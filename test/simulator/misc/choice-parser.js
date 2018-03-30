@@ -50,7 +50,7 @@ describe('Choice parser', function () {
 				]);
 				battle.join('p2', 'Guest 2', 1, [{species: "Rhydon", ability: 'prankster', moves: ['splash']}]);
 
-				battle.commitDecisions();
+				battle.makeChoices('move lunardance', 'move splash');
 
 				assert.false(battle.choose('p1', 'switch first'));
 				assert.false(battle.choose('p1', 'switch second'));
@@ -66,7 +66,7 @@ describe('Choice parser', function () {
 				]);
 				battle.join('p2', 'Guest 2', 1, [{species: "Rhydon", ability: 'prankster', moves: ['splash']}]);
 
-				battle.commitDecisions();
+				battle.makeChoices('move lunardance', 'move splash');
 
 				const badChoices = ['move 1', 'move 2 mega', 'team 1', 'pass', 'shift'];
 				for (const badChoice of badChoices) {
@@ -92,7 +92,7 @@ describe('Choice parser', function () {
 					{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
 					{species: "Ekans", ability: 'shedskin', moves: ['wrap']},
 				]);
-				battle.commitDecisions(); // Both p1 active Pokémon faint
+				battle.makeChoices('move selfdestruct, move selfdestruct', 'move roost, move irondefense'); // Both p1 active Pokémon faint
 
 				const badChoices = ['move 1', 'move 2 mega', 'team 1', 'shift'];
 				for (const badChoice of badChoices) {
@@ -114,7 +114,7 @@ describe('Choice parser', function () {
 					{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
 					{species: "Ekans", ability: 'shedskin', moves: ['wrap']},
 				]);
-				battle.commitDecisions(); // Both p1 active Pokémon faint
+				battle.makeChoices('move selfdestruct, move selfdestruct', 'move roost, move irondefense'); // Both p1 active Pokémon faint
 
 				const switchChoice = 'switch 3';
 				const passChoice = 'pass';
@@ -175,7 +175,7 @@ describe('Choice parser', function () {
 					{species: "Skarmory", ability: 'sturdy', moves: ['roost']},
 					{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
 				]);
-				battle.commitDecisions(); // Both p1 active Pokémon faint
+				battle.makeChoices('move selfdestruct, move selfdestruct', 'move roost, move irondefense'); // Both p1 active Pokémon faint
 				battle.choose('p1', 'pass, switch 3'); // Koffing switches in at slot #2
 
 				assert.fainted(p1.active[0]);
@@ -290,7 +290,7 @@ describe('Choice parser', function () {
 					{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
 					{species: "Golem", ability: 'sturdy', moves: ['defensecurl']},
 				]);
-				battle.commitDecisions(); // All p1 active Pokémon faint
+				battle.makeChoices('move selfdestruct, move selfdestruct, move lunardance', 'move roost, move irondefense, move defensecurl'); // All p1 active Pokémon faint
 
 				p1.choosePass().chooseSwitch(4).chooseDefault(); // Forretress switches in to slot #2
 				assert.species(p1.active[1], 'Forretress');

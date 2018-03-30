@@ -12,19 +12,17 @@ describe('Magnet Pull', function () {
 
 	it('should prevent Steel-type Pokemon from switching out normally', function () {
 		battle = common.createBattle();
-		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Magnezone", ability: 'magnetpull', moves: ['soak', 'charge']}]);
-		const p2 = battle.join('p2', 'Guest 2', 1, [
+		battle.join('p1', 'Guest 1', 1, [{species: "Magnezone", ability: 'magnetpull', moves: ['soak', 'charge']}]);
+		battle.join('p2', 'Guest 2', 1, [
 			{species: "Heatran", ability: 'flashfire', moves: ['curse']},
 			{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 		]);
-		assert.false(p2.chooseSwitch(2));
-		battle.commitDecisions();
+		battle.makeChoices('move soak', 'switch 2');
 		assert.species(battle.p2.active[0], 'Heatran');
-		p2.chooseSwitch(2).foe.chooseDefault();
+		battle.makeChoices('move soak', 'switch 2');
 		assert.species(battle.p2.active[0], 'Starmie');
-		p1.chooseMove(2).foe.chooseMove('reflecttype'); // Reflect Type makes Starmie part Steel
-		assert.false(p2.chooseSwitch(2));
-		battle.commitDecisions();
+		battle.makeChoices('move charge', 'move reflecttype'); // Reflect Type makes Starmie part Steel
+		battle.makeChoices('move soak', 'switch 2');
 		assert.species(battle.p2.active[0], 'Starmie');
 	});
 
@@ -35,8 +33,8 @@ describe('Magnet Pull', function () {
 			{species: "Heatran", ability: 'flashfire', moves: ['batonpass']},
 			{species: "Tentacruel", ability: 'clearbody', moves: ['rapidspin']},
 		]);
-		battle.p2.chooseMove('batonpass').foe.chooseDefault();
-		battle.p2.chooseSwitch(2);
+		battle.makeChoices('move toxic', 'move batonpass');
+		battle.makeChoices('move toxic', 'switch 2');
 		assert.species(battle.p2.active[0], 'Tentacruel');
 	});
 
@@ -47,7 +45,7 @@ describe('Magnet Pull', function () {
 			{species: "Aegislash", ability: 'stancechange', moves: ['swordsdance']},
 			{species: "Arcanine", ability: 'flashfire', moves: ['roar']},
 		]);
-		battle.p2.chooseSwitch(2).foe.chooseDefault();
+		battle.makeChoices('move substitute', 'switch 2');
 		assert.species(battle.p2.active[0], 'Arcanine');
 	});
 });

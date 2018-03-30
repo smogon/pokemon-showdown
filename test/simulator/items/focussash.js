@@ -15,7 +15,7 @@ describe('Focus Sash', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Paras', ability: 'dryskin', item: 'focussash', moves: ['sleeptalk']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Delphox', ability: 'magician', moves: ['incinerate']}]);
 		const holder = battle.p1.active[0];
-		battle.commitDecisions();
+		battle.makeChoices('move sleeptalk', 'move incinerate');
 		assert.false.holdsItem(holder);
 		assert.false.fainted(holder);
 		assert.strictEqual(holder.hp, 1);
@@ -26,7 +26,7 @@ describe('Focus Sash', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Shedinja', ability: 'wonderguard', item: 'focussash', moves: ['absorb']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Klefki', ability: 'prankster', moves: ['confuseray']}]);
 		const holder = battle.p1.active[0];
-		battle.commitDecisions();
+		battle.makeChoices('move absorb', 'move confuseray');
 		assert.false.holdsItem(holder);
 		assert.false.fainted(holder);
 		assert.strictEqual(holder.hp, 1);
@@ -37,7 +37,7 @@ describe('Focus Sash', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Shedinja', ability: 'wonderguard', item: 'focussash', moves: ['doubleedge']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Klefki', ability: 'prankster', moves: ['reflect']}]);
 		const holder = battle.p1.active[0];
-		battle.commitDecisions();
+		battle.makeChoices('move doubleedge', 'move reflect');
 		assert.holdsItem(holder);
 		assert.fainted(holder);
 	});
@@ -47,7 +47,7 @@ describe('Focus Sash', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Shedinja', ability: 'wonderguard', item: 'focussash', moves: ['sleeptalk']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Crobat', ability: 'infiltrator', moves: ['toxic']}]);
 		const holder = battle.p1.active[0];
-		battle.commitDecisions();
+		battle.makeChoices('move sleeptalk', 'move toxic');
 		assert.holdsItem(holder);
 		assert.fainted(holder);
 	});

@@ -14,7 +14,7 @@ describe('Thief', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Mew", ability: 'synchronize', moves: ['thief']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Blissey", ability: 'naturalcure', item: 'shedshell', moves: ['softboiled']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move thief', 'move softboiled');
 		assert.strictEqual(battle.p1.active[0].item, 'shedshell');
 	});
 
@@ -22,7 +22,7 @@ describe('Thief', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Mew", ability: 'synchronize', item: 'focussash', moves: ['thief']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Blissey", ability: 'naturalcure', item: 'shedshell', moves: ['softboiled']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move thief', 'move softboiled');
 		assert.strictEqual(battle.p2.active[0].item, 'shedshell');
 	});
 
@@ -30,7 +30,7 @@ describe('Thief', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Mew", ability: 'synchronize', moves: ['thief']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Blissey", ability: 'naturalcure', item: 'lifeorb', moves: ['softboiled']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move thief', 'move softboiled');
 		assert.strictEqual(battle.p1.active[0].hp, Math.ceil(9 / 10 * battle.p1.active[0].maxhp));
 	});
 });

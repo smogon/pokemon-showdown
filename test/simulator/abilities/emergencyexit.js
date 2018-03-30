@@ -17,7 +17,7 @@ describe(`Emergency Exit`, function () {
 		]);
 		const eePokemon = battle.p1.active[0];
 		const foePokemon = battle.p2.active[0];
-		battle.commitDecisions();
+		battle.makeChoices('move superfang', 'move superfang');
 		assert.strictEqual(foePokemon.hp, foePokemon.maxhp);
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
 		assert.strictEqual(battle.currentRequest, 'switch');
@@ -28,7 +28,7 @@ describe(`Emergency Exit`, function () {
 			[{species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'], item: 'sitrusberry', ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
 			[{species: "Raticate", ability: 'guts', moves: ['superfang']}],
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move sleeptalk', 'move superfang');
 		assert.strictEqual(battle.currentRequest, 'move');
 	});
 
@@ -38,9 +38,9 @@ describe(`Emergency Exit`, function () {
 			[{species: "Deoxys-Attack", ability: 'pressure', item: 'laggingtail', moves: ['thunderbolt']}],
 		]);
 		const eePokemon = battle.p1.active[0];
-		battle.commitDecisions();
+		battle.makeChoices('move substitute', 'move thunderbolt');
 		assert.false.atMost(eePokemon.hp, eePokemon.maxhp / 2);
-		battle.commitDecisions();
+		battle.makeChoices('move substitute', 'move thunderbolt');
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
 		assert.strictEqual(battle.currentRequest, 'move');
 	});
@@ -51,13 +51,13 @@ describe(`Emergency Exit`, function () {
 			[{species: "Zekrom", ability: 'pressure', moves: ['voltswitch']}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
 		]);
 		const eePokemon = battle.p1.active[0];
-		battle.commitDecisions();
+		battle.makeChoices('move sleeptalk', 'move voltswitch');
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
 
 		assert.false.holdsItem(eePokemon);
 		assert.strictEqual(battle.currentRequest, 'switch');
 
-		battle.commitDecisions();
+		battle.makeChoices('move sleeptalk', 'move voltswitch');
 		assert.species(battle.p1.active[0], 'Clefable');
 		assert.species(battle.p2.active[0], 'Zekrom');
 	});
@@ -68,13 +68,13 @@ describe(`Emergency Exit`, function () {
 			[{species: "Raticate", ability: 'guts', moves: ['superfang']}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
 		]);
 		const eePokemon = battle.p1.active[0];
-		battle.commitDecisions();
+		battle.makeChoices('move sleeptalk', 'move superfang');
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
 
 		assert.false.holdsItem(eePokemon);
 		assert.strictEqual(battle.currentRequest, 'switch');
 
-		battle.commitDecisions();
+		battle.makeChoices('move metronome', 'move metronome');
 		assert.species(battle.p1.active[0], 'Clefable');
 		assert.species(battle.p2.active[0], 'Clefable');
 	});
@@ -85,13 +85,13 @@ describe(`Emergency Exit`, function () {
 			[{species: "Raticate", ability: 'guts', moves: ['superfang']}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
 		]);
 		const eePokemon = battle.p1.active[0];
-		battle.commitDecisions();
+		battle.makeChoices('move sleeptalk', 'move superfang');
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
 
 		assert.false.holdsItem(eePokemon);
 		assert.strictEqual(battle.currentRequest, 'switch');
 
-		battle.commitDecisions();
+		battle.makeChoices('move metronome', 'move superfang');
 		assert.species(battle.p1.active[0], 'Clefable');
 	});
 
@@ -101,7 +101,7 @@ describe(`Emergency Exit`, function () {
 			[{species: "Nidoking", ability: 'sheerforce', moves: ['thunder']}],
 		]);
 		const eePokemon = battle.p1.active[0];
-		battle.commitDecisions();
+		battle.makeChoices('move sleeptalk', 'move thunder');
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
 		assert.strictEqual(battle.currentRequest, 'move');
 	});

@@ -20,12 +20,12 @@ describe('Sticky Hold', function () {
 			{species: 'Smeargle', ability: 'synchronize', moves: STEAL_MOVES},
 		]);
 		const itemHolder = battle.p1.active[0];
-		battle.commitDecisions();
+		battle.makeChoices('move recover', 'move grassknot');
 		assert.strictEqual(itemHolder.item, 'razzberry', "Shuckle should hold a Razz Berry");
-		battle.p2.chooseSwitch(2).foe.chooseDefault();
+		battle.makeChoices('move recover', 'switch 2');
 
 		for (const moveid of STEAL_MOVES) {
-			battle.p2.chooseMove(moveid).foe.chooseDefault();
+			battle.makeChoices('move recover', 'move ' + moveid);
 			assert.holdsItem(itemHolder, "Shuckle should still hold its Razz Berry");
 		}
 	});
@@ -34,7 +34,7 @@ describe('Sticky Hold', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Pangoro', ability: 'moldbreaker', moves: ['knockoff']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Shuckle', ability: 'stickyhold', item: 'ironball', moves: ['rest']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move knockoff', 'move rest');
 		assert.false.holdsItem(battle.p2.active[0]);
 	});
 });

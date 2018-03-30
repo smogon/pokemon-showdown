@@ -21,9 +21,8 @@ describe('Quash', function () {
 			{species: "Aerodactyl", ability: 'unnerve', moves: ['swift']},
 			{species: "Rotom", ability: 'levitate', moves: ['thunderbolt']},
 		]);
-		battle.choose('p1', 'move 1 2, move 1');
-		battle.choose('p2', 'move 1 2, move 1');
-		battle.choose('p2', 'switch 3, pass'); // Volt Switch
+		battle.makeChoices('move quash 2, move earthquake', 'move voltswitch 2, move swift');
+		battle.makeChoices('move quash, move earthquake', 'switch 3, pass'); // Volt Switch
 		assert.strictEqual(battle.log[battle.lastMoveLine].split('|')[3], 'Swift');
 	});
 
@@ -38,9 +37,8 @@ describe('Quash', function () {
 			{species: "Aerodactyl", ability: 'unnerve', moves: ['extremespeed']},
 			{species: "Rotom", ability: 'levitate', moves: ['thunderbolt']},
 		]);
-		battle.choose('p1', 'move 1 2, move 1');
-		battle.choose('p2', 'move 1 2, move 1 1');
-		battle.choose('p2', 'switch 3, pass'); // Volt Switch
+		battle.makeChoices('move quash 2, move earthquake', 'move voltswitch 2, move extremespeed 1');
+		battle.makeChoices('move quash, move earthquake', 'switch 3, pass'); // Volt Switch
 		assert.notStrictEqual(battle.log[battle.lastMoveLine].split('|')[3], 'Extremespeed');
 	});
 });

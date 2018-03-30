@@ -19,19 +19,19 @@ describe('Ring Target', function () {
 			{species: "Girafarig", ability: 'innerfocus', item: 'ringtarget', moves: ['rest']},
 			{species: "Absol", ability: 'superluck', item: 'ringtarget', moves: ['rest']},
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move earthquake', 'move rest');
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 		assert.false.fullHP(battle.p2.active[0]);
 
-		battle.p1.chooseMove('vitalthrow').foe.chooseSwitch(2); // Drifblim
+		battle.makeChoices('move vitalthrow', 'switch 2'); // Drifblim
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-resisted|'));
 		assert.false.fullHP(battle.p2.active[0]);
 
-		battle.p1.chooseMove('shadowball').foe.chooseSwitch(3); // Girafarig
+		battle.makeChoices('move shadowball', 'switch 3'); // Girafarig
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 		assert.false.fullHP(battle.p2.active[0]);
 
-		battle.p1.chooseMove('psychic').foe.chooseSwitch(4); // Absol
+		battle.makeChoices('move psychich', 'switch 4'); // Absol
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
@@ -42,11 +42,11 @@ describe('Ring Target', function () {
 			{species: "Mismagius", ability: 'levitate', item: 'ringtarget', moves: ['shadowsneak']},
 			{species: "Rotom-Fan", ability: 'levitate', item: 'ringtarget', moves: ['snore']},
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move earthquake', 'move shadowsneak');
 		assert.fullHP(battle.p2.active[0]);
 
 		// even if Rotom-Fan
-		battle.p2.chooseSwitch(2).foe.chooseDefault();
+		battle.makeChoices('move earthquake', 'switch 2');
 		assert.fullHP(battle.p2.active[0]);
 	});
 });

@@ -15,7 +15,7 @@ describe('Prankster', function () {
 			[{species: "Murkrow", ability: 'prankster', moves: ['taunt']}],
 			[{species: "Deoxys-Speed", ability: 'pressure', moves: ['calmmind']}],
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move taunt', 'move calmmind');
 		assert.statStage(battle.p2.active[0], 'spa', 0);
 	});
 
@@ -24,7 +24,7 @@ describe('Prankster', function () {
 			[{species: "Sableye", ability: 'prankster', moves: ['willowisp']}],
 			[{species: "Sableye", ability: 'keeneye', moves: ['willowisp']}],
 		]);
-		assert.constant(() => battle.p2.active[0].status, () => battle.commitDecisions());
+		assert.constant(() => battle.p2.active[0].status, () => battle.makeChoices('move willowisp', 'move willowisp'));
 	});
 
 	it('should cause bounced Status moves to fail against Dark Pokémon', function () {
@@ -32,7 +32,7 @@ describe('Prankster', function () {
 			[{species: "Klefki", ability: 'prankster', moves: ['magiccoat']}],
 			[{species: "Spiritomb", ability: 'pressure', moves: ['willowisp']}],
 		]);
-		assert.constant(() => battle.p2.active[0].status, () => battle.commitDecisions());
+		assert.constant(() => battle.p2.active[0].status, () => battle.makeChoices('move magiccoat', 'move willowisp'));
 	});
 });
 
@@ -46,6 +46,6 @@ describe('Prankster [Gen 6]', function () {
 			[{species: "Sableye", ability: 'prankster', moves: ['willowisp']}],
 			[{species: "Sableye", ability: 'keeneye', moves: ['willowisp']}],
 		]);
-		assert.sets(() => battle.p2.active[0].status, 'brn', () => battle.commitDecisions());
+		assert.sets(() => battle.p2.active[0].status, 'brn', () => battle.makeChoices('move willowisp', 'move willowisp'));
 	});
 });

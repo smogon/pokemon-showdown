@@ -14,7 +14,7 @@ describe('Flash Fire', function () {
 		battle = common.createBattle();
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: 'Heatran', ability: 'flashfire', moves: ['incinerate']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: 'Talonflame', ability: 'galewings', moves: ['flareblitz']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move incinerate', 'move flareblitz');
 		assert.fullHP(p1.active[0]);
 		let damage = p2.active[0].maxhp - p2.active[0].hp;
 		assert.bounded(damage, [82, 97]);
@@ -25,23 +25,23 @@ describe('Flash Fire', function () {
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: 'Heatran', ability: 'flashfire', moves: ['sleeptalk']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Talonflame', ability: 'galewings', moves: ['flareblitz']}]);
 		p1.active[0].setStatus('frz');
-		assert.false.hurts(p1.active[0], () => battle.commitDecisions());
+		assert.false.hurts(p1.active[0], () => battle.makeChoices('move sleeptalk', 'move flareblitz'));
 	});
 
 	it('should have its Fire-type immunity suppressed by Mold Breaker', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Heatran', ability: 'flashfire', moves: ['incinerate']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Haxorus', ability: 'moldbreaker', moves: ['firepunch']}]);
-		assert.hurts(battle.p1.active[0], () => battle.commitDecisions());
+		assert.hurts(battle.p1.active[0], () => battle.makeChoices('move incinerate', 'move firepunch'));
 	});
 
 	it('should lose the Flash Fire boost if its ability is changed', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Heatran', ability: 'flashfire', moves: ['sleeptalk', 'incinerate']}]);
-		const p2 = battle.join('p2', 'Guest 2', 1, [{species: 'Talonflame', ability: 'galewings', moves: ['incinerate', 'worryseed']}]);
-		battle.commitDecisions();
+		battle.join('p2', 'Guest 2', 1, [{species: 'Talonflame', ability: 'galewings', moves: ['incinerate', 'worryseed']}]);
+		battle.makeChoices('move sleeptalk', 'move incinerate');
 		battle.resetRNG();
-		p2.chooseMove('worryseed').foe.chooseMove('incinerate');
+		battle.makeChoices('move incinerate', 'move worryseed');
 		let damage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
 		assert.bounded(damage, [54, 65]);
 	});
@@ -58,6 +58,6 @@ describe('Flash Fire [Gen 4]', function () {
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: 'Heatran', ability: 'flashfire', moves: ['sleeptalk']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Charizard', ability: 'blaze', moves: ['flamethrower']}]);
 		p1.active[0].setStatus('frz');
-		assert.false.hurts(p1.active[0], () => battle.commitDecisions());
+		assert.false.hurts(p1.active[0], () => battle.makeChoices('move sleeptalk', 'move flamethrower'));
 	});
 });

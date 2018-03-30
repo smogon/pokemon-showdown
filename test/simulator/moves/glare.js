@@ -14,7 +14,7 @@ describe('Glare', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Arbok", ability: 'noguard', moves: ['glare']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Ekans", ability: 'sturdy', moves: ['bulkup']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move glare', 'move bulkup');
 		assert.strictEqual(battle.p2.active[0].status, 'par');
 	});
 
@@ -22,7 +22,7 @@ describe('Glare', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Arbok", ability: 'noguard', moves: ['glare']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Gengar", ability: 'blaze', moves: ['bulkup']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move glare', 'move bulkup');
 		assert.strictEqual(battle.p2.active[0].status, 'par');
 	});
 });
@@ -37,7 +37,7 @@ describe('Glare [Gen 3]', function () {
 			[{species: "Arbok", ability: 'noguard', moves: ['glare']}],
 			[{species: "Gengar", ability: 'blaze', moves: ['bulkup']}],
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move glare', 'move bulkup');
 		assert.strictEqual(battle.p2.active[0].status, '');
 	});
 });

@@ -35,8 +35,7 @@ describe('Flower Gift', function () {
 			[{species: "Blissey", ability: 'flowergift', moves: ['healbell']}, {species: "Blissey", ability: 'flowergift', moves: ['healbell']}],
 		]);
 
-		battle.choose('p1', 'move 1 1, move 1');
-		battle.choose('p2', 'move 1, move 1');
+		battle.makeChoices('move transform 1, move healbell 1', 'move healbell, move healbell');
 		let cherAtk = battle.p1.active[0].getStat('atk');
 		let cherSpd = battle.p1.active[0].getStat('spd');
 		let baseAtk = battle.p1.active[1].getStat('atk');

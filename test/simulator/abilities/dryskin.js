@@ -14,23 +14,22 @@ describe('Dry Skin', function () {
 		battle = common.createBattle();
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: 'Toxicroak', ability: 'dryskin', moves: ['bulkup']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Ninetales', ability: 'flashfire', moves: ['sunnyday']}]);
-		assert.hurtsBy(p1.active[0], Math.floor(p1.active[0].maxhp / 8), () => battle.commitDecisions());
+		assert.hurtsBy(p1.active[0], Math.floor(p1.active[0].maxhp / 8), () => battle.makeChoices('move bulkup', 'move sunnyday'));
 	});
 
 	it('should heal 1/8 max HP every turn that Rain Dance is active', function () {
 		battle = common.createBattle();
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: 'Toxicroak', ability: 'dryskin', moves: ['substitute']}]);
-		const p2 = battle.join('p2', 'Guest 2', 1, [{species: 'Politoed', ability: 'damp', moves: ['encore', 'raindance']}]);
-		battle.commitDecisions();
-		p2.chooseMove('raindance');
-		assert.hurtsBy(p1.active[0], -Math.floor(p1.active[0].maxhp / 8), () => battle.commitDecisions());
+		battle.join('p2', 'Guest 2', 1, [{species: 'Politoed', ability: 'damp', moves: ['encore', 'raindance']}]);
+		battle.makeChoices('move substitute', 'move encore');
+		assert.hurtsBy(p1.active[0], -Math.floor(p1.active[0].maxhp / 8), () => battle.makeChoices('move substitute', 'move raindance'));
 	});
 
 	it('should grant immunity to Water-type moves and heal 1/4 max HP', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Toxicroak', ability: 'dryskin', moves: ['substitute']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Politoed', ability: 'damp', moves: ['watergun']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move substitute', 'move watergun');
 		assert.fullHP(battle.p1.active[0]);
 	});
 
@@ -38,7 +37,7 @@ describe('Dry Skin', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Toxicroak', ability: 'dryskin', moves: ['bulkup']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Haxorus', ability: 'unnerve', moves: ['incinerate']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move bulkup', 'move incinerate');
 		let damage = battle.p1.active[0].maxhp - battle.p1.active[0].hp;
 		assert.bounded(damage, [51, 61]);
 	});
@@ -47,11 +46,10 @@ describe('Dry Skin', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Toxicroak', ability: 'dryskin', moves: ['bulkup']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Haxorus', ability: 'moldbreaker', moves: ['incinerate', 'surf']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move bulkup', 'move incinerate');
 		const target = battle.p1.active[0];
 		const damage = target.maxhp - target.hp;
 		assert.bounded(damage, [41, 49]);
-		battle.p2.chooseMove('surf');
-		assert.hurts(target, () => battle.commitDecisions());
+		assert.hurts(target, () => battle.makeChoices('move bulkup', 'move surf'));
 	});
 });

@@ -13,7 +13,7 @@ describe(`Judgment`, function () {
 			[{species: "Arceus", ability: 'Honey Gather', item: 'spookyplate', moves: ['judgment']}],
 			[{species: "Spiritomb", ability: 'stancechange', moves: ['calmmind']}],
 		]);
-		assert.hurts(battle.p2.active[0], () => battle.commitDecisions());
+		assert.hurts(battle.p2.active[0], () => battle.makeChoices('move judgment', 'move calmmind'));
 	});
 
 	it(`should not adapt its type to a held Z Crystal`, function () {
@@ -21,7 +21,7 @@ describe(`Judgment`, function () {
 			[{species: "Arceus", ability: 'Honey Gather', item: 'ghostiumz', moves: ['judgment']}],
 			[{species: "Spiritomb", ability: 'stancechange', moves: ['calmmind']}],
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move judgment', 'move calmmind');
 		assert.fullHP(battle.p2.active[0]);
 	});
 });

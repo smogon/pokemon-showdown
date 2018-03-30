@@ -15,8 +15,7 @@ describe('Pressure', function () {
 			[{species: "Giratina", ability: 'pressure', moves: ['rest']}, {species: "Talonflame", ability: 'galewings', moves: ['peck']}],
 			[{species: "Giratina", ability: 'defiant', moves: ['rest']}, {species: "Talonflame", ability: 'galewings', moves: ['peck']}],
 		]);
-		battle.choose('p1', 'move 1, move 1 -1');
-		battle.choose('p2', 'move 1, move 1 1');
+		battle.makeChoices('move rest, move peck -1', 'move rest, move peck 1');
 		let move = Dex.getMove('peck');
 		assert.strictEqual(battle.p1.active[1].getMoveData(move).pp, 55);
 		assert.strictEqual(battle.p2.active[1].getMoveData(move).pp, 54);
@@ -27,8 +26,7 @@ describe('Pressure', function () {
 			[{species: "Giratina", ability: 'pressure', moves: ['followme']}, {species: "Talonflame", ability: 'galewings', moves: ['peck']}],
 			[{species: "Clefable", ability: 'unaware', moves: ['followme']}, {species: "Ho-Oh", ability: 'pressure', moves: ['peck']}],
 		]);
-		battle.choose('p1', 'move 1, move 1 2');
-		battle.choose('p2', 'move 1, move 1 2');
+		battle.makeChoices('move followme, move peck 2', 'move followme, move peck 2');
 		let move = Dex.getMove('peck');
 		assert.strictEqual(battle.p1.active[1].getMoveData(move).pp, 55);
 		assert.strictEqual(battle.p2.active[1].getMoveData(move).pp, 54);
@@ -38,16 +36,13 @@ describe('Pressure', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Giratina", ability: 'pressure', item: 'laggingtail', moves: ['mistyterrain', 'shadowforce']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Smeargle", ability: 'desolateland', moves: ['doubleedge', 'spore', 'moonblast', 'surf']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move mistyterrain', 'move doubleedge');
 		assert.strictEqual(battle.p2.active[0].getMoveData(Dex.getMove('doubleedge')).pp, 22);
-		battle.choose('p1', 'move 2');
-		battle.choose('p2', 'move 2');
+		battle.makeChoices('move shadowforce', 'move spore');
 		assert.strictEqual(battle.p2.active[0].getMoveData(Dex.getMove('spore')).pp, 22);
-		battle.choose('p2', 'move 3');
-		battle.commitDecisions();
+		battle.makeChoices('move mistyterrain', 'move moonblast');
 		assert.strictEqual(battle.p2.active[0].getMoveData(Dex.getMove('moonblast')).pp, 22);
-		battle.choose('p2', 'move 4');
-		battle.commitDecisions();
+		battle.makeChoices('move mistyterrain', 'move surf');
 		assert.strictEqual(battle.p2.active[0].getMoveData(Dex.getMove('surf')).pp, 22);
 	});
 
@@ -64,7 +59,7 @@ describe('Pressure', function () {
 			{species: "Zekrom", ability: 'teravolt', moves: ['spikes']},
 			{species: "Reshiram", ability: 'turboblaze', moves: ['rockslide']},
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move rest, move rest, move rest', 'move hail, move spikes, move rockslide');
 		assert.strictEqual(battle.p2.active[0].getMoveData(Dex.getMove('hail')).pp, 12);
 		assert.strictEqual(battle.p2.active[1].getMoveData(Dex.getMove('spikes')).pp, 28);
 		assert.strictEqual(battle.p2.active[2].getMoveData(Dex.getMove('rockslide')).pp, 13);
@@ -83,7 +78,7 @@ describe('Pressure', function () {
 			{species: "Zekrom", ability: 'teravolt', moves: ['imprison']},
 			{species: "Reshiram", ability: 'turboblaze', moves: ['rest']},
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move rest, move rest, move rest', 'move snatch, move imprison, move rest');
 		assert.strictEqual(battle.p2.active[0].getMoveData(Dex.getMove('snatch')).pp, 12);
 		assert.strictEqual(battle.p2.active[1].getMoveData(Dex.getMove('imprison')).pp, 12);
 	});
@@ -99,8 +94,7 @@ describe('Pressure [Gen 4]', function () {
 			[{species: "Giratina", ability: 'pressure', moves: ['rest']}, {species: "Aerodactyl", ability: 'quickfeet', moves: ['peck']}],
 			[{species: "Giratina", ability: 'pressure', moves: ['rest']}, {species: "Aerodactyl", ability: 'quickfeet', moves: ['peck']}],
 		]);
-		battle.choose('p1', 'move 1, move 1 -1');
-		battle.choose('p2', 'move 1, move 1 1');
+		battle.makeChoices('move rest, move peck -1', 'move rest, move peck 1');
 		let move = Dex.getMove('peck');
 		assert.strictEqual(battle.p1.active[1].getMoveData(move).pp, 54);
 		assert.strictEqual(battle.p2.active[1].getMoveData(move).pp, 54);
@@ -111,8 +105,7 @@ describe('Pressure [Gen 4]', function () {
 			[{species: "Giratina", ability: 'pressure', moves: ['followme']}, {species: "Aerodactyl", ability: 'quickfeet', moves: ['peck']}],
 			[{species: "Clefable", ability: 'magicguard', moves: ['followme']}, {species: "Ho-Oh", ability: 'pressure', moves: ['peck']}],
 		]);
-		battle.choose('p1', 'move 1, move 1 2');
-		battle.choose('p2', 'move 1, move 1 2');
+		battle.makeChoices('move followme, move peck 2', 'move followme, move peck 2');
 		let move = Dex.getMove('peck');
 		assert.strictEqual(battle.p1.active[1].getMoveData(move).pp, 55);
 		assert.strictEqual(battle.p2.active[1].getMoveData(move).pp, 54);
@@ -124,10 +117,9 @@ describe('Pressure [Gen 4]', function () {
 			[{species: "Smeargle", ability: 'owntempo', moves: ['doubleedge', 'dragonpulse']}],
 		]);
 		const attacker = battle.p2.active[0];
-		battle.commitDecisions();
+		battle.makeChoices('move shadowforce', 'move doubleedge');
 		assert.strictEqual(attacker.getMoveData(Dex.getMove('doubleedge')).pp, 22);
-		battle.choose('p2', 'move 2');
-		battle.commitDecisions();
+		battle.makeChoices('move shadowforce', 'move dragonpulse');
 		assert.strictEqual(attacker.getMoveData(Dex.getMove('dragonpulse')).pp, 14);
 	});
 
@@ -136,7 +128,7 @@ describe('Pressure [Gen 4]', function () {
 			[{species: "Palkia", ability: 'pressure', moves: ['rest']}, {species: "Dialga", ability: 'pressure', moves: ['rest']}],
 			[{species: "Lugia", ability: 'pressure', moves: ['hail']}, {species: "Ho-Oh", ability: 'pressure', moves: ['earthquake']}],
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move rest', 'move earthquake');
 		assert.strictEqual(battle.p2.active[0].getMoveData(Dex.getMove('hail')).pp, 12);
 		assert.strictEqual(battle.p2.active[1].getMoveData(Dex.getMove('earthquake')).pp, 12);
 	});
@@ -146,7 +138,7 @@ describe('Pressure [Gen 4]', function () {
 			[{species: "Palkia", ability: 'pressure', moves: ['calmmind']}],
 			[{species: "Dialga", ability: 'pressure', moves: ['calmmind']}],
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move calmmind', 'move calmmind');
 		let move = Dex.getMove('calmmind');
 		assert.strictEqual(battle.p1.active[0].getMoveData(move).pp, 31);
 		assert.strictEqual(battle.p1.active[0].getMoveData(move).pp, 31);

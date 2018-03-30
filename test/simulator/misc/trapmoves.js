@@ -20,9 +20,8 @@ describe('Trapping Moves', function () {
 				{species: "Tangrowth", ability: 'leafguard', moves: ['swordsdance']},
 				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 			]);
-			battle.commitDecisions();
-			battle.choose('p2', 'switch 2');
-			battle.commitDecisions();
+			battle.makeChoices('move ' + toId(move), 'move swordsdance');
+			battle.makeChoices('move ' + toId(move), 'switch 2');
 			assert.strictEqual(battle.p2.active[0].template.speciesid, 'tangrowth');
 		});
 
@@ -33,8 +32,8 @@ describe('Trapping Moves', function () {
 				{species: "Tangrowth", ability: 'leafguard', moves: ['batonpass']},
 				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 			]);
-			battle.commitDecisions();
-			battle.choose('p2', 'switch 2');
+			battle.makeChoices('move ' + toId(move), 'move batonpass');
+			battle.makeChoices('move ' + toId(move), 'switch 2');
 			assert.strictEqual(battle.p2.active[0].template.speciesid, 'starmie');
 		});
 
@@ -45,9 +44,8 @@ describe('Trapping Moves', function () {
 				{species: "Gourgeist", ability: 'insomnia', moves: ['synthesis']},
 				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 			]);
-			battle.commitDecisions();
-			battle.choose('p2', 'switch 2');
-			battle.commitDecisions();
+			battle.makeChoices('move ' + toId(move), 'move synthesis');
+			battle.makeChoices('move ' + toId(move), 'switch 2');
 			assert.strictEqual(battle.p2.active[0].template.speciesid, 'starmie');
 		});
 
@@ -61,15 +59,14 @@ describe('Trapping Moves', function () {
 				{species: "Tangrowth", ability: 'leafguard', moves: ['roar']},
 				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 			]);
-			battle.commitDecisions();
-			battle.choose('p2', 'switch 2');
-			battle.commitDecisions();
+			battle.makeChoices('move ' + toId(move), 'move roar');
+			battle.makeChoices('move ' + toId(move), 'switch 2');
 			assert.strictEqual(battle.p2.active[0].template.speciesid, 'starmie');
 		});
 
 		it('should free all trapped Pokemon if the user is no longer active', function () {
 			battle = common.createBattle({gameType: 'doubles'});
-			const p1 = battle.join('p1', 'Guest 1', 1, [
+			battle.join('p1', 'Guest 1', 1, [
 				{species: "Smeargle", ability: 'prankster', moves: [toId(move)]},
 				{species: "Cobalion", ability: 'justified', item: 'laggingtail', moves: ['swordsdance', 'closecombat']},
 			]);
@@ -80,13 +77,12 @@ describe('Trapping Moves', function () {
 				{species: "Hippowdon", ability: 'sandstream', moves: ['slackoff']},
 			]);
 			if (move !== 'Thousand Waves') {
-				p1.chooseMove(1, 1).chooseMove(1).foe.chooseMove(1).chooseMove(1);
-				p1.chooseMove(1, 2).chooseMove(2, -1).foe.chooseMove(1).chooseMove(1);
+				battle.makeChoices('move ' + toId(move) + ' 1, move swordsdance', 'move synthesis, move recover');
+				battle.makeChoices('move ' + toId(move) + ' 2, move closecombat -1', 'move synthesis, move recover');
 			} else {
-				p1.chooseMove(1).chooseMove(2, -1).foe.chooseMove(1).chooseMove(1);
+				battle.makeChoices('move ' + toId(move) + ', move closecombat -1', 'move synthesis, move recover');
 			}
-			battle.choose('p2', 'switch 3, switch 4');
-			battle.commitDecisions();
+			battle.makeChoices('move ' + toId(move) + ', move swordsdance', 'switch 3, switch 4');
 			assert.strictEqual(battle.p2.active[0].template.speciesid, 'cradily');
 			assert.strictEqual(battle.p2.active[1].template.speciesid, 'hippowdon');
 		});
@@ -103,17 +99,12 @@ describe('Trapping Moves', function () {
 					{species: "Tangrowth", ability: 'leafguard', moves: ['synthesis', 'roar']},
 					{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 				]);
-				battle.commitDecisions();
-				battle.choose('p1', 'move 2');
-				battle.commitDecisions();
-				battle.choose('p1', 'switch 2');
-				battle.choose('p2', 'switch 2');
-				battle.commitDecisions();
+				battle.makeChoices('move ' + toId(move), 'move synthesis');
+				battle.makeChoices('move batonpass', 'move synthesis');
+				battle.makeChoices('switch 2', 'switch 2');
 				assert.strictEqual(battle.p2.active[0].template.speciesid, 'tangrowth');
-				battle.choose('p2', 'move 2');
-				battle.commitDecisions();
-				battle.choose('p2', 'switch 2');
-				battle.commitDecisions();
+				battle.makeChoices('move rest', 'move roar');
+				battle.makeChoices('move rest', 'switch 2');
 				assert.strictEqual(battle.p2.active[0].template.speciesid, 'starmie');
 			});
 		}
@@ -130,11 +121,10 @@ describe('Partial Trapping Moves', function () {
 			battle = common.createBattle();
 			battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'noguard', moves: [toId(move), 'rest']}]);
 			battle.join('p2', 'Guest 2', 1, [{species: "Blissey", ability: 'naturalcure', moves: ['healbell']}]);
-			battle.commitDecisions();
+			battle.makeChoices('move ' + toId(move), 'move healbell');
 			let pokemon = battle.p2.active[0];
 			pokemon.heal(pokemon.maxhp);
-			battle.choose('p1', 'move 2');
-			battle.commitDecisions();
+			battle.makeChoices('move rest', 'move healbell');
 			assert.strictEqual(pokemon.maxhp - pokemon.hp, battle.modify(pokemon.maxhp, 1 / 8));
 		});
 
@@ -145,9 +135,8 @@ describe('Partial Trapping Moves', function () {
 				{species: "Blissey", ability: 'naturalcure', moves: ['healbell']},
 				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 			]);
-			battle.commitDecisions();
-			battle.choose('p2', 'switch 2');
-			battle.commitDecisions();
+			battle.makeChoices('move ' + toId(move), 'move healbell');
+			battle.makeChoices('move ' + toId(move), 'switch 2');
 			assert.strictEqual(battle.p2.active[0].template.speciesid, 'blissey');
 		});
 
@@ -158,8 +147,8 @@ describe('Partial Trapping Moves', function () {
 				{species: "Blissey", ability: 'naturalcure', moves: ['batonpass']},
 				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 			]);
-			battle.commitDecisions();
-			battle.choose('p2', 'switch 2');
+			battle.makeChoices('move ' + toId(move), 'move batonpass');
+			battle.makeChoices('move ' + toId(move), 'switch 2');
 			assert.strictEqual(battle.p2.active[0].template.speciesid, 'starmie');
 		});
 
@@ -170,9 +159,8 @@ describe('Partial Trapping Moves', function () {
 				{species: "Dusknoir", ability: 'frisk', moves: ['sleeptalk']},
 				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 			]);
-			battle.commitDecisions();
-			battle.choose('p2', 'switch 2');
-			battle.commitDecisions();
+			battle.makeChoices('move ' + toId(move), 'move sleeptalk');
+			battle.makeChoices('move ' + toId(move), 'switch 2');
 			assert.strictEqual(battle.p2.active[0].template.speciesid, 'starmie');
 		});
 
@@ -186,9 +174,8 @@ describe('Partial Trapping Moves', function () {
 				{species: "Blissey", ability: 'naturalcure', moves: ['roar']},
 				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 			]);
-			battle.commitDecisions();
-			battle.choose('p2', 'switch 2');
-			battle.commitDecisions();
+			battle.makeChoices('move ' + toId(move), 'move healbell');
+			battle.makeChoices('move ' + toId(move), 'switch 2');
 			assert.strictEqual(battle.p2.active[0].template.speciesid, 'starmie');
 		});
 
@@ -202,9 +189,8 @@ describe('Partial Trapping Moves', function () {
 				{species: "Blissey", ability: 'naturalcure', moves: ['rapidspin']},
 				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 			]);
-			battle.commitDecisions();
-			battle.choose('p2', 'switch 2');
-			battle.commitDecisions();
+			battle.makeChoices('move ' + toId(move), 'move rapidspin');
+			battle.makeChoices('move ' + toId(move), 'switch 2');
 			assert.strictEqual(battle.p2.active[0].template.speciesid, 'starmie');
 		});
 	}

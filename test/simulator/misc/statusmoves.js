@@ -12,7 +12,7 @@ describe('Most status moves', function () {
 
 	it('should ignore natural type immunities', function () {
 		battle = common.createBattle();
-		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'prankster', item: 'leftovers', moves: ['gastroacid', 'glare', 'confuseray', 'sandattack']}]);
+		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'prankster', item: 'leftovers', moves: ['gastroacid', 'glare', 'confuseray', 'sandattack']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Klefki", ability: 'magician', happiness: 0, moves: ['return']},
 			{species: "Dusknoir", ability: 'frisk', moves: ['shadowpunch']},
@@ -20,15 +20,15 @@ describe('Most status moves', function () {
 			{species: "Tornadus", ability: 'prankster', moves: ['tailwind']},
 			{species: "Unown", ability: 'levitate', moves: ['hiddenpower']},
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move gastroacid', 'move return');
 		assert.false.holdsItem(battle.p2.active[0]); // Klefki's Magician suppressed by Gastro Acid.
-		p1.chooseMove('glare').foe.chooseSwitch(2); // Dusknoir
+		battle.makeChoices('move glare', 'switch 2'); // Dusknoir
 		assert.strictEqual(battle.p2.active[0].status, 'par');
-		p1.chooseMove('confuseray').foe.chooseSwitch(3); // Slaking
+		battle.makeChoices('move confuseray', 'switch 3'); // Slaking
 		assert.ok(battle.p2.active[0].volatiles['confusion']);
-		p1.chooseMove('sandattack').foe.chooseSwitch(4); // Tornadus
+		battle.makeChoices('move sandattack', 'switch 4'); // Tornadus
 		assert.statStage(battle.p2.active[0], 'accuracy', -1);
-		p1.chooseMove('sandattack').foe.chooseSwitch(5); // Unown (Levitate)
+		battle.makeChoices('move sandattack', 'switch 5'); // Unown (Levitate)
 		assert.statStage(battle.p2.active[0], 'accuracy', -1);
 	});
 
@@ -36,7 +36,7 @@ describe('Most status moves', function () {
 		this.timeout(0);
 
 		battle = common.createBattle();
-		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'noguard', item: 'laggingtail', moves: ['thunderwave', 'willowisp', 'poisongas', 'toxic']}]);
+		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'noguard', item: 'laggingtail', moves: ['thunderwave', 'willowisp', 'poisongas', 'toxic']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Zapdos", ability: 'pressure', moves: ['charge']},
 			{species: "Emboar", ability: 'blaze', moves: ['sleeptalk']},
@@ -44,27 +44,27 @@ describe('Most status moves', function () {
 			{species: "Aron", ability: 'sturdy', moves: ['magnetrise']},
 		]);
 
-		p1.chooseMove('thunderwave').foe.chooseDefault();
+		battle.makeChoices('move thunderwave', 'move charge');
 		assert.strictEqual(battle.p2.active[0].status, '');
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
 
-		p1.chooseMove('willowisp').foe.chooseSwitch(2); // Emboar
+		battle.makeChoices('move willowisp', 'switch 2'); // Emboar
 		assert.strictEqual(battle.p2.active[0].status, '');
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
 
-		p1.chooseMove('poisongas').foe.chooseSwitch(3); // Muk
+		battle.makeChoices('move poisongas', 'switch 3'); // Muk
 		assert.strictEqual(battle.p2.active[0].status, '');
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
 
-		p1.chooseMove('toxic').foe.chooseDefault();
+		battle.makeChoices('move toxic', 'move shadowsneak');
 		assert.strictEqual(battle.p2.active[0].status, '');
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
 
-		p1.chooseMove('poisongas').foe.chooseSwitch(4); // Aron
+		battle.makeChoices('move poisongas', 'switch 4'); // Aron
 		assert.strictEqual(battle.p2.active[0].status, '');
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
 
-		p1.chooseMove('toxic').foe.chooseDefault();
+		battle.makeChoices('move toxic', 'move magnetrise');
 		assert.strictEqual(battle.p2.active[0].status, '');
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
 	});
@@ -87,8 +87,7 @@ describe('Poison-inflicting status moves [Gen 2]', function () {
 
 		const target = battle.p2.active[0];
 		POISON_STATUS_MOVES.forEach(move => {
-			battle.p1.chooseMove(move);
-			assert.constant(() => target.status, () => battle.commitDecisions());
+			assert.constant(() => target.status, () => battle.makeChoices('move ' + move, 'move sleeptalk'));
 		});
 	});
 });

@@ -30,8 +30,7 @@ describe('Follow Me', function () {
 				hitCount++;
 			}
 		});
-		battle.choose('p2', 'move 1 2, move 1 2, move 1 2');
-		battle.commitDecisions();
+		battle.makeChoices('move followme, move calmmind, move calmmind', 'move lowkick 2, move lowkick 2, move lowkick 2');
 		assert.strictEqual(hitCount, 2);
 	});
 
@@ -45,7 +44,7 @@ describe('Follow Me', function () {
 			{species: 'Alakazam', ability: 'synchronize', moves: ['howl']},
 			{species: 'Kadabra', ability: 'synchronize', moves: ['howl']},
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move followme, move softboiled', 'move howl, move howl');
 		assert.strictEqual(battle.p1.active[0].boosts['atk'], 0);
 		assert.strictEqual(battle.p2.active[0].boosts['atk'], 1);
 		assert.strictEqual(battle.p2.active[1].boosts['atk'], 1);

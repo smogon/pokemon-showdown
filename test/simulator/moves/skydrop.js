@@ -14,9 +14,9 @@ describe('Sky Drop', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Lairon", ability: 'sturdy', moves: ['tackle']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move skydrop', 'move tackle');
 		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
-		battle.commitDecisions();
+		battle.makeChoices('move skydrop', 'move tackle');
 		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
@@ -27,9 +27,8 @@ describe('Sky Drop', function () {
 			{species: "Lairon", ability: 'sturdy', moves: ['bulkup']},
 			{species: "Aggron", ability: 'sturdy', moves: ['bulkup']},
 		]);
-		battle.commitDecisions();
-		battle.choose('p2', 'switch 2');
-		battle.commitDecisions();
+		battle.makeChoices('move skydrop', 'move bulkup');
+		battle.makeChoices('move skydrop', 'switch aggron');
 		assert.strictEqual(battle.p2.active[0].template.speciesid, 'lairon');
 	});
 
@@ -45,8 +44,7 @@ describe('Sky Drop', function () {
 			{species: "Aggron", ability: 'noguard', moves: ['dragontail']},
 			{species: "Omastar", ability: 'swiftswim', moves: ['shellsmash']},
 		]);
-		battle.choose('p1', 'move 1 1, move 1 1');
-		battle.choose('p2', 'move 1 1, move 1 1');
+		battle.makeChoices('move skydrop 1, move circlethrow 1', 'move bulkup, move dragontail 1');
 		assert.strictEqual(battle.p1.active[0].template.speciesid, 'aerodactyl');
 		assert.strictEqual(battle.p2.active[0].template.speciesid, 'armaldo');
 	});
@@ -56,9 +54,8 @@ describe('Sky Drop', function () {
 			[{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}],
 			[{species: "Manectric", ability: 'intimidate', item: 'manectite', moves: ['charge']}],
 		]);
-		battle.commitDecisions();
-		battle.choose('p2', 'move 1 mega');
-		battle.commitDecisions();
+		battle.makeChoices('move skydrop', 'move charge');
+		battle.makeChoices('move skydrop', 'move charge mega');
 		assert.strictEqual(battle.p2.active[0].template.speciesid, 'manectric');
 	});
 
@@ -66,13 +63,12 @@ describe('Sky Drop', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Aegislash", ability: 'stancechange', moves: ['tackle', 'kingsshield']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move skydrop', 'move tackle');
 		assert.strictEqual(battle.p2.active[0].template.speciesid, 'aegislash');
-		battle.commitDecisions();
+		battle.makeChoices('move skydrop', 'move tackle');
 		assert.strictEqual(battle.p2.active[0].template.speciesid, 'aegislashblade');
-		battle.commitDecisions();
-		battle.choose('p2', 'move 2');
-		battle.commitDecisions();
+		battle.makeChoices('move skydrop', 'move tackle');
+		battle.makeChoices('move skydrop', 'move kingsshield');
 		assert.strictEqual(battle.p2.active[0].template.speciesid, 'aegislashblade');
 	});
 
@@ -81,8 +77,7 @@ describe('Sky Drop', function () {
 			[{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}, {species: "Kyogre", ability: 'noguard', moves: ['scald']}],
 			[{species: "Lairon", ability: 'sturdy', moves: ['bulkup']}, {species: "Aggron", ability: 'sturdy', moves: ['bulkup']}],
 		]);
-		battle.choose('p1', 'move 1 1, move 1 -1');
-		battle.commitDecisions();
+		battle.makeChoices('move skydrop 1, move scald -1', 'move bulkup, move bulkup');
 		assert.strictEqual(battle.p2.active[0].boosts['atk'], 1);
 		assert.strictEqual(battle.p2.active[0].boosts['def'], 1);
 	});
@@ -92,9 +87,9 @@ describe('Sky Drop', function () {
 			[{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}],
 			[{species: "Salamence", ability: 'intimidate', moves: ['tackle']}],
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move skydrop', 'move tackle');
 		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
-		battle.commitDecisions();
+		battle.makeChoices('move skydrop', 'move tackle');
 		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
@@ -117,10 +112,8 @@ describe('Sky Drop', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Aerodactyl", ability: 'unnerve', moves: ['honeclaws', 'skydrop']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Lairon", ability: 'sturdy', moves: ['substitute', 'tackle']}]);
-		battle.commitDecisions();
-		battle.choose('p1', 'move 2');
-		battle.choose('p2', 'move 2');
-		battle.commitDecisions();
+		battle.makeChoices('move honeclaws', 'move substitute');
+		battle.makeChoices('move skydrop', 'move tackle');
 		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
@@ -128,7 +121,7 @@ describe('Sky Drop', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Aggron", ability: 'sturdy', moves: ['tackle']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move skydrop', 'move tackle');
 		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
@@ -137,8 +130,7 @@ describe('Sky Drop', function () {
 			[{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}, {species: "Smeargle", ability: 'owntempo', moves: ['spore']}],
 			[{species: "Lairon", ability: 'sturdy', moves: ['bulkup']}, {species: "Aggron", ability: 'sturdy', moves: ['bulkup']}],
 		]);
-		battle.choose('p1', 'move 1 -2, move 1 1');
-		battle.commitDecisions();
+		battle.makeChoices('move skydrop -2, move spore 1', 'move bulkup, move bulkup');
 		assert.strictEqual(battle.p2.active[0].status, 'slp');
 	});
 
@@ -147,10 +139,8 @@ describe('Sky Drop', function () {
 			[{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}, {species: "Smeargle", ability: 'owntempo', moves: ['splash']}],
 			[{species: "Lairon", ability: 'sturdy', moves: ['bulkup']}, {species: "Aggron", ability: 'sturdy', moves: ['bulkup', 'allyswitch']}],
 		]);
-		battle.choose('p1', 'move 1 1, move 1');
-		battle.commitDecisions();
-		battle.choose('p2', 'move 1, move 2');
-		battle.commitDecisions();
+		battle.makeChoices('move skydrop 1, move splash', 'move bulkup, move bulkup');
+		battle.makeChoices('move skydrop, move splash', 'move bulkup, move allyswitch');
 		assert.strictEqual(battle.p2.active[1].template.speciesid, 'lairon');
 		assert.notStrictEqual(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
 	});
@@ -160,10 +150,8 @@ describe('Sky Drop', function () {
 			[{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}, {species: "Smeargle", ability: 'owntempo', moves: ['splash']}],
 			[{species: "Lairon", ability: 'sturdy', moves: ['bulkup']}, {species: "Aggron", ability: 'sturdy', moves: ['bulkup', 'followme']}],
 		]);
-		battle.choose('p1', 'move 1 1, move 1');
-		battle.commitDecisions();
-		battle.choose('p2', 'move 1, move 2');
-		battle.commitDecisions();
+		battle.makeChoices('move skydrop 1, move splash', 'move bulkup move bulkup');
+		battle.makeChoices('move skydrop, move splash', 'move bulkup, move followme');
 		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		assert.strictEqual(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
 	});
@@ -177,11 +165,9 @@ describe('Sky Drop', function () {
 			// mod Sky Drop to deal no damage
 			if (effect.id === 'skydrop') return 0;
 		});
-		battle.choose('p1', 'move 1 1, move 1 2');
-		battle.choose('p2', 'move 1, move 1 2');
+		battle.makeChoices('move skydrop 1, move aquajet 2', 'move bulkup, move aquajet 2');
 		// Aerodactyl and Lairon are now airborne from Sky Drop
-		battle.choose('p1', 'move 1 1, move 1 1');
-		battle.choose('p2', 'move 1, move 1 1');
+		battle.makeChoices('move skydrop 1, move aquajet 1', 'move bulkup, move aquajet 1');
 		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
@@ -191,8 +177,7 @@ describe('Sky Drop', function () {
 			[{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}, {species: "Jirachi", ability: 'serenegrace', moves: ['gravity']}],
 			[{species: "Lairon", ability: 'sturdy', moves: ['bulkup']}, {species: "Aggron", ability: 'sturdy', moves: ['bulkup']}],
 		]);
-		battle.choose('p1', 'move 1 1, move 1');
-		battle.commitDecisions();
+		battle.makeChoices('move skydrop 1, move gravity', 'move bulkup, move bulkup');
 		assert.strictEqual(battle.p2.active[0].boosts['atk'], 1);
 		assert.strictEqual(battle.p2.active[0].boosts['def'], 1);
 	});
@@ -208,7 +193,7 @@ describe('Sky Drop [Gen 5]', function () {
 			[{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}],
 			[{species: "Aggron", ability: 'sturdy', moves: ['tackle']}],
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move skydrop', 'move tackle');
 		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
@@ -225,43 +210,36 @@ describe('Sky Drop [Gen 5]', function () {
 				{species: "Deoxys-Attack", ability: 'sturdy', moves: ['nastyplot', 'thunderbolt', 'roar']},
 				{species: "Azurill", ability: 'thickfat', moves: ['watersport']},
 			]);
-			battle.choose('p1', 'move 2 1, move 2');
-			battle.commitDecisions();
+			console.log('-------------------------------');
+			battle.makeChoices('move skydrop 1, move gravity', 'move sleeptalk, move nastyplot');
 			// Magikarp should now be stuck because of the Sky Drop glitch.
 		});
 
 		it('should prevent the target from moving or switching', function () {
-			battle.choose('p2', 'move 2 2, move 1');
-			battle.commitDecisions();
+			battle.makeChoices('move rockpolish, move recover', 'move tackle 2, move nastyplot');
 			assert.strictEqual(battle.p1.active[1].hp, battle.p1.active[1].maxhp);
-			battle.choose('p2', 'switch 3, move 1');
-			battle.commitDecisions();
+			battle.makeChoices('move rockpolish, move recover', 'switch azurill, move nastyplot');
 			assert.strictEqual(battle.p2.active[0].template.speciesid, 'magikarp');
 		});
 
 		it('should prevent the user from being forced out', function () {
-			battle.choose('p2', 'move 1, move 3 1');
-			battle.commitDecisions();
+			battle.makeChoices('move rockpolish, move recover', 'move sleeptalk, move roar 1');
 			assert.strictEqual(battle.p1.active[0].template.speciesid, 'aerodactyl');
 		});
 
 		it('should end when the user switches out', function () {
-			battle.choose('p1', 'switch 3, move 1');
-			battle.choose('p2', 'move 2 2, move 1');
+			battle.makeChoices('switch 3, move rockpolish', 'move tackle 2, move nastyplot');
 			assert.notStrictEqual(battle.p1.active[1].hp, battle.p1.active[1].maxhp);
 		});
 
 		it('should end when the user faints', function () {
-			battle.choose('p2', 'move 2 2, move 2 1');
-			battle.commitDecisions();
+			battle.makeChoices('move rockpolish, move recover', 'move tackle 2, move thunderbolt 1');
 			assert.notStrictEqual(battle.p1.active[1].hp, battle.p1.active[1].maxhp);
 		});
 
 		it('should end when the user completes another two-turn move', function () {
-			battle.choose('p1', 'move 3 2, move 1');
-			battle.commitDecisions();
-			battle.choose('p2', 'move 2 2, move 1');
-			battle.commitDecisions();
+			battle.makeChoices('move dig 2, move recover', 'move sleeptalk, move nastyplot');
+			battle.makeChoices('move rockpolish, move recover', 'move tackle 2, move nastyplot');
 			assert.notStrictEqual(battle.p1.active[1].hp, battle.p1.active[1].maxhp);
 		});
 	});

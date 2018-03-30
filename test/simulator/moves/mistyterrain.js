@@ -14,16 +14,15 @@ describe('Misty Terrain', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Florges", ability: 'symbiosis', moves: ['mist', 'mistyterrain']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Florges", ability: 'symbiosis', moves: ['mist']}]);
-		battle.choose('p1', 'move 2');
-		battle.commitDecisions();
+		battle.makeChoices('move mistyterrain', 'move mist');
 		assert.ok(battle.isTerrain('mistyterrain'));
-		battle.commitDecisions();
+		battle.makeChoices('move mist', 'move mist');
 		assert.ok(battle.isTerrain('mistyterrain'));
-		battle.commitDecisions();
+		battle.makeChoices('move mist', 'move mist');
 		assert.ok(battle.isTerrain('mistyterrain'));
-		battle.commitDecisions();
+		battle.makeChoices('move mist', 'move mist');
 		assert.ok(battle.isTerrain('mistyterrain'));
-		battle.commitDecisions();
+		battle.makeChoices('move mist', 'move mist');
 		assert.ok(battle.isTerrain(''));
 	});
 
@@ -31,7 +30,7 @@ describe('Misty Terrain', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Shaymin", ability: 'naturalcure', moves: ['mistyterrain']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Shaymin-Sky", ability: 'serenegrace', moves: ['leechseed']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move mistyterrain', 'move leechseed');
 		let basePower;
 		let move = Dex.getMove('dragonpulse');
 		basePower = battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], move, move.basePower, true);
@@ -44,9 +43,8 @@ describe('Misty Terrain', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Florges", ability: 'symbiosis', moves: ['mistyterrain', 'toxic']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Machamp", ability: 'noguard', item: 'airballoon', moves: ['bulkup', 'toxic']}]);
-		battle.commitDecisions();
-		battle.choose('p1', 'move 2');
-		battle.choose('p2', 'move 2');
+		battle.makeChoices('move mistyterrain', 'move bulkup');
+		battle.makeChoices('move toxic', 'move toxic');
 		assert.strictEqual(battle.p1.active[0].status, '');
 		assert.strictEqual(battle.p2.active[0].status, 'tox');
 	});
@@ -55,7 +53,7 @@ describe('Misty Terrain', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Florges", ability: 'symbiosis', moves: ['mistyterrain']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Crobat", ability: 'infiltrator', moves: ['toxic']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move mistyterrain', 'move toxic');
 		assert.strictEqual(battle.p1.active[0].status, 'tox');
 	});
 
@@ -63,9 +61,8 @@ describe('Misty Terrain', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Florges", ability: 'symbiosis', moves: ['mistyterrain', 'yawn']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Sableye", ability: 'prankster', moves: ['yawn']}]);
-		battle.commitDecisions();
-		battle.choose('p1', 'move 2');
-		battle.commitDecisions();
+		battle.makeChoices('move mistyterrain', 'move yawn');
+		battle.makeChoices('move yawn', 'move yawn');
 		assert.strictEqual(battle.p1.active[0].status, '');
 		let dataLine = battle.log[battle.lastMoveLine + 1].split('|');
 		assert.strictEqual(dataLine[1], '-start');
@@ -76,9 +73,8 @@ describe('Misty Terrain', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Florges", ability: 'symbiosis', moves: ['mistyterrain', 'rest']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Pidgeot", ability: 'keeneye', moves: ['doubleedge', 'rest']}]);
-		battle.commitDecisions();
-		battle.choose('p1', 'move 2');
-		battle.choose('p2', 'move 2');
+		battle.makeChoices('move mistyterrain', 'move doubleedge');
+		battle.makeChoices('move rest', 'move rest');
 		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
@@ -87,9 +83,8 @@ describe('Misty Terrain', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'owntempo', moves: ['yawn', 'skydrop']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Sableye", ability: 'prankster', moves: ['yawn', 'mistyterrain']}]);
-		battle.commitDecisions();
-		battle.choose('p1', 'move 2');
-		battle.choose('p2', 'move 2');
+		battle.makeChoices('move yawn', 'move yawn');
+		battle.makeChoices('move skydrop', 'move mistyterrain');
 		assert.strictEqual(battle.p1.active[0].status, 'slp');
 		assert.strictEqual(battle.p2.active[0].status, 'slp');
 	});
@@ -98,7 +93,7 @@ describe('Misty Terrain', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Whimsicott", ability: 'prankster', moves: ['mistyterrain']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Shuckle", ability: 'sturdy', moves: ['naturepower']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move mistyterrain', 'move naturepower');
 		let resultMove = toId(battle.log[battle.lastMoveLine].split('|')[3]);
 		assert.strictEqual(resultMove, 'moonblast');
 	});

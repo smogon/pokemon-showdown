@@ -17,8 +17,7 @@ describe('Shed Shell', function () {
 			{species: "Starmie", ability: 'naturalcure', item: 'shedshell', moves: ['recover']},
 			{species: "Heatran", ability: 'flashfire', moves: ['rest']},
 		]);
-		battle.p2.chooseSwitch(2);
-		battle.commitDecisions();
+		battle.makeChoices('move calmmind', 'switch 2');
 		assert.species(battle.p2.active[0], 'Heatran');
 	});
 
@@ -29,9 +28,8 @@ describe('Shed Shell', function () {
 			{species: "Venusaur", ability: 'overgrow', item: 'shedshell', moves: ['ingrain']},
 			{species: "Heatran", ability: 'flashfire', moves: ['rest']},
 		]);
-		battle.commitDecisions();
-		battle.p2.chooseSwitch(2);
-		battle.commitDecisions();
+		battle.makeChoices('move meanlook', 'move ingrain');
+		battle.makeChoices('move meanlook', 'switch 2');
 		assert.species(battle.p2.active[0], 'Heatran');
 	});
 
@@ -42,9 +40,8 @@ describe('Shed Shell', function () {
 			{species: "Magnezone", ability: 'sturdy', item: 'shedshell', moves: ['sleeptalk']},
 			{species: "Heatran", ability: 'flashfire', moves: ['rest']},
 		]);
-		battle.commitDecisions();
-		battle.p2.chooseSwitch(2);
-		battle.commitDecisions();
+		battle.makeChoices('move skydrop', 'move sleeptalk');
+		battle.makeChoices('move skydrop', 'switch 2');
 		assert.species(battle.p2.active[0], 'Magnezone');
 	});
 });

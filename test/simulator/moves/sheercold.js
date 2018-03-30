@@ -15,7 +15,7 @@ describe('Sheer Cold', function () {
 			[{species: "Deoxys-Speed", ability: 'noguard', moves: ['sheercold']}],
 			[{species: "Arceus-Ice", item: 'icicleplate', ability: 'multitype', moves: ['calmmind']}],
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move sheercold', 'move calmmind');
 		assert.false.fainted(battle.p2.active[0]);
 	});
 });
@@ -30,7 +30,7 @@ describe('Sheer Cold [Gen 6]', function () {
 			[{species: "Deoxys-Speed", ability: 'noguard', moves: ['sheercold']}],
 			[{species: "Arceus-Ice", item: 'icicleplate', ability: 'multitype', moves: ['calmmind']}],
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move sheercold', 'move calmmind');
 		assert.fainted(battle.p2.active[0]);
 	});
 });

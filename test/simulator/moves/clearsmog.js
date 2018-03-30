@@ -15,7 +15,7 @@ describe('Clear Smog', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Amoonguss", ability: 'regenerator', moves: ['clearsmog']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Sableye", ability: 'prankster', moves: ['calmmind']}]);
 
-		battle.commitDecisions();
+		battle.makeChoices('move clearsmog', 'move calmmind');
 
 		assert.strictEqual(battle.p2.pokemon[0].boosts['spa'], 0);
 		assert.strictEqual(battle.p2.pokemon[0].boosts['spd'], 0);
@@ -26,10 +26,8 @@ describe('Clear Smog', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Amoonguss", ability: 'regenerator', moves: ['clearsmog', 'toxic']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Sableye", ability: 'prankster', moves: ['substitute', 'calmmind']}]);
 
-		battle.choose('p1', 'move 2');
-		battle.commitDecisions();
-		battle.choose('p2', 'move 2');
-		battle.commitDecisions();
+		battle.makeChoices('move toxic', 'move substitute');
+		battle.makeChoices('move clearsmog', 'move calmmind');
 
 		assert.strictEqual(battle.p2.pokemon[0].boosts['spa'], 1);
 		assert.strictEqual(battle.p2.pokemon[0].boosts['spd'], 1);
@@ -40,7 +38,7 @@ describe('Clear Smog', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Amoonguss", ability: 'regenerator', item: 'laggingtail', moves: ['clearsmog']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Steelix", ability: 'prankster', moves: ['irondefense']}]);
 
-		battle.commitDecisions();
+		battle.makeChoices('move clearsmog', 'move irondefense');
 
 		assert.strictEqual(battle.p2.pokemon[0].boosts['def'], 2);
 	});
@@ -50,7 +48,7 @@ describe('Clear Smog', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Amoonguss", ability: 'regenerator', moves: ['clearsmog']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Arcanine", ability: 'intimidate', moves: ['morningsun']}]);
 
-		battle.commitDecisions();
+		battle.makeChoices('move clearsmog', 'move morningsun');
 
 		assert.strictEqual(battle.p1.pokemon[0].boosts['atk'], -1);
 	});
@@ -60,12 +58,11 @@ describe('Clear Smog', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Amoonguss", ability: 'regenerator', item: 'scopelens', moves: ['focusenergy', 'clearsmog']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Primeape", ability: 'angerpoint', moves: ['bulkup']}]);
 
-		battle.commitDecisions();
+		battle.makeChoices('move focusenergy', 'move bulkup');
 		assert.strictEqual(battle.p2.pokemon[0].boosts['atk'], 1);
 		assert.strictEqual(battle.p2.pokemon[0].boosts['def'], 1);
 
-		battle.choose('p1', 'move 2');
-		battle.commitDecisions();
+		battle.makeChoices('move clearsmog', 'move bulkup');
 		assert.strictEqual(battle.p2.pokemon[0].boosts['atk'], 6);
 		assert.strictEqual(battle.p2.pokemon[0].boosts['def'], 0);
 	});

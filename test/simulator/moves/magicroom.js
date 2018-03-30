@@ -14,7 +14,7 @@ describe('Magic Room', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Lopunny", ability: 'limber', item: 'leftovers', moves: ['bellydrum']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Giratina", ability: 'pressure', moves: ['magicroom']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move bellydrum', 'move magicroom');
 		assert.strictEqual(battle.p1.active[0].hp, Math.ceil(battle.p1.active[0].maxhp / 2));
 	});
 
@@ -22,7 +22,7 @@ describe('Magic Room', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Lopunny", ability: 'limber', item: 'chopleberry', moves: ['magicroom']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Golem", ability: 'noguard', moves: ['lowkick']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move magicroom', 'move lowkick');
 		assert.strictEqual(battle.p1.active[0].item, 'chopleberry');
 	});
 
@@ -30,8 +30,8 @@ describe('Magic Room', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Lopunny", ability: 'limber', item: 'assaultvest', moves: ['protect']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Golem", ability: 'noguard', moves: ['magicroom']}]);
-		battle.commitDecisions();
-		battle.commitDecisions();
+		battle.makeChoices('move protect', 'move magicroom');
+		battle.makeChoices('move protect', 'move magicroom');
 		assert.strictEqual(battle.p1.active[0].lastMove.id, 'protect');
 	});
 
@@ -39,7 +39,7 @@ describe('Magic Room', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Lopunny", ability: 'limber', item: 'seaincense', moves: ['fling']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Sableye", ability: 'prankster', moves: ['magicroom']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move fling', 'move magicroom');
 		assert.strictEqual(battle.p1.active[0].item, 'seaincense');
 	});
 
@@ -47,9 +47,8 @@ describe('Magic Room', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Lopunny", ability: 'limber', item: 'lopunnite', moves: ['bulkup']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Golem", ability: 'noguard', moves: ['magicroom', 'rest']}]);
-		battle.commitDecisions();
-		battle.choose('p1', 'move 1 mega');
-		battle.choose('p2', 'move 2');
+		battle.makeChoices('move bulkup', 'move magicroom');
+		battle.makeChoices('move bulkup mega', 'move rest');
 		assert.strictEqual(battle.p1.active[0].template.speciesid, 'lopunnymega');
 	});
 
@@ -60,8 +59,8 @@ describe('Magic Room', function () {
 			{species: "Groudon", ability: 'drought', item: 'redorb', moves: ['protect']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Meowstic", ability: 'prankster', moves: ['magicroom']}]);
-		battle.commitDecisions();
-		battle.choose('p1', 'switch 2');
+		battle.makeChoices('move voltswitch', 'move magicroom');
+		battle.makeChoices('switch groudon', 'move magicroom');
 		assert.strictEqual(battle.p1.active[0].template.speciesid, 'groudonprimal');
 	});
 });

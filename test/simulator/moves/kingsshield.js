@@ -13,7 +13,7 @@ describe(`King's Shield`, function () {
 			[{species: "Gallade", ability: 'justified', moves: ['zenheadbutt']}],
 			[{species: "Aegislash", ability: 'stancechange', moves: ['kingsshield']}],
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move zenheadbutt', 'move kingsshield');
 		assert.statStage(battle.p1.active[0], 'atk', -2);
 	});
 
@@ -22,7 +22,7 @@ describe(`King's Shield`, function () {
 			[{species: "Gallade", ability: 'justified', moves: ['drainpunch']}],
 			[{species: "Aegislash", ability: 'stancechange', moves: ['kingsshield']}],
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move drainpunch', 'move kingsshield');
 		assert.statStage(battle.p1.active[0], 'atk', -2);
 	});
 });
@@ -35,7 +35,7 @@ describe(`King's Shield [Gen 6]`, function () {
 			[{species: "Gallade", ability: 'justified', moves: ['drainpunch']}],
 			[{species: "Aegislash", ability: 'stancechange', moves: ['kingsshield']}],
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move drainpunch', 'move kingsshield');
 		assert.statStage(battle.p1.active[0], 'atk', 0);
 	});
 });

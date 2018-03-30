@@ -14,7 +14,7 @@ describe('Relic Song', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Meloetta", ability: 'serenegrace', moves: ['relicsong']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Registeel", ability: 'clearbody', moves: ['rest']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move relicsong', 'move rest');
 		assert.strictEqual(battle.p1.active[0].template.speciesid, 'meloettapirouette');
 	});
 
@@ -22,7 +22,7 @@ describe('Relic Song', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Meloetta-Pirouette", ability: 'serenegrace', moves: ['relicsong']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Registeel", ability: 'clearbody', moves: ['rest']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move relicsong', 'move rest');
 		assert.strictEqual(battle.p1.active[0].template.speciesid, 'meloetta');
 	});
 
@@ -30,9 +30,8 @@ describe('Relic Song', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Deoxys-Attack", ability: 'victorystar', item: 'laggingtail', moves: ['splash', 'relicsong']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest']}]);
-		battle.commitDecisions();
-		battle.choose('p1', 'move 2');
-		battle.choose('p2', 'move 2');
+		battle.makeChoices('move splash', 'move substitute');
+		battle.makeChoices('move relicsong', 'move rest');
 		assert.strictEqual(battle.p2.active[0].item, '');
 	});
 });
@@ -47,9 +46,8 @@ describe('Relic Song [Gen 5]', function () {
 			[{species: "Deoxys-Attack", ability: 'victorystar', item: 'laggingtail', moves: ['splash', 'relicsong']}],
 			[{species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest']}],
 		]);
-		battle.commitDecisions();
-		battle.choose('p1', 'move 2');
-		battle.choose('p2', 'move 2');
+		battle.makeChoices('move splash', 'move substitute');
+		battle.makeChoices('move relicsong', 'move rest');
 		assert.strictEqual(battle.p2.active[0].item, 'focussash');
 	});
 
@@ -58,7 +56,7 @@ describe('Relic Song [Gen 5]', function () {
 			[{species: "Meloetta", ability: 'serenegrace', moves: ['relicsong']}],
 			[{species: "Registeel", ability: 'prankster', moves: ['substitute']}],
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move relicsong', 'move substitute');
 		assert.strictEqual(battle.p1.active[0].template.speciesid, 'meloettapirouette');
 	});
 });

@@ -41,7 +41,6 @@ describe('Miracle Eye', function () {
 		], [
 			{species: "Zapdos", moves: ['roost']},
 		]]);
-		battle.choose('p1', 'move 3');
 		battle.makeChoices('move miracle eye', 'move roost');
 		battle.boost({spe: 6, evasion: -6}, battle.p2.active[0]);
 		for (let i = 0; i < 3; i++) {

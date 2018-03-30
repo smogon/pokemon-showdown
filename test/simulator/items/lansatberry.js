@@ -15,7 +15,7 @@ describe('Lansat Berry', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Aggron', ability: 'sturdy', item: 'lansatberry', moves: ['sleeptalk']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Lucario', ability: 'adaptability', moves: ['aurasphere']}]);
 		const holder = battle.p1.active[0];
-		battle.commitDecisions();
+		battle.makeChoices('move sleeptalk', 'move aurasphere');
 		assert.false.holdsItem(holder);
 		assert.ok('focusenergy' in holder.volatiles);
 	});
@@ -33,8 +33,8 @@ describe('Lansat Berry', function () {
 			assert.strictEqual(critRatio, expectedRatio[i++]);
 		});
 
-		battle.commitDecisions();
-		battle.commitDecisions();
+		battle.makeChoices('move triplekick', 'move acidarmor');
+		battle.makeChoices('move triplekick', 'move acidarmor');
 
 		assert.false.holdsItem(holder);
 		assert.strictEqual(holder.hp, 3);

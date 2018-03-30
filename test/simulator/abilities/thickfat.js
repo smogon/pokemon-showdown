@@ -17,12 +17,12 @@ describe('Thick Fat', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: "Nidoking", ability: 'sheerforce', moves: ['incinerate', 'icebeam']}]);
 		const target = battle.p1.active[0];
 		// should not crit
-		battle.p2.chooseMove('incinerate').foe.chooseDefault();
+		battle.makeChoices('move splash', 'move incinerate');
 		assert.bounded(target.maxhp - target.hp, [29, 35]);
 		battle.heal(target.maxhp, target, target, battle.getFormat());
 		battle.resetRNG();
 		// should not crit
-		battle.p2.chooseMove('icebeam').foe.chooseDefault();
+		battle.makeChoices('move splash', 'move icebeam');
 		assert.bounded(target.maxhp - target.hp, [56, 66]);
 	});
 
@@ -33,12 +33,12 @@ describe('Thick Fat', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: "Nidoking", ability: 'moldbreaker', moves: ['incinerate', 'icebeam']}]);
 		const target = battle.p1.active[0];
 		// should not crit
-		battle.p2.chooseMove('incinerate').foe.chooseDefault();
+		battle.makeChoices('move splash', 'move incinerate');
 		assert.bounded(target.maxhp - target.hp, [57, 68]);
 		battle.heal(target.maxhp, target, target, battle.getFormat());
 		battle.resetRNG();
 		// should not crit
-		battle.p2.chooseMove('icebeam').foe.chooseDefault();
+		battle.makeChoices('move splash', 'move icebeam');
 		assert.bounded(target.maxhp - target.hp, [85, 101]);
 	});
 });

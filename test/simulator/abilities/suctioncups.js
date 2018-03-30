@@ -17,11 +17,11 @@ describe('Suction Cups', function () {
 			{species: 'Forretress', ability: 'sturdy', moves: ['rapidspin']},
 		]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: 'Smeargle', ability: 'noguard', item: 'redcard', moves: ['healpulse', 'dragontail', 'circlethrow', 'roar']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move rapidspin', 'move healpulse');
 		assert.false.holdsItem(p2.active[0], "Red Card should activate");
 		assert.species(p1.active[0], 'Shuckle');
 		for (let i = 2; i <= 4; i++) {
-			p2.chooseMove(i).foe.chooseDefault();
+			battle.makeChoices('move rapidspin', 'move ' + i);
 			assert.species(p1.active[0], 'Shuckle');
 		}
 	});
@@ -33,7 +33,7 @@ describe('Suction Cups', function () {
 			{species: 'Shuckle', ability: 'suctioncups', item: 'ironball', moves: ['rest']},
 			{species: 'Forretress', ability: 'sturdy', moves: ['rapidspin']},
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move circlethrow', 'move rest');
 		assert.species(battle.p2.active[0], 'Forretress');
 	});
 });

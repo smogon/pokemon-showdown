@@ -14,7 +14,7 @@ describe('Damp', function () {
 		battle = common.createBattle();
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: 'Politoed', ability: 'damp', moves: ['calmmind']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: 'Electrode', ability: 'static', moves: ['explosion']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move calmmind', 'move explosion');
 		assert.fullHP(p1.active[0]);
 		assert.fullHP(p2.active[0]);
 	});
@@ -23,7 +23,7 @@ describe('Damp', function () {
 		battle = common.createBattle();
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: 'Poliwrath', ability: 'damp', moves: ['closecombat']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: 'Aron', ability: 'aftermath', moves: ['leer']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move closecombat', 'move leer');
 		assert.fullHP(p1.active[0]);
 		assert.fainted(p2.active[0]);
 	});
@@ -32,7 +32,7 @@ describe('Damp', function () {
 		battle = common.createBattle();
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: 'Politoed', ability: 'damp', moves: ['calmmind']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: 'Electrode', ability: 'moldbreaker', moves: ['explosion']}]);
-		assert.hurts(p1.active[0], () => battle.commitDecisions());
+		assert.hurts(p1.active[0], () => battle.makeChoices('move calmmind', 'move explosion'));
 		assert.fainted(p2.active[0]);
 	});
 });
