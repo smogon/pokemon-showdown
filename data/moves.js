@@ -9626,7 +9626,9 @@ let BattleMovedex = {
 		volatileStatus: 'magiccoat',
 		effect: {
 			duration: 1,
-			onStart: function (target) {
+			onStart: function (target, source, sourceEffect) {
+				// @ts-ignore
+				target.volatiles['magiccoat'].pranksterBoosted = sourceEffect.pranksterBoosted || false;
 				this.add('-singleturn', target, 'move: Magic Coat');
 			},
 			onTryHitPriority: 2,
@@ -9636,7 +9638,7 @@ let BattleMovedex = {
 				}
 				let newMove = this.getMoveCopy(move.id);
 				newMove.hasBounced = true;
-				newMove.pranksterBoosted = false;
+				newMove.pranksterBoosted = target.volatiles['magiccoat'].pranksterBoosted;
 				this.useMove(newMove, target, source);
 				return null;
 			},
