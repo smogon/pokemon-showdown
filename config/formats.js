@@ -568,8 +568,8 @@ let Formats = [
 	},
 	{
 		name: "[Gen 7] Digimon Showdown",
-		desc: [
-			"Use Digimon in this battle instead of Pokemon!",
+		desc: `Use Digimon in this battle instead of Pok&eacute;mon!`,
+		threads: [
 			`&bullet; <a href="dank memes">Digimon Showdown</a>`,
 		],
 
