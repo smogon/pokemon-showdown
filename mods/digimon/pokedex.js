@@ -531,7 +531,7 @@ exports.BattlePokedex = {
 	akatorimon: {
 		num: -2044,
 		species: "Akatorimon",
-		types: ["AIr", "Flame"],
+		types: ["Air", "Flame"],
 		gender: "N",
 		baseStats: {hp: 158, atk: 96, def: 93, spa: 96, spd: 81, spe: 80},
 		abilities: {0: "Data"},
@@ -1095,7 +1095,7 @@ exports.BattlePokedex = {
 	saberdramon: {
 		num: -2091,
 		species: "Saberdramon",
-		types: ["AIr", "Evil"],
+		types: ["Air", "Evil"],
 		gender: "N",
 		baseStats: {hp: 148, atk: 113, def: 72, spa: 94, spd: 70, spe: 90},
 		abilities: {0: "Virus"},
