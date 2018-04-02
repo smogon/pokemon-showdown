@@ -1374,8 +1374,6 @@ class RandomTeams extends Dex.ModdedDex {
 				ability = 'Synchronize';
 			} else if (template.id === 'venusaurmega') {
 				ability = 'Chlorophyll';
-			} else if (template.species === 'Stunfisk' && !teamDetails['sand']) {
-				ability = 'Limber';
 			}
 		} else {
 			ability = ability0.name;
@@ -1393,8 +1391,9 @@ class RandomTeams extends Dex.ModdedDex {
 			// PoTD Magikarp
 			item = 'Choice Band';
 		} else if (template.species === 'Stunfisk' && !teamDetails['sand']) {
-			// This is just to amuse Zarel
+			// This is just to amuse Zarel, but like, actually this time
 			item = 'Cheri Berry';
+			ability = 'Limber';
 
 		// First, the extra high-priority items
 		} else if (template.species === 'Clamperl' && !hasMove['shellsmash']) {
