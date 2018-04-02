@@ -1278,8 +1278,6 @@ class RandomTeams extends Dex.ModdedDex {
 					rejectAbility = !teamDetails['hail'];
 				} else if (ability === 'Lightning Rod') {
 					rejectAbility = template.types.includes('Ground');
-				} else if (ability === 'Limber') {
-					rejectAbility = template.types.includes('Electric');
 				} else if (ability === 'Liquid Voice') {
 					rejectAbility = !hasMove['hypervoice'];
 				} else if (ability === 'Overgrow') {
@@ -1376,6 +1374,8 @@ class RandomTeams extends Dex.ModdedDex {
 				ability = 'Synchronize';
 			} else if (template.id === 'venusaurmega') {
 				ability = 'Chlorophyll';
+			} else if (template.species === 'Stunfisk' && !teamDetails['sand']) {
+				ability = 'Limber';
 			}
 		} else {
 			ability = ability0.name;
@@ -1392,9 +1392,9 @@ class RandomTeams extends Dex.ModdedDex {
 		} else if (hasMove['magikarpsrevenge']) {
 			// PoTD Magikarp
 			item = 'Choice Band';
-		} else if (template.species === 'Rotom-Fan') {
+		} else if (template.species === 'Stunfisk' && !teamDetails['sand']) {
 			// This is just to amuse Zarel
-			item = 'Air Balloon';
+			item = 'Cheri Berry';
 
 		// First, the extra high-priority items
 		} else if (template.species === 'Clamperl' && !hasMove['shellsmash']) {
