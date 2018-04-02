@@ -161,6 +161,9 @@ exports.BattleStatuses = {
 		onLockMove: function (pokemon) {
 			return this.effectData.move;
 		},
+		onMoveAborted: function (pokemon) {
+			delete pokemon.volatiles['lockedmove'];
+		},
 		onBeforeTurn: function (pokemon) {
 			let move = this.getMove(this.effectData.move);
 			if (move.id) {

@@ -85,12 +85,7 @@ exports.BattleScripts = {
 			return;
 		}
 		if (!this.runEvent('BeforeMove', pokemon, target, move)) {
-			// Prevent invulnerability from persisting until the turn ends
-			pokemon.removeVolatile('twoturnmove');
-			// End Bide
-			pokemon.removeVolatile('bide');
-			// Rampage moves end without causing confusion
-			delete pokemon.volatiles['lockedmove'];
+			this.runEvent('MoveAborted', pokemon, target, move);
 			this.clearActiveMove(true);
 			// This is only run for sleep and fully paralysed.
 			this.runEvent('AfterMoveSelf', pokemon, target, move);
