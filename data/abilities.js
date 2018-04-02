@@ -2463,12 +2463,8 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon's Status moves have priority raised by 1, but Dark types are immune.",
 		onModifyPriority: function (priority, pokemon, target, move) {
 			if (move && move.category === 'Status') {
-				return priority + 1;
-			}
-		},
-		onModifyMove: function (move) {
-			if (move && move.category === 'Status') {
 				move.pranksterBoosted = true;
+				return priority + 1;
 			}
 		},
 		id: "prankster",
