@@ -1392,9 +1392,6 @@ class RandomTeams extends Dex.ModdedDex {
 		} else if (hasMove['magikarpsrevenge']) {
 			// PoTD Magikarp
 			item = 'Choice Band';
-		} else if (template.species === 'Rotom-Fan') {
-			// This is just to amuse Zarel
-			item = 'Air Balloon';
 
 		// First, the extra high-priority items
 		} else if (template.species === 'Clamperl' && !hasMove['shellsmash']) {
