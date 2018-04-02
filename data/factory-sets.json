@@ -16061,7 +16061,7 @@
 				"ability": ["Clear Body"],
 				"evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252},
 				"nature": "Hasty",
-				"moves": [["Moonblast"], ["Diamond Storm"], ["Psychic"], ["Hidden Power"]]
+				"moves": [["Moonblast"], ["Diamond Storm"], ["Psychic"], ["Hidden Power Fire"]]
 			}, {
 				"species": "Diancie",
 				"gender": "",
