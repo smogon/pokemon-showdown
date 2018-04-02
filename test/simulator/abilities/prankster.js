@@ -34,6 +34,30 @@ describe('Prankster', function () {
 		]);
 		assert.constant(() => battle.p2.active[0].status, () => battle.makeChoices('move magiccoat', 'move willowisp'));
 	});
+
+	it('should not cause bounced Status moves to fail against Dark Pokémon if it is removed', function () {
+		battle = common.createBattle({gameType: 'doubles'});
+		battle.join('p1', 'Guest 1', 1, [
+			{species: "Alakazam", ability: 'synchronize', moves: ['skillswap']},
+			{species: "Sableye", ability: 'prankster', moves: ['magiccoat']},
+		]);
+		const p2 = battle.join('p2', 'Guest 2', 1, [
+			{species: "Pyukumuku", ability: 'unaware', moves: ['curse']},
+			{species: "Houndoom", ability: 'flashfire', moves: ['confide']},
+		]);
+		battle.makeChoices('move skillswap -2, move magiccoat', 'move curse, move confide 2');
+		assert.statStage(p2.active[1], 'spa', -1);
+	});
+
+	it('should not cause Status moves forced by Encore to fail against Dark Pokémon', function () {
+		battle = common.createBattle([
+			[{species: "Liepard", ability: 'prankster', moves: ['encore']}],
+			[{species: "Riolu", ability: 'prankster', moves: ['confide', 'return']}],
+		]);
+		battle.makeChoices('move encore', 'move confide');
+		battle.makeChoices('move encore', 'move return');
+		assert.statStage(battle.p1.active[0], 'spa', -1);
+	});
 });
 
 describe('Prankster [Gen 6]', function () {
