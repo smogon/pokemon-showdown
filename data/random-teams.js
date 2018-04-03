@@ -570,6 +570,7 @@ class RandomTeams extends Dex.ModdedDex {
 		// Keep track of the available moves
 		for (const moveid of movePool) {
 			let move = this.getMove(moveid);
+			if (!move.basePower) continue;
 			if (move.category === 'Physical') counter['physicalpool']++;
 			if (move.category === 'Special') counter['specialpool']++;
 		}
