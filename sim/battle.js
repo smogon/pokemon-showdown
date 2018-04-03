@@ -177,7 +177,7 @@ class Battle extends Dex.ModdedDex {
 		this.midTurn = false;
 		this.currentRequest = '';
 		this.lastMoveLine = 0;
-		this.reportPercentages = false;
+		this.reportPercentages = this.gen >= 7;
 		this.supportCancel = false;
 		this.events = null;
 

@@ -13,7 +13,7 @@ let BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'Standard',
 		desc: "The standard ruleset for all offical Smogon singles tiers (Ubers, OU, etc.)",
-		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'Cancel Mod'],
 		banlist: ['Unreleased', 'Illegal'],
 	},
 	standardnext: {
@@ -74,7 +74,7 @@ let BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'Standard Doubles',
 		desc: "The standard ruleset for all official Smogon doubles tiers",
-		ruleset: ['Species Clause', 'Nickname Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Abilities Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Species Clause', 'Nickname Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Abilities Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'Cancel Mod'],
 		banlist: ['Unreleased', 'Illegal'],
 	},
 	pokemon: {

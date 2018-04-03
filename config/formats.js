@@ -21,7 +21,7 @@ let Formats = [
 
 		mod: 'gen7',
 		team: 'random',
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'Cancel Mod'],
 	},
 	{
 		name: "[Gen 7] Unrated Random Battle",
@@ -30,7 +30,7 @@ let Formats = [
 		team: 'random',
 		challengeShow: false,
 		rated: false,
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'Cancel Mod'],
 	},
 	{
 		name: "[Gen 7] OU",
@@ -160,7 +160,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
-		ruleset: ['Pokemon', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Pokemon', 'Endless Battle Clause', 'Team Preview', 'Cancel Mod'],
 		banlist: ['Illegal', 'Unreleased'],
 	},
 	{
@@ -232,7 +232,7 @@ let Formats = [
 		mod: 'gen7',
 		gameType: 'doubles',
 		team: 'random',
-		ruleset: ['PotD', 'Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['PotD', 'Pokemon', 'Cancel Mod'],
 	},
 	{
 		name: "[Gen 7] Doubles OU",
@@ -422,7 +422,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
-		ruleset: ['Pokemon', 'Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'CFZ Clause', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Pokemon', 'Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'CFZ Clause', 'Endless Battle Clause', 'Team Preview', 'Cancel Mod'],
 		banlist: ['Groudon-Primal', 'Arena Trap', 'Huge Power', 'Innards Out', 'Magnet Pull', 'Moody', 'Parental Bond', 'Protean', 'Psychic Surge', 'Pure Power', 'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard', 'Gengarite', 'Chatter', 'Comatose + Sleep Talk'],
 	},
 	{
@@ -438,7 +438,7 @@ let Formats = [
 			validate: [1, 3],
 			battle: 1,
 		},
-		ruleset: ['Pokemon', 'Species Clause', 'Nickname Clause', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Swagger Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
+		ruleset: ['Pokemon', 'Species Clause', 'Nickname Clause', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Swagger Clause', 'Endless Battle Clause', 'Cancel Mod', 'Team Preview'],
 		banlist: [
 			'Illegal', 'Unreleased', 'Arceus', 'Darkrai', 'Deoxys-Base', 'Deoxys-Attack', 'Deoxys-Defense', 'Dialga', 'Giratina', 'Groudon', 'Ho-Oh',
 			'Jirachi', 'Kangaskhan-Mega', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Marshadow', 'Mewtwo', 'Necrozma-Dawn-Wings',
@@ -611,7 +611,7 @@ let Formats = [
 
 		mod: 'gen7',
 		team: 'randomFactory',
-		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Mega Rayquaza Clause'],
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Team Preview', 'Cancel Mod', 'Mega Rayquaza Clause'],
 	},
 	{
 		name: "[Gen 7] BSS Factory",
@@ -634,7 +634,7 @@ let Formats = [
 		mod: 'gen7',
 		team: 'random',
 		searchShow: false,
-		ruleset: ['Pokemon', 'Same Type Clause', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Pokemon', 'Same Type Clause', 'Sleep Clause Mod', 'Cancel Mod'],
 	},
 	{
 		name: "[Gen 7] Challenge Cup 1v1",
@@ -644,7 +644,7 @@ let Formats = [
 		teamLength: {
 			battle: 1,
 		},
-		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
+		ruleset: ['Pokemon', 'Cancel Mod', 'Team Preview'],
 	},
 	{
 		name: "[Gen 7] Challenge Cup 2v2",
@@ -656,7 +656,7 @@ let Formats = [
 			battle: 2,
 		},
 		searchShow: false,
-		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
+		ruleset: ['Pokemon', 'Cancel Mod', 'Team Preview'],
 	},
 	{
 		name: "[Gen 7] Hackmons Cup",
@@ -664,7 +664,7 @@ let Formats = [
 
 		mod: 'gen7',
 		team: 'randomHC',
-		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Pokemon', 'Cancel Mod'],
 	},
 	{
 		name: "[Gen 7] Doubles Hackmons Cup",
@@ -673,7 +673,7 @@ let Formats = [
 		gameType: 'doubles',
 		team: 'randomHC',
 		searchShow: false,
-		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
+		ruleset: ['Pokemon', 'Cancel Mod'],
 	},
 	{
 		name: "[Gen 6] Random Battle",
@@ -710,21 +710,21 @@ let Formats = [
 
 		mod: 'gen3',
 		team: 'random',
-		ruleset: ['Pokemon', 'Standard'],
+		ruleset: ['Pokemon', 'Standard', 'HP Percentage Mod'],
 	},
 	{
 		name: "[Gen 2] Random Battle",
 
 		mod: 'gen2',
 		team: 'random',
-		ruleset: ['Pokemon', 'Standard'],
+		ruleset: ['Pokemon', 'Standard', 'HP Percentage Mod'],
 	},
 	{
 		name: "[Gen 1] Random Battle",
 
 		mod: 'gen1',
 		team: 'random',
-		ruleset: ['Pokemon', 'Standard'],
+		ruleset: ['Pokemon', 'Standard', 'HP Percentage Mod'],
 	},
 	{
 		name: "[Gen 1] Challenge Cup",
@@ -795,7 +795,7 @@ let Formats = [
 		],
 
 		mod: 'gen6',
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause'],
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Swagger Clause', 'HP Percentage Mod'],
 		banlist: ['Uber', 'Arena Trap', 'Shadow Tag', 'Soul Dew', 'Baton Pass'],
 	},
 	{
@@ -806,7 +806,7 @@ let Formats = [
 		],
 
 		mod: 'gen5',
-		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview', 'HP Percentage Mod'],
 		banlist: ['Uber', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Sand Stream ++ Sand Rush', 'Soul Dew'],
 	},
 	{
@@ -817,7 +817,7 @@ let Formats = [
 		],
 
 		mod: 'gen4',
-		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause'],
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'HP Percentage Mod'],
 		banlist: ['Uber'],
 	},
 	{
@@ -828,7 +828,7 @@ let Formats = [
 		],
 
 		mod: 'gen3',
-		ruleset: ['Pokemon', 'Standard'],
+		ruleset: ['Pokemon', 'Standard', 'HP Percentage Mod'],
 		banlist: ['Uber', 'Smeargle + Ingrain'],
 	},
 	{
@@ -839,7 +839,7 @@ let Formats = [
 		],
 
 		mod: 'gen2',
-		ruleset: ['Pokemon', 'Standard'],
+		ruleset: ['Pokemon', 'Standard', 'HP Percentage Mod'],
 		banlist: ['Uber'],
 	},
 	{
@@ -850,7 +850,7 @@ let Formats = [
 		],
 
 		mod: 'gen1',
-		ruleset: ['Pokemon', 'Standard'],
+		ruleset: ['Pokemon', 'Standard', 'HP Percentage Mod'],
 		banlist: ['Uber'],
 	},
 
@@ -870,7 +870,7 @@ let Formats = [
 
 		mod: 'gen6',
 		searchShow: false,
-		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview', 'Mega Rayquaza Clause'],
+		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview', 'Mega Rayquaza Clause', 'HP Percentage Mod'],
 	},
 	{
 		name: "[Gen 6] UU",
@@ -930,7 +930,7 @@ let Formats = [
 		mod: 'gen6',
 		searchShow: false,
 		maxLevel: 5,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup', 'HP Percentage Mod'],
 		banlist: ['LC Uber', 'Gligar', 'Misdreavus', 'Scyther', 'Sneasel', 'Tangela', 'Dragon Rage', 'Sonic Boom', 'Swagger'],
 	},
 	{
@@ -939,7 +939,7 @@ let Formats = [
 
 		mod: 'gen6',
 		searchShow: false,
-		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Same Type Clause', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Same Type Clause', 'Team Preview', 'HP Percentage Mod'],
 		banlist: [
 			'Aegislash', 'Altaria-Mega', 'Arceus', 'Blaziken', 'Charizard-Mega-X', 'Darkrai', 'Deoxys-Base', 'Deoxys-Attack', 'Dialga', 'Genesect', 'Gengar-Mega',
 			'Giratina', 'Greninja', 'Groudon', 'Ho-Oh', 'Hoopa-Unbound', 'Kangaskhan-Mega', 'Kyogre', 'Kyurem-White', 'Lucario-Mega', 'Lugia', 'Mawile-Mega', 'Metagross-Mega',
@@ -1017,7 +1017,7 @@ let Formats = [
 		mod: 'gen6',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Pokemon', 'Standard Doubles', 'Swagger Clause', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard Doubles', 'Swagger Clause', 'Team Preview', 'HP Percentage Mod'],
 		banlist: ['DUber', 'Soul Dew', 'Dark Void', 'Gravity ++ Grass Whistle', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder'],
 	},
 	{
@@ -1165,7 +1165,7 @@ let Formats = [
 		mod: 'gen5',
 		searchShow: false,
 		maxLevel: 5,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup', 'HP Percentage Mod'],
 		banlist: ['Berry Juice', 'Soul Dew', 'Dragon Rage', 'Sonic Boom', 'LC Uber', 'Gligar', 'Murkrow', 'Scyther', 'Sneasel', 'Tangela'],
 	},
 	{
@@ -1211,7 +1211,7 @@ let Formats = [
 		mod: 'gen5',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Swagger Clause', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Swagger Clause', 'Team Preview', 'HP Percentage Mod'],
 		banlist: [
 			'Arceus', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Jirachi',
 			'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Zekrom', 'Soul Dew', 'Dark Void', 'Sky Drop',
@@ -1261,7 +1261,7 @@ let Formats = [
 
 		mod: 'gen4',
 		searchShow: false,
-		ruleset: ['Pokemon', 'Standard'],
+		ruleset: ['Pokemon', 'Standard', 'HP Percentage Mod'],
 		banlist: ['Arceus'],
 	},
 	{
@@ -1273,7 +1273,7 @@ let Formats = [
 
 		mod: 'gen4',
 		searchShow: false,
-		ruleset: ['Pokemon', 'Standard'],
+		ruleset: ['Pokemon', 'Standard', 'HP Percentage Mod'],
 		banlist: ['Uber', 'OU', 'BL'],
 	},
 	{
@@ -1298,7 +1298,7 @@ let Formats = [
 		mod: 'gen4',
 		searchShow: false,
 		maxLevel: 5,
-		ruleset: ['Pokemon', 'Standard', 'Little Cup'],
+		ruleset: ['Pokemon', 'Standard', 'Little Cup', 'HP Percentage Mod'],
 		banlist: ['LC Uber', 'Misdreavus', 'Murkrow', 'Scyther', 'Sneasel', 'Tangela', 'Yanma', 'Berry Juice', 'Deep Sea Tooth', 'Dragon Rage', 'Sonic Boom'],
 	},
 	{
@@ -1362,7 +1362,7 @@ let Formats = [
 
 		mod: 'gen3',
 		searchShow: false,
-		ruleset: ['Pokemon', 'Standard'],
+		ruleset: ['Pokemon', 'Standard', 'HP Percentage Mod'],
 		banlist: ['Wobbuffet + Leftovers'],
 	},
 	{
@@ -1403,7 +1403,7 @@ let Formats = [
 
 		mod: 'gen2',
 		searchShow: false,
-		ruleset: ['Pokemon', 'Standard'],
+		ruleset: ['Pokemon', 'Standard', 'HP Percentage Mod'],
 	},
 	{
 		name: "[Gen 2] UU",
@@ -1431,7 +1431,7 @@ let Formats = [
 
 		mod: 'gen1',
 		searchShow: false,
-		ruleset: ['Pokemon', 'Standard'],
+		ruleset: ['Pokemon', 'Standard', 'HP Percentage Mod'],
 	},
 	{
 		name: "[Gen 1] OU (tradeback)",
@@ -1453,7 +1453,7 @@ let Formats = [
 
 		mod: 'stadium',
 		searchShow: false,
-		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'HP Percentage Mod'],
 		banlist: ['Uber',
 			'Nidoking + Fury Attack + Thrash', 'Exeggutor + Poison Powder + Stomp', 'Exeggutor + Sleep Powder + Stomp',
 			'Exeggutor + Stun Spore + Stomp', 'Jolteon + Focus Energy + Thunder Shock', 'Flareon + Focus Energy + Ember',
