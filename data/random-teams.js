@@ -1278,10 +1278,10 @@ class RandomTeams extends Dex.ModdedDex {
 					rejectAbility = !teamDetails['hail'];
 				} else if (ability === 'Lightning Rod') {
 					rejectAbility = template.types.includes('Ground');
-				} else if (ability === 'Liquid Voice') {
-					rejectAbility = !hasMove['hypervoice'];
 				} else if (ability === 'Limber') {
 					// rejectAbility = template.types.includes('Electric');
+				} else if (ability === 'Liquid Voice') {
+					rejectAbility = !hasMove['hypervoice'];
 				} else if (ability === 'Overgrow') {
 					rejectAbility = !counter['Grass'];
 				} else if (ability === 'Poison Heal') {
