@@ -6744,8 +6744,7 @@ let BattleMovedex = {
 			},
 			onFaint: function (target, source, effect) {
 				if (!source || source.fainted || !effect) return;
-				if (!source.lastMove) throw new Error("Pokemon.lastMove is null");
-				if (effect.effectType === 'Move' && !effect.isFutureMove) {
+				if (effect.effectType === 'Move' && !effect.isFutureMove && source.lastMove) {
 					for (const moveSlot of source.moveSlots) {
 						if (moveSlot.id === source.lastMove.id) {
 							moveSlot.pp = 0;
