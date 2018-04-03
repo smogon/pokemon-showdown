@@ -1280,6 +1280,8 @@ class RandomTeams extends Dex.ModdedDex {
 					rejectAbility = template.types.includes('Ground');
 				} else if (ability === 'Liquid Voice') {
 					rejectAbility = !hasMove['hypervoice'];
+				} else if (ability === 'Limber') {
+					// rejectAbility = template.types.includes('Electric');
 				} else if (ability === 'Overgrow') {
 					rejectAbility = !counter['Grass'];
 				} else if (ability === 'Poison Heal') {
@@ -1390,10 +1392,9 @@ class RandomTeams extends Dex.ModdedDex {
 		} else if (hasMove['magikarpsrevenge']) {
 			// PoTD Magikarp
 			item = 'Choice Band';
-		} else if (template.species === 'Stunfisk' && !teamDetails['sand']) {
-			// This is just to amuse Zarel, but like, actually this time
+		} else if (template.species === 'Stunfisk' && ability === 'Limber') {
+			// This is just to amuse Zarel
 			item = 'Cheri Berry';
-			ability = 'Limber';
 
 		// First, the extra high-priority items
 		} else if (template.species === 'Clamperl' && !hasMove['shellsmash']) {
