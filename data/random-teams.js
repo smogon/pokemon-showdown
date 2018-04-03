@@ -1393,9 +1393,6 @@ class RandomTeams extends Dex.ModdedDex {
 		} else if (hasMove['magikarpsrevenge']) {
 			// PoTD Magikarp
 			item = 'Choice Band';
-		} else if (template.species === 'Rotom-Fan') {
-			// This is just to amuse Zarel
-			item = 'Air Balloon';
 
 		// First, the extra high-priority items
 		} else if (template.species === 'Clamperl' && !hasMove['shellsmash']) {
@@ -1568,7 +1565,7 @@ class RandomTeams extends Dex.ModdedDex {
 		}
 
 		let levelScale = {
-			LC: 87,
+			LC: 88,
 			'LC Uber': 86,
 			NFE: 84,
 			PU: 83,
@@ -1604,6 +1601,13 @@ class RandomTeams extends Dex.ModdedDex {
 		if (ability === 'Power Construct') level = 73;
 		if (item === 'Kommonium Z') level = 77;
 		if (hasMove['batonpass'] && counter.setupType && level > 77) level = 77;
+
+		if (template.species === 'Stunfisk') {
+			// This is just to amuse Zarel
+			item = 'Cheri Berry';
+			ability = 'Limber';
+			level = 87;
+		}
 
 		// Prepare optimal HP
 		let srWeakness = this.getEffectiveness('Rock', template);
