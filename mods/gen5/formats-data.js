@@ -257,7 +257,7 @@ exports.BattleFormatsData = {
 	dugtrio: {
 		inherit: true,
 		randomBattleMoves: ["earthquake", "stoneedge", "stealthrock", "suckerpunch", "reversal", "substitute"],
-		tier: "OU",
+		tier: "Uber",
 	},
 	meowth: {
 		inherit: true,
