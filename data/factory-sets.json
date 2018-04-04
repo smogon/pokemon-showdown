@@ -2744,19 +2744,19 @@
 			}, {
 				"species": "Magearna",
 				"gender": "",
-				"item": ["Fairium Z", "Electrium Z"],
+				"item": ["Electrium Z"],
 				"ability": ["Soul-Heart"],
 				"evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252},
 				"nature": "Timid",
-				"moves": [["Shift Gear"], ["Fleur Cannon", "Ice Beam"], ["Thunderbolt"], ["Focus Blast"]]
+				"moves": [["Shift Gear"], ["Ice Beam"], ["Thunderbolt"], ["Focus Blast"]]
 			}, {
 				"species": "Magearna",
 				"gender": "",
-				"item": ["Fairium Z", "Electrium Z"],
+				"item": ["Fairium Z"],
 				"ability": ["Soul-Heart"],
 				"evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252},
 				"nature": "Timid",
-				"moves": [["Shift Gear"], ["Fleur Cannon", "Ice Beam"], ["Thunderbolt"], ["Hidden Power Fire"]]
+				"moves": [["Shift Gear"], ["Fleur Cannon"], ["Thunderbolt"], ["Hidden Power Fire"]]
 			}, {
 				"species": "Magearna",
 				"gender": "",
@@ -2777,7 +2777,7 @@
 			}, {
 				"species": "Magearna",
 				"gender": "",
-				"item": ["Fairium Z", "Electrium Z"],
+				"item": ["Fairium Z"],
 				"ability": ["Soul-Heart"],
 				"evs": {"hp": 252, "atk": 0, "def": 4, "spa": 252, "spd": 0, "spe": 0},
 				"ivs": {"hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 0},
@@ -2786,7 +2786,7 @@
 			}, {
 				"species": "Magearna",
 				"gender": "",
-				"item": ["Fairium Z", "Electrium Z"],
+				"item": ["Electrium Z"],
 				"ability": ["Soul-Heart"],
 				"evs": {"hp": 252, "atk": 0, "def": 4, "spa": 252, "spd": 0, "spe": 0},
 				"ivs": {"hp": 31, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 0},
@@ -3289,7 +3289,7 @@
 			"sets": [{
 				"species": "Volcarona",
 				"gender": "",
-				"item": ["Buginium Z", "Psychium Z"],
+				"item": ["Psychium Z"],
 				"ability": ["Flame Body"],
 				"evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252},
 				"nature": "Timid",
@@ -3297,7 +3297,7 @@
 			}, {
 				"species": "Volcarona",
 				"gender": "",
-				"item": ["Buginium Z", "Psychium Z"],
+				"item": ["Buginium Z"],
 				"ability": ["Flame Body"],
 				"evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252},
 				"nature": "Timid",
@@ -9724,7 +9724,7 @@
 			"sets": [{
 				"species": "Lilligant",
 				"gender": "",
-				"item": ["Life Orb", "Normalium Z"],
+				"item": ["Normalium Z"],
 				"ability": ["Chlorophyll"],
 				"evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252},
 				"nature": "Timid",
@@ -9732,7 +9732,7 @@
 			}, {
 				"species": "Lilligant",
 				"gender": "",
-				"item": ["Life Orb", "Normalium Z"],
+				"item": ["Life Orb"],
 				"ability": ["Chlorophyll"],
 				"evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252},
 				"nature": "Timid",
