@@ -271,8 +271,8 @@ exports.BattleMovedex = {
 				// Locked into a link
 				switch (this.effectData.turnsActivated[this.turn]) {
 				case 1: {
-					if (this.effectData.move[0] !== move.id) return this.effectData.move;
-					return[0];
+					if (this.effectData.move[0] !== move.id) return this.effectData.move[0];
+					return;
 				}
 				case 2:
 					if (this.effectData.move[1] !== move.id) return this.effectData.move[1];
