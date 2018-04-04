@@ -271,15 +271,9 @@ exports.BattleMovedex = {
 				// Locked into a link
 				switch (this.effectData.turnsActivated[this.turn]) {
 				case 1: {
-					let curAction = this.willMove(pokemon);
-					if (!curAction) {
-						let pseudoAction = {choice: 'move', move: this.effectData.move[1], targetLoc: curAction.targetLoc, pokemon: curAction.pokemon, targetPosition: curAction.targetPosition, targetSide: curAction.targetSide};
-						this.queue.unshift(pseudoAction);
-					}
-					if (this.effectData.move[0] !== move.id) return this.effectData.move[0];
-					return;
+					if (this.effectData.move[0] !== move.id) return this.effectData.move;
+					return[0];
 				}
-
 				case 2:
 					if (this.effectData.move[1] !== move.id) return this.effectData.move[1];
 					return;
