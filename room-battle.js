@@ -362,6 +362,7 @@ class Battle {
 		this.started = false;
 		this.ended = false;
 		this.active = false;
+		this.crashed = false;
 
 		/** @type {{[userid: string]: BattlePlayer}} */
 		this.players = Object.create(null);
@@ -541,6 +542,7 @@ class Battle {
 	receive(/** @type {string[]} */ lines) {
 		switch (lines[0]) {
 		case 'update':
+			if (lines[1].startsWith(`|html|<div class="broadcast-red"><b>The battle crashed`)) this.crashed = true;
 			for (const line of lines.slice(1)) {
 				this.room.add(line);
 			}
