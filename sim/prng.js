@@ -66,8 +66,8 @@ class PRNG {
 	next(from, to) {
 		this.seed = this.nextFrame(this.seed); // Advance the RNG
 		let result = (this.seed[0] << 16 >>> 0) + this.seed[1]; // Use the upper 32 bits
-		from = Math.floor(from);
-		to = Math.floor(to);
+		if (from) from = Math.floor(from);
+		if (to) to = Math.floor(to);
 		if (!from) {
 			result = result / 0x100000000;
 		} else if (!to) {

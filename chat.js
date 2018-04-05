@@ -700,6 +700,7 @@ class CommandContext {
 	 */
 	canBroadcast(suppressMessage) {
 		if (!this.broadcasting && this.cmdToken === BROADCAST_TOKEN) {
+			// @ts-ignore
 			if (!this.pmTarget && !this.user.can('broadcast', null, this.room)) {
 				this.errorReply("You need to be voiced to broadcast this command's information.");
 				this.errorReply("To see it for yourself, use: /" + this.message.substr(1));
@@ -777,6 +778,7 @@ class CommandContext {
 	 * @param {User?} [targetUser]
 	 */
 	canTalk(message, room, targetUser) {
+		// @ts-ignore
 		if (!room) room = this.room;
 		if (!targetUser && this.pmTarget) {
 			room = null;

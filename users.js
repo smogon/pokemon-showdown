@@ -1312,7 +1312,7 @@ class User {
 	}
 	/**
 	 * @param {string | Room} roomid
-	 * @param {Connection?} connection
+	 * @param {Connection?} [connection]
 	 */
 	joinRoom(roomid, connection = null) {
 		const room = Rooms(roomid);
