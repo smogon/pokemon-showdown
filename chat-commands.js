@@ -3784,6 +3784,35 @@ exports.commands = {
 		`/forcewin [user] - Forces the current match to end in a win for a user. Requires: & ~`,
 	],
 
+	ecb: 'endcrashedbattle',
+	endcrashedbattle: function (target, room, user) {
+		if (!this.can('ban')) return false;
+		if (!room.battle) {
+			this.errorReply("/endcrashedbattle - This is not a battle room.");
+			return false;
+		}
+		if (!room.battle.crashed) {
+			this.errorReply("/endcrashedbattle - The battle has not crashed.");
+			return false;
+		}
+		if (room.battle.timer.waitingForChoice('p1')) {
+			if (room.battle.timer.waitingForChoice('p2')) {
+				this.errorReply(`/endcrashedbattle - The battle has not stalled; currently waiting for both players.`);
+			} else {
+				this.errorReply(`/endcrashedbattle - The battle has not stalled; currently waiting for ${room.battle.playerNames[0]}.`);
+			}
+		} else if (room.battle.timer.waitingForChoice('p2')) {
+			this.errorReply(`/endcrashedbattle - The battle has not stalled; currently waiting for ${room.battle.playerNames[1]}.`);
+		}
+
+		room.battle.endType = 'forced';
+		room.rated = false;
+		room.battle.tie();
+		this.modlog('FORCETIE CRASHED BATTLE');
+		return false;
+	},
+	endcrashedbattlehelp: [`/endcrashedbattle - Forces the current battle to end in an unrated tie, but only if it has crashed.`],
+
 	/*********************************************************
 	 * Challenging and searching commands
 	 *********************************************************/
