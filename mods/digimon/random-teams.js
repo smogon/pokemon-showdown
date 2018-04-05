@@ -1206,7 +1206,14 @@ class RandomDigimonTeams extends RandomTeams {
 				}
 			}
 			if (!set.name) set.name = name;
-
+			if (set.species = "Alphamon") {
+				//this is just here to bully meicoo i mean amuse Lycanium Z
+				if (this.random(2) === 1) {
+					set.baseSignatureMove = "sheercold";
+					set.signatureMove = "Sheer Cold";
+					set.level = 100;
+				}
+			}
 			// Inherit how pokemon does it with Kuramon instead of sunkern
 			let mbstmin = 1381;
 
@@ -1234,12 +1241,12 @@ class RandomDigimonTeams extends RandomTeams {
 				level++;
 			}
 			level = level + 20; //Add 20. It lessens the level gap
-			if (level > 100) {
+			if (level >= 100) {
 				level = 100;
 			} else {
 				level = (level % 5) >= 2.5 ? parseInt(level / 5) * 5 + 5 : parseInt(level / 5) * 5; //Rounds to the Nearest 5 for simplicity
 			}
-			set.level = level;
+			if (!set.level) set.level = level;
 			set.nature = "Serious";
 			set.moves = [this.sampleNoReplace(set.moves), this.sampleNoReplace(set.moves), this.sampleNoReplace(set.moves), 'Protect', set.signatureMove];
 			team.push(set);
