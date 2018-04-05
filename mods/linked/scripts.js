@@ -105,7 +105,250 @@ exports.BattleScripts = {
 		}
 		if (noLock && pokemon.volatiles.lockedmove) delete pokemon.volatiles.lockedmove;
 	},
+	tryMoveHit: function (target, pokemon, move) {
+		this.setActiveMove(move, pokemon, target);
+		move.zBrokeProtect = false;
+		let hitResult = true;
+		hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move);
+		if (!hitResult) {
+			if (hitResult === false) this.add('-fail', target);
+			return false;
+		}
+		this.runEvent('PrepareHit', pokemon, target, move);
+		if (!this.singleEvent('Try', move, null, pokemon, target, move)) return false;
+		if (['all', 'foeSide', 'allySide', 'allyTeam'].includes(move.target)) {
+			if (move.target === 'all') {
+				hitResult = this.runEvent('TryHitField', target, pokemon, move);
+			} else {
+				hitResult = this.runEvent('TryHitSide', target, pokemon, move);
+			}
+			if (!hitResult) {
+				if (hitResult === false) this.add('-fail', target);
+				return false;
+			}
+			return this.moveHit(target, pokemon, move);
+		}
+		if (move.ignoreImmunity === undefined) move.ignoreImmunity = (move.category === 'Status');
+		if (this.gen < 7 && (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) && !target.runImmunity(move.type, true)) return false;
+		hitResult = this.runEvent('TryHit', target, pokemon, move);
+		if (!hitResult) {
+			if (hitResult === false) this.add('-fail', target);
+			return false;
+		}
+		if (this.gen >= 7 && (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) && !target.runImmunity(move.type, true)) return false;
+		if (move.flags['powder'] && target !== pokemon && !this.getImmunity('powder', target)) {
+			this.debug('natural powder immunity');
+			this.add('-immune', target, '[msg]');
+			return false;
+		}
+		if (this.gen >= 7 && pokemon.hasAbility('prankster') && target.side !== pokemon.side && !this.getImmunity('prankster', target)) {
+			let linkedMoves = pokemon.getLinkedMoves();
+			this.debug('natural prankster immunity');
+			if (!target.illusion) this.add('-hint', "In gen 7, Dark is immune to Prankster moves.");
+			if (this.getMove(linkedMoves[0]).pranksterBoosted) this.add('-immune', target, '[msg]');
+			if (this.getMove(linkedMoves[1]).pranksterBoosted) this.add('-immune', target, '[msg]');
+			if (move.pranksterBoosted) this.add('-immune', target, '[msg]');
+			return false;
+		}
 
+		let boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
+
+		// calculate true accuracy
+		let accuracy = move.accuracy;
+		let boosts, boost;
+		if (accuracy !== true) {
+			if (!move.ignoreAccuracy) {
+				boosts = this.runEvent('ModifyBoost', pokemon, null, null, Object.assign({}, pokemon.boosts));
+				boost = this.clampIntRange(boosts['accuracy'], -6, 6);
+				if (boost > 0) {
+					accuracy *= boostTable[boost];
+				} else {
+					accuracy /= boostTable[-boost];
+				}
+			}
+			if (!move.ignoreEvasion) {
+				boosts = this.runEvent('ModifyBoost', target, null, null, Object.assign({}, target.boosts));
+				boost = this.clampIntRange(boosts['evasion'], -6, 6);
+				if (boost > 0) {
+					accuracy /= boostTable[boost];
+				} else if (boost < 0) {
+					accuracy *= boostTable[-boost];
+				}
+			}
+		}
+		if (move.ohko) { // bypasses accuracy modifiers
+			if (!target.isSemiInvulnerable()) {
+				accuracy = 30;
+				if (move.ohko === 'Ice' && this.gen >= 7 && !pokemon.hasType('Ice')) {
+					accuracy = 20;
+				}
+				if (pokemon.level >= target.level && (move.ohko === true || !target.hasType(move.ohko))) {
+					accuracy += (pokemon.level - target.level);
+				} else {
+					this.add('-immune', target, '[ohko]');
+					return false;
+				}
+			}
+		} else {
+			accuracy = this.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
+		}
+		if (move.alwaysHit || (move.id === 'toxic' && this.gen >= 6 && pokemon.hasType('Poison'))) {
+			accuracy = true; // bypasses ohko accuracy modifiers
+		} else {
+			accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
+		}
+		// @ts-ignore
+		if (accuracy !== true && !this.randomChance(accuracy, 100)) {
+			if (!move.spreadHit) this.attrLastMove('[miss]');
+			this.add('-miss', pokemon, target);
+			return false;
+		}
+
+		if (move.breaksProtect) {
+			let broke = false;
+			for (const effectid of ['banefulbunker', 'kingsshield', 'protect', 'spikyshield']) {
+				if (target.removeVolatile(effectid)) broke = true;
+			}
+			if (this.gen >= 6 || target.side !== pokemon.side) {
+				for (const effectid of ['craftyshield', 'matblock', 'quickguard', 'wideguard']) {
+					if (target.side.removeSideCondition(effectid)) broke = true;
+				}
+			}
+			if (broke) {
+				if (move.id === 'feint') {
+					this.add('-activate', target, 'move: Feint');
+				} else {
+					this.add('-activate', target, 'move: ' + move.name, '[broken]');
+				}
+			}
+		}
+
+		if (move.stealsBoosts) {
+			let boosts = {};
+			let stolen = false;
+			for (let statName in target.boosts) {
+				let stage = target.boosts[statName];
+				if (stage > 0) {
+					boosts[statName] = stage;
+					stolen = true;
+				}
+			}
+			if (stolen) {
+				this.attrLastMove('[still]');
+				this.add('-clearpositiveboost', target, pokemon, 'move: ' + move.name);
+				this.boost(boosts, pokemon, pokemon);
+
+				for (let statName in boosts) {
+					boosts[statName] = 0;
+				}
+				target.setBoost(boosts);
+				this.add('-anim', pokemon, "Spectral Thief", target);
+			}
+		}
+
+		move.totalDamage = 0;
+		/**@type {number | false} */
+		let damage = 0;
+		pokemon.lastDamage = 0;
+		if (move.multihit) {
+			let hits = move.multihit;
+			if (Array.isArray(hits)) {
+				// yes, it's hardcoded... meh
+				if (hits[0] === 2 && hits[1] === 5) {
+					if (this.gen >= 5) {
+						hits = this.sample([2, 2, 3, 3, 4, 5]);
+					} else {
+						hits = this.sample([2, 2, 2, 3, 3, 3, 4, 5]);
+					}
+				} else {
+					hits = this.random(hits[0], hits[1] + 1);
+				}
+			}
+			hits = Math.floor(hits);
+			let nullDamage = true;
+			/**@type {number | false} */
+			let moveDamage;
+			// There is no need to recursively check the ´sleepUsable´ flag as Sleep Talk can only be used while asleep.
+			let isSleepUsable = move.sleepUsable || this.getMove(move.sourceEffect).sleepUsable;
+			let i;
+			for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
+				if (pokemon.status === 'slp' && !isSleepUsable) break;
+
+				if (move.multiaccuracy && i > 0) {
+					accuracy = move.accuracy;
+					if (accuracy !== true) {
+						if (!move.ignoreAccuracy) {
+							boosts = this.runEvent('ModifyBoost', pokemon, null, null, Object.assign({}, pokemon.boosts));
+							boost = this.clampIntRange(boosts['accuracy'], -6, 6);
+							if (boost > 0) {
+								accuracy *= boostTable[boost];
+							} else {
+								accuracy /= boostTable[-boost];
+							}
+						}
+						if (!move.ignoreEvasion) {
+							boosts = this.runEvent('ModifyBoost', target, null, null, Object.assign({}, target.boosts));
+							boost = this.clampIntRange(boosts['evasion'], -6, 6);
+							if (boost > 0) {
+								accuracy /= boostTable[boost];
+							} else if (boost < 0) {
+								accuracy *= boostTable[-boost];
+							}
+						}
+					}
+					accuracy = this.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
+					if (!move.alwaysHit) {
+						accuracy = this.runEvent('Accuracy', target, pokemon, move, accuracy);
+						// @ts-ignore
+						if (accuracy !== true && !this.randomChance(accuracy, 100)) break;
+					}
+				}
+
+				moveDamage = this.moveHit(target, pokemon, move);
+				if (moveDamage === false) break;
+				if (nullDamage && (moveDamage || moveDamage === 0 || moveDamage === undefined)) nullDamage = false;
+				// Damage from each hit is individually counted for the
+				// purposes of Counter, Metal Burst, and Mirror Coat.
+				damage = (moveDamage || 0);
+				// Total damage dealt is accumulated for the purposes of recoil (Parental Bond).
+				move.totalDamage += damage;
+				if (move.mindBlownRecoil && i === 0) {
+					this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.getEffect('Mind Blown'), true);
+				}
+				this.eachEvent('Update');
+			}
+			if (i === 0) return false;
+			if (nullDamage) damage = false;
+			this.add('-hitcount', target, i);
+		} else {
+			damage = this.moveHit(target, pokemon, move);
+			move.totalDamage = damage;
+		}
+
+		if (move.recoil && move.totalDamage) {
+			this.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, pokemon, 'recoil');
+		}
+
+		if (move.struggleRecoil) {
+			// @ts-ignore
+			this.directDamage(this.clampIntRange(Math.round(pokemon.maxhp / 4), 1), pokemon, pokemon, {id: 'strugglerecoil'});
+		}
+
+		if (target && pokemon !== target) target.gotAttacked(move, damage, pokemon);
+
+		if (move.ohko) this.add('-ohko');
+
+		if (!damage && damage !== 0) return damage;
+
+		this.eachEvent('Update');
+
+		if (target && !move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
+			this.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
+			this.runEvent('AfterMoveSecondary', target, pokemon, move);
+		}
+
+		return damage;
+	},
 	resolveAction: function (action, midTurn = false) {
 		if (!action) throw new Error(`Action not passed to resolveAction`);
 
@@ -188,8 +431,8 @@ exports.BattleScripts = {
 
 				let linkedMoves = action.pokemon.getLinkedMoves();
 				if (linkedMoves.length && !linkedMoves.disabled && !move.isZ) {
-					let decisionMove = toId(action.move);
-					let index = linkedMoves.indexOf(decisionMove);
+					let actionMove = toId(action.move);
+					let index = linkedMoves.indexOf(actionMove);
 					if (index !== -1) {
 						let altMove = this.getMoveCopy(linkedMoves[1 - index]);
 						let altPriority = this.runEvent('ModifyPriority', action.pokemon, target, altMove, altMove.priority);
@@ -257,8 +500,8 @@ exports.BattleScripts = {
 			if (action.linked) {
 				let linkedMoves = action.linked;
 				for (let i = linkedMoves.length - 1; i >= 0; i--) {
-					let pseudoDecision = {choice: 'move', move: linkedMoves[i], targetLoc: action.targetLoc, pokemon: action.pokemon, targetPosition: action.targetPosition, targetSide: action.targetSide};
-					this.queue.unshift(pseudoDecision);
+					let pseudoAction = {choice: 'move', move: linkedMoves[i], targetLoc: action.targetLoc, pokemon: action.pokemon, targetPosition: action.targetPosition, targetSide: action.targetSide};
+					this.queue.unshift(pseudoAction);
 				}
 				return;
 			}
@@ -471,7 +714,7 @@ exports.BattleScripts = {
 
 	pokemon: {
 		moveUsed: function (move, targetLoc) {
-			let lastMove = this.moveThisTurn ? [this.moveThisTurn, move] : move;
+			let lastMove = this.moveThisTurn ? [toId(this.moveThisTurn), move] : move;
 			this.lastMove = lastMove;
 			this.moveThisTurn = lastMove.id;
 			this.lastMoveTargetLoc = targetLoc;
@@ -487,7 +730,7 @@ exports.BattleScripts = {
 		getLinkedMoves: function () {
 			let linkedMoves = this.moveSlots.slice(0, 2);
 			if (linkedMoves.length !== 2 || linkedMoves[0].pp <= 0 || linkedMoves[1].pp <= 0) return [];
-			let ret = [toId(linkedMoves[0]), toId(linkedMoves[1])];
+			let ret = [linkedMoves[0].id, linkedMoves[1].id];
 
 			// Disabling effects which won't abort execution of moves already added to battle event loop.
 			if (!this.ateBerry && ret.includes('belch')) {
@@ -501,7 +744,6 @@ exports.BattleScripts = {
 			move = toId(move);
 			let linkedMoves = this.getLinkedMoves();
 			if (!linkedMoves.length) return;
-
 			return linkedMoves[0] === move || linkedMoves[1] === move;
 		},
 	},

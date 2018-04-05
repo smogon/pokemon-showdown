@@ -165,7 +165,7 @@ exports.BattleMovedex = {
 	},
 
 	/**
-	 * Disable, Encore and Torment
+	 * Disable, Encore, and Torment
 	 * Disabling effects
 	 *
 	 */
@@ -231,9 +231,9 @@ exports.BattleMovedex = {
 				let noEncore = ['assist', 'copycat', 'encore', 'mefirst', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'sketch', 'sleeptalk', 'struggle', 'transform'];
 				let lastMove = target.getLastMoveAbsolute();
 				let linkedMoves = target.getLinkedMoves();
-				let moveIndex = lastMove ? target.moves.indexOf(lastMove) : -1;
-				if (linkedMoves.includes(lastMove.id) && noEncore.includes(linkedMoves[0]) && noEncore.includes(linkedMoves[1])) {
-					// both moves are ones which cannot be encored
+				let moveIndex = lastMove ? target.moves.indexOf(lastMove.id) : -1;
+				if (lastMove && linkedMoves.includes(lastMove.id) && noEncore.includes(linkedMoves[0]) && noEncore.includes(linkedMoves[1])) {
+					// both moves cannot be encored
 					delete target.volatiles['encore'];
 					return false;
 				}
@@ -271,16 +271,9 @@ exports.BattleMovedex = {
 				// Locked into a link
 				switch (this.effectData.turnsActivated[this.turn]) {
 				case 1: {
-					if (!this.willMove(pokemon)) {
-						for (const source of this.effectData.sources) {
-							let pseudoDecision = {choice: 'move', move: this.effectData.move[1], targetLoc: this.getTargetLoc(pokemon, source), pokemon: this.willMove(pokemon).pokemon, targetPosition: this.willMove(pokemon).targetPosition, targetSide: this.willMove(pokemon).targetSide};
-							this.queue.unshift(pseudoDecision);
-						}
-					}
 					if (this.effectData.move[0] !== move.id) return this.effectData.move[0];
 					return;
 				}
-
 				case 2:
 					if (this.effectData.move[1] !== move.id) return this.effectData.move[1];
 					return;
@@ -290,7 +283,6 @@ exports.BattleMovedex = {
 			onResidual: function (target) {
 				// early termination if you run out of PP
 				let lastMove = target.getLastMoveAbsolute();
-
 				let index = target.moves.indexOf(lastMove.id);
 				if (index === -1) return; // no last move
 
@@ -340,7 +332,7 @@ exports.BattleMovedex = {
 			},
 			onDisableMove: function (pokemon) {
 				let lastMove = pokemon.lastMove;
-				if (lastMove.id === 'struggle') return;
+				if (!lastMove || lastMove.id === 'struggle') return;
 
 				if (Array.isArray(lastMove)) {
 					for (const move of lastMove) {
