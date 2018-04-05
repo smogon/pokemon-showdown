@@ -1214,6 +1214,12 @@ class RandomDigimonTeams extends RandomTeams {
 					set.level = 100;
 				}
 			}
+			if (set.species = "Meicoomon") {
+				//OK this is just a fun easter egg
+				if (this.random(4) === 1) {
+					set.name = "Meicoo";
+				}
+			}
 			// Inherit how pokemon does it with Kuramon instead of sunkern
 			let mbstmin = 1381;
 
