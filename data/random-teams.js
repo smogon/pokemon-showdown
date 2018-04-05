@@ -2523,7 +2523,7 @@ class RandomTeams extends Dex.ModdedDex {
 			item = 'Icy Rock';
 		} else if (ability === 'Magic Guard' && hasMove['psychoshift']) {
 			item = 'Flame Orb';
-		} else if (ability === 'Sheer Force' || ability === 'Magic Guard') {
+		} else if ((ability === 'Magic Guard' || ability === 'Sheer Force') && counter.damagingMoves.length > 1) {
 			item = 'Life Orb';
 		} else if (ability === 'Unburden') {
 			if (hasMove['fakeout']) {
