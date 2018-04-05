@@ -35,7 +35,7 @@ const Pokemon = require('./pokemon');
  * @property {Move} move - a move to use (move action only)
  * @property {boolean | 'done'} mega - true if megaing or ultra bursting
  * @property {string | undefined} zmove - if zmoving, the name of the zmove
- * @property {Effect?} sourceEffect - effect that called the move (eg Instruct) if any
+ * @property {Effect | undefined?} sourceEffect - effect that called the move (eg Instruct) if any
  */
 /**
  * A switch action
@@ -792,7 +792,7 @@ class Battle extends Dex.ModdedDex {
 	 *   they're useful for functions called by the event handler.
 	 *
 	 * @param {string} eventid
-	 * @param {?Pokemon | Side | Battle} target
+	 * @param {?Pokemon | Side | Battle} [target]
 	 * @param {?string | Pokemon | false} [source]
 	 * @param {?Effect | string} [effect]
 	 * @param {any} [relayVar]
@@ -970,7 +970,7 @@ class Battle extends Dex.ModdedDex {
 	 * @param {Pokemon | Side | Battle} thing
 	 * @param {string} callbackType
 	 * @param {string} foeCallbackType
-	 * @param {?string | Pokemon | Side | Battle | false} foeThing
+	 * @param {?string | Pokemon | Side | Battle | false} [foeThing]
 	 */
 	getRelevantEffects(thing, callbackType, foeCallbackType, foeThing) {
 		let statuses = this.getRelevantEffectsInner(thing, callbackType, foeCallbackType, foeThing, true, false);
@@ -982,7 +982,7 @@ class Battle extends Dex.ModdedDex {
 	 * @param {string | Pokemon | Side | Battle} thing
 	 * @param {string} callbackType
 	 * @param {?string} foeCallbackType
-	 * @param {?string | Pokemon | Side | Battle | false} foeThing
+	 * @param {?string | Pokemon | Side | Battle | false} [foeThing]
 	 * @param {boolean} bubbleUp
 	 * @param {boolean} bubbleDown
 	 * @param {string} [getAll]
@@ -3356,10 +3356,10 @@ class Battle extends Dex.ModdedDex {
 	/**
 	 * @param {string | Move} move
 	 * @param {Pokemon} target
-	 * @param {number | undefined} [targetLoc]
-	 * @param {?Effect | undefined} [sourceEffect]
-	 * @param {string | undefined} [zMove]
-	 * @param {boolean | undefined} [externalMove]
+	 * @param {number} [targetLoc]
+	 * @param {?Effect} [sourceEffect]
+	 * @param {string} [zMove]
+	 * @param {boolean} [externalMove]
 	 */
 	runMove(move, target, targetLoc, sourceEffect, zMove, externalMove) {
 		throw new Error(`The runMove function needs to be implemented in scripts.js or the battle format.`);
@@ -3368,9 +3368,9 @@ class Battle extends Dex.ModdedDex {
 	/**
 	 * @param {string | Move} move
 	 * @param {Pokemon} target
-	 * @param {Pokemon | false | undefined} [source]
-	 * @param {?Effect | undefined} [sourceEffect]
-	 * @param {string | undefined} [zMove]
+	 * @param {Pokemon | false} [source]
+	 * @param {?Effect} [sourceEffect]
+	 * @param {string} [zMove]
 	 * @return {boolean}
 	 */
 	useMove(move, target, source, sourceEffect, zMove) {
@@ -3380,9 +3380,9 @@ class Battle extends Dex.ModdedDex {
 	/**
 	 * @param {string | Move} move
 	 * @param {Pokemon} target
-	 * @param {Pokemon | false | undefined} [source]
-	 * @param {?Effect | undefined} [sourceEffect]
-	 * @param {string | undefined} [zMove]
+	 * @param {Pokemon | false} [source]
+	 * @param {?Effect} [sourceEffect]
+	 * @param {string} [zMove]
 	 * @return {boolean}
 	 */
 	useMoveInner(move, target, source, sourceEffect, zMove) {
@@ -3403,9 +3403,9 @@ class Battle extends Dex.ModdedDex {
 	 * @param {?Pokemon} target
 	 * @param {Pokemon} pokemon
 	 * @param {Move} move
-	 * @param {MoveData | undefined} [moveData]
-	 * @param {boolean | undefined} [isSecondary]
-	 * @param {boolean | undefined} [isSelf]
+	 * @param {MoveData} [moveData]
+	 * @param {boolean} [isSecondary]
+	 * @param {boolean} [isSelf]
 	 * @return {number | false}
 	 */
 	moveHit(target, pokemon, move, moveData, isSecondary, isSelf) {
@@ -3456,7 +3456,7 @@ class Battle extends Dex.ModdedDex {
 	/**
 	 * @param {Move} move
 	 * @param {Pokemon} pokemon
-	 * @param {boolean | undefined} [skipChecks]
+	 * @param {boolean} [skipChecks]
 	 * @return {string | undefined}
 	 */
 	getZMove(move, pokemon, skipChecks) {

@@ -309,7 +309,7 @@ class Side {
 		let moveid = '';
 		let targetType = '';
 		if (autoChoose) moveText = 1;
-		if (typeof moveText === 'number' || /^[0-9]+$/.test(moveText)) {
+		if (typeof moveText === 'number' || (moveText && /^[0-9]+$/.test(moveText))) {
 			// Parse a one-based move index.
 			const moveIndex = +moveText - 1;
 			if (moveIndex < 0 || moveIndex >= requestMoves.length || !requestMoves[moveIndex]) {
@@ -470,11 +470,9 @@ class Side {
 		if (index >= this.active.length) {
 			return this.emitChoiceError(`Can't switch: You do not have a Pokémon in slot ${index + 1}`);
 		}
-		/**@type {Pokemon} */
-		// @ts-ignore
 		const pokemon = this.active[index];
 		const autoChoose = !slotText;
-		let slot = parseInt(slotText) - 1;
+		let slot;
 		if (autoChoose) {
 			if (this.currentRequest !== 'switch') {
 				return this.emitChoiceError(`Can't switch: You need to select a Pokémon to switch in`);
@@ -482,6 +480,9 @@ class Side {
 			if (!this.choice.forcedSwitchesLeft) return this.choosePass();
 			slot = this.active.length;
 			while (this.choice.switchIns.has(slot) || this.pokemon[slot].fainted) slot++;
+		} else {
+			// @ts-ignore
+			slot = parseInt(slotText) - 1;
 		}
 		if (isNaN(slot) || slot < 0) {
 			// maybe it's a name!
@@ -540,7 +541,8 @@ class Side {
 	 */
 	chooseTeam(data) {
 		const autoFill = !data;
-		if (autoFill) data = `123456`;
+		// default to sending team in order
+		if (!data) data = `123456`;
 		let positions;
 		if (data.includes(',')) {
 			positions = ('' + data).split(',').map(datum => parseInt(datum) - 1);

@@ -1836,7 +1836,7 @@ class RandomTeams extends Dex.ModdedDex {
 	 * @param {TeamDetails} [teamDetails]
 	 * @return {RandomSet}
 	 */
-	randomDoublesSet(template, slot, teamDetails) {
+	randomDoublesSet(template, slot, teamDetails = {}) {
 		let baseTemplate = (template = this.getTemplate(template));
 		let species = template.species;
 
@@ -1846,8 +1846,6 @@ class RandomTeams extends Dex.ModdedDex {
 			let err = new Error('Template incompatible with random battles: ' + species);
 			require('../lib/crashlogger')(err, 'The doubles randbat set generator');
 		}
-
-		if (typeof teamDetails !== 'object') teamDetails = {megaStone: teamDetails};
 
 		if (template.battleOnly) {
 			// Only change the species. The template has custom moves, and may have different typing and requirements.

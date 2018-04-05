@@ -316,7 +316,7 @@ class ModdedDex {
 	}
 
 	/**
-	 * @param {string | Template | undefined} [name]
+	 * @param {string | Template} [name]
 	 * @return {Template}
 	 */
 	getTemplate(name) {
@@ -406,7 +406,7 @@ class ModdedDex {
 		return this.data.Learnsets[id].learnset;
 	}
 	/**
-	 * @param {string | Move | undefined} [name]
+	 * @param {string | Move} [name]
 	 * @return {Move}
 	 */
 	getMove(name) {
@@ -458,7 +458,7 @@ class ModdedDex {
 		return moveCopy;
 	}
 	/**
-	 * @param {?string | Effect} name
+	 * @param {?string | Effect} [name]
 	 * @return {Effect}
 	 */
 	getEffect(name) {
@@ -521,7 +521,7 @@ class ModdedDex {
 		return validatedFormatid;
 	}
 	/**
-	 * @param {string | Format | undefined} [name]
+	 * @param {string | Format} [name]
 	 * @return {Format}
 	 */
 	getFormat(name, isTrusted = false) {
@@ -565,7 +565,7 @@ class ModdedDex {
 		return effect;
 	}
 	/**
-	 * @param {string | Item | undefined} [name]
+	 * @param {string | Item} [name]
 	 * @return {Item}
 	 */
 	getItem(name) {
@@ -598,7 +598,7 @@ class ModdedDex {
 		return item;
 	}
 	/**
-	 * @param {string | Ability | undefined} [name]
+	 * @param {string | Ability} [name]
 	 * @return {Ability}
 	 */
 	getAbility(name = '') {
@@ -995,7 +995,7 @@ class ModdedDex {
 	clampIntRange(num, min, max) {
 		if (typeof num !== 'number') num = 0;
 		num = Math.floor(num);
-		if (num < min) num = min;
+		if (min !== undefined && num < min) num = min;
 		if (max !== undefined && num > max) num = max;
 		return num;
 	}

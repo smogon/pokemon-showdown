@@ -686,7 +686,7 @@ Punishments.roomUnpunish = function (room, id, punishType, ignoreWrite) {
  * @param {User} user
  * @param {number} expireTime
  * @param {string} id
- * @param {...string} [reason]
+ * @param {...string} reason
  * @return {PunishmentRow}
  */
 Punishments.ban = function (user, expireTime, id, ...reason) {
@@ -713,7 +713,7 @@ Punishments.unban = function (name) {
  * @param {User? | string} user
  * @param {number} expireTime
  * @param {string} id
- * @param {...string} [reason]
+ * @param {...string} reason
  * @return {PunishmentRow}
  */
 Punishments.lock = function (user, expireTime, id, ...reason) {
@@ -798,7 +798,7 @@ Punishments.unlock = function (name) {
  * @param {User} user
  * @param {number} expireTime
  * @param {string} id
- * @param {...string} [reason]
+ * @param {...string} reason
  * @return {PunishmentRow}
  */
 Punishments.namelock = function (user, expireTime, id, ...reason) {
@@ -854,7 +854,7 @@ Punishments.unnamelock = function (name) {
  * @param {User} user
  * @param {number} expireTime
  * @param {string} id
- * @param {...string} [reason]
+ * @param {...string} reason
  * @return {PunishmentRow}
  */
 Punishments.battleban = function (user, expireTime, id, ...reason) {
@@ -940,7 +940,7 @@ Punishments.banRange = function (range, reason) {
  * @param {User} user
  * @param {number} expireTime
  * @param {string} userId
- * @param {...string} [reason]
+ * @param {...string} reason
  * @return {PunishmentRow}
  */
 Punishments.roomBan = function (room, user, expireTime, userId, ...reason) {
@@ -976,7 +976,7 @@ Punishments.roomBan = function (room, user, expireTime, userId, ...reason) {
  * @param {User?} user
  * @param {number} expireTime
  * @param {string} userId
- * @param {...string} [reason]
+ * @param {...string} reason
  * @return {PunishmentRow}
  */
 Punishments.roomBlacklist = function (room, user, expireTime, userId, ...reason) {

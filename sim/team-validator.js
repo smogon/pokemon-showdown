@@ -1284,7 +1284,7 @@ class Validator {
 			template.species !== 'Unown' && template.baseSpecies !== 'Pikachu');
 	}
 	/**
-	 * @param {SparseStatsTable? | undefined} [stats]
+	 * @param {SparseStatsTable?} [stats]
 	 * @param {number} [fillNum]
 	 * @return {StatsTable}
 	 */
