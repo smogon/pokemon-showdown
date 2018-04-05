@@ -46,6 +46,14 @@ describe('Transform', function () {
 		}
 	});
 
+	it("should copy the target's focus energy status", function () {
+		battle = common.createBattle();
+		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: "Sawk", ability: 'sturdy', moves: ['focusenergy']}]);
+		battle.makeChoices('move transform', 'move focusenergy');
+		assert.ok(battle.p1.active[0].volatiles['focusenergy']);
+	});
+
 	it('should copy the target\'s moves with 5 PP each', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
@@ -110,6 +118,19 @@ describe('Transform', function () {
 		battle.makeChoices('move transform', 'switch 2');
 		battle.makeChoices('move transform', 'move transform');
 		assert.notStrictEqual(battle.p1.active[0].template, battle.p2.active[0].template);
+	});
+});
+
+describe('Transform [Gen 5]', function () {
+	afterEach(function () {
+		battle.destroy();
+	});
+
+	it("should not copy the target's focus energy status", function () {
+		battle = common.gen(5).createBattle();
+		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: "Sawk", ability: 'sturdy', moves: ['focusenergy']}]);
+		assert.constant(() => battle.p1.active[0].volatiles['focusenergy'], () => battle.makeChoices('move transform', 'move focusenergy'));
 	});
 });
 

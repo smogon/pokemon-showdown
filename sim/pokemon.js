@@ -769,6 +769,7 @@ class Pokemon {
 		for (let j in pokemon.boosts) {
 			this.boosts[j] = pokemon.boosts[j];
 		}
+		if (this.battle.gen >= 6 && pokemon.volatiles['focusenergy']) this.addVolatile('focusenergy');
 		if (effect) {
 			this.battle.add('-transform', this, pokemon, '[from] ' + effect.fullname);
 		} else {
