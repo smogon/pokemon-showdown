@@ -1157,7 +1157,7 @@ let Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] Digimon Showdown",
+		name: "[Digimon] Digimon Showdown",
 		desc: `Use Digimon in this battle instead of Pok&eacute;mon!`,
 		threads: [
 			`&bullet; <a href="Smogon post TBD">Digimon Showdown</a>`,
