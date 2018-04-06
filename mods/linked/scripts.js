@@ -484,9 +484,9 @@ exports.BattleScripts = {
 
 	pokemon: {
 		moveUsed: function (move, targetLoc) {
-			let lastMove = this.moveThisTurn ? [toId(this.moveThisTurn), move] : move;
+			let lastMove = this.moveThisTurn ? [this.moveThisTurn, move] : move;
 			this.lastMove = lastMove;
-			this.moveThisTurn = lastMove.id;
+			this.moveThisTurn = lastMove;
 			this.lastMoveTargetLoc = targetLoc;
 		},
 		getLastMoveAbsolute: function () { // used
@@ -494,8 +494,9 @@ exports.BattleScripts = {
 			return this.lastMove;
 		},
 		checkMoveThisTurn: function (move) {
-			if (Array.isArray(this.moveThisTurn)) return this.moveThisTurn.includes(toId(move));
-			return this.moveThisTurn === toId(move);
+			const moveId = toId(move);
+			if (Array.isArray(this.moveThisTurn)) return this.moveThisTurn.some(moveUsed => moveUsed.id === moveId);
+			return this.moveThisTurn && this.moveThisTurn.id === moveId;
 		},
 		getLinkedMoves: function () {
 			let linkedMoves = this.moveSlots.slice(0, 2);
