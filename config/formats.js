@@ -372,7 +372,7 @@ let Formats = [
 
 		mod: 'linked',
 		ruleset: ['[Gen 7] OU'],
-		banlist: ['King\'s Rock', 'Razor Fang'],
+		banlist: ['Chlorophyll', 'Sand Rush', 'Slush Rush', 'Surge Surfer', 'Swift Swim', 'Unburden', 'King\'s Rock', 'Razor Fang'],
 		restrictedMoves: ['Baneful Bunker', 'Bounce', 'Detect', 'Dig', 'Dive', 'Fly', 'Nature\'s Madness', 'Night Shade', 'Phantom Force', 'Protect', 'Seismic Toss', 'Shadow Force', 'Sky Drop', 'Spiky Shield', 'Super Fang'],
 		onValidateSet: function (set, format) {
 			const restrictedMoves = format.restrictedMoves || [];

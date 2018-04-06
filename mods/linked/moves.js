@@ -10,7 +10,6 @@ exports.BattleMovedex = {
 		beforeTurnCallback: function (pokemon, target) {
 			let linkedMoves = pokemon.getLinkedMoves();
 			if (linkedMoves.length && !linkedMoves.disabled) {
-				if (linkedMoves[0] === 'pursuit' && linkedMoves[1] !== 'pursuit') return;
 				if (linkedMoves[0] !== 'pursuit' && linkedMoves[1] === 'pursuit') return;
 			}
 
@@ -445,6 +444,52 @@ exports.BattleMovedex = {
 			onBeforeSwitchOutPriority: 1,
 			onBeforeSwitchOut: function (pokemon) {
 				pokemon.removeVolatile('destinybond');
+			},
+		},
+	},
+	iceball: {
+		inherit: true,
+		effect: {
+			duration: 2,
+			onLockMove: 'iceball',
+			onStart: function () {
+				this.effectData.hitCount = 1;
+			},
+			onRestart: function () {
+				this.effectData.hitCount++;
+				if (this.effectData.hitCount < 5) {
+					this.effectData.duration = 2;
+				}
+			},
+			onResidual: function (target) {
+				// This is just to ensure the volatile is deleted correctly
+				let lastMove = target.getLastMoveAbsolute();
+				if (lastMove && lastMove.id === 'struggle') {
+					delete target.volatiles['iceball'];
+				}
+			},
+		},
+	},
+	rollout: {
+		inherit: true,
+		effect: {
+			duration: 2,
+			onLockMove: 'rollout',
+			onStart: function () {
+				this.effectData.hitCount = 1;
+			},
+			onRestart: function () {
+				this.effectData.hitCount++;
+				if (this.effectData.hitCount < 5) {
+					this.effectData.duration = 2;
+				}
+			},
+			onResidual: function (target) {
+				// This is just to ensure the volatile is deleted correctly
+				let lastMove = target.getLastMoveAbsolute();
+				if (lastMove && lastMove.id === 'struggle') {
+					delete target.volatiles['rollout'];
+				}
 			},
 		},
 	},
