@@ -192,17 +192,27 @@ exports.BattleScripts = {
 				if (linkedMoves.length && !linkedMoves.disabled && !move.isZ && (linkIndex = linkedMoves.indexOf(toId(action.move))) >= 0) {
 					let linkedActions = action.linked || linkedMoves.map(moveId => this.getMoveCopy(moveId));
 					let altMove = linkedActions[1 - linkIndex];
-					priority = Math.min(
-						this.runEvent('ModifyPriority', action.pokemon, target, linkedActions[linkIndex], priority),
-						this.runEvent('ModifyPriority', action.pokemon, target, altMove, altMove.priority)
-					);
+					let thisPriority = this.runEvent('ModifyPriority', action.pokemon, target, linkedActions[linkIndex], priority);
+					let otherPriority = this.runEvent('ModifyPriority', action.pokemon, target, altMove, altMove.priority);
+
+					priority = Math.min(thisPriority, otherPriority);
+					action.priority = priority;
+					if (this.gen > 5) {
+						// Gen 6+: Quick Guard blocks moves with artificially enhanced priority.
+						// This also applies to Psychic Terrain.
+						linkedActions[linkIndex].priority = priority;
+						altMove.priority = priority;
+					}
 				} else {
 					priority = this.runEvent('ModifyPriority', action.pokemon, target, move, priority);
-				}
+					action.priority = priority;
 
-				action.priority = priority;
-				// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.
-				if (this.gen > 5) action.move.priority = priority;
+					if (this.gen > 5) {
+						// Gen 6+: Quick Guard blocks moves with artificially enhanced priority.
+						// This also applies to Psychic Terrain.
+						action.move.priority = priority;
+					}
+				}
 			}
 		}
 		if (!action.speed) {
