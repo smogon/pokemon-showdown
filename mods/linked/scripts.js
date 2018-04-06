@@ -256,8 +256,7 @@ exports.BattleScripts = {
 			if (action.linked) {
 				let linkedMoves = action.linked;
 				for (let i = linkedMoves.length - 1; i >= 0; i--) {
-					let pseudoAction = {choice: 'move', move: this.getMove(linkedMoves[i]), targetLoc: action.targetLoc, pokemon: action.pokemon, targetPosition: action.targetPosition, targetSide: action.targetSide};
-					pseudoAction.move.priority = action.move.priority;
+					let pseudoAction = {choice: 'move', move: linkedMoves[i], targetLoc: action.targetLoc, pokemon: action.pokemon, targetPosition: action.targetPosition, targetSide: action.targetSide};
 					this.queue.unshift(pseudoAction);
 				}
 				return;
