@@ -148,9 +148,10 @@ exports.BattleScripts = {
 					let decisionMove = toId(action.move);
 					if (linkedMoves.includes(decisionMove)) {
 						// flag the move as linked here
-						action.linked = linkedMoves;
-						if (this.getMove(linkedMoves[1 - linkedMoves.indexOf(decisionMove)]).beforeTurnCallback) {
-							this.addToQueue({choice: 'beforeTurnMove', pokemon: action.pokemon, move: linkedMoves[1 - linkedMoves.indexOf(decisionMove)], targetLoc: action.targetLoc});
+						action.linked = linkedMoves.map(moveId => this.getMoveCopy(moveId));
+						let linkedOtherMove = action.linked[1 - linkedMoves.indexOf(decisionMove)];
+						if (linkedOtherMove.beforeTurnCallback) {
+							this.addToQueue({choice: 'beforeTurnMove', pokemon: action.pokemon, move: linkedOtherMove, targetLoc: action.targetLoc});
 						}
 					}
 				}
@@ -183,17 +184,20 @@ exports.BattleScripts = {
 						move = zMove;
 					}
 				}
-				let priority = this.runEvent('ModifyPriority', action.pokemon, target, move, move.priority);
 
+				let priority = move.priority;
 				let linkedMoves = action.pokemon.getLinkedMoves();
-				if (linkedMoves.length && !linkedMoves.disabled && !move.isZ) {
-					let actionMove = toId(action.move);
-					let index = linkedMoves.indexOf(actionMove);
-					if (index !== -1) {
-						let altMove = this.getMoveCopy(linkedMoves[1 - index]);
-						let altPriority = this.runEvent('ModifyPriority', action.pokemon, target, altMove, altMove.priority);
-						priority = Math.min(priority, altPriority);
-					}
+				let linkIndex = -1;
+
+				if (linkedMoves.length && !linkedMoves.disabled && !move.isZ && (linkIndex = linkedMoves.indexOf(toId(action.move))) >= 0) {
+					let linkedActions = action.linked || linkedMoves.map(moveId => this.getMoveCopy(moveId));
+					let altMove = linkedActions[1 - linkIndex];
+					priority = Math.min(
+						this.runEvent('ModifyPriority', action.pokemon, target, linkedActions[linkIndex], priority),
+						this.runEvent('ModifyPriority', action.pokemon, target, altMove, altMove.priority)
+					);
+				} else {
+					priority = this.runEvent('ModifyPriority', action.pokemon, target, move, priority);
 				}
 
 				action.priority = priority;
