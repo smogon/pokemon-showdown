@@ -58,6 +58,18 @@ describe('Prankster', function () {
 		battle.makeChoices('move encore', 'move return');
 		assert.statStage(battle.p1.active[0], 'spa', -1);
 	});
+
+	it('should cause moves forced by Encore to fail against Dark Pokémon if the attacker intended to use a Status move', function () {
+		// https://www.smogon.com/forums/threads/3469932/page-396#post-7736003
+		battle = common.createBattle({gameType: 'doubles'}, [
+			[{species: "Liepard", ability: 'prankster', moves: ['encore', 'nastyplot']}, {species: "Tapu Fini", ability: 'mistysurge', moves: ['calmmind']}],
+			[{species: "Meowstic", ability: 'prankster', moves: ['frustration', 'leer']}, {species: "Lopunny", ability: 'limber', moves: ['agility']}],
+		]);
+		battle.p1.chooseMove('encore', 1).chooseMove('calmmind').foe.chooseMove('frustration', 2).chooseMove('agility');
+		battle.p1.chooseMove('encore', 1).chooseMove('calmmind').foe.chooseMove('leer').chooseMove('agility');
+		assert(battle.p2.active[0].volatiles.encore, `Meowstic should be encored`);
+		assert.fullHP(battle.p1.active[0]);
+	});
 });
 
 describe('Prankster [Gen 6]', function () {

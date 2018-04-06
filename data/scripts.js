@@ -18,15 +18,18 @@ let BattleScripts = {
 	 */
 	runMove: function (move, pokemon, targetLoc, sourceEffect, zMove, externalMove) {
 		let target = this.getTarget(pokemon, zMove || move, targetLoc);
+		let baseMove = this.getMoveCopy(move);
+		const pranksterBoosted = baseMove.pranksterBoosted;
 		if (!sourceEffect && toId(move) !== 'struggle' && !zMove) {
 			let changedMove = this.runEvent('OverrideAction', pokemon, target, move);
 			if (changedMove && changedMove !== true) {
-				move = changedMove;
+				baseMove = this.getMoveCopy(changedMove);
+				if (pranksterBoosted) baseMove.pranksterBoosted = pranksterBoosted;
 				target = null;
 			}
 		}
-		let baseMove = this.getMove(move);
 		move = zMove ? this.getZMoveCopy(baseMove, pokemon) : baseMove;
+
 		if (!target && target !== false) target = this.resolveTarget(pokemon, move);
 
 		// copy the priority for Quick Guard
