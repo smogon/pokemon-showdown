@@ -113,7 +113,7 @@ As an overview:
 
 - `switch Pikachu`, `switch pikachu`, or `switch 2` are all valid `CHOICE` strings to switch to a Pikachu in slot 2.
 
-- `move focusblast`, `move focusblast`, or `move 4` are all valid `CHOICE` strings to use Focus Blast, your active Pokemon's 4th move.
+- `move Focus Blast`, `move focusblast`, or `move 4` are all valid `CHOICE` strings to use Focus Blast, your active Pokemon's 4th move.
 
 In Doubles, decisions are delimited by `,`. If you have a Manectric and a Cresselia, `move Thunderbolt 1 mega, move Helping Hand -1` will make the Manectric mega evolve and use Thunderbolt at the opponent in slot 1, while Cresselia will use Helping Hand at Manectric.
 
