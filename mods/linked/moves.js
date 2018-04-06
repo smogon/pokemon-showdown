@@ -67,8 +67,7 @@ exports.BattleMovedex = {
 					return null;
 				}
 			} else {
-				for (const linkedMoveid of action.linked) {
-					let linkedMove = this.getMove(linkedMoveid);
+				for (const linkedMove of action.linked) {
 					if (linkedMove.category !== 'Status' || linkedMove.id === 'mefirst') return;
 				}
 				this.attrLastMove('[still]');
