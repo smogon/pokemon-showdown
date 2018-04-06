@@ -1540,6 +1540,7 @@
 103.27.76.0,103.27.79.255,Host US,http://hostus.us/
 103.27.78.0,103.27.79.255,Host US,http://hostus.us/
 103.28.148.0,103.28.149.255,Argon Data Communication,http://easyway.co.id
+103.75.118.0,103.75.118.255,OneProvider,http://oneprovider.com/
 103.192.176.0,103.192.179.255,Host US,http://hostus.us/
 103.192.178.0,103.192.178.255,Host US,http://hostus.us/
 103.192.179.0,103.192.179.255,Host US,http://hostus.us/
@@ -1886,6 +1887,7 @@
 164.40.147.0,164.40.147.255,GoGrid LLC,http://www.gogrid.com/
 164.138.220.0,164.138.221.255,SuperHosting.BG,http://www.superhosting.bg/
 164.177.128.0,164.177.159.255,Rackspace,http://www.rackspace.com/
+165.227.0.0,165.227.255.255,DigitalOcean USA,https://www.digitalocean.com/
 166.62.0.0,166.62.127.255,GoDaddy.com Inc,http://www.godaddy.com/
 166.78.0.0,166.78.255.255,Rackspace,http://www.rackspace.com/
 166.88.0.0,166.88.255.255,EGIHosting.com,http://www.egihosting.com/
@@ -2235,12 +2237,14 @@
 185.108.84.0,185.108.85.255,Ardis Russia,https://ardis.ru/
 185.108.129.0,185.108.129.255,OneProvider,http://oneprovider.com/
 185.121.120.0,185.121.121.255,Trabia Network,https://www.trabia.com/
+185.125.168.0,185.125.169.255,TerraHost,https://terrahost.no/
 185.137.16.0,185.137.19.255,Surfeasy,https://www.surfeasy.com/
 185.140.114.0,185.140.114.255,OneProvider,http://oneprovider.com/
 185.156.173.32,185.156.173.63,Cyberghost,http://www.cyberghostvpn.com/
 185.186.76.0,185.186.79.255,OneProvider,http://oneprovider.com/
 185.212.168.0,185.212.171.255,M247 Dedicated Servers,https://m247.com/
 186.227.162.128,186.227.162.191,Server Green,http://servergreen.com.br/
+186.227.192.0,186.227.207.255,HostDime Brazil,https://www.hostdime.com/
 186.251.128.0,186.251.139.255,ipglobe.net,https://www.ipglobe.net/
 187.0.192.0,187.0.223.255,alog,http://www.alog.com.br/
 187.33.0.0,187.33.31.255,alog,http://www.alog.com.br/
@@ -2274,6 +2278,7 @@
 188.241.112.0,188.241.119.255,Elvsoft,http://www.elvsoft.com/
 188.241.121.0,188.241.121.255,best-hosting.ro,http://best-hosting.ro/
 188.247.128.0,188.247.128.255,everhost,http://everhost.co/
+189.1.168.0,189.1.175.255,Maxihost,https://www.maxihost.com/
 189.113.160.0,189.113.175.255,hostrevenda.com,http://hostrevenda.com/
 190.4.88.0,190.4.91.255,Hosta Rica,http://hostarica.com/
 190.93.240.0,190.93.255.255,CloudFlare Inc,https://www.cloudflare.com/
@@ -2771,6 +2776,7 @@
 200.219.192.0,200.219.255.255,alog,http://www.alog.com.br/
 201.20.0.0,201.20.31.255,alog,http://www.alog.com.br/
 201.49.208.0,201.49.223.255,alog,http://www.alog.com.br/
+201.131.124.0,201.131.127.255,HostDime Mexico,https://www.hostdime.com/
 201.182.0.0,201.182.255.255,panamaserver.com,http://panamaserver.com/
 201.190.228.0,201.190.231.255,panamaserver.com,http://panamaserver.com/
 202.9.36.0,202.9.39.255,Gigabit Hosting Sdn Bhd,http://thegigabit.com/
@@ -2849,6 +2855,7 @@
 206.130.96.0,206.130.127.255,westhost,http://www.westhost.com/
 206.183.104.0,206.183.111.255,Web Werks,http://www.web-werks.com/
 206.188.0.0,206.188.31.255,Datapipe,http://www.datapipe.com/
+206.189.0.0,206.189.255.255,DigitalOcean USA,https://www.digitalocean.com/
 206.190.128.0,206.190.159.255,UK2 Group,http://www.uk2.net/
 206.196.0.0,206.196.31.255,Peak10,http://www.peak10.com/
 206.212.240.0,206.212.255.255,ColoStore,http://colostore.com/
