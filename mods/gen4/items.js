@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleItems = {
+/**@type {{[k: string]: ModdedItemData}} */
+let BattleItems = {
 	"adamantorb": {
 		inherit: true,
 		onBasePower: function (basePower, user, target, move) {
@@ -47,6 +48,7 @@ exports.BattleItems = {
 					priority: action.priority + 0.1,
 					pokemon: action.pokemon,
 					move: action.move,
+					// @ts-ignore
 					target: action.target,
 				});
 			}
@@ -248,3 +250,5 @@ exports.BattleItems = {
 		},
 	},
 };
+
+exports.BattleItems = BattleItems;

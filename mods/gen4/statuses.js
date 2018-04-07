@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleStatuses = {
+/**@type {{[k: string]: ModdedEffectData}} */
+let BattleStatuses = {
 	par: {
 		inherit: true,
 		onBeforeMove: function (pokemon) {
@@ -11,6 +12,9 @@ exports.BattleStatuses = {
 		},
 	},
 	slp: {
+		name: 'slp',
+		id: 'slp',
+		num: 0,
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'slp');
@@ -68,3 +72,5 @@ exports.BattleStatuses = {
 		counterMax: 8,
 	},
 };
+
+exports.BattleStatuses = BattleStatuses;

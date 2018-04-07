@@ -14,7 +14,7 @@
  * @property {string} id
  * @property {number} pp
  * @property {number} maxpp
- * @property {string} target
+ * @property {string} [target]
  * @property {string | boolean} disabled
  * @property {string} [disabledSource]
  * @property {boolean} used
@@ -101,6 +101,7 @@ class Pokemon {
 		this.moveThisTurnResult = undefined;
 
 		this.lastDamage = 0;
+		/**@type {?{pokemon: Pokemon, damage?: number, thisTurn: boolean, move?: string}} */
 		this.lastAttackedBy = null;
 		this.usedItemThisTurn = false;
 		this.newlySwitched = false;
@@ -210,6 +211,8 @@ class Pokemon {
 		// This is used in gen 1 only, here to avoid code repetition.
 		// Only declared if gen 1 to avoid declaring an object we aren't going to need.
 		if (this.battle.gen === 1) this.modifiedStats = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
+		/**@type {?boolean} */
+		this.subFainted = null;
 
 		this.isStale = 0;
 		this.isStaleCon = 0;
@@ -507,7 +510,7 @@ class Pokemon {
 
 	/**
 	 * @param {Move} move
-	 * @param {number} targetLoc
+	 * @param {number} [targetLoc]
 	 */
 	moveUsed(move, targetLoc) {
 		this.lastMove = move;
@@ -661,11 +664,12 @@ class Pokemon {
 	}
 
 	/**
-	 * @param {AnyObject} boost
+	 * @param {SparseBoostsTable} boost
 	 */
 	boostBy(boost) {
 		let delta = 0;
 		for (let i in boost) {
+			// @ts-ignore
 			delta = boost[i];
 			this.boosts[i] += delta;
 			if (this.boosts[i] > 6) {

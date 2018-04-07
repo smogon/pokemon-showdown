@@ -3,7 +3,13 @@
 const RandomGen4Teams = require('../../mods/gen4/random-teams');
 
 class RandomGen3Teams extends RandomGen4Teams {
-	randomSet(template, slot, teamDetails) {
+	/**
+	 * @param {string | Template} template
+	 * @param {number} [slot]
+	 * @param {RandomTeamsTypes["TeamDetails"]} [teamDetails]
+	 * @return {RandomTeamsTypes["RandomSet"]}
+	 */
+	randomSet(template, slot, teamDetails = {}) {
 		if (slot === undefined) slot = 1;
 		let baseTemplate = (template = this.getTemplate(template));
 		let species = template.species;
@@ -17,7 +23,8 @@ class RandomGen3Teams extends RandomGen4Teams {
 
 		if (template.battleOnly) species = template.baseSpecies;
 
-		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : Object.keys(template.learnset));
+		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : template.learnset ? Object.keys(template.learnset) : []);
+		/**@type {string[]} */
 		let moves = [];
 		let ability = '';
 		let item = '';
@@ -45,6 +52,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 		let hasAbility = {};
 		hasAbility[template.abilities[0]] = true;
 		if (template.abilities[1]) {
+			// @ts-ignore
 			hasAbility[template.abilities[1]] = true;
 		}
 		let availableHP = 0;
@@ -75,7 +83,9 @@ class RandomGen3Teams extends RandomGen4Teams {
 			'Smeargle', 'Shuckle',
 		];
 
-		let hasMove, counter;
+		/**@type {{[k: string]: boolean}} */
+		let hasMove = {};
+		let counter;
 
 		do {
 			// Keep track of all moves we have:
@@ -568,6 +578,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 		return {
 			name: template.baseSpecies,
 			species: species,
+			gender: template.gender,
 			moves: moves,
 			ability: ability,
 			evs: evs,
@@ -577,7 +588,8 @@ class RandomGen3Teams extends RandomGen4Teams {
 			shiny: this.randomChance(1, 1024),
 		};
 	}
-	randomTeam(side) {
+
+	randomTeam() {
 		let pokemon = [];
 
 		let allowedNFE = ['Scyther', 'Vigoroth'];
@@ -604,6 +616,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 		let baseFormes = {};
 		let uberCount = 0;
 		let nuCount = 0;
+		/**@type {RandomTeamsTypes["TeamDetails"]} */
 		let teamDetails = {};
 
 		while (pokemonPool.length && pokemon.length < 6) {

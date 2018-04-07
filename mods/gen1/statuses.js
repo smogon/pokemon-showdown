@@ -10,8 +10,12 @@
 
 'use strict';
 
-exports.BattleStatuses = {
+/**@type {{[k: string]: ModdedEffectData}} */
+let BattleStatuses = {
 	brn: {
+		name: 'brn',
+		id: 'brn',
+		num: 0,
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'brn');
@@ -34,6 +38,9 @@ exports.BattleStatuses = {
 		},
 	},
 	par: {
+		name: 'par',
+		id: 'par',
+		num: 0,
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'par');
@@ -58,6 +65,9 @@ exports.BattleStatuses = {
 		},
 	},
 	slp: {
+		name: 'slp',
+		id: 'slp',
+		num: 0,
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'slp');
@@ -79,6 +89,9 @@ exports.BattleStatuses = {
 		},
 	},
 	frz: {
+		name: 'frz',
+		id: 'frz',
+		num: 0,
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'frz');
@@ -90,12 +103,15 @@ exports.BattleStatuses = {
 			return false;
 		},
 		onAfterMoveSecondary: function (target, source, move) {
-			if (move.secondary && move.secondary.status === 'brn') {
+			if (move.secondary && move.secondary !== true && move.secondary.status === 'brn') {
 				target.cureStatus();
 			}
 		},
 	},
 	psn: {
+		name: 'psn',
+		id: 'psn',
+		num: 0,
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'psn');
@@ -114,6 +130,9 @@ exports.BattleStatuses = {
 		},
 	},
 	tox: {
+		name: 'tox',
+		id: 'tox',
+		num: 0,
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'tox');
@@ -134,6 +153,9 @@ exports.BattleStatuses = {
 		},
 	},
 	confusion: {
+		name: 'confusion',
+		id: 'confusion',
+		num: 0,
 		// this is a volatile status
 		onStart: function (target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.id === 'lockedmove') {
@@ -156,7 +178,7 @@ exports.BattleStatuses = {
 			this.add('-activate', pokemon, 'confusion');
 			if (!this.randomChance(128, 256)) {
 				// We check here to implement the substitute bug since otherwise we need to change directDamage to take target.
-				let damage = Math.floor(Math.floor(((Math.floor(2 * pokemon.level / 5) + 2) * pokemon.getStat('atk') * 40) / pokemon.getStat('def', false, false, true)) / 50) + 2;
+				let damage = Math.floor(Math.floor(((Math.floor(2 * pokemon.level / 5) + 2) * pokemon.getStat('atk') * 40) / pokemon.getStat('def', false)) / 50) + 2;
 				if (pokemon.volatiles['substitute']) {
 					// If there is Substitute, we check for opposing substitute.
 					if (target.volatiles['substitute']) {
@@ -180,6 +202,9 @@ exports.BattleStatuses = {
 		},
 	},
 	flinch: {
+		name: 'flinch',
+		id: 'flinch',
+		num: 0,
 		duration: 1,
 		onBeforeMovePriority: 4,
 		onBeforeMove: function (pokemon) {
@@ -191,6 +216,9 @@ exports.BattleStatuses = {
 		},
 	},
 	trapped: {
+		name: 'trapped',
+		id: 'trapped',
+		num: 0,
 		noCopy: true,
 		onTrapPokemon: function (pokemon) {
 			if (!this.effectData.source || !this.effectData.source.isActive) {
@@ -201,6 +229,9 @@ exports.BattleStatuses = {
 		},
 	},
 	partiallytrapped: {
+		name: 'partiallytrapped',
+		id: 'partiallytrapped',
+		num: 0,
 		duration: 2,
 		onBeforeMovePriority: 4,
 		onBeforeMove: function (pokemon) {
@@ -209,6 +240,9 @@ exports.BattleStatuses = {
 		},
 	},
 	partialtrappinglock: {
+		name: 'partialtrappinglock',
+		id: 'partialtrappinglock',
+		num: 0,
 		durationCallback: function () {
 			let duration = this.sample([2, 2, 2, 3, 3, 3, 4, 5]);
 			return duration;
@@ -240,6 +274,9 @@ exports.BattleStatuses = {
 		},
 	},
 	stall: {
+		name: 'stall',
+		id: 'stall',
+		num: 0,
 		// Protect, Detect, Endure counter
 		duration: 2,
 		counterMax: 256,
@@ -258,6 +295,7 @@ exports.BattleStatuses = {
 			return this.randomChance(1, counter);
 		},
 		onRestart: function () {
+			// @ts-ignore
 			if (this.effectData.counter < this.effect.counterMax) {
 				this.effectData.counter *= 2;
 			}
@@ -265,3 +303,5 @@ exports.BattleStatuses = {
 		},
 	},
 };
+
+exports.BattleStatuses = BattleStatuses;
