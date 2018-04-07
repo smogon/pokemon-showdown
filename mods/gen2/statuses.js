@@ -53,6 +53,12 @@ exports.BattleStatuses = {
 			return false;
 		},
 		onModifyMove: function () {},
+		onHit: function () {},
+		onAfterMoveSecondary: function (target, source, move) {
+			if (move.secondary && move.secondary.status === 'brn' || move.statusRoll === 'brn') {
+				target.cureStatus();
+			}
+		},
 		onAfterMoveSecondarySelf: function (pokemon, target, move) {
 			if (move.flags['defrost']) pokemon.cureStatus();
 		},

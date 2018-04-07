@@ -747,18 +747,14 @@ exports.BattleMovedex = {
 	},
 	triattack: {
 		inherit: true,
+		onHit: function (target, source, move) {
+			move.statusRoll = ['par', 'frz', 'brn'][this.random(3)];
+		},
 		secondary: {
 			chance: 20,
-			onHit: function (target, source) {
-				if (!target.hasType('Normal')) {
-					let result = this.random(3);
-					if (result === 0) {
-						target.trySetStatus('brn', source);
-					} else if (result === 1) {
-						target.trySetStatus('par', source);
-					} else {
-						target.trySetStatus('frz', source);
-					}
+			onHit: function (target, source, move) {
+				if (!target.hasType('Normal') && move.statusRoll) {
+					target.trySetStatus(move.statusRoll, source);
 				}
 			},
 		},
