@@ -869,6 +869,7 @@ exports.BattleMovedex = {
 	},
 	triattack: {
 		inherit: true,
+		onHit: function () {},
 		secondary: false,
 	},
 	whirlwind: {

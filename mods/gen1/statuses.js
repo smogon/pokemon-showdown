@@ -89,8 +89,8 @@ exports.BattleStatuses = {
 			pokemon.lastMove = null;
 			return false;
 		},
-		onHit: function (target, source, move) {
-			if (move.type === 'Fire' && move.category !== 'Status') {
+		onAfterMoveSecondary: function (target, source, move) {
+			if (move.secondary && move.secondary.status === 'brn') {
 				target.cureStatus();
 			}
 		},
