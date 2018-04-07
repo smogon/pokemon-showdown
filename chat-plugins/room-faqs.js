@@ -91,10 +91,11 @@ exports.commands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(Chat.formatText(roomFaqs[room.id][topic], true));
 		if (!this.broadcasting && user.can('declare', null, room)) {
-			let extra = `<code>/addfaq ${topic}, ${Chat.escapeHTML(roomFaqs[room.id][topic])}</code>`;
-			let aliases = Object.keys(roomFaqs[room.id]).filter(val => getAlias(room.id, val) === topic);
+			const src = Chat.escapeHTML(roomFaqs[room.id][topic]).replace(/\n/g, `<br />`);
+			let extra = `<code>/addfaq ${topic}, ${src}</code>`;
+			const aliases = Object.keys(roomFaqs[room.id]).filter(val => getAlias(room.id, val) === topic);
 			if (aliases.length) {
-				extra += `<br/><br/>Aliases: ${Object.keys(roomFaqs[room.id]).filter(val => getAlias(room.id, val) === topic).join(', ')}`;
+				extra += `<br /><br />Aliases: ${aliases.join(', ')}`;
 			}
 			this.sendReplyBox(extra);
 		}
@@ -107,3 +108,7 @@ exports.commands = {
 		`/removefaq <topic> - Removes the entry for <topic> in this room. If used on an alias, removes the alias. Requires: # & ~`,
 	],
 };
+
+process.nextTick(() => {
+	Chat.multiLinePattern.register('/addfaq ');
+});
