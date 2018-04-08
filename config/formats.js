@@ -674,7 +674,8 @@ let Formats = [
 		team: 'randomHC',
 		searchShow: false,
 		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
-	},	{
+	},
+	{
 		name: '[Gen 7] Metronome Battle',
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3632075/">Metronome Battle</a>`,
