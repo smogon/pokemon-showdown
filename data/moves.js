@@ -18020,11 +18020,11 @@ let BattleMovedex = {
 		num: 376,
 		accuracy: true,
 		basePower: 0,
-		basePowerCallback: function (pokemon) {
+		basePowerCallback: function (source, target, move) {
+			const callerMoveId = move.sourceEffect || move.id;
+			const moveSlot = source.getMoveData(callerMoveId);
 			// @ts-ignore
-			let move = pokemon.getMoveData(pokemon.lastMove.id); // Account for calling Trump Card via other moves
-			// @ts-ignore
-			switch (move.pp) {
+			switch (moveSlot.pp) {
 			case 0:
 				return 200;
 			case 1:
