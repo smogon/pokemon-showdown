@@ -18625,12 +18625,8 @@ let BattleMovedex = {
 		num: 311,
 		accuracy: 100,
 		basePower: 50,
-		basePowerCallback: function (pokemon, target, move) {
-			if (this.weather) return move.basePower * 2;
-			return move.basePower;
-		},
 		category: "Special",
-		desc: "Power doubles during weather effects and this move's type changes to match; Ice type during Hail, Water type during Rain Dance, Rock type during Sandstorm, and Fire type during Sunny Day.",
+		desc: "Power doubles during weather effects (except strong winds) and this move's type changes to match; Ice type during Hail, Water type during Rain Dance, Rock type during Sandstorm, and Fire type during Sunny Day.",
 		shortDesc: "Power doubles and type varies in each weather.",
 		id: "weatherball",
 		name: "Weather Ball",
@@ -18642,16 +18638,20 @@ let BattleMovedex = {
 			case 'sunnyday':
 			case 'desolateland':
 				move.type = 'Fire';
+				move.basePower *= 2;
 				break;
 			case 'raindance':
 			case 'primordialsea':
 				move.type = 'Water';
+				move.basePower *= 2;
 				break;
 			case 'sandstorm':
 				move.type = 'Rock';
+				move.basePower *= 2;
 				break;
 			case 'hail':
 				move.type = 'Ice';
+				move.basePower *= 2;
 				break;
 			}
 		},
