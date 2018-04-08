@@ -14990,11 +14990,6 @@ let BattleMovedex = {
 		},
 		effect: {
 			duration: 2,
-			onStart: function () {
-				if (this.willMove(this.effectData.source)) {
-					this.effectData.source.activeTurns--;
-				}
-			},
 			onAnyDragOut: function (pokemon) {
 				if (pokemon === this.effectData.target || pokemon === this.effectData.source) return false;
 			},
@@ -15006,6 +15001,7 @@ let BattleMovedex = {
 			onFoeBeforeMovePriority: 12,
 			onFoeBeforeMove: function (attacker, defender, move) {
 				if (attacker === this.effectData.source) {
+					this.effectData.source.activeTurns--;
 					this.debug('Sky drop nullifying.');
 					return null;
 				}
