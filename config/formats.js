@@ -8,7 +8,6 @@ let Formats = [
 
 	// US/UM Singles
 	///////////////////////////////////////////////////////////////////
-	{
 		section: "US/UM Singles",
 	},
 	{
@@ -692,7 +691,7 @@ let Formats = [
 			'Aegislash', 'Aerodactylite', 'Aggronite', 'Aguav Berry', 'Ampharosite', 'Berry', 'Berry Juice', 'Black Sludge', 'Blastoisinite',
 			'Blazikenite', 'Charizardite X', 'Charizardite Y', 'Cheek Pouch', 'Cursed Body', 'Desolate Land', 'Diancite', 'Dry Skin ++ Drizzle',
 			'Doublade', 'Enigma Berry', 'Figy Berry', 'Fur Coat', 'Galladite', 'Garchompite', 'Gardevoirite', 'Gold Berry', 'Grassy Surge', 'Gyaradosite',
-			'Harvest + Rowap Berry', 'Harvest + Jaboca Berry', 'Harvest + Leppa Berry', 'Honedge', 'Huge Power', 'Iapapa Berry', 'Ice Body', 'Iron Barbs', 'Kitsunoh',
+			'Harvest + Rowap Berry', 'Harvest + Jaboca Berry', 'Honedge', 'Huge Power', 'Iapapa Berry', 'Ice Body', 'Iron Barbs', 'Kitsunoh',
 			'Latiasite', 'Latiosite', 'Leftovers', 'Lucarionite', 'Mago Berry', 'Metagrossite', 'Moody', 'Normalium Z', 'Oran Berry',
 			'Parental Bond', 'Poison Heal', 'Power Construct', 'Pressure', 'Primordial Sea', 'Protean', 'Pure Power', 'Rain Dish ++ Drizzle',
 			'Rocky Helmet', 'Rough Skin', 'Salamencite', 'Sand Stream', 'Sceptilite', 'Schooling', 'Shedinja + Sturdy', 'Sitrus Berry',
