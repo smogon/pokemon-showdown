@@ -441,6 +441,10 @@ class TextFormatter {
 			case '\r':
 			case '\n':
 				this.popAllSpans(i);
+				if (this.isTrusted) {
+					this.buffers.push(`<br />`);
+					this.offset++;
+				}
 				beginningOfLine = i + 1;
 				break;
 			}
