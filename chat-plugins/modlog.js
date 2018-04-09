@@ -121,7 +121,7 @@ async function runModlog(roomidList, searchString, exactSearch, maxLines) {
 		regexString = searchString.replace(/[\\.+*?()|[\]{}^$]/g, '\\$&');
 	} else {
 		searchString = toId(searchString);
-		regexString = `[^a-zA-Z0-9]${searchString.split('').join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]`;
+		regexString = `[^a-zA-Z0-9]${searchString.split('').join('[^a-zA-Z0-9]*')}([^a-zA-Z0-9]|\\z)`;
 	}
 
 	let results = new SortedLimitedLengthList(maxLines);
