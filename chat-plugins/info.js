@@ -1836,9 +1836,8 @@ exports.commands = {
 
 	'!veekun': true,
 	veekun: function (target, broadcast, user) {
-		if (!this.runBroadcast()) return;
-
 		if (!target) return this.parse('/help veekun');
+		if (!this.runBroadcast()) return;
 
 		let baseLink = 'http://veekun.com/dex/';
 
@@ -1857,13 +1856,20 @@ exports.commands = {
 			let baseSpecies = pokemon.baseSpecies || pokemon.species;
 			let forme = pokemon.forme;
 
-			// Showdown and Veekun have different naming for this gender difference forme of Meowstic.
-			if (baseSpecies === 'Meowstic' && forme === 'F') {
-				forme = 'Female';
+			// Showdown and Veekun have different names for various formes
+			if (baseSpecies === 'Meowstic' && forme === 'F') forme = 'Female';
+			if (baseSpecies === 'Zygarde' && forme === '10%') forme = '10';
+			if (baseSpecies === 'Necrozma' && !Dex.getTemplate(baseSpecies + forme).battleOnly) forme = forme.substr(0, 4);
+			if (baseSpecies === 'Pikachu' && Dex.getTemplate(baseSpecies + forme).gen === 7) forme += '-Cap';
+			if (forme.endsWith('Totem')) {
+				if (baseSpecies === 'Raticate') forme = 'Totem-Alola';
+				if (baseSpecies === 'Marowak') forme = 'Totem';
+				if (baseSpecies === 'Mimikyu') forme += forme === 'Busted-Totem' ? '-Busted' : '-Disguised';
 			}
 
 			let link = baseLink + 'pokemon/' + baseSpecies.toLowerCase();
 			if (forme) {
+				if (baseSpecies === 'Arceus' || baseSpecies === 'Silvally') link += '/flavor';
 				link += '?form=' + forme.toLowerCase();
 			}
 
@@ -1873,6 +1879,7 @@ exports.commands = {
 		// Item
 		if (item.exists) {
 			atLeastOne = true;
+			if (item.isNonstandard) return this.errorReply(`${item.name} is not a real item.`);
 			let link = baseLink + 'items/' + item.name.toLowerCase();
 			this.sendReplyBox(`<a href="${link}">${item.name} item description</a> by Veekun`);
 		}
@@ -1880,7 +1887,7 @@ exports.commands = {
 		// Ability
 		if (ability.exists) {
 			atLeastOne = true;
-			if (ability.isNonstandard) return this.sendReply(ability.name + ' is not a real ability.');
+			if (ability.isNonstandard) return this.errorReply(`${ability.name} is not a real ability.`);
 			let link = baseLink + 'abilities/' + ability.name.toLowerCase();
 			this.sendReplyBox(`<a href="${link}">${ability.name} ability description</a> by Veekun`);
 		}
@@ -1888,7 +1895,7 @@ exports.commands = {
 		// Move
 		if (move.exists) {
 			atLeastOne = true;
-			if (move.isNonstandard) return this.errorReply(move.name + ' is not a real move.');
+			if (move.isNonstandard) return this.errorReply(`${move.name} is not a real move.`);
 			let link = baseLink + 'moves/' + move.name.toLowerCase();
 			this.sendReplyBox(`<a href="${link}">${move.name} move description</a> by Veekun`);
 		}
