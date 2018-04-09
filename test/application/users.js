@@ -119,6 +119,7 @@ describe('Users features', function () {
 				});
 
 				it('should disconnect every user at that IP', function () {
+					Punishments.sharedIps = new Map();
 					let users = ['127.0.0.1', '127.0.0.1'].map(ip => new User(new Connection(ip)));
 					Punishments.ban(users[0]);
 					assert.strictEqual(users[0].connected, false);
