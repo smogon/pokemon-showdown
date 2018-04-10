@@ -975,6 +975,19 @@ exports.commands = {
 		},
 		leavehelp: [`/mafia leave - Leave the game. Can only be done while signups are open.`],
 
+		playercap: function (target, room, user) {
+			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
+			if (!user.can('mute', null, room) && room.game.hostid !== user.userid) return false;
+			if (room.game.phase !== 'signups') return this.errorReply(`Signups are already closed.`);
+			if (toId(target) === 'none') target = 20;
+			target = parseInt(target);
+			if (!target || target > 20 || target < 2) return this.parse('/help mafia playercount');
+			if (target === room.game.playerCap) return this.errorReply(`Player cap is already set at ${room.game.playerCap}.`);
+			room.game.playerCap = target;
+			room.game.sendRoom(`Player cap has been set to ${room.game.playerCap}`, {declare: true});
+		},
+		playercapthelp: [`/mafia playercap [cap|none]- Limit the number of players being able to join the game. Player cap cannot be more than 20 and less than 2.`],
+
 		'!close': true,
 		close: function (target, room, user) {
 			let targetRoom = room;
@@ -1057,7 +1070,7 @@ exports.commands = {
 			target = target.split(',');
 			if (Rooms(target[0]) && Rooms(target[0]).users[user.userid]) targetRoom = Rooms(target.shift());
 			if (!targetRoom || !targetRoom.game || targetRoom.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
-			if (!user.can('mute', null, room) && targetRoom.game.hostid !== user.userid) return user.sendTo(targetRoom, `/mafia ${cmd} - Access denied.`);
+			if (!user.can('mute', null, room) && targetRoom.game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia ${cmd} - Access denied.`);
 			if (cmd === 'night') {
 				targetRoom.game.night();
 			} else {
