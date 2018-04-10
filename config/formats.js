@@ -378,7 +378,7 @@ let Formats = [
 		},
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 		banlist: [
-			'Aegislash', 'Aerodactylite', 'Aggronite', 'Aguav Berry', 'Ampharosite', 'Assault Vest', 'Berry', 'Berry Juice', 'Black Sludge',
+			'Aegislash', 'Aerodactylite', 'Aggronite', 'Aguav Berry', 'Ampharosite', 'Assault Vest', 'Berry', 'Berry Juice', 'Berserk Gene', 'Black Sludge',
 			'Blastoisinite', 'Blazikenite', 'Charizardite X', 'Charizardite Y', 'Cheek Pouch', 'Cursed Body', 'Desolate Land', 'Diancite',
 			'Doublade', 'Dry Skin', 'Enigma Berry', 'Figy Berry', 'Fur Coat', 'Galladite', 'Garchompite',
 			'Gardevoirite', 'Gold Berry', 'Grassy Surge', 'Gyaradosite', 'Harvest + Rowap Berry', 'Harvest + Jaboca Berry', 'Honedge',
