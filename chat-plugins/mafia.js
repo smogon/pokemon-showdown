@@ -573,7 +573,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			}
 			if (this.subs.includes(targetUser.userid)) this.subs.splice(this.subs.indexOf(targetUser.userid), 1);
 			this.players[targetUser.userid] = player;
-			this.sendRoom(`${Chat.escapeHTML(targetUser.name)} has been added to the game!`, {declare: true});
+			this.sendRoom(`${Chat.escapeHTML(targetUser.name)} has been added to the game by ${user.name}!`, {declare: true});
 		}
 		this.playerCount++;
 		this.updateRoleString();
@@ -1197,13 +1197,14 @@ exports.commands = {
 			target = target.split(',');
 			if (Rooms(target[0]) && Rooms(target[0]).users[user.userid]) targetRoom = Rooms(target.shift());
 			if (!targetRoom || !targetRoom.game || targetRoom.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
-			if (!user.can('mute', null, room) && targetRoom.game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia deadline - Access denied.`);
+			if (!user.can('mute', null, room) && targetRoom.game.hostid !== user.userid && target) return user.sendTo(targetRoom, `|error|/mafia deadline - Access denied.`);
 			target = toId(target.join(''));
 			if (target === 'off') {
 				return targetRoom.game.setDeadline('off');
 			} else {
 				target = parseInt(target);
 				if (isNaN(target)) {
+					if (room.game.hostid === user.userid && this.cmdToken === "!") this.broadcasting = true;
 					if (!this.runBroadcast()) return;
 					if ((targetRoom.game.dlAt - Date.now()) > 0) {
 						return this.sendReply(`The deadline is in ${Chat.toDurationString(targetRoom.game.dlAt - Date.now()) || '0 seconds'}.`);
@@ -1273,6 +1274,7 @@ exports.commands = {
 		lynches: function (target, room, user) {
 			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			if (!room.game.started) return this.errorReply(`The game of mafia has not started yet.`);
+			if (room.game.hostid === user.userid && this.cmdToken === "!") this.broadcasting = true;
 			if (!this.runBroadcast()) return false;
 
 			let buf = `<strong>Lynches (Hammer: ${room.game.hammerCount})</strong><br />`;
@@ -1290,6 +1292,7 @@ exports.commands = {
 
 		players: function (target, room, user) {
 			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
+			if (room.game.hostid === user.userid && this.cmdToken === "!") this.broadcasting = true;
 			if (!this.runBroadcast()) return false;
 
 			if (this.broadcasting) {
@@ -1419,7 +1422,7 @@ exports.commands = {
 			if (!targetRoom || !targetRoom.game || targetRoom.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			if (!user.can('mute', null, targetRoom) && targetRoom.game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia end - Access denied.`);
 			targetRoom.game.end(true);
-			this.modlog('MAFIAEND');
+			targetRoom.modlog('MAFIAEND');
 		},
 		endhelp: [`/mafia end - End the current game of mafia. Requires host % @ * # & ~`],
 
