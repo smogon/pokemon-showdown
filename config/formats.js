@@ -203,6 +203,32 @@ let Formats = [
 		requirePentagon: true,
 	},
 	{
+		name: "[Gen 7] Ultra Kalos Classic",
+		threads: [`&bullet; <a href="http://www.smogon.com/forums/threads/3632223/">Ultra Kalos Classic Discussion</a>`],
+
+		mod: 'gen7',
+		forcedLevel: 50,
+		teamLength: {
+			validate: [3, 6],
+			battle: 3,
+		},
+		ruleset: ['Pokemon', 'Standard GBU', 'Kalos Pokedex'],
+		onValidateSet: function (set) {
+			const item = this.getItem(set.item);
+			const bannedStones = [
+				"Latiasite", "Latiosite", "Swampertite", "Sceptilite", "Sablenite", "Altarianite", "Galladite",
+				"Audinite", "Metagrossite", "Sharpedonite", "Slowbronite", "Steelixite", "Pidgeotite",
+				"Glalitite", "Diancite", "Cameruptite", "Lopunnite", "Salamencite", "Beedrillite",
+			];
+			if (bannedStones.includes(item.name)) {
+				return [`(${set.name || set.species} is holding ${item.name})`, `Mega Stones not found in Kalos are banned in Ultra Kalos Classic.`];
+			}
+			if (item.zMove) {
+				return [`(${set.name || set.species} is holding ${item.name})`, `Z-Crystals are banned in Ultra Kalos Classic.`];
+			}
+		},
+	},
+	{
 		name: "[Gen 7] Custom Game",
 
 		mod: 'gen7',
