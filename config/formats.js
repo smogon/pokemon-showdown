@@ -380,11 +380,11 @@ let Formats = [
 		banlist: [
 			'Aegislash', 'Aerodactylite', 'Aggronite', 'Aguav Berry', 'Ampharosite', 'Assault Vest', 'Berry', 'Berry Juice', 'Black Sludge',
 			'Blastoisinite', 'Blazikenite', 'Charizardite X', 'Charizardite Y', 'Cheek Pouch', 'Cursed Body', 'Desolate Land', 'Diancite',
-			'Drizzle ++ Dry Skin', 'Drizzle ++ Rain Dish', 'Doublade', 'Enigma Berry', 'Figy Berry', 'Fur Coat', 'Galladite', 'Garchompite',
+			'Doublade', 'Dry Skin', 'Enigma Berry', 'Figy Berry', 'Fur Coat', 'Galladite', 'Garchompite',
 			'Gardevoirite', 'Gold Berry', 'Grassy Surge', 'Gyaradosite', 'Harvest + Rowap Berry', 'Harvest + Jaboca Berry', 'Honedge',
 			'Huge Power', 'Iapapa Berry', 'Ice Body', 'Iron Barbs', 'Kitsunoh', 'Latiasite', 'Latiosite', 'Leftovers', 'Lucarionite',
 			'Mago Berry', 'Mawilite', 'Medichamite', 'Metagrossite', 'Moody', 'Normalium Z', 'Oran Berry', 'Parental Bond', 'Poison Heal', 'Power Construct', 'Pressure',
-			'Primordial Sea', 'Protean', 'Pure Power', 'Rocky Helmet', 'Rough Skin', 'Salamencite', 'Sand Stream', 'Sceptilite', 'Schooling',
+			'Primordial Sea', 'Protean', 'Pure Power', 'Rain Dish', 'Rocky Helmet', 'Rough Skin', 'Salamencite', 'Sand Stream', 'Sceptilite', 'Schooling',
 			'Shedinja + Sturdy', 'Sitrus Berry', 'Snow Warning', 'Stamina', 'Steelixite', 'Swampertite', 'Tyranitarite', 'Venusaurite',
 			'Water Absorb', 'Volt Absorb', 'Wiki Berry', 'Wonder Guard',
 		],
