@@ -189,7 +189,7 @@ exports.BattleMovedex = {
 			onStart: function (target) {
 				let noEncore = ['encore', 'metronome', 'mimic', 'mirrormove', 'sketch', 'sleeptalk', 'struggle', 'transform'];
 				let moveIndex = target.lastMove ? target.moves.indexOf(target.lastMove.id) : -1;
-				if (!target.lastMove || noEncore.includes(target.lastMove.id) || (target.moveSlots[moveIndex] && target.moveSlots[moveIndex].pp <= 0)) {
+				if (!target.lastMove || noEncore.includes(target.lastMove.id) || !target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0) {
 					// it failed
 					this.add('-fail', target);
 					delete target.volatiles['encore'];

@@ -4412,7 +4412,7 @@ let BattleMovedex = {
 			onStart: function (target) {
 				let noEncore = ['assist', 'copycat', 'encore', 'mefirst', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'sketch', 'sleeptalk', 'struggle', 'transform'];
 				let moveIndex = target.lastMove ? target.moves.indexOf(target.lastMove.id) : -1;
-				if (!target.lastMove || target.lastMove.isZ || noEncore.includes(target.lastMove.id) || (target.moveSlots[moveIndex] && target.moveSlots[moveIndex].pp <= 0)) {
+				if (!target.lastMove || target.lastMove.isZ || noEncore.includes(target.lastMove.id) || !target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0) {
 					// it failed
 					delete target.volatiles['encore'];
 					return false;
