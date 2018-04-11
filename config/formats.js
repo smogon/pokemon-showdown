@@ -386,7 +386,7 @@ let Formats = [
 			'Black Sludge', 'Blastoisinite', 'Blazikenite', 'Charizardite X', 'Charizardite Y', 'Crucibellite', 'Diancite', 'Enigma Berry',
 			'Figy Berry', 'Galladite', 'Garchompite', 'Gardevoirite', 'Gold Berry', 'Gyaradosite', 'Iapapa Berry', 'Latiasite', 'Latiosite', 'Leftovers',
 			'Lucarionite', 'Mago Berry', 'Mawilite', 'Medichamite', 'Metagrossite', 'Normalium Z', 'Oran Berry', 'Rocky Helmet',
-			'Salamencite', 'Sceptilite', 'Sitrus Berry', 'Steelixite', 'Swampertite', 'Tyranitarite', 'Venusaurite', 'Wiki Berry',
+			'Salamencite', 'Sceptilite', 'Shell Bell', 'Sitrus Berry', 'Steelixite', 'Swampertite', 'Tyranitarite', 'Venusaurite', 'Wiki Berry',
 			'Harvest + Rowap Berry', 'Harvest + Jaboca Berry', 'Shedinja + Sturdy',
 		],
 		onValidateSet: function (set) {
