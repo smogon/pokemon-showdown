@@ -378,19 +378,19 @@ let Formats = [
 		},
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 		banlist: [
-			'Aegislash', 'Aerodactylite', 'Aggronite', 'Aguav Berry', 'Ampharosite', 'Assault Vest', 'Berry', 'Berry Juice', 'Black Sludge',
-			'Blastoisinite', 'Blazikenite', 'Charizardite X', 'Charizardite Y', 'Cheek Pouch', 'Cursed Body', 'Desolate Land', 'Diancite',
-			'Drizzle ++ Dry Skin', 'Drizzle ++ Rain Dish', 'Doublade', 'Enigma Berry', 'Figy Berry', 'Fur Coat', 'Galladite', 'Garchompite',
-			'Gardevoirite', 'Gold Berry', 'Grassy Surge', 'Gyaradosite', 'Harvest + Rowap Berry', 'Harvest + Jaboca Berry', 'Honedge',
-			'Huge Power', 'Iapapa Berry', 'Ice Body', 'Iron Barbs', 'Kitsunoh', 'Latiasite', 'Latiosite', 'Leftovers', 'Lucarionite',
-			'Mago Berry', 'Metagrossite', 'Moody', 'Normalium Z', 'Oran Berry', 'Parental Bond', 'Poison Heal', 'Power Construct', 'Pressure',
-			'Primordial Sea', 'Protean', 'Pure Power', 'Rocky Helmet', 'Rough Skin', 'Salamencite', 'Sand Stream', 'Sceptilite', 'Schooling',
-			'Shedinja + Sturdy', 'Sitrus Berry', 'Snow Warning', 'Stamina', 'Steelixite', 'Swampertite', 'Tyranitarite', 'Venusaurite',
-			'Water Absorb', 'Volt Absorb', 'Wiki Berry', 'Wonder Guard',
+			'Aegislash', 'Doublade', 'Honedge', 'Kitsunoh',
+			'Cheek Pouch', 'Cursed Body', 'Desolate Land', 'Dry Skin', 'Fur Coat', 'Grassy Surge', 'Huge Power', 'Ice Body', 'Iron Barbs',
+			'Moody', 'Parental Bond', 'Poison Heal', 'Power Construct', 'Pressure', 'Primordial Sea', 'Protean', 'Pure Power', 'Rain Dish',
+			'Rough Skin', 'Sand Stream', 'Schooling', 'Snow Warning', 'Stamina', 'Water Absorb', 'Volt Absorb', 'Wonder Guard',
+			'Aerodactylite', 'Aggronite', 'Aguav Berry', 'Ampharosite', 'Assault Vest', 'Berry', 'Berry Juice', 'Berserk Gene',
+			'Black Sludge', 'Blastoisinite', 'Blazikenite', 'Charizardite X', 'Charizardite Y', 'Diancite', 'Enigma Berry', 'Figy Berry',
+			'Galladite', 'Garchompite', 'Gardevoirite', 'Gold Berry', 'Gyaradosite', 'Iapapa Berry', 'Latiasite', 'Latiosite', 'Leftovers',
+			'Lucarionite', 'Mago Berry', 'Mawilite', 'Medichamite', 'Metagrossite', 'Normalium Z', 'Oran Berry', 'Rocky Helmet',
+			'Salamencite', 'Sceptilite', 'Sitrus Berry', 'Steelixite', 'Swampertite', 'Tyranitarite', 'Venusaurite', 'Wiki Berry',
+			'Harvest + Rowap Berry', 'Harvest + Jaboca Berry', 'Shedinja + Sturdy',
 		],
 		onValidateSet: function (set) {
 			let template = this.getTemplate(set.species);
-			if (set.name === template.baseSpecies) return [`${template.species} does not have a nickname.`, `(Nicknames are required)`];
 			let bst = template.baseStats.hp + template.baseStats.atk + template.baseStats.def + template.baseStats.spa + template.baseStats.spd + template.baseStats.spe;
 			if (bst > 600) return [`${template.species} is illegal.`, `(Pok\u00e9mon with a BST higher than 600 are banned)`];
 			if (set.moves.length !== 1 || this.getMove(set.moves[0]).id !== 'metronome') return [`${template.species} has illegal moves.`, `(You can only have one Metronome in the moveset)`];
