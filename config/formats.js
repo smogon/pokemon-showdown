@@ -379,7 +379,7 @@ let Formats = [
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 		banlist: [
 			'Aegislash', 'Doublade', 'Honedge', 'Kitsunoh',
-			'Cheek Pouch', 'Cursed Body', 'Desolate Land', 'Dry Skin', 'Fur Coat', 'Grassy Surge', 'Huge Power', 'Ice Body', 'Iron Barbs',
+			'Cheek Pouch', 'Cursed Body', 'Desolate Land', 'Dry Skin', 'Fluffy', 'Fur Coat', 'Grassy Surge', 'Huge Power', 'Ice Body', 'Iron Barbs',
 			'Moody', 'Parental Bond', 'Poison Heal', 'Power Construct', 'Pressure', 'Primordial Sea', 'Protean', 'Pure Power', 'Rain Dish',
 			'Rough Skin', 'Sand Stream', 'Schooling', 'Snow Warning', 'Stamina', 'Water Absorb', 'Volt Absorb', 'Wonder Guard',
 			'Aerodactylite', 'Aggronite', 'Aguav Berry', 'Ampharosite', 'Assault Vest', 'Berry', 'Berry Juice', 'Berserk Gene',
