@@ -378,22 +378,32 @@ let Formats = [
 		},
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 		banlist: [
-			'Aegislash', 'Doublade', 'Honedge', 'Kitsunoh',
-			'Cheek Pouch', 'Cursed Body', 'Desolate Land', 'Dry Skin', 'Fluffy', 'Fur Coat', 'Grassy Surge', 'Huge Power', 'Ice Body', 'Iron Barbs',
-			'Moody', 'Parental Bond', 'Poison Heal', 'Power Construct', 'Pressure', 'Primordial Sea', 'Protean', 'Pure Power', 'Rain Dish',
-			'Rough Skin', 'Sand Stream', 'Schooling', 'Snow Warning', 'Stamina', 'Volt Absorb', 'Water Absorb', 'Wonder Guard',
-			'Aerodactylite', 'Aggronite', 'Aguav Berry', 'Ampharosite', 'Assault Vest', 'Berry', 'Berry Juice', 'Berserk Gene',
-			'Black Sludge', 'Blastoisinite', 'Blazikenite', 'Charizardite X', 'Charizardite Y', 'Crucibellite', 'Diancite', 'Enigma Berry',
-			'Figy Berry', 'Galladite', 'Garchompite', 'Gardevoirite', 'Gold Berry', 'Gyaradosite', 'Iapapa Berry', 'Latiasite', 'Latiosite',
-			'Leftovers', 'Lucarionite', 'Mago Berry', 'Mawilite', 'Medichamite', 'Metagrossite', 'Normalium Z', 'Oran Berry', 'Rocky Helmet',
-			'Salamencite', 'Sceptilite', 'Shell Bell', 'Sitrus Berry', 'Steelixite', 'Swampertite', 'Tyranitarite', 'Venusaurite', 'Wiki Berry',
-			'Harvest + Rowap Berry', 'Harvest + Jaboca Berry', 'Shedinja + Sturdy',
+			'Aegislash', 'Doublade', 'Honedge', 'Kitsunoh', 'Cheek Pouch', 'Cursed Body', 'Desolate Land', 'Dry Skin', 'Fluffy', 'Fur Coat',
+			'Grassy Surge', 'Huge Power', 'Ice Body', 'Iron Barbs', 'Moody', 'Parental Bond', 'Poison Heal', 'Power Construct', 'Pressure',
+			'Primordial Sea', 'Protean', 'Pure Power', 'Rain Dish', 'Rough Skin', 'Sand Stream', 'Schooling', 'Snow Warning', 'Stamina',
+			'Volt Absorb', 'Water Absorb', 'Wonder Guard', 'Aguav Berry', 'Assault Vest', 'Berry', 'Berry Juice', 'Berserk Gene', 'Black Sludge',
+			'Enigma Berry', 'Figy Berry', 'Gold Berry', 'Iapapa Berry', 'Leftovers', 'Mago Berry', 'Mawilite', 'Medichamite', 'Normalium Z',
+			'Oran Berry', 'Rocky Helmet', 'Shell Bell', 'Sitrus Berry', 'Wiki Berry', 'Harvest + Rowap Berry', 'Harvest + Jaboca Berry', 'Shedinja + Sturdy',
 		],
 		onValidateSet: function (set) {
 			let template = this.getTemplate(set.species);
-			let bst = template.baseStats.hp + template.baseStats.atk + template.baseStats.def + template.baseStats.spa + template.baseStats.spd + template.baseStats.spe;
-			if (bst > 600) return [`${template.species} is illegal.`, `(Pok\u00e9mon with a BST higher than 600 are banned)`];
-			if (set.moves.length !== 1 || this.getMove(set.moves[0]).id !== 'metronome') return [`${template.species} has illegal moves.`, `(You can only have one Metronome in the moveset)`];
+			let bst = 0;
+			for (let stat in template.baseStats) {
+				// @ts-ignore
+				bst += template.baseStats[stat];
+			}
+			if (bst > 600) return [`${template.species} is banned.`, `(Pok\u00e9mon with a BST higher than 600 are banned)`];
+			let item = this.getItem(set.item);
+			if (set.item && item.megaStone) {
+				let bstMega = 0;
+				let megaTemplate = this.getTemplate(item.megaStone);
+				for (let stat in megaTemplate.baseStats) {
+					// @ts-ignore
+					bstMega += megaTemplate.baseStats[stat];
+				}
+				if (template.baseSpecies === item.megaEvolves && bstMega > 600) return [`${set.name || set.species}'s item ${item.name} is banned.`, `(Pok\u00e9mon with a BST higher than 600 are banned)`];
+			}
+			if (set.moves.length !== 1 || this.getMove(set.moves[0]).id !== 'metronome') return [`${set.name || set.species} has illegal moves.`, `(Pok\u00e9mon can only have one Metronome in their moveset)`];
 		},
 	},
 	{
