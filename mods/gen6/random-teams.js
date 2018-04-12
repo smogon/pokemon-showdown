@@ -512,7 +512,7 @@ class RandomGen6Teams extends RandomTeams {
 
 				// Pokemon should have moves that benefit their Type/Ability/Weather, as well as moves required by its forme
 				if (!rejected && (counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || counter.setupType === 'Mixed' || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3)) &&
-					(((counter.damagingMoves.length === 0 || (!counter.stab && (template.types.length > 1 || !hasMove['icebeam']) && !hasMove['metalburst'])) && (counter['physicalpool'] || counter['specialpool'])) ||
+					(((counter.damagingMoves.length === 0 || (!counter.stab && (counter.setupType || template.types.length > 1 || !hasMove['icebeam']) && !hasMove['metalburst'])) && (counter['physicalpool'] || counter['specialpool'])) ||
 					(hasType['Bug'] && !hasMove['batonpass'] && (movePool.includes('megahorn') || movePool.includes('pinmissile') || (hasType['Flying'] && !hasMove['hurricane'] && movePool.includes('bugbuzz')))) ||
 					(hasType['Dark'] && hasMove['suckerpunch'] && counter.stab < template.types.length) ||
 					(hasType['Dragon'] && !counter['Dragon'] && !hasAbility['Aerilate'] && !hasAbility['Pixilate'] && !hasMove['rest'] && !hasMove['sleeptalk']) ||
@@ -841,8 +841,6 @@ class RandomGen6Teams extends RandomTeams {
 			item = 'Leftovers';
 		} else if (this.getImmunity('Ground', template) && this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && ability !== 'Solid Rock' && !hasMove['magnetrise'] && !hasMove['sleeptalk']) {
 			item = 'Air Balloon';
-		} else if (counter.Status <= 1 && ability !== 'Sturdy' && !hasMove['rapidspin']) {
-			item = 'Life Orb';
 		} else {
 			item = 'Leftovers';
 		}
@@ -853,7 +851,7 @@ class RandomGen6Teams extends RandomTeams {
 		}
 
 		let levelScale = {
-			LC: 87,
+			LC: 88,
 			'LC Uber': 86,
 			NFE: 84,
 			PU: 83,
