@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleFormats = {
+/**@type {{[k: string]: ModdedFormatsData}} */
+let BattleFormats = {
 	pokemon: {
 		effectType: 'ValidatorRule',
 		name: 'Pokemon',
@@ -41,7 +42,7 @@ exports.BattleFormats = {
 			// Automatically set ability to None
 			set.ability = 'None';
 
-			if (toId(set.item) === 'thickclub' && set.species === 'Marowak' && hasSD) {
+			if (set.ivs && toId(set.item) === 'thickclub' && set.species === 'Marowak' && hasSD) {
 				set.ivs.atk = 26;
 			}
 
@@ -84,3 +85,5 @@ exports.BattleFormats = {
 		},
 	},
 };
+
+exports.BattleFormats = BattleFormats;

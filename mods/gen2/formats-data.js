@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleFormatsData = {
+/**@type {{[k: string]: ModdedTemplateFormatsData}} */
+let BattleFormatsData = {
 	bulbasaur: {
 		eventPokemon: [
 			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "growl", "ancientpower"]},
@@ -2679,7 +2680,7 @@ exports.BattleFormatsData = {
 			fillerMoves1: ["curse", "agility"],
 			fillerMoves2: ["return", "hiddenpowerground", "hiddenpowerbug", "nightshade", "nightshade"],
 		},
-		randomeSet3: { // Spider Web + BP
+		randomSet3: { // Spider Web + BP
 			chance: 16,
 			item: ["leftovers"],
 			baseMove1: "curse", baseMove2: "spiderweb", baseMove3: "sludgebomb", baseMove4: "batonpass",
@@ -3673,3 +3674,5 @@ exports.BattleFormatsData = {
 		tier: "Uber",
 	},
 };
+
+exports.BattleFormatsData = BattleFormatsData;

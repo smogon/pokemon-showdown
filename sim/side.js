@@ -113,6 +113,10 @@ class Side {
 		for (const [i, pokemon] of this.pokemon.entries()) {
 			pokemon.position = i;
 		}
+
+		// old-gens
+		/**@type {?Move} */
+		this.lastMove = null;
 	}
 
 	getChoice() {

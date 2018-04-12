@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleAbilities = {
+/**@type {{[k: string]: ModdedAbilityData}} */
+let BattleAbilities = {
 	"cutecharm": {
 		inherit: true,
 		desc: "There is a 1/3 chance a Pokemon making contact with this Pokemon will become infatuated if it is of the opposite gender.",
@@ -177,3 +178,5 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon is only damaged by supereffective moves and indirect damage.",
 	},
 };
+
+exports.BattleAbilities = BattleAbilities;
