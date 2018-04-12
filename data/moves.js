@@ -1657,7 +1657,7 @@ let BattleMovedex = {
 		},
 		effect: {
 			duration: 2,
-			onBeforeImmunity: function (target, source, move) {
+			onTryImmunity: function (target, source, move) {
 				if (move.id === 'gust' || move.id === 'twister') {
 					return;
 				}
@@ -3370,7 +3370,7 @@ let BattleMovedex = {
 			onImmunity: function (type, pokemon) {
 				if (type === 'sandstorm' || type === 'hail') return false;
 			},
-			onBeforeImmunity: function (target, source, move) {
+			onTryImmunity: function (target, source, move) {
 				if (move.id === 'earthquake' || move.id === 'magnitude' || move.id === 'helpinghand') {
 					return;
 				}
@@ -3530,7 +3530,7 @@ let BattleMovedex = {
 			onImmunity: function (type, pokemon) {
 				if (type === 'sandstorm' || type === 'hail') return false;
 			},
-			onBeforeImmunity: function (target, source, move) {
+			onTryImmunity: function (target, source, move) {
 				if (move.id === 'surf' || move.id === 'whirlpool' || move.id === 'helpinghand') {
 					return;
 				}
@@ -5581,7 +5581,7 @@ let BattleMovedex = {
 		},
 		effect: {
 			duration: 2,
-			onBeforeImmunity: function (target, source, move) {
+			onTryImmunity: function (target, source, move) {
 				if (move.id === 'gust' || move.id === 'twister') {
 					return;
 				}
@@ -11698,7 +11698,7 @@ let BattleMovedex = {
 		},
 		effect: {
 			duration: 2,
-			onBeforeImmunity: function (target, source, move) {
+			onTryImmunity: function (target, source, move) {
 				if (move.id === 'helpinghand') {
 					return;
 				}
@@ -14424,7 +14424,7 @@ let BattleMovedex = {
 		},
 		effect: {
 			duration: 2,
-			onBeforeImmunity: function (target, source, move) {
+			onTryImmunity: function (target, source, move) {
 				if (move.id === 'helpinghand') {
 					return;
 				}
@@ -15012,7 +15012,7 @@ let BattleMovedex = {
 				if (this.effectData.source.fainted) return;
 				return this.effectData.source;
 			},
-			onAnyBeforeImmunity: function (target, source, move) {
+			onAnyTryImmunity: function (target, source, move) {
 				if (target !== this.effectData.target && target !== this.effectData.source) {
 					return;
 				}

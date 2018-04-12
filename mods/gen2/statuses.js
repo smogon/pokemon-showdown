@@ -1,7 +1,11 @@
 'use strict';
 
-exports.BattleStatuses = {
+/**@type {{[k: string]: ModdedEffectData}} */
+let BattleStatuses = {
 	brn: {
+		name: 'brn',
+		id: 'brn',
+		num: 0,
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'brn');
@@ -15,6 +19,9 @@ exports.BattleStatuses = {
 		},
 	},
 	par: {
+		name: 'par',
+		id: 'par',
+		num: 0,
 		inherit: true,
 		onBeforeMovePriority: 2,
 		onBeforeMove: function (pokemon) {
@@ -25,6 +32,9 @@ exports.BattleStatuses = {
 		},
 	},
 	slp: {
+		name: 'slp',
+		id: 'slp',
+		num: 0,
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'slp');
@@ -46,6 +56,9 @@ exports.BattleStatuses = {
 		},
 	},
 	frz: {
+		name: 'frz',
+		id: 'frz',
+		num: 0,
 		inherit: true,
 		onBeforeMove: function (pokemon, target, move) {
 			if (move.flags['defrost']) return;
@@ -55,7 +68,7 @@ exports.BattleStatuses = {
 		onModifyMove: function () {},
 		onHit: function () {},
 		onAfterMoveSecondary: function (target, source, move) {
-			if (move.secondary && move.secondary.status === 'brn' || move.statusRoll === 'brn') {
+			if ((move.secondary && move.secondary !== true && move.secondary.status === 'brn') || move.statusRoll === 'brn') {
 				target.cureStatus();
 			}
 		},
@@ -67,6 +80,9 @@ exports.BattleStatuses = {
 		},
 	},
 	psn: {
+		name: 'psn',
+		id: 'psn',
+		num: 0,
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'psn');
@@ -80,6 +96,9 @@ exports.BattleStatuses = {
 		},
 	},
 	tox: {
+		name: 'tox',
+		id: 'tox',
+		num: 0,
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'tox');
@@ -125,6 +144,7 @@ exports.BattleStatuses = {
 			if (this.randomChance(1, 2)) {
 				return;
 			}
+			// @ts-ignore
 			move = {
 				basePower: 40,
 				type: '???',
@@ -146,12 +166,15 @@ exports.BattleStatuses = {
 		},
 	},
 	lockedmove: {
+		name: 'lockedmove',
+		id: 'lockedmove',
+		num: 0,
 		// Outrage, Thrash, Petal Dance...
 		durationCallback: function () {
 			return this.random(2, 4);
 		},
 		onResidual: function (target) {
-			if ((target.lastMove.id === 'struggle') || target.status === 'slp') {
+			if ((target.lastMove && target.lastMove.id === 'struggle') || target.status === 'slp') {
 				// don't lock, and bypass confusion for calming
 				delete target.volatiles['lockedmove'];
 			}
@@ -185,6 +208,9 @@ exports.BattleStatuses = {
 		},
 	},
 	stall: {
+		name: 'stall',
+		id: 'stall',
+		num: 0,
 		duration: 2,
 		onStart: function () {
 			this.effectData.counter = 127;
@@ -200,3 +226,5 @@ exports.BattleStatuses = {
 		},
 	},
 };
+
+exports.BattleStatuses = BattleStatuses;

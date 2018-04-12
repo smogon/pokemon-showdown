@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleItems = {
+/**@type {{[k: string]: ModdedItemData}} */
+let BattleItems = {
 	"berryjuice": {
 		inherit: true,
 		isUnreleased: true,
@@ -219,3 +220,5 @@ exports.BattleItems = {
 		},
 	},
 };
+
+exports.BattleItems = BattleItems;

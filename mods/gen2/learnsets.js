@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleLearnsets = {
+/**@type {{[k: string]: {learnset: {[k: string]: MoveSource[]}}}} */
+let BattleLearnsets = {
 	bulbasaur: {learnset: {
 		ancientpower: ["2S0"],
 		attract: ["2M"],
@@ -11249,3 +11250,5 @@ exports.BattleLearnsets = {
 		toxic: ["2M"],
 	}},
 };
+
+exports.BattleLearnsets = BattleLearnsets;

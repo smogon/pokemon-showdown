@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleScripts = {
+/**@type {ModdedBattleScriptsData} */
+let BattleScripts = {
 	inherit: 'gen4',
 	gen: 3,
 	init: function () {
@@ -48,7 +49,7 @@ exports.BattleScripts = {
 			return this.moveHit(target, pokemon, move);
 		}
 
-		hitResult = this.runEvent('BeforeImmunity', target, pokemon, move);
+		hitResult = this.runEvent('TryImmunity', target, pokemon, move);
 		if (!hitResult) {
 			if (!move.spreadHit) this.attrLastMove('[miss]');
 			this.add('-miss', pokemon, target);
@@ -59,13 +60,14 @@ exports.BattleScripts = {
 			move.ignoreImmunity = (move.category === 'Status');
 		}
 
-		if (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type)) {
+		if ((!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) && !target.runImmunity(move.type)) {
 			naturalImmunity = true;
 		}
 
 		let boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
 
 		// calculate true accuracy
+		/**@type {number | true} */
 		let accuracy = move.accuracy;
 		let boosts, boost;
 		if (accuracy !== true) {
@@ -130,11 +132,12 @@ exports.BattleScripts = {
 		}
 
 		move.totalDamage = 0;
+		/**@type {number | false} */
 		let damage = 0;
 		pokemon.lastDamage = 0;
 		if (move.multihit) {
 			let hits = move.multihit;
-			if (hits.length) {
+			if (Array.isArray(hits)) {
 				// yes, it's hardcoded... meh
 				if (hits[0] === 2 && hits[1] === 5) {
 					hits = this.sample([2, 2, 2, 3, 3, 3, 4, 5]);
@@ -144,6 +147,7 @@ exports.BattleScripts = {
 			}
 			hits = Math.floor(hits);
 			let nullDamage = true;
+			/**@type {number | false} */
 			let moveDamage;
 			// There is no need to recursively check the ´sleepUsable´ flag as Sleep Talk can only be used while asleep.
 			let isSleepUsable = move.sleepUsable || this.getMove(move.sourceEffect).sleepUsable;
@@ -218,6 +222,9 @@ exports.BattleScripts = {
 	},
 
 	calcRecoilDamage: function (damageDealt, move) {
+		// @ts-ignore
 		return this.clampIntRange(Math.floor(damageDealt * move.recoil[0] / move.recoil[1]), 1);
 	},
 };
+
+exports.BattleScripts = BattleScripts;

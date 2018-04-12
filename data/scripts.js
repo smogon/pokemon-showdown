@@ -354,7 +354,7 @@ let BattleScripts = {
 			return this.moveHit(target, pokemon, move);
 		}
 
-		hitResult = this.runEvent('BeforeImmunity', target, pokemon, move);
+		hitResult = this.runEvent('TryImmunity', target, pokemon, move);
 		if (!hitResult) {
 			if (hitResult !== null) {
 				if (!move.spreadHit) this.attrLastMove('[miss]');
