@@ -157,16 +157,16 @@ exports.BattleMovedex = {
 			onImmunity: function (type, pokemon) {
 				if (type === 'sandstorm') return false;
 			},
-			onAccuracy: function (accuracy, target, source, move) {
+			onBeforeImmunity: function (target, source, move) {
 				if (move.id === 'earthquake' || move.id === 'magnitude' || move.id === 'fissure') {
 					return;
 				}
 				if (['attract', 'curse', 'foresight', 'meanlook', 'mimic', 'nightmare', 'spiderweb', 'transform'].includes(move.id)) {
 					// Oversight in the interaction between these moves and the Lock-On effect
-					return 0;
+					return false;
 				}
 				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
-				return 0;
+				return false;
 			},
 			onSourceBasePower: function (basePower, target, source, move) {
 				if (move.id === 'earthquake' || move.id === 'magnitude') {
@@ -249,20 +249,20 @@ exports.BattleMovedex = {
 		},
 		effect: {
 			duration: 2,
-			onAccuracy: function (accuracy, target, source, move) {
+			onBeforeImmunity: function (target, source, move) {
 				if (move.id === 'gust' || move.id === 'twister' || move.id === 'thunder' || move.id === 'whirlwind') {
 					return;
 				}
 				if (move.id === 'earthquake' || move.id === 'magnitude' || move.id === 'fissure') {
 					// These moves miss even during the Lock-On effect
-					return 0;
+					return false;
 				}
 				if (['attract', 'curse', 'foresight', 'meanlook', 'mimic', 'nightmare', 'spiderweb', 'transform'].includes(move.id)) {
 					// Oversight in the interaction between these moves and the Lock-On effect
-					return 0;
+					return false;
 				}
 				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
-				return 0;
+				return false;
 			},
 			onSourceBasePower: function (basePower, target, source, move) {
 				if (move.id === 'gust' || move.id === 'twister') {

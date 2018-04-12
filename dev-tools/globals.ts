@@ -174,6 +174,7 @@ interface EventMethods {
 	onAnyModifyDamage?: (this: Battle, damage: number, source: Pokemon, target: Pokemon, move: Move) => void
 	onAnyRedirectTarget?: (this: Battle, target: Pokemon, source: Pokemon, source2: Pokemon, move: Move) => void
 	onAnyAccuracy?: (this: Battle, accuracy: number, target: Pokemon, source: Pokemon, move: Move) => void
+	onAnyBeforeImmunity?: (this: Battle, target: Pokemon, source: Pokemon, move: Move) => void
 	onAnyFaint?: (this: Battle) => void
 	onAnyModifyBoost?: (this: Battle, boosts: SparseBoostsTable, target: Pokemon) => void
 	onAnyDragOut?: (this: Battle, pokemon: Pokemon) => void
@@ -181,9 +182,10 @@ interface EventMethods {
 	onAttract?: (this: Battle, target: Pokemon, source: Pokemon, effect: UnknownEffect) => void
 	onAccuracy?: (this: Battle, accuracy: number, target: Pokemon, source: Pokemon, move: Move) => number | boolean | void
 	onBasePower?: (this: Battle, basePower: number, pokemon: Pokemon, target: Pokemon, move: Move) => void
+	onBeforeImmunity?: (this: Battle, target: Pokemon, source: Pokemon, move: Move) => void
 	onBeforeSwitchIn?: (this: Battle, pokemon: Pokemon) => void
-	onBeforeMove?: (this: Battle, attacker: Pokemon, defender: Pokemon, move: Move) => void
 	onBeforeSwitchOut?: (this: Battle, pokemon: Pokemon) => void
+	onBeforeMove?: (this: Battle, attacker: Pokemon, defender: Pokemon, move: Move) => void
 	onBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: UnknownEffect) => void
 	onChargeMove?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: Move) => void
 	onCheckShow?: (this: Battle, pokemon: Pokemon) => void

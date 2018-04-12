@@ -251,7 +251,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onLockMove: 'dig',
-			onAccuracy: function (accuracy, target, source, move) {
+			onBeforeImmunity: function (target, source, move) {
 				if (move.id === 'swift') return true;
 				this.add('-message', 'The foe ' + target.name + ' can\'t be hit underground!');
 				return null;
@@ -364,7 +364,7 @@ exports.BattleMovedex = {
 		effect: {
 			duration: 2,
 			onLockMove: 'fly',
-			onAccuracy: function (accuracy, target, source, move) {
+			onBeforeImmunity: function (target, source, move) {
 				if (move.id === 'swift') return true;
 				this.add('-message', 'The foe ' + target.name + ' can\'t be hit while flying!');
 				return null;

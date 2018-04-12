@@ -238,7 +238,15 @@ exports.BattleScripts = {
 		let doSelfDestruct = true;
 		let damage = 0;
 
-		// First, check if the Pokémon is immune to this move.
+		// First, check if the target is semi-invulnerable
+		let hitResult = this.runEvent('BeforeImmunity', target, pokemon, move);
+		if (!hitResult) {
+			if (!move.spreadHit) this.attrLastMove('[miss]');
+			this.add('-miss', pokemon);
+			return false;
+		}
+
+		// Then, check if the Pokémon is immune to this move.
 		if (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type, true)) {
 			if (move.selfdestruct) {
 				this.faint(pokemon, pokemon, move);

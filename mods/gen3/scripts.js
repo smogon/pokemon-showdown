@@ -48,6 +48,13 @@ exports.BattleScripts = {
 			return this.moveHit(target, pokemon, move);
 		}
 
+		hitResult = this.runEvent('BeforeImmunity', target, pokemon, move);
+		if (!hitResult) {
+			if (!move.spreadHit) this.attrLastMove('[miss]');
+			this.add('-miss', pokemon, target);
+			return false;
+		}
+
 		if (move.ignoreImmunity === undefined) {
 			move.ignoreImmunity = (move.category === 'Status');
 		}
