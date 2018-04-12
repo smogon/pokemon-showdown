@@ -5,7 +5,8 @@
 
 'use strict';
 
-exports.BattleMovedex = {
+/**@type {{[k: string]: ModdedMoveData}} */
+let BattleMovedex = {
 	acid: {
 		inherit: true,
 		desc: "Has a 33% chance to lower the target's Defense by 1 stage.",
@@ -96,6 +97,7 @@ exports.BattleMovedex = {
 					}
 					this.add('-end', pokemon, 'Bide');
 					let target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
+					// @ts-ignore
 					this.moveHit(target, pokemon, 'bide', {damage: this.effectData.totalDamage * 2});
 					return false;
 				}
@@ -443,7 +445,7 @@ exports.BattleMovedex = {
 		desc: "If this attack misses the target, the user takes 1 HP of damage.",
 		shortDesc: "User takes 1 HP damage it would have dealt if miss.",
 		onMoveFail: function (target, source, move) {
-			if (target.type !== 'ghost') {
+			if (!target.types.includes('Ghost')) {
 				this.directDamage(1, source);
 			}
 		},
@@ -534,9 +536,9 @@ exports.BattleMovedex = {
 			let moveslot = source.moves.indexOf('mimic');
 			if (moveslot < 0) return false;
 			let moves = target.moves;
-			let move = this.sample(moves);
-			if (!move) return false;
-			move = this.getMove(move);
+			let moveid = this.sample(moves);
+			if (!moveid) return false;
+			let move = this.getMove(moveid);
 			source.moveSlots[moveslot] = {
 				move: move.name,
 				id: move.id,
@@ -913,3 +915,5 @@ exports.BattleMovedex = {
 		},
 	},
 };
+
+exports.BattleMovedex = BattleMovedex;

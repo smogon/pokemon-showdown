@@ -5,7 +5,9 @@
  * Therefor we need to make a lot of changes to the battle engine for this game simulation.
  * This generation inherits all the changes from older generations, that must be taken into account when editing code.
  */
-exports.BattleScripts = {
+
+/**@type {ModdedBattleScriptsData} */
+let BattleScripts = {
 	inherit: 'gen2',
 	gen: 1,
 	debug: function (activity) {
@@ -41,6 +43,7 @@ exports.BattleScripts = {
 		boostBy: function (boost) {
 			let changed = false;
 			for (let i in boost) {
+				// @ts-ignore
 				let delta = boost[i];
 				if (delta > 0 && this.boosts[i] >= 6) continue;
 				if (delta < 0 && this.boosts[i] <= -6) continue;
@@ -53,12 +56,15 @@ exports.BattleScripts = {
 				}
 				changed = true;
 				// Recalculate the modified stat
+				// @ts-ignore
 				let stat = this.template.baseStats[i];
 				stat = Math.floor(Math.floor(2 * stat + this.set.ivs[i] + Math.floor(this.set.evs[i] / 4)) * this.level / 100 + 5);
 				this.modifiedStats[i] = this.stats[i] = Math.floor(stat);
 				if (this.boosts[i] >= 0) {
+					// @ts-ignore
 					this.modifyStat(i, [1, 1.5, 2, 2.5, 3, 3.5, 4][this.boosts[i]]);
 				} else {
+					// @ts-ignore
 					this.modifyStat(i, [100, 66, 50, 40, 33, 28, 25][-this.boosts[i]] / 100);
 				}
 			}
@@ -78,7 +84,7 @@ exports.BattleScripts = {
 
 		this.setActiveMove(move, pokemon, target);
 
-		if (pokemon.movedThisTurn || !this.runEvent('BeforeMove', pokemon, target, move)) {
+		if (pokemon.moveThisTurn || !this.runEvent('BeforeMove', pokemon, target, move)) {
 			// Prevent invulnerability from persisting until the turn ends.
 			pokemon.removeVolatile('twoturnmove');
 			// Rampage moves end without causing confusion
@@ -203,6 +209,7 @@ exports.BattleScripts = {
 			move.ignoreImmunity = (move.category === 'Status');
 		}
 
+		/**@type {number | false} */
 		let damage = false;
 		if (target.fainted) {
 			this.attrLastMove('[notarget]');
@@ -213,7 +220,7 @@ exports.BattleScripts = {
 
 		// Store 0 damage for last damage if move failed or dealt 0 damage.
 		// This only happens on moves that don't deal damage but call GetDamageVarsForPlayerAttack (disassembly).
-		if (!damage && (move.category !== 'Status' || (move.category === 'Status' && !['psn', 'tox', 'par'].includes(move.status))) &&
+		if (!damage && (move.category !== 'Status' || (move.status && move.category === 'Status' && !['psn', 'tox', 'par'].includes(move.status))) &&
 		!['conversion', 'haze', 'mist', 'focusenergy', 'confuseray', 'supersonic', 'transform', 'lightscreen', 'reflect', 'substitute', 'mimic', 'leechseed', 'splash', 'softboiled', 'recover', 'rest'].includes(move.id)) {
 			this.lastDamage = 0;
 		}
@@ -233,13 +240,14 @@ exports.BattleScripts = {
 	// tryMoveHit can be found on scripts.js
 	// This function attempts a move hit and returns the attempt result before the actual hit happens.
 	// It deals with partial trapping weirdness and accuracy bugs as well.
-	tryMoveHit: function (target, pokemon, move, spreadHit) {
+	tryMoveHit: function (target, pokemon, move) {
 		let boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
 		let doSelfDestruct = true;
+		/**@type {number | false} */
 		let damage = 0;
 
 		// First, check if the Pokémon is immune to this move.
-		if (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type, true)) {
+		if ((!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) && !target.runImmunity(move.type, true)) {
 			if (move.selfdestruct) {
 				this.faint(pokemon, pokemon, move);
 			}
@@ -247,6 +255,7 @@ exports.BattleScripts = {
 		}
 
 		// Now, let's calculate the accuracy.
+		/**@type {number | true} */
 		let accuracy = move.accuracy;
 
 		// Partial trapping moves: true accuracy while it lasts
@@ -303,7 +312,7 @@ exports.BattleScripts = {
 			pokemon.lastDamage = 0;
 			if (move.multihit) {
 				let hits = move.multihit;
-				if (hits.length) {
+				if (Array.isArray(hits)) {
 					// Yes, it's hardcoded... meh
 					if (hits[0] === 2 && hits[1] === 5) {
 						hits = this.sample([2, 2, 3, 3, 4, 5]);
@@ -313,6 +322,7 @@ exports.BattleScripts = {
 				}
 				hits = Math.floor(hits);
 				// In gen 1, all the hits have the same damage for multihits move
+				/**@type {number | false} */
 				let moveDamage = 0;
 				let firstDamage;
 				let i;
@@ -334,7 +344,7 @@ exports.BattleScripts = {
 					}
 				}
 				move.damage = null;
-				if (i === 0) return true;
+				if (i === 0) return 1;
 				this.add('-hitcount', target, i);
 			} else {
 				damage = this.moveHit(target, pokemon, move);
@@ -373,10 +383,12 @@ exports.BattleScripts = {
 	// It deals with the actual move hit, as the name indicates, dealing damage and/or effects.
 	// This function also deals with the Gen 1 Substitute behaviour on the hitting process.
 	moveHit: function (target, pokemon, move, moveData, isSecondary, isSelf) {
+		/**@type {number | false} */
 		let damage = 0;
 		move = this.getMoveCopy(move);
 
 		if (!isSecondary && !isSelf) this.setActiveMove(move, pokemon, target);
+		/**@type {number | boolean} */
 		let hitResult = true;
 		if (!moveData) moveData = move;
 
@@ -469,10 +481,12 @@ exports.BattleScripts = {
 				if (pokemon.side.foe.active[0] && pokemon.side.foe.active[0].status) {
 					// If it's paralysed, quarter its speed.
 					if (pokemon.side.foe.active[0].status === 'par') {
+						// @ts-ignore
 						pokemon.side.foe.active[0].modifyStat('spe', 0.25);
 					}
 					// If it's burned, halve its attack.
 					if (pokemon.side.foe.active[0].status === 'brn') {
+						// @ts-ignore
 						pokemon.side.foe.active[0].modifyStat('atk', 0.5);
 					}
 				}
@@ -499,7 +513,9 @@ exports.BattleScripts = {
 				} else if (!target.status) {
 					if (target.setStatus(moveData.status, pokemon, move)) {
 						// Gen 1 mechanics: The burn attack drop and the paralyse speed drop are applied here directly on stat modifiers.
+						// @ts-ignore
 						if (moveData.status === 'brn') target.modifyStat('atk', 0.5);
+						// @ts-ignore
 						if (moveData.status === 'par') target.modifyStat('spe', 0.25);
 					}
 				} else if (!isSecondary) {
@@ -513,7 +529,9 @@ exports.BattleScripts = {
 			}
 			if (moveData.forceStatus) {
 				if (target.setStatus(moveData.forceStatus, pokemon, move)) {
+					// @ts-ignore
 					if (moveData.forceStatus === 'brn') target.modifyStat('atk', 0.5);
+					// @ts-ignore
 					if (moveData.forceStatus === 'par') target.modifyStat('spe', 0.25);
 					didSomething = true;
 				}
@@ -547,13 +565,15 @@ exports.BattleScripts = {
 		if (target) {
 			let targetSub = target.getVolatile('substitute');
 			if (targetSub !== null) {
+				// @ts-ignore
 				targetHasSub = (targetSub.hp > 0);
 			}
 		}
 
 		// Here's where self effects are applied.
 		let doSelf = (targetHadSub && targetHasSub) || !targetHadSub;
-		if (moveData.self && (doSelf || moveData.self.volatileStatus === 'partialtrappinglock')) {
+		if (moveData.self && (doSelf || (moveData.self !== true && moveData.self.volatileStatus === 'partialtrappinglock'))) {
+			// @ts-ignore
 			this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
 		}
 
@@ -570,8 +590,8 @@ exports.BattleScripts = {
 				// That means that a move that does not share the type of the target can status it.
 				// If a move that was not fire-type would exist on Gen 1, it could burn a Pokémon.
 				if (!(secondary.status && ['par', 'brn', 'frz'].includes(secondary.status) && target && target.hasType(move.type))) {
-					let effectChance = Math.ceil(secondary.chance * 256 / 100);
-					if (typeof secondary.chance === 'undefined' || this.randomChance(effectChance, 256)) {
+					if (secondary.chance === undefined || this.randomChance(Math.ceil(secondary.chance * 256 / 100), 256)) {
+						// @ts-ignore
 						this.moveHit(target, pokemon, move, secondary, true, isSelf);
 					}
 				}
@@ -585,7 +605,7 @@ exports.BattleScripts = {
 	},
 	// boost can be found on sim/battle.js on Battle object.
 	// It deals with Pokémon stat boosting, including Gen 1 buggy behaviour with burn and paralyse.
-	boost: function (boost, target, source, effect) {
+	boost: function (boost, target, source = null, effect = null) {
 		if (this.event) {
 			if (!target) target = this.event.target;
 			if (!source) source = this.event.source;
@@ -596,11 +616,15 @@ exports.BattleScripts = {
 		boost = this.runEvent('Boost', target, source, effect, Object.assign({}, boost));
 		for (let i in boost) {
 			let currentBoost = {};
+			// @ts-ignore
 			currentBoost[i] = boost[i];
+			// @ts-ignore
 			if (boost[i] !== 0 && target.boostBy(currentBoost)) {
 				let msg = '-boost';
+				// @ts-ignore
 				if (boost[i] < 0) {
 					msg = '-unboost';
+					// @ts-ignore
 					boost[i] = -boost[i];
 					// Re-add attack and speed drops if not present
 					if (i === 'atk' && target.status === 'brn' && !target.volatiles['brnattackdrop']) {
@@ -619,8 +643,10 @@ exports.BattleScripts = {
 					}
 				}
 				if (effect.effectType === 'Move') {
+					// @ts-ignore
 					this.add(msg, target, i, boost[i]);
 				} else {
+					// @ts-ignore
 					this.add(msg, target, i, boost[i], '[from] ' + effect.fullname);
 				}
 				this.runEvent('AfterEachBoost', target, source, effect, currentBoost);
@@ -735,8 +761,10 @@ exports.BattleScripts = {
 	// It calculates the damage pokemon does to target with move.
 	getDamage: function (pokemon, target, move, suppressMessages) {
 		// First of all, we get the move.
-		if (typeof move === 'string') move = this.getMove(move);
-		if (typeof move === 'number') {
+		if (typeof move === 'string') {
+			move = this.getMove(move);
+		} else if (typeof move === 'number') {
+			// @ts-ignore
 			move = {
 				basePower: move,
 				type: '???',
@@ -745,6 +773,8 @@ exports.BattleScripts = {
 				flags: {},
 			};
 		}
+
+		move = /**@type {Move} */ (move); // eslint-disable-line no-self-assign
 
 		// Let's see if the target is immune to the move.
 		if (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) {
@@ -950,3 +980,5 @@ exports.BattleScripts = {
 		return Math.floor(damage);
 	},
 };
+
+exports.BattleScripts = BattleScripts;

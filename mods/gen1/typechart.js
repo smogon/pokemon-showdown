@@ -8,7 +8,8 @@
 
 'use strict';
 
-exports.BattleTypeChart = {
+/**@type {{[k: string]: ModdedTypeData | null}} */
+let BattleTypeChart = {
 	"Bug": {
 		damageTaken: {
 			"Bug": 0,
@@ -131,3 +132,5 @@ exports.BattleTypeChart = {
 	"Dark": null,
 	"Steel": null,
 };
+
+exports.BattleTypeChart = BattleTypeChart;

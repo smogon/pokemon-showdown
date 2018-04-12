@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleItems = {
+/**@type {{[k: string]: ModdedItemData}} */
+let BattleItems = {
 	brightpowder: {
 		inherit: true,
 		desc: "An attack against the holder has its accuracy out of 255 lowered by 20.",
@@ -132,3 +133,5 @@ exports.BattleItems = {
 		isNonstandard: false,
 	},
 };
+
+exports.BattleItems = BattleItems;

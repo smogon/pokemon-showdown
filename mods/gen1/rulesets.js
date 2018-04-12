@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleFormats = {
+/**@type {{[k: string]: ModdedFormatsData}} */
+let BattleFormats = {
 	pokemon: {
 		effectType: 'ValidatorRule',
 		name: 'Pokemon',
@@ -74,3 +75,5 @@ exports.BattleFormats = {
 		},
 	},
 };
+
+exports.BattleFormats = BattleFormats;

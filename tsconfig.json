@@ -10,6 +10,9 @@
         "checkJs": true
     },
     "types": ["node"],
+    "exclude": [
+        "./mods/gen1/pokedex.js",
+    ],
     "include": [
         "./config/formats.js",
         "./data/*",
@@ -22,6 +25,10 @@
         "./ladders-local.js",
         "./ladders-remote.js",
         "./ladders.js",
+        "./mods/gen1/*",
+        "./mods/gen2/*",
+        "./mods/gen3/*",
+        "./mods/gen4/*",
         "./monitor.js",
         "./loginserver.js",
         "./rooms.js",

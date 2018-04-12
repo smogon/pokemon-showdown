@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleFormatsData = {
+/**@type {{[k: string]: ModdedTemplateFormatsData}} */
+let BattleFormatsData = {
 	bulbasaur: {
 		inherit: true,
 		tier: "LC",
@@ -1587,3 +1588,5 @@ exports.BattleFormatsData = {
 		tier: "Uber",
 	},
 };
+
+exports.BattleFormatsData = BattleFormatsData;

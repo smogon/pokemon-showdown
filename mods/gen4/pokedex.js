@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattlePokedex = {
+/**@type {{[k: string]: ModdedTemplateData}} */
+let BattlePokedex = {
 	rotomheat: {
 		inherit: true,
 		types: ["Electric", "Ghost"],
@@ -22,3 +23,5 @@ exports.BattlePokedex = {
 		types: ["Electric", "Ghost"],
 	},
 };
+
+exports.BattlePokedex = BattlePokedex;

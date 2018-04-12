@@ -10,63 +10,6 @@ const randomBSSFactorySets = require('./bss-factory-sets.json');
 // @ts-ignore
 const randomFactorySets = require('./factory-sets.json');
 
-/**
- * @typedef {Object} TeamDetails
- * @property {number} [megaStone]
- * @property {number} [zMove]
- * @property {number} [hail]
- * @property {number} [rain]
- * @property {number} [sand]
- * @property {number} [sun]
- * @property {number} [stealthRock]
- * @property {number} [toxicSpikes]
- * @property {number} [hazardClear]
- */
-
-/**
- * @typedef {Object} FactoryTeamDetails
- * @property {number} megaCount
- * @property {number} zCount
- * @property {boolean} forceResult
- * @property {string} [weather]
- * @property {{[k: string]: number}} typeCount
- * @property {{[k: string]: number}} typeComboCount
- * @property {{[k: string]: number}} baseFormes
- * @property {{[k: string]: number}} has
- * @property {{[k: string]: number}} weaknesses
- * @property {{[k: string]: number}} resistances
- */
-
-/**
- * @typedef {Object} RandomSet
- * @property {string} name
- * @property {string} species
- * @property {string} gender
- * @property {string[]} moves
- * @property {string} ability
- * @property {SparseStatsTable} evs
- * @property {SparseStatsTable} ivs
- * @property {string} item
- * @property {number} level
- * @property {boolean} shiny
- */
-
-/**
- * @typedef {Object} RandomFactorySet
- * @property {string} name
- * @property {string} species
- * @property {string} gender
- * @property {string} item
- * @property {string} ability
- * @property {boolean} shiny
- * @property {number} level
- * @property {number} happiness
- * @property {SparseStatsTable} evs
- * @property {SparseStatsTable} ivs
- * @property {string} nature
- * @property {string[]} moves
- */
-
 class RandomTeams extends Dex.ModdedDex {
 	/**
 	 * @param {Format | string} format
@@ -181,6 +124,9 @@ class RandomTeams extends Dex.ModdedDex {
 	// 	let firstForme = this.getTemplate(template.otherFormes[0]);
 	// 	return !!firstForme.isMega;
 	// }
+	/**
+	 * @return {RandomTeamsTypes["RandomSet"][]}
+	 */
 	randomCCTeam() {
 		let team = [];
 
@@ -218,6 +164,8 @@ class RandomTeams extends Dex.ModdedDex {
 
 			// Random legal ability
 			let abilities = Object.values(template.abilities).filter(a => this.getAbility(a).gen <= this.gen);
+			/**@type {string} */
+			// @ts-ignore
 			let ability = this.gen <= 2 ? 'None' : this.sample(abilities);
 
 			// Four random unique moves from the movepool
@@ -604,8 +552,8 @@ class RandomTeams extends Dex.ModdedDex {
 	/**
 	 * @param {string | Template} template
 	 * @param {number} [slot]
-	 * @param {TeamDetails} [teamDetails]
-	 * @return {RandomSet}
+	 * @param {RandomTeamsTypes["TeamDetails"]} [teamDetails]
+	 * @return {RandomTeamsTypes["RandomSet"]}
 	 */
 	randomSet(template, slot = 1, teamDetails = {}) {
 		template = this.getTemplate(template);
@@ -1689,6 +1637,7 @@ class RandomTeams extends Dex.ModdedDex {
 		let baseFormes = {};
 		let uberCount = 0;
 		let puCount = 0;
+		/**@type {RandomTeamsTypes["TeamDetails"]} */
 		let teamDetails = {};
 
 		while (pokemonPool.length && pokemon.length < 6) {
@@ -1833,8 +1782,8 @@ class RandomTeams extends Dex.ModdedDex {
 	/**
 	 * @param {string | Template} template
 	 * @param {number} [slot]
-	 * @param {TeamDetails} [teamDetails]
-	 * @return {RandomSet}
+	 * @param {RandomTeamsTypes["TeamDetails"]} [teamDetails]
+	 * @return {RandomTeamsTypes["RandomSet"]}
 	 */
 	randomDoublesSet(template, slot, teamDetails = {}) {
 		let baseTemplate = (template = this.getTemplate(template));
@@ -2670,9 +2619,9 @@ class RandomTeams extends Dex.ModdedDex {
 	/**
 	 * @param {Template} template
 	 * @param {number} slot
-	 * @param {FactoryTeamDetails} teamData
+	 * @param {RandomTeamsTypes["FactoryTeamDetails"]} teamData
 	 * @param {string} tier
-	 * @return {RandomFactorySet | false}
+	 * @return {RandomTeamsTypes["RandomFactorySet"] | false}
 	 */
 	randomFactorySet(template, slot, teamData, tier) {
 		let speciesId = toId(template.species);
@@ -2698,7 +2647,7 @@ class RandomTeams extends Dex.ModdedDex {
 		for (const curSet of setList) {
 			let itemData = this.getItem(curSet.item + '');
 			if (teamData.megaCount > 0 && itemData.megaStone) continue; // reject 2+ mega stones
-			if (teamData.zCount > 0 && itemData.zMove) continue; // reject 2+ Z stones
+			if (teamData.zCount && teamData.zCount > 0 && itemData.zMove) continue; // reject 2+ Z stones
 			if (itemsMax[itemData.id] && teamData.has[itemData.id] >= itemsMax[itemData.id]) continue;
 
 			let abilityData = this.getAbility(curSet.ability + '');
@@ -2773,7 +2722,7 @@ class RandomTeams extends Dex.ModdedDex {
 
 	/**
 	 * @param {number} [depth]
-	 * @return {RandomFactorySet[]}
+	 * @return {RandomTeamsTypes["RandomFactorySet"][]}
 	 */
 	randomFactoryTeam(depth = 0) {
 		let forceResult = (depth >= 4);
@@ -2922,9 +2871,9 @@ class RandomTeams extends Dex.ModdedDex {
 	/**
 	 * @param {Template} template
 	 * @param {number} slot
-	 * @param {FactoryTeamDetails} teamData
+	 * @param {RandomTeamsTypes["FactoryTeamDetails"]} teamData
 	 * @param {string} tier
-	 * @return {RandomFactorySet | false}
+	 * @return {RandomTeamsTypes["RandomFactorySet"] | false}
 	 */
 	randomBSSFactorySet(template, slot, teamData, tier) {
 		let speciesId = toId(template.species);
@@ -2947,7 +2896,7 @@ class RandomTeams extends Dex.ModdedDex {
 		for (const curSet of setList) {
 			let itemData = this.getItem(curSet.item);
 			if (teamData.megaCount > 1 && itemData.megaStone) continue; // reject 3+ mega stones
-			if (teamData.zCount > 1 && itemData.zMove) continue; // reject 3+ Z stones
+			if (teamData.zCount && teamData.zCount > 1 && itemData.zMove) continue; // reject 3+ Z stones
 			if (teamData.has[itemData.id]) continue; // Item clause
 
 			let abilityData = this.getAbility(curSet.ability);
@@ -3008,7 +2957,7 @@ class RandomTeams extends Dex.ModdedDex {
 
 	/**
 	 * @param {number} [depth]
-	 * @return {RandomFactorySet[]}
+	 * @return {RandomTeamsTypes["RandomFactorySet"][]}
 	 */
 	randomBSSFactoryTeam(depth = 0) {
 		let forceResult = (depth >= 4);

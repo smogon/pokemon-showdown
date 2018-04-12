@@ -3,7 +3,13 @@
 const RandomGen6Teams = require('../../mods/gen6/random-teams');
 
 class RandomGen5Teams extends RandomGen6Teams {
-	randomSet(template, slot, teamDetails) {
+	/**
+	 * @param {string | Template} template
+	 * @param {number} [slot]
+	 * @param {RandomTeamsTypes["TeamDetails"]} [teamDetails]
+	 * @return {RandomTeamsTypes["RandomSet"]}
+	 */
+	randomSet(template, slot, teamDetails = {}) {
 		if (slot === undefined) slot = 1;
 		let baseTemplate = (template = this.getTemplate(template));
 		let species = template.species;
@@ -17,7 +23,8 @@ class RandomGen5Teams extends RandomGen6Teams {
 
 		if (template.battleOnly) species = template.baseSpecies;
 
-		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : Object.keys(template.learnset));
+		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : template.learnset ? Object.keys(template.learnset) : []);
+		/**@type {string[]} */
 		let moves = [];
 		let ability = '';
 		let item = '';
@@ -45,9 +52,11 @@ class RandomGen5Teams extends RandomGen6Teams {
 		let hasAbility = {};
 		hasAbility[template.abilities[0]] = true;
 		if (template.abilities[1]) {
+			// @ts-ignore
 			hasAbility[template.abilities[1]] = true;
 		}
 		if (template.abilities['H']) {
+			// @ts-ignore
 			hasAbility[template.abilities['H']] = true;
 		}
 		let availableHP = 0;
@@ -58,7 +67,9 @@ class RandomGen5Teams extends RandomGen6Teams {
 		let SetupException = ['extremespeed', 'suckerpunch', 'superpower', 'dracometeor', 'leafstorm', 'overheat'];
 		let counterAbilities = ['Adaptability', 'Contrary', 'Hustle', 'Iron Fist', 'Sheer Force', 'Skill Link'];
 
-		let hasMove, counter;
+		/**@type {{[k: string]: boolean}} */
+		let hasMove = {};
+		let counter;
 
 		do {
 			hasMove = {};
@@ -321,6 +332,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 				if (moveid === 'hiddenpower') {
 					let HPivs = this.getType(move.type).HPivs;
 					for (let iv in HPivs) {
+						// @ts-ignore
 						ivs[iv] = HPivs[iv];
 					}
 				}
@@ -436,6 +448,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 						ability = ability2.name;
 					} else {
 						// Default to the highest rated ability if all are rejected
+						// @ts-ignore
 						ability = abilities[0];
 						rejectAbility = false;
 					}
@@ -611,6 +624,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 		return {
 			name: template.baseSpecies,
 			species: species,
+			gender: template.gender,
 			moves: moves,
 			ability: ability,
 			evs: evs,
@@ -638,6 +652,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 		let baseFormes = {};
 		let uberCount = 0;
 		let nuCount = 0;
+		/**@type {RandomTeamsTypes["TeamDetails"]} */
 		let teamDetails = {};
 
 		while (pokemonPool.length && pokemon.length < 6) {

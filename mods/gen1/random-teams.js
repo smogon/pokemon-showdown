@@ -4,10 +4,11 @@ const RandomGen2Teams = require('../../mods/gen2/random-teams');
 
 class RandomGen1Teams extends RandomGen2Teams {
 	// Challenge Cup or CC teams are basically fully random teams.
-	randomCCTeam(side) {
+	randomCCTeam() {
 		let team = [];
 
 		let hasDexNumber = {};
+		/**@type {string[][]} */
 		let formes = [[], [], [], [], [], []];
 
 		// Pick six random Pokémon, no repeats.
@@ -84,11 +85,14 @@ class RandomGen1Teams extends RandomGen2Teams {
 			// Four random unique moves from movepool. don't worry about "attacking" or "viable".
 			// Since Gens 1 and 2 learnsets are shared, we need to weed out Gen 2 moves.
 			let moves;
+			/**@type {string[]} */
 			let pool = [];
-			for (let move in template.learnset) {
-				if (this.getMove(move).gen !== 1) continue;
-				if (template.learnset[move].some(learned => learned[0] === '1')) {
-					pool.push(move);
+			if (template.learnset) {
+				for (let move in template.learnset) {
+					if (this.getMove(move).gen !== 1) continue;
+					if (template.learnset[move].some(learned => learned[0] === '1')) {
+						pool.push(move);
+					}
 				}
 			}
 			if (pool.length <= 4) {
@@ -99,7 +103,9 @@ class RandomGen1Teams extends RandomGen2Teams {
 
 			team.push({
 				name: poke,
+				species: template.species,
 				moves: moves,
+				gender: false,
 				ability: 'None',
 				evs: evs,
 				ivs: ivs,
@@ -113,8 +119,9 @@ class RandomGen1Teams extends RandomGen2Teams {
 
 		return team;
 	}
+
 	// Random team generation for Gen 1 Random Battles.
-	randomTeam(side) {
+	randomTeam() {
 		// Get what we need ready.
 		let pokemonLeft = 0;
 		let pokemon = [];
@@ -224,13 +231,20 @@ class RandomGen1Teams extends RandomGen2Teams {
 
 		return pokemon;
 	}
-	// Random set generation for Gen 1 Random Battles.
+
+	/**
+	 * Random set generation for Gen 1 Random Battles.
+	 * @param {string | Template} template
+	 * @param {number} [slot]
+	 * @return {RandomTeamsTypes["RandomSet"]}
+	 */
 	randomSet(template, slot) {
 		if (slot === undefined) slot = 1;
 		template = this.getTemplate(template);
 		if (!template.exists) template = this.getTemplate('pikachu'); // Because Gen 1.
 
-		let movePool = template.randomBattleMoves.slice();
+		let movePool = template.randomBattleMoves ? template.randomBattleMoves.slice() : [];
+		/**@type {string[]} */
 		let moves = [];
 		let hasType = {};
 		hasType[template.types[0]] = true;
@@ -356,6 +370,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 
 		return {
 			name: template.name,
+			species: template.species,
 			moves: moves,
 			ability: 'None',
 			evs: {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255},
