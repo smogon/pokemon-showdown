@@ -706,18 +706,17 @@ class CommandContext {
 				this.errorReply("To see it for yourself, use: /" + this.message.substr(1));
 				return false;
 			}
-
-			if (this.room && this.room.lastBroadcast === this.broadcastMessage &&
-					this.room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
-				this.errorReply("You can't broadcast this because it was just broadcasted.");
-				return false;
-			}
-
 			let message = this.canTalk(suppressMessage || this.message);
 			if (!message) return false;
 
 			// broadcast cooldown
-			let broadcastMessage = message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
+			const broadcastMessage = message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
+
+			if (this.room && this.room.lastBroadcast === broadcastMessage &&
+					this.room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
+				this.errorReply("You can't broadcast this because it was just broadcasted.");
+				return false;
+			}
 
 			this.message = message;
 			this.broadcastMessage = broadcastMessage;
