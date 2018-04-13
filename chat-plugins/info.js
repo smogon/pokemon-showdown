@@ -1269,13 +1269,13 @@ exports.commands = {
 	'!staff': true,
 	staff: function (target, room, user) {
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox(`<a href="http://www.smogon.com/sim/staff_list">Pok&eacute;mon Showdown Staff List</a>`);
+		this.sendReplyBox(`<a href="https://www.smogon.com/sim/staff_list">Pok&eacute;mon Showdown Staff List</a>`);
 	},
 
 	'!forums': true,
 	forums: function (target, room, user) {
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox(`<a href="http://www.smogon.com/forums/forums/209/">Pok&eacute;mon Showdown Forums</a>`);
+		this.sendReplyBox(`<a href="https://www.smogon.com/forums/forums/209/">Pok&eacute;mon Showdown Forums</a>`);
 	},
 
 	'!privacypolicy': true,
@@ -1292,7 +1292,7 @@ exports.commands = {
 	'!suggestions': true,
 	suggestions: function (target, room, user) {
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox(`<a href="http://www.smogon.com/forums/threads/3534365/">Make a suggestion for Pok&eacute;mon Showdown</a>`);
+		this.sendReplyBox(`<a href="https://www.smogon.com/forums/threads/3534365/">Make a suggestion for Pok&eacute;mon Showdown</a>`);
 	},
 
 	'!bugs': true,
@@ -1300,12 +1300,12 @@ exports.commands = {
 	bugs: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (room && room.battle) {
-			this.sendReplyBox(`<center><button name="saveReplay"><i class="fa fa-upload"></i> Save Replay</button> &mdash; <a href="http://www.smogon.com/forums/threads/3520646/">Questions</a> &mdash; <a href="http://www.smogon.com/forums/threads/3469932/">Bug Reports</a></center>`);
+			this.sendReplyBox(`<center><button name="saveReplay"><i class="fa fa-upload"></i> Save Replay</button> &mdash; <a href="https://www.smogon.com/forums/threads/3520646/">Questions</a> &mdash; <a href="https://www.smogon.com/forums/threads/3469932/">Bug Reports</a></center>`);
 		} else {
 			this.sendReplyBox(
 				`Have a replay showcasing a bug on Pok&eacute;mon Showdown?<br />` +
-				`- <a href="http://www.smogon.com/forums/threads/3520646/">Questions</a><br />` +
-				`- <a href="http://www.smogon.com/forums/threads/3469932/">Bug Reports</a> (ask in <a href="/help">Help</a> before posting in the thread if you're unsure)`
+				`- <a href="https://www.smogon.com/forums/threads/3520646/">Questions</a><br />` +
+				`- <a href="https://www.smogon.com/forums/threads/3469932/">Bug Reports</a> (ask in <a href="/help">Help</a> before posting in the thread if you're unsure)`
 			);
 		}
 	},
@@ -1340,10 +1340,10 @@ exports.commands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			`New to competitive Pok&eacute;mon?<br />` +
-			`- <a href="http://www.smogon.com/forums/threads/3496279/">Beginner's Guide to Pok&eacute;mon Showdown</a><br />` +
-			`- <a href="http://www.smogon.com/dp/articles/intro_comp_pokemon">An introduction to competitive Pok&eacute;mon</a><br />` +
-			`- <a href="http://www.smogon.com/bw/articles/bw_tiers">What do 'OU', 'UU', etc mean?</a><br />` +
-			`- <a href="http://www.smogon.com/xyhub/tiers">What are the rules for each format? What is 'Sleep Clause'?</a>`
+			`- <a href="https://www.smogon.com/forums/threads/3496279/">Beginner's Guide to Pok&eacute;mon Showdown</a><br />` +
+			`- <a href="https://www.smogon.com/dp/articles/intro_comp_pokemon">An introduction to competitive Pok&eacute;mon</a><br />` +
+			`- <a href="https://www.smogon.com/bw/articles/bw_tiers">What do 'OU', 'UU', etc mean?</a><br />` +
+			`- <a href="https://www.smogon.com/xyhub/tiers">What are the rules for each format? What is 'Sleep Clause'?</a>`
 		);
 	},
 	introhelp: [
@@ -1357,9 +1357,9 @@ exports.commands = {
 	smogintro: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
-			`Welcome to Smogon's official simulator! The <a href="http://www.smogon.com/forums/forums/264">Smogon Info / Intro Hub</a> can help you get integrated into the community.<br />` +
-			`- <a href="http://www.smogon.com/forums/threads/3526346">Useful Smogon Info</a><br />` +
-			`- <a href="http://www.smogon.com/forums/threads/3498332">Tiering FAQ</a><br />`
+			`Welcome to Smogon's official simulator! The <a href="https://www.smogon.com/forums/forums/264">Smogon Info / Intro Hub</a> can help you get integrated into the community.<br />` +
+			`- <a href="https://www.smogon.com/forums/threads/3526346">Useful Smogon Info</a><br />` +
+			`- <a href="https://www.smogon.com/forums/threads/3498332">Tiering FAQ</a><br />`
 		);
 	},
 
@@ -1385,10 +1385,10 @@ exports.commands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			`An introduction to the Create-A-Pok&eacute;mon project:<br />` +
-			`- <a href="http://www.smogon.com/cap/">CAP project website and description</a><br />` +
-			`- <a href="http://www.smogon.com/forums/threads/48782/">What Pok&eacute;mon have been made?</a><br />` +
-			`- <a href="http://www.smogon.com/forums/forums/311">Talk about the metagame here</a><br />` +
-			`- <a href="http://www.smogon.com/forums/threads/3593752/">Sample SM CAP teams</a>`
+			`- <a href="https://www.smogon.com/cap/">CAP project website and description</a><br />` +
+			`- <a href="https://www.smogon.com/forums/threads/48782/">What Pok&eacute;mon have been made?</a><br />` +
+			`- <a href="https://www.smogon.com/forums/forums/311">Talk about the metagame here</a><br />` +
+			`- <a href="https://www.smogon.com/forums/threads/3593752/">Sample SM CAP teams</a>`
 		);
 	},
 	caphelp: [
@@ -1420,9 +1420,9 @@ exports.commands = {
 		if (!this.runBroadcast()) return;
 		if (!target) {
 			return this.sendReplyBox(
-				`- <a href="http://www.smogon.com/tiers/">Smogon Tiers</a><br />` +
-				`- <a href="http://www.smogon.com/forums/threads/3498332/">Tiering FAQ</a><br />` +
-				`- <a href="http://www.smogon.com/xyhub/tiers">The banlists for each tier</a><br />` +
+				`- <a href="https://www.smogon.com/tiers/">Smogon Tiers</a><br />` +
+				`- <a href="https://www.smogon.com/forums/threads/3498332/">Tiering FAQ</a><br />` +
+				`- <a href="https://www.smogon.com/xyhub/tiers">The banlists for each tier</a><br />` +
 				"<br /><em>Type /formatshelp <strong>[format|section]</strong> to get details about an available format or group of formats.</em>"
 			);
 		}
@@ -1553,7 +1553,7 @@ exports.commands = {
 			`- !showimage <em>[url], [width], [height]</em>: show an image to the room<br />` +
 			`- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc<br />` +
 			`<br />` +
-			`More detailed help can be found in the <a href="http://www.smogon.com/forums/posts/6774654/">roomauth guide</a><br />` +
+			`More detailed help can be found in the <a href="https://www.smogon.com/forums/posts/6774654/">roomauth guide</a><br />` +
 			`<br />` +
 			`Tournament Help:<br />` +
 			`- /tour create <em>format</em>, elimination: create a new single elimination tournament in the current room.<br />` +
@@ -1562,7 +1562,7 @@ exports.commands = {
 			`- /tour start: start the tournament in the current room<br />` +
 			`- /tour banlist [pokemon], [talent], [...]: ban moves, abilities, Pokémon or items from being used in a tournament (it must be created first)<br />` +
 			`<br />` +
-			`More detailed help can be found in the <a href="http://www.smogon.com/forums/posts/6777489/">tournaments guide</a><br />` +
+			`More detailed help can be found in the <a href="https://www.smogon.com/forums/posts/6777489/">tournaments guide</a><br />` +
 			`</div>`
 		);
 	},
@@ -1658,22 +1658,22 @@ exports.commands = {
 
 		let buffer = [];
 		if (showAll || target === 'staff') {
-			buffer.push(`<a href="http://www.smogon.com/forums/posts/6774482/">Staff FAQ</a>`);
+			buffer.push(`<a href="https://www.smogon.com/forums/posts/6774482/">Staff FAQ</a>`);
 		}
 		if (showAll || target === 'autoconfirmed' || target === 'ac') {
 			buffer.push(`A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer.`);
 		}
 		if (showAll || target === 'coil') {
-			buffer.push(`<a href="http://www.smogon.com/forums/threads/3508013/">What is COIL?</a>`);
+			buffer.push(`<a href="https://www.smogon.com/forums/threads/3508013/">What is COIL?</a>`);
 		}
 		if (showAll || target === 'tiering' || target === 'tiers' || target === 'tier') {
-			buffer.push(`<a href="http://www.smogon.com/ingame/battle/tiering-faq">Tiering FAQ</a>`);
+			buffer.push(`<a href="https://www.smogon.com/ingame/battle/tiering-faq">Tiering FAQ</a>`);
 		}
 		if (showAll || target === 'badge' || target === 'badges') {
-			buffer.push(`<a href="http://www.smogon.com/badge_faq">Badge FAQ</a>`);
+			buffer.push(`<a href="https://www.smogon.com/badge_faq">Badge FAQ</a>`);
 		}
 		if (showAll || !buffer.length) {
-			buffer.unshift(`<a href="http://www.smogon.com/forums/posts/6774128/">Frequently Asked Questions</a>`);
+			buffer.unshift(`<a href="https://www.smogon.com/forums/posts/6774128/">Frequently Asked Questions</a>`);
 		}
 		this.sendReplyBox(buffer.join(`<br />`));
 	},
@@ -1770,28 +1770,28 @@ exports.commands = {
 			// Special case for Meowstic-M
 			if (speciesid === 'meowstic') speciesid = 'meowsticm';
 			if (pokemon.tier === 'CAP') {
-				this.sendReplyBox(`<a href="http://www.smogon.com/cap/pokemon/strategies/${speciesid}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} ${pokemon.name} analysis preview</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a> <a href="http://smogon.com/cap/">CAP Project</a>`);
+				this.sendReplyBox(`<a href="https://www.smogon.com/cap/pokemon/strategies/${speciesid}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} ${pokemon.name} analysis preview</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a> <a href="http://smogon.com/cap/">CAP Project</a>`);
 			} else {
-				this.sendReplyBox(`<a href="http://www.smogon.com/dex/${generation}/pokemon/${speciesid}${(formatId ? '/' + formatId : '')}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} ${pokemon.name} analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>`);
+				this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}${(formatId ? '/' + formatId : '')}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
 			}
 		}
 
 		// Item
 		if (item.exists && genNumber > 1 && item.gen <= genNumber) {
 			atLeastOne = true;
-			this.sendReplyBox(`<a href="http://www.smogon.com/dex/${generation}/items/${item.id}">${generation.toUpperCase()} ${item.name} item analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>`);
+			this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/items/${item.id}">${generation.toUpperCase()} ${item.name} item analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
 		}
 
 		// Ability
 		if (ability.exists && genNumber > 2 && ability.gen <= genNumber) {
 			atLeastOne = true;
-			this.sendReplyBox(`<a href="http://www.smogon.com/dex/${generation}/abilities/${ability.id}">${generation.toUpperCase()} ${ability.name} ability analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>`);
+			this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/abilities/${ability.id}">${generation.toUpperCase()} ${ability.name} ability analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
 		}
 
 		// Move
 		if (move.exists && move.gen <= genNumber) {
 			atLeastOne = true;
-			this.sendReplyBox(`<a href="http://www.smogon.com/dex/${generation}/moves/${toId(move.name)}">${generation.toUpperCase()} ${move.name} move analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>`);
+			this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/moves/${toId(move.name)}">${generation.toUpperCase()} ${move.name} move analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
 		}
 
 		// Format
@@ -1821,7 +1821,7 @@ exports.commands = {
 			}
 			if (formatName) {
 				atLeastOne = true;
-				this.sendReplyBox(`<a href="http://www.smogon.com/dex/${generation}/formats/${formatId}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} format analysis</a>, brought to you by <a href="http://www.smogon.com">Smogon University</a>`);
+				this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/formats/${formatId}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} format analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
 			}
 		}
 
