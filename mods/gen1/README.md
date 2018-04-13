@@ -12,8 +12,8 @@ a similar fashion, Pokes used to have 30 IVs on each stat.
 
 The following sources have been used and extremly useful when developing this mod:
 https://raw.github.com/po-devs/pokemon-online/master/bin/database/rby-stuff.txt
-http://www.smogon.com/rb/articles/differences
-http://www.smogon.com/forums/threads/past-gens-research-thread.3506992/#post-5878612
+https://www.smogon.com/rb/articles/differences
+https://www.smogon.com/forums/threads/past-gens-research-thread.3506992/#post-5878612
 
 Special Stat
 ------------
