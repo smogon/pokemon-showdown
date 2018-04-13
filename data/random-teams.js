@@ -605,6 +605,7 @@ class RandomTeams extends Dex.ModdedDex {
 		}
 		counter['Physical'] = Math.floor(counter['Physical']);
 		counter['Special'] = Math.floor(counter['Special']);
+
 		return counter;
 	}
 
