@@ -737,8 +737,12 @@
 				"evs": {"hp": 240, "atk": 252, "def": 0, "spa": 0, "spd": 0, "spe": 16},
 				"nature": "Adamant",
 				"moves": [["Swords Dance"], ["Extreme Speed"], ["Shadow Claw"], ["Substitute"]]
-			}, {
-				"species": "Arceus",
+			}]
+		},
+		"arceusbug": {
+			"flags": {},
+			"sets": [{
+				"species": "Arceus-Bug",
 				"gender": "",
 				"item": ["Buginium Z"],
 				"ability": ["Multitype"],
