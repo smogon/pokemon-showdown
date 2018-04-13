@@ -907,10 +907,8 @@ exports.pages = {
 		if (!ladder) return `|deinit`;
 		if (['hosts', 'plays'].includes(ladder.section) && !user.can('mute', null, Rooms('mafia'))) return `|deinit`;
 		let buf = `|title|Mafia ${ladder.title} (${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()})\n|pagehtml|<div class="pad ladder">${query[1] === 'prev' ? '' : `<button class="button" name="send" value="/join view-mafialadder-${query[0]}" style="float:left"><i class="fa fa-refresh"></i> Refresh</button> <button class="button" name="send" value="/join view-mafialadder-${query[0]}-prev" style="float:left">View last month's ${ladder.title}</button>`}<br /><br />`;
-		buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="2"><h2 style="margin: 5px auto">Mafia ${ladder.title} for ${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()}</h1></th></tr>`;
-		buf += `<tr><th>User</th><th>${ladder.type}</th></tr>`;
-		if (!logs[ladder.section][month]) {
-			buf += `<tr><td colspan="2">${ladder.title} for ${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()} not found.</td></tr></table></div>`;
+		if (!logs[ladder.section][month] || !Object.keys(logs[ladder.section][month]).length) {
+			buf += `${ladder.title} for ${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()} not found.</div>`;
 			return buf;
 		}
 		const keys = Object.keys(logs[ladder.section][month]).sort((a, b) => {
@@ -918,6 +916,18 @@ exports.pages = {
 			b = logs[ladder.section][month][b];
 			return b - a;
 		});
+		if (!(user.can('mute', null, Rooms('mafia')) || month !== (new Date()).toLocaleString("en-us", {month: "numeric", year: "numeric"}))) {
+			const userIndex = keys.indexOf(user.userid);
+			if (userIndex !== -1) {
+				buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="2"><h2 style="margin: 5px auto">Mafia ${ladder.title} for ${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()}</h1></th></tr>`;
+				buf += `<tr><th>User</th><th>Position</th></tr>`;
+				buf += `<tr><td>${user.userid}</td><td>${userIndex + 1}</td></tr></table>`;
+			}
+			buf += `You cannot see the position of other people on the leaderboard until the month is over.</div>`;
+			return buf;
+		}
+		buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="2"><h2 style="margin: 5px auto">Mafia ${ladder.title} for ${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()}</h1></th></tr>`;
+		buf += `<tr><th>User</th><th>${ladder.type}</th></tr>`;
 		for (const key of keys) {
 			buf += `<tr><td>${key}</td><td>${logs[ladder.section][month][key]}</td></tr>`;
 		}
