@@ -476,20 +476,27 @@ class RandomTeams extends Dex.ModdedDex {
 			if (move.multihit && Array.isArray(move.multihit) && move.multihit[1] === 5) counter['skilllink']++;
 			if (move.recoil || move.hasCustomRecoil) counter['recoil']++;
 			if (move.drain) counter['drain']++;
+			// Conversion converts exactly one non-STAB into STAB
+			if (moveid === 'conversion') {
+				counter['stab']++;
+				counter['adaptability']++;
+			}
 			// Moves which have a base power, but aren't super-weak like Rapid Spin:
 			if (move.basePower > 30 || move.multihit || move.basePowerCallback || moveid === 'naturepower') {
 				counter[movetype]++;
-				if (hasType[movetype]) {
+				if (hasType[movetype] || movetype === 'Normal' && (hasAbility['Aerilate'] || hasAbility['Galvanize'] || hasAbility['Pixilate'] || hasAbility['Refrigerate'])) {
 					counter['adaptability']++;
 					// STAB:
 					// Certain moves aren't acceptable as a Pokemon's only STAB attack
-					if (!NoStab.includes(moveid) && (moveid !== 'hiddenpower' || Object.keys(hasType).length === 1)) counter['stab']++;
+					if (!NoStab.includes(moveid) && (moveid !== 'hiddenpower' || Object.keys(hasType).length === 1)) {
+						counter['stab']++;
+						// Ties between Physical and Special setup should broken in favor of STABs
+						counter[move.category] += 0.1;
+					}
+				} else if (move.priority === 0 && hasAbility['Protean'] && !NoStab.includes(moveid)) {
+					counter['stab']++;
 				}
-				if (move.priority === 0 && (hasAbility['Protean'] || moves.includes('conversion')) && !NoStab.includes(moveid)) counter['stab']++;
 				if (move.category === 'Physical') counter['hustle']++;
-				if (movetype === 'Normal' && !NoStab.includes(moveid)) {
-					if (hasAbility['Aerilate'] || hasAbility['Pixilate'] || hasAbility['Refrigerate']) counter['stab']++;
-				}
 				if (move.flags['bite']) counter['bite']++;
 				if (move.flags['punch']) counter['ironfist']++;
 				counter.damagingMoves.push(move);
@@ -545,6 +552,8 @@ class RandomTeams extends Dex.ModdedDex {
 				}
 			}
 		}
+		counter['Physical'] = Math.floor(counter['Physical']);
+		counter['Special'] = Math.floor(counter['Special']);
 
 		return counter;
 	}
