@@ -2492,7 +2492,7 @@ exports.commands = {
 			);
 		}
 
-		this.addModAction(`${name} was blacklisted from ${room.title} by ${user.name}. ${(target ? ` (${target})` : '')}`);
+		this.privateModAction(`(${name} was blacklisted from ${room.title} by ${user.name}. ${(target ? ` (${target})` : '')})`);
 
 		let affected = Punishments.roomBlacklist(room, targetUser, null, null, target);
 
@@ -2611,7 +2611,7 @@ exports.commands = {
 			}
 		}
 
-		this.addModAction(`${targets.join(', ')}${Chat.plural(targets, " were", " was")} nameblacklisted from ${room.title} by ${user.name}.`);
+		this.privateModAction(`(${targets.join(', ')}${Chat.plural(targets, " were", " was")} nameblacklisted from ${room.title} by ${user.name}.)`);
 		return true;
 	},
 	blacklistnamehelp: [`/blacklistname OR /nameblacklist [username1, username2, etc.] | reason - Blacklists the given username(s) from the room you are in for a year. Requires: # & ~`],
