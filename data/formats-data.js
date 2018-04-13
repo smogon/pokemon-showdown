@@ -7466,6 +7466,22 @@ let BattleFormatsData = {
 		isNonstandard: true,
 		tier: "CAP LC",
 	},
+	rebble: {
+		isNonstandard: true,
+		tier: "CAP LC",
+	},
+	tactite: {
+		isNonstandard: true,
+		tier: "CAP NFE",
+	},
+	privatyke: {
+		isNonstandard: true,
+		tier: "CAP LC",
+	},
+	voodoll: {
+		isNonstandard: true,
+		tier: "CAP LC",
+	},
 	pokestarufo: {
 		isNonstandard: true,
 		eventPokemon: [
