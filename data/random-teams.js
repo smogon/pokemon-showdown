@@ -536,13 +536,13 @@ class RandomTeams extends Dex.ModdedDex {
 			// Moves which have a base power, but aren't super-weak like Rapid Spin:
 			if (move.basePower > 30 || move.multihit || move.basePowerCallback || moveid === 'naturepower') {
 				counter[movetype]++;
-				if (hasType[movetype] || movetype === 'Normal' && (hasAbility['Aerilate'] || hasAbility['Pixilate'] || hasAbility['Refrigerate'] || hasAbility['Galvanize'])) {
+				if (hasType[movetype] || movetype === 'Normal' && (hasAbility['Aerilate'] || hasAbility['Galvanize'] || hasAbility['Pixilate'] || hasAbility['Refrigerate'])) {
 					counter['adaptability']++;
 					// STAB:
 					// Certain moves aren't acceptable as a Pokemon's only STAB attack
 					if (!NoStab.includes(moveid) && (moveid !== 'hiddenpower' || Object.keys(hasType).length === 1)) {
 						counter['stab']++;
-						// Ties between physical and special setup should broken in favor of STABs
+						// Ties between Physical and Special setup should broken in favor of STABs
 						counter[move.category] += 0.1;
 					}
 				} else if (move.priority === 0 && hasAbility['Protean'] && !NoStab.includes(moveid)) {
@@ -589,11 +589,7 @@ class RandomTeams extends Dex.ModdedDex {
 			let special = counter.Special + counter['specialpool'];
 			if (counter['physicalsetup'] && counter['specialsetup']) {
 				if (physical === special) {
-					if (counter.Physical === counter.Special) {
-						counter.setupType = 'Mixed';
-					} else {
-						counter.setupType = counter.Physical > counter.Special ? 'Physical' : 'Special';
-					}
+					counter.setupType = counter.Physical > counter.Special ? 'Physical' : 'Special';
 				} else {
 					counter.setupType = physical > special ? 'Physical' : 'Special';
 				}
