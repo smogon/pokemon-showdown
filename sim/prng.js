@@ -229,7 +229,7 @@ class PRNG {
 
 // The following commented-out function is designed to emulate the on-cartridge
 // PRNG for Gens 3 and 4, as described in
-// http://www.smogon.com/ingame/rng/pid_iv_creation#pokemon_random_number_generator
+// https://www.smogon.com/ingame/rng/pid_iv_creation#pokemon_random_number_generator
 // This RNG uses a 32-bit initial seed
 // m and n are converted to integers via Math.floor. If the result is NaN, they
 // are ignored.
