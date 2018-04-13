@@ -516,8 +516,13 @@ class RandomTeams extends Dex.ModdedDex {
 			// Moves that change stats:
 			if (RecoveryMove.includes(moveid)) counter['recovery']++;
 			if (ContraryMove.includes(moveid)) counter['contrary']++;
-			if (PhysicalSetup.includes(moveid)) counter['physicalsetup']++;
-			if (SpecialSetup.includes(moveid)) counter['specialsetup']++;
+			if (PhysicalSetup.includes(moveid)) {
+				counter['physicalsetup']++;
+				counter.setupType = 'Physical';
+			} else if (SpecialSetup.includes(moveid)) {
+				counter['specialsetup']++;
+				counter.setupType = 'Special';
+			}
 			if (MixedSetup.includes(moveid)) counter['mixedsetup']++;
 			if (SpeedSetup.includes(moveid)) counter['speedsetup']++;
 		}
@@ -533,23 +538,19 @@ class RandomTeams extends Dex.ModdedDex {
 		// Choose a setup type:
 		if (counter['mixedsetup']) {
 			counter.setupType = 'Mixed';
-		} else if (counter['physicalsetup'] || counter['specialsetup']) {
-			let physical = counter.Physical + counter['physicalpool'];
-			let special = counter.Special + counter['specialpool'];
+		} else if (counter.setupType) {
+			let pool = {};
+			pool.Physical = counter.Physical + counter['physicalpool'];
+			pool.Special = counter.Special + counter['specialpool'];
 			if (counter['physicalsetup'] && counter['specialsetup']) {
-				if (physical === special) {
-					counter.setupType = counter.Physical > counter.Special ? 'Physical' : 'Special';
+				if (pool.Physical === pool.Special) {
+					if (counter.Physical > counter.Special) counter.setupType = 'Physical';
+					if (counter.Special > counter.Physical) counter.setupType = 'Special';
 				} else {
-					counter.setupType = physical > special ? 'Physical' : 'Special';
+					counter.setupType = pool.Physical > pool.Special ? 'Physical' : 'Special';
 				}
-			} else if (counter['physicalsetup'] && physical >= 1) {
-				if (physical >= 2 || moves.includes('rest') && moves.includes('sleeptalk')) {
-					counter.setupType = 'Physical';
-				}
-			} else if (counter['specialsetup'] && special >= 1) {
-				if (special >= 2 || moves.includes('rest') && moves.includes('sleeptalk')) {
-					counter.setupType = 'Special';
-				}
+			} else if (!pool[counter.setupType] || pool[counter.setupType] === 1 && (!moves.includes('rest') || !moves.includes('sleeptalk'))) {
+				counter.setupType = '';
 			}
 		}
 		counter['Physical'] = Math.floor(counter['Physical']);
@@ -1451,31 +1452,29 @@ class RandomTeams extends Dex.ModdedDex {
 		} else if (counter.Physical + counter.Special >= 4 && template.baseStats.spd >= 65 && template.baseStats.hp + template.baseStats.def + template.baseStats.spd >= 235) {
 			item = 'Assault Vest';
 		} else if (counter.damagingMoves.length >= 4) {
-			item = (!!counter['Normal'] || (hasMove['suckerpunch'] && !hasType['Dark'])) ? 'Life Orb' : 'Expert Belt';
-		} else if (counter.damagingMoves.length >= 3 && !!counter['speedsetup'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd >= 300) {
-			item = 'Weakness Policy';
-		} else if (counter.damagingMoves.length >= 3 && ability !== 'Sturdy' && !hasMove['clearsmog'] && !hasMove['dragontail'] && !hasMove['foulplay'] && !hasMove['superfang']) {
-			item = (template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 285 || !!counter['speedsetup'] || hasMove['trickroom']) ? 'Life Orb' : 'Leftovers';
+			item = (!!counter['Dragon'] || !!counter['Normal'] || (hasMove['suckerpunch'] && !hasType['Dark'])) ? 'Life Orb' : 'Expert Belt';
 		} else if (template.species === 'Palkia' && (hasMove['dracometeor'] || hasMove['spacialrend']) && hasMove['hydropump']) {
 			item = 'Lustrous Orb';
+		} else if (counter.damagingMoves.length >= 3 && !!counter['speedsetup'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd >= 300) {
+			item = 'Weakness Policy';
 		} else if (slot === 0 && ability !== 'Regenerator' && ability !== 'Sturdy' && !counter['recoil'] && !counter['recovery'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 285) {
 			item = 'Focus Sash';
+		} else if (counter.damagingMoves.length >= 3 && ability !== 'Sturdy' && !hasMove['acidspray'] && !hasMove['clearsmog'] && !hasMove['dragontail'] && !hasMove['foulplay'] && !hasMove['superfang']) {
+			item = (template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 285 || !!counter['speedsetup'] || hasMove['trickroom']) ? 'Life Orb' : 'Leftovers';
 
 		// This is the "REALLY can't think of a good item" cutoff
-		} else if (ability === 'Super Luck') {
-			item = 'Scope Lens';
-		} else if (ability === 'Sturdy' && hasMove['explosion'] && !counter['speedsetup']) {
-			item = 'Custap Berry';
-		} else if (hasType['Poison']) {
-			item = 'Black Sludge';
 		} else if (ability === 'Gale Wings' && hasMove['bravebird']) {
 			item = !teamDetails.zMove ? 'Flyinium Z' : 'Sharp Beak';
+		} else if (ability === 'Sturdy' && hasMove['explosion'] && !counter['speedsetup']) {
+			item = 'Custap Berry';
+		} else if (ability === 'Super Luck') {
+			item = 'Scope Lens';
+		} else if (hasType['Poison']) {
+			item = 'Black Sludge';
 		} else if (this.getEffectiveness('Rock', template) >= 1 || hasMove['dragontail']) {
 			item = 'Leftovers';
 		} else if (this.getImmunity('Ground', template) && this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && ability !== 'Solid Rock' && !hasMove['magnetrise'] && !hasMove['sleeptalk']) {
 			item = 'Air Balloon';
-		} else {
-			item = 'Leftovers';
 		}
 
 		// For Trick / Switcheroo
