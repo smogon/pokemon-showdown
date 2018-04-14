@@ -1205,20 +1205,7 @@ class RandomDigimonTeams extends RandomTeams {
 					weakmonclause = true;
 				}
 			}
-			if (set.species = "Alphamon") {
-				//this is just here to bully meicoo i mean amuse Lycanium Z
-				if (this.random(10) === 1) {
-					set.baseSignatureMove = "sheercold";
-					set.signatureMove = "Sheer Cold";
-					set.level = 100;
-				}
-			}
-			if (set.species = "Meicoomon") {
-				//just something fun
-				if (this.random(4) === 1) {
-					set.name = "Meicoo";
-				}
-			}
+
 			if (!set.name) set.name = name;
 
 			// Inherit how pokemon does it with Kuramon instead of sunkern
