@@ -1240,7 +1240,7 @@ class RandomDigimonTeams extends RandomTeams {
 			} else {
 				level = (level % 5) >= 2.5 ? parseInt(level / 5) * 5 + 5 : parseInt(level / 5) * 5; //Rounds to the Nearest 5 for simplicity
 			}
-			if (!set.level) set.level = level;
+			set.level = level;
 			set.nature = "Serious";
 			set.moves = [this.sampleNoReplace(set.moves), this.sampleNoReplace(set.moves), this.sampleNoReplace(set.moves), 'Protect', set.signatureMove];
 			team.push(set);
