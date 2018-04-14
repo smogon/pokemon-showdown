@@ -916,7 +916,7 @@ exports.pages = {
 			b = logs[ladder.section][month][b];
 			return b - a;
 		});
-		if (!(user.can('mute', null, Rooms('mafia')) || month !== (new Date()).toLocaleString("en-us", {month: "numeric", year: "numeric"}))) {
+		if (!(user.can('mute', null, Rooms('mafia')) && month === (new Date()).toLocaleString("en-us", {month: "numeric", year: "numeric"}))) {
 			const userIndex = keys.indexOf(user.userid);
 			if (userIndex !== -1) {
 				buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="2"><h2 style="margin: 5px auto">Mafia ${ladder.title} for ${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()}</h1></th></tr>`;
