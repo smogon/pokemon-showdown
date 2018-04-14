@@ -655,6 +655,11 @@ class MafiaTracker extends Rooms.RoomGame {
 
 	nextSub(userid) {
 		if (!this.autoSub || !this.subs.length || (!this.requestedSub.length && !userid)) return;
+		const sub = Users(this.subs[0]);
+		if (!sub || !sub.connected || !sub.named || !this.room.users[sub.userid]) { // should never happen, just to be safe
+			this.subs = this.subs.slice(1);
+			return;
+		}
 		this.sub(userid || this.requestedSub.shift(), this.subs.shift());
 	}
 
@@ -1346,7 +1351,7 @@ exports.commands = {
 						if (Object.keys(game.players).includes(alt.userid)) return user.sendTo(targetRoom, `|error|You already have an alt in the game.`);
 						if (game.hostid === alt.userid) return user.sendTo(targetRoom, `|error|You cannot join a game with an alt as the host.`);
 					}
-					game.subs.push(user.userid);
+					game.subs.push(user.userid.slice());
 					game.nextSub();
 					// Update spectator's view
 					this.parse(`/join view-mafia-${targetRoom.id}`);
