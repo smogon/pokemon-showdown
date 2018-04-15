@@ -158,7 +158,7 @@ let BattleScripts = {
 	// useMove can be found on scripts.js
 	// It is the function that actually uses the move, running ModifyMove events.
 	// It uses the move and then deals with the effects after the move.
-	useMove: function (move, pokemon, target, sourceEffect) {
+	useMoveInner: function (move, pokemon, target, sourceEffect) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
 		move = this.getMove(move);
 		let baseMove = move;
