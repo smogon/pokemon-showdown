@@ -573,7 +573,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			}
 			if (this.subs.includes(targetUser.userid)) this.subs.splice(this.subs.indexOf(targetUser.userid), 1);
 			this.players[targetUser.userid] = player;
-			this.sendRoom(`${Chat.escapeHTML(targetUser.name)} has been added to the game by ${user.name}!`, {declare: true});
+			this.sendRoom(`${Chat.escapeHTML(targetUser.name)} has been added to the game by ${Chat.escapeHTML(user.name)}!`, {declare: true});
 		}
 		this.playerCount++;
 		this.updateRoleString();
@@ -977,11 +977,12 @@ exports.commands = {
 
 		playercap: function (target, room, user) {
 			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
-			if (!user.can('mute', null, room) && room.game.hostid !== user.userid) return false;
+			if (!user.can('mute', null, room) && room.game.hostid !== user.userid) return this.errorReply(`/mafia playercap - Access denied.`);
 			if (room.game.phase !== 'signups') return this.errorReply(`Signups are already closed.`);
 			if (toId(target) === 'none') target = 20;
 			target = parseInt(target);
-			if (!target || target > 20 || target < 2) return this.parse('/help mafia playercount');
+			if (!target || target > 20 || target < 2) return this.parse('/help mafia playercap');
+			if (target < room.game.playerCount) return this.errorReply(`Player cap has to be equal or more than the amount of players in game.`);
 			if (target === room.game.playerCap) return this.errorReply(`Player cap is already set at ${room.game.playerCap}.`);
 			room.game.playerCap = target;
 			room.game.sendRoom(`Player cap has been set to ${room.game.playerCap}`, {declare: true});
@@ -1217,8 +1218,17 @@ exports.commands = {
 			} else {
 				target = parseInt(target);
 				if (isNaN(target)) {
-					if (room.game.hostid === user.userid && this.cmdToken === "!") this.broadcasting = true;
-					if (!this.runBroadcast()) return;
+					if (room.game.hostid === user.userid && this.cmdToken === "!") {
+						const broadcastMessage = this.message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
+						if (room && room.lastBroadcast === broadcastMessage &&
+							room.lastBroadcastTime >= Date.now() - 20 * 1000) {
+							return this.errorReply("You can't broadcast this because it was just broadcasted.");
+						}
+						this.broadcasting = true;
+						room.lastBroadcastTime = Date.now();
+						room.lastBroadcast = broadcastMessage;
+					}
+					if (!this.runBroadcast()) return false;
 					if ((targetRoom.game.dlAt - Date.now()) > 0) {
 						return this.sendReply(`The deadline is in ${Chat.toDurationString(targetRoom.game.dlAt - Date.now()) || '0 seconds'}.`);
 					} else {
@@ -1287,7 +1297,16 @@ exports.commands = {
 		lynches: function (target, room, user) {
 			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			if (!room.game.started) return this.errorReply(`The game of mafia has not started yet.`);
-			if (room.game.hostid === user.userid && this.cmdToken === "!") this.broadcasting = true;
+			if (room.game.hostid === user.userid && this.cmdToken === "!") {
+				const broadcastMessage = this.message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
+				if (room && room.lastBroadcast === broadcastMessage &&
+					room.lastBroadcastTime >= Date.now() - 20 * 1000) {
+					return this.errorReply("You can't broadcast this because it was just broadcasted.");
+				}
+				this.broadcasting = true;
+				room.lastBroadcastTime = Date.now();
+				room.lastBroadcast = broadcastMessage;
+			}
 			if (!this.runBroadcast()) return false;
 
 			let buf = `<strong>Lynches (Hammer: ${room.game.hammerCount})</strong><br />`;
@@ -1305,7 +1324,16 @@ exports.commands = {
 
 		players: function (target, room, user) {
 			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
-			if (room.game.hostid === user.userid && this.cmdToken === "!") this.broadcasting = true;
+			if (room.game.hostid === user.userid && this.cmdToken === "!") {
+				const broadcastMessage = this.message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
+				if (room && room.lastBroadcast === broadcastMessage &&
+					room.lastBroadcastTime >= Date.now() - 20 * 1000) {
+					return this.errorReply("You can't broadcast this because it was just broadcasted.");
+				}
+				this.broadcasting = true;
+				room.lastBroadcastTime = Date.now();
+				room.lastBroadcast = broadcastMessage;
+			}
 			if (!this.runBroadcast()) return false;
 
 			if (this.broadcasting) {
