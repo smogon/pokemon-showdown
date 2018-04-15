@@ -467,7 +467,7 @@ Punishments.punish = function (user, punishment, recursionKeys) {
 		Punishments.userids.set(user.trusted, punishment);
 		keys.add(user.trusted);
 		// @ts-ignore TODO: investigate if this is a bug
-		if (!PUNISH_TRUSTED) affected.unshift(user);
+		if (!PUNISH_TRUSTED && affected) affected.unshift(user);
 	}
 	if (!recursionKeys) {
 		const [punishType, id, ...rest] = punishment;
