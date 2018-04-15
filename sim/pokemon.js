@@ -488,24 +488,26 @@ class Pokemon {
 	deductPP(move, amount, target) {
 		move = this.battle.getMove(move);
 		let ppData = this.getMoveData(move);
-		if (!ppData) return false;
+		if (!ppData) return 0;
 		ppData.used = true;
-		if (!ppData.pp) return false;
+		if (!ppData.pp) return 0;
 
-		ppData.pp -= amount || 1;
-		if (ppData.pp <= 0) {
+		if (!amount) amount = 1;
+		ppData.pp -= amount;
+		if (ppData.pp < 0) {
+			amount += ppData.pp;
 			ppData.pp = 0;
 		}
 		if (ppData.virtual) {
 			for (const foeActive of this.side.foe.active) {
 				if (foeActive.isStale >= 2) {
 					if (move.selfSwitch) this.isStalePPTurns++;
-					return true;
+					return amount;
 				}
 			}
 		}
 		this.isStalePPTurns = 0;
-		return true;
+		return amount;
 	}
 
 	/**
