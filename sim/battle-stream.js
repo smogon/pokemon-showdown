@@ -162,6 +162,116 @@ class BattleStream extends Streams.ObjectReadWriteStream {
 	}
 }
 
+/**
+ * Splits a BattleStream into omniscient, spectator, p1, and p2
+ * streams, for ease of consumption.
+ * @param {BattleStream} stream
+ */
+function getPlayerStreams(stream) {
+	let omniscient = new Streams.ObjectReadWriteStream({
+		write(/** @type {string} */ data) {
+			stream.write(data);
+		},
+	});
+	let spectator = new Streams.ObjectReadStream({
+		read() {},
+	});
+	let p1 = new Streams.ObjectReadWriteStream({
+		write(/** @type {string} */ data) {
+			stream.write(data.replace(/(^|\n)/g, `$1>p1 `));
+		},
+	});
+	let p2 = new Streams.ObjectReadWriteStream({
+		write(/** @type {string} */ data) {
+			stream.write(data.replace(/(^|\n)/g, `$1>p2 `));
+		},
+	});
+	(async () => {
+		let chunk;
+		while ((chunk = await stream.read())) {
+			const [type, data] = splitFirst(chunk, `\n`);
+			switch (type) {
+			case 'update':
+				const p1Update = data.replace(/\n\|split\n[^\n]*\n([^\n]*)\n[^\n]*\n[^\n]*/g, '\n$1');
+				p1.push(p1Update);
+				const p2Update = data.replace(/\n\|split\n[^\n]*\n[^\n]*\n([^\n]*)\n[^\n]*/g, '\n$1');
+				p2.push(p2Update);
+				const specUpdate = data.replace(/\n\|split\n([^\n]*)\n[^\n]*\n[^\n]*\n[^\n]*/g, '\n$1');
+				spectator.push(specUpdate);
+				const omniUpdate = data.replace(/\n\|split\n[^\n]*\n[^\n]*\n[^\n]*/g, '');
+				omniscient.push(omniUpdate);
+				break;
+			case 'sideupdate':
+				const [side, sideData] = splitFirst(data, `\n`);
+				(side === 'p1' ? p1 : p2).push(sideData);
+				break;
+			case 'end':
+				// ignore
+				break;
+			}
+		}
+		omniscient.push(null);
+		spectator.push(null);
+		p1.push(null);
+		p2.push(null);
+	})();
+	return {omniscient, spectator, p1, p2};
+}
+
+class BattlePlayer {
+	/**
+	 * @param {ObjectReadWriteStream} playerStream
+	 */
+	constructor(playerStream, debug = false) {
+		this.stream = playerStream;
+		this.log = /** @type {string[]} */ ([]);
+		this.debug = debug;
+		this.listen();
+	}
+	async listen() {
+		let chunk;
+		while ((chunk = await this.stream.read())) {
+			this.receive(chunk);
+		}
+	}
+	/**
+	 * @param {string} chunk
+	 */
+	receive(chunk) {
+		for (const line of chunk.split('\n')) {
+			this.receiveLine(line);
+		}
+	}
+	/**
+	 * @param {string} line
+	 */
+	receiveLine(line) {
+		if (this.debug) console.log(line);
+		if (line.charAt(0) !== '|') return;
+		const [cmd, rest] = splitFirst(line.slice(1), '|');
+		if (cmd === 'request') {
+			return this.receiveRequest(JSON.parse(rest));
+		}
+		if (cmd === 'error') {
+			throw new Error(rest);
+		}
+		this.log.push(line);
+	}
+	/**
+	 * @param {AnyObject} request
+	 */
+	receiveRequest(request) {
+		throw new Error(`must be implemented by subclass`);
+	}
+	/**
+	 * Makes a choice
+	 * @param {string} choice
+	 */
+	choose(choice) {
+		this.stream.write(choice);
+	}
+}
+
 class BattleTextStream extends Streams.ReadWriteStream {
 	constructor() {
 		super();
@@ -198,4 +308,6 @@ class BattleTextStream extends Streams.ReadWriteStream {
 module.exports = {
 	BattleStream,
 	BattleTextStream,
+	BattlePlayer,
+	getPlayerStreams,
 };
