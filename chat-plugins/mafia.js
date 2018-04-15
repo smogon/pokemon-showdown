@@ -916,20 +916,12 @@ exports.pages = {
 			b = logs[ladder.section][month][b];
 			return b - a;
 		});
-		if (!user.can('mute', null, Rooms('mafia')) && month === (new Date()).toLocaleString("en-us", {month: "numeric", year: "numeric"})) {
-			const userIndex = keys.indexOf(user.userid);
-			if (userIndex !== -1) {
-				buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="2"><h2 style="margin: 5px auto">Mafia ${ladder.title} for ${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()}</h1></th></tr>`;
-				buf += `<tr><th>User</th><th>Position</th></tr>`;
-				buf += `<tr><td>${user.userid}</td><td>${userIndex + 1}</td></tr></table>`;
-			}
-			buf += `You cannot see the position of other people on the leaderboard until the month is over.</div>`;
-			return buf;
-		}
+		const canViewPoints = user.can('mute', null, Rooms('mafia')) || month !== (new Date()).toLocaleString("en-us", {month: "numeric", year: "numeric"});
+		if (!canViewPoints) buf += `You cannot see point values until the month is over.`;
 		buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="2"><h2 style="margin: 5px auto">Mafia ${ladder.title} for ${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()}</h1></th></tr>`;
-		buf += `<tr><th>User</th><th>${ladder.type}</th></tr>`;
+		buf += `<tr><th>User</th>${canViewPoints ? `<th>${ladder.type}</th></tr>` : ``}`;
 		for (const key of keys) {
-			buf += `<tr><td>${key}</td><td>${logs[ladder.section][month][key]}</td></tr>`;
+			buf += `<tr><td>${key}</td>${canViewPoints ? `<td>${logs[ladder.section][month][key]}</td></tr>` : ''}`;
 		}
 		return buf + `</table></div>`;
 	},
