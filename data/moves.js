@@ -15933,9 +15933,12 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		onHit: function (target) {
-			if (target.lastMove && target.deductPP(target.lastMove.id, 4)) {
-				this.add("-activate", target, 'move: Spite', this.getMove(target.lastMove.id).name, 4);
-				return;
+			if (target.lastMove) {
+				let ppDeducted = target.deductPP(target.lastMove.id, 4);
+				if (ppDeducted) {
+					this.add("-activate", target, 'move: Spite', this.getMove(target.lastMove.id).name, ppDeducted);
+					return;
+				}
 			}
 			return false;
 		},
