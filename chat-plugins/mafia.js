@@ -1324,6 +1324,14 @@ exports.commands = {
 			this.sendReplyBox(`${showOrl ? `Original Rolelist: ` : `Rolelist: `}${roleString}`);
 		},
 
+		spectate: 'view',
+		view: function (target, room, user, connection) {
+			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
+			if (!this.runBroadcast()) return;
+			if (this.broadcasting) return this.sendReplyBox(`<button name="joinRoom" value="view-mafia-${room.id}" class="button"><strong>Spectate the game</strong></button>`);
+			return this.parse(`/join view-mafia-${room.id}`);
+		},
+
 		'!sub': true,
 		sub: function (target, room, user) {
 			let targetRoom = room;
