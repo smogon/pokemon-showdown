@@ -1001,7 +1001,7 @@ class ModdedDex {
 	}
 
 	/**
-	 * @param {Format} format
+	 * @param {Format | string} format
 	 * @param {PRNG | PRNGSeed?} [seed]
 	 */
 	getTeamGenerator(format, seed = null) {
@@ -1009,7 +1009,7 @@ class ModdedDex {
 		return new TeamGenerator(format, seed);
 	}
 	/**
-	 * @param {Format} format
+	 * @param {Format | string} format
 	 * @param {PRNG | PRNGSeed?} [seed]
 	 */
 	generateTeam(format, seed = null) {
