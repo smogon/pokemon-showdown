@@ -8198,6 +8198,7 @@ let BattleMovedex = {
 		num: 301,
 		accuracy: 90,
 		basePower: 30,
+<<<<<<< HEAD
 		basePowerCallback: function (pokemon, target, move) {
 			let bp = move.basePower;
 			if (pokemon.volatiles.iceball && pokemon.volatiles.iceball.hitCount) {
@@ -8210,6 +8211,8 @@ let BattleMovedex = {
 			this.debug("Ice Ball bp: " + bp);
 			return bp;
 		},
+=======
+>>>>>>> Rollout/Ice Ball: Maintain the BP multiplier when breaking Disguise
 		category: "Physical",
 		desc: "If this move is successful, the user is locked into this move and cannot make another move until it misses, 5 turns have passed, or the attack cannot be used. Power doubles with each successful hit of this move and doubles again if Defense Curl was used previously by the user. If this move is called by Sleep Talk, the move is used for one turn.",
 		shortDesc: "Power doubles with each hit. Repeats for 5 turns.",
@@ -8218,21 +8221,38 @@ let BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {bullet: 1, contact: 1, protect: 1, mirror: 1},
+		onModifyMove: function (move, pokemon) {
+			pokemon.addVolatile('iceball');
+		},
 		effect: {
-			duration: 2,
-			onLockMove: 'iceball',
+			onLockMove: function () {
+				return this.effectData.hitCount < 5 ? 'iceball' : undefined;
+			},
 			onStart: function () {
 				this.effectData.hitCount = 1;
+				this.effectData.multiplier = 1;
 			},
-			onRestart: function () {
+			onRestart: function (target) {
 				this.effectData.hitCount++;
-				if (this.effectData.hitCount < 5) {
-					this.effectData.duration = 2;
+			},
+			onBasePower: function (basePower, pokemon, target, move) {
+				if (pokemon.volatiles.iceball && pokemon.volatiles.iceball.hitCount) {
+					basePower *= this.effectData.multiplier;
+					if (this.effectData.multiplier >= 16) {
+						delete pokemon.volatiles['iceball'];
+					} else {
+						this.effectData.multiplier *= 2;
+					}
 				}
+				if (pokemon.volatiles.defensecurl) {
+					basePower *= 2;
+				}
+				this.debug("Ice Ball bp: " + basePower);
+				return basePower;
 			},
 			onResidual: function (target) {
-				if (target.lastMove && target.lastMove.id === 'struggle') {
-					// don't lock
+				if (target.lastMove && (target.lastMove.id === 'struggle' || target.lastMove.id === 'iceball' && !target.moveThisTurnResult)) {
+					// End Ice Ball
 					delete target.volatiles['iceball'];
 				}
 			},
@@ -13730,6 +13750,7 @@ let BattleMovedex = {
 		num: 205,
 		accuracy: 90,
 		basePower: 30,
+<<<<<<< HEAD
 		basePowerCallback: function (pokemon, target, move) {
 			let bp = move.basePower;
 			if (pokemon.volatiles.rollout && pokemon.volatiles.rollout.hitCount) {
@@ -13742,6 +13763,8 @@ let BattleMovedex = {
 			this.debug("Rollout bp: " + bp);
 			return bp;
 		},
+=======
+>>>>>>> Rollout/Ice Ball: Maintain the BP multiplier when breaking Disguise
 		category: "Physical",
 		desc: "If this move is successful, the user is locked into this move and cannot make another move until it misses, 5 turns have passed, or the attack cannot be used. Power doubles with each successful hit of this move and doubles again if Defense Curl was used previously by the user. If this move is called by Sleep Talk, the move is used for one turn.",
 		shortDesc: "Power doubles with each hit. Repeats for 5 turns.",
@@ -13750,21 +13773,38 @@ let BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
+		onModifyMove: function (move, pokemon) {
+			pokemon.addVolatile('rollout');
+		},
 		effect: {
-			duration: 2,
-			onLockMove: 'rollout',
+			onLockMove: function () {
+				return this.effectData.hitCount < 5 ? 'rollout' : undefined;
+			},
 			onStart: function () {
 				this.effectData.hitCount = 1;
+				this.effectData.multiplier = 1;
 			},
-			onRestart: function () {
+			onRestart: function (target) {
 				this.effectData.hitCount++;
-				if (this.effectData.hitCount < 5) {
-					this.effectData.duration = 2;
+			},
+			onBasePower: function (basePower, pokemon, target, move) {
+				if (pokemon.volatiles.rollout && pokemon.volatiles.rollout.hitCount) {
+					basePower *= this.effectData.multiplier;
+					if (this.effectData.multiplier >= 16) {
+						delete pokemon.volatiles['rollout'];
+					} else {
+						this.effectData.multiplier *= 2;
+					}
 				}
+				if (pokemon.volatiles.defensecurl) {
+					basePower *= 2;
+				}
+				this.debug("Rollout bp: " + basePower);
+				return basePower;
 			},
 			onResidual: function (target) {
-				if (target.lastMove && target.lastMove.id === 'struggle') {
-					// don't lock
+				if (target.lastMove && (target.lastMove.id === 'struggle' || target.lastMove.id === 'rollout' && !target.moveThisTurnResult)) {
+					// End Rollout
 					delete target.volatiles['rollout'];
 				}
 			},

@@ -707,6 +707,15 @@ let BattleAbilities = {
 			if (effect && effect.effectType === 'Move' && ['mimikyu', 'mimikyutotem'].includes(target.template.speciesid) && !target.transformed) {
 				this.add('-activate', target, 'ability: Disguise');
 				this.effectData.busted = true;
+				if (source) {
+					// De-increment rollout and ice ball BP multipliers
+					if (source.volatiles['rollout']) {
+						 source.volatiles['rollout'].multiplier /= 2;
+					}
+					if (source.volatiles['iceball']) {
+						 source.volatiles['iceball'].multiplier /= 2;
+					}
+				}
 				return 0;
 			}
 		},
