@@ -8232,7 +8232,7 @@ let BattleMovedex = {
 				this.effectData.hitCount = 1;
 				this.effectData.multiplier = 1;
 			},
-			onRestart: function (target) {
+			onRestart: function () {
 				this.effectData.hitCount++;
 			},
 			onBasePower: function (basePower, pokemon, target, move) {
@@ -13784,7 +13784,7 @@ let BattleMovedex = {
 				this.effectData.hitCount = 1;
 				this.effectData.multiplier = 1;
 			},
-			onRestart: function (target) {
+			onRestart: function () {
 				this.effectData.hitCount++;
 			},
 			onBasePower: function (basePower, pokemon, target, move) {
