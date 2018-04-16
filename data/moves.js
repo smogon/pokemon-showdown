@@ -8222,7 +8222,10 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {bullet: 1, contact: 1, protect: 1, mirror: 1},
 		onModifyMove: function (move, pokemon) {
-			pokemon.addVolatile('iceball');
+			if (pokemon.addVolatile('iceball')) pokemon.volatiles['iceball'].hitThisTurn = false;
+		},
+		onHit: function (target, source) {
+			if (source.volatiles['iceball']) source.volatiles['iceball'].hitThisTurn = true;
 		},
 		effect: {
 			onLockMove: function () {
@@ -8234,6 +8237,11 @@ let BattleMovedex = {
 			},
 			onRestart: function () {
 				this.effectData.hitCount++;
+			},
+			onBeforeMovePriority: 20,
+			onBeforeMove: function (pokemon, target, move) {
+				if (move.id !== 'iceball') return;
+				if (pokemon.volatiles['iceball']) pokemon.volatiles['iceball'].hitThisTurn = false;
 			},
 			onBasePower: function (basePower, pokemon, target, move) {
 				if (pokemon.volatiles.iceball && pokemon.volatiles.iceball.hitCount) {
@@ -8251,7 +8259,7 @@ let BattleMovedex = {
 				return basePower;
 			},
 			onResidual: function (target) {
-				if (target.lastMove && (target.lastMove.id === 'struggle' || target.lastMove.id === 'iceball' && !target.moveThisTurnResult)) {
+				if (target.lastMove && target.lastMove.id === 'struggle' || !this.effectData.hitThisTurn) {
 					// End Ice Ball
 					delete target.volatiles['iceball'];
 				}
@@ -13774,7 +13782,10 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onModifyMove: function (move, pokemon) {
-			pokemon.addVolatile('rollout');
+			if (pokemon.addVolatile('rollout')) pokemon.volatiles['rollout'].hitThisTurn = false;
+		},
+		onHit: function (target, source) {
+			if (source.volatiles['rollout']) source.volatiles['rollout'].hitThisTurn = true;
 		},
 		effect: {
 			onLockMove: function () {
@@ -13786,6 +13797,11 @@ let BattleMovedex = {
 			},
 			onRestart: function () {
 				this.effectData.hitCount++;
+			},
+			onBeforeMovePriority: 20,
+			onBeforeMove: function (pokemon, target, move) {
+				if (move.id !== 'rollout') return;
+				if (pokemon.volatiles['rollout']) pokemon.volatiles['rollout'].hitThisTurn = false;
 			},
 			onBasePower: function (basePower, pokemon, target, move) {
 				if (pokemon.volatiles.rollout && pokemon.volatiles.rollout.hitCount) {
@@ -13803,7 +13819,7 @@ let BattleMovedex = {
 				return basePower;
 			},
 			onResidual: function (target) {
-				if (target.lastMove && (target.lastMove.id === 'struggle' || target.lastMove.id === 'rollout' && !target.moveThisTurnResult)) {
+				if (target.lastMove && target.lastMove.id === 'struggle' || !this.effectData.hitThisTurn) {
 					// End Rollout
 					delete target.volatiles['rollout'];
 				}
