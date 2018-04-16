@@ -11291,6 +11291,7 @@
 				"ability": ["Early Bird"],
 				"level": 5,
 				"evs": {"hp": 0, "atk": 236, "def": 0, "spa": 0, "spd": 0, "spe": 236},
+				"ivs": {"hp": 29, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31},
 				"nature": "Jolly",
 				"moves": [["Brave Bird"], ["Jump Kick"], ["Knock Off"], ["Quick Attack"]]
 			}, {
@@ -11656,6 +11657,7 @@
 				"ability": ["Speed Boost"],
 				"level": 5,
 				"evs": {"hp": 0, "atk": 196, "def": 36, "spa": 0, "spd": 36, "spe": 236},
+				"ivs": {"hp": 0, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31},
 				"nature": "Adamant",
 				"moves": [["Waterfall"], ["Crunch"], ["Psychic Fangs"], ["Protect"]]
 			}, {
@@ -11665,6 +11667,7 @@
 				"ability": ["Speed Boost"],
 				"level": 5,
 				"evs": {"hp": 0, "atk": 196, "def": 36, "spa": 0, "spd": 36, "spe": 236},
+				"ivs": {"hp": 0, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31},
 				"nature": "Adamant",
 				"moves": [["Waterfall"], ["Crunch"], ["Aqua Jet"], ["Destiny Bond"]]
 			}, {
@@ -11674,6 +11677,7 @@
 				"ability": ["Speed Boost"],
 				"level": 5,
 				"evs": {"hp": 0, "atk": 0, "def": 36, "spa": 236, "spd": 0, "spe": 236},
+				"ivs": {"hp": 0, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31},
 				"nature": "Modest",
 				"moves": [["Hydro Pump"], ["Dark Pulse"], ["Ice Beam"], ["Protect"]]
 			}]
@@ -11683,7 +11687,17 @@
 			"sets": [{
 				"species": "Corphish",
 				"gender": "",
-				"item": ["Eviolite", "Life Orb"],
+				"item": ["Life Orb"],
+				"ability": ["Adaptability"],
+				"level": 5,
+				"evs": {"hp": 0, "atk": 196, "def": 76, "spa": 0, "spd": 0, "spe": 236},
+				"ivs": {"hp": 0, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31},
+				"nature": "Adamant",
+				"moves": [["Swords Dance"], ["Crabhammer"], ["Knock Off"], ["Aqua Jet"]]
+			}, {
+				"species": "Corphish",
+				"gender": "",
+				"item": ["Eviolite"],
 				"ability": ["Adaptability"],
 				"level": 5,
 				"evs": {"hp": 0, "atk": 196, "def": 76, "spa": 0, "spd": 0, "spe": 236},
@@ -11692,7 +11706,16 @@
 			}, {
 				"species": "Corphish",
 				"gender": "",
-				"item": ["Eviolite", "Waterium Z"],
+				"item": ["Eviolite"],
+				"ability": ["Adaptability"],
+				"level": 5,
+				"evs": {"hp": 0, "atk": 196, "def": 76, "spa": 0, "spd": 0, "spe": 236},
+				"nature": "Jolly",
+				"moves": [["Dragon Dance"], ["Crabhammer"], ["Knock Off"], ["Aqua Jet"]]
+			}, {
+				"species": "Corphish",
+				"gender": "",
+				"item": ["Waterium Z"],
 				"ability": ["Adaptability"],
 				"level": 5,
 				"evs": {"hp": 0, "atk": 196, "def": 76, "spa": 0, "spd": 0, "spe": 236},
@@ -12000,6 +12023,7 @@
 				"ability": ["Huge Power"],
 				"level": 5,
 				"evs": {"hp": 0, "atk": 228, "def": 52, "spa": 0, "spd": 0, "spe": 220},
+				"ivs": {"hp": 23, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31},
 				"nature": "Adamant",
 				"moves": [["Return"], ["Earthquake"], ["Iron Head", "Stone Edge"], ["Quick Attack"]],
 				"happiness": 255
@@ -12566,15 +12590,6 @@
 				"evs": {"hp": 60, "atk": 0, "def": 0, "spa": 220, "spd": 0, "spe": 228},
 				"nature": "Modest",
 				"moves": [["Hyper Voice"], ["Earth Power"], ["Thunderbolt"], ["Hyper Beam"]]
-			}, {
-				"species": "Amaura",
-				"gender": "",
-				"item": ["Berry Juice"],
-				"ability": ["Refrigerate"],
-				"level": 5,
-				"evs": {"hp": 220, "atk": 0, "def": 36, "spa": 0, "spd": 252, "spe": 0},
-				"nature": "Careful",
-				"moves": [["Stealth Rock"], ["Body Slam"], ["Rock Slide"], ["Dragon Tail"]]
 			}]
 		},
 		"bulbasaur": {
@@ -13127,6 +13142,7 @@
 				"ability": ["Defiant"],
 				"level": 5,
 				"evs": {"hp": 36, "atk": 196, "def": 76, "spa": 0, "spd": 0, "spe": 196},
+				"ivs": {"hp": 0, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31},
 				"nature": "Jolly",
 				"moves": [["Close Combat"], ["Gunk Shot"], ["Earthquake", "Taunt"], ["U-turn", "Bulk Up"]]
 			}]
@@ -13140,6 +13156,7 @@
 				"ability": ["Magic Bounce"],
 				"level": 5,
 				"evs": {"hp": 0, "atk": 116, "def": 0, "spa": 196, "spd": 0, "spe": 196},
+				"ivs": {"hp": 0, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31},
 				"nature": "Naive",
 				"moves": [["Psychic"], ["Heat Wave", "Dazzling Gleam"], ["Sucker Punch"], ["U-turn"]]
 			}, {
@@ -13479,6 +13496,7 @@
 				"ability": ["Hustle"],
 				"level": 5,
 				"evs": {"hp": 0, "atk": 236, "def": 0, "spa": 0, "spd": 0, "spe": 236},
+				"ivs": {"hp": 29, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31},
 				"nature": "Naive",
 				"moves": [["Waterfall"], ["Bullet Seed"], ["Rock Blast"], ["Fire Blast"]]
 			}]
