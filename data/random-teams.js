@@ -563,6 +563,7 @@ class RandomTeams extends Dex.ModdedDex {
 	 * @param {string | Template} template
 	 * @param {number} [slot]
 	 * @param {RandomTeamsTypes["TeamDetails"]} [teamDetails]
+	 * @param {boolean} [isDoubles]
 	 * @return {RandomTeamsTypes["RandomSet"]}
 	 */
 	randomSet(template, slot = 1, teamDetails = {}, isDoubles = false) {
