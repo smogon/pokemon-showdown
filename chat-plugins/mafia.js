@@ -987,7 +987,7 @@ exports.commands = {
 			room.game.playerCap = target;
 			room.game.sendRoom(`Player cap has been set to ${room.game.playerCap}`, {declare: true});
 		},
-		playercaphelp: [`/mafia playercap [cap|none]- Limit the number of players being able to join the game. Player cap cannot be more than 20 and less than 2.`],
+		playercaphelp: [`/mafia playercap [cap|none]- Limit the number of players being able to join the game. Player cap cannot be more than 20 or less than 2.`],
 
 		'!close': true,
 		close: function (target, room, user) {
