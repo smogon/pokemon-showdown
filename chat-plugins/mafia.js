@@ -907,10 +907,8 @@ exports.pages = {
 		if (!ladder) return `|deinit`;
 		if (['hosts', 'plays'].includes(ladder.section) && !user.can('mute', null, Rooms('mafia'))) return `|deinit`;
 		let buf = `|title|Mafia ${ladder.title} (${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()})\n|pagehtml|<div class="pad ladder">${query[1] === 'prev' ? '' : `<button class="button" name="send" value="/join view-mafialadder-${query[0]}" style="float:left"><i class="fa fa-refresh"></i> Refresh</button> <button class="button" name="send" value="/join view-mafialadder-${query[0]}-prev" style="float:left">View last month's ${ladder.title}</button>`}<br /><br />`;
-		buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="2"><h2 style="margin: 5px auto">Mafia ${ladder.title} for ${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()}</h1></th></tr>`;
-		buf += `<tr><th>User</th><th>${ladder.type}</th></tr>`;
-		if (!logs[ladder.section][month]) {
-			buf += `<tr><td colspan="2">${ladder.title} for ${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()} not found.</td></tr></table></div>`;
+		if (!logs[ladder.section][month] || !Object.keys(logs[ladder.section][month]).length) {
+			buf += `${ladder.title} for ${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()} not found.</div>`;
 			return buf;
 		}
 		const keys = Object.keys(logs[ladder.section][month]).sort((a, b) => {
@@ -918,8 +916,12 @@ exports.pages = {
 			b = logs[ladder.section][month][b];
 			return b - a;
 		});
+		const canViewPoints = user.can('mute', null, Rooms('mafia')) || month !== (new Date()).toLocaleString("en-us", {month: "numeric", year: "numeric"});
+		if (!canViewPoints) buf += `You cannot see point values until the month is over.`;
+		buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="2"><h2 style="margin: 5px auto">Mafia ${ladder.title} for ${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()}</h1></th></tr>`;
+		buf += `<tr><th>User</th>${canViewPoints ? `<th>${ladder.type}</th></tr>` : ``}`;
 		for (const key of keys) {
-			buf += `<tr><td>${key}</td><td>${logs[ladder.section][month][key]}</td></tr>`;
+			buf += `<tr><td>${key}</td>${canViewPoints ? `<td>${logs[ladder.section][month][key]}</td></tr>` : ''}`;
 		}
 		return buf + `</table></div>`;
 	},
@@ -1322,6 +1324,14 @@ exports.commands = {
 			this.sendReplyBox(`${showOrl ? `Original Rolelist: ` : `Rolelist: `}${roleString}`);
 		},
 
+		spectate: 'view',
+		view: function (target, room, user, connection) {
+			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
+			if (!this.runBroadcast()) return;
+			if (this.broadcasting) return this.sendReplyBox(`<button name="joinRoom" value="view-mafia-${room.id}" class="button"><strong>Spectate the game</strong></button>`);
+			return this.parse(`/join view-mafia-${room.id}`);
+		},
+
 		'!sub': true,
 		sub: function (target, room, user) {
 			let targetRoom = room;
@@ -1451,7 +1461,7 @@ exports.commands = {
 			if (!gavePoints) return this.parse('/help mafia win');
 			writeLogs();
 			this.modlog(`MAFIAPOINTS`, null, `${points} points were awarded to ${Chat.toListString(target)}`);
-			this.addModAction(`${points} points were awarded to: ${Chat.toListString(target)}`);
+			this.privateModAction(`(${points} points were awarded to: ${Chat.toListString(target)})`);
 		},
 		winhelp: [`/mafia win (points) [user1], [user2], [user3], ... - Award the specified users points to the mafia leaderboard for this month. The amount of points can be negative to take points. Defaults to 10 points.`],
 
@@ -1485,7 +1495,7 @@ exports.commands = {
 			if (!gavePoints) return this.parse('/help mafia mvp');
 			writeLogs();
 			this.modlog(`MAFIA${cmd.toUpperCase()}`, null, `MVP and 5 points were ${cmd === 'unmvp' ? 'taken from' : 'awarded to'} ${Chat.toListString(target)}`);
-			this.addModAction(`MVP and 5 points were ${cmd === 'unmvp' ? 'taken from' : 'awarded to'}: ${Chat.toListString(target)}`);
+			this.privateModAction(`(MVP and 5 points were ${cmd === 'unmvp' ? 'taken from' : 'awarded to'}: ${Chat.toListString(target)})`);
 		},
 		mvphelp: [
 			`/mafia mvp [user1], [user2], ... - Gives a MVP point and 5 leaderboard points to the users specified.`,
