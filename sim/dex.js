@@ -1042,7 +1042,7 @@ class ModdedDex {
 				searchResults.push({
 					isInexact: isInexact,
 					searchType: searchTypes[result],
-					name: res.name,
+					name: res.species ? res.species : res.name,
 				});
 			}
 		}
