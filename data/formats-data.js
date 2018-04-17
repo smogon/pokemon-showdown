@@ -3259,7 +3259,7 @@ let BattleFormatsData = {
 		randomBattleMoves: ["stealthrock", "fireblast", "earthpower", "ancientpower", "willowisp", "toxic"],
 		randomDoubleBattleMoves: ["fireblast", "earthpower", "heatwave", "eruption", "rockslide", "protect"],
 		requiredItem: "Cameruptite",
-		tier: "NU",
+		tier: "BL3",
 		doublesTier: "DOU",
 	},
 	torkoal: {
@@ -4407,7 +4407,7 @@ let BattleFormatsData = {
 		randomBattleMoves: ["blizzard", "gigadrain", "woodhammer", "earthquake", "iceshard", "hiddenpowerfire"],
 		randomDoubleBattleMoves: ["blizzard", "iceshard", "gigadrain", "protect", "focusblast", "woodhammer", "earthquake"],
 		requiredItem: "Abomasite",
-		tier: "NU",
+		tier: "BL3",
 		doublesTier: "DUU",
 	},
 	rotom: {
@@ -6994,7 +6994,7 @@ let BattleFormatsData = {
 	bruxish: {
 		randomBattleMoves: ["psychicfangs", "crunch", "liquidation", "icefang", "aquajet", "swordsdance"],
 		randomDoubleBattleMoves: ["trickroom", "psychicfangs", "crunch", "liquidation", "protect", "swordsdance"],
-		tier: "NU",
+		tier: "BL3",
 		doublesTier: "DUU",
 	},
 	drampa: {
