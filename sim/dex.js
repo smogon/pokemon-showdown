@@ -374,7 +374,10 @@ class ModdedDex {
 			// Inherit any statuses from the base species (Arceus, Silvally).
 			const baseSpeciesStatuses = this.data.Statuses[toId(template.baseSpecies)];
 			if (baseSpeciesStatuses !== undefined) {
-				Object.assign(template, baseSpeciesStatuses);
+				for (const key in baseSpeciesStatuses) {
+					// @ts-ignore
+					if (!(key in template)) template[key] = baseSpeciesStatuses[key];
+				}
 			}
 			if (!template.tier && !template.doublesTier && template.baseSpecies !== template.species) {
 				if (template.baseSpecies === 'Mimikyu') {
