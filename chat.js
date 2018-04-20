@@ -339,6 +339,8 @@ class CommandContext {
 			target = '';
 		}
 
+		if (cmd.endsWith(',')) cmd = cmd.slice(0, -1);
+
 		let curCommands = Chat.commands;
 		let commandHandler;
 		let fullCmd = cmd;
