@@ -3406,18 +3406,6 @@
 				"moves": [["Defog"], ["Earthquake"], ["Roost"], ["Knock Off", "Taunt"]]
 			}]
 		},
-		"amoonguss": {
-			"flags": {},
-			"sets": [{
-				"species": "Amoonguss",
-				"gender": "",
-				"item": ["Black Sludge"],
-				"ability": ["Regenerator"],
-				"evs": {"hp": 248, "atk": 0, "def": 44, "spa": 0, "spd": 216, "spe": 0},
-				"nature": "Calm",
-				"moves": [["Spore"], ["Giga Drain"], ["Sludge Bomb", "Hidden Power Fire"], ["Stun Spore", "Toxic"]]
-			}]
-		},
 		"azumarill": {
 			"flags": {},
 			"sets": [{
@@ -7879,6 +7867,19 @@
 				"moves": [["Bug Buzz"], ["Spikes"], ["Final Gambit"], ["Encore"]]
 			}]
 		},
+		"ambipom": {
+			"flags": {},
+			"sets": [{
+				"species": "Ambipom",
+				"gender": "",
+				"item": ["Life Orb"],
+				"ability": ["Technician"],
+				"happiness": 0,
+				"evs": {"hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252},
+				"nature": "Jolly",
+				"moves": [["Fake Out"], ["Frustration"], ["Low Kick"], ["Pursuit"]]
+			}]
+		},
 		"aromatisse": {
 			"flags": {},
 			"sets": [{
@@ -7940,6 +7941,19 @@
 				"moves": [["Calm Mind"], ["Dazzling Gleam"], ["Fire Blast"], ["Surf"]]
 			}]
 		},
+		"blastoise": {
+			"flags": {},
+			"sets": [{
+				"species": "Blastoise",
+				"gender": "",
+				"item": ["Leftovers"],
+				"ability": ["Torrent"],
+				"evs": {"hp": 252, "atk": 0, "def": 252, "spa": 0, "spd": 4, "spe": 0},
+				"ivs": {"hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31},
+				"nature": "Bold",
+				"moves": [["Scald"], ["Rapid Spin"], ["Refresh"], ["Toxic"]]
+			}]
+		},
 		"braviary": {
 			"flags": {},
 			"sets": [{
@@ -7993,6 +8007,19 @@
 				"moves": [["Scald"], ["Dark Pulse"], ["Ice Beam"], ["U-turn"]]
 			}]
 		},
+		"comfey": {
+			"flags": {},
+			"sets": [{
+				"species": "Comfey",
+				"gender": "",
+				"item": ["Pixie Plate"],
+				"ability": ["Triage"],
+				"evs": {"hp": 252, "atk": 0, "def": 160, "spa": 0, "spd": 0, "spe": 96},
+				"ivs": {"hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31},
+				"nature": "Timid",
+				"moves": [["Calm Mind"], ["Draining Kiss"], ["Taunt"], ["Synthesis"]]
+			}]
+		},
 		"cryogonal": {
 			"flags": {},
 			"sets": [{
@@ -8044,6 +8071,44 @@
 				"ivs": {"hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31},
 				"nature": "Timid",
 				"moves": [["Wish"], ["Protect"], ["Toxic"], ["Flamethrower"]]
+			}]
+		},
+		"diancie": {
+			"flags": {},
+			"sets": [{
+				"species": "Diancie",
+				"gender": "",
+				"item": ["Leftovers"],
+				"ability": ["Clear Body"],
+				"evs": {"hp": 252, "atk": 0, "def": 132, "spa": 0, "spd": 124, "spe": 0},
+				"nature": "Sassy",
+				"moves": [["Stealth Rock"], ["Moonblast"], ["Diamond Storm"], ["Heal Bell"]]
+			}, {
+				"species": "Diancie",
+				"gender": "",
+				"item": ["Leftovers"],
+				"ability": ["Clear Body"],
+				"evs": {"hp": 252, "atk": 0, "def": 120, "spa": 0, "spd": 136, "spe": 0},
+				"nature": "Bold",
+				"moves": [["Calm Mind"], ["Moonblast"], ["Earth Power"], ["Substitute"]]
+			}, {
+				"species": "Diancie",
+				"gender": "",
+				"item": ["Choice Specs"],
+				"ability": ["Clear Body"],
+				"evs": {"hp":0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252},
+				"ivs": {"hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31},
+				"nature": "Modest",
+				"moves": [["Moonblast"], ["Power Gem"], ["Earth Power"], ["Hidden Power Fire"]]
+			}, {
+				"species": "Diancie",
+				"gender": "",
+				"item": ["Life Orb"],
+				"ability": ["Clear Body"],
+				"evs": {"hp":0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252},
+				"ivs": {"hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 0},
+				"nature": "Quiet",
+				"moves": [["Trick Room"], ["Moonblast"], ["Earth Power"], ["Psychic"]]
 			}]
 		},
 		"dodrio": {
@@ -8146,6 +8211,18 @@
 				"evs": {"hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252},
 				"nature": "Jolly",
 				"moves": [["Spikes"], ["Gunk Shot"], ["Drain Punch"], ["Explosion"]]
+			}]
+		},
+		"gigalith": {
+			"flags": {},
+			"sets": [{
+				"species": "Gigalith",
+				"gender": "",
+				"item": ["Leftovers"],
+				"ability": ["Sand Stream"],
+				"evs": {"hp": 252, "atk": 0, "def": 0, "spa": 0, "spd": 244, "spe": 12},
+				"nature": "Careful",
+				"moves": [["Stealth Rock"], ["Rock Blast"], ["Earthquake"], ["Toxic"]]
 			}]
 		},
 		"golbat": {
@@ -8573,6 +8650,14 @@
 				"evs": {"hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252},
 				"nature": "Jolly",
 				"moves": [["Dragon Dance"], ["Knock Off"], ["High Jump Kick"], ["Drain Punch"]]
+			}, {
+				"species": "Scrafty",
+				"gender": "",
+				"item": ["Leftovers"],
+				"ability": ["Shed Skin"],
+				"evs": {"hp": 252, "atk": 0, "def": 0, "spa": 0, "spd": 244, "spe": 12},
+				"nature": "Careful",
+				"moves": [["Bulk Up"], ["Drain Punch"], ["Knock Off"], ["Rest"]]
 			}]
 		},
 		"scyther": {
@@ -8724,6 +8809,19 @@
 				"moves": [["Stealth Rock"], ["Earthquake"], ["Heavy Slam"], ["Toxic"]]
 			}]
 		},
+		"stoutland": {
+			"flags": {},
+			"sets": [{
+				"species": "Stoutland",
+				"gender": "",
+				"item": ["Choice Band"],
+				"ability": ["Sand Rush"],
+				"happiness": 0,
+				"evs": {"hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252},
+				"nature": "Adamant",
+				"moves": [["Frustration"], ["Facade"], ["Pursuit"], ["Superpower"]]
+			}]
+		},
 		"toxicroak": {
 			"flags": {},
 			"sets": [{
@@ -8840,6 +8938,15 @@
 				"ivs": {"hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31},
 				"nature": "Modest",
 				"moves": [["Sunny Day"], ["Growth"], ["Giga Drain"], ["Sludge Bomb"]]
+			}, {
+				"species": "Venusaur",
+				"gender": "",
+				"item": ["Normalium Z"],
+				"ability": ["Chlorophyll"],
+				"evs": {"hp": 0, "atk": 0, "def": 0, "spa": 252, "spd": 4, "spe": 252},
+				"ivs": {"hp": 31, "atk": 0, "def": 31, "spa": 31, "spd": 31, "spe": 31},
+				"nature": "Timid",
+				"moves": [["Giga Drain"], ["Sludge Bomb"], ["Celebrate"], ["Growth"]]
 			}]
 		},
 		"vileplume": {
@@ -9849,18 +9956,6 @@
 				"moves": [["Fake Out"], ["Double-Edge"], ["Sucker Punch"], ["Earthquake"]]
 			}]
 		},
-		"miltank": {
-			"flags": {},
-			"sets": [{
-				"species": "Miltank",
-				"gender": "",
-				"item": ["Leftovers"],
-				"ability": ["Thick Fat", "Sap Sipper"],
-				"evs": {"hp": 248, "atk": 0, "def": 0, "spa": 0, "spd": 240, "spe": 20},
-				"nature": "Careful",
-				"moves": [["Stealth Rock"], ["Milk Drink"], ["Body Slam", "Seismic Toss"], ["Toxic", "Heal Bell", "Thunder Wave"]]
-			}]
-		},
 		"primeape": {
 			"flags": {},
 			"sets": [{
@@ -10699,18 +10794,6 @@
 				"evs": {"hp": 0, "atk": 252, "def": 0, "spa": 0, "spd": 4, "spe": 252},
 				"nature": "Adamant",
 				"moves": [["Swords Dance"], ["Leech Life"], ["Aerial Ace"], ["Dig"]]
-			}]
-		},
-		"palossand": {
-			"flags": {},
-			"sets": [{
-				"species": "Palossand",
-				"gender": "",
-				"item": ["Colbur Berry"],
-				"ability": ["Water Compaction"],
-				"evs": {"hp": 248, "atk": 0, "def": 252, "spa": 0, "spd": 8, "spe": 0},
-				"nature": "Bold",
-				"moves": [["Earth Power"], ["Shadow Ball", "Toxic"], ["Stealth Rock"], ["Shore Up"]]
 			}]
 		},
 		"sandslash": {
