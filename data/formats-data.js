@@ -2460,7 +2460,7 @@ let BattleFormatsData = {
 		randomBattleMoves: ["nastyplot", "darkpulse", "taunt", "fireblast", "hiddenpowergrass"],
 		randomDoubleBattleMoves: ["nastyplot", "darkpulse", "taunt", "heatwave", "hiddenpowergrass", "protect"],
 		requiredItem: "Houndoominite",
-		tier: "RU",
+		tier: "BL2",
 		doublesTier: "DUU",
 	},
 	phanpy: {
@@ -2542,7 +2542,7 @@ let BattleFormatsData = {
 			{"generation": 7, "level": 100, "isHidden": false, "moves": ["sacredfire", "stoneedge", "ironhead", "flamecharge"], "pokeball": "cherishball"},
 		],
 		eventOnly: true,
-		tier: "RU",
+		tier: "BL2",
 		doublesTier: "DUU",
 	},
 	suicune: {
@@ -5541,7 +5541,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 7, "level": 65, "gender": "M", "isHidden": false, "abilities": ["innerfocus"], "moves": ["fakeout", "dualchop", "highjumpkick", "uturn"], "pokeball": "cherishball"},
 		],
-		tier: "RU",
+		tier: "BL2",
 		doublesTier: "DUU",
 	},
 	druddigon: {
