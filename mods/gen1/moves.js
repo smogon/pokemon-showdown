@@ -22,7 +22,7 @@ let BattleMovedex = {
 	amnesia: {
 		inherit: true,
 		desc: "Raises the user's Special by 2 stages.",
-		shortDesc: "Boosts the user's Special by 2.",
+		shortDesc: "Raises the user's Special by 2.",
 		boosts: {
 			spd: 2,
 			spa: 2,
@@ -308,8 +308,8 @@ let BattleMovedex = {
 	},
 	dizzypunch: {
 		inherit: true,
-		desc: "Deals damage to the target.",
-		shortDesc: "Deals damage.",
+		desc: "No additional effect.",
+		shortDesc: "No additional effect.",
 		secondary: false,
 	},
 	doubleedge: {
@@ -400,7 +400,7 @@ let BattleMovedex = {
 	growth: {
 		inherit: true,
 		desc: "Raises the user's Special by 1 stage.",
-		shortDesc: "Boosts the user's Special by 1.",
+		shortDesc: "Raises the user's Special by 1.",
 		boosts: {
 			spa: 1,
 			spd: 1,
@@ -443,7 +443,7 @@ let BattleMovedex = {
 	highjumpkick: {
 		inherit: true,
 		desc: "If this attack misses the target, the user takes 1 HP of damage.",
-		shortDesc: "User takes 1 HP damage it would have dealt if miss.",
+		shortDesc: "User takes 1 HP of damage if it misses.",
 		onMoveFail: function (target, source, move) {
 			if (!target.types.includes('Ghost')) {
 				this.directDamage(1, source);
@@ -452,13 +452,13 @@ let BattleMovedex = {
 	},
 	hyperbeam: {
 		inherit: true,
-		desc: "Deals damage to a target. If this move is successful, the user must recharge on the following turn and cannot make a move, unless the opponent faints or a Substitute is destroyed.",
-		shortDesc: "User cannot move next turn unless target or substitute faints.",
+		desc: "If this move is successful, the user must recharge on the following turn and cannot make a move, unless the target or its substitute was knocked out by this move.",
+		shortDesc: "Can't move next turn if target or sub is not KOed.",
 	},
 	jumpkick: {
 		inherit: true,
-		desc: "If this attack misses the target, the user 1HP of damage.",
-		shortDesc: "User takes 1 HP damage if miss.",
+		desc: "If this attack misses the target, the user takes 1 HP of damage.",
+		shortDesc: "User takes 1 HP of damage if it misses.",
 		onMoveFail: function (target, source, move) {
 			this.damage(1, source);
 		},
@@ -499,8 +499,8 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "For 5 turns, the user has double Special when attacked. Removed by Haze.",
-		shortDesc: "For 5 turns, user's Special is 2x when attacked.",
+		desc: "While the user remains active, its Special is doubled when taking damage. Critical hits ignore this protection. This effect can be removed by Haze.",
+		shortDesc: "While active, user's Special is 2x when damaged.",
 		id: "lightscreen",
 		isViable: true,
 		name: "Light Screen",
@@ -530,8 +530,8 @@ let BattleMovedex = {
 	},
 	mimic: {
 		inherit: true,
-		desc: "This move is replaced by a random move on target's moveSlots. The copied move has the maximum PP for that move. Ignores a target's Substitute.",
-		shortDesc: "A random target's move replaces this one.",
+		desc: "This move is replaced by a random move known by the target, even if the user already knows that move. The copied move has the maximum PP for that move.",
+		shortDesc: "Random move known by the target replaces this.",
 		onHit: function (target, source) {
 			let moveslot = source.moves.indexOf('mimic');
 			if (moveslot < 0) return false;
@@ -644,8 +644,8 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user has doubled Defense. Critical hits ignore this protection. It is removed from the user if it is successfully hit by Haze.",
-		shortDesc: "User's Defense is 2x.",
+		desc: "While the user remains active, its Defense is doubled when taking damage. Critical hits ignore this protection. This effect can be removed by Haze.",
+		shortDesc: "While active, the user's Defense is doubled.",
 		id: "reflect",
 		isViable: true,
 		name: "Reflect",
@@ -693,8 +693,8 @@ let BattleMovedex = {
 	},
 	rockslide: {
 		inherit: true,
-		desc: "Deals damage to a foe.",
-		shortDesc: "Deals damage.",
+		desc: "No additional effect.",
+		shortDesc: "No additional effect.",
 		secondary: false,
 		target: "normal",
 	},
