@@ -1473,7 +1473,8 @@ exports.commands = {
 			if (!targetRoom || !targetRoom.game || targetRoom.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			if (!user.can('mute', null, targetRoom) && targetRoom.game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia end - Access denied.`);
 			targetRoom.game.end(true);
-			targetRoom.modlog('MAFIAEND');
+			this.room = targetRoom;
+			this.modlog('MAFIAEND');
 		},
 		endhelp: [`/mafia end - End the current game of mafia. Requires host % @ * # & ~`],
 
