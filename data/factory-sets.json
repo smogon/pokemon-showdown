@@ -12540,6 +12540,7 @@
 				"ability": ["Vital Spirit"],
 				"level": 5,
 				"evs": {"hp": 0, "atk": 236, "def": 0, "spa": 0, "spd": 0, "spe": 252},
+				"ivs": {"hp": 29, "atk": 31, "def": 31, "spa": 31, "spd": 31, "spe": 31},
 				"nature": "Jolly",
 				"moves": [["Belly Drum"], ["Fire Punch"], ["Thunder Punch", "Thief"], ["Mach Punch"]]
 			}]
