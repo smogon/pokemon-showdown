@@ -445,6 +445,16 @@ class RandomGen6Teams extends RandomTeams {
 					break;
 
 				// Status:
+				case 'stunspore': case 'thunderwave':
+					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
+					if (hasMove['discharge'] || hasMove['gyroball'] || hasMove['spore'] || hasMove['toxic'] || hasMove['trickroom'] || hasMove['yawn']) rejected = true;
+					break;
+				case 'toxic':
+					if (counter.setupType || hasMove['flamecharge'] || hasMove['hypnosis'] || hasMove['sleeppowder'] || hasMove['willowisp'] || hasMove['yawn']) rejected = true;
+					break;
+				case 'willowisp':
+					if (hasMove['scald']) rejected = true;
+					break;
 				case 'raindance':
 					if (counter.Physical + counter.Special < 2 || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					if (!hasType['Water'] && !hasMove['thunder']) rejected = true;
@@ -460,16 +470,6 @@ class RandomGen6Teams extends RandomTeams {
 							if (weatherball >= 0) this.fastPop(movePool, weatherball);
 						}
 					}
-					break;
-				case 'stunspore': case 'thunderwave':
-					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
-					if (hasMove['discharge'] || hasMove['gyroball'] || hasMove['spore'] || hasMove['toxic'] || hasMove['trickroom'] || hasMove['yawn']) rejected = true;
-					break;
-				case 'toxic':
-					if (counter.setupType || hasMove['flamecharge'] || hasMove['hypnosis'] || hasMove['sleeppowder'] || hasMove['willowisp'] || hasMove['yawn']) rejected = true;
-					break;
-				case 'willowisp':
-					if (hasMove['scald']) rejected = true;
 					break;
 				case 'milkdrink': case 'moonlight': case 'painsplit': case 'recover': case 'roost': case 'softboiled': case 'synthesis':
 					if (hasMove['leechseed'] || hasMove['rest'] || hasMove['wish']) rejected = true;
@@ -825,7 +825,7 @@ class RandomGen6Teams extends RandomTeams {
 			item = 'Weakness Policy';
 		} else if (slot === 0 && ability !== 'Regenerator' && ability !== 'Sturdy' && !counter['recoil'] && !counter['recovery'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 285) {
 			item = 'Focus Sash';
-		} else if (counter.damagingMoves.length >= 3 && ability !== 'Sturdy' && !hasMove['acidspray'] && !hasMove['clearsmog'] && !hasMove['dragontail'] && !hasMove['foulplay'] && !hasMove['superfang']) {
+		} else if (counter.damagingMoves.length >= 3 && ability !== 'Sturdy' && !hasMove['acidspray'] && !hasMove['dragontail'] && !hasMove['foulplay'] && !hasMove['rapidspin'] && !hasMove['superfang']) {
 			item = (template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 285 || !!counter['speedsetup'] || hasMove['trickroom']) ? 'Life Orb' : 'Leftovers';
 
 		// This is the "REALLY can't think of a good item" cutoff

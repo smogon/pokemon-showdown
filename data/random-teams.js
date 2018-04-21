@@ -530,7 +530,7 @@ class RandomTeams extends Dex.ModdedDex {
 		// Keep track of the available moves
 		for (const moveid of movePool) {
 			let move = this.getMove(moveid);
-			if (!move.basePower) continue;
+			if (move.damageCallback) continue;
 			if (move.category === 'Physical') counter['physicalpool']++;
 			if (move.category === 'Special') counter['specialpool']++;
 		}
@@ -863,7 +863,7 @@ class RandomTeams extends Dex.ModdedDex {
 					if (hasMove['playrough'] && counter.setupType !== 'Special') rejected = true;
 					break;
 				case 'drainingkiss':
-					if (hasMove['dazzlinggleam'] || counter.setupType !== 'Special' && !hasAbility['triage']) rejected = true;
+					if (hasMove['dazzlinggleam'] || counter.setupType !== 'Special' && !hasAbility['Triage']) rejected = true;
 					break;
 				case 'moonblast':
 					if (isDoubles && hasMove['dazzlinggleam']) rejected = true;
@@ -1491,7 +1491,7 @@ class RandomTeams extends Dex.ModdedDex {
 			item = 'Weakness Policy';
 		} else if (slot === 0 && ability !== 'Regenerator' && ability !== 'Sturdy' && !counter['recoil'] && !counter['recovery'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 285) {
 			item = 'Focus Sash';
-		} else if (counter.damagingMoves.length >= 3 && ability !== 'Sturdy' && !hasMove['acidspray'] && !hasMove['clearsmog'] && !hasMove['dragontail'] && !hasMove['foulplay'] && !hasMove['superfang']) {
+		} else if (counter.damagingMoves.length >= 3 && ability !== 'Sturdy' && !hasMove['acidspray'] && !hasMove['dragontail'] && !hasMove['foulplay'] && !hasMove['rapidspin'] && !hasMove['superfang']) {
 			item = (template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 285 || !!counter['speedsetup'] || hasMove['trickroom']) ? 'Life Orb' : 'Leftovers';
 
 		// This is the "REALLY can't think of a good item" cutoff
