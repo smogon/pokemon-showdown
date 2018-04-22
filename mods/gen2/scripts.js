@@ -632,7 +632,7 @@ let BattleScripts = {
 		}
 
 		// Type effectiveness
-		let totalTypeMod = this.getEffectiveness(type, target);
+		let totalTypeMod = target.runEffectiveness(move);
 		// Super effective attack
 		if (totalTypeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
