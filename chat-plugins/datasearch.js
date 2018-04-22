@@ -370,6 +370,8 @@ function runDexsearch(target, cmd, canAll, message) {
 			}
 			if (targetType in allTypes) {
 				target = allTypes[targetType];
+				const invalid = validParameter("types", target, isNotSearch, target);
+				if (invalid) return {reply: invalid};
 				if ((orGroup.types[target] && isNotSearch) || (orGroup.types[target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a type.'};
 				orGroup.types[target] = !isNotSearch;
 				continue;
