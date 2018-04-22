@@ -242,20 +242,20 @@ class Validator {
 				if (banReason) problems.push(`Mega evolutions are ${banReason}.`);
 			}
 		}
-		if (!templateOverride && postMegaTemplate.tier) {
-			banReason = ruleTable.check('pokemontag:' + toId(postMegaTemplate.tier), setHas);
-			if (banReason) {
-				problems.push(`${postMegaTemplate.species} is in ${postMegaTemplate.tier}, which is ${banReason}.`);
+		if (!templateOverride) {
+			if (ruleTable.has('-unreleased') && postMegaTemplate.isUnreleased) {
+				problems.push(`${name} (${postMegaTemplate.species}) is unreleased.`);
+			} else if (postMegaTemplate.tier) {
+				banReason = ruleTable.check('pokemontag:' + toId(postMegaTemplate.tier), setHas);
+				if (banReason) {
+					problems.push(`${postMegaTemplate.species} is in ${postMegaTemplate.tier}, which is ${banReason}.`);
+				} else if (postMegaTemplate.doublesTier) {
+					banReason = ruleTable.check('pokemontag:' + toId(postMegaTemplate.doublesTier), setHas);
+					if (banReason) {
+						problems.push(`${postMegaTemplate.species} is in ${postMegaTemplate.doublesTier}, which is ${banReason}.`);
+					}
+				}
 			}
-		}
-		if (!templateOverride && postMegaTemplate.doublesTier) {
-			banReason = ruleTable.check('pokemontag:' + toId(postMegaTemplate.doublesTier), setHas);
-			if (banReason) {
-				problems.push(`${postMegaTemplate.species} is in ${postMegaTemplate.doublesTier}, which is ${banReason}.`);
-			}
-		}
-		if (!templateOverride && ruleTable.has('-unreleased') && postMegaTemplate.isUnreleased) {
-			problems.push(`${name} (${postMegaTemplate.species}) is unreleased.`);
 		}
 
 		banReason = ruleTable.check('ability:' + toId(set.ability), setHas);
