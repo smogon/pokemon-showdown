@@ -2103,7 +2103,7 @@ let BattleFormatsData = {
 	azumarill: {
 		randomBattleMoves: ["liquidation", "aquajet", "playrough", "superpower", "bellydrum", "knockoff"],
 		randomDoubleBattleMoves: ["waterfall", "aquajet", "playrough", "superpower", "bellydrum", "knockoff", "protect"],
-		tier: "UU",
+		tier: "BL",
 		doublesTier: "DUU",
 	},
 	bonsly: {
