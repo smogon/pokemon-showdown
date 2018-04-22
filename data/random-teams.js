@@ -1923,7 +1923,7 @@ class RandomTeams extends Dex.ModdedDex {
 			item: items + '' || setData.set.item || '',
 			ability: abilities + '' || setData.set.ability || template.abilities['0'],
 			shiny: setData.set.shiny || this.randomChance(1, 1024),
-			level: setData.set.level || 100,
+			level: tier === "LC" ? 5 : 100,
 			happiness: setData.set.happiness || 255,
 			evs: evs,
 			ivs: ivs,
