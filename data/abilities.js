@@ -2126,10 +2126,10 @@ let BattleAbilities = {
 		num: 30,
 	},
 	"neuroforce": {
-		shortDesc: "This Pokemon's attacks that are super effective against the target do 1.2x damage.",
+		shortDesc: "This Pokemon's attacks that are super effective against the target do 1.25x damage.",
 		onModifyDamage: function (damage, source, target, move) {
 			if (move && move.typeMod > 0) {
-				return this.chainModify([0x1333, 0x1000]);
+				return this.chainModify([0x1400, 0x1000]);
 			}
 		},
 		id: "neuroforce",
