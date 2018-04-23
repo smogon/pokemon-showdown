@@ -1902,7 +1902,7 @@ class RandomTeams extends Dex.ModdedDex {
 			gender: setData.set.gender || template.gender || (this.randomChance(1, 2) ? 'M' : 'F'),
 			item: items + '' || setData.set.item || '',
 			ability: abilities + '' || setData.set.ability || template.abilities['0'],
-			shiny: setData.set.shiny || this.randomChance(1, 1024),
+			shiny: typeof setData.set.shiny === 'undefined' ? this.randomChance(1, 1024) : setData.set.shiny,
 			level: tier === "LC" ? 5 : 100,
 			happiness: typeof setData.set.happiness === 'undefined' ? 255 : setData.set.happiness,
 			evs: Object.assign({hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0}, setData.set.evs),
