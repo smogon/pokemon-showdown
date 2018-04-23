@@ -102,17 +102,8 @@ let Formats = [
 		],
 
 		mod: 'gen7',
-		searchShow: false,
 		ruleset: ['[Gen 7] NU'],
 		banlist: ['NU', 'BL4'],
-	},
-	{
-		name: "[Gen 7] PU (suspect test)",
-		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3632456/">PU Suspect Test</a>`],
-
-		mod: 'gen7',
-		challengeShow: false,
-		ruleset: ['[Gen 7] PU'],
 	},
 	{
 		name: "[Gen 7] LC",
