@@ -1513,7 +1513,7 @@ let BattleFormatsData = {
 			{"generation": 4, "level": 50, "gender": "F", "nature": "Modest", "moves": ["flamethrower", "psychic", "hyperbeam", "solarbeam"], "pokeball": "pokeball"},
 			{"generation": 4, "level": 50, "gender": "M", "nature": "Hardy", "moves": ["confuseray", "firepunch", "lavaplume", "flamethrower"], "pokeball": "cherishball"},
 		],
-		tier: "PU",
+		tier: "BL4",
 		doublesTier: "DUU",
 	},
 	pinsir: {
