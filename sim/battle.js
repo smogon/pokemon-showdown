@@ -2359,7 +2359,7 @@ class Battle extends Dex.ModdedDex {
 			this.add('-zbroken', target);
 		}
 
-		if (this.gen !== 5 && !Math.floor(baseDamage)) {
+		if (this.gen !== 5 && !Math.floor(baseDamage) && (!['mimikyu', 'mimikyutotem'].includes(target.template.speciesid) || target.transformed || (target.volatiles['substitute'] && !(move.flags['authentic'] || move.infiltrates)))) {
 			return 1;
 		}
 
