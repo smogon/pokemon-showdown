@@ -1914,7 +1914,7 @@ class RandomTeams extends Dex.ModdedDex {
 			ability: abilities + '' || setData.set.ability || template.abilities['0'],
 			shiny: setData.set.shiny || this.randomChance(1, 1024),
 			level: tier === "LC" ? 5 : 100,
-			happiness: typeof setData.set.happiness === "undefined" ? 255 : setData.set.happiness,
+			happiness: typeof setData.set.happiness === 'undefined' ? 255 : setData.set.happiness,
 			evs: evs,
 			ivs: Object.assign({hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31}, setData.set.ivs),
 			nature: setData.set.nature || 'Serious',
