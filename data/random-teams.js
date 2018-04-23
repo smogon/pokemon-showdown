@@ -1906,16 +1906,6 @@ class RandomTeams extends Dex.ModdedDex {
 			evs = {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84};
 		}
 
-		let ivs = {};
-		if (setData.set.ivs) {
-			for (let iv in setData.set.ivs) {
-				if (!setData.set.ivs[iv]) ivs[iv] = 31;
-				ivs[iv] = setData.set.ivs[iv];
-			}
-		} else {
-			ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
-		}
-
 		return {
 			name: setData.set.name || template.baseSpecies,
 			species: setData.set.species,
@@ -1924,9 +1914,9 @@ class RandomTeams extends Dex.ModdedDex {
 			ability: abilities + '' || setData.set.ability || template.abilities['0'],
 			shiny: setData.set.shiny || this.randomChance(1, 1024),
 			level: tier === "LC" ? 5 : 100,
-			happiness: setData.set.happiness || 255,
+			happiness: typeof setData.set.happiness === "undefined" ? 255 : setData.set.happiness,
 			evs: evs,
-			ivs: ivs,
+			ivs: Object.assign({hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31}, setData.set.ivs),
 			nature: setData.set.nature || 'Serious',
 			moves: moves,
 		};
