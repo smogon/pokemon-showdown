@@ -1838,14 +1838,14 @@ class RandomTeams extends Dex.ModdedDex {
 		let effectivePool = [];
 		let priorityPool = [];
 		for (const curSet of setList) {
-			let itemData = this.getItem(curSet.item + '');
-			if (teamData.megaCount > 0 && itemData.megaStone) continue; // reject 2+ mega stones
-			if (teamData.zCount && teamData.zCount > 0 && itemData.zMove) continue; // reject 2+ Z stones
-			if (itemsMax[itemData.id] && teamData.has[itemData.id] >= itemsMax[itemData.id]) continue;
+			let item = this.getItem(curSet.item);
+			if (teamData.megaCount > 0 && item.megaStone) continue; // reject 2+ mega stones
+			if (teamData.zCount && teamData.zCount > 0 && item.zMove) continue; // reject 2+ Z stones
+			if (itemsMax[item.id] && teamData.has[item.id] >= itemsMax[item.id]) continue;
 
-			let abilityData = this.getAbility(curSet.ability + '');
-			if (weatherAbilitiesRequire[abilityData.id] && teamData.weather !== weatherAbilitiesRequire[abilityData.id]) continue;
-			if (teamData.weather && weatherAbilities.includes(abilityData.id)) continue; // reject 2+ weather setters
+			let ability = this.getAbility(curSet.ability);
+			if (weatherAbilitiesRequire[ability.id] && teamData.weather !== weatherAbilitiesRequire[ability.id]) continue;
+			if (teamData.weather && weatherAbilities.includes(ability.id)) continue; // reject 2+ weather setters
 
 			let reject = false;
 			let hasRequiredMove = false;
@@ -1882,7 +1882,7 @@ class RandomTeams extends Dex.ModdedDex {
 		}
 
 		let items = [];
-		if (Array.isArray(setData.set.item) === true) {
+		if (Array.isArray(setData.set.item)) {
 			let randomItem = setData.set.item;
 			items.push(setData.itemVariants ? randomItem[setData.itemVariants] : this.sample(randomItem));
 		} else {
@@ -1890,7 +1890,7 @@ class RandomTeams extends Dex.ModdedDex {
 		}
 
 		let abilities = [];
-		if (Array.isArray(setData.set.ability) === true) {
+		if (Array.isArray(setData.set.ability)) {
 			let randomAbility = setData.set.ability;
 			abilities.push(setData.abilityVariants ? randomAbility[setData.abilityVariants] : this.sample(randomAbility));
 		} else {
@@ -1904,10 +1904,10 @@ class RandomTeams extends Dex.ModdedDex {
 			item: items + '' || setData.set.item || '',
 			ability: abilities + '' || setData.set.ability || template.abilities['0'],
 			shiny: typeof setData.set.shiny === 'undefined' ? this.randomChance(1, 1024) : setData.set.shiny,
-			level: setData.set.level || 100,
+			level: tier === "LC" ? 5 : 100,
 			happiness: typeof setData.set.happiness === 'undefined' ? 255 : setData.set.happiness,
-			evs: setData.set.evs || {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84},
-			ivs: setData.set.ivs || {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31},
+			evs: Object.assign({hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0}, setData.set.evs),
+			ivs: Object.assign({hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31}, setData.set.ivs),
 			nature: setData.set.nature || 'Serious',
 			moves: moves,
 		};
