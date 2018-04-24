@@ -101,7 +101,7 @@ describe(`Factory sets`, function () {
 			const setsJSON = require(`../../../data/${filename}.json`);
 
 			for (const type in setsJSON) {
-				const typeTable = setsJSON[type];
+				const typeTable = filename === 'bss-factory-sets' ? setsJSON : setsJSON[type];
 				for (const species in typeTable) {
 					const speciesData = typeTable[species];
 					for (const set of speciesData.sets) {
