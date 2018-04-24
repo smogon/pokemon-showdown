@@ -428,6 +428,9 @@ class Connection {
 			Sockets.channelRemove(this.worker, room.id, this.socketid);
 		}
 	}
+	toString() {
+		return (this.user ? this.user.userid + '[' + this.user.connections.indexOf(this) + ']' : '[disconnected]') + ':' + this.ip + (this.protocol !== 'websocket' ? ':' + this.protocol : '');
+	}
 }
 
 /** @typedef {[string, string, Connection]} ChatQueueEntry */
