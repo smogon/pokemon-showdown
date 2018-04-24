@@ -588,7 +588,7 @@ class RandomTeams extends Dex.ModdedDex {
 			template = this.getTemplate(template.otherFormes.length >= 2 ? this.sample(template.otherFormes) : template.otherFormes[0]);
 		}
 
-		const randMoves = !isDoubles ? template.randomBattleMoves : template.randomDoubleBattleMoves;
+		const randMoves = !isDoubles ? template.randomBattleMoves : template.randomDoubleBattleMoves || template.randomBattleMoves;
 		let movePool = (randMoves ? randMoves.slice() : template.learnset ? Object.keys(template.learnset) : []);
 		/**@type {string[]} */
 		let moves = [];
