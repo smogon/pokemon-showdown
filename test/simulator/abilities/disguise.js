@@ -75,7 +75,7 @@ describe('Disguise', function () {
 		assert.hurtsBy(battle.p2.active[0], 1, () => battle.commitDecisions());
 	});
 
-	it('should not trigger critical hits while active', function () {
+	it.skip('should not trigger critical hits while active', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Mimikyu', ability: 'disguise', moves: ['counter']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Cryogonal', ability: 'noguard', moves: ['frostbreath']}]);

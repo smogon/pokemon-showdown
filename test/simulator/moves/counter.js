@@ -12,11 +12,9 @@ describe('Counter', function () {
 
 	it('should deal damage equal to twice the damage taken from the last Physical attack', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Sawk', ability: 'sturdy', moves: ['tackle', 'doublekick']}]);
+		battle.join('p1', 'Guest 1', 1, [{species: 'Sawk', ability: 'sturdy', moves: ['seismictoss']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Throh', ability: 'guts', moves: ['counter']}]);
-		battle.commitDecisions();
-		let hp = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
-		assert.strictEqual(battle.p1.active[0].maxhp - battle.p1.active[0].hp, 2 * hp);
+		assert.hurtsBy(battle.p1.active[0], 200, () => battle.commitDecisions());
 	});
 
 	it('should deal damage based on the last hit from the last Physical attack', function () {
@@ -34,17 +32,26 @@ describe('Counter', function () {
 		assert.strictEqual(battle.p1.active[0].maxhp - battle.p1.active[0].hp, 2 * lastDamage);
 	});
 
+	it('should fail if user is not damaged by Physical attacks this turn', function () {
+		battle = common.createBattle();
+		battle.join('p1', 'Guest 1', 1, [{species: 'Sawk', ability: 'sturdy', moves: ['aurasphere']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: 'Throh', ability: 'guts', moves: ['counter']}]);
+		assert.false.hurts(battle.p1.active[0], () => battle.commitDecisions());
+	});
+
 	it('should target the opposing Pokemon that hit the user with a Physical attack most recently that turn', function () {
-		battle = common.createBattle({gameType: 'doubles'});
+		battle = common.createBattle({gameType: 'triples'});
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Bastiodon', ability: 'sturdy', moves: ['counter']},
 			{species: 'Toucannon', ability: 'keeneye', moves: ['beakblast']},
+			{species: 'Kingdra', ability: 'sniper', moves: ['dragonpulse']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [
-			{species: 'Crobat', ability: 'pressure', moves: ['acrobatics']},
+			{species: 'Crobat', ability: 'innerfocus', moves: ['acrobatics']},
 			{species: 'Avalugg', ability: 'sturdy', moves: ['avalanche']},
+			{species: 'Castform', ability: 'forecast', moves: ['weatherball']},
 		]);
-		battle.makeChoices('move counter, move beakblast -1', 'move acrobatics 1, move avalanche 1');
+		battle.makeChoices('move counter, move beakblast -1, move dragonpulse -1', 'move acrobatics 1, move avalanche 1, move weatherball 1');
 		assert.fullHP(battle.p1.active[1]);
 		assert.fullHP(battle.p2.active[0]);
 		assert.false.fullHP(battle.p2.active[1]);
@@ -53,14 +60,80 @@ describe('Counter', function () {
 	it('should bypass Follow Me', function () {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.join('p1', 'Guest 1', 1, [
-			{species: 'Bastiodon', ability: 'furcoat', moves: ['counter']},
+			{species: 'Bastiodon', ability: 'sturdy', moves: ['counter']},
 			{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [
-			{species: 'Crobat', ability: 'pressure', moves: ['acrobatics']},
+			{species: 'Crobat', ability: 'innerfocus', moves: ['acrobatics']},
 			{species: 'Clefable', ability: 'unaware', moves: ['followme']},
 		]);
 		battle.makeChoices('move counter, move splash', 'move acrobatics 1, move followme');
+		assert.fullHP(battle.p2.active[1]);
+		assert.false.fullHP(battle.p2.active[0]);
+	});
+});
+
+describe('Mirror Coat', function () {
+	afterEach(function () {
+		battle.destroy();
+	});
+
+	it('should deal damage equal to twice the damage taken from the last Special attack', function () {
+		battle = common.createBattle();
+		battle.join('p1', 'Guest 1', 1, [{species: 'Espeon', ability: 'synchronize', moves: ['sonicboom']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: 'Umbreon', ability: 'synchronize', moves: ['mirrorcoat']}]);
+		assert.hurtsBy(battle.p1.active[0], 40, () => battle.commitDecisions());
+	});
+
+	it('should deal damage based on the last hit from the last Special attack', function () {
+		battle = common.createBattle();
+		battle.join('p1', 'Guest 1', 1, [{species: 'Espeon', ability: 'synchronize', moves: ['watershuriken']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: 'Umbreon', ability: 'synchronize', moves: ['mirrorcoat']}]);
+		let lastDamage = 0;
+		battle.onEvent('Damage', battle.getFormat(), function (damage, attacker, defender, move) {
+			if (move.id === 'watershuriken') {
+				lastDamage = damage;
+			}
+		});
+
+		battle.commitDecisions();
+		assert.strictEqual(battle.p1.active[0].maxhp - battle.p1.active[0].hp, 2 * lastDamage);
+	});
+
+	it('should fail if user is not damaged by Special attacks this turn', function () {
+		battle = common.createBattle();
+		battle.join('p1', 'Guest 1', 1, [{species: 'Espeon', ability: 'synchronize', moves: ['tackle']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: 'Umbreon', ability: 'synchronize', moves: ['mirrorcoat']}]);
+		assert.false.hurts(battle.p1.active[0], () => battle.commitDecisions());
+	});
+
+	it('should target the opposing Pokemon that hit the user with a Special attack most recently that turn', function () {
+		battle = common.createBattle({gameType: 'doubles'});
+		battle.join('p1', 'Guest 1', 1, [
+			{species: 'Mew', ability: 'synchronize', moves: ['mirrorcoat']},
+			{species: 'Lucario', ability: 'justified', item: 'laggingtail', moves: ['aurasphere']},
+		]);
+		battle.join('p2', 'Guest 2', 1, [
+			{species: 'Crobat', ability: 'innerfocus', moves: ['venoshock']},
+			{species: 'Avalugg', ability: 'sturdy', moves: ['flashcannon']},
+		]);
+		battle.makeChoices('move mirrorcoat, move aurasphere -1', 'move venoshock 1, move flashcannon 1');
+		assert.fullHP(battle.p1.active[1]);
+		assert.fullHP(battle.p2.active[0]);
+		assert.false.fullHP(battle.p2.active[1]);
+	});
+
+	it('should bypass Follow Me', function () {
+		battle = common.createBattle({gameType: 'doubles'});
+		battle.join('p1', 'Guest 1', 1, [
+			{species: 'Mew', ability: 'synchronize', moves: ['mirrorcoat']},
+			{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
+		]);
+		battle.join('p2', 'Guest 2', 1, [
+			{species: 'Crobat', ability: 'innerfocus', moves: ['venoshock']},
+			{species: 'Clefable', ability: 'unaware', moves: ['followme']},
+		]);
+		battle.makeChoices('move mirrorcoat, move splash', 'move venoshock 1, move followme');
 		assert.fullHP(battle.p2.active[1]);
 		assert.false.fullHP(battle.p2.active[0]);
 	});

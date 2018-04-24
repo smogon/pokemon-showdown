@@ -702,8 +702,8 @@ let BattleAbilities = {
 	"disguise": {
 		desc: "If this Pokemon is a Mimikyu, the first hit it takes in battle deals 0 neutral damage. Its disguise is then broken and it changes to Busted Form. Confusion damage also breaks the disguise.",
 		shortDesc: "If this Pokemon is a Mimikyu, the first hit it takes in battle deals 0 neutral damage.",
-		onAnyModifyDamage: function (damage, source, target, effect) {
-			if (target !== this.effectData.target) return;
+		onDamagePriority: 1,
+		onDamage: function (damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move' && ['mimikyu', 'mimikyutotem'].includes(target.template.speciesid) && !target.transformed) {
 				this.add('-activate', target, 'ability: Disguise');
 				this.effectData.busted = true;
@@ -715,8 +715,6 @@ let BattleAbilities = {
 			let pokemon = this.activeTarget;
 			if (!['mimikyu', 'mimikyutotem'].includes(pokemon.template.speciesid) || pokemon.transformed || (pokemon.volatiles['substitute'] && !(move.flags['authentic'] || move.infiltrates))) return;
 			if (!pokemon.runImmunity(move.type)) return;
-			// Workaround to suppress crit since onCriticalHit can't be a function in the type checker
-			move.crit = false;
 			return 0;
 		},
 		onUpdate: function (pokemon) {
