@@ -20,6 +20,15 @@ let BattleItems = {
 		desc: "No competitive use.",
 		onBasePower: function () {},
 	},
+	dragonscale: {
+		inherit: true,
+		onBasePower: function (basePower, user, target, move) {
+			if (move.type === 'Dragon') {
+				return basePower * 1.1;
+			}
+		},
+		desc: "Holder's Dragon-type attacks have 1.1x power. Evolves Seadra (trade).",
+	},
 	focusband: {
 		inherit: true,
 		desc: "Holder has a ~11.7% chance to survive an attack that would KO it with 1 HP.",
@@ -89,10 +98,6 @@ let BattleItems = {
 		isNonstandard: false,
 	},
 	burntberry: {
-		inherit: true,
-		isNonstandard: false,
-	},
-	dragonscale: {
 		inherit: true,
 		isNonstandard: false,
 	},
