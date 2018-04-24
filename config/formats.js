@@ -77,9 +77,19 @@ let Formats = [
 		],
 
 		mod: 'gen7',
+		searchShow: false,
 		ruleset: ['[Gen 7] UU'],
 		banlist: ['UU', 'BL2', 'Aurora Veil'],
 		unbanlist: ['Drought'],
+	},
+	{
+		name: "[Gen 7] RU (suspect test)",
+		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3633367/">RU Suspect Test</a>`],
+
+		mod: 'gen7',
+		ruleset: ['[Gen 7] UU'],
+		banlist: ['UU', 'BL2', 'Aurora Veil'],
+		unbanlist: ['Entei', 'Drought'],
 	},
 	{
 		name: "[Gen 7] NU",
