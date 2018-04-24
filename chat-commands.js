@@ -1861,7 +1861,7 @@ exports.commands = {
 		let unlocked = Punishments.unlock(target);
 
 		if (unlocked) {
-			const unlockMessage = `${unlocked.join(", "} ${((unlocked.length > 1) ? "were" : "was")} unlocked by ${user.name}. ${reason}`;
+			const unlockMessage = `${unlocked.join(", ")} ${((unlocked.length > 1) ? "were" : "was")} unlocked by ${user.name}. ${reason}`;
 			this.addModAction(unlockMessage);
 			// Notify staff room when a user is unlocked outside of it.
 			if (!reason && room.id !== 'staff' && Rooms('staff')) {
