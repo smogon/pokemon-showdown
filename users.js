@@ -1232,7 +1232,7 @@ class User {
 	 * @param {boolean} includeTrusted
 	 * @param {boolean} forPunishment
 	 */
-	getAltUsers(includeTrusted, forPunishment) {
+	getAltUsers(includeTrusted = false, forPunishment = false) {
 		let alts = findUsers([this.getLastId()], Object.keys(this.ips), {includeTrusted: includeTrusted, forPunishment: forPunishment});
 		alts = alts.filter(user => user !== this);
 		if (forPunishment) alts.unshift(this);
