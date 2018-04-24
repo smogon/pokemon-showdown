@@ -638,7 +638,7 @@ class CommandContext {
 	}
 	/**
 	 * @param {string} action
-	 * @param {string | User} user
+	 * @param {string | User?} user
 	 * @param {string} note
 	 * @param {object} options
 	 */
@@ -687,10 +687,10 @@ class CommandContext {
 	}
 	/**
 	 * @param {string} permission
-	 * @param {string | User} target
-	 * @param {BasicChatRoom} room
+	 * @param {string | User?} target
+	 * @param {BasicChatRoom?} room
 	 */
-	can(permission, target, room) {
+	can(permission, target = null, room = null) {
 		if (!this.user.can(permission, target, room)) {
 			this.errorReply(this.cmdToken + this.fullCmd + " - Access denied.");
 			return false;
@@ -729,10 +729,10 @@ class CommandContext {
 		return true;
 	}
 	/**
-	 * @param {?boolean} ignoreCooldown
-	 * @param {?string} suppressMessage
+	 * @param {boolean} [ignoreCooldown = false]
+	 * @param {?string} [suppressMessage = null]
 	 */
-	runBroadcast(ignoreCooldown, suppressMessage) {
+	runBroadcast(ignoreCooldown = false, suppressMessage = null) {
 		if (this.broadcasting || this.cmdToken !== BROADCAST_TOKEN) {
 			// Already being broadcast, or the user doesn't intend to broadcast.
 			return true;
@@ -778,11 +778,11 @@ class CommandContext {
 		return false;
 	}
 	/**
-	 * @param {string} message
+	 * @param {string?} message
 	 * @param {BasicChatRoom?} [room]
 	 * @param {User?} [targetUser]
 	 */
-	canTalk(message, room, targetUser) {
+	canTalk(message = null, room = null, targetUser = null) {
 		// @ts-ignore
 		if (!room) room = this.room;
 		if (!targetUser && this.pmTarget) {
@@ -941,13 +941,14 @@ class CommandContext {
 	 * @param {string} uri
 	 * @param {boolean} isRelative
 	 */
-	canEmbedURI(uri, isRelative) {
+	canEmbedURI(uri, isRelative = false) {
 		if (uri.startsWith('https://')) return uri;
 		if (uri.startsWith('//')) return uri;
 		if (uri.startsWith('data:')) return uri;
 		if (!uri.startsWith('http://')) {
 			if (/^[a-z]+:\/\//.test(uri) || isRelative) {
-				return this.errorReply("URIs must begin with 'https://' or 'http://' or 'data:'");
+				this.errorReply("URIs must begin with 'https://' or 'http://' or 'data:'");
+				return null;
 			}
 		} else {
 			uri = uri.slice(7);
@@ -976,7 +977,8 @@ class CommandContext {
 			return '//' + uri;
 		}
 		if (domain === 'bit.ly') {
-			return this.errorReply("Please don't use URL shorteners.");
+			this.errorReply("Please don't use URL shorteners.");
+			return null;
 		}
 		// unknown URI, allow HTTP to be safe
 		return 'http://' + uri;
@@ -992,7 +994,7 @@ class CommandContext {
 		while ((match = images.exec(html))) {
 			if (this.room.isPersonal && !this.user.can('announce')) {
 				this.errorReply("Images are not allowed in personal rooms.");
-				return false;
+				return null;
 			}
 			if (!/width=([0-9]+|"[0-9]+")/i.test(match[0]) || !/height=([0-9]+|"[0-9]+")/i.test(match[0])) {
 				// Width and height are required because most browsers insert the
@@ -1000,12 +1002,12 @@ class CommandContext {
 				// image is loaded, this changes the height of the chat area, which
 				// messes up autoscrolling.
 				this.errorReply('All images must have a width and height attribute');
-				return false;
+				return null;
 			}
 			let srcMatch = /src\s*=\s*"?([^ "]+)(\s*")?/i.exec(match[0]);
 			if (srcMatch) {
 				let uri = this.canEmbedURI(srcMatch[1], true);
-				if (!uri) return false;
+				if (!uri) return null;
 				html = html.slice(0, match.index + srcMatch.index) + 'src="' + uri + '"' + html.slice(match.index + srcMatch.index + srcMatch[0].length);
 				// lastIndex is inaccurate since html was changed
 				images.lastIndex = match.index + 11;
@@ -1014,11 +1016,11 @@ class CommandContext {
 		if ((this.room.isPersonal || this.room.isPrivate === true) && !this.user.can('lock') && html.replace(/\s*style\s*=\s*"?[^"]*"\s*>/g, '>').match(/<button[^>]/)) {
 			this.errorReply('You do not have permission to use scripted buttons in HTML.');
 			this.errorReply('If you just want to link to a room, you can do this: <a href="/roomid"><button>button contents</button></a>');
-			return false;
+			return null;
 		}
 		if (/>here.?</i.test(html) || /click here/i.test(html)) {
 			this.errorReply('Do not use "click here"');
-			return false;
+			return null;
 		}
 
 		// check for mismatched tags
@@ -1029,11 +1031,11 @@ class CommandContext {
 				if (tag.charAt(1) === '/') {
 					if (!stack.length) {
 						this.errorReply("Extraneous </" + tag.substr(2) + "> without an opening tag.");
-						return false;
+						return null;
 					}
 					if (tag.substr(2) !== stack.pop()) {
 						this.errorReply("Missing </" + tag.substr(2) + "> or it's in the wrong place.");
-						return false;
+						return null;
 					}
 				} else {
 					stack.push(tag.substr(1));
@@ -1041,7 +1043,7 @@ class CommandContext {
 			}
 			if (stack.length) {
 				this.errorReply("Missing </" + stack.pop() + ">.");
-				return false;
+				return null;
 			}
 		}
 

@@ -12,7 +12,11 @@
 
 'use strict';
 
-exports.commands = {
+/** @typedef {(this: CommandContext, target: string, room: BasicChatRoom, user: User, connection: Connection, cmd: string, message: string) => (void)} ChatHandler */
+/** @typedef {{[k: string]: ChatHandler | string | true | string[]}} ChatCommands */
+
+/** @type {ChatCommands} */
+const commands = {
 
 	'!whois': true,
 	ip: 'whois',
@@ -290,7 +294,7 @@ exports.commands = {
 		let [ip, roomid] = this.splitOne(target);
 		let targetRoom = roomid ? Rooms(roomid) : null;
 		if (!targetRoom && targetRoom !== null) return this.errorReply(`The room "${roomid}" does not exist.`);
-		let results = [];
+		let results = /** @type {string[]} */ ([]);
 		let isAll = (cmd === 'ipsearchall');
 
 		if (/[a-z]/.test(ip)) {
@@ -469,6 +473,7 @@ exports.commands = {
 		}
 
 		if (showDetails) {
+			/** @type {AnyObject} */
 			let details;
 			if (newTargets[0].searchType === 'pokemon') {
 				let pokemon = mod.getTemplate(newTargets[0].name);
@@ -492,9 +497,9 @@ exports.commands = {
 				};
 				if (pokemon.color && mod.gen >= 5) details["Dex Colour"] = pokemon.color;
 				if (pokemon.eggGroups && mod.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
-				let evos = [];
-				pokemon.evos.forEach(evo => {
-					evo = mod.getTemplate(evo);
+				let evos = /** @type {string[]} */ ([]);
+				pokemon.evos.forEach(evoName => {
+					const evo = mod.getTemplate(evoName);
 					if (evo.gen <= mod.gen) {
 						evos.push(evo.name + " (" + evo.evoLevel + ")");
 					}
@@ -642,9 +647,10 @@ exports.commands = {
 		if (!target) return this.parse('/help weakness');
 		if (!this.runBroadcast()) return;
 		target = target.trim();
-		let mod = target.split(',');
-		mod = Dex.mod(toId(mod[mod.length - 1])) || Dex;
+		let modName = target.split(',');
+		let mod = Dex.mod(toId(modName[modName.length - 1])) || Dex;
 		let targets = target.split(/ ?[,/] ?/);
+		/** @type {{types: string[], [k: string]: any}} */
 		let pokemon = mod.getTemplate(targets[0]);
 		let type1 = mod.getType(targets[0]);
 		let type2 = mod.getType(targets[1]);
@@ -1585,9 +1591,9 @@ exports.commands = {
 		if (!this.can('lockdown')) return false;
 
 		let buf = `<strong>${process.pid}</strong> - Main<br />`;
-		Sockets.workers.forEach(worker => {
+		for (const worker of Sockets.workers.values()) {
 			buf += `<strong>${worker.pid || worker.process.pid}</strong> - Sockets ${worker.id}<br />`;
-		});
+		}
 
 		const processManagers = require('../lib/process-manager').processManagers;
 		for (const manager of processManagers) {
@@ -2124,6 +2130,8 @@ exports.commands = {
 		`!htmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: ~ & #`,
 	],
 };
+
+exports.commands = commands;
 
 process.nextTick(() => {
 	Dex.includeData();

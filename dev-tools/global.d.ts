@@ -20,7 +20,6 @@ import * as ChatType from './../chat'
 declare global {
 	// modules
 	const Dex: typeof DexType
-	const Chat: typeof ChatType
 	const Punishments: typeof PunishmentsType
 	const Ladders: typeof LaddersType
 	const LadderStoreT: typeof LadderStoreType
@@ -76,4 +75,8 @@ declare global {
 	const Users: typeof UsersType
 	const User: typeof UsersType.User
 	const Connection: typeof UsersType.Connection
+
+	// chat
+	const Chat: typeof ChatType
+	const CommandContext: typeof ChatType.CommandContext
 }
