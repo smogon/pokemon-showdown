@@ -1941,7 +1941,7 @@ exports.commands = {
 			let guests = affected.length - 1;
 			affected = affected.slice(1).map(user => user.getLastName()).filter(alt => alt.substr(0, 7) !== '[Guest ');
 			guests -= affected.length;
-			displayMessage = `(`${name}'s ${(acAccount ? `ac account: ${acAccount}, ` : ``)} banned alts: ${affected.join(", ")} ${(guests ? ` [${guests} guests]` : ``)})`;
+			displayMessage = `(${name}'s ${(acAccount ? `ac account: ${acAccount}, ` : ``)} banned alts: ${affected.join(", ")} ${(guests ? ` [${guests} guests]` : ``)})`;
 			this.privateModAction(displayMessage);
 			for (const user of affected) {
 				this.add(`|unlink|${toId(user)}`);
@@ -3400,9 +3400,9 @@ exports.commands = {
 		}
 		function getPokemon(input) {
 			if (/^[0-9]+$/.test(input)) {
-				return '.pokemon[' + (parseInt(input) - 1) + ']';
+				return `.pokemon[${(parseInt(input) - 1)}]`;
 			}
-			return ".pokemon.find(p => p.speciesid===`"${toId(targets[1])}"`)";
+			return `.pokemon.find(p => p.speciesid==='${toId(targets[1])}')`;
 		}
 		switch (cmd) {
 		case 'hp':
@@ -3461,8 +3461,8 @@ exports.commands = {
 
 	allowexportinputlog(/** @type {string} */ target, /** @type {Room?} */ room, /** @type {User} */ user) {
 		const battle = room.battle;
-		if (!battle) return this.errorReply(`Must be in a battle`);
-		if (!battle.allowExtraction) return this.errorReply(`Someone must have requested extraction`);
+		if (!battle) return this.errorReply(`Must be in a battle.`);
+		if (!battle.allowExtraction) return this.errorReply(`Someone must have requested extraction.`);
 		const targetUser = Users.getExact(target);
 
 		if (toId(battle.playerNames[0]) === user.userid) {
@@ -3485,7 +3485,7 @@ exports.commands = {
 		if (!battle) return this.errorReply(`This command only works in battle rooms.`);
 		if (!battle.inputLog) {
 			this.errorReply(`This command only works when the battle has ended - if the battle has stalled, ask players to forfeit.`);
-			if (user.can('forcewin')) this.errorReply(`Alternatively, you can end the battle with /forcetie`);
+			if (user.can('forcewin')) this.errorReply(`Alternatively, you can end the battle with /forcetie.`);
 			return;
 		}
 		if (!this.can('exportinputlog', null, room)) return;
@@ -4051,15 +4051,15 @@ exports.commands = {
 			let allCommands = Chat.commands;
 			if (typeof allCommands[target] === 'string') {
 				// If a function changes with command name, help for that command name will be searched first.
-				altCommandHelp = target + 'help';
+				altCommandHelp = `${target}help`;
 				if (altCommandHelp in allCommands) {
 					helpCmd = altCommandHelp;
 				} else {
-					helpCmd = allCommands[target] + 'help';
+					helpCmd = `${allCommands[target]}help`;
 				}
 			} else if (targets.length > 1 && typeof allCommands[targets[0]] === 'object') {
 				// Handle internal namespace commands
-				let helpCmd = targets.pop() + 'help';
+				let helpCmd = `${targets.pop()}help`;
 				let namespace = allCommands[targets.shift()];
 				for (const t of targets) {
 					if (!namespace[t]) return this.errorReply(`Help for the command '${target}' was not found. Try /help for general help.`);
@@ -4067,7 +4067,7 @@ exports.commands = {
 				}
 				if (typeof namespace[helpCmd] === 'object') return this.sendReply(namespace[helpCmd].join('\n'));
 				if (typeof namespace[helpCmd] === 'function') return this.run(namespace[helpCmd]);
-				return this.errorReply(`Help for the command '${target}' was not found. Try /help for general help`);
+				return this.errorReply(`Help for the command '${target}' was not found. Try /help for general help.`);
 			} else {
 				helpCmd = `${target}help`;
 			}
@@ -4079,7 +4079,7 @@ exports.commands = {
 					this.sendReply(allCommands[helpCmd].join('\n'));
 				}
 			} else {
-				this.errorReply(`Help for the command '${target}' was not found. Try /help for general help`);
+				this.errorReply(`Help for the command '${target}' was not found. Try /help for general help.`);
 			}
 		}
 	},
