@@ -38,7 +38,7 @@ class RandomGen2Teams extends RandomGen3Teams {
 			let skip = false;
 
 			// Ensure 1 Uber at most
-			// Ensure 2 mons of same tier at most (this includes OU,BL,UU,NU; other tiers not supported yet)
+			// Ensure 2 mons of same tier at most (this includes OU,UUBL,UU,NU; other tiers not supported yet)
 			let tier = template.tier;
 			switch (tier) {
 			case 'Uber':
@@ -280,7 +280,7 @@ class RandomGen2Teams extends RandomGen3Teams {
 			NFE: 84, // unused
 			NU: 78,
 			UU: 74,
-			BL: 70,
+			UUBL: 70,
 			OU: 68,
 			Uber: 64,
 		};
