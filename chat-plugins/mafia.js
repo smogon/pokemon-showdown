@@ -91,6 +91,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.subs = [];
 		this.autoSub = true;
 		this.requestedSub = [];
+		this.hostRequestedSub = [];
 		this.played = [];
 
 		this.hammerCount = 0;
@@ -654,10 +655,13 @@ class MafiaTracker extends Rooms.RoomGame {
 	}
 
 	nextSub(userid) {
-		if (!this.subs.length || ((!this.requestedSub.length || !this.autoSub) && !userid)) return;
+		if (!this.subs.length || (!this.hostRequestedSub.length && ((!this.requestedSub.length || !this.autoSub)) && !userid)) return;
 		const sub = Users(this.subs.shift(), true);
 		if (!sub || !sub.connected || !sub.named || !this.room.users[sub.userid]) return; // should never happen, just to be safe
-		this.sub(userid || this.requestedSub.shift(), sub.userid);
+		const toSubOut = userid || this.hostRequestedSub.shift() || this.requestedSub.shift();
+		if (this.hostRequestedSub.includes(toSubOut)) this.hostRequestedSub.splice(this.hostRequestedSub.indexOf(toSubOut), 1);
+		if (this.requestedSub.includes(toSubOut)) this.requestedSub.splice(this.requestedSub.indexOf(toSubOut), 1);
+		this.sub(toSubOut, sub.userid);
 	}
 
 	sendPlayerList() {
@@ -707,6 +711,13 @@ class MafiaTracker extends Rooms.RoomGame {
 	}
 
 	onChatMessage(message, user) {
+		const subIndex = this.hostRequestedSub.indexOf(user.userid);
+		if (subIndex !== -1) {
+			this.hostRequestedSub.splice(subIndex, 1);
+			const host = Users(this.hostid);
+			if (host && host.connected) host.sendTo(this.room, `${user.userid} has spoken and been removed from the host sublist.`);
+		}
+
 		if (user.isStaff || (this.room.auth && this.room.auth[user.userid] && this.room.auth[user.userid] !== '+') || this.hostid === user.userid || !this.started) return false;
 		if (!this.players[user.userid] && (!this.dead[user.userid] || !this.dead[user.userid].treestump)) return `You cannot talk while a game of ${this.title} is going on.`;
 		if (this.phase === 'night') return `You cannot talk at night.`;
@@ -873,6 +884,7 @@ exports.pages = {
 			buf += `<p>Please note that you will have to PM all the players their alignment, partners (if any), and other infromation about their role because the server will not provide it.</p>`;
 			buf += `<hr/></details></p>`;
 			buf += `<p style="font-weight:bold;">Sub List: ${room.game.subs.join(', ')}</p>`;
+			buf += `<p style="font-weight:bold;">Players who will be subbed unless they talk: ${room.game.hostRequestedSub.join(', ')}</p>`;
 			buf += `<p style="font-weight:bold;">Players who are requesting a sub: ${room.game.requestedSub.join(', ')}</p>`;
 		}
 		if (!isHost) {
@@ -1372,8 +1384,21 @@ exports.commands = {
 				if (!user.can('mute', null, room) && game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia sub - Access denied for force substituting a player.`);
 				let toSub = target.shift();
 				if (!(toId(toSub) in game.players)) return user.sendTo(targetRoom, `|error|${toSub} is not in the game.`);
-				if (!game.subs.length) return user.sendTo(targetRoom, `|error|There are no subs to replace ${toSub}.`);
-				game.nextSub(toId(toSub));
+				if (!game.subs.length) {
+					if (room.game.hostRequestedSub.indexOf(toId(toSub)) !== -1) return user.sendTo(targetRoom, `|error|${toSub} is already on the list to be subbed out.`);
+					user.sendTo(targetRoom, `|error|There are no subs to replace ${toSub}, they will be subbed if a sub is available before they speak next.`);
+					room.game.hostRequestedSub.unshift(toId(toSub));
+				} else {
+					game.nextSub(toId(toSub));
+				}
+				break;
+			case 'remove':
+				if (!user.can('mute', null, room) && game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia sub - Access denied for force substituting a player.`);
+				const toRemove = toId(target.shift());
+				const toRemoveIndex = room.game.subs.indexOf(toRemove);
+				if (toRemoveIndex === -1) return user.sendTo(room, `|error|${toRemove} is not on the sub list.`);
+				room.game.subs.splice(toRemoveIndex, 1);
+				user.sendTo(room, `${toRemove} has been removed from the sublist`);
 				break;
 			default:
 				if (!user.can('mute', null, room) && game.hostid !== user.userid) return this.errorReply(`/mafia sub - Access denied for force substituting a player.`);
@@ -1392,15 +1417,17 @@ exports.commands = {
 						if (room.game.hostid === alt.userid) return this.errorReply(`${targetUser.name} has an alt as the host. Use /mafia forcesub ${toSub}, ${targetUser.userid} to forcibly sub them in.`);
 					}
 				}
-				if (room.game.subs.includes(targetUser.userid)) this.subs.splice(this.subs.indexOf(targetUser.userid), 1);
-
+				if (room.game.subs.includes(targetUser.userid)) room.game.subs.splice(room.game.subs.indexOf(targetUser.userid), 1);
+				if (room.game.hostRequestedSub.includes(toSubOut)) room.game.hostRequestedSub.splice(room.game.hostRequestedSub.indexOf(toSubOut), 1);
+				if (room.game.requestedSub.includes(toSubOut)) room.game.requestedSub.splice(room.game.requestedSub.indexOf(toSubOut), 1);
 				game.sub(toSubOut, toSubIn);
 			}
 		},
 		subhelp: [
 			`/mafia sub in - Request to sub into the game, or cancel a request to sub out.`,
 			`/mafia sub out - Request to sub out of the game, or cancel a request to sub in.`,
-			`/mafia sub next [player] - Forcibly sub [player] out of the game. Requires host % @ * # & ~`,
+			`/mafia sub next, [player] - Forcibly sub [player] out of the game. Requires host % @ * # & ~`,
+			`/mafia sub remove, [user] - Remove [user] from the sublist. Requres  host % @ * # & ~`,
 			`/mafia sub [player], [user] - Forcibly sub [player] for [user]. Requires host % @ * # & ~`,
 		],
 
