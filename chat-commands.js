@@ -1118,7 +1118,7 @@ exports.commands = {
 			if (user.can('ban', null, room) && cmd !== 'stafftopic') {
 				this.sendReply('Source:');
 				this.sendReplyBox(
-					`<code>/staffintro ${Chat.escapeHTML(room.staffMessage).split('\n').map(line => { return line.replace(/^(\t+)/, (match, $1) => '&nbsp;'.repeat(4 * $1.length)).replace(/^(\s+)/, (match, $1) => '&nbsp;'.repeat($1.length)) }).join('<br />')}</code>`
+					`<code>/staffintro ${Chat.escapeHTML(room.staffMessage).split('\n').map(line => { return line.replace(/^(\t+)/, (match, $1) => '&nbsp;'.repeat(4 * $1.length)).replace(/^(\s+)/, (match, $1) => '&nbsp;'.repeat($1.length)) }).join('<br />')}</code>`;
 				);
 			}
 			return;
