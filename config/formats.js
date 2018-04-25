@@ -106,14 +106,23 @@ let Formats = [
 	{
 		name: "[Gen 7] PU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3625646/">PU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3632456/">PU Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3614892/">PU Viability Rankings</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3614470/">PU Sample Teams</a>`,
 		],
 
 		mod: 'gen7',
+		searchShow: false,
 		ruleset: ['[Gen 7] NU'],
 		banlist: ['NU', 'PUBL'],
+	},
+	{
+		name: "[Gen 7] PU (suspect test)",
+		threads: [`&bullet; <a href="https://www.smogon.com/forums/posts/7768325/">PU Suspect Test</a>`],
+
+		mod: 'gen7',
+		challengeShow: false,
+		ruleset: ['[Gen 7] PU'],
 	},
 	{
 		name: "[Gen 7] LC",
