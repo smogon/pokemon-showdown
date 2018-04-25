@@ -543,9 +543,9 @@ class RandomGen3Teams extends RandomGen4Teams {
 			LC: 87,
 			NFE: 85,
 			NU: 83,
-			BL2: 81,
+			NUBL: 81,
 			UU: 79,
-			BL: 77,
+			UUBL: 77,
 			OU: 75,
 			Uber: 71,
 		};

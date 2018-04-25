@@ -177,7 +177,7 @@ let BattleFormatsData = {
 	crobat: {
 		inherit: true,
 		randomBattleMoves: ["bravebird", "roost", "superfang", "taunt", "nastyplot", "sludgebomb", "airslash", "uturn", "heatwave", "hiddenpowerfighting", "crosspoison", "pursuit"],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	oddish: {
 		inherit: true,
@@ -639,7 +639,7 @@ let BattleFormatsData = {
 	espeon: {
 		inherit: true,
 		randomBattleMoves: ["psychic", "shadowball", "hiddenpowerground", "calmmind", "morningsun", "batonpass", "substitute"],
-		tier: "BL2",
+		tier: "NUBL",
 	},
 	umbreon: {
 		inherit: true,
@@ -663,7 +663,7 @@ let BattleFormatsData = {
 	},
 	porygonz: {
 		randomBattleMoves: ["triattack", "thunderbolt", "icebeam", "darkpulse", "hiddenpowerfighting", "agility", "trick", "nastyplot"],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	omanyte: {
 		tier: "LC",
@@ -878,7 +878,7 @@ let BattleFormatsData = {
 	},
 	yanmega: {
 		randomBattleMoves: ["bugbuzz", "airslash", "hiddenpowerground", "uturn", "protect", "hiddenpowerfire"],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	wooper: {
 		tier: "LC",
@@ -893,7 +893,7 @@ let BattleFormatsData = {
 	},
 	honchkrow: {
 		randomBattleMoves: ["superpower", "suckerpunch", "bravebird", "heatwave", "pursuit"],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	misdreavus: {
 		inherit: true,
@@ -961,7 +961,7 @@ let BattleFormatsData = {
 	},
 	heracross: {
 		randomBattleMoves: ["closecombat", "megahorn", "stoneedge", "nightslash", "substitute"],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	sneasel: {
 		inherit: true,
@@ -1061,12 +1061,12 @@ let BattleFormatsData = {
 	raikou: {
 		inherit: true,
 		randomBattleMoves: ["thunderbolt", "hiddenpowerice", "aurasphere", "calmmind", "shadowball"],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	entei: {
 		inherit: true,
 		randomBattleMoves: ["extremespeed", "flareblitz", "hiddenpowergrass", "stoneedge", "ironhead"],
-		tier: "BL2",
+		tier: "NUBL",
 	},
 	suicune: {
 		inherit: true,
@@ -1218,7 +1218,7 @@ let BattleFormatsData = {
 	},
 	gallade: {
 		randomBattleMoves: ["swordsdance", "closecombat", "psychocut", "stoneedge", "icepunch", "shadowsneak", "nightslash", "trick"],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	surskit: {
 		inherit: true,
@@ -1574,7 +1574,7 @@ let BattleFormatsData = {
 	},
 	froslass: {
 		randomBattleMoves: ["icebeam", "spikes", "destinybond", "shadowball", "taunt", "trick"],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	spheal: {
 		inherit: true,
@@ -1735,7 +1735,7 @@ let BattleFormatsData = {
 	},
 	staraptor: {
 		randomBattleMoves: ["bravebird", "closecombat", "return", "uturn", "pursuit", "quickattack", "substitute", "roost", "doubleedge"],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	bidoof: {
 		inherit: true,
@@ -1895,7 +1895,7 @@ let BattleFormatsData = {
 		tier: "OU",
 	},
 	hippopotas: {
-		tier: "BL2",
+		tier: "NUBL",
 	},
 	hippowdon: {
 		randomBattleMoves: ["earthquake", "slackoff", "roar", "stealthrock", "toxic", "icefang", "stoneedge"],
@@ -1927,11 +1927,11 @@ let BattleFormatsData = {
 		tier: "NU",
 	},
 	snover: {
-		tier: "BL2",
+		tier: "NUBL",
 	},
 	abomasnow: {
 		randomBattleMoves: ["blizzard", "iceshard", "woodhammer", "leechseed", "substitute", "earthquake", "hiddenpowerfire", "energyball"],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	rotom: {
 		randomBattleMoves: ["thunderbolt", "shadowball", "substitute", "painsplit", "hiddenpowerfighting", "willowisp", "trick"],
@@ -2006,7 +2006,7 @@ let BattleFormatsData = {
 	cresselia: {
 		inherit: true,
 		randomBattleMoves: ["moonlight", "psychic", "hiddenpowerfire", "icebeam", "thunderwave", "toxic", "substitute", "calmmind", "reflect", "lightscreen"],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	phione: {
 		inherit: true,

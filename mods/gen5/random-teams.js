@@ -597,11 +597,11 @@ class RandomGen5Teams extends RandomGen6Teams {
 		let levelScale = {
 			Uber: 73,
 			OU: 75,
-			BL: 76,
+			UUBL: 76,
 			UU: 77,
-			BL2: 78,
+			RUBL: 78,
 			RU: 79,
-			BL3: 80,
+			NUBL: 80,
 			NU: 81,
 		};
 		let customScale = {

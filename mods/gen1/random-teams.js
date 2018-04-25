@@ -127,8 +127,8 @@ class RandomGen1Teams extends RandomGen2Teams {
 		let pokemon = [];
 
 		let handicapMons = ['magikarp', 'weedle', 'kakuna', 'caterpie', 'metapod'];
-		let nuTiers = ['UU', 'BL', 'NFE', 'LC', 'NU'];
-		let uuTiers = ['NFE', 'UU', 'BL', 'NU'];
+		let nuTiers = ['UU', 'UUBL', 'NFE', 'LC', 'NU'];
+		let uuTiers = ['NFE', 'UU', 'UUBL', 'NU'];
 
 		let n = 1;
 		let pokemonPool = [];
