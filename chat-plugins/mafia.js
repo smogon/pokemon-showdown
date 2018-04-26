@@ -1229,7 +1229,7 @@ exports.commands = {
 			target = target.split(',');
 			if (Rooms(target[0]) && Rooms(target[0]).users[user.userid]) targetRoom = Rooms(target.shift());
 			if (!targetRoom || !targetRoom.game || targetRoom.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
-			if (!user.can('mute', null, room) && targetRoom.game.hostid !== user.userid && target) return user.sendTo(targetRoom, `|error|/mafia deadline - Access denied.`);
+			if (!user.can('mute', null, room) && targetRoom.game.hostid !== user.userid && target.join('')) return user.sendTo(targetRoom, `|error|/mafia deadline - Access denied.`);
 			target = toId(target.join(''));
 			if (target === 'off') {
 				return targetRoom.game.setDeadline('off');
