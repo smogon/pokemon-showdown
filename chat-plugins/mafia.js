@@ -117,11 +117,8 @@ class MafiaTracker extends Rooms.RoomGame {
 
 	join(user) {
 		if (this.phase !== 'signups') return user.sendTo(this.room, `|error|The game of ${this.title} has already started.`);
-		if (user.userid === this.hostid) return user.sendTo(this.room, `|error|You cannot host and play!`);
-		for (const alt of user.getAltUsers(true)) {
-			if (Object.keys(this.players).includes(alt.userid)) return user.sendTo(this.room, `|error|You already have an alt in the game.`);
-			if (this.hostid === alt.userid) return user.sendTo(this.room, `|error|You cannot join a game with an alt as the host.`);
-		}
+		const canJoin = this.canJoin(user, true);
+		if (canJoin.length) return user.sendTo(this.room, `|error|${canJoin}`);
 		if (!this.addPlayer(user)) return user.sendTo(this.room, `|error|You have already joined the game of ${this.title}.`);
 		if (this.subs.includes(user.userid)) this.subs.splice(this.subs.indexOf(user.userid), 1);
 		this.players[user.userid].updateHtmlRoom();
@@ -547,16 +544,8 @@ class MafiaTracker extends Rooms.RoomGame {
 			delete this.dead[deadPlayer.userid];
 		} else {
 			const targetUser = Users(deadPlayer);
-			if (!targetUser || !targetUser.connected) return user.sendTo(this.room, `|error|The user "${deadPlayer}" was not found.`);
-			if (!this.room.users[targetUser.userid]) return user.sendTo(this.room, `|error|${targetUser.name} is not in this room, and cannot be added to the game.`);
-			if (targetUser.userid === this.hostid) return user.sendTo(this.room, `|error|${targetUser.name} cannot host and play!`);
-			if (!force) {
-				for (const alt of targetUser.getAltUsers(true)) {
-					if (Object.keys(this.players).includes(alt.userid)) return user.sendTo(this.room, `|error|${targetUser.name} already has an alt in the game. Use /mafia forceadd ${targetUser.name} to forcibly add them.`);
-					if (this.hostid === alt.userid) return user.sendTo(this.room, `|error|${targetUser.name} has an alt as the host. Use /mafia forceadd ${targetUser.name} to forcibly add them.`);
-				}
-			}
-			if (this.subs.includes(targetUser.userid)) this.subs.splice(this.subs.indexOf(targetUser.userid), 1);
+			const canJoin = this.canJoin(targetUser, false, force);
+			if (canJoin.length) return user.sendTo(this.room, `|error|${canJoin}`);
 			let player = this.makePlayer(targetUser);
 			if (this.started) {
 				player.role = {
@@ -708,6 +697,21 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 		output += `</div>`;
 		return output;
+	}
+
+	canJoin(user, self, force) {
+		const targetString = self ? `You are` : `${user.userid} is`;
+		if (!user || !user.connected) return `The user "${user}" was not found.`;
+		if (!this.room.users[user.userid]) return `${targetString} not in the room.`;
+		if (this.players[user.userid]) return `${targetString} already in the game.`;
+		if (this.hostid === user.userid) return `${targetString} the host.`;
+		if (!force) {
+			for (const alt of user.getAltUsers(true)) {
+				if (this.players[alt.userid]) return `${self ? `You already have` : `${user.userid} already has`} an alt in the game.`;
+				if (this.hostid === alt.userid) return `${self ? `You have` : `${user.userid} has`} an alt as the game host.`;
+			}
+		}
+		return true;
 	}
 
 	onChatMessage(message, user) {
@@ -1352,14 +1356,10 @@ exports.commands = {
 					game.players[user.userid].updateHtmlRoom();
 				} else {
 					if (!this.canTalk(null, targetRoom)) return;
-					if (game.hostid === user.userid) return user.sendTo(targetRoom, `|error|The host cannot sub into the game.`);
 					if (game.subs.includes(user.userid)) return user.sendTo(targetRoom, `|error|You are already on the sub list.`);
 					if (game.played.includes(user.userid)) return user.sendTo(targetRoom, `|error|You cannot sub back into the game.`);
-					if (game.subs.includes(user.userid)) return user.sendTo(targetRoom, `|error|You have already requested to be subbed in.`);
-					for (const alt of user.getAltUsers(true)) {
-						if (Object.keys(game.players).includes(alt.userid)) return user.sendTo(targetRoom, `|error|You already have an alt in the game.`);
-						if (game.hostid === alt.userid) return user.sendTo(targetRoom, `|error|You cannot join a game with an alt as the host.`);
-					}
+					const canJoin = room.game.canJoin(user, true);
+					if (canJoin.length) return user.sendTo(targetRoom, `|error|${canJoin}`);
 					game.subs.push(user.userid);
 					game.nextSub();
 					// Update spectator's view
@@ -1407,16 +1407,8 @@ exports.commands = {
 				if (!(toSubOut in game.players)) return this.errorReply(`${toSubOut} is not in the game.`);
 
 				const targetUser = Users(toSubIn);
-				if (!targetUser || !targetUser.connected) return this.errorReply(`The user "${toSubIn}" was not found.`);
-				if (!room.users[targetUser.userid]) return this.errorReply(`${targetUser.name} is not in this room, and cannot be added to the game.`);
-				if (targetUser.userid === room.game.hostid) return this.errorReply(`${targetUser.name} cannot host and play!`);
-				const force = cmd === 'forcesub';
-				if (!force) {
-					for (const alt of targetUser.getAltUsers(true)) {
-						if (Object.keys(room.game.players).includes(alt.userid)) return this.errorReply(`${targetUser.name} already has an alt in the game. Use /mafia forcesub ${toSub}, ${targetUser.userid} to forcibly sub them in.`);
-						if (room.game.hostid === alt.userid) return this.errorReply(`${targetUser.name} has an alt as the host. Use /mafia forcesub ${toSub}, ${targetUser.userid} to forcibly sub them in.`);
-					}
-				}
+				const canJoin = room.game.canJoin(targetUser, false, cmd === 'forcesub');
+				if (canJoin.length) return user.sendTo(targetRoom, `|error|${canJoin}`);
 				if (room.game.subs.includes(targetUser.userid)) room.game.subs.splice(room.game.subs.indexOf(targetUser.userid), 1);
 				if (room.game.hostRequestedSub.includes(toSubOut)) room.game.hostRequestedSub.splice(room.game.hostRequestedSub.indexOf(toSubOut), 1);
 				if (room.game.requestedSub.includes(toSubOut)) room.game.requestedSub.splice(room.game.requestedSub.indexOf(toSubOut), 1);
