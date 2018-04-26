@@ -1944,9 +1944,6 @@ class RandomTeams extends Dex.ModdedDex {
 			let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
 			if (!template.exists) continue;
 
-			let set = this.randomFactorySet(template, pokemon.length, teamData, chosenTier);
-			if (!set) continue;
-
 			let speciesFlags = this.randomFactorySets[chosenTier][template.speciesid].flags;
 
 			// Limit to one of each species (Species Clause)
@@ -1954,6 +1951,9 @@ class RandomTeams extends Dex.ModdedDex {
 
 			// Limit the number of Megas to one
 			if (teamData.megaCount >= 1 && speciesFlags.megaOnly) continue;
+
+			let set = this.randomFactorySet(template, pokemon.length, teamData, chosenTier);
+			if (!set) continue;
 
 			// Limit the number of Z moves to one
 			if (teamData.zCount >= 1 && set.item.length !== 0 && (set.item + '').indexOf("ium Z") !== -1) continue;
