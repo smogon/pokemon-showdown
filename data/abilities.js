@@ -2026,7 +2026,7 @@ let BattleAbilities = {
 		num: 121,
 	},
 	"mummy": {
-		desc: "Pokemon making contact with this Pokemon have their Ability changed to Mummy. Does not affect the Abilities Multitype or Stance Change.",
+		desc: "Pokemon making contact with this Pokemon have their Ability changed to Mummy. Does not affect the Abilities Multitype, Stance Change, Schooling, Battle Bond, Shields Down, RKS System, and Disguise.",
 		shortDesc: "Pokemon making contact with this Pokemon have their Ability changed to Mummy.",
 		id: "mummy",
 		name: "Mummy",
