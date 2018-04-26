@@ -1827,7 +1827,7 @@ exports.BattleFormatsData = {
 	},
 	blaziken: {
 		inherit: true,
-		randomBattleMoves: ["flareblitz", "highjumpkick", "protect", "swordsdance", "substitute", "batonpass", "stoneedge", "knockoff"],
+		randomBattleMoves: ["blazekick", "highjumpkick", "protect", "swordsdance", "substitute", "batonpass", "stoneedge", "knockoff"],
 		tier: "Uber",
 		doublesTier: "DUU",
 	},
