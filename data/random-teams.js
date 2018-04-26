@@ -2065,13 +2065,12 @@ class RandomTeams extends Dex.ModdedDex {
 	 * @param {Template} template
 	 * @param {number} slot
 	 * @param {RandomTeamsTypes["FactoryTeamDetails"]} teamData
-	 * @param {string} tier
 	 * @return {RandomTeamsTypes["RandomFactorySet"] | false}
 	 */
-	randomBSSFactorySet(template, slot, teamData, tier) {
+	randomBSSFactorySet(template, slot, teamData) {
 		let speciesId = toId(template.species);
 		// let flags = this.randomBSSFactorySets[tier][speciesId].flags;
-		let setList = this.randomBSSFactorySets[tier][speciesId].sets;
+		let setList = this.randomBSSFactorySets[speciesId].sets;
 
 		let movesMax = {'batonpass': 1, 'stealthrock': 1, 'spikes': 1, 'toxicspikes': 1, 'doubleedge': 1, 'trickroom': 1};
 		let requiredMoves = {};
@@ -2087,14 +2086,14 @@ class RandomTeams extends Dex.ModdedDex {
 		let effectivePool = [];
 		let priorityPool = [];
 		for (const curSet of setList) {
-			let itemData = this.getItem(curSet.item);
-			if (teamData.megaCount > 1 && itemData.megaStone) continue; // reject 3+ mega stones
-			if (teamData.zCount && teamData.zCount > 1 && itemData.zMove) continue; // reject 3+ Z stones
-			if (teamData.has[itemData.id]) continue; // Item clause
+			let item = this.getItem(curSet.item);
+			if (teamData.megaCount > 1 && item.megaStone) continue; // reject 3+ mega stones
+			if (teamData.zCount && teamData.zCount > 1 && item.zMove) continue; // reject 3+ Z stones
+			if (teamData.has[item.id]) continue; // Item clause
 
-			let abilityData = this.getAbility(curSet.ability);
-			if (weatherAbilitiesRequire[abilityData.id] && teamData.weather !== weatherAbilitiesRequire[abilityData.id]) continue;
-			if (teamData.weather && weatherAbilities.includes(abilityData.id)) continue; // reject 2+ weather setters
+			let ability = this.getAbility(curSet.ability);
+			if (weatherAbilitiesRequire[ability.id] && teamData.weather !== weatherAbilitiesRequire[ability.id]) continue;
+			if (teamData.weather && weatherAbilities.includes(ability.id)) continue; // reject 2+ weather setters
 
 			if (curSet.species === 'Aron' && teamData.weather !== 'sandstorm') continue; // reject Aron without a Sand Stream user
 
@@ -2141,8 +2140,8 @@ class RandomTeams extends Dex.ModdedDex {
 			shiny: typeof setData.set.shiny === 'undefined' ? this.randomChance(1, 1024) : setData.set.shiny,
 			level: setData.set.level || 50,
 			happiness: typeof setData.set.happiness === 'undefined' ? 255 : setData.set.happiness,
-			evs: setData.set.evs || {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84},
-			ivs: setData.set.ivs || {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31},
+			evs: Object.assign({hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0}, setData.set.evs),
+			ivs: Object.assign({hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31}, setData.set.ivs),
 			nature: setData.set.nature || 'Serious',
 			moves: moves,
 		};
@@ -2155,12 +2154,9 @@ class RandomTeams extends Dex.ModdedDex {
 	randomBSSFactoryTeam(depth = 0) {
 		let forceResult = (depth >= 4);
 
-		// Make chosen tier always BSS
-		const chosenTier = 'BSS';
-
 		let pokemon = [];
 
-		let pokemonPool = Object.keys(this.randomBSSFactorySets[chosenTier]);
+		let pokemonPool = Object.keys(this.randomBSSFactorySets);
 
 		let teamData = {typeCount: {}, typeComboCount: {}, baseFormes: {}, megaCount: 0, zCount: 0, eeveeLimCount: 0, has: {}, forceResult: forceResult, weaknesses: {}, resistances: {}};
 		/**@type {string[]} */
@@ -2179,7 +2175,7 @@ class RandomTeams extends Dex.ModdedDex {
 			let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
 			if (!template.exists) continue;
 
-			let speciesFlags = this.randomBSSFactorySets[chosenTier][template.speciesid].flags;
+			let speciesFlags = this.randomBSSFactorySets[template.speciesid].flags;
 
 			// Limit to one of each species (Species Clause)
 			if (teamData.baseFormes[template.baseSpecies]) continue;
@@ -2202,7 +2198,7 @@ class RandomTeams extends Dex.ModdedDex {
 			if (speciesFlags.limEevee) teamData.eeveeLimCount++;
 			if (teamData.eeveeLimCount >= 1 && speciesFlags.limEevee) continue;
 
-			let set = this.randomBSSFactorySet(template, pokemon.length, teamData, chosenTier);
+			let set = this.randomBSSFactorySet(template, pokemon.length, teamData);
 			if (!set) continue;
 
 			// Limit 1 of any type combination
