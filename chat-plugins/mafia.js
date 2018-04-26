@@ -182,6 +182,14 @@ class MafiaTracker extends Rooms.RoomGame {
 						let originalKey = key;
 						if (typeof MafiaData.roles[key] === 'string') key = MafiaData.roles[MafiaData.roles[key]].id;
 						if (!role.image && MafiaData.roles[key].image) role.image = MafiaData.roles[key].image;
+						if (MafiaData.roles[key].alignment) {
+							if (role.alignment && role.alignment !== MafiaData.roles[key].alignment) {
+								// A role cant have multiple alignments
+								problems.push(`The role "${role.name}" has multiple possible alignments (${MafiaData.roles[key].alignment} or ${role.alignment})`);
+								break;
+							}
+							role.alignment = MafiaData.roles[key].alignment;
+						}
 						if (MafiaData.roles[key].memo) role.memo = role.memo.concat(MafiaData.roles[key].memo);
 						let index = roleKey.split('_').indexOf(originalKey.split('_')[0]);
 						target.splice(index, originalKey.split('_').length);
@@ -231,7 +239,7 @@ class MafiaTracker extends Rooms.RoomGame {
 				let id = toId(targetId);
 				if (MafiaData.alignments[id]) {
 					if (typeof MafiaData.alignments[id] === 'string') id = MafiaData.alignments[id];
-					if (role.alignment) {
+					if (role.alignment && role.alignment !== MafiaData.alignments[id].id) {
 						// A role cant have multiple alignments
 						problems.push(`The role "${role.name}" has multiple possible alignments (${MafiaData.alignments[id].id} or ${role.alignment})`);
 						break;
