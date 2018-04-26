@@ -69,9 +69,9 @@ exports.commands = {
 		connection.popup(buffer.join("\n\n"));
 	},
 	authhelp: [
-		`/auth - Show global staff for the server.
-		/auth [room] - Show what roomauth a room has.
-		/auth [user] - Show what global and roomauth a user has.`,
+		`/auth - Show global staff for the server.`,
+		`/auth [room] - Show what roomauth a room has.`,
+		`/auth [user] - Show what global and roomauth a user has.`,
 	],
 
 	userlist: function (target, room, user) {
@@ -487,8 +487,8 @@ exports.commands = {
 		return `/invite ${targetRoom.id}`;
 	},
 	invitehelp: [
-		`/invite [username] - Invites the player [username] to join the room you sent the command to.
-		(in a PM) /invite [roomname] - Invites the player you're PMing to join the room [roomname].`,
+		`/invite [username] - Invites the player [username] to join the room you sent the command to.`,
+		`(in a PM) /invite [roomname] - Invites the player you're PMing to join the room [roomname].`,
 	],
 
 	pminfobox: function (target, room, user, connection) {
@@ -795,8 +795,8 @@ exports.commands = {
 		room.destroy();
 	},
 	deleteroomhelp: [
-		`/deleteroom [roomname] - Deletes room [roomname]. Must be typed in the room to delete. Requires: & ~
-		/deletegroupchat - Deletes the current room, if it's a groupchat. Requires: & ~ #.`,
+		`/deleteroom [roomname] - Deletes room [roomname]. Must be typed in the room to delete. Requires: & ~`,
+		`/deletegroupchat - Deletes the current room, if it's a groupchat. Requires: & ~ #.`,
 	],
 
 	hideroom: 'privateroom',
@@ -878,9 +878,9 @@ exports.commands = {
 		}
 	},
 	privateroomhelp: [
-		`/secretroom - Makes a room secret. Secret rooms are visible to & and up. Requires: & ~
-		/hiddenroom [on/off] - Makes a room hidden. Hidden rooms are visible to % and up, and inherit global ranks. Requires: \u2606 & ~
-		/publicroom - Makes a room public. Requires: \u2606 & ~`,
+		`/secretroom - Makes a room secret. Secret rooms are visible to & and up. Requires: & ~`,
+		`/hiddenroom [on/off] - Makes a room hidden. Hidden rooms are visible to % and up, and inherit global ranks. Requires: \u2606 & ~`,
+		`/publicroom - Makes a room public. Requires: \u2606 & ~`,
 	],
 
 	officialchatroom: 'officialroom',
@@ -1014,10 +1014,10 @@ exports.commands = {
 	},
 
 	subroomhelp: [
-		`/subroom [room] - Marks the current room as a subroom of [room]. Requires: & ~
-		/unsubroom - Unmarks the current room as a subroom. Requires: & ~
-		/subrooms - Displays the current room's subrooms.
-		/parentroom - Displays the current room's parent room.`,
+		`/subroom [room] - Marks the current room as a subroom of [room]. Requires: & ~`,
+		`/unsubroom - Unmarks the current room as a subroom. Requires: & ~`,
+		`/subrooms - Displays the current room's subrooms.`,
+		`/parentroom - Displays the current room's parent room.`,
 	],
 
 	roomdesc: function (target, room, user) {
@@ -1117,9 +1117,7 @@ exports.commands = {
 			this.sendReply(`|raw|<div class="infobox">${room.staffMessage.replace(/\n/g, ``)}</div>`);
 			if (user.can('ban', null, room) && cmd !== 'stafftopic') {
 				this.sendReply('Source:');
-				this.sendReplyBox(
-					`<code>/staffintro ${Chat.escapeHTML(room.staffMessage).split('\n').map(line => { return line.replace(/^(\t+)/, (match, $1) => '&nbsp;'.repeat(4 * $1.length)).replace(/^(\s+)/, (match, $1) => '&nbsp;'.repeat($1.length)) }).join('<br />')}</code>`;
-				);
+				this.sendReplyBox(`<code>/staffintro ${Chat.escapeHTML(room.staffMessage).split('\n').map(line => { return line.replace(/^(\t+)/, (match, $1) => '&nbsp;'.repeat(4 * $1.length)).replace(/^(\s+)/, (match, $1) => '&nbsp;'.repeat($1.length)); }).join('<br />')}</code>`);
 			}
 			return;
 		}
@@ -1194,9 +1192,9 @@ exports.commands = {
 		}
 	},
 	roomaliashelp: [
-		`/roomalias - displays a list of all room aliases of the room the command was entered in.
-		/roomalias [alias] - adds the given room alias to the room the command was entered in. Requires: & ~
-		/removeroomalias [alias] - removes the given room alias of the room the command was entered in. Requires: & ~`,
+		`/roomalias - displays a list of all room aliases of the room the command was entered in.`,
+		`/roomalias [alias] - adds the given room alias to the room the command was entered in. Requires: & ~`,
+		`/removeroomalias [alias] - removes the given room alias of the room the command was entered in. Requires: & ~`,
 	],
 
 	deleteroomalias: 'removeroomalias',
@@ -1839,9 +1837,9 @@ exports.commands = {
 		return true;
 	},
 	lockhelp: [
-		`/lock OR /l [username], [reason] - Locks the user from talking in all chats. Requires: % @ * & ~
-		/weeklock OR /wl [username], [reason] - Same as /lock, but locks users for a week.
-		/lock OR /l [username], [reason] spoiler: [proof] - Marks proof in modlog only.`,
+		`/lock OR /l [username], [reason] - Locks the user from talking in all chats. Requires: % @ * & ~`,
+		`/weeklock OR /wl [username], [reason] - Same as /lock, but locks users for a week.`,
+		`/lock OR /l [username], [reason] spoiler: [proof] - Marks proof in modlog only.`,
 	],
 
 	unlock: function (target, room, user) {
@@ -1958,8 +1956,8 @@ exports.commands = {
 		return true;
 	},
 	globalbanhelp: [
-		`/globalban OR /gban [username], [reason] - Kick user from all rooms and ban user's IP address with reason. Requires: @ * & ~
-		/globalban OR /gban [username], [reason] spoiler: [proof] - Marks proof in modlog only.`,
+		`/globalban OR /gban [username], [reason] - Kick user from all rooms and ban user's IP address with reason. Requires: @ * & ~`,
+		`/globalban OR /gban [username], [reason] spoiler: [proof] - Marks proof in modlog only.`,
 	],
 
 	globalunban: 'unglobalban',
@@ -2446,8 +2444,8 @@ exports.commands = {
 		}
 	},
 	hidetexthelp: [
-		`/hidetext [username] - Removes a locked or muted/banned user's messages from chat. Requires: % @ * # & ~
-		/hidealtstext [username] - Removes a locked or muted/banned user's messages, and their alternate account's messages from the chat.  Requires: % @ * # & ~`,
+		`/hidetext [username] - Removes a locked or muted/banned user's messages from chat. Requires: % @ * # & ~`,
+		`/hidealtstext [username] - Removes a locked or muted/banned user's messages, and their alternate account's messages from the chat.  Requires: % @ * # & ~`,
 	],
 
 	ab: 'blacklist',
@@ -2712,8 +2710,8 @@ exports.commands = {
 		this.sendReplyBox(buf);
 	},
 	showblacklisthelp: [
-		`/showblacklist OR /showbl - show a list of blacklisted users in the room. Requires: % @ # & ~
-		/expiringblacklists OR /expiringbls - show a list of blacklisted users from the room whose blacklists are expiring in 3 months or less. Requires: % @ # & ~`,
+		`/showblacklist OR /showbl - show a list of blacklisted users in the room. Requires: % @ # & ~`,
+		`/expiringblacklists OR /expiringbls - show a list of blacklisted users from the room whose blacklists are expiring in 3 months or less. Requires: % @ # & ~`,
 	],
 
 	markshared: function (target, room, user) {
@@ -3445,17 +3443,17 @@ exports.commands = {
 		}
 	},
 	editbattlehelp: [
-		`/editbattle hp [player], [pokemon], [hp]
-		/editbattle status [player], [pokemon], [status]
-		/editbattle pp [player], [pokemon], [move], [pp]
-		/editbattle boost [player], [pokemon], [stat], [amount]
-		/editbattle volatile [player], [pokemon], [volatile]
-		/editbattle sidecondition [player], [sidecondition]
-		/editbattle fieldcondition [fieldcondition]
-		/editbattle weather [weather]
-		/editbattle terrain [terrain]
-		Short forms: /ebat h OR s OR pp OR b OR v OR sc OR fc OR w OR t
-		[player] must be a username or number, [pokemon] must be species name or number (not nickname), [move] must be move name.`,
+		`/editbattle hp [player], [pokemon], [hp]`,
+		`/editbattle status [player], [pokemon], [status]`,
+		`/editbattle pp [player], [pokemon], [move], [pp]`,
+		`/editbattle boost [player], [pokemon], [stat], [amount]`,
+		`/editbattle volatile [player], [pokemon], [volatile]`,
+		`/editbattle sidecondition [player], [sidecondition]`,
+		`/editbattle fieldcondition [fieldcondition]`,
+		`/editbattle weather [weather]`,
+		`/editbattle terrain [terrain]`,
+		`Short forms: /ebat h OR s OR pp OR b OR v OR sc OR fc OR w OR t`,
+		`[player] must be a username or number, [pokemon] must be species name or number (not nickname), [move] must be move name.`,
 	],
 
 	allowexportinputlog(/** @type {string} */ target, /** @type {Room?} */ room, /** @type {User} */ user) {
@@ -3643,8 +3641,8 @@ exports.commands = {
 		this.modlog('ROOMPLAYER', targetUser.getLastId());
 	},
 	addplayerhelp: [
-		`/addplayer [username], p1 - Allow the specified user to join the battle as Player 1.
-		/addplayer [username], p2 - Allow the specified user to join the battle as Player 2.`,
+		`/addplayer [username], p1 - Allow the specified user to join the battle as Player 1.`,
+		`/addplayer [username], p2 - Allow the specified user to join the battle as Player 2.`,
 	],
 
 	restoreplayers: function (target, room, user) {
@@ -3782,8 +3780,8 @@ exports.commands = {
 		}
 	},
 	forcewinhelp: [
-		`/forcetie - Forces the current match to end in a tie. Requires: & ~
-		/forcewin [user] - Forces the current match to end in a win for a user. Requires: & ~`,
+		`/forcetie - Forces the current match to end in a tie. Requires: & ~`,
+		`/forcewin [user] - Forces the current match to end in a win for a user. Requires: & ~`,
 	],
 
 	/*********************************************************
