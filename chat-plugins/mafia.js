@@ -118,7 +118,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	join(user) {
 		if (this.phase !== 'signups') return user.sendTo(this.room, `|error|The game of ${this.title} has already started.`);
 		const canJoin = this.canJoin(user, true);
-		if (canJoin.length) return user.sendTo(this.room, `|error|${canJoin}`);
+		if (canJoin) return user.sendTo(this.room, `|error|${canJoin}`);
 		if (!this.addPlayer(user)) return user.sendTo(this.room, `|error|You have already joined the game of ${this.title}.`);
 		if (this.subs.includes(user.userid)) this.subs.splice(this.subs.indexOf(user.userid), 1);
 		this.players[user.userid].updateHtmlRoom();
@@ -545,7 +545,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		} else {
 			const targetUser = Users(deadPlayer);
 			const canJoin = this.canJoin(targetUser, false, force);
-			if (canJoin.length) return user.sendTo(this.room, `|error|${canJoin}`);
+			if (canJoin) return user.sendTo(this.room, `|error|${canJoin}`);
 			let player = this.makePlayer(targetUser);
 			if (this.started) {
 				player.role = {
@@ -711,7 +711,7 @@ class MafiaTracker extends Rooms.RoomGame {
 				if (this.hostid === alt.userid) return `${self ? `You have` : `${user.userid} has`} an alt as the game host.`;
 			}
 		}
-		return true;
+		return false;
 	}
 
 	onChatMessage(message, user) {
@@ -1359,7 +1359,7 @@ exports.commands = {
 					if (game.subs.includes(user.userid)) return user.sendTo(targetRoom, `|error|You are already on the sub list.`);
 					if (game.played.includes(user.userid)) return user.sendTo(targetRoom, `|error|You cannot sub back into the game.`);
 					const canJoin = room.game.canJoin(user, true);
-					if (canJoin.length) return user.sendTo(targetRoom, `|error|${canJoin}`);
+					if (canJoin) return user.sendTo(targetRoom, `|error|${canJoin}`);
 					game.subs.push(user.userid);
 					game.nextSub();
 					// Update spectator's view
@@ -1408,7 +1408,7 @@ exports.commands = {
 
 				const targetUser = Users(toSubIn);
 				const canJoin = room.game.canJoin(targetUser, false, cmd === 'forcesub');
-				if (canJoin.length) return user.sendTo(targetRoom, `|error|${canJoin}`);
+				if (canJoin) return user.sendTo(targetRoom, `|error|${canJoin}`);
 				if (room.game.subs.includes(targetUser.userid)) room.game.subs.splice(room.game.subs.indexOf(targetUser.userid), 1);
 				if (room.game.hostRequestedSub.includes(toSubOut)) room.game.hostRequestedSub.splice(room.game.hostRequestedSub.indexOf(toSubOut), 1);
 				if (room.game.requestedSub.includes(toSubOut)) room.game.requestedSub.splice(room.game.requestedSub.indexOf(toSubOut), 1);
