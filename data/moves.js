@@ -8198,21 +8198,6 @@ let BattleMovedex = {
 		num: 301,
 		accuracy: 90,
 		basePower: 30,
-<<<<<<< HEAD
-		basePowerCallback: function (pokemon, target, move) {
-			let bp = move.basePower;
-			if (pokemon.volatiles.iceball && pokemon.volatiles.iceball.hitCount) {
-				bp *= Math.pow(2, pokemon.volatiles.iceball.hitCount);
-			}
-			if (pokemon.status !== 'slp') pokemon.addVolatile('iceball');
-			if (pokemon.volatiles.defensecurl) {
-				bp *= 2;
-			}
-			this.debug("Ice Ball bp: " + bp);
-			return bp;
-		},
-=======
->>>>>>> Rollout/Ice Ball: Maintain the BP multiplier when breaking Disguise
 		category: "Physical",
 		desc: "If this move is successful, the user is locked into this move and cannot make another move until it misses, 5 turns have passed, or the attack cannot be used. Power doubles with each successful hit of this move and doubles again if Defense Curl was used previously by the user. If this move is called by Sleep Talk, the move is used for one turn.",
 		shortDesc: "Power doubles with each hit. Repeats for 5 turns.",
@@ -8225,7 +8210,7 @@ let BattleMovedex = {
 			if (pokemon.addVolatile('iceball')) pokemon.volatiles['iceball'].hitThisTurn = false;
 		},
 		onHit: function (target, source) {
-			if (source.volatiles['iceball']) source.volatiles['iceball'].hitThisTurn = true;
+			if (source.volatiles['iceball'] && source.status !== 'slp') source.volatiles['iceball'].hitThisTurn = true;
 		},
 		effect: {
 			onLockMove: function () {
@@ -13758,21 +13743,6 @@ let BattleMovedex = {
 		num: 205,
 		accuracy: 90,
 		basePower: 30,
-<<<<<<< HEAD
-		basePowerCallback: function (pokemon, target, move) {
-			let bp = move.basePower;
-			if (pokemon.volatiles.rollout && pokemon.volatiles.rollout.hitCount) {
-				bp *= Math.pow(2, pokemon.volatiles.rollout.hitCount);
-			}
-			if (pokemon.status !== 'slp') pokemon.addVolatile('rollout');
-			if (pokemon.volatiles.defensecurl) {
-				bp *= 2;
-			}
-			this.debug("Rollout bp: " + bp);
-			return bp;
-		},
-=======
->>>>>>> Rollout/Ice Ball: Maintain the BP multiplier when breaking Disguise
 		category: "Physical",
 		desc: "If this move is successful, the user is locked into this move and cannot make another move until it misses, 5 turns have passed, or the attack cannot be used. Power doubles with each successful hit of this move and doubles again if Defense Curl was used previously by the user. If this move is called by Sleep Talk, the move is used for one turn.",
 		shortDesc: "Power doubles with each hit. Repeats for 5 turns.",
@@ -13785,7 +13755,7 @@ let BattleMovedex = {
 			if (pokemon.addVolatile('rollout')) pokemon.volatiles['rollout'].hitThisTurn = false;
 		},
 		onHit: function (target, source) {
-			if (source.volatiles['rollout']) source.volatiles['rollout'].hitThisTurn = true;
+			if (source.volatiles['rollout'] && source.status !== 'slp') source.volatiles['rollout'].hitThisTurn = true;
 		},
 		effect: {
 			onLockMove: function () {
