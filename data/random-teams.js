@@ -1374,7 +1374,7 @@ class RandomTeams extends Dex.ModdedDex {
 			if (hasMove['destinybond']) {
 				item = 'Custap Berry';
 			} else {
-				item = !isDoubles && this.randomChance(1,2) ? 'Leftovers' : 'Sitrus Berry';
+				item = !isDoubles && this.randomChance(1, 2) ? 'Leftovers' : 'Sitrus Berry';
 			}
 		} else if (template.species === 'Decidueye' && hasMove['spiritshackle'] && counter.setupType && !teamDetails.zMove) {
 			item = 'Decidium Z';
