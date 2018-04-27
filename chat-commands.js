@@ -1542,7 +1542,7 @@ exports.commands = {
 
 		if (name) {
 			this.addModAction("" + name + " was unbanned from " + room.title + " by " + user.name + ".");
-			if (!room.isPrivate && room.chatRoomData) {
+			if (room.isPrivate !== true && room.chatRoomData) {
 				this.globalModlog("UNROOMBAN", name, " by " + user.userid);
 			}
 		} else {
