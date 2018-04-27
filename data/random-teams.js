@@ -1371,7 +1371,11 @@ class RandomTeams extends Dex.ModdedDex {
 		} else if (template.species === 'Unown') {
 			item = 'Choice Specs';
 		} else if (template.species === 'Wobbuffet') {
-			item = hasMove['destinybond'] ? 'Custap Berry' : this.sample(['Leftovers', 'Sitrus Berry']);
+			if (hasMove['destinybond']) {
+				item = 'Custap Berry';
+			} else {
+				item = !isDoubles && this.randomChance(1,2) ? 'Leftovers' : 'Sitrus Berry';
+			}
 		} else if (template.species === 'Decidueye' && hasMove['spiritshackle'] && counter.setupType && !teamDetails.zMove) {
 			item = 'Decidium Z';
 		} else if (template.species === 'Raichu-Alola' && hasMove['thunderbolt'] && !teamDetails.zMove && this.randomChance(1, 4)) {
@@ -1464,7 +1468,7 @@ class RandomTeams extends Dex.ModdedDex {
 			item = 'Air Balloon';
 		} else if (hasMove['outrage'] && (counter.setupType || ability === 'Multiscale')) {
 			item = 'Lum Berry';
-		} else if (ability === 'Slow Start' || hasMove['clearsmog'] || hasMove['curse'] || hasMove['detect'] || hasMove['protect'] || hasMove['sleeptalk']) {
+		} else if (!isDoubles && (ability === 'Slow Start' || hasMove['clearsmog'] || hasMove['curse'] || hasMove['detect'] || hasMove['protect'] || hasMove['sleeptalk'])) {
 			item = 'Leftovers';
 		} else if (isDoubles && this.getEffectiveness('Ice', template) >= 2) {
 			item = 'Yache Berry';
