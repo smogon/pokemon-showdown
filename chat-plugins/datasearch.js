@@ -75,7 +75,7 @@ exports.commands = {
 	rollmove: 'randommove',
 	randmove: 'randommove',
 	randommove: function (target, room, user, connection, cmd, message) {
-		if (!this.canBroadcast()) return;
+		if (!this.canBroadcast(true)) return;
 		let targets = target.split(",");
 		let targetsBuffer = [];
 		let qty;
@@ -99,7 +99,7 @@ exports.commands = {
 			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
-			if (!this.runBroadcast()) return;
+			if (!this.runBroadcast(true)) return;
 			if (response.error) {
 				this.errorReply(response.error);
 			} else if (response.reply) {
@@ -119,7 +119,7 @@ exports.commands = {
 	rollpokemon: 'randompokemon',
 	randpoke: 'randompokemon',
 	randompokemon: function (target, room, user, connection, cmd, message) {
-		if (!this.canBroadcast()) return;
+		if (!this.canBroadcast(true)) return;
 		let targets = target.split(",");
 		let targetsBuffer = [];
 		let qty;
@@ -143,7 +143,7 @@ exports.commands = {
 			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
-			if (!this.runBroadcast()) return;
+			if (!this.runBroadcast(true)) return;
 			if (response.error) {
 				this.errorReply(response.error);
 			} else if (response.reply) {
