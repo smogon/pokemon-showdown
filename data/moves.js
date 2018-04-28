@@ -3197,10 +3197,11 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		onHit: function (target, source, move) {
-			if (!target.volatiles['substitute'] || move.infiltrates) this.boost({evasion: -1});
+			/**@type {?boolean | number} */
+			let success = false;
+			if (!target.volatiles['substitute'] || move.infiltrates) success = this.boost({evasion: -1});
 			let removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
 			let removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
-			let success = false;
 			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
 					if (!removeAll.includes(targetCondition)) continue;
