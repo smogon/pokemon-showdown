@@ -40,6 +40,20 @@ describe('Stomping Tantrum', function () {
 		battle.makeChoices('move stompingtantrum', 'move protect');
 	});
 
+	it('should not double its Base Power if the last move used on the previous turn was a successful Celebrate', function () {
+		battle = common.createBattle([
+			[{species: 'Snorlax', ability: 'thickfat', moves: ['celebrate', 'stompingtantrum']}],
+			[{species: 'Manaphy', ability: 'hydration', moves: ['rest']}],
+		]);
+
+		battle.onEvent('ModifyBasePower', battle.getFormat(), function (basePower) {
+			assert.strictEqual(basePower, 75);
+		});
+
+		battle.makeChoices('move celebrate', 'move rest');
+		battle.makeChoices('move stompingtantrum', 'move rest');
+	});
+
 	it('should not double its Base Power if the last "move" used on the previous turn was a recharge', function () {
 		battle = common.createBattle([
 			[{species: 'Marowak-Alola', ability: 'rockhead', moves: ['stompingtantrum', 'hyperbeam']}],
