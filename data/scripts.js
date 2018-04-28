@@ -661,7 +661,7 @@ let BattleScripts = {
 
 		if (target) {
 			/**@type {?boolean | number | undefined} */
-			let didSomething = undefined; // eslint-disable-line no-undef-init
+			let didSomething = undefined;
 
 			damage = this.getDamage(pokemon, target, moveData);
 
