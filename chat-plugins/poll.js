@@ -303,7 +303,7 @@ exports.commands = {
 		show: 'display',
 		display: function (target, room, user, connection) {
 			if (!room.poll) return this.errorReply("There is no poll running in this room.");
-			if (!this.runBroadcast(true)) return;
+			if (!this.runBroadcast()) return;
 			room.update();
 
 			if (this.broadcasting) {
