@@ -1251,6 +1251,7 @@ exports.commands = {
 							return this.errorReply("You can't broadcast this because it was just broadcasted.");
 						}
 						this.broadcasting = true;
+						this.broadcastMessage = broadcastMessage; 
 						room.lastBroadcastTime = Date.now();
 						room.lastBroadcast = broadcastMessage;
 					}
@@ -1330,6 +1331,7 @@ exports.commands = {
 					return this.errorReply("You can't broadcast this because it was just broadcasted.");
 				}
 				this.broadcasting = true;
+				this.broadcastMessage = broadcastMessage;
 				room.lastBroadcastTime = Date.now();
 				room.lastBroadcast = broadcastMessage;
 			}
@@ -1348,6 +1350,7 @@ exports.commands = {
 			this.sendReplyBox(buf);
 		},
 
+		pl: 'players',
 		players: function (target, room, user) {
 			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			if (room.game.hostid === user.userid && this.cmdToken === "!") {
@@ -1357,6 +1360,7 @@ exports.commands = {
 					return this.errorReply("You can't broadcast this because it was just broadcasted.");
 				}
 				this.broadcasting = true;
+				this.broadcastMessage = broadcastMessage; 
 				room.lastBroadcastTime = Date.now();
 				room.lastBroadcast = broadcastMessage;
 			}
