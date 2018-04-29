@@ -1959,8 +1959,13 @@ class RandomTeams extends Dex.ModdedDex {
 			let set = this.randomFactorySet(template, pokemon.length, teamData, chosenTier);
 			if (!set) continue;
 
+			let itemData = this.getItem(set.item);
+
+			// Actually limit the number of Megas to one
+			if (teamData.megaCount >= 1 && itemData.megaStone) continue;
+
 			// Limit the number of Z moves to one
-			if (teamData.zCount >= 1 && set.item.length !== 0 && (set.item + '').indexOf("ium Z") !== -1) continue;
+			if (teamData.zCount >= 1 && itemData.zMove) continue;
 
 			let types = template.types;
 			// Enforce Monotype
@@ -2001,7 +2006,6 @@ class RandomTeams extends Dex.ModdedDex {
 
 			teamData.baseFormes[template.baseSpecies] = 1;
 
-			let itemData = this.getItem(set.item + '');
 			if (itemData.megaStone) teamData.megaCount++;
 			if (itemData.zMove) teamData.zCount++;
 			if (itemData.id in teamData.has) {
