@@ -67,10 +67,10 @@ exports.commands = {
 		cardio: function (target, room, user) {
 			if (room.id !== 'healthfitness') return this.errorReply("This command can only be used in Health & Fitness.");
 			if (!target) {
-				if (!this.canBroadcast('!healthfitness cardio')) return;
+				if (!this.canBroadcast(false, '!healthfitness cardio')) return;
 				if (this.broadcastMessage && !this.can('broadcast', null, room)) return false;
 
-				if (!this.runBroadcast('!healthfitness cardio')) return;
+				if (!this.runBroadcast(false, '!healthfitness cardio')) return;
 
 				const cardio = Chat.formatText(HF.hfData.cardio || NOT_SET, true);
 				return this.sendReplyBox(`<strong>Cardio Challenge:</strong> ${cardio}`);
@@ -91,10 +91,10 @@ exports.commands = {
 		gym: function (target, room, user) {
 			if (room.id !== 'healthfitness') return this.errorReply("This command can only be used in Health & Fitness.");
 			if (!target) {
-				if (!this.canBroadcast('!healthfitness gym')) return;
+				if (!this.canBroadcast(false, '!healthfitness gym')) return;
 				if (this.broadcastMessage && !this.can('broadcast', null, room)) return false;
 
-				if (!this.runBroadcast('!healthfitness gym')) return;
+				if (!this.runBroadcast(false, '!healthfitness gym')) return;
 
 				const gym = Chat.formatText(HF.hfData.gym || NOT_SET, true);
 				return this.sendReplyBox(`<strong>Gym Challenge:</strong> ${gym}`);
@@ -115,10 +115,10 @@ exports.commands = {
 		quote: function (target, room, user) {
 			if (room.id !== 'healthfitness') return this.errorReply("This command can only be used in Health & Fitness.");
 			if (!target) {
-				if (!this.canBroadcast('!healthfitness quote')) return;
+				if (!this.canBroadcast(false, '!healthfitness quote')) return;
 				if (this.broadcastMessage && !this.can('broadcast', null, room)) return false;
 
-				if (!this.runBroadcast('!healthfitness quote')) return;
+				if (!this.runBroadcast(false, '!healthfitness quote')) return;
 
 				const quote = Chat.formatText(HF.hfData.quote || NOT_SET, true);
 				return this.sendReplyBox(`<strong>Quote of the Day:</strong> ${quote}`);

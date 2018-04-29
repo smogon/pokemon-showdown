@@ -145,10 +145,10 @@ exports.commands = {
 			let code = `<div class="chat"><code style="white-space: pre-wrap; display: table">${output.join('<br />')}</code></div>`;
 			if (output.length > 3) code = `<details><summary>See code...</summary>${code}</details>`;
 
-			if (!this.canBroadcast('!code')) return;
+			if (!this.canBroadcast(true, '!code')) return;
 			if (this.broadcastMessage && !this.can('broadcast', null, room)) return false;
 
-			if (!this.runBroadcast('!code')) return;
+			if (!this.runBroadcast(true, '!code')) return;
 
 			this.sendReplyBox(code);
 		} else {
@@ -3340,7 +3340,7 @@ exports.commands = {
 		if (!user.hasConsoleAccess(connection)) {
 			return this.errorReply("/eval - Access denied.");
 		}
-		if (!this.runBroadcast()) return;
+		if (!this.runBroadcast(true)) return;
 
 		if (!this.broadcasting) this.sendReply('||>> ' + target);
 		try {
@@ -3365,7 +3365,7 @@ exports.commands = {
 		if (!user.hasConsoleAccess(connection)) {
 			return this.errorReply("/evalbattle - Access denied.");
 		}
-		if (!this.runBroadcast()) return;
+		if (!this.runBroadcast(true)) return;
 		if (!room.battle) {
 			return this.errorReply("/evalbattle - This isn't a battle room.");
 		}
