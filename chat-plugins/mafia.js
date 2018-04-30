@@ -1251,6 +1251,8 @@ exports.commands = {
 							return this.errorReply("You can't broadcast this because it was just broadcasted.");
 						}
 						this.broadcasting = true;
+						this.broadcastMessage = broadcastMessage;
+						this.sendReply('|c|' + this.user.getIdentity(this.room.id) + '|' + this.message);
 						room.lastBroadcastTime = Date.now();
 						room.lastBroadcast = broadcastMessage;
 					}
@@ -1330,6 +1332,8 @@ exports.commands = {
 					return this.errorReply("You can't broadcast this because it was just broadcasted.");
 				}
 				this.broadcasting = true;
+				this.broadcastMessage = broadcastMessage;
+				this.sendReply('|c|' + this.user.getIdentity(this.room.id) + '|' + this.message);
 				room.lastBroadcastTime = Date.now();
 				room.lastBroadcast = broadcastMessage;
 			}
@@ -1348,6 +1352,7 @@ exports.commands = {
 			this.sendReplyBox(buf);
 		},
 
+		pl: 'players',
 		players: function (target, room, user) {
 			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			if (room.game.hostid === user.userid && this.cmdToken === "!") {
@@ -1357,6 +1362,8 @@ exports.commands = {
 					return this.errorReply("You can't broadcast this because it was just broadcasted.");
 				}
 				this.broadcasting = true;
+				this.broadcastMessage = broadcastMessage;
+				this.sendReply('|c|' + this.user.getIdentity(this.room.id) + '|' + this.message);
 				room.lastBroadcastTime = Date.now();
 				room.lastBroadcast = broadcastMessage;
 			}
@@ -1623,6 +1630,7 @@ exports.commands = {
 		hostlogs: 'leaderboard',
 		playlogs: 'leaderboard',
 		mvpladder: 'leaderboard',
+		lb: 'leaderboard',
 		leaderboard: function (target, room, user, connection, cmd) {
 			if (!room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (room.id !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
@@ -1632,6 +1640,7 @@ exports.commands = {
 				// Deny broadcasting host/playlogs
 				if (!this.runBroadcast()) return;
 			}
+			if (cmd === 'lb') cmd = 'leaderboard';
 			if (this.broadcasting) return this.sendReplyBox(`<button name="joinRoom" value="view-mafialadder-${cmd}" class="button"><strong>${cmd}</strong></button>`);
 			return this.parse(`/join view-mafialadder-${cmd}`);
 		},
