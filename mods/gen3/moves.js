@@ -507,6 +507,7 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "For 2 turns, prevents the target from using non-damaging moves.",
 		shortDesc: "For 2 turns, the target can't use status moves.",
+		flags: {protect: 1, authentic: 1},
 		effect: {
 			duration: 2,
 			onStart: function (target) {
@@ -530,6 +531,10 @@ let BattleMovedex = {
 				}
 			},
 		},
+	},
+	teeterdance: {
+		inherit: true,
+		flags: {protect: 1},
 	},
 	tickle: {
 		inherit: true,
