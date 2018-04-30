@@ -1427,7 +1427,7 @@ exports.commands = {
 					if (!this.canTalk(null, targetRoom)) return;
 					if (game.subs.includes(user.userid)) return user.sendTo(targetRoom, `|error|You are already on the sub list.`);
 					if (game.played.includes(user.userid)) return user.sendTo(targetRoom, `|error|You cannot sub back into the game.`);
-					const canJoin = room.game.canJoin(user, true);
+					const canJoin = game.canJoin(user, true);
 					if (canJoin) return user.sendTo(targetRoom, `|error|${canJoin}`);
 					game.subs.push(user.userid);
 					game.nextSub();
