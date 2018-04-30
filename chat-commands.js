@@ -158,8 +158,8 @@ exports.commands = {
 		}
 	},
 	codehelp: [
-		`!code [code] - Broadcasts code to a room. Accepts multi-line arguments. Requires: + % @ & # ~
-		/code [code] - Shows you code. Accepts multi-line arguments.`,
+		`!code [code] - Broadcasts code to a room. Accepts multi-line arguments. Requires: + % @ & # ~`
+		`/code [code] - Shows you code. Accepts multi-line arguments.`,
 	],
 
 	'!avatar': true,
@@ -418,7 +418,7 @@ exports.commands = {
 		if (!user.lastPM) {
 			return this.errorReply("No one has PMed you yet.");
 		}
-		return this.parse(`/msg ${(user.lastPM || '')}, ${target}`);
+		return this.parse(`/msg ${user.lastPM || ''}, ${target}`);
 	},
 	replyhelp: [`/reply OR /r [message] - Send a private message to the last person you received a message from, or sent a message to.`],
 
@@ -796,7 +796,7 @@ exports.commands = {
 	},
 	deleteroomhelp: [
 		`/deleteroom [roomname] - Deletes room [roomname]. Must be typed in the room to delete. Requires: & ~`,
-		`/deletegroupchat - Deletes the current room, if it's a groupchat. Requires: & ~ #.`,
+		`/deletegroupchat - Deletes the current room, if it's a groupchat. Requires: & ~ #`,
 	],
 
 	hideroom: 'privateroom',
@@ -1374,7 +1374,7 @@ exports.commands = {
 		let targetRoom = room;
 		if (target) targetRoom = Rooms.search(target);
 		if (!targetRoom || targetRoom.id === 'global' || !targetRoom.checkModjoin(user)) return this.errorReply(`The room "${target}" does not exist.`);
-		if (!targetRoom.auth) return this.sendReply(`/roomauth - The room '${(targetRoom.title || target)}' isn't designed for per-room moderation and therefore has no auth list. ${userLookup}`);
+		if (!targetRoom.auth) return this.sendReply(`/roomauth - The room '${targetRoom.title || target}' isn't designed for per-room moderation and therefore has no auth list.${userLookup}`);
 
 		let rankLists = {};
 		for (let u in targetRoom.auth) {
@@ -2195,7 +2195,7 @@ exports.commands = {
 		let name = targetUser ? targetUser.name : this.targetUsername;
 
 		if (!userid) return this.parse('/help trustuser');
-		if (!targetUser) if (!targetUser) return this.errorReply(`User '${name}' is not online.`);
+		if (!targetUser) return this.errorReply(`User '${name}' is not online.`);
 
 		if (targetUser.trusted) return this.errorReply(`User '${name}' is already trusted.`);
 
@@ -2856,17 +2856,17 @@ exports.commands = {
 		Rooms.global.notifyRooms(['development', 'staff', 'upperstaff'], `|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${target}`);
 	},
 	hotpatchhelp: [
-		`Hot-patching the game engine allows you to update parts of Showdown without interrupting currently-running battles. Requires: ~
-		Hot-patching has greater memory requirements than restarting.
-		You can disable various hot-patches with /nohotpatch. For more information on this, see /help nohotpatch
-		/hotpatch chat - reload chat-commands.js and the chat-plugins.
-		/hotpatch battles - spawn new simulator processes.
-		/hotpatch validator - spawn new team validator processes.
-		/hotpatch formats - reload the sim/dex.js tree, rebuild and rebroad the formats list, and spawn new simulator and team validator processes.
-		/hotpatch dnsbl - reloads Dnsbl datacenters.
-		/hotpatch punishments - reloads new punishments code.
-		/hotpatch tournaments - reloads new tournaments code.
-		/hotpatch all - hot-patches chat, tournaments, formats, login server, punishments, and dnsbl.`,
+		`Hot-patching the game engine allows you to update parts of Showdown without interrupting currently-running battles. Requires: ~`,
+		`Hot-patching has greater memory requirements than restarting`,
+		`You can disable various hot-patches with /nohotpatch. For more information on this, see /help nohotpatch`,
+		`/hotpatch chat - reload chat-commands.js and the chat-plugins`,
+		`/hotpatch battles - spawn new simulator processes`,
+		`/hotpatch validator - spawn new team validator processes`,
+		`/hotpatch formats - reload the sim/dex.js tree, rebuild and rebroad the formats list, and spawn new simulator and team validator processes`,
+		`/hotpatch dnsbl - reloads Dnsbl datacenters`,
+		`/hotpatch punishments - reloads new punishments code`,
+		`/hotpatch tournaments - reloads new tournaments code`,
+		`/hotpatch all - hot-patches chat, tournaments, formats, login server, punishments, and dnsbl`,
 	],
 
 	hotpatchlock: 'nohotpatch',
@@ -3089,8 +3089,8 @@ exports.commands = {
 		}
 	},
 	autolockdownkillhelp: [
-		`/autolockdownkill on - Turns on the setting to enable the server to automatically kill itself upon the final battle finishing. Requires ~
-		/autolockdownkill off - Turns off the setting to enable the server to automatically kill itself upon the final battle finishing. Requires ~`,
+		`/autolockdownkill on - Turns on the setting to enable the server to automatically kill itself upon the final battle finishing. Requires ~`,
+		`/autolockdownkill off - Turns off the setting to enable the server to automatically kill itself upon the final battle finishing. Requires ~`,
 	],
 
 	prelockdown: function (target, room, user) {
@@ -3238,20 +3238,20 @@ exports.commands = {
 		logRoom.roomlog(`${user.name} used /updateserver.`);
 
 		let [code, stdout, stderr] = await exec(`git fetch`);
-		if (code) throw new Error(`updateserver: Crash while fetching - make sure this is a Git repository.`);
+		if (code) throw new Error(`updateserver: Crash while fetching - make sure this is a Git repository`);
 		if (!stdout && !stderr) {
 			Chat.updateServerLock = false;
 			return this.sendReply(`There were no updates.`);
 		}
 
 		[code, stdout, stderr] = await exec(`git rev-parse HEAD`);
-		if (code || stderr) throw new Error(`updateserver: Crash while grabbing hash.`);
+		if (code || stderr) throw new Error(`updateserver: Crash while grabbing hash`);
 		const oldHash = String(stdout).trim();
 
 		[code, stdout, stderr] = await exec(`git stash save --include-untracked "PS /updateserver autostash"`);
 		let stashedChanges = true;
 		if (code) throw new Error(`updateserver: Crash while stashing.`);
-		if ((stdout + stderr).includes("No local changes.")) {
+		if ((stdout + stderr).includes("No local changes")) {
 			stashedChanges = false;
 		} else if (stderr) {
 			throw new Error(`updateserver: Crash while stashing.`);
@@ -3325,12 +3325,12 @@ exports.commands = {
 		}
 		if (!target) return this.parse('/help bash');
 
-		connection.sendTo(room, "$ " + target);
+		connection.sendTo(room, `$${target}`);
 		require('child_process').exec(target, (error, stdout, stderr) => {
 			connection.sendTo(room, (`${stdout}${stderr}`));
 		});
 	},
-	bashhelp: [`/bash [command] - Executes a bash command on the server. Requires: ~ console access.`],
+	bashhelp: [`/bash [command] - Executes a bash command on the server. Requires: ~ console access`],
 
 	eval: async function (target, room, user, connection) {
 		if (!user.hasConsoleAccess(connection)) {
