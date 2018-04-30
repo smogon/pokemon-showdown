@@ -440,49 +440,38 @@ let Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] Linked",
-		desc: `The first two moves in a Pok&eacute;mon's moveset are used simultaneously.`,
+		name: "[Gen 7] ZU",
+		desc: `The usage-based tier below PU.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3627804/">Linked</a>`,
-		],
-
-		mod: 'linked',
-		ruleset: ['[Gen 7] OU'],
-		banlist: ['Chlorophyll', 'Sand Rush', 'Slush Rush', 'Surge Surfer', 'Swift Swim', 'Unburden', 'King\'s Rock', 'Razor Fang', 'Swampertite'],
-		restrictedMoves: ['Baneful Bunker', 'Bounce', 'Detect', 'Dig', 'Dive', 'Fly', 'Nature\'s Madness', 'Night Shade', 'Phantom Force', 'Protect', 'Seismic Toss', 'Shadow Force', 'Sky Drop', 'Spiky Shield', 'Super Fang'],
-		onValidateSet: function (set, format) {
-			const restrictedMoves = format.restrictedMoves || [];
-			let problems = [];
-			for (const [i, moveid] of set.moves.entries()) {
-				let move = this.getMove(moveid);
-				if ((i === 0 || i === 1) && restrictedMoves.includes(move.name)) {
-					problems.push(`${set.name || set.species}'s move ${move.name} cannot be linked.`);
-				}
-			}
-			return problems;
-		},
-	},
-	{
-		name: "[Gen 7] 350 Cup",
-		desc: `Pok&eacute;mon with a BST of 350 or lower have their stats doubled.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3589641/">350 Cup</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3629669/">ZU</a>`,
 		],
 
 		mod: 'gen7',
-		ruleset: ['[Gen 7] Ubers'],
-		banlist: ['Gengar-Mega', 'Rufflet', 'Arena Trap', 'Shadow Tag', 'Eevium Z', 'Eviolite', 'Deep Sea Tooth', 'Light Ball'],
-		onModifyTemplate: function (template, target, source) {
-			if (source) return;
-			if (Object.values(template.baseStats).reduce((x, y) => x + y) > 350) return;
-			template = Object.assign({}, template);
-			template.baseStats = Object.assign({}, template.baseStats);
-			for (let i in template.baseStats) {
-				// @ts-ignore
-				template.baseStats[i] *= 2;
-			}
-			return template;
-		},
+		ruleset: ['[Gen 7] PU'],
+		banlist: [
+			// PU by usage
+			'Abomasnow', 'Absol', 'Aggron', 'Archeops', 'Articuno', 'Audino', 'Aurorus', 'Claydol', 'Clefairy', 'Crabominable',
+			'Drampa', 'Eelektross', 'Exeggutor-Alola', 'Ferroseed', 'Floatzel', 'Gastrodon', 'Golurk', 'Gourgeist-Super', 'Gurdurr',
+			'Haunter', 'Hitmonchan', 'Kabutops', 'Kangaskhan', 'Kecleon', 'Kingler', 'Komala', 'Lanturn', 'Lilligant', 'Ludicolo',
+			'Mesprit', 'Mudsdale', 'Oricorio-Sensu', 'Passimian', 'Persian-Alola', 'Primeape', 'Pyroar', 'Raichu-Alola', 'Regirock',
+			'Sableye', 'Sandslash-Alola', 'Silvally-Fairy', 'Silvally-Ghost', 'Skuntank', 'Stoutland', 'Togedemaru', 'Ursaring',
+			'Weezing', 'Zangoose',
+			// Banned from ZU
+			'Carracosta', 'Exeggutor', 'Gorebyss', 'Jynx', 'Musharna', 'Raticate-Alola', 'Raticate-Alola-Totem', 'Throh', 'Turtonator',
+			'Type: Null', 'Victreebel',
+		],
+	},
+	{
+		name: "[Gen 7] Inverse",
+		desc: `The type effectiveness chart is inverted.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3590154/">Inverse</a>`,
+		],
+
+		mod: 'gen7',
+		ruleset: ['[Gen 7] OU', 'Inverse Mod'],
+		banlist: ['Hoopa-Unbound', 'Kartana', 'Kyurem-Black', 'Serperior', 'Tapu Bulu', 'Tapu Lele'],
+		unbanlist: ['Aegislash', 'Dialga', 'Giratina', 'Lucario-Mega', 'Solgaleo'],
 	},
 	{
 		section: "Other Metagames",
