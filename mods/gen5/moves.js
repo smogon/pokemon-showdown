@@ -112,7 +112,7 @@ exports.BattleMovedex = {
 			chance: 10,
 			volatileStatus: 'confusion',
 		},
-		flags: {protect: 1, mirror: 1, sound: 1, distance: 1},
+		flags: {protect: 1, sound: 1, distance: 1},
 	},
 	clamp: {
 		inherit: true,
@@ -217,6 +217,7 @@ exports.BattleMovedex = {
 	feint: {
 		inherit: true,
 		desc: "If this move is successful, it breaks through the target's Detect or Protect for this turn, allowing other Pokemon to attack the target normally. If the target is an opponent and its side is protected by Quick Guard or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the opponent's side normally.",
+		flags: {},
 	},
 	finalgambit: {
 		inherit: true,
