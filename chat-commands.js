@@ -158,7 +158,7 @@ exports.commands = {
 		}
 	},
 	codehelp: [
-		`!code [code] - Broadcasts code to a room. Accepts multi-line arguments. Requires: + % @ & # ~`
+		`!code [code] - Broadcasts code to a room. Accepts multi-line arguments. Requires: + % @ & # ~`,
 		`/code [code] - Shows you code. Accepts multi-line arguments.`,
 	],
 
@@ -1937,7 +1937,7 @@ exports.commands = {
 		if (affected.length > 1) {
 			let guests = affected.length - 1;
 			affected = affected.slice(1).map(user => user.getLastName()).filter(alt => alt.substr(0, 7) !== '[Guest ');
-		
+
 			guests -= affected.length;
 			displayMessage = `(${name}'s ${(acAccount ? `ac account: ${acAccount}, ` : ``)} banned alts: ${affected.join(", ")} ${(guests ? ` [${guests} guests]` : ``)})`;
 			this.privateModAction(displayMessage);
