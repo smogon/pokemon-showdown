@@ -660,8 +660,8 @@ let BattleScripts = {
 		}
 
 		if (target) {
-			/**@type {?boolean | number} */
-			let didSomething = false;
+			/**@type {?boolean | number | undefined} */
+			let didSomething = undefined;
 
 			damage = this.getDamage(pokemon, target, moveData);
 
@@ -757,22 +757,28 @@ let BattleScripts = {
 			// Hit events
 			//   These are like the TryHit events, except we don't need a FieldHit event.
 			//   Scroll up for the TryHit event documentation, and just ignore the "Try" part. ;)
-			hitResult = null;
 			if (move.target === 'all' && !isSelf) {
 				if (moveData.onHitField) hitResult = this.singleEvent('HitField', moveData, {}, target, pokemon, move);
 			} else if ((move.target === 'foeSide' || move.target === 'allySide') && !isSelf) {
 				if (moveData.onHitSide) hitResult = this.singleEvent('HitSide', moveData, {}, target.side, pokemon, move);
 			} else {
-				if (moveData.onHit) hitResult = this.singleEvent('Hit', moveData, {}, target, pokemon, move);
+				if (moveData.onHit) {
+					hitResult = this.singleEvent('Hit', moveData, {}, target, pokemon, move);
+					didSomething = didSomething || hitResult;
+				}
 				if (!isSelf && !isSecondary) {
 					this.runEvent('Hit', target, pokemon, move);
 				}
 				if (moveData.onAfterHit) hitResult = this.singleEvent('AfterHit', moveData, {}, target, pokemon, move);
 			}
+			didSomething = didSomething || hitResult;
 
-			if (!hitResult && !didSomething && !moveData.self && !moveData.selfdestruct) {
+			// Move didn't fail because it didn't try to do anything
+			if (didSomething === undefined) didSomething = true;
+
+			if (!didSomething && !moveData.self && !moveData.selfdestruct) {
 				if (!isSelf && !isSecondary) {
-					if (hitResult === false || didSomething === false) this.add('-fail', pokemon);
+					if (didSomething === false) this.add('-fail', pokemon);
 				}
 				this.debug('move failed because it did nothing');
 				return false;

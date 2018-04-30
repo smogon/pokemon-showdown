@@ -147,10 +147,10 @@ exports.commands = {
 			let code = `<div class="chat"><code style="white-space: pre-wrap; display: table">${output.join('<br />')}</code></div>`;
 			if (output.length > 3) code = `<details><summary>See code...</summary>${code}</details>`;
 
-			if (!this.canBroadcast('!code')) return;
+			if (!this.canBroadcast(true, '!code')) return;
 			if (this.broadcastMessage && !this.can('broadcast', null, room)) return false;
 
-			if (!this.runBroadcast('!code')) return;
+			if (!this.runBroadcast(true, '!code')) return;
 
 			this.sendReplyBox(code);
 		} else {
@@ -1539,7 +1539,7 @@ exports.commands = {
 
 		if (name) {
 			this.addModAction(`${name} was unbanned from ${room.title} by ${user.name}.`);
-			if (!room.isPrivate && room.chatRoomData) {
+			if (room.isPrivate !== true && room.chatRoomData) {
 				this.globalModlog("UNROOMBAN", name, ` by ${user.userid}`);
 			}
 		} else {
@@ -1937,6 +1937,7 @@ exports.commands = {
 		if (affected.length > 1) {
 			let guests = affected.length - 1;
 			affected = affected.slice(1).map(user => user.getLastName()).filter(alt => alt.substr(0, 7) !== '[Guest ');
+		
 			guests -= affected.length;
 			displayMessage = `(${name}'s ${(acAccount ? `ac account: ${acAccount}, ` : ``)} banned alts: ${affected.join(", ")} ${(guests ? ` [${guests} guests]` : ``)})`;
 			this.privateModAction(displayMessage);
@@ -3336,7 +3337,7 @@ exports.commands = {
 		if (!user.hasConsoleAccess(connection)) {
 			return this.errorReply("/eval - Access denied.");
 		}
-		if (!this.runBroadcast()) return;
+		if (!this.runBroadcast(true)) return;
 
 		if (!this.broadcasting) this.sendReply(`||>> ${target}`);
 		try {
@@ -3361,7 +3362,7 @@ exports.commands = {
 		if (!user.hasConsoleAccess(connection)) {
 			return this.errorReply("/evalbattle - Access denied.");
 		}
-		if (!this.runBroadcast()) return;
+		if (!this.runBroadcast(true)) return;
 		if (!room.battle) {
 			return this.errorReply("/evalbattle - This isn't a battle room.");
 		}

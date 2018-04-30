@@ -88,7 +88,6 @@
 		"no-restricted-globals": ["error", "Proxy", "Reflect", "Symbol", "WeakSet"],
 		"no-shadow-restricted-names": "error",
 		"no-shadow": "off",
-		"no-undef-init": "warn",
 		"no-undef": ["error", {"typeof": true}],
 		"no-undefined": "off",
 		"no-unused-vars": ["warn", {"args": "none"}],

@@ -1018,7 +1018,9 @@
 			}]
 		},
 		"gyarados": {
-			"flags": {},
+			"flags": {
+				"megaOnly": 1
+			},
 			"sets": [{
 				"species": "Gyarados",
 				"item": ["Gyaradosite"],
@@ -3083,7 +3085,9 @@
 			}]
 		},
 		"camerupt": {
-			"flags": {},
+			"flags": {
+				"megaOnly": 1
+			},
 			"sets": [{
 				"species": "Camerupt",
 				"item": ["Cameruptite"],

@@ -44,7 +44,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 2, "level": 40, "shiny": true, "moves": ["poisonpowder", "sleeppowder", "razorleaf", "sweetscent"]},
 		],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	charmander: {
 		eventPokemon: [
@@ -76,7 +76,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 2, "level": 40, "shiny": true, "moves": ["rage", "scaryface", "flamethrower", "wingattack"]},
 		],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	squirtle: {
 		eventPokemon: [
@@ -418,7 +418,7 @@ let BattleFormatsData = {
 			fillerMoves1: ["icebeam", "fireblast"],
 			fillerMoves2: ["reflect", "lightscreen"],
 		},
-		tier: "BL",
+		tier: "UUBL",
 	},
 	vulpix: {
 		tier: "LC",
@@ -817,7 +817,7 @@ let BattleFormatsData = {
 			fillerMoves1: ["reflect", "reflect", "lightscreen", "thunderwave"],
 			fillerMoves2: ["thunderwave", "thunderwave", "thunderpunch", "icepunch", "firepunch", "encore"],
 		},
-		tier: "BL",
+		tier: "UUBL",
 	},
 	machop: {
 		eventPokemon: [
@@ -896,7 +896,7 @@ let BattleFormatsData = {
 			fillerMoves1: ["hydropump", "surf"],
 			fillerMoves2: ["mirrorcoat", "rapidspin", "haze"],
 		},
-		tier: "BL",
+		tier: "UUBL",
 	},
 	geodude: {
 		eventPokemon: [
@@ -914,7 +914,7 @@ let BattleFormatsData = {
 			baseMove1: "earthquake", baseMove2: "rockslide", baseMove3: "explosion",
 			fillerMoves1: ["curse", "hiddenpowerbug", "fireblast", "rapidspin", "roar"],
 		},
-		tier: "BL",
+		tier: "UUBL",
 	},
 	ponyta: {
 		eventPokemon: [
@@ -1128,7 +1128,7 @@ let BattleFormatsData = {
 			item: ["leftovers"],
 			baseMove1: "curse", baseMove2: "sludgebomb", baseMove3: "rest", baseMove4: "sleeptalk",
 		},
-		tier: "BL",
+		tier: "UUBL",
 	},
 	shellder: {
 		tier: "LC",
@@ -1466,7 +1466,7 @@ let BattleFormatsData = {
 			item: ["leftovers"],
 			baseMove1: "earthquake", baseMove2: "rockslide", baseMove3: "rest", baseMove4: "sleeptalk",
 		},
-		tier: "BL",
+		tier: "UUBL",
 	},
 	chansey: {
 		eventPokemon: [
@@ -1550,7 +1550,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 2, "level": 5, "shiny": 1, "moves": ["cometpunch", "feintattack"]},
 		],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	horsea: {
 		eventPokemon: [
@@ -1586,7 +1586,7 @@ let BattleFormatsData = {
 			baseMove1: "curse", baseMove2: "return", baseMove3: "surf",
 			fillerMoves1: ["hiddenpowerrock", "hiddenpowerbug"],
 		},
-		tier: "BL",
+		tier: "UUBL",
 	},
 	goldeen: {
 		eventPokemon: [
@@ -1752,7 +1752,7 @@ let BattleFormatsData = {
 			baseMove1: "swordsdance", baseMove2: "substitute", baseMove3: "batonpass",
 			fillerMoves1: ["hiddenpowersteel", "hiddenpowersteel", "hiddenpowerbug", "hiddenpowerground", "return"],
 		},
-		tier: "BL",
+		tier: "UUBL",
 	},
 	smoochum: {
 		eventPokemon: [
@@ -1785,7 +1785,7 @@ let BattleFormatsData = {
 			baseMove1: "meanlook", baseMove2: "perishsong", baseMove3: "protect",
 			fillerMoves1: ["icebeam", "icebeam", "substitute"],
 		},
-		tier: "BL",
+		tier: "UUBL",
 	},
 	elekid: {
 		eventPokemon: [
@@ -1896,7 +1896,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 2, "level": 5, "shiny": 1, "moves": ["tackle", "tailwhip", "quickattack"]},
 		],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	magikarp: {
 		eventPokemon: [
@@ -1965,7 +1965,7 @@ let BattleFormatsData = {
 			{"generation": 2, "level": 5, "shiny": 1, "moves": ["watergun", "growl", "sing", "bite"]},
 			{"generation": 2, "level": 5, "shiny": 1, "moves": ["watergun", "growl", "sing", "futuresight"]},
 		],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	ditto: {
 		randomSet1: { // Transform
@@ -2096,7 +2096,7 @@ let BattleFormatsData = {
 			item: ["leftovers"],
 			baseMove1: "growth", baseMove2: "psychic", baseMove3: "substitute", baseMove4: "batonpass",
 		},
-		tier: "BL",
+		tier: "UUBL",
 	},
 	umbreon: {
 		randomSet1: { // Annoyer
@@ -2152,7 +2152,7 @@ let BattleFormatsData = {
 			fillerMoves1: ["return", "return", "doubleedge"],
 			fillerMoves2: ["thunderbolt", "thunderbolt", "thunder", "thunderwave", "thunderwave"],
 		},
-		tier: "BL",
+		tier: "UUBL",
 	},
 	omanyte: {
 		eventPokemon: [
@@ -2226,7 +2226,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 2, "level": 5, "shiny": 1, "moves": ["wingattack", "rockthrow"]},
 		],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	snorlax: {
 		randomSet1: { // Curse + EQ
@@ -2279,7 +2279,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 2, "level": 50, "shiny": true, "moves": ["mist", "agility", "mindreader", "icebeam"]},
 		],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	zapdos: {
 		randomSet1: { // RestTalk
@@ -2343,7 +2343,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 2, "level": 50, "shiny": true, "moves": ["firespin", "agility", "endure", "flamethrower"]},
 		],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	dratini: {
 		eventPokemon: [
@@ -2473,7 +2473,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 2, "level": 40, "shiny": true, "moves": ["reflect", "poisonpowder", "synthesis", "bodyslam"]},
 		],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	cyndaquil: {
 		eventPokemon: [
@@ -2505,7 +2505,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 2, "level": 40, "shiny": true, "moves": ["smokescreen", "ember", "quickattack", "flamewheel"]},
 		],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	totodile: {
 		eventPokemon: [
@@ -3263,7 +3263,7 @@ let BattleFormatsData = {
 			baseMove1: "rest", baseMove2: "sleeptalk", baseMove3: "return",
 			fillerMoves2: ["curse", "earthquake"],
 		},
-		tier: "BL",
+		tier: "UUBL",
 	},
 	slugma: {
 		tier: "LC",
@@ -3431,7 +3431,7 @@ let BattleFormatsData = {
 			baseMove1: "fireblast", baseMove2: "crunch", baseMove3: "thief",
 			fillerMoves1: ["counter", "pursuit", "pursuit", "hiddenpowergrass"],
 		},
-		tier: "BL",
+		tier: "UUBL",
 	},
 	phanpy: {
 		eventPokemon: [
@@ -3460,7 +3460,7 @@ let BattleFormatsData = {
 			fillerMoves1: ["bodyslam", "bodyslam", "hiddenpowerbug"],
 			fillerMoves2: ["rapidspin", "roar", "roar", "hiddenpowerbug"],
 		},
-		tier: "BL",
+		tier: "UUBL",
 	},
 	stantler: {
 		randomSet1: { // Attacker
@@ -3512,7 +3512,7 @@ let BattleFormatsData = {
 			fillerMoves1: ["counter", "mirrorcoat", "destinybond", "recover", "encore", "disable"],
 			fillerMoves2: ["destinybond", "spikes", "substitute", "recover", "encore", "disable", "healbell"],
 		},
-		tier: "BL",
+		tier: "UUBL",
 	},
 	miltank: {
 		randomSet3: { // Standard
@@ -3569,7 +3569,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 2, "level": 40, "shiny": true, "moves": ["leer", "ember", "roar", "firespin"]},
 		],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	suicune: {
 		randomSet1: { // RestTalk

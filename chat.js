@@ -698,9 +698,10 @@ class CommandContext {
 		return true;
 	}
 	/**
+	 * @param {?boolean} ignoreCooldown
 	 * @param {?string} suppressMessage
 	 */
-	canBroadcast(suppressMessage) {
+	canBroadcast(ignoreCooldown, suppressMessage) {
 		if (!this.broadcasting && this.cmdToken === BROADCAST_TOKEN) {
 			// @ts-ignore
 			if (!this.pmTarget && !this.user.can('broadcast', null, this.room)) {
@@ -712,8 +713,9 @@ class CommandContext {
 			// broadcast cooldown
 			const broadcastMessage = (suppressMessage || this.message).toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
 
-			if (this.room && this.room.lastBroadcast === broadcastMessage &&
-					this.room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN) {
+			if (!ignoreCooldown && this.room && this.room.lastBroadcast === broadcastMessage &&
+					this.room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN &&
+					!this.user.can('bypassall')) {
 				this.errorReply("You can't broadcast this because it was just broadcasted.");
 				return false;
 			}
@@ -727,9 +729,10 @@ class CommandContext {
 		return true;
 	}
 	/**
+	 * @param {?boolean} ignoreCooldown
 	 * @param {?string} suppressMessage
 	 */
-	runBroadcast(suppressMessage) {
+	runBroadcast(ignoreCooldown, suppressMessage) {
 		if (this.broadcasting || this.cmdToken !== BROADCAST_TOKEN) {
 			// Already being broadcast, or the user doesn't intend to broadcast.
 			return true;
@@ -737,7 +740,7 @@ class CommandContext {
 
 		if (!this.broadcastMessage) {
 			// Permission hasn't been checked yet. Do it now.
-			if (!this.canBroadcast(suppressMessage)) return false;
+			if (!this.canBroadcast(ignoreCooldown, suppressMessage)) return false;
 		}
 
 		this.broadcasting = true;
@@ -747,7 +750,7 @@ class CommandContext {
 		} else {
 			this.sendReply('|c|' + this.user.getIdentity(this.room.id) + '|' + (suppressMessage || this.message));
 		}
-		if (!this.pmTarget) {
+		if (!ignoreCooldown && !this.pmTarget) {
 			this.room.lastBroadcast = this.broadcastMessage;
 			this.room.lastBroadcastTime = Date.now();
 		}

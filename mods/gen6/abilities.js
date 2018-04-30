@@ -58,6 +58,10 @@ exports.BattleAbilities = {
 		inherit: true,
 		shortDesc: "If this Pokemon is an Arceus, its type changes to match its held Plate.",
 	},
+	"mummy": {
+		inherit: true,
+		desc: "Pokemon making contact with this Pokemon have their Ability changed to Mummy. Does not affect the Abilities Multitype or Stance Change.",
+	},
 	"normalize": {
 		inherit: true,
 		desc: "This Pokemon's moves are changed to be Normal type. This effect comes before other effects that change a move's type.",
