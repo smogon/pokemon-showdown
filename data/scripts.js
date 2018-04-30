@@ -747,20 +747,31 @@ let BattleScripts = {
 				didSomething = didSomething || hitResult;
 			}
 			if (moveData.forceSwitch) {
-				if (this.canSwitch(target.side)) didSomething = true; // at least defer the fail message to later
+				hitResult = this.canSwitch(target.side);
+				didSomething = didSomething || hitResult;
 			}
 			if (moveData.selfSwitch) {
-				// If the move is Parting Shot and it fails to change the target's stats in gen 7, didSomething will be null instead of false.
+				// If the move is Parting Shot and it fails to change the target's stats in gen 7, didSomething will be null instead of undefined.
 				// Leaving didSomething as null will cause this function to return before setting the switch flag, preventing the switch.
-				if (this.canSwitch(pokemon.side) && (didSomething !== null || this.gen < 7)) didSomething = true; // at least defer the fail message to later
+				if (this.canSwitch(pokemon.side) && (didSomething !== null || this.gen < 7)) {
+					didSomething = true;
+				} else {
+					didSomething = didSomething || false;
+				}
 			}
 			// Hit events
 			//   These are like the TryHit events, except we don't need a FieldHit event.
 			//   Scroll up for the TryHit event documentation, and just ignore the "Try" part. ;)
 			if (move.target === 'all' && !isSelf) {
-				if (moveData.onHitField) hitResult = this.singleEvent('HitField', moveData, {}, target, pokemon, move);
+				if (moveData.onHitField) {
+					hitResult = this.singleEvent('HitField', moveData, {}, target, pokemon, move);
+					didSomething = didSomething || hitResult;
+				}
 			} else if ((move.target === 'foeSide' || move.target === 'allySide') && !isSelf) {
-				if (moveData.onHitSide) hitResult = this.singleEvent('HitSide', moveData, {}, target.side, pokemon, move);
+				if (moveData.onHitSide) {
+					hitResult = this.singleEvent('HitSide', moveData, {}, target.side, pokemon, move);
+					didSomething = didSomething || hitResult;
+				}
 			} else {
 				if (moveData.onHit) {
 					hitResult = this.singleEvent('Hit', moveData, {}, target, pokemon, move);
@@ -769,9 +780,11 @@ let BattleScripts = {
 				if (!isSelf && !isSecondary) {
 					this.runEvent('Hit', target, pokemon, move);
 				}
-				if (moveData.onAfterHit) hitResult = this.singleEvent('AfterHit', moveData, {}, target, pokemon, move);
+				if (moveData.onAfterHit) {
+					hitResult = this.singleEvent('AfterHit', moveData, {}, target, pokemon, move);
+					didSomething = didSomething || hitResult;
+				}
 			}
-			didSomething = didSomething || hitResult;
 
 			// Move didn't fail because it didn't try to do anything
 			if (didSomething === undefined) didSomething = true;
