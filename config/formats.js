@@ -211,6 +211,19 @@ let Formats = [
 		requirePentagon: true,
 	},
 	{
+		name: "[Gen 7] Ultra No Holds Barred",
+		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3633858/">Ultra No Holds Barred</a>`],
+
+		mod: 'gen7',
+		forcedLevel: 100,
+		teamLength: {
+			validate: [3, 6],
+			battle: 3,
+		},
+		ruleset: ['Pokemon', 'Nickname Clause', 'Team Preview', 'Cancel Mod'],
+		banlist: ['Illegal', 'Unreleased', 'Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Arceus', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Solgaleo', 'Lunala'],
+	},
+	{
 		name: "[Gen 7] Custom Game",
 
 		mod: 'gen7',
