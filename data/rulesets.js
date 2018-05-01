@@ -434,7 +434,7 @@ let BattleFormats = {
 			for (const set of team) {
 				let name = set.name;
 				if (name) {
-					if (name === set.species) continue;
+					if (name === this.getTemplate(set.species).baseSpecies) continue;
 					if (nameTable[name]) {
 						return ["Your Pokémon must have different nicknames.", "(You have more than one " + name + ")"];
 					}
