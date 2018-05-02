@@ -186,7 +186,7 @@ class Pokemon {
 			if (!this.set.ivs[i] && this.set.ivs[i] !== 0) this.set.ivs[i] = 31;
 		}
 		for (let i in this.set.evs) {
-			this.set.evs[i] = this.battle.clampIntRange(this.set.evs[i], 0, 255);
+			this.set.evs[i] = this.battle.clampIntRange(this.set.evs[i], 0, 9999);
 		}
 		for (let i in this.set.ivs) {
 			this.set.ivs[i] = this.battle.clampIntRange(this.set.ivs[i], 0, 31);
