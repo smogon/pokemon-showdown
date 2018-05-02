@@ -900,6 +900,21 @@ let BattleMovedex = {
 			}
 		},
 	},
+	mudsport: {
+		inherit: true,
+		desc: "Until the user is no longer active, all Electric-type attacks used by any active Pokemon have their power halved. Fails if this move is already in effect; not stackable.",
+		shortDesc: "Weakens Electric-type attacks to 1/2 their power.",
+		effect: {
+			noCopy: true,
+			onStart: function (pokemon) {
+				this.add('-start', pokemon, 'move: Mud Sport');
+			},
+			onBasePowerPriority: 3,
+			onAnyBasePower: function (basePower, user, target, move) {
+				if (move.type === 'Electric') return this.chainModify(0.5);
+			},
+		},
+	},
 	odorsleuth: {
 		inherit: true,
 		flags: {protect: 1, mirror: 1, authentic: 1},
@@ -1249,6 +1264,21 @@ let BattleMovedex = {
 	volttackle: {
 		inherit: true,
 		recoil: [1, 3],
+	},
+	watersport: {
+		inherit: true,
+		desc: "Until the user is no longer active, all Fire-type attacks used by any active Pokemon have their power halved. Fails if this move is already in effect; not stackable.",
+		shortDesc: "Weakens Fire-type attacks to 1/2 their power.",
+		effect: {
+			noCopy: true,
+			onStart: function (pokemon) {
+				this.add('-start', pokemon, 'move: Water Sport');
+			},
+			onBasePowerPriority: 3,
+			onAnyBasePower: function (basePower, user, target, move) {
+				if (move.type === 'Fire') return this.chainModify(0.5);
+			},
+		},
 	},
 	whirlpool: {
 		inherit: true,
