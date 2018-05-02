@@ -98,6 +98,7 @@ describe(`Hackmons Cup Team generator`, function () {
 describe(`Factory sets`, function () {
 	for (const filename of ['bss-factory-sets', 'factory-sets']) {
 		it(`should have valid sets in ${filename}.json`, function () {
+			this.timeout(5000);
 			const setsJSON = require(`../../../data/${filename}.json`);
 
 			for (const type in setsJSON) {
