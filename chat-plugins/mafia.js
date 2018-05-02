@@ -533,6 +533,11 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 		delete this.lynches[player.userid];
 		delete this.players[player.userid];
+		let subIndex = this.requestedSub.indexOf(player.userid);
+		if (subIndex !== -1) this.requestedSub.splice(subIndex, 1);
+		subIndex = this.hostRequestedSub.indexOf(player.userid);
+		if (subIndex !== -1) this.hostRequestedSub.splice(subIndex, 1);
+
 		this.playerCount--;
 		this.updateRoleString();
 		this.updatePlayers();
