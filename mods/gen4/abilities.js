@@ -351,6 +351,19 @@ let BattleAbilities = {
 			source.trySetStatus(id);
 		},
 	},
+	"thickfat": {
+		shortDesc: "The power of Fire- and Ice-type attacks against this Pokemon is halved.",
+		onBasePowerPriority: 1,
+		onSourceBasePower: function (basePower, attacker, defender, move) {
+			if (move.type === 'Ice' || move.type === 'Fire') {
+				return this.chainModify(0.5);
+			}
+		},
+		id: "thickfat",
+		name: "Thick Fat",
+		rating: 3.5,
+		num: 47,
+	},
 	"torrent": {
 		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its Water-type attacks have their power multiplied by 1.5.",
 		shortDesc: "At 1/3 or less of its max HP, this Pokemon's Water-type attacks have 1.5x power.",
