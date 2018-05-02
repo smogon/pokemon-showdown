@@ -713,8 +713,8 @@ class MafiaTracker extends Rooms.RoomGame {
 	}
 
 	canJoin(user, self, force) {
+		if (!user || !user.connected) return `User not found.`;
 		const targetString = self ? `You are` : `${user.userid} is`;
-		if (!user || !user.connected) return `The user "${user}" was not found.`;
 		if (!this.room.users[user.userid]) return `${targetString} not in the room.`;
 		if (this.players[user.userid]) return `${targetString} already in the game.`;
 		if (this.hostid === user.userid) return `${targetString} the host.`;
