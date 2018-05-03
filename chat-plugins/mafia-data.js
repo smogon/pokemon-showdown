@@ -874,6 +874,11 @@ exports.modifiers = Object.assign(Object.create(null), {
 		id: `strongwilled`,
 		memo: [`Strong-Willed: Your actions can not fail, excluding kills.`],
 	},
+	suicidal: {
+		name: `Suicidal`,
+		id: `suicidal`,
+		memo: [`Suicidal: You will passively die.`],
+	},
 	avenger: `supersaint`,
 	ss: `supersaint`,
 	supersaint: {
