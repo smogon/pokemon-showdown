@@ -896,6 +896,11 @@ exports.modifiers = Object.assign(Object.create(null), {
 		id: `tentacled`,
 		memo: [`Tentacled: You will always be inspected as ALIEN.`],
 	},
+	tree: {
+		name: `Tree`,
+		id: `tree`,
+		memo: [`Tree: You can talk after your death, provided you died due to a lynch.`],
+	},
 	treestump: {
 		name: `Treestump`,
 		id: `treestump`,
@@ -1021,6 +1026,12 @@ exports.themes = Object.assign(Object.create(null), {
 		11: `Mafia Goon, Mafia Goon, Mafia Goon, Lightkeeper, Gunsmith, Gunsmith, Oracle, Oracle, Oracle, Oracle, Oracle`,
 		12: `Mafia Goon, Mafia Goon, Mafia Goon, Lightkeeper, Gunsmith, Gunsmith, Oracle, Oracle, Oracle, Oracle, Oracle, Oracle`,
 		13: `Mafia Goon, Mafia Goon, Mafia Gunsmith, Lightkeeper, Gunsmith, Gunsmith, Gunsmith, Oracle, Oracle, Oracle, Oracle, Oracle, Oracle`,
+	},
+	medmaf: `medical_mafia`,
+	medical_mafia: {
+		name: `Medical Mafia`,
+		desc: `Medical Mafia: A theme where the Mafia invade a hospital. The Mafia has to beat a group of Doctors... who may not all heal their patients.`,
+		9: `Mafia Goon, Mafia Goon, Doctor, Doctor, Doctor, Doctor, Doctor, Doctor, Nurse`,
 	},
 	nd: `neighbors_dilemma`,
 	neighbors_dilemma: {
