@@ -69,7 +69,7 @@ exports.alignments = Object.assign(Object.create(null), {
 		memo: [
 			`Factional Communication: If there are other Cult-aligned players, you may PM them during the game.`,
 			`Factional Concept: The Cultafia can recruit and kill players. Ask the Host for more information about how this works exactly.`,
-			`You are aligned with the <span style="color:#000;font-weight:bold">Cult</span>. You win when all players without a Cult wincon are eliminated and at least one Cult-aligned player is still alive (or nothing can prevent the same).`,
+			`You are aligned with the <span style="color:#600;font-weight:bold">Cultafia</span>. You win when all players without a Cultafia wincon are eliminated and at least one Cultafia-aligned player is still alive (or nothing can prevent the same).`,
 		],
 		// TODO image for cult faction
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
@@ -106,7 +106,7 @@ exports.alignments = Object.assign(Object.create(null), {
 		memo: [
 			`Factional Communication: If there are other Mime-aligned players, you may PM them during the game.`,
 			`Factional Roleblock: The Mimes may roleblock one player per night.`,
-			`You are aligned with the <span style="color:#A6B;font-weight:bold">Mimes</span>. You win when all Mimes have been lynched.`,
+			`You are aligned with the <span style="color:#A6B;font-weight:bold">Mimes</span>. You win when all players with a Mime wincon have been lynched.`,
 		],
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
 	},
@@ -120,7 +120,7 @@ exports.alignments = Object.assign(Object.create(null), {
 			`Factional Actions: The Arsonists may together use one factional action a night.`,
 			`Factional Prime: The Arsonists prime someone by dousing them with gasoline.`,
 			`Factional Ignite: The Arsonists light all previously primed players on fire, killing them.`,
-			`You are aligned with the <span style="color:#E82;font-weight:bold">Arsonists</span>. You win when all players without a Replicant wincon are eliminated and at least one Replicant-aligned player is still alive (or nothing can prevent the same).`,
+			`You are aligned with the <span style="color:#E82;font-weight:bold">Arsonists</span>. You win when all players without an Arsonist wincon are eliminated and at least one Arsonist-aligned player is still alive (or nothing can prevent the same).`,
 		],
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
 	},
@@ -145,7 +145,7 @@ exports.alignments = Object.assign(Object.create(null), {
 		memo: [
 			`Factional Communication: If there are other Hypnotist-aligned players, you may PM them during the game.`,
 			`Factional Hypnotise: The Hypnotists can hypnotise another player every night. For the next day only, this player gains an additional win-condition of lynching another player specified by the Hypnotists.`,
-			`You are aligned with the <span style="color:#A26;font-weight:bold">Hypnotists</span>. You win when all players without a Cult wincon are eliminated and at least one Cult-aligned player is still alive (or nothing can prevent the same).`,
+			`You are aligned with the <span style="color:#A26;font-weight:bold">Hypnotists</span>. You win when all players without a Hypnotist wincon are eliminated and at least one Hypnotist-aligned player is still alive (or nothing can prevent the same).`,
 		],
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
 	},
