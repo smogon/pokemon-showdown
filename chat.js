@@ -807,7 +807,7 @@ class CommandContext {
 			if (room) {
 				if (lockType && !room.isHelp) {
 					this.errorReply(`You are ${lockType} and can't talk in chat. ${lockExpiration}`);
-					// this.sendReply(`|html|<a href="view-help-request-appeal-lock" class="button">Get help with this</a>`);
+					this.sendReply(`|html|<a href="view-help-request--appeal" class="button">Get help with this</a>`);
 					return false;
 				}
 				if (room.isMuted(user)) {
@@ -846,8 +846,9 @@ class CommandContext {
 				if (targetUser.ignorePMs && targetUser.ignorePMs !== user.group && !user.can('lock')) {
 					if (!targetUser.can('lock')) {
 						return this.errorReply(`This user is blocking private messages right now.`);
-					} else if (targetUser.can('declare')) {
-						return this.errorReply(`This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.`);
+					} else {
+						this.errorReply(`This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.`);
+						return this.sendReply(`|html|If you need help, try opening a <a href="view-help-request" class="button">help ticket</a>`);
 					}
 				}
 				if (user.ignorePMs && user.ignorePMs !== targetUser.group && !targetUser.can('lock')) {

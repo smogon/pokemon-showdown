@@ -27,13 +27,19 @@ function writeTickets() {
 class HelpTicket extends Rooms.RoomGame {
 	constructor(room, ticket) {
 		super(room);
+		this.title = "Help Ticket - " + ticket.type;
+		this.gameid = "helpticket";
+		this.allowRenames = true;
 		this.ticket = ticket;
 		this.claimQueue = [];
 	}
 
 	onJoin(user, connection) {
-		if (!user.isStaff || !this.ticket.open) return false;
-		if (user.userid === this.ticket.userid) return false;
+		if (!this.ticket.open) return false;
+		if (!user.isStaff || user.userid === this.ticket.userid) {
+			this.addPlayer(user);
+			return false;
+		}
 		if (this.ticket.escalated && !user.can('declare')) return false;
 		if (!this.ticket.claimed) {
 			this.ticket.claimed = user.name;
@@ -47,7 +53,11 @@ class HelpTicket extends Rooms.RoomGame {
 	}
 
 	onLeave(user, connection) {
-		if (!user.isStaff || !this.ticket.open) return false;
+		if (user.userid in this.players) {
+			this.removePlayer(user);
+			return false;
+		}
+		if (!this.ticket.open) return false;
 		if (toId(this.ticket.claimed) === user.userid) {
 			if (this.claimQueue.length) {
 				this.ticket.claimed = this.claimQueue.shift();
@@ -63,6 +73,23 @@ class HelpTicket extends Rooms.RoomGame {
 			let index = this.claimQueue.map(toId).indexOf(user.userid);
 			if (index > -1) this.claimQueue.splice(index, 1);
 		}
+	}
+
+	addPlayer(user) {
+		if (user.userid in this.players) return false;
+		let player = this.makePlayer(user);
+		if (!player) return false;
+		this.players[user.userid] = player;
+		this.playerCount++;
+		return true;
+	}
+
+	forfeit(user) {
+		if (!(user.userid in this.players)) return;
+		this.removePlayer(user);
+		if (this.playerCount - 1 > 0) return; // There are still users in the ticket room, dont close the ticket
+		this.close(user);
+		return true;
 	}
 
 	escalate(sendUp, staff) {
@@ -107,7 +134,7 @@ class HelpTicket extends Rooms.RoomGame {
 	}
 }
 
-const NOTIFY_ALL_TIMEOUT = 60 * 1000;
+const NOTIFY_ALL_TIMEOUT = 5 * 60 * 1000;
 let unclaimedTicketTimer = {upperstaff: null, staff: null};
 function pokeUnclaimedTicketTimer(upper, hasUnclaimed) {
 	const room = Rooms(upper ? 'upperstaff' : 'staff');
@@ -270,6 +297,8 @@ exports.pages = {
 				lock: `I want to appeal my lock`,
 				ip: `I'm locked because I have the same IP as someone I don't recognize`,
 				semilock: `I can't talk in chat because of my ISP`,
+				hasautoconfirmed: `Yes, I have an autoconfirmed account`,
+				lacksautoconfirmed: `No, I don't have an autoconfirmed account`,
 				appealother: `I want to appeal a mute/roomban/blacklist`,
 
 				misc: `Something else`,
@@ -394,7 +423,17 @@ exports.pages = {
 					buf += `<p><Button>confirmipappeal</Button></p>`;
 					break;
 				case 'semilock':
-					buf += `<p>Click the button below, and a global staff member will check. </p>`;
+					buf += `<p>Do you have an Autoconfirmed account? An account is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer.</p>`;
+					if (!isLast) break;
+					buf += `<p><Button>hasautoconfirmed</Button> <Button>lacksautoconfirmed</Button></p>`;
+					break;
+				case 'hasautoconfirmed':
+					buf += `<p>Login to your autoconfirmed account, and the semilock will automatically be removed. If the semilock does not go away, you can try asking a global staff member for help. Click the button below to call a global staff member.</p>`;
+					if (!isLast) break;
+					buf += `<p><Button>confirmappealsemi</Button></p>`;
+					break;
+				case 'lacksautoconfirmed':
+					buf += `<p>If you don't have an autoconfirmed account, you will need to contact a global staff member to appeal your semilock. Click the button below to call a global staff member.</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirmappealsemi</Button></p>`;
 					break;
@@ -502,6 +541,7 @@ exports.commands = {
 	report: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (this.broadcasting) {
+			if (room.battle) return this.errorReply(`This command cannot be broadcast in battles.`);
 			return this.sendReplyBox('<button name="joinRoom" value="view-help-request--report" class="button"><strong>Report someone</strong></button>');
 		}
 
@@ -512,6 +552,7 @@ exports.commands = {
 	appeal: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (this.broadcasting) {
+			if (room.battle) return this.errorReply(`This command cannot be broadcast in battles.`);
 			return this.sendReplyBox('<button name="joinRoom" value="view-help-request--appeal" class="button"><strong>Appeal a punishment</strong></button>');
 		}
 
@@ -605,12 +646,16 @@ exports.commands = {
 					helpRoom.modjoin = '%';
 				}
 				helpRoom.introMessage = `<h2 style="margin-top:0">Help Ticket - ${user.name}</h2><p><b>Issue</b>: ${ticket.type}<br />${upper ? `An Upper` : `A Global`} staff member will be with you shortly.</p>`;
-				helpRoom.staffMessage = `<p><button class="button" name="send" value="/helpticket close ${user.userid}">Close Ticket</button> <button class="button" name="send" value="/helpticket escalate ${user.userid}">Escalate</button> ${upper ? `` : `<button class="button" name="send" value="/helpticket escalate ${user.userid}, upperstaff">Escalate to Upper Staff</button>`} <button class="button" name="send" value="/helpticket ban ${user.userid}"><small>Ticketban</small></button></p>`;
+				helpRoom.staffMessage = `<p><button class="button" name="send" value="/helpticket escalate ${user.userid}">Escalate</button> ${upper ? `` : `<button class="button" name="send" value="/helpticket close ${user.userid}">Close Ticket</button> <button class="button" name="send" value="/helpticket escalate ${user.userid}, upperstaff">Escalate to Upper Staff</button>`} <button class="button" name="send" value="/helpticket ban ${user.userid}"><small>Ticketban</small></button></p>`;
 				if (helpRoom.game) helpRoom.game.destroy();
 				helpRoom.game = new HelpTicket(helpRoom, ticket);
 			}
 			helpRoom.game.modnote(user, `${user.name} opened a new ticket. Issue: ${ticket.type}`);
 			this.parse(`/join help-${user.userid}`);
+			if (!(user.userid in helpRoom.game.players)) {
+				// User was already in the room, manually add them to the "game" so they get a popup if they try to leave
+				helpRoom.game.addPlayer(user);
+			}
 			tickets[user.userid] = ticket;
 			writeTickets();
 			notifyStaff(upper);
@@ -641,11 +686,10 @@ exports.commands = {
 
 		'!close': true,
 		close: function (target, room, user) {
-			if (!this.can('lock')) return;
 			if (!target) return this.parse(`/help helpticket close`);
 			let ticket = tickets[toId(target)];
-			if (!ticket || !ticket.open) return this.errorReply(`${target} does not have an open ticket.`);
-			if (ticket.escalated && !user.can('declare')) return this.errorReply(`/helpticket close - Access denied for closing upper staff tickets.`);
+			if (!ticket || !ticket.open || (ticket.userid !== user.userid && !user.can('lock'))) return this.errorReply(`${target} does not have an open ticket.`);
+			if (ticket.escalated && ticket.userid !== user.userid && !user.can('declare')) return this.errorReply(`/helpticket close - Access denied for closing upper staff tickets.`);
 			if (Rooms('help-' + ticket.userid)) {
 				Rooms('help-' + ticket.userid).game.close(user);
 			} else {
