@@ -55,7 +55,7 @@ exports.alignments = Object.assign(Object.create(null), {
 		color: `#000`,
 		memo: [
 			`Factional Communication: If there are other Cult-aligned players, you may PM them during the game.`,
-			`Factional Concept: The Cult can recruit other players into the Cult more often than not.`,
+			`Factional Concept: The Cult can recruit other players into the Cult more often than not. Ask the Host for more information about how this works exactly.`,
 			`You are aligned with the <span style="color:#000;font-weight:bold">Cult</span>. You win when all players without a Cult wincon are eliminated and at least one Cult-aligned player is still alive (or nothing can prevent the same).`,
 		],
 		// TODO image for cult faction
@@ -144,13 +144,13 @@ exports.alignments = Object.assign(Object.create(null), {
 		color: `#A26`,
 		memo: [
 			`Factional Communication: If there are other Hypnotist-aligned players, you may PM them during the game.`,
-			`Factional Concept: The Cult can recruit other players into the Cult more often than not.`,
+			`Factional Hypnotise: The Hypnotists can hypnotise another player every night. For the next day only, this player gains an additional win-condition of lynching another player specified by the Hypnotists.`,
 			`You are aligned with the <span style="color:#A26;font-weight:bold">Hypnotists</span>. You win when all players without a Cult wincon are eliminated and at least one Cult-aligned player is still alive (or nothing can prevent the same).`,
 		],
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
 	},
-	// Mermaid theme doesn't seem balanced enough to officially recognise.
-	// Would like to discuss Terrorist theme too.
+	// Mermaid theme doesn't seem balanced enough to officially recognise. (Mermaid faction)
+	// Would like to discuss Terrorist theme too. (Terrorist faction)
 	solo: {
 		// Special alignment for all roles that are on their own.
 		name: `Solo`,
