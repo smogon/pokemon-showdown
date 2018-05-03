@@ -1,6 +1,8 @@
 'use strict';
 
 exports.alignments = Object.assign(Object.create(null), {
+	//  Do not add Mafia variants, unless they are supported in a major theme (Werewolves, Replicants).
+	//  Do not add Solo alignments.
 	town: {
 		name: `Town`,
 		plural: `Town`,
@@ -59,6 +61,19 @@ exports.alignments = Object.assign(Object.create(null), {
 		// TODO image for cult faction
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
 	},
+	cultafia: {
+		name: `Cultafia`,
+		plural: `Cultafia`,
+		id: `cultafia`,
+		color: `#600`,
+		memo: [
+			`Factional Communication: If there are other Cult-aligned players, you may PM them during the game.`,
+			`Factional Concept: The Cult can recruit other players into the Cult more often than not.`,
+			`You are aligned with the <span style="color:#000;font-weight:bold">Cult</span>. You win when all players without a Cult wincon are eliminated and at least one Cult-aligned player is still alive (or nothing can prevent the same).`,
+		],
+		// TODO image for cult faction
+		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
+	},
 	goo: {
 		name: `Goo`,
 		plural: `Goos`,
@@ -83,6 +98,45 @@ exports.alignments = Object.assign(Object.create(null), {
 		],
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
 	},
+	mime: {
+		name: `Mime`,
+		plural: `Mimes`,
+		id: `mime`,
+		color: `#A6B`,
+		memo: [
+			`Factional Communication: If there are other Replicant-aligned players, you may PM them during the game.`,
+			`Factional Roleblock: The Replicants may kill one player per night.`,
+			`You are aligned with the <span style="color:#DDD;font-weight:bold">Replicants</span>. You win when all players without a Replicant wincon are eliminated and at least one Replicant-aligned player is still alive (or nothing can prevent the same).`,
+		],
+		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
+	},
+	pygmee: {
+		name: `Pygmee`,
+		plural: `Pygmees`,
+		id: `pygmee`,
+		color: `#640`,
+		memo: [
+			`Factional Knowledge: If there are other Replicant-aligned players, you know who they are.`,
+			`Factional Kill: The Pygmees may attempt to kill someone at any moment.`,
+			`You are aligned with the <span style="color:#DDD;font-weight:bold">Pygmees</span>. You win when all players without a Pygmee wincon are eliminated and at least one Pygmee-aligned player is still alive (or nothing can prevent the same).`,
+		],
+		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
+	},
+	hypnotist: {
+		name: `Hypnotist`,
+		plural: `Hypnotists`,
+		id: `Hypnotists`,
+		color: `#A26`,
+		memo: [
+			`Factional Communication: If there are other Cult-aligned players, you may PM them during the game.`,
+			`Factional Concept: The Cult can recruit other players into the Cult more often than not.`,
+			`You are aligned with the <span style="color:#000;font-weight:bold">Cult</span>. You win when all players without a Cult wincon are eliminated and at least one Cult-aligned player is still alive (or nothing can prevent the same).`,
+		],
+		// TODO image for cult faction
+		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
+	},
+	// Mermaid theme doesn't seem balanced enough to officially recognise.
+	// Would like to discuss Terrorist theme too.
 	solo: {
 		// Special alignment for all roles that are on their own.
 		name: `Solo`,
@@ -876,18 +930,18 @@ exports.themes = Object.assign(Object.create(null), {
 		6: `Mafia Goon, Mafia Goon, Role Cop, Jailkeeper, Vanilla Townie, Vanilla Townie`,
 		7: `Mafia Goon, Mafia Goon, Macho Role Cop, Doctor, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		8: `Mafia Pretty Lady, Mafia Goon, Role Cop, Doctor, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
-		9: `Mafia Goon, Mafia Goon, Werewolf, Role Cop, Doctor, Pretty Lady, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
-		10: `Mafia Goon, Mafia Goon, Werewolf, Role Cop, Doctor, Pretty Lady, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
-		11: `Mafia Goon, Mafia Goon, Werewolf, Role Cop, Doctor, Pretty Lady, Mayor, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
-		12: `Mafia Goon, Mafia Goon, Mafia Goon, Bulletproof Werewolf, Role Cop, Doctor, Pretty Lady, Mayor, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
-		13: `Mafia Goon, Mafia Goon, Mafia Pretty Lady, Werewolf, Role Cop, Doctor, Pretty Lady, Mayor, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
-		14: `Mafia Goon, Mafia Goon, Mafia Pretty Lady, Werewolf Strongman, Role Cop, Doctor, Pretty Lady, Jailkeeper, Mayor, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
-		15: `Mafia Goon, Mafia Goon, Mafia Role Cop, Mafia Pretty Lady, Bulletproof Werewolf, Role Cop, Doctor, Pretty Lady, Jailkeeper, Mayor, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
-		16: `Mafia Goon, Mafia Goon, Mafia Role Cop, Mafia Pretty Lady, Bulletproof Werewolf, Role Cop, Doctor, Pretty Lady, Jailkeeper, Mayor, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
-		17: `Mafia Goon, Mafia Goon, Mafia Role Cop, Mafia Pretty Lady, Bulletproof Werewolf, Role Cop, Doctor, Pretty Lady, Jailkeeper, Mayor, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
-		18: `Mafia Goon, Mafia Goon, Mafia Role Cop, Mafia Pretty Lady, Bulletproof Werewolf, Role Cop, Doctor, Pretty Lady, Jailkeeper, Mayor, Named Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
-		19: `Mafia Goon, Mafia Goon, Mafia Role Cop, Mafia Pretty Lady, Bulletproof Werewolf, Role Cop, Doctor, Pretty Lady, Jailkeeper, Mayor, Named Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
-		20: `Mafia Goon, Mafia Goon, Mafia Role Cop, Mafia Pretty Lady, Bulletproof Werewolf, Role Cop, Doctor, Pretty Lady, Jailkeeper, Mayor, Named Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		9: `Mafia Goon, Mafia Pretty Lady, Role Cop, Doctor, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		10: `Mafia Goon, Mafia Pretty Lady, Bulletproof Werewolf, Role Cop, Doctor, Pretty Lady, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		11: `Mafia Goon, Mafia Pretty Lady, Bulletproof Werewolf, Role Cop, Doctor, Pretty Lady, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		12: `Mafia Goon, Mafia Pretty Lady, Bulletproof Werewolf, Role Cop, Doctor, Pretty Lady, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		13: `Mafia Goon, Mafia Pretty Lady, Bulletproof Werewolf, Role Cop, Doctor, Pretty Lady, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		14: `Mafia Goon, Mafia Goon, Mafia Pretty Lady, Bulletproof Werewolf, Role Cop, Doctor, Pretty Lady, Jailkeeper, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		15: `Mafia Goon, Mafia Role Cop, Mafia Pretty Lady, Bulletproof Werewolf One-Shot Strongman, Role Cop, Doctor, Doctor, Pretty Lady, Jailkeeper, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		16: `Mafia Goon, Mafia Role Cop, Mafia Pretty Lady, Bulletproof Werewolf One-Shot Strongman, Role Cop, Doctor, Doctor, Pretty Lady, Jailkeeper, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		17: `Mafia Goon, Mafia Role Cop, Mafia Pretty Lady, Bulletproof Werewolf One-Shot Strongman, Role Cop, Doctor, Doctor, Pretty Lady, Jailkeeper, One-Shot Vigilante, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		18: `Mafia Goon, Mafia Role Cop, Mafia Pretty Lady, Bulletproof Werewolf One-Shot Strongman, Role Cop, Doctor, Doctor, Pretty Lady, Jailkeeper, One-Shot Vigilante, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		19: `Mafia Goon, Mafia Goon, Mafia Role Cop, Mafia Pretty Lady, Bulletproof Werewolf One-Shot Strongman, Role Cop, Doctor, Doctor, Pretty Lady, Jailkeeper, One-Shot Vigilante, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		20: `Mafia Goon, Mafia Goon, Mafia Role Cop, Mafia Pretty Lady, Bulletproof Werewolf One-Shot Strongman, Role Cop, Doctor, Doctor, Pretty Lady, Jailkeeper, One-Shot Vigilante, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 	},
 	dethy: {
 		name: `Dethy`,
@@ -924,6 +978,12 @@ exports.themes = Object.assign(Object.create(null), {
 		desc: `Kids With Guns: A theme based around roles that can kill people!`,
 		8: `Mafia Suicide Bomber, Mafia Goon, One-Shot Vigilante, Innocent Child, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 	},
+	lh: `lighthouse`,
+	lighthouse: {
+		name: `Lighthouse`,
+		desc: `Lighthouse: A theme where the town has a Lightkeeper. When this role dies, the next day is anonymous!`,
+		5:
+	}
 	nd: `neighbors_dilemma`,
 	neighbors_dilemma: {
 		name: `Neighbors Dilemma`,
@@ -1929,8 +1989,8 @@ exports.IDEAs = Object.assign(Object.create(null), {
 			`Alien Alien-of-all-Trades`,
 			`Alien Omniscient`,
 			`Solo E.T`,
-			`Solo Cultafia Leader`,
-			`Solo Gambit Cult Recruiter`,
+			`Cultafia Leader`,
+			`Gambit Cult Recruiter`,
 			`Solo Inquisitor`,
 			`Solo Bulletproof Duskiller`,
 			`Solo Bulletproof Corrupt Queen`,
