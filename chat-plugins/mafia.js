@@ -1502,6 +1502,7 @@ exports.commands = {
 			`/mafia sub [player], [user] - Forcibly sub [player] for [user]. Requires host % @ * # & ~`,
 		],
 
+		"!autosub": true,
 		autosub: function (target, room, user) {
 			let targetRoom = room;
 			target = target.split(',');
@@ -1515,7 +1516,7 @@ exports.commands = {
 				if (targetRoom.game.autoSub) return user.sendTo(targetRoom, `|error|Automatic subbing of players is already enabled.`);
 				targetRoom.game.autoSub = true;
 				user.sendTo(targetRoom, `Automatic subbing of players has been enabled.`);
-				room.game.nextSub();
+				targetRoom.game.nextSub();
 			} else if (this.meansNo(toId(target))) {
 				if (!targetRoom.game.autoSub) return user.sendTo(targetRoom, `|error|Automatic subbing of players is already disabled.`);
 				targetRoom.game.autoSub = false;
