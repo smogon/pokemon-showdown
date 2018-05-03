@@ -306,7 +306,7 @@ exports.roles = Object.assign(Object.create(null), {
 		name: `Firefighter`,
 		id: `firefighter`,
 		memo: [`Firefighter: During the Night, you may PM the host the name of another player. This player can't be primed by an Arsonist that night.`],
-	}
+	},
 	fruit_vendor: {
 		name: `Fruit Vendor`,
 		id: `fruitvendor`,
@@ -990,7 +990,7 @@ exports.themes = Object.assign(Object.create(null), {
 		name: `Forest Fire`,
 		desc: `Forest Fire: The forest risks being burned down! Stop the Arsonists before its too late.`,
 		9: `Arsonist, Arsonist, Tree, Tree, Tree, Tree, Tree, Tree, Firefighter`,
-	}
+	},
 	job: `jungle_of_bullshit`,
 	jungle_of_bullshit: {
 		name: `Jungle of Bullshit`,
@@ -1016,7 +1016,7 @@ exports.themes = Object.assign(Object.create(null), {
 		11: `Mafia Goon, Mafia Goon, Mafia Goon, Lightkeeper, Gunsmith, Gunsmith, Oracle, Oracle, Oracle, Oracle, Oracle`,
 		12: `Mafia Goon, Mafia Goon, Mafia Goon, Lightkeeper, Gunsmith, Gunsmith, Oracle, Oracle, Oracle, Oracle, Oracle, Oracle`,
 		13: `Mafia Goon, Mafia Goon, Mafia Gunsmith, Lightkeeper, Gunsmith, Gunsmith, Gunsmith, Oracle, Oracle, Oracle, Oracle, Oracle, Oracle`,
-	}
+	},
 	nd: `neighbors_dilemma`,
 	neighbors_dilemma: {
 		name: `Neighbors Dilemma`,
