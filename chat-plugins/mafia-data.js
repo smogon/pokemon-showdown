@@ -68,7 +68,7 @@ exports.alignments = Object.assign(Object.create(null), {
 		color: `#600`,
 		memo: [
 			`Factional Communication: If there are other Cult-aligned players, you may PM them during the game.`,
-			`Factional Concept: The Cult can recruit other players into the Cult more often than not.`,
+			`Factional Concept: The Cultafia can recruit and kill players. Ask the Host for more information about how this works exactly.`,
 			`You are aligned with the <span style="color:#000;font-weight:bold">Cult</span>. You win when all players without a Cult wincon are eliminated and at least one Cult-aligned player is still alive (or nothing can prevent the same).`,
 		],
 		// TODO image for cult faction
@@ -104,9 +104,23 @@ exports.alignments = Object.assign(Object.create(null), {
 		id: `mime`,
 		color: `#A6B`,
 		memo: [
-			`Factional Communication: If there are other Replicant-aligned players, you may PM them during the game.`,
-			`Factional Roleblock: The Replicants may kill one player per night.`,
-			`You are aligned with the <span style="color:#DDD;font-weight:bold">Replicants</span>. You win when all players without a Replicant wincon are eliminated and at least one Replicant-aligned player is still alive (or nothing can prevent the same).`,
+			`Factional Communication: If there are other Mime-aligned players, you may PM them during the game.`,
+			`Factional Roleblock: The Mimes may roleblock one player per night.`,
+			`You are aligned with the <span style="color:#A6B;font-weight:bold">Mimes</span>. You win when all Mimes have been lynched.`,
+		],
+		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
+	},
+	arsonist: {
+		name: `Arsonist`,
+		plural: `Arsonists`,
+		id: `arsonist`,
+		color: `#E82`,
+		memo: [
+			`Factional Communication: If there are other Arsonist-aligned players, you may PM them during the game.`,
+			`Factional Actions: The Arsonists may together use one factional action a night.`,
+			`Factional Prime: The Arsonists prime someone by dousing them with gasoline.`,
+			`Factional Ignite: The Arsonists light all previously primed players on fire, killing them.`,
+			`You are aligned with the <span style="color:#E82;font-weight:bold">Arsonists</span>. You win when all players without a Replicant wincon are eliminated and at least one Replicant-aligned player is still alive (or nothing can prevent the same).`,
 		],
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
 	},
@@ -118,21 +132,21 @@ exports.alignments = Object.assign(Object.create(null), {
 		memo: [
 			`Factional Knowledge: If there are other Replicant-aligned players, you know who they are.`,
 			`Factional Kill: The Pygmees may attempt to kill someone at any moment.`,
-			`You are aligned with the <span style="color:#DDD;font-weight:bold">Pygmees</span>. You win when all players without a Pygmee wincon are eliminated and at least one Pygmee-aligned player is still alive (or nothing can prevent the same).`,
+			`You are aligned with the <span style="color:#640;font-weight:bold">Pygmees</span>. You win when all players without a Pygmee wincon are eliminated and at least one Pygmee-aligned player is still alive (or nothing can prevent the same).`,
 		],
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
 	},
+	// Will be added in SI soon.
 	hypnotist: {
 		name: `Hypnotist`,
 		plural: `Hypnotists`,
 		id: `Hypnotists`,
 		color: `#A26`,
 		memo: [
-			`Factional Communication: If there are other Cult-aligned players, you may PM them during the game.`,
+			`Factional Communication: If there are other Hypnotist-aligned players, you may PM them during the game.`,
 			`Factional Concept: The Cult can recruit other players into the Cult more often than not.`,
-			`You are aligned with the <span style="color:#000;font-weight:bold">Cult</span>. You win when all players without a Cult wincon are eliminated and at least one Cult-aligned player is still alive (or nothing can prevent the same).`,
+			`You are aligned with the <span style="color:#A26;font-weight:bold">Hypnotists</span>. You win when all players without a Cult wincon are eliminated and at least one Cult-aligned player is still alive (or nothing can prevent the same).`,
 		],
-		// TODO image for cult faction
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
 	},
 	// Mermaid theme doesn't seem balanced enough to officially recognise.
@@ -288,6 +302,11 @@ exports.roles = Object.assign(Object.create(null), {
 		memo: [`FBI Agent: Each night you can PM the host the name of another player. You will be told if they are SERIAL KILLER or NOT SERIAL KILLER, or receive NO RESULT if your investigation failed.`],
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
 	},
+	firefighter: {
+		name: `Firefighter`,
+		id: `firefighter`,
+		memo: [`Firefighter: During the Night, you may PM the host the name of another player. This player can't be primed by an Arsonist that night.`],
+	}
 	fruit_vendor: {
 		name: `Fruit Vendor`,
 		id: `fruitvendor`,
@@ -966,6 +985,12 @@ exports.themes = Object.assign(Object.create(null), {
 		19: `Mafia Compulsive Janitor, Mafia Coroner, Mafia Coroner, Mafia Suicide Bomber, Coroner, Coroner, Coroner, Gunsmith, Blacksmith, Organ Donor, Innocent Child, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		20: `Mafia Compulsive Janitor, Mafia Coroner, Mafia Coroner, Mafia Suicide Bomber, Mafia Goon, Coroner, Coroner, Coroner, Gunsmith, Blacksmith, Organ Donor, Innocent Child, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 	},
+	ff: `forest_fire`,
+	forest_fire: {
+		name: `Forest Fire`,
+		desc: `Forest Fire: The forest risks being burned down! Stop the Arsonists before its too late.`,
+		9: `Arsonist, Arsonist, Tree, Tree, Tree, Tree, Tree, Tree, Firefighter`,
+	}
 	job: `jungle_of_bullshit`,
 	jungle_of_bullshit: {
 		name: `Jungle of Bullshit`,
@@ -982,7 +1007,15 @@ exports.themes = Object.assign(Object.create(null), {
 	lighthouse: {
 		name: `Lighthouse`,
 		desc: `Lighthouse: A theme where the town has a Lightkeeper. When this role dies, the next day is anonymous!`,
-		5:
+		5: `Mafia Goon, Lightkeeper, Oracle, Oracle, Oracle`,
+		6: `Mafia Goon, Mafia Goon, Lightkeeper, Gunsmith, Oracle, Oracle`,
+		7: `Mafia Goon, Mafia Goon, Lightkeeper, Gunsmith, Oracle, Oracle, Oracle`,
+		8: `Mafia Goon, Mafia Goon, Lightkeeper, Gunsmith, Gunsmith, Oracle, Oracle, Oracle`,
+		9: `Mafia Goon, Mafia Gunsmith, Lightkeeper, Gunsmith, Gunsmith, Oracle, Oracle, Oracle, Oracle`,
+		10: `Mafia Goon, Mafia Gunsmith, Lightkeeper, Gunsmith, Gunsmith, Oracle, Oracle, Oracle, Oracle, Oracle`,
+		11: `Mafia Goon, Mafia Goon, Mafia Goon, Lightkeeper, Gunsmith, Gunsmith, Oracle, Oracle, Oracle, Oracle, Oracle`,
+		12: `Mafia Goon, Mafia Goon, Mafia Goon, Lightkeeper, Gunsmith, Gunsmith, Oracle, Oracle, Oracle, Oracle, Oracle, Oracle`,
+		13: `Mafia Goon, Mafia Goon, Mafia Gunsmith, Lightkeeper, Gunsmith, Gunsmith, Gunsmith, Oracle, Oracle, Oracle, Oracle, Oracle, Oracle`,
 	}
 	nd: `neighbors_dilemma`,
 	neighbors_dilemma: {
