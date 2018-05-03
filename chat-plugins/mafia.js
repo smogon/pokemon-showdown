@@ -139,10 +139,14 @@ class MafiaTracker extends Rooms.RoomGame {
 		return new MafiaPlayer(user, this);
 	}
 
-	setRoles(roleString, force) {
+	setRoles(user, roleString, force) {
 		let roleNames = roleString.split(',').map(x => { return x.trim(); });
 		let roles = roleNames.slice().map(x => { return x.toLowerCase().replace(/[^\w\d\s]/g, '').split(' '); });
-		if (roles.length !== this.playerCount) return ['You have not provided enough roles for the players.'];
+		if (roles.length < this.playerCount) {
+			return user.sendTo(this.room, `|error|You have not provided enough roles for the players.`);
+		} else if (roles.length > this.playerCount) {
+			user.sendTo(this.room, `|error|You have provided too many roles, ${roles.length - this.playerCount} ${Chat.plural(roles.length - this.playerCount, 'roles', 'role')} will not be assigned.`);
+		}
 		if (this.originalRoles.length) {
 			// Reset roles
 			this.originalRoles = [];
@@ -180,7 +184,7 @@ class MafiaTracker extends Rooms.RoomGame {
 					let roleKey = target.slice().map(p => { return toId(p); }).join('_');
 					if (roleKey.includes(key)) {
 						let originalKey = key;
-						if (typeof MafiaData.roles[key] === 'string') key = MafiaData.roles[MafiaData.roles[key]].id;
+						if (typeof MafiaData.roles[key] === 'string') key = MafiaData.roles[key];
 						if (!role.image && MafiaData.roles[key].image) role.image = MafiaData.roles[key].image;
 						if (MafiaData.roles[key].alignment) {
 							if (role.alignment && role.alignment !== MafiaData.roles[key].alignment) {
@@ -196,7 +200,7 @@ class MafiaTracker extends Rooms.RoomGame {
 					}
 				} else if (target.includes(key)) {
 					let index = target.indexOf(key);
-					if (typeof MafiaData.roles[key] === 'string') key = MafiaData.roles[MafiaData.roles[key]].id;
+					if (typeof MafiaData.roles[key] === 'string') key = MafiaData.roles[key];
 					if (!role.image && MafiaData.roles[key].image) role.image = MafiaData.roles[key].image;
 					if (MafiaData.roles[key].memo) role.memo = role.memo.concat(MafiaData.roles[key].memo);
 					target.splice(index, 1);
@@ -207,7 +211,7 @@ class MafiaTracker extends Rooms.RoomGame {
 				if (key.includes('_')) {
 					let roleKey = target.slice().map(p => { return toId(p); }).join('_');
 					if (roleKey.includes(key)) {
-						if (typeof MafiaData.modifiers[key] === 'string') key = MafiaData.modifiers[MafiaData.modifiers[key]].id;
+						if (typeof MafiaData.modifiers[key] === 'string') key = MafiaData.modifiers[key];
 						if (!role.image && MafiaData.modifiers[key].image) role.image = MafiaData.modifiers[key].image;
 						if (MafiaData.modifiers[key].memo) role.memo = role.memo.concat(MafiaData.modifiers[key].memo);
 						let index = roleKey.split('_').indexOf(key.split('_')[0]);
@@ -228,7 +232,7 @@ class MafiaTracker extends Rooms.RoomGame {
 					}
 				} else if (target.includes(key)) {
 					let index = target.indexOf(key);
-					if (typeof MafiaData.modifiers[key] === 'string') key = MafiaData.modifiers[MafiaData.modifiers[key]].id;
+					if (typeof MafiaData.modifiers[key] === 'string') key = MafiaData.modifiers[key];
 					if (!role.image && MafiaData.modifiers[key].image) role.image = MafiaData.modifiers[key].image;
 					if (MafiaData.modifiers[key].memo) role.memo = role.memo.concat(MafiaData.modifiers[key].memo);
 					target.splice(index, 1);
@@ -266,13 +270,16 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (alignments.length < 2 && alignments[0] !== 'solo') problems.push(`There must be at least 2 different alignments in a game!`);
 		if (problems.length) {
 			this.originalRoles = [];
-			return problems;
+			for (const problem of problems) {
+				user.sendTo(this.room, `|error|${problem}`);
+			}
+			return user.sendTo(this.room, `|error|To forcibly set the roles, use /mafia forcesetroles`);
 		}
 		this.roles = this.originalRoles.slice();
 		this.originalRoleString = this.originalRoles.slice().map(r => { return `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`; }).join(', ');
 		this.roleString = this.originalRoleString;
 		this.updatePlayers();
-		return [];
+		this.sendRoom(`The roles have been set.`);
 	}
 
 	start(user) {
@@ -283,7 +290,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 		if (this.playerCount < 2) return user.sendTo(this.room, `You need at least 2 players to start.`);
 		if (!Object.keys(this.roles).length) return user.sendTo(this.room, `You need to set the roles before starting.`);
-		if (Object.keys(this.roles).length !== this.playerCount) return user.sendTo(this.room, `You have not provided enough roles for the players.`);
+		if (Object.keys(this.roles).length < this.playerCount) return user.sendTo(this.room, `You have not provided enough roles for the players.`);
 		this.started = true;
 		this.played = Object.keys(this.players);
 		this.sendRoom(`The game of ${this.title} is starting!`, {declare: true});
@@ -1073,10 +1080,8 @@ exports.commands = {
 			if (!user.can('mute', null, room) && room.game.hostid !== user.userid) return this.errorReply(`/mafia ${cmd} - Access denied.`);
 			if (room.game.phase !== 'locked') return this.errorReply(room.game.phase === 'signups' ? `You need to close signups first.` : `The game has already started.`);
 			if (!target) return this.parse('/help mafia setroles');
-			// Validate roles
-			let problems = room.game.setRoles(target, cmd === 'forcesetroles');
-			if (problems.length) return this.errorReply(problems.concat([`To forcibly set the roles, use /mafia forcesetroles ${target}`]).join('\n'));
-			this.sendReply(`The roles have been set.`);
+
+			room.game.setRoles(user, target, cmd === 'forcesetroles');
 		},
 		setroleshelp: [
 			`/mafia setroles [comma seperated roles] - Set the roles for a game of mafia. You need to provide one role per player.`,
