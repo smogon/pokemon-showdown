@@ -287,7 +287,9 @@ class Tournament {
 		}
 
 		if (!isAllowAlts) {
-			for (const otherUser of this.generator.getUsers()) {
+			for (let otherUser of this.generator.getUsers()) {
+				if (!otherUser) continue;
+				otherUser = Users(otherUser.userid);
 				if (otherUser && otherUser.latestIp === user.latestIp) {
 					output.sendReply('|tournament|error|AltUserAlreadyAdded');
 					return;
