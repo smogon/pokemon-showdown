@@ -6795,7 +6795,7 @@ let BattleFormatsData = {
 		doublesTier: "DUU",
 	},
 	pyukumuku: {
-		randomBattleMoves: ["memento", "counter", "reflect", "lightscreen"],
+		randomBattleMoves: ["toxic", "recover", "counter", "reflect", "lightscreen"],
 		randomDoubleBattleMoves: ["reflect", "lightscreen", "counter", "helpinghand", "safeguard", "memento"],
 		tier: "PU",
 		doublesTier: "DUU",
