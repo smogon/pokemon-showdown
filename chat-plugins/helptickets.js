@@ -541,7 +541,7 @@ exports.commands = {
 	report: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (this.broadcasting) {
-			if (room.battle) return this.errorReply(`This command cannot be broadcast in battles.`);
+			if (room && room.battle) return this.errorReply(`This command cannot be broadcast in battles.`);
 			return this.sendReplyBox('<button name="joinRoom" value="view-help-request--report" class="button"><strong>Report someone</strong></button>');
 		}
 
@@ -552,7 +552,7 @@ exports.commands = {
 	appeal: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (this.broadcasting) {
-			if (room.battle) return this.errorReply(`This command cannot be broadcast in battles.`);
+			if (room && room.battle) return this.errorReply(`This command cannot be broadcast in battles.`);
 			return this.sendReplyBox('<button name="joinRoom" value="view-help-request--appeal" class="button"><strong>Appeal a punishment</strong></button>');
 		}
 
