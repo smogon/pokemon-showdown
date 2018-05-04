@@ -18,7 +18,7 @@ This is the source code for the game server of [Pokémon Showdown][4], a website
 
 This repository contains the files needed to set up your own Pokémon Showdown server. Note that to set up a server, you'll also need a server computer.
 
-You can use your own computer as a server, but for other people to connect to your computer, you'll need to expose a port (default is 8000 but you can choose a different one) to connect to, which sometimes requires [port forwarding][5] (note that this isn't possible on certain internet connections).
+You can use your own computer as a server, but for other people to connect to your computer, you'll need to expose a port (default is 8000 but you can choose a different one) to connect to, which sometimes requires [port forwarding][5]. Note that some internet providers don't let you host a server at all, in which case you'll have to rent a VPS to use as a server.
 
   [4]: http://pokemonshowdown.com/
   [5]: http://en.wikipedia.org/wiki/Port_forwarding
