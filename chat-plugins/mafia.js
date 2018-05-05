@@ -492,6 +492,8 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (!this.started) {
 			// Game has not started, simply kick the player
 			this.sendRoom(`${player.safeName} was kicked from the game!`, {declare: true});
+			if (this.hostRequestedSub.includes(player.userid)) this.hostRequestedSub.splice(this.hostRequestedSub.indexOf(player.userid), 1);
+			if (this.requestedSub.includes(player.userid)) this.requestedSub.splice(this.requestedSub.indexOf(player.userid), 1);
 			player.destroy();
 			delete this.players[player.userid];
 			this.playerCount--;
