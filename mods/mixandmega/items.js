@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleItems = {
+/**@type {{[k: string]: ModdedItemData}} */
+let BattleItems = {
 	blueorb: {
 		inherit: true,
 		onSwitchIn: function (pokemon) {
@@ -9,6 +10,8 @@ exports.BattleItems = {
 			}
 		},
 		onPrimal: function (pokemon) {
+			/**@type {Template} */
+			// @ts-ignore
 			let template = this.getMixedTemplate(pokemon.originalSpecies, 'Kyogre-Primal');
 			pokemon.formeChange(template);
 			pokemon.baseTemplate = template;
@@ -17,6 +20,7 @@ exports.BattleItems = {
 				this.add('detailschange', pokemon, pokemon.details);
 			} else {
 				if (pokemon.illusion) pokemon.ability = '';
+				// @ts-ignore
 				let oTemplate = this.getTemplate(pokemon.illusion || pokemon.originalSpecies);
 				this.add('-formechange', pokemon, oTemplate.species);
 				this.add('-start', pokemon, 'Blue Orb', '[silent]');
@@ -37,6 +41,8 @@ exports.BattleItems = {
 			}
 		},
 		onPrimal: function (pokemon) {
+			/**@type {Template} */
+			// @ts-ignore
 			let template = this.getMixedTemplate(pokemon.originalSpecies, 'Groudon-Primal');
 			pokemon.formeChange(template);
 			pokemon.baseTemplate = template;
@@ -44,6 +50,7 @@ exports.BattleItems = {
 				pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.set.shiny ? ', shiny' : '');
 				this.add('detailschange', pokemon, pokemon.details);
 			} else {
+				// @ts-ignore
 				let oTemplate = this.getTemplate(pokemon.illusion || pokemon.originalSpecies);
 				this.add('-formechange', pokemon, oTemplate.species);
 				this.add('-start', pokemon, 'Red Orb', '[silent]');
@@ -66,3 +73,5 @@ exports.BattleItems = {
 		},
 	},
 };
+
+exports.BattleItems = BattleItems;
