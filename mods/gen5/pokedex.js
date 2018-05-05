@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattlePokedex = {
+/**@type {{[k: string]: ModdedTemplateData}} */
+let BattlePokedex = {
 	butterfree: {
 		inherit: true,
 		baseStats: {hp: 60, atk: 45, def: 50, spa: 80, spd: 80, spe: 70},
@@ -397,3 +398,5 @@ exports.BattlePokedex = {
 		abilities: {0: "Flame Body"},
 	},
 };
+
+exports.BattlePokedex = BattlePokedex;

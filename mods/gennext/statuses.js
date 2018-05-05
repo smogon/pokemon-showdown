@@ -1,7 +1,11 @@
 'use strict';
 
-exports.BattleStatuses = {
+/**@type {{[k: string]: ModdedEffectData}} */
+let BattleStatuses = {
 	frz: {
+		name: 'frz',
+		id: 'frz',
+		num: 0,
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'frz');
@@ -27,12 +31,17 @@ exports.BattleStatuses = {
 	},
 	lockedmove: {
 		// Outrage, Thrash, Petal Dance...
+		name: 'lockedmove',
+		id: 'lockedmove',
+		num: 0,
 		durationCallback: function () {
 			return this.random(2, 4);
 		},
 		onResidual: function (target) {
+			/**@type {Move} */
+			// @ts-ignore
 			let move = target.lastMove;
-			if (!move.self || move.self.volatileStatus !== 'lockedmove') {
+			if (!move.self || (move.self !== true && move.self.volatileStatus !== 'lockedmove')) {
 				// don't lock, and bypass confusion for calming
 				delete target.volatiles['lockedmove'];
 			} else if (target.ability === 'owntempo') {
@@ -44,11 +53,15 @@ exports.BattleStatuses = {
 			target.addVolatile('confusion');
 		},
 		onLockMove: function (pokemon) {
+			// @ts-ignore
 			return pokemon.lastMove.id;
 		},
 	},
 	confusion: {
 		// this is a volatile status
+		name: 'confusion',
+		id: 'confusion',
+		num: 0,
 		onStart: function (target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.id === 'lockedmove') {
 				this.add('-start', target, 'confusion', '[fatigue]');
@@ -108,6 +121,9 @@ exports.BattleStatuses = {
 	// intrinsics!
 
 	bidestall: {
+		name: 'bidestall',
+		id: 'bidestall',
+		num: 0,
 		duration: 3,
 	},
 
@@ -333,8 +349,10 @@ exports.BattleStatuses = {
 		// Cryogonal: infinite hail, Ice Body
 		onModifyMove: function (move) {
 			if (move.id === 'hail') {
+				/**@type {string} */
+				// @ts-ignore
 				let weather = move.weather;
-				move.weather = null;
+				move.weather = '';
 				move.onHit = function (target, source) {
 					this.setWeather(weather, source, this.getAbility('snowwarning'));
 					this.weatherData.duration = 0;
@@ -356,8 +374,10 @@ exports.BattleStatuses = {
 		// Probopass: infinite sand
 		onModifyMove: function (move) {
 			if (move.id === 'sandstorm') {
+				/**@type {string} */
+				// @ts-ignore
 				let weather = move.weather;
-				move.weather = null;
+				move.weather = '';
 				move.onHit = function (target, source) {
 					this.setWeather(weather, source, this.getAbility('sandstream'));
 					this.weatherData.duration = 0;
@@ -370,8 +390,10 @@ exports.BattleStatuses = {
 		// Phione: infinite rain
 		onModifyMove: function (move) {
 			if (move.id === 'raindance') {
+				/**@type {string} */
+				// @ts-ignore
 				let weather = move.weather;
-				move.weather = null;
+				move.weather = '';
 				move.onHit = function (target, source) {
 					this.setWeather(weather, source, this.getAbility('drizzle'));
 					this.weatherData.duration = 0;
@@ -381,3 +403,5 @@ exports.BattleStatuses = {
 		},
 	},
 };
+
+exports.BattleStatuses = BattleStatuses;

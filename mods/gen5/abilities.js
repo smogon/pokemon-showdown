@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleAbilities = {
+/**@type {{[k: string]: ModdedAbilityData}} */
+let BattleAbilities = {
 	"frisk": {
 		inherit: true,
 		shortDesc: "On switch-in, this Pokemon identifies a random foe's held item.",
@@ -54,6 +55,7 @@ exports.BattleAbilities = {
 			if (move.secondaries && move.id !== 'secretpower') {
 				this.debug('doubling secondary chance');
 				for (const secondary of move.secondaries) {
+					// @ts-ignore
 					secondary.chance *= 2;
 				}
 			}
@@ -65,3 +67,5 @@ exports.BattleAbilities = {
 		onAllyTryHitSide: function () {},
 	},
 };
+
+exports.BattleAbilities = BattleAbilities;

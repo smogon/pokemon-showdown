@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleScripts = {
+/**@type {ModdedBattleScriptsData} */
+let BattleScripts = {
 	init: function () {
 		this.modData('Pokedex', 'cherrimsunshine').types = ['Grass', 'Fire'];
 
@@ -149,3 +150,5 @@ exports.BattleScripts = {
 		}
 	},
 };
+
+exports.BattleScripts = BattleScripts;

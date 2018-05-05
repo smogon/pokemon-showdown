@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleTypeChart = {
+/**@type {{[k: string]: ModdedTypeData | null}} */
+let BattleTypeChart = {
 	"Electric": {
 		inherit: true,
 		damageTaken: {
@@ -94,3 +95,5 @@ exports.BattleTypeChart = {
 	},
 	"Fairy": null,
 };
+
+exports.BattleTypeChart = BattleTypeChart;

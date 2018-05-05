@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleScripts = {
+/**@type {ModdedBattleScriptsData} */
+let BattleScripts = {
 	init: function () {
 		for (let id in this.data.Items) {
 			if (!this.data.Items[id].megaStone) continue;
@@ -8,22 +9,24 @@ exports.BattleScripts = {
 		}
 	},
 	canMegaEvo: function (pokemon) {
-		if (pokemon.template.isMega || pokemon.template.isPrimal) return false;
+		if (pokemon.template.isMega || pokemon.template.isPrimal) return null;
 
 		const item = pokemon.getItem();
 		if (item.megaStone) {
-			if (item.megaStone === pokemon.species) return false;
+			if (item.megaStone === pokemon.species) return null;
 			return item.megaStone;
 		} else if (pokemon.baseMoves.includes('dragonascent')) {
 			return 'Rayquaza-Mega';
 		} else {
-			return false;
+			return null;
 		}
 	},
 	runMegaEvo: function (pokemon) {
 		if (pokemon.template.isMega || pokemon.template.isPrimal) return false;
 
 		const isUltraBurst = !pokemon.canMegaEvo;
+		/**@type {Template} */
+		// @ts-ignore
 		const template = this.getMixedTemplate(pokemon.originalSpecies, pokemon.canMegaEvo || pokemon.canUltraBurst);
 		const side = pokemon.side;
 
@@ -38,6 +41,7 @@ exports.BattleScripts = {
 		pokemon.baseTemplate = template; // Mega Evolution is permanent
 
 		// Do we have a proper sprite for it?
+		// @ts-ignore
 		if (this.getTemplate(pokemon.canMegaEvo).baseSpecies === pokemon.originalSpecies || isUltraBurst) {
 			pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 			this.add('detailschange', pokemon, pokemon.details);
@@ -60,15 +64,17 @@ exports.BattleScripts = {
 
 		pokemon.setAbility(template.abilities['0'], null, true);
 		pokemon.baseAbility = pokemon.ability;
-		pokemon.canMegaEvo = false;
-		if (isUltraBurst) pokemon.canUltraBurst = false;
+		pokemon.canMegaEvo = null;
+		if (isUltraBurst) pokemon.canUltraBurst = null;
 		return true;
 	},
 	getMixedTemplate: function (originalSpecies, megaSpecies) {
 		let originalTemplate = this.getTemplate(originalSpecies);
 		let megaTemplate = this.getTemplate(megaSpecies);
 		if (originalTemplate.baseSpecies === megaTemplate.baseSpecies) return megaTemplate;
+		// @ts-ignore
 		let deltas = this.getMegaDeltas(megaTemplate);
+		// @ts-ignore
 		let template = this.doGetMixedTemplate(originalTemplate, deltas);
 		return template;
 	},
@@ -82,6 +88,7 @@ exports.BattleScripts = {
 			requiredItem: megaTemplate.requiredItem,
 		};
 		for (let statId in megaTemplate.baseStats) {
+			// @ts-ignore
 			deltas.baseStats[statId] = megaTemplate.baseStats[statId] - baseTemplate.baseStats[statId];
 		}
 		if (megaTemplate.types.length > baseTemplate.types.length) {
@@ -106,8 +113,10 @@ exports.BattleScripts = {
 			template.types = [template.types[0], deltas.type];
 		}
 		let baseStats = template.baseStats;
+		// @ts-ignore
 		template.baseStats = {};
 		for (let statName in baseStats) {
+			// @ts-ignore
 			template.baseStats[statName] = this.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
 		}
 		template.weightkg = Math.max(0.1, template.weightkg + deltas.weightkg);
@@ -118,3 +127,5 @@ exports.BattleScripts = {
 		return template;
 	},
 };
+
+exports.BattleScripts = BattleScripts;

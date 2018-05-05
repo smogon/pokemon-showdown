@@ -240,7 +240,7 @@ interface EventMethods {
 	onPreStart?: (this: Battle, pokemon: Pokemon) => void
 	onPrimal?: (this: Battle, pokemon: Pokemon) => void
 	onRedirectTarget?: (this: Battle, target: Pokemon, source: Pokemon, source2: UnknownEffect) => void
-	onResidual?: (this: Battle, pokemon: Pokemon) => void
+	onResidual?: (this: Battle, pokemon: Pokemon, source: Pokemon, effect: UnknownEffect) => void
 	onRestart?: (this: Battle, pokemon: Pokemon, source: Pokemon) => void
 	onSetAbility?: (this: Battle, ability: string, target: Pokemon, source: Pokemon, effect: UnknownEffect) => void
 	onSetStatus?: (this: Battle, status: Status, target: Pokemon, source: Pokemon, effect: UnknownEffect) => void
@@ -267,6 +267,7 @@ interface EventMethods {
 	onTryEatItem?: (this: Battle, item: Item, pokemon: Pokemon) => void
 	onTryHeal?: ((this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: UnknownEffect) => void) | boolean
 	onTryHit?: ((this: Battle, pokemon: Pokemon, target: Pokemon, move: Move) => void) | boolean
+	onTryHitField?: (this: Battle, target: Pokemon, source: Pokemon) => boolean | void
 	onTryHitSide?: (this: Battle, side: Side, source: Pokemon) => void
 	onTryMove?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: Move) => void
 	onTryPrimaryHit?: (this: Battle, target: Pokemon, source: Pokemon, move: Move) => void
@@ -326,6 +327,7 @@ interface EffectData extends EventMethods {
 	onModifyWeightPriority?: number
 	onRedirectTargetPriority?: number
 	onResidualOrder?: number
+	onResidualPriority?: number
 	onResidualSubOrder?: number
 	onSwitchInPriority?: number
 	onTrapPokemonPriority?: number
@@ -334,9 +336,9 @@ interface EffectData extends EventMethods {
 	onTryMovePriority?: number
 	onTryPrimaryHitPriority?: number
 	recoil?: number[]
-	secondary?: boolean | SecondaryEffect
+	secondary?: boolean | SecondaryEffect | null
 	secondaries?: false | SecondaryEffect[]
-	self?: SelfEffect | boolean
+	self?: SelfEffect | boolean | null
 	shortDesc?: string
 	status?: string
 	weather?: string
@@ -575,6 +577,7 @@ interface TemplateFormatsData {
 	gen?: number
 	isNonstandard?: boolean | string
 	isUnreleased?: boolean
+	maleOnlyHidden?: boolean
 	randomBattleMoves?: string[]
 	randomDoubleBattleMoves?: string[]
 	requiredAbility?: string
@@ -701,6 +704,8 @@ interface BattleScriptsData {
 	getZMoveCopy?: (this: Battle, move: Move, pokemon: Pokemon) => Move
 	isAdjacent?: (this: Battle, pokemon1: Pokemon, pokemon2: Pokemon) => boolean
 	moveHit?: (this: Battle, target: Pokemon | null, pokemon: Pokemon, move: string | Move, moveData?: Move, isSecondary?: boolean, isSelf?: boolean) => number | false
+	resolveAction?: (this: Battle, action: AnyObject, midTurn?: boolean) => Actions["Action"]
+	runAction?: (this: Battle, action: Actions["Action"]) => void
 	runMegaEvo?: (this: Battle, pokemon: Pokemon) => boolean
 	runMove?: (this: Battle, move: Move, pokemon: Pokemon, targetLoc: number, sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean) => void
 	targetTypeChoices?: (this: Battle, targetType: string) => boolean
@@ -717,9 +722,11 @@ interface ModdedBattlePokemon {
 	boostBy?: (this: Pokemon, boost: SparseBoostsTable) => boolean
 	getStat?: (this: Pokemon, statName: string, unboosted?: boolean, unmodified?: boolean) => number
 	modifyStat?: (this: Pokemon, statName: string, modifier: number) => void
+	moveUsed?: (this: Pokemon, move: Move, targetLoc?: number) => void
+	recalculateStats?: (this: Pokemon) => void
 }
 
-interface ModdedBattleScriptsData extends BattleScriptsData {
+interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	inherit?: string
 	lastDamage?: number
 	pokemon?: ModdedBattlePokemon
@@ -731,6 +738,11 @@ interface ModdedBattleScriptsData extends BattleScriptsData {
 	getDamage?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: string | number | Move, suppressMessages: boolean) => number
 	init?: (this: Battle) => void
 	modifyDamage?: (this: Battle, baseDamage: number, pokemon: Pokemon, target: Pokemon, move: Move, suppressMessages?: boolean) => void
+
+	// oms
+	doGetMixedTemplate?: (this: Battle, template: Template, deltas: AnyObject) => Template
+	getMegaDeltas?: (this: Battle, megaSpecies: Template) => AnyObject
+	getMixedTemplate?: (this: Battle, originalSpecies: string, megaSpecies: string) => Template
 }
 
 interface TypeData {
@@ -752,6 +764,88 @@ interface TypeInfo extends TypeData {
 	id: string
 	name: string
 	toString: () => string
+}
+
+interface Actions {
+	/** A move action */
+	MoveAction: {
+		/** action type */
+		choice: 'move' | 'beforeTurnMove'
+		/** priority of the action (lower first) */
+		priority: number
+		/** speed of pokemon using move (higher first if priority tie) */
+		speed: number
+		/** the pokemon doing the move */
+		pokemon: Pokemon
+		/** location of the target, relative to pokemon's side */
+		targetLoc: number
+		/** a move to use (move action only) */
+		moveid: string
+		/** a move to use (move action only) */
+		move: Move
+		/** true if megaing or ultra bursting */
+		mega: boolean | 'done'
+		/** if zmoving, the name of the zmove */
+		zmove?: string
+		/** effect that called the move (eg Instruct) if any */
+		sourceEffect?: Effect | null
+	}
+
+	/** A switch action */
+	SwitchAction: {
+		/** action type */
+		choice: 'switch' | 'instaswitch'
+		/** priority of the action (lower first) */
+		priority: number
+		/** speed of pokemon switching (higher first if priority tie) */
+		speed: number
+		/** the pokemon doing the switch */
+		pokemon: Pokemon
+		/** pokemon to switch to */
+		target: Pokemon
+		/** effect that called the switch (eg U */
+		sourceEffect: Effect | null
+	}
+
+	/** A Team Preview choice action */
+	TeamAction: {
+		/** action type */
+		choice: 'team'
+		/** priority of the action (lower first) */
+		priority: number
+		/** unused for this action type */
+		speed: 1
+		/** the pokemon switching */
+		pokemon: Pokemon
+		/** new index */
+		index: number
+	}
+
+	/** A generic action not done by a pokemon */
+	FieldAction: {
+		/** action type */
+		choice: 'start' | 'residual' | 'pass' | 'beforeTurn'
+		/** priority of the action (lower first) */
+		priority: number
+		/** unused for this action type */
+		speed: 1
+		/** unused for this action type */
+		pokemon: null
+	}
+
+	/** A generic action done by a single pokemon */
+	PokemonAction: {
+		/** action type */
+		choice: 'megaEvo' | 'shift' | 'runPrimal' | 'runSwitch' | 'event' | 'runUnnerve'
+		/** priority of the action (lower first) */
+		priority: number
+		/** speed of pokemon doing action (higher first if priority tie) */
+		speed: number
+		/** the pokemon doing action */
+		pokemon: Pokemon
+	}
+
+	Action: Actions["MoveAction"] | Actions["SwitchAction"] | Actions["TeamAction"] | Actions["FieldAction"] | Actions["PokemonAction"]
 }
 
 interface RandomTeamsTypes {

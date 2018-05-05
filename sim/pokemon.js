@@ -238,6 +238,8 @@ class Pokemon {
 
 		/**@type {string | undefined} */
 		this.originalSpecies = undefined;
+		/**@type {?boolean} */
+		this.gluttonyFlag = null;
 	}
 	get moves() {
 		return this.moveSlots.map(moveSlot => moveSlot.id);

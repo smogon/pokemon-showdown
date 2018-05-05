@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleFormatsData = {
+/**@type {{[k: string]: ModdedTemplateFormatsData}} */
+let BattleFormatsData = {
 	pikachupartner: {
 		inherit: true,
 		isUnreleased: true,
@@ -67,3 +68,5 @@ exports.BattleFormatsData = {
 		tier: "Unreleased",
 	},
 };
+
+exports.BattleFormatsData = BattleFormatsData;

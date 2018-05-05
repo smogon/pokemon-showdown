@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleAbilities = {
+/**@type {{[k: string]: ModdedAbilityData}} */
+let BattleAbilities = {
 	"aerilate": {
 		inherit: true,
 		desc: "This Pokemon's Normal-type moves become Flying-type moves and have their power multiplied by 1.3. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
@@ -79,6 +80,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon's damaging moves become multi-hit moves that hit twice. The second hit has its damage halved. Does not affect multi-hit moves or moves that have multiple targets.",
 		shortDesc: "This Pokemon's damaging moves hit twice. The second hit has its damage halved.",
 		onBasePower: function (basePower, pokemon, target, move) {
+			// @ts-ignore
 			if (move.hasParentalBond && ++move.hit > 1) return this.chainModify(0.5);
 		},
 	},
@@ -127,3 +129,5 @@ exports.BattleAbilities = {
 		rating: 0.5,
 	},
 };
+
+exports.BattleAbilities = BattleAbilities;
