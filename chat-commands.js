@@ -2628,7 +2628,7 @@ const commands = {
 		const name = Punishments.roomUnblacklist(room, target);
 
 		if (name) {
-			this.addModAction("" + name + " was unblacklisted by " + user.name + ".");
+			this.privateModAction(`(${name} was unblacklisted by ${user.name}.)`);
 			if (!room.isPrivate && room.chatRoomData) {
 				this.globalModlog("UNBLACKLIST", name, " by " + user.userid);
 			}
