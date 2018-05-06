@@ -2129,6 +2129,29 @@ const commands = {
 		`/htmlbox [message] - Displays a message, parsing HTML code contained.`,
 		`!htmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: ~ & #`,
 	],
+	changeuhtml: 'adduhtml',
+	adduhtml: function (target, room, user, connection, cmd) {
+		if (!target) return this.parse('/help ' + cmd);
+		if (!this.canTalk()) return;
+
+		let [name, html] = this.splitOne(target);
+		name = toId(name);
+		html = this.canHTML(html);
+		if (!html) return;
+		if (!this.can('addhtml', null, room)) return;
+
+		if (!user.can('addhtml')) {
+			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
+		}
+
+		this.add(`|uhtml${(cmd === 'changeuhtml' ? 'change' : '')}|${name}|${html}`);
+	},
+	adduhtmlhelp: [
+		`/adduhtml [name], [message] - Shows everyone a message that can change, parsing HTML code contained.`,
+	],
+	changeuhtmlhelp: [
+		`/changeuhtml [name], [message] - Changes a message previously shown with /adduhtml`,
+	],
 };
 
 exports.commands = commands;
