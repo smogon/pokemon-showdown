@@ -782,6 +782,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	}
 
 	forfeit(user) {
+		if (!(user.userid in this.players)) return false;
 		// Treat it as if the user was banned (force sub)
 		return this.removeBannedUser(user);
 	}
@@ -1264,7 +1265,7 @@ exports.commands = {
 			} else {
 				target = parseInt(target);
 				if (isNaN(target)) {
-					if (room.game.hostid === user.userid && this.cmdToken === "!") {
+					if (targetRoom.game.hostid === user.userid && this.cmdToken === "!") {
 						const broadcastMessage = this.message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
 						if (room && room.lastBroadcast === broadcastMessage &&
 							room.lastBroadcastTime >= Date.now() - 20 * 1000) {
