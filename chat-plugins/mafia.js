@@ -782,7 +782,6 @@ class MafiaTracker extends Rooms.RoomGame {
 	}
 
 	forfeit(user) {
-		if (!(user.userid in this.players)) return false;
 		// Treat it as if the user was banned (force sub)
 		return this.removeBannedUser(user);
 	}
@@ -1254,18 +1253,15 @@ exports.commands = {
 
 		dl: 'deadline',
 		deadline: function (target, room, user) {
-			let targetRoom = room;
-			target = target.split(',');
-			if (Rooms(target[0]) && Rooms(target[0]).users[user.userid]) targetRoom = Rooms(target.shift());
-			if (!targetRoom || !targetRoom.game || targetRoom.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
-			if (!user.can('mute', null, room) && targetRoom.game.hostid !== user.userid && target.join('')) return user.sendTo(targetRoom, `|error|/mafia deadline - Access denied.`);
-			target = toId(target.join(''));
+			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
+			target = toId(target);
+			if (!user.can('mute', null, room) && room.game.hostid !== user.userid && target) return this.errorReply(`/mafia deadline - Access denied.`);
 			if (target === 'off') {
-				return targetRoom.game.setDeadline('off');
+				return room.game.setDeadline('off');
 			} else {
 				target = parseInt(target);
 				if (isNaN(target)) {
-					if (targetRoom.game.hostid === user.userid && this.cmdToken === "!") {
+					if (room.game.hostid === user.userid && this.cmdToken === "!") {
 						const broadcastMessage = this.message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
 						if (room && room.lastBroadcast === broadcastMessage &&
 							room.lastBroadcastTime >= Date.now() - 20 * 1000) {
@@ -1278,14 +1274,14 @@ exports.commands = {
 						room.lastBroadcast = broadcastMessage;
 					}
 					if (!this.runBroadcast()) return false;
-					if ((targetRoom.game.dlAt - Date.now()) > 0) {
-						return this.sendReply(`The deadline is in ${Chat.toDurationString(targetRoom.game.dlAt - Date.now()) || '0 seconds'}.`);
+					if ((room.game.dlAt - Date.now()) > 0) {
+						return this.sendReply(`The deadline is in ${Chat.toDurationString(room.game.dlAt - Date.now()) || '0 seconds'}.`);
 					} else {
 						return this.parse(`/help mafia deadline`);
 					}
 				}
-				if (target < 1 || target > 20) return user.sendTo(targetRoom, `|error|The deadline must be between 1 and 20 minutes.`);
-				return targetRoom.game.setDeadline(target);
+				if (target < 1 || target > 20) return this.errorReply(`The deadline must be between 1 and 20 minutes.`);
+				return room.game.setDeadline(target);
 			}
 		},
 		deadlinehelp: [`/mafia deadline [minutes|off] - Sets or removes the deadline for the game. Cannot be more than 20 minutes.`],
