@@ -2515,7 +2515,7 @@ const commands = {
 		if (userid !== toId(this.inputUsername)) this.add(`|unlink|hide|${toId(this.inputUsername)}`);
 
 		if (!room.isPrivate && room.chatRoomData) {
-			this.globalModlog("BLACKLIST", targetUser, ` by ${user.userid} ${(target ? `: ${target}` : '')}`);
+			this.globalModlog("BLACKLIST", targetUser, ` by ${user.userid}${(target ? `: ${target}` : '')}`);
 		}
 		return true;
 	},
@@ -2611,7 +2611,7 @@ const commands = {
 				Monitor.log("[CrisisMonitor] Trusted user " + userid + (trusted !== userid ? " (" + trusted + ")" : "") + " was nameblacklisted from " + room.id + " by " + user.name + ", and should probably be demoted.");
 			}
 			if (!room.isPrivate && room.chatRoomData) {
-				this.globalModlog("NAMEBLACKLIST", userid, " by " + user.userid);
+				this.globalModlog("NAMEBLACKLIST", userid, ` by ${user.userid}${(reason ? `: ${reason}` : '')}`);
 			}
 		}
 
