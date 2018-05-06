@@ -131,6 +131,10 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.players[user.userid].destroy();
 		delete this.players[user.userid];
 		this.playerCount--;
+		let subIndex = this.requestedSub.indexOf(user.userid);
+		if (subIndex !== -1) this.requestedSub.splice(subIndex, 1);
+		subIndex = this.hostRequestedSub.indexOf(user.userid);
+		if (subIndex !== -1) this.hostRequestedSub.splice(subIndex, 1);
 		this.sendRoom(`${user.name} has left the game.`);
 		user.send(`>view-mafia-${this.room.id}\n|init|html\n${Chat.pages.mafia([this.room.id], user)}`);
 	}
@@ -538,6 +542,10 @@ class MafiaTracker extends Rooms.RoomGame {
 		for (const p of Object.keys(this.players)) {
 			if (this.players[p].lynching === player.userid) this.players[p].lynching = '';
 		}
+		for (const p of Object.keys(this.dead)) {
+			if (this.dead[p].restless && this.dead[p].lynching === player.userid) this.dead[p].lynching = '';
+		}
+
 		delete this.lynches[player.userid];
 		delete this.players[player.userid];
 		let subIndex = this.requestedSub.indexOf(player.userid);
@@ -635,9 +643,11 @@ class MafiaTracker extends Rooms.RoomGame {
 
 	sub(player, replacement) {
 		let oldPlayer = this.players[player];
+		if (!oldPlayer) return; // should never happen
 		if (oldPlayer.lynching) this.unlynch(oldPlayer.userid, true);
 
 		const newUser = Users(replacement);
+		if (!newUser) return; // should never happen
 		let newPlayer = this.makePlayer(newUser);
 		newPlayer.role = oldPlayer.role;
 		this.players[newPlayer.userid] = newPlayer;
@@ -766,12 +776,12 @@ class MafiaTracker extends Rooms.RoomGame {
 	removeBannedUser(user) {
 		// Player was banned, attempt to sub now
 		// If we can't sub now, make subbing them out the top priority
+		if (!(user.userid in this.players)) return false;
 		if (this.subs.length) return this.nextSub(user.userid);
 		this.requestedSub.unshift(user.userid);
 	}
 
 	forfeit(user) {
-		if (!(user.userid in this.players)) return false;
 		// Treat it as if the user was banned (force sub)
 		return this.removeBannedUser(user);
 	}
@@ -1149,7 +1159,7 @@ exports.commands = {
 			if (Rooms(target) && Rooms(target).users[user.userid]) targetRoom = Rooms(target);
 			if (!targetRoom || !targetRoom.game || targetRoom.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			if (!this.canTalk(null, targetRoom)) return;
-			if (!(user.userid in targetRoom.game.players)) return user.sendTo(targetRoom, `|error|You are not in the game of ${targetRoom.game.title}.`);
+			if (!(user.userid in targetRoom.game.players) && (!(user.userid in targetRoom.game.dead) || !targetRoom.game.dead[user.userid].restless)) return user.sendTo(targetRoom, `|error|You are not in the game of ${targetRoom.game.title}.`);
 			targetRoom.game.unlynch(user);
 		},
 		unlynchhelp: [`/mafia unlynch - Withdraw your lynch vote. Fails if your not voting to lynch anyone`],
