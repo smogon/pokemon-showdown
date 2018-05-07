@@ -67,7 +67,7 @@ exports.alignments = Object.assign(Object.create(null), {
 		id: `cultafia`,
 		color: `#600`,
 		memo: [
-			`Factional Communication: If there are other Cult-aligned players, you may PM them during the game.`,
+			`Factional Communication: If there are other Cultafia-aligned players, you may PM them during the game.`,
 			`Factional Concept: The Cultafia can recruit and kill players. Ask the Host for more information about how this works exactly.`,
 			`You are aligned with the <span style="color:#600;font-weight:bold">Cultafia</span>. You win when all players without a Cultafia wincon are eliminated and at least one Cultafia-aligned player is still alive (or nothing can prevent the same).`,
 		],
@@ -130,7 +130,7 @@ exports.alignments = Object.assign(Object.create(null), {
 		id: `pygmee`,
 		color: `#640`,
 		memo: [
-			`Factional Knowledge: If there are other Replicant-aligned players, you know who they are.`,
+			`Factional Knowledge: If there are other Pygmee-aligned players, you know who they are.`,
 			`Factional Kill: The Pygmees may attempt to kill someone at any moment.`,
 			`You are aligned with the <span style="color:#640;font-weight:bold">Pygmees</span>. You win when all players without a Pygmee wincon are eliminated and at least one Pygmee-aligned player is still alive (or nothing can prevent the same).`,
 		],
