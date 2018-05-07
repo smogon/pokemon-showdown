@@ -620,6 +620,8 @@ exports.commands = {
 				'Inappropriate Pokemon Nicknames': 'Please save a replay of the battle and put it in chat so global staff can check.',
 				'Timerstalling': 'Please place the link to the battle in chat so global staff can check.',
 			};
+			const introMessage = `<h2 style="margin-top:0">Help Ticket - ${user.name}</h2><p><b>Issue</b>: ${ticket.type}<br />${upper ? `An Upper` : `A Global`} Staff member will be with you shortly.</p>${contexts[target] ? `<p>${contexts[target]}</p>` : ``}`;
+			const staffMessage = `${upper ? `<p><h3>Do not post sensitive information in this room.</h3>Drivers and moderators can access this room's logs via the log viewer; please PM the user instead.</p>` : ``}<p><button class="button" name="send" value="/helpticket close ${user.userid}">Close Ticket</button> <button class="button" name="send" value="/helpticket escalate ${user.userid}">Escalate</button> ${upper ? `` : `<button class="button" name="send" value="/helpticket escalate ${user.userid}, upperstaff">Escalate to Upper Staff</button>`} <button class="button" name="send" value="/helpticket ban ${user.userid}"><small>Ticketban</small></button></p>`;
 			let helpRoom = Rooms(`help-${user.userid}`);
 			if (!helpRoom) {
 				helpRoom = Rooms.createChatRoom(`help-${user.userid}`, `[H] ${user.name}`, {
@@ -628,8 +630,8 @@ exports.commands = {
 					isPrivate: 'hidden',
 					modjoin: (upper ? '&' : '%'),
 					auth: {[user.userid]: '+'},
-					introMessage: `<h2 style="margin-top:0">Help Ticket - ${user.name}</h2><p><b>Issue</b>: ${ticket.type}<br />${upper ? `An Upper` : `A Global`} Staff member will be with you shortly.</p>${contexts[target] ? `<p>${contexts[target]}</p>` : ``}`,
-					staffMessage: `${upper ? `<p><h3>Do not post sensitive information in this room.</h3>Drivers and moderators can access this room's logs via the log viewer; please PM the user instead.</p>` : ``}<p><button class="button" name="send" value="/helpticket close ${user.userid}">Close Ticket</button> <button class="button" name="send" value="/helpticket escalate ${user.userid}">Escalate</button> ${upper ? `` : `<button class="button" name="send" value="/helpticket escalate ${user.userid}, upperstaff">Escalate to Upper Staff</button>`} <button class="button" name="send" value="/helpticket ban ${user.userid}"><small>Ticketban</small></button></p>`,
+					introMessage: introMessage,
+					staffMessage: staffMessage,
 				});
 				helpRoom.game = new HelpTicket(helpRoom, ticket);
 			} else {
@@ -645,8 +647,8 @@ exports.commands = {
 				} else if (!upper && helpRoom.modjoin === '&') {
 					helpRoom.modjoin = '%';
 				}
-				helpRoom.introMessage = `<h2 style="margin-top:0">Help Ticket - ${user.name}</h2><p><b>Issue</b>: ${ticket.type}<br />${upper ? `An Upper` : `A Global`} staff member will be with you shortly.</p>`;
-				helpRoom.staffMessage = `<p><button class="button" name="send" value="/helpticket escalate ${user.userid}">Escalate</button> ${upper ? `` : `<button class="button" name="send" value="/helpticket close ${user.userid}">Close Ticket</button> <button class="button" name="send" value="/helpticket escalate ${user.userid}, upperstaff">Escalate to Upper Staff</button>`} <button class="button" name="send" value="/helpticket ban ${user.userid}"><small>Ticketban</small></button></p>`;
+				helpRoom.introMessage = introMessage;
+				helpRoom.staffMessage = staffMessage;
 				if (helpRoom.game) helpRoom.game.destroy();
 				helpRoom.game = new HelpTicket(helpRoom, ticket);
 			}
