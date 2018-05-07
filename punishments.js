@@ -1099,6 +1099,7 @@ Punishments.removeSharedIp = function (ip) {
 
 /**
  * @param {string} searchId
+ * @return {[string[], (string | number)[]?]}
  */
 Punishments.search = function (searchId) {
 	/** @type {string[]} */

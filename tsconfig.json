@@ -38,6 +38,7 @@
         "./verifier.js",
         "./chat.js",
         "./users.js",
+        "./chat-plugins/helptickets.js",
         "./punishments.js"
     ]
 }
