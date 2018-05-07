@@ -5242,7 +5242,7 @@ let BattleFormatsData = {
 	archeops: {
 		randomBattleMoves: ["headsmash", "acrobatics", "stoneedge", "earthquake", "aquatail", "uturn", "tailwind"],
 		randomDoubleBattleMoves: ["stoneedge", "rockslide", "earthquake", "uturn", "acrobatics", "tailwind", "taunt", "protect"],
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "DUU",
 	},
 	trubbish: {
