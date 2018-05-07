@@ -978,7 +978,7 @@ const commands = {
 
 		let targets = target.split(' ');
 
-		let lvlSet, natureSet, ivSet, evSet, baseSet, modSet = false;
+		let lvlSet, natureSet, ivSet, evSet, baseSet, modSet, realSet = false;
 
 		let pokemon;
 		let useStat = '';
@@ -988,9 +988,10 @@ const commands = {
 		let nature = 1.0;
 		let iv = 31;
 		let ev = 252;
-		let statValue = -1;
+		let baseStat = -1;
 		let modifier = 0;
 		let positiveMod = true;
+		let realStat;
 
 		for (const arg of targets) {
 			let lowercase = arg.toLowerCase();
@@ -1123,6 +1124,7 @@ const commands = {
 				if (modifier > 6) {
 					return this.sendReplyBox('Modifier should be a number between -6 and +6');
 				}
+				if (modSet) continue;
 			}
 
 			if (!pokemon) {
@@ -1136,42 +1138,95 @@ const commands = {
 
 			let tempStat = parseInt(arg);
 
+			if (!realSet) {
+				if (lowercase.endsWith('real')) {
+					realStat = tempStat;
+					realSet = true;
+
+					if (isNaN(realStat)) {
+						return this.sendReplyBox('Invalid value for target real stat: ' + Chat.escapeHTML(arg));
+					}
+					if (realStat < 0) {
+						return this.sendReplyBox('The target real stat must be greater than 0.');
+					}
+					continue;
+				}
+			}
+
 			if (!isNaN(tempStat) && !baseSet && tempStat > 0 && tempStat < 256) {
-				statValue = tempStat;
+				baseStat = tempStat;
 				baseSet = true;
 			}
 		}
 
 		if (pokemon) {
 			if (useStat) {
-				statValue = pokemon[useStat];
+				baseStat = pokemon[useStat];
 			} else {
 				return this.sendReplyBox('No stat found.');
 			}
 		}
 
-		if (statValue < 0) {
+		if (realSet) {
+			if (!baseSet) {
+				if (calcHP) {
+					baseStat = Math.ceil((100 * realStat - 10 - level * (ev / 4 + iv + 100)) / (2 * level));
+				} else {
+					if (!positiveMod) {
+						realStat *= (2 + modifier) / 2;
+					} else {
+						realStat *= 2 / (2 + modifier);
+					}
+
+					baseStat = Math.ceil((100 * Math.ceil(realStat) - nature * (level * (ev / 4 + iv) + 500)) / (2 * level * nature));
+				}
+				if (baseStat < 0) {
+					return this.sendReplyBox('No valid value for base stat possible with given parameters.');
+				}
+			} else if (!evSet) {
+				if (calcHP) {
+					ev = Math.ceil(100 * (realStat - 10) / level - 2 * (baseStat + 50));
+				} else {
+					if (!positiveMod) {
+						realStat *= (2 + modifier) / 2;
+					} else {
+						realStat *= 2 / (2 + modifier);
+					}
+
+					ev = Math.ceil(-1 * (2 * (nature * (baseStat * level + 250) - 50 * Math.ceil(realStat))) / (level * nature));
+				}
+				ev -= 31;
+				if (ev < 0) iv += ev;
+				ev *= 4;
+				if (iv < 0 || ev > 255) {
+					return this.sendReplyBox('No valid EV/IV combination possible with given parameters. Maybe try a different nature?' + ev);
+				}
+			} else {
+				return this.sendReplyBox('Too many parameters given; nothing to calculate.');
+			}
+		} else if (baseStat < 0) {
 			return this.sendReplyBox('No valid value for base stat found.');
 		}
 
 		let output;
 
 		if (calcHP) {
-			output = (((iv + (2 * statValue) + (ev / 4) + 100) * level) / 100) + 10;
+			output = (((iv + (2 * baseStat) + (ev / 4) + 100) * level) / 100) + 10;
 		} else {
-			output = Math.floor(nature * Math.floor((((iv + (2 * statValue) + (ev / 4)) * level) / 100) + 5));
+			output = Math.floor(nature * Math.floor((((iv + (2 * baseStat) + (ev / 4)) * level) / 100) + 5));
 			if (positiveMod) {
 				output *= (2 + modifier) / 2;
 			} else {
 				output *= 2 / (2 + modifier);
 			}
 		}
-		return this.sendReplyBox('Base ' + statValue + (calcHP ? ' HP ' : ' ') + 'at level ' + level + ' with ' + iv + ' IVs, ' + ev + (nature === 1.1 ? '+' : (nature === 0.9 ? '-' : '')) + ' EVs' + (modifier > 0 && !calcHP ? ' at ' + (positiveMod ? '+' : '-') + modifier : '') + ': <b>' + Math.floor(output) + '</b>.');
+		return this.sendReplyBox('Base ' + baseStat + (calcHP ? ' HP ' : ' ') + 'at level ' + level + ' with ' + iv + ' IVs, ' + ev + (nature === 1.1 ? '+' : (nature === 0.9 ? '-' : '')) + ' EVs' + (modifier > 0 && !calcHP ? ' at ' + (positiveMod ? '+' : '-') + modifier : '') + ': <b>' + Math.floor(output) + '</b>.');
 	},
 	statcalchelp: [
 		`/statcalc [level] [base stat] [IVs] [nature] [EVs] [modifier] (only base stat is required) - Calculates what the actual stat of a Pokémon is with the given parameters. For example, '/statcalc lv50 100 30iv positive 252ev scarf' calculates the speed of a base 100 scarfer with HP Ice in Battle Spot, and '/statcalc uninvested 90 neutral' calculates the attack of an uninvested Crobat.`,
 		`!statcalc [level] [base stat] [IVs] [nature] [EVs] [modifier] (only base stat is required) - Shows this information to everyone.`,
 		`Inputing 'hp' as an argument makes it use the formula for HP. Instead of giving nature, '+' and '-' can be appended to the EV amount (e.g. 252+ev) to signify a boosting or inhibiting nature.`,
+		`An actual stat can be given in place of a base stat or EVs. In this case, the minumum base stat or EVs necessary to have that real stat with the given parameters will be determined. For example, '/statcalc 502real 252+ +1' calculates the minimum base speed necessary for a positive natured fully invested scarfer to outspeed`,
 	],
 
 	/*********************************************************
