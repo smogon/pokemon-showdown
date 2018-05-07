@@ -279,6 +279,10 @@ function notifyStaff(upper = false) {
 		buf = `|tempnotifyoff|helptickets`;
 	}
 	if (room.userCount) Sockets.channelBroadcast(room.id, `>view-help-tickets\n${buf}`);
+	if (hasUnclaimed) {
+		// only notify for people highlighting
+		buf = `${buf}|There are unclaimed Help tickets`;
+	}
 	for (let i in room.users) {
 		let user = room.users[i];
 		if (user.can('mute', null, room)) user.sendTo(room, buf);
