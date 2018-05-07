@@ -1138,11 +1138,6 @@ const commands = {
 
 			let tempStat = parseInt(arg);
 
-			if (!isNaN(tempStat) && !baseSet && tempStat > 0 && tempStat < 256) {
-				baseStat = tempStat;
-				baseSet = true;
-			}
-
 			if (!realSet) {
 				if (lowercase.endsWith('real')) {
 					realStat = tempStat;
@@ -1154,7 +1149,13 @@ const commands = {
 					if (realStat < 0) {
 						return this.sendReplyBox('The target real stat must be greater than 0.');
 					}
+					continue;
 				}
+			}
+
+			if (!isNaN(tempStat) && !baseSet && tempStat > 0 && tempStat < 256) {
+				baseStat = tempStat;
+				baseSet = true;
 			}
 		}
 
