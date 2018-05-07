@@ -41,12 +41,8 @@ const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
 const FS = require('./lib/fs');
 
 /*********************************************************
- * Users map
+ * Utility functions
  *********************************************************/
-
-let users = new Map();
-let prevUsers = new Map();
-let numUsers = 0;
 
 // Low-level functions for manipulating Users.users and Users.prevUsers
 // Keeping them all here makes it easy to ensure they stay consistent
@@ -125,11 +121,12 @@ function getUser(name, exactName = false) {
 	let i = 0;
 	if (!exactName) {
 		while (userid && !users.has(userid) && i < 1000) {
+			// @ts-ignore
 			userid = prevUsers.get(userid);
 			i++;
 		}
 	}
-	return users.get(userid);
+	return users.get(userid) || null;
 }
 
 /**
@@ -1662,6 +1659,12 @@ function socketReceive(worker, workerid, socketid, message) {
 		Monitor.warn(`[slow] ${deltaTime}ms - ${user.name} <${connection.ip}>: ${roomId}|${message}`);
 	}
 }
+
+/** @type {Map<string, User>} */
+let users = new Map();
+/** @type {Map<string, string>} */
+let prevUsers = new Map();
+let numUsers = 0;
 
 let Users = Object.assign(getUser, {
 	delete: deleteUser,
