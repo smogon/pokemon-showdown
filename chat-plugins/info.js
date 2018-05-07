@@ -1149,7 +1149,7 @@ const commands = {
 					realSet = true;
 
 					if (isNaN(realStat)) {
-						return this.sendReplyBox('Invalid value for target raw stat: ' + Chat.escapeHTML(arg));
+						return this.sendReplyBox('Invalid value for target real stat: ' + Chat.escapeHTML(arg));
 					}
 					if (realStat < 0) {
 						return this.sendReplyBox('The target real stat must be greater than 0.');
