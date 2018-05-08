@@ -2368,6 +2368,11 @@ const commands = {
 		}
 		if (!this.can('forcerename', targetUser)) return false;
 		if (targetUser.namelocked) return this.errorReply(`User '${targetUser.name}' is already namelocked.`);
+		// TODO: Allow unnamelocking by guest numbers so that this doesn't have to be a thing
+		if (targetUser.locked && targetUser.locked === '#hostfilter') {
+			this.errorReply(`User '${targetUser.name}' is already locked due to being on a proxy. If you want to continue to namelock them, you must first unlock them.`);
+			return;
+		}
 
 		const reasonText = reason ? ` (${reason})` : `.`;
 		const lockMessage = `${targetUser.name} was namelocked by ${user.name}${reasonText}`;
