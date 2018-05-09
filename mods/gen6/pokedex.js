@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattlePokedex = {
+/**@type {{[k: string]: ModdedTemplateData}} */
+let BattlePokedex = {
 	charizardmegax: {
 		inherit: true,
 		color: "Red",
@@ -313,3 +314,5 @@ exports.BattlePokedex = {
 		abilities: {0: "Volt Absorb", 1: "Lightning Rod"},
 	},
 };
+
+exports.BattlePokedex = BattlePokedex;

@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleItems = {
+/**@type {{[k: string]: ModdedItemData}} */
+let BattleItems = {
 	aguavberry: {
 		inherit: true,
 		naturalGift: {
@@ -543,3 +544,5 @@ exports.BattleItems = {
 		},
 	},
 };
+
+exports.BattleItems = BattleItems;

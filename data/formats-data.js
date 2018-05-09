@@ -2543,7 +2543,7 @@ let BattleFormatsData = {
 			{"generation": 7, "level": 100, "isHidden": false, "moves": ["sacredfire", "stoneedge", "ironhead", "flamecharge"], "pokeball": "cherishball"},
 		],
 		eventOnly: true,
-		tier: "RUBL",
+		tier: "RU",
 		doublesTier: "DUU",
 	},
 	suicune: {
@@ -5242,7 +5242,7 @@ let BattleFormatsData = {
 	archeops: {
 		randomBattleMoves: ["headsmash", "acrobatics", "stoneedge", "earthquake", "aquatail", "uturn", "tailwind"],
 		randomDoubleBattleMoves: ["stoneedge", "rockslide", "earthquake", "uturn", "acrobatics", "tailwind", "taunt", "protect"],
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "DUU",
 	},
 	trubbish: {
@@ -6795,7 +6795,7 @@ let BattleFormatsData = {
 		doublesTier: "DUU",
 	},
 	pyukumuku: {
-		randomBattleMoves: ["memento", "counter", "reflect", "lightscreen"],
+		randomBattleMoves: ["toxic", "recover", "counter", "reflect", "lightscreen"],
 		randomDoubleBattleMoves: ["reflect", "lightscreen", "counter", "helpinghand", "safeguard", "memento"],
 		tier: "PU",
 		doublesTier: "DUU",

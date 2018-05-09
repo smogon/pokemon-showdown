@@ -25,10 +25,7 @@
         "./ladders-local.js",
         "./ladders-remote.js",
         "./ladders.js",
-        "./mods/gen1/*",
-        "./mods/gen2/*",
-        "./mods/gen3/*",
-        "./mods/gen4/*",
+        "./mods/*/*",
         "./monitor.js",
         "./loginserver.js",
         "./rooms.js",
@@ -41,6 +38,7 @@
         "./verifier.js",
         "./chat.js",
         "./users.js",
+        "./chat-plugins/helptickets.js",
         "./punishments.js"
     ]
 }

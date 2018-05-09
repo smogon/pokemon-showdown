@@ -19,6 +19,7 @@
   "scripts": {
     "start": "node pokemon-showdown",
     "test": "eslint --cache . && tsc && mocha",
+    "tsc": "tsc",
     "lint": "eslint --cache .",
     "precommit": "npm run lint",
     "prepush": "npm test"
@@ -54,6 +55,6 @@
     "eslint": "^4.16.0",
     "husky": "^0.14.3",
     "mocha": "^4.0.1",
-    "typescript": "^2.8.1"
+    "typescript": "^2.8.3"
   }
 }

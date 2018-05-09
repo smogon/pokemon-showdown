@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleItems = {
+/**@type {{[k: string]: ModdedItemData}} */
+let BattleItems = {
 	"burndrive": {
 		inherit: true,
 		onBasePower: function (basePower, user, target, move) {},
@@ -178,3 +179,5 @@ exports.BattleItems = {
 		desc: "Raises Farfetch'd's critical hit rate two stages.",
 	},
 };
+
+exports.BattleItems = BattleItems;

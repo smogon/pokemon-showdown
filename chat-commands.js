@@ -26,7 +26,11 @@ const HOURMUTE_LENGTH = 60 * 60 * 1000;
 
 const MAX_CHATROOM_ID_LENGTH = 225;
 
-exports.commands = {
+/** @typedef {(this: Chat.CommandContext, target: string, room: Room, user: User, connection: Connection, cmd: string) => (void)} ChatHandler */
+/** @typedef {{[k: string]: ChatHandler | string | true | string[]}} ChatCommands */
+
+/** @type {ChatCommands} */
+const commands = {
 
 	'!version': true,
 	version: function (target, room, user) {
@@ -124,7 +128,6 @@ exports.commands = {
 
 	'!pi': true,
 	pi: function (target, room, user) {
-		if (!this.runBroadcast()) return;
 		return this.sendReplyBox(
 			'Did you mean: 1. 3.1415926535897932384626... (Decimal)<br />' +
 			'2. 3.184809493B91866... (Duodecimal)<br />' +
@@ -522,7 +525,6 @@ exports.commands = {
 	ignorepm: 'ignorepms',
 	ignorepms: function (target, room, user) {
 		if (user.ignorePMs === (target || true)) return this.errorReply("You are already blocking private messages! To unblock, use /unblockpms");
-		if (user.can('lock') && !user.can('declare')) return this.errorReply("You are not allowed to block private messages.");
 		user.ignorePMs = true;
 		if (target in Config.groups) {
 			user.ignorePMs = target;
@@ -1093,6 +1095,7 @@ exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 	},
+
 	deletetopic: 'deleteroomintro',
 	deleteroomintro: function (target, room, user) {
 		if (!this.can('declare', null, room)) return false;
@@ -1117,7 +1120,7 @@ exports.commands = {
 			this.sendReply(`|raw|<div class="infobox">${room.staffMessage.replace(/\n/g, ``)}</div>`);
 			if (user.can('ban', null, room) && cmd !== 'stafftopic') {
 				this.sendReply('Source:');
-				this.sendReplyBox(`<code>/staffintro ${Chat.escapeHTML(room.staffMessage).split('\n').map(line => { return line.replace(/^(\t+)/, (match, $1) => '&nbsp;'.repeat(4 * $1.length)).replace(/^(\s+)/, (match, $1) => '&nbsp;'.repeat($1.length)); }).join('<br />')}</code>`);
+				this.sendReplyBox(`<code>/staffintro ${room.staffMessage.split('\n').map(line => { return line.replace(/^(\t+)/, (match, $1) => '&nbsp;'.repeat(4 * $1.length)).replace(/^(\s+)/, (match, $1) => '&nbsp;'.repeat($1.length)); }).join('<br />')}</code>`);
 			}
 			return;
 		}
@@ -1858,7 +1861,7 @@ exports.commands = {
 		let unlocked = Punishments.unlock(target);
 
 		if (unlocked) {
-			const unlockMessage = `${unlocked.join(", ")} ${((unlocked.length > 1) ? "were" : "was")} unlocked by ${user.name}. ${reason}`;
+			const unlockMessage = `${unlocked.join(", ")} ${((unlocked.length > 1) ? "were" : "was")} unlocked by ${user.name}.${reason}`;
 			this.addModAction(unlockMessage);
 			// Notify staff room when a user is unlocked outside of it.
 			if (!reason && room.id !== 'staff' && Rooms('staff')) {
@@ -1937,7 +1940,6 @@ exports.commands = {
 		if (affected.length > 1) {
 			let guests = affected.length - 1;
 			affected = affected.slice(1).map(user => user.getLastName()).filter(alt => alt.substr(0, 7) !== '[Guest ');
-
 			guests -= affected.length;
 			displayMessage = `(${name}'s ${(acAccount ? `ac account: ${acAccount}, ` : ``)} banned alts: ${affected.join(", ")} ${(guests ? ` [${guests} guests]` : ``)})`;
 			this.privateModAction(displayMessage);
@@ -1949,7 +1951,7 @@ exports.commands = {
 			this.privateModAction(displayMessage);
 		}
 
-		this.add('|unlink|hide|' + userid);
+		this.add(`|unlink|hide|${userid}`);
 		if (userid !== toId(this.inputUsername)) this.add(`|unlink|hide|${toId(this.inputUsername)}`);
 
 		const globalReason = (target ? `: ${userReason} ${proof}` : '');
@@ -2509,7 +2511,7 @@ exports.commands = {
 		if (userid !== toId(this.inputUsername)) this.add(`|unlink|hide|${toId(this.inputUsername)}`);
 
 		if (!room.isPrivate && room.chatRoomData) {
-			this.globalModlog("BLACKLIST", targetUser, ` by ${user.userid} ${(target ? `: ${target}` : '')}`);
+			this.globalModlog("BLACKLIST", targetUser, ` by ${user.userid}${(target ? `: ${target}` : '')}`);
 		}
 		return true;
 	},
@@ -2605,7 +2607,7 @@ exports.commands = {
 				Monitor.log(`[CrisisMonitor] Trusted user ${userid}${(trusted !== userid ? ` (${trusted})` : ``)} was nameblacklisted from ${room.id} by ${user.name}, and should probably be demoted.`);
 			}
 			if (!room.isPrivate && room.chatRoomData) {
-				this.globalModlog("NAMEBLACKLIST", userid, ` by ${user.userid}`);
+				this.globalModlog("NAMEBLACKLIST", userid, ` by ${user.userid}${(reason ? `: ${reason}` : '')}`);
 			}
 		}
 
@@ -2622,7 +2624,7 @@ exports.commands = {
 		const name = Punishments.roomUnblacklist(room, target);
 
 		if (name) {
-			this.addModAction(`${name} was unblacklisted by ${user.name}.`);
+			this.privateModAction(`(${name} was unblacklisted by ${user.name}.)`);
 			if (!room.isPrivate && room.chatRoomData) {
 				this.globalModlog("UNBLACKLIST", name, ` by ${user.userid}`);
 			}
@@ -3206,7 +3208,7 @@ exports.commands = {
 		if (!this.can('hotpatch')) return false;
 		Rooms.global.send('|refresh|');
 		const logRoom = Rooms('staff') || room;
-		logRoom.roomlog(`${user.name} used /refreshpage.`);
+		logRoom.roomlog(`${user.name} used /refreshpage`);
 	},
 
 	updateserver: async function (target, room, user, connection) {
@@ -3236,7 +3238,7 @@ exports.commands = {
 		}
 
 		this.sendReply(`Fetching newest version...`);
-		logRoom.roomlog(`${user.name} used /updateserver.`);
+		logRoom.roomlog(`${user.name} used /updateserver`);
 
 		let [code, stdout, stderr] = await exec(`git fetch`);
 		if (code) throw new Error(`updateserver: Crash while fetching - make sure this is a Git repository`);
@@ -3251,11 +3253,11 @@ exports.commands = {
 
 		[code, stdout, stderr] = await exec(`git stash save --include-untracked "PS /updateserver autostash"`);
 		let stashedChanges = true;
-		if (code) throw new Error(`updateserver: Crash while stashing.`);
+		if (code) throw new Error(`updateserver: Crash while stashing`);
 		if ((stdout + stderr).includes("No local changes")) {
 			stashedChanges = false;
 		} else if (stderr) {
-			throw new Error(`updateserver: Crash while stashing.`);
+			throw new Error(`updateserver: Crash while stashing`);
 		} else {
 			this.sendReply(`Saving changes...`);
 		}
@@ -3303,7 +3305,7 @@ exports.commands = {
 			Rooms.lobby.addRaw(`<div class="broadcast-green"><b>We fixed the crash without restarting the server!</b><br />You may resume talking in the Lobby and starting new battles.</div>`).update();
 		}
 		const logRoom = Rooms('staff') || room;
-		logRoom.roomlog(`${user.name} used /crashfixed.`);
+		logRoom.roomlog(`${user.name} used /crashfixed`);
 	},
 	crashfixedhelp: [`/crashfixed - Ends the active lockdown caused by a crash without the need of a restart. Requires: ~`],
 
@@ -3326,7 +3328,7 @@ exports.commands = {
 		}
 		if (!target) return this.parse('/help bash');
 
-		connection.sendTo(room, `$${target}`);
+		connection.sendTo(room, `$ ${target}`);
 		require('child_process').exec(target, (error, stdout, stderr) => {
 			connection.sendTo(room, (`${stdout}${stderr}`));
 		});
@@ -3346,7 +3348,7 @@ exports.commands = {
 			let me = user;
 			let result = eval(target);
 			if (result && result.then) {
-				result = 'Promise -> ' + Chat.stringify(await result);
+				result = `Promise -> ${Chat.stringify(await result)}`;
 			} else {
 				result = Chat.stringify(result);
 			}
@@ -3556,7 +3558,7 @@ exports.commands = {
 
 	choose: function (target, room, user) {
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
-		if (!room.game.choose) return this.errorReply("This game doesn't support /choose.");
+		if (!room.game.choose) return this.errorReply("This game doesn't support /choose");
 
 		room.game.choose(user, target);
 	},
@@ -3578,7 +3580,7 @@ exports.commands = {
 
 	undo: function (target, room, user) {
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
-		if (!room.game.undo) return this.errorReply("This game doesn't support /undo.");
+		if (!room.game.undo) return this.errorReply("This game doesn't support /undo");
 
 		room.game.undo(user, target);
 	},
@@ -3669,7 +3671,7 @@ exports.commands = {
 	joinbattle: 'joingame',
 	joingame: function (target, room, user) {
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
-		if (!room.game.joinGame) return this.errorReply("This game doesn't support /joingame.");
+		if (!room.game.joinGame) return this.errorReply("This game doesn't support /joingame");
 
 		room.game.joinGame(user);
 	},
@@ -3678,7 +3680,7 @@ exports.commands = {
 	partbattle: 'leavegame',
 	leavegame: function (target, room, user) {
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
-		if (!room.game.leaveGame) return this.errorReply("This game doesn't support /leavegame.");
+		if (!room.game.leaveGame) return this.errorReply("This game doesn't support /leavegame");
 
 		room.game.leaveGame(user);
 	},
@@ -3721,7 +3723,7 @@ exports.commands = {
 			if (!timer.timerRequesters.size) {
 				return this.sendReply(`The game timer is OFF.`);
 			}
-			return this.sendReply(`The game timer is ON (requested by ${[...timer.timerRequesters].join(', ')}).`);
+			return this.sendReply(`The game timer is ON (requested by ${[...timer.timerRequesters].join(', ')})`);
 		}
 		const force = user.can('timer', null, room);
 		if (!force && !room.game.players[user]) {
@@ -4083,6 +4085,8 @@ exports.commands = {
 	},
 
 };
+
+exports.commands = commands;
 
 process.nextTick(() => {
 	// We might want to migrate most of this to a JSON schema of command attributes.

@@ -287,7 +287,9 @@ class Tournament {
 		}
 
 		if (!isAllowAlts) {
-			for (const otherUser of this.generator.getUsers()) {
+			for (let otherUser of this.generator.getUsers()) {
+				if (!otherUser) continue;
+				otherUser = Users(otherUser.userid);
 				if (otherUser && otherUser.latestIp === user.latestIp) {
 					output.sendReply('|tournament|error|AltUserAlreadyAdded');
 					return;
@@ -1042,7 +1044,7 @@ let commands = {
 			if (tournament.customRules.length < 1) {
 				return this.errorReply("The tournament does not have any custom rules.");
 			}
-			this.sendReplyBox("This tournament includes:<br />" + tournament.getCustomRules());
+			this.sendReply("|html|<div class='infobox infobox-limited'>This tournament includes:<br />" + tournament.getCustomRules() + "</div>");
 		},
 	},
 	creation: {
@@ -1131,8 +1133,8 @@ let commands = {
 				return this.errorReply("The custom rules cannot be changed once the tournament has started.");
 			}
 			if (tournament.setCustomRules(params, this)) {
-				this.room.addRaw("<div class='infobox'>This tournament includes:<br />" + tournament.getCustomRules() + "</div>");
-				this.privateModAction("(" + user.name + " set the tournament's custom rules to " + tournament.customRules.join(", ") + ".)");
+				this.room.addRaw("<div class='infobox infobox-limited'>This tournament includes:<br />" + tournament.getCustomRules() + "</div>");
+				this.privateModAction("(" + user.name + " updated the tournament's custom rules.)");
 				this.modlog('TOUR RULES', null, tournament.customRules.join(", "));
 			}
 		},
