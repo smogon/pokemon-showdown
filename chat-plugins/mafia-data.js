@@ -899,7 +899,7 @@ exports.modifiers = Object.assign(Object.create(null), {
 	tree: {
 		name: `Tree`,
 		id: `tree`,
-		memo: [`Tree: You can talk after your death, provided you died due to a lynch.`],
+		memo: [`Tree: You can talk after your death, provided you died due to a lynch. You can still be primed and ignited by Arsonists afterwards.`],
 	},
 	treestump: {
 		name: `Treestump`,
@@ -998,7 +998,7 @@ exports.themes = Object.assign(Object.create(null), {
 	ff: `forest_fire`,
 	forest_fire: {
 		name: `Forest Fire`,
-		desc: `Forest Fire: The forest risks being burned down! Stop the Arsonists before it's too late. Even the Treestumps can be burned down!`,
+		desc: `Forest Fire: The forest risks being burned down! Stop the Arsonists before it's too late.`,
 		9: `Arsonist, Arsonist, Tree, Tree, Tree, Tree, Tree, Tree, Firefighter`,
 	},
 	job: `jungle_of_bullshit`,
