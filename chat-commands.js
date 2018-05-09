@@ -3354,7 +3354,8 @@ const commands = {
 			this.sendReply('||<< ' + result);
 			/* eslint-enable no-unused-vars */
 		} catch (e) {
-			this.sendReply(`|| << ${(`${e.stack}`).replace(/\n *at CommandContext\.eval [\s\S]*/m, '').replace(/\n/g, '\n||')}`);
+			const message = ('' + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, '').replace(/\n/g, '\n||');
+			this.sendReply(`|| << ${message}`);
 		}
 	},
 
