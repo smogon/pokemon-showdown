@@ -1063,11 +1063,8 @@ const commands = {
 			this.sendReply('|raw|<div class="infobox infobox-limited">' + room.introMessage.replace(/\n/g, '') + '</div>');
 			if (!this.broadcasting && user.can('declare', null, room) && cmd !== 'topic') {
 				this.sendReply('Source:');
-				this.sendReplyBox(
-					'<code>/roomintro ' + Chat.escapeHTML(room.introMessage).split('\n').map(line => {
-						return line.replace(/^(\t+)/, (match, $1) => '&nbsp;'.repeat(4 * $1.length)).replace(/^(\s+)/, (match, $1) => '&nbsp;'.repeat($1.length));
-					}).join('<br />') + '</code>'
-				);
+				const code = Chat.escapeHTML(room.introMessage).replace(/\n/g, '<br />');
+				this.sendReplyBox(`<code style="white-space: pre-wrap">/roomintro ${code}</code>`);
 			}
 			return;
 		}
@@ -1120,7 +1117,8 @@ const commands = {
 			this.sendReply(`|raw|<div class="infobox">${room.staffMessage.replace(/\n/g, ``)}</div>`);
 			if (user.can('ban', null, room) && cmd !== 'stafftopic') {
 				this.sendReply('Source:');
-				this.sendReplyBox(`<code>/staffintro ${room.staffMessage.split('\n').map(line => { return line.replace(/^(\t+)/, (match, $1) => '&nbsp;'.repeat(4 * $1.length)).replace(/^(\s+)/, (match, $1) => '&nbsp;'.repeat($1.length)); }).join('<br />')}</code>`);
+				const code = Chat.escapeHTML(room.staffMessage).replace(/\n/g, '<br />');
+				this.sendReplyBox(`<code style="white-space: pre-wrap">/staffintro ${code}</code>`);
 			}
 			return;
 		}
