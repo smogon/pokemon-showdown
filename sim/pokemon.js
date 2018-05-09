@@ -800,10 +800,8 @@ class Pokemon {
 				// Giratina formes
 				if (this.template.species === 'Giratina' && this.item === 'griseousorb') {
 					this.formeChange('Giratina-Origin');
-					this.battle.add('-formechange', this, 'Giratina-Origin');
 				} else if (this.template.species === 'Giratina-Origin' && this.item !== 'griseousorb') {
 					this.formeChange('Giratina');
-					this.battle.add('-formechange', this, 'Giratina');
 				}
 			}
 			if (this.template.num === 493) {
@@ -812,7 +810,6 @@ class Pokemon {
 				let targetForme = (item && item.onPlate ? 'Arceus-' + item.onPlate : 'Arceus');
 				if (this.template.species !== targetForme) {
 					this.formeChange(targetForme);
-					this.battle.add('-formechange', this, targetForme);
 				}
 			}
 		}
