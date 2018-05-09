@@ -953,8 +953,6 @@ let BattleScripts = {
 	},
 
 	runMegaEvo: function (pokemon) {
-		/**@type {string} */
-		const effectType = pokemon.canMegaEvo ? '-mega' : '-burst';
 		// @ts-ignore
 		const template = this.getTemplate(pokemon.canMegaEvo || pokemon.canUltraBurst);
 		const side = pokemon.side;
@@ -970,10 +968,10 @@ let BattleScripts = {
 
 		// Limit one mega evolution
 		for (const ally of side.pokemon) {
-			if (effectType === '-burst') {
-				ally.canUltraBurst = null;
-			} else {
+			if (pokemon.canMegaEvo) {
 				ally.canMegaEvo = null;
+			} else {
+				ally.canUltraBurst = null;
 			}
 		}
 
