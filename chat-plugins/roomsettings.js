@@ -516,12 +516,13 @@ exports.commands = {
 			if (words.length > 1) {
 				this.privateModAction(`(The banwords ${words.map(w => `'${w}'`).join(', ')} were added by ${user.name}.)`);
 				this.modlog('BANWORD', null, words.map(w => `'${w}'`).join(', '));
-				this.sendReply(`Banned phrases succesfully added. The list is currently: ${room.banwords.join(', ')}`);
+				this.sendReply(`Banned phrases succesfully added.`);
 			} else {
 				this.privateModAction(`(The banword '${words[0]}' was added by ${user.name}.)`);
 				this.modlog('BANWORD', null, words[0]);
-				this.sendReply(`Banned phrase succesfully added. The list is currently: ${room.banwords.join(', ')}`);
+				this.sendReply(`Banned phrase succesfully added.`);
 			}
+			this.sendReply(`The list is currently: ${room.banwords.join(', ')}`);
 
 			if (room.chatRoomData) {
 				room.chatRoomData.banwords = room.banwords;
@@ -545,19 +546,22 @@ exports.commands = {
 			}
 
 			room.banwords = room.banwords.filter(w => !words.includes(w));
+			if (!room.banwords.length) room.banwords = null;
 			room.banwordRegex = null;
 			if (words.length > 1) {
 				this.privateModAction(`(The banwords ${words.map(w => `'${w}'`).join(', ')} were removed by ${user.name}.)`);
 				this.modlog('UNBANWORD', null, words.map(w => `'${w}'`).join(', '));
-				this.sendReply(`Banned phrases succesfully deleted.${room.banwords.length ? `The list is currently: ${room.banwords.join(', ')}` : `The list is now empty.`}`);
+				this.sendReply(`Banned phrases succesfully deleted.`);
 			} else {
 				this.privateModAction(`(The banword '${words[0]}' was removed by ${user.name}.)`);
 				this.modlog('UNBANWORD', null, words[0]);
-				this.sendReply(`Banned phrase succesfully deleted.${room.banwords.length ? `The list is currently: ${room.banwords.join(', ')}` : `The list is now empty.`}`);
+				this.sendReply(`Banned phrase succesfully deleted.`);
 			}
+			this.sendReply(room.banwords ? `The list is currently: ${room.banwords.join(', ')}` : `The list is now empty.`);
 
 			if (room.chatRoomData) {
 				room.chatRoomData.banwords = room.banwords;
+				if (!room.banwords) delete room.chatRoomData.banwords;
 				Rooms.global.writeChatRoomData();
 			}
 		},
@@ -565,7 +569,7 @@ exports.commands = {
 		list: function (target, room, user) {
 			if (!this.can('mute', null, room)) return false;
 
-			if (!room.banwords || !room.banwords.length) return this.sendReply("This room has no banned phrases.");
+			if (!room.banwords) return this.sendReply("This room has no banned phrases.");
 
 			return this.sendReply(`Banned phrases in room ${room.id}: ${room.banwords.join(', ')}`);
 		},
