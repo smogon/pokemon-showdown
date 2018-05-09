@@ -226,6 +226,9 @@ class Pokemon {
 
 		this.clearVolatile();
 
+		// Keep track of what type the client sees for this Pokemon
+		this.apparentType = this.baseTemplate.types.join('/');
+
 		/**@type {number} */
 		this.maxhp = this.template.maxHP || this.baseStats.hp;
 		/**@type {number} */
@@ -746,7 +749,7 @@ class Pokemon {
 		}
 		this.transformed = true;
 
-		this.types = pokemon.types;
+		this.setType(pokemon.types);
 		this.addedType = pokemon.addedType;
 		this.knownType = this.side === pokemon.side && pokemon.knownType;
 
@@ -827,7 +830,7 @@ class Pokemon {
 
 		this.template = template;
 
-		this.types = template.types;
+		this.setType(template.types);
 		this.addedType = template.addedType || '';
 		this.knownType = true;
 
@@ -1467,6 +1470,7 @@ class Pokemon {
 		this.types = (typeof newType === 'string' ? [newType] : newType);
 		this.addedType = '';
 		this.knownType = true;
+		this.apparentType = this.types.join('/');
 
 		return true;
 	}

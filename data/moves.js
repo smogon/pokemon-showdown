@@ -13235,7 +13235,7 @@ let BattleMovedex = {
 					return false;
 				}
 			}
-			source.types = newBaseTypes;
+			source.setType(newBaseTypes);
 			source.addedType = target.addedType;
 			source.knownType = target.side === source.side && target.knownType;
 		},
@@ -13798,10 +13798,7 @@ let BattleMovedex = {
 			onResidualOrder: 20,
 			onTypePriority: -1,
 			onType: function (types, pokemon) {
-				// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
-				if (!types.includes('???')) {
-					return types.filter(type => type !== 'Flying');
-				}
+				return types.filter(type => type !== 'Flying');
 			},
 		},
 		secondary: false,

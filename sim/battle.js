@@ -1553,11 +1553,13 @@ class Battle extends Dex.ModdedDex {
 
 				if (this.gen >= 7) {
 					// In Gen 7, the real type of every Pokemon is visible to all players via the bottom screen while making choices
-					let realTypeString = (pokemon.illusion || pokemon).getTypes(true).join('/');
-					let templateTypeString = (pokemon.illusion || pokemon).baseTemplate.types.join('/');
-					if (realTypeString !== templateTypeString) {
+					const seenPokemon = pokemon.illusion || pokemon;
+					const realTypeString = seenPokemon.getTypes(true).join('/');
+					if (realTypeString !== seenPokemon.apparentType) {
 						this.add('-start', pokemon, 'typechange', realTypeString, '[silent]');
+						seenPokemon.apparentType = realTypeString;
 						if (pokemon.addedType) {
+							// The typechange message removes the added type, so put it back
 							this.add('-start', pokemon, 'typeadd', pokemon.addedType, '[silent]');
 						}
 					}
