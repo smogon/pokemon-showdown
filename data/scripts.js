@@ -953,6 +953,7 @@ let BattleScripts = {
 	},
 
 	runMegaEvo: function (pokemon) {
+		/**@type {string} */
 		const effectType = pokemon.canMegaEvo ? '-mega' : '-burst';
 		// @ts-ignore
 		const template = this.getTemplate(pokemon.canMegaEvo || pokemon.canUltraBurst);
@@ -965,21 +966,7 @@ let BattleScripts = {
 			}
 		}
 
-		pokemon.formeChange(template);
-		pokemon.baseTemplate = template; // mega evolution is permanent
-		pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
-		if (pokemon.illusion) {
-			pokemon.ability = ''; // Don't allow Illusion to wear off
-			// @ts-ignore
-			this.add(effectType, pokemon, pokemon.illusion.template.baseSpecies, template.requiredItem);
-		} else {
-			// @ts-ignore
-			this.add(effectType, pokemon, template.baseSpecies, template.requiredItem);
-			this.add('detailschange', pokemon, pokemon.details);
-		}
-		pokemon.moveThisTurnResult = true; // Mega Evolution/Ultra Burst counts as an action for Truant
-		pokemon.setAbility(template.abilities['0'], null, true);
-		pokemon.baseAbility = pokemon.ability;
+		pokemon.formeChange(template, pokemon.getItem(), true);
 
 		// Limit one mega evolution
 		for (const ally of side.pokemon) {

@@ -37,15 +37,10 @@ let BattleScripts = {
 			}
 		}
 
-		pokemon.formeChange(template);
-		pokemon.baseTemplate = template; // Mega Evolution is permanent
-
 		// Do we have a proper sprite for it?
 		// @ts-ignore
 		if (this.getTemplate(pokemon.canMegaEvo).baseSpecies === pokemon.originalSpecies || isUltraBurst) {
-			pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
-			this.add('detailschange', pokemon, pokemon.details);
-			this.add((isUltraBurst ? '-burst' : '-mega'), pokemon, template.baseSpecies, template.requiredItem);
+			pokemon.formeChange(template, pokemon.getItem(), true);
 		} else {
 			let oTemplate = this.getTemplate(pokemon.originalSpecies);
 			let oMegaTemplate = this.getTemplate(template.originalMega);
@@ -54,7 +49,8 @@ let BattleScripts = {
 			} else {
 				this.add('message', "" + pokemon.species + "'s " + pokemon.getItem().name + " is reacting to " + pokemon.side.name + "'s Mega Bracelet!");
 			}
-			this.add('-formechange', pokemon, oTemplate.species, template.requiredItem);
+			pokemon.formeChange(template, pokemon.getItem(), true);
+			pokemon.baseTemplate = template; // Mega Evolution is permanent
 			this.add('message', template.baseSpecies + " has Mega Evolved into Mega " + template.baseSpecies + "!");
 			this.add('-start', pokemon, oMegaTemplate.requiredItem || oMegaTemplate.requiredMove, '[silent]');
 			if (oTemplate.types.length !== pokemon.template.types.length || oTemplate.types[1] !== pokemon.template.types[1]) {

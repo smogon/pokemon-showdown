@@ -421,7 +421,7 @@ class Item extends Effect {
 		this.megaEvolves = this.megaEvolves;
 		/**
 		 * If this is a Z crystal: true if the Z Crystal is generic
-		 * (e.g. Firium Z). If species-specific, the name 
+		 * (e.g. Firium Z). If species-specific, the name
 		 * (e.g. Inferno Overdrive) of the Z Move this crystal allows
 		 * the use of.
 		 * undefined, if not a Z crystal.
