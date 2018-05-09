@@ -868,7 +868,7 @@ class Pokemon {
 						this.battle.add('-burst', this, apparentSpecies, template.requiredItem);
 						this.moveThisTurnResult = true; // Ultra Burst counts as an action for Truant
 					} else if (source.onPrimal) {
-						this.battle.add('-primal', this.illusion || this);
+						this.battle.add('-primal', !this.illusion && this);
 					} else {
 						this.battle.add('-mega', this, apparentSpecies, template.requiredItem);
 						this.moveThisTurnResult = true; // Mega Evolution counts as an action for Truant
