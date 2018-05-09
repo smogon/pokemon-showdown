@@ -13796,7 +13796,13 @@ let BattleMovedex = {
 		effect: {
 			duration: 1,
 			onResidualOrder: 20,
-			// implemented in BattlePokemon#getTypes
+			onTypePriority: -1,
+			onType: function (types, pokemon) {
+				// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
+				if (!types.includes('???')) {
+					return types.filter(type => type !== 'Flying');
+				}
+			},
 		},
 		secondary: false,
 		target: "self",

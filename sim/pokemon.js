@@ -1486,12 +1486,9 @@ class Pokemon {
 	 */
 	getTypes(excludeAdded) {
 		let types = this.types;
+		types = this.battle.runEvent('Type', this, null, null, types);
 		if (!excludeAdded && this.addedType) {
 			types = types.concat(this.addedType);
-		}
-		// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
-		if ('roost' in this.volatiles && !types.includes('???')) {
-			types = types.filter(type => type !== 'Flying');
 		}
 		if (types.length) return types;
 		return [this.battle.gen >= 5 ? 'Normal' : '???'];
