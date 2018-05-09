@@ -770,9 +770,7 @@ let BattleStatuses = {
 					type = 'Normal';
 				}
 			}
-			types = [type];
-			if (pokemon.addedType) types.push(pokemon.addedType);
-			return types;
+			return [type];
 		},
 	},
 };
