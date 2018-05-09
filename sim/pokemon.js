@@ -861,9 +861,7 @@ class Pokemon {
 			if (isPermanent) {
 				this.baseTemplate = template;
 				this.details = template.species + (this.level === 100 ? '' : ', L' + this.level) + (this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
-				if (!this.illusion) {
-					this.battle.add('detailschange', this, this.details);
-				}
+				this.battle.add('detailschange', this, (this.illusion || this).details);
 				if (source.effectType === 'Item') {
 					// @ts-ignore
 					if (source.zMove) {
