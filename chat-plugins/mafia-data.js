@@ -998,7 +998,7 @@ exports.themes = Object.assign(Object.create(null), {
 	ff: `forest_fire`,
 	forest_fire: {
 		name: `Forest Fire`,
-		desc: `Forest Fire: The forest risks being burned down! Stop the Arsonists before its too late.`,
+		desc: `Forest Fire: The forest risks being burned down! Stop the Arsonists before it's too late. Even the Treestumps can be burned down!`,
 		9: `Arsonist, Arsonist, Tree, Tree, Tree, Tree, Tree, Tree, Firefighter`,
 	},
 	job: `jungle_of_bullshit`,
