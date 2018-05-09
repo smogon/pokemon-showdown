@@ -967,8 +967,9 @@ let BattleScripts = {
 		pokemon.formeChange(template, pokemon.getItem(), true);
 
 		// Limit one mega evolution
+		let wasMega = pokemon.canMegaEvo;
 		for (const ally of side.pokemon) {
-			if (pokemon.canMegaEvo) {
+			if (wasMega) {
 				ally.canMegaEvo = null;
 			} else {
 				ally.canUltraBurst = null;
