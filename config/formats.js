@@ -361,7 +361,7 @@ let Formats = [
 			validate: [2, 2],
 			battle: 2,
 		},
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', ],
+		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 		banlist: [
 			'Aegislash', 'Doublade', 'Honedge', 'Kitsunoh', 'Magearna', 'Battle Bond', 'Cheek Pouch', 'Cursed Body', 'Desolate Land', 'Dry Skin',
 			'Fluffy', 'Fur Coat', 'Grassy Surge', 'Huge Power', 'Ice Body', 'Iron Barbs', 'Moody', 'Parental Bond', 'Poison Heal', 'Power Construct',
