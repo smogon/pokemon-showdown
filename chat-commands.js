@@ -404,7 +404,7 @@ const commands = {
 
 		user.avatar = avatar;
 		if (!parts[1]) {
-			this.sendReplyBox(`Avatar changed to:\n<img src="//play.pokemonshowdown.com/sprites/trainers/${(typeof avatar === 'string' ? avatar.substr(1) : avatar)}.png" alt="" width="80" height="80" />`);
+			this.sendReply(`Avatar changed to:\n|raw|<img src="//play.pokemonshowdown.com/sprites/trainers/${(typeof avatar === 'string' ? avatar.substr(1) : avatar)}.png" alt="" width="80" height="80" />`);
 		}
 	},
 	avatarhelp: [`/avatar [avatar number 1 to 293] - Change your trainer sprite.`],
