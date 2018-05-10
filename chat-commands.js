@@ -2111,6 +2111,7 @@ const commands = {
 	 * Moderating: Other
 	 *********************************************************/
 
+	note: 'modnote',
 	mn: 'modnote',
 	modnote: function (target, room, user, connection) {
 		if (!target) return this.parse('/help modnote');
