@@ -1038,7 +1038,7 @@ exports.commands = {
 
 		qdel: 'queueremove',
 		qdelete: 'queueremove',
-		qremove: 'qremove',
+		qremove: 'queueremove',
 		queueremove: function (target, room, user) {
 			this.parse(`/mafia queue remove, ${target}`);
 		},
