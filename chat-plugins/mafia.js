@@ -386,7 +386,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (target === player.userid && (this.hammerCount - 1 > (this.lynches[target] ? this.lynches[target].count : 0)) && this.selfEnabled === 'hammer') return false;
 		if (player.lastLynch + 2000 >= Date.now()) return user.sendTo(this.room, `|error|You must wait another ${Chat.toDurationString((player.lastLynch + 2000) - Date.now()) || '1 second'} before you can change your lynch.`);
 		const previousLynch = player.lynching;
-		if (previousLynch) this.unlynch(Users(player.userid), true);
+		if (previousLynch) this.unlynch(player.userid, true);
 		let lynch = this.lynches[target];
 		if (!lynch) {
 			this.lynches[target] = {count: 1, lastLynch: Date.now(), dir: 'up', lynchers: [user.userid]};
@@ -418,8 +418,9 @@ class MafiaTracker extends Rooms.RoomGame {
 
 	unlynch(user, force) {
 		if (this.phase !== 'day' && !force) return false;
-		let player = this.players[user.userid];
-		if (!player && this.dead[user.userid] && this.dead[user.userid].restless) player = this.dead[user.userid];
+		const userid = typeof user === 'string' ? user : user.userid;
+		let player = this.players[userid];
+		if (!player && this.dead[userid] && this.dead[userid].restless) player = this.dead[userid];
 		if (!player || !player.lynching) return false;
 		if (player.lastLynch + 2000 >= Date.now() && !force) return user.sendTo(this.room, `|error|You must wait another ${Chat.toDurationString((player.lastLynch + 2000) - Date.now()) || '1 second'} before you can change your lynch.`);
 		let lynch = this.lynches[player.lynching];
@@ -429,7 +430,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		} else {
 			lynch.lastLynch = Date.now();
 			lynch.dir = 'down';
-			lynch.lynchers.splice(lynch.lynchers.indexOf(user.userid), 1);
+			lynch.lynchers.splice(lynch.lynchers.indexOf(userid), 1);
 		}
 		if (!force) this.sendRoom(player.lynching === 'nolynch' ? `${user.name} is no longer abstaining from lynching.` : `${user.name} has unlynched ${this.players[player.lynching].name}.`, {timestamp: true, user: user});
 		player.lynching = '';
@@ -533,7 +534,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		default:
 			msg += ` was eliminated`;
 		}
-		if (player.lynching) this.unlynch(Users(player.userid), true);
+		if (player.lynching) this.unlynch(player.userid, true);
 		this.sendRoom(`${msg}! ${!this.noReveal && toId(ability) === 'kill' ? `${player.safeName}'s role was ${player.getRole()}.` : ''}`, {declare: true});
 		for (const [roleIndex, role] of this.roles.entries()) {
 			if (role.id === player.role.id) {
