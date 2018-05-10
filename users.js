@@ -1275,6 +1275,10 @@ class User {
 				handler = handler[parts.shift() || 'default'];
 			}
 		}
+		if (!room && (roomid.startsWith('battle-') || roomid.startsWith('replay-'))) {
+			// replay room
+			return Rooms.replayRoomFromHtml(roomid, connection);
+		}
 		if (!room || !room.checkModjoin(this)) {
 			if (!this.named) {
 				return Rooms.RETRY_AFTER_LOGIN;
