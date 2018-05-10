@@ -21,6 +21,7 @@ const RETRY_AFTER_LOGIN = null;
 
 const FS = require('./lib/fs');
 const Roomlogs = require('./roomlogs');
+const HTTPS = require('https');
 
 /*********************************************************
  * the Room object.
@@ -1561,6 +1562,57 @@ let Rooms = Object.assign(getRoom, {
 		if (p1) Monitor.countBattle(p1.latestIp, p1.name);
 		if (p2) Monitor.countBattle(p2.latestIp, p2.name);
 		return room;
+	},
+
+	/**
+	 * @param {string} roomid
+	 * @param {Connection} connection
+	 */
+	replayRoomFromHtml(roomid, connection) {
+		let replayName = roomid.slice(7);
+		roomid = `battle-${replayName}`;
+		let url = `https://replay.pokemonshowdown.com/${replayName}`;
+		HTTPS.get(url, res => {
+			let data = '';
+			res.on('data', chunk => {
+				data += chunk;
+			});
+			res.on('end', () => {
+				if (data) {
+					const titleStart = data.indexOf('<title>');
+					const titleEnd = data.indexOf('</title>');
+					let title = 'Replay';
+					if (titleStart >= 0 && titleEnd > titleStart) {
+						title = data.slice(titleStart + 7, titleEnd - 1);
+						const colonIndex = title.indexOf(':');
+						const hyphenIndex = title.lastIndexOf('-');
+						title = title.substring(colonIndex + 2, hyphenIndex - 1);
+					}
+					const index1 = data.indexOf('<script type="text/plain" class="battle-log-data">');
+					const index2 = data.indexOf('<script type="text/plain" class="log">');
+					if (index1 < 0 && index2 < 0) {
+						connection.sendTo(roomid, `|noinit|joinfailed|Error parsing replay.`);
+						return false;
+					}
+					if (index1 >= 0) {
+						data = data.slice(index1 + 50);
+					} else if (index2 >= 0) {
+						data = data.slice(index2 + 38);
+					}
+					const index3 = data.indexOf('</script>');
+					data = data.slice(0, index3);
+					data = data.replace(/\\\//g, '/');
+					connection.send(`>${roomid}\n|init|battle\n|title|${title}\n${data}`);
+					connection.send(`>${roomid}\n|expire|<a href=${url} target="_blank">Open replay in new tab</a>`);
+					return false;
+				} else {
+					return false;
+				}
+			});
+			res.on('error', () => {
+				return false;
+			});
+		});
 	},
 
 	battleModlogStream: FS('logs/modlog/modlog_battle.txt').createAppendStream(),
