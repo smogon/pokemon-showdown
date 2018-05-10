@@ -1236,6 +1236,7 @@ const commands = {
 	'!uptime': true,
 	uptime: function (target, room, user) {
 		if (!this.runBroadcast()) return;
+		if (!this.can('broadcast')) return false;
 		let uptime = process.uptime();
 		let uptimeText;
 		if (uptime > 24 * 60 * 60) {
