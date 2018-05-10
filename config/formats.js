@@ -458,6 +458,18 @@ let Formats = [
 		column: 2,
 	},
 	{
+		name: "[Gen 7] Digimon Showdown",
+		desc: `The Digimon Meta Game!`,
+		threads: [
+			`&bullet; <a href="TBA">Digimon Showdown</a>`,
+		],
+
+		mod: "digimon",
+		gameType: 'triples',
+		team: "randomDigimon",
+		ruleset: ['Cancel Mod', 'HP Percentage Mod'],
+	},
+	{
 		name: "[Gen 7] Balanced Hackmons",
 		desc: `Anything that can be hacked in-game and is usable in local battles is allowed.`,
 		threads: [
