@@ -1612,7 +1612,7 @@ const commands = {
 		if (!this.can('warn', targetUser, room)) return false;
 		if (targetUser.can('makeroom')) return this.errorReply("You are not allowed to warn upper staff members.");
 
-		this.addModAction(`${targetUser.name} was warned by ${user.name}.${(target ? `(${target})` : ``)}`);
+		this.addModAction(`${targetUser.name} was warned by ${user.name}.${(target ? ` (${target})` : ``)}`);
 		this.modlog('WARN', targetUser, target, {noalts: 1});
 		targetUser.send(`|c|~|/warn ${target}`);
 		let userid = targetUser.getLastId();
