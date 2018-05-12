@@ -697,8 +697,8 @@ const commands = {
 			staffMessage: `<p>As creator of this groupchat, <u>you are entirely responsible for what occurs in this chatroom</u>. Global rules apply at all times.</p><p>If you have created this room for someone else, <u>you are still responsible</u> whether or not you choose to actively supervise the room.</p><p style="font-style:italic">For this reason, we strongly recommend that you only create groupchats for users you know and trust.</p><p>If this room is used to break global rules or disrupt other areas of the server, this will be considered irresponsible use of auth privileges on the part of the creator, and <b>you will be globally demoted and barred from public auth.</b></p>`,
 		});
 		if (targetRoom) {
-			// The creator is RO.
-			targetRoom.auth[user.userid] = '#';
+			// The creator is a Host.
+			targetRoom.auth[user.userid] = '\u2605';
 			// Join after creating room. No other response is given.
 			user.joinRoom(targetRoom.id);
 			user.popup(`You've just made a groupchat; it is now your responsibility, regardless of whether or not you actively partake in the room. For more info, read your groupchat's staff intro.`);
@@ -1068,7 +1068,7 @@ const commands = {
 			}
 			return;
 		}
-		if (!this.can('declare', null, room)) return false;
+		if (!this.can('editroom', null, room)) return false;
 		if (this.meansNo(target) || target === 'delete') return this.errorReply('Did you mean "/deleteroomintro"?');
 		target = this.canHTML(target);
 		if (!target) return;
