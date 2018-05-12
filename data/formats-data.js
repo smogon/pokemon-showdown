@@ -7258,11 +7258,13 @@ let BattleFormatsData = {
 	},
 	naganadel: {
 		randomBattleMoves: ["nastyplot", "dragonpulse", "sludgewave", "fireblast", "dracometeor", "uturn"],
+		randomDoubleBattleMoves: ["nastyplot", "dragonpulse", "sludgewave", "sludgebomb", "fireblast", "dracometeor", "uturn"],
 		tier: "Uber",
 		doublesTier: "DUU",
 	},
 	stakataka: {
 		randomBattleMoves: ["gyroball", "stoneedge", "trickroom", "earthquake", "superpower", "stealthrock"],
+		randomDoubleBattleMoves: ["gyroball", "stoneedge", "trickroom", "earthquake", "superpower", "stealthrock", "rockslide"],
 		eventPokemon: [
 			{"generation": 7, "level": 60, "shiny": 1, "moves": ["irondefense", "ironhead", "rockblast", "wideguard"]},
 		],
@@ -7272,6 +7274,7 @@ let BattleFormatsData = {
 	},
 	blacephalon: {
 		randomBattleMoves: ["mindblown", "fireblast", "shadowball", "hiddenpowerice", "trick", "willowisp", "calmmind"],
+		randomDoubleBattleMoves: ["mindblown", "fireblast", "shadowball", "hiddenpowerice", "heatwave", "willowisp", "calmmind"],
 		eventPokemon: [
 			{"generation": 7, "level": 60, "shiny": 1, "moves": ["fireblast", "shadowball", "trick", "mindblown"]},
 		],
@@ -7281,6 +7284,7 @@ let BattleFormatsData = {
 	},
 	zeraora: {
 		randomBattleMoves: ["plasmafists", "closecombat", "voltswitch", "hiddenpowerice", "knockoff", "grassknot", "workup"],
+		randomDoubleBattleMoves: ["plasmafists", "closecombat", "voltswitch", "hiddenpowerice", "knockoff", "grassknot", "fakeout"],
 		isUnreleased: true,
 		tier: "Unreleased",
 	},
