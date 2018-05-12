@@ -636,11 +636,9 @@ const commands = {
 		}
 		let parent = cmd === 'subroomgroupchat' ? room.id : null;
 		// if (!this.can('makegroupchat')) return false;
-		if (target.length > 64) return this.errorReply("Title must be under 32 characters long.");
-		let targets = target.split(',', 2);
 
 		// Title defaults to a random 8-digit number.
-		let title = targets[0].trim();
+		let title = target.trim();
 		if (title.length >= 32) {
 			return this.errorReply("Title must be under 32 characters long.");
 		} else if (!title) {
@@ -679,9 +677,6 @@ const commands = {
 			return;
 		}
 
-		// Privacy settings, default to hidden.
-		let privacy = (toId(targets[1]) === 'private') ? true : 'hidden';
-
 		let groupChatLink = '<code>&lt;&lt;' + roomid + '>></code>';
 		let groupChatURL = '';
 		if (Config.serverid) {
@@ -696,7 +691,7 @@ const commands = {
 		}
 		let targetRoom = Rooms.createChatRoom(roomid, `[G] ${title}`, {
 			isPersonal: true,
-			isPrivate: privacy,
+			isPrivate: 'hidden',
 			modjoin: parent ? null : '+',
 			parentid: parent,
 			auth: {},
@@ -714,8 +709,8 @@ const commands = {
 		return this.errorReply(`An unknown error occurred while trying to create the room '${title}'.`);
 	},
 	makegroupchathelp: [
-		`/makegroupchat [roomname], [hidden|private] - Creates a group chat named [roomname]. Leave off privacy to default to hidden. Requires global voice or roomdriver+ in a public room to make a groupchat.`,
-		`/subroomgroupchat [roomname], [hidden|private] - Creates a subroom groupchat of the current room. Can only be used in a public room you have staff in.`,
+		`/makegroupchat [roomname] - Creates an invite-only group chat named [roomname]. Requires global voice or roomdriver+ in a public room to make a groupchat.`,
+		`/subroomgroupchat [roomname] - Creates a subroom groupchat of the current room. Can only be used in a public room you have staff in.`,
 	],
 
 	deregisterchatroom: function (target, room, user) {
