@@ -1362,12 +1362,12 @@ const commands = {
 	bugs: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (room && room.battle) {
-			this.sendReplyBox(`<center><button name="saveReplay"><i class="fa fa-upload"></i> Save Replay</button> &mdash; <a href="https://www.smogon.com/forums/threads/3520646/">Questions</a> &mdash; <a href="https://www.smogon.com/forums/threads/3469932/">Bug Reports</a></center>`);
+			this.sendReplyBox(`<center><button name="saveReplay"><i class="fa fa-upload"></i> Save Replay</button> &mdash; <a href="https://www.smogon.com/forums/threads/3520646/">Questions</a> &mdash; <a href="https://www.smogon.com/forums/threads/3634749/">Bug Reports</a></center>`);
 		} else {
 			this.sendReplyBox(
 				`Have a replay showcasing a bug on Pok&eacute;mon Showdown?<br />` +
 				`- <a href="https://www.smogon.com/forums/threads/3520646/">Questions</a><br />` +
-				`- <a href="https://www.smogon.com/forums/threads/3469932/">Bug Reports</a> (ask in <a href="/help">Help</a> before posting in the thread if you're unsure)`
+				`- <a href="https://www.smogon.com/forums/threads/3634749/">Bug Reports</a> (ask in <a href="/help">Help</a> before posting in the thread if you're unsure)`
 			);
 		}
 	},
