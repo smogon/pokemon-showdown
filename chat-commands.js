@@ -711,7 +711,7 @@ const commands = {
 	},
 	makegroupchathelp: [
 		`/makegroupchat [roomname] - Creates an invite-only group chat named [roomname]. Requires global voice or roomdriver+ in a public room to make a groupchat.`,
-		`/subroomgroupchat [roomname] - Creates a subroom groupchat of the current room. Can only be used in a room you have staff in.`,
+		`/subroomgroupchat [roomname] - Creates a subroom groupchat of the current room. Can only be used in a public room you have staff in.`,
 	],
 
 	deregisterchatroom: function (target, room, user) {
@@ -760,7 +760,7 @@ const commands = {
 		}
 
 		if (room.isPersonal) {
-			if (!this.can('declare', null, room)) return;
+			if (!this.can('tournamentsmanagement', null, room)) return;
 		} else {
 			if (!this.can('makeroom')) return;
 		}
