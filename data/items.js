@@ -6367,7 +6367,7 @@ let BattleItems = {
 			}
 			moveSlot.pp += 5;
 			if (moveSlot.pp > moveSlot.maxpp) moveSlot.pp = moveSlot.maxpp;
-			this.add('-activate', pokemon, 'item: Leppa Berry', moveSlot.move);
+			this.add('-activate', pokemon, 'item: Mystery Berry', moveSlot.move);
 			if (pokemon.item !== 'leppaberry') {
 				let foeActive = pokemon.side.foe.active;
 				let foeIsStale = false;
