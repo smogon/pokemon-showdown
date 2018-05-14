@@ -1670,7 +1670,7 @@ exports.commands = {
 		],
 
 		disable: function (target, room, user) {
-			if (!this.can('gamehost', null, room)) return;
+			if (!this.can('gamemanagement', null, room)) return;
 			if (!room.mafiaEnabled) {
 				return this.errorReply("Mafia is already disabled.");
 			}
@@ -1685,7 +1685,7 @@ exports.commands = {
 		disablehelp: [`/mafia disable - Disables mafia in this room. Requires # & ~`],
 
 		enable: function (target, room, user) {
-			if (!this.can('gamehost', null, room)) return;
+			if (!this.can('gamemanagement', null, room)) return;
 			if (room.mafiaEnabled) {
 				return this.errorReply("Mafia is already enabled.");
 			}

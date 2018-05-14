@@ -251,7 +251,7 @@ exports.commands = {
 		endhelp: ["/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ * # & ~"],
 
 		disable: function (target, room, user) {
-			if (!this.can('gamehost', null, room)) return;
+			if (!this.can('gamemanagement', null, room)) return;
 			if (room.hangmanDisabled) {
 				return this.errorReply("Hangman is already disabled.");
 			}
@@ -264,7 +264,7 @@ exports.commands = {
 		},
 
 		enable: function (target, room, user) {
-			if (!this.can('gamehost', null, room)) return;
+			if (!this.can('gamemanagement', null, room)) return;
 			if (!room.hangmanDisabled) {
 				return this.errorReply("Hangman is already enabled.");
 			}

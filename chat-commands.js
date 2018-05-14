@@ -760,7 +760,7 @@ const commands = {
 		}
 
 		if (room.isPersonal) {
-			if (!this.can('gamehost', null, room)) return;
+			if (!this.can('gamemanagement', null, room)) return;
 		} else {
 			if (!this.can('makeroom')) return;
 		}

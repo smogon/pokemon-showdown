@@ -515,7 +515,7 @@ exports.commands = {
 		// roomowner commands
 		off: 'disable',
 		disable: function (target, room, user) {
-			if (!this.can('gamehost', null, room)) return;
+			if (!this.can('gamemanagement', null, room)) return;
 			if (room.unoDisabled) {
 				return this.errorReply("UNO is already disabled in this room.");
 			}
@@ -529,7 +529,7 @@ exports.commands = {
 
 		on: 'enable',
 		enable: function (target, room, user) {
-			if (!this.can('gamehost', null, room)) return;
+			if (!this.can('gamemanagement', null, room)) return;
 			if (!room.unoDisabled) {
 				return this.errorReply("UNO is already enabled in this room.");
 			}

@@ -324,7 +324,7 @@ exports.disablehotpatchall = false;
 //     - battlemessage: /a command.
 //     - tournaments: creating tournaments (/tour new, settype etc.)
 //     - gamemoderation: /tour dq, autodq, end etc.
-//     - gamehost: enable/disable games, minigames, and tournaments.
+//     - gamemanagement: enable/disable games, minigames, and tournaments.
 //     - minigame: make minigames (hangman, polls, etc.).
 //     - game: make games.
 exports.grouplist = [
@@ -355,7 +355,7 @@ exports.grouplist = [
 		potd: true,
 		disableladder: true,
 		globalonly: true,
-		gamehost: true,
+		gamemanagement: true,
 		exportinputlog: true,
 	},
 	{
@@ -371,7 +371,7 @@ exports.grouplist = [
 		declare: true,
 		modchatall: true,
 		roomonly: true,
-		gamehost: true,
+		gamemanagement: true,
 	},
 	{
 		symbol: '\u2605',
@@ -382,7 +382,7 @@ exports.grouplist = [
 		declare: true,
 		modchat: true,
 		roomonly: true,
-		gamehost: true,
+		gamemanagement: true,
 		joinbattle: true,
 	},
 	{

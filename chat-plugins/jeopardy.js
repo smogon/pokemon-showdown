@@ -508,7 +508,7 @@ exports.commands = {
 	jeopardy: {
 		off: 'disable',
 		disable: function (target, room, user) {
-			if (!this.can('gamehost', null, room)) return;
+			if (!this.can('gamemanagement', null, room)) return;
 			if (room.jeopDisabled) {
 				return this.errorReply("Jeopardy is already disabled in this room.");
 			}
@@ -522,7 +522,7 @@ exports.commands = {
 
 		on: 'enable',
 		enable: function (target, room, user) {
-			if (!this.can('gamehost', null, room)) return;
+			if (!this.can('gamemanagement', null, room)) return;
 			if (!room.jeopDisabled) {
 				return this.errorReply("Jeopardy is already enabled in this room.");
 			}
