@@ -631,8 +631,9 @@ const commands = {
 		if (!user.trusted) {
 			return this.errorReply("You must be global voice or roomdriver+ in some public room to make a groupchat.");
 		}
-		if (cmd === 'subroomgroupchat' && !user.can('mute', null, room)) {
-			return this.errorReply("You can only create subroom groupchats for rooms you're staff in.");
+		if (cmd === 'subroomgroupchat') {
+			if (!user.can('mute', null, room)) return this.errorReply("You can only create subroom groupchats for rooms you're staff in.");
+			if (room.battle) return this.errorReply("You cannot create a subroom of a battle.");
 		}
 		let parent = cmd === 'subroomgroupchat' ? room.id : null;
 		// if (!this.can('makegroupchat')) return false;
@@ -759,7 +760,7 @@ const commands = {
 		}
 
 		if (room.isPersonal) {
-			if (!this.can('editroom', null, room)) return;
+			if (!this.can('gamemanagement', null, room)) return;
 		} else {
 			if (!this.can('makeroom')) return;
 		}
