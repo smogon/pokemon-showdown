@@ -324,10 +324,9 @@ exports.disablehotpatchall = false;
 //     - battlemessage: /a command.
 //     - tournaments: creating tournaments (/tour new, settype etc.)
 //     - gamemoderation: /tour dq, autodq, end etc.
-//     - gamehost: enable/disable games and tournaments.
+//     - gamehost: enable/disable games, minigames, and tournaments.
 //     - minigame: make minigames (hangman, polls, etc.).
 //     - game: make games.
-//     - gamehost: enable/disable games and minigames.
 exports.grouplist = [
 	{
 		symbol: '~',
