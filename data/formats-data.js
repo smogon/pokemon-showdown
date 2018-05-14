@@ -6629,6 +6629,7 @@ let BattleFormatsData = {
 	},
 	lycanrocdusk: {
 		randomBattleMoves: ["swordsdance", "accelerock", "stoneedge", "drillrun", "firefang", "return"],
+		randomDoubleBattleMoves: ["accelerock", "stoneedge", "rockslide", "drillrun", "firefang", "protect"],
 		tier: "RU",
 		doublesTier: "DUU",
 	},
@@ -7202,6 +7203,7 @@ let BattleFormatsData = {
 	},
 	necrozmaduskmane: {
 		randomBattleMoves: ["swordsdance", "sunsteelstrike", "photongeyser", "earthquake", "knockoff", "autotomize"],
+		randomDoubleBattleMoves: ["swordsdance", "sunsteelstrike", "photongeyser", "earthquake", "knockoff", "rockslide"],
 		eventPokemon: [
 			{"generation": 7, "level": 65, "moves": ["sunsteelstrike"]},
 		],
@@ -7258,7 +7260,7 @@ let BattleFormatsData = {
 	},
 	naganadel: {
 		randomBattleMoves: ["nastyplot", "dragonpulse", "sludgewave", "fireblast", "dracometeor", "uturn"],
-		randomDoubleBattleMoves: ["nastyplot", "dragonpulse", "sludgewave", "sludgebomb", "fireblast", "dracometeor", "uturn"],
+		randomDoubleBattleMoves: ["nastyplot", "dragonpulse", "sludgewave", "sludgebomb", "fireblast", "dracometeor", "uturn", "protect"],
 		tier: "Uber",
 		doublesTier: "DUU",
 	},
@@ -7274,7 +7276,7 @@ let BattleFormatsData = {
 	},
 	blacephalon: {
 		randomBattleMoves: ["mindblown", "fireblast", "shadowball", "hiddenpowerice", "trick", "willowisp", "calmmind"],
-		randomDoubleBattleMoves: ["mindblown", "fireblast", "shadowball", "hiddenpowerice", "heatwave", "willowisp", "calmmind"],
+		randomDoubleBattleMoves: ["mindblown", "fireblast", "shadowball", "hiddenpowerice", "heatwave", "protect"],
 		eventPokemon: [
 			{"generation": 7, "level": 60, "shiny": 1, "moves": ["fireblast", "shadowball", "trick", "mindblown"]},
 		],
@@ -7284,7 +7286,7 @@ let BattleFormatsData = {
 	},
 	zeraora: {
 		randomBattleMoves: ["plasmafists", "closecombat", "voltswitch", "hiddenpowerice", "knockoff", "grassknot", "workup"],
-		randomDoubleBattleMoves: ["plasmafists", "closecombat", "voltswitch", "hiddenpowerice", "knockoff", "grassknot", "fakeout"],
+		randomDoubleBattleMoves: ["plasmafists", "closecombat", "voltswitch", "hiddenpowerice", "knockoff", "grassknot", "fakeout", "protect"],
 		isUnreleased: true,
 		tier: "Unreleased",
 	},
