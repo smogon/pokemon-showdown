@@ -340,24 +340,17 @@ let Formats = [
 		requirePentagon: true,
 	},
 	{
-		name: "[Gen 7] Battle Spot Special 9",
-		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3629823/">Battle Spot Special 9</a>`],
+		name: "[Gen 7] Battle Spot Special 10",
+		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3634759/">Battle Spot Special 10</a>`],
 
 		mod: 'gen7',
 		gameType: 'doubles',
 		maxForcedLevel: 50,
 		teamLength: {
-			validate: [2, 6],
-			battle: 2,
+			validate: [4, 6],
+			battle: 4,
 		},
-		ruleset: ['Pokemon', 'Standard GBU'],
-		banlist: ['Eviolite', 'Focus Sash'],
-		onValidateSet: function (set, format) {
-			if (set.item) {
-				let item = this.getItem(set.item);
-				if (item.megaStone || item.zMove) return [`${set.name || set.species} has ${item.name}, which is banned in ${format.name}.`];
-			}
-		},
+		ruleset: ['Pokemon', 'Standard GBU', 'Inverse Mod'],
 	},
 	{
 		name: '[Gen 7] Metronome Battle',
