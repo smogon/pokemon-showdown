@@ -1897,7 +1897,7 @@ class Battle extends Dex.ModdedDex {
 		}
 		if (damage !== 0) damage = this.clampIntRange(damage, 1);
 		damage = target.damage(damage, source, effect);
-		if (source) source.lastDamage = damage;
+		if (source && effect.effectType === 'Move') source.lastDamage = damage;
 		let name = effect.fullname;
 		if (name === 'tox') name = 'psn';
 		switch (effect.id) {
