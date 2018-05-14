@@ -123,7 +123,7 @@ class RoomSettings {
 		return slowchatOutput.join(' ');
 	}
 	tourStatus() {
-		if (!this.user.can('tournamentsmanagement', null, this.room)) return this.button(this.room.toursEnabled === true ? '@' : this.room.toursEnabled === '%' ? '%' : '#', true);
+		if (!this.user.can('gamemanagement', null, this.room)) return this.button(this.room.toursEnabled === true ? '@' : this.room.toursEnabled === '%' ? '%' : '#', true);
 
 		if (this.room.toursEnabled === true) {
 			return `${this.button('%', null, 'tournament enable %')} ${this.button('@', true)} ${this.button('#', null, 'tournament disable')}`;

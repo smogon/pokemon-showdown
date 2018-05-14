@@ -1398,7 +1398,7 @@ Chat.commands.tournament = function (paramString, room, user, connection) {
 	} else if (cmd === 'help') {
 		return this.parse('/help tournament');
 	} else if (this.meansYes(cmd)) {
-		if (!this.can('tournamentsmanagement', null, room)) return;
+		if (!this.can('gamemanagement', null, room)) return;
 		let rank = params[0];
 		if (rank && rank === '@') {
 			if (room.toursEnabled === true) return this.errorReply("Tournaments are already enabled for @ and above in this room.");
@@ -1420,7 +1420,7 @@ Chat.commands.tournament = function (paramString, room, user, connection) {
 			return this.errorReply("Tournament enable setting not recognized.  Valid options include [%|@].");
 		}
 	} else if (this.meansNo(cmd)) {
-		if (!this.can('tournamentsmanagement', null, room)) return;
+		if (!this.can('gamemanagement', null, room)) return;
 		if (!room.toursEnabled) {
 			return this.errorReply("Tournaments are already disabled.");
 		}
@@ -1431,7 +1431,7 @@ Chat.commands.tournament = function (paramString, room, user, connection) {
 		}
 		return this.sendReply("Tournaments are now disabled.");
 	} else if (cmd === 'announce' || cmd === 'announcements') {
-		if (!this.can('tournamentsmanagement', null, room)) return;
+		if (!this.can('gamemanagement', null, room)) return;
 		if (!Config.tourannouncements.includes(room.id)) {
 			return this.errorReply("Tournaments in this room cannot be announced.");
 		}
@@ -1466,9 +1466,9 @@ Chat.commands.tournament = function (paramString, room, user, connection) {
 		if (room.toursEnabled === true) {
 			if (!this.can('tournaments', null, room)) return;
 		} else if (room.toursEnabled === '%') {
-			if (!this.can('tournamentsmoderation', null, room)) return;
+			if (!this.can('gamemoderation', null, room)) return;
 		} else {
-			if (!user.can('tournamentsmanagement', null, room)) {
+			if (!user.can('gamemanagement', null, room)) {
 				return this.errorReply("Tournaments are disabled in this room (" + room.id + ").");
 			}
 		}
@@ -1500,9 +1500,9 @@ Chat.commands.tournament = function (paramString, room, user, connection) {
 			if (room.toursEnabled === true) {
 				if (!this.can('tournaments', null, room)) return;
 			} else if (room.toursEnabled === '%') {
-				if (!this.can('tournamentsmoderation', null, room)) return;
+				if (!this.can('gamemoderation', null, room)) return;
 			} else {
-				if (!user.can('tournamentsmanagement', null, room)) {
+				if (!user.can('gamemanagement', null, room)) {
 					return this.errorReply("Tournaments are disabled in this room (" + room.id + ").");
 				}
 			}
@@ -1510,7 +1510,7 @@ Chat.commands.tournament = function (paramString, room, user, connection) {
 		}
 
 		if (commands.moderation[cmd]) {
-			if (!user.can('tournamentsmoderation', null, room)) {
+			if (!user.can('gamemoderation', null, room)) {
 				return this.errorReply(cmd + " -  Access denied.");
 			}
 			commandHandler = typeof commands.moderation[cmd] === 'string' ? commands.moderation[commands.moderation[cmd]] : commands.moderation[cmd];
