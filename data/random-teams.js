@@ -1226,8 +1226,10 @@ class RandomTeams extends Dex.ModdedDex {
 					rejectAbility = abilities.includes('Technician') && !!counter['technician'];
 				} else if (ability === 'Power Construct') {
 					rejectAbility = template.forme === '10%' && !hasMove['substitute'];
-				} else if (ability === 'Prankster' || ability === 'Pressure') {
+				} else if (ability === 'Prankster') {
 					rejectAbility = !counter['Status'];
+				} else if (ability === 'Pressure' || ability === 'Synchronize') {
+					rejectAbility = counter.Status < 2;
 				} else if (ability === 'Regenerator') {
 					rejectAbility = abilities.includes('Magic Guard');
 				} else if (ability === 'Quick Feet') {
@@ -1254,8 +1256,6 @@ class RandomTeams extends Dex.ModdedDex {
 					rejectAbility = !!counter['recoil'] && !counter['recovery'];
 				} else if (ability === 'Swarm') {
 					rejectAbility = !counter['Bug'];
-				} else if (ability === 'Synchronize') {
-					rejectAbility = counter.Status < 2;
 				} else if (ability === 'Technician') {
 					rejectAbility = !counter['technician'] || (abilities.includes('Skill Link') && counter['skilllink'] >= counter['technician']);
 				} else if (ability === 'Tinted Lens') {
