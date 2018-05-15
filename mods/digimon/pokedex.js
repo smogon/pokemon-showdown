@@ -1,5 +1,7 @@
 'use strict';
-exports.BattlePokedex = {
+
+/**@type {{[k: string]: ModdedTemplateData}} */
+let BattlePokedex = {
 	botamon: {
 		num: -2000,
 		species: "Botamon",
@@ -2065,3 +2067,5 @@ exports.BattlePokedex = {
 		eggGroups: ["Undiscovered"],
 	},
 };
+
+exports.BattlePokedex = BattlePokedex;

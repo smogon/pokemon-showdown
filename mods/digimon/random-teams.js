@@ -1237,7 +1237,7 @@ class RandomDigimonTeams extends RandomTeams {
 			if (level > 100) {
 				level = 100;
 			} else {
-				level = (level % 5) >= 2.5 ? parseInt(level / 5) * 5 + 5 : parseInt(level / 5) * 5; //Rounds to the Nearest 5 for simplicity
+				level = (level % 5) >= 2.5 ? (level / 5) * 5 + 5 : (level / 5) * 5; //Rounds to the Nearest 5 for simplicity
 			}
 			set.level = level;
 			set.nature = "Serious";

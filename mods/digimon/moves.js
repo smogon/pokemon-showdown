@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleMovedex = {
+/**@type {{[k: string]: ModdedMoveData}} */
+let BattleMovedex = {
 	"acidbubble": {
 		accuracy: 90,
 		basePower: 60,
@@ -1634,23 +1635,23 @@ exports.BattleMovedex = {
 		type: "Filth",
 	},
 	"pummelwhack": {
-		name: "Pummel Whack",
-		id: "pummelwhack",
+		accuracy: 95,
 		basePower: 110,
-		priority: 0,
 		category: "Physical",
-		type: "Evil",
-		target: "normal",
 		desc: "No additional effect.",
 		shortDesc: "No additional effect.",
+		priority: 0,
+		pp: 3,
+		noPPBoosts: true,
+		name: "Pummel Whack",
+		id: "pummelwhack",
+		flags: {protect: 1, mirror: 1},
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "shadowpunch", target);
 		},
-		flags: {protect: 1, mirror: 1},
-		accuracy: 95,
-		pp: 3,
-		noPPBoosts: true,
+		target: "normal",
+		type: "Evil",
 	},
 	"firefeather": {
 		name: "Fire Feather",
@@ -2488,7 +2489,7 @@ exports.BattleMovedex = {
 		name: "Modestly Stun",
 		id: "modestlystun",
 		priority: 0,
-		basePower: "80",
+		basePower: 80,
 		category: "Physical",
 		type: "Battle",
 		target: "normal",
@@ -2511,7 +2512,7 @@ exports.BattleMovedex = {
 		name: "Berserk Thinking",
 		id: "berserkthinking",
 		priority: 0,
-		basePower: "40",
+		basePower: 40,
 		category: "Physical",
 		type: "Battle",
 		target: "any",
@@ -2549,7 +2550,7 @@ exports.BattleMovedex = {
 	"revengeflame": {
 		name: "Revenge Flame",
 		id: "revengeflame",
-		priority: -4, //same as Revenge
+		priority: -4, // Same as Revenge
 		basePower: 70,
 		category: "Physical",
 		type: "Flame",
@@ -3374,9 +3375,8 @@ exports.BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		secondary: false,
-		onAfterMoveSecondarySelf: function (pokemon, target, source, move) {
-			for (let i = 0; i < target.side.active.length; i++) {
-				let allyActive = target.side.foe.active[i];
+		onAfterMoveSecondarySelf: function (source, target, move) {
+			for (const allyActive of source.side.active) {
 				if (allyActive) this.heal(allyActive.maxhp / 2, allyActive);
 			}
 		},
@@ -5372,3 +5372,5 @@ exports.BattleMovedex = {
 		shortDesc: "For 5 turns, sunlight powers Fire/Flame moves.",
 	},
 };
+
+exports.BattleMovedex = BattleMovedex;
