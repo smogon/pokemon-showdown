@@ -7260,7 +7260,7 @@ let BattleFormatsData = {
 	},
 	naganadel: {
 		randomBattleMoves: ["nastyplot", "dragonpulse", "sludgewave", "fireblast", "dracometeor", "uturn"],
-		randomDoubleBattleMoves: ["nastyplot", "dragonpulse", "sludgewave", "sludgebomb", "fireblast", "dracometeor", "uturn", "protect"],
+		randomDoubleBattleMoves: ["tailwind", "dragonpulse", "sludgebomb", "fireblast", "dracometeor", "uturn", "protect"],
 		tier: "Uber",
 		doublesTier: "DUU",
 	},
