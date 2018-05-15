@@ -1339,7 +1339,7 @@ exports.BattleMovedex = {
 	"scissorclaw": {
 		accuracy: 90,
 		basePower: 110,
-		category: "Physcial",
+		category: "Physical",
 		desc: "Ignores target’s stat changes.",
 		shortDesc: "Ignores target’s stat changes.",
 		id: "scissorclaw",
