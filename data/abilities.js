@@ -599,7 +599,7 @@ let BattleAbilities = {
 		},
 		id: "dazzling",
 		name: "Dazzling",
-		rating: 3.5,
+		rating: 3,
 		num: 219,
 	},
 	"defeatist": {
@@ -2580,7 +2580,7 @@ let BattleAbilities = {
 		},
 		id: "queenlymajesty",
 		name: "Queenly Majesty",
-		rating: 3.5,
+		rating: 3,
 		num: 214,
 	},
 	"quickfeet": {
