@@ -719,7 +719,7 @@ class User {
 			const game = Rooms(roomid).game;
 			if (!game || game.ended) continue; // should never happen
 			if (game.allowRenames || !this.named) continue;
-			this.popup(`You can't change your name right now because you're in ${Rooms(roomid).title}, which doesn't allow renaming.`);
+			this.popup(`You can't change your name right now because you're in ${game.title}, which doesn't allow renaming.`);
 			return false;
 		}
 
