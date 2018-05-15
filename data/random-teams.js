@@ -1285,25 +1285,20 @@ class RandomTeams extends Dex.ModdedDex {
 
 			if (abilities.includes('Galvanize') && !!counter['Normal']) {
 				ability = 'Galvanize';
-			}
-			if (abilities.includes('Guts') && ability !== 'Quick Feet' && (hasMove['facade'] || hasMove['protect'] || (hasMove['rest'] && hasMove['sleeptalk']))) {
+			} else if (abilities.includes('Guts') && ability !== 'Quick Feet' && (hasMove['facade'] || hasMove['protect'] || (hasMove['rest'] && hasMove['sleeptalk']))) {
 				ability = 'Guts';
-			}
-			if (isDoubles && abilities.includes('Intimidate')) {
+			} else if (abilities.includes('Prankster') && counter.Status > 1) {
+				ability = 'Prankster';
+			} else if (abilities.includes('Swift Swim') && hasMove['raindance']) {
+				ability = 'Swift Swim';
+			} else if (abilities.includes('Triage') && !!counter['drain']) {
+				ability = 'Triage';
+			} else if (abilities.includes('Unburden') && hasMove['acrobatics']) {
+				ability = 'Unburden';
+			} else if (isDoubles && abilities.includes('Intimidate')) {
 				ability = 'Intimidate';
 			}
-			if (abilities.includes('Prankster') && counter.Status > 1) {
-				ability = 'Prankster';
-			}
-			if (abilities.includes('Swift Swim') && hasMove['raindance']) {
-				ability = 'Swift Swim';
-			}
-			if (abilities.includes('Triage') && !!counter['drain']) {
-				ability = 'Triage';
-			}
-			if (abilities.includes('Unburden') && hasMove['acrobatics']) {
-				ability = 'Unburden';
-			}
+
 			if (template.species === 'Ambipom' && !counter['technician']) {
 				// If it doesn't qualify for Technician, Skill Link is useless on it
 				ability = 'Pickup';
