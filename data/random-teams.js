@@ -994,7 +994,6 @@ class RandomTeams extends Dex.ModdedDex {
 					break;
 				case 'sludgewave':
 					if (hasMove['poisonjab']) rejected = true;
-					if (hasMove['sludgebomb'] && isDoubles) rejected = true;
 					break;
 				case 'photongeyser': case 'psychic':
 					if (hasMove['psyshock'] || counter.setupType === 'Special' && hasMove['storedpower']) rejected = true;
