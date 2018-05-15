@@ -909,10 +909,11 @@ let commands = {
 			}
 
 			for (let i in affected) {
-				let targetTicket = punishment;
 				let userid = (typeof affected[i] !== 'string' ? affected[i].getLastId() : toId(affected[i]));
+				let targetTicket = tickets[userid];
+				if (targetTicket && targetTicket.open) targetTicket.open = false;
 				if (Rooms(`help-${userid}`)) Rooms(`help-${userid}`).destroy();
-				ticketBans[userid] = targetTicket;
+				ticketBans[userid] = punishment;
 			}
 			writeTickets();
 			notifyStaff();
@@ -938,13 +939,13 @@ let commands = {
 
 			let affected = [];
 			for (let t in ticketBans) {
-				if (ticketBans[t].banned === ticket.banned && ticketBans[t].userid !== ticket.userid) {
+				if (toId(ticketBans[t].banned) === toId(ticket.banned) && ticketBans[t].userid !== ticket.userid) {
 					affected.push(ticketBans[t].name);
 					delete ticketBans[t];
 				}
 			}
 			affected.unshift(ticket.name);
-			delete tickets[ticket.userid];
+			delete ticketBans[ticket.userid];
 			writeTickets();
 
 			this.addModAction(`${affected.join(', ')} ${Chat.plural(affected.length, "were", "was")} ticket unbanned by ${user.name}.`);
