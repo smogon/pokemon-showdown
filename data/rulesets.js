@@ -126,7 +126,7 @@ let BattleFormats = {
 			if (template.gen > this.gen) {
 				problems.push(set.species + ' does not exist in gen ' + this.gen + '.');
 			}
-			if ((template.num === 25 || template.num === 172) && template.tier === 'Illegal') {
+			if (template.gen && template.gen !== this.gen && template.tier === 'Illegal') {
 				problems.push(set.species + ' does not exist outside of gen ' + template.gen + '.');
 			}
 			let ability = {};
@@ -157,7 +157,7 @@ let BattleFormats = {
 			}
 
 			if (!allowCAP || !template.tier.startsWith('CAP')) {
-				if (template.isNonstandard) {
+				if (template.isNonstandard && template.num > -5000) {
 					problems.push(set.species + ' does not exist.');
 				}
 			}
@@ -198,6 +198,11 @@ let BattleFormats = {
 			// ----------- legality line ------------------------------------------
 			if (!this.getRuleTable(format).has('-illegal')) return problems;
 			// everything after this line only happens if we're doing legality enforcement
+
+			// Pokestar studios
+			if (template.num <= -5000 && template.isNonstandard) {
+				problems.push(`${set.species} cannot be obtained by legal means.`);
+			}
 
 			// only in gen 1 and 2 it was legal to max out all EVs
 			if (this.gen >= 3 && totalEV > 510) {
