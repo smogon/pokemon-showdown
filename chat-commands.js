@@ -1004,9 +1004,10 @@ const commands = {
 
 	parentroom: 'subrooms',
 	subrooms: function (target, room, user, connection, cmd) {
-		if (cmd === 'parentroom' && !room.parent) return this.errorReply(`This room is not a parent room.`);
-		if (room.parent) return this.sendReply(`This is a subroom of ${room.parent.title}.`);
-		if (room.isPrivate) return this.errorReply(`Private rooms cannot have subrooms.`);
+		if (cmd === 'parentroom') {
+			if (!room.parent) return this.errorReply(`This room is not a subroom.`);
+			return this.sendReply(`This is a subroom of ${room.parent.title}.`);
+		}
 		if (!room.chatRoomData) return this.errorReply(`Temporary rooms cannot have subrooms.`);
 
 		if (!this.runBroadcast()) return;
