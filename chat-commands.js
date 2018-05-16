@@ -633,6 +633,7 @@ const commands = {
 		}
 		if (cmd === 'subroomgroupchat') {
 			if (!user.can('mute', null, room)) return this.errorReply("You can only create subroom groupchats for rooms you're staff in.");
+			if (room.isPrivate) return this.errorReply("You can only create subroom groupchats for public rooms.");
 			if (room.battle) return this.errorReply("You cannot create a subroom of a battle.");
 		}
 		let parent = cmd === 'subroomgroupchat' ? room.id : null;
