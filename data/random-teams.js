@@ -1115,6 +1115,7 @@ class RandomTeams extends Dex.ModdedDex {
 					(hasType['Electric'] && !counter['Electric'] && !hasAbility['Galvanize']) ||
 					(hasType['Fighting'] && !counter['Fighting'] && (counter.setupType || !counter['Status'])) ||
 					(hasType['Fire'] && !counter['Fire']) ||
+					(hasType['Ghost'] && !hasType['Dark'] && !counter['Ghost']) ||
 					(hasType['Ground'] && !counter['Ground'] && !hasMove['rest'] && !hasMove['sleeptalk']) ||
 					(hasType['Ice'] && !counter['Ice'] && !hasAbility['Refrigerate']) ||
 					(hasType['Psychic'] && !!counter['Psychic'] && !hasType['Flying'] && !hasAbility['Pixilate'] && template.types.length > 1 && counter.stab < 2) ||
@@ -1334,6 +1335,8 @@ class RandomTeams extends Dex.ModdedDex {
 			item = 'Deep Sea Tooth';
 		} else if (template.species === 'Cubone' || template.baseSpecies === 'Marowak') {
 			item = 'Thick Club';
+		} else if (template.species === 'Decidueye' && hasMove['spiritshackle'] && counter.setupType && !teamDetails.zMove) {
+			item = 'Decidium Z';
 		} else if (template.species === 'Dedenne') {
 			item = 'Petaya Berry';
 		} else if (template.species === 'Deoxys-Attack') {
@@ -1342,6 +1345,8 @@ class RandomTeams extends Dex.ModdedDex {
 			item = 'Stick';
 		} else if (template.species === 'Kommo-o' && !teamDetails.zMove) {
 			item = hasMove['clangingscales'] ? 'Kommonium Z' : 'Dragonium Z';
+		} else if (template.species === 'Marshadow' && hasMove['spectralthief'] && counter.setupType && !teamDetails.zMove) {
+			item = 'Marshadium Z';
 		} else if ((template.species === 'Necrozma-Dusk-Mane' || template.species === 'Necrozma-Dawn-Wings') && !teamDetails.zMove) {
 			if (hasMove['autotomize'] && hasMove['sunsteelstrike']) {
 				item = 'Solganium Z';
@@ -1360,6 +1365,8 @@ class RandomTeams extends Dex.ModdedDex {
 			}
 		} else if (template.baseSpecies === 'Pikachu') {
 			item = 'Light Ball';
+		} else if (template.species === 'Raichu-Alola' && hasMove['thunderbolt'] && !teamDetails.zMove && this.randomChance(1, 4)) {
+			item = 'Aloraichium Z';
 		} else if (template.species === 'Shedinja' || template.species === 'Smeargle') {
 			item = 'Focus Sash';
 		} else if (template.species === 'Unfezant' && counter['Physical'] >= 2) {
@@ -1372,10 +1379,6 @@ class RandomTeams extends Dex.ModdedDex {
 			} else {
 				item = isDoubles || this.randomChance(1, 2) ? 'Sitrus Berry' : 'Leftovers';
 			}
-		} else if (template.species === 'Decidueye' && hasMove['spiritshackle'] && counter.setupType && !teamDetails.zMove) {
-			item = 'Decidium Z';
-		} else if (template.species === 'Raichu-Alola' && hasMove['thunderbolt'] && !teamDetails.zMove && this.randomChance(1, 4)) {
-			item = 'Aloraichium Z';
 		} else if (template.species === 'Zygarde-10%' && hasMove['substitute'] && !teamDetails.zMove) {
 			item = hasMove['outrage'] ? 'Dragonium Z' : 'Groundium Z';
 		} else if (ability === 'Imposter') {

@@ -520,6 +520,7 @@ class RandomGen6Teams extends RandomTeams {
 					(hasType['Electric'] && !counter['Electric']) ||
 					(hasType['Fighting'] && !counter['Fighting'] && (counter.setupType || !counter['Status'])) ||
 					(hasType['Fire'] && !counter['Fire']) ||
+					(hasType['Ghost'] && !hasType['Dark'] && !counter['Ghost']) ||
 					(hasType['Ground'] && !counter['Ground'] && !hasMove['rest'] && !hasMove['sleeptalk']) ||
 					(hasType['Ice'] && !counter['Ice'] && !hasAbility['Refrigerate']) ||
 					(hasType['Psychic'] && !!counter['Psychic'] && !hasType['Flying'] && !hasAbility['Pixilate'] && template.types.length > 1 && counter.stab < 2) ||
