@@ -27,6 +27,7 @@ const MORE_BUTTON_INCREMENTS = [200, 400, 800, 1600, 3200];
 const LINES_SEPARATOR = 'lines=';
 const MAX_RESULTS_LENGTH = MORE_BUTTON_INCREMENTS[MORE_BUTTON_INCREMENTS.length - 1];
 const LOG_PATH = 'logs/modlog/';
+const BATTLESEARCH_LIMIT = 3;
 
 class SortedLimitedLengthList {
 	constructor(maxSize) {
@@ -281,59 +282,98 @@ function getModlog(connection, roomid = 'global', searchString = '', maxLines = 
 
 async function runBattleSearch(userid, tierid, turnLimit) {
 	let dirs = await FS('logs/').readdir();
-	dirs = dirs.filter(f => f.length === 7 && f.includes('-'));
+	dirs = dirs.filter(f => f.length === 7 && f.includes('-')).sort((aKey, bKey) => {
+		const a = aKey.split('-').map(parseInt);
+		const b = bKey.split('-').map(parseInt);
+		if (a[0] === b[0]) {
+			if (a[1] > b[1]) return -1;
+			return 1;
+		}
+		if (a[0] > b[0]) return -1;
+		return 1;
+	});
 	let results = {
 		totalBattles: 0,
 		totalWins: 0,
 		totalLosses: 0,
 		totalTies: 0,
 	};
+	let monthsSearched = 0;
 	for (const month of dirs) {
-		let days = [];
-		try {
-			days = await FS(`logs/${month}/${tierid}`).readdir();
-		} catch (err) {
-			if (err.code === 'ENOENT') continue;
-			throw err;
-		}
-		for (const day of days) {
-			const out = await readBattleDir(`logs/${month}/${tierid}/${day}`, userid, turnLimit);
-			for (const key in out) {
-				if (!results[key]) {
-					results[key] = out[key];
-				} else {
-					results[key] += out[key];
-				}
+		if (monthsSearched >= BATTLESEARCH_LIMIT) break;
+		const out = await readBattleDir(`logs/${month}/${tierid}`, userid, turnLimit);
+		for (const key in out) {
+			if (!results[key]) {
+				results[key] = out[key];
+			} else {
+				results[key] += out[key];
 			}
 		}
+		monthsSearched++;
 	}
 	return results;
 }
 
 async function readBattleDir(path, userid, turnLimit) {
-	const files = await FS(path).readdir();
+	const useRipgrep = checkRipgrepAvailability();
 	let out = {
 		totalBattles: 0,
 		totalWins: 0,
 		totalLosses: 0,
 		totalTies: 0,
 	};
-	for (const file of files) {
-		let data = await FS(`${path}/${file}`).readIfExists();
-		data = JSON.parse(data);
-		if (toId(data.p1) !== userid && toId(data.p2) !== userid) continue;
-		if (data.turns > turnLimit) continue;
-		out.totalBattles++;
-		if (toId(data.winner) === userid) {
-			out.totalWins++;
-		} else if (toId(data.winner)) {
-			out.totalLosses++;
-		} else {
-			out.totalTies++;
+	let days = [];
+	try {
+		days = await FS(path).readdir();
+	} catch (err) {
+		if (err.code === 'ENOENT') return out;
+		throw err;
+	}
+	if (useRipgrep) {
+		const regexString = `("p1":"${userid}"|"p2":"${userid}")`;
+		let stdout;
+		try {
+			stdout = execFileSync('rg', ['-i', regexString, '--no-filename', '--no-line-number', '-tjson', path]);
+		} catch (error) {
+			return out;
 		}
-		const foe = toId(data.p1) === userid ? toId(data.p2) : toId(data.p1);
-		if (!out[foe]) out[foe] = 0;
-		out[foe]++;
+		for (const file of stdout.toString().split('\n').reverse()) {
+			if (!file) continue;
+			let data = JSON.parse(file);
+			if (data.turns > turnLimit) continue;
+			out.totalBattles++;
+			if (toId(data.winner) === userid) {
+				out.totalWins++;
+			} else if (data.winner) {
+				out.totalLosses++;
+			} else {
+				out.totalTies++;
+			}
+			const foe = toId(data.p1) === userid ? toId(data.p2) : toId(data.p1);
+			if (!out[foe]) out[foe] = 0;
+			out[foe]++;
+		}
+		return out;
+	}
+	for (const day of days) {
+		const files = await FS(`${path}/${day}`).readdir();
+		for (const file of files) {
+			const json = await FS(`${path}/${day}/${file}`).readIfExists();
+			const data = JSON.parse(json);
+			if (toId(data.p1) !== userid && toId(data.p2) !== userid) continue;
+			if (data.turns > turnLimit) continue;
+			out.totalBattles++;
+			if (toId(data.winner) === userid) {
+				out.totalWins++;
+			} else if (data.winner) {
+				out.totalLosses++;
+			} else {
+				out.totalTies++;
+			}
+			const foe = toId(data.p1) === userid ? toId(data.p2) : toId(data.p1);
+			if (!out[foe]) out[foe] = 0;
+			out[foe]++;
+		}
 	}
 	return out;
 }
@@ -372,7 +412,7 @@ exports.pages = {
 	},
 	battlesearch(args, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		let [userid, tierid, turnLimit] = args.map(x => { return toId(x); });
+		let [userid, tierid, turnLimit] = args.map(toId);
 		if (!userid || !tierid) return;
 		const format = Dex.getFormat(tierid);
 		if (format.exists) tierid = format.id;
@@ -384,6 +424,7 @@ exports.pages = {
 		}
 
 		getBattleSearch(connection, userid, tierid, turnLimit);
+		return `|title|[Battle Search][${userid}][${format.id}]\n|pagehtml|<div class="pad ladder">Results for ${Chat.escapeHTML(format.name)} where ${userid} was a player and the battle ended in ${turnLimit} or less turns:<br /><br />Loading...`;
 	},
 };
 
@@ -447,6 +488,7 @@ exports.commands = {
 		}
 
 		getBattleSearch(connection, userid, tierid, turnLimit);
+		return user.send(`>view-battlesearch-${userid}-${format.id}-${turnLimit}\n|init|html\n|title|[Battle Search][${userid}][${format.id}]\n|pagehtml|<div class="pad ladder">Results for ${Chat.escapeHTML(format.name)} where ${userid} was a player and the battle ended in ${turnLimit} or less turns:<br /><br />Loading...`);
 	},
 	battlesearchhelp: ['/battlesearch [user], [tier], (turn limit) - Searches a users rated battle history and returns information on battles that ended in (turn limit or 1) turns or less. Requires &, ~'],
 };
