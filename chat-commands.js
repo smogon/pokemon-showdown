@@ -790,11 +790,6 @@ const commands = {
 		if (room.subRooms) {
 			for (const subRoom of room.subRooms) subRoom.parent = null;
 		}
-		const parent = room.parent;
-		if (parent && parent.subRooms) {
-			parent.subRooms.delete(room.id);
-			if (!parent.subRooms.size) parent.subRooms = null;
-		}
 
 		room.add(`|raw|<div class="broadcast-red"><b>This room has been deleted.</b></div>`);
 		room.update(); // |expire| needs to be its own message
