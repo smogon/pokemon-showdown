@@ -26,7 +26,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 6, "level": 100, "isHidden": true, "moves": ["solarbeam", "frenzyplant", "synthesis", "grasspledge"], "pokeball": "cherishball"},
 		],
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "DUU",
 	},
 	venusaurmega: {
