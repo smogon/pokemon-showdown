@@ -1113,11 +1113,6 @@ class BasicChatRoom extends BasicRoom {
 		}
 	}
 	expire() {
-		const parent = this.parent;
-		if (parent && parent.subRooms) {
-			parent.subRooms.delete(this.id);
-			if (!parent.subRooms.size) parent.subRooms = null;
-		}
 		this.send('|expire|');
 		this.destroy();
 	}
@@ -1282,6 +1277,11 @@ class BasicChatRoom extends BasicRoom {
 			// @ts-ignore
 			this.users[i].leaveRoom(this, null, true);
 			delete this.users[i];
+		}
+
+		if (this.parent && this.parent.subRooms) {
+			this.parent.subRooms.delete(this.id);
+			if (!this.parent.subRooms.size) this.parent.subRooms = null;
 		}
 
 		Rooms.global.deregisterChatRoom(this.id);
