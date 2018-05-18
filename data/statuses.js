@@ -369,6 +369,7 @@ let BattleStatuses = {
 		onBeforeMove: function (pokemon) {
 			this.add('cant', pokemon, 'recharge');
 			pokemon.removeVolatile('mustrecharge');
+			pokemon.removeVolatile('truant');
 			return null;
 		},
 		onLockMove: function (pokemon) {
