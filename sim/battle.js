@@ -1986,10 +1986,10 @@ class Battle extends Dex.ModdedDex {
 		damage = Math.floor(damage);
 		// for things like Liquid Ooze, the Heal event still happens when nothing is healed.
 		damage = this.runEvent('TryHeal', target, source, effect, damage);
-		if (!damage) return 0;
-		if (!target || !target.hp) return 0;
+		if (!damage) return damage;
+		if (!target || !target.hp) return false;
 		if (!target.isActive) return false;
-		if (target.hp >= target.maxhp) return 0;
+		if (target.hp >= target.maxhp) return false;
 		let finalDamage = target.heal(damage, source, effect);
 		switch (effect.id) {
 		case 'leechseed':
