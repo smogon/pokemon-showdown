@@ -3747,7 +3747,7 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon skips every other turn instead of using a move.",
 		onStart: function (pokemon) {
 			pokemon.removeVolatile('truant');
-			if (pokemon.activeTurns && (pokemon.moveThisTurnResult || !this.willMove(pokemon))) {
+			if (pokemon.activeTurns && (pokemon.moveThisTurnResult !== undefined || !this.willMove(pokemon))) {
 				pokemon.addVolatile('truant');
 			}
 		},
