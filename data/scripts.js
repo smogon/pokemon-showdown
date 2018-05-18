@@ -977,6 +977,7 @@ let BattleScripts = {
 			this.add(effectType, pokemon, template.baseSpecies, template.requiredItem);
 			this.add('detailschange', pokemon, pokemon.details);
 		}
+		pokemon.moveThisTurnResult = true; // Mega Evolution/Ultra Burst counts as an action for Truant
 		pokemon.setAbility(template.abilities['0'], null, true);
 		pokemon.baseAbility = pokemon.ability;
 

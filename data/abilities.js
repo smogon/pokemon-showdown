@@ -3745,17 +3745,21 @@ let BattleAbilities = {
 	},
 	"truant": {
 		shortDesc: "This Pokemon skips every other turn instead of using a move.",
+		onStart: function (pokemon) {
+			pokemon.removeVolatile('truant');
+			if (pokemon.activeTurns && (pokemon.moveThisTurnResult || !this.willMove(pokemon))) {
+				pokemon.addVolatile('truant');
+			}
+		},
 		onBeforeMovePriority: 9,
-		onBeforeMove: function (pokemon, target, move) {
+		onBeforeMove: function (pokemon) {
 			if (pokemon.removeVolatile('truant')) {
 				this.add('cant', pokemon, 'ability: Truant');
 				return false;
 			}
 			pokemon.addVolatile('truant');
 		},
-		effect: {
-			duration: 2,
-		},
+		effect: {},
 		id: "truant",
 		name: "Truant",
 		rating: -2,
