@@ -504,6 +504,7 @@ let BattleAliases = {
 	// abilities
 	"ph": "Poison Heal",
 	"stag": "Shadow Tag",
+	"hyphen": "-",
 
 	// items
 	"assvest": "Assault Vest",

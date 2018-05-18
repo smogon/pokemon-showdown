@@ -618,7 +618,7 @@ class ModdedDex {
 			}
 			return ability;
 		}
-		if (id && this.data.Abilities.hasOwnProperty(id)) {
+		if (this.data.Abilities.hasOwnProperty(id)) {
 			ability = new Data.Ability({name}, this.data.Abilities[id]);
 		} else {
 			ability = new Data.Ability({name, exists: false});
