@@ -67,8 +67,8 @@ describe('Heal Block', function () {
 
 	it('should not prevent the target from using Z-Powered healing status moves or healing from Z Power', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Elgyem', ability: 'telepathy', item: 'normaliumz', moves: ['psychic', 'healblock', 'recover']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Beheeyem', ability: 'telepathy', item: 'psychiumz', moves: ['psychic', 'healblock', 'teleport']}]);
+		battle.join('p1', 'Guest 1', 1, [{species: 'Beheeyem', ability: 'telepathy', item: 'normaliumz', moves: ['psychic', 'healblock', 'recover']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: 'Elgyem', ability: 'telepathy', item: 'psychiumz', moves: ['psychic', 'healblock', 'teleport']}]);
 		battle.makeChoices('move psychic', 'move psychic');
 		battle.makeChoices('move healblock', 'move healblock');
 		battle.makeChoices('move recover zmove', 'move teleport zmove');
