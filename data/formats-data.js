@@ -7365,6 +7365,11 @@ let BattleFormatsData = {
 		isNonstandard: true,
 		tier: "CAP",
 	},
+	jumbao: {
+		randomBattleMoves: ["moonblast", "flameburst", "focusblast", "synthesis", "solarbeam", "hiddenpowerground", "healingwish"],
+		isNonstandard: true,
+		tier: "CAP",
+	},
 	syclant: {
 		randomBattleMoves: ["bugbuzz", "icebeam", "blizzard", "earthpower", "spikes", "superpower", "tailglow", "uturn", "focusblast"],
 		isNonstandard: true,
