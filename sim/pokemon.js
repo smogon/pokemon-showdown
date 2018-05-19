@@ -623,6 +623,7 @@ class Pokemon {
 
 		// Information should be restricted for the last active Pokémon
 		let isLastActive = this.isLastActive();
+		let canSwitchIn = this.battle.canSwitch(this.side) > 0;
 		let moves = this.getMoves(lockedMove, isLastActive);
 		let data = {moves: moves.length ? moves : [{move: 'Struggle', id: 'struggle'}]};
 
@@ -630,12 +631,15 @@ class Pokemon {
 			if (this.maybeDisabled) {
 				data.maybeDisabled = true;
 			}
-			if (this.trapped === true) {
-				data.trapped = true;
-			} else if (this.maybeTrapped) {
-				data.maybeTrapped = true;
+			if (canSwitchIn) {
+				if (this.trapped === true) {
+					data.trapped = true;
+				} else if (this.maybeTrapped) {
+					data.maybeTrapped = true;
+				}
 			}
-		} else {
+		} else if (canSwitchIn) {
+			// Discovered by selecting a valid Pokémon as a switch target and cancelling.
 			if (this.trapped) data.trapped = true;
 		}
 
