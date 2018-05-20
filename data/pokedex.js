@@ -13449,7 +13449,7 @@ let BattlePokedex = {
 		species: "Jumbao",
 		types: ["Grass", "Fairy"],
 		baseStats: {hp: 92, atk: 63, def: 97, spa: 124, spd: 104, spe: 96},
-		abilities: {0: "Drought", 1: "Trace"},
+		abilities: {0: "Drought", 1: "Trace", H: "Overcoat"},
 		heightm: 2.4,
 		weightkg: 600,
 		color: "Brown",
