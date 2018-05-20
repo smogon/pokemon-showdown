@@ -8040,41 +8040,6 @@
 				"moves": [["Hydro Pump"], ["Ice Beam"], ["Hidden Power Grass"], ["Celebrate"]]
 			}]
 		},
-		"venusaur": {
-			"flags": {},
-			"sets": [{
-				"species": "Venusaur",
-				"item": ["Life Orb"],
-				"ability": ["Overgrow"],
-				"evs": {"spa": 252, "spd": 4, "spe": 252},
-				"ivs": {"atk": 0},
-				"nature": "Timid",
-				"moves": [["Leaf Storm"], ["Sludge Bomb"], ["Sleep Powder"], ["Synthesis"]]
-			}, {
-				"species": "Venusaur",
-				"item": ["Black Sludge"],
-				"ability": ["Overgrow"],
-				"evs": {"hp": 252, "spd": 240, "spe": 16},
-				"nature": "Calm",
-				"moves": [["Giga Drain"], ["Sludge Bomb"], ["Knock Off", "Sleep Powder"], ["Synthesis"]]
-			}, {
-				"species": "Venusaur",
-				"item": ["Life Orb"],
-				"ability": ["Chlorophyll"],
-				"evs": {"spa": 252, "spd": 4, "spe": 252},
-				"ivs": {"atk": 0},
-				"nature": "Modest",
-				"moves": [["Sunny Day"], ["Growth"], ["Giga Drain"], ["Sludge Bomb"]]
-			}, {
-				"species": "Venusaur",
-				"item": ["Normalium Z"],
-				"ability": ["Chlorophyll"],
-				"evs": {"spa": 252, "spd": 4, "spe": 252},
-				"ivs": {"atk": 0},
-				"nature": "Timid",
-				"moves": [["Giga Drain"], ["Sludge Bomb"], ["Celebrate"], ["Growth"]]
-			}]
-		},
 		"vileplume": {
 			"flags": {},
 			"sets": [{
@@ -8639,23 +8604,6 @@
 		}
 	},
 	"PU": {
-		"archeops": {
-			"flags": {},
-			"sets": [{
-				"species": "Archeops",
-				"ability": ["Defeatist"],
-				"evs": {"atk": 252, "spd": 4, "spe": 252},
-				"nature": "Jolly",
-				"moves": [["Acrobatics"], ["Earthquake"], ["Roost"], ["Taunt", "Stone Edge"]]
-			}, {
-				"species": "Archeops",
-				"item": ["Focus Sash"],
-				"ability": ["Defeatist"],
-				"evs": {"atk": 252, "spd": 4, "spe": 252},
-				"nature": "Jolly",
-				"moves": [["Taunt"], ["Stealth Rock"], ["Head Smash"], ["Endeavor"]]
-			}]
-		},
 		"mesprit": {
 			"flags": {},
 			"sets": [{
@@ -8767,17 +8715,6 @@
 				"evs": {"hp": 248, "def": 252, "spd": 8},
 				"nature": "Relaxed",
 				"moves": [["Stealth Rock"], ["Scald"], ["Rock Slide"], ["Toxic", "Knock Off"]]
-			}]
-		},
-		"magmortar": {
-			"flags": {},
-			"sets": [{
-				"species": "Magmortar",
-				"item": ["Assault Vest", "Fightinium Z"],
-				"ability": ["Vital Spirit"],
-				"evs": {"def": 4, "spa": 252, "spe": 252},
-				"nature": "Modest",
-				"moves": [["Thunderbolt"], ["Earthquake", "Hidden Power Grass"], ["Fire Blast"], ["Focus Blast"]]
 			}]
 		},
 		"musharna": {
