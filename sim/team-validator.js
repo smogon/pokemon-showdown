@@ -270,11 +270,12 @@ class Validator {
 			problems.push(`${name}'s item ${set.item} is unreleased.`);
 		}
 
+		if (!set.ability) set.ability = 'No Ability';
 		setHas[toId(set.ability)] = true;
 		if (ruleTable.has('-illegal')) {
 			// Don't check abilities for metagames with All Abilities
 			if (dex.gen <= 2) {
-				set.ability = 'None';
+				set.ability = 'No Ability';
 			} else if (!ruleTable.has('ignoreillegalabilities')) {
 				if (!ability.name) {
 					problems.push(`${name} needs to have an ability.`);
