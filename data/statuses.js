@@ -744,8 +744,7 @@ let BattleStatuses = {
 		name: 'Arceus',
 		id: 'arceus',
 		num: 493,
-		onSwitchInPriority: 101,
-		onSwitchIn: function (pokemon) {
+		onType: function (types, pokemon) {
 			let type = 'Normal';
 			if (pokemon.ability === 'multitype') {
 				// @ts-ignore
@@ -755,15 +754,14 @@ let BattleStatuses = {
 					type = 'Normal';
 				}
 			}
-			pokemon.setType(type, true);
+			return [type];
 		},
 	},
 	silvally: {
 		name: 'Silvally',
 		id: 'silvally',
 		num: 773,
-		onSwitchInPriority: 101,
-		onSwitchIn: function (pokemon) {
+		onType: function (types, pokemon) {
 			let type = 'Normal';
 			if (pokemon.ability === 'rkssystem') {
 				// @ts-ignore
@@ -773,7 +771,7 @@ let BattleStatuses = {
 					type = 'Normal';
 				}
 			}
-			pokemon.setType(type, true);
+			return [type];
 		},
 	},
 };
