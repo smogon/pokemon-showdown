@@ -693,7 +693,7 @@ const commands = {
 		if (!titleid) {
 			titleid = `${Math.floor(Math.random() * 100000000)}`;
 		}
-		let roomid = `groupchat-${user.userid}-${titleid}`;
+		let roomid = `groupchat-${parent || user.userid}-${titleid}`;
 		// Titles must be unique.
 		if (Rooms.search(roomid)) return this.errorReply(`A group chat named '${title}' already exists.`);
 		// Tab title is prefixed with '[G]' to distinguish groupchats from
@@ -726,11 +726,12 @@ const commands = {
 			staffMessage: `<p>As creator of this groupchat, <u>you are entirely responsible for what occurs in this chatroom</u>. Global rules apply at all times.</p><p>If you have created this room for someone else, <u>you are still responsible</u> whether or not you choose to actively supervise the room.</p><p style="font-style:italic">For this reason, we strongly recommend that you only create groupchats for users you know and trust.</p><p>If this room is used to break global rules or disrupt other areas of the server, this will be considered irresponsible use of auth privileges on the part of the creator, and <b>you will be globally demoted and barred from public auth.</b></p>`,
 		});
 		if (targetRoom) {
-			// The creator is a Host.
-			targetRoom.auth[user.userid] = '\u2605';
+			// The creator is a Room Owner in subroom groupchats and a Host otherwise..
+			targetRoom.auth[user.userid] = parent ? '#' : '\u2605';
 			// Join after creating room. No other response is given.
 			user.joinRoom(targetRoom.id);
 			user.popup(`You've just made a groupchat; it is now your responsibility, regardless of whether or not you actively partake in the room. For more info, read your groupchat's staff intro.`);
+			if (parent) this.modlog('SUBROOMGROUPCHAT', null, title);
 			return;
 		}
 		return this.errorReply(`An unknown error occurred while trying to create the room '${title}'.`);
