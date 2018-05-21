@@ -76,10 +76,6 @@ let BattleStatuses = {
 			if (move.sleepUsable) {
 				return;
 			}
-
-			// Remove Truant
-			pokemon.removeVolatile('truant');
-
 			return false;
 		},
 	},

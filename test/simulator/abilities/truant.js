@@ -31,7 +31,7 @@ describe('Truant', function () {
 		assert.hurts(pokemon, () => battle.commitDecisions());
 	});
 
-	it('should allow the user to act the turn it wakes up', function () {
+	it('should not allow the user to act the turn it wakes up', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Slaking", ability: 'truant', moves: ['scratch', 'rest']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Steelix", ability: 'sturdy', moves: ['endure', 'quickattack']}]);
@@ -40,7 +40,7 @@ describe('Truant', function () {
 		battle.makeChoices('move rest', 'move quickattack');
 		assert.false.hurts(pokemon, () => battle.makeChoices('move scratch', 'move endure'), 'Attacked on turn 1 of sleep');
 		assert.false.hurts(pokemon, () => battle.makeChoices('move scratch', 'move endure'), 'Attacked on turn 2 of sleep');
-		assert.hurts(pokemon, () => battle.makeChoices('move scratch', 'move endure'));
+		assert.false.hurts(pokemon, () => battle.makeChoices('move scratch', 'move endure'), 'Attacked after waking up');
 	});
 
 	it('should cause two-turn moves to fail', function () {
