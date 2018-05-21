@@ -64,9 +64,6 @@ let BattleStatuses = {
 		},
 		onBeforeMovePriority: 10,
 		onBeforeMove: function (pokemon, target, move) {
-			// Remove Truant (Marty confirm?)
-			pokemon.removeVolatile('truant');
-
 			if (pokemon.hasAbility('earlybird')) {
 				pokemon.statusData.time--;
 			}
@@ -79,6 +76,10 @@ let BattleStatuses = {
 			if (move.sleepUsable) {
 				return;
 			}
+
+			// Remove Truant
+			pokemon.removeVolatile('truant');
+
 			return false;
 		},
 	},
