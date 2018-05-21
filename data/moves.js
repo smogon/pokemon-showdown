@@ -7179,7 +7179,7 @@ let BattleMovedex = {
 				this.add('-end', pokemon, 'move: Heal Block');
 			},
 			onTryHeal: function (damage, target, source, effect) {
-				if (effect.id === 'zpower' || this.effectData.isZ) return damage;
+				if ((effect && effect.id === 'zpower') || this.effectData.isZ) return damage;
 				return false;
 			},
 		},
