@@ -271,6 +271,7 @@ interface EventMethods {
 	onTryHitSide?: (this: Battle, side: Side, source: Pokemon) => void
 	onTryMove?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: Move) => void
 	onTryPrimaryHit?: (this: Battle, target: Pokemon, source: Pokemon, move: Move) => void
+	onType?: (this: Battle, types: string[], pokemon: Pokemon) => void
 	onUpdate?: (this: Battle, pokemon: Pokemon) => void
 	onUseMoveMessage?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: Move) => void
 	onWeather?: (this: Battle, target: Pokemon, source: Pokemon, effect: UnknownEffect) => void
@@ -335,6 +336,7 @@ interface EffectData extends EventMethods {
 	onTryHitPriority?: number
 	onTryMovePriority?: number
 	onTryPrimaryHitPriority?: number
+	onTypePriority?: number
 	recoil?: number[]
 	secondary?: boolean | SecondaryEffect | null
 	secondaries?: false | SecondaryEffect[]

@@ -1548,6 +1548,21 @@ class Battle extends Dex.ModdedDex {
 					} else {
 						pokemon.lastAttackedBy = null;
 					}
+					if (this.gen >= 7) pokemon.knownType = true; // If it was an illusion, it's not any more
+				}
+
+				if (this.gen >= 7) {
+					// In Gen 7, the real type of every Pokemon is visible to all players via the bottom screen while making choices
+					const seenPokemon = pokemon.illusion || pokemon;
+					const realTypeString = seenPokemon.getTypes(true).join('/');
+					if (realTypeString !== seenPokemon.apparentType) {
+						this.add('-start', pokemon, 'typechange', realTypeString, '[silent]');
+						seenPokemon.apparentType = realTypeString;
+						if (pokemon.addedType) {
+							// The typechange message removes the added type, so put it back
+							this.add('-start', pokemon, 'typeadd', pokemon.addedType, '[silent]');
+						}
+					}
 				}
 
 				pokemon.trapped = pokemon.maybeTrapped = false;

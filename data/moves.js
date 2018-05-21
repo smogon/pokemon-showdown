@@ -13238,7 +13238,7 @@ let BattleMovedex = {
 					return false;
 				}
 			}
-			source.types = newBaseTypes;
+			source.setType(newBaseTypes);
 			source.addedType = target.addedType;
 			source.knownType = target.side === source.side && target.knownType;
 		},
@@ -13799,7 +13799,10 @@ let BattleMovedex = {
 		effect: {
 			duration: 1,
 			onResidualOrder: 20,
-			// implemented in BattlePokemon#getTypes
+			onTypePriority: -1,
+			onType: function (types, pokemon) {
+				return types.filter(type => type !== 'Flying');
+			},
 		},
 		secondary: false,
 		target: "self",
