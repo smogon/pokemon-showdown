@@ -16,7 +16,7 @@ describe('Stomping Tantrum', function () {
 			[{species: 'Manaphy', ability: 'hydration', moves: ['rest']}],
 		]);
 
-		battle.onEvent('ModifyBasePower', battle.getFormat(), function (basePower) {
+		battle.onEvent('BasePower', battle.getFormat(), function (basePower) {
 			assert.strictEqual(basePower, 150);
 		});
 
@@ -32,7 +32,7 @@ describe('Stomping Tantrum', function () {
 			[{species: 'Manaphy', ability: 'hydration', moves: ['protect']}],
 		]);
 
-		battle.onEvent('ModifyBasePower', battle.getFormat(), function (basePower) {
+		battle.onEvent('BasePower', battle.getFormat(), function (basePower) {
 			assert.strictEqual(basePower, 75);
 		});
 
@@ -46,7 +46,7 @@ describe('Stomping Tantrum', function () {
 			[{species: 'Manaphy', ability: 'hydration', moves: ['rest']}],
 		]);
 
-		battle.onEvent('ModifyBasePower', battle.getFormat(), function (basePower) {
+		battle.onEvent('BasePower', battle.getFormat(), function (basePower) {
 			assert.strictEqual(basePower, 75);
 		});
 
@@ -60,8 +60,8 @@ describe('Stomping Tantrum', function () {
 			[{species: 'Lycanroc-Midnight', ability: 'noguard', moves: ['sleeptalk']}],
 		]);
 
-		battle.onEvent('ModifyBasePower', battle.getFormat(), function (basePower) {
-			assert.strictEqual(basePower, 75);
+		battle.onEvent('BasePower', battle.getFormat(), function (basePower, pokemon, target, move) {
+			if (move.id === 'stompingtantrum') assert.strictEqual(basePower, 75);
 		});
 
 		battle.makeChoices('move hyperbeam', 'move sleeptalk');

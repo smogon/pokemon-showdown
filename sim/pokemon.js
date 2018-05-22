@@ -94,10 +94,61 @@ class Pokemon {
 		/**@type {string | boolean} */
 		this.moveThisTurn = '';
 
-		// For Stomping Tantrum
-		/**@type {boolean | undefined} */
+		/**
+		 * The result of the last move used on the previous turn by this
+		 * Pokemon. Stomping Tantrum checks this property for a value of false
+		 * when determine whether to double its power, but it has four
+		 * possible values:
+		 *
+		 * undefined indicates this Pokemon was not active last turn. It should
+		 * not be used to indicate that a move was attempted and failed, either
+		 * in a way that boosts Stomping Tantrum or not.
+		 *
+		 * null indicates that the Pokemon's move was skipped in such a way
+		 * that does not boost Stomping Tantrum, either from having to recharge
+		 * or spending a turn trapped by another Pokemon's Sky Drop.
+		 *
+		 * false indicates that the move completely failed to execute for any
+		 * reason not mentioned above, including missing, the target being
+		 * immune, the user being immobilized by an effect such as paralysis, etc.
+		 *
+		 * true indicates that the move successfully executed one or more of
+		 * its effects on one or more targets, including hitting with an attack
+		 * but dealing 0 damage to the target in cases such as Disguise, or that
+		 * the move was blocked by one or more moves such as Protect.
+		 * @type {boolean | null | undefined}
+		 */
 		this.moveLastTurnResult = undefined;
-		/**@type {boolean | undefined} */
+		/**
+		 * The result of the most recent move used this turn by this Pokemon.
+		 * At the start of each turn, the value stored here is moved to its
+		 * counterpart, moveLastTurnResult, and this property is reinitialized
+		 * to undefined. This property can have one of four possible values:
+		 *
+		 * undefined indicates that this Pokemon has not yet finished an
+		 * attempt to use a move this turn. As this value is only overwritten
+		 * after a move finishes execution, it is not sufficient for an event
+		 * to examine only this property when checking if a Pokemon has not
+		 * moved yet this turn if the event could take place during that
+		 * Pokemon's move.
+		 *
+		 * null indicates that the Pokemon's move was skipped in such a way
+		 * that does not boost Stomping Tantrum, either from having to recharge
+		 * or spending a turn trapped by another Pokemon's Sky Drop.
+		 *
+		 * false indicates that the move completely failed to execute for any
+		 * reason not mentioned above, including missing, the target being
+		 * immune, the user being immobilized by an effect such as paralysis, etc.
+		 *
+		 * true indicates that the move successfully executed one or more of
+		 * its effects on one or more targets, including hitting with an attack
+		 * but dealing 0 damage to the target in cases such as Disguise. It can
+		 * also mean that the move was blocked by one or more moves such as
+		 * Protect. Uniquely, this value can also be true if this Pokemon mega
+		 * evolved or ultra bursted this turn, but in that case the value should
+		 * always be overwritten by a move action before the end of that turn.
+		 * @type {boolean | null | undefined}
+		 */
 		this.moveThisTurnResult = undefined;
 
 		this.lastDamage = 0;
