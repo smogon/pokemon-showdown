@@ -879,6 +879,8 @@ class Pokemon {
 
 		if (!template.abilities) return false;
 
+		let apparentType = template.types.join('/');
+
 		template = this.battle.singleEvent('ModifyTemplate', this.battle.getFormat(), null, this, source, null, template);
 
 		if (!template) return false;
@@ -886,6 +888,7 @@ class Pokemon {
 		this.template = template;
 
 		this.setType(template.types);
+		this.apparentType = apparentType;
 		this.addedType = template.addedType || '';
 		this.knownType = true;
 
@@ -955,7 +958,6 @@ class Pokemon {
 		this.beingCalledBack = false;
 
 		this.formeChange(this.baseTemplate);
-		this.apparentType = this.baseTemplate.types.join('/');
 	}
 
 	/**
