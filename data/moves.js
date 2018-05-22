@@ -16245,6 +16245,10 @@ let BattleMovedex = {
 		num: 707,
 		accuracy: 100,
 		basePower: 75,
+		basePowerCallback: function (pokemon, target, move) {
+			if (pokemon.moveLastTurnResult === false) return move.basePower * 2;
+			return move.basePower;
+		},
 		category: "Physical",
 		desc: "Power doubles if the user's last move on the previous turn, including moves called by other moves or those used out of turn through Instruct, Snatch, or Magic Coat or the Abilities Dancer or Magic Bounce, failed to do any of its normal effects, not counting damage from an unsuccessful Mind Blown, Jump Kick, or High Jump Kick, or if the user was prevented from moving by any effect other than recharging or Sky Drop. A move that was blocked by Baneful Bunker, Detect, King's Shield, Protect, Spiky Shield, Crafty Shield, Mat Block, Quick Guard, or Wide Guard will not double this move's power, nor will Bounce or Fly ending early due to the effect of Gravity, Smack Down, or Thousand Arrows.",
 		shortDesc: "Power doubles if the user's last move failed.",
@@ -16253,12 +16257,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onBasePowerPriority: 4,
-		onBasePower: function (basePower, pokemon) {
-			if (pokemon.moveLastTurnResult === false) {
-				return this.chainModify(2);
-			}
-		},
 		secondary: false,
 		target: "normal",
 		type: "Ground",
