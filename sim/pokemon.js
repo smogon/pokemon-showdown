@@ -904,6 +904,7 @@ class Pokemon {
 		this.beingCalledBack = false;
 
 		this.formeChange(this.baseTemplate);
+		this.apparentType = this.baseTemplate.types.join('/');
 	}
 
 	/**
