@@ -11,7 +11,7 @@
     },
     "types": ["node"],
     "exclude": [
-        "./mods/gen1/pokedex.js",
+        "./mods/gen1/pokedex.js"
     ],
     "include": [
         "./config/formats.js",
@@ -39,6 +39,8 @@
         "./chat.js",
         "./users.js",
         "./chat-plugins/helptickets.js",
+        "./chat-plugins/mafia.js",
+        "./chat-plugins/mafia-data.js",
         "./punishments.js"
     ]
 }
