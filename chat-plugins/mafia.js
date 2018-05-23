@@ -1252,28 +1252,28 @@ const commands = {
 		queue: function (target, room, user) {
 			if (!room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (room.id !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
-			target = target.split(',');
-			if (['forceadd', 'add', 'remove', 'del', 'delete'].includes(toId(target[0]))) {
-				if (!user.can('broadcast', null, room)) return this.errorReply(`/mafia ${toId(target[0])} - Access denied.`);
+			const args = target.split(',');
+			if (['forceadd', 'add', 'remove', 'del', 'delete'].includes(toId(args[0]))) {
+				if (!user.can('broadcast', null, room)) return this.errorReply(`/mafia ${toId(args[0])} - Access denied.`);
 			} else {
 				if (!this.runBroadcast()) return false;
 			}
 			switch (toId(target[0])) {
 			case 'forceadd':
 			case 'add':
-				let useradd = Users(toId(target[1]));
-				if ((!useradd || !useradd.connected) && toId(target[0]) !== 'forceadd') return this.errorReply(`User ${target[1]} not found.`);
-				if (hostQueue.includes(toId(target[1]))) return this.errorReply(`User ${target[1]} is already on the host queue.`);
-				hostQueue.push(toId(target[1]));
-				this.sendReply(`User ${target[1]} has been added to the host queue.`);
+				let useradd = Users(toId(args[1]));
+				if ((!useradd || !useradd.connected) && toId(args[0]) !== 'forceadd') return this.errorReply(`User ${args[1]} not found.`);
+				if (hostQueue.includes(toId(args[1]))) return this.errorReply(`User ${args[1]} is already on the host queue.`);
+				hostQueue.push(toId(args[1]));
+				this.sendReply(`User ${args[1]} has been added to the host queue.`);
 				break;
 			case 'del':
 			case 'delete':
 			case 'remove':
-				let index = hostQueue.indexOf(toId(target[1]));
-				if (index === -1) return this.erroReply(`User ${target[1]} is not on the host queue.`);
+				let index = hostQueue.indexOf(toId(args[1]));
+				if (index === -1) return this.errorReply(`User ${args[1]} is not on the host queue.`);
 				hostQueue.splice(index, 1);
-				this.sendReply(`User ${target[1]} has been removed from the host queue`);
+				this.sendReply(`User ${args[1]} has been removed from the host queue`);
 				break;
 			case '':
 			case 'show':
