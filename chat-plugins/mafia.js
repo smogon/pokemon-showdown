@@ -1301,13 +1301,6 @@ const commands = {
 			this.parse(`/mafia queue remove, ${target}`);
 		},
 
-		'!join': true,
-		join: function (target, room, user) {
-			let targetRoom = room;
-			if (Rooms(target) && Rooms(target).users[user.userid]) targetRoom = Rooms(target);
-			if (!targetRoom || !targetRoom.game || targetRoom.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
-		},
-
 		'!mafjoin': true,
 		// Typescript doesn't like "join" as the command name for some reason, so this is a hack to get around that.
 		join: 'mafjoin',
