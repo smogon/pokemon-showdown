@@ -270,11 +270,12 @@ class Validator {
 			problems.push(`${name}'s item ${set.item} is unreleased.`);
 		}
 
+		if (!set.ability) set.ability = 'No Ability';
 		setHas[toId(set.ability)] = true;
 		if (ruleTable.has('-illegal')) {
 			// Don't check abilities for metagames with All Abilities
 			if (dex.gen <= 2) {
-				set.ability = 'None';
+				set.ability = 'No Ability';
 			} else if (!ruleTable.has('ignoreillegalabilities')) {
 				if (!ability.name) {
 					problems.push(`${name} needs to have an ability.`);
@@ -489,6 +490,9 @@ class Validator {
 		if (ruleTable.has('-illegal') && set.level < (template.evoLevel || 0)) {
 			// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
 			problems.push(`${name} must be at least level ${template.evoLevel} to be evolved.`);
+		}
+		if (ruleTable.has('-illegal') && template.id === 'keldeo' && set.moves.includes('secretsword') && (format.requirePlus || format.requirePentagon)) {
+			problems.push(`${name} has Secret Sword, which is only compatible with Keldeo-Ordinary obtained from Gen 5.`);
 		}
 		if (!lsetData.sources && lsetData.sourcesBefore <= 3 && dex.getAbility(set.ability).gen === 4 && !template.prevo && dex.gen <= 5) {
 			problems.push(`${name} has a gen 4 ability and isn't evolved - it can't use moves from gen 3.`);

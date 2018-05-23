@@ -41,12 +41,8 @@ const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
 const FS = require('./lib/fs');
 
 /*********************************************************
- * Users map
+ * Utility functions
  *********************************************************/
-
-let users = new Map();
-let prevUsers = new Map();
-let numUsers = 0;
 
 // Low-level functions for manipulating Users.users and Users.prevUsers
 // Keeping them all here makes it easy to ensure they stay consistent
@@ -125,11 +121,12 @@ function getUser(name, exactName = false) {
 	let i = 0;
 	if (!exactName) {
 		while (userid && !users.has(userid) && i < 1000) {
+			// @ts-ignore
 			userid = prevUsers.get(userid);
 			i++;
 		}
 	}
-	return users.get(userid);
+	return users.get(userid) || null;
 }
 
 /**
@@ -156,14 +153,14 @@ function getExactUser(name) {
  *   Users.findUsers([userids], [ips])
  * @param {string[]} userids
  * @param {string[]} ips
- * @param {{forPunishment: boolean, includeTrusted: boolean}} options
+ * @param {{forPunishment?: boolean, includeTrusted?: boolean}} options
  */
-function findUsers(userids, ips, options) {
+function findUsers(userids, ips, options = {}) {
 	let matches = /** @type {User[]} */ ([]);
-	if (options && options.forPunishment) ips = ips.filter(ip => !Punishments.sharedIps.has(ip));
+	if (options.forPunishment) ips = ips.filter(ip => !Punishments.sharedIps.has(ip));
 	for (const user of users.values()) {
-		if (!(options && options.forPunishment) && !user.named && !user.connected) continue;
-		if (!(options && options.includeTrusted) && user.trusted) continue;
+		if (!options.forPunishment && !user.named && !user.connected) continue;
+		if (!options.includeTrusted && user.trusted) continue;
 		if (userids.includes(user.userid)) {
 			matches.push(user);
 			continue;
@@ -722,7 +719,7 @@ class User {
 			const game = Rooms(roomid).game;
 			if (!game || game.ended) continue; // should never happen
 			if (game.allowRenames || !this.named) continue;
-			this.popup(`You can't change your name right now because you're in ${Rooms(roomid).title}, which doesn't allow renaming.`);
+			this.popup(`You can't change your name right now because you're in ${game.title}, which doesn't allow renaming.`);
 			return false;
 		}
 
@@ -1662,6 +1659,12 @@ function socketReceive(worker, workerid, socketid, message) {
 		Monitor.warn(`[slow] ${deltaTime}ms - ${user.name} <${connection.ip}>: ${roomId}|${message}`);
 	}
 }
+
+/** @type {Map<string, User>} */
+let users = new Map();
+/** @type {Map<string, string>} */
+let prevUsers = new Map();
+let numUsers = 0;
 
 let Users = Object.assign(getUser, {
 	delete: deleteUser,

@@ -94,10 +94,61 @@ class Pokemon {
 		/**@type {string | boolean} */
 		this.moveThisTurn = '';
 
-		// For Stomping Tantrum
-		/**@type {boolean | undefined} */
+		/**
+		 * The result of the last move used on the previous turn by this
+		 * Pokemon. Stomping Tantrum checks this property for a value of false
+		 * when determine whether to double its power, but it has four
+		 * possible values:
+		 *
+		 * undefined indicates this Pokemon was not active last turn. It should
+		 * not be used to indicate that a move was attempted and failed, either
+		 * in a way that boosts Stomping Tantrum or not.
+		 *
+		 * null indicates that the Pokemon's move was skipped in such a way
+		 * that does not boost Stomping Tantrum, either from having to recharge
+		 * or spending a turn trapped by another Pokemon's Sky Drop.
+		 *
+		 * false indicates that the move completely failed to execute for any
+		 * reason not mentioned above, including missing, the target being
+		 * immune, the user being immobilized by an effect such as paralysis, etc.
+		 *
+		 * true indicates that the move successfully executed one or more of
+		 * its effects on one or more targets, including hitting with an attack
+		 * but dealing 0 damage to the target in cases such as Disguise, or that
+		 * the move was blocked by one or more moves such as Protect.
+		 * @type {boolean | null | undefined}
+		 */
 		this.moveLastTurnResult = undefined;
-		/**@type {boolean | undefined} */
+		/**
+		 * The result of the most recent move used this turn by this Pokemon.
+		 * At the start of each turn, the value stored here is moved to its
+		 * counterpart, moveLastTurnResult, and this property is reinitialized
+		 * to undefined. This property can have one of four possible values:
+		 *
+		 * undefined indicates that this Pokemon has not yet finished an
+		 * attempt to use a move this turn. As this value is only overwritten
+		 * after a move finishes execution, it is not sufficient for an event
+		 * to examine only this property when checking if a Pokemon has not
+		 * moved yet this turn if the event could take place during that
+		 * Pokemon's move.
+		 *
+		 * null indicates that the Pokemon's move was skipped in such a way
+		 * that does not boost Stomping Tantrum, either from having to recharge
+		 * or spending a turn trapped by another Pokemon's Sky Drop.
+		 *
+		 * false indicates that the move completely failed to execute for any
+		 * reason not mentioned above, including missing, the target being
+		 * immune, the user being immobilized by an effect such as paralysis, etc.
+		 *
+		 * true indicates that the move successfully executed one or more of
+		 * its effects on one or more targets, including hitting with an attack
+		 * but dealing 0 damage to the target in cases such as Disguise. It can
+		 * also mean that the move was blocked by one or more moves such as
+		 * Protect. Uniquely, this value can also be true if this Pokemon mega
+		 * evolved or ultra bursted this turn, but in that case the value should
+		 * always be overwritten by a move action before the end of that turn.
+		 * @type {boolean | null | undefined}
+		 */
 		this.moveThisTurnResult = undefined;
 
 		this.lastDamage = 0;
@@ -226,6 +277,9 @@ class Pokemon {
 
 		this.clearVolatile();
 
+		// Keep track of what type the client sees for this Pokemon
+		this.apparentType = this.baseTemplate.types.join('/');
+
 		/**@type {number} */
 		this.maxhp = this.template.maxHP || this.baseStats.hp;
 		/**@type {number} */
@@ -238,6 +292,8 @@ class Pokemon {
 
 		/**@type {string | undefined} */
 		this.originalSpecies = undefined;
+		/**@type {?boolean} */
+		this.gluttonyFlag = null;
 	}
 	get moves() {
 		return this.moveSlots.map(moveSlot => moveSlot.id);
@@ -621,6 +677,7 @@ class Pokemon {
 
 		// Information should be restricted for the last active Pokémon
 		let isLastActive = this.isLastActive();
+		let canSwitchIn = this.battle.canSwitch(this.side) > 0;
 		let moves = this.getMoves(lockedMove, isLastActive);
 		let data = {moves: moves.length ? moves : [{move: 'Struggle', id: 'struggle'}]};
 
@@ -628,12 +685,15 @@ class Pokemon {
 			if (this.maybeDisabled) {
 				data.maybeDisabled = true;
 			}
-			if (this.trapped === true) {
-				data.trapped = true;
-			} else if (this.maybeTrapped) {
-				data.maybeTrapped = true;
+			if (canSwitchIn) {
+				if (this.trapped === true) {
+					data.trapped = true;
+				} else if (this.maybeTrapped) {
+					data.maybeTrapped = true;
+				}
 			}
-		} else {
+		} else if (canSwitchIn) {
+			// Discovered by selecting a valid Pokémon as a switch target and cancelling.
 			if (this.trapped) data.trapped = true;
 		}
 
@@ -744,7 +804,7 @@ class Pokemon {
 		}
 		this.transformed = true;
 
-		this.types = pokemon.types;
+		this.setType(pokemon.types);
 		this.addedType = pokemon.addedType;
 		this.knownType = this.side === pokemon.side && pokemon.knownType;
 
@@ -819,13 +879,16 @@ class Pokemon {
 
 		if (!template.abilities) return false;
 
+		let apparentType = template.types.join('/');
+
 		template = this.battle.singleEvent('ModifyTemplate', this.battle.getFormat(), null, this, source, null, template);
 
 		if (!template) return false;
 
 		this.template = template;
 
-		this.types = template.types;
+		this.setType(template.types);
+		this.apparentType = apparentType;
 		this.addedType = template.addedType || '';
 		this.knownType = true;
 
@@ -1465,6 +1528,7 @@ class Pokemon {
 		this.types = (typeof newType === 'string' ? [newType] : newType);
 		this.addedType = '';
 		this.knownType = true;
+		this.apparentType = this.types.join('/');
 
 		return true;
 	}
@@ -1484,12 +1548,9 @@ class Pokemon {
 	 */
 	getTypes(excludeAdded) {
 		let types = this.types;
+		types = this.battle.runEvent('Type', this, null, null, types);
 		if (!excludeAdded && this.addedType) {
 			types = types.concat(this.addedType);
-		}
-		// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
-		if ('roost' in this.volatiles && !types.includes('???')) {
-			types = types.filter(type => type !== 'Flying');
 		}
 		if (types.length) return types;
 		return [this.battle.gen >= 5 ? 'Normal' : '???'];

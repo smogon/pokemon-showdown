@@ -639,10 +639,10 @@ class CommandContext {
 	/**
 	 * @param {string} action
 	 * @param {string | User?} user
-	 * @param {string} note
+	 * @param {string?} note
 	 * @param {object} options
 	 */
-	modlog(action, user, note, options = {}) {
+	modlog(action, user, note = null, options = {}) {
 		let buf = `(${this.room.id}) ${action}: `;
 		if (user) {
 			if (typeof user === 'string') {
