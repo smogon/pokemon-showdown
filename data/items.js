@@ -537,19 +537,7 @@ let BattleItems = {
 			}
 		},
 		onPrimal: function (pokemon) {
-			let template = this.getTemplate('Kyogre-Primal');
-			pokemon.formeChange(template);
-			pokemon.baseTemplate = template;
-			pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
-			if (pokemon.illusion) {
-				pokemon.ability = ''; // Don't allow Illusion to wear off
-				this.add('-primal', pokemon.illusion);
-			} else {
-				this.add('detailschange', pokemon, pokemon.details);
-				this.add('-primal', pokemon);
-			}
-			pokemon.setAbility(template.abilities['0'], null, true);
-			pokemon.baseAbility = pokemon.ability;
+			pokemon.formeChange('Kyogre-Primal', this.effect, true);
 		},
 		onTakeItem: function (item, source) {
 			if (source.baseTemplate.baseSpecies === 'Kyogre') return false;
@@ -4671,19 +4659,7 @@ let BattleItems = {
 			}
 		},
 		onPrimal: function (pokemon) {
-			let template = this.getTemplate('Groudon-Primal');
-			pokemon.formeChange(template);
-			pokemon.baseTemplate = template;
-			pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
-			if (pokemon.illusion) {
-				pokemon.ability = ''; // Don't allow Illusion to wear off
-				this.add('-primal', pokemon.illusion);
-			} else {
-				this.add('detailschange', pokemon, pokemon.details);
-				this.add('-primal', pokemon);
-			}
-			pokemon.setAbility(template.abilities['0'], null, true);
-			pokemon.baseAbility = pokemon.ability;
+			pokemon.formeChange('Groudon-Primal', this.effect, true);
 		},
 		onTakeItem: function (item, source) {
 			if (source.baseTemplate.baseSpecies === 'Groudon') return false;

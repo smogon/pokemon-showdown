@@ -780,8 +780,7 @@ let BattleMovedex = {
 			};
 			let tmpAtkEVs;
 			let Atk2SpA;
-			if (pokemon.template.speciesid === 'meloettapirouette' && pokemon.formeChange('Meloetta')) {
-				this.add('-formechange', pokemon, 'Meloetta');
+			if (pokemon.template.speciesid === 'meloettapirouette' && pokemon.formeChange('Meloetta', this.effect, false, '[msg]')) {
 				tmpAtkEVs = pokemon.set.evs.atk;
 				pokemon.set.evs.atk = pokemon.set.evs.spa;
 				pokemon.set.evs.spa = tmpAtkEVs;
@@ -791,8 +790,7 @@ let BattleMovedex = {
 					atk: Atk2SpA,
 					spa: -Atk2SpA,
 				}, pokemon);
-			} else if (pokemon.formeChange('Meloetta-Pirouette')) {
-				this.add('-formechange', pokemon, 'Meloetta-Pirouette');
+			} else if (pokemon.formeChange('Meloetta-Pirouette', this.effect, false, '[msg]')) {
 				tmpAtkEVs = pokemon.set.evs.atk;
 				pokemon.set.evs.atk = pokemon.set.evs.spa;
 				pokemon.set.evs.spa = tmpAtkEVs;

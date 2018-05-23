@@ -3409,6 +3409,9 @@ class Battle extends Dex.ModdedDex {
 	}
 
 	/**
+	 * This function is also used for Ultra Bursting.
+	 * Takes the Pokemon that will Mega Evolve or Ultra Burst as a parameter.
+	 * Returns false if the Pokemon cannot Mega Evolve or Ultra Burst, otherwise returns true.
 	 * @param {Pokemon} pokemon
 	 * @return {boolean}
 	 */
