@@ -42,8 +42,9 @@
  * @typedef {Object} MafiaIDEAplayerData
  * @property {string[]} choices
  * @property {string[]} originalChoices
- * @property {Object} picks 
+ * @property {Object} picks
  */
+
 const FS = require('./../lib/fs');
 const LOGS_FILE = 'config/chat-plugins/mafia-logs.json';
 const MafiaData = require('./mafia-data.js');
@@ -116,7 +117,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 		/** @type {MafiaIDEAplayerData?} */
 		this.IDEA = null;
 	}
-	
+
 	getRole() {
 		if (!this.role) return;
 		return `<span style="font-weight:bold;color:${MafiaData.alignments[this.role.alignment].color}">${this.role.safeName}</span>`;
@@ -134,8 +135,8 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 
 // Parses a single role into an object
 /**
- * 
- * @param {string} roleString 
+ *
+ * @param {string} roleString
  * @returns {MafiaParsedRole}}
  */
 function parseRole(roleString) {
@@ -158,7 +159,7 @@ function parseRole(roleString) {
 			let roleKey = target.slice().map(p => toId(p)).join('_');
 			if (roleKey.includes(key)) {
 				let originalKey = key;
-				if (typeof MafiaData.roles[key] === 'string') key = MafiaData.roles[MafiaData.roles[key]].id;
+				if (typeof MafiaData.roles[key] === 'string') key = MafiaData.roles[key];
 				if (!role.image && MafiaData.roles[key].image) role.image = MafiaData.roles[key].image;
 				if (MafiaData.roles[key].alignment) {
 					if (role.alignment && role.alignment !== MafiaData.roles[key].alignment) {
@@ -174,7 +175,7 @@ function parseRole(roleString) {
 			}
 		} else if (target.includes(key)) {
 			let index = target.indexOf(key);
-			if (typeof MafiaData.roles[key] === 'string') key = MafiaData.roles[MafiaData.roles[key]].id;
+			if (typeof MafiaData.roles[key] === 'string') key = MafiaData.roles[key];
 			if (!role.image && MafiaData.roles[key].image) role.image = MafiaData.roles[key].image;
 			if (MafiaData.roles[key].memo) role.memo = role.memo.concat(MafiaData.roles[key].memo);
 			target.splice(index, 1);
@@ -185,7 +186,7 @@ function parseRole(roleString) {
 		if (key.includes('_')) {
 			let roleKey = target.slice().map(p => toId(p)).join('_');
 			if (roleKey.includes(key)) {
-				if (typeof MafiaData.modifiers[key] === 'string') key = MafiaData.modifiers[MafiaData.modifiers[key]].id;
+				if (typeof MafiaData.modifiers[key] === 'string') key = MafiaData.modifiers[key];
 				if (!role.image && MafiaData.modifiers[key].image) role.image = MafiaData.modifiers[key].image;
 				if (MafiaData.modifiers[key].memo) role.memo = role.memo.concat(MafiaData.modifiers[key].memo);
 				let index = roleKey.split('_').indexOf(key.split('_')[0]);
@@ -206,7 +207,7 @@ function parseRole(roleString) {
 			}
 		} else if (target.includes(key)) {
 			let index = target.indexOf(key);
-			if (typeof MafiaData.modifiers[key] === 'string') key = MafiaData.modifiers[MafiaData.modifiers[key]].id;
+			if (typeof MafiaData.modifiers[key] === 'string') key = MafiaData.modifiers[key];
 			if (!role.image && MafiaData.modifiers[key].image) role.image = MafiaData.modifiers[key].image;
 			if (MafiaData.modifiers[key].memo) role.memo = role.memo.concat(MafiaData.modifiers[key].memo);
 			target.splice(index, 1);
@@ -304,8 +305,8 @@ class MafiaTracker extends Rooms.RoomGame {
 			timer: null,
 			discardsHtml: '',
 			waitingPick: [],
-		}; 
-	
+		};
+
 		this.sendRoom(this.roomWindow(), {uhtml: true});
 	}
 
@@ -749,6 +750,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	 * @return {void}
 	 */
 	revive(user, toRevive, force = false) {
+		if (this.phase === 'IDEApicking') return user.sendTo(this.room, `|error|You cannot add or remove players while IDEA roles are being picked.`);
 		if (toRevive in this.players) {
 			user.sendTo(this.room, `|error|The user ${toRevive} is already a living player.`);
 			return;
@@ -1102,6 +1104,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	destroy() {
 		// Slightly modified to handle dead players
 		if (this.timer) clearTimeout(this.timer);
+		if (this.IDEA.timer) clearTimeout(this.IDEA.timer);
 		this.room.game = null;
 		this.room = /** @type {any} */ (null);
 		for (let i in this.players) {
@@ -1114,9 +1117,9 @@ class MafiaTracker extends Rooms.RoomGame {
 
 	//IDEA commands
 	/**
-	 * 
-	 * @param {User} user 
-	 * @param {string} target 
+	 *
+	 * @param {User} user
+	 * @param {string} target
 	 */
 	ideaInit(user, target) {
 		this.originalRoles = [];
@@ -1133,8 +1136,8 @@ class MafiaTracker extends Rooms.RoomGame {
 	}
 
 	/**
-	 * 
-	 * @param {User} user 
+	 *
+	 * @param {User} user
 	 */
 	ideaDistributeRoles(user) {
 		if (!this.IDEA.data) return user.sendTo(this.room, `|error|No IDEA module loaded`);
@@ -1161,7 +1164,7 @@ class MafiaTracker extends Rooms.RoomGame {
 				choices: roles.splice(0, this.IDEA.data.choices),
 				originalChoices: [], // MAKE SURE TO SET THIS
 				picks: {},
-			}
+			};
 			player.IDEA.originalChoices = player.IDEA.choices.slice();
 			for (const pick of this.IDEA.data.picks) {
 				player.IDEA.picks[pick] = null;
@@ -1178,9 +1181,9 @@ class MafiaTracker extends Rooms.RoomGame {
 	}
 
 	/**
-	 * 
-	 * @param {User} user 
-	 * @param {string[]} target 
+	 *
+	 * @param {User} user
+	 * @param {string[]} target
 	 */
 	ideaPick(user, target) {
 		let buf = '';
@@ -1190,7 +1193,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (!player.IDEA) return this.sendRoom(`Trying to pick an IDEA role with no player IDEA object, user: ${user.userid}. Please report this to a mod.`);
 		target = target.map(item => toId(item));
 		if (target.length === 1 && this.IDEA.data.picks.length === 1) target = [this.IDEA.data.picks[0], target[0]];
-		if (target.length !== 2) return `Invalid selection.`;
+		if (target.length !== 2) return user.sendTo(this.room, `|error|Invalid selection.`);
 
 		// selection, role
 		// eg: role, bloodhound
@@ -1198,8 +1201,8 @@ class MafiaTracker extends Rooms.RoomGame {
 		// "selection ," deselects
 
 		if (target[1]) {
-			const roleIndex = player.IDEA.choices.indexOf(target[1]);
-			if (roleIndex === -1) return `${target[1]} is not an available role, perhaps it is already selected?`;
+			const roleIndex = player.IDEA.choices.map(choice => toId(choice)).indexOf(target[1]);
+			if (roleIndex === -1) return user.sendTo(this.room, `|error|${target[1]} is not an available role, perhaps it is already selected?`);
 			target[1] = player.IDEA.choices.splice(roleIndex, 1)[0];
 		} else {
 			target[1] = '';
@@ -1224,7 +1227,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			this.ideaFinalizePicks();
 			return;
 		}
-		return buf;
+		return user.sendTo(this.room, buf);
 	}
 
 	ideaFinalizePicks() {
@@ -1245,21 +1248,23 @@ class MafiaTracker extends Rooms.RoomGame {
 				role.push(`${choice}: ${player.IDEA.picks[choice]}`);
 			}
 			if (randPicked) randed.push(p);
-			// if there's only one option, don't include the option name in the role
+			// if there's only one option, it's their role, parse it properly
 			let roleName = '';
 			if (this.IDEA.data.picks.length === 1) {
-				roleName = player.IDEA.picks[this.IDEA.data.picks[0]];
+				const role = parseRole(player.IDEA.picks[this.IDEA.data.picks[0]]);
+				player.role = role.role;
+				if (role.problems.length) this.sendRoom(`Problems found when parsing IDEA role ${player.IDEA.picks[this.IDEA.data.picks[0]]}. Please report this to a mod.`);
 			} else {
 				roleName = role.join('; ');
+				player.role = {
+					name: roleName,
+					safeName: Chat.escapeHTML(roleName),
+					id: toId(roleName),
+					alignment: 'solo',
+					memo: [`(Your role was set from an IDEA.)`],
+					image: '',
+				};
 			}
-			player.role = {
-				name: roleName,
-				safeName: Chat.escapeHTML(roleName),
-				id: toId(roleName),
-				alignment: 'solo',
-				memo: [`(Your role was set from an idea.)`],
-				image: '',
-			};
 		}
 		this.IDEA.discardsHtml = `<b>Discards:</b><br />`;
 		for (const p of Object.keys(this.players).sort()) {
@@ -1275,8 +1280,8 @@ class MafiaTracker extends Rooms.RoomGame {
 	}
 
 	/**
-	 * 
-	 * @param {User} user 
+	 *
+	 * @param {User} user
 	 */
 	ideaStart(user) {
 		if (this.phase !== 'IDEAlocked') {
@@ -1326,7 +1331,7 @@ const pages = {
 			if (!IDEA) return game.sendRoom(`IDEA picking phase but no IDEA object for user: ${user.userid}. Please report this to a mod.`);
 			for (const pick of Object.keys(IDEA.picks)) {
 				buf += `<b>${pick}:</b> `;
-				if (IDEA.picks[pick] === null) {
+				if (!IDEA.picks[pick]) {
 					buf += `<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">clear</button>`;
 				} else {
 					buf += `<button class="button" name="send" value="/mafia ideapick ${roomid}, ${pick},">clear</button>`;
@@ -1672,17 +1677,20 @@ const commands = {
 		],
 
 		ideapick: function (target, room, user) {
-			let targetRoom /** @type {ChatRoom?} */ = (Rooms(target));
+			const args = target.split(',');
+			let targetRoom /** @type {ChatRoom?} */ = (Rooms(args[0]));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
+			} else {
+				args.shift();
 			}
 			if (!targetRoom.game || targetRoom.game.gameid !== 'mafia') return user.sendTo(targetRoom, `|error|There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (targetRoom.game);
 			if (!(user.userid in game.players)) return user.sendTo(targetRoom, '|error|You are not a player in the game.');
 			if (game.phase !== 'IDEApicking') return user.sendTo(targetRoom, `|error|The game is not in the IDEA picking phase.`);
 			if (!targetRoom || !targetRoom.game || targetRoom.game.gameid !== 'mafia') return user.sendTo(targetRoom, `|error|There is no game of mafia running in this room.`);
-			game.ideaPick(user, target.split(','));
+			game.ideaPick(user, args);
 		},
 
 		ideareroll: function (target, room, user) {
@@ -1872,6 +1880,7 @@ const commands = {
 			if (!user.can('mute', null, room) && game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia kill - Access denied.`);
 			const player = game.players[toId(args.join(''))];
 			if (!player) return user.sendTo(targetRoom, `|error|"${args.join(',')}" is not a living player.`);
+			if (game.phase === 'IDEApicking') return this.errorReply(`You cannot add or remove players while IDEA roles are being picked.`); // needs to be here since eliminate doesn't pass the user
 			game.eliminate(player, cmd);
 		},
 		killhelp: [
