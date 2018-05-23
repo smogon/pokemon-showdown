@@ -4168,7 +4168,8 @@ let BattleAbilities = {
 		num: -3,
 	},
 	"persistent": {
-		shortDesc: "The duration of certain field effects is increased by 2 turns if used by this Pokemon.",
+		desc: "The duration of Gravity, Heal Block, Magic Room, Safeguard, Tailwind, Trick Room, and Wonder Room is increased by 2 turns if the effect is started by this Pokemon.",
+		shortDesc: "When used, Gravity/Heal Block/Safeguard/Tailwind/Room effects last 2 more turns.",
 		id: "persistent",
 		isNonstandard: true,
 		name: "Persistent",
