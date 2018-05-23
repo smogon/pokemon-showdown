@@ -818,6 +818,9 @@ class Pokemon {
 	}
 
 	/**
+	 * Changes this Pokemon's forme to match the given templateId (or template).
+	 * This function handles all changes to stats, ability, type, template, etc.
+	 * as well as sending all relevant messages sent to the client.
 	 * @param {string | Template} templateId
 	 * @param {Pokemon | Effect} source
 	 * @param {boolean} [isPermanent]

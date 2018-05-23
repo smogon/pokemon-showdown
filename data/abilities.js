@@ -261,8 +261,7 @@ let BattleAbilities = {
 		onSourceFaint: function (target, source, effect) {
 			if (effect && effect.effectType === 'Move' && source.template.speciesid === 'greninja' && source.hp && !source.transformed && source.side.foe.pokemonLeft) {
 				this.add('-activate', source, 'ability: Battle Bond');
-				let template = this.getTemplate('Greninja-Ash');
-				source.formeChange(template, this.effect, true);
+				source.formeChange('Greninja-Ash', this.effect, true);
 			}
 		},
 		onModifyMovePriority: -1,
@@ -724,8 +723,8 @@ let BattleAbilities = {
 		},
 		onUpdate: function (pokemon) {
 			if (['mimikyu', 'mimikyutotem'].includes(pokemon.template.speciesid) && this.effectData.busted) {
-				let template = this.getTemplate(pokemon.template.speciesid === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted');
-				pokemon.formeChange(template, this.effect, true);
+				let templateid = pokemon.template.speciesid === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted';
+				pokemon.formeChange(templateid, this.effect, true);
 			}
 		},
 		id: "disguise",

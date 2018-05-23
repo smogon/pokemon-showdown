@@ -953,8 +953,8 @@ let BattleScripts = {
 	},
 
 	runMegaEvo: function (pokemon) {
-		// @ts-ignore
-		const template = this.getTemplate(pokemon.canMegaEvo || pokemon.canUltraBurst);
+		const templateid = pokemon.canMegaEvo || pokemon.canUltraBurst;
+		if (!templateid) return false;
 		const side = pokemon.side;
 
 		// Pokémon affected by Sky Drop cannot mega evolve. Enforce it here for now.
@@ -964,7 +964,7 @@ let BattleScripts = {
 			}
 		}
 
-		pokemon.formeChange(template, pokemon.getItem(), true);
+		pokemon.formeChange(templateid, pokemon.getItem(), true);
 
 		// Limit one mega evolution
 		let wasMega = pokemon.canMegaEvo;

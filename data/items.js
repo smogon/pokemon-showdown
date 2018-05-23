@@ -537,7 +537,7 @@ let BattleItems = {
 			}
 		},
 		onPrimal: function (pokemon) {
-			pokemon.formeChange(this.getTemplate('Kyogre-Primal'), this.effect, true);
+			pokemon.formeChange('Kyogre-Primal', this.effect, true);
 		},
 		onTakeItem: function (item, source) {
 			if (source.baseTemplate.baseSpecies === 'Kyogre') return false;
@@ -4659,7 +4659,7 @@ let BattleItems = {
 			}
 		},
 		onPrimal: function (pokemon) {
-			pokemon.formeChange(this.getTemplate('Groudon-Primal'), this.effect, true);
+			pokemon.formeChange('Groudon-Primal', this.effect, true);
 		},
 		onTakeItem: function (item, source) {
 			if (source.baseTemplate.baseSpecies === 'Groudon') return false;
