@@ -805,7 +805,7 @@ class Pokemon {
 		}
 		this.transformed = true;
 
-		this.setType(pokemon.types);
+		this.setType(pokemon.getTypes(true), true);
 		this.addedType = pokemon.addedType;
 		this.knownType = this.side === pokemon.side && pokemon.knownType;
 
@@ -890,7 +890,7 @@ class Pokemon {
 
 		this.template = template;
 
-		this.setType(template.types);
+		this.setType(template.types, true);
 		this.apparentType = apparentType;
 		this.addedType = template.addedType || '';
 		this.knownType = true;
