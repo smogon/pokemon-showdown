@@ -25,6 +25,7 @@ const LOGS_FILE = 'config/chat-plugins/mafia-logs.json';
 const MafiaData = require('./mafia-data.js');
 /** @type {MafiaLog} */
 let logs = {leaderboard: {}, mvps: {}, hosts: {}, plays: {}};
+/** @type {string[]} */
 let hostQueue = [];
 
 try {
