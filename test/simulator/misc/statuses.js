@@ -104,6 +104,49 @@ describe('Toxic Poison', function () {
 	});
 });
 
+describe('Freeze', function () {
+	afterEach(function () {
+		battle.destroy();
+	});
+
+	it('should cause an afflicted Shaymin-Sky to revert to its base forme', function () {
+		battle = common.createBattle([
+			[{species: 'Chansey', ability: 'serenegrace', moves: ['icebeam']}],
+			[{species: 'Shaymin-Sky', ability: 'sturdy', moves: ['sleeptalk']}],
+		]);
+		// I didn't feel like manually testing seed after seed. Sue me.
+		battle.onEvent('ModifyMove', battle.getFormat(), function (move) {
+			if (move.secondaries) {
+				this.debug('Freeze test: Guaranteeing secondary');
+				for (const secondary of move.secondaries) {
+					secondary.chance = 100;
+				}
+			}
+		});
+		battle.makeChoices('move icebeam', 'move sleeptalk');
+		assert.strictEqual(battle.p2.active[0].status, 'frz');
+		assert.strictEqual(battle.p2.active[0].template.species, 'Shaymin');
+	});
+
+	it('should not cause an afflicted Pokemon transformed into Shaymin-Sky to change to Shaymin', function () {
+		battle = common.createBattle([
+			[{species: 'Ditto', ability: 'imposter', moves: ['transform']}],
+			[{species: 'Shaymin-Sky', ability: 'sturdy', moves: ['icebeam', 'sleeptalk']}],
+		]);
+		battle.onEvent('ModifyMove', battle.getFormat(), function (move) {
+			if (move.secondaries) {
+				this.debug('Freeze test: Guaranteeing secondary');
+				for (const secondary of move.secondaries) {
+					secondary.chance = 100;
+				}
+			}
+		});
+		battle.makeChoices('move sleeptalk', 'move icebeam');
+		assert.strictEqual(battle.p1.active[0].status, 'frz');
+		assert.strictEqual(battle.p1.active[0].template.species, 'Shaymin-Sky');
+	});
+});
+
 describe('Burn [Gen 6]', function () {
 	afterEach(function () {
 		battle.destroy();
