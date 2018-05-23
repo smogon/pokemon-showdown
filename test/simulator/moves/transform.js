@@ -119,6 +119,15 @@ describe('Transform', function () {
 		battle.makeChoices('move transform', 'move transform');
 		assert.notStrictEqual(battle.p1.active[0].template, battle.p2.active[0].template);
 	});
+
+	it(`should copy the target's real type, even if the target is an Arceus`, function () {
+		battle = common.createBattle([
+			[{species: "Ditto", ability: 'limber', item: 'flameplate', moves: ['transform']}],
+			[{species: "Arceus-Steel", ability: 'multitype', item: 'ironplate', moves: ['rest']}],
+		]);
+		battle.makeChoices('move transform', 'move rest');
+		assert.deepStrictEqual(battle.p1.active[0].getTypes(), ["Steel"]);
+	});
 });
 
 describe('Transform [Gen 5]', function () {
@@ -164,6 +173,7 @@ describe('Transform [Gen 4]', function () {
 		]);
 		battle.makeChoices('move transform', 'move rest');
 		assert.strictEqual(battle.p1.active[0].template.species, 'Arceus-Fire');
+		assert.deepStrictEqual(battle.p1.active[0].getTypes(), ["Fire"]);
 	});
 
 	it('should succeed against a Substitute', function () {
