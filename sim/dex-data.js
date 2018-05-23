@@ -420,6 +420,38 @@ class Item extends Effect {
 		 */
 		this.megaEvolves = this.megaEvolves;
 		/**
+		 * If this is a Z crystal: true if the Z Crystal is generic
+		 * (e.g. Firium Z). If species-specific, the name
+		 * (e.g. Inferno Overdrive) of the Z Move this crystal allows
+		 * the use of.
+		 * undefined, if not a Z crystal.
+		 * @type {boolean | string | undefined}
+		*/
+		this.zMove = this.zMove;
+		/**
+		 * If this is a generic Z crystal: The type (e.g. Fire) of the
+		 * Z Move this crystal allows the use of (e.g. Fire)
+		 * undefined, if not a generic Z crystal
+		 * @type {string | undefined}
+		 */
+		this.zMoveType = this.zMoveType;
+		/**
+		 * If this is a species-specific Z crystal: The name
+		 * (e.g. Play Rough) of the move this crystal requires its
+		 * holder to know to use its Z move.
+		 * undefined, if not a species-specific Z crystal
+		 * @type {string | undefined}
+		 */
+		this.zMoveFrom = this.zMoveFrom;
+		/**
+		 * If this is a species-specific Z crystal: An array of the
+		 * species of Pokemon that can use this crystal's Z move.
+		 * Note that these are the full names, e.g. 'Mimikyu-Busted'
+		 * undefined, if not a species-specific Z crystal
+		 * @type {string[] | undefined}
+		 */
+		this.zMoveUser = this.zMoveUser;
+		/**
 		 * Is this item a Berry?
 		 * @type {boolean}
 		 */

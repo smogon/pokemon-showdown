@@ -187,6 +187,7 @@ class Pokemon {
 		this.heightm = this.template.heightm;
 		this.weightkg = this.template.weightkg;
 
+		/**@type {string} */
 		this.baseAbility = toId(set.ability);
 		this.ability = this.baseAbility;
 		this.item = toId(set.item);
@@ -850,10 +851,8 @@ class Pokemon {
 				// Giratina formes
 				if (this.template.species === 'Giratina' && this.item === 'griseousorb') {
 					this.formeChange('Giratina-Origin');
-					this.battle.add('-formechange', this, 'Giratina-Origin');
 				} else if (this.template.species === 'Giratina-Origin' && this.item !== 'griseousorb') {
 					this.formeChange('Giratina');
-					this.battle.add('-formechange', this, 'Giratina');
 				}
 			}
 			if (this.template.num === 493) {
@@ -862,7 +861,6 @@ class Pokemon {
 				let targetForme = (item && item.onPlate ? 'Arceus-' + item.onPlate : 'Arceus');
 				if (this.template.species !== targetForme) {
 					this.formeChange(targetForme);
-					this.battle.add('-formechange', this, targetForme);
 				}
 			}
 		}
@@ -871,10 +869,15 @@ class Pokemon {
 	}
 
 	/**
+	 * Changes this Pokemon's forme to match the given templateId (or template).
+	 * This function handles all changes to stats, ability, type, template, etc.
+	 * as well as sending all relevant messages sent to the client.
 	 * @param {string | Template} templateId
-	 * @param {Pokemon | Effect} [source]
+	 * @param {Pokemon | Effect} source
+	 * @param {boolean} [isPermanent]
+	 * @param {string} [message]
 	 */
-	formeChange(templateId, source) {
+	formeChange(templateId, source = this.battle.effect, isPermanent, message) {
 		let template = this.battle.getTemplate(templateId);
 
 		if (!template.abilities) return false;
@@ -892,7 +895,7 @@ class Pokemon {
 		this.addedType = template.addedType || '';
 		this.knownType = true;
 
-		if (!source) {
+		if (!(source instanceof Pokemon)) {
 			let stats = this.battle.spreadModify(this.template.baseStats, this.set);
 			if (!this.baseStats) this.baseStats = stats;
 			for (let statName in this.stats) {
@@ -909,6 +912,42 @@ class Pokemon {
 				if (this.status === 'brn') this.modifyStat('atk', 0.5);
 			}
 			this.speed = this.stats.spe;
+			if (!source.id) return true;
+
+			let apparentSpecies = this.illusion ? this.illusion.template.species : template.baseSpecies; // The species the opponent sees
+			if (isPermanent) {
+				this.baseTemplate = template;
+				this.details = template.species + (this.level === 100 ? '' : ', L' + this.level) + (this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
+				this.battle.add('detailschange', this, (this.illusion || this).details);
+				if (source.effectType === 'Item') {
+					// @ts-ignore
+					if (source.zMove) {
+						this.battle.add('-burst', this, apparentSpecies, template.requiredItem);
+						this.moveThisTurnResult = true; // Ultra Burst counts as an action for Truant
+					} else if (source.onPrimal) {
+						this.battle.add('-primal', !this.illusion && this);
+					} else {
+						this.battle.add('-mega', this, apparentSpecies, template.requiredItem);
+						this.moveThisTurnResult = true; // Mega Evolution counts as an action for Truant
+					}
+				} else if (source.effectType === 'Status') {
+					// Shaymin-Sky -> Shaymin
+					this.battle.add('-formechange', this, template.species, message);
+				}
+			} else {
+				if (source.effectType === 'Ability') {
+					this.battle.add('-formechange', this, template.species, message, `[from] ability: ${source.name}`);
+				} else {
+					this.battle.add('-formechange', this, this.illusion ? this.illusion.template.species : template.species, message);
+				}
+			}
+			if (source.effectType !== 'Ability' && source.id !== 'relicsong' && source.id !== 'zenmode') {
+				if (this.illusion) {
+					this.ability = ''; // Don't allow Illusion to wear off
+				}
+				this.setAbility(template.abilities['0'], null, true);
+				if (isPermanent) this.baseAbility = this.ability;
+			}
 		}
 		return true;
 	}

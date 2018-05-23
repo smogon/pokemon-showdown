@@ -954,9 +954,8 @@ let BattleScripts = {
 	},
 
 	runMegaEvo: function (pokemon) {
-		const effectType = pokemon.canMegaEvo ? '-mega' : '-burst';
-		// @ts-ignore
-		const template = this.getTemplate(pokemon.canMegaEvo || pokemon.canUltraBurst);
+		const templateid = pokemon.canMegaEvo || pokemon.canUltraBurst;
+		if (!templateid) return false;
 		const side = pokemon.side;
 
 		// Pokémon affected by Sky Drop cannot mega evolve. Enforce it here for now.
@@ -966,28 +965,15 @@ let BattleScripts = {
 			}
 		}
 
-		pokemon.formeChange(template);
-		pokemon.baseTemplate = template; // mega evolution is permanent
-		pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
-		if (pokemon.illusion) {
-			pokemon.ability = ''; // Don't allow Illusion to wear off
-			// @ts-ignore
-			this.add(effectType, pokemon, pokemon.illusion.template.baseSpecies, template.requiredItem);
-		} else {
-			// @ts-ignore
-			this.add(effectType, pokemon, template.baseSpecies, template.requiredItem);
-			this.add('detailschange', pokemon, pokemon.details);
-		}
-		pokemon.moveThisTurnResult = true; // Mega Evolution/Ultra Burst counts as an action for Truant
-		pokemon.setAbility(template.abilities['0'], null, true);
-		pokemon.baseAbility = pokemon.ability;
+		pokemon.formeChange(templateid, pokemon.getItem(), true);
 
 		// Limit one mega evolution
+		let wasMega = pokemon.canMegaEvo;
 		for (const ally of side.pokemon) {
-			if (effectType === '-burst') {
-				ally.canUltraBurst = null;
-			} else {
+			if (wasMega) {
 				ally.canMegaEvo = null;
+			} else {
+				ally.canUltraBurst = null;
 			}
 		}
 
