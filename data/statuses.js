@@ -737,6 +737,7 @@ let BattleStatuses = {
 		name: 'Arceus',
 		id: 'arceus',
 		num: 493,
+		onTypePriority: 1,
 		onType: function (types, pokemon) {
 			let type = 'Normal';
 			if (pokemon.ability === 'multitype') {
@@ -754,6 +755,7 @@ let BattleStatuses = {
 		name: 'Silvally',
 		id: 'silvally',
 		num: 773,
+		onTypePriority: 1,
 		onType: function (types, pokemon) {
 			let type = 'Normal';
 			if (pokemon.ability === 'rkssystem') {
