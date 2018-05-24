@@ -572,9 +572,10 @@ let Formats = [
 		// searchShow: false,
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Kartana', 'Kyurem-Black', 'Shedinja'],
-		onType: function (types, target) {
-			let moveTypes = [...new Set(target.baseMoveSlots.slice(0, 2).map(move => this.getMove(move.id).type))];
-			return moveTypes;
+		onModifyTemplate: function (template, target, source) {
+			if (!source) return;
+			let types = [...new Set(target.baseMoveSlots.slice(0, 2).map(move => this.getMove(move.id).type))];
+			return Object.assign({}, template, {types: types});
 		},
 	},
 	{
