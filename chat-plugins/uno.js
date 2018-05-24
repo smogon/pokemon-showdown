@@ -606,12 +606,8 @@ exports.commands = {
 			if (!amount || amount < 30 || amount > 600) return this.errorReply("The amount must be a number between 30 and 600.");
 			if (room.game.state !== 'signups') return this.errorReply("The game of UNO has already started.");
 			room.game.autostartTimer = amount;
-			if (room.game.autostartTimer) {
-				clearTimeout(room.game.autostartTimer);
-			}
-			room.game.autostartTimer = setTimeout(() => {
-				room.game.onStart();
-			}, amount * 1000);
+			if (room.game.autostartTimer) clearTimeout(room.game.autostartTimer);
+			room.game.autostartTimer = setTimeout(() => room.game.onStart(), amount * 1000);
 			this.addModAction(`${user.name} has set the autostart timer to ${amount} seconds.`);
 			this.modlog('UNO AUTOSTART', null, `${amount} seconds.`);
 		},
