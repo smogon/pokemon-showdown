@@ -1263,7 +1263,7 @@ const commands = {
 			case 'forceadd':
 			case 'add':
 				let targetUser = Users(toId(args[1]));
-				if ((!targetUser || !targetUser.connected) && toId(args[0]) !== 'forceadd') return this.errorReply(`User ${args[1]} not found. To forcefully add the user to the queue, use /mafia queue forceadd, ${args[1}`);
+				if ((!targetUser || !targetUser.connected) && toId(args[0]) !== 'forceadd') return this.errorReply(`User ${args[1]} not found. To forcefully add the user to the queue, use /mafia queue forceadd, ${args[1]}`);
 				if (hostQueue.includes(toId(args[1]))) return this.errorReply(`User ${args[1]} is already on the host queue.`);
 				hostQueue.push(toId(args[1]));
 				this.sendReply(`User ${args[1]} has been added to the host queue.`);
