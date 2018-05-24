@@ -1238,7 +1238,8 @@ const commands = {
 
 			room.game = new MafiaTracker(room, targetUser);
 
-			if (hostQueue[0] === targetUser.userid) hostQueue.shift();
+			const queueIndex = hostQueue.indexOf(targetUser.userid);
+			if (queueIndex > -1) hostQueue.splice(queueIndex, 1);
 			// @ts-ignore "Chat.pages" is possibly undefined
 			targetUser.send(`>view-mafia-${room.id}\n|init|html\n${Chat.pages.mafia([room.id], targetUser)}`);
 			this.privateModAction(`(${targetUser.name} was appointed the mafia host by ${user.name}.)`);
@@ -1258,11 +1259,11 @@ const commands = {
 			} else {
 				if (!this.runBroadcast()) return false;
 			}
-			switch (toId(target[0])) {
+			switch (toId(args[0])) {
 			case 'forceadd':
 			case 'add':
-				let useradd = Users(toId(args[1]));
-				if ((!useradd || !useradd.connected) && toId(args[0]) !== 'forceadd') return this.errorReply(`User ${args[1]} not found.`);
+				let targetUser = Users(toId(args[1]));
+				if ((!targetUser || !targetUser.connected) && toId(args[0]) !== 'forceadd') return this.errorReply(`User ${args[1]} not found. To forcefully add the user to the queue, use /mafia queue forceadd, ${args[1}`);
 				if (hostQueue.includes(toId(args[1]))) return this.errorReply(`User ${args[1]} is already on the host queue.`);
 				hostQueue.push(toId(args[1]));
 				this.sendReply(`User ${args[1]} has been added to the host queue.`);
@@ -1291,8 +1292,10 @@ const commands = {
 		],
 
 		qadd: 'queueadd',
-		queueadd: function (target, room, user) {
-			this.parse(`/mafia queue add, ${target}`);
+		qforceadd: 'queueadd',
+		queueforceadd: 'queueadd',
+		queueadd: function (target, room, user, connection, cmd) {
+			this.parse(`/mafia queue ${cmd.includes('force') ? `forceadd` : `add`}, ${target}`);
 		},
 
 		qdel: 'queueremove',
@@ -2093,9 +2096,7 @@ const commands = {
 	mafiahelp: [
 		`Commands for the Mafia plugin:`,
 		`/mafia host [user] - Create a game of Mafia with [user] as the host. Requires + % @ * # & ~, voice can only host themselves.`,
-		`/mafia queue - Shows the upcoming users who are going to host.`,
-		`/mafia queue add, (user) - Adds the user to the hosting queue. Requires: + % @ # & ~`,
-		`/mafia queue remove, (user) - Removes the user from the hosting queue. Requires: + % @ # & ~`,
+		`/mafia queue [add|remove|view], [user] - Add: Adds the user to the queue. Requires + % @ * # & ~. Remove: Removes the user from the queue. Requires + % @ * # & ~. View: Shows the upcoming users who are going to host.`,
 		`/mafia join - Join the game.`,
 		`/mafia leave - Leave the game. Can only be done while signups are open.`,
 		`/mafia close - Closes signups for the current game. Requires: host % @ * # & ~`,
