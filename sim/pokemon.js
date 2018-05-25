@@ -278,7 +278,10 @@ class Pokemon {
 
 		this.clearVolatile();
 
-		// Keep track of what type the client sees for this Pokemon
+		/**
+		 * Keeps track of what type the client sees for this Pokemon
+		 * @type {string}
+		 */
 		this.apparentType = this.baseTemplate.types.join('/');
 
 		/**@type {number} */
@@ -800,7 +803,7 @@ class Pokemon {
 		if (!template.abilities || (pokemon && pokemon.transformed && this.battle.gen >= 2) || (user && user.transformed && this.battle.gen >= 5)) {
 			return false;
 		}
-		if (!this.formeChange(template, pokemon)) {
+		if (!this.formeChange(template, null)) {
 			return false;
 		}
 		this.transformed = true;
@@ -808,6 +811,7 @@ class Pokemon {
 		this.setType(pokemon.getTypes(true), true);
 		this.addedType = pokemon.addedType;
 		this.knownType = this.side === pokemon.side && pokemon.knownType;
+		this.apparentType = pokemon.apparentType;
 
 		for (let statName in this.stats) {
 			this.stats[statName] = pokemon.stats[statName];
@@ -873,7 +877,7 @@ class Pokemon {
 	 * This function handles all changes to stats, ability, type, template, etc.
 	 * as well as sending all relevant messages sent to the client.
 	 * @param {string | Template} templateId
-	 * @param {Pokemon | Effect} source
+	 * @param {Effect | null} source
 	 * @param {boolean} [isPermanent]
 	 * @param {string} [message]
 	 */
@@ -895,7 +899,7 @@ class Pokemon {
 		this.addedType = template.addedType || '';
 		this.knownType = true;
 
-		if (!(source instanceof Pokemon)) {
+		if (source) {
 			let stats = this.battle.spreadModify(this.template.baseStats, this.set);
 			if (!this.baseStats) this.baseStats = stats;
 			for (let statName in this.stats) {
