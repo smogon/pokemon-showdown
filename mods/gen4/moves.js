@@ -606,6 +606,7 @@ let BattleMovedex = {
 			duration: 5,
 			durationCallback: function (target, source, effect) {
 				if (source && source.hasAbility('persistent')) {
+					this.add('-activate', source, 'ability: Persistent', effect);
 					return 7;
 				}
 				return 5;
@@ -1156,7 +1157,8 @@ let BattleMovedex = {
 		effect: {
 			duration: 3,
 			durationCallback: function (target, source, effect) {
-				if (source && source.ability === 'persistent') {
+				if (source && source.hasAbility('persistent')) {
+					this.add('-activate', source, 'ability: Persistent', effect);
 					return 5;
 				}
 				return 3;
