@@ -1764,7 +1764,7 @@ let BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		onBasePowerPriority: 4,
 		onBasePower: function (basePower, pokemon, target) {
-			if (target.hp * 2 < target.maxhp) {
+			if (target.hp * 2 <= target.maxhp) {
 				return this.chainModify(2);
 			}
 		},
