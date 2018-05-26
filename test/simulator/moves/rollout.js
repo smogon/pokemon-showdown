@@ -129,5 +129,35 @@ for (const move of moves) {
 			battle.makeChoices('move ' + id, 'move recover');
 			assert.strictEqual(hitCount, 1);
 		});
+
+		it('should store its damage multiplier beyond the usual 5 hits if damage calculation is skipped by Disguise', function () {
+			battle = common.createBattle([
+				[
+					{species: 'Smeargle', ability: 'owntempo', moves: ['bellydrum', 'gravity', 'heartswap']},
+					{species: 'Mimikyu', ability: 'disguise', moves: ['swordsdance']},
+					{species: 'Gyarados', ability: 'moxie', moves: ['dragondance']},
+				], [
+					{species: 'Geodude-Alola', ability: 'galvanize', level: 1, evs: {atk: 252}, nature: 'adamant', item: 'Life Orb', moves: ['defensecurl', id, 'explosion']},
+				],
+			]);
+
+			battle.onEvent('BasePower', battle.getFormat(), -1, function (basePower, pokemon, target, move) {
+				if (move.id === 'explosion') {
+					assert.strictEqual(basePower, 8000);
+					return basePower;
+				}
+				let multiplier = [2, 4, 8, 8, 16][pokemon.volatiles[id].hitCount - 1];
+				assert.strictEqual(multiplier, pokemon.volatiles[id].multiplier);
+			});
+
+			battle.makeChoices('move bellydrum', 'move defensecurl');
+			battle.makeChoices('move gravity', 'move ' + id);
+			battle.makeChoices('move heartswap', 'move ' + id);
+			battle.makeChoices('switch 2', 'move ' + id);
+			battle.makeChoices('move swordsdance', 'move ' + id);
+			battle.makeChoices('move swordsdance', 'move ' + id);
+			battle.makeChoices('switch 3', 'move explosion');
+			assert.fainted(battle.p1.active[0]);
+		});
 	});
 }
