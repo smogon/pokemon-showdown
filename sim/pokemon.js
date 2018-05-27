@@ -882,20 +882,18 @@ class Pokemon {
 	 * @param {string} [message]
 	 */
 	formeChange(templateId, source = this.battle.effect, isPermanent, message) {
-		let template = this.battle.getTemplate(templateId);
+		let rawTemplate = this.battle.getTemplate(templateId);
 
-		if (!template.abilities) return false;
+		if (!rawTemplate.abilities) return false;
 
-		let apparentType = template.types.join('/');
-
-		template = this.battle.singleEvent('ModifyTemplate', this.battle.getFormat(), null, this, source, null, template);
+		let template = this.battle.singleEvent('ModifyTemplate', this.battle.getFormat(), null, this, source, null, rawTemplate);
 
 		if (!template) return false;
 
 		this.template = template;
 
 		this.setType(template.types, true);
-		this.apparentType = apparentType;
+		this.apparentType = rawTemplate.types.join('/');
 		this.addedType = template.addedType || '';
 		this.knownType = true;
 
@@ -920,7 +918,7 @@ class Pokemon {
 
 			let apparentSpecies = this.illusion ? this.illusion.template.species : template.baseSpecies; // The species the opponent sees
 			if (isPermanent) {
-				this.baseTemplate = template;
+				this.baseTemplate = rawTemplate;
 				this.details = template.species + (this.level === 100 ? '' : ', L' + this.level) + (this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
 				this.battle.add('detailschange', this, (this.illusion || this).details);
 				if (source.effectType === 'Item') {
