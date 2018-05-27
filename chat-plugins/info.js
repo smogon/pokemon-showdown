@@ -1676,8 +1676,8 @@ const commands = {
 			return this.errorReply(`This is not a room you can set the rules of.`);
 		}
 		if (!this.can('editroom', null, room)) return;
-		if (target.length > 100) {
-			return this.errorReply(`Error: Room rules link is too long (must be under 100 characters). You can use a URL shortener to shorten the link.`);
+		if (target.length > 150) {
+			return this.errorReply(`Error: Room rules link is too long (must be under 150 characters). You can use a URL shortener to shorten the link.`);
 		}
 
 		target = target.trim();
