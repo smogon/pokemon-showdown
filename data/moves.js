@@ -12589,14 +12589,12 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (move, pokemon) {
-			if (!pokemon.status) return false;
-			move.status = pokemon.status;
-		},
-		self: {
-			onHit: function (pokemon) {
+		onHit: function (target, pokemon) {
+			if (pokemon.status && !target.status && target.trySetStatus(pokemon.status)) {
 				pokemon.cureStatus();
-			},
+			} else {
+				return false;
+			}
 		},
 		secondary: false,
 		target: "normal",
