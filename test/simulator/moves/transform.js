@@ -128,6 +128,16 @@ describe('Transform', function () {
 		battle.makeChoices('move transform', 'move rest');
 		assert.deepStrictEqual(battle.p1.active[0].getTypes(), ["Steel"]);
 	});
+
+	it(`should ignore the effects of Roost`, function () {
+		battle = common.createBattle([
+			[{species: "Mew", ability: 'synchronize', moves: ['seismictoss', 'transform']}],
+			[{species: "Talonflame", ability: 'flamebody', moves: ['roost']}],
+		]);
+		battle.makeChoices('move seismictoss', 'move roost');
+		battle.makeChoices('move transform', 'move roost');
+		assert.deepStrictEqual(battle.p1.active[0].getTypes(), ["Fire", "Flying"]);
+	});
 });
 
 describe('Transform [Gen 5]', function () {
