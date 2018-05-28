@@ -358,8 +358,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	 * @return {void}
 	 */
 	setRoles(user, roleString, force = false) {
-		let roleNames = (/** @type {string[]} */roleString.split(',').map(x => { return x.trim(); }));
-		let roles = /** @type {string[]} */(roleNames.slice());
+		let roles = (/** @type {string[]} */roleString.split(',').map(x => { return x.trim(); }));
 		if (roles.length < this.playerCount) {
 			return user.sendTo(this.room, `|error|You have not provided enough roles for the players.`);
 		} else if (roles.length > this.playerCount) {
@@ -917,6 +916,194 @@ class MafiaTracker extends Rooms.RoomGame {
 	}
 
 	/**
+	 *
+	 * @param {User} user
+	 * @param {string} moduleName
+	 */
+	ideaInit(user, moduleName) {
+		this.originalRoles = [];
+		this.originalRoleString = '';
+		this.roles = [];
+		this.roleString = '';
+
+		this.IDEA.data = MafiaData.IDEAs[moduleName];
+		if (typeof this.IDEA.data === 'string') this.IDEA.data = MafiaData.IDEAs[this.IDEA.data];
+		if (typeof this.IDEA.data !== 'object') return false;
+		if (!this.IDEA.data) return user.sendTo(this.room, `|error|${moduleName} is not a valid IDEA.`);
+		return this.ideaDistributeRoles(user);
+	}
+
+	/**
+	 *
+	 * @param {User} user
+	 */
+	ideaDistributeRoles(user) {
+		if (!this.IDEA.data) return user.sendTo(this.room, `|error|No IDEA module loaded`);
+		if (this.phase !== 'locked' && this.phase !== 'IDEAlocked') return user.sendTo(this.room, `|error|The game must be in a locked state to distribute IDEA roles.`);
+
+		const neededRoles = this.IDEA.data.choices * this.playerCount;
+		if (neededRoles > this.IDEA.data.roles.length) return user.sendTo(this.room, `|error|Not enough roles in the IDEA module.`);
+
+		let roles = [];
+		let selectedIndexes = [];
+		for (let i = 0; i < neededRoles; i++) {
+			let randomIndex;
+			do {
+				randomIndex = Math.floor(Math.random() * this.IDEA.data.roles.length);
+			} while (selectedIndexes.indexOf(randomIndex) !== -1);
+			roles.push(this.IDEA.data.roles[randomIndex]);
+			selectedIndexes.push(randomIndex);
+		}
+		Dex.shuffle(roles);
+		this.IDEA.waitingPick = [];
+		for (const p in this.players) {
+			const player = this.players[p];
+			player.IDEA = {
+				choices: roles.splice(0, this.IDEA.data.choices),
+				originalChoices: [], // MAKE SURE TO SET THIS
+				picks: {},
+			};
+			player.IDEA.originalChoices = player.IDEA.choices.slice();
+			for (const pick of this.IDEA.data.picks) {
+				player.IDEA.picks[pick] = null;
+				this.IDEA.waitingPick.push(p);
+			}
+		}
+		this.phase = 'IDEApicking';
+		this.updatePlayers();
+
+		this.sendRoom(`IDEA roles have been distributed. You will have ${IDEA_TIMER / 1000} seconds to make your picks.`, {declare: true});
+		this.IDEA.timer = setTimeout(() => { this.ideaFinalizePicks(); }, IDEA_TIMER);
+
+		return ``;
+	}
+
+	/**
+	 *
+	 * @param {User} user
+	 * @param {string[]} selection
+	 */
+	ideaPick(user, selection) {
+		let buf = '';
+		if (this.phase !== 'IDEApicking') return 'The game is not in the IDEA picking phase.';
+		if (!this.IDEA || !this.IDEA.data) return this.sendRoom(`Trying to pick an IDEA role with no module running, target: ${JSON.stringify(selection)}. Please report this to a mod.`);
+		const player = this.players[user.userid];
+		if (!player.IDEA) return this.sendRoom(`Trying to pick an IDEA role with no player IDEA object, user: ${user.userid}. Please report this to a mod.`);
+		selection = selection.map(item => toId(item));
+		if (selection.length === 1 && this.IDEA.data.picks.length === 1) selection = [this.IDEA.data.picks[0], selection[0]];
+		if (selection.length !== 2) return user.sendTo(this.room, `|error|Invalid selection.`);
+
+		// input is formatted as ['selection', 'role']
+		// eg: ['role', 'bloodhound']
+		// ['alignment', 'alien']
+		// ['selection', ''] deselects
+		if (selection[1]) {
+			const roleIndex = player.IDEA.choices.map(choice => toId(choice)).indexOf(selection[1]);
+			if (roleIndex === -1) return user.sendTo(this.room, `|error|${selection[1]} is not an available role, perhaps it is already selected?`);
+			selection[1] = player.IDEA.choices.splice(roleIndex, 1)[0];
+		} else {
+			selection[1] = '';
+		}
+
+		if (player.IDEA.picks[selection[0]]) {
+			buf += `You have deselected ${player.IDEA.picks[selection[0]]}. `;
+			player.IDEA.choices.push(player.IDEA.picks[selection[0]]);
+		}
+
+		if (player.IDEA.picks[selection[0]] && !selection[1]) {
+			this.IDEA.waitingPick.push(player.userid);
+		} else if (!player.IDEA.picks[selection[0]] && selection[1]) {
+			this.IDEA.waitingPick.splice(this.IDEA.waitingPick.indexOf(player.userid), 1);
+		}
+
+		player.IDEA.picks[selection[0]] = selection[1];
+		if (selection[1]) buf += `You have selected ${selection[0]}: ${selection[1]}.`;
+		player.updateHtmlRoom();
+		if (!this.IDEA.waitingPick.length) {
+			if (this.IDEA.timer) clearTimeout(this.IDEA.timer);
+			this.ideaFinalizePicks();
+			return;
+		}
+		return user.sendTo(this.room, buf);
+	}
+
+	ideaFinalizePicks() {
+		if (!this.IDEA || !this.IDEA.data) return this.sendRoom(`Tried to finalize IDEA picks with no IDEA module running, please report this to a mod.`);
+		let randed = [];
+		for (const p in this.players) {
+			const player = this.players[p];
+			if (!player.IDEA) return this.sendRoom(`Trying to pick an IDEA role with no player IDEA object, user: ${player.userid}. Please report this to a mod.`);
+			let randPicked = false;
+			let role = [];
+			for (const choice of this.IDEA.data.picks) {
+				if (!player.IDEA.picks[choice]) {
+					randPicked = true;
+					player.IDEA.picks[choice] = player.IDEA.choices.shift();
+					const user = Users(player.userid);
+					if (user) user.sendTo(this.room, `You were randomly assigned ${choice}: ${player.IDEA.picks[choice]}`);
+				}
+				role.push(`${choice}: ${player.IDEA.picks[choice]}`);
+			}
+			if (randPicked) randed.push(p);
+			// if there's only one option, it's their role, parse it properly
+			let roleName = '';
+			if (this.IDEA.data.picks.length === 1) {
+				const role = parseRole(player.IDEA.picks[this.IDEA.data.picks[0]]);
+				player.role = role.role;
+				if (role.problems.length) this.sendRoom(`Problems found when parsing IDEA role ${player.IDEA.picks[this.IDEA.data.picks[0]]}. Please report this to a mod.`);
+			} else {
+				roleName = role.join('; ');
+				player.role = {
+					name: roleName,
+					safeName: Chat.escapeHTML(roleName),
+					id: toId(roleName),
+					alignment: 'solo',
+					memo: [`(Your role was set from an IDEA.)`],
+					image: '',
+				};
+			}
+		}
+		this.IDEA.discardsHtml = `<b>Discards:</b><br />`;
+		for (const p of Object.keys(this.players).sort()) {
+			// @ts-ignore guaranteed above
+			this.IDEA.discardsHtml += `<b>${this.players[p].safeName}:</b> ${this.players[p].IDEA.choices.join(', ')}<br />`;
+		}
+
+		this.phase = 'IDEAlocked';
+		if (randed.length) this.sendRoom(`${randed.join(', ')} didn't pick.`, {declare: true});
+		this.sendRoom(`IDEA picks are locked!`, {declare: true});
+		this.sendRoom(`To start, use /mafia start, or to reroll use /mafia ideareroll`);
+		this.updatePlayers();
+	}
+
+	/**
+	 *
+	 * @param {User} user
+	 */
+	ideaStart(user) {
+		if (this.phase !== 'IDEAlocked') {
+			return user.sendTo(this.room, `|error|The game does not have IDEA roles set.`);
+		}
+		for (const p in this.players) {
+			if (!this.players[p].role) return user.sendTo(this.room, `|error|Not all players have a role.`);
+		}
+		this.started = true;
+		this.played = Object.keys(this.players);
+		this.sendRoom(`The game of ${this.title} is starting!`, {declare: true});
+		this.played.push(this.hostid);
+
+		for (const p in this.players) {
+			let u = Users(p);
+			// @ts-ignore guaranteed at this point
+			if (u && u.connected) u.send(`>${this.room.id}\n|notify|Your role is ${this.players[p].role.safeName}.`);
+		}
+
+		this.day(0, true);
+
+		this.room.add(`|html|<details><summary>IDEA discards:</summary>${this.IDEA.discardsHtml}</details>`).update();
+	}
+
+	/**
 	 * @return {void}
 	 */
 	sendPlayerList() {
@@ -1113,197 +1300,6 @@ class MafiaTracker extends Rooms.RoomGame {
 		for (let i in this.dead) {
 			this.dead[i].destroy();
 		}
-	}
-
-	//IDEA commands
-	/**
-	 *
-	 * @param {User} user
-	 * @param {string} target
-	 */
-	ideaInit(user, target) {
-		this.originalRoles = [];
-		this.originalRoleString = '';
-		this.roles = [];
-		this.roleString = '';
-
-		this.IDEA.data = MafiaData.IDEAs[target];
-		if (typeof this.IDEA.data === 'string') this.IDEA.data = MafiaData.IDEAs[this.IDEA.data];
-		if (typeof this.IDEA.data !== 'object') return false;
-		if (!this.IDEA.data) return user.sendTo(this.room, `|error|${target} is not a valid IDEA.`);
-		this.sendRoom(`${this.IDEA.data.name} roles loaded.`, {declare: true});
-		return this.ideaDistributeRoles(user);
-	}
-
-	/**
-	 *
-	 * @param {User} user
-	 */
-	ideaDistributeRoles(user) {
-		if (!this.IDEA.data) return user.sendTo(this.room, `|error|No IDEA module loaded`);
-		if (this.phase !== 'locked' && this.phase !== 'IDEAlocked') return user.sendTo(this.room, `|error|The game must be in a locked state to distribute IDEA roles.`);
-
-		const neededRoles = this.IDEA.data.choices * this.playerCount;
-		if (neededRoles > this.IDEA.data.roles.length) return user.sendTo(this.room, `|error|Not enough roles in the IDEA module.`);
-
-		let roles = [];
-		let selectedIndexes = [];
-		for (let i = 0; i < neededRoles; i++) {
-			let randomIndex;
-			do {
-				randomIndex = Math.floor(Math.random() * this.IDEA.data.roles.length);
-			} while (selectedIndexes.indexOf(randomIndex) !== -1);
-			roles.push(this.IDEA.data.roles[randomIndex]);
-			selectedIndexes.push(randomIndex);
-		}
-		Dex.shuffle(roles);
-		this.IDEA.waitingPick = [];
-		for (const p in this.players) {
-			const player = this.players[p];
-			player.IDEA = {
-				choices: roles.splice(0, this.IDEA.data.choices),
-				originalChoices: [], // MAKE SURE TO SET THIS
-				picks: {},
-			};
-			player.IDEA.originalChoices = player.IDEA.choices.slice();
-			for (const pick of this.IDEA.data.picks) {
-				player.IDEA.picks[pick] = null;
-				this.IDEA.waitingPick.push(p);
-			}
-		}
-		this.phase = 'IDEApicking';
-		this.updatePlayers();
-
-		this.sendRoom(`IDEA roles have been distributed. You will have ${IDEA_TIMER / 1000} seconds to make your picks.`, {declare: true});
-		this.IDEA.timer = setTimeout(() => { this.ideaFinalizePicks(); }, IDEA_TIMER);
-
-		return ``;
-	}
-
-	/**
-	 *
-	 * @param {User} user
-	 * @param {string[]} target
-	 */
-	ideaPick(user, target) {
-		let buf = '';
-		if (this.phase !== 'IDEApicking') return 'The game is not in the IDEA picking phase.';
-		if (!this.IDEA || !this.IDEA.data) return this.sendRoom(`Trying to pick an IDEA role with no module running, target: ${JSON.stringify(target)}. Please report this to a mod.`);
-		const player = this.players[user.userid];
-		if (!player.IDEA) return this.sendRoom(`Trying to pick an IDEA role with no player IDEA object, user: ${user.userid}. Please report this to a mod.`);
-		target = target.map(item => toId(item));
-		if (target.length === 1 && this.IDEA.data.picks.length === 1) target = [this.IDEA.data.picks[0], target[0]];
-		if (target.length !== 2) return user.sendTo(this.room, `|error|Invalid selection.`);
-
-		// selection, role
-		// eg: role, bloodhound
-		// alignment, alien
-		// "selection ," deselects
-
-		if (target[1]) {
-			const roleIndex = player.IDEA.choices.map(choice => toId(choice)).indexOf(target[1]);
-			if (roleIndex === -1) return user.sendTo(this.room, `|error|${target[1]} is not an available role, perhaps it is already selected?`);
-			target[1] = player.IDEA.choices.splice(roleIndex, 1)[0];
-		} else {
-			target[1] = '';
-		}
-
-		if (player.IDEA.picks[target[0]]) {
-			buf += `You have deselected ${player.IDEA.picks[target[0]]}. `;
-			player.IDEA.choices.push(player.IDEA.picks[target[0]]);
-		}
-
-		if (player.IDEA.picks[target[0]] && !target[1]) {
-			this.IDEA.waitingPick.push(player.userid);
-		} else if (!player.IDEA.picks[target[0]] && target[1]) {
-			this.IDEA.waitingPick.splice(this.IDEA.waitingPick.indexOf(player.userid), 1);
-		}
-
-		player.IDEA.picks[target[0]] = target[1];
-		if (target[1]) buf += `You have selected ${target[0]}: ${target[1]}.`;
-		player.updateHtmlRoom();
-		if (!this.IDEA.waitingPick.length) {
-			if (this.IDEA.timer) clearTimeout(this.IDEA.timer);
-			this.ideaFinalizePicks();
-			return;
-		}
-		return user.sendTo(this.room, buf);
-	}
-
-	ideaFinalizePicks() {
-		if (!this.IDEA || !this.IDEA.data) return this.sendRoom(`Tried to finalize IDEA picks with no IDEA module running, please report this to a mod.`);
-		let randed = [];
-		for (const p in this.players) {
-			const player = this.players[p];
-			if (!player.IDEA) return this.sendRoom(`Trying to pick an IDEA role with no player IDEA object, user: ${player.userid}. Please report this to a mod.`);
-			let randPicked = false;
-			let role = [];
-			for (const choice of this.IDEA.data.picks) {
-				if (!player.IDEA.picks[choice]) {
-					randPicked = true;
-					player.IDEA.picks[choice] = player.IDEA.choices.shift();
-					const user = Users(player.userid);
-					if (user) user.sendTo(this.room, `You were randomly assigned ${choice}: ${player.IDEA.picks[choice]}`);
-				}
-				role.push(`${choice}: ${player.IDEA.picks[choice]}`);
-			}
-			if (randPicked) randed.push(p);
-			// if there's only one option, it's their role, parse it properly
-			let roleName = '';
-			if (this.IDEA.data.picks.length === 1) {
-				const role = parseRole(player.IDEA.picks[this.IDEA.data.picks[0]]);
-				player.role = role.role;
-				if (role.problems.length) this.sendRoom(`Problems found when parsing IDEA role ${player.IDEA.picks[this.IDEA.data.picks[0]]}. Please report this to a mod.`);
-			} else {
-				roleName = role.join('; ');
-				player.role = {
-					name: roleName,
-					safeName: Chat.escapeHTML(roleName),
-					id: toId(roleName),
-					alignment: 'solo',
-					memo: [`(Your role was set from an IDEA.)`],
-					image: '',
-				};
-			}
-		}
-		this.IDEA.discardsHtml = `<b>Discards:</b><br />`;
-		for (const p of Object.keys(this.players).sort()) {
-			// @ts-ignore guaranteed above
-			this.IDEA.discardsHtml += `<b>${this.players[p].safeName}:</b> ${this.players[p].IDEA.choices.join(', ')}<br />`;
-		}
-
-		this.phase = 'IDEAlocked';
-		if (randed.length) this.sendRoom(`${randed.join(', ')} didn't pick.`, {declare: true});
-		this.sendRoom(`IDEA picks are locked!`, {declare: true});
-		this.sendRoom(`To start, use /mafia start, or to reroll use /mafia ideareroll`);
-		this.updatePlayers();
-	}
-
-	/**
-	 *
-	 * @param {User} user
-	 */
-	ideaStart(user) {
-		if (this.phase !== 'IDEAlocked') {
-			return user.sendTo(this.room, `|error|The game does not have IDEA roles set.`);
-		}
-		for (const p in this.players) {
-			if (!this.players[p].role) return user.sendTo(this.room, `|error|Not all players have a role.`);
-		}
-		this.started = true;
-		this.played = Object.keys(this.players);
-		this.sendRoom(`The game of ${this.title} is starting!`, {declare: true});
-		this.played.push(this.hostid);
-
-		for (const p in this.players) {
-			let u = Users(p);
-			// @ts-ignore guaranteed at this point
-			if (u && u.connected) u.send(`>${this.room.id}\n|notify|Your role is ${this.players[p].role.safeName}.`);
-		}
-
-		this.day(0, true);
-
-		this.room.add(`|html|<details><summary>IDEA discards:</summary>${this.IDEA.discardsHtml}</details>`).update();
 	}
 }
 /** @typedef {(query: string[], user: User, connection: Connection) => (string | null | void)} PageHandler */
