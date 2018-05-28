@@ -808,7 +808,8 @@ class Pokemon {
 		}
 		this.transformed = true;
 
-		this.setType(pokemon.getTypes(true), true);
+		let types = pokemon.getTypes(true);
+		this.setType(pokemon.volatiles.roost ? pokemon.volatiles.roost.typeWas : types);
 		this.addedType = pokemon.addedType;
 		this.knownType = this.side === pokemon.side && pokemon.knownType;
 		this.apparentType = pokemon.apparentType;
