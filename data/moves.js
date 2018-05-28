@@ -13804,6 +13804,7 @@ let BattleMovedex = {
 			onResidualOrder: 20,
 			onTypePriority: -1,
 			onType: function (types, pokemon) {
+				this.effectData.typeWas = types;
 				return types.filter(type => type !== 'Flying');
 			},
 		},
