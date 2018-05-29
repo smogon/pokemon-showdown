@@ -7,13 +7,13 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
+            "name": "Start Server",
             "program": "${workspaceFolder}\\app.js"
         },
         {
             "type": "node",
             "request": "launch",
-            "name": "Mocha Tests",
+            "name": "Run Mocha Tests",
             "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
             "args": [
                 "-u",
