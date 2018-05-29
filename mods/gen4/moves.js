@@ -443,6 +443,9 @@ let BattleMovedex = {
 					}
 				}
 			},
+			onLockMove: function () {
+				return this.effectData.move;
+			},
 		},
 	},
 	endeavor: {
