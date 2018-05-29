@@ -217,6 +217,7 @@ let BattleMovedex = {
 	},
 	conversion: {
 		inherit: true,
+		desc: "Causes the user's types to become the same as the current types of the target.",
 		volatileStatus: 'conversion',
 		accuracy: true,
 		target: "normal",

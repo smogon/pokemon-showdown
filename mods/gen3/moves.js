@@ -108,6 +108,26 @@ let BattleMovedex = {
 		shortDesc: "The user's Electric attack next turn has 2x power.",
 		boosts: false,
 	},
+	conversion: {
+		inherit: true,
+		desc: "The user's type changes to match the original type of one of its known moves besides Curse, at random, but not either of its current types. Fails if the user cannot change its type, or if this move would only be able to select one of the user's current types.",
+		onHit: function (target) {
+			let possibleTypes = target.moveSlots.map(moveSlot => {
+				let move = this.getMove(moveSlot.id);
+				if (move.id !== 'curse' && !target.hasType(move.type)) {
+					return move.type;
+				}
+				return '';
+			}).filter(type => type);
+			if (!possibleTypes.length) {
+				return false;
+			}
+			let type = this.sample(possibleTypes);
+
+			if (!target.setType(type)) return false;
+			this.add('-start', target, 'typechange', type);
+		},
+	},
 	counter: {
 		inherit: true,
 		damageCallback: function (pokemon) {
