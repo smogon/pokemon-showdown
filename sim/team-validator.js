@@ -452,7 +452,7 @@ class Validator {
 				if (eventProblems) problems.push(...eventProblems);
 			}
 		} else if (ruleTable.has('-illegal') && template.eventOnly) {
-			let eventTemplate = !template.learnset && template.baseSpecies !== template.species ? dex.getTemplate(template.baseSpecies) : template;
+			let eventTemplate = !template.learnset && template.baseSpecies !== template.species && template.id !== 'zygarde10' ? dex.getTemplate(template.baseSpecies) : template;
 			const eventPokemon = eventTemplate.eventPokemon;
 			if (!eventPokemon) throw new Error(`Event-only template ${template.species} has no eventPokemon table`);
 			let legal = false;
