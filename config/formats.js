@@ -409,12 +409,11 @@ let Formats = [
 
 		mod: 'suicidecup',
 		forcedLevel: 100,
-		ruleset: ['[Gen 7] Ubers', '!Mega Rayquaza Clause', '!OHKO Clause'],
+		ruleset: ['Cancel Mod', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Moody Clause', 'Nickname Clause', 'Pokemon', 'Sleep Clause Mod', 'Species Clause', 'Team Preview'],
 		banlist: [
 			'Shedinja', 'Infiltrator', 'Magic Guard', 'Misty Surge', 'Assault Vest', 'Explosion', 'Final Gambit', 'Healing Wish',
 			'Lunar Dance', 'Magic Room', 'Memento', 'Misty Terrain', 'Self-Destruct',
 		],
-		unbanlist: ['Baton Pass'],
 		onValidateTeam: function (team) {
 			if (team.length !== 6) return [`Your team cannot have less than 6 Pok\u00e9mon.`];
 		},
@@ -427,10 +426,10 @@ let Formats = [
 		],
 
 		mod: 'gen7',
-		ruleset: ['[Gen 7] Ubers', '!Mega Rayquaza Clause'],
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
 		banlist: [
 			'Gengar-Mega', 'Mawile-Mega', 'Medicham-Mega', 'Shedinja', 'Arena Trap', 'Shadow Tag', 'Deep Sea Scale',
-			'Deep Sea Tooth', 'Eevium Z', 'Eviolite', 'Light Ball', 'Thick Club',
+			'Deep Sea Tooth', 'Eevium Z', 'Eviolite', 'Light Ball', 'Thick Club', 'Baton Pass',
 		],
 		onModifyTemplate: function (template, target, source) {
 			template = Object.assign({}, template);
