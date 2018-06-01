@@ -23,7 +23,7 @@
 
 class Pokemon {
 	/**
-	 * @param {string | AnyObject} set
+	 * @param {string | PokemonSet} set
 	 * @param {Side} side
 	 */
 	constructor(set, side) {
@@ -35,7 +35,7 @@ class Pokemon {
 		let pokemonScripts = this.battle.data.Scripts.pokemon;
 		if (pokemonScripts) Object.assign(this, pokemonScripts);
 
-		if (typeof set === 'string') set = {name: set};
+		if (typeof set === 'string') set = new this.battle.Data.PokemonSet({name: set});
 
 		// "pre-bound" functions for nicer syntax
 		// allows them to be passed directly to Battle#add
@@ -54,6 +54,7 @@ class Pokemon {
 		}
 		this.name = set.name.substr(0, 20);
 		this.speciesid = toId(this.species);
+		/**@type {Template} */
 		this.template = this.baseTemplate;
 		this.movepp = {};
 		/**@type {MoveSlot[]} */
@@ -166,10 +167,11 @@ class Pokemon {
 		this.speed = 0;
 		this.abilityOrder = 0;
 
-		set.level = this.battle.clampIntRange(set.forcedLevel || set.level || 100, 1, 9999);
+		set.level = this.battle.clampIntRange(set.level || 100, 1, 9999);
 		this.level = set.level;
 
 		let genders = {M: 'M', F: 'F', N: 'N'};
+		/**@type {GenderName} */
 		this.gender = genders[set.gender] || this.template.gender || (this.battle.random() * 2 < 1 ? 'M' : 'F');
 		if (this.gender === 'N') this.gender = '';
 		this.happiness = typeof set.happiness === 'number' ? this.battle.clampIntRange(set.happiness, 0, 255) : 255;
@@ -246,6 +248,7 @@ class Pokemon {
 		if (this.battle.gen && this.battle.gen <= 2) {
 			// We represent DVs using even IVs. Ensure they are in fact even.
 			for (let i in this.set.ivs) {
+				// @ts-ignore Typescript bug: [js] Object is possibly 'undefined'. (It's not, we just set them all in the last loop.)
 				this.set.ivs[i] &= 30;
 			}
 		}
@@ -256,7 +259,7 @@ class Pokemon {
 		/**@type {number} */
 		this.hpPower = hpData.power;
 
-		/**@type {{[k: string]: number}} */
+		/**@type {BoostsTable} */
 		this.boosts = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0};
 		this.stats = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
 

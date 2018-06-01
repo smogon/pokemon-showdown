@@ -672,26 +672,25 @@ class ModdedDex {
 		return nature;
 	}
 	/**
-	 * @param {AnyObject} stats
-	 * @param {AnyObject} set
-	 * @return {AnyObject}
+	 * @param {StatsTable} stats
+	 * @param {PokemonSet} set
 	 */
 	spreadModify(stats, set) {
-		const modStats = {atk: 10, def: 10, spa: 10, spd: 10, spe: 10};
+		/**@type {StatsTable}*/
+		const modStats = {hp: 10, atk: 10, def: 10, spa: 10, spd: 10, spe: 10};
 		for (let statName in modStats) {
 			let stat = stats[statName];
-			modStats[statName] = Math.floor(Math.floor(2 * stat + set.ivs[statName] + Math.floor(set.evs[statName] / 4)) * set.level / 100 + 5);
-		}
-		if ('hp' in stats) {
-			let stat = stats['hp'];
-			modStats['hp'] = Math.floor(Math.floor(2 * stat + set.ivs['hp'] + Math.floor(set.evs['hp'] / 4) + 100) * set.level / 100 + 10);
+			if (statName === 'hp') {
+				modStats['hp'] = Math.floor(Math.floor(2 * stat + set.ivs['hp'] + Math.floor(set.evs['hp'] / 4) + 100) * set.level / 100 + 10);
+			} else {
+				modStats[statName] = Math.floor(Math.floor(2 * stat + set.ivs[statName] + Math.floor(set.evs[statName] / 4)) * set.level / 100 + 5);
+			}
 		}
 		return this.natureModify(modStats, set.nature);
 	}
 	/**
-	 * @param {AnyObject} stats
+	 * @param {StatsTable} stats
 	 * @param {string | AnyObject} nature
-	 * @return {AnyObject}
 	 */
 	natureModify(stats, nature) {
 		nature = this.getNature(nature);
@@ -1216,7 +1215,7 @@ class ModdedDex {
 
 		// limit to 24
 		for (let count = 0; count < 24; count++) {
-			let set = /** @type {any} */ ({});
+			let set = new Data.PokemonSet({});
 			team.push(set);
 
 			// name
@@ -1277,7 +1276,7 @@ class ModdedDex {
 			// gender
 			j = buf.indexOf('|', i);
 			if (j < 0) return null;
-			if (i !== j) set.gender = buf.substring(i, j);
+			if (i !== j) set.gender = {M: 'M', F: 'F', N: 'N'}[buf.substring(i, j)] || '';
 			i = j + 1;
 
 			// ivs

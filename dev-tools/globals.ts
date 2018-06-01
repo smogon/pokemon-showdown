@@ -22,9 +22,10 @@ let TeamValidatorAsync = require('../team-validator-async');
 
 type GenderName = 'M' | 'F' | 'N' | '';
 type StatName = 'hp' | 'atk' | 'def' | 'spa' | 'spd' | 'spe';
-type StatsTable = {hp: number, atk: number, def: number, spa: number, spd: number, spe: number};
-type SparseStatsTable = {hp?: number, atk?: number, def?: number, spa?: number, spd?: number, spe?: number};
-type SparseBoostsTable = {hp?: number, atk?: number, def?: number, spa?: number, spd?: number, spe?: number, accuracy?: number, evasion?: number};
+type StatsTable = {[key:string]: number, hp: number, atk: number, def: number, spa: number, spd: number, spe: number};
+type SparseStatsTable = Partial<StatsTable>;
+type BoostsTable = {[key:string]: number, atk: number, def: number, spa: number, spd: number, spe: number, accuracy: number, evasion: number};
+type SparseBoostsTable = Partial<BoostsTable>;
 type PokemonSet = {
 	name: string,
 	species: string,
@@ -32,11 +33,11 @@ type PokemonSet = {
 	ability: string,
 	moves: string[],
 	nature: string,
-	evs?: SparseStatsTable,
-	gender?: string,
-	ivs?: SparseStatsTable,
+	gender: string,
+	evs: StatsTable,
+	ivs: StatsTable,
+	level: number,
 	shiny?: boolean,
-	level?: number,
 	happiness?: number,
 	pokeball?: string,
 	hpType?: string,

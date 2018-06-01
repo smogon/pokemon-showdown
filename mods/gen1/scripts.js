@@ -43,8 +43,8 @@ let BattleScripts = {
 		boostBy: function (boost) {
 			let changed = false;
 			for (let i in boost) {
-				// @ts-ignore
 				let delta = boost[i];
+				if (delta === undefined) continue;
 				if (delta > 0 && this.boosts[i] >= 6) continue;
 				if (delta < 0 && this.boosts[i] <= -6) continue;
 				this.boosts[i] += delta;

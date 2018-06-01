@@ -215,7 +215,7 @@ let BattleFormats = {
 				}
 			} else {
 				if (set.gender !== 'M' && set.gender !== 'F') {
-					set.gender = undefined;
+					set.gender = '';
 				}
 			}
 
