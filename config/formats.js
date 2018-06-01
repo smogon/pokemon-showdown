@@ -433,7 +433,6 @@ let Formats = [
 			'Deep Sea Tooth', 'Eevium Z', 'Eviolite', 'Light Ball', 'Thick Club',
 		],
 		onModifyTemplate: function (template, target, source) {
-			if (source) return;
 			template = Object.assign({}, template);
 			template.baseStats = Object.assign({}, template.baseStats);
 			let stats = ['atk', 'def', 'spa', 'spd', 'spe'];
