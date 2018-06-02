@@ -411,8 +411,8 @@ let Formats = [
 		forcedLevel: 100,
 		ruleset: ['Cancel Mod', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Moody Clause', 'Nickname Clause', 'Pokemon', 'Sleep Clause Mod', 'Species Clause', 'Team Preview'],
 		banlist: [
-			'Shedinja', 'Infiltrator', 'Magic Guard', 'Misty Surge', 'Assault Vest', 'Explosion', 'Final Gambit', 'Healing Wish',
-			'Lunar Dance', 'Magic Room', 'Memento', 'Misty Terrain', 'Self-Destruct',
+			'Illegal', 'Unreleased', 'Shedinja', 'Infiltrator', 'Magic Guard', 'Misty Surge', 'Assault Vest', 'Explosion',
+			'Final Gambit', 'Healing Wish', 'Lunar Dance', 'Magic Room', 'Memento', 'Misty Terrain', 'Self-Destruct',
 		],
 		onValidateTeam: function (team) {
 			if (team.length !== 6) return [`Your team cannot have less than 6 Pok\u00e9mon.`];
