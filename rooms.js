@@ -17,6 +17,7 @@ const REPORT_USER_STATS_INTERVAL = 10 * 60 * 1000;
 
 const CRASH_REPORT_THROTTLE = 60 * 60 * 1000;
 
+/** @type {null} */
 const RETRY_AFTER_LOGIN = null;
 
 const FS = require('./lib/fs');
@@ -80,7 +81,7 @@ class BasicRoom {
 
 		// room settings
 
-		/** @type {AnyObject?} */
+		/** @type {Partial<BasicRoom>?} */
 		this.chatRoomData = null;
 		/** @type {boolean | 'hidden' | 'voice'} */
 		this.isPrivate = false;
@@ -384,7 +385,7 @@ class GlobalRoom extends BasicRoom {
 	/**
 	 * @param {string} roomid
 	 */
-	constructor(roomid) {
+	constructor(roomid = 'global') {
 		if (roomid !== 'global') throw new Error(`The global room's room ID must be 'global'`);
 		super(roomid);
 
@@ -393,6 +394,7 @@ class GlobalRoom extends BasicRoom {
 		/** @type {false} */
 		this.active = false;
 		/** @type {null} */
+		// @ts-ignore Typescript bug?
 		this.chatRoomData = null;
 		/**@type {boolean | 'pre' | 'ddos'} */
 		this.lockdown = false;
@@ -965,7 +967,7 @@ class BasicChatRoom extends BasicRoom {
 	/**
 	 * @param {string} roomid
 	 * @param {string} [title]
-	 * @param {AnyObject} [options]
+	 * @param {Partial<BasicChatRoom> & Partial<Roomlog>} [options]
 	 */
 	constructor(roomid, title, options = {}) {
 		super(roomid, title);
@@ -978,6 +980,7 @@ class BasicChatRoom extends BasicRoom {
 		if (options.batchJoins === undefined) {
 			options.batchJoins = options.isPersonal ? 0 : Config.reportjoinsperiod || 0;
 		}
+		/** @type {Roomlog} */
 		this.log = Roomlogs.create(this, options);
 
 		/** @type {any} */
@@ -1002,9 +1005,12 @@ class BasicChatRoom extends BasicRoom {
 		/** @type {string[]} */
 		this.banwords = [];
 
+		/** @type {(Partial<BasicChatRoom> & Partial<Roomlog>)?} */
 		this.chatRoomData = (options.isPersonal ? null : options);
 		Object.assign(this, options);
 		if (this.auth) Object.setPrototypeOf(this.auth, null);
+		/** @type {string?} */
+		this.parentid = this.parentid || null;
 		/** @type {Room?} */
 		this.parent = null;
 		if (options.parentid) {
@@ -1030,6 +1036,7 @@ class BasicChatRoom extends BasicRoom {
 		if (Config.logchat) {
 			this.roomlog('NEW CHATROOM: ' + this.id);
 			if (Config.loguserstats) {
+				/** @type {NodeJS.Timer?} */
 				this.logUserStatsInterval = setInterval(() => this.logUserStats(), Config.loguserstats);
 			}
 		}
@@ -1267,13 +1274,6 @@ class BasicChatRoom extends BasicRoom {
 	destroy() {
 		// deallocate ourself
 
-		if (this.battle && this.tour) {
-			// resolve state of the tournament;
-			// @ts-ignore
-			if (!this.battle.ended) this.tour.onBattleWin(this, '');
-			this.tour = null;
-		}
-
 		// remove references to ourself
 		for (let i in this.users) {
 			// @ts-ignore
@@ -1332,6 +1332,7 @@ class ChatRoom extends BasicChatRoom {
 	// TypeScript happy
 	constructor() {
 		super('');
+		/** @type {RoomBattle?} */
 		this.battle = null;
 		this.active = false;
 		/** @type {'chat'} */
@@ -1458,6 +1459,15 @@ class GameRoom extends BasicChatRoom {
 	onConnect(user, connection) {
 		this.sendUser(connection, '|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user));
 		if (this.game && this.game.onConnect) this.game.onConnect(user, connection);
+	}
+
+	destroy() {
+		if (this.battle && this.tour) {
+			// resolve state of the tournament;
+			if (!this.battle.ended) this.tour.onBattleWin(this, '');
+			this.tour = null;
+		}
+		super.destroy();
 	}
 }
 
@@ -1599,8 +1609,9 @@ let Rooms = Object.assign(getRoom, {
 // initialize
 
 Monitor.notice("NEW GLOBAL: global");
+// @ts-ignore Typescript bug
 Rooms.global = new GlobalRoom('global');
-
+// @ts-ignore Typescript bug
 Rooms.rooms.set('global', Rooms.global);
-
+// @ts-ignore
 module.exports = Rooms;

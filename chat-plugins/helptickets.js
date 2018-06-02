@@ -41,6 +41,7 @@ let tickets = {};
 let ticketBans = {};
 
 try {
+	/** @type {typeof tickets & typeof ticketBans} */
 	let ticketData = JSON.parse(FS(TICKET_FILE).readSync());
 	for (let t in ticketData) {
 		const ticket = ticketData[t];

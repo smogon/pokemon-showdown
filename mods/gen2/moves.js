@@ -570,7 +570,7 @@ let BattleMovedex = {
 		onPrepareHit: function (target, source) {
 			return source.status !== 'slp';
 		},
-		secondary: {},
+		secondary: false,
 	},
 	slash: {
 		inherit: true,

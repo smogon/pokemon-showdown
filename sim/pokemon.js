@@ -54,7 +54,6 @@ class Pokemon {
 		}
 		this.name = set.name.substr(0, 20);
 		this.speciesid = toId(this.species);
-		/**@type {Template} */
 		this.template = this.baseTemplate;
 		this.movepp = {};
 		/**@type {MoveSlot[]} */
@@ -65,6 +64,7 @@ class Pokemon {
 		// @ts-ignore - null used for this.formeChange(this.baseTemplate)
 		this.baseStats = null;
 
+		/**@type {boolean | "hidden"} */
 		this.trapped = false;
 		this.maybeTrapped = false;
 		this.maybeDisabled = false;
@@ -225,7 +225,9 @@ class Pokemon {
 			}
 		}
 
+		/** @type {string | null | undefined} */
 		this.canMegaEvo = this.battle.canMegaEvo(this);
+		/** @type {string | null | undefined} */
 		this.canUltraBurst = this.battle.canUltraBurst(this);
 
 		if (!this.set.evs) {
@@ -465,6 +467,7 @@ class Pokemon {
 	/**
 	 * @param {Move} move
 	 * @param {Pokemon} target
+	 * @return {Pokemon[]}
 	 */
 	getMoveTargets(move, target) {
 		let targets = [];
@@ -499,7 +502,6 @@ class Pokemon {
 				}
 			}
 			for (const foeActive of this.side.foe.active) {
-				// @ts-ignore
 				if (this.battle.isAdjacent(this, foeActive)) {
 					targets.push(foeActive);
 				}
@@ -1429,6 +1431,7 @@ class Pokemon {
 	 * @param {Pokemon?} source
 	 * @param {Effect?} sourceEffect
 	 * @param {string | Effect?} linkedStatus
+	 * @return {boolean | any}
 	 */
 	addVolatile(status, source = null, sourceEffect = null, linkedStatus = null) {
 		let result;

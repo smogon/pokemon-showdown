@@ -1294,7 +1294,7 @@ let BattleMovedex = {
 						this.add('-miss', pokemon, target);
 						return false;
 					}
-					let moveData = {
+					let moveData = Object.assign({}, move, {
 						id: 'bide',
 						name: "Bide",
 						accuracy: true,
@@ -1302,10 +1302,8 @@ let BattleMovedex = {
 						category: "Physical",
 						priority: 1,
 						flags: {contact: 1, protect: 1},
-						effectType: 'Move',
 						type: 'Normal',
-					};
-					// @ts-ignore
+					});
 					this.tryMoveHit(target, pokemon, moveData);
 					return false;
 				}
@@ -2776,7 +2774,6 @@ let BattleMovedex = {
 				return source.side.foe.active[this.effectData.position];
 			},
 			onAfterDamage: function (damage, target, source, effect) {
-				// @ts-ignore
 				if (effect && effect.effectType === 'Move' && source.side !== target.side && this.getCategory(effect) === 'Physical') {
 					this.effectData.position = source.position;
 					this.effectData.damage = 2 * damage;
@@ -5490,9 +5487,9 @@ let BattleMovedex = {
 			} else {
 				if (!move.secondaries) move.secondaries = [];
 				if (item.fling.status) {
-					move.secondaries.push({status: item.fling.status});
+					move.secondaries.push({status: item.fling.status, chance: 100});
 				} else if (item.fling.volatileStatus) {
-					move.secondaries.push({volatileStatus: item.fling.volatileStatus});
+					move.secondaries.push({volatileStatus: item.fling.volatileStatus, chance: 100});
 				}
 			}
 			source.setItem('');

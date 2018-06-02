@@ -26,6 +26,12 @@ To reload chat commands:
 'use strict';
 /** @typedef {GlobalRoom | GameRoom | ChatRoom} Room */
 
+/** @typedef {(query: string[], user: User, connection?: Connection) => (string | null | void)} PageHandler */
+/** @typedef {{[k: string]: PageHandler}} PageTable */
+
+/** @typedef {(this: CommandContext, target: string, room: ChatRoom | GameRoom, user: User, connection: Connection, cmd: string, message: string) => (void)} ChatHandler */
+/** @typedef {{[k: string]: ChatHandler | string | true | string[] | ChatCommands}} ChatCommands */
+
 const LINK_WHITELIST = ['*.pokemonshowdown.com', 'psim.us', 'smogtours.psim.us', '*.smogon.com', '*.pastebin.com', '*.hastebin.com'];
 
 const MAX_MESSAGE_LENGTH = 300;
@@ -39,6 +45,7 @@ const VALID_COMMAND_TOKENS = '/!';
 const BROADCAST_TOKEN = '!';
 
 const FS = require('./lib/fs');
+const Rooms = require('./rooms');
 
 let Chat = module.exports;
 
@@ -102,8 +109,11 @@ Chat.multiLinePattern = new PatternTester();
  * Load command files
  *********************************************************/
 
+/** @type {CommandContext} */
 Chat.baseCommands = undefined;
+/** @type {CommandContext} */
 Chat.commands = undefined;
+/** @type {PageTable} */
 Chat.pages = undefined;
 
 /*********************************************************
@@ -502,9 +512,7 @@ class CommandContext {
 		return true;
 	}
 	checkGameFilter() {
-		// @ts-ignore
-		if (!this.room || !this.room.game || !this.room.game.onChatMessage) return false;
-		// @ts-ignore
+		if (!this.room || !this.room.game) return false;
 		return this.room.game.onChatMessage(this.message, this.user);
 	}
 	/**
@@ -703,8 +711,8 @@ class CommandContext {
 	 * @param {?string} suppressMessage
 	 */
 	canBroadcast(ignoreCooldown, suppressMessage) {
+		if (this.room instanceof Rooms.GlobalRoom) return false;
 		if (!this.broadcasting && this.cmdToken === BROADCAST_TOKEN) {
-			// @ts-ignore
 			if (!this.pmTarget && !this.user.can('broadcast', null, this.room)) {
 				this.errorReply("You need to be voiced to broadcast this command's information.");
 				this.errorReply("To see it for yourself, use: /" + this.message.substr(1));
@@ -752,6 +760,7 @@ class CommandContext {
 			this.sendReply('|c|' + this.user.getIdentity(this.room.id) + '|' + (suppressMessage || this.message));
 		}
 		if (!ignoreCooldown && !this.pmTarget) {
+			// @ts-ignore this.broadcastMessage is initialized above in this.canBroadcast, or we don't get this far
 			this.room.lastBroadcast = this.broadcastMessage;
 			this.room.lastBroadcastTime = Date.now();
 		}
@@ -784,7 +793,11 @@ class CommandContext {
 	 * @param {User?} [targetUser]
 	 */
 	canTalk(message = null, room = null, targetUser = null) {
-		// @ts-ignore
+		if (this.room instanceof Rooms.GlobalRoom) {
+			// should never happen
+			// console.log(`Command tried to write to global: ${user.name}: ${message}`);
+			return false;
+		}
 		if (!room) room = this.room;
 		if (!targetUser && this.pmTarget) {
 			room = null;
@@ -793,11 +806,6 @@ class CommandContext {
 		let user = this.user;
 		let connection = this.connection;
 
-		if (room && room.id === 'global') {
-			// should never happen
-			// console.log(`Command tried to write to global: ${user.name}: ${message}`);
-			return false;
-		}
 		if (!user.named) {
 			connection.popup(`You must choose a name before you can talk.`);
 			return false;
@@ -902,7 +910,7 @@ class CommandContext {
 		}
 
 		if (!this.checkSlowchat(room, user)) {
-			// @ts-ignore
+			// @ts-ignore ~ The truthiness of room and room.slowchat are evaluated in checkSlowchat
 			this.errorReply("This room has slow-chat enabled. You can only talk once every " + room.slowchat + " seconds.");
 			return false;
 		}
@@ -1456,7 +1464,6 @@ Chat.getDataPokemonHTML = function (template, gen = 7, tier = '') {
 	}
 	let bst = 0;
 	for (let i in template.baseStats) {
-		// @ts-ignore
 		bst += template.baseStats[i];
 	}
 	buf += '<span style="float:left;min-height:26px">';

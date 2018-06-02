@@ -391,7 +391,6 @@ let BattleAbilities = {
 			for (let i in boost) {
 				// @ts-ignore
 				if (boost[i] < 0) {
-					// @ts-ignore
 					delete boost[i];
 					showMsg = true;
 				}
@@ -1023,7 +1022,6 @@ let BattleAbilities = {
 			for (let i in boost) {
 				// @ts-ignore
 				if (boost[i] < 0) {
-					// @ts-ignore
 					delete boost[i];
 					showMsg = true;
 				}
@@ -1156,7 +1154,6 @@ let BattleAbilities = {
 			for (let i in boost) {
 				// @ts-ignore
 				if (boost[i] < 0) {
-					// @ts-ignore
 					delete boost[i];
 					showMsg = true;
 				}
@@ -2269,12 +2266,10 @@ let BattleAbilities = {
 		},
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, pokemon, target, move) {
-			// @ts-ignore
-			if (move.hasParentalBond && ++move.hit > 1) return this.chainModify(0.25);
+			if (move.hasParentalBond && move.hit && ++move.hit > 1) return this.chainModify(0.25);
 		},
 		onSourceModifySecondaries: function (secondaries, target, source, move) {
-			// @ts-ignore
-			if (move.hasParentalBond && move.id === 'secretpower' && move.hit < 2) {
+			if (move.hasParentalBond && move.id === 'secretpower' && move.hit && move.hit < 2) {
 				// hack to prevent accidentally suppressing King's Rock/Razor Fang
 				return secondaries.filter(effect => effect.volatileStatus === 'flinch');
 			}
@@ -2880,7 +2875,6 @@ let BattleAbilities = {
 			if (move.secondaries) {
 				this.debug('doubling secondary chance');
 				for (const secondary of move.secondaries) {
-					// @ts-ignore
 					secondary.chance *= 2;
 				}
 			}
@@ -3530,8 +3524,7 @@ let BattleAbilities = {
 			if (effect && effect.id === 'toxicspikes') return;
 			if (status.id === 'slp' || status.id === 'frz') return;
 			this.add('-activate', target, 'ability: Synchronize');
-			// @ts-ignore
-			source.trySetStatus(status, target, {status: status.id, id: 'synchronize'});
+			source.trySetStatus(status, target, Object.assign({status: status.id}, this.effect));
 		},
 		id: "synchronize",
 		name: "Synchronize",
@@ -3981,7 +3974,6 @@ let BattleAbilities = {
 			for (let i in boost) {
 				// @ts-ignore
 				if (boost[i] < 0) {
-					// @ts-ignore
 					delete boost[i];
 					showMsg = true;
 				}

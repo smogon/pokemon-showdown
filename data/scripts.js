@@ -133,6 +133,7 @@ let BattleScripts = {
 	 */
 	useMove: function (move, pokemon, target, sourceEffect, zMove) {
 		pokemon.moveThisTurnResult = undefined;
+		/** @type {boolean? | undefined} */ // Typescript bug
 		let oldMoveResult = pokemon.moveThisTurnResult;
 		let moveResult = this.useMoveInner(move, pokemon, target, sourceEffect, zMove);
 		if (oldMoveResult === pokemon.moveThisTurnResult) pokemon.moveThisTurnResult = moveResult;

@@ -12,7 +12,7 @@ let Monitor = require('../monitor');
 
 let LoginServer = require('../loginserver');
 
-type RoomBattle = AnyObject;
+// type RoomBattle = AnyObject;
 
 let Verifier = require('../verifier');
 let Dnsbl = require('../dnsbl');
@@ -133,9 +133,9 @@ interface SelfEffect {
 }
 
 interface SecondaryEffect {
+	chance: number
 	ability?: Ability
 	boosts?: SparseBoostsTable
-	chance?: number
 	dustproof?: boolean
 	self?: SelfEffect
 	status?: string
@@ -539,7 +539,7 @@ interface Move extends Effect, MoveData {
 	zPowered?: boolean
 }
 
-type TemplateAbility = {0: string, 1?: string, H?: string, S?: string}
+type TemplateAbility = {[key: string]: string | undefined, [index: number]: string | undefined, 0: string, 1?: string, H?: string, S?: string}
 
 interface TemplateData {
 	abilities: TemplateAbility

@@ -239,6 +239,16 @@ class RoomGame {
 	onUpdateConnection(user, connection) {
 		this.onConnect(user, connection);
 	}
+
+	/**
+	 * Called for every message a user sends while this game is active
+	 * @param {string} message
+	 * @param {User} user
+	 * @return {(string | false)}
+	 */
+	onChatMessage(message, user) {
+		return false;
+	}
 }
 
 // these exports are traditionally attached to rooms.js

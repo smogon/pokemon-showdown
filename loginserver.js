@@ -46,7 +46,8 @@ class LoginServerInstance {
 		this.requestQueue = [];
 
 		this.requestTimer = null;
-		this.requestTimeoutTimer = null;
+		// @ts-ignor~e Typescript bug? No idea why only this
+		// this.requestTimeoutTimer = null;
 		/** @type {string} */
 		this.requestLog = '';
 		this.lastRequest = 0;

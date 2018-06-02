@@ -882,6 +882,7 @@ class Battle extends Dex.ModdedDex {
 	 * @param {Effect} [effect]
 	 * @param {any} [relayVar]
 	 * @param {boolean} [onEffect]
+	 * @return {any}
 	 */
 	priorityEvent(eventid, target, source, effect, relayVar, onEffect) {
 		return this.runEvent(eventid, target, source, effect, relayVar, onEffect, true);
