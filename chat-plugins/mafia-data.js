@@ -149,8 +149,6 @@ exports.alignments = Object.assign(Object.create(null), {
 		],
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
 	},
-	// Mermaid theme doesn't seem balanced enough to officially recognise. (Mermaid faction)
-	// Would like to discuss Terrorist theme too. (Terrorist faction)
 	solo: {
 		// Special alignment for all roles that are on their own.
 		name: `Solo`,
