@@ -602,13 +602,17 @@ exports.commands = {
 		autostart: function (target, room, user) {
 			if (!this.can('minigame', null, room)) return;
 			if (!room.game || room.game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
+			if (Tools.toId(target) === 'off') {
+				this.addModAction(`${user.name} has turned off UNO autostart timer.`);
+				clearTimeout(room.game.autostartTimer);
+				return;
+			}
 			const amount = parseInt(target);
 			if (!amount || amount < 30 || amount > 600) return this.errorReply("The amount must be a number between 30 and 600.");
 			if (room.game.state !== 'signups') return this.errorReply("The game of UNO has already started.");
 			if (room.game.autostartTimer) clearTimeout(room.game.autostartTimer);
 			room.game.autostartTimer = setTimeout(room.game.onStart, amount * 1000);
 			this.addModAction(`${user.name} has set the autostart timer to ${amount} seconds.`);
-			this.modlog('UNO AUTOSTART', null, `${amount} seconds.`);
 		},
 
 		dq: 'disqualify',
