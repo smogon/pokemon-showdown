@@ -140,7 +140,7 @@ exports.alignments = Object.assign(Object.create(null), {
 	hypnotist: {
 		name: `Hypnotist`,
 		plural: `Hypnotists`,
-		id: `Hypnotists`,
+		id: `hypnotist`,
 		color: `#A26`,
 		memo: [
 			`Factional Communication: If there are other Hypnotist-aligned players, you may PM them during the game.`,
@@ -454,7 +454,7 @@ exports.roles = Object.assign(Object.create(null), {
 	pl: `pretty_lady`,
 	pretty_lady: {
 		name: `Pretty Lady`,
-		id: `pretty_lady`,
+		id: `prettylady`,
 		memo: [`Pretty Lady: During the Night, you may PM the host the name of another player. This player won't be able to use an action this Night. If you target a Werewolf performing a kill, you redirect its kill onto you.`],
 	},
 	pi: `private_investigator`,
@@ -475,8 +475,8 @@ exports.roles = Object.assign(Object.create(null), {
 		memo: [`Pseudojester: You are only able to win if you get lynched. You will be aligned with the player who placed the last lynch.`],
 	},
 	pseudolyncher: {
-		name: `Pseudojester`,
-		id: `pseudojester`,
+		name: `Pseudolyncher`,
+		id: `pseudolyncher`,
 		memo: [`Pseudolyncher: You are only able to win if you get your target lynched. You will be aligned with the alignment of this player.`],
 	},
 	psychiatrist: {
@@ -962,7 +962,7 @@ exports.themes = Object.assign(Object.create(null), {
 		11: `Mafia Goon, Mafia Pretty Lady, Bulletproof Werewolf, Role Cop, Doctor, Pretty Lady, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		12: `Mafia Goon, Mafia Pretty Lady, Bulletproof Werewolf, Role Cop, Doctor, Pretty Lady, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		13: `Mafia Goon, Mafia Pretty Lady, Bulletproof Werewolf, Role Cop, Doctor, Pretty Lady, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
-		14: `Mafia Goon, Mafia Goon, Mafia Pretty Lady, Bulletproof Werewolf, Role Cop, Doctor, Pretty Lady, Jailkeeper, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		14: `Mafia Goon, Mafia Goon, Mafia Pretty Lady, Bulletproof Werewolf, Role Cop, Doctor, Pretty Lady, Jailkeeper, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		15: `Mafia Goon, Mafia Role Cop, Mafia Pretty Lady, Bulletproof Werewolf One-Shot Strongman, Role Cop, Doctor, Doctor, Pretty Lady, Jailkeeper, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		16: `Mafia Goon, Mafia Role Cop, Mafia Pretty Lady, Bulletproof Werewolf One-Shot Strongman, Role Cop, Doctor, Doctor, Pretty Lady, Jailkeeper, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		17: `Mafia Goon, Mafia Role Cop, Mafia Pretty Lady, Bulletproof Werewolf One-Shot Strongman, Role Cop, Doctor, Doctor, Pretty Lady, Jailkeeper, One-Shot Vigilante, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
