@@ -45,7 +45,6 @@ const VALID_COMMAND_TOKENS = '/!';
 const BROADCAST_TOKEN = '!';
 
 const FS = require('./lib/fs');
-const Rooms = require('./rooms');
 
 let Chat = module.exports;
 
