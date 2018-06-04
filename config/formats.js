@@ -428,7 +428,7 @@ let Formats = [
 		mod: 'gen7',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
 		banlist: [
-			'Gengar-Mega', 'Mawile-Mega', 'Medicham-Mega', 'Shedinja', 'Arena Trap', 'Shadow Tag', 'Deep Sea Scale',
+			'Carvanha', 'Gengar-Mega', 'Mawile-Mega', 'Medicham-Mega', 'Shedinja', 'Arena Trap', 'Shadow Tag', 'Deep Sea Scale',
 			'Deep Sea Tooth', 'Eevium Z', 'Eviolite', 'Light Ball', 'Thick Club', 'Baton Pass',
 		],
 		onModifyTemplate: function (template, target, source) {
