@@ -1233,9 +1233,8 @@ const commands = {
 			let targetUser = this.targetUser;
 			if (!targetUser || !targetUser.connected) return this.errorReply(`The user "${this.targetUsername}" was not found.`);
 			if (!room.users[targetUser.userid]) return this.errorReply(`${targetUser.name} is not in this room, and cannot be hosted.`);
-			if (!user.can('mute', null, room) && !user.can('broadcast', null, room)) return this.errorReply(`/mafia host - Access denied.`);
-			if (!user.can('mute', null, room) && targetUser.userid !== user.userid) return this.errorReply(`/mafia host - Access denied for hosting users other than yourself.`);
-
+			if (!user.can('broadcast', null, room)) return this.errorReply(`/mafia host - Access denied.`);
+			
 			room.game = new MafiaTracker(room, targetUser);
 
 			const queueIndex = hostQueue.indexOf(targetUser.userid);
@@ -1247,31 +1246,31 @@ const commands = {
 			room.add(`|c:|${(Math.floor(Date.now() / 1000))}|~|**Mafiasignup!**`).update();
 			this.modlog('MAFIAHOST', targetUser, null, {noalts: true, noip: true});
 		},
-		hosthelp: [`/mafia host [user] - Create a game of Mafia with [user] as the host. Requires + % @ * # & ~, voice can only host themselves.`],
+		hosthelp: [`/mafia host [user] - Create a game of Mafia with [user] as the host. Requires + % @ * # & ~`],
 
 		q: 'queue',
 		queue: function (target, room, user) {
 			if (!room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (room.id !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
-			const args = target.split(',');
-			if (['forceadd', 'add', 'remove', 'del', 'delete'].includes(toId(args[0]))) {
-				if (!user.can('broadcast', null, room)) return this.errorReply(`/mafia ${toId(args[0])} - Access denied.`);
+			const args = target.split(',').map(toId);
+			if (['forceadd', 'add', 'remove', 'del', 'delete'].includes(args[0])) {
+				if (!user.can('broadcast', null, room)) return this.errorReply(`/mafia queue ${args[0]} - Access denied.`);
 			} else {
 				if (!this.runBroadcast()) return false;
 			}
-			switch (toId(args[0])) {
+			switch (args[0]) {
 			case 'forceadd':
 			case 'add':
-				let targetUser = Users(toId(args[1]));
-				if ((!targetUser || !targetUser.connected) && toId(args[0]) !== 'forceadd') return this.errorReply(`User ${args[1]} not found. To forcefully add the user to the queue, use /mafia queue forceadd, ${args[1]}`);
-				if (hostQueue.includes(toId(args[1]))) return this.errorReply(`User ${args[1]} is already on the host queue.`);
-				hostQueue.push(toId(args[1]));
+				let targetUser = Users(args[1]);
+				if ((!targetUser || !targetUser.connected) && args[0] !== 'forceadd') return this.errorReply(`User ${args[1]} not found. To forcefully add the user to the queue, use /mafia queue forceadd, ${args[1]}`);
+				if (hostQueue.includes(args[1])) return this.errorReply(`User ${args[1]} is already on the host queue.`);
+				hostQueue.push(args[1]);
 				this.sendReply(`User ${args[1]} has been added to the host queue.`);
 				break;
 			case 'del':
 			case 'delete':
 			case 'remove':
-				let index = hostQueue.indexOf(toId(args[1]));
+				let index = hostQueue.indexOf(args[1]);
 				if (index === -1) return this.errorReply(`User ${args[1]} is not on the host queue.`);
 				hostQueue.splice(index, 1);
 				this.sendReply(`User ${args[1]} has been removed from the host queue`);
