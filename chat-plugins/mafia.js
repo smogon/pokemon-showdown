@@ -1234,7 +1234,7 @@ const commands = {
 			if (!targetUser || !targetUser.connected) return this.errorReply(`The user "${this.targetUsername}" was not found.`);
 			if (!room.users[targetUser.userid]) return this.errorReply(`${targetUser.name} is not in this room, and cannot be hosted.`);
 			if (!user.can('broadcast', null, room)) return this.errorReply(`/mafia host - Access denied.`);
-			
+
 			room.game = new MafiaTracker(room, targetUser);
 
 			const queueIndex = hostQueue.indexOf(targetUser.userid);
@@ -1964,12 +1964,12 @@ const commands = {
 			}
 			if (!targetRoom.game || targetRoom.game.gameid !== 'mafia') return user.sendTo(targetRoom, `|error|There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (targetRoom.game);
-			if (!user.can('mute', null, targetRoom) && game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia end - Access denied.`);
+			if (!user.can('broadcast', null, targetRoom) && game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia end - Access denied.`);
 			game.end();
 			this.room = targetRoom;
 			this.modlog('MAFIAEND', null);
 		},
-		endhelp: [`/mafia end - End the current game of mafia. Requires host % @ * # & ~`],
+		endhelp: [`/mafia end - End the current game of mafia. Requires host + % @ * # & ~`],
 
 		win: function (target, room, user) {
 			if (!room || !room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
