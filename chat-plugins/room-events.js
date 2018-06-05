@@ -49,23 +49,13 @@ exports.commands = {
 			const eventId = toId(eventName);
 			if (!eventId) return this.errorReply("Event names must contain at least one alphanumerical character.");
 
-			if (room.events[eventId] && this.cmd === 'add') {
-				this.errorReply(`There's already an event named '${eventId}'; to replace it, use /roomevents edit`);
-				this.sendReplyBox(Chat.html`<code>/roomevents edit ${room.events[eventId].eventName} | ${room.events[eventId].date} | ${room.events[eventId].desc}</code>`);
-				return;
-			} else if (this.cmd === 'edit' && !room.events[eventId]) {
-				this.errorReply(`There's no event named '${eventId}'; to add one, use /roomevents add`);
-				this.sendReplyBox(Chat.html`<code>/roomevents add ${eventName} | ${date} | ${desc}</code>`);
-				return;
-			}
-
+			this.privateModAction(`(${user.name} ${room.events[eventId] ? "edited the" : "added a"} roomevent titled "${eventName}".)`);
+			this.modlog('ROOMEVENT', null, `${room.events[eventId] ? "edited" : "added"} "${eventName}"`);
 			room.events[eventId] = {
 				eventName: eventName,
 				date: date,
 				desc: desc,
 			};
-			this.privateModAction(`(${user.name} ${this.cmd}ed ${this.cmd === 'add' ? 'a' : 'the'} roomevent titled "${eventName}".)`);
-			this.modlog('ROOMEVENT', null, `${this.cmd}ed "${eventName}"`);
 
 			room.chatRoomData.events = room.events;
 			Rooms.global.writeChatRoomData();
