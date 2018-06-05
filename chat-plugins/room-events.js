@@ -32,7 +32,7 @@ exports.commands = {
 		edit: 'add',
 		add: function (target, room, user) {
 			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
-			if (!this.can('declare', null, room)) return false;
+			if (!this.can('ban', null, room)) return false;
 			if (!room.events) room.events = Object.create(null);
 			let [eventName, date, ...desc] = target.split(target.includes('|') ? '|' : ',');
 
@@ -73,7 +73,7 @@ exports.commands = {
 		delete: 'remove',
 		remove: function (target, room, user) {
 			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
-			if (!this.can('declare', null, room)) return false;
+			if (!this.can('ban', null, room)) return false;
 			if (!room.events || Object.keys(room.events).length === 0) {
 				return this.errorReply("There are currently no planned upcoming events for this room to remove.");
 			}
