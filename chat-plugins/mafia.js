@@ -13,6 +13,11 @@
  * @property {string} image
  */
 /**
+ * @typedef {Object} MafiaParsedRole
+ * @property {MafiaRole} role
+ * @property {string[]} problems
+ */
+/**
  * @typedef {Object} MafiaLynch
  * @property {number} count
  * @property {number} lastLynch
@@ -32,11 +37,6 @@
  * @property {NodeJS.Timer?} timer
  * @property {string} discardsHtml
  * @property {string[]} waitingPick
- */
-/**
- * @typedef {Object} MafiaParsedRole
- * @property {MafiaRole} role
- * @property {string[]} problems
  */
 /**
  * @typedef {Object} MafiaIDEAplayerData
@@ -984,7 +984,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.phase = 'IDEApicking';
 		this.updatePlayers();
 
-		this.sendRoom(`IDEA roles have been distributed. You will have ${IDEA_TIMER / 1000} seconds to make your picks.`, {declare: true});
+		this.sendRoom(`${this.IDEA.data.name} roles have been distributed. You will have ${IDEA_TIMER / 1000} seconds to make your picks.`, {declare: true});
 		this.IDEA.timer = setTimeout(() => { this.ideaFinalizePicks(); }, IDEA_TIMER);
 
 		return ``;
