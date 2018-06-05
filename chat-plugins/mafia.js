@@ -391,8 +391,10 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 		/** @type {string[]} */
 		let problems = [];
+		/** @type {string[]} */
 		let alignments = [];
-		let cache = {};
+		/** @type {{[k: string]: MafiaRole}} */
+		let cache = Object.create(null);
 		for (const string of roles) {
 			const roleId = string.toLowerCase().replace(/[^\w\d\s]/g, '');
 			if (roleId in cache) {
@@ -401,7 +403,7 @@ class MafiaTracker extends Rooms.RoomGame {
 				const role = parseRole(string);
 				if (role.problems.length) problems = problems.concat(role.problems);
 				if (alignments.indexOf(role.role.alignment) === -1) alignments.push(role.role.alignment);
-				cache[roleId] = role;
+				cache[roleId] = role.role;
 				this.originalRoles.push(role.role);
 			}
 		}
