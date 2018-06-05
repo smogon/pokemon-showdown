@@ -142,9 +142,8 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 function parseRole(roleString) {
 	let target = roleString.toLowerCase().replace(/[^\w\d\s]/g, '').split(' ');
 	/** @type {MafiaRole} */
-
 	let role = {
-		name: roleString.split(' ').map(p => { return toId(p) === 'solo' ? '' : p; }).join(' '),
+		name: roleString.split(' ').map(p => toId(p) === 'solo' ? '' : p).join(' '),
 		safeName: '', // MAKE SURE THESE ARE SET BELOW
 		id: '',
 		image: '',
@@ -156,7 +155,7 @@ function parseRole(roleString) {
 	role.id = toId(role.name);
 	for (let key in MafiaData.roles) {
 		if (key.includes('_')) {
-			let roleKey = target.slice().map(p => toId(p)).join('_');
+			let roleKey = target.slice().map(toId).join('_');
 			if (roleKey.includes(key)) {
 				let originalKey = key;
 				if (typeof MafiaData.roles[key] === 'string') key = MafiaData.roles[key];
@@ -184,7 +183,7 @@ function parseRole(roleString) {
 	// Add modifiers
 	for (let key in MafiaData.modifiers) {
 		if (key.includes('_')) {
-			let roleKey = target.slice().map(p => toId(p)).join('_');
+			let roleKey = target.slice().map(toId).join('_');
 			if (roleKey.includes(key)) {
 				if (typeof MafiaData.modifiers[key] === 'string') key = MafiaData.modifiers[key];
 				if (!role.image && MafiaData.modifiers[key].image) role.image = MafiaData.modifiers[key].image;
@@ -358,7 +357,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	 * @return {void}
 	 */
 	setRoles(user, roleString, force = false) {
-		let roles = (/** @type {string[]} */roleString.split(',').map(x => { return x.trim(); }));
+		let roles = (/** @type {string[]} */roleString.split(',').map(x => x.trim()));
 		if (roles.length < this.playerCount) {
 			return user.sendTo(this.room, `|error|You have not provided enough roles for the players.`);
 		} else if (roles.length > this.playerCount) {
@@ -384,7 +383,7 @@ class MafiaTracker extends Rooms.RoomGame {
 				};
 			});
 			this.roles = this.originalRoles.slice();
-			this.originalRoleString = this.originalRoles.slice().map(r => { return `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`; }).join(', ');
+			this.originalRoleString = this.originalRoles.slice().map(r => `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`).join(', ');
 			this.roleString = this.originalRoleString;
 			return;
 		}
@@ -413,7 +412,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			return user.sendTo(this.room, `|error|To forcibly set the roles, use /mafia forcesetroles`);
 		}
 		this.roles = this.originalRoles.slice();
-		this.originalRoleString = this.originalRoles.slice().map(r => { return `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`; }).join(', ');
+		this.originalRoleString = this.originalRoles.slice().map(r => `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`).join(', ');
 		this.roleString = this.originalRoleString;
 		this.phase = 'locked';
 		this.updatePlayers();
@@ -426,19 +425,27 @@ class MafiaTracker extends Rooms.RoomGame {
 	 */
 	start(user) {
 		if (!user) return;
-		if (this.phase !== 'locked') {
+		if (this.phase !== 'locked' && this.phase !== 'IDEAlocked') {
 			if (this.phase === 'signups') return user.sendTo(this.room, `You need to close the signups first.`);
+			if (this.phase === 'IDEApicking') return user.sendTo(this.room, `You must wait for IDEA picks to finish before starting.`);
 			return user.sendTo(this.room, `The game is already started!`);
 		}
 		if (this.playerCount < 2) return user.sendTo(this.room, `You need at least 2 players to start.`);
-		if (!Object.keys(this.roles).length) return user.sendTo(this.room, `You need to set the roles before starting.`);
-		if (Object.keys(this.roles).length < this.playerCount) return user.sendTo(this.room, `You have not provided enough roles for the players.`);
+		if (this.phase === 'IDEAlocked') {
+			for (const p in this.players) {
+				if (!this.players[p].role) return user.sendTo(this.room, `|error|Not all players have a role.`);
+			}
+		} else {
+			if (!Object.keys(this.roles).length) return user.sendTo(this.room, `You need to set the roles before starting.`);
+			if (Object.keys(this.roles).length < this.playerCount) return user.sendTo(this.room, `You have not provided enough roles for the players.`);
+		}
 		this.started = true;
 		this.played = Object.keys(this.players);
 		this.sendRoom(`The game of ${this.title} is starting!`, {declare: true});
 		this.played.push(this.hostid);
 		this.distributeRoles();
 		this.day(0, true);
+		if (this.IDEA.data) this.room.add(`|html|<details><summary>IDEA discards:</summary>${this.IDEA.discardsHtml}</details>`).update();
 	}
 
 	/**
@@ -928,8 +935,8 @@ class MafiaTracker extends Rooms.RoomGame {
 
 		this.IDEA.data = MafiaData.IDEAs[moduleName];
 		if (typeof this.IDEA.data === 'string') this.IDEA.data = MafiaData.IDEAs[this.IDEA.data];
-		if (typeof this.IDEA.data !== 'object') return false;
 		if (!this.IDEA.data) return user.sendTo(this.room, `|error|${moduleName} is not a valid IDEA.`);
+		if (typeof this.IDEA.data !== 'object') return this.sendRoom(`Invalid alias for IDEA ${moduleName}. Please report this to .`);
 		return this.ideaDistributeRoles(user);
 	}
 
@@ -968,7 +975,11 @@ class MafiaTracker extends Rooms.RoomGame {
 				player.IDEA.picks[pick] = null;
 				this.IDEA.waitingPick.push(p);
 			}
+			const u = Users(p);
+			// @ts-ignore guaranteed at this point
+			if (u && u.connected) u.send(`>${this.room.id}\n|notify|Pick your role in the IDEA module.`);
 		}
+
 		this.phase = 'IDEApicking';
 		this.updatePlayers();
 
@@ -989,7 +1000,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (!this.IDEA || !this.IDEA.data) return this.sendRoom(`Trying to pick an IDEA role with no module running, target: ${JSON.stringify(selection)}. Please report this to a mod.`);
 		const player = this.players[user.userid];
 		if (!player.IDEA) return this.sendRoom(`Trying to pick an IDEA role with no player IDEA object, user: ${user.userid}. Please report this to a mod.`);
-		selection = selection.map(item => toId(item));
+		selection = selection.map(toId);
 		if (selection.length === 1 && this.IDEA.data.picks.length === 1) selection = [this.IDEA.data.picks[0], selection[0]];
 		if (selection.length !== 2) return user.sendTo(this.room, `|error|Invalid selection.`);
 
@@ -998,7 +1009,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		// ['alignment', 'alien']
 		// ['selection', ''] deselects
 		if (selection[1]) {
-			const roleIndex = player.IDEA.choices.map(choice => toId(choice)).indexOf(selection[1]);
+			const roleIndex = player.IDEA.choices.map(toId).indexOf(selection[1]);
 			if (roleIndex === -1) return user.sendTo(this.room, `|error|${selection[1]} is not an available role, perhaps it is already selected?`);
 			selection[1] = player.IDEA.choices.splice(roleIndex, 1)[0];
 		} else {
@@ -1065,49 +1076,23 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 		this.IDEA.discardsHtml = `<b>Discards:</b><br />`;
 		for (const p of Object.keys(this.players).sort()) {
-			// @ts-ignore guaranteed above
-			this.IDEA.discardsHtml += `<b>${this.players[p].safeName}:</b> ${this.players[p].IDEA.choices.join(', ')}<br />`;
+			const IDEA = this.players[p].IDEA;
+			if (!IDEA) return this.sendRoom(`No IDEA data for player ${p} when finalising IDEAs. Please report this to a mod.`);
+			this.IDEA.discardsHtml += `<b>${this.players[p].safeName}:</b> ${IDEA.choices.join(', ')}<br />`;
 		}
 
 		this.phase = 'IDEAlocked';
-		if (randed.length) this.sendRoom(`${randed.join(', ')} didn't pick.`, {declare: true});
+		if (randed.length) this.sendRoom(`${randed.join(', ')} did not pick a role in time and were randomly assigned one.`, {declare: true});
 		this.sendRoom(`IDEA picks are locked!`, {declare: true});
 		this.sendRoom(`To start, use /mafia start, or to reroll use /mafia ideareroll`);
 		this.updatePlayers();
 	}
 
 	/**
-	 *
-	 * @param {User} user
-	 */
-	ideaStart(user) {
-		if (this.phase !== 'IDEAlocked') {
-			return user.sendTo(this.room, `|error|The game does not have IDEA roles set.`);
-		}
-		for (const p in this.players) {
-			if (!this.players[p].role) return user.sendTo(this.room, `|error|Not all players have a role.`);
-		}
-		this.started = true;
-		this.played = Object.keys(this.players);
-		this.sendRoom(`The game of ${this.title} is starting!`, {declare: true});
-		this.played.push(this.hostid);
-
-		for (const p in this.players) {
-			let u = Users(p);
-			// @ts-ignore guaranteed at this point
-			if (u && u.connected) u.send(`>${this.room.id}\n|notify|Your role is ${this.players[p].role.safeName}.`);
-		}
-
-		this.day(0, true);
-
-		this.room.add(`|html|<details><summary>IDEA discards:</summary>${this.IDEA.discardsHtml}</details>`).update();
-	}
-
-	/**
 	 * @return {void}
 	 */
 	sendPlayerList() {
-		this.room.add(`|c:|${(Math.floor(Date.now() / 1000))}|~|**Players (${this.playerCount})**: ${Object.keys(this.players).map(p => { return this.players[p].name; }).join(', ')}`).update();
+		this.room.add(`|c:|${(Math.floor(Date.now() / 1000))}|~|**Players (${this.playerCount})**: ${Object.keys(this.players).map(p => this.players[p].name).join(', ')}`).update();
 	}
 
 	/**
@@ -1140,7 +1125,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	 * @return {void}
 	 */
 	updateRoleString() {
-		this.roleString = this.roles.slice().map(r => { return `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`; }).join(', ');
+		this.roleString = this.roles.slice().map(r => `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`).join(', ');
 	}
 
 	/**
@@ -1320,7 +1305,7 @@ const pages = {
 		let buf = `|title|${game.title}\n|pagehtml|<div class="pad broadcast-blue">`;
 		buf += `<button class="button" name="send" value="/join view-mafia-${room.id}" style="float:left"><i class="fa fa-refresh"></i> Refresh</button>`;
 		buf += `<br/><br/><h1 style="text-align:center;">${game.title}</h1><h3>Host: ${game.host}</h3>`;
-		buf += `<p style="font-weight:bold;">Players (${game.playerCount}): ${Object.keys(game.players).sort().map(p => { return game.players[p].safeName; }).join(', ')}</p><hr/>`;
+		buf += `<p style="font-weight:bold;">Players (${game.playerCount}): ${Object.keys(game.players).sort().map(p => game.players[p].safeName).join(', ')}</p><hr/>`;
 		if (isPlayer && game.phase === 'IDEApicking') {
 			buf += `<p><b>IDEA information:</b><br />`;
 			const IDEA = game.players[user.userid].IDEA;
@@ -1348,7 +1333,7 @@ const pages = {
 			for (const role of IDEA.originalChoices) {
 				const roleObject = parseRole(role).role;
 				buf += `<details><summary>${role}</summary>`;
-				buf += `<table><tr><td style="text-align:center;"><td style="text-align:left;width:100%"><ul>${roleObject.memo.map(m => { return `<li>${m}</li>`; }).join('')}</ul></td></tr></table>`;
+				buf += `<table><tr><td style="text-align:center;"><td style="text-align:left;width:100%"><ul>${roleObject.memo.map(m => `<li>${m}</li>`).join('')}</ul></td></tr></table>`;
 				buf += `</details>`;
 			}
 			buf += `</p></details></p>`;
@@ -1372,7 +1357,7 @@ const pages = {
 			if (role) {
 				buf += `<h3>${game.players[user.userid].safeName}, you are a ${game.players[user.userid].getRole()}</h3>`;
 				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Role Details</summary>`;
-				buf += `<table><tr><td style="text-align:center;">${role.image || `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`}</td><td style="text-align:left;width:100%"><ul>${role.memo.map(m => { return `<li>${m}</li>`; }).join('')}</ul></td></tr></table>`;
+				buf += `<table><tr><td style="text-align:center;">${role.image || `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`}</td><td style="text-align:left;width:100%"><ul>${role.memo.map(m => `<li>${m}</li>`).join('')}</ul></td></tr></table>`;
 				if (!['town', 'solo'].includes(role.alignment)) buf += `<p><span style="font-weight:bold">Partners</span>: ${game.getPartners(role.alignment, game.players[user.userid])}</p>`;
 				buf += `</details></p>`;
 			}
@@ -1382,7 +1367,7 @@ const pages = {
 			let plur = game.getPlurality();
 			for (const key of Object.keys(game.players).concat((game.enableNL ? ['nolynch'] : []))) {
 				if (game.lynches[key]) {
-					buf += `<p style="font-weight:bold">${game.lynches[key].count}${plur === key ? '*' : ''} ${game.players[key] ? game.players[key].safeName : 'No Lynch'} (${game.lynches[key].lynchers.map(a => { return game.players[a] ? game.players[a].safeName : a; }).join(', ')}) `;
+					buf += `<p style="font-weight:bold">${game.lynches[key].count}${plur === key ? '*' : ''} ${game.players[key] ? game.players[key].safeName : 'No Lynch'} (${game.lynches[key].lynchers.map(a => game.players[a] ? game.players[a].safeName : a).join(', ')}) `;
 				} else {
 					buf += `<p style="font-weight:bold">0 ${game.players[key] ? game.players[key].safeName : 'No Lynch'} `;
 				}
@@ -1435,7 +1420,7 @@ const pages = {
 			buf += `<h3>Setting the roles</h3>`;
 			buf += `<p>To set the roles, use /mafia setroles [comma seperated list of roles] in ${room.title}.</p>`;
 			buf += `<p>The following key words determine a role's alignment (If none are found, the default alignment is town):</p>`;
-			buf += `<p style="font-weight:bold">${Object.keys(MafiaData.alignments).map(a => { return `<span style="color:${MafiaData.alignments[a].color || '#FFF'}">${MafiaData.alignments[a].name}</span>`; }).join(', ')}</p>`;
+			buf += `<p style="font-weight:bold">${Object.keys(MafiaData.alignments).map(a => `<span style="color:${MafiaData.alignments[a].color || '#FFF'}">${MafiaData.alignments[a].name}</span>`).join(', ')}</p>`;
 			buf += `<p>If you have roles that have conflicting alignments or base roles, you can use /mafia forcesetroles [comma seperated list of roles] to forcibly set the roles.</p>`;
 			buf += `<p>Please note that you will have to PM all the players their alignment, partners (if any), and other information about their role because the server will not provide it.</p>`;
 			buf += `<hr/></details></p>`;
@@ -1668,7 +1653,7 @@ const commands = {
 		ideahelp: [
 			`/mafia idea [idea] - starts the IDEA module [idea]. Requires % @ * # & ~`,
 			`/mafia ideareroll - rerolls the IDEA module. Requires host % @ * # & ~`,
-			`/mafia ideapick [for], [role] - selects a role`,
+			`/mafia ideapick [selection], [role] - selects a role`,
 			`/mafia ideadiscards - shows the discarded roles`,
 		],
 
@@ -1685,7 +1670,6 @@ const commands = {
 			const game = /** @type {MafiaTracker} */ (targetRoom.game);
 			if (!(user.userid in game.players)) return user.sendTo(targetRoom, '|error|You are not a player in the game.');
 			if (game.phase !== 'IDEApicking') return user.sendTo(targetRoom, `|error|The game is not in the IDEA picking phase.`);
-			if (!targetRoom || !targetRoom.game || targetRoom.game.gameid !== 'mafia') return user.sendTo(targetRoom, `|error|There is no game of mafia running in this room.`);
 			game.ideaPick(user, args);
 		},
 
@@ -1721,11 +1705,7 @@ const commands = {
 			if (!targetRoom.game || targetRoom.game.gameid !== 'mafia') return user.sendTo(targetRoom, `|error|There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (targetRoom.game);
 			if (!user.can('mute', null, room) && game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia start - Access denied.`);
-			if (game.IDEA.data) {
-				game.ideaStart(user);
-			} else {
-				game.start(user);
-			}
+			game.start(user);
 		},
 		starthelp: [`/mafia start - Start the game of mafia. Signups must be closed. Requires host % @ * # & ~`],
 
@@ -2027,7 +2007,7 @@ const commands = {
 				return game.lynches[b].count - game.lynches[a].count;
 			});
 			for (const key of list) {
-				buf += `${game.lynches[key].count}${plur === key ? '*' : ''} ${game.players[key] ? game.players[key].safeName : 'No Lynch'} (${game.lynches[key].lynchers.map(a => { return game.players[a] ? game.players[a].safeName : a; }).join(', ')})<br />`;
+				buf += `${game.lynches[key].count}${plur === key ? '*' : ''} ${game.players[key] ? game.players[key].safeName : 'No Lynch'} (${game.lynches[key].lynchers.map(a => game.players[a] ? game.players[a].safeName : a).join(', ')})<br />`;
 			}
 			this.sendReplyBox(buf);
 		},
@@ -2053,7 +2033,7 @@ const commands = {
 			if (this.broadcasting) {
 				game.sendPlayerList();
 			} else {
-				this.sendReplyBox(`Players (${game.playerCount}): ${Object.keys(game.players).map(p => { return game.players[p].safeName; }).join(', ')}`);
+				this.sendReplyBox(`Players (${game.playerCount}): ${Object.keys(game.players).map(p => game.players[p].safeName).join(', ')}`);
 			}
 		},
 
@@ -2075,7 +2055,6 @@ const commands = {
 			if (game.closedSetup) return this.errorReply(`You cannot show roles in a closed setup.`);
 			if (!this.runBroadcast()) return false;
 			if (game.IDEA.data) {
-				// @ts-ignore guaranteed above
 				let buf = `<details><summary>IDEA roles:</summary>${game.IDEA.data.roles.join(`<br />`)}</details>`;
 				return this.sendReplyBox(buf);
 			}
@@ -2084,7 +2063,7 @@ const commands = {
 				if (a.alignment < b.alignment) return -1;
 				if (b.alignment < a.alignment) return 1;
 				return 0;
-			}).map((role) => { return role.safeName; }).join(', ');
+			}).map(role => role.safeName).join(', ');
 
 			this.sendReplyBox(`${showOrl ? `Original Rolelist: ` : `Rolelist: `}${roleString}`);
 		},
@@ -2264,18 +2243,6 @@ const commands = {
 			this.modlog('MAFIAEND', null);
 		},
 		endhelp: [`/mafia end - End the current game of mafia. Requires host % @ * # & ~`],
-
-		showrole: function (target, room, user) {
-			if (!target) return this.parse('/help mafia showrole');
-			if (!this.runBroadcast()) return false;
-			const role = parseRole(target);
-			if (role.problems.length) return this.errorReply(role.problems.join(`\n`));
-			let buf = Chat.html`<details><summary>${target}</summary>`;
-			buf += `<table><tr><td style="text-align:center;"><td style="text-align:left;width:100%"><ul>${role.role.memo.map(m => { return `<li>${m}</li>`; }).join('')}</ul></td></tr></table>`;
-			buf += `</details>`;
-			this.sendReplyBox(buf);
-		},
-		showrolehelp: [`/mafia showrole [role] - Gets information on [role].`],
 
 		win: function (target, room, user) {
 			if (!room || !room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
