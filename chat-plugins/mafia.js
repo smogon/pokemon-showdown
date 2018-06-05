@@ -965,6 +965,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.IDEA.waitingPick = [];
 		for (const p in this.players) {
 			const player = this.players[p];
+			player.role = null;
 			player.IDEA = {
 				choices: roles.splice(0, this.IDEA.data.choices),
 				originalChoices: [], // MAKE SURE TO SET THIS
