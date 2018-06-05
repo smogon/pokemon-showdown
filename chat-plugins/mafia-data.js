@@ -155,6 +155,7 @@ exports.alignments = Object.assign(Object.create(null), {
 		plural: `Solos`,
 		id: `solo`,
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-goon.png"/>`,
+		memo: [],
 	},
 });
 
