@@ -25,6 +25,8 @@ const LOGS_FILE = 'config/chat-plugins/mafia-logs.json';
 const MafiaData = require('./mafia-data.js');
 /** @type {MafiaLog} */
 let logs = {leaderboard: {}, mvps: {}, hosts: {}, plays: {}};
+/** @type {string[]} */
+let hostQueue = [];
 
 try {
 	const json = FS(LOGS_FILE).readIfExistsSync();
@@ -1231,10 +1233,12 @@ const commands = {
 			let targetUser = this.targetUser;
 			if (!targetUser || !targetUser.connected) return this.errorReply(`The user "${this.targetUsername}" was not found.`);
 			if (!room.users[targetUser.userid]) return this.errorReply(`${targetUser.name} is not in this room, and cannot be hosted.`);
-			if (!user.can('mute', null, room) && !user.can('broadcast', null, room)) return this.errorReply(`/mafia host - Access denied.`);
-			if (!user.can('mute', null, room) && targetUser.userid !== user.userid) return this.errorReply(`/mafia host - Access denied for hosting users other than yourself.`);
+			if (!user.can('broadcast', null, room)) return this.errorReply(`/mafia host - Access denied.`);
 
 			room.game = new MafiaTracker(room, targetUser);
+
+			const queueIndex = hostQueue.indexOf(targetUser.userid);
+			if (queueIndex > -1) hostQueue.splice(queueIndex, 1);
 			// @ts-ignore "Chat.pages" is possibly undefined
 			targetUser.send(`>view-mafia-${room.id}\n|init|html\n${Chat.pages.mafia([room.id], targetUser)}`);
 			this.privateModAction(`(${targetUser.name} was appointed the mafia host by ${user.name}.)`);
@@ -1242,7 +1246,63 @@ const commands = {
 			room.add(`|c:|${(Math.floor(Date.now() / 1000))}|~|**Mafiasignup!**`).update();
 			this.modlog('MAFIAHOST', targetUser, null, {noalts: true, noip: true});
 		},
-		hosthelp: [`/mafia host [user] - Create a game of Mafia with [user] as the host. Requires + % @ * # & ~, voice can only host themselves.`],
+		hosthelp: [`/mafia host [user] - Create a game of Mafia with [user] as the host. Requires + % @ * # & ~`],
+
+		q: 'queue',
+		queue: function (target, room, user) {
+			if (!room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
+			if (room.id !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
+			const args = target.split(',').map(toId);
+			if (['forceadd', 'add', 'remove', 'del', 'delete'].includes(args[0])) {
+				if (!user.can('broadcast', null, room)) return this.errorReply(`/mafia queue ${args[0]} - Access denied.`);
+			} else {
+				if (!this.runBroadcast()) return false;
+			}
+			switch (args[0]) {
+			case 'forceadd':
+			case 'add':
+				let targetUser = Users(args[1]);
+				if ((!targetUser || !targetUser.connected) && args[0] !== 'forceadd') return this.errorReply(`User ${args[1]} not found. To forcefully add the user to the queue, use /mafia queue forceadd, ${args[1]}`);
+				if (hostQueue.includes(args[1])) return this.errorReply(`User ${args[1]} is already on the host queue.`);
+				hostQueue.push(args[1]);
+				this.sendReply(`User ${args[1]} has been added to the host queue.`);
+				break;
+			case 'del':
+			case 'delete':
+			case 'remove':
+				let index = hostQueue.indexOf(args[1]);
+				if (index === -1) return this.errorReply(`User ${args[1]} is not on the host queue.`);
+				hostQueue.splice(index, 1);
+				this.sendReply(`User ${args[1]} has been removed from the host queue`);
+				break;
+			case '':
+			case 'show':
+			case 'view':
+				this.sendReplyBox(`<strong>Host Queue:</strong> ${hostQueue.join(', ')}`);
+				break;
+			default:
+				this.parse('/help mafia queue');
+			}
+		},
+		queuehelp: [
+			`/mafia queue - Shows the upcoming users who are going to host.`,
+			`/mafia queue add, (user) - Adds the user to the hosting queue. Requires: + % @ # & ~`,
+			`/mafia queue remove, (user) - Removes the user from the hosting queue. Requires: + % @ # & ~`,
+		],
+
+		qadd: 'queueadd',
+		qforceadd: 'queueadd',
+		queueforceadd: 'queueadd',
+		queueadd: function (target, room, user, connection, cmd) {
+			this.parse(`/mafia queue ${cmd.includes('force') ? `forceadd` : `add`}, ${target}`);
+		},
+
+		qdel: 'queueremove',
+		qdelete: 'queueremove',
+		qremove: 'queueremove',
+		queueremove: function (target, room, user) {
+			this.parse(`/mafia queue remove, ${target}`);
+		},
 
 		'!mafjoin': true,
 		// Typescript doesn't like "join" as the command name for some reason, so this is a hack to get around that.
@@ -1255,6 +1315,7 @@ const commands = {
 			}
 			if (!targetRoom.game || targetRoom.game.gameid !== 'mafia') return user.sendTo(targetRoom, `|error|There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (targetRoom.game);
+
 			if (!this.canTalk(null, targetRoom)) return;
 			game.join(user);
 		},
@@ -1286,7 +1347,7 @@ const commands = {
 			game.playerCap = num;
 			game.sendRoom(`Player cap has been set to ${game.playerCap}`, {declare: true});
 		},
-		playercaphelp: [`/mafia playercap [cap|none]- Limit the number of players being able to join the game. Player cap cannot be more than 20 or less than 2.`],
+		playercaphelp: [`/mafia playercap [cap|none]- Limit the number of players being able to join the game. Player cap cannot be more than 20 or less than 2. Requires: host % @ # & ~`],
 
 		'!close': true,
 		close: function (target, room, user) {
@@ -1903,12 +1964,12 @@ const commands = {
 			}
 			if (!targetRoom.game || targetRoom.game.gameid !== 'mafia') return user.sendTo(targetRoom, `|error|There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (targetRoom.game);
-			if (!user.can('mute', null, targetRoom) && game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia end - Access denied.`);
+			if (!user.can('broadcast', null, targetRoom) && game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia end - Access denied.`);
 			game.end();
 			this.room = targetRoom;
 			this.modlog('MAFIAEND', null);
 		},
-		endhelp: [`/mafia end - End the current game of mafia. Requires host % @ * # & ~`],
+		endhelp: [`/mafia end - End the current game of mafia. Requires host + % @ * # & ~`],
 
 		win: function (target, room, user) {
 			if (!room || !room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
@@ -2034,6 +2095,7 @@ const commands = {
 	mafiahelp: [
 		`Commands for the Mafia plugin:`,
 		`/mafia host [user] - Create a game of Mafia with [user] as the host. Requires + % @ * # & ~, voice can only host themselves.`,
+		`/mafia queue [add|remove|view], [user] - Add: Adds the user to the queue. Requires + % @ * # & ~. Remove: Removes the user from the queue. Requires + % @ * # & ~. View: Shows the upcoming users who are going to host.`,
 		`/mafia join - Join the game.`,
 		`/mafia leave - Leave the game. Can only be done while signups are open.`,
 		`/mafia close - Closes signups for the current game. Requires: host % @ * # & ~`,
