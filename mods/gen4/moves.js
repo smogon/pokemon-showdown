@@ -131,21 +131,11 @@ let BattleMovedex = {
 						this.add('-miss', pokemon, target);
 						return false;
 					}
-					/**@type {Move} */
-					// @ts-ignore
-					let moveData = {
-						id: 'bide',
-						name: "Bide",
-						accuracy: true,
+					Object.assign(move, {
 						damage: this.effectData.totalDamage * 2,
-						category: "Physical",
-						priority: 1,
-						flags: {contact: 1, protect: 1},
-						ignoreImmunity: true,
-						effectType: 'Move',
-						type: 'Normal',
-					};
-					this.tryMoveHit(target, pokemon, moveData);
+						beforeMoveCallback: undefined,
+					});
+					this.tryMoveHit(target, pokemon, move);
 					return false;
 				}
 				this.add('-activate', pokemon, 'move: Bide');
@@ -1318,7 +1308,6 @@ let BattleMovedex = {
 			duration: 2,
 			onResidualOrder: 0,
 			onEnd: function (side) {
-				// @ts-ignore
 				let target = side.active[this.effectData.sourcePosition];
 				if (!target.fainted) {
 					let source = this.effectData.source;

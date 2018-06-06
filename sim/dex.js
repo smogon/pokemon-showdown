@@ -64,10 +64,10 @@ const DATA_FILES = {
 const nullEffect = new Data.PureEffect({name: '', exists: false});
 
 /** @typedef {{id: string, name: string, [k: string]: any}} DexTemplate */
-/** @typedef {{[id: string]: AnyObject}} DexTable */
 
-/** @typedef {{Pokedex: DexTable, Movedex: DexTable, Statuses: DexTable, TypeChart: DexTable, Scripts: DexTable, Items: DexTable, Abilities: DexTable, FormatsData: DexTable, Learnsets: DexTable, Aliases: {[id: string]: string}, Natures: DexTable, Formats: DexTable}} DexTableData */
+/** @typedef {{Pokedex: DexTable<Template>, Movedex: DexTable<Move>, Statuses: DexTable<EffectData>, TypeChart: DexTable<TypeData>, Scripts: DexTable<AnyObject>, Items: DexTable<Item>, Abilities: DexTable<Ability>, FormatsData: DexTable<ModdedTemplateFormatsData>, Learnsets: DexTable<{learnset: {[k: string]: MoveSource[]}}>, Aliases: {[id: string]: string}, Natures: DexTable<{[l: string]: string | undefined, name: string, plus?: string, minus?: string}>, Formats: DexTable<Format>}} DexTableData */
 
+/** @type {{[k: string]: {[l: string | undefined]: string, name: string, plus?: string, minus?: string}}} */
 const BattleNatures = {
 	adamant: {name: "Adamant", plus: 'atk', minus: 'spa'},
 	bashful: {name: "Bashful"},
@@ -117,7 +117,7 @@ class ModdedDex {
 
 		/** @type {?DexTableData} */
 		this.dataCache = null;
-		/** @type {?DexTable} */
+		/** @type {?DexTable<Format>} */
 		this.formatsCache = null;
 
 		/** @type {Map<string, Template>} */
@@ -160,7 +160,7 @@ class ModdedDex {
 	get data() {
 		return this.loadData();
 	}
-	/** @return {DexTable} */
+	/** @return {DexTable<Format>} */
 	get formats() {
 		this.includeFormats();
 		// @ts-ignore
@@ -251,8 +251,7 @@ class ModdedDex {
 	 */
 	getImmunity(source, target) {
 		/** @type {string} */
-		// @ts-ignore
-		let sourceType = source.type || source;
+		let sourceType = typeof source !== 'string' ? source.type : source;
 		/** @type {string[] | string} */
 		// @ts-ignore
 		let targetTyping = target.getTypes && target.getTypes() || target.types || target;
@@ -273,8 +272,7 @@ class ModdedDex {
 	 */
 	getEffectiveness(source, target) {
 		/** @type {string} */
-		// @ts-ignore
-		let sourceType = source.type || source;
+		let sourceType = typeof source !== 'string' ? source.type : source;
 		let totalTypeMod = 0;
 		/** @type {string[] | string} */
 		// @ts-ignore
@@ -381,14 +379,16 @@ class ModdedDex {
 			}
 			if (!template.tier && !template.doublesTier && template.baseSpecies !== template.species) {
 				if (template.baseSpecies === 'Mimikyu') {
+					// @ts-ignore
 					template.tier = this.data.FormatsData[toId(template.baseSpecies)].tier;
+					// @ts-ignore
 					template.doublesTier = this.data.FormatsData[toId(template.baseSpecies)].doublesTier;
 				} else if (template.speciesid.endsWith('totem')) {
-					template.tier = this.data.FormatsData[template.speciesid.slice(0, -5)].tier;
-					template.doublesTier = this.data.FormatsData[template.speciesid.slice(0, -5)].doublesTier;
+					template.tier = this.data.FormatsData[template.speciesid.slice(0, -5)].tier || 'OU';
+					template.doublesTier = this.data.FormatsData[template.speciesid.slice(0, -5)].doublesTier || 'DOU';
 				} else {
-					template.tier = this.data.FormatsData[toId(template.baseSpecies)].tier;
-					template.doublesTier = this.data.FormatsData[toId(template.baseSpecies)].doublesTier;
+					template.tier = this.data.FormatsData[toId(template.baseSpecies)].tier || 'Illegal';
+					template.doublesTier = this.data.FormatsData[toId(template.baseSpecies)].doublesTier || 'Illegal';
 				}
 			}
 			if (!template.tier) template.tier = 'Illegal';
@@ -480,6 +480,7 @@ class ModdedDex {
 		}
 		let id = toId(name);
 		let effect;
+		let otherEffects = {reoil: 'Recoil', drain: 'Drain', zpower: 'Z Power'};
 		if (this.data.Statuses.hasOwnProperty(id)) {
 			effect = new Data.PureEffect({name}, this.data.Statuses[id]);
 		} else if (this.data.Movedex.hasOwnProperty(id) && this.data.Movedex[id].effect) {
@@ -493,10 +494,8 @@ class ModdedDex {
 			effect = new Data.PureEffect({name}, this.data.Items[id].effect);
 		} else if (this.data.Formats.hasOwnProperty(id)) {
 			effect = new Data.Format({name}, this.data.Formats[id]);
-		} else if (id === 'recoil') {
-			effect = new Data.PureEffect({name: 'Recoil', effectType: 'Recoil'});
-		} else if (id === 'drain') {
-			effect = new Data.PureEffect({name: 'Drain', effectType: 'Drain'});
+		} else if (otherEffects[id]) {
+			effect = new Data.PureEffect({name: otherEffects[id], effectType: otherEffects[id]});
 		} else {
 			effect = new Data.PureEffect({name, exists: false});
 		}
@@ -901,6 +900,7 @@ class ModdedDex {
 			if (table.hasOwnProperty(id)) {
 				if (matchType === 'pokemon') {
 					const template = table[id];
+					// @ts-ignore
 					if (template.otherFormes) {
 						matches.push('basepokemon:' + id);
 						continue;

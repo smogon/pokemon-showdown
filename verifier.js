@@ -35,7 +35,6 @@ const PM = new QueryProcessManager(module, async ({data, signature}) => {
 
 if (!PM.isParentProcess) {
 	// This is a child process!
-	// @ts-ignore
 	global.Config = require('./config/config');
 	require('./lib/repl').start('verifier', /** @param {string} cmd */ cmd => eval(cmd));
 } else {

@@ -86,7 +86,6 @@ class RandomGen2Teams extends RandomGen3Teams {
 			if (set.other.discard && pokemonPool.length + 1 > pokemonLeft) continue;
 
 			// The set also passes the randomSet limitations.
-			// @ts-ignore
 			pokemon.push(set.moveset);
 
 			// Now let's update the counters. First, the Pokémon left.

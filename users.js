@@ -101,7 +101,7 @@ function merge(user1, user2) {
  * Usage:
  *   Users.get(userid or username)
  *
- * Returns the corresponding User object, or undefined if no matching
+ * Returns the corresponding User object, or null if no matching
  * was found.
  *
  * By default, this function will track users across name changes.
@@ -115,14 +115,12 @@ function merge(user1, user2) {
  */
 function getUser(name, exactName = false) {
 	if (!name || name === '!') return null;
-	// @ts-ignore
-	if (name && name.userid) return name;
+	if (name && typeof name !== 'string') return name;
 	let userid = toId(name);
 	let i = 0;
 	if (!exactName) {
 		while (userid && !users.has(userid) && i < 1000) {
-			// @ts-ignore
-			userid = prevUsers.get(userid);
+			userid = prevUsers.get(userid) || '';
 			i++;
 		}
 	}
@@ -325,8 +323,7 @@ function isUsernameKnown(name) {
  * @param {string | User} name
  */
 function isTrusted(name) {
-	// @ts-ignore
-	if (name.trusted) return name.trusted;
+	if (typeof name !== 'string') return name.trusted || false;
 	let userid = toId(name);
 	if (userid in usergroups) return userid;
 	for (const room of Rooms.global.chatRooms) {
@@ -376,8 +373,7 @@ class Connection {
  	* @param {string} data
  	*/
 	sendTo(roomid, data) {
-		// @ts-ignore
-		if (roomid && roomid.id) roomid = roomid.id;
+		if (roomid && typeof roomid !== 'string') roomid = roomid.id;
 		if (roomid && roomid !== 'lobby') data = `>${roomid}\n${data}`;
 		Sockets.socketSend(this.worker, this.socketid, data);
 		Monitor.countNetworkUse(data.length);
@@ -522,8 +518,7 @@ class User {
 	 * @param {string} data
 	 */
 	sendTo(roomid, data) {
-		// @ts-ignore
-		if (roomid && roomid.id) roomid = roomid.id;
+		if (roomid && typeof roomid !== 'string') roomid = roomid.id;
 		if (roomid && roomid !== 'global' && roomid !== 'lobby') data = `>${roomid}\n${data}`;
 		for (const connection of this.connections) {
 			if (roomid && !connection.inRooms.has(roomid)) continue;
@@ -1256,8 +1251,7 @@ class User {
 	 * @param {Connection} connection
 	 */
 	tryJoinRoom(roomid, connection) {
-		// @ts-ignore
-		roomid = /** @type {string} */ (roomid && roomid.id ? roomid.id : roomid);
+		roomid = /** @type {string} */ (roomid && typeof roomid !== 'string' ? roomid.id : roomid);
 		let room = Rooms.search(roomid);
 		if (!room && roomid.startsWith('view-')) {
 			// it's a page!

@@ -668,7 +668,7 @@ let BattleMovedex = {
 					pokemon.removeVolatile('bidestall');
 				}
 			},
-			onBeforeMove: function (pokemon) {
+			onBeforeMove: function (pokemon, target, move) {
 				if (this.effectData.duration === 1) {
 					if (!this.effectData.totalDamage) {
 						this.add('-end', pokemon, 'Bide');
@@ -677,12 +677,12 @@ let BattleMovedex = {
 					}
 					this.add('-end', pokemon, 'Bide');
 					let target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
-					/**@type {Move} */
-					// @ts-ignore
-					let moveData = {
+					Object.assign(move, {
 						damage: this.effectData.totalDamage * 2,
-					};
-					this.moveHit(target, pokemon, 'bide', moveData);
+						beforeMoveCallback: undefined,
+						onTryHit: undefined,
+					});
+					this.moveHit(target, pokemon, 'bide', move);
 					return false;
 				}
 				this.add('-activate', pokemon, 'Bide');

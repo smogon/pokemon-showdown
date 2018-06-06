@@ -505,7 +505,7 @@ class RandomTeams extends Dex.ModdedDex {
 			// Moves with secondary effects:
 			if (move.secondary) {
 				counter['sheerforce']++;
-				// @ts-ignore
+				// @ts-ignore TypeScript bug? A SecondaryEffect's chance property should always be a number, but TypeScript thinks it could be true here, and only here
 				if (move.secondary.chance >= 20) counter['serenegrace']++;
 			}
 			// Moves with low accuracy:

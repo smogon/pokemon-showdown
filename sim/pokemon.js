@@ -60,7 +60,7 @@ class Pokemon {
 		this.moveSlots = [];
 		/**@type {MoveSlot[]} */
 		this.baseMoveSlots = [];
-		/**@type {AnyObject} */
+		/**@type {StatsTable} */
 		// @ts-ignore - null used for this.formeChange(this.baseTemplate)
 		this.baseStats = null;
 
@@ -153,7 +153,7 @@ class Pokemon {
 		this.moveThisTurnResult = undefined;
 
 		this.lastDamage = 0;
-		/**@type {?{pokemon: Pokemon, damage?: number, thisTurn: boolean, move?: string}} */
+		/**@type {?{pokemon: Pokemon, damage: number, thisTurn: boolean, move?: string}} */
 		this.lastAttackedBy = null;
 		this.usedItemThisTurn = false;
 		this.newlySwitched = false;
@@ -495,7 +495,6 @@ class Pokemon {
 		case 'allAdjacentFoes':
 			if (move.target === 'allAdjacent') {
 				for (const allyActive of this.side.active) {
-					// @ts-ignore
 					if (this.battle.isAdjacent(this, allyActive)) {
 						targets.push(allyActive);
 					}
@@ -616,6 +615,7 @@ class Pokemon {
 	/**
 	 * @param {string?} [lockedMove]
 	 * @param {boolean} [restrictData]
+	 * @return {MoveSlot[]}
 	 */
 	getMoves(lockedMove, restrictData) {
 		if (lockedMove) {
@@ -625,6 +625,10 @@ class Pokemon {
 				return [{
 					move: 'Recharge',
 					id: 'recharge',
+					pp: 0,
+					maxpp: 0,
+					disabled: false,
+					used: false,
 				}];
 			}
 			for (const moveSlot of this.moveSlots) {
@@ -632,12 +636,20 @@ class Pokemon {
 				return [{
 					move: moveSlot.move,
 					id: moveSlot.id,
+					pp: 0,
+					maxpp: 0,
+					disabled: false,
+					used: false,
 				}];
 			}
 			// does this happen?
 			return [{
 				move: this.battle.getMove(lockedMove).name,
 				id: lockedMove,
+				pp: 0,
+				maxpp: 0,
+				disabled: false,
+				used: false,
 			}];
 		}
 		let moves = [];
@@ -661,7 +673,6 @@ class Pokemon {
 				}
 			}
 			let disabled = moveSlot.disabled;
-			// @ts-ignore
 			if (moveSlot.pp <= 0 || disabled && this.side.active.length >= 2 && this.battle.targetTypeChoices(target)) {
 				disabled = true;
 			} else if (disabled === 'hidden' && restrictData) {
@@ -670,14 +681,11 @@ class Pokemon {
 			if (!disabled) {
 				hasValidMove = true;
 			}
-			moves.push({
+			moves.push(Object.assign({}, moveSlot, {
 				move: moveName,
-				id: moveSlot.id,
-				pp: moveSlot.pp,
-				maxpp: moveSlot.maxpp,
 				target: target,
 				disabled: disabled,
-			});
+			}));
 		}
 		if (hasValidMove) return moves;
 
@@ -691,7 +699,7 @@ class Pokemon {
 		let isLastActive = this.isLastActive();
 		let canSwitchIn = this.battle.canSwitch(this.side) > 0;
 		let moves = this.getMoves(lockedMove, isLastActive);
-		let data = {moves: moves.length ? moves : [{move: 'Struggle', id: 'struggle'}]};
+		let data = {moves: moves.length ? moves : [{move: 'Struggle', id: 'struggle', target: 'normal', disabled: false}]};
 
 		if (isLastActive) {
 			if (this.maybeDisabled) {
@@ -923,7 +931,7 @@ class Pokemon {
 				if (this.status === 'brn') this.modifyStat('atk', 0.5);
 			}
 			this.speed = this.stats.spe;
-			if ((!source.id && !source.effectType) || this.battle.gen <= 2) return true;
+			if ((!source.id && !source.effectType) || this.battle.gen <= 2 || this.fainted) return true;
 
 			let apparentSpecies = this.illusion ? this.illusion.template.species : template.baseSpecies; // The species the opponent sees
 			if (isPermanent) {

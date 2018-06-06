@@ -26,7 +26,6 @@ let BattleScripts = {
 		recalculateStats: function () {
 			for (let statName in this.stats) {
 				/**@type {number} */
-				// @ts-ignore
 				let stat = this.template.baseStats[statName];
 				stat = Math.floor(Math.floor(2 * stat + this.set.ivs[statName] + Math.floor(this.set.evs[statName] / 4)) * this.level / 100 + 5);
 				this.baseStats[statName] = this.stats[statName] = Math.floor(stat);
@@ -388,7 +387,6 @@ let BattleScripts = {
 
 		// Here's where self effects are applied.
 		if (moveData.self) {
-			// @ts-ignore
 			this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
 		}
 
@@ -405,10 +403,8 @@ let BattleScripts = {
 				// That means that a move that does not share the type of the target can status it.
 				// If a move that was not fire-type would exist on Gen 1, it could burn a Pokémon.
 				if (!(secondary.status && ['par', 'brn', 'frz'].includes(secondary.status) && target && target.hasType(move.type))) {
-					// @ts-ignore
 					let effectChance = Math.floor(secondary.chance * 255 / 100);
 					if (typeof secondary.chance === 'undefined' || this.randomChance(effectChance + 1, 256)) {
-						// @ts-ignore
 						this.moveHit(target, pokemon, move, secondary, true, isSelf);
 					}
 				}

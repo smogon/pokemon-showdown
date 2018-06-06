@@ -474,7 +474,7 @@ class Item extends Effect {
 		 * (e.g. Inferno Overdrive) of the Z Move this crystal allows
 		 * the use of.
 		 * undefined, if not a Z crystal.
-		 * @type {boolean | string | undefined}
+		 * @type {true | string | undefined}
 		*/
 		this.zMove = this.zMove;
 		/**
@@ -932,12 +932,12 @@ class Move extends Effect {
 		 * tracked because it often differs from the real move type.
 		 * @type {string}
 		 */
-		this.baseType = Tools.getString(this.baseType) || this.type;
+		this.baseMoveType = Tools.getString(this.baseMoveType) || this.type;
 
 		/**
 		 * Secondary effect. You usually don't want to access this
 		 * directly; but through the secondaries array.
-		 * @type {boolean  | SecondaryEffect | undefined}
+		 * @type {false | SecondaryEffect | undefined}
 		 */
 		this.secondary = this.secondary;
 

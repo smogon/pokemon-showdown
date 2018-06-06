@@ -87,20 +87,11 @@ let BattleMovedex = {
 						this.add('-miss', pokemon, target);
 						return false;
 					}
-					/**@type {Move} */
-					// @ts-ignore
-					let moveData = {
-						id: 'bide',
-						name: "Bide",
-						accuracy: 100,
+					Object.assign(move, {
 						damage: this.effectData.totalDamage * 2,
-						category: "Physical",
-						priority: 0,
-						flags: {contact: 1, protect: 1},
-						effectType: 'Move',
-						type: 'Normal',
-					};
-					this.tryMoveHit(target, pokemon, moveData);
+						beforeMoveCallback: undefined,
+					});
+					this.tryMoveHit(target, pokemon, move);
 					return false;
 				}
 				this.add('-activate', pokemon, 'move: Bide');
@@ -118,7 +109,6 @@ let BattleMovedex = {
 		damageCallback: function (pokemon, target) {
 			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && pokemon.lastAttackedBy.move && (this.getCategory(pokemon.lastAttackedBy.move) === 'Physical' || this.getMove(pokemon.lastAttackedBy.move).id === 'hiddenpower') &&
 				(!target.lastMove || target.lastMove.id !== 'sleeptalk')) {
-				// @ts-ignore
 				return 2 * pokemon.lastAttackedBy.damage;
 			}
 			return false;
@@ -378,7 +368,6 @@ let BattleMovedex = {
 		damageCallback: function (pokemon, target) {
 			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && pokemon.lastAttackedBy.move && this.getCategory(pokemon.lastAttackedBy.move) === 'Special' &&
 				this.getMove(pokemon.lastAttackedBy.move).id !== 'hiddenpower' && (!target.lastMove || target.lastMove.id !== 'sleeptalk')) {
-				// @ts-ignore
 				return 2 * pokemon.lastAttackedBy.damage;
 			}
 			return false;

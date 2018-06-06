@@ -300,7 +300,6 @@ class Side {
 		}
 		const autoChoose = !moveText;
 		/**@type {Pokemon} */
-		// @ts-ignore
 		const pokemon = this.active[index];
 
 		if (megaOrZ === true) megaOrZ = 'mega';
@@ -402,7 +401,6 @@ class Side {
 			let disabledSource = '';
 			for (const moveId of moves) {
 				if (moveId.id !== moveid) continue;
-				// @ts-ignore
 				if (!moveId.disabled) {
 					isEnabled = true;
 					break;
@@ -605,7 +603,6 @@ class Side {
 			return this.emitChoiceError(`Can't shift: You can only shift from the edge to the center`);
 		}
 		/**@type {Pokemon} */
-		// @ts-ignore
 		const pokemon = this.active[index];
 
 		this.choice.actions.push({
@@ -721,14 +718,12 @@ class Side {
 			switch (this.currentRequest) {
 			case 'move':
 				// auto-pass
-				// @ts-ignore
 				while (index < this.active.length && this.active[index].fainted) {
 					this.choosePass();
 					index++;
 				}
 				break;
 			case 'switch':
-				// @ts-ignore
 				while (index < this.active.length && !this.active[index].switchFlag) {
 					this.choosePass();
 					index++;
@@ -744,7 +739,6 @@ class Side {
 		const index = this.getChoiceIndex(true);
 		if (index >= this.active.length) return false;
 		/**@type {Pokemon} */
-		// @ts-ignore
 		const pokemon = this.active[index];
 
 		switch (this.currentRequest) {

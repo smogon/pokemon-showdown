@@ -55,7 +55,6 @@ let BattleAbilities = {
 			if (move.secondaries && move.id !== 'secretpower') {
 				this.debug('doubling secondary chance');
 				for (const secondary of move.secondaries) {
-					// @ts-ignore
 					secondary.chance *= 2;
 				}
 			}

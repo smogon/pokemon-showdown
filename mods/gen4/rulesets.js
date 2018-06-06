@@ -13,7 +13,6 @@ let BattleFormats = {
 			}
 			if (template.num === 493 && set.evs) {
 				for (let stat in set.evs) {
-					// @ts-ignore
 					if (set.evs[stat] > 100) return ["Arceus may not have more than 100 of any EVs in Generation 4."];
 				}
 			}

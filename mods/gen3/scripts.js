@@ -222,7 +222,7 @@ let BattleScripts = {
 	},
 
 	calcRecoilDamage: function (damageDealt, move) {
-		// @ts-ignore
+		if (!move.recoil) throw new TypeError(`Tried to calculate recoil damage, but move ${move.name} had no recoil data.`);
 		return this.clampIntRange(Math.floor(damageDealt * move.recoil[0] / move.recoil[1]), 1);
 	},
 };

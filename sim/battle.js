@@ -1579,7 +1579,6 @@ class Battle extends Dex.ModdedDex {
 						let template = (source.illusion || source).template;
 						if (!template.abilities) continue;
 						for (let abilitySlot in template.abilities) {
-							// @ts-ignore
 							let abilityName = template.abilities[abilitySlot];
 							if (abilityName === source.ability) {
 								// pokemon event was already run above so we don't need
@@ -1832,8 +1831,8 @@ class Battle extends Dex.ModdedDex {
 		let success = null;
 		let boosted = false;
 		for (let i in boost) {
+			/** @type {SparseBoostsTable} */
 			let currentBoost = {};
-			// @ts-ignore
 			currentBoost[i] = boost[i];
 			let boostBy = target.boostBy(currentBoost);
 			let msg = '-boost';
@@ -2799,7 +2798,6 @@ class Battle extends Dex.ModdedDex {
 			this.runMove(action.move, action.pokemon, action.targetLoc, action.sourceEffect, action.zmove);
 			break;
 		case 'megaEvo':
-			// @ts-ignore
 			this.runMegaEvo(action.pokemon);
 			break;
 		case 'beforeTurnMove': {
@@ -3367,7 +3365,7 @@ class Battle extends Dex.ModdedDex {
 	 * @param {?Pokemon} target
 	 * @param {Pokemon} pokemon
 	 * @param {string | Move} move
-	 * @param {Move} [moveData]
+	 * @param {Partial<Move>} [moveData]
 	 * @param {boolean} [isSecondary]
 	 * @param {boolean} [isSelf]
 	 * @return {number | false}

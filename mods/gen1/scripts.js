@@ -56,7 +56,6 @@ let BattleScripts = {
 				}
 				changed = true;
 				// Recalculate the modified stat
-				// @ts-ignore
 				let stat = this.template.baseStats[i];
 				stat = Math.floor(Math.floor(2 * stat + this.set.ivs[i] + Math.floor(this.set.evs[i] / 4)) * this.level / 100 + 5);
 				this.modifiedStats[i] = this.stats[i] = Math.floor(stat);
@@ -581,7 +580,6 @@ let BattleScripts = {
 		// Here's where self effects are applied.
 		let doSelf = (targetHadSub && targetHasSub) || !targetHadSub;
 		if (moveData.self && (doSelf || (moveData.self !== true && moveData.self.volatileStatus === 'partialtrappinglock'))) {
-			// @ts-ignore
 			this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
 		}
 
@@ -599,7 +597,6 @@ let BattleScripts = {
 				// If a move that was not fire-type would exist on Gen 1, it could burn a Pokémon.
 				if (!(secondary.status && ['par', 'brn', 'frz'].includes(secondary.status) && target && target.hasType(move.type))) {
 					if (secondary.chance === undefined || this.randomChance(Math.ceil(secondary.chance * 256 / 100), 256)) {
-						// @ts-ignore
 						this.moveHit(target, pokemon, move, secondary, true, isSelf);
 					}
 				}
@@ -623,10 +620,9 @@ let BattleScripts = {
 		effect = this.getEffect(effect);
 		boost = this.runEvent('Boost', target, source, effect, Object.assign({}, boost));
 		for (let i in boost) {
+			/** @type {SparseBoostsTable} */
 			let currentBoost = {};
-			// @ts-ignore
 			currentBoost[i] = boost[i];
-			// @ts-ignore
 			if (boost[i] !== 0 && target.boostBy(currentBoost)) {
 				let msg = '-boost';
 				// @ts-ignore
@@ -651,10 +647,8 @@ let BattleScripts = {
 					}
 				}
 				if (effect.effectType === 'Move') {
-					// @ts-ignore
 					this.add(msg, target, i, boost[i]);
 				} else {
-					// @ts-ignore
 					this.add(msg, target, i, boost[i], '[from] ' + effect.fullname);
 				}
 				this.runEvent('AfterEachBoost', target, source, effect, currentBoost);

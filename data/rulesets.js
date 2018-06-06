@@ -176,12 +176,9 @@ let BattleFormats = {
 
 			if (set.evs) {
 				for (let k in set.evs) {
-					// @ts-ignore
 					if (typeof set.evs[k] !== 'number' || set.evs[k] < 0) {
-						// @ts-ignore
 						set.evs[k] = 0;
 					}
-					// @ts-ignore
 					totalEV += set.evs[k];
 				}
 			}
@@ -226,7 +223,6 @@ let BattleFormats = {
 				template.species !== 'Unown' && template.baseSpecies !== 'Pikachu' && (template.baseSpecies !== 'Diancie' || !set.shiny)) {
 				let perfectIVs = 0;
 				for (let i in set.ivs) {
-					// @ts-ignore
 					if (set.ivs[i] >= 31) perfectIVs++;
 				}
 				let reason = (format.requirePentagon ? " and this format requires gen " + this.gen + " Pokémon" : " in gen 6");
@@ -299,7 +295,6 @@ let BattleFormats = {
 					// Ensure that the ability is (still) legal.
 					let legalAbility = false;
 					for (let i in template.abilities) {
-						// @ts-ignore
 						if (template.abilities[i] !== set.ability) continue;
 						legalAbility = true;
 						break;

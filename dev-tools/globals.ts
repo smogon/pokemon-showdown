@@ -5,6 +5,20 @@ type Side = typeof Sim.nullSide
 type Validator = typeof Sim.nullValidator
 
 interface AnyObject {[k: string]: any}
+type DexTable<T> = {[key: string]: T}
+
+/**
+ * EXPERIMENTAL: Makes all properties in T whose keys are not assignable to U optional.
+ * U can be any type, but is intended to be a union of strings (such as one produced by the keyof keyword).
+ * An object can be assigned to this type if it can be assigned to T,
+ * or has every property listed in U and those properties match their counterparts in T.
+ * Keep in mind that objects which fit only the latter requirement are not assignable to T.
+ */
+type SelectiveRequire<T, U> = T | {
+	[P in Extract<keyof T, U>]: T[P];
+}/*  & {
+	[P in Exclude<keyof T, U>]?: T[P];
+}; */
 
 let Config = require('../config/config');
 
@@ -42,6 +56,7 @@ type PokemonSet = {
 	pokeball?: string,
 	hpType?: string,
 };
+
 /**
  * Describes a possible way to get a move onto a pokemon.
  *
@@ -201,7 +216,7 @@ interface EventMethods {
 	onDragOut?: (this: Battle, pokemon: Pokemon) => void
 	onEat?: ((this: Battle, pokemon: Pokemon) => void) | false
 	onEatItem?: (this: Battle, item: Item, pokemon: Pokemon) => void
-	onEnd?: (this: Battle, pokemon: Pokemon) => void
+	onEnd?: (this: Battle, pokemon: Pokemon & Side) => void
 	onFaint?: (this: Battle, target: Pokemon, source: Pokemon, effect: UnknownEffect) => void
 	onFlinch?: ((this: Battle, pokemon: Pokemon) => void) | boolean
 	onFoeAfterDamage?: (this: Battle, damage: number, target: Pokemon) => void
@@ -241,7 +256,7 @@ interface EventMethods {
 	onPreStart?: (this: Battle, pokemon: Pokemon) => void
 	onPrimal?: (this: Battle, pokemon: Pokemon) => void
 	onRedirectTarget?: (this: Battle, target: Pokemon, source: Pokemon, source2: UnknownEffect) => void
-	onResidual?: (this: Battle, pokemon: Pokemon, source: Pokemon, effect: UnknownEffect) => void
+	onResidual?: (this: Battle, target: Pokemon & Side, source: Pokemon, effect: UnknownEffect) => void
 	onRestart?: (this: Battle, pokemon: Pokemon, source: Pokemon) => void
 	onSetAbility?: (this: Battle, ability: string, target: Pokemon, source: Pokemon, effect: UnknownEffect) => void
 	onSetStatus?: (this: Battle, status: Status, target: Pokemon, source: Pokemon, effect: UnknownEffect) => void
@@ -257,7 +272,7 @@ interface EventMethods {
 	onSourceTryHeal?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: UnknownEffect) => void
 	onSourceTryPrimaryHit?: (this: Battle, target: Pokemon, source: Pokemon, move: Move) => void
 	onStallMove?: (this: Battle, pokemon: Pokemon) => void
-	onStart?: (this: Battle, pokemon: Pokemon, source: Pokemon, effect: UnknownEffect, move: Move) => void
+	onStart?: (this: Battle, target: Pokemon & Side, source: Pokemon, effect: UnknownEffect, move: Move) => void
 	onSwitchIn?: (this: Battle, pokemon: Pokemon) => void
 	onSwitchOut?: (this: Battle, pokemon: Pokemon) => void
 	onTakeItem?: ((this: Battle, item: Item, pokemon: Pokemon, source: Pokemon) => void) | false
@@ -338,10 +353,10 @@ interface EffectData extends EventMethods {
 	onTryMovePriority?: number
 	onTryPrimaryHitPriority?: number
 	onTypePriority?: number
-	recoil?: number[]
-	secondary?: boolean | SecondaryEffect | null
+	recoil?: [number, number]
+	secondary?: false | SecondaryEffect | null
 	secondaries?: false | SecondaryEffect[]
-	self?: SelfEffect | boolean | null
+	self?: SelfEffect | false | null
 	shortDesc?: string
 	status?: string
 	weather?: string
@@ -414,7 +429,7 @@ interface ItemData extends EffectData {
 	onMemory?: string
 	onPlate?: string
 	spritenum?: number
-	zMove?: string | boolean
+	zMove?: string | true
 	zMoveFrom?: string
 	zMoveType?: string
 	zMoveUser?: string[]
@@ -671,7 +686,9 @@ interface FormatsData extends EventMethods {
 	onValidateSet?: (this: ModdedDex, set: PokemonSet, format: Format, setHas: AnyObject, teamHas: AnyObject) => string[] | false | void
 	onValidateTeam?: (this: ModdedDex, team: PokemonSet[], format: Format, teamHas: AnyObject) => string[] | false | void
 	validateSet?: (this: Validator, set: PokemonSet, teamHas: AnyObject) => string[] | false | void
-	validateTeam?: (this: Validator, team: PokemonSet[], removeNicknames: boolean) => string[] | false | void
+	validateTeam?: (this: Validator, team: PokemonSet[], removeNicknames: boolean) => string[] | false | void,
+	section?: string,
+	column?: number
 }
 
 interface ModdedFormatsData extends Partial<FormatsData> {
