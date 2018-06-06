@@ -7,11 +7,13 @@ const YEAR = 365 * 24 * 60 * MINUTE;
 
 const theStudio = Rooms.get('thestudio');
 const tvbf = Rooms.get('tvbooksfilms');
+const yt = Rooms.get('youtube');
 
 const AOTDS_FILE = 'config/chat-plugins/thestudio.tsv';
 const FOTDS_FILE = 'config/chat-plugins/tvbf-films.tsv';
 const BOTDS_FILE = 'config/chat-plugins/tvbf-books.tsv';
 const SOTDS_FILE = 'config/chat-plugins/tvbf-shows.tsv';
+const COTDS_FILE = 'config/chat-plugins/youtube-channels.tsv';
 const PRENOMS_FILE = 'config/chat-plugins/otd-prenoms.json';
 
 let prenoms = {};
@@ -229,6 +231,7 @@ class OtdHandler {
 
 		let output = Chat.html `<div class="broadcast-blue" style="text-align:center;"><p><span style="font-weight:bold;font-size:11pt">The ${this.name} of the Day is ${winner[this.keys[0]]}.</span>`;
 		if (winner.quote) output += Chat.html `<br/><span style="font-style:italic;">"${winner.quote}"</span>`;
+		if (winner.tagline) output += Chat.html `<br/>${winner.tagline}`;
 		output += `</p><table style="margin:auto;"><tr>`;
 		if (winner.image) output += Chat.html `<td><img src="${winner.image}" width=100 height=100></td>`;
 		output += `<td style="text-align:right;margin:5px;">`;
@@ -289,6 +292,7 @@ const aotd = new OtdHandler('aotd', 'Artist', theStudio, AOTDS_FILE, ['artist', 
 const fotd = new OtdHandler('fotd', 'Film', tvbf, FOTDS_FILE, ['film', 'nominator', 'quote', 'link', 'image', 'time'], ['Film', 'Nominator', 'Quote', 'Link', 'Image', 'Timestamp']);
 const botd = new OtdHandler('botd', 'Book', tvbf, BOTDS_FILE, ['book', 'nominator', 'quote', 'link', 'image', 'time'], ['Book', 'Nominator', 'Quote', 'Link', 'Image', 'Timestamp']);
 const sotd = new OtdHandler('sotd', 'Show', tvbf, SOTDS_FILE, ['show', 'nominator', 'quote', 'link', 'image', 'time'], ['Show', 'Nominator', 'Quote', 'Link', 'Image', 'Timestamp']);
+const cotd = new OtdHandler('cotd', 'Channel', yt, COTDS_FILE, ['channel', 'nominator', 'link', 'tagline', 'image', 'time'], ['Show', 'Nominator', 'Link', 'Tagline', 'Image', 'Timestamp']);
 
 function selectHandler(message) {
 	let id = toId(message.substring(1, 5));
@@ -301,6 +305,8 @@ function selectHandler(message) {
 		return botd;
 	case 'sotd':
 		return sotd;
+	case 'cotd':
+		return cotd;
 	default:
 		throw new Error("Invalid type for otd handler.");
 	}
@@ -308,15 +314,12 @@ function selectHandler(message) {
 
 let commands = {
 	start: function (target, room, user, connection, cmd) {
-		if (toId(this.message.substring(1, 5)) === 'aotd') {
-			if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
-		} else {
-			if (room !== tvbf) return this.errorReply('This command can only be used in TV, Books & Films.');
-		}
-		if (!this.can('mute', null, room)) return false;
 		if (!this.canTalk()) return;
 
 		const handler = selectHandler(this.message);
+
+		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+		if (!this.can('mute', null, room)) return false;
 
 		if (handler.voting) return this.errorReply(`The nomination for the ${handler.name} of the Day nomination is already in progress.`);
 		handler.startVote();
@@ -327,15 +330,12 @@ let commands = {
 	starthelp: [`/-otd start - Starts nominations for the Thing of the Day. Requires: % @ # & ~`],
 
 	end: function (target, room, user) {
-		if (toId(this.message.substring(1, 5)) === 'aotd') {
-			if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
-		} else {
-			if (room !== tvbf) return this.errorReply('This command can only be used in TV, Books & Films.');
-		}
-		if (!this.can('mute', null, room)) return false;
 		if (!this.canTalk()) return;
 
 		const handler = selectHandler(this.message);
+
+		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+		if (!this.can('mute', null, room)) return false;
 
 		if (!handler.voting) return this.errorReply(`There is no ${handler.name} of the Day nomination in progress.`);
 
@@ -349,15 +349,12 @@ let commands = {
 	endhelp: [`/-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # & ~`],
 
 	nom: function (target, room, user) {
-		if (toId(this.message.substring(1, 5)) === 'aotd') {
-			if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
-		} else {
-			if (room !== tvbf) return this.errorReply('This command can only be used in TV, Books & Films.');
-		}
 		if (!this.canTalk()) return;
-		if (!target) this.parse('/help otd');
+		if (!target) return this.parse('/help otd');
 
 		const handler = selectHandler(this.message);
+
+		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 
 		if (!toNominationId(target).length || target.length > 50) return this.sendReply(`'${target}' is not a valid ${handler.name.toLowerCase()} name.`);
 
@@ -366,13 +363,12 @@ let commands = {
 	nomhelp: [`/-otd nom [nomination] - Nominate something for Thing of the Day.`],
 
 	view: function (target, room, user, connection) {
-		if (toId(this.message.substring(1, 5)) === 'aotd') {
-			if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
-		} else {
-			if (room !== tvbf) return this.errorReply('This command can only be used in TV, Books & Films.');
-		}
 		if (!this.canTalk()) return;
 		if (!this.runBroadcast()) return false;
+
+		const handler = selectHandler(this.message);
+
+		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 
 		if (this.broadcasting) {
 			selectHandler(this.message).display();
@@ -383,20 +379,17 @@ let commands = {
 	viewhelp: [`/-otd view - View the current nominations for the Thing of the Day.`],
 
 	remove: function (target, room, user) {
-		if (toId(this.message.substring(1, 5)) === 'aotd') {
-			if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
-		} else {
-			if (room !== tvbf) return this.errorReply('This command can only be used in TV, Books & Films.');
-		}
-		if (!this.can('mute', null, room)) return false;
 		if (!this.canTalk()) return;
+
+		const handler = selectHandler(this.message);
+
+		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+		if (!this.can('mute', null, room)) return false;
 
 		target = this.splitTarget(target);
 		let name = this.targetUsername;
 		let userid = toId(name);
 		if (!userid) return this.errorReply(`'${name}' is not a valid username.`);
-
-		const handler = selectHandler(this.message);
 
 		if (handler.removeNomination(userid)) {
 			this.privateModAction(`(${user.name} removed ${this.targetUsername}'s nomination for the ${handler.name} of the Day.)`);
@@ -408,16 +401,13 @@ let commands = {
 	removehelp: [`/-otd remove [username] - Remove a user's nomination for the Thing of the Day and prevent them from voting again until the next round. Requires: % @ * # & ~`],
 
 	force: function (target, room, user) {
-		if (toId(this.message.substring(1, 5)) === 'aotd') {
-			if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
-		} else {
-			if (room !== tvbf) return this.errorReply('This command can only be used in TV, Books & Films.');
-		}
-		if (!this.can('declare', null, room)) return false;
 		if (!this.canTalk()) return;
-		if (!target) this.parse('/help aotd force');
+		if (!target) return this.parse('/help aotd force');
 
 		const handler = selectHandler(this.message);
+
+		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+		if (!this.can('declare', null, room)) return false;
 
 		if (!toNominationId(target).length || target.length > 50) return this.sendReply(`'${target}' is not a valid ${handler.name.toLowerCase()} name.`);
 
@@ -429,15 +419,12 @@ let commands = {
 	forcehelp: [`/-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # & ~`],
 
 	delay: function (target, room, user) {
-		if (toId(this.message.substring(1, 5)) === 'aotd') {
-			if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
-		} else {
-			if (room !== tvbf) return this.errorReply('This command can only be used in TV, Books & Films.');
-		}
-		if (!this.can('mute', null, room)) return false;
 		if (!this.canTalk()) return;
 
 		const handler = selectHandler(this.message);
+
+		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+		if (!this.can('mute', null, room)) return false;
 
 		if (!(handler.voting && handler.timer)) return this.errorReply(`There is no ${handler.name} of the Day nomination to disable the timer for.`);
 
@@ -448,16 +435,12 @@ let commands = {
 	delayhelp: [`/-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # & ~`],
 
 	set: function (target, room, user) {
-		if (toId(this.message.substring(1, 5)) === 'aotd') {
-			if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
-		} else {
-			if (room !== tvbf) return this.errorReply('This command can only be used in TV, Books & Films.');
-		}
-		if (!target) this.parse('/help aotd set');
-		if (!room.chatRoomData || !this.can('mute', null, room)) return false;
 		if (!this.canTalk()) return;
 
 		const handler = selectHandler(this.message);
+
+		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+		if (!this.can('mute', null, room)) return false;
 
 		let params = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
 
@@ -477,17 +460,19 @@ let commands = {
 			case 'film':
 			case 'show':
 			case 'book':
+			case 'channel':
 				if (!toNominationId(value) || value.length > 50) return this.errorReply(`Please enter a valid ${key} name.`);
 				break;
 			case 'quote':
-				if (!value.length || value.length > 150) return this.errorReply("Please enter a valid quote.");
+			case 'tagline':
+				if (!value.length || value.length > 150) return this.errorReply(`Please enter a valid ${key}.`);
 				break;
 			case 'song':
 				if (!value.length || value.length > 50) return this.errorReply("Please enter a valid song name.");
 				break;
 			case 'link':
 			case 'image':
-				if (!/https?:\/\/[^ ]+\//.test(value)) return this.errorReply(`Please enter a valid URL for the ${key} (starting with http:// or https://)`);
+				if (!/https?:\/\//.test(value)) return this.errorReply(`Please enter a valid URL for the ${key} (starting with http:// or https://)`);
 				if (value.length > 200) return this.errorReply("URL too long.");
 				break;
 			default:
@@ -508,43 +493,32 @@ let commands = {
 	sethelp: [`/-otd set property: value[, property: value] - Set the winner, quote, song, link or image for the current Thing of the Day. Requires: % @ * # & ~`],
 
 	winners: function (target, room, user, connection) {
-		if (toId(this.message.substring(1, 5)) === 'aotd') {
-			if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
-		} else {
-			if (room !== tvbf) return this.errorReply('This command can only be used in TV, Books & Films.');
-		}
-		if (!this.canTalk()) return false;
+		if (!this.canTalk()) return;
+
+		const handler = selectHandler(this.message);
+
+		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 
 		return connection.popup(selectHandler(this.message).generateWinnerList(parseInt(target)));
 	},
 	winnershelp: [`/-otd winners [year] - Displays a list of previous things of the day of the past year. Optionally, specify a year to see all winners in that year.`],
 
 	'': function (target, room) {
-		if (toId(this.message.substring(1, 5)) === 'aotd') {
-			if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
-		} else {
-			if (room !== tvbf) return this.errorReply('This command can only be used in TV, Books & Films.');
-		}
+		if (!this.canTalk()) return;
 		if (!this.runBroadcast()) return false;
 
-		let text = selectHandler(this.message).generateWinnerDisplay();
+		const handler = selectHandler(this.message);
+
+		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+
+		let text = handler.generateWinnerDisplay();
 		if (!text) return this.errorReply("There is no winner yet.");
 		return this.sendReplyBox(text);
-	},
-
-	help: function (target, room) {
-		if (toId(this.message.substring(1, 5)) === 'aotd') {
-			if (room !== theStudio) return this.errorReply('This command can only be used in The Studio.');
-		} else {
-			if (room !== tvbf) return this.errorReply('This command can only be used in TV, Books & Films.');
-		}
-		if (!this.runBroadcast()) return false;
-		this.sendReply("Use /help otd to view help for all commands, or /help aotd [command] for help on a specific command.");
 	},
 };
 
 const help = [
-	`Thing of the Day plugin commands (aotd, fotd, botd, sotd):`,
+	`Thing of the Day plugin commands (aotd, fotd, botd, sotd, cotd):`,
 	`- /-otd - View the current Thing of the Day.`,
 	`- /-otd start - Starts nominations for the Thing of the Day. Requires: % @ # & ~`,
 	`- /-otd nom [nomination] - Nominate something for Thing of the Day.`,
@@ -561,6 +535,7 @@ exports.commands = {
 	fotd: commands,
 	botd: commands,
 	sotd: commands,
+	cotd: commands,
 	aotdhelp: help,
 	otdhelp: help,
 };
