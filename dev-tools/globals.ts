@@ -16,9 +16,7 @@ type DexTable<T> = {[key: string]: T}
  */
 type SelectiveRequire<T, U> = T | {
 	[P in Extract<keyof T, U>]: T[P];
-}/*  & {
-	[P in Exclude<keyof T, U>]?: T[P];
-}; */
+}
 
 let Config = require('../config/config');
 
