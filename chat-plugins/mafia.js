@@ -1395,7 +1395,7 @@ const pages = {
 			buf += `<h3>General Options</h3>`;
 			if (!game.started) {
 				buf += `<button class="button" name="send" value="/mafia closedsetup ${room.id}, ${game.closedSetup ? 'off' : 'on'}">${game.closedSetup ? 'Disable' : 'Enable'} Closed Setup</button>`;
-				if (game.phase === 'locked') {
+				if (game.phase === 'locked' || game.phase === 'IDEAlocked') {
 					buf += ` <button class="button" name="send" value="/mafia start ${room.id}">Start Game</button>`;
 				} else {
 					buf += ` <button class="button" name="send" value="/mafia close ${room.id}">Close Signups</button>`;
@@ -1533,7 +1533,9 @@ const commands = {
 			if (room.id !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
 			const args = target.split(',').map(toId);
 			if (['forceadd', 'add', 'remove', 'del', 'delete'].includes(args[0])) {
-				if (!user.can('broadcast', null, room)) return this.errorReply(`/mafia queue ${args[0]} - Access denied.`);
+				if (!user.can('broadcast', null, room)) {
+					if (args[0] !== 'add' || args[1] !== user.userid) return this.errorReply(`/mafia queue ${args[0]} - Access denied.`);
+				}
 			} else {
 				if (!this.runBroadcast()) return false;
 			}
@@ -1721,6 +1723,7 @@ const commands = {
 			`/mafia ideadiscards - shows the discarded roles`,
 		],
 
+		'!ideapick': true,
 		ideapick: function (target, room, user) {
 			const args = target.split(',');
 			let targetRoom /** @type {ChatRoom?} */ = (Rooms(args[0]));
@@ -1737,6 +1740,7 @@ const commands = {
 			game.ideaPick(user, args);
 		},
 
+		'!ideareroll': true,
 		ideareroll: function (target, room, user) {
 			let targetRoom /** @type {ChatRoom?} */ = (Rooms(target));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
