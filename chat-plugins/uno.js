@@ -603,6 +603,7 @@ exports.commands = {
 			if (!this.can('minigame', null, room)) return;
 			if (!room.game || room.game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
 			if (toId(target) === 'off') {
+				if (!room.game.autostartTimer) return this.errorReply("There is no autostart timer running on.");
 				this.addModAction(`${user.name} has turned off UNO autostart timer.`);
 				clearTimeout(room.game.autostartTimer);
 				return;
