@@ -615,7 +615,6 @@ class Pokemon {
 	/**
 	 * @param {string?} [lockedMove]
 	 * @param {boolean} [restrictData]
-	 * @return {MoveSlot[]}
 	 */
 	getMoves(lockedMove, restrictData) {
 		if (lockedMove) {
@@ -625,10 +624,6 @@ class Pokemon {
 				return [{
 					move: 'Recharge',
 					id: 'recharge',
-					pp: 0,
-					maxpp: 0,
-					disabled: false,
-					used: false,
 				}];
 			}
 			for (const moveSlot of this.moveSlots) {
@@ -636,20 +631,12 @@ class Pokemon {
 				return [{
 					move: moveSlot.move,
 					id: moveSlot.id,
-					pp: 0,
-					maxpp: 0,
-					disabled: false,
-					used: false,
 				}];
 			}
 			// does this happen?
 			return [{
 				move: this.battle.getMove(lockedMove).name,
 				id: lockedMove,
-				pp: 0,
-				maxpp: 0,
-				disabled: false,
-				used: false,
 			}];
 		}
 		let moves = [];
@@ -681,11 +668,14 @@ class Pokemon {
 			if (!disabled) {
 				hasValidMove = true;
 			}
-			moves.push(Object.assign({}, moveSlot, {
+			moves.push({
 				move: moveName,
+				id: moveSlot.id,
+				pp: moveSlot.pp,
+				maxpp: moveSlot.maxpp,
 				target: target,
 				disabled: disabled,
-			}));
+			});
 		}
 		if (hasValidMove) return moves;
 

@@ -401,6 +401,7 @@ class Side {
 			let disabledSource = '';
 			for (const moveId of moves) {
 				if (moveId.id !== moveid) continue;
+				// @ts-ignore
 				if (!moveId.disabled) {
 					isEnabled = true;
 					break;
