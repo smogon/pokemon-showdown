@@ -197,45 +197,7 @@ let BattleScripts = {
 		}
 		this.addMove('move', pokemon, movename, target + attrs);
 
-		if (zMove) {
-			const zPower = this.getEffect('zpower');
-			if (move.category !== 'Status') {
-				this.attrLastMove('[zeffect]');
-			} else if (move.zMoveBoost) {
-				this.boost(move.zMoveBoost, pokemon, pokemon, zPower);
-			} else {
-				switch (move.zMoveEffect) {
-				case 'heal':
-					this.heal(pokemon.maxhp, pokemon, pokemon, zPower);
-					break;
-				case 'healreplacement':
-					move.self = {sideCondition: 'healreplacement'};
-					break;
-				case 'clearnegativeboost':
-					let boosts = {};
-					for (let i in pokemon.boosts) {
-						if (pokemon.boosts[i] < 0) {
-							boosts[i] = 0;
-						}
-					}
-					pokemon.setBoost(boosts);
-					this.add('-clearnegativeboost', pokemon, '[zeffect]');
-					break;
-				case 'redirect':
-					pokemon.addVolatile('followme', pokemon, zPower);
-					break;
-				case 'crit2':
-					pokemon.addVolatile('focusenergy', pokemon, zPower);
-					break;
-				case 'curse':
-					if (pokemon.hasType('Ghost')) {
-						this.heal(pokemon.maxhp, pokemon, pokemon, zPower);
-					} else {
-						this.boost({atk: 1}, pokemon, pokemon, zPower);
-					}
-				}
-			}
-		}
+		if (zMove) this.runZPower(move, pokemon);
 
 		if (target === false) {
 			this.attrLastMove('[notarget]');
@@ -982,6 +944,46 @@ let BattleScripts = {
 
 		this.runEvent('AfterMega', pokemon);
 		return true;
+	},
+
+	runZPower: function (move, pokemon) {
+		const zPower = this.getEffect('zpower');
+		if (move.category !== 'Status') {
+			this.attrLastMove('[zeffect]');
+		} else if (move.zMoveBoost) {
+			this.boost(move.zMoveBoost, pokemon, pokemon, zPower);
+		} else {
+			switch (move.zMoveEffect) {
+			case 'heal':
+				this.heal(pokemon.maxhp, pokemon, pokemon, zPower);
+				break;
+			case 'healreplacement':
+				move.self = {sideCondition: 'healreplacement'};
+				break;
+			case 'clearnegativeboost':
+				let boosts = {};
+				for (let i in pokemon.boosts) {
+					if (pokemon.boosts[i] < 0) {
+						boosts[i] = 0;
+					}
+				}
+				pokemon.setBoost(boosts);
+				this.add('-clearnegativeboost', pokemon, '[zeffect]');
+				break;
+			case 'redirect':
+				pokemon.addVolatile('followme', pokemon, zPower);
+				break;
+			case 'crit2':
+				pokemon.addVolatile('focusenergy', pokemon, zPower);
+				break;
+			case 'curse':
+				if (pokemon.hasType('Ghost')) {
+					this.heal(pokemon.maxhp, pokemon, pokemon, zPower);
+				} else {
+					this.boost({atk: 1}, pokemon, pokemon, zPower);
+				}
+			}
+		}
 	},
 
 	isAdjacent: function (pokemon1, pokemon2) {

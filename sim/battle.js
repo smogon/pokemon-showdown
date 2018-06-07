@@ -3438,6 +3438,14 @@ class Battle extends Dex.ModdedDex {
 	}
 
 	/**
+	 * @param {Move} move
+	 * @param {Pokemon} pokemon
+	 */
+	runZPower(move, pokemon) {
+		throw new Error(`The runZPower function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	/**
 	 * @param {Pokemon} pokemon
 	 * @param {Pokemon} target
 	 * @return {boolean}
