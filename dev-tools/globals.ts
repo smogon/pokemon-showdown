@@ -7,17 +7,6 @@ type Validator = typeof Sim.nullValidator
 interface AnyObject {[k: string]: any}
 type DexTable<T> = {[key: string]: T}
 
-/**
- * EXPERIMENTAL: Makes all properties in T whose keys are not assignable to U optional.
- * U can be any type, but is intended to be a union of strings (such as one produced by the keyof keyword).
- * An object can be assigned to this type if it can be assigned to T,
- * or has every property listed in U and those properties match their counterparts in T.
- * Keep in mind that objects which fit only the latter requirement are not assignable to T.
- */
-type SelectiveRequire<T, U> = T | {
-	[P in Extract<keyof T, U>]: T[P];
-}
-
 let Config = require('../config/config');
 
 let Monitor = require('../monitor');
