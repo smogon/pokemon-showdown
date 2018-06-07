@@ -506,6 +506,7 @@ class Trivia extends Rooms.RoomGame {
 		}
 
 		this.broadcast(`The game will begin in ${START_TIMEOUT / 1000} seconds...`);
+		this.phase = INTERMISSION_PHASE;
 		this.phaseTimeout = setTimeout(() => this.askQuestion(), START_TIMEOUT);
 	}
 
