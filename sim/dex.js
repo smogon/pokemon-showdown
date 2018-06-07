@@ -480,7 +480,7 @@ class ModdedDex {
 		}
 		let id = toId(name);
 		let effect;
-		let otherEffects = {reoil: 'Recoil', drain: 'Drain', zpower: 'Z Power'};
+		let otherEffects = {recoil: 'Recoil', drain: 'Drain', zpower: 'Z Power'};
 		if (this.data.Statuses.hasOwnProperty(id)) {
 			effect = new Data.PureEffect({name}, this.data.Statuses[id]);
 		} else if (this.data.Movedex.hasOwnProperty(id) && this.data.Movedex[id].effect) {
