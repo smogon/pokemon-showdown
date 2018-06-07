@@ -108,9 +108,9 @@ Chat.multiLinePattern = new PatternTester();
  * Load command files
  *********************************************************/
 
-/** @type {CommandContext} */
+/** @type {ChatCommands} */
 Chat.baseCommands = undefined;
-/** @type {CommandContext} */
+/** @type {ChatCommands} */
 Chat.commands = undefined;
 /** @type {PageTable} */
 Chat.pages = undefined;
