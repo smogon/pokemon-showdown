@@ -2534,8 +2534,6 @@ const commands = {
 				this.privateModAction(displayMessage);
 			}
 		}
-		this.add(`|unlink|hide|${userid}`);
-		if (userid !== toId(this.inputUsername)) this.add(`|unlink|hide|${toId(this.inputUsername)}`);
 
 		if (!room.isPrivate && room.chatRoomData) {
 			this.globalModlog("BLACKLIST", targetUser, ` by ${user.userid}${(target ? `: ${target}` : '')}`);
