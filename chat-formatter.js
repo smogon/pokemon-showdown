@@ -87,7 +87,7 @@ class TextFormatter {
 		this.stack = /** @type {FormatSpan[]} */ ([]);
 		this.isTrusted = isTrusted;
 		/** offset of str that's been parsed so far */
-		/** @type {number} */
+		/** @type {number} */ // TypeScript bug: [js] 'offset' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
 		this.offset = 0;
 	}
 	// debugAt(i=0, j=i+1) { console.log(this.slice(0, i) + '[' + this.slice(i, j) + ']' + this.slice(j, this.str.length)); }
