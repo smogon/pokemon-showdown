@@ -89,7 +89,7 @@ function writeFile(name, data) {
 }
 // Load logs
 logs = readFile(LOGS_FILE);
-if (logs) logs = {leaderboard: {}, mvps: {}, hosts: {}, plays: {}};
+if (!logs) logs = {leaderboard: {}, mvps: {}, hosts: {}, plays: {}};
 /** @type {MafiaLogSection[]} */
 const tables = ['leaderboard', 'mvps', 'hosts', 'plays'];
 for (const section of tables) {
