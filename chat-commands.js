@@ -21,8 +21,8 @@ const crypto = require('crypto');
 const FS = require('./lib/fs');
 
 const MAX_REASON_LENGTH = 300;
-const MUTE_LENGTH = 7 * 60 * 1000;
-const HOURMUTE_LENGTH = 60 * 60 * 1000;
+const MUTE_LENGTH = 420000;				// 7 * 60 * 1000
+const HOURMUTE_LENGTH = 3600000;			// 60 * 60 * 1000
 
 const MAX_CHATROOM_ID_LENGTH = 225;
 
@@ -1695,7 +1695,7 @@ const commands = {
 			return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
 		}
 
-		let muteDuration = ((cmd === 'hm' || cmd === 'hourmute') ? HOURMUTE_LENGTH : MUTE_LENGTH);
+		let muteDuration = ((cmd === 'hm' || cmd === 'hourmute' || (typeof cmd = 'number' && cmd * 1000 > HOURMUTE_LENGTH) ? HOURMUTE_LENGTH : ((typeof cmd == 'number' && (cmd * 1000) <= HOURMUTE_LENGTH) ? (cmd * 1000) : MUTE_LENGTH)));
 		if (!this.can('mute', targetUser, room)) return false;
 		if (targetUser.can('makeroom')) return this.errorReply("You are not allowed to mute upper staff members.");
 		let canBeMutedFurther = ((room.getMuteTime(targetUser) || 0) <= (muteDuration * 5 / 6));
