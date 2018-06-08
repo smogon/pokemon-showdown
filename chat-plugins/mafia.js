@@ -3,6 +3,8 @@
 /** @typedef {{[date: string]: {[userid: string]: number}}} MafiaLogTable */
 /** @typedef {'leaderboard' | 'mvps' | 'hosts' | 'plays'} MafiaLogSection */
 /** @typedef {{leaderboard: MafiaLogTable, mvps: MafiaLogTable, hosts: MafiaLogTable, plays: MafiaLogTable}} MafiaLog */
+/** @typedef {{gameBans: MafiaBans, hostBans: MafiaBans}} MafiaBanTable */
+/** @typedef {{[k: string]: number}} MafiaBans */
 /**
  * @typedef {Object} MafiaRole
  * @property {string} name
@@ -47,59 +49,109 @@
 
 const FS = require('./../lib/fs');
 const LOGS_FILE = 'config/chat-plugins/mafia-logs.json';
+const BANS_FILE = 'config/chat-plugins/mafia-bans.json';
 const MafiaData = require('./mafia-data.js');
 /** @type {MafiaLog} */
 let logs = {leaderboard: {}, mvps: {}, hosts: {}, plays: {}};
+/** @type {MafiaBanTable} */
+let bans = {gameBans: {}, hostBans: {}};
 /** @type {string[]} */
 let hostQueue = [];
 
 const IDEA_TIMER = 120 * 1000;
+const BAN_DURATION = 10 * 1000;
 
-try {
-	const json = FS(LOGS_FILE).readIfExistsSync();
-	if (!json) {
-		// Create file
-		FS(LOGS_FILE).writeSync('{"leaderboard": {}, "mvps": {}, "hosts": {}, "plays": {}}');
-	} else {
-		logs = JSON.parse(json);
+/**
+ *
+ * @param {string} name
+ */
+function readFile(name) {
+	try {
+		const json = FS(name).readIfExistsSync();
+		if (!json) {
+			FS(name).writeSync("{}");
+			return false;
+		}
+		return JSON.parse(json);
+	} catch (e) {
+		if (e.code !== 'ENOENT') throw e;
 	}
-	/** @type {MafiaLogSection[]} */
-	const tables = ['leaderboard', 'mvps', 'hosts', 'plays'];
-	for (const section of tables) {
-		// Check to see if we need to eliminate an old month's data.
-		const month = new Date().toLocaleString("en-us", {month: "numeric", year: "numeric"});
-		if (!logs[section]) logs[section] = {};
-		if (!logs[section][month]) logs[section][month] = {};
-		if (Object.keys(logs[section]).length >= 3) {
-			// eliminate the oldest month(s)
-			let keys = Object.keys(logs[section]).sort((aKey, bKey) => {
-				const a = aKey.split('/');
-				const b = bKey.split('/');
-				if (a[1] !== b[1]) {
-					// year
-					if (parseInt(a[1]) < parseInt(b[1])) return -1;
-					return 1;
-				}
-				// month
-				if (parseInt(a[0]) < parseInt(b[0])) return -1;
+}
+/**
+ *
+ * @param {string} name
+ * @param {object} data
+ */
+function writeFile(name, data) {
+	FS(name).writeUpdate(() => (
+		JSON.stringify(data)
+	));
+}
+// Load logs
+logs = readFile(LOGS_FILE);
+if (logs) logs = {leaderboard: {}, mvps: {}, hosts: {}, plays: {}};
+/** @type {MafiaLogSection[]} */
+const tables = ['leaderboard', 'mvps', 'hosts', 'plays'];
+for (const section of tables) {
+	// Check to see if we need to eliminate an old month's data.
+	const month = new Date().toLocaleString("en-us", {month: "numeric", year: "numeric"});
+	if (!logs[section]) logs[section] = {};
+	if (!logs[section][month]) logs[section][month] = {};
+	if (Object.keys(logs[section]).length >= 3) {
+		// eliminate the oldest month(s)
+		let keys = Object.keys(logs[section]).sort((aKey, bKey) => {
+			const a = aKey.split('/');
+			const b = bKey.split('/');
+			if (a[1] !== b[1]) {
+				// year
+				if (parseInt(a[1]) < parseInt(b[1])) return -1;
 				return 1;
-			});
-			while (keys.length > 2) {
-				const curKey = keys.shift();
-				if (!curKey) break; // should never happen
-				delete logs[section][curKey];
 			}
+			// month
+			if (parseInt(a[0]) < parseInt(b[0])) return -1;
+			return 1;
+		});
+		while (keys.length > 2) {
+			const curKey = keys.shift();
+			if (!curKey) break; // should never happen
+			delete logs[section][curKey];
 		}
 	}
-	writeLogs();
-} catch (e) {
-	if (e.code !== 'ENOENT') throw e;
 }
+writeFile(LOGS_FILE, logs);
 
-function writeLogs() {
-	FS(LOGS_FILE).writeUpdate(() => (
-		JSON.stringify(logs)
-	));
+// Load bans
+
+bans = readFile(BANS_FILE);
+if (!bans) bans = {gameBans: {}, hostBans: {}};
+const now = Date.now();
+
+for (const userid in bans.gameBans) {
+	if (bans.gameBans[userid] < now) {
+		delete bans.gameBans[userid];
+	}
+}
+for (const userid in bans.hostBans) {
+	if (bans.hostBans[userid] < now) {
+		delete bans.hostBans[userid];
+	}
+}
+writeFile(BANS_FILE, bans);
+
+/**
+ *
+ * @param {string} userid
+ * @param {boolean} host
+ */
+function isBanned(userid, host = false) {
+	const banTable = host ? bans.hostBans : bans.gameBans;
+	if (!(userid in banTable)) return false;
+	if (banTable[userid] < Date.now()) {
+		delete banTable[userid];
+		writeFile(BANS_FILE, bans);
+		return false;
+	}
+	return true;
 }
 
 class MafiaPlayer extends Rooms.RoomGamePlayer {
@@ -289,6 +341,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.roles = [];
 		this.roleString = '';
 
+		/** @type {"signups" | "locked" | "IDEApicking" | "IDEAlocked" | "day" | "night"} */
 		this.phase = "signups";
 		this.dayNum = 0;
 		this.closedSetup = false;
@@ -1168,6 +1221,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	canJoin(user, self = false, force = false) {
 		if (!user || !user.connected) return `User not found.`;
 		const targetString = self ? `You are` : `${user.userid} is`;
+		if (isBanned(user.userid)) return `${targetString} banned from joining games.`;
 		if (!this.room.users[user.userid]) return `${targetString} not in the room.`;
 		if (this.players[user.userid]) return `${targetString} already in the game.`;
 		if (this.hostid === user.userid) return `${targetString} the host.`;
@@ -1269,7 +1323,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			if (!logs.hosts[month]) logs.hosts[month] = {};
 			if (!logs.hosts[month][this.hostid]) logs.hosts[month][this.hostid] = 0;
 			logs.hosts[month][this.hostid]++;
-			writeLogs();
+			writeFile(LOGS_FILE, logs);
 		}
 		if (this.timer) {
 			clearTimeout(this.timer);
@@ -1512,6 +1566,7 @@ const commands = {
 			let targetUser = this.targetUser;
 			if (!targetUser || !targetUser.connected) return this.errorReply(`The user "${this.targetUsername}" was not found.`);
 			if (!room.users[targetUser.userid]) return this.errorReply(`${targetUser.name} is not in this room, and cannot be hosted.`);
+			if (isBanned(targetUser.userid, true)) return this.errorReply(`${targetUser.name} is banned from hosting games.`);
 			if (!user.can('broadcast', null, room)) return this.errorReply(`/mafia host - Access denied.`);
 
 			room.game = new MafiaTracker(room, targetUser);
@@ -1542,11 +1597,12 @@ const commands = {
 			switch (args[0]) {
 			case 'forceadd':
 			case 'add':
+				if (!this.canTalk()) return;
 				let targetUser = Users(args[1]);
 				if ((!targetUser || !targetUser.connected) && args[0] !== 'forceadd') return this.errorReply(`User ${args[1]} not found. To forcefully add the user to the queue, use /mafia queue forceadd, ${args[1]}`);
 				if (hostQueue.includes(args[1])) return this.errorReply(`User ${args[1]} is already on the host queue.`);
 				hostQueue.push(args[1]);
-				this.sendReply(`User ${args[1]} has been added to the host queue.`);
+				room.add(`User ${args[1]} has been added to the host queue.`).update();
 				break;
 			case 'del':
 			case 'delete':
@@ -1554,7 +1610,7 @@ const commands = {
 				let index = hostQueue.indexOf(args[1]);
 				if (index === -1) return this.errorReply(`User ${args[1]} is not on the host queue.`);
 				hostQueue.splice(index, 1);
-				this.sendReply(`User ${args[1]} has been removed from the host queue`);
+				room.add(`User ${args[1]} has been removed from the host queue`).update();
 				break;
 			case '':
 			case 'show':
@@ -1710,8 +1766,8 @@ const commands = {
 
 		idea: function (target, room, user) {
 			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
-			if (!user.can('mute', null, room)) return this.errorReply(`/mafia idea - Access denied.`);
 			const game = /** @type {MafiaTracker} */ (room.game);
+			if (!user.can('broadcast', null, room) || ((!user.can('mute', null, room) && (game.hostid !== user.userid)))) return this.errorReply(`/mafia idea - Access denied.`);
 			if (game.started) return this.errorReply(`You cannot start an IDEA after the game has started.`);
 			if (game.phase !== 'locked' && game.phase !== 'IDEAlocked') return this.errorReply(`You need to close the signups first.`);
 			game.ideaInit(user, toId(target));
@@ -2338,7 +2394,7 @@ const commands = {
 				if (logs.leaderboard[month][u] === 0) delete logs.leaderboard[month][u];
 			}
 			if (!gavePoints) return this.parse('/help mafia win');
-			writeLogs();
+			writeFile(LOGS_FILE, logs);
 			this.modlog(`MAFIAPOINTS`, null, `${points} points were awarded to ${Chat.toListString(args)}`);
 			this.privateModAction(`(${points} points were awarded to: ${Chat.toListString(args)})`);
 		},
@@ -2372,7 +2428,7 @@ const commands = {
 				}
 			}
 			if (!gavePoints) return this.parse('/help mafia mvp');
-			writeLogs();
+			writeFile(LOGS_FILE, logs);
 			this.modlog(`MAFIA${cmd.toUpperCase()}`, null, `MVP and 5 points were ${cmd === 'unmvp' ? 'taken from' : 'awarded to'} ${Chat.toListString(args)}`);
 			this.privateModAction(`(MVP and 5 points were ${cmd === 'unmvp' ? 'taken from' : 'awarded to'}: ${Chat.toListString(args)})`);
 		},
@@ -2402,6 +2458,31 @@ const commands = {
 			`/mafia [leaderboard|mvpladder] - View the leaderboard or MVP ladder for the current or last month.`,
 			`/mafia [hostlost|playlogs] - View the host logs or play logs for the current or last month. Requires % @ * # & ~`,
 		],
+
+		hostban: 'gameban',
+		unhostban: 'gameban',
+		ungameban: 'gameban',
+		gameban: function (target, room, user, connection, cmd) {
+			if (!room || !room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
+			if (room.id !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
+
+			this.splitTarget(target, false);
+			if (!this.can('ban', this.targetUser, room)) return false;
+			if (!this.targetUser) return this.errorReply(`User ${target} not found.`);
+			const gameBan = (cmd.endsWith('gameban'));
+			const isUnban = (cmd.startsWith('un'));
+			if (isBanned(toId(this.targetUsername), !gameBan) === !isUnban) return this.errorReply(`${this.targetUsername} is ${isUnban ? 'not' : 'already'} banned from ${gameBan ? 'playing' : 'hosting'} games.`);
+			const banTable = gameBan ? bans.gameBans : bans.hostBans;
+			if (isUnban) {
+				delete banTable[toId(this.targetUsername)];
+				this.modlog(`MAFIAUN${gameBan ? 'GAME' : 'HOST'}BAN`, this.targetUser);
+			} else {
+				banTable[toId(this.targetUsername)] = Date.now() + BAN_DURATION;
+				this.modlog(`MAFIA${gameBan ? 'GAME' : 'HOST'}BAN`, this.targetUser);
+			}
+			writeFile(BANS_FILE, bans);
+			this.privateModAction(`(${this.targetUsername} was ${isUnban ? 'un' : ''}banned from ${gameBan ? 'joining' : 'hosting'} games by ${user})`);
+		},
 
 		disable: function (target, room, user) {
 			if (!room || !this.can('gamemanagement', null, room)) return;
