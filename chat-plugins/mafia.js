@@ -59,7 +59,7 @@ let bans = {gameBans: {}, hostBans: {}};
 let hostQueue = [];
 
 const IDEA_TIMER = 120 * 1000;
-const BAN_DURATION = 10 * 1000;
+const BAN_DURATION = 1000 * 60 * 60 * 24 * 2;
 
 /**
  *
