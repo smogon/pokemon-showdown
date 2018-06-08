@@ -142,7 +142,6 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
  * @returns {MafiaParsedRole}}
  */
 function parseRole(roleString) {
-	let target = roleString.toLowerCase().replace(/[^\w\d\s]/g, '').split(' ');
 	/** @type {MafiaRole} */
 	let role = {
 		name: roleString.split(' ').map(p => toId(p) === 'solo' ? '' : p).join(' '),
@@ -152,6 +151,8 @@ function parseRole(roleString) {
 		memo: ['During the Day, you may vote for whomever you want lynched.'],
 		alignment: '',
 	};
+	roleString = roleString.replace(/\s*\(.*?\)\s*/g, ' ');
+	let target = roleString.toLowerCase().replace(/[^\w\d\s]/g, '').split(' ');
 	let problems = [];
 	role.safeName = Chat.escapeHTML(role.name);
 	role.id = toId(role.name);
@@ -257,6 +258,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.allowRenames = false;
 		this.started = false;
 		this.ended = false;
+		this.theme = '';
 
 		this.hostid = host.userid;
 		this.host = Chat.escapeHTML(host.name);
@@ -360,6 +362,16 @@ class MafiaTracker extends Rooms.RoomGame {
 	 */
 	setRoles(user, roleString, force = false) {
 		let roles = (/** @type {string[]} */roleString.split(',').map(x => x.trim()));
+		if (roles.length === 1) {
+			// Attempt to set roles from a theme
+			if (!MafiaData.themes[toId(roles[0])]) return user.sendTo(this.room, `|error|The theme "${roles[0]}" was not found.`);
+			let theme = MafiaData.themes[toId(roles[0])];
+			if (!theme[this.playerCount]) return user.sendTo(this.room, `|error|The theme "${theme.name}" does not have a role list for ${this.playerCount} players.`);
+			/** @type {string} */
+			let themeRoles = theme[this.playerCount].slice();
+			roles = themeRoles.split(',').map(x => x.trim());
+			this.theme = toId(theme.name);
+		}
 		if (roles.length < this.playerCount) {
 			return user.sendTo(this.room, `|error|You have not provided enough roles for the players.`);
 		} else if (roles.length > this.playerCount) {
@@ -1350,6 +1362,11 @@ const pages = {
 			buf += `</details></p>`;
 		} else {
 			if (!game.closedSetup) {
+				let theme = MafiaData.themes[game.theme];
+				if (theme) {
+					buf += `<p><span style="font-weight:bold;">Theme</span>: ${theme.name}</p>`;
+					buf += `<p>${theme.desc}</p>`;
+				}
 				if (game.noReveal) {
 					buf += `<p><span style="font-weight:bold;">Original Rolelist</span>: ${game.originalRoleString}</p>`;
 				} else {
@@ -1423,9 +1440,11 @@ const pages = {
 			buf += `<hr/></details></p>`;
 			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">How to setup roles</summary>`;
 			buf += `<h3>Setting the roles</h3>`;
-			buf += `<p>To set the roles, use /mafia setroles [comma seperated list of roles] in ${room.title}.</p>`;
+			buf += `<p>To set the roles, use /mafia setroles [comma seperated list of roles] OR /mafia setroles [theme] in ${room.title}.</p>`;
+			buf += `<p>If you set the roles from a theme, the role parser will get all the correct roles for you. (Not all themes are supported).</p>`;
 			buf += `<p>The following key words determine a role's alignment (If none are found, the default alignment is town):</p>`;
 			buf += `<p style="font-weight:bold">${Object.keys(MafiaData.alignments).map(a => `<span style="color:${MafiaData.alignments[a].color || '#FFF'}">${MafiaData.alignments[a].name}</span>`).join(', ')}</p>`;
+			buf += `<p>Please note that anything inside (parentheses) is ignored by the role parser.</p>`;
 			buf += `<p>If you have roles that have conflicting alignments or base roles, you can use /mafia forcesetroles [comma seperated list of roles] to forcibly set the roles.</p>`;
 			buf += `<p>Please note that you will have to PM all the players their alignment, partners (if any), and other information about their role because the server will not provide it.</p>`;
 			buf += `<hr/></details></p>`;

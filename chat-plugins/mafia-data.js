@@ -243,6 +243,13 @@ exports.roles = Object.assign(Object.create(null), {
 		memo: [`Conspiracy Theorist: Each night you can PM the host the name of another player. You will be told if they are ALIEN or NOT ALIEN, or receive NO RESULT if your investigation failed. Additionally, you will always be inspected as an ALIEN when possible.`],
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
 	},
+	// Above cop so it gets checked first
+	role_cop: {
+		name: `Role Cop`,
+		id: `rolecop`,
+		memo: [`Role Cop: Each night you can PM the host the name of another player. You will be told their exact role, or NO RESULT if your investigation failed.`],
+		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
+	},
 	cop: {
 		name: `Cop`,
 		id: `cop`,
@@ -516,12 +523,6 @@ exports.roles = Object.assign(Object.create(null), {
 		name: `Roleblocker`,
 		id: `roleblocker`,
 		memo: [`Roleblocker: During the Night, you may PM the host the name of another player. This player won't be able to use an action this Night.`],
-	},
-	role_cop: {
-		name: `Role Cop`,
-		id: `rolecop`,
-		memo: [`Role Cop: Each night you can PM the host the name of another player. You will be told their exact role, or NO RESULT if your investigation failed.`],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
 	},
 	suppressor: `rolestopper`,
 	rolestopper: {
