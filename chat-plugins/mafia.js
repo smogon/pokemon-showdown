@@ -1602,7 +1602,7 @@ const commands = {
 				if ((!targetUser || !targetUser.connected) && args[0] !== 'forceadd') return this.errorReply(`User ${args[1]} not found. To forcefully add the user to the queue, use /mafia queue forceadd, ${args[1]}`);
 				if (hostQueue.includes(args[1])) return this.errorReply(`User ${args[1]} is already on the host queue.`);
 				hostQueue.push(args[1]);
-				room.add(`User ${args[1]} has been added to the host queue.`).update();
+				room.add(`User ${args[1]} has been added to the host queue by ${user.name}.`).update();
 				break;
 			case 'del':
 			case 'delete':
@@ -1610,7 +1610,7 @@ const commands = {
 				let index = hostQueue.indexOf(args[1]);
 				if (index === -1) return this.errorReply(`User ${args[1]} is not on the host queue.`);
 				hostQueue.splice(index, 1);
-				room.add(`User ${args[1]} has been removed from the host queue`).update();
+				room.add(`User ${args[1]} has been removed from the host queue by ${user.name}.`).update();
 				break;
 			case '':
 			case 'show':
@@ -2466,23 +2466,32 @@ const commands = {
 			if (!room || !room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (room.id !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
 
-			this.splitTarget(target, false);
+			const duration = parseInt(this.splitTarget(target, false));
 			if (!this.can('ban', this.targetUser, room)) return false;
 			if (!this.targetUser) return this.errorReply(`User ${target} not found.`);
+
 			const gameBan = (cmd.endsWith('gameban'));
 			const isUnban = (cmd.startsWith('un'));
 			if (isBanned(toId(this.targetUsername), !gameBan) === !isUnban) return this.errorReply(`${this.targetUsername} is ${isUnban ? 'not' : 'already'} banned from ${gameBan ? 'playing' : 'hosting'} games.`);
 			const banTable = gameBan ? bans.gameBans : bans.hostBans;
+
 			if (isUnban) {
 				delete banTable[toId(this.targetUsername)];
 				this.modlog(`MAFIAUN${gameBan ? 'GAME' : 'HOST'}BAN`, this.targetUser);
 			} else {
-				banTable[toId(this.targetUsername)] = Date.now() + BAN_DURATION;
-				this.modlog(`MAFIA${gameBan ? 'GAME' : 'HOST'}BAN`, this.targetUser);
+				if (isNaN(duration) || duration < 1) return this.parse('/help mafia gameban');
+				if (duration > 7) return this.errorReply(`Bans cannot be longer than 7 days.`);
+
+				banTable[toId(this.targetUsername)] = Date.now() + 1000 * 60 * 60 * 24 * duration;
+				this.modlog(`MAFIA${gameBan ? 'GAME' : 'HOST'}BAN`, this.targetUser, `for ${duration} days.`);
 			}
 			writeFile(BANS_FILE, bans);
-			this.privateModAction(`(${this.targetUsername} was ${isUnban ? 'un' : ''}banned from ${gameBan ? 'joining' : 'hosting'} games by ${user})`);
+			this.privateModAction(`(${this.targetUsername} was ${isUnban ? 'un' : ''}banned from ${gameBan ? 'joining' : 'hosting'} games by ${user}${!isUnban ? ` for ${duration} days` : ''})`);
 		},
+		gamebanhelp: [
+			`/mafia [game|host]ban [user], [duration] - Ban a user from joining/hosting games for [duration] days. Requires @ * # & ~`,
+			`/mafia (un)[game|host]ban [user] - Unbans a user from joining/hosting games. Requires @ * # & ~`,
+		],
 
 		disable: function (target, room, user) {
 			if (!room || !this.can('gamemanagement', null, room)) return;
