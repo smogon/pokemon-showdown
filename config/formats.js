@@ -71,7 +71,7 @@ let Formats = [
 	},
 	{
 		name: "[Gen 7] UU (suspect test)",
-		desc: [`&bullet; <a href="http://www.smogon.com/forums/threads/3636383/">UU Suspect Test</a>`],
+		threads: [`&bullet; <a href="http://www.smogon.com/forums/threads/3636383/">UU Suspect Test</a>`],
 
 		mod: 'gen7',
 		challengeShow: false,
