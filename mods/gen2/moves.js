@@ -439,12 +439,6 @@ let BattleMovedex = {
 			onAfterMoveSelf: function (pokemon) {
 				if (pokemon.status === 'slp') this.damage(pokemon.maxhp / 4);
 			},
-			onUpdate: function (pokemon) {
-				if (pokemon.status !== 'slp') {
-					pokemon.removeVolatile('nightmare');
-					this.add('-end', pokemon, 'Nightmare', '[silent]');
-				}
-			},
 		},
 	},
 	outrage: {

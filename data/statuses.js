@@ -70,6 +70,9 @@ let BattleStatuses = {
 			pokemon.statusData.time--;
 			if (pokemon.statusData.time <= 0) {
 				pokemon.cureStatus();
+				if (!pokemon.hasAbility('comatose') && pokemon.removeVolatile('nightmare')) {
+					this.add('-end', pokemon, 'Nightmare', '[silent]');
+				}
 				return;
 			}
 			this.add('cant', pokemon, 'slp');
