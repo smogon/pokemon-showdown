@@ -401,6 +401,7 @@ const pages = {
 				lock: `I want to appeal my lock`,
 				ip: `I'm locked because I have the same IP as someone I don't recognize`,
 				semilock: `I can't talk in chat because of my ISP`,
+				hostfilter: `I'm locked because of #hostfilter`,
 				hasautoconfirmed: `Yes, I have an autoconfirmed account`,
 				lacksautoconfirmed: `No, I don't have an autoconfirmed account`,
 				appealother: `I want to appeal a mute/roomban/blacklist`,
@@ -421,6 +422,7 @@ const pages = {
 				confirmreportglobal: `Report a Global Staff member`,
 				confirmappeal: `Appeal your lock`,
 				confirmipappeal: `Appeal IP lock`,
+				confirmhostfilter: `Appeal #hostfilter lock`,
 				confirmappealsemi: `Appeal ISP lock`,
 				confirmticket: `Report last ticket`,
 				confirmother: `Call a Global Staff member`,
@@ -437,6 +439,7 @@ const pages = {
 				reportglobal: `Global Staff Complaint`,
 				appeal: `Appeal`,
 				ipappeal: `IP-Appeal`,
+				hostfilter: `#hostfilter Appeal`,
 				appealsemi: `ISP-Appeal`,
 				ticket: `Report Last Ticket`,
 				other: `Other`,
@@ -504,7 +507,10 @@ const pages = {
 								buf += `<p><Button>lock</Button></p>`;
 							}
 						}
-						if (user.locked !== user.userid || isStaff) {
+						if (user.locked === '#hostfilter' || isStaff) {
+							buf += `<p><Button>hostfilter</Button></p>`;
+						}
+						if ((user.locked !== user.userid && user.locked !== '#hostfilter') || isStaff) {
 							buf += `<p><Button>ip</Button></p>`;
 						}
 					}
@@ -525,6 +531,12 @@ const pages = {
 					buf += `<p>If you are locked under a name you don't recognize, click the button below to call a global staff member so we can check.</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirmipappeal</Button></p>`;
+					break;
+				case 'hostfilter':
+					buf += `<p>If you are locked under #hostfilter, it means you are connected to Pok&eacute;mon Showdown with a Proxy or VPN. We automatically lock these to prevent evasion of punishments. To get unlocked, you need to disable your Proxy or VPN, and use the /logout command.</p>`;
+					buf += `<p>If you are not using a Proxy or VPN, or the above steps did not work, click the button below to get in touch with a global staff member.</p>`;
+					if (!isLast) break;
+					buf += `<p><Button>confirmhostfilter</Button></p>`;
 					break;
 				case 'semilock':
 					buf += `<p>Do you have an Autoconfirmed account? An account is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer.</p>`;
@@ -726,7 +738,7 @@ let commands = {
 				}
 			}
 			if (Monitor.countTickets(user.latestIp)) return this.popupReply(`Due to high load, you are limited to creating ${Punishments.sharedIps.has(user.latestIp) ? `50` : `5`} tickets every hour.`);
-			if (!['PM Harassment', 'Battle Harassment', 'Chatroom Harassment', 'Inappropriate Content', 'Inappropriate Username', 'Inappropriate Pokemon Nicknames', 'Timerstalling', 'Global Staff Complaint', 'Appeal', 'IP-Appeal', 'ISP-Appeal', 'Report Last Ticket', 'Room Owner Complaint', 'Other'].includes(target)) return this.parse('/helpticket');
+			if (!['PM Harassment', 'Battle Harassment', 'Chatroom Harassment', 'Inappropriate Content', 'Inappropriate Username', 'Inappropriate Pokemon Nicknames', 'Timerstalling', 'Global Staff Complaint', 'Appeal', 'IP-Appeal', '#hostfilter Appeal', 'ISP-Appeal', 'Report Last Ticket', 'Room Owner Complaint', 'Other'].includes(target)) return this.parse('/helpticket');
 			let upper = false;
 			if (['Room Owner Complaint', 'Global Staff Complaint', 'Report Last Ticket'].includes(target)) upper = true;
 			if (target === 'Report Last Ticket') {
