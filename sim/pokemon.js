@@ -915,7 +915,7 @@ class Pokemon {
 				if (this.status === 'brn') this.modifyStat('atk', 0.5);
 			}
 			this.speed = this.stats.spe;
-			if (!source.id) return true;
+			if ((!source.id && !source.effectType) || this.battle.gen <= 2) return true;
 
 			let apparentSpecies = this.illusion ? this.illusion.template.species : template.baseSpecies; // The species the opponent sees
 			if (isPermanent) {
