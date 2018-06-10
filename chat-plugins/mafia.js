@@ -2332,6 +2332,8 @@ const commands = {
 			const oldHost = Users(game.hostid);
 			if (oldHost) oldHost.send(`>view-mafia-${room.id}\n|deinit`);
 			if (game.subs.includes(targetUser.userid)) game.subs.splice(game.subs.indexOf(targetUser.userid), 1);
+			const queueIndex = hostQueue.indexOf(targetUser.userid);
+			if (queueIndex > -1) hostQueue.splice(queueIndex, 1);
 			game.host = Chat.escapeHTML(targetUser.name);
 			game.hostid = targetUser.userid;
 			game.played.push(targetUser.userid);
@@ -2470,6 +2472,8 @@ const commands = {
 
 				hostBans[toId(this.targetUsername)] = Date.now() + 1000 * 60 * 60 * 24 * duration;
 				this.modlog(`MAFIAHOSTBAN`, this.targetUser, `for ${duration} days.`);
+				const queueIndex = hostQueue.indexOf(toId(this.targetUsername));
+				if (queueIndex > -1) hostQueue.splice(queueIndex, 1);
 			}
 			writeFile(BANS_FILE, hostBans);
 			room.add(`${this.targetUsername} was ${isUnban ? 'un' : ''}banned from hosting games by ${user}${!isUnban ? ` for ${duration} days` : ''}.`).update();
