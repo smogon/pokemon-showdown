@@ -6603,7 +6603,7 @@ let BattleFormatsData = {
 	ribombee: {
 		randomBattleMoves: ["quiverdance", "bugbuzz", "moonblast", "hiddenpowerfire", "roost"],
 		randomDoubleBattleMoves: ["quiverdance", "pollenpuff", "moonblast", "protect", "batonpass"],
-		tier: "RU",
+		tier: "NUBL",
 		doublesTier: "DUU",
 	},
 	ribombeetotem: {
