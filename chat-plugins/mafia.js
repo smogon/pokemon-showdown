@@ -139,7 +139,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 /**
  *
  * @param {string} roleString
- * @returns {MafiaParsedRole}}
+ * @return {MafiaParsedRole}
  */
 function parseRole(roleString) {
 	/** @type {MafiaRole} */
@@ -282,6 +282,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.lynches = Object.create(null);
 		/** @type {string?} */
 		this.hasPlurality = null;
+		/** @type {boolean} */
 		this.enableNL = true;
 
 		/** @type {MafiaRole[]} */
@@ -364,8 +365,9 @@ class MafiaTracker extends Rooms.RoomGame {
 		let roles = (/** @type {string[]} */roleString.split(',').map(x => x.trim()));
 		if (roles.length === 1) {
 			// Attempt to set roles from a theme
-			if (!MafiaData.themes[toId(roles[0])]) return user.sendTo(this.room, `|error|The theme "${roles[0]}" was not found.`);
 			let theme = MafiaData.themes[toId(roles[0])];
+			if (typeof theme === 'string') theme = MafiaData.themes[theme];
+			if (typeof theme !== 'object') return user.sendTo(this.room, `|error|The theme "${roles[0]}" was not found.`);
 			if (!theme[this.playerCount]) return user.sendTo(this.room, `|error|The theme "${theme.name}" does not have a role list for ${this.playerCount} players.`);
 			/** @type {string} */
 			let themeRoles = theme[this.playerCount].slice();
@@ -509,9 +511,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			this.hammerCount = Math.floor(Object.keys(this.players).length / 2) + 1;
 			this.lynches = Object.create(null);
 			this.hasPlurality = null;
-			for (const player of Object.values(this.players)) {
-				player.lynching = '';
-			}
+			this.clearLynches();
 		}
 		this.phase = 'day';
 		if (extension && !initial) {
@@ -638,9 +638,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.sendRoom(`The hammer count has been set at ${this.hammerCount}, and lynches have been reset.`, {declare: true});
 		this.lynches = Object.create(null);
 		this.hasPlurality = null;
-		for (const player of Object.values(this.players)) {
-			player.lynching = '';
-		}
+		this.clearLynches();
 	}
 
 	/**
@@ -745,14 +743,7 @@ class MafiaTracker extends Rooms.RoomGame {
 				}
 			}
 		}
-		for (const p of Object.keys(this.players)) {
-			if (this.players[p].lynching === player.userid) this.players[p].lynching = '';
-		}
-		for (const p of Object.keys(this.dead)) {
-			if (this.dead[p].restless && this.dead[p].lynching === player.userid) this.dead[p].lynching = '';
-		}
-
-		delete this.lynches[player.userid];
+		this.clearLynches(player.userid);
 		delete this.players[player.userid];
 		let subIndex = this.requestedSub.indexOf(player.userid);
 		if (subIndex !== -1) this.requestedSub.splice(subIndex, 1);
@@ -1190,6 +1181,51 @@ class MafiaTracker extends Rooms.RoomGame {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * @param {User} user
+	 * @param {boolean | 'hammer'} setting
+	 */
+	setSelfLynch(user, setting) {
+		const from = this.selfEnabled;
+		if (from === setting) return user.sendTo(this.room, `|error|Selflynching is already ${setting ? `set to Self${setting === 'hammer' ? 'hammering' : 'lynching'}` : 'disabled'}.`);
+		if (from) {
+			this.sendRoom(`Self${from === 'hammer' ? 'hammering' : 'lynching'} has been ${setting ? `changed to Self${setting === 'hammer' ? 'hammering' : 'lynching'}` : 'disabled'}.`, {declare: true});
+		} else {
+			this.sendRoom(`Self${setting === 'hammer' ? 'hammering' : 'lynching'} has been ${setting ? 'enabled' : 'disabled'}.`, {declare: true});
+		}
+		this.selfEnabled = setting;
+		if (!setting) {
+			for (const player of Object.values(this.players)) {
+				if (player.lynching === player.userid) this.unlynch(player.userid, true);
+			}
+		}
+		this.updatePlayers();
+	}
+	/**
+	 * @param {User} user
+	 * @param {boolean} setting
+	 */
+	setNoLynch(user, setting) {
+		if (this.enableNL === setting) return user.sendTo(this.room, `|error|No Lynch is already ${setting ? 'enabled' : 'disabled'}.`);
+		this.enableNL = setting;
+		this.sendRoom(`No Lynch has been ${setting ? 'enabled' : 'disabled'}.`, {declare: true});
+		if (!setting) this.clearLynches('nolynch');
+		this.updatePlayers();
+	}
+	/**
+	 * @param {string} target
+	 */
+	clearLynches(target = '') {
+		if (target) delete this.lynches[target];
+		for (const player of Object.values(this.players)) {
+			if (!target || (player.lynching === target)) player.lynching = '';
+		}
+		for (const player of Object.values(this.dead)) {
+			if (player.restless && (!target || player.lynching === target)) player.lynching = '';
+		}
+		this.hasPlurality = null;
 	}
 
 	/**
@@ -1889,35 +1925,11 @@ const commands = {
 			let action = toId(args.shift());
 			if (!action) return this.parse(`/help mafia selflynch`);
 			if (this.meansYes(action)) {
-				if (game.selfEnabled === 'hammer') {
-					game.sendRoom(`Selfhammering has been changed to Selflynching.`, {declare: true});
-				} else if (!game.selfEnabled) {
-					game.sendRoom(`Selflynching has been enabled.`, {declare: true});
-				} else {
-					return user.sendTo(targetRoom, `|error|Selflynching is already enabled.`);
-				}
-				game.selfEnabled = true;
-				game.updatePlayers();
-			} else if (action === 'hammer') {
-				if (game.selfEnabled === true) {
-					game.sendRoom(`Selflynching has been changed to Selfhammering.`, {declare: true});
-				} else if (!game.selfEnabled) {
-					game.sendRoom(`Selfhammer has been enabled.`, {declare: true});
-				} else {
-					return user.sendTo(targetRoom, `|error|Selfhammer is already enabled.`);
-				}
-				game.selfEnabled = 'hammer';
-				game.updatePlayers();
+				game.setSelfLynch(user, true);
 			} else if (this.meansNo(action)) {
-				if (game.selfEnabled === 'hammer') {
-					game.sendRoom(`Selfhammer has been disabled.`, {declare: true});
-				} else if (game.selfEnabled === true) {
-					game.sendRoom(`Selflynch has been disabled.`, {declare: true});
-				} else {
-					return user.sendTo(targetRoom, `|error|Selflynching and hammering is already disabled.`);
-				}
-				game.selfEnabled = false;
-				game.updatePlayers();
+				game.setSelfLynch(user, false);
+			} else if (action === 'hammer') {
+				game.setSelfLynch(user, 'hammer');
 			} else {
 				return this.parse(`/help mafia selflynch`);
 			}
@@ -2049,21 +2061,10 @@ const commands = {
 			if (!targetRoom.game || targetRoom.game.gameid !== 'mafia') return user.sendTo(targetRoom, `|error|There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (targetRoom.game);
 			if (!user.can('mute', null, room) && game.hostid !== user.userid) return user.sendTo(targetRoom, `|error|/mafia ${cmd} - Access denied.`);
-			if (cmd === 'disablenl') {
-				if (!game.enableNL) return user.sendTo(targetRoom, `|error|No Lynch has already been disabled.`);
-				game.enableNL = false;
-				game.sendRoom(`No Lynch has been disabled.`, {declare: true});
-				// Remove everyone's lynches from No Lynch
-				if (game.lynches.nolynch) delete game.lynches.nolynch;
-				for (const player of Object.values(game.players)) {
-					if (player.lynching === 'nolynch') player.lynching = '';
-				}
-				game.getPlurality();
-				game.updatePlayers();
+			if (cmd === 'enablenl') {
+				game.setNoLynch(user, true);
 			} else {
-				if (game.enableNL) return user.sendTo(targetRoom, `|error|No Lynch has already been enabled.`);
-				game.enableNL = true;
-				game.sendRoom(`No Lynch has been enabled.`, {declare: true});
+				game.setNoLynch(user, false);
 			}
 		},
 		enablenlhelp: [`/mafia enablenl OR /mafia disablenl - Allows or disallows players abstain from lynching. Requires host % @ # & ~`],
