@@ -60,14 +60,13 @@ let hostQueue = [];
 const IDEA_TIMER = 120 * 1000;
 
 /**
- *
  * @param {string} name
  */
 function readFile(name) {
 	try {
 		const json = FS(name).readIfExistsSync();
 		if (!json) {
-			FS(name).writeSync("{}");
+			writeFile(name, "{}");
 			return false;
 		}
 		return JSON.parse(json);
@@ -76,7 +75,6 @@ function readFile(name) {
 	}
 }
 /**
- *
  * @param {string} name
  * @param {object} data
  */
@@ -85,6 +83,7 @@ function writeFile(name, data) {
 		JSON.stringify(data)
 	));
 }
+
 // Load logs
 logs = readFile(LOGS_FILE);
 if (!logs) logs = {leaderboard: {}, mvps: {}, hosts: {}, plays: {}};
@@ -119,13 +118,11 @@ for (const section of tables) {
 writeFile(LOGS_FILE, logs);
 
 // Load bans
-
 hostBans = readFile(BANS_FILE);
 if (!hostBans) hostBans = Object.create(null);
-const now = Date.now();
 
 for (const userid in hostBans) {
-	if (hostBans[userid] < now) {
+	if (hostBans[userid] < Date.now()) {
 		delete hostBans[userid];
 	}
 }
@@ -2457,8 +2454,8 @@ const commands = {
 			if (room.id !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
 
 			const duration = parseInt(this.splitTarget(target, false));
-			if (!this.can('ban', this.targetUser, room)) return false;
 			if (!this.targetUser) return this.errorReply(`User ${target} not found.`);
+			if (!this.can('mute', this.targetUser, room)) return false;
 
 			const isUnban = (cmd.startsWith('un'));
 			if (isHostBanned(toId(this.targetUsername)) === !isUnban) return this.errorReply(`${this.targetUsername} is ${isUnban ? 'not' : 'already'} banned from hosting games.`);
@@ -2467,7 +2464,7 @@ const commands = {
 				delete hostBans[toId(this.targetUsername)];
 				this.modlog(`MAFIAUNHOSTBAN`, this.targetUser);
 			} else {
-				if (isNaN(duration) || duration < 1) return this.parse('/help mafia gameban');
+				if (isNaN(duration) || duration < 1) return this.parse('/help mafia hostban');
 				if (duration > 7) return this.errorReply(`Bans cannot be longer than 7 days.`);
 
 				hostBans[toId(this.targetUsername)] = Date.now() + 1000 * 60 * 60 * 24 * duration;
@@ -2476,11 +2473,11 @@ const commands = {
 				if (queueIndex > -1) hostQueue.splice(queueIndex, 1);
 			}
 			writeFile(BANS_FILE, hostBans);
-			room.add(`${this.targetUsername} was ${isUnban ? 'un' : ''}banned from hosting games by ${user}${!isUnban ? ` for ${duration} days` : ''}.`).update();
+			room.add(`${this.targetUsername} was ${isUnban ? 'un' : ''}banned from hosting games by ${user}${!isUnban ? ` for ${duration} days` : ''} by ${user.name}.`).update();
 		},
-		gamebanhelp: [
-			`/mafia hostban [user], [duration] - Ban a user from hosting games for [duration] days. Requires @ * # & ~`,
-			`/mafia (un)hostban [user] - Unbans a user from hosting games. Requires @ * # & ~`,
+		hostbanhelp: [
+			`/mafia hostban [user], [duration] - Ban a user from hosting games for [duration] days. Requires % @ * # & ~`,
+			`/mafia (un)hostban [user] - Unbans a user from hosting games. Requires % @ * # & ~`,
 		],
 
 		disable: function (target, room, user) {
