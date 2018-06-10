@@ -139,7 +139,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 /**
  *
  * @param {string} roleString
- * @returns {MafiaParsedRole}
+ * @return {MafiaParsedRole}
  */
 function parseRole(roleString) {
 	/** @type {MafiaRole} */
