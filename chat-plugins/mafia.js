@@ -69,7 +69,7 @@ function readFile(name) {
 			writeFile(name, "{}");
 			return false;
 		}
-		return JSON.parse(json);
+		return Object.assign(Object.create(null), JSON.parse(json));
 	} catch (e) {
 		if (e.code !== 'ENOENT') throw e;
 	}
