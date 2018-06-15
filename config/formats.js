@@ -420,11 +420,29 @@ let Formats = [
 		forcedLevel: 100,
 		ruleset: ['Cancel Mod', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Moody Clause', 'Nickname Clause', 'Pokemon', 'Sleep Clause Mod', 'Species Clause', 'Team Preview'],
 		banlist: [
-			'Illegal', 'Unreleased', 'Shedinja', 'Infiltrator', 'Magic Guard', 'Misty Surge', 'Assault Vest', 'Explosion',
+			'Illegal', 'Unreleased', 'Shedinja', 'Infiltrator', 'Magic Guard', 'Misty Surge', 'Assault Vest', 'Choice Scarf', 'Explosion',
 			'Final Gambit', 'Healing Wish', 'Lunar Dance', 'Magic Room', 'Memento', 'Misty Terrain', 'Self-Destruct',
 		],
 		onValidateTeam: function (team) {
-			if (team.length !== 6) return [`Your team cannot have less than 6 Pok\u00e9mon.`];
+			let problems = [];
+			if (team.length !== 6) problems.push(`Your team cannot have less than 6 Pok\u00e9mon.`);
+			let families = {};
+			for (const set of team) {
+				let pokemon = this.getTemplate(set.species);
+				if (pokemon.baseSpecies) pokemon = this.getTemplate(pokemon.baseSpecies);
+				if (pokemon.prevo) {
+					pokemon = this.getTemplate(pokemon.prevo);
+					if (pokemon.prevo) {
+						pokemon = this.getTemplate(pokemon.prevo);
+					}
+				}
+				if (!families[pokemon.species]) families[pokemon.species] = [];
+				families[pokemon.species].push(set.species);
+			}
+			for (const family in families) {
+				if (families[family].length > 1) problems.push(`${Chat.toListString(families[family])} are in the same evolutionary family.`);
+			}
+			return problems;
 		},
 	},
 	{
