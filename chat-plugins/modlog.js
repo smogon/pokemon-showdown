@@ -27,7 +27,7 @@ const MORE_BUTTON_INCREMENTS = [200, 400, 800, 1600, 3200];
 const LINES_SEPARATOR = 'lines=';
 const MAX_RESULTS_LENGTH = MORE_BUTTON_INCREMENTS[MORE_BUTTON_INCREMENTS.length - 1];
 const LOG_PATH = 'logs/modlog/';
-const BATTLESEARCH_LIMIT = 3;
+const BATTLESEARCH_LIMIT = 1;
 
 class SortedLimitedLengthList {
 	constructor(maxSize) {
