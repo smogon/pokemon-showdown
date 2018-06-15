@@ -438,7 +438,7 @@ let Formats = [
 				let set = team[i];
 				for (let j = i + 1; j < team.length; j++) {
 					if (format.getEvoFamily(set.species) === format.getEvoFamily(team[j].species)) {
-						problems.push(`You cannot have more than one Pokemon from their respective evolutionary line. (${set.name || set.species} and ${team[j].name || team[j].species} are from the same evolutionary line)`)
+						problems.push(`You cannot have more than one Pokemon from their respective evolutionary line. (${set.name || set.species} and ${team[j].name || team[j].species} are from the same evolutionary line)`);
 					}
 				}
 			}
