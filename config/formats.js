@@ -431,9 +431,9 @@ let Formats = [
 			return template.speciesid;
 		},
 		onValidateTeam: function (team, format) {
-			if (team.length !== 6) return [`Your team cannot have less than 6 Pok\u00e9mon.`];
-			// Family Clause
 			let problems = [];
+			if (team.length !== 6) problems.push(`Your team cannot have less than 6 Pok\u00e9mon.`);
+			// Family Clause
 			for (let i = 0; i < team.length; i++) {
 				let set = team[i];
 				for (let j = i + 1; j < team.length; j++) {
