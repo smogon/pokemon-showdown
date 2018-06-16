@@ -2514,38 +2514,6 @@ const commands = {
 			`/mafia (un)hostban [user] - Unbans a user from hosting games. Requires % @ * # & ~`,
 		],
 
-		unhostban: 'hostban',
-		hostban: function (target, room, user, connection, cmd) {
-			if (!room || !room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
-			if (room.id !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
-
-			const duration = parseInt(this.splitTarget(target, false));
-			if (!this.targetUser) return this.errorReply(`User ${target} not found.`);
-			if (!this.can('mute', this.targetUser, room)) return false;
-
-			const isUnban = (cmd.startsWith('un'));
-			if (isHostBanned(toId(this.targetUsername)) === !isUnban) return this.errorReply(`${this.targetUsername} is ${isUnban ? 'not' : 'already'} banned from hosting games.`);
-
-			if (isUnban) {
-				delete hostBans[toId(this.targetUsername)];
-				this.modlog(`MAFIAUNHOSTBAN`, this.targetUser);
-			} else {
-				if (isNaN(duration) || duration < 1) return this.parse('/help mafia hostban');
-				if (duration > 7) return this.errorReply(`Bans cannot be longer than 7 days.`);
-
-				hostBans[toId(this.targetUsername)] = Date.now() + 1000 * 60 * 60 * 24 * duration;
-				this.modlog(`MAFIAHOSTBAN`, this.targetUser, `for ${duration} days.`);
-				const queueIndex = hostQueue.indexOf(toId(this.targetUsername));
-				if (queueIndex > -1) hostQueue.splice(queueIndex, 1);
-			}
-			writeFile(BANS_FILE, hostBans);
-			room.add(`${this.targetUsername} was ${isUnban ? 'un' : ''}banned from hosting games by ${user}${!isUnban ? ` for ${duration} days` : ''} by ${user.name}.`).update();
-		},
-		hostbanhelp: [
-			`/mafia hostban [user], [duration] - Ban a user from hosting games for [duration] days. Requires % @ * # & ~`,
-			`/mafia (un)hostban [user] - Unbans a user from hosting games. Requires % @ * # & ~`,
-		],
-
 		disable: function (target, room, user) {
 			if (!room || !this.can('gamemanagement', null, room)) return;
 			if (!room.mafiaEnabled) {
