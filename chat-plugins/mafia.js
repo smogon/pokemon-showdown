@@ -1822,12 +1822,7 @@ const commands = {
 		idea: function (target, room, user) {
 			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (room.game);
-<<<<<<< HEAD
-			if (!user.can('broadcast', null, room) || ((!user.can('mute', null, room) && (game.hostid !== user.userid)))) return this.errorReply(`/mafia idea - Access denied.`);
-||||||| parent of af5de0e4... idea updates
-=======
 			if (!user.can('broadcast', null, room) || (!user.can('mute', null, room) && game.hostid !== user.userid)) return this.errorReply(`/mafia idea - Access denied.`);
->>>>>>> af5de0e4... idea updates
 			if (game.started) return this.errorReply(`You cannot start an IDEA after the game has started.`);
 			if (game.phase !== 'locked' && game.phase !== 'IDEAlocked') return this.errorReply(`You need to close the signups first.`);
 			game.ideaInit(user, toId(target));
