@@ -426,7 +426,10 @@ let Formats = [
 		onValidateTeam: function (team, format) {
 			let problems = [];
 			if (team.length !== 6) problems.push(`Your team cannot have less than 6 Pok\u00e9mon.`);
-			// Family Clause
+			/**
+			 * Family Clause
+			 *@param {string} species
+			 */
 			let getEvoFamily = function (species) {
 				let template = Dex.getTemplate(species);
 				while (template.prevo) {
