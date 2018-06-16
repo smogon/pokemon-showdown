@@ -8080,24 +8080,6 @@
 				"moves": [["Roost"], ["Bug Buzz"], ["Energy Ball"], ["Volt Switch"]]
 			}]
 		},
-		"virizion": {
-			"flags": {},
-			"sets": [{
-				"species": "Virizion",
-				"item": ["Rockium Z"],
-				"ability": ["Justified"],
-				"evs": {"atk": 252, "spd": 4, "spe": 252},
-				"nature": "Jolly",
-				"moves": [["Swords Dance"], ["Close Combat"], ["Leaf Blade"], ["Stone Edge"]]
-			}, {
-				"species": "Virizion",
-				"item": ["Life Orb"],
-				"ability": ["Justified"],
-				"evs": {"atk": 252, "spd": 4, "spe": 252},
-				"nature": "Jolly",
-				"moves": [["Swords Dance"], ["Close Combat"], ["Leaf Blade"], ["Zen Headbutt"]]
-			}]
-		},
 		"vivillonfancy": {
 			"flags": {},
 			"sets": [{
