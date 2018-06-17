@@ -476,6 +476,7 @@ class CommandContext {
 	 */
 	checkSlowchat(room, user) {
 		if (!room || !room.slowchat) return true;
+		if (user.can('broadcast', null, room)) return true;
 		let lastActiveSeconds = (Date.now() - user.lastMessageTime) / 1000;
 		if (lastActiveSeconds < room.slowchat) return false;
 		return true;
@@ -900,7 +901,7 @@ class CommandContext {
 			return false;
 		}
 
-		if (!this.checkSlowchat(room, user) && !user.can('mute', null, room)) {
+		if (!this.checkSlowchat(room, user)) {
 			// @ts-ignore
 			this.errorReply("This room has slow-chat enabled. You can only talk once every " + room.slowchat + " seconds.");
 			return false;
