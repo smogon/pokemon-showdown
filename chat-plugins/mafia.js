@@ -1572,12 +1572,10 @@ const pages = {
 			const b = logs[section][month][keyB];
 			return b - a;
 		});
-		const canViewPoints = user.can('mute', null, mafiaRoom) || month !== (new Date()).toLocaleString("en-us", {month: "numeric", year: "numeric"});
-		if (!canViewPoints) buf += `You cannot see point values until the month is over.`;
 		buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="2"><h2 style="margin: 5px auto">Mafia ${ladder.title} for ${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()}</h1></th></tr>`;
-		buf += `<tr><th>User</th>${canViewPoints ? `<th>${ladder.type}</th></tr>` : ``}`;
+		buf += `<tr><th>User</th><th>${ladder.type}</th></tr>`;
 		for (const key of keys) {
-			buf += `<tr><td>${key}</td>${canViewPoints ? `<td>${logs[section][month][key]}</td></tr>` : ''}`;
+			buf += `<tr><td>${key}</td><td>${logs[section][month][key]}</td></tr>`;
 		}
 		return buf + `</table></div>`;
 	},
@@ -1597,18 +1595,41 @@ const commands = {
 			return this.parse('/help mafia');
 		},
 
-		host: function (target, room, user) {
+		forcehost: 'host',
+		nexthost: 'host',
+		host: function (target, room, user, connection, cmd) {
 			if (!room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (!this.canTalk()) return;
 			if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 			if (room.game) return this.errorReply(`There is already a game of ${room.game.title} in progress in this room.`);
-			if (!target) return this.parse('/help mafia host');
-			this.splitTarget(target, false);
+			if (!user.can('broadcast', null, room)) return this.errorReply(`/mafia ${cmd} - Access denied.`);
+			if ((cmd === 'nexthost' || cmd === 'forcehost') && room.id !== 'mafia') return this.errorReply(`/mafia ${cmd} - This command is only meant to be used in the Mafia room.`);
+			let toHost = cmd === 'nexthost' ? hostQueue.shift() : target;
+			if (!toHost) {
+				if (cmd === 'nexthost') return this.errorReply(`The host queue is empty.`);
+				return this.parse('/help mafia host');
+			}
+			if (cmd === 'nexthost') {
+				this.splitTarget(toHost, false);
+				let skipped = [];
+				while (!this.targetUser || !this.targetUser.connected || !room.users[this.targetUser.userid] || isHostBanned(this.targetUser.userid)) {
+					skipped.push(toId(toHost));
+					toHost = hostQueue.shift();
+					if (!toHost) {
+						this.sendReply(`${skipped.join(', ')} were not online, not in the room, or are host banned and were removed from the host queue.`);
+						return this.errorReply(`Nobody on the host queue could be hosted.`);
+					}
+					this.splitTarget(toHost, false);
+				}
+				this.sendReply(`${skipped.join(', ')} were not online, not in the room, or are host banned and were removed from the host queue.`);
+			} else {
+				this.splitTarget(toHost, false);
+				if (!this.targetUser || !this.targetUser.connected) return this.errorReply(`The user "${this.targetUsername}" was not found.`);
+				if (!room.users[this.targetUser.userid]) return this.errorReply(`${this.targetUser.name} is not in this room, and cannot be hosted.`);
+				if (isHostBanned(this.targetUser.userid)) return this.errorReply(`${this.targetUser.name} is banned from hosting games.`);
+				if (hostQueue[0] && this.targetUser.userid !== hostQueue[0] && cmd !== 'forcehost') return this.errorReply(`${this.targetUser.name} is not next on the host queue. To host them now anyways, use /mafia forcehost ${this.targetUser.userid}`);
+			}
 			let targetUser = this.targetUser;
-			if (!targetUser || !targetUser.connected) return this.errorReply(`The user "${this.targetUsername}" was not found.`);
-			if (!room.users[targetUser.userid]) return this.errorReply(`${targetUser.name} is not in this room, and cannot be hosted.`);
-			if (isHostBanned(targetUser.userid)) return this.errorReply(`${targetUser.name} is banned from hosting games.`);
-			if (!user.can('broadcast', null, room)) return this.errorReply(`/mafia host - Access denied.`);
 
 			room.game = new MafiaTracker(room, targetUser);
 
@@ -1621,7 +1642,10 @@ const commands = {
 			room.add(`|c:|${(Math.floor(Date.now() / 1000))}|~|**Mafiasignup!**`).update();
 			this.modlog('MAFIAHOST', targetUser, null, {noalts: true, noip: true});
 		},
-		hosthelp: [`/mafia host [user] - Create a game of Mafia with [user] as the host. Requires + % @ * # & ~`],
+		hosthelp: [
+			`/mafia host [user] - Create a game of Mafia with [user] as the host. Requires + % @ * # & ~`,
+			`/mafia nexthost - Host the next user in the host queue. Requires + % @ * # & ~`,
+		],
 
 		q: 'queue',
 		queue: function (target, room, user) {
@@ -2168,15 +2192,6 @@ const commands = {
 			}
 		},
 
-		role: function (target, room, user) {
-			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
-			const game = /** @type {MafiaTracker} */ (room.game);
-			if (!(user.userid in game.players)) return this.errorReply(`You are not in the game of ${game.title}.`);
-			const role = game.players[user.userid].role;
-			if (!role) return this.errorReply(`You do not have a role yet.`);
-			this.sendReplyBox(`Your role is: ${role.safeName}`);
-		},
-
 		originalrolelist: 'rolelist',
 		orl: 'rolelist',
 		rl: 'rolelist',
@@ -2377,6 +2392,64 @@ const commands = {
 		},
 		endhelp: [`/mafia end - End the current game of mafia. Requires host + % @ * # & ~`],
 
+		role: 'data',
+		modifier: 'data',
+		alignment: 'data',
+		theme: 'data',
+		dt: 'data',
+		data: function (target, room, user, connection, cmd) {
+			if (!room || !room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
+			if (cmd === 'role' && !target) {
+				// Support /mafia role showing your current role if your in a game
+				const game = /** @type {MafiaTracker} */ (room.game);
+				if (!game || game.id !== 'mafia') return this.errorReply(`There is no game of mafia running in this room. If you meant to display information about a role, use /mafia role [role name]`);
+				if (!(user.userid in game.players)) return this.errorReply(`You are not in the game of ${game.title}.`);
+				const role = game.players[user.userid].role;
+				if (!role) return this.errorReply(`You do not have a role yet.`);
+				return this.sendReplyBox(`Your role is: ${role.safeName}`);
+			}
+			if (!this.runBroadcast()) return;
+			if (!target) return this.parse(`/help mafia data`);
+
+			const types = {alignment: 'alignments', role: 'roles', modifier: 'modifiers', theme: 'themes'};
+			let id = target.split(' ').map(toId).join('_');
+			let result = null;
+			let dataType = cmd;
+			if (cmd in types) {
+				let type = /** @type {'alignments' | 'roles' | 'modifiers' | 'themes'} */ (types[cmd]);
+				let data = MafiaData[type];
+				if (!data) return this.errorReply(`"${type}" is not a valid search area.`); // Should never happen
+				if (!data[id]) return this.errorReply(`"${target} is not a valid ${cmd}."`);
+				result = data[id];
+				if (typeof result === 'string') result = data[result];
+			} else {
+				// Search all
+				for (let i in types) {
+					let type = /** @type {'alignments' | 'roles' | 'modifiers' | 'themes'} */ (types[i]);
+					let data = MafiaData[type];
+					if (!data) continue; // Should never happen
+					if (!data[id]) continue;
+					result = data[id];
+					if (typeof result === 'string') result = data[result];
+					dataType = i;
+					break;
+				}
+				if (!result) return this.errorReply(`"${target}" is not a valid mafia alignment, role, modifier, or theme.`);
+			}
+			let buf = `<h3${result.color ? ' style="color: ' + result.color + '"' : ``}>${result.name}</h3><b>Type</b>: ${dataType}<br/>`;
+			if (dataType === 'theme') {
+				buf += `<b>Description</b>: ${result.desc}<br/><details><summary class="button" style="font-weight: bold; display: inline-block">Setups:</summary>`;
+				for (let i in result) {
+					if (isNaN(parseInt(i))) continue;
+					buf += `${i}: ${result[i]}<br/>`;
+				}
+			} else {
+				buf += `${result.memo.join('<br/>')}`;
+			}
+			return this.sendReplyBox(buf);
+		},
+		datahelp: [`/mafia data [alignment|role|modifier|theme] - Get information on a mafia alignment, role, modifier, or theme.`],
+
 		win: function (target, room, user) {
 			if (!room || !room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (room.id !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
@@ -2532,7 +2605,8 @@ const commands = {
 	},
 	mafiahelp: [
 		`Commands for the Mafia plugin:`,
-		`/mafia host [user] - Create a game of Mafia with [user] as the host. Requires + % @ * # & ~, voice can only host themselves.`,
+		`/mafia host [user] - Create a game of Mafia with [user] as the host. Requires + % @ * # & ~`,
+		`/mafia nexthost - Host the next user in the host queue. Requires + % @ * # & ~`,
 		`/mafia queue [add|remove|view], [user] - Add: Adds the user to the queue. Requires + % @ * # & ~. Remove: Removes the user from the queue. Requires + % @ * # & ~. View: Shows the upcoming users who are going to host.`,
 		`/mafia join - Join the game.`,
 		`/mafia leave - Leave the game. Can only be done while signups are open.`,
@@ -2561,6 +2635,7 @@ const commands = {
 		`/mafia sub next [player] - Forcibly sub [player] out of the game. Requires host % @ * # & ~`,
 		`/mafia subhost [user] - Substitues the user as the new game host.`,
 		`/mafia end - End the current game of mafia. Requires host % @ * # & ~`,
+		`/mafia data [alignment|role|modifier|theme] - Get information on a mafia alignment, role, modifier, or theme.`,
 		`/mafia win (points) [user1], [user2], [user3], ... - Award the specified users points to the mafia leaderboard for this month. The amount of points can be negative to take points. Defaults to 10 points.`,
 		`/mafia mvp [user1], [user2], ... - Gives a MVP point and 5 leaderboard points to the users specified.`,
 		`/mafia unmvp [user1], [user2], ... - Takes away a MVP point and 5 leaderboard points from the users specified.`,
