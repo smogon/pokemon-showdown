@@ -547,7 +547,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	 * @param {boolean} initial
 	 * @return {void}
 	 */
-	day(extension, initial = false) {
+	day(extension = null, initial = false) {
 		if (this.phase !== 'night' && !initial) return;
 		if (this.timer) this.setDeadline(0);
 		if (extension === null) {
@@ -1564,7 +1564,7 @@ const pages = {
 			mvpladder: {title: 'MVP Ladder', type: 'MVPs', section: 'mvps'},
 			hostlogs: {title: 'Host Logs', type: 'Hosts', section: 'hosts'},
 			playlogs: {title: 'Play Logs', type: 'Plays', section: 'plays'},
-			leaverlogs: {title: 'Leaver Logs', type: 'Leaves', section: 'leavers'},
+			leaverlogs: {title: 'Leaver Logs', type: 'Leavers', section: 'leavers'},
 		};
 		let date = new Date();
 		if (query[1] === 'prev') date.setMonth(date.getMonth() - 1);
@@ -1572,7 +1572,7 @@ const pages = {
 		const ladder = headers[query[0]];
 		if (!ladder) return `|deinit`;
 		const mafiaRoom = /** @type {ChatRoom?} */ (Rooms('mafia'));
-		if (['hosts', 'plays', 'leaves'].includes(ladder.section) && !user.can('mute', null, mafiaRoom)) return `|deinit`;
+		if (['hosts', 'plays', 'leavers'].includes(ladder.section) && !user.can('mute', null, mafiaRoom)) return `|deinit`;
 		let buf = `|title|Mafia ${ladder.title} (${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()})\n|pagehtml|<div class="pad ladder">${query[1] === 'prev' ? '' : `<button class="button" name="send" value="/join view-mafialadder-${query[0]}" style="float:left"><i class="fa fa-refresh"></i> Refresh</button> <button class="button" name="send" value="/join view-mafialadder-${query[0]}-prev" style="float:left">View last month's ${ladder.title}</button>`}<br /><br />`;
 		/** @type {MafiaLogSection} */
 		const section = ladder.section;
@@ -1828,7 +1828,7 @@ const commands = {
 			game.ideaInit(user, toId(target));
 		},
 		ideahelp: [
-			`/mafia idea [idea] - starts the IDEA module [idea]. Requires % @ * # & ~, voices can only start for themselves`,
+			`/mafia idea [idea] - starts the IDEA module [idea]. Requires + % @ * # & ~, voices can only start for themselves`,
 			`/mafia ideareroll - rerolls the IDEA module. Requires host % @ * # & ~`,
 			`/mafia ideapick [selection], [role] - selects a role`,
 			`/mafia ideadiscards - shows the discarded roles`,
