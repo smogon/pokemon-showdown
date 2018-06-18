@@ -4836,7 +4836,7 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	emboar: {
-		randomBattleMoves: ["flareblitz", "superpower", "wildcharge", "stoneedge", "fireblast", "grassknot", "suckerpunch"],
+		randomBattleMoves: ["flareblitz", "superpower", "wildcharge", "headsmash", "fireblast", "grassknot", "suckerpunch"],
 		randomDoubleBattleMoves: ["flareblitz", "superpower", "flamecharge", "wildcharge", "headsmash", "protect", "heatwave", "rockslide"],
 		eventPokemon: [
 			{"generation": 5, "level": 100, "gender": "M", "isHidden": false, "moves": ["flareblitz", "hammerarm", "wildcharge", "headsmash"], "pokeball": "cherishball"},

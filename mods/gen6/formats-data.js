@@ -3438,7 +3438,7 @@ let BattleFormatsData = {
 	},
 	emboar: {
 		inherit: true,
-		randomBattleMoves: ["flareblitz", "superpower", "wildcharge", "stoneedge", "fireblast", "grassknot", "suckerpunch"],
+		randomBattleMoves: ["flareblitz", "superpower", "wildcharge", "headsmash", "fireblast", "grassknot", "suckerpunch"],
 		randomDoubleBattleMoves: ["flareblitz", "superpower", "flamecharge", "wildcharge", "headsmash", "protect", "heatwave", "rockslide"],
 		tier: "RU",
 		doublesTier: "DUU",
