@@ -169,8 +169,8 @@ class BattleTimer {
 	start(/** @type {User} */ requester) {
 		let userid = requester ? requester.userid : 'staff';
 		if (this.timerRequesters.has(userid)) return false;
-		if (this.timer && requester) {
-			this.battle.room.add(`|inactive|${requester.name} also wants the timer to be on.`).update();
+		if (this.timer) {
+			this.battle.room.add(`|inactive|${requester ? requester.name : userid} also wants the timer to be on.`).update();
 			this.timerRequesters.add(userid);
 			return false;
 		}
