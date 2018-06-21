@@ -89,7 +89,7 @@ exports.commands = {
 
 			if (!this.runBroadcast()) return;
 			this.sendReplyBox(`<table border="1" cellspacing="0" cellpadding="3"><tr><td>${Chat.escapeHTML(room.events[target].eventName)}</td><td>${Chat.formatText(room.events[target].desc, true)}</td><td><time>${Chat.escapeHTML(room.events[target].date)}</time></td></tr></table>`);
-			if (!this.broadcasting && user.can('declare', null, room)) this.sendReplyBox(Chat.html`<code>/roomevents add ${room.events[target].eventName} | ${room.events[target].date} | ${room.events[target].desc}</code>`);
+			if (!this.broadcasting && user.can('ban', null, room)) this.sendReplyBox(Chat.html`<code>/roomevents add ${room.events[target].eventName} | ${room.events[target].date} | ${room.events[target].desc}</code>`);
 		},
 		help: function (target, room, user) {
 			return this.parse('/help roomevents');
@@ -98,7 +98,7 @@ exports.commands = {
 	roomeventshelp: [
 		`/roomevents - Displays a list of upcoming room-specific events.`,
 		`/roomevents add [event name] | [event date/time] | [event description] - Adds a room event. Requires: @ # & ~`,
-		`/roomevents remove [event name] - Deletes an event. Requires: # & ~`,
+		`/roomevents remove [event name] - Deletes an event. Requires: @ # & ~`,
 		`/roomevents view [event name] - Displays information about a specific event.`,
 	],
 };
