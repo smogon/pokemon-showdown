@@ -88,7 +88,7 @@ function writeFile(name, data) {
 logs = readFile(LOGS_FILE);
 if (!logs) logs = {leaderboard: {}, mvps: {}, hosts: {}, plays: {}, leavers: {}};
 /** @type {MafiaLogSection[]} */
-const tables = ['leaderboard', 'mvps', 'hosts', 'plays'];
+const tables = ['leaderboard', 'mvps', 'hosts', 'plays', 'leavers'];
 for (const section of tables) {
 	// Check to see if we need to eliminate an old month's data.
 	const month = new Date().toLocaleString("en-us", {month: "numeric", year: "numeric"});
