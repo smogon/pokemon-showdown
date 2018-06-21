@@ -170,10 +170,12 @@ exports.roles = Object.assign(Object.create(null), {
 		name: `Villager`,
 		id: `villager`,
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
+		memo: [`Vanilla Townie: Town player without any additional abilities.`],
 	},
 	goon: {
 		name: `Goon`,
 		id: `goon`,
+		memo: [`Goon: Mafia player without any additional abilities.`],
 	},
 	assassin: {
 		name: `Assassin`,
