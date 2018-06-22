@@ -23399,9 +23399,12 @@ let BattleLearnsets = {
 	smeargle: {learnset: {
 		captivate: ["5D"],
 		falseswipe: ["5S1"],
+		flamethrower: ["6S2"],
+		furyswipes: ["6S2"],
 		meanlook: ["5S1"],
 		odorsleuth: ["5S1"],
-		sketch: ["7L91", "7L81", "7L71", "7L61", "7L51", "7L41", "7L31", "7L21", "7L11", "7L1", "7V", "6L1", "5D", "5L1", "4L1", "3L1", "3S0"],
+		seismictoss: ["6S2"],
+		sketch: ["7L91", "7L81", "7L71", "7L61", "7L51", "7L41", "7L31", "7L21", "7L11", "7L1", "7V", "6L1", "6S2", "5D", "5L1", "4L1", "3L1", "3S0"],
 		sleeptalk: ["5D"],
 		spore: ["5S1"],
 	}},
