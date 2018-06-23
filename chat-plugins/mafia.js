@@ -1629,12 +1629,12 @@ const commands = {
 					skipped.push(toId(toHost));
 					toHost = hostQueue.shift();
 					if (!toHost) {
-						this.sendReply(`${skipped.join(', ')} were not online, not in the room, or are host banned and were removed from the host queue.`);
+						if (skipped.length) this.sendReply(`${skipped.join(', ')} were not online, not in the room, or are host banned and were removed from the host queue.`);
 						return this.errorReply(`Nobody on the host queue could be hosted.`);
 					}
 					this.splitTarget(toHost, false);
 				}
-				this.sendReply(`${skipped.join(', ')} were not online, not in the room, or are host banned and were removed from the host queue.`);
+				if (skipped.length) this.sendReply(`${skipped.join(', ')} were not online, not in the room, or are host banned and were removed from the host queue.`);
 			} else {
 				this.splitTarget(toHost, false);
 				if (!this.targetUser || !this.targetUser.connected) return this.errorReply(`The user "${this.targetUsername}" was not found.`);
@@ -2580,7 +2580,7 @@ const commands = {
 				if (queueIndex > -1) hostQueue.splice(queueIndex, 1);
 			}
 			writeFile(BANS_FILE, hostBans);
-			room.add(`${this.targetUsername} was ${isUnban ? 'un' : ''}banned from hosting games by ${user}${!isUnban ? ` for ${duration} days` : ''} by ${user.name}.`).update();
+			room.add(`${this.targetUsername} was ${isUnban ? 'un' : ''}banned from hosting games${!isUnban ? ` for ${duration} days` : ''} by ${user.name}.`).update();
 		},
 		hostbanhelp: [
 			`/mafia hostban [user], [duration] - Ban a user from hosting games for [duration] days. Requires % @ * # & ~`,
