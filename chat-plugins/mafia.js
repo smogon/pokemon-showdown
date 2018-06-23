@@ -2454,7 +2454,16 @@ const commands = {
 				buf += `<b>Description</b>: ${result.desc}<br/><details><summary class="button" style="font-weight: bold; display: inline-block">Setups:</summary>`;
 				for (let i in result) {
 					if (isNaN(parseInt(i))) continue;
-					buf += `${i}: ${result[i]}<br/>`;
+					buf += `${i}: `;
+					let count = {};
+					let roles = [];
+					for (const role of result[i].split(',').map((/** @type {string} */x) => x.trim())) {
+						count[role] = count[role] ? count[role] + 1 : 1;
+					}
+					for (const role in count) {
+						roles.push(count[role] > 1 ? `${count[role]}x ${role}` : role);
+					}
+					buf += `${roles.join(', ')}<br/>`;
 				}
 			} else {
 				buf += `${result.memo.join('<br/>')}`;
