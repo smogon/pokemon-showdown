@@ -2746,7 +2746,7 @@ let BattleFormatsData = {
 		randomBattleMoves: ["ironhead", "uturn", "firepunch", "icepunch", "trick", "stealthrock", "bodyslam", "toxic", "wish", "substitute"],
 		randomDoubleBattleMoves: ["bodyslam", "ironhead", "icywind", "thunderwave", "helpinghand", "trickroom", "uturn", "followme", "zenheadbutt", "protect"],
 		tier: "OU",
-		doublesTier: "DUU",
+		doublesTier: "DUber",
 	},
 	deoxys: {
 		inherit: true,
