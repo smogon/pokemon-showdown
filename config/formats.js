@@ -433,24 +433,27 @@ let Formats = [
 			'Illegal', 'Unreleased', 'Shedinja', 'Infiltrator', 'Magic Guard', 'Misty Surge', 'Assault Vest', 'Choice Scarf', 'Explosion',
 			'Final Gambit', 'Healing Wish', 'Lunar Dance', 'Magic Room', 'Memento', 'Misty Terrain', 'Self-Destruct',
 		],
-		onValidateTeam: function (team) {
+		onValidateTeam: function (team, format) {
 			let problems = [];
 			if (team.length !== 6) problems.push(`Your team cannot have less than 6 Pok\u00e9mon.`);
-			let families = {};
-			for (const set of team) {
-				let pokemon = this.getTemplate(set.species);
-				if (pokemon.baseSpecies) pokemon = this.getTemplate(pokemon.baseSpecies);
-				if (pokemon.prevo) {
-					pokemon = this.getTemplate(pokemon.prevo);
-					if (pokemon.prevo) {
-						pokemon = this.getTemplate(pokemon.prevo);
+			/**
+			 * Family Clause
+			 * @param {string} species
+			 */
+			let getEvoFamily = function (species) {
+				let template = Dex.getTemplate(species);
+				while (template.prevo) {
+					template = Dex.getTemplate(template.prevo);
+				}
+				return template.speciesid;
+			};
+			for (let i = 0; i < team.length; i++) {
+				let set = team[i];
+				for (let j = i + 1; j < team.length; j++) {
+					if (getEvoFamily(set.species) === getEvoFamily(team[j].species)) {
+						problems.push(`You cannot have more than one Pokemon from their respective evolutionary line. (${set.name || set.species} and ${team[j].name || team[j].species} are from the same evolutionary line)`);
 					}
 				}
-				if (!families[pokemon.species]) families[pokemon.species] = [];
-				families[pokemon.species].push(set.species);
-			}
-			for (const family in families) {
-				if (families[family].length > 1) problems.push(`${Chat.toListString(families[family])} are in the same evolutionary family.`);
 			}
 			return problems;
 		},
