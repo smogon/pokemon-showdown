@@ -611,6 +611,42 @@ let Formats = [
 		},
 	},
 	{
+		name: "[Gen 7] STABmons",
+		desc: `Pok&eacute;mon can use any move of their typing, in addition to the moves they can normally learn.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3587949/">STABmons</a>`,
+		],
+
+		mod: 'gen7',
+		// searchShow: false,
+		ruleset: ['[Gen 7] OU', 'STABmons Move Legality'],
+		banlist: ['Aerodactyl-Mega', 'Blacephalon', 'Kartana', 'Komala', 'Kyurem-Black', 'Porygon-Z', 'Silvally', 'Tapu Koko', 'Tapu Lele', 'King\'s Rock', 'Razor Fang'],
+		restrictedMoves: ['Acupressure', 'Belly Drum', 'Chatter', 'Extreme Speed', 'Geomancy', 'Lovely Kiss', 'Shell Smash', 'Shift Gear', 'Spore', 'Thousand Arrows'],
+	},
+	{
+		name: "[Gen 7] ZU",
+		desc: `The usage-based tier below PU.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3629669/">ZU</a>`,
+		],
+
+		mod: 'gen7',
+		searchShow: false,
+		ruleset: ['[Gen 7] PU'],
+		banlist: [
+			// PU
+			'Abomasnow', 'Absol', 'Aggron', 'Archeops', 'Articuno', 'Audino', 'Aurorus', 'Claydol', 'Clefairy', 'Drampa',
+			'Eelektross', 'Exeggutor-Alola', 'Ferroseed', 'Floatzel', 'Gastrodon', 'Golurk', 'Gourgeist-Super', 'Gurdurr',
+			'Haunter', 'Hitmonchan', 'Kabutops', 'Kangaskhan', 'Kecleon', 'Kingler', 'Komala', 'Lanturn', 'Lilligant',
+			'Mesprit', 'Mudsdale', 'Oricorio-Sensu', 'Passimian', 'Persian-Alola', 'Primeape', 'Pyroar', 'Raichu-Alola',
+			'Regirock', 'Sableye', 'Sandslash-Alola', 'Silvally-Fairy', 'Silvally-Ghost', 'Skuntank', 'Spiritomb',
+			'Swanna', 'Stoutland', 'Togedemaru', 'Ursaring', 'Weezing', 'Zangoose',
+			// ZUBL
+			'Carracosta', 'Crabominable', 'Exeggutor', 'Gorebyss', 'Jynx', 'Ludicolo', 'Musharna', 'Raticate-Alola',
+			'Raticate-Alola-Totem', 'Throh', 'Turtonator', 'Type: Null', 'Victreebel',
+		],
+	},
+	{
 		name: "[Gen 7] Camomons",
 		desc: `Pok&eacute;mon change type to match their first two moves.`,
 		threads: [
@@ -625,19 +661,6 @@ let Formats = [
 			let types = [...new Set(target.baseMoveSlots.slice(0, 2).map(move => this.getMove(move.id).type))];
 			return Object.assign({}, template, {types: types});
 		},
-	},
-	{
-		name: "[Gen 7] STABmons",
-		desc: `Pok&eacute;mon can use any move of their typing, in addition to the moves they can normally learn.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3587949/">STABmons</a>`,
-		],
-
-		mod: 'gen7',
-		// searchShow: false,
-		ruleset: ['[Gen 7] OU', 'STABmons Move Legality'],
-		banlist: ['Aerodactyl-Mega', 'Blacephalon', 'Kartana', 'Komala', 'Kyurem-Black', 'Porygon-Z', 'Silvally', 'Tapu Koko', 'Tapu Lele', 'King\'s Rock', 'Razor Fang'],
-		restrictedMoves: ['Acupressure', 'Belly Drum', 'Chatter', 'Extreme Speed', 'Geomancy', 'Lovely Kiss', 'Shell Smash', 'Shift Gear', 'Spore', 'Thousand Arrows'],
 	},
 	{
 		name: "[Gen 7] 2v2 Doubles",
