@@ -618,9 +618,9 @@ const commands = {
 		this.sendReply(buffer);
 	},
 	datahelp: [
-		`/data [pokemon/item/move/ability] - Get details on this pokemon/item/move/ability/nature.`,
-		`/data [pokemon/item/move/ability], Gen [generation number/format name] - Get details on this pokemon/item/move/ability/nature for that generation/format.`,
-		`!data [pokemon/item/move/ability] - Show everyone these details. Requires: + % @ * # & ~`,
+		`/data [pokemon/item/move/ability/nature] - Get details on this pokemon/item/move/ability/nature.`,
+		`/data [pokemon/item/move/ability/nature], Gen [generation number/format name] - Get details on this pokemon/item/move/ability/nature for that generation/format.`,
+		`!data [pokemon/item/move/ability/nature] - Show everyone these details. Requires: + % @ * # & ~`,
 	],
 
 	'!details': true,
@@ -630,9 +630,9 @@ const commands = {
 		this.run('data');
 	},
 	detailshelp: [
-		`/details [pokemon/item/move/ability] - Get additional details on this pokemon/item/move/ability/nature.`,
-		`/details [pokemon/item/move/ability], Gen [generation number/format name] - Get details on this pokemon/item/move/ability/nature for that generation/format.`,
-		`!details [pokemon/item/move/ability] - Show everyone these details. Requires: + % @ * # & ~`,
+		`/details [pokemon/item/move/ability/nature] - Get additional details on this pokemon/item/move/ability/nature.`,
+		`/details [pokemon/item/move/ability/nature], Gen [generation number/format name] - Get details on this pokemon/item/move/ability/nature for that generation/format.`,
+		`!details [pokemon/item/move/ability/nature] - Show everyone these details. Requires: + % @ * # & ~`,
 	],
 
 	'!weakness': true,
