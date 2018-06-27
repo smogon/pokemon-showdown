@@ -95,6 +95,7 @@ let BattleScripts = {
 			pokemon.side.zMoveUsed = true;
 		}
 		let moveDidSomething = this.useMove(baseMove, pokemon, target, sourceEffect, zMove);
+		if (this.activeMove) move = this.activeMove;
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 		this.runEvent('AfterMove', pokemon, target, move);
 
