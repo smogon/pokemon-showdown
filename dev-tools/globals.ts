@@ -535,6 +535,7 @@ interface Move extends Effect, MoveData {
 	totalDamage?: number | false
 	willChangeForme?: boolean
 	zBrokeProtect?: boolean
+	zPowered?: boolean
 }
 
 type TemplateAbility = {0: string, 1?: string, H?: string, S?: string}
