@@ -145,9 +145,11 @@ let BattleScripts = {
 			let baseMove = move;
 			this.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
 			move = this.getZMoveCopy(move, pokemon);
+			move.zPowered = true;
 			if (move.type !== 'Normal') sourceEffect = baseMove;
 		} else if (zMove || (move.category !== 'Status' && sourceEffect && sourceEffect.isZ && sourceEffect.id !== 'instruct')) {
 			move = this.getZMoveCopy(move, pokemon);
+			move.zPowered = true;
 		}
 		if (this.activeMove) {
 			move.priority = this.activeMove.priority;
