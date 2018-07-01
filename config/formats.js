@@ -423,9 +423,9 @@ let Formats = [
 		name: "[Gen 7] Metagamiate",
 		desc: `All Pok&eacute;mon gain an intrinsic -ate ability corresponding to their first type if not shiny, and second type (if applicable) if shiny.`,
 		threads: [
-			`&bullet; <a href=\"https://www.smogon.com/forums/threads/3604808/\">Metagamiate</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3604808/">Metagamiate</a>`,
 		],
-	 
+
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Dragonite', 'Kyurem-Black'],
@@ -444,7 +444,6 @@ let Formats = [
 			return this.chainModify([0x1333, 0x1000]);
 		},
 		validateSet: function (set, teamHas) {
-			let trueTemplate = this.dex.getTemplate(set.species)
 			let forgedTemplate = Object.assign({}, this.dex.getTemplate(set.species));
 			if (forgedTemplate.eventPokemon) {
 				let ep = []; //Avoid format crosstalk by using an empty array as a base
@@ -467,7 +466,7 @@ let Formats = [
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Kyurem-Black'],
-		unbanlist : ['Kyurem-White', 'Marshadow', 'Metagrossite', 'Naganadel', 'Reshiram'],
+		unbanlist: ['Kyurem-White', 'Marshadow', 'Metagrossite', 'Naganadel', 'Reshiram'],
 		onModifyTemplate: function (template, target, source) {
 			template = Object.assign({}, template);
 			template.baseStats = Object.assign({}, template.baseStats);
