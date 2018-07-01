@@ -431,7 +431,7 @@ let Formats = [
 		banlist: ['Dragonite', 'Kyurem-Black'],
 		onModifyMovePriority: -2,
 		onModifyMove: function (move, pokemon) {
-			if (move.type === 'Normal' && !move.isZ) {
+			if (move.type === 'Normal' && !['judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'weatherball'].includes(move.id) && !(move.isZ && move.category !== 'Status')) {
 				let types = pokemon.getTypes();
 				let type = types.length < 2 || !pokemon.set.shiny ? types[0] : types[1];
 				move.type = type;
@@ -441,8 +441,7 @@ let Formats = [
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, attacker, defender, move) {
 			// @ts-ignore
-			if (!move.isMetagamiate) return;
-			return this.chainModify([0x1333, 0x1000]);
+			if (move.isMetagamiate) this.chainModify([0x1333, 0x1000]);
 		},
 		validateSet: function (set, teamHas) {
 			let forgedTemplate = Object.assign({}, this.dex.getTemplate(set.species));
