@@ -446,9 +446,10 @@ let Formats = [
 		onModifyTemplate: function (template, target, source) {
 			template = Object.assign({}, template);
 			if (template.eventPokemon) {
-				for (let event of template.eventPokemon) {
+				for (let [i, event] of template.eventPokemon.entries()) {
 					event = Object.assign({}, event);
 					event.shiny = 1;
+					template.eventPokemon[i] = event;
 				}
 			}
 			return template;
