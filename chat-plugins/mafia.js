@@ -2523,12 +2523,12 @@ const commands = {
 				if (!logs.mvps[month][u]) logs.mvps[month][u] = 0;
 				if (cmd === 'unmvp') {
 					logs.mvps[month][u]--;
-					logs.leaderboard[month][u] -= 5;
+					logs.leaderboard[month][u] -= 10;
 					if (logs.mvps[month][u] === 0) delete logs.mvps[month][u];
 					if (logs.leaderboard[month][u] === 0) delete logs.leaderboard[month][u];
 				} else {
 					logs.mvps[month][u]++;
-					logs.leaderboard[month][u] += 5;
+					logs.leaderboard[month][u] += 10;
 				}
 			}
 			if (!gavePoints) return this.parse('/help mafia mvp');
