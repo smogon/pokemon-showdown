@@ -328,5 +328,5 @@ exports.commands = {
 		template.baseStats = Object.assign({}, newStats);
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(template)}`);
 	},
-	scalemonshelp: [`/reverse OR /reversed <pokemon> - Shows the base stats that a Pokemon would have in Reversed.`],
+	reversedhelp: [`/reverse OR /reversed <pokemon> - Shows the base stats that a Pokemon would have in Reversed.`],
 };
