@@ -311,24 +311,22 @@ exports.commands = {
 	},
 	tiershifthelp: [`/ts OR /tiershift <pokemon> - Shows the base stats that a Pokemon would have in Tier Shift.`],
 
-	'!scalemons': true,
-	scale: 'scalemons',
-	scalemons: function (target, room, user) {
+	'!reversed': true,
+	reverse: 'reversed',
+	reversed: function (target, room, user) {
 		if (!this.runBroadcast()) return;
-		if (!toId(target)) return this.parse(`/help scalemons`);
+		if (!toId(target)) return this.parse(`/help reversed`);
 		let template = Object.assign({}, Dex.getTemplate(target));
 		if (!template.exists) return this.errorReply(`Error: Pokemon ${target} not found.`);
 		let newStats = Object.assign({}, template.baseStats);
-		let stats = ['atk', 'def', 'spa', 'spd', 'spe'];
-		// @ts-ignore
-		let pst = stats.map(stat => template.baseStats[stat]).reduce((x, y) => x + y);
-		let scale = 600 - template.baseStats['hp'];
-		for (const stat of stats) {
-			// @ts-ignore
-			newStats[stat] = Dex.clampIntRange(template.baseStats[stat] * scale / pst, 1, 255);
-		}
+		let temp = newStats.atk;
+		newStats.atk = newStats.spa;
+		newStats.spa = temp;
+		temp = newStats.def;
+		newStats.def = newStats.spd;
+		newStats.spd = temp;
 		template.baseStats = Object.assign({}, newStats);
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(template)}`);
 	},
-	scalemonshelp: [`/scale OR /scalemons <pokemon> - Shows the base stats that a Pokemon would have in Scalemons.`],
+	scalemonshelp: [`/reverse OR /reversed <pokemon> - Shows the base stats that a Pokemon would have in Reversed.`],
 };
