@@ -426,7 +426,7 @@ let Formats = [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3604808/">Metagamiate</a>`,
 		],
 
-		mod: 'gen7',
+		mod: 'metagamiate',
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Dragonite', 'Kyurem-Black'],
 		onModifyMovePriority: -1,
@@ -442,17 +442,6 @@ let Formats = [
 		onBasePower: function (basePower, attacker, defender, move) {
 			// @ts-ignore
 			if (move.isMetagamiate) return this.chainModify([0x1333, 0x1000]);
-		},
-		onModifyTemplate: function (template, target, source) {
-			template = Object.assign({}, template);
-			if (template.eventPokemon) {
-				for (let [i, event] of template.eventPokemon.entries()) {
-					event = Object.assign({}, event);
-					event.shiny = 1;
-					template.eventPokemon[i] = event;
-				}
-			}
-			return template;
 		},
 	},
 	{
