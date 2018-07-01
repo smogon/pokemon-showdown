@@ -643,6 +643,7 @@ interface FormatsData extends EventMethods {
 	mod?: string
 	noChangeAbility?: boolean
 	noChangeForme?: boolean
+	onModifyMovePriority?: number
 	onStartPriority?: number
 	onSwitchInPriority?: number
 	rated?: boolean
