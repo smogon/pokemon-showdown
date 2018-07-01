@@ -421,9 +421,9 @@ let Formats = [
 	},
 	{
 		name: "[Gen 7] Metagamiate",
-		desc: `Every Pok&eacute; gains an intrinsic -ate ability for their primary type, or their secondary type if shiny.`,
+		desc: `Every Pok&eacute; gains an intrinsic -ate ability matching its primary type, or its secondary type if shiny.`,
 		threads: [
-			`&bullet; <a href="">Metagamiate</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3604808/">Metagamiate</a>`,
 		],
 
 		mod: 'gen7',
