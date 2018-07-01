@@ -420,65 +420,61 @@ let Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] Suicide Cup",
-		desc: `Victory is obtained when all of your Pok&eacute;mon have fainted.`,
+		name: "[Gen 7] Metagamiate",
+		desc: `Every Pok&eacute;mon gains an intrinsic -ate ability matching its primary type, or its secondary type if shiny.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3633603/">Suicide Cup</a>`,
-		],
-
-		mod: 'suicidecup',
-		forcedLevel: 100,
-		ruleset: ['Cancel Mod', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Moody Clause', 'Nickname Clause', 'Pokemon', 'Sleep Clause Mod', 'Species Clause', 'Team Preview'],
-		banlist: [
-			'Illegal', 'Unreleased', 'Shedinja', 'Infiltrator', 'Magic Guard', 'Misty Surge', 'Assault Vest', 'Choice Scarf', 'Explosion',
-			'Final Gambit', 'Healing Wish', 'Lunar Dance', 'Magic Room', 'Memento', 'Misty Terrain', 'Self-Destruct',
-		],
-		onValidateTeam: function (team) {
-			let problems = [];
-			if (team.length !== 6) problems.push(`Your team cannot have less than 6 Pok\u00e9mon.`);
-			let families = {};
-			for (const set of team) {
-				let pokemon = this.getTemplate(set.species);
-				if (pokemon.baseSpecies) pokemon = this.getTemplate(pokemon.baseSpecies);
-				if (pokemon.prevo) {
-					pokemon = this.getTemplate(pokemon.prevo);
-					if (pokemon.prevo) {
-						pokemon = this.getTemplate(pokemon.prevo);
-					}
-				}
-				if (!families[pokemon.species]) families[pokemon.species] = [];
-				families[pokemon.species].push(set.species);
-			}
-			for (const family in families) {
-				if (families[family].length > 1) problems.push(`${Chat.toListString(families[family])} are in the same evolutionary family.`);
-			}
-			return problems;
-		},
-	},
-	{
-		name: "[Gen 7] Scalemons",
-		desc: `Every Pok&eacute;mon's stats, barring HP, are scaled to give them a BST as close to 600 as possible.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3607934/">Scalemons</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3604808/">Metagamiate</a>`,
 		],
 
 		mod: 'gen7',
-		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		banlist: [
-			'Abra', 'Carvanha', 'Gastly', 'Gengar-Mega', 'Mawile-Mega', 'Medicham-Mega', 'Shedinja', 'Arena Trap', 'Huge Power',
-			'Shadow Tag', 'Deep Sea Scale', 'Deep Sea Tooth', 'Eevium Z', 'Eviolite', 'Light Ball', 'Thick Club', 'Baton Pass',
+		ruleset: ['[Gen 7] OU'],
+		banlist: ['Dragonite', 'Kyurem-Black'],
+		onModifyMovePriority: -1,
+		onModifyMove: function (move, source) {
+			if (move.type === 'Normal' && !['judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'weatherball'].includes(move.id) && !move.isZ && move.category !== 'Status') {
+				if (source.hasAbility(['aerilate', 'pixilate', 'refrigerate', 'galvanize', 'normalize'])) return;
+				// @ts-ignore
+				move.isMetagamiate = true;
+				move.type = source.getTypes().length < 2 || !source.set.shiny ? source.getTypes()[0] : source.getTypes()[1];
+			}
+		},
+		onBasePowerPriority: 8,
+		onBasePower: function (basePower, attacker, defender, move) {
+			// @ts-ignore
+			if (move.isMetagamiate) return this.chainModify([0x1333, 0x1000]);
+		},
+		onModifyTemplate: function (template, target, source) {
+			template = Object.assign({}, template);
+			if (template.eventPokemon) {
+				for (let [i, event] of template.eventPokemon.entries()) {
+					event = Object.assign({}, event);
+					event.shiny = 1;
+					template.eventPokemon[i] = event;
+				}
+			}
+			return template;
+		},
+	},
+	{
+		name: "[Gen 7] Reversed",
+		desc: `Every Pok&eacute;mon has its Atk and Sp. Atk, as well as its Def and Sp. Def, swap.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3623871/">Reversed</a>`,
 		],
+
+		mod: 'gen7',
+		ruleset: ['[Gen 7] OU'],
+		banlist: ['Kyurem-Black'],
+		unbanlist: ['Kyurem-White', 'Marshadow', 'Metagross-Mega', 'Naganadel', 'Reshiram'],
 		onModifyTemplate: function (template, target, source) {
 			template = Object.assign({}, template);
 			template.baseStats = Object.assign({}, template.baseStats);
-			let stats = ['atk', 'def', 'spa', 'spd', 'spe'];
-			// @ts-ignore
-			let pst = stats.map(stat => template.baseStats[stat]).reduce((x, y) => x + y);
-			let scale = 600 - template.baseStats['hp'];
-			for (const stat of stats) {
-				// @ts-ignore
-				template.baseStats[stat] = this.clampIntRange(template.baseStats[stat] * scale / pst, 1, 255);
-			}
+			const atk = template.baseStats.atk;
+			const def = template.baseStats.def;
+			template.baseStats.atk = template.baseStats.spa;
+			template.baseStats.def = template.baseStats.spd;
+			template.baseStats.spa = atk;
+			template.baseStats.spd = def;
 			return template;
 		},
 	},
@@ -618,7 +614,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
-		// searchShow: false,
+		searchShow: false,
 		ruleset: ['[Gen 7] OU', 'STABmons Move Legality'],
 		banlist: ['Aerodactyl-Mega', 'Blacephalon', 'Kartana', 'Komala', 'Kyurem-Black', 'Porygon-Z', 'Silvally', 'Tapu Koko', 'Tapu Lele', 'King\'s Rock', 'Razor Fang'],
 		restrictedMoves: ['Acupressure', 'Belly Drum', 'Chatter', 'Extreme Speed', 'Geomancy', 'Lovely Kiss', 'Shell Smash', 'Shift Gear', 'Spore', 'Thousand Arrows'],
@@ -631,7 +627,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
-		searchShow: false,
+		// searchShow: false,
 		ruleset: ['[Gen 7] PU'],
 		banlist: [
 			// PU
