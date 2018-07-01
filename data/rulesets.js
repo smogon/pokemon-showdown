@@ -62,7 +62,7 @@ let BattleFormats = {
 			'Phione', 'Manaphy', 'Darkrai', 'Shaymin', 'Arceus',
 			'Victini', 'Keldeo', 'Meloetta', 'Genesect',
 			'Diancie', 'Hoopa', 'Volcanion',
-			'Magearna', 'Marshadow',
+			'Magearna', 'Marshadow', 'Zeraora',
 		],
 		onValidateSet(set, format) {
 			if (this.gen < 7 && toId(set.item) === 'souldew') {
