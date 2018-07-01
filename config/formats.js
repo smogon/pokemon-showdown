@@ -431,7 +431,7 @@ let Formats = [
 		banlist: ['Dragonite', 'Kyurem-Black'],
 		onModifyMovePriority: -2,
 		onModifyMove: function (move, pokemon) {
-			if (move.type === 'Normal' && !move.isZ && !pokemon.hasAbility(['aerilate', 'galvanize', 'normalize', 'pixilate', 'refrigerate'])) {
+			if (move.type === 'Normal' && !move.isZ) {
 				let types = pokemon.getTypes();
 				let type = types.length < 2 || !pokemon.set.shiny ? types[0] : types[1];
 				move.type = type;
@@ -440,6 +440,7 @@ let Formats = [
 		},
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, attacker, defender, move) {
+			// @ts-ignore
 			if (!move.isMetagamiate) return;
 			return this.chainModify([0x1333, 0x1000]);
 		},
