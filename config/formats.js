@@ -441,7 +441,7 @@ let Formats = [
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, attacker, defender, move) {
 			// @ts-ignore
-			if (move.isMetagamiate) this.chainModify([0x1333, 0x1000]);
+			if (move.isMetagamiate) return this.chainModify([0x1333, 0x1000]);
 		},
 		validateSet: function (set, teamHas) {
 			let forgedTemplate = Object.assign({}, this.dex.getTemplate(set.species));
