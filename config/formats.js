@@ -446,7 +446,7 @@ let Formats = [
 	},
 	{
 		name: "[Gen 7] Reversed",
-		desc: `Every Pok&eacute;mon has its Atk and Sp. Atk, as well as its Def and Sp. Def, swap.`,
+		desc: `Every Pok&eacute;mon has its base Atk and Sp. Atk stat, as well as its base Def and Sp. Def stat, swapped.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3623871/">Reversed</a>`,
 		],
