@@ -151,6 +151,7 @@ interface EventMethods {
 	onAfterDamage?: (this: Battle, damage: number, target: Pokemon, soruce: Pokemon, move: Move) => void
 	onAfterMoveSecondary?: (this: Battle, target: Pokemon, source: Pokemon, move: Move) => void
 	onAfterEachBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon) => void
+	onAfterHit?: (this: Battle, source: Pokemon, target: Pokemon, move: Move) => void
 	onAfterSetStatus?: (this: Battle, status: Status, target: Pokemon, source: Pokemon, effect: UnknownEffect) => void
 	onAfterSwitchInSelf?: (this: Battle, pokemon: Pokemon) => void
 	onAfterUseItem?: (this: Battle, item: Item, pokemon: Pokemon) => void
@@ -158,7 +159,6 @@ interface EventMethods {
 	onAfterMoveSecondarySelf?: (this: Battle, source: Pokemon, target: Pokemon, move: Move) => void
 	onAfterMove?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: Move) => void
 	onAfterMoveSelf?: (this: Battle, pokemon: Pokemon) => void
-	onAfterHit?: (this: Battle, target: Pokemon, source: Pokemon) => void
 	onAllyTryAddVolatile?: (this: Battle, status: Status, target: Pokemon, source: Pokemon, effect: UnknownEffect) => void
 	onAllyBasePower?: (this: Battle, basePower: number, attacker: Pokemon, defender: Pokemon, move: Move) => void
 	onAllyModifyAtk?: (this: Battle, atk: number) => void
