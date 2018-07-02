@@ -3506,17 +3506,15 @@ let BattleAbilities = {
 		desc: "If an ally uses its item, this Pokemon gives its item to that ally immediately. Does not activate if the ally's item was stolen or knocked off.",
 		shortDesc: "If an ally uses its item, this Pokemon gives its item to that ally immediately.",
 		onAllyAfterUseItem: function (item, pokemon) {
-			let sourceItem = this.effectData.target.getItem();
-			if (!sourceItem) return;
+			let source = this.effectData.target;
+			let myItem = source.takeItem();
+			if (!myItem) return;
 			// @ts-ignore
-			if (!this.singleEvent('TakeItem', item, this.effectData.target.itemData, this.effectData.target, pokemon, this.effectData, item)) return;
-			sourceItem = this.effectData.target.takeItem();
-			if (!sourceItem) {
+			if (!this.singleEvent('TakeItem', myItem, source.itemData, pokemon, source, this.effectData, myItem) || !pokemon.setItem(myItem)) {
+				source.item = myItem.id;
 				return;
 			}
-			if (pokemon.setItem(sourceItem)) {
-				this.add('-activate', this.effectData.target, 'ability: Symbiosis', sourceItem, '[of] ' + pokemon);
-			}
+			this.add('-activate', source, 'ability: Symbiosis', myItem, '[of] ' + pokemon);
 		},
 		id: "symbiosis",
 		name: "Symbiosis",
