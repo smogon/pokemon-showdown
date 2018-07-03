@@ -211,8 +211,8 @@ let Formats = [
 		requirePentagon: true,
 	},
 	{
-		name: "[Gen 7] Ultra No Holds Barred",
-		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3633858/">Ultra No Holds Barred</a>`],
+		name: "[Gen 7] Battle Spot Special 11",
+		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3638629/">Battle Spot Special 11</a>`],
 
 		mod: 'gen7',
 		forcedLevel: 100,
@@ -220,8 +220,10 @@ let Formats = [
 			validate: [3, 6],
 			battle: 3,
 		},
-		ruleset: ['Pokemon', 'Nickname Clause', 'Team Preview', 'Cancel Mod'],
-		banlist: ['Illegal', 'Unreleased', 'Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Arceus', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Solgaleo', 'Lunala'],
+		ruleset: ['Species Clause', 'Item Clause', 'Nickname Clause', 'Team Preview', 'Cancel Mod'],
+		banlist: ['Illegal', 'Unreleased', 'Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina',
+			'Arceus', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Solgaleo', 'Lunala', 'Necrozma-Dusk-Mane', 'Necrozma-Dawn-Wings',
+		],
 	},
 	{
 		name: "[Gen 7] Custom Game",
@@ -338,19 +340,6 @@ let Formats = [
 		},
 		ruleset: ['Pokemon', 'Standard GBU'],
 		requirePentagon: true,
-	},
-	{
-		name: "[Gen 7] Battle Spot Special 10",
-		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3634759/">Battle Spot Special 10</a>`],
-
-		mod: 'gen7',
-		gameType: 'doubles',
-		maxForcedLevel: 50,
-		teamLength: {
-			validate: [4, 6],
-			battle: 4,
-		},
-		ruleset: ['Pokemon', 'Standard GBU', 'Inverse Mod'],
 	},
 	{
 		name: '[Gen 7] Metronome Battle',
