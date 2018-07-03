@@ -266,7 +266,7 @@ class Validator {
 		if (banReason) {
 			problems.push(`${name}'s item ${set.item} is ${banReason}.`);
 		}
-		if (ruleTable.has('-unreleased') && item.isUnreleased) {
+		if (ruleTable.has('-unreleased') && item.isUnreleased && !ruleTable.has('+item:' + item.id)) {
 			problems.push(`${name}'s item ${set.item} is unreleased.`);
 		}
 
@@ -339,7 +339,7 @@ class Validator {
 			}
 
 			if (ruleTable.has('-unreleased')) {
-				if (move.isUnreleased) problems.push(`${name}'s move ${move.name} is unreleased.`);
+				if (move.isUnreleased && !ruleTable.has('+move:' + move.id)) problems.push(`${name}'s move ${move.name} is unreleased.`);
 			}
 
 			if (ruleTable.has('-illegal')) {
