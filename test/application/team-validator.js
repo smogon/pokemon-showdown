@@ -219,4 +219,112 @@ describe('Team Validator', function () {
 		let illegal = TeamValidator('gen1ou').validateTeam(team);
 		assert(illegal);
 	});
+
+	/*********************************************************
+ 	* Custom rules
+ 	*********************************************************/
+	it('should allow Pokemon to be banned', function () {
+		let team = [
+			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt']},
+		];
+		let illegal = TeamValidator('gen7anythinggoes@@@-Pikachu').validateTeam(team);
+		assert(illegal);
+	});
+
+	it('should allow Pokemon to be unbanned', function () {
+		let team = [
+			{species: 'blaziken', ability: 'blaze', moves: ['skyuppercut']},
+		];
+		let illegal = TeamValidator('gen7ou@@@+Blaziken').validateTeam(team);
+		assert(!illegal);
+	});
+
+	it('should allow moves to be banned', function () {
+		let team = [
+			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt']},
+		];
+		let illegal = TeamValidator('gen7anythinggoes@@@-Agility').validateTeam(team);
+		assert(illegal);
+	});
+
+	it('should allow moves to be unbanned', function () {
+		let team = [
+			{species: 'absol', ability: 'pressure', moves: ['batonpass']},
+		];
+		let illegal = TeamValidator('gen7ou@@@+Baton Pass').validateTeam(team);
+		assert(!illegal);
+	});
+
+	it('should allow items to be banned', function () {
+		let team = [
+			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt'], item: 'lightball'},
+		];
+		let illegal = TeamValidator('gen7anythinggoes@@@-Light Ball').validateTeam(team);
+		assert(illegal);
+	});
+
+	it('should allow items to be unbanned', function () {
+		let team = [
+			{species: 'eevee', ability: 'runaway', moves: ['tackle'], item: 'eeviumz'},
+		];
+		let illegal = TeamValidator('gen7lc@@@+Eevium Z').validateTeam(team);
+		assert(!illegal);
+	});
+
+	it('should allow abilities to be banned', function () {
+		let team = [
+			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt']},
+		];
+		let illegal = TeamValidator('gen7anythinggoes@@@-Static').validateTeam(team);
+		assert(illegal);
+	});
+
+	it('should allow abilities to be unbanned', function () {
+		let team = [
+			{species: 'wobbuffet', ability: 'shadowtag', moves: ['counter']},
+		];
+		let illegal = TeamValidator('gen7ou@@@+Shadow Tag').validateTeam(team);
+		assert(!illegal);
+	});
+
+	it('should allow complex bans to be added', function () {
+		let team = [
+			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt']},
+		];
+		let illegal = TeamValidator('gen7anythinggoes@@@-Pikachu + Agility').validateTeam(team);
+		assert(illegal);
+
+		team = [
+			{species: 'smeargle', ability: 'owntempo', moves: ['gravity']},
+			{species: 'pikachu', ability: 'static', moves: ['thunderbolt']},
+		];
+		illegal = TeamValidator('gen7doublesou@@@-Gravity ++ Thunderbolt').validateTeam(team);
+		assert(illegal);
+	});
+
+	it('should allow complex bans to be altered', function () {
+		let team = [
+			{species: 'smeargle', ability: 'owntempo', moves: ['gravity']},
+			{species: 'abomasnow', ability: 'snowwarning', moves: ['grasswhistle']},
+		];
+		let illegal = TeamValidator('gen7doublesou@@@-Gravity ++ Grass Whistle > 2').validateTeam(team);
+		assert(!illegal);
+
+		team = [
+			{species: 'smeargle', ability: 'owntempo', moves: ['gravity']},
+			{species: 'abomasnow', ability: 'snowwarning', moves: ['grasswhistle']},
+			{species: 'cacturne', ability: 'sandveil', moves: ['grasswhistle']},
+		];
+		illegal = TeamValidator('gen7doublesou@@@-Gravity ++ Grass Whistle > 2').validateTeam(team);
+		assert(illegal);
+	});
+
+	it('should allow complex bans to be removed', function () {
+		let team = [
+			{species: 'smeargle', ability: 'owntempo', moves: ['gravity']},
+			{species: 'abomasnow', ability: 'snowwarning', moves: ['grasswhistle']},
+		];
+		let illegal = TeamValidator('gen7doublesou@@@+Gravity ++ Grass Whistle').validateTeam(team);
+		assert(!illegal);
+	});
 });

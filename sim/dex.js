@@ -766,9 +766,15 @@ class ModdedDex {
 			const ruleSpec = this.validateRule(rule, format);
 			if (typeof ruleSpec !== 'string') {
 				if (ruleSpec[0] === 'complexTeamBan') {
-					ruleTable.complexTeamBans.push(/** @type {any} */ (ruleSpec.slice(1)));
+					/**@type {[string, string, number, string[]]} */
+					// @ts-ignore
+					let complexTeamBan = ruleSpec.slice(1);
+					ruleTable.addComplexTeamBan(complexTeamBan[0], complexTeamBan[1], complexTeamBan[2], complexTeamBan[3]);
 				} else if (ruleSpec[0] === 'complexBan') {
-					ruleTable.complexBans.push(/** @type {any} */ (ruleSpec.slice(1)));
+					/**@type {[string, string, number, string[]]} */
+					// @ts-ignore
+					let complexBan = ruleSpec.slice(1);
+					ruleTable.addComplexBan(complexBan[0], complexBan[1], complexBan[2], complexBan[3]);
 				} else {
 					throw new Error(`Unrecognized rule spec ${ruleSpec}`);
 				}
@@ -794,10 +800,10 @@ class ModdedDex {
 				if (!ruleTable.has('!' + k)) ruleTable.set(k, v || subformat.name);
 			}
 			for (const [rule, source, limit, bans] of subRuleTable.complexBans) {
-				ruleTable.complexBans.push([rule, source || subformat.name, limit, bans]);
+				ruleTable.addComplexBan(rule, source || subformat.name, limit, bans);
 			}
 			for (const [rule, source, limit, bans] of subRuleTable.complexTeamBans) {
-				ruleTable.complexTeamBans.push([rule, source || subformat.name, limit, bans]);
+				ruleTable.addComplexTeamBan(rule, source || subformat.name, limit, bans);
 			}
 			if (subRuleTable.checkLearnset) {
 				if (ruleTable.checkLearnset) {
@@ -823,9 +829,9 @@ class ModdedDex {
 			if (rule.slice(1).includes('>') || rule.slice(1).includes('+')) {
 				let buf = rule.slice(1);
 				const gtIndex = buf.lastIndexOf('>');
-				let limit = 0;
+				let limit = rule.charAt(0) === '+' ? Infinity : 0;
 				if (gtIndex >= 0 && /^[0-9]+$/.test(buf.slice(gtIndex + 1).trim())) {
-					limit = parseInt(buf.slice(gtIndex + 1));
+					if (limit === 0) limit = parseInt(buf.slice(gtIndex + 1));
 					buf = buf.slice(0, gtIndex);
 				}
 				let checkTeam = buf.includes('++');
