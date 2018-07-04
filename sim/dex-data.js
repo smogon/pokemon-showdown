@@ -233,6 +233,55 @@ class RuleTable extends Map {
 		if (source === undefined) return '';
 		return source ? `banned by ${source}` : `banned`;
 	}
+
+	/**
+	 * @param {[string, string, number, string[]][]} complexBans
+	 * @param {string} rule
+	 * @return {number}
+	 */
+	getComplexBanIndex(complexBans, rule) {
+		let ruleId = toId(rule);
+		let complexBanIndex = -1;
+		for (let i = 0; i < complexBans.length; i++) {
+			if (toId(complexBans[i][0]) === ruleId) {
+				complexBanIndex = i;
+				break;
+			}
+		}
+		return complexBanIndex;
+	}
+
+	/**
+	 * @param {string} rule
+	 * @param {string} source
+	 * @param {number} limit
+	 * @param {string[]} bans
+	 */
+	addComplexBan(rule, source, limit, bans) {
+		let complexBanIndex = this.getComplexBanIndex(this.complexBans, rule);
+		if (complexBanIndex !== -1) {
+			if (this.complexBans[complexBanIndex][2] === Infinity) return;
+			this.complexBans[complexBanIndex] = [rule, source, limit, bans];
+		} else {
+			this.complexBans.push([rule, source, limit, bans]);
+		}
+	}
+
+	/**
+	 * @param {string} rule
+	 * @param {string} source
+	 * @param {number} limit
+	 * @param {string[]} bans
+	 */
+	addComplexTeamBan(rule, source, limit, bans) {
+		let complexBanTeamIndex = this.getComplexBanIndex(this.complexTeamBans, rule);
+		if (complexBanTeamIndex !== -1) {
+			if (this.complexTeamBans[complexBanTeamIndex][2] === Infinity) return;
+			this.complexTeamBans[complexBanTeamIndex] = [rule, source, limit, bans];
+		} else {
+			this.complexTeamBans.push([rule, source, limit, bans]);
+		}
+	}
 }
 
 class Format extends Effect {
