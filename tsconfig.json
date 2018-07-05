@@ -41,6 +41,7 @@
         "./chat-plugins/helptickets.js",
         "./chat-plugins/mafia.js",
         "./chat-plugins/mafia-data.js",
+        "./chat-plugins/wifi.js",
         "./punishments.js"
     ]
 }
