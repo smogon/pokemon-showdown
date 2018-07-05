@@ -41,7 +41,7 @@ function saveBreedingData() {
 }
 
 /**
- * @param {String} str
+ * @param {string} str
  */
 function toPokemonId(str) {
 	return str.toLowerCase().replace(/é/g, 'e').replace(/[^a-z0-9 -/]/g, '');
@@ -52,10 +52,10 @@ class Giveaway {
 	 * @param {User} host
 	 * @param {User} giver
 	 * @param {ChatRoom} room
-	 * @param {String} ot
-	 * @param {String} tid
-	 * @param {String} fc
-	 * @param {String} prize
+	 * @param {string} ot
+	 * @param {string} tid
+	 * @param {string} fc
+	 * @param {string} prize
 	 */
 	constructor(host, giver, room, ot, tid, fc, prize) {
 		// The massive amounts of typescipt ignores are to work around something that is impossible to implement in the current typescipt version, but should be available soon.
@@ -85,7 +85,7 @@ class Giveaway {
 		this.timer = null;
 
 		// This seems wrong but I can't find a better way to do this.
-		/** @type {Set<String>} */
+		/** @type {Set<string>} */
 		// @ts-ignore
 		this.monIds = null;
 		this.sprite = '';
@@ -95,7 +95,7 @@ class Giveaway {
 	generateReminder() {}
 
 	/**
-	 * @param {String} content
+	 * @param {string} content
 	 */
 	send(content) {
 		// @ts-ignore
@@ -104,7 +104,7 @@ class Giveaway {
 	}
 
 	/**
-	 * @param {String} content
+	 * @param {string} content
 	 */
 	changeUhtml(content) {
 		// @ts-ignore
@@ -163,7 +163,7 @@ class Giveaway {
 	/**
 	 * @param {ChatRoom} room
 	 * @param {User} user
-	 * @param {String} reason
+	 * @param {string} reason
 	 */
 	static ban(room, user, reason) {
 		Punishments.roomPunish(room, user, ['GIVEAWAYBAN', toId(user), Date.now() + BAN_DURATION, reason], null);
@@ -178,9 +178,9 @@ class Giveaway {
 	}
 
 	/**
-	 * @param {String} text
+	 * @param {string} text
 	 *
-	 * @return {[Set<String>, String]}
+	 * @return {[Set<string>, string]}
 	 */
 	static getSprite(text) {
 		text = toPokemonId(text);
@@ -245,7 +245,7 @@ class Giveaway {
 	}
 
 	/**
-	 * @param {Set<String>} monIds
+	 * @param {Set<string>} monIds
 	 */
 	static updateStats(monIds) {
 		for (let mon of monIds) {
@@ -258,7 +258,7 @@ class Giveaway {
 	}
 
 	/**
-	 * @param {String} rightSide
+	 * @param {string} rightSide
 	 */
 	generateWindow(rightSide) {
 		return `<p style="text-align:center;font-size:14pt;font-weight:bold;margin-bottom:2px;">It's giveaway time!</p>` +
@@ -273,12 +273,12 @@ class QuestionGiveaway extends Giveaway {
 	 * @param {User} host
 	 * @param {User} giver
 	 * @param {ChatRoom} room
-	 * @param {String} ot
-	 * @param {String} tid
-	 * @param {String} fc
-	 * @param {String} prize
-	 * @param {String} question
-	 * @param {String[]} answers
+	 * @param {string} ot
+	 * @param {string} tid
+	 * @param {string} fc
+	 * @param {string} prize
+	 * @param {string} question
+	 * @param {string[]} answers
 	 */
 	constructor(host, giver, room, ot, tid, fc, prize, question, answers) {
 		super(host, giver, room, ot, tid, fc, prize);
@@ -307,7 +307,7 @@ class QuestionGiveaway extends Giveaway {
 
 	/**
 	 * @param {User} user
-	 * @param {String} guess
+	 * @param {string} guess
 	 */
 	guessAnswer(user, guess) {
 		if (this.phase !== 'started') return user.sendTo(this.room, "The giveaway has not started yet.");
@@ -338,8 +338,8 @@ class QuestionGiveaway extends Giveaway {
 	}
 
 	/**
-	 * @param {String} key
-	 * @param {String} value
+	 * @param {string} key
+	 * @param {string} value
 	 * @param {User} user
 	 */
 	change(key, value, user) {
@@ -386,16 +386,16 @@ class QuestionGiveaway extends Giveaway {
 	}
 
 	/**
-	 * @param {String} str
+	 * @param {string} str
 	 *
-	 * @return {String}
+	 * @return {string}
 	 */
 	static sanitize(str) {
 		return str.toLowerCase().replace(/[^a-z0-9 .-]+/ig, "").trim();
 	}
 
 	/**
-	 * @param {String[]} answers
+	 * @param {string[]} answers
 	 */
 	static sanitizeAnswers(answers) {
 		return answers.map(val => QuestionGiveaway.sanitize(val)).filter((val, index, array) => toId(val).length && array.indexOf(val) === index);
@@ -415,10 +415,10 @@ class LotteryGiveaway extends Giveaway {
 	 * @param {User} host
 	 * @param {User} giver
 	 * @param {ChatRoom} room
-	 * @param {String} ot
-	 * @param {String} tid
-	 * @param {String} fc
-	 * @param {String} prize
+	 * @param {string} ot
+	 * @param {string} tid
+	 * @param {string} fc
+	 * @param {string} prize
 	 * @param {number} winners
 	 */
 	constructor(host, giver, room, ot, tid, fc, prize, winners) {
@@ -538,9 +538,9 @@ class GtsGiveaway {
 	 * @param {ChatRoom} room
 	 * @param {User} giver
 	 * @param {number} amount
-	 * @param {String} summary
-	 * @param {String} deposit
-	 * @param {String} lookfor
+	 * @param {string} summary
+	 * @param {string} deposit
+	 * @param {string} lookfor
 	 */
 	constructor(room, giver, amount, summary, deposit, lookfor) {
 		// @ts-ignore
@@ -559,13 +559,13 @@ class GtsGiveaway {
 		this.lookfor = lookfor;
 
 		// This seems wrong but I can't find a better way to do this.
-		/** @type {Set<String>} */
+		/** @type {Set<string>} */
 		// @ts-ignore
 		this.monIds = null;
 		this.sprite = '';
 		[this.monIds, this.sprite] = Giveaway.getSprite(this.summary);
 
-		/** @type {String[]} */
+		/** @type {string[]} */
 		this.sent = [];
 		this.noDeposits = false;
 
@@ -574,7 +574,7 @@ class GtsGiveaway {
 	}
 
 	/**
-	 * @param {String} content
+	 * @param {string} content
 	 */
 	send(content) {
 		// @ts-ignore
@@ -583,7 +583,7 @@ class GtsGiveaway {
 	}
 
 	/**
-	 * @param {String} content
+	 * @param {string} content
 	 */
 	changeUhtml(content) {
 		// @ts-ignore
@@ -620,7 +620,7 @@ class GtsGiveaway {
 	}
 
 	/**
-	 * @param {String} ign
+	 * @param {string} ign
 	 */
 	updateSent(ign) {
 		this.left--;
@@ -657,7 +657,7 @@ class GtsGiveaway {
 
 	// This currently doesn't match some of the edge cases the other pokemon matching function does account for (such as Type: Null). However, this should never be used as a fodder mon anyway, so I don't see a huge need to implement it.
 	/**
-	 * @param {String} text
+	 * @param {string} text
 	 */
 	static linkify(text) {
 		let parsed = text.toLowerCase().replace(/é/g, 'e');
