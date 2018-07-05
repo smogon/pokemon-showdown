@@ -1200,7 +1200,7 @@ let commands = {
 			let reason = '';
 			if (params[1]) {
 				reason = params[1].trim();
-				if (reason.length > MAX_REASON_LENGTH) return this.errorReply("The reason is too long. It cannot exceed " + MAX_REASON_LENGTH + " characters.");
+				if (reason.length > MAX_REASON_LENGTH) return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
 			}
 			if (tournament.disqualifyUser(targetUserid, this, reason)) {
 				this.privateModAction(`(${(targetUser.name || targetUserid)} was disqualified from the tournament by ${user.name} ${(reason ? ' (' + reason + ')' : '')})`);
