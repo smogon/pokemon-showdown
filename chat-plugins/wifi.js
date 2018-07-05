@@ -769,7 +769,7 @@ let commands = {
 		let numWinners = 1;
 		if (winners) {
 			numWinners = parseInt(winners);
-			if (isNaN(numWinners) || numWinners < 1 || numWinners > 10) return this.errorReply("The lottery giveaway can have a minimum of 1 and a maximum of 10 winners.");
+			if (isNaN(numWinners) || numWinners < 1 || numWinners > 5) return this.errorReply("The lottery giveaway can have a minimum of 1 and a maximum of 5 winners.");
 		}
 
 		// @ts-ignore
