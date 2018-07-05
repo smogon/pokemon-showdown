@@ -631,7 +631,7 @@ let commands = {
 			let [giver, amount, summary, deposit, lookfor] = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
 			if (!(giver && amount && summary && deposit && lookfor)) return this.errorReply("Invalid arguments specified - /gts start giver | amount | summary | deposit | lookfor");
 			amount = parseInt(amount);
-			if (!amount || amount < 30 || amount > 100) return this.errorReply("Please enter a valid amount. For a GTS giveaway, you need to give away at least 30 mons, and no more than 100.");
+			if (!amount || amount < 20 || amount > 100) return this.errorReply("Please enter a valid amount. For a GTS giveaway, you need to give away at least 20 mons, and no more than 100.");
 			let targetUser = Users(giver);
 			if (!targetUser || !targetUser.connected) return this.errorReply(`User '${giver}' is not online.`);
 			if (!this.can('warn', null, room)) return this.errorReply("Permission denied.");
