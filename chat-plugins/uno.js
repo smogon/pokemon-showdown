@@ -612,7 +612,9 @@ exports.commands = {
 			if (!amount || amount < 30 || amount > 600) return this.errorReply("The amount must be a number between 30 and 600 seconds.");
 			if (room.game.state !== 'signups') return this.errorReply("The game of UNO has already started.");
 			if (room.game.autostartTimer) clearTimeout(room.game.autostartTimer);
-			room.game.autostartTimer = setTimeout(room.game.onStart, amount * 1000);
+			room.game.autostartTimer = setTimeout(() => {
+				room.game.onStart();
+			}, amount * 1000);
 			this.addModAction(`${user.name} has set the UNO autostart timer to ${amount} seconds.`);
 		},
 
