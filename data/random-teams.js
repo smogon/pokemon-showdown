@@ -1612,6 +1612,11 @@ class RandomTeams extends Dex.ModdedDex {
 			ivs.atk = 0;
 		}
 
+		if (ability === 'Beast Boost' && counter.Special < 1) {
+			evs.spa = 0;
+			ivs.spa = 0;
+		}
+
 		if (hasMove['gyroball'] || hasMove['trickroom']) {
 			evs.spe = 0;
 			ivs.spe = 0;
