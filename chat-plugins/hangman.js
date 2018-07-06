@@ -8,14 +8,16 @@
 const maxMistakes = 6;
 
 class Hangman extends Rooms.RoomGame {
-	constructor(room, user, word, hint) {
+	/**
+	 * @param {ChatRoom} room
+	 * @param {User} user
+	 * @param {string} word
+	 * @param {string?} [hint]
+	 */
+	constructor(room, user, word, hint = '') {
 		super(room);
 
-		if (room.gameNumber) {
-			room.gameNumber++;
-		} else {
-			room.gameNumber = 1;
-		}
+		room.gameNumber++;
 
 		this.gameid = 'hangman';
 		this.title = 'Hangman';
@@ -24,9 +26,12 @@ class Hangman extends Rooms.RoomGame {
 		this.hint = hint;
 		this.incorrectGuesses = 0;
 
+		/** @type {string[]} */
 		this.guesses = [];
+		/** @type {string[]} */
 		this.letterGuesses = [];
 		this.lastGuesser = '';
+		/** @type {string[]} */
 		this.wordSoFar = [];
 
 		for (const letter of word) {
@@ -38,8 +43,12 @@ class Hangman extends Rooms.RoomGame {
 		}
 	}
 
+	/**
+	 * @param {string} word
+	 * @param {User} user
+	 */
 	guess(word, user) {
-		if (user.userid === this.room.game.creator) return user.sendTo(this.room, "You can't guess in your own hangman game.");
+		if (user.userid === this.creator) return user.sendTo(this.room, "You can't guess in your own hangman game.");
 
 		let sanitized = word.replace(/[^A-Za-z ]/g, '');
 		let normalized = toId(sanitized);
@@ -54,7 +63,7 @@ class Hangman extends Rooms.RoomGame {
 			if (!this.guessWord(sanitized, user.name)) {
 				user.sendTo(this.room, "Invalid guess");
 			} else {
-				this.room.send(user.name + " guessed \"" + sanitized + "\"!");
+				this.room.send(`${user.name} guessed "${sanitized}"!`);
 			}
 		} else {
 			if (!this.guessLetter(sanitized, user.name)) {
@@ -63,6 +72,10 @@ class Hangman extends Rooms.RoomGame {
 		}
 	}
 
+	/**
+	 * @param {string} letter
+	 * @param {string} guesser
+	 */
 	guessLetter(letter, guesser) {
 		letter = letter.toUpperCase();
 		if (this.guesses.includes(letter)) return false;
@@ -76,15 +89,15 @@ class Hangman extends Rooms.RoomGame {
 			if (!this.wordSoFar.includes('_')) {
 				this.incorrectGuesses = -1;
 				this.guesses.push(letter);
-				this.letterGuesses.push(letter + '1');
+				this.letterGuesses.push(`${letter}1`);
 				this.lastGuesser = guesser;
 				this.finish();
 				return true;
 			}
-			this.letterGuesses.push(letter + '1');
+			this.letterGuesses.push(`${letter}1`);
 		} else {
 			this.incorrectGuesses++;
-			this.letterGuesses.push(letter + '0');
+			this.letterGuesses.push(`${letter}0`);
 		}
 
 		this.guesses.push(letter);
@@ -93,6 +106,10 @@ class Hangman extends Rooms.RoomGame {
 		return true;
 	}
 
+	/**
+	 * @param {string} word
+	 * @param {string} guesser
+	 */
 	guessWord(word, guesser) {
 		let ourWord = toId(this.word);
 		let guessedWord = toId(word);
@@ -117,8 +134,8 @@ class Hangman extends Rooms.RoomGame {
 		return false;
 	}
 
-	hangingMan() {
-		return '<img width="120" height="120" src="//play.pokemonshowdown.com/fx/hangman' + (this.incorrectGuesses === -1 ? 7 : this.incorrectGuesses) + '.png" />';
+	get hangingMan() {
+		return `<img width="120" height="120" src="//play.pokemonshowdown.com/fx/hangman${this.incorrectGuesses === -1 ? 7 : this.incorrectGuesses}.png" />`;
 	}
 
 	generateWindow() {
@@ -130,33 +147,35 @@ class Hangman extends Rooms.RoomGame {
 			result = 2;
 		}
 
-		let output = '<div class="broadcast-' + (result === 1 ? 'red' : (result === 2 ? 'green' : 'blue')) + '">';
-		output += '<p style="text-align:left;font-weight:bold;font-size:10pt;margin:5px 0 0 15px">' + (result === 1 ? 'Too bad! The mon has been hanged.' : (result === 2 ? 'The word has been guessed. Congratulations!' : 'Hangman')) + '</p>';
-		output += '<table><tr><td style="text-align:center;">' + this.hangingMan() + '</td><td style="text-align:center;width:100%;word-wrap:break-word">';
+		const color = result === 1 ? 'red' : (result === 2 ? 'green' : 'blue');
+		const message = result === 1 ? 'Too bad! The mon has been hanged.' : (result === 2 ? 'The word has been guessed. Congratulations!' : 'Hangman');
+		let output = `<div class="broadcast-${color}">`;
+		output += `<p style="text-align:left;font-weight:bold;font-size:10pt;margin:5px 0 0 15px">${message}</p>`;
+		output += `<table><tr><td style="text-align:center;">${this.hangingMan}</td><td style="text-align:center;width:100%;word-wrap:break-word">`;
 
 		let wordString = this.wordSoFar.join('');
 		if (result === 1) {
 			let word = this.word;
 			wordString = wordString.replace(/_+/g, (match, offset) =>
-				'<font color="#7af87a">' + word.substr(offset, match.length) + '</font>'
+				`<font color="#7af87a">${word.substr(offset, match.length)}</font>`
 			);
 		}
 
-		if (this.hint) output += '<div>(Hint: ' + Chat.escapeHTML(this.hint) + ')</div>';
-		output += '<p style="font-weight:bold;font-size:12pt;letter-spacing:3pt">' + wordString + '</p>';
+		if (this.hint) output += Chat.html`<div>(Hint: ${this.hint})</div>`;
+		output += `<p style="font-weight:bold;font-size:12pt;letter-spacing:3pt">${wordString}</p>`;
 		if (this.guesses.length) {
 			if (this.letterGuesses.length) {
 				output += 'Letters: ' + this.letterGuesses.map(g =>
-					'<strong' + (g[1] === '1' ? '' : ' style="color: #DBA"') + '>' + Chat.escapeHTML(g[0]) + '</strong>'
+					`<strong${g[1] === '1' ? '' : ' style="color: #DBA"'}>${Chat.escapeHTML(g[0])}</strong>`
 				).join(', ');
 			}
 			if (result === 2) {
-				output += '<br />Winner: ' + Chat.escapeHTML(this.lastGuesser);
+				output += Chat.html`<br />Winner: ${this.lastGuesser}`;
 			} else if (this.guesses[this.guesses.length - 1].length === 1) {
 				// last guess was a letter
-				output += ' <small>&ndash; ' + Chat.escapeHTML(this.lastGuesser) + '</small>';
+				output += Chat.html` <small>&ndash; ${this.lastGuesser}</small>`;
 			} else {
-				output += '<br />Guessed: ' + this.guesses[this.guesses.length - 1] + ' <small>&ndash; ' + Chat.escapeHTML(this.lastGuesser) + '</small>';
+				output += Chat.html`<br />Guessed: ${this.guesses[this.guesses.length - 1]} <small>&ndash; ${this.lastGuesser}</small>`;
 			}
 		}
 
@@ -165,16 +184,20 @@ class Hangman extends Rooms.RoomGame {
 		return output;
 	}
 
-	display(user, broadcast) {
+	/**
+	 * @param {User} user
+	 * @param {boolean} [broadcast]
+	 */
+	display(user, broadcast = false) {
 		if (broadcast) {
-			this.room.add('|uhtml|hangman' + this.room.gameNumber + '|' + this.generateWindow());
+			this.room.add(`|uhtml|hangman${this.room.gameNumber}|${this.generateWindow()}`);
 		} else {
-			user.sendTo(this.room, '|uhtml|hangman' + this.room.gameNumber + '|' + this.generateWindow());
+			user.sendTo(this.room, `|uhtml|hangman${this.room.gameNumber}|${this.generateWindow()}`);
 		}
 	}
 
 	update() {
-		this.room.add('|uhtmlchange|hangman' + this.room.gameNumber + '|' + this.generateWindow());
+		this.room.add(`|uhtmlchange|hangman${this.room.gameNumber}|${this.generateWindow()}`);
 
 		if (this.incorrectGuesses === maxMistakes) {
 			this.finish();
@@ -182,28 +205,33 @@ class Hangman extends Rooms.RoomGame {
 	}
 
 	end() {
-		this.room.add('|uhtmlchange|hangman' + this.room.gameNumber + '|<div class="infobox">(The game of hangman was ended.)</div>');
+		this.room.add(`|uhtmlchange|hangman${this.room.gameNumber}|<div class="infobox">(The game of hangman was ended.)</div>`);
 		this.room.add("The game of hangman was ended.");
 		delete this.room.game;
 	}
 
 	finish() {
-		this.room.add('|uhtmlchange|hangman' + this.room.gameNumber + '|<div class="infobox">(The game of hangman has ended &ndash; scroll down to see the results)</div>');
-		this.room.add('|html|' + this.generateWindow());
+		this.room.add(`|uhtmlchange|hangman${this.room.gameNumber}|<div class="infobox">(The game of hangman has ended &ndash; scroll down to see the results)</div>`);
+		this.room.add(`|html|${this.generateWindow()}`);
 		delete this.room.game;
 	}
 }
 
-exports.commands = {
+/** @typedef {(this: CommandContext, target: string, room: ChatRoom, user: User, connection: Connection, cmd: string, message: string) => (void)} ChatHandler */
+/** @typedef {{[k: string]: ChatHandler | string | true | string[] | ChatCommands}} ChatCommands */
+
+/** @type {ChatCommands} */
+const commands = {
 	hangman: {
 		create: 'new',
 		new: function (target, room, user) {
 			let params = target.split(',');
 
 			if (!this.can('minigame', null, room)) return false;
+			// @ts-ignore
 			if (room.hangmanDisabled) return this.errorReply("Hangman is disabled for this room.");
 			if (!this.canTalk()) return;
-			if (room.game) return this.errorReply("There is already a game of " + room.game.title + " in progress in this room.");
+			if (room.game) return this.errorReply(`There is already a game of ${room.game.title} in progress in this room.`);
 
 			if (!params) return this.errorReply("No word entered.");
 			let word = params[0].replace(/[^A-Za-z '-]/g, '');
@@ -218,11 +246,12 @@ exports.commands = {
 				if (hint.length > 150) return this.errorReply("Hint too long.");
 			}
 
-			room.game = new Hangman(room, user, word, hint);
-			room.game.display(user, true);
+			const game = new Hangman(room, user, word, hint);
+			room.game = game;
+			game.display(user, true);
 
-			this.modlog('HANGMAN');
-			return this.privateModAction("(A game of hangman was started by " + user.name + ".)");
+			this.modlog('HANGMAN', null);
+			return this.privateModAction(`(A game of hangman was started by ${user.name}.)`);
 		},
 		createhelp: ["/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ * # & ~"],
 
@@ -231,7 +260,8 @@ exports.commands = {
 			if (!room.game || room.game.gameid !== 'hangman') return this.errorReply("There is no game of hangman running in this room.");
 			if (!this.canTalk()) return;
 
-			room.game.guess(target, user);
+			const game = /** @type {Hangman} */ (room.game);
+			game.guess(target, user);
 		},
 		guesshelp: [
 			`/hangman guess [letter] - Makes a guess for the letter entered.`,
@@ -244,17 +274,20 @@ exports.commands = {
 			if (!this.canTalk()) return;
 			if (!room.game || room.game.gameid !== 'hangman') return this.errorReply("There is no game of hangman running in this room.");
 
-			room.game.end();
-			this.modlog('ENDHANGMAN');
-			return this.privateModAction("(The game of hangman was ended by " + user.name + ".)");
+			const game = /** @type {Hangman} */ (room.game);
+			game.end();
+			this.modlog('ENDHANGMAN', null);
+			return this.privateModAction(`(The game of hangman was ended by ${user.name}.)`);
 		},
 		endhelp: ["/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ * # & ~"],
 
 		disable: function (target, room, user) {
 			if (!this.can('gamemanagement', null, room)) return;
+			// @ts-ignore
 			if (room.hangmanDisabled) {
 				return this.errorReply("Hangman is already disabled.");
 			}
+			// @ts-ignore
 			room.hangmanDisabled = true;
 			if (room.chatRoomData) {
 				room.chatRoomData.hangmanDisabled = true;
@@ -265,9 +298,11 @@ exports.commands = {
 
 		enable: function (target, room, user) {
 			if (!this.can('gamemanagement', null, room)) return;
+			// @ts-ignore
 			if (!room.hangmanDisabled) {
 				return this.errorReply("Hangman is already enabled.");
 			}
+			// @ts-ignore
 			delete room.hangmanDisabled;
 			if (room.chatRoomData) {
 				delete room.chatRoomData.hangmanDisabled;
@@ -281,7 +316,8 @@ exports.commands = {
 			if (!this.runBroadcast()) return;
 			room.update();
 
-			room.game.display(user, this.broadcasting);
+			const game = /** @type {Hangman} */ (room.game);
+			game.display(user, this.broadcasting);
 		},
 
 		'': function (target, room, user) {
@@ -303,8 +339,10 @@ exports.commands = {
 	guess: function (target, room, user) {
 		if (!room.game) return this.errorReply("There is no game running in this room.");
 		if (!this.canTalk()) return;
+		// @ts-ignore
 		if (!room.game.guess) return this.errorReply("You can't guess anything in this game.");
 
+		// @ts-ignore
 		room.game.guess(target, user);
 	},
 	guesshelp: [
@@ -313,3 +351,5 @@ exports.commands = {
 		`/hangman guess [word] - Same as a letter, but guesses an entire word.`,
 	],
 };
+
+exports.commands = commands;
