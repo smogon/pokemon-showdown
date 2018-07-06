@@ -681,6 +681,9 @@ class RandomTeams extends Dex.ModdedDex {
 				case 'cottonguard': case 'defendorder':
 					if (!counter['recovery'] && !hasMove['rest']) rejected = true;
 					break;
+				case 'dig': case 'fly':
+					if (teamDetails.zMove || counter.setupType !== 'Physical') rejected = true;
+					break;
 				case 'focuspunch':
 					if (!hasMove['substitute'] || counter.damagingMoves.length < 2) rejected = true;
 					break;
@@ -770,7 +773,7 @@ class RandomTeams extends Dex.ModdedDex {
 					if (counter.damagingMoves.length > 1 || counter.setupType) rejected = true;
 					break;
 				case 'protect':
-					if (counter.setupType && (hasAbility['Guts'] || hasAbility['Speed Boost'])) rejected = true;
+					if (counter.setupType && !hasMove['wish']) rejected = true;
 					if (hasMove['rest'] || hasMove['lightscreen'] && hasMove['reflect']) rejected = true;
 					break;
 				case 'pursuit':
@@ -902,9 +905,6 @@ class RandomTeams extends Dex.ModdedDex {
 					break;
 				case 'airslash': case 'oblivionwing':
 					if (hasMove['acrobatics'] || hasMove['bravebird'] || hasMove['hurricane']) rejected = true;
-					break;
-				case 'fly':
-					if (teamDetails.zMove || counter.setupType !== 'Physical') rejected = true;
 					break;
 				case 'hex':
 					if (!hasMove['willowisp']) rejected = true;
@@ -1395,6 +1395,8 @@ class RandomTeams extends Dex.ModdedDex {
 			}
 		} else if (hasMove['conversion']) {
 			item = 'Normalium Z';
+		} else if (hasMove['dig'] && !teamDetails.zMove) {
+			item = 'Groundium Z';
 		} else if (hasMove['mindblown'] && !!counter['Status'] && !teamDetails.zMove) {
 			item = 'Firium Z';
 		} else if (!teamDetails.zMove && (hasMove['fly'] || hasMove['bounce'] && counter.setupType && !hasMove['sleeptalk'])) {
