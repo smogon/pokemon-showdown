@@ -77,13 +77,13 @@ class Tournament {
 		this.isEnded = false;
 
 		room.add(`|tournament|create|${this.format}|${generator.name}|${this.playerCap}`);
-		room.send('|tournament|update|' + JSON.stringify({
+		room.send(`|tournament|update|${JSON.stringify({
 			format: this.format,
 			generator: generator.name,
 			playerCap: this.playerCap,
 			isStarted: false,
 			isJoined: false,
-		}));
+		})}`);
 		this.update();
 	}
 	destroy() {
