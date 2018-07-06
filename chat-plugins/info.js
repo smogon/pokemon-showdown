@@ -2100,9 +2100,9 @@ const commands = {
 	'!pickrandom': true,
 	pr: 'pickrandom',
 	pick: 'pickrandom',
-	pickrandom: function (target, room, user, connection, cmd) {
-		if (!this.canBroadcast()) return false;
-		target = this.message.slice(this.message.indexOf(cmd) + cmd.length + 1); // Not very elegant, but stops filter evasion using !pick.
+	pickrandom: function (target, room, user) {
+		target = this.canTalk(target);
+		if (!target) return false;
 		let options = target.split(',');
 		if (options.length < 2) return this.parse('/help pick');
 		if (!this.runBroadcast(true)) return false;
