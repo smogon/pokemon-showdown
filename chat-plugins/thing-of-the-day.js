@@ -5,9 +5,9 @@ const FS = require('./../lib/fs');
 const MINUTE = 60 * 1000;
 const YEAR = 365 * 24 * 60 * MINUTE;
 
-const theStudio = Rooms.get('thestudio');
-const tvbf = Rooms.get('tvbooksfilms');
-const yt = Rooms.get('youtube');
+const theStudio = /** @type {ChatRoom} */ (Rooms.get('thestudio'));
+const tvbf = /** @type {ChatRoom} */ (Rooms.get('tvbooksfilms'));
+const yt = /** @type {ChatRoom} */ (Rooms.get('youtube'));
 
 const AOTDS_FILE = 'config/chat-plugins/thestudio.tsv';
 const FOTDS_FILE = 'config/chat-plugins/tvbf-films.tsv';
@@ -16,6 +16,7 @@ const SOTDS_FILE = 'config/chat-plugins/tvbf-shows.tsv';
 const COTDS_FILE = 'config/chat-plugins/youtube-channels.tsv';
 const PRENOMS_FILE = 'config/chat-plugins/otd-prenoms.json';
 
+/** @type {{[k: string]: [string, AnyObject][]}} */
 let prenoms = {};
 try {
 	prenoms = require(`../${PRENOMS_FILE}`);
@@ -28,16 +29,30 @@ function savePrenoms() {
 	FS(PRENOMS_FILE).write(JSON.stringify(prenoms));
 }
 
-function toNominationId(nomination) { // toId would return '' for foreign/sadistic nominations
+/**
+ * @param {string} nomination
+ *
+ * toId would return '' for foreign/sadistic nominations
+ */
+function toNominationId(nomination) {
 	return nomination.toLowerCase().replace(/\s/g, '').replace(/\b&\b/g, '');
 }
 
 class OtdHandler {
+	/**
+	 * @param {string} id
+	 * @param {string} name
+	 * @param {ChatRoom} room
+	 * @param {string} filename
+	 * @param {string[]} keys
+	 * @param {string[]} keyLabels
+	 */
 	constructor(id, name, room, filename, keys, keyLabels) {
 		this.id = id;
 		this.name = name;
 		this.room = room;
 
+		/** @type {Map<string, AnyObject>} */
 		this.nominations = new Map(prenoms[id]);
 		this.removedNominations = new Map();
 
@@ -49,10 +64,11 @@ class OtdHandler {
 		this.keys = keys;
 		this.keyLabels = keyLabels;
 
+		/** @type {AnyObject[]} */
 		this.winners = [];
 
-		this.file.read().then(data => {
-			data = ('' + data).split("\n");
+		this.file.read().then(content => {
+			const data = ('' + content).split("\n");
 			for (const arg of data) {
 				if (!arg || arg === '\r') continue;
 				if (arg.startsWith(`${this.keyLabels[0]}\t`)) continue;
@@ -81,9 +97,13 @@ class OtdHandler {
 		this.removedNominations = new Map();
 		delete prenoms[this.id];
 		savePrenoms();
-		clearTimeout(this.timer);
+		if (this.timer) clearTimeout(this.timer);
 	}
 
+	/**
+	 * @param {User} user
+	 * @param {string} nomination
+	 */
 	addNomination(user, nomination) {
 		const id = toNominationId(nomination);
 
@@ -149,6 +169,9 @@ class OtdHandler {
 		this.room.add(`|uhtml|otd|${this.generateNomWindow()}`);
 	}
 
+	/**
+	 * @param {Connection} connection
+	 */
 	displayTo(connection) {
 		connection.sendTo(this.room, `|uhtml|otd|${this.generateNomWindow()}`);
 	}
@@ -158,6 +181,7 @@ class OtdHandler {
 		if (!keys.length) return false;
 
 		let winner = this.nominations.get(keys[Math.floor(Math.random() * keys.length)]);
+		if (!winner) return false; // Should never happen but shuts typescript up.
 		this.appendWinner(winner.nomination, winner.name);
 
 		this.room.add(Chat.html `|uhtml|otd|<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:12pt;">Nominations for ${this.name} of the Day are over!</p><p style="tex-align:center;font-size:10pt;">Out of ${keys.length} nominations, we randomly selected <strong>${winner.nomination}</strong> as the winner! (Nomination by ${winner.name})</p></div>`);
@@ -167,6 +191,9 @@ class OtdHandler {
 		return true;
 	}
 
+	/**
+	 * @param {string} name
+	 */
 	removeNomination(name) {
 		name = toId(name);
 
@@ -190,11 +217,19 @@ class OtdHandler {
 		return success;
 	}
 
+	/**
+	 * @param {string} winner
+	 * @param {string} user
+	 */
 	forceWinner(winner, user) {
 		this.appendWinner(winner, user);
 		this.finish();
 	}
 
+	/**
+	 * @param {string} nomination
+	 * @param {string} user
+	 */
 	appendWinner(nomination, user) {
 		const entry = {time: Date.now(), nominator: user};
 		entry[this.keys[0]] = nomination;
@@ -202,6 +237,9 @@ class OtdHandler {
 		this.saveWinners();
 	}
 
+	/**
+	 * @param {{[k: string]: string}} properties
+	 */
 	setWinnerProperty(properties) {
 		if (!this.winners.length) return;
 		for (let i in properties) {
@@ -252,6 +290,9 @@ class OtdHandler {
 		return output;
 	}
 
+	/**
+	 * @param {number} year
+	 */
 	generateWinnerList(year) {
 		let output = `|wide||html|`;
 
@@ -267,6 +308,7 @@ class OtdHandler {
 				break;
 			}
 
+			/** @param {number} num */
 			const pad = num => num < 10 ? '0' + num : num;
 
 			output += Chat.html `[${pad(date.getMonth() + 1)}-${pad(date.getDate())}-${date.getFullYear()}] ${this.winners[i][this.keys[0]]}`;
@@ -294,6 +336,9 @@ const botd = new OtdHandler('botd', 'Book', tvbf, BOTDS_FILE, ['book', 'nominato
 const sotd = new OtdHandler('sotd', 'Show', tvbf, SOTDS_FILE, ['show', 'nominator', 'quote', 'link', 'image', 'time'], ['Show', 'Nominator', 'Quote', 'Link', 'Image', 'Timestamp']);
 const cotd = new OtdHandler('cotd', 'Channel', yt, COTDS_FILE, ['channel', 'nominator', 'link', 'tagline', 'image', 'time'], ['Show', 'Nominator', 'Link', 'Tagline', 'Image', 'Timestamp']);
 
+/**
+ * @param {string} message
+ */
 function selectHandler(message) {
 	let id = toId(message.substring(1, 5));
 	switch (id) {
@@ -312,6 +357,10 @@ function selectHandler(message) {
 	}
 }
 
+/** @typedef {(this: CommandContext, target: string, room: ChatRoom, user: User, connection: Connection, cmd: string, message: string) => (void)} ChatHandler */
+/** @typedef {{[k: string]: ChatHandler | string | true | string[] | ChatCommands}} ChatCommands */
+
+/** @type {ChatCommands} */
 let commands = {
 	start: function (target, room, user, connection, cmd) {
 		if (!this.canTalk()) return;
@@ -325,7 +374,7 @@ let commands = {
 		handler.startVote();
 
 		this.privateModAction(`(${user.name} has started nominations for the ${handler.name} of the Day.)`);
-		this.modlog(`${handler.id.toUpperCase()} START`);
+		this.modlog(`${handler.id.toUpperCase()} START`, null);
 	},
 	starthelp: [`/-otd start - Starts nominations for the Thing of the Day. Requires: % @ # & ~`],
 
@@ -344,7 +393,7 @@ let commands = {
 		handler.rollWinner();
 
 		this.privateModAction(`(${user.name} has ended nominations for the ${handler.name} of the Day.)`);
-		this.modlog(`${handler.id.toUpperCase()} END`);
+		this.modlog(`${handler.id.toUpperCase()} END`, null);
 	},
 	endhelp: [`/-otd end - End nominations for the Thing of the Day and set it to a randomly selected nomination. Requires: % @ # & ~`],
 
@@ -386,7 +435,7 @@ let commands = {
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 		if (!this.can('mute', null, room)) return false;
 
-		target = this.splitTarget(target);
+		target = this.splitTarget(target, false);
 		let name = this.targetUsername;
 		let userid = toId(name);
 		if (!userid) return this.errorReply(`'${name}' is not a valid username.`);
