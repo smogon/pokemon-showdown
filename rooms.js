@@ -110,6 +110,7 @@ class BasicRoom {
 		this.privacySetter = null;
 		/** @type {Map<string, ChatRoom>?} */
 		this.subRooms = null;
+		this.gameNumber = 0;
 	}
 
 	/**
