@@ -175,10 +175,10 @@ class Tournament {
 		if (this.isEnded) return;
 		if ((!this.bracketUpdateTimer && this.isBracketInvalidated) || (this.isTournamentStarted && this.isAvailableMatchesInvalidated)) {
 			this.room.add(
-				`Error: update() called with a target user when data invalidated: 
-				${(!this.bracketUpdateTimer && this.isBracketInvalidated)}, 
-				${(this.isTournamentStarted && this.isAvailableMatchesInvalidated)}
-				; Please report this to an admin.`
+				"Error: update() called with a target user when data invalidated: " +
+				(!this.bracketUpdateTimer && this.isBracketInvalidated) + ", " +
+				(this.isTournamentStarted && this.isAvailableMatchesInvalidated) +
+				"; Please report this to an admin."
 			);
 			return;
 		}
