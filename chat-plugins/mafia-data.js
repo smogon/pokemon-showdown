@@ -1349,7 +1349,7 @@ const IDEAs = {
 			`Lynchbait`,
 			`Psychiatrist`,
 			`Reloader`,
-			`Fruit Vendor`,
+			`Mafia Fruit Vendor`,
 			`Parrot Role`,
 			`Solo Judas`,
 			`Solo Saulus`,
