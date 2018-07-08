@@ -1668,10 +1668,8 @@ const commands = {
 			if (!room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (room.id !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
 			const args = target.split(',').map(toId);
-			if (['forceadd', 'add', 'remove', 'del', 'delete'].includes(args[0])) {
-				if (!user.can('broadcast', null, room)) {
-					if (args[0] !== 'add' || !this.can('broadcast', null, room)) return false;
-				}
+			if (['forceadd', 'add', 'remove', 'del', 'delete'].includes(args[0]) && !this.can('broadcast', null, room)) {
+				return false;
 			} else {
 				if (!this.runBroadcast()) return false;
 			}
