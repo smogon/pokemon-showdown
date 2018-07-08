@@ -872,7 +872,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			clearTimeout(this.timer);
 			this.timer = null;
 			this.dlAt = 0;
-			if (!silent) this.sendRoom(`The deadline has been cleared.`);
+			if (!silent) this.sendRoom(`The deadline has been cleared.`, {strong: true});
 			return;
 		}
 		if (minutes < 1 || minutes > 20) return;
@@ -880,30 +880,30 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.dlAt = Date.now() + (minutes * 60000);
 		if (minutes > 3) {
 			this.timer = setTimeout(() => {
-				this.sendRoom(`3 minutes left!`);
+				this.sendRoom(`3 minutes left!`, {strong: true});
 				this.timer = setTimeout(() => {
-					this.sendRoom(`1 minute left!`);
+					this.sendRoom(`1 minute left!`, {strong: true});
 					this.timer = setTimeout(() => {
-						this.sendRoom(`Time is up!`);
+						this.sendRoom(`Time is up!`, {strong: true});
 						this.night();
 					}, 60000);
 				}, 2 * 60000);
 			}, (minutes - 3) * 60000);
 		} else if (minutes > 1) {
 			this.timer = setTimeout(() => {
-				this.sendRoom(`1 minute left!`);
+				this.sendRoom(`1 minute left!`, {strong: true});
 				this.timer = setTimeout(() => {
-					this.sendRoom(`Time is up!`);
+					this.sendRoom(`Time is up!`, {strong: true});
 					if (this.phase === 'day') this.night();
 				}, 60000);
 			}, (minutes - 1) * 60000);
 		} else {
 			this.timer = setTimeout(() => {
-				this.sendRoom(`Time is up!`);
+				this.sendRoom(`Time is up!`, {strong: true});
 				if (this.phase === 'day') this.night();
 			}, minutes * 60000);
 		}
-		this.sendRoom(`The deadline has been set for ${minutes} minute${minutes === 1 ? '' : 's'}.`);
+		this.sendRoom(`The deadline has been set for ${minutes} minute${minutes === 1 ? '' : 's'}.`, {strong: true});
 	}
 
 	/**
@@ -1182,12 +1182,13 @@ class MafiaTracker extends Rooms.RoomGame {
 
 	/**
 	 * @param {string} message
-	 * @param {{uhtml?: boolean, declare?: boolean, timestamp?: boolean}} options
+	 * @param {{uhtml?: boolean, declare?: boolean, strong?: boolean, timestamp?: boolean}} options
 	 * @return {void}
 	 */
 	sendRoom(message, options = {}) {
 		if (options.uhtml) return this.room.add(`|uhtml|mafia|${message}`).update();
 		if (options.declare) return this.room.add(`|raw|<div class="broadcast-blue">${message}</div>`).update();
+		if (options.strong) return this.room.add(`|raw|<strong>${message}</strong>`).update();
 		if (options.timestamp) return this.room.add(`|c:|${(Math.floor(Date.now() / 1000))}|~|${message}`).update();
 		return this.room.add(message).update();
 	}
@@ -1616,48 +1617,50 @@ const commands = {
 			if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 			if (room.game) return this.errorReply(`There is already a game of ${room.game.title} in progress in this room.`);
 			if (!user.can('broadcast', null, room)) return this.errorReply(`/mafia ${cmd} - Access denied.`);
-			if ((cmd === 'nexthost' || cmd === 'forcehost') && room.id !== 'mafia') return this.errorReply(`/mafia ${cmd} - This command is only meant to be used in the Mafia room.`);
-			let toHost = cmd === 'nexthost' ? hostQueue.shift() : target;
-			if (!toHost) {
-				if (cmd === 'nexthost') return this.errorReply(`The host queue is empty.`);
-				return this.parse('/help mafia host');
-			}
-			if (cmd === 'nexthost') {
-				this.splitTarget(toHost, false);
-				let skipped = [];
-				while (!this.targetUser || !this.targetUser.connected || !room.users[this.targetUser.userid] || isHostBanned(this.targetUser.userid)) {
-					skipped.push(toId(toHost));
-					toHost = hostQueue.shift();
-					if (!toHost) {
-						if (skipped.length) this.sendReply(`${skipped.join(', ')} were not online, not in the room, or are host banned and were removed from the host queue.`);
-						return this.errorReply(`Nobody on the host queue could be hosted.`);
-					}
-					this.splitTarget(toHost, false);
+
+			if (room.id === 'mafia') {
+				if (cmd === 'nexthost') {
+					if (!hostQueue.length) return this.errorReply(`Nobody is on the host queue.`);
+					let skipped = [];
+					do {
+						// @ts-ignore guaranteed
+						this.splitTarget(hostQueue.shift(), true);
+						if (!this.targetUser || !this.targetUser.connected || !room.users[this.targetUser.userid] || isHostBanned(this.targetUser.userid)) {
+							skipped.push(this.targetUsername);
+							this.targetUser = null;
+						}
+					} while (!this.targetUser && hostQueue.length);
+					if (skipped.length) this.sendReply(`${skipped.join(', ')} ${Chat.plural(skipped.length, 'were', 'was')} not online, not in the room, or are host banned and were removed from the host queue.`);
+					if (!this.targetUser) return this.errorReply(`Nobody on the host queue could be hosted.`);
+				} else {
+					if (cmd !== 'forcehost' && toId(target) !== hostQueue[0]) return this.errorReply(`${target} is not next on the host queue. To host them now anyways, use /mafia forcehost ${target}`);
+					this.splitTarget(target, true);
 				}
-				if (skipped.length) this.sendReply(`${skipped.join(', ')} were not online, not in the room, or are host banned and were removed from the host queue.`);
 			} else {
-				this.splitTarget(toHost, false);
-				if (!this.targetUser || !this.targetUser.connected) return this.errorReply(`The user "${this.targetUsername}" was not found.`);
-				if (!room.users[this.targetUser.userid]) return this.errorReply(`${this.targetUser.name} is not in this room, and cannot be hosted.`);
-				if (isHostBanned(this.targetUser.userid)) return this.errorReply(`${this.targetUser.name} is banned from hosting games.`);
-				if (hostQueue[0] && this.targetUser.userid !== hostQueue[0] && cmd !== 'forcehost') return this.errorReply(`${this.targetUser.name} is not next on the host queue. To host them now anyways, use /mafia forcehost ${this.targetUser.userid}`);
+				this.splitTarget(target, true);
 			}
+
+			if (!this.targetUser || !this.targetUser.connected) return this.errorReply(`The user "${this.targetUsername}" was not found.`);
+			if (this.targetUser.userid !== user.userid && !this.can('mute', null, room)) return false;
+			if (!room.users[this.targetUser.userid]) return this.errorReply(`${this.targetUser.name} is not in this room, and cannot be hosted.`);
+			if (room.id === 'mafia' && isHostBanned(this.targetUser.userid)) return this.errorReply(`${this.targetUser.name} is banned from hosting games.`);
+
 			let targetUser = this.targetUser;
 
 			room.game = new MafiaTracker(room, targetUser);
 
-			const queueIndex = hostQueue.indexOf(targetUser.userid);
-			if (queueIndex > -1) hostQueue.splice(queueIndex, 1);
 			// @ts-ignore "Chat.pages" is possibly undefined
 			targetUser.send(`>view-mafia-${room.id}\n|init|html\n${Chat.pages.mafia([room.id], targetUser)}`);
-			this.privateModAction(`(${targetUser.name} was appointed the mafia host by ${user.name}.)`);
 			room.addByUser(user, `${targetUser.name} was appointed the mafia host by ${user.name}.`);
-			room.add(`|c:|${(Math.floor(Date.now() / 1000))}|~|**Mafiasignup!**`).update();
+			if (room.id === 'mafia') {
+				const queueIndex = hostQueue.indexOf(targetUser.userid);
+				if (queueIndex > -1) hostQueue.splice(queueIndex, 1);
+				room.add(`|c:|${(Math.floor(Date.now() / 1000))}|~|**Mafiasignup!**`).update();
+			}
 			this.modlog('MAFIAHOST', targetUser, null, {noalts: true, noip: true});
 		},
 		hosthelp: [
-			`/mafia host [user] - Create a game of Mafia with [user] as the host. Requires + % @ * # & ~`,
-			`/mafia nexthost - Host the next user in the host queue. Requires + % @ * # & ~`,
+			`/mafia host [user] - Create a game of Mafia with [user] as the host. Requires + % @ * # & ~, voices can only host themselves`,
 		],
 
 		q: 'queue',
@@ -1665,10 +1668,8 @@ const commands = {
 			if (!room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (room.id !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
 			const args = target.split(',').map(toId);
-			if (['forceadd', 'add', 'remove', 'del', 'delete'].includes(args[0])) {
-				if (!user.can('broadcast', null, room)) {
-					if (args[0] !== 'add' || args[1] !== user.userid) return this.errorReply(`/mafia queue ${args[0]} - Access denied.`);
-				}
+			if (['forceadd', 'add', 'remove', 'del', 'delete'].includes(args[0]) && !this.can('broadcast', null, room)) {
+				return false;
 			} else {
 				if (!this.runBroadcast()) return false;
 			}
@@ -2092,7 +2093,7 @@ const commands = {
 					}
 					if (!this.runBroadcast()) return false;
 					if ((game.dlAt - Date.now()) > 0) {
-						return this.sendReply(`The deadline is in ${Chat.toDurationString(game.dlAt - Date.now()) || '0 seconds'}.`);
+						return this.sendReply(`|raw|<strong>The deadline is in ${Chat.toDurationString(game.dlAt - Date.now()) || '0 seconds'}.</strong>`);
 					} else {
 						return this.parse(`/help mafia deadline`);
 					}
@@ -2500,7 +2501,7 @@ const commands = {
 			if (!gavePoints) return this.parse('/help mafia win');
 			writeFile(LOGS_FILE, logs);
 			this.modlog(`MAFIAPOINTS`, null, `${points} points were awarded to ${Chat.toListString(args)}`);
-			this.privateModAction(`(${points} points were awarded to: ${Chat.toListString(args)})`);
+			room.add(`${points} points were awarded to: ${Chat.toListString(args)}`).update();
 		},
 		winhelp: [`/mafia win (points) [user1], [user2], [user3], ... - Award the specified users points to the mafia leaderboard for this month. The amount of points can be negative to take points. Defaults to 10 points.`],
 
@@ -2533,12 +2534,12 @@ const commands = {
 			}
 			if (!gavePoints) return this.parse('/help mafia mvp');
 			writeFile(LOGS_FILE, logs);
-			this.modlog(`MAFIA${cmd.toUpperCase()}`, null, `MVP and 5 points were ${cmd === 'unmvp' ? 'taken from' : 'awarded to'} ${Chat.toListString(args)}`);
-			this.privateModAction(`(MVP and 5 points were ${cmd === 'unmvp' ? 'taken from' : 'awarded to'}: ${Chat.toListString(args)})`);
+			this.modlog(`MAFIA${cmd.toUpperCase()}`, null, `MVP and 10 points were ${cmd === 'unmvp' ? 'taken from' : 'awarded to'} ${Chat.toListString(args)}`);
+			room.add(`MVP and 10 points were ${cmd === 'unmvp' ? 'taken from' : 'awarded to'}: ${Chat.toListString(args)}`).update();
 		},
 		mvphelp: [
-			`/mafia mvp [user1], [user2], ... - Gives a MVP point and 5 leaderboard points to the users specified.`,
-			`/mafia unmvp [user1], [user2], ... - Takes away a MVP point and 5 leaderboard points from the users specified.`,
+			`/mafia mvp [user1], [user2], ... - Gives a MVP point and 10 leaderboard points to the users specified.`,
+			`/mafia unmvp [user1], [user2], ... - Takes away a MVP point and 10 leaderboard points from the users specified.`,
 		],
 
 		hostlogs: 'leaderboard',
