@@ -1609,6 +1609,8 @@ const commands = {
 			return this.parse('/help mafia');
 		},
 
+		forcehost: 'host',
+		nexthost: 'host',
 		host: function (target, room, user, connection, cmd) {
 			if (!room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (!this.canTalk()) return;
@@ -1616,12 +1618,33 @@ const commands = {
 			if (room.game) return this.errorReply(`There is already a game of ${room.game.title} in progress in this room.`);
 			if (!user.can('broadcast', null, room)) return this.errorReply(`/mafia ${cmd} - Access denied.`);
 
-			this.splitTarget(target, false);
+			if (room.id === 'mafia') {
+				if (cmd === 'nexthost') {
+					if (!hostQueue.length) return this.errorReply(`Nobody is on the host queue.`);
+					let skipped = [];
+					do {
+						// @ts-ignore guaranteed
+						this.splitTarget(hostQueue.shift(), true);
+						if (!this.targetUser || !this.targetUser.connected || !room.users[this.targetUser.userid] || isHostBanned(this.targetUser.userid)) {
+							skipped.push(this.targetUsername);
+							this.targetUser = null;
+						}
+					} while (!this.targetUser && hostQueue.length);
+					if (skipped.length) this.sendReply(`${skipped.join(', ')} ${Chat.plural(skipped.length, 'were', 'was')} not online, not in the room, or are host banned and were removed from the host queue.`);
+					if (!this.targetUser) return this.errorReply(`Nobody on the host queue could be hosted.`);
+				} else {
+					if (cmd !== 'forcehost' && toId(target) !== hostQueue[0]) return this.errorReply(`${target} is not next on the host queue. To host them now anyways, use /mafia forcehost ${target}`);
+					this.splitTarget(target, true);
+				}
+			} else {
+				this.splitTarget(target, true);
+			}
+
 			if (!this.targetUser || !this.targetUser.connected) return this.errorReply(`The user "${this.targetUsername}" was not found.`);
 			if (this.targetUser.userid !== user.userid && !this.can('mute', null, room)) return false;
 			if (!room.users[this.targetUser.userid]) return this.errorReply(`${this.targetUser.name} is not in this room, and cannot be hosted.`);
-			if (isHostBanned(this.targetUser.userid)) return this.errorReply(`${this.targetUser.name} is banned from hosting games.`);
-			if (room.id === 'mafia' && hostQueue[0] && this.targetUser.userid !== hostQueue[0] && cmd !== 'forcehost') return this.errorReply(`${this.targetUser.name} is not next on the host queue. To host them now anyways, use /mafia forcehost ${this.targetUser.userid}`);
+			if (room.id === 'mafia' && isHostBanned(this.targetUser.userid)) return this.errorReply(`${this.targetUser.name} is banned from hosting games.`);
+
 			let targetUser = this.targetUser;
 
 			room.game = new MafiaTracker(room, targetUser);
