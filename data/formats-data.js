@@ -2950,7 +2950,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	ninjask: {
-		randomBattleMoves: ["swordsdance", "aerialace", "nightslash", "protect", "leechlife", "uturn"],
+		randomBattleMoves: ["swordsdance", "aerialace", "nightslash", "dig", "leechlife", "uturn"],
 		randomDoubleBattleMoves: ["batonpass", "swordsdance", "substitute", "protect", "leechlife", "aerialace"],
 		tier: "PU",
 		doublesTier: "DUU",
