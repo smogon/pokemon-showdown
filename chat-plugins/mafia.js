@@ -1633,7 +1633,7 @@ const commands = {
 					if (skipped.length) this.sendReply(`${skipped.join(', ')} ${Chat.plural(skipped.length, 'were', 'was')} not online, not in the room, or are host banned and were removed from the host queue.`);
 					if (!this.targetUser) return this.errorReply(`Nobody on the host queue could be hosted.`);
 				} else {
-					if (cmd !== 'forcehost' && toId(target) !== hostQueue[0]) return this.errorReply(`${target} is not next on the host queue. To host them now anyways, use /mafia forcehost ${target}`);
+					if (cmd !== 'forcehost' && hostQueue.length && toId(target) !== hostQueue[0]) return this.errorReply(`${target} is not next on the host queue. To host them now anyways, use /mafia forcehost ${target}`);
 					this.splitTarget(target, true);
 				}
 			} else {
