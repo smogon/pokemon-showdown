@@ -100,6 +100,7 @@ let BattleMovedex = {
 	blizzard: {
 		inherit: true,
 		desc: "Has a 10% chance to freeze the target.",
+		shortDesc: "10% chance to freeze foe(s).",
 		onModifyMove: function () { },
 	},
 	charge: {
