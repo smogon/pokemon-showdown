@@ -331,4 +331,23 @@ exports.commands = {
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(template)}`);
 	},
 	scalemonshelp: [`/scale OR /scalemons <pokemon> - Shows the base stats that a Pokemon would have in Scalemons.`],
+
+	'!reversed': true,
+	reverse: 'reversed',
+	reversed: function (target, room, user) {
+		if (!this.runBroadcast()) return;
+		if (!toId(target)) return this.parse(`/help reversed`);
+		let template = Object.assign({}, Dex.getTemplate(target));
+		if (!template.exists) return this.errorReply(`Error: Pokemon ${target} not found.`);
+		let newStats = Object.assign({}, template.baseStats);
+		let temp = newStats.atk;
+		newStats.atk = newStats.spa;
+		newStats.spa = temp;
+		temp = newStats.def;
+		newStats.def = newStats.spd;
+		newStats.spd = temp;
+		template.baseStats = Object.assign({}, newStats);
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(template)}`);
+	},
+	reversedhelp: [`/reverse OR /reversed <pokemon> - Shows the base stats that a Pokemon would have in Reversed.`],
 };
