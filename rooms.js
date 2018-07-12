@@ -1067,6 +1067,16 @@ class BasicChatRoom extends BasicRoom {
 		this.log.modlog(message);
 		return this;
 	}
+	/**
+	 * @param {string[]} userids
+	 */
+	hideText(userids) {
+		this.log.clearText(userids);
+		for (const userid of userids) {
+			this.add(`|unlink|hide|${userid}`);
+		}
+		this.update();
+	}
 	logUserStats() {
 		let total = 0;
 		let guests = 0;

@@ -1547,8 +1547,7 @@ const commands = {
 				this.privateModAction(displayMessage);
 			}
 		}
-		this.add(`|unlink|hide|${userid}`);
-		if (userid !== toId(this.inputUsername)) this.add(`|unlink|hide|${toId(this.inputUsername)}`);
+		room.hideText([userid, toId(this.inputUsername)]);
 
 		if (room.isPrivate !== true && room.chatRoomData) {
 			this.globalModlog("ROOMBAN", targetUser, ` by ${user.userid} ${(target ? `: ${target}` : ``)}`);
@@ -1856,8 +1855,7 @@ const commands = {
 			displayMessage = `(${name}'s ac account: ${acAccount})`;
 			this.privateModAction(displayMessage);
 		}
-		this.add(`|unlink|hide|${userid}`);
-		if (userid !== toId(this.inputUsername)) this.add(`|unlink|hide|${toId(this.inputUsername)}`);
+		room.hideText([userid, toId(this.inputUsername)]);
 
 		const globalReason = (target ? `: ${userReason} ${proof}` : '');
 		this.globalModlog((week ? "WEEKLOCK" : "LOCK"), targetUser || userid, ` by ${user.userid}${globalReason}`);
@@ -1978,8 +1976,7 @@ const commands = {
 			this.privateModAction(displayMessage);
 		}
 
-		this.add(`|unlink|hide|${userid}`);
-		if (userid !== toId(this.inputUsername)) this.add(`|unlink|hide|${toId(this.inputUsername)}`);
+		room.hideText([userid, toId(this.inputUsername)]);
 
 		const globalReason = (target ? `: ${userReason} ${proof}` : '');
 		this.globalModlog("BAN", targetUser, ` by ${user.userid}${globalReason}`);
@@ -2452,18 +2449,12 @@ const commands = {
 		if (targetUser && (cmd === 'hidealtstext' || cmd === 'hidetextalts' || cmd === 'hidealttext')) {
 			this.addModAction(`${name}'s alts' messages were cleared from ${room.title} by ${user.name}.`);
 			this.modlog('HIDEALTSTEXT', targetUser, null, {noip: 1});
-			this.add(`|unlink|hide|${userid}`);
-			const alts = targetUser.getAltUsers(true);
-			for (const alt of alts) {
-				this.add(`|unlink|hide|${alt.getLastId()}`);
-			}
-			for (const prevName in targetUser.prevNames) {
-				this.add(`|unlink|hide|${targetUser.prevNames[prevName]}`);
-			}
+			const alts = [userid].concat(Object.keys(targetUser.prevNames)).concat(targetUser.getAltUsers(true).map(user => user.getLastId()));
+			room.hideText(alts);
 		} else {
 			this.addModAction(`${name}'s messages were cleared from ${room.title} by ${user.name}.`);
 			this.modlog('HIDETEXT', targetUser || userid, null, {noip: 1, noalts: 1});
-			this.add(`|unlink|hide|${userid}`);
+			room.hideText([userid]);
 		}
 	},
 	hidetexthelp: [

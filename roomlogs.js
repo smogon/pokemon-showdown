@@ -184,6 +184,13 @@ class Roomlog {
 		return false;
 	}
 	/**
+	 * @param {string[]} userids
+	 */
+	clearText(userids) {
+		const messageStart = this.logTimes ? '|c:|' : '|c|';
+		this.log = this.log.filter(line => (!line.startsWith(messageStart) || !userids.includes(toId(line.split('|')[3]))));
+	}
+	/**
 	 * @param {string} message
 	 */
 	uhtmlchange(message) {
