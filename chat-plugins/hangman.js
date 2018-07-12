@@ -17,7 +17,7 @@ class Hangman extends Rooms.RoomGame {
 	constructor(room, user, word, hint = '') {
 		super(room);
 
-		room.gameNumber++;
+		this.gameNumber = ++room.gameNumber;
 
 		this.gameid = 'hangman';
 		this.title = 'Hangman';
@@ -190,14 +190,14 @@ class Hangman extends Rooms.RoomGame {
 	 */
 	display(user, broadcast = false) {
 		if (broadcast) {
-			this.room.add(`|uhtml|hangman${this.room.gameNumber}|${this.generateWindow()}`);
+			this.room.add(`|uhtml|hangman${this.gameNumber}|${this.generateWindow()}`);
 		} else {
-			user.sendTo(this.room, `|uhtml|hangman${this.room.gameNumber}|${this.generateWindow()}`);
+			user.sendTo(this.room, `|uhtml|hangman${this.gameNumber}|${this.generateWindow()}`);
 		}
 	}
 
 	update() {
-		this.room.add(`|uhtmlchange|hangman${this.room.gameNumber}|${this.generateWindow()}`);
+		this.room.add(`|uhtmlchange|hangman${this.gameNumber}|${this.generateWindow()}`);
 
 		if (this.incorrectGuesses === maxMistakes) {
 			this.finish();
@@ -205,13 +205,13 @@ class Hangman extends Rooms.RoomGame {
 	}
 
 	end() {
-		this.room.add(`|uhtmlchange|hangman${this.room.gameNumber}|<div class="infobox">(The game of hangman was ended.)</div>`);
+		this.room.add(`|uhtmlchange|hangman${this.gameNumber}|<div class="infobox">(The game of hangman was ended.)</div>`);
 		this.room.add("The game of hangman was ended.");
 		delete this.room.game;
 	}
 
 	finish() {
-		this.room.add(`|uhtmlchange|hangman${this.room.gameNumber}|<div class="infobox">(The game of hangman has ended &ndash; scroll down to see the results)</div>`);
+		this.room.add(`|uhtmlchange|hangman${this.gameNumber}|<div class="infobox">(The game of hangman has ended &ndash; scroll down to see the results)</div>`);
 		this.room.add(`|html|${this.generateWindow()}`);
 		delete this.room.game;
 	}
