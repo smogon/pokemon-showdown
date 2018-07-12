@@ -638,11 +638,11 @@ class CommandContext {
 	}
 	/**
 	 * @param {string} action
-	 * @param {string | User?} user
-	 * @param {string?} note
+	 * @param {string | User?} [user]
+	 * @param {string?} [note]
 	 * @param {object} options
 	 */
-	modlog(action, user, note = null, options = {}) {
+	modlog(action, user = null, note = null, options = {}) {
 		let buf = `(${this.room.id}) ${action}: `;
 		if (user) {
 			if (typeof user === 'string') {
@@ -1089,9 +1089,9 @@ class CommandContext {
 	 *   message has no comma)
 	 *
 	 * @param {string} target
-	 * @param {boolean} exactName
+	 * @param {boolean} [exactName]
 	 */
-	splitTarget(target, exactName) {
+	splitTarget(target, exactName = false) {
 		let [name, rest] = this.splitOne(target);
 
 		this.targetUser = Users.get(name, exactName);

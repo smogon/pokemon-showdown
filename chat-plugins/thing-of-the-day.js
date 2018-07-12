@@ -435,7 +435,7 @@ let commands = {
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 		if (!this.can('mute', null, room)) return false;
 
-		target = this.splitTarget(target, false);
+		target = this.splitTarget(target);
 		let name = this.targetUsername;
 		let userid = toId(name);
 		if (!userid) return this.errorReply(`'${name}' is not a valid username.`);
