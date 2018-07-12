@@ -15,9 +15,9 @@ echo "We require Node.js version 8 or later; Node.js not found"
 exit 1
 */;
 
-const child_process = require('child_process');
-const fs = require('fs');
-const path = require('path');
+var child_process = require('child_process');
+var fs = require('fs');
+var path = require('path');
 
 // # Make sure we're Node 8+
 
@@ -112,24 +112,24 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		break;
 	case 'generate-team':
 		{
-			const Dex = require('./sim/dex');
+			var Dex = require('./sim/dex');
 			global.toId = Dex.getId;
-			const seed = process.argv[4] ? process.argv[4].split(',').map(Number) : undefined;
+			var seed = process.argv[4] ? process.argv[4].split(',').map(Number) : undefined;
 			console.log(Dex.packTeam(Dex.generateTeam(process.argv[3], seed)));
 		}
 		break;
 	case 'validate-team':
 		{
-			const Dex = require('./sim/dex');
-			const TeamValidator = require('./sim/team-validator');
-			const validator = TeamValidator(process.argv[3]);
-			const Streams = require('./lib/streams');
-			const stdin = new Streams.ReadStream(process.stdin);
+			var Dex = require('./sim/dex');
+			var TeamValidator = require('./sim/team-validator');
+			var validator = TeamValidator(process.argv[3]);
+			var Streams = require('./lib/streams');
+			var stdin = new Streams.ReadStream(process.stdin);
 
 			stdin.readLine().then(function (textTeam) {
 				try {
-					const team = Dex.fastUnpackTeam(textTeam);
-					const result = validator.validateTeam(team);
+					var team = Dex.fastUnpackTeam(textTeam);
+					var result = validator.validateTeam(team);
 					if (result) {
 						console.error(result.join('\n'));
 						process.exit(1);
@@ -144,25 +144,25 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		break;
 	case 'simulate-battle':
 		{
-			const BattleTextStream = require('./sim/battle-stream').BattleTextStream;
-			const Streams = require('./lib/streams');
-			const stdin = new Streams.ReadStream(process.stdin);
-			const stdout = new Streams.WriteStream(process.stdout);
+			var BattleTextStream = require('./sim/battle-stream').BattleTextStream;
+			var Streams = require('./lib/streams');
+			var stdin = new Streams.ReadStream(process.stdin);
+			var stdout = new Streams.WriteStream(process.stdout);
 
-			const battleStream = new BattleTextStream();
+			var battleStream = new BattleTextStream();
 			stdin.pipeTo(battleStream);
 			battleStream.pipeTo(stdout);
 		}
 		break;
 	case 'unpack-team':
 		{
-			const Dex = require('./sim/dex');
-			const Streams = require('./lib/streams');
-			const stdin = new Streams.ReadStream(process.stdin);
+			var Dex = require('./sim/dex');
+			var Streams = require('./lib/streams');
+			var stdin = new Streams.ReadStream(process.stdin);
 
 			stdin.readLine().then(function (packedTeam) {
 				try {
-					const unpackedTeam = Dex.fastUnpackTeam(packedTeam);
+					var unpackedTeam = Dex.fastUnpackTeam(packedTeam);
 					console.log(JSON.stringify(unpackedTeam));
 					process.exit(0);
 				} catch (e) {
@@ -174,13 +174,13 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		break;
 	case 'pack-team':
 		{
-			const Dex = require('./sim/dex');
-			const Streams = require('./lib/streams');
-			const stdin = new Streams.ReadStream(process.stdin);
+			var Dex = require('./sim/dex');
+			var Streams = require('./lib/streams');
+			var stdin = new Streams.ReadStream(process.stdin);
 
 			stdin.readLine().then(function (unpackedTeam) {
 				try {
-					const packedTeam = Dex.packTeam(JSON.parse(unpackedTeam));
+					var packedTeam = Dex.packTeam(JSON.parse(unpackedTeam));
 					console.log(packedTeam);
 					process.exit(0);
 				} catch (e) {
