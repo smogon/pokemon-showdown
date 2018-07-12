@@ -279,7 +279,7 @@ const commands = {
 			room.poll.display();
 
 			this.roomlog(`${user.name} used ${message}`);
-			this.modlog('POLL', null);
+			this.modlog('POLL');
 			return this.privateModAction(`(A poll was started by ${user.name}.)`);
 		},
 		newhelp: [`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ * # & ~`],
@@ -356,7 +356,7 @@ const commands = {
 
 			room.poll.end();
 			delete room.poll;
-			this.modlog('POLL END', null);
+			this.modlog('POLL END');
 			return this.privateModAction(`(The poll was ended by ${user.name}.)`);
 		},
 		endhelp: [`/poll end - Ends a poll and displays the results. Requires: % @ * # & ~`],

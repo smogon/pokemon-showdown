@@ -250,7 +250,7 @@ const commands = {
 			room.game = game;
 			game.display(user, true);
 
-			this.modlog('HANGMAN', null);
+			this.modlog('HANGMAN');
 			return this.privateModAction(`(A game of hangman was started by ${user.name}.)`);
 		},
 		createhelp: ["/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ * # & ~"],
@@ -276,7 +276,7 @@ const commands = {
 
 			const game = /** @type {Hangman} */ (room.game);
 			game.end();
-			this.modlog('ENDHANGMAN', null);
+			this.modlog('ENDHANGMAN');
 			return this.privateModAction(`(The game of hangman was ended by ${user.name}.)`);
 		},
 		endhelp: ["/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ * # & ~"],
