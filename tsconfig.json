@@ -46,6 +46,7 @@
         "./chat-plugins/room-faqs.js",
         "./chat-plugins/thing-of-the-day.js",
         "./chat-plugins/wifi.js",
-        "./punishments.js"
+        "./punishments.js",
+        "./tournaments/generator-round-robin.js"
     ]
 }
