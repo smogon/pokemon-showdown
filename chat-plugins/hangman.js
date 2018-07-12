@@ -134,7 +134,7 @@ class Hangman extends Rooms.RoomGame {
 		return false;
 	}
 
-	get hangingMan() {
+	hangingMan() {
 		return `<img width="120" height="120" src="//play.pokemonshowdown.com/fx/hangman${this.incorrectGuesses === -1 ? 7 : this.incorrectGuesses}.png" />`;
 	}
 
@@ -151,7 +151,7 @@ class Hangman extends Rooms.RoomGame {
 		const message = result === 1 ? 'Too bad! The mon has been hanged.' : (result === 2 ? 'The word has been guessed. Congratulations!' : 'Hangman');
 		let output = `<div class="broadcast-${color}">`;
 		output += `<p style="text-align:left;font-weight:bold;font-size:10pt;margin:5px 0 0 15px">${message}</p>`;
-		output += `<table><tr><td style="text-align:center;">${this.hangingMan}</td><td style="text-align:center;width:100%;word-wrap:break-word">`;
+		output += `<table><tr><td style="text-align:center;">${this.hangingMan()}</td><td style="text-align:center;width:100%;word-wrap:break-word">`;
 
 		let wordString = this.wordSoFar.join('');
 		if (result === 1) {
