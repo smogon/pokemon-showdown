@@ -2324,6 +2324,7 @@ let BattleAbilities = {
 					source.item = yourItem.id;
 					return;
 				}
+				this.add('-enditem', source, yourItem, '[silent]', '[from] ability: Pickpocket', '[of] ' + source);
 				this.add('-item', target, yourItem, '[from] ability: Pickpocket', '[of] ' + source);
 			}
 		},
