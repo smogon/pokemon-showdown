@@ -21,7 +21,6 @@
     "test": "eslint --cache . && tsc && mocha",
     "tsc": "tsc",
     "lint": "eslint --cache .",
-    "precommit": "npm run lint",
     "prepush": "npm test"
   },
   "bin": "./pokemon-showdown",
