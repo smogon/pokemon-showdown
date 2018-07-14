@@ -300,10 +300,12 @@ class ScavengerHunt extends Rooms.RoomGame {
 		if (this.timer) {
 			clearTimeout(this.timer);
 			delete this.timer;
+			this.timerEnd = null;
 		}
 
 		if (minutes && minutes > 0) {
 			this.timer = setTimeout(() => this.onEnd(), minutes * 60000);
+			this.timerEnd = Date.now() + minutes * 60000;
 		}
 
 		return minutes || 'off';
@@ -376,7 +378,8 @@ class ScavengerHunt extends Rooms.RoomGame {
 	}
 
 	onEnd(reset, endedBy) {
-		if (!endedBy && this.completed.length === 0) {
+		if (this.parentGame) this.parentGame.onBeforeEndHunt();
+		if (!endedBy && (this.preCompleted ? this.preCompleted.length : this.completed.length) === 0) {
 			reset = true;
 		}
 		if (!reset) {
@@ -399,7 +402,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 
 			this.announce(
 				`The ${this.gameType ? `${this.gameType} ` : ""}scavenger hunt was ended ${(endedBy ? "by " + Chat.escapeHTML(endedBy.name) : "automatically")}.<br />` +
-				`${this.completed.slice(0, sliceIndex).map((p, i) => `${formatOrder(i + 1)} place: <em>${Chat.escapeHTML(p.name)}</em>${this.gameType === 'official' ? ` <span style="color: lightgreen;">[${p.time}]</span>` : ''}.<br />`).join("")}${this.completed.length > sliceIndex ? `Consolation Prize: ${this.completed.slice(sliceIndex).map(e => `<em>${Chat.escapeHTML(e.name)}</em>${this.gameType === 'official' ? ` <span style="color: lightgreen;">[${e.time}]</span>` : ''}`).join(', ')}<br />` : ''}<br />` +
+				`${this.completed.slice(0, sliceIndex).map((p, i) => `${formatOrder(i + 1)} place: <em>${Chat.escapeHTML(p.name)}</em> <span style="color: lightgreen;">[${p.time}]</span>.<br />`).join("")}${this.completed.length > sliceIndex ? `Consolation Prize: ${this.completed.slice(sliceIndex).map(e => `<em>${Chat.escapeHTML(e.name)}</em> <span style="color: lightgreen;">[${e.time}]</span>`).join(', ')}<br />` : ''}<br />` +
 				`<details style="cursor: pointer;"><summary>Solution: </summary><br />${this.questions.map((q, i) => `${i + 1}) ${Chat.formatText(q.hint)} <span style="color: lightgreen">[<em>${Chat.escapeHTML(q.answer.join(' / '))}</em>]</span>`).join("<br />")}</details>`
 			);
 
@@ -415,7 +418,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 			if (this.parentGame) this.parentGame.onEndEvent();
 			this.tryRunQueue(this.room.id);
 		}
-
+		if (this.parentGame) this.parentGame.onAfterEndHunt();
 		this.destroy();
 	}
 
@@ -684,6 +687,7 @@ let commands = {
 
 				room.game = new ScavengerGames.JumpStart(room);
 				room.game.announce("A new Jump Start game has been started!");
+				this.sendReply('Please use /starthunt to set the first hunt.');
 			},
 
 			set: function (target, room, user) {
@@ -691,7 +695,7 @@ let commands = {
 				if (!this.can('mute', null, room)) return false;
 				if (!room.game || room.game.gameid !== "jumpstart") return this.errorReply("There is no Jump Start game currently running.");
 
-				let error = room.game.setJumpStart(target.split(', '));
+				let error = room.game.setJumpStart(target.split(','));
 				if (error) return this.errorReply(error);
 			},
 		},
@@ -715,6 +719,31 @@ let commands = {
 			room.game.announce("A new Point Rally game has been started!");
 		},
 
+		incog: 'incognito',
+		incognitomode: 'incognito',
+		incognito: function (target, room, user) {
+			if (room.id !== 'scavengers') return this.errorReply("Scavenger games can only be created in the scavengers room.");
+			if (!this.can('mute', null, room)) return false;
+			if (room.game) return this.errorReply(`There is already a game in this room - ${room.game.title}.`);
+
+			let [details, hostsArray, ...params] = target.split('|'), blind, official;
+			details = details.split(' ').map(toId);
+			if (details.includes('blind')) blind = true;
+			if (details.includes('official')) official = true;
+
+			if (!official && !blind) {
+				params = [hostsArray, ...params];
+				hostsArray = details.join(' ');
+			}
+
+			let hosts = ScavengerHunt.parseHosts(hostsArray.split(/[,;]/), room, official);
+			if (!hosts) return this.errorReply("The user(s) you specified as the host is not online, or is not in the room.");
+
+			params = ScavengerHunt.parseQuestions(params);
+			if (params.err) return this.errorReply(params.err);
+
+			room.game = new ScavengerGames.Incognito(room, blind, official, user, hosts, params.result);
+		},
 		/**
 		 * General game commands
 		 */
@@ -782,7 +811,7 @@ let commands = {
 		if (room.id !== 'scavengers') return this.errorReply("Scavenger hunts can only be created in the scavengers room.");
 		if (!this.can('mute', null, room)) return false;
 		if (room.game && !room.game.scavParentGame) return this.errorReply(`There is already a game in this room - ${room.game.title}.`);
-		if (cmd === 'starthunt' && room.scavQueue.length) return this.errorReply("There are currently hunts in the queue! If you would like to start the hunt anyways, use /forcestarthunt.");
+		if (!cmd.includes('official') && !cmd.includes('practice') && room.scavQueue.length && !(room.game && room.scavParentGame)) return this.errorReply("There are currently hunts in the queue! If you would like to start the hunt anyways, use /forcestarthunt.");
 		let gameType = cmd.includes('official') ? 'official' : cmd.includes('practice') ? 'practice' : null;
 
 		let [hostsArray, ...params] = target.split('|');
@@ -813,20 +842,21 @@ let commands = {
 		const hostersMsg = Chat.toListString(game.hosts.map(h => h.name));
 		const hostMsg = game.hosts.some(h => h.userid === game.staffHostId) ? '' : Chat.html` (started by - ${game.staffHostName})`;
 		const finishers = Chat.html`${game.completed.map(u => u.name).join(', ')}`;
-		const buffer = `<div class="infobox" style="margin-top: 0px;">The current ${gameTypeMsg}scavenger hunt by <em>${hostersMsg}${hostMsg}</em> has been up for: ${elapsedMsg}<br />Completed (${game.completed.length}): ${finishers}<br /></div>`;
+		const buffer = `<div class="infobox" style="margin-top: 0px;">The current ${gameTypeMsg}scavenger hunt by <em>${hostersMsg}${hostMsg}</em> has been up for: ${elapsedMsg}<br />${!game.timerEnd ? 'The timer is currently off.' : `The hunt ends in: ${Chat.toDurationString(game.timerEnd - Date.now(), {hhmmss: true})}`}<br />Completed (${game.completed.length}): ${finishers}</div>`;
 
 		if (game.hosts.some(h => h.userid === user.userid) || game.staffHostId === user.userid) {
 			let str = `<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><th><b>Question</b></th><th><b>Users on this Question</b></th>`;
 			for (let i = 0; i < game.questions.length; i++) {
 				let questionNum = i + 1;
-				let players = Object.values(game.players).filter(player => player.currentQuestion === i);
+				let players = Object.values(game.players).filter(player => player.currentQuestion === i && !player.completed);
 				if (!players.length) {
 					str += `<tr><td>${questionNum}</td><td>None</td>`;
 				} else {
 					str += Chat.html`<tr><td>${questionNum}</td><td>${players.map(pl => pl.name).join(", ")}`;
 				}
 			}
-			str += Chat.html`<tr><td>Completed</td><td>${game.completed.length ? game.completed.map(pl => pl.name).join(", ") : 'None'}`;
+			let completed = game.preCompleted ? game.preCompleted : game.completed;
+			str += Chat.html`<tr><td>Completed</td><td>${completed.length ? completed.map(pl => pl.name).join(", ") : 'None'}`;
 			return this.sendReply(`|raw|${str}</table></div>${buffer}`);
 		}
 		this.sendReply(`|raw|${buffer}`);
@@ -882,8 +912,11 @@ let commands = {
 	end: function (target, room, user) {
 		if (!this.can('mute', null, room)) return false;
 		if (!room.game || !room.game.scavGame) return this.errorReply(`There is no scavenger game currently running.`);
+		if (room.game.scavParentGame && !room.game.childGame) return this.parse('/scav games end');
 
-		let completed = room.game.scavParentGame ? room.game.childGame.completed : room.game.completed;
+		let game = room.game.childGame || room.game;
+		let completed = game.preCompleted ? game.preCompleted : game.completed;
+
 		if (!this.cmd.includes('force')) {
 			if (!completed.length) {
 				return this.errorReply('No one has finished the hunt yet.  Use /forceendhunt if you want to end the hunt and reveal the answers.');
