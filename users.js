@@ -511,6 +511,8 @@ class User {
 		this.lockNotified = false;
 		/**@type {string} */
 		this.autoconfirmed = '';
+		/** @type {string} */
+		this.trackRename = '';
 		// initialize
 		Users.add(this);
 	}
