@@ -176,6 +176,8 @@ class ScavGame extends Rooms.RoomGame {
 	}
 	onCompleteEvent(player) {}
 	onEndEvent() {}
+	onBeforeEndHunt() {}
+	onAfterEndHunt() {}
 	onDestroyEvent() {
 		this.childGame = null;
 	}
@@ -199,7 +201,7 @@ class ScavGame extends Rooms.RoomGame {
 		let name = this.players[userid].name;
 
 		this.players[userid].destroy();
-		if (this.childGame.eliminate) this.childGame.eliminate(userid);
+		if (this.childGame && this.childGame.eliminate) this.childGame.eliminate(userid);
 
 		delete this.players[userid];
 		this.playerCount--;
@@ -368,7 +370,10 @@ class JumpStart extends ScavGame {
 		const MIN_WAIT_TIME = 60; // seconds
 		let prevDiff;
 		for (const diff of timesArray) {
-			if (!diff || diff < 0) return "The times must be numbers greater than 0 in seconds.";
+			if (!diff || diff < 0) {
+				delete this.jumpStartTimes;
+				return "The times must be numbers greater than 0 in seconds.";
+			}
 			if (prevDiff) {
 				this.jumpStartTimes.push(prevDiff - diff); // make the timer call itself as one runs out
 			} else {
@@ -383,7 +388,6 @@ class JumpStart extends ScavGame {
 			return "Invalid ordering of times.";
 		}
 		this.earlyTimes = timesArray;
-
 		// start the hunt
 		this.onStartEvent();
 		this.childGame = new Rooms.ScavengerHunt(...this.hunts[0], this);
@@ -398,7 +402,7 @@ class JumpStart extends ScavGame {
 				this.timer = setTimeout(() => {
 					this.onStartEvent();
 					this.childGame = new Rooms.ScavengerHunt(...this.hunts[1], this); // start it after the last hunt object has been destroyed
-				}, this.huntWait + (this.jumpStartTimes.reduce((a, b) => a + b) * 1000));
+				}, this.huntWait * 1000 + (this.jumpStartTimes.reduce((a, b) => a + b) * 1000));
 				return;
 			}
 
@@ -407,6 +411,7 @@ class JumpStart extends ScavGame {
 			this.timer = setTimeout(() => {
 				let targetUser = Users(targetUserId);
 				if (targetUser) {
+					this.announce('sending hint to ' + targetUser.name + " " + new Date());
 					targetUser.sendTo(this.room, `|raw|<strong>The first hint to the next hunt is:</strong> ${Chat.formatText(this.hunts[1][4][0])}`);
 					targetUser.sendTo(this.room, `|notify|Early Hint|The first hint to the next hunt is: ${this.hunts[1][4][0]}`);
 				}
@@ -415,10 +420,11 @@ class JumpStart extends ScavGame {
 		} else {
 			// there are no more slots for early delivery - start the new hunt
 			this.timer = setTimeout(() => {
+				this.announce('starting second hunt ' + new Date());
 				this.onStartEvent();
 				this.childGame = new Rooms.ScavengerHunt(...this.hunts[1], this);
 				this.room.add(`|c|~|[ScavengerManager] A scavenger hunt by ${Chat.toListString(this.childGame.hosts.map(h => h.name))} has been automatically started.`).update(); // highlight the users with "hunt by"
-			}, this.huntWait);
+			}, this.huntWait * 1000);
 		}
 	}
 
@@ -498,10 +504,73 @@ class PointRally extends ScavGame {
 	}
 }
 
+class Incognito extends ScavGame {
+	constructor(room, blind, official, staffHost, hosts, hunt) {
+		super(room, 'Incognito');
+
+		this.blind = blind;
+		this.hunt = hunt;
+		this.gameType = official ? 'official' : null;
+
+		this.announce(`A new ${blind ? 'Blind' : ''} Incognito game has been started!`);
+		this.createHunt(room, staffHost, hosts, this.gameType, hunt);
+		this.childGame.preCompleted = [];
+	}
+
+	onSubmit(user, value) {
+		if (this.childGame && this.childGame.onSubmit) {
+			// intercept handling of the last question
+			if (user.userid in this.childGame.players && this.childGame.players[user.userid].currentQuestion + 1 >= this.childGame.questions.length) {
+				let hunt = this.childGame;
+
+				value = toId(value);
+
+				let player = hunt.players[user.userid];
+				if (player.completed) return player.sendRoom(`That may or may not be the right answer - if you aren't confident, you can try again!`);
+
+				hunt.validatePlayer(player);
+
+				if (player.verifyAnswer(value)) {
+					this.markComplete(player);
+					if (this.blind) return player.sendRoom(`That may or may not be the right answer - if you aren't confident, you can try again!`);
+					player.sendRoom(`Congratulations! You have gotten the correct answer.`);
+					player.sendRoom(`This is a special style where finishes aren't announced! To see your placement, wait for the hunt to end. Until then, it's your secret that you finished!`);
+				} else {
+					if (this.blind) return player.sendRoom(`That may or may not be the right answer - if you aren't confident, you can try again!`);
+					player.sendRoom(`That is not the answer - try again!`);
+				}
+			} else {
+				this.childGame.onSubmit(user, value);
+			}
+		}
+	}
+
+	markComplete(player) {
+		if (player.completed) return false;
+
+		if (this.childGame.preCompleted.find(p => toId(p.name) === player.userid)) return false;
+
+		let now = Date.now();
+		let time = Chat.toDurationString(now - this.childGame.startTime, {hhmmss: true});
+
+		player.completed = true;
+		this.childGame.preCompleted.push({name: player.name, time: time});
+	}
+
+	onBeforeEndHunt() {
+		this.childGame.completed = this.childGame.preCompleted;
+	}
+
+	onAfterEndHunt() {
+		setImmediate(() => this.destroy());
+	}
+}
+
 
 module.exports = {
-	KOGame: KOGame,
-	JumpStart: JumpStart,
-	PointRally: PointRally,
-	ScavengerGames: ScavengerGames,
+	KOGame,
+	JumpStart,
+	PointRally,
+	ScavengerGames,
+	Incognito,
 };
