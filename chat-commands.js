@@ -2447,12 +2447,12 @@ const commands = {
 		if (!(user.can('lock') || localPunished)) return this.errorReply(`User ${name} is neither locked nor muted/banned from this room.`);
 
 		if (targetUser && (cmd === 'hidealtstext' || cmd === 'hidetextalts' || cmd === 'hidealttext')) {
-			this.addModAction(`${name}'s alts' messages were cleared from ${room.title} by ${user.name}.`);
+			room.sendMods(`${name}'s alts' messages were cleared from ${room.title} by ${user.name}.`);
 			this.modlog('HIDEALTSTEXT', targetUser, null, {noip: 1});
 			const alts = [userid].concat(Object.keys(targetUser.prevNames)).concat(targetUser.getAltUsers(true).map(user => user.getLastId()));
 			room.hideText(alts);
 		} else {
-			this.addModAction(`${name}'s messages were cleared from ${room.title} by ${user.name}.`);
+			room.sendMods(`${name}'s messages were cleared from ${room.title} by ${user.name}.`);
 			this.modlog('HIDETEXT', targetUser || userid, null, {noip: 1, noalts: 1});
 			room.hideText([userid]);
 		}

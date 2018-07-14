@@ -188,7 +188,21 @@ class Roomlog {
 	 */
 	clearText(userids) {
 		const messageStart = this.logTimes ? '|c:|' : '|c|';
-		this.log = this.log.filter(line => (!line.startsWith(messageStart) || !userids.includes(toId(line.split('|')[3]))));
+		const section = this.logTimes ? 4 : 3; // ['', 'c' timestamp?, author, message]
+		/** @type {string[]} */
+		let cleared = [];
+		this.log = this.log.filter(line => {
+			if (line.startsWith(messageStart)) {
+				const parts = Chat.splitFirst(line, '|', section);
+				const user = toId(parts[section - 1]);
+				if (userids.includes(user)) {
+					if (!cleared.includes(user)) cleared.push(user);
+					return false;
+				}
+			}
+			return true;
+		});
+		return cleared;
 	}
 	/**
 	 * @param {string} message

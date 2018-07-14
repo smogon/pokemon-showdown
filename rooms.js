@@ -1071,9 +1071,9 @@ class BasicChatRoom extends BasicRoom {
 	 * @param {string[]} userids
 	 */
 	hideText(userids) {
-		this.log.clearText(userids);
-		for (const userid of userids) {
-			this.add(`|unlink|hide|${userid}`);
+		const cleared = this.log.clearText(userids);
+		for (const userid of cleared) {
+			this.send(`|unlink|hide|${userid}`);
 		}
 		this.update();
 	}
