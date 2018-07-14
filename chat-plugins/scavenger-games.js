@@ -201,7 +201,7 @@ class ScavGame extends Rooms.RoomGame {
 		let name = this.players[userid].name;
 
 		this.players[userid].destroy();
-		if (this.childGame.eliminate) this.childGame.eliminate(userid);
+		if (this.childGame && this.childGame.eliminate) this.childGame.eliminate(userid);
 
 		delete this.players[userid];
 		this.playerCount--;
