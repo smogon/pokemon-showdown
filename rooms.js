@@ -180,6 +180,14 @@ class BasicRoom {
 		return this.add('|c|' + user.getIdentity(this.id) + '|/log ' + text).update();
 	}
 	/**
+	 * Like addByUser, but without logging
+	 * @param {User} user
+	 * @param {string} text
+	 */
+	sendByUser(user, text) {
+		return this.send('|c|' + user.getIdentity(this.id) + '|/log ' + text);
+	}
+	/**
 	 * Like addByUser, but sends to mods only.
 	 * @param {User} user
 	 * @param {string} text

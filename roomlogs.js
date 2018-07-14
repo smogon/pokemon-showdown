@@ -194,9 +194,9 @@ class Roomlog {
 		this.log = this.log.filter(line => {
 			if (line.startsWith(messageStart)) {
 				const parts = Chat.splitFirst(line, '|', section);
-				const user = toId(parts[section - 1]);
-				if (userids.includes(user)) {
-					if (!cleared.includes(user)) cleared.push(user);
+				const userid = toId(parts[section - 1]);
+				if (userids.includes(userid)) {
+					if (!cleared.includes(userid)) cleared.push(userid);
 					return false;
 				}
 			}
