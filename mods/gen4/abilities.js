@@ -348,7 +348,7 @@ let BattleAbilities = {
 			let id = status.id;
 			if (id === 'slp' || id === 'frz') return;
 			if (id === 'tox') id = 'psn';
-			source.trySetStatus(id);
+			source.trySetStatus(id, target);
 		},
 	},
 	"thickfat": {
