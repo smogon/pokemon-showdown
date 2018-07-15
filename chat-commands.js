@@ -814,7 +814,7 @@ const commands = {
 		}
 
 		if (room.subRooms) {
-			for (const subRoom of room.subRooms) subRoom.parent = null;
+			for (const subRoom of room.subRooms.values()) subRoom.parent = null;
 		}
 
 		room.add(`|raw|<div class="broadcast-red"><b>This room has been deleted.</b></div>`);
