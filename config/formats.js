@@ -47,7 +47,7 @@ let Formats = [
 	{
 		name: "[Gen 7] Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3587184/">Ubers Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3637068/">Ubers Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3623296/">Ubers Viability Rankings</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3599816/">Ubers Sample Teams</a>`,
 		],
@@ -59,7 +59,7 @@ let Formats = [
 	{
 		name: "[Gen 7] UU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3636383/">UU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3639173/">UU Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3626124/">UU Viability Rankings</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3621217/">UU Sample Teams</a>`,
 		],
@@ -71,7 +71,7 @@ let Formats = [
 	{
 		name: "[Gen 7] RU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3625382/">RU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3638874/">RU Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3622740/">RU Viability Rankings</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3622057/">RU Sample Teams</a>`,
 		],
@@ -96,7 +96,7 @@ let Formats = [
 	{
 		name: "[Gen 7] PU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3632456/">PU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3639176/">PU Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3614892/">PU Viability Rankings</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3614470/">PU Sample Teams</a>`,
 		],
