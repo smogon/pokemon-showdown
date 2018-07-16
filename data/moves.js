@@ -6601,7 +6601,7 @@ let BattleMovedex = {
 				}
 			},
 			onEnd: function () {
-				this.eachEvent('Terrain');
+				if (!this.effectData.duration) this.eachEvent('Terrain');
 				this.add('-fieldend', 'move: Grassy Terrain');
 			},
 		},
