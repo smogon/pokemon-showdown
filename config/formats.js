@@ -423,7 +423,7 @@ let Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
-		banlist: ['Kyurem-Black'],
+		banlist: ['Kyurem-Black', 'Tapu Koko'],
 		unbanlist: ['Kyurem-White', 'Marshadow', 'Metagross-Mega', 'Naganadel', 'Reshiram'],
 		onModifyTemplate: function (template, target, source) {
 			template = Object.assign({}, template);
