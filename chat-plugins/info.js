@@ -450,14 +450,14 @@ const commands = {
 				return this.sendReply(buffer);
 			case 'pokemon':
 				let pokemon = mod.getTemplate(newTarget.name);
+				let format;
 				if (sep[1]) {
-					let template = pokemon;
-					let format = Dex.getFormat(sep[1]);
-					if (format.exists && format.onModifyTemplate) {
-						template = format.onModifyTemplate.call(require('../sim/battle'), pokemon);
-						if (typeof template === 'undefined') template = pokemon;
-					}
-					pokemon = template;
+					format = Dex.getFormat(sep[1]);
+				} else if (room && room.battle) {
+					format = Dex.getFormat(room.battle.format);
+				}
+				if (format && format.exists && format.onModifyTemplate) {
+					pokemon = format.onModifyTemplate.call(require('../sim/battle'), pokemon) || pokemon;
 				}
 				let tier = pokemon.tier;
 				if (room && (room.id === 'smogondoubles' ||
