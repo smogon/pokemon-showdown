@@ -450,6 +450,15 @@ const commands = {
 				return this.sendReply(buffer);
 			case 'pokemon':
 				let pokemon = mod.getTemplate(newTarget.name);
+				let format;
+				if (sep[1]) {
+					format = Dex.getFormat(sep[1]);
+				} else if (room && room.battle) {
+					format = Dex.getFormat(room.battle.format);
+				}
+				if (format && format.exists && format.onModifyTemplate) {
+					pokemon = format.onModifyTemplate.call(require('../sim/battle'), pokemon) || pokemon;
+				}
 				let tier = pokemon.tier;
 				if (room && (room.id === 'smogondoubles' ||
 					['gen7doublesou', 'gen7doublesubers', 'gen7doublesuu'].includes(room.battle && room.battle.format))) {
