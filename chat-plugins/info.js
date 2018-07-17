@@ -418,12 +418,19 @@ const commands = {
 			}
 		}
 		let mod = Dex;
+		/** @type {Format?} */
+		let format = null;
 		if (sep[1] && toId(sep[1]) in Dex.dexes) {
 			mod = Dex.mod(toId(sep[1]));
-		} else if (sep[1] && Dex.getFormat(sep[1]).mod) {
-			mod = Dex.mod(Dex.getFormat(sep[1]).mod);
+		} else if (sep[1]) {
+			format = Dex.getFormat(sep[1]);
+			if (!format.exists) {
+				return this.errorReply(`Unrecognized format or mod "${format.name}"`);
+			}
+			mod = Dex.mod(format.mod);
 		} else if (room && room.battle) {
-			mod = Dex.forFormat(room.battle.format);
+			format = Dex.getFormat(room.battle.format);
+			mod = Dex.mod(format.mod);
 		}
 		let newTargets = mod.dataSearch(target);
 		let showDetails = (cmd === 'dt' || cmd === 'details');
@@ -450,13 +457,7 @@ const commands = {
 				return this.sendReply(buffer);
 			case 'pokemon':
 				let pokemon = mod.getTemplate(newTarget.name);
-				let format;
-				if (sep[1]) {
-					format = Dex.getFormat(sep[1]);
-				} else if (room && room.battle) {
-					format = Dex.getFormat(room.battle.format);
-				}
-				if (format && format.exists && format.onModifyTemplate) {
+				if (format && format.onModifyTemplate) {
 					pokemon = format.onModifyTemplate.call(require('../sim/battle'), pokemon) || pokemon;
 				}
 				let tier = pokemon.tier;
