@@ -14,7 +14,7 @@ let generatorFiles = {
 	'roundrobin': 'generator-round-robin',
 	'elimination': 'generator-elimination',
 };
-for (let type in generatorFiles) {
+for (const type in generatorFiles) {
 	TournamentGenerators[type] = require('./' + generatorFiles[type]);
 }
 
@@ -77,13 +77,14 @@ class Tournament {
 		this.isEnded = false;
 
 		room.add(`|tournament|create|${this.format}|${generator.name}|${this.playerCap}`);
-		room.send(`|tournament|update|${JSON.stringify({
+		const update = {
 			format: this.format,
 			generator: generator.name,
 			playerCap: this.playerCap,
 			isStarted: false,
 			isJoined: false,
-		})}`);
+		};
+		room.send(`|tournament|update|${JSON.stringify(update)}`);
 		this.update();
 	}
 	destroy() {
@@ -108,7 +109,7 @@ class Tournament {
 		if (isErrored) return;
 
 		this.generator = generator;
-		this.room.send(`|tournament|update|${JSON.stringify({generator: generator.name})}`);
+		this.room.send(`|tournament|update|{"generator": "${generator.name}"}`);
 		this.isBracketInvalidated = true;
 		this.update();
 		return true;
@@ -126,10 +127,10 @@ class Tournament {
 	}
 
 	getCustomRules() {
-		let bans = [];
-		let unbans = [];
-		let addedRules = [];
-		let removedRules = [];
+		const bans = [];
+		const unbans = [];
+		const addedRules = [];
+		const removedRules = [];
 		for (const ban of this.customRules) {
 			let charAt0 = ban.charAt(0);
 			if (charAt0 === '+') {
@@ -142,7 +143,7 @@ class Tournament {
 				addedRules.push(ban);
 			}
 		}
-		let html = [];
+		const html = [];
 		if (bans.length) html.push(`<b>Bans</b> - ${Chat.escapeHTML(bans.join(', '))}`);
 		if (unbans.length) html.push(`<b>Unbans</b> - ${Chat.escapeHTML(unbans.join(', '))}`);
 		if (addedRules.length) html.push(`<b>Added rules</b> - ${Chat.escapeHTML(addedRules.join(', '))}`);
@@ -163,7 +164,7 @@ class Tournament {
 		} else if (this.autoStartTimer) {
 			clearTimeout(this.autoStartTimer);
 		}
-		for (let i in this.players) {
+		for (const i in this.players) {
 			this.players[i].destroy();
 		}
 		this.room.add('|tournament|forceend');
@@ -183,7 +184,7 @@ class Tournament {
 			return;
 		}
 		let isJoined = targetUser.userid in this.players;
-		let update = {
+		const update = {
 			format: this.format,
 			generator: this.generator.name,
 			isStarted: this.isTournamentStarted,
@@ -193,17 +194,18 @@ class Tournament {
 		if (this.format !== this.originalFormat) update.teambuilderFormat = this.originalFormat;
 		connection.sendTo(this.room, `|tournament|update|${JSON.stringify(update)}`);
 		if (this.isTournamentStarted && isJoined) {
-			connection.sendTo(this.room, `|tournament|update|${JSON.stringify({
+			const obj = {
 				challenges: usersToNames(this.availableMatchesCache.challenges.get(this.players[targetUser.userid])),
 				challengeBys: usersToNames(this.availableMatchesCache.challengeBys.get(this.players[targetUser.userid])),
-			})}`);
+			};
+			connection.sendTo(this.room, `|tournament|update|${JSON.stringify(obj)}`);
 
-			let pendingChallenge = this.pendingChallenges.get(this.players[targetUser.userid]);
+			const pendingChallenge = this.pendingChallenges.get(this.players[targetUser.userid]);
 			if (pendingChallenge) {
 				if (pendingChallenge.to) {
-					connection.sendTo(this.room, `|tournament|update|${JSON.stringify({challenging: pendingChallenge.to.name})}`);
+					connection.sendTo(this.room, `|tournament|update|{"challenging": "${pendingChallenge.to.name}"}`);
 				} else if (pendingChallenge.from) {
-					connection.sendTo(this.room, `|tournament|update|${JSON.stringify({challenged: pendingChallenge.from.name})}`);
+					connection.sendTo(this.room, `|tournament|update|{"challenged": "${pendingChallenge.from.name}"}`);
 				}
 			}
 		}
@@ -225,7 +227,7 @@ class Tournament {
 
 				this.bracketCache = this.getBracketData();
 				this.isBracketInvalidated = false;
-				this.room.send(`|tournament|update|${JSON.stringify({bracketData: this.bracketCache})}`);
+				this.room.send(`|tournament|update|{"bracketData": "${this.bracketCache}"}`);
 			}
 		}
 
@@ -234,10 +236,10 @@ class Tournament {
 			this.isAvailableMatchesInvalidated = false;
 
 			this.availableMatchesCache.challenges.forEach((opponents, player) => {
-				player.sendRoom(`|tournament|update|${JSON.stringify({challenges: usersToNames(opponents)})}`);
+				player.sendRoom(`|tournament|update|{"challenges": "${usersToNames(opponents)}"}`);
 			});
 			this.availableMatchesCache.challengeBys.forEach((opponents, player) => {
-				player.sendRoom(`|tournament|update|${JSON.stringify({challengeBys: usersToNames(opponents)})}`);
+				player.sendRoom(`|tournament|update|{"challenges": "${usersToNames(opponents)}"}`);
 			});
 		}
 		this.room.send('|tournament|updateEnd');
@@ -724,8 +726,8 @@ class Tournament {
 		this.lastActionTimes.set(to, Date.now());
 		this.pendingChallenges.set(from, {to: to, team: ready.team});
 		this.pendingChallenges.set(to, {from: from, team: ready.team});
-		from.sendRoom(`|tournament|update|${JSON.stringify({challenging: to.name})}`);
-		to.sendRoom(`|tournament|update|${JSON.stringify({challenged: from.name})}`);
+		from.sendRoom(`|tournament|update|{"challenging": "${to.name}"}`);
+		to.sendRoom(`|tournament|update|{"challenged": "${from.name}"}`);
 
 		this.isBracketInvalidated = true;
 		this.update();
@@ -901,12 +903,13 @@ class Tournament {
 		this.room.update();
 	}
 	onTournamentEnd() {
-		this.room.add(`|tournament|end|${JSON.stringify({
+		const update = {
 			results: this.generator.getResults().map(usersToNames),
 			format: this.format,
 			generator: this.generator.name,
 			bracketData: this.getBracketData(),
-		})}`);
+		};
+		this.room.add(`|tournament|end|${JSON.stringify(update)}`);
 		this.isEnded = true;
 		if (this.autoDisqualifyTimer) clearTimeout(this.autoDisqualifyTimer);
 		delete exports.tournaments[this.room.id];
@@ -1062,10 +1065,10 @@ let commands = {
 					if (Config.tourdefaultplayercap && tournament.playerCap > Config.tourdefaultplayercap) {
 						Monitor.log(`[TourMonitor] Room ${tournament.room.id} starting a tour over default cap (${tournament.playerCap})`);
 					}
-					this.room.send(`|tournament|update|${JSON.stringify({playerCap: tournament.playerCap})}`);
+					this.room.send(`|tournament|update|{"playerCap": "${playerCap}"}`);
 				} else if (tournament.playerCap && !playerCap) {
 					tournament.playerCap = 0;
-					this.room.send(`|tournament|update|${JSON.stringify({playerCap: tournament.playerCap})}`);
+					this.room.send(`|tournament|update|{"playerCap": "${playerCap}"}`);
 				}
 				const capNote = (tournament.playerCap ? ' with a player cap of ' + tournament.playerCap : '');
 				this.privateModAction(`(${user.name} set tournament type to ${generator.name + capNote}.)`);
@@ -1109,7 +1112,7 @@ let commands = {
 				this.modlog('TOUR PLAYERCAP', null, tournament.playerCap);
 				this.sendReply(`Tournament cap set to ${tournament.playerCap}.`);
 			}
-			this.room.send(`|tournament|update|${JSON.stringify({playerCap: tournament.playerCap})}`);
+			this.room.send(`|tournament|update|{"playerCap": "${tournament.playerCap}"}`);
 		},
 		end: 'delete',
 		stop: 'delete',
@@ -1168,7 +1171,7 @@ let commands = {
 			if (name.length > MAX_CUSTOM_NAME_LENGTH) return this.errorReply(`The tournament's name cannot exceed ${MAX_CUSTOM_NAME_LENGTH} characters.`);
 			if (name.includes('|')) return this.errorReply("The tournament's name cannot include the | symbol.");
 			tournament.format = name;
-			this.room.send(`|tournament|update|${JSON.stringify({format: tournament.format})}`);
+			this.room.send(`|tournament|update|{"format": "${tournament.format}"}`);
 			this.privateModAction(`(${user.name} set the tournament's name to ${tournament.format}.)`);
 			this.modlog('TOUR NAME', null, tournament.format);
 			tournament.update();
@@ -1177,7 +1180,7 @@ let commands = {
 		clearname: function (tournament, user) {
 			if (tournament.format === tournament.originalFormat) return this.errorReply("The tournament does not have a name.");
 			tournament.format = tournament.originalFormat;
-			this.room.send(`|tournament|update|${JSON.stringify({format: tournament.format})}`);
+			this.room.send(`|tournament|update|{"format": "${tournament.format}"}`);
 			this.privateModAction(`(${user.name} cleared the tournament's name.)`);
 			this.modlog('TOUR CLEARNAME');
 			tournament.update();
@@ -1305,13 +1308,13 @@ let commands = {
 			if (this.meansYes(option) || option === 'allow' || option === 'allowed') {
 				if (tournament.modjoin) return this.errorReply("Modjoining is already allowed for this tournament.");
 				tournament.modjoin = true;
-				this.room.add('Modjoining is now allowed (Players can modjoin their tournament battles).');
+				this.room.add("Modjoining is now allowed (Players can modjoin their tournament battles).");
 				this.privateModAction(`(The tournament was set to allow modjoin by ${user.name})`);
 				this.modlog('TOUR MODJOIN', null, option);
 			} else if (this.meansNo(option) || option === 'disallow' || option === 'disallowed') {
 				if (!tournament.modjoin) return this.errorReply("Modjoining is already not allowed for this tournament.");
 				tournament.modjoin = false;
-				this.room.add('Modjoining is now banned (Players cannot modjoin their tournament battles).');
+				this.room.add("Modjoining is now banned (Players cannot modjoin their tournament battles).");
 				this.privateModAction(`(The tournament was set to disallow modjoin by ${user.name})`);
 				this.modlog('TOUR MODJOIN', null, option);
 			} else {
@@ -1390,13 +1393,14 @@ Chat.commands.tournament = function (paramString, room, user, connection) {
 
 	if (cmd === '') {
 		if (!this.runBroadcast()) return;
-		this.sendReply(`|tournaments|info|${JSON.stringify(Object.keys(exports.tournaments).filter(tournament => {
+		const update = Object.keys(exports.tournaments).filter(tournament => {
 			tournament = exports.tournaments[tournament];
 			return !tournament.room.isPrivate && !tournament.room.isPersonal && !tournament.room.staffRoom;
 		}).map(tournament => {
 			tournament = exports.tournaments[tournament];
 			return {room: tournament.room.id, title: tournament.room.title, format: tournament.format, generator: tournament.generator.name, isStarted: tournament.isTournamentStarted};
-		}))}`);
+		});
+		this.sendReply(`|tournaments|info|${JSON.stringify(update)}`);
 	} else if (cmd === 'help') {
 		return this.parse('/help tournament');
 	} else if (this.meansYes(cmd)) {
