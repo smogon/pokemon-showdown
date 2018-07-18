@@ -21,6 +21,7 @@
 /**
  * @typedef {Object} MafiaLynch
  * @property {number} count
+ * @property {number} trueCount
  * @property {number} lastLynch
  * @property {string} dir
  * @property {string[]} lynchers
@@ -320,6 +321,10 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.hammerCount = 0;
 		/** @type {{[userid: string]: MafiaLynch}} */
 		this.lynches = Object.create(null);
+		/** @type {{[userid: string]: number}} */
+		this.lynchModifiers = Object.create(null);
+		/** @type {{[userid: string]: number}} */
+		this.hammerModifiers = Object.create(null);
 		/** @type {string?} */
 		this.hasPlurality = null;
 		/** @type {boolean} */
@@ -603,10 +608,11 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (previousLynch) this.unlynch(userid, true);
 		let lynch = this.lynches[target];
 		if (!lynch) {
-			this.lynches[target] = {count: 1, lastLynch: Date.now(), dir: 'up', lynchers: [userid]};
+			this.lynches[target] = {count: 1, trueCount: this.getLynchValue(userid), lastLynch: Date.now(), dir: 'up', lynchers: [userid]};
 			lynch = this.lynches[target];
 		} else {
 			lynch.count++;
+			lynch.trueCount += this.getLynchValue(userid);
 			lynch.lastLynch = Date.now();
 			lynch.dir = 'up';
 			lynch.lynchers.push(userid);
@@ -620,7 +626,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			this.sendRoom(name === 'No Lynch' ? `${(targetUser ? targetUser.name : userid)} has abstained from lynching.` : `${(targetUser ? targetUser.name : userid)} has lynched ${name}.`, {timestamp: true});
 		}
 		player.lastLynch = Date.now();
-		if (this.hammerCount <= lynch.count) {
+		if (this.getHammerValue(target) <= lynch.trueCount) {
 			// HAMMER
 			this.sendRoom(`Hammer! ${target === 'nolynch' ? 'Nobody' : Chat.escapeHTML(name)} was lynched!`, {declare: true});
 			if (target !== 'nolynch') this.eliminate(this.players[target], 'kill');
@@ -644,6 +650,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (player.lastLynch + 2000 >= Date.now() && !force) this.sendUser(userid, `|error|You must wait another ${Chat.toDurationString((player.lastLynch + 2000) - Date.now()) || '1 second'} before you can change your lynch.`);
 		let lynch = this.lynches[player.lynching];
 		lynch.count--;
+		lynch.trueCount -= this.getLynchValue(userid);
 		if (lynch.count <= 0) {
 			delete this.lynches[player.lynching];
 		} else {
@@ -659,6 +666,94 @@ class MafiaTracker extends Rooms.RoomGame {
 		player.updateHtmlRoom();
 	}
 
+	/**
+	 * @param {User} user
+	 * @param {string} target
+	 * @param {number} mod
+	 */
+	applyLynchModifier(user, target, mod) {
+		const targetPlayer = this.players[target] || this.dead[target];
+		if (!targetPlayer) return this.sendUser(user, `|error|${target} is not in the game of mafia.`);
+		if (target in this.dead && !targetPlayer.restless) return this.sendUser(user, `|error|${target} is not alive or a restless spirit, and therefore cannot lynch.`);
+		const oldMod = this.lynchModifiers[target];
+		if (mod === oldMod || ((isNaN(mod) || mod === 1) && oldMod === undefined)) {
+			if (isNaN(mod) || mod === 1) return this.sendUser(user, `|error|${target} already has no lynch modifier.`);
+			return this.sendUser(user, `|error|${target} already has a lynch modifier of ${mod}`);
+		}
+		const newMod = isNaN(mod) ? 1 : mod;
+		if (targetPlayer.lynching) {
+			this.lynches[targetPlayer.lynching].trueCount += oldMod - newMod;
+			if (this.getHammerValue(targetPlayer.lynching) <= this.lynches[targetPlayer.lynching].trueCount) {
+				this.sendRoom(`${targetPlayer.lynching} has been lynched due to a modifier change! They have not been eliminated.`);
+				this.night(true);
+			}
+		}
+		if (newMod === 1) {
+			delete this.lynchModifiers[target];
+			return this.sendUser(user, `|${targetPlayer.name} has had their lynch modifier removed.`);
+		} else {
+			this.lynchModifiers[target] = newMod;
+			return this.sendUser(user, `${targetPlayer.name} has been given a lynch modifier of ${newMod}`);
+		}
+	}
+	/**
+	 * @param {User} user
+	 * @param {string} target
+	 * @param {number} mod
+	 */
+	applyHammerModifier(user, target, mod) {
+		if (!(target in this.players || target === 'nolynch')) return this.sendUser(user, `|error|${target} is not in the game of mafia.`);
+		const oldMod = this.hammerModifiers[target];
+		if (mod === oldMod || ((isNaN(mod) || mod === 0) && oldMod === undefined)) {
+			if (isNaN(mod) || mod === 0) return this.sendUser(user, `|error|${target} already has no hammer modifier.`);
+			return this.sendUser(user, `|error|${target} already has a hammer modifier of ${mod}`);
+		}
+		const newMod = isNaN(mod) ? 0 : mod;
+		if (this.lynches[target]) {
+			if (this.hammerCount + newMod <= this.lynches[target].trueCount) { // do this manually since we havent actually changed the value yet
+				this.sendRoom(`${target} has been lynched due to a modifier change! They have not been eliminated.`); // make sure these strings are the same
+				this.night(true);
+			}
+		}
+		if (newMod === 0) {
+			delete this.hammerModifiers[target];
+			return this.sendUser(user, `${target} has had their hammer modifier removed.`);
+		} else {
+			this.hammerModifiers[target] = newMod;
+			return this.sendUser(user, `${target} has been given a hammer modifier of ${newMod}`);
+		}
+	}
+	/**
+	 * @param {User} user
+	 */
+	clearLynchModifiers(user) {
+		for (const player of [...Object.keys(this.players), ...Object.keys(this.dead)]) {
+			if (this.lynchModifiers[player]) this.applyLynchModifier(user, player, 1);
+		}
+	}
+	/**
+	 * @param {User} user
+	 */
+	clearHammerModifiers(user) {
+		for (const player of ['nolynch', ...Object.keys(this.players)]) {
+			if (this.hammerModifiers[player]) this.applyHammerModifier(user, player, 0);
+		}
+	}
+
+	/**
+	 * @param {string} userid
+	 */
+	getLynchValue(userid) {
+		const mod = this.lynchModifiers[userid];
+		return (mod === undefined ? 1 : mod);
+	}
+	/**
+	 * @param {string} userid
+	 */
+	getHammerValue(userid) {
+		const mod = this.hammerModifiers[userid];
+		return (mod === undefined ? this.hammerCount : this.hammerCount + mod);
+	}
 	/**
 	 * @return {void}
 	 */
@@ -687,7 +782,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.sendRoom(`The hammer count has been shifted to ${this.hammerCount}. Lynches have not been reset.`, {declare: true});
 		let hammered = [];
 		for (const lynch in this.lynches) {
-			if (this.lynches[lynch].count >= this.hammerCount) hammered.push(lynch === 'nolynch' ? 'Nobody' : lynch);
+			if (this.lynches[lynch].trueCount >= this.getHammerValue(lynch)) hammered.push(lynch === 'nolynch' ? 'Nobody' : lynch);
 		}
 		if (hammered.length) {
 			this.sendRoom(`${Chat.count(hammered, "players have")} been hammered: ${hammered.join(', ')}. They have not been removed from the game.`, {declare: true});
@@ -1489,6 +1584,10 @@ const pages = {
 					} else if ((game.selfEnabled && !isSpirit) || user.userid !== key) {
 						buf += `<button class="button" name="send" value="/mafia lynch ${room.id}, ${key}">Lynch ${game.players[key] ? game.players[key].safeName : 'No Lynch'}</button>`;
 					}
+				} else if (isHost) {
+					const lynch = game.lynches[key];
+					if (lynch && lynch.count !== lynch.trueCount) buf += `(${lynch.trueCount})`;
+					if (game.hammerModifiers[key]) buf += `(${game.getHammerValue(key)} to hammer)`;
 				}
 				buf += `</p>`;
 			}
@@ -1517,13 +1616,14 @@ const pages = {
 			buf += `<h3>Player Options</h3>`;
 			for (let p in game.players) {
 				let player = game.players[p];
-				buf += `<p style="font-weight:bold;">${player.safeName} (${player.role ? player.getRole() : ''}): <button class="button" name="send" value="/mafia kill ${room.id}, ${player.userid}">Kill</button> <button class="button" name="send" value="/mafia treestump ${room.id}, ${player.userid}">Make a Treestump (Kill)</button> <button class="button" name="send" value="/mafia spirit ${room.id}, ${player.userid}">Make a Restless Spirit (Kill)</button> <button class="button" name="send" value="/mafia spiritstump ${room.id}, ${player.userid}">Make a Restless Treestump (Kill)</button> <button class="button" name="send" value="/mafia sub ${room.id}, next, ${player.userid}">Force sub</button></p>`;
+				buf += `<p style="font-weight:bold;">${player.safeName} (${player.role ? player.getRole() : ''})${game.lynchModifiers[p] !== undefined ? `(lynches worth ${game.getLynchValue(p)})` : ''}: <button class="button" name="send" value="/mafia kill ${room.id}, ${player.userid}">Kill</button> <button class="button" name="send" value="/mafia treestump ${room.id}, ${player.userid}">Make a Treestump (Kill)</button> <button class="button" name="send" value="/mafia spirit ${room.id}, ${player.userid}">Make a Restless Spirit (Kill)</button> <button class="button" name="send" value="/mafia spiritstump ${room.id}, ${player.userid}">Make a Restless Treestump (Kill)</button> <button class="button" name="send" value="/mafia sub ${room.id}, next, ${player.userid}">Force sub</button></p>`;
 			}
 			for (let d in game.dead) {
 				let dead = game.dead[d];
 				buf += `<p style="font-weight:bold;">${dead.safeName} (${dead.role ? dead.getRole() : ''})`;
 				if (dead.treestump) buf += ` (is a Treestump)`;
 				if (dead.restless) buf += ` (is a Restless Spirit)`;
+				if (game.lynchModifiers[d] !== undefined) buf += ` (lynches worth ${game.getLynchValue(d)})`;
 				buf += `: <button class="button" name="send" value="/mafia revive ${room.id}, ${dead.userid}">Revive</button></p>`;
 			}
 			buf += `<hr/></details></p>`;
@@ -2103,6 +2203,71 @@ const commands = {
 			}
 		},
 		deadlinehelp: [`/mafia deadline [minutes|off] - Sets or removes the deadline for the game. Cannot be more than 20 minutes.`],
+
+		applylynchmodifier: 'applyhammermodifier',
+		applyhammermodifier: function (target, room, user, connection, cmd) {
+			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
+			const game = /** @type {MafiaTracker} */ (room.game);
+			if (!user.can('mute', null, room) && game.hostid !== user.userid) return this.errorReply(`/mafia ${cmd} - Access denied.`);
+			if (!game.started) return this.errorReply(`The game has not started yet.`);
+			const [player, mod] = target.split(',');
+			if (cmd === 'applyhammermodifier') {
+				game.applyHammerModifier(user, toId(player), parseInt(mod));
+			} else {
+				game.applyLynchModifier(user, toId(player), parseInt(mod));
+			}
+		},
+		clearlynchmodifiers: 'clearhammermodifiers',
+		clearhammermodifiers: function (target, room, user, connection, cmd) {
+			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
+			const game = /** @type {MafiaTracker} */ (room.game);
+			if (!user.can('mute', null, room) && game.hostid !== user.userid) return this.errorReply(`/mafia ${cmd} - Access denied.`);
+			if (!game.started) return this.errorReply(`The game has not started yet.`);
+			if (cmd === 'clearhammermodifiers') {
+				game.clearHammerModifiers(user);
+			} else {
+				game.clearLynchModifiers(user);
+			}
+		},
+
+		hate: 'love',
+		unhate: 'love',
+		unlove: 'love',
+		removelynchmodifier: 'love',
+		love: function (target, room, user, connection, cmd) {
+			let mod;
+			switch (cmd) {
+			case 'hate':
+				mod = -1;
+				break;
+			case 'love':
+				mod = 1;
+				break;
+			case 'unhate': case 'unlove': case 'removelynchmodifier':
+				mod = 0;
+				break;
+			}
+			this.parse(`/mafia applyhammermodifier ${target}, ${mod}`);
+		},
+		doublevoter: 'mayor',
+		voteless: 'mayor',
+		unvoteless: 'mayor',
+		unmayor: 'mayor',
+		mayor: function (target, room, user, connection, cmd) {
+			let mod;
+			switch (cmd) {
+			case 'doublevoter': case 'mayor':
+				mod = 2;
+				break;
+			case 'voteless':
+				mod = 0;
+				break;
+			case 'unvoteless': case 'unmayor':
+				mod = 1;
+				break;
+			}
+			this.parse(`/mafia applylynchmodifier ${target}, ${mod}`);
+		},
 
 		shifthammer: 'hammer',
 		resethammer: 'hammer',
