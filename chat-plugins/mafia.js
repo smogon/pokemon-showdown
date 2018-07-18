@@ -2638,9 +2638,11 @@ const commands = {
 		},
 		datahelp: [`/mafia data [alignment|role|modifier|theme] - Get information on a mafia alignment, role, modifier, or theme.`],
 
-		win: function (target, room, user) {
+		winfaction: 'win',
+		win: function (target, room, user, connection, cmd) {
 			if (!room || !room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (room.id !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
+			if (cmd === 'winfaction' && (!room.game || !(room.game.gameid === 'mafia'))) return this.errorReply(`There is no game of mafia running in the room`);
 			if (!this.can('mute', null, room)) return;
 			const args = target.split(',');
 			let points = parseInt(args[0]);
@@ -2654,8 +2656,29 @@ const commands = {
 			if (!args.length) return this.parse('/help mafia win');
 			const month = new Date().toLocaleString("en-us", {month: "numeric", year: "numeric"});
 			if (!logs.leaderboard[month]) logs.leaderboard[month] = {};
+
+			let toGiveTo = [];
+			let buf = `${points} were awarded to: `;
+			if (cmd === 'winfaction') {
+				const game = /** @type {MafiaTracker} */ (room.game);
+				for (let faction of args) {
+					faction = toId(faction);
+					let inFaction = [];
+					for (const user of [...Object.values(game.players), ...Object.values(game.dead)]) {
+						if (user.role && toId(user.role.alignment) === faction) {
+							toGiveTo.push(user.userid);
+							inFaction.push(user.userid);
+						}
+					}
+					if (inFaction.length) buf += ` the ${faction} faction: ${inFaction.join(', ')};`;
+				}
+			} else {
+				toGiveTo = args;
+				buf += toGiveTo.join(', ');
+			}
+			if (!toGiveTo.length) return this.parse('/help mafia win');
 			let gavePoints = false;
-			for (let u of args) {
+			for (let u of toGiveTo) {
 				u = toId(u);
 				if (!u) continue;
 				if (!gavePoints) gavePoints = true;
@@ -2665,10 +2688,13 @@ const commands = {
 			}
 			if (!gavePoints) return this.parse('/help mafia win');
 			writeFile(LOGS_FILE, logs);
-			this.modlog(`MAFIAPOINTS`, null, `${points} points were awarded to ${Chat.toListString(args)}`);
-			room.add(`${points} points were awarded to: ${Chat.toListString(args)}`).update();
+			this.modlog(`MAFIAPOINTS`, null, `${points} points were awarded to ${Chat.toListString(toGiveTo)}`);
+			room.add(buf).update();
 		},
-		winhelp: [`/mafia win (points) [user1], [user2], [user3], ... - Award the specified users points to the mafia leaderboard for this month. The amount of points can be negative to take points. Defaults to 10 points.`],
+		winhelp: [
+			`/mafia win (points) [user1], [user2], [user3], ... - Award the specified users points to the mafia leaderboard for this month. The amount of points can be negative to take points. Defaults to 10 points.`,
+			`/mafia winfaction (points), [faction] - Award the specified points to all the players in the given faction.`,
+		],
 
 		unmvp: 'mvp',
 		mvp: function (target, room, user, connection, cmd) {
