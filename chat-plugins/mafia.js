@@ -1219,6 +1219,14 @@ class MafiaTracker extends Rooms.RoomGame {
 					memo: [`(Your role was set from an IDEA.)`],
 					image: '',
 				};
+				// hardcoding this because it makes GestI so much nicer
+				for (const pick of role) {
+					if (pick.substr(0, 10) === 'alignment:') {
+						const parsedRole = parseRole(pick.substr(9));
+						if (parsedRole.problems.length) this.sendRoom(`Problems found when parsing IDEA role ${pick}. Please report this to a mod.`);
+						player.role.alignment = parsedRole.role.alignment;
+					}
+				}
 			}
 		}
 		this.IDEA.discardsHtml = `<b>Discards:</b><br />`;
