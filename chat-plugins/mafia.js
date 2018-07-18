@@ -29,6 +29,7 @@
 /**
  * @typedef {Object} MafiaIDEAdata
  * @property {string} name
+ * @property {boolean?} untrusted
  * @property {string[]} roles
  * @property {number} choices
  * @property {string[]} picks
@@ -1070,6 +1071,33 @@ class MafiaTracker extends Rooms.RoomGame {
 	}
 
 	/**
+	 * @param {User} user
+	 * @param {number} choices
+	 * @param {string[]} picks
+	 * @param {string} rolesString
+	 */
+	customIdeaInit(user, choices, picks, rolesString) {
+		this.originalRoles = [];
+		this.originalRoleString = '';
+		this.roles = [];
+		this.roleString = '';
+
+		const roles = Chat.stripHTML(rolesString);
+		let roleList = roles.split('\n');
+		if (roleList.length === 1) {
+			roleList = roles.split(',').map(r => r.trim());
+		}
+
+		this.IDEA.data = {
+			name: `${Chat.escapeHTML(this.host)}'s IDEA`,
+			untrusted: true,
+			roles: roleList,
+			picks,
+			choices,
+		};
+		return this.ideaDistributeRoles(user);
+	}
+	/**
 	 *
 	 * @param {User} user
 	 * @param {string} moduleName
@@ -1205,7 +1233,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			if (randPicked) randed.push(p);
 			// if there's only one option, it's their role, parse it properly
 			let roleName = '';
-			if (this.IDEA.data.picks.length === 1) {
+			if (!this.IDEA.data.untrusted && this.IDEA.data.picks.length === 1) {
 				const role = parseRole(player.IDEA.picks[this.IDEA.data.picks[0]]);
 				player.role = role.role;
 				if (role.problems.length) this.sendRoom(`Problems found when parsing IDEA role ${player.IDEA.picks[this.IDEA.data.picks[0]]}. Please report this to a mod.`);
@@ -1220,11 +1248,13 @@ class MafiaTracker extends Rooms.RoomGame {
 					image: '',
 				};
 				// hardcoding this because it makes GestI so much nicer
-				for (const pick of role) {
-					if (pick.substr(0, 10) === 'alignment:') {
-						const parsedRole = parseRole(pick.substr(9));
-						if (parsedRole.problems.length) this.sendRoom(`Problems found when parsing IDEA role ${pick}. Please report this to a mod.`);
-						player.role.alignment = parsedRole.role.alignment;
+				if (!this.IDEA.data.untrusted) {
+					for (const pick of role) {
+						if (pick.substr(0, 10) === 'alignment:') {
+							const parsedRole = parseRole(pick.substr(9));
+							if (parsedRole.problems.length) this.sendRoom(`Problems found when parsing IDEA role ${pick}. Please report this to a mod.`);
+							player.role.alignment = parsedRole.role.alignment;
+						}
 					}
 				}
 			}
@@ -1967,6 +1997,21 @@ const commands = {
 			`/mafia ideadiscards - shows the discarded roles`,
 		],
 
+		customidea: function (target, room, user) {
+			if (!this.can('mute', null, room)) return;
+			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
+			const game = /** @type {MafiaTracker} */ (room.game);
+			if (game.started) return this.errorReply(`You cannot start an IDEA after the game has started.`);
+			if (game.phase !== 'locked' && game.phase !== 'IDEAlocked') return this.errorReply(`You need to close the signups first.`);
+			const [options, roles] = Chat.splitFirst(target, '\n');
+			if (!options || !roles) return this.parse('/help mafia idea');
+			const [choicesStr, ...picks] = options.split(',').map(x => x.trim());
+			const choices = parseInt(choicesStr);
+			if (!choices || choices <= picks.length) return this.errorReply(`You need to have more choices than picks.`);
+			if (picks.some((value, index, arr) => arr.indexOf(value, index + 1) > 0)) return this.errorReply(`Your picks must be unique.`);
+			game.customIdeaInit(user, choices, picks, roles);
+		},
+		customideahelp: [`/mafia customidea choices, picks \\n (comma or newline separated rolelist) - Starts an IDEA module with custom roles. Requires % @ # & ~`],
 		'!ideapick': true,
 		ideapick: function (target, room, user) {
 			const args = target.split(',');
@@ -2873,3 +2918,7 @@ module.exports = {
 	commands,
 	pages,
 };
+
+process.nextTick(() => {
+	Chat.multiLinePattern.register('/mafia customidea');
+});
