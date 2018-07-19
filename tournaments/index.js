@@ -932,7 +932,8 @@ function createTournamentGenerator(generator, args, output) {
 	let Generator = getGenerator(generator);
 	if (!Generator) {
 		output.errorReply(`${generator} is not a valid type.`);
-		output.errorReply(`Valid types: ${Object.keys(TournamentGenerators).join(', ')}`);
+		const generators = Object.keys(TournamentGenerators).join(', ');
+		output.errorReply(`Valid types: ${generators}`);
 		return;
 	}
 	args.unshift(null);
@@ -1343,7 +1344,7 @@ const commands = {
 			if (params.length < 1) {
 				return this.sendReply(`Usage: ${cmd} <user>, <reason>`);
 			}
-			const targetUser = Users.get(params[0]);
+			let targetUser = Users.get(params[0]);
 			const online = !!targetUser;
 			if (!online) targetUser = params[0];
 			const targetUserid = toId(targetUser);
