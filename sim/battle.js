@@ -1193,7 +1193,7 @@ class Battle extends Dex.ModdedDex {
 			}
 			if (switchTable.some(flag => flag === true)) {
 				this.p1.currentRequest = 'switch';
-				p1request = {forceSwitch: switchTable, side: this.p1.getData()};
+				p1request = {forceSwitch: switchTable, side: this.p1.getRequestData()};
 			}
 			switchTable = [];
 			for (const active of this.p2.active) {
@@ -1201,7 +1201,7 @@ class Battle extends Dex.ModdedDex {
 			}
 			if (switchTable.some(flag => flag === true)) {
 				this.p2.currentRequest = 'switch';
-				p2request = {forceSwitch: switchTable, side: this.p2.getData()};
+				p2request = {forceSwitch: switchTable, side: this.p2.getRequestData()};
 			}
 			break;
 		}
@@ -1214,19 +1214,19 @@ class Battle extends Dex.ModdedDex {
 			this.p1.maxTeamSize = maxTeamSize;
 			this.p2.maxTeamSize = maxTeamSize;
 			this.p1.currentRequest = 'teampreview';
-			p1request = {teamPreview: true, maxTeamSize: maxTeamSize, side: this.p1.getData()};
+			p1request = {teamPreview: true, maxTeamSize: maxTeamSize, side: this.p1.getRequestData()};
 			this.p2.currentRequest = 'teampreview';
-			p2request = {teamPreview: true, maxTeamSize: maxTeamSize, side: this.p2.getData()};
+			p2request = {teamPreview: true, maxTeamSize: maxTeamSize, side: this.p2.getRequestData()};
 			break;
 
 		default: {
 			this.p1.currentRequest = 'move';
 			let activeData = this.p1.active.map(pokemon => pokemon && pokemon.getRequestData());
-			p1request = {active: activeData, side: this.p1.getData()};
+			p1request = {active: activeData, side: this.p1.getRequestData()};
 
 			this.p2.currentRequest = 'move';
 			activeData = this.p2.active.map(pokemon => pokemon && pokemon.getRequestData());
-			p2request = {active: activeData, side: this.p2.getData()};
+			p2request = {active: activeData, side: this.p2.getRequestData()};
 			break;
 		}
 		}
@@ -1235,14 +1235,14 @@ class Battle extends Dex.ModdedDex {
 			if (!this.supportCancel || !p2request) p1request.noCancel = true;
 			this.p1.emitRequest(p1request);
 		} else {
-			this.p1.emitRequest({wait: true, side: this.p1.getData()});
+			this.p1.emitRequest({wait: true, side: this.p1.getRequestData()});
 		}
 
 		if (p2request) {
 			if (!this.supportCancel || !p1request) p2request.noCancel = true;
 			this.p2.emitRequest(p2request);
 		} else {
-			this.p2.emitRequest({wait: true, side: this.p2.getData()});
+			this.p2.emitRequest({wait: true, side: this.p2.getRequestData()});
 		}
 
 		if (this.p1.isChoiceDone() && this.p2.isChoiceDone()) {
