@@ -146,7 +146,7 @@ class Side {
 		return this.id + ': ' + this.name;
 	}
 
-	getData() {
+	getRequestData() {
 		let data = {
 			name: this.name,
 			id: this.id,
