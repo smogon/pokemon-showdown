@@ -109,7 +109,7 @@ class Tournament {
 		if (isErrored) return;
 
 		this.generator = generator;
-		this.room.send(`|tournament|update|{"generator": "${generator.name}"}`);
+		this.room.send(`|tournament|update|${JSON.stringify({generator: generator.name})}`);
 		this.isBracketInvalidated = true;
 		this.update();
 		return true;
@@ -183,7 +183,7 @@ class Tournament {
 			);
 			return;
 		}
-		let isJoined = targetUser.userid in this.players;
+		const isJoined = targetUser.userid in this.players;
 		const update = {
 			format: this.format,
 			generator: this.generator.name,
@@ -194,18 +194,18 @@ class Tournament {
 		if (this.format !== this.originalFormat) update.teambuilderFormat = this.originalFormat;
 		connection.sendTo(this.room, `|tournament|update|${JSON.stringify(update)}`);
 		if (this.isTournamentStarted && isJoined) {
-			const obj = {
+			const update2 = {
 				challenges: usersToNames(this.availableMatchesCache.challenges.get(this.players[targetUser.userid])),
 				challengeBys: usersToNames(this.availableMatchesCache.challengeBys.get(this.players[targetUser.userid])),
 			};
-			connection.sendTo(this.room, `|tournament|update|${JSON.stringify(obj)}`);
+			connection.sendTo(this.room, `|tournament|update|${JSON.stringify(update2)}`);
 
 			const pendingChallenge = this.pendingChallenges.get(this.players[targetUser.userid]);
 			if (pendingChallenge) {
 				if (pendingChallenge.to) {
-					connection.sendTo(this.room, `|tournament|update|{"challenging": "${pendingChallenge.to.name}"}`);
+					connection.sendTo(this.room, `|tournament|update|${JSON.stringify({challenging: pendingChallenge.to.name})}`);
 				} else if (pendingChallenge.from) {
-					connection.sendTo(this.room, `|tournament|update|{"challenged": "${pendingChallenge.from.name}"}`);
+					connection.sendTo(this.room, `|tournament|update|${JSON.stringify({challenging: pendingChallenge.from.name})}`);
 				}
 			}
 		}
@@ -227,7 +227,7 @@ class Tournament {
 
 				this.bracketCache = this.getBracketData();
 				this.isBracketInvalidated = false;
-				this.room.send(`|tournament|update|{"bracketData": "${this.bracketCache}"}`);
+				this.room.send(`|tournament|update|${JSON.stringify({bracketData: this.bracketCache})}`);
 			}
 		}
 
@@ -236,10 +236,10 @@ class Tournament {
 			this.isAvailableMatchesInvalidated = false;
 
 			this.availableMatchesCache.challenges.forEach((opponents, player) => {
-				player.sendRoom(`|tournament|update|{"challenges": "${usersToNames(opponents)}"}`);
+				player.sendRoom(`|tournament|update|${JSON.stringify({challenges: usersToNames(opponents)})}`);
 			});
 			this.availableMatchesCache.challengeBys.forEach((opponents, player) => {
-				player.sendRoom(`|tournament|update|{"challenges": "${usersToNames(opponents)}"}`);
+				player.sendRoom(`|tournament|update|${JSON.stringify({challenges: usersToNames(opponents)})}`);
 			});
 		}
 		this.room.send('|tournament|updateEnd');
@@ -327,7 +327,7 @@ class Tournament {
 			return;
 		}
 
-		let error = this.generator.removeUser(this.players[user.userid]);
+		const error = this.generator.removeUser(this.players[user.userid]);
 		if (typeof error === 'string') {
 			output.sendReply(`|tournament|error|${error}`);
 			return;
@@ -351,7 +351,7 @@ class Tournament {
 			return;
 		}
 
-		let player = new Rooms.RoomGamePlayer(replacementUser, this);
+		const player = new Rooms.RoomGamePlayer(replacementUser, this);
 		this.generator.replaceUser(this.players[user.userid], player);
 		this.players[user.userid].destroy();
 		delete this.players[user.userid];
@@ -427,7 +427,7 @@ class Tournament {
 			return false;
 		}
 
-		let users = this.generator.getUsers();
+		const users = this.generator.getUsers();
 		if (users.length < 2) {
 			output.sendReply('|tournament|error|NotEnoughUsers');
 			return false;
@@ -442,7 +442,7 @@ class Tournament {
 		this.disqualifiedUsers = new Map();
 		this.autoDisqualifyWarnings = new Map();
 		this.lastActionTimes = new Map();
-		let now = Date.now();
+		const now = Date.now();
 		users.forEach(user => {
 			this.availableMatches.set(user, new Map());
 			this.inProgressMatches.set(user, null);
@@ -461,16 +461,16 @@ class Tournament {
 		return true;
 	}
 	getAvailableMatches() {
-		let matches = this.generator.getAvailableMatches();
+		const matches = this.generator.getAvailableMatches();
 		if (typeof matches === 'string') {
 			this.room.add(`Unexpected error from getAvailableMatches(): ${matches}. Please report this to an admin.`);
 			return;
 		}
 
-		let users = this.generator.getUsers();
-		let challenges = new Map();
-		let challengeBys = new Map();
-		let oldAvailableMatches = new Map();
+		const users = this.generator.getUsers();
+		const challenges = new Map();
+		const challengeBys = new Map();
+		const oldAvailableMatches = new Map();
 
 		users.forEach(user => {
 			challenges.set(user, []);
@@ -492,7 +492,7 @@ class Tournament {
 			this.availableMatches.get(match[0]).set(match[1], true);
 		});
 
-		let now = Date.now();
+		const now = Date.now();
 		this.availableMatches.forEach((availableMatches, user) => {
 			if (oldAvailableMatches.get(user)) return;
 
@@ -506,7 +506,7 @@ class Tournament {
 	}
 
 	disqualifyUser(userid, output, reason) {
-		let user = Users.get(userid);
+		const user = Users.get(userid);
 		let sendReply;
 		if (output) {
 			sendReply = msg => output.sendReply(msg);
@@ -525,13 +525,13 @@ class Tournament {
 			return false;
 		}
 
-		let player = this.players[userid];
+		const player = this.players[userid];
 		if (this.disqualifiedUsers.get(player)) {
 			sendReply(`|tournament|error|AlreadyDisqualified|${userid}`);
 			return false;
 		}
 
-		let error = this.generator.disqualifyUser(player);
+		const error = this.generator.disqualifyUser(player);
 		if (error) {
 			sendReply(`|tournament|error|${error}`);
 			return false;
@@ -640,11 +640,11 @@ class Tournament {
 			return false;
 		}
 		if (this.autoDisqualifyTimer) clearTimeout(this.autoDisqualifyTimer);
-		let now = Date.now();
+		const now = Date.now();
 		this.lastActionTimes.forEach((time, player) => {
 			let availableMatches = false;
 			if (this.availableMatches.get(player).size) availableMatches = true;
-			let pendingChallenge = this.pendingChallenges.get(player);
+			const pendingChallenge = this.pendingChallenges.get(player);
 
 			if (!availableMatches && !pendingChallenge) {
 				this.autoDisqualifyWarnings.delete(player);
@@ -694,9 +694,9 @@ class Tournament {
 			return;
 		}
 
-		let from = this.players[user.userid];
-		let to = this.players[targetUserid];
-		let availableMatches = this.availableMatches.get(from);
+		const from = this.players[user.userid];
+		const to = this.players[targetUserid];
+		const availableMatches = this.availableMatches.get(from);
 		if (!availableMatches || !availableMatches.get(to)) {
 			output.sendReply('|tournament|error|InvalidMatch');
 			return;
@@ -743,8 +743,8 @@ class Tournament {
 			return;
 		}
 
-		let player = this.players[user.userid];
-		let challenge = this.pendingChallenges.get(player);
+		const player = this.players[user.userid];
+		const challenge = this.pendingChallenges.get(player);
 		if (!challenge || challenge.from) return;
 
 		this.generator.setUserBusy(player, false);
@@ -769,22 +769,22 @@ class Tournament {
 			return;
 		}
 
-		let player = this.players[user.userid];
-		let challenge = this.pendingChallenges.get(player);
+		const player = this.players[user.userid];
+		const challenge = this.pendingChallenges.get(player);
 		if (!challenge || !challenge.from) return;
 
 		const ready = await Ladders(this.teambuilderFormat).prepBattle(output.connection);
 		if (!ready) return;
 
 		// Prevent battles between offline users from starting
-		let from = Users.get(challenge.from.userid);
+		const from = Users.get(challenge.from.userid);
 		if (!from || !from.connected || !user.connected) return;
 
 		// Prevent double accepts and users that have been disqualified while between these two functions
 		if (!this.pendingChallenges.get(challenge.from)) return;
 		if (!this.pendingChallenges.get(player)) return;
 
-		let room = Rooms.createBattle(this.teambuilderFormat, {
+		const room = Rooms.createBattle(this.teambuilderFormat, {
 			isPrivate: this.room.isPrivate,
 			p1: from,
 			p1team: challenge.team,
@@ -835,7 +835,7 @@ class Tournament {
 		if (this.scouting || this.isEnded || user.latestIp === room.p1.latestIp || user.latestIp === room.p2.latestIp) return;
 		if (user.can('makeroom')) return;
 		for (const targetUser of this.generator.getUsers(true)) {
-			let otherUser = Users.get(targetUser.userid);
+			const otherUser = Users.get(targetUser.userid);
 			if (otherUser && otherUser.latestIp === user.latestIp) {
 				return "Scouting is banned: tournament players can't watch other tournament battles.";
 			}
@@ -845,10 +845,10 @@ class Tournament {
 		room.tour = null;
 		room.parent = null;
 
-		let from = this.players[room.p1.userid];
-		let to = this.players[room.p2.userid];
-		let winner = this.players[winnerid];
-		let score = room.battle.score || [0, 0];
+		const from = this.players[room.p1.userid];
+		const to = this.players[room.p2.userid];
+		const winner = this.players[winnerid];
+		const score = room.battle.score || [0, 0];
 
 		let result = 'draw';
 		if (from === winner) {
@@ -873,7 +873,7 @@ class Tournament {
 		}
 		if (!(this.disqualifiedUsers.get(from) || this.disqualifiedUsers.get(to))) {
 			// If a player was disqualified, handle the results there
-			let error = this.generator.setMatchResult([from, to], result, score);
+			const error = this.generator.setMatchResult([from, to], result, score);
 			if (error) {
 				// Should never happen
 				return this.room.add(`Unexpected ${error} from setMatchResult([${room.p1.userid}, ${room.p2.userid}], ${result}, ${score}) in onBattleWin(${room.id}, ${winnerid}). Please report this to an admin.`).update();
@@ -890,7 +890,7 @@ class Tournament {
 
 		if (this.generator.isTournamentEnded()) {
 			if (!this.room.isPrivate && this.generator.name.includes('Elimination') && !Config.autosavereplays) {
-				let uploader = Users.get(winnerid);
+				const uploader = Users.get(winnerid);
 				if (uploader && uploader.connections[0]) {
 					Chat.parse('/savereplay', room, uploader, uploader.connections[0]);
 				}
@@ -914,7 +914,7 @@ class Tournament {
 		if (this.autoDisqualifyTimer) clearTimeout(this.autoDisqualifyTimer);
 		delete exports.tournaments[this.room.id];
 		delete this.room.game;
-		for (let i in this.players) {
+		for (const i in this.players) {
 			this.players[i].destroy();
 		}
 	}
@@ -954,12 +954,14 @@ function createTournament(room, format, generator, playerCap, isRated, args, out
 	format = Dex.getFormat(format);
 	if (format.effectType !== 'Format' || !format.tournamentShow) {
 		output.errorReply(`${format.id} is not a valid tournament format.`);
-		output.errorReply(`Valid formats: ${Object.values(Dex.formats).filter(f => f.tournamentShow).map(format => format.name).join(', ')}`);
+		const formats = Object.values(Dex.formats).filter(f => f.tournamentShow).map(format => format.name).join(', ');
+		output.errorReply(`Valid formats: ${formats}`);
 		return;
 	}
 	if (!getGenerator(generator)) {
 		output.errorReply(`${generator} is not a valid type.`);
-		output.errorReply(`Valid types: ${Object.keys(TournamentGenerators).join(', ')}`);
+		const generators = Object.keys(TournamentGenerators).join(', ');
+		output.errorReply(`Valid types: ${generators}`);
 		return;
 	}
 	if (playerCap && playerCap < 2) {
@@ -970,14 +972,14 @@ function createTournament(room, format, generator, playerCap, isRated, args, out
 	return room.game;
 }
 function deleteTournament(id, output) {
-	let tournament = exports.tournaments[id];
+	const tournament = exports.tournaments[id];
 	if (!tournament) {
 		output.errorReply(`${id} doesn't exist.`);
 		return false;
 	}
 	tournament.forceEnd(output);
 	delete exports.tournaments[id];
-	let room = Rooms(id);
+	const room = Rooms(id);
 	if (room) delete room.game;
 	return true;
 }
@@ -987,7 +989,7 @@ function getTournament(id, output) {
 	}
 }
 
-let commands = {
+const commands = {
 	basic: {
 		j: 'join',
 		in: 'join',
@@ -1057,8 +1059,8 @@ let commands = {
 			if (params.length < 1) {
 				return this.sendReply(`Usage: ${cmd} <type> [, <comma-separated arguments>]`);
 			}
-			let playerCap = parseInt(params.splice(1, 1));
-			let generator = createTournamentGenerator(params.shift(), params, this);
+			const playerCap = parseInt(params.splice(1, 1));
+			const generator = createTournamentGenerator(params.shift(), params, this);
 			if (generator && tournament.setGenerator(generator, this)) {
 				if (playerCap && playerCap >= 2) {
 					tournament.playerCap = playerCap;
@@ -1198,8 +1200,8 @@ let commands = {
 			if (params.length < 1) {
 				return this.sendReply(`Usage: ${cmd} <user>`);
 			}
-			let targetUser = Users.get(params[0]) || params[0];
-			let targetUserid = toId(targetUser);
+			const targetUser = Users.get(params[0]) || params[0];
+			const targetUserid = toId(targetUser);
 			let reason = '';
 			if (params[1]) {
 				reason = params[1].trim();
@@ -1234,7 +1236,7 @@ let commands = {
 					params[0] = 'off';
 					tournament.autostartcap = false;
 				}
-				let timeout = params[0].toLowerCase() === 'off' ? Infinity : params[0];
+				const timeout = params[0].toLowerCase() === 'off' ? Infinity : params[0];
 				if (tournament.setAutoStartTimeout(timeout * 60 * 1000, this)) {
 					this.privateModAction(`(The tournament auto start timer was set to  ${params[0]} by ${user.name})`);
 					this.modlog('TOUR AUTOSTART', null, timeout === Infinity ? 'off' : params[0]);
@@ -1251,7 +1253,7 @@ let commands = {
 				}
 			}
 			if (params[0].toLowerCase() === 'infinity' || params[0] === '0') params[0] = 'off';
-			let timeout = params[0].toLowerCase() === 'off' ? Infinity : params[0] * 60 * 1000;
+			const timeout = params[0].toLowerCase() === 'off' ? Infinity : params[0] * 60 * 1000;
 			if (timeout === tournament.autoDisqualifyTimeout) return this.errorReply(`The automatic tournament disqualify timer is already set to ${params[0]} minute(s).`);
 			if (tournament.setAutoDisqualifyTimeout(timeout, this)) {
 				this.privateModAction(`(The tournament auto disqualify timer was set to ${params[0]} by ${user.name})`);
@@ -1275,7 +1277,7 @@ let commands = {
 				}
 			}
 
-			let option = params[0].toLowerCase();
+			const option = params[0].toLowerCase();
 			if (this.meansYes(option) || option === 'allow' || option === 'allowed') {
 				if (tournament.scouting) return this.errorReply("Scouting for this tournament is already set to allowed.");
 				tournament.scouting = true;
@@ -1304,7 +1306,7 @@ let commands = {
 				}
 			}
 
-			let option = params[0].toLowerCase();
+			const option = params[0].toLowerCase();
 			if (this.meansYes(option) || option === 'allow' || option === 'allowed') {
 				if (tournament.modjoin) return this.errorReply("Modjoining is already allowed for this tournament.");
 				tournament.modjoin = true;
@@ -1322,7 +1324,7 @@ let commands = {
 			}
 		},
 		forcetimer: function (tournament, user, params, cmd) {
-			let option = params.length ? params[0].toLowerCase() : 'on';
+			const option = params.length ? params[0].toLowerCase() : 'on';
 			if (this.meansYes(option)) {
 				tournament.forceTimer = true;
 				this.room.add('Forcetimer is now on for the tournament.');
@@ -1341,10 +1343,10 @@ let commands = {
 			if (params.length < 1) {
 				return this.sendReply(`Usage: ${cmd} <user>, <reason>`);
 			}
-			let targetUser = Users.get(params[0]);
-			let online = !!targetUser;
+			const targetUser = Users.get(params[0]);
+			const online = !!targetUser;
 			if (!online) targetUser = params[0];
-			let targetUserid = toId(targetUser);
+			const targetUserid = toId(targetUser);
 			let reason = '';
 			if (params[1]) {
 				reason = params[1].trim();
@@ -1353,7 +1355,7 @@ let commands = {
 
 			if (tournament.checkBanned(targetUser)) return this.errorReply("This user is already banned from tournaments.");
 
-			let punishment = ['TOURBAN', targetUserid, Date.now() + TOURBAN_DURATION, reason];
+			const punishment = ['TOURBAN', targetUserid, Date.now() + TOURBAN_DURATION, reason];
 			if (online) {
 				Punishments.roomPunish(this.room, targetUser, punishment);
 			} else {
@@ -1368,8 +1370,8 @@ let commands = {
 			if (params.length < 1) {
 				return this.sendReply(`Usage: ${cmd} <user>`);
 			}
-			let targetUser = Users.get(params[0]) || params[0];
-			let targetUserid = toId(targetUser);
+			const targetUser = Users.get(params[0]) || params[0];
+			const targetUserid = toId(targetUser);
 
 			if (!tournament.checkBanned(targetUser)) return this.errorReply("This user isn't banned from tournaments.");
 
@@ -1532,7 +1534,7 @@ Chat.commands.tournament = function (paramString, room, user, connection) {
 Chat.commands.tournamenthelp = function (target, room, user) {
 	if (!this.runBroadcast()) return;
 	return this.sendReplyBox(
-		`- create/new &lt;format>, &lt;type> [, &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />` +
+		`- create/new &lt;format>, &lt;type>, [ &lt;comma-separated arguments>]: Creates a new tournament in the current room.<br />` +
 		`- settype &lt;type> [, &lt;comma-separated arguments>]: Modifies the type of tournament after it's been created, but before it has started.<br />` +
 		`- cap/playercap &lt;cap>: Sets the player cap of the tournament before it has started.<br />` +
 		`- rules/banlist &lt;comma-separated arguments>: Sets the custom rules for the tournament before it has started.<br />` +
