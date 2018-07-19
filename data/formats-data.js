@@ -6146,7 +6146,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 6, "level": 50, "nature": "Relaxed", "isHidden": true, "moves": ["trickroom", "healpulse", "disable", "moonblast"], "pokeball": "cherishball"},
 		],
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "DUU",
 	},
 	swirlix: {
