@@ -383,13 +383,13 @@ class UNOgame extends Rooms.RoomGame {
 		this.sendToRoom(`The color has been changed to ${color}.`);
 		clearTimeout(this.timer);
 
+		// send the display of their cards again
+		this.players[user.userid].sendDisplay();
+
 		if (this.isPlusFour) {
 			this.isPlusFour = false;
 			this.onNextPlayer(); // handle the skipping here.
 		}
-
-		// send the display of their cards again
-		this.players[user.userid].sendDisplay();
 
 		this.nextTurn();
 	}
