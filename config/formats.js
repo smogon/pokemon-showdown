@@ -208,24 +208,16 @@ let Formats = [
 	},
 	{
 		name: "[Gen 7] Let's Go! Cup",
-		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3639342/">Let&apos;s Go! Cup</a>`],
+		desc: `1-Pokemon teams with only Pikachu or Eevee are allowed.`,
+		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3639342/">Let's Go! Cup</a>`],
 
 		mod: 'gen7',
 		forcedLevel: 50,
-		teamLength: {
-			validate: [1, 1],
-			battle: 1,
-		},
 		ruleset: ['Pokemon', 'Cancel Mod'],
 		banlist: ['Illegal', 'Unreleased'],
-		onValidateTeam: function (team) {
-			const valid = ['Pikachu', 'Eevee'];
-			let n = 0;
-			for (const set of team) {
-				let baseSpecies = this.getTemplate(set.species).baseSpecies;
-				if (valid.includes(baseSpecies)) n++;
-				if (n !== 1) return ["Only Pikachu and Eevee are allowed in this format!"];
-			}
+		onValidateTeam: function (team, format) {
+			if (team.length !== 1) return [`Only one Pokemon per team is allowed.`];
+			if (!['eevee', 'pikachu'].includes(toId(team[0].species))) return [`Only Pikachu and Eevee are allowed in ${format.name}.`];
 		},
 	},
 	{
