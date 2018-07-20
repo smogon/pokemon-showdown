@@ -6462,7 +6462,7 @@ let BattleFormatsData = {
 			{"generation": 7, "level": 15, "moves": ["shadowball", "nastyplot", "psychic", "hyperspacehole"], "pokeball": "cherishball"},
 		],
 		eventOnly: true,
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "DUU",
 	},
 	hoopaunbound: {
