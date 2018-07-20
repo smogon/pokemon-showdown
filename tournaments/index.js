@@ -726,8 +726,8 @@ class Tournament {
 		this.lastActionTimes.set(to, Date.now());
 		this.pendingChallenges.set(from, {to: to, team: ready.team});
 		this.pendingChallenges.set(to, {from: from, team: ready.team});
-		from.sendRoom(`|tournament|update|{"challenging": "${to.name}"}`);
-		to.sendRoom(`|tournament|update|{"challenged": "${from.name}"}`);
+		from.sendRoom(`|tournament|update|${JSON.stringify({challenging: to.name})}`);
+		to.sendRoom(`|tournament|update|${JSON.stringify({challenged: from.name})}`);
 
 		this.isBracketInvalidated = true;
 		this.update();
@@ -1174,7 +1174,7 @@ const commands = {
 			if (name.length > MAX_CUSTOM_NAME_LENGTH) return this.errorReply(`The tournament's name cannot exceed ${MAX_CUSTOM_NAME_LENGTH} characters.`);
 			if (name.includes('|')) return this.errorReply("The tournament's name cannot include the | symbol.");
 			tournament.format = name;
-			this.room.send(`|tournament|update|{"format": "${tournament.format}"}`);
+			this.room.send(`|tournament|update|${JSON.stringify({format: tournament.format})}`);
 			this.privateModAction(`(${user.name} set the tournament's name to ${tournament.format}.)`);
 			this.modlog('TOUR NAME', null, tournament.format);
 			tournament.update();
@@ -1183,7 +1183,7 @@ const commands = {
 		clearname: function (tournament, user) {
 			if (tournament.format === tournament.originalFormat) return this.errorReply("The tournament does not have a name.");
 			tournament.format = tournament.originalFormat;
-			this.room.send(`|tournament|update|{"format": "${tournament.format}"}`);
+			this.room.send(`|tournament|update|${JSON.stringify({format: tournament.format})}`);
 			this.privateModAction(`(${user.name} cleared the tournament's name.)`);
 			this.modlog('TOUR CLEARNAME');
 			tournament.update();
