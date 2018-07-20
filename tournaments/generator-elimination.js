@@ -256,7 +256,7 @@ class Elimination {
 		if (match) {
 			let error = this.setMatchResult(match, result);
 			if (error) {
-				throw new Error("Unexpected " + error + " from setMatchResult([" + match.join(", ") + "], " + result + ")");
+				throw new Error(`Unexpected ${error} from setMatchResult([${match.join(', ')}], ${result})`);
 			}
 		}
 	}
@@ -340,7 +340,7 @@ class Elimination {
 				}
 
 				if (error) {
-					throw new Error("Unexpected " + error + " from setMatchResult([" + userA + ", " + userB + "], ...)");
+					throw new Error(`Unexpected ${error} from setMatchResult([${userA},${userB}], ...)`);
 				}
 			}
 		} else if (loserData.loseCount < this.maxSubtrees && !loserData.isDisqualified) {
@@ -365,7 +365,7 @@ class Elimination {
 				}
 
 				if (error) {
-					throw new Error("Unexpected " + error + " from setMatchResult([" + userA + ", " + userB + "], ...)");
+					throw new Error(`Unexpected ${error} from setMatchResult([${userA}, ${userB}], ...)`);
 				}
 			}
 		}
