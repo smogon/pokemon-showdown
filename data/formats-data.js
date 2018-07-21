@@ -952,7 +952,7 @@ let BattleFormatsData = {
 		randomBattleMoves: ["calmmind", "scald", "psyshock", "slackoff", "fireblast", "psychic", "icebeam"],
 		randomDoubleBattleMoves: ["scald", "fireblast", "icebeam", "psychic", "thunderwave", "slackoff", "trickroom", "protect", "psyshock"],
 		requiredItem: "Slowbronite",
-		tier: "RU",
+		tier: "RUBL",
 		doublesTier: "DUU",
 	},
 	slowking: {
@@ -2676,7 +2676,7 @@ let BattleFormatsData = {
 		randomBattleMoves: ["substitute", "gigadrain", "dragonpulse", "focusblast", "swordsdance", "outrage", "leafblade", "earthquake", "hiddenpowerfire"],
 		randomDoubleBattleMoves: ["substitute", "gigadrain", "leafstorm", "hiddenpowerice", "focusblast", "dragonpulse", "hiddenpowerfire", "protect"],
 		requiredItem: "Sceptilite",
-		tier: "RU",
+		tier: "RUBL",
 		doublesTier: "DUU",
 	},
 	torchic: {
