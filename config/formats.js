@@ -89,7 +89,7 @@ let Formats = [
 		mod: 'gen7',
 		challengeShow: false,
 		ruleset: ['[Gen 7] UU'],
-		banlist: ['UU', 'RUBL', 'Aurora Veil', 'Entei'],
+		banlist: ['UU', 'RUBL', 'Aurora Veil'],
 		unbanlist: ['Drought'],
 	},
 	{
