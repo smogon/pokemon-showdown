@@ -84,7 +84,7 @@ let Formats = [
 	},
 	{
 		name: "[Gen 7] RU (suspect test)",
-		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/np-ru-stage-12-summertime.3639410/">RU Suspect Test</a>`],
+		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3639410/">RU Suspect Test</a>`],
 
 		mod: 'gen7',
 		challengeShow: false,
