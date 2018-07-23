@@ -117,7 +117,9 @@ represented by a space), and the rest of the string being their username.
 
 `|title|TITLE`
 
-> `TITLE` is the title of the room.
+> `TITLE` is the title of the room. The title is _not_ guaranteed to resemble
+> the room ID; for instance, room `battle-gen7uu-779767714` could have title
+> `Alice vs. Bob`.
 
 `|users|USERLIST`
 
