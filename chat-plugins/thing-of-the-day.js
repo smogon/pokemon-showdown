@@ -535,7 +535,7 @@ let commands = {
 
 		if (keys.length) {
 			handler.setWinnerProperty(changelist);
-			this.modlog('handler.id.toUpperCase()', null, `changed ${keys.join(', ')}`);
+			this.modlog(handler.id.toUpperCase(), null, `changed ${keys.join(', ')}`);
 			return this.privateModAction(`(${user.name} changed the following propert${Chat.plural(keys, 'ies', 'y')} of the ${handler.name} of the Day: ${keys.join(', ')})`);
 		}
 	},
