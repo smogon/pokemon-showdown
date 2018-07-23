@@ -18637,7 +18637,7 @@ let BattleMovedex = {
 		},
 		category: "Special",
 		desc: "Hits two to five times. Has a 1/3 chance to hit two or three times, and a 1/6 chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Ability Skill Link, this move will always hit five times. Base power is 20 if the user is Ash-Greninja.",
-		shortDesc: "Hits 2-5 times in one turn.",
+		shortDesc: "Usually goes first. Hits 2-5 times in one turn.",
 		id: "watershuriken",
 		isViable: true,
 		name: "Water Shuriken",
