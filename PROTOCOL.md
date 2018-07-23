@@ -115,6 +115,10 @@ represented by a space), and the rest of the string being their username.
 > The first message received from a room when you join it. `ROOMTYPE` is
 > one of: `chat` or `battle`
 
+`|title|TITLE`
+
+> `TITLE` is the title of the room.
+
 `|users|USERLIST`
 
 > `USERLIST` is a comma-separated list of `USER`s, sent from chat rooms when
