@@ -612,6 +612,7 @@ class User {
 		if (room && room.auth) {
 			group = room.getAuth(this);
 			if (targetUser) targetGroup = room.getAuth(targetUser);
+			if (room.isPrivate === true && this.can('makeroom')) group = this.group;
 		} else {
 			group = this.group;
 			if (targetUser) targetGroup = targetUser.group;
