@@ -1111,7 +1111,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.IDEA.data = MafiaData.IDEAs[moduleName];
 		if (typeof this.IDEA.data === 'string') this.IDEA.data = MafiaData.IDEAs[this.IDEA.data];
 		if (!this.IDEA.data) return user.sendTo(this.room, `|error|${moduleName} is not a valid IDEA.`);
-		if (typeof this.IDEA.data !== 'object') return this.sendRoom(`Invalid alias for IDEA ${moduleName}. Please report this to .`);
+		if (typeof this.IDEA.data !== 'object') return this.sendRoom(`Invalid alias for IDEA ${moduleName}. Please report this to a mod.`);
 		return this.ideaDistributeRoles(user);
 	}
 
@@ -1233,10 +1233,10 @@ class MafiaTracker extends Rooms.RoomGame {
 			if (randPicked) randed.push(p);
 			// if there's only one option, it's their role, parse it properly
 			let roleName = '';
-			if (!this.IDEA.data.untrusted && this.IDEA.data.picks.length === 1) {
+			if (this.IDEA.data.picks.length === 1) {
 				const role = parseRole(player.IDEA.picks[this.IDEA.data.picks[0]]);
 				player.role = role.role;
-				if (role.problems.length) this.sendRoom(`Problems found when parsing IDEA role ${player.IDEA.picks[this.IDEA.data.picks[0]]}. Please report this to a mod.`);
+				if (role.problems.length && !this.IDEA.data.untrusted) this.sendRoom(`Problems found when parsing IDEA role ${player.IDEA.picks[this.IDEA.data.picks[0]]}. Please report this to a mod.`);
 			} else {
 				roleName = role.join('; ');
 				player.role = {
@@ -2025,7 +2025,10 @@ const commands = {
 			if (picks.some((value, index, arr) => arr.indexOf(value, index + 1) > 0)) return this.errorReply(`Your picks must be unique.`);
 			game.customIdeaInit(user, choices, picks, roles);
 		},
-		customideahelp: [`/mafia customidea choices, picks \\n (comma or newline separated rolelist) - Starts an IDEA module with custom roles. Requires % @ # & ~`],
+		customideahelp: [
+			`/mafia customidea choices, picks (new line here, shift+enter)`,
+			`(comma or newline separated rolelist) - Starts an IDEA module with custom roles. Requires % @ # & ~`,
+		],
 		'!ideapick': true,
 		ideapick: function (target, room, user) {
 			const args = target.split(',');
@@ -2725,7 +2728,7 @@ const commands = {
 		win: function (target, room, user, connection, cmd) {
 			if (!room || !room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (room.id !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
-			if (cmd === 'winfaction' && (!room.game || !(room.game.gameid === 'mafia'))) return this.errorReply(`There is no game of mafia running in the room`);
+			if (cmd === 'winfaction' && (!room.game || room.game.gameid !== 'mafia')) return this.errorReply(`There is no game of mafia running in the room`);
 			if (!this.can('mute', null, room)) return;
 			const args = target.split(',');
 			let points = parseInt(args[0]);
@@ -2775,7 +2778,7 @@ const commands = {
 			room.add(buf).update();
 		},
 		winhelp: [
-			`/mafia win (points) [user1], [user2], [user3], ... - Award the specified users points to the mafia leaderboard for this month. The amount of points can be negative to take points. Defaults to 10 points.`,
+			`/mafia win (points), [user1], [user2], [user3], ... - Award the specified users points to the mafia leaderboard for this month. The amount of points can be negative to take points. Defaults to 10 points.`,
 			`/mafia winfaction (points), [faction] - Award the specified points to all the players in the given faction.`,
 		],
 
