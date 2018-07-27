@@ -1818,6 +1818,7 @@ class Battle extends Dex.ModdedDex {
 	 * @param {boolean} isSelf
 	 */
 	boost(boost, target = null, source = null, effect = null, isSecondary = false, isSelf = false) {
+
 		if (this.event) {
 			if (!target) target = this.event.target;
 			if (!source) source = this.event.source;
@@ -1825,6 +1826,10 @@ class Battle extends Dex.ModdedDex {
 		}
 		if (!target || !target.hp) return 0;
 		if (!target.isActive) return false;
+		if (target.side.foe.battle.faintQueue.length === target.side.foe.pokemonLeft &&
+			 (effect.id === this.data.Movedex.clangoroussoulblaze.id ||
+			  effect.id === this.data.Movedex.closecombat.id ||
+				effect.id === this.data.Movedex.poweruppunch.id)) return false;
 		if (this.gen > 5 && !target.side.foe.pokemonLeft) return false;
 		effect = this.getEffect(effect);
 		boost = this.runEvent('Boost', target, source, effect, Object.assign({}, boost));
