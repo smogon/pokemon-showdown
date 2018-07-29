@@ -312,6 +312,10 @@ let BattleFormats = {
 
 			return problems;
 		},
+		banlist: [
+			'Chansey + Charm + Seismic Toss', 'Chansey + Charm + Psywave',
+			'Shiftry + Leaf Blade + Sucker Punch',
+		],
 	},
 	hoennpokedex: {
 		effectType: 'ValidatorRule',
