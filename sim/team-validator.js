@@ -525,7 +525,11 @@ class Validator {
 				problems.push(`${name} is limited to ${limit} of ${rule}${clause}.`);
 			} else if (!limit && count >= bans.length) {
 				const clause = source ? ` by ${source}` : ``;
-				problems.push(`${name} has the combination of ${rule}, which is banned${clause}.`);
+				if (source === 'Pokemon') {
+					if (ruleTable.has('-illegal')) problems.push(`${name} has the combination of ${rule}, which is impossible to obtain legitimately.`);
+				} else {
+					problems.push(`${name} has the combination of ${rule}, which is banned${clause}.`);
+				}
 			}
 		}
 
