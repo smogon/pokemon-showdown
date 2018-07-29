@@ -137,7 +137,6 @@ class Giveaway {
 	 * @param {User} user
 	 */
 	checkExcluded(user) {
-		if (Giveaway.checkBanned(this.room, user)) return true;
 		if (user === this.giver || user.latestIp in this.giver.ips || toId(user) in this.giver.prevNames) return true;
 		return false;
 	}
@@ -303,6 +302,7 @@ class QuestionGiveaway extends Giveaway {
 		if (this.phase !== 'started') return user.sendTo(this.room, "The giveaway has not started yet.");
 
 		if (this.checkJoined(user) && Object.values(this.joined).indexOf(user.userid) < 0) return user.sendTo(this.room, "You have already joined the giveaway.");
+		if (Giveaway.checkBanned(this.room, user)) return user.sendTo(this.room, "You are banned from entering giveaways.");
 		if (this.checkExcluded(user)) return user.sendTo(this.room, "You are disallowed from entering the giveaway.");
 
 		if (!this.answered[user.userid]) this.answered[user.userid] = 0;
@@ -455,6 +455,7 @@ class LotteryGiveaway extends Giveaway {
 
 		if (!user.named) return user.sendTo(this.room, "You need to choose a name before joining a lottery giveaway.");
 		if (this.checkJoined(user)) return user.sendTo(this.room, "You have already joined the giveaway.");
+		if (Giveaway.checkBanned(this.room, user)) return user.sendTo(this.room, "You are banned from entering giveaways.");
 		if (this.checkExcluded(user)) return user.sendTo(this.room, "You are disallowed from entering the giveaway.");
 
 		this.joined[user.latestIp] = user.userid;
