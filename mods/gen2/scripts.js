@@ -498,12 +498,13 @@ let BattleScripts = {
 		basePower = this.clampIntRange(basePower, 1);
 
 		// Checking for the move's Critical Hit ratio
-		move.critRatio = this.clampIntRange(move.critRatio, 0, 5);
+		let critRatio = this.runEvent('ModifyCritRatio', pokemon, target, move, move.critRatio || 0);
+		critRatio = this.clampIntRange(critRatio, 0, 5);
 		let critMult = [0, 16, 8, 4, 3, 2];
 		move.crit = move.willCrit || false;
 		if (typeof move.willCrit === 'undefined') {
-			if (move.critRatio) {
-				move.crit = this.randomChance(1, critMult[move.critRatio]);
+			if (critRatio) {
+				move.crit = this.randomChance(1, critMult[critRatio]);
 			}
 		}
 
