@@ -639,6 +639,7 @@ let BattleMovedex = {
 					this.debug('sub bypass: self hit');
 					return;
 				}
+				if (move.id === 'twineedle') delete move.secondaries;
 				if (move.drain) {
 					this.add('-hint', "In Gold/Silver/Crystal, draining moves always miss against Substitute.");
 					this.add('-miss', source);
