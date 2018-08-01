@@ -12,6 +12,7 @@
 
 const fs = require('fs');
 
+const RATED_TYPES = ['official', 'regular'];
 const DEFAULT_POINTS = {
 	official: [20, 15, 10, 5, 1],
 };
@@ -751,7 +752,7 @@ let commands = {
 				params = [hostsArray, ...params];
 				hostsArray = details.join(' ');
 			}
-
+			if (!hostsArray) return this.errorReply("The user(s) you specified as the host is not online, or is not in the room.");
 			let hosts = ScavengerHunt.parseHosts(hostsArray.split(/[,;]/), room, official);
 			if (!hosts) return this.errorReply("The user(s) you specified as the host is not online, or is not in the room.");
 
@@ -1184,7 +1185,7 @@ let commands = {
 			for (const entry of source) {
 				points.push(`${entry[0]}: ${entry[1]}`);
 			}
-			return this.sendReplyBox(`The points rewarded for winning hunts is:<br />${points.join('<br />')}`);
+			return this.sendReplyBox(`The points rewarded for winning hunts within a minute is:<br />${points.join('<br />')}`);
 		}
 
 		if (!this.can('declare', null, room)) return false; // perms for editing
@@ -1192,6 +1193,7 @@ let commands = {
 		let [type, blitzPoints] = target.split(',');
 		blitzPoints = parseInt(blitzPoints);
 		type = toId(type);
+		if (!RATED_TYPES.includes(type)) return this.errorReply(`You cannot set blitz points for ${type} hunts.`);
 
 		if (isNaN(blitzPoints) || blitzPoints < 0 || blitzPoints > 1000) return this.errorReply("The points value awarded for blitz must be an integer bewteen 0 and 1000.");
 		if (!room.blitzPoints) room.blitzPoints = {};
@@ -1222,6 +1224,7 @@ let commands = {
 
 		let [type, ...pointsSet] = target.split(',');
 		type = toId(type);
+		if (!RATED_TYPES.includes(type)) return this.errorReply(`You cannot set win points for ${type} hunts.`);
 		let winPoints = pointsSet.map(p => parseInt(p));
 
 		if (winPoints.some(p => isNaN(p) || p < 0 || p > 1000) || !winPoints.length) return this.errorReply("The points value awarded for winning a scavenger hunt must be an integer between 0 and 1000.");
