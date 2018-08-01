@@ -1651,7 +1651,7 @@ const commands = {
 
 	search: function (target, room, user) {
 		if (room.id !== 'questionworkshop') return this.errorReply("This command can only be used in Question Workshop.");
-		if (!this.can('broadcast', null, room)) return false;
+		if (!this.can('mute', null, room)) return false;
 		if (!target.includes(',')) return this.errorReply("No valid search arguments entered.");
 
 		let [type, ...query] = target.split(',');
