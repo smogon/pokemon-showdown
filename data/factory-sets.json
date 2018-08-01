@@ -7548,14 +7548,14 @@
 			"sets": [{
 				"species": "Incineroar",
 				"item": ["Assault Vest"],
-				"ability": ["Blaze"],
+				"ability": ["Intimidate"],
 				"evs": {"hp": 248, "atk": 252, "spa": 8},
 				"nature": "Brave",
 				"moves": [["Fire Blast"], ["Darkest Lariat"], ["U-turn"], ["Fake Out"]]
 			}, {
 				"species": "Incineroar",
 				"item": ["Incinium Z"],
-				"ability": ["Blaze"],
+				"ability": ["Intimidate"],
 				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": "Jolly",
 				"moves": [["Flare Blitz"], ["Darkest Lariat"], ["Low Kick"], ["Swords Dance"]]
