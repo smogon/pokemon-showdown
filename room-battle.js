@@ -232,7 +232,7 @@ class BattleTimer {
 					perTurnTicks = 0;
 				}
 			}
-			this.ticksLeft[slotNum] += this.settings.perTurnTicks;
+			this.ticksLeft[slotNum] += perTurnTicks;
 			this.turnTicksLeft[slotNum] = Math.min(this.ticksLeft[slotNum], maxTurnTicks);
 
 			const ticksLeft = this.turnTicksLeft[slotNum];
