@@ -80,17 +80,6 @@ let Formats = [
 		],
 
 		mod: 'gen7',
-		searchShow: false,
-		ruleset: ['[Gen 7] UU'],
-		banlist: ['UU', 'RUBL', 'Aurora Veil'],
-		unbanlist: ['Drought'],
-	},
-	{
-		name: "[Gen 7] RU (suspect test)",
-		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3639410/">RU Suspect Test</a>`],
-
-		mod: 'gen7',
-		challengeShow: false,
 		ruleset: ['[Gen 7] UU'],
 		banlist: ['UU', 'RUBL', 'Aurora Veil'],
 		unbanlist: ['Drought'],
@@ -610,7 +599,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
-		searchShow: false,
+		// searchShow: false,
 		ruleset: ['[Gen 7] OU', 'STABmons Move Legality'],
 		banlist: ['Aerodactyl-Mega', 'Blacephalon', 'Kartana', 'Komala', 'Kyurem-Black', 'Porygon-Z', 'Silvally', 'Tapu Koko', 'Tapu Lele', 'King\'s Rock', 'Razor Fang'],
 		restrictedMoves: ['Acupressure', 'Belly Drum', 'Chatter', 'Extreme Speed', 'Geomancy', 'Lovely Kiss', 'Shell Smash', 'Shift Gear', 'Spore', 'Thousand Arrows'],
@@ -623,7 +612,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
-		// searchShow: false,
+		searchShow: false,
 		ruleset: ['[Gen 7] PU'],
 		banlist: [
 			// PU
