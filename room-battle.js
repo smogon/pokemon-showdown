@@ -24,7 +24,6 @@ const MAX_TURN_TIME = 150;
 const STARTING_TIME_CHALLENGE = 280;
 const MAX_TURN_TIME_CHALLENGE = 300;
 
-const NOT_DISCONNECTED = 100;
 const DISCONNECTION_TICKS = 13;
 
 // time after a player disabling the timer before they can re-enable it
@@ -125,6 +124,12 @@ class BattleTimer {
 		 * @type {number[]}
 		 */
 		this.dcTicksLeft = [];
+		/**
+		 * Used to track a user's last known connection status, and display
+		 * the proper message when it changes.
+		 * @type {boolean[]}
+		 */
+		this.connected = [];
 
 		/**
 		 * Last tick.
@@ -163,7 +168,8 @@ class BattleTimer {
 		for (let slotNum = 0; slotNum < 2; slotNum++) {
 			this.ticksLeft.push(this.settings.startingTicks);
 			this.turnTicksLeft.push(-1);
-			this.dcTicksLeft.push(NOT_DISCONNECTED);
+			this.dcTicksLeft.push(DISCONNECTION_TICKS);
+			this.connected.push(true);
 		}
 	}
 	start(/** @type {User} */ requester) {
@@ -250,7 +256,8 @@ class BattleTimer {
 			this.ticksLeft[slotNum]--;
 			this.turnTicksLeft[slotNum]--;
 
-			if (this.dcTicksLeft[slotNum] !== NOT_DISCONNECTED) {
+			const connected = !this.connected[slotNum];
+			if (!connected) {
 				this.dcTicksLeft[slotNum]--;
 			}
 
@@ -258,14 +265,17 @@ class BattleTimer {
 			if (dcTicksLeft <= 0) this.turnTicksLeft[slotNum] = 0;
 			const ticksLeft = this.turnTicksLeft[slotNum];
 			if (!ticksLeft) continue;
-			if (ticksLeft < dcTicksLeft) dcTicksLeft = NOT_DISCONNECTED; // turn timer supersedes dc timer
 
-			if (dcTicksLeft <= 4) {
-				this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${dcTicksLeft * TICK_TIME} seconds to reconnect!`).update();
-			}
-			if (dcTicksLeft !== NOT_DISCONNECTED) continue;
-			if (ticksLeft % 3 === 0 || ticksLeft <= 4) {
-				this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${ticksLeft * TICK_TIME} seconds left.`).update();
+			if (!connected && dcTicksLeft <= ticksLeft) {
+				// dc timer is shown only if it's lower than turn timer
+				if (dcTicksLeft <= 4) {
+					this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${dcTicksLeft * TICK_TIME} seconds to reconnect!`).update();
+				}
+			} else {
+				// regular turn timer shown
+				if (ticksLeft % 3 === 0 || ticksLeft <= 4) {
+					this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${ticksLeft * TICK_TIME} seconds left.`).update();
+				}
 			}
 		}
 		if (!this.checkTimeout()) {
@@ -276,16 +286,18 @@ class BattleTimer {
 		for (const slotNum of this.ticksLeft.keys()) {
 			const slot = /** @type {PlayerSlot} */ ('p' + (slotNum + 1));
 			const player = this.battle[slot];
-			const isConnected = player && player.active;
+			const isConnected = !!(player && player.active);
 
-			if (!!isConnected === !!(this.dcTicksLeft[slotNum] === NOT_DISCONNECTED)) continue;
+			if (isConnected === this.connected[slotNum]) continue;
 
 			if (!isConnected) {
 				// player has disconnected: don't wait longer than 6 ticks (1 minute)
+				this.connected[slotNum] = false;
 				if (this.settings.dcTimer) {
 					this.dcTicksLeft[slotNum] = DISCONNECTION_TICKS;
 				} else {
-					this.dcTicksLeft[slotNum] = NOT_DISCONNECTED - 1;
+					// arbitrary large number
+					this.dcTicksLeft[slotNum] = DISCONNECTION_TICKS * 10;
 				}
 				if (this.timerRequesters.size) {
 					if (this.settings.dcTimer) {
@@ -296,7 +308,7 @@ class BattleTimer {
 				}
 			} else {
 				// player has reconnected
-				this.dcTicksLeft[slotNum] = NOT_DISCONNECTED;
+				this.connected[slotNum] = true;
 				if (this.timerRequesters.size) {
 					let timeLeft = ``;
 					if (this.waitingForChoice(slot)) {
@@ -319,7 +331,7 @@ class BattleTimer {
 		let didSomething = false;
 		for (const [slotNum, ticks] of this.turnTicksLeft.entries()) {
 			if (ticks) continue;
-			if (this.settings.timeoutAutoChoose && this.ticksLeft[slotNum] && this.dcTicksLeft[slotNum] === NOT_DISCONNECTED) {
+			if (this.settings.timeoutAutoChoose && this.ticksLeft[slotNum] && this.connected[slotNum]) {
 				const slot = 'p' + (slotNum + 1);
 				this.battle.stream.write(`>${slot} default`);
 				didSomething = true;
