@@ -67,7 +67,7 @@ const nullEffect = new Data.PureEffect({name: '', exists: false});
 
 /** @typedef {{Pokedex: DexTable<Template>, Movedex: DexTable<Move>, Statuses: DexTable<EffectData>, TypeChart: DexTable<TypeData>, Scripts: DexTable<AnyObject>, Items: DexTable<Item>, Abilities: DexTable<Ability>, FormatsData: DexTable<ModdedTemplateFormatsData>, Learnsets: DexTable<{learnset: {[k: string]: MoveSource[]}}>, Aliases: {[id: string]: string}, Natures: DexTable<{[l: string]: string | undefined, name: string, plus?: string, minus?: string}>, Formats: DexTable<Format>}} DexTableData */
 
-/** @type {{[k: string]: {[l: string | undefined]: string, name: string, plus?: string, minus?: string}}} */
+/** @type {{[k: string]: {[l: string]: string | undefined, name: string, plus?: string, minus?: string}}} */
 const BattleNatures = {
 	adamant: {name: "Adamant", plus: 'atk', minus: 'spa'},
 	bashful: {name: "Bashful"},

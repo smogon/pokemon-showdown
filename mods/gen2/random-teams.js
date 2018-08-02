@@ -294,6 +294,7 @@ class RandomGen2Teams extends RandomGen3Teams {
 		// @ts-ignore
 		return {
 			moveset: {
+				name: template.name,
 				species: template.name,
 				moves: moves,
 				ability: 'None',
