@@ -809,6 +809,15 @@ let Formats = [
 		team: 'random',
 		ruleset: ['Pokemon', 'Standard'],
 	},
+	{
+		name: "[Gen 1] Challenge Cup",
+
+		mod: 'gen1',
+		team: 'randomCC',
+		searchShow: false,
+		challengeShow: false,
+		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
+	},
 
 	// RoA Spotlight
 	///////////////////////////////////////////////////////////////////
@@ -818,32 +827,91 @@ let Formats = [
 		column: 3,
 	},
 	{
-		name: "[Gen 3] STABmons",
-
-		mod: 'gen3',
-		ruleset: ['[Gen 3] OU', 'STABmons Move Legality'],
-		banlist: [],
-		restrictedMoves: [],
-	},
-	{
-		name: "[Gen 2] Ubers",
+		name: "[Gen 3] Ubers",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/7433879/">GSC Ubers Information &amp; Resources</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/posts/6431086/">GSC Sample Teams</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/7433832/">ADV Ubers Information &amp; Resources</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3536426/">ADV Ubers Viability Ranking</a>`,
 		],
 
-		mod: 'gen2',
+		mod: 'gen3',
 		// searchShow: false,
 		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Smeargle + Ingrain', 'Wobbuffet + Leftovers'],
 	},
 	{
-		name: "[Gen 1] Challenge Cup",
+		name: "[Gen 6] Mix and Mega",
+		desc: `Mega Stones and Primal Orbs can be used on almost any fully evolved Pok&eacute;mon with no Mega Evolution limit.`,
+		threads: [`&bullet; <a href="https://www.smogon.com/dex/xy/formats/mix_and_mega/">ORAS Mix and Mega</a>`],
 
-		mod: 'gen1',
-		team: 'randomCC',
-		// searchShow: false,
-		challengeShow: false,
-		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
+		mod: 'mixandmega',
+		ruleset: ['Pokemon', 'Standard', 'Mega Rayquaza Clause', 'Team Preview'],
+		banlist: ['Baton Pass', 'Dynamic Punch', 'Electrify', 'Zap Cannon'],
+		restrictedStones: ['Beedrillite', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Medichamite'],
+		cannotMega: [
+			'Arceus', 'Cresselia', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Dragonite', 'Genesect',
+			'Giratina', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lucario', 'Lugia', 'Manaphy',
+			'Mewtwo', 'Palkia', 'Rayquaza', 'Regigigas', 'Reshiram', 'Slaking', 'Xerneas', 'Yveltal', 'Zekrom',
+		],
+		onValidateTeam: function (team) {
+			let itemTable = {};
+			for (const set of team) {
+				let item = this.getItem(set.item);
+				if (!item) continue;
+				if (itemTable[item.id] && item.megaStone) return ["You are limited to one of each Mega Stone.", "(You have more than one " + this.getItem(item).name + ")"];
+				if (itemTable[item.id] && (item.id === 'blueorb' || item.id === 'redorb')) return ["You are limited to one of each Primal Orb.", "(You have more than one " + this.getItem(item).name + ")"];
+				itemTable[item.id] = true;
+			}
+		},
+		onValidateSet: function (set, format) {
+			let template = this.getTemplate(set.species || set.name);
+			let item = this.getItem(set.item);
+			if (!item.megaEvolves && item.id !== 'blueorb' && item.id !== 'redorb') return;
+			if (template.baseSpecies === item.megaEvolves || (template.baseSpecies === 'Groudon' && item.id === 'redorb') || (template.baseSpecies === 'Kyogre' && item.id === 'blueorb')) return;
+			if (template.evos.length) return ["" + template.species + " is not allowed to hold " + item.name + " because it's not fully evolved."];
+			let uberStones = format.restrictedStones || [];
+			let uberPokemon = format.cannotMega || [];
+			if (uberPokemon.includes(template.name) || uberStones.includes(item.name)) return ["" + template.species + " is not allowed to hold " + item.name + "."];
+		},
+		onBegin: function () {
+			for (const pokemon of this.p1.pokemon.concat(this.p2.pokemon)) {
+				pokemon.originalSpecies = pokemon.baseTemplate.species;
+			}
+		},
+		onSwitchIn: function (pokemon) {
+			let oMegaTemplate = this.getTemplate(pokemon.template.originalMega);
+			if (oMegaTemplate.exists && pokemon.originalSpecies !== oMegaTemplate.baseSpecies) {
+				// Place volatiles on the Pokémon to show its mega-evolved condition and details
+				this.add('-start', pokemon, oMegaTemplate.requiredItem || oMegaTemplate.requiredMove, '[silent]');
+				let oTemplate = this.getTemplate(pokemon.originalSpecies);
+				if (oTemplate.types.length !== pokemon.template.types.length || oTemplate.types[1] !== pokemon.template.types[1]) {
+					this.add('-start', pokemon, 'typechange', pokemon.template.types.join('/'), '[silent]');
+				}
+			}
+		},
+		onSwitchOut: function (pokemon) {
+			let oMegaTemplate = this.getTemplate(pokemon.template.originalMega);
+			if (oMegaTemplate.exists && pokemon.originalSpecies !== oMegaTemplate.baseSpecies) {
+				this.add('-end', pokemon, oMegaTemplate.requiredItem || oMegaTemplate.requiredMove, '[silent]');
+			}
+		},
+	},
+	{
+		name: "[Gen 2] Mediocremons",
+
+		mod: 'gen2',
+		ruleset: ['[Gen 2] OU'],
+		banlist: [],
+		onValidateSet: function (set) {
+			let problems = [];
+			let template = this.getTemplate(set.species);
+			let item = this.getItem(set.item);
+			if (item.megaEvolves === template.species) template = this.getTemplate(item.megaStone);
+			let statTable = {hp: 'an HP', atk: 'an Attack', def: 'a Defense', spa: 'a Special Attack', spd: 'a Special Defense', spe: 'a Speed'};
+			for (let stat in statTable) {
+				if (template.baseStats[stat] >= 100) problems.push(template.species + " has " + statTable[stat] + " of " + template.baseStats[stat] + ", which is banned.");
+			}
+			return problems;
+		},
 	},
 
 	// Past Gens OU
@@ -1432,18 +1500,6 @@ let Formats = [
 		column: 4,
 	},
 	{
-		name: "[Gen 3] Ubers",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/7433832/">ADV Ubers Information &amp; Resources</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3536426/">ADV Ubers Viability Ranking</a>`,
-		],
-
-		mod: 'gen3',
-		searchShow: false,
-		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Smeargle + Ingrain', 'Wobbuffet + Leftovers'],
-	},
-	{
 		name: "[Gen 3] UU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3585923/">ADV UU Metagame Discussion</a>`,
@@ -1471,6 +1527,17 @@ let Formats = [
 		searchShow: false,
 		debug: true,
 		ruleset: ['Pokemon', 'HP Percentage Mod', 'Cancel Mod'],
+	},
+	{
+		name: "[Gen 2] Ubers",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/7433879/">GSC Ubers Information &amp; Resources</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/6431086/">GSC Sample Teams</a>`,
+		],
+
+		mod: 'gen2',
+		searchShow: false,
+		ruleset: ['Pokemon', 'Standard'],
 	},
 	{
 		name: "[Gen 2] UU",
