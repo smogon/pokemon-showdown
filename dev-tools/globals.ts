@@ -186,6 +186,7 @@ interface EventMethods {
 	onAccuracy?: (this: Battle, accuracy: number, target: Pokemon, source: Pokemon, move: Move) => number | boolean | null | void
 	onBasePower?: (this: Battle, basePower: number, pokemon: Pokemon, target: Pokemon, move: Move) => void
 	onTryImmunity?: (this: Battle, target: Pokemon, source: Pokemon, move: Move) => void
+	onBeforeFaint?: (this: Battle, pokemon: Pokemon) => void
 	onBeforeMove?: (this: Battle, attacker: Pokemon, defender: Pokemon, move: Move) => void
 	onBeforeSwitchIn?: (this: Battle, pokemon: Pokemon) => void
 	onBeforeSwitchOut?: (this: Battle, pokemon: Pokemon) => void
