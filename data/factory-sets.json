@@ -7278,6 +7278,7 @@
 				"species": "Delphox",
 				"item": ["Leftovers"],
 				"ability": ["Blaze"],
+        "evs": {"hp": 248, "spd": 108, "spe": 152},
 				"ivs": {"atk": 0},
 				"nature": "Timid",
 				"moves": [["Wish"], ["Protect"], ["Toxic"], ["Flamethrower"]]
