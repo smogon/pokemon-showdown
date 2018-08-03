@@ -156,7 +156,6 @@ Chat.namefilter = function (name, user) {
 		// \u534d\u5350 swastika
 		// \u2a0d crossed integral (f)
 		name = name.replace(/[\u00a1\u2580-\u2590\u25A0\u25Ac\u25AE\u25B0\u2a0d\u534d\u5350]/g, '');
-		name = name.replace(/[\u2800]+/g, ' ').trim();
 
 		// e-mail address
 		if (name.includes('@') && name.includes('.')) return '';
@@ -164,12 +163,7 @@ Chat.namefilter = function (name, user) {
 		// url
 		if (/[a-z0-9]\.(com|net|org)/.test(name)) name = name.replace(/\./g, '');
 
-		// \u2604\u2614\u2615\u2618\u2620\u2622\u2623\u2626\u262a\u262e\u2638\u2639\u2648-\u2653\u267f comet, umbrella, coffee, shamrock, crossbones, radiation, hazard, christ, islam, peace, dharma, frown, zodiac-, wheelchair
-		// \u2692\u2693\u2694\u2696\u2697\u2699\u269b\u269c\u26a1\u26aa\u26ab\u26b0\u26b1\u26b3-\u26bd\u26bf-\u26e1\u26e3-\u26ff hammer/pick, anchor, swords, scales, alembic, gear, atom, fleur, lightning, white circle, black circle, coffin, urn, lots, lots, lots
-		// \u2705\u270a-\u270c\u2728\u274c\u274e\u2753-\u2755\u2757\u27bf check, hand signs, stars emoji, cross, cross, punc-, punc, doubleloop
-		// \u2b1b\u2b1c\u2b50\u2b55 black square, white square, white star, circle
-		name = name.replace(/[\u2604\u2614\u2615\u2618\u2620\u2622\u2623\u2626\u262a\u262e\u2638\u2639\u2648-\u2653\u267f\u2692\u2693\u2694\u2696\u2697\u2699\u269b\u269c\u26a1\u26aa\u26ab\u26b0\u26b1\u26b3-\u26bd\u26bf-\u26e1\u26e3-\u26ff\u2705\u270a-\u270c\u2728\u274c\u274e\u2753-\u2755\u2757\u27bf\u2b1b\u2b1c\u2b50\u2b55]/g, '');
-
+		// Limit the amount of symbols allowed in usernames to 4 maximum, and disallow (R) and (C) from being used in the middle of names.
 		let nameSymbols = name.replace(/[^\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2090-\u23FA\u2500-\u2BD1]+/g, '');
 		// \u00ae\u00a9 (R) (C)
 		if (nameSymbols.length > 4 || /[^a-z0-9][a-z0-9][^a-z0-9]/.test(name.toLowerCase() + ' ') || /[\u00ae\u00a9].*[a-zA-Z0-9]/.test(name)) name = name.replace(/[\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F]+/g, '').replace(/[^A-Za-z0-9]{2,}/g, ' ').trim();
