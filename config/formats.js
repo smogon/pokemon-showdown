@@ -407,51 +407,74 @@ let Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] Metagamiate",
-		desc: `Every Pok&eacute;mon gains an intrinsic -ate ability matching its primary type, or its secondary type if shiny.`,
+		name: "[Gen 7] Tier Shift",
+		desc: `Pok&eacute;mon get +10 to each stat per tier below OU they are in. UU gets +10, RU +20, NU +30, and PU +40.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3604808/">Metagamiate</a>`,
-		],
-
-		mod: 'metagamiate',
-		ruleset: ['[Gen 7] OU'],
-		banlist: ['Dragonite', 'Kyurem-Black'],
-		onModifyMovePriority: -1,
-		onModifyMove: function (move, source) {
-			if (move.type === 'Normal' && !['judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'weatherball'].includes(move.id) && !move.isZ && move.category !== 'Status') {
-				if (source.hasAbility(['aerilate', 'pixilate', 'refrigerate', 'galvanize', 'normalize'])) return;
-				// @ts-ignore
-				move.isMetagamiate = true;
-				move.type = source.getTypes().length < 2 || !source.set.shiny ? source.getTypes()[0] : source.getTypes()[1];
-			}
-		},
-		onBasePowerPriority: 8,
-		onBasePower: function (basePower, attacker, defender, move) {
-			// @ts-ignore
-			if (move.isMetagamiate) return this.chainModify([0x1333, 0x1000]);
-		},
-	},
-	{
-		name: "[Gen 7] Reversed",
-		desc: `Every Pok&eacute;mon has its base Atk and Sp. Atk stat, as well as its base Def and Sp. Def stat, swapped.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3623871/">Reversed</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3610073/">Tier Shift</a>`,
 		],
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
-		banlist: ['Kyurem-Black', 'Tapu Koko'],
-		unbanlist: ['Kyurem-White', 'Marshadow', 'Metagross-Mega', 'Naganadel', 'Reshiram'],
-		onModifyTemplate: function (template, target, source) {
-			template = Object.assign({}, template);
-			template.baseStats = Object.assign({}, template.baseStats);
-			const atk = template.baseStats.atk;
-			const def = template.baseStats.def;
-			template.baseStats.atk = template.baseStats.spa;
-			template.baseStats.def = template.baseStats.spd;
-			template.baseStats.spa = atk;
-			template.baseStats.spd = def;
-			return template;
+		banlist: ['Damp Rock', 'Deep Sea Tooth', 'Eviolite'],
+		onModifyTemplate: function (template, pokemon) {
+			let tsTemplate = Object.assign({}, template);
+			const boosts = {'UU': 10, 'RUBL': 10, 'RU': 20, 'NUBL': 20, 'NU': 30, 'PUBL': 30, 'PU': 40, 'NFE': 40, 'LC Uber': 40, 'LC': 40};
+			let tier = tsTemplate.tier;
+			if (pokemon.set.item) {
+				let item = this.getItem(pokemon.set.item);
+				if (item.megaEvolves === tsTemplate.species) tier = this.getTemplate(item.megaStone).tier;
+			}
+			if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
+			let boost = (tier in boosts) ? boosts[tier] : 0;
+			if (boost > 0 && (pokemon.set.ability === 'Drizzle' || pokemon.set.item === 'Mewnium Z')) boost = 0;
+			if (boost > 10 && pokemon.set.moves.includes('auroraveil')) boost = 10;
+			if (boost > 20 && pokemon.set.ability === 'Drought') boost = 20;
+			tsTemplate.baseStats = Object.assign({}, tsTemplate.baseStats);
+			for (let statName in tsTemplate.baseStats) {
+				// @ts-ignore
+				tsTemplate.baseStats[statName] = this.clampIntRange(tsTemplate.baseStats[statName] + boost, 1, 255);
+			}
+			return tsTemplate;
+		},
+	},
+	{
+		name: "[Gen 7] Benjamin Butterfree",
+		desc: `Pok&eacute;mon that faint reincarnate as their prevo, but without the moves they can't learn.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3605680/">Benjamin Butterfree</a>`,
+		],
+
+		mod: 'gen7',
+		ruleset: ['[Gen 7] OU'],
+		onBeforeFaint: function (pokemon) {
+			let prevo = pokemon.baseTemplate.isMega ? this.getTemplate(pokemon.baseTemplate.baseSpecies).prevo : pokemon.baseTemplate.prevo;
+			if (!prevo || pokemon.set.ability === 'Battle Bond') return;
+			let template = this.getTemplate(pokemon.set.species);
+			// @ts-ignore
+			let abilitySlot = Object.keys(template.abilities).find(slot => template.abilities[slot] === pokemon.set.ability);
+			template = this.getTemplate(prevo);
+			// @ts-ignore
+			if (!template.abilities[abilitySlot]) abilitySlot = '0';
+			pokemon.faintQueued = false;
+			pokemon.hp = pokemon.maxhp;
+			pokemon.formeChange(template, this.getFormat(), true, '', abilitySlot);
+			this.add('-message', `${pokemon.name} has devolved into ${template.species}!`);
+			if (Object.values(pokemon.boosts).find(boost => boost !== 0)) {
+				pokemon.clearBoosts();
+				this.add('-clearboost', pokemon);
+			}
+			pokemon.cureStatus(true);
+			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+			let learnset = template.learnset || this.getTemplate(template.baseSpecies).learnset || {};
+			let prevoset = template.prevo && this.getTemplate(template.prevo).learnset || {};
+			for (const moveSlot of pokemon.baseMoveSlots) {
+				if (!learnset[moveSlot.id] && !prevoset[moveSlot.id]) {
+					moveSlot.used = true;
+					moveSlot.pp = 0;
+				}
+			}
+			pokemon.canMegaEvo = null;
+			return false;
 		},
 	},
 	{
@@ -897,6 +920,7 @@ let Formats = [
 			if (item.megaEvolves === template.species) template = this.getTemplate(item.megaStone);
 			let statTable = {hp: 'an HP', atk: 'an Attack', def: 'a Defense', spa: 'a Special Attack', spd: 'a Special Defense', spe: 'a Speed'};
 			for (let stat in statTable) {
+				// @ts-ignore
 				if (template.baseStats[stat] >= 100) problems.push(template.species + " has " + statTable[stat] + " of " + template.baseStats[stat] + ", which is banned.");
 			}
 			return problems;
