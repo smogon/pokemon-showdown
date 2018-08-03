@@ -2,7 +2,7 @@
 
 /**@type {ModdedBattleScriptsData} */
 let BattleScripts = {
-	gen: 6,
+	inherit: 'gen6',
 	init: function () {
 		for (let id in this.data.Items) {
 			if (!this.data.Items[id].megaStone) continue;
