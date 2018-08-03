@@ -9,6 +9,9 @@ npm-debug.log
 .eslintcache
 package-lock.json
 
+# visual studio live share
+.vs
+
 # boilerplate #
 ###############
 
