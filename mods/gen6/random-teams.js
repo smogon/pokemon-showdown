@@ -737,13 +737,10 @@ class RandomGen6Teams extends RandomTeams {
 			// To perma-taunt a Pokemon by giving it Assault Vest
 			item = 'Assault Vest';
 		} else if (hasMove['switcheroo'] || hasMove['trick']) {
-			let randomBool = this.randomChance(2, 3);
-			if (counter.Physical >= 3 && (template.baseStats.spe < 60 || template.baseStats.spe > 108 || randomBool)) {
-				item = 'Choice Band';
-			} else if (counter.Special >= 3 && (template.baseStats.spe < 60 || template.baseStats.spe > 108 || randomBool)) {
-				item = 'Choice Specs';
-			} else {
+			if (template.baseStats.spe >= 60 && template.baseStats.spe <= 108) {
 				item = 'Choice Scarf';
+			} else {
+				item = (counter.Physical > counter.Special) ? 'Choice Band' : 'Choice Specs';
 			}
 		} else if (hasMove['geomancy'] || hasMove['solarbeam'] && !hasAbility['Drought'] && !hasMove['sunnyday'] && !teamDetails['sun']) {
 			item = 'Power Herb';
