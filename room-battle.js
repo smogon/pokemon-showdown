@@ -256,7 +256,7 @@ class BattleTimer {
 			this.ticksLeft[slotNum]--;
 			this.turnTicksLeft[slotNum]--;
 
-			const connected = !this.connected[slotNum];
+			const connected = this.connected[slotNum];
 			if (!connected) {
 				this.dcTicksLeft[slotNum]--;
 			}
