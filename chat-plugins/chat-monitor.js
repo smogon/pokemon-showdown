@@ -4,15 +4,22 @@ const FS = require('../lib/fs');
 
 const MONITOR_FILE = 'config/chat-plugins/chat-monitor.json';
 
-/** @type {{[k: string]: string[]}?} */
-let data = null;
-try {
-	data = require(`../${MONITOR_FILE}`);
-} catch (e) {
-	if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
-}
 /** @type {{[k: string]: string[]}} */
-const filterWords = !data || typeof data !== 'object' ? {publicfilter: [], filter: [], autolock: [], namefilter: []} : data;
+let filterWords;
+{
+	let loadedFilterWords;
+	try {
+		loadedFilterWords = require(`../${MONITOR_FILE}`);
+	} catch (e) {
+		if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
+	}
+	filterWords = loadedFilterWords || {
+		publicfilter: [],
+		filter: [],
+		autolock: [],
+		namefilter: [],
+	};
+}
 
 function saveFilters() {
 	FS(MONITOR_FILE).writeUpdate(() => JSON.stringify(filterWords));
