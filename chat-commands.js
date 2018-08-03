@@ -167,7 +167,7 @@ const commands = {
 
 	'!avatar': true,
 	avatar: function (target, room, user) {
-		if (!target) return this.parse('/avatars');
+		if (!target) return this.parse(`${this.cmdToken}avatars`);
 		let parts = target.split(',');
 		let avatarid = toId(parts[0]);
 		let avatar = 0;
