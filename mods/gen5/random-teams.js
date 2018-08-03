@@ -332,6 +332,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 				if (moveid === 'hiddenpower') {
 					let HPivs = this.getType(move.type).HPivs;
 					for (let iv in HPivs) {
+						// @ts-ignore
 						ivs[iv] = HPivs[iv];
 					}
 				}

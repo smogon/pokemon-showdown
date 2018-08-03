@@ -214,6 +214,7 @@ let BattleMovedex = {
 		onHit: function (target) {
 			let stats = [];
 			for (let stat in target.boosts) {
+				// @ts-ignore
 				if (target.boosts[stat] < 6) {
 					stats.push(stat);
 				}
@@ -6805,7 +6806,9 @@ let BattleMovedex = {
 			let sourceBoosts = {};
 
 			for (const stat of ['def', 'spd']) {
+				// @ts-ignore
 				targetBoosts[stat] = target.boosts[stat];
+				// @ts-ignore
 				sourceBoosts[stat] = source.boosts[stat];
 			}
 
@@ -7323,7 +7326,9 @@ let BattleMovedex = {
 			let sourceBoosts = {};
 
 			for (let i in target.boosts) {
+				// @ts-ignore
 				targetBoosts[i] = target.boosts[i];
+				// @ts-ignore
 				sourceBoosts[i] = source.boosts[i];
 			}
 
@@ -10587,6 +10592,7 @@ let BattleMovedex = {
 					for (let i in boost) {
 						// @ts-ignore
 						if (boost[i] < 0) {
+							// @ts-ignore
 							delete boost[i];
 							showMsg = true;
 						}
@@ -12123,7 +12129,9 @@ let BattleMovedex = {
 			let sourceBoosts = {};
 
 			for (const stat of ['atk', 'spa']) {
+				// @ts-ignore
 				targetBoosts[stat] = target.boosts[stat];
+				// @ts-ignore
 				sourceBoosts[stat] = source.boosts[stat];
 			}
 
@@ -12402,6 +12410,7 @@ let BattleMovedex = {
 		flags: {authentic: 1, mystery: 1},
 		onHit: function (target, source) {
 			for (let i in target.boosts) {
+				// @ts-ignore
 				source.boosts[i] = target.boosts[i];
 			}
 			this.add('-copyboost', source, target, '[from] move: Psych Up');
@@ -17657,7 +17666,9 @@ let BattleMovedex = {
 		onHit: function (target) {
 			let success = false;
 			for (let i in target.boosts) {
+				// @ts-ignore
 				if (target.boosts[i] === 0) continue;
+				// @ts-ignore
 				target.boosts[i] = -target.boosts[i];
 				success = true;
 			}

@@ -364,6 +364,7 @@ let Formats = [
 			let template = this.getTemplate(set.species);
 			let bst = 0;
 			for (let stat in template.baseStats) {
+				// @ts-ignore
 				bst += template.baseStats[stat];
 			}
 			if (bst > 600) return [`${template.species} is banned.`, `(Pok\u00e9mon with a BST higher than 600 are banned)`];
@@ -372,6 +373,7 @@ let Formats = [
 				let bstMega = 0;
 				let megaTemplate = this.getTemplate(item.megaStone);
 				for (let stat in megaTemplate.baseStats) {
+					// @ts-ignore
 					bstMega += megaTemplate.baseStats[stat];
 				}
 				if (template.baseSpecies === item.megaEvolves && bstMega > 600) return [`${set.name || set.species}'s item ${item.name} is banned.`, `(Pok\u00e9mon with a BST higher than 600 are banned)`];
@@ -582,6 +584,7 @@ let Formats = [
 				let template = this.getTemplate(set.species || set.name);
 				let legalAbility = false;
 				for (let i in template.abilities) {
+					// @ts-ignore
 					if (set.ability === template.abilities[i]) legalAbility = true;
 				}
 				if (!legalAbility) return ['The ability ' + set.ability + ' is banned on Pok\u00e9mon that do not naturally have it.'];
@@ -894,6 +897,7 @@ let Formats = [
 			if (item.megaEvolves === template.species) template = this.getTemplate(item.megaStone);
 			let statTable = {hp: 'an HP', atk: 'an Attack', def: 'a Defense', spa: 'a Special Attack', spd: 'a Special Defense', spe: 'a Speed'};
 			for (let stat in statTable) {
+				// @ts-ignore
 				if (template.baseStats[stat] >= 100) problems.push(template.species + " has " + statTable[stat] + " of " + template.baseStats[stat] + ", which is banned.");
 			}
 			return problems;

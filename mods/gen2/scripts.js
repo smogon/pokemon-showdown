@@ -19,6 +19,7 @@ let BattleScripts = {
 
 			// Stat boosts.
 			if (!unboosted) {
+				// @ts-ignore
 				let boost = this.boosts[statName];
 				if (boost > 6) boost = 6;
 				if (boost < -6) boost = -6;
@@ -550,6 +551,7 @@ let BattleScripts = {
 			if (!suppressMessages) this.add('-crit', target);
 			// Stat level modifications are ignored if they are neutral to or favour the defender.
 			// Reflect and Light Screen defensive boosts are only ignored if stat level modifications were also ignored as a result of that.
+			// @ts-ignore
 			if (attacker.boosts[atkType] <= defender.boosts[defType]) {
 				unboosted = true;
 				noburndrop = true;

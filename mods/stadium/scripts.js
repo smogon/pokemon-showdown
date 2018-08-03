@@ -26,8 +26,11 @@ let BattleScripts = {
 		recalculateStats: function () {
 			for (let statName in this.stats) {
 				/**@type {number} */
+				// @ts-ignore
 				let stat = this.template.baseStats[statName];
+				// @ts-ignore
 				stat = Math.floor(Math.floor(2 * stat + this.set.ivs[statName] + Math.floor(this.set.evs[statName] / 4)) * this.level / 100 + 5);
+				// @ts-ignore
 				this.baseStats[statName] = this.stats[statName] = Math.floor(stat);
 				this.modifiedStats[statName] = Math.floor(stat);
 				// Re-apply drops, if necessary.
@@ -35,7 +38,9 @@ let BattleScripts = {
 				if (this.status === 'par') this.modifyStat('spe', 0.25);
 				// @ts-ignore
 				if (this.status === 'brn') this.modifyStat('atk', 0.5);
+				// @ts-ignore
 				if (this.boosts[statName] !== 0) {
+					// @ts-ignore
 					if (this.boosts[statName] >= 0) {
 						// @ts-ignore
 						this.modifyStat(statName, [1, 1.5, 2, 2.5, 3, 3.5, 4][this.boosts[statName]]);
@@ -50,15 +55,23 @@ let BattleScripts = {
 		boostBy: function (boost) {
 			let changed = false;
 			for (let i in boost) {
+				// @ts-ignore
 				let delta = boost[i];
 				if (delta === undefined) continue;
+				// @ts-ignore
 				this.boosts[i] += delta;
+				// @ts-ignore
 				if (this.boosts[i] > 6) {
+					// @ts-ignore
 					delta -= this.boosts[i] - 6;
+					// @ts-ignore
 					this.boosts[i] = 6;
 				}
+				// @ts-ignore
 				if (this.boosts[i] < -6) {
+					// @ts-ignore
 					delta -= this.boosts[i] - (-6);
+					// @ts-ignore
 					this.boosts[i] = -6;
 				}
 				if (delta) changed = true;

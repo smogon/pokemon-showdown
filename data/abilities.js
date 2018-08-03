@@ -391,6 +391,7 @@ let BattleAbilities = {
 			for (let i in boost) {
 				// @ts-ignore
 				if (boost[i] < 0) {
+					// @ts-ignore
 					delete boost[i];
 					showMsg = true;
 				}
@@ -1022,6 +1023,7 @@ let BattleAbilities = {
 			for (let i in boost) {
 				// @ts-ignore
 				if (boost[i] < 0) {
+					// @ts-ignore
 					delete boost[i];
 					showMsg = true;
 				}
@@ -1154,6 +1156,7 @@ let BattleAbilities = {
 			for (let i in boost) {
 				// @ts-ignore
 				if (boost[i] < 0) {
+					// @ts-ignore
 					delete boost[i];
 					showMsg = true;
 				}
@@ -1947,6 +1950,7 @@ let BattleAbilities = {
 			let stats = [];
 			let boost = {};
 			for (let statPlus in pokemon.boosts) {
+				// @ts-ignore
 				if (pokemon.boosts[statPlus] < 6) {
 					stats.push(statPlus);
 				}
@@ -1956,6 +1960,7 @@ let BattleAbilities = {
 
 			stats = [];
 			for (let statMinus in pokemon.boosts) {
+				// @ts-ignore
 				if (pokemon.boosts[statMinus] > -6 && statMinus !== randomStat) {
 					stats.push(statMinus);
 				}
@@ -3432,7 +3437,7 @@ let BattleAbilities = {
 	},
 	"surgesurfer": {
 		shortDesc: "If Electric Terrain is active, this Pokemon's Speed is doubled.",
-		onModifySpe: function (spe) {
+		onModifySpe: function () {
 			if (this.isTerrain('electricterrain')) {
 				return this.chainModify(2);
 			}
@@ -3974,6 +3979,7 @@ let BattleAbilities = {
 			for (let i in boost) {
 				// @ts-ignore
 				if (boost[i] < 0) {
+					// @ts-ignore
 					delete boost[i];
 					showMsg = true;
 				}

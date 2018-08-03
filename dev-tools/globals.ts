@@ -23,9 +23,9 @@ let TeamValidatorAsync = require('../team-validator-async');
 
 type GenderName = 'M' | 'F' | 'N' | '';
 type StatName = 'hp' | 'atk' | 'def' | 'spa' | 'spd' | 'spe';
-type StatsTable = {[key:string]: number, hp: number, atk: number, def: number, spa: number, spd: number, spe: number};
+type StatsTable = {hp: number, atk: number, def: number, spa: number, spd: number, spe: number};
 type SparseStatsTable = Partial<StatsTable>;
-type BoostsTable = {[key:string]: number, atk: number, def: number, spa: number, spd: number, spe: number, accuracy: number, evasion: number};
+type BoostsTable = {atk: number, def: number, spa: number, spd: number, spe: number, accuracy: number, evasion: number};
 type SparseBoostsTable = Partial<BoostsTable>;
 type PokemonSet = {
 	name: string,
@@ -541,7 +541,7 @@ interface Move extends Effect, MoveData {
 	zPowered?: boolean
 }
 
-type TemplateAbility = {[key: string]: string | undefined, [index: number]: string | undefined, 0: string, 1?: string, H?: string, S?: string}
+type TemplateAbility = { 0: string, 1?: string, H?: string, S?: string}
 
 interface TemplateData {
 	abilities: TemplateAbility

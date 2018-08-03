@@ -439,6 +439,7 @@ let BattleScripts = {
 			let boosts = {};
 			let stolen = false;
 			for (let statName in target.boosts) {
+				// @ts-ignore
 				let stage = target.boosts[statName];
 				if (stage > 0) {
 					boosts[statName] = stage;
@@ -963,6 +964,7 @@ let BattleScripts = {
 			case 'clearnegativeboost':
 				let boosts = {};
 				for (let i in pokemon.boosts) {
+					// @ts-ignore
 					if (pokemon.boosts[i] < 0) {
 						boosts[i] = 0;
 					}

@@ -12,6 +12,7 @@ let BattleMovedex = {
 			}
 			let stats = [];
 			for (let stat in target.boosts) {
+				// @ts-ignore
 				if (target.boosts[stat] < 6) {
 					stats.push(stat);
 				}

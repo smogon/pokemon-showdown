@@ -23,7 +23,7 @@
 
 class Pokemon {
 	/**
-	 * @param {string | PokemonSet} set
+	 * @param {string | AnyObject} set
 	 * @param {Side} side
 	 */
 	constructor(set, side) {
@@ -35,13 +35,15 @@ class Pokemon {
 		let pokemonScripts = this.battle.data.Scripts.pokemon;
 		if (pokemonScripts) Object.assign(this, pokemonScripts);
 
-		if (typeof set === 'string') set = new this.battle.Data.PokemonSet({name: set});
+		if (typeof set === 'string') set = {name: set};
 
 		// "pre-bound" functions for nicer syntax
 		// allows them to be passed directly to Battle#add
 		this.getHealth = (/**@param {Side} side */side => this.getHealthInner(side));
 		this.getDetails = (/**@param {Side} side */side => this.getDetailsInner(side));
 
+		/** @type {PokemonSet} */
+		// @ts-ignore
 		this.set = set;
 
 		this.baseTemplate = this.battle.getTemplate(set.species || set.name);
@@ -238,13 +240,17 @@ class Pokemon {
 		}
 		let stats = {hp: 31, atk: 31, def: 31, spe: 31, spa: 31, spd: 31};
 		for (let i in stats) {
+			// @ts-ignore
 			if (!this.set.evs[i]) this.set.evs[i] = 0;
+			// @ts-ignore
 			if (!this.set.ivs[i] && this.set.ivs[i] !== 0) this.set.ivs[i] = 31;
 		}
 		for (let i in this.set.evs) {
+			// @ts-ignore
 			this.set.evs[i] = this.battle.clampIntRange(this.set.evs[i], 0, 255);
 		}
 		for (let i in this.set.ivs) {
+			// @ts-ignore
 			this.set.ivs[i] = this.battle.clampIntRange(this.set.ivs[i], 0, 31);
 		}
 		if (this.battle.gen && this.battle.gen <= 2) {
@@ -730,6 +736,7 @@ class Pokemon {
 	positiveBoosts() {
 		let boosts = 0;
 		for (let i in this.boosts) {
+			// @ts-ignore
 			if (this.boosts[i] > 0) boosts += this.boosts[i];
 		}
 		return boosts;
@@ -743,13 +750,20 @@ class Pokemon {
 		for (let i in boost) {
 			// @ts-ignore
 			delta = boost[i];
+			// @ts-ignore
 			this.boosts[i] += delta;
+			// @ts-ignore
 			if (this.boosts[i] > 6) {
+				// @ts-ignore
 				delta -= this.boosts[i] - 6;
+				// @ts-ignore
 				this.boosts[i] = 6;
 			}
+			// @ts-ignore
 			if (this.boosts[i] < -6) {
+				// @ts-ignore
 				delta -= this.boosts[i] - (-6);
+				// @ts-ignore
 				this.boosts[i] = -6;
 			}
 		}
@@ -758,15 +772,17 @@ class Pokemon {
 
 	clearBoosts() {
 		for (let i in this.boosts) {
+			// @ts-ignore
 			this.boosts[i] = 0;
 		}
 	}
 
 	/**
-	 * @param {AnyObject} boost
+	 * @param {SparseBoostsTable} boost
 	 */
 	setBoost(boost) {
 		for (let i in boost) {
+			// @ts-ignore
 			this.boosts[i] = boost[i];
 		}
 	}
@@ -845,6 +861,7 @@ class Pokemon {
 			this.moves.push(toId(moveName));
 		}
 		for (let j in pokemon.boosts) {
+			// @ts-ignore
 			this.boosts[j] = pokemon.boosts[j];
 		}
 		if (this.battle.gen >= 6 && pokemon.volatiles['focusenergy']) this.addVolatile('focusenergy');
@@ -908,8 +925,11 @@ class Pokemon {
 			let stats = this.battle.spreadModify(this.template.baseStats, this.set);
 			if (!this.baseStats) this.baseStats = stats;
 			for (let statName in this.stats) {
+				// @ts-ignore
 				this.stats[statName] = stats[statName];
+				// @ts-ignore
 				this.baseStats[statName] = stats[statName];
+				// @ts-ignore
 				if (this.modifiedStats) this.modifiedStats[statName] = stats[statName]; // Gen 1: Reset modified stats.
 			}
 			if (this.battle.gen <= 1) {

@@ -299,6 +299,7 @@ let BattleAbilities = {
 			for (let i in boost) {
 				// @ts-ignore
 				if (boost[i] < 0) {
+					// @ts-ignore
 					delete boost[i];
 					this.add("-message", target.name + "'s stats were not lowered! (placeholder)");
 				}
@@ -312,6 +313,7 @@ let BattleAbilities = {
 			for (let i in boost) {
 				// @ts-ignore
 				if (boost[i] < 0) {
+					// @ts-ignore
 					delete boost[i];
 					this.add("-message", target.name + "'s stats were not lowered! (placeholder)");
 				}

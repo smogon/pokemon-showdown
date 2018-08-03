@@ -884,6 +884,7 @@ let BattleMovedex = {
 				onHit: function (target, source) {
 					let stats = [];
 					for (let stat in target.boosts) {
+						// @ts-ignore
 						if (stat !== 'accuracy' && stat !== 'evasion' && stat !== 'atk' && target.boosts[stat] < 6) {
 							stats.push(stat);
 						}
@@ -916,6 +917,7 @@ let BattleMovedex = {
 				onHit: function (target, source) {
 					let stats = [];
 					for (let stat in target.boosts) {
+						// @ts-ignore
 						if (stat !== 'accuracy' && stat !== 'evasion' && stat !== 'atk' && target.boosts[stat] < 6) {
 							stats.push(stat);
 						}
@@ -942,6 +944,7 @@ let BattleMovedex = {
 				onHit: function (target, source) {
 					let stats = [];
 					for (let stat in target.boosts) {
+						// @ts-ignore
 						if (stat !== 'accuracy' && stat !== 'evasion' && stat !== 'atk' && target.boosts[stat] < 6) {
 							stats.push(stat);
 						}

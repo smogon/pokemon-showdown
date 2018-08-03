@@ -75,6 +75,7 @@ let BattleScripts = {
 			requiredItem: megaTemplate.requiredItem,
 		};
 		for (let statId in megaTemplate.baseStats) {
+			// @ts-ignore
 			deltas.baseStats[statId] = megaTemplate.baseStats[statId] - baseTemplate.baseStats[statId];
 		}
 		if (megaTemplate.types.length > baseTemplate.types.length) {
@@ -99,6 +100,7 @@ let BattleScripts = {
 			template.types = [template.types[0], deltas.type];
 		}
 		for (let statName in template.baseStats) {
+			// @ts-ignore
 			template.baseStats[statName] = this.clampIntRange(template.baseStats[statName] + deltas.baseStats[statName], 1, 255);
 		}
 		template.weightkg = Math.max(0.1, template.weightkg + deltas.weightkg);

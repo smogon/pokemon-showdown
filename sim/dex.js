@@ -678,10 +678,12 @@ class ModdedDex {
 		/**@type {StatsTable}*/
 		const modStats = {hp: 10, atk: 10, def: 10, spa: 10, spd: 10, spe: 10};
 		for (let statName in modStats) {
+			// @ts-ignore
 			let stat = stats[statName];
 			if (statName === 'hp') {
 				modStats['hp'] = Math.floor(Math.floor(2 * stat + set.ivs['hp'] + Math.floor(set.evs['hp'] / 4) + 100) * set.level / 100 + 10);
 			} else {
+				// @ts-ignore
 				modStats[statName] = Math.floor(Math.floor(2 * stat + set.ivs[statName] + Math.floor(set.evs[statName] / 4)) * set.level / 100 + 5);
 			}
 		}
@@ -693,7 +695,9 @@ class ModdedDex {
 	 */
 	natureModify(stats, nature) {
 		nature = this.getNature(nature);
+		// @ts-ignore
 		if (nature.plus) stats[nature.plus] = Math.floor(stats[nature.plus] * 1.1);
+		// @ts-ignore
 		if (nature.minus) stats[nature.minus] = Math.floor(stats[nature.minus] * 0.9);
 		return stats;
 	}
@@ -1215,7 +1219,7 @@ class ModdedDex {
 
 		// limit to 24
 		for (let count = 0; count < 24; count++) {
-			let set = new Data.PokemonSet({});
+			let set = /** @type {PokemonSet} */ ({});
 			team.push(set);
 
 			// name
