@@ -15,7 +15,7 @@ try {
 const filterWords = !data || typeof data !== 'object' ? {publicfilter: [], filter: [], autolock: [], namefilter: []} : data;
 
 function saveFilters() {
-	FS(MONITOR_FILE).write(JSON.stringify(filterWords));
+	FS(MONITOR_FILE).writeUpdate(() => JSON.stringify(filterWords));
 }
 
 /** @typedef {(this: CommandContext, target: string, room: ChatRoom, user: User, connection: Connection, cmd: string, message: string) => (void)} ChatHandler */
