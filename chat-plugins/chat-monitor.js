@@ -3,6 +3,7 @@
 const FS = require('../lib/fs');
 
 const MONITOR_FILE = 'config/chat-plugins/chat-monitor.json';
+const KEYS = ['publicfilter', 'filter', 'autolock', 'namefilter'];
 
 /** @type {{[k: string]: string[]}} */
 let filterWords;
@@ -13,12 +14,11 @@ let filterWords;
 	} catch (e) {
 		if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
 	}
-	filterWords = loadedFilterWords || {
-		publicfilter: [],
-		filter: [],
-		autolock: [],
-		namefilter: [],
-	};
+	filterWords = loadedFilterWords || {};
+
+	for (const key of KEYS) {
+		if (!filterWords[key]) filterWords[key] = [];
+	}
 }
 
 function saveFilters() {
