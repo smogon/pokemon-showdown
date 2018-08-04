@@ -10,9 +10,6 @@ let filterKeys = {publicwarn: ['PUBLIC', 'WARN'], warn: ['EVERYWHERE', 'WARN'], 
 
 /** @type {{[k: string]: string[]}} */
 let filterWords = {};
-for (const key in filterKeys) {
-	if (!filterWords[key]) filterWords[key] = [];
-}
 
 // Expose filterKeys and filterWords so they can be used by other plugins.
 // @ts-ignore
@@ -20,28 +17,34 @@ Chat.filterKeys = filterKeys;
 // @ts-ignore
 Chat.filterWords = filterWords;
 
-/*
- * Columns Location and Punishment use keywords. Possible values:
- *
- * Location: EVERYWHERE, PUBLIC, NAMES
- * Punishment: AUTOLOCK, WARN
- */
-FS(MONITOR_FILE).readIfExists().then(data => {
-	const lines = data.split('\n');
-	loop: for (const line of lines) {
-		if (!line || line === '\r') continue;
-		let [location, word, punishment] = line.split('\t').map(param => param.trim());
-		if (location === 'Location') continue;
-		if (!(location && word && punishment)) continue;
-
-		for (const key in filterKeys) {
-			if (filterKeys[key][0] === location && filterKeys[key][1] === punishment) {
-				filterWords[key].push(word);
-				continue loop;
-			}
-		}
-		throw new Error(`Unrecognized [location, punishment] pair for filter word entry: ${[location, word, punishment]}`);
+setImmediate(() => {
+	for (const key in filterKeys) {
+		if (!filterWords[key]) filterWords[key] = [];
 	}
+
+	/*
+	 * Columns Location and Punishment use keywords. Possible values:
+	 *
+	 * Location: EVERYWHERE, PUBLIC, NAMES
+	 * Punishment: AUTOLOCK, WARN
+	 */
+	FS(MONITOR_FILE).readIfExists().then(data => {
+		const lines = data.split('\n');
+		loop: for (const line of lines) {
+			if (!line || line === '\r') continue;
+			let [location, word, punishment] = line.split('\t').map(param => param.trim());
+			if (location === 'Location') continue;
+			if (!(location && word && punishment)) continue;
+
+			for (const key in filterKeys) {
+				if (filterKeys[key][0] === location && filterKeys[key][1] === punishment) {
+					filterWords[key].push(word);
+					continue loop;
+				}
+			}
+			throw new Error(`Unrecognized [location, punishment] pair for filter word entry: ${[location, word, punishment]}`);
+		}
+	});
 });
 
 /**
