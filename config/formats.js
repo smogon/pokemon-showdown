@@ -862,9 +862,9 @@ let Formats = [
 		banlist: ['Baton Pass', 'Dynamic Punch', 'Electrify', 'Zap Cannon'],
 		restrictedStones: ['Beedrillite', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Medichamite'],
 		cannotMega: [
-			'Arceus', 'Cresselia', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Dragonite', 'Genesect',
-			'Giratina', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lucario', 'Lugia', 'Manaphy',
-			'Mewtwo', 'Palkia', 'Rayquaza', 'Regigigas', 'Reshiram', 'Slaking', 'Xerneas', 'Yveltal', 'Zekrom',
+			'Arceus', 'Cresselia', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Dialga', 'Dragonite', 'Genesect', 'Giratina',
+			'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lucario', 'Lugia', 'Manaphy', 'Mewtwo',
+			'Palkia', 'Rayquaza', 'Regigigas', 'Reshiram', 'Shaymin-Sky', 'Slaking', 'Xerneas', 'Yveltal', 'Zekrom',
 		],
 		onValidateTeam: function (team) {
 			let itemTable = {};
