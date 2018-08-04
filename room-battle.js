@@ -25,6 +25,7 @@ const STARTING_TIME_CHALLENGE = 280;
 const MAX_TURN_TIME_CHALLENGE = 300;
 
 const DISCONNECTION_TICKS = 13;
+const DISCONNECTION_BANK_TICKS = 60;
 
 // time after a player disabling the timer before they can re-enable it
 const TIMER_COOLDOWN = 20 * 1000;
@@ -143,7 +144,7 @@ class BattleTimer {
 		const hasLongTurns = Dex.getFormat(battle.format, true).gameType !== 'singles';
 		const isChallenge = (!battle.rated && !battle.room.tour);
 		const timerSettings = Dex.getFormat(battle.format, true).timer;
-		/**@type {{perTurnTicks: number, startingTicks: number, maxPerTurnTicks: number, maxFirstTurnTicks: number, dcTimer: boolean, starting?: number, perTurn?: number, maxPerTurn?: number, maxFirstTurn?: number, timeoutAutoChoose?: boolean, accelerate?: boolean}} */
+		/**@type {{perTurnTicks: number, startingTicks: number, maxPerTurnTicks: number, maxFirstTurnTicks: number, dcTimer: boolean, dcTimerBank?: boolean, starting?: number, perTurn?: number, maxPerTurn?: number, maxFirstTurn?: number, timeoutAutoChoose?: boolean, accelerate?: boolean}} */
 		// @ts-ignore
 		this.settings = Object.assign({}, timerSettings);
 		if (this.settings.perTurn === undefined) {
@@ -164,11 +165,12 @@ class BattleTimer {
 			this.settings.accelerate = !timerSettings;
 		}
 		this.settings.dcTimer = !isChallenge;
+		if (this.settings.dcTimerBank === undefined) this.settings.dcTimerBank = isChallenge;
 
 		for (let slotNum = 0; slotNum < 2; slotNum++) {
 			this.ticksLeft.push(this.settings.startingTicks);
 			this.turnTicksLeft.push(-1);
-			this.dcTicksLeft.push(DISCONNECTION_TICKS);
+			this.dcTicksLeft.push(this.settings.dcTimerBank ? DISCONNECTION_BANK_TICKS : DISCONNECTION_TICKS);
 			this.connected.push(true);
 		}
 	}
@@ -251,30 +253,45 @@ class BattleTimer {
 		if (this.battle.ended) return;
 		for (const slotNum of this.ticksLeft.keys()) {
 			const slot = /** @type {PlayerSlot} */ ('p' + (slotNum + 1));
+			const connected = this.connected[slotNum];
 
 			if (!this.waitingForChoice(slot)) continue;
-			this.ticksLeft[slotNum]--;
-			this.turnTicksLeft[slotNum]--;
-
-			const connected = this.connected[slotNum];
-			if (!connected) {
+			if (!connected && this.dcTicksLeft[slotNum] > 0) {
 				this.dcTicksLeft[slotNum]--;
+				if (this.dcTicksLeft[slotNum] <= 0) {
+					this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has run out disconnection time!`).update();
+				}
+			} else {
+				this.ticksLeft[slotNum]--;
+				this.turnTicksLeft[slotNum]--;
 			}
 
 			let dcTicksLeft = this.dcTicksLeft[slotNum];
-			if (dcTicksLeft <= 0) this.turnTicksLeft[slotNum] = 0;
+			if (dcTicksLeft <= 0 && !this.settings.dcTimerBank) this.turnTicksLeft[slotNum] = 0;
 			const ticksLeft = this.turnTicksLeft[slotNum];
 			if (!ticksLeft) continue;
 
-			if (!connected && dcTicksLeft <= ticksLeft) {
-				// dc timer is shown only if it's lower than turn timer
-				if (dcTicksLeft <= 4) {
-					this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${dcTicksLeft * TICK_TIME} seconds to reconnect!`).update();
+			if (!this.settings.dcTimerBank) {
+				if (!connected && dcTicksLeft <= ticksLeft) {
+					// dc timer is shown only if it's lower than turn timer
+					if (dcTicksLeft <= 4) {
+						this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${dcTicksLeft * TICK_TIME} seconds to reconnect!`).update();
+					}
+				} else {
+					// regular turn timer shown
+					if (ticksLeft % 3 === 0 || ticksLeft <= 4) {
+						this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${ticksLeft * TICK_TIME} seconds left.`).update();
+					}
 				}
 			} else {
-				// regular turn timer shown
-				if (ticksLeft % 3 === 0 || ticksLeft <= 4) {
-					this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${ticksLeft * TICK_TIME} seconds left.`).update();
+				if (!connected && dcTicksLeft > 0) {
+					if (dcTicksLeft <= 4 || dcTicksLeft % 3 === 0) {
+						this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${dcTicksLeft * TICK_TIME} seconds left of disconnection time.`).update();
+					}
+				} else {
+					if (ticksLeft % 3 === 0 || ticksLeft <= 4) {
+						this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${ticksLeft * TICK_TIME} seconds left.`).update();
+					}
 				}
 			}
 		}
@@ -291,20 +308,32 @@ class BattleTimer {
 			if (isConnected === this.connected[slotNum]) continue;
 
 			if (!isConnected) {
-				// player has disconnected: don't wait longer than 6 ticks (1 minute)
+				// player has disconnected
 				this.connected[slotNum] = false;
-				if (this.settings.dcTimer) {
-					this.dcTicksLeft[slotNum] = DISCONNECTION_TICKS;
-				} else {
-					// arbitrary large number
-					this.dcTicksLeft[slotNum] = DISCONNECTION_TICKS * 10;
-				}
-				if (this.timerRequesters.size) {
+				if (!this.settings.dcTimerBank) {
+					// don't wait longer than 6 ticks (1 minute)
 					if (this.settings.dcTimer) {
-						this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} disconnected and has a minute to reconnect!`).update();
+						this.dcTicksLeft[slotNum] = DISCONNECTION_TICKS;
 					} else {
-						this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} disconnected!`).update();
+						// arbitrary large number
+						this.dcTicksLeft[slotNum] = DISCONNECTION_TICKS * 10;
 					}
+				}
+
+				if (this.timerRequesters.size) {
+					let msg = `!`;
+
+					if (this.settings.dcTimer) {
+						msg = ` and has a minute to reconnect!`;
+					}
+					if (this.settings.dcTimerBank) {
+						if (this.dcTicksLeft[slotNum] > 0) {
+							msg = ` and has ${this.dcTicksLeft[slotNum] * TICK_TIME} seconds left of disconnection time!`;
+						} else {
+							msg = ` and has no disconnection time left!`;
+						}
+					}
+					this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} disconnected${msg}`).update();
 				}
 			} else {
 				// player has reconnected
