@@ -2,27 +2,73 @@
 
 const FS = require('../lib/fs');
 
-const MONITOR_FILE = 'config/chat-plugins/chat-monitor.json';
-const KEYS = ['publicfilter', 'filter', 'autolock', 'namefilter'];
+const MONITOR_FILE = 'config/chat-plugins/chat-monitor.tsv';
+const COLUMNS = 'Location\tWord\tPunishment\r\n';
 
 /** @type {{[k: string]: string[]}} */
-let filterWords;
-{
-	let loadedFilterWords;
-	try {
-		loadedFilterWords = require(`../${MONITOR_FILE}`);
-	} catch (e) {
-		if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
-	}
-	filterWords = loadedFilterWords || {};
+let filterKeys = {publicwarn: ['PUBLIC', 'WARN'], warn: ['EVERYWHERE', 'WARN'], autolock: ['EVERYWHERE', 'AUTOLOCK'], namefilter: ['NAMES', 'WARN']};
 
-	for (const key of KEYS) {
-		if (!filterWords[key]) filterWords[key] = [];
+/** @type {{[k: string]: string[]}} */
+let filterWords = {};
+for (const key in filterKeys) {
+	if (!filterWords[key]) filterWords[key] = [];
+}
+
+// Expose filterKeys and filterWords so they can be used by other plugins.
+// @ts-ignore
+Chat.filterKeys = filterKeys;
+// @ts-ignore
+Chat.filterWords = filterWords;
+
+/*
+ * Columns Location and Punishment use keywords. Possible values:
+ *
+ * Location: EVERYWHERE, PUBLIC, NAMES
+ * Punishment: AUTOLOCK, WARN
+ */
+FS(MONITOR_FILE).readIfExists().then(data => {
+	const lines = data.split('\n');
+	loop: for (const line of lines) {
+		if (!line || line === '\r') continue;
+		let [location, word, punishment] = line.split('\t').map(param => param.trim());
+		if (location === 'Location') continue;
+		if (!(location && word && punishment)) continue;
+
+		for (const key in filterKeys) {
+			if (filterKeys[key][0] === location && filterKeys[key][1] === punishment) {
+				filterWords[key].push(word);
+				continue loop;
+			}
+		}
+		throw new Error(`Unrecognized [location, punishment] pair for filter word entry: ${[location, word, punishment]}`);
 	}
+});
+
+/**
+ * @param {string} location
+ * @param {string} word
+ * @param {string} punishment
+ */
+function renderEntry(location, word, punishment) {
+	return `${location}\t${word}\t${punishment}\r\n`;
 }
 
 function saveFilters() {
-	FS(MONITOR_FILE).writeUpdate(() => JSON.stringify(filterWords));
+	FS(MONITOR_FILE).writeUpdate(() => {
+		let buf = COLUMNS;
+		for (const key in filterKeys) {
+			buf += filterWords[key].map(word => renderEntry(filterKeys[key][0], word, filterKeys[key][1])).join('');
+		}
+		return buf;
+	});
+}
+
+/**
+ * @param {string} key
+ * @param {string} word
+ */
+function appendEntry(key, word) {
+	FS(MONITOR_FILE).append(renderEntry(filterKeys[key][0], word, filterKeys[key][1]));
 }
 
 /** @typedef {(this: CommandContext, target: string, room: ChatRoom, user: User, connection: Connection, cmd: string, message: string) => (void)} ChatHandler */
@@ -61,7 +107,7 @@ let chatfilter = function (message, user, room, connection, targetUser) {
 			return false;
 		}
 	}
-	for (let line of filterWords.filter) {
+	for (let line of filterWords.warn) {
 		let matched = false;
 		if (line.charAt(line.length - 1) === '•') {
 			line = line.slice(0, -1);
@@ -82,7 +128,7 @@ let chatfilter = function (message, user, room, connection, targetUser) {
 		}
 	}
 	if ((room && room.isPrivate !== true) || !room) {
-		for (let line of filterWords.publicfilter) {
+		for (let line of filterWords.publicwarn) {
 			let matched = false;
 			if (line.charAt(line.length - 1) === '•') {
 				line = line.slice(0, -1);
@@ -123,13 +169,13 @@ let namefilter = function (name, user) {
 			return '';
 		}
 	}
-	for (let line of filterWords.filter) {
+	for (let line of filterWords.warn) {
 		if (lcName.includes(line)) {
 			user.trackRename = name;
 			return '';
 		}
 	}
-	for (let line of filterWords.publicfilter) {
+	for (let line of filterWords.publicwarn) {
 		if (lcName.includes(line)) {
 			user.trackRename = name;
 			return '';
@@ -166,7 +212,9 @@ let commands = {
 		if (duplicates.length) return this.errorReply(`${duplicates.join(', ')} ${Chat.plural(duplicates, "are", "is")} already added to the ${list} list.`);
 		filterWords[list] = filterWords[list].concat(words);
 		this.globalModlog(`ADDFILTER`, null, `'${words.join(', ')}' to ${list} list by ${user.name}`);
-		saveFilters();
+		for (const word of words) {
+			appendEntry(list, word);
+		}
 		return this.sendReply(`'${words.join(', ')}' ${Chat.plural(words, "were", "was")} added to the ${list} list.`);
 	},
 	removefilterword: function (target, room, user) {
@@ -190,11 +238,11 @@ let commands = {
 		if (!this.can('lock')) return false;
 
 		let content = '';
-		if (filterWords.publicfilter.length) {
-			content += `<td style="padding: 5px 10px;vertical-align:top;"><p style="font-weight:bold;text-align:center;">Filtered in public rooms:</p>${filterWords.publicfilter.map(str => `<p style="text-align:center;margin:0px;">${str}</p>`).join('')}</td>`;
+		if (filterWords.publicwarn.length) {
+			content += `<td style="padding: 5px 10px;vertical-align:top;"><p style="font-weight:bold;text-align:center;">Filtered in public rooms:</p>${filterWords.publicwarn.map(str => `<p style="text-align:center;margin:0px;">${str}</p>`).join('')}</td>`;
 		}
-		if (filterWords.filter.length) {
-			content += `<td style="padding: 5px 10px;vertical-align:top;"><p style="font-weight:bold;text-align:center;">Filtered:</p>${filterWords.filter.map(str => `<p style="text-align:center;margin:0px;">${str}</p>`).join('')}</td>`;
+		if (filterWords.warn.length) {
+			content += `<td style="padding: 5px 10px;vertical-align:top;"><p style="font-weight:bold;text-align:center;">Filtered:</p>${filterWords.warn.map(str => `<p style="text-align:center;margin:0px;">${str}</p>`).join('')}</td>`;
 		}
 		if (filterWords.autolock.length) {
 			content += `<td style="padding: 5px 10px;vertical-align:top;"><p style="font-weight:bold;text-align:center;">Weeklock:</p>${filterWords.autolock.map(str => `<p style="text-align:center;margin:0px;">${str}</p>`).join('')}</td>`;
