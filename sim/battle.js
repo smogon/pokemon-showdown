@@ -2598,7 +2598,7 @@ class Battle extends Dex.ModdedDex {
 				if (action.zmove) {
 					let zMoveName = this.getZMove(action.move, action.pokemon, true);
 					let zMove = this.getMove(zMoveName);
-					if (zMove.exists) {
+					if (zMove.exists && zMove.isZ) {
 						move = zMove;
 					}
 				}
