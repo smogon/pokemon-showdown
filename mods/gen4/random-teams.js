@@ -124,8 +124,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 					if (!(hasMove['calmmind'] && (hasMove['recover'] || hasMove['roost']))) rejected = true;
 					break;
 				case 'rest':
-					if (movePool.includes('sleeptalk')) rejected = true;
-					if (hasAbility['Hydration'] && !hasMove['raindance']) rejected = true;
+					if (movePool.includes('sleeptalk') || hasAbility['Hydration'] && !hasMove['raindance']) rejected = true;
 					break;
 				case 'sleeptalk':
 					if (!hasMove['rest']) rejected = true;
