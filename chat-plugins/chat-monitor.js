@@ -5,17 +5,8 @@ const FS = require('../lib/fs');
 const MONITOR_FILE = 'config/chat-plugins/chat-monitor.tsv';
 const COLUMNS = 'Location\tWord\tPunishment\r\n';
 
-/** @type {{[k: string]: string[]}} */
-let filterKeys = {publicwarn: ['PUBLIC', 'WARN'], warn: ['EVERYWHERE', 'WARN'], autolock: ['EVERYWHERE', 'AUTOLOCK'], namefilter: ['NAMES', 'WARN']};
-
-/** @type {{[k: string]: string[]}} */
-let filterWords = {};
-
-// Expose filterKeys and filterWords so they can be used by other plugins.
-// @ts-ignore
-Chat.filterKeys = filterKeys;
-// @ts-ignore
-Chat.filterWords = filterWords;
+let filterKeys = Chat.filterKeys = Object.assign(Chat.filterKeys, {publicwarn: ['PUBLIC', 'WARN'], warn: ['EVERYWHERE', 'WARN'], autolock: ['EVERYWHERE', 'AUTOLOCK'], namefilter: ['NAMES', 'WARN']});
+let filterWords = Chat.filterWords;
 
 setImmediate(() => {
 	for (const key in filterKeys) {

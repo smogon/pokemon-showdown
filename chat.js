@@ -1586,3 +1586,9 @@ Chat.stringify = function (value, depth = 0) {
 Chat.formatText = require('./chat-formatter').formatText;
 Chat.linkRegex = require('./chat-formatter').linkRegex;
 Chat.updateServerLock = false;
+
+// Used (and populated) by ChatMonitor.
+/** @type {{[k: string]: string[]}} */
+Chat.filterKeys = {};
+/** @type {{[k: string]: string[]}} */
+Chat.filterWords = {};
