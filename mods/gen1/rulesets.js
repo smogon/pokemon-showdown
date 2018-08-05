@@ -29,6 +29,9 @@ let BattleFormats = {
 				problems.push((set.name || set.species) + ' has more than four moves.');
 			}
 
+			if (set.evs) set.evs['spd'] = set.evs['spa'];
+			if (set.ivs) set.ivs['spd'] = set.ivs['spa'];
+
 			// Let's manually delete items.
 			set.item = '';
 
