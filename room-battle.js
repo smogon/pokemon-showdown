@@ -258,40 +258,25 @@ class BattleTimer {
 			if (!this.waitingForChoice(slot)) continue;
 			if (!connected && this.dcTicksLeft[slotNum] > 0) {
 				this.dcTicksLeft[slotNum]--;
-				if (this.dcTicksLeft[slotNum] <= 0) {
-					this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has run out disconnection time!`).update();
-				}
 			} else {
 				this.ticksLeft[slotNum]--;
 				this.turnTicksLeft[slotNum]--;
 			}
 
 			let dcTicksLeft = this.dcTicksLeft[slotNum];
-			if (dcTicksLeft <= 0 && !this.settings.dcTimerBank) this.turnTicksLeft[slotNum] = 0;
+			if (dcTicksLeft <= 0) this.turnTicksLeft[slotNum] = 0;
 			const ticksLeft = this.turnTicksLeft[slotNum];
 			if (!ticksLeft) continue;
 
-			if (!this.settings.dcTimerBank) {
-				if (!connected && dcTicksLeft <= ticksLeft) {
-					// dc timer is shown only if it's lower than turn timer
-					if (dcTicksLeft <= 4) {
-						this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${dcTicksLeft * TICK_TIME} seconds to reconnect!`).update();
-					}
-				} else {
-					// regular turn timer shown
-					if (ticksLeft % 3 === 0 || ticksLeft <= 4) {
-						this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${ticksLeft * TICK_TIME} seconds left.`).update();
-					}
+			if (!connected && (dcTicksLeft <= ticksLeft || this.settings.dcTimerBank)) {
+				// dc timer is shown only if it's lower than turn timer or you're in timer bank mode
+				if (dcTicksLeft % 6 === 0 || dcTicksLeft <= 4) {
+					this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${dcTicksLeft * TICK_TIME} seconds to reconnect!`).update();
 				}
 			} else {
-				if (!connected && dcTicksLeft > 0) {
-					if (dcTicksLeft <= 4 || dcTicksLeft % 3 === 0) {
-						this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${dcTicksLeft * TICK_TIME} seconds left of disconnection time.`).update();
-					}
-				} else {
-					if (ticksLeft % 3 === 0 || ticksLeft <= 4) {
-						this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${ticksLeft * TICK_TIME} seconds left.`).update();
-					}
+				// regular turn timer shown
+				if (ticksLeft % 6 === 0 || ticksLeft <= 4) {
+					this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${ticksLeft * TICK_TIME} seconds left.`).update();
 				}
 			}
 		}
@@ -328,7 +313,7 @@ class BattleTimer {
 					}
 					if (this.settings.dcTimerBank) {
 						if (this.dcTicksLeft[slotNum] > 0) {
-							msg = ` and has ${this.dcTicksLeft[slotNum] * TICK_TIME} seconds left of disconnection time!`;
+							msg = ` and has ${this.dcTicksLeft[slotNum] * TICK_TIME} seconds to reconnect!`;
 						} else {
 							msg = ` and has no disconnection time left!`;
 						}
