@@ -461,10 +461,10 @@ let Formats = [
 			}
 			pokemon.formeChange(template, this.getFormat(), true, '', abilitySlot);
 			this.add('-message', `${pokemon.name} has devolved into ${template.species}!`);
-			pokemon.cureStatus(true);
 			let newHP = Math.floor(Math.floor(2 * pokemon.template.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100) * pokemon.level / 100 + 10);
 			pokemon.maxhp = pokemon.hp = newHP;
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+			pokemon.cureStatus(true);
 			let learnset = template.learnset || this.getTemplate(template.baseSpecies).learnset || {};
 			let prevoset = template.prevo && this.getTemplate(template.prevo).learnset || {};
 			for (const moveSlot of pokemon.baseMoveSlots) {
