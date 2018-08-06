@@ -379,13 +379,11 @@ class ModdedDex {
 			}
 			if (!template.tier && !template.doublesTier && template.baseSpecies !== template.species) {
 				if (template.baseSpecies === 'Mimikyu') {
-					// @ts-ignore
-					template.tier = this.data.FormatsData[toId(template.baseSpecies)].tier;
-					// @ts-ignore
-					template.doublesTier = this.data.FormatsData[toId(template.baseSpecies)].doublesTier;
+					template.tier = this.data.FormatsData[toId(template.baseSpecies)].tier || 'Illegal';
+					template.doublesTier = this.data.FormatsData[toId(template.baseSpecies)].doublesTier || 'Illegal';
 				} else if (template.speciesid.endsWith('totem')) {
-					template.tier = this.data.FormatsData[template.speciesid.slice(0, -5)].tier || 'OU';
-					template.doublesTier = this.data.FormatsData[template.speciesid.slice(0, -5)].doublesTier || 'DOU';
+					template.tier = this.data.FormatsData[template.speciesid.slice(0, -5)].tier || 'Illegal';
+					template.doublesTier = this.data.FormatsData[template.speciesid.slice(0, -5)].doublesTier || 'Illegal';
 				} else {
 					template.tier = this.data.FormatsData[toId(template.baseSpecies)].tier || 'Illegal';
 					template.doublesTier = this.data.FormatsData[toId(template.baseSpecies)].doublesTier || 'Illegal';
@@ -480,7 +478,6 @@ class ModdedDex {
 		}
 		let id = toId(name);
 		let effect;
-		let otherEffects = {recoil: 'Recoil', drain: 'Drain', zpower: 'Z Power'};
 		if (this.data.Statuses.hasOwnProperty(id)) {
 			effect = new Data.PureEffect({name}, this.data.Statuses[id]);
 		} else if (this.data.Movedex.hasOwnProperty(id) && this.data.Movedex[id].effect) {
@@ -494,8 +491,10 @@ class ModdedDex {
 			effect = new Data.PureEffect({name}, this.data.Items[id].effect);
 		} else if (this.data.Formats.hasOwnProperty(id)) {
 			effect = new Data.Format({name}, this.data.Formats[id]);
-		} else if (otherEffects[id]) {
-			effect = new Data.PureEffect({name: otherEffects[id], effectType: otherEffects[id]});
+		} else if (id === 'recoil') {
+			effect = new Data.PureEffect({name: 'Recoil', effectType: 'Recoil'});
+		} else if (id === 'drain') {
+			effect = new Data.PureEffect({name: 'Drain', effectType: 'Drain'});
 		} else {
 			effect = new Data.PureEffect({name, exists: false});
 		}
@@ -671,27 +670,30 @@ class ModdedDex {
 		return nature;
 	}
 	/**
-	 * @param {StatsTable} stats
+	 * Given a table of base stats and a pokemon set, return the actual stats.
+	 * @param {StatsTable} baseStats
 	 * @param {PokemonSet} set
+	 * @return {StatsTable}
 	 */
-	spreadModify(stats, set) {
-		/**@type {StatsTable}*/
-		const modStats = {hp: 10, atk: 10, def: 10, spa: 10, spd: 10, spe: 10};
+	spreadModify(baseStats, set) {
+		/** @type {any} */
+		const modStats = {atk: 10, def: 10, spa: 10, spd: 10, spe: 10};
 		for (let statName in modStats) {
 			// @ts-ignore
-			let stat = stats[statName];
-			if (statName === 'hp') {
-				modStats['hp'] = Math.floor(Math.floor(2 * stat + set.ivs['hp'] + Math.floor(set.evs['hp'] / 4) + 100) * set.level / 100 + 10);
-			} else {
-				// @ts-ignore
-				modStats[statName] = Math.floor(Math.floor(2 * stat + set.ivs[statName] + Math.floor(set.evs[statName] / 4)) * set.level / 100 + 5);
-			}
+			let stat = baseStats[statName];
+			// @ts-ignore
+			modStats[statName] = Math.floor(Math.floor(2 * stat + set.ivs[statName] + Math.floor(set.evs[statName] / 4)) * set.level / 100 + 5);
+		}
+		if ('hp' in baseStats) {
+			let stat = baseStats['hp'];
+			modStats['hp'] = Math.floor(Math.floor(2 * stat + set.ivs['hp'] + Math.floor(set.evs['hp'] / 4) + 100) * set.level / 100 + 10);
 		}
 		return this.natureModify(modStats, set.nature);
 	}
 	/**
 	 * @param {StatsTable} stats
 	 * @param {string | AnyObject} nature
+	 * @return {StatsTable}
 	 */
 	natureModify(stats, nature) {
 		nature = this.getNature(nature);
@@ -1280,7 +1282,7 @@ class ModdedDex {
 			// gender
 			j = buf.indexOf('|', i);
 			if (j < 0) return null;
-			if (i !== j) set.gender = {M: 'M', F: 'F', N: 'N'}[buf.substring(i, j)] || '';
+			if (i !== j) set.gender = buf.substring(i, j);
 			i = j + 1;
 
 			// ivs

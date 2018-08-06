@@ -937,17 +937,17 @@ class Move extends Effect {
 		/**
 		 * Secondary effect. You usually don't want to access this
 		 * directly; but through the secondaries array.
-		 * @type {false | SecondaryEffect | undefined}
+		 * @type {SecondaryEffect | null}
 		 */
-		this.secondary = this.secondary;
+		this.secondary = this.secondary || null;
 
 		/**
 		 * Secondary effects. An array because there can be more than one
 		 * (for instance, Fire Fang has both a burn and a flinch
 		 * secondary).
-		 * @type {false | SecondaryEffect[] | undefined}
+		 * @type {SecondaryEffect[] | null}
 		 */
-		this.secondaries = this.secondaries || (this.secondary && typeof this.secondary !== 'boolean' && [this.secondary]);
+		this.secondaries = this.secondaries || (this.secondary && [this.secondary]) || null;
 
 		/**
 		 * Move priority. Higher priorities go before lower priorities,

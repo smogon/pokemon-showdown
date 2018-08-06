@@ -48,15 +48,15 @@ describe('Team Validator', function () {
 	});
 
 	it('should validate Gen 2 IVs', function () {
-		let team = Dex.fastUnpackTeam('|raikou|||hiddenpowerwater||1||14,28,26,,,|||');
+		let team = Dex.fastUnpackTeam('|raikou|||hiddenpowerwater||||14,28,26,,,|||');
 		let illegal = TeamValidator('gen2ou').validateTeam(team);
 		assert.strictEqual(illegal, null);
 
-		team = Dex.fastUnpackTeam('|raikou|||hiddenpowerfire||1||14,28,26,,,|||');
+		team = Dex.fastUnpackTeam('|raikou|||hiddenpowerfire||||14,28,26,,,|||');
 		illegal = TeamValidator('gen2ou').validateTeam(team);
 		assert(illegal);
 
-		team = Dex.fastUnpackTeam('|raikou|||hiddenpowerwater||1||16,28,26,,,|||');
+		team = Dex.fastUnpackTeam('|raikou|||hiddenpowerwater||||16,28,26,,,|||');
 		illegal = TeamValidator('gen2ou').validateTeam(team);
 		assert(illegal);
 	});

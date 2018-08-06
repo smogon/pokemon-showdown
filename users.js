@@ -115,12 +115,14 @@ function merge(user1, user2) {
  */
 function getUser(name, exactName = false) {
 	if (!name || name === '!') return null;
-	if (name && typeof name !== 'string') return name;
+	// @ts-ignore
+	if (name && name.userid) return name;
 	let userid = toId(name);
 	let i = 0;
 	if (!exactName) {
 		while (userid && !users.has(userid) && i < 1000) {
-			userid = prevUsers.get(userid) || '';
+			// @ts-ignore
+			userid = prevUsers.get(userid);
 			i++;
 		}
 	}
@@ -323,7 +325,8 @@ function isUsernameKnown(name) {
  * @param {string | User} name
  */
 function isTrusted(name) {
-	if (typeof name !== 'string') return name.trusted || false;
+	// @ts-ignore
+	if (name.trusted) return name.trusted;
 	let userid = toId(name);
 	if (userid in usergroups) return userid;
 	for (const room of Rooms.global.chatRooms) {
@@ -373,7 +376,8 @@ class Connection {
  	* @param {string} data
  	*/
 	sendTo(roomid, data) {
-		if (roomid && typeof roomid !== 'string') roomid = roomid.id;
+		// @ts-ignore
+		if (roomid && roomid.id) roomid = roomid.id;
 		if (roomid && roomid !== 'lobby') data = `>${roomid}\n${data}`;
 		Sockets.socketSend(this.worker, this.socketid, data);
 		Monitor.countNetworkUse(data.length);
@@ -518,7 +522,8 @@ class User {
 	 * @param {string} data
 	 */
 	sendTo(roomid, data) {
-		if (roomid && typeof roomid !== 'string') roomid = roomid.id;
+		// @ts-ignore
+		if (roomid && roomid.id) roomid = roomid.id;
 		if (roomid && roomid !== 'global' && roomid !== 'lobby') data = `>${roomid}\n${data}`;
 		for (const connection of this.connections) {
 			if (roomid && !connection.inRooms.has(roomid)) continue;
@@ -1251,7 +1256,8 @@ class User {
 	 * @param {Connection} connection
 	 */
 	tryJoinRoom(roomid, connection) {
-		roomid = /** @type {string} */ (roomid && typeof roomid !== 'string' ? roomid.id : roomid);
+		// @ts-ignore
+		roomid = /** @type {string} */ (roomid && roomid.id ? roomid.id : roomid);
 		let room = Rooms.search(roomid);
 		if (!room && roomid.startsWith('view-')) {
 			// it's a page!

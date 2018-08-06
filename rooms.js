@@ -81,7 +81,7 @@ class BasicRoom {
 
 		// room settings
 
-		/** @type {Partial<BasicRoom>?} */
+		/** @type {AnyObject?} */
 		this.chatRoomData = null;
 		/** @type {boolean | 'hidden' | 'voice'} */
 		this.isPrivate = false;
@@ -385,7 +385,7 @@ class GlobalRoom extends BasicRoom {
 	/**
 	 * @param {string} roomid
 	 */
-	constructor(roomid = 'global') {
+	constructor(roomid) {
 		if (roomid !== 'global') throw new Error(`The global room's room ID must be 'global'`);
 		super(roomid);
 
@@ -394,7 +394,7 @@ class GlobalRoom extends BasicRoom {
 		/** @type {false} */
 		this.active = false;
 		/** @type {null} */
-		// @ts-ignore Typescript bug?
+		// @ts-ignore TypeScript bug: ignoring null type
 		this.chatRoomData = null;
 		/**@type {boolean | 'pre' | 'ddos'} */
 		this.lockdown = false;
@@ -867,7 +867,8 @@ class GlobalRoom extends BasicRoom {
 	startLockdown(err, slow = false) {
 		if (this.lockdown && err) return;
 		let devRoom = Rooms('development');
-		const stack = (err.stack ? Chat.escapeHTML(err.stack).split(`\n`).slice(0, 2).join(`<br />`) : ``);
+		// @ts-ignore
+		const stack = (err ? Chat.escapeHTML(err.stack).split(`\n`).slice(0, 2).join(`<br />`) : ``);
 		for (const [id, curRoom] of Rooms.rooms) {
 			if (id === 'global') continue;
 			if (err) {
@@ -948,7 +949,8 @@ class GlobalRoom extends BasicRoom {
 			return;
 		}
 		this.lastReportedCrash = time;
-		const stack = (err.stack ? Chat.escapeHTML(err.stack).split(`\n`).slice(0, 2).join(`<br />`) : ``);
+		// @ts-ignore
+		const stack = (err ? Chat.escapeHTML(err.stack).split(`\n`).slice(0, 2).join(`<br />`) : ``);
 		const crashMessage = `|html|<div class="broadcast-red"><b>The server has crashed:</b> ${stack}</div>`;
 		const devRoom = Rooms('development');
 		if (devRoom) {
@@ -965,7 +967,7 @@ class BasicChatRoom extends BasicRoom {
 	/**
 	 * @param {string} roomid
 	 * @param {string} [title]
-	 * @param {Partial<BasicChatRoom> & Partial<Roomlog>} [options]
+	 * @param {AnyObject} [options]
 	 */
 	constructor(roomid, title, options = {}) {
 		super(roomid, title);
@@ -978,7 +980,6 @@ class BasicChatRoom extends BasicRoom {
 		if (options.batchJoins === undefined) {
 			options.batchJoins = options.isPersonal ? 0 : Config.reportjoinsperiod || 0;
 		}
-		/** @type {Roomlog} */
 		this.log = Roomlogs.create(this, options);
 
 		/** @type {any} */
@@ -1003,12 +1004,9 @@ class BasicChatRoom extends BasicRoom {
 		/** @type {string[]} */
 		this.banwords = [];
 
-		/** @type {(Partial<BasicChatRoom> & Partial<Roomlog>)?} */
 		this.chatRoomData = (options.isPersonal ? null : options);
 		Object.assign(this, options);
 		if (this.auth) Object.setPrototypeOf(this.auth, null);
-		/** @type {string?} */
-		this.parentid = this.parentid || null;
 		/** @type {Room?} */
 		this.parent = null;
 		if (options.parentid) {
@@ -1031,10 +1029,11 @@ class BasicChatRoom extends BasicRoom {
 		// TypeScript bug: subclass null
 		this.muteTimer = /** @type {NodeJS.Timer?} */ (null);
 
+		/** @type {NodeJS.Timer?} */
+		this.logUserStatsInterval = null;
 		if (Config.logchat) {
 			this.roomlog('NEW CHATROOM: ' + this.id);
 			if (Config.loguserstats) {
-				/** @type {NodeJS.Timer?} */
 				this.logUserStatsInterval = setInterval(() => this.logUserStats(), Config.loguserstats);
 			}
 		}
@@ -1272,6 +1271,13 @@ class BasicChatRoom extends BasicRoom {
 	destroy() {
 		// deallocate ourself
 
+		if (this.battle && this.tour) {
+			// resolve state of the tournament;
+			// @ts-ignore
+			if (!this.battle.ended) this.tour.onBattleWin(this, '');
+			this.tour = /** @type {any} */ (null);
+		}
+
 		// remove references to ourself
 		for (let i in this.users) {
 			// @ts-ignore
@@ -1330,7 +1336,8 @@ class ChatRoom extends BasicChatRoom {
 	// TypeScript happy
 	constructor() {
 		super('');
-		/** @type {RoomBattle?} */
+		/** @type {null} */
+		// @ts-ignore TypeScript bug: ignoring null type
 		this.battle = null;
 		this.active = false;
 		/** @type {'chat'} */
@@ -1458,15 +1465,6 @@ class GameRoom extends BasicChatRoom {
 		this.sendUser(connection, '|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user));
 		if (this.game && this.game.onConnect) this.game.onConnect(user, connection);
 	}
-
-	destroy() {
-		if (this.battle && this.tour) {
-			// resolve state of the tournament;
-			if (!this.battle.ended) this.tour.onBattleWin(this, '');
-			this.tour = null;
-		}
-		super.destroy();
-	}
 }
 
 /**
@@ -1474,7 +1472,8 @@ class GameRoom extends BasicChatRoom {
  * @return {Room}
  */
 function getRoom(roomid) {
-	if (roomid && typeof roomid !== 'string') return roomid;
+	// @ts-ignore
+	if (roomid && roomid.id) return roomid;
 	// @ts-ignore
 	return Rooms.rooms.get(roomid);
 }
@@ -1606,9 +1605,11 @@ let Rooms = Object.assign(getRoom, {
 // initialize
 
 Monitor.notice("NEW GLOBAL: global");
-// @ts-ignore Typescript bug
+// @ts-ignore
 Rooms.global = new GlobalRoom('global');
-// @ts-ignore Typescript bug
+
+// @ts-ignore
 Rooms.rooms.set('global', Rooms.global);
+
 // @ts-ignore
 module.exports = Rooms;

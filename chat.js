@@ -792,12 +792,13 @@ class CommandContext {
 	 * @param {User?} [targetUser]
 	 */
 	canTalk(message = null, room = null, targetUser = null) {
-		if (this.room instanceof Rooms.GlobalRoom) {
-			// should never happen
-			// console.log(`Command tried to write to global: ${user.name}: ${message}`);
-			return false;
+		if (!room) {
+			if (this.room instanceof Rooms.GlobalRoom) {
+				// should never happen
+				throw new Error(`Command tried to write to global: ${this.user.name}: ${message}`);
+			}
+			room = this.room;
 		}
-		if (!room) room = this.room;
 		if (!targetUser && this.pmTarget) {
 			room = null;
 			targetUser = this.pmTarget;
@@ -836,7 +837,7 @@ class CommandContext {
 					return false;
 				}
 				if (!(user.userid in room.users)) {
-					connection.popup("You can't send a message to this room without being in it.");
+					connection.popup(`You can't send a message to this room without being in it.`);
 					return false;
 				}
 			}
@@ -910,7 +911,7 @@ class CommandContext {
 
 		if (!this.checkSlowchat(room, user)) {
 			// @ts-ignore ~ The truthiness of room and room.slowchat are evaluated in checkSlowchat
-			this.errorReply("This room has slow-chat enabled. You can only talk once every " + room.slowchat + " seconds.");
+			this.errorReply(`This room has slow-chat enabled. You can only talk once every ${room.slowchat} seconds.`);
 			return false;
 		}
 

@@ -48,7 +48,7 @@ let BattleItems = {
 					priority: action.priority + 0.1,
 					pokemon: action.pokemon,
 					move: action.move,
-					target: action.targetLoc,
+					targetLoc: action.targetLoc,
 				});
 			}
 		},

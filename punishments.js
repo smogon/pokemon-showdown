@@ -1483,12 +1483,11 @@ Punishments.isRoomBanned = function (user, roomid) {
  * options.publicOnly will make this only return public room punishments.
  * options.checkIps will also check the IP of the user for IP-based punishments.
  *
- * @param {User? | string} user
+ * @param {User | string} user
  * @param {Object?} options
  * @return {Array}
  */
 Punishments.getRoomPunishments = function (user, options) {
-	if (typeof user === 'string') user = Users(user);
 	if (!user) return [];
 	let userid = toId(user);
 	let checkMutes = typeof user !== 'string';
@@ -1502,6 +1501,7 @@ Punishments.getRoomPunishments = function (user, options) {
 			punishments.push([curRoom, punishment]);
 			continue;
 		} else if (options && options.checkIps) {
+			// @ts-ignore
 			for (let ip in user.ips) {
 				punishment = Punishments.roomIps.nestedGet(curRoom.id, ip);
 				if (punishment) {
@@ -1513,7 +1513,9 @@ Punishments.getRoomPunishments = function (user, options) {
 		if (checkMutes && curRoom.muteQueue) {
 			for (const entry of curRoom.muteQueue) {
 				if (userid === entry.userid ||
+					// @ts-ignore
 					user.guestNum === entry.guestNum ||
+					// @ts-ignore
 					(user.autoconfirmed && user.autoconfirmed === entry.autoconfirmed)) {
 					punishments.push([curRoom, ['MUTE', entry.userid, entry.time]]);
 				}

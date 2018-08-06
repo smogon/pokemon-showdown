@@ -135,7 +135,7 @@ interface SelfEffect {
 }
 
 interface SecondaryEffect {
-	chance: number
+	chance?: number
 	ability?: Ability
 	boosts?: SparseBoostsTable
 	dustproof?: boolean
@@ -341,9 +341,9 @@ interface EffectData extends EventMethods {
 	onTryPrimaryHitPriority?: number
 	onTypePriority?: number
 	recoil?: [number, number]
-	secondary?: false | SecondaryEffect | null
-	secondaries?: false | SecondaryEffect[]
-	self?: SelfEffect | false | null
+	secondary?: SecondaryEffect | null
+	secondaries?: SecondaryEffect[] | null
+	self?: SelfEffect | null
 	shortDesc?: string
 	status?: string
 	weather?: string
@@ -541,7 +541,7 @@ interface Move extends Effect, MoveData {
 	zPowered?: boolean
 }
 
-type TemplateAbility = { 0: string, 1?: string, H?: string, S?: string}
+type TemplateAbility = {0: string, 1?: string, H?: string, S?: string}
 
 interface TemplateData {
 	abilities: TemplateAbility

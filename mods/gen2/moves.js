@@ -87,11 +87,20 @@ let BattleMovedex = {
 						this.add('-miss', pokemon, target);
 						return false;
 					}
-					Object.assign(move, {
+					/**@type {Move} */
+					// @ts-ignore
+					let moveData = {
+						id: 'bide',
+						name: "Bide",
+						accuracy: 100,
 						damage: this.effectData.totalDamage * 2,
-						beforeMoveCallback: undefined,
-					});
-					this.tryMoveHit(target, pokemon, move);
+						category: "Physical",
+						priority: 0,
+						flags: {contact: 1, protect: 1},
+						effectType: 'Move',
+						type: 'Normal',
+					};
+					this.tryMoveHit(target, pokemon, moveData);
 					return false;
 				}
 				this.add('-activate', pokemon, 'move: Bide');
@@ -518,7 +527,7 @@ let BattleMovedex = {
 			this.heal(target.maxhp);
 			this.add('-status', target, 'slp', '[from] move: Rest');
 		},
-		secondary: false,
+		secondary: null,
 	},
 	reversal: {
 		inherit: true,
@@ -559,7 +568,7 @@ let BattleMovedex = {
 		onPrepareHit: function (target, source) {
 			return source.status !== 'slp';
 		},
-		secondary: false,
+		secondary: null,
 	},
 	slash: {
 		inherit: true,

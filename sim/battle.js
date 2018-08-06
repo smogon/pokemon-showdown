@@ -74,8 +74,7 @@ class Battle extends Dex.ModdedDex {
 		this.formatData = {id: format.id};
 
 		/** @type {Effect} */
-		// @ts-ignore
-		this.effect = {id: ''};
+		this.effect = /** @type {Effect} */ ({id: ''});
 		/** @type {AnyObject} */
 		this.effectData = {id: ''};
 		/** @type {AnyObject} */
@@ -3369,7 +3368,7 @@ class Battle extends Dex.ModdedDex {
 	 * @param {?Pokemon} target
 	 * @param {Pokemon} pokemon
 	 * @param {string | Move} move
-	 * @param {Partial<Move>} [moveData]
+	 * @param {Move | SelfEffect | SecondaryEffect} [moveData]
 	 * @param {boolean} [isSecondary]
 	 * @param {boolean} [isSelf]
 	 * @return {number | false}

@@ -132,11 +132,21 @@ let BattleMovedex = {
 						this.add('-miss', pokemon, target);
 						return false;
 					}
-					Object.assign(move, {
+					/**@type {Move} */
+					// @ts-ignore
+					let moveData = {
+						id: 'bide',
+						name: "Bide",
+						accuracy: true,
 						damage: this.effectData.totalDamage * 2,
-						beforeMoveCallback: undefined,
-					});
-					this.tryMoveHit(target, pokemon, move);
+						category: "Physical",
+						priority: 1,
+						flags: {contact: 1, protect: 1},
+						ignoreImmunity: true,
+						effectType: 'Move',
+						type: 'Normal',
+					};
+					this.tryMoveHit(target, pokemon, moveData);
 					return false;
 				}
 				this.add('-activate', pokemon, 'move: Bide');

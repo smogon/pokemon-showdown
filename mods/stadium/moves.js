@@ -171,7 +171,7 @@ let BattleMovedex = {
 				this.add('-end', target, 'Substitute');
 			},
 		},
-		secondary: false,
+		secondary: null,
 		target: "self",
 		type: "Normal",
 	},

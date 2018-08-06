@@ -768,21 +768,21 @@ let BattleScripts = {
 			}
 		}
 		if (moveData.self && !move.selfDropped) {
-			let selfRoll = Infinity; // Nothing is greater than Infinity
+			let selfRoll = 0;
 			if (!isSecondary && moveData.self.boosts) {
 				selfRoll = this.random(100);
 				if (!move.multihit) move.selfDropped = true;
 			}
 			// This is done solely to mimic in-game RNG behaviour. All self drops have a 100% chance of happening but still grab a random number.
-			if (typeof moveData.self.chance === 'undefined' || selfRoll < moveData.self.chance) {
+			if (moveData.self.chance === undefined || selfRoll < moveData.self.chance) {
 				this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
 			}
 		}
 		if (moveData.secondaries) {
-			let secondaryRoll;
+			/** @type {SecondaryEffect[]} */
 			let secondaries = this.runEvent('ModifySecondaries', target, pokemon, moveData, moveData.secondaries.slice());
 			for (const secondary of secondaries) {
-				secondaryRoll = this.random(100);
+				let secondaryRoll = this.random(100);
 				if (typeof secondary.chance === 'undefined' || secondaryRoll < secondary.chance) {
 					this.moveHit(target, pokemon, move, secondary, true, isSelf);
 				}
@@ -804,7 +804,7 @@ let BattleScripts = {
 	},
 
 	calcRecoilDamage: function (damageDealt, move) {
-		if (!move.recoil) throw new TypeError(`Tried to calculate recoil damage, but move ${move.name} had no recoil data.`);
+		// @ts-ignore
 		return this.clampIntRange(Math.round(damageDealt * move.recoil[0] / move.recoil[1]), 1);
 	},
 
@@ -857,7 +857,7 @@ let BattleScripts = {
 		if (pokemon) {
 			let item = pokemon.getItem();
 			if (move.name === item.zMoveFrom) {
-				// @ts-ignore Idea: define stricter types so ItemData.zMoveFrom being a string implies ItemData.zMove is also a string
+				// @ts-ignore
 				return this.getMoveCopy(item.zMove);
 			}
 		}
@@ -868,7 +868,7 @@ let BattleScripts = {
 			return zMove;
 		}
 		zMove = this.getMoveCopy(this.zMoveTable[move.type]);
-		// @ts-ignore Idea: define stricter types so MoveData.category being "Status" implies MoveData.zMovePower is a number
+		// @ts-ignore
 		zMove.basePower = move.zMovePower;
 		zMove.category = move.category;
 		return zMove;

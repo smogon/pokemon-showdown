@@ -2880,7 +2880,7 @@ let BattleAbilities = {
 			if (move.secondaries) {
 				this.debug('doubling secondary chance');
 				for (const secondary of move.secondaries) {
-					secondary.chance *= 2;
+					if (secondary.chance) secondary.chance *= 2;
 				}
 			}
 		},
@@ -3437,7 +3437,7 @@ let BattleAbilities = {
 	},
 	"surgesurfer": {
 		shortDesc: "If Electric Terrain is active, this Pokemon's Speed is doubled.",
-		onModifySpe: function () {
+		onModifySpe: function (spe) {
 			if (this.isTerrain('electricterrain')) {
 				return this.chainModify(2);
 			}
@@ -3529,7 +3529,7 @@ let BattleAbilities = {
 			if (effect && effect.id === 'toxicspikes') return;
 			if (status.id === 'slp' || status.id === 'frz') return;
 			this.add('-activate', target, 'ability: Synchronize');
-			source.trySetStatus(status, target, Object.assign({status: status.id}, this.effect));
+			source.trySetStatus(status, target);
 		},
 		id: "synchronize",
 		name: "Synchronize",

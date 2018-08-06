@@ -38,8 +38,8 @@ let BattleScripts = {
 		}
 
 		// Do we have a proper sprite for it?
-		// @ts-ignore TypeScript bug: TS doesn't infer that if isUltraBurst is false, pokemon.canMegaEvo must be a string
-		if (isUltraBurst || this.getTemplate(pokemon.canMegaEvo).baseSpecies === pokemon.originalSpecies) {
+		// @ts-ignore
+		if (this.getTemplate(pokemon.canMegaEvo).baseSpecies === pokemon.originalSpecies || isUltraBurst) {
 			pokemon.formeChange(template, pokemon.getItem(), true);
 		} else {
 			let oTemplate = this.getTemplate(pokemon.originalSpecies);
@@ -99,9 +99,12 @@ let BattleScripts = {
 		} else if (deltas.type) {
 			template.types = [template.types[0], deltas.type];
 		}
-		for (let statName in template.baseStats) {
+		let baseStats = template.baseStats;
+		// @ts-ignore
+		template.baseStats = {};
+		for (let statName in baseStats) {
 			// @ts-ignore
-			template.baseStats[statName] = this.clampIntRange(template.baseStats[statName] + deltas.baseStats[statName], 1, 255);
+			template.baseStats[statName] = this.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
 		}
 		template.weightkg = Math.max(0.1, template.weightkg + deltas.weightkg);
 		template.originalMega = deltas.originalMega;

@@ -394,10 +394,10 @@ let BattleScripts = {
 			}
 		}
 		if (moveData.self) {
-			let selfRoll = Infinity; // Nothing is greater than Infinity;
+			let selfRoll = 0;
 			if (!isSecondary && moveData.self.boosts) selfRoll = this.random(100);
 			// This is done solely to mimic in-game RNG behaviour. All self drops have a 100% chance of happening but still grab a random number.
-			if (typeof moveData.self.chance === 'undefined' || selfRoll < moveData.self.chance) {
+			if (moveData.self.chance === undefined || selfRoll < moveData.self.chance) {
 				this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
 			}
 		}
@@ -409,7 +409,7 @@ let BattleScripts = {
 				// This means tri-attack can burn fire-types and freeze ice-types.
 				// Unlike gen 1, though, paralysis works for all unless the target is immune to direct move (ie. ground-types and t-wave).
 				if (!(secondary.status && ['brn', 'frz'].includes(secondary.status) && target && target.hasType(move.type))) {
-					let effectChance = Math.floor(secondary.chance * 255 / 100);
+					let effectChance = Math.floor((secondary.chance || 100) * 255 / 100);
 					if (typeof secondary.chance === 'undefined' || this.randomChance(effectChance, 256)) {
 						this.moveHit(target, pokemon, move, secondary, true, isSelf);
 					}

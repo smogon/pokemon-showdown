@@ -677,12 +677,12 @@ let BattleMovedex = {
 					}
 					this.add('-end', pokemon, 'Bide');
 					let target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
-					Object.assign(move, {
+					/**@type {Move} */
+					// @ts-ignore
+					let moveData = {
 						damage: this.effectData.totalDamage * 2,
-						beforeMoveCallback: undefined,
-						onTryHit: undefined,
-					});
-					this.moveHit(target, pokemon, 'bide', move);
+					};
+					this.moveHit(target, pokemon, 'bide', moveData);
 					return false;
 				}
 				this.add('-activate', pokemon, 'Bide');

@@ -241,10 +241,12 @@ class RoomGame {
 	}
 
 	/**
-	 * Called for every message a user sends while this game is active
+	 * Called for every message a user sends while this game is active.
+	 * Return an error message to prevent the message from being sent, or
+	 * `false` to let it through.
 	 * @param {string} message
 	 * @param {User} user
-	 * @return {(string | false)}
+	 * @return {string | false}
 	 */
 	onChatMessage(message, user) {
 		return false;

@@ -273,7 +273,7 @@ let BattleAbilities = {
 			if (move.secondaries) {
 				this.debug('doubling secondary chance');
 				for (const secondary of move.secondaries) {
-					secondary.chance *= 2;
+					if (secondary.chance) secondary.chance *= 2;
 				}
 			}
 		},
