@@ -425,7 +425,6 @@ class Validator {
 				problems.push(`${name} has exactly 510 EVs, but this format does not restrict you to 510 EVs: you can max out every EV (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
 			}
 		}
-		// @ts-ignore TypeScript index signature bug
 		if (set.evs && !Object.values(set.evs).some(value => value > 0)) {
 			problems.push(`${name} has exactly 0 EVs - did you forget to EV it? (If this was intentional, add exactly 1 to one of your EVs, which won't change its stats but will tell us that it wasn't a mistake).`);
 		}
@@ -448,7 +447,7 @@ class Validator {
 					problems.push(`${name} has an event-exclusive move that it doesn't qualify for (only one of several ways to get the move will be listed):`);
 				}
 				let eventProblems = this.validateSource(set, lsetData.sources[0], template, ` because it has a move only available`);
-				// @ts-ignore TypeScript overload syntax bug
+				// @ts-ignore validateEvent must have returned an array because it was passed a because param
 				if (eventProblems) problems.push(...eventProblems);
 			}
 		} else if (ruleTable.has('-illegal') && template.eventOnly) {
@@ -482,7 +481,7 @@ class Validator {
 				}
 				let eventName = eventPokemon.length > 1 ? ` #${eventNum}` : ``;
 				let eventProblems = this.validateEvent(set, eventInfo, eventTemplate, ` to be`, `from its event${eventName}`);
-				// @ts-ignore TypeScript overload syntax bug
+				// @ts-ignore validateEvent must have returned an array because it was passed a because param
 				if (eventProblems) problems.push(...eventProblems);
 			}
 		}
@@ -657,12 +656,12 @@ class Validator {
 			if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 			let statTable = {hp: 'HP', atk: 'Attack', def: 'Defense', spa: 'Special Attack', spd: 'Special Defense', spe: 'Speed'};
 			for (let statId in eventData.ivs) {
-				// @ts-ignore TypeScript index signature bug
+				// @ts-ignore
 				if (canBottleCap && set.ivs[statId] === 31) continue;
-				// @ts-ignore TypeScript index signature bug
+				// @ts-ignore
 				if (set.ivs[statId] !== eventData.ivs[statId]) {
 					if (fastReturn) return true;
-					// @ts-ignore TypeScript index signature bug
+					// @ts-ignore
 					problems.push(`${name} must have ${eventData.ivs[statId]} ${statTable[statId]} IVs${etc}.`);
 				}
 			}
@@ -689,7 +688,7 @@ class Validator {
 			// Events can also have a certain amount of guaranteed perfect IVs
 			let perfectIVs = 0;
 			for (let i in set.ivs) {
-				// @ts-ignore TypeScript index signature bug
+				// @ts-ignore
 				if (set.ivs[i] >= 31) perfectIVs++;
 			}
 			if (perfectIVs < requiredIVs) {

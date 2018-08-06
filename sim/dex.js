@@ -64,10 +64,10 @@ const DATA_FILES = {
 const nullEffect = new Data.PureEffect({name: '', exists: false});
 
 /** @typedef {{id: string, name: string, [k: string]: any}} DexTemplate */
-/** @typedef {{[id: string]: AnyObject}} DexTable */
 
-/** @typedef {{Pokedex: DexTable, Movedex: DexTable, Statuses: DexTable, TypeChart: DexTable, Scripts: DexTable, Items: DexTable, Abilities: DexTable, FormatsData: DexTable, Learnsets: DexTable, Aliases: {[id: string]: string}, Natures: DexTable, Formats: DexTable}} DexTableData */
+/** @typedef {{Pokedex: DexTable<Template>, Movedex: DexTable<Move>, Statuses: DexTable<EffectData>, TypeChart: DexTable<TypeData>, Scripts: DexTable<AnyObject>, Items: DexTable<Item>, Abilities: DexTable<Ability>, FormatsData: DexTable<ModdedTemplateFormatsData>, Learnsets: DexTable<{learnset: {[k: string]: MoveSource[]}}>, Aliases: {[id: string]: string}, Natures: DexTable<{[l: string]: string | undefined, name: string, plus?: string, minus?: string}>, Formats: DexTable<Format>}} DexTableData */
 
+/** @type {{[k: string]: {[l: string]: string | undefined, name: string, plus?: string, minus?: string}}} */
 const BattleNatures = {
 	adamant: {name: "Adamant", plus: 'atk', minus: 'spa'},
 	bashful: {name: "Bashful"},
@@ -117,7 +117,7 @@ class ModdedDex {
 
 		/** @type {?DexTableData} */
 		this.dataCache = null;
-		/** @type {?DexTable} */
+		/** @type {?DexTable<Format>} */
 		this.formatsCache = null;
 
 		/** @type {Map<string, Template>} */
@@ -160,7 +160,7 @@ class ModdedDex {
 	get data() {
 		return this.loadData();
 	}
-	/** @return {DexTable} */
+	/** @return {DexTable<Format>} */
 	get formats() {
 		this.includeFormats();
 		// @ts-ignore
@@ -251,8 +251,7 @@ class ModdedDex {
 	 */
 	getImmunity(source, target) {
 		/** @type {string} */
-		// @ts-ignore
-		let sourceType = source.type || source;
+		let sourceType = typeof source !== 'string' ? source.type : source;
 		/** @type {string[] | string} */
 		// @ts-ignore
 		let targetTyping = target.getTypes && target.getTypes() || target.types || target;
@@ -273,8 +272,7 @@ class ModdedDex {
 	 */
 	getEffectiveness(source, target) {
 		/** @type {string} */
-		// @ts-ignore
-		let sourceType = source.type || source;
+		let sourceType = typeof source !== 'string' ? source.type : source;
 		let totalTypeMod = 0;
 		/** @type {string[] | string} */
 		// @ts-ignore
@@ -381,14 +379,14 @@ class ModdedDex {
 			}
 			if (!template.tier && !template.doublesTier && template.baseSpecies !== template.species) {
 				if (template.baseSpecies === 'Mimikyu') {
-					template.tier = this.data.FormatsData[toId(template.baseSpecies)].tier;
-					template.doublesTier = this.data.FormatsData[toId(template.baseSpecies)].doublesTier;
+					template.tier = this.data.FormatsData[toId(template.baseSpecies)].tier || 'Illegal';
+					template.doublesTier = this.data.FormatsData[toId(template.baseSpecies)].doublesTier || 'Illegal';
 				} else if (template.speciesid.endsWith('totem')) {
-					template.tier = this.data.FormatsData[template.speciesid.slice(0, -5)].tier;
-					template.doublesTier = this.data.FormatsData[template.speciesid.slice(0, -5)].doublesTier;
+					template.tier = this.data.FormatsData[template.speciesid.slice(0, -5)].tier || 'Illegal';
+					template.doublesTier = this.data.FormatsData[template.speciesid.slice(0, -5)].doublesTier || 'Illegal';
 				} else {
-					template.tier = this.data.FormatsData[toId(template.baseSpecies)].tier;
-					template.doublesTier = this.data.FormatsData[toId(template.baseSpecies)].doublesTier;
+					template.tier = this.data.FormatsData[toId(template.baseSpecies)].tier || 'Illegal';
+					template.doublesTier = this.data.FormatsData[toId(template.baseSpecies)].doublesTier || 'Illegal';
 				}
 			}
 			if (!template.tier) template.tier = 'Illegal';
@@ -672,30 +670,36 @@ class ModdedDex {
 		return nature;
 	}
 	/**
-	 * @param {AnyObject} stats
-	 * @param {AnyObject} set
-	 * @return {AnyObject}
+	 * Given a table of base stats and a pokemon set, return the actual stats.
+	 * @param {StatsTable} baseStats
+	 * @param {PokemonSet} set
+	 * @return {StatsTable}
 	 */
-	spreadModify(stats, set) {
+	spreadModify(baseStats, set) {
+		/** @type {any} */
 		const modStats = {atk: 10, def: 10, spa: 10, spd: 10, spe: 10};
 		for (let statName in modStats) {
-			let stat = stats[statName];
+			// @ts-ignore
+			let stat = baseStats[statName];
+			// @ts-ignore
 			modStats[statName] = Math.floor(Math.floor(2 * stat + set.ivs[statName] + Math.floor(set.evs[statName] / 4)) * set.level / 100 + 5);
 		}
-		if ('hp' in stats) {
-			let stat = stats['hp'];
+		if ('hp' in baseStats) {
+			let stat = baseStats['hp'];
 			modStats['hp'] = Math.floor(Math.floor(2 * stat + set.ivs['hp'] + Math.floor(set.evs['hp'] / 4) + 100) * set.level / 100 + 10);
 		}
 		return this.natureModify(modStats, set.nature);
 	}
 	/**
-	 * @param {AnyObject} stats
+	 * @param {StatsTable} stats
 	 * @param {string | AnyObject} nature
-	 * @return {AnyObject}
+	 * @return {StatsTable}
 	 */
 	natureModify(stats, nature) {
 		nature = this.getNature(nature);
+		// @ts-ignore
 		if (nature.plus) stats[nature.plus] = Math.floor(stats[nature.plus] * 1.1);
+		// @ts-ignore
 		if (nature.minus) stats[nature.minus] = Math.floor(stats[nature.minus] * 0.9);
 		return stats;
 	}
@@ -902,6 +906,7 @@ class ModdedDex {
 			if (table.hasOwnProperty(id)) {
 				if (matchType === 'pokemon') {
 					const template = table[id];
+					// @ts-ignore
 					if (template.otherFormes) {
 						matches.push('basepokemon:' + id);
 						continue;
@@ -1216,7 +1221,7 @@ class ModdedDex {
 
 		// limit to 24
 		for (let count = 0; count < 24; count++) {
-			let set = /** @type {any} */ ({});
+			let set = /** @type {PokemonSet} */ ({});
 			team.push(set);
 
 			// name

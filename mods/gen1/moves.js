@@ -97,8 +97,7 @@ let BattleMovedex = {
 					}
 					this.add('-end', pokemon, 'Bide');
 					let target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
-					// @ts-ignore
-					this.moveHit(target, pokemon, 'bide', {damage: this.effectData.totalDamage * 2});
+					this.moveHit(target, pokemon, 'bide', /** @type {Move} */ ({damage: this.effectData.totalDamage * 2}));
 					return false;
 				}
 				this.add('-activate', pokemon, 'Bide');
@@ -311,7 +310,7 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "No additional effect.",
 		shortDesc: "No additional effect.",
-		secondary: false,
+		secondary: null,
 	},
 	doubleedge: {
 		inherit: true,
@@ -525,7 +524,7 @@ let BattleMovedex = {
 	metronome: {
 		inherit: true,
 		noMetronome: ['metronome', 'struggle'],
-		secondary: false,
+		secondary: null,
 		target: "self",
 		type: "Normal",
 	},
@@ -664,7 +663,7 @@ let BattleMovedex = {
 				this.add('-start', pokemon, 'Reflect');
 			},
 		},
-		secondary: false,
+		secondary: null,
 		target: "self",
 		type: "Psychic",
 	},
@@ -696,7 +695,7 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "No additional effect.",
 		shortDesc: "No additional effect.",
-		secondary: false,
+		secondary: null,
 		target: "normal",
 	},
 	rockthrow: {
@@ -831,16 +830,19 @@ let BattleMovedex = {
 				}
 				this.runEvent('AfterSubDamage', target, source, move, damage);
 				// Add here counter damage
-				if (!target.lastAttackedBy) target.lastAttackedBy = {pokemon: source, thisTurn: true};
-				target.lastAttackedBy.move = move.id;
-				target.lastAttackedBy.damage = damage;
+				if (!target.lastAttackedBy) {
+					target.lastAttackedBy = {pokemon: source, move: move.id, thisTurn: true, damage: damage};
+				} else {
+					target.lastAttackedBy.move = move.id;
+					target.lastAttackedBy.damage = damage;
+				}
 				return 0;
 			},
 			onEnd: function (target) {
 				this.add('-end', target, 'Substitute');
 			},
 		},
-		secondary: false,
+		secondary: null,
 		target: "self",
 		type: "Normal",
 	},
@@ -873,7 +875,7 @@ let BattleMovedex = {
 	triattack: {
 		inherit: true,
 		onHit: function () {},
-		secondary: false,
+		secondary: null,
 	},
 	whirlwind: {
 		inherit: true,

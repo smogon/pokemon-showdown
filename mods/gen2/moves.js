@@ -118,7 +118,6 @@ let BattleMovedex = {
 		damageCallback: function (pokemon, target) {
 			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && pokemon.lastAttackedBy.move && (this.getCategory(pokemon.lastAttackedBy.move) === 'Physical' || this.getMove(pokemon.lastAttackedBy.move).id === 'hiddenpower') &&
 				(!target.lastMove || target.lastMove.id !== 'sleeptalk')) {
-				// @ts-ignore
 				return 2 * pokemon.lastAttackedBy.damage;
 			}
 			return false;
@@ -378,7 +377,6 @@ let BattleMovedex = {
 		damageCallback: function (pokemon, target) {
 			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && pokemon.lastAttackedBy.move && this.getCategory(pokemon.lastAttackedBy.move) === 'Special' &&
 				this.getMove(pokemon.lastAttackedBy.move).id !== 'hiddenpower' && (!target.lastMove || target.lastMove.id !== 'sleeptalk')) {
-				// @ts-ignore
 				return 2 * pokemon.lastAttackedBy.damage;
 			}
 			return false;
@@ -529,7 +527,7 @@ let BattleMovedex = {
 			this.heal(target.maxhp);
 			this.add('-status', target, 'slp', '[from] move: Rest');
 		},
-		secondary: false,
+		secondary: null,
 	},
 	reversal: {
 		inherit: true,
@@ -570,7 +568,7 @@ let BattleMovedex = {
 		onPrepareHit: function (target, source) {
 			return source.status !== 'slp';
 		},
-		secondary: {},
+		secondary: null,
 	},
 	slash: {
 		inherit: true,

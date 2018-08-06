@@ -239,6 +239,18 @@ class RoomGame {
 	onUpdateConnection(user, connection) {
 		this.onConnect(user, connection);
 	}
+
+	/**
+	 * Called for every message a user sends while this game is active.
+	 * Return an error message to prevent the message from being sent, or
+	 * `false` to let it through.
+	 * @param {string} message
+	 * @param {User} user
+	 * @return {string | false}
+	 */
+	onChatMessage(message, user) {
+		return false;
+	}
 }
 
 // these exports are traditionally attached to rooms.js

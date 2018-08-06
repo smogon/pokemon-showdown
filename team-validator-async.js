@@ -60,7 +60,7 @@ const PM = new QueryProcessManager(module, async message => {
 
 if (!PM.isParentProcess) {
 	// This is a child process!
-	// @ts-ignore
+	// @ts-ignore This file doesn't exist on the repository, so Travis checks fail if this isn't ignored
 	global.Config = require('./config/config');
 	global.TeamValidator = require('./sim/team-validator');
 

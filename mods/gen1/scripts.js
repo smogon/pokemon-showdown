@@ -45,21 +45,31 @@ let BattleScripts = {
 			for (let i in boost) {
 				// @ts-ignore
 				let delta = boost[i];
+				if (delta === undefined) continue;
+				// @ts-ignore
 				if (delta > 0 && this.boosts[i] >= 6) continue;
+				// @ts-ignore
 				if (delta < 0 && this.boosts[i] <= -6) continue;
+				// @ts-ignore
 				this.boosts[i] += delta;
+				// @ts-ignore
 				if (this.boosts[i] > 6) {
+					// @ts-ignore
 					this.boosts[i] = 6;
 				}
+				// @ts-ignore
 				if (this.boosts[i] < -6) {
+					// @ts-ignore
 					this.boosts[i] = -6;
 				}
 				changed = true;
 				// Recalculate the modified stat
 				// @ts-ignore
 				let stat = this.template.baseStats[i];
+				// @ts-ignore
 				stat = Math.floor(Math.floor(2 * stat + this.set.ivs[i] + Math.floor(this.set.evs[i] / 4)) * this.level / 100 + 5);
 				this.modifiedStats[i] = this.stats[i] = Math.floor(stat);
+				// @ts-ignore
 				if (this.boosts[i] >= 0) {
 					// @ts-ignore
 					this.modifyStat(i, [1, 1.5, 2, 2.5, 3, 3.5, 4][this.boosts[i]]);
@@ -581,7 +591,6 @@ let BattleScripts = {
 		// Here's where self effects are applied.
 		let doSelf = (targetHadSub && targetHasSub) || !targetHadSub;
 		if (moveData.self && (doSelf || (moveData.self !== true && moveData.self.volatileStatus === 'partialtrappinglock'))) {
-			// @ts-ignore
 			this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
 		}
 
@@ -599,7 +608,6 @@ let BattleScripts = {
 				// If a move that was not fire-type would exist on Gen 1, it could burn a Pokémon.
 				if (!(secondary.status && ['par', 'brn', 'frz'].includes(secondary.status) && target && target.hasType(move.type))) {
 					if (secondary.chance === undefined || this.randomChance(Math.ceil(secondary.chance * 256 / 100), 256)) {
-						// @ts-ignore
 						this.moveHit(target, pokemon, move, secondary, true, isSelf);
 					}
 				}
@@ -623,6 +631,7 @@ let BattleScripts = {
 		effect = this.getEffect(effect);
 		boost = this.runEvent('Boost', target, source, effect, Object.assign({}, boost));
 		for (let i in boost) {
+			/** @type {SparseBoostsTable} */
 			let currentBoost = {};
 			// @ts-ignore
 			currentBoost[i] = boost[i];

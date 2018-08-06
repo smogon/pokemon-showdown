@@ -552,7 +552,6 @@ let BattleAbilities = {
 		onBeforeMove: function () {},
 		onModifyMove: function (move, pokemon) {
 			if (!move.self) move.self = {};
-			// @ts-ignore
 			if (!move.self.volatileStatus) move.self.volatileStatus = 'truant';
 		},
 		effect: {

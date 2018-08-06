@@ -170,7 +170,6 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 		const user = Users(this.userid);
 		if (!user || !user.connected) return;
 		if (this.game.ended) return user.send(`>view-mafia-${this.game.room.id}\n|deinit`);
-		// @ts-ignore "Chat.pages" is possibly undefined
 		const buf = Chat.pages.mafia([this.game.room.id], user);
 		this.send(`>view-mafia-${this.game.room.id}\n|init|html\n${buf}`);
 	}
@@ -390,7 +389,6 @@ class MafiaTracker extends Rooms.RoomGame {
 		subIndex = this.hostRequestedSub.indexOf(user.userid);
 		if (subIndex !== -1) this.hostRequestedSub.splice(subIndex, 1);
 		this.sendRoom(`${user.name} has left the game.`);
-		// @ts-ignore "Chat.pages" is possibly undefined
 		user.send(`>view-mafia-${this.room.id}\n|init|html\n${Chat.pages.mafia([this.room.id], user)}`);
 	}
 
@@ -1032,7 +1030,6 @@ class MafiaTracker extends Rooms.RoomGame {
 			}
 		}
 		if (newUser && newUser.connected) {
-			// @ts-ignore "Chat.pages" is possibly undefined
 			newUser.send(`>view-mafia-${this.room.id}\n|init|html\n${Chat.pages.mafia([this.room.id], newUser)}`);
 			newUser.send(`>${this.room.id}\n|notify|You have been substituted in the mafia game for ${oldPlayer.safeName}.`);
 		}
@@ -1301,7 +1298,6 @@ class MafiaTracker extends Rooms.RoomGame {
 		const host = Users(this.hostid);
 		if (!host || !host.connected) return;
 		if (this.ended) return host.send(`>view-mafia-${this.room.id}\n|deinit`);
-		// @ts-ignore "Chat.pages" is possibly undefined
 		const buf = Chat.pages.mafia([this.room.id], host);
 		host.send(`>view-mafia-${this.room.id}\n|init|html\n${buf}`);
 	}
@@ -1801,7 +1797,6 @@ const commands = {
 
 			room.game = new MafiaTracker(room, targetUser);
 
-			// @ts-ignore "Chat.pages" is possibly undefined
 			targetUser.send(`>view-mafia-${room.id}\n|init|html\n${Chat.pages.mafia([room.id], targetUser)}`);
 			room.addByUser(user, `${targetUser.name} was appointed the mafia host by ${user.name}.`);
 			if (room.id === 'mafia') {
@@ -2634,7 +2629,6 @@ const commands = {
 			game.host = Chat.escapeHTML(targetUser.name);
 			game.hostid = targetUser.userid;
 			game.played.push(targetUser.userid);
-			// @ts-ignore "Chat.pages" is possibly undefined
 			targetUser.send(`>view-mafia-${room.id}\n|init|html\n${Chat.pages.mafia([room.id], targetUser)}`);
 			game.sendRoom(`${Chat.escapeHTML(targetUser.name)} has been substituted as the new host, replacing ${oldHostid}.`, {declare: true});
 			this.modlog('MAFIASUBHOST', targetUser, `replacing ${oldHostid}`, {noalts: true, noip: true});

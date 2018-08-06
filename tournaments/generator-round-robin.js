@@ -14,9 +14,11 @@ class RoundRobin {
 		this.isBracketFrozen = false;
 		/** @type {User[]} */
 		this.users = [];
+		/** @type {boolean[]} */
 		this.isUsersBusy = [];
 		/** @type {(?Match)[][]} */
 		this.matches = [];
+		/** @type {number[]} */
 		this.userScores = [];
 		this.pendingMatches = new Map();
 		this.totalPendingMatches = 0;
