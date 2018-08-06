@@ -1204,10 +1204,12 @@ function runItemsearch(target, cmd, canAll, message) {
 	let showAll = false;
 
 	target = target.trim();
-	if (target.substr(target.length - 5) === ', all') {
+	const lastCommaIndex = target.lastIndexOf(',');
+	const lastArgumentSubstr = target.substr(lastCommaIndex + 1).trim();
+	if (lastArgumentSubstr === 'all') {
 		if (!canAll) return {reply: "A search ending in ', all' cannot be broadcast."};
 		showAll = true;
-		target = target.substr(0, target.length - 5);
+		target = target.substr(0, lastCommaIndex);
 	}
 
 	target = target.toLowerCase().replace('-', ' ').replace(/[^a-z0-9.\s/]/g, '');
