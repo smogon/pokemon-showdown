@@ -54,7 +54,6 @@ if (('Config' in global) &&
 	Config.loglevel = 2;
 }
 
-// @ts-ignore
 const Monitor = module.exports = {
 	/*********************************************************
 	 * Logging

@@ -42,7 +42,7 @@ const AUTOLOCK_POINT_THRESHOLD = 8;
 
 /**
  * TODO: Properly Typescript this.
- * @typedef {any[]} PunishmentRow
+ * @typedef {User[]} PunishmentRow
  */
 
 /**
@@ -466,7 +466,6 @@ Punishments.punish = function (user, punishment, recursionKeys) {
 	if (user.trusted) {
 		Punishments.userids.set(user.trusted, punishment);
 		keys.add(user.trusted);
-		// @ts-ignore TODO: investigate if this is a bug
 		if (!PUNISH_TRUSTED && affected) affected.unshift(user);
 	}
 	if (!recursionKeys) {
@@ -597,7 +596,6 @@ Punishments.roomPunish = function (room, user, punishment, recursionKeys) {
 
 		if (typeof roomid === 'string' || !(room.isPrivate === true || room.isPersonal || room.battle)) Punishments.monitorRoomPunishments(user);
 
-		// @ts-ignore
 		return affected;
 	}
 };
@@ -717,9 +715,8 @@ Punishments.unban = function (name) {
  * @return {PunishmentRow}
  */
 Punishments.lock = function (user, expireTime, id, ...reason) {
-	// @ts-ignore
-	if (!id && user) id = user.getLastId();
 	if (!user || typeof user === 'string') user = Users(id);
+	if (!id && user) id = user.getLastId();
 
 	if (!expireTime) expireTime = Date.now() + LOCK_DURATION;
 	let punishment = ['LOCK', id, expireTime, ...reason];

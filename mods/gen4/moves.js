@@ -12,6 +12,7 @@ let BattleMovedex = {
 			}
 			let stats = [];
 			for (let stat in target.boosts) {
+				// @ts-ignore
 				if (target.boosts[stat] < 6) {
 					stats.push(stat);
 				}
@@ -1318,7 +1319,6 @@ let BattleMovedex = {
 			duration: 2,
 			onResidualOrder: 0,
 			onEnd: function (side) {
-				// @ts-ignore
 				let target = side.active[this.effectData.sourcePosition];
 				if (!target.fainted) {
 					let source = this.effectData.source;

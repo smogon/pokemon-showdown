@@ -74,8 +74,7 @@ class Battle extends Dex.ModdedDex {
 		this.formatData = {id: format.id};
 
 		/** @type {Effect} */
-		// @ts-ignore
-		this.effect = {id: ''};
+		this.effect = /** @type {Effect} */ ({id: ''});
 		/** @type {AnyObject} */
 		this.effectData = {id: ''};
 		/** @type {AnyObject} */
@@ -882,6 +881,7 @@ class Battle extends Dex.ModdedDex {
 	 * @param {Effect} [effect]
 	 * @param {any} [relayVar]
 	 * @param {boolean} [onEffect]
+	 * @return {any}
 	 */
 	priorityEvent(eventid, target, source, effect, relayVar, onEffect) {
 		return this.runEvent(eventid, target, source, effect, relayVar, onEffect, true);
@@ -1831,6 +1831,7 @@ class Battle extends Dex.ModdedDex {
 		let success = null;
 		let boosted = false;
 		for (let i in boost) {
+			/** @type {SparseBoostsTable} */
 			let currentBoost = {};
 			// @ts-ignore
 			currentBoost[i] = boost[i];
@@ -2193,7 +2194,9 @@ class Battle extends Dex.ModdedDex {
 		let attack;
 		let defense;
 
+		// @ts-ignore
 		let atkBoosts = move.useTargetOffensive ? defender.boosts[attackStat] : attacker.boosts[attackStat];
+		// @ts-ignore
 		let defBoosts = move.useSourceDefensive ? attacker.boosts[defenseStat] : defender.boosts[defenseStat];
 
 		let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
@@ -2797,7 +2800,6 @@ class Battle extends Dex.ModdedDex {
 			this.runMove(action.move, action.pokemon, action.targetLoc, action.sourceEffect, action.zmove);
 			break;
 		case 'megaEvo':
-			// @ts-ignore
 			this.runMegaEvo(action.pokemon);
 			break;
 		case 'beforeTurnMove': {
@@ -3365,7 +3367,7 @@ class Battle extends Dex.ModdedDex {
 	 * @param {?Pokemon} target
 	 * @param {Pokemon} pokemon
 	 * @param {string | Move} move
-	 * @param {Move} [moveData]
+	 * @param {Move | SelfEffect | SecondaryEffect} [moveData]
 	 * @param {boolean} [isSecondary]
 	 * @param {boolean} [isSelf]
 	 * @return {number | false}
@@ -3435,6 +3437,14 @@ class Battle extends Dex.ModdedDex {
 	 */
 	getZMoveCopy(move, pokemon) {
 		throw new Error(`The getZMoveCopy function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	/**
+	 * @param {Move} move
+	 * @param {Pokemon} pokemon
+	 */
+	runZPower(move, pokemon) {
+		throw new Error(`The runZPower function needs to be implemented in scripts.js or the battle format.`);
 	}
 
 	/**

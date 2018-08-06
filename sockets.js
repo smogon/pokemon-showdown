@@ -179,6 +179,7 @@ if (cluster.isMaster) {
 	};
 } else {
 	// is worker
+	// @ts-ignore This file doesn't exist on the repository, so Travis checks fail if this isn't ignored
 	global.Config = require('./config/config');
 
 	if (process.env.PSPORT) Config.port = +process.env.PSPORT;

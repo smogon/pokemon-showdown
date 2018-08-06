@@ -505,8 +505,9 @@ class RandomTeams extends Dex.ModdedDex {
 			// Moves with secondary effects:
 			if (move.secondary) {
 				counter['sheerforce']++;
-				// @ts-ignore
-				if (move.secondary.chance >= 20) counter['serenegrace']++;
+				if (move.secondary.chance && move.secondary.chance >= 20 && move.secondary.chance < 100) {
+					counter['serenegrace']++;
+				}
 			}
 			// Moves with low accuracy:
 			if (move.accuracy && move.accuracy !== true && move.accuracy < 90) counter['inaccurate']++;

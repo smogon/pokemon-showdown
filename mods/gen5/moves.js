@@ -588,7 +588,7 @@ let BattleMovedex = {
 				if (move.type === 'Electric') return this.chainModify([0x548, 0x1000]); // The Mud Sport modifier is slightly higher than the usual 0.33 modifier (0x547)
 			},
 		},
-		secondary: false,
+		secondary: null,
 		target: "all",
 		type: "Ground",
 	},
@@ -1026,7 +1026,7 @@ let BattleMovedex = {
 				if (move.type === 'Fire') return this.chainModify([0x548, 0x1000]); // The Water Sport modifier is slightly higher than the usual 0.33 modifier (0x547)
 			},
 		},
-		secondary: false,
+		secondary: null,
 		target: "all",
 		type: "Water",
 	},

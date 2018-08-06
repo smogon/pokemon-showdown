@@ -474,7 +474,7 @@ class Item extends Effect {
 		 * (e.g. Inferno Overdrive) of the Z Move this crystal allows
 		 * the use of.
 		 * undefined, if not a Z crystal.
-		 * @type {boolean | string | undefined}
+		 * @type {true | string | undefined}
 		*/
 		this.zMove = this.zMove;
 		/**
@@ -932,22 +932,22 @@ class Move extends Effect {
 		 * tracked because it often differs from the real move type.
 		 * @type {string}
 		 */
-		this.baseType = Tools.getString(this.baseType) || this.type;
+		this.baseMoveType = Tools.getString(this.baseMoveType) || this.type;
 
 		/**
 		 * Secondary effect. You usually don't want to access this
 		 * directly; but through the secondaries array.
-		 * @type {boolean  | SecondaryEffect | undefined}
+		 * @type {SecondaryEffect | null}
 		 */
-		this.secondary = this.secondary;
+		this.secondary = this.secondary || null;
 
 		/**
 		 * Secondary effects. An array because there can be more than one
 		 * (for instance, Fire Fang has both a burn and a flinch
 		 * secondary).
-		 * @type {false | SecondaryEffect[] | undefined}
+		 * @type {SecondaryEffect[] | null}
 		 */
-		this.secondaries = this.secondaries || (this.secondary && typeof this.secondary !== 'boolean' && [this.secondary]);
+		this.secondaries = this.secondaries || (this.secondary && [this.secondary]) || null;
 
 		/**
 		 * Move priority. Higher priorities go before lower priorities,
@@ -1203,6 +1203,120 @@ class TypeInfo {
 	}
 }
 
+// class PokemonSet {
+// 	/**
+// 	 * @param {Partial<PokemonSet>} data
+// 	 */
+// 	constructor(data) {
+// 		/**
+// 		 * The Pokemon's set's nickname, which is identical to its base
+// 		 * species if not specified by the player, e.g. "Minior".
+// 		 * @type {string}
+// 		 */
+// 		this.name = '';
+// 		/**
+// 		 * The Pokemon's species, e.g. "Minior-Red".
+// 		 * This should always be converted to an id before use.
+// 		 * @type {string}
+// 		 */
+// 		this.species = '';
+// 		/**
+// 		 * The Pokemon's set's item. This can be an id, e.g. "whiteherb"
+// 		 * or a full name, e.g. "White Herb".
+// 		 * This should always be converted to an id before use.
+// 		 * @type {string}
+// 		 */
+// 		this.item = '';
+// 		/**
+// 		 * The Pokemon's set's ability. This can be an id, e.g. "shieldsdown"
+// 		 * or a full name, e.g. "Shields Down".
+// 		 * This should always be converted to an id before use.
+// 		 * @type {string}
+// 		 */
+// 		this.ability = 'noability';
+// 		/**
+// 		 * An array of the Pokemon's set's moves. Each move can be an id,
+// 		 * e.g. "shellsmash" or a full name, e.g. "Shell Smash"
+// 		 * These should always be converted to ids before use.
+// 		 * @type {string[]}
+// 		 */
+// 		this.moves = [];
+// 		/**
+// 		 * The Pokemon's set's nature. This can be an id, e.g. "adamant"
+// 		 * or a full name, e.g. "Adamant".
+// 		 * This should always be converted to an id before use.
+// 		 * @type {string}
+// 		 */
+// 		this.nature = '';
+// 		/**
+// 		 * The Pokemon's set's gender.
+// 		 * @type {GenderName}
+// 		 */
+// 		this.gender = '';
+// 		/**
+// 		 * The Pokemon's set's effort values, used in stat calculation.
+// 		 * These must be between 0 and 255, inclusive.
+// 		 * @type {StatsTable}
+// 		 */
+// 		this.evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
+// 		/**
+// 		 * The Pokemon's individual values, used in stat calculation.
+// 		 * These must be between 0 and 31, inclusive.
+// 		 * These are also used as DVs, or determinant values, in Gens
+// 		 * 1 and 2, which are represented as even numbers from 0 to 30.
+// 		 * From Gen 2 and on, IVs/DVs are used to determine Hidden Power's
+// 		 * type, although in Gen 7 a Pokemon may be legally altered such
+// 		 * that its stats are calculated as if these values were 31 via
+// 		 * Bottlecaps. Currently, PS handles this by considering any
+// 		 * IV of 31 in Gen 7 to count as either even or odd for the purpose
+// 		 * of validating a Hidden Power type, though restrictions on
+// 		 * possible IVs for event-only Pokemon are still considered.
+// 		 * @type {StatsTable}
+// 		 */
+// 		this.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+// 		/**
+// 		 * The Pokemon's level. This is usually between 1 and 100, inclusive,
+// 		 * but the simulator supports levels up to 9999 for testing purposes.
+// 		 * @type {number}
+// 		 */
+// 		this.level = 100;
+// 		/**
+// 		 * Whether the Pokemon is shiny or not. While having no direct
+// 		 * competitive effect except in a few OMs, certain Pokemon cannot
+// 		 * be legally obtained as shiny, either as a whole or with certain
+// 		 * event-only abilities or moves.
+// 		 * @type {boolean | undefined}
+// 		 */
+// 		this.shiny = undefined;
+// 		/**
+// 		 * The Pokemon's set's happiness value. This is used only for
+// 		 * calculating the base power of the moves Return and Frustration.
+// 		 * This value must be between 0 and 255, inclusive.
+// 		 * @type {number | undefined}
+// 		 */
+// 		this.happiness = 255; // :)
+// 		/**
+// 		 * The Pokemon's set's Hidden Power type. This value is intended
+// 		 * to be used to manually set a set's HP type in Gen 7 where
+// 		 * its IVs do not necessarily reflect the user's intended type.
+// 		 * TODO: actually support this in the teambuilder.
+// 		 * @type {string | undefined}
+// 		 */
+// 		this.hpType = undefined;
+// 		/**
+// 		 * The pokeball this Pokemon is in. Like shininess, this property
+// 		 * has no direct competitive effects, but has implications for
+// 		 * event legality. For example, any Rayquaza that knows V-Create
+// 		 * must be sent out from a Cherish Ball.
+// 		 * TODO: actually support this in the validator, switching animations,
+// 		 * and the teambuilder.
+// 		 * @type {string | undefined}
+// 		 */
+// 		this.pokeball = undefined;
+// 		Object.assign(this, data);
+// 	}
+// }
+
 exports.Tools = Tools;
 exports.Effect = Effect;
 exports.PureEffect = PureEffect;
@@ -1213,3 +1327,4 @@ exports.Template = Template;
 exports.Move = Move;
 exports.Ability = Ability;
 exports.TypeInfo = TypeInfo;
+//exports.PokemonSet = PokemonSet;
