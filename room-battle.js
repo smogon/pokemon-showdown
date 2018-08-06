@@ -256,11 +256,15 @@ class BattleTimer {
 			const connected = this.connected[slotNum];
 
 			if (!this.waitingForChoice(slot)) continue;
-			if (!connected && this.dcTicksLeft[slotNum] > 0) {
-				this.dcTicksLeft[slotNum]--;
-			} else {
+			if (connected) {
 				this.ticksLeft[slotNum]--;
 				this.turnTicksLeft[slotNum]--;
+			} else {
+				this.dcTicksLeft[slotNum]--;
+				if (!this.settings.dcTimerBank) {
+					this.ticksLeft[slotNum]--;
+					this.turnTicksLeft[slotNum]--;
+				}
 			}
 
 			let dcTicksLeft = this.dcTicksLeft[slotNum];
