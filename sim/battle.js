@@ -868,6 +868,7 @@ class Battle extends Dex.ModdedDex {
 			relayVar = this.modify(relayVar, this.event.modifier);
 		}
 		this.event = parentEvent;
+
 		return relayVar;
 	}
 
