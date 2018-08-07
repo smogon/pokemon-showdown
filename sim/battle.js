@@ -769,7 +769,7 @@ class Battle extends Dex.ModdedDex {
 		effect = this.getEffect(effect);
 		let args = [target, source, effect];
 		//console.log('Event: ' + eventid + ' (depth ' + this.eventDepth + ') t:' + target.id + ' s:' + (!source || source.id) + ' e:' + effect.id);
-		if (eventid == 'LockMoveTarget') {
+		if (eventid === 'LockMoveTarget') {
 			relayVar = target.lastMoveTargetLoc;
 		}
 		if (relayVar === undefined || relayVar === null) {
