@@ -2577,9 +2577,7 @@ let BattleItems = {
 			basePower: 130,
 		},
 		onEffectiveness: function (typeMod, target, type, move) {
-			// @ts-ignore
 			if (target.volatiles['ingrain'] || target.volatiles['smackdown'] || this.getPseudoWeather('gravity')) return;
-			// @ts-ignore
 			if (move.type === 'Ground' && target.hasType('Flying')) return 0;
 		},
 		// airborneness negation implemented in sim/pokemon.js:Pokemon#isGrounded
@@ -5430,6 +5428,7 @@ let BattleItems = {
 		onEat: function (pokemon) {
 			let stats = [];
 			for (let stat in pokemon.boosts) {
+				// @ts-ignore
 				if (stat !== 'accuracy' && stat !== 'evasion' && pokemon.boosts[stat] < 6) {
 					stats.push(stat);
 				}
@@ -5538,7 +5537,7 @@ let BattleItems = {
 		onHit: function (target, source, move) {
 			if (source && source !== target && !source.item && move && move.flags['contact']) {
 				let barb = target.takeItem();
-				// @ts-ignore
+				if (!barb) return; // Gen 4 Multitype
 				source.setItem(barb);
 				// no message for Sticky Barb changing hands
 			}
@@ -5975,6 +5974,7 @@ let BattleItems = {
 				let activate = false;
 				let boosts = {};
 				for (let i in pokemon.boosts) {
+					// @ts-ignore
 					if (pokemon.boosts[i] < 0) {
 						activate = true;
 						boosts[i] = 0;
@@ -5990,6 +5990,7 @@ let BattleItems = {
 			let activate = false;
 			let boosts = {};
 			for (let i in pokemon.boosts) {
+				// @ts-ignore
 				if (pokemon.boosts[i] < 0) {
 					activate = true;
 					boosts[i] = 0;

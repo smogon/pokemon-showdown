@@ -2111,11 +2111,13 @@ const commands = {
 	pr: 'pickrandom',
 	pick: 'pickrandom',
 	pickrandom: function (target, room, user) {
-		target = this.canTalk(target);
 		if (!target) return false;
-		let options = target.split(',');
-		if (options.length < 2) return this.parse('/help pick');
+		if (!target.includes(',')) return this.parse('/help pick');
 		if (!this.runBroadcast(true)) return false;
+		if (this.broadcasting) {
+			[, target] = Chat.splitFirst(this.message, ' ');
+		}
+		let options = target.split(',');
 		const pickedOption = options[Math.floor(Math.random() * options.length)].trim();
 		return this.sendReplyBox(Chat.html`<em>We randomly picked:</em> ${pickedOption}`);
 	},

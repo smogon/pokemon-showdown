@@ -27,7 +27,6 @@ const MORE_BUTTON_INCREMENTS = [200, 400, 800, 1600, 3200];
 const LINES_SEPARATOR = 'lines=';
 const MAX_RESULTS_LENGTH = MORE_BUTTON_INCREMENTS[MORE_BUTTON_INCREMENTS.length - 1];
 const LOG_PATH = 'logs/modlog/';
-const BATTLESEARCH_LIMIT = 1;
 
 class SortedLimitedLengthList {
 	constructor(maxSize) {
@@ -280,109 +279,77 @@ function getModlog(connection, roomid = 'global', searchString = '', maxLines = 
  * Battle Search Functions
  *********************************************************/
 
-async function runBattleSearch(userid, tierid, turnLimit) {
-	let dirs = await FS('logs/').readdir();
-	dirs = dirs.filter(f => f.length === 7 && f.includes('-')).sort((aKey, bKey) => {
-		const a = aKey.split('-').map(parseInt);
-		const b = bKey.split('-').map(parseInt);
-		if (a[0] === b[0]) {
-			if (a[1] > b[1]) return -1;
-			return 1;
-		}
-		if (a[0] > b[0]) return -1;
-		return 1;
-	});
+async function runBattleSearch(userid, turnLimit, month, tierid, date) {
+	const useRipgrep = checkRipgrepAvailability();
+	let path = `logs/${month}/${tierid}/${date}`;
 	let results = {
 		totalBattles: 0,
 		totalWins: 0,
 		totalLosses: 0,
 		totalTies: 0,
 	};
-	let monthsSearched = 0;
-	for (const month of dirs) {
-		if (monthsSearched >= BATTLESEARCH_LIMIT) break;
-		const out = await readBattleDir(`logs/${month}/${tierid}`, userid, turnLimit);
-		for (const key in out) {
-			if (!results[key]) {
-				results[key] = out[key];
-			} else {
-				results[key] += out[key];
-			}
-		}
-		monthsSearched++;
-	}
-	return results;
-}
-
-async function readBattleDir(path, userid, turnLimit) {
-	const useRipgrep = checkRipgrepAvailability();
-	let out = {
-		totalBattles: 0,
-		totalWins: 0,
-		totalLosses: 0,
-		totalTies: 0,
-	};
-	let days = [];
+	let files = [];
 	try {
-		days = await FS(path).readdir();
+		files = await FS(path).readdir();
 	} catch (err) {
-		if (err.code === 'ENOENT') return out;
+		if (err.code === 'ENOENT') {
+			results.notFound = true;
+			return results;
+		}
 		throw err;
 	}
 	if (useRipgrep) {
-		const regexString = `("p1":"${userid}"|"p2":"${userid}")`;
+		// Matches non-word (including _ which counts as a word) characters between letters/numbers
+		// in a user's name so the userid can case-insensitively be matched to the name.
+		const regexString = `("p1":"${userid.split('').join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*"|"p2":"${userid.split('').join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*")`;
 		let stdout;
 		try {
 			stdout = execFileSync('rg', ['-i', regexString, '--no-filename', '--no-line-number', '-tjson', path]);
 		} catch (error) {
-			return out;
+			return results;
 		}
 		for (const file of stdout.toString().split('\n').reverse()) {
 			if (!file) continue;
 			let data = JSON.parse(file);
 			if (data.turns > turnLimit) continue;
-			out.totalBattles++;
+			results.totalBattles++;
 			if (toId(data.winner) === userid) {
-				out.totalWins++;
+				results.totalWins++;
 			} else if (data.winner) {
-				out.totalLosses++;
+				results.totalLosses++;
 			} else {
-				out.totalTies++;
+				results.totalTies++;
 			}
 			const foe = toId(data.p1) === userid ? toId(data.p2) : toId(data.p1);
-			if (!out[foe]) out[foe] = 0;
-			out[foe]++;
+			if (!results[foe]) results[foe] = 0;
+			results[foe]++;
 		}
-		return out;
+		return results;
 	}
-	for (const day of days) {
-		const files = await FS(`${path}/${day}`).readdir();
-		for (const file of files) {
-			const json = await FS(`${path}/${day}/${file}`).readIfExists();
-			const data = JSON.parse(json);
-			if (toId(data.p1) !== userid && toId(data.p2) !== userid) continue;
-			if (data.turns > turnLimit) continue;
-			out.totalBattles++;
-			if (toId(data.winner) === userid) {
-				out.totalWins++;
-			} else if (data.winner) {
-				out.totalLosses++;
-			} else {
-				out.totalTies++;
-			}
-			const foe = toId(data.p1) === userid ? toId(data.p2) : toId(data.p1);
-			if (!out[foe]) out[foe] = 0;
-			out[foe]++;
+	for (const file of files) {
+		const json = await FS(`${path}/${file}`).readIfExists();
+		const data = JSON.parse(json);
+		if (toId(data.p1) !== userid && toId(data.p2) !== userid) continue;
+		if (data.turns > turnLimit) continue;
+		results.totalBattles++;
+		if (toId(data.winner) === userid) {
+			results.totalWins++;
+		} else if (data.winner) {
+			results.totalLosses++;
+		} else {
+			results.totalTies++;
 		}
+		const foe = toId(data.p1) === userid ? toId(data.p2) : toId(data.p1);
+		if (!results[foe]) results[foe] = 0;
+		results[foe]++;
 	}
-	return out;
+	return results;
 }
 
-function buildResults(data, userid, tierid, turnLimit) {
-	const format = Dex.getFormat(tierid);
-	let buf = `>view-battlesearch-${userid}-${format.id}-${turnLimit}\n|init|html\n|title|[Battle Search][${userid}][${format.id}]\n`;
-	buf += `|pagehtml|<div class="pad ladder">Results for ${Chat.escapeHTML(format.name)} where ${userid} was a player and the battle ended in ${turnLimit} or less turns:<br /><br />`;
-	buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="2"><h2 style="margin: 5px auto">${userid}'s ${Chat.escapeHTML(format.name)} Battles</h1></th></tr><tr><th>Category</th><th>Number</th></tr>`;
+function buildResults(data, userid, turnLimit, month, tierid, date) {
+	let buf = `>view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}-${date}-confirm\n|init|html\n|title|[Battle Search][${userid}][${tierid}][${date}]\n`;
+	buf += `|pagehtml|<div class="pad ladder"><p>${tierid} battles on ${date} where ${userid} was a player and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}:</p>`;
+	buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="2"><h2 style="margin: 5px auto">${userid}'s ${tierid} Battles</h1></th></tr><tr><th>Category</th><th>Number</th></tr>`;
 	buf += `<tr><td>Total Battles</td><td>${data.totalBattles}</td></tr><tr><td>Total Wins</td><td>${data.totalWins}</td></tr><tr><td>Total Losses</td><td>${data.totalLosses}</td></tr><tr><td>Total Ties</td><td>${data.totalTies}</td></tr>`;
 	buf += `<tr><th>Opponent</th><th>Times Battled</th></tr>`;
 	for (let foe in data) {
@@ -393,12 +360,12 @@ function buildResults(data, userid, tierid, turnLimit) {
 	return buf;
 }
 
-function getBattleSearch(connection, userid, tierid, turnLimit = 1) {
+function getBattleSearch(connection, userid, turnLimit = 1, month, tierid, date) {
 	const user = connection.user;
-	if (!user.can('forcewin')) return connection.popup(`Access Denied`);
+	if (!user.can('forcewin')) return connection.popup(`/battlesearch - Access Denied`);
 
-	PM.query({cmd: 'battlesearch', userid, tierid, turnLimit}).then(response => {
-		connection.send(buildResults(response, userid, tierid, turnLimit));
+	PM.query({cmd: 'battlesearch', userid, turnLimit, month, tierid, date}).then(response => {
+		connection.send(buildResults(response, userid, turnLimit, month, tierid, date));
 	});
 }
 
@@ -412,19 +379,75 @@ exports.pages = {
 	},
 	battlesearch(args, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		let [userid, tierid, turnLimit] = args.map(toId);
-		if (!userid || !tierid) return;
-		const format = Dex.getFormat(tierid);
-		if (format.exists) tierid = format.id;
-		if (!turnLimit) {
-			turnLimit = 1;
+		if (!user.can('forcewin')) return `|title|[Battle Search]\n|pagehtml|<div class="pad ladder">/battlesearch - Access Denied.</div>`;
+		let userid = toId(args.shift());
+		let turnLimit = parseInt(args.shift());
+		if (!userid || !turnLimit || turnLimit < 1) return user.popup(`Some arguments are missing or invalid for battlesearch. Use /battlesearch to start over.`);
+		let title = `|title|[Battle Search][${userid}]`;
+		let buf = `\n|pagehtml|<div class="pad ladder"><h2>Battle Search</h2><p>Userid: ${userid}</p><p>Maximum Turns: ${turnLimit}</p>`;
+
+		let months = FS('logs/').readdirSync();
+		months = months.filter(f => f.length === 7 && f.includes('-')).sort((aKey, bKey) => {
+			const a = aKey.split('-').map(parseInt);
+			const b = bKey.split('-').map(parseInt);
+			if (a[0] === b[0]) {
+				if (a[1] > b[1]) return -1;
+				return 1;
+			}
+			if (a[0] > b[0]) return -1;
+			return 1;
+		});
+		let month = args.shift();
+		if (!month) {
+			buf += `<p>Please select a month:</p><ul style="list-style: none; display: block; padding: 0">`;
+			for (const i of months) {
+				buf += `<li style="display: inline; list-style: none"><a href="/view-battlesearch-${userid}-${turnLimit}-${i}" target="replace"><button class="button">${i}</button></li>`;
+			}
+			return title + buf + `</ul></div>`;
 		} else {
-			turnLimit = parseInt(turnLimit);
-			if (isNaN(turnLimit)) turnLimit = 1;
+			month = month += `-${args.shift()}`;
+			if (!months.includes(month)) return title + buf + `Invalid month selected. <a href="/view-battlesearch-${userid}-${turnLimit}" target="replace"><button class="button">Back to month selection</button></a></div>`;
+			buf += `<p><a href="/view-battlesearch-${userid}-${turnLimit}" target="replace"><button class="button">Back</button></a> <button class="button disabled">${month}</button></p>`;
 		}
 
-		getBattleSearch(connection, userid, tierid, turnLimit);
-		return `|title|[Battle Search][${userid}][${format.id}]\n|pagehtml|<div class="pad ladder">Results for ${Chat.escapeHTML(format.name)} where ${userid} was a player and the battle ended in ${turnLimit} or less turns:<br /><br />Loading...`;
+		let tierid = toId(args.shift());
+		const tiers = FS(`logs/${month}/`).readdirSync();
+		if (!tierid) {
+			buf += `<p>Please select the tier to search:</p><ul style="list-style: none; display: block; padding: 0">`;
+			for (const tier of tiers) {
+				buf += `<li style="display: inline; list-style: none"><a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tier}" target="replace"><button class="button">${tier}</button></a></li>`;
+			}
+			return title + buf + `</ul></div>`;
+		} else {
+			if (!tiers.includes(tierid)) return title + buf + `Invalid tier selected. <a href="/view-battlesearch-${userid}-${turnLimit}-${month}" target="replace"><button class="button">Back to tier selection</button></a></div>`;
+			title += `[${tierid}]`;
+			buf += `<p><a href="/view-battlesearch-${userid}-${turnLimit}-${month}" target="replace"><button class="button">Back</button></a> <button class="button disabled">${tierid}</button></p>`;
+		}
+
+		let date = args.shift();
+		const days = FS(`logs/${month}/${tierid}/`).readdirSync();
+		if (!date) {
+			buf += `<p>Please select the date to search:</p><ul style="list-style: none; display: block; padding: 0">`;
+			for (const day of days) {
+				buf += `<li style="display: inline; list-style: none"><a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}-${day}" target="replace"><button class="button">${day}</button></a></li>`;
+			}
+			return title + buf + `</ul></div>`;
+		} else {
+			date = date += `-${args.shift()}-${args.shift()}`;
+			if (!days.includes(date)) return title + buf + `Invalid date selected. <a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}" target="replace"><button class="button">Back to date selection</button></a></div>`;
+			title += `[${date}]`;
+			buf += `<p><a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}" target="replace"><button class="button">Back</button></a> <button class="button disabled">${date}</button></p>`;
+		}
+
+		if (args[0] !== 'confirm') {
+			buf += `<p>Are you sure you want to run a battle search for for ${tierid} battles on ${date} where ${userid} was a player and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}?</p>`;
+			buf += `<p><a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}-${date}-confirm" target="replace"><button class="button notifying">Yes, run the battle search</button></a> <a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}" target="replace"><button class="button">No, go back</button></a></p>`;
+			return title + buf + `</div>`;
+		}
+
+		// Run search
+		getBattleSearch(connection, userid, turnLimit, month, tierid, date);
+		return title + `\n|pagehtml|<div class="pad ladder"><h2>Battle Search</h2><p>Searching for ${tierid} battles on ${date} where ${userid} was a player and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}.</p><p>Loading... (this will take a while)</p></div>`;
 	},
 };
 
@@ -475,22 +498,21 @@ exports.commands = {
 
 	battlesearch: function (target, room, user, connection) {
 		if (!target.trim()) return this.parse('/help battlesearch');
+		if (!this.can('forcewin')) return;
 
-		let [userid, tierid, turnLimit] = target.split(',').map(x => { return toId(x); });
-		if (!userid || !tierid) return this.parse('/help battlesearch');
-		const format = Dex.getFormat(tierid);
-		if (format.exists) tierid = format.id;
+		let [userid, turnLimit] = target.split(',').map(toId);
+		if (!userid) return this.parse('/help battlesearch');
 		if (!turnLimit) {
 			turnLimit = 1;
 		} else {
 			turnLimit = parseInt(turnLimit);
-			if (isNaN(turnLimit) || turnLimit < 1) turnLimit = 1;
+			if (isNaN(turnLimit) || turnLimit < 1) return this.errorReply(`The turn limit should be a number that is greater than 0.`);
 		}
 
-		getBattleSearch(connection, userid, tierid, turnLimit);
-		return user.send(`>view-battlesearch-${userid}-${format.id}-${turnLimit}\n|init|html\n|title|[Battle Search][${userid}][${format.id}]\n|pagehtml|<div class="pad ladder">Results for ${Chat.escapeHTML(format.name)} where ${userid} was a player and the battle ended in ${turnLimit} or less turns:<br /><br />Loading...`);
+		// Selection on month, tier, and date will be handled in the HTML room
+		return this.parse(`/join view-battlesearch-${userid}-${turnLimit}`);
 	},
-	battlesearchhelp: ['/battlesearch [user], [tier], (turn limit) - Searches a users rated battle history and returns information on battles that ended in (turn limit or 1) turns or less. Requires &, ~'],
+	battlesearchhelp: ['/battlesearch [user], (turn limit) - Searches a users rated battle history and returns information on battles that ended in less than (turn limit or 1) turns. Requires &, ~'],
 };
 
 /*********************************************************
@@ -515,14 +537,16 @@ const PM = new QueryProcessManager(module, async data => {
 		}
 		break;
 	case 'battlesearch':
-		const {userid, tierid, turnLimit} = data;
+		const {userid, turnLimit, month, tierid, date} = data;
 		try {
-			return await runBattleSearch(userid, tierid, turnLimit);
+			return await runBattleSearch(userid, turnLimit, month, tierid, date);
 		} catch (err) {
 			require('../lib/crashlogger')(err, 'A battle search query', {
 				userid,
-				tierid,
 				turnLimit,
+				month,
+				tierid,
+				date,
 			});
 		}
 		break;

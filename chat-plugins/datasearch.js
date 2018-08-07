@@ -1204,10 +1204,12 @@ function runItemsearch(target, cmd, canAll, message) {
 	let showAll = false;
 
 	target = target.trim();
-	if (target.substr(target.length - 5) === ', all') {
+	const lastCommaIndex = target.lastIndexOf(',');
+	const lastArgumentSubstr = target.substr(lastCommaIndex + 1).trim();
+	if (lastArgumentSubstr === 'all') {
 		if (!canAll) return {reply: "A search ending in ', all' cannot be broadcast."};
 		showAll = true;
-		target = target.substr(0, target.length - 5);
+		target = target.substr(0, lastCommaIndex);
 	}
 
 	target = target.toLowerCase().replace('-', ' ').replace(/[^a-z0-9.\s/]/g, '');
@@ -1377,27 +1379,13 @@ function runItemsearch(target, cmd, canAll, message) {
 				if (descWords.includes(word)) matched++;
 			}
 
-			if (matched >= bestMatched && matched >= (searchedWords.length * 3 / 5)) foundItems.push(item.name);
-			if (matched > bestMatched) bestMatched = matched;
-		}
-
-		// iterate over found items again to make sure they all are the best match
-		for (let [i, id] of foundItems.entries()) {
-			let item = Dex.getItem(id);
-			let matched = 0;
-			let descWords = item.desc;
-			if (/[1-9.]+x/.test(descWords)) descWords += ' increases';
-			if (item.isBerry) descWords += ' berry';
-			descWords = descWords.replace(/super[-\s]effective/g, 'supereffective');
-			descWords = descWords.toLowerCase().replace('-', ' ').replace(/[^a-z0-9\s/]/g, '').replace(/(\D)\./, (p0, p1) => p1).split(' ');
-
-			for (const word of searchedWords) {
-				if (descWords.includes(word)) matched++;
-			}
-
-			if (matched !== bestMatched) {
-				foundItems.splice(i, 1);
-				i--;
+			if (matched >= (searchedWords.length * 3 / 5)) {
+				if (matched === bestMatched) {
+					foundItems.push(item.name);
+				} else if (matched > bestMatched) {
+					foundItems = [item.name];
+					bestMatched = matched;
+				}
 			}
 		}
 	}

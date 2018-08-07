@@ -7278,6 +7278,7 @@
 				"species": "Delphox",
 				"item": ["Leftovers"],
 				"ability": ["Blaze"],
+        "evs": {"hp": 248, "spd": 108, "spe": 152},
 				"ivs": {"atk": 0},
 				"nature": "Timid",
 				"moves": [["Wish"], ["Protect"], ["Toxic"], ["Flamethrower"]]
@@ -7548,14 +7549,14 @@
 			"sets": [{
 				"species": "Incineroar",
 				"item": ["Assault Vest"],
-				"ability": ["Blaze"],
+				"ability": ["Intimidate"],
 				"evs": {"hp": 248, "atk": 252, "spa": 8},
 				"nature": "Brave",
 				"moves": [["Fire Blast"], ["Darkest Lariat"], ["U-turn"], ["Fake Out"]]
 			}, {
 				"species": "Incineroar",
 				"item": ["Incinium Z"],
-				"ability": ["Blaze"],
+				"ability": ["Intimidate"],
 				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": "Jolly",
 				"moves": [["Flare Blitz"], ["Darkest Lariat"], ["Low Kick"], ["Swords Dance"]]
@@ -14428,13 +14429,6 @@
 			"flags": {},
 			"sets": [{
 				"species": "Mimikyu",
-				"item": ["Life Orb"],
-				"ability": ["Disguise"],
-				"evs": {"atk": 252, "def": 4, "spe": 252},
-				"nature": "Jolly",
-				"moves": [["Swords Dance"], ["Shadow Claw"], ["Play Rough"], ["Shadow Sneak"]]
-			}, {
-				"species": "Mimikyu",
 				"item": ["Ghostium Z"],
 				"ability": ["Disguise"],
 				"evs": {"atk": 252, "def": 4, "spe": 252},
@@ -14447,13 +14441,6 @@
 				"evs": {"atk": 252, "def": 4, "spe": 252},
 				"nature": "Jolly",
 				"moves": [["Swords Dance"], ["Shadow Claw"], ["Play Rough"], ["Shadow Sneak"]]
-			}, {
-				"species": "Mimikyu",
-				"item": ["Mimikium Z"],
-				"ability": ["Disguise"],
-				"evs": {"atk": 252, "def": 4, "spe": 252},
-				"nature": "Jolly",
-				"moves": [["Swords Dance"], ["Play Rough"], ["Shadow Claw"], ["Shadow Sneak"]]
 			}, {
 				"species": "Mimikyu",
 				"item": ["Life Orb"],
@@ -14477,14 +14464,14 @@
 				"species": "Slurpuff",
 				"item": ["Sitrus Berry"],
 				"ability": ["Unburden"],
-				"evs": {"atk": 252, "def": 4, "spe": 252},
+				"evs": {"hp": 4, "atk": 252, "spe": 252},
 				"nature": "Jolly",
 				"moves": [["Play Rough"], ["Drain Punch"], ["Belly Drum"], ["Sticky Web"]]
 			}, {
 				"species": "Slurpuff",
 				"item": ["Sitrus Berry"],
 				"ability": ["Unburden"],
-				"evs": {"atk": 252, "def": 4, "spe": 252},
+				"evs": {"hp": 4, "atk": 252, "spe": 252},
 				"nature": "Jolly",
 				"moves": [["Play Rough"], ["Drain Punch"], ["Belly Drum"], ["Return"]]
 			}]

@@ -1,21 +1,21 @@
-import * as BattleType from './../sim/battle'
-import * as BattleStreamType from './../sim/battle-stream'
-import * as DataType from './../sim/dex-data'
-import * as DexType from './../sim/dex'
-import * as SimType from './../sim/index'
-import * as PokemonType from './../sim/pokemon'
-import * as PRNGType from './../sim/prng'
-import * as SideType from './../sim/side'
-import * as TeamValidatorType from './../sim/team-validator'
-import * as RoomsType from './../rooms'
-import * as RoomlogsType from './../roomlogs'
-import * as LadderStoreType from './../ladders-remote'
-import * as LaddersType from './../ladders'
-import * as UsersType from './../users'
-import * as PunishmentsType from './../punishments'
-import * as StreamsType from './../lib/streams'
-import * as child_process from 'child_process'
-import * as ChatType from './../chat'
+import BattleType = require('./../sim/battle');
+import BattleStreamType = require('./../sim/battle-stream');
+import DataType = require('./../sim/dex-data');
+import DexType = require('./../sim/dex');
+import SimType = require('./../sim/index');
+import PokemonType = require('./../sim/pokemon');
+import PRNGType = require('./../sim/prng');
+import SideType = require('./../sim/side');
+import TeamValidatorType = require('./../sim/team-validator');
+import RoomsType = require('./../rooms');
+import RoomlogsType = require('./../roomlogs');
+import LadderStoreType = require('./../ladders-remote');
+import LaddersType = require('./../ladders');
+import UsersType = require('./../users');
+import PunishmentsType = require('./../punishments');
+import StreamsType = require('./../lib/streams');
+import child_process = require('child_process');
+import ChatType = require('./../chat');
 
 declare global {
 	// modules

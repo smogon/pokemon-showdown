@@ -290,6 +290,7 @@ const commands = {
 			// @ts-ignore
 			room.hangmanDisabled = true;
 			if (room.chatRoomData) {
+				// @ts-ignore
 				room.chatRoomData.hangmanDisabled = true;
 				Rooms.global.writeChatRoomData();
 			}
@@ -305,6 +306,7 @@ const commands = {
 			// @ts-ignore
 			delete room.hangmanDisabled;
 			if (room.chatRoomData) {
+				// @ts-ignore
 				delete room.chatRoomData.hangmanDisabled;
 				Rooms.global.writeChatRoomData();
 			}

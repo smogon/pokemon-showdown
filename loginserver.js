@@ -46,7 +46,6 @@ class LoginServerInstance {
 		this.requestQueue = [];
 
 		this.requestTimer = null;
-		this.requestTimeoutTimer = null;
 		/** @type {string} */
 		this.requestLog = '';
 		this.lastRequest = 0;

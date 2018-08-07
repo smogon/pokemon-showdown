@@ -68,7 +68,7 @@ let BattleStatuses = {
 		onModifyMove: function () {},
 		onHit: function () {},
 		onAfterMoveSecondary: function (target, source, move) {
-			if ((move.secondary && move.secondary !== true && move.secondary.status === 'brn') || move.statusRoll === 'brn') {
+			if ((move.secondary && move.secondary.status === 'brn') || move.statusRoll === 'brn') {
 				target.cureStatus();
 			}
 		},

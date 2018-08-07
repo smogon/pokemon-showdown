@@ -118,7 +118,6 @@ let BattleMovedex = {
 		damageCallback: function (pokemon, target) {
 			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && pokemon.lastAttackedBy.move && (this.getCategory(pokemon.lastAttackedBy.move) === 'Physical' || this.getMove(pokemon.lastAttackedBy.move).id === 'hiddenpower') &&
 				(!target.lastMove || target.lastMove.id !== 'sleeptalk')) {
-				// @ts-ignore
 				return 2 * pokemon.lastAttackedBy.damage;
 			}
 			return false;
@@ -378,7 +377,6 @@ let BattleMovedex = {
 		damageCallback: function (pokemon, target) {
 			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && pokemon.lastAttackedBy.move && this.getCategory(pokemon.lastAttackedBy.move) === 'Special' &&
 				this.getMove(pokemon.lastAttackedBy.move).id !== 'hiddenpower' && (!target.lastMove || target.lastMove.id !== 'sleeptalk')) {
-				// @ts-ignore
 				return 2 * pokemon.lastAttackedBy.damage;
 			}
 			return false;
@@ -529,7 +527,7 @@ let BattleMovedex = {
 			this.heal(target.maxhp);
 			this.add('-status', target, 'slp', '[from] move: Rest');
 		},
-		secondary: false,
+		secondary: null,
 	},
 	reversal: {
 		inherit: true,
@@ -570,7 +568,7 @@ let BattleMovedex = {
 		onPrepareHit: function (target, source) {
 			return source.status !== 'slp';
 		},
-		secondary: {},
+		secondary: null,
 	},
 	slash: {
 		inherit: true,
@@ -639,6 +637,7 @@ let BattleMovedex = {
 					this.debug('sub bypass: self hit');
 					return;
 				}
+				if (move.id === 'twineedle') delete move.secondaries;
 				if (move.drain) {
 					this.add('-hint', "In Gold/Silver/Crystal, draining moves always miss against Substitute.");
 					this.add('-miss', source);
@@ -675,7 +674,7 @@ let BattleMovedex = {
 					this.add('-activate', target, 'Substitute', '[damage]');
 				}
 				if (move.recoil) {
-					this.damage(Math.round(damage * move.recoil[0] / move.recoil[1]), source, target, 'recoil');
+					this.damage(1, source, target, 'recoil');
 				}
 				this.runEvent('AfterSubDamage', target, source, move, damage);
 				return 0; // hit
