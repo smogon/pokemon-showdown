@@ -2271,7 +2271,7 @@ let BattleAbilities = {
 		},
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, pokemon, target, move) {
-			if (move.hasParentalBond && move.hit && ++move.hit > 1) return this.chainModify(0.25);
+			if (move.hasParentalBond && typeof move.hit === 'number' && ++move.hit > 1) return this.chainModify(0.25);
 		},
 		onSourceModifySecondaries: function (secondaries, target, source, move) {
 			if (move.hasParentalBond && move.id === 'secretpower' && move.hit && move.hit < 2) {
