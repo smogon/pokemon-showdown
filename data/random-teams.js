@@ -1911,7 +1911,7 @@ class RandomTeams extends Dex.ModdedDex {
 		// no exploitable information is leaked from rolling the tier in getTeam(p1).
 		let availableTiers = ['Uber', 'OU', 'UU', 'RU', 'NU', 'PU', 'LC', 'Mono'];
 		if (!this.FactoryTier) this.FactoryTier = this.sample(availableTiers);
-		const chosenTier = this.FactoryTier;
+		const chosenTier = 'Mono';
 		const tierValues = {
 			'Uber': 5,
 			'OU': 4, 'UUBL': 4,
@@ -1971,8 +1971,11 @@ class RandomTeams extends Dex.ModdedDex {
 			if (itemData.megaStone) types = this.getTemplate(itemData.megaStone).types;
 
 			// Enforce Monotype
-			if (chosenTier === 'Mono' && types.indexOf(type) < 0) {
-				continue;
+			if (chosenTier === 'Mono') {
+				for (const type of types) {
+					if (!template.types.includes(type)) continue;
+				}
+				if (!types.includes(type)) continue;
 			} else {
 			// If not Monotype, limit to two of each type
 				let skip = false;
