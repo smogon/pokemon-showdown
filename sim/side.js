@@ -382,7 +382,7 @@ class Side {
 
 		const lockedMove = pokemon.getLockedMove();
 		if (lockedMove) {
-			const lockedMoveTarget = this.battle.runEvent('LockMoveTarget', pokemon);
+			const lockedMoveTarget = pokemon.lastMoveTargetLoc;
 			this.choice.actions.push({
 				choice: 'move',
 				pokemon: pokemon,
