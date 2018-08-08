@@ -1911,7 +1911,7 @@ class RandomTeams extends Dex.ModdedDex {
 		// no exploitable information is leaked from rolling the tier in getTeam(p1).
 		let availableTiers = ['Uber', 'OU', 'UU', 'RU', 'NU', 'PU', 'LC', 'Mono'];
 		if (!this.FactoryTier) this.FactoryTier = this.sample(availableTiers);
-		const chosenTier = 'Mono';
+		const chosenTier = this.FactoryTier;
 		const tierValues = {
 			'Uber': 5,
 			'OU': 4, 'UUBL': 4,
