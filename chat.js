@@ -792,11 +792,7 @@ class CommandContext {
 	 * @param {User?} [targetUser]
 	 */
 	canTalk(message = null, room = null, targetUser = null) {
-		if (!room) {
-			if (this.room instanceof Rooms.GlobalRoom) {
-				// should never happen
-				throw new Error(`Command tried to write to global: ${this.user.name}: ${message}`);
-			}
+		if (!room && !(this.room instanceof Rooms.GlobalRoom)) {
 			room = this.room;
 		}
 		if (!targetUser && this.pmTarget) {
