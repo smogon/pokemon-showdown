@@ -904,7 +904,7 @@ class RandomTeams extends Dex.ModdedDex {
 				case 'acrobatics':
 					if (hasMove['hurricane'] && counter.setupType !== 'Physical') rejected = true;
 					break;
-				case 'airslash': case 'oblivionwing':
+				case 'airslash':
 					if (hasMove['acrobatics'] || hasMove['bravebird'] || hasMove['hurricane']) rejected = true;
 					break;
 				case 'hex':
@@ -921,7 +921,8 @@ class RandomTeams extends Dex.ModdedDex {
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'gigadrain':
-					if (hasMove['petaldance'] || (hasMove['seedbomb'] && !isDoubles) || counter.Special < 4 && !counter.setupType && hasMove['leafstorm']) rejected = true;
+					if (hasMove['petaldance'] || hasMove['powerwhip'] || (hasMove['seedbomb'] && !isDoubles)) rejected = true;
+					if (counter.Special < 4 && !counter.setupType && hasMove['leafstorm']) rejected = true;
 					break;
 				case 'leafblade': case 'woodhammer':
 					if (hasMove['gigadrain'] && counter.setupType !== 'Physical') rejected = true;
@@ -1003,7 +1004,7 @@ class RandomTeams extends Dex.ModdedDex {
 					}
 					break;
 				case 'headsmash':
-					if (hasMove['stoneedge'] || (isDoubles && hasMove['rockslide'])) rejected = true;
+					if (hasMove['stoneedge'] || isDoubles && hasMove['rockslide']) rejected = true;
 					break;
 				case 'rockblast': case 'rockslide':
 					if ((hasMove['headsmash'] || hasMove['stoneedge']) && !isDoubles) rejected = true;
@@ -1443,7 +1444,7 @@ class RandomTeams extends Dex.ModdedDex {
 		// Medium priority
 		} else if (((ability === 'Speed Boost' && !hasMove['substitute']) || (ability === 'Stance Change')) && counter.Physical + counter.Special > 2) {
 			item = 'Life Orb';
-		} else if (template.baseStats.spe <= 50 && hasMove['sleeppowder'] && counter.setupType && !teamDetails.zMove) {
+		} else if (hasType['Grass'] && template.baseStats.spe <= 70 && hasMove['sleeppowder'] && counter.setupType && !teamDetails.zMove) {
 			item = 'Grassium Z';
 		} else if (counter.Physical >= 4 && !hasMove['bodyslam'] && !hasMove['dragontail'] && !hasMove['fakeout'] && !hasMove['flamecharge'] && !hasMove['rapidspin'] && !hasMove['suckerpunch'] && !isDoubles) {
 			item = template.baseStats.atk >= 100 && template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && this.randomChance(2, 3) ? 'Choice Scarf' : 'Choice Band';
