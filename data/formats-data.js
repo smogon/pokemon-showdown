@@ -854,8 +854,8 @@ let BattleFormatsData = {
 		doublesTier: "DUU",
 	},
 	bellsprout: {
-		randomBattleMoves: ["swordsdance", "sleeppowder", "sunnyday", "growth", "solarbeam", "gigadrain", "sludgebomb", "weatherball", "suckerpunch", "seedbomb"],
-		randomDoubleBattleMoves: ["swordsdance", "sleeppowder", "sunnyday", "growth", "solarbeam", "gigadrain", "sludgebomb", "weatherball", "suckerpunch", "seedbomb", "protect"],
+		randomBattleMoves: ["sleeppowder", "sunnyday", "growth", "solarbeam", "sludgebomb", "weatherball", "suckerpunch", "seedbomb"],
+		randomDoubleBattleMoves: ["sleeppowder", "sunnyday", "growth", "solarbeam", "sludgebomb", "weatherball", "suckerpunch", "seedbomb", "protect"],
 		eventPokemon: [
 			{"generation": 3, "level": 5, "shiny": 1, "moves": ["vinewhip", "teeterdance"], "pokeball": "pokeball"},
 			{"generation": 3, "level": 10, "gender": "M", "moves": ["vinewhip", "growth"], "pokeball": "pokeball"},
@@ -863,16 +863,16 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	weepinbell: {
-		randomBattleMoves: ["swordsdance", "sleeppowder", "sunnyday", "growth", "solarbeam", "gigadrain", "sludgebomb", "weatherball", "suckerpunch", "seedbomb", "knockoff"],
-		randomDoubleBattleMoves: ["swordsdance", "sleeppowder", "sunnyday", "growth", "solarbeam", "gigadrain", "sludgebomb", "weatherball", "suckerpunch", "seedbomb", "protect", "knockoff"],
+		randomBattleMoves: ["sleeppowder", "sunnyday", "growth", "solarbeam", "sludgebomb", "weatherball", "suckerpunch", "seedbomb", "knockoff"],
+		randomDoubleBattleMoves: ["sleeppowder", "sunnyday", "growth", "solarbeam", "sludgebomb", "weatherball", "suckerpunch", "seedbomb", "knockoff", "protect"],
 		eventPokemon: [
 			{"generation": 3, "level": 32, "moves": ["morningsun", "magicalleaf", "sludgebomb", "sweetscent"]},
 		],
 		tier: "NFE",
 	},
 	victreebel: {
-		randomBattleMoves: ["sleeppowder", "sunnyday", "growth", "solarbeam", "gigadrain", "sludgebomb", "weatherball", "suckerpunch", "powerwhip", "knockoff", "swordsdance"],
-		randomDoubleBattleMoves: ["swordsdance", "sleeppowder", "sunnyday", "growth", "solarbeam", "gigadrain", "sludgebomb", "weatherball", "suckerpunch", "powerwhip", "protect", "knockoff"],
+		randomBattleMoves: ["sleeppowder", "sludgebomb", "gigadrain", "hiddenpowerfire", "suckerpunch", "swordsdance", "powerwhip", "knockoff"],
+		randomDoubleBattleMoves: ["sleeppowder", "sunnyday", "growth", "solarbeam", "sludgebomb", "weatherball", "suckerpunch", "powerwhip", "knockoff", "protect"],
 		tier: "PU",
 		doublesTier: "DUU",
 	},
@@ -1368,7 +1368,7 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	kingdra: {
-		randomBattleMoves: ["dragondance", "waterfall", "outrage", "ironhead", "substitute", "raindance", "hydropump", "dracometeor"],
+		randomBattleMoves: ["raindance", "hydropump", "dracometeor", "icebeam", "dragondance", "waterfall", "outrage"],
 		randomDoubleBattleMoves: ["hydropump", "icebeam", "raindance", "dracometeor", "dragonpulse", "muddywater", "protect"],
 		eventPokemon: [
 			{"generation": 3, "level": 50, "abilities": ["swiftswim"], "moves": ["leer", "watergun", "twister", "agility"], "pokeball": "pokeball"},
@@ -3163,8 +3163,8 @@ let BattleFormatsData = {
 		doublesTier: "DUU",
 	},
 	volbeat: {
-		randomBattleMoves: ["uturn", "roost", "bugbuzz", "thunderwave", "encore", "tailwind", "defog"],
-		randomDoubleBattleMoves: ["stringshot", "strugglebug", "helpinghand", "bugbuzz", "thunderwave", "encore", "tailwind", "protect"],
+		randomBattleMoves: ["uturn", "roost", "thunderwave", "encore", "tailwind", "defog"],
+		randomDoubleBattleMoves: ["stringshot", "strugglebug", "helpinghand", "thunderwave", "encore", "tailwind", "protect"],
 		tier: "PU",
 		doublesTier: "DUU",
 	},
@@ -6000,15 +6000,15 @@ let BattleFormatsData = {
 		doublesTier: "DUU",
 	},
 	fletchling: {
-		randomBattleMoves: ["roost", "swordsdance", "uturn", "return", "overheat", "flamecharge", "tailwind"],
+		randomBattleMoves: ["roost", "swordsdance", "uturn", "return", "overheat", "flamecharge"],
 		tier: "LC",
 	},
 	fletchinder: {
-		randomBattleMoves: ["roost", "swordsdance", "uturn", "return", "overheat", "flamecharge", "tailwind", "acrobatics"],
+		randomBattleMoves: ["roost", "swordsdance", "uturn", "return", "overheat", "flamecharge", "acrobatics"],
 		tier: "NFE",
 	},
 	talonflame: {
-		randomBattleMoves: ["bravebird", "flareblitz", "roost", "swordsdance", "uturn", "willowisp", "tailwind"],
+		randomBattleMoves: ["bravebird", "flareblitz", "roost", "swordsdance", "uturn", "willowisp"],
 		randomDoubleBattleMoves: ["bravebird", "flareblitz", "roost", "swordsdance", "uturn", "willowisp", "tailwind", "taunt", "protect"],
 		tier: "RUBL",
 		doublesTier: "DUU",
@@ -6389,7 +6389,7 @@ let BattleFormatsData = {
 		doublesTier: "DUber",
 	},
 	yveltal: {
-		randomBattleMoves: ["darkpulse", "hurricane", "foulplay", "oblivionwing", "uturn", "suckerpunch", "taunt", "toxic", "roost"],
+		randomBattleMoves: ["darkpulse", "oblivionwing", "focusblast", "uturn", "foulplay", "suckerpunch", "toxic", "taunt", "roost"],
 		randomDoubleBattleMoves: ["darkpulse", "oblivionwing", "taunt", "focusblast", "hurricane", "roost", "suckerpunch", "snarl", "skydrop", "protect"],
 		eventPokemon: [
 			{"generation": 6, "level": 50, "moves": ["snarl", "oblivionwing", "disable", "darkpulse"]},

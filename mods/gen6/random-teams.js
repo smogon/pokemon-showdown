@@ -330,7 +330,7 @@ class RandomGen6Teams extends RandomTeams {
 				case 'acrobatics':
 					if (hasMove['hurricane'] && counter.setupType !== 'Physical') rejected = true;
 					break;
-				case 'airslash': case 'oblivionwing':
+				case 'airslash':
 					if (hasMove['acrobatics'] || hasMove['bravebird'] || hasMove['hurricane']) rejected = true;
 					break;
 				case 'shadowclaw':
@@ -340,8 +340,9 @@ class RandomGen6Teams extends RandomTeams {
 					if (hasType['Ghost'] && template.types.length > 1 && counter.stab < 2) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
-				case 'gigadrain':
-					if (hasMove['seedbomb'] || hasMove['petaldance'] || counter.Special < 4 && !counter.setupType && hasMove['leafstorm']) rejected = true;
+				case 'gigadrain': case 'powerwhip':
+					if (hasMove['seedbomb'] || hasMove['petaldance'] || hasMove['sunnyday'] && hasMove['solarbeam']) rejected = true;
+					if (counter.Special < 4 && !counter.setupType && hasMove['leafstorm']) rejected = true;
 					break;
 				case 'leafblade': case 'woodhammer':
 					if (hasMove['gigadrain'] && counter.setupType !== 'Physical') rejected = true;
