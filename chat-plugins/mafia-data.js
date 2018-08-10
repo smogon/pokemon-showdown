@@ -1014,7 +1014,7 @@ exports.roles = Object.assign(Object.create(null), {
 	vanguard: {
 		name: `Vanguard`,
 		id: `vanguard`,
-		memo: [`Vanguard: During the Night, you may PM the host the name of another player. If this player used an action, they can\'t be killed that night.`],
+		memo: [`Vanguard: During the Night, you may PM the host the name of another player. If this player used an action, they can't be killed that night.`],
 	},
 	vig: `vigilante`,
 	vigilante: {
@@ -1076,18 +1076,42 @@ exports.modifiers = Object.assign(Object.create(null), {
 		id: `ascetic`,
 		memo: [`Ascetic: Actions on you will fail, excluding kills.`],
 	},
-	//  backup
-	//  blue goo
-	//  bomb
-	//  brown goo
+	backup: {
+		name: `Backup`,
+		id: `backup`,
+		memo: [`Backup: If the role specified in your role PM dies, you become that role instead.`],
+	},
+	blue_goo: {
+		name: `Blue Goo`,
+		id: `bluegoo`,
+		memo: [`Blue Goo: If you die or are lynched, the player who kills you or casts the lynching vote becomes blue goo themselves.`],
+	},
+	bomb: {
+		name: `Bomb`,
+		id: `bomb`,
+		memo: [`Bomb: If you are killed, your killer will die too.`],
+	},
+	brown_goo: {
+		name: `Brown Goo`,
+		id: `browngoo`,
+		memo: [`Brown Goo: You will steal the vote of anyone who targets you for the next game day.`],
+	},
 	bp: `bulletproof`,
 	bulletproof: {
 		name: `Bulletproof`,
 		id: `bulletproof`,
 		memo: [`Bulletproof: You cannot be nightkilled.`],
 	},
-	//  card dealer
-	//  celebrity
+	card_dealer: {
+		name: `Card Dealer`,
+		id: `card_dealer`,
+		memo: [`Anyone who targets you, will have their role replaced by a random other role.`],
+	},
+	celebrity: {
+		name: `Celebrity`,
+		id: `celebrity`,
+		memo: [`It will be publicly revealed who targeted you each night.`],
+	},
 	clairvoyant: {
 		name: `Clairvoyant`,
 		id: `clairvoyant`,
@@ -1104,19 +1128,31 @@ exports.modifiers = Object.assign(Object.create(null), {
 		id: `compulsivechildkiller`,
 		memo: [`Compulsive Child Killer: Whenever an Innocent Child (or a variation of one) reveals itself, you will immediately kill them.`],
 	},
-	//  consistent
+	consistent: {
+		name: `Consistent`,
+		id: `consistent`,
+		memo: [`Consistent: Once you targeted someone, you may not target anyone else.`],
+	},
 	contrary: {
 		name: `Contrary`,
 		id: `contrary`,
 		memo: [`Contrary: Your action only succeeds when it'd fail without this modifier.`],
 	},
-	//  curfew agent
+	curfew_agent: {
+		name: `Curfew Agent`,
+		id: `curfewagent`,
+		memo: [`Curfew Agent: While you are alive, no one will die at night.`],
+	},
 	day: {
 		name: `Day`,
 		id: `day`,
 		memo: [`Day: You have to use your action during the Day.`],
 	},
-	//  deactivator
+	deactivator: {
+		name: `Deactivator`,
+		id: `deactivator`,
+		memo: [`Deactivator: While you are alive, a specific role can't be used.`],
+	},
 	death: {
 		name: `Death`,
 		id: `death`,
@@ -1132,7 +1168,16 @@ exports.modifiers = Object.assign(Object.create(null), {
 		id: `deathproof`,
 		memo: [`Deathproof: You can't die.`],
 	},
-	//  detector
+	detector: {
+		name: `Detector`,
+		id: `detector`,
+		memo: [`Detector: You will be informed of anyone who targeted you.`],
+	},
+	delayed: {
+		name: `Delayed`,
+		id: `delayed`,
+		memo: [`Delayed: Your action will only go through the following night.`].
+	}
 	doppelganger: {
 		name: `Doppelganger`,
 		id: `doppelganger`,
@@ -1148,7 +1193,12 @@ exports.modifiers = Object.assign(Object.create(null), {
 		id: `evangelistic`,
 		memo: [`Evangelistic: You will be inspected as CULT.`],
 	},
-	//  excellent sense of smell
+	excellent_sense_of_smell_townie: `excellent_sense_of_smell`,
+	excellent_sense_of_smell: {
+		name: `Excellent Sense of Smell`,
+		id: `ecxellentsenseofsmell`,
+		memo: [`Excellent Sense of Smell: You know how many Goo-aligned players there are in the game.`],
+	},
 	false: {
 		name: `False`,
 		id: `false`,
@@ -1159,21 +1209,41 @@ exports.modifiers = Object.assign(Object.create(null), {
 		id: `friend`,
 		memo: [`Friend: Besides your normal win-condition, you can win when only Friends are left alive. You can talk to other Friends.`],
 	},
-	//  gambit
+	gambit: {
+		name: `Gambit`,
+		id: `gambit`,
+		memo: [`Gambit: Your action only works if you die that same night.`],
+	},
 	godfather: {
 		name: `Godfather`,
 		id: `godfather`,
 		memo: [`Godfather: You will be inspected as NOT MAFIA.`],
 	},
-	//  gold goo
+	gold_goo: {
+		name: `Gold Goo`,
+		id: `goldgoo`,
+		memo: [`Whenever someone targets you with a non-factional action, they lose the ability to use that action and you gain it.`],
+	},
 	gravedigger: {
 		name: `Gravedigger`,
 		id: `gravedigger`,
 		memo: [`Gravedigger: You will return as if you targeted the player who died to Watchers and Trackers.`],
 	},
-	//  green goo
-	//  grim reaper
-	//  hallucinator
+	green_goo: {
+		name: `Green Goo`,
+		id: `greengoo`,
+		memo: [`Whenever a player targets you with an action, they will become green goo and lose any powers they currently have. Their faction doesn't change.`],
+	},
+	grim_reaper: {
+		name: `Grim Reaper`,
+		id: `grimreaper`,
+		memo: [`Grim Reaper: While you are alive, all dead players are Restless Spirits.`],
+	},
+	hallucinator: {
+		name: `Hallucinator`,
+		id: `hallucinator`,
+		memo: [`Hallucinator: While you are alive, all dead players reveal a random role in the setup, instead of their own role.`],
+	},
 	haunting: {
 		name: `Haunting`,
 		id: `haunting`,
@@ -1199,17 +1269,42 @@ exports.modifiers = Object.assign(Object.create(null), {
 		id: `hopeful`,
 		memo: [`Hopeful: You always receive VIGILANTE upon inspection.`],
 	},
-	//  illusionist
-	//  immobile parrot
-	//  inconsistent
-	//  inheritor
+	illusionist: {
+		name: `Illusionist`,
+		id: `illusionist`,
+		memo: [`Illusionist: You may still lynch and talk after death.`],
+	},
+	immobile_os_parrot
+	immobile_parrot: {
+		name: `Immobile Parrot`,
+		id: `immobile_parrot`,
+		memo: [`Immobile Parrot: Anyone who targets you, targets themselves instead.`],
+	},
+	inconsistent: {
+		name: `Inconsistent`,
+		id: `inconsistent`,
+		memo: [`Inconsistent: You may not target any player multiple times.`],
+	},
+	inheritor: {
+		name: `Inheritor`,
+		id: `inheritor`,
+		memo: [`Inheritor: You inherit the abilities of the most recently killed player.`],
+	},
 	insane: {
 		name: `Insane`,
 		id: `insane`,
 		memo: [`Insane: You receive the opposite results from expected upon inspection.`],
 	},
-	//  insomniac
-	//  lightkeeper
+	insomniac: {
+		name: `Insomniac`,
+		id: `insomniac`,
+		memo: [`Insomniac: You may talk at night.`],
+	},
+	lightkeeper: {
+		name: `Lightkeeper`,
+		id: `lightkeeper`,
+		memo: [`Lightkeeper: When you die, the next day is anonymous (and all messages go through the host).`],
+	},
 	lightning_rod: {
 		name: `Lightning Rod`,
 		id: `lightningrod`,
@@ -1241,6 +1336,7 @@ exports.modifiers = Object.assign(Object.create(null), {
 		memo: [`Mason: You can speak to other Masons, who are confirmed to not be members of the MAFIA.`],
 	},
 	doublevoter: `mayor`,
+	double_voter: `mayor`,
 	mayor: {
 		name: `Mayor`,
 		id: `mayor`,
@@ -1261,7 +1357,11 @@ exports.modifiers = Object.assign(Object.create(null), {
 		id: `monk`,
 		memo: [`Monk: You can speak to other Monks, who are confirmed to not be WEREWOLVES.`],
 	},
-	//  murderous
+	murderous: {
+		name: `Murderous`,
+		id: `murderous`,
+		memo: [`Murderous: You die if you don't kill anyone.`],
+	},
 	naive: {
 		name: `Naive`,
 		id: `naive`,
@@ -1277,7 +1377,11 @@ exports.modifiers = Object.assign(Object.create(null), {
 		id: `neighbor`,
 		memo: [`Neighbor: You can talk to other Neighbors.`],
 	},
-	//  nexus
+	nexus: {
+		name: `Nexus`,
+		id: `nexus`,
+		memo: [`Nexus: All actions targeting you, excluding kills, will be redirected to a random other player.`],
+	},
 	midnight: `night`,
 	night: {
 		name: `Night`,
@@ -1294,7 +1398,11 @@ exports.modifiers = Object.assign(Object.create(null), {
 		id: `omniscient`,
 		memo: [`Omniscient: You know all roles that are present in the setup.`],
 	},
-	//  orange goo
+	orange_goo: {
+		name: `Orange Goo`,
+		id: `orangegoo`,
+		memo: [`Orange Goo: You will steal the vote of anyone who targets you for the rest of the game.`],
+	},
 	pacifist: {
 		name: `Pacifist`,
 		id: `pacifist`,
@@ -1305,9 +1413,21 @@ exports.modifiers = Object.assign(Object.create(null), {
 		id: `paranoid`,
 		memo: [`Paranoid: You always receive GUILTY upon inspection, or an equivalent to this.`],
 	},
-	//  patron
-	//  prism
-	//  randomizer
+	patron: {
+		name: `Patron`,
+		id: `patron`,
+		memo: [`Patron: Once you die, your faction loses.`],
+	},
+	prism: {
+		name: `Prism`,
+		id: `prism`,
+		memo: [`Prism: Any actions targeting you, target all players.`],
+	},
+	randomizer: {
+		name: `Randomizer`,
+		id: `randomizer`,
+		memo: [`Randomizer: If multiple people targeted you, they will target a random person who targeted you instead.`],
+	},
 	reflexive_vigilante: `paranoid_gun_owner`,
 	pgo: `paranoid_gun_owner`,
 	paranoid_gun_owner: {
@@ -1331,21 +1451,37 @@ exports.modifiers = Object.assign(Object.create(null), {
 		id: `psychotrooper`,
 		memo: [`Psychotrooper: All investigative results are reversed while you are alive.`],
 	},
-	//  public / publishing
-	//  purple goo
-	//  rainbow goo
+	publishing: `public`,
+	public: {
+		name: `Public`,
+		id: `public`,
+		memo: [`Public: Your result is displayed publicly.`],
+	},
+	purple_goo: {
+		name: `Purple Goo`,
+		id: `purplegoo`,
+		memo: [`Purple Goo: Whenever someone targets you with an action, you switch roles with that player.`],
+	},
+	rainbow_goo: {
+		name: `Rainbow Goo`,
+		id: `rainbowgoo`,
+		memo: [`Rainbow Goo: Whenever a player targets you with an action, you do something random (anything any other color can do) to them.`],
+	},
 	random: {
 		name: `Random`,
 		id: `random`,
 		memo: [`Random: Your role is used randomly.`],
 	},
-	//  red goo normal
 	reflexive: {
 		name: `Reflexive`,
 		id: `reflexive`,
 		memo: [`Reflexive: You use your action on people who target you.`],
 	},
-	//  reserved
+	reserved: {
+		name: `Reserved`,
+		id: `reserved`,
+		memo: [`Reserved: This player can PM anyone, and can be PMd back, but may not talk in the main chat (excluding lynches).`],
+	},
 	restless_spirit: {
 		name: `Restless Spirit`,
 		id: `restlessspirit`,
@@ -1371,19 +1507,31 @@ exports.modifiers = Object.assign(Object.create(null), {
 		id: `sane`,
 		memo: [`Sane: You receive the correct results upon inspection.`],
 	},
-	//  secret agent
+	secret_agent: {
+		name: `Secret Agent`,
+		id: `secretagent`,
+		memo: [`Secret Agent: You are informed of which factions are in the game immediately.`],
+	},
 	self: {
 		name: `Self`,
 		id: `self`,
 		memo: [`Self: You must target yourself.`],
 	},
-	//  semilyncher
+	semilyncher: {
+		name: `Semilyncher`,
+		id: `semilyncher`,
+		memo: [`Semilyncher: If you get a specific player lynched, they turn into your alignment.`],
+	},
 	senpai: {
 		name: `Senpai`,
 		id: `senpai`,
 		memo: [`Senpai: When you get lynched, everyone who lynched you dies as well.`],
 	},
-	//  silver goo
+	silver_goo: {
+		name: `Silver Goo`,
+		id: `silvergoo`,
+		memo: [`Silver Goo: Whenever another player targets you with an action, you become a perfect copy of that player.`],
+	},
 	strongman: {
 		name: `Strongman`,
 		id: `strongman`,
@@ -1408,8 +1556,16 @@ exports.modifiers = Object.assign(Object.create(null), {
 		id: `supersaint`,
 		memo: [`Supersaint: When this player is lynched, the player who placed the hammering vote dies as well..`],
 	},
-	//  talkative
-	//  teal goo
+	talkative: {
+		name: `Talkative`,
+		id: `talkative`,
+		memo: [`Talkative: If anyone else has an ability that causes them to be able to talk to other players, you may talk with them too.`],
+	},
+	teal_goo: {
+		name: `Teal Goo`,
+		id: `tealgoo`,
+		memo: [`Teal Goo: Anyone who targets you with an action will become a different role.`],
+	},
 	temporary: {
 		name: `Temporary`,
 		id: `temporary`,
@@ -1420,7 +1576,11 @@ exports.modifiers = Object.assign(Object.create(null), {
 		id: `tentacled`,
 		memo: [`Tentacled: You will always be inspected as ALIEN.`],
 	},
-	//  toxic goo
+	toxic_goo: {
+		name: `Toxic Goo`,
+		id: `toxicgoo`,
+		memo: [`Toxic Goo: Anyone who targets you with an ability will die of poison at the end of the next day.`],
+	},
 	tree: {
 		name: `Tree`,
 		id: `tree`,
@@ -1431,16 +1591,40 @@ exports.modifiers = Object.assign(Object.create(null), {
 		id: `treestump`,
 		memo: [`Treestump: You can talk after your death.`],
 	},
-	//  trypophobic
-	//  turquoise
-	//  ugly
+	trypophobic: {
+		name: `Trypophobic`,
+		id: `trypophobic`,
+		memo: [`Trypophobic: You may vanillaise someone upon being lynched.`],
+	},
+	turquoise_goo: {
+		name: `Turquoise Goo`,
+		id: `turquoisegoo`,
+		memo: [`Turquoise Goo: When you die, you can turn another player into Turquoise Goo.`],
+	},
+	ugly_townie: `ugly`,
+	ugly: {
+		name: `Ugly`,
+		id: `ugly`,
+		memo: [`Ugly: You know how many Goo-aligned players there are, and can win with them as long as you survive. You are inspected as ALIEN.`],
+	},
+	unibackup: `universal_backup`,
+	uni_backup: `universal_backup`,
+	universal_backup: {
+		name: `Universal Backup`,
+		id: `universalbacup`,
+		memo: [`Universal Backup: You inherit the role of the first player who died.`],
+	},
 	lynchproof: `unlynchable`,
 	unlynchable: {
 		name: `Unlynchable`,
 		id: `unlynchable`,
 		memo: [`Unlynchable: You cannot be lynched. If you're lynched, you will survive and the game will turn to Night.`],
 	},
-	//  usurper
+	usurper: {
+		name: `Usurper`,
+		id: `usurper`,
+		memo: [`Usurper: You must outlive a Godfather before you can win.`],
+	},
 	vengeful: {
 		name: `Vengeful`,
 		id: `vengeful`,
@@ -1456,8 +1640,16 @@ exports.modifiers = Object.assign(Object.create(null), {
 		id: `weak`,
 		memo: [`Weak: You will die if you target a player who is not aligned with the TOWN.`],
 	},
-	//  whisperer
-	//  white goo
+	whisperer: {
+		name: `Whisperer`,
+		id: `whisperer`,
+		memo: [`Whisperer: You may PM any player in the game, but they may not PM you back.`],
+	},
+	white_goo: {
+		name: `White Goo`,
+		id: `whitegoo`,
+		memo: [`White Goo: All dead players will turn to White Goo as they die. You show up as town on death.`],
+	},
 	wrong_place_at_the_wrong_time: {
 		name: `Wrong Place at the Wrong Time`,
 		id: `wrongplaceatthewrongtime`,
@@ -1469,7 +1661,11 @@ exports.modifiers = Object.assign(Object.create(null), {
 		id: `xshot`,
 		memo: [`X-Shot: You may only use this ability X times during the game.`],
 	},
-	//  yellow goo
+	yellow_goo: {
+		name: `Yellow Goo`,
+		id: `yellowgoo`,
+		memo: [`Yellow Goo: Whenever someone targets you with an action, they lose the ability to use that action and you gain it. This even affects factional actions. That member of the faction can no longer perform that action. Other members of the faction can still perform it.`],
+	},
 });
 
 exports.themes = Object.assign(Object.create(null), {
@@ -2605,35 +2801,148 @@ exports.IDEAs = Object.assign(Object.create(null), {
 });
 
 exports.terms = Object.assign(Object.create(null), {
-	/* : {
+	/* 
+	: {
 		name: ``,
 		desc: [``],
 	}, */
-	// bastard
-	// bussing
-	// bw
-	// cc
-	// defmaj
-	// dilemma
-	// filler
-	// fos
-	// hypo
-	// l-x (1, 2, 3)
-	// lurking
-	// lylo
-	// majority
-	// majnox
-	// modplur
-	// mylo
-	// omgus
-	// plop
-	// plurality
-	// plurnox
-	// plylo
-	// pmylo
-	// qh
-	// scorched earth
-	// snaq bastard
-	// tunnel
-	// wifom
+	bastard: {
+		name: `Bastard`,
+		desc: [`Bastard: Any kind of role may be in this setup, and the host may lie to the players.`],
+	},
+	bus: `bussing`,
+	bussing: {
+		name: `Bussing`,
+		desc: [`Bussing: A scum player lynching or scumreading their partner to appear town.`],
+	},
+	bw: `bandwagon`,
+	bandwagon: {
+		name: `Bandwagon`,
+		desc: [`Bandwagon: A group of people following a lynch or thought.`],
+	},
+	cc: `counter_claim`,
+	counterclaim: `counter_claim`,
+	counter_claim: {
+		name: `Counter Claim`,
+		desc: [`Counter Claim: When someone claims a role, in response of someone else claiming that role (of which there's usually only one left in the game).`],
+	},
+	defmaj: `definite_majority`,
+	definitemajority: `definite_majority`,
+	definite_majority: {
+		name: `Definite Majority`,
+		desc: [`The day only ends when hammer is reached.`],
+	},
+	dilemma: {
+		name: `Dilemma`,
+		desc: [`Dilemma: When town can only win by No Lynching and hoping the Anti-Town factions kill each other.`],
+	},
+	fillering: `filler`,
+	filler: {
+		name: `Filler`,
+		desc: [`Filler: Excessive talk about things that are not related or important to the game.`],
+	},
+	fos: `finger_of_suspect`,
+	finger_of_suspect: {
+		name: `Finger of Suspect`,
+		desc: [`Finger of Suspect: Pointing out that you scumread someone.`],
+	},
+	hammer: {
+		name: `Hammer`,
+		desc: [`Hammer: The amount of votes needed to have a majority of players lynching someone.`],
+	},
+	hypo: {
+		name: `Hypo`,
+		desc: [`Hypo: When everyone claims what they would've done if they were a specific role. This is done to not out the power role, but that Town still has access to their actions or results in case they die.`],
+	},
+	'l-1': `l-x`,	'l-2': `l-x`,	'l-3': `l-x`,	'l-4': `l-x`,	lx: `l-x`,	l1: `l-x`,	l2: `l-x`,	l3: `l-x`,	l4: `l-x`,
+	'l-x': {
+		name: `L-x`,
+		desc: [`L-x: When a player is a specific amount of votes away from hammer.`],
+	},
+	lurking: {
+		name: `Lurking`,
+		desc: [`Lurking: When someone is purposefully not talking in the chat, even while they're there.`],
+	},
+	lylo: {
+		name: `LyLo`,
+		desc: [`LyLo: If the wrong player is lynched today, or nobody is lynched, town loses.`],
+	},
+	maj: `majority`,
+	majority: {
+		name: `Majority`,
+		desc: [`Majority: If no hammer is reached at the deadline, no one is lynched.`],
+	},
+	majnox: {
+		name: `MajNoX`,
+		desc: [`MajNoX: Majority, without any extensions.`],
+	},
+	modplur: `modified_plurality`,
+	modified_plurality: {
+		name: `Modified Plurality`,
+		desc: [`Modified Plurality: Plurality, but if a certain amount of votes isn't reached at the deadline, no one is lynched.`],
+	},
+	mylo: {
+		name: `MyLo`,
+		desc: [`MyLo: If the wrong player is lynched today, town loses.`],
+	},
+	nullread: {
+		name: `Nullread`,
+		desc: [`Nullread: A player who you don't know whether they're Town or not.`],
+	},
+	omgus: {
+		name: `OMGUS`,
+		desc: [`OMGUS: Accusing someone solely because they accused you.`],
+	},
+	plop: {
+		name: `PLOP`,
+		desc: [`PLOP: "Pretty Lady Over-Powered", using the Pretty Lady (protected by a Doctor) to find solo scum, by judging whether the Nightkill went through.`],
+	},
+	plur: `plurality`,
+	plurality: {
+		name: `Plurality`,
+		desc: [`Plurality: If the deadline is reached, the player with the most votes will be lynched.`],
+	},
+	plurnox: {
+		name: `PlurNoX`,
+		desc: [`PlurNoX: Plurality, without any extensions.`],
+	},
+	plylo: {
+		name: `PLyLo`,
+		desc: [`PLyLo: "Potential LyLo", there's a chance but it's not definite that if the wrong person, or No Lynch is lynched, town loses.`],
+	},
+	pmylo: {
+		name: `PMyLo`,
+		desc: [`PMyLo: "Potential MyLo", there's a chance but it's not definite that if the wrong person is lynched, town loses.`],
+	},
+	qh: `quickhammer`,
+	quickhammer: {
+		name: `Quickhammer`,
+		desc: [`Quickhammer: When all of the Mafia quickly lynch someone, to reach hammer and cause a Mafia win.`],
+	},
+	scorched_earth: {
+		name: `Scorched Earth`,
+		desc: [`Scorched Earth: When no players are left alive.`],
+	},
+	sr: `scumread`,
+	scumread: {
+		name: `Scumread`,
+		desc: [`Scumread: A player who you think is not aligned with the Town.`],
+	},
+	snaq_bastard: {
+		name: `Snaq Bastard`,
+		desc: [`Snaq Bastard: Any role can be in the game, excluding Hidden or False ones. The host will not lie to the players.`],
+	},
+	tr: `townread`,
+	townread: {
+		name: `Townread`,
+		desc: [`Townread: A player who you think is aligned with the Town.`],
+	},
+	tunnel: {
+		name: `Tunnel`,
+		desc: [`Tunnel: When a player is convinced another player is scum, and will consider anything the player does scummy.`],
+	},
+	wifom: {
+		name: `WIFOM`,
+		desc: [`WIFOM: "Wine In Front Of Me", the circular reasoning that Mafia could've anticipated something, and did it because of that.`],
+	},
 });
