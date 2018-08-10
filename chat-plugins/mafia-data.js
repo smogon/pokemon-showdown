@@ -495,8 +495,11 @@ exports.roles = Object.assign(Object.create(null), {
 		alignment: `goo`,
 		memo: [`Gray Goo: Anyone who targets you will join the Cult. You will die after Night 2. There is no way to stop this death.`],
 	},
-	//  gray goo normal
-	//  gossiper
+	gossiper: {
+		name: `Gossiper`,
+		id: `gossiper`,
+		memo: [`Gossiper: During the Night, you can PM the host the name of another player. This player will get to know who targeted you.`],
+	},
 	guard: {
 		name: `Guard`,
 		id: `guard`,
@@ -507,22 +510,44 @@ exports.roles = Object.assign(Object.create(null), {
 		id: `gunsmith`,
 		memo: [`Gunsmith: Once per day or night, you can PM the name of a player to the host. This player will receive a gun, which they can kill someone with that day (if given at day) or the next day (if given at night).`],
 	},
-	//  halter
-	//  hasty lover
-	//  hater
+	halter: {
+		name: `Halter`,
+		id: `halter`,
+		memo: [`Halter: `], // Make Jumbo complete
+	},
+	hasty_lover: {
+		name: `Hasty Lover`,
+		id: `hastylover`,
+		memo: [`Hasty Lover: During the Night, you must PM the name of a player to the host. For that night and the following day, you are Lovers.`],
+	},
+	hater: {
+		name: `Hater`,
+		id: `hater`,
+		memo: [`Hater: During the Night, you can PM the name of a player to the host. This player will take one less vote to be lynched the next day.`],
+	},
 	hider: {
 		name: `Hider`,
 		id: `hider`,
 		memo: [`Hider: During the Night, you may PM the host the name of another player. You will not be able to be targeted that night, but if the person you targeted died or is not aligned with the TOWN, you die.`],
 	},
-	//  homekeeper
+	homekeeper: {
+		name: `Homekeeper`,
+		id: `homekeeper`,
+		memo: [`Homekeeper: During the Night, you may PM the host the name of another player. If they idled, they will not be able to be nightkilled that night.`],
+	},
 	child: `innocent_child`,
 	innocent_child: {
 		name: `Innocent Child`,
 		id: `innocentchild`,
+		alignment: `Town`,
 		memo: [`Innocent Child: At any point during the game, you may PM the host to reveal you as TOWN publicly.`],
 	},
-	//  inquisitor
+	inquisitor: {
+		name: `Inquisitor`,
+		id: `inquisitor`,
+		alignment: `solo`,
+		memo: [`Inquisitor: During the Night, you may PM the host the name of another player. This player will die, if not, they will be recruited into your cult.`],
+	},
 	joat: `jack-of-all-trades`,
 	jack_of_all_trades: `jack-of-all-trades`,
 	'jack-of-all-trades': {
@@ -558,7 +583,11 @@ exports.roles = Object.assign(Object.create(null), {
 		alignment: `solo`,
 		memo: [`Judas: You start off aligned with the TOWN, but when you get lynched for the first time you don't die. Instead, you become aligned with the MAFIA.`],
 	},
-	//  judge
+	judge: {
+		name: `Judge`,
+		id: `judge`,
+		memo: [`Judge: During the Night, you can PM the host the name of a player. If they are of a different alignment than the person being lynched the day prior, they die.`],
+	},
 	king: {
 		name: `King`,
 		id: `king`,
@@ -569,27 +598,65 @@ exports.roles = Object.assign(Object.create(null), {
 		id: `kingmaker`,
 		memo: [`Kingmaker: Each night, you can PM the host the name of a player. The next day this person, if alive, will decide the lynch for that day.`],
 	},
-	//  leader (cult / cultafia)
-	//  little liar
-	//  loner
-	//  loverboy
-	//  loyal lover
-	//  lure
+	leader: {
+		name: `Leader`,
+		id: `leader`,
+		memo: [`Leader: You are the leader of a faction. You may get special actions. Ask the host for more information.`],
+	},
+	litteliar: {
+		name: `Little Liar`,
+		id: `litteliar`,
+		memo: [`Little Liar: At any point during the game, you may PM the host to reveal you as TOWN publicly.`],
+	},
+	loner: {
+		name: `Loner`,
+		id: `loner`,
+		alignment: `solo`,
+		memo: [`Loner: You win when everyone else is dead, have no partners, and do not have a nightkill.`],
+	},
+	loverboy: {
+		name: `Loverboy`,
+		id: `loverboy`,
+		memo: [`Loverboy: During the Night, you can PM the host the name of another player. They will die if you die and are informed of this.`],
+	},
+	loyal_lover: {
+		name: `Loyal Lover`,
+		id: `loyallover`,
+		alignment: `solo`,
+		memo: [`Loyal Lover: Once a game, at night, you may PM the host the name of another player. You will become lovers with them. You can only win if the person you're lovers with wins.`],
+	},
+	stripper: `lure`,
+	lure: {
+		name: `Lure`,
+		id: `lure`,
+		memo: [`Lure: During the Night, you can PM the host the name of another player. This player will be forced to target you.`],
+	},
 	lyncher: {
 		name: `Lyncher`,
 		id: `lyncher`,
 		alignment: `solo`,
 		memo: [`Lyncher: You win when you get a specific player lynched.`],
 	},
-	//  magician
+	magician: {
+		name: `Magician`,
+		id: `magician`,
+		memo: [`Magician: During the Night, you can PM the host the name of another player. This player will be removed from the game at the end of the night, without a reveal. While the Mafia's kill target (if successful) stays in the game. At the end of the next day, the Magician's target is added back, while the Mafia's kill is removed.`],
+	},
 	millermaker: {
 		name: `Millermaker`,
 		id: `millermaker`,
 		memo: [`Millermaker: Each night, you can PM the host the name of a player. This player will permanently show up as guilty to investigative role.`],
 	},
-	//  mirror
-	//  missionary
-	//  modposter
+	missionary: {
+		name: `Missionary`,
+		id: `missionary`,
+		memo: [`Missionary: During the Night, you can PM the host the name of another player. This player will not be able to kill anyone else.`],
+	},
+	modposter: {
+		name: `Modposter`,
+		id: `modposter`,
+		memo: [`Modposter: At any point during the game, you may PM the host a phrase. They will publicly, yet anonymously, post this phrase in chat.`],
+	},
 	monarch: {
 		name: `Monarch`,
 		id: `monarch`,
@@ -601,7 +668,11 @@ exports.roles = Object.assign(Object.create(null), {
 		memo: [`Motion Detector: During the Night, you may PM the host the name of another player. You will get to know whether any actions were performed on or by this player.`],
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
 	},
-	//  multiplier
+	multiplier: {
+		name: `Multiplier`,
+		id: `multiplier`,
+		memo: [`Multiplier: During the Night, you can PM the host the name of another player. This player's action will target all players in the game.`],
+	},
 	vanilla_cop: `neapolitan`,
 	neapolitan: {
 		name: `Neapolitan`,
@@ -609,9 +680,17 @@ exports.roles = Object.assign(Object.create(null), {
 		memo: [`Neapolitan: Each night, you can PM the host the name of a player. You will be told if they are VANILLA or NOT VANILLA, or receive NO RESULT if your investigation failed.`],
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
 	},
-	//  necromancer
+	necromancer: {
+		name: `Necromancer`,
+		id: `necromancer`,
+		memo: [`Necromancer: Once a game at Night, you can PM the host to revive all dead players for the following Day and Night.`],
+	},
+	nightmare: {
+		name: `Nightmare`,
+		id: `nightmare`,
+		memo: [`Nightmare: During the Night, you can PM the host the name of another player. This player will not be able to talk or lynch the next day, but can use their action again.`],
+	},
 	backup_doctor: `nurse`,
-	//  nightmare
 	nurse: {
 		name: `Nurse`,
 		id: `nurse`,
@@ -634,9 +713,23 @@ exports.roles = Object.assign(Object.create(null), {
 		id: `oracle`,
 		memo: [`Oracle: Each night, you can PM the host the name of a player. When you die, you'll publicly reveal this player's role, until you've chosen a different player.`],
 	},
-	//  oracle si
-	//  organ donor
-	//  palette goo
+	oracle_si: `oraclesi`,
+	oracle_snaqs_idea: `oraclesi`,
+	oraclesi: {
+		name: `Oracle`,
+		id: `oraclesi`,
+		memo: [`Oracle: During the Night, you can PM the host a question about the setup of the game. They will answer you with YES or NO.`],
+	},
+	organ_donor: {
+		name: `Organ Donor`,
+		id: `organdonor`,
+		memo: [`Organ Donor: During the Night, you can PM the host the name of a dead player. You will die, but this player will be revived.`], // Said night because ESun automatically reverts all to day.
+	},
+	palette_goo: {
+		name: `Palette Goo`,
+		id: `palettegoo`,
+		memo: [`Palette Goo: During the Night, you may PM the the host a Goo type. You will turn into this type of Goo.`],
+	},
 	parrot: `parrot_role`,
 	wereparrot: `parrot_role`,
 	parrot_role: {
@@ -649,8 +742,16 @@ exports.roles = Object.assign(Object.create(null), {
 		id: `politician`,
 		memo: [`Politician: Each night, you can PM the host the name of two players. You give the vote of the former player to the latter player for the next day.`],
 	},
-	//  power cop
-	//  praiser
+	power_cop: {
+		name: `Power Cop`,
+		id: `powercop`,
+		memo: [`Power Cop: During the Night, you can PM the host the name of another player. They will tell you how strong that player's role is on a scale from 0 to 10.`],
+	},
+	praiser: {
+		name: `Praiser`,
+		id: `praiser`,
+		memo: [`Praiser: During the Night, you can PM the host the name of another player. This player will take one more lynch to be lynched the following day.`],
+	},
 	hooker: `pretty_lady`,
 	pl: `pretty_lady`,
 	pretty_lady: {
@@ -670,7 +771,11 @@ exports.roles = Object.assign(Object.create(null), {
 		id: `prober`,
 		memo: [`Prober: Each night you can PM the host the name of another player. You will be told if they are WEREWOLF or NOT WEREWOLF, or receive NO RESULT if your investigation failed. Additionally, this player can't perform a night action that night.`],
 	},
-	//  pseudocider
+	pseudocider: {
+		name: `Pseudocider`,
+		id: `pseudocider`,
+		memo: [`Pseudocider: Once a game, during the Night, you can PM the host to remove you from the game. You will be removed without reveal, and can be added back during a future night upon choice.`],
+	},
 	pseudojester: {
 		name: `Pseudojester`,
 		id: `pseudojester`,
@@ -715,7 +820,11 @@ exports.roles = Object.assign(Object.create(null), {
 		id: `redirector`,
 		memo: [`Redirector: During the Night, you may PM the host the names of two other players. The former player will target the latter player instead.`],
 	},
-	//  reviver
+	reviver: {
+		name: `Reviver`,
+		id: `reviver`,
+		memo: [`Reviver: During the Night, you may PM the host the name of a dead player. This player will be added back to the game.`],
+	},
 	roleblocker: {
 		name: `Roleblocker`,
 		id: `roleblocker`,
@@ -727,7 +836,12 @@ exports.roles = Object.assign(Object.create(null), {
 		memo: [`Role Cop: Each night you can PM the host the name of another player. You will be told their exact role, or NO RESULT if your investigation failed.`],
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
 	},
-	//  role vanillaiser
+	role_vanillaizer: `role_vanillaiser`,
+	role_vanillaiser: {
+		name: `Role Vanillaiser`,
+		id: `rolevanillaiser`,
+		memo: [`Role Vanillaiser: During the Night, you may PM the host the name of a role. If this role is in this setup, you will vanillaise any player with this role.`],
+	},
 	suppressor: `rolestopper`,
 	rolestopper: {
 		name: `Rolestopper`,
@@ -741,8 +855,16 @@ exports.roles = Object.assign(Object.create(null), {
 		alignment: `solo`,
 		memo: [`Saulus: You start off aligned with the MAFIA, but when you get lynched for the first time you don't die. Instead, you become aligned with the TOWN.`],
 	},
-	//  schemer
-	//  screamer
+	schemer: {
+		name: `Schemer`,
+		id: `schemer`,
+		memo: [`Schemer: During the Night, you may PM the host the name of another player. You will get to know what kind of action this player used, and may redirect it.`],
+	},
+	screamer: {
+		name: `Screamer`,
+		id: `screamer`,
+		memo: [`Screamer: During the Night, you may PM the host to scream. This will prevent anyone in the game from getting a result.`],
+	},
 	seer: {
 		name: `Seer`,
 		id: `seer`,
@@ -762,23 +884,49 @@ exports.roles = Object.assign(Object.create(null), {
 		alignment: `solo`,
 		memo: [`Serial Killer: You are aligned with yourself and win when you are the last player standing. During the Night, you may PM the host the name of another player. This player will die.`],
 	},
-	//  shadow
+	shadow: {
+		name: `Shadow`,
+		id: `shadow`,
+		alignment: `solo`,
+		memo: [`Shadow: Once a game at Night, you may PM the host the name of another player. You will copy any abilities this player has. Additionally, you may kill someone once each night.`],
+	},
 	silencer: {
 		name: `Silencer`,
 		id: `silencer`,
 		memo: [`Silencer: During the Night, you may PM the host the name of another player. This player will not be able to talk during the next day. Ask the host whether this player will be able to lynch or not.`],
 	},
-	//  solar god
-	//  stalker
-	//  substitute
-	//  subway recruiter
+	solar_god: {
+		name: `Solar God`,
+		id: `solargod`,
+		memo: [`Solar God: During the Day, you may PM the host to end the Day. The Day will immediately end.`],
+	},
+	stalker: {
+		name: `Stalker`,
+		id: `stalker`,
+		memo: [`Stalker: During the Night, you may PM the host the name of another player. You will get to know who this player targeted, and their target will be roleblocked.`],
+	},
+	substitute: {
+		name: `Substitute`,
+		id: `substitute`,
+		memo: [`Substitute: Once a game, during the Night, you may PM the host the name of another player. If you die before this player, this player will die instead of you.`],
+	},
+	subway_recruiter: {
+		name: `Subway Recruiter`,
+		id: `subwayrecruiter`,
+		memo: [`Subway Recruiter: During the Night, you may PM the host to add a player. If there's a player on the sublist, they will be added to the game, as your alignment.`],
+	},
 	kamikaze_pilot: `suicide_bomber`,
 	suicide_bomber: {
 		name: `Suicide Bomber`,
 		id: `suicidebomber`,
 		memo: [`Suicide Bomber: During the Night, you may PM the host the name of another player. This player will be killed, but you will die as well.`],
 	},
-	//  super
+	super_townie: `super`,
+	super: {
+		name: `Super`,
+		id: `super`,
+		memo: [`Super: Once a game, during the Night, you may PM the host to activate. If you would die that night, or the following day, you survive and may kill someone instead.`],
+	},
 	survivor: {
 		name: `Survivor`,
 		id: `survivor`,
@@ -790,8 +938,17 @@ exports.roles = Object.assign(Object.create(null), {
 		id: `sympathiser`,
 		memo: [`Sympathiser: You are aligned with a specified alignment when there are other players of this alignment in the game. Otherwise, you are TOWN.`],
 	},
-	//  tallier & sensor
-	//  teacher
+	sensor: `tallier`,
+	tallier: {
+		name: `Tallier`,
+		id: `tallier`,
+		memo: [`Tallier: During the Night, you may PM the host to get to know how many people on yesterday's lynch were not aligned with the Town.`],
+	},
+	teacher: {
+		name: `Teacher`,
+		id: `teacher`,
+		memo: [`Teacher: During the Night, you may PM the host the name of another player. This player will receive a One-Shot Cop to use, that gets TOWN / NOT TOWN results.`],
+	},
 	tourist: {
 		name: `Tourist`,
 		id: `tourist`,
@@ -803,7 +960,11 @@ exports.roles = Object.assign(Object.create(null), {
 		memo: [`Tracker: During the Night, you may PM the host the name of another player. You will be told who, if anyone, this player targeted.`],
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
 	},
-	//  trainwreck
+	trainwreck: {
+		name: `Trainwreck`,
+		id: `trainwreck`,
+		memo: [`Trainwreck: During the Night, you may PM the host the name of another player. Everyone who is lynching this person at the end of the day dies.`],
+	},
 	traitor: {
 		name: `Traitor`,
 		id: `traitor`,
@@ -821,8 +982,18 @@ exports.roles = Object.assign(Object.create(null), {
 		alignment: `solo`,
 		memo: [`Underdog: You are aligned with yourself. You start out as a Survivor, but turn into the alignment of the first player to die during a day when they die.`],
 	},
-	//  universal sympathiser
-	//  universal usurper
+	universal_sympathiser: {
+		name: `Universal Sympathiser`,
+		id: `univeralsympathiser`,
+		alignment: `solo`,
+		memo: [`Universal Sympathiser: You win if the Town does not win.`],
+	},
+	universal_usurper: {
+		name: `Universal Usurper`,
+		id: `universalusurper`,
+		alignment: `solo`,
+		memo: [`Universal Usurper: You win if you are alive and the Town does not win. No one else will win.`],
+	},
 	unjester: {
 		name: `Unjester`,
 		id: `unjester`,
@@ -840,7 +1011,11 @@ exports.roles = Object.assign(Object.create(null), {
 		id: `vanillaiser`,
 		memo: [`Vanillaiser: During the Night, you may PM the host the name of another player. Starting the next day, this player will lose any role they have, turning into a Vanilla role.`],
 	},
-	//  vanguard
+	vanguard: {
+		name: `Vanguard`,
+		id: `vanguard`,
+		memo: [`Vanguard: During the Night, you may PM the host the name of another player. If this player used an action, they can\'t be killed that night.`],
+	},
 	vig: `vigilante`,
 	vigilante: {
 		name: `Vigilante`,
@@ -859,10 +1034,29 @@ exports.roles = Object.assign(Object.create(null), {
 		memo: [`Watcher: During the Night, you may PM the host the name of another player. You will be told who, if anyone, targeted this player.`],
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
 	},
-	//  wild card
-	//  wild card gi
-	//  wild discard 
-	//  yogi bear
+	wild_card: {
+		name: `Wild Card`,
+		id: `wildcard`,
+		memo: [`Wild Card: During the Night, you may PM the host the name of another player. All actions used on the Wild Card, except kills, are redirected to the target.`],
+	},
+	wild_card_greater_idea: `wildcard_gi`
+	wild_card_gi: {
+		name: `Wild Card`,
+		id: `wildcardgi`,
+		alignment: `solo`,
+		memo: [`Wild Card: You get a different randomised role.`],
+	},
+	wild_discard: {
+		name: `Wild disCard`,
+		id: `wilddiscard`,
+		alignment: `solo`,
+		memo: [`Wild disCard: You may choose a different role from the game's discards.`],
+	},
+	yogi_bear: {
+		name: `Yogi Bear`,
+		id: `yogibear`,
+		memo: [`Yogi Bear: During the Night, you may PM the host the name of another player. You will be told whether they are TREESTUMP or NOT TREESTUMP, or NO RESULT if your investigation failed.`],
+	},
 });
 
 exports.modifiers = Object.assign(Object.create(null), {
@@ -1056,6 +1250,11 @@ exports.modifiers = Object.assign(Object.create(null), {
 		name: `Miller`,
 		id: `miller`,
 		memo: [`Miller: You will always be inspected as MAFIA.`],
+	},
+	mirror: {
+		name: `Mirror`,
+		id: `mirror`,
+		memo: [`Mirror: When someone targets you, you use the same action on them.`],
 	},
 	monk: {
 		name: `Monk`,
@@ -1576,7 +1775,7 @@ exports.IDEAs = Object.assign(Object.create(null), {
 			`Solo Serial Killer (Immune to Alien Kills)`,
 			`One-Shot Cult Recruiter`,
 			`One-Shot Cult Goomaker`,
-			`Solo Wild Card`,
+			`Solo Wild Card Greater Idea`,
 		],
 		picks: [`role`],
 		choices: 2,
@@ -1726,7 +1925,7 @@ exports.IDEAs = Object.assign(Object.create(null), {
 			`Solo Serial Killer (Immune to Alien Kills)`,
 			`One-Shot Cult Recruiter`,
 			`One-Shot Cult Goomaker`,
-			`Solo Wild Card`,
+			`Solo Wild Card Greater Idea`,
 		],
 		picks: [`role`, `alignment`],
 		choices: 3,
@@ -1876,7 +2075,7 @@ exports.IDEAs = Object.assign(Object.create(null), {
 			`Solo Serial Killer (Immune to Alien Kills)`,
 			`One-Shot Cult Recruiter`,
 			`One-Shot Cult Goomaker`,
-			`Solo Wild Card`,
+			`Solo Wild Card Greater Idea`,
 		],
 		picks: [`role`],
 		choices: 2,
