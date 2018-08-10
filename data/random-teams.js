@@ -1834,7 +1834,7 @@ class RandomTeams extends Dex.ModdedDex {
 
 		// Build a pool of eligible sets, given the team partners
 		// Also keep track of sets with moves the team requires
-		/**@type {{set: AnyObject, moveVariants?: number[], itemVariants?: number, abilityVariants?: number}[]} */
+		/**@type {{set: AnyObject, moveVariants?: number[]}[]} */
 		let effectivePool = [];
 		let priorityPool = [];
 		for (const curSet of setList) {
@@ -1881,34 +1881,22 @@ class RandomTeams extends Dex.ModdedDex {
 			moves.push(setData.moveVariants ? moveSlot[setData.moveVariants[i]] : this.sample(moveSlot));
 		}
 
-		let items = [];
-		if (Array.isArray(setData.set.item)) {
-			let randomItem = setData.set.item;
-			items.push(setData.itemVariants ? randomItem[setData.itemVariants] : this.sample(randomItem));
-		} else {
-			items.push(setData.set.item);
-		}
-
-		let abilities = [];
-		if (Array.isArray(setData.set.ability)) {
-			let randomAbility = setData.set.ability;
-			abilities.push(setData.abilityVariants ? randomAbility[setData.abilityVariants] : this.sample(randomAbility));
-		} else {
-			abilities.push(setData.set.ability);
-		}
+		let item = Array.isArray(setData.set.item) ? this.sample(setData.set.item) : setData.set.item;
+		let ability = Array.isArray(setData.set.ability) ? this.sample(setData.set.ability) : setData.set.ability;
+		let nature = Array.isArray(setData.set.nature) ? this.sample(setData.set.nature) : setData.set.nature;
 
 		return {
 			name: setData.set.name || template.baseSpecies,
 			species: setData.set.species,
 			gender: setData.set.gender || template.gender || (this.randomChance(1, 2) ? 'M' : 'F'),
-			item: items + '' || setData.set.item || '',
-			ability: abilities + '' || setData.set.ability || template.abilities['0'],
+			item: item || '',
+			ability: ability || template.abilities['0'],
 			shiny: typeof setData.set.shiny === 'undefined' ? this.randomChance(1, 1024) : setData.set.shiny,
-			level: tier === "LC" ? 5 : 100,
+			level: setData.set.level ? setData.set.level : tier === "LC" ? 5 : 100,
 			happiness: typeof setData.set.happiness === 'undefined' ? 255 : setData.set.happiness,
 			evs: Object.assign({hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0}, setData.set.evs),
 			ivs: Object.assign({hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31}, setData.set.ivs),
-			nature: setData.set.nature || 'Serious',
+			nature: nature || 'Serious',
 			moves: moves,
 		};
 	}
@@ -1980,9 +1968,15 @@ class RandomTeams extends Dex.ModdedDex {
 			if (teamData.zCount >= 1 && itemData.zMove) continue;
 
 			let types = template.types;
+			// Prevents Mega Evolutions from breaking the type limits
+			if (itemData.megaStone) types = this.getTemplate(itemData.megaStone).types;
+
 			// Enforce Monotype
-			if (chosenTier === 'Mono' && types.indexOf(type) < 0) {
-				continue;
+			if (chosenTier === 'Mono') {
+				for (const type of types) {
+					if (!template.types.includes(type)) continue;
+				}
+				if (!types.includes(type)) continue;
 			} else {
 			// If not Monotype, limit to two of each type
 				let skip = false;
