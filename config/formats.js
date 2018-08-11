@@ -434,6 +434,7 @@ let Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
+		banlist: ['Blissey'],
 		onBeforeFaint: function (pokemon) {
 			let prevo = pokemon.baseTemplate.isMega ? this.getTemplate(pokemon.baseTemplate.baseSpecies).prevo : pokemon.baseTemplate.prevo;
 			if (!prevo || pokemon.set.ability === 'Battle Bond') return;
