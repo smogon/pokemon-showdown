@@ -9375,7 +9375,7 @@
 		"kecleon": {
 			"flags": {},
 			"sets": [{
-				"species": "Komala",
+				"species": "Kecleon",
 				"item": ["Assault Vest"],
 				"ability": ["Protean"],
 				"evs": {"hp": 172, "atk": 252, "spe": 84},
