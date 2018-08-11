@@ -1113,7 +1113,7 @@ class RandomTeams extends Dex.ModdedDex {
 					(hasType['Electric'] && !counter['Electric'] && !hasAbility['Galvanize']) ||
 					(hasType['Fighting'] && !counter['Fighting'] && (counter.setupType || !counter['Status'])) ||
 					(hasType['Fire'] && !counter['Fire']) ||
-					(hasType['Ghost'] && !hasType['Dark'] && !counter['Ghost']) ||
+					(hasType['Ghost'] && !hasType['Dark'] && !counter['Ghost'] && !hasAbility['Steelworker']) ||
 					(hasType['Ground'] && !counter['Ground'] && !hasMove['rest'] && !hasMove['sleeptalk']) ||
 					(hasType['Ice'] && !counter['Ice'] && !hasAbility['Refrigerate']) ||
 					(hasType['Psychic'] && !!counter['Psychic'] && !hasType['Flying'] && !hasAbility['Pixilate'] && template.types.length > 1 && counter.stab < 2) ||
