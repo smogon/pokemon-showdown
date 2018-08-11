@@ -7039,7 +7039,7 @@ let BattleFormatsData = {
 		doublesTier: "DUU",
 	},
 	dhelmise: {
-		randomBattleMoves: ["swordsdance", "powerwhip", "shadowclaw", "anchorshot", "switcheroo", "earthquake"],
+		randomBattleMoves: ["powerwhip", "anchorshot", "knockoff", "earthquake", "rapidspin", "synthesis"],
 		randomDoubleBattleMoves: ["powerwhip", "shadowclaw", "anchorshot", "protect", "gyroball"],
 		tier: "NU",
 		doublesTier: "DUU",
