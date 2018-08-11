@@ -292,6 +292,9 @@ class CommandContext {
 				}
 			}
 
+			if (!this.pmTarget && this.room.id === 'global') {
+				return this.errorReply(`Please specify a room or user to send this message to.`);
+			}
 			message = this.canTalk(message);
 		}
 
@@ -792,12 +795,18 @@ class CommandContext {
 	 * @param {User?} [targetUser]
 	 */
 	canTalk(message = null, room = null, targetUser = null) {
-		if (!room && !(this.room instanceof Rooms.GlobalRoom)) {
-			room = this.room;
-		}
 		if (!targetUser && this.pmTarget) {
-			room = null;
 			targetUser = this.pmTarget;
+		}
+		if (targetUser) {
+			room = null;
+		} else if (!room) {
+			if (this.room.id === 'global') {
+				// should never happen
+				throw new Error(`Command tried to write to global: ${this.user.name}: ${message}`);
+			}
+			// @ts-ignore
+			room = this.room;
 		}
 		let user = this.user;
 		let connection = this.connection;
