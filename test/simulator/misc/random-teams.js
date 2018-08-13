@@ -106,9 +106,13 @@ describe(`Factory sets`, function () {
 				for (const species in typeTable) {
 					const speciesData = typeTable[species];
 					for (const set of speciesData.sets) {
-						assert(Dex.getTemplate(set.species).exists, `invalid species "${set.species}" of ${species}`);
+						const template = Dex.getTemplate(set.species);
+						assert(template.exists, `invalid species "${set.species}" of ${species}`);
 
-						assert(!Dex.getTemplate(set.species).battleOnly, `invalid battle-only forme "${set.species}" of ${species}`);
+						// currently failing due to a Piloswine labeled as a Mamoswine set
+						// assert(species.startsWith(toId(template.baseSpecies)), `non-matching species "${set.species}" of ${species}`);
+
+						assert(!template.battleOnly, `invalid battle-only forme "${set.species}" of ${species}`);
 
 						for (const itemName of [].concat(set.item)) {
 							if (!itemName && [].concat(...set.moves).includes("Acrobatics")) continue;
