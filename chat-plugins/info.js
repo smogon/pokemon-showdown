@@ -1749,8 +1749,8 @@ const commands = {
 		this.sendReplyBox(buffer.join(`<br />`));
 	},
 	faqhelp: [
-		`/faq [theme] - Provides a link to the FAQ. Add deviation, doubles, randomcap, restart, or staff for a link to these questions. Add all for all of them.`,
-		`!faq [theme] - Shows everyone a link to the FAQ. Add deviation, doubles, randomcap, restart, or staff for a link to these questions. Add all for all of them. Requires: + % @ * # & ~`,
+		`/faq [theme] - Provides a link to the FAQ. Add autoconfirmed, badges, coil, ladder, staff, or tiers for a link to these questions. Add all for all of them.`,
+		`!faq [theme] - Shows everyone a link to the FAQ. Add autoconfirmed, badges, coil, ladder, staff, or tiers for a link to these questions. Add all for all of them. Requires: + % @ * # & ~`,
 	],
 
 	'!smogdex': true,
