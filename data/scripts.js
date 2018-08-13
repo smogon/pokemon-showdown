@@ -116,7 +116,7 @@ let BattleScripts = {
 			for (const dancer of dancers) {
 				if (this.faintMessages()) break;
 				this.add('-activate', dancer, 'ability: Dancer');
-				this.runMove(baseMove.id, dancer, 0, this.getAbility('dancer'), undefined, true);
+				this.runMove(move.id, dancer, 0, this.getAbility('dancer'), undefined, true);
 			}
 		}
 		if (noLock && pokemon.volatiles.lockedmove) delete pokemon.volatiles.lockedmove;
