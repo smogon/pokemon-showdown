@@ -236,7 +236,7 @@ const Monitor = module.exports = {
 	countTickets(ip) {
 		let count = this.tickets.increment(ip, 60 * 60 * 1000)[0];
 		if (Punishments.sharedIps.has(ip)) {
-			return count >= 50;
+			return count >= 20;
 		} else {
 			return count >= 5;
 		}
