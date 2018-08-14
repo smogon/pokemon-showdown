@@ -67,7 +67,7 @@ function saveFilters() {
 
 /**
  * @param {string} key
- * @param {string} word
+ * @param {string | [RegExp, string]} word
  */
 function appendEntry(key, word) {
 	FS(MONITOR_FILE).append(renderEntry(filterKeys[key][0], word, filterKeys[key][1]));
