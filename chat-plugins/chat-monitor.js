@@ -3,7 +3,6 @@
 const FS = require('../lib/fs');
 
 const MONITOR_FILE = 'config/chat-plugins/chat-monitor.tsv';
-const COLUMNS = 'Location\tWord\tPunishment\r\n';
 
 /** @type {{[k: string]: string[]}} */
 let filterKeys = Chat.filterKeys = Object.assign(Chat.filterKeys, {publicwarn: ['PUBLIC', 'WARN'], warn: ['EVERYWHERE', 'WARN'], autolock: ['EVERYWHERE', 'AUTOLOCK'], namefilter: ['NAMES', 'WARN'], wordfilter: ['EVERYWHERE', 'FILTERTO']});
@@ -57,7 +56,7 @@ function renderEntry(location, word, punishment) {
 
 function saveFilters() {
 	FS(MONITOR_FILE).writeUpdate(() => {
-		let buf = COLUMNS;
+		let buf = 'Location\tWord\tPunishment\r\n';
 		for (const key in filterKeys) {
 			buf += filterWords[key].map(word => renderEntry(filterKeys[key][0], word, filterKeys[key][1])).join('');
 		}
