@@ -15,7 +15,7 @@ describe('Contrary', function () {
 		battle = common.createBattle();
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Spinda", ability: 'contrary', moves: ['superpower']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Dragonite", ability: 'multiscale', moves: ['dragondance']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move superpower', 'move dragondance');
 		assert.statStage(p1.active[0], 'atk', 1);
 		assert.statStage(p1.active[0], 'def', 1);
 	});
@@ -24,7 +24,7 @@ describe('Contrary', function () {
 		battle = common.createBattle();
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Serperior", ability: 'contrary', moves: ['leechseed']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Growlithe", ability: 'intimidate', moves: ['topsyturvy']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move leechseed', 'move topsyturvy');
 		assert.statStage(p1.active[0], 'atk', -1);
 	});
 
@@ -32,7 +32,7 @@ describe('Contrary', function () {
 		battle = common.createBattle();
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Spinda", ability: 'contrary', moves: ['bellydrum']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Dragonite", ability: 'multiscale', moves: ['dragondance']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move bellydrum', 'move dragondance');
 		assert.statStage(p1.active[0], 'atk', -6);
 	});
 
@@ -40,7 +40,7 @@ describe('Contrary', function () {
 		battle = common.createBattle();
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Spinda", ability: 'contrary', moves: ['tackle']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Dragonite", ability: 'moldbreaker', moves: ['growl']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move tackle', 'move growl');
 		assert.statStage(p1.active[0], 'atk', -1);
 	});
 });

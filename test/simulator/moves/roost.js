@@ -15,7 +15,7 @@ describe('Roost', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Clefable", item: 'leftovers', ability: 'unaware', moves: ['calmmind']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Dragonite", item: 'laggingtail', ability: 'multiscale', moves: ['roost']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move calmmind', 'move roost');
 		assert.strictEqual(battle.log[battle.lastMoveLine + 1], '|-fail|' + battle.p2.active[0]);
 	});
 
@@ -23,9 +23,8 @@ describe('Roost', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Clefable", ability: 'unaware', moves: ['calmmind', 'hiddenpowergrass']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Dragonite", ability: 'multiscale', moves: ['roost', 'dragondance']}]);
-		battle.choose('p1', 'move 2');
-		battle.choose('p2', 'move 2');
-		battle.commitDecisions();
+		battle.makeChoices('move hiddenpowergrass', 'move dragondance');
+		battle.makeChoices('move calmmind', 'move roost');
 		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
@@ -34,22 +33,19 @@ describe('Roost', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Aggron", item: 'leftovers', ability: 'sturdy', moves: ['mudslap', 'hiddenpowergrass']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Aerodactyl", item: 'focussash', ability: 'wonderguard', moves: ['roost', 'doubleedge']}]);
 
-		battle.commitDecisions();
+		battle.makeChoices('move mudslap', 'move roost');
 		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp); // Immune to Mud Slap
 
 		// Ensure that Aerodactyl has some damage
-		battle.choose('p2', 'move 2');
-		battle.commitDecisions();
+		battle.makeChoices('move mudslap', 'move doubleedge');
 
-		battle.commitDecisions();
+		battle.makeChoices('move mudslap', 'move roost');
 		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp); // Hit super-effectively by Mud Slap
 
 		// Ensure that Aerodactyl has some damage
-		battle.choose('p2', 'move 2');
-		battle.commitDecisions();
+		battle.makeChoices('move mudslap', 'move doubleedge');
 
-		battle.choose('p1', 'move 2');
-		battle.commitDecisions();
+		battle.makeChoices('move hiddenpowergrasss', 'move roost');
 		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp); // Hit super-effectively by HP Grass
 	});
 
@@ -70,7 +66,7 @@ describe('Roost', function () {
 			return Sim.Pokemon.prototype.damage.apply(this, args);
 		};
 
-		battle.commitDecisions();
+		battle.makeChoices('move aircutter, move earthquake', 'move roost, move earthquake');
 		assert.strictEqual(hitCount, 3);
 	});
 
@@ -78,8 +74,8 @@ describe('Roost', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Tornadus", item: 'focussash', ability: 'prankster', moves: ['roost']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Gastly", item: 'laggingtail', ability: 'levitate', moves: ['astonish']}]);
-		battle.commitDecisions();
-		battle.commitDecisions();
+		battle.makeChoices('move roost', 'move astonish');
+		battle.makeChoices('move roost', 'move astonish');
 		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp); // Immune to Astonish
 	});
 });
@@ -95,12 +91,11 @@ describe('Roost - DPP', function () {
 			[{species: "Gastly", item: 'laggingtail', ability: 'levitate', moves: ['astonish', 'earthpower']}],
 		]);
 
-		battle.commitDecisions();
-		battle.commitDecisions();
+		battle.makeChoices('move roost', 'move astonish');
+		battle.makeChoices('move roost', 'move astonish');
 		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp); // Affected by Astonish
 
-		battle.choose('p2', 'move 2');
-		battle.commitDecisions();
+		battle.makeChoices('move roost', 'move earthpower');
 		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp); // Affected by Earth Power
 	});
 });

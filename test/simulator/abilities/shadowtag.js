@@ -17,8 +17,7 @@ describe('Shadow Tag', function () {
 			{species: "Tornadus", ability: 'defiant', moves: ['tailwind']},
 			{species: "Heatran", ability: 'flashfire', moves: ['roar']},
 		]);
-		assert.false(p2.chooseSwitch(2));
-		battle.commitDecisions();
+		assert.false(battle.makeChoices('move counter', 'switch 2'));
 		assert.species(p2.active[0], 'Tornadus');
 	});
 
@@ -29,8 +28,8 @@ describe('Shadow Tag', function () {
 			{species: "Tornadus", ability: 'defiant', moves: ['uturn']},
 			{species: "Heatran", ability: 'flashfire', moves: ['roar']},
 		]);
-		battle.commitDecisions();
-		p2.chooseSwitch(2);
+		battle.makeChoices('move counter', 'move uturn');
+		battle.makeChoices('move counter', 'switch 2');
 		assert.species(p2.active[0], 'Heatran');
 	});
 
@@ -41,8 +40,7 @@ describe('Shadow Tag', function () {
 			{species: "Gothitelle", ability: 'shadowtag', moves: ['psychic']},
 			{species: "Heatran", ability: 'flashfire', moves: ['roar']},
 		]);
-		p2.chooseSwitch(2);
-		battle.commitDecisions();
+		battle.makeChoices('move counter', 'switch 2');
 		assert.species(p2.active[0], 'Heatran');
 	});
 
@@ -53,8 +51,7 @@ describe('Shadow Tag', function () {
 			{species: "Gengar", ability: 'levitate', moves: ['curse']},
 			{species: "Heatran", ability: 'flashfire', moves: ['roar']},
 		]);
-		p2.chooseSwitch(2);
-		battle.commitDecisions();
+		battle.makeChoices('move counter', 'switch 2');
 		assert.species(p2.active[0], 'Heatran');
 	});
 });

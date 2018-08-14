@@ -139,7 +139,7 @@ if (cluster.isMaster) {
 	};
 
 	exports.killPid = function (pid) {
-		for (let [workerid, worker] of workers) { // eslint-disable-line no-unused-vars
+		for (const worker of workers.values()) {
 			if (pid === worker.process.pid) {
 				return this.killWorker(worker);
 			}
@@ -179,6 +179,7 @@ if (cluster.isMaster) {
 	};
 } else {
 	// is worker
+	// @ts-ignore This file doesn't exist on the repository, so Travis checks fail if this isn't ignored
 	global.Config = require('./config/config');
 
 	if (process.env.PSPORT) Config.port = +process.env.PSPORT;

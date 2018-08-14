@@ -14,7 +14,7 @@ describe('Transform', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Hoopa-Unbound", ability: 'magician', moves: ['rest']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move transform', 'move rest');
 		assert.strictEqual(battle.p1.active[0].template, battle.p2.active[0].template);
 	});
 
@@ -22,7 +22,7 @@ describe('Transform', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Mewtwo", ability: 'pressure', moves: ['rest']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move transform', 'move rest');
 		let p1poke = battle.p1.active[0];
 		let p2poke = battle.p2.active[0];
 		for (let stat in p1poke.stats) {
@@ -37,8 +37,7 @@ describe('Transform', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Mew", ability: 'synchronize', item: 'laggingtail', moves: ['calmmind', 'agility', 'transform']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Scolipede", ability: 'swarm', moves: ['honeclaws', 'irondefense', 'doubleteam']}]);
 		for (let i = 1; i <= 3; i++) {
-			battle.choose('p1', 'move ' + i);
-			battle.choose('p2', 'move ' + i);
+			battle.makeChoices('move ' + i, 'move ' + i);
 		}
 		let p1poke = battle.p1.active[0];
 		let p2poke = battle.p2.active[0];
@@ -47,13 +46,21 @@ describe('Transform', function () {
 		}
 	});
 
+	it("should copy the target's focus energy status", function () {
+		battle = common.createBattle();
+		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: "Sawk", ability: 'sturdy', moves: ['focusenergy']}]);
+		battle.makeChoices('move transform', 'move focusenergy');
+		assert.ok(battle.p1.active[0].volatiles['focusenergy']);
+	});
+
 	it('should copy the target\'s moves with 5 PP each', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Mew", ability: 'synchronize', moves: ['rest', 'psychic', 'energyball', 'hyperbeam']}]);
 		let p1poke = battle.p1.active[0];
 		let p2poke = battle.p2.active[0];
-		battle.commitDecisions();
+		battle.makeChoices('move transform', 'move rest');
 		assert.strictEqual(p1poke.moves.length, p2poke.moves.length);
 		for (let i = 0; i < p1poke.moves.length; i++) {
 			let move = p1poke.moves[i];
@@ -68,7 +75,7 @@ describe('Transform', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Arcanine", ability: 'intimidate', moves: ['rest']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move transform', 'move rest');
 		assert.strictEqual(battle.p2.active[0].boosts['atk'], -1);
 	});
 
@@ -76,7 +83,7 @@ describe('Transform', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Hitmonlee", ability: 'unburden', item: 'normalgem', moves: ['feint']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move transform', 'move feint');
 		assert.notStrictEqual(battle.p1.active[0].getStat('spe'), battle.p2.active[0].getStat('spe'));
 	});
 
@@ -84,7 +91,7 @@ describe('Transform', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Mewtwo", ability: 'pressure', moves: ['substitute']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move transform', 'move substitute');
 		assert.notStrictEqual(battle.p1.active[0].template, battle.p2.active[0].template);
 	});
 
@@ -95,7 +102,7 @@ describe('Transform', function () {
 			{species: "Zoroark", ability: 'illusion', moves: ['rest']},
 			{species: "Mewtwo", ability: 'pressure', moves: ['rest']},
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move transform', 'move rest');
 		assert.notStrictEqual(battle.p1.active[0].template, battle.p2.active[0].template);
 	});
 
@@ -106,12 +113,43 @@ describe('Transform', function () {
 			{species: "Magikarp", ability: 'rattled', moves: ['splash']},
 			{species: "Mew", ability: 'synchronize', moves: ['transform']},
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move transform', 'move splash');
 		assert.strictEqual(battle.p1.active[0].template, battle.p2.active[0].template);
-		battle.choose('p2', 'switch 2');
-		battle.commitDecisions();
-		battle.commitDecisions();
+		battle.makeChoices('move transform', 'switch 2');
+		battle.makeChoices('move transform', 'move transform');
 		assert.notStrictEqual(battle.p1.active[0].template, battle.p2.active[0].template);
+	});
+
+	it(`should copy the target's real type, even if the target is an Arceus`, function () {
+		battle = common.createBattle([
+			[{species: "Ditto", ability: 'limber', item: 'flameplate', moves: ['transform']}],
+			[{species: "Arceus-Steel", ability: 'multitype', item: 'ironplate', moves: ['rest']}],
+		]);
+		battle.makeChoices('move transform', 'move rest');
+		assert.deepStrictEqual(battle.p1.active[0].getTypes(), ["Steel"]);
+	});
+
+	it(`should ignore the effects of Roost`, function () {
+		battle = common.createBattle([
+			[{species: "Mew", ability: 'synchronize', moves: ['seismictoss', 'transform']}],
+			[{species: "Talonflame", ability: 'flamebody', moves: ['roost']}],
+		]);
+		battle.makeChoices('move seismictoss', 'move roost');
+		battle.makeChoices('move transform', 'move roost');
+		assert.deepStrictEqual(battle.p1.active[0].getTypes(), ["Fire", "Flying"]);
+	});
+});
+
+describe('Transform [Gen 5]', function () {
+	afterEach(function () {
+		battle.destroy();
+	});
+
+	it("should not copy the target's focus energy status", function () {
+		battle = common.gen(5).createBattle();
+		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: "Sawk", ability: 'sturdy', moves: ['focusenergy']}]);
+		assert.constant(() => battle.p1.active[0].volatiles['focusenergy'], () => battle.makeChoices('move transform', 'move focusenergy'));
 	});
 });
 
@@ -125,7 +163,7 @@ describe('Transform [Gen 4]', function () {
 			[{species: "Ditto", ability: 'limber', moves: ['transform']}],
 			[{species: "Giratina-Origin", ability: 'levitate', item: 'griseousorb', moves: ['rest']}],
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move transform', 'move rest');
 		assert.strictEqual(battle.p1.active[0].template.species, 'Giratina');
 	});
 
@@ -134,7 +172,7 @@ describe('Transform [Gen 4]', function () {
 			[{species: "Ditto", ability: 'limber', item: 'griseousorb', moves: ['transform']}],
 			[{species: "Giratina", ability: 'pressure', moves: ['rest']}],
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move transform', 'move rest');
 		assert.strictEqual(battle.p1.active[0].template.species, 'Giratina-Origin');
 	});
 
@@ -143,8 +181,9 @@ describe('Transform [Gen 4]', function () {
 			[{species: "Ditto", ability: 'limber', item: 'flameplate', moves: ['transform']}],
 			[{species: "Arceus-Steel", ability: 'multitype', item: 'ironplate', moves: ['rest']}],
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move transform', 'move rest');
 		assert.strictEqual(battle.p1.active[0].template.species, 'Arceus-Fire');
+		assert.deepStrictEqual(battle.p1.active[0].getTypes(), ["Fire"]);
 	});
 
 	it('should succeed against a Substitute', function () {
@@ -152,7 +191,7 @@ describe('Transform [Gen 4]', function () {
 			[{species: "Ditto", ability: 'limber', moves: ['transform']}],
 			[{species: "Mewtwo", ability: 'pressure', moves: ['substitute']}],
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move transform', 'move rest');
 		assert.strictEqual(battle.p1.active[0].template, battle.p2.active[0].template);
 	});
 });

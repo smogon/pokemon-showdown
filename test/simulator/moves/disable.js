@@ -14,8 +14,11 @@ describe('Disable', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Abra', ability: 'synchronize', item: 'laggingtail', moves: ['disable']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Abra', ability: 'synchronize', moves: ['teleport']}]);
-		battle.commitDecisions();
-		battle.commitDecisions();
+		battle.makeChoices('move disable', 'move teleport');
+
+		// Teleport is disable, p2 Abra will struggle instead
+		battle.makeChoices('move disable', 'move teleport');
+
 		assert.strictEqual(battle.p2.active[0].lastMove.id, 'struggle');
 	});
 });

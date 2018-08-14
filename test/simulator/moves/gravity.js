@@ -14,7 +14,7 @@ describe('Gravity', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Aerodactyl', ability: 'pressure', moves: ['gravity']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Aron', ability: 'sturdy', moves: ['earthpower']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move gravity', 'move earthpower');
 		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
@@ -22,7 +22,7 @@ describe('Gravity', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Rotom', ability: 'levitate', moves: ['gravity']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Aron', ability: 'sturdy', moves: ['earthpower']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move gravity', 'move earthpower');
 		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
@@ -30,9 +30,9 @@ describe('Gravity', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Spiritomb', ability: 'pressure', moves: ['gravity']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Aerodactyl', ability: 'pressure', moves: ['fly']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move gravity', 'move fly');
 		assert.ok(!battle.p2.active[0].volatiles['twoturnmove']);
-		battle.commitDecisions();
+		battle.makeChoices('move gravity', 'move fly');
 		assert.strictEqual(battle.p2.active[0].lastMove.id, 'struggle');
 	});
 });

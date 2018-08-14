@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleItems = {
+/**@type {{[k: string]: ItemData}} */
+let BattleItems = {
 	"abomasite": {
 		id: "abomasite",
 		name: "Abomasite",
@@ -536,19 +537,7 @@ exports.BattleItems = {
 			}
 		},
 		onPrimal: function (pokemon) {
-			let template = this.getTemplate('Kyogre-Primal');
-			pokemon.formeChange(template);
-			pokemon.baseTemplate = template;
-			pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
-			if (pokemon.illusion) {
-				pokemon.ability = ''; // Don't allow Illusion to wear off
-				this.add('-primal', pokemon.illusion);
-			} else {
-				this.add('detailschange', pokemon, pokemon.details);
-				this.add('-primal', pokemon);
-			}
-			pokemon.setAbility(template.abilities['0'], null, true);
-			pokemon.baseAbility = pokemon.ability;
+			pokemon.formeChange('Kyogre-Primal', this.effect, true);
 		},
 		onTakeItem: function (item, source) {
 			if (source.baseTemplate.baseSpecies === 'Kyogre') return false;
@@ -1107,6 +1096,18 @@ exports.BattleItems = {
 		gen: 7,
 		desc: "If holder has a Dark move, this item allows it to use a Dark Z-Move.",
 	},
+	"dawnstone": {
+		id: "dawnstone",
+		name: "Dawn Stone",
+		spritenum: 92,
+		fling: {
+			basePower: 80,
+		},
+		num: 109,
+		gen: 4,
+		desc: "Evolves male Kirlia into Gallade and female Snorunt into Froslass when used.",
+		shortDesc: "Evolves certain species of Pokemon when used.",
+	},
 	"decidiumz": {
 		id: "decidiumz",
 		name: "Decidium Z",
@@ -1134,7 +1135,8 @@ exports.BattleItems = {
 		},
 		num: 227,
 		gen: 3,
-		desc: "If held by a Clamperl, its Sp. Def is doubled.",
+		desc: "If held by a Clamperl, its Sp. Def is doubled. Evolves Clamperl into Gorebyss when traded.",
+		shortDesc: "If held by a Clamperl, its Sp. Def is doubled.",
 	},
 	"deepseatooth": {
 		id: "deepseatooth",
@@ -1151,7 +1153,8 @@ exports.BattleItems = {
 		},
 		num: 226,
 		gen: 3,
-		desc: "If held by a Clamperl, its Sp. Atk is doubled.",
+		desc: "If held by a Clamperl, its Sp. Atk is doubled. Evolves Clamperl into Huntail when traded.",
+		shortDesc: "If held by a Clamperl, its Sp. Atk is doubled.",
 	},
 	"destinyknot": {
 		id: "destinyknot",
@@ -1293,6 +1296,17 @@ exports.BattleItems = {
 		gen: 7,
 		desc: "Holder's Multi-Attack is Dragon type.",
 	},
+	"dragonscale": {
+		id: "dragonscale",
+		name: "Dragon Scale",
+		spritenum: 108,
+		fling: {
+			basePower: 30,
+		},
+		num: 250,
+		gen: 2,
+		desc: "Evolves Seadra into Kingdra when traded.",
+	},
 	"dragoniumz": {
 		id: "dragoniumz",
 		name: "Dragonium Z",
@@ -1336,6 +1350,17 @@ exports.BattleItems = {
 		gen: 5,
 		desc: "A special Poke Ball that appears out of nowhere in a bag at the Entree Forest.",
 	},
+	"dubiousdisc": {
+		id: "dubiousdisc",
+		name: "Dubious Disc",
+		spritenum: 113,
+		fling: {
+			basePower: 50,
+		},
+		num: 324,
+		gen: 4,
+		desc: "Evolves Porygon2 into Porygon-Z when traded.",
+	},
 	"durinberry": {
 		id: "durinberry",
 		name: "Durin Berry",
@@ -1358,6 +1383,18 @@ exports.BattleItems = {
 		num: 13,
 		gen: 4,
 		desc: "A Poke Ball that makes it easier to catch wild Pokemon at night or in caves.",
+	},
+	"duskstone": {
+		id: "duskstone",
+		name: "Dusk Stone",
+		spritenum: 116,
+		fling: {
+			basePower: 80,
+		},
+		num: 108,
+		gen: 4,
+		desc: "Evolves Murkrow into Honchkrow, Misdreavus into Mismagius, Lampent into Chandelure, and Doublade into Aegislash when used.",
+		shortDesc: "Evolves certain species of Pokemon when used.",
 	},
 	"earthplate": {
 		id: "earthplate",
@@ -1730,6 +1767,18 @@ exports.BattleItems = {
 		gen: 7,
 		desc: "Holder's Multi-Attack is Fire type.",
 	},
+	"firestone": {
+		id: "firestone",
+		name: "Fire Stone",
+		spritenum: 142,
+		fling: {
+			basePower: 30,
+		},
+		num: 82,
+		gen: 1,
+		desc: "Evolves Vulpix into Ninetales, Growlithe into Arcanine, Eevee into Flareon, and Pansear into Simisear when used.",
+		shortDesc: "Evolves certain species of Pokemon when used.",
+	},
 	"firiumz": {
 		id: "firiumz",
 		name: "Firium Z",
@@ -1874,7 +1923,7 @@ exports.BattleItems = {
 			basePower: 10,
 		},
 		onDamage: function (damage, target, source, effect) {
-			if (this.random(10) === 0 && damage >= target.hp && effect && effect.effectType === 'Move') {
+			if (this.randomChance(1, 10) && damage >= target.hp && effect && effect.effectType === 'Move') {
 				this.add("-activate", target, "item: Focus Band");
 				return target.hp - 1;
 			}
@@ -2428,6 +2477,18 @@ exports.BattleItems = {
 		gen: 7,
 		desc: "Holder's Multi-Attack is Ice type.",
 	},
+	"icestone": {
+		id: "icestone",
+		name: "Ice Stone",
+		spritenum: 693,
+		fling: {
+			basePower: 30,
+		},
+		num: 849,
+		gen: 7,
+		desc: "Evolves Alolan Sandshrew into Alolan Sandslash and Alolan Vulpix into Alolan Ninetales when used.",
+		shortDesc: "Evolves certain species of Pokemon when used.",
+	},
 	"icicleplate": {
 		id: "icicleplate",
 		name: "Icicle Plate",
@@ -2560,7 +2621,7 @@ exports.BattleItems = {
 			type: "Dragon",
 		},
 		onAfterDamage: function (damage, target, source, move) {
-			if (source && source !== target && move && move.category === 'Physical') {
+			if (source && source.hp && source !== target && move && move.category === 'Physical') {
 				if (target.eatItem()) {
 					this.damage(source.maxhp / 8, source, target);
 				}
@@ -2570,6 +2631,17 @@ exports.BattleItems = {
 		num: 211,
 		gen: 4,
 		desc: "If holder is hit by a physical move, attacker loses 1/8 of its max HP. Single use.",
+	},
+	"jawfossil": {
+		id: "jawfossil",
+		name: "Jaw Fossil",
+		spritenum: 694,
+		fling: {
+			basePower: 100,
+		},
+		num: 710,
+		gen: 6,
+		desc: "Can be revived into Tyrunt.",
 	},
 	"kasibberry": {
 		id: "kasibberry",
@@ -2678,8 +2750,8 @@ exports.BattleItems = {
 		onModifyMove: function (move) {
 			if (move.category !== "Status") {
 				if (!move.secondaries) move.secondaries = [];
-				for (let i = 0; i < move.secondaries.length; i++) {
-					if (move.secondaries[i].volatileStatus === 'flinch') return;
+				for (const secondary of move.secondaries) {
+					if (secondary.volatileStatus === 'flinch') return;
 				}
 				move.secondaries.push({
 					chance: 10,
@@ -2689,7 +2761,8 @@ exports.BattleItems = {
 		},
 		num: 221,
 		gen: 2,
-		desc: "Holder's attacks without a chance to flinch gain a 10% chance to flinch.",
+		desc: "Holder's attacks without a chance to flinch gain a 10% chance to flinch. Evolves Poliwhirl into Politoed and Slowpoke into Slowking when traded.",
+		shortDesc: "Holder's attacks without a chance to flinch gain a 10% chance to flinch.",
 	},
 	"kommoniumz": {
 		id: "kommoniumz",
@@ -2782,6 +2855,18 @@ exports.BattleItems = {
 		gen: 3,
 		desc: "The accuracy of attacks against the holder is 0.9x.",
 	},
+	"leafstone": {
+		id: "leafstone",
+		name: "Leaf Stone",
+		spritenum: 241,
+		fling: {
+			basePower: 30,
+		},
+		num: 85,
+		gen: 1,
+		desc: "Evolves Gloom into Vileplume, Weepinbell into Victreebel, Exeggcute into Exeggutor or Alolan Exeggutor, Nuzleaf into Shiftry, and Pansage into Simisage when used.",
+		shortDesc: "Evolves certain species of Pokemon when used.",
+	},
 	"leftovers": {
 		id: "leftovers",
 		name: "Leftovers",
@@ -2839,10 +2924,9 @@ exports.BattleItems = {
 			if (moveSlot.pp > moveSlot.maxpp) moveSlot.pp = moveSlot.maxpp;
 			this.add('-activate', pokemon, 'item: Leppa Berry', moveSlot.move, '[consumed]');
 			if (pokemon.item !== 'leppaberry') {
-				let foeActive = pokemon.side.foe.active;
 				let foeIsStale = false;
-				for (let i = 0; i < foeActive.length; i++) {
-					if (foeActive[i].hp && foeActive[i].isStale >= 2) {
+				for (const foeActive of pokemon.side.foe.active) {
+					if (foeActive.hp && foeActive.isStale >= 2) {
 						foeIsStale = true;
 						break;
 					}
@@ -2896,7 +2980,7 @@ exports.BattleItems = {
 			return this.chainModify([0x14CC, 0x1000]);
 		},
 		onAfterMoveSecondarySelf: function (source, target, move) {
-			if (source && source !== target && move && move.category !== 'Status' && !move.ohko) {
+			if (source && source !== target && move && move.category !== 'Status') {
 				this.damage(source.maxhp / 10, source, source, this.getItem('lifeorb'));
 			}
 		},
@@ -3103,6 +3187,17 @@ exports.BattleItems = {
 		gen: 3,
 		desc: "Holder's Speed is halved. The Ability Klutz does not ignore this effect.",
 	},
+	"magmarizer": {
+		id: "magmarizer",
+		name: "Magmarizer",
+		spritenum: 272,
+		fling: {
+			basePower: 80,
+		},
+		num: 323,
+		gen: 4,
+		desc: "Evolves Magmar into Magmortar when traded.",
+	},
 	"magnet": {
 		id: "magnet",
 		name: "Magnet",
@@ -3171,6 +3266,7 @@ exports.BattleItems = {
 			if (this.activeMove.id !== 'knockoff' && this.activeMove.id !== 'thief' && this.activeMove.id !== 'covet') return false;
 		},
 		isUnreleased: true,
+		num: 0,
 		gen: 2,
 		desc: "Cannot be given to or taken from a Pokemon, except by Covet/Knock Off/Thief.",
 	},
@@ -3287,11 +3383,11 @@ exports.BattleItems = {
 			basePower: 10,
 			effect: function (pokemon) {
 				let conditions = ['attract', 'taunt', 'encore', 'torment', 'disable', 'healblock'];
-				for (let i = 0; i < conditions.length; i++) {
-					if (pokemon.volatiles[conditions[i]]) {
-						for (let j = 0; j < conditions.length; j++) {
-							pokemon.removeVolatile(conditions[j]);
-							if (conditions[i] === 'attract' && conditions[j] === 'attract') {
+				for (const firstCondition of conditions) {
+					if (pokemon.volatiles[firstCondition]) {
+						for (const secondCondition of conditions) {
+							pokemon.removeVolatile(secondCondition);
+							if (firstCondition === 'attract' && secondCondition === 'attract') {
 								this.add('-end', pokemon, 'move: Attract', '[from] item: Mental Herb');
 							}
 						}
@@ -3302,12 +3398,12 @@ exports.BattleItems = {
 		},
 		onUpdate: function (pokemon) {
 			let conditions = ['attract', 'taunt', 'encore', 'torment', 'disable', 'healblock'];
-			for (let i = 0; i < conditions.length; i++) {
-				if (pokemon.volatiles[conditions[i]]) {
+			for (const firstCondition of conditions) {
+				if (pokemon.volatiles[firstCondition]) {
 					if (!pokemon.useItem()) return;
-					for (let j = 0; j < conditions.length; j++) {
-						pokemon.removeVolatile(conditions[j]);
-						if (conditions[i] === 'attract' && conditions[j] === 'attract') {
+					for (const secondCondition of conditions) {
+						pokemon.removeVolatile(secondCondition);
+						if (firstCondition === 'attract' && secondCondition === 'attract') {
 							this.add('-end', pokemon, 'move: Attract', '[from] item: Mental Herb');
 						}
 					}
@@ -3348,7 +3444,8 @@ exports.BattleItems = {
 		},
 		num: 233,
 		gen: 2,
-		desc: "Holder's Steel-type attacks have 1.2x power.",
+		desc: "Holder's Steel-type attacks have 1.2x power. Evolves Onix into Steelix and Scyther into Scizor when traded.",
+		shortDesc: "Holder's Steel-type attacks have 1.2x power.",
 	},
 	"metalpowder": {
 		id: "metalpowder",
@@ -3382,7 +3479,8 @@ exports.BattleItems = {
 				this.effectData.numConsecutive = 0;
 				this.effectData.lastMove = '';
 			},
-			onBeforeMove: function (pokemon, target, move) {
+			onTryMovePriority: -2,
+			onTryMove: function (pokemon, target, move) {
 				if (!pokemon.hasItem('metronome')) {
 					pokemon.removeVolatile('metronome');
 					return;
@@ -3550,6 +3648,18 @@ exports.BattleItems = {
 		num: 498,
 		gen: 2,
 		desc: "A Poke Ball for catching Pokemon that evolve using the Moon Stone.",
+	},
+	"moonstone": {
+		id: "moonstone",
+		name: "Moon Stone",
+		spritenum: 295,
+		fling: {
+			basePower: 30,
+		},
+		num: 81,
+		gen: 1,
+		desc: "Evolves Nidorina into Nidoqueen, Nidorino into Nidoking, Clefairy into Clefable, Jigglypuff into Wigglytuff, Skitty into Delcatty, and Munna into Musharna when used.",
+		shortDesc: "Evolves certain species of Pokemon when used.",
 	},
 	"muscleband": {
 		id: "muscleband",
@@ -3751,6 +3861,17 @@ exports.BattleItems = {
 		num: 155,
 		gen: 3,
 		desc: "Restores 10 HP when at 1/2 max HP or less. Single use.",
+	},
+	"ovalstone": {
+		id: "ovalstone",
+		name: "Oval Stone",
+		spritenum: 321,
+		fling: {
+			basePower: 80,
+		},
+		num: 110,
+		gen: 4,
+		desc: "Evolves Happiny into Chansey when held and leveled up during the day.",
 	},
 	"pamtreberry": {
 		id: "pamtreberry",
@@ -4200,6 +4321,17 @@ exports.BattleItems = {
 		gen: 7,
 		desc: "If held by a Primarina with Sparkling Aria, it can use Oceanic Operetta.",
 	},
+	"prismscale": {
+		id: "prismscale",
+		name: "Prism Scale",
+		spritenum: 365,
+		fling: {
+			basePower: 30,
+		},
+		num: 537,
+		gen: 5,
+		desc: "Evolves Feebas into Milotic when traded.",
+	},
 	"protectivepads": {
 		id: "protectivepads",
 		name: "Protective Pads",
@@ -4207,12 +4339,56 @@ exports.BattleItems = {
 		fling: {
 			basePower: 30,
 		},
-		onModifyMove: function (move) {
-			delete move.flags['contact'];
+		onAttractPriority: -1,
+		onAttract: function (target, source, effect) {
+			if (target !== source && target === this.activePokemon && this.activeMove && this.activeMove.flags['contact']) return false;
+		},
+		onBoostPriority: -1,
+		onBoost: function (boost, target, source, effect) {
+			if (target !== source && target === this.activePokemon && this.activeMove && this.activeMove.flags['contact']) {
+				if (effect && effect.effectType === 'Ability') {
+					// Ability activation always happens for boosts
+					this.add('-activate', target, 'item: Protective Pads');
+				}
+				return false;
+			}
+		},
+		onDamagePriority: -1,
+		onDamage: function (damage, target, source, effect) {
+			if (target !== source && target === this.activePokemon && this.activeMove && this.activeMove.flags['contact']) {
+				if (effect && effect.effectType === 'Ability') {
+					this.add('-activate', source, effect.fullname);
+					this.add('-activate', target, 'item: Protective Pads');
+				}
+				return false;
+			}
+		},
+		onSetAbility: function (ability, target, source, effect) {
+			if (target !== source && target === this.activePokemon && this.activeMove && this.activeMove.flags['contact']) {
+				if (effect && effect.effectType === 'Ability') {
+					this.add('-activate', source, effect.fullname);
+					this.add('-activate', target, 'item: Protective Pads');
+				}
+				return false;
+			}
+		},
+		onSetStatus: function (status, target, source, effect) {
+			if (target !== source && target === this.activePokemon && this.activeMove && this.activeMove.flags['contact']) return false;
 		},
 		num: 880,
 		gen: 7,
-		desc: "Holder's attacks do not make contact with the target.",
+		desc: "Holder's moves are protected from adverse contact effects, except Pickpocket.",
+	},
+	"protector": {
+		id: "protector",
+		name: "Protector",
+		spritenum: 367,
+		fling: {
+			basePower: 80,
+		},
+		num: 321,
+		gen: 4,
+		desc: "Evolves Rhydon into Rhyperior when traded.",
 	},
 	"psychicgem": {
 		id: "psychicgem",
@@ -4304,7 +4480,7 @@ exports.BattleItems = {
 		id: "quickclaw",
 		onModifyPriorityPriority: -1,
 		onModifyPriority: function (priority, pokemon) {
-			if (this.random(5) === 0) {
+			if (this.randomChance(1, 5)) {
 				this.add('-activate', pokemon, 'item: Quick Claw');
 				return Math.round(priority) + 0.1;
 			}
@@ -4395,7 +4571,8 @@ exports.BattleItems = {
 		},
 		num: 326,
 		gen: 4,
-		desc: "Holder's critical hit ratio is raised by 1 stage.",
+		desc: "Holder's critical hit ratio is raised by 1 stage. Evolves Sneasel into Weavile when held and leveled up during the night.",
+		shortDesc: "Holder's critical hit ratio is raised by 1 stage.",
 	},
 	"razorfang": {
 		id: "razorfang",
@@ -4409,8 +4586,8 @@ exports.BattleItems = {
 		onModifyMove: function (move) {
 			if (move.category !== "Status") {
 				if (!move.secondaries) move.secondaries = [];
-				for (let i = 0; i < move.secondaries.length; i++) {
-					if (move.secondaries[i].volatileStatus === 'flinch') return;
+				for (const secondary of move.secondaries) {
+					if (secondary.volatileStatus === 'flinch') return;
 				}
 				move.secondaries.push({
 					chance: 10,
@@ -4420,7 +4597,8 @@ exports.BattleItems = {
 		},
 		num: 327,
 		gen: 4,
-		desc: "Holder's attacks without a chance to flinch gain a 10% chance to flinch.",
+		desc: "Holder's attacks without a chance to flinch gain a 10% chance to flinch. Evolves Gligar into Gliscor when held and leveled up during the night.",
+		shortDesc: "Holder's attacks without a chance to flinch gain a 10% chance to flinch.",
 	},
 	"razzberry": {
 		id: "razzberry",
@@ -4436,6 +4614,17 @@ exports.BattleItems = {
 		num: 164,
 		gen: 3,
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
+	},
+	"reapercloth": {
+		id: "reapercloth",
+		name: "Reaper Cloth",
+		spritenum: 385,
+		fling: {
+			basePower: 10,
+		},
+		num: 325,
+		gen: 4,
+		desc: "Evolves Dusclops into Dusknoir when traded.",
 	},
 	"redcard": {
 		id: "redcard",
@@ -4468,19 +4657,7 @@ exports.BattleItems = {
 			}
 		},
 		onPrimal: function (pokemon) {
-			let template = this.getTemplate('Groudon-Primal');
-			pokemon.formeChange(template);
-			pokemon.baseTemplate = template;
-			pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
-			if (pokemon.illusion) {
-				pokemon.ability = ''; // Don't allow Illusion to wear off
-				this.add('-primal', pokemon.illusion);
-			} else {
-				this.add('detailschange', pokemon, pokemon.details);
-				this.add('-primal', pokemon);
-			}
-			pokemon.setAbility(template.abilities['0'], null, true);
-			pokemon.baseAbility = pokemon.ability;
+			pokemon.formeChange('Groudon-Primal', this.effect, true);
 		},
 		onTakeItem: function (item, source) {
 			if (source.baseTemplate.baseSpecies === 'Groudon') return false;
@@ -4677,7 +4854,7 @@ exports.BattleItems = {
 			type: "Dark",
 		},
 		onAfterDamage: function (damage, target, source, move) {
-			if (source && source !== target && move && move.category === 'Special') {
+			if (source && source.hp && source !== target && move && move.category === 'Special') {
 				if (target.eatItem()) {
 					this.damage(source.maxhp / 8, source, target);
 				}
@@ -4701,6 +4878,17 @@ exports.BattleItems = {
 		num: 754,
 		gen: 6,
 		desc: "If held by a Sableye, this item allows it to Mega Evolve in battle.",
+	},
+	"sachet": {
+		id: "sachet",
+		name: "Sachet",
+		spritenum: 691,
+		fling: {
+			basePower: 80,
+		},
+		num: 647,
+		gen: 6,
+		desc: "Evolves Spritzee into Aromatisse when traded.",
 	},
 	"safariball": {
 		id: "safariball",
@@ -4729,6 +4917,17 @@ exports.BattleItems = {
 		num: 650,
 		gen: 6,
 		desc: "Holder is immune to powder moves and damage from Sandstorm or Hail.",
+	},
+	"sailfossil": {
+		id: "sailfossil",
+		name: "Sail Fossil",
+		spritenum: 695,
+		fling: {
+			basePower: 100,
+		},
+		num: 711,
+		gen: 6,
+		desc: "Can be revived into Amaura.",
 	},
 	"salacberry": {
 		id: "salacberry",
@@ -4886,6 +5085,18 @@ exports.BattleItems = {
 		num: 253,
 		gen: 3,
 		desc: "After an attack, holder gains 1/8 of the damage in HP dealt to other Pokemon.",
+	},
+	"shinystone": {
+		id: "shinystone",
+		name: "Shiny Stone",
+		spritenum: 439,
+		fling: {
+			basePower: 80,
+		},
+		num: 107,
+		gen: 4,
+		desc: "Evolves Togetic into Togekiss, Roselia into Roserade, Minccino into Cinccino, and Floette into Florges when used.",
+		shortDesc: "Evolves certain species of Pokemon when used.",
 	},
 	"shockdrive": {
 		id: "shockdrive",
@@ -5217,12 +5428,13 @@ exports.BattleItems = {
 		onEat: function (pokemon) {
 			let stats = [];
 			for (let stat in pokemon.boosts) {
+				// @ts-ignore
 				if (stat !== 'accuracy' && stat !== 'evasion' && pokemon.boosts[stat] < 6) {
 					stats.push(stat);
 				}
 			}
 			if (stats.length) {
-				let randomStat = stats[this.random(stats.length)];
+				let randomStat = this.sample(stats);
 				let boost = {};
 				boost[randomStat] = 2;
 				this.boost(boost);
@@ -5325,6 +5537,7 @@ exports.BattleItems = {
 		onHit: function (target, source, move) {
 			if (source && source !== target && !source.item && move && move.flags['contact']) {
 				let barb = target.takeItem();
+				if (!barb) return; // Gen 4 Multitype
 				source.setItem(barb);
 				// no message for Sticky Barb changing hands
 			}
@@ -5354,6 +5567,18 @@ exports.BattleItems = {
 		num: 309,
 		gen: 4,
 		desc: "Holder's Rock-type attacks have 1.2x power. Judgment is Rock type.",
+	},
+	"sunstone": {
+		id: "sunstone",
+		name: "Sun Stone",
+		spritenum: 480,
+		fling: {
+			basePower: 30,
+		},
+		num: 80,
+		gen: 2,
+		desc: "Evolves Gloom into Bellossom, Sunkern into Sunflora, Cottonee into Whimsicott, Petilil into Lilligant, and Helioptile into Heliolisk when used.",
+		shortDesc: "Evolves certain species of Pokemon when used.",
 	},
 	"swampertite": {
 		id: "swampertite",
@@ -5445,6 +5670,18 @@ exports.BattleItems = {
 		num: 258,
 		gen: 2,
 		desc: "If held by a Cubone or a Marowak, its Attack is doubled.",
+	},
+	"thunderstone": {
+		id: "thunderstone",
+		name: "Thunder Stone",
+		spritenum: 492,
+		fling: {
+			basePower: 30,
+		},
+		num: 83,
+		gen: 1,
+		desc: "Evolves Pikachu into Raichu or Alolan Raichu, Eevee into Jolteon, and Eelektrik into Eelektross when used.",
+		shortDesc: "Evolves certain species of Pokemon when used.",
 	},
 	"timerball": {
 		id: "timerball",
@@ -5544,6 +5781,17 @@ exports.BattleItems = {
 		gen: 7,
 		desc: "Dusk Mane/Dawn Wings Necrozma: Ultra Burst, then Z-Move w/ Photon Geyser.",
 	},
+	"upgrade": {
+		id: "upgrade",
+		name: "Up-Grade",
+		spritenum: 523,
+		fling: {
+			basePower: 30,
+		},
+		num: 252,
+		gen: 2,
+		desc: "Evolves Porygon into Porygon2 when traded.",
+	},
 	"venusaurite": {
 		id: "venusaurite",
 		name: "Venusaurite",
@@ -5615,6 +5863,18 @@ exports.BattleItems = {
 		num: 913,
 		gen: 7,
 		desc: "Holder's Multi-Attack is Water type.",
+	},
+	"waterstone": {
+		id: "waterstone",
+		name: "Water Stone",
+		spritenum: 529,
+		fling: {
+			basePower: 30,
+		},
+		num: 84,
+		gen: 1,
+		desc: "Evolves Poliwhirl into Poliwrath, Shellder into Cloyster, Staryu into Starmie, Eevee into Vaporeon, Lombre into Ludicolo, and Panpour into Simipour when used.",
+		shortDesc: "Evolves certain species of Pokemon when used.",
 	},
 	"wateriumz": {
 		id: "wateriumz",
@@ -5693,6 +5953,17 @@ exports.BattleItems = {
 		gen: 3,
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
+	"whippeddream": {
+		id: "whippeddream",
+		name: "Whipped Dream",
+		spritenum: 692,
+		fling: {
+			basePower: 80,
+		},
+		num: 646,
+		gen: 6,
+		desc: "Evolves Swirlix into Slurpuff when traded.",
+	},
 	"whiteherb": {
 		id: "whiteherb",
 		name: "White Herb",
@@ -5703,6 +5974,7 @@ exports.BattleItems = {
 				let activate = false;
 				let boosts = {};
 				for (let i in pokemon.boosts) {
+					// @ts-ignore
 					if (pokemon.boosts[i] < 0) {
 						activate = true;
 						boosts[i] = 0;
@@ -5718,6 +5990,7 @@ exports.BattleItems = {
 			let activate = false;
 			let boosts = {};
 			for (let i in pokemon.boosts) {
+				// @ts-ignore
 				if (pokemon.boosts[i] < 0) {
 					activate = true;
 					boosts[i] = 0;
@@ -5866,6 +6139,7 @@ exports.BattleItems = {
 			pokemon.addVolatile('confusion');
 			pokemon.setItem('');
 		},
+		num: 0,
 		gen: 2,
 		isNonstandard: 'gen2',
 		desc: "(Gen 2) On switch-in, raises holder's Attack by 2 and confuses it. Single use.",
@@ -5940,20 +6214,6 @@ exports.BattleItems = {
 		gen: 2,
 		isNonstandard: 'gen2',
 		desc: "(Gen 2) Holder is cured if it is frozen. Single use.",
-	},
-	"dragonscale": {
-		id: "dragonscale",
-		name: "Dragon Scale",
-		spritenum: 108,
-		onBasePower: function (basePower, user, target, move) {
-			if (move.type === 'Dragon') {
-				return basePower * 1.1;
-			}
-		},
-		num: 250,
-		gen: 2,
-		isNonstandard: 'gen2',
-		desc: "(Gen 2) Holder's Dragon-type attacks have 1.1x power. Evolves Seadra (trade).",
 	},
 	"goldberry": {
 		id: "goldberry",
@@ -6061,6 +6321,7 @@ exports.BattleItems = {
 			type: "Fighting",
 		},
 		onUpdate: function (pokemon) {
+			if (!pokemon.hp) return;
 			let moveSlot = pokemon.lastMove && pokemon.getMoveData(pokemon.lastMove.id);
 			if (moveSlot && moveSlot.pp === 0) {
 				pokemon.addVolatile('leppaberry');
@@ -6084,12 +6345,12 @@ exports.BattleItems = {
 			}
 			moveSlot.pp += 5;
 			if (moveSlot.pp > moveSlot.maxpp) moveSlot.pp = moveSlot.maxpp;
-			this.add('-activate', pokemon, 'item: Leppa Berry', moveSlot.move);
+			this.add('-activate', pokemon, 'item: Mystery Berry', moveSlot.move);
 			if (pokemon.item !== 'leppaberry') {
 				let foeActive = pokemon.side.foe.active;
 				let foeIsStale = false;
-				for (let i = 0; i < 1; i++) {
-					if (foeActive.isStale >= 2) {
+				for (let i = 0; i < foeActive.length; i++) {
+					if (foeActive[i].isStale >= 2) {
 						foeIsStale = true;
 						break;
 					}
@@ -6199,3 +6460,5 @@ exports.BattleItems = {
 		desc: "If held by a Crucibelle, this item allows it to Mega Evolve in battle.",
 	},
 };
+
+exports.BattleItems = BattleItems;

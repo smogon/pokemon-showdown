@@ -123,7 +123,7 @@ class RoomSettings {
 		return slowchatOutput.join(' ');
 	}
 	tourStatus() {
-		if (!this.user.can('tournamentsmanagement', null, this.room)) return this.button(this.room.toursEnabled === true ? '@' : this.room.toursEnabled === '%' ? '%' : '#', true);
+		if (!this.user.can('gamemanagement', null, this.room)) return this.button(this.room.toursEnabled === true ? '@' : this.room.toursEnabled === '%' ? '%' : '#', true);
 
 		if (this.room.toursEnabled === true) {
 			return `${this.button('%', null, 'tournament enable %')} ${this.button('@', true)} ${this.button('#', null, 'tournament disable')}`;
@@ -149,6 +149,14 @@ class RoomSettings {
 			return `${this.button('Hangman enabled', true)} ${this.button('off', null, 'hangman disable')}`;
 		}
 	}
+	mafia() {
+		if (!this.user.can('editroom', null, this.room)) return this.button(this.room.mafiaEnabled ? 'Mafia enabled' : 'off', true);
+		if (this.room.mafiaEnabled) {
+			return `${this.button('Mafia enabled', true)} ${this.button('off', null, 'mafia disable')}`;
+		} else {
+			return `${this.button('Mafia enabled', null, 'mafia enable')} ${this.button('off', true)}`;
+		}
+	}
 	generateDisplay(user, room, connection) {
 		let output = Chat.html`<div class="infobox">Room Settings for ${this.room.title}<br />`;
 		output += `<strong>Modchat:</strong> <br />${this.modchat()}<br />`;
@@ -160,6 +168,7 @@ class RoomSettings {
 		output += `<strong>Tournaments:</strong> <br />${this.tourStatus()}<br />`;
 		output += `<strong>UNO:</strong> <br />${this.uno()}<br />`;
 		output += `<strong>Hangman:</strong> <br />${this.hangman()}<br />`;
+		output += `<strong>Mafia:</strong> <br />${this.mafia()}<br />`;
 		output += '</div>';
 
 		this.user.sendTo(this.room, `|uhtml${(this.sameCommand ? '' : 'change')}|roomsettings|${output}`);
@@ -243,7 +252,8 @@ exports.commands = {
 			this.add(`|raw|<div class="broadcast-red"><strong>Moderated chat was set to ${modchatSetting}!</strong><br />Only users of rank ${modchatSetting} and higher can talk.</div>`);
 		}
 		if (room.battle && !room.modchat && !user.can('modchat')) room.requestModchat(null);
-		this.privateModCommand(`(${user.name} set modchat to ${room.modchat})`);
+		this.privateModAction(`(${user.name} set modchat to ${room.modchat})`);
+		this.modlog('MODCHAT', null, `to ${room.modchat}`);
 
 		if (room.chatRoomData) {
 			room.chatRoomData.modchat = room.modchat;
@@ -295,7 +305,8 @@ exports.commands = {
 			if (!room.modjoin) return this.errorReply(`Modjoin is already turned off in this room.`);
 			delete room.modjoin;
 			this.add(`|raw|<div class="broadcast-blue"><strong>This room is no longer invite only!</strong><br />Anyone may now join.</div>`);
-			this.addModCommand(`${user.name} turned off modjoin.`);
+			this.addModAction(`${user.name} turned off modjoin.`);
+			this.modlog('MODJOIN', null, 'OFF');
 			if (room.chatRoomData) {
 				delete room.chatRoomData.modjoin;
 				Rooms.global.writeChatRoomData();
@@ -305,19 +316,22 @@ exports.commands = {
 			if (room.modjoin === true) return this.errorReply(`Modjoin is already set to sync modchat in this room.`);
 			room.modjoin = true;
 			this.add(`|raw|<div class="broadcast-red"><strong>Moderated join is set to sync with modchat!</strong><br />Only users who can speak in modchat can join.</div>`);
-			this.addModCommand(`${user.name} set modjoin to sync with modchat.`);
+			this.addModAction(`${user.name} set modjoin to sync with modchat.`);
+			this.modlog('MODJOIN SYNC');
 		} else if (target === 'ac' || target === 'autoconfirmed') {
 			if (room.modjoin === 'autoconfirmed') return this.errorReply(`Modjoin is already set to autoconfirmed.`);
 			room.modjoin = 'autoconfirmed';
 			this.add(`|raw|<div class="broadcast-red"><strong>Moderated join is set to autoconfirmed!</strong><br />Users must be rank autoconfirmed or invited with <code>/invite</code> to join</div>`);
-			this.addModCommand(`${user.name} set modjoin to autoconfirmed.`);
+			this.addModAction(`${user.name} set modjoin to autoconfirmed.`);
+			this.modlog('MODJOIN', null, 'autoconfirmed');
 		} else if (target in Config.groups || target === 'trusted') {
 			if (room.battle && !user.can('makeroom') && target !== '+') return this.errorReply(`/modjoin - Access denied from setting modjoin past + in battles.`);
 			if (room.isPersonal && !user.can('makeroom') && target !== '+') return this.errorReply(`/modjoin - Access denied from setting modjoin past + in group chats.`);
 			if (room.modjoin === target) return this.errorReply(`Modjoin is already set to ${target} in this room.`);
 			room.modjoin = target;
 			this.add(`|raw|<div class="broadcast-red"><strong>This room is now invite only!</strong><br />Users must be rank ${target} or invited with <code>/invite</code> to join</div>`);
-			this.addModCommand(`${user.name} set modjoin to ${target}.`);
+			this.addModAction(`${user.name} set modjoin to ${target}.`);
+			this.modlog('MODJOIN', null, target);
 		} else {
 			this.errorReply(`Unrecognized modjoin setting.`);
 			this.parse('/help modjoin');
@@ -359,7 +373,8 @@ exports.commands = {
 			return this.parse("/help slowchat");
 		}
 		const slowchatSetting = (room.slowchat || "OFF");
-		this.privateModCommand(`(${user.name} set slowchat to ${slowchatSetting})`);
+		this.privateModAction(`(${user.name} set slowchat to ${slowchatSetting})`);
+		this.modlog('SLOWCHAT', null, slowchatSetting);
 
 		if (room.chatRoomData) {
 			room.chatRoomData.slowchat = room.slowchat;
@@ -391,7 +406,8 @@ exports.commands = {
 			return this.parse("/help stretchfilter");
 		}
 		const stretchSetting = (room.filterStretching ? "ON" : "OFF");
-		this.privateModCommand(`(${user.name} turned the stretch filter ${stretchSetting})`);
+		this.privateModAction(`(${user.name} turned the stretch filter ${stretchSetting})`);
+		this.modlog('STRETCH FILTER', null, stretchSetting);
 
 		if (room.chatRoomData) {
 			room.chatRoomData.filterStretching = room.filterStretching;
@@ -420,7 +436,8 @@ exports.commands = {
 			return this.parse("/help capsfilter");
 		}
 		const capsSetting = (room.filterCaps ? "ON" : "OFF");
-		this.privateModCommand(`(${user.name} turned the caps filter ${capsSetting})`);
+		this.privateModAction(`(${user.name} turned the caps filter ${capsSetting})`);
+		this.modlog('CAPS FILTER', null, capsSetting);
 
 		if (room.chatRoomData) {
 			room.chatRoomData.filterCaps = room.filterCaps;
@@ -449,7 +466,8 @@ exports.commands = {
 			return this.parse("/help emojifilter");
 		}
 		const emojiSetting = (room.filterEmojis ? "ON" : "OFF");
-		this.privateModCommand(`(${user.name} turned the emoji filter ${emojiSetting})`);
+		this.privateModAction(`(${user.name} turned the emoji filter ${emojiSetting})`);
+		this.modlog('EMOJI FILTER', null, emojiSetting);
 
 		if (room.chatRoomData) {
 			room.chatRoomData.filterEmojis = room.filterEmojis;
@@ -496,12 +514,15 @@ exports.commands = {
 			room.banwords = room.banwords.concat(words);
 			room.banwordRegex = null;
 			if (words.length > 1) {
-				this.privateModCommand(`(The banwords ${words.map(w => `'${w}'`).join(', ')} were added by ${user.name}.)`);
-				this.sendReply(`Banned phrases succesfully added. The list is currently: ${room.banwords.join(', ')}`);
+				this.privateModAction(`(The banwords ${words.map(w => `'${w}'`).join(', ')} were added by ${user.name}.)`);
+				this.modlog('BANWORD', null, words.map(w => `'${w}'`).join(', '));
+				this.sendReply(`Banned phrases succesfully added.`);
 			} else {
-				this.privateModCommand(`(The banword '${words[0]}' was added by ${user.name}.)`);
-				this.sendReply(`Banned phrase succesfully added. The list is currently: ${room.banwords.join(', ')}`);
+				this.privateModAction(`(The banword '${words[0]}' was added by ${user.name}.)`);
+				this.modlog('BANWORD', null, words[0]);
+				this.sendReply(`Banned phrase succesfully added.`);
 			}
+			this.sendReply(`The list is currently: ${room.banwords.join(', ')}`);
 
 			if (room.chatRoomData) {
 				room.chatRoomData.banwords = room.banwords;
@@ -525,17 +546,22 @@ exports.commands = {
 			}
 
 			room.banwords = room.banwords.filter(w => !words.includes(w));
+			if (!room.banwords.length) room.banwords = null;
 			room.banwordRegex = null;
 			if (words.length > 1) {
-				this.privateModCommand(`(The banwords ${words.map(w => `'${w}'`).join(', ')} were removed by ${user.name}.)`);
-				this.sendReply(`Banned phrases succesfully deleted. The list is currently: ${room.banwords.join(', ')}`);
+				this.privateModAction(`(The banwords ${words.map(w => `'${w}'`).join(', ')} were removed by ${user.name}.)`);
+				this.modlog('UNBANWORD', null, words.map(w => `'${w}'`).join(', '));
+				this.sendReply(`Banned phrases succesfully deleted.`);
 			} else {
-				this.privateModCommand(`(The banword '${words[0]}' was removed by ${user.name}.)`);
-				this.sendReply(`Banned phrase succesfully deleted. The list is currently: ${room.banwords.join(', ')}`);
+				this.privateModAction(`(The banword '${words[0]}' was removed by ${user.name}.)`);
+				this.modlog('UNBANWORD', null, words[0]);
+				this.sendReply(`Banned phrase succesfully deleted.`);
 			}
+			this.sendReply(room.banwords ? `The list is currently: ${room.banwords.join(', ')}` : `The list is now empty.`);
 
 			if (room.chatRoomData) {
 				room.chatRoomData.banwords = room.banwords;
+				if (!room.banwords) delete room.chatRoomData.banwords;
 				Rooms.global.writeChatRoomData();
 			}
 		},

@@ -4,7 +4,8 @@
 
 'use strict';
 
-exports.BattleMovedex = {
+/**@type {{[k: string]: ModdedMoveData}} */
+let BattleMovedex = {
 	absorb: {
 		inherit: true,
 		pp: 20,
@@ -70,6 +71,8 @@ exports.BattleMovedex = {
 						this.add('-miss', pokemon, target);
 						return false;
 					}
+					/**@type {Move} */
+					// @ts-ignore
 					let moveData = {
 						id: 'bide',
 						name: "Bide",
@@ -97,6 +100,7 @@ exports.BattleMovedex = {
 	blizzard: {
 		inherit: true,
 		desc: "Has a 10% chance to freeze the target.",
+		shortDesc: "10% chance to freeze foe(s).",
 		onModifyMove: function () { },
 	},
 	charge: {
@@ -105,10 +109,31 @@ exports.BattleMovedex = {
 		shortDesc: "The user's Electric attack next turn has 2x power.",
 		boosts: false,
 	},
+	conversion: {
+		inherit: true,
+		desc: "The user's type changes to match the original type of one of its known moves besides Curse, at random, but not either of its current types. Fails if the user cannot change its type, or if this move would only be able to select one of the user's current types.",
+		onHit: function (target) {
+			let possibleTypes = target.moveSlots.map(moveSlot => {
+				let move = this.getMove(moveSlot.id);
+				if (move.id !== 'curse' && !target.hasType(move.type)) {
+					return move.type;
+				}
+				return '';
+			}).filter(type => type);
+			if (!possibleTypes.length) {
+				return false;
+			}
+			let type = this.sample(possibleTypes);
+
+			if (!target.setType(type)) return false;
+			this.add('-start', target, 'typechange', type);
+		},
+	},
 	counter: {
 		inherit: true,
 		damageCallback: function (pokemon) {
-			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && (this.getCategory(pokemon.lastAttackedBy.move) === 'Physical' || this.getMove(pokemon.lastAttackedBy.move).id === 'hiddenpower')) {
+			if (pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && pokemon.lastAttackedBy.move && (this.getCategory(pokemon.lastAttackedBy.move) === 'Physical' || this.getMove(pokemon.lastAttackedBy.move).id === 'hiddenpower')) {
+				// @ts-ignore
 				return 2 * pokemon.lastAttackedBy.damage;
 			}
 			return false;
@@ -224,7 +249,7 @@ exports.BattleMovedex = {
 			onStart: function (target) {
 				let noEncore = ['encore', 'mimic', 'mirrormove', 'sketch', 'struggle', 'transform'];
 				let moveIndex = target.lastMove ? target.moves.indexOf(target.lastMove.id) : -1;
-				if (!target.lastMove || noEncore.includes(target.lastMove.id) || (target.moveSlots[moveIndex] && target.moveSlots[moveIndex].pp <= 0)) {
+				if (!target.lastMove || noEncore.includes(target.lastMove.id) || !target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0) {
 					// it failed
 					this.add('-fail', target);
 					delete target.volatiles['encore'];
@@ -376,7 +401,7 @@ exports.BattleMovedex = {
 		onTryHit: function () { },
 		onHit: function (pokemon) {
 			let noMirror = ['assist', 'curse', 'doomdesire', 'focuspunch', 'futuresight', 'magiccoat', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'psychup', 'roleplay', 'sketch', 'sleeptalk', 'spikes', 'spitup', 'taunt', 'teeterdance', 'transform'];
-			if (!pokemon.lastAttackedBy || !pokemon.lastAttackedBy.pokemon.lastMove || noMirror.includes(pokemon.lastAttackedBy.move) || !pokemon.lastAttackedBy.pokemon.hasMove(pokemon.lastAttackedBy.move)) {
+			if (!pokemon.lastAttackedBy || !pokemon.lastAttackedBy.pokemon.lastMove || !pokemon.lastAttackedBy.move || noMirror.includes(pokemon.lastAttackedBy.move) || !pokemon.lastAttackedBy.pokemon.hasMove(pokemon.lastAttackedBy.move)) {
 				return false;
 			}
 			this.useMove(pokemon.lastAttackedBy.move, pokemon);
@@ -440,11 +465,10 @@ exports.BattleMovedex = {
 					moves.push({move: move, pp: pp});
 				}
 			}
-			let randomMove = '';
-			if (moves.length) randomMove = moves[this.random(moves.length)];
-			if (!randomMove) {
+			if (!moves.length) {
 				return false;
 			}
+			let randomMove = this.sample(moves);
 			if (!randomMove.pp) {
 				this.add('cant', pokemon, 'nopp', randomMove.move);
 				return;
@@ -504,6 +528,7 @@ exports.BattleMovedex = {
 		inherit: true,
 		desc: "For 2 turns, prevents the target from using non-damaging moves.",
 		shortDesc: "For 2 turns, the target can't use status moves.",
+		flags: {protect: 1, authentic: 1},
 		effect: {
 			duration: 2,
 			onStart: function (target) {
@@ -528,6 +553,10 @@ exports.BattleMovedex = {
 			},
 		},
 	},
+	teeterdance: {
+		inherit: true,
+		flags: {protect: 1},
+	},
 	tickle: {
 		inherit: true,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
@@ -540,13 +569,13 @@ exports.BattleMovedex = {
 		inherit: true,
 		desc: "If the target lost HP, the user takes recoil damage equal to 1/3 the HP lost by the target, rounded down, but not less than 1 HP.",
 		shortDesc: "Has 1/3 recoil.",
-		secondary: false,
+		secondary: null,
 	},
 	waterfall: {
 		inherit: true,
 		desc: "No additional effect.",
 		shortDesc: "No additional effect.",
-		secondary: false,
+		secondary: null,
 	},
 	weatherball: {
 		inherit: true,
@@ -575,3 +604,5 @@ exports.BattleMovedex = {
 		basePower: 100,
 	},
 };
+
+exports.BattleMovedex = BattleMovedex;

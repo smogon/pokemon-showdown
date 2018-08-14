@@ -548,7 +548,8 @@ exports.commands = {
 			if (categoryCount > MAX_CATEGORY_COUNT) return this.sendReply(`A match with more than ${MAX_CATEGORY_COUNT} categories cannot be created.`);
 			if (questionCount > MAX_QUESTION_COUNT) return this.sendReply(`A match with more than ${MAX_QUESTION_COUNT} questions per category cannot be created.`);
 			room.game = new Jeopardy(room, user, categoryCount, questionCount);
-			this.privateModCommand(`A new game of Jeopardy was started by ${user.name}`);
+			this.privateModAction(`A new game of Jeopardy was started by ${user.name}`);
+			this.modlog('JEOPARDY');
 		},
 
 		categories: function (target, room, user) {
@@ -726,7 +727,8 @@ exports.commands = {
 			if (!room.game || room.game.gameid !== 'jeopardy') return this.errorReply("There is no game of Jeopardy going on in this room.");
 			if (!this.can('minigame', null, room)) return;
 			room.game.destroy();
-			this.privateModCommand(`The game of Jeopardy was ended by ${user.name}`);
+			this.privateModAction(`The game of Jeopardy was ended by ${user.name}`);
+			this.modlog('JEOPARDY END');
 		},
 
 		pass: function (target, room, user) {
@@ -742,7 +744,8 @@ exports.commands = {
 			if (!amount || amount < 2 || amount > 120) return this.errorReply("The amount must be a number between 2 and 120.");
 
 			room.game.answeringTime = amount;
-			this.addModCommand(`${user.name} has set the answering window for questions to ${amount} seconds`);
+			this.addModAction(`${user.name} has set the answering window for questions to ${amount} seconds`);
+			this.modlog('JEOPARDY TIMER', null, `${amount} seconds`);
 		},
 
 		finaltimer: function (target, room, user) {
@@ -752,7 +755,8 @@ exports.commands = {
 			if (!amount || amount < 2 || amount > 300) return this.errorReply("The amount must be a number between 2 and 300.");
 
 			room.game.finalAnsweringTime = amount;
-			this.addModCommand(`${user.name} has set the answering window for the final question to ${amount} seconds`);
+			this.addModAction(`${user.name} has set the answering window for the final question to ${amount} seconds`);
+			this.modlog('JEOPARDY FINALTIMER', null, `${amount} seconds`);
 		},
 	},
 	jeopardyhelp: [

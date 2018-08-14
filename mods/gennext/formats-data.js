@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleFormatsData = {
+/**@type {{[k: string]: ModdedTemplateFormatsData}} */
+let BattleFormatsData = {
 	aegislash: {
 		inherit: true,
 		tier: 'OU',
@@ -62,3 +63,5 @@ exports.BattleFormatsData = {
 		tier: 'Uber',
 	},
 };
+
+exports.BattleFormatsData = BattleFormatsData;

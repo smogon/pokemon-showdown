@@ -1,9 +1,23 @@
+/**
+ * Modlog
+ * Pokemon Showdown - http://pokemonshowdown.com/
+ *
+ * Interface for viewing and searching modlog. These run in a
+ * subprocess.
+ *
+ * Also handles searching battle logs.
+ *
+ * Actually writing to modlog is handled in chat.js, rooms.js, and
+ * roomlogs.js
+ *
+ * @license MIT
+ */
+
 'use strict';
 
 const FS = require('./../lib/fs');
 const path = require('path');
 const Dashycode = require('../lib/dashycode');
-const ProcessManager = require('./../process-manager');
 const execFileSync = require('child_process').execFileSync;
 
 const MAX_PROCESSES = 1;
@@ -14,84 +28,6 @@ const LINES_SEPARATOR = 'lines=';
 const MAX_RESULTS_LENGTH = MORE_BUTTON_INCREMENTS[MORE_BUTTON_INCREMENTS.length - 1];
 const LOG_PATH = 'logs/modlog/';
 
-class ModlogManager extends ProcessManager {
-	onMessageUpstream(message) {
-		// Protocol:
-		// when crashing: 	  "[id]|0"
-		// when not crashing: "[id]|1|[results]"
-		let pipeIndex = message.indexOf('|');
-		let id = +message.substr(0, pipeIndex);
-
-		if (this.pendingTasks.has(id)) {
-			this.pendingTasks.get(id)(message.slice(pipeIndex + 1));
-			this.pendingTasks.delete(id);
-			this.release();
-		}
-	}
-
-	async onMessageDownstream(message) {
-		// protocol:
-		// "[id]|[comma-separated list of room ids]|[searchString]|[exactSearch]|[maxLines]"
-		let pipeIndex = message.indexOf('|');
-		let nextPipeIndex = message.indexOf('|', pipeIndex + 1);
-		let id = message.substr(0, pipeIndex);
-		let rooms = message.substr(pipeIndex + 1, nextPipeIndex - pipeIndex - 1);
-
-		pipeIndex = nextPipeIndex;
-		nextPipeIndex = message.indexOf('|', pipeIndex + 1);
-		let searchString = message.substr(pipeIndex + 1, nextPipeIndex - pipeIndex - 1);
-
-		pipeIndex = nextPipeIndex;
-		nextPipeIndex = message.indexOf('|', pipeIndex + 1);
-		let exactSearch = message.substr(pipeIndex + 1, nextPipeIndex - pipeIndex - 1);
-		let maxLines = message.substr(nextPipeIndex + 1);
-
-		process.send(id + '|' + await this.receive(rooms, searchString, exactSearch, maxLines));
-	}
-
-	async receive(rooms, searchString, exactSearch, maxLines) {
-		let result = '';
-		exactSearch = exactSearch === '1';
-		maxLines = Number(maxLines);
-		try {
-			result = '1|' + await runModlog(rooms.split(','), searchString, exactSearch, maxLines);
-		} catch (err) {
-			require('../lib/crashlogger')(err, 'A modlog query', {
-				rooms: rooms,
-				searchString: searchString,
-				exactSearch: exactSearch,
-				maxLines: maxLines,
-			});
-			result = '0';
-		}
-		return result;
-	}
-}
-
-exports.ModlogManager = ModlogManager;
-
-const PM = exports.PM = new ModlogManager({
-	execFile: __filename,
-	maxProcesses: MAX_PROCESSES,
-	isChatBased: true,
-});
-
-if (process.send && module === process.mainModule) {
-	global.Config = require('../config/config');
-	process.on('uncaughtException', err => {
-		if (Config.crashguard) {
-			require('../lib/crashlogger')(err, 'A modlog child process');
-		}
-	});
-	global.Dex = require('../sim/dex');
-	global.toId = Dex.getId;
-	process.on('message', message => PM.onMessageDownstream(message));
-	process.on('disconnect', () => process.exit());
-	require('../lib/repl').start('modlog', cmd => eval(cmd));
-} else {
-	PM.spawn();
-}
-
 class SortedLimitedLengthList {
 	constructor(maxSize) {
 		this.maxSize = maxSize;
@@ -99,7 +35,7 @@ class SortedLimitedLengthList {
 	}
 
 	getListClone() {
-		return this.list.slice(0);
+		return this.list.slice();
 	}
 
 	tryInsert(element) {
@@ -123,6 +59,10 @@ class SortedLimitedLengthList {
 		return true;
 	}
 }
+
+/*********************************************************
+ * Modlog Functions
+ *********************************************************/
 
 function checkRipgrepAvailability() {
 	if (Config.ripgrepmodlog === undefined) {
@@ -152,16 +92,16 @@ function getMoreButton(room, search, useExactSearch, lines, maxLines) {
 	}
 }
 
-async function runModlog(rooms, searchString, exactSearch, maxLines) {
-	const useRipgrep = checkRipgrepAvailability();
+async function runModlog(roomidList, searchString, exactSearch, maxLines) {
+	const useRipgrep = checkRipgrepAvailability() && searchString;
 	let fileNameList = [];
 	let checkAllRooms = false;
-	for (const roomid of rooms) {
+	for (const roomid of roomidList) {
 		if (roomid === 'all') {
 			checkAllRooms = true;
 			const fileList = await FS(LOG_PATH).readdir();
 			for (const file of fileList) {
-				if (file !== 'README.md') fileNameList.push(file);
+				if (file !== 'README.md' && file !== 'modlog_global.txt') fileNameList.push(file);
 			}
 		} else {
 			fileNameList.push(`modlog_${roomid}.txt`);
@@ -181,39 +121,41 @@ async function runModlog(rooms, searchString, exactSearch, maxLines) {
 		regexString = searchString.replace(/[\\.+*?()|[\]{}^$]/g, '\\$&');
 	} else {
 		searchString = toId(searchString);
-		regexString = `[^a-zA-Z0-9]${searchString.split('').join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]`;
+		regexString = `[^a-zA-Z0-9]${searchString.split('').join('[^a-zA-Z0-9]*')}([^a-zA-Z0-9]|\\z)`;
 	}
 
 	let results = new SortedLimitedLengthList(maxLines);
-	if (useRipgrep && searchString) {
+	if (useRipgrep) {
 		// the entire directory is searched by default, no need to list every file manually
 		if (checkAllRooms) fileNameList = [LOG_PATH];
 		runRipgrepModlog(fileNameList, regexString, results);
 	} else {
-		const searchStringRegex = new RegExp(regexString, 'i');
+		const searchStringRegex = searchString ? new RegExp(regexString, 'i') : null;
 		for (const fileName of fileNameList) {
 			await checkRoomModlog(fileName, searchStringRegex, results);
 		}
 	}
 	const resultData = results.getListClone();
-	return resultData.join('\n');
+	return resultData;
 }
 
 async function checkRoomModlog(path, regex, results) {
-	const fileContents = await FS(path).readTextIfExists();
-	for (const line of fileContents.toString().split('\n').reverse()) {
-		if (regex.test(line)) {
+	const fileStream = await FS(path).createReadStream();
+	let line;
+	while ((line = await fileStream.readLine()) !== null) {
+		if (!regex || regex.test(line)) {
 			const insertionSuccessful = results.tryInsert(line);
 			if (!insertionSuccessful) break;
 		}
 	}
+	fileStream.destroy();
 	return results;
 }
 
 function runRipgrepModlog(paths, regexString, results) {
 	let stdout;
 	try {
-		stdout = execFileSync('rg', ['-i', '-e', regexString, '--no-filename', '--no-line-number', ...paths], {cwd: path.normalize(`${__dirname}/../`)});
+		stdout = execFileSync('rg', ['-i', '-e', regexString, '--no-filename', '--no-line-number', ...paths, '-g', '!modlog_global.txt'], {cwd: path.normalize(`${__dirname}/../`)});
 	} catch (error) {
 		return results;
 	}
@@ -223,8 +165,8 @@ function runRipgrepModlog(paths, regexString, results) {
 	return results;
 }
 
-function prettifyResults(rawResults, room, searchString, exactSearch, addModlogLinks, hideIps, maxLines) {
-	if (rawResults === '0') {
+function prettifyResults(resultArray, room, searchString, exactSearch, addModlogLinks, hideIps, maxLines) {
+	if (resultArray === null) {
 		return "The modlog query has crashed.";
 	}
 	let roomName;
@@ -238,15 +180,11 @@ function prettifyResults(rawResults, room, searchString, exactSearch, addModlogL
 	default:
 		roomName = `room ${room}`;
 	}
-	let pipeIndex = rawResults.indexOf('|');
-	if (pipeIndex < 0) pipeIndex = 0;
-	rawResults = rawResults.substr(pipeIndex + 1, rawResults.length);
-	if (!rawResults) {
+	if (!resultArray.length) {
 		return `|popup|No moderator actions containing ${searchString} found on ${roomName}.` +
 				(exactSearch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.");
 	}
 	const title = `[${room}]` + (searchString ? ` ${searchString}` : ``);
-	const resultArray = rawResults.split('\n');
 	let lines = resultArray.length;
 	let curDate = '';
 	resultArray.unshift('');
@@ -254,7 +192,7 @@ function prettifyResults(rawResults, room, searchString, exactSearch, addModlogL
 		let time;
 		let bracketIndex;
 		if (line) {
-			if (hideIps) line = line.replace(/\([0-9]+\.[0-9]+\.[0-9]+\.[0-9]+\)/g, '');
+			if (hideIps) line = line.replace(/[([][0-9]+\.[0-9]+\.[0-9]+\.[0-9]+[)\]]/g, '');
 			bracketIndex = line.indexOf(']');
 			if (bracketIndex < 0) return Chat.escapeHTML(line);
 			time = new Date(line.slice(1, bracketIndex));
@@ -283,16 +221,16 @@ function prettifyResults(rawResults, room, searchString, exactSearch, addModlogL
 	const modlogid = room + (searchString ? '-' + Dashycode.encode(searchString) : '');
 	if (searchString) {
 		const searchStringDescription = (exactSearch ? `containing the string "${searchString}"` : `matching the username "${searchString}"`);
-		preamble = `>view-modlog-${modlogid}\n|init|html\n|title|[Modlog]${title}\n|pagehtml|<div class="pad"><p>The last ${lines} logged action${Chat.plural(lines)} ${searchStringDescription} on ${roomName}.` +
-						(exactSearch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.");
+		preamble = `>view-modlog-${modlogid}\n|init|html\n|title|[Modlog]${title}\n|pagehtml|<div class="pad"><p>The last ${Chat.count(lines, "logged actions")} ${searchStringDescription} on ${roomName}.` +
+			(exactSearch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.");
 	} else {
-		preamble = `>view-modlog-${modlogid}\n|init|html\n|title|[Modlog]${title}\n|pagehtml|<div class="pad"><p>The last ${lines} line${Chat.plural(lines)} of the Moderator Log of ${roomName}.`;
+		preamble = `>view-modlog-${modlogid}\n|init|html\n|title|[Modlog]${title}\n|pagehtml|<div class="pad"><p>The last ${Chat.count(lines, "lines")} of the Moderator Log of ${roomName}.`;
 	}
 	let moreButton = getMoreButton(room, searchString, exactSearch, lines, maxLines);
 	return `${preamble}${resultString}${moreButton}</div>`;
 }
 
-function getModlog(connection, roomid = 'global', searchString = '', lines = 20, timed = false) {
+function getModlog(connection, roomid = 'global', searchString = '', maxLines = 20, timed = false) {
 	const startTime = Date.now();
 	const targetRoom = Rooms.search(roomid);
 	const user = connection.user;
@@ -303,7 +241,7 @@ function getModlog(connection, roomid = 'global', searchString = '', lines = 20,
 			return connection.popup("Access denied");
 		}
 	} else {
-		if (!user.can('modlog', null, targetRoom)) {
+		if (!user.can('modlog', null, targetRoom) && !user.can('modlog')) {
 			return connection.popup("Access denied");
 		}
 	}
@@ -316,9 +254,9 @@ function getModlog(connection, roomid = 'global', searchString = '', lines = 20,
 		return;
 	}
 
-	let exactSearch = '0';
+	let exactSearch = false;
 	if (searchString.match(/^["'].+["']$/)) {
-		exactSearch = '1';
+		exactSearch = true;
 		searchString = searchString.substring(1, searchString.length - 1);
 	}
 
@@ -331,9 +269,103 @@ function getModlog(connection, roomid = 'global', searchString = '', lines = 20,
 		roomidList = [roomid];
 	}
 
-	PM.send(roomidList.join(','), searchString, exactSearch, lines).then(response => {
-		connection.send(prettifyResults(response, roomid, searchString, exactSearch === '1', addModlogLinks, hideIps, lines));
+	PM.query({cmd: 'modlog', roomidList, searchString, exactSearch, maxLines}).then(response => {
+		connection.send(prettifyResults(response, roomid, searchString, exactSearch, addModlogLinks, hideIps, maxLines));
 		if (timed) connection.popup(`The modlog query took ${Date.now() - startTime} ms to complete.`);
+	});
+}
+
+/*********************************************************
+ * Battle Search Functions
+ *********************************************************/
+
+async function runBattleSearch(userid, turnLimit, month, tierid, date) {
+	const useRipgrep = checkRipgrepAvailability();
+	let path = `logs/${month}/${tierid}/${date}`;
+	let results = {
+		totalBattles: 0,
+		totalWins: 0,
+		totalLosses: 0,
+		totalTies: 0,
+	};
+	let files = [];
+	try {
+		files = await FS(path).readdir();
+	} catch (err) {
+		if (err.code === 'ENOENT') {
+			results.notFound = true;
+			return results;
+		}
+		throw err;
+	}
+	if (useRipgrep) {
+		// Matches non-word (including _ which counts as a word) characters between letters/numbers
+		// in a user's name so the userid can case-insensitively be matched to the name.
+		const regexString = `("p1":"${userid.split('').join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*"|"p2":"${userid.split('').join('[^a-zA-Z0-9]*')}[^a-zA-Z0-9]*")`;
+		let stdout;
+		try {
+			stdout = execFileSync('rg', ['-i', regexString, '--no-filename', '--no-line-number', '-tjson', path]);
+		} catch (error) {
+			return results;
+		}
+		for (const file of stdout.toString().split('\n').reverse()) {
+			if (!file) continue;
+			let data = JSON.parse(file);
+			if (data.turns > turnLimit) continue;
+			results.totalBattles++;
+			if (toId(data.winner) === userid) {
+				results.totalWins++;
+			} else if (data.winner) {
+				results.totalLosses++;
+			} else {
+				results.totalTies++;
+			}
+			const foe = toId(data.p1) === userid ? toId(data.p2) : toId(data.p1);
+			if (!results[foe]) results[foe] = 0;
+			results[foe]++;
+		}
+		return results;
+	}
+	for (const file of files) {
+		const json = await FS(`${path}/${file}`).readIfExists();
+		const data = JSON.parse(json);
+		if (toId(data.p1) !== userid && toId(data.p2) !== userid) continue;
+		if (data.turns > turnLimit) continue;
+		results.totalBattles++;
+		if (toId(data.winner) === userid) {
+			results.totalWins++;
+		} else if (data.winner) {
+			results.totalLosses++;
+		} else {
+			results.totalTies++;
+		}
+		const foe = toId(data.p1) === userid ? toId(data.p2) : toId(data.p1);
+		if (!results[foe]) results[foe] = 0;
+		results[foe]++;
+	}
+	return results;
+}
+
+function buildResults(data, userid, turnLimit, month, tierid, date) {
+	let buf = `>view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}-${date}-confirm\n|init|html\n|title|[Battle Search][${userid}][${tierid}][${date}]\n`;
+	buf += `|pagehtml|<div class="pad ladder"><p>${tierid} battles on ${date} where ${userid} was a player and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}:</p>`;
+	buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="2"><h2 style="margin: 5px auto">${userid}'s ${tierid} Battles</h1></th></tr><tr><th>Category</th><th>Number</th></tr>`;
+	buf += `<tr><td>Total Battles</td><td>${data.totalBattles}</td></tr><tr><td>Total Wins</td><td>${data.totalWins}</td></tr><tr><td>Total Losses</td><td>${data.totalLosses}</td></tr><tr><td>Total Ties</td><td>${data.totalTies}</td></tr>`;
+	buf += `<tr><th>Opponent</th><th>Times Battled</th></tr>`;
+	for (let foe in data) {
+		if (['totalBattles', 'totalWins', 'totalLosses', 'totalTies'].includes(foe)) continue;
+		buf += `<tr><td>${foe}</td><td>${data[foe]}</td></tr>`;
+	}
+	buf += `</tbody></table></div>`;
+	return buf;
+}
+
+function getBattleSearch(connection, userid, turnLimit = 1, month, tierid, date) {
+	const user = connection.user;
+	if (!user.can('forcewin')) return connection.popup(`/battlesearch - Access Denied`);
+
+	PM.query({cmd: 'battlesearch', userid, turnLimit, month, tierid, date}).then(response => {
+		connection.send(buildResults(response, userid, turnLimit, month, tierid, date));
 	});
 }
 
@@ -345,10 +377,83 @@ exports.pages = {
 
 		getModlog(connection, roomid, target);
 	},
+	battlesearch(args, user, connection) {
+		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
+		if (!user.can('forcewin')) return `|title|[Battle Search]\n|pagehtml|<div class="pad ladder">/battlesearch - Access Denied.</div>`;
+		let userid = toId(args.shift());
+		let turnLimit = parseInt(args.shift());
+		if (!userid || !turnLimit || turnLimit < 1) return user.popup(`Some arguments are missing or invalid for battlesearch. Use /battlesearch to start over.`);
+		let title = `|title|[Battle Search][${userid}]`;
+		let buf = `\n|pagehtml|<div class="pad ladder"><h2>Battle Search</h2><p>Userid: ${userid}</p><p>Maximum Turns: ${turnLimit}</p>`;
+
+		let months = FS('logs/').readdirSync();
+		months = months.filter(f => f.length === 7 && f.includes('-')).sort((aKey, bKey) => {
+			const a = aKey.split('-').map(parseInt);
+			const b = bKey.split('-').map(parseInt);
+			if (a[0] === b[0]) {
+				if (a[1] > b[1]) return -1;
+				return 1;
+			}
+			if (a[0] > b[0]) return -1;
+			return 1;
+		});
+		let month = args.shift();
+		if (!month) {
+			buf += `<p>Please select a month:</p><ul style="list-style: none; display: block; padding: 0">`;
+			for (const i of months) {
+				buf += `<li style="display: inline; list-style: none"><a href="/view-battlesearch-${userid}-${turnLimit}-${i}" target="replace"><button class="button">${i}</button></li>`;
+			}
+			return title + buf + `</ul></div>`;
+		} else {
+			month = month += `-${args.shift()}`;
+			if (!months.includes(month)) return title + buf + `Invalid month selected. <a href="/view-battlesearch-${userid}-${turnLimit}" target="replace"><button class="button">Back to month selection</button></a></div>`;
+			buf += `<p><a href="/view-battlesearch-${userid}-${turnLimit}" target="replace"><button class="button">Back</button></a> <button class="button disabled">${month}</button></p>`;
+		}
+
+		let tierid = toId(args.shift());
+		const tiers = FS(`logs/${month}/`).readdirSync();
+		if (!tierid) {
+			buf += `<p>Please select the tier to search:</p><ul style="list-style: none; display: block; padding: 0">`;
+			for (const tier of tiers) {
+				buf += `<li style="display: inline; list-style: none"><a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tier}" target="replace"><button class="button">${tier}</button></a></li>`;
+			}
+			return title + buf + `</ul></div>`;
+		} else {
+			if (!tiers.includes(tierid)) return title + buf + `Invalid tier selected. <a href="/view-battlesearch-${userid}-${turnLimit}-${month}" target="replace"><button class="button">Back to tier selection</button></a></div>`;
+			title += `[${tierid}]`;
+			buf += `<p><a href="/view-battlesearch-${userid}-${turnLimit}-${month}" target="replace"><button class="button">Back</button></a> <button class="button disabled">${tierid}</button></p>`;
+		}
+
+		let date = args.shift();
+		const days = FS(`logs/${month}/${tierid}/`).readdirSync();
+		if (!date) {
+			buf += `<p>Please select the date to search:</p><ul style="list-style: none; display: block; padding: 0">`;
+			for (const day of days) {
+				buf += `<li style="display: inline; list-style: none"><a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}-${day}" target="replace"><button class="button">${day}</button></a></li>`;
+			}
+			return title + buf + `</ul></div>`;
+		} else {
+			date = date += `-${args.shift()}-${args.shift()}`;
+			if (!days.includes(date)) return title + buf + `Invalid date selected. <a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}" target="replace"><button class="button">Back to date selection</button></a></div>`;
+			title += `[${date}]`;
+			buf += `<p><a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}" target="replace"><button class="button">Back</button></a> <button class="button disabled">${date}</button></p>`;
+		}
+
+		if (args[0] !== 'confirm') {
+			buf += `<p>Are you sure you want to run a battle search for for ${tierid} battles on ${date} where ${userid} was a player and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}?</p>`;
+			buf += `<p><a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}-${date}-confirm" target="replace"><button class="button notifying">Yes, run the battle search</button></a> <a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}" target="replace"><button class="button">No, go back</button></a></p>`;
+			return title + buf + `</div>`;
+		}
+
+		// Run search
+		getBattleSearch(connection, userid, turnLimit, month, tierid, date);
+		return title + `\n|pagehtml|<div class="pad ladder"><h2>Battle Search</h2><p>Searching for ${tierid} battles on ${date} where ${userid} was a player and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}.</p><p>Loading... (this will take a while)</p></div>`;
+	},
 };
 
 exports.commands = {
 	'!modlog': true,
+	ml: 'modlog',
 	timedmodlog: 'modlog',
 	modlog: function (target, room, user, connection, cmd) {
 		if (!room) room = Rooms('global');
@@ -386,8 +491,83 @@ exports.commands = {
 		getModlog(connection, roomid, target, lines, cmd === 'timedmodlog');
 	},
 	modloghelp: [
-		`/modlog [roomid], [search] - Searches the moderator log - defaults to the current room unless specified otherwise.`,
+		`/modlog OR /ml [roomid], [search] - Searches the moderator log - defaults to the current room unless specified otherwise.`,
 		`If you set [roomid] as [all], it searches for [search] on all rooms' moderator logs.`,
 		`If you set [roomid] as [public], it searches for [search] in all public rooms' moderator logs, excluding battles. Requires: % @ * # & ~`,
 	],
+
+	battlesearch: function (target, room, user, connection) {
+		if (!target.trim()) return this.parse('/help battlesearch');
+		if (!this.can('forcewin')) return;
+
+		let [userid, turnLimit] = target.split(',').map(toId);
+		if (!userid) return this.parse('/help battlesearch');
+		if (!turnLimit) {
+			turnLimit = 1;
+		} else {
+			turnLimit = parseInt(turnLimit);
+			if (isNaN(turnLimit) || turnLimit < 1) return this.errorReply(`The turn limit should be a number that is greater than 0.`);
+		}
+
+		// Selection on month, tier, and date will be handled in the HTML room
+		return this.parse(`/join view-battlesearch-${userid}-${turnLimit}`);
+	},
+	battlesearchhelp: ['/battlesearch [user], (turn limit) - Searches a users rated battle history and returns information on battles that ended in less than (turn limit or 1) turns. Requires &, ~'],
 };
+
+/*********************************************************
+ * Process manager
+ *********************************************************/
+
+const QueryProcessManager = require('./../lib/process-manager').QueryProcessManager;
+
+const PM = new QueryProcessManager(module, async data => {
+	switch (data.cmd) {
+	case 'modlog':
+		const {roomidList, searchString, exactSearch, maxLines} = data;
+		try {
+			return await runModlog(roomidList, searchString, exactSearch, maxLines);
+		} catch (err) {
+			require('../lib/crashlogger')(err, 'A modlog query', {
+				roomidList,
+				searchString,
+				exactSearch,
+				maxLines,
+			});
+		}
+		break;
+	case 'battlesearch':
+		const {userid, turnLimit, month, tierid, date} = data;
+		try {
+			return await runBattleSearch(userid, turnLimit, month, tierid, date);
+		} catch (err) {
+			require('../lib/crashlogger')(err, 'A battle search query', {
+				userid,
+				turnLimit,
+				month,
+				tierid,
+				date,
+			});
+		}
+		break;
+	}
+	return null;
+});
+
+if (!PM.isParentProcess) {
+	// This is a child process!
+	global.Config = require('../config/config');
+	process.on('uncaughtException', err => {
+		if (Config.crashguard) {
+			require('../lib/crashlogger')(err, 'A modlog child process');
+		}
+	});
+	global.Dex = require('../sim/dex');
+	global.toId = Dex.getId;
+
+	require('../lib/repl').start('modlog', cmd => eval(cmd));
+} else {
+	PM.spawn(MAX_PROCESSES);
+}
+
+exports.PM = PM;

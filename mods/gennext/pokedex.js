@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattlePokedex = {
+/**@type {{[k: string]: ModdedTemplateData}} */
+let BattlePokedex = {
 	genesectdouse: {
 		inherit: true,
 		types: ["Bug", "Water"],
@@ -18,3 +19,5 @@ exports.BattlePokedex = {
 		types: ["Bug", "Ice"],
 	},
 };
+
+exports.BattlePokedex = BattlePokedex;

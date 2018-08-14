@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleAbilities = {
+/**@type {{[k: string]: ModdedAbilityData}} */
+let BattleAbilities = {
 	"angerpoint": {
 		inherit: true,
 		desc: "If this Pokemon, or its substitute, is struck by a critical hit, its Attack is raised by 12 stages.",
@@ -29,6 +30,19 @@ exports.BattleAbilities = {
 		rating: 2,
 		num: 66,
 	},
+	"colorchange": {
+		inherit: true,
+		desc: "This Pokemon's type changes to match the type of the last move that hit it, unless that type is already one of its types. This effect applies after each hit from a multi-hit move.",
+		onAfterDamage: function (damage, target, source, move) {
+			if (!target.hp) return;
+			let type = move.type;
+			if (target.isActive && move.effectType === 'Move' && move.category !== 'Status' && type !== '???' && !target.hasType(type)) {
+				if (!target.setType(type)) return false;
+				this.add('-start', target, 'typechange', type, '[from] Color Change');
+			}
+		},
+		onAfterMoveSecondary: function () {},
+	},
 	"effectspore": {
 		inherit: true,
 		onAfterDamage: function (damage, target, source, move) {
@@ -46,6 +60,17 @@ exports.BattleAbilities = {
 	},
 	"flashfire": {
 		inherit: true,
+		onTryHit: function (target, source, move) {
+			if (target !== source && move.type === 'Fire') {
+				if (target.status === 'frz') {
+					return;
+				}
+				if (!target.addVolatile('flashfire')) {
+					this.add('-immune', target, '[msg]', '[from] ability: Flash Fire');
+				}
+				return null;
+			}
+		},
 		effect: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart: function (target) {
@@ -80,6 +105,7 @@ exports.BattleAbilities = {
 	"forewarn": {
 		inherit: true,
 		onStart: function (pokemon) {
+			/**@type {Move[]} */
 			let warnMoves = [];
 			let warnBp = 1;
 			for (const target of pokemon.side.foe.active) {
@@ -99,7 +125,7 @@ exports.BattleAbilities = {
 				}
 			}
 			if (!warnMoves.length) return;
-			let warnMove = warnMoves[this.random(warnMoves.length)];
+			let warnMove = this.sample(warnMoves);
 			this.add('-activate', pokemon, 'ability: Forewarn', warnMove);
 		},
 	},
@@ -247,7 +273,7 @@ exports.BattleAbilities = {
 			if (move.secondaries) {
 				this.debug('doubling secondary chance');
 				for (const secondary of move.secondaries) {
-					secondary.chance *= 2;
+					if (secondary.chance) secondary.chance *= 2;
 				}
 			}
 		},
@@ -256,6 +282,7 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon's stat stages are considered doubled during stat calculations.",
 		onModifyBoost: function (boosts) {
 			for (let key in boosts) {
+				// @ts-ignore
 				boosts[key] *= 2;
 			}
 		},
@@ -276,7 +303,7 @@ exports.BattleAbilities = {
 		inherit: true,
 		onTakeItem: function (item, pokemon, source) {
 			if (this.suppressingAttackEvents() && pokemon !== this.activePokemon) return;
-			if ((source && source !== pokemon) || this.activeMove.id === 'knockoff') {
+			if ((source && source !== pokemon) || (this.activeMove && this.activeMove.id === 'knockoff')) {
 				this.add('-activate', pokemon, 'ability: Sticky Hold');
 				return false;
 			}
@@ -320,8 +347,21 @@ exports.BattleAbilities = {
 			let id = status.id;
 			if (id === 'slp' || id === 'frz') return;
 			if (id === 'tox') id = 'psn';
-			source.trySetStatus(id);
+			source.trySetStatus(id, target);
 		},
+	},
+	"thickfat": {
+		shortDesc: "The power of Fire- and Ice-type attacks against this Pokemon is halved.",
+		onBasePowerPriority: 1,
+		onSourceBasePower: function (basePower, attacker, defender, move) {
+			if (move.type === 'Ice' || move.type === 'Fire') {
+				return this.chainModify(0.5);
+			}
+		},
+		id: "thickfat",
+		name: "Thick Fat",
+		rating: 3.5,
+		num: 47,
 	},
 	"torrent": {
 		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its Water-type attacks have their power multiplied by 1.5.",
@@ -371,3 +411,5 @@ exports.BattleAbilities = {
 		},
 	},
 };
+
+exports.BattleAbilities = BattleAbilities;

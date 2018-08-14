@@ -22,7 +22,7 @@ describe('Shell Armor', function () {
 				assert.false(move.crit);
 			}
 		});
-		battle.commitDecisions();
+		battle.makeChoices('move quickattack', 'move frostbreath');
 		assert.ok(successfulEvent);
 	});
 
@@ -38,7 +38,7 @@ describe('Shell Armor', function () {
 				assert.ok(move.crit);
 			}
 		});
-		battle.commitDecisions();
+		battle.makeChoices('move quickattack', 'move frostbreath');
 		assert.ok(successfulEvent);
 	});
 });

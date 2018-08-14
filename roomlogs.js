@@ -31,7 +31,7 @@ const FS = require('./lib/fs');
  */
 class Roomlog {
 	/**
-	 * @param {Room} room
+	 * @param {BasicChatRoom} room
 	 */
 	constructor(room, options = {}) {
 		this.id = room.id;
@@ -60,13 +60,13 @@ class Roomlog {
 		/**
 		 * undefined = uninitialized,
 		 * null = disabled
-		 * @type {NodeJS.WritableStream? | undefined}
+		 * @type {WriteStream? | undefined}
 		 */
 		this.modlogStream = undefined;
 		/**
 		 * undefined = uninitialized,
 		 * null = disabled
-		 * @type {NodeJS.WritableStream? | undefined}
+		 * @type {WriteStream? | undefined}
 		 */
 		this.roomlogStream = undefined;
 
@@ -168,14 +168,30 @@ class Roomlog {
 		return this;
 	}
 	/**
+	 * @param {string} username
+	 */
+	hasUsername(username) {
+		const userid = toId(username);
+		for (const line of this.log) {
+			if (line.startsWith('|c:|')) {
+				const curUserid = toId(line.split('|', 4)[3]);
+				if (curUserid === userid) return true;
+			} else if (line.startsWith('|c|')) {
+				const curUserid = toId(line.split('|', 3)[2]);
+				if (curUserid === userid) return true;
+			}
+		}
+		return false;
+	}
+	/**
 	 * @param {string} message
 	 */
 	uhtmlchange(message) {
 		let thirdPipe = message.indexOf('|', 13);
 		let originalStart = '|uhtml|' + message.slice(13, thirdPipe + 1);
-		for (let i = 0; i < this.log.length; i++) {
-			if (this.log[i].startsWith(originalStart)) {
-				this.log[i] = originalStart + message.slice(thirdPipe + 1);
+		for (let line of this.log) {
+			if (line.startsWith(originalStart)) {
+				line = originalStart + message.slice(thirdPipe + 1);
 				break;
 			}
 		}
@@ -225,32 +241,26 @@ class Roomlog {
 			this.modlogStream = null;
 		}
 		if (this.modlogStream) {
-			promises.push(new Promise(resolve => {
-				// @ts-ignore https://github.com/DefinitelyTyped/DefinitelyTyped/pull/22077
-				this.modlogStream.end(resolve);
-				this.modlogStream = null;
-			}));
+			promises.push(this.modlogStream.end());
+			this.modlogStream = null;
 		}
 		if (this.roomlogStream) {
-			promises.push(new Promise(resolve => {
-				// @ts-ignore https://github.com/DefinitelyTyped/DefinitelyTyped/pull/22077
-				this.roomlogStream.end(resolve);
-				this.roomlogStream = null;
-			}));
+			promises.push(this.roomlogStream.end());
+			this.roomlogStream = null;
 		}
 		Roomlogs.roomlogs.delete(this.id);
 		return Promise.all(promises);
 	}
 }
 
-/** @type {Map<string, NodeJS.WritableStream>} */
+/** @type {Map<string, WriteStream>} */
 const sharedModlogs = new Map();
 
 /** @type {Map<string, Roomlog>} */
 const roomlogs = new Map();
 
 /**
- * @param {Room} room
+ * @param {BasicChatRoom} room
  */
 function createRoomlog(room, options = {}) {
 	let roomlog = Roomlogs.roomlogs.get(room.id);

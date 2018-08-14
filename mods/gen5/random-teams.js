@@ -3,7 +3,13 @@
 const RandomGen6Teams = require('../../mods/gen6/random-teams');
 
 class RandomGen5Teams extends RandomGen6Teams {
-	randomSet(template, slot, teamDetails) {
+	/**
+	 * @param {string | Template} template
+	 * @param {number} [slot]
+	 * @param {RandomTeamsTypes["TeamDetails"]} [teamDetails]
+	 * @return {RandomTeamsTypes["RandomSet"]}
+	 */
+	randomSet(template, slot, teamDetails = {}) {
 		if (slot === undefined) slot = 1;
 		let baseTemplate = (template = this.getTemplate(template));
 		let species = template.species;
@@ -17,7 +23,8 @@ class RandomGen5Teams extends RandomGen6Teams {
 
 		if (template.battleOnly) species = template.baseSpecies;
 
-		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : Object.keys(template.learnset));
+		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : template.learnset ? Object.keys(template.learnset) : []);
+		/**@type {string[]} */
 		let moves = [];
 		let ability = '';
 		let item = '';
@@ -45,9 +52,11 @@ class RandomGen5Teams extends RandomGen6Teams {
 		let hasAbility = {};
 		hasAbility[template.abilities[0]] = true;
 		if (template.abilities[1]) {
+			// @ts-ignore
 			hasAbility[template.abilities[1]] = true;
 		}
 		if (template.abilities['H']) {
+			// @ts-ignore
 			hasAbility[template.abilities['H']] = true;
 		}
 		let availableHP = 0;
@@ -58,7 +67,9 @@ class RandomGen5Teams extends RandomGen6Teams {
 		let SetupException = ['extremespeed', 'suckerpunch', 'superpower', 'dracometeor', 'leafstorm', 'overheat'];
 		let counterAbilities = ['Adaptability', 'Contrary', 'Hustle', 'Iron Fist', 'Sheer Force', 'Skill Link'];
 
-		let hasMove, counter;
+		/**@type {{[k: string]: boolean}} */
+		let hasMove = {};
+		let counter;
 
 		do {
 			hasMove = {};
@@ -321,6 +332,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 				if (moveid === 'hiddenpower') {
 					let HPivs = this.getType(move.type).HPivs;
 					for (let iv in HPivs) {
+						// @ts-ignore
 						ivs[iv] = HPivs[iv];
 					}
 				}
@@ -347,7 +359,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 						}
 					}
 					if (rejectableMoves.length) {
-						moves.splice(rejectableMoves[this.random(rejectableMoves.length)], 1);
+						moves.splice(this.sample(rejectableMoves), 1);
 					}
 				}
 			}
@@ -371,12 +383,12 @@ class RandomGen5Teams extends RandomGen6Teams {
 		let ability1 = this.getAbility(abilities[1]);
 		let ability2 = this.getAbility(abilities[2]);
 		if (abilities[1]) {
-			if (abilities[2] && ability1.rating <= ability2.rating && this.random(2)) {
+			if (abilities[2] && ability1.rating <= ability2.rating && this.randomChance(1, 2)) {
 				[ability1, ability2] = [ability2, ability1];
 			}
-			if (ability0.rating <= ability1.rating && this.random(2)) {
+			if (ability0.rating <= ability1.rating && this.randomChance(1, 2)) {
 				[ability0, ability1] = [ability1, ability0];
-			} else if (ability0.rating - 0.6 <= ability1.rating && this.random(3)) {
+			} else if (ability0.rating - 0.6 <= ability1.rating && this.randomChance(2, 3)) {
 				[ability0, ability1] = [ability1, ability0];
 			}
 			ability = ability0.name;
@@ -436,6 +448,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 						ability = ability2.name;
 					} else {
 						// Default to the highest rated ability if all are rejected
+						// @ts-ignore
 						ability = abilities[0];
 						rejectAbility = false;
 					}
@@ -457,7 +470,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 
 		item = 'Leftovers';
 		if (template.requiredItems) {
-			item = template.requiredItems[this.random(template.requiredItems.length)];
+			item = this.sample(template.requiredItems);
 
 		// First, the extra high-priority items
 		} else if (template.species === 'Marowak') {
@@ -472,7 +485,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 			item = 'Focus Sash';
 		} else if (template.species === 'Unown') {
 			item = 'Choice Specs';
-		} else if (template.species === 'Wobbuffet' && hasMove['destinybond'] && this.random(2)) {
+		} else if (template.species === 'Wobbuffet' && hasMove['destinybond'] && this.randomChance(1, 2)) {
 			item = 'Custap Berry';
 		} else if (ability === 'Imposter') {
 			item = 'Choice Scarf';
@@ -481,10 +494,10 @@ class RandomGen5Teams extends RandomGen6Teams {
 		} else if (hasMove['trick'] && hasMove['gyroball']) {
 			item = 'Iron Ball';
 		} else if (hasMove['switcheroo'] || hasMove['trick']) {
-			let randomNum = this.random(2);
-			if (counter.Physical >= 3 && (template.baseStats.spe >= 95 || randomNum)) {
+			let randomBool = this.randomChance(1, 2);
+			if (counter.Physical >= 3 && (template.baseStats.spe >= 95 || randomBool)) {
 				item = 'Choice Band';
-			} else if (counter.Special >= 3 && (template.baseStats.spe >= 95 || randomNum)) {
+			} else if (counter.Special >= 3 && (template.baseStats.spe >= 95 || randomBool)) {
 				item = 'Choice Specs';
 			} else {
 				item = 'Choice Scarf';
@@ -519,7 +532,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 				if (!move.basePower && !move.basePowerCallback) continue;
 				eligibleTypes.push(move.type);
 			}
-			item = eligibleTypes[this.random(eligibleTypes.length)] + ' Gem';
+			item = this.sample(eligibleTypes) + ' Gem';
 		} else if (ability === 'Guts') {
 			if (hasMove['drainpunch']) {
 				item = 'Flame Orb';
@@ -531,9 +544,9 @@ class RandomGen5Teams extends RandomGen6Teams {
 		} else if (hasMove['lightscreen'] || hasMove['reflect']) {
 			item = 'Light Clay';
 		} else if (counter.Physical >= 4 && !hasMove['fakeout'] && !hasMove['suckerpunch'] && !hasMove['flamecharge'] && !hasMove['rapidspin']) {
-			item = this.random(3) ? 'Choice Band' : 'Expert Belt';
+			item = this.randomChance(2, 3) ? 'Choice Band' : 'Expert Belt';
 		} else if (counter.Special >= 4) {
-			item = this.random(3) ? 'Choice Specs' : 'Expert Belt';
+			item = this.randomChance(2, 3) ? 'Choice Specs' : 'Expert Belt';
 		} else if (this.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate' && !hasMove['magnetrise']) {
 			item = 'Air Balloon';
 		} else if ((hasMove['eruption'] || hasMove['waterspout']) && !counter['Status']) {
@@ -545,7 +558,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 				if (!move.basePower && !move.basePowerCallback) continue;
 				eligibleTypes.push(move.type);
 			}
-			item = eligibleTypes[this.random(eligibleTypes.length)] + ' Gem';
+			item = this.sample(eligibleTypes) + ' Gem';
 		} else if (hasMove['detect'] || hasMove['protect'] || hasMove['substitute']) {
 			item = 'Leftovers';
 		} else if ((hasMove['flail'] || hasMove['reversal']) && ability !== 'Sturdy') {
@@ -584,11 +597,11 @@ class RandomGen5Teams extends RandomGen6Teams {
 		let levelScale = {
 			Uber: 73,
 			OU: 75,
-			BL: 76,
+			UUBL: 76,
 			UU: 77,
-			BL2: 78,
+			RUBL: 78,
 			RU: 79,
-			BL3: 80,
+			NUBL: 80,
 			NU: 81,
 		};
 		let customScale = {
@@ -611,13 +624,14 @@ class RandomGen5Teams extends RandomGen6Teams {
 		return {
 			name: template.baseSpecies,
 			species: species,
+			gender: template.gender,
 			moves: moves,
 			ability: ability,
 			evs: evs,
 			ivs: ivs,
 			item: item,
 			level: level,
-			shiny: !this.random(1024),
+			shiny: this.randomChance(1, 1024),
 		};
 	}
 
@@ -638,6 +652,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 		let baseFormes = {};
 		let uberCount = 0;
 		let nuCount = 0;
+		/**@type {RandomTeamsTypes["TeamDetails"]} */
 		let teamDetails = {};
 
 		while (pokemonPool.length && pokemon.length < 6) {
@@ -651,36 +666,36 @@ class RandomGen5Teams extends RandomGen6Teams {
 			switch (tier) {
 			case 'Uber':
 				// Ubers are limited to 2 but have a 20% chance of being added anyway.
-				if (uberCount > 1 && this.random(5) >= 1) continue;
+				if (uberCount > 1 && this.randomChance(4, 5)) continue;
 				break;
 			case 'NU':
 				// NUs are limited to 2 but have a 20% chance of being added anyway.
-				if (nuCount > 1 && this.random(5) >= 1) continue;
+				if (nuCount > 1 && this.randomChance(4, 5)) continue;
 			}
 
 			// Adjust rate for species with multiple formes
 			switch (template.baseSpecies) {
 			case 'Arceus':
-				if (this.random(17) >= 1) continue;
+				if (this.randomChance(16, 17)) continue;
 				break;
 			case 'Rotom':
-				if (this.random(6) >= 1) continue;
+				if (this.randomChance(5, 6)) continue;
 				break;
 			case 'Genesect':
-				if (this.random(5) >= 1) continue;
+				if (this.randomChance(4, 5)) continue;
 				break;
 			case 'Castform':
-				if (this.random(4) >= 1) continue;
+				if (this.randomChance(3, 4)) continue;
 				break;
 			case 'Basculin': case 'Cherrim': case 'Meloetta':
-				if (this.random(2) >= 1) continue;
+				if (this.randomChance(1, 2)) continue;
 				break;
 			}
 
 			// Limit 2 of any type
 			let skip = false;
 			for (const type of template.types) {
-				if (typeCount[type] > 1 && this.random(5) >= 1) {
+				if (typeCount[type] > 1 && this.randomChance(4, 5)) {
 					skip = true;
 					break;
 				}

@@ -15,8 +15,7 @@ describe('Mega Evolution', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Banette', ability: 'frisk', item: 'banettite', moves: ['psychup']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Deoxys-Speed', ability: 'pressure', moves: ['calmmind']}]);
 		const pranksterMega = battle.p1.active[0];
-		battle.p1.chooseMove('psychup', null, true);
-		battle.commitDecisions();
+		battle.makeChoices('move psychup mega', 'move calmmind');
 		assert.statStage(pranksterMega, 'spa', 0);
 	});
 
@@ -25,8 +24,8 @@ describe('Mega Evolution', function () {
 			[{species: "Politoed", ability: 'drizzle', item: '', moves: ['scald']}, {species: "Kingdra", ability: 'swiftswim', item: '', moves: ['dragondance']}],
 			[{species: "Marowak", ability: 'rockhead', item: '', moves: ['earthquake']}, {species: "Alakazam", ability: 'magicguard', item: 'alakazite', moves: ['psychup']}],
 		]);
-		battle.p1.chooseSwitch(2).foe.chooseSwitch(2);
-		battle.p1.chooseMove('dragondance').foe.chooseMove('psychup', null, true);
+		battle.makeChoices('switch 2', 'switch 2');
+		battle.makeChoices('move dragondance', 'move psychup mega');
 		assert.statStage(battle.p1.active[0], 'atk', 1);
 		assert.statStage(battle.p2.active[0], 'atk', 0);
 		assert.species(battle.p2.active[0], 'Alakazam-Mega');
@@ -37,8 +36,7 @@ describe('Mega Evolution', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Sableye', ability: 'prankster', item: 'sablenite', moves: ['psychup']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Deoxys-Speed', ability: 'pressure', moves: ['calmmind']}]);
 		const noPranksterMega = battle.p1.active[0];
-		battle.p1.chooseMove('psychup', null, true);
-		battle.commitDecisions();
+		battle.makeChoices('move psychup mega', 'move calmmind');
 		assert.statStage(noPranksterMega, 'spa', 1);
 	});
 
@@ -47,8 +45,7 @@ describe('Mega Evolution', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Beedrill', ability: 'swarm', item: 'beedrillite', moves: ['xscissor']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Hoopa-Unbound', ability: 'magician', moves: ['psyshock']}]);
 		const fastBase = battle.p2.active[0];
-		battle.p1.chooseMove('xscissor', null, true);
-		battle.commitDecisions();
+		battle.makeChoices('move xscissor mega', 'move psyshock');
 		assert.fainted(fastBase);
 	});
 
@@ -57,8 +54,7 @@ describe('Mega Evolution', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Necrozma-Dusk-Mane', ability: 'swarm', item: 'ultranecroziumz', moves: ['xscissor']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Hoopa-Unbound', ability: 'magician', moves: ['darkpulse']}]);
 		const fastBase = battle.p2.active[0];
-		battle.p1.chooseMove('xscissor', null, 'ultra');
-		battle.commitDecisions();
+		battle.makeChoices('move xscissor ultra', 'move darkpluse');
 		assert.strictEqual(fastBase.hp, 0);
 	});
 });
@@ -73,8 +69,7 @@ describe('Mega Evolution [Gen 6]', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Banette', ability: 'frisk', item: 'banettite', moves: ['psychup']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Deoxys-Speed', ability: 'pressure', moves: ['calmmind']}]);
 		const pranksterMega = battle.p1.active[0];
-		battle.p1.chooseMove('psychup', null, true);
-		battle.commitDecisions();
+		battle.makeChoices('move psychup mega', 'move calmmind');
 		assert.statStage(pranksterMega, 'spa', 1);
 	});
 
@@ -83,8 +78,8 @@ describe('Mega Evolution [Gen 6]', function () {
 			[{species: "Politoed", ability: 'drizzle', item: '', moves: ['scald']}, {species: "Kingdra", ability: 'swiftswim', item: '', moves: ['dragondance']}],
 			[{species: "Marowak", ability: 'rockhead', item: '', moves: ['earthquake']}, {species: "Alakazam", ability: 'magicguard', item: 'alakazite', moves: ['psychup']}],
 		]);
-		battle.p1.chooseSwitch(2).foe.chooseSwitch(2);
-		battle.p1.chooseMove('dragondance').foe.chooseMove('psychup', null, true);
+		battle.makeChoices('switch 2', 'switch 2');
+		battle.makeChoices('move dragondance', 'move psychup mega');
 		assert.statStage(battle.p1.active[0], 'atk', 1);
 		assert.statStage(battle.p2.active[0], 'atk', 1);
 		assert.species(battle.p2.active[0], 'Alakazam-Mega');
@@ -95,8 +90,7 @@ describe('Mega Evolution [Gen 6]', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Sableye', ability: 'prankster', item: 'sablenite', moves: ['psychup']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Deoxys-Speed', ability: 'pressure', moves: ['calmmind']}]);
 		const noPranksterMega = battle.p1.active[0];
-		battle.p1.chooseMove('psychup', null, true);
-		battle.commitDecisions();
+		battle.makeChoices('move psychup mega', 'move calmmind');
 		assert.statStage(noPranksterMega, 'spa', 0);
 	});
 
@@ -105,8 +99,7 @@ describe('Mega Evolution [Gen 6]', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Beedrill', ability: 'swarm', item: 'beedrillite', moves: ['xscissor']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Hoopa-Unbound', ability: 'magician', moves: ['psyshock']}]);
 		const fastMega = battle.p1.active[0];
-		battle.p1.chooseMove('xscissor', null, true);
-		battle.commitDecisions();
+		battle.makeChoices('move xscissor mega', 'move psyshock');
 		assert.fainted(fastMega);
 	});
 });

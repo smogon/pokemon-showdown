@@ -16,6 +16,7 @@ const http = Config.loginserver.startsWith('http:') ? require("http") : require(
 const url = require('url');
 
 const FS = require('./lib/fs');
+const Streams = require('./lib/streams');
 
 /**
  * A custom error type used when requests to the login server take too long.
@@ -45,7 +46,6 @@ class LoginServerInstance {
 		this.requestQueue = [];
 
 		this.requestTimer = null;
-		this.requestTimeoutTimer = null;
 		/** @type {string} */
 		this.requestLog = '';
 		this.lastRequest = 0;
@@ -75,14 +75,7 @@ class LoginServerInstance {
 		return new Promise((resolve, reject) => {
 			// @ts-ignore TypeScript bug: http.get signature
 			let req = http.get(urlObject, res => {
-				let buffer = '';
-				res.setEncoding('utf8');
-
-				res.on('data', (/** @type {string} */ chunk) => {
-					buffer += chunk;
-				});
-
-				res.on('end', () => {
+				Streams.readAll(res).then(buffer => {
 					let data = parseJSON(buffer).json || null;
 					resolve([data, res.statusCode, null]);
 					this.openRequests--;
@@ -153,55 +146,25 @@ class LoginServerInstance {
 			'&servertoken=' + encodeURIComponent(Config.servertoken) +
 			'&nocache=' + new Date().getTime() +
 			'&json=' + encodeURIComponent(JSON.stringify(dataList)) + '\n';
+		/** @type {any} */
 		let requestOptions = url.parse(this.uri + 'action.php');
-		// @ts-ignore
 		requestOptions.method = 'post';
-		// @ts-ignore
 		requestOptions.headers = {
 			'Content-Type': 'application/x-www-form-urlencoded',
 			'Content-Length': postData.length,
 		};
 
-		let req = /** @type {any} */ (null);
-
-		let hadError = false;
-		let onReqError = (/** @type {Error} */ error) => {
-			if (hadError) return;
-			hadError = true;
-			if (this.requestTimeoutTimer) {
-				clearTimeout(this.requestTimeoutTimer);
-				this.requestTimeoutTimer = null;
-			}
-			req.abort();
-			for (const resolve of resolvers) {
-				resolve([null, 0, error]);
-			}
-			this.requestEnd(error);
-		};
-
-		// @ts-ignore TypeScript bug: http.get signature
-		req = http.request(requestOptions, res => {
-			if (this.requestTimeoutTimer) {
-				clearTimeout(this.requestTimeoutTimer);
-				this.requestTimeoutTimer = null;
-			}
-			let buffer = '';
-			res.setEncoding('utf8');
-
-			res.on('data', (/** @type {string} */ chunk) => {
-				buffer += chunk;
-			});
-
-			let requestEnded = false;
-			let endReq = () => {
-				if (requestEnded) return;
-				requestEnded = true;
-				if (this.requestTimeoutTimer) {
-					clearTimeout(this.requestTimeoutTimer);
-					this.requestTimeoutTimer = null;
-				}
+		/** @type {any} */
+		let response = null;
+		// @ts-ignore
+		let req = http.request(requestOptions, res => {
+			response = res;
+			Streams.readAll(res).then(buffer => {
 				//console.log('RESPONSE: ' + buffer);
 				let data = parseJSON(buffer).json;
+				if (buffer.startsWith(`[{"actionsuccess":true,`)) {
+					buffer = 'stream interrupt';
+				}
 				for (const [i, resolve] of resolvers.entries()) {
 					if (data) {
 						resolve([data[i], res.statusCode, null]);
@@ -210,20 +173,24 @@ class LoginServerInstance {
 					}
 				}
 				this.requestEnd();
-			};
-			res.on('end', endReq);
-			res.on('close', endReq);
-
-			this.requestTimeoutTimer = setTimeout(() => {
-				if (res.connection) res.connection.destroy();
-				endReq();
-			}, LOGIN_SERVER_TIMEOUT);
+			});
 		});
 
-		req.on('error', onReqError);
+		req.on('close', () => {
+			if (response) return;
+			const error = new TimeoutError("Response not received");
+			for (const resolve of resolvers) {
+				resolve([null, 0, error]);
+			}
+			this.requestEnd(error);
+		});
+
+		req.on('error', (/** @type {Error} */ error) => {
+			// ignore; will be handled by the 'close' handler
+		});
 
 		req.setTimeout(LOGIN_SERVER_TIMEOUT, () => {
-			onReqError(new TimeoutError("Response not received"));
+			req.abort();
 		});
 
 		req.write(postData);
@@ -259,6 +226,8 @@ let LoginServer = Object.assign(new LoginServerInstance(), {
 FS('./config/custom.css').onModify(() => {
 	LoginServer.request('invalidatecss');
 });
-LoginServer.request('invalidatecss');
+if (!Config.nofswriting) {
+	LoginServer.request('invalidatecss');
+}
 
 module.exports = LoginServer;

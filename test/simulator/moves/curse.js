@@ -23,7 +23,7 @@ describe('Curse', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: "Trevenant", ability: 'shedskin', item: 'laggingtail', moves: ['trickortreat']}]);
 
 		assert.strictEqual(battle.p1.active[0].getRequestData().moves[0].target, 'self');
-		battle.commitDecisions();
+		battle.makeChoices('move curse', 'move trickortreat');
 		assert.strictEqual(battle.p1.active[0].getRequestData().moves[0].target, 'normal');
 	});
 
@@ -33,7 +33,7 @@ describe('Curse', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: "Jellicent", ability: 'waterabsorb', item: '', moves: ['soak']}]);
 
 		assert.strictEqual(battle.p1.active[0].getRequestData().moves[0].target, 'normal');
-		battle.commitDecisions();
+		battle.makeChoices('move curse', 'move soak');
 		assert.strictEqual(battle.p1.active[0].getRequestData().moves[0].target, 'self');
 	});
 
@@ -51,8 +51,7 @@ describe('Curse', function () {
 			{species: "Zoroark", ability: 'illusion', item: '', moves: ['nastyplot']},
 			{species: "Gengar", ability: 'levitate', item: '', moves: ['spite']},
 		]);
-		battle.choose('p1', 'move 2'); // Reflect Type!
-		battle.commitDecisions();
+		battle.makeChoices('move reflecttype', 'move nastyplot');
 
 		assert.deepEqual(battle.p1.active[0].getTypes(), ["Dark"]); // Copied Zoroark's type instead of Gengar's
 		assert.strictEqual(battle.p1.active[0].getRequestData().moves[0].target, 'self');
@@ -63,13 +62,12 @@ describe('Curse', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Greninja", ability: 'protean', item: '', moves: ['curse', 'spite']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]);
 
-		battle.commitDecisions();
+		battle.makeChoices('move curse', 'move stringshot');
 		let hps = [battle.p1.active[0].hp, battle.p2.active[0].hp];
 		assert.notStrictEqual(hps[0], battle.p1.active[0].maxhp); // Curse user cut its HP down + residual damage
 		assert.strictEqual(hps[1], battle.p2.active[0].maxhp); // Foe unaffected
 
-		battle.choose('p1', 'move 2');
-		battle.commitDecisions();
+		battle.makeChoices('move spite', 'move stringshot');
 		assert.notStrictEqual(hps[0], battle.p1.active[0].hp); // Curse user is hurt by residual damage
 		assert.strictEqual(hps[1], battle.p2.active[0].hp); // Foe unaffected
 	});
@@ -79,13 +77,12 @@ describe('Curse', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Gengar", ability: 'protean', item: '', moves: ['curse', 'spite']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]);
 
-		battle.commitDecisions();
+		battle.makeChoices('move curse', 'move stringshot');
 		let hps = [battle.p1.active[0].hp, battle.p2.active[0].hp];
 		assert.notStrictEqual(hps[0], battle.p1.active[0].maxhp); // Curse user cut its HP down
 		assert.notStrictEqual(hps[1], battle.p2.active[0].maxhp); // Curse residual damage
 
-		battle.choose('p1', 'move 2');
-		battle.commitDecisions(); // Check residual damage
+		battle.makeChoices('move spite', 'move stringshot'); // Check residual damage
 		assert.strictEqual(hps[0], battle.p1.active[0].hp); // Curse user unaffected
 		assert.notStrictEqual(hps[1], battle.p2.active[0].hp); // Curse residual damage
 	});
@@ -113,15 +110,15 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 		let p2active = battle.p2.active;
 		let cursePartner = curseUser.side.active[1 - curseUser.position];
 
-		battle.choose('p1', 'move 1, move 1'); // Kecleon uses Curse last in the turn.
-		battle.choose('p2', 'move 1 ' + (curseUser.position + 1) + ', move 1 ' + (curseUser.position + 1)); // Fighting attack on Kecleon, then Ghost.
+		// p1: Kecleon uses Curse last in the turn.
+		// p2: Fighting attack on Kecleon, then Ghost.
+		battle.makeChoices('move curse, move lightscreen', 'move aurasphere ' + (curseUser.position + 1) + ', move lick ' + (curseUser.position + 1));
 
 		assert.ok(curseUser.hasType('Ghost')); // Curse user must be Ghost
 		assert.ok(curseUser.hp < curseUser.maxhp / 2); // Curse user cut its HP down
 
 		let foeHP = [p2active[0].hp, p2active[1].hp];
-		battle.choose('p1', 'move 2 1, move 2 1');
-		battle.choose('p2', 'move 2, move 2');
+		battle.makeChoices('move curse, move lightscreen', 'move calmmind, move calmmind');
 
 		assert.notStrictEqual(curseUser.hp, curseUser.maxhp); // Curse user cut its HP down
 		if (curseUser.position === 0) {
@@ -139,8 +136,9 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 		let p1active = battle.p1.active;
 		let p2active = battle.p2.active;
 
-		battle.choose('p1', 'move 1, move 1, move 1'); // Kecleon uses Curse last in the turn.
-		battle.choose('p2', 'move 1 ' + (curseUser.position + 1) + ', move 1 ' + (curseUser.position + 1) + ', move 1'); // Electric attack on Kecleon, then Ghost.
+		// p1: Kecleon uses Curse last in the turn.
+		// p2: Electric attack on Kecleon, then Ghost.
+		battle.makeChoices('move curse, move lightscree, move harden', 'move aurasphere ' + (curseUser.position + 1) + ', move lick ' + (curseUser.position + 1) + ', move harden');
 
 		assert.ok(curseUser.hasType('Ghost')); // Curse user must be Ghost
 		assert.ok(curseUser.hp < curseUser.maxhp / 2); // Curse user cut its HP down

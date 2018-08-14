@@ -12,23 +12,34 @@
 'use strict';
 
 const Dex = require('./dex');
-global.toId = Dex.getId;
 const Battle = require('./battle');
 const Side = require('./side');
 const Pokemon = require('./pokemon');
 const PRNG = require('./prng');
+const {BattleStream} = require('./battle-stream');
+const Validator = require('./team-validator').Validator; // eslint-disable-line no-unused-vars
 
-/**
- * @param {string} format
- * @param {boolean | string} rated
- * @param {Function} send
- * @param {PRNG} [prng]
- */
-exports.construct = function (format, rated, send, prng) {
-	return new Battle(format, rated, send, prng);
+module.exports = {
+	Pokemon,
+	Side,
+	Battle,
+	PRNG,
+	Dex,
+
+	BattleStream,
+
+	// typescript hacks
+
+	/**@type {Battle} */
+	// @ts-ignore
+	nullBattle: null,
+	/**@type {Pokemon} */
+	// @ts-ignore
+	nullPokemon: null,
+	/**@type {Side} */
+	// @ts-ignore
+	nullSide: null,
+	/**@type {Validator} */
+	// @ts-ignore
+	nullValidator: null,
 };
-
-exports.Pokemon = Pokemon;
-exports.Side = Side;
-exports.Battle = Battle;
-exports.PRNG = PRNG;

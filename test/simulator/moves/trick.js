@@ -12,7 +12,7 @@ describe('Trick', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Mew", ability: 'synchronize', item: 'leftovers', moves: ['trick']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Purugly", ability: 'defiant', item: 'sitrusberry', moves: ['rest']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move trick', 'move rest');
 		assert.strictEqual(battle.p1.active[0].item, 'sitrusberry');
 		assert.strictEqual(battle.p2.active[0].item, 'leftovers');
 	});
@@ -21,7 +21,7 @@ describe('Trick', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Mew", ability: 'synchronize', moves: ['trick']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Arceus", ability: 'download', item: 'flameplate', moves: ['swordsdance']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move trick', 'move swordsdance');
 		assert.strictEqual(battle.p2.active[0].item, 'flameplate');
 	});
 
@@ -29,7 +29,7 @@ describe('Trick', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Mew", ability: 'synchronize', item: 'fistplate', moves: ['trick']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Arceus", ability: 'download', moves: ['swordsdance']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move trick', 'move swordsdance');
 		assert.strictEqual(battle.p2.active[0].item, '');
 	});
 
@@ -37,7 +37,7 @@ describe('Trick', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Mew", ability: 'synchronize', moves: ['trick']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Genesect", ability: 'download', item: 'dousedrive', moves: ['shiftgear']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move trick', 'move shiftgear');
 		assert.strictEqual(battle.p2.active[0].item, 'dousedrive');
 	});
 
@@ -45,7 +45,7 @@ describe('Trick', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Mew", ability: 'synchronize', item: 'shockdrive', moves: ['trick']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Genesect", ability: 'download', moves: ['shiftgear']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move trick', 'move shiftgear');
 		assert.strictEqual(battle.p2.active[0].item, '');
 	});
 
@@ -53,7 +53,7 @@ describe('Trick', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Mew", ability: 'synchronize', moves: ['trick']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Scizor", ability: 'technician', item: 'scizorite', moves: ['swordsdance']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move trick', 'move swordsdance');
 		assert.strictEqual(battle.p2.active[0].item, 'scizorite');
 	});
 
@@ -61,7 +61,7 @@ describe('Trick', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Mew", ability: 'synchronize', moves: ['trick']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Scizor", ability: 'technician', item: 'audinite', moves: ['swordsdance']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move trick', 'move swordsdance');
 		assert.strictEqual(battle.p1.active[0].item, 'audinite');
 	});
 });
@@ -73,7 +73,7 @@ describe('Z-Trick', function () {
 		battle = common.createBattle();
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Mew", ability: 'synchronize', item: 'psychiumz', moves: ['trick']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: "Rattata", ability: 'guts', item: 'leftovers', moves: ['quickattack']}]);
-		p1.chooseMove('trick', 0, 'zmove').foe.chooseDefault();
+		battle.makeChoices('move trick zmove', 'move quickattack');
 		assert.statStage(p1.active[0], 'spe', 2);
 		assert.strictEqual(p1.active[0].item, 'psychiumz');
 		assert.strictEqual(p2.active[0].item, 'leftovers');

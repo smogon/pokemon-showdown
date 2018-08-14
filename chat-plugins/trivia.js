@@ -385,35 +385,15 @@ class Trivia extends Rooms.RoomGame {
 	 * a title and an optional message.
 	 * @param {string} title
 	 * @param {string?} message
-	 * @return {ChatRoom}
+	 * @return {?ChatRoom}
 	 */
 	broadcast(title, message) {
 		let buffer = `<div class="broadcast-blue"><strong>${title}</strong>`;
 		if (message) buffer += `<br />${message}`;
 		buffer += '</div>';
 
-		// This shouldn't happen, but sometimes this will fire after
-		// Trivia#destroy has already set the instance's room to null.
-		let tarRoom = this.room;
-		if (!tarRoom) {
-			for (const room of Rooms.rooms.values()) {
-				if (room.game === this)	{
-					return room.addRaw(buffer).update();
-				}
-			}
-
-			Monitor.debug(
-				`${this.title} is FUBAR! Game instance tried to broadcast after having destroyed itself\n
-				Mode: ${this.mode}\n
-				Category: ${this.category}\n
-				Length: ${SCORE_CAPS[this.cap]}\n
-				UGM: ${triviaData.ugm ? 'enabled' : 'disabled'}`
-			);
-
-			return tarRoom;
-		}
-
-		return tarRoom.addRaw(buffer).update();
+		if (!this.room) return null;
+		return this.room.addRaw(buffer).update();
 	}
 
 	/**
@@ -506,6 +486,7 @@ class Trivia extends Rooms.RoomGame {
 		}
 
 		this.broadcast(`The game will begin in ${START_TIMEOUT / 1000} seconds...`);
+		this.phase = INTERMISSION_PHASE;
 		this.phaseTimeout = setTimeout(() => this.askQuestion(), START_TIMEOUT);
 	}
 
@@ -521,7 +502,8 @@ class Trivia extends Rooms.RoomGame {
 				'No questions are left!',
 				'The game has reached a stalemate'
 			);
-			return this.destroy();
+			if (this.room) this.destroy();
+			return;
 		}
 
 		this.phase = QUESTION_PHASE;
@@ -657,9 +639,14 @@ class Trivia extends Rooms.RoomGame {
 			` mode trivia under the ${this.category} category with a cap of ` +
 			`${this.cap} points, with ${winner.points} points and ` +
 			`${winner.correctAnswers} correct answers!)`;
+
+		let logbuf = `(User ${winner.userid} won the game of ${this.mode}` +
+			` mode trivia under the ${this.category} category with a cap of ` +
+			`${this.cap} points, with ${winner.points} points and ` +
+			`${winner.correctAnswers} correct answers!)`;
 		this.room.sendMods(buf);
 		this.room.roomlog(buf);
-		this.room.modlog(buf);
+		this.room.modlog(`(${this.room.id}) ${logbuf}`);
 
 		writeTriviaData();
 		this.destroy();
@@ -939,7 +926,7 @@ class NumberModeTrivia extends Trivia {
 
 			if (winner) return this.win(winner, buffer);
 
-			buffer += `${(innerBuffer.length > 1 ? 'Each of them' : 'They')} gained <strong>${points}</strong> point(s)!`;
+			buffer += `${Chat.plural(innerBuffer, "Each of them", "They")} gained <strong>${points}</strong> point(s)!`;
 		} else {
 			for (let i in this.players) {
 				let player = this.players[i];
@@ -1446,13 +1433,15 @@ const commands = {
 		if (cmd === 'add') {
 			triviaData.questions.splice(findEndOfCategory(category, false), 0, submission);
 			writeTriviaData();
-			return this.privateModCommand(`(Question '${target[1]}' was added to the ${isWL ? "Weakest Link" : "Trivia"} question database by ${user.name}.)`);
+			this.modlog('TRIVIAQUESTION', null, `added to ${isWL ? "Weakest Link" : "Trivia"} - '${target[1]}'`);
+			return this.privateModAction(`(Question '${target[1]}' was added to the ${isWL ? "Weakest Link" : "Trivia"} question database by ${user.name}.)`);
 		}
 
 		submissions.splice(findEndOfCategory(category, true), 0, submission);
 		writeTriviaData();
 		if (!user.can('mute', null, room)) this.sendReply(`Question '${target[1]}' was submitted for review.`);
-		this.privateModCommand(`(${user.name} submitted question '${target[1]}' for review.)`);
+		this.modlog('TRIVIAQUESTION', null, `submitted '${target[1]}'`);
+		this.privateModAction(`(${user.name} submitted question '${target[1]}' for review.)`);
 	},
 	submithelp: [`/trivia submit [category] | [question] | [answer1], [answer2] ... [answern] - Add a question to the submission database for staff to review. Requires: + % @ # & ~`],
 	addhelp: [`/trivia add [category] | [question] | [answer1], [answer2], ... [answern] - Add a question to the question database. Requires: % @ # & ~`],
@@ -1465,8 +1454,8 @@ const commands = {
 		let submissionsLen = submissions.length;
 		if (!submissionsLen) return this.sendReply("No questions await review.");
 
-		let buffer = "|raw|<div class=\"ladder\"><table>" +
-			`<tr><td colspan="6"><strong>${submissionsLen}</strong> question${submissionsLen > 1 ? "s await" : " awaits"} review:</td></tr>` +
+		let buffer = `|raw|<div class="ladder"><table>` +
+			`<tr><td colspan="6"><strong>${Chat.count(submissionsLen, "</strong> questions")} awaiting review:</td></tr>` +
 			"<tr><th>#</th><th>Category</th><th>Question</th><th>Answer(s)</th><th>Submitted By</th><th>Type</th></tr>";
 
 		let i = 0;
@@ -1502,7 +1491,8 @@ const commands = {
 
 			triviaData.submissions = [];
 			writeTriviaData();
-			return this.privateModCommand(`(${user.name} ${(isAccepting ? " added " : " removed ")} all questions from the submission database.)`);
+			this.modlog(`TRIVIAQUESTION`, null, `${(isAccepting ? "added" : "removed")} all from submission database.`);
+			return this.privateModAction(`(${user.name} ${(isAccepting ? " added " : " removed ")} all questions from the submission database.)`);
 		}
 
 		if (/^\d+(?:-\d+)?(?:, ?\d+(?:-\d+)?)*$/.test(target)) {
@@ -1555,7 +1545,8 @@ const commands = {
 			}
 
 			writeTriviaData();
-			return this.privateModCommand(`(${user.name} ${(isAccepting ? "added " : "removed ")}submission number${(indicesLen > 1 ? "s " : " ")}${target} from the submission database.)`);
+			this.modlog('TRIVIAQUESTION', null, `${(isAccepting ? "added " : "removed ")}submission number${(indicesLen > 1 ? "s " : " ")}${target}`);
+			return this.privateModAction(`(${user.name} ${(isAccepting ? "added " : "removed ")}submission number${(indicesLen > 1 ? "s " : " ")}${target} from the submission database.)`);
 		}
 
 		this.errorReply(`'${target}' is an invalid argument. View /trivia help questions for more information.`);
@@ -1580,7 +1571,8 @@ const commands = {
 			if (toId(question.question) === questionID) {
 				questions.splice(i, 1);
 				writeTriviaData();
-				return this.privateModCommand(`(${user.name} removed question '${target}' from the question database.)`);
+				this.modlog('TRIVIAQUESTION', null, `removed '${target}'`);
+				return this.privateModAction(`(${user.name} removed question '${target}' from the question database.)`);
 			}
 		}
 
@@ -1659,7 +1651,7 @@ const commands = {
 
 	search: function (target, room, user) {
 		if (room.id !== 'questionworkshop') return this.errorReply("This command can only be used in Question Workshop.");
-		if (!this.can('broadcast', null, room)) return false;
+		if (!this.can('mute', null, room)) return false;
 		if (!target.includes(',')) return this.errorReply("No valid search arguments entered.");
 
 		let [type, ...query] = target.split(',');
@@ -1756,7 +1748,8 @@ const commands = {
 			}
 			CATEGORIES.ugm = 'Ultimate Gaming Month';
 			writeTriviaData();
-			return this.privateModCommand(`(${user.name} enabled UGM mode.)`);
+			this.modlog('UGMMODE', null, 'ON');
+			return this.privateModAction(`(${user.name} enabled UGM mode.)`);
 		}
 		if (command === 'disable') {
 			if (!triviaData.ugm) return this.errorReply("UGM mode is already disabled.");
@@ -1764,7 +1757,8 @@ const commands = {
 			delete triviaData.ugm;
 			delete CATEGORIES.ugm;
 			writeTriviaData();
-			return this.privateModCommand(`(${user.name} disabled UGM mode.)`);
+			this.modlog('UGMMODE', null, 'OFF');
+			return this.privateModAction(`(${user.name} disabled UGM mode.)`);
 		}
 		this.errorReply("Invalid target. Valid targets: enable, disable");
 	},
@@ -1864,4 +1858,3 @@ module.exports = {
 		],
 	},
 };
-

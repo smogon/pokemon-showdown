@@ -13,7 +13,7 @@ describe('Arena Trap', function () {
 	it('should prevent grounded Pokemon that are not immune to trapping from switching out normally', function () {
 		this.timeout(0);
 		battle = common.createBattle();
-		const p1 = battle.join('p1', 'Guest 1', 1, [{species: "Dugtrio", ability: 'arenatrap', moves: ['snore', 'telekinesis', 'gravity']}]);
+		battle.join('p1', 'Guest 1', 1, [{species: "Dugtrio", ability: 'arenatrap', moves: ['snore', 'telekinesis', 'gravity']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [
 			{species: "Tornadus", ability: 'defiant', moves: ['tailwind']},
 			{species: "Heatran", ability: 'flashfire', item: 'airballoon', moves: ['roar']},
@@ -22,41 +22,35 @@ describe('Arena Trap', function () {
 			{species: "Magnezone", ability: 'magnetpull', moves: ['magnetrise']},
 			{species: "Vaporeon", ability: 'waterabsorb', moves: ['roar']},
 		]);
-		p2.chooseSwitch(2).foe.chooseMove(1);
+		battle.makeChoices('move snore', 'switch 2');
 		assert.species(p2.active[0], 'Heatran');
-		p2.chooseSwitch(3).foe.chooseMove(1);
+		battle.makeChoices('move snore', 'switch 3');
 		assert.species(p2.active[0], 'Claydol');
-		p2.chooseSwitch(4).foe.chooseMove(1);
+		battle.makeChoices('move snore', 'switch 4');
 		assert.species(p2.active[0], 'Dusknoir');
-		p2.chooseSwitch(5).foe.chooseMove(1);
+		battle.makeChoices('move snore', 'switch 5');
 		assert.species(p2.active[0], 'Magnezone');
+		battle.makeChoices('', 'switch 6');
 
-		assert.false(p2.chooseSwitch(6)); // Magnezone is trapped
-		battle.commitDecisions();
-		assert.species(p2.active[0], 'Magnezone');
+		assert.species(p2.active[0], 'Magnezone'); // Magnezone is trapped
 
 		assert.strictEqual(p2.active[0].name, "Magnezone");
-		p2.chooseMove(1); // Magnet Rise
-		battle.commitDecisions();
+		battle.makeChoices('', 'move magnetrise');
 
-		p2.chooseSwitch(6).foe.chooseMove(1);
+		battle.makeChoices('move snore', 'switch 6');
 		assert.species(p2.active[0], 'Vaporeon');
 
-		assert.false(p2.chooseSwitch(2)); // Vaporeon is trapped
-		battle.commitDecisions();
+		battle.makeChoices('', 'switch 2'); // Vaporeon is trapped
 		assert.species(p2.active[0], 'Vaporeon');
 
-		p1.chooseMove(2); // Telekinesis
-		battle.commitDecisions();
+		battle.makeChoices('move telekinesis', ''); // Telekinesis
 
-		p2.chooseSwitch(2).foe.chooseMove(1);
+		battle.makeChoices('move snore', 'switch 2');
 		assert.species(p2.active[0], 'Tornadus');
 
-		p1.chooseMove(3); // Gravity
-		battle.commitDecisions();
+		battle.makeChoices('move gravity', ''); // Gravity
 
-		assert.false(p2.chooseSwitch(4)); // Tornadus is trapped
-		battle.commitDecisions();
+		battle.makeChoices('', 'switch 4'); // Tornadus is trapped
 		assert.species(p2.active[0], 'Tornadus');
 	});
 });

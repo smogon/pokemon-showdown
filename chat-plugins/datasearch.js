@@ -5,12 +5,10 @@
  * Commands for advanced searching for pokemon, moves, items and learnsets.
  * These commands run on a child process by default.
  *
- * @license MIT license
+ * @license MIT
  */
 
 'use strict';
-
-const ProcessManager = require('./../process-manager');
 
 const MAX_PROCESSES = 1;
 const RESULTS_MAX_LENGTH = 10;
@@ -19,68 +17,6 @@ function escapeHTML(str) {
 	if (!str) return '';
 	return ('' + str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;').replace(/\//g, '&#x2f;');
 }
-
-class DatasearchManager extends ProcessManager {
-	onMessageUpstream(message) {
-		// Protocol:
-		// "[id]|JSON"
-		let pipeIndex = message.indexOf('|');
-		let id = +message.substr(0, pipeIndex);
-		let result = JSON.parse(message.slice(pipeIndex + 1));
-
-		if (this.pendingTasks.has(id)) {
-			this.pendingTasks.get(id)(result);
-			this.pendingTasks.delete(id);
-			this.release();
-		}
-	}
-
-	onMessageDownstream(message) {
-		// protocol:
-		// "[id]|{data, sig}"
-		let pipeIndex = message.indexOf('|');
-		let id = message.substr(0, pipeIndex);
-
-		let data = JSON.parse(message.slice(pipeIndex + 1));
-		process.send(id + '|' + JSON.stringify(this.receive(data)));
-	}
-
-	receive(data) {
-		let result;
-		try {
-			switch (data.cmd) {
-			case 'randpoke':
-			case 'dexsearch':
-				result = runDexsearch(data.target, data.cmd, data.canAll, data.message);
-				break;
-			case 'randmove':
-			case 'movesearch':
-				result = runMovesearch(data.target, data.cmd, data.canAll, data.message);
-				break;
-			case 'itemsearch':
-				result = runItemsearch(data.target, data.cmd, data.canAll, data.message);
-				break;
-			case 'learn':
-				result = runLearn(data.target, data.message);
-				break;
-			default:
-				result = null;
-			}
-		} catch (err) {
-			require('./../lib/crashlogger')(err, 'A search query', data);
-			result = {error: "Sorry! Our search engine crashed on your query. We've been automatically notified and will fix this crash."};
-		}
-		return result;
-	}
-}
-
-exports.DatasearchManager = DatasearchManager;
-
-const PM = exports.PM = new DatasearchManager({
-	execFile: __filename,
-	maxProcesses: MAX_PROCESSES,
-	isChatBased: true,
-});
 
 exports.commands = {
 	'!dexsearch': true,
@@ -121,9 +57,11 @@ exports.commands = {
 		`/dexsearch [parameter], [parameter], [parameter], ... - Searches for Pok\u00e9mon that fulfill the selected criteria`,
 		`Search categories are: type, tier, color, moves, ability, gen, resists, recovery, priority, stat, weight, height, egg group.`,
 		`Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.`,
-		`Valid tiers are: Uber/OU/BL/UU/BL2/RU/BL3/NU/BL4/PU/NFE/LC/CAP/CAP NFE/CAP LC.`,
+		`Valid tiers are: Uber/OU/UUBL/UU/RUBL/RU/NUBL/NU/PUBL/PU/NFE/LC/LCUber/CAP/CAP NFE/CAP LC.`,
+		`Valid doubles tiers are: DUber/DOU/DBL/DUU.`,
 		`Types can be searched for by either having the type precede 'type' or just using the type itself as a parameter, e.g., both 'fire type' and 'fire' show all Fire types; however, using 'psychic' as a parameter will show all Pok\u00e9mon that learn the move Psychic and not Psychic types.`,
 		`'resists' followed by a type will show Pok\u00e9mon that resist that typing, e.g., 'resists normal'.`,
+		`'weak' followed by a type will show Pok\u00e9mon that are weak to that typing, e.g., 'weak fire'.`,
 		`Inequality ranges use the characters '>=' for '≥' and '<=' for '≤', e.g., 'hp <= 95' searches all Pok\u00e9mon with HP less than or equal to 95.`,
 		`Parameters can be excluded through the use of '!', e.g., '!water type' excludes all water types.`,
 		`The parameter 'mega' can be added to search for Mega Evolutions only, and the parameter 'NFE' can be added to search not-fully evolved Pok\u00e9mon only.`,
@@ -137,7 +75,7 @@ exports.commands = {
 	rollmove: 'randommove',
 	randmove: 'randommove',
 	randommove: function (target, room, user, connection, cmd, message) {
-		if (!this.canBroadcast()) return;
+		if (!this.canBroadcast(true)) return;
 		let targets = target.split(",");
 		let targetsBuffer = [];
 		let qty;
@@ -161,7 +99,7 @@ exports.commands = {
 			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
-			if (!this.runBroadcast()) return;
+			if (!this.runBroadcast(true)) return;
 			if (response.error) {
 				this.errorReply(response.error);
 			} else if (response.reply) {
@@ -181,7 +119,7 @@ exports.commands = {
 	rollpokemon: 'randompokemon',
 	randpoke: 'randompokemon',
 	randompokemon: function (target, room, user, connection, cmd, message) {
-		if (!this.canBroadcast()) return;
+		if (!this.canBroadcast(true)) return;
 		let targets = target.split(",");
 		let targetsBuffer = [];
 		let qty;
@@ -205,7 +143,7 @@ exports.commands = {
 			canAll: (!this.broadcastMessage || (room && room.isPersonal)),
 			message: (this.broadcastMessage ? "" : message),
 		}).then(response => {
-			if (!this.runBroadcast()) return;
+			if (!this.runBroadcast(true)) return;
 			if (response.error) {
 				this.errorReply(response.error);
 			} else if (response.reply) {
@@ -331,31 +269,10 @@ exports.commands = {
 	],
 };
 
-if (process.send && module === process.mainModule) {
-	// This is a child process!
-
-	global.Config = require('../config/config');
-
-	if (Config.crashguard) {
-		process.on('uncaughtException', err => {
-			require('../lib/crashlogger')(err, 'A dexsearch process', true);
-		});
-	}
-
-	global.Dex = require('../sim/dex');
-	global.toId = Dex.getId;
-	Dex.includeData();
-	global.TeamValidator = require('../sim/team-validator');
-
-	process.on('message', message => PM.onMessageDownstream(message));
-	process.on('disconnect', () => process.exit());
-
-	require('../lib/repl').start('dexsearch', cmd => eval(cmd));
-}
-
 function runDexsearch(target, cmd, canAll, message) {
 	let searches = [];
-	let allTiers = {'uber': 'Uber', 'ubers': 'Uber', 'ou': 'OU', 'bl': 'BL', 'uu': 'UU', 'bl2': 'BL2', 'ru': 'RU', 'bl3': 'BL3', 'nu': 'NU', 'bl4': 'BL4', 'pu': 'PU', 'nfe': 'NFE', 'lcuber': 'LC Uber', 'lcubers': 'LC Uber', 'lc': 'LC', 'cap': 'CAP', 'caplc': 'CAP LC', 'capnfe': 'CAP NFE', __proto__: null};
+	let allTiers = {'uber': 'Uber', 'ubers': 'Uber', 'ou': 'OU', 'uubl': 'UUBL', 'uu': 'UU', 'rubl': 'RUBL', 'ru': 'RU', 'nubl': 'NUBL', 'nu': 'NU', 'publ': 'PUBL', 'pu': 'PU', 'nfe': 'NFE', 'lcuber': 'LC Uber', 'lcubers': 'LC Uber', 'lc': 'LC', 'cap': 'CAP', 'caplc': 'CAP LC', 'capnfe': 'CAP NFE', __proto__: null};
+	let allDoublesTiers = {'doublesubers': 'DUber', 'doublesuber': 'DUber', 'duber': 'DUber', 'dubers': 'DUber', 'doublesou': 'DOU', 'dou': 'DOU', 'doublesbl': 'DBL', 'dbl': 'DBL', 'doublesuu': 'DUU', 'duu': 'DUU', __proto__: null};
 	let allTypes = Object.create(null);
 	for (let i in Dex.data.TypeChart) {
 		allTypes[toId(i)] = i;
@@ -375,7 +292,7 @@ function runDexsearch(target, cmd, canAll, message) {
 			if (group[cat][param] === undefined) {
 				if (uniqueTraits.includes(cat)) {
 					for (let currentParam in group[cat]) {
-						if (group[cat][currentParam] !== isNotSearch) return `A Pok&eacute;mon cannot have multiple ${cat}.`;
+						if (group[cat][currentParam] !== isNotSearch && !isNotSearch) return `A Pok&eacute;mon cannot have multiple ${cat}.`;
 					}
 				}
 				continue;
@@ -390,7 +307,7 @@ function runDexsearch(target, cmd, canAll, message) {
 	};
 
 	for (const andGroup of target.split(',')) {
-		let orGroup = {abilities: {}, tiers: {}, colors: {}, 'egg groups': {}, gens: {}, moves: {}, types: {}, resists: {}, stats: {}, skip: false};
+		let orGroup = {abilities: {}, tiers: {}, doublesTiers: {}, colors: {}, 'egg groups': {}, gens: {}, moves: {}, types: {}, resists: {}, weak: {}, stats: {}, skip: false};
 		let parameters = andGroup.split("|");
 		if (parameters.length > 3) return {reply: "No more than 3 alternatives for each parameter may be used."};
 		for (const parameter of parameters) {
@@ -421,6 +338,14 @@ function runDexsearch(target, cmd, canAll, message) {
 				continue;
 			}
 
+			if (toId(target) in allDoublesTiers) {
+				target = allDoublesTiers[toId(target)];
+				let invalid = validParameter("doubles tiers", target, isNotSearch, target);
+				if (invalid) return {reply: invalid};
+				orGroup.doublesTiers[target] = !isNotSearch;
+				continue;
+			}
+
 			if (allColors.includes(target)) {
 				target = target.charAt(0).toUpperCase() + target.slice(1);
 				let invalid = validParameter("colors", target, isNotSearch, target);
@@ -445,6 +370,8 @@ function runDexsearch(target, cmd, canAll, message) {
 			}
 			if (targetType in allTypes) {
 				target = allTypes[targetType];
+				const invalid = validParameter("types", target, isNotSearch, target);
+				if (invalid) return {reply: invalid};
 				if ((orGroup.types[target] && isNotSearch) || (orGroup.types[target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a type.'};
 				orGroup.types[target] = !isNotSearch;
 				continue;
@@ -584,6 +511,18 @@ function runDexsearch(target, cmd, canAll, message) {
 				}
 			}
 
+			if (target.substr(0, 5) === 'weak ') {
+				let targetWeak = target.substr(5, 1).toUpperCase() + target.substr(6);
+				if (targetWeak in Dex.data.TypeChart) {
+					let invalid = validParameter("weak", targetWeak, isNotSearch, target);
+					if (invalid) return {reply: invalid};
+					orGroup.weak[targetWeak] = !isNotSearch;
+					continue;
+				} else {
+					return {reply: `'${targetWeak}' is not a recognized type.`};
+				}
+			}
+
 			let inequality = target.search(/>|<|=/);
 			if (inequality >= 0) {
 				if (isNotSearch) return {reply: "You cannot use the negation symbol '!' in stat ranges."};
@@ -639,7 +578,7 @@ function runDexsearch(target, cmd, canAll, message) {
 			searches.push(orGroup);
 		}
 	}
-	if (showAll && searches.length === 0 && megaSearch === null) return {reply: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command."};
+	if (showAll && searches.length === 0 && megaSearch === null && !maxGen) return {reply: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command."};
 	if (!maxGen) maxGen = 7;
 	let mod = Dex.mod('gen' + maxGen);
 	let dex = {};
@@ -686,6 +625,13 @@ function runDexsearch(target, cmd, canAll, message) {
 				if (alts.tiers.LC && !dex[mon].prevo && dex[mon].nfe && !Dex.formats.gen7lc.banlist.includes(dex[mon].species) && tier !== 'NFE') continue;
 			}
 
+			if (alts.doublesTiers && Object.keys(alts.doublesTiers).length) {
+				let tier = dex[mon].doublesTier;
+				if (tier && tier[0] === '(') tier = tier.slice(1, -1);
+				if (alts.doublesTiers[tier]) continue;
+				if (Object.values(alts.doublesTiers).includes(false) && alts.doublesTiers[tier] !== false) continue;
+			}
+
 			for (let type in alts.types) {
 				if (dex[mon].types.includes(type) === alts.types[type]) {
 					matched = true;
@@ -702,6 +648,18 @@ function runDexsearch(target, cmd, canAll, message) {
 					if (notImmune && effectiveness >= 0) matched = true;
 				} else {
 					if (!notImmune || effectiveness < 0) matched = true;
+				}
+			}
+			if (matched) continue;
+
+			for (let type in alts.weak) {
+				let effectiveness = 0;
+				let notImmune = Dex.getImmunity(type, dex[mon]);
+				if (notImmune) effectiveness = Dex.getEffectiveness(type, dex[mon]);
+				if (alts.weak[type]) {
+					if (notImmune && effectiveness >= 1) matched = true;
+				} else {
+					if (!notImmune || effectiveness < 1) matched = true;
 				}
 			}
 			if (matched) continue;
@@ -763,7 +721,7 @@ function runDexsearch(target, cmd, canAll, message) {
 		}
 	}
 	let results = [];
-	for (let mon in dex) {
+	for (const mon of Object.keys(dex).sort()) {
 		if (dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies)) continue;
 		results.push(dex[mon].species);
 	}
@@ -998,7 +956,7 @@ function runMovesearch(target, cmd, canAll, message) {
 				case 'evasiveness': target = 'evasion'; break;
 				default: target = target.substr(7);
 				}
-				if (!allBoosts.includes(target)) return {reply: `'${escapeHTML(target.substr(7))}' is not a recognized stat.`};
+				if (!allBoosts.includes(target)) return {reply: `'${escapeHTML(target)}' is not a recognized stat.`};
 				if (isBoost) {
 					if ((orGroup.boost[target] && isNotSearch) || (orGroup.boost[target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a stat boost.'};
 					orGroup.boost[target] = !isNotSearch;
@@ -1022,7 +980,7 @@ function runMovesearch(target, cmd, canAll, message) {
 				case 'evasiveness': target = 'evasion'; break;
 				default: target = target.substr(8);
 				}
-				if (!allBoosts.includes(target)) return {reply: `'${escapeHTML(target.substr(8))}' is not a recognized stat.`};
+				if (!allBoosts.includes(target)) return {reply: `'${escapeHTML(target)}' is not a recognized stat.`};
 				if ((orGroup.zboost[target] && isNotSearch) || (orGroup.zboost[target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include a stat boost.'};
 				orGroup.zboost[target] = !isNotSearch;
 				continue;
@@ -1196,7 +1154,8 @@ function runMovesearch(target, cmd, canAll, message) {
 
 			for (let searchStatus in alts.volatileStatus) {
 				let canStatus = !!((dex[move].secondary && dex[move].secondary.volatileStatus === searchStatus) ||
-								   (dex[move].secondaries && dex[move].secondaries.some(entry => entry.volatileStatus === searchStatus)));
+								   (dex[move].secondaries && dex[move].secondaries.some(entry => entry.volatileStatus === searchStatus)) ||
+								   (dex[move].volatileStatus === searchStatus));
 				if (canStatus === alts.volatileStatus[searchStatus]) {
 					matched = true;
 					break;
@@ -1245,10 +1204,12 @@ function runItemsearch(target, cmd, canAll, message) {
 	let showAll = false;
 
 	target = target.trim();
-	if (target.substr(target.length - 5) === ', all') {
+	const lastCommaIndex = target.lastIndexOf(',');
+	const lastArgumentSubstr = target.substr(lastCommaIndex + 1).trim();
+	if (lastArgumentSubstr === 'all') {
 		if (!canAll) return {reply: "A search ending in ', all' cannot be broadcast."};
 		showAll = true;
-		target = target.substr(0, target.length - 5);
+		target = target.substr(0, lastCommaIndex);
 	}
 
 	target = target.toLowerCase().replace('-', ' ').replace(/[^a-z0-9.\s/]/g, '');
@@ -1418,27 +1379,13 @@ function runItemsearch(target, cmd, canAll, message) {
 				if (descWords.includes(word)) matched++;
 			}
 
-			if (matched >= bestMatched && matched >= (searchedWords.length * 3 / 5)) foundItems.push(item.name);
-			if (matched > bestMatched) bestMatched = matched;
-		}
-
-		// iterate over found items again to make sure they all are the best match
-		for (let [i, id] of foundItems.entries()) {
-			let item = Dex.getItem(id);
-			let matched = 0;
-			let descWords = item.desc;
-			if (/[1-9.]+x/.test(descWords)) descWords += ' increases';
-			if (item.isBerry) descWords += ' berry';
-			descWords = descWords.replace(/super[-\s]effective/g, 'supereffective');
-			descWords = descWords.toLowerCase().replace('-', ' ').replace(/[^a-z0-9\s/]/g, '').replace(/(\D)\./, (p0, p1) => p1).split(' ');
-
-			for (const word of searchedWords) {
-				if (descWords.includes(word)) matched++;
-			}
-
-			if (matched !== bestMatched) {
-				foundItems.splice(i, 1);
-				i--;
+			if (matched >= (searchedWords.length * 3 / 5)) {
+				if (matched === bestMatched) {
+					foundItems.push(item.name);
+				} else if (matched > bestMatched) {
+					foundItems = [item.name];
+					bestMatched = matched;
+				}
 			}
 		}
 	}
@@ -1498,9 +1445,9 @@ function runLearn(target, cmd) {
 	if (!formatName) formatName = 'Gen ' + gen;
 	let lsetData = {set: {}, sources: [], sourcesBefore: gen};
 
-	let template = Dex.getTemplate(targets.shift());
+	const validator = TeamValidator(formatid);
+	let template = validator.dex.getTemplate(targets.shift());
 	let move = {};
-	let problem;
 	let all = (cmd === 'learnall');
 	if (cmd === 'learn5') lsetData.set.level = 5;
 
@@ -1516,20 +1463,29 @@ function runLearn(target, cmd) {
 		return {error: "You must specify at least one move."};
 	}
 
+	let lsetProblem;
 	for (const arg of targets) {
-		move = Dex.getMove(arg);
+		if (['ha', 'hidden', 'hiddenability'].includes(toId(arg))) {
+			lsetData.isHidden = true;
+			continue;
+		}
+		move = validator.dex.getMove(arg);
 		if (!move.exists || move.id === 'magikarpsrevenge') {
 			return {error: `Move '${move.id}' not found.`};
 		}
 		if (move.gen > gen) {
 			return {error: `${move.name} didn't exist yet in generation ${gen}.`};
 		}
-		problem = TeamValidator(formatid).checkLearnset(move, template.species, lsetData);
-		if (problem) break;
+		lsetProblem = validator.checkLearnset(move, template, lsetData);
+		if (lsetProblem) {
+			lsetProblem.moveName = move.name;
+			break;
+		}
 	}
+	let problems = validator.reconcileLearnset(template, lsetData, lsetProblem);
 	let buffer = `In ${formatName}, `;
-	buffer += "" + template.name + (problem ? " <span class=\"message-learn-cannotlearn\">can't</span> learn " : " <span class=\"message-learn-canlearn\">can</span> learn ") + (targets.length > 1 ? "these moves" : move.name);
-	if (!problem) {
+	buffer += `${template.name}` + (problems ? ` <span class="message-learn-cannotlearn">can't</span> learn ` : ` <span class="message-learn-canlearn">can</span> learn `) + (targets.length > 1 ? `these moves` : move.name);
+	if (!problems) {
 		let sourceNames = {E: "egg", S: "event", D: "dream world", V: "virtual console transfer from gen 1-2", X: "egg, traded back", Y: "event, traded back"};
 		let sourcesBefore = lsetData.sourcesBefore;
 		if (lsetData.sources || sourcesBefore < gen) buffer += " only when obtained";
@@ -1570,15 +1526,68 @@ function runLearn(target, cmd) {
 		if (sourcesBefore) {
 			buffer += `<li>${(sourcesBefore < gen ? "Gen " + sourcesBefore + " or earlier" : "anywhere") + " (all moves are level-up/tutor/TM/HM in Gen " + Math.min(gen, sourcesBefore) + (sourcesBefore < gen ? " to " + gen : "")})`;
 		}
+		if (lsetData.babyOnly && sourcesBefore) {
+			buffer += `<li>must be obtained as ` + Dex.getTemplate(lsetData.babyOnly).species;
+		}
 		buffer += "</ul>";
+	} else if (targets.length > 1 || problems.length > 1) {
+		buffer += ` because:<ul class="message-learn-list">`;
+		buffer += `<li>` + problems.join(`</li><li>`) + `</li>`;
+		buffer += `</ul>`;
 	}
 	return {reply: buffer};
 }
 
 function runSearch(query) {
-	return PM.send(query);
+	return PM.query(query);
 }
 
-if (!process.send) {
-	PM.spawn();
+/*********************************************************
+ * Process manager
+ *********************************************************/
+
+const QueryProcessManager = require('./../lib/process-manager').QueryProcessManager;
+
+const PM = new QueryProcessManager(module, async query => {
+	try {
+		switch (query.cmd) {
+		case 'randpoke':
+		case 'dexsearch':
+			return runDexsearch(query.target, query.cmd, query.canAll, query.message);
+		case 'randmove':
+		case 'movesearch':
+			return runMovesearch(query.target, query.cmd, query.canAll, query.message);
+		case 'itemsearch':
+			return runItemsearch(query.target, query.cmd, query.canAll, query.message);
+		case 'learn':
+			return runLearn(query.target, query.message);
+		default:
+			return null;
+		}
+	} catch (err) {
+		require('./../lib/crashlogger')(err, 'A search query', query);
+	}
+	return {error: "Sorry! Our search engine crashed on your query. We've been automatically notified and will fix this crash."};
+});
+
+if (!PM.isParentProcess) {
+	// This is a child process!
+	global.Config = require('../config/config');
+
+	if (Config.crashguard) {
+		process.on('uncaughtException', err => {
+			require('../lib/crashlogger')(err, 'A dexsearch process', true);
+		});
+	}
+
+	global.Dex = require('../sim/dex');
+	global.toId = Dex.getId;
+	Dex.includeData();
+	global.TeamValidator = require('../sim/team-validator');
+
+	require('../lib/repl').start('dexsearch', cmd => eval(cmd));
+} else {
+	PM.spawn(MAX_PROCESSES);
 }
+
+exports.PM = PM;

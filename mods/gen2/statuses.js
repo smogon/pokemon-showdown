@@ -1,7 +1,11 @@
 'use strict';
 
-exports.BattleStatuses = {
+/**@type {{[k: string]: ModdedEffectData}} */
+let BattleStatuses = {
 	brn: {
+		name: 'brn',
+		id: 'brn',
+		num: 0,
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'brn');
@@ -15,16 +19,22 @@ exports.BattleStatuses = {
 		},
 	},
 	par: {
+		name: 'par',
+		id: 'par',
+		num: 0,
 		inherit: true,
 		onBeforeMovePriority: 2,
 		onBeforeMove: function (pokemon) {
-			if (this.random(4) === 0) {
+			if (this.randomChance(1, 4)) {
 				this.add('cant', pokemon, 'par');
 				return false;
 			}
 		},
 	},
 	slp: {
+		name: 'slp',
+		id: 'slp',
+		num: 0,
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'slp');
@@ -46,6 +56,9 @@ exports.BattleStatuses = {
 		},
 	},
 	frz: {
+		name: 'frz',
+		id: 'frz',
+		num: 0,
 		inherit: true,
 		onBeforeMove: function (pokemon, target, move) {
 			if (move.flags['defrost']) return;
@@ -53,14 +66,23 @@ exports.BattleStatuses = {
 			return false;
 		},
 		onModifyMove: function () {},
+		onHit: function () {},
+		onAfterMoveSecondary: function (target, source, move) {
+			if ((move.secondary && move.secondary.status === 'brn') || move.statusRoll === 'brn') {
+				target.cureStatus();
+			}
+		},
 		onAfterMoveSecondarySelf: function (pokemon, target, move) {
 			if (move.flags['defrost']) pokemon.cureStatus();
 		},
 		onResidual: function (pokemon) {
-			if (this.random(256) < 25) pokemon.cureStatus();
+			if (this.randomChance(25, 256)) pokemon.cureStatus();
 		},
 	},
 	psn: {
+		name: 'psn',
+		id: 'psn',
+		num: 0,
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'psn');
@@ -74,6 +96,9 @@ exports.BattleStatuses = {
 		},
 	},
 	tox: {
+		name: 'tox',
+		id: 'tox',
+		num: 0,
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'tox');
@@ -116,9 +141,10 @@ exports.BattleStatuses = {
 				return;
 			}
 			this.add('-activate', pokemon, 'confusion');
-			if (this.random(2) === 0) {
+			if (this.randomChance(1, 2)) {
 				return;
 			}
+			// @ts-ignore
 			move = {
 				basePower: 40,
 				type: '???',
@@ -140,12 +166,15 @@ exports.BattleStatuses = {
 		},
 	},
 	lockedmove: {
+		name: 'lockedmove',
+		id: 'lockedmove',
+		num: 0,
 		// Outrage, Thrash, Petal Dance...
 		durationCallback: function () {
 			return this.random(2, 4);
 		},
 		onResidual: function (target) {
-			if ((target.lastMove.id === 'struggle') || target.status === 'slp') {
+			if ((target.lastMove && target.lastMove.id === 'struggle') || target.status === 'slp') {
 				// don't lock, and bypass confusion for calming
 				delete target.volatiles['lockedmove'];
 			}
@@ -160,6 +189,9 @@ exports.BattleStatuses = {
 		},
 		onLockMove: function (pokemon) {
 			return this.effectData.move;
+		},
+		onMoveAborted: function (pokemon) {
+			delete pokemon.volatiles['lockedmove'];
 		},
 		onBeforeTurn: function (pokemon) {
 			let move = this.getMove(this.effectData.move);
@@ -176,6 +208,9 @@ exports.BattleStatuses = {
 		},
 	},
 	stall: {
+		name: 'stall',
+		id: 'stall',
+		num: 0,
 		duration: 2,
 		onStart: function () {
 			this.effectData.counter = 127;
@@ -183,7 +218,7 @@ exports.BattleStatuses = {
 		onStallMove: function () {
 			let counter = Math.floor(this.effectData.counter) || 127;
 			this.debug("Success chance: " + Math.round(counter * 1000 / 255) / 10 + "% (" + counter + "/255)");
-			return (this.random(255) < counter);
+			return this.randomChance(counter, 255);
 		},
 		onRestart: function () {
 			this.effectData.counter /= 2;
@@ -191,3 +226,5 @@ exports.BattleStatuses = {
 		},
 	},
 };
+
+exports.BattleStatuses = BattleStatuses;

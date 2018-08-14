@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleItems = {
+/**@type {{[k: string]: ModdedItemData}} */
+let BattleItems = {
 	aguavberry: {
 		inherit: true,
 		desc: "Restores 1/8 max HP at 1/2 max HP or less; confuses if -SpD Nature. Single use.",
@@ -78,6 +79,14 @@ exports.BattleItems = {
 				if (target.eatItem()) {
 					this.damage(source.maxhp / 8, source, target, null, true);
 				}
+			}
+		},
+	},
+	lifeorb: {
+		inherit: true,
+		onAfterMoveSecondarySelf: function (source, target, move) {
+			if (source && source !== target && move && move.category !== 'Status' && !move.ohko) {
+				this.damage(source.maxhp / 10, source, source, this.getItem('lifeorb'));
 			}
 		},
 	},
@@ -196,3 +205,5 @@ exports.BattleItems = {
 		},
 	},
 };
+
+exports.BattleItems = BattleItems;

@@ -17,8 +17,13 @@ function saveRoomFaqs() {
 	fs.writeFile(ROOMFAQ_FILE, JSON.stringify(roomFaqs), () => {});
 }
 
-// Aliases are implemented as a "regular" FAQ entry starting with a >. EX: {a: "text", b: ">a"}
-// This is done to allow easy checking whether a key is associated with a value or alias as well as preserve backwards compatibility.
+/**
+ * @param {string} roomid
+ * @param {string} key
+ *
+ * Aliases are implemented as a "regular" FAQ entry starting with a >. EX: {a: "text", b: ">a"}
+ * This is done to allow easy checking whether a key is associated with a value or alias as well as preserve backwards compatibility.
+ */
 function getAlias(roomid, key) {
 	if (!roomFaqs[roomid]) return false;
 	let value = roomFaqs[roomid][key];
@@ -26,16 +31,20 @@ function getAlias(roomid, key) {
 	return false;
 }
 
-exports.commands = {
+/** @typedef {(this: CommandContext, target: string, room: ChatRoom, user: User, connection: Connection, cmd: string, message: string) => (void)} ChatHandler */
+/** @typedef {{[k: string]: ChatHandler | string | true | string[] | ChatCommands}} ChatCommands */
+
+/** @type {ChatCommands} */
+const commands = {
 	addfaq: function (target, room, user) {
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 		if (!this.can('declare', null, room)) return false;
 		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
-		let [topic, ...text] = target.split(',');
+		let [topic, ...rest] = target.split(',');
 
 		topic = toId(topic);
-		if (!(topic && text.length)) return this.parse('/help roomfaq');
-		text = text.join(',').trim();
+		if (!(topic && rest.length)) return this.parse('/help roomfaq');
+		let text = rest.join(',').trim();
 		if (topic.length > 25) return this.errorReply("FAQ topics should not exceed 25 characters.");
 		if (text.length > 500) return this.errorReply("FAQ entries should not exceed 500 characters.");
 
@@ -45,7 +54,8 @@ exports.commands = {
 		roomFaqs[room.id][topic] = text;
 		saveRoomFaqs();
 		this.sendReplyBox(Chat.formatText(text, true));
-		this.privateModCommand(`(${user.name} added a FAQ for '${topic}')`);
+		this.privateModAction(`(${user.name} added a FAQ for '${topic}')`);
+		this.modlog('RFAQ', null, `added '${topic}'`);
 	},
 	removefaq: function (target, room, user) {
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
@@ -59,7 +69,8 @@ exports.commands = {
 		Object.keys(roomFaqs[room.id]).filter(val => getAlias(room.id, val) === topic).map(val => delete roomFaqs[room.id][val]);
 		if (!Object.keys(roomFaqs[room.id]).length) delete roomFaqs[room.id];
 		saveRoomFaqs();
-		this.privateModCommand(`(${user.name} removed the FAQ for '${topic}')`);
+		this.privateModAction(`(${user.name} removed the FAQ for '${topic}')`);
+		this.modlog('ROOMFAQ', null, `removed ${topic}`);
 	},
 	addalias: function (target, room, user) {
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
@@ -74,7 +85,8 @@ exports.commands = {
 		if (getAlias(room.id, topic)) return this.errorReply(`You cannot make an alias of an alias. Use /addalias ${alias}, ${getAlias(room.id, topic)} instead.`);
 		roomFaqs[room.id][alias] = `>${topic}`;
 		saveRoomFaqs();
-		this.privateModCommand(`(${user.name} added an alias for '${topic}': ${alias})`);
+		this.privateModAction(`(${user.name} added an alias for '${topic}': ${alias})`);
+		this.modlog('ROOMFAQ', null, `alias for '${topic}' - ${alias}`);
 	},
 	rfaq: 'roomfaq',
 	roomfaq: function (target, room, user) {
@@ -88,10 +100,11 @@ exports.commands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(Chat.formatText(roomFaqs[room.id][topic], true));
 		if (!this.broadcasting && user.can('declare', null, room)) {
-			let extra = `<code>/addfaq ${topic}, ${Chat.escapeHTML(roomFaqs[room.id][topic])}</code>`;
-			let aliases = Object.keys(roomFaqs[room.id]).filter(val => getAlias(room.id, val) === topic);
+			const src = Chat.escapeHTML(roomFaqs[room.id][topic]).replace(/\n/g, `<br />`);
+			let extra = `<code>/addfaq ${topic}, ${src}</code>`;
+			const aliases = Object.keys(roomFaqs[room.id]).filter(val => getAlias(room.id, val) === topic);
 			if (aliases.length) {
-				extra += `<br/><br/>Aliases: ${Object.keys(roomFaqs[room.id]).filter(val => getAlias(room.id, val) === topic).join(', ')}`;
+				extra += `<br /><br />Aliases: ${aliases.join(', ')}`;
 			}
 			this.sendReplyBox(extra);
 		}
@@ -104,3 +117,9 @@ exports.commands = {
 		`/removefaq <topic> - Removes the entry for <topic> in this room. If used on an alias, removes the alias. Requires: # & ~`,
 	],
 };
+
+exports.commands = commands;
+
+process.nextTick(() => {
+	Chat.multiLinePattern.register('/addfaq ');
+});

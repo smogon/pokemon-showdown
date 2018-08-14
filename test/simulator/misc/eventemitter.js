@@ -27,7 +27,7 @@ describe('Battle#on', function () {
 		battle.onEvent('ModifyDamage', battle.getFormat(), function () {
 			return 5;
 		});
-		battle.commitDecisions();
+		battle.makeChoices('move bulkup', 'move peck');
 		assert.strictEqual(eventCount, 4);
 		assert.strictEqual(eventCount2, 2);
 		assert.strictEqual(battle.p1.active[0].maxhp - battle.p1.active[0].hp, 5);
@@ -48,7 +48,7 @@ describe('Battle#on', function () {
 		for (let i = 0; i < 9; i++) {
 			battle.onEvent('ModifyDamage', battle.getFormat(), -i, modHandler(i));
 		}
-		battle.commitDecisions();
+		battle.makeChoices('move bulkup', 'move peck');
 		assert.strictEqual(eventCount, 9);
 	});
 

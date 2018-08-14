@@ -19,8 +19,8 @@ describe('Flame Orb', function () {
 		battle.join('p2', 'Guest 2', 1, [
 			{species: 'Breloom', ability: 'technician', moves: ['bulletseed']},
 		]);
-		battle.commitDecisions();
-		battle.choose('p1', 'switch 2');
+		battle.makeChoices('move splash', 'move bulletseed');
+		battle.makeChoices('switch 2', 'move bulletseed');
 		assert.notStrictEqual(battle.p1.active[0].status, 'brn');
 	});
 
@@ -29,6 +29,6 @@ describe('Flame Orb', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Ursaring', ability: 'guts', item: 'flameorb', moves: ['protect']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']}]);
 		const target = battle.p1.active[0];
-		assert.sets(() => target.status, 'brn', () => battle.commitDecisions());
+		assert.sets(() => target.status, 'brn', () => battle.makeChoices('move protect', 'move splash'));
 	});
 });

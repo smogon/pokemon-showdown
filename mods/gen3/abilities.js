@@ -1,13 +1,14 @@
 'use strict';
 
-exports.BattleAbilities = {
+/**@type {{[k: string]: ModdedAbilityData}} */
+let BattleAbilities = {
 	"cutecharm": {
 		inherit: true,
 		desc: "There is a 1/3 chance a Pokemon making contact with this Pokemon will become infatuated if it is of the opposite gender.",
 		shortDesc: "1/3 chance of infatuating Pokemon of the opposite gender if they make contact.",
 		onAfterDamage: function (damage, target, source, move) {
 			if (move && move.flags['contact']) {
-				if (this.random(3) < 1) {
+				if (this.randomChance(1, 3)) {
 					source.addVolatile('attract', target);
 				}
 			}
@@ -21,11 +22,11 @@ exports.BattleAbilities = {
 			if (move && move.flags['contact'] && !source.status) {
 				let r = this.random(300);
 				if (r < 10) {
-					source.setStatus('slp');
+					source.setStatus('slp', target);
 				} else if (r < 20) {
-					source.setStatus('par');
+					source.setStatus('par', target);
 				} else if (r < 30) {
-					source.setStatus('psn');
+					source.setStatus('psn', target);
 				}
 			}
 		},
@@ -35,7 +36,7 @@ exports.BattleAbilities = {
 		shortDesc: "1/3 chance a Pokemon making contact with this Pokemon will be burned.",
 		onAfterDamage: function (damage, target, source, move) {
 			if (move && move.flags['contact']) {
-				if (this.random(3) < 1) {
+				if (this.randomChance(1, 3)) {
 					source.trySetStatus('brn', target);
 				}
 			}
@@ -49,8 +50,11 @@ exports.BattleAbilities = {
 				if (move.id === 'willowisp' && (target.hasType('Fire') || target.status || target.volatiles['substitute'])) {
 					return;
 				}
+				if (target.status === 'frz') {
+					return;
+				}
 				if (!target.addVolatile('flashfire')) {
-					this.add('-immune', target, '[msg]');
+					this.add('-immune', target, '[msg]', '[from] ability: Flash Fire');
 				}
 				return null;
 			}
@@ -101,7 +105,7 @@ exports.BattleAbilities = {
 		shortDesc: "1/3 chance a Pokemon making contact with this Pokemon will be poisoned.",
 		onAfterDamage: function (damage, target, source, move) {
 			if (move && move.flags['contact']) {
-				if (this.random(3) < 1) {
+				if (this.randomChance(1, 3)) {
 					source.trySetStatus('psn', target);
 				}
 			}
@@ -134,7 +138,7 @@ exports.BattleAbilities = {
 		shortDesc: "1/3 chance a Pokemon making contact with this Pokemon will be paralyzed.",
 		onAfterDamage: function (damage, target, source, effect) {
 			if (effect && effect.flags['contact']) {
-				if (this.random(3) < 1) {
+				if (this.randomChance(1, 3)) {
 					source.trySetStatus('par', target);
 				}
 			}
@@ -163,7 +167,7 @@ exports.BattleAbilities = {
 		onTryHit: function (target, source, move) {
 			if (target !== source && move.type === 'Electric' && move.id !== 'thunderwave') {
 				if (!this.heal(target.maxhp / 4)) {
-					this.add('-immune', target, '[msg]');
+					this.add('-immune', target, '[msg]', '[from] ability: Volt Absorb');
 				}
 				return null;
 			}
@@ -174,3 +178,5 @@ exports.BattleAbilities = {
 		shortDesc: "This Pokemon is only damaged by supereffective moves and indirect damage.",
 	},
 };
+
+exports.BattleAbilities = BattleAbilities;

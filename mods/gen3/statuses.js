@@ -1,7 +1,11 @@
 'use strict';
 
-exports.BattleStatuses = {
+/**@type {{[k: string]: ModdedEffectData}} */
+let BattleStatuses = {
 	slp: {
+		name: 'slp',
+		id: 'slp',
+		num: 0,
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'slp');
@@ -46,3 +50,5 @@ exports.BattleStatuses = {
 		onModifySpD: function () { },
 	},
 };
+
+exports.BattleStatuses = BattleStatuses;

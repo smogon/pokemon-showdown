@@ -216,7 +216,7 @@ Dnsbl.urlToHost = function (url) {
 
 Dnsbl.datacenters = [];
 Dnsbl.loadDatacenters = async function () {
-	const data = await FS('config/datacenters.csv').readTextIfExists();
+	const data = await FS('config/datacenters.csv').readIfExists();
 	const rows = data.split('\n');
 	let datacenters = [];
 	for (const row of rows) {

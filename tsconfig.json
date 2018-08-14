@@ -10,7 +10,12 @@
         "checkJs": true
     },
     "types": ["node"],
+    "exclude": [
+        "./mods/gen1/pokedex.js"
+    ],
     "include": [
+        "./config/formats.js",
+        "./data/*",
         "./dev-tools/global.d.ts",
         "./dev-tools/globals.ts",
         "./dev-tools/node.d.ts",
@@ -20,16 +25,28 @@
         "./ladders-local.js",
         "./ladders-remote.js",
         "./ladders.js",
+        "./mods/*/*",
         "./monitor.js",
         "./loginserver.js",
         "./rooms.js",
         "./roomlogs.js",
         "./chat-formatter.js",
         "./room-game.js",
+        "./room-battle.js",
         "./process-manager.js",
+        "./team-validator-async.js",
         "./verifier.js",
         "./chat.js",
         "./users.js",
-        "./punishments.js"
+        "./chat-plugins/hangman.js",
+        "./chat-plugins/helptickets.js",
+        "./chat-plugins/mafia.js",
+        "./chat-plugins/mafia-data.js",
+        "./chat-plugins/poll.js",
+        "./chat-plugins/room-faqs.js",
+        "./chat-plugins/thing-of-the-day.js",
+        "./chat-plugins/wifi.js",
+        "./punishments.js",
+        "./tournaments/generator-round-robin.js"
     ]
 }

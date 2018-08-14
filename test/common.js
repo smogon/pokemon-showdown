@@ -2,7 +2,6 @@
 
 const assert = require('assert');
 const Dex = require('./../sim/dex');
-const PRNG = require('./../sim/prng');
 const Sim = require('./../sim');
 
 const cache = new Map();
@@ -95,23 +94,22 @@ class TestTools {
 	 *
 	 * @param {Object} [options]
 	 * @param {Team[]} [teams]
-	 * @param {PRNG} [prng] A pseudo-random number generator. If not provided, a pseudo-random number
-	 * generator will be generated for the user with a seed that is guaranteed to be the same across
-	 * test executions to help with determinism.
 	 * @returns {Sim.Battle} A battle.
 	 */
-	createBattle(options, teams, prng = new PRNG(DEFAULT_SEED)) {
+	createBattle(options, teams) {
 		if (Array.isArray(options)) {
 			teams = options;
 			options = {};
 		}
-		const format = this.getFormat(options || {});
-		const battle = Sim.construct(
-			format.id,
-			undefined,
-			undefined,
-			prng
-		);
+		if (!options) options = {};
+		const format = this.getFormat(options);
+		const battle = new Sim.Battle({
+			formatid: format.id,
+			// If a seed for the pseudo-random number generator is not provided,
+			// a default seed (guaranteed to be the same across test executions)
+			// will be used.
+			seed: options.seed || DEFAULT_SEED,
+		});
 		battle.LEGACY_API_DO_NOT_USE = true;
 		if (teams) {
 			for (let i = 0; i < teams.length; i++) {

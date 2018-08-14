@@ -15,7 +15,7 @@ describe('Weakness Policy', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Lucario", ability: 'justified', moves: ['aurasphere']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Blissey", ability: 'naturalcure', item: 'weaknesspolicy', moves: ['softboiled']}]);
 		const holder = battle.p2.active[0];
-		battle.commitDecisions();
+		battle.makeChoices('move aurasphere', 'move softboiled');
 		assert.false.holdsItem(holder);
 		assert.statStage(holder, 'atk', 2);
 		assert.statStage(holder, 'spa', 2);
@@ -26,7 +26,7 @@ describe('Weakness Policy', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Lucario", ability: 'justified', moves: ['seismictoss']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Blissey", ability: 'naturalcure', item: 'weaknesspolicy', moves: ['softboiled']}]);
 		const holder = battle.p2.active[0];
-		battle.commitDecisions();
+		battle.makeChoices('move seismictoss', 'move softboiled');
 		assert.holdsItem(holder);
 		assert.statStage(holder, 'atk', 0);
 		assert.statStage(holder, 'spa', 0);

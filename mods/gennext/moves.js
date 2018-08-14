@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleMovedex = {
+/**@type {{[k: string]: ModdedMoveData}} */
+let BattleMovedex = {
 	/******************************************************************
 	Perfect accuracy moves:
 	- base power increased to 90
@@ -667,7 +668,7 @@ exports.BattleMovedex = {
 					pokemon.removeVolatile('bidestall');
 				}
 			},
-			onBeforeMove: function (pokemon) {
+			onBeforeMove: function (pokemon, target, move) {
 				if (this.effectData.duration === 1) {
 					if (!this.effectData.totalDamage) {
 						this.add('-end', pokemon, 'Bide');
@@ -676,7 +677,12 @@ exports.BattleMovedex = {
 					}
 					this.add('-end', pokemon, 'Bide');
 					let target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
-					this.moveHit(target, pokemon, 'bide', {damage: this.effectData.totalDamage * 2});
+					/**@type {Move} */
+					// @ts-ignore
+					let moveData = {
+						damage: this.effectData.totalDamage * 2,
+					};
+					this.moveHit(target, pokemon, 'bide', moveData);
 					return false;
 				}
 				this.add('-activate', pokemon, 'Bide');
@@ -774,8 +780,7 @@ exports.BattleMovedex = {
 			};
 			let tmpAtkEVs;
 			let Atk2SpA;
-			if (pokemon.template.speciesid === 'meloettapirouette' && pokemon.formeChange('Meloetta')) {
-				this.add('-formechange', pokemon, 'Meloetta');
+			if (pokemon.template.speciesid === 'meloettapirouette' && pokemon.formeChange('Meloetta', this.effect, false, '[msg]')) {
 				tmpAtkEVs = pokemon.set.evs.atk;
 				pokemon.set.evs.atk = pokemon.set.evs.spa;
 				pokemon.set.evs.spa = tmpAtkEVs;
@@ -785,8 +790,7 @@ exports.BattleMovedex = {
 					atk: Atk2SpA,
 					spa: -Atk2SpA,
 				}, pokemon);
-			} else if (pokemon.formeChange('Meloetta-Pirouette')) {
-				this.add('-formechange', pokemon, 'Meloetta-Pirouette');
+			} else if (pokemon.formeChange('Meloetta-Pirouette', this.effect, false, '[msg]')) {
 				tmpAtkEVs = pokemon.set.evs.atk;
 				pokemon.set.evs.atk = pokemon.set.evs.spa;
 				pokemon.set.evs.spa = tmpAtkEVs;
@@ -880,12 +884,13 @@ exports.BattleMovedex = {
 				onHit: function (target, source) {
 					let stats = [];
 					for (let stat in target.boosts) {
+						// @ts-ignore
 						if (stat !== 'accuracy' && stat !== 'evasion' && stat !== 'atk' && target.boosts[stat] < 6) {
 							stats.push(stat);
 						}
 					}
 					if (stats.length) {
-						let randomStat = stats[this.random(stats.length)];
+						let randomStat = this.sample(stats);
 						let boost = {};
 						boost[randomStat] = 1;
 						this.boost(boost);
@@ -912,12 +917,13 @@ exports.BattleMovedex = {
 				onHit: function (target, source) {
 					let stats = [];
 					for (let stat in target.boosts) {
+						// @ts-ignore
 						if (stat !== 'accuracy' && stat !== 'evasion' && stat !== 'atk' && target.boosts[stat] < 6) {
 							stats.push(stat);
 						}
 					}
 					if (stats.length) {
-						let randomStat = stats[this.random(stats.length)];
+						let randomStat = this.sample(stats);
 						let boost = {};
 						boost[randomStat] = 1;
 						this.boost(boost);
@@ -938,12 +944,13 @@ exports.BattleMovedex = {
 				onHit: function (target, source) {
 					let stats = [];
 					for (let stat in target.boosts) {
+						// @ts-ignore
 						if (stat !== 'accuracy' && stat !== 'evasion' && stat !== 'atk' && target.boosts[stat] < 6) {
 							stats.push(stat);
 						}
 					}
 					if (stats.length) {
-						let randomStat = stats[this.random(stats.length)];
+						let randomStat = this.sample(stats);
 						let boost = {};
 						boost[randomStat] = 1;
 						this.boost(boost);
@@ -1224,6 +1231,7 @@ exports.BattleMovedex = {
 		onModifyMove: function (move) {
 			switch (this.effectiveWeather()) {
 			case 'sunnyday':
+				// @ts-ignore
 				move.secondary.chance = 60;
 				break;
 			}
@@ -1236,6 +1244,7 @@ exports.BattleMovedex = {
 		onModifyMove: function (move) {
 			switch (this.effectiveWeather()) {
 			case 'sunnyday':
+				// @ts-ignore
 				move.secondary.chance = 60;
 				break;
 			}
@@ -2026,7 +2035,7 @@ exports.BattleMovedex = {
 			if (user.illusion) {
 				let illusionMoves = user.illusion.moves.filter(move => this.getMove(move).category !== 'Status');
 				if (!illusionMoves.length) return;
-				move.name = this.getMove(illusionMoves[this.random(illusionMoves.length)]).name;
+				move.name = this.getMove(this.sample(illusionMoves)).name;
 			}
 		},
 		desc: "Has a 40% chance to lower the target's accuracy by 1 stage. If Illusion is active, displays as a random non-Status move in the copied Pokémon's moveset.",
@@ -2086,3 +2095,5 @@ exports.BattleMovedex = {
 		},
 	},
 };
+
+exports.BattleMovedex = BattleMovedex;

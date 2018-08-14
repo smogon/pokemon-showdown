@@ -14,16 +14,15 @@ describe('Electric Terrain', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Florges", ability: 'symbiosis', moves: ['mist', 'electricterrain']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Florges", ability: 'symbiosis', moves: ['mist']}]);
-		battle.choose('p1', 'move 2');
-		battle.commitDecisions();
+		battle.makeChoices('move electricterrain', 'move mist');
 		assert.ok(battle.isTerrain('electricterrain'));
-		battle.commitDecisions();
+		battle.makeChoices('move electricterrain', 'move mist');
 		assert.ok(battle.isTerrain('electricterrain'));
-		battle.commitDecisions();
+		battle.makeChoices('move electricterrain', 'move mist');
 		assert.ok(battle.isTerrain('electricterrain'));
-		battle.commitDecisions();
+		battle.makeChoices('move electricterrain', 'move mist');
 		assert.ok(battle.isTerrain('electricterrain'));
-		battle.commitDecisions();
+		battle.makeChoices('move electricterrain', 'move mist');
 		assert.ok(battle.isTerrain(''));
 	});
 
@@ -31,7 +30,7 @@ describe('Electric Terrain', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Jolteon", ability: 'voltabsorb', moves: ['electricterrain']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Thundurus", ability: 'defiant', moves: ['thunderwave']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move electricterrain', 'move thunderwave');
 		let basePower;
 		let move = Dex.getMove('thunderbolt');
 		basePower = battle.runEvent('BasePower', battle.p1.active[0], battle.p2.active[0], move, move.basePower, true);
@@ -44,9 +43,8 @@ describe('Electric Terrain', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Jolteon", ability: 'voltabsorb', moves: ['electricterrain', 'spore']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Abra", ability: 'magicguard', moves: ['telekinesis', 'spore']}]);
-		battle.commitDecisions();
-		battle.choose('p1', 'move 2');
-		battle.choose('p2', 'move 2');
+		battle.makeChoices('move electricterrain', 'move thunderwave');
+		battle.makeChoices('move spore', 'move spore');
 		assert.strictEqual(battle.p1.active[0].status, 'slp');
 		assert.strictEqual(battle.p2.active[0].status, '');
 	});
@@ -55,7 +53,7 @@ describe('Electric Terrain', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Jolteon", ability: 'voltabsorb', moves: ['sleeptalk', 'electricterrain']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Whimsicott", ability: 'prankster', moves: ['spore']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move sleeptalk', 'move spore');
 		assert.strictEqual(battle.p1.active[0].status, 'slp');
 	});
 
@@ -63,9 +61,8 @@ describe('Electric Terrain', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Jolteon", ability: 'voltabsorb', moves: ['electricterrain', 'yawn']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Sableye", ability: 'prankster', moves: ['yawn']}]);
-		battle.commitDecisions();
-		battle.choose('p1', 'move 2');
-		battle.commitDecisions();
+		battle.makeChoices('move electricterrain', 'move yawn');
+		battle.makeChoices('move yawn', 'move yawn');
 		assert.strictEqual(battle.p1.active[0].status, '');
 		assert.ok(!battle.p2.active[0].volatiles['yawn']);
 	});
@@ -74,9 +71,8 @@ describe('Electric Terrain', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Jolteon", ability: 'shellarmor', moves: ['electricterrain', 'rest']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Pidgeot", ability: 'keeneye', moves: ['doubleedge', 'rest']}]);
-		battle.commitDecisions();
-		battle.choose('p1', 'move 2');
-		battle.choose('p2', 'move 2');
+		battle.makeChoices('move electricterrain', 'move doubleedge');
+		battle.makeChoices('move rest', 'move rest');
 		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
@@ -85,9 +81,8 @@ describe('Electric Terrain', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'owntempo', moves: ['yawn', 'skydrop']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Sableye", ability: 'prankster', moves: ['yawn', 'electricterrain']}]);
-		battle.commitDecisions();
-		battle.choose('p1', 'move 2');
-		battle.choose('p2', 'move 2');
+		battle.makeChoices('move yawn', 'move yawn');
+		battle.makeChoices('move skydrop', 'move electricterrain');
 		assert.strictEqual(battle.p1.active[0].status, 'slp');
 		assert.strictEqual(battle.p2.active[0].status, 'slp');
 	});
@@ -96,7 +91,7 @@ describe('Electric Terrain', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Jolteon", ability: 'voltabsorb', moves: ['electricterrain']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Shuckle", ability: 'sturdy', moves: ['naturepower']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move electricterrain', 'move naturepower');
 		let resultMove = toId(battle.log[battle.lastMoveLine].split('|')[3]);
 		assert.strictEqual(resultMove, 'thunderbolt');
 	});

@@ -14,7 +14,7 @@ describe('Thunder Wave', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Jolteon", ability: 'quickfeet', moves: ['thunderwave']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Vaporeon", ability: 'hydration', moves: ['aquaring']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move thunderwave', 'move aquaring');
 		assert.strictEqual(battle.p2.active[0].status, 'par');
 	});
 
@@ -22,7 +22,7 @@ describe('Thunder Wave', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Jolteon", ability: 'quickfeet', moves: ['thunderwave']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Hippowdon", ability: 'sandforce', moves: ['slackoff']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move thunderwave', 'move slackoff');
 		assert.strictEqual(battle.p2.active[0].status, '');
 	});
 });

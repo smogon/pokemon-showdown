@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleAbilities = {
+/**@type {{[k: string]: ModdedAbilityData}} */
+let BattleAbilities = {
 	"swiftswim": {
 		inherit: true,
 		onModifySpe: function (spe, pokemon) {
@@ -42,7 +43,7 @@ exports.BattleAbilities = {
 		onModifyMove: function (move) {
 			if (move.weather) {
 				let weather = move.weather;
-				move.weather = null;
+				move.weather = '';
 				move.onHit = function (target, source) {
 					this.setWeather(weather, source, this.getAbility('forecast'));
 					this.weatherData.duration = 0;
@@ -124,7 +125,7 @@ exports.BattleAbilities = {
 		},
 		onAfterDamage: function (damage, target, source, move) {
 			if (move && move.flags['contact'] && this.isWeather('hail')) {
-				if (this.random(10) < 3) {
+				if (this.randomChance(3, 10)) {
 					source.trySetStatus('frz', target);
 				}
 			}
@@ -170,8 +171,10 @@ exports.BattleAbilities = {
 		inherit: true,
 		onModifyMove: function (move) {
 			if (move.id === 'sunnyday') {
+				/**@type {string} */
+				// @ts-ignore
 				let weather = move.weather;
-				move.weather = null;
+				move.weather = '';
 				move.onHit = function (target, source) {
 					this.setWeather(weather, source, this.getAbility('flowergift'));
 					this.weatherData.duration = 0;
@@ -294,7 +297,9 @@ exports.BattleAbilities = {
 		inherit: true,
 		onBoost: function (boost, target, source) {
 			for (let i in boost) {
+				// @ts-ignore
 				if (boost[i] < 0) {
+					// @ts-ignore
 					delete boost[i];
 					this.add("-message", target.name + "'s stats were not lowered! (placeholder)");
 				}
@@ -306,7 +311,9 @@ exports.BattleAbilities = {
 		inherit: true,
 		onBoost: function (boost, target, source) {
 			for (let i in boost) {
+				// @ts-ignore
 				if (boost[i] < 0) {
+					// @ts-ignore
 					delete boost[i];
 					this.add("-message", target.name + "'s stats were not lowered! (placeholder)");
 				}
@@ -504,6 +511,7 @@ exports.BattleAbilities = {
 			if (!pokemon.gluttonyFlag && !pokemon.item && this.getItem(pokemon.lastItem).isBerry) {
 				pokemon.gluttonyFlag = true;
 				pokemon.setItem(pokemon.lastItem);
+				pokemon.lastItem = '';
 				this.add("-item", pokemon, pokemon.item, '[from] ability: Gluttony');
 			}
 		},
@@ -679,3 +687,5 @@ exports.BattleAbilities = {
 		onFoeTrapPokemon: function (pokemon) {},
 	},
 };
+
+exports.BattleAbilities = BattleAbilities;

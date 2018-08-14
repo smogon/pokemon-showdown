@@ -22,7 +22,7 @@ describe('Battle Armor', function () {
 				assert.ok(!move.crit);
 			}
 		});
-		battle.commitDecisions();
+		battle.makeChoices('move quickattack', 'move frostbreath');
 		assert.ok(successfulEvent);
 	});
 
@@ -31,7 +31,7 @@ describe('Battle Armor', function () {
 			[{species: 'Slowbro', ability: 'battlearmor', moves: ['quickattack']}],
 			[{species: 'Cryogonal', ability: 'moldbreaker', item: 'zoomlens', moves: ['frostbreath']}],
 		]);
-		battle.commitDecisions(); // Team Preview
+		battle.makeChoices('move quickattack', 'move frostbreath');
 		let successfulEvent = false;
 		battle.onEvent('ModifyDamage', battle.getFormat(), function (damage, attacker, defender, move) {
 			if (move.id === 'frostbreath') {
@@ -39,7 +39,7 @@ describe('Battle Armor', function () {
 				assert.ok(move.crit);
 			}
 		});
-		battle.commitDecisions();
+		battle.makeChoices('move quickattack', 'move frostbreath');
 		assert.ok(successfulEvent);
 	});
 });

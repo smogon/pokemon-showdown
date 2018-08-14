@@ -19,11 +19,11 @@ describe('Leftovers [Gen 2]', function () {
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Miltank", moves: ['seismictoss']},
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move healbell', 'move seismictoss');
 		assert.strictEqual(p1.active[0].hp, 590);
 
-		p1.chooseSwitch(2).foe.chooseDefault();
-		p1.chooseSwitch(2);
+		battle.makeChoices('switch 2', 'move seismictoss');
+		battle.makeChoices('switch 2', 'move seismictoss');
 		assert.strictEqual(p1.active[0].hp, 630);
 	});
 });

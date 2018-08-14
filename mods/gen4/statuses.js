@@ -1,16 +1,20 @@
 'use strict';
 
-exports.BattleStatuses = {
+/**@type {{[k: string]: ModdedEffectData}} */
+let BattleStatuses = {
 	par: {
 		inherit: true,
 		onBeforeMove: function (pokemon) {
-			if (!pokemon.hasAbility('magicguard') && this.random(4) === 0) {
+			if (!pokemon.hasAbility('magicguard') && this.randomChance(1, 4)) {
 				this.add('cant', pokemon, 'par');
 				return false;
 			}
 		},
 	},
 	slp: {
+		name: 'slp',
+		id: 'slp',
+		num: 0,
 		effectType: 'Status',
 		onStart: function (target) {
 			this.add('-status', target, 'slp');
@@ -37,7 +41,7 @@ exports.BattleStatuses = {
 	frz: {
 		inherit: true,
 		onBeforeMove: function (pokemon, target, move) {
-			if (this.random(5) === 0) {
+			if (this.randomChance(1, 5)) {
 				pokemon.cureStatus();
 				return;
 			}
@@ -68,3 +72,5 @@ exports.BattleStatuses = {
 		counterMax: 8,
 	},
 };
+
+exports.BattleStatuses = BattleStatuses;

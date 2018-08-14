@@ -97,6 +97,10 @@ class Ladder extends LadderStore {
 			connection.popup(message);
 			return null;
 		}
+		if (Punishments.isBattleBanned(user)) {
+			connection.popup(`You are barred from starting any new games until your battle ban expires.`);
+			return null;
+		}
 		let gameCount = user.games.size;
 		if (Monitor.countConcurrentBattle(gameCount, connection)) {
 			return null;
@@ -433,6 +437,7 @@ class Ladder extends LadderStore {
 		const format = Dex.getFormat(this.formatid);
 		if (!format.searchShow) {
 			connection.popup(`Error: Your format ${format.id} is not ladderable.`);
+			return;
 		}
 		let oldUserid = user.userid;
 		const search = await this.prepBattle(connection, null, format.rated !== false);

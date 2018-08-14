@@ -3,7 +3,13 @@
 const RandomGen4Teams = require('../../mods/gen4/random-teams');
 
 class RandomGen3Teams extends RandomGen4Teams {
-	randomSet(template, slot, teamDetails) {
+	/**
+	 * @param {string | Template} template
+	 * @param {number} [slot]
+	 * @param {RandomTeamsTypes["TeamDetails"]} [teamDetails]
+	 * @return {RandomTeamsTypes["RandomSet"]}
+	 */
+	randomSet(template, slot, teamDetails = {}) {
 		if (slot === undefined) slot = 1;
 		let baseTemplate = (template = this.getTemplate(template));
 		let species = template.species;
@@ -17,7 +23,8 @@ class RandomGen3Teams extends RandomGen4Teams {
 
 		if (template.battleOnly) species = template.baseSpecies;
 
-		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : Object.keys(template.learnset));
+		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : template.learnset ? Object.keys(template.learnset) : []);
+		/**@type {string[]} */
 		let moves = [];
 		let ability = '';
 		let item = '';
@@ -45,6 +52,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 		let hasAbility = {};
 		hasAbility[template.abilities[0]] = true;
 		if (template.abilities[1]) {
+			// @ts-ignore TypeScript bug
 			hasAbility[template.abilities[1]] = true;
 		}
 		let availableHP = 0;
@@ -75,7 +83,9 @@ class RandomGen3Teams extends RandomGen4Teams {
 			'Smeargle', 'Shuckle',
 		];
 
-		let hasMove, counter;
+		/**@type {{[k: string]: boolean}} */
+		let hasMove = {};
+		let counter;
 
 		do {
 			// Keep track of all moves we have:
@@ -386,7 +396,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 							}
 						}
 						if (rejectableMoves.length) {
-							moves.splice(rejectableMoves[this.random(rejectableMoves.length)], 1);
+							moves.splice(this.sample(rejectableMoves), 1);
 						}
 					}
 				}
@@ -430,9 +440,9 @@ class RandomGen3Teams extends RandomGen4Teams {
 		if (ability0.gen !== 3) ability = ability1.name;
 		if (ability0.gen === 3 && ability1.gen === 3) {
 			if (ability0.rating <= ability1.rating) {
-				if (this.random(2)) ability = ability1.name;
+				if (this.randomChance(1, 2)) ability = ability1.name;
 			} else if (ability0.rating - 0.6 <= ability1.rating) {
-				if (!this.random(3)) ability = ability1.name;
+				if (this.randomChance(1, 3)) ability = ability1.name;
 			}
 
 			let rejectAbility = false;
@@ -488,7 +498,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 
 		item = 'Leftovers';
 		if (template.requiredItems) {
-			item = template.requiredItems[this.random(template.requiredItems.length)];
+			item = this.sample(template.requiredItems);
 
 		// First, the extra high-priority items
 		} else if (template.species === 'Farfetch\'d') {
@@ -512,15 +522,15 @@ class RandomGen3Teams extends RandomGen4Teams {
 		} else if (hasMove['leechseed']) {
 			item = 'Leftovers';
 		} else if (hasMove['endeavor'] || hasMove['flail'] || hasMove['reversal'] || hasMove['endure'] ||
-			hasMove['substitute'] && counter.Status < 3 && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 250 && this.random(2)) {
+			hasMove['substitute'] && counter.Status < 3 && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 250 && this.randomChance(1, 2)) {
 			if (template.baseStats.spe <= 90 && !counter['speedsetup'] && !hasMove['focuspunch']) {
 				item = 'Salac Berry';
-			} else if (counter.Physical > counter.Special || counter.Physical === counter.Special && this.random(2)) {
+			} else if (counter.Physical > counter.Special || counter.Physical === counter.Special && this.randomChance(1, 2)) {
 				item = 'Liechi Berry';
 			} else {
 				item = 'Petaya Berry';
 			}
-		} else if ((counter.Physical >= 4 || counter.Physical >= 3 && counter.Special === 1 && this.random(2)) && !(hasMove['bodyslam'] && hasAbility['Serene Grace']) && !hasMove['fakeout'] && !hasMove['rapidspin']) {
+		} else if ((counter.Physical >= 4 || counter.Physical >= 3 && counter.Special === 1 && this.randomChance(1, 2)) && !(hasMove['bodyslam'] && hasAbility['Serene Grace']) && !hasMove['fakeout'] && !hasMove['rapidspin']) {
 			item = 'Choice Band';
 		} else if (hasMove['curse'] || hasMove['protect'] || hasMove['sleeptalk'] || hasMove['substitute']) {
 			item = 'Leftovers';
@@ -533,9 +543,9 @@ class RandomGen3Teams extends RandomGen4Teams {
 			LC: 87,
 			NFE: 85,
 			NU: 83,
-			BL2: 81,
+			NUBL: 81,
 			UU: 79,
-			BL: 77,
+			UUBL: 77,
 			OU: 75,
 			Uber: 71,
 		};
@@ -568,16 +578,18 @@ class RandomGen3Teams extends RandomGen4Teams {
 		return {
 			name: template.baseSpecies,
 			species: species,
+			gender: template.gender,
 			moves: moves,
 			ability: ability,
 			evs: evs,
 			ivs: ivs,
 			item: item,
 			level: level,
-			shiny: !this.random(1024),
+			shiny: this.randomChance(1, 1024),
 		};
 	}
-	randomTeam(side) {
+
+	randomTeam() {
 		let pokemon = [];
 
 		let allowedNFE = ['Scyther', 'Vigoroth'];
@@ -604,6 +616,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 		let baseFormes = {};
 		let uberCount = 0;
 		let nuCount = 0;
+		/**@type {RandomTeamsTypes["TeamDetails"]} */
 		let teamDetails = {};
 
 		while (pokemonPool.length && pokemon.length < 6) {
@@ -620,20 +633,20 @@ class RandomGen3Teams extends RandomGen4Teams {
 			switch (tier) {
 			case 'Uber':
 				// Ubers are limited to 2 but have a 20% chance of being added anyway.
-				if (uberCount > 1 && this.random(5) >= 1) continue;
+				if (uberCount > 1 && this.randomChance(4, 5)) continue;
 				break;
 			case 'NU':
 				// NUs are limited to 2 but have a 20% chance of being added anyway.
-				if (nuCount > 1 && this.random(5) >= 1) continue;
+				if (nuCount > 1 && this.randomChance(4, 5)) continue;
 			}
 
 			// Adjust rate for castform
-			if (template.baseSpecies === 'Castform' && this.random(4) >= 1) continue;
+			if (template.baseSpecies === 'Castform' && this.randomChance(3, 4)) continue;
 
 			// Limit 2 of any type
 			let skip = false;
 			for (const type of template.types) {
-				if (typeCount[type] > 1 && this.random(5) >= 1) {
+				if (typeCount[type] > 1 && this.randomChance(4, 5)) {
 					skip = true;
 					break;
 				}

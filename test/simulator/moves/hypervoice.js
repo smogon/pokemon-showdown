@@ -14,9 +14,8 @@ describe('Hyper Voice', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Deoxys-Attack", ability: 'victorystar', item: 'laggingtail', moves: ['splash', 'hypervoice']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest']}]);
-		battle.commitDecisions();
-		battle.choose('p1', 'move 2');
-		battle.choose('p2', 'move 2');
+		battle.makeChoices('move splash', 'move substitute');
+		battle.makeChoices('move hypervoice', 'move rest');
 		assert.strictEqual(battle.p2.active[0].item, '');
 	});
 });
@@ -31,9 +30,8 @@ describe('Hyper Voice [Gen 5]', function () {
 			[{species: "Deoxys-Attack", ability: 'victorystar', item: 'laggingtail', moves: ['splash', 'hypervoice']}],
 			[{species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest']}],
 		]);
-		battle.commitDecisions();
-		battle.choose('p1', 'move 2');
-		battle.choose('p2', 'move 2');
+		battle.makeChoices('move splash', 'move substitute');
+		battle.makeChoices('move hypervoice', 'move rest');
 		assert.strictEqual(battle.p2.active[0].item, 'focussash');
 	});
 });

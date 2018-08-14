@@ -54,7 +54,6 @@ if (('Config' in global) &&
 	Config.loglevel = 2;
 }
 
-// @ts-ignore
 const Monitor = module.exports = {
 	/*********************************************************
 	 * Logging
@@ -236,9 +235,11 @@ const Monitor = module.exports = {
 	 */
 	countTickets(ip) {
 		let count = this.tickets.increment(ip, 60 * 60 * 1000)[0];
-		if (Punishments.sharedIps.has(ip) && count >= 50) return true;
-		if (count >= 5) return true;
-		return false;
+		if (Punishments.sharedIps.has(ip)) {
+			return count >= 20;
+		} else {
+			return count >= 5;
+		}
 	},
 
 	/**
@@ -249,16 +250,11 @@ const Monitor = module.exports = {
 	 */
 	countNetworkUse(size) {
 		if (!Config.emergency || typeof this.activeIp !== 'string') return;
-		// @ts-ignore
 		if (this.activeIp in this.networkUse) {
-			// @ts-ignore
 			this.networkUse[this.activeIp] += size;
-			// @ts-ignore
 			this.networkCount[this.activeIp]++;
 		} else {
-			// @ts-ignore
 			this.networkUse[this.activeIp] = size;
-			// @ts-ignore
 			this.networkCount[this.activeIp] = 1;
 		}
 	},

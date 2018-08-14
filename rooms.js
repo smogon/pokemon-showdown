@@ -17,6 +17,7 @@ const REPORT_USER_STATS_INTERVAL = 10 * 60 * 1000;
 
 const CRASH_REPORT_THROTTLE = 60 * 60 * 1000;
 
+/** @type {null} */
 const RETRY_AFTER_LOGIN = null;
 
 const FS = require('./lib/fs');
@@ -75,6 +76,8 @@ class BasicRoom {
 		this.muteTimer = null;
 
 		this.lastUpdate = 0;
+		this.lastBroadcast = '';
+		this.lastBroadcastTime = 0;
 
 		// room settings
 
@@ -103,10 +106,12 @@ class BasicRoom {
 		this.filterStretching = false;
 		this.filterEmojis = false;
 		this.filterCaps = false;
+		this.mafiaEnabled = false;
 		/** @type {Set<string>?} */
 		this.privacySetter = null;
 		/** @type {Map<string, ChatRoom>?} */
 		this.subRooms = null;
+		this.gameNumber = 0;
 	}
 
 	/**
@@ -347,8 +352,7 @@ class BasicRoom {
 			autoconfirmed = user.autoconfirmed;
 		}
 
-		for (let i = 0; i < this.muteQueue.length; i++) {
-			let entry = this.muteQueue[i];
+		for (const [i, entry] of this.muteQueue.entries()) {
 			if (entry.userid === userid ||
 				(user && entry.guestNum === user.guestNum) ||
 				(autoconfirmed && entry.autoconfirmed === autoconfirmed)) {
@@ -390,7 +394,10 @@ class GlobalRoom extends BasicRoom {
 		/** @type {false} */
 		this.active = false;
 		/** @type {null} */
+		// @ts-ignore TypeScript bug: ignoring null type
 		this.chatRoomData = null;
+		/**@type {boolean | 'pre' | 'ddos'} */
+		this.lockdown = false;
 
 		this.battleCount = 0;
 		this.lastReportedCrash = 0;
@@ -428,14 +435,14 @@ class GlobalRoom extends BasicRoom {
 		 * @type {string[]}
 		 */
 		this.staffAutojoinList = [];
-		for (let i = 0; i < this.chatRoomDataList.length; i++) {
-			if (!this.chatRoomDataList[i] || !this.chatRoomDataList[i].title) {
+		for (const [i, chatRoomData] of this.chatRoomDataList.entries()) {
+			if (!chatRoomData || !chatRoomData.title) {
 				Monitor.warn(`ERROR: Room number ${i} has no data and could not be loaded.`);
 				continue;
 			}
-			let id = toId(this.chatRoomDataList[i].title);
+			let id = toId(chatRoomData.title);
 			Monitor.notice("NEW CHATROOM: " + id);
-			let room = Rooms.createChatRoom(id, this.chatRoomDataList[i].title, this.chatRoomDataList[i]);
+			let room = Rooms.createChatRoom(id, chatRoomData.title, chatRoomData);
 			if (room.aliases) {
 				for (const alias of room.aliases) {
 					Rooms.aliases.set(alias, id);
@@ -453,7 +460,7 @@ class GlobalRoom extends BasicRoom {
 		} else {
 			// Prevent there from being two possible hidden classes an instance
 			// of GlobalRoom can have.
-			this.ladderIpLog = new (require('stream')).Writable();
+			this.ladderIpLog = new (require('./lib/streams')).WriteStream({write() {}});
 		}
 
 		let lastBattle;
@@ -776,12 +783,12 @@ class GlobalRoom extends BasicRoom {
 	}
 	/**
 	 * @param {User} user
-	 * @param {Connection} connection
+	 * @param {Connection} [connection]
 	 */
 	checkAutojoin(user, connection) {
 		if (!user.named) return;
-		for (let i = 0; i < this.staffAutojoinList.length; i++) {
-			let room = /** @type {ChatRoom} */ (Rooms(this.staffAutojoinList[i]));
+		for (let [i, staffAutojoin] of this.staffAutojoinList.entries()) {
+			let room = /** @type {ChatRoom} */ (Rooms(staffAutojoin));
 			if (!room) {
 				this.staffAutojoinList.splice(i, 1);
 				i--;
@@ -860,6 +867,7 @@ class GlobalRoom extends BasicRoom {
 	startLockdown(err, slow = false) {
 		if (this.lockdown && err) return;
 		let devRoom = Rooms('development');
+		// @ts-ignore
 		const stack = (err ? Chat.escapeHTML(err.stack).split(`\n`).slice(0, 2).join(`<br />`) : ``);
 		for (const [id, curRoom] of Rooms.rooms) {
 			if (id === 'global') continue;
@@ -926,7 +934,7 @@ class GlobalRoom extends BasicRoom {
 	 */
 	notifyRooms(rooms, message) {
 		if (!rooms || !message) return;
-		for (let roomid of rooms) {
+		for (const roomid of rooms) {
 			let curRoom = Rooms(roomid);
 			if (curRoom) curRoom.add(message).update();
 		}
@@ -941,6 +949,7 @@ class GlobalRoom extends BasicRoom {
 			return;
 		}
 		this.lastReportedCrash = time;
+		// @ts-ignore
 		const stack = (err ? Chat.escapeHTML(err.stack).split(`\n`).slice(0, 2).join(`<br />`) : ``);
 		const crashMessage = `|html|<div class="broadcast-red"><b>The server has crashed:</b> ${stack}</div>`;
 		const devRoom = Rooms('development');
@@ -1020,6 +1029,8 @@ class BasicChatRoom extends BasicRoom {
 		// TypeScript bug: subclass null
 		this.muteTimer = /** @type {NodeJS.Timer?} */ (null);
 
+		/** @type {NodeJS.Timer?} */
+		this.logUserStatsInterval = null;
 		if (Config.logchat) {
 			this.roomlog('NEW CHATROOM: ' + this.id);
 			if (Config.loguserstats) {
@@ -1064,7 +1075,7 @@ class BasicChatRoom extends BasicRoom {
 		let total = 0;
 		let guests = 0;
 		let groups = {};
-		for (let group of Config.groupsranking) {
+		for (const group of Config.groupsranking) {
 			groups[group] = 0;
 		}
 		for (let i in this.users) {
@@ -1195,6 +1206,7 @@ class BasicChatRoom extends BasicRoom {
 		this.users[user.userid] = user;
 		this.userCount++;
 
+		if (this.poll) this.poll.onConnect(user, connection);
 		if (this.game && this.game.onJoin) this.game.onJoin(user, connection);
 		return true;
 	}
@@ -1263,7 +1275,7 @@ class BasicChatRoom extends BasicRoom {
 			// resolve state of the tournament;
 			// @ts-ignore
 			if (!this.battle.ended) this.tour.onBattleWin(this, '');
-			this.tour = null;
+			this.tour = /** @type {any} */ (null);
 		}
 
 		// remove references to ourself
@@ -1271,6 +1283,11 @@ class BasicChatRoom extends BasicRoom {
 			// @ts-ignore
 			this.users[i].leaveRoom(this, null, true);
 			delete this.users[i];
+		}
+
+		if (this.parent && this.parent.subRooms) {
+			this.parent.subRooms.delete(this.id);
+			if (!this.parent.subRooms.size) this.parent.subRooms = null;
 		}
 
 		Rooms.global.deregisterChatRoom(this.id);
@@ -1319,6 +1336,8 @@ class ChatRoom extends BasicChatRoom {
 	// TypeScript happy
 	constructor() {
 		super('');
+		/** @type {null} */
+		// @ts-ignore TypeScript bug: ignoring null type
 		this.battle = null;
 		this.active = false;
 		/** @type {'chat'} */
@@ -1354,8 +1373,8 @@ class GameRoom extends BasicChatRoom {
 		this.tour = options.tour || null;
 		this.parent = options.parent || (this.tour && this.tour.room) || null;
 
-		this.p1 = null;
-		this.p2 = null;
+		this.p1 = options.p1 || null;
+		this.p2 = options.p2 || null;
 
 		/**
 		 * The lower player's rating, for searching purposes.
@@ -1449,7 +1468,7 @@ class GameRoom extends BasicChatRoom {
 }
 
 /**
- * @param {string | Room | undefined} roomid
+ * @param {string | Room} [roomid]
  * @return {Room}
  */
 function getRoom(roomid) {
@@ -1460,9 +1479,6 @@ function getRoom(roomid) {
 }
 
 /** @typedef {GlobalRoom | GameRoom | ChatRoom} Room */
-
-// workaround to stop TypeScript from checking room-battle
-let roomBattleLoc = './room-battle';
 
 let Rooms = Object.assign(getRoom, {
 	/**
@@ -1512,17 +1528,15 @@ let Rooms = Object.assign(getRoom, {
 	 * @param {AnyObject} options
 	 */
 	createBattle(formatid, options) {
-		const p1 = options.p1;
-		const p2 = options.p2;
-		if (p1 === p2) throw new Error(`Players can't battle themselves`);
-		if (!p1) throw new Error(`p1 required`);
-		if (!p2) throw new Error(`p2 required`);
-		Ladders.cancelSearches(p1);
-		Ladders.cancelSearches(p2);
+		const p1 = /** @type {User?} */ (options.p1);
+		const p2 = /** @type {User?} */ (options.p2);
+		if (p1 && p1 === p2) throw new Error(`Players can't battle themselves`);
+		if (p1) Ladders.cancelSearches(p1);
+		if (p2) Ladders.cancelSearches(p2);
 
 		if (Rooms.global.lockdown === true) {
-			p1.popup("The server is restarting. Battles will be available again in a few minutes.");
-			p2.popup("The server is restarting. Battles will be available again in a few minutes.");
+			if (p1) p1.popup("The server is restarting. Battles will be available again in a few minutes.");
+			if (p2) p2.popup("The server is restarting. Battles will be available again in a few minutes.");
 			return;
 		}
 
@@ -1532,19 +1546,18 @@ let Rooms = Object.assign(getRoom, {
 		// options.rated < 0 or falsy means "unrated", and will be converted to 0 here
 		// options.rated === true is converted to 1 (used in tests sometimes)
 		options.rated = Math.max(+options.rated || 0, 0);
-		const room = Rooms.createGameRoom(roomid, "" + p1.name + " vs. " + p2.name, options);
+		const p1name = p1 ? p1.name : "Player 1";
+		const p2name = p2 ? p2.name : "Player 2";
+		const room = Rooms.createGameRoom(roomid, "" + p1name + " vs. " + p2name, options);
 		// @ts-ignore TODO: make RoomBattle a subclass of RoomGame
-		const game = room.game = new Rooms.RoomBattle(room, formatid, options);
-		room.p1 = p1;
-		room.p2 = p2;
-		room.battle = room.game;
+		room.game = new Rooms.RoomBattle(room, formatid, options);
 
 		let inviteOnly = (options.inviteOnly || []);
-		if (p1.inviteOnlyNextBattle) {
+		if (p1 && p1.inviteOnlyNextBattle) {
 			inviteOnly.push(p1.userid);
 			p1.inviteOnlyNextBattle = false;
 		}
-		if (p2.inviteOnlyNextBattle) {
+		if (p2 && p2.inviteOnlyNextBattle) {
 			inviteOnly.push(p2.userid);
 			p2.inviteOnlyNextBattle = false;
 		}
@@ -1556,21 +1569,18 @@ let Rooms = Object.assign(getRoom, {
 			room.add(`|raw|<div class="broadcast-red"><strong>This battle is invite-only!</strong><br />Users must be rank + or invited with <code>/invite</code> to join</div>`);
 		}
 
-		game.addPlayer(p1, options.p1team);
-		game.addPlayer(p2, options.p2team);
-		p1.joinRoom(room);
-		p2.joinRoom(room);
-		Monitor.countBattle(p1.latestIp, p1.name);
-		Monitor.countBattle(p2.latestIp, p2.name);
-		Rooms.global.onCreateBattleRoom(p1, p2, room, options);
+		if (p1) p1.joinRoom(room);
+		if (p2) p2.joinRoom(room);
+		if (p1) Monitor.countBattle(p1.latestIp, p1.name);
+		if (p2) Monitor.countBattle(p2.latestIp, p2.name);
 		return room;
 	},
 
 	battleModlogStream: FS('logs/modlog/modlog_battle.txt').createAppendStream(),
 	groupchatModlogStream: FS('logs/modlog/modlog_groupchat.txt').createAppendStream(),
 
-	/** @type {GlobalRoom} */
-	global: /** @type {any} */ (null),
+	// @ts-ignore
+	global: (/** @type {GlobalRoom} */ (null)),
 	/** @type {?ChatRoom} */
 	lobby: null,
 
@@ -1587,17 +1597,19 @@ let Rooms = Object.assign(getRoom, {
 
 	Roomlogs: Roomlogs,
 
-	RoomBattle: require(roomBattleLoc).RoomBattle,
-	RoomBattlePlayer: require(roomBattleLoc).RoomBattlePlayer,
-	SimulatorManager: require(roomBattleLoc).SimulatorManager,
-	SimulatorProcess: require(roomBattleLoc).SimulatorProcess,
+	RoomBattle: require('./room-battle').RoomBattle,
+	RoomBattlePlayer: require('./room-battle').RoomBattlePlayer,
+	PM: require('./room-battle').PM,
 });
 
 // initialize
 
 Monitor.notice("NEW GLOBAL: global");
+// @ts-ignore
 Rooms.global = new GlobalRoom('global');
 
+// @ts-ignore
 Rooms.rooms.set('global', Rooms.global);
 
+// @ts-ignore
 module.exports = Rooms;

@@ -27,12 +27,12 @@ describe('Plates', function () {
 					{species: 'Abra', ability: 'synchronize', moves: ['thief', 'trick', 'knockoff']},
 				]);
 				const holder = battle.p1.active[0];
-				battle.commitDecisions(); // Fennekin's Magician
+				battle.makeChoices('move recover', 'move mysticalfire'); // Fennekin's Magician
 				assert.holdsItem(holder);
-				battle.p2.chooseSwitch(2).foe.chooseDefault();
+				battle.makeChoices('move recover', 'switch 2');
 
 				for (let i = 1; i <= 3; i++) {
-					battle.p2.chooseMove(i).foe.chooseDefault();
+					battle.makeChoices('move recover', 'move ' + i);
 					assert.holdsItem(holder);
 				}
 			});
@@ -41,7 +41,7 @@ describe('Plates', function () {
 				battle = common.createBattle();
 				battle.join('p1', 'Guest 1', 1, [{species: 'Mawile', ability: 'intimidate', moves: ['swordsdance']}]);
 				battle.join('p2', 'Guest 2', 1, [{species: 'Arceus', ability: 'frisk', item: id, moves: ['fling']}]);
-				battle.commitDecisions();
+				battle.makeChoices('move swordsdance', 'move fling');
 				assert.holdsItem(battle.p2.active[0]);
 			});
 
@@ -49,7 +49,7 @@ describe('Plates', function () {
 				battle = common.createBattle();
 				battle.join('p1', 'Guest 1', 1, [{species: 'Arceus', ability: 'multitype', moves: ['thief']}]);
 				battle.join('p2', 'Guest 2', 1, [{species: 'Azumarill', ability: 'thickfat', item: id, moves: ['bestow']}]);
-				battle.commitDecisions();
+				battle.makeChoices('move thief', 'move bestow');
 				assert.false.holdsItem(battle.p1.active[0]);
 			});
 
@@ -57,7 +57,7 @@ describe('Plates', function () {
 				battle = common.createBattle();
 				battle.join('p1', 'Guest 1', 1, [{species: 'Arceus', ability: 'multitype', moves: ['knockoff']}]);
 				battle.join('p2', 'Guest 2', 1, [{species: 'Azumarill', ability: 'thickfat', item: id, moves: ['bulkup']}]);
-				battle.commitDecisions();
+				battle.makeChoices('move knockoff', 'move bulkup');
 				assert.false.holdsItem(battle.p2.active[0]);
 			});
 		});

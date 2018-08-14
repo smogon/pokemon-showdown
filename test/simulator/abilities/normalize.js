@@ -14,7 +14,7 @@ describe('Normalize', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Delcatty", ability: 'normalize', moves: ['grassknot']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Latias", ability: 'colorchange', moves: ['endure']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move grassknot', 'move endure');
 		assert.ok(battle.p2.active[0].hasType('Normal'));
 	});
 
@@ -22,7 +22,7 @@ describe('Normalize', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Delcatty", ability: 'normalize', moves: ['hiddenpowerfighting']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Latias", ability: 'colorchange', moves: ['endure']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move hiddenpowerfighting', 'move endure');
 		assert.ok(battle.p2.active[0].hasType('Fighting'));
 	});
 
@@ -30,7 +30,7 @@ describe('Normalize', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Delcatty", ability: 'normalize', item: 'dousedrive', moves: ['technoblast']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Latias", ability: 'colorchange', moves: ['endure']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move technoblash', 'move endure');
 		assert.ok(battle.p2.active[0].hasType('Water'));
 	});
 
@@ -38,7 +38,7 @@ describe('Normalize', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Delcatty", ability: 'normalize', item: 'zapplate', moves: ['judgment']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Latias", ability: 'colorchange', moves: ['endure']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move judgment', 'move endure');
 		assert.ok(battle.p2.active[0].hasType('Electric'));
 	});
 
@@ -46,7 +46,7 @@ describe('Normalize', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Delcatty", ability: 'normalize', item: 'laggingtail', moves: ['weatherball']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Latias", ability: 'colorchange', moves: ['sunnyday']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move weatherball', 'move sunnyday');
 		assert.ok(battle.p2.active[0].hasType('Fire'));
 	});
 
@@ -54,7 +54,7 @@ describe('Normalize', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Delcatty", ability: 'normalize', item: 'chopleberry', moves: ['naturalgift']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Latias", ability: 'colorchange', moves: ['endure']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move naturalgift', 'move endure');
 		assert.ok(battle.p2.active[0].hasType('Fighting'));
 	});
 });
@@ -69,7 +69,7 @@ describe('Normalize [Gen 4]', function () {
 			[{species: "Delcatty", ability: 'normalize', moves: ['grassknot']}],
 			[{species: "Latias", ability: 'colorchange', moves: ['endure']}],
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move grassknot', 'move endure');
 		assert.ok(battle.p2.active[0].hasType('Normal'));
 	});
 
@@ -78,7 +78,7 @@ describe('Normalize [Gen 4]', function () {
 			[{species: "Delcatty", ability: 'normalize', moves: ['hiddenpowerfire']}],
 			[{species: "Latias", ability: 'colorchange', moves: ['endure']}],
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move hiddenpowerfire', 'move endure');
 		assert.ok(battle.p2.active[0].hasType('Normal'));
 	});
 
@@ -87,7 +87,7 @@ describe('Normalize [Gen 4]', function () {
 			[{species: "Delcatty", ability: 'normalize', item: 'pixieplate', moves: ['judgment']}],
 			[{species: "Latias", ability: 'colorchange', moves: ['endure']}],
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move judgment', 'move endure');
 		assert.ok(battle.p2.active[0].hasType('Normal'));
 	});
 
@@ -96,7 +96,7 @@ describe('Normalize [Gen 4]', function () {
 			[{species: "Delcatty", ability: 'normalize', item: 'laggingtail', moves: ['weatherball']}],
 			[{species: "Latias", ability: 'colorchange', moves: ['sunnyday']}],
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move weatherball', 'move sunnyday');
 		assert.ok(battle.p2.active[0].hasType('Normal'));
 	});
 });

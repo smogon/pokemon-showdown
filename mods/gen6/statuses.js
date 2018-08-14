@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleStatuses = {
+/**@type {{[k: string]: ModdedEffectData}} */
+let BattleStatuses = {
 	brn: {
 		inherit: true,
 		onResidual: function (pokemon) {
@@ -24,12 +25,13 @@ exports.BattleStatuses = {
 				return;
 			}
 			this.add('-activate', pokemon, 'confusion');
-			if (this.random(2) === 0) {
+			if (this.randomChance(1, 2)) {
 				return;
 			}
 			this.damage(this.getDamage(pokemon, pokemon, 40), pokemon, pokemon, {
 				id: 'confused',
 				effectType: 'Move',
+				// @ts-ignore
 				type: '???',
 			});
 			return false;
@@ -40,3 +42,5 @@ exports.BattleStatuses = {
 		onBeforeMove: function () {},
 	},
 };
+
+exports.BattleStatuses = BattleStatuses;

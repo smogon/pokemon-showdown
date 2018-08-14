@@ -14,10 +14,10 @@ describe('Taunt', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Sableye', ability: 'prankster', moves: ['taunt']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Chansey', ability: 'naturalcure', moves: ['calmmind']}]);
-		battle.commitDecisions();
+		battle.makeChoices('move taunt', 'move calmmind');
 		assert.strictEqual(battle.p2.active[0].boosts['spa'], 0);
 		assert.strictEqual(battle.p2.active[0].boosts['spd'], 0);
-		battle.commitDecisions();
+		battle.makeChoices('move taunt', 'move calmmind');
 		assert.strictEqual(battle.p2.active[0].lastMove.id, 'struggle');
 	});
 
@@ -25,7 +25,7 @@ describe('Taunt', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Sableye', ability: 'prankster', moves: ['taunt']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Charmander', ability: 'blaze', item: 'firiumz', moves: ['sunnyday']}]);
-		battle.p2.chooseMove('sunnyday', 0, 'zmove').foe.chooseDefault();
+		battle.makeChoices('move taunt', 'move sunnyday zmove');
 		assert.statStage(battle.p2.active[0], 'spe', 1);
 		assert.ok(battle.isWeather('sunnyday'));
 	});

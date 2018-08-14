@@ -16,11 +16,11 @@ describe('Multiscale', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: "Gyarados", ability: 'moxie', moves: ['incinerate']}]);
 		let damage, curhp;
 		let pokemon = battle.p1.active[0];
-		battle.commitDecisions();
+		battle.makeChoices('move splash', 'move incinerate');
 		damage = pokemon.maxhp - pokemon.hp;
 		curhp = pokemon.hp;
 		battle.resetRNG();
-		battle.commitDecisions();
+		battle.makeChoices('move splash', 'move incinerate');
 		assert.strictEqual(damage, battle.modify(curhp - pokemon.hp, 0.5));
 	});
 
@@ -30,11 +30,11 @@ describe('Multiscale', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: "Gyarados", ability: 'moldbreaker', moves: ['incinerate']}]);
 		let damage, curhp;
 		let pokemon = battle.p1.active[0];
-		battle.commitDecisions();
+		battle.makeChoices('move splash', 'move incinerate');
 		damage = pokemon.maxhp - pokemon.hp;
 		curhp = pokemon.hp;
 		battle.resetRNG();
-		battle.commitDecisions();
+		battle.makeChoices('move splash', 'move incinerate');
 		assert.strictEqual(curhp - pokemon.hp, damage);
 	});
 });

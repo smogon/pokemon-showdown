@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleStatuses = {
+/**@type {{[k: string]: ModdedEffectData}} */
+let BattleStatuses = {
 	slp: {
 		inherit: true,
 		onSwitchIn: function (target) {
@@ -37,9 +38,10 @@ exports.BattleStatuses = {
 				return (this.random() * 4294967296 < 1);
 			}
 			this.debug("Success chance: " + Math.round(100 / counter) + "%");
-			return (this.random(counter) === 0);
+			return this.randomChance(1, counter);
 		},
 		onRestart: function () {
+			// @ts-ignore
 			if (this.effectData.counter < this.effect.counterMax) {
 				this.effectData.counter *= 2;
 			}
@@ -55,3 +57,5 @@ exports.BattleStatuses = {
 		},
 	},
 };
+
+exports.BattleStatuses = BattleStatuses;

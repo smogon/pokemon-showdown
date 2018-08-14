@@ -1,7 +1,11 @@
 'use strict';
 
-exports.BattleStatuses = {
+/**@type {{[k: string]: EffectData}} */
+let BattleStatuses = {
 	brn: {
+		name: 'brn',
+		id: 'brn',
+		num: 0,
 		effectType: 'Status',
 		onStart: function (target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.id === 'flameorb') {
@@ -19,6 +23,9 @@ exports.BattleStatuses = {
 		},
 	},
 	par: {
+		name: 'par',
+		id: 'par',
+		num: 0,
 		effectType: 'Status',
 		onStart: function (target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
@@ -34,13 +41,16 @@ exports.BattleStatuses = {
 		},
 		onBeforeMovePriority: 1,
 		onBeforeMove: function (pokemon) {
-			if (this.random(4) === 0) {
+			if (this.randomChance(1, 4)) {
 				this.add('cant', pokemon, 'par');
 				return false;
 			}
 		},
 	},
 	slp: {
+		name: 'slp',
+		id: 'slp',
+		num: 0,
 		effectType: 'Status',
 		onStart: function (target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
@@ -70,6 +80,9 @@ exports.BattleStatuses = {
 		},
 	},
 	frz: {
+		name: 'frz',
+		id: 'frz',
+		num: 0,
 		effectType: 'Status',
 		onStart: function (target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
@@ -78,20 +91,13 @@ exports.BattleStatuses = {
 				this.add('-status', target, 'frz');
 			}
 			if (target.template.species === 'Shaymin-Sky' && target.baseTemplate.baseSpecies === 'Shaymin') {
-				let template = this.getTemplate('Shaymin');
-				target.formeChange(template);
-				target.baseTemplate = template;
-				target.setAbility(template.abilities['0'], null, true);
-				target.baseAbility = target.ability;
-				target.details = template.species + (target.level === 100 ? '' : ', L' + target.level) + (target.gender === '' ? '' : ', ' + target.gender) + (target.set.shiny ? ', shiny' : '');
-				this.add('detailschange', target, target.details);
-				this.add('-formechange', target, 'Shaymin', '[msg]');
+				target.formeChange('Shaymin', this.effect, true);
 			}
 		},
 		onBeforeMovePriority: 10,
 		onBeforeMove: function (pokemon, target, move) {
 			if (move.flags['defrost']) return;
-			if (this.random(5) === 0) {
+			if (this.randomChance(1, 5)) {
 				pokemon.cureStatus();
 				return;
 			}
@@ -111,6 +117,9 @@ exports.BattleStatuses = {
 		},
 	},
 	psn: {
+		name: 'psn',
+		id: 'psn',
+		num: 0,
 		effectType: 'Status',
 		onStart: function (target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
@@ -125,6 +134,9 @@ exports.BattleStatuses = {
 		},
 	},
 	tox: {
+		name: 'tox',
+		id: 'tox',
+		num: 0,
 		effectType: 'Status',
 		onStart: function (target, source, sourceEffect) {
 			this.effectData.stage = 0;
@@ -148,6 +160,9 @@ exports.BattleStatuses = {
 		},
 	},
 	confusion: {
+		name: 'confusion',
+		id: 'confusion',
+		num: 0,
 		// this is a volatile status
 		onStart: function (target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.id === 'lockedmove') {
@@ -168,19 +183,23 @@ exports.BattleStatuses = {
 				return;
 			}
 			this.add('-activate', pokemon, 'confusion');
-			if (this.random(3) > 0) {
+			if (!this.randomChance(1, 3)) {
 				return;
 			}
 			this.activeTarget = pokemon;
 			this.damage(this.getDamage(pokemon, pokemon, 40), pokemon, pokemon, {
 				id: 'confused',
 				effectType: 'Move',
+				// @ts-ignore
 				type: '???',
 			});
 			return false;
 		},
 	},
 	flinch: {
+		name: 'flinch',
+		id: 'flinch',
+		num: 0,
 		duration: 1,
 		onBeforeMovePriority: 8,
 		onBeforeMove: function (pokemon) {
@@ -192,6 +211,9 @@ exports.BattleStatuses = {
 		},
 	},
 	trapped: {
+		name: 'trapped',
+		id: 'trapped',
+		num: 0,
 		noCopy: true,
 		onTrapPokemon: function (pokemon) {
 			pokemon.tryTrap();
@@ -201,9 +223,15 @@ exports.BattleStatuses = {
 		},
 	},
 	trapper: {
+		name: 'trapper',
+		id: 'trapper',
+		num: 0,
 		noCopy: true,
 	},
 	partiallytrapped: {
+		name: 'partiallytrapped',
+		id: 'partiallytrapped',
+		num: 0,
 		duration: 5,
 		durationCallback: function (target, source) {
 			if (source.hasItem('gripclaw')) return 8;
@@ -233,6 +261,9 @@ exports.BattleStatuses = {
 	},
 	lockedmove: {
 		// Outrage, Thrash, Petal Dance...
+		name: 'lockedmove',
+		id: 'lockedmove',
+		num: 0,
 		duration: 2,
 		onResidual: function (target) {
 			if (target.status === 'slp') {
@@ -260,12 +291,12 @@ exports.BattleStatuses = {
 	},
 	twoturnmove: {
 		// Skull Bash, SolarBeam, Sky Drop...
+		name: 'twoturnmove',
+		id: 'twoturnmove',
+		num: 0,
 		duration: 2,
 		onStart: function (target, source, effect) {
 			this.effectData.move = effect.id;
-			// source and target are reversed since the event target is the
-			// pokemon using the two-turn move
-			this.effectData.targetLoc = this.getTargetLoc(source, target);
 			target.addVolatile(effect.id, source);
 		},
 		onEnd: function (target) {
@@ -274,25 +305,27 @@ exports.BattleStatuses = {
 		onLockMove: function () {
 			return this.effectData.move;
 		},
-		onLockMoveTarget: function () {
-			return this.effectData.targetLoc;
-		},
 		onMoveAborted: function (pokemon) {
 			pokemon.removeVolatile('twoturnmove');
 		},
 	},
 	choicelock: {
+		name: 'choicelock',
+		id: 'choicelock',
+		num: 0,
+		noCopy: true,
 		onStart: function (pokemon) {
+			if (!this.activeMove) throw new Error("Battle.activeMove is null");
 			if (!this.activeMove.id || this.activeMove.hasBounced) return false;
 			this.effectData.move = this.activeMove.id;
 		},
 		onBeforeMove: function (pokemon, target, move) {
-			if (!pokemon.getItem().isChoice || !pokemon.hasMove(this.effectData.move)) {
+			if (!pokemon.getItem().isChoice) {
 				pokemon.removeVolatile('choicelock');
 				return;
 			}
-			if (move.id !== this.effectData.move && move.id !== 'struggle') {
-				// Fails even if the Choice item is being ignored, and no PP is lost
+			if (!pokemon.ignoringItem() && move.id !== this.effectData.move && move.id !== 'struggle') {
+				// Fails unless the Choice item is being ignored, and no PP is lost
 				this.addMove('move', pokemon, move.name);
 				this.attrLastMove('[still]');
 				this.add('-fail', pokemon);
@@ -315,11 +348,15 @@ exports.BattleStatuses = {
 		},
 	},
 	mustrecharge: {
+		name: 'mustrecharge',
+		id: 'mustrecharge',
+		num: 0,
 		duration: 2,
 		onBeforeMovePriority: 11,
 		onBeforeMove: function (pokemon) {
 			this.add('cant', pokemon, 'recharge');
 			pokemon.removeVolatile('mustrecharge');
+			pokemon.removeVolatile('truant');
 			return null;
 		},
 		onLockMove: function (pokemon) {
@@ -329,6 +366,9 @@ exports.BattleStatuses = {
 	},
 	futuremove: {
 		// this is a side condition
+		name: 'futuremove',
+		id: 'futuremove',
+		num: 0,
 		onStart: function (side) {
 			this.effectData.positions = [];
 			for (let i = 0; i < side.active.length; i++) {
@@ -338,7 +378,7 @@ exports.BattleStatuses = {
 		onResidualOrder: 3,
 		onResidual: function (side) {
 			let finished = true;
-			for (let i = 0; i < side.active.length; i++) {
+			for (const [i, target] of side.active.entries()) {
 				let posData = this.effectData.positions[i];
 				if (!posData) continue;
 
@@ -350,7 +390,6 @@ exports.BattleStatuses = {
 				}
 
 				// time's up; time to hit! :D
-				let target = side.active[i];
 				const move = this.getMove(posData.move);
 				if (target.fainted) {
 					this.add('-hint', '' + move.name + ' did not hit because the target is fainted.');
@@ -378,6 +417,9 @@ exports.BattleStatuses = {
 	},
 	healreplacement: {
 		// this is a side condition
+		name: 'healreplacement',
+		id: 'healreplacement',
+		num: 0,
 		onStart: function (side, source, sourceEffect) {
 			this.effectData.position = source.position;
 			this.effectData.sourceEffect = sourceEffect;
@@ -394,19 +436,25 @@ exports.BattleStatuses = {
 	},
 	stall: {
 		// Protect, Detect, Endure counter
+		name: 'stall',
+		id: 'stall',
+		num: 0,
 		duration: 2,
 		counterMax: 729,
 		onStart: function () {
 			this.effectData.counter = 3;
 		},
-		onStallMove: function () {
+		onStallMove: function (pokemon) {
 			// this.effectData.counter should never be undefined here.
 			// However, just in case, use 1 if it is undefined.
 			let counter = this.effectData.counter || 1;
 			this.debug("Success chance: " + Math.round(100 / counter) + "%");
-			return (this.random(counter) === 0);
+			let success = this.randomChance(1, counter);
+			if (!success) delete pokemon.volatiles['stall'];
+			return success;
 		},
 		onRestart: function () {
+			// @ts-ignore
 			if (this.effectData.counter < this.effect.counterMax) {
 				this.effectData.counter *= 3;
 			}
@@ -414,6 +462,9 @@ exports.BattleStatuses = {
 		},
 	},
 	gem: {
+		name: 'gem',
+		id: 'gem',
+		num: 0,
 		duration: 1,
 		affectsFainted: true,
 		onBasePower: function (basePower, user, target, move) {
@@ -425,6 +476,9 @@ exports.BattleStatuses = {
 	// weather is implemented here since it's so important to the game
 
 	raindance: {
+		name: 'RainDance',
+		id: 'raindance',
+		num: 0,
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback: function (source, effect) {
@@ -461,6 +515,9 @@ exports.BattleStatuses = {
 		},
 	},
 	primordialsea: {
+		name: 'PrimordialSea',
+		id: 'primordialsea',
+		num: 0,
 		effectType: 'Weather',
 		duration: 0,
 		onTryMove: function (target, source, effect) {
@@ -489,6 +546,9 @@ exports.BattleStatuses = {
 		},
 	},
 	sunnyday: {
+		name: 'SunnyDay',
+		id: 'sunnyday',
+		num: 0,
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback: function (source, effect) {
@@ -528,6 +588,9 @@ exports.BattleStatuses = {
 		},
 	},
 	desolateland: {
+		name: 'DesolateLand',
+		id: 'desolateland',
+		num: 0,
 		effectType: 'Weather',
 		duration: 0,
 		onTryMove: function (target, source, effect) {
@@ -559,6 +622,9 @@ exports.BattleStatuses = {
 		},
 	},
 	sandstorm: {
+		name: 'Sandstorm',
+		id: 'sandstorm',
+		num: 0,
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback: function (source, effect) {
@@ -596,6 +662,9 @@ exports.BattleStatuses = {
 		},
 	},
 	hail: {
+		name: 'Hail',
+		id: 'hail',
+		num: 0,
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback: function (source, effect) {
@@ -625,6 +694,9 @@ exports.BattleStatuses = {
 		},
 	},
 	deltastream: {
+		name: 'DeltaStream',
+		id: 'deltastream',
+		num: 0,
 		effectType: 'Weather',
 		duration: 0,
 		onEffectiveness: function (typeMod, target, type, move) {
@@ -653,29 +725,39 @@ exports.BattleStatuses = {
 	// in the Pokedex, so that needs to be overridden.
 	// This is mainly relevant for Hackmons and Balanced Hackmons.
 	arceus: {
-		onSwitchInPriority: 101,
-		onSwitchIn: function (pokemon) {
+		name: 'Arceus',
+		id: 'arceus',
+		num: 493,
+		onTypePriority: 1,
+		onType: function (types, pokemon) {
+			/** @type {string | undefined} */
 			let type = 'Normal';
 			if (pokemon.ability === 'multitype') {
 				type = pokemon.getItem().onPlate;
-				if (!type || type === true) {
+				if (!type) {
 					type = 'Normal';
 				}
 			}
-			pokemon.setType(type, true);
+			return [type];
 		},
 	},
 	silvally: {
-		onSwitchInPriority: 101,
-		onSwitchIn: function (pokemon) {
+		name: 'Silvally',
+		id: 'silvally',
+		num: 773,
+		onTypePriority: 1,
+		onType: function (types, pokemon) {
+			/** @type {string | undefined} */
 			let type = 'Normal';
 			if (pokemon.ability === 'rkssystem') {
 				type = pokemon.getItem().onMemory;
-				if (!type || type === true) {
+				if (!type) {
 					type = 'Normal';
 				}
 			}
-			pokemon.setType(type, true);
+			return [type];
 		},
 	},
 };
+
+exports.BattleStatuses = BattleStatuses;

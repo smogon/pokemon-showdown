@@ -16,12 +16,11 @@ describe('Haze - RBY', function () {
 			[{species: "Mewtwo", moves: ['swordsdance', 'splash']}],
 		]);
 
-		battle.commitDecisions();
+		battle.makeChoices('move agility', 'move swordsdance');
 		assert.strictEqual(battle.p1.active[0].boosts.spe, 2);
 		assert.strictEqual(battle.p2.active[0].boosts.atk, 2);
 
-		battle.choose('p1', 'move 2');
-		battle.choose('p2', 'move 2');
+		battle.makeChoices('move haze', 'move splash');
 		assert.strictEqual(battle.p1.active[0].boosts.spe, 0);
 		assert.strictEqual(battle.p2.active[0].boosts.atk, 0);
 	});
@@ -32,11 +31,10 @@ describe('Haze - RBY', function () {
 			[{species: "Mewtwo", moves: ['splash']}],
 		]);
 
-		battle.commitDecisions();
+		battle.makeChoices('move thunderwave', 'move splash');
 		assert.strictEqual(battle.p2.active[0].status, 'par');
 
-		battle.choose('p1', 'move 2');
-		battle.commitDecisions();
+		battle.makeChoices('move haze', 'move splash');
 		assert.notStrictEqual(battle.p2.active[0].status, 'par');
 	});
 
@@ -46,10 +44,10 @@ describe('Haze - RBY', function () {
 			[{species: "Mewtwo", moves: ['haze']}],
 		]);
 
-		battle.commitDecisions();
+		battle.makeChoices('move thunderwave', 'move haze');
 		assert.strictEqual(battle.p2.active[0].status, 'par');
 
-		battle.commitDecisions();
+		battle.makeChoices('move thunderwave', 'move haze');
 		assert.strictEqual(battle.p2.active[0].status, 'par');
 	});
 
@@ -59,11 +57,10 @@ describe('Haze - RBY', function () {
 			[{species: "Mewtwo", moves: ['focusenergy', 'haze']}],
 		]);
 
-		battle.commitDecisions();
+		battle.makeChoices('move splash', 'move focusenergy');
 		assert.ok(battle.p2.active[0].volatiles['focusenergy']);
 
-		battle.choose('p2', 'move 2');
-		battle.commitDecisions();
+		battle.makeChoices('move splash', 'move haze');
 		assert.strictEqual(typeof battle.p2.active[0].volatiles['focusenergy'], 'undefined');
 	});
 
@@ -73,15 +70,13 @@ describe('Haze - RBY', function () {
 			[{species: "Mewtwo", moves: ['splash']}],
 		]);
 
-		battle.commitDecisions();
+		battle.makeChoices('move reflect', 'move splash');
 		assert.ok(battle.p1.active[0].volatiles['reflect']);
 
-		battle.choose('p1', 'move 2');
-		battle.commitDecisions();
+		battle.makeChoices('move lightscreen', 'move splash');
 		assert.ok(battle.p1.active[0].volatiles['lightscreen']);
 
-		battle.choose('p1', 'move 3');
-		battle.commitDecisions();
+		battle.makeChoices('move haze', 'move splash');
 		assert.strictEqual(typeof battle.p1.active[0].volatiles['reflect'], 'undefined');
 		assert.strictEqual(typeof battle.p1.active[0].volatiles['lightscreen'], 'undefined');
 	});

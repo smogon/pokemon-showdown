@@ -61,11 +61,10 @@ class LadderStore {
 			return (this.ladder = cachedLadder);
 		}
 		try {
-			const data = await FS('config/ladders/' + this.formatid + '.tsv').readTextIfExists();
+			const data = await FS('config/ladders/' + this.formatid + '.tsv').readIfExists();
 			let ladder = /** @type {LadderRow[]} */ ([]);
-			let dataLines = data.split('\n');
-			for (let i = 1; i < dataLines.length; i++) {
-				let line = dataLines[i].trim();
+			for (const dataLine of data.split('\n')) {
+				let line = dataLine.trim();
 				if (!line) continue;
 				let row = line.split('\t');
 				ladder.push([toId(row[1]), Number(row[0]), row[1], Number(row[2]), Number(row[3]), Number(row[4]), row[5]]);
@@ -96,7 +95,7 @@ class LadderStore {
 		}
 		let stream = FS(`config/ladders/${this.formatid}.tsv`).createWriteStream();
 		stream.write('Elo\tUsername\tW\tL\tT\tLast update\r\n');
-		for (let row of ladder) {
+		for (const row of ladder) {
 			stream.write(row.slice(1).join('\t') + '\r\n');
 		}
 		stream.end();
@@ -113,8 +112,8 @@ class LadderStore {
 	indexOfUser(username, createIfNeeded = false) {
 		if (!this.ladder) throw new Error(`Must be called with ladder loaded`);
 		let userid = toId(username);
-		for (let i = 0; i < this.ladder.length; i++) {
-			if (this.ladder[i][0] === userid) return i;
+		for (const [i, user] of this.ladder.entries()) {
+			if (user[0] === userid) return i;
 		}
 		if (createIfNeeded) {
 			let index = this.ladder.length;
@@ -137,8 +136,7 @@ class LadderStore {
 		let buf = `<h3>${name} Top 100</h3>`;
 		buf += `<table>`;
 		buf += `<tr><th>` + ['', 'Username', '<abbr title="Elo rating">Elo</abbr>', 'W', 'L', 'T'].join(`</th><th>`) + `</th></tr>`;
-		for (let i = 0; i < ladder.length; i++) {
-			let row = ladder[i];
+		for (const [i, row] of ladder.entries()) {
 			buf += `<tr><td>` + [
 				i + 1, row[2], `<strong>${Math.round(row[1])}</strong>`, row[3], row[4], row[5],
 			].join(`</td><td>`) + `</td></tr>`;
@@ -225,7 +223,7 @@ class LadderStore {
 	async updateRating(p1name, p2name, p1score, room) {
 		if (Ladders.disabled) {
 			room.addRaw(`Ratings not updated. The ladders are currently disabled.`).update();
-			return [p1score, undefined, undefined];
+			return [p1score, null, null];
 		}
 
 		let formatid = this.formatid;
@@ -288,7 +286,7 @@ class LadderStore {
 
 			if (!room.battle) {
 				Monitor.warn(`room expired before ladder update was received`);
-				return;
+				return [p1score, null, null];
 			}
 
 			let reasons = '' + (Math.round(p1newElo) - Math.round(p1elo)) + ' for ' + (p1score > 0.9 ? 'winning' : (p1score < 0.1 ? 'losing' : 'tying'));
@@ -301,7 +299,7 @@ class LadderStore {
 
 			room.update();
 		} catch (e) {
-			if (!room.battle) return;
+			if (!room.battle) return [p1score, null, null];
 			room.addRaw(`There was an error calculating rating changes:`);
 			room.add(e.stack);
 			room.update();

@@ -4,10 +4,11 @@ const RandomGen2Teams = require('../../mods/gen2/random-teams');
 
 class RandomGen1Teams extends RandomGen2Teams {
 	// Challenge Cup or CC teams are basically fully random teams.
-	randomCCTeam(side) {
+	randomCCTeam() {
 		let team = [];
 
 		let hasDexNumber = {};
+		/**@type {string[][]} */
 		let formes = [[], [], [], [], [], []];
 
 		// Pick six random Pokémon, no repeats.
@@ -33,7 +34,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 
 		for (let i = 0; i < 6; i++) {
 			// Choose forme.
-			let poke = formes[i][this.random(formes[i].length)];
+			let poke = this.sample(formes[i]);
 			let template = this.getTemplate(poke);
 
 			// Level balance: calculate directly from stats rather than using some silly lookup table.
@@ -65,11 +66,11 @@ class RandomGen1Teams extends RandomGen2Teams {
 			// Random DVs.
 			let ivs = {
 				hp: 0,
-				atk: this.random(15),
-				def: this.random(15),
-				spa: this.random(15),
+				atk: this.random(16),
+				def: this.random(16),
+				spa: this.random(16),
 				spd: 0,
-				spe: this.random(15),
+				spe: this.random(16),
 			};
 			ivs["hp"] = (ivs["atk"] % 2) * 16 + (ivs["def"] % 2) * 8 + (ivs["spe"] % 2) * 4 + (ivs["spa"] % 2) * 2;
 			ivs["atk"] = ivs["atk"] * 2;
@@ -84,11 +85,14 @@ class RandomGen1Teams extends RandomGen2Teams {
 			// Four random unique moves from movepool. don't worry about "attacking" or "viable".
 			// Since Gens 1 and 2 learnsets are shared, we need to weed out Gen 2 moves.
 			let moves;
+			/**@type {string[]} */
 			let pool = [];
-			for (let move in template.learnset) {
-				if (this.getMove(move).gen !== 1) continue;
-				if (template.learnset[move].some(learned => learned[0] === '1')) {
-					pool.push(move);
+			if (template.learnset) {
+				for (let move in template.learnset) {
+					if (this.getMove(move).gen !== 1) continue;
+					if (template.learnset[move].some(learned => learned[0] === '1')) {
+						pool.push(move);
+					}
 				}
 			}
 			if (pool.length <= 4) {
@@ -99,7 +103,9 @@ class RandomGen1Teams extends RandomGen2Teams {
 
 			team.push({
 				name: poke,
+				species: template.species,
 				moves: moves,
+				gender: false,
 				ability: 'None',
 				evs: evs,
 				ivs: ivs,
@@ -113,15 +119,16 @@ class RandomGen1Teams extends RandomGen2Teams {
 
 		return team;
 	}
+
 	// Random team generation for Gen 1 Random Battles.
-	randomTeam(side) {
+	randomTeam() {
 		// Get what we need ready.
 		let pokemonLeft = 0;
 		let pokemon = [];
 
 		let handicapMons = ['magikarp', 'weedle', 'kakuna', 'caterpie', 'metapod'];
-		let nuTiers = ['UU', 'BL', 'NFE', 'LC', 'NU'];
-		let uuTiers = ['NFE', 'UU', 'BL', 'NU'];
+		let nuTiers = ['UU', 'UUBL', 'NFE', 'LC', 'NU'];
+		let uuTiers = ['NFE', 'UU', 'UUBL', 'NU'];
 
 		let n = 1;
 		let pokemonPool = [];
@@ -152,7 +159,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 			case 'NFE':
 				// Don't add pre-evo mon if already 4 or more non-OUs, or if already 3 or more non-OUs with one being a shitmon
 				// Regardless, pre-evo mons are slightly less common.
-				if (nuCount > 3 || (hasShitmon && nuCount > 2) || this.random(3) === 0) continue;
+				if (nuCount > 3 || (hasShitmon && nuCount > 2) || this.randomChance(1, 3)) continue;
 				break;
 			case 'Uber':
 				// If you have one of the worst mons we allow luck to give you all Ubers.
@@ -160,7 +167,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 				break;
 			default:
 				// OUs are fine. Otherwise 50% chance to skip mon if already 4 or more non-OUs.
-				if (uuTiers.includes(tier) && pokemonPool.length > 1 && (nuCount > 3 && this.random(2) >= 1)) continue;
+				if (uuTiers.includes(tier) && pokemonPool.length > 1 && (nuCount > 3 && this.randomChance(1, 2))) continue;
 			}
 
 			let skip = false;
@@ -168,7 +175,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 			// Limit 2 of any type as well. Diversity and minor weakness count.
 			// The second of a same type has halved chance of being added.
 			for (const type of template.types) {
-				if (typeCount[type] > 1 || (typeCount[type] === 1 && this.random(2) && pokemonPool.length > 1)) {
+				if (typeCount[type] > 1 || (typeCount[type] === 1 && this.randomChance(1, 2) && pokemonPool.length > 1)) {
 					skip = true;
 					break;
 				}
@@ -224,13 +231,20 @@ class RandomGen1Teams extends RandomGen2Teams {
 
 		return pokemon;
 	}
-	// Random set generation for Gen 1 Random Battles.
+
+	/**
+	 * Random set generation for Gen 1 Random Battles.
+	 * @param {string | Template} template
+	 * @param {number} [slot]
+	 * @return {RandomTeamsTypes["RandomSet"]}
+	 */
 	randomSet(template, slot) {
 		if (slot === undefined) slot = 1;
 		template = this.getTemplate(template);
 		if (!template.exists) template = this.getTemplate('pikachu'); // Because Gen 1.
 
-		let movePool = template.randomBattleMoves.slice();
+		let movePool = template.randomBattleMoves ? template.randomBattleMoves.slice() : [];
+		/**@type {string[]} */
 		let moves = [];
 		let hasType = {};
 		hasType[template.types[0]] = true;
@@ -246,7 +260,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 
 		// Either add all moves or add none
 		if (template.comboMoves) {
-			if (this.random(2) === 0) {
+			if (this.randomChance(1, 2)) {
 				moves = moves.concat(template.comboMoves);
 			}
 		}
@@ -254,7 +268,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 		// Add one of the semi-mandatory moves
 		// Often, these are used so that the Pokemon only gets one of the less useful moves
 		if (moves.length < 4 && template.exclusiveMoves) {
-			moves.push(template.exclusiveMoves[this.random(template.exclusiveMoves.length)]);
+			moves.push(this.sample(template.exclusiveMoves));
 		}
 
 		// Add the mandatory move. SD Mew and Amnesia Snorlax are exceptions.
@@ -356,6 +370,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 
 		return {
 			name: template.name,
+			species: template.species,
 			moves: moves,
 			ability: 'None',
 			evs: {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255},

@@ -21,15 +21,13 @@ class PRNG {
 	/**
 	 * Creates a new source of randomness for the given seed.
 	 *
-	 * @param {PRNGSeed} [seed]
+	 * @param {PRNGSeed?} [seed]
 	 */
-	constructor(seed = PRNG.generateSeed()) {
-		/** @type {PRNGSeed} */
-		// @ts-ignore TypeScript bug
-		this.initialSeed = seed.slice(); // make a copy
-		/** @type {PRNGSeed} */
-		// @ts-ignore TypeScript bug
-		this.seed = seed.slice();
+	constructor(seed = null) {
+		if (!seed) seed = PRNG.generateSeed();
+		this.initialSeed = /** @type {PRNGSeed} */ (seed.slice()); // make a copy
+		/** @type {PRNGSeed} */ // TypeScript bug: can't infer type
+		this.seed = /** @type {PRNGSeed} */ (seed.slice());
 	}
 
 	/**
@@ -68,8 +66,8 @@ class PRNG {
 	next(from, to) {
 		this.seed = this.nextFrame(this.seed); // Advance the RNG
 		let result = (this.seed[0] << 16 >>> 0) + this.seed[1]; // Use the upper 32 bits
-		from = Math.floor(from);
-		to = Math.floor(to);
+		if (from) from = Math.floor(from);
+		if (to) to = Math.floor(to);
 		if (!from) {
 			result = result / 0x100000000;
 		} else if (!to) {
@@ -78,6 +76,53 @@ class PRNG {
 			result = Math.floor(result * (to - from) / 0x100000000) + from;
 		}
 		return result;
+	}
+
+	/**
+	 * Flip a coin (two-sided die), returning true or false.
+	 *
+	 * This function returns true with probability `P`, where `P = numerator
+	 * / denominator`. This function returns false with probability `1 - P`.
+         *
+         * The numerator must be a non-negative integer (`>= 0`).
+         *
+         * The denominator must be a positive integer (`> 0`).
+	 *
+	 * @param {number} numerator - the top part of the probability fraction
+	 * @param {number} denominator - the bottom part of the probability fraction
+	 * @return {boolean} - randomly true or false
+	 */
+	randomChance(numerator, denominator) {
+		return this.next(denominator) < numerator;
+	}
+
+	/**
+	 * Return a random item from the given array.
+	 *
+	 * This function chooses items in the array with equal probability.
+	 *
+	 * If there are duplicate items in the array, each duplicate is
+	 * considered separately. For example, sample(['x', 'x', 'y']) returns
+	 * 'x' 67% of the time and 'y' 33% of the time.
+	 *
+	 * The array must contain at least one item.
+	 *
+	 * The array must not be sparse.
+	 *
+	 * @param {ReadonlyArray<T>} items - the items to choose from
+	 * @return {T} - a random item from items
+	 * @template T
+	 */
+	sample(items) {
+		if (items.length === 0) {
+			throw new RangeError(`Cannot sample an empty array`);
+		}
+		const index = this.next(items.length);
+		const item = items[index];
+		if (item === undefined && !Object.prototype.hasOwnProperty.call(items, index)) {
+			throw new RangeError(`Cannot sample a sparse array`);
+		}
+		return item;
 	}
 
 	/**
@@ -184,7 +229,7 @@ class PRNG {
 
 // The following commented-out function is designed to emulate the on-cartridge
 // PRNG for Gens 3 and 4, as described in
-// http://www.smogon.com/ingame/rng/pid_iv_creation#pokemon_random_number_generator
+// https://www.smogon.com/ingame/rng/pid_iv_creation#pokemon_random_number_generator
 // This RNG uses a 32-bit initial seed
 // m and n are converted to integers via Math.floor. If the result is NaN, they
 // are ignored.

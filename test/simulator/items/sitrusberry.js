@@ -15,7 +15,7 @@ describe('Sitrus Berry', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Aggron', ability: 'sturdy', item: 'sitrusberry', moves: ['sleeptalk']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Lucario', ability: 'adaptability', moves: ['aurasphere']}]);
 		const holder = battle.p1.active[0];
-		battle.commitDecisions();
+		battle.makeChoices('move sleeptalk', 'move aurasphere');
 		assert.false.holdsItem(holder);
 		assert.strictEqual(holder.hp, Math.floor(holder.maxhp / 4) + 1);
 	});
@@ -27,7 +27,7 @@ describe('Sitrus Berry', function () {
 		]);
 		const holder = battle.p1.active[0];
 		const hpgain = Math.floor(holder.maxhp / 4);
-		battle.commitDecisions();
+		battle.makeChoices('move recycle', 'move earthquake');
 		assert.false.holdsItem(holder);
 		assert.strictEqual(holder.hp, hpgain + hpgain + 1);
 	});
@@ -37,7 +37,7 @@ describe('Sitrus Berry', function () {
 			[{species: 'Deoxys-Attack', ability: 'sturdy', item: 'sitrusberry', moves: ['sleeptalk']}],
 			[{species: 'Krookodile', ability: 'intimidate', moves: ['knockoff']}],
 		]);
-		battle.commitDecisions();
+		battle.makeChoices('move sleeptalk', 'move knockoff');
 		assert.strictEqual(battle.p1.active[0].hp, 1);
 	});
 
@@ -47,7 +47,7 @@ describe('Sitrus Berry', function () {
 			[{species: 'Sableye', ability: 'prankster', moves: ['confuseray']}],
 		]);
 		const holder = battle.p1.active[0];
-		battle.commitDecisions();
+		battle.makeChoices('move sleeptalk', 'move confuseray');
 		assert.holdsItem(holder);
 		assert.false.strictEqual(holder.hp, holder.maxhp);
 	});

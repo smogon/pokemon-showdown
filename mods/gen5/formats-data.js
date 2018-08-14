@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleFormatsData = {
+/**@type {{[k: string]: ModdedTemplateFormatsData}} */
+let BattleFormatsData = {
 	bulbasaur: {
 		inherit: true,
 		randomBattleMoves: ["sleeppowder", "gigadrain", "hiddenpowerfire", "hiddenpowerice", "sludgebomb", "powerwhip", "leechseed", "synthesis"],
@@ -248,7 +249,7 @@ exports.BattleFormatsData = {
 	venomoth: {
 		inherit: true,
 		randomBattleMoves: ["sleeppowder", "roost", "toxicspikes", "quiverdance", "batonpass", "bugbuzz", "sludgebomb", "gigadrain", "substitute"],
-		tier: "BL2",
+		tier: "RUBL",
 	},
 	diglett: {
 		randomBattleMoves: ["earthquake", "rockslide", "stealthrock", "suckerpunch", "reversal", "substitute"],
@@ -257,7 +258,7 @@ exports.BattleFormatsData = {
 	dugtrio: {
 		inherit: true,
 		randomBattleMoves: ["earthquake", "stoneedge", "stealthrock", "suckerpunch", "reversal", "substitute"],
-		tier: "OU",
+		tier: "Uber",
 	},
 	meowth: {
 		inherit: true,
@@ -582,7 +583,7 @@ exports.BattleFormatsData = {
 	chansey: {
 		inherit: true,
 		randomBattleMoves: ["wish", "softboiled", "protect", "toxic", "aromatherapy", "seismictoss", "counter", "thunderwave", "stealthrock"],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	blissey: {
 		inherit: true,
@@ -662,7 +663,7 @@ exports.BattleFormatsData = {
 	},
 	jynx: {
 		randomBattleMoves: ["icebeam", "psychic", "focusblast", "trick", "shadowball", "nastyplot", "lovelykiss", "substitute", "energyball"],
-		tier: "BL3",
+		tier: "NUBL",
 	},
 	elekid: {
 		inherit: true,
@@ -1061,7 +1062,7 @@ exports.BattleFormatsData = {
 	wobbuffet: {
 		inherit: true,
 		randomBattleMoves: ["destinybond", "counter", "mirrorcoat", "encore"],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	girafarig: {
 		randomBattleMoves: ["psychic", "thunderbolt", "calmmind", "batonpass", "agility", "hypervoice", "thunderwave"],
@@ -1583,7 +1584,7 @@ exports.BattleFormatsData = {
 	carvanha: {
 		inherit: true,
 		randomBattleMoves: ["protect", "hydropump", "icebeam", "waterfall", "crunch", "hiddenpowergrass", "aquajet"],
-		tier: "LC Uber",
+		tier: "LC",
 	},
 	sharpedo: {
 		randomBattleMoves: ["protect", "hydropump", "icebeam", "crunch", "earthquake", "waterfall", "hiddenpowergrass", "aquajet"],
@@ -1806,7 +1807,7 @@ exports.BattleFormatsData = {
 	},
 	froslass: {
 		randomBattleMoves: ["icebeam", "spikes", "destinybond", "shadowball", "substitute", "taunt", "thunderbolt", "thunderwave"],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	spheal: {
 		inherit: true,
@@ -1997,7 +1998,7 @@ exports.BattleFormatsData = {
 	},
 	staraptor: {
 		randomBattleMoves: ["bravebird", "closecombat", "return", "uturn", "quickattack", "substitute", "roost", "doubleedge"],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	bidoof: {
 		inherit: true,
@@ -2299,7 +2300,7 @@ exports.BattleFormatsData = {
 	cresselia: {
 		inherit: true,
 		randomBattleMoves: ["moonlight", "psychic", "icebeam", "thunderwave", "toxic", "lunardance", "rest", "sleeptalk", "calmmind", "reflect", "lightscreen"],
-		tier: "BL2",
+		tier: "RUBL",
 	},
 	phione: {
 		inherit: true,
@@ -2630,7 +2631,7 @@ exports.BattleFormatsData = {
 	},
 	scolipede: {
 		randomBattleMoves: ["spikes", "toxicspikes", "megahorn", "rockslide", "earthquake", "swordsdance", "batonpass", "aquatail", "superpower"],
-		tier: "BL3",
+		tier: "NUBL",
 	},
 	cottonee: {
 		randomBattleMoves: ["encore", "taunt", "substitute", "leechseed", "toxic", "stunspore"],
@@ -2768,7 +2769,7 @@ exports.BattleFormatsData = {
 	gothitelle: {
 		randomBattleMoves: ["psychic", "thunderbolt", "hiddenpowerfighting", "shadowball", "substitute", "calmmind", "reflect", "lightscreen", "trick"],
 		maleOnlyHidden: true,
-		tier: "BL",
+		tier: "UUBL",
 	},
 	solosis: {
 		randomBattleMoves: ["calmmind", "recover", "psychic", "hiddenpowerfighting", "shadowball", "trickroom", "psyshock"],
@@ -2904,7 +2905,7 @@ exports.BattleFormatsData = {
 	chandelure: {
 		inherit: true,
 		randomBattleMoves: ["shadowball", "energyball", "fireblast", "overheat", "hiddenpowerfighting", "hiddenpowerground", "hiddenpowerrock", "trick", "substitute", "painsplit"],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	axew: {
 		inherit: true,
@@ -3087,7 +3088,7 @@ exports.BattleFormatsData = {
 	kyurem: {
 		inherit: true,
 		randomBattleMoves: ["substitute", "icebeam", "dracometeor", "dragonpulse", "focusblast", "outrage", "earthpower", "roost"],
-		tier: "BL",
+		tier: "UUBL",
 	},
 	kyuremblack: {
 		inherit: true,
@@ -3131,3 +3132,5 @@ exports.BattleFormatsData = {
 		requiredItem: "Shock Drive",
 	},
 };
+
+exports.BattleFormatsData = BattleFormatsData;

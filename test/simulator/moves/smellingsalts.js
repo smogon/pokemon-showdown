@@ -14,9 +14,8 @@ describe('Smelling Salts', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Meloetta", ability: 'serenegrace', moves: ['smellingsalts', 'thunderwave']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Dragonite", ability: 'multiscale', moves: ['roost']}]);
-		battle.choose('p1', 'move 2');
-		battle.commitDecisions();
-		battle.commitDecisions();
+		battle.makeChoices('move thunderwave', 'move roost');
+		battle.makeChoices('move smellingsalts', 'move roost');
 		assert.notStrictEqual(battle.p2.active[0].status, 'par');
 	});
 });
