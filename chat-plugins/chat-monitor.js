@@ -288,7 +288,7 @@ let commands = {
 			content += `<td style="padding: 5px 10px;vertical-align:top;"><p style="font-weight:bold;text-align:center;">Filtered in usernames: </p>${filterWords.namefilter.map(str => `<p style="text-align:center;margin:0px;">${str}</p>`).join('')}</td>`;
 		}
 		if (filterWords.wordfilter.length) {
-			content += `<td style="padding: 5px 10px;vertical-align:top;"><p style="font-weight:bold;text-align:center;">Filtered in usernames: </p>${filterWords.wordfilter.map(entry => `<p style="text-align:center;margin:0px;"><code>${entry[0]}</code> => ${entry[1]}</p>`).join('')}</td>`;
+			content += `<td style="padding: 5px 10px;vertical-align:top;"><p style="font-weight:bold;text-align:center;">Replaced: </p>${filterWords.wordfilter.map(entry => `<p style="text-align:center;margin:0px;"><code>${entry[0]}</code> => ${entry[1]}</p>`).join('')}</td>`;
 		}
 		if (!content) return this.sendReplyBox("There are no filtered words.");
 		return this.sendReplyBox(`<table style="margin:auto;"><tr>${content}</tr></table>`);
