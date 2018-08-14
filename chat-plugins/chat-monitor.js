@@ -33,6 +33,7 @@ setImmediate(() => {
 					if (punishment === 'FILTERTO') {
 						const filterTo = rest[0];
 						filterWords[key].push([new RegExp(word, 'g'), filterTo]);
+						continue loop;
 					} else {
 						filterWords[key].push(word);
 						continue loop;
@@ -50,7 +51,7 @@ setImmediate(() => {
  * @param {string} punishment
  */
 function renderEntry(location, word, punishment) {
-	if (Array.isArray(word)) return `${location}\t${String(word[0]).slice(1, -1)}\t${punishment}\t${word[1]}\r\n`;
+	if (Array.isArray(word)) return `${location}\t${String(word[0]).slice(1, -2)}\t${punishment}\t${word[1]}\r\n`;
 	return `${location}\t${word}\t${punishment}\r\n`;
 }
 
@@ -233,6 +234,7 @@ let commands = {
 
 			filterWords[list].push([regex, filterTo]);
 			this.globalModlog(`ADDFILTER`, null, `'${String(regex)} => ${filterTo}' to ${list} list by ${user.name}`);
+			appendEntry(list, [regex, filterTo]);
 			return this.sendReply(`'${String(regex)} => ${filterTo}' was added to the ${list} list.`);
 		} else {
 			const duplicates = words.filter(val => filterWords[list].includes(val));
