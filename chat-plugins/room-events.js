@@ -94,11 +94,39 @@ exports.commands = {
 		help: function (target, room, user) {
 			return this.parse('/help roomevents');
 		},
+		sort: function (target, room, user) {
+			let multiplier = 1;
+			let columnName = "";
+			let order = "";
+			if (target.split(target.includes('|') ? '|' : ',') === target) {
+				[columnName, order] = target.split(target.includes('|') ? '|' : ',');
+				multiplier = (toId(order) === 'desc') ? -1 : 1;
+			} else {
+				columnName = target;
+			}
+			switch (toId(columnName)) {
+			case "date":
+			case "eventdate":
+				room.events.sort(function (a, b) { return (a.date < b.date) ? 1 * multiplier : (b.date < a.date) ? -1 * multiplier : 0; });
+				break;
+			case "descripton":
+			case "eventdescription":
+				room.events.sort(function (a, b) { return (a.desc < b.desc) ? 1 * multiplier : (b.desc < a.desc) ? -1 * multiplier : 0; });
+				break;
+			case "eventname":
+			case "name":
+				room.events.sort(function (a, b) { return (a.name < b.name) ? 1 * multiplier : (b.name < a.name) ? -1 * multiplier : 0; });
+				break;
+			default:
+				room.events.sort(function (a, b) { return (a.date < b.date) ? 1 * multiplier : (b.date < a.date) ? -1 * multiplier : 0; });
+			}
+		},
 	},
 	roomeventshelp: [
 		`/roomevents - Displays a list of upcoming room-specific events.`,
 		`/roomevents add [event name] | [event date/time] | [event description] - Adds a room event. Requires: @ # & ~`,
 		`/roomevents remove [event name] - Deletes an event. Requires: @ # & ~`,
 		`/roomevents view [event name] - Displays information about a specific event.`,
+		`/roomevents sort [column name] | [asc/desc] - Sorts events table by column name`,
 	],
 };
