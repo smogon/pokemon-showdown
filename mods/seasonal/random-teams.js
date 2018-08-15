@@ -53,6 +53,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Scripting',
 				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 			},
+			'MacChaeger': {
+				species: 'Mantyke', ability: 'Water Veil', item: ['Life Orb', 'Normalium Z'], gender: 'M',
+				moves: ['Scald', 'Clear Smog', 'Sleep Talk'],
+				signatureMove: 'Nap Time',
+				evs: {hp: 248, spa: 84, spe: 176}, ivs: {atk: 0}, nature: 'Modest',
+			},
 		};
 		let pool = Object.keys(sets);
 		while (pool.length && team.length < 6) {

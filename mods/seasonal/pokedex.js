@@ -9,6 +9,11 @@ let BattlePokedex = {
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100}, // the base stats for the pokemon
 	},
 	*/
+	// MacChaeger
+	mantyke: {
+		inherit: true,
+		baseStats: {hp: 90, atk: 40, def: 100, spa: 120, spd: 240, spe: 100},
+	},
 };
 
 exports.BattlePokedex = BattlePokedex;

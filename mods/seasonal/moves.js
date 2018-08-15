@@ -76,6 +76,61 @@ let BattleMovedex = {
 		target: "self",
 		type: "Psychic",
 	},
+	// MacChaeger
+	naptime: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "The user falls asleep for the next turn and restores 50% of its HP, curing itself of any major status condition. If the user falls asleep in this way, all other active Pokemon that are not asleep or frozen also try to use Nap Time. Fails if the user has full HP, is already asleep, or if another effect is preventing sleep.",
+		shortDesc: "All active Pokemon sleep 1 turn, restore HP & status.",
+		id: "naptime",
+		isNonstandard: true,
+		name: "Nap Time",
+		pp: 5,
+		priority: 0,
+		flags: {snatch: 1, heal: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Rest", target);
+			this.add('-anim', source, "Aromatic Mist", target);
+		},
+		onTryMove: function (pokemon) {
+			if (pokemon.hp < pokemon.maxhp && pokemon.status !== 'slp' && !pokemon.hasAbility('comatose')) return;
+			this.add('-fail', pokemon);
+			return null;
+		},
+		onHit: function (target, source, move) {
+			let napWeather = this.pseudoWeather['naptime'];
+			// Trigger sleep clause if not the original user
+			// @ts-ignore
+			if (!target.setStatus('slp', napWeather.source, move)) return false;
+			target.statusData.time = 2;
+			target.statusData.startTime = 2;
+			this.heal(target.maxhp / 2); //Aesthetic only as the healing happens after you fall asleep in-game
+			this.add('-status', target, 'slp', '[from] move: Rest');
+			// @ts-ignore
+			if (napWeather.source === target) {
+				for (let i = 0; i < this.sides.length; i++) {
+					for (let j = 0; j < this.sides[i].active.length; j++) {
+						let curMon = this.sides[i].active[j];
+						if (curMon === source) continue;
+						if (curMon && curMon.hp && curMon.status !== 'slp' && curMon.status !== 'frz' && !curMon.hasAbility('comatose')) {
+							this.add('-anim', source, "Yawn", curMon);
+							this.useMove(move, curMon, curMon, move);
+						}
+					}
+				}
+			}
+			this.removePseudoWeather('naptime');
+		},
+		pseudoWeather: 'naptime',
+		effect: {
+			duration: 1,
+		},
+		target: "self",
+		type: "Fairy",
+		zMoveEffect: 'clearnegativeboosts',
+	},
 };
 
 exports.BattleMovedex = BattleMovedex;

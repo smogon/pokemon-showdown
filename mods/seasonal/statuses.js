@@ -40,6 +40,15 @@ let BattleStatuses = {
 			this.add(`c|&HoeenHero|NO! There must of been a bug in my script ;-;`);
 		},
 	},
+	macchaeger: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|@MacChaeger|What are you gonna do with that big bat? Gonna hit me? Better make it count. Better make it hurt. Better kill me in one shot.`);
+		},
+		onFaint: function () {
+			this.add(`c|@MacChaeger|im gonna pyuk`);
+		},
+	},
 };
 
 exports.BattleStatuses = BattleStatuses;
