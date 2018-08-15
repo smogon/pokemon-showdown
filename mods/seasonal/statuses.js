@@ -18,6 +18,16 @@ let BattleStatuses = {
 		// Innate effects go here
 	},
 	*/
+	// Please keep statuses organized alphabetically based on staff member name!
+	eternally: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|@eternally|quack`);
+		},
+		onFaint: function () {
+			this.add(`c|@eternally|quack`);
+		},
+	},
 };
 
 exports.BattleStatuses = BattleStatuses;

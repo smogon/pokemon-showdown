@@ -5,20 +5,21 @@
  * @typedef {Object} SSBSet
  * @property {string} species
  * @property {string} ability
- * @property {string} item
+ * @property {string | string[]} item
  * @property {GenderName} gender
  * @property {(string | string[])[]} moves
  * @property {string} signatureMove
  * @property {{hp?: number, atk?: number, def?: number, spa?: number, spd?: number, spe?: number}=} evs
  * @property {{hp?: number, atk?: number, def?: number, spa?: number, spd?: number, spe?: number}=} ivs
  * @property {string} nature
+ * @property {number=} level
  * @property {boolean=} shiny
  */
 
 const RandomTeams = require('../../data/random-teams');
 
 class RandomStaffBrosTeams extends RandomTeams {
-	RandomStaffBrosTeams() {
+	randomStaffBrosTeam() {
 		/** @type {PokemonSet[]} */
 		let team = [];
 		/** @type {SSBSets} */
@@ -29,16 +30,23 @@ class RandomStaffBrosTeams extends RandomTeams {
 				species: 'Species',  ability: 'Ability', item: 'Item', gender: '',
 				moves: ['Move Name', ['Move Name', 'Move Name']],
 				signatureMove: 'Move Name',
-				evs: {stat: number}, ivs: {stat: number}, nature: 'Nature', shiny: false,
+				evs: {stat: number}, ivs: {stat: number}, nature: 'Nature', level: 100, shiny: false,
 			},
 			// Species, ability, and item need to be captialized properly ex: Ludicolo, Swift Swim, Life Orb
 			// Gender can be M, F, N, or left as an empty string
 			// each slot in moves needs to be a string (the move name, captialized properly ex: Hydro Pump), or an array of strings (also move names)
 			// signatureMove also needs to be capitalized properly ex: Scripting
 			// You can skip Evs (defaults to 82 all) and/or Ivs (defaults to 31 all), or just skip part of the Evs (skipped evs are 0) and/or Ivs (skipped Ivs are 31)
-			// You can also skip shiny, defaults to false
+			// You can also skip shiny, defaults to false. Level can be skipped (defaults to 100).
 			// Nature needs to be a valid nature with the first letter capitalized ex: Modest
 			*/
+			// Please keep sets organized alphabetically based on staff member name!
+			eternally: {
+				species: 'Ducklett', ability: 'Primordial Sea', item: 'Eviolite', gender: 'M',
+				moves: ['Surf', 'Hurricane', 'Roost'],
+				signatureMove: 'Quack',
+				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+			},
 		};
 		let pool = Object.keys(sets);
 		while (pool.length && team.length < 6) {
@@ -48,14 +56,14 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let set = {
 				name: name,
 				species: ssbSet.species,
-				item: ssbSet.item,
+				item: Array.isArray(ssbSet.item) ? this.sampleNoReplace(ssbSet.item) : ssbSet.item,
 				ability: ssbSet.ability,
 				moves: [],
 				nature: ssbSet.nature,
 				gender: ssbSet.gender,
 				evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0},
 				ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31},
-				level: 100,
+				level: ssbSet.level || 100,
 				shiny: ssbSet.shiny,
 			};
 			if (ssbSet.ivs) {

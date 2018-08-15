@@ -13,7 +13,6 @@ let BattleMovedex = {
 		id: "moveid",
 		name: "Move Name",
 		pp: 10, // unboosted PP count
-		noPPBoosts: true, // add this to not boost the PP of a move, not needed for Z moves, dont include it otherwise
 		priority: 0, // move priority, -6 -> 6
 		flags: {}, // Move flags https://github.com/Zarel/Pokemon-Showdown/blob/master/data/moves.js#L1-L27
 		secondary: {
@@ -33,6 +32,26 @@ let BattleMovedex = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Please keep sets organized alphabetically based on staff member name!
+	quack: {
+		accuracy: 100,
+		category: "Status",
+		desc: "",
+		shortDesc: "",
+		id: "quack",
+		name: "Quack",
+		pp: 5,
+		priority: 0,
+		flags: {mirror: 1, snatch: 1},
+		onHit: function (target, source) {
+			this.add('-anim', source, 'Feather Dance', source);
+			this.add('-anim', source, 'Aqua Ring', source);
+		},
+		boosts: {spa: 1, def: 1},
+		secondary: null,
+		target: "self",
+		type: "Flying",
+	},
 };
 
 exports.BattleMovedex = BattleMovedex;
