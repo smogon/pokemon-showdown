@@ -123,15 +123,8 @@ let BattleScripts = {
 
 		pokemon.formeChange(templateid, pokemon.getItem(), true);
 
-		// Do not limit mega evolution
-		/*let wasMega = pokemon.canMegaEvo;
-		for (const ally of side.pokemon) {
-			if (wasMega) {
-				ally.canMegaEvo = null;
-			} else {
-				ally.canUltraBurst = null;
-			}
-		}*/
+		// Limit mega evolution to once-per-Pokemon
+		pokemon.canMegaEvo = null;
 
 		this.runEvent('AfterMega', pokemon);
 		return true;
