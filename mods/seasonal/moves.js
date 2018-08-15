@@ -33,6 +33,7 @@ let BattleMovedex = {
 	},
 	*/
 	// Please keep sets organized alphabetically based on staff member name!
+	// eternally
 	quack: {
 		accuracy: 100,
 		category: "Status",
@@ -43,7 +44,8 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {mirror: 1, snatch: 1},
-		onHit: function (target, source) {
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
 			this.add('-anim', source, 'Feather Dance', source);
 			this.add('-anim', source, 'Aqua Ring', source);
 		},
@@ -51,6 +53,28 @@ let BattleMovedex = {
 		secondary: null,
 		target: "self",
 		type: "Flying",
+	},
+	//hoeenhero
+	scripting: {
+		accuracy: 100,
+		category: "Status",
+		desc: "",
+		shortDesc: "",
+		id: "scripting",
+		name: "Scripting",
+		pp: 5,
+		priority: 0,
+		flags: {mirror: 1, snatch: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Calm Mind', source);
+			this.add('-anim', source, 'Geomancy', source);
+		},
+		weather: 'raindance',
+		boosts: {spa: 1},
+		secondary: null,
+		target: "self",
+		type: "Psychic",
 	},
 };
 

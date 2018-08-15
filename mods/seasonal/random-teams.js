@@ -41,11 +41,17 @@ class RandomStaffBrosTeams extends RandomTeams {
 			// Nature needs to be a valid nature with the first letter capitalized ex: Modest
 			*/
 			// Please keep sets organized alphabetically based on staff member name!
-			eternally: {
-				species: 'Ducklett', ability: 'Primordial Sea', item: 'Eviolite', gender: 'M',
+			eternally: { //Primordial Sea
+				species: 'Ducklett', ability: 'Battle Armor', item: 'Eviolite', gender: 'M',
 				moves: ['Surf', 'Hurricane', 'Roost'],
 				signatureMove: 'Quack',
 				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+			},
+			hoeenhero: {
+				species: 'Ludicolo', ability: 'Swift Swim', item: 'Damp Rock', gender: 'M',
+				moves: [['Hydro Pump', 'Scald'], 'Giga Drain', 'Ice Beam'],
+				signatureMove: 'Scripting',
+				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 			},
 		};
 		let pool = Object.keys(sets);
