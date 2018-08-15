@@ -33,6 +33,26 @@ let BattleMovedex = {
 	},
 	*/
 	// Please keep sets organized alphabetically based on staff member name!
+	// cc
+	restartingrouter: {
+		accuracy: 100,
+		category: "Status",
+		desc: "",
+		shortDesc: "",
+		id: "restartingrouter",
+		name: "Restarting Router",
+		pp: 10,
+		priority: 0,
+		flags: {mirror: 1, snatch: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Charge', source);
+		},
+		boosts: {spa: 1, spe: 1},
+		secondary: null,
+		target: "self",
+		type: "Electric",
+	},
 	// eternally
 	quack: {
 		accuracy: 100,
@@ -53,6 +73,31 @@ let BattleMovedex = {
 		secondary: null,
 		target: "self",
 		type: "Flying",
+	},
+	// kalalokki
+	maelstrm: {
+		accuracy: 85,
+		basePower: 100,
+		category: "Special",
+		desc: "",
+		shortDesc: "",
+		id: "maelstrm",
+		name: "Maelström",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		volatileStatus: 'partiallytrapped',
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Dark Void', source);
+			this.add('-anim', source, 'Surf', source);
+		},
+		onHit: function (target, source, move) {
+			target.addVolatile('trapped', source, move);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Water",
 	},
 	//hoeenhero
 	scripting: {

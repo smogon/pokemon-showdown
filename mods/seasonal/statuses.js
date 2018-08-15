@@ -19,6 +19,18 @@ let BattleStatuses = {
 	},
 	*/
 	// Please keep statuses organized alphabetically based on staff member name!
+	cc: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|%cc|Yo guys! :]`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|%cc|Gotta go brb`);
+		},
+		onFaint: function () {
+			this.add(`c|%cc|Unfort`);
+		},
+	},
 	eternally: {
 		noCopy: true,
 		onStart: function () {
@@ -26,6 +38,20 @@ let BattleStatuses = {
 		},
 		onFaint: function () {
 			this.add(`c|@eternally|quack`);
+		},
+	},
+	kalalokki: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|@Kalalokki|(•_•)`);
+			this.add(`c|@Kalalokki|( •_•)>⌐■-■`);
+			this.add(`c|@Kalalokki|(⌐■_■)`);
+			this.setWeather('raindance');
+		},
+		onFaint: function () {
+			this.add(`c|@Kalalokki|(⌐■_■)`);
+			this.add(`c|@Kalalokki|( •_•)>⌐■-■`);
+			this.add(`c|@Kalalokki|(x_x)`);
 		},
 	},
 	hoeenhero: {

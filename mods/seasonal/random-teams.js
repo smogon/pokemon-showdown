@@ -41,11 +41,23 @@ class RandomStaffBrosTeams extends RandomTeams {
 			// Nature needs to be a valid nature with the first letter capitalized ex: Modest
 			*/
 			// Please keep sets organized alphabetically based on staff member name!
-			eternally: { //Primordial Sea
-				species: 'Ducklett', ability: 'Battle Armor', item: 'Eviolite', gender: 'M',
+			cc: {
+				species: 'Cobalion', ability: 'Lurking', item: ['Shuca Berry', 'Chople Berry', 'Fightinium Z'], gender: 'M',
+				moves: ['Focus Blast', 'Flash Cannon', ['Thunderbolt', 'Ice Beam']],
+				signatureMove: 'Restarting Router',
+				evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+			},
+			eternally: {
+				species: 'Ducklett', ability: 'Primordial Sea', item: 'Eviolite', gender: 'M',
 				moves: ['Surf', 'Hurricane', 'Roost'],
 				signatureMove: 'Quack',
 				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+			},
+			'Kalalokki': {
+				species: 'Wingull',  ability: 'Swift Swim', item: ['Waterium Z', 'Flyinium Z', 'Electrium Z'], gender: 'M',
+				moves: ['Water Spout', 'Hurricane', 'Thunder'],
+				signatureMove: 'Maelström',
+				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 			},
 			hoeenhero: {
 				species: 'Ludicolo', ability: 'Swift Swim', item: 'Damp Rock', gender: 'M',
