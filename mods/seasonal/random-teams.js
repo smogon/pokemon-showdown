@@ -71,6 +71,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Scripting',
 				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 			},
+			'Iyarito': {
+				species: 'Vaporeon', ability: 'Poison Heal', item: 'Leftovers', gender: 'F',
+				moves: ['Scald', 'Wish', 'Toxic'],
+				signatureMove: 'Víbora',
+				evs: {hp: 252, def: 220, spd: 36}, nature: 'Bold', shiny: true,
+			},
 			'Kalalokki': {
 				species: 'Wingull', ability: 'Swift Swim', item: ['Waterium Z', 'Flyinium Z', 'Electrium Z'], gender: 'M',
 				moves: ['Water Spout', 'Hurricane', 'Thunder'],

@@ -90,6 +90,18 @@ let BattleStatuses = {
 			this.add(`c|&HoeenHero|NO! There must of been a bug in my script ;-;`);
 		},
 	},
+	iyarito: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|@Iyarito|Iyarito is always right`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|@Iyarito|It's all Iyarito's fault`);
+		},
+		onFaint: function () {
+			this.add(`c|@Iyarito|RIP Patrona`);
+		},
+	},
 	macchaeger: {
 		noCopy: true,
 		onStart: function () {

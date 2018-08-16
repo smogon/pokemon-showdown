@@ -177,6 +177,33 @@ let BattleMovedex = {
 		target: "self",
 		type: "Psychic",
 	},
+	// Iyarito
+	vbora: {
+		accuracy: 100,
+		category: "Status",
+		desc: "Cures the user's party of all status conditions, but poisons the user.",
+		shortDesc: "Cures party, poisons self.",
+		id: "vbora",
+		name: "Víbora",
+		pp: 5,
+		flags: {mirror: 1, snatch: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Acid Armor', source);
+		},
+		onHit: function (pokemon, source, move) {
+			//this.add('-activate', source, 'move: Víbora');
+			let success = false;
+			for (const ally of pokemon.side.pokemon) {
+				if (ally.cureStatus()) success = true;
+			}
+			pokemon.setStatus('psn', pokemon);
+			return success;
+		},
+		secondary: null,
+		target: "allyTeam",
+		type: "Poison",
+	},
 	// kalalokki
 	maelstrm: {
 		accuracy: 85,
