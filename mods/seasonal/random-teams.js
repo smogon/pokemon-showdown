@@ -89,6 +89,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Tipping Over',
 				evs: {hp: 252, atk: 252, def: 4}, ivs: {spe: 0}, nature: 'Adament',
 			},
+			'moo': {
+				species: 'Miltank', ability: 'Scrappy', item: 'Life Orb', gender: 'M',
+				moves: ['Extreme Speed', 'Rapid Spin', 'Close Combat'],
+				signatureMove: 'Protein Shake',
+				evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful',
+			},
 			'torkool': {
 				species: 'Torkoal', ability: 'Deflective Shell', item: 'Leftovers', gender: 'M',
 				moves: ['Morning Sun', ['Lava Plume', 'Magma Storm'], 'Toxic'],

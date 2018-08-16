@@ -111,6 +111,18 @@ let BattleStatuses = {
 			this.add(`c|@Megazard|Better luck next thyme`);
 		},
 	},
+	moo: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|@moo|/me moo`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|@moo|/me moo`);
+		},
+		onFaint: function () {
+			this.add(`c|@moo|/me moo`);
+		},
+	},
 	torkool: {
 		noCopy: true,
 		onStart: function () {

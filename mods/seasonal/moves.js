@@ -286,6 +286,44 @@ let BattleMovedex = {
 		target: "normal",
 		type: "???",
 	},
+	// moo
+	proteinshake: {
+		accuracy: 100,
+		category: "Status",
+		desc: "The user's Attack, Special Attack, and Speed are boosted by 1. The user also gains 100kg of weight.",
+		shortDesc: "Boosts users atk, spa, and spe by 1. User gains 100kg",
+		id: "proteinshake",
+		name: "Protein Shake",
+		pp: 10,
+		priority: 0,
+		flags: {snatch: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Milk Drink", source);
+		},
+		volatileStatus: 'proteinshake',
+		effect: {
+			onStart: function (pokemon) {
+				this.effectData.multiplier = 1;
+				this.add('-start', pokemon, 'Protein Shake');
+			},
+			onRestart: function (pokemon) {
+				this.effectData.multiplier++;
+				this.add('-start', pokemon, 'Protein Shake');
+			},
+			onModifyWeightPriority: 1,
+			onModifyWeight: function (weight, pokemon) {
+				if (this.effectData.multiplier) {
+					weight += this.effectData.multiplier * 100;
+					return weight;
+				}
+			},
+		},
+		boosts: {atk: 1, def: 1, spe: 1},
+		secondary: null,
+		target: "self",
+		type: "Normal",
+	},
 	// torkool
 	smokebomb: {
 		accuracy: 100,
