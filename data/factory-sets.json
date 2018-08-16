@@ -9252,9 +9252,9 @@
 				"species": "Tangela",
 				"item": ["Eviolite"],
 				"ability": ["Regenerator"],
-				"evs": {"hp": 252, "def": 252, "spe": 4},
+				"evs": {"hp": 252, "def": 252, "spd": 4},
 				"nature": "Bold",
-				"moves": [["Giga Drain"], ["Hidden Power Ice"], ["Synthesis"], ["Leech Seed", "Sleep Powder", "Defog"]]
+				"moves": [["Giga Drain"], ["Hidden Power Ice"], ["Synthesis"], ["Leech Seed", "Sleep Powder", "Knock Off"]]
 			}]
 		},
 		"stoutland": {
