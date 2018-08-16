@@ -100,31 +100,6 @@ let BattleMovedex = {
 		target: "self",
 		type: "Flying",
 	},
-	// kalalokki
-	maelstrm: {
-		accuracy: 85,
-		basePower: 100,
-		category: "Special",
-		desc: "",
-		shortDesc: "",
-		id: "maelstrm",
-		name: "Maelström",
-		pp: 5,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		volatileStatus: 'partiallytrapped',
-		onPrepareHit: function (target, source) {
-			this.attrLastMove('[still]');
-			this.add('-anim', source, 'Dark Void', source);
-			this.add('-anim', source, 'Surf', source);
-		},
-		onHit: function (target, source, move) {
-			target.addVolatile('trapped', source, move);
-		},
-		secondary: null,
-		target: "normal",
-		type: "Water",
-	},
 	// Hippopotas
 	hazardpass: {
 		accuracy: 100,
@@ -202,10 +177,34 @@ let BattleMovedex = {
 		target: "self",
 		type: "Psychic",
 	},
+	// kalalokki
+	maelstrm: {
+		accuracy: 85,
+		basePower: 100,
+		category: "Special",
+		desc: "",
+		shortDesc: "",
+		id: "maelstrm",
+		name: "Maelström",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		volatileStatus: 'partiallytrapped',
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Dark Void', source);
+			this.add('-anim', source, 'Surf', source);
+		},
+		onHit: function (target, source, move) {
+			target.addVolatile('trapped', source, move);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Water",
+	},
 	// MacChaeger
 	naptime: {
-		accuracy: true,
-		basePower: 0,
+		accuracy: 100,
 		category: "Status",
 		desc: "The user falls asleep for the next turn and restores 50% of its HP, curing itself of any major status condition. If the user falls asleep in this way, all other active Pokemon that are not asleep or frozen also try to use Nap Time. Fails if the user has full HP, is already asleep, or if another effect is preventing sleep.",
 		shortDesc: "All active Pokemon sleep 1 turn, restore HP & status.",
@@ -256,6 +255,36 @@ let BattleMovedex = {
 		target: "self",
 		type: "Fairy",
 		zMoveEffect: 'clearnegativeboosts',
+	},
+	// Megazard
+	tippingover: {
+		accuracy: 100,
+		basePower: 20,
+		basePowerCallback: function (pokemon, target, move) {
+			return move.basePower + 20 * pokemon.positiveBoosts();
+		},
+		category: "Physical",
+		desc: "Power is equal to 20+(X*20), where X is the user's total stat stage changes that are greater than 0. If the user had any stockpile layers, they lose them.",
+		shortDesc: " + 20 power for each of the user's stat boosts. Removes Stockpile.",
+		id: "tippingover",
+		name: "Tipping Over",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Dragon Hammer", target);
+			this.add('-anim', target, "Explosion", target);
+		},
+		onTry: function (pokemon) {
+			if (!pokemon.volatiles['stockpile']) return false;
+		},
+		onAfterMove: function (pokemon) {
+			pokemon.removeVolatile('stockpile');
+		},
+		secondary: null,
+		target: "normal",
+		type: "???",
 	},
 };
 

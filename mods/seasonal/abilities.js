@@ -13,6 +13,7 @@ let BattleAbilities = {
 		// For more examples, see https://github.com/Zarel/Pokemon-Showdown/blob/master/data/abilities.js
 	},
 	*/
+	// Please keep abilites organized alphabetically based on staff member name!
 	// cc
 	lurking: {
 		desc: "",
@@ -22,6 +23,24 @@ let BattleAbilities = {
 		onModifyMove: function (move) {
 			if (typeof move.accuracy === 'number') {
 				move.accuracy *= 1.3;
+			}
+		},
+	},
+	// Megazard
+	standuptall: {
+		desc: "",
+		shortDesc: "",
+		id: "standuptall",
+		name: "Stand Up Tall",
+		onResidualOrder: 26,
+		onResidualSubOrder: 1,
+		onResidual: function (pokemon) {
+			if (pokemon.activeTurns) {
+				if (this.randomChance(1, 2)) {
+					this.boost({def: 1});
+				} else {
+					this.boost({spd: 1});
+				}
 			}
 		},
 	},

@@ -99,6 +99,18 @@ let BattleStatuses = {
 			this.add(`c|@MacChaeger|im gonna pyuk`);
 		},
 	},
+	megazard: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|@Megazard|Almond top of the world!`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|@Megazard|Change of plants`);
+		},
+		onFaint: function () {
+			this.add(`c|@Megazard|Better luck next thyme`);
+		},
+	},
 };
 
 exports.BattleStatuses = BattleStatuses;
