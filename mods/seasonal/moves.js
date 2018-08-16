@@ -286,6 +286,37 @@ let BattleMovedex = {
 		target: "normal",
 		type: "???",
 	},
+	// torkool
+	smokebomb: {
+		accuracy: 100,
+		category: "Status",
+		desc: "Moves all hazards on the user's side of the field to the foe's side of the field. The user then switches out.",
+		shortDesc: "Moves hazards to foe's side. Switches out.",
+		id: "smokebomb",
+		name: "Smoke Bomb",
+		pp: 10,
+		priority: 0,
+		flags: {snatch: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Smokescreen", target);
+			this.add('-anim', source, "Parting Shot", target);
+		},
+		onHit: function (target, source) {
+			const sideConditions = {'spikes': 1, 'toxicspikes': 1, 'burnspikes': 1, 'stealthrock': 1, 'stickyweb': 1};
+			for (let i in sideConditions) {
+				let layers = source.side.sideConditions[i] ? (source.side.sideConditions[i].layers || 1) : 1;
+				if (source.side.removeSideCondition(i)) {
+					this.add('-sideend', source.side, this.getEffect(i).name, '[from] move: Smoke Bomb', '[of] ' + source);
+					for (layers; layers > 0; layers--) target.side.addSideCondition(i, source);
+				}
+			}
+		},
+		selfSwitch: true,
+		secondary: null,
+		target: "normal",
+		type: "Fire",
+	},
 };
 
 exports.BattleMovedex = BattleMovedex;
