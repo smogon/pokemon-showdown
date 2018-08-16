@@ -99,6 +99,61 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Water",
 	},
+	// Hippopotas
+	hazardpass: {
+		accuracy: 100,
+		category: "Status",
+		pp: 20,
+		shortDesc: "Sets 2 random hazards, then switches out.",
+		id: "hazardpass",
+		isNonstandard: true,
+		name: "Hazard Pass",
+		flags: {reflectable: 1, mirror: 1, authentic: 1},
+		onPrepareHit: function () {
+			this.attrLastMove('[still]');
+		},
+		onHitSide: function (target, source) {
+			// All possible hazards, and their maximum possible layer count
+			/** @type {{[key: string]: number}} */
+			let hazards = {stealthrock: 1, spikes: 3, toxicspikes: 2, stickyweb: 1};
+			// Check how many layers of each hazard can still be added to the foe's side
+			if (target.getSideCondition('stealthrock')) delete hazards.stealthrock;
+			if (target.getSideCondition('spikes')) {
+				hazards.spikes -= target.sideConditions['spikes'].layers;
+				if (!hazards.spikes) delete hazards.spikes;
+			}
+			if (target.getSideCondition('toxicspikes')) {
+				hazards.toxicspikes -= target.sideConditions['toxicspikes'].layers;
+				if (!hazards.toxicspikes) delete hazards.toxicspikes;
+			}
+			if (target.getSideCondition('stickyweb')) delete hazards.stickyweb;
+			// Create a list of hazards not yet at their maximum layer count
+			let hazardTypes = Object.keys(hazards);
+			// If there are no possible hazards, don't do anything
+			if (!hazardTypes.length) return false;
+			// Pick a random hazard, and set it
+			let hazard1 = this.sample(hazardTypes);
+			// Theoretically, this should always work
+			this.add('-anim', source, this.getMove(hazard1).name, target);
+			target.addSideCondition(hazard1, source, this.effect);
+			// If that was the last possible layer of that hazard, remove it from our list of possible hazards
+			if (hazards[hazard1] === 1) {
+				hazardTypes.splice(hazardTypes.indexOf(hazard1), 1);
+				// If there are no more hazards we can set, end early on a success
+				if (!hazardTypes.length) return true;
+			}
+			// Set the last hazard and animate the switch
+			let hazard2 = this.sample(hazardTypes);
+			this.add('-anim', source, this.getMove(hazard2).name, target);
+			target.addSideCondition(hazard2, source, this.effect);
+			this.add('-anim', source, "Baton Pass", target);
+		},
+		selfSwitch: true,
+		secondary: null,
+		target: "foeSide",
+		type: "Normal",
+		zMoveBoost: {def: 1},
+	},
 	//hoeenhero
 	scripting: {
 		accuracy: 100,

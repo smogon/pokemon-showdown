@@ -54,6 +54,18 @@ let BattleStatuses = {
 			this.add(`c|@Kalalokki|(x_x)`);
 		},
 	},
+	hippopotas: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|@Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|@Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
+		},
+		onFaint: function () {
+			this.add(`c|@Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
+		},
+	},
 	hoeenhero: {
 		noCopy: true,
 		onStart: function () {

@@ -59,6 +59,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Maelström',
 				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 			},
+			'Hippopotas': {
+				species: 'Hippopotas', ability: 'Regenerator', item: 'Eviolite', gender: 'N',
+				moves: ['Stealth Rock', 'Spikes', 'Toxic Spikes', 'Sticky Web'],
+				signatureMove: 'Hazard Pass',
+				evs: {hp: 252, def: 252, spd: 4}, ivs: {atk: 0, spa: 0}, nature: 'Bold',
+			},
 			hoeenhero: {
 				species: 'Ludicolo', ability: 'Swift Swim', item: 'Damp Rock', gender: 'M',
 				moves: [['Hydro Pump', 'Scald'], 'Giga Drain', 'Ice Beam'],
