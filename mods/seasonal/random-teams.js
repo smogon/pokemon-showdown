@@ -41,6 +41,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 			// Nature needs to be a valid nature with the first letter capitalized ex: Modest
 			*/
 			// Please keep sets organized alphabetically based on staff member name!
+			'Aelita': {
+				species: 'Porygon-Z', ability: 'Protean', item: ['Life Orb'], gender: 'F',
+				moves: [['Boomburst', 'Moonblast'], 'Blue Flare', 'Chatter'],
+				signatureMove: 'Energy Field',
+				evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
+			},
 			cc: {
 				species: 'Cobalion', ability: 'Lurking', item: ['Shuca Berry', 'Chople Berry', 'Fightinium Z'], gender: 'M',
 				moves: ['Focus Blast', 'Flash Cannon', ['Thunderbolt', 'Ice Beam']],

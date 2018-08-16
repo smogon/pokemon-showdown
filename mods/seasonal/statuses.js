@@ -19,6 +19,18 @@ let BattleStatuses = {
 	},
 	*/
 	// Please keep statuses organized alphabetically based on staff member name!
+	aelita: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|@Aelita|Transfer, Aelita! Scanner, Aelita! Virtualization!`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|@Aelita|I have a tower to deactivate. See ya!`);
+		},
+		onFaint: function () {
+			this.add(`c|@Aelita|CODE: LYOKO . Tower deactivated... Return to the past, now!`);
+		},
+	},
 	cc: {
 		noCopy: true,
 		onStart: function () {

@@ -33,6 +33,32 @@ let BattleMovedex = {
 	},
 	*/
 	// Please keep sets organized alphabetically based on staff member name!
+	// Aelita
+	energyfield: {
+		accuracy: 100,
+		basePower: 140,
+		category: "Special",
+		shortDesc: "40% to paralyze target. Lowers user's SpA, SpD, Spe by 1.",
+		id: "energyfield",
+		isNonstandard: true,
+		name: "Energy Field",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Electro Ball", target);
+			this.add('-anim', source, "Ion Deluge", target);
+		},
+		self: {boosts: {spa: -1, spd: -1, spe: -1}},
+		secondary: {
+			chance: 40,
+			status: 'par',
+		},
+		target: "normal",
+		type: "Electric",
+		zMovePower: 200,
+	},
 	// cc
 	restartingrouter: {
 		accuracy: 100,
