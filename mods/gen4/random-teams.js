@@ -142,13 +142,11 @@ class RandomGen4Teams extends RandomGen5Teams {
 
 				// Set up once and only if we have the moves for it
 				case 'bellydrum': case 'bulkup': case 'curse': case 'dragondance': case 'swordsdance':
-					if (counter.setupType !== 'Physical' || counter['physicalsetup'] > 1) {
-						if (!hasMove['growth'] || hasMove['sunnyday']) rejected = true;
-					}
+					if (counter.setupType !== 'Physical' || counter['physicalsetup'] > 1 || hasMove['sunnyday']) rejected = true;
 					if (counter.Physical + counter['physicalpool'] < 2 && !hasMove['batonpass'] && (!hasMove['rest'] || !hasMove['sleeptalk'])) rejected = true;
 					isSetup = true;
 					break;
-				case 'calmmind': case 'growth': case 'nastyplot': case 'tailglow':
+				case 'calmmind': case 'nastyplot': case 'tailglow':
 					if (counter.setupType !== 'Special' || counter['specialsetup'] > 1) rejected = true;
 					if (counter.Special + counter['specialpool'] < 2 && !hasMove['batonpass'] && (!hasMove['rest'] || !hasMove['sleeptalk'])) rejected = true;
 					isSetup = true;
@@ -258,7 +256,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 				case 'energyball':
 					if (hasMove['leafblade'] || hasMove['woodhammer'] || (hasMove['sunnyday'] && hasMove['solarbeam'])) rejected = true;
 					break;
-				case 'grassknot': case 'seedbomb':
+				case 'grassknot': case 'leafblade': case 'seedbomb':
 					if (hasMove['woodhammer'] || (hasMove['sunnyday'] && hasMove['solarbeam'])) rejected = true;
 					break;
 				case 'leafstorm':
@@ -379,9 +377,9 @@ class RandomGen4Teams extends RandomGen5Teams {
 				if ((hasType['Bug'] && !counter['Bug'] && (movePool.includes('bugbuzz') || movePool.includes('megahorn'))) ||
 					(hasType['Dragon'] && !counter['Dragon']) ||
 					(hasType['Electric'] && !counter['Electric']) ||
-					(hasType['Fighting'] && !counter['Fighting'] && (counter.setupType || !counter['Status'] || movePool.includes('closecombat'))) ||
+					(hasType['Fighting'] && !counter['Fighting'] && (counter.setupType || !counter['Status'] || movePool.includes('closecombat') || movePool.includes('highjumpkick'))) ||
 					(hasType['Fire'] && !counter['Fire']) ||
-					(hasType['Flying'] && !counter['Flying'] && movePool.includes('bravebird')) ||
+					(hasType['Flying'] && !counter['Flying'] && (counter.setupType !== 'Special' && movePool.includes('bravebird'))) ||
 					(hasType['Grass'] && !counter['Grass'] && (movePool.includes('leafblade') || movePool.includes('leafstorm') || movePool.includes('seedflare') || movePool.includes('woodhammer'))) ||
 					(hasType['Ground'] && !counter['Ground']) ||
 					(hasType['Ice'] && !counter['Ice'] && (!hasType['Water'] || !counter['Water'])) ||
@@ -598,7 +596,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 			item = 'Lustrous Orb';
 		} else if (ability === 'Guts') {
 			item = 'Toxic Orb';
-		} else if (slot === 0 && !counter['recoil'] && !counter['recovery'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 235) {
+		} else if (slot === 0 && !counter['recoil'] && !moves.some(id => !!recoveryMoves.includes(id)) && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 235) {
 			item = 'Focus Sash';
 		} else if (counter.damagingMoves.length >= 4) {
 			item = (!!counter['Normal'] || hasMove['chargebeam'] || hasMove['suckerpunch']) ? 'Life Orb' : 'Expert Belt';
