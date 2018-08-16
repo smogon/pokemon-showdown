@@ -60,7 +60,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
 			'Kalalokki': {
-				species: 'Wingull',  ability: 'Swift Swim', item: ['Waterium Z', 'Flyinium Z', 'Electrium Z'], gender: 'M',
+				species: 'Wingull', ability: 'Swift Swim', item: ['Waterium Z', 'Flyinium Z', 'Electrium Z'], gender: 'M',
 				moves: ['Water Spout', 'Hurricane', 'Thunder'],
 				signatureMove: 'Maelström',
 				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
