@@ -31,6 +31,18 @@ let BattleStatuses = {
 			this.add(`c|@Aelita|CODE: LYOKO . Tower deactivated... Return to the past, now!`);
 		},
 	},
+	beowulf: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|@Beowulf|/me BUZZES LOUDLY`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|@Beowulf|/me BUZZES LOUDLY`);
+		},
+		onFaint: function () {
+			this.add(`c|@Beowulf|BUZZ BUZZ BUZZ BUZZ`);
+		},
+	},
 	cc: {
 		noCopy: true,
 		onStart: function () {

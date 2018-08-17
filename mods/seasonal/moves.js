@@ -59,6 +59,29 @@ let BattleMovedex = {
 		type: "Electric",
 		zMovePower: 200,
 	},
+	// Beowulf
+	buzzingoftheswarm: {
+		accuracy: 100,
+		basePower: 95,
+		category: "Physical",
+		desc: "",
+		shortDesc: "",
+		id: "buzzingoftheswarm",
+		name: "Buzzing of the Swarm",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Bug Buzz', source);
+		},
+		secondary: {
+			chance: 20,
+			volatileStatus: 'flinch',
+		},
+		target: "normal",
+		type: "Bug",
+	},
 	// cc
 	restartingrouter: {
 		accuracy: 100,

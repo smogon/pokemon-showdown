@@ -4,7 +4,7 @@
 /**
  * @typedef {Object} SSBSet
  * @property {string} species
- * @property {string} ability
+ * @property {string | string[]} ability
  * @property {string | string[]} item
  * @property {GenderName} gender
  * @property {(string | string[])[]} moves
@@ -46,6 +46,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				moves: [['Boomburst', 'Moonblast'], 'Blue Flare', 'Chatter'],
 				signatureMove: 'Energy Field',
 				evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
+			},
+			'Beowulf': {
+				species: 'Beedrill', ability: ['Download', 'Speed Boost'], item: 'Beedrillite', gender: 'M',
+				moves: ['Spiky Shield', 'Gunk Shot', ['Bolt Strike', 'Diamond Storm', 'Sacred Fire']],
+				signatureMove: 'Buzzing of the Swarm',
+				evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 			},
 			'cc': {
 				species: 'Cobalion', ability: 'Lurking', item: ['Shuca Berry', 'Chople Berry', 'Fightinium Z'], gender: 'M',
@@ -117,7 +123,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				name: name,
 				species: ssbSet.species,
 				item: Array.isArray(ssbSet.item) ? this.sampleNoReplace(ssbSet.item) : ssbSet.item,
-				ability: ssbSet.ability,
+				ability: Array.isArray(ssbSet.ability) ? this.sampleNoReplace(ssbSet.ability) : ssbSet.ability,
 				moves: [],
 				nature: ssbSet.nature,
 				gender: ssbSet.gender,
