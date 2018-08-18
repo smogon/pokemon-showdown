@@ -26,6 +26,22 @@ let BattleAbilities = {
 			}
 		},
 	},
+	// E4 Flint
+	starkmountain: {
+		desc: "The user summong sunny when they switch in. If the weather is sunny, the user is immune to water type attacks.",
+		shortDesc: "Summons sunny weather, Immune to Water type attacks in sunny weather.",
+		id: "starkmountain",
+		name: "Stark Mountain",
+		onStart: function (target, source) {
+			this.setWeather('sunnyday', source);
+		},
+		onTryHit: function (target, source, move) {
+			if (target !== source && move.type === 'Water' && this.isWeather(['sunnyday', 'desolateland'])) {
+				this.add('-immune', target, '[msg]', '[from] ability: Stark Mountain');
+				return null;
+			}
+		},
+	},
 	// Megazard
 	standuptall: {
 		desc: "This Pokemon's Defense or Special Defense is raised 1 stage at the end of each full turn on the field.",

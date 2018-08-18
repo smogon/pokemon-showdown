@@ -9,6 +9,12 @@ let BattlePokedex = {
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100}, // the base stats for the pokemon
 	},
 	*/
+	// E4 Flint
+	steelixmega: {
+		inherit: true,
+		abilities: {0: 'Stark Mountain'},
+		types: ['Steel', 'Ground', 'Fire'],
+	},
 	// MacChaeger
 	mantyke: {
 		inherit: true,

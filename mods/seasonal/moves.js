@@ -128,6 +128,34 @@ let BattleMovedex = {
 		target: "self",
 		type: "Electric",
 	},
+	// E4 Flint
+	fangofthefireking: {
+		accuracy: 100,
+		basePower: 0,
+		damage: 150,
+		category: "Physical",
+		desc: "Does 150 damage and burns the target.",
+		shortDesc: "Does 150 damage, burns.",
+		id: "fangofthefireking",
+		name: "Fang of the Fire King",
+		pp: 10,
+		priority: 0,
+		flags: {mirror: 1, protect: 1, bite: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Burn Up', target);
+			this.add('-anim', source, 'Crunch', target);
+			this.add('-anim', source, 'Crunch', target);
+		},
+		onHit: function (target, source) {
+			target.setStatus('brn', source, null, true);
+			// Cringy message
+			if (this.random(5) === 1) this.add(`c|@e4 Flint|here's a __taste__ of my __firepower__ XD`);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fire",
+	},
 	// eternally
 	quack: {
 		accuracy: 100,

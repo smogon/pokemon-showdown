@@ -67,6 +67,18 @@ let BattleStatuses = {
 			this.add(`c|%cc|Unfort`);
 		},
 	},
+	e4flint: {
+		noCopy: true,
+		onStart: function (target, source) {
+			this.add(`c|@E4 Flint|How many Fire-Types do I have now`);
+			// Mega evo right away and display unique typing
+			this.runMegaEvo(source);
+			this.add('-start', source, 'typeadd', 'Fire');
+		},
+		onFaint: function () {
+			this.add(`c|@E4 Flint|lul ok`);
+		},
+	},
 	eternally: {
 		noCopy: true,
 		onStart: function () {
