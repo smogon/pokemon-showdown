@@ -59,6 +59,32 @@ let BattleMovedex = {
 		type: "Electric",
 		zMovePower: 200,
 	},
+	// ant
+	truant: {
+		accuracy: 100,
+		basePower: 100,
+		category: "Physical",
+		desc: "",
+		shortDesc: "",
+		id: "truant",
+		name: "TRU ANT",
+		pp: 5,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Sunsteel Strike', target);
+		},
+		onHit: function (pokemon) {
+			let oldAbility = pokemon.setAbility('truant');
+			if (oldAbility) {
+				this.add('-ability', pokemon, 'Truant', '[from] move: TRU ANT');
+				return;
+			}
+			return false;
+		},
+		target: "normal",
+		type: "Steel",
+	},
 	// Beowulf
 	buzzingoftheswarm: {
 		accuracy: 100,

@@ -47,6 +47,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Energy Field',
 				evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 			},
+			'ant': {
+				species: 'Durant', ability: 'Flash Fire', item: 'Leftovers', gender: 'F',
+				moves: ['King\'s Shield', 'U-turn', 'Pursuit'],
+				signatureMove: 'TRU ANT',
+				evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
+			},
 			'Beowulf': {
 				species: 'Beedrill', ability: ['Download', 'Speed Boost'], item: 'Beedrillite', gender: 'M',
 				moves: ['Spiky Shield', 'Gunk Shot', ['Bolt Strike', 'Diamond Storm', 'Sacred Fire']],
