@@ -44,6 +44,20 @@ let BattleAbilities = {
 			}
 		},
 	},
+	// The Immortal
+	beastboost2: {
+		desc: "This Pokemon's highest 2 stats are raised by 1 if it attacks and KOes another Pokemon",
+		shortDesc: "This Pokemon's highest 2 stats are raised by 1 if it attacks and KOes another Pokemon",
+		id: "beastboost2",
+		name: "Beast Boost 2",
+		onSourceFaint: function (target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				let statOrder = Object.keys(source.stats)
+				    .sort((stat1, stat2) => source.stats[stat2] - source.stats[stat1]);
+				this.boost({[statOrder[0]]: 1, [statOrder[1]]: 1}, source);
+			}
+		},
+	},
 	// torkool
 	deflectiveshell: {
 		desc: "Non-contact moves do 33% less damage to this pokemon.",

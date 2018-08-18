@@ -147,6 +147,18 @@ let BattleStatuses = {
 			this.add(`c|@moo|/me moo`);
 		},
 	},
+	theimmortal: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|~The Immortal|h-hi`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|~The Immortal|ok`);
+		},
+		onFaint: function () {
+			this.add(`c|~The Immortal|zzz`);
+		},
+	},
 	torkool: {
 		noCopy: true,
 		onStart: function () {

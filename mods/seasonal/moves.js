@@ -374,6 +374,35 @@ let BattleMovedex = {
 		target: "self",
 		type: "Normal",
 	},
+	// The Immortal
+	ultrasucc: {
+		accuracy: 95,
+		basePower: 90,
+		desc: "",
+		shortDesc: "",
+		id: "ultrasucc",
+		name: "Ultra Succ",
+		category: "Physical",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, heal: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Dragon Ascent", target);
+			this.add('-anim', source, "Draining Kiss", target);
+		},
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					spe: 1,
+				},
+			},
+		},
+		drain: [1, 2],
+		target: "normal",
+		type: "Fighting",
+	},
 	// torkool
 	smokebomb: {
 		accuracy: 100,

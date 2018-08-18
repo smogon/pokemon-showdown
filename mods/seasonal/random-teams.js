@@ -107,6 +107,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Protein Shake',
 				evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful',
 			},
+			'The Immortal': {
+				species: 'Buzzwole', ability: 'Beast Boost 2', item: 'Assault Vest', gender: 'N', // confirm with TI
+				moves: ['Leech Life', 'Plasma Fists', 'Ice Punch'],
+				signatureMove: 'Ultra Succ',
+				evs: {atk: 252, hp: 252, spd: 4}, nature: 'Adamant',
+			},
 			'torkool': {
 				species: 'Torkoal', ability: 'Deflective Shell', item: 'Leftovers', gender: 'M',
 				moves: ['Morning Sun', ['Lava Plume', 'Magma Storm'], 'Toxic'],
