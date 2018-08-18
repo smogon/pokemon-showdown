@@ -41,7 +41,7 @@ if (scavsRoom && Array.isArray(scavsRoom.winPoints)) {
 	if (scavsRoom.chatRoomData) {
 		scavsRoom.chatRoomData.winPoints = scavsRoom.winPoints;
 		scavsRoom.chatRoomData.blitzPoints = scavsRoom.blitzPoints;
-		scavsRoom.global.writeChatRoomData();
+		Rooms.global.writeChatRoomData();
 	}
 }
 
