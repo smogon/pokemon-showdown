@@ -469,7 +469,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 
 				let next = room.scavQueue.shift();
 				let duration = room.defaultScavTimer || DEFAULT_TIMER_DURATION;
-				room.game = new ScavengerHunt(room, {userid: next.staffHostId, name: next.staffHostName}, next.hosts, false, next.questions);
+				room.game = new ScavengerHunt(room, {userid: next.staffHostId, name: next.staffHostName}, next.hosts, 'regular', next.questions);
 				room.game.setTimer(duration); // auto timer for queue'd games.
 
 				room.add(`|c|~|[ScavengerManager] A scavenger hunt by ${Chat.toListString(next.hosts.map(h => h.name))} has been automatically started. It will automatically end in ${duration} minutes.`).update(); // highlight the users with "hunt by"
@@ -746,9 +746,14 @@ let commands = {
 			let [details, hostsArray, ...params] = target.split('|'), blind, official;
 			details = details.split(' ').map(toId);
 			if (details.includes('blind')) blind = true;
-			if (details.includes('official')) official = true;
+			let gameType = 'regular';
+			if (details.includes('official')) {
+				gameType = 'official';
+			} else if (details.includes('mini')) {
+				gameType = 'mini';
+			}
 
-			if (!official && !blind) {
+			if (gameType === 'regular' && !blind) {
 				params = [hostsArray, ...params];
 				hostsArray = details.join(' ');
 			}
@@ -759,7 +764,7 @@ let commands = {
 			params = ScavengerHunt.parseQuestions(params);
 			if (params.err) return this.errorReply(params.err);
 
-			room.game = new ScavengerGames.Incognito(room, blind, official, user, hosts, params.result);
+			room.game = new ScavengerGames.Incognito(room, blind, gameType, user, hosts, params.result);
 		},
 		/**
 		 * General game commands
@@ -830,14 +835,17 @@ let commands = {
 		if (room.id !== 'scavengers') return this.errorReply("Scavenger hunts can only be created in the scavengers room.");
 		if (!this.can('mute', null, room)) return false;
 		if (room.game && !room.game.scavParentGame) return this.errorReply(`There is already a game in this room - ${room.game.title}.`);
-		if (!cmd.includes('official') && !cmd.includes('practice') && room.scavQueue && room.scavQueue.length && !(room.game && room.scavParentGame)) return this.errorReply("There are currently hunts in the queue! If you would like to start the hunt anyways, use /forcestarthunt.");
 		let gameType = 'regular';
-		switch (cmd) {
-		case 'createpractice': gameType = 'practice'; break;
-		case 'createofficial': gameType = 'official'; break;
-		case 'createmini': gameType = 'mini'; break;
-		case 'createunrated': gameType = 'unrated'; break;
+		if (cmd.includes('practice')) {
+			gameType = 'practice';
+		} else if (cmd.includes('official')) {
+			gameType = 'official';
+		} else if (cmd.includes('mini')) {
+			gameType = 'mini';
+		} else if (cmd.includes('unrated')) {
+			gameType = 'unrated';
 		}
+		if (gameType === 'regular' && room.scavQueue && room.scavQueue.length && !(room.game && room.scavParentGame)) return this.errorReply("There are currently hunts in the queue! If you would like to start the hunt anyways, use /forcestarthunt.");
 
 		let [hostsArray, ...params] = target.split('|');
 		let hosts = ScavengerHunt.parseHosts(hostsArray.split(/[,;]/), room, gameType === 'official');
@@ -1053,7 +1061,7 @@ let commands = {
 		if (!room.scavQueue[target]) return false; // no need for an error reply - this is done via UI anyways
 
 		let next = room.scavQueue.splice(target, 1)[0]; // returns [ hunt ]
-		room.game = new ScavengerHunt(room, {userid: next.staffHostId, name: next.staffHostName}, next.hosts, false, next.questions);
+		room.game = new ScavengerHunt(room, {userid: next.staffHostId, name: next.staffHostName}, next.hosts, 'regular', next.questions);
 
 		if (target) this.sendReply(`|uhtmlchange|scav-queue|${formatQueue(room.scavQueue, user, room)}`);
 		this.modlog('SCAV NEW', null, `from queue: creators - ${next.hosts.map(h => h.userid)}`);
@@ -1376,6 +1384,8 @@ exports.commands = {
 	scavenge: commands.guess,
 	startpracticehunt: 'starthunt',
 	startofficialhunt: 'starthunt',
+	startminihunt: 'starthunt',
+	startunratedhunt: 'starthunt',
 	forcestarthunt: 'starthunt',
 	starthunt: commands.create,
 	joinhunt: commands.join,
@@ -1426,7 +1436,7 @@ exports.commands = {
 		const staffCommands = [
 			"<strong>Staff commands:</strong>",
 			"- /starthunt <em>[host] | [hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em> - creates a new scavenger hunt. (Requires: % @ * # & ~)",
-			"- /startofficialhunt <em>[host] | [hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em> - creates a new official scavenger hunt with a 60 second blitz period.  Blitz and wins from official hunts will count towards the leaderboard. (Requires: % @ * # & ~)",
+			"- /start(official/practice/mini/unrated)hunt <em>[host] | [hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em> - creates a new scavenger hunt, giving points if assigned.  Blitz and wins will count towards the leaderboard. (Requires: % @ * # & ~)",
 			"- /edithunt <em>[question number], [hint | answer], [value]</em> - edits the current scavenger hunt. Only the host(s) can edit the hunt.",
 			"- /resethunt - resets the current scavenger hunt without revealing the hints and answers. (Requires: % @ * # & ~)",
 			"- /endhunt - ends the current scavenger hunt and announces the winners and the answers. (Requires: % @ * # & ~)",

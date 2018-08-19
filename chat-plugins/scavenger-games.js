@@ -505,12 +505,12 @@ class PointRally extends ScavGame {
 }
 
 class Incognito extends ScavGame {
-	constructor(room, blind, official, staffHost, hosts, hunt) {
+	constructor(room, blind, gameType, staffHost, hosts, hunt) {
 		super(room, 'Incognito');
 
 		this.blind = blind;
 		this.hunt = hunt;
-		this.gameType = official ? 'official' : null;
+		this.gameType = gameType;
 
 		this.announce(`A new ${blind ? 'Blind' : ''} Incognito game has been started!`);
 		this.createHunt(room, staffHost, hosts, this.gameType, hunt);
