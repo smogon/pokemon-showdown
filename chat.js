@@ -292,9 +292,6 @@ class CommandContext {
 				}
 			}
 
-			if (!this.pmTarget && this.room.id === 'global') {
-				return this.errorReply(`Please specify a room or user to send this message to.`);
-			}
 			message = this.canTalk(message);
 		}
 
@@ -316,7 +313,7 @@ class CommandContext {
 	/**
 	 * @param {string} message
 	 * @param {boolean} recursing
-	 * @return {string | undefined}
+	 * @return {'!' | undefined | Function}
 	 */
 	splitCommand(message = this.message, recursing = false) {
 		this.cmd = '';
@@ -802,8 +799,8 @@ class CommandContext {
 			room = null;
 		} else if (!room) {
 			if (this.room.id === 'global') {
-				// should never happen
-				throw new Error(`Command tried to write to global: ${this.user.name}: ${message}`);
+				this.connection.popup(`Your message needs to be sent to a user or room.`);
+				return false;
 			}
 			// @ts-ignore
 			room = this.room;

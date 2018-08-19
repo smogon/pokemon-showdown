@@ -2348,7 +2348,6 @@ const commands = {
 
 		if (room && !this.can('announce', null, room)) return false;
 
-		if (room && room.id === 'global') this.errorReply(`Please specify a room to announce in.`);
 		target = this.canTalk(target);
 		if (!target) return;
 
