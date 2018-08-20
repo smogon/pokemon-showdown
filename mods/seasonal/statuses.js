@@ -138,6 +138,18 @@ let BattleStatuses = {
 			this.add(`c|@Iyarito|RIP Patrona`);
 		},
 	},
+	level51: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|@Level 51|Calculating chance of victory!`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|@Level 51|chance_victory < 1. Recalibrating...`);
+		},
+		onFaint: function () {
+			this.add(`c|@Level 51|**IndexError**: list index out of range`);
+		},
+	},
 	macchaeger: {
 		noCopy: true,
 		onStart: function () {

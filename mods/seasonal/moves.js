@@ -306,6 +306,44 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Water",
 	},
+	// Level 51
+	nextlevelstrats: {
+		accuracy: true,
+		category: "Status",
+		desc: "",
+		shortDesc: "",
+		id: "nextlevelstrats",
+		name: "Next Level Strats",
+		pp: 5,
+		priority: 0,
+		flags: {snatch: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Nasty Plot", target);
+		},
+		onHit: function (pokemon) {
+			const template = pokemon.template;
+			pokemon.level += 10;
+			pokemon.set.level = pokemon.level;
+			pokemon.formeChange(template);
+			// ability is set to default from formeChange
+			pokemon.setAbility('parentalbond');
+
+			pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+			this.add('detailschange', pokemon, pokemon.details);
+
+			const newHP = Math.floor(Math.floor(2 * template.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100) * pokemon.level / 100 + 10);
+			pokemon.hp = newHP - (pokemon.maxhp - pokemon.hp);
+			pokemon.maxhp = newHP;
+			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+
+			this.add('-message', `${pokemon.name} advanced 10 levels! It is now level ${pokemon.level}!`);
+		},
+		secondary: null,
+		target: "self",
+		type: "Normal",
+
+	},
 	// MacChaeger
 	naptime: {
 		accuracy: 100,
