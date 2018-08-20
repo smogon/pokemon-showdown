@@ -258,21 +258,16 @@ class CommandContext {
 		}
 		message = this.message;
 
-		let originalRoom = this.room;
-		if (this.room && !(this.user.userid in this.room.users)) {
-			this.room = Rooms.global;
-		}
-
 		let commandHandler = this.splitCommand(message);
 
 		if (typeof commandHandler === 'function') {
 			message = this.run(commandHandler);
 		} else {
 			if (commandHandler === '!') {
-				if (originalRoom === Rooms.global) {
+				if (this.room === Rooms.global) {
 					return this.popupReply(`You tried use "${message}" as a global command, but it is not a global command.`);
-				} else if (originalRoom) {
-					return this.popupReply(`You tried to send "${message}" to the room "${originalRoom.id}" but it failed because you were not in that room.`);
+				} else if (this.room) {
+					return this.popupReply(`You tried to send "${message}" to the room "${this.room.id}" but it failed because you were not in that room.`);
 				}
 				return this.errorReply(`The command "${this.cmdToken}${this.fullCmd}" is unavailable in private messages. To send a message starting with "${this.cmdToken}${this.fullCmd}", type "${this.cmdToken}${this.cmdToken}${this.fullCmd}".`);
 			}
@@ -412,8 +407,15 @@ class CommandContext {
 		this.target = target;
 		this.fullCmd = fullCmd;
 
-		if (typeof commandHandler === 'function' && (this.pmTarget || this.room === Rooms.global)) {
-			if (!curCommands['!' + (typeof curCommands[cmd] === 'string' ? curCommands[cmd] : cmd)]) {
+		const requireGlobalCommand = (
+			this.pmTarget ||
+			this.room === Rooms.global ||
+			(this.room && !(this.user.userid in this.room.users))
+		);
+
+		if (typeof commandHandler === 'function' && requireGlobalCommand) {
+			const baseCmd = typeof curCommands[cmd] === 'string' ? curCommands[cmd] : cmd;
+			if (!curCommands['!' + baseCmd]) {
 				return '!';
 			}
 		}
@@ -518,22 +520,25 @@ class CommandContext {
 	 * @param {string} message
 	 */
 	pmTransform(message) {
-		if (!this.pmTarget) throw new Error(`Not a PM`);
-		let prefix = `|pm|${this.user.getIdentity()}|${this.pmTarget.getIdentity()}|`;
+		if (!this.pmTarget && this.room !== Rooms.global) throw new Error(`Not a PM`);
+		const targetIdentity = this.pmTarget ? this.pmTarget.getIdentity() : '~';
+		const prefix = `|pm|${this.user.getIdentity()}|${targetIdentity}|`;
 		return message.split('\n').map(message => {
 			if (message.startsWith('||')) {
-				return prefix + '/text ' + message.slice(2);
-			} else if (message.startsWith('|html|')) {
-				return prefix + '/raw ' + message.slice(6);
-			} else if (message.startsWith('|raw|')) {
-				return prefix + '/raw ' + message.slice(5);
-			} else if (message.startsWith('|c~|')) {
+				return prefix + `/text ` + message.slice(2);
+			} else if (message.startsWith(`|html|`)) {
+				return prefix + `/error ` + message.slice(6);
+			} else if (message.startsWith(`|raw|`)) {
+				return prefix + `/raw ` + message.slice(5);
+			} else if (message.startsWith(`|error|`)) {
+				return prefix + `/error ` + message.slice(7);
+			} else if (message.startsWith(`|c~|`)) {
 				return prefix + message.slice(4);
-			} else if (message.startsWith('|c|~|/')) {
+			} else if (message.startsWith(`|c|~|/`)) {
 				return prefix + message.slice(5);
 			}
-			return prefix + '/text ' + message;
-		}).join('\n');
+			return prefix + `/text ` + message;
+		}).join(`\n`);
 	}
 	/**
 	 * @param {string} data
@@ -544,7 +549,7 @@ class CommandContext {
 			this.add(data);
 		} else {
 			// not broadcasting
-			if (this.pmTarget) {
+			if (this.pmTarget || this.room === Rooms.global) {
 				data = this.pmTransform(data);
 				this.connection.send(data);
 			} else {
@@ -556,24 +561,19 @@ class CommandContext {
 	 * @param {string} message
 	 */
 	errorReply(message) {
-		if (this.pmTarget) {
-			let prefix = '|pm|' + this.user.getIdentity() + '|' + this.pmTarget.getIdentity() + '|/error ';
-			this.connection.send(prefix + message.replace(/\n/g, prefix));
-		} else {
-			this.sendReply('|html|<div class="message-error">' + Chat.escapeHTML(message).replace(/\n/g, '<br />') + '</div>');
-		}
+		this.sendReply(`|error|` + message.replace(/\n/g, `\n|error|`));
 	}
 	/**
 	 * @param {string} html
 	 */
 	addBox(html) {
-		this.add('|html|<div class="infobox">' + html + '</div>');
+		this.add(`|html|<div class="infobox">${html}</div>`);
 	}
 	/**
 	 * @param {string} html
 	 */
 	sendReplyBox(html) {
-		this.sendReply('|html|<div class="infobox">' + html + '</div>');
+		this.sendReply(`|html|<div class="infobox">${html}</div>`);
 	}
 	/**
 	 * @param {string} message
@@ -799,7 +799,7 @@ class CommandContext {
 			room = null;
 		} else if (!room) {
 			if (this.room.id === 'global') {
-				this.connection.popup(`Your message needs to be sent to a user or room.`);
+				this.connection.popup(`Your message could not be sent:\n\n${message}\n\nIt needs to be sent to a user or room.`);
 				return false;
 			}
 			// @ts-ignore

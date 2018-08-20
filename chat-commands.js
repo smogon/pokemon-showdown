@@ -433,20 +433,23 @@ const commands = {
 		if (!target) return this.parse('/help msg');
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
-		if (!target) {
+		if (this.targetUsername === '~') {
+			this.room = Rooms.global;
+			this.pmTarget = null;
+		} else if (!target) {
 			this.errorReply("You forgot the comma.");
 			return this.parse('/help msg');
-		}
-		if (!targetUser) {
+		} else if (!targetUser) {
 			let error = `User ${this.targetUsername} not found. Did you misspell their name?`;
 			error = `|pm|${this.user.getIdentity()}| ${this.targetUsername}|/error ${error}`;
 			connection.send(error);
 			return;
+		} else {
+			this.pmTarget = targetUser;
+			this.room = undefined;
 		}
-		this.pmTarget = targetUser;
-		this.room = undefined;
 
-		if (!targetUser.connected) {
+		if (targetUser && !targetUser.connected) {
 			return this.errorReply(`User ${this.targetUsername} is offline.`);
 		}
 
