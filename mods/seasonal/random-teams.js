@@ -53,6 +53,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'TRU ANT',
 				evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 			},
+			'Akir': {
+				species: 'Parasect', ability: 'Dry Skin', item: 'Leftovers', gender: 'M',
+				moves: ['Spore', 'Leech Life', ['Toxic', 'Stun Spore', 'Sacred Fire']],
+				signatureMove: 'Compost',
+				evs: {hp: 248, atk: 8, spd: 252}, nature: 'Careful',
+			},
 			'Beowulf': {
 				species: 'Beedrill', ability: ['Download', 'Speed Boost'], item: 'Beedrillite', gender: 'M',
 				moves: ['Spiky Shield', 'Gunk Shot', ['Bolt Strike', 'Diamond Storm', 'Sacred Fire']],

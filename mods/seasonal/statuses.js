@@ -43,6 +43,24 @@ let BattleStatuses = {
 			this.add(`c|&ant|I'M NOT ANTEMORTEM`);
 		},
 	},
+	akir: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|%Akir|hey whats up`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|%Akir|sorry need to build more`);
+		},
+		onFaint: function () {
+			this.add(`c|%Akir|too sleepy, c ya`);
+		},
+		onSourceModifyDamage: function (damage, source, target, move) {
+			if (move.typeMod > 0) {
+				this.debug('Solid Rock neutralize');
+				return this.chainModify(0.75);
+			}
+		},
+	},
 	beowulf: {
 		noCopy: true,
 		onStart: function () {

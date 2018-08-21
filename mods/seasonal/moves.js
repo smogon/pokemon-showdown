@@ -85,6 +85,32 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Steel",
 	},
+	// Akir
+	compost: {
+		accuracy: true,
+		category: "Status",
+		desc: "",
+		shortDesc: "",
+		id: "compost",
+		name: "Compost",
+		pp: 5,
+		priority: 0,
+		flags: {snatch: 1, heal: 1},
+		heal: [1, 2],
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Ingrain", target);
+		},
+		onHit: function (pokemon) {
+			if (pokemon.side.faintedLastTurn) {
+				this.boost({atk: 1, def: 1, spd: 1});
+				pokemon.cureStatus();
+			}
+		},
+		secondary: null,
+		target: "self",
+		type: "Ghost",
+	},
 	// Beowulf
 	buzzingoftheswarm: {
 		accuracy: 100,
