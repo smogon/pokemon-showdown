@@ -1137,6 +1137,9 @@ class Validator {
 							if (tradebackEligible && learnedGen === 2 && move.gen <= 1) {
 								// can tradeback
 								sources.push('1ET' + father.id);
+							// father must be able to learn the move in this gen
+							} else if (!fromSelf && !fatherSources.some(source => parseInt(source.charAt(0)) <= learnedGen)) {
+								continue;
 							}
 							sources.push(learned + father.id);
 							if (limitedEgg !== false) limitedEgg = true;
