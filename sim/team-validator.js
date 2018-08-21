@@ -838,7 +838,7 @@ class Validator {
 						for (const fatherSource of fatherSources) {
 							// Triply nested loop! Fortunately, all the loops are designed
 							// to be as short as possible.
-							if (+source.charAt(0) > eggGen) continue;
+							if (+fatherSource.charAt(0) > eggGen) continue;
 							if (fatherSource.charAt(1) === 'E') {
 								if (restrictedSource && (restrictedSource !== fatherSource || eggsRestricted)) {
 									continue;
