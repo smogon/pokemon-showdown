@@ -653,6 +653,99 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fighting",
 	},
+	// Tiksi
+	devolutionwave: {
+		accuracy: true,
+		basePower: 25,
+		category: "Physical",
+		desc: "",
+		shortDesc: "",
+		id: "devolutionwave",
+		name: "Devolution Wave",
+		pp: 1,
+		priority: 0,
+		flags: {},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Psywave", target);
+		},
+		multihit: 5,
+		onAfterHit: function (target, source, move) {
+			// @ts-ignore hack for tiksi's move
+			if (!move.curHits) move.curHits = 1;
+			let option = this.random(2);
+			this.add('-anim', source, 'Rock Throw', target);
+			// @ts-ignore hack for tiksi's move
+			switch (move.curHits) {
+			case 1:
+				if (option) {
+					target.trySetStatus('tox', source);
+				} else {
+					target.trySetStatus('par', source);
+				}
+				break;
+			case 2:
+				if (option) {
+					let bannedAbilities = ['battlebond', 'comatose', 'disguise', 'illusion', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange', 'wonderguard'];
+					if (bannedAbilities.includes(target.ability) || bannedAbilities.includes(source.ability)) {
+						this.add('-fail', target, 'move: Skill Swap');
+						break;
+					}
+					let targetAbility = this.getAbility(target.ability);
+					let sourceAbility = this.getAbility(source.ability);
+					if (target.side === source.side) {
+						this.add('-activate', source, 'move: Skill Swap', '', '', '[of] ' + target);
+					} else {
+						this.add('-activate', source, 'move: Skill Swap', targetAbility, sourceAbility, '[of] ' + target);
+					}
+					this.singleEvent('End', sourceAbility, source.abilityData, source);
+					this.singleEvent('End', targetAbility, target.abilityData, target);
+					if (targetAbility.id !== sourceAbility.id) {
+						source.ability = targetAbility.id;
+						target.ability = sourceAbility.id;
+						source.abilityData = {id: toId(source.ability), target: source};
+						target.abilityData = {id: toId(target.ability), target: target};
+					}
+					this.singleEvent('Start', targetAbility, source.abilityData, source);
+					this.singleEvent('Start', sourceAbility, target.abilityData, target);
+				} else {
+					if (!target.setType('Water')) {
+						this.add('-fail', target, 'move: Soak');
+					} else {
+						this.add('-start', target, 'typechange', 'Water');
+					}
+				}
+				break;
+			case 3:
+				if (option) {
+					target.side.addSideCondition('stealthrock');
+				} else {
+					target.side.addSideCondition('spikes');
+				}
+				break;
+			case 4:
+				if (option) {
+					this.setTerrain('grassyterrain', source);
+				} else {
+					this.setTerrain('mistyterrain', source);
+				}
+				break;
+			case 5:
+				if (option) {
+					this.boost({atk: 1}, source);
+				} else {
+					this.boost({def: 1}, source);
+				}
+				break;
+			}
+			// @ts-ignore hack for tiksi's move
+			move.curHits++;
+		},
+		isZ: "tiksiumz",
+		secondary: null,
+		target: "normal",
+		type: "Rock",
+	},
 	// torkool
 	smokebomb: {
 		accuracy: 100,

@@ -319,6 +319,18 @@ let BattleStatuses = {
 			this.add(`c|~The Immortal|zzz`);
 		},
 	},
+	tiksi: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|@Tiksi|Hakkaa päälle! For the King of the Woodland!`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|@Tiksi|TI rigged this ok`);
+		},
+		onFaint: function (pokemon) {
+			this.add(`c|@Tiksi|You rotten ${pokemon.side.foe.name}! I'll send you to the Tiksi branch!`);
+		},
+	},
 	torkool: {
 		noCopy: true,
 		onStart: function () {
