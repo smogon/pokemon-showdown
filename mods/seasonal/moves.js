@@ -182,6 +182,56 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fire",
 	},
+	// EV
+	evoblast: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Special",
+		desc: "",
+		shortDesc: "",
+		id: "evoblast",
+		name: "Evoblast",
+		pp: 10,
+		priority: 0,
+		flags: {mirror: 1, protect: 1},
+		onModifyMove: function (move, pokemon, target) {
+			move.type = pokemon.types[0];
+			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
+		},
+		onPrepareHit: function (target, source, move) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Extreme Evoboost', source);
+			switch (move.type) {
+			case 'Fire':
+				this.add('-anim', source, 'Flamethrower', target);
+				break;
+			case 'Electric':
+				this.add('-anim', source, 'Thunderbolt', target);
+				break;
+			case 'Water':
+				this.add('-anim', source, 'Bubblebeam', target);
+				break;
+			case 'Psychic':
+				this.add('-anim', source, 'Psybeam', target);
+				break;
+			case 'Dark':
+				this.add('-anim', source, 'Dark Pulse', target);
+				break;
+			case 'Grass':
+				this.add('-anim', source, 'Solar Beam', target);
+				break;
+			case 'Ice':
+				this.add('-anim', source, 'Ice Beam', target);
+				break;
+			case 'Fairy':
+				this.add('-anim', source, 'Dazzling Gleam', target);
+				break;
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+	},
 	// eternally
 	quack: {
 		accuracy: 100,

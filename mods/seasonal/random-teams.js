@@ -83,6 +83,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Quack',
 				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
+			'EV': {
+				species: 'Eevee', ability: 'Anticipation', item: 'Leftovers', gender: 'M',
+				moves: ['Baton Pass', 'Wish', 'Protect'],
+				signatureMove: 'Evoblast',
+				evs: {hp: 252, spe: 252}, nature: 'Serious',
+			},
 			'Hippopotas': {
 				species: 'Hippopotas', ability: 'Regenerator', item: 'Eviolite', gender: 'N',
 				moves: ['Stealth Rock', 'Spikes', 'Toxic Spikes', 'Sticky Web'],

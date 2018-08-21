@@ -106,6 +106,57 @@ let BattleStatuses = {
 			this.add(`c|@eternally|quack`);
 		},
 	},
+	ev: {
+		onStart: function (target) {
+			this.add(`c|~EV|Behold! The power of EVOLUTION!`);
+
+			let formes = {
+				'flareon': ['Icicle Crash', 'Earthquake', 'Baton Pass', 'Evoblast'],
+				'jolteon': ['Ice Beam', 'Flamethrower', 'Baton Pass', 'Evoblast'],
+				'vaporeon': ['Recover', 'Heal Bell', 'Baton Pass', 'Evoblast'],
+				'espeon': ['Aura Sphere', 'Lovely Kiss', 'Baton Pass', 'Evoblast'],
+				'umbreon': ['Knock Off', 'Toxic', 'Baton Pass', 'Evoblast'],
+				'leafeon': ['Synthesis', 'Hi Jump Kick', 'Baton Pass', 'Evoblast'],
+				'glaceon': ['Blue Flare', 'Agility', 'Baton Pass', 'Evoblast'],
+				'sylveon': ['Earth Power', 'Calm Mind', 'Baton Pass', 'Evoblast'],
+			};
+			let forme = Object.keys(formes)[this.random(8)];
+			this.add(`-anim`, target, 'Geomancy', target);
+			target.formeChange(forme);
+			target.setAbility('Anticipation');
+			// Update movepool
+			target.moveSlots = [];
+			for (let i = 0; i < formes[forme].length; i++) {
+				let moveid = formes[forme][i];
+				let move = this.getMove(moveid);
+				if (!move.id) continue;
+				target.moveSlots.push({
+					move: move.name,
+					id: move.id,
+					// @ts-ignore hacky change for EV's set
+					pp: Math.floor(((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5) * (target.ppPercentages ? target.ppPercentages[i] : 1)),
+					maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
+					target: move.target,
+					disabled: false,
+					used: false,
+					virtual: true,
+				});
+				target.moves.push(move.id);
+			}
+		},
+		onBeforeSwitchOut: function (pokemon) {
+			// @ts-ignore hacky change for EV's set
+			pokemon.ppPercentages = pokemon.moveSlots.slice().map(m => {
+				return m.pp / m.maxpp;
+			});
+		},
+		onSwitchOut: function () {
+			this.add(`c|~EV|We'll be back.`);
+		},
+		onFaint: function () {
+			this.add(`c|~EV|If you __say__ EV it sounds like Eevee. It's actually quite simple.`);
+		},
+	},
 	kalalokki: {
 		noCopy: true,
 		onStart: function () {
