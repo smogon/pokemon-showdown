@@ -170,6 +170,7 @@ Contributors
 - Ben Davies [Morfent] - Development
 - Ben Frengley [TalkTakesTime] - Development
 - Cody Thompson [Rising_Dusk] - Development
+- [Honko] - Development
 - Ian Clail [Layell] - Art (battle graphics, sprites)
 - Jeremy Piemonte [panpawn] - Development
 - Kris Johnson [Kris] - Development
