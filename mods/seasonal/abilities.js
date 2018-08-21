@@ -16,8 +16,8 @@ let BattleAbilities = {
 	// Please keep abilites organized alphabetically based on staff member name!
 	// cc
 	lurking: {
-		desc: "",
-		shortDesc: "",
+		desc: "This Pokemon's moves have their accuracy multiplied by 1.3.",
+		shortDesc: "This Pokemon's moves have their accuracy multiplied by 1.3.",
 		id: "lurking",
 		name: "Lurking",
 		onModifyMove: function (move) {
@@ -62,8 +62,8 @@ let BattleAbilities = {
 	},
 	// The Immortal
 	beastboost2: {
-		desc: "This Pokemon's highest 2 stats are raised by 1 if it attacks and KOes another Pokemon",
-		shortDesc: "This Pokemon's highest 2 stats are raised by 1 if it attacks and KOes another Pokemon",
+		desc: "This Pokemon's highest 2 stats are raised by 1 if it attacks and KOes another Pokemon.",
+		shortDesc: "This Pokemon's highest 2 stats are raised by 1 if it attacks and KOes another Pokemon.",
 		id: "beastboost2",
 		name: "Beast Boost 2",
 		onSourceFaint: function (target, source, effect) {
