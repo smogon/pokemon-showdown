@@ -127,6 +127,24 @@ describe('Team Validator', function () {
 		assert.strictEqual(illegal, null);
 
 		team = [
+			{species: 'skarmory', ability: 'keeneye', moves: ['curse', 'drillpeck']},
+		];
+		illegal = TeamValidator('gen3ou').validateTeam(team);
+		assert(illegal);
+
+		team = [
+			{species: 'skarmory', ability: 'keeneye', moves: ['whirlwind', 'drillpeck']},
+		];
+		illegal = TeamValidator('gen3ou').validateTeam(team);
+		assert(illegal);
+
+		team = [
+			{species: 'armaldo', ability: 'battlearmor', moves: ['knockoff', 'rapidspin']},
+		];
+		illegal = TeamValidator('gen3ou').validateTeam(team);
+		assert(illegal);
+
+		team = [
 			{species: 'snorlax', ability: 'immunity', moves: ['curse', 'pursuit']},
 		];
 		illegal = TeamValidator('gen4ou').validateTeam(team);
