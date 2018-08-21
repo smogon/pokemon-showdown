@@ -526,6 +526,72 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fire",
 	},
+	// Trickster
+	minisingularity: {
+		accuracy: 55,
+		basePower: 0,
+		basePowerCallback: function (pokemon, target) {
+			let targetWeight = target.getWeight();
+			if (targetWeight >= 200) {
+				this.debug('120 bp');
+				return 120;
+			}
+			if (targetWeight >= 100) {
+				this.debug('100 bp');
+				return 100;
+			}
+			if (targetWeight >= 50) {
+				this.debug('80 bp');
+				return 80;
+			}
+			if (targetWeight >= 25) {
+				this.debug('60 bp');
+				return 60;
+			}
+			if (targetWeight >= 10) {
+				this.debug('40 bp');
+				return 40;
+			}
+			this.debug('20 bp');
+			return 20;
+		},
+		category: "Special",
+		desc: "",
+		shortDesc: "",
+		id: "minisingularity",
+		name: "Mini Singularity",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		volatileStatus: "minisingularity",
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Spacial Rend", target);
+			this.add('-anim', source, "Flash", target);
+		},
+		onAfterHit: function (target, source) {
+			if (source.hp) {
+				let item = target.takeItem();
+				if (item) {
+					this.add('-enditem', target, item.name, '[from] move: Mini Singularity', '[of] ' + source);
+					target.setItem('ironball');
+					this.add('-message', target.name + ' obtained an Iron Ball.');
+				}
+			}
+		},
+		effect: {
+			noCopy: true,
+			onStart: function (pokemon) {
+				this.add('-message', pokemon.name + ' weight has doubled.');
+			},
+			onModifyWeight: function (weight) {
+				return weight * 2;
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Psychic",
+	},
 };
 
 exports.BattleMovedex = BattleMovedex;

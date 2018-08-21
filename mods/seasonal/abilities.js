@@ -86,6 +86,16 @@ let BattleAbilities = {
 			return this.chainModify(mod);
 		},
 	},
+	// Trickster
+	interdimensional: {
+		desc: "On Switch-in, this Pokemon summons Gravity.",
+		shortDesc: "On Switch-in, this Pokemon Summons Gravity.",
+		id: "interdimensional",
+		name: "Interdimensional",
+		onStart: function (target, source) {
+			this.addPseudoWeather('gravity', source);
+		},
+	},
 };
 
 exports.BattleAbilities = BattleAbilities;

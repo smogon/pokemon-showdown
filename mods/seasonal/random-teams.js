@@ -137,6 +137,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Smoke Bomb',
 				evs: {hp: 248, spa: 8, spd: 252}, nature: 'Calm',
 			},
+			'Trickster': {
+				species: 'Hoopa', ability: 'Interdimensional', item: 'Life Orb', gender: 'M',
+				moves: ['Inferno', 'Zap Cannon', ['Roost', 'Grasswhistle']],
+				signatureMove: 'Mini Singularity',
+				evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+			},
 		};
 		let pool = Object.keys(sets);
 		while (pool.length && team.length < 6) {
