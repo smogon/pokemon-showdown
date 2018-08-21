@@ -125,6 +125,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Next Level Strats',
 				evs: {hp: 236, def: 220, spd: 48, spe: 4}, ivs: {atk: 0}, nature: 'Calm',
 			},
+			'LifeisDANK': {
+				species: 'Delibird', ability: 'Mountaineer', item: 'Focus Sash', gender: 'F',
+				moves: ['Ice Shard', 'Return', 'Explosion'],
+				signatureMove: 'Bar Fight',
+				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
+			},
 			'MacChaeger': {
 				species: 'Mantyke', ability: 'Water Veil', item: ['Life Orb', 'Normalium Z'], gender: 'M',
 				moves: ['Scald', 'Clear Smog', 'Sleep Talk'],

@@ -450,6 +450,33 @@ let BattleMovedex = {
 		type: "Normal",
 
 	},
+	// LifeisDANK
+	barfight: {
+		accuracy: 100,
+		basePower: 10,
+		category: "Physical",
+		desc: "3 Priority. Gives the user and target +3 atk, -3 def and confusion.",
+		shortDesc: "Hits first. +3 atk, -3 def and confusion for both user and foe.",
+		id: "barfight",
+		name: "Bar Fight",
+		pp: 10,
+		priority: 3,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Fake Out", target);
+			this.add('-anim', source, "Feather Dance", target);
+		},
+		onHit: function (target, source) {
+			this.boost({atk: 3, def: -3}, target);
+			this.boost({atk: 3, def: -3}, source);
+			target.addVolatile('confusion');
+			source.addVolatile('confusion');
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fighting",
+	},
 	// MacChaeger
 	naptime: {
 		accuracy: 100,

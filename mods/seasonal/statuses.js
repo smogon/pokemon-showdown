@@ -231,6 +231,31 @@ let BattleStatuses = {
 			this.add(`c|@Level 51|**IndexError**: list index out of range`);
 		},
 	},
+	lifeisdank: {
+		noCopy: true,
+		onStart: function (target) {
+			this.add(`c|&LifeisDANK|!!!ლ(⁰⊖⁰ლ) Peent Peent.`);
+			this.boost({spe: 2}, target);
+		},
+		onSwitchOut: function () {
+			this.add(`c|&LifeisDANK|!(•⌔• ) Peent Peent.`);
+		},
+		onFaint: function () {
+			this.add(`c|&LifeisDANK|(•⌔•. ) Peent.`);
+		},
+		// Aerilate innate
+		onModifyMovePriority: -1,
+		onModifyMove: function (move, pokemon) {
+			if (move.type === 'Normal' && !['judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'weatherball'].includes(move.id) && !(move.isZ && move.category !== 'Status')) {
+				move.type = 'Flying';
+				move.aerilateBoosted = true;
+			}
+		},
+		onBasePowerPriority: 8,
+		onBasePower: function (basePower, pokemon, target, move) {
+			if (move.aerilateBoosted) return this.chainModify([0x1333, 0x1000]);
+		},
+	},
 	macchaeger: {
 		noCopy: true,
 		onStart: function () {
