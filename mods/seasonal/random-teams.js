@@ -71,6 +71,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Restarting Router',
 				evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
+			'Cerberax': {
+				species: 'Wailord', ability: 'Levitate', item: 'Figy Berry', gender: 'F',
+				moves: ['Shift Gear', 'Waterfall', 'Recover'],
+				signatureMove: 'Blimp Crash',
+				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant',
+			},
 			'E4 Flint': {
 				species: 'Steelix', ability: 'Sturdy', item: 'Magmarizer', gender: 'M', // Ability is changed on mega evo, which is instant for this set
 				moves: ['Sunsteel Strike', 'Thousand Arrows', ['Dragon Tail', 'Diamond Storm', 'V-create', 'V-create']], // V-create listed twice for 50% chance to get it

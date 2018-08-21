@@ -154,6 +154,36 @@ let BattleMovedex = {
 		target: "self",
 		type: "Electric",
 	},
+	// Cerberax
+	blimpcrash: {
+		accuracy: true,
+		onModifyAccuracy: function (accuracy, target, source) {
+			if (target.isGrounded()) return 80;
+			return accuracy;
+		},
+		basePower: 165,
+		category: "Physical",
+		desc: "Will always hit a target who isn't grounded. The user and the target will be grounded, and the user will take 1/2 of the damage inflicted as recoil.",
+		shortDesc: "Always hits ungrounded targets, grounds user and target, user takes 1/2 recoil.",
+		id: "blimpcrash",
+		name: "Blimp Crash",
+		pp: 5,
+		priority: 0,
+		flags: {mirror: 1, protect: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Head Smash', target);
+			this.add('-anim', source, 'Earthquake', target);
+		},
+		onHit: function (target, source) {
+			target.addVolatile('smackdown');
+			source.addVolatile('smackdown');
+		},
+		secondary: null,
+		recoil: [1, 2],
+		target: "normal",
+		type: "Flying",
+	},
 	// E4 Flint
 	fangofthefireking: {
 		accuracy: 100,
