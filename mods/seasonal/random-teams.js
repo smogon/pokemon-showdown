@@ -137,6 +137,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Nap Time',
 				evs: {hp: 248, spa: 84, spe: 176}, ivs: {atk: 0}, nature: 'Modest',
 			},
+			'martha': {
+				species: 'Diancie', ability: 'Pixilate', item: 'Diancite', gender: 'F',
+				moves: ['BoomBurst', ['Fire Blast', 'Earth Power'], 'Photon Geyser'],
+				signatureMove: 'Crystal Boost',
+				evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+			},
 			'Megazard': {
 				species: 'Exeggutor-Alola', ability: 'Stand Up Tall', item: 'Leftovers', gender: 'M',
 				moves: ['Strength Sap', 'Growth', 'Stockpile'],

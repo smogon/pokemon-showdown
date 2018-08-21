@@ -265,6 +265,24 @@ let BattleStatuses = {
 			this.add(`c|@MacChaeger|im gonna pyuk`);
 		},
 	},
+	martha: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|%martha|in to lose r1`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|%martha|bad`);
+		},
+		onUpdate: function (pokemon) {
+			let name = toId(pokemon.name);
+			if (pokemon.template.isMega) {
+				if (name === 'martha' && pokemon.getAbility().id === 'magicbounce') {
+					pokemon.setAbility('Pixilate');
+					this.add('-ability', pokemon, 'Pixilate');
+				}
+			}
+		},
+	},
 	megazard: {
 		noCopy: true,
 		onStart: function () {

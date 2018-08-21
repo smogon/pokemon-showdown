@@ -531,6 +531,31 @@ let BattleMovedex = {
 		type: "Fairy",
 		zMoveEffect: 'clearnegativeboosts',
 	},
+	// martha
+	crystalboost: {
+		accuracy: 90,
+		basePower: 75,
+		category: "Special",
+		desc: "",
+		shortDesc: "",
+		id: "crystalboost",
+		name: "Crystal Boost",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', target, "Power Gem", target);
+		},
+		secondary: {
+			chance: 50,
+			boosts: {
+				spa: 1,
+			},
+		},
+		target: "normal",
+		type: "Rock",
+	},
 	// Megazard
 	tippingover: {
 		accuracy: 100,
