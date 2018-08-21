@@ -6153,7 +6153,8 @@ let BattleItems = {
 			basePower: 80,
 			type: "Poison",
 		},
-		onUpdate: function (pokemon) {
+		onResidualOrder: 5,
+		onResidual: function (pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
@@ -6224,7 +6225,8 @@ let BattleItems = {
 			basePower: 80,
 			type: "Psychic",
 		},
-		onUpdate: function (pokemon) {
+		onResidualOrder: 5,
+		onResidual: function (pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
