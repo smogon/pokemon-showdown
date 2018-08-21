@@ -2,9 +2,38 @@
 
 /**@type {{[k: string]: ModdedItemData}} */
 let BattleItems = {
+	"aguavberry": {
+		inherit: true,
+		onUpdate: function () {},
+		onResidualOrder: 5,
+		onResidual: function (pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 2) {
+				pokemon.eatItem();
+			}
+		},
+	},
+	"apicotberry": {
+		inherit: true,
+		onUpdate: function () {},
+		onResidualOrder: 5,
+		onResidual: function (pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 4) {
+				pokemon.eatItem();
+			}
+		},
+	},
 	"berryjuice": {
 		inherit: true,
 		isUnreleased: true,
+		onUpdate: function () {},
+		onResidualOrder: 5,
+		onResidual: function (pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 2) {
+				if (this.runEvent('TryHeal', pokemon) && pokemon.useItem()) {
+					this.heal(20);
+				}
+			}
+		},
 	},
 	"blackbelt": {
 		inherit: true,
@@ -52,12 +81,42 @@ let BattleItems = {
 		num: 208,
 		gen: 3,
 	},
+	"figyberry": {
+		inherit: true,
+		onUpdate: function () {},
+		onResidualOrder: 5,
+		onResidual: function (pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 2) {
+				pokemon.eatItem();
+			}
+		},
+	},
+	"ganlonberry": {
+		inherit: true,
+		onUpdate: function () {},
+		onResidualOrder: 5,
+		onResidual: function (pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 4) {
+				pokemon.eatItem();
+			}
+		},
+	},
 	"hardstone": {
 		inherit: true,
 		desc: "Holder's Rock-type attacks have 1.1x power.",
 		onBasePower: function (basePower, user, target, move) {
 			if (move && move.type === 'Rock') {
 				return basePower * 1.1;
+			}
+		},
+	},
+	"iapapaberry": {
+		inherit: true,
+		onUpdate: function () {},
+		onResidualOrder: 5,
+		onResidual: function (pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 2) {
+				pokemon.eatItem();
 			}
 		},
 	},
@@ -73,6 +132,16 @@ let BattleItems = {
 			}
 		},
 	},
+	"lansatberry": {
+		inherit: true,
+		onUpdate: function () {},
+		onResidualOrder: 5,
+		onResidual: function (pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 4) {
+				pokemon.eatItem();
+			}
+		},
+	},
 	"laxincense": {
 		inherit: true,
 		desc: "The accuracy of attacks against the holder is 0.95x.",
@@ -80,6 +149,16 @@ let BattleItems = {
 			if (typeof accuracy !== 'number') return;
 			this.debug('lax incense - decreasing accuracy');
 			return accuracy * 0.95;
+		},
+	},
+	"liechiberry": {
+		inherit: true,
+		onUpdate: function () {},
+		onResidualOrder: 5,
+		onResidual: function (pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 4) {
+				pokemon.eatItem();
+			}
 		},
 	},
 	"lightball": {
@@ -93,6 +172,16 @@ let BattleItems = {
 		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Electric') {
 				return basePower * 1.1;
+			}
+		},
+	},
+	"magoberry": {
+		inherit: true,
+		onUpdate: function () {},
+		onResidualOrder: 5,
+		onResidual: function (pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 2) {
+				pokemon.eatItem();
 			}
 		},
 	},
@@ -132,6 +221,26 @@ let BattleItems = {
 			}
 		},
 	},
+	"oranberry": {
+		inherit: true,
+		onUpdate: function () {},
+		onResidualOrder: 5,
+		onResidual: function (pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 2) {
+				pokemon.eatItem();
+			}
+		},
+	},
+	"petayaberry": {
+		inherit: true,
+		onUpdate: function () {},
+		onResidualOrder: 5,
+		onResidual: function (pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 4) {
+				pokemon.eatItem();
+			}
+		},
+	},
 	"poisonbarb": {
 		inherit: true,
 		desc: "Holder's Poison-type attacks have 1.1x power.",
@@ -146,6 +255,16 @@ let BattleItems = {
 		onModifyPriority: function (priority, pokemon) {
 			if (this.randomChance(1, 5)) {
 				return Math.round(priority) + 0.1;
+			}
+		},
+	},
+	"salacberry": {
+		inherit: true,
+		onUpdate: function () {},
+		onResidualOrder: 5,
+		onResidual: function (pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 4) {
+				pokemon.eatItem();
 			}
 		},
 	},
@@ -188,6 +307,13 @@ let BattleItems = {
 	"sitrusberry": {
 		inherit: true,
 		desc: "Restores 30 HP when at 1/2 max HP or less. Single use.",
+		onUpdate: function () {},
+		onResidualOrder: 5,
+		onResidual: function (pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 2) {
+				pokemon.eatItem();
+			}
+		},
 		onEat: function (pokemon) {
 			this.heal(30);
 		},
@@ -210,12 +336,32 @@ let BattleItems = {
 			}
 		},
 	},
+	"starfberry": {
+		inherit: true,
+		onUpdate: function () {},
+		onResidualOrder: 5,
+		onResidual: function (pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 4) {
+				pokemon.eatItem();
+			}
+		},
+	},
 	"twistedspoon": {
 		inherit: true,
 		desc: "Holder's Psychic-type attacks have 1.1x power.",
 		onBasePower: function (basePower, user, target, move) {
 			if (move.type === 'Psychic') {
 				return basePower * 1.1;
+			}
+		},
+	},
+	"wikiberry": {
+		inherit: true,
+		onUpdate: function () {},
+		onResidualOrder: 5,
+		onResidual: function (pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 2) {
+				pokemon.eatItem();
 			}
 		},
 	},
