@@ -185,6 +185,37 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Flying",
 	},
+	// deg
+	luciddreams: {
+		accuracy: 100,
+		category: "Status",
+		desc: "The foe falls asleep, and is inflicted with and leech seed. The user loses 1/2 of their HP.",
+		shortDesc: "Foe: sleep + nightmare + leech seed. User loses 1/2 HP.",
+		id: "luciddreams",
+		name: "Lucid Dreams",
+		pp: 5,
+		priority: 0,
+		flags: {mirror: 1, snatch: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Dark Void', target);
+			this.add('-anim', source, 'Night Shade', target);
+		},
+		onHit: function (target, source, move) {
+			let hadEffect = false;
+			if (target.trySetStatus('slp')) hadEffect = true;
+			if (target.addVolatile('nightmare')) hadEffect = true;
+			if (target.addVolatile('leechseed')) hadEffect = true;
+			if (!hadEffect) {
+				this.add('-fail', target);
+			} else {
+				this.damage(source.maxhp / 2, source, source, 'recoil');
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+	},
 	// E4 Flint
 	fangofthefireking: {
 		accuracy: 100,
@@ -607,11 +638,11 @@ let BattleMovedex = {
 		effect: {
 			onStart: function (pokemon) {
 				this.effectData.multiplier = 1;
-				this.add('-start', pokemon, 'Protein Shake');
+				this.add('-start', pokemon, 'Protein Shake', '[silent]');
 			},
 			onRestart: function (pokemon) {
 				this.effectData.multiplier++;
-				this.add('-start', pokemon, 'Protein Shake');
+				this.add('-start', pokemon, 'Protein Shake', '[silent]');
 			},
 			onModifyWeightPriority: 1,
 			onModifyWeight: function (weight, pokemon) {

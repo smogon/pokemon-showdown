@@ -11,7 +11,7 @@
  * @property {string} signatureMove
  * @property {{hp?: number, atk?: number, def?: number, spa?: number, spd?: number, spe?: number}=} evs
  * @property {{hp?: number, atk?: number, def?: number, spa?: number, spd?: number, spe?: number}=} ivs
- * @property {string} nature
+ * @property {string | string[]} nature
  * @property {number=} level
  * @property {boolean=} shiny
  */
@@ -76,6 +76,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				moves: ['Shift Gear', 'Waterfall', 'Recover'],
 				signatureMove: 'Blimp Crash',
 				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant',
+			},
+			'deg': {
+				species: 'Gengar', ability: 'Bad Dreams', item: 'Gengarite', gender: 'M',
+				moves: [['Hex', 'Shadow Ball'], 'Sludge Wave', 'Focus Blast'],
+				signatureMove: 'Lucid Dreams',
+				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: ['Modest', 'Timid'],
 			},
 			'E4 Flint': {
 				species: 'Steelix', ability: 'Sturdy', item: 'Magmarizer', gender: 'M', // Ability is changed on mega evo, which is instant for this set
@@ -191,7 +197,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				item: Array.isArray(ssbSet.item) ? this.sampleNoReplace(ssbSet.item) : ssbSet.item,
 				ability: Array.isArray(ssbSet.ability) ? this.sampleNoReplace(ssbSet.ability) : ssbSet.ability,
 				moves: [],
-				nature: ssbSet.nature,
+				nature: Array.isArray(ssbSet.nature) ? this.sampleNoReplace(ssbSet.nature) : ssbSet.nature,
 				gender: ssbSet.gender,
 				evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0},
 				ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31},

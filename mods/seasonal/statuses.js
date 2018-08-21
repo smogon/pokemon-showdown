@@ -97,6 +97,18 @@ let BattleStatuses = {
 			this.add(`c|%Cerberax|┬─┬ ︵ /(.□. \\）`);
 		},
 	},
+	deg: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|%deg|rof`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|%deg|rof`);
+		},
+		onFaint: function () {
+			this.add(`c|%deg|Dream Eater Gengar is an unset.`);
+		},
+	},
 	e4flint: {
 		noCopy: true,
 		onStart: function (target, source) {
@@ -272,15 +284,6 @@ let BattleStatuses = {
 		},
 		onSwitchOut: function () {
 			this.add(`c|%martha|bad`);
-		},
-		onUpdate: function (pokemon) {
-			let name = toId(pokemon.name);
-			if (pokemon.template.isMega) {
-				if (name === 'martha' && pokemon.getAbility().id === 'magicbounce') {
-					pokemon.setAbility('Pixilate');
-					this.add('-ability', pokemon, 'Pixilate');
-				}
-			}
 		},
 	},
 	megazard: {
