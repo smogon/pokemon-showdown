@@ -8101,24 +8101,6 @@
 				"moves": [["Heal Bell"], ["Roost"], ["Defog", "Toxic"], ["Freeze-Dry"]]
 			}]
 		},
-		"kingler": {
-			"flags": {},
-			"sets": [{
-				"species": "Kingler",
-				"item": ["Life Orb"],
-				"ability": ["Sheer Force"],
-				"evs": {"atk": 252, "spa": 4, "spe": 252},
-				"nature": "Naughty",
-				"moves": [["Liquidation"], ["Stomping Tantrum"], ["Agility"], ["Ice Beam"]]
-			}, {
-				"species": "Kingler",
-				"item": ["Life Orb"],
-				"ability": ["Sheer Force"],
-				"evs": {"atk": 252, "spd": 4, "spe": 252},
-				"nature": "Adamant",
-				"moves": [["Liquidation"], ["Stomping Tantrum", "Superpower"], ["Agility"], ["Swords Dance"]]
-			}]
-		},
 		"mesprit": {
 			"flags": {},
 			"sets": [{
