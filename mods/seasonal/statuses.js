@@ -97,6 +97,18 @@ let BattleStatuses = {
 			this.add(`c|%Cerberax|┬─┬ ︵ /(.□. \\）`);
 		},
 	},
+	chloe: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|@Chloe|hlelo`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|@Chloe|bubye`);
+		},
+		onFaint: function () {
+			this.add(`c|@Chloe|aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`);
+		},
+	},
 	deg: {
 		noCopy: true,
 		onStart: function () {

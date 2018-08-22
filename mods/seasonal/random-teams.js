@@ -77,6 +77,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Blimp Crash',
 				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant',
 			},
+			'Chloe': {
+				species: 'Tapu Fini', ability: 'Prankster', item: 'Light Clay', gender: 'F',
+				moves: ['Fleur Cannon', 'Parting Shot', ['Taunt', 'Topsy Turvy']],
+				signatureMove: 'beskyttelsesnet',
+				evs: {hp: 248, def: 252, spa: 8}, ivs: {atk: 0}, nature: 'Bold',
+			},
 			'deg': {
 				species: 'Gengar', ability: 'Bad Dreams', item: 'Gengarite', gender: 'M',
 				moves: [['Hex', 'Shadow Ball'], 'Sludge Wave', 'Focus Blast'],

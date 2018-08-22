@@ -185,6 +185,32 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Flying",
 	},
+	// Chloe
+	beskyttelsesnet: {
+		accuracy: true,
+		category: "Status",
+		desc: "",
+		shortDesc: "",
+		id: "beskyttelsesnet",
+		name: "beskyttelsesnet",
+		pp: 10,
+		priority: 0,
+		flags: {mirror: 1, snatch: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Geomancy', source);
+			this.add('-anim', source, 'Memento', target);
+		},
+		onHit: function (target, source) {
+			source.side.addSideCondition('lightscreen', source);
+			source.side.addSideCondition('reflect', source);
+			source.side.addSideCondition('safeguard', source);
+		},
+		selfdestruct: "ifHit",
+		secondary: null,
+		target: "self",
+		type: "Dark",
+	},
 	// deg
 	luciddreams: {
 		accuracy: 100,
