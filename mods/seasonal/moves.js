@@ -445,6 +445,30 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Water",
 	},
+	// KingSwordYT
+	dragonwarriortouch: {
+		accuracy: 100,
+		basePower: 70,
+		status: "Physical",
+		id: "dragonwarriortouch",
+		name: "Dragon Warrior Touch",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, punch: 1, contact: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Outrage', target);
+			this.add('-anim', source, 'Drain Punch', target);
+		},
+		self: {
+			boosts: {
+				atk: 1,
+			},
+		},
+		drain: [1, 2],
+		target: "normal",
+		type: "Fighting",
+	},
 	// Level 51
 	nextlevelstrats: {
 		accuracy: true,

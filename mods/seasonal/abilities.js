@@ -42,6 +42,23 @@ let BattleAbilities = {
 			}
 		},
 	},
+	// KingSwordYT
+	kungfupanda: {
+		desc: "This Pokemon's punch-based attacks have their power multiplied by 1.2, and this Pokemon's Speed is raised by 1 stage after it is damaged by a move",
+		shortDesc: "This Pokemon's punch-based attacks have 1.2x power. +1 Spe when hit.",
+		onBasePowerPriority: 8,
+		onBasePower: function (basePower, attacker, defender, move) {
+			if (move.flags['punch']) {
+				this.debug('Kung Fu Panda boost');
+				return this.chainModify([0x1333, 0x1000]);
+			}
+		},
+		onAfterDamage: function (damage, target, source, effect) {
+			if (effect && effect.effectType === 'Move' && effect.id !== 'confused') {
+				this.boost({spe: 1});
+			}
+		},
+	},
 	// Megazard
 	standuptall: {
 		desc: "This Pokemon's Defense or Special Defense is raised 1 stage at the end of each full turn on the field.",
