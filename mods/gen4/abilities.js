@@ -273,8 +273,7 @@ let BattleAbilities = {
 			if (move.secondaries) {
 				this.debug('doubling secondary chance');
 				for (const secondary of move.secondaries) {
-					// @ts-ignore
-					secondary.chance *= 2;
+					if (secondary.chance) secondary.chance *= 2;
 				}
 			}
 		},
@@ -348,7 +347,7 @@ let BattleAbilities = {
 			let id = status.id;
 			if (id === 'slp' || id === 'frz') return;
 			if (id === 'tox') id = 'psn';
-			source.trySetStatus(id);
+			source.trySetStatus(id, target);
 		},
 	},
 	"thickfat": {

@@ -66,11 +66,11 @@ class RandomGen1Teams extends RandomGen2Teams {
 			// Random DVs.
 			let ivs = {
 				hp: 0,
-				atk: this.random(15),
-				def: this.random(15),
-				spa: this.random(15),
+				atk: this.random(16),
+				def: this.random(16),
+				spa: this.random(16),
 				spd: 0,
-				spe: this.random(15),
+				spe: this.random(16),
 			};
 			ivs["hp"] = (ivs["atk"] % 2) * 16 + (ivs["def"] % 2) * 8 + (ivs["spe"] % 2) * 4 + (ivs["spa"] % 2) * 2;
 			ivs["atk"] = ivs["atk"] * 2;

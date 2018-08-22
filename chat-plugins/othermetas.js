@@ -1,7 +1,35 @@
 // Other Metas plugin by Spandan
 'use strict';
 
-exports.commands = {
+/**
+ * @param {string} stone
+ * @return {Object}
+ */
+function getMegaStone(stone) {
+	let item = Dex.getItem(stone);
+	if (!item.exists) {
+		if (toId(stone) === 'dragonascent') {
+			let move = Dex.getMove(stone);
+			return {
+				id: move.id,
+				name: move.name,
+				megaEvolves: 'Rayquaza',
+				megaStone: 'Rayquaza-Mega',
+				exists: true,
+			};
+		} else {
+			return {exists: false};
+		}
+	}
+	if (!item.megaStone && !item.onPrimal) return {exists: false};
+	return item;
+}
+
+/** @typedef {(this: CommandContext, target: string, room: BasicChatRoom, user: User, connection: Connection, cmd: string, message: string) => (void)} ChatHandler */
+/** @typedef {{[k: string]: ChatHandler | string | true | string[]}} ChatCommands */
+
+/** @type {ChatCommands} */
+const commands = {
 	'!othermetas': true,
 	om: 'othermetas',
 	othermetas: function (target, room, user) {
@@ -45,35 +73,27 @@ exports.commands = {
 		if (!this.runBroadcast()) return;
 		if (!toId(target) || !target.includes('@')) return this.parse('/help mixandmega');
 		let sep = target.split('@');
-		let stone;
-		if (toId(sep[1]) === 'dragonascent') {
-			stone = {
-				megaStone: "Rayquaza-Mega",
-				megaEvolves: "Rayquaza",
-			};
-		} else {
-			stone = Dex.getItem(sep[1]);
-		}
+		let stone = getMegaStone(sep[1]);
 		let template = Object.assign({}, Dex.getTemplate(sep[0]));
-		if (!stone.megaEvolves && !stone.onPrimal) return this.errorReply(`Error: Mega Stone not found.`);
+		if (!stone.exists) return this.errorReply(`Error: Mega Stone not found.`);
 		if (!template.exists) return this.errorReply(`Error: Pokemon not found.`);
-		if (template.isMega || (template.evos && Object.keys(template.evos).length > 0) || template.name === 'Necrozma-Ultra') { // Mega Pokemon and Ultra Necrozma cannot be mega evolved
-			this.errorReply(`Warning: You cannot mega evolve non-fully evolved Pokemon, Mega Pokemon, and Ultra Necrozma in Mix and Mega.`);
+		if (template.isMega || template.name === 'Necrozma-Ultra') { // Mega Pokemon and Ultra Necrozma cannot be mega evolved
+			this.errorReply(`Warning: You cannot mega evolve Mega Pokemon and Ultra Necrozma in Mix and Mega.`);
 		}
 		let banlist = Dex.getFormat('gen7mixandmega').banlist;
 		if (banlist.includes(stone.name)) {
 			this.errorReply(`Warning: ${stone.name} is banned from Mix and Mega.`);
 		}
-		let restrictedStones = Dex.getFormat('gen7mixandmega').restrictedStones;
+		let restrictedStones = Dex.getFormat('gen7mixandmega').restrictedStones || [];
 		if (restrictedStones.includes(stone.name) && template.name !== stone.megaEvolves) {
 			this.errorReply(`Warning: ${stone.name} is restricted to ${stone.megaEvolves} in Mix and Mega.`);
 		}
-		let cannotMega = Dex.getFormat('gen7mixandmega').cannotMega;
+		let cannotMega = Dex.getFormat('gen7mixandmega').cannotMega || [];
 		if (cannotMega.includes(template.name) && template.name !== stone.megaEvolves && !template.isMega) { // Separate messages because there's a difference between being already mega evolved / NFE and being banned from mega evolving
 			this.errorReply(`Warning: ${template.name} is banned from mega evolving with a non-native mega stone in Mix and Mega.`);
 		}
 		if (['Multitype', 'RKS System'].includes(template.abilities['0']) && !['Arceus', 'Silvally'].includes(template.name)) {
-			this.errorReply(`Warning: ${template.name} is required to hold ${template.baseSpecies === 'Silvally' ? template.requiredItem : 'either ' + template.requiredItems[0] + ' or ' + template.requiredItems[1]}.`);
+			this.errorReply(`Warning: ${template.name} is required to hold ${template.baseSpecies === 'Arceus' && template.requiredItems ? 'either ' + template.requiredItems[0] + ' or ' + template.requiredItems[1] : template.requiredItem}.`);
 		}
 		if (stone.isUnreleased) {
 			this.errorReply(`Warning: ${stone.name} is unreleased and is not usable in current Mix and Mega.`);
@@ -102,6 +122,7 @@ exports.commands = {
 			weightkg: megaTemplate.weightkg - baseTemplate.weightkg,
 		};
 		for (let statId in megaTemplate.baseStats) {
+			// @ts-ignore
 			deltas.baseStats[statId] = megaTemplate.baseStats[statId] - baseTemplate.baseStats[statId];
 		}
 		if (megaTemplate.types.length > baseTemplate.types.length) {
@@ -119,13 +140,13 @@ exports.commands = {
 		} else if (deltas.type) {
 			mixedTemplate.types = [mixedTemplate.types[0], deltas.type];
 		}
-		mixedTemplate.baseStats = {};
+		mixedTemplate.baseStats = Object.assign({}, mixedTemplate.baseStats);
 		for (let statName in template.baseStats) { // Add the changed stats and weight
-			mixedTemplate.baseStats[statName] = Dex.clampIntRange(Dex.data.Pokedex[template.id].baseStats[statName] + deltas.baseStats[statName], 1, 255);
+			// @ts-ignore
+			mixedTemplate.baseStats[statName] = Dex.clampIntRange(mixedTemplate.baseStats[statName] + deltas.baseStats[statName], 1, 255);
 		}
 		mixedTemplate.weightkg = Math.round(Math.max(0.1, template.weightkg + deltas.weightkg) * 100) / 100;
 		mixedTemplate.tier = "MnM";
-		let details;
 		let weighthit = 20;
 		if (mixedTemplate.weightkg >= 200) {
 			weighthit = 120;
@@ -138,7 +159,7 @@ exports.commands = {
 		} else if (mixedTemplate.weightkg >= 10) {
 			weighthit = 40;
 		}
-		details = {
+		let details = {
 			"Dex#": mixedTemplate.num,
 			"Gen": mixedTemplate.gen,
 			"Height": mixedTemplate.heightm + " m",
@@ -162,21 +183,13 @@ exports.commands = {
 		if (!this.runBroadcast()) return;
 		let targetid = toId(target);
 		if (!targetid) return this.parse('/help stone');
-		let stone;
-		if (targetid === 'dragonascent') {
-			stone = {
-				megaStone: "Rayquaza-Mega",
-				megaEvolves: "Rayquaza",
-			};
-		} else {
-			stone = Dex.getItem(target);
-		}
-		if (!stone.megaEvolves && !stone.onPrimal) return this.errorReply(`Error: Mega Stone not found.`);
+		let stone = getMegaStone(targetid);
+		if (!stone.exists) return this.errorReply(`Error: Mega Stone not found.`);
 		let banlist = Dex.getFormat('gen7mixandmega').banlist;
 		if (banlist.includes(stone.name)) {
 			this.errorReply(`Warning: ${stone.name} is banned from Mix and Mega.`);
 		}
-		let restrictedStones = Dex.getFormat('gen7mixandmega').restrictedStones;
+		let restrictedStones = Dex.getFormat('gen7mixandmega').restrictedStones || [];
 		if (restrictedStones.includes(stone.name)) {
 			this.errorReply(`Warning: ${stone.name} is restricted to ${stone.megaEvolves} in Mix and Mega.`);
 		}
@@ -204,6 +217,7 @@ exports.commands = {
 			weightkg: megaTemplate.weightkg - baseTemplate.weightkg,
 		};
 		for (let statId in megaTemplate.baseStats) {
+			// @ts-ignore
 			deltas.baseStats[statId] = megaTemplate.baseStats[statId] - baseTemplate.baseStats[statId];
 		}
 		if (megaTemplate.types.length > baseTemplate.types.length) {
@@ -270,13 +284,14 @@ exports.commands = {
 		if (!template.exists) return this.errorReply("Error: Pokemon not found.");
 		let bst = 0;
 		for (let i in template.baseStats) {
+			// @ts-ignore
 			bst += template.baseStats[i];
 		}
-		let newStats = {};
+		template.baseStats = Object.assign({}, template.baseStats);
 		for (let i in template.baseStats) {
-			newStats[i] = template.baseStats[i] * (bst <= 350 ? 2 : 1);
+			// @ts-ignore
+			template.baseStats[i] = template.baseStats[i] * (bst <= 350 ? 2 : 1);
 		}
-		template.baseStats = Object.assign({}, newStats);
 		this.sendReply(`|html|${Chat.getDataPokemonHTML(template)}`);
 	},
 	'350cuphelp': [`/350 OR /350cup <pokemon> - Shows the base stats that a Pokemon would have in 350 Cup.`],
@@ -304,10 +319,34 @@ exports.commands = {
 		let boost = boosts[template.tier];
 		let newStats = Object.assign({}, template.baseStats);
 		for (let statName in template.baseStats) {
+			// @ts-ignore
 			newStats[statName] = Dex.clampIntRange(newStats[statName] + boost, 1, 255);
 		}
 		template.baseStats = Object.assign({}, newStats);
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(template)}`);
 	},
 	tiershifthelp: [`/ts OR /tiershift <pokemon> - Shows the base stats that a Pokemon would have in Tier Shift.`],
+
+	'!scalemons': true,
+	scale: 'scalemons',
+	scalemons: function (target, room, user) {
+		if (!this.runBroadcast()) return;
+		if (!toId(target)) return this.parse(`/help scalemons`);
+		let template = Object.assign({}, Dex.getTemplate(target));
+		if (!template.exists) return this.errorReply(`Error: Pokemon ${target} not found.`);
+		let newStats = Object.assign({}, template.baseStats);
+		let stats = ['atk', 'def', 'spa', 'spd', 'spe'];
+		// @ts-ignore
+		let pst = stats.map(stat => template.baseStats[stat]).reduce((x, y) => x + y);
+		let scale = 600 - template.baseStats['hp'];
+		for (const stat of stats) {
+			// @ts-ignore
+			newStats[stat] = Dex.clampIntRange(template.baseStats[stat] * scale / pst, 1, 255);
+		}
+		template.baseStats = Object.assign({}, newStats);
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(template)}`);
+	},
+	scalemonshelp: [`/scale OR /scalemons <pokemon> - Shows the base stats that a Pokemon would have in Scalemons.`],
 };
+
+exports.commands = commands;

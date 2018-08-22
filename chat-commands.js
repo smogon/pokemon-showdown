@@ -167,7 +167,7 @@ const commands = {
 
 	'!avatar': true,
 	avatar: function (target, room, user) {
-		if (!target) return this.parse('/avatars');
+		if (!target) return this.parse(`${this.cmdToken}avatars`);
 		let parts = target.split(',');
 		let avatarid = toId(parts[0]);
 		let avatar = 0;
@@ -433,20 +433,23 @@ const commands = {
 		if (!target) return this.parse('/help msg');
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
-		if (!target) {
+		if (this.targetUsername === '~') {
+			this.room = Rooms.global;
+			this.pmTarget = null;
+		} else if (!target) {
 			this.errorReply("You forgot the comma.");
 			return this.parse('/help msg');
-		}
-		if (!targetUser) {
+		} else if (!targetUser) {
 			let error = `User ${this.targetUsername} not found. Did you misspell their name?`;
 			error = `|pm|${this.user.getIdentity()}| ${this.targetUsername}|/error ${error}`;
 			connection.send(error);
 			return;
+		} else {
+			this.pmTarget = targetUser;
+			this.room = undefined;
 		}
-		this.pmTarget = targetUser;
-		this.room = undefined;
 
-		if (!targetUser.connected) {
+		if (targetUser && !targetUser.connected) {
 			return this.errorReply(`User ${this.targetUsername} is offline.`);
 		}
 
@@ -814,7 +817,7 @@ const commands = {
 		}
 
 		if (room.subRooms) {
-			for (const subRoom of room.subRooms) subRoom.parent = null;
+			for (const subRoom of room.subRooms.values()) subRoom.parent = null;
 		}
 
 		room.add(`|raw|<div class="broadcast-red"><b>This room has been deleted.</b></div>`);
@@ -1513,6 +1516,7 @@ const commands = {
 		}
 		if (!this.can('ban', targetUser, room)) return false;
 		if (targetUser.can('makeroom')) return this.errorReply("You are not allowed to ban upper staff members.");
+		if (Punishments.getRoomPunishType(room, this.targetUsername) === 'BLACKLIST') return this.errorReply(`This user is already blacklisted from ${room.id}.`);
 		let name = targetUser.getLastName();
 		let userid = targetUser.getLastId();
 
@@ -1737,11 +1741,11 @@ const commands = {
 		if (!this.can('mute', null, room)) return false;
 
 		let targetUser = this.targetUser;
-		let successfullyUnmuted = room.unmute(targetUser ? targetUser.userid : this.targetUsername, `Your mute in '${room.title}' has been lifted.`);
+		let successfullyUnmuted = room.unmute(targetUser ? targetUser.userid : toId(this.targetUsername), `Your mute in '${room.title}' has been lifted.`);
 
 		if (successfullyUnmuted) {
 			this.addModAction(`${(targetUser ? targetUser.name : successfullyUnmuted)} was unmuted by ${user.name}.`);
-			this.modlog('UNMUTE', targetUser, null, {noip: 1, noalts: 1});
+			this.modlog('UNMUTE', (targetUser || successfullyUnmuted), null, {noip: 1, noalts: 1});
 		} else {
 			this.errorReply(`${(targetUser ? targetUser.name : this.targetUsername)} is not muted.`);
 		}
@@ -2444,33 +2448,26 @@ const commands = {
 		if (!targetUser && !room.log.hasUsername(target)) return this.errorReply(`User ${target} not found or has no roomlogs.`);
 		if (!targetUser && !user.can('lock')) return this.errorReply(`User ${name} not found.`);
 		let userid = toId(this.inputUsername);
-		let hidetype = '';
 		if (!user.can('mute', targetUser, room) && !this.can('ban', targetUser, room)) return;
 
-		if (targetUser && (targetUser.locked || Punishments.isRoomBanned(targetUser, room.id) || room.isMuted(targetUser) || user.can('lock'))) {
-			hidetype = 'hide|';
-		} else if (!targetUser && user.can('lock')) {
-			hidetype = 'hide|';
-		} else {
-			return this.errorReply(`User ${name} is neither locked nor muted/banned from this room.`);
-		}
+		const localPunished = (targetUser && (targetUser.locked || Punishments.isRoomBanned(targetUser, room.id) || room.isMuted(targetUser)));
+		if (!(user.can('lock') || localPunished)) return this.errorReply(`User ${name} is neither locked nor muted/banned from this room.`);
 
-		if (cmd === 'hidealtstext' || cmd === 'hidetextalts' || cmd === 'hidealttext') {
+		if (targetUser && (cmd === 'hidealtstext' || cmd === 'hidetextalts' || cmd === 'hidealttext')) {
 			this.addModAction(`${name}'s alts' messages were cleared from ${room.title} by ${user.name}.`);
 			this.modlog('HIDEALTSTEXT', targetUser, null, {noip: 1});
-			this.add(`|unlink|${hidetype}${userid}`);
-
+			this.add(`|unlink|hide|${userid}`);
 			const alts = targetUser.getAltUsers(true);
 			for (const alt of alts) {
-				this.add(`|unlink|${hidetype}${alt.getLastId()}`);
+				this.add(`|unlink|hide|${alt.getLastId()}`);
 			}
 			for (const prevName in targetUser.prevNames) {
-				this.add(`|unlink|${hidetype}${targetUser.prevNames[prevName]}`);
+				this.add(`|unlink|hide|${targetUser.prevNames[prevName]}`);
 			}
 		} else {
 			this.addModAction(`${name}'s messages were cleared from ${room.title} by ${user.name}.`);
-			this.modlog('HIDETEXT', targetUser, null, {noip: 1, noalts: 1});
-			this.add(`|unlink|${hidetype}${userid}`);
+			this.modlog('HIDETEXT', targetUser || userid, null, {noip: 1, noalts: 1});
+			this.add(`|unlink|hide|${userid}`);
 		}
 	},
 	hidetexthelp: [
@@ -2534,11 +2531,12 @@ const commands = {
 				this.privateModAction(displayMessage);
 			}
 		}
-		this.add(`|unlink|hide|${userid}`);
-		if (userid !== toId(this.inputUsername)) this.add(`|unlink|hide|${toId(this.inputUsername)}`);
 
 		if (!room.isPrivate && room.chatRoomData) {
 			this.globalModlog("BLACKLIST", targetUser, ` by ${user.userid}${(target ? `: ${target}` : '')}`);
+		} else {
+			// Room modlog only
+			this.modlog("BLACKLIST", targetUser, ` by ${user.userid}${(target ? `: ${target}` : '')}`);
 		}
 		return true;
 	},
@@ -3342,9 +3340,9 @@ const commands = {
 		let memUsage = process.memoryUsage();
 		let results = [memUsage.rss, memUsage.heapUsed, memUsage.heapTotal];
 		let units = ["B", "KiB", "MiB", "GiB", "TiB"];
-		for (let result of results) {
-			let unitIndex = Math.floor(Math.log2(result) / 10); // 2^10 base log
-			result = `${(result / Math.pow(2, 10 * unitIndex)).toFixed(2)} ${units[unitIndex]}`;
+		for (let i = 0; i < results.length; i++) {
+			let unitIndex = Math.floor(Math.log2(results[i]) / 10); // 2^10 base log
+			results[i] = `${(results[i] / Math.pow(2, 10 * unitIndex)).toFixed(2)} ${units[unitIndex]}`;
 		}
 		this.sendReply(`||[Main process] RSS: ${results[0]}, Heap: ${results[1]} / ${results[2]}`);
 	},
@@ -3619,7 +3617,7 @@ const commands = {
 		// retrieve spectator log (0) if there are privacy concerns
 		const format = Dex.getFormat(room.format, true);
 		let hideDetails = !format.id.includes('customgame');
-		if (format.team && room.game.ended) hideDetails = false;
+		if (format.team && room.battle.ended) hideDetails = false;
 		const data = room.getLog(hideDetails ? 0 : 3);
 		const datahash = crypto.createHash('md5').update(data.replace(/[^(\x20-\x7F)]+/g, '')).digest('hex');
 		let players = room.battle.playerNames;
@@ -3633,6 +3631,7 @@ const commands = {
 			format: format.id,
 			rating: rating,
 			hidden: room.isPrivate ? '1' : '',
+			inputlog: room.battle.inputLog ? room.battle.inputLog.join('\n') : null,
 		});
 		if (success && success.errorip) {
 			connection.popup(`This server's request IP ${success.errorip} is not a registered server.`);

@@ -401,6 +401,7 @@ const pages = {
 				lock: `I want to appeal my lock`,
 				ip: `I'm locked because I have the same IP as someone I don't recognize`,
 				semilock: `I can't talk in chat because of my ISP`,
+				hostfilter: `I'm locked because of #hostfilter`,
 				hasautoconfirmed: `Yes, I have an autoconfirmed account`,
 				lacksautoconfirmed: `No, I don't have an autoconfirmed account`,
 				appealother: `I want to appeal a mute/roomban/blacklist`,
@@ -504,7 +505,10 @@ const pages = {
 								buf += `<p><Button>lock</Button></p>`;
 							}
 						}
-						if (user.locked !== user.userid || isStaff) {
+						if (user.locked === '#hostfilter' || isStaff) {
+							buf += `<p><Button>hostfilter</Button></p>`;
+						}
+						if ((user.locked !== user.userid && user.locked !== '#hostfilter') || isStaff) {
 							buf += `<p><Button>ip</Button></p>`;
 						}
 					}
@@ -517,7 +521,7 @@ const pages = {
 					buf += `<p>Please make a post in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal Forums</a> to appeal a permalock.</p>`;
 					break;
 				case 'lock':
-					buf += `<p>If you want to appeal your lock, click the button below and a global staff member will be with you shortly. Alternatively, make a post in <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeals</a>.</p>`;
+					buf += `<p>If you want to appeal your lock, click the button below and a global staff member will be with you shortly.</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirmappeal</Button></p>`;
 					break;
@@ -526,13 +530,17 @@ const pages = {
 					if (!isLast) break;
 					buf += `<p><Button>confirmipappeal</Button></p>`;
 					break;
+				case 'hostfilter':
+					buf += `<p>If you are locked under #hostfilter, it means you are connected to Pok&eacute;mon Showdown with a Proxy or VPN. We automatically lock these to prevent evasion of punishments. To get unlocked, you need to disable your Proxy or VPN, and use the /logout command.</p>`;
+					break;
 				case 'semilock':
 					buf += `<p>Do you have an Autoconfirmed account? An account is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer.</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>hasautoconfirmed</Button> <Button>lacksautoconfirmed</Button></p>`;
 					break;
 				case 'hasautoconfirmed':
-					buf += `<p>Login to your autoconfirmed account, and the semilock will automatically be removed. If the semilock does not go away, you can try asking a global staff member for help. Click the button below to call a global staff member.</p>`;
+					buf += `<p>Login to your autoconfirmed account by using the /nick command, and the semilock will automatically be removed. Afterwords, you can use the /nick command to switch back to your current username without being semilocked again.</p>`;
+					buf += `<p>If the semilock does not go away, you can try asking a global staff member for help. Click the button below to call a global staff member.</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirmappealsemi</Button></p>`;
 					break;
@@ -748,7 +756,7 @@ let commands = {
 				'Inappropriate Pokemon Nicknames': 'Please save a replay of the battle and put it in chat so global staff can check.',
 				'Timerstalling': 'Please place the link to the battle in chat so global staff can check.',
 			};
-			const introMessage = `<h2 style="margin-top:0">Help Ticket - ${user.name}</h2><p><b>Issue</b>: ${ticket.type}<br />${upper ? `An Upper` : `A Global`} Staff member will be with you shortly.</p>${contexts[target] ? `<p>${contexts[target]}</p>` : ``}`;
+			const introMessage = `<h2 style="margin-top:0">Help Ticket - ${user.name}</h2><p><b>Issue</b>: ${ticket.type}<br />${upper ? `An Upper` : `A Global`} Staff member will be with you shortly.</p>${contexts[target] ? `<p style="text-decoration: underline">${contexts[target]}</p>` : ``}`;
 			const staffMessage = `${upper ? `<p><h3>Do not post sensitive information in this room.</h3>Drivers and moderators can access this room's logs via the log viewer; please PM the user instead.</p>` : ``}<p><button class="button" name="send" value="/helpticket close ${user.userid}">Close Ticket</button> <button class="button" name="send" value="/helpticket escalate ${user.userid}">Escalate</button> ${upper ? `` : `<button class="button" name="send" value="/helpticket escalate ${user.userid}, upperstaff">Escalate to Upper Staff</button>`} <button class="button" name="send" value="/helpticket ban ${user.userid}"><small>Ticketban</small></button></p>`;
 			let helpRoom = /** @type {ChatRoom?} */ (Rooms(`help-${user.userid}`));
 			if (!helpRoom) {

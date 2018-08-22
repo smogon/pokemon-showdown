@@ -418,12 +418,19 @@ const commands = {
 			}
 		}
 		let mod = Dex;
+		/** @type {Format?} */
+		let format = null;
 		if (sep[1] && toId(sep[1]) in Dex.dexes) {
 			mod = Dex.mod(toId(sep[1]));
-		} else if (sep[1] && Dex.getFormat(sep[1]).mod) {
-			mod = Dex.mod(Dex.getFormat(sep[1]).mod);
+		} else if (sep[1]) {
+			format = Dex.getFormat(sep[1]);
+			if (!format.exists) {
+				return this.errorReply(`Unrecognized format or mod "${format.name}"`);
+			}
+			mod = Dex.mod(format.mod);
 		} else if (room && room.battle) {
-			mod = Dex.forFormat(room.battle.format);
+			format = Dex.getFormat(room.battle.format);
+			mod = Dex.mod(format.mod);
 		}
 		let newTargets = mod.dataSearch(target);
 		let showDetails = (cmd === 'dt' || cmd === 'details');
@@ -450,6 +457,9 @@ const commands = {
 				return this.sendReply(buffer);
 			case 'pokemon':
 				let pokemon = mod.getTemplate(newTarget.name);
+				if (format && format.onModifyTemplate) {
+					pokemon = format.onModifyTemplate.call(require('../sim/battle'), pokemon) || pokemon;
+				}
 				let tier = pokemon.tier;
 				if (room && (room.id === 'smogondoubles' ||
 					['gen7doublesou', 'gen7doublesubers', 'gen7doublesuu'].includes(room.battle && room.battle.format))) {
@@ -618,9 +628,9 @@ const commands = {
 		this.sendReply(buffer);
 	},
 	datahelp: [
-		`/data [pokemon/item/move/ability] - Get details on this pokemon/item/move/ability/nature.`,
-		`/data [pokemon/item/move/ability], Gen [generation number/format name] - Get details on this pokemon/item/move/ability/nature for that generation/format.`,
-		`!data [pokemon/item/move/ability] - Show everyone these details. Requires: + % @ * # & ~`,
+		`/data [pokemon/item/move/ability/nature] - Get details on this pokemon/item/move/ability/nature.`,
+		`/data [pokemon/item/move/ability/nature], Gen [generation number/format name] - Get details on this pokemon/item/move/ability/nature for that generation/format.`,
+		`!data [pokemon/item/move/ability/nature] - Show everyone these details. Requires: + % @ * # & ~`,
 	],
 
 	'!details': true,
@@ -630,9 +640,9 @@ const commands = {
 		this.run('data');
 	},
 	detailshelp: [
-		`/details [pokemon/item/move/ability] - Get additional details on this pokemon/item/move/ability/nature.`,
-		`/details [pokemon/item/move/ability], Gen [generation number/format name] - Get details on this pokemon/item/move/ability/nature for that generation/format.`,
-		`!details [pokemon/item/move/ability] - Show everyone these details. Requires: + % @ * # & ~`,
+		`/details [pokemon/item/move/ability/nature] - Get additional details on this pokemon/item/move/ability/nature.`,
+		`/details [pokemon/item/move/ability/nature], Gen [generation number/format name] - Get details on this pokemon/item/move/ability/nature for that generation/format.`,
+		`!details [pokemon/item/move/ability/nature] - Show everyone these details. Requires: + % @ * # & ~`,
 	],
 
 	'!weakness': true,
@@ -1724,6 +1734,9 @@ const commands = {
 		if (showAll || target === 'coil') {
 			buffer.push(`<a href="https://www.smogon.com/forums/threads/3508013/">What is COIL?</a>`);
 		}
+		if (showAll || target === 'ladder' || target === 'ladderhelp' || target === 'decay') {
+			buffer.push(`<a href="https://pokemonshowdown.com/pages/ladderhelp">How the ladder works</a>`);
+		}
 		if (showAll || target === 'tiering' || target === 'tiers' || target === 'tier') {
 			buffer.push(`<a href="https://www.smogon.com/ingame/battle/tiering-faq">Tiering FAQ</a>`);
 		}
@@ -1736,8 +1749,8 @@ const commands = {
 		this.sendReplyBox(buffer.join(`<br />`));
 	},
 	faqhelp: [
-		`/faq [theme] - Provides a link to the FAQ. Add deviation, doubles, randomcap, restart, or staff for a link to these questions. Add all for all of them.`,
-		`!faq [theme] - Shows everyone a link to the FAQ. Add deviation, doubles, randomcap, restart, or staff for a link to these questions. Add all for all of them. Requires: + % @ * # & ~`,
+		`/faq [theme] - Provides a link to the FAQ. Add autoconfirmed, badges, coil, ladder, staff, or tiers for a link to these questions. Add all for all of them.`,
+		`!faq [theme] - Shows everyone a link to the FAQ. Add autoconfirmed, badges, coil, ladder, staff, or tiers for a link to these questions. Add all for all of them. Requires: + % @ * # & ~`,
 	],
 
 	'!smogdex': true,
@@ -2101,9 +2114,13 @@ const commands = {
 	pr: 'pickrandom',
 	pick: 'pickrandom',
 	pickrandom: function (target, room, user) {
-		let options = target.split(',');
-		if (options.length < 2) return this.parse('/help pick');
+		if (!target) return false;
+		if (!target.includes(',')) return this.parse('/help pick');
 		if (!this.runBroadcast(true)) return false;
+		if (this.broadcasting) {
+			[, target] = Chat.splitFirst(this.message, ' ');
+		}
+		let options = target.split(',');
 		const pickedOption = options[Math.floor(Math.random() * options.length)].trim();
 		return this.sendReplyBox(Chat.html`<em>We randomly picked:</em> ${pickedOption}`);
 	},

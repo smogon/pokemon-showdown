@@ -62,7 +62,7 @@ let BattleFormats = {
 			'Phione', 'Manaphy', 'Darkrai', 'Shaymin', 'Arceus',
 			'Victini', 'Keldeo', 'Meloetta', 'Genesect',
 			'Diancie', 'Hoopa', 'Volcanion',
-			'Magearna', 'Marshadow',
+			'Magearna', 'Marshadow', 'Zeraora',
 		],
 		onValidateSet(set, format) {
 			if (this.gen < 7 && toId(set.item) === 'souldew') {
@@ -186,10 +186,6 @@ let BattleFormats = {
 				}
 			}
 
-			if (this.gen <= 1) {
-				if (set.evs) set.evs['spd'] = set.evs['spa'];
-				if (set.ivs) set.ivs['spd'] = set.ivs['spa'];
-			}
 			// In gen 6, it is impossible to battle other players with pokemon that break the EV limit
 			if (totalEV > 510 && this.gen === 6) {
 				problems.push((set.name || set.species) + " has more than 510 total EVs.");
@@ -215,7 +211,7 @@ let BattleFormats = {
 				}
 			} else {
 				if (set.gender !== 'M' && set.gender !== 'F') {
-					set.gender = undefined;
+					set.gender = '';
 				}
 			}
 
@@ -312,6 +308,10 @@ let BattleFormats = {
 
 			return problems;
 		},
+		banlist: [
+			'Chansey + Charm + Seismic Toss', 'Chansey + Charm + Psywave',
+			'Shiftry + Leaf Blade + Sucker Punch',
+		],
 	},
 	hoennpokedex: {
 		effectType: 'ValidatorRule',

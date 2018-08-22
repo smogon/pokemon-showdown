@@ -52,7 +52,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 		let hasAbility = {};
 		hasAbility[template.abilities[0]] = true;
 		if (template.abilities[1]) {
-			// @ts-ignore
+			// @ts-ignore TypeScript bug
 			hasAbility[template.abilities[1]] = true;
 		}
 		let availableHP = 0;

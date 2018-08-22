@@ -28,7 +28,9 @@ let BattleScripts = {
 				/**@type {number} */
 				// @ts-ignore
 				let stat = this.template.baseStats[statName];
+				// @ts-ignore
 				stat = Math.floor(Math.floor(2 * stat + this.set.ivs[statName] + Math.floor(this.set.evs[statName] / 4)) * this.level / 100 + 5);
+				// @ts-ignore
 				this.baseStats[statName] = this.stats[statName] = Math.floor(stat);
 				this.modifiedStats[statName] = Math.floor(stat);
 				// Re-apply drops, if necessary.
@@ -36,7 +38,9 @@ let BattleScripts = {
 				if (this.status === 'par') this.modifyStat('spe', 0.25);
 				// @ts-ignore
 				if (this.status === 'brn') this.modifyStat('atk', 0.5);
+				// @ts-ignore
 				if (this.boosts[statName] !== 0) {
+					// @ts-ignore
 					if (this.boosts[statName] >= 0) {
 						// @ts-ignore
 						this.modifyStat(statName, [1, 1.5, 2, 2.5, 3, 3.5, 4][this.boosts[statName]]);
@@ -53,13 +57,21 @@ let BattleScripts = {
 			for (let i in boost) {
 				// @ts-ignore
 				let delta = boost[i];
+				if (delta === undefined) continue;
+				// @ts-ignore
 				this.boosts[i] += delta;
+				// @ts-ignore
 				if (this.boosts[i] > 6) {
+					// @ts-ignore
 					delta -= this.boosts[i] - 6;
+					// @ts-ignore
 					this.boosts[i] = 6;
 				}
+				// @ts-ignore
 				if (this.boosts[i] < -6) {
+					// @ts-ignore
 					delta -= this.boosts[i] - (-6);
+					// @ts-ignore
 					this.boosts[i] = -6;
 				}
 				if (delta) changed = true;
@@ -388,7 +400,6 @@ let BattleScripts = {
 
 		// Here's where self effects are applied.
 		if (moveData.self) {
-			// @ts-ignore
 			this.moveHit(pokemon, pokemon, move, moveData.self, isSecondary, true);
 		}
 
@@ -405,10 +416,8 @@ let BattleScripts = {
 				// That means that a move that does not share the type of the target can status it.
 				// If a move that was not fire-type would exist on Gen 1, it could burn a Pokémon.
 				if (!(secondary.status && ['par', 'brn', 'frz'].includes(secondary.status) && target && target.hasType(move.type))) {
-					// @ts-ignore
-					let effectChance = Math.floor(secondary.chance * 255 / 100);
+					let effectChance = Math.floor((secondary.chance || 100) * 255 / 100);
 					if (typeof secondary.chance === 'undefined' || this.randomChance(effectChance + 1, 256)) {
-						// @ts-ignore
 						this.moveHit(target, pokemon, move, secondary, true, isSelf);
 					}
 				}
