@@ -723,13 +723,14 @@ let BattleStatuses = {
 	// Multitype and RKS System, respectively, that changes their type,
 	// but their formes are specified to be their corresponding type
 	// in the Pokedex, so that needs to be overridden.
-	// This is mainly relevant for Hackmons and Balanced Hackmons.
+	// This is mainly relevant for Hackmons Cup and Balanced Hackmons.
 	arceus: {
 		name: 'Arceus',
 		id: 'arceus',
 		num: 493,
 		onTypePriority: 1,
 		onType: function (types, pokemon) {
+			if (pokemon.transformed) return types;
 			/** @type {string | undefined} */
 			let type = 'Normal';
 			if (pokemon.ability === 'multitype') {
@@ -747,6 +748,7 @@ let BattleStatuses = {
 		num: 773,
 		onTypePriority: 1,
 		onType: function (types, pokemon) {
+			if (pokemon.transformed) return types;
 			/** @type {string | undefined} */
 			let type = 'Normal';
 			if (pokemon.ability === 'rkssystem') {
