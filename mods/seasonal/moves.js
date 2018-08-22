@@ -602,7 +602,7 @@ let BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
-			this.add('-anim', target, "Power Gem", target);
+			this.add('-anim', target, "Power Gem", source);
 		},
 		secondary: {
 			chance: 50,
@@ -612,6 +612,53 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Rock",
+	},
+	// Marty
+	"typeanalysis": {
+		accuracy: true,
+		category: "Status",
+		desc: "If the user is a Silvally, it gains a Memory to match one of the target's weaknesses, changes form, and uses Multi-Attack. This move and its effects ignore the Abilities of other Pokemon. Fails if the target has no weaknesses, or if the user is not a Silvally.",
+		shortDesc: "Changes form to match the target's weakness.",
+		id: "typeanalysis",
+		name: "Type Analysis",
+		pp: 10,
+		priority: 0,
+		flags: {authentic: 1, protect: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Conversion", source);
+		},
+		onHit: function (target, source) {
+			if (source.baseTemplate.baseSpecies !== 'Silvally') return false;
+			let targetTypes = target.getTypes(true).filter(type => type !== '???');
+			if (!targetTypes.length) {
+				if (target.addedType) {
+					targetTypes = ['Normal'];
+				} else {
+					return false;
+				}
+			}
+			let weaknesses = [];
+			for (let type in this.data.TypeChart) {
+				let typeMod = this.getEffectiveness(type, targetTypes);
+				if (typeMod > 0 && this.getImmunity(type, target)) weaknesses.push(type);
+			}
+			if (!weaknesses.length) {
+				return false;
+			}
+			let randomType = this.sample(weaknesses);
+			source.setItem(randomType + 'memory');
+			this.add('-item', source, source.getItem(), '[from] move: Type Analysis');
+			let template = this.getTemplate('Silvally-' + randomType);
+			source.formeChange(template, this.getAbility('rkssystem'), true);
+			let move = this.getMoveCopy('multiattack');
+			move.ignoreAbility = true;
+			this.useMove(move, source, target);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+		zMoveEffect: 'heal',
 	},
 	// Megazard
 	tippingover: {

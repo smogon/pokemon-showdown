@@ -155,6 +155,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Crystal Boost',
 				evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
+			'Marty': {
+				species: 'Silvally', ability: 'RKS System', item: 'Normal Gem', gender: 'N',
+				moves: ['Parting Shot', 'Explosion', 'Extreme Speed'],
+				signatureMove: 'Type Analysis',
+				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
+			},
 			'Megazard': {
 				species: 'Exeggutor-Alola', ability: 'Stand Up Tall', item: 'Leftovers', gender: 'M',
 				moves: ['Strength Sap', 'Growth', 'Stockpile'],

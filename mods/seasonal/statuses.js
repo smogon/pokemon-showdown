@@ -298,6 +298,10 @@ let BattleStatuses = {
 			this.add(`c|%martha|bad`);
 		},
 	},
+	marty: {
+		noCopy: true,
+		// No phrases provided
+	},
 	megazard: {
 		noCopy: true,
 		onStart: function () {
