@@ -138,6 +138,9 @@ class BattleTimer {
 		 */
 		this.lastTick = 0;
 
+		/** Debug mode; true to output detailed timer info every tick */
+		this.debug = false;
+
 		this.lastDisabledTime = 0;
 		this.lastDisabledByUser = null;
 
@@ -285,6 +288,10 @@ class BattleTimer {
 					this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${ticksLeft * TICK_TIME} seconds left.`).update();
 				}
 			}
+		}
+		if (this.debug) {
+			this.battle.room.add(`||[${this.battle.playerNames[0]} has ${this.turnTicksLeft[0] * TICK_TIME}s this turn / ${this.ticksLeft[0] * TICK_TIME}s total]`);
+			this.battle.room.add(`||[${this.battle.playerNames[0]} has ${this.turnTicksLeft[0] * TICK_TIME}s this turn / ${this.ticksLeft[0] * TICK_TIME}s total]`);
 		}
 		if (!this.checkTimeout()) {
 			this.timer = setTimeout(() => this.nextTick(), TICK_TIME * 1000);
