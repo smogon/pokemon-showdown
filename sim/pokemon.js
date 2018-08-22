@@ -56,7 +56,6 @@ class Pokemon {
 		}
 		this.name = set.name.substr(0, 20);
 		this.speciesid = toId(this.species);
-		/**@type {Template} */ // Typescript bug fixed in 2.9
 		this.template = this.baseTemplate;
 		this.movepp = {};
 		/**@type {MoveSlot[]} */
