@@ -1599,6 +1599,7 @@ let Rooms = Object.assign(getRoom, {
 
 	RoomBattle: require('./room-battle').RoomBattle,
 	RoomBattlePlayer: require('./room-battle').RoomBattlePlayer,
+	RoomBattleTimer: require('./room-battle').RoomBattleTimer,
 	PM: require('./room-battle').PM,
 });
 
