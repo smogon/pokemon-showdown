@@ -1968,13 +1968,17 @@ class RandomTeams extends Dex.ModdedDex {
 			if (teamData.zCount >= 1 && itemData.zMove) continue;
 
 			let types = template.types;
-			// Prevents Mega Evolutions from breaking the type limits
-			if (itemData.megaStone) types = this.getTemplate(itemData.megaStone).types;
 
 			// Enforce Monotype
 			if (chosenTier === 'Mono') {
-				for (const type of types) {
-					if (!template.types.includes(type)) continue;
+				// Prevents Mega Evolutions from breaking the type limits
+				if (itemData.megaStone) {
+					let megaTemplate = this.getTemplate(itemData.megaStone);
+					if (types.length > megaTemplate.types.length) types = [template.types[0]];
+					// Only check the second type because a Mega Evolution should always share the first type with its base forme.
+					if (megaTemplate.types[1] && types[1] && megaTemplate.types[1] !== types[1]) {
+						types = [megaTemplate.types[0]];
+					}
 				}
 				if (!types.includes(type)) continue;
 			} else {
