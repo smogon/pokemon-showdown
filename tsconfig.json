@@ -42,6 +42,7 @@
         "./chat-plugins/helptickets.js",
         "./chat-plugins/mafia.js",
         "./chat-plugins/mafia-data.js",
+        "./chat-plugins/othermetas.js",
         "./chat-plugins/poll.js",
         "./chat-plugins/room-faqs.js",
         "./chat-plugins/thing-of-the-day.js",
