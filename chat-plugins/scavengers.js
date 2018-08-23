@@ -1377,7 +1377,7 @@ let commands = {
 	modsettings: {
 		'': 'update',
 		'update': function (target, room, user) {
-			if (!this.can('declare') || room.id !== 'scavengers') return false;
+			if (!this.can('declare', null, room) || room.id !== 'scavengers') return false;
 			let settings = room.scavmod || {};
 
 			this.sendReply(`|uhtml${this.cmd === 'update' ? 'change' : ''}|scav-modsettings|<div class=infobox><strong>Scavenger Moderation Settings:</strong><br /><br />` +
@@ -1386,7 +1386,7 @@ let commands = {
 		},
 
 		'ipcheck': function (target, room, user) {
-			if (!this.can('declare') || room.id !== 'scavengers') return false;
+			if (!this.can('declare', null, room) || room.id !== 'scavengers') return false;
 
 			let settings = scavsRoom.scavmod || {};
 			target = toId(target);
