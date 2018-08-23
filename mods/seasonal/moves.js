@@ -270,6 +270,61 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fire",
 	},
+	// Eien
+	ancestralpower: {
+		accuracy: true,
+		category: "Status",
+		desc: "",
+		shortDesc: "",
+		id: "ancestralpower",
+		name: "Ancestral Power",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+		},
+		onHit: function (target, source, move) {
+			let baseForme = source.template.id;
+			let formes = {
+				celebi: 'Future Sight',
+				jirachi: 'Doom Desire',
+				manaphy: 'Tail Glow',
+				shaymin: 'Seed Flare',
+				victini: 'V-create',
+			};
+			let forme = Object.keys(formes)[this.random(5)];
+			source.formeChange(forme, this.getAbility('psychicsurge'), true);
+			this.boost({atk: 1, spa: 1}, source, source, move);
+			this.useMove(formes[forme], source, target);
+			this.boost({atk: -1, spa: -1}, source, source, move);
+			source.formeChange(baseForme, this.getAbility('psychicsurge'), true);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Psychic",
+	},
+	// eternally
+	quack: {
+		accuracy: 100,
+		category: "Status",
+		desc: "Boosts the users spa and def by 1 stage.",
+		shortDesc: "+1 def, spa",
+		id: "quack",
+		name: "Quack",
+		pp: 5,
+		priority: 0,
+		flags: {mirror: 1, snatch: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Feather Dance', source);
+			this.add('-anim', source, 'Aqua Ring', source);
+		},
+		boosts: {def: 1, spa: 1},
+		secondary: null,
+		target: "self",
+		type: "Flying",
+	},
 	// EV
 	evoblast: {
 		accuracy: 100,
@@ -319,27 +374,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Normal",
-	},
-	// eternally
-	quack: {
-		accuracy: 100,
-		category: "Status",
-		desc: "Boosts the users spa and def by 1 stage.",
-		shortDesc: "+1 def, spa",
-		id: "quack",
-		name: "Quack",
-		pp: 5,
-		priority: 0,
-		flags: {mirror: 1, snatch: 1},
-		onPrepareHit: function (target, source) {
-			this.attrLastMove('[still]');
-			this.add('-anim', source, 'Feather Dance', source);
-			this.add('-anim', source, 'Aqua Ring', source);
-		},
-		boosts: {def: 1, spa: 1},
-		secondary: null,
-		target: "self",
-		type: "Flying",
 	},
 	// Hippopotas
 	hazardpass: {

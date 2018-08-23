@@ -95,6 +95,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Fang of the Fire King',
 				evs: {hp: 252, atk: 36, def: 100, spd: 120}, nature: 'Adament',
 			},
+			'Eien': {
+				species: 'Mew', ability: 'Psychic Surge', item: 'Terrain Extender', gender: 'N',
+				moves: ['Calm Mind', 'Psychic', 'Psyshock'],
+				signatureMove: 'Ancestral Power',
+				evs: {hp: 252, spd: 4, spe: 252}, nature: 'Timid',
+			},
 			'eternally': {
 				species: 'Ducklett', ability: 'Primordial Sea', item: 'Eviolite', gender: 'M',
 				moves: ['Surf', 'Hurricane', 'Roost'],

@@ -133,6 +133,15 @@ let BattleStatuses = {
 			this.add(`c|@E4 Flint|lul ok`);
 		},
 	},
+	eien: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|@Eien|umu!`);
+		},
+		onFaint: function () {
+			this.add(`c|@Eien|This game is Bad Civilization...`);
+		},
+	},
 	eternally: {
 		noCopy: true,
 		onStart: function () {
