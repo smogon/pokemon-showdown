@@ -218,7 +218,16 @@ class RandomStaffBrosTeams extends RandomTeams {
 		};
 		let pool = Object.keys(sets);
 		while (pool.length && team.length < 6) {
-			let name = this.sampleNoReplace(pool);
+			let name = '';
+			// DEBUG CODE
+			let debug = false; // Programmers - Toggle this to use the code below
+			if (team.length === 1 && debug) {
+				// Force a specific set to appear for testing
+				name = 'Kalalokki';
+				if (pool.indexOf(name) > -1) pool.splice(pool.indexOf(name), 1);
+			} else {
+				name = this.sampleNoReplace(pool);
+			}
 			let ssbSet = sets[name];
 			/** @type {PokemonSet} */
 			let set = {

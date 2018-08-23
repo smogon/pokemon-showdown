@@ -495,11 +495,39 @@ let BattleMovedex = {
 		volatileStatus: 'partiallytrapped',
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
-			this.add('-anim', source, 'Dark Void', source);
-			this.add('-anim', source, 'Surf', source);
+			this.add('-anim', source, 'Dark Void', target);
+			this.add('-anim', source, 'Surf', target);
 		},
-		onHit: function (target, source, move) {
-			target.addVolatile('trapped', source, move);
+		onHit: function (target, source) {
+			target.addVolatile('maelstrm', source);
+		},
+		effect: {
+			duration: 5,
+			durationCallback: function (target, source) {
+				if (source.hasItem('gripclaw')) {
+					this.debug('maelstrm grip claw duration boost');
+					return 8;
+				}
+				return 5;
+			},
+			onStart: function () {
+				this.add('message', 'It became trapped in an enormous maelström!');
+			},
+			onResidualOrder: 11,
+			onResidual: function (pokemon) {
+				if (this.effectData.source.hasItem('bindingband')) {
+					this.debug('maelstrm binding band damage boost');
+					this.damage(pokemon.maxhp / 6);
+				} else {
+					this.damage(pokemon.maxhp / 8);
+				}
+			},
+			onEnd: function () {
+				this.add('message', 'The maelström dissipated.');
+			},
+			onTrapPokemon: function (pokemon) {
+				pokemon.tryTrap();
+			},
 		},
 		secondary: null,
 		target: "normal",
