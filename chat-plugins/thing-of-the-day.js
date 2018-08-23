@@ -6,12 +6,11 @@ const MINUTE = 60 * 1000;
 const YEAR = 365 * 24 * 60 * MINUTE;
 
 const theStudio = /** @type {ChatRoom} */ (Rooms.get('thestudio'));
-const tvbf = /** @type {ChatRoom} */ (Rooms.get('tvbooksfilms'));
+const tvbf = /** @type {ChatRoom} */ (Rooms.get('jubilifetvfilms'));
 const yt = /** @type {ChatRoom} */ (Rooms.get('youtube'));
 
 const AOTDS_FILE = 'config/chat-plugins/thestudio.tsv';
 const FOTDS_FILE = 'config/chat-plugins/tvbf-films.tsv';
-const BOTDS_FILE = 'config/chat-plugins/tvbf-books.tsv';
 const SOTDS_FILE = 'config/chat-plugins/tvbf-shows.tsv';
 const COTDS_FILE = 'config/chat-plugins/youtube-channels.tsv';
 const PRENOMS_FILE = 'config/chat-plugins/otd-prenoms.json';
@@ -107,7 +106,7 @@ class OtdHandler {
 	addNomination(user, nomination) {
 		const id = toNominationId(nomination);
 
-		if (this.winners.slice(this.room === tvbf ? -10 : -30).some(entry => toNominationId(entry[this.keys[0]]) === id)) return user.sendTo(this.room, `This ${this.name.toLowerCase()} has already been ${this.id} in the past month.`);
+		if (this.winners.slice(this.room === tvbf ? -15 : -30).some(entry => toNominationId(entry[this.keys[0]]) === id)) return user.sendTo(this.room, `This ${this.name.toLowerCase()} has already been ${this.id} in the past month.`);
 
 		for (const value of this.removedNominations.values()) {
 			if (toId(user) in value.userids || user.latestIp in value.ips) return user.sendTo(this.room, `Since your nomination has been removed by staff, you cannot submit another ${this.name.toLowerCase()} until the next round.`);
@@ -332,7 +331,6 @@ class OtdHandler {
 
 const aotd = new OtdHandler('aotd', 'Artist', theStudio, AOTDS_FILE, ['artist', 'nominator', 'quote', 'song', 'link', 'image', 'time'], ['Artist', 'Nominator', 'Quote', 'Song', 'Link', 'Image', 'Timestamp']);
 const fotd = new OtdHandler('fotd', 'Film', tvbf, FOTDS_FILE, ['film', 'nominator', 'quote', 'link', 'image', 'time'], ['Film', 'Nominator', 'Quote', 'Link', 'Image', 'Timestamp']);
-const botd = new OtdHandler('botd', 'Book', tvbf, BOTDS_FILE, ['book', 'nominator', 'quote', 'link', 'image', 'time'], ['Book', 'Nominator', 'Quote', 'Link', 'Image', 'Timestamp']);
 const sotd = new OtdHandler('sotd', 'Show', tvbf, SOTDS_FILE, ['show', 'nominator', 'quote', 'link', 'image', 'time'], ['Show', 'Nominator', 'Quote', 'Link', 'Image', 'Timestamp']);
 const cotd = new OtdHandler('cotd', 'Channel', yt, COTDS_FILE, ['channel', 'nominator', 'link', 'tagline', 'image', 'time'], ['Show', 'Nominator', 'Link', 'Tagline', 'Image', 'Timestamp']);
 
@@ -346,8 +344,6 @@ function selectHandler(message) {
 		return aotd;
 	case 'fotd':
 		return fotd;
-	case 'botd':
-		return botd;
 	case 'sotd':
 		return sotd;
 	case 'cotd':
@@ -508,7 +504,6 @@ let commands = {
 			case 'artist':
 			case 'film':
 			case 'show':
-			case 'book':
 			case 'channel':
 				if (!toNominationId(value) || value.length > 50) return this.errorReply(`Please enter a valid ${key} name.`);
 				break;
@@ -567,7 +562,7 @@ let commands = {
 };
 
 const help = [
-	`Thing of the Day plugin commands (aotd, fotd, botd, sotd, cotd):`,
+	`Thing of the Day plugin commands (aotd, fotd, sotd, cotd):`,
 	`- /-otd - View the current Thing of the Day.`,
 	`- /-otd start - Starts nominations for the Thing of the Day. Requires: % @ # & ~`,
 	`- /-otd nom [nomination] - Nominate something for Thing of the Day.`,
@@ -582,7 +577,6 @@ const help = [
 exports.commands = {
 	aotd: commands,
 	fotd: commands,
-	botd: commands,
 	sotd: commands,
 	cotd: commands,
 	aotdhelp: help,
