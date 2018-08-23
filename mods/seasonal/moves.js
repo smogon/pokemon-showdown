@@ -754,6 +754,65 @@ let BattleMovedex = {
 		target: "self",
 		type: "Normal",
 	},
+	// Quite Quiet
+	"spookytransform": {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "",
+		shortDesc: "",
+		id: "spookytransform",
+		name: "Spooky Transform",
+		pp: 5,
+		priority: 1,
+		flags: {mystery: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			return !source.removeVolatile('spookytransform');
+		},
+		onHit: function (target, pokemon) {
+			if (!pokemon.transformInto(target, pokemon)) {
+				return false;
+			}
+			this.add('-anim', pokemon, "Refresh", pokemon);
+			pokemon.addVolatile('spookytransform');
+		},
+		effect: {
+			onDamagePriority: -100,
+			onDamage: function (damage, target, source) {
+				if (target.transformed && damage && source)	{
+					this.add('-immune', target, '[msg]', '[from] effect: Spooky Transform');
+					this.add('-message', `${target.name} reflected the damage back to ${source.name}.`);
+					this.add('-anim', target, "Night Shade", source);
+					this.damage(damage, source);
+					return null;
+				}
+				return damage;
+			},
+			onResidualOrder: 1,
+			onResidualSubOrder: 1,
+			onResidual: function (pokemon) {
+				pokemon.clearBoosts();
+				pokemon.moveSlots = pokemon.baseMoveSlots.slice();
+				pokemon.transformed = false;
+				pokemon.formeChange(pokemon.baseTemplate);
+				pokemon.setAbility('Levitate');
+				this.add('-clearboost', pokemon, false, '[silent]');
+				this.add('-end', pokemon, 'Transform');
+			},
+			onBeforeMovePriority: -1,
+			onBeforeMove: function (pokemon, target, move) {
+				if (move.id === 'spookytransform') return;
+				pokemon.removeVolatile('spookytransform');
+			},
+			onMoveAborted: function (pokemon, target, move) {
+				pokemon.removeVolatile('spookytransform');
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+	},
 	// The Immortal
 	ultrasucc: {
 		accuracy: 95,

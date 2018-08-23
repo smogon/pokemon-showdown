@@ -338,6 +338,27 @@ let BattleStatuses = {
 			this.add(`c|@moo|/me moo`);
 		},
 	},
+	quitequiet: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|@Quite Quiet|spooky :d`);
+		},
+		onFaint: function () {
+			this.add(`c|@Quite Quiet|:'(`);
+		},
+		onModifyDefPriority: 6,
+		onModifyDef: function (def, pokemon) {
+			if (!pokemon.transformed) {
+				return this.chainModify(2);
+			}
+		},
+		onModifySpDPriority: 6,
+		onModifySpD: function (spd, pokemon) {
+			if (!pokemon.transformed) {
+				return this.chainModify(2);
+			}
+		},
+	},
 	theimmortal: {
 		noCopy: true,
 		onStart: function () {

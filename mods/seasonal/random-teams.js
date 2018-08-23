@@ -179,6 +179,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Protein Shake',
 				evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful',
 			},
+			'Quite Quiet': {
+				species: 'Misdreavus', ability: 'Levitate', item: 'Leftovers', gender: 'F',
+				moves: [['Moongeist Beam', 'Shadow Ball', 'Night Shade'], 'Recover', ['Heal Bell', 'Taunt']],
+				signatureMove: 'Spooky Transform',
+				evs: {hp: 252, def: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+			},
 			'The Immortal': {
 				species: 'Buzzwole', ability: 'Beast Boost 2', item: 'Assault Vest', gender: 'N', // confirm with TI
 				moves: ['Leech Life', 'Plasma Fists', 'Ice Punch'],
