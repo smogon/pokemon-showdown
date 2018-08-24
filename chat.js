@@ -527,7 +527,7 @@ class CommandContext {
 			if (message.startsWith('||')) {
 				return prefix + `/text ` + message.slice(2);
 			} else if (message.startsWith(`|html|`)) {
-				return prefix + `/error ` + message.slice(6);
+				return prefix + `/raw ` + message.slice(6);
 			} else if (message.startsWith(`|raw|`)) {
 				return prefix + `/raw ` + message.slice(5);
 			} else if (message.startsWith(`|error|`)) {
