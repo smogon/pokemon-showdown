@@ -104,6 +104,9 @@ let Formats = [
 		mod: 'gen7',
 		ruleset: ['[Gen 7] NU'],
 		banlist: ['NU', 'PUBL'],
+		onBegin: function () {
+			if (this.rated) this.add('html', `<div class="broadcast-red"><strong>PU is currently suspecting Pyroar! For information on how to participate check out the <a href="https://www.smogon.com/forums/posts/7889792/">suspect thread</a>.</strong></div>`);
+		},
 	},
 	{
 		name: "[Gen 7] LC",
