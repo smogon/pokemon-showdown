@@ -493,6 +493,8 @@ class UnoGame extends Rooms.RoomGame {
 	 * @return {Card[]}
 	 */
 	onDrawCard(user, count) {
+		if (typeof count === 'string') count = parseInt(count);
+		if (!count || isNaN(count) || count < 1) count = 1;
 		let drawnCards = /** @type {Card[]} */ (this.drawCard(count));
 
 		let player = this.players[user.userid];
@@ -539,7 +541,7 @@ class UnoGame extends Rooms.RoomGame {
 			// if the previous player hasn't hit UNO before the next player plays something, they are forced to draw 2 cards;
 			if (this.awaitUno !== this.currentPlayerid) {
 				this.sendToRoom(`${this.players[this.awaitUno].name} forgot to say UNO! and is forced to draw 2 cards.`);
-				this.onDrawCard(this.players[this.awaitUno].userid, 2);
+				this.onDrawCard(this.players[this.awaitUno], 2);
 			}
 			delete this.awaitUno;
 			delete this.unoId;
