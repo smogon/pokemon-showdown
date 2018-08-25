@@ -156,7 +156,7 @@ let BattleScripts = {
 					targetVolatile.duration = 2;
 					// We get the move position for the PP change.
 					const moveSlot = pokemon.moveSlots.find(moveSlot => moveSlot.id === move.id);
-					if (moveSlot && moveSlot.pp === 0) {
+					if (moveSlot && moveSlot.pp < 0) {
 						moveSlot.pp = 63;
 						pokemon.isStale = 2;
 						pokemon.isStaleSource = 'ppoverflow';
