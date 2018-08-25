@@ -783,6 +783,20 @@ let BattleFormats = {
 			}
 		},
 	},
+	arceusevclause: {
+		effectType: 'ValidatorRule',
+		name: 'Arceus EV Clause',
+		desc: "Restricts Arceus to a maximum of 100 EVs in any one stat",
+		onValidateSet(set, format) {
+			let template = this.getTemplate(set.species);
+			if (template.num === 493 && set.evs) {
+				for (let stat in set.evs) {
+					// @ts-ignore
+					if (set.evs[stat] > 100) return ["Arceus may not have more than 100 of any EVs."];
+				}
+			}
+		},
+	},
 	inversemod: {
 		effectType: 'Rule',
 		name: 'Inverse Mod',
