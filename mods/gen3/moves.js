@@ -363,7 +363,7 @@ let BattleMovedex = {
 	},
 	explosion: {
 		inherit: true,
-		desc: "The user faints after using this move. The target's Defense is halved during damage calculation. This move is prevented from executing if any active Pokemon has the Ability Damp.",
+		desc: "The user faints after using this move. The target's Defense is halved during damage calculation. This move is prevented from executing if any active Pokemon has the Damp Ability.",
 	},
 	extrasensory: {
 		inherit: true,
@@ -400,7 +400,7 @@ let BattleMovedex = {
 	},
 	followme: {
 		inherit: true,
-		desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the user. Such attacks are redirected to the user before they can be reflected by Magic Coat, or drawn in by the Ability Lightning Rod. This effect remains active even if the user leaves the field. Fails if it is not a Double Battle.",
+		desc: "Until the end of the turn, all single-target attacks from the opposing side are redirected to the user. Such attacks are redirected to the user before they can be reflected by Magic Coat, or drawn in by the Lightning Rod Ability. This effect remains active even if the user leaves the field. Fails if it is not a Double Battle.",
 	},
 	foresight: {
 		inherit: true,
@@ -480,7 +480,7 @@ let BattleMovedex = {
 	},
 	knockoff: {
 		inherit: true,
-		desc: "The target's held item is lost for the rest of the battle, unless it has the Ability Sticky Hold. During the effect, the target cannot gain a new item by any means.",
+		desc: "The target's held item is lost for the rest of the battle, unless it has the Sticky Hold Ability. During the effect, the target cannot gain a new item by any means.",
 	},
 	leafblade: {
 		inherit: true,
@@ -500,7 +500,7 @@ let BattleMovedex = {
 	},
 	magiccoat: {
 		inherit: true,
-		desc: "The user is unaffected by certain non-damaging moves directed at it and will instead use such moves against the original user. If the move targets both opposing Pokemon and the Pokemon under this effect is on the left side, it will reflect the move targeting both opposing Pokemon and its ally will not be affected by the original move; otherwise, if the Pokemon under this effect is on the right side, its ally will be affected by the original move and this Pokemon will reflect the move only targeting the original user. The effect ends once a move is reflected or at the end of the turn. Moves reflected in this way can be reflected again by another Pokemon under this effect. If the user has the Ability Soundproof, it nullifies sound-based moves before this effect happens. The Ability Lightning Rod redirects Electric moves before this move takes effect.",
+		desc: "The user is unaffected by certain non-damaging moves directed at it and will instead use such moves against the original user. If the move targets both opposing Pokemon and the Pokemon under this effect is on the left side, it will reflect the move targeting both opposing Pokemon and its ally will not be affected by the original move; otherwise, if the Pokemon under this effect is on the right side, its ally will be affected by the original move and this Pokemon will reflect the move only targeting the original user. The effect ends once a move is reflected or at the end of the turn. Moves reflected in this way can be reflected again by another Pokemon under this effect. If the user has the Soundproof Ability, it nullifies sound-based moves before this effect happens. The Lightning Rod Ability redirects Electric moves before this move takes effect.",
 	},
 	meanlook: {
 		inherit: true,
@@ -668,11 +668,11 @@ let BattleMovedex = {
 	},
 	sandstorm: {
 		inherit: true,
-		desc: "For 5 turns, the weather becomes Sandstorm. At the end of each turn except the last, all active Pokemon lose 1/16 of their maximum HP, rounded down, unless they are a Ground, Rock, or Steel type, or have the Ability Sand Veil. Fails if the current weather is Sandstorm.",
+		desc: "For 5 turns, the weather becomes Sandstorm. At the end of each turn except the last, all active Pokemon lose 1/16 of their maximum HP, rounded down, unless they are a Ground, Rock, or Steel type, or have the Sand Veil Ability. Fails if the current weather is Sandstorm.",
 	},
 	selfdestruct: {
 		inherit: true,
-		desc: "The user faints after using this move. The target's Defense is halved during damage calculation. This move is prevented from executing if any active Pokemon has the Ability Damp.",
+		desc: "The user faints after using this move. The target's Defense is halved during damage calculation. This move is prevented from executing if any active Pokemon has the Damp Ability.",
 	},
 	sketch: {
 		inherit: true,
@@ -740,7 +740,7 @@ let BattleMovedex = {
 	},
 	spikes: {
 		inherit: true,
-		desc: "Sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in, unless it is a Flying-type Pokemon or has the Ability Levitate. Can be used up to three times before failing. Opponents lose 1/8 of their maximum HP with one layer, 1/6 of their maximum HP with two layers, and 1/4 of their maximum HP with three layers, all rounded down. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin successfully.",
+		desc: "Sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in, unless it is a Flying-type Pokemon or has the Levitate Ability. Can be used up to three times before failing. Opponents lose 1/8 of their maximum HP with one layer, 1/6 of their maximum HP with two layers, and 1/4 of their maximum HP with three layers, all rounded down. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin successfully.",
 	},
 	spite: {
 		inherit: true,
@@ -788,7 +788,7 @@ let BattleMovedex = {
 	struggle: {
 		inherit: true,
 		accuracy: 100,
-		desc: "Deals typeless damage to a random opposing Pokemon. If this move was successful, the user takes damage equal to 1/4 the HP lost by the target, rounded down, but not less than 1 HP, and the Ability Rock Head does not prevent this. This move is automatically used if none of the user's known moves can be selected.",
+		desc: "Deals typeless damage to a random opposing Pokemon. If this move was successful, the user takes damage equal to 1/4 the HP lost by the target, rounded down, but not less than 1 HP, and the Rock Head Ability does not prevent this. This move is automatically used if none of the user's known moves can be selected.",
 		shortDesc: "User loses 1/4 the HP lost by the target.",
 		recoil: [1, 4],
 		struggleRecoil: false,
@@ -857,7 +857,7 @@ let BattleMovedex = {
 	},
 	trick: {
 		inherit: true,
-		desc: "The user swaps its held item with the target's held item. Fails if either the user or the target is holding a Mail, if neither is holding an item, if either is under the effect of Knock Off, or if the target has the Ability Sticky Hold.",
+		desc: "The user swaps its held item with the target's held item. Fails if either the user or the target is holding a Mail, if neither is holding an item, if either is under the effect of Knock Off, or if the target has the Sticky Hold Ability.",
 	},
 	triplekick: {
 		inherit: true,

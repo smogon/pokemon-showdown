@@ -171,8 +171,8 @@ let BattleAbilities = {
 		num: 98,
 	},
 	"minus": {
-		desc: "If an active ally has the Ability Plus, this Pokemon's Special Attack is multiplied by 1.5.",
-		shortDesc: "If an active ally has the Ability Plus, this Pokemon's Sp. Atk is 1.5x.",
+		desc: "If an active ally has the Plus Ability, this Pokemon's Special Attack is multiplied by 1.5.",
+		shortDesc: "If an active ally has the Plus Ability, this Pokemon's Sp. Atk is 1.5x.",
 		onModifySpA: function (spa, pokemon) {
 			let allyActive = pokemon.side.active;
 			if (allyActive.length === 1) {
@@ -234,8 +234,8 @@ let BattleAbilities = {
 		num: 53,
 	},
 	"plus": {
-		desc: "If an active ally has the Ability Minus, this Pokemon's Special Attack is multiplied by 1.5.",
-		shortDesc: "If an active ally has the Ability Minus, this Pokemon's Sp. Atk is 1.5x.",
+		desc: "If an active ally has the Minus Ability, this Pokemon's Special Attack is multiplied by 1.5.",
+		shortDesc: "If an active ally has the Minus Ability, this Pokemon's Sp. Atk is 1.5x.",
 		onModifySpA: function (spa, pokemon) {
 			let allyActive = pokemon.side.active;
 			if (allyActive.length === 1) {
