@@ -20,7 +20,7 @@ let BattleAbilities = {
 	},
 	"damp": {
 		inherit: true,
-		desc: "While this Pokemon is active, Explosion, Self-Destruct, and the Ability Aftermath are prevented from having an effect.",
+		desc: "While this Pokemon is active, Explosion, Self-Destruct, and the Aftermath Ability are prevented from having an effect.",
 		shortDesc: "Prevents Explosion/Self-Destruct/Aftermath while this Pokemon is active.",
 	},
 	"galewings": {
@@ -61,7 +61,7 @@ let BattleAbilities = {
 	},
 	"mummy": {
 		inherit: true,
-		desc: "Pokemon making contact with this Pokemon have their Ability changed to Mummy. Does not affect the Abilities Multitype or Stance Change.",
+		desc: "Pokemon making contact with this Pokemon have their Ability changed to Mummy. Does not affect the Multitype or Stance Change Abilities.",
 	},
 	"normalize": {
 		inherit: true,
