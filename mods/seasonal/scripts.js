@@ -157,6 +157,50 @@ let BattleScripts = {
 		}
 		if (atLeastOne) return zMoves;
 	},
+	runZPower: function (move, pokemon) {
+		const zPower = this.getEffect('zpower');
+		if (move.category !== 'Status') {
+			this.attrLastMove('[zeffect]');
+		} else if (move.zMoveBoost) {
+			this.boost(move.zMoveBoost, pokemon, pokemon, zPower);
+		} else {
+			switch (move.zMoveEffect) {
+			case 'heal':
+				this.heal(pokemon.maxhp, pokemon, pokemon, zPower);
+				break;
+			case 'healhalf':
+				// For DragonWhale
+				this.heal(pokemon.maxhp / 2, pokemon, pokemon, zPower);
+				break;
+			case 'healreplacement':
+				move.self = {sideCondition: 'healreplacement'};
+				break;
+			case 'clearnegativeboost':
+				let boosts = {};
+				for (let i in pokemon.boosts) {
+					// @ts-ignore
+					if (pokemon.boosts[i] < 0) {
+						boosts[i] = 0;
+					}
+				}
+				pokemon.setBoost(boosts);
+				this.add('-clearnegativeboost', pokemon, '[zeffect]');
+				break;
+			case 'redirect':
+				pokemon.addVolatile('followme', pokemon, zPower);
+				break;
+			case 'crit2':
+				pokemon.addVolatile('focusenergy', pokemon, zPower);
+				break;
+			case 'curse':
+				if (pokemon.hasType('Ghost')) {
+					this.heal(pokemon.maxhp, pokemon, pokemon, zPower);
+				} else {
+					this.boost({atk: 1}, pokemon, pokemon, zPower);
+				}
+			}
+		}
+	},
 };
 
 exports.BattleScripts = BattleScripts;

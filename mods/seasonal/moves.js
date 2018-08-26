@@ -242,6 +242,35 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Ghost",
 	},
+	// DragonWhale
+	earthsblessing: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "",
+		shortDesc: "",
+		id: "earthsblessing",
+		name: "Earth's Blessing",
+		pp: 5,
+		priority: 0,
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Swords Dance', source);
+			this.add('-anim', source, 'Wood Hammer', source);
+		},
+		onHit: function (pokemon, move) {
+			if (this.pseudoWeather.gravity) return false;
+			this.boost({atk: 2}, pokemon, pokemon, 'move: Earth\'s Blessing');
+			this.addPseudoWeather('gravity');
+			if (['', 'slp', 'frz'].includes(pokemon.status)) return;
+			pokemon.cureStatus();
+		},
+		flags: {mirror: 1, snatch: 1},
+		secondary: false,
+		target: "self",
+		type: "Ground",
+		zMoveEffect: 'healhalf',
+	},
 	// E4 Flint
 	fangofthefireking: {
 		accuracy: 100,
@@ -532,6 +561,33 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Water",
+	},
+	// Kay
+	inked: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		desc: "Lowers the user's Defense, Special Defense and Speed by 1 stage.",
+		shortDesc: "Lowers the user's Def, SpD and Spe by 1.",
+		id: "inked",
+		name: "Inked",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Octazooka', target);
+		},
+		self: {
+			boosts: {
+				def: -1,
+				spd: -1,
+				spe: -1,
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Psychic",
 	},
 	// KingSwordYT
 	dragonwarriortouch: {

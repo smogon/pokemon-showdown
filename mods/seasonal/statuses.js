@@ -121,6 +121,12 @@ let BattleStatuses = {
 			this.add(`c|%deg|Dream Eater Gengar is an unset.`);
 		},
 	},
+	dragonwhale: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|@DragonWhale|i would switch to chomper here`);
+		},
+	},
 	e4flint: {
 		noCopy: true,
 		onStart: function (target, source) {
@@ -250,6 +256,26 @@ let BattleStatuses = {
 		},
 		onFaint: function () {
 			this.add(`c|@Iyarito|RIP Patrona`);
+		},
+	},
+	kay: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|@Kay|Every kiss begins with Kay`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|@Kay|くコ:彡`);
+		},
+		onFaint: function () {
+			this.add(`c|@Kay|'kay bye!くコ:彡`);
+		},
+		// Simple Innate
+		onBoost: function (boost, target, source, effect) {
+			if (effect && effect.id === 'zpower') return;
+			for (let i in boost) {
+				// @ts-ignore
+				boost[i] *= 2;
+			}
 		},
 	},
 	kingswordyt: {
