@@ -272,7 +272,7 @@ let Formats = [
 		banlist: ['DOU', 'DBL'],
 	},
 	{
-		name: "[Gen 7] VGC 2019 (Sun Series)",
+		name: "[Gen 7] VGC 2019 (Sun)",
 
 		mod: 'gen7',
 		gameType: 'doubles',
@@ -283,7 +283,7 @@ let Formats = [
 		},
 		timer: {starting: 6 * 60 + 30 - 10, perTurn: 10, maxPerTurn: 55, maxFirstTurn: 90, timeoutAutoChoose: true, dcTimerBank: false},
 		ruleset: ['Pokemon', 'Minimal GBU'],
-		banlist: ['Dragon Ascent'],
+		banlist: ['Unown', 'Rayquaza + Dragon Ascent'],
 		requirePlus: true,
 		onValidateTeam: function (team) {
 			const legends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma'];
@@ -303,10 +303,11 @@ let Formats = [
 		},
 	},
 	{
-		name: "[Gen 7] VGC 2019 (Moon Series)",
+		name: "[Gen 7] VGC 2019 (Moon)",
 
 		mod: 'gen7',
 		gameType: 'doubles',
+		searchShow: false,
 		forcedLevel: 50,
 		teamLength: {
 			validate: [4, 6],
@@ -314,7 +315,7 @@ let Formats = [
 		},
 		timer: {starting: 6 * 60 + 30 - 10, perTurn: 10, maxPerTurn: 55, maxFirstTurn: 90, timeoutAutoChoose: true, dcTimerBank: false},
 		ruleset: ['Pokemon', 'Minimal GBU'],
-		banlist: ['Dragon Ascent'],
+		banlist: ['Unown', 'Rayquaza + Dragon Ascent'],
 		requirePlus: true,
 		onValidateTeam: function (team) {
 			const legends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma'];
@@ -334,7 +335,7 @@ let Formats = [
 		},
 	},
 	{
-		name: "[Gen 7] VGC 2019 (Ultra Series)",
+		name: "[Gen 7] VGC 2019 (Ultra)",
 
 		mod: 'gen7',
 		gameType: 'doubles',
@@ -345,6 +346,7 @@ let Formats = [
 		},
 		timer: {starting: 6 * 60 + 30 - 10, perTurn: 10, maxPerTurn: 55, maxFirstTurn: 90, timeoutAutoChoose: true, dcTimerBank: false},
 		ruleset: ['Pokemon', 'Minimal GBU'],
+		banlist: ['Unown'],
 		requirePlus: true,
 		onValidateTeam: function (team) {
 			const legends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma'];
