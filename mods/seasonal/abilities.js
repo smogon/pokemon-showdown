@@ -77,6 +77,17 @@ let BattleAbilities = {
 			}
 		},
 	},
+	// Teremiare
+	notprankster: {
+		shortDesc: "This Pokemon's Status moves have priority raised by 1.",
+		onModifyPriority: function (priority, pokemon, target, move) {
+			if (move && move.category === 'Status') {
+				return priority + 1;
+			}
+		},
+		id: "notprankster",
+		name: "Not Prankster",
+	},
 	// The Immortal
 	beastboost2: {
 		desc: "This Pokemon's highest 2 stats are raised by 1 if it attacks and KOes another Pokemon.",

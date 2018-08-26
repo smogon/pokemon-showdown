@@ -191,6 +191,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Spooky Transform',
 				evs: {hp: 252, def: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
+			'Teremiare': {
+				species: 'Zorua', ability: 'Not Prankster', item: 'Eject Button', gender: 'N',
+				moves: ['Encore', 'Taunt', 'Lunar Dance'],
+				signatureMove: 'No Fun Zone',
+				evs: {hp: 252, def: 136, spd: 120}, ivs: {atk: 0}, nature: 'Bold', shiny: true,
+			},
 			'The Immortal': {
 				species: 'Buzzwole', ability: 'Beast Boost 2', item: 'Assault Vest', gender: 'N', // confirm with TI
 				moves: ['Leech Life', 'Plasma Fists', 'Ice Punch'],
