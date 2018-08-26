@@ -628,7 +628,7 @@ let Formats = [
 			'Lilligant', 'Lycanroc-Base', 'Manectric', 'Mesprit', 'Mudsdale', 'Omastar', 'Oricorio-Sensu', 'Passimian',
 			'Persian-Alola', 'Poliwrath', 'Primeape', 'Probopass', 'Pyroar', 'Pyukumuku', 'Quagsire', 'Qwilfish',
 			'Raichu-Alola', 'Regirock', 'Sableye', 'Sandslash-Alola', 'Scyther', 'Silvally-Fairy', 'Silvally-Ghost',
-			'Skuntank', 'Spiritomb', 'Swanna', 'Togedemaru', 'Weezing', 'Zangoose',
+			'Skuntank', 'Spiritomb', 'Stoutland', 'Swanna', 'Togedemaru', 'Weezing', 'Zangoose',
 			// ZUBL
 			'Carracosta', 'Crabominable', 'Exeggutor-Base', 'Gorebyss', 'Jynx', 'Kabutops', 'Ludicolo', 'Musharna',
 			'Raticate-Alola', 'Raticate-Alola-Totem', 'Throh', 'Turtonator', 'Type: Null', 'Ursaring', 'Victreebel',
