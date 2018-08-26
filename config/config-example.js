@@ -88,11 +88,11 @@ exports.potd = '';
 exports.crashguard = true;
 
 /**
- * login server data - don't forget the http: * and the trailing slash
+ * login server data - don't forget the http:// and the trailing slash
  *   This is the URL of the user database and ladder mentioned earlier.
  *   Don't change this setting - there aren't any other login servers right now
  */
-exports.loginserver = 'http: *play.pokemonshowdown.com/';
+exports.loginserver = 'http://play.pokemonshowdown.com/';
 exports.loginserverkeyalgo = "RSA-SHA1";
 exports.loginserverpublickeyid = 4;
 exports.loginserverpublickey = `-----BEGIN PUBLIC KEY-----
