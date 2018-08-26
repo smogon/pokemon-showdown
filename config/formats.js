@@ -282,7 +282,7 @@ let Formats = [
 			battle: 4,
 		},
 		timer: {starting: 7 * 60 + 90 - 10, perTurn: 10, maxPerTurn: 55, maxFirstTurn: 90, timeoutAutoChoose: true, dcTimerBank: false},
-		ruleset: ['Pokemon', 'Minimal GBU'],
+		ruleset: ['Pokemon', 'Minimal GBU', 'Team Preview'],
 		banlist: ['Unown', 'Dragon Ascent'],
 		requirePlus: true,
 		onValidateTeam: function (team) {
@@ -313,7 +313,7 @@ let Formats = [
 			battle: 4,
 		},
 		timer: {starting: 7 * 60 + 90 - 10, perTurn: 10, maxPerTurn: 55, maxFirstTurn: 90, timeoutAutoChoose: true, dcTimerBank: false},
-		ruleset: ['Pokemon', 'Minimal GBU'],
+		ruleset: ['Pokemon', 'Minimal GBU', 'Team Preview'],
 		banlist: ['Unown', 'Dragon Ascent'],
 		requirePlus: true,
 		onValidateTeam: function (team) {
@@ -343,7 +343,7 @@ let Formats = [
 			battle: 4,
 		},
 		timer: {starting: 7 * 60 + 90 - 10, perTurn: 10, maxPerTurn: 55, maxFirstTurn: 90, timeoutAutoChoose: true, dcTimerBank: false},
-		ruleset: ['Pokemon', 'Minimal GBU'],
+		ruleset: ['Pokemon', 'Minimal GBU', 'Team Preview'],
 		banlist: ['Unown'],
 		requirePlus: true,
 		onValidateTeam: function (team) {
