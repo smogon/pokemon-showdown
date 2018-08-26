@@ -272,7 +272,7 @@ let Formats = [
 		banlist: ['DOU', 'DBL'],
 	},
 	{
-		name: "[Gen 7] VGC 2019 (Sun)",
+		name: "[Gen 7] VGC 2019 Sun Series",
 
 		mod: 'gen7',
 		gameType: 'doubles',
@@ -283,7 +283,7 @@ let Formats = [
 		},
 		timer: {starting: 6 * 60 + 30 - 10, perTurn: 10, maxPerTurn: 55, maxFirstTurn: 90, timeoutAutoChoose: true, dcTimerBank: false},
 		ruleset: ['Pokemon', 'Minimal GBU'],
-		banlist: ['Unown', 'Rayquaza + Dragon Ascent'],
+		banlist: ['Unown', 'Dragon Ascent'],
 		requirePlus: true,
 		onValidateTeam: function (team) {
 			const legends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma'];
@@ -291,10 +291,9 @@ let Formats = [
 			let problems = [];
 			for (const set of team) {
 				const baseSpecies = this.getTemplate(set.species).baseSpecies;
-				if (legends.includes(baseSpecies)) n++;
-				if (n > 2) {
-					problems.push(`You can only use up to two legendary Pok\u00E9mon.`);
-					n = -6; // Prevent the message from being listed more than once.
+				if (legends.includes(baseSpecies)) {
+					n++;
+					if (n === 3) problems.push(`You can only use up to two legendary Pok\u00E9mon.`);
 				}
 				const item = this.getItem(set.item);
 				if (item.zMove || item.megaStone || ['redorb', 'blueorb'].includes(item.id)) problems.push(`${set.name || set.species}'s item ${item.name} is banned.`);
@@ -303,7 +302,7 @@ let Formats = [
 		},
 	},
 	{
-		name: "[Gen 7] VGC 2019 (Moon)",
+		name: "[Gen 7] VGC 2019 Moon Series",
 
 		mod: 'gen7',
 		gameType: 'doubles',
@@ -315,7 +314,7 @@ let Formats = [
 		},
 		timer: {starting: 6 * 60 + 30 - 10, perTurn: 10, maxPerTurn: 55, maxFirstTurn: 90, timeoutAutoChoose: true, dcTimerBank: false},
 		ruleset: ['Pokemon', 'Minimal GBU'],
-		banlist: ['Unown', 'Rayquaza + Dragon Ascent'],
+		banlist: ['Unown', 'Dragon Ascent'],
 		requirePlus: true,
 		onValidateTeam: function (team) {
 			const legends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma'];
@@ -323,10 +322,9 @@ let Formats = [
 			let problems = [];
 			for (const set of team) {
 				const baseSpecies = this.getTemplate(set.species).baseSpecies;
-				if (legends.includes(baseSpecies)) n++;
-				if (n > 2) {
-					problems.push(`You can only use up to two legendary Pok\u00E9mon.`);
-					n = -6; // Prevent the message from being listed more than once.
+				if (legends.includes(baseSpecies)) {
+					n++;
+					if (n === 3) problems.push(`You can only use up to two legendary Pok\u00E9mon.`);
 				}
 				const item = this.getItem(set.item);
 				if (item.megaStone || ['redorb', 'blueorb', 'ultranecroziumz'].includes(item.id)) problems.push(`${set.name || set.species}'s item ${item.name} is banned.`);
@@ -335,7 +333,7 @@ let Formats = [
 		},
 	},
 	{
-		name: "[Gen 7] VGC 2019 (Ultra)",
+		name: "[Gen 7] VGC 2019 Ultra Series",
 
 		mod: 'gen7',
 		gameType: 'doubles',
