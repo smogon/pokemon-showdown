@@ -54,7 +54,7 @@ let BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'Minimal GBU',
 		desc: "The standard ruleset for official tournaments, but without Restricted Legendary bans",
-		ruleset: ['Species Clause', 'Nickname Clause', 'Item Clause', 'Cancel Mod'],
+		ruleset: ['Species Clause', 'Nickname Clause', 'Item Clause', 'Team Preview', 'Cancel Mod'],
 		banlist: ['Unreleased', 'Illegal', 'Battle Bond',
 			'Mew',
 			'Celebi',
