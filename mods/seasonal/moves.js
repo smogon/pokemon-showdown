@@ -635,6 +635,7 @@ let BattleMovedex = {
 			pokemon.formeChange(template);
 			// ability is set to default from formeChange
 			pokemon.setAbility('parentalbond');
+			this.add('-hint', 'Level 51 still has the Parental Bond ability.');
 
 			pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 			this.add('detailschange', pokemon, pokemon.details);
