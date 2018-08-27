@@ -71,6 +71,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Restarting Router',
 				evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
+			'Ceteris': {
+				species: 'Greninja', ability: 'Protean', item: 'Expert Belt', gender: 'M',
+				moves: ['Dark Pulse', 'Origin Pulse', 'Gunk Shot', 'Shadow Sneak'],
+				signatureMove: 'Bringer of Darkness',
+				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
+			},
 			'Cerberax': {
 				species: 'Wailord', ability: 'Levitate', item: 'Figy Berry', gender: 'F',
 				moves: ['Shift Gear', 'Waterfall', 'Recover'],
@@ -265,7 +271,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'MicktheSpud';
+				name = 'Ceteris';
 				if (pool.indexOf(name) > -1) pool.splice(pool.indexOf(name), 1);
 			} else {
 				name = this.sampleNoReplace(pool);

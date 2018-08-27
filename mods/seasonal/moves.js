@@ -155,6 +155,46 @@ let BattleMovedex = {
 		target: "self",
 		type: "Electric",
 	},
+	// Ceteris
+	bringerofdarkness: {
+		accuracy: true,
+		category: "Status",
+		desc: "",
+		shortDesc: "",
+		id: "bringerofdarkness",
+		name: "Bringer of Darkness",
+		pp: 5,
+		priority: 0,
+		flags: {reflectable: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Dark Void", target);
+		},
+		onHit: function (target, source, move) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Spikes", target);
+			target.side.addSideCondition('spikes');
+			let stats = [];
+			for (let stat in source.boosts) {
+				// @ts-ignore
+				if (stat !== 'accuracy' && stat !== 'evasion' && source.boosts[stat] < 6) {
+					stats.push(stat);
+				}
+			}
+			if (stats.length) {
+				let randomStat = this.sample(stats);
+				let boost = {};
+				boost[randomStat] = 1;
+				this.boost(boost, source);
+			}
+		},
+		secondary: {
+			chance: 50,
+			status: 'slp',
+		},
+		target: "normal",
+		type: "Dark",
+	},
 	// Cerberax
 	blimpcrash: {
 		accuracy: true,
