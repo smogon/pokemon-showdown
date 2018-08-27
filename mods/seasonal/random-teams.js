@@ -209,6 +209,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Spooky Transform',
 				evs: {hp: 252, def: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
+			'Shiba': {
+				species: 'Fletchinder', ability: 'Gale Wings 1.0', item: 'Eviolite', gender: 'F',
+				moves: ['Dragon Ascent', 'Sacred Fire', 'Roost'],
+				signatureMove: 'GO INDA',
+				evs: {atk: 252, hp: 248, spe: 8}, nature: 'Adamant',
+      },
 			'Teremiare': {
 				species: 'Zorua', ability: 'Not Prankster', item: 'Eject Button', gender: 'N',
 				moves: ['Encore', 'Taunt', 'Lunar Dance'],

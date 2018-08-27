@@ -962,6 +962,30 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Ghost",
 	},
+	// Shiba
+	goinda: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Raises the user's Attack by 2 stages and Speed by 1 stage.",
+		shortDesc: "Raises the user's Attack by 2 and Speed by 1.",
+		id: "goinda",
+		name: "GO INDA",
+		pp: 5,
+		priority: 0,
+		flags: {snatch: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Swords Dance", source);
+			this.add('-anim', source, "Sacred Fire", source);
+		},
+		boosts: {
+			atk: 2,
+			spe: 1,
+		},
+		target: "self",
+		type: "Flying",
+  },
 	// Teremiare
 	nofunzone: {
 		accuracy: 100,

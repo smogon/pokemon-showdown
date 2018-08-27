@@ -77,6 +77,16 @@ let BattleAbilities = {
 			}
 		},
 	},
+	// Shiba
+	galewings10: {
+		id: "galewings10",
+		name: "Gale Wings 1.0",
+		desc: "This Pokemon's Flying-type moves have their priority increased by 1.",
+		shortDesc: "This Pokemon's Flying-type moves have their priority increased by 1.",
+		onModifyPriority: function (priority, pokemon, target, move) {
+			if (move && move.type === 'Flying') return priority + 1;
+		},
+  },
 	// Teremiare
 	notprankster: {
 		shortDesc: "This Pokemon's Status moves have priority raised by 1.",
