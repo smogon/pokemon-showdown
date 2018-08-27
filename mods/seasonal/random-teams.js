@@ -191,6 +191,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Tipping Over',
 				evs: {hp: 252, atk: 252, def: 4}, ivs: {spe: 0}, nature: 'Adament',
 			},
+			'MicktheSpud': {
+				species: 'Lycanroc-Midnight', ability: 'Fake Crash', item: 'Life Orb', gender: 'M', // Changes to Lycanrock-Dusk when ability is triggered
+				moves: ['Stone Edge', ['Earthquake', 'High Horsepower'], ['Dragon Dance', 'Swords Dance']],
+				signatureMove: 'Cyclone Spin',
+				evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
+			},
 			'moo': {
 				species: 'Miltank', ability: 'Scrappy', item: 'Life Orb', gender: 'M',
 				moves: ['Extreme Speed', 'Rapid Spin', 'Close Combat'],
@@ -214,7 +220,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				moves: ['Dragon Ascent', 'Sacred Fire', 'Roost'],
 				signatureMove: 'GO INDA',
 				evs: {atk: 252, hp: 248, spe: 8}, nature: 'Adamant',
-      },
+			},
 			'Teremiare': {
 				species: 'Zorua', ability: 'Not Prankster', item: 'Eject Button', gender: 'N',
 				moves: ['Encore', 'Taunt', 'Lunar Dance'],
@@ -259,7 +265,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'Yuki';
+				name = 'MicktheSpud';
 				if (pool.indexOf(name) > -1) pool.splice(pool.indexOf(name), 1);
 			} else {
 				name = this.sampleNoReplace(pool);

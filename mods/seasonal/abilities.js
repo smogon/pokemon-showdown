@@ -77,6 +77,35 @@ let BattleAbilities = {
 			}
 		},
 	},
+	// MicktheSpud
+	fakecrash: {
+		desc: "If this Pokemon is a Lycanroc-Midnight, the first hit it takes in battle deals 0 neutral damage. Its disguise is then broken and it changes to Lycanroc-Dusk. Confusion damage also breaks the disguise.",
+		shortDesc: "If this Pokemon is a Lycanroc-Midnight, the first hit it takes in battle deals 0 damage.",
+		onDamagePriority: 1,
+		onDamage: function (damage, target, source, effect) {
+			if (effect && effect.effectType === 'Move' && target.template.speciesid === 'lycanrocmidnight' && !target.transformed) {
+				this.add('-activate', target, 'ability: Fake Crash');
+				this.effectData.busted = true;
+				return 0;
+			}
+		},
+		onEffectiveness: function (typeMod, target, type, move) {
+			if (!this.activeTarget) return;
+			let pokemon = this.activeTarget;
+			if (pokemon.template.speciesid !== 'lycanrocmidnight' || pokemon.transformed || (pokemon.volatiles['substitute'] && !(move.flags['authentic'] || move.infiltrates))) return;
+			if (!pokemon.runImmunity(move.type)) return;
+			return 0;
+		},
+		onUpdate: function (pokemon) {
+			if (pokemon.template.speciesid === 'lycanrocmidnight' && this.effectData.busted) {
+				let templateid = 'Lycanroc-Dusk';
+				pokemon.formeChange(templateid, this.effect, true);
+				this.add('-message', `${pokemon.name || pokemon.species}'s true identity was revealed!`);
+			}
+		},
+		id: "fakecrash",
+		name: "Fake Crash",
+	},
 	// Shiba
 	galewings10: {
 		id: "galewings10",
@@ -86,7 +115,7 @@ let BattleAbilities = {
 		onModifyPriority: function (priority, pokemon, target, move) {
 			if (move && move.type === 'Flying') return priority + 1;
 		},
-  },
+	},
 	// Teremiare
 	notprankster: {
 		shortDesc: "This Pokemon's Status moves have priority raised by 1.",

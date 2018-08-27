@@ -361,6 +361,18 @@ let BattleStatuses = {
 			this.add(`c|@Megazard|Better luck next thyme`);
 		},
 	},
+	mickthespud: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|%MicktheSpud|Woah!`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|%MicktheSpud|Woah!`);
+		},
+		onFaint: function () {
+			this.add(`c|%MicktheSpud|Woah!`);
+		},
+	},
 	moo: {
 		noCopy: true,
 		onStart: function () {
@@ -415,8 +427,8 @@ let BattleStatuses = {
 		},
 		onSwitchOut: function () {
 			this.add(`c|%Shiba|gotta buy an alt rq brb`);
-    },
-  },
+		},
+	},
 	teremiare: {
 		noCopy: true,
 		onStart: function () {

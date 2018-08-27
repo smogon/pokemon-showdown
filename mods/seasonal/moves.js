@@ -834,6 +834,42 @@ let BattleMovedex = {
 		target: "normal",
 		type: "???",
 	},
+	// MicktheSpud
+	cyclonespin: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		desc: "",
+		shortDesc: "",
+		id: "cyclonespin",
+		name: "Cyclone Spin",
+		pp: 10,
+		priority: 0,
+		flags: {mirror: 1, protect: 1, contact: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Rapid Spin", target);
+		},
+		self: {
+			onHit: function (pokemon) {
+				if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
+					this.add('-end', pokemon, 'Leech Seed', '[from] move: Cyclone Spin', '[of] ' + pokemon);
+				}
+				let sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+				for (const condition of sideConditions) {
+					if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
+						this.add('-sideend', pokemon.side, this.getEffect(condition).name, '[from] move: Cyclone Spin', '[of] ' + pokemon);
+					}
+				}
+				if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
+					pokemon.removeVolatile('partiallytrapped');
+				}
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fighting",
+	},
 	// moo
 	proteinshake: {
 		accuracy: 100,
@@ -985,7 +1021,7 @@ let BattleMovedex = {
 		},
 		target: "self",
 		type: "Flying",
-  },
+	},
 	// Teremiare
 	nofunzone: {
 		accuracy: 100,
