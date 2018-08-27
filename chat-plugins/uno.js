@@ -30,7 +30,7 @@ const textColors = {
 const textShadow = 'text-shadow: 1px 0px black, -1px 0px black, 0px -1px black, 0px 1px black, 2px -2px black;';
 
 /** @typedef {'Green' | 'Yellow' | 'Red' | 'Blue' | 'Black'} Color */
-/** @typedef {{value: string, color: Color | string, changedColor?: Color, name: string}} Card */
+/** @typedef {{value: string, color: Color, changedColor?: Color, name: string}} Card */
 
 /**
  * @param {Card} card
@@ -49,6 +49,7 @@ function cardHTML(card, fullsize) {
  * @return {Card[]}
  */
 function createDeck() {
+	/** @type {Color[]} */
 	const colors = ['Red', 'Blue', 'Green', 'Yellow'];
 	const values = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'Reverse', 'Skip', '+2'];
 
@@ -56,21 +57,41 @@ function createDeck() {
 
 	for (const color of colors) {
 		basic.push(...values.map(v => {
-			return {value: v, color: color, name: color + " " + v};
+			/** @type {Card} */
+			let c = {value: v, color: color, name: color + " " + v};
+			return c;
 		}));
 	}
 
-	return [...basic, ...basic, // two copies of the basic stuff (total 96)
-		...[0, 1, 2, 3].map(v => ({color: colors[v], value: '0', name: colors[v] + ' 0'})), // the 4 0s
-		...[0, 1, 2, 3].map(v => ({color: 'Black', value: 'Wild', name: 'Wild'})), // wild cards
-		...[0, 1, 2, 3].map(v => ({color: 'Black', value: '+4', name: "Wild +4"})), // wild +4 cards
+	return [
+		// two copies of the basic stuff (total 96)
+		...basic,
+		...basic,
+		// The four 0s
+		...[0, 1, 2, 3].map(v => {
+			/** @type {Card} */
+			let c = {color: colors[v], value: '0', name: colors[v] + ' 0'};
+			return c;
+		}),
+		 // Wild cards
+		...[0, 1, 2, 3].map(v => {
+			/** @type {Card} */
+			let c = {color: 'Black', value: 'Wild', name: 'Wild'};
+			return c;
+		}),
+		// Wild +4 cards
+		...[0, 1, 2, 3].map(v => {
+			/** @type {Card} */
+			let c = {color: 'Black', value: '+4', name: 'Wild +4'};
+			return c;
+		}),
 	]; // 108 cards
 }
 
 class UnoGame extends Rooms.RoomGame {
 	/**
 	 * @param {ChatRoom} room
-	 * @param {number | string} cap
+	 * @param {number} cap
 	 * @param {boolean} suppressMessages
 	 */
 	constructor(room, cap, suppressMessages) {
@@ -82,12 +103,8 @@ class UnoGame extends Rooms.RoomGame {
 			room.gameNumber = 1;
 		}
 
-		if (typeof cap === 'string') cap = isNaN(parseInt(cap)) ? 6 : parseInt(cap);
-		if (cap < 2) cap = 2;
-
 		/** @type {number} */
 		this.playerCap = cap;
-		/** @type {boolean} */
 		this.allowRenames = true;
 		/** @type {number} */
 		this.maxTime = maxTime;
@@ -98,7 +115,6 @@ class UnoGame extends Rooms.RoomGame {
 
 		/** @type {string} */
 		this.gameid = 'uno';
-		/** @type {string} */
 		this.title = 'UNO';
 
 		/** @type {string} */
@@ -217,7 +233,7 @@ class UnoGame extends Rooms.RoomGame {
 		this.players[user.userid].userid = user.userid;
 		if (this.awaitUno && this.awaitUno === oldUserid) this.awaitUno = user.userid;
 
-		if (this.currentPlayerid && this.currentPlayerid === oldUserid) this.currentPlayerid = user.userid;
+		if (this.currentPlayerid === oldUserid) this.currentPlayerid = user.userid;
 	}
 
 	/**
@@ -489,7 +505,7 @@ class UnoGame extends Rooms.RoomGame {
 
 	/**
 	 * @param {UnoGamePlayer} user
-	 * @param {number | string} count
+	 * @param {number} count
 	 * @return {Card[]}
 	 */
 	onDrawCard(user, count) {
@@ -504,7 +520,7 @@ class UnoGame extends Rooms.RoomGame {
 	}
 
 	/**
-	 * @param {string | number} count
+	 * @param {number} count
 	 * @return {Card[]}
 	 */
 	drawCard(count) {
@@ -695,7 +711,10 @@ const commands = {
 
 			let suppressMessages = cmd.includes('private') || !(cmd.includes('public') || room.id === 'gamecorner');
 
-			room.game = new UnoGame(room, target, suppressMessages);
+			let cap = parseInt(target);
+			if (isNaN(cap)) cap = 6;
+			if (cap < 2) cap = 2;
+			room.game = new UnoGame(room, cap, suppressMessages);
 			this.privateModAction(`(A game of UNO was created by ${user.name}.)`);
 			this.modlog('UNO CREATE');
 		},
@@ -728,12 +747,10 @@ const commands = {
 			if (!amount || amount < 5 || amount > 300) return this.errorReply("The amount must be a number between 5 and 300.");
 
 			game.maxTime = amount;
-			if (game.timer) {
-				clearTimeout(game.timer);
-				game.timer = setTimeout(() => {
-					game.eliminate(game.currentPlayerid);
-				}, amount * 1000);
-			}
+			if (game.timer) clearTimeout(game.timer);
+			game.timer = setTimeout(() => {
+				game.eliminate(game.currentPlayerid);
+			}, amount * 1000);
 			this.addModAction(`${user.name} has set the UNO automatic disqualification timer to ${amount} seconds.`);
 			this.modlog('UNO TIMER', null, `${amount} seconds`);
 		},
