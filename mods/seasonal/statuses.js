@@ -373,6 +373,20 @@ let BattleStatuses = {
 			this.add(`c|@moo|/me moo`);
 		},
 	},
+	omroom: {
+		noCopy: true,
+		onStart: function (target, source) {
+			source.types = ["Fire", "Fairy"];
+			this.add(`c|%OM Room|use shift gear`);
+			this.add('-start', source, 'typeadd', 'Fairy');
+		},
+		onSwitchOut: function () {
+			this.add(`c|%OM Room|Ok brb I'm gonna ${["ladder Mix and Mega", "roll battle some surv regs real quick"][this.random(2)]}`);
+		},
+		onFaint: function () {
+			this.add(`c|%OM Room|Oh god I rolled a 1`);
+		},
+	},
 	quitequiet: {
 		noCopy: true,
 		onStart: function () {

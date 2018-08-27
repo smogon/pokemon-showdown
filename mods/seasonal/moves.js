@@ -872,6 +872,37 @@ let BattleMovedex = {
 		target: "self",
 		type: "Normal",
 	},
+	// OM Room
+	omboom: {
+		accuracy: 95,
+		basePower: 110,
+		desc: "",
+		shortDesc: "",
+		id: "omboom",
+		name: "OM Boom",
+		category: "Physical",
+		pp: 15,
+		priority: 0,
+		flags: {mirror: 1, protect: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Fire Lash", target);
+			this.add('-anim', source, "Heat Crash", target);
+		},
+		onHit: function () {
+			this.add(`c|%OM Room|Bang Bang`);
+		},
+		secondary: {
+			chance: 50,
+			self: {
+				boosts: {
+					spe: 2,
+				},
+			},
+		},
+		target: "normal",
+		type: "Fire",
+	},
 	// Quite Quiet
 	"spookytransform": {
 		accuracy: true,

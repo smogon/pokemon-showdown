@@ -197,6 +197,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Protein Shake',
 				evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful',
 			},
+			'OM Room': {
+				species: 'Flareon', ability: 'Pixilate', item: 'Metronome', gender: 'M',
+				moves: ['Fake Out', 'Thousand Arrows', 'Extreme Speed'],
+				signatureMove: 'OM Boom',
+				evs: {atk: 252, def: 4, spe: 252}, nature: 'Adamant',
+			},
 			'Quite Quiet': {
 				species: 'Misdreavus', ability: 'Levitate', item: 'Leftovers', gender: 'F',
 				moves: [['Moongeist Beam', 'Shadow Ball', 'Night Shade'], 'Recover', ['Heal Bell', 'Taunt']],
