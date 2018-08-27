@@ -233,6 +233,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Mini Singularity',
 				evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
+			'Yuki': {
+				species: 'Ninetales-Alola', ability: 'Snow Storm', item: 'Focus Sash', gender: 'F',
+				moves: ['Blizzard', 'Moonblast', 'Aurora Veil'],
+				signatureMove: 'Cutie Escape',
+				evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
+			},
 		};
 		let pool = Object.keys(sets);
 		while (pool.length && team.length < 6) {
@@ -241,7 +247,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'Kalalokki';
+				name = 'Yuki';
 				if (pool.indexOf(name) > -1) pool.splice(pool.indexOf(name), 1);
 			} else {
 				name = this.sampleNoReplace(pool);

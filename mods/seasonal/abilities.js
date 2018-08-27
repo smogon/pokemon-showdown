@@ -124,6 +124,18 @@ let BattleAbilities = {
 			this.addPseudoWeather('gravity', source);
 		},
 	},
+	// Yuki
+	snowstorm: {
+		desc: "Hail crashes down for unlimited turns.",
+		shortDesc: "Hail crashes down for unlimited turns.",
+		id: "snowstorm",
+		name: "Snow Storm",
+		onStart: function () {
+			let snowStorm = this.getEffect('hail');
+			snowStorm.duration = -1;
+			this.setWeather(snowStorm);
+		},
+	},
 };
 
 exports.BattleAbilities = BattleAbilities;

@@ -266,7 +266,7 @@ let BattleMovedex = {
 			pokemon.cureStatus();
 		},
 		flags: {mirror: 1, snatch: 1},
-		secondary: false,
+		secondary: null,
 		target: "self",
 		type: "Ground",
 		zMoveEffect: 'healhalf',
@@ -1198,6 +1198,50 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
+	},
+	// Yuki
+	cutieescape: {
+		accuracy: true,
+		category: "Status",
+		desc: "",
+		shortDesc: "",
+		id: "cutieescape",
+		name: "Cutie Escape",
+		pp: 10,
+		priority: -6,
+		flags: {snatch: 1, mirror: 1},
+		beforeTurnCallback: function (pokemon) {
+			pokemon.addVolatile('cutieescape');
+			this.add('-message', `${pokemon.name} is preparing to flee!`);
+		},
+		beforeMoveCallback: function (pokemon) {
+			if (!pokemon.volatiles['cutieescape'] || !pokemon.volatiles['cutieescape'].tookDamage) {
+				this.add('-fail', pokemon, 'move: Cutie Escape');
+				return true;
+			}
+		},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Baton Pass", source);
+		},
+		onHit: function (target, source) {
+			target.addVolatile('confusion');
+			target.addVolatile('cutietrap');
+		},
+		effect: {
+			duration: 1,
+			onStart: function (pokemon) {
+				this.add('-singleturn', pokemon, 'move: Cutie Escape');
+			},
+			onHit: function (pokemon, source, move) {
+				if (move.category !== 'Status') {
+					pokemon.volatiles['cutieescape'].tookDamage = true;
+				}
+			},
+		},
+		selfSwitch: true,
+		target: "normal",
+		type: "Fairy",
 	},
 };
 

@@ -451,6 +451,58 @@ let BattleStatuses = {
 			this.add(`c|@Trickster|(✖﹏✖✿)`);
 		},
 	},
+	yuki: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|%Yuki|My ice may be a little __cold__, but your plan has been put completely on __hold__!`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|%Yuki|I-It's too hot in here!`);
+		},
+		onFaint: function () {
+			this.add(`c|%Yuki|I'm melting...`);
+		},
+	},
+	// Custom effect for Yuki
+	cutietrap: {
+		duration: 5,
+		noCopy: true,
+		onStart: function (pokemon, source) {
+			if (!this.runEvent('Attract', pokemon, source)) {
+				this.debug('Attract event failed');
+				return false;
+			}
+			this.add('-start', pokemon, 'Attract', '[from] move: Cutie Trap', '[of] ' + source);
+			this.add('-message', `${pokemon.name} was trapped by love!`);
+		},
+		onBeforeMovePriority: 2,
+		onBeforeMove: function (pokemon, target, move) {
+			this.add('-activate', pokemon, 'move: Attract', '[of] ' + this.effectData.source);
+			if (this.randomChance(1, 2)) {
+				this.add('cant', pokemon, 'Attract');
+				return false;
+			}
+		},
+		onTrapPokemon: function (pokemon) {
+			pokemon.tryTrap();
+		},
+		onEnd: function (pokemon) {
+			this.add('-end', pokemon, 'Attract', '[silent]');
+			this.add('-message', `${pokemon.name} is no longer trapped by love.`);
+		},
+	},
+	// Modified hail for Yuki
+	hail: {
+		inherit: true,
+		onStart: function (battle, source, effect) {
+			if (effect && effect.effectType === 'Ability') {
+				if (this.gen <= 5 || effect.id === 'snowstorm') this.effectData.duration = 0;
+				this.add('-weather', 'Hail', '[from] ability: ' + effect, '[of] ' + source);
+			} else {
+				this.add('-weather', 'Hail');
+			}
+		},
+	},
 };
 
 exports.BattleStatuses = BattleStatuses;
