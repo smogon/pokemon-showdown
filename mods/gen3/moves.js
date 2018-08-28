@@ -561,7 +561,7 @@ let BattleMovedex = {
 			let noMirror = ['assist', 'curse', 'doomdesire', 'focuspunch', 'futuresight', 'magiccoat', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'psychup', 'roleplay', 'sketch', 'sleeptalk', 'spikes', 'spitup', 'taunt', 'teeterdance', 'transform'];
 			if (pokemon.hurtBy.length === 0) return false;
 			let lastHurtBy = pokemon.hurtBy[pokemon.hurtBy.length - 1];
-			if (!lastHurtBy.pokemon.lastMove || !lastHurtBy.move || noMirror.includes(lastHurtBy.move) || !lastHurtBy.pokemon.hasMove(lastHurtBy.move)) {
+			if (!lastHurtBy.source.lastMove || !lastHurtBy.move || noMirror.includes(lastHurtBy.move) || !lastHurtBy.source.hasMove(lastHurtBy.move)) {
 				return false;
 			}
 			this.useMove(lastHurtBy.move, pokemon);
