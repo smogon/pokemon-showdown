@@ -606,6 +606,7 @@ class Pokemon {
 			source: source,
 			damage: damage,
 			move: move.id,
+			thisTurn: true,
 		};
 		this.hurtBy.push(lastHurtBy);
 	}
