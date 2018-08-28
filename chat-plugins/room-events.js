@@ -99,36 +99,40 @@ exports.commands = {
 			if (!room.events || !Object.keys(room.events).length) {
 				return this.errorReply("There are currently no planned upcoming events for this room.");
 			}
+			if (!this.can('ban', null, room)) return false;
 			let multiplier = 1;
 			let columnName = "";
 			let order = "";
 			if (target.split(target.includes('|') ? '|' : ',') === target) {
-				columnName = target;
+				columnName = toId(target);
 			} else {
 				[columnName, order] = target.split(target.includes('|') ? '|' : ',');
-				multiplier = (toId(order) === 'desc') ? 1 : -1;
+				order = toId(order);
+				multiplier = (order === 'desc') ? 1 : -1;
 			}
-			let sortable = [];
-			for (const event in room.events) {
-				let eventTarget = toId(event);
-				sortable.push(room.events[eventTarget]);
-			}
+			columnName = toId(columnName);
+			let sortable = Object.values(room.events);
 			switch (toId(columnName)) {
 			case "date":
 			case "eventdate":
-				room.events = sortable.sort(function (a, b) { return (toId(a.date) < toId(b.date)) ? 1 * multiplier : (toId(b.date) < toId(a.date)) ? -1 * multiplier : 0; });
+				sortable.sort(function (a, b) { return (toId(a.date) < toId(b.date)) ? 1 * multiplier : (toId(b.date) < toId(a.date)) ? -1 * multiplier : 0; });
 				break;
 			case "desc":
 			case "description":
 			case "eventdescription":
-				room.events = sortable.sort(function (a, b) { return (toId(a.desc) < toId(b.desc)) ? 1 * multiplier : (toId(b.desc) < toId(a.desc)) ? -1 * multiplier : 0; });
+				sortable.sort(function (a, b) { return (toId(a.desc) < toId(b.desc)) ? 1 * multiplier : (toId(b.desc) < toId(a.desc)) ? -1 * multiplier : 0; });
 				break;
 			case "eventname":
 			case "name":
-				room.events = sortable.sort(function (a, b) { return (toId(a.eventName) < toId(b.eventName)) ? 1 * multiplier : (toId(b.eventName) < toId(a.eventName)) ? -1 * multiplier : 0; });
+				sortable.sort(function (a, b) { return (toId(a.eventName) < toId(b.eventName)) ? 1 * multiplier : (toId(b.eventName) < toId(a.eventName)) ? -1 * multiplier : 0; });
 				break;
 			default:
-				room.events = sortable.sort(function (a, b) { return (toId(a.date) < toId(b.date)) ? 1 * multiplier : (toId(b.date) < toId(a.date)) ? -1 * multiplier : 0; });
+				sortable.sort(function (a, b) { return (toId(a.date) < toId(b.date)) ? 1 * multiplier : (toId(b.date) < toId(a.date)) ? -1 * multiplier : 0; });
+			}
+			room.events = {};
+			for (const sortedObj of sortable) {
+				const eventId = toId(sortedObj.eventName);
+				room.events[eventId] = sortedObj;
 			}
 		},
 	},
