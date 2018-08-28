@@ -1400,7 +1400,7 @@ class RandomTeams extends Dex.ModdedDex {
 			item = 'Groundium Z';
 		} else if (hasMove['mindblown'] && !!counter['Status'] && !teamDetails.zMove) {
 			item = 'Firium Z';
-		} else if (!teamDetails.zMove && hasMove['fly'] || ((hasMove['bounce'] || (hasAbility['Gale Wings'] && hasMove['bravebird'])) && counter.setupType)) {
+		} else if (!teamDetails.zMove && (hasMove['fly'] || ((hasMove['bounce'] || (hasAbility['Gale Wings'] && hasMove['bravebird'])) && counter.setupType))) {
 			item = 'Flyinium Z';
 		} else if (hasMove['solarbeam'] && !hasAbility['Drought'] && !hasMove['sunnyday'] && !teamDetails['sun']) {
 			item = !teamDetails.zMove ? 'Grassium Z' : 'Power Herb';
