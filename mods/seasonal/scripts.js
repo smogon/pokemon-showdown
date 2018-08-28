@@ -175,6 +175,10 @@ let BattleScripts = {
 			case 'healreplacement':
 				move.self = {sideCondition: 'healreplacement'};
 				break;
+			case 'boostreplacement':
+				// For nui
+				move.self = {sideCondition: 'boostreplacement'};
+				break;
 			case 'clearnegativeboost':
 				let boosts = {};
 				for (let i in pokemon.boosts) {

@@ -949,6 +949,40 @@ let BattleMovedex = {
 		target: "self",
 		type: "Normal",
 	},
+	// nui
+	pyramidingsong: {
+		accuracy: 100,
+		desc: "",
+		shortDesc: "",
+		id: "pyramidingsong",
+		name: "Pyramiding Song",
+		category: "Status",
+		pp: 20,
+		priority: 0,
+		flags: {mirror: 1, protect: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Freeze Dry", target);
+			this.add('-anim', source, "Mist", target);
+		},
+		onTryHit: function (target, source, move) {
+			target.side.addSideCondition('pyramidingsong');
+		},
+		onHit: function (target, pokemon) {
+			target.switchFlag = 'selfSwitch';
+		},
+		effect: {
+			duration: 1,
+			onSwitchIn: function (pokemon) {
+				this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.getMove('pyramidingsong'));
+			},
+		},
+		selfSwitch: true,
+		secondary: null,
+		target: "normal",
+		type: "Water",
+		zMoveEffect: "boostreplacement",
+	},
 	// OM Room
 	omboom: {
 		accuracy: 95,

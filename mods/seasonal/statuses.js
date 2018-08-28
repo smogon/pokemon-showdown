@@ -397,6 +397,18 @@ let BattleStatuses = {
 			this.add(`c|@moo|/me moo`);
 		},
 	},
+	nui: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|&nui|（*＾3＾）`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|&nui|(´◔‸◔\`) **??+ !`);
+		},
+		onFaint: function () {
+			this.add(`c|&nui|(◕︿◕✿)`);
+		},
+	},
 	omroom: {
 		noCopy: true,
 		onStart: function (target, source) {
@@ -547,6 +559,19 @@ let BattleStatuses = {
 				this.add('-weather', 'Hail', '[from] ability: ' + effect, '[of] ' + source);
 			} else {
 				this.add('-weather', 'Hail');
+			}
+		},
+	},
+	// boostreplacement condition for nui's zmove
+	boostreplacement: {
+		// this is a side condition
+		name: 'boostreplacement',
+		id: 'boostreplacement',
+		onSwitchInPriority: 1,
+		onSwitchIn: function (target) {
+			if (!target.fainted && target.position === this.effectData.position) {
+				this.boost({def: 1, spd: 1});
+				target.side.removeSideCondition('boostreplacement');
 			}
 		},
 	},

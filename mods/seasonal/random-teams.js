@@ -209,6 +209,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Protein Shake',
 				evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful',
 			},
+			'nui': {
+				species: 'Milotic', ability: 'Prismatic Terrain', item: 'Waterium Z', gender: 'N',
+				moves: ['Origin	Pulse', ['Toxic', 'Sleep Talk'], ['Recover', 'Rest']],
+				signatureMove: 'Pyramiding Song',
+				evs: {hp: 252, def: 252, spd: 4}, ivs: {atk: 0}, nature: 'Bold', shiny: true,
+			},
 			'OM Room': {
 				species: 'Flareon', ability: 'Pixilate', item: 'Metronome', gender: 'M',
 				moves: ['Fake Out', 'Thousand Arrows', 'Extreme Speed'],
@@ -311,6 +317,15 @@ class RandomStaffBrosTeams extends RandomTeams {
 				let move = this.sampleNoReplace(ssbSet.moves);
 				if (Array.isArray(move)) move = this.sampleNoReplace(move);
 				set.moves.push(move);
+			}
+			if (name === 'nui') { //  nui must always have these sleep talk and rest if it has 1 or the other.
+				if (set.moves.includes('rest') && !set.moves.includes('sleeptalk')) {
+					set.moves.splice(set.moves.indexOf('rest') + 1, 1);
+					set.moves.push('sleeptalk');
+				} else if (!set.moves.includes('rest') && set.moves.includes('sleeptalk')) { // separated for positioning
+					set.moves.splice(set.moves.indexOf('sleeptalk') - 1, 1);
+					set.moves.push('rest');
+				}
 			}
 			set.moves.push(ssbSet.signatureMove);
 			team.push(set);

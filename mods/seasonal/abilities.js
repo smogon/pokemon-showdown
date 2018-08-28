@@ -106,6 +106,61 @@ let BattleAbilities = {
 		id: "fakecrash",
 		name: "Fake Crash",
 	},
+	// nui
+	prismaticterrain: {
+		id: "prismaticterrain",
+		name: "Prismatic Terrain",
+		desc: "For 5 turns, the terrain becomes Prismatic Terrain. During the effect, the power of Ice-type attacks is multiplied by 0.5. Hazards are removed and cannot be set while Prismatic Terrain is active. Fails if the current terrain is Prismatic Terrain.",
+		shortDesc: "5 turns. No hazards,-Ice power.",
+		onStart: function (source) {
+			this.setTerrain('prismaticterrain');
+		},
+		effect: {
+			duration: 5,
+			durationCallback: function (source, effect) {
+				if (source && source.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onBeforeMovePriority: 2,
+			onBeforeMove: function (pokemon, target, move) {
+				let hazards = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+				if (hazards.includes(move.id)) {
+					this.add('-message', 'The Prismatic Terrain prevents ' + move.id + ' from working.');
+					return false;
+				}
+			},
+			onBasePower: function (basePower, attacker, defender, move) {
+				if (move.type === 'Ice') {
+					this.debug('prismatic terrain weaken');
+					return this.chainModify(0.5);
+				}
+			},
+			onStart: function (battle, source, effect) {
+				if (effect && effect.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Prismatic Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Prismatic Terrain');
+				}
+				let removeAll = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+				for (const sideCondition of removeAll) {
+					let target = source.side.foe;
+					if (target.removeSideCondition(sideCondition)) {
+						this.add('-sideend', target, this.getEffect(sideCondition).name, '[from] move: Prismatic Terrain', '[of] ' + target);
+					}
+					if (source.side.removeSideCondition(sideCondition)) {
+						this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Prismatic Terrain', '[of] ' + source);
+					}
+				}
+			},
+			onResidualOrder: 21,
+			onResidualSubOrder: 2,
+			onEnd: function (side) {
+				this.add('-fieldend', 'Prismatic Terrain');
+			},
+		},
+	},
 	// Shiba
 	galewings10: {
 		id: "galewings10",
