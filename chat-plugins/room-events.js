@@ -94,31 +94,41 @@ exports.commands = {
 		help: function (target, room, user) {
 			return this.parse('/help roomevents');
 		},
-		sort: function (target, room, user) {
+		sortby: function (target, room, user) {
+			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!room.events || !Object.keys(room.events).length) {
+				return this.errorReply("There are currently no planned upcoming events for this room.");
+			}
 			let multiplier = 1;
 			let columnName = "";
 			let order = "";
 			if (target.split(target.includes('|') ? '|' : ',') === target) {
-				[columnName, order] = target.split(target.includes('|') ? '|' : ',');
-				multiplier = (toId(order) === 'desc') ? -1 : 1;
-			} else {
 				columnName = target;
+			} else {
+				[columnName, order] = target.split(target.includes('|') ? '|' : ',');
+				multiplier = (toId(order) === 'desc') ? 1 : -1;
+			}
+			let sortable = [];
+			for (const event in room.events) {
+				let eventTarget = toId(event);
+				sortable.push(room.events[eventTarget]);
 			}
 			switch (toId(columnName)) {
 			case "date":
 			case "eventdate":
-				room.events.sort(function (a, b) { return (a.date < b.date) ? 1 * multiplier : (b.date < a.date) ? -1 * multiplier : 0; });
+				room.events = sortable.sort(function (a, b) { return (toId(a.date) < toId(b.date)) ? 1 * multiplier : (toId(b.date) < toId(a.date)) ? -1 * multiplier : 0; });
 				break;
-			case "descripton":
+			case "desc":
+			case "description":
 			case "eventdescription":
-				room.events.sort(function (a, b) { return (a.desc < b.desc) ? 1 * multiplier : (b.desc < a.desc) ? -1 * multiplier : 0; });
+				room.events = sortable.sort(function (a, b) { return (toId(a.desc) < toId(b.desc)) ? 1 * multiplier : (toId(b.desc) < toId(a.desc)) ? -1 * multiplier : 0; });
 				break;
 			case "eventname":
 			case "name":
-				room.events.sort(function (a, b) { return (a.name < b.name) ? 1 * multiplier : (b.name < a.name) ? -1 * multiplier : 0; });
+				room.events = sortable.sort(function (a, b) { return (toId(a.eventName) < toId(b.eventName)) ? 1 * multiplier : (toId(b.eventName) < toId(a.eventName)) ? -1 * multiplier : 0; });
 				break;
 			default:
-				room.events.sort(function (a, b) { return (a.date < b.date) ? 1 * multiplier : (b.date < a.date) ? -1 * multiplier : 0; });
+				room.events = sortable.sort(function (a, b) { return (toId(a.date) < toId(b.date)) ? 1 * multiplier : (toId(b.date) < toId(a.date)) ? -1 * multiplier : 0; });
 			}
 		},
 	},
@@ -127,6 +137,6 @@ exports.commands = {
 		`/roomevents add [event name] | [event date/time] | [event description] - Adds a room event. Requires: @ # & ~`,
 		`/roomevents remove [event name] - Deletes an event. Requires: @ # & ~`,
 		`/roomevents view [event name] - Displays information about a specific event.`,
-		`/roomevents sort [column name] | [asc/desc] - Sorts events table by column name`,
+		`/roomevents sortby [column name] | [asc/desc] - Sorts events table by column name and an optional argument to ascending or descending order`,
 	],
 };
