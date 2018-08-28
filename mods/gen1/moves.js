@@ -967,11 +967,11 @@ let BattleMovedex = {
 				}
 				this.runEvent('AfterSubDamage', target, source, move, damage);
 				// Add here counter damage
-				if (!target.lastAttackedBy) {
-					target.lastAttackedBy = {pokemon: source, move: move.id, thisTurn: true, damage: damage};
+				if (target.hurtBy.length == 0) {
+					target.hurtBy.push({source: source, move: move.id, damage: damage, thisTurn: true});
 				} else {
-					target.lastAttackedBy.move = move.id;
-					target.lastAttackedBy.damage = damage;
+					target.hurtBy[target.hurtBy.length - 1].move = move.id;
+					target.hurtBy[target.hurtBy.length - 1].damage = damage;
 				}
 				return 0;
 			},
