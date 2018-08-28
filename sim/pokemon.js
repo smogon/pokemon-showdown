@@ -155,7 +155,7 @@ class Pokemon {
 		this.moveThisTurnResult = undefined;
 
 		this.lastDamage = 0;
-		/**@type {?{pokemon: Pokemon, damage: number, thisTurn: boolean, move?: string}} */
+		/**@type {{source: Pokemon, damage: number, thisTurn: boolean, move?: string}[]} */
 		this.hurtBy = [];
 		this.usedItemThisTurn = false;
 		this.newlySwitched = false;
