@@ -148,22 +148,10 @@ exports.commands = {
 			}
 			room.chatRoomData.events = room.events;
 
-			let resultString = "sorted list by column: ";
-			if (defaultCase) {
-				resultString += "date (invalid column name provided)";
-			} else {
-				resultString += columnName;
-			}
-			resultString += " in ";
-			if (multiplier === 1) {
-				resultString += "ascending ";
-			} else {
-				resultString += "descending ";
-			}
-			resultString += " order";
-			if (delimited.length === 1) {
-				resultString += " (by default)";
-			}
+			//build communication string
+			const resultString = `sorted by column: ${defaultCase ? "date (invalid column name provided)" : columnName}` +
+								 ` in ${multiplier === 1 ? "ascending" : "descending"} order` +
+								 `${delimited.length === 1 ? " (by default)" : ""}`;
 			this.modlog('ROOMEVENT', null, resultString);
 			return this.sendReply(resultString);
 		},
