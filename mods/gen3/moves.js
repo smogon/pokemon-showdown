@@ -187,7 +187,7 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "Deals damage to the last opposing Pokemon to hit the user with a physical attack this turn equal to twice the HP lost by the user from that attack. If that opposing Pokemon's position is no longer in use and there is another opposing Pokemon on the field, the damage is done to it instead. This move considers Hidden Power as Normal type, and only the last hit of a multi-hit attack is counted. Fails if the user was not hit by an opposing Pokemon's physical attack this turn, or if the user did not lose HP from the attack.",
 		damageCallback: function (pokemon) {
-			if (pokemon.hurtBy.length == 0) return false;
+			if (pokemon.hurtBy.length === 0) return false;
 			let lastHurtBy = pokemon.hurtBy[pokemon.hurtBy.length - 1];
 			if (lastHurtBy.move && lastHurtBy.thisTurn && (this.getCategory(lastHurtBy.move) === 'Physical' || this.getMove(lastHurtBy.move).id === 'hiddenpower')) {
 				// @ts-ignore
@@ -559,7 +559,7 @@ let BattleMovedex = {
 		onTryHit: function () { },
 		onHit: function (pokemon) {
 			let noMirror = ['assist', 'curse', 'doomdesire', 'focuspunch', 'futuresight', 'magiccoat', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'psychup', 'roleplay', 'sketch', 'sleeptalk', 'spikes', 'spitup', 'taunt', 'teeterdance', 'transform'];
-			if (pokemon.hurtBy.length == 0) return false;
+			if (pokemon.hurtBy.length === 0) return false;
 			let lastHurtBy = pokemon.hurtBy[pokemon.hurtBy.length - 1];
 			if (!lastHurtBy.pokemon.lastMove || !lastHurtBy.move || noMirror.includes(lastHurtBy.move) || !lastHurtBy.pokemon.hasMove(lastHurtBy.move)) {
 				return false;

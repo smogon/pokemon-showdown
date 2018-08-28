@@ -1104,7 +1104,7 @@ let BattleMovedex = {
 		onTryHit: function () { },
 		onHit: function (pokemon) {
 			let noMirror = ['acupressure', 'aromatherapy', 'assist', 'chatter', 'copycat', 'counter', 'curse', 'doomdesire', 'feint', 'focuspunch', 'futuresight', 'gravity', 'hail', 'haze', 'healbell', 'helpinghand', 'lightscreen', 'luckychant', 'magiccoat', 'mefirst', 'metronome', 'mimic', 'mirrorcoat', 'mirrormove', 'mist', 'mudsport', 'naturepower', 'perishsong', 'psychup', 'raindance', 'reflect', 'roleplay', 'safeguard', 'sandstorm', 'sketch', 'sleeptalk', 'snatch', 'spikes', 'spitup', 'stealthrock', 'struggle', 'sunnyday', 'tailwind', 'toxicspikes', 'transform', 'watersport'];
-			if (pokemon.hurtBy.length == 0) return false;
+			if (pokemon.hurtBy.length === 0) return false;
 			let lastHurtBy = pokemon.hurtBy[pokemon.hurtBy.length - 1];
 			if (!lastHurtBy.source.lastMove || !lastHurtBy.move || noMirror.includes(lastHurtBy.move) || !lastHurtBy.source.hasMove(lastHurtBy.move)) {
 				 return false;
