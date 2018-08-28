@@ -12,8 +12,13 @@
 
 const fs = require('fs');
 
-const DEFAULT_POINTS = [20, 15, 10, 5, 1];
-const DEFAULT_BLITZ_POINTS = 10;
+const RATED_TYPES = ['official', 'regular', 'mini'];
+const DEFAULT_POINTS = {
+	official: [20, 15, 10, 5, 1],
+};
+const DEFAULT_BLITZ_POINTS = {
+	official: 10,
+};
 const DEFAULT_TIMER_DURATION = 120;
 
 const path = require('path');
@@ -27,6 +32,18 @@ const FILTER_LENIENCY = 7;
 const HISTORY_PERIOD = 6; // months
 
 const ScavengerGames = require("./scavenger-games");
+
+// convert points stored in the old format
+const scavsRoom = Rooms('scavengers');
+if (scavsRoom && Array.isArray(scavsRoom.winPoints)) {
+	scavsRoom.winPoints = {official: scavsRoom.winPoints.slice()};
+	scavsRoom.blitzPoints = {official: scavsRoom.blitzPoints};
+	if (scavsRoom.chatRoomData) {
+		scavsRoom.chatRoomData.winPoints = scavsRoom.winPoints;
+		scavsRoom.chatRoomData.blitzPoints = scavsRoom.blitzPoints;
+		Rooms.global.writeChatRoomData();
+	}
+}
 
 class Ladder {
 	constructor(file) {
@@ -218,7 +235,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 	// alert new users that are joining the room about the current hunt.
 	onConnect(user, connection) {
 		// send the fact that a hunt is currently going on.
-		connection.sendTo(this.room, `|raw|<div class="broadcast-blue"><strong>${(this.gameType === 'official' ? "An official" : this.gameType === 'practice' ? "A practice" : "A")} Scavenger Hunt by <em>${Chat.escapeHTML(Chat.toListString(this.hosts.map(h => h.name)))}</em> has been started${(this.hosts.some(h => h.userid === this.staffHostId) ? '' : ` by <em>${Chat.escapeHTML(this.staffHostName)}</em>`)}.<br />The first hint is: ${Chat.formatText(this.questions[0].hint)}</strong></div>`);
+		connection.sendTo(this.room, `|raw|<div class="broadcast-blue"><strong>${['official', 'unrated'].includes(this.gameType) ? 'An' : 'A'} ${this.gameType} Scavenger Hunt by <em>${Chat.escapeHTML(Chat.toListString(this.hosts.map(h => h.name)))}</em> has been started${(this.hosts.some(h => h.userid === this.staffHostId) ? '' : ` by <em>${Chat.escapeHTML(this.staffHostName)}</em>`)}.<br />The first hint is: ${Chat.formatText(this.questions[0].hint)}</strong></div>`);
 	}
 
 	joinGame(user) {
@@ -268,7 +285,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 			this.questions.push({hint: hint, answer: answer});
 		}
 
-		this.announce(`A new${(this.gameType === 'official' ? " official" : this.gameType === 'practice' ? " practice" : '')} Scavenger Hunt by <em>${Chat.escapeHTML(Chat.toListString(this.hosts.map(h => h.name)))}</em> has been started${(this.hosts.some(h => h.userid === this.staffHostId) ? '' : ` by <em>${Chat.escapeHTML(this.staffHostName)}</em>`)}.<br />The first hint is: ${Chat.formatText(this.questions[0].hint)}`);
+		this.announce(`A new ${this.gameType} Scavenger Hunt by <em>${Chat.escapeHTML(Chat.toListString(this.hosts.map(h => h.name)))}</em> has been started${(this.hosts.some(h => h.userid === this.staffHostId) ? '' : ` by <em>${Chat.escapeHTML(this.staffHostName)}</em>`)}.<br />The first hint is: ${Chat.formatText(this.questions[0].hint)}`);
 	}
 
 	onEditQuestion(number, question_answer, value) {
@@ -366,7 +383,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 		let now = Date.now();
 		let time = Chat.toDurationString(now - this.startTime, {hhmmss: true});
 
-		let blitz = this.gameType === 'official' && now - this.startTime <= 60000;
+		let blitz = (((this.room.blitzPoints && this.room.blitzPoints[this.gameType]) || DEFAULT_BLITZ_POINTS[this.gameType]) && now - this.startTime <= 60000);
 
 		player.completed = true;
 		this.completed.push({name: player.name, time: time, blitz: blitz});
@@ -385,15 +402,15 @@ class ScavengerHunt extends Rooms.RoomGame {
 		if (!reset) {
 			// give points for winning and blitzes in official games
 
-			let winPoints = this.room.winPoints || DEFAULT_POINTS;
-			let blitzPoints = this.room.blitzPoints || DEFAULT_BLITZ_POINTS;
+			let winPoints = (this.room.winPoints && this.room.winPoints[this.gameType]) || DEFAULT_POINTS[this.gameType];
+			let blitzPoints = (this.room.blitzPoints && this.room.blitzPoints[this.gameType]) || DEFAULT_BLITZ_POINTS[this.gameType];
 
-			if (this.gameType === 'official') {
+			if (winPoints || blitzPoints) {
 				for (const [i, completed] of this.completed.entries()) {
 					if (!completed.blitz && i >= winPoints.length) break; // there won't be any more need to keep going
 					let name = completed.name;
 					if (winPoints[i]) Leaderboard.addPoints(name, 'points', winPoints[i]);
-					if (completed.blitz) Leaderboard.addPoints(name, 'points', blitzPoints);
+					if (blitzPoints && completed.blitz) Leaderboard.addPoints(name, 'points', blitzPoints);
 				}
 				Leaderboard.write();
 			}
@@ -452,7 +469,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 
 				let next = room.scavQueue.shift();
 				let duration = room.defaultScavTimer || DEFAULT_TIMER_DURATION;
-				room.game = new ScavengerHunt(room, {userid: next.staffHostId, name: next.staffHostName}, next.hosts, false, next.questions);
+				room.game = new ScavengerHunt(room, {userid: next.staffHostId, name: next.staffHostName}, next.hosts, 'regular', next.questions);
 				room.game.setTimer(duration); // auto timer for queue'd games.
 
 				room.add(`|c|~|[ScavengerManager] A scavenger hunt by ${Chat.toListString(next.hosts.map(h => h.name))} has been automatically started. It will automatically end in ${duration} minutes.`).update(); // highlight the users with "hunt by"
@@ -729,20 +746,25 @@ let commands = {
 			let [details, hostsArray, ...params] = target.split('|'), blind, official;
 			details = details.split(' ').map(toId);
 			if (details.includes('blind')) blind = true;
-			if (details.includes('official')) official = true;
+			let gameType = 'regular';
+			if (details.includes('official')) {
+				gameType = 'official';
+			} else if (details.includes('mini')) {
+				gameType = 'mini';
+			}
 
-			if (!official && !blind) {
+			if (gameType === 'regular' && !blind) {
 				params = [hostsArray, ...params];
 				hostsArray = details.join(' ');
 			}
-
+			if (!hostsArray) return this.errorReply("The user(s) you specified as the host is not online, or is not in the room.");
 			let hosts = ScavengerHunt.parseHosts(hostsArray.split(/[,;]/), room, official);
 			if (!hosts) return this.errorReply("The user(s) you specified as the host is not online, or is not in the room.");
 
 			params = ScavengerHunt.parseQuestions(params);
 			if (params.err) return this.errorReply(params.err);
 
-			room.game = new ScavengerGames.Incognito(room, blind, official, user, hosts, params.result);
+			room.game = new ScavengerGames.Incognito(room, blind, gameType, user, hosts, params.result);
 		},
 		/**
 		 * General game commands
@@ -807,12 +829,23 @@ let commands = {
 	 */
 	createpractice: 'create',
 	createofficial: 'create',
+	createunrated: 'create',
+	createmini: 'create',
 	create: function (target, room, user, connection, cmd) {
 		if (room.id !== 'scavengers') return this.errorReply("Scavenger hunts can only be created in the scavengers room.");
 		if (!this.can('mute', null, room)) return false;
 		if (room.game && !room.game.scavParentGame) return this.errorReply(`There is already a game in this room - ${room.game.title}.`);
-		if (!cmd.includes('official') && !cmd.includes('practice') && room.scavQueue.length && !(room.game && room.scavParentGame)) return this.errorReply("There are currently hunts in the queue! If you would like to start the hunt anyways, use /forcestarthunt.");
-		let gameType = cmd.includes('official') ? 'official' : cmd.includes('practice') ? 'practice' : null;
+		let gameType = 'regular';
+		if (cmd.includes('practice')) {
+			gameType = 'practice';
+		} else if (cmd.includes('official')) {
+			gameType = 'official';
+		} else if (cmd.includes('mini')) {
+			gameType = 'mini';
+		} else if (cmd.includes('unrated')) {
+			gameType = 'unrated';
+		}
+		if (gameType === 'regular' && room.scavQueue && room.scavQueue.length && !(room.game && room.scavParentGame)) return this.errorReply("There are currently hunts in the queue! If you would like to start the hunt anyways, use /forcestarthunt.");
 
 		let [hostsArray, ...params] = target.split('|');
 		let hosts = ScavengerHunt.parseHosts(hostsArray.split(/[,;]/), room, gameType === 'official');
@@ -1028,7 +1061,7 @@ let commands = {
 		if (!room.scavQueue[target]) return false; // no need for an error reply - this is done via UI anyways
 
 		let next = room.scavQueue.splice(target, 1)[0]; // returns [ hunt ]
-		room.game = new ScavengerHunt(room, {userid: next.staffHostId, name: next.staffHostName}, next.hosts, false, next.questions);
+		room.game = new ScavengerHunt(room, {userid: next.staffHostId, name: next.staffHostName}, next.hosts, 'regular', next.questions);
 
 		if (target) this.sendReply(`|uhtmlchange|scav-queue|${formatQueue(room.scavQueue, user, room)}`);
 		this.modlog('SCAV NEW', null, `from queue: creators - ${next.hosts.map(h => h.userid)}`);
@@ -1127,12 +1160,15 @@ let commands = {
 		if (room.id !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
 		if (!this.runBroadcast()) return false;
 
-		Leaderboard.visualize('points').then(ladder => {
-			this.sendReply(`|raw|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Points</th></tr>${ladder.map(entry => {
-				let isStaff = room.auth && room.auth[toId(entry.name)];
+		const isChange = (!this.broadcasting && target);
+		const hideStaff = (!this.broadcasting && this.meansNo(target));
 
+		Leaderboard.visualize('points').then(ladder => {
+			this.sendReply(`|uhtml${isChange ? 'change' : ''}|scavladder|<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><tr><th>Rank</th><th>Name</th><th>Points</th></tr>${ladder.map(entry => {
+				let isStaff = room.auth && room.auth[toId(entry.name)];
+				if (isStaff && hideStaff) return '';
 				return `<tr><td>${entry.rank}</td><td>${(isStaff ? `<em>${Chat.escapeHTML(entry.name)}</em>` : (entry.rank <= 5 ? `<strong>${Chat.escapeHTML(entry.name)}</strong>` : Chat.escapeHTML(entry.name)))}</td><td>${entry.points}</td></tr>`;
-			}).join('')}</table></div>`);
+			}).join('')}</table></div><div style="text-align: center"><button class="button" name="send" value="/scav top ${hideStaff ? 'yes' : 'no'}">${hideStaff ? "Show" : "Hide"} Auth</button></div>`);
 			if (this.broadcasting) setImmediate(() => room.update()); // make sure the room updates for broadcasting since this is async.
 		});
 	},
@@ -1157,43 +1193,67 @@ let commands = {
 	setblitz: function (target, room, user) {
 		if (room.id !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
 		if (!this.can('mute', null, room)) return false; // perms for viewing only
-		if (!target) return this.sendReply(`The points rewarded for winning official hunts is: ${(room.blitzPoints || DEFAULT_BLITZ_POINTS)}`);
+
+		if (!target) {
+			let points = [];
+			const source = Object.entries(Object.assign(DEFAULT_BLITZ_POINTS, room.blitzPoints || {}));
+			for (const entry of source) {
+				points.push(`${entry[0]}: ${entry[1]}`);
+			}
+			return this.sendReplyBox(`The points rewarded for winning hunts within a minute is:<br />${points.join('<br />')}`);
+		}
 
 		if (!this.can('declare', null, room)) return false; // perms for editing
 
-		let blitzPoints = parseInt(target);
-		if (isNaN(blitzPoints) || blitzPoints < 0 || blitzPoints > 1000) return this.errorReply("The points value awarded for blitz must be an integer bewteen 0 and 1000.");
+		let [type, blitzPoints] = target.split(',');
+		blitzPoints = parseInt(blitzPoints);
+		type = toId(type);
+		if (!RATED_TYPES.includes(type)) return this.errorReply(`You cannot set blitz points for ${type} hunts.`);
 
-		room.blitzPoints = blitzPoints;
+		if (isNaN(blitzPoints) || blitzPoints < 0 || blitzPoints > 1000) return this.errorReply("The points value awarded for blitz must be an integer bewteen 0 and 1000.");
+		if (!room.blitzPoints) room.blitzPoints = {};
+		room.blitzPoints[type] = blitzPoints;
 
 		if (room.chatRoomData) {
 			room.chatRoomData.blitzPoints = room.blitzPoints;
 			Rooms.global.writeChatRoomData();
 		}
-		this.privateModAction(`(${user.name} has set the points awarded for blitz to ${blitzPoints}.)`);
-		this.modlog('SCAV BLITZ', null, blitzPoints);
+		this.privateModAction(`(${user.name} has set the points awarded for blitz for ${type} hunts to ${blitzPoints}.)`);
+		this.modlog('SCAV BLITZ', null, `${type}: ${blitzPoints}`);
 	},
 
 	setpoints: function (target, room, user) {
 		if (room.id !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
 		if (!this.can('mute', null, room)) return false; // perms for viewing only
-		if (!target) return this.sendReply(`The points rewarded for winning official hunts is: ${(room.winPoints || DEFAULT_POINTS).map((p, i) => `(${(i + 1)}) ${p}`).join(', ')}`);
+
+		if (!target) {
+			let points = [];
+			const source = Object.entries(Object.assign(DEFAULT_POINTS, room.winPoints || {}));
+			for (const entry of source) {
+				points.push(`${entry[0]}: ${entry[1].map((p, i) => `(${(i + 1)}) ${p}`).join(', ')}`);
+			}
+			return this.sendReplyBox(`The points rewarded for winning hunts is:<br />${points.join('<br />')}`);
+		}
 
 		if (!this.can('declare', null, room)) return false; // perms for editting
 
-		let winPoints = target.split(',').map(p => parseInt(p));
+		let [type, ...pointsSet] = target.split(',');
+		type = toId(type);
+		if (!RATED_TYPES.includes(type)) return this.errorReply(`You cannot set win points for ${type} hunts.`);
+		let winPoints = pointsSet.map(p => parseInt(p));
 
 		if (winPoints.some(p => isNaN(p) || p < 0 || p > 1000) || !winPoints.length) return this.errorReply("The points value awarded for winning a scavenger hunt must be an integer between 0 and 1000.");
 
-		room.winPoints = winPoints;
+		if (!room.winPoints) room.winPoints = {};
+		room.winPoints[type] = winPoints;
 
 		if (room.chatRoomData) {
 			room.chatRoomData.winPoints = room.winPoints;
 			Rooms.global.writeChatRoomData();
 		}
 		const pointsDisplay = winPoints.map((p, i) => `(${(i + 1)}) ${p}`).join(', ');
-		this.privateModAction(`(${user.name} has set the points awarded for winning an official scavenger hunt to - ${pointsDisplay})`);
-		this.modlog('SCAV SETPOINTS', null, pointsDisplay);
+		this.privateModAction(`(${user.name} has set the points awarded for winning ${type} scavenger hunts to - ${pointsDisplay})`);
+		this.modlog('SCAV SETPOINTS', null, `${type}: ${pointsDisplay}`);
 	},
 
 	/**
@@ -1324,6 +1384,8 @@ exports.commands = {
 	scavenge: commands.guess,
 	startpracticehunt: 'starthunt',
 	startofficialhunt: 'starthunt',
+	startminihunt: 'starthunt',
+	startunratedhunt: 'starthunt',
 	forcestarthunt: 'starthunt',
 	starthunt: commands.create,
 	joinhunt: commands.join,
@@ -1374,7 +1436,7 @@ exports.commands = {
 		const staffCommands = [
 			"<strong>Staff commands:</strong>",
 			"- /starthunt <em>[host] | [hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em> - creates a new scavenger hunt. (Requires: % @ * # & ~)",
-			"- /startofficialhunt <em>[host] | [hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em> - creates a new official scavenger hunt with a 60 second blitz period.  Blitz and wins from official hunts will count towards the leaderboard. (Requires: % @ * # & ~)",
+			"- /start(official/practice/mini/unrated)hunt <em>[host] | [hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em> - creates a new scavenger hunt, giving points if assigned.  Blitz and wins will count towards the leaderboard. (Requires: % @ * # & ~)",
 			"- /edithunt <em>[question number], [hint | answer], [value]</em> - edits the current scavenger hunt. Only the host(s) can edit the hunt.",
 			"- /resethunt - resets the current scavenger hunt without revealing the hints and answers. (Requires: % @ * # & ~)",
 			"- /endhunt - ends the current scavenger hunt and announces the winners and the answers. (Requires: % @ * # & ~)",

@@ -54,7 +54,7 @@ let BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'Minimal GBU',
 		desc: "The standard ruleset for official tournaments, but without Restricted Legendary bans",
-		ruleset: ['Species Clause', 'Nickname Clause', 'Item Clause', 'Cancel Mod'],
+		ruleset: ['Species Clause', 'Nickname Clause', 'Item Clause', 'Team Preview', 'Cancel Mod'],
 		banlist: ['Unreleased', 'Illegal', 'Battle Bond',
 			'Mew',
 			'Celebi',
@@ -779,6 +779,20 @@ let BattleFormats = {
 			for (const side of this.sides) {
 				for (const pokemon of side.pokemon) {
 					if (pokemon.speciesid === 'rayquaza') pokemon.canMegaEvo = null;
+				}
+			}
+		},
+	},
+	arceusevclause: {
+		effectType: 'ValidatorRule',
+		name: 'Arceus EV Clause',
+		desc: "Restricts Arceus to a maximum of 100 EVs in any one stat",
+		onValidateSet(set, format) {
+			let template = this.getTemplate(set.species);
+			if (template.num === 493 && set.evs) {
+				for (let stat in set.evs) {
+					// @ts-ignore
+					if (set.evs[stat] > 100) return ["Arceus may not have more than 100 of any EVs."];
 				}
 			}
 		},

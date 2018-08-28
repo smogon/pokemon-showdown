@@ -2427,7 +2427,7 @@ let BattleFormatsData = {
 		randomSet3: { // Defensive
 			chance: 16,
 			item: ["leftovers"],
-			baseMove1: "psychic", baseMove2: "recover",
+			baseMove1: "psychic", baseMove2: "softboiled",
 			fillerMoves1: ["thunderwave", "thunderwave", "thunderwave", "reflect"],
 			fillerMoves2: ["reflect", "reflect", "reflect", "reflect", "earthquake", "icebeam", "thunderbolt", "fireblast"],
 		},

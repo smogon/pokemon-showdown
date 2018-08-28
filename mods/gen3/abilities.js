@@ -76,8 +76,8 @@ let BattleAbilities = {
 	},
 	"minus": {
 		inherit: true,
-		desc: "If an active Pokemon has the Ability Plus, this Pokemon's Special Attack is multiplied by 1.5.",
-		shortDesc: "If an active Pokemon has the Ability Plus, this Pokemon's Sp. Atk is 1.5x.",
+		desc: "If an active Pokemon has the Plus Ability, this Pokemon's Special Attack is multiplied by 1.5.",
+		shortDesc: "If an active Pokemon has the Plus Ability, this Pokemon's Sp. Atk is 1.5x.",
 		onModifySpA: function (spa, pokemon) {
 			let allActives = pokemon.side.active.concat(pokemon.side.foe.active);
 			for (const active of allActives) {
@@ -89,8 +89,8 @@ let BattleAbilities = {
 	},
 	"plus": {
 		inherit: true,
-		desc: "If an active Pokemon has the Ability Minus, this Pokemon's Special Attack is multiplied by 1.5.",
-		shortDesc: "If an active Pokemon has the Ability Minus, this Pokemon's Sp. Atk is 1.5x.",
+		desc: "If an active Pokemon has the Minus Ability, this Pokemon's Special Attack is multiplied by 1.5.",
+		shortDesc: "If an active Pokemon has the Minus Ability, this Pokemon's Sp. Atk is 1.5x.",
 		onModifySpA: function (spa, pokemon) {
 			let allActives = pokemon.side.active.concat(pokemon.side.foe.active);
 			for (const active of allActives) {

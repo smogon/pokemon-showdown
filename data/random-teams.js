@@ -427,7 +427,7 @@ class RandomTeams extends Dex.ModdedDex {
 
 		// Moves that heal a fixed amount:
 		let RecoveryMove = [
-			'healorder', 'milkdrink', 'recover', 'roost', 'slackoff', 'softboiled',
+			'healorder', 'milkdrink', 'moonlight', 'morningsun', 'recover', 'roost', 'slackoff', 'softboiled', 'synthesis',
 		];
 		// Moves which drop stats:
 		let ContraryMove = [
@@ -1131,7 +1131,7 @@ class RandomTeams extends Dex.ModdedDex {
 					(hasAbility['Stance Change'] && !counter.setupType && movePool.includes('kingsshield')) ||
 					(movePool.includes('technoblast') || template.requiredMove && movePool.includes(toId(template.requiredMove)))))) {
 					// Reject Status or non-STAB
-					if (!isSetup && !move.weather && moveid !== 'judgment' && moveid !== 'rest' && moveid !== 'sleeptalk') {
+					if (!isSetup && !move.weather && moveid !== 'judgment' && moveid !== 'rest' && moveid !== 'sleeptalk' && moveid !== 'technoblast') {
 						if (move.category === 'Status' || !hasType[move.type] || move.selfSwitch || move.basePower && move.basePower < 40 && !move.multihit) rejected = true;
 					}
 				}
@@ -1968,13 +1968,17 @@ class RandomTeams extends Dex.ModdedDex {
 			if (teamData.zCount >= 1 && itemData.zMove) continue;
 
 			let types = template.types;
-			// Prevents Mega Evolutions from breaking the type limits
-			if (itemData.megaStone) types = this.getTemplate(itemData.megaStone).types;
 
 			// Enforce Monotype
 			if (chosenTier === 'Mono') {
-				for (const type of types) {
-					if (!template.types.includes(type)) continue;
+				// Prevents Mega Evolutions from breaking the type limits
+				if (itemData.megaStone) {
+					let megaTemplate = this.getTemplate(itemData.megaStone);
+					if (types.length > megaTemplate.types.length) types = [template.types[0]];
+					// Only check the second type because a Mega Evolution should always share the first type with its base forme.
+					if (megaTemplate.types[1] && types[1] && megaTemplate.types[1] !== types[1]) {
+						types = [megaTemplate.types[0]];
+					}
 				}
 				if (!types.includes(type)) continue;
 			} else {

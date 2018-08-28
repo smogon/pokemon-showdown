@@ -205,7 +205,7 @@ class Tournament {
 				if (pendingChallenge.to) {
 					connection.sendTo(this.room, `|tournament|update|${JSON.stringify({challenging: pendingChallenge.to.name})}`);
 				} else if (pendingChallenge.from) {
-					connection.sendTo(this.room, `|tournament|update|${JSON.stringify({challenging: pendingChallenge.from.name})}`);
+					connection.sendTo(this.room, `|tournament|update|${JSON.stringify({challenged: pendingChallenge.from.name})}`);
 				}
 			}
 		}

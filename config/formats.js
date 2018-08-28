@@ -105,7 +105,7 @@ let Formats = [
 		ruleset: ['[Gen 7] NU'],
 		banlist: ['NU', 'PUBL'],
 		onBegin: function () {
-			if (this.rated) this.add('html', `<div class="broadcast-blue"><strong>PU is currently suspecting Kingler! For information on how to participate check out the <a href="https://www.smogon.com/forums/posts/7872605/">suspect thread</a>.</strong></div>`);
+			if (this.rated) this.add('html', `<div class="broadcast-red"><strong>PU is currently suspecting Pyroar! For information on how to participate check out the <a href="https://www.smogon.com/forums/posts/7889792/">suspect thread</a>.</strong></div>`);
 		},
 	},
 	{
@@ -270,6 +270,91 @@ let Formats = [
 		gameType: 'doubles',
 		ruleset: ['[Gen 7] Doubles OU'],
 		banlist: ['DOU', 'DBL'],
+	},
+	{
+		name: "[Gen 7] VGC 2019 Sun Series",
+
+		mod: 'gen7',
+		gameType: 'doubles',
+		forcedLevel: 50,
+		teamLength: {
+			validate: [4, 6],
+			battle: 4,
+		},
+		timer: {starting: 7 * 60 + 90 - 10, perTurn: 10, maxPerTurn: 55, maxFirstTurn: 90, timeoutAutoChoose: true, dcTimerBank: false},
+		ruleset: ['Pokemon', 'Minimal GBU'],
+		banlist: ['Unown', 'Dragon Ascent'],
+		requirePlus: true,
+		onValidateTeam: function (team) {
+			const legends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma'];
+			let n = 0;
+			let problems = [];
+			for (const set of team) {
+				const baseSpecies = this.getTemplate(set.species).baseSpecies;
+				if (legends.includes(baseSpecies)) {
+					n++;
+					if (n === 3) problems.push(`You can only use up to two legendary Pok\u00E9mon.`);
+				}
+				const item = this.getItem(set.item);
+				if (item.zMove || item.megaStone || ['redorb', 'blueorb'].includes(item.id)) problems.push(`${set.name || set.species}'s item ${item.name} is banned.`);
+			}
+			return problems;
+		},
+	},
+	{
+		name: "[Gen 7] VGC 2019 Moon Series",
+
+		mod: 'gen7',
+		gameType: 'doubles',
+		searchShow: false,
+		forcedLevel: 50,
+		teamLength: {
+			validate: [4, 6],
+			battle: 4,
+		},
+		timer: {starting: 7 * 60 + 90 - 10, perTurn: 10, maxPerTurn: 55, maxFirstTurn: 90, timeoutAutoChoose: true, dcTimerBank: false},
+		ruleset: ['Pokemon', 'Minimal GBU'],
+		banlist: ['Unown', 'Dragon Ascent'],
+		requirePlus: true,
+		onValidateTeam: function (team) {
+			const legends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma'];
+			let n = 0;
+			let problems = [];
+			for (const set of team) {
+				const baseSpecies = this.getTemplate(set.species).baseSpecies;
+				if (legends.includes(baseSpecies)) {
+					n++;
+					if (n === 3) problems.push(`You can only use up to two legendary Pok\u00E9mon.`);
+				}
+				const item = this.getItem(set.item);
+				if (item.megaStone || ['redorb', 'blueorb', 'ultranecroziumz'].includes(item.id)) problems.push(`${set.name || set.species}'s item ${item.name} is banned.`);
+			}
+			return problems;
+		},
+	},
+	{
+		name: "[Gen 7] VGC 2019 Ultra Series",
+
+		mod: 'gen7',
+		gameType: 'doubles',
+		forcedLevel: 50,
+		teamLength: {
+			validate: [4, 6],
+			battle: 4,
+		},
+		timer: {starting: 7 * 60 + 90 - 10, perTurn: 10, maxPerTurn: 55, maxFirstTurn: 90, timeoutAutoChoose: true, dcTimerBank: false},
+		ruleset: ['Pokemon', 'Minimal GBU'],
+		banlist: ['Unown'],
+		requirePlus: true,
+		onValidateTeam: function (team) {
+			const legends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma'];
+			let n = 0;
+			for (const set of team) {
+				const baseSpecies = this.getTemplate(set.species).baseSpecies;
+				if (legends.includes(baseSpecies)) n++;
+				if (n > 2) return [`You can only use up to two legendary Pok\u00E9mon.`];
+			}
+		},
 	},
 	{
 		name: "[Gen 7] VGC 2018",
@@ -628,7 +713,7 @@ let Formats = [
 			'Lilligant', 'Lycanroc-Base', 'Manectric', 'Mesprit', 'Mudsdale', 'Omastar', 'Oricorio-Sensu', 'Passimian',
 			'Persian-Alola', 'Poliwrath', 'Primeape', 'Probopass', 'Pyroar', 'Pyukumuku', 'Quagsire', 'Qwilfish',
 			'Raichu-Alola', 'Regirock', 'Sableye', 'Sandslash-Alola', 'Scyther', 'Silvally-Fairy', 'Silvally-Ghost',
-			'Skuntank', 'Spiritomb', 'Swanna', 'Togedemaru', 'Weezing', 'Zangoose',
+			'Skuntank', 'Spiritomb', 'Stoutland', 'Swanna', 'Togedemaru', 'Weezing', 'Zangoose',
 			// ZUBL
 			'Carracosta', 'Crabominable', 'Exeggutor-Base', 'Gorebyss', 'Jynx', 'Kabutops', 'Ludicolo', 'Musharna',
 			'Raticate-Alola', 'Raticate-Alola-Totem', 'Throh', 'Turtonator', 'Type: Null', 'Ursaring', 'Victreebel',
@@ -649,6 +734,12 @@ let Formats = [
 			let types = [...new Set(target.baseMoveSlots.slice(0, 2).map(move => this.getMove(move.id).type))];
 			return Object.assign({}, template, {types: types});
 		},
+		onSwitchIn: function (pokemon) {
+			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+		},
+		onAfterMega: function (pokemon) {
+			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
+		},
 	},
 	{
 		name: "[Gen 7] 2v2 Doubles",
@@ -665,7 +756,10 @@ let Formats = [
 			battle: 2,
 		},
 		ruleset: ['[Gen 7] Doubles OU'],
-		banlist: ['Salamence-Mega', 'Tapu Lele', 'Focus Sash', 'Final Gambit', 'Perish Song'],
+		banlist: [
+			'Salamence-Mega', 'Tapu Lele', 'Focus Sash', 'Final Gambit', 'Perish Song',
+			'Flash', 'Kinesis', 'Leaf Tornado', 'Mirror Shot', 'Mud Bomb', 'Mud-Slap', 'Muddy Water', 'Night Daze', 'Octazooka', 'Sand Attack', 'Smokescreen',
+		],
 	},
 	{
 		name: "[Gen 6] Gen-NEXT OU",

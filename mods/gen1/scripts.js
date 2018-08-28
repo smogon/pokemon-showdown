@@ -121,6 +121,14 @@ let BattleScripts = {
 		} else {
 			sourceEffect = move;
 		}
+		if (pokemon.volatiles['partialtrappinglock'] && target !== pokemon.volatiles['partialtrappinglock'].locked) {
+			const moveSlot = pokemon.moveSlots.find(moveSlot => moveSlot.id === move.id);
+			if (moveSlot && moveSlot.pp < 0) {
+				moveSlot.pp = 63;
+				pokemon.isStale = 2;
+				pokemon.isStaleSource = 'ppoverflow';
+			}
+		}
 		this.useMove(move, pokemon, target, sourceEffect);
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 
@@ -154,13 +162,6 @@ let BattleScripts = {
 					sourceVolatile.locked = target;
 					// Duration reset thus partially trapped at 2 always.
 					targetVolatile.duration = 2;
-					// We get the move position for the PP change.
-					const moveSlot = pokemon.moveSlots.find(moveSlot => moveSlot.id === move.id);
-					if (moveSlot && moveSlot.pp === 0) {
-						moveSlot.pp = 63;
-						pokemon.isStale = 2;
-						pokemon.isStaleSource = 'ppoverflow';
-					}
 				}
 			} // If we move to here, the move failed and there's no partial trapping lock.
 		}

@@ -34,7 +34,7 @@ let BattleFormatsData = {
 	},
 	blastoise: {
 		inherit: true,
-		randomBattleMoves: ["hydropump", "surf", "icebeam", "rapidspin", "roar", "rest", "sleeptalk"],
+		randomBattleMoves: ["surf", "icebeam", "rapidspin", "toxic", "roar", "rest", "sleeptalk"],
 		tier: "UU",
 	},
 	caterpie: {
@@ -176,7 +176,7 @@ let BattleFormatsData = {
 	},
 	crobat: {
 		inherit: true,
-		randomBattleMoves: ["bravebird", "roost", "superfang", "taunt", "nastyplot", "sludgebomb", "airslash", "uturn", "heatwave", "hiddenpowerfighting", "crosspoison", "pursuit"],
+		randomBattleMoves: ["bravebird", "roost", "superfang", "taunt", "nastyplot", "sludgebomb", "uturn", "heatwave"],
 		tier: "UUBL",
 	},
 	oddish: {
@@ -262,7 +262,7 @@ let BattleFormatsData = {
 	},
 	poliwrath: {
 		inherit: true,
-		randomBattleMoves: ["substitute", "focuspunch", "bulkup", "brickbreak", "waterfall", "toxic", "rest", "sleeptalk", "icepunch"],
+		randomBattleMoves: ["substitute", "focuspunch", "bulkup", "brickbreak", "waterfall", "toxic", "rest", "sleeptalk", "icepunch", "encore"],
 		tier: "NU",
 	},
 	politoed: {
@@ -300,7 +300,7 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	victreebel: {
-		randomBattleMoves: ["swordsdance", "sleeppowder", "suckerpunch", "leafblade", "sunnyday", "solarbeam", "hiddenpowerrock", "weatherball"],
+		randomBattleMoves: ["leafstorm", "sludgebomb", "sleeppowder", "suckerpunch", "leafblade", "sunnyday", "solarbeam", "weatherball"],
 		tier: "NU",
 	},
 	tentacool: {
@@ -419,7 +419,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	kingler: {
-		randomBattleMoves: ["crabhammer", "return", "swordsdance", "agility", "rockslide", "xscissor", "superpower"],
+		randomBattleMoves: ["crabhammer", "return", "swordsdance", "agility", "xscissor", "superpower"],
 		tier: "NU",
 	},
 	voltorb: {
@@ -1842,7 +1842,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	lopunny: {
-		randomBattleMoves: ["encore", "return", "healbell", "thunderwave", "batonpass", "substitute"],
+		randomBattleMoves: ["encore", "return", "healingwish", "toxic", "thunderwave", "batonpass", "substitute"],
 		tier: "NU",
 	},
 	glameow: {

@@ -3185,7 +3185,7 @@ let BattleItems = {
 		},
 		num: 215,
 		gen: 3,
-		desc: "Holder's Speed is halved. The Ability Klutz does not ignore this effect.",
+		desc: "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
 	},
 	"magmarizer": {
 		id: "magmarizer",
@@ -4207,7 +4207,7 @@ let BattleItems = {
 		},
 		num: 293,
 		gen: 4,
-		desc: "Holder's Speed is halved. The Ability Klutz does not ignore this effect.",
+		desc: "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
 	},
 	"powerband": {
 		id: "powerband",
@@ -4222,7 +4222,7 @@ let BattleItems = {
 		},
 		num: 292,
 		gen: 4,
-		desc: "Holder's Speed is halved. The Ability Klutz does not ignore this effect.",
+		desc: "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
 	},
 	"powerbelt": {
 		id: "powerbelt",
@@ -4237,7 +4237,7 @@ let BattleItems = {
 		},
 		num: 290,
 		gen: 4,
-		desc: "Holder's Speed is halved. The Ability Klutz does not ignore this effect.",
+		desc: "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
 	},
 	"powerbracer": {
 		id: "powerbracer",
@@ -4252,7 +4252,7 @@ let BattleItems = {
 		},
 		num: 289,
 		gen: 4,
-		desc: "Holder's Speed is halved. The Ability Klutz does not ignore this effect.",
+		desc: "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
 	},
 	"powerherb": {
 		id: "powerherb",
@@ -4284,7 +4284,7 @@ let BattleItems = {
 		},
 		num: 291,
 		gen: 4,
-		desc: "Holder's Speed is halved. The Ability Klutz does not ignore this effect.",
+		desc: "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
 	},
 	"powerweight": {
 		id: "powerweight",
@@ -4299,7 +4299,7 @@ let BattleItems = {
 		},
 		num: 294,
 		gen: 4,
-		desc: "Holder's Speed is halved. The Ability Klutz does not ignore this effect.",
+		desc: "Holder's Speed is halved. The Klutz Ability does not ignore this effect.",
 	},
 	"premierball": {
 		id: "premierball",
@@ -6153,7 +6153,8 @@ let BattleItems = {
 			basePower: 80,
 			type: "Poison",
 		},
-		onUpdate: function (pokemon) {
+		onResidualOrder: 5,
+		onResidual: function (pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
@@ -6224,7 +6225,8 @@ let BattleItems = {
 			basePower: 80,
 			type: "Psychic",
 		},
-		onUpdate: function (pokemon) {
+		onResidualOrder: 5,
+		onResidual: function (pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
