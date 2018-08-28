@@ -95,45 +95,77 @@ exports.commands = {
 			return this.parse('/help roomevents');
 		},
 		sortby: function (target, room, user) {
+			//preconditions
 			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!room.events || !Object.keys(room.events).length) {
 				return this.errorReply("There are currently no planned upcoming events for this room.");
 			}
 			if (!this.can('ban', null, room)) return false;
+
+			//declare variables
 			let multiplier = 1;
 			let columnName = "";
-			let order = "";
-			if (target.split(target.includes('|') ? '|' : ',') === target) {
-				columnName = toId(target);
-			} else {
-				[columnName, order] = target.split(target.includes('|') ? '|' : ',');
-				order = toId(order);
-				multiplier = (order === 'desc') ? 1 : -1;
-			}
-			columnName = toId(columnName);
+			let delimited = target.split(target.includes('|') ? '|' : ',');
 			let sortable = Object.values(room.events);
-			switch (toId(columnName)) {
+			let defaultCase = false;
+
+			//id tokens
+			if (delimited.length === 1) {
+				columnName = target;
+			} else {
+				let order = "";
+				[columnName, order] = delimited;
+				order = toId(order);
+				multiplier = (order === 'desc') ? -1 : 1;
+			}
+
+			//sort the array by the appropriate column name
+			columnName = toId(columnName);
+			switch (columnName) {
 			case "date":
 			case "eventdate":
-				sortable.sort(function (a, b) { return (toId(a.date) < toId(b.date)) ? 1 * multiplier : (toId(b.date) < toId(a.date)) ? -1 * multiplier : 0; });
+				sortable.sort((a, b) => { return (toId(a.date) < toId(b.date)) ? -1 * multiplier : (toId(b.date) < toId(a.date)) ? 1 * multiplier : 0; });
 				break;
 			case "desc":
 			case "description":
 			case "eventdescription":
-				sortable.sort(function (a, b) { return (toId(a.desc) < toId(b.desc)) ? 1 * multiplier : (toId(b.desc) < toId(a.desc)) ? -1 * multiplier : 0; });
+				sortable.sort((a, b) => { return (toId(a.desc) < toId(b.desc)) ? -1 * multiplier : (toId(b.desc) < toId(a.desc)) ? 1 * multiplier : 0; });
 				break;
 			case "eventname":
 			case "name":
-				sortable.sort(function (a, b) { return (toId(a.eventName) < toId(b.eventName)) ? 1 * multiplier : (toId(b.eventName) < toId(a.eventName)) ? -1 * multiplier : 0; });
+				sortable.sort((a, b) => { return (toId(a.eventName) < toId(b.eventName)) ? -1 * multiplier : (toId(b.eventName) < toId(a.eventName)) ? 1 * multiplier : 0; });
 				break;
 			default:
-				sortable.sort(function (a, b) { return (toId(a.date) < toId(b.date)) ? 1 * multiplier : (toId(b.date) < toId(a.date)) ? -1 * multiplier : 0; });
+				sortable.sort((a, b) => { return (toId(a.date) < toId(b.date)) ? -1 * multiplier : (toId(b.date) < toId(a.date)) ? 1 * multiplier : 0; });
+				defaultCase = true;
 			}
+
+			//rebuild the room.events object
 			room.events = {};
 			for (const sortedObj of sortable) {
 				const eventId = toId(sortedObj.eventName);
 				room.events[eventId] = sortedObj;
 			}
+			room.chatRoomData.events = room.events;
+
+			let resultString = "sorted list by column: ";
+			if (defaultCase) {
+				resultString += "date (invalid column name provided)";
+			} else {
+				resultString += columnName;
+			}
+			resultString += " in ";
+			if (multiplier === 1) {
+				resultString += "ascending ";
+			} else {
+				resultString += "descending ";
+			}
+			resultString += " order";
+			if (delimited.length === 1) {
+				resultString += " (by default)";
+			}
+			this.modlog('ROOMEVENT', null, resultString);
+			return this.sendReply(resultString);
 		},
 	},
 	roomeventshelp: [
@@ -141,6 +173,6 @@ exports.commands = {
 		`/roomevents add [event name] | [event date/time] | [event description] - Adds a room event. Requires: @ # & ~`,
 		`/roomevents remove [event name] - Deletes an event. Requires: @ # & ~`,
 		`/roomevents view [event name] - Displays information about a specific event.`,
-		`/roomevents sortby [column name] | [asc/desc (optional)] - Sorts events table by column name and an optional argument to ascending or descending order`,
+		`/roomevents sortby [column name] | [asc/desc (optional)] - Sorts events table by column name and an optional argument to ascending or descending order. Ascending order is default`,
 	],
 };
