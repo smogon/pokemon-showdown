@@ -211,7 +211,6 @@ let Formats = [
 			'Nihilego', 'Buzzwole', 'Pheromosa', 'Xurkitree', 'Celesteela', 'Kartana', 'Guzzlord', 'Poipole', 'Naganadel',
 			'Stakataka', 'Blacephalon',
 		],
-
 		onValidateSet: function (set, format) {
 			if (set.item) {
 				let item = this.getItem(set.item);
