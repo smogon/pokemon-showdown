@@ -10515,6 +10515,7 @@ let BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "The user uses the last move used by the target. The copied move is used against that target, if possible. Fails if the target has not made a move, or if the last move used cannot be copied by this move.",
+		shortDesc: "User uses the target's last used move against it.",
 		id: "mirrormove",
 		name: "Mirror Move",
 		pp: 20,
