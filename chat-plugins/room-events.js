@@ -95,21 +95,20 @@ exports.commands = {
 			return this.parse('/help roomevents');
 		},
 		sortby: function (target, room, user) {
-			//preconditions
+			// preconditions
 			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!room.events || !Object.keys(room.events).length) {
 				return this.errorReply("There are currently no planned upcoming events for this room.");
 			}
 			if (!this.can('ban', null, room)) return false;
 
-			//declare variables
+			// declare variables
 			let multiplier = 1;
 			let columnName = "";
 			let delimited = target.split(target.includes('|') ? '|' : ',');
 			let sortable = Object.values(room.events);
-			let defaultCase = false;
 
-			//id tokens
+			// id tokens
 			if (delimited.length === 1) {
 				columnName = target;
 			} else {
@@ -119,7 +118,7 @@ exports.commands = {
 				multiplier = (order === 'desc') ? -1 : 1;
 			}
 
-			//sort the array by the appropriate column name
+			// sort the array by the appropriate column name
 			columnName = toId(columnName);
 			switch (columnName) {
 			case "date":
@@ -136,11 +135,10 @@ exports.commands = {
 				sortable.sort((a, b) => { return (toId(a.eventName) < toId(b.eventName)) ? -1 * multiplier : (toId(b.eventName) < toId(a.eventName)) ? 1 * multiplier : 0; });
 				break;
 			default:
-				sortable.sort((a, b) => { return (toId(a.date) < toId(b.date)) ? -1 * multiplier : (toId(b.date) < toId(a.date)) ? 1 * multiplier : 0; });
-				defaultCase = true;
+				return this.errorReply("No or invalid column name specified. Please use one of: date, eventdate, desc, description, eventdescription, eventname, name.");
 			}
 
-			//rebuild the room.events object
+			// rebuild the room.events object
 			room.events = {};
 			for (const sortedObj of sortable) {
 				const eventId = toId(sortedObj.eventName);
@@ -148,8 +146,8 @@ exports.commands = {
 			}
 			room.chatRoomData.events = room.events;
 
-			//build communication string
-			const resultString = `sorted by column: ${defaultCase ? "date (invalid column name provided)" : columnName}` +
+			// build communication string
+			const resultString = `sorted by column:` + columnName +
 								 ` in ${multiplier === 1 ? "ascending" : "descending"} order` +
 								 `${delimited.length === 1 ? " (by default)" : ""}`;
 			this.modlog('ROOMEVENT', null, resultString);
