@@ -297,9 +297,10 @@ class MafiaTracker extends Rooms.RoomGame {
 	 * @param {User} user
 	 * @param {string} roleString
 	 * @param {boolean} force
+	 * @param {boolean} reset
 	 * @return {void}
 	 */
-	setRoles(user, roleString, force = false) {
+	setRoles(user, roleString, force = false, reset = false) {
 		let roles = (/** @type {string[]} */roleString.split(',').map(x => x.trim()));
 		if (roles.length === 1) {
 			// Attempt to set roles from a theme
@@ -319,14 +320,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		} else if (roles.length > this.playerCount) {
 			user.sendTo(this.room, `|error|You have provided too many roles, ${roles.length - this.playerCount} ${Chat.plural(roles.length - this.playerCount, 'roles', 'role')} will not be assigned.`);
 		}
-		if (this.originalRoles.length) {
-			// Reset roles
-			this.originalRoles = [];
-			this.originalRoleString = '';
-			this.roles = [];
-			this.roleString = '';
-		}
-		if (this.IDEA.data) this.IDEA.data = null;
+
 		if (force) {
 			this.originalRoles = roles.map(r => {
 				return {
@@ -343,6 +337,8 @@ class MafiaTracker extends Rooms.RoomGame {
 			this.roleString = this.originalRoleString;
 			return this.sendRoom(`The roles have been set.`);
 		}
+
+		let newRoles = [];
 		/** @type {string[]} */
 		let problems = [];
 		/** @type {string[]} */
@@ -352,29 +348,33 @@ class MafiaTracker extends Rooms.RoomGame {
 		for (const string of roles) {
 			const roleId = string.toLowerCase().replace(/[^\w\d\s]/g, '');
 			if (roleId in cache) {
-				this.originalRoles.push(Object.assign(Object.create(null), cache[roleId]));
+				newRoles.push(Object.assign(Object.create(null), cache[roleId]));
 			} else {
 				const role = MafiaTracker.parseRole(string);
 				if (role.problems.length) problems = problems.concat(role.problems);
 				if (alignments.indexOf(role.role.alignment) === -1) alignments.push(role.role.alignment);
 				cache[roleId] = role.role;
-				this.originalRoles.push(role.role);
+				newRoles.push(role.role);
 			}
 		}
 		if (alignments.length < 2 && alignments[0] !== 'solo') problems.push(`There must be at least 2 different alignments in a game!`);
 		if (problems.length) {
-			this.originalRoles = [];
 			for (const problem of problems) {
 				user.sendTo(this.room, `|error|${problem}`);
 			}
 			return user.sendTo(this.room, `|error|To forcibly set the roles, use /mafia forcesetroles`);
 		}
+
+		this.IDEA.data = null;
+
+		this.originalRoles = newRoles;
 		this.roles = this.originalRoles.slice();
 		this.originalRoleString = this.originalRoles.slice().map(r => `<span style="font-weight:bold;color:${MafiaData.alignments[r.alignment].color || '#FFF'}">${r.safeName}</span>`).join(', ');
 		this.roleString = this.originalRoleString;
-		this.phase = 'locked';
+		if (!reset) this.phase = 'locked';
 		this.updatePlayers();
-		this.sendRoom(`The roles have been set.`);
+		this.sendRoom(`The roles have been ${reset ? 're' : ''}set.`);
+		if (reset) this.distributeRoles();
 	}
 
 	/**
@@ -519,7 +519,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	 * @return {void}
 	 */
 	distributeRoles() {
-		if (this.phase !== 'locked' || !Object.keys(this.roles).length) return;
+		if (!Object.keys(this.roles).length) return;
 		this.sendRoom(`The roles are being distributed...`);
 		let roles = Dex.shuffle(this.roles.slice());
 		for (let p in this.players) {
@@ -1012,7 +1012,6 @@ class MafiaTracker extends Rooms.RoomGame {
 	sub(player, replacement) {
 		let oldPlayer = this.players[player];
 		if (!oldPlayer) return; // should never happen
-		if (oldPlayer.lynching) this.unlynch(oldPlayer.userid, true);
 
 		const newUser = Users(replacement);
 		if (!newUser) return; // should never happen
@@ -1570,7 +1569,7 @@ const pages = {
 					if (i === selectedIndex) {
 						buf += `<button class="button disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;">${choice}</button>`;
 					} else {
-						buf += `<button class="button" name="send" value="/mafia ideapick ${roomid}, ${pick}, ${choice}">${choice}</button>`;
+						buf += `<button class="button" name="send" value="/mafia ideapick ${roomid}, ${pick}, ${toId(choice)}">${choice}</button>`;
 					}
 				}
 				buf += `<br />`;
@@ -1987,19 +1986,27 @@ const commands = {
 		},
 		revealhelp: [`/mafia reveal [on|off] - Sets if roles reveal on death or not. Requires host % @ * # & ~`],
 
+		resetroles: 'setroles',
+		forceresetroles: 'setroles',
 		forcesetroles: 'setroles',
 		setroles: function (target, room, user, connection, cmd) {
 			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (room.game);
 			if (!user.can('mute', null, room) && game.hostid !== user.userid && !game.cohosts.includes(user.userid)) return this.errorReply(`/mafia ${cmd} - Access denied.`);
-			if (game.phase !== 'locked' && game.phase !== 'IDEAlocked') return this.errorReply(game.phase === 'signups' ? `You need to close signups first.` : `The game has already started.`);
+			const reset = cmd.includes('reset');
+			if (reset) {
+				if (game.phase !== 'day' && game.phase !== 'night') return this.errorReply(`The game has not started yet.`);
+			} else {
+				if (game.phase !== 'locked' && game.phase !== 'IDEAlocked') return this.errorReply(game.phase === 'signups' ? `You need to close signups first.` : `The game has already started.`);
+			}
 			if (!target) return this.parse('/help mafia setroles');
 
-			game.setRoles(user, target, cmd === 'forcesetroles');
+			game.setRoles(user, target, cmd.includes('force'), reset);
 		},
 		setroleshelp: [
-			`/mafia setroles [comma seperated roles] - Set the roles for a game of mafia. You need to provide one role per player.`,
-			`/mafia forcesetroles [comma seperated roles] - Forcibly set the roles for a game of mafia. No role PM information or alignment will be set.`,
+			`/mafia setroles [comma separated roles] - Set the roles for a game of mafia. You need to provide one role per player.`,
+			`/mafia forcesetroles [comma separated roles] - Forcibly set the roles for a game of mafia. No role PM information or alignment will be set.`,
+			`/mafia resetroles [comma separated roles] - Reset the roles in an ongoing game.`,
 		],
 
 		idea: function (target, room, user) {
