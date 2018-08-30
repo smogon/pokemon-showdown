@@ -362,7 +362,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			for (const problem of problems) {
 				user.sendTo(this.room, `|error|${problem}`);
 			}
-			return user.sendTo(this.room, `|error|To forcibly set the roles, use /mafia forcesetroles`);
+			return user.sendTo(this.room, `|error|To forcibly set the roles, use /mafia force${reset ? "re" : ""}setroles`);
 		}
 
 		this.IDEA.data = null;
@@ -506,10 +506,8 @@ class MafiaTracker extends Rooms.RoomGame {
 			if (Object.keys(this.roles).length < this.playerCount) return user.sendTo(this.room, `You have not provided enough roles for the players.`);
 		}
 		this.started = true;
-		this.played = Object.keys(this.players);
 		this.sendRoom(`The game of ${this.title} is starting!`, {declare: true});
-		this.played.push(this.hostid);
-		this.played = this.played.concat(this.cohosts);
+		// MafiaTracker#played gets set in distributeRoles
 		this.distributeRoles();
 		this.day(null, true);
 		if (this.IDEA.data) this.room.add(`|html|<div class="infobox"><details><summary>IDEA discards:</summary>${this.IDEA.discardsHtml}</details></div>`).update();
@@ -520,7 +518,6 @@ class MafiaTracker extends Rooms.RoomGame {
 	 */
 	distributeRoles() {
 		if (!Object.keys(this.roles).length) return;
-		this.sendRoom(`The roles are being distributed...`);
 		let roles = Dex.shuffle(this.roles.slice());
 		for (let p in this.players) {
 			let role = roles.shift();
@@ -2645,16 +2642,18 @@ const commands = {
 			if (!targetUser || !targetUser.connected) return this.errorReply(`The user "${this.targetUsername}" was not found.`);
 			if (!room.users[targetUser.userid]) return this.errorReply(`${targetUser.name} is not in this room, and cannot be hosted.`);
 			if (game.hostid === targetUser.userid) return this.errorReply(`${targetUser.name} is already the host.`);
-			if (game.cohosts.includes(user.userid)) return this.errorReply(`${targetUser.name} is already a cohost.`);
+			if (game.cohosts.includes(targetUser.userid)) return this.errorReply(`${targetUser.name} is already a cohost.`);
 			if (targetUser.userid in game.players) return this.errorReply(`The host cannot be ingame.`);
 			if (targetUser.userid in game.dead) {
-				if (!cmd.includes('force')) return this.errorReply(`${targetUser.name} could potentially be revived. To continue anyway, use /mafia forcesubhost ${target}.`);
+				if (!cmd.includes('force')) return this.errorReply(`${targetUser.name} could potentially be revived. To continue anyway, use /mafia force${cmd} ${target}.`);
+				if (game.dead[targetUser.userid].lynching) game.unlynch(targetUser.userid);
 				game.dead[targetUser.userid].destroy();
 				delete game.dead[targetUser.userid];
 			}
 			if (cmd.includes('cohost')) {
 				game.cohosts.push(targetUser.userid);
 				game.sendRoom(`${Chat.escapeHTML(targetUser.name)} has been added as a cohost by ${Chat.escapeHTML(user.name)}`, {declare: true});
+				targetUser.send(`>view-mafia-${room.id}\n|init|html\n|${Chat.pages.mafia([room.id], targetUser)}`);
 			} else {
 				const oldHostid = game.hostid;
 				const oldHost = Users(game.hostid);
@@ -2688,7 +2687,7 @@ const commands = {
 				return this.errorReply(`${target} is not a cohost.`);
 			}
 			game.cohosts.splice(cohostIndex, 1);
-			game.sendRoom(`${target} was removed as a cohost by ${Chat.escapeHTML(user.name)}`);
+			game.sendRoom(`${target} was removed as a cohost by ${Chat.escapeHTML(user.name)}`, {declare: true});
 		},
 
 		'!end': true,
