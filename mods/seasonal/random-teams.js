@@ -65,6 +65,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Buzzing of the Swarm',
 				evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 			},
+			'cant say': {
+				species: 'Aegislash', ability: 'Stance Change', item: 'Weakness Policy', gender: 'M',
+				moves: ['Shift Gear', 'Spectral Thief', 'Sacred Sword'],
+				signatureMove: 'a e s t h e t i s l a s h',
+				evs: {hp: 32, atk: 252, spd: 4, spe: 220}, nature: 'Jolly',
+			},
 			'cc': {
 				species: 'Cobalion', ability: 'Lurking', item: ['Shuca Berry', 'Chople Berry', 'Fightinium Z'], gender: 'M',
 				moves: ['Focus Blast', 'Flash Cannon', ['Thunderbolt', 'Ice Beam']],

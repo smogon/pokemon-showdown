@@ -135,6 +135,30 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Bug",
 	},
+	// cant say
+	aesthetislash: {
+		accuracy: 100,
+		basePower: 100,
+		category: "Physical",
+		desc: "The terrain becomes Grassy Terrain.",
+		shortDesc: "Summons Grassy Terrain.",
+		id: "aesthetislash",
+		name: "a e s t h e t i s l a s h",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Geomancy', source);
+			this.add('-anim', source, 'Swords Dance', source);
+			this.add('-anim', source, 'Bloom Doom', target);
+		},
+		onHit: function () {
+			this.setTerrain('grassyterrain');
+		},
+		target: "normal",
+		type: "Steel",
+	},
 	// cc
 	restartingrouter: {
 		accuracy: 100,
