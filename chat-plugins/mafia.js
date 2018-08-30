@@ -528,6 +528,8 @@ class MafiaTracker extends Rooms.RoomGame {
 			let u = Users(p);
 			if (u && u.connected) u.send(`>${this.room.id}\n|notify|Your role is ${role.safeName}. For more details of your role, check your Role PM.`);
 		}
+		this.dead = {};
+		this.played = [this.hostid, ...this.cohosts, ...Object.keys(this.players)];
 		this.sendRoom(`The roles have been distributed.`, {declare: true});
 		this.updatePlayers();
 	}
@@ -2474,6 +2476,15 @@ const commands = {
 			}).map(role => role.safeName).join(', ');
 
 			this.sendReplyBox(`${showOrl ? `Original Rolelist: ` : `Rolelist: `}${roleString}`);
+		},
+
+		playerroles: function (target, room, user) {
+			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
+			const game = /** @type {MafiaTracker} */ (room.game);
+			if (game.hostid !== user.userid && !game.cohosts.includes(user.userid)) return this.errorReply(`Only the host can view roles.`);
+			if (!game.started) return this.errorReply(`The game has not started.`);
+			const players = [...Object.values(game.players), ...Object.values(game.dead)];
+			this.sendReplyBox(players.map(p => `${p.safeName}: ${p.role ? p.role.safeName : 'No role'}`).join('<br/>'));
 		},
 
 		spectate: 'view',
