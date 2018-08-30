@@ -343,6 +343,10 @@ let Formats = [
 	},
 	{
 		name: "[Gen 7] VGC 2019 Ultra Series",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3641100/">VGC 2019 Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3641123/">VGC 2019 Viability Rankings</a>`,
+		],
 
 		mod: 'gen7',
 		gameType: 'doubles',
@@ -367,6 +371,11 @@ let Formats = [
 	},
 	{
 		name: "[Gen 7] VGC 2018",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3631800/">VGC 2018 Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3622041/">VGC 2018 Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3628885/">VGC 2018 Sample Teams</a>`,
+		],
 
 		mod: 'gen7',
 		gameType: 'doubles',
