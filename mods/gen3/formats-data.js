@@ -18,7 +18,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	charmeleon: {
-		tier: "NU",
+		tier: "NFE",
 	},
 	charizard: {
 		inherit: true,
@@ -30,7 +30,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	wartortle: {
-		tier: "NU",
+		tier: "NFE",
 	},
 	blastoise: {
 		inherit: true,
@@ -207,7 +207,7 @@ let BattleFormatsData = {
 		tier: "NU",
 	},
 	diglett: {
-		tier: "LC",
+		tier: "NU",
 	},
 	dugtrio: {
 		inherit: true,
@@ -252,7 +252,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	poliwhirl: {
-		tier: "NU",
+		tier: "NFE",
 	},
 	poliwrath: {
 		inherit: true,
@@ -264,7 +264,7 @@ let BattleFormatsData = {
 		tier: "UU",
 	},
 	abra: {
-		tier: "LC",
+		tier: "NU",
 	},
 	kadabra: {
 		tier: "UUBL",
@@ -278,7 +278,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	machoke: {
-		tier: "NU",
+		tier: "NFE",
 	},
 	machamp: {
 		inherit: true,
@@ -291,7 +291,7 @@ let BattleFormatsData = {
 	},
 	weepinbell: {
 		inherit: true,
-		tier: "NU",
+		tier: "NFE",
 	},
 	victreebel: {
 		randomBattleMoves: ["sleeppowder", "sludgebomb", "synthesis", "sunnyday", "solarbeam", "gigadrain", "hiddenpowerfire", "hiddenpowerground", "swordsdance"],
@@ -660,7 +660,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	dragonair: {
-		tier: "NU",
+		tier: "NFE",
 	},
 	dragonite: {
 		inherit: true,
@@ -693,7 +693,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	quilava: {
-		tier: "NU",
+		tier: "NFE",
 	},
 	typhlosion: {
 		inherit: true,
@@ -1021,7 +1021,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	grovyle: {
-		tier: "NU",
+		tier: "NFE",
 	},
 	sceptile: {
 		randomBattleMoves: ["leafblade", "dragonclaw", "hiddenpowerfire", "hiddenpowerice", "crunch", "thunderpunch", "leechseed", "substitute"],
@@ -1219,7 +1219,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	lairon: {
-		tier: "NU",
+		tier: "NFE",
 	},
 	aggron: {
 		inherit: true,
@@ -1315,7 +1315,7 @@ let BattleFormatsData = {
 		tier: "NU",
 	},
 	trapinch: {
-		tier: "NU",
+		tier: "LC",
 	},
 	vibrava: {
 		tier: "NFE",
@@ -1474,14 +1474,14 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	sealeo: {
-		tier: "NU",
+		tier: "NFE",
 	},
 	walrein: {
 		randomBattleMoves: ["icebeam", "surf", "earthquake", "hiddenpowergrass", "toxic", "rest", "sleeptalk", "encore", "roar", "yawn"],
 		tier: "UU",
 	},
 	clamperl: {
-		tier: "NU",
+		tier: "LC",
 	},
 	huntail: {
 		randomBattleMoves: ["doubleedge", "surf", "hydropump", "icebeam", "crunch", "hiddenpowergrass", "raindance"],
