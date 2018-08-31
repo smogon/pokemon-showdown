@@ -995,8 +995,10 @@ let BattleMovedex = {
 		onTryHit: function (target, source, move) {
 			target.side.addSideCondition('pyramidingsong');
 		},
-		onHit: function (target, pokemon) {
-			target.switchFlag = 'selfSwitch';
+		onHit: function (target, source, move) {
+			if (this.runEvent('DragOut', source, target, move)) {
+				source.forceSwitchFlag = true;
+			}
 		},
 		effect: {
 			duration: 1,
@@ -1004,7 +1006,7 @@ let BattleMovedex = {
 				this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.getMove('pyramidingsong'));
 			},
 		},
-		selfSwitch: true,
+		forceSwitch: true,
 		secondary: null,
 		target: "normal",
 		type: "Water",
