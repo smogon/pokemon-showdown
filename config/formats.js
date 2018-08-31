@@ -496,79 +496,138 @@ let Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] Tier Shift",
-		desc: `Pok&eacute;mon get +10 to each stat per tier below OU they are in. UU gets +10, RU +20, NU +30, and PU +40.`,
+		name: "[Gen 7] Sketchmons",
+		desc: `Pok&eacute;mon can learn one of any move they don't normally learn, barring the few that are banned.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3610073/">Tier Shift</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3587743/">Sketchmons</a>`,
 		],
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
-		banlist: ['Damp Rock', 'Deep Sea Tooth', 'Eviolite'],
-		onModifyTemplate: function (template, pokemon) {
-			let tsTemplate = Object.assign({}, template);
-			const boosts = {'UU': 10, 'RUBL': 10, 'RU': 20, 'NUBL': 20, 'NU': 30, 'PUBL': 30, 'PU': 40, 'NFE': 40, 'LC Uber': 40, 'LC': 40};
-			let tier = tsTemplate.tier;
-			if (pokemon && pokemon.set.item) {
-				let item = this.getItem(pokemon.set.item);
-				if (item.megaEvolves === tsTemplate.species) tier = this.getTemplate(item.megaStone).tier;
-			}
-			if (tier.charAt(0) === '(') tier = tier.slice(1, -1);
-			let boost = (tier in boosts) ? boosts[tier] : 0;
-			if (boost > 0 && pokemon && (pokemon.set.ability === 'Drizzle' || pokemon.set.item === 'Mewnium Z')) boost = 0;
-			if (boost > 10 && pokemon && pokemon.set.moves.includes('auroraveil')) boost = 10;
-			if (boost > 20 && pokemon && pokemon.set.ability === 'Drought') boost = 20;
-			tsTemplate.baseStats = Object.assign({}, tsTemplate.baseStats);
-			// `Dex` needs to be used in /data, `this` needs to be used in battles
-			const clampRange = this && this.clampIntRange ? this.clampIntRange : Dex.clampIntRange;
-			for (let statName in tsTemplate.baseStats) {
+		banlist: ['Porygon-Z'],
+		restrictedMoves: [
+			'Belly Drum', 'Celebrate', 'Chatter', 'Conversion', "Forest's Curse", 'Geomancy', 'Happy Hour', 'Hold Hands',
+			'Lovely Kiss', 'Purify', 'Quiver Dance', 'Shell Smash', 'Shift Gear', 'Sketch', 'Spore', 'Sticky Web', 'Trick-or-Treat',
+		],
+		checkLearnset: function (move, template, lsetData, set) {
+			let problem = this.checkLearnset(move, template, lsetData, set);
+			const restrictedMoves = this.format.restrictedMoves || [];
+			if (!problem) return null;
+			if (move.isZ || restrictedMoves.includes(move.name)) return problem;
+			// @ts-ignore
+			if (set.sketchMove) return {type: 'oversketched', maxSketches: 1};
+			// @ts-ignore
+			set.sketchMove = move.id;
+			return null;
+		},
+		onValidateTeam: function (team, format, teamHas) {
+			let sketches = {};
+			for (const set of team) {
 				// @ts-ignore
-				tsTemplate.baseStats[statName] = clampRange(tsTemplate.baseStats[statName] + boost, 1, 255);
+				if (set.sketchMove) {
+					// @ts-ignore
+					if (!sketches[set.sketchMove]) {
+						// @ts-ignore
+						sketches[set.sketchMove] = 1;
+					} else {
+						// @ts-ignore
+						sketches[set.sketchMove]++;
+					}
+				}
 			}
-			return tsTemplate;
+			let overSketched = Object.keys(sketches).filter(move => sketches[move] > 1);
+			if (overSketched.length) return overSketched.map(move => `You are limited to 1 of ${this.getMove(move).name} by Sketch Clause. (You have sketched ${this.getMove(move).name} ${sketches[move]} times.)`);
 		},
 	},
 	{
-		name: "[Gen 7] Benjamin Butterfree",
-		desc: `Pok&eacute;mon that faint reincarnate as their prevo, but without the moves they can't learn.`,
+		name: "[Gen 7] Partners in Crime",
+		desc: "Doubles-based metagame where both active ally Pok&eacute;mon share abilities and moves.",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3605680/">Benjamin Butterfree</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3618488/">Partners in Crime</a>`,
 		],
 
-		mod: 'gen7',
-		ruleset: ['[Gen 7] OU'],
-		banlist: ['Blissey'],
-		onBeforeFaint: function (pokemon) {
-			let prevo = pokemon.baseTemplate.isMega ? this.getTemplate(pokemon.baseTemplate.baseSpecies).prevo : pokemon.baseTemplate.prevo;
-			if (!prevo || pokemon.set.ability === 'Battle Bond') return;
-			let template = this.getTemplate(pokemon.set.species);
-			// @ts-ignore
-			let abilitySlot = Object.keys(template.abilities).find(slot => template.abilities[slot] === pokemon.set.ability);
-			template = this.getTemplate(prevo);
-			// @ts-ignore
-			if (!template.abilities[abilitySlot]) abilitySlot = '0';
-			pokemon.faintQueued = false;
-			pokemon.hp = pokemon.maxhp;
-			if (Object.values(pokemon.boosts).find(boost => boost !== 0)) {
-				pokemon.clearBoosts();
-				this.add('-clearboost', pokemon);
-			}
-			pokemon.formeChange(template, this.getFormat(), true, '', abilitySlot);
-			this.add('-message', `${pokemon.name} has devolved into ${template.species}!`);
-			pokemon.cureStatus(true);
-			let newHP = Math.floor(Math.floor(2 * pokemon.template.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100) * pokemon.level / 100 + 10);
-			pokemon.maxhp = pokemon.hp = newHP;
-			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
-			let learnset = template.learnset || this.getTemplate(template.baseSpecies).learnset || {};
-			let prevoset = template.prevo && this.getTemplate(template.prevo).learnset || {};
-			for (const moveSlot of pokemon.baseMoveSlots) {
-				if (!learnset[moveSlot.id] && !prevoset[moveSlot.id]) {
-					moveSlot.used = true;
-					moveSlot.pp = 0;
+		mod: 'pic',
+		gameType: 'doubles',
+		ruleset: ['[Gen 7] Doubles OU', 'Sleep Clause Mod'],
+		banlist: ['Huge Power', 'Imposter', 'Parental Bond', 'Pure Power', 'Wonder Guard', 'Mimic', 'Sketch', 'Transform'],
+		onSwitchInPriority: 2,
+		onSwitchIn: function (pokemon) {
+			if (this.p1.active.every(ally => ally && !ally.fainted)) {
+				let p1a = this.p1.active[0], p1b = this.p1.active[1];
+				if (p1a.ability !== p1b.ability) {
+					let p1aInnate = 'ability' + p1b.ability;
+					p1a.volatiles[p1aInnate] = {id: p1aInnate, target: p1a};
+					let p1bInnate = 'ability' + p1a.ability;
+					p1b.volatiles[p1bInnate] = {id: p1bInnate, target: p1b};
 				}
 			}
-			pokemon.canMegaEvo = null;
-			return false;
+			if (this.p2.active.every(ally => ally && !ally.fainted)) {
+				let p2a = this.p2.active[0], p2b = this.p2.active[1];
+				if (p2a.ability !== p2b.ability) {
+					let p2a_innate = 'ability' + p2b.ability;
+					p2a.volatiles[p2a_innate] = {id: p2a_innate, target: p2a};
+					let p2b_innate = 'ability' + p2a.ability;
+					p2b.volatiles[p2b_innate] = {id: p2b_innate, target: p2b};
+				}
+			}
+			let ally = pokemon.side.active.find(ally => ally && ally !== pokemon && !ally.fainted);
+			if (ally && ally.ability !== pokemon.ability) {
+				// @ts-ignore
+				if (!pokemon.innate) {
+					// @ts-ignore
+					pokemon.innate = 'ability' + ally.ability;
+					// @ts-ignore
+					delete pokemon.volatiles[pokemon.innate];
+					// @ts-ignore
+					pokemon.addVolatile(pokemon.innate);
+				}
+				// @ts-ignore
+				if (!ally.innate) {
+					// @ts-ignore
+					ally.innate = 'ability' + pokemon.ability;
+					// @ts-ignore
+					delete ally.volatiles[ally.innate];
+					// @ts-ignore
+					ally.addVolatile(ally.innate);
+				}
+			}
+		},
+		onSwitchOut: function (pokemon) {
+			// @ts-ignore
+			if (pokemon.innate) {
+				// @ts-ignore
+				pokemon.removeVolatile(pokemon.innate);
+				// @ts-ignore
+				delete pokemon.innate;
+			}
+			let ally = pokemon.side.active.find(ally => ally && ally !== pokemon && !ally.fainted);
+			// @ts-ignore
+			if (ally && ally.innate) {
+				// @ts-ignore
+				ally.removeVolatile(ally.innate);
+				// @ts-ignore
+				delete ally.innate;
+			}
+		},
+		onFaint: function (pokemon) {
+			// this.add('-hint', 'checking ally ability after faint of ' + pokemon);
+			// @ts-ignore
+			if (pokemon.innate) {
+				// this.add('-hint', 'removing ' + pokemon.innate);
+				// @ts-ignore
+				pokemon.removeVolatile(pokemon.innate);
+				// @ts-ignore
+				delete pokemon.innate;
+			}
+			let ally = pokemon.side.active.find(ally => ally && ally !== pokemon && !ally.fainted);
+			// @ts-ignore
+			if (ally && ally.innate) {
+				// this.add('-hint', 'removing ally\'s ' + ally.innate);
+				// @ts-ignore
+				ally.removeVolatile(ally.innate);
+				// @ts-ignore
+				delete ally.innate;
+			}
 		},
 	},
 	{
