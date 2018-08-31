@@ -579,6 +579,9 @@ let BattleStatuses = {
 		// this is a side condition
 		name: 'boostreplacement',
 		id: 'boostreplacement',
+		onStart: function (side, source) {
+			this.effectData.position = source.position;
+		},
 		onSwitchInPriority: 1,
 		onSwitchIn: function (target) {
 			if (!target.fainted && target.position === this.effectData.position) {
