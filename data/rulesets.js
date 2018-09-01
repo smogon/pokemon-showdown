@@ -850,12 +850,6 @@ let BattleFormats = {
 			return this.checkLearnset(move, template, lsetData, set);
 		},
 	},
-	allowonesketch: {
-		effectType: 'ValidatorRule',
-		name: 'Allow One Sketch',
-		desc: "Allows each Pok&eacute;mon to use one move they don't normally have access to via Sketch",
-		// Implemented in team-validator.js
-	},
 	allowcap: {
 		effectType: 'ValidatorRule',
 		name: 'Allow CAP',
