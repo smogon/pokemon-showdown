@@ -125,9 +125,9 @@ let BattleAbilities = {
 			},
 			onBeforeMovePriority: 2,
 			onBeforeMove: function (pokemon, target, move) {
-				let hazards = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+				let hazards = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'hazardpass', 'beskyttelsesnet', 'bringerofdarkness'];
 				if (hazards.includes(move.id)) {
-					this.add('-message', 'The Prismatic Terrain prevents ' + move.id + ' from working.');
+					this.add('-message', 'The Prismatic Terrain prevents ' + move.name + ' from working.');
 					return false;
 				}
 			},

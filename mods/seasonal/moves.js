@@ -627,20 +627,20 @@ let BattleMovedex = {
 		type: "Water",
 	},
 	// Kay
-	inked: {
+	inkzooka: {
 		accuracy: 100,
 		basePower: 80,
 		category: "Physical",
 		desc: "Lowers the user's Defense, Special Defense and Speed by 1 stage.",
 		shortDesc: "Lowers the user's Def, SpD and Spe by 1.",
-		id: "inked",
-		name: "Inked",
+		id: "inkzooka",
+		name: "Inkzooka",
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
-			this.add('-anim', source, 'Octazooka', target);
+			this.add('-anim', source, 'Never Ending Nightmare', target);
 		},
 		self: {
 			boosts: {
@@ -657,7 +657,7 @@ let BattleMovedex = {
 	dragonwarriortouch: {
 		accuracy: 100,
 		basePower: 70,
-		status: "Physical",
+		category: "Physical",
 		id: "dragonwarriortouch",
 		name: "Dragon Warrior Touch",
 		pp: 5,

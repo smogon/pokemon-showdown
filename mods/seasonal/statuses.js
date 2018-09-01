@@ -285,13 +285,13 @@ let BattleStatuses = {
 	kay: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|@Kay|Every kiss begins with Kay`);
+			this.add(`c|@kay|Every kiss begins with Kay`);
 		},
 		onSwitchOut: function () {
-			this.add(`c|@Kay|くコ:彡`);
+			this.add(`c|@kay|くコ:彡`);
 		},
 		onFaint: function () {
-			this.add(`c|@Kay|'kay bye!くコ:彡`);
+			this.add(`c|@kay|'kay bye!くコ:彡`);
 		},
 		// Simple Innate
 		onBoost: function (boost, target, source, effect) {
