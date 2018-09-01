@@ -761,7 +761,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
-		// searchShow: false,
+		searchShow: false,
 		ruleset: ['[Gen 7] OU', 'STABmons Move Legality'],
 		banlist: ['Aerodactyl-Mega', 'Blacephalon', 'Kartana', 'Komala', 'Kyurem-Black', 'Porygon-Z', 'Silvally', 'Tapu Koko', 'Tapu Lele', 'King\'s Rock', 'Razor Fang'],
 		restrictedMoves: ['Acupressure', 'Belly Drum', 'Chatter', 'Extreme Speed', 'Geomancy', 'Lovely Kiss', 'Shell Smash', 'Shift Gear', 'Spore', 'Thousand Arrows'],
@@ -774,7 +774,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
-		searchShow: false,
+		// searchShow: false,
 		ruleset: ['[Gen 7] PU'],
 		banlist: [
 			// PU
