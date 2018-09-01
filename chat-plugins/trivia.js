@@ -543,10 +543,26 @@ class Trivia extends Rooms.RoomGame {
 	 */
 	verifyAnswer(tarAnswer) {
 		return this.curAnswers.some(answer => (
-			(answer === tarAnswer) || (answer.length > 5 && Dex.levenshtein(tarAnswer, answer) < 3)
+			(answer === tarAnswer) || (Dex.levenshtein(tarAnswer, answer) <= this.maxLevenshteinAllowed(answer.length))
 		));
 	}
 
+	/**
+	 * Return the maximum Levenshtein distance that is allowable for answers of the given length.
+	 * @param {number} answerLength
+	 * @return {number}
+	 */
+	maxLevenshteinAllowed(answerLength) {
+		if (answerLength > 5) {
+			return 2;
+		}
+
+		if (answerLength > 4) {
+			return 1;
+		}
+
+		return 0;
+	}
 	/**
 	 * This is a noop here since it'd defined properly by mode subclasses later
 	 * on. This calculates the points a correct responder earns, which is
