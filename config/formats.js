@@ -514,7 +514,8 @@ let Formats = [
 			if (!problem) return null;
 			const restrictedMoves = this.format.restrictedMoves || [];
 			if (move.isZ || restrictedMoves.includes(move.name)) return problem;
-			if (set['sketchMove']) return {type: 'oversketched', maxSketches: 1};
+			// @ts-ignore
+			if (set.sketchMove) return {type: 'oversketched', maxSketches: 1};
 			// @ts-ignore
 			set.sketchMove = move.id;
 			return null;
@@ -522,7 +523,8 @@ let Formats = [
 		onValidateTeam: function (team, format, teamHas) {
 			let sketches = {};
 			for (const set of team) {
-				if (set['sketchMove']) {
+				// @ts-ignore
+				if (set.sketchMove) {
 					// @ts-ignore
 					if (!sketches[set.sketchMove]) {
 						// @ts-ignore
@@ -591,14 +593,16 @@ let Formats = [
 			}
 		},
 		onSwitchOut: function (pokemon) {
-			if (pokemon['innate']) {
+			// @ts-ignore
+			if (pokemon.innate) {
 				// @ts-ignore
 				pokemon.removeVolatile(pokemon.innate);
 				// @ts-ignore
 				delete pokemon.innate;
 			}
 			let ally = pokemon.side.active.find(ally => ally && ally !== pokemon && !ally.fainted);
-			if (ally && ally['innate']) {
+			// @ts-ignore
+			if (ally && ally.innate) {
 				// @ts-ignore
 				ally.removeVolatile(ally.innate);
 				// @ts-ignore
@@ -606,14 +610,16 @@ let Formats = [
 			}
 		},
 		onFaint: function (pokemon) {
-			if (pokemon['innate']) {
+			// @ts-ignore
+			if (pokemon.innate) {
 				// @ts-ignore
 				pokemon.removeVolatile(pokemon.innate);
 				// @ts-ignore
 				delete pokemon.innate;
 			}
 			let ally = pokemon.side.active.find(ally => ally && ally !== pokemon && !ally.fainted);
-			if (ally && ally['innate']) {
+			// @ts-ignore
+			if (ally && ally.innate) {
 				// @ts-ignore
 				ally.removeVolatile(ally.innate);
 				// @ts-ignore
