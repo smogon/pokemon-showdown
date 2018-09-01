@@ -997,7 +997,7 @@ let Formats = [
 	},
 	{
 		name: "[Gen 6] 1v1",
-		desc: `Bring three Pok&eacute;mon to Team Preview and choose one to battle."`,
+		desc: `Bring three Pok&eacute;mon to Team Preview and choose one to battle.`,
 
 		mod: 'gen6',
 		teamLength: {
