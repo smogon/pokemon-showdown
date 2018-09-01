@@ -11,7 +11,8 @@
     },
     "types": ["node"],
     "exclude": [
-        "./mods/gen1/pokedex.js"
+        "./mods/gen1/pokedex.js",
+        "./mods/pic/*.js"
     ],
     "include": [
         "./config/formats.js",
