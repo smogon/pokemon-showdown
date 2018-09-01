@@ -1557,11 +1557,10 @@ class Pokemon {
 	 * @param {Side | boolean} side
 	 */
 	getHealthInner(side) {
+		if (!this.hp) return '0 fnt';
 		let hpstring;
 		// side === true in replays
-		if (!this.hp) {
-			hpstring = '0';
-		} else if (side === this.side || side === true) {
+		if (side === this.side || side === true) {
 			hpstring = '' + this.hp + '/' + this.maxhp;
 		} else {
 			let ratio = this.hp / this.maxhp;
