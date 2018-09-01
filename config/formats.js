@@ -504,18 +504,17 @@ let Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
-		banlist: ['Porygon-Z'],
+		banlist: ['Kartana', 'Porygon-Z', 'Battle Bond'],
 		restrictedMoves: [
 			'Belly Drum', 'Celebrate', 'Chatter', 'Conversion', "Forest's Curse", 'Geomancy', 'Happy Hour', 'Hold Hands',
 			'Lovely Kiss', 'Purify', 'Quiver Dance', 'Shell Smash', 'Shift Gear', 'Sketch', 'Spore', 'Sticky Web', 'Trick-or-Treat',
 		],
 		checkLearnset: function (move, template, lsetData, set) {
 			let problem = this.checkLearnset(move, template, lsetData, set);
-			const restrictedMoves = this.format.restrictedMoves || [];
 			if (!problem) return null;
+			const restrictedMoves = this.format.restrictedMoves || [];
 			if (move.isZ || restrictedMoves.includes(move.name)) return problem;
-			// @ts-ignore
-			if (set.sketchMove) return {type: 'oversketched', maxSketches: 1};
+			if (set['sketchMove']) return {type: 'oversketched', maxSketches: 1};
 			// @ts-ignore
 			set.sketchMove = move.id;
 			return null;
@@ -523,8 +522,7 @@ let Formats = [
 		onValidateTeam: function (team, format, teamHas) {
 			let sketches = {};
 			for (const set of team) {
-				// @ts-ignore
-				if (set.sketchMove) {
+				if (set['sketchMove']) {
 					// @ts-ignore
 					if (!sketches[set.sketchMove]) {
 						// @ts-ignore
@@ -549,7 +547,7 @@ let Formats = [
 		mod: 'pic',
 		gameType: 'doubles',
 		ruleset: ['[Gen 7] Doubles OU', 'Sleep Clause Mod'],
-		banlist: ['Huge Power', 'Imposter', 'Parental Bond', 'Pure Power', 'Wonder Guard', 'Mimic', 'Sketch', 'Transform'],
+		banlist: ['Kangaskhanite', 'Mawilite', 'Medichamite', 'Huge Power', 'Imposter', 'Normalize', 'Pure Power', 'Wonder Guard', 'Mimic', 'Sketch', 'Transform'],
 		onSwitchInPriority: 2,
 		onSwitchIn: function (pokemon) {
 			if (this.p1.active.every(ally => ally && !ally.fainted)) {
@@ -593,16 +591,14 @@ let Formats = [
 			}
 		},
 		onSwitchOut: function (pokemon) {
-			// @ts-ignore
-			if (pokemon.innate) {
+			if (pokemon['innate']) {
 				// @ts-ignore
 				pokemon.removeVolatile(pokemon.innate);
 				// @ts-ignore
 				delete pokemon.innate;
 			}
 			let ally = pokemon.side.active.find(ally => ally && ally !== pokemon && !ally.fainted);
-			// @ts-ignore
-			if (ally && ally.innate) {
+			if (ally && ally['innate']) {
 				// @ts-ignore
 				ally.removeVolatile(ally.innate);
 				// @ts-ignore
@@ -610,19 +606,14 @@ let Formats = [
 			}
 		},
 		onFaint: function (pokemon) {
-			// this.add('-hint', 'checking ally ability after faint of ' + pokemon);
-			// @ts-ignore
-			if (pokemon.innate) {
-				// this.add('-hint', 'removing ' + pokemon.innate);
+			if (pokemon['innate']) {
 				// @ts-ignore
 				pokemon.removeVolatile(pokemon.innate);
 				// @ts-ignore
 				delete pokemon.innate;
 			}
 			let ally = pokemon.side.active.find(ally => ally && ally !== pokemon && !ally.fainted);
-			// @ts-ignore
-			if (ally && ally.innate) {
-				// this.add('-hint', 'removing ally\'s ' + ally.innate);
+			if (ally && ally['innate']) {
 				// @ts-ignore
 				ally.removeVolatile(ally.innate);
 				// @ts-ignore
