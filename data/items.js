@@ -563,7 +563,7 @@ let BattleItems = {
 	},
 	"brightpowder": {
 		id: "brightpowder",
-		name: "BrightPowder",
+		name: "Bright Powder",
 		spritenum: 51,
 		fling: {
 			basePower: 10,
