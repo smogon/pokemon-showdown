@@ -770,7 +770,7 @@ let Formats = [
 			validate: [2, 4],
 			battle: 2,
 		},
-		ruleset: ['[Gen 7] Doubles OU'],
+		ruleset: ['[Gen 7] Doubles OU', 'Sleep Clause Mod'],
 		banlist: [
 			'Salamence-Mega', 'Tapu Lele', 'Focus Sash', 'Final Gambit', 'Perish Song',
 			'Flash', 'Kinesis', 'Leaf Tornado', 'Mirror Shot', 'Mud Bomb', 'Mud-Slap', 'Muddy Water', 'Night Daze', 'Octazooka', 'Sand Attack', 'Smokescreen',
