@@ -29,6 +29,14 @@ const textColors = {
 
 const textShadow = 'text-shadow: 1px 0px black, -1px 0px black, 0px -1px black, 0px 1px black, 2px -2px black;';
 
+/** @typedef {'Green' | 'Yellow' | 'Red' | 'Blue' | 'Black'} Color */
+/** @typedef {{value: string, color: Color, changedColor?: Color, name: string}} Card */
+
+/**
+ * @param {Card} card
+ * @param {boolean} fullsize
+ * @return {string}
+ */
 function cardHTML(card, fullsize) {
 	let surface = card.value.replace(/[^A-Z0-9+]/g, "");
 	let background = rgbGradients[card.color];
@@ -37,26 +45,55 @@ function cardHTML(card, fullsize) {
 	return `<button class="button" style="font-size: 14px; font-weight: bold; color: white; ${textShadow} padding-bottom: 117px; text-align: left; height: 135px; width: ${fullsize ? '72' : '37'}px; border-radius: 10px 2px 2px 3px; color: white; background: ${card.color}; background: -webkit-linear-gradient(${background}); background: -o-linear-gradient(${background}); background: -moz-linear-gradient(${background}); background: linear-gradient(${background})" name=send value="/uno play ${card.name}">${surface}</button>`;
 }
 
+/**
+ * @return {Card[]}
+ */
 function createDeck() {
+	/** @type {Color[]} */
 	const colors = ['Red', 'Blue', 'Green', 'Yellow'];
 	const values = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'Reverse', 'Skip', '+2'];
 
-	let basic = [];
+	let basic = /** @type {Card[]} */ ([]);
 
 	for (const color of colors) {
 		basic.push(...values.map(v => {
-			return {value: v, color: color, name: color + " " + v};
+			/** @type {Card} */
+			let c = {value: v, color: color, name: color + " " + v};
+			return c;
 		}));
 	}
 
-	return [...basic, ...basic, // two copies of the basic stuff (total 96)
-		...[0, 1, 2, 3].map(v => ({color: colors[v], value: '0', name: colors[v] + ' 0'})), // the 4 0s
-		...[0, 1, 2, 3].map(v => ({color: 'Black', value: 'Wild', name: 'Wild'})), // wild cards
-		...[0, 1, 2, 3].map(v => ({color: 'Black', value: '+4', name: "Wild +4"})), // wild +4 cards
+	return [
+		// two copies of the basic stuff (total 96)
+		...basic,
+		...basic,
+		// The four 0s
+		...[0, 1, 2, 3].map(v => {
+			/** @type {Card} */
+			let c = {color: colors[v], value: '0', name: colors[v] + ' 0'};
+			return c;
+		}),
+		 // Wild cards
+		...[0, 1, 2, 3].map(v => {
+			/** @type {Card} */
+			let c = {color: 'Black', value: 'Wild', name: 'Wild'};
+			return c;
+		}),
+		// Wild +4 cards
+		...[0, 1, 2, 3].map(v => {
+			/** @type {Card} */
+			let c = {color: 'Black', value: '+4', name: 'Wild +4'};
+			return c;
+		}),
 	]; // 108 cards
 }
 
-class UNOgame extends Rooms.RoomGame {
+class UnoGame extends Rooms.RoomGame {
+	/**
+	 * @param {ChatRoom} room
+	 * @param {number} cap
+	 * @param {boolean} suppressMessages
+	 */
 	constructor(room, cap, suppressMessages) {
 		super(room);
 
@@ -66,34 +103,45 @@ class UNOgame extends Rooms.RoomGame {
 			room.gameNumber = 1;
 		}
 
-		cap = parseInt(cap) || 6;
-		if (cap < 2) cap = 2;
-
+		/** @type {number} */
 		this.playerCap = cap;
 		this.allowRenames = true;
+		/** @type {number} */
 		this.maxTime = maxTime;
+		/** @type {NodeJS.Timer?} */
+		this.timer = null;
+		/** @type {NodeJS.Timer?} */
 		this.autostartTimer = null;
 
+		/** @type {string} */
 		this.gameid = 'uno';
 		this.title = 'UNO';
 
+		/** @type {string} */
 		this.state = 'signups';
 
-		this.currentPlayer = null;
+		/** @type {string} */
+		this.currentPlayerid = '';
+		/** @type {Card[]} */
 		this.deck = Dex.shuffle(createDeck());
+		/** @type {Card[]} */
 		this.discards = [];
 		this.topCard = null;
 
 		this.direction = 1;
 
 		this.suppressMessages = suppressMessages || false;
-		this.spectators = {};
+		this.spectators = Object.create(null);
 
 		this.sendToRoom(`|uhtml|uno-${this.room.gameNumber}|<div class="broadcast-green"><p style="font-size: 14pt; text-align: center">A new game of <strong>UNO</strong> is starting!</p><p style="font-size: 9pt; text-align: center"><button name="send" value="/uno join">Join</button><br />Or use <strong>/uno join</strong> to join the game.</p>${(this.suppressMessages ? `<p style="font-size: 6pt; text-align: center">Game messages will be shown to only players.  If you would like to spectate the game, use <strong>/uno spectate</strong></p>` : '')}</div>`, true);
 	}
 
 	onUpdateConnection() {}
 
+	/**
+	 * @param {User} user
+	 * @param {Connection} connection
+	 */
 	onConnect(user, connection) {
 		if (this.state === 'signups') {
 			connection.sendTo(this.room, `|uhtml|uno-${this.room.gameNumber}|<div class="broadcast-green"><p style="font-size: 14pt; text-align: center">A new game of <strong>UNO</strong> is starting!</p><p style="font-size: 9pt; text-align: center"><button name="send" value="/uno join">Join</button><br />Or use <strong>/uno join</strong> to join the game.</p>${(this.suppressMessages ? `<p style="font-size: 6pt; text-align: center">Game messages will be shown to only players.  If you would like to spectate the game, use <strong>/uno spectate</strong></p>` : '')}</div>`);
@@ -102,6 +150,9 @@ class UNOgame extends Rooms.RoomGame {
 		}
 	}
 
+	/**
+	 * @return {false | void}
+	 */
 	onStart() {
 		if (this.playerCount < 2) return false;
 		if (this.autostartTimer) clearTimeout(this.autostartTimer);
@@ -127,6 +178,10 @@ class UNOgame extends Rooms.RoomGame {
 		this.nextTurn(true);
 	}
 
+	/**
+	 * @param {User} user
+	 * @return {boolean}
+	 */
 	joinGame(user) {
 		if (this.state === 'signups' && this.addPlayer(user)) {
 			this.sendToRoom(`${user.name} has joined the game of UNO.`);
@@ -135,6 +190,10 @@ class UNOgame extends Rooms.RoomGame {
 		return false;
 	}
 
+	/**
+	 * @param {User} user
+	 * @return {boolean}
+	 */
 	leaveGame(user) {
 		if (this.state === 'signups' && this.removePlayer(user)) {
 			this.sendToRoom(`${user.name} has left the game of UNO.`);
@@ -143,11 +202,22 @@ class UNOgame extends Rooms.RoomGame {
 		return false;
 	}
 
-	// overwrite the default makePlayer so it makes a UNOgamePlayer instead.
+	/**
+	 * Overwrite the default makePlayer so it makes an UnoGamePlayer instead.
+	 * @param {User} user
+	 * @return {UnoGamePlayer}
+	 */
 	makePlayer(user) {
-		return new UNOgamePlayer(user, this);
+		return new UnoGamePlayer(user, this);
 	}
 
+	/**
+	 * @param {User} user
+	 * @param {string} oldUserid
+	 * @param {boolean} isJoining
+	 * @param {boolean} isForceRenamed
+	 * @return {false | void}
+	 */
 	onRename(user, oldUserid, isJoining, isForceRenamed) {
 		if (!(oldUserid in this.players) || user.userid === oldUserid) return false;
 		if (!user.named && !isForceRenamed) {
@@ -163,39 +233,47 @@ class UNOgame extends Rooms.RoomGame {
 		this.players[user.userid].userid = user.userid;
 		if (this.awaitUno && this.awaitUno === oldUserid) this.awaitUno = user.userid;
 
-		if (this.currentPlayer && this.currentPlayer === oldUserid) this.currentPlayer = user.userid;
+		if (this.currentPlayerid === oldUserid) this.currentPlayerid = user.userid;
 	}
 
+	/**
+	 * @param {string} userid
+	 * @return {string | false}
+	 */
 	eliminate(userid) {
 		if (!(userid in this.players)) return false;
 
 		let name = this.players[userid].name;
 
 		if (this.playerCount === 2) {
-			this.removePlayer({userid: userid});
+			this.removePlayer(this.players[userid]);
 			this.onWin(this.players[Object.keys(this.players)[0]]);
 			return name;
 		}
 
 		// handle current player...
-		if (userid === this.currentPlayer) {
+		if (userid === this.currentPlayerid) {
 			if (this.state === 'color') {
 				this.topCard.changedColor = this.discards[1].changedColor || this.discards[1].color;
 				this.sendToRoom(`|raw|${Chat.escapeHTML(name)} has not picked a color, the color will stay as <span style="color: ${textColors[this.topCard.changedColor]}">${this.topCard.changedColor}</span>.`);
 			}
 
-			clearTimeout(this.timer);
+			if (this.timer) clearTimeout(this.timer);
 			this.nextTurn();
 		}
 
 		// put that player's cards into the discard pile to prevent cards from being permanently lost
 		this.discards.push(...this.players[userid].hand);
 
-		this.removePlayer({userid: userid});
+		this.removePlayer(this.players[userid]);
 		return name;
 	}
 
-	sendToRoom(msg, overrideSuppress) {
+	/**
+	 * @param {string} msg
+	 * @param {boolean} [overrideSuppress]
+	 */
+	sendToRoom(msg, overrideSuppress = false) {
 		if (!this.suppressMessages || overrideSuppress) {
 			this.room.add(msg).update();
 		} else {
@@ -213,15 +291,22 @@ class UNOgame extends Rooms.RoomGame {
 		}
 	}
 
+	/**
+	 * @param {boolean} [showCards]
+	 * @return {string[]}
+	 */
 	getPlayers(showCards) {
 		let playerList = Object.keys(this.players);
 		if (!showCards) {
 			return playerList.sort().map(id => Chat.escapeHTML(this.players[id].name));
 		}
 		if (this.direction === -1) playerList = playerList.reverse();
-		return playerList.map(id => `${(this.currentPlayer && this.currentPlayer === id ? '<strong>' : '')}${Chat.escapeHTML(this.players[id].name)} (${this.players[id].hand.length}) ${(this.currentPlayer && this.currentPlayer === id ? '</strong>' : "")}`);
+		return playerList.map(id => `${(this.currentPlayerid === id ? '<strong>' : '')}${Chat.escapeHTML(this.players[id].name)} (${this.players[id].hand.length}) ${(this.currentPlayerid === id ? '</strong>' : "")}`);
 	}
 
+	/**
+	 * @return {Promise}
+	 */
 	onAwaitUno() {
 		return new Promise((resolve, reject) => {
 			if (!this.awaitUno) return resolve();
@@ -237,13 +322,16 @@ class UNOgame extends Rooms.RoomGame {
 		});
 	}
 
+	/**
+	 * @param {boolean} [starting]
+	 */
 	nextTurn(starting) {
 		this.onAwaitUno()
 			.then(() => {
 				if (!starting) this.onNextPlayer();
 
-				clearTimeout(this.timer);
-				let player = this.players[this.currentPlayer];
+				if (this.timer) clearTimeout(this.timer);
+				let player = this.players[this.currentPlayerid];
 
 				this.sendToRoom(`|c:|${(Math.floor(Date.now() / 1000))}|~|${player.name}'s turn.`);
 				this.state = 'play';
@@ -252,25 +340,28 @@ class UNOgame extends Rooms.RoomGame {
 
 				this.timer = setTimeout(() => {
 					this.sendToRoom(`${player.name} has been automatically disqualified.`);
-					this.eliminate(this.currentPlayer);
+					this.eliminate(this.currentPlayerid);
 				}, this.maxTime * 1000);
 			});
 	}
 
 	onNextPlayer() {
 		// if none is set
-		if (!this.currentPlayer) {
+		if (!this.currentPlayerid) {
 			let userList = Object.keys(this.players);
-			this.currentPlayer = userList[Math.floor(this.playerCount * Math.random())];
+			this.currentPlayerid = userList[Math.floor(this.playerCount * Math.random())];
 		}
 
-		this.currentPlayer = this.getNextPlayer();
+		this.currentPlayerid = this.getNextPlayer();
 	}
 
+	/**
+	 * @return {string}
+	 */
 	getNextPlayer() {
 		let userList = Object.keys(this.players);
 
-		let player = userList[(userList.indexOf(this.currentPlayer) + this.direction)];
+		let player = userList[(userList.indexOf(this.currentPlayerid) + this.direction)];
 
 		if (!player) {
 			player = this.direction === 1 ? userList[0] : userList[this.playerCount - 1];
@@ -278,8 +369,12 @@ class UNOgame extends Rooms.RoomGame {
 		return player;
 	}
 
+	/**
+	 * @param {UnoGamePlayer} user
+	 * @return {boolean | void}
+	 */
 	onDraw(user) {
-		if (this.currentPlayer !== user.userid || this.state !== 'play') return false;
+		if (this.currentPlayerid !== user.userid || this.state !== 'play') return false;
 		if (this.players[user.userid].cardLock) return true;
 
 		this.onCheckUno();
@@ -287,13 +382,18 @@ class UNOgame extends Rooms.RoomGame {
 		this.sendToRoom(`${user.name} has drawn a card.`);
 		let player = this.players[user.userid];
 
-		let card = this.onDrawCard(user, 1, true);
+		let card = this.onDrawCard(user, 1);
 		player.sendDisplay();
 		player.cardLock = card[0].name;
 	}
 
+	/**
+	 * @param {UnoGamePlayer} user
+	 * @param {string} cardName
+	 * @return {false | string | void}
+	 */
 	onPlay(user, cardName) {
-		if (this.currentPlayer !== user.userid || this.state !== 'play') return false;
+		if (this.currentPlayerid !== user.userid || this.state !== 'play') return false;
 		let player = this.players[user.userid];
 
 		let card = player.hasCard(cardName);
@@ -304,7 +404,7 @@ class UNOgame extends Rooms.RoomGame {
 		if (card.color !== 'Black' && card.color !== (this.topCard.changedColor || this.topCard.color) && card.value !== this.topCard.value) return `You cannot play this card - you can only play: Wild cards, ${(this.topCard.changedColor ? 'and' : '')} ${(this.topCard.changedColor || this.topCard.color)} cards${this.topCard.changedColor ? "" : ` and ${this.topCard.value}'s`}.`;
 		if (card.value === '+4' && !player.canPlayWildFour()) return "You cannot play Wild +4 when you still have a card with the same color as the top card.";
 
-		clearTimeout(this.timer); // reset the autodq timer.
+		if (this.timer) clearTimeout(this.timer); // reset the autodq timer.
 
 		this.onCheckUno();
 
@@ -334,6 +434,10 @@ class UNOgame extends Rooms.RoomGame {
 		if (this.state === 'play') this.nextTurn();
 	}
 
+	/**
+	 * @param {'Reverse' | 'Skip' | 'Wild' | '+2' | '+4'} value
+	 * @param {boolean} [initialize]
+	 */
 	onRunEffect(value, initialize) {
 		const colorDisplay = `|uhtml|uno-hand|<table style="width: 100%; border: 1px solid black"><tr><td style="width: 50%"><button style="width: 100%; background-color: red; border: 2px solid rgba(0 , 0 , 0 , 0.59); border-radius: 5px; padding: 5px" name=send value="/uno color Red">Red</button></td><td style="width: 50%"><button style="width: 100%; background-color: blue; border: 2px solid rgba(0 , 0 , 0 , 0.59); border-radius: 5px; color: white; padding: 5px" name=send value="/uno color Blue">Blue</button></td></tr><tr><td style="width: 50%"><button style="width: 100%; background-color: green; border: 2px solid rgba(0 , 0 , 0 , 0.59); border-radius: 5px; padding: 5px" name=send value="/uno color Green">Green</button></td><td style="width: 50%"><button style="width: 100%; background-color: yellow; border: 2px solid rgba(0 , 0 , 0 , 0.59); border-radius: 5px; padding: 5px" name=send value="/uno color Yellow">Yellow</button></td></tr></table>`;
 
@@ -345,43 +449,48 @@ class UNOgame extends Rooms.RoomGame {
 			break;
 		case 'Skip':
 			this.onNextPlayer();
-			this.sendToRoom(this.players[this.currentPlayer].name + "'s turn has been skipped.");
+			this.sendToRoom(this.players[this.currentPlayerid].name + "'s turn has been skipped.");
 			break;
 		case '+2':
 			this.onNextPlayer();
-			this.sendToRoom(this.players[this.currentPlayer].name + " has been forced to draw 2 cards.");
-			this.onDrawCard({userid: this.currentPlayer}, 2);
+			this.sendToRoom(this.players[this.currentPlayerid].name + " has been forced to draw 2 cards.");
+			this.onDrawCard(this.players[this.currentPlayerid], 2);
 			break;
 		case '+4':
-			this.players[this.currentPlayer].sendRoom(colorDisplay);
+			this.players[this.currentPlayerid].sendRoom(colorDisplay);
 			this.state = 'color';
 			// apply to the next in line, since the current player still has to choose the color
 			let next = this.getNextPlayer();
 			this.sendToRoom(this.players[next].name + " has been forced to draw 4 cards.");
-			this.onDrawCard({userid: next}, 4);
+			this.onDrawCard(this.players[this.getNextPlayer()], 4);
 			this.isPlusFour = true;
 			this.timer = setTimeout(() => {
-				this.sendToRoom(`${this.players[this.currentPlayer].name} has been automatically disqualified.`);
-				this.eliminate(this.currentPlayer);
+				this.sendToRoom(`${this.players[this.currentPlayerid].name} has been automatically disqualified.`);
+				this.eliminate(this.currentPlayerid);
 			}, this.maxTime * 1000);
 			break;
 		case 'Wild':
-			this.players[this.currentPlayer].sendRoom(colorDisplay);
+			this.players[this.currentPlayerid].sendRoom(colorDisplay);
 			this.state = 'color';
 			this.timer = setTimeout(() => {
-				this.sendToRoom(`${this.players[this.currentPlayer].name} has been automatically disqualified.`);
-				this.eliminate(this.currentPlayer);
+				this.sendToRoom(`${this.players[this.currentPlayerid].name} has been automatically disqualified.`);
+				this.eliminate(this.currentPlayerid);
 			}, this.maxTime * 1000);
 			break;
 		}
 		if (initialize) this.onNextPlayer();
 	}
 
-	onSelectcolor(user, color) {
-		if (!['Red', 'Blue', 'Green', 'Yellow'].includes(color) || user.userid !== this.currentPlayer || this.state !== 'color') return false;
+	/**
+	 * @param {UnoGamePlayer} user
+	 * @param {Color | string} color
+	 * @return {false | void}
+	 */
+	onSelectColor(user, color) {
+		if (!['Red', 'Blue', 'Green', 'Yellow'].includes(color) || user.userid !== this.currentPlayerid || this.state !== 'color') return false;
 		this.topCard.changedColor = color;
 		this.sendToRoom(`The color has been changed to ${color}.`);
-		clearTimeout(this.timer);
+		if (this.timer) clearTimeout(this.timer);
 
 		// send the display of their cards again
 		this.players[user.userid].sendDisplay();
@@ -394,9 +503,15 @@ class UNOgame extends Rooms.RoomGame {
 		this.nextTurn();
 	}
 
+	/**
+	 * @param {UnoGamePlayer} user
+	 * @param {number} count
+	 * @return {Card[]}
+	 */
 	onDrawCard(user, count) {
-		if (!(user.userid in this.players)) return false;
-		let drawnCards = this.drawCard(count);
+		if (typeof count === 'string') count = parseInt(count);
+		if (!count || isNaN(count) || count < 1) count = 1;
+		let drawnCards = /** @type {Card[]} */ (this.drawCard(count));
 
 		let player = this.players[user.userid];
 		player.hand.push(...drawnCards);
@@ -404,21 +519,31 @@ class UNOgame extends Rooms.RoomGame {
 		return drawnCards;
 	}
 
+	/**
+	 * @param {number} count
+	 * @return {Card[]}
+	 */
 	drawCard(count) {
-		count = parseInt(count);
-		if (!count || count < 1) count = 1;
-		let drawnCards = [];
+		if (typeof count === 'string') count = parseInt(count);
+		if (!count || isNaN(count) || count < 1) count = 1;
+		let drawnCards = /** @type {Card[]} */ ([]);
 
 		for (let i = 0; i < count; i++) {
 			if (!this.deck.length) {
 				this.deck = this.discards.length ? Dex.shuffle(this.discards) : Dex.shuffle(createDeck()); // shuffle the cards back into the deck, or if there are no discards, add another deck into the game.
 				this.discards = []; // clear discard pile
 			}
-			drawnCards.push(this.deck.pop());
+			drawnCards.push(this.deck[this.deck.length - 1]);
+			this.deck.pop();
 		}
 		return drawnCards;
 	}
 
+	/**
+	 * @param {UnoGamePlayer} user
+	 * @param {string} unoId
+	 * @return {false | void}
+	 */
 	onUno(user, unoId) {
 		// uno id makes spamming /uno uno impossible
 		if (this.unoId !== unoId || user.userid !== this.awaitUno) return false;
@@ -430,28 +555,35 @@ class UNOgame extends Rooms.RoomGame {
 	onCheckUno() {
 		if (this.awaitUno) {
 			// if the previous player hasn't hit UNO before the next player plays something, they are forced to draw 2 cards;
-			if (this.awaitUno !== this.currentPlayer) {
+			if (this.awaitUno !== this.currentPlayerid) {
 				this.sendToRoom(`${this.players[this.awaitUno].name} forgot to say UNO! and is forced to draw 2 cards.`);
-				this.onDrawCard({userid: this.awaitUno}, 2);
+				this.onDrawCard(this.players[this.awaitUno], 2);
 			}
 			delete this.awaitUno;
 			delete this.unoId;
 		}
 	}
 
+	/**
+	 * @param {UnoGamePlayer | User} user
+	 * @return {false | void}
+	 */
 	onSendHand(user) {
 		if (!(user.userid in this.players) || this.state === 'signups') return false;
 
 		this.players[user.userid].sendDisplay();
 	}
 
+	/**
+	 * @param {UnoGamePlayer} player
+	 */
 	onWin(player) {
 		this.sendToRoom(Chat.html`|raw|<div class="broadcast-green">Congratulations to ${player.name} for winning the game of UNO!</div>`, true);
 		this.destroy();
 	}
 
 	destroy() {
-		clearTimeout(this.timer);
+		if (this.timer) clearTimeout(this.timer);
 		if (this.autostartTimer) clearTimeout(this.autostartTimer);
 		this.sendToRoom(`|uhtmlchange|uno-${this.room.gameNumber}|<div class="infobox">The game of UNO has ended.</div>`, true);
 
@@ -463,12 +595,20 @@ class UNOgame extends Rooms.RoomGame {
 	}
 }
 
-class UNOgamePlayer extends Rooms.RoomGamePlayer {
+class UnoGamePlayer extends Rooms.RoomGamePlayer {
+	/**
+	 * @param {User} user
+	 * @param {UnoGame} game
+	 */
 	constructor(user, game) {
 		super(user, game);
-		this.hand = [];
+		this.hand = /** @type {Card[]} */ ([]);
+		this.game = game;
 	}
 
+	/**
+	 * @return {boolean}
+	 */
 	canPlayWildFour() {
 		let color = (this.game.topCard.changedColor || this.game.topCard.color);
 
@@ -476,10 +616,16 @@ class UNOgamePlayer extends Rooms.RoomGamePlayer {
 		return true;
 	}
 
+	/**
+	 * @param {string} cardName
+	 */
 	hasCard(cardName) {
-		return this.hand.find(c => c.name === cardName);
+		return this.hand.find(card => card.name === cardName);
 	}
 
+	/**
+	 * @param {string} cardName
+	 */
 	removeCard(cardName) {
 		for (const [i, card] of this.hand.entries()) {
 			if (card.name === cardName) {
@@ -489,6 +635,9 @@ class UNOgamePlayer extends Rooms.RoomGamePlayer {
 		}
 	}
 
+	/**
+	 * @return {string[]}
+	 */
 	buildHand() {
 		return this.hand.sort((a, b) => a.color.localeCompare(b.color) || a.value.localeCompare(b.value))
 			.map((c, i) => cardHTML(c, i === this.hand.length - 1));
@@ -506,14 +655,18 @@ class UNOgamePlayer extends Rooms.RoomGamePlayer {
 		// clear previous display and show new display
 		this.sendRoom("|uhtmlchange|uno-hand|");
 		this.sendRoom(
-			`|uhtml|uno-hand|<div style="border: 1px solid skyblue; padding: 0 0 5px 0"><table style="width: 100%; table-layout: fixed; border-radius: 3px"><tr><td colspan=4 rowspan=2 style="padding: 5px"><div style="overflow-x: auto; white-space: nowrap; width: 100%">${hand}</div></td>${this.game.currentPlayer === this.userid ? `<td colspan=2 style="padding: 5px 5px 0 5px">${top}</td></tr>` : ""}` +
+			`|uhtml|uno-hand|<div style="border: 1px solid skyblue; padding: 0 0 5px 0"><table style="width: 100%; table-layout: fixed; border-radius: 3px"><tr><td colspan=4 rowspan=2 style="padding: 5px"><div style="overflow-x: auto; white-space: nowrap; width: 100%">${hand}</div></td>${this.game.currentPlayerid === this.userid ? `<td colspan=2 style="padding: 5px 5px 0 5px">${top}</td></tr>` : ""}` +
 			`<tr><td colspan=2 style="vertical-align: top; padding: 0px 5px 5px 5px"><div style="overflow-y: scroll">${players}</div></td></tr></table>` +
-			`${this.game.currentPlayer === this.userid ? `<div style="text-align: center">${draw}${pass}<br />${uno}</div>` : ""}</div>`
+			`${this.game.currentPlayerid === this.userid ? `<div style="text-align: center">${draw}${pass}<br />${uno}</div>` : ""}</div>`
 		);
 	}
 }
 
-exports.commands = {
+/** @typedef {(this: CommandContext, target: string, room: ChatRoom, user: User, connection: Connection, cmd: string, message: string) => (void)} ChatHandler */
+/** @typedef {{[k: string]: { [k: string]: ChatHandler | string | true | string[] | ChatCommands} | string[]}} ChatCommands */
+
+/** @type {ChatCommands} */
+const commands = {
 	uno: {
 		// roomowner commands
 		off: 'disable',
@@ -558,15 +711,19 @@ exports.commands = {
 
 			let suppressMessages = cmd.includes('private') || !(cmd.includes('public') || room.id === 'gamecorner');
 
-			room.game = new UNOgame(room, target, suppressMessages);
+			let cap = parseInt(target);
+			if (isNaN(cap)) cap = 6;
+			if (cap < 2) cap = 2;
+			room.game = new UnoGame(room, cap, suppressMessages);
 			this.privateModAction(`(A game of UNO was created by ${user.name}.)`);
 			this.modlog('UNO CREATE');
 		},
 
 		start: function (target, room, user) {
 			if (!this.can('minigame', null, room)) return;
-			if (!room.game || room.game.gameid !== 'uno' || room.game.state !== 'signups') return this.errorReply("There is no UNO game in signups phase in this room.");
-			if (room.game.onStart()) {
+			const game = /** @type {UnoGame} */ (room.game);
+			if (!game || game.gameid !== 'uno' || game.state !== 'signups') return this.errorReply("There is no UNO game in signups phase in this room.");
+			if (game.onStart()) {
 				this.privateModAction(`(The game of UNO was started by ${user.name}.)`);
 				this.modlog('UNO START');
 			}
@@ -584,36 +741,36 @@ exports.commands = {
 
 		timer: function (target, room, user) {
 			if (!this.can('minigame', null, room)) return;
-			if (!room.game || room.game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room.");
+			const game = /** @type {UnoGame} */ (room.game);
+			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room.");
 			let amount = parseInt(target);
 			if (!amount || amount < 5 || amount > 300) return this.errorReply("The amount must be a number between 5 and 300.");
 
-			room.game.maxTime = amount;
-			if (room.game.timer) {
-				clearTimeout(room.game.timer);
-				room.game.timer = setTimeout(() => {
-					room.game.eliminate(room.game.currentPlayer);
-				}, amount * 1000);
-			}
+			game.maxTime = amount;
+			if (game.timer) clearTimeout(game.timer);
+			game.timer = setTimeout(() => {
+				game.eliminate(game.currentPlayerid);
+			}, amount * 1000);
 			this.addModAction(`${user.name} has set the UNO automatic disqualification timer to ${amount} seconds.`);
 			this.modlog('UNO TIMER', null, `${amount} seconds`);
 		},
 
 		autostart: function (target, room, user) {
 			if (!this.can('minigame', null, room)) return;
-			if (!room.game || room.game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
+			const game = /** @type {UnoGame} */ (room.game);
+			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
 			if (toId(target) === 'off') {
-				if (!room.game.autostartTimer) return this.errorReply("There is no autostart timer running on.");
+				if (!game.autostartTimer) return this.errorReply("There is no autostart timer running on.");
 				this.addModAction(`${user.name} has turned off the UNO autostart timer.`);
-				clearTimeout(room.game.autostartTimer);
+				clearTimeout(game.autostartTimer);
 				return;
 			}
 			const amount = parseInt(target);
 			if (!amount || amount < 30 || amount > 600) return this.errorReply("The amount must be a number between 30 and 600 seconds.");
-			if (room.game.state !== 'signups') return this.errorReply("The game of UNO has already started.");
-			if (room.game.autostartTimer) clearTimeout(room.game.autostartTimer);
-			room.game.autostartTimer = setTimeout(() => {
-				room.game.onStart();
+			if (game.state !== 'signups') return this.errorReply("The game of UNO has already started.");
+			if (game.autostartTimer) clearTimeout(game.autostartTimer);
+			game.autostartTimer = setTimeout(() => {
+				game.onStart();
 			}, amount * 1000);
 			this.addModAction(`${user.name} has set the UNO autostart timer to ${amount} seconds.`);
 		},
@@ -621,9 +778,10 @@ exports.commands = {
 		dq: 'disqualify',
 		disqualify: function (target, room, user) {
 			if (!this.can('minigame', null, room)) return;
-			if (!room.game || room.game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
+			const game = /** @type {UnoGame} */ (room.game);
+			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
 
-			let disqualified = room.game.eliminate(toId(target));
+			let disqualified = game.eliminate(toId(target));
 			if (disqualified === false) return this.errorReply(`Unable to disqualify ${target}.`);
 			this.privateModAction(`(${user.name} has disqualified ${disqualified} from the UNO game.)`);
 			this.modlog('UNO DQ', toId(target));
@@ -631,68 +789,79 @@ exports.commands = {
 		},
 
 		// player/user commands
-		j: 'join',
-		join: function (target, room, user) {
-			if (!room.game || room.game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
+		j: 'unojoin',
+		// TypeScript doesn't like 'join' being defined as a function
+		join: 'unojoin',
+		unojoin: function (target, room, user) {
+			const game = /** @type {UnoGame} */ (room.game);
+			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
 			if (!this.canTalk()) return false;
-			if (!room.game.joinGame(user)) return this.errorReply("Unable to join the game.");
+			if (!game.joinGame(user)) return this.errorReply("Unable to join the game.");
 
 			return this.sendReply("You have joined the game of UNO.");
 		},
 
 		l: 'leave',
 		leave: function (target, room, user) {
-			if (!room.game || room.game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
-			if (!room.game.leaveGame(user)) return this.errorReply("Unable to leave the game.");
+			const game = /** @type {UnoGame} */ (room.game);
+			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
+			if (!game.leaveGame(user)) return this.errorReply("Unable to leave the game.");
 			return this.sendReply("You have left the game of UNO.");
 		},
 
 		play: function (target, room, user) {
-			if (!room.game || room.game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
-			let error = room.game.onPlay(user, target);
+			const game = /** @type {UnoGame} */ (room.game);
+			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
+			let error = game.onPlay(game.players[user.userid], target);
 			if (error) this.errorReply(error);
 		},
 
 		draw: function (target, room, user) {
-			if (!room.game || room.game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
-			let error = room.game.onDraw(user);
+			const game = /** @type {UnoGame} */ (room.game);
+			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
+			let error = game.onDraw(game.players[user.userid]);
 			if (error) return this.errorReply("You have already drawn a card this turn.");
 		},
 
 		pass: function (target, room, user) {
-			if (!room.game || room.game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
-			if (room.game.currentPlayer !== user.userid) return this.errorReply("It is currently not your turn.");
-			if (!room.game.players[user.userid].cardLock) return this.errorReply("You cannot pass until you draw a card.");
-			if (room.game.state === 'color') return this.errorReply("You cannot pass until you choose a color.");
+			const game = /** @type {UnoGame} */ (room.game);
+			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
+			if (game.currentPlayerid !== user.userid) return this.errorReply("It is currently not your turn.");
+			if (!game.players[user.userid].cardLock) return this.errorReply("You cannot pass until you draw a card.");
+			if (game.state === 'color') return this.errorReply("You cannot pass until you choose a color.");
 
-			room.game.sendToRoom(`${user.name} has passed.`);
-			room.game.nextTurn();
+			game.sendToRoom(`${user.name} has passed.`);
+			game.nextTurn();
 		},
 
 		color: function (target, room, user) {
-			if (!room.game || room.game.gameid !== 'uno') return false;
-			room.game.onSelectcolor(user, target);
+			const game = /** @type {UnoGame} */ (room.game);
+			if (!game || game.gameid !== 'uno') return false;
+			game.onSelectColor(game.players[user.userid], target);
 		},
 
 		uno: function (target, room, user) {
-			if (!room.game || room.game.gameid !== 'uno') return false;
-			room.game.onUno(user, target);
+			const game = /** @type {UnoGame} */ (room.game);
+			if (!game || game.gameid !== 'uno') return false;
+			game.onUno(game.players[user.userid], target);
 		},
 
 		// information commands
 		'': 'hand',
 		hand: function (target, room, user) {
-			if (!room.game || room.game.gameid !== 'uno') return this.parse("/help uno");
-			room.game.onSendHand(user);
+			const game = /** @type {UnoGame} */ (room.game);
+			if (!game || game.gameid !== 'uno') return this.parse("/help uno");
+			game.onSendHand(user);
 		},
 
 		players: 'getusers',
 		users: 'getusers',
 		getplayers: 'getusers',
 		getusers: function (target, room, user) {
-			if (!room.game || room.game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
+			const game = /** @type {UnoGame} */ (room.game);
+			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
 			if (!this.runBroadcast()) return false;
-			this.sendReplyBox(`<strong>Players (${room.game.playerCount})</strong>:<br />${room.game.getPlayers().join(', ')}`);
+			this.sendReplyBox(`<strong>Players (${game.playerCount})</strong>:<br />${game.getPlayers().join(', ')}`);
 		},
 
 		help: function (target, room, user) {
@@ -701,38 +870,41 @@ exports.commands = {
 
 		// suppression commands
 		suppress: function (target, room, user) {
-			if (!room.game || room.game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
+			const game = /** @type {UnoGame} */ (room.game);
+			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
 			if (!this.can('minigame', null, room)) return;
 
 			target = toId(target);
 			let state = target === 'on' ? true : target === 'off' ? false : undefined;
 
-			if (state === undefined) return this.sendReply(`Suppression of UNO game messages is currently ${(room.game.suppressMessages ? 'on' : 'off')}.`);
-			if (state === room.game.suppressMessages) return this.errorReply(`Suppression of UNO game messages is already ${(room.game.suppressMessages ? 'on' : 'off')}.`);
+			if (state === undefined) return this.sendReply(`Suppression of UNO game messages is currently ${(game.suppressMessages ? 'on' : 'off')}.`);
+			if (state === game.suppressMessages) return this.errorReply(`Suppression of UNO game messages is already ${(game.suppressMessages ? 'on' : 'off')}.`);
 
-			room.game.suppressMessages = state;
+			game.suppressMessages = state;
 
 			this.addModAction(`${user.name} has turned ${(state ? 'on' : 'off')} suppression of UNO game messages.`);
 			this.modlog('UNO SUPRESS', null, (state ? 'ON' : 'OFF'));
 		},
 
 		spectate: function (target, room, user) {
-			if (!room.game || room.game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
+			const game = /** @type {UnoGame} */ (room.game);
+			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
 
-			if (!room.game.suppressMessages) return this.errorReply("The current UNO game is not suppressing messages.");
-			if (user.userid in room.game.spectators) return this.errorReply("You are already spectating this game.");
+			if (!game.suppressMessages) return this.errorReply("The current UNO game is not suppressing messages.");
+			if (user.userid in game.spectators) return this.errorReply("You are already spectating this game.");
 
-			room.game.spectators[user.userid] = 1;
+			game.spectators[user.userid] = 1;
 			this.sendReply("You are now spectating this private UNO game.");
 		},
 
 		unspectate: function (target, room, user) {
-			if (!room.game || room.game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
+			const game = /** @type {UnoGame} */ (room.game);
+			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
 
-			if (!room.game.suppressMessages) return this.errorReply("The current UNO game is not suppressing messages.");
-			if (!(user.userid in room.game.spectators)) return this.errorReply("You are currently not spectating this game.");
+			if (!game.suppressMessages) return this.errorReply("The current UNO game is not suppressing messages.");
+			if (!(user.userid in game.spectators)) return this.errorReply("You are currently not spectating this game.");
 
-			delete room.game.spectators[user.userid];
+			delete game.spectators[user.userid];
 			this.sendReply("You are no longer spectating this private UNO game.");
 		},
 	},
@@ -750,3 +922,5 @@ exports.commands = {
 		`/uno suppress [on|off] - Toggles suppression of game messages.`,
 	],
 };
+
+exports.commands = commands;

@@ -107,6 +107,7 @@ class BasicRoom {
 		this.filterEmojis = false;
 		this.filterCaps = false;
 		this.mafiaEnabled = false;
+		this.unoDisabled = false;
 		/** @type {Set<string>?} */
 		this.privacySetter = null;
 		/** @type {Map<string, ChatRoom>?} */
