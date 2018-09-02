@@ -1356,7 +1356,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (!force) {
 			for (const alt of user.getAltUsers(true)) {
 				if (this.players[alt.userid]) return `${self ? `You already have` : `${user.userid} already has`} an alt in the game.`;
-				if (this.hostid === alt.userid || this.cohosts.includes(alt.userid)) return `${self ? `You have` : `${user.userid} has`} an alt as the game host.`;
+				if (this.hostid === alt.userid || this.cohosts.includes(alt.userid)) return `${self ? `You have` : `${user.userid} has`} an alt as a game host.`;
 			}
 		}
 		return false;
@@ -2657,6 +2657,7 @@ const commands = {
 				game.cohosts.push(targetUser.userid);
 				game.sendRoom(`${Chat.escapeHTML(targetUser.name)} has been added as a cohost by ${Chat.escapeHTML(user.name)}`, {declare: true});
 				targetUser.send(`>view-mafia-${room.id}\n|init|html\n|${Chat.pages.mafia([room.id], targetUser)}`);
+				this.modlog('MAFIACOHOST', targetUser, null, {noalts: true, noip: true});
 			} else {
 				const oldHostid = game.hostid;
 				const oldHost = Users(game.hostid);
@@ -2691,6 +2692,7 @@ const commands = {
 			}
 			game.cohosts.splice(cohostIndex, 1);
 			game.sendRoom(`${target} was removed as a cohost by ${Chat.escapeHTML(user.name)}`, {declare: true});
+			this.modlog('MAFIAUNCOHOST', target, null, {noalts: true, noip: true});
 		},
 
 		'!end': true,
