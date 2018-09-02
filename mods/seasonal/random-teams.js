@@ -227,6 +227,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'OM Boom',
 				evs: {atk: 252, def: 4, spe: 252}, nature: 'Adamant',
 			},
+			'Paradise': {
+				species: 'Muk', ability: 'Unaware', item: 'Black Sludge', gender: '',
+				moves: ['Wish', 'Knock Off', 'Protect'],
+				signatureMove: 'Corrosive Toxic',
+				evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful',
+			},
 			'Quite Quiet': {
 				species: 'Misdreavus', ability: 'Levitate', item: 'Leftovers', gender: 'F',
 				moves: [['Moongeist Beam', 'Shadow Ball', 'Night Shade'], 'Recover', ['Heal Bell', 'Taunt']],

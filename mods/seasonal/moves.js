@@ -1043,6 +1043,36 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fire",
 	},
+	// Paradise
+	"corrosivetoxic": {
+		accuracy: true,
+		category: "Status",
+		desc: "",
+		shortDesc: "",
+		id: "corrosivetoxic",
+		name: "Corrosive Toxic",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Toxic", source);
+		},
+		onTryHit: function (target, source, move) {
+			// hacky way of forcing toxic to effect poison / steel types without corrosion usage
+			if (target.hasType('Steel') || target.hasType('Poison')) {
+				let status = this.getEffect(move.status);
+				target.status = status.id;
+				target.statusData = {id: status.id, target: target, source: source, stage: 0};
+				this.add('-status', target, target.status);
+				move.status = undefined;
+			}
+		},
+		status: 'tox',
+		secondary: null,
+		target: "normal",
+		type: "Poison",
+	},
 	// Quite Quiet
 	"spookytransform": {
 		accuracy: true,

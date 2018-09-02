@@ -435,6 +435,18 @@ let BattleStatuses = {
 			this.add(`c|%OM Room|Oh god I rolled a 1`);
 		},
 	},
+	paradise: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|@Paradise|⠠⠺⠓⠁⠞⠀⠞⠓⠑⠀⠋⠥⠉⠅⠀⠙⠊⠙⠀⠽⠕⠥⠀⠚⠥⠎⠞⠀⠋⠥⠉⠅⠊⠝⠛⠀⠎⠁⠽⠀⠁⠃⠕⠥⠞⠀⠍⠑,⠀⠽⠕⠥⠀⠇⠊⠞⠞⠇⠑⠀⠃⠊⠞⠉⠓?`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|@Paradise|Braille is the only language you need.`);
+		},
+		onFaint: function () {
+			this.add(`c|@Paradise|⠠⠽⠕⠥’⠗⠑⠀⠋⠥⠉⠅⠊⠝⠛⠀⠙⠑⠁⠙,⠀⠅⠊⠙⠙⠕.`);
+		},
+	},
 	quitequiet: {
 		noCopy: true,
 		onStart: function () {
