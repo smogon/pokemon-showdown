@@ -25508,7 +25508,6 @@ let BattleLearnsets = {
 		captivate: ["4M"],
 		confide: ["7M", "6M"],
 		counter: ["7E", "6E", "5E", "4E"],
-		dive: ["6M"],
 		doubleedge: ["3T"],
 		doubleteam: ["7M", "6M", "5M", "4M", "3M"],
 		echoedvoice: ["7M", "6M", "5M"],
