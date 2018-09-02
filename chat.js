@@ -572,6 +572,12 @@ class CommandContext {
 	/**
 	 * @param {string} html
 	 */
+	addModBox(html) {
+		this.room.sendMods(`|html|<div class="infobox">${html}</div>`);
+	}
+	/**
+	 * @param {string} html
+	 */
 	sendReplyBox(html) {
 		this.sendReply(`|html|<div class="infobox">${html}</div>`);
 	}
