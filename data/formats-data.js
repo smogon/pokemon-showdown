@@ -6054,7 +6054,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 6, "level": 49, "gender": "M", "perfectIVs": 2, "isHidden": false, "abilities": ["unnerve"], "moves": ["hypervoice", "fireblast", "darkpulse"], "pokeball": "cherishball"},
 		],
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "DUU",
 	},
 	flabebe: {
