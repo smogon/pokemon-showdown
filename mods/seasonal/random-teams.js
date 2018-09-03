@@ -111,7 +111,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				species: 'Steelix', ability: 'Sturdy', item: 'Magmarizer', gender: 'M', // Ability is changed on mega evo, which is instant for this set
 				moves: ['Sunsteel Strike', 'Thousand Arrows', ['Dragon Tail', 'Diamond Storm', 'V-create', 'V-create']], // V-create listed twice for 50% chance to get it
 				signatureMove: 'Fang of the Fire King',
-				evs: {hp: 252, atk: 36, def: 100, spd: 120}, nature: 'Adament',
+				evs: {hp: 252, atk: 36, def: 100, spd: 120}, nature: 'Adamant',
 			},
 			'Eien': {
 				species: 'Mew', ability: 'Psychic Surge', item: 'Terrain Extender', gender: 'N',
@@ -159,7 +159,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				species: 'Inkay', ability: 'Contrary', item: 'Eviolite', gender: 'M',
 				moves: ['Power Trip', 'Rest', 'Sleep Talk'],
 				signatureMove: 'Inkzooka',
-				evs: {hp: 252, atk: 144, spe: 112}, nature: 'Adament',
+				evs: {hp: 252, atk: 144, spe: 112}, nature: 'Adamant',
 			},
 			'KingSwordYT': {
 				species: 'Pangoro', ability: 'Kung Fu Panda', item: 'Life Orb', gender: 'M',
@@ -201,7 +201,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				species: 'Exeggutor-Alola', ability: 'Stand Up Tall', item: 'Leftovers', gender: 'M',
 				moves: ['Strength Sap', 'Growth', 'Stockpile'],
 				signatureMove: 'Tipping Over',
-				evs: {hp: 252, atk: 252, def: 4}, ivs: {spe: 0}, nature: 'Adament',
+				evs: {hp: 252, atk: 252, def: 4}, ivs: {spe: 0}, nature: 'Adamant',
 			},
 			'MicktheSpud': {
 				species: 'Lycanroc-Midnight', ability: 'Fake Crash', item: 'Life Orb', gender: 'M', // Changes to Lycanrock-Dusk when ability is triggered
@@ -261,7 +261,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				species: 'Cradily', ability: 'Sand Stream', item: 'Tiksium Z', gender: 'M',
 				moves: ['Shore Up', 'Horn Leech', 'Curse'],
 				signatureMove: 'Rock Slide', // Base move for custom Z-move
-				evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adament',
+				evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
 			},
 			'torkool': {
 				species: 'Torkoal', ability: 'Deflective Shell', item: 'Leftovers', gender: 'M',
