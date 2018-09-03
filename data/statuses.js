@@ -391,8 +391,8 @@ let BattleStatuses = {
 
 				// time's up; time to hit! :D
 				const move = this.getMove(posData.move);
-				if (target.fainted) {
-					this.add('-hint', '' + move.name + ' did not hit because the target is fainted.');
+				if (target.fainted || target === posData.source) {
+					this.add('-hint', '' + move.name + ' did not hit because the target is ' + (target.fainted ? 'fainted' : 'the user') + '.');
 					this.effectData.positions[i] = null;
 					continue;
 				}

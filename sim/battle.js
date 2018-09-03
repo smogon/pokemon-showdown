@@ -2396,8 +2396,12 @@ class Battle extends Dex.ModdedDex {
 	getTarget(pokemon, move, targetLoc) {
 		move = this.getMove(move);
 		let target;
-		if ((move.target !== 'randomNormal') &&
-				this.validTargetLoc(targetLoc, pokemon, move.target)) {
+		// Fails if the target is the user and the move can't target its own position
+		if (['adjacentAlly', 'any', 'normal'].includes(move.target) && targetLoc === -(pokemon.position + 1)) {
+			if (move.isFutureMove) return pokemon;
+			return false;
+		}
+		if (move.target !== 'randomNormal' && this.validTargetLoc(targetLoc, pokemon, move.target)) {
 			if (targetLoc > 0) {
 				target = pokemon.side.foe.active[targetLoc - 1];
 			} else {
