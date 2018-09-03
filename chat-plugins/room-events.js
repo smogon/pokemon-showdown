@@ -94,11 +94,71 @@ exports.commands = {
 		help: function (target, room, user) {
 			return this.parse('/help roomevents');
 		},
+		sortby: function (target, room, user) {
+			// preconditions
+			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!room.events || !Object.keys(room.events).length) {
+				return this.errorReply("There are currently no planned upcoming events for this room.");
+			}
+			if (!this.can('ban', null, room)) return false;
+
+			// declare variables
+			let multiplier = 1;
+			let columnName = "";
+			let delimited = target.split(target.includes('|') ? '|' : ',');
+			let sortable = Object.values(room.events);
+
+			// id tokens
+			if (delimited.length === 1) {
+				columnName = target;
+			} else {
+				let order = "";
+				[columnName, order] = delimited;
+				order = toId(order);
+				multiplier = (order === 'desc') ? -1 : 1;
+			}
+
+			// sort the array by the appropriate column name
+			columnName = toId(columnName);
+			switch (columnName) {
+			case "date":
+			case "eventdate":
+				sortable.sort((a, b) => { return (toId(a.date) < toId(b.date)) ? -1 * multiplier : (toId(b.date) < toId(a.date)) ? 1 * multiplier : 0; });
+				break;
+			case "desc":
+			case "description":
+			case "eventdescription":
+				sortable.sort((a, b) => { return (toId(a.desc) < toId(b.desc)) ? -1 * multiplier : (toId(b.desc) < toId(a.desc)) ? 1 * multiplier : 0; });
+				break;
+			case "eventname":
+			case "name":
+				sortable.sort((a, b) => { return (toId(a.eventName) < toId(b.eventName)) ? -1 * multiplier : (toId(b.eventName) < toId(a.eventName)) ? 1 * multiplier : 0; });
+				break;
+			default:
+				return this.errorReply("No or invalid column name specified. Please use one of: date, eventdate, desc, description, eventdescription, eventname, name.");
+			}
+
+			// rebuild the room.events object
+			room.events = {};
+			for (const sortedObj of sortable) {
+				const eventId = toId(sortedObj.eventName);
+				room.events[eventId] = sortedObj;
+			}
+			room.chatRoomData.events = room.events;
+
+			// build communication string
+			const resultString = `sorted by column:` + columnName +
+								 ` in ${multiplier === 1 ? "ascending" : "descending"} order` +
+								 `${delimited.length === 1 ? " (by default)" : ""}`;
+			this.modlog('ROOMEVENT', null, resultString);
+			return this.sendReply(resultString);
+		},
 	},
 	roomeventshelp: [
 		`/roomevents - Displays a list of upcoming room-specific events.`,
 		`/roomevents add [event name] | [event date/time] | [event description] - Adds a room event. Requires: @ # & ~`,
 		`/roomevents remove [event name] - Deletes an event. Requires: @ # & ~`,
 		`/roomevents view [event name] - Displays information about a specific event.`,
+		`/roomevents sortby [column name] | [asc/desc (optional)] - Sorts events table by column name and an optional argument to ascending or descending order. Ascending order is default`,
 	],
 };
