@@ -131,6 +131,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Evoblast',
 				evs: {hp: 252, spe: 252}, nature: 'Serious',
 			},
+			'false': {
+				species: 'Rayquaza-Mega', ability: 'Infiltrator', item: 'Focus Band', gender: 'F',
+				moves: ['Celebrate'],
+				signatureMove: 'fr*ck',
+				evs: {atk: 252, spe: 252, def: 4}, nature: 'Jolly', shiny: true,
+			},
 			'Hippopotas': {
 				species: 'Hippopotas', ability: 'Regenerator', item: 'Eviolite', gender: 'N',
 				moves: ['Stealth Rock', 'Spikes', 'Toxic Spikes', 'Sticky Web'],
@@ -227,6 +233,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'OM Boom',
 				evs: {atk: 252, def: 4, spe: 252}, nature: 'Adamant',
 			},
+			'Osiris': {
+				species: 'Pumpkaboo-Super', ability: 'Sacred Shadow', item: 'Eviolite', gender: 'M',
+				moves: ['Leech Seed', 'Will-O-Wisp', 'Seed Bomb'],
+				signatureMove: 'Night March',
+				evs: {hp: 252, atk: 144, spd: 112}, nature: 'Adamant', shiny: true,
+			},
 			'Paradise': {
 				species: 'Muk', ability: 'Unaware', item: 'Black Sludge', gender: '',
 				moves: ['Wish', 'Knock Off', 'Protect'],
@@ -289,7 +301,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'kay';
+				name = 'Osiris';
 				if (pool.indexOf(name) > -1) pool.splice(pool.indexOf(name), 1);
 			} else {
 				name = this.sampleNoReplace(pool);

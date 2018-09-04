@@ -232,6 +232,18 @@ let BattleStatuses = {
 			this.add(`c|~EV|If you __say__ EV it sounds like Eevee. It's actually quite simple.`);
 		},
 	},
+	'false': { // no apostrophes causes issues
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|@false|٩(•̤̀ᵕ•̤́๑)ᵒᵏᵎᵎᵎᵎ`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|@false|٩(๑•◡-๑)۶ⒽⓤⒼ❤`);
+		},
+		onFaint: function () {
+			this.add(`c|@false|ɢ∞פ⋆ᖙᵒᵝ ٩꒰”̮*ू꒱`);
+		},
+	},
 	kalalokki: {
 		noCopy: true,
 		onStart: function () {
@@ -433,6 +445,18 @@ let BattleStatuses = {
 		},
 		onFaint: function () {
 			this.add(`c|%OM Room|Oh god I rolled a 1`);
+		},
+	},
+	osiris: {
+		noCopy: true,
+		onStart: function (target, source) {
+			this.add(`c|%Osiris|THE SECRET INGREDIENT IS`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|%Osiris|god's plan`);
+		},
+		onFaint: function () {
+			this.add(`c|%Osiris|I'm getting too old for this x_x`);
 		},
 	},
 	paradise: {

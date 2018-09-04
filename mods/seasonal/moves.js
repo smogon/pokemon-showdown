@@ -468,6 +468,30 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Normal",
 	},
+	// False
+	frck: {
+		accuracy: true,
+		basePower: 1000,
+		category: "Physical",
+		desc: "",
+		shortDesc: "",
+		id: "frck",
+		name: "fr*ck",
+		pp: 6,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		selfdestruct: "ifHit",
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-activate', source, 'move: Celebrate');
+			this.add('-anim', source, 'Searing Sunraze Smash', target);
+			this.add('-anim', source, 'Explosion', target);
+		},
+		secondary: null,
+		target: "normal",
+		type: "???",
+	},
 	// Hippopotas
 	hazardpass: {
 		accuracy: 100,
@@ -1042,6 +1066,37 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Fire",
+	},
+	// Osiris
+	nightmarch: {
+		basePower: 60,
+		basePowerCallback: function (pokemon, target, move) {
+			let faintedmons = 0;
+			for (const ally of pokemon.side.pokemon) {
+				if (ally.fainted || !ally.hp) faintedmons += 20;
+			}
+			for (const foes of target.side.pokemon) {
+				if (foes.fainted || !foes.hp) faintedmons += 20;
+			}
+			return move.basePower + faintedmons;
+		},
+		accuracy: 100,
+		category: "Physical",
+		desc: "",
+		shortDesc: "",
+		id: "nightmarch",
+		name: "Night March",
+		pp: 5,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Nightmare", target);
+			this.add('-anim', source, "Moongeist Beam", target);
+			this.add('-anim', source, "Stomping Tantrum", target);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
 	},
 	// Paradise
 	"corrosivetoxic": {

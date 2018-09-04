@@ -161,6 +161,47 @@ let BattleAbilities = {
 			},
 		},
 	},
+	// Osiris
+	sacredshadow: {
+		desc: "",
+		shortDesc: "",
+		onModifyAtkPriority: 5,
+		onSourceModifyAtk: function (atk, attacker, defender, move) {
+			if (move.type === 'Fire' || move.type === 'Flying') {
+				return this.chainModify(0.5);
+			}
+		},
+		onModifySpAPriority: 5,
+		onSourceModifySpA: function (atk, attacker, defender, move) {
+			if (move.type === 'Fire' || move.type === 'Flying') {
+				return this.chainModify(0.5);
+			}
+		},
+		onModifyAtk: function (atk, attacker, defender, move) {
+			if (move.type === 'Ghost') {
+				return this.chainModify(2);
+			}
+		},
+		onModifySpA: function (atk, attacker, defender, move) {
+			if (move.type === 'Ghost') {
+				return this.chainModify(2);
+			}
+		},
+		onUpdate: function (pokemon) {
+			if (pokemon.status === 'brn') {
+				this.add('-activate', pokemon, 'ability: Sacred Shadow');
+				pokemon.cureStatus();
+			}
+		},
+		onSetStatus: function (status, target, source, effect) {
+			if (status.id !== 'brn') return;
+			if (!effect || !effect.status) return false;
+			this.add('-immune', target, '[msg]', '[from] ability: Sacred Shadow');
+			return false;
+		},
+		id: "sacredshadow",
+		name: "Sacred Shadow",
+	},
 	// Shiba
 	galewings10: {
 		id: "galewings10",
