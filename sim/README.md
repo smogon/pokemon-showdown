@@ -1,9 +1,7 @@
 Simulator
 =========
 
-Pokémon Showdown's new simulator API is designed to be relatively more straightforward to use than the old one.
-
-It is implemented as a `ReadWriteStream`. You write to it player choices, and you read protocol messages from it.
+Pokémon Showdown's simulator API is implemented as a `ReadWriteStream`. You write player choices to it, and you read protocol messages from it.
 
 ```js
 const Sim = require('Pokemon-Showdown/sim');
@@ -152,11 +150,11 @@ To be exact, `CHOICE` is one of:
   - `MOVESLOTSPEC` is a move name (capitalization/spacing-insensitive) or 1-based move slot number
   - `TARGETSPEC` is a 1-based target slot number. Add a `-` in front of it to refer to allies. Remember that slots oppose each other, so in a battle, the slots go as follows:
 
-     Triples    Doubles    Singles
-     3  2  1     2  1         1
-    -1 -2 -3    -1 -2        -1
+         Triples    Doubles    Singles
+         3  2  1     2  1         1
+        -1 -2 -3    -1 -2        -1
 
-(But note that slot numbers are unnecessary in Singles: you can never choose a target in Singles.)
+    (But note that slot numbers are unnecessary in Singles: you can never choose a target in Singles.)
 
 `SWITCHSPEC` is:
 
