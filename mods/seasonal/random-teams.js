@@ -107,6 +107,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Earth\'s Blessing',
 				evs: {hp: 112, atk: 144, spe: 252}, nature: 'Jolly',
 			},
+			'duck': {
+				species: 'Farfetch\'d', ability: 'Sniper', item: 'Stick', gender: 'M',
+				moves: ['Shift Gear', 'Superpower', 'Dragon Ascent'],
+				signatureMove: 'Holy Duck!',
+				evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
+			},
 			'E4 Flint': {
 				species: 'Steelix', ability: 'Sturdy', item: 'Magmarizer', gender: 'M', // Ability is changed on mega evo, which is instant for this set
 				moves: ['Sunsteel Strike', 'Thousand Arrows', ['Dragon Tail', 'Diamond Storm', 'V-create', 'V-create']], // V-create listed twice for 50% chance to get it

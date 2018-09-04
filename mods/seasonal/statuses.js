@@ -151,6 +151,21 @@ let BattleStatuses = {
 			this.add(`c|@DragonWhale|i would switch to chomper here`);
 		},
 	},
+	duck: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|@duck|Yes, I'm actually a duck. I know.`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|@duck|/me waddles away`);
+		},
+		onFaint: function () {
+			this.add(`c|@duck|Duck you! That move was too op anyway.`);
+		},
+		onModifyCritRatio: function (critRatio) {
+			return critRatio + 1;
+		},
+	},
 	e4flint: {
 		noCopy: true,
 		onStart: function (target, source) {

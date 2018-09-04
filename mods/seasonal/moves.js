@@ -335,6 +335,34 @@ let BattleMovedex = {
 		type: "Ground",
 		zMoveEffect: 'healhalf',
 	},
+	// duck
+	holyduck: {
+		accuracy: 95,
+		basePower: 95,
+		category: "Physical",
+		desc: "",
+		shortDesc: "",
+		id: "holyduck",
+		name: "Holy Duck!",
+		pp: 5,
+		priority: 1,
+		flags: {mirror: 1, protect: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Extreme Speed', target);
+			this.add('-anim', source, 'Feather Dance', target);
+		},
+		onTryHit: function (pokemon) {
+			if (pokemon.runImmunity('Normal')) {
+				pokemon.side.removeSideCondition('reflect');
+				pokemon.side.removeSideCondition('lightscreen');
+				pokemon.side.removeSideCondition('auroraveil');
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+	},
 	// E4 Flint
 	fangofthefireking: {
 		accuracy: 100,
