@@ -7533,6 +7533,10 @@ let BattleFormatsData = {
 		isNonstandard: true,
 		tier: "CAP LC",
 	},
+	mumbao: {
+		isNonstandard: true,
+		tier: "CAP LC",
+	},
 	pokestarufo: {
 		isNonstandard: true,
 		eventPokemon: [
