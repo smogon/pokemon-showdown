@@ -150,9 +150,9 @@ To be exact, `CHOICE` is one of:
   - `MOVESLOTSPEC` is a move name (capitalization/spacing-insensitive) or 1-based move slot number
   - `TARGETSPEC` is a 1-based target slot number. Add a `-` in front of it to refer to allies. Remember that slots oppose each other, so in a battle, the slots go as follows:
 
-         Triples    Doubles    Singles
-         3  2  1     2  1         1
-        -1 -2 -3    -1 -2        -1
+         Triples       Doubles     Singles
+         3  2  1         2  1         1
+        -1 -2 -3        -1 -2        -1
 
     (But note that slot numbers are unnecessary in Singles: you can never choose a target in Singles.)
 
