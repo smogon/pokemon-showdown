@@ -529,6 +529,10 @@ if (cluster.isMaster) {
 		sockets.set(socketid, socket);
 
 		let socketip = socket.remoteAddress;
+		//ip merge problem fix for people trying to make side server using services like glitch.
+		if (socket.remoteAddress === '127.0.0.1' && socket.headers["x-forwarded-for"]) socketip = socket.headers["x-forwarded-for"].split(",")[0];
+		
+		
 		if (isTrustedProxyIp(socketip)) {
 			let ips = (socket.headers['x-forwarded-for'] || '')
 				.split(',')
