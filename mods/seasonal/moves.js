@@ -492,6 +492,12 @@ let BattleMovedex = {
 				break;
 			}
 		},
+		onHit: function (target, source) {
+			let stat = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy'][this.random(6)];
+			let boost = {};
+			boost[stat] = 1;
+			this.boost(boost, source);
+		},
 		secondary: null,
 		target: "normal",
 		type: "Normal",
