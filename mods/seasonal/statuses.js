@@ -274,6 +274,15 @@ let BattleStatuses = {
 			this.add(`c|@Kalalokki|(x_x)`);
 		},
 	},
+	grimAuxillatrix: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|@grimAuxillatrix|${['A BRAWL IS SURELY BREWING!', 'GOOD DAY FOR A SWELL BATTLE!', 'THIS MATCH WILL GET RED HOT!'][this.random(3)]}`);
+		},
+		onFaint: function () {
+			this.add(`c|@grimAuxillatrix|**KNOCKOUT!**`);
+		},
+	},
 	hippopotas: {
 		noCopy: true,
 		onStart: function () {

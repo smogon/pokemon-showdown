@@ -143,6 +143,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'fr*ck',
 				evs: {atk: 252, spe: 252, def: 4}, nature: 'Jolly', shiny: true,
 			},
+			'grimAuxiliatrix': {
+				species: 'Aggron', ability: 'Sturdy', item: 'Aggronite', gender: '',
+				moves: [['Toxic', 'Thunder Wave'], ['Stone Edge', 'Heat Crash'], 'Earthquake'],
+				signatureMove: 'Pain Train',
+				evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful',
+			},
 			'Hippopotas': {
 				species: 'Hippopotas', ability: 'Regenerator', item: 'Eviolite', gender: 'N',
 				moves: ['Stealth Rock', 'Spikes', 'Toxic Spikes', 'Sticky Web'],
@@ -307,7 +313,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'Level 51';
+				name = 'grimAuxiliatrix';
 				if (pool.indexOf(name) > -1) pool.splice(pool.indexOf(name), 1);
 			} else {
 				name = this.sampleNoReplace(pool);

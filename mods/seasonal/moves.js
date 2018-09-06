@@ -526,6 +526,44 @@ let BattleMovedex = {
 		target: "normal",
 		type: "???",
 	},
+	// grimAuxiliatrix
+	paintrain: {
+		accuracy: 100,
+		basePower: 0,
+		basePowerCallback: function (pokemon, target) {
+			let targetWeight = target.getWeight();
+			let pokemonWeight = pokemon.getWeight();
+			if (pokemonWeight > targetWeight * 5) {
+				return 120;
+			}
+			if (pokemonWeight > targetWeight * 4) {
+				return 100;
+			}
+			if (pokemonWeight > targetWeight * 3) {
+				return 80;
+			}
+			if (pokemonWeight > targetWeight * 2) {
+				return 60;
+			}
+			return 40;
+		},
+		category: "Physical",
+		desc: "The power of this move depends on (user's weight / target's weight), rounded down. Power is equal to 120 if the result is 5 or more, 100 if 4, 80 if 3, 60 if 2, and 40 if 1 or less. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
+		shortDesc: "More power the heavier the user than the target.",
+		id: "paintrain",
+		isNonstandard: true,
+		name: "Pain Train",
+		pp: 10,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Meteor Mash', target);
+		},
+		drain: [1, 2],
+		secondary: null,
+		target: "normal",
+		type: "Steel",
+	},
 	// Hippopotas
 	hazardpass: {
 		accuracy: 100,
