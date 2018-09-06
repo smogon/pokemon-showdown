@@ -1424,6 +1424,7 @@ function runLearn(target, cmd) {
 			format = Dex.getFormat(targetid);
 			formatid = targetid;
 			formatName = format.name;
+			targets.shift();
 		}
 		if (targetid.startsWith('gen') && parseInt(targetid.charAt(3))) {
 			gen = parseInt(targetid.slice(3));
@@ -1440,12 +1441,14 @@ function runLearn(target, cmd) {
 		}
 		break;
 	}
-	if (!formatid) format = new Dex.Data.Format(format);
-	if (!formatid) formatid = 'gen' + gen + 'ou';
-	if (!formatName) formatName = 'Gen ' + gen;
+	if (!formatName) {
+		format = new Dex.Data.Format(format);
+		formatName = 'Gen ' + gen;
+		if (format.requirePentagon) formatName += ' Pentagon';
+	}
 	let lsetData = {set: {}, sources: [], sourcesBefore: gen};
 
-	const validator = TeamValidator(formatid);
+	const validator = TeamValidator(format);
 	let template = validator.dex.getTemplate(targets.shift());
 	let move = {};
 	let all = (cmd === 'learnall');
