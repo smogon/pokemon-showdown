@@ -777,9 +777,7 @@ const commands = {
 		let roomid = target.trim();
 		if (!roomid) {
 			// allow deleting personal rooms without typing out the room name
-			if (room.isPersonal && cmd === "deletegroupchat") {
-				roomid = room.id;
-			} else {
+			if (!room.isPersonal || cmd !== "deletegroupchat") {
 				return this.parse(`/help deleteroom`);
 			}
 		} else {
@@ -1063,7 +1061,7 @@ const commands = {
 		}
 		if (!this.can('declare')) return false;
 		if (target.length > 80) return this.errorReply(`Error: Room description is too long (must be at most 80 characters).`);
-		let normalizedTarget = ' ' + target.toLowerCase().replace('[^a-zA-Z0-9]+', ' ').trim() + ' ';
+		let normalizedTarget = ' ' + target.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim() + ' ';
 
 		if (normalizedTarget.includes(' welcome ')) {
 			return this.errorReply(`Error: Room description must not contain the word "welcome".`);
@@ -1263,6 +1261,7 @@ const commands = {
 		}
 		if (!target) return this.parse('/help roomowner');
 		target = this.splitTarget(target, true);
+		if (target) return this.errorReply(`This command does not support specifying a reason.`);
 		let targetUser = this.targetUser;
 		let name = this.targetUsername;
 		let userid = toId(name);
@@ -1737,6 +1736,7 @@ const commands = {
 	unmute: function (target, room, user) {
 		if (!target) return this.parse('/help unmute');
 		target = this.splitTarget(target);
+		if (target) return this.errorReply(`This command does not support specifying a reason.`);
 		if (!this.canTalk()) return;
 		if (!this.can('mute', null, room)) return false;
 
@@ -2224,6 +2224,7 @@ const commands = {
 		if (!this.can('promote')) return;
 
 		target = this.splitTarget(target, true);
+		if (target) return this.errorReply(`This command does not support specifying a reason.`);
 		let targetUser = this.targetUser;
 		let userid = toId(this.targetUsername);
 		let name = targetUser ? targetUser.name : this.targetUsername;
@@ -3290,7 +3291,7 @@ const commands = {
 		// errors can occur while rebasing or popping the stash; make sure to recover
 		try {
 			this.sendReply(`Rebasing...`);
-			[code, stdout, stderr] = await exec(`git rebase FETCH_HEAD`);
+			[code] = await exec(`git rebase FETCH_HEAD`);
 			if (code) {
 				// conflict while rebasing
 				await exec(`git rebase --abort`);
@@ -3299,7 +3300,7 @@ const commands = {
 
 			if (stashedChanges) {
 				this.sendReply(`Restoring saved changes...`);
-				[code, stdout, stderr] = await exec(`git stash pop`);
+				[code] = await exec(`git stash pop`);
 				if (code) {
 					// conflict while popping stash
 					await exec(`git reset HEAD .`);
@@ -3802,12 +3803,8 @@ const commands = {
 		let targetUser = Users.getExact(target);
 		if (!targetUser) return this.errorReply(`User '${target}' not found.`);
 
-		target = targetUser ? targetUser.userid : '';
-
-		if (target) {
-			room.battle.win(targetUser);
-			this.modlog('FORCEWIN', target);
-		}
+		room.battle.win(targetUser);
+		this.modlog('FORCEWIN', targetUser.userid);
 	},
 	forcewinhelp: [
 		`/forcetie - Forces the current match to end in a tie. Requires: & ~`,
@@ -3901,6 +3898,7 @@ const commands = {
 	'!accept': true,
 	accept: function (target, room, user, connection) {
 		target = this.splitTarget(target);
+		if (target) return this.popupReply(`This command does not support specifying multiple users`);
 		const targetUser = this.targetUser || this.pmTarget;
 		if (!targetUser) return this.popupReply(`User "${this.targetUsername}" not found.`);
 		Ladders.acceptChallenge(connection, targetUser);

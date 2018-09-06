@@ -214,9 +214,9 @@ class Battle extends Dex.ModdedDex {
 			let result = this.runEvent('SetWeather', source, source, status);
 			if (!result) {
 				if (result === false) {
-					if (source && sourceEffect && sourceEffect.weather) {
+					if (sourceEffect && sourceEffect.weather) {
 						this.add('-fail', source, sourceEffect, '[from]: ' + this.weather);
-					} else if (source && sourceEffect && sourceEffect.effectType === 'Ability') {
+					} else if (sourceEffect && sourceEffect.effectType === 'Ability') {
 						this.add('-ability', source, sourceEffect, '[from] ' + this.weather, '[fail]');
 					}
 				}

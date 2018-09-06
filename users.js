@@ -116,7 +116,7 @@ function merge(user1, user2) {
 function getUser(name, exactName = false) {
 	if (!name || name === '!') return null;
 	// @ts-ignore
-	if (name && name.userid) return name;
+	if (name.userid) return name;
 	let userid = toId(name);
 	let i = 0;
 	if (!exactName) {
