@@ -64,7 +64,7 @@ class TextFormatter {
 
 		// filter links first
 		str = str.replace(linkRegex, uri => {
-			let fulluri = uri;
+			let fulluri;
 			if (/^[a-z0-9.]+@/ig.test(uri)) {
 				fulluri = 'mailto:' + uri;
 			} else {
