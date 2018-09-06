@@ -180,8 +180,8 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {atk: 252, hp: 4, spe: 252}, nature: 'Jolly',
 			},
 			'Level 51': {
-				species: 'Porygon2', ability: 'Parental Bond', item: 'Eviolite', gender: 'N',
-				moves: ['Recover', 'Seismic Toss', ['Cosmic Power', 'Aqua Ring']],
+				species: 'Porygon2', ability: 'Unaware', item: 'Eviolite', gender: 'N',
+				moves: ['Recover', ['Seismic Toss', 'Night Shade'], ['Cosmic Power', 'Aqua Ring']],
 				signatureMove: 'Next Level Strats',
 				evs: {hp: 236, def: 220, spd: 48, spe: 4}, ivs: {atk: 0}, nature: 'Calm',
 			},
@@ -199,7 +199,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'martha': {
 				species: 'Diancie', ability: 'Pixilate', item: 'Diancite', gender: 'F',
-				moves: ['BoomBurst', ['Fire Blast', 'Earth Power'], 'Photon Geyser'],
+				moves: ['Hyper Voice', ['Fire Blast', 'Earth Power'], 'Photon Geyser'],
 				signatureMove: 'Crystal Boost',
 				evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
@@ -307,7 +307,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'Osiris';
+				name = 'Level 51';
 				if (pool.indexOf(name) > -1) pool.splice(pool.indexOf(name), 1);
 			} else {
 				name = this.sampleNoReplace(pool);

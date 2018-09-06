@@ -214,6 +214,7 @@ let BattleStatuses = {
 			this.add(`-anim`, target, 'Geomancy', target);
 			target.formeChange(forme);
 			target.setAbility('Anticipation');
+			this.add('-hint', 'EV still has the Anticipation ability.');
 			// Update movepool
 			target.moveSlots = [];
 			for (let i = 0; i < formes[forme].length; i++) {

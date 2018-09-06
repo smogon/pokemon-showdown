@@ -739,8 +739,8 @@ let BattleMovedex = {
 	nextlevelstrats: {
 		accuracy: true,
 		category: "Status",
-		desc: "The user gains 10 levels when using this move.",
-		shortDesc: "User gains 10 levels",
+		desc: "The user gains 5 levels when using this move.",
+		shortDesc: "User gains 5 levels",
 		id: "nextlevelstrats",
 		name: "Next Level Strats",
 		pp: 5,
@@ -752,12 +752,12 @@ let BattleMovedex = {
 		},
 		onHit: function (pokemon) {
 			const template = pokemon.template;
-			pokemon.level += 10;
+			pokemon.level += 5;
 			pokemon.set.level = pokemon.level;
 			pokemon.formeChange(template);
 			// ability is set to default from formeChange
-			pokemon.setAbility('parentalbond');
-			this.add('-hint', 'Level 51 still has the Parental Bond ability.');
+			pokemon.setAbility('unaware');
+			this.add('-hint', 'Level 51 still has the Unaware ability.');
 
 			pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 			this.add('detailschange', pokemon, pokemon.details);
@@ -790,12 +790,15 @@ let BattleMovedex = {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Fake Out", target);
 			this.add('-anim', source, "Feather Dance", target);
+			return this.runEvent('StallMove', source);
 		},
 		onHit: function (target, source) {
+			source.addVolatile('stall');
 			this.boost({atk: 3, def: -3}, target);
 			this.boost({atk: 3, def: -3}, source);
 			target.addVolatile('confusion');
 			source.addVolatile('confusion');
+			target.addVolatile('flinch');
 		},
 		secondary: null,
 		target: "normal",
@@ -939,7 +942,7 @@ let BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "Power is equal to 20+(X*20), where X is the user's total stat stage changes that are greater than 0. If the user had any stockpile layers, they lose them.",
-		shortDesc: "+20 power for each boost. Resets Stockpile.",
+		shortDesc: "+20 per boost. Removes some defensive boosts.",
 		id: "tippingover",
 		name: "Tipping Over",
 		pp: 10,
@@ -948,13 +951,20 @@ let BattleMovedex = {
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Dragon Hammer", target);
-			this.add('-anim', target, "Explosion", target);
+			this.add('-anim', target, "Earthquake", target);
 		},
 		onTry: function (pokemon) {
-			if (!pokemon.volatiles['stockpile']) return false;
+			if (!pokemon.volatiles['stockpile']) {
+				this.add('-fail', pokemon);
+				return false;
+			}
 		},
-		onAfterMove: function (pokemon) {
-			pokemon.removeVolatile('stockpile');
+		onHit: function (target, source, move) {
+			let stockpileLayers = source.volatiles['stockpile'].layers;
+			let boosts = {};
+			boosts.def = (source.boosts.def - stockpileLayers) * -1;
+			boosts.spd = (source.boosts.spd - stockpileLayers) * -1;
+			this.boost(boosts, source, source, move);
 		},
 		secondary: null,
 		target: "normal",
