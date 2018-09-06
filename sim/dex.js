@@ -1041,21 +1041,20 @@ class ModdedDex {
 			return false;
 		}
 
-		/** @type {DataType[]} */
 		searchIn = searchIn || ['Pokedex', 'Movedex', 'Abilities', 'Items', 'Natures'];
 
 		let searchFunctions = {Pokedex: 'getTemplate', Movedex: 'getMove', Abilities: 'getAbility', Items: 'getItem', Natures: 'getNature'};
 		let searchTypes = {Pokedex: 'pokemon', Movedex: 'move', Abilities: 'ability', Items: 'item', Natures: 'nature'};
 		/** @type {AnyObject[] | false} */
 		let searchResults = [];
-		for (const result of searchIn) {
+		for (const table of searchIn) {
 			/** @type {AnyObject} */
 			// @ts-ignore
-			let res = this[searchFunctions[result]](target);
+			let res = this[searchFunctions[table]](target);
 			if (res.exists && res.gen <= this.gen) {
 				searchResults.push({
 					isInexact: isInexact,
-					searchType: searchTypes[result],
+					searchType: searchTypes[table],
 					name: res.species ? res.species : res.name,
 				});
 			}
@@ -1077,8 +1076,9 @@ class ModdedDex {
 			maxLd = 2;
 		}
 		searchResults = false;
-		for (let i = 0; i <= searchIn.length; i++) {
-			let searchObj = this.data[searchIn[i] || 'Aliases'];
+		for (const table of [...searchIn, 'Aliases']) {
+			// @ts-ignore
+			let searchObj = this.data[table];
 			if (!searchObj) {
 				continue;
 			}

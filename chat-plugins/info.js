@@ -412,7 +412,6 @@ const commands = {
 				let pokemon = Dex.getTemplate(p);
 				if (pokemon.num === targetNum) {
 					target = pokemon.species;
-					targetId = pokemon.id;
 					break;
 				}
 			}
@@ -1536,7 +1535,7 @@ const commands = {
 			break;
 		}
 
-		if (!totalMatches) return this.errorReply("No " + (target ? "matched " : "") + "formats found.");
+		if (!totalMatches) return this.errorReply("No matched formats found.");
 		if (totalMatches === 1) {
 			let rules = [];
 			let rulesetHtml = '';
