@@ -65,6 +65,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Buzzing of the Swarm',
 				evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 			},
+			'biggie': {
+				species: 'Snorlax', ability: 'Fur Coat', item: 'Leftovers', gender: 'M',
+				moves: ['Diamond Storm', 'Knock Off', ['Drain Punch', 'Precipice Blades']],
+				signatureMove: 'Food Rush',
+				evs: {hp: 4, atk: 252, spd: 252}, nature: 'Adamant',
+			},
 			'cant say': {
 				species: 'Aegislash', ability: 'Stance Change', item: 'Weakness Policy', gender: 'M',
 				moves: ['Shift Gear', 'Spectral Thief', 'Sacred Sword'],

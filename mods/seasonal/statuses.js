@@ -73,6 +73,18 @@ let BattleStatuses = {
 			this.add(`c|@Beowulf|BUZZ BUZZ BUZZ BUZZ`);
 		},
 	},
+	biggie: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|@biggie|Gamin' on ya`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|@biggie|Mission complete!`);
+		},
+		onFaint: function () {
+			this.add(`c|@biggie|It was all a dream`);
+		},
+	},
 	cantsay: {
 		noCopy: true,
 		onStart: function () {

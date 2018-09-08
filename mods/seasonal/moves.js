@@ -135,6 +135,28 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Bug",
 	},
+	// biggie
+	foodrush: {
+		accuracy: 100,
+		basePower: 100,
+		category: "Physical",
+		desc: "Forces the target to switch to a random Pokemon.",
+		shortDesc: "Forces the target to switch.",
+		id: "foodrush",
+		name: "Food Rush",
+		pp: 10,
+		priority: -6,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Stockpile', source);
+			this.add('-anim', source, 'Spit Up', source);
+		},
+		forceSwitch: true,
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+	},
 	// cant say
 	aesthetislash: {
 		accuracy: 100,
