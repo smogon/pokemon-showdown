@@ -266,6 +266,7 @@ class UnoGame extends Rooms.RoomGame {
 			if (this.timer) clearTimeout(this.timer);
 			this.nextTurn();
 		}
+		if (this.awaitUno === userid) delete this.awaitUno;
 
 		// put that player's cards into the discard pile to prevent cards from being permanently lost
 		this.discards.push(...this.players[userid].hand);
