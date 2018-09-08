@@ -2541,7 +2541,12 @@ const commands = {
 		}
 		return true;
 	},
-	blacklisthelp: [`/blacklist [username], [reason] - Blacklists the user from the room you are in for a year. Requires: # & ~`],
+	blacklisthelp: [
+		`/blacklist [username], [reason] - Blacklists the user from the room you are in for a year. Requires: # & ~`,
+		`/unblacklist [username] - Unblacklists the user from the room you are in. Requires: # & ~`,
+		`/showblacklist OR /showbl - show a list of blacklisted users in the room. Requires: % @ # & ~`,
+		`/expiringblacklists OR /expiringbls - show a list of blacklisted users from the room whose blacklists are expiring in 3 months or less. Requires: % @ # & ~`,
+	],
 
 	battleban: function (target, room, user, connection) {
 		if (!target) return this.parse(`/help battleban`);
