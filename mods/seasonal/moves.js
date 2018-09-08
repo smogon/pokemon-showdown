@@ -112,6 +112,32 @@ let BattleMovedex = {
 		target: "self",
 		type: "Ghost",
 	},
+	// Arcticblast
+	trashalanche: {
+		basePower: 40,
+		basePowerCallback: function (pokemon, target, move) {
+			let noitem = 0;
+			for (const foes of target.side.pokemon) {
+				if (!foes.item) noitem += 40;
+			}
+			return move.basePower + noitem;
+		},
+		accuracy: 100,
+		category: "Physical",
+		desc: "",
+		shortDesc: "",
+		id: "trashalanche",
+		name: "Trashalanche",
+		pp: 10,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Gunk Shot", target);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Poison",
+	},
 	// Beowulf
 	buzzingoftheswarm: {
 		accuracy: 100,
@@ -933,7 +959,7 @@ let BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
-			this.add('-anim', target, "Power Gem", source);
+			this.add('-anim', source, "Power Gem", target);
 		},
 		secondary: {
 			chance: 50,
@@ -1215,7 +1241,7 @@ let BattleMovedex = {
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
-			this.add('-anim', source, "Toxic", source);
+			this.add('-anim', source, "Toxic", target);
 		},
 		onTryHit: function (target, source, move) {
 			// hacky way of forcing toxic to effect poison / steel types without corrosion usage

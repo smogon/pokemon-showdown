@@ -59,6 +59,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Compost',
 				evs: {hp: 248, atk: 8, spd: 252}, nature: 'Careful',
 			},
+			'Arcticblast': {
+				species: 'Garbodor', ability: 'Mold Breaker', item: 'Choice Band', gender: 'M',
+				moves: ['Knock Off', 'Poison Jab', ['Earthquake', 'U-turn']],
+				signatureMove: 'Trashalanche',
+				evs: {hp: 252, atk: 252, def: 4}, nature: 'Adamant',
+			},
 			'Beowulf': {
 				species: 'Beedrill', ability: ['Download', 'Speed Boost'], item: 'Beedrillite', gender: 'M',
 				moves: ['Spiky Shield', 'Gunk Shot', ['Bolt Strike', 'Diamond Storm', 'Sacred Fire']],
@@ -319,7 +325,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'grimAuxiliatrix';
+				name = 'Arcticblast';
 				if (pool.indexOf(name) > -1) pool.splice(pool.indexOf(name), 1);
 			} else {
 				name = this.sampleNoReplace(pool);

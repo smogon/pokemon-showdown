@@ -61,6 +61,38 @@ let BattleStatuses = {
 			}
 		},
 	},
+	arcticblast: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|%Arcticblast|Draw for turn.`);
+		},
+		onModifyMove: function (move) {
+			if (move.id === 'knockoff') {
+				// Aesthetically pleasing so the phrase happens after the move
+				if (!move.secondaries) move.secondaries = [];
+				move.secondaries.push({
+					chance: 100,
+					self: {
+						onHit: function () {
+							this.add(`c|%Arcticblast|+20 ;)`);
+						},
+					},
+				});
+			}
+		},
+		onFaint: function (pokemon) {
+			if (pokemon.side.foe.active[0].template.speciesid === 'greninja') {
+				this.add(`c|%Arcticblast|FRIENDS DON’T LET FRIENDS PLAY FROGS`);
+			} else {
+				this.add(`c|%Arcticblast|FREE SKYMIN`);
+			}
+		},
+		onSourceFaint: function (target) {
+			if (target.template.speciesid === 'greninja') {
+				this.add(`c|%Arcticblast|FRIENDS DON’T LET FRIENDS PLAY FROGS`);
+			}
+		},
+	},
 	beowulf: {
 		noCopy: true,
 		onStart: function () {
@@ -286,7 +318,7 @@ let BattleStatuses = {
 			this.add(`c|@Kalalokki|(x_x)`);
 		},
 	},
-	grimAuxillatrix: {
+	grimauxillatrix: {
 		noCopy: true,
 		onStart: function () {
 			this.add(`c|@grimAuxillatrix|${['A BRAWL IS SURELY BREWING!', 'GOOD DAY FOR A SWELL BATTLE!', 'THIS MATCH WILL GET RED HOT!'][this.random(3)]}`);
