@@ -2397,7 +2397,8 @@ class Battle extends Dex.ModdedDex {
 		move = this.getMove(move);
 		let target;
 		// Fails if the target is the user and the move can't target its own position
-		if (['adjacentAlly', 'any', 'normal'].includes(move.target) && targetLoc === -(pokemon.position + 1)) {
+		if (['adjacentAlly', 'any', 'normal'].includes(move.target) && targetLoc === -(pokemon.position + 1) &&
+				!pokemon.volatiles['twoturnmove'] && !pokemon.volatiles['iceball'] && !pokemon.volatiles['rollout']) {
 			if (move.isFutureMove) return pokemon;
 			return false;
 		}
