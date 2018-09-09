@@ -406,7 +406,7 @@ const commands = {
 		target = sep[0].trim();
 		let targetId = toId(target);
 		if (!targetId) return this.parse('/help data');
-		let targetNum = parseInt(targetId);
+		let targetNum = parseInt(target);
 		if (!isNaN(targetNum) && '' + targetNum === target) {
 			for (let p in Dex.data.Pokedex) {
 				let pokemon = Dex.getTemplate(p);
