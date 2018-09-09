@@ -551,6 +551,7 @@ const commands = {
 					if (move.flags['powder']) details["&#10003; Powder"] = "";
 					if (move.flags['reflectable']) details["&#10003; Bounceable"] = "";
 					if (move.flags['gravity'] && mod.gen >= 4) details["&#10007; Suppressed by Gravity"] = "";
+					if (move.flags['dance'] && mod.gen >= 7) details["&#10003; Dance move"] = "";
 
 					if (mod.gen >= 7) {
 						if (move.zMovePower) {
