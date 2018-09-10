@@ -828,13 +828,13 @@ const commands = {
 			}
 
 			// arg is a type?
-			let type = arg.charAt(0).toUpperCase() + arg.slice(1);
+			let argType = arg.charAt(0).toUpperCase() + arg.slice(1);
 			let eff;
-			if (type in mod.data.TypeChart) {
-				sources.push(type);
+			if (argType in mod.data.TypeChart) {
+				sources.push(argType);
 				for (let type in bestCoverage) {
-					if (!mod.getImmunity(type, type) && !type.ignoreImmunity) continue;
-					eff = mod.getEffectiveness(type, type);
+					if (!mod.getImmunity(argType, type)) continue;
+					eff = mod.getEffectiveness(argType, type);
 					if (eff > bestCoverage[type]) bestCoverage[type] = eff;
 				}
 				continue;
