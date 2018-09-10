@@ -102,7 +102,7 @@ let BattleMovedex = {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Ingrain", target);
 		},
-		onHit: function (pokemon) {
+		onTry: function (pokemon) {
 			if (pokemon.side.faintedLastTurn) {
 				this.boost({atk: 1, def: 1, spd: 1});
 				pokemon.cureStatus();
@@ -1166,7 +1166,7 @@ let BattleMovedex = {
 		type: "Water",
 		zMoveEffect: "boostreplacement",
 	},
-	// OM Room
+	// OM
 	omboom: {
 		accuracy: 95,
 		basePower: 110,
@@ -1184,7 +1184,7 @@ let BattleMovedex = {
 			this.add('-anim', source, "Heat Crash", target);
 		},
 		onHit: function () {
-			this.add(`c|%OM Room|Bang Bang`);
+			this.add(`c|%OM|Bang Bang`);
 		},
 		secondary: {
 			chance: 50,

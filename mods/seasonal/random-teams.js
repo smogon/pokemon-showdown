@@ -251,7 +251,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Pyramiding Song',
 				evs: {hp: 252, def: 252, spd: 4}, ivs: {atk: 0}, nature: 'Bold', shiny: true,
 			},
-			'OM Room': {
+			'OM': {
 				species: 'Flareon', ability: 'Pixilate', item: 'Metronome', gender: 'M',
 				moves: ['Fake Out', 'Thousand Arrows', 'Extreme Speed'],
 				signatureMove: 'OM Boom',
