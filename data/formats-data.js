@@ -471,7 +471,7 @@ let BattleFormatsData = {
 	sandslash: {
 		randomBattleMoves: ["earthquake", "swordsdance", "rapidspin", "toxic", "stealthrock", "knockoff"],
 		randomDoubleBattleMoves: ["earthquake", "rockslide", "stoneedge", "swordsdance", "xscissor", "knockoff", "protect"],
-		tier: "NU",
+		tier: "PU",
 		doublesTier: "DUU",
 	},
 	sandslashalola: {
