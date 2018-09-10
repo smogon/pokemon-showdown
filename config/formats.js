@@ -825,6 +825,10 @@ let Formats = [
 		},
 		ruleset: ['[Gen 7] Doubles OU', 'Accuracy Moves Clause', 'Sleep Clause Mod'],
 		banlist: ['Salamence-Mega', 'Tapu Lele', 'Focus Sash', 'Final Gambit', 'Perish Song'],
+		onValidateSet: function (set) {
+			const item = this.getItem(set.item);
+			if (item.zMove) return [(set.name || set.species) + "'s item " + item.name + " is banned."];
+		},
 	},
 	{
 		name: "[Gen 6] Gen-NEXT OU",
