@@ -1,5 +1,5 @@
 'use strict';
-/** @typedef {{name: string, plural: string, id: string, color?: string, memo: string[], image?: string}} MafiaAlignment */
+/** @typedef {{name: string, plural: string, id: string, color?: string, buttonColor?: string, memo: string[], image?: string}} MafiaAlignment */
 /** @typedef {{[k: string]: MafiaAlignment | string}} MafiaAlignments */
 
 /** @typedef {{name: string, id: string, memo: string[], alignment?: string, image?: string}} MafiaRole */
@@ -23,6 +23,7 @@ const alignments = {
 		plural: `Town`,
 		id: `town`,
 		color: `#060`,
+		buttonColor: `#0A0`,
 		memo: [`You are aligned with the <span style="color:#060;font-weight:bold">Town</span>. You win when all threats to the Town are eliminated and at least one Town-aligned player is still alive, or nothing can prevent the same.`],
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
 	},
