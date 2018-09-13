@@ -8955,6 +8955,10 @@ let BattleMovedex = {
 			onStart: function (pokemon) {
 				this.add('-start', pokemon, 'move: Laser Focus');
 			},
+			onRestart: function (pokemon) {
+				this.effectData.duration = 2;
+				this.add('-start', pokemon, 'move: Laser Focus');
+			},
 			onModifyCritRatio: function (critRatio) {
 				return 5;
 			},
