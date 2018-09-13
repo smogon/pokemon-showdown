@@ -4149,6 +4149,53 @@ let BattleAbilities = {
 		rating: 3.5,
 		num: -4,
 	},
+	"typeshift": {
+		shortDesc: "If this Pokemon is an X-Type, its type changes at will.",
+		id: "typeshift",
+		name: "Type Shift",
+		rating: 4,
+		num: -5,
+	},
+	"miracleguardguard": {
+		shortDesc: "This Pokemon can only be damaged by supereffective moves.",
+		onTryHit: function (target, source, move) {
+			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle') return;
+			this.debug('Miracle Guard immunity: ' + move.id);
+			if (target.runEffectiveness(move) <= 0) {
+				this.add('-immune', target, '[msg]', '[from] ability: Miracle Guard');
+				return null;
+			}
+            if (effect && effect.status) this.add('-immune', target, '[msg]', '[from] ability: Miracle Guard');
+			if (move.id === 'attract' || move.id === 'captivate' || move.id === 'taunt') {
+				this.add('-immune', pokemon, '[msg]', '[from] ability: Miracle Guard');
+				return null;
+			}
+		},
+		onDamage: function (damage, target, source, effect) {
+			if (effect.effectType !== 'Move') {
+				return false;
+			}
+		},
+		onUpdate: function (pokemon) {
+			if (pokemon.volatiles['attract']) {
+				this.add('-activate', pokemon, 'ability: Miracle Guard');
+				pokemon.removeVolatile('attract');
+				this.add('-end', pokemon, 'move: Attract', '[from] ability: Miracle Guard');
+			}
+			if (pokemon.volatiles['taunt']) {
+				this.add('-activate', pokemon, 'ability: Miracle Guard');
+				pokemon.removeVolatile('taunt');
+				// Taunt's volatile already sends the -end message when removed
+			}
+		},
+		onImmunity: function (type, pokemon) {
+			if (type === 'attract') return false;
+		},
+		id: "miracleguard",
+		name: "Miracle Guard",
+		rating: 5,
+		num: -6,
+	},
 };
 
 exports.BattleAbilities = BattleAbilities;
