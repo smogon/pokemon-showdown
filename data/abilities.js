@@ -3173,6 +3173,7 @@ let BattleAbilities = {
 	"soulheart": {
 		desc: "This Pokemon's Special Attack is raised by 1 stage when another Pokemon faints.",
 		shortDesc: "This Pokemon's Sp. Atk is raised by 1 stage when another Pokemon faints.",
+		onAnyFaintPriority: 1,
 		onAnyFaint: function () {
 			this.boost({spa: 1}, this.effectData.target);
 		},
