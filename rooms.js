@@ -182,6 +182,14 @@ class BasicRoom {
 		return this.add('|c|' + user.getIdentity(this.id) + '|/log ' + text).update();
 	}
 	/**
+	 * Like addByUser, but without logging
+	 * @param {User} user
+	 * @param {string} text
+	 */
+	sendByUser(user, text) {
+		return this.send('|c|' + user.getIdentity(this.id) + '|/log ' + text);
+	}
+	/**
 	 * Like addByUser, but sends to mods only.
 	 * @param {User} user
 	 * @param {string} text
@@ -1071,6 +1079,16 @@ class BasicChatRoom extends BasicRoom {
 	modlog(message) {
 		this.log.modlog(message);
 		return this;
+	}
+	/**
+	 * @param {string[]} userids
+	 */
+	hideText(userids) {
+		const cleared = this.log.clearText(userids);
+		for (const userid of cleared) {
+			this.send(`|unlink|hide|${userid}`);
+		}
+		this.update();
 	}
 	logUserStats() {
 		let total = 0;

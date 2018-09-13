@@ -184,6 +184,27 @@ class Roomlog {
 		return false;
 	}
 	/**
+	 * @param {string[]} userids
+	 */
+	clearText(userids) {
+		const messageStart = this.logTimes ? '|c:|' : '|c|';
+		const section = this.logTimes ? 4 : 3; // ['', 'c' timestamp?, author, message]
+		/** @type {string[]} */
+		let cleared = [];
+		this.log = this.log.filter(line => {
+			if (line.startsWith(messageStart)) {
+				const parts = Chat.splitFirst(line, '|', section);
+				const userid = toId(parts[section - 1]);
+				if (userids.includes(userid)) {
+					if (!cleared.includes(userid)) cleared.push(userid);
+					return false;
+				}
+			}
+			return true;
+		});
+		return cleared;
+	}
+	/**
 	 * @param {string} message
 	 */
 	uhtmlchange(message) {
