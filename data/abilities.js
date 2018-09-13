@@ -4156,8 +4156,12 @@ let BattleAbilities = {
 		rating: 4,
 		num: -5,
 	},
-	"miracleguardguard": {
+	"miracleguard": {
 		shortDesc: "This Pokemon can only be damaged by supereffective moves.",
+		onSetStatus: function (status, target, source, effect) {
+				if (effect && effect.status) this.add('-immune', target, '[msg]', '[from] ability: Miracle Guard');
+				return false;
+		},
 		onTryHit: function (target, source, move) {
 			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle') return;
 			this.debug('Miracle Guard immunity: ' + move.id);
@@ -4176,6 +4180,10 @@ let BattleAbilities = {
 				return false;
 			}
 		},
+		onTryAddVolatile: function (status, target) {
+				this.add('-immune', target, '[msg]', '[from] ability: Miracle Guard');
+				return null;
+		},
 		onUpdate: function (pokemon) {
 			if (pokemon.volatiles['attract']) {
 				this.add('-activate', pokemon, 'ability: Miracle Guard');
@@ -4187,6 +4195,12 @@ let BattleAbilities = {
 				pokemon.removeVolatile('taunt');
 				// Taunt's volatile already sends the -end message when removed
 			}
+		},
+		onAnyAccuracy: function (accuracy, target, source, move) {
+			if (move && (source === this.effectData.target || target === this.effectData.target)) {
+				return true;
+			}
+			return accuracy;
 		},
 		onImmunity: function (type, pokemon) {
 			if (type === 'attract') return false;
