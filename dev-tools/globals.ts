@@ -307,6 +307,7 @@ interface EffectData extends EventMethods {
 	onAfterMoveSecondaryPriority?: number
 	onAfterMoveSecondarySelfPriority?: number
 	onAfterMoveSelfPriority?: number
+	onAnyFaintPriority?: number
 	onAttractPriority?: number
 	onBasePowerPriority?: number
 	onBeforeMovePriority?: number
