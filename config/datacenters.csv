@@ -859,7 +859,7 @@
 69.175.0.0,69.175.127.255,SingleHop,http://www.singlehop.com/
 69.176.80.0,69.176.95.255,ethr.net,http://ethr.net/
 69.192.0.0,69.192.255.255,Akamai,http://akamai.com/
-69.194.0.0,69.194.127.255,Peak Web Hosting,http://www.peakwebhosting.com/
+69.194.7.0,69.194.7.255,Peak Web Hosting,http://www.peakwebhosting.com/
 69.194.128.0,69.194.143.255,SWITCH Communications Group LLC,http://www.switchnap.com/
 69.194.160.0,69.194.175.255,Fortress Integrated Technologies,http://fortressitx.com/
 69.194.224.0,69.194.239.255,180Servers,http://www.180servers.com/
