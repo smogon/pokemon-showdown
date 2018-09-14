@@ -928,7 +928,7 @@ class CommandContext {
 			return false;
 		}
 		if (!this.checkBanwords(room, message) && !user.can('mute', null, room)) {
-			this.errorReply("Your message contained banned words.");
+			this.errorReply("Your message contained banned words in this room.");
 			return false;
 		}
 
