@@ -17687,7 +17687,7 @@ let BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Badly poisons the target. If a Poison-type Pokemon uses this move, the target cannot avoid the attack, even if the target is in the middle of a two-turn move.",
-		shortDesc: "Badly poisons the target. Poison types can't miss.",
+		shortDesc: "Badly poisons the target. Poison-types can't miss.",
 		id: "toxic",
 		isViable: true,
 		name: "Toxic",
