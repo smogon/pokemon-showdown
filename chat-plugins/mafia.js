@@ -1121,7 +1121,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 
 		this.IDEA.data = {
-			name: `${Chat.escapeHTML(this.host)}'s IDEA`,
+			name: `${this.host}'s IDEA`, // already escaped
 			untrusted: true,
 			roles: roleList,
 			picks,
