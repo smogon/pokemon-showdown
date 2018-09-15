@@ -6,7 +6,7 @@ const MONITOR_FILE = 'config/chat-plugins/chat-monitor.tsv';
 
 /** @type {{[k: string]: string[]}} */
 let filterKeys = Chat.filterKeys = Object.assign(Chat.filterKeys, {publicwarn: ['PUBLIC', 'WARN'], warn: ['EVERYWHERE', 'WARN'], autolock: ['EVERYWHERE', 'AUTOLOCK'], namefilter: ['NAMES', 'WARN'], wordfilter: ['EVERYWHERE', 'FILTERTO']});
-/** @type {{[k: string]: ([(string | RegExp), string, string?][])}} */
+/** @type {{[k: string]: ([(string | RegExp), string, string?, number][])}} */
 let filterWords = Chat.filterWords;
 
 setImmediate(() => {
@@ -24,7 +24,7 @@ setImmediate(() => {
 		const lines = data.split('\n');
 		loop: for (const line of lines) {
 			if (!line || line === '\r') continue;
-			let [location, word, punishment, reason, ...rest] = line.split('\t').map(param => param.trim());
+			let [location, word, punishment, reason, times, ...rest] = line.split('\t').map(param => param.trim());
 			if (location === 'Location') continue;
 			if (!(location && word && punishment)) continue;
 
@@ -32,32 +32,32 @@ setImmediate(() => {
 				if (filterKeys[key][0] === location && filterKeys[key][1] === punishment) {
 					if (punishment === 'FILTERTO') {
 						const filterTo = rest[0];
-						filterWords[key].push([new RegExp(word, 'g'), reason, filterTo]);
+						filterWords[key].push([new RegExp(word, 'g'), reason, filterTo, parseInt(times) || 0]);
 						continue loop;
 					} else {
-						filterWords[key].push([word, reason, null]);
+						filterWords[key].push([word, reason, null, parseInt(times) || 0]);
 						continue loop;
 					}
 				}
 			}
-			throw new Error(`Unrecognized [location, punishment] pair for filter word entry: ${[location, word, punishment, reason]}`);
+			throw new Error(`Unrecognized [location, punishment] pair for filter word entry: ${[location, word, punishment, reason, times]}`);
 		}
 	});
 });
 
 /**
  * @param {string} location
- * @param {[(string | RegExp), string, string?]} word
+ * @param {[(string | RegExp), string, string?, number]} word
  * @param {string} punishment
  */
 function renderEntry(location, word, punishment) {
 	const str = word[0] instanceof RegExp ? String(word[0]).slice(1, -2) : word[0];
-	return `${location}\t${str}\t${punishment}\t${word[1]}${word[2] ? `\t${word[2]}` : ''}\r\n`;
+	return `${location}\t${str}\t${punishment}\t${word[1]}\t${word[3]}${word[2] ? `\t${word[2]}` : ''}\r\n`;
 }
 
 function saveFilters() {
 	FS(MONITOR_FILE).writeUpdate(() => {
-		let buf = 'Location\tWord\tPunishment\tReason\r\n';
+		let buf = 'Location\tWord\tPunishment\tReason\tTimes\r\n';
 		for (const key in filterKeys) {
 			buf += filterWords[key].map(word => renderEntry(filterKeys[key][0], word, filterKeys[key][1])).join('');
 		}
@@ -67,7 +67,7 @@ function saveFilters() {
 
 /**
  * @param {string} key
- * @param {[(string | RegExp), string, string?]} word
+ * @param {[(string | RegExp), string, string?, number]} word
  */
 function appendEntry(key, word) {
 	FS(MONITOR_FILE).append(renderEntry(filterKeys[key][0], word, filterKeys[key][1]));
@@ -83,7 +83,8 @@ let chatfilter = function (message, user, room) {
 	let lcMessage = message.replace(/\u039d/g, 'N').toLowerCase().replace(/[\u200b\u007F\u00AD]/g, '').replace(/\u03bf/g, 'o').replace(/\u043e/g, 'o').replace(/\u0430/g, 'a').replace(/\u0435/g, 'e').replace(/\u039d/g, 'e');
 	lcMessage = lcMessage.replace(/__|\*\*|``|\[\[|\]\]/g, '');
 
-	for (let [line, reason] of filterWords.autolock) {
+	for (let i = 0; i < filterWords.autolock.length; i++) {
+		let [line, reason] = filterWords.autolock[i];
 		let matched = false;
 		if (typeof line !== 'string') continue; // Failsafe to appease typescript.
 		if (line.charAt(line.length - 1) === '•') {
@@ -107,10 +108,13 @@ let chatfilter = function (message, user, room) {
 			} else {
 				this.errorReply(`Please do not say '${line}'.`);
 			}
+			filterWords.autolock[i][3]++;
+			saveFilters();
 			return false;
 		}
 	}
-	for (let [line, reason] of filterWords.warn) {
+	for (let i = 0; i < filterWords.warn.length; i++) {
+		let [line, reason] = filterWords.warn[i];
 		let matched = false;
 		if (typeof line !== 'string') continue; // Failsafe to appease typescript.
 		if (line.charAt(line.length - 1) === '•') {
@@ -128,6 +132,8 @@ let chatfilter = function (message, user, room) {
 				return message;
 			}
 			this.errorReply(`Please do not say '${line}'.`);
+			filterWords.warn[i][3]++;
+			saveFilters();
 			return false;
 		}
 	}
@@ -235,18 +241,18 @@ let commands = {
 				return this.errorReply(e.message.startsWith('Invalid regular expression: ') ? e.message : `Invalid regular expression: /${word}/: ${e.message}`);
 			}
 
-			filterWords[list].push([regex, reason, filterTo]);
+			filterWords[list].push([regex, reason, filterTo, 0]);
 			this.globalModlog(`ADDFILTER`, null, `'${String(regex)} => ${filterTo}' to ${list} list by ${user.name}${reason ? ` (${reason})` : ''}`);
-			appendEntry(list, [regex, reason, filterTo]);
+			appendEntry(list, [regex, reason, filterTo, 0]);
 			return this.sendReply(`'${String(regex)} => ${filterTo}' was added to the ${list} list.`);
 		} else {
 			let [word, ...reasonParts] = rest;
 			word = word.trim();
 			let reason = reasonParts.join(',');
 			if (filterWords[list].some(val => val[0] === word)) return this.errorReply(`${word} is already added to the ${list} list.`);
-			filterWords[list].push([word, reason, null]);
+			filterWords[list].push([word, reason, null, 0]);
 			this.globalModlog(`ADDFILTER`, null, `'${word}' to ${list} list by ${user.name}${reason ? ` (${reason})` : ''}`);
-			appendEntry(list, [word, reason, null]);
+			appendEntry(list, [word, reason, null, 0]);
 			return this.sendReply(`'${word}' was added to the ${list} list.`);
 		}
 	},
@@ -296,7 +302,7 @@ let commands = {
 			content += `<td style="padding: 5px 10px;vertical-align:top;"><p style="font-weight:bold;text-align:center;">Filtered in public rooms:</p>${filterWords.wordfilter.map(([str, reason, filterTo]) => `<abbr style="text-align:center;margin:0px;display:block;" title="${reason}"><code>${str}</code> => ${filterTo}</abbr>`).join('')}</td>`;
 		}
 		if (!content) return this.sendReplyBox("There are no filtered words.");
-		return this.sendReplyBox(`<table style="margin:auto;"><tr>${content}</tr></table>`);
+		return this.sendReply(`|raw|<div class="infobox infobox-limited"><table style="margin:auto;"><tr>${content}</tr></table></div>`);
 	},
 	allowname: function (target, room, user) {
 		if (!this.can('forcerename')) return false;
