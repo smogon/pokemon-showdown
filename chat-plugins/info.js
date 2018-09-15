@@ -2193,7 +2193,6 @@ const commands = {
 		`/htmlbox [message] - Displays a message, parsing HTML code contained.`,
 		`!htmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: ~ & #`,
 	],
-	addmodhtmlbox: 'addhtmlbox',
 	addhtmlbox: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help ' + cmd);
 		if (!this.canTalk()) return;
@@ -2205,20 +2204,29 @@ const commands = {
 			target += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
-		if (cmd === 'addmodhtmlbox') {
-			this.addModBox(target);
-		} else {
-			this.addBox(target);
-		}
+		this.addBox(target);
 	},
 	addhtmlboxhelp: [
 		`/addhtmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: ~ & #`,
 	],
-	addmodhtmlboxhelp: [
-		`/addmodhtmlbox [message] - Shows staff a message, parsing HTML code contained. Requires: ~ & #`,
+	addrankhtmlbox: function (target, room, user, connection, cmd) {
+		if (!target) return this.parse('/help ' + cmd);
+		if (!this.canTalk()) return;
+		let [rank, html] = this.splitOne(target);
+		if (!(rank in Config.groups)) return this.errorReply(`Group '${rank}' does not exist.`);
+		html = this.canHTML(html);
+		if (!html) return;
+		if (!this.can('addhtml', null, room)) return;
+
+		if (!user.can('addhtml')) {
+			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
+		}
+
+		this.room.sendRankedUsers(`|html|<div class="infobox">${html}</div>`, rank);
+	},
+	addrankhtmlboxhelp: [
+		`/addrankhtmlbox [rank], [message] - Shows everyone with the specified rank or higher a message, parsing HTML code contained. Requires: ~ & #`,
 	],
-	changemoduhtml: 'adduhtml',
-	addmoduhtml: 'adduhtml',
 	changeuhtml: 'adduhtml',
 	adduhtml: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help ' + cmd);
@@ -2234,12 +2242,8 @@ const commands = {
 			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
-		html = `|uhtml${(cmd === 'changeuhtml' || cmd === 'changemoduhtml' ? 'change' : '')}|${name}|${html}`;
-		if (cmd === 'addmoduhtml' || cmd === 'changemoduhtml') {
-			this.room.sendMods(html);
-		} else {
-			this.add(html);
-		}
+		html = `|uhtml${(cmd === 'changeuhtml' ? 'change' : '')}|${name}|${html}`;
+		this.add(html);
 	},
 	adduhtmlhelp: [
 		`/adduhtml [name], [message] - Shows everyone a message that can change, parsing HTML code contained.  Requires: ~ & #`,
@@ -2247,11 +2251,31 @@ const commands = {
 	changeuhtmlhelp: [
 		`/changeuhtml [name], [message] - Changes the message previously shown with /adduhtml [name]. Requires: ~ & #`,
 	],
-	addmoduhtmlhelp: [
-		`/addmoduhtml [name], [message] - Shows staff a message that can change, parsing HTML code contained. Requires: ~ & #`,
+	changerankuhtml: 'addrankuhtml',
+	addrankuhtml: function (target, room, user, connection, cmd) {
+		if (!target) return this.parse('/help ' + cmd);
+		if (!this.canTalk()) return;
+
+		let [rank, uhtml] = this.splitOne(target);
+		if (!(rank in Config.groups)) return this.errorReply(`Group '${rank}' does not exist.`);
+		let [name, html] = this.splitOne(uhtml);
+		name = toId(name);
+		html = this.canHTML(html);
+		if (!html) return;
+		if (!this.can('addhtml', null, room)) return;
+
+		if (!user.can('addhtml')) {
+			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
+		}
+
+		html = `|uhtml${(cmd === 'changerankuhtml' ? 'change' : '')}|${name}|${html}`;
+		this.room.sendRankedUsers(html, rank);
+	},
+	addrankuhtmlhelp: [
+		`/addrankuhtml [rank], [name], [message] - Shows everyone with the specified rank or higher a message that can change, parsing HTML code contained.  Requires: ~ & #`,
 	],
-	changemoduhtmlhelp: [
-		`/changemoduhtml [name], [message] - Changes the staff message previously shown with /addmoduhtml [name]. Requires: ~ & #`,
+	changerankuhtmlhelp: [
+		`/changerankuhtml [rank], [name], [message] - Changes the message previously shown with /addrankuhtml [rank], [name]. Requires: ~ & #`,
 	],
 };
 
