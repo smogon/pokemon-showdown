@@ -1538,7 +1538,7 @@ class MafiaTracker extends Rooms.RoomGame {
 				logs.plays[month][player]++;
 			}
 			if (!logs.hosts[month]) logs.hosts[month] = {};
-			for (const hostid of [...this.cohosts, this.host]) {
+			for (const hostid of [...this.cohosts, this.hostid].map(toId)) {
 				if (!logs.hosts[month][hostid]) logs.hosts[month][hostid] = 0;
 				logs.hosts[month][hostid]++;
 			}
