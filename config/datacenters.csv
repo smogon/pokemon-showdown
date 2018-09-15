@@ -8,7 +8,7 @@
 5.39.216.0,5.39.223.255,HostKey,http://www.hostkey.com/
 5.44.26.144,5.44.26.159,PEER 1,http://www.peer1.com/
 5.45.72.0,5.45.75.255,3NT UK,http://3nt.com/
-5.62.46.0,5.62.47.255,Privax LTD,http://www.privax.com/
+5.62.0.0,5.62.63.255,Privax LTD,http://www.privax.com/
 5.77.32.0,5.77.63.255,eukhost.com,http://eukhost.com/
 5.79.0.0,5.79.7.255,Rackspace,http://www.rackspace.com/
 5.79.16.0,5.79.24.255,Rackspace,http://www.rackspace.com/
@@ -1014,6 +1014,7 @@
 77.111.244.0,77.111.247.255,Opera Mini Proxy,https://www.opera.com/
 77.120.108.128,77.120.108.191,Volia Datacenter,http://www.hosting-service.com.ua
 77.222.40.0,77.222.43.255,SpaceWeb,https://sweb.ru/
+77.234.40.0,77.234.47.255,Avast Cloud,https://www.avast.com
 77.235.32.0,77.235.63.255,EuroVPS,http://eurovps.com/
 77.237.228.0,77.237.231.255,servhost.de,http://servhost.de/
 77.237.241.128,77.237.241.255,webhoster.de,http://webhoster.de/
@@ -2391,7 +2392,7 @@
 192.110.160.0,192.110.167.255,Input Output Flood LLC,http://ioflood.com/
 192.111.128.0,192.111.143.255,Total Server Solutions,http://totalserversolutions.com/
 192.119.64.0,192.119.127.255,hostwinds.com,http://www.hostwinds.com/
-192.119.144.0,192.119.159.255,avantehosting.net,https://avantehosting.net/
+192.119.160.0,192.119.175.255,madgenius.com,http://www.madgenius.com/
 192.124.170.0,192.124.219.255,demos,http://demos.ru/
 192.129.128.0,192.129.255.255,hostwinds.com,http://www.hostwinds.com/
 192.138.16.0,192.138.23.255,wiredtree,http://www.wiredtree.com/
@@ -2608,7 +2609,7 @@
 198.50.96.0,198.50.127.255,iWeb Technologies Inc.,http://iweb.com/
 198.50.128.0,198.50.255.255,OVH,http://www.ovh.co.uk/
 198.52.96.0,198.52.127.255,multacom.com,http://multacom.com/
-198.52.128.0,198.52.255.255,avantehosting.net,https://avantehosting.net/
+198.52.192.0,198.52.255.255,avantehosting.net,https://avantehosting.net/
 198.55.96.0,198.55.127.255,QuadraNet,http://quadranet.com/
 198.58.96.0,198.58.127.255,Linode,http://www.linode.com/
 198.61.128.0,198.61.255.255,Rackspace,http://www.rackspace.com/
@@ -2746,7 +2747,7 @@
 199.193.248.0,199.193.255.255,Enzu Inc,https://www.enzu.com/
 199.195.116.0,199.195.119.255,A2 Hosting,http://www.a2hosting.com/
 199.195.128.0,199.195.131.255,fiberhub.com,http://www.fiberhub.com/
-199.195.156.0,199.195.159.255,avantehosting.net,https://avantehosting.net/
+199.195.156.0,199.195.159.255,softsyshosting.com,https://www.softsyshosting.com
 199.195.192.0,199.195.199.255,Midphase,http://www.midphase.com/
 199.195.212.0,199.195.215.255,Forta Trust,http://www.fortatrust.com/
 199.204.44.0,199.204.47.255,vexxhost web hosting,http://vexxhost.com/
