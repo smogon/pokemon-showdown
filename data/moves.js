@@ -10348,7 +10348,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 150,
 		category: "Special",
-		desc: "Whether or not this move is successful, the user loses 1/2 of its maximum HP, rounded up, unless the user has the Magic Guard Ability. This move is prevented from executing and the user does not lose HP if any active Pokemon has the Damp Ability, or if this move is Fire type and the user is affected by Powder or the weather is Primordial Sea.",
+		desc: "Whether or not this move is successful and even if it would cause fainting, the user loses 1/2 of its maximum HP, rounded up, unless the user has the Magic Guard Ability. This move is prevented from executing and the user does not lose HP if any active Pokemon has the Damp Ability, or if this move is Fire type and the user is affected by Powder or the weather is Primordial Sea.",
 		shortDesc: "User loses 50% max HP. Hits adjacent Pokemon.",
 		id: "mindblown",
 		isViable: true,
