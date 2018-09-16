@@ -745,10 +745,10 @@ Punishments.lock = function (user, expireTime, id, ...reason) {
  * @param {string} source
  * @param {string} reason
  * @param {string?} message
- * @param {boolean?} [week]
- * @param {boolean?} [name]
+ * @param {boolean} week
+ * @param {boolean} name
  */
-Punishments.autolock = function (user, room, source, reason, message, week, name) {
+Punishments.autolock = function (user, room, source, reason, message, week = false, name = false) {
 	if (!message) message = reason;
 
 	let punishment = `LOCKED`;

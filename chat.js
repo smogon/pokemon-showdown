@@ -626,7 +626,7 @@ class CommandContext {
 	}
 	/**
 	 * @param {string} action
-	 * @param {(string | User)?} user
+	 * @param {string | User?} user
 	 * @param {string} note
 	 */
 	globalModlog(action, user, note) {
