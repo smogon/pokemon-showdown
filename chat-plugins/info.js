@@ -2191,7 +2191,7 @@ const commands = {
 	},
 	htmlboxhelp: [
 		`/htmlbox [message] - Displays a message, parsing HTML code contained.`,
-		`!htmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: ~ & #`,
+		`!htmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: * # & ~`,
 	],
 	addhtmlbox: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help ' + cmd);
@@ -2207,7 +2207,7 @@ const commands = {
 		this.addBox(target);
 	},
 	addhtmlboxhelp: [
-		`/addhtmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: ~ & #`,
+		`/addhtmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: * & ~`,
 	],
 	addrankhtmlbox: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help ' + cmd);
@@ -2225,7 +2225,7 @@ const commands = {
 		this.room.sendRankedUsers(`|html|<div class="infobox">${html}</div>`, rank);
 	},
 	addrankhtmlboxhelp: [
-		`/addrankhtmlbox [rank], [message] - Shows everyone with the specified rank or higher a message, parsing HTML code contained. Requires: ~ & #`,
+		`/addrankhtmlbox [rank], [message] - Shows everyone with the specified rank or higher a message, parsing HTML code contained. Requires: * & ~`,
 	],
 	changeuhtml: 'adduhtml',
 	adduhtml: function (target, room, user, connection, cmd) {
@@ -2246,10 +2246,10 @@ const commands = {
 		this.add(html);
 	},
 	adduhtmlhelp: [
-		`/adduhtml [name], [message] - Shows everyone a message that can change, parsing HTML code contained.  Requires: ~ & #`,
+		`/adduhtml [name], [message] - Shows everyone a message that can change, parsing HTML code contained.  Requires: * & ~`,
 	],
 	changeuhtmlhelp: [
-		`/changeuhtml [name], [message] - Changes the message previously shown with /adduhtml [name]. Requires: ~ & #`,
+		`/changeuhtml [name], [message] - Changes the message previously shown with /adduhtml [name]. Requires: * & ~`,
 	],
 	changerankuhtml: 'addrankuhtml',
 	addrankuhtml: function (target, room, user, connection, cmd) {
@@ -2272,10 +2272,10 @@ const commands = {
 		this.room.sendRankedUsers(html, rank);
 	},
 	addrankuhtmlhelp: [
-		`/addrankuhtml [rank], [name], [message] - Shows everyone with the specified rank or higher a message that can change, parsing HTML code contained.  Requires: ~ & #`,
+		`/addrankuhtml [rank], [name], [message] - Shows everyone with the specified rank or higher a message that can change, parsing HTML code contained.  Requires: * & ~`,
 	],
 	changerankuhtmlhelp: [
-		`/changerankuhtml [rank], [name], [message] - Changes the message previously shown with /addrankuhtml [rank], [name]. Requires: ~ & #`,
+		`/changerankuhtml [rank], [name], [message] - Changes the message previously shown with /addrankuhtml [rank], [name]. Requires: * & ~`,
 	],
 };
 
