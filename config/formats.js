@@ -503,7 +503,7 @@ let Formats = [
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Kartana', 'Porygon-Z', 'Battle Bond'],
 		restrictedMoves: [
-			'Belly Drum', 'Celebrate', 'Chatter', 'Conversion', "Forest's Curse", 'Geomancy', 'Happy Hour', 'Hold Hands',
+			'Belly Drum', 'Celebrate', 'Chatter', 'Conversion', 'Extreme Speed', "Forest's Curse", 'Geomancy', 'Happy Hour', 'Hold Hands',
 			'Lovely Kiss', 'Purify', 'Quiver Dance', 'Shell Smash', 'Shift Gear', 'Sketch', 'Spore', 'Sticky Web', 'Trick-or-Treat',
 		],
 		checkLearnset: function (move, template, lsetData, set) {
