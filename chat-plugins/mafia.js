@@ -522,13 +522,14 @@ class MafiaTracker extends Rooms.RoomGame {
 	 * @return {void}
 	 */
 	distributeRoles() {
-		if (!Object.keys(this.roles).length) return;
 		let roles = Dex.shuffle(this.roles.slice());
-		for (let p in this.players) {
-			let role = roles.shift();
-			this.players[p].role = role;
-			let u = Users(p);
-			if (u && u.connected) u.send(`>${this.room.id}\n|notify|Your role is ${role.safeName}. For more details of your role, check your Role PM.`);
+		if (roles.length) {
+			for (let p in this.players) {
+				let role = roles.shift();
+				this.players[p].role = role;
+				let u = Users(p);
+				if (u && u.connected) u.send(`>${this.room.id}\n|notify|Your role is ${role.safeName}. For more details of your role, check your Role PM.`);
+			}
 		}
 		this.dead = {};
 		this.played = [this.hostid, ...this.cohosts, ...Object.keys(this.players)];
@@ -1120,7 +1121,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 
 		this.IDEA.data = {
-			name: `${Chat.escapeHTML(this.host)}'s IDEA`,
+			name: `${this.host}'s IDEA`, // already escaped
 			untrusted: true,
 			roles: roleList,
 			picks,
@@ -1537,7 +1538,7 @@ class MafiaTracker extends Rooms.RoomGame {
 				logs.plays[month][player]++;
 			}
 			if (!logs.hosts[month]) logs.hosts[month] = {};
-			for (const hostid of [...this.cohosts, this.host]) {
+			for (const hostid of [...this.cohosts, this.hostid]) {
 				if (!logs.hosts[month][hostid]) logs.hosts[month][hostid] = 0;
 				logs.hosts[month][hostid]++;
 			}
