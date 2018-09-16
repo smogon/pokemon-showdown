@@ -2577,7 +2577,7 @@ let BattleMovedex = {
 			let possibleTypes = [];
 			let attackType = target.lastMove.type;
 			for (let type in this.data.TypeChart) {
-				if (source.hasType(type) || target.hasType(type)) continue;
+				if (source.hasType(type)) continue;
 				let typeCheck = this.data.TypeChart[type].damageTaken[attackType];
 				if (typeCheck === 2 || typeCheck === 3) {
 					possibleTypes.push(type);
