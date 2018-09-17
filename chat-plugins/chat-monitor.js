@@ -89,7 +89,7 @@ let chatfilter = function (message, user, room) {
 		let matched = false;
 		if (typeof line !== 'string') continue; // Failsafe to appease typescript.
 		if (line.startsWith('\\b') || line.endsWith('\\b')) {
-			matched = (new RegExp(line, 'g')).test(lcMessage);
+			matched = new RegExp(line).test(lcMessage);
 		} else {
 			matched = lcMessage.includes(line);
 		}
@@ -115,7 +115,7 @@ let chatfilter = function (message, user, room) {
 		let matched = false;
 		if (typeof line !== 'string') continue; // Failsafe to appease typescript.
 		if (line.startsWith('\\b') || line.endsWith('\\b')) {
-			matched = (new RegExp(line, 'g')).test(lcMessage);
+			matched = new RegExp(line).test(lcMessage);
 		} else {
 			matched = lcMessage.includes(line);
 		}
@@ -135,7 +135,7 @@ let chatfilter = function (message, user, room) {
 			let matched = false;
 			if (typeof line !== 'string') continue; // Failsafe to appease typescript.
 			if (line.startsWith('\\b') || line.endsWith('\\b')) {
-				matched = (new RegExp(line, 'g')).test(lcMessage);
+				matched = new RegExp(line).test(lcMessage);
 			} else {
 				matched = lcMessage.includes(line);
 			}
