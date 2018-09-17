@@ -217,6 +217,9 @@ class Validator {
 		if (set.happiness !== undefined && isNaN(set.happiness)) {
 			problems.push(`${name} has an invalid happiness.`);
 		}
+		if (set.hpType && (!dex.getType(set.hpType).exists || ['normal', 'fairy'].includes(toId(set.hpType)))) {
+			problems.push(`${name}'s Hidden Power type (${set.hpType}) is invalid.`);
+		}
 
 		let banReason = ruleTable.check('pokemon:' + template.id, setHas);
 		let templateOverride = ruleTable.has('+pokemon:' + template.id);
