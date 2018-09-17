@@ -56,22 +56,17 @@ function renderEntry(location, word, punishment) {
 	return `${location}\t${str}\t${punishment}\t${word[1]}\t${word[3]}${word[2] ? `\t${word[2]}` : ''}\r\n`;
 }
 
-function saveFilters() {
+/**
+ * @param {boolean} force
+ */
+function saveFilters(force = false) {
 	FS(MONITOR_FILE).writeUpdate(() => {
 		let buf = 'Location\tWord\tPunishment\tReason\tTimes\r\n';
 		for (const key in filterKeys) {
 			buf += filterWords[key].map(word => renderEntry(filterKeys[key][0], word, filterKeys[key][1])).join('');
 		}
 		return buf;
-	}, {throttle: WRITE_THROTTLE_TIME});
-}
-
-/**
- * @param {string} key
- * @param {[(string | RegExp), string, string?, number]} word
- */
-function appendEntry(key, word) {
-	FS(MONITOR_FILE).append(renderEntry(filterKeys[key][0], word, filterKeys[key][1]));
+	}, {throttle: force ? 0 : WRITE_THROTTLE_TIME});
 }
 
 /** @typedef {(this: CommandContext, target: string, room: ChatRoom, user: User, connection: Connection, cmd: string, message: string) => (void)} ChatHandler */
@@ -232,7 +227,7 @@ let commands = {
 
 			filterWords[list].push([regex, reason, filterTo, 0]);
 			this.globalModlog(`ADDFILTER`, null, `'${String(regex)} => ${filterTo}' to ${list} list by ${user.name}${reason ? ` (${reason})` : ''}`);
-			appendEntry(list, [regex, reason, filterTo, 0]);
+			saveFilters(true);
 			return this.sendReply(`'${String(regex)} => ${filterTo}' was added to the ${list} list.`);
 		} else {
 			let [word, ...reasonParts] = rest;
@@ -241,7 +236,7 @@ let commands = {
 			if (filterWords[list].some(val => val[0] === word)) return this.errorReply(`${word} is already added to the ${list} list.`);
 			filterWords[list].push([word, reason, null, 0]);
 			this.globalModlog(`ADDFILTER`, null, `'${word}' to ${list} list by ${user.name}${reason ? ` (${reason})` : ''}`);
-			appendEntry(list, [word, reason, null, 0]);
+			saveFilters(true);
 			return this.sendReply(`'${word}' was added to the ${list} list.`);
 		}
 	},
