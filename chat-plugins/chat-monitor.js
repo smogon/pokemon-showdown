@@ -56,26 +56,14 @@ function renderEntry(location, word, punishment) {
 	return `${location}\t${str}\t${punishment}\t${word[1]}\t${word[3]}${word[2] ? `\t${word[2]}` : ''}\r\n`;
 }
 
-let writePending = false;
-let canWrite = true;
-
 function saveFilters() {
-	if (!canWrite) {
-		writePending = true;
-		return;
-	}
 	FS(MONITOR_FILE).writeUpdate(() => {
 		let buf = 'Location\tWord\tPunishment\tReason\tTimes\r\n';
 		for (const key in filterKeys) {
 			buf += filterWords[key].map(word => renderEntry(filterKeys[key][0], word, filterKeys[key][1])).join('');
 		}
 		return buf;
-	});
-	canWrite = false;
-	setTimeout(() => {
-		canWrite = true;
-		if (writePending) saveFilters();
-	}, WRITE_THROTTLE_TIME);
+	}, {throttle: WRITE_THROTTLE_TIME});
 }
 
 /**
@@ -100,7 +88,7 @@ let chatfilter = function (message, user, room) {
 		let [line, reason] = filterWords.autolock[i];
 		let matched = false;
 		if (typeof line !== 'string') continue; // Failsafe to appease typescript.
-		if (line.endsWith('\\b')) {
+		if (line.startsWith('\\b') || line.endsWith('\\b')) {
 			matched = (new RegExp(line, 'g')).test(lcMessage);
 		} else {
 			matched = lcMessage.includes(line);
@@ -126,7 +114,7 @@ let chatfilter = function (message, user, room) {
 		let [line, reason] = filterWords.warn[i];
 		let matched = false;
 		if (typeof line !== 'string') continue; // Failsafe to appease typescript.
-		if (line.endsWith('\\b')) {
+		if (line.startsWith('\\b') || line.endsWith('\\b')) {
 			matched = (new RegExp(line, 'g')).test(lcMessage);
 		} else {
 			matched = lcMessage.includes(line);
@@ -146,7 +134,7 @@ let chatfilter = function (message, user, room) {
 		for (let [line, reason] of filterWords.publicwarn) {
 			let matched = false;
 			if (typeof line !== 'string') continue; // Failsafe to appease typescript.
-			if (line.endsWith('\\b')) {
+			if (line.startsWith('\\b') || line.endsWith('\\b')) {
 				matched = (new RegExp(line, 'g')).test(lcMessage);
 			} else {
 				matched = lcMessage.includes(line);
