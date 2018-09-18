@@ -513,6 +513,9 @@ class User {
 		this.lockNotified = false;
 		/**@type {string} */
 		this.autoconfirmed = '';
+		// Used in punishments
+		/** @type {string} */
+		this.trackRename = '';
 		// initialize
 		Users.add(this);
 	}

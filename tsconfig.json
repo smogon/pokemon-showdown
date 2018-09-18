@@ -39,6 +39,7 @@
         "./verifier.js",
         "./chat.js",
         "./users.js",
+        "./chat-plugins/chat-monitor.js",
         "./chat-plugins/hangman.js",
         "./chat-plugins/helptickets.js",
         "./chat-plugins/mafia.js",

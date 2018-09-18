@@ -165,8 +165,17 @@ Chat.namefilter = function (name, user) {
 		// \u534d\u5350 swastika
 		// \u2a0d crossed integral (f)
 		name = name.replace(/[\u00a1\u2580-\u2590\u25A0\u25Ac\u25AE\u25B0\u2a0d\u534d\u5350]/g, '');
+
 		// e-mail address
 		if (name.includes('@') && name.includes('.')) return '';
+
+		// url
+		if (/[a-z0-9]\.(com|net|org)/.test(name)) name = name.replace(/\./g, '');
+
+		// Limit the amount of symbols allowed in usernames to 4 maximum, and disallow (R) and (C) from being used in the middle of names.
+		let nameSymbols = name.replace(/[^\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2090-\u23FA\u2500-\u2BD1]+/g, '');
+		// \u00ae\u00a9 (R) (C)
+		if (nameSymbols.length > 4 || /[^a-z0-9][a-z0-9][^a-z0-9]/.test(name.toLowerCase() + ' ') || /[\u00ae\u00a9].*[a-zA-Z0-9]/.test(name)) name = name.replace(/[\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F]+/g, '').replace(/[^A-Za-z0-9]{2,}/g, ' ').trim();
 	}
 	name = name.replace(/^[^A-Za-z0-9]+/, ""); // remove symbols from start
 
@@ -624,20 +633,22 @@ class CommandContext {
 	}
 	/**
 	 * @param {string} action
-	 * @param {string | User} user
+	 * @param {string | User?} user
 	 * @param {string} note
 	 */
 	globalModlog(action, user, note) {
 		let buf = `(${this.room.id}) ${action}: `;
-		if (typeof user === 'string') {
-			buf += `[${user}]`;
-		} else {
-			let userid = user.getLastId();
-			buf += `[${userid}]`;
-			if (user.autoconfirmed && user.autoconfirmed !== userid) buf += ` ac:[${user.autoconfirmed}]`;
-			const alts = user.getAltUsers(false, true).map(user => user.getLastId()).join('], [');
-			if (alts.length) buf += ` alts:[${alts}]`;
-			buf += ` [${user.latestIp}]`;
+		if (user) {
+			if (typeof user === 'string') {
+				buf += `[${user}]`;
+			} else {
+				let userid = user.getLastId();
+				buf += `[${userid}]`;
+				if (user.autoconfirmed && user.autoconfirmed !== userid) buf += ` ac:[${user.autoconfirmed}]`;
+				const alts = user.getAltUsers(false, true).map(user => user.getLastId()).join('], [');
+				if (alts.length) buf += ` alts:[${alts}]`;
+				buf += ` [${user.latestIp}]`;
+			}
 		}
 		buf += note;
 
@@ -1587,3 +1598,9 @@ Chat.stringify = function (value, depth = 0) {
 Chat.formatText = require('./chat-formatter').formatText;
 Chat.linkRegex = require('./chat-formatter').linkRegex;
 Chat.updateServerLock = false;
+
+// Used (and populated) by ChatMonitor.
+/** @type {{[k: string]: string[]}} */
+Chat.filterKeys = {};
+/** @type {{[k: string]: string[]}} */
+Chat.filterWords = {};
