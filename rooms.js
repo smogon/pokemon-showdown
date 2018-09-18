@@ -101,6 +101,8 @@ class BasicRoom {
 		/** @type {string?} */
 		this.modchat = null;
 		this.staffRoom = false;
+		/** @type {string | false} */
+		this.language = false;
 		/** @type {false | number} */
 		this.slowchat = false;
 		this.filterStretching = false;
