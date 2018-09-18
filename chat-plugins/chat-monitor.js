@@ -201,92 +201,95 @@ let namefilter = function (name, user) {
 
 /** @type {ChatCommands} */
 let commands = {
-	addfilterword: function (target, room, user) {
-		if (!this.can('updateserver')) return false;
+	filters: 'filter',
+	filter: {
+		add: function (target, room, user) {
+			if (!this.can('updateserver')) return false;
 
-		let [list, ...rest] = target.split(',');
-		list = toId(list);
+			let [list, ...rest] = target.split(',');
+			list = toId(list);
 
-		if (!list || !rest.length) return this.errorReply("Syntax: /addfilterword list, word, reason");
+			if (!list || !rest.length) return this.errorReply("Syntax: /filter add list, word, reason");
 
-		if (!(list in filterWords)) return this.errorReply(`Invalid list: ${list}. Possible options: ${Object.keys(filterWords).join(', ')}`);
+			if (!(list in filterWords)) return this.errorReply(`Invalid list: ${list}. Possible options: ${Object.keys(filterWords).join(', ')}`);
 
-		if (filterKeys[list][1] === 'FILTERTO') {
-			let [word, filterTo, ...reasonParts] = rest;
-			word = word.trim();
-			filterTo = filterTo.trim();
-			let reason = reasonParts.join(',');
-			if (!filterTo) return this.errorReply(`Syntax for word filters: /addfilterword ${list}, regex, filter to, reason`);
+			if (filterKeys[list][1] === 'FILTERTO') {
+				let [word, filterTo, ...reasonParts] = rest;
+				word = word.trim();
+				filterTo = filterTo.trim();
+				let reason = reasonParts.join(',');
+				if (!filterTo) return this.errorReply(`Syntax for word filters: /filter add ${list}, regex, filter to, reason`);
 
-			let regex;
-			try {
-				regex = new RegExp(word, 'g'); // eslint-disable-line no-unused-vars
-			} catch (e) {
-				return this.errorReply(e.message.startsWith('Invalid regular expression: ') ? e.message : `Invalid regular expression: /${word}/: ${e.message}`);
+				let regex;
+				try {
+					regex = new RegExp(word, 'g'); // eslint-disable-line no-unused-vars
+				} catch (e) {
+					return this.errorReply(e.message.startsWith('Invalid regular expression: ') ? e.message : `Invalid regular expression: /${word}/: ${e.message}`);
+				}
+
+				filterWords[list].push([regex, reason, filterTo, 0]);
+				this.globalModlog(`ADDFILTER`, null, `'${String(regex)} => ${filterTo}' to ${list} list by ${user.name}${reason ? ` (${reason})` : ''}`);
+				saveFilters(true);
+				return this.sendReply(`'${String(regex)} => ${filterTo}' was added to the ${list} list.`);
+			} else {
+				let [word, ...reasonParts] = rest;
+				word = word.trim();
+				let reason = reasonParts.join(',');
+				if (filterWords[list].some(val => val[0] === word)) return this.errorReply(`${word} is already added to the ${list} list.`);
+				filterWords[list].push([word, reason, null, 0]);
+				this.globalModlog(`ADDFILTER`, null, `'${word}' to ${list} list by ${user.name}${reason ? ` (${reason})` : ''}`);
+				saveFilters(true);
+				return this.sendReply(`'${word}' was added to the ${list} list.`);
 			}
+		},
+		remove: function (target, room, user) {
+			if (!this.can('updateserver')) return false;
 
-			filterWords[list].push([regex, reason, filterTo, 0]);
-			this.globalModlog(`ADDFILTER`, null, `'${String(regex)} => ${filterTo}' to ${list} list by ${user.name}${reason ? ` (${reason})` : ''}`);
-			saveFilters(true);
-			return this.sendReply(`'${String(regex)} => ${filterTo}' was added to the ${list} list.`);
-		} else {
-			let [word, ...reasonParts] = rest;
-			word = word.trim();
-			let reason = reasonParts.join(',');
-			if (filterWords[list].some(val => val[0] === word)) return this.errorReply(`${word} is already added to the ${list} list.`);
-			filterWords[list].push([word, reason, null, 0]);
-			this.globalModlog(`ADDFILTER`, null, `'${word}' to ${list} list by ${user.name}${reason ? ` (${reason})` : ''}`);
-			saveFilters(true);
-			return this.sendReply(`'${word}' was added to the ${list} list.`);
-		}
-	},
-	removefilterword: function (target, room, user) {
-		if (!this.can('updateserver')) return false;
+			let [list, ...words] = target.split(',').map(param => param.trim());
+			list = toId(list);
 
-		let [list, ...words] = target.split(',').map(param => param.trim());
-		list = toId(list);
+			if (!list || !words.length) return this.errorReply("Syntax: /filter remove list, words");
 
-		if (!list || !words.length) return this.errorReply("Syntax: /removefilterword list, words");
+			if (!(list in filterWords)) return this.errorReply(`Invalid list: ${list}. Possible options: ${Object.keys(filterWords).join(', ')}`);
 
-		if (!(list in filterWords)) return this.errorReply(`Invalid list: ${list}. Possible options: ${Object.keys(filterWords).join(', ')}`);
+			if (filterKeys[list][1] === 'FILTERTO') {
+				const notFound = words.filter(val => !filterWords[list].filter(entry => String(entry[0]).slice(1, -2) === val).length);
+				if (notFound.length) return this.errorReply(`${notFound.join(', ')} ${Chat.plural(notFound, "are", "is")} not on the ${list} list.`);
+				filterWords[list] = filterWords[list].filter(entry => !words.includes(String(entry[0]).slice(1, -2)));
+				this.globalModlog(`REMOVEFILTER`, null, `'${words.join(', ')}' from ${list} list by ${user.name}`);
+				saveFilters();
+				return this.sendReply(`'${words.join(', ')}' ${Chat.plural(words, "were", "was")} removed from the ${list} list.`);
+			} else {
+				const notFound = words.filter(val => !filterWords[list].filter(entry => entry[0] === val).length);
+				if (notFound.length) return this.errorReply(`${notFound.join(', ')} ${Chat.plural(notFound, "are", "is")} not on the ${list} list.`);
+				filterWords[list] = filterWords[list].filter(entry => !words.includes(String(entry[0]))); // This feels wrong
+				this.globalModlog(`REMOVEFILTER`, null, `'${words.join(', ')}' from ${list} list by ${user.name}`);
+				saveFilters();
+				return this.sendReply(`'${words.join(', ')}' ${Chat.plural(words, "were", "was")} removed from the ${list} list.`);
+			}
+		},
+		view: function (target, room, user) {
+			if (!this.can('lock')) return false;
 
-		if (filterKeys[list][1] === 'FILTERTO') {
-			const notFound = words.filter(val => !filterWords[list].filter(entry => String(entry[0]).slice(1, -2) === val).length);
-			if (notFound.length) return this.errorReply(`${notFound.join(', ')} ${Chat.plural(notFound, "are", "is")} not on the ${list} list.`);
-			filterWords[list] = filterWords[list].filter(entry => !words.includes(String(entry[0]).slice(1, -2)));
-			this.globalModlog(`REMOVEFILTER`, null, `'${words.join(', ')}' from ${list} list by ${user.name}`);
-			saveFilters();
-			return this.sendReply(`'${words.join(', ')}' ${Chat.plural(words, "were", "was")} removed from the ${list} list.`);
-		} else {
-			const notFound = words.filter(val => !filterWords[list].filter(entry => entry[0] === val).length);
-			if (notFound.length) return this.errorReply(`${notFound.join(', ')} ${Chat.plural(notFound, "are", "is")} not on the ${list} list.`);
-			filterWords[list] = filterWords[list].filter(entry => !words.includes(String(entry[0]))); // This feels wrong
-			this.globalModlog(`REMOVEFILTER`, null, `'${words.join(', ')}' from ${list} list by ${user.name}`);
-			saveFilters();
-			return this.sendReply(`'${words.join(', ')}' ${Chat.plural(words, "were", "was")} removed from the ${list} list.`);
-		}
-	},
-	viewfilters: function (target, room, user) {
-		if (!this.can('lock')) return false;
-
-		let content = '';
-		if (filterWords.publicwarn.length) {
-			content += `<td style="padding: 5px 10px;vertical-align:top;"><p style="font-weight:bold;text-align:center;">Filtered in public rooms:</p>${filterWords.publicwarn.map(([str, reason]) => `<abbr style="text-align:center;margin:0px;display:block;" title="${reason}">${str}</abbr>`).join('')}</td>`;
-		}
-		if (filterWords.warn.length) {
-			content += `<td style="padding: 5px 10px;vertical-align:top;"><p style="font-weight:bold;text-align:center;">Filtered:</p>${filterWords.warn.map(([str, reason]) => `<abbr style="text-align:center;margin:0px;display:block;" title="${reason}">${str}</abbr>`).join('')}</td>`;
-		}
-		if (filterWords.autolock.length) {
-			content += `<td style="padding: 5px 10px;vertical-align:top;"><p style="font-weight:bold;text-align:center;">Weeklock:</p>${filterWords.autolock.map(([str, reason]) => `<abbr style="text-align:center;margin:0px;display:block;" title="${reason}">${str}</abbr>`).join('')}</td>`;
-		}
-		if (filterWords.namefilter.length) {
-			content += `<td style="padding: 5px 10px;vertical-align:top;"><p style="font-weight:bold;text-align:center;">Filtered in names:</p>${filterWords.namefilter.map(([str, reason]) => `<abbr style="text-align:center;margin:0px;display:block;" title="${reason}">${str}</abbr>`).join('')}</td>`;
-		}
-		if (filterWords.wordfilter.length) {
-			content += `<td style="padding: 5px 10px;vertical-align:top;"><p style="font-weight:bold;text-align:center;">Filtered in public rooms:</p>${filterWords.wordfilter.map(([str, reason, filterTo]) => `<abbr style="text-align:center;margin:0px;display:block;" title="${reason}"><code>${str}</code> => ${filterTo}</abbr>`).join('')}</td>`;
-		}
-		if (!content) return this.sendReplyBox("There are no filtered words.");
-		return this.sendReply(`|raw|<div class="infobox infobox-limited"><table style="margin:auto;"><tr>${content}</tr></table></div>`);
+			let content = '';
+			if (filterWords.publicwarn.length) {
+				content += `<td style="padding: 5px 10px;vertical-align:top;"><p style="font-weight:bold;text-align:center;">Filtered in public rooms:</p>${filterWords.publicwarn.map(([str, reason]) => `<abbr style="text-align:center;margin:0px;display:block;" title="${reason}">${str}</abbr>`).join('')}</td>`;
+			}
+			if (filterWords.warn.length) {
+				content += `<td style="padding: 5px 10px;vertical-align:top;"><p style="font-weight:bold;text-align:center;">Filtered:</p>${filterWords.warn.map(([str, reason]) => `<abbr style="text-align:center;margin:0px;display:block;" title="${reason}">${str}</abbr>`).join('')}</td>`;
+			}
+			if (filterWords.autolock.length) {
+				content += `<td style="padding: 5px 10px;vertical-align:top;"><p style="font-weight:bold;text-align:center;">Weeklock:</p>${filterWords.autolock.map(([str, reason]) => `<abbr style="text-align:center;margin:0px;display:block;" title="${reason}">${str}</abbr>`).join('')}</td>`;
+			}
+			if (filterWords.namefilter.length) {
+				content += `<td style="padding: 5px 10px;vertical-align:top;"><p style="font-weight:bold;text-align:center;">Filtered in names:</p>${filterWords.namefilter.map(([str, reason]) => `<abbr style="text-align:center;margin:0px;display:block;" title="${reason}">${str}</abbr>`).join('')}</td>`;
+			}
+			if (filterWords.wordfilter.length) {
+				content += `<td style="padding: 5px 10px;vertical-align:top;"><p style="font-weight:bold;text-align:center;">Filtered in public rooms:</p>${filterWords.wordfilter.map(([str, reason, filterTo]) => `<abbr style="text-align:center;margin:0px;display:block;" title="${reason}"><code>${str}</code> => ${filterTo}</abbr>`).join('')}</td>`;
+			}
+			if (!content) return this.sendReplyBox("There are no filtered words.");
+			return this.sendReply(`|raw|<div class="infobox infobox-limited"><table style="margin:auto;"><tr>${content}</tr></table></div>`);
+		},
 	},
 	allowname: function (target, room, user) {
 		if (!this.can('forcerename')) return false;
