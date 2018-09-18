@@ -162,11 +162,10 @@ let chatfilter = function (message, user, room) {
 	return message;
 };
 
-const namefilterwhitelist = new Map();
 /** @type {NameFilter} */
 let namefilter = function (name, user) {
 	let id = toId(name);
-	if (namefilterwhitelist.has(id)) return name;
+	if (Chat.namefilterwhitelist.has(id)) return name;
 	if (id === user.trackRename) return '';
 	let lcName = name.replace(/\u039d/g, 'N').toLowerCase().replace(/[\u200b\u007F\u00AD]/g, '').replace(/\u03bf/g, 'o').replace(/\u043e/g, 'o').replace(/\u0430/g, 'a').replace(/\u0435/g, 'e').replace(/\u039d/g, 'e');
 	// Remove false positives.
@@ -238,8 +237,14 @@ const pages = {
 			content += filterWords.namefilter.map(([str, reason, , hits]) => `<tr><td><abbr title="${reason}">${str}</abbr></td><td>${hits}</td></tr>`).join('');
 		}
 		if (filterWords.wordfilter.length) {
-			content += `<tr><th colspan="2"><h3>Filtered in public rooms</h3></tr></th>`;
+			content += `<tr><th colspan="2"><h3>Filtered to different phrases</h3></tr></th>`;
 			content += filterWords.wordfilter.map(([str, reason, filterTo, hits]) => `<tr><td><abbr title="${reason}"><code>${str}</code></abbr> &rArr; ${filterTo}</td><td>${hits}</td></tr>`).join('');
+		}
+		if (Chat.namefilterwhitelist.size) {
+			content += `<tr><th colspan="2"><h3>Whitelisted names</h3></tr></th>`;
+			for (const [val] of Chat.namefilterwhitelist) {
+				content += `<tr><td>${val}</td></tr>`;
+			}
 		}
 		if (!content) {
 			buf += `<p>There are no filtered words.</p>`;
@@ -329,7 +334,7 @@ let commands = {
 		if (!this.can('forcerename')) return false;
 		target = toId(target);
 		if (!target) return this.errorReply(`Syntax: /allowname username`);
-		namefilterwhitelist.set(target, user.name);
+		Chat.namefilterwhitelist.set(target, user.name);
 
 		const msg = `${target} was allowed as a username by ${user.name}.`;
 		const staffRoom = Rooms('staff');

@@ -1604,3 +1604,5 @@ Chat.updateServerLock = false;
 Chat.filterKeys = {};
 /** @type {{[k: string]: string[]}} */
 Chat.filterWords = {};
+/** @type {Map<string, string>} */
+Chat.namefilterwhitelist = new Map();
