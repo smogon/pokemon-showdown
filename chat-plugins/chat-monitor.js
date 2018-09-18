@@ -282,7 +282,7 @@ let commands = {
 				let [word, filterTo, ...reasonParts] = rest;
 				word = word.trim();
 				filterTo = filterTo.trim();
-				let reason = reasonParts.join(',');
+				let reason = reasonParts.join(',').trim();
 				if (!filterTo) return this.errorReply(`Syntax for word filters: /filter add ${list}, regex, filter to, reason`);
 
 				let regex;
@@ -299,7 +299,7 @@ let commands = {
 			} else {
 				let [word, ...reasonParts] = rest;
 				word = word.trim();
-				let reason = reasonParts.join(',');
+				let reason = reasonParts.join(',').trim();
 				if (filterWords[list].some(val => val[0] === word)) return this.errorReply(`${word} is already added to the ${list} list.`);
 				filterWords[list].push([word, reason, null, 0]);
 				this.globalModlog(`ADDFILTER`, null, `'${word}' to ${list} list by ${user.name}${reason ? ` (${reason})` : ''}`);
