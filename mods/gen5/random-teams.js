@@ -232,8 +232,8 @@ class RandomGen5Teams extends RandomGen6Teams {
 				case 'drainpunch':
 					if (hasMove['closecombat'] || hasMove['crosschop'] || hasMove['highjumpkick']) rejected = true;
 					break;
-				case 'fierydance': case 'flamethrower':
-					if (hasMove['blueflare'] || hasMove['fireblast'] || hasMove['lavaplume'] || hasMove['overheat']) rejected = true;
+				case 'flareblitz': case 'fierydance': case 'flamethrower': case 'lavaplume':
+					if (hasMove['blueflare'] || hasMove['fireblast'] || hasMove['overheat']) rejected = true;
 					break;
 				case 'firepunch':
 					if (hasMove['flareblitz']) rejected = true;
@@ -241,11 +241,8 @@ class RandomGen5Teams extends RandomGen6Teams {
 				case 'overheat':
 					if (counter.setupType === 'Special' || hasMove['fireblast']) rejected = true;
 					break;
-				case 'airslash':
-					if (hasMove['hurricane']) rejected = true;
-					break;
-				case 'bravebird': case 'drillpeck': case 'pluck':
-					if (hasMove['acrobatics']) rejected = true;
+				case 'airslash': case 'bravebird': case 'drillpeck': case 'pluck':
+					if (hasMove['acrobatics'] || hasMove['hurricane']) rejected = true;
 					break;
 				case 'gigadrain':
 					if ((!counter.setupType && hasMove['leafstorm']) || hasMove['petaldance']) rejected = true;
@@ -294,7 +291,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 					break;
 
 				// Status:
-				case 'encore': case 'suckerpunch':
+				case 'encore': case 'iceshard': case 'suckerpunch':
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'moonlight': case 'painsplit': case 'recover': case 'roost': case 'softboiled': case 'synthesis':
@@ -467,6 +464,8 @@ class RandomGen5Teams extends RandomGen6Teams {
 					rejectAbility = counter['damage'] >= counter.damagingMoves.length || (counter.Status > 2 && !counter.setupType);
 				} else if (ability === 'Torrent') {
 					rejectAbility = !counter['Water'];
+				} else if (ability === 'Unburden') {
+					rejectAbility = template.baseStats.spe > 100;
 				} else if (ability === 'Water Absorb') {
 					rejectAbility = abilities.includes('Volt Absorb');
 				}
@@ -559,9 +558,11 @@ class RandomGen5Teams extends RandomGen6Teams {
 
 		// Medium priority
 		} else if (counter.Physical >= 4 && !hasMove['fakeout'] && !hasMove['suckerpunch'] && !hasMove['flamecharge'] && !hasMove['rapidspin']) {
-			item = this.randomChance(2, 3) ? 'Choice Band' : 'Expert Belt';
+			item = !counter['Normal'] && this.randomChance(1, 3) ? 'Expert Belt' : 'Choice Band';
 		} else if (counter.Special >= 4) {
-			item = this.randomChance(2, 3) ? 'Choice Specs' : 'Expert Belt';
+			item = this.randomChance(1, 3) ? 'Expert Belt' : 'Choice Specs';
+		} else if (ability === 'Speed Boost' && !hasMove['substitute'] && counter.Physical + counter.Special > 2) {
+			item = 'Life Orb';
 		} else if ((hasMove['eruption'] || hasMove['waterspout']) && !counter['Status']) {
 			item = 'Choice Scarf';
 		} else if (this.getEffectiveness('Ground', template) >= 2 && ability !== 'Levitate' && !hasMove['magnetrise']) {
@@ -587,7 +588,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 		} else if (counter.Physical + counter.Special >= 3 && counter.setupType) {
 			item = hasMove['outrage'] ? 'Lum Berry' : 'Life Orb';
 		} else if (counter.Physical + counter.Special >= 4) {
-			item = 'Expert Belt';
+			item = counter['Normal'] ? 'Life Orb' : 'Expert Belt';
 		} else if (slot === 0 && ability !== 'Sturdy' && !counter['recoil']) {
 			item = 'Focus Sash';
 
