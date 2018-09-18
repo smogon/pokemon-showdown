@@ -209,6 +209,48 @@ let namefilter = function (name, user) {
 	return name;
 };
 
+/** @typedef {(query: string[], user: User, connection: Connection) => (string | null | void)} PageHandler */
+/** @typedef {{[k: string]: PageHandler | PageTable}} PageTable */
+
+/** @type {PageTable} */
+const pages = {
+	filters(query, user, connection) {
+		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
+		let buf = `|title|Filters\n|pagehtml|<div class="pad ladder"><h2>Filters</h2>`;
+		if (!user.can('lock')) {
+			return buf + `<p>Access denied</p></div>`;
+		}
+		let content = ``;
+		if (filterWords.publicwarn.length) {
+			content += `<tr><th colspan="2"><h3>Filtered in public rooms</h3></tr></th>`;
+			content += filterWords.publicwarn.map(([str, reason, , hits]) => `<tr><td><abbr title="${reason}">${str}</abbr></td><td>${hits}</td></tr>`).join('');
+		}
+		if (filterWords.warn.length) {
+			content += `<tr><th colspan="2"><h3>Filtered</h3></tr></th>`;
+			content += filterWords.warn.map(([str, reason, , hits]) => `<tr><td><abbr title="${reason}">${str}</abbr></td><td>${hits}</td></tr>`).join('');
+		}
+		if (filterWords.autolock.length) {
+			content += `<tr><th colspan="2"><h3>Weeklock</h3></tr></th>`;
+			content += filterWords.autolock.map(([str, reason, , hits]) => `<tr><td><abbr title="${reason}">${str}</abbr></td><td>${hits}</td></tr>`).join('');
+		}
+		if (filterWords.namefilter.length) {
+			content += `<tr><th colspan="2"><h3>Filtered in names</h3></tr></th>`;
+			content += filterWords.namefilter.map(([str, reason, , hits]) => `<tr><td><abbr title="${reason}">${str}</abbr></td><td>${hits}</td></tr>`).join('');
+		}
+		if (filterWords.wordfilter.length) {
+			content += `<tr><th colspan="2"><h3>Filtered in public rooms</h3></tr></th>`;
+			content += filterWords.wordfilter.map(([str, reason, filterTo, hits]) => `<tr><td><abbr title="${reason}"><code>${str}</code></abbr> &rArr; ${filterTo}</td><td>${hits}</td></tr>`).join('');
+		}
+		if (!content) {
+			buf += `<p>There are no filtered words.</p>`;
+		} else {
+			buf += `<table>${content}</table>`;
+		}
+		buf += `</div>`;
+		return buf;
+	},
+};
+exports.pages = pages;
 
 /** @type {ChatCommands} */
 let commands = {
@@ -280,26 +322,7 @@ let commands = {
 			}
 		},
 		view: function (target, room, user) {
-			if (!this.can('lock')) return false;
-
-			let content = '';
-			if (filterWords.publicwarn.length) {
-				content += `<td style="padding: 5px 10px;vertical-align:top;"><p style="font-weight:bold;text-align:center;">Filtered in public rooms:</p>${filterWords.publicwarn.map(([str, reason]) => `<abbr style="text-align:center;margin:0px;display:block;" title="${reason}">${str}</abbr>`).join('')}</td>`;
-			}
-			if (filterWords.warn.length) {
-				content += `<td style="padding: 5px 10px;vertical-align:top;"><p style="font-weight:bold;text-align:center;">Filtered:</p>${filterWords.warn.map(([str, reason]) => `<abbr style="text-align:center;margin:0px;display:block;" title="${reason}">${str}</abbr>`).join('')}</td>`;
-			}
-			if (filterWords.autolock.length) {
-				content += `<td style="padding: 5px 10px;vertical-align:top;"><p style="font-weight:bold;text-align:center;">Weeklock:</p>${filterWords.autolock.map(([str, reason]) => `<abbr style="text-align:center;margin:0px;display:block;" title="${reason}">${str}</abbr>`).join('')}</td>`;
-			}
-			if (filterWords.namefilter.length) {
-				content += `<td style="padding: 5px 10px;vertical-align:top;"><p style="font-weight:bold;text-align:center;">Filtered in names:</p>${filterWords.namefilter.map(([str, reason]) => `<abbr style="text-align:center;margin:0px;display:block;" title="${reason}">${str}</abbr>`).join('')}</td>`;
-			}
-			if (filterWords.wordfilter.length) {
-				content += `<td style="padding: 5px 10px;vertical-align:top;"><p style="font-weight:bold;text-align:center;">Filtered in public rooms:</p>${filterWords.wordfilter.map(([str, reason, filterTo]) => `<abbr style="text-align:center;margin:0px;display:block;" title="${reason}"><code>${str}</code> => ${filterTo}</abbr>`).join('')}</td>`;
-			}
-			if (!content) return this.sendReplyBox("There are no filtered words.");
-			return this.sendReply(`|raw|<div class="infobox infobox-limited"><table style="margin:auto;"><tr>${content}</tr></table></div>`);
+			this.parse(`/join view-filters`);
 		},
 	},
 	allowname: function (target, room, user) {
