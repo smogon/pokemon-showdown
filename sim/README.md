@@ -14,7 +14,7 @@ stream = new Sim.BattleStream();
     }
 })();
 
-stream.write(`>start {"format":"gen7randombattle"}`);
+stream.write(`>start {"formatid":"gen7randombattle"}`);
 stream.write(`>player p1 {"name":"Alice"}`);
 stream.write(`>player p2 {"name":"Bob"}`);
 ```
