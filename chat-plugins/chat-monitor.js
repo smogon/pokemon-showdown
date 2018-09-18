@@ -333,6 +333,7 @@ let commands = {
 				return this.sendReply(`'${words.join(', ')}' ${Chat.plural(words, "were", "was")} removed from the ${list} list.`);
 			}
 		},
+		list: 'view',
 		view: function (target, room, user) {
 			this.parse(`/join view-filters`);
 		},
