@@ -146,7 +146,7 @@ let chatfilter = function (message, user, room) {
 	}
 	for (let line of filterWords.wordfilter) {
 		if (typeof line === 'string') continue; // Failsafe to appease typescript.
-		message = message.replace(line[0], line[1]);
+		message = message.replace(line[0], line[2] || '');
 	}
 
 	return message;
