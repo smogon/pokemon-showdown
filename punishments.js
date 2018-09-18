@@ -742,9 +742,10 @@ Punishments.lock = function (user, expireTime, id, ...reason) {
  * @param {string} source
  * @param {string} reason
  * @param {string?} message
- * @param {boolean?} week
+ * @param {boolean} week
+ * @param {boolean} name
  */
-Punishments.autolock = function (user, room, source, reason, message, week) {
+Punishments.autolock = function (user, room, source, reason, message, week = false, name = false) {
 	if (!message) message = reason;
 
 	let punishment = `LOCKED`;
@@ -753,9 +754,14 @@ Punishments.autolock = function (user, room, source, reason, message, week) {
 		expires = Date.now() + 7 * 24 * 60 * 60 * 1000;
 		punishment = `WEEKLOCKED`;
 	}
-	Punishments.lock(user, expires, toId(user), `Autolock: ${user.name || toId(user)}: ${reason}`);
+	if (name) {
+		punishment = `NAMELOCKED`;
+		Punishments.namelock(user, expires, toId(user), `Autonamelock: ${user.name || toId(user)}: ${reason}`);
+	} else {
+		Punishments.lock(user, expires, toId(user), `Autolock: ${user.name || toId(user)}: ${reason}`);
+	}
 	Monitor.log(`[${source}] ${punishment}: ${message}`);
-	Rooms.global.modlog(`(${toId(room)}) AUTOLOCK: [${toId(user)}]: ${reason}`);
+	Rooms.global.modlog(`(${toId(room)}) AUTO${name ? `NAME` : ''}LOCK: [${toId(user)}]: ${reason}`);
 };
 /**
  * @param {string} name
