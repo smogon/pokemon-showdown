@@ -38,7 +38,7 @@ class SortedLimitedLengthList {
 		return this.list.slice();
 	}
 
-	tryInsert(element) {
+	insert(element) {
 		let insertedAt = -1;
 		for (let i = this.list.length - 1; i >= 0; i--) {
 			if (element.localeCompare(this.list[i]) < 0) {
@@ -54,9 +54,7 @@ class SortedLimitedLengthList {
 		if (insertedAt < 0) this.list.splice(0, 0, element);
 		if (this.list.length > this.maxSize) {
 			this.list.pop();
-			if (insertedAt === this.list.length) return false;
 		}
-		return true;
 	}
 }
 
@@ -76,7 +74,7 @@ function checkRipgrepAvailability() {
 	return Config.ripgrepmodlog;
 }
 
-function getMoreButton(room, search, useExactSearch, lines, maxLines) {
+function getMoreButton(roomid, search, useExactSearch, lines, maxLines) {
 	let newLines = 0;
 	for (let increase of MORE_BUTTON_INCREMENTS) {
 		if (increase > lines) {
@@ -88,7 +86,7 @@ function getMoreButton(room, search, useExactSearch, lines, maxLines) {
 		return ''; // don't show a button if no more pre-set increments are valid or if the amount of results is already below the max
 	} else {
 		if (useExactSearch) search = Chat.escapeHTML(`"${search}"`);
-		return `<br /><div style="text-align:center"><button class="button" name="send" value="/modlog ${room}, ${search} ${LINES_SEPARATOR}${newLines}" title="View more results">Older results<br />&#x25bc;</button></div>`;
+		return `<br /><div style="text-align:center"><button class="button" name="send" value="/modlog ${roomid}, ${search} ${LINES_SEPARATOR}${newLines}" title="View more results">Older results<br />&#x25bc;</button></div>`;
 	}
 }
 
@@ -144,8 +142,7 @@ async function checkRoomModlog(path, regex, results) {
 	let line;
 	while ((line = await fileStream.readLine()) !== null) {
 		if (!regex || regex.test(line)) {
-			const insertionSuccessful = results.tryInsert(line);
-			if (!insertionSuccessful) break;
+			results.insert(line);
 		}
 	}
 	fileStream.destroy();
@@ -160,17 +157,17 @@ function runRipgrepModlog(paths, regexString, results) {
 		return results;
 	}
 	for (const fileName of stdout.toString().split('\n').reverse()) {
-		if (fileName) results.tryInsert(fileName);
+		if (fileName) results.insert(fileName);
 	}
 	return results;
 }
 
-function prettifyResults(resultArray, room, searchString, exactSearch, addModlogLinks, hideIps, maxLines) {
+function prettifyResults(resultArray, roomid, searchString, exactSearch, addModlogLinks, hideIps, maxLines) {
 	if (resultArray === null) {
 		return "The modlog query has crashed.";
 	}
 	let roomName;
-	switch (room) {
+	switch (roomid) {
 	case 'all':
 		roomName = "all rooms";
 		break;
@@ -178,13 +175,13 @@ function prettifyResults(resultArray, room, searchString, exactSearch, addModlog
 		roomName = "all public rooms";
 		break;
 	default:
-		roomName = `room ${room}`;
+		roomName = `room ${roomid}`;
 	}
 	if (!resultArray.length) {
 		return `|popup|No moderator actions containing ${searchString} found on ${roomName}.` +
 				(exactSearch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.");
 	}
-	const title = `[${room}]` + (searchString ? ` ${searchString}` : ``);
+	const title = `[${roomid}]` + (searchString ? ` ${searchString}` : ``);
 	let lines = resultArray.length;
 	let curDate = '';
 	resultArray.unshift('');
@@ -218,15 +215,17 @@ function prettifyResults(resultArray, room, searchString, exactSearch, addModlog
 		return `${date}<small>[${timestamp}] (${thisRoomID})</small>${Chat.escapeHTML(line.slice(parenIndex + 1))}`;
 	}).join(`<br />`);
 	let preamble;
-	const modlogid = room + (searchString ? '-' + Dashycode.encode(searchString) : '');
+	const modlogid = roomid + (searchString ? '-' + Dashycode.encode(searchString) : '');
 	if (searchString) {
 		const searchStringDescription = (exactSearch ? `containing the string "${searchString}"` : `matching the username "${searchString}"`);
-		preamble = `>view-modlog-${modlogid}\n|init|html\n|title|[Modlog]${title}\n|pagehtml|<div class="pad"><p>The last ${Chat.count(lines, "logged actions")} ${searchStringDescription} on ${roomName}.` +
+		preamble = `>view-modlog-${modlogid}\n|init|html\n|title|[Modlog]${title}\n` +
+			`|pagehtml|<div class="pad"><p>The last ${Chat.count(lines, "logged actions")} ${searchStringDescription} on ${roomName}.` +
 			(exactSearch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.");
 	} else {
-		preamble = `>view-modlog-${modlogid}\n|init|html\n|title|[Modlog]${title}\n|pagehtml|<div class="pad"><p>The last ${Chat.count(lines, "lines")} of the Moderator Log of ${roomName}.`;
+		preamble = `>view-modlog-${modlogid}\n|init|html\n|title|[Modlog]${title}\n` +
+			`|pagehtml|<div class="pad"><p>The last ${Chat.count(lines, "lines")} of the Moderator Log of ${roomName}.`;
 	}
-	let moreButton = getMoreButton(room, searchString, exactSearch, lines, maxLines);
+	let moreButton = getMoreButton(roomid, searchString, exactSearch, lines, maxLines);
 	return `${preamble}${resultString}${moreButton}</div>`;
 }
 
