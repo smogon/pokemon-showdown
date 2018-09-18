@@ -150,12 +150,12 @@ let chatfilter = function (message, user, room) {
 	for (let line of filterWords.wordfilter) {
 		const regex = line[0];
 		if (typeof regex === 'string') continue;
-		let matches = regex.exec(lcMessage);
-		if (!matches) continue;
-		for (let match of matches) {
-			message.replace(match[0], line[2] || '');
+		let match = regex.exec(lcMessage);
+		while (match) {
+			message = message.replace(match[0], line[2] || '');
 			line[3]++;
 			saveFilters();
+			match = regex.exec(lcMessage);
 		}
 	}
 
