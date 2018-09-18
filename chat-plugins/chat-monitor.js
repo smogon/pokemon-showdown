@@ -89,7 +89,7 @@ let chatfilter = function (message, user, room) {
 			matched = lcMessage.includes(line);
 		}
 		if (matched) {
-			if (room && room.id.endsWith('staff')) return `${message} __[would be locked: ${line}]__`;
+			if (room && room.id.endsWith('staff')) return `${message} __[would be locked: ${line}${reason ? ` (${reason})` : ''}]__`;
 			if (user.isStaff) {
 				return message;
 			}
