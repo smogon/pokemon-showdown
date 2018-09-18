@@ -193,7 +193,14 @@ let namefilter = function (name, user) {
 		}
 	}
 	for (let line of filterWords.namefilter) {
-		if (lcName.includes(String(line[0]))) {
+		const word = String(line[0]);
+		let matched;
+		if (word.startsWith('\\b') || word.endsWith('\\b')) {
+			matched = new RegExp(word).test(lcName);
+		} else {
+			matched = lcName.includes(word);
+		}
+		if (matched) {
 			user.trackRename = name;
 			line[3]++;
 			saveFilters();
