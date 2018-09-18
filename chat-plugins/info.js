@@ -1683,24 +1683,26 @@ const commands = {
 	rules: function (target, room, user) {
 		if (!target) {
 			const languageTable = {
-				portuguese: ['Por favor siga as regras:', 'pages/rules-pt', 'Regras Globais', `Regras da sala ${room.title}`],
-				spanish: ['Por favor sigue las reglas:', 'pages/rules-es', 'Reglas Globales', `Reglas de la sala ${room.title}`],
-				italian: ['Per favore, rispetta le seguenti regole:', 'pages/rules-it', 'Regole Globali', `Regole della room ${room.title}`],
-				french: ['Veuillez suivre ces règles:', 'pages/rules-fr', 'Règles Générales', `Règles de la room ${room.title}`],
-				simplifiedchinese: ['请遵守规则:', 'pages/rules-zh', '全站规则', `${room.title}房间规则`],
-				traditionalchinese: ['請遵守規則:', 'pages/rules-tw', '全站規則', `${room.title}房間規則`],
-				japanese: ['ルールを守ってください:', 'pages/rules-ja', '全部屋共通ルール', `${room.title}部屋のルール`],
-				hindi: ['कृपया इन नियमों का पालन करें:', 'pages/rules-hi', 'आप सभी के लिए नियम:', `${room.title} इस Room के नियम:`],
-				turkish: ['Lütfen kurallara uyun:', 'pages/rules-tr', 'Genel kurallar', `${room.title} odası kuralları`],
-				dutch: ['Volg de regels:', 'pages/rules-nl', 'Globale Regels ', `Regels van de ${room.title} room`],
-				german: ['Bitte befolgt die Regeln:', 'pages/rules-de', 'Globale Regeln', `Regeln des ${room.title} Raumes`],
-				english: ['Please follow the rules:', 'rules', 'Global Rules', `${room.title} room rules`],
+				portuguese: ['Por favor siga as regras:', 'pages/rules-pt', 'Regras Globais', room ? `Regras da sala ${room.title}` : ``],
+				spanish: ['Por favor sigue las reglas:', 'pages/rules-es', 'Reglas Globales', room ? `Reglas de la sala ${room.title}` : ``],
+				italian: ['Per favore, rispetta le seguenti regole:', 'pages/rules-it', 'Regole Globali', room ? `Regole della room ${room.title}` : ``],
+				french: ['Veuillez suivre ces règles:', 'pages/rules-fr', 'Règles Générales', room ? `Règles de la room ${room.title}` : ``],
+				simplifiedchinese: ['请遵守规则:', 'pages/rules-zh', '全站规则', room ? `${room.title}房间规则` : ``],
+				traditionalchinese: ['請遵守規則:', 'pages/rules-tw', '全站規則', room ? `${room.title}房間規則` : ``],
+				japanese: ['ルールを守ってください:', 'pages/rules-ja', '全部屋共通ルール', room ? `${room.title}部屋のルール` : ``],
+				hindi: ['कृपया इन नियमों का पालन करें:', 'pages/rules-hi', 'आप सभी के लिए नियम:', room ? `${room.title} इस Room के नियम:` : ``],
+				turkish: ['Lütfen kurallara uyun:', 'pages/rules-tr', 'Genel kurallar', room ? `${room.title} odası kuralları` : ``],
+				dutch: ['Volg de regels:', 'pages/rules-nl', 'Globale Regels ', room ? `Regels van de ${room.title} room` : ``],
+				german: ['Bitte befolgt die Regeln:', 'pages/rules-de', 'Globale Regeln', room ? `Regeln des ${room.title} Raumes` : ``],
+				english: ['Please follow the rules:', 'rules', 'Global Rules', room ? `${room.title} room rules` : ``],
 			};
 			if (!this.runBroadcast()) return;
+			const globalRulesLink = `https://pokemonshowdown.com/${languageTable[room && room.language ? room.language : 'english'][1]}`;
+			const globalRulesLinkText = languageTable[room && room.language ? room.language : 'english'][2];
 			this.sendReplyBox(
-				`${languageTable[room.language || 'english'][0]}<br />` +
+				`${room ? languageTable[room.language || 'english'][0] + '<br />' : ``}` +
 				(room && room.rulesLink ? Chat.html`- <a href="${room.rulesLink}">${languageTable[room.language || 'english'][3]}</a><br />` : ``) +
-				`- <a href="https://pokemonshowdown.com/${languageTable[room.language || 'english'][1]}">${languageTable[room.language || 'english'][2]}</a>`
+				`- <a href="${globalRulesLink}">${globalRulesLinkText}</a>`
 			);
 			return;
 		}
