@@ -872,7 +872,7 @@ let BattleAbilities = {
 		},
 		id: "emergencyexit",
 		name: "Emergency Exit",
-		rating: 2,
+		rating: 1.5,
 		num: 194,
 	},
 	"fairyaura": {
