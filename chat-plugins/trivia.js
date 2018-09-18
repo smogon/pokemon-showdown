@@ -7,11 +7,25 @@
 
 const FS = require('./../lib/fs');
 
-const CATEGORIES = {
+const MAIN_CATEGORIES = {
 	ae: 'Arts and Entertainment',
 	pokemon: 'Pok\u00E9mon',
 	sg: 'Science and Geography',
 	sh: 'Society and Humanities',
+};
+
+const SPECIAL_CATEGORIES = {
+	misc: 'Miscellaneous',
+	subcat: 'Sub-Category',
+};
+
+const ALL_CATEGORIES = {
+	ae: 'Arts and Entertainment',
+	misc: 'Miscellaneous',
+	pokemon: 'Pok\u00E9mon',
+	sg: 'Science and Geography',
+	sh: 'Society and Humanities',
+	subcat: 'Sub-Category',
 };
 
 const MODES = {
@@ -34,7 +48,9 @@ const SCORE_CAPS = {
 	long: 50,
 };
 
-Object.setPrototypeOf(CATEGORIES, null);
+Object.setPrototypeOf(MAIN_CATEGORIES, null);
+Object.setPrototypeOf(SPECIAL_CATEGORIES, null);
+Object.setPrototypeOf(ALL_CATEGORIES, null);
 Object.setPrototypeOf(MODES, null);
 Object.setPrototypeOf(SCORE_CAPS, null);
 
@@ -59,8 +75,7 @@ const NUM_FINALS_QUESTIONS = 5;
  * @typedef {TriviaQuestion[]} TriviaQuestions
  * @typedef {{[k: string]: TriviaRank}} TriviaLeaderboard
  * @typedef {TriviaRank[][]} TriviaLadder
- * @typedef {{[k: string]: number}} TriviaUGM
- * @typedef {{questions?: TriviaQuestions, submissions?: TriviaQuestions, leaderboard?: TriviaLeaderboard, ladder?: TriviaLadder, ugm?: TriviaUGM, wlquestions?: TriviaQuestions, wlsubmissions?: TriviaQuestions}} TriviaData
+ * @typedef {{questions?: TriviaQuestions, submissions?: TriviaQuestions, leaderboard?: TriviaLeaderboard, ladder?: TriviaLadder, wlquestions?: TriviaQuestions, wlsubmissions?: TriviaQuestions}} TriviaData
  */
 
 /**
@@ -77,10 +92,6 @@ if (typeof triviaData.leaderboard !== 'object') triviaData.leaderboard = {};
 if (!Array.isArray(triviaData.ladder)) triviaData.ladder = [];
 if (!Array.isArray(triviaData.questions)) triviaData.questions = [];
 if (!Array.isArray(triviaData.submissions)) triviaData.submissions = [];
-if (triviaData.ugm) {
-	CATEGORIES.ugm = 'Ultimate Gaming Month';
-	if (typeof triviaData.ugm !== 'object') triviaData.ugm = {};
-}
 if (triviaData.questions.some(q => !('type' in q))) {
 	triviaData.questions = triviaData.questions.map(q => Object.assign(Object.create(null), q, {type: 'trivia'}));
 }
@@ -137,7 +148,7 @@ function sliceCategory(category) {
 	let sliceUpTo = findEndOfCategory(category, false);
 	if (!sliceUpTo) return [];
 
-	let categories = Object.keys(CATEGORIES);
+	let categories = Object.keys(ALL_CATEGORIES);
 	let categoryIdx = categories.indexOf(category);
 	if (!categoryIdx) return questions.slice(0, sliceUpTo);
 
@@ -234,9 +245,9 @@ class Trivia extends Rooms.RoomGame {
 		if (category === 'all') {
 			this.category = 'All';
 		} else if (category === 'random') {
-			this.category = `Random (${CATEGORIES[questions[0].category]})`;
+			this.category = `Random (${ALL_CATEGORIES[questions[0].category]})`;
 		} else {
-			this.category = CATEGORIES[category];
+			this.category = ALL_CATEGORIES[category];
 		}
 		/** @type {TriviaQuestions} */
 		this.questions = questions;
@@ -524,7 +535,7 @@ class Trivia extends Rooms.RoomGame {
 	sendQuestion(question) {
 		this.broadcast(
 			`Question: ${question.question}`,
-			`Category: ${CATEGORIES[question.category]}`
+			`Category: ${ALL_CATEGORIES[question.category]}`
 		);
 	}
 
@@ -603,12 +614,6 @@ class Trivia extends Rooms.RoomGame {
 				rank[2] += player.correctAnswers;
 			} else {
 				leaderboard[i] = [0, player.points, player.correctAnswers];
-			}
-
-			if (triviaData.ugm && this.category === 'Ultimate Gaming Month') {
-				let ugmPoints = player.points / 5 | 0;
-				if (winner && winner.userid === i) ugmPoints *= 2;
-				triviaData.ugm[i] += ugmPoints;
 			}
 		}
 
@@ -1232,17 +1237,15 @@ const commands = {
 		let isAll = (category === 'all');
 		let questions;
 		if (isRandom) {
-			let categories = Object.keys(CATEGORIES);
+			let categories = Object.keys(MAIN_CATEGORIES);
 			let randCategory = categories[Math.random() * categories.length | 0];
-			if (triviaData.ugm && randCategory === 'ugm') {
-				categories.splice(categories.indexOf('ugm'), 1);
-				randCategory = categories[Math.random() * categories.length | 0];
-			}
 			questions = sliceCategory(randCategory);
 		} else if (isAll) {
 			questions = triviaData.questions.slice();
-			if (triviaData.ugm) questions = questions.filter(q => q.category !== 'ugm');
-		} else if (CATEGORIES[category]) {
+			for (const category in SPECIAL_CATEGORIES) {
+				questions = questions.filter(q => q.category !== category);
+			}
+		} else if (ALL_CATEGORIES[category]) {
 			questions = sliceCategory(category);
 		} else {
 			return this.errorReply(`"${category}" is an invalid category.`);
@@ -1260,7 +1263,7 @@ const commands = {
 			if (questions.length < SCORE_CAPS[length] / 5) {
 				if (isRandom) return this.errorReply("There are not enough questions in the randomly chosen category to finish a trivia game.");
 				if (isAll) return this.errorReply("There are not enough questions in the trivia database to finish a trivia game.");
-				return this.errorReply(`There are not enough questions under the category "${CATEGORIES[category]}" to finish a trivia game.`);
+				return this.errorReply(`There are not enough questions under the category "${ALL_CATEGORIES[category]}" to finish a trivia game.`);
 			}
 		}
 
@@ -1417,7 +1420,8 @@ const commands = {
 		if (target.length !== 3) return this.errorReply("Invalid arguments specified. View /trivia help for more information.");
 
 		let category = toId(target[0]);
-		if (!CATEGORIES[category]) return this.errorReply(`'${target[0].trim()}' is not a valid category. View /trivia help for more information.`);
+		if (!ALL_CATEGORIES[category]) return this.errorReply(`'${target[0].trim()}' is not a valid category. View /trivia help for more information.`);
+		if (cmd === 'submit' && !MAIN_CATEGORIES[category]) return this.errorReply(`You cannot submit question in the '${ALL_CATEGORIES[category]}' category`);
 		if (this.message.startsWith("/wlink") && category === 'pokemon') return this.errorReply("Pokemon questions are not allowed for the Weakest Link");
 		let question = Chat.escapeHTML(target[1].trim());
 		if (!question) return this.errorReply(`'${target[1]}' is not a valid question.`);
@@ -1615,11 +1619,11 @@ const commands = {
 
 			let lastCategoryIdx = 0;
 			buffer += "<tr><th>Category</th><th>Question Count</th></tr>";
-			for (const category in CATEGORIES) {
+			for (const category in ALL_CATEGORIES) {
 				if (category === 'random') continue;
 				let tally = findEndOfCategory(category, false) - lastCategoryIdx;
 				lastCategoryIdx += tally;
-				buffer += `<tr><td>${CATEGORIES[category]}</td><td>${tally} (${((tally * 100) / questionsLen).toFixed(2)}%)</td></tr>`;
+				buffer += `<tr><td>${ALL_CATEGORIES[category]}</td><td>${tally} (${((tally * 100) / questionsLen).toFixed(2)}%)</td></tr>`;
 			}
 			buffer += `<tr><td><strong>Total</strong></td><td><strong>${questionsLen}</strong></td></table></div>`;
 
@@ -1630,7 +1634,7 @@ const commands = {
 
 		let category = toId(target);
 		if (category === 'random') return false;
-		if (!CATEGORIES[category]) return this.errorReply(`'${target}' is not a valid category. View /help trivia for more information.`);
+		if (!ALL_CATEGORIES[category]) return this.errorReply(`'${target}' is not a valid category. View /help trivia for more information.`);
 
 		let list = sliceCategory(category);
 		if (isWL) {
@@ -1639,12 +1643,12 @@ const commands = {
 			list = list.filter(q => q.type === "trivia");
 		}
 		if (!list.length) {
-			buffer += `<tr><td>There are no questions in the ${CATEGORIES[target]} category for ${isWL ? "Weakest Link" : "Trivia"}.</td></table></div>`;
+			buffer += `<tr><td>There are no questions in the ${ALL_CATEGORIES[target]} category for ${isWL ? "Weakest Link" : "Trivia"}.</td></table></div>`;
 			return this.sendReply(buffer);
 		}
 
 		if (user.can('ban', null, room)) {
-			buffer += `<tr><td colspan="3">There are <strong>${list.length}</strong> questions in the ${CATEGORIES[target]} category for ${isWL ? "Weakest Link" : "Trivia"}.</td></tr>` +
+			buffer += `<tr><td colspan="3">There are <strong>${list.length}</strong> questions in the ${ALL_CATEGORIES[target]} category for ${isWL ? "Weakest Link" : "Trivia"}.</td></tr>` +
 				"<tr><th>#</th><th>Question</th><th>Answer(s)</th></tr>";
 			for (const [i, entry] of list.entries()) {
 				buffer += `<tr><td><strong>${(i + 1)}</strong></td><td>${entry.question}</td><td>${entry.answers.join(", ")}</td><tr>`;
@@ -1667,7 +1671,7 @@ const commands = {
 
 	search: function (target, room, user) {
 		if (room.id !== 'questionworkshop') return this.errorReply("This command can only be used in Question Workshop.");
-		if (!this.can('mute', null, room)) return false;
+		if (!this.can('broadcast', null, room)) return false;
 		if (!target.includes(',')) return this.errorReply("No valid search arguments entered.");
 
 		let [type, ...query] = target.split(',');
@@ -1683,7 +1687,7 @@ const commands = {
 		query = query.join(',').trim();
 		if (!query) return this.errorReply("No valid search query as entered.");
 
-		let results = triviaData[type].filter(q => q.question.includes(query));
+		let results = triviaData[type].filter(q => q.question.includes(query) && !SPECIAL_CATEGORIES[q.category]);
 		if (!results.length) return this.sendReply(`No results found under the ${type} list.`);
 
 		let buffer = "|raw|<div class=\"ladder\"><table><tr><th>#</th><th>Category</th><th>Question</th></tr>" +
@@ -1718,8 +1722,7 @@ const commands = {
 			`User: <strong>${name}</strong><br />`	 +
 			`Leaderboard score: <strong>${score[0]}</strong> (#${score[3]})<br />` +
 			`Total game points: <strong>${score[1]}</strong> (#${score[4]})<br />` +
-			`Total correct answers: <strong>${score[2]}</strong> (#${score[5]})` +
-			(triviaData.ugm ? `<br />UGM points: <strong>${triviaData.ugm[userid]}</strong>` : "")
+			`Total correct answers: <strong>${score[2]}</strong> (#${score[5]})`
 		);
 	},
 	rankhelp: [`/trivia rank [username] - View the rank of the specified user. If no name is given, view your own.`],
@@ -1751,34 +1754,24 @@ const commands = {
 	},
 	ladderhelp: [`/trivia ladder [num] - View information about 100 users on the trivia leaderboard.`],
 
-	ugm: function (target, room, user) {
-		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
-		if (!this.can('broadcast', null, room)) return false;
-
-		let command = toId(target);
-		if (command === 'enable') {
-			if (triviaData.ugm) return this.errorReply("UGM mode is already enabled.");
-			triviaData.ugm = {};
-			for (let i in triviaData.leaderboard) {
-				triviaData.ugm[i] = 0;
+	clearquestions: 'clearqs',
+	clearqs: function (target, room, user) {
+		if (room.id !== 'questionworkshop') return this.errorReply("This command can only be used in Question Workshop");
+		if (!this.can('declare', null, room)) return false;
+		const category = toId(target);
+		if (ALL_CATEGORIES[category]) {
+			if (SPECIAL_CATEGORIES[category]) {
+				triviaData.questions = triviaData.questions.filter(q => q.category !== category);
+				writeTriviaData();
+				return this.privateModAction(`(${user.name} removed all questions of category '${category}'.)`);
+			} else {
+				return this.errorReply(`You cannot clear the category '${ALL_CATEGORIES[category]}'.`);
 			}
-			CATEGORIES.ugm = 'Ultimate Gaming Month';
-			writeTriviaData();
-			this.modlog('UGMMODE', null, 'ON');
-			return this.privateModAction(`(${user.name} enabled UGM mode.)`);
+		} else {
+			return this.errorReply(`'${category}' is an invalid category.`);
 		}
-		if (command === 'disable') {
-			if (!triviaData.ugm) return this.errorReply("UGM mode is already disabled.");
-			triviaData.questions = triviaData.questions.filter(q => q.category !== 'ugm');
-			delete triviaData.ugm;
-			delete CATEGORIES.ugm;
-			writeTriviaData();
-			this.modlog('UGMMODE', null, 'OFF');
-			return this.privateModAction(`(${user.name} disabled UGM mode.)`);
-		}
-		this.errorReply("Invalid target. Valid targets: enable, disable");
 	},
-	ugmhelp: [`/trivia ugm [setting] - Enable or disable UGM mode. Requires: # & ~`],
+	clearqshelp: [`/trivia clears [category] - Remove all questions of the given category. Requires: # & ~`],
 
 	bank: function (target, room, user) {
 		if (!room.game || room.game.title !== 'Weakest Link') return this.errorReply("This command can only be used for games of the Weakest Link.");
@@ -1816,7 +1809,9 @@ const commands = {
 };
 
 module.exports = {
-	CATEGORIES,
+	ALL_CATEGORIES,
+	MAIN_CATEGORIES,
+	SPECIAL_CATEGORIES,
 	MODES,
 	SCORE_CAPS,
 
@@ -1860,12 +1855,12 @@ module.exports = {
 			`- /trivia delete [question] - Delete a question from the trivia database. Requires: % @ # & ~`,
 			`- /trivia qs - View the distribution of questions in the question database.`,
 			`- /trivia qs [category] - View the questions in the specified category. Requires: % @ # & ~`,
+			`- /trivia clearqs [category] - Clear all questions in the given category. Requires: # & ~`,
 			`Informational commands:`,
 			`- /trivia search [type], [query] - Searches for questions based on their type and their query. Valid types: submissions, subs, questions, qs. Requires: + % @ # & ~`,
 			`- /trivia status [player] - lists the player's standings (your own if no player is specified) and the list of players in the current trivia game.`,
 			`- /trivia rank [username] - View the rank of the specified user. If none is given, view your own.`,
 			`- /trivia ladder - View information about the top 15 users on the trivia leaderboard.`,
-			`- /trivia ugm [setting] - Enable or disable UGM mode. Requires: # & ~`,
 			`Weakest Link Game commands:`,
 			`- /trivia bank - Bank when it is your turn.`,
 			`- /trivia vote [user] - Attempt to vote off a user during the voting phase.`,
