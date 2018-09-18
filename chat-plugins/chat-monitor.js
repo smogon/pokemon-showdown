@@ -126,7 +126,8 @@ let chatfilter = function (message, user, room) {
 		}
 	}
 	if ((room && room.isPrivate !== true) || !room) {
-		for (let [line, reason] of filterWords.publicwarn) {
+		for (let i = 0; i < filterWords.publicwarn.length; i++) {
+			let [line, reason] = filterWords.publicwarn[i];
 			let matched = false;
 			if (typeof line !== 'string') continue; // Failsafe to appease typescript.
 			if (line.startsWith('\\b') || line.endsWith('\\b')) {
@@ -140,13 +141,22 @@ let chatfilter = function (message, user, room) {
 					return message;
 				}
 				this.errorReply(`Please do not say '${line}'.`);
+				filterWords.publicwarn[i][3]++;
+				saveFilters();
 				return false;
 			}
 		}
 	}
 	for (let line of filterWords.wordfilter) {
-		if (typeof line === 'string') continue; // Failsafe to appease typescript.
-		message = message.replace(line[0], line[2] || '');
+		const regex = line[0];
+		if (typeof regex === 'string') continue;
+		let matches = regex.exec(lcMessage);
+		if (!matches) continue;
+		for (let match of matches) {
+			message.replace(match[0], line[2] || '');
+			line[3]++;
+			saveFilters();
+		}
 	}
 
 	return message;
@@ -183,10 +193,11 @@ let namefilter = function (name, user) {
 			return '';
 		}
 	}
-	for (let [line] of filterWords.namefilter) {
-		if (typeof line !== 'string') continue; // Failsafe to appease typescript.
-		if (lcName.includes(line)) {
+	for (let line of filterWords.namefilter) {
+		if (lcName.includes(String(line[0]))) {
 			user.trackRename = name;
+			line[3]++;
+			saveFilters();
 			return '';
 		}
 	}
