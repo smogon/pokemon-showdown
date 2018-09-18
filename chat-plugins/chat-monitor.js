@@ -227,24 +227,24 @@ const pages = {
 			return buf + `<p>Access denied</p></div>`;
 		}
 		let content = ``;
+		content += `<tr><th colspan="2"><h3>Filtered in public rooms <span style="font-size:8pt;">[publicwarn]</span></h3></tr></th>`;
 		if (filterWords.publicwarn.length) {
-			content += `<tr><th colspan="2"><h3>Filtered in public rooms</h3></tr></th>`;
 			content += filterWords.publicwarn.map(([str, reason, , hits]) => `<tr><td><abbr title="${reason}">${str}</abbr></td><td>${hits}</td></tr>`).join('');
 		}
+		content += `<tr><th colspan="2"><h3>Filtered <span style="font-size:8pt;">[warn]</span></h3></tr></th>`;
 		if (filterWords.warn.length) {
-			content += `<tr><th colspan="2"><h3>Filtered</h3></tr></th>`;
 			content += filterWords.warn.map(([str, reason, , hits]) => `<tr><td><abbr title="${reason}">${str}</abbr></td><td>${hits}</td></tr>`).join('');
 		}
+		content += `<tr><th colspan="2"><h3>Weeklock <span style="font-size:8pt;">[autolock]</span></h3></tr></th>`;
 		if (filterWords.autolock.length) {
-			content += `<tr><th colspan="2"><h3>Weeklock</h3></tr></th>`;
 			content += filterWords.autolock.map(([str, reason, , hits]) => `<tr><td><abbr title="${reason}">${str}</abbr></td><td>${hits}</td></tr>`).join('');
 		}
+		content += `<tr><th colspan="2"><h3>Filtered in names <span style="font-size:8pt;">[namefilter]</span></h3></tr></th>`;
 		if (filterWords.namefilter.length) {
-			content += `<tr><th colspan="2"><h3>Filtered in names</h3></tr></th>`;
 			content += filterWords.namefilter.map(([str, reason, , hits]) => `<tr><td><abbr title="${reason}">${str}</abbr></td><td>${hits}</td></tr>`).join('');
 		}
+		content += `<tr><th colspan="2"><h3>Filtered to different phrases <span style="font-size:8pt;">[wordfilter]</span></h3></tr></th>`;
 		if (filterWords.wordfilter.length) {
-			content += `<tr><th colspan="2"><h3>Filtered to different phrases</h3></tr></th>`;
 			content += filterWords.wordfilter.map(([str, reason, filterTo, hits]) => `<tr><td><abbr title="${reason}"><code>${str}</code></abbr> &rArr; ${filterTo}</td><td>${hits}</td></tr>`).join('');
 		}
 		if (Chat.namefilterwhitelist.size) {
