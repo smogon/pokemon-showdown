@@ -52,7 +52,7 @@ setImmediate(() => {
  * @param {string} punishment
  */
 function renderEntry(location, word, punishment) {
-	const str = word[0] instanceof RegExp ? String(word[0]).slice(1, -2) : word[0];
+	const str = word[0] instanceof RegExp ? String(word[0]).slice(1, -3) : word[0];
 	return `${location}\t${str}\t${punishment}\t${word[1]}\t${word[3]}${word[2] ? `\t${word[2]}` : ''}\r\n`;
 }
 
