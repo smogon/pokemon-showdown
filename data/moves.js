@@ -14951,7 +14951,6 @@ let BattleMovedex = {
 
 				if (target.hasType('Flying')) {
 					this.add('-immune', target, '[msg]');
-					this.add('-end', target, 'Sky Drop');
 					return null;
 				}
 			} else {
