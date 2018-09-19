@@ -287,7 +287,7 @@ let commands = {
 
 				let regex;
 				try {
-					regex = new RegExp(word, 'g'); // eslint-disable-line no-unused-vars
+					regex = new RegExp(word, 'ig'); // eslint-disable-line no-unused-vars
 				} catch (e) {
 					return this.errorReply(e.message.startsWith('Invalid regular expression: ') ? e.message : `Invalid regular expression: /${word}/: ${e.message}`);
 				}
@@ -320,7 +320,7 @@ let commands = {
 			if (filterKeys[list][1] === 'FILTERTO') {
 				const notFound = words.filter(val => !filterWords[list].filter(entry => String(entry[0]).slice(1, -3) === val).length);
 				if (notFound.length) return this.errorReply(`${notFound.join(', ')} ${Chat.plural(notFound, "are", "is")} not on the ${list} list.`);
-				filterWords[list] = filterWords[list].filter(entry => !words.includes(String(entry[0]).slice(1, -2)));
+				filterWords[list] = filterWords[list].filter(entry => !words.includes(String(entry[0]).slice(1, -3)));
 				this.globalModlog(`REMOVEFILTER`, null, `'${words.join(', ')}' from ${list} list by ${user.name}`);
 				saveFilters();
 				return this.sendReply(`'${words.join(', ')}' ${Chat.plural(words, "were", "was")} removed from the ${list} list.`);
