@@ -1347,6 +1347,8 @@ class RandomTeams extends Dex.ModdedDex {
 			item = 'Lycanium Z';
 		} else if (template.species === 'Marshadow' && hasMove['spectralthief'] && counter.setupType && !teamDetails.zMove) {
 			item = 'Marshadium Z';
+		} else if (template.species === 'Mimikyu' && hasMove['playrough'] && counter.setupType && !teamDetails.zMove) {
+			item = 'Mimikium Z';
 		} else if ((template.species === 'Necrozma-Dusk-Mane' || template.species === 'Necrozma-Dawn-Wings') && !teamDetails.zMove) {
 			if (hasMove['autotomize'] && hasMove['sunsteelstrike']) {
 				item = 'Solganium Z';
