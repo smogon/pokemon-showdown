@@ -33,7 +33,7 @@ setImmediate(() => {
 				if (filterKeys[key][0] === location && filterKeys[key][1] === punishment) {
 					if (punishment === 'FILTERTO') {
 						const filterTo = rest[0];
-						filterWords[key].push([new RegExp(word, 'g'), reason, filterTo, parseInt(times) || 0]);
+						filterWords[key].push([new RegExp(word, 'ig'), reason, filterTo, parseInt(times) || 0]);
 						continue loop;
 					} else {
 						filterWords[key].push([word, reason, null, parseInt(times) || 0]);
