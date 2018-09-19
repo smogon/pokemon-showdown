@@ -138,15 +138,17 @@ let chatfilter = function (message, user, room) {
 			}
 		}
 	}
-	for (let line of filterWords.wordfilter) {
-		const regex = line[0];
-		if (typeof regex === 'string') continue;
-		let match = regex.exec(message);
-		while (match) {
-			message = message.replace(match[0], line[2] || '');
-			line[3]++;
-			saveFilters();
-			match = regex.exec(message);
+	if (room && room.chatRoomData && room.id.endsWith('staff')) {
+		for (let line of filterWords.wordfilter) {
+			const regex = line[0];
+			if (typeof regex === 'string') continue;
+			let match = regex.exec(message);
+			while (match) {
+				message = message.replace(match[0], line[2] || '');
+				line[3]++;
+				saveFilters();
+				match = regex.exec(message);
+			}
 		}
 	}
 
