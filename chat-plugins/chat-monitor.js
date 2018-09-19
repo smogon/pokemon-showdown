@@ -89,10 +89,7 @@ let chatfilter = function (message, user, room) {
 			matched = lcMessage.includes(line);
 		}
 		if (matched) {
-			if (room && room.chatRoomData && room.id.endsWith('staff')) return `${message} __[would be locked: ${line}${reason ? ` (${reason})` : ''}]__`;
-			if (user.isStaff) {
-				return message;
-			}
+			if ((room && ((room.chatRoomData && room.id.endsWith('staff')) || room.id.startsWith('help-'))) || user.isStaff || (this.pmTarget && this.pmTarget.isStaff)) return `${message} __[would be locked: ${line}${reason ? ` (${reason})` : ''}]__`;
 			message = message.replace(/(https?):\/\//g, '$1__:__//');
 			message = message.replace(/\./g, '__.__');
 			if (room) {
@@ -115,10 +112,7 @@ let chatfilter = function (message, user, room) {
 			matched = lcMessage.includes(line);
 		}
 		if (matched) {
-			if (room && room.chatRoomData && room.id.endsWith('staff')) return `${message} __[would be filtered: ${line}${reason ? ` (${reason})` : ''}]__`;
-			if (user.isStaff) {
-				return message;
-			}
+			if ((room && ((room.chatRoomData && room.id.endsWith('staff')) || room.id.startsWith('help-'))) || user.isStaff || (this.pmTarget && this.pmTarget.isStaff)) return `${message} __[would be filtered: ${line}${reason ? ` (${reason})` : ''}]__`;
 			this.errorReply(`Please do not say '${line}'.`);
 			filterWords.warn[i][3]++;
 			saveFilters();
@@ -136,10 +130,7 @@ let chatfilter = function (message, user, room) {
 				matched = lcMessage.includes(line);
 			}
 			if (matched) {
-				if (room && room.chatRoomData && room.id.endsWith('staff')) return `${message} __[would be filtered in public: ${line}${reason ? ` (${reason})` : ''}]__`;
-				if (user.isStaff) {
-					return message;
-				}
+				if ((room && ((room.chatRoomData && room.id.endsWith('staff')) || room.id.startsWith('help-'))) || user.isStaff || (this.pmTarget && this.pmTarget.isStaff)) return `${message} __[would be filtered in public: ${line}${reason ? ` (${reason})` : ''}]__`;
 				this.errorReply(`Please do not say '${line}'.`);
 				filterWords.publicwarn[i][3]++;
 				saveFilters();
