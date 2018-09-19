@@ -144,7 +144,10 @@ let chatfilter = function (message, user, room) {
 			if (typeof regex === 'string') continue;
 			let match = regex.exec(message);
 			while (match) {
-				message = message.replace(match[0], line[2] || '');
+				let filtered = line[2] || '';
+				if (match[0] === match[0].toUpperCase()) filtered = filtered.toUpperCase();
+				if (match[0][0] === match[0][0].toUpperCase()) filtered = `${filtered ? filtered[0].toUpperCase() : ''}${filtered.slice(1)}`;
+				message = message.replace(match[0], filtered);
 				line[3]++;
 				saveFilters();
 				match = regex.exec(message);
