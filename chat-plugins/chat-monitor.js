@@ -276,10 +276,10 @@ let commands = {
 
 			if (filterKeys[list][1] === 'FILTERTO') {
 				let [word, filterTo, ...reasonParts] = rest;
+				if (!filterTo) return this.errorReply(`Syntax for word filters: /filter add ${list}, regex, filter to, reason`);
 				word = word.trim();
 				filterTo = filterTo.trim();
 				let reason = reasonParts.join(',').trim();
-				if (!filterTo) return this.errorReply(`Syntax for word filters: /filter add ${list}, regex, filter to, reason`);
 
 				let regex;
 				try {
