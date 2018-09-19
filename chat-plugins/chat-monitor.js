@@ -318,7 +318,7 @@ let commands = {
 			if (!(list in filterWords)) return this.errorReply(`Invalid list: ${list}. Possible options: ${Object.keys(filterWords).join(', ')}`);
 
 			if (filterKeys[list][1] === 'FILTERTO') {
-				const notFound = words.filter(val => !filterWords[list].filter(entry => String(entry[0]).slice(1, -2) === val).length);
+				const notFound = words.filter(val => !filterWords[list].filter(entry => String(entry[0]).slice(1, -3) === val).length);
 				if (notFound.length) return this.errorReply(`${notFound.join(', ')} ${Chat.plural(notFound, "are", "is")} not on the ${list} list.`);
 				filterWords[list] = filterWords[list].filter(entry => !words.includes(String(entry[0]).slice(1, -2)));
 				this.globalModlog(`REMOVEFILTER`, null, `'${words.join(', ')}' from ${list} list by ${user.name}`);
