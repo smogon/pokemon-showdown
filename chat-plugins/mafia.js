@@ -977,6 +977,7 @@ class MafiaTracker extends Rooms.RoomGame {
 				this.roleString = '';
 			}
 			if (this.subs.includes(targetUser.userid)) this.subs.splice(this.subs.indexOf(targetUser.userid), 1);
+			this.played.push(targetUser.userid);
 			this.players[targetUser.userid] = player;
 			this.sendRoom(`${Chat.escapeHTML(targetUser.name)} has been added to the game by ${Chat.escapeHTML(user.name)}!`, {declare: true});
 		}
@@ -1049,6 +1050,8 @@ class MafiaTracker extends Rooms.RoomGame {
 			let lynch = this.lynches[oldPlayer.lynching];
 			lynch.lynchers.splice(lynch.lynchers.indexOf(oldPlayer.userid, 1));
 			lynch.lynchers.push(newPlayer.userid);
+			newPlayer.lynching = oldPlayer.lynching;
+			oldPlayer.lynching = '';
 		}
 		this.players[newPlayer.userid] = newPlayer;
 		this.players[oldPlayer.userid].destroy();
@@ -1860,7 +1863,8 @@ const commands = {
 			if (room.id !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
 			const args = target.split(',').map(toId);
 			if (['forceadd', 'add', 'remove', 'del', 'delete'].includes(args[0])) {
-				if (['forceadd', 'add'].includes(args[0]) && !this.can('mute', null, room)) return;
+				const permission = (user.userid === args[1]) ? 'broadcast' : 'mute';
+				if (['forceadd', 'add'].includes(args[0]) && !this.can(permission, null, room)) return;
 				if (['remove', 'del', 'delete'].includes(args[0]) && user.userid !== args[1] && !this.can('mute', null, room)) return;
 			} else {
 				if (!this.runBroadcast()) return false;
