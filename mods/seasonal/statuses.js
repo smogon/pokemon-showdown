@@ -19,6 +19,18 @@ let BattleStatuses = {
 	},
 	*/
 	// Please keep statuses organized alphabetically based on staff member name!
+	'2xthetap': { // No single quotes causes issues
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|%2xTheTap|Time for a heckin' battle.`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|%2xTheTap|Doin' me a heckin' concern.`);
+		},
+		onFaint: function () {
+			this.add(`c|%2xTheTap|Doin' me the final bamboozle.`);
+		},
+	},
 	aelita: {
 		noCopy: true,
 		onStart: function () {
@@ -117,6 +129,18 @@ let BattleStatuses = {
 			this.add(`c|@biggie|It was all a dream`);
 		},
 	},
+	brandon: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|%Brandon|Let's set some mood music: ${['https://www.youtube.com/watch?time_continue=2&v=xFrGuyw1V8s', 'https://www.youtube.com/watch?v=m3-hY-hlhBg', 'https://www.youtube.com/watch?v=IyYnnUcgeMc', 'https://www.youtube.com/watch?v=na7lIb09898', 'https://www.youtube.com/watch?v=FrLequ6dUdM'][this.random(5)]}`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|%Brandon|I gotta charge my phone brb`);
+		},
+		onFaint: function () {
+			this.add(`c|%Brandon|I need a nap`);
+		},
+	},
 	cantsay: {
 		noCopy: true,
 		onStart: function () {
@@ -164,6 +188,10 @@ let BattleStatuses = {
 		onFaint: function () {
 			this.add(`c|%Ceteris|IMPOSSIBLE!! THIS IS AN OUTRAGE!! I WILL EXACT MY REVENGE ON YOU ONE DAY (◣_◢)`);
 		},
+	},
+	chaos: {
+		noCopy: true,
+		// No phrases provided
 	},
 	chloe: {
 		noCopy: true,
@@ -318,7 +346,7 @@ let BattleStatuses = {
 			this.add(`c|@Kalalokki|(x_x)`);
 		},
 	},
-	grimauxillatrix: {
+	grimauxiliatrix: {
 		noCopy: true,
 		onStart: function () {
 			this.add(`c|@grimAuxillatrix|${['A BRAWL IS SURELY BREWING!', 'GOOD DAY FOR A SWELL BATTLE!', 'THIS MATCH WILL GET RED HOT!'][this.random(3)]}`);
@@ -349,6 +377,19 @@ let BattleStatuses = {
 		},
 		onFaint: function () {
 			this.add(`c|&HoeenHero|NO! There must of been a bug in my script ;-;`);
+		},
+	},
+	imas: {
+		noCopy: true,
+		onStart: function (pokemon) {
+			let foe = pokemon.side.foe.active[0];
+			this.add(`c|%imas|${foe.name} more like suck`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|%imas|oops`);
+		},
+		onFaint: function () {
+			this.add(`c|%imas|oh no`);
 		},
 	},
 	iyarito: {
@@ -439,6 +480,18 @@ let BattleStatuses = {
 		},
 		onFaint: function () {
 			this.add(`c|@MacChaeger|im gonna pyuk`);
+		},
+	},
+	majorbowman: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|@MajorBowman|I'm MajorBowman and I'm here to make it clear.`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|@MajorBowman|Witty catch phrase, you know what I mean?`);
+		},
+		onFaint: function () {
+			this.add(`c|@MajorBowman|THEY GOT ME, GAL`);
 		},
 	},
 	martha: {
@@ -625,6 +678,18 @@ let BattleStatuses = {
 		},
 		onFaint: function () {
 			this.add(`c|@Trickster|(✖﹏✖✿)`);
+		},
+	},
+	urkerab: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`j|%urkerab`);
+		},
+		onSwitchOut: function () {
+			this.add(`l|%urkerab`);
+		},
+		onFaint: function () {
+			this.add(`l|%urkerab`);
 		},
 	},
 	yuki: {

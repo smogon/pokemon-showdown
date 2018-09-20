@@ -14,6 +14,22 @@ let BattleAbilities = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Brandon
+	gracideamastery: {
+		desc: "",
+		shortDesc: "",
+		id: "gracideamastery",
+		name: "Gracidea Mastery",
+		onPrepareHit: function (source, target, move) {
+			if (!target || !move) return;
+			if (target !== source && move.category !== 'Status') {
+				source.formeChange('Shaymin-Sky', this.effect);
+			}
+		},
+		onSourceHit: function (target, source, move) {
+			source.formeChange('Shaymin', this.effect);
+		},
+	},
 	// cc
 	lurking: {
 		desc: "This Pokemon's moves have their accuracy multiplied by 1.3.",
@@ -257,6 +273,16 @@ let BattleAbilities = {
 		name: "Interdimensional",
 		onStart: function (target, source) {
 			this.addPseudoWeather('gravity', source);
+		},
+	},
+	// urkerab
+	focusenergy: {
+		desc: "",
+		shortDesc: "",
+		id: "focusenergy",
+		name: "Focus Energy",
+		onStart: function (pokemon) {
+			pokemon.addVolatile('focusenergy');
 		},
 	},
 	// Yuki

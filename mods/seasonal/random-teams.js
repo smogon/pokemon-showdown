@@ -41,6 +41,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 			// Nature needs to be a valid nature with the first letter capitalized ex: Modest
 			*/
 			// Please keep sets organized alphabetically based on staff member name!
+			'2xTheTap': {
+				species: 'Arcanine', ability: 'Mold Breaker', item: 'Life Orb', gender: 'M',
+				moves: ['Sacred Fire', 'Extreme Speed', 'Morning Sun'],
+				signatureMove: 'Noble Howl',
+				evs: {atk: 252, def: 4, spe: 252}, nature: 'Adamant', shiny: true,
+			},
 			'Aelita': {
 				species: 'Porygon-Z', ability: 'Protean', item: ['Life Orb'], gender: 'F',
 				moves: [['Boomburst', 'Moonblast'], 'Blue Flare', 'Chatter'],
@@ -77,6 +83,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Food Rush',
 				evs: {hp: 4, atk: 252, spd: 252}, nature: 'Adamant',
 			},
+			'Brandon': {
+				species: 'Shaymin', ability: 'Gracidea Mastery', item: 'Red Card', gender: 'N',
+				moves: ['Seed Flare', ['Earth Power', 'Moonblast', 'Psychic'], ['Oblivion Wing', 'Strength Sap']],
+				signatureMove: 'Blustery Winds',
+				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: ['Modest', 'Timid'],
+			},
 			'cant say': {
 				species: 'Aegislash', ability: 'Stance Change', item: 'Weakness Policy', gender: 'M',
 				moves: ['Shift Gear', 'Spectral Thief', 'Sacred Sword'],
@@ -100,6 +112,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				moves: ['Shift Gear', 'Waterfall', 'Recover'],
 				signatureMove: 'Blimp Crash',
 				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant',
+			},
+			'chaos': {
+				species: 'Bewear', ability: 'Fur Coat', item: 'Red Card', gender: 'M',
+				moves: ['Extreme Speed', 'Close Combat', 'Knock Off', ['Swords Dance', 'Recover']],
+				signatureMove: 'Forcewin',
+				evs: {atk: 252, def: 4, spe: 252}, nature: 'Adamant',
 			},
 			'Chloe': {
 				species: 'Tapu Fini', ability: 'Prankster', item: 'Light Clay', gender: 'F',
@@ -173,6 +191,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Scripting',
 				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 			},
+			'imas': {
+				species: 'Skarmory', ability: 'Prankster', item: 'Sharp Beak', gender: 'M',
+				moves: ['Swords Dance', 'Roost', 'Taunt'],
+				signatureMove: 'B O I',
+				evs: {hp: 252, atk: 252, spe: 4}, nature: 'Adamant',
+			},
 			'Iyarito': {
 				species: 'Vaporeon', ability: 'Poison Heal', item: 'Leftovers', gender: 'F',
 				moves: ['Scald', 'Wish', 'Toxic'],
@@ -214,6 +238,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				moves: ['Scald', 'Clear Smog', 'Sleep Talk'],
 				signatureMove: 'Nap Time',
 				evs: {hp: 248, spa: 84, spe: 176}, ivs: {atk: 0}, nature: 'Modest',
+			},
+			'MajorBowman': {
+				species: 'Victini', ability: 'Victory Star', item: 'Victinium Z', gender: 'M',
+				moves: ['Bolt Strike', 'Zen Headbutt', 'U-Turn'],
+				signatureMove: 'V-create',
+				evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
 			},
 			'martha': {
 				species: 'Diancie', ability: 'Pixilate', item: 'Diancite', gender: 'F',
@@ -311,6 +341,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Mini Singularity',
 				evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
+			'urkerab': {
+				species: 'Muk-Alola', ability: 'Focus Energy', item: 'Air Balloon', gender: 'M',
+				moves: ['Night Slash', 'Drill Run', 'Cross Poison'],
+				signatureMove: 'Holy Orders',
+				evs: {hp: 248, atk: 100, def: 136, spd: 24}, nature: 'Impish',
+			},
 			'Yuki': {
 				species: 'Ninetales-Alola', ability: 'Snow Storm', item: 'Focus Sash', gender: 'F',
 				moves: ['Blizzard', 'Moonblast', 'Aurora Veil'],
@@ -325,7 +361,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'Arcticblast';
+				name = 'imas';
 				if (pool.indexOf(name) > -1) pool.splice(pool.indexOf(name), 1);
 			} else {
 				name = this.sampleNoReplace(pool);
