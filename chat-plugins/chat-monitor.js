@@ -6,7 +6,7 @@ const MONITOR_FILE = 'config/chat-plugins/chat-monitor.tsv';
 const WRITE_THROTTLE_TIME = 5 * 60 * 1000;
 
 /** @type {{[k: string]: string[]}} */
-let filterKeys = Chat.filterKeys = Object.assign(Chat.filterKeys, {publicwarn: ['PUBLIC', 'WARN'], warn: ['EVERYWHERE', 'WARN'], autolock: ['EVERYWHERE', 'AUTOLOCK'], namefilter: ['NAMES', 'WARN'], wordfilter: ['EVERYWHERE', 'FILTERTO']});
+let filterKeys = Chat.filterKeys = Object.assign(Chat.filterKeys, {publicwarn: ['PUBLIC', 'WARN', 'Filtered in public'], warn: ['EVERYWHERE', 'WARN', 'Filtered'], autolock: ['EVERYWHERE', 'AUTOLOCK', 'Autolock'], namefilter: ['NAMES', 'WARN', 'Filtered in usernames'], wordfilter: ['EVERYWHERE', 'FILTERTO', 'Filtered to a different phrase']});
 /** @type {{[k: string]: ([(string | RegExp), string, string?, number][])}} */
 let filterWords = Chat.filterWords;
 
@@ -223,26 +223,21 @@ const pages = {
 			return buf + `<p>Access denied</p></div>`;
 		}
 		let content = ``;
-		content += `<tr><th colspan="2"><h3>Filtered in public rooms <span style="font-size:8pt;">[publicwarn]</span></h3></tr></th>`;
-		if (filterWords.publicwarn.length) {
-			content += filterWords.publicwarn.map(([str, reason, , hits]) => `<tr><td><abbr title="${reason}">${str}</abbr></td><td>${hits}</td></tr>`).join('');
+		for (const key in filterKeys) {
+			content += `<tr><th colspan="2"><h3>${filterKeys[key][2]} <span style="font-size:8pt;">[${key}]</span></h3></tr></th>`;
+			if (filterWords[key].length) {
+				content += filterWords[key].map(([str, reason, filterTo, hits]) => {
+					let entry = '';
+					if (filterTo) {
+						entry = `<abbr title="${reason}"><code>${str}</code></abbr> &rArr; ${filterTo}`;
+					} else {
+						entry = `<abbr title="${reason}">${str}</abbr>`;
+					}
+					return `<tr><td>${entry}</td><td>${hits}</td></tr>`;
+				}).join('');
+			}
 		}
-		content += `<tr><th colspan="2"><h3>Filtered <span style="font-size:8pt;">[warn]</span></h3></tr></th>`;
-		if (filterWords.warn.length) {
-			content += filterWords.warn.map(([str, reason, , hits]) => `<tr><td><abbr title="${reason}">${str}</abbr></td><td>${hits}</td></tr>`).join('');
-		}
-		content += `<tr><th colspan="2"><h3>Weeklock <span style="font-size:8pt;">[autolock]</span></h3></tr></th>`;
-		if (filterWords.autolock.length) {
-			content += filterWords.autolock.map(([str, reason, , hits]) => `<tr><td><abbr title="${reason}">${str}</abbr></td><td>${hits}</td></tr>`).join('');
-		}
-		content += `<tr><th colspan="2"><h3>Filtered in names <span style="font-size:8pt;">[namefilter]</span></h3></tr></th>`;
-		if (filterWords.namefilter.length) {
-			content += filterWords.namefilter.map(([str, reason, , hits]) => `<tr><td><abbr title="${reason}">${str}</abbr></td><td>${hits}</td></tr>`).join('');
-		}
-		content += `<tr><th colspan="2"><h3>Filtered to different phrases <span style="font-size:8pt;">[wordfilter]</span></h3></tr></th>`;
-		if (filterWords.wordfilter.length) {
-			content += filterWords.wordfilter.map(([str, reason, filterTo, hits]) => `<tr><td><abbr title="${reason}"><code>${str}</code></abbr> &rArr; ${filterTo}</td><td>${hits}</td></tr>`).join('');
-		}
+
 		if (Chat.namefilterwhitelist.size) {
 			content += `<tr><th colspan="2"><h3>Whitelisted names</h3></tr></th>`;
 			for (const [val] of Chat.namefilterwhitelist) {
