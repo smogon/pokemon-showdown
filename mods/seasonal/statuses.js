@@ -141,6 +141,18 @@ let BattleStatuses = {
 			this.add(`c|%Brandon|I need a nap`);
 		},
 	},
+	bumbadadabum: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|&bumbadadabum|The Light shall bring victory!`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|&bumbadadabum|Regenerator is very fair and balanced`);
+		},
+		onFaint: function () {
+			this.add(`c|&bumbadadabum|Who will lead my kingdom now?`);
+		},
+	},
 	cantsay: {
 		noCopy: true,
 		onStart: function () {
@@ -451,14 +463,14 @@ let BattleStatuses = {
 	lifeisdank: {
 		noCopy: true,
 		onStart: function (target) {
-			this.add(`c|&LifeisDANK|!!!ლ(⁰⊖⁰ლ) Peent Peent.`);
+			this.add(`c|~LifeisDANK|!!!ლ(⁰⊖⁰ლ) Peent Peent.`);
 			this.boost({spe: 2}, target);
 		},
 		onSwitchOut: function () {
-			this.add(`c|&LifeisDANK|!(•⌔• ) Peent Peent.`);
+			this.add(`c|~LifeisDANK|!(•⌔• ) Peent Peent.`);
 		},
 		onFaint: function () {
-			this.add(`c|&LifeisDANK|(•⌔•. ) Peent.`);
+			this.add(`c|~LifeisDANK|(•⌔•. ) Peent.`);
 		},
 		// Aerilate innate
 		onModifyMovePriority: -1,

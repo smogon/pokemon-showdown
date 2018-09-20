@@ -1,5 +1,9 @@
 'use strict';
 
+// Used for bumbadadabum's move
+const RandomStaffBrosTeams = require('./random-teams');
+const Pokemon = require('../../sim/pokemon');
+
 /** @type {{[k: string]: ModdedMoveData}} */
 let BattleMovedex = {
 	/*
@@ -269,6 +273,75 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Flying",
+	},
+	// bumbadadabum
+	wondertrade: {
+		accuracy: true,
+		category: "Status",
+		desc: "",
+		shortDesc: "",
+		id: "wondertrade",
+		name: "Wonder Trade",
+		pp: 2,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Amnesia', source);
+			this.add('-anim', source, 'Double Team', source);
+		},
+		onTryHit: function (target, source) {
+			if (source.name !== 'bumbadadabum') {
+				this.add('-fail', source);
+				this.add('-hint', 'Only bumbadadabum can use Wonder Trade.');
+				return null;
+			}
+		},
+		onHit: function (target, source) {
+			// Store percent of HP left, percent of PP left, and status for each pokemon on the user's team
+			let carryOver = [];
+			let currentTeam = source.side.pokemon;
+			for (let pokemon of currentTeam) {
+				carryOver.push({
+					hp: pokemon.hp / pokemon.maxhp,
+					status: pokemon.status,
+					pp: pokemon.moveSlots.slice().map(m => {
+						return m.pp / m.maxpp;
+					}),
+				});
+			}
+			// Generate a new team
+			let generator = new RandomStaffBrosTeams(this.format, this.prng);
+			let team = generator.generateTeam();
+			// Overwrite un-fainted pokemon other than the user
+			for (let i = 0; i < currentTeam.length; i++) {
+				if (currentTeam[i].fainted || !currentTeam[i].hp || currentTeam[i].position === source.position) continue;
+				let set = team.shift();
+				let oldSet = carryOver[i];
+				if (set.name === 'bumbadadabum') {
+					// No way am I allowing 2 of this mon on one team
+					set = team.shift();
+				}
+
+				// Bit of a hack so client doesn't crash when formeChange is called for the new pokemon
+				let effect = this.effect;
+				this.effect = /** @type {Effect} */ ({id: ''});
+				let pokemon = new Pokemon(set, source.side);
+				this.effect = effect;
+
+				pokemon.hp = Math.floor(pokemon.maxhp * oldSet.hp) || 1;
+				pokemon.status = oldSet.status;
+				for (let j = 0; j < pokemon.moveSlots.length; j++) {
+					pokemon.moveSlots[j].pp = pokemon.moveSlots[j].maxpp * oldSet.pp[j];
+				}
+				pokemon.position = currentTeam[i].position;
+				currentTeam[i] = pokemon;
+			}
+			this.add('message', `${source.side.name} wonder traded their team away!`);
+		},
+		target: "self",
+		type: "Psychic",
 	},
 	// cant say
 	aesthetislash: {

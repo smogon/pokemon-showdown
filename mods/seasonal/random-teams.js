@@ -89,6 +89,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Blustery Winds',
 				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: ['Modest', 'Timid'],
 			},
+			'bumbadadabum': {
+				species: 'Slowbro', ability: 'Regenerator', item: 'Leftovers', gender: 'M',
+				moves: ['Scald', 'Slack Off', 'Psyshock'],
+				signatureMove: 'Wonder Trade',
+				evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold',
+			},
 			'cant say': {
 				species: 'Aegislash', ability: 'Stance Change', item: 'Weakness Policy', gender: 'M',
 				moves: ['Shift Gear', 'Spectral Thief', 'Sacred Sword'],
@@ -361,7 +367,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'imas';
+				name = 'bumbadadabum';
 				if (pool.indexOf(name) > -1) pool.splice(pool.indexOf(name), 1);
 			} else {
 				name = this.sampleNoReplace(pool);
