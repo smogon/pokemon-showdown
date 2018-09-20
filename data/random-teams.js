@@ -678,8 +678,8 @@ class RandomTeams extends Dex.ModdedDex {
 
 				switch (moveid) {
 				// Not very useful without their supporting moves
-				case 'clangingscales':
-					if (teamDetails.zMove) rejected = true;
+				case 'clangingscales': case 'happyhour':
+					if (teamDetails.zMove || hasMove['rest']) rejected = true;
 					break;
 				case 'cottonguard': case 'defendorder':
 					if (!counter['recovery'] && !hasMove['rest']) rejected = true;
@@ -1396,7 +1396,7 @@ class RandomTeams extends Dex.ModdedDex {
 			} else {
 				item = (counter.Physical > counter.Special) ? 'Choice Band' : 'Choice Specs';
 			}
-		} else if (hasMove['conversion']) {
+		} else if (hasMove['conversion'] || hasMove['happyhour']) {
 			item = 'Normalium Z';
 		} else if (hasMove['dig'] && !teamDetails.zMove) {
 			item = 'Groundium Z';
