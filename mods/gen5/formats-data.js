@@ -587,7 +587,7 @@ let BattleFormatsData = {
 	},
 	blissey: {
 		inherit: true,
-		randomBattleMoves: ["wish", "softboiled", "protect", "toxic", "aromatherapy", "seismictoss", "counter", "thunderwave", "stealthrock", "flamethrower", "icebeam"],
+		randomBattleMoves: ["wish", "softboiled", "protect", "toxic", "aromatherapy", "seismictoss", "counter", "thunderwave", "stealthrock", "flamethrower"],
 		tier: "OU",
 	},
 	tangela: {
@@ -1087,7 +1087,7 @@ let BattleFormatsData = {
 		tier: "UU",
 	},
 	gliscor: {
-		randomBattleMoves: ["swordsdance", "acrobatics", "earthquake", "roost", "substitute", "taunt", "icefang", "protect", "toxic", "stealthrock"],
+		randomBattleMoves: ["swordsdance", "earthquake", "roost", "substitute", "taunt", "icefang", "protect", "toxic", "stealthrock"],
 		tier: "OU",
 	},
 	snubbull: {
