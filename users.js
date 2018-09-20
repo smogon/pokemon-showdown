@@ -604,7 +604,8 @@ class User {
 			return true;
 		}
 
-		let group = ' ';
+		/** @type {string} */
+		let group;
 		let targetGroup = '';
 		let targetUser = null;
 
