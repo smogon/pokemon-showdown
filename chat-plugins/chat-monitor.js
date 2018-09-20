@@ -138,7 +138,7 @@ let chatfilter = function (message, user, room) {
 			}
 		}
 	}
-	if (room && room.chatRoomData && room.id.endsWith('staff')) {
+	if (!(room && room.chatRoomData && room.id.endsWith('staff'))) {
 		for (let line of filterWords.wordfilter) {
 			const regex = line[0];
 			if (typeof regex === 'string') continue;
