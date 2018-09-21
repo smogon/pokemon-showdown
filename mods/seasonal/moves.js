@@ -233,6 +233,31 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Poison",
 	},
+	// Arrested
+	jailshell: {
+		accuracy: 90,
+		basePower: 90,
+		category: "Special",
+		id: "jailshell",
+		name: "Jail Shell",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Anchor Shot", target);
+		},
+		onHit: function (target, source, move) {
+			if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
+			source.addVolatile('imprison', source, move);
+		},
+		secondary: {
+			chance: 50,
+			status: 'par',
+		},
+		target: "normal",
+		type: "Normal",
+	},
 	// Beowulf
 	buzzingoftheswarm: {
 		accuracy: 100,
@@ -1664,6 +1689,38 @@ let BattleMovedex = {
 		target: "self",
 		type: "Flying",
 	},
+	// tennisace
+	groundsurge: {
+		accuracy: 100,
+		basePower: 95,
+		desc: "",
+		shortDesc: "",
+		id: "groundsurge",
+		name: "Ground Surge",
+		category: "Special",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Thunder", target);
+			this.add('-anim', source, "Fissure", target);
+		},
+		// I tried using Thousand Arrows's code, doesnt work.
+		onModifyMovePriority: -5,
+		onModifyMove: function (move) {
+			if (!move.ignoreImmunity) move.ignoreImmunity = {};
+			if (move.ignoreImmunity !== true) {
+				move.ignoreImmunity['Electric'] = true;
+			}
+		},
+		onEffectiveness: function (typeMod, type) {
+			if (type === 'Ground') return 1;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Electric",
+	},
 	// Teremiare
 	nofunzone: {
 		accuracy: 100,
@@ -1948,7 +2005,7 @@ let BattleMovedex = {
 		onHit: function (target, source) {
 			this.useMove("healorder", source, source);
 			this.useMove("defendorder", source, source);
-			this.useMove("attackorder", source, source);
+			this.useMove("attackorder", source, source.side.foe.active[0]);
 		},
 		secondary: null,
 		target: "self",

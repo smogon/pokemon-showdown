@@ -48,7 +48,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {atk: 252, def: 4, spe: 252}, nature: 'Adamant', shiny: true,
 			},
 			'Aelita': {
-				species: 'Porygon-Z', ability: 'Protean', item: ['Life Orb'], gender: 'F',
+				species: 'Porygon-Z', ability: 'Protean', item: 'Life Orb', gender: 'F',
 				moves: [['Boomburst', 'Moonblast'], 'Blue Flare', 'Chatter'],
 				signatureMove: 'Energy Field',
 				evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
@@ -76,6 +76,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				moves: ['Knock Off', 'Poison Jab', ['Earthquake', 'U-turn']],
 				signatureMove: 'Trashalanche',
 				evs: {hp: 252, atk: 252, def: 4}, nature: 'Adamant',
+			},
+			'Arrested': {
+				species: 'Blastoise', ability: 'Torrent', item: 'Blastoisinite', gender: 'M',
+				moves: ['Muddy Water', 'Ice Beam', 'Slack Off'],
+				signatureMove: 'Jail Shell',
+				evs: {hp: 252, def: 4, spa: 252}, nature: 'Modest',
 			},
 			'Beowulf': {
 				species: 'Beedrill', ability: ['Download', 'Speed Boost'], item: 'Beedrillite', gender: 'M',
@@ -335,6 +341,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'GO INDA',
 				evs: {atk: 252, hp: 248, spe: 8}, nature: 'Adamant',
 			},
+			'tennisace': {
+				species: 'Raikou', ability: 'Levitate', item: 'Life Orb', gender: 'M',
+				moves: ['Volt Switch', 'Shadow Ball', 'Aura Sphere'],
+				signatureMove: 'Ground Surge',
+				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+			},
 			'Teremiare': {
 				species: 'Zorua', ability: 'Not Prankster', item: 'Eject Button', gender: 'N',
 				moves: ['Encore', 'Taunt', 'Lunar Dance'],
@@ -385,7 +397,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'eternally';
+				name = 'tennisace';
 				if (pool.indexOf(name) > -1) pool.splice(pool.indexOf(name), 1);
 			} else {
 				name = this.sampleNoReplace(pool);

@@ -14,6 +14,32 @@ let BattleAbilities = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Arrested
+	shellshocker: {
+		desc: "",
+		shortDesc: "",
+		id: "shellshocker",
+		name: "Shell Shocker",
+		onModifyMovePriority: -1,
+		onModifyMove: function (move, pokemon) {
+			if (move.type === 'Normal' && !['judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'weatherball'].includes(move.id) && !(move.isZ && move.category !== 'Status')) {
+				move.type = 'Electric';
+				move.galvanizeBoosted = true;
+			}
+		},
+		onBasePowerPriority: 8,
+		onBasePower: function (basePower, pokemon, target, move) {
+			if (move.galvanizeBoosted) return this.chainModify([0x1333, 0x1000]);
+		},
+		onTryHit: function (target, source, move) {
+			if (target !== source && move.type === 'Electric') {
+				if (!this.heal(target.maxhp / 4)) {
+					this.add('-immune', target, '[msg]', '[from] ability: Shell Shocker');
+				}
+				return null;
+			}
+		},
+	},
 	// Brandon
 	gracideamastery: {
 		desc: "",

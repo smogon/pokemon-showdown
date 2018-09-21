@@ -14,6 +14,11 @@ let BattlePokedex = {
 		inherit: true,
 		abilities: {0: "Adaptability"},
 	},
+	// Arrested
+	blastoisemega: {
+		inherit: true,
+		abilities: {0: "Shell Shocker"},
+	},
 	// deg
 	gengarmega: {
 		inherit: true,

@@ -117,6 +117,18 @@ let BattleStatuses = {
 			}
 		},
 	},
+	arrested: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|%Arrested|Let's get this party started.`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|%Arrested|I need a break, this is getting boring.`);
+		},
+		onFaint: function () {
+			this.add(`c|%Arrested|It's cool, I didn't wanna battle anyway.`);
+		},
+	},
 	beowulf: {
 		noCopy: true,
 		onStart: function () {
@@ -677,6 +689,18 @@ let BattleStatuses = {
 		},
 		onSwitchOut: function () {
 			this.add(`c|%Shiba|gotta buy an alt rq brb`);
+		},
+	},
+	tennisace: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|@tennisace|VIVA LOS TIGRES`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|@tennisace|wtf is this shit even`);
+		},
+		onFaint: function () {
+			this.add(`c|@tennisace|maybe next season n_n`);
 		},
 	},
 	teremiare: {
