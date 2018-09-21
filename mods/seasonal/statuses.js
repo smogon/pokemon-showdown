@@ -806,6 +806,17 @@ let BattleStatuses = {
 			this.add(`c|%Yuki|I'm melting...`);
 		},
 	},
+	zarel: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|~Zarel|Your mom`);
+		},
+		onFaint: function () {
+			this.add(`c|~Zarel|Your mom`);
+			// message is shown after the "Zarel Fainted!" message
+			this.add('message', 'Zarel used your mom!');
+		},
+	},
 	// Custom effect for Yuki
 	cutietrap: {
 		duration: 5,

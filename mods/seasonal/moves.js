@@ -2110,6 +2110,52 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fairy",
 	},
+	// Zarel
+	relicsongdance: {
+		accuracy: 100,
+		basePower: 60,
+		multihit: 2,
+		category: "Special",
+		id: "relicsongdance",
+		name: "Relic Song Dance",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
+		ignoreImmunity: true,
+		onTryHit: function (target, pokemon) {
+			this.attrLastMove('[still]');
+			let move = pokemon.template.speciesid === 'meloettapirouette' ? 'Brick Break' : 'Relic Song';
+			this.add('-anim', pokemon, move, target);
+		},
+		onHit: function (target, pokemon, move) {
+			if (pokemon.template.speciesid === 'meloettapirouette') {
+				pokemon.formeChange('Meloetta');
+			} else if (pokemon.formeChange('Meloetta-Pirouette')) {
+				move.category = 'Physical';
+				move.type = 'Fighting';
+			}
+		},
+		onAfterMove: function (pokemon) {
+			// Ensure Meloetta goes back to standard form after using the move
+			if (pokemon.template.speciesid === 'meloettapirouette') {
+				pokemon.formeChange('Meloetta');
+			}
+			this.add('-hint', 'Zarel still has the Serene Grace ability.');
+		},
+		effect: {
+			duration: 1,
+			onAfterMoveSecondarySelf: function (pokemon, target, move) {
+				if (pokemon.template.speciesid === 'meloettapirouette') {
+					pokemon.formeChange('Meloetta');
+				} else {
+					pokemon.formeChange('Meloetta-Pirouette');
+				}
+				pokemon.removeVolatile('relicsong');
+			},
+		},
+		target: "allAdjacentFoes",
+		type: "Psychic",
+	},
 };
 
 exports.BattleMovedex = BattleMovedex;
