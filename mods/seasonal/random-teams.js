@@ -287,6 +287,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Type Analysis',
 				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 			},
+			'Meicoo': {
+				species: 'Pidgeot', ability: 'Prankster', item: 'Pidgeotite', gender: 'M',
+				moves: ['Hurricane', 'Inferno', 'Roost'],
+				signatureMove: '/scavenges u',
+				evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+			},
 			'Megazard': {
 				species: 'Exeggutor-Alola', ability: 'Stand Up Tall', item: 'Leftovers', gender: 'M',
 				moves: ['Strength Sap', 'Growth', 'Stockpile'],

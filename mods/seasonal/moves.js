@@ -1367,6 +1367,47 @@ let BattleMovedex = {
 		type: "Normal",
 		zMoveEffect: 'heal',
 	},
+	// Meicoo
+	scavengesu: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "",
+		shortDesc: "",
+		id: "scavengesu",
+		name: "/scavenges u",
+		pp: 5,
+		priority: 0,
+		flags: {mirror: 1, protect: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Imprison", source);
+			this.add('-anim', source, "Miracle Eye", target);
+		},
+		onHit: function (target, source) {
+			this.boost({atk: -2, spa: -2}, source, source, 'move: /scavenges u');
+			let targetBoosts = {};
+			let sourceBoosts = {};
+
+			for (let i in target.boosts) {
+				// @ts-ignore
+				targetBoosts[i] = target.boosts[i];
+				// @ts-ignore
+				sourceBoosts[i] = source.boosts[i];
+			}
+
+			target.setBoost(sourceBoosts);
+			source.setBoost(targetBoosts);
+
+			this.add(`c|%Meicoo|cool quiz`);
+
+			this.add('-swapboost', source, target, '[from] move: /scavenges u');
+			this.add('-message', source.name + ' switched stat changes with its target!');
+		},
+		secondary: null,
+		target: "normal",
+		type: "Psychic",
+	},
 	// Megazard
 	tippingover: {
 		accuracy: 100,

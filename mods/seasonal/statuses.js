@@ -569,6 +569,18 @@ let BattleStatuses = {
 		noCopy: true,
 		// No phrases provided
 	},
+	meicoo: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|%Meicoo|/joinhunt`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|%Meicoo|/leavehunt`);
+		},
+		onFaint: function () {
+			this.add(`c|%Meicoo|"That is not the answer - try again!"`);
+		},
+	},
 	megazard: {
 		noCopy: true,
 		onStart: function () {
