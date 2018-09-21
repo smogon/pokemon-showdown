@@ -331,6 +331,7 @@ class Pokemon {
 	 */
 	getDetailsInner(side) {
 		if (this.illusion) {
+			if (this.battle.illusionCopiesLevels) return this.illusion.details + '|' + this.getHealthInner(side);
 			let illusionDetails = this.illusion.species + (this.level === 100 ? '' : ', L' + this.level) + (this.illusion.gender === '' ? '' : ', ' + this.illusion.gender) + (this.illusion.set.shiny ? ', shiny' : '');
 			return illusionDetails + '|' + this.getHealthInner(side);
 		}
