@@ -109,6 +109,52 @@ let BattleMovedex = {
 		type: "Electric",
 		zMovePower: 200,
 	},
+	// Andy
+	pilfer: {
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		desc: "",
+		shortDesc: "",
+		id: "pilfer",
+		name: "Pilfer",
+		pp: 5,
+		priority: 1,
+		flags: {protect: 1, mirror: 1, contact: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+		},
+		onTryHit: function (target, pokemon) {
+			let decision = this.willMove(target);
+			if (decision) {
+				let move = this.getMoveCopy(decision.move.id);
+				if (move.category === 'Status' && move.id !== 'mefirst') {
+					this.useMove(move, pokemon, pokemon);
+					this.attrLastMove('[still]');
+					this.add('-anim', pokemon, "Sucker Punch", target);
+					this.add('-anim', pokemon, "Night Slash", target);
+					return;
+				}
+			}
+			return false;
+		},
+		volatileStatus: 'pilfer',
+		effect: {
+			// Simulate the snatch effect while being able to use the pilfered move 1st
+			duration: 1,
+			onStart: function () {
+			},
+			onBeforeMovePriority: 3,
+			onBeforeMove: function (pokemon, target, move) {
+				if (move.category === 'Status') {
+					this.add('-message', move.name + ' was pilfered and was unable to be used.');
+					return false;
+				}
+			},
+		},
+		target: "normal",
+		type: "Dark",
+	},
 	// ant
 	truant: {
 		accuracy: 100,
@@ -621,6 +667,28 @@ let BattleMovedex = {
 			// Cringy message
 			if (this.random(5) === 1) this.add(`c|@E4 Flint|here's a __taste__ of my __firepower__ XD`);
 		},
+		secondary: null,
+		target: "normal",
+		type: "Fire",
+	},
+	// explodingdaisies
+	doom: {
+		basePower: 100,
+		accuracy: 100,
+		category: "Special",
+		desc: "",
+		shortDesc: "",
+		id: "doom",
+		name: "DOOM!",
+		pp: 5,
+		priority: 0,
+		flags: {mirror: 1, protect: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Eruption', target);
+			this.add('-anim', source, 'Sunny Day', source);
+		},
+		weather: 'sunnyday',
 		secondary: null,
 		target: "normal",
 		type: "Fire",
@@ -1551,6 +1619,26 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
+	},
+	// Scotteh
+	geomagneticstorm: {
+		accuracy: 100,
+		basePower: 140,
+		category: "Special",
+		desc: "No additional effect.",
+		shortDesc: "No additional effect.",
+		id: "geomagneticstorm",
+		name: "Geomagnetic Storm",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Discharge", target);
+		},
+		secondary: null,
+		target: "allAdjacent",
+		type: "Electric",
 	},
 	// Shiba
 	goinda: {

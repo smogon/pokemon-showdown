@@ -43,6 +43,18 @@ let BattleStatuses = {
 			this.add(`c|@Aelita|CODE: LYOKO . Tower deactivated... Return to the past, now!`);
 		},
 	},
+	andy: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|@Andy >_>|**>_>**`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|@Andy >_>|**<_<**`);
+		},
+		onFaint: function () {
+			this.add(`c|@Andy >_>|u sux >_>`);
+		},
+	},
 	ant: {
 		noCopy: true,
 		onStart: function () {
@@ -260,6 +272,18 @@ let BattleStatuses = {
 		},
 		onFaint: function () {
 			this.add(`c|@E4 Flint|lul ok`);
+		},
+	},
+	explodingdaisies: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|%explodingdaisies|For today's weather: DOOOOOM!`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|%explodingdaisies|I WILL DESTROY YOU.......BUT LATER!`);
+		},
+		onFaint: function () {
+			this.add(`c|%explodingdaisies|MY PEOPLE NEED ME!`);
 		},
 	},
 	eien: {
@@ -624,6 +648,22 @@ let BattleStatuses = {
 			if (!pokemon.transformed) {
 				return this.chainModify(2);
 			}
+		},
+	},
+	scotteh: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|&Scotteh|─────▄▄████▀█▄`);
+			this.add(`c|&Scotteh|───▄██████████████████▄`);
+			this.add(`c|&Scotteh|─▄█████.▼.▼.▼.▼.▼.▼.▼`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|&Scotteh|▄███████▄.▲.▲.▲.▲.▲.▲`);
+			this.add(`c|&Scotteh|█████████████████████▀▀`);
+		},
+		onFaint: function () {
+			this.add(`c|&Scotteh|▄███████▄.▲.▲.▲.▲.▲.▲`);
+			this.add(`c|&Scotteh|█████████████████████▀▀`);
 		},
 	},
 	shiba: {

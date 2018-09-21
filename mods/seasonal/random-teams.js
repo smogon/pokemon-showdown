@@ -53,6 +53,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Energy Field',
 				evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 			},
+			'Andy >_>': {
+				species: 'Absol', ability: 'Adaptability', item: 'Absolite', gender: 'M',
+				moves: ['Dragon Dance', 'Destiny Bond', 'Sucker Punch'],
+				signatureMove: 'Pilfer',
+				evs: {atk: 252, def: 4, spe: 252}, nature: 'Adamant',
+			},
 			'ant': {
 				species: 'Durant', ability: 'Flash Fire', item: 'Leftovers', gender: 'F',
 				moves: ['King\'s Shield', 'U-turn', 'Pursuit'],
@@ -154,6 +160,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				moves: ['Sunsteel Strike', 'Thousand Arrows', ['Dragon Tail', 'Diamond Storm', 'V-create', 'V-create']], // V-create listed twice for 50% chance to get it
 				signatureMove: 'Fang of the Fire King',
 				evs: {hp: 252, atk: 36, def: 100, spd: 120}, nature: 'Adamant',
+			},
+			'explodingdaisies': {
+				species: 'Houndoom', ability: 'Flash Fire', item: 'Houndoominite', gender: 'M',
+				moves: ['Sludge Bomb', 'Nasty Plot', 'Dark Pulse'],
+				signatureMove: 'DOOM!',
+				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
 			'Eien': {
 				species: 'Mew', ability: 'Psychic Surge', item: 'Terrain Extender', gender: 'N',
@@ -311,6 +323,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Spooky Transform',
 				evs: {hp: 252, def: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
+			'Scotteh': {
+				species: 'Suicune', ability: 'Leftovers', item: 'Fur Coat', gender: 'M',
+				moves: ['Nasty Plot', 'Ice Beam', 'Scald', 'Recover'],
+				signatureMove: 'Geomagnetic Storm',
+				evs: {def: 252, spa: 4, spe: 252}, nature: 'Bold',
+			},
 			'Shiba': {
 				species: 'Fletchinder', ability: 'Gale Wings 1.0', item: 'Eviolite', gender: 'F',
 				moves: ['Dragon Ascent', 'Sacred Fire', 'Roost'],
@@ -367,7 +385,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'bumbadadabum';
+				name = 'explodingdaisies';
 				if (pool.indexOf(name) > -1) pool.splice(pool.indexOf(name), 1);
 			} else {
 				name = this.sampleNoReplace(pool);

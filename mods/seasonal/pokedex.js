@@ -9,6 +9,11 @@ let BattlePokedex = {
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100}, // the base stats for the pokemon
 	},
 	*/
+	// Andy
+	absolmega: {
+		inherit: true,
+		abilities: {0: "Adaptability"},
+	},
 	// deg
 	gengarmega: {
 		inherit: true,
