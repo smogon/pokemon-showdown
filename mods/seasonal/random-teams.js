@@ -259,7 +259,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'MacChaeger': {
 				species: 'Mantyke', ability: 'Water Veil', item: ['Life Orb', 'Normalium Z'], gender: 'M',
-				moves: ['Scald', 'Clear Smog', 'Sleep Talk'],
+				moves: ['Scald', 'Aeroblast', 'Sleep Talk'],
 				signatureMove: 'Nap Time',
 				evs: {hp: 248, spa: 84, spe: 176}, ivs: {atk: 0}, nature: 'Modest',
 			},
@@ -325,8 +325,8 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'Quite Quiet': {
 				species: 'Misdreavus', ability: 'Levitate', item: 'Leftovers', gender: 'F',
-				moves: [['Moongeist Beam', 'Shadow Ball', 'Night Shade'], 'Recover', ['Heal Bell', 'Taunt']],
-				signatureMove: 'Spooky Transform',
+				moves: [['Moongeist Beam', 'Shadow Ball', 'Night Shade'], 'Recover', ['Heal Bell', 'Encore', 'Taunt', 'Swagger']],
+				signatureMove: 'Literally Cheating',
 				evs: {hp: 252, def: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
 			'Scotteh': {
@@ -397,7 +397,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'tennisace';
+				name = 'Quite Quiet';
 				if (pool.indexOf(name) > -1) pool.splice(pool.indexOf(name), 1);
 			} else {
 				name = this.sampleNoReplace(pool);

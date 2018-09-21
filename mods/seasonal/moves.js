@@ -1587,62 +1587,55 @@ let BattleMovedex = {
 		type: "Poison",
 	},
 	// Quite Quiet
-	"spookytransform": {
+	literallycheating: {
 		accuracy: true,
-		basePower: 0,
 		category: "Status",
 		desc: "",
 		shortDesc: "",
-		id: "spookytransform",
-		name: "Spooky Transform",
+		id: "literallycheating",
+		name: "Literally Cheating",
 		pp: 5,
-		priority: 1,
-		flags: {mystery: 1},
+		priority: 0,
+		flags: {nosky: 1},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
-			return !source.removeVolatile('spookytransform');
+			this.add('-anim', source, "Genesis Supernova", source);
 		},
-		onHit: function (target, pokemon) {
-			if (!pokemon.transformInto(target, pokemon)) {
-				return false;
-			}
-			this.add('-anim', pokemon, "Refresh", pokemon);
-			pokemon.addVolatile('spookytransform');
-		},
+		terrain: 'literallycheating',
 		effect: {
-			onDamagePriority: -100,
-			onDamage: function (damage, target, source) {
-				if (target.transformed && damage && source)	{
-					this.add('-immune', target, '[msg]', '[from] effect: Spooky Transform');
-					this.add('-message', `${target.name} reflected the damage back to ${source.name}.`);
-					this.add('-anim', target, "Night Shade", source);
-					this.damage(damage, source);
-					return null;
+			duration: 3,
+			durationCallback: function (source, effect) {
+				if (source && source.hasItem('terrainextender')) {
+					return 5;
 				}
-				return damage;
+				return 3;
 			},
-			onResidualOrder: 1,
-			onResidualSubOrder: 1,
-			onResidual: function (pokemon) {
-				pokemon.clearBoosts();
-				pokemon.moveSlots = pokemon.baseMoveSlots.slice();
-				pokemon.transformed = false;
-				pokemon.formeChange(pokemon.baseTemplate);
-				pokemon.setAbility('Levitate');
-				this.add('-clearboost', pokemon, false, '[silent]');
-				this.add('-end', pokemon, 'Transform');
+			onBoost: function (boost, target, source, effect) {
+				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
+				let positiveBoost = false;
+				let values = Object.values(boost);
+				for (let i of values) {
+					if (i !== undefined && i > 0) {
+						positiveBoost = true;
+						break;
+					}
+				}
+				if (!positiveBoost || !target.lastMove) return;
+				target.deductPP(target.lastMove.id, target.lastMove.pp);
+				this.add('-activate', target, 'move: Literally Cheating', target.lastMove.name, target.lastMove.pp);
+				this.add('-message', `${target.name} lost PP!`);
 			},
-			onBeforeMovePriority: -1,
-			onBeforeMove: function (pokemon, target, move) {
-				if (move.id === 'spookytransform') return;
-				pokemon.removeVolatile('spookytransform');
+			onStart: function (battle, source, effect) {
+				this.add('-fieldstart', 'move: Literally Cheating');
 			},
-			onMoveAborted: function (pokemon, target, move) {
-				pokemon.removeVolatile('spookytransform');
+			onResidualOrder: 21,
+			onResidualSubOrder: 2,
+			onEnd: function () {
+				this.add('-fieldend', 'move: Literally Cheating');
 			},
 		},
 		secondary: null,
-		target: "normal",
+		target: "all",
 		type: "Ghost",
 	},
 	// Scotteh

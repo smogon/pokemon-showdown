@@ -407,7 +407,8 @@ let BattleStatuses = {
 			this.add(`c|@grimAuxillatrix|**KNOCKOUT!**`);
 		},
 	},
-	hippopotas: {
+	// Cant use the exact name because its a pokemon's name
+	hippopotasuser: {
 		noCopy: true,
 		onStart: function () {
 			this.add(`c|@Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
@@ -656,13 +657,13 @@ let BattleStatuses = {
 		onModifyDefPriority: 6,
 		onModifyDef: function (def, pokemon) {
 			if (!pokemon.transformed) {
-				return this.chainModify(2);
+				return this.chainModify(1.5);
 			}
 		},
 		onModifySpDPriority: 6,
 		onModifySpD: function (spd, pokemon) {
 			if (!pokemon.transformed) {
-				return this.chainModify(2);
+				return this.chainModify(1.5);
 			}
 		},
 	},
