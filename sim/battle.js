@@ -120,6 +120,7 @@ class Battle extends Dex.ModdedDex {
 		this.currentRequest = '';
 		this.lastMoveLine = 0;
 		this.reportPercentages = false;
+		this.illusionCopiesLevels = false;
 		this.supportCancel = false;
 		this.events = null;
 

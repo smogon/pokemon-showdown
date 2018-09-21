@@ -724,6 +724,15 @@ let BattleFormats = {
 			this.add('rule', 'Switch Priority Clause Mod: Faster Pokémon switch first');
 		},
 	},
+	illusionlevelmod: {
+		effectType: 'Rule',
+		name: 'Illusion Level Mod',
+		desc: "Makes Illusion also copy levels - normally, Illusion copies everything except levels, which isn't a problem in tiers where everyone is level 100 or 50, but is a problem in Randbats because the level balancing makes Zoroark much weaker than intended",
+		onStart: function () {
+			this.add('rule', 'Illusion Level Mod: Illusion also fakes levels');
+			this.illusionCopiesLevels = true;
+		},
+	},
 	freezeclausemod: {
 		effectType: 'Rule',
 		name: 'Freeze Clause Mod',
