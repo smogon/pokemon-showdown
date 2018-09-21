@@ -25,6 +25,12 @@ let BattlePokedex = {
 		abilities: {0: 'Stark Mountain'},
 		types: ['Steel', 'Ground', 'Fire'],
 	},
+	// eternally
+	ducklett: {
+		inherit: true,
+		// Doubled spa and spe
+		baseStats: {hp: 62, atk: 44, def: 50, spa: 88, spd: 50, spe: 110},
+	},
 	// grimAuxiliatrix
 	aggronmega: {
 		inherit: true,

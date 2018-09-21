@@ -70,7 +70,7 @@ let BattleAbilities = {
 			}
 		},
 		onAfterDamage: function (damage, target, source, effect) {
-			if (effect && effect.effectType === 'Move' && effect.id !== 'confused') {
+			if (effect && effect.effectType === 'Move' && effect.flags.contact && effect.id !== 'confused') {
 				this.boost({spe: 1});
 			}
 		},

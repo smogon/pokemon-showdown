@@ -731,8 +731,8 @@ let BattleMovedex = {
 	quack: {
 		accuracy: 100,
 		category: "Status",
-		desc: "Boosts the users spa and def by 1 stage.",
-		shortDesc: "+1 def, spa",
+		desc: "Boosts the users def, spd, and spe by 1 stage.",
+		shortDesc: "+1 def, spd, spe",
 		id: "quack",
 		name: "Quack",
 		pp: 5,
@@ -743,7 +743,7 @@ let BattleMovedex = {
 			this.add('-anim', source, 'Feather Dance', source);
 			this.add('-anim', source, 'Aqua Ring', source);
 		},
-		boosts: {def: 1, spa: 1},
+		boosts: {def: 1, spd: 1, spe: 1},
 		secondary: null,
 		target: "self",
 		type: "Flying",

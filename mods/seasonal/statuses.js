@@ -176,6 +176,10 @@ let BattleStatuses = {
 		onFaint: function () {
 			this.add(`c|@cant say|bg haxor :(`);
 		},
+		onAfterMove: function (pokemon) {
+			if (pokemon.template.baseSpecies !== 'Aegislash' || pokemon.transformed) return;
+			if (pokemon.template.species !== 'Aegislash') pokemon.formeChange('Aegislash');
+		},
 	},
 	cc: {
 		noCopy: true,

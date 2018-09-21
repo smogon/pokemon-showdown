@@ -144,10 +144,10 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: ['Modest', 'Timid'],
 			},
 			'DragonWhale': {
-				species: 'Garchomp', ability: 'Beast Boost', item: 'Groundium Z', gender: 'M',
+				species: 'Garchomp', ability: 'Hustle', item: 'Groundium Z', gender: 'M',
 				moves: ['Earthquake', 'Dragon Rush', 'Diamond Storm'],
 				signatureMove: 'Earth\'s Blessing',
-				evs: {hp: 112, atk: 144, spe: 252}, nature: 'Jolly',
+				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 			},
 			'duck': {
 				species: 'Farfetch\'d', ability: 'Sniper', item: 'Stick', gender: 'M',
@@ -175,7 +175,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'eternally': {
 				species: 'Ducklett', ability: 'Primordial Sea', item: 'Eviolite', gender: 'M',
-				moves: ['Surf', 'Hurricane', 'Roost'],
+				moves: ['Origin Pulse', 'Hurricane', 'Roost'],
 				signatureMove: 'Quack',
 				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
@@ -385,7 +385,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'explodingdaisies';
+				name = 'eternally';
 				if (pool.indexOf(name) > -1) pool.splice(pool.indexOf(name), 1);
 			} else {
 				name = this.sampleNoReplace(pool);
