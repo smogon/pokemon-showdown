@@ -227,6 +227,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Víbora',
 				evs: {hp: 252, def: 220, spd: 36}, nature: 'Bold', shiny: true,
 			},
+			'jdarden': {
+				species: 'Dragonair', ability: 'Fur Coat', item: 'Eviolite', gender: 'M',
+				moves: ['Rest', 'Sleep Talk', 'Quiver Dance'],
+				signatureMove: 'Wyvern\'s Wail',
+				evs: {hp: 248, def: 252, spd: 8}, ivs: {atk: 0}, nature: 'Bold',
+			},
 			'Kalalokki': {
 				species: 'Wingull', ability: 'Swift Swim', item: ['Waterium Z', 'Flyinium Z', 'Electrium Z'], gender: 'M',
 				moves: ['Water Spout', 'Hurricane', 'Thunder'],

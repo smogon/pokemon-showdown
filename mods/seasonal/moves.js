@@ -1017,6 +1017,26 @@ let BattleMovedex = {
 		target: "allyTeam",
 		type: "Poison",
 	},
+	// jdarden
+	"wyvernswail": {
+		accuracy: 100,
+		basePower: 60,
+		category: "Special",
+		desc: "Deals damage and forces target to switch. Sound based",
+		shortDesc: "Deals damage and forces target to switch. Sound based",
+		id: "wyvernswail",
+		name: "Wyvern's Wail",
+		pp: 15,
+		priority: -6,
+		flags: {protect: 1, mirror: 1, sound: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Whirlwind', source);
+		},
+		forceSwitch: true,
+		target: "normal",
+		type: "Flying",
+	},
 	// kalalokki
 	maelstrm: {
 		accuracy: 85,
