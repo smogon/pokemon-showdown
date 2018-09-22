@@ -1915,7 +1915,7 @@ const commands = {
 		Punishments.savePunishments();
 
 		Users.findUsers([userid], []).forEach(curUser => {
-			if (curUser.locked && Punishments.getPunishType(curUser.userid) !== 'LOCK') {
+			if (curUser.locked && !curUser.locked.startsWith('#') && Punishments.getPunishType(curUser.userid) !== 'LOCK') {
 				curUser.locked = false;
 				curUser.updateIdentity();
 			}
@@ -1939,7 +1939,7 @@ const commands = {
 		Punishments.savePunishments();
 
 		Users.findUsers([], [target]).forEach(curUser => {
-			if (curUser.locked && Punishments.getPunishType(curUser.userid) !== 'LOCK') {
+			if (curUser.locked && !curUser.locked.startsWith('#') && Punishments.getPunishType(curUser.userid) !== 'LOCK') {
 				curUser.locked = false;
 				curUser.updateIdentity();
 			}
