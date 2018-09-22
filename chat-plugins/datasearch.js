@@ -1425,6 +1425,7 @@ function runLearn(target, cmd) {
 			formatid = targetid;
 			formatName = format.name;
 			targets.shift();
+			continue;
 		}
 		if (targetid.startsWith('gen') && parseInt(targetid.charAt(3))) {
 			gen = parseInt(targetid.slice(3));
@@ -1442,8 +1443,8 @@ function runLearn(target, cmd) {
 		break;
 	}
 	if (!formatName) {
-		format = new Dex.Data.Format(format);
-		formatName = 'Gen ' + gen;
+		format = new Dex.Data.Format(format, {mod: `gen${gen}`});
+		formatName = `Gen ${gen}`;
 		if (format.requirePentagon) formatName += ' Pentagon';
 	}
 	let lsetData = {set: {}, sources: [], sourcesBefore: gen};
