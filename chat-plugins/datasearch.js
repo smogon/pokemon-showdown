@@ -1443,8 +1443,8 @@ function runLearn(target, cmd) {
 		break;
 	}
 	if (!formatName) {
-		format = Dex.getFormat(`gen${gen}ou`);
-		formatName = 'Gen ' + gen;
+		format = new Dex.Data.Format(format, {mod: `gen${gen}`});
+		formatName = `Gen ${gen}`;
 		if (format.requirePentagon) formatName += ' Pentagon';
 	}
 	let lsetData = {set: {}, sources: [], sourcesBefore: gen};
