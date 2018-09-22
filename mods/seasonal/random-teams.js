@@ -210,9 +210,9 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 252, def: 252, spd: 4}, ivs: {atk: 0, spa: 0}, nature: 'Bold',
 			},
 			'HoeenHero': {
-				species: 'Ludicolo', ability: 'Swift Swim', item: 'Damp Rock', gender: 'M',
+				species: 'Ludicolo', ability: 'Scripter', item: 'Terrain Extender', gender: 'M',
 				moves: [['Hydro Pump', 'Scald'], 'Giga Drain', 'Ice Beam'],
-				signatureMove: 'Scripting',
+				signatureMove: 'Scripted Terrain',
 				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 			},
 			'imas': {
@@ -415,7 +415,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'Zarel';
+				name = 'HoeenHero';
 				if (pool.indexOf(name) > -1) pool.splice(pool.indexOf(name), 1);
 			} else {
 				name = this.sampleNoReplace(pool);

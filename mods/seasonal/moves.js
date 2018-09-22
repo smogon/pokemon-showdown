@@ -46,6 +46,7 @@ let BattleMovedex = {
 		shortDesc: "",
 		id: "noblehowl",
 		name: "Noble Howl",
+		isNonstandard: true,
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
@@ -90,8 +91,8 @@ let BattleMovedex = {
 		desc: "Has a 40% chance to paralyze the target. Lowers the user's spa, spd, and spe by 1 stage.",
 		shortDesc: "40% to paralyze target. Lowers user's spa, spd, spe.",
 		id: "energyfield",
-		isNonstandard: true,
 		name: "Energy Field",
+		isNonstandard: true,
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
@@ -118,6 +119,7 @@ let BattleMovedex = {
 		shortDesc: "",
 		id: "pilfer",
 		name: "Pilfer",
+		isNonstandard: true,
 		pp: 5,
 		priority: 1,
 		flags: {protect: 1, mirror: 1, contact: 1},
@@ -164,6 +166,7 @@ let BattleMovedex = {
 		shortDesc: "Changes the target's ability to Truant.",
 		id: "truant",
 		name: "TRU ANT",
+		isNonstandard: true,
 		pp: 5,
 		flags: {protect: 1, mirror: 1},
 		onPrepareHit: function (target, source) {
@@ -189,6 +192,7 @@ let BattleMovedex = {
 		shortDesc: "Boosts stats and cures status if ally fainted last turn.",
 		id: "compost",
 		name: "Compost",
+		isNonstandard: true,
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
@@ -223,6 +227,7 @@ let BattleMovedex = {
 		shortDesc: "",
 		id: "trashalanche",
 		name: "Trashalanche",
+		isNonstandard: true,
 		pp: 10,
 		flags: {protect: 1, mirror: 1},
 		onPrepareHit: function (target, source) {
@@ -240,6 +245,7 @@ let BattleMovedex = {
 		category: "Special",
 		id: "jailshell",
 		name: "Jail Shell",
+		isNonstandard: true,
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
@@ -267,6 +273,7 @@ let BattleMovedex = {
 		shortDesc: "20% chance to flinch",
 		id: "buzzingoftheswarm",
 		name: "Buzzing of the Swarm",
+		isNonstandard: true,
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
@@ -290,6 +297,7 @@ let BattleMovedex = {
 		shortDesc: "Forces the target to switch.",
 		id: "foodrush",
 		name: "Food Rush",
+		isNonstandard: true,
 		pp: 10,
 		priority: -6,
 		flags: {protect: 1, mirror: 1},
@@ -312,6 +320,7 @@ let BattleMovedex = {
 		shortDesc: "",
 		id: "blusterywinds",
 		name: "Blustery Winds",
+		isNonstandard: true,
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
@@ -353,6 +362,7 @@ let BattleMovedex = {
 		shortDesc: "",
 		id: "wondertrade",
 		name: "Wonder Trade",
+		isNonstandard: true,
 		pp: 2,
 		noPPBoosts: true,
 		priority: 0,
@@ -423,6 +433,7 @@ let BattleMovedex = {
 		shortDesc: "Summons Grassy Terrain.",
 		id: "aesthetislash",
 		name: "a e s t h e t i s l a s h",
+		isNonstandard: true,
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
@@ -446,6 +457,7 @@ let BattleMovedex = {
 		shortDesc: "+1 spa, spe",
 		id: "restartingrouter",
 		name: "Restarting Router",
+		isNonstandard: true,
 		pp: 10,
 		priority: 0,
 		flags: {mirror: 1, snatch: 1},
@@ -466,6 +478,7 @@ let BattleMovedex = {
 		shortDesc: "",
 		id: "bringerofdarkness",
 		name: "Bringer of Darkness",
+		isNonstandard: true,
 		pp: 5,
 		priority: 0,
 		flags: {reflectable: 1, mirror: 1},
@@ -511,6 +524,7 @@ let BattleMovedex = {
 		shortDesc: "Always hits levitating, grounds both sides, 1/2 recoil.",
 		id: "blimpcrash",
 		name: "Blimp Crash",
+		isNonstandard: true,
 		pp: 5,
 		priority: 0,
 		flags: {mirror: 1, protect: 1},
@@ -535,6 +549,7 @@ let BattleMovedex = {
 		category: "Status",
 		id: "forcewin",
 		name: "Forcewin",
+		isNonstandard: true,
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
@@ -562,6 +577,7 @@ let BattleMovedex = {
 		shortDesc: "",
 		id: "beskyttelsesnet",
 		name: "beskyttelsesnet",
+		isNonstandard: true,
 		pp: 10,
 		priority: 0,
 		flags: {mirror: 1, snatch: 1},
@@ -588,6 +604,7 @@ let BattleMovedex = {
 		shortDesc: "Foe: sleep + nightmare + leech seed. User loses 1/2 HP.",
 		id: "luciddreams",
 		name: "Lucid Dreams",
+		isNonstandard: true,
 		pp: 5,
 		priority: 0,
 		flags: {mirror: 1, snatch: 1},
@@ -620,6 +637,7 @@ let BattleMovedex = {
 		shortDesc: "",
 		id: "earthsblessing",
 		name: "Earth's Blessing",
+		isNonstandard: true,
 		pp: 5,
 		priority: 0,
 		onPrepareHit: function (target, source) {
@@ -649,6 +667,7 @@ let BattleMovedex = {
 		shortDesc: "",
 		id: "holyduck",
 		name: "Holy Duck!",
+		isNonstandard: true,
 		pp: 5,
 		priority: 1,
 		flags: {mirror: 1, protect: 1},
@@ -678,6 +697,7 @@ let BattleMovedex = {
 		shortDesc: "Does 150 damage, burns.",
 		id: "fangofthefireking",
 		name: "Fang of the Fire King",
+		isNonstandard: true,
 		pp: 10,
 		priority: 0,
 		flags: {mirror: 1, protect: 1, bite: 1},
@@ -705,6 +725,7 @@ let BattleMovedex = {
 		shortDesc: "",
 		id: "doom",
 		name: "DOOM!",
+		isNonstandard: true,
 		pp: 5,
 		priority: 0,
 		flags: {mirror: 1, protect: 1},
@@ -726,6 +747,7 @@ let BattleMovedex = {
 		shortDesc: "",
 		id: "ancestralpower",
 		name: "Ancestral Power",
+		isNonstandard: true,
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1},
@@ -760,6 +782,7 @@ let BattleMovedex = {
 		shortDesc: "+1 def, spd, spe",
 		id: "quack",
 		name: "Quack",
+		isNonstandard: true,
 		pp: 5,
 		priority: 0,
 		flags: {mirror: 1, snatch: 1},
@@ -782,6 +805,7 @@ let BattleMovedex = {
 		shortDesc: "Type = users type. Physical if atk > spa, else Special.",
 		id: "evoblast",
 		name: "Evoblast",
+		isNonstandard: true,
 		pp: 10,
 		priority: 0,
 		flags: {mirror: 1, protect: 1},
@@ -838,6 +862,7 @@ let BattleMovedex = {
 		shortDesc: "",
 		id: "frck",
 		name: "fr*ck",
+		isNonstandard: true,
 		pp: 6,
 		noPPBoosts: true,
 		priority: 0,
@@ -878,8 +903,8 @@ let BattleMovedex = {
 		desc: "The power of this move depends on (user's weight / target's weight), rounded down. Power is equal to 120 if the result is 5 or more, 100 if 4, 80 if 3, 60 if 2, and 40 if 1 or less. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
 		shortDesc: "More power the heavier the user than the target.",
 		id: "paintrain",
-		isNonstandard: true,
 		name: "Pain Train",
+		isNonstandard: true,
 		pp: 10,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onPrepareHit: function (target, source) {
@@ -899,8 +924,8 @@ let BattleMovedex = {
 		desc: "The user sets 2 of Stealth Rocks, Spikes (1 layer), Toxic Spikes (1 layer), and Sticky Web on the foe's side of the field, and then switches out.",
 		shortDesc: "Sets 2 random hazards, then switches out.",
 		id: "hazardpass",
-		isNonstandard: true,
 		name: "Hazard Pass",
+		isNonstandard: true,
 		flags: {reflectable: 1, mirror: 1, authentic: 1},
 		onPrepareHit: function () {
 			this.attrLastMove('[still]');
@@ -948,26 +973,149 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 	},
 	//hoeenhero
-	scripting: {
+	scriptedterrain: {
 		accuracy: 100,
 		category: "Status",
-		desc: "The user summon's rainy weather and boosts its spa by 1 stage.",
-		shortDesc: "Rain Dance & +1 spa",
-		id: "scripting",
-		name: "Scripting",
+		desc: "Sets Scripted Terrain for 5 turns. The power of Bug type moves is boosted by 1.5. 5% chance for a pokemon to use Glitch Out instead of their intended move. At the end of a turn, 5% chance to transform into a missingno. with 3 random moves and Glitch Out. Switching out will restore the pokemon to its normal state.",
+		shortDesc: "5 turns. +Bug power, glitchy effects.",
+		id: "scriptedterrain",
+		name: "Scripted Terrain",
+		isNonstandard: true,
 		pp: 5,
 		priority: 0,
-		flags: {mirror: 1, snatch: 1},
+		flags: {nosky: 1},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, 'Calm Mind', source);
 			this.add('-anim', source, 'Geomancy', source);
 		},
-		weather: 'raindance',
-		boosts: {spa: 1},
+		terrain: 'scriptedterrain',
+		effect: {
+			duration: 5,
+			durationCallback: function (source, effect) {
+				if (source && source.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onBasePower: function (basePower, attacker, defender, move) {
+				if (move.type === 'Bug') {
+					this.debug('scripted terrain boost');
+					return this.chainModify(1.5);
+				}
+			},
+			onTryHitPriority: 4,
+			onTryHit: function (target, source, effect) {
+				if (!effect || effect.id === 'glitchout' || source.volatiles['glitchout']) return;
+				if (this.random(20) === 1) {
+					this.add('message', `${source.name}'s move was glitched by the Scripted Terrain!`);
+					//source.addVolatile('glitchout');
+					this.useMove('Glitch Out', source, source.side.foe.active[0]);
+					return null;
+				}
+			},
+			onStart: function (battle, source, effect) {
+				if (effect && effect.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Scripted Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Scripted Terrain');
+				}
+			},
+			onResidualOrder: 21,
+			onResidualSubOrder: 2,
+			onResidual: function () {
+				this.eachEvent('Terrain');
+			},
+			onTerrain: function (pokemon) {
+				if (pokemon.template.id === 'missingno') return;
+				if (this.random(20) === 1) {
+					this.debug('Scripted terrain corrupt');
+					this.add('message', `${pokemon.name} was corrupted by a bug in the scripted terrain!`);
+					// generate a movepool
+					let moves = [];
+					let pool = this.shuffle(Object.keys(this.data.Movedex));
+					let metronome = this.getMove('metronome');
+					for (let i of pool) {
+						let move = this.getMove(i);
+						if (i !== move.id) continue;
+						if (move.isZ || move.isNonstandard) continue;
+						// @ts-ignore
+						if (metronome.noMetronome.includes(move.id)) continue;
+						if (this.getMove(i).gen > this.gen) continue;
+						moves.push(move);
+						if (moves.length >= 3) break;
+					}
+					moves.push('glitchout');
+					pokemon.formeChange('missingno');
+					pokemon.moveSlots = [];
+					for (let moveid of moves) {
+						let move = this.getMove(moveid);
+						if (!move.id) continue;
+						pokemon.moveSlots.push({
+							move: move.name,
+							id: move.id,
+							pp: 5,
+							maxpp: 5,
+							target: move.target,
+							disabled: false,
+							used: false,
+							virtual: true,
+						});
+						pokemon.moves.push(move.id);
+					}
+				}
+			},
+			onEnd: function () {
+				this.add('-fieldend', 'move: Scripted Terrain');
+			},
+		},
 		secondary: null,
 		target: "self",
 		type: "Psychic",
+	},
+	// Used by HoeenHero's terrain
+	glitchout: {
+		accuracy: true,
+		category: "Status",
+		desc: "A random move is selected for use, other than After You, Assist, Baneful Bunker, Beak Blast, Belch, Bestow, Celebrate, Chatter, Copycat, Counter, Covet, Crafty Shield, Destiny Bond, Detect, Diamond Storm, Endure, Feint, Fleur Cannon, Focus Punch, Follow Me, Freeze Shock, Helping Hand, Hold Hands, Hyperspace Hole, Ice Burn, Instruct, King's Shield, Light of Ruin, Mat Block, Me First, Metronome, Mimic, Mind Blown, Mirror Coat, Mirror Move, Nature Power, Photon Geyser, Plasma Fists, Protect, Quash, Quick Guard, Rage Powder, Relic Song, Secret Sword, Shell Trap, Sketch, Sleep Talk, Snarl, Snatch, Snore, Spectral Thief, Spiky Shield, Spotlight, Steam Eruption, Struggle, Switcheroo, Techno Blast, Thief, Thousand Arrows, Thousand Waves, Transform, Trick, V-create, or Wide Guard. The selected move's Base Power is increased by 20.",
+		shortDesc: "Picks a random move. Base Power +20",
+		id: "glitchout",
+		name: "Glitch Out",
+		isNonstandard: true,
+		pp: 10,
+		priority: 0,
+		flags: {},
+		noMetronome: ['afteryou', 'assist', 'banefulbunker', 'beakblast', 'belch', 'bestow', 'celebrate', 'chatter', 'copycat', 'counter', 'covet', 'craftyshield', 'destinybond', 'detect', 'diamondstorm', 'dragonascent', 'endure', 'feint', 'fleurcannon', 'focuspunch', 'followme', 'freezeshock', 'helpinghand', 'holdhands', 'hyperspacefury', 'hyperspacehole', 'iceburn', 'instruct', 'kingsshield', 'lightofruin', 'matblock', 'mefirst', 'metronome', 'mimic', 'mindblown', 'mirrorcoat', 'mirrormove', 'naturepower', 'originpulse', 'photongeyser', 'plasmafists', 'precipiceblades', 'protect', 'quash', 'quickguard', 'ragepowder', 'relicsong', 'secretsword', 'shelltrap', 'sketch', 'sleeptalk', 'snarl', 'snatch', 'snore', 'spectralthief', 'spikyshield', 'spotlight', 'steameruption', 'struggle', 'switcheroo', 'technoblast', 'thief', 'thousandarrows', 'thousandwaves', 'transform', 'trick', 'vcreate', 'wideguard'],
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Bug Buzz', source);
+			this.add('-anim', source, 'Metronome', source);
+			source.addVolatile('glitchout');
+		},
+		onHit: function (target, source, effect) {
+			let moves = [];
+			for (let i in this.data.Movedex) {
+				let move = this.data.Movedex[i];
+				if (i !== move.id) continue;
+				if (move.isZ || move.isNonstandard) continue;
+				// @ts-ignore
+				if (effect.noMetronome.includes(move.id)) continue;
+				if (this.getMove(i).gen > this.gen) continue;
+				moves.push(move);
+			}
+			let randomMove = '';
+			if (moves.length) {
+				moves.sort((a, b) => a.num - b.num);
+				randomMove = this.sample(moves).id;
+			}
+			if (!randomMove) {
+				return false;
+			}
+			this.useMove(randomMove, target);
+		},
+		secondary: null,
+		target: "self",
+		type: "Bug",
 	},
 	// imas
 	boi: {
@@ -978,6 +1126,7 @@ let BattleMovedex = {
 		shortDesc: "",
 		id: "boi",
 		name: "B O I",
+		isNonstandard: true,
 		pp: 15,
 		priority: 1,
 		flags: {contact: 1, protect: 1, mirror: 1},
@@ -998,6 +1147,7 @@ let BattleMovedex = {
 		shortDesc: "Cures party's statuses, poisons self.",
 		id: "vbora",
 		name: "Víbora",
+		isNonstandard: true,
 		pp: 5,
 		flags: {mirror: 1, snatch: 1},
 		onPrepareHit: function (target, source) {
@@ -1026,6 +1176,7 @@ let BattleMovedex = {
 		shortDesc: "Deals damage and forces target to switch. Sound based",
 		id: "wyvernswail",
 		name: "Wyvern's Wail",
+		isNonstandard: true,
 		pp: 15,
 		priority: -6,
 		flags: {protect: 1, mirror: 1, sound: 1},
@@ -1046,6 +1197,7 @@ let BattleMovedex = {
 		shortDesc: "Traps the target",
 		id: "maelstrm",
 		name: "Maelström",
+		isNonstandard: true,
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
@@ -1099,6 +1251,7 @@ let BattleMovedex = {
 		shortDesc: "Lowers the user's Def, SpD and Spe by 1.",
 		id: "inkzooka",
 		name: "Inkzooka",
+		isNonstandard: true,
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
@@ -1124,6 +1277,7 @@ let BattleMovedex = {
 		category: "Physical",
 		id: "dragonwarriortouch",
 		name: "Dragon Warrior Touch",
+		isNonstandard: true,
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, punch: 1, contact: 1},
@@ -1149,6 +1303,7 @@ let BattleMovedex = {
 		shortDesc: "User gains 5 levels",
 		id: "nextlevelstrats",
 		name: "Next Level Strats",
+		isNonstandard: true,
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1},
@@ -1189,6 +1344,7 @@ let BattleMovedex = {
 		shortDesc: "Hits first. +3 atk, -3 def & confusion for both sides.",
 		id: "barfight",
 		name: "Bar Fight",
+		isNonstandard: true,
 		pp: 10,
 		priority: 3,
 		flags: {protect: 1, mirror: 1},
@@ -1217,8 +1373,8 @@ let BattleMovedex = {
 		desc: "The user falls asleep for the next turn and restores 50% of its HP, curing itself of any major status condition. If the user falls asleep in this way, all other active Pokemon that are not asleep or frozen also try to use Nap Time. Fails if the user has full HP, is already asleep, or if another effect is preventing sleep.",
 		shortDesc: "All active Pokemon sleep 1 turn, restore HP & status.",
 		id: "naptime",
-		isNonstandard: true,
 		name: "Nap Time",
+		isNonstandard: true,
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
@@ -1279,6 +1435,7 @@ let BattleMovedex = {
 		shortDesc: "",
 		id: "blazeofglory",
 		name: "Blaze of Glory",
+		isNonstandard: true,
 		pp: 1,
 		priority: 0,
 		flags: {},
@@ -1302,6 +1459,7 @@ let BattleMovedex = {
 		shortDesc: "50% chance to boost spa by 1 stage.",
 		id: "crystalboost",
 		name: "Crystal Boost",
+		isNonstandard: true,
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
@@ -1328,6 +1486,7 @@ let BattleMovedex = {
 		shortDesc: "Changes form to match the target's weakness.",
 		id: "typeanalysis",
 		name: "Type Analysis",
+		isNonstandard: true,
 		pp: 10,
 		priority: 0,
 		flags: {authentic: 1, protect: 1},
@@ -1376,6 +1535,7 @@ let BattleMovedex = {
 		shortDesc: "",
 		id: "scavengesu",
 		name: "/scavenges u",
+		isNonstandard: true,
 		pp: 5,
 		priority: 0,
 		flags: {mirror: 1, protect: 1},
@@ -1420,6 +1580,7 @@ let BattleMovedex = {
 		shortDesc: "+20 per boost. Removes some defensive boosts.",
 		id: "tippingover",
 		name: "Tipping Over",
+		isNonstandard: true,
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
@@ -1454,6 +1615,7 @@ let BattleMovedex = {
 		shortDesc: "",
 		id: "cyclonespin",
 		name: "Cyclone Spin",
+		isNonstandard: true,
 		pp: 10,
 		priority: 0,
 		flags: {mirror: 1, protect: 1, contact: 1},
@@ -1489,6 +1651,7 @@ let BattleMovedex = {
 		shortDesc: "+1 atk, spa, and spe. User gains 100kg.",
 		id: "proteinshake",
 		name: "Protein Shake",
+		isNonstandard: true,
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, mirror: 1},
@@ -1522,11 +1685,12 @@ let BattleMovedex = {
 	// nui
 	pyramidingsong: {
 		accuracy: 100,
+		category: "Status",
 		desc: "",
 		shortDesc: "",
 		id: "pyramidingsong",
 		name: "Pyramiding Song",
-		category: "Status",
+		isNonstandard: true,
 		pp: 20,
 		priority: 0,
 		flags: {mirror: 1, protect: 1},
@@ -1559,11 +1723,12 @@ let BattleMovedex = {
 	omboom: {
 		accuracy: 95,
 		basePower: 110,
+		category: "Physical",
 		desc: "",
 		shortDesc: "",
 		id: "omboom",
 		name: "OM Boom",
-		category: "Physical",
+		isNonstandard: true,
 		pp: 15,
 		priority: 0,
 		flags: {mirror: 1, protect: 1},
@@ -1605,6 +1770,7 @@ let BattleMovedex = {
 		shortDesc: "",
 		id: "nightmarch",
 		name: "Night March",
+		isNonstandard: true,
 		pp: 5,
 		flags: {protect: 1, mirror: 1},
 		onPrepareHit: function (target, source) {
@@ -1625,6 +1791,7 @@ let BattleMovedex = {
 		shortDesc: "",
 		id: "corrosivetoxic",
 		name: "Corrosive Toxic",
+		isNonstandard: true,
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
@@ -1655,6 +1822,7 @@ let BattleMovedex = {
 		shortDesc: "",
 		id: "literallycheating",
 		name: "Literally Cheating",
+		isNonstandard: true,
 		pp: 5,
 		priority: 0,
 		flags: {nosky: 1},
@@ -1708,6 +1876,7 @@ let BattleMovedex = {
 		shortDesc: "No additional effect.",
 		id: "geomagneticstorm",
 		name: "Geomagnetic Storm",
+		isNonstandard: true,
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
@@ -1728,6 +1897,7 @@ let BattleMovedex = {
 		shortDesc: "Raises the user's Attack by 2 and Speed by 1.",
 		id: "goinda",
 		name: "GO INDA",
+		isNonstandard: true,
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1},
@@ -1747,11 +1917,12 @@ let BattleMovedex = {
 	groundsurge: {
 		accuracy: 100,
 		basePower: 95,
+		category: "Special",
 		desc: "",
 		shortDesc: "",
 		id: "groundsurge",
 		name: "Ground Surge",
-		category: "Special",
+		isNonstandard: true,
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
@@ -1783,6 +1954,7 @@ let BattleMovedex = {
 		shortDesc: "",
 		id: "nofunzone",
 		name: "No Fun Zone",
+		isNonstandard: true,
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1, mirror: 1},
@@ -1833,11 +2005,12 @@ let BattleMovedex = {
 	ultrasucc: {
 		accuracy: 95,
 		basePower: 90,
+		category: "Physical",
 		desc: "The user boosts their speed by 1 stage, and recovers 50% of the damage dealt.",
 		shortDesc: "+1 spe, user heals 50% of the damage dealt.",
 		id: "ultrasucc",
 		name: "Ultra Succ",
-		category: "Physical",
+		isNonstandard: true,
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, heal: 1},
@@ -1862,6 +2035,7 @@ let BattleMovedex = {
 		shortDesc: "Hits 5 times, various effects after each hit.",
 		id: "devolutionwave",
 		name: "Devolution Wave",
+		isNonstandard: true,
 		pp: 1,
 		priority: 0,
 		flags: {},
@@ -1954,6 +2128,7 @@ let BattleMovedex = {
 		shortDesc: "Moves hazards to foe's side. Switches out.",
 		id: "smokebomb",
 		name: "Smoke Bomb",
+		isNonstandard: true,
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, mirror: 1},
@@ -2011,6 +2186,7 @@ let BattleMovedex = {
 		shortDesc: "Heavier foe = more power. Increases foe's weigth.",
 		id: "minisingularity",
 		name: "Mini Singularity",
+		isNonstandard: true,
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
@@ -2050,6 +2226,7 @@ let BattleMovedex = {
 		category: "Status",
 		id: "holyorders",
 		name: "Holy Orders",
+		isNonstandard: true,
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1},
@@ -2073,6 +2250,7 @@ let BattleMovedex = {
 		shortDesc: "",
 		id: "cutieescape",
 		name: "Cutie Escape",
+		isNonstandard: true,
 		pp: 10,
 		priority: -6,
 		flags: {snatch: 1, mirror: 1},
@@ -2118,6 +2296,7 @@ let BattleMovedex = {
 		category: "Special",
 		id: "relicsongdance",
 		name: "Relic Song Dance",
+		isNonstandard: true,
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},

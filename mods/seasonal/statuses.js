@@ -873,6 +873,16 @@ let BattleStatuses = {
 			}
 		},
 	},
+	// Prevents glitch out from running more than once per turn per pokemon & boosts base power
+	glitchout: {
+		duration: 1,
+		onTryHit: function (target, source, move) {
+			if (move.basePower) {
+				move.basePower += 20;
+				this.debug('glitch out base power boost');
+			}
+		},
+	},
 };
 
 exports.BattleStatuses = BattleStatuses;

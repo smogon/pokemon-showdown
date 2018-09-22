@@ -84,6 +84,22 @@ let BattleAbilities = {
 			}
 		},
 	},
+	// HoeenHero
+	scripter: {
+		desc: "If the terrain is scripted terrain, this pokemon's moves have 1.5x power, and its speed is doubled.",
+		shortDesc: "If scripted terrain, 1.5x move power & 2x speed",
+		onModifyDamage: function (damage, source, target, move) {
+			if (this.isTerrain('scriptedterrain')) {
+				this.debug('Scripter boost');
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpe: function (spe, pokemon) {
+			if (this.isTerrain('scriptedterrain')) {
+				return this.chainModify(2);
+			}
+		},
+	},
 	// KingSwordYT
 	kungfupanda: {
 		desc: "This Pokemon's punch-based attacks have their power multiplied by 1.2, and this Pokemon's Speed is raised by 1 stage after it is damaged by a move",
