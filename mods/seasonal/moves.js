@@ -149,7 +149,7 @@ let BattleMovedex = {
 			onBeforeMovePriority: 3,
 			onBeforeMove: function (pokemon, target, move) {
 				if (move.category === 'Status') {
-					this.add('-message', move.name + ' was pilfered and was unable to be used.');
+					this.add('-message', move.name + ' was pilfered and unable to be used.');
 					return false;
 				}
 			},
@@ -451,7 +451,7 @@ let BattleMovedex = {
 	},
 	// cc
 	restartingrouter: {
-		accuracy: 100,
+		accuracy: true,
 		category: "Status",
 		desc: "Boosts the user's spa and spe by 1 stage.",
 		shortDesc: "+1 spa, spe",
@@ -520,8 +520,8 @@ let BattleMovedex = {
 		},
 		basePower: 165,
 		category: "Physical",
-		desc: "Will always hit a target who isn't grounded. The user and the target will be grounded, and the user will take 1/2 of the damage inflicted as recoil.",
-		shortDesc: "Always hits levitating, grounds both sides, 1/2 recoil.",
+		desc: "80% Accuracy if target is grounded. The user and the target will be grounded, and the user will take 1/2 of the damage inflicted as recoil.",
+		shortDesc: "80 Acc vs grounded, grounds both sides, 1/2 recoil.",
 		id: "blimpcrash",
 		name: "Blimp Crash",
 		isNonstandard: true,
@@ -776,7 +776,7 @@ let BattleMovedex = {
 	},
 	// eternally
 	quack: {
-		accuracy: 100,
+		accuracy: true,
 		category: "Status",
 		desc: "Boosts the users def, spd, and spe by 1 stage.",
 		shortDesc: "+1 def, spd, spe",
@@ -1141,7 +1141,7 @@ let BattleMovedex = {
 	},
 	// Iyarito
 	vbora: {
-		accuracy: 100,
+		accuracy: true,
 		category: "Status",
 		desc: "Cures the user's party of all status conditions, but poisons the user.",
 		shortDesc: "Cures party's statuses, poisons self.",
@@ -1182,7 +1182,7 @@ let BattleMovedex = {
 		flags: {protect: 1, mirror: 1, sound: 1},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
-			this.add('-anim', source, 'Whirlwind', source);
+			this.add('-anim', source, 'Whirlwind', target);
 		},
 		forceSwitch: true,
 		target: "normal",
@@ -1366,9 +1366,46 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Flying",
 	},
+	// Lycanium Z
+	changelingcrash: {
+		accuracy: 100,
+		basePower: 40,
+		category: "Special",
+		desc: "",
+		shortDesc: "",
+		id: "changelingcrash",
+		name: "Changeling Crash",
+		isNonstandard: true,
+		pp: 10,
+		priority: 3,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+		},
+		// Balancing Reasons
+		onTry: function (source, target) {
+			if (target.transformed || source.transformed) {
+				this.add('-fail', source);
+				return null;
+			}
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Play Rough", target);
+		},
+		onHit: function (target, pokemon) {
+			if (!pokemon.transformInto(target, pokemon)) {
+				return false;
+			}
+		},
+		secondary: {
+			chance: 100,
+			volatileStatus: 'flinch',
+		},
+		target: "normal",
+		type: "Bug",
+	},
 	// MacChaeger
 	naptime: {
-		accuracy: 100,
+		accuracy: true,
 		category: "Status",
 		desc: "The user falls asleep for the next turn and restores 50% of its HP, curing itself of any major status condition. If the user falls asleep in this way, all other active Pokemon that are not asleep or frozen also try to use Nap Time. Fails if the user has full HP, is already asleep, or if another effect is preventing sleep.",
 		shortDesc: "All active Pokemon sleep 1 turn, restore HP & status.",
@@ -1645,7 +1682,7 @@ let BattleMovedex = {
 	},
 	// moo
 	proteinshake: {
-		accuracy: 100,
+		accuracy: true,
 		category: "Status",
 		desc: "The user's Attack, Special Attack, and Speed are boosted by 1. The user also gains 100kg of weight.",
 		shortDesc: "+1 atk, spa, and spe. User gains 100kg.",
@@ -1931,7 +1968,6 @@ let BattleMovedex = {
 			this.add('-anim', source, "Thunder", target);
 			this.add('-anim', source, "Fissure", target);
 		},
-		// I tried using Thousand Arrows's code, doesnt work.
 		onModifyMovePriority: -5,
 		onModifyMove: function (move) {
 			if (!move.ignoreImmunity) move.ignoreImmunity = {};
@@ -2242,6 +2278,39 @@ let BattleMovedex = {
 		target: "self",
 		type: "Bug",
 	},
+	// XpRienzo ☑◡☑
+	blehflame: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Special",
+		desc: "Has a 10% chance to raise the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage.",
+		shortDesc: "10% chance to raise all stats by 1 (not acc/eva).",
+		id: "blehflame",
+		name: "Bleh Flame",
+		isNonstandard: true,
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Flame Charge", target);
+			this.add('-anim', source, "Overheat", target);
+		},
+		secondary: {
+			chance: 10,
+			self: {
+				boosts: {
+					atk: 1,
+					def: 1,
+					spa: 1,
+					spd: 1,
+					spe: 1,
+				},
+			},
+		},
+		target: "normal",
+		type: "Fire",
+	},
 	// Yuki
 	cutieescape: {
 		accuracy: true,
@@ -2301,6 +2370,9 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
 		ignoreImmunity: true,
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+		},
 		onTryHit: function (target, pokemon) {
 			this.attrLastMove('[still]');
 			let move = pokemon.template.speciesid === 'meloettapirouette' ? 'Brick Break' : 'Relic Song';

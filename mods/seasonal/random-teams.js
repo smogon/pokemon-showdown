@@ -263,6 +263,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Bar Fight',
 				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 			},
+			'Lycanium Z': {
+				species: 'Keldeo', ability: 'Protean', item: 'Choice Scarf', gender: 'N',
+				moves: ['Steam Eruption', 'Secret Sword', ['Frost Breath', 'Power Gem', 'Discharge']],
+				signatureMove: 'Changeling Crash',
+				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
+			},
 			'MacChaeger': {
 				species: 'Mantyke', ability: 'Water Veil', item: ['Life Orb', 'Normalium Z'], gender: 'M',
 				moves: ['Scald', 'Aeroblast', 'Sleep Talk'],
@@ -342,7 +348,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 252, def: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
 			'Scotteh': {
-				species: 'Suicune', ability: 'Leftovers', item: 'Fur Coat', gender: 'M',
+				species: 'Suicune', ability: 'Fur Coat', item: 'Leftovers', gender: 'M',
 				moves: ['Nasty Plot', 'Ice Beam', 'Scald', 'Recover'],
 				signatureMove: 'Geomagnetic Storm',
 				evs: {def: 252, spa: 4, spe: 252}, nature: 'Bold',
@@ -400,6 +406,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				moves: ['Blizzard', 'Moonblast', 'Aurora Veil'],
 				signatureMove: 'Cutie Escape',
 				evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
+			},
+			'XpRienzo ☑◡☑': {
+				species: 'Reshiram', ability: 'Turboblaze', item: 'Charcoal', gender: 'M',
+				moves: ['Core Enforcer', 'Volt Switch', 'Psystrike'],
+				signatureMove: 'Bleh Flame',
+				evs: {spa: 252, spd: 4, spe: 252}, ivs: {hp: 24, def: 25, spd: 20}, nature: 'Timid',
 			},
 			'Zarel': {
 				species: 'Meloetta', ability: 'Serene Grace', item: '', gender: 'M',
