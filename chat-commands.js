@@ -2356,6 +2356,32 @@ const commands = {
 	},
 	announcehelp: [`/announce OR /wall [message] - Makes an announcement. Requires: % @ * # & ~`],
 
+	notifyoffrank: 'notifyrank',
+	notifyrank: function (target, room, user, connection, cmd) {
+		if (!target) return this.parse(`/help notifyrank`);
+		if (!this.can('addhtml', null, room)) return false;
+		if (!this.canTalk()) return;
+		let [rank, notification] = this.splitOne(target);
+		if (!(rank in Config.groups)) return this.errorReply(`Group '${rank}' does not exist.`);
+		const id = `${room.id}-rank-${Config.groups[rank].id}`;
+		if (cmd === 'notifyoffrank') {
+			room.sendRankedUsers(`|tempnotifyoff|${id}`, rank);
+		} else {
+			let [title, message] = this.splitOne(notification);
+			if (!title) title = `${room.title} ${Config.groups[rank].name}+ message!`;
+			if (!user.can('addhtml')) {
+				title += ` (notification from ${user.name})`;
+			}
+			if (message.length > 300) return this.errorReply(`Notifications should not exceed 300 characters.`);
+			room.sendRankedUsers(`|tempnotify|${id}|${title}|${message}`, rank);
+			this.modlog(`NOTIFYRANK`, null, target);
+		}
+	},
+	notifyrankhelp: [
+		`/notifyrank [rank], [title], [message] - Sends a notification to everyone with the specified rank or higher. Requires: # * & ~`,
+		`/notifyoffrank [rank] - Closes the notification previously sent with /notifyrank [rank]. Requires: # * & ~`,
+	],
+
 	fr: 'forcerename',
 	forcerename: function (target, room, user) {
 		if (!target) return this.parse('/help forcerename');
