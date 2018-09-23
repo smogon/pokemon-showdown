@@ -117,6 +117,20 @@ let BattleAbilities = {
 			}
 		},
 	},
+	// Lionyx
+	frozenskin: {
+		id: "frozenskin",
+		name: "Frozen Skin",
+		shortDesc: "If Hail is active, this Pokemon's Speed is doubled; immunity to Hail.",
+		onModifySpe: function (spe, pokemon) {
+			if (this.isWeather('hail')) {
+				return this.chainModify(2);
+			}
+		},
+		onImmunity: function (type, pokemon) {
+			if (type === 'hail') return false;
+		},
+	},
 	// Megazard
 	standuptall: {
 		desc: "This Pokemon's Defense or Special Defense is raised 1 stage at the end of each full turn on the field.",

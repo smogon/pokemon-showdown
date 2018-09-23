@@ -535,6 +535,18 @@ let BattleStatuses = {
 			if (move.aerilateBoosted) return this.chainModify([0x1333, 0x1000]);
 		},
 	},
+	lionyx: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|+Lionyx|Let the storm rage on... for Arendelle!`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|+Lionyx|/me turns away and slams the door`);
+		},
+		onFaint: function () {
+			this.add(`c|+Lionyx|Can't hold it back anymore...`);
+		},
+	},
 	lycaniumz: {
 		noCopy: true,
 		onStart: function () {

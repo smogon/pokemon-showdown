@@ -1366,6 +1366,40 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Flying",
 	},
+	// Lionyx
+	letitgo: {
+		accuracy: 95,
+		basePower: 110,
+		category: "Physical",
+		desc: "",
+		shortDesc: "",
+		id: "letitgo",
+		name: "Let it Go",
+		isNonstandard: true,
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Ice Beam", target);
+			this.add('-anim', source, "Subzero Slammer", target);
+			this.add('-anim', source, "Hyper Voice", target);
+		},
+		secondaries: [
+			{
+				chance: 5,
+				status: 'frz',
+			}, {
+				chance: 15,
+				boosts: {
+					spd: -1,
+				},
+			},
+		],
+		weather: 'hail',
+		target: "normal",
+		type: "Ice",
+	},
 	// Lycanium Z
 	changelingcrash: {
 		accuracy: 100,
