@@ -110,6 +110,32 @@ let BattleMovedex = {
 		type: "Electric",
 		zMovePower: 200,
 	},
+	// Amaluna
+	turismosplash: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "",
+		shortDesc: "",
+		id: "turismosplash",
+		name: "Turismo Splash",
+		isNonstandard: true,
+		pp: 5,
+		priority: -6,
+		flags: {snatch: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Coil", source);
+			this.add('-anim', source, "Extreme Evoboost", source);
+		},
+		boosts: {
+			spa: 1,
+		},
+		pseudoWeather: 'trickroom',
+		secondary: null,
+		target: "self",
+		type: "Water",
+	},
 	// Andy
 	pilfer: {
 		accuracy: 100,

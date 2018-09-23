@@ -43,6 +43,18 @@ let BattleStatuses = {
 			this.add(`c|@Aelita|CODE: LYOKO . Tower deactivated... Return to the past, now!`);
 		},
 	},
+	amaluna: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|+Amaluna|Please no casual chatting here`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|+Amaluna|It's not too late, it's never too late`);
+		},
+		onFaint: function () {
+			this.add(`c|+Amaluna|Don't talk to me unless you're famous`);
+		},
+	},
 	andy: {
 		noCopy: true,
 		onStart: function () {
@@ -401,10 +413,10 @@ let BattleStatuses = {
 	grimauxiliatrix: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|@grimAuxillatrix|${['A BRAWL IS SURELY BREWING!', 'GOOD DAY FOR A SWELL BATTLE!', 'THIS MATCH WILL GET RED HOT!'][this.random(3)]}`);
+			this.add(`c|@grimAuxiliatrix|${['A BRAWL IS SURELY BREWING!', 'GOOD DAY FOR A SWELL BATTLE!', 'THIS MATCH WILL GET RED HOT!'][this.random(3)]}`);
 		},
 		onFaint: function () {
-			this.add(`c|@grimAuxillatrix|**KNOCKOUT!**`);
+			this.add(`c|@grimAuxiliatrix|**KNOCKOUT!**`);
 		},
 	},
 	// Cant use the exact name because its a pokemon's name

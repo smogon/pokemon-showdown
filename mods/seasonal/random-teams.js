@@ -53,6 +53,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Energy Field',
 				evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 			},
+			'Amaluna': {
+				species: 'Octillery', ability: 'Neuroforce', item: 'Expert Belt', gender: 'F',
+				moves: ['Surf', 'Fire Blast', 'Freeze-Dry'],
+				signatureMove: 'Turismo Splash',
+				evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0, spe: 0}, nature: 'Quiet',
+			},
 			'Andy >_>': {
 				species: 'Absol', ability: 'Adaptability', item: 'Absolite', gender: 'M',
 				moves: ['Dragon Dance', 'Destiny Bond', 'Sucker Punch'],
@@ -433,7 +439,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'Lionyx';
+				name = 'Amaluna';
 				if (pool.indexOf(name) > -1) pool.splice(pool.indexOf(name), 1);
 			} else {
 				name = this.sampleNoReplace(pool);
