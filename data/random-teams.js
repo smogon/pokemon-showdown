@@ -1318,7 +1318,7 @@ class RandomTeams extends Dex.ModdedDex {
 
 		item = !isDoubles ? 'Leftovers' : 'Sitrus Berry';
 		if (template.requiredItems) {
-			if (template.baseSpecies === 'Arceus' && hasMove['judgment']) {
+			if (template.baseSpecies === 'Arceus' && (hasMove['judgment'] || !counter[template.types[0]])) {
 				// Judgment doesn't change type with Z-Crystals
 				item = template.requiredItems[0];
 			} else {
