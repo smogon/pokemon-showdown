@@ -432,6 +432,7 @@ let BattleScripts = {
 				} else {
 					this.add('-activate', target, 'move: ' + move.name, '[broken]');
 				}
+				if (this.gen >= 6) delete target.volatiles['stall'];
 			}
 		}
 
