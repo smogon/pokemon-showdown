@@ -874,6 +874,7 @@ interface RandomTeamsTypes {
 		toxicSpikes?: number
 		hazardClear?: number
 		rapidSpin?: number
+		illusion?: number
 	}
 	FactoryTeamDetails: {
 		megaCount: number

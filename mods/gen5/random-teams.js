@@ -652,7 +652,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 	randomTeam() {
 		let pokemon = [];
 
-		let allowedNFE = ['Porygon2', 'Scyther'];
+		const allowedNFE = ['Porygon2', 'Scyther'];
 
 		let pokemonPool = [];
 		for (let id in this.data.FormatsData) {
@@ -706,6 +706,8 @@ class RandomGen5Teams extends RandomGen6Teams {
 				break;
 			}
 
+			let types = template.types;
+
 			// Limit 2 of any type
 			let skip = false;
 			for (const type of template.types) {
@@ -717,6 +719,9 @@ class RandomGen5Teams extends RandomGen6Teams {
 			if (skip) continue;
 
 			let set = this.randomSet(template, pokemon.length, teamDetails);
+
+			// Illusion shouldn't be the last Pokemon of the team
+			if (set.ability === 'Illusion' && pokemon.length > 4) continue;
 
 			// Limit 1 of any type combination
 			let typeCombo = template.types.slice().sort().join();
@@ -731,11 +736,18 @@ class RandomGen5Teams extends RandomGen6Teams {
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);
 
+			if (pokemon.length === 6) {
+				// Set Zoroark's level to be the same as the last Pokemon
+				let illusion = teamDetails['illusion'];
+				if (illusion) pokemon[illusion - 1].level = pokemon[5].level;
+				break;
+			}
+
 			// Now that our Pokemon has passed all checks, we can increment our counters
 			baseFormes[template.baseSpecies] = 1;
 
 			// Increment type counters
-			for (const type of template.types) {
+			for (const type of types) {
 				if (type in typeCount) {
 					typeCount[type]++;
 				} else {
@@ -762,6 +774,9 @@ class RandomGen5Teams extends RandomGen6Teams {
 			if (set.moves.includes('stealthrock')) teamDetails['stealthRock'] = 1;
 			if (set.moves.includes('toxicspikes')) teamDetails['toxicSpikes'] = 1;
 			if (set.moves.includes('rapidspin')) teamDetails['rapidSpin'] = 1;
+
+			// For setting Zoroark's level
+			if (set.ability === 'Illusion') teamDetails['illusion'] = pokemon.length;
 		}
 		return pokemon;
 	}
