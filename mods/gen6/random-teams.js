@@ -700,6 +700,8 @@ class RandomGen6Teams extends RandomTeams {
 				ability = 'Klutz';
 			} else if ((template.species === 'Rampardos' && !hasMove['headsmash']) || hasMove['rockclimb']) {
 				ability = 'Sheer Force';
+			} else if (template.species === 'Torterra' && !counter['Grass']) {
+				ability = 'Shell Armor';
 			} else if (template.species === 'Umbreon') {
 				ability = 'Synchronize';
 			} else if (template.id === 'venusaurmega') {
