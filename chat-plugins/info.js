@@ -1690,7 +1690,7 @@ const commands = {
 				simplifiedchinese: ['请遵守规则:', 'pages/rules-zh', '全站规则', room ? `${room.title}房间规则` : ``],
 				traditionalchinese: ['請遵守規則:', 'pages/rules-tw', '全站規則', room ? `${room.title}房間規則` : ``],
 				japanese: ['ルールを守ってください:', 'pages/rules-ja', '全部屋共通ルール', room ? `${room.title}部屋のルール` : ``],
-				hindi: ['कृपया इन नियमों का पालन करें:', 'pages/rules-hi', 'आप सभी के लिए नियम:', room ? `${room.title} इस Room के नियम:` : ``],
+				hindi: ['कृपया इन नियमों का पालन करें:', 'pages/rules-hi', 'सामान्य नियम', room ? `${room.title} Room के नियम` : ``],
 				turkish: ['Lütfen kurallara uyun:', 'pages/rules-tr', 'Genel kurallar', room ? `${room.title} odası kuralları` : ``],
 				dutch: ['Volg de regels:', 'pages/rules-nl', 'Globale Regels ', room ? `Regels van de ${room.title} room` : ``],
 				german: ['Bitte befolgt die Regeln:', 'pages/rules-de', 'Globale Regeln', room ? `Regeln des ${room.title} Raumes` : ``],
