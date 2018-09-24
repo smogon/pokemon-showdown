@@ -363,6 +363,7 @@ exports.commands = {
 
 	roomlanguage: function (target, room, user) {
 		const languageTable = {
+			__proto__: null,
 			portuguese: 'Portuguese',
 			spanish: 'Spanish',
 			italian: 'Italian',
