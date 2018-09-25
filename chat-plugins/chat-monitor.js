@@ -324,14 +324,20 @@ let commands = {
 				return this.sendReply(`'${words.join(', ')}' ${Chat.plural(words, "were", "was")} removed from the ${list} list.`);
 			}
 		},
+		'': 'view',
 		list: 'view',
 		view: function (target, room, user) {
 			this.parse(`/join view-filters`);
 		},
+		help: function (target, room, user) {
+			this.parse(`/help filter`);
+		},
 	},
-	filterhelp: [`- /filter add list, word, reason - Adds a word to the given filter list. Requires: ~`,
+	filterhelp: [
+		`- /filter add list, word, reason - Adds a word to the given filter list. Requires: ~`,
 		`- /filter remove list, words - Removes words from the given filter list. Requires: ~`,
-		`- /filter view - Opens the list of filtered words. Requires: % @ * & ~`],
+		`- /filter view - Opens the list of filtered words. Requires: % @ * & ~`,
+	],
 	allowname: function (target, room, user) {
 		if (!this.can('forcerename')) return false;
 		target = toId(target);
