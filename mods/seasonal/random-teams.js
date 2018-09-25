@@ -284,7 +284,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			'Lycanium Z': {
 				species: 'Keldeo', ability: 'Protean', item: 'Choice Scarf', gender: 'N',
 				moves: ['Steam Eruption', 'Secret Sword', ['Frost Breath', 'Power Gem', 'Discharge']],
-				signatureMove: 'Changeling Crash',
+				signatureMove: 'IP Merge',
 				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
 			},
 			'MacChaeger': {
