@@ -1908,18 +1908,19 @@ const commands = {
 
 		const userid = toId(target);
 		const punishment = Punishments.userids.get(userid);
-		if (!punishment) return this.errorReply("This name isn't locked");
-		if (punishment[1] === userid) return this.parse(`/unlock ${userid}`);
+		if (!punishment) return this.errorReply("This name isn't locked.");
+		if (punishment[1] === userid) return this.errorReply(`"${userid}" was specifically locked by a staff member (check the global modlog). Use /unlock if you really want to unlock this name.`);
 
 		Punishments.userids.delete(userid);
 		Punishments.savePunishments();
 
-		Users.findUsers([userid], []).forEach(curUser => {
-			if (curUser.locked && !curUser.locked.startsWith('#') && Punishments.getPunishType(curUser.userid) !== 'LOCK') {
+		for (const curUser of Users.findUsers([userid], [])) {
+			if (curUser.locked && !curUser.locked.startsWith('#') && !Punishments.getPunishType(curUser.userid)) {
 				curUser.locked = false;
+				curUser.namelocked = false;
 				curUser.updateIdentity();
 			}
-		});
+		}
 		this.globalModlog("UNLOCKNAME", userid, ` by ${user.name}`);
 		this.addModAction(`The name '${target}' was unlocked by ${user.name}.`);
 	},
@@ -1938,12 +1939,13 @@ const commands = {
 		Punishments.ips.delete(target);
 		Punishments.savePunishments();
 
-		Users.findUsers([], [target]).forEach(curUser => {
-			if (curUser.locked && !curUser.locked.startsWith('#') && Punishments.getPunishType(curUser.userid) !== 'LOCK') {
+		for (const curUser of Users.findUsers([], [target])) {
+			if (curUser.locked && !curUser.locked.startsWith('#') && !Punishments.getPunishType(curUser.userid)) {
 				curUser.locked = false;
+				curUser.namelocked = false;
 				curUser.updateIdentity();
 			}
-		});
+		}
 		this.globalModlog(`UNLOCK${range ? 'RANGE' : 'IP'}`, target, ` by ${user.name}`);
 		this.addModAction(`${user.name} unlocked the ${range ? "IP range" : "IP"}: ${target}`);
 	},
