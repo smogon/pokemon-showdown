@@ -2491,6 +2491,27 @@ let BattleMovedex = {
 		target: "self",
 		type: "Bug",
 	},
+	// Volco
+	explosivedrain: {
+		basePower: 90,
+		accuracy: 100,
+		category: "Special",
+		id: "explosivedrain",
+		name: "Explosive Drain",
+		isNonstandard: true,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		drain: [1, 2],
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Fire Blast", target);
+			this.add('-anim', source, "Giga Drain", target);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fire",
+	},
 	// XpRienzo ☑◡☑
 	blehflame: {
 		accuracy: 100,

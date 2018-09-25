@@ -904,6 +904,18 @@ let BattleStatuses = {
 			this.add(`l|%urkerab`);
 		},
 	},
+	volco: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c| Volco|Get Ready, I'm going to take you down!`);
+		},
+		onSwitchOut: function () {
+			this.add(`c| Volco|I've decided to spare you, lucky you.`);
+		},
+		onFaint: function () {
+			this.add(`c| Volco|Well, seems I was got taken down instead.`);
+		},
+	},
 	xprienzo: {
 		noCopy: true,
 		onStart: function () {
