@@ -1949,7 +1949,11 @@ const commands = {
 		this.globalModlog(`UNLOCK${range ? 'RANGE' : 'IP'}`, target, ` by ${user.name}`);
 		this.addModAction(`${user.name} unlocked the ${range ? "IP range" : "IP"}: ${target}`);
 	},
-	unlockhelp: [`/unlock [username] - Unlocks the user. Requires: % @ * & ~`],
+	unlockhelp: [
+		`/unlock [username] - Unlocks the user. Requires: % @ * & ~`,
+		`/unlockname [username] - Unlocks a punished alt while leaving the original punishment intact. Requires: % @ * & ~`,
+		`/unlockip [ip] - Unlocks a punished ip while leaving the original punishment intact. Requires: @ * & ~`,
+	],
 
 	forceglobalban: 'globalban',
 	gban: 'globalban',
