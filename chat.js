@@ -645,7 +645,7 @@ class CommandContext {
 				let userid = user.getLastId();
 				buf += `[${userid}]`;
 				if (user.autoconfirmed && user.autoconfirmed !== userid) buf += ` ac:[${user.autoconfirmed}]`;
-				const alts = user.getAltUsers(false, true).map(user => user.getLastId()).join('], [');
+				const alts = user.getAltUsers(false, true).slice(1).map(user => user.getLastId()).join('], [');
 				if (alts.length) buf += ` alts:[${alts}]`;
 				buf += ` [${user.latestIp}]`;
 			}
@@ -671,7 +671,7 @@ class CommandContext {
 				buf += `[${userid}]`;
 				if (!options.noalts) {
 					if (user.autoconfirmed && user.autoconfirmed !== userid) buf += ` ac:[${user.autoconfirmed}]`;
-					const alts = user.getAltUsers(false, true).map(user => user.getLastId()).join('], [');
+					const alts = user.getAltUsers(false, true).slice(1).map(user => user.getLastId()).join('], [');
 					if (alts.length) buf += ` alts:[${alts}]`;
 				}
 				if (!options.noip) buf += ` [${user.latestIp}]`;
