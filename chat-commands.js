@@ -1902,6 +1902,53 @@ const commands = {
 			this.errorReply(`User '${target}' is not locked.`);
 		}
 	},
+	unlockname: function (target, room, user) {
+		if (!target) return this.parse('/help unlock');
+		if (!this.can('lock')) return false;
+
+		const userid = toId(target);
+		const punishment = Punishments.userids.get(userid);
+		if (!punishment) return this.errorReply("This name isn't locked.");
+		if (punishment[1] === userid) return this.errorReply(`"${userid}" was specifically locked by a staff member (check the global modlog). Use /unlock if you really want to unlock this name.`);
+
+		Punishments.userids.delete(userid);
+		Punishments.savePunishments();
+
+		for (const curUser of Users.findUsers([userid], [])) {
+			if (curUser.locked && !curUser.locked.startsWith('#') && !Punishments.getPunishType(curUser.userid)) {
+				curUser.locked = false;
+				curUser.namelocked = false;
+				curUser.updateIdentity();
+			}
+		}
+		this.globalModlog("UNLOCKNAME", userid, ` by ${user.name}`);
+		this.addModAction(`The name '${target}' was unlocked by ${user.name}.`);
+	},
+	unlockip: function (target, room, user) {
+		target = target.trim();
+		if (!target) return this.parse('/help unlock');
+		if (!this.can('ban')) return false;
+		const range = target.charAt(target.length - 1) === '*';
+		if (range && !this.can('rangeban')) return false;
+
+		if (!/^[0-9.*]+$/.test(target)) return this.errorReply("Please enter a valid IP address.");
+
+		const punishment = Punishments.ips.get(target);
+		if (!punishment) return this.errorReply(`${target} is not a locked/banned IP or IP range.`);
+
+		Punishments.ips.delete(target);
+		Punishments.savePunishments();
+
+		for (const curUser of Users.findUsers([], [target])) {
+			if (curUser.locked && !curUser.locked.startsWith('#') && !Punishments.getPunishType(curUser.userid)) {
+				curUser.locked = false;
+				curUser.namelocked = false;
+				curUser.updateIdentity();
+			}
+		}
+		this.globalModlog(`UNLOCK${range ? 'RANGE' : 'IP'}`, target, ` by ${user.name}`);
+		this.addModAction(`${user.name} unlocked the ${range ? "IP range" : "IP"}: ${target}`);
+	},
 	unlockhelp: [`/unlock [username] - Unlocks the user. Requires: % @ * & ~`],
 
 	forceglobalban: 'globalban',
@@ -2123,19 +2170,6 @@ const commands = {
 
 	unrangelock: 'unlockip',
 	rangeunlock: 'unlockip',
-	unlockip: function (target, room, user) {
-		target = target.trim();
-		if (!target) {
-			return this.parse('/help unbanip');
-		}
-		if (!this.can('rangeban')) return false;
-		if (!Punishments.ips.has(target)) {
-			return this.errorReply(`${target} is not a locked/banned IP or IP range.`);
-		}
-		Punishments.ips.delete(target);
-		this.addModAction(`${user.name} unlocked the ${(target.charAt(target.length - 1) === '*' ? "IP range" : "IP")}: ${target}`);
-		this.modlog('UNRANGELOCK', null, target);
-	},
 
 	/*********************************************************
 	 * Moderating: Other
