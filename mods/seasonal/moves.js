@@ -1387,8 +1387,8 @@ let BattleMovedex = {
 			pokemon.set.level = pokemon.level;
 			pokemon.formeChange(template);
 			// ability is set to default from formeChange
-			pokemon.setAbility('unaware');
-			this.add('-hint', 'Level 51 still has the Unaware ability.');
+			pokemon.setAbility('stamina');
+			this.add('-hint', 'Level 51 still has the Stamina ability.');
 
 			pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 			this.add('detailschange', pokemon, pokemon.details);
