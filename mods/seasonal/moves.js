@@ -122,6 +122,11 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 5,
 		priority: -6,
+		onModifyMove: function (move) {
+			if (!this.pseudoWeather.trickroom) {
+				move.pseudoWeather = 'trickroom';
+			}
+		},
 		flags: {snatch: 1, mirror: 1},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
@@ -131,7 +136,6 @@ let BattleMovedex = {
 		boosts: {
 			spa: 1,
 		},
-		pseudoWeather: 'trickroom',
 		secondary: null,
 		target: "self",
 		type: "Water",
@@ -904,6 +908,46 @@ let BattleMovedex = {
 		target: "normal",
 		type: "???",
 	},
+	// FOMG
+	rickrollout: {
+		accuracy: true,
+		basePower: 140,
+		category: "Physical",
+		desc: "",
+		shortDesc: "",
+		id: "rickrollout",
+		name: "Rickrollout",
+		isNonstandard: true,
+		pp: 1,
+		priority: 0,
+		flags: {},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Rock Polish', source);
+			this.add('-anim', source, 'Let\'s Snuggle Forever', target);
+		},
+		onHit: function () {
+			let messages = ["SPL players don't want you to know about this secret",
+				"North American player reveals the concerning secret how to make money with pokemon that will crack you up",
+				"10 amazing facts about Zarel you have never heard of",
+				"Veteran player shared his best team with a beginner - here's what happened after",
+				"Use these 3 simple methods to gain 200+ rating in 10 minutes"][this.random(5)];
+
+			this.add(`raw|<a href = "https://www.youtube.com/watch?v=oHg5SJYRHA0"><b>${messages}</b></a>`);
+		},
+		self: {
+			boosts: {
+				spe: 2,
+			},
+		},
+		secondary: {
+			chance: 30,
+			volatileStatus: 'confusion',
+		},
+		isZ: "astleyiumz",
+		target: "normal",
+		type: "Rock",
+	},
 	// grimAuxiliatrix
 	paintrain: {
 		accuracy: 100,
@@ -1354,7 +1398,7 @@ let BattleMovedex = {
 			pokemon.maxhp = newHP;
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 
-			this.add('-message', `${pokemon.name} advanced 10 levels! It is now level ${pokemon.level}!`);
+			this.add('-message', `${pokemon.name} advanced 5 levels! It is now level ${pokemon.level}!`);
 		},
 		secondary: null,
 		target: "self",
@@ -1427,14 +1471,14 @@ let BattleMovedex = {
 		type: "Ice",
 	},
 	// Lycanium Z
-	changelingcrash: {
+	ipmerge: {
 		accuracy: 100,
 		basePower: 40,
 		category: "Special",
 		desc: "",
 		shortDesc: "",
-		id: "changelingcrash",
-		name: "Changeling Crash",
+		id: "ipmerge",
+		name: "IP Merge",
 		isNonstandard: true,
 		pp: 10,
 		priority: 3,
@@ -1779,6 +1823,32 @@ let BattleMovedex = {
 		target: "self",
 		type: "Normal",
 	},
+	// Morfent
+	e: {
+		accuracy: true,
+		category: "Status",
+		desc: "",
+		shortDesc: "",
+		id: "e",
+		name: "E",
+		isNonstandard: true,
+		pp: 5,
+		priority: 1,
+		flags: {snatch: 1, mirror: 1, heal: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Recover", source);
+			this.add('-anim', source, "Nasty Plot", source);
+		},
+		onHit: function (target, source) {
+			source.addVolatile('confusion', source);
+			source.addVolatile('reverseforesight', source);
+		},
+		heal: [1, 2],
+		secondary: null,
+		target: "self",
+		type: "Ghost",
+	},
 	// nui
 	pyramidingsong: {
 		accuracy: 100,
@@ -1879,6 +1949,27 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
+	},
+	// Overneat
+	totalleech: {
+		accuracy: 100,
+		basePower: 70,
+		category: "Special",
+		desc: "",
+		shortDesc: "",
+		id: "totalleech",
+		name: "Total Leech",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, heal: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Leech Life", target);
+		},
+		drain: [1, 2],
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
 	},
 	// Paradise
 	"corrosivetoxic": {
@@ -2010,6 +2101,31 @@ let BattleMovedex = {
 		target: "self",
 		type: "Flying",
 	},
+	// Teclis
+	zekken: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Raises the user's Speed by 1 stage and its Attack by 2 stages.",
+		shortDesc: "Raises the user's Speed by 1 and Attack by 2.",
+		id: "zekken",
+		name: "Zekken",
+		isNonstandard: true,
+		pp: 10,
+		priority: 0,
+		flags: {snatch: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Swords Dance", source);
+		},
+		boosts: {
+			atk: 2,
+			spe: 1,
+		},
+		secondary: null,
+		target: "self",
+		type: "Fairy",
+	},
 	// tennisace
 	groundsurge: {
 		accuracy: 100,
@@ -2121,6 +2237,43 @@ let BattleMovedex = {
 		drain: [1, 2],
 		target: "normal",
 		type: "Fighting",
+	},
+	// The Leprechaun
+	gyroballin: {
+		accuracy: 100,
+		basePower: 0,
+		basePowerCallback: function (pokemon, target) {
+			let power = (Math.floor(25 * target.getStat('spe') / pokemon.getStat('spe')) || 1);
+			if (power > 150) power = 150;
+			this.debug('' + power + ' bp');
+			return power;
+		},
+		onModifyMove: function (move) {
+			if (!this.pseudoWeather.trickroom) {
+				move.pseudoWeather = 'trickroom';
+			}
+		},
+		category: "Physical",
+		desc: "",
+		shortDesc: "",
+		id: "gyroballin",
+		name: "Gyro Ballin'",
+		isNonstandard: true,
+		pp: 5,
+		priority: 0,
+		flags: {bullet: 1, contact: 1, protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Gyro Ball", target);
+		},
+		onHit: function () {
+			this.add('-fieldactivate', 'move: Pay Day'); // Coins are scattered on the ground
+		},
+		secondary: null,
+		target: "normal",
+		type: "Steel",
+		zMovePower: 160,
+		contestType: "Cool",
 	},
 	// Tiksi
 	devolutionwave: {

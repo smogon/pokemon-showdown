@@ -203,6 +203,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'fr*ck',
 				evs: {atk: 252, spe: 252, def: 4}, nature: 'Jolly', shiny: true,
 			},
+			'FOMG': {
+				species: 'Golem', ability: 'Serene Grace', item: 'Astleyium Z', gender: 'M',
+				moves: ['Earthquake', 'Explosion', 'Iron Head'],
+				signatureMove: 'Rock Slide',
+				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
+			},
 			'grimAuxiliatrix': {
 				species: 'Aggron', ability: 'Sturdy', item: 'Aggronite', gender: '',
 				moves: [['Toxic', 'Thunder Wave'], ['Stone Edge', 'Heat Crash'], 'Earthquake'],
@@ -258,7 +264,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {atk: 252, hp: 4, spe: 252}, nature: 'Jolly',
 			},
 			'Level 51': {
-				species: 'Porygon2', ability: 'Unaware', item: 'Eviolite', gender: 'N',
+				species: 'Porygon2', ability: 'Stamina', item: 'Eviolite', gender: 'N',
 				moves: ['Recover', ['Seismic Toss', 'Night Shade'], ['Cosmic Power', 'Aqua Ring']],
 				signatureMove: 'Next Level Strats',
 				evs: {hp: 236, def: 220, spd: 48, spe: 4}, ivs: {atk: 0}, nature: 'Calm',
@@ -329,6 +335,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Protein Shake',
 				evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful',
 			},
+			'Morfent ( _̀> ̀)': {
+				species: 'Banette', ability: 'Intimidate', item: 'Banettite', gender: 'M',
+				moves: ['Shadow Sneak', 'Destiny Bond', 'Belly Drum'],
+				signatureMove: 'E',
+				evs: {hp: 184, atk: 252, def: 68, spd: 4}, nature: 'Adamant',
+			},
 			'nui': {
 				species: 'Milotic', ability: 'Prismatic Terrain', item: 'Waterium Z', gender: 'N',
 				moves: ['Steam Eruption', 'Toxic', 'Recover'],
@@ -346,6 +358,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				moves: ['Leech Seed', 'Will-O-Wisp', 'Seed Bomb'],
 				signatureMove: 'Night March',
 				evs: {hp: 252, atk: 144, spd: 112}, nature: 'Adamant', shiny: true,
+			},
+			'Overneat': {
+				species: 'Sylveon', ability: 'Fairy Aura', item: 'Power Herb', gender: 'F',
+				moves: ['Geomancy', 'Psyshock', 'Earth Power'],
+				signatureMove: 'Total Leech',
+				evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
 			'Paradise': {
 				species: 'Muk', ability: 'Unaware', item: 'Black Sludge', gender: '',
@@ -371,6 +389,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'GO INDA',
 				evs: {atk: 252, hp: 248, spe: 8}, nature: 'Adamant',
 			},
+			'Teclis': {
+				species: 'Gallade', ability: 'Intimidate', item: 'Galladite', gender: 'M',
+				moves: ['Sacred Sword', 'Psycho Cut', 'Knock Off'],
+				signatureMove: 'Zekken',
+				evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', shiny: true,
+			},
 			'tennisace': {
 				species: 'Raikou', ability: 'Levitate', item: 'Life Orb', gender: 'M',
 				moves: ['Volt Switch', 'Shadow Ball', 'Aura Sphere'],
@@ -387,7 +411,13 @@ class RandomStaffBrosTeams extends RandomTeams {
 				species: 'Buzzwole', ability: 'Beast Boost 2', item: 'Assault Vest', gender: 'N', // confirm with TI
 				moves: ['Leech Life', 'Plasma Fists', 'Ice Punch'],
 				signatureMove: 'Ultra Succ',
-				evs: {atk: 252, hp: 252, spd: 4}, nature: 'Adamant',
+				evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
+			},
+			'The Leprechaun': {
+				species: 'Bronzong', ability: 'Steelworker', item: 'Life Orb', gender: 'N',
+				moves: ['Photon Geyser', 'Precipice Blades', 'Diamond Storm'],
+				signatureMove: 'Gyro Ballin\'',
+				evs: {hp: 252, atk: 252, def: 4}, ivs: {spe: 0}, nature: 'Brave', shiny: true,
 			},
 			'Tiksi': {
 				species: 'Cradily', ability: 'Sand Stream', item: 'Tiksium Z', gender: 'M',
@@ -439,7 +469,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'Amaluna';
+				name = 'Overneat';
 				if (pool.indexOf(name) > -1) pool.splice(pool.indexOf(name), 1);
 			} else {
 				name = this.sampleNoReplace(pool);

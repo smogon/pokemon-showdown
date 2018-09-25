@@ -56,6 +56,16 @@ let BattlePokedex = {
 		inherit: true,
 		abilities: {0: 'Pixilate'},
 	},
+	// Morfent
+	banettemega: {
+		inherit: true,
+		abilities: {0: 'Comatose'},
+	},
+	// Teclis
+	gallademega: {
+		inherit: true,
+		abilities: {0: 'Natural Cure'},
+	},
 };
 
 exports.BattlePokedex = BattlePokedex;

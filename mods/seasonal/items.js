@@ -14,6 +14,18 @@ let BattleItems = {
 		fling: undefined, // Cannot be flung now since its a mega stone
 		desc: "If held by a Steelix, this item allows it to Mega Evolve in battle.",
 	},
+	// FOMG
+	astleyiumz: {
+		id: "astleyiumz",
+		name: "Astleyium Z",
+		spritenum: 643,
+		onTakeItem: false,
+		zMove: "Rickrollout",
+		zMoveFrom: "Rock Slide",
+		zMoveUser: ["Golem"],
+		gen: 7,
+		desc: "If held by a Golem with Rock Slide, it can use Rickrollout.",
+	},
 	// MajorBowman
 	victiniumz: {
 		id: "victiniumz",
