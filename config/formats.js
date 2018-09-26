@@ -646,6 +646,22 @@ let Formats = [
 				pokemon.addVolatile(name, pokemon);
 			}
 		},
+		// For Snaquaza
+		onBeforeFaint: function (pokemon) {
+			// @ts-ignore Hack for Snaquaza's Z move
+			if (!pokemon.claimHP) return;
+			pokemon.hp = pokemon.maxhp;
+			pokemon.faintQueued = false;
+			pokemon.formeChange(pokemon.baseTemplate.id);
+			pokemon.moveSlots = pokemon.moveSlots.slice(0, 4);
+			this.add('message', `${pokemon.name}'s fake claim was uncovered!`);
+			// @ts-ignore Hack for Snaquaza's Z move
+			pokemon.hp = pokemon.claimHP;
+			// @ts-ignore Hack for Snaquaza's Z move
+			delete pokemon.claimHP;
+			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+			return false;
+		},
 	},
 	{
 		name: "[Gen 7] Balanced Hackmons",

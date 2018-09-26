@@ -389,6 +389,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'GO INDA',
 				evs: {atk: 252, hp: 248, spe: 8}, nature: 'Adamant',
 			},
+			'Snaquaza': {
+				species: 'Honchkrow', ability: 'Illusion', item: 'Fakeclaimium Z', gender: 'M',
+				moves: ['Superpower', 'Sucker Punch', ['Flamethrower', 'Ice Beam', 'Thunderbolt']],
+				signatureMove: 'Brave Bird',
+				nature: 'Serious',
+			},
 			'Teclis': {
 				species: 'Gallade', ability: 'Intimidate', item: 'Galladite', gender: 'M',
 				moves: ['Sacred Sword', 'Psycho Cut', 'Knock Off'],
@@ -475,7 +481,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'Volco';
+				name = 'Snaquaza';
 				if (pool.indexOf(name) > -1) pool.splice(pool.indexOf(name), 1);
 			} else {
 				name = this.sampleNoReplace(pool);

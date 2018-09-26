@@ -799,6 +799,18 @@ let BattleStatuses = {
 			this.add(`c|%Shiba|gotta buy an alt rq brb`);
 		},
 	},
+	snaquaza: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|+Snaquaza|Snaq is baq... with a vengeance!`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|+Snaquaza|Lynch Hoeen while I'm away...`);
+		},
+		onFaint: function () {
+			this.add(`c|+Snaquaza|How did you know I was scum?`);
+		},
+	},
 	teclis: {
 		noCopy: true,
 		onStart: function () {

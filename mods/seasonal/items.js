@@ -30,13 +30,24 @@ let BattleItems = {
 	victiniumz: {
 		id: "victiniumz",
 		name: "Victinium Z",
-		spritenum: 632,
 		onTakeItem: false,
 		zMove: "Blaze of Glory",
 		zMoveFrom: "V-create",
 		zMoveUser: ["Victini"],
 		gen: 7,
 		desc: "If held by a Victini with V-Create, it can use Blaze of Glory.",
+	},
+	// Snaquaza
+	fakeclaimiumz: {
+		id: "fakeclaimiumz",
+		name: "Fakeclaimium Z",
+		onTakeItem: false,
+		zMove: "Fake Claim",
+		// @ts-ignore hack for Snaquaza's Z move.
+		zMoveFrom: ["Brave Bird", "Superpower", "Sucker Punch", "Flamethrower", "Ice Beam", "Thunderbolt"],
+		zMoveUser: ["Honchkrow"],
+		gen: 7,
+		desc: "If held by a Honchkrow, it can use Fake Claim.",
 	},
 	// Tiksi
 	tiksiumz: {

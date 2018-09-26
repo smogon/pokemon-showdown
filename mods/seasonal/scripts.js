@@ -129,6 +129,55 @@ let BattleScripts = {
 		this.runEvent('AfterMega', pokemon);
 		return true;
 	},
+	getZMove: function (move, pokemon, skipChecks) {
+		let item = pokemon.getItem();
+		if (!skipChecks) {
+			if (!item.zMove) return;
+			if (item.zMoveUser && !item.zMoveUser.includes(pokemon.template.species)) return;
+			let moveData = pokemon.getMoveData(move);
+			if (!moveData || !moveData.pp) return; // Draining the PP of the base move prevents the corresponding Z-move from being used.
+		}
+
+		if (item.zMoveFrom) {
+			if (Array.isArray(item.zMoveFrom)) {
+				if (item.zMoveFrom.includes(move.name)) return item.zMove;
+			} else {
+				if (move.name === item.zMoveFrom) return item.zMove;
+			}
+		} else if (item.zMove === true) {
+			if (move.type === item.zMoveType) {
+				if (move.category === "Status") {
+					return move.name;
+				} else if (move.zMovePower) {
+					return this.zMoveTable[move.type];
+				}
+			}
+		}
+	},
+	getZMoveCopy: function (move, pokemon) {
+		let zMove;
+		if (pokemon) {
+			let item = pokemon.getItem();
+			if (item.zMoveFrom && Array.isArray(item.zMoveFrom) ? item.zMoveFrom.includes(move.name) : item.zMoveFrom === move.name) {
+				// @ts-ignore
+				zMove = this.getMoveCopy(item.zMove);
+				// @ts-ignore Hack for Snaquaza's Z move
+				zMove.baseMove = move;
+				return zMove;
+			}
+		}
+
+		if (move.category === 'Status') {
+			zMove = this.getMoveCopy(move);
+			zMove.isZ = true;
+			return zMove;
+		}
+		zMove = this.getMoveCopy(this.zMoveTable[move.type]);
+		// @ts-ignore
+		zMove.basePower = move.zMovePower;
+		zMove.category = move.category;
+		return zMove;
+	},
 	// Modded to allow each Pokemon on a team to use a Z move once per battle
 	canZMove: function (pokemon) {
 		// @ts-ignore pokemon.zMoveUsed only exists in this mod
