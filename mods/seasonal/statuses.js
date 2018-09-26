@@ -447,13 +447,13 @@ let BattleStatuses = {
 	hoeenhero: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|&HoeenHero|I'll script my way to victory!`);
+			this.add(`c|&HoeenHero|My scripts will lead me to victory!`);
 		},
 		onSwitchOut: function () {
 			this.add(`c|&HoeenHero|I need to look something up, hold on...`);
 		},
 		onFaint: function () {
-			this.add(`c|&HoeenHero|NO! There must of been a bug in my script ;-;`);
+			this.add(`c|&HoeenHero|There must have been a bug in my script ;-;`);
 		},
 	},
 	imas: {

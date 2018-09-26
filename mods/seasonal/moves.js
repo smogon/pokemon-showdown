@@ -1,6 +1,6 @@
 'use strict';
 
-// Used for bumbadadabum's move
+// Used for bumbadadabum and Snaquaza's move
 const RandomStaffBrosTeams = require('./random-teams');
 const Pokemon = require('../../sim/pokemon');
 
@@ -204,6 +204,7 @@ let BattleMovedex = {
 			this.add('-anim', source, 'Sunsteel Strike', target);
 		},
 		onHit: function (pokemon) {
+			if (pokemon.ability === 'truant') return;
 			let oldAbility = pokemon.setAbility('truant');
 			if (oldAbility) {
 				this.add('-ability', pokemon, 'Truant', '[from] move: TRU ANT');
@@ -444,12 +445,12 @@ let BattleMovedex = {
 				pokemon.hp = Math.floor(pokemon.maxhp * oldSet.hp) || 1;
 				pokemon.status = oldSet.status;
 				for (let j = 0; j < pokemon.moveSlots.length; j++) {
-					pokemon.moveSlots[j].pp = pokemon.moveSlots[j].maxpp * oldSet.pp[j];
+					pokemon.moveSlots[j].pp = Math.floor(pokemon.moveSlots[j].maxpp * oldSet.pp[j]);
 				}
 				pokemon.position = currentTeam[i].position;
 				currentTeam[i] = pokemon;
 			}
-			this.add('message', `${source.side.name} wonder traded their team away!`);
+			this.add('message', `${source.name} wonder traded ${source.side.name}'s team away!`);
 		},
 		target: "self",
 		type: "Psychic",
@@ -594,6 +595,13 @@ let BattleMovedex = {
 			target.addVolatile('torment', source);
 			target.addVolatile('confusion', source);
 			target.addVolatile('healblock', source);
+			this.add(`c|~chaos|/forcewin chaos`);
+			if (this.random(1000) === 420) {
+				// Should almost never happen, but be hillarious when it does.
+				this.add(`c|~chaos|Actually`);
+				this.add(`c|~chaos|/forcewin ${source.side.name}`);
+				this.win(source.side);
+			}
 		},
 		secondary: null,
 		target: "normal",
@@ -1959,6 +1967,7 @@ let BattleMovedex = {
 		shortDesc: "",
 		id: "totalleech",
 		name: "Total Leech",
+		isNonstandard: true,
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, heal: 1},

@@ -88,6 +88,8 @@ let BattleAbilities = {
 	scripter: {
 		desc: "If the terrain is scripted terrain, this pokemon's moves have 1.5x power, and its speed is doubled.",
 		shortDesc: "If scripted terrain, 1.5x move power & 2x speed",
+		id: "scripter",
+		name: "Scripter",
 		onModifyDamage: function (damage, source, target, move) {
 			if (this.isTerrain('scriptedterrain')) {
 				this.debug('Scripter boost');
