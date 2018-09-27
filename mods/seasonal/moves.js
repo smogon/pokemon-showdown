@@ -422,6 +422,10 @@ let BattleMovedex = {
 						return m.pp / m.maxpp;
 					}),
 				});
+				// Handle pokemon with less than 4 moves
+				while (carryOver[carryOver.length - 1].pp.length < 4) {
+					carryOver[carryOver.length - 1].pp.push(100);
+				}
 			}
 			// Generate a new team
 			let generator = new RandomStaffBrosTeams(this.format, this.prng);
@@ -2591,6 +2595,32 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fire",
+	},
+	// Xayah
+	cuttingdance: {
+		accuracy: 95,
+		basePower: 100,
+		category: "Special",
+		desc: "",
+		shortDesc: "",
+		id: "cuttingdance",
+		name: "Cutting Dance",
+		isNonstandard: true,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Revalation Dance", source);
+			this.add('-anim', source, "Air Slash", target);
+		},
+		secondary: {
+			chance: 20,
+			volatileStatus: 'flinch',
+		},
+		zMovePower: 175,
+		target: "normal",
+		type: "Flying",
 	},
 	// XpRienzo ☑◡☑
 	blehflame: {

@@ -461,6 +461,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Cutie Escape',
 				evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
 			},
+			'Xayah': {
+				species: 'Noivern', ability: 'Dancer', item: 'Flyinium Z', gender: 'M',
+				moves: ['Clanging Scales', 'Roost', 'Glare'],
+				signatureMove: 'Cutting Dance',
+				evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
+			},
 			'XpRienzo ☑◡☑': {
 				species: 'Reshiram', ability: 'Turboblaze', item: 'Charcoal', gender: 'M',
 				moves: ['Core Enforcer', 'Volt Switch', 'Psystrike'],
@@ -481,8 +487,13 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'Snaquaza';
-				if (pool.indexOf(name) > -1) pool.splice(pool.indexOf(name), 1);
+				name = 'Xayah';
+				if (pool.indexOf(name) > -1) {
+					pool.splice(pool.indexOf(name), 1);
+				} else {
+					// Was already picked
+					name = this.sampleNoReplace(pool);
+				}
 			} else {
 				name = this.sampleNoReplace(pool);
 			}

@@ -928,6 +928,18 @@ let BattleStatuses = {
 			this.add(`c| Volco|Well, seems I was got taken down instead.`);
 		},
 	},
+	xayah: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|+Xayah|Let's dance!`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|+Xayah|Fine, I'll go.`);
+		},
+		onFaint: function () {
+			this.add(`c|+Xayah|All out of second dances...`);
+		},
+	},
 	xprienzo: {
 		noCopy: true,
 		onStart: function () {
