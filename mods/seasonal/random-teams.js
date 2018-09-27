@@ -121,7 +121,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'cc': {
 				species: 'Cobalion', ability: 'Lurking', item: ['Shuca Berry', 'Chople Berry', 'Fightinium Z'], gender: 'M',
-				moves: ['Focus Blast', 'Flash Cannon', ['Thunderbolt', 'Ice Beam']],
+				moves: ['Focus Blast', 'Flash Cannon', ['Thunder', 'Blizzard']],
 				signatureMove: 'Restarting Router',
 				evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},

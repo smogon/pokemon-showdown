@@ -484,8 +484,8 @@ let BattleMovedex = {
 	restartingrouter: {
 		accuracy: true,
 		category: "Status",
-		desc: "Boosts the user's spa and spe by 1 stage.",
-		shortDesc: "+1 spa, spe",
+		desc: "Boosts the user's spa by 2 stages and spe by 1 stage.",
+		shortDesc: "+2 spa, +1 spe",
 		id: "restartingrouter",
 		name: "Restarting Router",
 		isNonstandard: true,
@@ -496,7 +496,7 @@ let BattleMovedex = {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, 'Charge', source);
 		},
-		boosts: {spa: 1, spe: 1},
+		boosts: {spa: 2, spe: 1},
 		secondary: null,
 		target: "self",
 		type: "Electric",
