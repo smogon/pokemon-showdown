@@ -571,6 +571,22 @@ let BattleStatuses = {
 			this.add(`c|+Lionyx|Can't hold it back anymore...`);
 		},
 	},
+	lostseso: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|+Lost Seso|<3 ( ͡° ͜ʖ ͡°) DANCE WITH ME ( ͡° ͜ʖ ͡°) <3`);
+			this.effectData.danceMultiplier = 0;
+		},
+		onAfterMove: function (pokemon, target, move) {
+			if (move.flags.dance) this.effectData.danceMultiplier++;
+		},
+		onSwitchOut: function () {
+			this.add(`c|+Lost Seso|Ran out of ramen, brb`);
+		},
+		onFaint: function () {
+			this.add(`c|+Lost Seso|└[ ─ ಎ ─ ]┘ 0% Battery, feed me ramen please`);
+		},
+	},
 	lycaniumz: {
 		noCopy: true,
 		onStart: function () {

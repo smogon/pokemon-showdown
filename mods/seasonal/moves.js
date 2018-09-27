@@ -1482,6 +1482,34 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Ice",
 	},
+	// Lost Seso
+	shuffleramendance: {
+		accuracy: 100,
+		basePower: 10,
+		basePowerCallback: function (pokemon, target, move) {
+			if (!pokemon.volatiles['lostseso']) return move.basePower;
+			let multiplier = pokemon.volatiles['lostseso'].danceMultiplier;
+			if (typeof multiplier !== 'number') return move.basePower;
+			this.debug(`Shuffle Ramen Dance base power: ${move.basePower + (multiplier * 40)}`);
+			return move.basePower + (multiplier * 40);
+		},
+		category: "Special",
+		desc: "",
+		shortDesc: "",
+		id: "shuffleramendance",
+		name: "Shuffle Ramen Dance",
+		isNonstandard: true,
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Outrage', target);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fire",
+	},
 	// Lycanium Z
 	ipmerge: {
 		accuracy: 100,
