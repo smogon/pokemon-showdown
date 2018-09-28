@@ -258,7 +258,7 @@ let BattleFormatsData = {
 	dugtrio: {
 		inherit: true,
 		randomBattleMoves: ["earthquake", "stoneedge", "stealthrock", "suckerpunch", "reversal", "substitute"],
-		tier: "Uber",
+		tier: "OU",
 	},
 	meowth: {
 		inherit: true,
