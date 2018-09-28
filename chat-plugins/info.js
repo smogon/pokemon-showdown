@@ -96,7 +96,7 @@ const commands = {
 
 				const punishment = Punishments.userids.get(targetAlt.userid);
 				const punishMsg = punishment ? ` (${Punishments.punishmentTypes.get(punishment[0]) || 'punished'}${punishment[1] !== targetAlt.userid ? ` as ${punishment[1]}` : ''})` : '';
-				buf += Chat.html`<br />Alt: <span class="username">${targetAlt.name}${punishMsg}</span>`;
+				buf += Chat.html`<br />Alt: <span class="username">${targetAlt.name}</span>${punishMsg}`;
 				if (!targetAlt.connected) buf += ` <em style="color:gray">(offline)</em>`;
 				prevNames = Object.keys(targetAlt.prevNames).map(userid => {
 					const punishment = Punishments.userids.get(userid);
