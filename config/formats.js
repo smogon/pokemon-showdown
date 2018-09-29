@@ -767,7 +767,7 @@ let Formats = [
 		name: "[Gen 7] ZU",
 		desc: `The usage-based tier below PU.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3629669/">ZU</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3629669/">ZeroUsed</a>`,
 		],
 
 		mod: 'gen7',
@@ -783,7 +783,7 @@ let Formats = [
 			'Scyther', 'Silvally-Fairy', 'Silvally-Ghost', 'Skuntank', 'Spiritomb', 'Swanna', 'Togedemaru', 'Weezing', 'Zangoose',
 			// ZUBL
 			'Carracosta', 'Crabominable', 'Exeggutor-Base', 'Gorebyss', 'Jynx', 'Kabutops', 'Ludicolo', 'Musharna',
-			'Raticate-Alola', 'Raticate-Alola-Totem', 'Throh', 'Turtonator', 'Type: Null', 'Ursaring', 'Victreebel',
+			'Raticate-Alola', 'Raticate-Alola-Totem', 'Stoutland', 'Throh', 'Turtonator', 'Type: Null', 'Ursaring', 'Victreebel',
 		],
 	},
 	{
