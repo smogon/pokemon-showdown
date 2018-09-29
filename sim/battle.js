@@ -1538,6 +1538,7 @@ class Battle extends Dex.ModdedDex {
 				pokemon.newlySwitched = false;
 				pokemon.moveLastTurnResult = pokemon.moveThisTurnResult;
 				pokemon.moveThisTurnResult = undefined;
+				pokemon.hurt = false;
 
 				pokemon.maybeDisabled = false;
 				for (const moveSlot of pokemon.moveSlots) {
@@ -1977,7 +1978,7 @@ class Battle extends Dex.ModdedDex {
 		if (!damage) return 0;
 		damage = this.clampIntRange(damage, 1);
 
-		damage = target.damage(damage, source, effect);
+		damage = target.damage(damage, source, effect, true);
 		switch (effect && effect.id) {
 		case 'strugglerecoil':
 			this.add('-damage', target, target.getHealth, '[from] recoil');
