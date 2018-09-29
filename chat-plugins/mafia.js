@@ -175,6 +175,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 		const user = Users(this.userid);
 		if (!user || !user.connected) return;
 		if (this.game.ended) return user.send(`>view-mafia-${this.game.room.id}\n|deinit`);
+		// @ts-ignore
 		const buf = Chat.pages.mafia([this.game.room.id], user);
 		this.send(`>view-mafia-${this.game.room.id}\n|init|html\n${buf}`);
 	}
@@ -287,6 +288,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		subIndex = this.hostRequestedSub.indexOf(user.userid);
 		if (subIndex !== -1) this.hostRequestedSub.splice(subIndex, 1);
 		this.sendRoom(`${user.name} has left the game.`);
+		// @ts-ignore
 		user.send(`>view-mafia-${this.room.id}\n|init|html\n${Chat.pages.mafia([this.room.id], user)}`);
 	}
 
@@ -1068,6 +1070,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			}
 		}
 		if (newUser && newUser.connected) {
+			// @ts-ignore
 			newUser.send(`>view-mafia-${this.room.id}\n|init|html\n${Chat.pages.mafia([this.room.id], newUser)}`);
 			newUser.send(`>${this.room.id}\n|notify|You have been substituted in the mafia game for ${oldPlayer.safeName}.`);
 		}
@@ -1337,6 +1340,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			const host = Users(hostid);
 			if (!host || !host.connected) return;
 			if (this.ended) return host.send(`>view-mafia-${this.room.id}\n|deinit`);
+			// @ts-ignore
 			const buf = Chat.pages.mafia([this.room.id], host);
 			host.send(`>view-mafia-${this.room.id}\n|init|html\n${buf}`);
 		}
@@ -1568,8 +1572,6 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 	}
 }
-/** @typedef {(query: string[], user: User, connection: Connection) => (string | null | void)} PageHandler */
-/** @typedef {{[k: string]: PageHandler | PageTable}} PageTable */
 
 /** @type {PageTable} */
 const pages = {
@@ -1751,6 +1753,7 @@ const pages = {
 	mafialadder: function (query, user) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		if (!query.length || !Rooms('mafia')) return `|deinit`;
+		/** @type {{[k: string]: {title: string, type: string, section: MafiaLogSection}}} */
 		const headers = {
 			leaderboard: {title: 'Leaderboard', type: 'Points', section: 'leaderboard'},
 			mvpladder: {title: 'MVP Ladder', type: 'MVPs', section: 'mvps'},
@@ -1768,7 +1771,6 @@ const pages = {
 		let buf = `|title|Mafia ${ladder.title} (${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()})\n|pagehtml|<div class="pad ladder">`;
 		buf += `${query[1] === 'prev' ? '' : `<button class="button" name="send" value="/join view-mafialadder-${query[0]}" style="float:left"><i class="fa fa-refresh"></i> Refresh</button> <button class="button" name="send" value="/join view-mafialadder-${query[0]}-prev" style="float:left">View last month's ${ladder.title}</button>`}`;
 		buf += `<br /><br />`;
-		/** @type {MafiaLogSection} */
 		const section = ladder.section;
 		if (!logs[section][month] || !Object.keys(logs[section][month]).length) {
 			buf += `${ladder.title} for ${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()} not found.</div>`;
@@ -1787,8 +1789,6 @@ const pages = {
 		return buf + `</table></div>`;
 	},
 };
-/** @typedef {(this: CommandContext, target: string, room: ChatRoom | GameRoom, user: User, connection: Connection, cmd: string, message: string) => (void)} ChatHandler */
-/** @typedef {{[k: string]: ChatHandler | string | true | string[] | ChatCommands}} ChatCommands */
 
 /** @type {ChatCommands} */
 const commands = {
@@ -1844,6 +1844,7 @@ const commands = {
 
 			room.game = new MafiaTracker(room, targetUser);
 
+			// @ts-ignore
 			targetUser.send(`>view-mafia-${room.id}\n|init|html\n${Chat.pages.mafia([room.id], targetUser)}`);
 			room.addByUser(user, `${targetUser.name} was appointed the mafia host by ${user.name}.`);
 			if (room.id === 'mafia') {
@@ -2684,6 +2685,7 @@ const commands = {
 			if (cmd.includes('cohost')) {
 				game.cohosts.push(targetUser.userid);
 				game.sendRoom(`${Chat.escapeHTML(targetUser.name)} has been added as a cohost by ${Chat.escapeHTML(user.name)}`, {declare: true});
+				// @ts-ignore
 				targetUser.send(`>view-mafia-${room.id}\n|init|html\n|${Chat.pages.mafia([room.id], targetUser)}`);
 				this.modlog('MAFIACOHOST', targetUser, null, {noalts: true, noip: true});
 			} else {
@@ -2696,6 +2698,7 @@ const commands = {
 				game.host = Chat.escapeHTML(targetUser.name);
 				game.hostid = targetUser.userid;
 				game.played.push(targetUser.userid);
+				// @ts-ignore
 				targetUser.send(`>view-mafia-${room.id}\n|init|html\n${Chat.pages.mafia([room.id], targetUser)}`);
 				game.sendRoom(`${Chat.escapeHTML(targetUser.name)} has been substituted as the new host, replacing ${oldHostid}.`, {declare: true});
 				this.modlog('MAFIASUBHOST', targetUser, `replacing ${oldHostid}`, {noalts: true, noip: true});
@@ -2758,6 +2761,7 @@ const commands = {
 			if (!this.runBroadcast()) return;
 			if (!target) return this.parse(`/help mafia data`);
 
+			/** @type {{[k: string]: string}} */
 			const types = {alignment: 'alignments', role: 'roles', modifier: 'modifiers', theme: 'themes'};
 			let id = target.split(' ').map(toId).join('_');
 			let result = null;
@@ -2789,6 +2793,7 @@ const commands = {
 				for (let i in result) {
 					if (isNaN(parseInt(i))) continue;
 					buf += `${i}: `;
+					/** @type {{[k: string]: number}} */
 					let count = {};
 					let roles = [];
 					for (const role of result[i].split(',').map((/** @type {string} */x) => x.trim())) {

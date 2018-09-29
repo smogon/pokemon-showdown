@@ -9,7 +9,7 @@ const maxMistakes = 6;
 
 class Hangman extends Rooms.RoomGame {
 	/**
-	 * @param {ChatRoom} room
+	 * @param {ChatRoom | GameRoom} room
 	 * @param {User} user
 	 * @param {string} word
 	 * @param {string?} [hint]
@@ -216,9 +216,6 @@ class Hangman extends Rooms.RoomGame {
 		delete this.room.game;
 	}
 }
-
-/** @typedef {(this: CommandContext, target: string, room: ChatRoom, user: User, connection: Connection, cmd: string, message: string) => (void)} ChatHandler */
-/** @typedef {{[k: string]: ChatHandler | string | true | string[] | ChatCommands}} ChatCommands */
 
 /** @type {ChatCommands} */
 const commands = {

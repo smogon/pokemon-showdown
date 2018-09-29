@@ -25,9 +25,6 @@ function getMegaStone(stone) {
 	return item;
 }
 
-/** @typedef {(this: CommandContext, target: string, room: BasicChatRoom, user: User, connection: Connection, cmd: string, message: string) => (void)} ChatHandler */
-/** @typedef {{[k: string]: ChatHandler | string | true | string[]}} ChatCommands */
-
 /** @type {ChatCommands} */
 const commands = {
 	'!othermetas': true,
@@ -117,6 +114,7 @@ const commands = {
 			megaTemplate = Dex.getTemplate("Kyogre-Primal");
 			baseTemplate = Dex.getTemplate("Kyogre");
 		}
+		/** @type {{baseStats: {[k: string]: number}, weightkg: number, type?: string}} */
 		let deltas = {
 			baseStats: {},
 			weightkg: megaTemplate.weightkg - baseTemplate.weightkg,
@@ -159,9 +157,10 @@ const commands = {
 		} else if (mixedTemplate.weightkg >= 10) {
 			weighthit = 40;
 		}
+		/** @type {{[k: string]: string}} */
 		let details = {
-			"Dex#": mixedTemplate.num,
-			"Gen": mixedTemplate.gen,
+			"Dex#": '' + mixedTemplate.num,
+			"Gen": '' + mixedTemplate.gen,
 			"Height": mixedTemplate.heightm + " m",
 			"Weight": mixedTemplate.weightkg + " kg <em>(" + weighthit + " BP)</em>",
 			"Dex Colour": mixedTemplate.color,
@@ -212,6 +211,7 @@ const commands = {
 			baseTemplate = Dex.getTemplate("Kyogre");
 			megaTemplate = Dex.getTemplate("Kyogre-Primal");
 		}
+		/** @type {{baseStats: {[k: string]: number}, weightkg: number, type?: string}} */
 		let deltas = {
 			baseStats: {},
 			weightkg: megaTemplate.weightkg - baseTemplate.weightkg,
@@ -303,6 +303,7 @@ const commands = {
 		if (!toId(target)) return this.parse('/help tiershift');
 		let template = Object.assign({}, Dex.getTemplate(target));
 		if (!template.exists) return this.errorReply("Error: Pokemon not found.");
+		/** @type {{[k: string]: number}} */
 		let boosts = {
 			'UU': 10,
 			'RUBL': 10,

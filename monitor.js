@@ -135,8 +135,11 @@ const Monitor = module.exports = {
 
 	/** @type {string | null} */
 	activeIp: null,
+	/** @type {{[k: string]: number}} */
 	networkUse: {},
+	/** @type {{[k: string]: number}} */
 	networkCount: {},
+	/** @type {{[k: string]: string}} */
 	hotpatchLock: {},
 
 	/**

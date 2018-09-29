@@ -772,6 +772,7 @@ let BattleMovedex = {
 			if (pokemon.baseTemplate.species !== 'Meloetta' || pokemon.transformed) {
 				return;
 			}
+			/**@type {{[k: string]: string}} */
 			let natureChange = {
 				'Modest': 'Adamant',
 				'Adamant': 'Modest',
@@ -891,6 +892,7 @@ let BattleMovedex = {
 					}
 					if (stats.length) {
 						let randomStat = this.sample(stats);
+						/**@type {{[k: string]: number}} */
 						let boost = {};
 						boost[randomStat] = 1;
 						this.boost(boost);
@@ -924,6 +926,7 @@ let BattleMovedex = {
 					}
 					if (stats.length) {
 						let randomStat = this.sample(stats);
+						/**@type {{[k: string]: number}} */
 						let boost = {};
 						boost[randomStat] = 1;
 						this.boost(boost);
@@ -951,6 +954,7 @@ let BattleMovedex = {
 					}
 					if (stats.length) {
 						let randomStat = this.sample(stats);
+						/**@type {{[k: string]: number}} */
 						let boost = {};
 						boost[randomStat] = 1;
 						this.boost(boost);

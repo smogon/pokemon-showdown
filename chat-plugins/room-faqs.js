@@ -5,6 +5,7 @@ const path = require('path');
 
 const ROOMFAQ_FILE = path.resolve(__dirname, '../config/chat-plugins/faqs.json');
 
+/** @type {{[k: string]: {[k: string]: string}}} */
 let roomFaqs = {};
 try {
 	roomFaqs = require(ROOMFAQ_FILE);
@@ -30,9 +31,6 @@ function getAlias(roomid, key) {
 	if (value && value[0] === '>') return value.substr(1);
 	return false;
 }
-
-/** @typedef {(this: CommandContext, target: string, room: ChatRoom, user: User, connection: Connection, cmd: string, message: string) => (void)} ChatHandler */
-/** @typedef {{[k: string]: ChatHandler | string | true | string[] | ChatCommands}} ChatCommands */
 
 /** @type {ChatCommands} */
 const commands = {

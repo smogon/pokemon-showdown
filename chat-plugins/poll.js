@@ -10,7 +10,7 @@
 
 class Poll {
 	/**
-	 * @param {ChatRoom} room
+	 * @param {ChatRoom | GameRoom} room
 	 * @param {QuestionData} questionData
 	 * @param {string[]} options
 	 */
@@ -19,7 +19,9 @@ class Poll {
 		this.room = room;
 		this.question = questionData.source;
 		this.supportHTML = questionData.supportHTML;
+		/** @type {{[k: string]: number}} */
 		this.voters = {};
+		/** @type {{[k: string]: number}} */
 		this.voterIps = {};
 		this.totalVotes = 0;
 		/** @type {NodeJS.Timer?} */
@@ -212,9 +214,6 @@ class Poll {
 }
 
 exports.Poll = Poll;
-
-/** @typedef {(this: CommandContext, target: string, room: ChatRoom, user: User, connection: Connection, cmd: string, message: string) => (void)} ChatHandler */
-/** @typedef {{[k: string]: ChatHandler | string | true | string[] | ChatCommands}} ChatCommands */
 
 /** @type {ChatCommands} */
 const commands = {

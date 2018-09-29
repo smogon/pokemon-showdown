@@ -49,11 +49,14 @@
   "private": true,
   "license": "MIT",
   "devDependencies": {
+    "@types/cloud-env": "^0.2.0",
     "@types/node": "^8.0.32",
+    "@types/node-static": "^0.7.2",
     "@types/nodemailer": "^4.3.0",
+    "@types/sockjs": "^0.3.31",
     "eslint": "^5.6.1",
     "husky": "^0.14.3",
     "mocha": "^5.2.0",
-    "typescript": "^3.0.1"
+    "typescript": "^3.1.1"
   }
 }
