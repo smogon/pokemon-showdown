@@ -661,7 +661,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 60,
 		basePowerCallback: function (pokemon, target, move) {
-			if (pokemon.volatiles.assurance && pokemon.volatiles.assurance.hurt) {
+			if (pokemon.volatiles.assurance && pokemon.volatiles.assurance.hurt && pokemon.volatiles.assurance.position === target.position) {
 				this.debug('Boosted for being damaged this turn');
 				return move.basePower * 2;
 			}
