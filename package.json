@@ -18,7 +18,7 @@
   },
   "scripts": {
     "start": "node pokemon-showdown",
-    "test": "eslint --cache . && tsc && mocha",
+    "test": "eslint --cache . && mocha",
     "tsc": "tsc",
     "lint": "eslint --cache .",
     "prepush": "npm test"

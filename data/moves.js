@@ -661,7 +661,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 60,
 		basePowerCallback: function (pokemon, target, move) {
-			if (pokemon.volatiles.assurance && pokemon.volatiles.assurance.hurt && pokemon.volatiles.assurance.position === target.position) {
+			if (pokemon.volatiles.assurance && pokemon.volatiles.assurance.hurt[target.position]) {
 				this.debug('Boosted for being damaged this turn');
 				return move.basePower * 2;
 			}
@@ -677,20 +677,17 @@ let BattleMovedex = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		beforeTurnCallback: function (pokemon, target) {
 			pokemon.addVolatile('assurance');
-			pokemon.volatiles.assurance.position = target.position;
+			/** @type {boolean?[]} */
+			pokemon.volatiles.assurance.hurt = [];
 		},
 		effect: {
 			duration: 1,
 			onFoeAfterDamage: function (damage, target) {
-				if (target.position === this.effectData.position) {
-					this.debug('damaged this turn');
-					this.effectData.hurt = true;
-				}
+				this.effectData.hurt[target.position] = true;
+				this.debug('damaged this turn');
 			},
 			onFoeSwitchOut: function (pokemon) {
-				if (pokemon.position === this.effectData.position) {
-					this.effectData.hurt = false;
-				}
+				this.effectData.hurt[pokemon.position] = false;
 			},
 		},
 		secondary: null,
