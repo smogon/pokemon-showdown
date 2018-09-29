@@ -1276,7 +1276,6 @@ Punishments.checkName = function (user, userid, registered) {
 	}
 	if (id === 'NAMELOCK' || user.namelocked) {
 		user.popup(`You are namelocked and can't have a username${bannedUnder}. Your namelock will expire in a few days.${reason}${appeal}`);
-		if (punishment[2]) Punishments.punish(user, punishment);
 		user.locked = punishUserid;
 		user.namelocked = punishUserid;
 		user.resetName();
@@ -1288,7 +1287,7 @@ Punishments.checkName = function (user, userid, registered) {
 			user.popup(`You are locked${bannedUnder}. Your lock will expire in a few days.${reason}${appeal}`);
 		}
 		user.lockNotified = true;
-		Punishments.punish(user, punishment);
+		if (user.userid === punishUserid) Punishments.punish(user, punishment);
 		user.locked = punishUserid;
 		user.updateIdentity();
 	}
