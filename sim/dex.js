@@ -787,9 +787,8 @@ class ModdedDex {
 			if ("!+-".includes(ruleSpec.charAt(0))) {
 				if (ruleSpec.charAt(0) === '+' && ruleTable.has('-' + ruleSpec.slice(1))) {
 					ruleTable.delete('-' + ruleSpec.slice(1));
-				} else {
-					ruleTable.set(ruleSpec, '');
 				}
+				ruleTable.set(ruleSpec, '');
 				continue;
 			}
 			const subformat = this.getFormat(ruleSpec);
