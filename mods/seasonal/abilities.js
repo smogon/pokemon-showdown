@@ -276,6 +276,24 @@ let BattleAbilities = {
 		id: "sacredshadow",
 		name: "Sacred Shadow",
 	},
+	// ptoad
+	fatrain: {
+		id: "fatrain",
+		name: "Fat Rain",
+		shortDesc: "",
+		onStart: function (source) {
+			for (const action of this.queue) {
+				if (action.choice === 'runPrimal' && action.pokemon === source && source.template.speciesid === 'kyogre') return;
+				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
+			}
+			this.setWeather('raindance');
+		},
+		onModifyDef: function (def, pokemon) {
+			if (this.isWeather(['raindance', 'primordialsea'])) {
+				return this.chainModify(1.5);
+			}
+		},
+	},
 	// Shiba
 	galewings10: {
 		id: "galewings10",

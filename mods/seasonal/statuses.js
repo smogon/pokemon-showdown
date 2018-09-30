@@ -670,6 +670,18 @@ let BattleStatuses = {
 			this.add(`c|%MicktheSpud|Woah!`);
 		},
 	},
+	mitsuki: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|+Mitsuki|SSSSSSSSSSSSS`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|+Mitsuki|sssssssssssss`);
+		},
+		onFaint: function () {
+			this.add(`c|+Mitsuki|sss`);
+		},
+	},
 	moo: {
 		noCopy: true,
 		onStart: function () {
@@ -767,6 +779,18 @@ let BattleStatuses = {
 		},
 		onFaint: function () {
 			this.add(`c|@Paradise|⠠⠽⠕⠥’⠗⠑⠀⠋⠥⠉⠅⠊⠝⠛⠀⠙⠑⠁⠙,⠀⠅⠊⠙⠙⠕.`);
+		},
+	},
+	ptoad: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|+ptoad⚬|Make it rain!`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|+ptoad⚬|Oh. You're switching me out. No, it's fine, I "toad"ally get it.`);
+		},
+		onFaint: function () {
+			this.add(`c|+ptoad⚬|Wow. Way to rain on my parade.`);
 		},
 	},
 	quitequiet: {
@@ -932,6 +956,18 @@ let BattleStatuses = {
 			this.add(`l|%urkerab`);
 		},
 	},
+	uselesscrab: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|+Uselesscrab|/me !`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|+Uselesscrab|hilarious`);
+		},
+		onFaint: function () {
+			this.add(`c|+Uselesscrab|i love pokemon`);
+		},
+	},
 	volco: {
 		noCopy: true,
 		onStart: function () {
@@ -944,16 +980,16 @@ let BattleStatuses = {
 			this.add(`c| Volco|Well, seems I was got taken down instead.`);
 		},
 	},
-	xayah: {
+	xayahh: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|+Xayah|Let's dance!`);
+			this.add(`c|+Xayahh|Let's dance!`);
 		},
 		onSwitchOut: function () {
-			this.add(`c|+Xayah|Fine, I'll go.`);
+			this.add(`c|+Xayahh|Fine, I'll go.`);
 		},
 		onFaint: function () {
-			this.add(`c|+Xayah|All out of second dances...`);
+			this.add(`c|+Xayahh|All out of second dances...`);
 		},
 	},
 	xprienzo: {
@@ -1054,20 +1090,6 @@ let BattleStatuses = {
 			if (move.basePower) {
 				move.basePower += 20;
 				this.debug('glitch out base power boost');
-			}
-		},
-	},
-	// Reverse Foresight for Morfent
-	reverseforesight: {
-		onStart: function (pokemon) {
-			this.add('-start', pokemon, 'Reverse Foresight');
-			this.add('-message', pokemon.name + ' can hit normal types with ghost type attacks!');
-		},
-		onModifyMovePriority: -5,
-		onModifyMove: function (move) {
-			if (!move.ignoreImmunity) move.ignoreImmunity = {};
-			if (move.ignoreImmunity !== true) {
-				move.ignoreImmunity['Ghost'] = true;
 			}
 		},
 	},
