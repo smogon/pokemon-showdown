@@ -3896,7 +3896,7 @@ let BattleFormatsData = {
 		doublesTier: "DUU",
 	},
 	emolga: {
-		randomBattleMoves: ["encore", "chargebeam", "uturn", "thunderbolt", "voltswitch", "airslash", "roost"],
+		randomBattleMoves: ["encore", "chargebeam", "uturn", "thunderbolt", "airslash", "roost"],
 		randomDoubleBattleMoves: ["helpinghand", "tailwind", "encore", "substitute", "thunderbolt", "airslash", "roost", "protect"],
 		tier: "PU",
 		doublesTier: "DUU",
