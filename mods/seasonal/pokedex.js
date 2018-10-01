@@ -61,6 +61,11 @@ let BattlePokedex = {
 		inherit: true,
 		abilities: {0: 'Comatose'},
 	},
+	// Saburo
+	metagrossmega: {
+		inherit: true,
+		abilities: {0: 'Levitate'},
+	},
 	// Teclis
 	gallademega: {
 		inherit: true,
