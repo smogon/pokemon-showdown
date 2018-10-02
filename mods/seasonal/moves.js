@@ -2012,7 +2012,7 @@ let BattleMovedex = {
 		name: "E",
 		isNonstandard: true,
 		pp: 5,
-		priority: 1,
+		priority: -6,
 		onModifyMove: function (move) {
 			if (!this.pseudoWeather.trickroom) {
 				move.pseudoWeather = 'trickroom';
