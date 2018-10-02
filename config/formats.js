@@ -533,7 +533,7 @@ let Formats = [
 				}
 			}
 			let problemsArray = /** @type {string[]} */ ([]);
-			let followerProblems = this.constructor('gen7ou').validateSet.call(this, set, teamHas);
+			let followerProblems = TeamValidator('gen7ou').validateSet.call(this, set, teamHas);
 			if (followerProblems) problemsArray = problemsArray.concat(followerProblems);
 			let template = this.dex.getTemplate(set.species);
 			let item = this.dex.getItem(set.item);
