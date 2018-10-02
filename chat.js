@@ -395,17 +395,17 @@ class CommandContext {
 		if (!commandHandler && !recursing) {
 			for (let g in Config.groups) {
 				let groupid = Config.groups[g].id;
-				if (cmd === groupid) {
+				if (fullCmd === groupid) {
 					return this.splitCommand(`/promote ${target}, ${g}`, true);
-				} else if (cmd === 'global' + groupid) {
+				} else if (fullCmd === 'global' + groupid) {
 					return this.splitCommand(`/globalpromote ${target}, ${g}`, true);
-				} else if (cmd === 'de' + groupid || cmd === 'un' + groupid || cmd === 'globalde' + groupid || cmd === 'deglobal' + groupid) {
+				} else if (fullCmd === 'de' + groupid || fullCmd === 'un' + groupid || fullCmd === 'globalde' + groupid || fullCmd === 'deglobal' + groupid) {
 					return this.splitCommand(`/demote ${target}`, true);
-				} else if (cmd === 'room' + groupid) {
+				} else if (fullCmd === 'room' + groupid) {
 					return this.splitCommand(`/roompromote ${target}, ${g}`, true);
-				} else if (cmd === 'forceroom' + groupid) {
+				} else if (fullCmd === 'forceroom' + groupid) {
 					return this.splitCommand(`/roompromote !!!${target}, ${g}`, true);
-				} else if (cmd === 'roomde' + groupid || cmd === 'deroom' + groupid || cmd === 'roomun' + groupid) {
+				} else if (fullCmd === 'roomde' + groupid || fullCmd === 'deroom' + groupid || fullCmd === 'roomun' + groupid) {
 					return this.splitCommand(`/roomdemote ${target}`, true);
 				}
 			}
