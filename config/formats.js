@@ -522,23 +522,25 @@ let Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] Ubers'],
-		validateSet: function (set, teamHas) {
-			if (!teamHas.typeTable) {
-				let template = this.dex.getTemplate(set.species);
-				teamHas.typeTable = template.types;
-				let item = this.dex.getItem(set.item);
-				if (template.species === item.megaEvolves) {
-					template = this.dex.getTemplate(item.megaStone);
-					if (template.types[1] !== teamHas.typeTable[1]) teamHas.typeTable = [teamHas.typeTable[0]];
+		onValidateTeam: function (team, format, teamHas) {
+			let problemsArray = /** @type {string[]} */ ([]);
+			let types = /** @type {string[]} */ ([]);
+			for (const [i, set] of team.entries()) {
+				if (i === 0) {
+					let template = this.getTemplate(set.name || set.species);
+					types = template.types;
+					if (template.species.substr(0, 9) === 'Necrozma-' && set.item && this.getItem(set.item).id === 'ultranecroziumz') types = ['Psychic'];
+					let problems = TeamValidator('gen7ubers').validateSet(set, teamHas);
+					if (problems) problemsArray = problemsArray.concat(problems);
+				} else {
+					let problems = TeamValidator('gen7ou').validateSet(set, teamHas);
+					if (problems) problemsArray = problemsArray.concat(problems);
+					let template = this.getTemplate(set.name || set.species);
+					let item = this.getItem(set.item);
+					if (item && template.species === item.megaEvolves) template = this.getTemplate(item.megaStone);
+					if (!template.types.some(type => types.includes(type))) problemsArray.push("Followers must share a type with the God.", `(${template.species} doesn't share a type with ${team[0].species}.)`);
 				}
 			}
-			let problemsArray = /** @type {string[]} */ ([]);
-			let followerProblems = TeamValidator('gen7ou').validateSet.call(this, set, teamHas);
-			if (followerProblems) problemsArray = problemsArray.concat(followerProblems);
-			let template = this.dex.getTemplate(set.species);
-			let item = this.dex.getItem(set.item);
-			if (template.species === item.megaEvolves) template = this.dex.getTemplate(item.megaStone);
-			if (!template.types.some(type => teamHas.typeTable.includes(type))) problemsArray.push("Followers must share a type with the God.", `(${template.species} doesn't share a type with the God.)`);
 			return problemsArray;
 		},
 		onBegin: function () {
