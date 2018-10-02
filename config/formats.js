@@ -546,7 +546,7 @@ let Formats = [
 					if (item.megaStone && template.species === item.megaEvolves) {
 						template = this.getTemplate(item.megaStone);
 						let baseTemplate = this.getTemplate(item.megaEvolves);
-						followerTypes = baseTemplate.types.filter(type => template.types.includes(type));
+						followerTypes = baseTemplate.types.filter(type => template.types.includes(type)).concat(template.types.filter(type => types.includes(type)));
 					}
 					if (!followerTypes.some(type => types.includes(type))) problemsArray.push("Followers must share a type with the God.", `(${template.isMega ? template.baseSpecies : template.species} doesn't share a type with ${team[0].species}.)`);
 				}
