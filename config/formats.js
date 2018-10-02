@@ -526,19 +526,29 @@ let Formats = [
 			let problemsArray = /** @type {string[]} */ ([]);
 			let types = /** @type {string[]} */ ([]);
 			for (const [i, set] of team.entries()) {
+				let item = this.getItem(set.item);
 				if (i === 0) {
 					let template = this.getTemplate(set.species);
 					types = template.types;
-					if (template.species.substr(0, 9) === 'Necrozma-' && set.item && this.getItem(set.item).id === 'ultranecroziumz') types = ['Psychic'];
+					if (template.species.substr(0, 9) === 'Necrozma-' && item.id === 'ultranecroziumz') types = ['Psychic'];
+					if (item.megaStone && template.species === item.megaEvolves) {
+						template = this.getTemplate(item.megaStone);
+						let baseTemplate = this.getTemplate(item.megaEvolves);
+						types = baseTemplate.types.filter(type => template.types.includes(type));
+					}
 					let problems = TeamValidator('gen7ubers').validateSet(set, teamHas);
 					if (problems) problemsArray = problemsArray.concat(problems);
 				} else {
 					let problems = TeamValidator('gen7ou').validateSet(set, teamHas);
 					if (problems) problemsArray = problemsArray.concat(problems);
 					let template = this.getTemplate(set.species);
-					let item = this.getItem(set.item);
-					if (item && item.megaEvolves && template.species === item.megaEvolves) template = this.getTemplate(item.megaStone);
-					if (!template.types.some(type => types.includes(type))) problemsArray.push("Followers must share a type with the God.", `(${template.species} doesn't share a type with ${team[0].species}.)`);
+					let followerTypes = template.types;
+					if (item.megaStone && template.species === item.megaEvolves) {
+						template = this.getTemplate(item.megaStone);
+						let baseTemplate = this.getTemplate(item.megaEvolves);
+						followerTypes = baseTemplate.types.filter(type => template.types.includes(type));
+					}
+					if (!followerTypes.some(type => types.includes(type))) problemsArray.push("Followers must share a type with the God.", `(${template.isMega ? template.baseSpecies : template.species} doesn't share a type with ${team[0].species}.)`);
 				}
 			}
 			return problemsArray;
