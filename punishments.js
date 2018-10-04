@@ -761,7 +761,8 @@ Punishments.autolock = function (user, room, source, reason, message, week = fal
 		Punishments.lock(user, expires, toId(user), `Autolock: ${user.name || toId(user)}: ${reason}`);
 	}
 	Monitor.log(`[${source}] ${punishment}: ${message}`);
-	Rooms.global.modlog(`(${toId(room)}) AUTO${name ? `NAME` : ''}LOCK: [${toId(user)}]: ${reason}`);
+	const ipStr = typeof user !== 'string' ? ` [${user.latestIp}]` : '';
+	Rooms.global.modlog(`(${toId(room)}) AUTO${name ? `NAME` : ''}LOCK: [${toId(user)}]${ipStr}: ${reason}`);
 };
 /**
  * @param {string} name
