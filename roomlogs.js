@@ -197,6 +197,7 @@ class Roomlog {
 				const userid = toId(parts[section - 1]);
 				if (userids.includes(userid)) {
 					if (!cleared.includes(userid)) cleared.push(userid);
+					if (this.id.startsWith('battle')) return true; // Don't remove messages in battle rooms to preserve evidence
 					return false;
 				}
 			}
