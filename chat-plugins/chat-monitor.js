@@ -7,7 +7,7 @@ const WRITE_THROTTLE_TIME = 5 * 60 * 1000;
 
 /** @type {{[k: string]: string[]}} */
 let filterKeys = Chat.filterKeys = Object.assign(Chat.filterKeys, {publicwarn: ['PUBLIC', 'WARN', 'Filtered in public'], warn: ['EVERYWHERE', 'WARN', 'Filtered'], autolock: ['EVERYWHERE', 'AUTOLOCK', 'Autolock'], namefilter: ['NAMES', 'WARN', 'Filtered in usernames'], wordfilter: ['EVERYWHERE', 'FILTERTO', 'Filtered to a different phrase']});
-/** @type {{[k: string]: ([(string | RegExp), string, string?, number][])}} */
+/** @type {{[k: string]: [(string | RegExp), string, string?, number][]}} */
 let filterWords = Chat.filterWords;
 
 setImmediate(() => {
@@ -68,11 +68,6 @@ function saveFilters(force = false) {
 		return buf;
 	}, {throttle: force ? 0 : WRITE_THROTTLE_TIME});
 }
-
-/** @typedef {(this: CommandContext, target: string, room: ChatRoom, user: User, connection: Connection, cmd: string, message: string) => (void)} ChatHandler */
-/** @typedef {(this: CommandContext, message: string, user: User, room: ChatRoom?, connection: Connection, targetUser: User?) => (string | boolean)} ChatFilter */
-/** @typedef {(name: string, user: User) => (string)} NameFilter */
-/** @typedef {{[k: string]: ChatHandler | string | true | string[] | ChatCommands}} ChatCommands */
 
 /** @type {ChatFilter} */
 let chatfilter = function (message, user, room) {

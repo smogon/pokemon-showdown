@@ -1726,6 +1726,7 @@ let BattleAbilities = {
 		id: "liquidooze",
 		onSourceTryHeal: function (damage, target, source, effect) {
 			this.debug("Heal is occurring: " + target + " <- " + source + " :: " + effect.id);
+			/**@type {{[k: string]: number}} */
 			let canOoze = {drain: 1, leechseed: 1, strengthsap: 1};
 			if (canOoze[effect.id]) {
 				this.damage(damage);
@@ -1956,6 +1957,7 @@ let BattleAbilities = {
 				}
 			}
 			let randomStat = stats.length ? this.sample(stats) : "";
+			// @ts-ignore
 			if (randomStat) boost[randomStat] = 2;
 
 			stats = [];
@@ -1966,6 +1968,7 @@ let BattleAbilities = {
 				}
 			}
 			randomStat = stats.length ? this.sample(stats) : "";
+			// @ts-ignore
 			if (randomStat) boost[randomStat] = -1;
 
 			this.boost(boost);

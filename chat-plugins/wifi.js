@@ -16,6 +16,7 @@ const RECENT_THRESHOLD = 30 * 24 * 60 * 60 * 1000;
 const STATS_FILE = 'config/chat-plugins/wifi.json';
 const BREEDING_FILE = 'config/chat-plugins/breeding.json';
 
+/** @type {{[k: string]: number[]}} */
 let stats = {};
 try {
 	stats = require(`../${STATS_FILE}`);
@@ -28,6 +29,7 @@ function saveStats() {
 	FS(STATS_FILE).write(JSON.stringify(stats));
 }
 
+/** @type {{winners?: {[k: string]: AnyObject}, latest?: string}} */
 let breedingData = {};
 try {
 	breedingData = require(`../${BREEDING_FILE}`);
@@ -51,7 +53,7 @@ class Giveaway {
 	/**
 	 * @param {User} host
 	 * @param {User} giver
-	 * @param {ChatRoom} room
+	 * @param {ChatRoom | GameRoom} room
 	 * @param {string} ot
 	 * @param {string} tid
 	 * @param {string} fc
@@ -72,6 +74,7 @@ class Giveaway {
 		this.prize = prize;
 		this.phase = 'pending';
 
+		/** @type {{[k: string]: string}} */
 		this.joined = {};
 
 		/** @type {NodeJS.Timer?} */
@@ -142,7 +145,7 @@ class Giveaway {
 	}
 
 	/**
-	 * @param {ChatRoom} room
+	 * @param {ChatRoom | GameRoom} room
 	 * @param {User} user
 	 */
 	static checkBanned(room, user) {
@@ -150,7 +153,7 @@ class Giveaway {
 	}
 
 	/**
-	 * @param {ChatRoom} room
+	 * @param {ChatRoom | GameRoom} room
 	 * @param {User} user
 	 * @param {string} reason
 	 */
@@ -159,7 +162,7 @@ class Giveaway {
 	}
 
 	/**
-	 * @param {ChatRoom} room
+	 * @param {ChatRoom | GameRoom} room
 	 * @param {User} user
 	 */
 	static unban(room, user) {
@@ -276,6 +279,7 @@ class QuestionGiveaway extends Giveaway {
 
 		this.question = question;
 		this.answers = QuestionGiveaway.sanitizeAnswers(answers);
+		/** @type {{[k: string]: number}} */
 		this.answered = {}; // userid: number of guesses
 
 		this.send(this.generateWindow('The question will be displayed in one minute! Use /ga to answer.'));
@@ -656,9 +660,6 @@ class GtsGiveaway {
 	}
 }
 
-/** @typedef {(this: CommandContext, target: string, room: ChatRoom, user: User, connection: Connection, cmd: string, message: string) => (void)} ChatHandler */
-/** @typedef {{[k: string]: ChatHandler | string | true | string[] | ChatCommands}} ChatCommands */
-
 /** @type {ChatCommands} */
 let commands = {
 	// question giveaway.
@@ -942,7 +943,6 @@ let commands = {
 		if (!target) return this.errorReply("No mon entered - /giveaway count pokemon.");
 		if (!this.runBroadcast()) return;
 
-		/** @type {[number]} */
 		let count = stats[target];
 
 		if (!count) return this.sendReplyBox("This Pokémon has never been given away.");
@@ -1019,6 +1019,7 @@ let breedingcontests = {
 	},
 	view: function (target, room, user) {
 		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
+		/** @type {string | undefined} */
 		let contest = toId(target);
 		if (!contest) contest = breedingData.latest;
 		if (!contest) return this.errorReply("There have been no breeding contests.");

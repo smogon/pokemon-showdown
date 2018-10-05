@@ -67,6 +67,7 @@ let BattleScripts = {
 	},
 	getMegaDeltas: function (megaTemplate) {
 		let baseTemplate = this.getTemplate(megaTemplate.baseSpecies);
+		/**@type {{ability: string, baseStats: {[k: string]: number}, weightkg: number, originalMega: string, requiredItem: string | undefined, type?: string, isMega?: boolean, isPrimal?: boolean}} */
 		let deltas = {
 			ability: megaTemplate.abilities['0'],
 			baseStats: {},

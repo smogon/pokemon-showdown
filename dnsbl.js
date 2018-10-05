@@ -144,7 +144,7 @@ Dnsbl.cidrToPattern = function (cidr) {
 		if (!pattern) return [];
 		return [pattern];
 	}
-	// $FlowFixMe: flow doesn't understand filter
+	// @ts-ignore
 	return cidr.map(Dnsbl.getCidrPattern).filter(x => x);
 };
 /**
@@ -160,7 +160,7 @@ Dnsbl.rangeToPattern = function (range) {
 		if (!pattern) return [];
 		return [pattern];
 	}
-	// $FlowFixMe: flow doesn't understand filter
+	// @ts-ignore
 	return range.map(Dnsbl.getRangePattern).filter(x => x);
 };
 /**
@@ -188,10 +188,12 @@ Dnsbl.checkPattern = function (patterns, num) {
 Dnsbl.checker = function (ranges) {
 	if (!ranges || !ranges.length) return () => false;
 	/** @type {[number, number][]} */
-	let patterns;
+	let patterns = [];
 	if (typeof ranges === 'string') {
-		patterns = [Dnsbl.getPattern(ranges)];
+		let rangePatterns = Dnsbl.getPattern(ranges);
+		if (rangePatterns) patterns = [rangePatterns];
 	} else {
+		// @ts-ignore
 		patterns = ranges.map(Dnsbl.getPattern).filter(x => x);
 	}
 	return ip => Dnsbl.checkPattern(patterns, Dnsbl.ipToNumber(ip));
@@ -214,14 +216,17 @@ Dnsbl.urlToHost = function (url) {
 	return url;
 };
 
+/**@type {[number, number, string][]} */
 Dnsbl.datacenters = [];
 Dnsbl.loadDatacenters = async function () {
 	const data = await FS('config/datacenters.csv').readIfExists();
 	const rows = data.split('\n');
+	/**@type {[number, number, string][]} */
 	let datacenters = [];
 	for (const row of rows) {
 		if (!row) continue;
 		const rowSplit = row.split(',');
+		/**@type {[number, number, string]} */
 		const rowData = [
 			Dnsbl.ipToNumber(rowSplit[0]),
 			Dnsbl.ipToNumber(rowSplit[1]),

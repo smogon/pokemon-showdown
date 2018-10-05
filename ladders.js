@@ -319,6 +319,7 @@ class Ladder extends LadderStore {
 	static updateChallenges(user, connection = null) {
 		if (!user.connected) return;
 		let challengeTo = null;
+		/**@type {{[k: string]: string}} */
 		let challengesFrom = {};
 		const userChalls = Ladders.challenges.get(user.userid);
 		if (userChalls) {

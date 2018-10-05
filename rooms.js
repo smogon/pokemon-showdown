@@ -479,6 +479,7 @@ class GlobalRoom extends BasicRoom {
 		} else {
 			// Prevent there from being two possible hidden classes an instance
 			// of GlobalRoom can have.
+			// @ts-ignore
 			this.ladderIpLog = new (require('./lib/streams')).WriteStream({write() {}});
 		}
 
@@ -624,6 +625,7 @@ class GlobalRoom extends BasicRoom {
 		let roomTable = /** @type {{[roomid: string]: AnyObject}} */ ({});
 		for (let i = rooms.length - 1; i >= rooms.length - 100 && i >= 0; i--) {
 			let room = rooms[i];
+			/** @type {{p1?: string, p2?: string, minElo?: string | number}} */
 			let roomData = {};
 			if (room.active && room.battle) {
 				if (room.battle.p1) roomData.p1 = room.battle.p1.name;
@@ -646,6 +648,7 @@ class GlobalRoom extends BasicRoom {
 			if (!room) continue;
 			if (room.parent) continue;
 			if (room.isPrivate && !(room.isPrivate === 'voice' && user.group !== ' ')) continue;
+			/** @type {{title: string, desc: string, userCount: number, subRooms?: string[]}} */
 			let roomData = {
 				title: room.title,
 				desc: room.desc,
@@ -1103,6 +1106,7 @@ class BasicChatRoom extends BasicRoom {
 	logUserStats() {
 		let total = 0;
 		let guests = 0;
+		/** @type {{[k: string]: number}} */
 		let groups = {};
 		for (const group of Config.groupsranking) {
 			groups[group] = 0;

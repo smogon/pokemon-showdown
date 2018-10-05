@@ -22,6 +22,8 @@ const crypto = require('crypto');
 
 const QueryProcessManager = require('./lib/process-manager').QueryProcessManager;
 
+/**@type {QueryProcessManager} */
+// @ts-ignore
 const PM = new QueryProcessManager(module, async ({data, signature}) => {
 	let verifier = crypto.createVerify(Config.loginserverkeyalgo);
 	verifier.update(data);

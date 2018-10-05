@@ -61,6 +61,7 @@ class Side {
 		/** @type {Pokemon[]} */
 		// @ts-ignore
 		this.active = [null];
+		/**@type {AnyObject} */
 		this.sideConditions = {};
 
 		this.pokemonLeft = 0;
@@ -176,6 +177,7 @@ class Side {
 				item: pokemon.item,
 				pokeball: pokemon.pokeball,
 			};
+			// @ts-ignore
 			if (this.battle.gen > 6) entry.ability = pokemon.ability;
 			data.pokemon.push(entry);
 		}
@@ -289,6 +291,7 @@ class Side {
 	 * @param {string | number} [moveText]
 	 * @param {number} [targetLoc]
 	 * @param {boolean | string} [megaOrZ]
+	 * @return {boolean | Side}
 	 */
 	chooseMove(moveText, targetLoc, megaOrZ) {
 		if (this.currentRequest !== 'move') {
@@ -319,6 +322,7 @@ class Side {
 				return this.emitChoiceError(`Can't move: Your ${pokemon.name} doesn't have a move ${moveIndex + 1}`);
 			}
 			moveid = requestMoves[moveIndex].id;
+			// @ts-ignore
 			targetType = requestMoves[moveIndex].target;
 		} else {
 			// Parse a move ID.
@@ -341,8 +345,10 @@ class Side {
 		if (autoChoose) {
 			for (const [i, move] of requestMoves.entries()) {
 				if (move.disabled) continue;
+				// @ts-ignore
 				if (i < moves.length && move.id === moves[i].id && moves[i].disabled) continue;
 				moveid = move.id;
+				// @ts-ignore
 				targetType = move.target;
 				break;
 			}
@@ -464,6 +470,7 @@ class Side {
 
 	/**
 	 * @param {string} [slotText]
+	 * @return {boolean | Side}
 	 */
 	chooseSwitch(slotText) {
 		if (this.currentRequest !== 'move' && this.currentRequest !== 'switch') {
@@ -541,6 +548,7 @@ class Side {
 
 	/**
 	 * @param {string} [data]
+	 * @return {boolean | Side}
 	 */
 	chooseTeam(data) {
 		const autoFill = !data;
@@ -592,6 +600,9 @@ class Side {
 		return true;
 	}
 
+	/**
+	 * @return {boolean | Side}
+	 */
 	chooseShift() {
 		const index = this.getChoiceIndex();
 		if (index >= this.active.length) {
@@ -736,6 +747,9 @@ class Side {
 		return index;
 	}
 
+	/**
+	 * @return {boolean | Side}
+	 */
 	choosePass() {
 		const index = this.getChoiceIndex(true);
 		if (index >= this.active.length) return false;
@@ -767,6 +781,9 @@ class Side {
 		return true;
 	}
 
+	/**
+	 * @return {boolean | Side}
+	 */
 	chooseDefault() {
 		if (!this.battle.LEGACY_API_DO_NOT_USE) throw new Error(`This is a legacy API, it's called autoChoose now`);
 		if (this.isChoiceDone()) {

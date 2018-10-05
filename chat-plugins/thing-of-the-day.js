@@ -75,6 +75,7 @@ class OtdHandler {
 			for (const arg of data) {
 				if (!arg || arg === '\r') continue;
 				if (arg.startsWith(`${this.keyLabels[0]}\t`)) continue;
+				/** @type {AnyObject} */
 				const entry = {};
 				let vals = arg.trim().split("\t");
 				for (let i = 0; i < vals.length; i++) {
@@ -132,6 +133,7 @@ class OtdHandler {
 			}
 		}
 
+		/** @type {{[k: string]: string}} */
 		let obj = {};
 		obj[user.userid] = user.name;
 
@@ -234,6 +236,7 @@ class OtdHandler {
 	 * @param {string} user
 	 */
 	appendWinner(nomination, user) {
+		/** @type {AnyObject} */
 		const entry = {time: Date.now(), nominator: user};
 		entry[this.keys[0]] = nomination;
 		this.winners.push(entry);
@@ -359,9 +362,6 @@ function selectHandler(message) {
 		throw new Error("Invalid type for otd handler.");
 	}
 }
-
-/** @typedef {(this: CommandContext, target: string, room: ChatRoom, user: User, connection: Connection, cmd: string, message: string) => (void)} ChatHandler */
-/** @typedef {{[k: string]: ChatHandler | string | true | string[] | ChatCommands}} ChatCommands */
 
 /** @type {ChatCommands} */
 let commands = {
@@ -496,6 +496,7 @@ let commands = {
 
 		let params = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
 
+		/** @type {{[k: string]: string}} */
 		let changelist = {};
 
 		for (const param of params) {

@@ -90,7 +90,7 @@ function createDeck() {
 
 class UnoGame extends Rooms.RoomGame {
 	/**
-	 * @param {ChatRoom} room
+	 * @param {ChatRoom | GameRoom} room
 	 * @param {number} cap
 	 * @param {boolean} suppressMessages
 	 */
@@ -686,9 +686,6 @@ class UnoGamePlayer extends Rooms.RoomGamePlayer {
 		);
 	}
 }
-
-/** @typedef {(this: CommandContext, target: string, room: ChatRoom, user: User, connection: Connection, cmd: string, message: string) => (void)} ChatHandler */
-/** @typedef {{[k: string]: { [k: string]: ChatHandler | string | true | string[] | ChatCommands} | string[]}} ChatCommands */
 
 /** @type {ChatCommands} */
 const commands = {

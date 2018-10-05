@@ -27,19 +27,4 @@ module.exports = {
 	Dex,
 
 	BattleStream,
-
-	// typescript hacks
-
-	/**@type {Battle} */
-	// @ts-ignore
-	nullBattle: null,
-	/**@type {Pokemon} */
-	// @ts-ignore
-	nullPokemon: null,
-	/**@type {Side} */
-	// @ts-ignore
-	nullSide: null,
-	/**@type {Validator} */
-	// @ts-ignore
-	nullValidator: null,
 };

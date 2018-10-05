@@ -48,6 +48,7 @@ let BattleAbilities = {
 		inherit: true,
 		onSourceTryHeal: function (damage, target, source, effect) {
 			this.debug("Heal is occurring: " + target + " <- " + source + " :: " + effect.id);
+			/**@type {{[k: string]: number}} */
 			let canOoze = {drain: 1, leechseed: 1};
 			if (canOoze[effect.id]) {
 				this.damage(damage, null, null, null, true);

@@ -44,11 +44,13 @@ class RandomGen4Teams extends RandomGen5Teams {
 			spd: 31,
 			spe: 31,
 		};
+		/**@type {{[k: string]: true}} */
 		let hasType = {};
 		hasType[template.types[0]] = true;
 		if (template.types[1]) {
 			hasType[template.types[1]] = true;
 		}
+		/**@type {{[k: string]: true}} */
 		let hasAbility = {};
 		hasAbility[template.abilities[0]] = true;
 		if (template.abilities[1]) {
@@ -352,12 +354,14 @@ class RandomGen4Teams extends RandomGen5Teams {
 					// Reject STABs last in case the setup type changes later on
 					if (!SetupException.includes(moveid) && (!hasType[move.type] || counter.stab > 1 || counter[move.category] < 2)) rejected = true;
 				}
+				// @ts-ignore
 				if (counter.setupType && !isSetup && move.category !== counter.setupType && counter[counter.setupType] < 2 && !hasMove['batonpass']) {
 					// Mono-attacking with setup and RestTalk or recovery + status healing is allowed
 					if (moveid !== 'rest' && moveid !== 'sleeptalk' &&
 						!(recoveryMoves.includes(moveid) && (hasMove['healbell'] || hasMove['refresh'])) &&
 						!((moveid === 'healbell' || moveid === 'refresh') && moves.some(id => !!recoveryMoves.includes(id)))) {
 						// Reject Status moves only if there is nothing else to reject
+						// @ts-ignore
 						if (move.category !== 'Status' || counter[counter.setupType] + counter.Status > 3 && counter['physicalsetup'] + counter['specialsetup'] < 2) rejected = true;
 					}
 				}
@@ -386,11 +390,14 @@ class RandomGen4Teams extends RandomGen5Teams {
 					(hasType['Rock'] && !counter['Rock'] && (movePool.includes('headsmash') || movePool.includes('stoneedge'))) ||
 					(hasType['Steel'] && !counter['Steel'] && movePool.includes('meteormash')) ||
 					(hasType['Water'] && !counter['Water'] && (!hasType['Ice'] || !counter['Ice'])) ||
+					// @ts-ignore
 					((hasAbility['Adaptability'] && !counter.setupType && template.types.length > 1 && (!counter[template.types[0]] || !counter[template.types[1]])) ||
 					(hasAbility['Guts'] && hasType['Normal'] && movePool.includes('facade')) ||
 					(hasAbility['Slow Start'] && movePool.includes('substitute')) ||
+					// @ts-ignore
 					(counter['defensesetup'] && !counter.recovery && !hasMove['rest']) ||
 					(template.requiredMove && movePool.includes(toId(template.requiredMove)))) &&
+					// @ts-ignore
 					(counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3))) {
 					// Reject Status or non-STAB
 					if (!isSetup && !move.weather && moveid !== 'judgment' && !recoveryMoves.includes(moveid) && moveid !== 'sleeptalk') {
@@ -467,6 +474,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 			let rejectAbility = false;
 			if (counterAbilities.includes(ability)) {
 				// Adaptability, Hustle, Iron Fist, Skill Link
+				// @ts-ignore
 				rejectAbility = !counter[toId(ability)];
 			} else if (ability === 'Blaze') {
 				rejectAbility = !counter['Fire'];
@@ -635,7 +643,9 @@ class RandomGen4Teams extends RandomGen5Teams {
 			Ditto: 99, Unown: 99,
 		};
 		let tier = template.tier;
+		// @ts-ignore
 		let level = levelScale[tier] || 75;
+		// @ts-ignore
 		if (customScale[template.name]) level = customScale[template.name];
 
 		// Prepare optimal HP

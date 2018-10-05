@@ -31,12 +31,14 @@ let BattleScripts = {
 			statName = toId(statName);
 			if (statName === 'hp') return this.maxhp;
 			if (unmodified) return this.stats[statName];
+			// @ts-ignore
 			return this.modifiedStats[statName];
 		},
 		// Gen 1 function to apply a stat modification that is only active until the stat is recalculated or mon switched.
 		// Modified stats are declared in the Pokemon object in sim/pokemon.js in about line 681.
 		modifyStat: function (stat, modifier) {
 			if (!(stat in this.stats)) return;
+			// @ts-ignore
 			this.modifiedStats[stat] = this.battle.clampIntRange(Math.floor(this.modifiedStats[stat] * modifier), 1, 999);
 		},
 		// In generation 1, boosting function increases the stored modified stat and checks for opponent's status.
@@ -68,6 +70,7 @@ let BattleScripts = {
 				let stat = this.template.baseStats[i];
 				// @ts-ignore
 				stat = Math.floor(Math.floor(2 * stat + this.set.ivs[i] + Math.floor(this.set.evs[i] / 4)) * this.level / 100 + 5);
+				// @ts-ignore
 				this.modifiedStats[i] = this.stats[i] = Math.floor(stat);
 				// @ts-ignore
 				if (this.boosts[i] >= 0) {
@@ -169,6 +172,7 @@ let BattleScripts = {
 	// useMove can be found on scripts.js
 	// It is the function that actually uses the move, running ModifyMove events.
 	// It uses the move and then deals with the effects after the move.
+	// @ts-ignore
 	useMove: function (move, pokemon, target, sourceEffect) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
 		move = this.getMove(move);
@@ -675,6 +679,7 @@ let BattleScripts = {
 	// damage can be found in sim/battle.js on the Battle object. Not to confuse with BattlePokemon.prototype.damage
 	// It calculates and executes the damage damage from source to target with effect.
 	// It also deals with recoil and drains.
+	// @ts-ignore
 	damage: function (damage, target, source, effect) {
 		if (this.event) {
 			if (!target) target = this.event.target;

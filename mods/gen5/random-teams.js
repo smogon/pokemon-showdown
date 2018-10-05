@@ -48,11 +48,13 @@ class RandomGen5Teams extends RandomGen6Teams {
 			spd: 31,
 			spe: 31,
 		};
+		/**@type {{[k: string]: true}} */
 		let hasType = {};
 		hasType[template.types[0]] = true;
 		if (template.types[1]) {
 			hasType[template.types[1]] = true;
 		}
+		/**@type {{[k: string]: true}} */
 		let hasAbility = {};
 		hasAbility[template.abilities[0]] = true;
 		if (template.abilities[1]) {
@@ -324,9 +326,11 @@ class RandomGen5Teams extends RandomGen6Teams {
 					// Reject STABs last in case the setup type changes later on
 					if (!SetupException.includes(moveid) && (!hasType[move.type] || counter.stab > 1 || counter[move.category] < 2)) rejected = true;
 				}
+				// @ts-ignore
 				if (counter.setupType && !isSetup && counter.setupType !== 'Mixed' && move.category !== counter.setupType && counter[counter.setupType] < 2 && !hasMove['batonpass'] && moveid !== 'rest' && moveid !== 'sleeptalk') {
 					// Mono-attacking with setup and RestTalk is allowed
 					// Reject Status moves only if there is nothing else to reject
+					// @ts-ignore
 					if (move.category !== 'Status' || counter[counter.setupType] + counter.Status > 3 && counter['physicalsetup'] + counter['specialsetup'] < 2) rejected = true;
 				}
 				if (counter.setupType === 'Special' && moveid === 'hiddenpower' && template.types.length > 1 && counter['Special'] <= 2 && !hasType[move.type] && !counter['Physical'] && counter['specialpool']) {
@@ -335,6 +339,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 				}
 
 				// Pokemon should have moves that benefit their Type/Ability/Weather, as well as moves required by its forme
+				// @ts-ignore
 				if (!rejected && (counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || counter.setupType === 'Mixed' || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3)) &&
 					((counter.damagingMoves.length === 0 && !hasMove['metalburst']) ||
 					(!counter.stab && (counter.Status < 2 || counter.setupType || template.types.length > 1 || (template.types[0] !== 'Normal' && template.types[0] !== 'Psychic') || !hasMove['icebeam']) && (counter['physicalpool'] || counter['specialpool'])) ||
@@ -348,6 +353,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 					(hasType['Ice'] && !counter['Ice']) ||
 					(hasType['Steel'] && hasAbility['Technician'] && !counter['Steel']) ||
 					(hasType['Water'] && (!counter['Water'] || !counter.stab)) ||
+					// @ts-ignore
 					((hasAbility['Adaptability'] && !counter.setupType && template.types.length > 1 && (!counter[template.types[0]] || !counter[template.types[1]])) ||
 					(hasAbility['Bad Dreams'] && movePool.includes('darkvoid')) ||
 					(hasAbility['Contrary'] && !counter['contrary'] && template.species !== 'Shuckle') ||
@@ -415,6 +421,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 				rejectAbility = false;
 				if (counterAbilities.includes(ability)) {
 					// Adaptability, Contrary, Hustle, Iron Fist, Skill Link
+					// @ts-ignore
 					rejectAbility = !counter[toId(ability)];
 				} else if (ability === 'Blaze') {
 					rejectAbility = !counter['Fire'];
@@ -621,7 +628,9 @@ class RandomGen5Teams extends RandomGen6Teams {
 		let customScale = {
 			Blaziken: 74, 'Deoxys-Defense': 74, Landorus: 74, Manaphy: 74, Thundurus: 74, 'Tornadus-Therian': 74, Unown: 85,
 		};
+		// @ts-ignore
 		let level = levelScale[template.tier] || 75;
+		// @ts-ignore
 		if (customScale[template.name]) level = customScale[template.name];
 
 		// Minimize confusion damage
@@ -661,8 +670,11 @@ class RandomGen5Teams extends RandomGen6Teams {
 			pokemonPool.push(id);
 		}
 
+		/**@type {{[k: string]: number}} */
 		let typeCount = {};
+		/**@type {{[k: string]: number}} */
 		let typeComboCount = {};
+		/**@type {{[k: string]: number}} */
 		let baseFormes = {};
 		let uberCount = 0;
 		let nuCount = 0;

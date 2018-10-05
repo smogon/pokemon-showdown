@@ -34,6 +34,8 @@ class ValidatorAsync {
 
 const QueryProcessManager = require('./lib/process-manager').QueryProcessManager;
 
+/**@type {QueryProcessManager} */
+// @ts-ignore
 const PM = new QueryProcessManager(module, async message => {
 	let {formatid, removeNicknames, team} = message;
 	let parsedTeam = Dex.fastUnpackTeam(team);

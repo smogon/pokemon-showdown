@@ -914,6 +914,7 @@ class Battle {
 		this[slot] = player;
 		this.playerNames[slotNum] = player.name;
 
+		/**@type {{name: string, avatar: string, team?: string}} */
 		let options = {
 			name: player.name,
 			avatar: '' + user.avatar,

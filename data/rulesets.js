@@ -129,6 +129,8 @@ let BattleFormats = {
 			if (template.gen && template.gen !== this.gen && template.tier === 'Illegal') {
 				problems.push(set.species + ' does not exist outside of gen ' + template.gen + '.');
 			}
+			/**@type {Ability} */
+			// @ts-ignore
 			let ability = {};
 			if (set.ability) {
 				ability = this.getAbility(set.ability);
@@ -232,6 +234,7 @@ let BattleFormats = {
 			// limit one of each move
 			let moves = [];
 			if (set.moves) {
+				/**@type {{[k: string]: true}} */
 				let hasMove = {};
 				for (const moveId of set.moves) {
 					let move = this.getMove(moveId);
@@ -278,6 +281,7 @@ let BattleFormats = {
 			}
 
 			if (template.species === 'Pikachu-Cosplay') {
+				/**@type {{[k: string]: string}} */
 				let cosplay = {meteormash: 'Pikachu-Rock-Star', iciclecrash: 'Pikachu-Belle', drainingkiss: 'Pikachu-Pop-Star', electricterrain: 'Pikachu-PhD', flyingpress: 'Pikachu-Libre'};
 				for (const moveid of set.moves) {
 					if (moveid in cosplay) {
@@ -420,6 +424,7 @@ let BattleFormats = {
 			this.add('rule', 'Species Clause: Limit one of each Pokémon');
 		},
 		onValidateTeam: function (team, format) {
+			/**@type {{[k: string]: true}} */
 			let speciesTable = {};
 			for (const set of team) {
 				let template = this.getTemplate(set.species);
@@ -435,6 +440,7 @@ let BattleFormats = {
 		name: 'Nickname Clause',
 		desc: "Prevents teams from having more than one Pok&eacute;mon with the same nickname",
 		onValidateTeam: function (team, format) {
+			/**@type {{[k: string]: true}} */
 			let nameTable = {};
 			for (const set of team) {
 				let name = set.name;
@@ -458,6 +464,7 @@ let BattleFormats = {
 			this.add('rule', 'Item Clause: Limit one of each item');
 		},
 		onValidateTeam: function (team, format) {
+			/**@type {{[k: string]: true}} */
 			let itemTable = {};
 			for (const set of team) {
 				let item = toId(set.item);
@@ -477,7 +484,9 @@ let BattleFormats = {
 			this.add('rule', 'Ability Clause: Limit two of each ability');
 		},
 		onValidateTeam: function (team, format) {
+			/**@type {{[k: string]: number}} */
 			let abilityTable = {};
+			/**@type {{[k: string]: string}} */
 			let base = {
 				airlock: 'cloudnine',
 				battlearmor: 'shellarmor',

@@ -210,6 +210,7 @@ class HelpTicket extends Rooms.RoomGame {
 }
 
 const NOTIFY_ALL_TIMEOUT = 5 * 60 * 1000;
+/** @type {{[k: string]: NodeJS.Timer?}} */
 let unclaimedTicketTimer = {upperstaff: null, staff: null};
 /**
  * @param {boolean} upper
@@ -221,6 +222,7 @@ function pokeUnclaimedTicketTimer(upper, hasUnclaimed) {
 	if (hasUnclaimed && !unclaimedTicketTimer[room.id]) {
 		unclaimedTicketTimer[room.id] = setTimeout(() => notifyUnclaimedTicket(upper), NOTIFY_ALL_TIMEOUT);
 	} else if (!hasUnclaimed && unclaimedTicketTimer[room.id]) {
+		// @ts-ignore
 		clearTimeout(unclaimedTicketTimer[room.id]);
 		unclaimedTicketTimer[room.id] = null;
 	}
@@ -231,6 +233,7 @@ function pokeUnclaimedTicketTimer(upper, hasUnclaimed) {
 function notifyUnclaimedTicket(upper) {
 	const room = Rooms(upper ? 'upperstaff' : 'staff');
 	if (!room) return;
+	// @ts-ignore
 	clearTimeout(unclaimedTicketTimer[room.id]);
 	unclaimedTicketTimer[room.id] = null;
 	for (let i in room.users) {
@@ -358,9 +361,6 @@ for (const room of Rooms.rooms.values()) {
 	room.game = game;
 }
 
-/** @typedef {(query: string[], user: User, connection: Connection) => (string | null | void)} PageHandler */
-/** @typedef {{[k: string]: PageHandler | PageTable}} PageTable */
-
 /** @type {PageTable} */
 const pages = {
 	help: {
@@ -389,6 +389,7 @@ const pages = {
 
 			const isStaff = user.can('lock');
 			if (!query.length) query = [''];
+			/** @type {{[k: string]: string}} */
 			const pages = {
 				report: `I want to report someone`,
 				harassment: `Someone is harassing me`,
@@ -426,6 +427,7 @@ const pages = {
 				confirmticket: `Report last ticket`,
 				confirmother: `Call a Global Staff member`,
 			};
+			/** @type {{[k: string]: string}} */
 			const ticketTitles = {
 				pmharassment: `PM Harassment`,
 				battleharassment: `Battle Harassment`,
@@ -668,9 +670,6 @@ const pages = {
 };
 exports.pages = pages;
 
-/** @typedef {(this: CommandContext, target: string, room: BasicChatRoom, user: User, connection: Connection, cmd: string, message: string) => (void)} ChatHandler */
-/** @typedef {{[k: string]: ChatHandler | string | true | string[] | ChatCommands}} ChatCommands */
-
 /** @type {ChatCommands} */
 let commands = {
 	'!report': true,
@@ -751,6 +750,7 @@ let commands = {
 				escalated: upper,
 				ip: user.latestIp,
 			};
+			/** @type {{[k: string]: string}} */
 			const contexts = {
 				'Battle Harassment': 'Please save a replay of the battle and put it in chat so global staff can check.',
 				'Inappropriate Pokemon Nicknames': 'Please save a replay of the battle and put it in chat so global staff can check.',
