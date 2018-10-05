@@ -32,6 +32,7 @@ const FS = require('./lib/fs');
 class Roomlog {
 	/**
 	 * @param {BasicChatRoom} room
+	 * @param {{isMultichannel?: any, autoTruncate?: any, logTimes?: any}} [options]
 	 */
 	constructor(room, options = {}) {
 		this.id = room.id;

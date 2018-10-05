@@ -218,6 +218,7 @@ function cacheGroupData() {
 
 	let groups = Config.groups;
 	let punishgroups = Config.punishgroups;
+	/** @type {{[k: string]: 'processing' | true}} */
 	let cachedGroups = {};
 
 	/**
@@ -1556,7 +1557,7 @@ function pruneInactive(threshold) {
 
 /**
  * @param {any} worker
- * @param {string} workerid
+ * @param {string | number} workerid
  * @param {string} socketid
  * @param {string} ip
  * @param {string} protocol
@@ -1599,7 +1600,7 @@ function socketConnect(worker, workerid, socketid, ip, protocol) {
 }
 /**
  * @param {any} worker
- * @param {string} workerid
+ * @param {string | number} workerid
  * @param {string} socketid
  */
 function socketDisconnect(worker, workerid, socketid) {
@@ -1611,7 +1612,7 @@ function socketDisconnect(worker, workerid, socketid) {
 }
 /**
  * @param {any} worker
- * @param {string} workerid
+ * @param {string | number} workerid
  * @param {string} socketid
  * @param {string} message
  */

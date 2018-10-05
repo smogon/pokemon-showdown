@@ -67,6 +67,7 @@ class Validator {
 			return problems;
 		}
 
+		/**@type {{[k: string]: number}} */
 		let teamHas = {};
 		for (const set of team) { // Changing this loop to for-of would require another loop/map statement to do removeNicknames
 			if (!set) return [`You sent invalid team data. If you're not using a custom client, please report this as a bug.`];
@@ -162,6 +163,7 @@ class Validator {
 		let isHidden = false;
 		let lsetData = /** @type {PokemonSources} */ ({sources: [], sourcesBefore: dex.gen});
 
+		/**@type {{[k: string]: true}} */
 		let setHas = {};
 		const ruleTable = this.ruleTable;
 
@@ -517,9 +519,7 @@ class Validator {
 		for (const [rule, source, limit, bans] of ruleTable.complexBans) {
 			let count = 0;
 			for (const ban of bans) {
-				if (setHas[ban] > 0) {
-					count += limit ? setHas[ban] : 1;
-				}
+				if (setHas[ban]) count++;
 			}
 			if (limit && count > limit) {
 				const clause = source ? ` by ${source}` : ``;
@@ -931,6 +931,7 @@ class Validator {
 
 		let format = this.format;
 		let ruleTable = dex.getRuleTable(format);
+		/**@type {{[k: string]: boolean}} */
 		let alreadyChecked = {};
 		let level = set.level || 100;
 

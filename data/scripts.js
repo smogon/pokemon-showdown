@@ -437,6 +437,7 @@ let BattleScripts = {
 		}
 
 		if (move.stealsBoosts) {
+			/** @type {{[k: string]: number}} */
 			let boosts = {};
 			let stolen = false;
 			for (let statName in target.boosts) {
@@ -847,6 +848,7 @@ let BattleScripts = {
 				if (move.category === "Status") {
 					return move.name;
 				} else if (move.zMovePower) {
+					// @ts-ignore
 					return this.zMoveTable[move.type];
 				}
 			}
@@ -868,6 +870,7 @@ let BattleScripts = {
 			zMove.isZ = true;
 			return zMove;
 		}
+		// @ts-ignore
 		zMove = this.getMoveCopy(this.zMoveTable[move.type]);
 		// @ts-ignore
 		zMove.basePower = move.zMovePower;
@@ -963,6 +966,7 @@ let BattleScripts = {
 				move.self = {sideCondition: 'healreplacement'};
 				break;
 			case 'clearnegativeboost':
+				/** @type {{[k: string]: number}} */
 				let boosts = {};
 				for (let i in pokemon.boosts) {
 					// @ts-ignore
