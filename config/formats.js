@@ -722,15 +722,15 @@ let Formats = [
 		ruleset: ['[Gen 7] PU'],
 		banlist: [
 			// PU
-			'Absol', 'Aggron', 'Altaria', 'Archeops', 'Aromatisse', 'Articuno', 'Audino', 'Aurorus', 'Claydol', 'Clefairy',
-			'Drampa', 'Eelektross', 'Exeggutor-Alola', 'Floatzel', 'Froslass', 'Golurk', 'Gourgeist-Super', 'Gurdurr',
-			'Haunter', 'Hitmonchan', 'Kangaskhan', 'Kingler', 'Komala', 'Lanturn', 'Liepard', 'Lilligant', 'Lycanroc-Base',
-			'Manectric', 'Mesprit', 'Mudsdale', 'Omastar', 'Oricorio-Sensu', 'Passimian', 'Persian-Alola', 'Poliwrath',
-			'Primeape', 'Pyukumuku', 'Quagsire', 'Qwilfish', 'Raichu-Alola', 'Regirock', 'Sableye', 'Sandslash-Alola',
-			'Scyther', 'Silvally-Fairy', 'Silvally-Ghost', 'Skuntank', 'Spiritomb', 'Swanna', 'Togedemaru', 'Weezing', 'Zangoose',
+			'Absol', 'Aggron', 'Archeops', 'Aromatisse', 'Articuno', 'Audino', 'Aurorus', 'Claydol', 'Clefairy', 'Drampa',
+			'Eelektross', 'Exeggutor-Alola', 'Froslass', 'Golurk', 'Gurdurr', 'Haunter', 'Hitmonchan', 'Kabutops',
+			'Kangaskhan', 'Kingler', 'Lanturn', 'Liepard', 'Lilligant', 'Ludicolo', 'Lurantis', 'Lycanroc-Base', 'Manectric',
+			'Mesprit', 'Mudsdale', 'Omastar', 'Oricorio-Sensu', 'Passimian', 'Persian-Alola', 'Poliwrath', 'Primeape',
+			'Quagsire', 'Qwilfish', 'Raichu-Alola', 'Regirock', 'Rotom-Frost', 'Sableye', 'Sandslash-Alola', 'Scyther',
+			'Silvally-Fairy', 'Silvally-Ghost', 'Skuntank', 'Spiritomb', 'Stoutland', 'Togedemaru', 'Type: Null', 'Weezing',
 			// ZUBL
-			'Carracosta', 'Crabominable', 'Exeggutor-Base', 'Gorebyss', 'Jynx', 'Kabutops', 'Ludicolo', 'Musharna',
-			'Raticate-Alola', 'Raticate-Alola-Totem', 'Stoutland', 'Throh', 'Turtonator', 'Type: Null', 'Ursaring', 'Victreebel',
+			'Carracosta', 'Crabominable', 'Exeggutor-Base', 'Gorebyss', 'Jynx', 'Musharna',
+			'Raticate-Alola', 'Raticate-Alola-Totem', 'Throh', 'Turtonator', 'Ursaring', 'Victreebel',
 		],
 	},
 	{

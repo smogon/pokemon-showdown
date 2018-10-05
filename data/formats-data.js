@@ -556,13 +556,13 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 5, "level": 50, "gender": "M", "nature": "Bold", "ivs": {"def": 31}, "isHidden": true, "moves": ["heatwave", "solarbeam", "psyshock", "willowisp"], "pokeball": "cherishball"},
 		],
-		tier: "PU",
+		tier: "RU",
 		doublesTier: "DUU",
 	},
 	ninetalesalola: {
 		randomBattleMoves: ["nastyplot", "blizzard", "moonblast", "substitute", "hiddenpowerfire", "freezedry", "auroraveil"],
 		randomDoubleBattleMoves: ["blizzard", "moonblast", "protect", "hiddenpowerfire", "freezedry", "auroraveil", "encore"],
-		tier: "OU",
+		tier: "UUBL",
 		doublesTier: "DOU",
 	},
 	igglybuff: {
@@ -768,7 +768,7 @@ let BattleFormatsData = {
 			{"generation": 4, "level": 50, "abilities": ["intimidate"], "moves": ["flareblitz", "thunderfang", "crunch", "extremespeed"], "pokeball": "cherishball"},
 			{"generation": 7, "level": 50, "isHidden": false, "abilities": ["intimidate"], "moves": ["flareblitz", "extremespeed", "willowisp", "protect"], "pokeball": "cherishball"},
 		],
-		tier: "UU",
+		tier: "RU",
 		doublesTier: "DUU",
 	},
 	poliwag: {
@@ -952,7 +952,7 @@ let BattleFormatsData = {
 		randomBattleMoves: ["calmmind", "scald", "psyshock", "slackoff", "fireblast", "psychic", "icebeam"],
 		randomDoubleBattleMoves: ["scald", "fireblast", "icebeam", "psychic", "thunderwave", "slackoff", "trickroom", "protect", "psyshock"],
 		requiredItem: "Slowbronite",
-		tier: "RUBL",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	slowking: {
@@ -1002,7 +1002,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 3, "level": 34, "moves": ["batonpass", "drillpeck", "agility", "triattack"]},
 		],
-		tier: "NU",
+		tier: "PU",
 		doublesTier: "DUU",
 	},
 	seel: {
@@ -1143,7 +1143,7 @@ let BattleFormatsData = {
 	kingler: {
 		randomBattleMoves: ["liquidation", "xscissor", "rockslide", "swordsdance", "agility", "superpower", "knockoff"],
 		randomDoubleBattleMoves: ["crabhammer", "xscissor", "rockslide", "substitute", "superpower", "knockoff", "protect", "wideguard"],
-		tier: "PUBL",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	voltorb: {
@@ -2179,7 +2179,7 @@ let BattleFormatsData = {
 	quagsire: {
 		randomBattleMoves: ["recover", "earthquake", "scald", "toxic", "encore", "icebeam"],
 		randomDoubleBattleMoves: ["icywind", "earthquake", "waterfall", "scald", "rockslide", "curse", "yawn", "icepunch", "protect"],
-		tier: "NU",
+		tier: "PU",
 		doublesTier: "DUU",
 	},
 	murkrow: {
@@ -2434,7 +2434,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 3, "level": 10, "gender": "M", "moves": ["tackle", "bubble", "supersonic"], "pokeball": "pokeball"},
 		],
-		tier: "UU",
+		tier: "RU",
 		doublesTier: "DUU",
 	},
 	skarmory: {
@@ -3836,14 +3836,14 @@ let BattleFormatsData = {
 			{"generation": 7, "level": 100, "moves": ["lusterpurge", "psychic", "dracometeor", "tailwind"], "pokeball": "cherishball"},
 		],
 		eventOnly: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	latiosmega: {
 		randomBattleMoves: ["calmmind", "dracometeor", "hiddenpowerfire", "psyshock", "roost", "defog"],
 		randomDoubleBattleMoves: ["dracometeor", "dragonpulse", "surf", "thunderbolt", "psyshock", "substitute", "tailwind", "protect", "hiddenpowerfire"],
 		requiredItem: "Latiosite",
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	kyogre: {
@@ -4348,7 +4348,7 @@ let BattleFormatsData = {
 			{"generation": 6, "level": 100, "nature": "Jolly", "isHidden": false, "abilities": ["innerfocus"], "moves": ["closecombat", "aurasphere", "flashcannon", "quickattack"], "pokeball": "cherishball"},
 			{"generation": 7, "level": 40, "gender": "M", "nature": "Serious", "isHidden": false, "abilities": ["steadfast"], "moves": ["aurasphere", "highjumpkick", "dragonpulse", "extremespeed"], "pokeball": "pokeball"},
 		],
-		tier: "RUBL",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	lucariomega: {
@@ -4439,7 +4439,7 @@ let BattleFormatsData = {
 	rotomheat: {
 		randomBattleMoves: ["overheat", "thunderbolt", "voltswitch", "hiddenpowerice", "painsplit", "willowisp", "trick"],
 		randomDoubleBattleMoves: ["overheat", "thunderbolt", "voltswitch", "substitute", "painsplit", "hiddenpowerice", "willowisp", "trick", "electroweb", "protect"],
-		tier: "RU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	rotomwash: {
@@ -4854,7 +4854,7 @@ let BattleFormatsData = {
 			{"generation": 5, "level": 100, "gender": "M", "isHidden": false, "moves": ["flareblitz", "hammerarm", "wildcharge", "headsmash"], "pokeball": "cherishball"},
 			{"generation": 6, "level": 50, "isHidden": true, "moves": ["flareblitz", "holdback", "headsmash", "takedown"], "pokeball": "cherishball"},
 		],
-		tier: "NUBL",
+		tier: "RU",
 		doublesTier: "DUU",
 	},
 	oshawott: {
@@ -5075,7 +5075,7 @@ let BattleFormatsData = {
 	seismitoad: {
 		randomBattleMoves: ["hydropump", "scald", "sludgewave", "earthquake", "knockoff", "stealthrock", "toxic", "raindance"],
 		randomDoubleBattleMoves: ["hydropump", "muddywater", "sludgebomb", "earthquake", "hiddenpowerelectric", "icywind", "protect"],
-		tier: "UU",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	throh: {
@@ -5406,7 +5406,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 5, "level": 40, "isHidden": true, "moves": ["waterpulse", "ominouswind", "brine", "raindance"]},
 		],
-		tier: "NU",
+		tier: "PU",
 		doublesTier: "DUU",
 	},
 	alomomola: {
@@ -5594,7 +5594,7 @@ let BattleFormatsData = {
 	bisharp: {
 		randomBattleMoves: ["swordsdance", "knockoff", "ironhead", "suckerpunch", "lowkick"],
 		randomDoubleBattleMoves: ["swordsdance", "substitute", "suckerpunch", "ironhead", "brickbreak", "knockoff", "protect"],
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DUU",
 	},
 	bouffalant: {
@@ -5827,7 +5827,7 @@ let BattleFormatsData = {
 			{"generation": 7, "level": 60, "shiny": 1, "moves": ["slash", "scaryface", "glaciate", "dragonpulse"]},
 		],
 		eventOnly: true,
-		tier: "UU",
+		tier: "RUBL",
 		doublesTier: "DUU",
 	},
 	kyuremblack: {
@@ -7321,7 +7321,7 @@ let BattleFormatsData = {
 			{"generation": 7, "level": 50, "moves": ["plasmafists", "thunderpunch", "closecombat", "thunder"]},
 		],
 		eventOnly: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	missingno: {
