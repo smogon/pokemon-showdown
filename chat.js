@@ -236,7 +236,6 @@ Chat.nicknamefilters = [];
  * @param {User} user
  */
 Chat.nicknamefilter = function (nickname, user) {
-	nickname = Dex.getName(nickname);
 	for (const filter of Chat.nicknamefilters) {
 		nickname = filter(nickname, user);
 		if (!nickname) return '';
