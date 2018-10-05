@@ -535,13 +535,15 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 		};
 		let pool = Object.keys(sets);
+		/** @type {{[type: string]: number}} */
+		let typePool = {};
 		while (pool.length && team.length < 6) {
 			let name = '';
 			// DEBUG CODE
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'Bimp';
+				name = 'Snaquaza';
 				if (pool.indexOf(name) > -1) {
 					pool.splice(pool.indexOf(name), 1);
 				} else {
@@ -552,6 +554,24 @@ class RandomStaffBrosTeams extends RandomTeams {
 				name = this.sampleNoReplace(pool);
 			}
 			let ssbSet = sets[name];
+			// Enforce typing limits
+			let types = this.getTemplate(ssbSet.species).types;
+			if (name === 'E4 Flint') types = ["Steel", "Ground", "Fire"];
+			if (name === 'OM') types = ["Fire", "Fairy"];
+			let rejected = false;
+			for (let type of types) {
+				if (typePool[type] === undefined) typePool[type] = 0;
+				if (typePool[type] >= 3) {
+					// Reject
+					rejected = true;
+					break;
+				}
+			}
+			if (rejected) continue;
+			// Update type counts
+			for (let type of types) {
+				typePool[type]++;
+			}
 			/** @type {PokemonSet} */
 			let set = {
 				name: name,

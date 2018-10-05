@@ -45,13 +45,13 @@ let BattleStatuses = {
 		// Fat Snake Innate
 		onModifyDefPriority: 6,
 		onModifyDef: function (def, pokemon) {
-			if (!pokemon.transformed) {
+			if (!pokemon.transformed && !pokemon.illusion) {
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpDPriority: 6,
 		onModifySpD: function (spd, pokemon) {
-			if (!pokemon.transformed) {
+			if (!pokemon.transformed && !pokemon.illusion) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -116,7 +116,7 @@ let BattleStatuses = {
 			this.add(`c|%Akir|too sleepy, c ya`);
 		},
 		onSourceModifyDamage: function (damage, source, target, move) {
-			if (move.typeMod > 0) {
+			if (move.typeMod > 0 && !target.illusion) {
 				this.debug('Solid Rock neutralize');
 				return this.chainModify(0.75);
 			}
@@ -331,6 +331,7 @@ let BattleStatuses = {
 		noCopy: true,
 		onStart: function (target, source) {
 			this.add(`c|@E4 Flint|How many Fire-Types do I have now`);
+			if (source.illusion) return;
 			// Mega evo right away and display unique typing
 			this.runMegaEvo(source);
 			this.add('-start', source, 'typeadd', 'Fire');
@@ -372,6 +373,7 @@ let BattleStatuses = {
 	ev: {
 		onStart: function (target) {
 			this.add(`c|~EV|Behold! The power of EVOLUTION!`);
+			if (target.illusion) return;
 
 			let formes = {
 				'flareon': ['Icicle Crash', 'Earthquake', 'Baton Pass', 'Evoblast'],
@@ -409,6 +411,7 @@ let BattleStatuses = {
 			}
 		},
 		onBeforeSwitchOut: function (pokemon) {
+			if (pokemon.illusion) return;
 			// @ts-ignore hacky change for EV's set
 			pokemon.ppPercentages = pokemon.moveSlots.slice().map(m => {
 				return m.pp / m.maxpp;
@@ -421,7 +424,7 @@ let BattleStatuses = {
 			this.add(`c|~EV|If you __say__ EV it sounds like Eevee. It's actually quite simple.`);
 		},
 	},
-	'false': { // no apostrophes causes issues
+	'false': {
 		noCopy: true,
 		onStart: function () {
 			this.add(`c|@false|٩(•̤̀ᵕ•̤́๑)ᵒᵏᵎᵎᵎᵎ`);
@@ -564,6 +567,7 @@ let BattleStatuses = {
 		},
 		// Simple Innate
 		onBoost: function (boost, target, source, effect) {
+			if (source.illusion) return;
 			if (effect && effect.id === 'zpower') return;
 			for (let i in boost) {
 				// @ts-ignore
@@ -610,6 +614,7 @@ let BattleStatuses = {
 		// Aerilate innate
 		onModifyMovePriority: -1,
 		onModifyMove: function (move, pokemon) {
+			if (pokemon.illusion) return;
 			if (move.type === 'Normal' && !['judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'weatherball'].includes(move.id) && !(move.isZ && move.category !== 'Status')) {
 				move.type = 'Flying';
 				move.aerilateBoosted = true;
@@ -864,12 +869,14 @@ let BattleStatuses = {
 		},
 		onModifyDefPriority: 6,
 		onModifyDef: function (def, pokemon) {
+			if (pokemon.illusion) return;
 			if (!pokemon.transformed) {
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpDPriority: 6,
 		onModifySpD: function (spd, pokemon) {
+			if (pokemon.illusion) return;
 			if (!pokemon.transformed) {
 				return this.chainModify(1.5);
 			}
@@ -917,8 +924,10 @@ let BattleStatuses = {
 		onStart: function () {
 			this.add(`c|+Snaquaza|Snaq is baq... with a vengeance!`);
 		},
-		onSwitchOut: function () {
+		onSwitchOut: function (pokemon) {
 			this.add(`c|+Snaquaza|Lynch Hoeen while I'm away...`);
+			// @ts-ignore Hack for Snaquaza's Z move
+			if (pokemon.claimHP) delete pokemon.claimHP;
 		},
 		onFaint: function () {
 			this.add(`c|+Snaquaza|How did you know I was scum?`);

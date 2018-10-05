@@ -16,8 +16,8 @@ let BattleAbilities = {
 	// Please keep abilites organized alphabetically based on staff member name!
 	// Arrested
 	shellshocker: {
-		desc: "",
-		shortDesc: "",
+		desc: "This Pokemon's Normal-type moves become Electric type and have 1.2x power. In addition, this Pokemon heals 1/4 of its max HP when hit by Electric moves and is immune to Electric type moves.",
+		shortDesc: "Normal type moves become Electric type; Heals 1/4 HP when hit by an Electric attack.",
 		id: "shellshocker",
 		name: "Shell Shocker",
 		onModifyMovePriority: -1,
@@ -52,12 +52,13 @@ let BattleAbilities = {
 	},
 	// Brandon
 	gracideamastery: {
-		desc: "",
-		shortDesc: "",
+		desc: "If this pokemon is a Shaymin, it will transform into Shaymin-Sky before using a Physical or Special attack move. After using the move, this pokemon will transform back into Shaymin.",
+		shortDesc: "This pokemon transforms into Shaymin-Sky before attacking, and revert to Shaymin after.",
 		id: "gracideamastery",
 		name: "Gracidea Mastery",
 		onPrepareHit: function (source, target, move) {
 			if (!target || !move) return;
+			if (source.template.baseSpecies !== 'Shaymin' || source.transformed) return;
 			if (target !== source && move.category !== 'Status') {
 				source.formeChange('Shaymin-Sky', this.effect);
 			}
@@ -80,7 +81,7 @@ let BattleAbilities = {
 	},
 	// E4 Flint
 	starkmountain: {
-		desc: "The user summong sunny when they switch in. If the weather is sunny, the user is immune to water type attacks.",
+		desc: "The user summons sunny weather when they switch in. If the weather is sunny, the user is immune to water type attacks.",
 		shortDesc: "Summons sunny weather, Immune to Water type attacks in sunny weather.",
 		id: "starkmountain",
 		name: "Stark Mountain",
@@ -116,6 +117,8 @@ let BattleAbilities = {
 	kungfupanda: {
 		desc: "This Pokemon's punch-based attacks have their power multiplied by 1.2, and this Pokemon's Speed is raised by 1 stage after it is damaged by a move",
 		shortDesc: "This Pokemon's punch-based attacks have 1.2x power. +1 Spe when hit.",
+		id: "kungfupanda",
+		name: "Kung Fu Panda",
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, attacker, defender, move) {
 			if (move.flags['punch']) {
@@ -131,9 +134,10 @@ let BattleAbilities = {
 	},
 	// Lionyx
 	frozenskin: {
+		desc: "If Hail is active, this Pokemon's Speed is doubled. This pokemon is also immune to Hail.",
+		shortDesc: "If Hail is active, this Pokemon's Speed is doubled; immunity to Hail.",
 		id: "frozenskin",
 		name: "Frozen Skin",
-		shortDesc: "If Hail is active, this Pokemon's Speed is doubled; immunity to Hail.",
 		onModifySpe: function (spe, pokemon) {
 			if (this.isWeather('hail')) {
 				return this.chainModify(2);
@@ -165,6 +169,8 @@ let BattleAbilities = {
 	fakecrash: {
 		desc: "If this Pokemon is a Lycanroc-Midnight, the first hit it takes in battle deals 0 neutral damage. Its disguise is then broken and it changes to Lycanroc-Dusk. Confusion damage also breaks the disguise.",
 		shortDesc: "If this Pokemon is a Lycanroc-Midnight, the first hit it takes in battle deals 0 damage.",
+		id: "fakecrash",
+		name: "Fake Crash",
 		onDamagePriority: 1,
 		onDamage: function (damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move' && target.template.speciesid === 'lycanrocmidnight' && !target.transformed) {
@@ -187,15 +193,13 @@ let BattleAbilities = {
 				this.add('-message', `${pokemon.name || pokemon.species}'s true identity was revealed!`);
 			}
 		},
-		id: "fakecrash",
-		name: "Fake Crash",
 	},
 	// nui
 	prismaticterrain: {
-		id: "prismaticterrain",
-		name: "Prismatic Terrain",
 		desc: "For 5 turns, the terrain becomes Prismatic Terrain. During the effect, the power of Ice-type attacks is multiplied by 0.5. Hazards are removed and cannot be set while Prismatic Terrain is active. Fails if the current terrain is Prismatic Terrain.",
 		shortDesc: "5 turns. No hazards,-Ice power.",
+		id: "prismaticterrain",
+		name: "Prismatic Terrain",
 		onStart: function (source) {
 			this.setTerrain('prismaticterrain');
 		},
@@ -247,8 +251,10 @@ let BattleAbilities = {
 	},
 	// Osiris
 	sacredshadow: {
-		desc: "",
-		shortDesc: "",
+		desc: "This Pokemon's attacking stat is doubled while using a Ghost-type attack. If a Pokemon uses a Fire-type or FLying-type attack against this Pokemon, that Pokemon's attacking stat is halved when calculating the damage to this Pokemon. This Pokemon cannot be burned. Gaining this Ability while burned cures it.",
+		shortDesc: "This Pokemon's Ghost power is 2x; can't be burned; Fire/Flying power against it is halved.",
+		id: "sacredshadow",
+		name: "Sacred Shadow",
 		onModifyAtkPriority: 5,
 		onSourceModifyAtk: function (atk, attacker, defender, move) {
 			if (move.type === 'Fire' || move.type === 'Flying') {
@@ -283,14 +289,13 @@ let BattleAbilities = {
 			this.add('-immune', target, '[msg]', '[from] ability: Sacred Shadow');
 			return false;
 		},
-		id: "sacredshadow",
-		name: "Sacred Shadow",
 	},
 	// ptoad
 	fatrain: {
+		desc: "This pokemon summons Rain when it switches in, and its Defense is 1.5x in Rain.",
+		shortDesc: "This pokemon summons Rain when it switches in; 1.5x def in Rain.",
 		id: "fatrain",
 		name: "Fat Rain",
-		shortDesc: "",
 		onStart: function (source) {
 			for (const action of this.queue) {
 				if (action.choice === 'runPrimal' && action.pokemon === source && source.template.speciesid === 'kyogre') return;
@@ -306,24 +311,25 @@ let BattleAbilities = {
 	},
 	// Shiba
 	galewings10: {
-		id: "galewings10",
-		name: "Gale Wings 1.0",
 		desc: "This Pokemon's Flying-type moves have their priority increased by 1.",
 		shortDesc: "This Pokemon's Flying-type moves have their priority increased by 1.",
+		id: "galewings10",
+		name: "Gale Wings 1.0",
 		onModifyPriority: function (priority, pokemon, target, move) {
 			if (move && move.type === 'Flying') return priority + 1;
 		},
 	},
 	// Teremiare
 	notprankster: {
+		desc: "This Pokemon's Status moves have priority raised by 1.",
 		shortDesc: "This Pokemon's Status moves have priority raised by 1.",
+		id: "notprankster",
+		name: "Not Prankster",
 		onModifyPriority: function (priority, pokemon, target, move) {
 			if (move && move.category === 'Status') {
 				return priority + 1;
 			}
 		},
-		id: "notprankster",
-		name: "Not Prankster",
 	},
 	// The Immortal
 	beastboost2: {
@@ -370,8 +376,8 @@ let BattleAbilities = {
 	},
 	// urkerab
 	focusenergy: {
-		desc: "",
-		shortDesc: "",
+		desc: "This Pokemon gains the Focus Energy status when it switches in.",
+		shortDesc: "This Pokemon gains the Focus Energy status when it switches in.",
 		id: "focusenergy",
 		name: "Focus Energy",
 		onStart: function (pokemon) {
@@ -388,6 +394,31 @@ let BattleAbilities = {
 			let snowStorm = this.getEffect('hail');
 			snowStorm.duration = -1;
 			this.setWeather(snowStorm);
+		},
+	},
+	// Modified Illusion to support SSB volatiles
+	illusion: {
+		inherit: true,
+		onEnd: function (pokemon) {
+			if (pokemon.illusion) {
+				this.debug('illusion cleared');
+				let disguisedAs = toId(pokemon.illusion.name);
+				pokemon.illusion = null;
+				let details = pokemon.template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+				this.add('replace', pokemon, details);
+				this.add('-end', pokemon, 'Illusion');
+				// Handle hippopotas
+				if (this.getTemplate(disguisedAs).exists) disguisedAs += 'user';
+				if (pokemon.volatiles[disguisedAs]) {
+					pokemon.removeVolatile(disguisedAs);
+				}
+				if (!pokemon.volatiles[toId(pokemon.name)]) {
+					let status = this.getEffect(toId(pokemon.name));
+					if (status && status.exists) {
+						pokemon.addVolatile(toId(pokemon.name), pokemon);
+					}
+				}
+			}
 		},
 	},
 };
