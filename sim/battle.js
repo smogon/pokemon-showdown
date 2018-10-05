@@ -3067,6 +3067,10 @@ class Battle extends Dex.ModdedDex {
 
 		if (!side.choose(input)) return false;
 
+		if (!side.isChoiceDone()) {
+			side.emitChoiceError(`Incomplete choice: ${input} - missing other pokemon`);
+			return false;
+		}
 		this.checkActions();
 		return true;
 	}
