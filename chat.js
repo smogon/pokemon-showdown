@@ -216,6 +216,20 @@ Chat.loginfilter = function (user, oldUser, usertype) {
 	}
 };
 
+Chat.nicknamefilters = [];
+/**
+ * @param {string} nickname
+ * @param {User} user
+ */
+Chat.nicknamefilter = function (nickname, user) {
+	nickname = Dex.getName(nickname);
+	for (const filter of Chat.nicknamefilters) {
+		nickname = filter(nickname, user);
+		if (!nickname) return '';
+	}
+	return nickname;
+};
+
 /*********************************************************
  * Parser
  *********************************************************/
@@ -1234,6 +1248,7 @@ Chat.loadPlugins = function () {
 	if (Config.namefilter) Chat.namefilters.push(Config.namefilter);
 	if (Config.hostfilter) Chat.hostfilters.push(Config.hostfilter);
 	if (Config.loginfilter) Chat.loginfilters.push(Config.loginfilter);
+	if (Config.nicknamefilter) Chat.nicknamefilters.push(Config.nicknamefilter);
 
 	// Install plug-in commands and chat filters
 
@@ -1253,6 +1268,7 @@ Chat.loadPlugins = function () {
 		if (plugin.namefilter) Chat.namefilters.push(plugin.namefilter);
 		if (plugin.hostfilter) Chat.hostfilters.push(plugin.hostfilter);
 		if (plugin.loginfilter) Chat.loginfilters.push(plugin.loginfilter);
+		if (plugin.nicknamefilter) Chat.nicknamefilters.push(plugin.nicknamefilter);
 	}
 };
 
