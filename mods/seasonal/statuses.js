@@ -178,6 +178,18 @@ let BattleStatuses = {
 			this.add(`c|@Beowulf|BUZZ BUZZ BUZZ BUZZ`);
 		},
 	},
+	bhrisbrown: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|+Bhris Brown|Never send a boy to do a mans job`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|+Bhris Brown|Goddamit Nappa...`);
+		},
+		onFaint: function () {
+			this.add(`c|+Bhris Brown|There is one thing I'd like to know...tell me. Will I meet that clown Kakarot in the other world?`);
+		},
+	},
 	biggie: {
 		noCopy: true,
 		onStart: function () {
@@ -552,6 +564,36 @@ let BattleStatuses = {
 		},
 		onFaint: function () {
 			this.add(`c|%jdarden|Back to my natural state`);
+		},
+	},
+	kaijubunny: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|+Kaiju Bunny|Hey there! Good luck!`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|+Kaiju Bunny|Don't keep her from battling for too long!`);
+		},
+		onFaint: function () {
+			this.add(`c|+Kaiju Bunny|She tried her best... ;;`);
+		},
+		// Kaiju Rage Innate
+		// onUpdate so toxic orb can activate after. Code mainly copied from Power Construct.
+		onUpdate: function (pokemon) {
+			if (pokemon.template.speciesid !== 'gligar' || pokemon.transformed || pokemon.illusion || !pokemon.hp) return;
+			if (pokemon.hp > pokemon.maxhp / 2) return;
+			this.add('-activate', pokemon, 'ability: Kaiju Rage');
+			pokemon.formeChange('Gliscor', this.effect, true);
+			let newHP = Math.floor(Math.floor(2 * pokemon.template.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100) * pokemon.level / 100 + 10);
+			pokemon.hp = newHP - (pokemon.maxhp - pokemon.hp);
+			pokemon.maxhp = newHP;
+			pokemon.heal(pokemon.maxhp / 4);
+			this.add('-heal', pokemon, pokemon.getHealth);
+			pokemon.takeItem();
+			pokemon.setItem('toxicorb');
+			this.add('-message', pokemon.name + '\'s item is now a Toxic Orb!');
+			this.add('-message', pokemon.name + '\'s ability is now Poison Heal!');
+			this.boost({atk: 2, spe: 1}, pokemon);
 		},
 	},
 	kay: {
@@ -933,6 +975,18 @@ let BattleStatuses = {
 			this.add(`c|+Snaquaza|How did you know I was scum?`);
 		},
 	},
+	sungodvolcarona: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|+SunGodVolcarona|Praise the Sun and live a happy life.`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|+SunGodVolcarona|You dare switch out a god?`);
+		},
+		onFaint: function () {
+			this.add(`c|+SunGodVolcarona|All Suns have to set at one point.`);
+		},
+	},
 	teclis: {
 		noCopy: true,
 		onStart: function () {
@@ -1024,6 +1078,18 @@ let BattleStatuses = {
 		},
 		onFaint: function () {
 			this.add(`c|@Trickster|(✖﹏✖✿)`);
+		},
+	},
+	unleashourpassion: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|+UnleashOurPassion|1v1 me if real`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|+UnleashOurPassion|Tfw you remember switching exists`);
+		},
+		onFaint: function () {
+			this.add(`c|+UnleashOurPassion|That's hax! You were supposed to miss`);
 		},
 	},
 	urkerab: {

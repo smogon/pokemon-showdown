@@ -40,6 +40,33 @@ let BattleAbilities = {
 			}
 		},
 	},
+	// Bhris Brown
+	stimulatedpride: {
+		id: "stimulatedpride",
+		name: "Stimulated Pride",
+		desc: "",
+		shortDesc: "",
+		onStart: function (pokemon) {
+			let activated = false;
+			for (const target of pokemon.side.foe.active) {
+				if (!target || !this.isAdjacent(target, pokemon)) continue;
+				if (!activated) {
+					this.add('-ability', pokemon, 'Stimulated Pride', 'boost');
+					activated = true;
+				}
+				if (target.volatiles['substitute']) {
+					this.add('-immune', target, '[msg]');
+				} else {
+					this.boost({atk: -1}, target, pokemon);
+				}
+			}
+		},
+		onModifySpe: function (spe, pokemon) {
+			if (this.isWeather(['raindance', 'primordialsea'])) {
+				return this.chainModify(2);
+			}
+		},
+	},
 	// Bimp
 	learnsomethingnew: {
 		desc: "This Pokemon's Attack is raised by 1 stage when another Pokemon faints.",
@@ -81,17 +108,16 @@ let BattleAbilities = {
 	},
 	// E4 Flint
 	starkmountain: {
-		desc: "The user summons sunny weather when they switch in. If the weather is sunny, the user is immune to water type attacks.",
-		shortDesc: "Summons sunny weather, Immune to Water type attacks in sunny weather.",
+		desc: "The user summons sunny weather when they switch in. Water-type attack damage against this pokemon is halved.",
+		shortDesc: "Summons sunny weather, halved Water damage.",
 		id: "starkmountain",
 		name: "Stark Mountain",
 		onStart: function (target, source) {
 			this.setWeather('sunnyday', source);
 		},
-		onTryHit: function (target, source, move) {
-			if (target !== source && move.type === 'Water' && this.isWeather(['sunnyday', 'desolateland'])) {
-				this.add('-immune', target, '[msg]', '[from] ability: Stark Mountain');
-				return null;
+		onSourceBasePower: function (basePower, attacker, defender, move) {
+			if (move.type === 'Water') {
+				return this.chainModify(0.5);
 			}
 		},
 	},
@@ -317,6 +343,21 @@ let BattleAbilities = {
 		name: "Gale Wings 1.0",
 		onModifyPriority: function (priority, pokemon, target, move) {
 			if (move && move.type === 'Flying') return priority + 1;
+		},
+	},
+	// SunGodVolcarona
+	solarflare: {
+		id: "solarflare",
+		name: "Solar Flare",
+		desc: "This Pokemon is immune to Rock-type moves and restores 1/4 of its maximum HP, rounded down, when hit by an Rock-type move.",
+		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Rock moves; Rock immunity.",
+		onTryHit: function (target, source, move) {
+			if (target !== source && move.type === 'Rock') {
+				if (!this.heal(target.maxhp / 4)) {
+					this.add('-immune', target, '[msg]', '[from] ability: Solar Flare');
+				}
+				return null;
+			}
 		},
 	},
 	// Teremiare

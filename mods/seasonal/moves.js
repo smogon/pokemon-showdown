@@ -342,6 +342,35 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Bug",
 	},
+	// Bhris Brown
+	finalimpact: {
+		basePower: 85,
+		accuracy: 100,
+		category: "Physical",
+		desc: "Summons Rain Dance. Boosts user's Defense 1 stage.",
+		shortDesc: "User's Def +1. Summons Rain Dance.",
+		id: "finalimpact",
+		name: "Final Impact",
+		isNonstandard: true,
+		pp: 5,
+		priority: 0,
+		flags: {mirror: 1, protect: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Meteor Mash', target);
+		},
+		weather: 'raindance',
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					def: 1,
+				},
+			},
+		},
+		target: "normal",
+		type: "Fighting",
+	},
 	// biggie
 	foodrush: {
 		accuracy: 100,
@@ -781,12 +810,12 @@ let BattleMovedex = {
 	},
 	// E4 Flint
 	fangofthefireking: {
-		accuracy: 100,
+		accuracy: 90,
 		basePower: 0,
-		damage: 150,
+		damage: 111,
 		category: "Physical",
 		desc: "Deals 150 HP of damage and burns the target.",
-		shortDesc: "Always does 150 HP of damage; burns.",
+		shortDesc: "Always does 111 HP of damage; burns.",
 		id: "fangofthefireking",
 		name: "Fang of the Fire King",
 		isNonstandard: true,
@@ -795,9 +824,16 @@ let BattleMovedex = {
 		flags: {mirror: 1, protect: 1, bite: 1},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
-			this.add('-anim', source, 'Burn Up', target);
+			// Cannot have sunny day weather as an anim
 			this.add('-anim', source, 'Crunch', target);
-			this.add('-anim', source, 'Crunch', target);
+			this.add('-anim', target, 'Searing Shot', target);
+		},
+		onTryMove: function (pokemon, target, move) {
+			this.attrLastMove('[still]');
+			if (!pokemon.hasType('Fire') || target.hasType('Fire')) {
+				this.add('-fail', pokemon, 'move: Fang of the Fire King');
+				return null;
+			}
 		},
 		onHit: function (target, source) {
 			target.setStatus('brn', source, null, true);
@@ -1382,6 +1418,30 @@ let BattleMovedex = {
 		forceSwitch: true,
 		target: "normal",
 		type: "Flying",
+	},
+	// Kaiju Bunny
+	beastialstrike: {
+		accuracy: 100,
+		basePower: 150,
+		basePowerCallback: function (pokemon, target, move) {
+			return move.basePower * pokemon.hp / pokemon.maxhp;
+		},
+		category: "Physical",
+		desc: "Power is equal to (user's current HP * 150 / user's maximum HP), rounded down, but not less than 1.",
+		shortDesc: "Less power as user's HP decreases.",
+		id: "beastialstrike",
+		name: "Beastial Strike",
+		isNonstandard: true,
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Outrage', target);
+		},
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: null,
+		target: "normal",
+		type: "Dragon",
 	},
 	// kalalokki
 	maelstrm: {
@@ -2458,6 +2518,32 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Dark",
 	},
+	// SunGodVolcarona
+	scorchingglobalvortex: {
+		accuracy: true,
+		basePower: 200,
+		category: "Special",
+		desc: "Has a 100% chance to burn the target. Ignores abilities.",
+		shortDesc: "100% to burn. Ignores abilities.",
+		id: "scorchingglobalvortex",
+		name: "Scorching Global Vortex",
+		isNonstandard: true,
+		pp: 1,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Searing Sunraze Smash", target);
+		},
+		ignoreAbility: true,
+		secondary: {
+			chance: 100,
+			status: 'brn',
+		},
+		isZ: "volcaroniumz",
+		target: "normal",
+		type: "Fire",
+	},
 	// Teclis
 	zekken: {
 		accuracy: true,
@@ -2825,6 +2911,31 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
+	},
+	// UnleashOurPassion
+	continuous1v1: {
+		accuracy: 90,
+		basePower: 120,
+		category: "Special",
+		desc: "Restores HP if this move knocks out the target.",
+		shortDesc: "Restores HP if this KOes the target.",
+		id: "continuous1v1",
+		name: "Continuous 1v1",
+		isNonstandard: true,
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Discharge", target);
+			this.add('-anim', source, "First Impression", target);
+		},
+		onAfterMoveSecondarySelf: function (pokemon, target, move) {
+			if (!target || target.fainted || target.hp <= 0) this.heal(pokemon.maxhp, pokemon, pokemon, move);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Electric",
 	},
 	// urkerab
 	holyorders: {

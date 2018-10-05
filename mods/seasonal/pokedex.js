@@ -19,6 +19,11 @@ let BattlePokedex = {
 		inherit: true,
 		abilities: {0: "Shell Shocker"},
 	},
+	// Bhris Brown
+	swampertmega: {
+		inherit: true,
+		abilities: {0: "Stimulated Pride"},
+	},
 	// deg
 	gengarmega: {
 		inherit: true,
@@ -40,6 +45,11 @@ let BattlePokedex = {
 	aggronmega: {
 		inherit: true,
 		abilities: {0: 'Intimidate'},
+	},
+	// Kaiju Bunny
+	gliscor: {
+		inherit: true,
+		abilities: {0: 'Poison Heal'}, 	// Ability change is permanent
 	},
 	// Lionyx
 	gardevoirmega: {

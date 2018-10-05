@@ -48,6 +48,17 @@ let BattleItems = {
 		gen: 7,
 		desc: "If held by a Honchkrow, it can use Fake Claim.",
 	},
+	// SunGodVolcarona
+	volcaroniumz: {
+		id: "volcaroniumz",
+		name: "Volcaronium Z",
+		onTakeItem: false,
+		zMove: "Scorching Global Vortex",
+		zMoveFrom: "Fiery Dance",
+		zMoveUser: ["Volcarona"],
+		gen: 7,
+		desc: "If held by a Volcarona with Fiery Dance, it can use Scorching Global Vortex.",
+	},
 	// Tiksi
 	tiksiumz: {
 		id: "tiksiumz",
