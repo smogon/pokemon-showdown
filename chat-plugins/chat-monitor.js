@@ -215,7 +215,7 @@ let nicknamefilter = function (name, user) {
 	for (let [line] of filterWords.autolock) {
 		if (typeof line !== 'string') continue; // Failsafe to appease typescript.
 		if (lcName.includes(line)) {
-			Punishments.autolock(user, Rooms('staff'), `NicknameMonitor`, `inappropriate Pokémon nickname: ${name}`, `using an inappropriate Pokémon nickname: ${name}`, false);
+			Punishments.autolock(user, Rooms('staff'), `NicknameMonitor`, `inappropriate Pokémon nickname: ${name}`, `${toId(user)}: using an inappropriate Pokémon nickname: ${name}`, false);
 			return '';
 		}
 	}
