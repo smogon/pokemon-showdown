@@ -36,6 +36,17 @@ let BattleItems = {
 		gen: 7,
 		desc: "If held by a Victini with V-Create, it can use Blaze of Glory.",
 	},
+	// SamJo
+	thicciniumz: {
+		id: "thicciniumz",
+		name: "Thiccinium Z",
+		onTakeItem: false,
+		zMove: "Extra T h i c c",
+		zMoveFrom: "Thicc",
+		zMoveUser: ["Mamoswine"],
+		gen: 7,
+		desc: "If held by a Mamoswine with Thicc, it can use Extra T h i c c.",
+	},
 	// Snaquaza
 	fakeclaimiumz: {
 		id: "fakeclaimiumz",

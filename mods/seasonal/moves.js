@@ -2400,6 +2400,64 @@ let BattleMovedex = {
 		target: "self",
 		type: "Psychic",
 	},
+	// SamJo
+	thicc: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Raises the user's Attack and accuracy by 1 stage.",
+		shortDesc: "Raises the user's Attack and accuracy by 1.",
+		id: "thicc",
+		name: "Thicc",
+		isNonstandard: true,
+		pp: 15,
+		priority: 0,
+		flags: {snatch: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Hone Claws", source);
+		},
+		boosts: {
+			atk: 1,
+			accuracy: 1,
+		},
+		secondary: null,
+		target: "self",
+		type: "Ice",
+	},
+	// SamJo Z-Move
+	extrathicc: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Raises the user's Attack and accuracy by 1 stage. Summons Hail and Aurora Veil.",
+		shortDesc: "User's atk and acc +1. Sets Hail and Aurora Veil.",
+		id: "extrathicc",
+		name: "Extra T h i c c",
+		isNonstandard: true,
+		pp: 1,
+		priority: 0,
+		flags: {},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Hone Claws", source);
+			this.add('-anim', source, "Extreme Evoboost", source);
+			this.add('-anim', source, "Blizzard", source);
+		},
+		onHit: function (target, source) {
+			this.setWeather('hail');
+			if (this.isWeather('hail')) source.side.addSideCondition('auroraveil', source);
+			this.add('-message', source.name + ' became extra thicc!');
+		},
+		boosts: {
+			atk: 1,
+			accuracy: 1,
+		},
+		isZ: "thicciniumz",
+		secondary: null,
+		target: "self",
+		type: "Ice",
+	},
 	// Scotteh
 	geomagneticstorm: {
 		accuracy: 100,

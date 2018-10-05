@@ -127,6 +127,10 @@ let BattleScripts = {
 		pokemon.canMegaEvo = null;
 
 		this.runEvent('AfterMega', pokemon);
+
+		// E4 flint gains fire type when mega evolving
+		if (pokemon.name === 'E4 Flint' && !pokemon.illusion) this.add('-start', pokemon, 'typeadd', 'Fire');
+
 		return true;
 	},
 	getZMove: function (move, pokemon, skipChecks) {

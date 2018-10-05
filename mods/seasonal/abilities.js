@@ -335,6 +335,39 @@ let BattleAbilities = {
 			}
 		},
 	},
+	// SamJo
+	thiccerfat: {
+		desc: "If a Pokemon uses a Fire- or Ice-type attack against this Pokemon, that Pokemon's attacking stat is halved when calculating the damage to this Pokemon. This Pokemon cannot be burned. Gaining this Ability while burned cures it.",
+		shortDesc: "Fire/Ice-type damage reduced. Immune to burns.",
+		id: "thiccerfat",
+		name: "Thiccer Fat",
+		onModifyAtkPriority: 6,
+		onSourceModifyAtk: function (atk, attacker, defender, move) {
+			if (move.type === 'Ice' || move.type === 'Fire') {
+				this.debug('Thick Fat weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onModifySpAPriority: 5,
+		onSourceModifySpA: function (atk, attacker, defender, move) {
+			if (move.type === 'Ice' || move.type === 'Fire') {
+				this.debug('Thick Fat weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onUpdate: function (pokemon) {
+			if (pokemon.status === 'brn') {
+				this.add('-activate', pokemon, 'ability: Thiccer Fat');
+				pokemon.cureStatus();
+			}
+		},
+		onSetStatus: function (status, target, source, effect) {
+			if (status.id !== 'brn') return;
+			if (!effect || !effect.status) return false;
+			this.add('-immune', target, '[msg]', '[from] ability: Thiccer Fat');
+			return false;
+		},
+	},
 	// Shiba
 	galewings10: {
 		desc: "This Pokemon's Flying-type moves have their priority increased by 1.",

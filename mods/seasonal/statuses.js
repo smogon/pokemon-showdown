@@ -340,12 +340,11 @@ let BattleStatuses = {
 		},
 	},
 	e4flint: {
+		// Fire type when mega evolving implemented in scripts.js
 		noCopy: true,
 		onStart: function (target, source) {
 			this.add(`c|@E4 Flint|How many Fire-Types do I have now`);
-			if (source.illusion) return;
-			// Mega evo right away and display unique typing
-			this.runMegaEvo(source);
+			if (source.template.speciesid !== 'steelixmega' || source.illusion) return;
 			this.add('-start', source, 'typeadd', 'Fire');
 		},
 		onFaint: function () {
@@ -934,6 +933,18 @@ let BattleStatuses = {
 		},
 		onFaint: function () {
 			this.add(`c|+Saburo|...you see too much`);
+		},
+	},
+	samjo: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|+SamJo|Heyo/ Hope your day's been fantasthicc! Woo!`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|+SamJo|Catch ya later, stay thicc my friends o/`);
+		},
+		onFaint: function () {
+			this.add(`c|+SamJo|Oof, gotta get thiccer……. ;(`);
 		},
 	},
 	scotteh: {
