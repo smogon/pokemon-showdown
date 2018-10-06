@@ -527,8 +527,9 @@ let Formats = [
 			let types = /** @type {string[]} */ ([]);
 			for (const [i, set] of team.entries()) {
 				let item = this.getItem(set.item);
+				let template = this.getTemplate(set.species);
+				if (!template.exists) return [`The Pok\u00e9mon "${set.name || set.species}" does not exist.`];
 				if (i === 0) {
-					let template = this.getTemplate(set.species);
 					types = template.types;
 					if (template.species.substr(0, 9) === 'Necrozma-' && item.id === 'ultranecroziumz') types = ['Psychic'];
 					if (item.megaStone && template.species === item.megaEvolves) {
@@ -541,12 +542,13 @@ let Formats = [
 				} else {
 					let problems = TeamValidator('gen7ou').validateSet(set, teamHas);
 					if (problems) problemsArray = problemsArray.concat(problems);
-					let template = this.getTemplate(set.species);
 					let followerTypes = template.types;
 					if (item.megaStone && template.species === item.megaEvolves) {
 						template = this.getTemplate(item.megaStone);
 						let baseTemplate = this.getTemplate(item.megaEvolves);
-						followerTypes = baseTemplate.types.filter(type => template.types.includes(type)).concat(template.types.filter(type => types.includes(type)));
+						if (baseTemplate.types.some(type => types.includes(type)) && template.types.some(type => types.includes(type))) {
+							followerTypes = baseTemplate.types.concat(template.types).filter(type => template.types.concat(baseTemplate.types).includes(type));
+						}
 					}
 					if (!followerTypes.some(type => types.includes(type))) problemsArray.push("Followers must share a type with the God.", `(${template.isMega ? template.baseSpecies : template.species} doesn't share a type with ${team[0].species}.)`);
 				}
