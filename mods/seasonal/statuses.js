@@ -1025,10 +1025,10 @@ let BattleStatuses = {
 	teremiare: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|@Teremiare|<('o'<)`);
+			this.add(`c|%Teremiare|<('o'<)`);
 		},
 		onFaint: function () {
-			this.add(`c|@Teremiare|(>'o')>`);
+			this.add(`c|%Teremiare|(>'o')>`);
 		},
 	},
 	theimmortal: {
