@@ -336,7 +336,8 @@ class RandomGen6Teams extends RandomTeams {
 					if (hasMove['acrobatics'] || hasMove['bravebird'] || hasMove['hurricane']) rejected = true;
 					break;
 				case 'shadowclaw':
-					if (hasMove['phantomforce'] || (hasMove['shadowball'] && counter.setupType !== 'Physical') || hasMove['shadowsneak']) rejected = true;
+					if (hasMove['phantomforce'] || hasMove['shadowforce'] || hasMove['shadowsneak']) rejected = true;
+					if (hasMove['shadowball'] && counter.setupType !== 'Physical') rejected = true;
 					break;
 				case 'shadowsneak':
 					if (hasType['Ghost'] && template.types.length > 1 && counter.stab < 2) rejected = true;
