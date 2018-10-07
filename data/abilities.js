@@ -2050,6 +2050,9 @@ let BattleAbilities = {
 				}
 			}
 		},
+		onBasePower: function (basePower, pokemon, target, move) {
+			if (move.multihitType === 'parentalbond' && move.hit > 1) return this.chainModify(0.25);
+		},
 		rating: 2,
 		num: 152,
 	},
