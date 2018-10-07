@@ -119,6 +119,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Trivia Room',
 				evs: {hp: 248, atk: 252, spd: 8}, ivs: {spe: 0}, nature: 'Brave',
 			},
+			'bobochan': {
+				species: 'Emolga', ability: 'Huge Power', item: 'Choice Band', gender: 'M',
+				moves: ['Brave Bird', ['Knock Off', 'Encore'], 'U-Turn'],
+				signatureMove: 'Thousand Circuit Overload',
+				evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
+			},
 			'Brandon': {
 				species: 'Shaymin', ability: 'Gracidea Mastery', item: 'Red Card', gender: 'N',
 				moves: ['Seed Flare', ['Earth Power', 'Moonblast', 'Psychic'], ['Oblivion Wing', 'Strength Sap']],

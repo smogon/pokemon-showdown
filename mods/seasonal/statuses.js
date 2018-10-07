@@ -214,6 +214,18 @@ let BattleStatuses = {
 			this.add(`c|+Bimp|Well that was uneventful -_-`);
 		},
 	},
+	bobochan: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|%bobochan|Pika Pika! Just kidding, it's just a knock off clone.`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|%bobochan|Time to skedaddle!`);
+		},
+		onFaint: function () {
+			this.add(`c|%bobochan|You cruel trainer for killing an innocent pokemon!`);
+		},
+	},
 	brandon: {
 		noCopy: true,
 		onStart: function () {

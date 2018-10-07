@@ -419,6 +419,45 @@ let BattleMovedex = {
 		target: "self",
 		type: "Psychic",
 	},
+	// bobochan
+	thousandcircuitoverload: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		desc: "If the target is a Ground type and is immune to Electric due to its typing, this move deals neutral damage regardless of its other type(s), and the target loses its type-based immunity to Electric.",
+		shortDesc: "First hit neutral on Ground; removes its immunity.",
+		id: "thousandcircuitoverload",
+		name: "Thousand Circuit Overload",
+		isNonstandard: true,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Plasma Fists', target);
+		},
+		onEffectiveness: function (typeMod, type, move) {
+			if (move.type !== 'Electric') return;
+			let target = this.activeTarget;
+			if (!target) return; // avoid crashing when called from a chat plugin
+			if (!target.runImmunity('Electric')) {
+				if (target.hasType('Ground')) return 0;
+			}
+		},
+		volatileStatus: 'overload',
+		effect: {
+			onStart: function (target) {
+				this.add('-start', target, 'Overload');
+			},
+			onNegateImmunity: function (pokemon, type) {
+				if (pokemon.hasType('Ground') && type === 'Electric') return false;
+			},
+		},
+		ignoreImmunity: {'Electric': true},
+		secondary: null,
+		target: "normal",
+		type: "Electric",
+	},
 	// Brandon
 	blusterywinds: {
 		accuracy: 100,
