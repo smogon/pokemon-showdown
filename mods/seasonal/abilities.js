@@ -14,6 +14,23 @@ let BattleAbilities = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// 5gen
+	seasonsgift: {
+		desc: "If the weather is sunnyday this pokemon has 1.5x atk and 2x spe.",
+		shortDesc: "If sunnyday is active, 1.5x atk & 2x spe.",
+		id: "seasonsgift",
+		name: "Season's Gift",
+		onModifyAtk: function (atk) {
+			if (this.isWeather(['sunnyday', 'desolateland'])) {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpe: function (spe) {
+			if (this.isWeather(['sunnyday', 'desolateland'])) {
+				return this.chainModify(2);
+			}
+		},
+	},
 	// Arrested
 	shellshocker: {
 		desc: "This Pokemon's Normal-type moves become Electric type and have 1.2x power. In addition, this Pokemon heals 1/4 of its max HP when hit by Electric moves and is immune to Electric type moves.",

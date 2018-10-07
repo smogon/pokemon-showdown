@@ -31,6 +31,18 @@ let BattleStatuses = {
 			this.add(`c|%2xTheTap|Doin' me the final bamboozle.`);
 		},
 	},
+	'5gen': {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|+5gen|Someone asked for extra sauce?`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|+5gen|Need to get some from the back.`);
+		},
+		onFaint: function () {
+			this.add(`c|+5gen|I'm not dead yet, just changing formes.`);
+		},
+	},
 	acakewearingahat: {
 		noCopy: true,
 		onStart: function () {

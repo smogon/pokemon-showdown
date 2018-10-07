@@ -47,6 +47,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Noble Howl',
 				evs: {atk: 252, def: 4, spe: 252}, nature: 'Adamant', shiny: true,
 			},
+			'5gen': {
+				species: 'Sawsbuck', ability: 'Season\'s Gift', item: 'Heat Rock', gender: 'M',
+				moves: ['Sunny Day', 'Return', 'High Jump Kick'],
+				signatureMove: 'Too Much Saws',
+				evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
+			},
 			'ACakeWearingAHat': {
 				species: 'Dunsparce', ability: 'Serene Grace', item: 'Leftovers', gender: 'M',
 				moves: ['Headbutt', 'Shadow Strike', 'Roost'],
