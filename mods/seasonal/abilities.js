@@ -58,6 +58,20 @@ let BattleAbilities = {
 			}
 		},
 	},
+	// Arsenal
+	logia: {
+		desc: "If this Pokemon is an Arceus, its type changes to match its held Plate or Z-Crystal. This pokemon is immune to Normal-type moves and to moves of the same type as itself.",
+		shortDesc: "Type matches its plate. Immunity to Normal moves & moves of this Pokemon's type.",
+		// Logia's type-changing itself is implemented in statuses.js
+		id: "logia",
+		name: "Logia",
+		onTryHit: function (target, source, move) {
+			if (target !== source && (move.type === 'Normal' || target.types.includes(move.type))) {
+				this.add('-immune', target, '[msg]', '[from] ability: Logia');
+				return null;
+			}
+		},
+	},
 	// Bhris Brown
 	stimulatedpride: {
 		id: "stimulatedpride",

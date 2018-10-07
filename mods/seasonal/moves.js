@@ -289,6 +289,64 @@ let BattleMovedex = {
 		target: "self",
 		type: "Ghost",
 	},
+	// A Quag to The Past
+	murkyambush: {
+		accuracy: true,
+		basePower: 150,
+		category: "Physical",
+		desc: "Fails unless the user is hit by a contact attack from an opponent this turn before it can execute the move. The foe's attacking contact move has it's secondary effects suppressed, and damage halved. If the user was hit and has not fainted, it attacks, and the effect ends.",
+		shortDesc: "User must be hit by a contact move before moving.",
+		id: "murkyambush",
+		name: "Murky Ambush",
+		isNonstandard: true,
+		pp: 20,
+		priority: -3,
+		flags: {contact: 1, protect: 1},
+		onPrepareHit: function (target, source) {
+			if (source.volatiles['murkyambush'] && source.volatiles['murkyambush'].gotHit) {
+				this.attrLastMove('[still]');
+				this.add('-anim', source, "Crunch", target);
+			}
+		},
+		beforeTurnCallback: function (pokemon) {
+			pokemon.addVolatile('murkyambush');
+			this.add('-message', `${pokemon.name} anticipates the opposing Pokémon's next move!`);
+			this.attrLastMove('[still]');
+			this.add('-anim', pokemon, "Work Up", pokemon);
+		},
+		beforeMoveCallback: function (pokemon) {
+			if (pokemon.volatiles['murkyambush'] && !pokemon.volatiles['murkyambush'].gotHit) {
+				this.add('cant', pokemon, 'Murky Ambush', 'Murky Ambush');
+				this.add('-message', `${pokemon.name} eases up.`);
+				return true;
+			}
+			this.add('-message', `${pokemon.side.foe.active[0].name} was caught in the ambush!`);
+		},
+		effect: {
+			duration: 1,
+			onStart: function (pokemon) {
+				this.add('-singleturn', pokemon, 'move: Murky Ambush');
+			},
+			onBasePowerPriority: 7,
+			onSourceBasePower: function () {
+				this.debug('Murky Ambush weaken');
+				return this.chainModify(0.5);
+			},
+			onFoeTryMove: function (target, source, move) {
+				if (move.secondaries && move.flags.contact) {
+					this.debug('Murky Ambush secondary effects suppression');
+					delete move.secondaries;
+				}
+			},
+			onHit: function (pokemon, source, move) {
+				if (pokemon.side !== source.side && move.flags.contact) {
+					pokemon.volatiles['murkyambush'].gotHit = true;
+				}
+			},
+		},
+		target: "normal",
+		type: "Dark",
+	},
 	// Arcticblast
 	trashalanche: {
 		basePower: 40,
@@ -341,6 +399,41 @@ let BattleMovedex = {
 			chance: 50,
 			status: 'par',
 		},
+		target: "normal",
+		type: "Normal",
+	},
+	// Arsenal
+	comeonyougunners: {
+		accuracy: 100,
+		basePower: 100,
+		category: "Special",
+		desc: "This move's type depends on the user's held Plate. If the target has the same type as this move, the base power is boosted by 1.5.",
+		shortDesc: "Type = Plate. 1.5x base power if foe has the move's type.",
+		id: "comeonyougunners",
+		name: "Come on you Gunners",
+		isNonstandard: true,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source, move) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Judgment', target);
+			this.add('-anim', target, 'Extreme Evoboost', target);
+			// Modifying BP here so it happens AFTER ModifyMove
+			if (target.types.includes(move.type)) {
+				this.debug('Come on you Gunners BP boost');
+				move.basePower = move.basePower * 1.5;
+			}
+		},
+		onModifyMovePriority: 2,
+		onModifyMove: function (move, pokemon) {
+			const item = pokemon.getItem();
+			if (item.id && item.onPlate && !item.zMove) {
+				this.debug(`Come on you Gunners type changed to: ${item.onPlate}`);
+				move.type = item.onPlate;
+			}
+		},
+		secondary: null,
 		target: "normal",
 		type: "Normal",
 	},

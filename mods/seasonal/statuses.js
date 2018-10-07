@@ -80,6 +80,24 @@ let BattleStatuses = {
 			this.add(`c|@Aelita|CODE: LYOKO . Tower deactivated... Return to the past, now!`);
 		},
 	},
+	akir: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|%Akir|hey whats up`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|%Akir|sorry need to build more`);
+		},
+		onFaint: function () {
+			this.add(`c|%Akir|too sleepy, c ya`);
+		},
+		onSourceModifyDamage: function (damage, source, target, move) {
+			if (move.typeMod > 0 && !target.illusion) {
+				this.debug('Solid Rock neutralize');
+				return this.chainModify(0.75);
+			}
+		},
+	},
 	amaluna: {
 		noCopy: true,
 		onStart: function () {
@@ -116,22 +134,16 @@ let BattleStatuses = {
 			this.add(`c|&ant|I'M NOT ANTEMORTEM`);
 		},
 	},
-	akir: {
+	aquagtothepast: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|%Akir|hey whats up`);
+			this.add(`c|+A Quag to The Past|You mess with one Goon, you mess with them all... And they're all here!`);
 		},
 		onSwitchOut: function () {
-			this.add(`c|%Akir|sorry need to build more`);
+			this.add(`c|+A Quag to The Past|Um, no.`);
 		},
 		onFaint: function () {
-			this.add(`c|%Akir|too sleepy, c ya`);
-		},
-		onSourceModifyDamage: function (damage, source, target, move) {
-			if (move.typeMod > 0 && !target.illusion) {
-				this.debug('Solid Rock neutralize');
-				return this.chainModify(0.75);
-			}
+			this.add(`c|+A Quag to The Past|...Wait, this isn't the groupchat, is it...`);
 		},
 	},
 	arcticblast: {
@@ -176,6 +188,18 @@ let BattleStatuses = {
 		},
 		onFaint: function () {
 			this.add(`c|%Arrested|It's cool, I didn't wanna battle anyway.`);
+		},
+	},
+	arsenal: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|+Arsenal|Wenger In`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|+Arsenal|Time to watch anime`);
+		},
+		onFaint: function () {
+			this.add(`c|+Arsenal|Wenger Out`);
 		},
 	},
 	beowulf: {
@@ -1286,6 +1310,22 @@ let BattleStatuses = {
 				move.basePower += 20;
 				this.debug('glitch out base power boost');
 			}
+		},
+	},
+	// Modified type setup for arceus
+	arceus: {
+		inherit: true,
+		onType: function (types, pokemon) {
+			if (pokemon.transformed) return types;
+			/** @type {string | undefined} */
+			let type = 'Normal';
+			if (pokemon.ability === 'multitype' || pokemon.ability === 'logia') {
+				type = pokemon.getItem().onPlate;
+				if (!type) {
+					type = 'Normal';
+				}
+			}
+			return [type];
 		},
 	},
 };

@@ -65,6 +65,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Energy Field',
 				evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 			},
+			'Akir': {
+				species: 'Parasect', ability: 'Dry Skin', item: 'Leftovers', gender: 'M',
+				moves: ['Spore', 'Leech Life', ['Toxic', 'Stun Spore', 'Sacred Fire']],
+				signatureMove: 'Compost',
+				evs: {hp: 248, atk: 8, spd: 252}, nature: 'Careful',
+			},
 			'Amaluna': {
 				species: 'Octillery', ability: 'Neuroforce', item: 'Expert Belt', gender: 'F',
 				moves: ['Surf', 'Fire Blast', 'Freeze-Dry'],
@@ -83,11 +89,11 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'TRU ANT',
 				evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 			},
-			'Akir': {
-				species: 'Parasect', ability: 'Dry Skin', item: 'Leftovers', gender: 'M',
-				moves: ['Spore', 'Leech Life', ['Toxic', 'Stun Spore', 'Sacred Fire']],
-				signatureMove: 'Compost',
-				evs: {hp: 248, atk: 8, spd: 252}, nature: 'Careful',
+			'A Quag to The Past': {
+				species: 'Quagsire', ability: 'Unaware', item: 'Leftovers', gender: 'M',
+				moves: ['Recover', 'Toxic', 'Scald'],
+				signatureMove: 'Murky Ambush',
+				evs: {hp: 252, def: 252, spd: 4}, ivs: {spe: 0}, nature: 'Relaxed',
 			},
 			'Arcticblast': {
 				species: 'Garbodor', ability: 'Mold Breaker', item: 'Choice Band', gender: 'M',
@@ -100,6 +106,13 @@ class RandomStaffBrosTeams extends RandomTeams {
 				moves: ['Muddy Water', 'Ice Beam', 'Slack Off'],
 				signatureMove: 'Jail Shell',
 				evs: {hp: 252, def: 4, spa: 252}, nature: 'Modest',
+			},
+			'Arsenal': {
+				species: 'Arceus', ability: 'Logia', gender: 'M',
+				item: ["Draco Plate", "Dread Plate", "Earth Plate", "Fist Plate", "Flame Plate", "Icicle Plate", "Insect Plate", "Iron Plate", "Meadow Plate", "Mind Plate", "Pixie Plate", "Sky Plate", "Splash Plate", "Spooky Plate", "Stone Plate", "Toxic Plate", "Zap Plate"],
+				moves: ['Mimic', 'Stealth Rock', 'Memento'],
+				signatureMove: 'Come on you Gunners',
+				evs: {hp: 4, spa: 252, spe: 252}, ivs: {hp: 20, def: 20, spd: 20}, nature: 'Naive',
 			},
 			'Beowulf': {
 				species: 'Beedrill', ability: ['Download', 'Speed Boost'], item: 'Beedrillite', gender: 'M',
@@ -591,7 +604,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'Rory Mercury';
+				name = 'A Quag to The Past';
 				if (pool.indexOf(name) > -1) {
 					pool.splice(pool.indexOf(name), 1);
 				} else {
