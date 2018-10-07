@@ -251,9 +251,10 @@ class Validator {
 			if (ruleTable.has('-unreleased') && postMegaTemplate.isUnreleased) {
 				problems.push(`${name} (${postMegaTemplate.species}) is unreleased.`);
 			} else if (postMegaTemplate.tier) {
-				banReason = ruleTable.check('pokemontag:' + toId(postMegaTemplate.tier), setHas);
+				let tag = postMegaTemplate.tier === '(PU)' ? 'ZU' : postMegaTemplate.tier;
+				banReason = ruleTable.check('pokemontag:' + toId(tag), setHas);
 				if (banReason) {
-					problems.push(`${postMegaTemplate.species} is in ${postMegaTemplate.tier}, which is ${banReason}.`);
+					problems.push(`${postMegaTemplate.species} is in ${tag}, which is ${banReason}.`);
 				} else if (postMegaTemplate.doublesTier) {
 					banReason = ruleTable.check('pokemontag:' + toId(postMegaTemplate.doublesTier), setHas);
 					if (banReason) {
