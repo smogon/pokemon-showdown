@@ -430,6 +430,7 @@ let BattleStatuses = {
 		},
 	},
 	ev: {
+		noCopy: true,
 		onStart: function (target) {
 			this.add(`c|~EV|Behold! The power of EVOLUTION!`);
 			if (target.illusion) return;
@@ -936,6 +937,18 @@ let BattleStatuses = {
 			this.add(`c|@Paradise|⠠⠽⠕⠥’⠗⠑⠀⠋⠥⠉⠅⠊⠝⠛⠀⠙⠑⠁⠙,⠀⠅⠊⠙⠙⠕.`);
 		},
 	},
+	pluviometer: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|@pluviometer|${["Need a GP check?", "I'm a switch-in and I'm switching in #hyphenation"][this.random(2)]}`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|@pluviometer|${["I wish this were a better matchup #subjunctive", "GP 1/2", "GP 2/2"][this.random(3)]}`);
+		},
+		onFaint: function () {
+			this.add(`c|@pluviometer|${["Follow SmogonU on Facebook! https://www.facebook.com/SmogonU", "Follow SmogonU on Twitter! https://twitter.com/SmogonU"][this.random(2)]}`);
+		},
+	},
 	ptoad: {
 		noCopy: true,
 		onStart: function () {
@@ -1030,6 +1043,18 @@ let BattleStatuses = {
 		},
 		onSwitchOut: function () {
 			this.add(`c|%Shiba|gotta buy an alt rq brb`);
+		},
+	},
+	slowbroth: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|+Slowbroth|DETECTING FOREIGN SPECIES...`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|+Slowbroth|TELEPORTING TO ALTERNATE DIMENSION...`);
+		},
+		onFaint: function () {
+			this.add(`c|+Slowbroth|HARDWARE DAMAGE PERMANENT...`);
 		},
 	},
 	snaquaza: {
@@ -1326,6 +1351,27 @@ let BattleStatuses = {
 				}
 			}
 			return [type];
+		},
+	},
+	// Slowbroth's Alien wave. This is here so Trick Room can be in the move's PseudoWeather.
+	alienwave: {
+		duration: 5,
+		onStart: function (target, source) {
+			this.add('-fieldstart', 'move: Alien Wave');
+			this.add('-message', `Psychic-type attacks can hit Dark-type Pokemon!`);
+		},
+		onNegateImmunity: function (pokemon, type) {
+			if (pokemon.hasType('Dark') && type === 'Psychic') return false;
+		},
+		onUpdate: function () {
+			if (!this.pseudoWeather.trickroom) {
+				this.removePseudoWeather('alienwave');
+			}
+		},
+		onResidualOrder: 23,
+		onEnd: function () {
+			this.add('-fieldend', 'move: Alien Wave');
+			this.add('-message', `Psychic-type attacks can no longer hit Dark-type Pokemon.`);
 		},
 	},
 };

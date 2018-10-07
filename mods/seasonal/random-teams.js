@@ -66,8 +66,8 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 			},
 			'Akir': {
-				species: 'Parasect', ability: 'Dry Skin', item: 'Leftovers', gender: 'M',
-				moves: ['Spore', 'Leech Life', ['Toxic', 'Stun Spore', 'Sacred Fire']],
+				species: 'Parasect', ability: 'Regrowth', item: 'Leftovers', gender: 'M',
+				moves: ['Spore', 'Leech Life', ['Toxic', 'Healing Wish', 'Parting Shot']],
 				signatureMove: 'Compost',
 				evs: {hp: 248, atk: 8, spd: 252}, nature: 'Careful',
 			},
@@ -444,6 +444,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Corrosive Toxic',
 				evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful',
 			},
+			'pluviometer': {
+				species: 'Mismagius', ability: 'Sheer Force', item: 'Life Orb', gender: '',
+				moves: ['Taunt', 'Moonblast', ['Mystical Fire', 'Earth Power']],
+				signatureMove: 'Grammar Hammer',
+				evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+			},
 			'ptoad': {
 				species: 'Politoed', ability: 'Fat Rain', item: 'Damp Rock', gender: 'M',
 				moves: ['Scald', 'Toxic', 'Ice Beam'],
@@ -485,6 +491,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				moves: ['Dragon Ascent', 'Sacred Fire', 'Roost'],
 				signatureMove: 'GO INDA',
 				evs: {atk: 252, hp: 248, spe: 8}, nature: 'Adamant',
+			},
+			'Slowbroth': {
+				species: 'Beheeyem', ability: 'Psychic Surge', item: 'Psychium Z', gender: 'M',
+				moves: ['Nasty Plot', 'Psystrike', ['Aura Sphere', 'Earth Power', 'Shadow Ball']],
+				signatureMove: 'Alien Wave',
+				evs: {hp: 248, spa: 252, spd: 8}, ivs: {atk: 0, spe: 0}, nature: 'Quiet',
 			},
 			'Snaquaza': {
 				species: 'Honchkrow', ability: 'Illusion', item: 'Fakeclaimium Z', gender: 'M',
