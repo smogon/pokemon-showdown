@@ -431,6 +431,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Literally Cheating',
 				evs: {hp: 252, def: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
+			'Rory Mercury': {
+				species: 'Charjabug', ability: 'Recharge', item: ['Occa Berry', 'Ganlon Berry'], gender: 'M',
+				moves: ['Zing Zap', ['Leech Life', 'Lunge'], 'Natural Gift'],
+				signatureMove: 'Scavenge',
+				evs: {hp: 248, atk: 252, def: 8}, ivs: {spe: 0}, nature: 'Brave',
+			},
 			'Saburo': {
 				species: 'Metagross', ability: 'Levitate', item: 'Metagrossite', gender: 'M',
 				moves: ['Psychic Fangs', 'Iron Head', ['Earthquake', 'Ice Punch']],
@@ -573,7 +579,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'Snaquaza';
+				name = 'Rory Mercury';
 				if (pool.indexOf(name) > -1) {
 					pool.splice(pool.indexOf(name), 1);
 				} else {

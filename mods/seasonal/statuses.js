@@ -923,6 +923,18 @@ let BattleStatuses = {
 			}
 		},
 	},
+	rorymercury: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|+Rory Mercury|guess I'm in charge now`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|+Rory Mercury|brb`);
+		},
+		onFaint: function () {
+			this.add(`c|+Rory Mercury|/me shook af`);
+		},
+	},
 	saburo: {
 		noCopy: true,
 		onStart: function () {

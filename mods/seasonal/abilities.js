@@ -20,6 +20,7 @@ let BattleAbilities = {
 		shortDesc: "Normal type moves become Electric type; Heals 1/4 HP when hit by an Electric attack.",
 		id: "shellshocker",
 		name: "Shell Shocker",
+		isNonstandard: true,
 		onModifyMovePriority: -1,
 		onModifyMove: function (move, pokemon) {
 			if (move.type === 'Normal' && !['judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'weatherball'].includes(move.id) && !(move.isZ && move.category !== 'Status')) {
@@ -44,8 +45,9 @@ let BattleAbilities = {
 	stimulatedpride: {
 		id: "stimulatedpride",
 		name: "Stimulated Pride",
-		desc: "",
-		shortDesc: "",
+		desc: "On switch in, this Pokemon summons Rain, and lowers the foe's attack by 1.",
+		shortDesc: "On switch in, this Pokemon summons Rain, and lowers the foe's attack by 1.",
+		isNonstandard: true,
 		onStart: function (pokemon) {
 			let activated = false;
 			for (const target of pokemon.side.foe.active) {
@@ -73,6 +75,7 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon's Atk is raised by 1 stage when another Pokemon faints.",
 		id: "learnsomethingnew",
 		name: "Learn Something New!",
+		isNonstandard: true,
 		onAnyFaint: function () {
 			this.boost({atk: 1}, this.effectData.target);
 		},
@@ -83,6 +86,7 @@ let BattleAbilities = {
 		shortDesc: "This pokemon transforms into Shaymin-Sky before attacking, and revert to Shaymin after.",
 		id: "gracideamastery",
 		name: "Gracidea Mastery",
+		isNonstandard: true,
 		onPrepareHit: function (source, target, move) {
 			if (!target || !move) return;
 			if (source.template.baseSpecies !== 'Shaymin' || source.transformed) return;
@@ -100,6 +104,7 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon's moves have their accuracy multiplied by 1.3.",
 		id: "lurking",
 		name: "Lurking",
+		isNonstandard: true,
 		onModifyMove: function (move) {
 			if (typeof move.accuracy === 'number') {
 				move.accuracy *= 1.3;
@@ -112,6 +117,7 @@ let BattleAbilities = {
 		shortDesc: "Summons sunny weather, halved Water damage.",
 		id: "starkmountain",
 		name: "Stark Mountain",
+		isNonstandard: true,
 		onStart: function (target, source) {
 			this.setWeather('sunnyday', source);
 		},
@@ -127,6 +133,7 @@ let BattleAbilities = {
 		shortDesc: "If scripted terrain, 1.5x move power & 2x speed",
 		id: "scripter",
 		name: "Scripter",
+		isNonstandard: true,
 		onModifyDamage: function (damage, source, target, move) {
 			if (this.isTerrain('scriptedterrain')) {
 				this.debug('Scripter boost');
@@ -145,6 +152,7 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon's punch-based attacks have 1.2x power. +1 Spe when hit.",
 		id: "kungfupanda",
 		name: "Kung Fu Panda",
+		isNonstandard: true,
 		onBasePowerPriority: 8,
 		onBasePower: function (basePower, attacker, defender, move) {
 			if (move.flags['punch']) {
@@ -164,6 +172,7 @@ let BattleAbilities = {
 		shortDesc: "If Hail is active, this Pokemon's Speed is doubled; immunity to Hail.",
 		id: "frozenskin",
 		name: "Frozen Skin",
+		isNonstandard: true,
 		onModifySpe: function (spe, pokemon) {
 			if (this.isWeather('hail')) {
 				return this.chainModify(2);
@@ -179,6 +188,7 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon's Def or Spd is raised 1 stage at the end of each full turn on the field.",
 		id: "standuptall",
 		name: "Stand Up Tall",
+		isNonstandard: true,
 		onResidualOrder: 26,
 		onResidualSubOrder: 1,
 		onResidual: function (pokemon) {
@@ -197,6 +207,7 @@ let BattleAbilities = {
 		shortDesc: "If this Pokemon is a Lycanroc-Midnight, the first hit it takes in battle deals 0 damage.",
 		id: "fakecrash",
 		name: "Fake Crash",
+		isNonstandard: true,
 		onDamagePriority: 1,
 		onDamage: function (damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move' && target.template.speciesid === 'lycanrocmidnight' && !target.transformed) {
@@ -226,6 +237,7 @@ let BattleAbilities = {
 		shortDesc: "5 turns. No hazards,-Ice power.",
 		id: "prismaticterrain",
 		name: "Prismatic Terrain",
+		isNonstandard: true,
 		onStart: function (source) {
 			this.setTerrain('prismaticterrain');
 		},
@@ -281,6 +293,7 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon's Ghost power is 2x; can't be burned; Fire/Flying power against it is halved.",
 		id: "sacredshadow",
 		name: "Sacred Shadow",
+		isNonstandard: true,
 		onModifyAtkPriority: 5,
 		onSourceModifyAtk: function (atk, attacker, defender, move) {
 			if (move.type === 'Fire' || move.type === 'Flying') {
@@ -322,6 +335,7 @@ let BattleAbilities = {
 		shortDesc: "This pokemon summons Rain when it switches in; 1.5x def in Rain.",
 		id: "fatrain",
 		name: "Fat Rain",
+		isNonstandard: true,
 		onStart: function (source) {
 			for (const action of this.queue) {
 				if (action.choice === 'runPrimal' && action.pokemon === source && source.template.speciesid === 'kyogre') return;
@@ -335,12 +349,32 @@ let BattleAbilities = {
 			}
 		},
 	},
+	// Rory Mercury
+	recharge: {
+		desc: "This Pokemon has its major status condition cured, and restores 1/3 of its maximum HP, rounded down, when it switches out. When this Pokemon switches in, if it uses an Electric-type attack on the next turn, its power will be doubled",
+		shortDesc: "Natural Cure + Regenerator + Charge",
+		id: "recharge",
+		name: "Recharge",
+		isNonstandard: true,
+		onSwitchIn: function (pokemon) {
+			this.add('-activate', pokemon, 'ability: Recharge');
+			pokemon.addVolatile('charge');
+		},
+		onSwitchOut: function (pokemon) {
+			pokemon.heal(pokemon.maxhp / 3);
+
+			if (!pokemon.status) return;
+			this.add('-curestatus', pokemon, pokemon.status, '[from] ability: Recharge');
+			pokemon.setStatus('');
+		},
+	},
 	// SamJo
 	thiccerfat: {
 		desc: "If a Pokemon uses a Fire- or Ice-type attack against this Pokemon, that Pokemon's attacking stat is halved when calculating the damage to this Pokemon. This Pokemon cannot be burned. Gaining this Ability while burned cures it.",
 		shortDesc: "Fire/Ice-type damage reduced. Immune to burns.",
 		id: "thiccerfat",
 		name: "Thiccer Fat",
+		isNonstandard: true,
 		onModifyAtkPriority: 6,
 		onSourceModifyAtk: function (atk, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire') {
@@ -374,16 +408,18 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon's Flying-type moves have their priority increased by 1.",
 		id: "galewings10",
 		name: "Gale Wings 1.0",
+		isNonstandard: true,
 		onModifyPriority: function (priority, pokemon, target, move) {
 			if (move && move.type === 'Flying') return priority + 1;
 		},
 	},
 	// SunGodVolcarona
 	solarflare: {
-		id: "solarflare",
-		name: "Solar Flare",
 		desc: "This Pokemon is immune to Rock-type moves and restores 1/4 of its maximum HP, rounded down, when hit by an Rock-type move.",
 		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Rock moves; Rock immunity.",
+		id: "solarflare",
+		name: "Solar Flare",
+		isNonstandard: true,
 		onTryHit: function (target, source, move) {
 			if (target !== source && move.type === 'Rock') {
 				if (!this.heal(target.maxhp / 4)) {
@@ -399,6 +435,7 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon's Status moves have priority raised by 1.",
 		id: "notprankster",
 		name: "Not Prankster",
+		isNonstandard: true,
 		onModifyPriority: function (priority, pokemon, target, move) {
 			if (move && move.category === 'Status') {
 				return priority + 1;
@@ -411,6 +448,7 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon's highest 2 stats are raised by 1 if it attacks and KOes another Pokemon.",
 		id: "beastboost2",
 		name: "Beast Boost 2",
+		isNonstandard: true,
 		onSourceFaint: function (target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				let statOrder = Object.keys(source.stats)
@@ -425,6 +463,7 @@ let BattleAbilities = {
 		shortDesc: "Drought + Non-contact does 33% less damage.",
 		id: "deflectiveshell",
 		name: "Deflective Shell",
+		isNonstandard: true,
 		onStart: function (source) {
 			for (const action of this.queue) {
 				if (action.choice === 'runPrimal' && action.pokemon === source && source.template.speciesid === 'groudon') return;
@@ -444,6 +483,7 @@ let BattleAbilities = {
 		shortDesc: "On Switch-in, this Pokemon Summons Gravity.",
 		id: "interdimensional",
 		name: "Interdimensional",
+		isNonstandard: true,
 		onStart: function (target, source) {
 			this.addPseudoWeather('gravity', source);
 		},
@@ -454,6 +494,7 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon gains the Focus Energy status when it switches in.",
 		id: "focusenergy",
 		name: "Focus Energy",
+		isNonstandard: true,
 		onStart: function (pokemon) {
 			pokemon.addVolatile('focusenergy');
 		},
@@ -464,6 +505,7 @@ let BattleAbilities = {
 		shortDesc: "Hail crashes down for unlimited turns.",
 		id: "snowstorm",
 		name: "Snow Storm",
+		isNonstandard: true,
 		onStart: function () {
 			let snowStorm = this.getEffect('hail');
 			snowStorm.duration = -1;
