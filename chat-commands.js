@@ -2404,24 +2404,35 @@ const commands = {
 		if (!target) return this.parse(`/help notifyrank`);
 		if (!this.can('addhtml', null, room)) return false;
 		if (!this.canTalk()) return;
-		let [rank, notification] = this.splitOne(target);
+		let [rank, titleNotification] = this.splitOne(target);
+		if (rank === 'all') rank = ` `;
 		if (!(rank in Config.groups)) return this.errorReply(`Group '${rank}' does not exist.`);
-		const id = `${room.id}-rank-${Config.groups[rank].id}`;
+		const id = `${room.id}-rank-${(Config.groups[rank].id || `all`)}`;
 		if (cmd === 'notifyoffrank') {
-			room.sendRankedUsers(`|tempnotifyoff|${id}`, rank);
+			if (rank === ' ') {
+				room.send(`|tempnotifyoff|${id}`);
+			} else {
+				room.sendRankedUsers(`|tempnotifyoff|${id}`, rank);
+			}
 		} else {
-			let [title, message] = this.splitOne(notification);
-			if (!title) title = `${room.title} ${Config.groups[rank].name}+ message!`;
+			let [title, notificationHighlight] = this.splitOne(titleNotification);
+			if (!title) title = `${room.title} ${(Config.groups[rank].name ? `${Config.groups[rank].name}+ ` : ``)}message!`;
 			if (!user.can('addhtml')) {
 				title += ` (notification from ${user.name})`;
 			}
-			if (message.length > 300) return this.errorReply(`Notifications should not exceed 300 characters.`);
-			room.sendRankedUsers(`|tempnotify|${id}|${title}|${message}`, rank);
+			const [notification, highlight] = this.splitOne(notificationHighlight);
+			if (notification.length > 300) return this.errorReply(`Notifications should not exceed 300 characters.`);
+			const message = `|tempnotify|${id}|${title}|${notification}${(highlight ? `|${highlight}` : ``)}`;
+			if (rank === ' ') {
+				room.send(message);
+			} else {
+				room.sendRankedUsers(message, rank);
+			}
 			this.modlog(`NOTIFYRANK`, null, target);
 		}
 	},
 	notifyrankhelp: [
-		`/notifyrank [rank], [title], [message] - Sends a notification to everyone with the specified rank or higher. Requires: # * & ~`,
+		`/notifyrank [rank], [title], [message], [highlight] - Sends a notification to users who are [rank] or higher (and highlight on [highlight], if specified). Requires: # * & ~`,
 		`/notifyoffrank [rank] - Closes the notification previously sent with /notifyrank [rank]. Requires: # * & ~`,
 	],
 
