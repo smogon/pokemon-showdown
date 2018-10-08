@@ -1031,8 +1031,17 @@ let BattleAbilities = {
 			if (showMsg && !effect.secondaries) this.add('-fail', this.effectData.target, 'unboost', '[from] ability: Flower Veil', '[of] ' + target);
 		},
 		onAllySetStatus: function (status, target, source, effect) {
-			if (target.hasType('Grass')) {
-				if (!effect || !effect.status) return false;
+			if (target.hasType('Grass') && source && target !== source && effect) {
+				this.debug('interrupting setStatus with Flower Veil');
+				if (effect.id === 'synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
+					this.add('-activate', this.effectData.target, 'ability: Flower Veil', '[of] ' + target);
+				}
+				return null;
+			}
+		},
+		onAllyTryAddVolatile: function (status, target) {
+			if (target.hasType('Grass') && status.id === 'yawn') {
+				this.debug('Flower Veil blocking yawn');
 				this.add('-activate', this.effectData.target, 'ability: Flower Veil', '[of] ' + target);
 				return null;
 			}
