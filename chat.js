@@ -49,6 +49,10 @@ const BROADCAST_TOKEN = '!';
 
 const FS = require('./lib/fs');
 
+/** @type {(url: string) => Promise<{width: number, height: number}>} */
+// @ts-ignore ignoring until there is a ts typedef available for this module.
+const probe = require('probe-image-size');
+
 let Chat = module.exports;
 
 // Matches U+FE0F and all Emoji_Presentation characters. More details on
@@ -1631,6 +1635,41 @@ Chat.stringify = function (value, depth = 0) {
 Chat.formatText = require('./chat-formatter').formatText;
 Chat.linkRegex = require('./chat-formatter').linkRegex;
 Chat.updateServerLock = false;
+
+/**
+ * Gets the dimension of the image at url. Returns 0x0 if the image isn't found, as well as the relevant error.
+ * @param {string} url
+ * @return {Promise<AnyObject>}
+ */
+Chat.getImageDimensions = function (url) {
+	return new Promise(resolve => {
+		probe(url).then(dimensions => resolve(dimensions), (err) => resolve({height: 0, width: 0, err: err}));
+	});
+};
+
+/**
+ * Generates dimensions to fit an image at url into a maximum size of maxWidth x maxHeight,
+ * preserving aspect ratio.
+ * @param {string} url
+ * @param {number} [maxHeight]
+ * @param {number} [maxWidth]
+ * @return {Promise<[number, number]>}
+ */
+Chat.fitImage = async function (url, maxHeight = 300, maxWidth = 300) {
+	let {height, width} = await Chat.getImageDimensions(url);
+
+	let ratio = 1;
+
+	if (width <= maxWidth && height <= maxHeight) return [width, height];
+
+	if (height * (maxWidth / maxHeight) > width) {
+		ratio = maxHeight / height;
+	} else {
+		ratio = maxWidth / width;
+	}
+
+	return [Math.round(width * ratio), Math.round(height * ratio)];
+};
 
 // Used (and populated) by ChatMonitor.
 /** @type {{[k: string]: string[]}} */

@@ -273,7 +273,7 @@ class OtdHandler {
 		this.file.write(buf);
 	}
 
-	generateWinnerDisplay() {
+	async generateWinnerDisplay() {
 		if (!this.winners.length) return false;
 		let winner = this.winners[this.winners.length - 1];
 
@@ -281,7 +281,8 @@ class OtdHandler {
 		if (winner.quote) output += Chat.html `<br/><span style="font-style:italic;">"${winner.quote}"</span>`;
 		if (winner.tagline) output += Chat.html `<br/>${winner.tagline}`;
 		output += `</p><table style="margin:auto;"><tr>`;
-		if (winner.image) output += Chat.html `<td><img src="${winner.image}" width=100 height=100></td>`;
+		const [width, height] = await Chat.fitImage(winner.image, 100, 100);
+		if (winner.image) output += Chat.html `<td><img src="${winner.image}" width=${width} height=${height}></td>`;
 		output += `<td style="text-align:right;margin:5px;">`;
 		if (winner.song) {
 			output += `<b>Song:</b> `;
@@ -569,9 +570,10 @@ let commands = {
 
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 
-		let text = handler.generateWinnerDisplay();
-		if (!text) return this.errorReply("There is no winner yet.");
-		return this.sendReplyBox(text);
+		handler.generateWinnerDisplay().then(text => {
+			if (!text) return this.errorReply("There is no winner yet.");
+			return this.sendReplyBox(text);
+		});
 	},
 };
 
