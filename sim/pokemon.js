@@ -155,7 +155,7 @@ class Pokemon {
 		this.moveThisTurnResult = undefined;
 
 		this.lastDamage = 0;
-		/**@type {?{pokemon: Pokemon, damage: number, thisTurn: boolean, move?: string}} */
+		/**@type {{source: Pokemon, damage: number, thisTurn: boolean, move?: string}[]} */
 		this.hurtBy = [];
 		this.usedItemThisTurn = false;
 		this.newlySwitched = false;
@@ -612,7 +612,7 @@ class Pokemon {
 		if (!damage) damage = 0;
 		move = this.battle.getMove(move);
 		let lastHurtBy = {
-			pokemon: source,
+			source: source,
 			damage: damage,
 			move: move.id,
 			thisTurn: true,
