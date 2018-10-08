@@ -619,7 +619,7 @@ class Pokemon {
 		};
 		this.hurtBy.push(lastHurtBy);
 	}
-	
+
 	get lastHurtBy() {
 		if (this.hurtBy.length === 0) return undefined;
 		return this.hurtBy[this.hurtBy.length - 1];
