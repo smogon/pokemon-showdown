@@ -1848,42 +1848,120 @@ let BattleMovedex = {
 		type: "Fire",
 	},
 	// Lycanium Z
-	ipmerge: {
-		accuracy: 100,
-		basePower: 40,
-		category: "Special",
-		desc: "Has a 100% chance to flinch the target. If this move hits a Pokemon not behind a Substitute, and if both the user and target are not already transformed or under the effect of Illusion, the user transforms into the opponent, copying its current stats, stat stages, types, moves, Ability, weight, gender, and sprite. The user's level and HP remain the same and each copied move receives only 5 PP, with a maximum of 5 PP each. The user can no longer change formes if it would have the ability to do so.",
-		shortDesc: "Hits first; foe flinches; user transforms into target.",
-		id: "ipmerge",
-		name: "IP Merge",
+	purplepills: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: " Gains a random typing and 3 moves based on that typing (2 special and 1 status). Attacks use this Pokemon's Special Defense for the offensive stat. If used again return to this Pokemon's original moveset and typing.",
+		shortDesc: "Gains 3 random moves and typing.",
+		id: "purplepills",
+		name: "Purple Pills",
 		isNonstandard: true,
-		pp: 10,
-		priority: 3,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		pp: 15,
+		priority: 0,
+		flags: {snatch: 1, mirror: 1},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
+			this.add('-anim', source, "Swallow", source);
 		},
-		// Balancing Reasons
-		onTry: function (source, target) {
-			if (target.transformed || source.transformed) {
-				this.add('-fail', source);
-				return null;
-			}
-			this.attrLastMove('[still]');
-			this.add('-anim', source, "Memento", target);
-			this.add('-anim', target, "Parabolic Charge", target);
+		volatileStatus: 'purplepills',
+		effect: {
+			noCopy: true,
+			onStart: function (pokemon) {
+				this.add('-start', pokemon, 'Purple Pills', '[silent]');
+				this.add('-message', `${pokemon.name} swallowed some pills!`);
+				const allTypes = ['Normal', 'Fire', 'Fighting', 'Water', 'Flying', 'Grass', 'Poison', 'Electric', 'Ground', 'Psychic', 'Rock', 'Ice', 'Bug', 'Dragon', 'Ghost', 'Dark', 'Steel', 'Fairy'];
+				let type1 = allTypes[this.random(18)];
+				let type2 = allTypes[this.random(18)];
+				if (type1 === type2) {
+					pokemon.types = [type1];
+					this.add('-start', pokemon, 'typechange', `${type1}`);
+				} else {
+					pokemon.types = [type1, type2];
+					this.add('-start', pokemon, 'typechange', `${type1}/${type2}`);
+				}
+				// @ts-ignore track percentages to keep purple pills from resetting pp
+				pokemon.ppPercentages = pokemon.moveSlots.slice().map(m => {
+					return m.pp / m.maxpp;
+				});
+				// Get all possible moves sorted for convience in coding
+				let newMovep = [];
+				let statMove = []; let offMove1 = []; let offMove2 = [];
+				for (let i in exports.BattleMovedex) {
+					let move = exports.BattleMovedex[i];
+					if (i !== move.id) continue;
+					if (move.isZ || move.isNonstandard || !move.isViable) continue;
+					if (move.type && !pokemon.types.includes(move.type)) continue;
+					// Time to sort!
+					if (move.category === 'Status') statMove.push(move);
+					if (move.category === 'Special') {
+						if (move.type === type1) offMove1.push(move);
+						if (move.type === type2) offMove2.push(move);
+					}
+				}
+				newMovep.push(toId(offMove1[this.random(offMove1.length)]));
+				newMovep.push(toId(offMove2[this.random(offMove2.length)]));
+				newMovep.push(toId(statMove[this.random(statMove.length)]));
+				newMovep.push('purplepills');
+				// Replace Moveset
+				pokemon.moveSlots = [];
+				for (let i = 0; i < newMovep.length; i++) {
+					let moveid = newMovep[i];
+					let move = this.getMove(moveid);
+					if (!move.id) continue;
+					pokemon.moveSlots.push({
+						move: move.name,
+						id: move.id,
+						// @ts-ignore hacky way to reduce purple pill's PP
+						pp: Math.floor(((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5) * (pokemon.ppPercentages ? pokemon.ppPercentages[i] : 1)),
+						maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
+						target: move.target,
+						disabled: false,
+						used: false,
+						virtual: true,
+					});
+					pokemon.moves.push(move.id);
+				}
+			},
+			onModifySpAPriority: 1,
+			onModifySpA: function (spa, pokemon) {
+				return pokemon.getStat('spd');
+			},
+			onRestart: function (pokemon) {
+				this.add('-message', `${pokemon.name} feels better!`);
+				delete pokemon.volatiles['purplepills'];
+				this.add('-end', pokemon, 'Purple Pills', '[silent]');
+				pokemon.types = ['Psychic'];
+				this.add('-start', pokemon, 'typechange', 'Psychic');
+				// @ts-ignore track percentages to keep purple pills from resetting pp
+				pokemon.ppPercentages = pokemon.moveSlots.slice().map(m => {
+					return m.pp / m.maxpp;
+				});
+				// Update movepool
+				let newMovep = ['moonlight', 'heartswap', 'batonpass', 'purplepills'];
+				pokemon.moveSlots = [];
+				for (let i = 0; i < newMovep.length; i++) {
+					let moveid = newMovep[i];
+					let move = this.getMove(moveid);
+					if (!move.id) continue;
+					pokemon.moveSlots.push({
+						move: move.name,
+						id: move.id,
+						// @ts-ignore hacky way to reduce purple pill's PP
+						pp: Math.floor(((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5) * (pokemon.ppPercentages ? pokemon.ppPercentages[i] : 1)),
+						maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
+						target: move.target,
+						disabled: false,
+						used: false,
+						virtual: true,
+					});
+					pokemon.moves.push(move.id);
+				}
+			},
 		},
-		onHit: function (target, pokemon) {
-			if (!pokemon.transformInto(target, pokemon)) {
-				return false;
-			}
-		},
-		secondary: {
-			chance: 100,
-			volatileStatus: 'flinch',
-		},
-		target: "normal",
-		type: "Bug",
+		secondary: null,
+		target: "self",
+		type: "Poison",
 	},
 	// MacChaeger
 	naptime: {
@@ -3464,6 +3542,39 @@ let BattleMovedex = {
 		},
 		target: "allAdjacentFoes",
 		type: "Psychic",
+	},
+	// Modified Moves \\
+	// Purple Pills is immune to taunt
+	"taunt": {
+		inherit: true,
+		volatileStatus: 'taunt',
+		effect: {
+			duration: 3,
+			onStart: function (target) {
+				if (target.activeTurns && !this.willMove(target)) {
+					this.effectData.duration++;
+				}
+				this.add('-start', target, 'move: Taunt');
+			},
+			onResidualOrder: 12,
+			onEnd: function (target) {
+				this.add('-end', target, 'move: Taunt');
+			},
+			onDisableMove: function (pokemon) {
+				for (const moveSlot of pokemon.moveSlots) {
+					if (this.getMove(moveSlot.id).category === 'Status' && this.getMove(moveSlot.id).id !== 'purplepills') {
+						pokemon.disableMove(moveSlot.id);
+					}
+				}
+			},
+			onBeforeMovePriority: 5,
+			onBeforeMove: function (attacker, defender, move) {
+				if (!move.isZ && move.category === 'Status' && move.id !== 'purplepills') {
+					this.add('cant', attacker, 'move: Taunt', move);
+					return false;
+				}
+			},
+		},
 	},
 };
 

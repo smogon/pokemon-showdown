@@ -746,14 +746,15 @@ let BattleStatuses = {
 	lycaniumz: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c| Lycanium Z|Oh? Is it my turn? Alright, I'll try my best.`);
+			this.add(`c| Lycanium Z|It's either I win or you lose, 'cause I won't accept defeat.`);
 		},
 		onSwitchOut: function () {
-			this.add(`c| Lycanium Z|Time to regroup and retreat.`);
+			this.add(`c| Lycanium Z|What I gotta do to get it through to you? I'm superhuman.`);
 		},
 		onFaint: function () {
-			this.add(`c| Lycanium Z|/me sigh`);
-			this.add(`c| Lycanium Z|Why me?`);
+			this.add(`c| Lycanium Z|How can I find you?`);
+			this.add(`c| Lycanium Z|Who do you turn to?`);
+			this.add(`c| Lycanium Z|How do I bind you?`);
 		},
 	},
 	macchaeger: {
