@@ -932,7 +932,7 @@ class Pokemon {
 		this.addedType = template.addedType || '';
 		this.knownType = true;
 		if (this.battle.gen >= 7) this.removeVolatile('autotomize');
-		
+
 		if (source) {
 			let stats = this.battle.spreadModify(this.template.baseStats, this.set);
 			if (!this.baseStats) this.baseStats = stats;
