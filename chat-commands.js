@@ -2981,7 +2981,7 @@ const commands = {
 
 	hotpatchlock: 'nohotpatch',
 	nohotpatch: function (target, room, user) {
-		if (!this.can('hotpatch')) return;
+		if (!this.can('declare')) return;
 		if (!target) return this.parse('/help nohotpatch');
 
 		const separator = ' ';
@@ -3005,7 +3005,7 @@ const commands = {
 		}
 		Rooms.global.notifyRooms(['development', 'staff', 'upperstaff'], `|c|${user.getIdentity()}|/log ${user.name} has disabled hot-patching ${hotpatch}. Reason: ${reason}`);
 	},
-	nohotpatchhelp: [`/nohotpatch [chat|formats|battles|validator|tournaments|punishments|all] [reason] - Disables hotpatching the specified part of the simulator. Requires: ~`],
+	nohotpatchhelp: [`/nohotpatch [chat|formats|battles|validator|tournaments|punishments|all] [reason] - Disables hotpatching the specified part of the simulator. Requires: & ~`],
 
 	savelearnsets: function (target, room, user) {
 		if (!this.can('hotpatch')) return false;
