@@ -618,6 +618,11 @@ class Pokemon {
 			thisTurn: true,
 		};
 	}
+	
+	get lastHurtBy() {
+		if (this.hurtBy.length === 0) return undefined;
+		return this.hurtBy[this.hurtBy.length - 1];
+	}
 
 	/**
 	 * @return {string | null}
