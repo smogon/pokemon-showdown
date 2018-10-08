@@ -2176,11 +2176,8 @@ const commands = {
 		}
 
 		let targets = target.split(',');
-		if (targets.length !== 3) {
-			// Width and height are required because most browsers insert the
-			// <img> element before width and height are known, and when the
-			// image is loaded, this changes the height of the chat area, which
-			// messes up autoscrolling.
+
+		if (targets.length !== 1 && targets.length !== 3) {
 			return this.parse('/help showimage');
 		}
 
@@ -2190,25 +2187,32 @@ const commands = {
 
 		if (!image) return false;
 
-		let width = targets[1].trim();
-		if (!width) return this.errorReply(`No width for the image was provided!`);
-		if (!isNaN(width)) width += `px`;
+		if (targets.length === 3) {
+			let width = targets[1].trim();
+			if (!width) return this.errorReply(`No width for the image was provided!`);
+			if (!isNaN(width)) width += `px`;
 
-		let height = targets[2].trim();
-		if (!height) return this.errorReply(`No height for the image was provided!`);
-		if (!isNaN(height)) height += `px`;
+			let height = targets[2].trim();
+			if (!height) return this.errorReply(`No height for the image was provided!`);
+			if (!isNaN(height)) height += `px`;
 
-		let unitRegex = /^\d+(?:p[xtc]|%|[ecm]m|ex|in)$/;
-		if (!unitRegex.test(width)) {
-			return this.errorReply(`"${width}" is not a valid width value!`);
+			let unitRegex = /^\d+(?:p[xtc]|%|[ecm]m|ex|in)$/;
+			if (!unitRegex.test(width)) {
+				return this.errorReply(`"${width}" is not a valid width value!`);
+			}
+			if (!unitRegex.test(height)) {
+				return this.errorReply(`"${height}" is not a valid height value!`);
+			}
+
+			return this.sendReply(Chat.html`|raw|<img src="${image}" style="width: ${width}; height: ${height}" />`);
 		}
-		if (!unitRegex.test(height)) {
-			return this.errorReply(`"${height}" is not a valid height value!`);
-		}
 
-		this.sendReply(Chat.html`|raw|<img src="${image}" style="width: ${width}; height: ${height}" />`);
+		Chat.fitImage(image).then(([width, height]) => {
+			this.sendReply(Chat.html`|raw|<img src="${image}" style="width: ${width}px; height: ${height}px" />`);
+			room.update();
+		});
 	},
-	showimagehelp: [`/showimage [url], [width], [height] - Show an image. Any CSS units may be used for the width or height (default: px). Requires: # & ~`],
+	showimagehelp: [`/showimage [url], [width], [height] - Show an image. Any CSS units may be used for the width or height (default: px). If width and height aren't provided, automatically scale the image to fit in chat. Requires: # & ~`],
 
 	htmlbox: function (target, room, user) {
 		if (!target) return this.parse('/help htmlbox');
