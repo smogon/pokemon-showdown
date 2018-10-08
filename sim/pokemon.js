@@ -931,7 +931,7 @@ class Pokemon {
 		this.apparentType = rawTemplate.types.join('/');
 		this.addedType = template.addedType || '';
 		this.knownType = true;
-
+		this.removeVolatile('autotomize')
 		if (source) {
 			let stats = this.battle.spreadModify(this.template.baseStats, this.set);
 			if (!this.baseStats) this.baseStats = stats;
