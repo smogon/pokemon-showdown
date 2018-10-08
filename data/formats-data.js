@@ -7046,7 +7046,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 7, "level": 1, "shiny": 1, "isHidden": true, "moves": ["playnice", "echoedvoice", "hurricane"], "pokeball": "cherishball"},
 		],
-		tier: "(PU)",
+		tier: "PU",
 		doublesTier: "DUU",
 	},
 	dhelmise: {
