@@ -1902,30 +1902,30 @@ let BattleMovedex = {
 	// Lost Seso
 	shuffleramendance: {
 		accuracy: 100,
-		basePower: 10,
-		basePowerCallback: function (pokemon, target, move) {
-			if (!pokemon.volatiles['lostseso']) return move.basePower;
-			let multiplier = pokemon.volatiles['lostseso'].danceMultiplier;
-			if (typeof multiplier !== 'number') return move.basePower;
-			this.debug(`Shuffle Ramen Dance base power: ${move.basePower + (multiplier * 40)}`);
-			return move.basePower + (multiplier * 40);
-		},
+		basePower: 80,
 		category: "Special",
-		desc: "This move gains 40 power for every turn in which the user used a dance move. Gained power is reset upon switching out.",
-		shortDesc: "+40 power for each dance move used by user.",
+		desc: "This move's type effectiveness is inverted, meaning that its super effective on water types but not very effective on grass types (and so forth). 20% chance to paralyze the target.",
+		shortDesc: "Type effectiveness is inverted; 20% par.",
 		id: "shuffleramendance",
 		name: "Shuffle Ramen Dance",
 		isNonstandard: true,
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, 'Outrage', target);
 		},
-		secondary: null,
+		onEffectiveness: function (typeMod) {
+			return -typeMod;
+		},
+		secondary: {
+			status: 'par',
+			chance: 20,
+		},
 		target: "normal",
 		type: "Fire",
+		zMovePower: 160,
 	},
 	// Lycanium Z
 	purplepills: {

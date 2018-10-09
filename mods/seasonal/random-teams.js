@@ -361,8 +361,8 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
 			},
 			'Lost Seso': {
-				species: 'Typhlosion', ability: 'Competitive', item: 'Scope Lens', gender: 'M',
-				moves: ['Quiver Dance', 'Teeter Dance', 'Revelation Dance', 'Fiery Dance'],
+				species: 'Typhlosion', ability: 'Dazzling', item: 'Firium Z', gender: 'M',
+				moves: ['Calm Mind', 'Petal Dance', 'Fiery Dance'],
 				signatureMove: 'Shuffle Ramen Dance',
 				evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
 			},
@@ -640,7 +640,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'SpaceBass';
+				name = 'Lost Seso';
 				if (pool.indexOf(name) > -1) {
 					pool.splice(pool.indexOf(name), 1);
 				} else {
