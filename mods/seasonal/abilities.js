@@ -139,7 +139,7 @@ let BattleAbilities = {
 				source.formeChange('Shaymin-Sky', this.effect);
 			}
 		},
-		onSourceHit: function (target, source, move) {
+		onAfterMove: function (target, source, move) {
 			source.formeChange('Shaymin', this.effect);
 		},
 	},

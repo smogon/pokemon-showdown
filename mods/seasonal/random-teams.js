@@ -79,7 +79,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'Andy >_>': {
 				species: 'Absol', ability: 'Adaptability', item: 'Absolite', gender: 'M',
-				moves: ['Dragon Dance', 'Destiny Bond', 'Sucker Punch'],
+				moves: ['Pursuit', 'Destiny Bond', 'Sucker Punch'],
 				signatureMove: 'Pilfer',
 				evs: {atk: 252, def: 4, spe: 252}, nature: 'Adamant',
 			},

@@ -2102,7 +2102,7 @@ let BattleMovedex = {
 		type: "Rock",
 	},
 	// Marty
-	"typeanalysis": {
+	typeanalysis: {
 		accuracy: true,
 		category: "Status",
 		desc: "If the user is a Silvally, its item becomes a random Memory whose type matches one of the target's weaknesses, it changes form, and it uses Multi-Attack. This move and its effects ignore the Abilities of other Pokemon. Fails if the target has no weaknesses or if the user's form is not Silvally.",
@@ -2141,7 +2141,7 @@ let BattleMovedex = {
 			let template = this.getTemplate('Silvally-' + randomType);
 			source.formeChange(template, this.getAbility('rkssystem'), true);
 			let move = this.getMoveCopy('multiattack');
-			move.ignoreAbility = true;
+			move.basePower = 80;
 			this.useMove(move, source, target);
 		},
 		secondary: null,
@@ -2617,7 +2617,7 @@ let BattleMovedex = {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Genesis Supernova", source);
 		},
-		terrain: 'literallycheating',
+		pseudoWeather: 'literallycheating',
 		effect: {
 			duration: 3,
 			durationCallback: function (source, effect) {
@@ -2637,8 +2637,12 @@ let BattleMovedex = {
 					}
 				}
 				if (!positiveBoost || !target.lastMove) return;
-				target.deductPP(target.lastMove.id, target.lastMove.pp);
 				this.add('-activate', target, 'move: Literally Cheating', target.lastMove.name, target.lastMove.pp);
+				for (const moveSlot of target.moveSlots) {
+					if (moveSlot.id === target.lastMove.id) {
+						target.deductPP(moveSlot.id, moveSlot.pp);
+					}
+				}
 				this.add('-message', `${target.name} lost PP!`);
 			},
 			onStart: function (battle, source, effect) {
