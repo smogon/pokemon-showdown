@@ -2980,6 +2980,31 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Dark",
 	},
+	// SpaceBass
+	armyofmushrooms: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Before the turn starts, this Pokemon boosts it's Spd and Def by 1 stage. When this move hits, this Pokemon uses Sleep Powder, Leech Seed, and Powder. This move's priority is 1 and cannot be affected by prankster.",
+		shortDesc: "+1 Def, Spd + Sleep Powder, Leech Seed, & Powder.",
+		id: "armyofmushrooms",
+		name: "Army of Mushrooms",
+		isNonstandard: true,
+		pp: 10,
+		priority: 1,
+		flags: {snatch: 1},
+		beforeTurnCallback: function (pokemon) {
+			this.boost({def: 1, spd: 1}, pokemon, pokemon, 'mushroom army');
+		},
+		onHit: function (pokemon) {
+			this.useMove("sleeppowder", pokemon);
+			this.useMove("leechseed", pokemon);
+			this.useMove("powder", pokemon);
+		},
+		secondary: null,
+		target: "self",
+		type: "Grass",
+	},
 	// SunGodVolcarona
 	scorchingglobalvortex: {
 		accuracy: true,

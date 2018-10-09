@@ -522,6 +522,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Brave Bird',
 				nature: 'Serious',
 			},
+			'SpaceBass': {
+				species: 'Foongus', ability: 'Prankster', item: 'Eviolite', gender: 'M',
+				moves: ['Ingrain', 'Substitute', 'Baton Pass'],
+				signatureMove: 'Army of Mushrooms',
+				evs: {hp: 252, def: 128, spd: 128}, ivs: {atk: 0, spe: 0}, nature: 'Sassy',
+			},
 			'SunGodVolcarona': {
 				species: 'Volcarona', ability: 'Solar Flare', item: 'Volcaronium Z', gender: 'M',
 				moves: ['Quiver Dance', 'Giga Drain', ['Earth Power', 'Psychic']],
@@ -634,7 +640,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'imagi';
+				name = 'SpaceBass';
 				if (pool.indexOf(name) > -1) {
 					pool.splice(pool.indexOf(name), 1);
 				} else {

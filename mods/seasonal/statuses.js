@@ -1108,6 +1108,21 @@ let BattleStatuses = {
 			this.add(`c|+Snaquaza|How did you know I was scum?`);
 		},
 	},
+	spacebass: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|@SpaceBass|ಠ_ಠﾉ(_̅_̅_̅_̅_̲̅м̲̅a̲̅я̲̅i̲̅j̲̅u̲̅a̲̅n̲̅a̲̅_̅_̅_̅()ڪے~ `);
+		},
+		onSwitchOut: function (pokemon) {
+			this.add(`c|@SpaceBass|**ಠ_ಠ** `);
+			if (pokemon.illusion) return;
+			// Innate - heals 40% on switch out
+			pokemon.heal(pokemon.maxhp * 0.4);
+		},
+		onFaint: function () {
+			this.add(`c|@SpaceBass|bg`);
+		},
+	},
 	sungodvolcarona: {
 		noCopy: true,
 		onStart: function () {

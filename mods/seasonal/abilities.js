@@ -612,6 +612,16 @@ let BattleAbilities = {
 			}
 		},
 	},
+	// Modified Prankster to not boost Army of Mushrooms
+	prankster: {
+		inherit: true,
+		onModifyPriority: function (priority, pokemon, target, move) {
+			if (move && move.category === 'Status' && move.id !== 'armyofmushrooms') {
+				move.pranksterBoosted = true;
+				return priority + 1;
+			}
+		},
+	},
 };
 
 exports.BattleAbilities = BattleAbilities;
