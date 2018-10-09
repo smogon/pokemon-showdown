@@ -592,6 +592,18 @@ let BattleStatuses = {
 			this.add(`c|+Hubriz|I burn, I pine, I perish.`);
 		},
 	},
+	hurl: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|%Hurl|underoos`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|%Hurl|/me hurls out`);
+		},
+		onFaint: function () {
+			this.add(`c|%Hurl|i disappoint people a lot`);
+		},
+	},
 	imas: {
 		noCopy: true,
 		onStart: function (pokemon) {

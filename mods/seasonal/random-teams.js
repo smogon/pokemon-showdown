@@ -288,6 +288,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Flower Tornado',
 				evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
+			'Hurl': {
+				species: 'Grimer-Alola', ability: 'Poison Touch', item: 'Eviolite', gender: 'M',
+				moves: ['Knock Off', 'Earthquake', 'Recover'],
+				signatureMove: 'Hurl',
+				evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
+			},
 			'imas': {
 				species: 'Skarmory', ability: 'Prankster', item: 'Sharp Beak', gender: 'M',
 				moves: ['Swords Dance', 'Roost', 'Taunt'],
@@ -622,7 +628,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'A Quag to The Past';
+				name = 'Hurl';
 				if (pool.indexOf(name) > -1) {
 					pool.splice(pool.indexOf(name), 1);
 				} else {

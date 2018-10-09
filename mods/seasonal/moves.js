@@ -1536,6 +1536,29 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Grass",
 	},
+	// Hurl
+	hurl: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		desc: "Sets a layer of Toxic Spikes.",
+		shortDesc: "Sets a layer of Toxic Spikes.",
+		id: "hurl",
+		name: "Hurl",
+		isNonstandard: true,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Gunk Shot', target);
+		},
+		onHit: function (target) {
+			target.side.addSideCondition('toxicspikes');
+		},
+		target: "normal",
+		type: "Poison",
+	},
 	// imas
 	boi: {
 		accuracy: 100,
@@ -3223,8 +3246,8 @@ let BattleMovedex = {
 	smokebomb: {
 		accuracy: 100,
 		category: "Status",
-		desc: "Moves all hazards that are on the user's side of the field to the foe's side of the field. The user then switches out.",
-		shortDesc: "Moves any hazards to foe's side. Switches out.",
+		desc: "Moves all hazards that are on the user's side of the field to the foe's side of the field. Sets Stealth Rock on the foes side. The user then switches out.",
+		shortDesc: "Moves hazards to foe's side. Switches out.",
 		id: "smokebomb",
 		name: "Smoke Bomb",
 		isNonstandard: true,
