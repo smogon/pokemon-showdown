@@ -879,6 +879,32 @@ let BattleMovedex = {
 		target: "self",
 		type: "Dark",
 	},
+	// Cleo
+	lovingembrace: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Special",
+		desc: "This move has a 50% chance to infatuate the opponent.",
+		shortDesc: "50% chance to infatuate.",
+		id: "lovingembrace",
+		name: "Loving Embrace",
+		isNonstandard: true,
+		pp: 25,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Wrap", target);
+			this.add('-anim', source, "Liquidation", target);
+			this.add('-anim', source, "Surf", target);
+		},
+		secondary: {
+			chance: 50,
+			volatileStatus: 'attract',
+		},
+		target: "normal",
+		type: "Water",
+	},
 	// deg
 	luciddreams: {
 		accuracy: 100,

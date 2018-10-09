@@ -192,6 +192,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'beskyttelsesnet',
 				evs: {hp: 248, def: 252, spa: 8}, ivs: {atk: 0}, nature: 'Bold',
 			},
+			'Cleo': {
+				species: 'Sealeo', ability: 'Adrenaline Rush', item: 'Leftovers', gender: 'M',
+				moves: ['Icy Wind', 'Ice Beam', 'Wrap'],
+				signatureMove: 'Loving Embrace',
+				evs: {hp: 4, spa: 252, spe: 252}, nature: 'Modest', shiny: true,
+			},
 			'deg': {
 				species: 'Gengar', ability: 'Bad Dreams', item: 'Gengarite', gender: 'M',
 				moves: [['Hex', 'Shadow Ball'], 'Sludge Wave', 'Focus Blast'],

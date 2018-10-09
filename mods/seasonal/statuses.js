@@ -354,6 +354,18 @@ let BattleStatuses = {
 			this.add(`c|@Chloe|aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa`);
 		},
 	},
+	cleo: {
+		noCopy: true,
+		onSwitchIn: function () {
+			this.add(`|c|+Cleo|Cleo! Cleo! Your friendly neighborhood Sea Leo!`);
+		},
+		onSwitchOut: function () {
+			this.add(`|c|+Cleo|bbl~`);
+		},
+		onFaint: function () {
+			this.add(`|c|+Cleo|n.n`);
+		},
+	},
 	deg: {
 		noCopy: true,
 		onStart: function () {
