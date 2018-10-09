@@ -977,9 +977,10 @@ let BattleMovedex = {
 	avalanche: {
 		inherit: true,
 		basePowerCallback: function (pokemon, source) {
-			if (pokemon.lastHurtBy) {
-				if (pokemon.lastHurtBy.damage > 0 && pokemon.lastHurtBy.thisTurn) {
-					this.debug('Boosted for getting hit by ' + pokemon.lastHurtBy.move);
+			let lastHurtBy = pokemon.getLastHurtBy();
+			if (lastHurtBy) {
+				if (lastHurtBy.damage > 0 && lastHurtBy.thisTurn) {
+					this.debug('Boosted for getting hit by ' + lastHurtBy.move);
 					return this.isWeather('hail') ? 180 : 120;
 				}
 			}

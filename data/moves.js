@@ -945,11 +945,11 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 60,
 		basePowerCallback: function (pokemon, target, move) {
-			let hurtByTarget = pokemon.hurtBy.find(function (x) {
-				return x.source === target && x.damage > 0 && x.thisTurn;
-			});
+			let hurtByTarget = pokemon.hurtBy.some(p =>
+				p.source === target && p.damage > 0 && p.thisTurn
+			);
 			if (hurtByTarget) {
-				this.debug('Boosted for getting hit by ' + hurtByTarget.move);
+				this.debug('Boosted for getting hit by ' + target);
 				return move.basePower * 2;
 			}
 			return move.basePower;
@@ -13393,11 +13393,11 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 60,
 		basePowerCallback: function (pokemon, target, move) {
-			let hurtByTarget = pokemon.hurtBy.find(function (x) {
-				return x.source === target && x.damage > 0 && x.thisTurn;
-			});
+			let hurtByTarget = pokemon.hurtBy.some(p =>
+				p.source === target && p.damage > 0 && p.thisTurn
+			);
 			if (hurtByTarget) {
-				this.debug('Boosted for getting hit by ' + hurtByTarget.move);
+				this.debug('Boosted for getting hit by ' + target);
 				return move.basePower * 2;
 			}
 			return move.basePower;
