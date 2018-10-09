@@ -1825,7 +1825,13 @@ const commands = {
 		let weekMsg = week ? ' for a week' : '';
 
 		if (targetUser) {
-			targetUser.popup(`|modal|${user.name} has locked you from talking in chats, battles, and PMing regular users${weekMsg}.${(userReason ? `\n\nReason: ${userReason}` : "")}\n\nIf you feel that your lock was unjustified, you can still PM staff members (%, @, &, and ~) to discuss it${(Config.appealurl ? ` or you can appeal:\n${Config.appealurl}` : ".")}\n\nYour lock will expire in a few days.`);
+			let appeal = ``;
+			if (Chat.pages.help) {
+				appeal += `<a href="view-help-request--appeal"><button class="button"><strong>Appeal your punishment</strong></button></a>`;
+			} else if (Config.appealurl) {
+				appeal += `appeal: <a href="${Config.appealurl}">${Config.appealurl}</a>`;
+			}
+			targetUser.send(`|popup||html||modal|${user.name} has locked you from talking in chats, battles, and PMing regular users${weekMsg}.${(userReason ? `\n\nReason: ${userReason}` : "")}\n\nIf you feel that your lock was unjustified, you can ${appeal}.\n\nYour lock will expire in a few days.`);
 		}
 
 		let lockMessage = `${name} was locked from talking${weekMsg} by ${user.name}.` + (userReason ? ` (${userReason})` : "");

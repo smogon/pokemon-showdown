@@ -1235,6 +1235,9 @@ Punishments.checkName = function (user, userid, registered) {
 		battleban = Punishments.roomUserids.get(Punishments.isBattleBanned(user));
 		if (!battleban) battleban = ['BATTLEBAN', Punishments.isBattleBanned(user), 0];
 	}
+
+	const ticket = Chat.pages.help ? `<a href="view-help-request--appeal"><button class="button"><strong>Appeal your punishment</strong></button></a>` : '';
+
 	if (battleban) {
 		if (battleban[1] !== user.userid && Punishments.sharedIps.has(user.latestIp) && user.autoconfirmed) {
 			Punishments.roomUnpunish("battle", userid, 'BATTLEBAN');
@@ -1242,8 +1245,9 @@ Punishments.checkName = function (user, userid, registered) {
 			Punishments.roomPunish("battle", user, battleban);
 			user.cancelReady();
 			if (!punishment) {
+				let appealLink = ticket || (Config.appealurl ? `appeal at: ${Config.appealurl}` : ``);
 				// Prioritize popups for other global punishments
-				user.send(`|popup|You are banned from battling${battleban[1] !== userid ? ` because you have the same IP as banned user: ${battleban[1]}` : ''}. Your battle ban will expire in a few days.${battleban[3] ? `||||Reason: ${battleban[3]}` : ``}${Config.appealurl ? `||||Or you can appeal at: ${Config.appealurl}` : ``}`);
+				user.send(`|popup||html|You are banned from battling${battleban[1] !== userid ? ` because you have the same IP as banned user: ${battleban[1]}` : ''}. Your battle ban will expire in a few days.${battleban[3] ? Chat.html `\n\nReason: ${battleban[3]}` : ``}${appealLink ? `\n\nOr you can ${appealLink}.` : ``}`);
 				user.punishmentNotified = true;
 				return;
 			}
@@ -1254,9 +1258,15 @@ Punishments.checkName = function (user, userid, registered) {
 	let id = punishment[0];
 	let punishUserid = punishment[1];
 	let reason = ``;
-	if (punishment[3]) reason = `\n\nReason: ${punishment[3]}`;
+	if (punishment[3]) reason = `\n\nReason: ${Chat.escapeHTML(punishment[3])}`;
 	let appeal = ``;
-	if (Config.appealurl) appeal = `\n\nOr you can appeal at: ${Config.appealurl}`;
+	if (user.permalocked && Config.appealurl) {
+		appeal += `\n\nPermanent punishments can be appealed: <a href="${Config.appealurl}">${Config.appealurl}</a>`;
+	} else if (ticket) {
+		appeal += `\n\nIf you feel you were unfairly punished or wish to otherwise appeal, you can ${ticket}.`;
+	} else if (Config.appealurl) {
+		appeal += `\n\nIf you wish to appeal your punishment, please use: <a href="${Config.appealurl}">${Config.appealurl}</a>`;
+	}
 	let bannedUnder = ``;
 	if (punishUserid !== userid) bannedUnder = ` because you have the same IP as banned user: ${punishUserid}`;
 
@@ -1270,14 +1280,14 @@ Punishments.checkName = function (user, userid, registered) {
 		return;
 	}
 	if (registered && id === 'BAN') {
-		user.popup(`Your username (${user.name}) is banned${bannedUnder}. Your ban will expire in a few days.${reason}${appeal}`);
+		user.popup(`Your username (${user.name}) is banned${bannedUnder}. Your ban will expire in a few days.${reason}${Config.appealurl ? `||||Or you can appeal at: ${Config.appealurl}` : ``}`);
 		user.punishmentNotified = true;
 		Punishments.punish(user, punishment);
 		user.disconnectAll();
 		return;
 	}
 	if (id === 'NAMELOCK' || user.namelocked) {
-		user.popup(`You are namelocked and can't have a username${bannedUnder}. Your namelock will expire in a few days.${reason}${appeal}`);
+		user.send(`|popup||html|You are namelocked and can't have a username${bannedUnder}. Your namelock will expire in a few days.${reason}${appeal}`);
 		user.locked = punishUserid;
 		user.namelocked = punishUserid;
 		user.resetName();
@@ -1286,7 +1296,7 @@ Punishments.checkName = function (user, userid, registered) {
 		if (punishUserid === '#hostfilter') {
 			user.popup(`Due to spam, you can't chat using a proxy. (Your IP ${user.latestIp} appears to be a proxy.)`);
 		} else if (!user.lockNotified) {
-			user.popup(`You are locked${bannedUnder}. Your lock will expire in a few days.${reason}${appeal}`);
+			user.send(`|popup||html|You are locked${bannedUnder}. ${user.permalocked ? `This lock is permanent.` : `Your lock will expire in a few days.`}${reason}${appeal}`);
 		}
 		user.lockNotified = true;
 		if (user.userid === punishUserid) Punishments.punish(user, punishment);
