@@ -291,7 +291,7 @@ let BattleFormatsData = {
 			{"generation": 1, "level": 5, "moves": ["fly"]},
 			{"generation": 1, "level": 5, "moves": ["thundershock", "growl", "surf"]},
 		],
-		tier: "NFE",
+		tier: "UU",
 	},
 	raichu: {
 		randomSet1: { // Attacker
@@ -306,7 +306,7 @@ let BattleFormatsData = {
 			baseMove1: "thunderbolt", baseMove2: "surf", baseMove3: "thunderwave",
 			fillerMoves1: ["reflect", "lightscreen"],
 		},
-		tier: "UU",
+		tier: "NU",
 	},
 	sandshrew: {
 		tier: "LC",
@@ -437,7 +437,7 @@ let BattleFormatsData = {
 			baseMove1: "confuseray", baseMove2: "toxic", baseMove3: "substitute",
 			fillerMoves1: ["flamethrower", "fireblast"],
 		},
-		tier: "UU",
+		tier: "NU",
 	},
 	igglybuff: {
 		eventPokemon: [
@@ -473,7 +473,7 @@ let BattleFormatsData = {
 			fillerMoves1: ["doubleedge", "doubleedge", "bodyslam"],
 			fillerMoves2: ["curse", "curse", "curse", "icebeam", "fireblast"],
 		},
-		tier: "UU",
+		tier: "NU",
 	},
 	zubat: {
 		eventPokemon: [
@@ -676,7 +676,7 @@ let BattleFormatsData = {
 			fillerMoves1: ["surf", "surf", "hydropump"],
 			fillerMoves2: ["hypnosis", "hypnosis", "hypnosis", "hiddenpowerelectric", "psychic"],
 		},
-		tier: "UU",
+		tier: "NU",
 	},
 	mankey: {
 		tier: "LC",
@@ -701,7 +701,7 @@ let BattleFormatsData = {
 			fillerMoves1: ["crosschop", "meditate"],
 			fillerMoves2: ["rockslide", "hiddenpowerghost"],
 		},
-		tier: "UU",
+		tier: "NU",
 	},
 	growlithe: {
 		tier: "LC",
@@ -760,7 +760,7 @@ let BattleFormatsData = {
 			fillerMoves2: ["icebeam", "icebeam", "bodyslam"],
 			fillerMoves3: ["lovelykiss", "lovelykiss", "lovelykiss", "lovelykiss", "dynamicpunch", "bodyslam", "counter"],
 		},
-		tier: "UU",
+		tier: "NU",
 	},
 	politoed: {
 		randomSet1: { // Belly Drum
@@ -1147,7 +1147,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	haunter: {
-		tier: "NFE",
+		tier: "UU",
 	},
 	gengar: {
 		randomSet1: { // Attacker
@@ -1356,7 +1356,7 @@ let BattleFormatsData = {
 			item: ["miracleberry"],
 			baseMove1: "endure", baseMove2: "meditate", baseMove3: "reversal", baseMove4: "hiddenpowerghost",
 		},
-		tier: "UU",
+		tier: "NU",
 	},
 	hitmonchan: {
 		randomSet1: { // Attacker
@@ -1448,7 +1448,7 @@ let BattleFormatsData = {
 			baseMove1: "sludgebomb", baseMove2: "curse", baseMove3: "explosion",
 			fillerMoves1: ["thunderbolt", "fireblast"],
 		},
-		tier: "UU",
+		tier: "NU",
 	},
 	rhyhorn: {
 		tier: "LC",
@@ -1466,7 +1466,7 @@ let BattleFormatsData = {
 			item: ["leftovers"],
 			baseMove1: "earthquake", baseMove2: "rockslide", baseMove3: "rest", baseMove4: "sleeptalk",
 		},
-		tier: "UUBL",
+		tier: "OU",
 	},
 	chansey: {
 		eventPokemon: [
@@ -1677,7 +1677,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 2, "level": 5, "shiny": 1, "moves": ["barrier", "mindreader"]},
 		],
-		tier: "NU",
+		tier: "UU",
 	},
 	scyther: {
 		randomSet1: { // SD + 3 attacks
@@ -1839,7 +1839,7 @@ let BattleFormatsData = {
 			fillerMoves1: ["thunderpunch", "thunderpunch", "hiddenpowergrass"],
 			fillerMoves2: ["crosschop", "hiddenpowerice"],
 		},
-		tier: "UU",
+		tier: "NU",
 	},
 	pinsir: {
 		randomSet1: { // Swords Dance + 3 attacks
@@ -2070,7 +2070,7 @@ let BattleFormatsData = {
 			baseMove1: "fireblast", baseMove2: "growth", baseMove3: "return",
 			fillerMoves1: ["hiddenpowergrass", "zapcannon"],
 		},
-		tier: "UU",
+		tier: "NU",
 	},
 	espeon: {
 		randomSet1: { // Growth attacker w/o Sub
@@ -2152,7 +2152,7 @@ let BattleFormatsData = {
 			fillerMoves1: ["return", "return", "doubleedge"],
 			fillerMoves2: ["thunderbolt", "thunderbolt", "thunder", "thunderwave", "thunderwave"],
 		},
-		tier: "UUBL",
+		tier: "OU",
 	},
 	omanyte: {
 		eventPokemon: [
@@ -2379,7 +2379,7 @@ let BattleFormatsData = {
 			fillerMoves1: ["reflect", "lightscreen"],
 			fillerMoves2: ["rest", "rest", "icebeam"],
 		},
-		tier: "OU",
+		tier: "UUBL",
 	},
 	mewtwo: {
 		randomSet1: { // Attacker
@@ -2547,7 +2547,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 2, "level": 40, "shiny": true, "moves": ["watergun", "bite", "scaryface", "slash"]},
 		],
-		tier: "UU",
+		tier: "NU",
 	},
 	sentret: {
 		eventPokemon: [
