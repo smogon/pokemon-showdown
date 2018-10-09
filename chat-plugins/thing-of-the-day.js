@@ -451,16 +451,14 @@ let commands = {
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 		if (!this.can('mute', null, room)) return false;
 
-		target = this.splitTarget(target);
-		let name = this.targetUsername;
-		let userid = toId(name);
-		if (!userid) return this.errorReply(`'${name}' is not a valid username.`);
+		let userid = toId(target);
+		if (!userid) return this.errorReply(`'${target}' is not a valid username.`);
 
 		if (handler.removeNomination(userid)) {
 			this.privateModAction(`(${user.name} removed ${this.targetUsername}'s nomination for the ${handler.name} of the ${handler.timeLabel}.)`);
 			this.modlog(`${handler.id.toUpperCase()} REMOVENOM`, userid);
 		} else {
-			this.sendReply(`User '${name}' has no nomination for the ${handler.name} of the ${handler.timeLabel}.`);
+			this.sendReply(`User '${target}' has no nomination for the ${handler.name} of the ${handler.timeLabel}.`);
 		}
 	},
 	removehelp: [`/-otd remove [username] - Remove a user's nomination for the Thing of the Day and prevent them from voting again until the next round. Requires: % @ * # & ~`],
