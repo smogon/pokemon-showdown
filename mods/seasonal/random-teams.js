@@ -294,6 +294,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Hurl',
 				evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
 			},
+			'imagi': {
+				species: 'Tapu Lele', ability: 'Psychic Surge', item: 'Luminous Moss', gender: 'M',
+				moves: [['Recover', 'Quiver Dance'], 'Nature\'s Madness', ['Psyshock', 'Moonblast']],
+				signatureMove: 'Delayed Promise',
+				evs: {spa: 252, spd: 4, spe: 252}, nature: 'Modest',
+			},
 			'imas': {
 				species: 'Skarmory', ability: 'Prankster', item: 'Sharp Beak', gender: 'M',
 				moves: ['Swords Dance', 'Roost', 'Taunt'],
@@ -628,7 +634,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'Hurl';
+				name = 'imagi';
 				if (pool.indexOf(name) > -1) {
 					pool.splice(pool.indexOf(name), 1);
 				} else {

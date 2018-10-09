@@ -604,6 +604,18 @@ let BattleStatuses = {
 			this.add(`c|%Hurl|i disappoint people a lot`);
 		},
 	},
+	imagi: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|+imagi|/me is eating tiramisu!`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|+imagi|/me is eating more tiramisu!`);
+		},
+		onFaint: function () {
+			this.add(`c|+imagi|/me descends into food coma. x_x`);
+		},
+	},
 	imas: {
 		noCopy: true,
 		onStart: function (pokemon) {

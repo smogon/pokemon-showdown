@@ -1556,8 +1556,39 @@ let BattleMovedex = {
 		onHit: function (target) {
 			target.side.addSideCondition('toxicspikes');
 		},
+		secondary: null,
 		target: "normal",
 		type: "Poison",
+	},
+	// imagi
+	delayedpromise: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		desc: "This move bypasses Baneful Bunker, Crafty Shield, Detect, King's Shield, Mat Block, Protect, Quick Guard, Substitute, Spiky Shield, and Wide Guard. The target's stat stages are set to 0, and the target's speed is lowered by 1 after stats are reset. 75% chance to put the target to sleep.",
+		shortDesc: "Reset's foe's stats, -1 foe speed, 75% foe slp.",
+		id: "delayedpromise",
+		name: "Delayed Promise",
+		isNonstandard: true,
+		pp: 10,
+		priority: 0,
+		flags: {authentic: 1, snatch: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, 'Wish', source);
+			this.add('-anim', source, 'Spite', target);
+		},
+		onHit: function (target, source) {
+			target.clearBoosts();
+			this.add('-clearboost', target);
+			this.boost({spe: -1}, target, source);
+		},
+		secondary: {
+			status: 'slp',
+			chance: 75,
+		},
+		target: "normal",
+		type: "Psychic",
 	},
 	// imas
 	boi: {
