@@ -9627,7 +9627,7 @@ let BattleMovedex = {
 			onStart: function (target, source, effect) {
 				this.add('-singleturn', target, 'move: Magic Coat');
 				if (effect && effect.effectType === 'Move') {
-					this.effectData.pranksterBoosted = /** @type {ActiveMove} */ (effect).pranksterBoosted;
+					this.effectData.pranksterBoosted = effect.pranksterBoosted;
 				}
 			},
 			onTryHitPriority: 2,

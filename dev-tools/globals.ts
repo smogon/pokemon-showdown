@@ -128,7 +128,7 @@ type EventInfo = {
 	from?: string,
 };
 
-type UnknownEffect = Ability | Item | Move | Template | Status | Weather
+type UnknownEffect = Ability | Item | ActiveMove | Template | Status | Weather
 
 interface SelfEffect {
 	boosts?: SparseBoostsTable
