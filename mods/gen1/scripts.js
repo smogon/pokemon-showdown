@@ -10,7 +10,7 @@
 let BattleScripts = {
 	inherit: 'gen2',
 	gen: 1,
-	debug: function (activity) {
+	debug(activity) {
 		if (this.getFormat().debug) {
 			this.add('debug', activity);
 		}
@@ -27,7 +27,7 @@ let BattleScripts = {
 	},
 	// BattlePokemon scripts.
 	pokemon: {
-		getStat: function (statName, unmodified) {
+		getStat(statName, unmodified) {
 			statName = toId(statName);
 			if (statName === 'hp') return this.maxhp;
 			if (unmodified) return this.stats[statName];
@@ -36,13 +36,13 @@ let BattleScripts = {
 		},
 		// Gen 1 function to apply a stat modification that is only active until the stat is recalculated or mon switched.
 		// Modified stats are declared in the Pokemon object in sim/pokemon.js in about line 681.
-		modifyStat: function (stat, modifier) {
+		modifyStat(stat, modifier) {
 			if (!(stat in this.stats)) return;
 			// @ts-ignore
 			this.modifiedStats[stat] = this.battle.clampIntRange(Math.floor(this.modifiedStats[stat] * modifier), 1, 999);
 		},
 		// In generation 1, boosting function increases the stored modified stat and checks for opponent's status.
-		boostBy: function (boost) {
+		boostBy(boost) {
 			let changed = false;
 			for (let i in boost) {
 				// @ts-ignore
@@ -89,9 +89,9 @@ let BattleScripts = {
 	// It deals with the beforeMove and AfterMoveSelf events.
 	// This leads with partial trapping moves shennanigans after the move has been used.
 	// It also deals with how PP reduction works on gen 1.
-	runMove: function (move, pokemon, targetLoc, sourceEffect) {
-		let target = this.getTarget(pokemon, move, targetLoc);
-		move = this.getMove(move);
+	runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect) {
+		let target = this.getTarget(pokemon, moveOrMoveName, targetLoc);
+		let move = this.getActiveMove(moveOrMoveName);
 		if (!target) target = this.resolveTarget(pokemon, move);
 		if (target.subFainted) delete target.subFainted;
 
@@ -173,11 +173,10 @@ let BattleScripts = {
 	// It is the function that actually uses the move, running ModifyMove events.
 	// It uses the move and then deals with the effects after the move.
 	// @ts-ignore
-	useMove: function (move, pokemon, target, sourceEffect) {
+	useMove(moveOrMoveName, pokemon, target, sourceEffect) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
-		move = this.getMove(move);
-		let baseMove = move;
-		move = this.getMoveCopy(move);
+		let baseMove = this.getMove(moveOrMoveName);
+		let move = this.getActiveMove(baseMove);
 		if (!target) target = this.resolveTarget(pokemon, move);
 		if (move.target === 'self') {
 			target = pokemon;
@@ -255,7 +254,7 @@ let BattleScripts = {
 	// tryMoveHit can be found on scripts.js
 	// This function attempts a move hit and returns the attempt result before the actual hit happens.
 	// It deals with partial trapping weirdness and accuracy bugs as well.
-	tryMoveHit: function (target, pokemon, move) {
+	tryMoveHit(target, pokemon, move) {
 		let boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
 		let doSelfDestruct = true;
 		/**@type {number | false} */
@@ -405,10 +404,9 @@ let BattleScripts = {
 	// move Hit can be found on scripts.js
 	// It deals with the actual move hit, as the name indicates, dealing damage and/or effects.
 	// This function also deals with the Gen 1 Substitute behaviour on the hitting process.
-	moveHit: function (target, pokemon, move, moveData, isSecondary, isSelf) {
+	moveHit(target, pokemon, move, moveData, isSecondary, isSelf) {
 		/**@type {number | false} */
 		let damage = 0;
-		move = this.getMoveCopy(move);
 
 		if (!isSecondary && !isSelf) this.setActiveMove(move, pokemon, target);
 		/**@type {number | boolean} */
@@ -626,7 +624,7 @@ let BattleScripts = {
 	},
 	// boost can be found on sim/battle.js on Battle object.
 	// It deals with Pokémon stat boosting, including Gen 1 buggy behaviour with burn and paralyse.
-	boost: function (boost, target, source = null, effect = null) {
+	boost(boost, target, source = null, effect = null) {
 		if (this.event) {
 			if (!target) target = this.event.target;
 			if (!source) source = this.event.source;
@@ -680,7 +678,7 @@ let BattleScripts = {
 	// It calculates and executes the damage damage from source to target with effect.
 	// It also deals with recoil and drains.
 	// @ts-ignore
-	damage: function (damage, target, source, effect) {
+	damage(damage, target, source, effect) {
 		if (this.event) {
 			if (!target) target = this.event.target;
 			if (!source) source = this.event.source;
@@ -742,7 +740,7 @@ let BattleScripts = {
 	// directDamage can be found on sim/battle.js in Battle object
 	// It deals direct damage damage from source to target with effect.
 	// It also deals with Gen 1 weird Substitute behaviour.
-	directDamage: function (damage, target, source, effect) {
+	directDamage(damage, target, source, effect) {
 		if (this.event) {
 			if (!target) target = this.event.target;
 			if (!source) source = this.event.source;
@@ -782,22 +780,20 @@ let BattleScripts = {
 	},
 	// getDamage can be found on sim/battle.js on the Battle object.
 	// It calculates the damage pokemon does to target with move.
-	getDamage: function (pokemon, target, move, suppressMessages) {
+	getDamage(pokemon, target, move, suppressMessages) {
 		// First of all, we get the move.
 		if (typeof move === 'string') {
-			move = this.getMove(move);
+			move = this.getActiveMove(move);
 		} else if (typeof move === 'number') {
 			// @ts-ignore
-			move = {
+			move = /** @type {ActiveMove} */ ({
 				basePower: move,
 				type: '???',
 				category: 'Physical',
 				willCrit: false,
 				flags: {},
-			};
+			});
 		}
-
-		move = /**@type {Move} */ (move); // eslint-disable-line no-self-assign
 
 		// Let's see if the target is immune to the move.
 		if (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) {

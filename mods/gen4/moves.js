@@ -429,16 +429,14 @@ let BattleMovedex = {
 			if (target.side.sideConditions['futuremove'].positions[target.position]) {
 				return false;
 			}
-			/**@type {Move} */
-			// @ts-ignore
-			let moveData = {
+			let moveData = /** @type {ActiveMove} */ ({
 				name: "Doom Desire",
 				basePower: 120,
 				category: "Special",
 				flags: {},
 				willCrit: false,
 				type: '???',
-			};
+			});
 			let damage = this.getDamage(source, target, moveData, true);
 			target.side.sideConditions['futuremove'].positions[target.position] = {
 				duration: 3,
@@ -691,16 +689,14 @@ let BattleMovedex = {
 			if (target.side.sideConditions['futuremove'].positions[target.position]) {
 				return false;
 			}
-			/**@type {Move} */
-			// @ts-ignore
-			let moveData = {
+			let moveData = /** @type {ActiveMove} */ ({
 				name: "Future Sight",
 				basePower: 80,
 				category: "Special",
 				flags: {},
 				willCrit: false,
 				type: '???',
-			};
+			});
 			let damage = this.getDamage(source, target, moveData, true);
 			target.side.sideConditions['futuremove'].positions[target.position] = {
 				duration: 3,
@@ -984,7 +980,7 @@ let BattleMovedex = {
 					return;
 				}
 				target.removeVolatile('magiccoat');
-				let newMove = this.getMoveCopy(move.id);
+				let newMove = this.getActiveMove(move.id);
 				newMove.hasBounced = true;
 				this.useMove(newMove, target, source);
 				return null;

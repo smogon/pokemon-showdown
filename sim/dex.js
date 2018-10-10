@@ -328,6 +328,7 @@ class ModdedDex {
 		} else if (id === 'nidoran' && name.slice(-1) === '♂') {
 			id = 'nidoranm';
 		}
+		/** @type {any} */
 		let template = this.templateCache.get(id);
 		if (template) return template;
 		if (this.data.Aliases.hasOwnProperty(id)) {
@@ -442,20 +443,20 @@ class ModdedDex {
 	 * Ensure we're working on a copy of a move (and make a copy if we aren't)
 	 *
 	 * Remember: "ensure" - by default, it won't make a copy of a copy:
-	 *     moveCopy === Dex.getMoveCopy(moveCopy)
+	 *     moveCopy === Dex.getActiveMove(moveCopy)
 	 *
 	 * If you really want to, use:
-	 *     moveCopyCopy = Dex.getMoveCopy(moveCopy.id)
+	 *     moveCopyCopy = Dex.getActiveMove(moveCopy.id)
 	 *
 	 * @param {Move | string} move - Move ID, move object, or movecopy object describing move to copy
-	 * @return {Move} movecopy object
+	 * @return {ActiveMove}
 	 */
-	getMoveCopy(move) {
+	getActiveMove(move) {
 		// @ts-ignore
-		if (move && move.isCopy) return move;
+		if (move && typeof move.hit === 'number') return move;
 		move = this.getMove(move);
-		let moveCopy = this.deepClone(move);
-		moveCopy.isCopy = true;
+		let moveCopy = /** @type {ActiveMove} */ (this.deepClone(move));
+		moveCopy.hit = 0;
 		return moveCopy;
 	}
 	/**
@@ -1338,11 +1339,12 @@ class ModdedDex {
 	 * @return {any}
 	 */
 	deepClone(obj) {
-		if (typeof obj === 'function') return obj;
 		if (obj === null || typeof obj !== 'object') return obj;
+		// @ts-ignore
 		if (Array.isArray(obj)) return obj.map(prop => this.deepClone(prop));
 		const clone = Object.create(Object.getPrototypeOf(obj));
 		for (const key of Object.keys(obj)) {
+			// @ts-ignore
 			clone[key] = this.deepClone(obj[key]);
 		}
 		return clone;
