@@ -2,7 +2,7 @@
 
 /**@type {ModdedBattleScriptsData} */
 let BattleScripts = {
-	init: function () {
+	init() {
 		this.modData('Pokedex', 'cherrimsunshine').types = ['Grass', 'Fire'];
 
 		// Give Hurricane to all the Bug/Flying Quiver-dancers

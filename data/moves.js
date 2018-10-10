@@ -9627,7 +9627,7 @@ let BattleMovedex = {
 			onStart: function (target, source, effect) {
 				this.add('-singleturn', target, 'move: Magic Coat');
 				if (effect && effect.effectType === 'Move') {
-					this.effectData.pranksterBoosted = effect.pranksterBoosted;
+					this.effectData.pranksterBoosted = /** @type {ActiveMove} */ (effect).pranksterBoosted;
 				}
 			},
 			onTryHitPriority: 2,
@@ -9635,7 +9635,7 @@ let BattleMovedex = {
 				if (target === source || move.hasBounced || !move.flags['reflectable']) {
 					return;
 				}
-				let newMove = this.getMoveCopy(move.id);
+				let newMove = this.getActiveMove(move.id);
 				newMove.hasBounced = true;
 				newMove.pranksterBoosted = this.effectData.pranksterBoosted;
 				this.useMove(newMove, target, source);
@@ -9645,7 +9645,7 @@ let BattleMovedex = {
 				if (target.side === source.side || move.hasBounced || !move.flags['reflectable']) {
 					return;
 				}
-				let newMove = this.getMoveCopy(move.id);
+				let newMove = this.getActiveMove(move.id);
 				newMove.hasBounced = true;
 				newMove.pranksterBoosted = false;
 				this.useMove(newMove, this.effectData.target, source);
@@ -9947,7 +9947,7 @@ let BattleMovedex = {
 				let noMeFirst = [
 					'chatter', 'counter', 'covet', 'focuspunch', 'mefirst', 'metalburst', 'mirrorcoat', 'struggle', 'thief',
 				];
-				let move = this.getMoveCopy(action.move.id);
+				let move = this.getActiveMove(action.move.id);
 				if (move.category !== 'Status' && !noMeFirst.includes(move.id)) {
 					pokemon.addVolatile('mefirst');
 					this.useMove(move, pokemon, target);
@@ -17947,11 +17947,6 @@ let BattleMovedex = {
 		accuracy: 90,
 		basePower: 10,
 		basePowerCallback: function (pokemon, target, move) {
-			if (move.hit) {
-				move.hit++;
-			} else {
-				move.hit = 1;
-			}
 			return 10 * move.hit;
 		},
 		category: "Physical",
