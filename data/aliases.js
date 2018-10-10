@@ -605,6 +605,7 @@ let BattleAliases = {
 	"naga": "Naganadel",
 	"nape": "Infernape",
 	"nebby": "Cosmog",
+	"neckboy": "Exeggutor-Alola",
 	"obama": "Abomasnow",
 	"ogre": "Kyogre",
 	"ohmagod": "Plasmanta",
