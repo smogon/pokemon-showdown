@@ -102,7 +102,7 @@ let BattleMovedex = {
 		priority: 0,
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
-			this.add('-anim', source, 'Headbutt', source);
+			this.add('-anim', source, 'Headbutt', target);
 		},
 		flags: {protect: 1, mirror: 1},
 		secondary: null,
@@ -2655,6 +2655,33 @@ let BattleMovedex = {
 		target: "self",
 		type: "Grass",
 	},
+	// Psynergy
+	resolve: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Raises the user's Speed by 1 stage. Gives Focus Energy",
+		shortDesc: "Raises the user's Speed by 1; Focus Energy",
+		id: "resolve",
+		name: "Resolve",
+		isNonstandard: true,
+		pp: 10,
+		priority: 0,
+		flags: {snatch: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Acupressure", source);
+			this.add('-anim', source, "Flare Blitz", source);
+		},
+		onHit: function (target, source) {
+			source.addVolatile('focusenergy', source);
+		},
+		boosts: {
+			spe: 1,
+		},
+		target: "self",
+		type: "Fighting",
+	},
 	// Quite Quiet
 	literallycheating: {
 		accuracy: true,
@@ -2674,14 +2701,7 @@ let BattleMovedex = {
 		pseudoWeather: 'literallycheating',
 		effect: {
 			duration: 3,
-			durationCallback: function (source, effect) {
-				if (source && source.hasItem('terrainextender')) {
-					return 5;
-				}
-				return 3;
-			},
 			onBoost: function (boost, target, source, effect) {
-				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
 				let positiveBoost = false;
 				let values = Object.values(boost);
 				for (let i of values) {
@@ -2691,12 +2711,12 @@ let BattleMovedex = {
 					}
 				}
 				if (!positiveBoost || !target.lastMove) return;
-				this.add('-activate', target, 'move: Literally Cheating', target.lastMove.name, target.lastMove.pp);
 				for (const moveSlot of target.moveSlots) {
 					if (moveSlot.id === target.lastMove.id) {
 						target.deductPP(moveSlot.id, moveSlot.pp);
 					}
 				}
+				this.add('-activate', target, 'move: Literally Cheating', target.lastMove.name, target.lastMove.pp);
 				this.add('-message', `${target.name} lost PP!`);
 			},
 			onStart: function (battle, source, effect) {
@@ -3684,6 +3704,30 @@ let BattleMovedex = {
 				}
 			},
 		},
+	},
+	// Zyg
+	thelifeofzyg: {
+		accuracy: true,
+		category: "Status",
+		desc: "Badly poisons the target all Pokemon on the field.",
+		shortDesc: "Badly poisons both Pokemon.",
+		id: "thelifeofzyg",
+		name: "The Life of Zyg",
+		isNonstandard: true,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onPrepareHit: function (target, source) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Toxic", target);
+		},
+		onHit: function (target, source) {
+			target.trySetStatus('tox', source);
+			source.trySetStatus('tox', source);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Poison",
 	},
 };
 

@@ -424,6 +424,22 @@ let BattleAbilities = {
 			}
 		},
 	},
+	// Psynergy
+	wrath: {
+		desc: "This Pokemon's moves have their accuracy multiplied by 1.1 and their critical hit ratio is raised by 1 stage.",
+		shortDesc: "+1 Crit Ratio; Accuracy of moves increased.",
+		id: "wrath",
+		name: "Wrath",
+		isNonstandard: true,
+		onModifyCritRatio: function (critRatio) {
+			return critRatio + 1;
+		},
+		onModifyMove: function (move) {
+			if (typeof move.accuracy === 'number') {
+				move.accuracy *= 1.1;
+			}
+		},
+	},
 	// Rory Mercury
 	recharge: {
 		desc: "This Pokemon has its major status condition cured, and restores 1/3 of its maximum HP, rounded down, when it switches out. When this Pokemon switches in, if it uses an Electric-type attack on the next turn, its power will be doubled",

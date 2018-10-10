@@ -781,10 +781,25 @@ let BattleStatuses = {
 	},
 	lycaniumz: {
 		noCopy: true,
-		onStart: function () {
+		onStart: function (pokemon) {
 			this.add(`c| Lycanium Z|It's either I win or you lose, 'cause I won't accept defeat.`);
+			if (pokemon.illusion) return;
+			let i = 0;
+			for (const moveSlot of pokemon.moveSlots) {
+				let move = this.getMove(moveSlot.id);
+				// @ts-ignore hacky way to reduce purple pill's PP
+				moveSlot.pp = Math.floor(((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5) * (pokemon.ppPercentages ? pokemon.ppPercentages[i] : 1));
+				i++;
+			}
 		},
-		onSwitchOut: function () {
+		onBeforeSwitchOut: function (pokemon) {
+			if (pokemon.illusion) return;
+			// @ts-ignore track percentages to keep purple pills from resetting pp
+			pokemon.ppPercentages = pokemon.moveSlots.slice().map(m => {
+				return m.pp / m.maxpp;
+			});
+		},
+		onSwitchOut: function (pokemon) {
 			this.add(`c| Lycanium Z|What I gotta do to get it through to you? I'm superhuman.`);
 		},
 		onFaint: function () {
@@ -996,6 +1011,18 @@ let BattleStatuses = {
 		},
 		onFaint: function () {
 			this.add(`c|+ptoad⚬|Wow. Way to rain on my parade.`);
+		},
+	},
+	psynergy: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|+Psynergy|oh`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|+Psynergy|Joe doesn't pay me enough for this`);
+		},
+		onFaint: function () {
+			this.add(`c|+Psynergy|I'm going to be late...`);
 		},
 	},
 	quitequiet: {
@@ -1321,6 +1348,18 @@ let BattleStatuses = {
 			this.add(`c|~Zarel|Your mom`);
 			// message is shown after the "Zarel Fainted!" message
 			this.add('message', 'Zarel used your mom!');
+		},
+	},
+	zyguser: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|+Zyg|/me sighs`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|+Zyg|/me sighs`);
+		},
+		onFaint: function () {
+			this.add(`c|+Zyg|Brexit means Brexit`);
 		},
 	},
 	// Custom effect for Yuki

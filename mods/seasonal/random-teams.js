@@ -474,6 +474,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Lilypad Shield',
 				evs: {hp: 252, def: 60, spd: 196}, ivs: {atk: 0}, nature: 'Calm',
 			},
+			'Psynergy': {
+				species: 'Blaziken', ability: 'Wrath', item: 'Blazikenite', gender: 'M',
+				moves: ['Flare Blitz', ['High Jump Kick', 'Superpower'], ['Wild Charge', 'Thunder Punch']],
+				signatureMove: 'Resolve',
+				evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
+			},
 			'Quite Quiet': {
 				species: 'Misdreavus', ability: 'Levitate', item: 'Leftovers', gender: 'F',
 				moves: [['Moongeist Beam', 'Shadow Ball', 'Night Shade'], 'Recover', ['Heal Bell', 'Encore', 'Taunt', 'Swagger']],
@@ -630,6 +636,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Relic Song Dance',
 				evs: {hp: 4, atk: 252, spa: 252}, nature: 'Quiet',
 			},
+			'Zyg': {
+				species: 'Zygarde', ability: 'Poison Heal', item: 'Leftovers', gender: 'N',
+				moves: ['Thousand Arrows', 'Stone Edge', 'Coil'],
+				signatureMove: 'The Life of Zyg',
+				evs: {hp: 188, atk: 68, def: 252}, nature: 'Adamant',
+			},
 		};
 		let pool = Object.keys(sets);
 		/** @type {{[type: string]: number}} */
@@ -640,7 +652,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'Lost Seso';
+				name = 'Psynergy';
 				if (pool.indexOf(name) > -1) {
 					pool.splice(pool.indexOf(name), 1);
 				} else {

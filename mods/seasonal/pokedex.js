@@ -71,6 +71,11 @@ let BattlePokedex = {
 		inherit: true,
 		abilities: {0: 'Comatose'},
 	},
+	// Psynergy
+	blazikenmega: {
+		inherit: true,
+		abilities: {0: 'Wrath'},
+	},
 	// Saburo
 	metagrossmega: {
 		inherit: true,
