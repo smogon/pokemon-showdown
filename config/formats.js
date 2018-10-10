@@ -235,7 +235,7 @@ let Formats = [
 				'Claydol', 'Cofagrigus', 'Crawdaunt', 'Croagunk', 'Crobat', 'Cubone', 'Darkrai', 'Decidueye', 'Dewpider', 'Dhelmise', 'Ditto', 'Doublade',
 				'Drapion', 'Drifblim', 'Drifloon', 'Drowzee', 'Dusclops', 'Dusknoir', 'Duskull', 'Dustox', 'Eevee', 'Ekans', 'Electivire', 'Elgyem', 'Espeon',
 				'Espurr', 'Exploud', 'Frillish', 'Froslass', 'Galvantula', 'Garbodor', 'Gastly', 'Gengar', 'Gigalith', 'Glalie', 'Gligar', 'Gliscor', 'Golbat',
-				'Golett', 'Golisopod', 'Golurk', 'Gothita', 'Gothitelle', 'Gothorita', 'Gourgeist', 'Gourgeist-Large', 'Gourgeist-Small', 'Gourgeist-Super',
+				'Golett', 'Golisopod', 'Golurk', 'Gothita', 'Gothitelle', 'Gothorita', 'Gourgeist', 'Gourgeist-Large', 'Gourgeist-Small', 'Gourgeist-Super', 'Granbull',
 				'Grimer', 'Grimer-Alola', 'Gulpin', 'Guzzlord', 'Haunter', 'Honchkrow', 'Honedge', 'Hoopa', 'Hoothoot', 'Houndoom', 'Houndour', 'Huntail',
 				'Hydreigon', 'Hypno', 'Incineroar', 'Jellicent', 'Joltik', 'Kabuto', 'Kabutops', 'Koffing', 'Krokorok', 'Krookodile', 'Lampent', 'Larvesta',
 				'Liepard', 'Litwick', 'Loudred', 'Lunatone', 'Lycanroc-Midnight', 'Magmortar', 'Malamar', 'Mandibuzz', 'Mareanie', 'Marowak', 'Marowak-Alola',
