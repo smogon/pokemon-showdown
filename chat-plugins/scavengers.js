@@ -176,7 +176,7 @@ let HostLeaderboard = new PlayerLadder(HOST_DATA_FILE);
 let PlayerLeaderboard = new PlayerLadder(PLAYER_DATA_FILE);
 
 function formatQueue(queue = [], viewer, room) {
-	const isStaff = viewer.can('mute', room);
+	const isStaff = viewer.can('mute', null, room);
 	const queueDisabled = room.scavQueueDisabled;
 	const timerDuration = room.defaultScavTimer || DEFAULT_TIMER_DURATION;
 	let buffer;
