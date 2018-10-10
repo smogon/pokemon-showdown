@@ -304,6 +304,12 @@ interface EffectData extends EventMethods {
 	infiltrates?: boolean
 	isNonstandard?: boolean | string
 	isUnreleased?: boolean
+	/**
+	 * `true` for generic Z-moves like Gigavolt Havoc.
+	 * Also `true` for Z-powered status moves like Z-Encore.
+	 * Move ID of the base move, for specific Z-moves like Stoked
+	 * Sparksurfer.
+	 */
 	isZ?: boolean | string
 	noCopy?: boolean
 	onAccuracyPriority?: number
@@ -545,7 +551,12 @@ interface ActiveMove extends Effect, MoveData {
 	totalDamage?: number | false
 	willChangeForme?: boolean
 	zBrokeProtect?: boolean
-	zPowered?: boolean
+	/**
+	 * Has this move been boosted by a Z-crystal? Usually the same as
+	 * `isZ`, but hacked moves will have this be `false` and `isZ` be
+	 * truthy.
+	 */
+	isZPowered?: boolean
 }
 
 type TemplateAbility = {0: string, 1?: string, H?: string, S?: string}

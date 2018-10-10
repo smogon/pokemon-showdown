@@ -32,8 +32,6 @@ let BattleScripts = {
 
 		if (!target && target !== false) target = this.resolveTarget(pokemon, move);
 
-		// copy the priority for Quick Guard
-		if (zMove) move.priority = baseMove.priority;
 		move.isExternal = externalMove;
 
 		this.setActiveMove(move, pokemon, target);
@@ -141,17 +139,17 @@ let BattleScripts = {
 	},
 	useMoveInner(moveOrMoveName, pokemon, target, sourceEffect, zMove) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
+		if (sourceEffect && sourceEffect.id === 'instruct') sourceEffect = null;
+
 		let move = this.getActiveMove(moveOrMoveName);
-		if (zMove && move.id === 'weatherball') {
-			let baseMove = move;
-			this.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
+		if (zMove || (move.category !== 'Status' && sourceEffect && sourceEffect.isZ)) {
+			if (move.id === 'weatherball') {
+				this.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
+				if (move.type !== 'Normal') sourceEffect = move;
+			}
 			move = this.getActiveZMove(move, pokemon);
-			move.zPowered = true;
-			if (move.type !== 'Normal') sourceEffect = baseMove;
-		} else if (zMove || (move.category !== 'Status' && sourceEffect && sourceEffect.isZ && sourceEffect.id !== 'instruct')) {
-			move = this.getActiveZMove(move, pokemon);
-			move.zPowered = true;
 		}
+
 		if (this.activeMove) {
 			move.priority = this.activeMove.priority;
 			if (!move.hasBounced) move.pranksterBoosted = this.activeMove.pranksterBoosted;
@@ -860,19 +858,25 @@ let BattleScripts = {
 			let item = pokemon.getItem();
 			if (move.name === item.zMoveFrom) {
 				// @ts-ignore
-				return this.getActiveMove(item.zMove);
+				let zMove = this.getActiveMove(item.zMove);
+				zMove.isZPowered = true;
+				return zMove;
 			}
 		}
 
 		if (move.category === 'Status') {
 			let zMove = this.getActiveMove(move);
 			zMove.isZ = true;
+			zMove.isZPowered = true;
 			return zMove;
 		}
 		let zMove = this.getActiveMove(this.zMoveTable[move.type]);
 		// @ts-ignore
 		zMove.basePower = move.zMovePower;
 		zMove.category = move.category;
+		// copy the priority for Quick Guard
+		zMove.priority = move.priority;
+		zMove.isZPowered = true;
 		return zMove;
 	},
 

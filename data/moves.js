@@ -1034,7 +1034,7 @@ let BattleMovedex = {
 				return null;
 			},
 			onHit: function (target, source, move) {
-				if (move.zPowered && move.flags['contact']) {
+				if (move.isZPowered && move.flags['contact']) {
 					source.trySetStatus('psn', target);
 				}
 			},
@@ -8870,7 +8870,7 @@ let BattleMovedex = {
 				return null;
 			},
 			onHit: function (target, source, move) {
-				if (move.zPowered && move.flags['contact']) {
+				if (move.isZPowered && move.flags['contact']) {
 					this.boost({atk: -2}, source, target, this.getMove("King's Shield"));
 				}
 			},
@@ -15541,7 +15541,7 @@ let BattleMovedex = {
 				return null;
 			},
 			onHit: function (target, source, move) {
-				if (move.zPowered && move.flags['contact']) {
+				if (move.isZPowered && move.flags['contact']) {
 					this.damage(source.maxhp / 8, source, target);
 				}
 			},
