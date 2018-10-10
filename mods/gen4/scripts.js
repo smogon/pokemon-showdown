@@ -4,13 +4,13 @@
 let BattleScripts = {
 	inherit: 'gen5',
 	gen: 4,
-	init: function () {
+	init() {
 		for (let i in this.data.Pokedex) {
 			delete this.data.Pokedex[i].abilities['H'];
 		}
 	},
 
-	modifyDamage: function (baseDamage, pokemon, target, move, suppressMessages = false) {
+	modifyDamage(baseDamage, pokemon, target, move, suppressMessages = false) {
 		// DPP divides modifiers into several mathematically important stages
 		// The modifiers run earlier than other generations are called with ModifyDamagePhase1 and ModifyDamagePhase2
 
@@ -89,7 +89,7 @@ let BattleScripts = {
 
 		return Math.floor(baseDamage);
 	},
-	tryMoveHit: function (target, pokemon, move) {
+	tryMoveHit(target, pokemon, move) {
 		this.setActiveMove(move, pokemon, target);
 		let hitResult = true;
 
@@ -290,7 +290,7 @@ let BattleScripts = {
 		return damage;
 	},
 
-	calcRecoilDamage: function (damageDealt, move) {
+	calcRecoilDamage(damageDealt, move) {
 		// @ts-ignore
 		return this.clampIntRange(Math.floor(damageDealt * move.recoil[0] / move.recoil[1]), 1);
 	},

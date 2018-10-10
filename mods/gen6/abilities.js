@@ -81,7 +81,7 @@ let BattleAbilities = {
 		desc: "This Pokemon's damaging moves become multi-hit moves that hit twice. The second hit has its damage halved. Does not affect multi-hit moves or moves that have multiple targets.",
 		shortDesc: "This Pokemon's damaging moves hit twice. The second hit has its damage halved.",
 		onBasePower: function (basePower, pokemon, target, move) {
-			if (move.hasParentalBond && typeof move.hit === 'number' && ++move.hit > 1) return this.chainModify(0.5);
+			if (move.multihitType === 'parentalbond' && move.hit > 1) return this.chainModify(0.5);
 		},
 	},
 	"pixilate": {

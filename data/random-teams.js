@@ -1772,8 +1772,10 @@ class RandomTeams extends Dex.ModdedDex {
 				if (pokemon.length === 1) {
 					template = potd;
 					if (template.species === 'Magikarp') {
+						// @ts-ignore
 						template.randomBattleMoves = ['bounce', 'flail', 'splash', 'magikarpsrevenge'];
 					} else if (template.species === 'Delibird') {
+						// @ts-ignore
 						template.randomBattleMoves = ['present', 'bestow'];
 					}
 				} else if (template.species === potd.species) {

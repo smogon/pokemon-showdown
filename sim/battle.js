@@ -46,6 +46,7 @@ class Battle extends Dex.ModdedDex {
 	constructor(options) {
 		let format = Dex.getFormat(options.formatid, true);
 		super(format.mod);
+		/** @type {{[k: string]: string}} */
 		this.zMoveTable = {};
 		Object.assign(this, this.data.Scripts);
 
@@ -114,6 +115,7 @@ class Battle extends Dex.ModdedDex {
 		this.eventDepth = 0;
 		/** @type {?Move} */
 		this.lastMove = null;
+		/** @type {?ActiveMove} */
 		this.activeMove = null;
 		this.activePokemon = null;
 		this.activeTarget = null;
@@ -417,7 +419,7 @@ class Battle extends Dex.ModdedDex {
 	}
 
 	/**
-	 * @param {?Move} [move]
+	 * @param {?ActiveMove} [move]
 	 * @param {?Pokemon} [pokemon]
 	 * @param {?Pokemon | false} [target]
 	 */
@@ -2107,20 +2109,21 @@ class Battle extends Dex.ModdedDex {
 	/**
 	 * @param {Pokemon} pokemon
 	 * @param {Pokemon} target
-	 * @param {string | number | Move} move
+	 * @param {string | number | ActiveMove} move
 	 * @param {boolean} [suppressMessages]
 	 */
 	getDamage(pokemon, target, move, suppressMessages = false) {
-		if (typeof move === 'string') move = this.getMove(move);
+		if (typeof move === 'string') move = this.getActiveMove(move);
 
 		if (typeof move === 'number') {
 			let basePower = move;
-			move = new Data.Move({
+			move = /** @type {ActiveMove} */ (new Data.Move({
 				basePower,
 				type: '???',
 				category: 'Physical',
 				willCrit: false,
-			});
+			}));
+			move.hit = 0;
 		}
 
 		if (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) {
@@ -2250,7 +2253,7 @@ class Battle extends Dex.ModdedDex {
 	 * @param {number} baseDamage
 	 * @param {Pokemon} pokemon
 	 * @param {Pokemon} target
-	 * @param {Move} move
+	 * @param {ActiveMove} move
 	 * @param {boolean} [suppressMessages]
 	 */
 	modifyDamage(baseDamage, pokemon, target, move, suppressMessages = false) {
@@ -2554,7 +2557,7 @@ class Battle extends Dex.ModdedDex {
 		if (!action) throw new Error(`Action not passed to resolveAction`);
 
 		if (!action.side && action.pokemon) action.side = action.pokemon.side;
-		if (!action.move && action.moveid) action.move = this.getMoveCopy(action.moveid);
+		if (!action.move && action.moveid) action.move = this.getActiveMove(action.moveid);
 		if (!action.choice && action.move) action.choice = 'move';
 		if (!action.priority && action.priority !== 0) {
 			let priorities = {
@@ -2600,7 +2603,7 @@ class Battle extends Dex.ModdedDex {
 		let deferPriority = this.gen >= 7 && action.mega && action.mega !== 'done';
 		if (action.move) {
 			let target = null;
-			action.move = this.getMoveCopy(action.move);
+			action.move = this.getActiveMove(action.move);
 
 			if (!action.targetLoc) {
 				target = this.resolveTarget(action.pokemon, action.move);
@@ -3384,7 +3387,7 @@ class Battle extends Dex.ModdedDex {
 	 * @param {?Pokemon} target
 	 * @param {Pokemon} pokemon
 	 * @param {string | Move} move
-	 * @param {Move | SelfEffect | SecondaryEffect} [moveData]
+	 * @param {ActiveMove | SelfEffect | SecondaryEffect} [moveData]
 	 * @param {boolean} [isSecondary]
 	 * @param {boolean} [isSelf]
 	 * @return {number | false}
@@ -3450,14 +3453,14 @@ class Battle extends Dex.ModdedDex {
 	/**
 	 * @param {string | Move} move
 	 * @param {Pokemon} pokemon
-	 * @return {Move}
+	 * @return {ActiveMove}
 	 */
-	getZMoveCopy(move, pokemon) {
-		throw new Error(`The getZMoveCopy function needs to be implemented in scripts.js or the battle format.`);
+	getActiveZMove(move, pokemon) {
+		throw new Error(`The getActiveZMove function needs to be implemented in scripts.js or the battle format.`);
 	}
 
 	/**
-	 * @param {Move} move
+	 * @param {ActiveMove} move
 	 * @param {Pokemon} pokemon
 	 */
 	runZPower(move, pokemon) {

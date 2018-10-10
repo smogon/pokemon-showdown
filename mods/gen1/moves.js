@@ -106,7 +106,7 @@ let BattleMovedex = {
 					}
 					this.add('-end', pokemon, 'Bide');
 					let target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
-					this.moveHit(target, pokemon, 'bide', /** @type {Move} */ ({damage: this.effectData.totalDamage * 2}));
+					this.moveHit(target, pokemon, 'bide', /** @type {ActiveMove} */ ({damage: this.effectData.totalDamage * 2}));
 					return false;
 				}
 				this.add('-activate', pokemon, 'Bide');
