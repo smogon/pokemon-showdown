@@ -176,6 +176,7 @@ let HostLeaderboard = new PlayerLadder(HOST_DATA_FILE);
 let PlayerLeaderboard = new PlayerLadder(PLAYER_DATA_FILE);
 
 function formatQueue(queue = [], viewer, room) {
+	const isStaff = viewer.can('mute', null, room);
 	const queueDisabled = room.scavQueueDisabled;
 	const timerDuration = room.defaultScavTimer || DEFAULT_TIMER_DURATION;
 	let buffer;
@@ -184,7 +185,9 @@ function formatQueue(queue = [], viewer, room) {
 	} else {
 		buffer = `<tr><td colspan=3>The scavenger queue is currently empty.</td></tr>`;
 	}
-	return `<div class="ladder"><table style="width: 100%"><tr><th>By</th><th>Questions</th></tr>${buffer}</table></div><table style="width: 100%"><tr><td style="text-align: left;">Auto Timer Duration: ${timerDuration} minutes</td><td>Auto Dequeue: <button class="button${!queueDisabled ? '" name="send" value="/scav disablequeue"' : ' disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;"'}>OFF</button>&nbsp;<button class="button${queueDisabled ? '" name="send" value="/scav enablequeue"' : ' disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;"'}>ON</button></td><td style="text-align: right;"><button class="button" name="send" value="/scav next 0">Start the next hunt</button></td></tr></table>`;
+	let template = `<div class="ladder"><table style="width: 100%"><tr><th>By</th><th>Questions</th></tr>${isStaff ? buffer : buffer.replace(/<button.*?>.+?<\/button>/gi, '')}</table></div>`;
+	if (isStaff) template += `<table style="width: 100%"><tr><td style="text-align: left;">Auto Timer Duration: ${timerDuration} minutes</td><td>Auto Dequeue: <button class="button${!queueDisabled ? '" name="send" value="/scav disablequeue"' : ' disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;"'}>OFF</button>&nbsp;<button class="button${queueDisabled ? '" name="send" value="/scav enablequeue"' : ' disabled" style="font-weight:bold; color:#575757; font-weight:bold; background-color:#d3d3d3;"'}>ON</button></td><td style="text-align: right;"><button class="button" name="send" value="/scav next 0">Start the next hunt</button></td></tr></table>`;
+	return template;
 }
 
 function formatOrder(place) {
@@ -1044,7 +1047,6 @@ let commands = {
 
 	viewqueue: function (target, room, user) {
 		if (room.id !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
-		if (!this.can('mute', null, room)) return false;
 
 		this.sendReply(`|uhtml|scav-queue|${formatQueue(room.scavQueue, user, room)}`);
 	},
