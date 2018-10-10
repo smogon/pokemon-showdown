@@ -92,10 +92,7 @@ let BattleScripts = {
 	},
 	doGetMixedTemplate(templateOrTemplateName, deltas) {
 		if (!deltas) throw new TypeError("Must specify deltas!");
-		if (!templateOrTemplateName || typeof templateOrTemplateName === 'string') {
-			templateOrTemplateName = this.getTemplate(templateOrTemplateName);
-		}
-		let template = this.deepClone(templateOrTemplateName);
+		let template = this.deepClone(this.getTemplate(templateOrTemplateName));
 		template.abilities = {'0': deltas.ability};
 		if (template.types[0] === deltas.type) {
 			template.types = [deltas.type];
