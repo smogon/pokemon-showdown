@@ -1586,11 +1586,11 @@ let Rooms = Object.assign(getRoom, {
 		room.game = new Rooms.RoomBattle(room, formatid, options);
 
 		let inviteOnly = (options.inviteOnly || []);
-		if (p1 && p1.inviteOnlyNextBattle) {
+		if (p1 && (p1.inviteOnlyNextBattle || p1.inviteOnly)) {
 			inviteOnly.push(p1.userid);
 			p1.inviteOnlyNextBattle = false;
 		}
-		if (p2 && p2.inviteOnlyNextBattle) {
+		if (p2 && (p2.inviteOnlyNextBattle || p2.inviteOnly)) {
 			inviteOnly.push(p2.userid);
 			p2.inviteOnlyNextBattle = false;
 		}

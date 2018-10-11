@@ -489,6 +489,7 @@ class User {
 		this.ignorePMs = false;
 		this.lastConnected = 0;
 		this.inviteOnlyNextBattle = false;
+		this.inviteOnly = false;
 
 		// chat queue
 		/** @type {ChatQueueEntry[]?} */
