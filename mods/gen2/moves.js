@@ -144,9 +144,9 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "Deals damage to the opposing Pokemon equal to twice the HP lost by the user from a physical attack this turn. This move considers Hidden Power as Normal type, and only the last hit of a multi-hit attack is counted. Fails if the user moves first, if the user was not hit by a physical attack this turn, or if the user did not lose HP from the attack. If the opposing Pokemon used Fissure or Horn Drill and missed, this move deals 65535 damage.",
 		damageCallback: function (pokemon, target) {
-			let lastHurtBy = pokemon.getLastHurtBy();
-			if (lastHurtBy && lastHurtBy.move && lastHurtBy.thisTurn && (this.getCategory(lastHurtBy.move) === 'Physical' || this.getMove(lastHurtBy.move).id === 'hiddenpower') && (!target.lastMove || target.lastMove.id !== 'sleeptalk')) {
-				return 2 * lastHurtBy.damage;
+			let lastAttackedBy = pokemon.getLastAttackedBy();
+			if (lastAttackedBy && lastAttackedBy.move && lastAttackedBy.thisTurn && (this.getCategory(lastAttackedBy.move) === 'Physical' || this.getMove(lastAttackedBy.move).id === 'hiddenpower') && (!target.lastMove || target.lastMove.id !== 'sleeptalk')) {
+				return 2 * lastAttackedBy.damage;
 			}
 			return false;
 		},
@@ -493,9 +493,9 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "Deals damage to the opposing Pokemon equal to twice the HP lost by the user from a special attack this turn. This move considers Hidden Power as Normal type, and only the last hit of a multi-hit attack is counted. Fails if the user moves first, if the user was not hit by a special attack this turn, or if the user did not lose HP from the attack.",
 		damageCallback: function (pokemon, target) {
-			let lastHurtBy = pokemon.getLastHurtBy();
-			if (lastHurtBy && lastHurtBy.move && lastHurtBy.thisTurn && this.getCategory(lastHurtBy.move) === 'Special' && this.getMove(lastHurtBy.move).id !== 'hiddenpower' && (!target.lastMove || target.lastMove.id !== 'sleeptalk')) {
-				return 2 * lastHurtBy.damage;
+			let lastAttackedBy = pokemon.getLastAttackedBy();
+			if (lastAttackedBy && lastAttackedBy.move && lastAttackedBy.thisTurn && this.getCategory(lastAttackedBy.move) === 'Special' && this.getMove(lastAttackedBy.move).id !== 'hiddenpower' && (!target.lastMove || target.lastMove.id !== 'sleeptalk')) {
+				return 2 * lastAttackedBy.damage;
 			}
 			return false;
 		},

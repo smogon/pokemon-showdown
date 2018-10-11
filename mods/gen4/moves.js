@@ -1101,11 +1101,11 @@ let BattleMovedex = {
 		onTryHit: function () { },
 		onHit: function (pokemon) {
 			let noMirror = ['acupressure', 'aromatherapy', 'assist', 'chatter', 'copycat', 'counter', 'curse', 'doomdesire', 'feint', 'focuspunch', 'futuresight', 'gravity', 'hail', 'haze', 'healbell', 'helpinghand', 'lightscreen', 'luckychant', 'magiccoat', 'mefirst', 'metronome', 'mimic', 'mirrorcoat', 'mirrormove', 'mist', 'mudsport', 'naturepower', 'perishsong', 'psychup', 'raindance', 'reflect', 'roleplay', 'safeguard', 'sandstorm', 'sketch', 'sleeptalk', 'snatch', 'spikes', 'spitup', 'stealthrock', 'struggle', 'sunnyday', 'tailwind', 'toxicspikes', 'transform', 'watersport'];
-			let lastHurtBy = pokemon.getLastHurtBy();
-			if (!lastHurtBy || !lastHurtBy.source.lastMove || !lastHurtBy.move || noMirror.includes(lastHurtBy.move) || !lastHurtBy.source.hasMove(lastHurtBy.move)) {
+			let lastAttackedBy = pokemon.getLastAttackedBy();
+			if (!lastAttackedBy || !lastAttackedBy.source.lastMove || !lastAttackedBy.move || noMirror.includes(lastAttackedBy.move) || !lastAttackedBy.source.hasMove(lastAttackedBy.move)) {
 				 return false;
 			}
-			this.useMove(lastHurtBy.move, pokemon);
+			this.useMove(lastAttackedBy.move, pokemon);
 		},
 		target: "self",
 	},

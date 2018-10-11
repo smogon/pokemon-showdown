@@ -931,10 +931,10 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 60,
 		basePowerCallback: function (pokemon, target, move) {
-			let hurtByTarget = pokemon.hurtBy.some(p =>
+			let damagedByTarget = pokemon.attackedBy.some(p =>
 				p.source === target && p.damage > 0 && p.thisTurn
 			);
-			if (hurtByTarget) {
+			if (damagedByTarget) {
 				this.debug('Boosted for getting hit by ' + target);
 				return move.basePower * 2;
 			}
@@ -13379,10 +13379,10 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 60,
 		basePowerCallback: function (pokemon, target, move) {
-			let hurtByTarget = pokemon.hurtBy.some(p =>
+			let damagedByTarget = pokemon.attackedBy.some(p =>
 				p.source === target && p.damage > 0 && p.thisTurn
 			);
-			if (hurtByTarget) {
+			if (damagedByTarget) {
 				this.debug('Boosted for getting hit by ' + target);
 				return move.basePower * 2;
 			}
