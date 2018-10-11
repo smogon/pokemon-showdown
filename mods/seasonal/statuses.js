@@ -317,13 +317,13 @@ let BattleStatuses = {
 	cerberax: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|%Cerberax|(╯°□°)╯︵ ┻━┻`);
+			this.add(`c|+Cerberax|(╯°□°)╯︵ ┻━┻`);
 		},
 		onSwitchOut: function () {
-			this.add(`c|%Cerberax|┬─┬ ノ( ゜-゜ノ)`);
+			this.add(`c|+Cerberax|┬─┬ ノ( ゜-゜ノ)`);
 		},
 		onFaint: function () {
-			this.add(`c|%Cerberax|┬─┬ ︵ /(.□. \\）`);
+			this.add(`c|+Cerberax|┬─┬ ︵ /(.□. \\）`);
 		},
 	},
 	ceteris: {
@@ -357,13 +357,13 @@ let BattleStatuses = {
 	cleo: {
 		noCopy: true,
 		onSwitchIn: function () {
-			this.add(`|c|+Cleo|Cleo! Cleo! Your friendly neighborhood Sea Leo!`);
+			this.add(`c|+Cleo|Cleo! Cleo! Your friendly neighborhood Sea Leo!`);
 		},
 		onSwitchOut: function () {
-			this.add(`|c|+Cleo|bbl~`);
+			this.add(`c|+Cleo|bbl~`);
 		},
 		onFaint: function () {
-			this.add(`|c|+Cleo|n.n`);
+			this.add(`c|+Cleo|n.n`);
 		},
 	},
 	deg: {
@@ -947,10 +947,10 @@ let BattleStatuses = {
 			this.add('-start', source, 'typeadd', 'Fairy');
 		},
 		onSwitchOut: function () {
-			this.add(`c|%OM|Ok brb I'm gonna ${["ladder Mix and Mega", "roll battle some surv regs real quick"][this.random(2)]}`);
+			this.add(`c|%OM|Ok brb I'm gonna ${["ladder Mix and Mega", "roll battle some surv regs real quick", "sweep y'all in mafia let's get it"][this.random(3)]}`);
 		},
 		onFaint: function () {
-			this.add(`c|%OM|Oh god I rolled a 1`);
+			this.add(`c|%OM|${["Oh god I rolled a 1", "Killed Night 1, seriously?"][this.random(2)]}`);
 		},
 	},
 	osiris: {

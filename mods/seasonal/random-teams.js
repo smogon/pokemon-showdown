@@ -440,7 +440,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'OM': {
 				species: 'Flareon', ability: 'Pixilate', item: 'Metronome', gender: 'M',
-				moves: ['Fake Out', 'Thousand Arrows', 'Extreme Speed'],
+				moves: ['Leaf Blade', 'Thousand Arrows', 'Extreme Speed'],
 				signatureMove: 'OM Boom',
 				evs: {atk: 252, def: 4, spe: 252}, nature: 'Adamant',
 			},
@@ -652,7 +652,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'Psynergy';
+				name = 'Bhris Brown';
 				if (pool.indexOf(name) > -1) {
 					pool.splice(pool.indexOf(name), 1);
 				} else {

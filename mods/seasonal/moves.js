@@ -567,10 +567,11 @@ let BattleMovedex = {
 				if (target.hasType('Ground')) return 0;
 			}
 		},
-		volatileStatus: 'overload',
+		volatileStatus: 'thousandcircuitoverload',
 		effect: {
-			onStart: function (target) {
-				this.add('-start', target, 'Overload');
+			noCopy: true,
+			onStart: function (pokemon) {
+				this.add('-start', pokemon, 'Thousand Circuit Overload');
 			},
 			onNegateImmunity: function (pokemon, type) {
 				if (pokemon.hasType('Ground') && type === 'Electric') return false;
@@ -3516,8 +3517,8 @@ let BattleMovedex = {
 	},
 	// Xayahh
 	cuttingdance: {
-		accuracy: 95,
-		basePower: 100,
+		accuracy: 100,
+		basePower: 95,
 		category: "Special",
 		desc: "Has a 20% chance to flinch the target.",
 		shortDesc: "20% chance to flinch the target.",
