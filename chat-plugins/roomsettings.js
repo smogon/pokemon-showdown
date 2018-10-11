@@ -288,6 +288,19 @@ exports.commands = {
 		}
 	},
 
+	ioall: function (target, room, user) {
+		if (this.meansNo(target)) {
+			user.inviteOnly = false;
+			this.sendReply("Your next battle will be publicly visible.");
+		} else {
+			user.inviteOnly = true;
+			this.sendReply("All your battles will be invite-only.");
+		}
+	},
+	ioallhelp: [
+		`/ioall [off/on] - Sets modjoin + on all your battles. Users can't join unless invited with /invite.`,
+	],
+
 	inviteonly: function (target, room, user) {
 		if (!target) return this.parse('/help inviteonly');
 		if (this.meansYes(target)) {
