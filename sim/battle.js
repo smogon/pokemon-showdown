@@ -1547,13 +1547,16 @@ class Battle extends Dex.ModdedDex {
 				this.runEvent('DisableMove', pokemon);
 				if (!pokemon.ateBerry) pokemon.disableMove('belch');
 
-				if (pokemon.lastAttackedBy) {
-					if (pokemon.lastAttackedBy.pokemon.isActive) {
-						pokemon.lastAttackedBy.thisTurn = false;
+				// If it was an illusion, it's not any more
+				if (pokemon.getLastHurtBy() && this.gen >= 7) pokemon.knownType = true;
+
+				for (let i = pokemon.hurtBy.length - 1; i >= 0; i--) {
+					let attack = pokemon.hurtBy[i];
+					if (attack.source.isActive) {
+						attack.thisTurn = false;
 					} else {
-						pokemon.lastAttackedBy = null;
+						pokemon.hurtBy.slice(pokemon.hurtBy.indexOf(attack), 1);
 					}
-					if (this.gen >= 7) pokemon.knownType = true; // If it was an illusion, it's not any more
 				}
 
 				if (this.gen >= 7) {

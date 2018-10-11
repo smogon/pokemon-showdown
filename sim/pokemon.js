@@ -155,8 +155,8 @@ class Pokemon {
 		this.moveThisTurnResult = undefined;
 
 		this.lastDamage = 0;
-		/**@type {?{pokemon: Pokemon, damage: number, thisTurn: boolean, move?: string}} */
-		this.lastAttackedBy = null;
+		/**@type {{source: Pokemon, damage: number, thisTurn: boolean, move?: string}[]} */
+		this.hurtBy = [];
 		this.usedItemThisTurn = false;
 		this.newlySwitched = false;
 		this.beingCalledBack = false;
@@ -611,12 +611,18 @@ class Pokemon {
 	gotAttacked(move, damage, source) {
 		if (!damage) damage = 0;
 		move = this.battle.getMove(move);
-		this.lastAttackedBy = {
-			pokemon: source,
+		let lastHurtBy = {
+			source: source,
 			damage: damage,
 			move: move.id,
 			thisTurn: true,
 		};
+		this.hurtBy.push(lastHurtBy);
+	}
+
+	getLastHurtBy() {
+		if (this.hurtBy.length === 0) return undefined;
+		return this.hurtBy[this.hurtBy.length - 1];
 	}
 
 	/**
@@ -1038,7 +1044,7 @@ class Pokemon {
 		this.moveThisTurn = '';
 
 		this.lastDamage = 0;
-		this.lastAttackedBy = null;
+		this.hurtBy = [];
 		this.newlySwitched = true;
 		this.beingCalledBack = false;
 
