@@ -1102,7 +1102,7 @@ class Pokemon {
 		d = Math.floor(d);
 		if (isNaN(d)) return 0;
 		if (d <= 0) return 0;
-		if(!direct) this.hurt = true;
+		if (!direct) this.hurt = true;
 		this.hp -= d;
 		if (this.hp <= 0) {
 			d += this.hp;
