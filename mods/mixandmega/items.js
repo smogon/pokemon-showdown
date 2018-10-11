@@ -42,11 +42,9 @@ let BattleItems = {
 				pokemon.formeChange(template, this.effect, true);
 				pokemon.baseTemplate = template;
 				this.add('-start', pokemon, 'Red Orb', '[silent]');
-				// @ts-ignore
-				let oTemplate = this.getTemplate(pokemon.illusion || pokemon.originalSpecies);
-				this.add('-start', pokemon, 'Red Orb', '[silent]');
+				let apparentSpecies = pokemon.illusion ? pokemon.illusion.template.species : pokemon.originalSpecies;
+				let oTemplate = this.getTemplate(apparentSpecies);
 				if (pokemon.illusion) {
-					pokemon.ability = '';
 					let types = oTemplate.types;
 					if (types.length > 1 || types[types.length - 1] !== 'Fire') {
 						this.add('-start', pokemon, 'typechange', (types[0] !== 'Fire' ? types[0] + '/' : '') + 'Fire', '[silent]');
