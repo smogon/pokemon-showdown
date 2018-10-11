@@ -142,11 +142,13 @@ let BattleScripts = {
 		if (sourceEffect && sourceEffect.id === 'instruct') sourceEffect = null;
 
 		let move = this.getActiveMove(moveOrMoveName);
+		if (move.id === 'weatherball' && zMove) {
+			// Z-Weather Ball only changes types if it's used directly,
+			// not if it's called by Z-Sleep Talk or something.
+			this.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
+			if (move.type !== 'Normal') sourceEffect = move;
+		}
 		if (zMove || (move.category !== 'Status' && sourceEffect && sourceEffect.isZ)) {
-			if (move.id === 'weatherball') {
-				this.singleEvent('ModifyMove', move, null, pokemon, target, move, move);
-				if (move.type !== 'Normal') sourceEffect = move;
-			}
 			move = this.getActiveZMove(move, pokemon);
 		}
 
