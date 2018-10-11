@@ -154,7 +154,7 @@ class Pokemon {
 		 */
 		this.moveThisTurnResult = undefined;
 
-		this.hurt = false;
+		this.hurtThisTurn = false;
 		this.lastDamage = 0;
 		/**@type {{source: Pokemon, damage: number, thisTurn: boolean, move?: string}[]} */
 		this.attackedBy = [];
@@ -1046,7 +1046,7 @@ class Pokemon {
 
 		this.lastDamage = 0;
 		this.attackedBy = [];
-		this.hurt = false;
+		this.hurtThisTurn = false;
 		this.newlySwitched = true;
 		this.beingCalledBack = false;
 
@@ -1102,7 +1102,7 @@ class Pokemon {
 		d = Math.floor(d);
 		if (isNaN(d)) return 0;
 		if (d <= 0) return 0;
-		if (!direct) this.hurt = true;
+		if (!direct) this.hurtThisTurn = true;
 		this.hp -= d;
 		if (this.hp <= 0) {
 			d += this.hp;
