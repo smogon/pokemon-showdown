@@ -349,18 +349,18 @@ let BattleMovedex = {
 	},
 	// Arcticblast
 	trashalanche: {
-		basePower: 40,
+		basePower: 80,
 		basePowerCallback: function (pokemon, target, move) {
 			let noitem = 0;
 			for (const foes of target.side.pokemon) {
-				if (!foes.item) noitem += 40;
+				if (!foes.item) noitem += 20;
 			}
 			return move.basePower + noitem;
 		},
 		accuracy: 100,
 		category: "Physical",
-		desc: "Power rises by 40 for every non-fainted opponent that is not holding an item.",
-		shortDesc: "+ 40 power for each item-less opponent.",
+		desc: "Power rises by 20 for every non-fainted opponent that is not holding an item.",
+		shortDesc: "+ 20 power for each item-less opponent.",
 		id: "trashalanche",
 		name: "Trashalanche",
 		isNonstandard: true,
@@ -2948,7 +2948,7 @@ let BattleMovedex = {
 		accuracy: true,
 		category: "Physical",
 		basePower: 1,
-		desc: "The user creates a substitute to take its place in battle. This substitute takes the sprite of a randomly selected Pokemon from a broad set of Random Battle-eligible Pokemon able to learn the move chosen as this move's base move. Upon its creation, the user's Illusion is broken until it next switches out. The substitute-face Pokemon is generated a Random Battle moveset with maximum PP that is added (except for duplicates) to the user's moveset; these additions are removed when this substitute is no longer active. This substitute retains the user's current stats (except for HP), base stats, stat stages, types, Ability, weight, gender, level, status conditions, trapping, binding, and pseudo-statuses such as confusion. Its HP is 100% of the user's maximum HP. When this substitute falls to zero HP, it breaks, and the user reverts to the state in which it used this move. This substitute absorbs indirect damage and authentic moves, but does not reset the counter of bad poison when broken, and cannot be transfered through Baton Pass. Transforming into this Substitute will not fail, and will give that move's user access to all 8 (if no duplicates) moves with 5 PP each.",
+		desc: "The user creates a substitute to take its place in battle. This substitute takes the sprite of a randomly selected Pokemon from a broad set of Random Battle-eligible Pokemon able to learn the move chosen as this move's base move. Upon its creation, the user's Illusion is broken until it next switches out. The substitute-face Pokemon is generated a Random Battle moveset with maximum PP that is added (except for duplicates) to the user's moveset; these additions are removed when this substitute is no longer active. This substitute retains the user's current stats (except for HP), base stats, stat stages, types, weight, gender, level, status conditions, trapping, binding, and pseudo-statuses such as confusion. The User's Ability is lost until switched out. Its HP is 100% of the user's maximum HP. When this substitute falls to zero HP, it breaks, and the user reverts to the state in which it used this move. This substitute absorbs indirect damage and authentic moves, but does not reset the counter of bad poison when broken, and cannot be transfered through Baton Pass. Transforming into this Substitute will not fail, and will give that move's user access to all 8 (if no duplicates) moves with 5 PP each.",
 		shortDesc: "Uses a Random Battle Pokemon as a Substitute.",
 		id: "fakeclaim",
 		name: "Fake Claim",
@@ -2990,8 +2990,8 @@ let BattleMovedex = {
 			let set = generator.randomSet(claim);
 			// Tranform into it
 			source.formeChange(set.species, move);
-			source.setAbility('Illusion');
-			this.add('-hint', `${source.name} still has the Illusion ability.`);
+			source.setAbility('No Ability');
+			this.add('-hint', `${source.name} has temporarily lost its ability.`);
 			for (let newMove of set.moves) {
 				let moveTemplate = this.getMove(newMove);
 				if (source.moves.includes(moveTemplate.id)) continue;

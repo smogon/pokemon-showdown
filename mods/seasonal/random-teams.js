@@ -96,10 +96,10 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 252, def: 252, spd: 4}, ivs: {spe: 0}, nature: 'Relaxed',
 			},
 			'Arcticblast': {
-				species: 'Garbodor', ability: 'Mold Breaker', item: 'Choice Band', gender: 'M',
-				moves: ['Knock Off', 'Poison Jab', ['Earthquake', 'U-turn']],
+				species: 'Garbodor', ability: 'Analytic', item: 'Assault Vest', gender: 'M',
+				moves: ['Knock Off', 'Earthquake', ['Horn Leech', 'U-turn', 'Avalanche']],
 				signatureMove: 'Trashalanche',
-				evs: {hp: 252, atk: 252, def: 4}, nature: 'Adamant',
+				evs: {hp: 252, atk: 252, def: 4}, ivs: {spe: 0}, nature: 'Brave',
 			},
 			'Arrested': {
 				species: 'Blastoise', ability: 'Torrent', item: 'Blastoisinite', gender: 'M',

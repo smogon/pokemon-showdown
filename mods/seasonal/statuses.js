@@ -149,7 +149,7 @@ let BattleStatuses = {
 	arcticblast: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|%Arcticblast|Draw for turn.`);
+			this.add(`c|%Arcticblast|My trash friend can do no wrong`);
 		},
 		onModifyMove: function (move) {
 			if (move.id === 'knockoff') {
