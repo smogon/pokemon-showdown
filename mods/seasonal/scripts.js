@@ -2,24 +2,22 @@
 
 /** @type {ModdedBattleScriptsData} */
 let BattleScripts = {
-	runMove: function (move, pokemon, targetLoc, sourceEffect, zMove, externalMove) {
-		let target = this.getTarget(pokemon, zMove || move, targetLoc);
-		let baseMove = this.getMoveCopy(move);
+	runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect, zMove, externalMove) {
+		let target = this.getTarget(pokemon, zMove || moveOrMoveName, targetLoc);
+		let baseMove = this.getActiveMove(moveOrMoveName);
 		const pranksterBoosted = baseMove.pranksterBoosted;
-		if (!sourceEffect && toId(move) !== 'struggle' && !zMove) {
-			let changedMove = this.runEvent('OverrideAction', pokemon, target, move);
+		if (!sourceEffect && baseMove.id !== 'struggle' && !zMove) {
+			let changedMove = this.runEvent('OverrideAction', pokemon, target, baseMove);
 			if (changedMove && changedMove !== true) {
-				baseMove = this.getMoveCopy(changedMove);
+				baseMove = this.getActiveMove(changedMove);
 				if (pranksterBoosted) baseMove.pranksterBoosted = pranksterBoosted;
 				target = null;
 			}
 		}
-		move = zMove ? this.getZMoveCopy(baseMove, pokemon) : baseMove;
+		let move = zMove ? this.getActiveZMove(baseMove, pokemon) : baseMove;
 
 		if (!target && target !== false) target = this.resolveTarget(pokemon, move);
 
-		// copy the priority for Quick Guard
-		if (zMove) move.priority = baseMove.priority;
 		move.isExternal = externalMove;
 
 		this.setActiveMove(move, pokemon, target);
@@ -109,7 +107,7 @@ let BattleScripts = {
 		if (noLock && pokemon.volatiles.lockedmove) delete pokemon.volatiles.lockedmove;
 	},
 	// Modded to allow unlimited mega evos
-	runMegaEvo: function (pokemon) {
+	runMegaEvo(pokemon) {
 		const templateid = pokemon.canMegaEvo || pokemon.canUltraBurst;
 		if (!templateid) return false;
 		const side = pokemon.side;
@@ -133,7 +131,7 @@ let BattleScripts = {
 
 		return true;
 	},
-	getZMove: function (move, pokemon, skipChecks) {
+	getZMove(move, pokemon, skipChecks) {
 		let item = pokemon.getItem();
 		if (!skipChecks) {
 			if (!item.zMove) return;
@@ -144,9 +142,9 @@ let BattleScripts = {
 
 		if (item.zMoveFrom) {
 			if (Array.isArray(item.zMoveFrom)) {
-				if (item.zMoveFrom.includes(move.name)) return item.zMove;
+				if (item.zMoveFrom.includes(move.name)) return /** @type {string} */ (item.zMove);
 			} else {
-				if (move.name === item.zMoveFrom) return item.zMove;
+				if (move.name === item.zMoveFrom) return /** @type {string} */ (item.zMove);
 			}
 		} else if (item.zMove === true) {
 			if (move.type === item.zMoveType) {
@@ -158,13 +156,13 @@ let BattleScripts = {
 			}
 		}
 	},
-	getZMoveCopy: function (move, pokemon) {
+	getActiveZMove(move, pokemon) {
 		let zMove;
 		if (pokemon) {
 			let item = pokemon.getItem();
 			if (item.zMoveFrom && Array.isArray(item.zMoveFrom) ? item.zMoveFrom.includes(move.name) : item.zMoveFrom === move.name) {
 				// @ts-ignore
-				zMove = this.getMoveCopy(item.zMove);
+				zMove = this.getActiveMove(item.zMove);
 				// @ts-ignore Hack for Snaquaza's Z move
 				zMove.baseMove = move;
 				return zMove;
@@ -172,18 +170,18 @@ let BattleScripts = {
 		}
 
 		if (move.category === 'Status') {
-			zMove = this.getMoveCopy(move);
+			zMove = this.getActiveMove(move);
 			zMove.isZ = true;
 			return zMove;
 		}
-		zMove = this.getMoveCopy(this.zMoveTable[move.type]);
+		zMove = this.getActiveMove(this.zMoveTable[move.type]);
 		// @ts-ignore
 		zMove.basePower = move.zMovePower;
 		zMove.category = move.category;
 		return zMove;
 	},
 	// Modded to allow each Pokemon on a team to use a Z move once per battle
-	canZMove: function (pokemon) {
+	canZMove(pokemon) {
 		// @ts-ignore pokemon.zMoveUsed only exists in this mod
 		if (pokemon.zMoveUsed || (pokemon.transformed && (pokemon.template.isMega || pokemon.template.isPrimal || pokemon.template.forme === "Ultra"))) return;
 		let item = pokemon.getItem();
@@ -210,7 +208,7 @@ let BattleScripts = {
 		}
 		if (atLeastOne) return zMoves;
 	},
-	runZPower: function (move, pokemon) {
+	runZPower(move, pokemon) {
 		const zPower = this.getEffect('zpower');
 		if (move.category !== 'Status') {
 			this.attrLastMove('[zeffect]');
@@ -233,6 +231,7 @@ let BattleScripts = {
 				move.self = {sideCondition: 'boostreplacement'};
 				break;
 			case 'clearnegativeboost':
+				/** @type {{[k: string]: number}} */
 				let boosts = {};
 				for (let i in pokemon.boosts) {
 					// @ts-ignore

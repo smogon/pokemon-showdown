@@ -447,6 +447,7 @@ let BattleStatuses = {
 			this.add(`c|~EV|Behold! The power of EVOLUTION!`);
 			if (target.illusion) return;
 
+			/** @type {{[forme: string]: string[]}} */
 			let formes = {
 				'flareon': ['Icicle Crash', 'Earthquake', 'Baton Pass', 'Evoblast'],
 				'jolteon': ['Ice Beam', 'Flamethrower', 'Baton Pass', 'Evoblast'],
@@ -464,6 +465,7 @@ let BattleStatuses = {
 			this.add('-hint', 'EV still has the Anticipation ability.');
 			// Update movepool
 			target.moveSlots = [];
+			if (!formes[forme]) return; // should never happen
 			for (let i = 0; i < formes[forme].length; i++) {
 				let moveid = formes[forme][i];
 				let move = this.getMove(moveid);

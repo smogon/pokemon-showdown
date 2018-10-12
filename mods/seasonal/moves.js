@@ -202,7 +202,7 @@ let BattleMovedex = {
 		onTryHit: function (target, pokemon) {
 			let decision = this.willMove(target);
 			if (decision) {
-				let move = this.getMoveCopy(decision.move.id);
+				let move = this.getActiveMove(decision.move.id);
 				if (move.category === 'Status' && move.id !== 'mefirst') {
 					this.useMove(move, pokemon, pokemon);
 					this.attrLastMove('[still]');
@@ -765,6 +765,7 @@ let BattleMovedex = {
 			}
 			if (stats.length) {
 				let randomStat = this.sample(stats);
+				/** @type {{[stat: string]: number}} */
 				let boost = {};
 				boost[randomStat] = 1;
 				this.boost(boost, source);
@@ -1063,6 +1064,7 @@ let BattleMovedex = {
 		},
 		onHit: function (target, source, move) {
 			let baseForme = source.template.id;
+			/** @type {{[forme: string]: string}} */
 			let formes = {
 				celebi: 'Future Sight',
 				jirachi: 'Doom Desire',
@@ -1152,6 +1154,7 @@ let BattleMovedex = {
 		},
 		onHit: function (target, source) {
 			let stat = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy'][this.random(6)];
+			/** @type {{[stat: string]: number}} */
 			let boost = {};
 			boost[stat] = 1;
 			this.boost(boost, source);
@@ -2187,7 +2190,7 @@ let BattleMovedex = {
 			this.add('-item', source, source.getItem(), '[from] move: Type Analysis');
 			let template = this.getTemplate('Silvally-' + randomType);
 			source.formeChange(template, this.getAbility('rkssystem'), true);
-			let move = this.getMoveCopy('multiattack');
+			let move = this.getActiveMove('multiattack');
 			move.basePower = 80;
 			this.useMove(move, source, target);
 		},
@@ -2639,7 +2642,7 @@ let BattleMovedex = {
 				return null;
 			},
 			onHit: function (target, source, move) {
-				if (move.zPowered && move.flags['contact']) {
+				if (move.isZPowered && move.flags['contact']) {
 					this.heal(target.maxhp / 4, target, target);
 				}
 			},
@@ -2944,11 +2947,12 @@ let BattleMovedex = {
 		},
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[still]');
-			let zmove = this.getMoveCopy(this.zMoveTable[move.type]);
+			let zmove = this.getMove(this.zMoveTable[move.type]);
 			this.add('-anim', source, zmove.name, target);
 			this.add('-anim', source, "Transform", source);
 		},
 		onHit: function (target, source, move) {
+			/** @type {{[move: string]: string[]}} */
 			let claims = {
 				bravebird: ['Braviary', 'Crobat', 'Decidueye', 'Dodrio', 'Farfetch\'d', 'Golbat', 'Mandibuzz', 'Pidgeot', 'Skarmory', 'Staraptor', 'Swanna', 'Swellow', 'Talonflame', 'Tapu Koko', 'Toucannon'],
 				superpower: ['Absol', 'Aggron', 'Armaldo', 'Avalugg', 'Azumarill', 'Barbaracle', 'Basculin', 'Beartic', 'Bewear', 'Bibarel', 'Bouffalant', 'Braviary', 'Breloom', 'Buzzwole', 'Cacturne', 'Carracosta', 'Celesteela', 'Chesnaught', 'Cobalion', 'Conkeldurr', 'Crabominable', 'Crawdaunt', 'Darmanitan', 'Diggersby', 'Donphan', 'Dragonite', 'Drampa', 'Druddigon', 'Durant', 'Eelektross', 'Emboar', 'Exeggutor-Alola', 'Feraligatr', 'Flareon', 'Flygon', 'Gigalith', 'Gogoat', 'Golem', 'Golurk', 'Goodra', 'Granbull', 'Gurdurr', 'Hariyama', 'Hawlucha', 'Haxorus', 'Heatmor', 'Hippowdon', 'Hitmonlee', 'Hydreigon', 'Incineroar', 'Kabutops', 'Keldeo', 'Kingler', 'Komala', 'Kommo-o', 'Krookodile', 'Landorus-Therian', 'Lurantis', 'Luxray', 'Machamp', 'Malamar', 'Mamoswine', 'Mew', 'Mudsdale', 'Nidoking', 'Nidoqueen', 'Pangoro', 'Passimian', 'Piloswine', 'Pinsir', 'Rampardos', 'Regice', 'Regigigas', 'Regirock', 'Registeel', 'Reuniclus', 'Rhydon', 'Rhyperior', 'Samurott', 'Sawk', 'Scizor', 'Scolipede', 'Simipour', 'Simisage', 'Simisear', 'Smeargle', 'Snorlax', 'Spinda', 'Stakataka', 'Stoutland', 'Swampert', 'Tapu Bulu', 'Terrakion', 'Throh', 'Thundurus', 'Torkoal', 'Tornadus', 'Torterra', 'Tyranitar', 'Tyrantrum', 'Ursaring', 'Virizion', 'Zeraora'],
@@ -2959,7 +2963,9 @@ let BattleMovedex = {
 			};
 			// @ts-ignore Hack for Snaquaza's Z move
 			const baseMove = move.baseMove ? move.baseMove.id : 'bravebird';
-			const claim = claims[baseMove][this.random(claims[baseMove].length)];
+			const pool = claims[baseMove];
+			if (!pool) return false; // Should never happen
+			const claim = claims[baseMove][this.random(pool.length)];
 			// Generate new set
 			const generator = new RandomStaffBrosTeams('gen7randombattle', this.prng);
 			let set = generator.randomSet(claim);
