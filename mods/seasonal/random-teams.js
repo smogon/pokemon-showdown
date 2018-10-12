@@ -555,7 +555,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			'Teremiare': {
 				species: 'Zorua', ability: 'Not Prankster', item: 'Eject Button', gender: 'N',
 				moves: ['Encore', 'Taunt', 'Lunar Dance'],
-				signatureMove: 'No Fun Zone',
+				signatureMove: 'Rotate',
 				evs: {hp: 252, def: 136, spd: 120}, ivs: {atk: 0}, nature: 'Bold', shiny: true,
 			},
 			'The Immortal': {
@@ -652,7 +652,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'Bhris Brown';
+				name = 'deg';
 				if (pool.indexOf(name) > -1) {
 					pool.splice(pool.indexOf(name), 1);
 				} else {

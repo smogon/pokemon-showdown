@@ -1188,8 +1188,36 @@ let BattleStatuses = {
 	},
 	teremiare: {
 		noCopy: true,
-		onStart: function () {
+		onStart: function (source) {
 			this.add(`c|%Teremiare|<('o'<)`);
+			if (source.illusion) return;
+			let target = source.side.foe.active[0];
+
+			let removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+			let removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+			for (const targetCondition of removeTarget) {
+				if (target.side.removeSideCondition(targetCondition)) {
+					if (!removeAll.includes(targetCondition)) continue;
+					this.add('-sideend', target.side, this.getEffect(targetCondition).name, '[from] move: No Fun Zone', '[of] ' + target);
+				}
+			}
+			for (const sideCondition of removeAll) {
+				if (source.side.removeSideCondition(sideCondition)) {
+					this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: No Fun Zone', '[of] ' + source);
+				}
+			}
+			this.add('-clearallboost');
+			for (const side of this.sides) {
+				for (const pokemon of side.active) {
+					if (pokemon && pokemon.isActive) pokemon.clearBoosts();
+				}
+			}
+			for (const clear in this.pseudoWeather) {
+				if (clear.endsWith('mod') || clear.endsWith('clause')) continue;
+				this.removePseudoWeather(clear);
+			}
+			this.clearWeather();
+			this.clearTerrain();
 		},
 		onFaint: function () {
 			this.add(`c|%Teremiare|(>'o')>`);

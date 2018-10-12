@@ -60,23 +60,19 @@ let BattleMovedex = {
 			if (!(['', 'slp', 'frz'].includes(source.status))) {
 				source.cureStatus();
 			}
-			let success = false;
 			let removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
 			let removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
 			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
 					if (!removeAll.includes(targetCondition)) continue;
 					this.add('-sideend', target.side, this.getEffect(targetCondition).name, '[from] move: Noble Howl', '[of] ' + target);
-					success = true;
 				}
 			}
 			for (const sideCondition of removeAll) {
 				if (source.side.removeSideCondition(sideCondition)) {
 					this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Noble Howl', '[of] ' + source);
-					success = true;
 				}
 			}
-			return success;
 		},
 		flags: {mirror: 1, snatch: 1, authentic: 1},
 		secondary: null,
@@ -597,29 +593,24 @@ let BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
-			// delta stream unable to be done without adding the weather for the move duration then removing it after
 			this.add('-anim', source, "Defog", target);
 		},
 		onHit: function (target, source, move) {
-			/** @type {boolean} */
-			let success = false;
-			if (this.clearWeather()) success = true;
-			if (this.clearTerrain()) success = true;
-			let removeAll = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
-			for (const targetCondition of removeAll) {
+			this.clearWeather();
+			this.clearTerrain();
+			let removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+			let removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
 					if (!removeAll.includes(targetCondition)) continue;
 					this.add('-sideend', target.side, this.getEffect(targetCondition).name, '[from] move: Blustery Winds', '[of] ' + target);
-					success = true;
 				}
 			}
 			for (const sideCondition of removeAll) {
 				if (source.side.removeSideCondition(sideCondition)) {
 					this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Blustery Winds', '[of] ' + source);
-					success = true;
 				}
 			}
-			return success;
 		},
 		secondary: null,
 		target: "normal",
@@ -908,7 +899,7 @@ let BattleMovedex = {
 	},
 	// deg
 	luciddreams: {
-		accuracy: 100,
+		accuracy: 75,
 		category: "Status",
 		desc: "The foe falls asleep, and is inflicted with the effects of Nightmare and Leech Seed. The user loses 1/2 of their maximum HP.",
 		shortDesc: "Loses 1/2 HP. Foe: sleep, Nightmare, Leech Seed.",
@@ -1013,7 +1004,6 @@ let BattleMovedex = {
 		flags: {mirror: 1, protect: 1, bite: 1},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
-			// Cannot have sunny day weather as an anim
 			this.add('-anim', source, 'Crunch', target);
 			this.add('-anim', target, 'Searing Shot', target);
 		},
@@ -3111,58 +3101,37 @@ let BattleMovedex = {
 		type: "Electric",
 	},
 	// Teremiare
-	nofunzone: {
+	rotate: {
 		accuracy: 100,
 		category: "Status",
-		desc: "Ends the effects of Spikes, Toxic Spikes, Stealth Rock, Sticky Web, stat changes, weather, terrain, Room moves, Sport moves, Gravity, Fairy Lock, and Ion Deluge, and ends Reflect, Light Screen, Aurora Veil, Safeguard, and Mist on the opponent's side of the field. Echoed Voice's power resets to 40. Cures the user's team of status effects, and subjects the opponent to the effects of Heal Block and Embargo.",
-		shortDesc: "Removes hazards/stat changes; has other effects.",
-		id: "nofunzone",
-		name: "No Fun Zone",
+		desc: "The next Pokemon will switch out after using their move.",
+		shortDesc: "Next Pokemon will switch after using their move.",
+		id: "rotate",
+		name: "Rotate",
 		isNonstandard: true,
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, mirror: 1},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Celebrate", target);
 		},
-		onHit: function (target, source) {
-			for (const side of this.sides) {
-				for (const pokemon of side.active) {
-					if (pokemon.hasAbility('soundproof')) continue;
-					pokemon.cureStatus();
-				}
-			}
-			target.addVolatile('healblock');
-			target.addVolatile('embargo');
-			let removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
-			let removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
-			for (const targetCondition of removeTarget) {
-				if (target.side.removeSideCondition(targetCondition)) {
-					if (!removeAll.includes(targetCondition)) continue;
-					this.add('-sideend', target.side, this.getEffect(targetCondition).name, '[from] move: No Fun Zone', '[of] ' + target);
-				}
-			}
-			for (const sideCondition of removeAll) {
-				if (source.side.removeSideCondition(sideCondition)) {
-					this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: No Fun Zone', '[of] ' + source);
-				}
-			}
-			this.add('-clearallboost');
-			for (const side of this.sides) {
-				for (const pokemon of side.active) {
-					if (pokemon && pokemon.isActive) pokemon.clearBoosts();
-				}
-			}
-			for (const clear in this.pseudoWeather) {
-				if (clear.endsWith('mod') || clear.endsWith('clause')) continue;
-				this.removePseudoWeather(clear);
-			}
-			this.clearWeather();
-			this.clearTerrain();
+		sideCondition: "rotate",
+		effect: {
+			duration: 2,
+			onStart: function () {
+				this.add('-message', `The next pokemon is going to rotate!`);
+			},
+			onModifyMove: function (move) {
+				move.selfSwitch = true;
+			},
+			onBeforeMove: function (source, move) {
+				this.add('-message', `${source.name} is preparing to rotate!`);
+			},
 		},
+		selfSwitch: true,
 		secondary: null,
-		target: "foe",
+		target: "self",
 		type: "Normal",
 	},
 	// The Immortal
