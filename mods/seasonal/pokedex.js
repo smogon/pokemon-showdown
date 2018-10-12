@@ -51,6 +51,11 @@ let BattlePokedex = {
 		inherit: true,
 		abilities: {0: 'Poison Heal'}, 	// Ability change is permanent
 	},
+	// Level 51
+	porygon2: {
+		inherit: true,
+		abilities: {0: 'Stamina'},
+	},
 	// Lionyx
 	gardevoirmega: {
 		inherit: true,

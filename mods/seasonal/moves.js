@@ -50,8 +50,11 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Howl', source);
 			this.add('-anim', source, 'Boomburst', source);
 		},
@@ -96,8 +99,11 @@ let BattleMovedex = {
 		name: "Too Much Saws",
 		pp: 10,
 		priority: 0,
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Headbutt', target);
 		},
 		flags: {protect: 1, mirror: 1},
@@ -117,8 +123,11 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {snatch: 1, mirror: 1, dance: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Quiver Dance", source);
 		},
 		boosts: {atk: 1, def: 1, spe: 1},
@@ -139,8 +148,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Electro Ball", target);
 			this.add('-anim', source, "Ion Deluge", target);
 		},
@@ -171,8 +183,11 @@ let BattleMovedex = {
 			}
 		},
 		flags: {snatch: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Coil", source);
 			this.add('-anim', source, "Extreme Evoboost", source);
 		},
@@ -196,18 +211,22 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 1,
 		flags: {protect: 1, mirror: 1, contact: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
 		},
-		onTryHit: function (target, pokemon) {
+		onTryHit: function (target, source) {
 			let decision = this.willMove(target);
 			if (decision) {
 				let move = this.getActiveMove(decision.move.id);
-				if (move.category === 'Status' && move.id !== 'mefirst') {
-					this.useMove(move, pokemon, pokemon);
-					this.attrLastMove('[still]');
-					this.add('-anim', pokemon, "Sucker Punch", target);
-					this.add('-anim', pokemon, "Night Slash", target);
+				if (move.category === 'Status' && move.id !== 'mefirst' && move.target) {
+					if (move.target === 'self') {
+						 this.useMove(move, source, source);
+					} else {
+						 this.useMove(move, source, target);
+					}
+					this.add('-anim', source, "Sucker Punch", target);
+					this.add('-anim', source, "Night Slash", target);
 					return;
 				}
 			}
@@ -242,8 +261,11 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 5,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Sunsteel Strike', target);
 		},
 		onHit: function (pokemon) {
@@ -271,8 +293,11 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
 		heal: [1, 2],
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Ingrain", target);
 			let side = source.side;
 			if (side.faintedLastTurn) {
@@ -302,9 +327,12 @@ let BattleMovedex = {
 		pp: 20,
 		priority: -3,
 		flags: {contact: 1, protect: 1},
+		onTryMovePriority: 100,
+		onTryMove: function () {
+			this.attrLastMove('[still]');
+		},
 		onPrepareHit: function (target, source) {
 			if (source.volatiles['murkyambush'] && source.volatiles['murkyambush'].gotHit) {
-				this.attrLastMove('[still]');
 				this.add('-anim', source, "Crunch", target);
 			}
 		},
@@ -366,8 +394,11 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 10,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Gunk Shot", target);
 		},
 		secondary: null,
@@ -387,8 +418,11 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Anchor Shot", target);
 		},
 		onHit: function (target, source, move) {
@@ -415,8 +449,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source, move) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source, move) {
 			this.add('-anim', source, 'Judgment', target);
 			this.add('-anim', target, 'Extreme Evoboost', target);
 			// Modifying BP here so it happens AFTER ModifyMove
@@ -450,8 +487,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Bug Buzz', source);
 		},
 		secondary: {
@@ -474,8 +514,11 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {mirror: 1, protect: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Meteor Mash', target);
 		},
 		weather: 'raindance',
@@ -503,8 +546,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: -6,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Stockpile', source);
 			this.add('-anim', source, 'Spit Up', target);
 		},
@@ -525,9 +571,12 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 5,
 		priority: -7,
-		flags: {mirror: 1, snatch: 1},
-		onPrepareHit: function (target, source) {
+		flags: {snatch: 1, mirror: 1},
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Trick Room", source);
 		},
 		pseudoWeather: 'triviaroom',
@@ -570,8 +619,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Plasma Fists', target);
 		},
 		onEffectiveness: function (typeMod, type, move) {
@@ -610,8 +662,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Defog", target);
 		},
 		onHit: function (target, source, move) {
@@ -648,8 +703,11 @@ let BattleMovedex = {
 		noPPBoosts: true,
 		priority: 0,
 		flags: {},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Amnesia', source);
 			this.add('-anim', source, 'Double Team', source);
 		},
@@ -722,8 +780,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Geomancy', source);
 			this.add('-anim', source, 'Swords Dance', source);
 			this.add('-anim', source, 'Bloom Doom', target);
@@ -746,8 +807,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {mirror: 1, snatch: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Charge', source);
 		},
 		boosts: {spa: 2, spe: 1},
@@ -767,12 +831,14 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {reflectable: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Dark Void", target);
 		},
 		onHit: function (target, source, move) {
-			this.attrLastMove('[still]');
 			this.add('-anim', source, "Spikes", target);
 			target.side.addSideCondition('spikes');
 			let stats = [];
@@ -814,8 +880,11 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {mirror: 1, protect: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Head Smash', target);
 			this.add('-anim', source, 'Earthquake', target);
 		},
@@ -841,8 +910,11 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Entrainment", target);
 			this.add('-anim', source, "Lock On", target);
 		},
@@ -876,8 +948,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {mirror: 1, snatch: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Geomancy', source);
 			this.add('-anim', source, 'Memento', target);
 		},
@@ -904,8 +979,11 @@ let BattleMovedex = {
 		pp: 25,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Wrap", target);
 			this.add('-anim', source, "Liquidation", target);
 			this.add('-anim', source, "Surf", target);
@@ -929,8 +1007,11 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {mirror: 1, snatch: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Dark Void', target);
 			this.add('-anim', source, 'Night Shade', target);
 		},
@@ -961,8 +1042,11 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 5,
 		priority: 0,
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Swords Dance', source);
 			this.add('-anim', source, 'Wood Hammer', source);
 		},
@@ -992,8 +1076,11 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 1,
 		flags: {mirror: 1, protect: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Extreme Speed', target);
 			this.add('-anim', source, 'Feather Dance', target);
 		},
@@ -1022,17 +1109,17 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {mirror: 1, protect: 1, bite: 1},
-		onPrepareHit: function (target, source) {
-			this.attrLastMove('[still]');
-			this.add('-anim', source, 'Crunch', target);
-			this.add('-anim', target, 'Searing Shot', target);
-		},
+		onTryMovePriority: 100,
 		onTryMove: function (pokemon, target, move) {
 			this.attrLastMove('[still]');
 			if (!pokemon.hasType('Fire') || target.hasType('Fire')) {
 				this.add('-fail', pokemon, 'move: Fang of the Fire King');
 				return null;
 			}
+		},
+		onPrepareHit: function (target, source) {
+			this.add('-anim', source, 'Crunch', target);
+			this.add('-anim', target, 'Searing Shot', target);
 		},
 		onHit: function (target, source) {
 			target.setStatus('brn', source, null, true);
@@ -1056,8 +1143,11 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {mirror: 1, protect: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Eruption', target);
 			this.add('-anim', source, 'Sunny Day', source);
 		},
@@ -1078,7 +1168,8 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
 		},
 		onHit: function (target, source, move) {
@@ -1114,8 +1205,11 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {mirror: 1, snatch: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Feather Dance', source);
 			this.add('-anim', source, 'Aqua Ring', source);
 		},
@@ -1141,8 +1235,11 @@ let BattleMovedex = {
 			move.type = pokemon.types[0];
 			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
 		},
-		onPrepareHit: function (target, source, move) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source, move) {
 			this.add('-anim', source, 'Extreme Evoboost', source);
 			switch (move.type) {
 			case 'Fire':
@@ -1197,8 +1294,11 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		selfdestruct: "ifHit",
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-activate', source, 'move: Celebrate');
 			this.add('-anim', source, 'Searing Sunraze Smash', target);
 			this.add('-anim', source, 'Explosion', target);
@@ -1220,8 +1320,11 @@ let BattleMovedex = {
 		pp: 1,
 		priority: 0,
 		flags: {},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Rock Polish', source);
 			this.add('-anim', source, 'Let\'s Snuggle Forever', target);
 		},
@@ -1276,8 +1379,11 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 10,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Meteor Mash', target);
 		},
 		drain: [1, 2],
@@ -1296,7 +1402,8 @@ let BattleMovedex = {
 		name: "Hazard Pass",
 		isNonstandard: true,
 		flags: {reflectable: 1, mirror: 1, authentic: 1},
-		onPrepareHit: function () {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
 		},
 		onHitSide: function (target, source) {
@@ -1354,17 +1461,14 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Psystrike", target);
 		},
-		onModifyMovePriority: -5,
-		onModifyMove: function (move) {
-			if (!move.ignoreImmunity) move.ignoreImmunity = {};
-			if (move.ignoreImmunity !== true) {
-				move.ignoreImmunity['Psychic'] = true;
-			}
-		},
+		ignoreImmunity: {'Psychic': true},
 		onEffectiveness: function (typeMod, type) {
 			if (type === 'Dark') return 1;
 		},
@@ -1384,8 +1488,11 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {nosky: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Calm Mind', source);
 			this.add('-anim', source, 'Geomancy', source);
 		},
@@ -1488,8 +1595,11 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		noMetronome: ['afteryou', 'assist', 'banefulbunker', 'beakblast', 'belch', 'bestow', 'celebrate', 'chatter', 'copycat', 'counter', 'covet', 'craftyshield', 'destinybond', 'detect', 'diamondstorm', 'dragonascent', 'endure', 'feint', 'fleurcannon', 'focuspunch', 'followme', 'freezeshock', 'helpinghand', 'holdhands', 'hyperspacefury', 'hyperspacehole', 'iceburn', 'instruct', 'kingsshield', 'lightofruin', 'matblock', 'mefirst', 'metronome', 'mimic', 'mindblown', 'mirrorcoat', 'mirrormove', 'naturepower', 'originpulse', 'photongeyser', 'plasmafists', 'precipiceblades', 'protect', 'quash', 'quickguard', 'ragepowder', 'relicsong', 'secretsword', 'shelltrap', 'sketch', 'sleeptalk', 'snarl', 'snatch', 'snore', 'spectralthief', 'spikyshield', 'spotlight', 'steameruption', 'struggle', 'switcheroo', 'technoblast', 'thief', 'thousandarrows', 'thousandwaves', 'transform', 'trick', 'vcreate', 'wideguard'],
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Bug Buzz', source);
 			this.add('-anim', source, 'Metronome', source);
 			source.addVolatile('glitchout');
@@ -1532,8 +1642,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Petal Blizzard", target);
 			this.add('-anim', source, "Leaf Tornado", target);
 		},
@@ -1588,8 +1701,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {authentic: 1, snatch: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Wish', source);
 			this.add('-anim', source, 'Spite', target);
 		},
@@ -1618,8 +1734,11 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Supersonic Skystrike', target);
 		},
 		recoil: [33, 100],
@@ -1638,8 +1757,11 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 5,
 		flags: {mirror: 1, snatch: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Acid Armor', source);
 		},
 		onHit: function (pokemon, source, move) {
@@ -1668,8 +1790,11 @@ let BattleMovedex = {
 		pp: 15,
 		priority: -6,
 		flags: {protect: 1, mirror: 1, sound: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Whirlwind', target);
 		},
 		forceSwitch: true,
@@ -1689,8 +1814,11 @@ let BattleMovedex = {
 		id: "beastialstrike",
 		name: "Beastial Strike",
 		isNonstandard: true,
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Outrage', target);
 		},
 		pp: 5,
@@ -1714,8 +1842,11 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		volatileStatus: 'partiallytrapped',
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Dark Void', target);
 			this.add('-anim', source, 'Surf', target);
 		},
@@ -1767,8 +1898,11 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Never Ending Nightmare', target);
 		},
 		self: {
@@ -1795,8 +1929,11 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, punch: 1, contact: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Outrage', target);
 			this.add('-anim', source, 'Drain Punch', target);
 		},
@@ -1821,8 +1958,11 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Nasty Plot", target);
 		},
 		onHit: function (pokemon) {
@@ -1830,9 +1970,6 @@ let BattleMovedex = {
 			pokemon.level += 5;
 			pokemon.set.level = pokemon.level;
 			pokemon.formeChange(template);
-			// ability is set to default from formeChange
-			pokemon.setAbility('stamina');
-			this.add('-hint', 'Level 51 still has the Stamina ability.');
 
 			pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 			this.add('detailschange', pokemon, pokemon.details);
@@ -1862,8 +1999,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 3,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Fake Out", target);
 			this.add('-anim', source, "Feather Dance", target);
 			return this.runEvent('StallMove', source);
@@ -1893,8 +2033,11 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Ice Beam", target);
 			this.add('-anim', source, "Subzero Slammer", target);
 			this.add('-anim', source, "Hyper Voice", target);
@@ -1927,8 +2070,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Outrage', target);
 		},
 		onEffectiveness: function (typeMod) {
@@ -1955,8 +2101,11 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {snatch: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Swallow", source);
 		},
 		volatileStatus: 'purplepills',
@@ -2070,16 +2219,16 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		onPrepareHit: function (target, source) {
-			this.attrLastMove('[still]');
-			this.add('-anim', source, "Rest", target);
-			this.add('-anim', source, "Aromatic Mist", target);
-		},
+		onTryMovePriority: 100,
 		onTryMove: function (pokemon) {
 			this.attrLastMove('[still]');
 			if (pokemon.hp < pokemon.maxhp && pokemon.status !== 'slp' && !pokemon.hasAbility('comatose')) return;
 			this.add('-fail', pokemon);
 			return null;
+		},
+		onPrepareHit: function (target, source) {
+			this.add('-anim', source, "Rest", target);
+			this.add('-anim', source, "Aromatic Mist", target);
 		},
 		onHit: function (target, source, move) {
 			let napWeather = this.pseudoWeather['naptime'];
@@ -2131,8 +2280,11 @@ let BattleMovedex = {
 		pp: 1,
 		priority: 0,
 		flags: {},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Recover", source);
 			this.heal(source.maxhp, source, source, 'Blaze of Glory');
 			this.add('-anim', source, "Final Gambit", target);
@@ -2155,8 +2307,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Power Gem", target);
 		},
 		secondary: {
@@ -2182,8 +2337,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {authentic: 1, protect: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Conversion", source);
 		},
 		onHit: function (target, source) {
@@ -2231,8 +2389,11 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {mirror: 1, protect: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Imprison", source);
 			this.add('-anim', source, "Miracle Eye", target);
 		},
@@ -2276,8 +2437,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Dragon Hammer", target);
 			this.add('-anim', target, "Earthquake", target);
 		},
@@ -2311,8 +2475,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {mirror: 1, protect: 1, contact: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Rapid Spin", target);
 		},
 		self: {
@@ -2348,8 +2515,11 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Leaf Tornado", target);
 			this.add('-anim', source, "Leaf Storm", target);
 		},
@@ -2376,8 +2546,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Milk Drink", source);
 		},
 		volatileStatus: 'proteinshake',
@@ -2420,8 +2593,11 @@ let BattleMovedex = {
 			}
 		},
 		flags: {snatch: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Recover", source);
 			this.add('-anim', source, "Nasty Plot", source);
 		},
@@ -2444,8 +2620,11 @@ let BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {mirror: 1, protect: 1, authentic: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Freeze Dry", target);
 			this.add('-anim', source, "Mist", target);
 		},
@@ -2482,8 +2661,11 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {mirror: 1, protect: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Fire Lash", target);
 			this.add('-anim', source, "Heat Crash", target);
 		},
@@ -2523,8 +2705,11 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 5,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Nightmare", target);
 			this.add('-anim', source, "Moongeist Beam", target);
 			this.add('-anim', source, "Stomping Tantrum", target);
@@ -2546,8 +2731,11 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, heal: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Leech Life", target);
 		},
 		drain: [1, 2],
@@ -2567,8 +2755,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Toxic", target);
 		},
 		onTryHit: function (target, source, move) {
@@ -2623,8 +2814,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 4,
 		flags: {heal: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Spiky Shield", source);
 		},
 		stallingMove: true,
@@ -2683,8 +2877,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Acupressure", source);
 			this.add('-anim', source, "Flare Blitz", source);
 		},
@@ -2760,8 +2957,11 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Dig", source);
 		},
 		onTryHit: function (target, source, move) {
@@ -2790,8 +2990,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Refresh", source);
 			this.add('-anim', source, "Geomancy", source);
 		},
@@ -2826,8 +3029,11 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {snatch: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Hone Claws", source);
 		},
 		boosts: {
@@ -2851,8 +3057,11 @@ let BattleMovedex = {
 		pp: 1,
 		priority: 0,
 		flags: {},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Hone Claws", source);
 			this.add('-anim', source, "Extreme Evoboost", source);
 			this.add('-anim', source, "Blizzard", source);
@@ -2884,8 +3093,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Discharge", target);
 		},
 		secondary: null,
@@ -2905,8 +3117,11 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Swords Dance", source);
 			this.add('-anim', source, "Sacred Fire", source);
 		},
@@ -2930,8 +3145,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: -7,
 		flags: {mirror: 1, snatch: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Telekinesis", source);
 			this.add('-anim', source, "Trick Room", source);
 		},
@@ -2964,8 +3182,11 @@ let BattleMovedex = {
 			// @ts-ignore Hack for Snaquaza's Z move
 			move.category = move.baseMove ? move.baseMove.category : move.category;
 		},
-		onPrepareHit: function (target, source, move) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source, move) {
 			let zmove = this.getMove(this.zMoveTable[move.type]);
 			this.add('-anim', source, zmove.name, target);
 			this.add('-anim', source, "Transform", source);
@@ -3031,6 +3252,10 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 1,
 		flags: {snatch: 1},
+		onTryMovePriority: 100,
+		onTryMove: function () {
+			this.attrLastMove('[still]');
+		},
 		beforeTurnCallback: function (pokemon) {
 			this.boost({def: 1, spd: 1}, pokemon, pokemon, 'mushroom army');
 		},
@@ -3056,8 +3281,11 @@ let BattleMovedex = {
 		pp: 1,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Searing Sunraze Smash", target);
 		},
 		onHit: function (target, source) {
@@ -3081,8 +3309,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Swords Dance", source);
 		},
 		boosts: {
@@ -3106,18 +3337,15 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Thunder", target);
 			this.add('-anim', source, "Fissure", target);
 		},
-		onModifyMovePriority: -5,
-		onModifyMove: function (move) {
-			if (!move.ignoreImmunity) move.ignoreImmunity = {};
-			if (move.ignoreImmunity !== true) {
-				move.ignoreImmunity['Electric'] = true;
-			}
-		},
+		ignoreImmunity: {'Electric': true},
 		onEffectiveness: function (typeMod, type) {
 			if (type === 'Ground') return 1;
 		},
@@ -3137,8 +3365,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Celebrate", target);
 		},
 		sideCondition: "rotate",
@@ -3172,8 +3403,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, heal: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Dragon Ascent", target);
 			this.add('-anim', source, "Draining Kiss", target);
 		},
@@ -3208,8 +3442,11 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {bullet: 1, contact: 1, protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Gyro Ball", target);
 		},
 		onHit: function () {
@@ -3234,8 +3471,11 @@ let BattleMovedex = {
 		pp: 1,
 		priority: 0,
 		flags: {},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Psywave", target);
 		},
 		multihit: 5,
@@ -3327,8 +3567,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Smokescreen", target);
 			this.add('-anim', source, "Parting Shot", target);
 		},
@@ -3387,8 +3630,11 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		volatileStatus: "minisingularity",
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Spacial Rend", target);
 			this.add('-anim', source, "Flash", target);
 		},
@@ -3428,8 +3674,11 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Discharge", target);
 			this.add('-anim', source, "First Impression", target);
 		},
@@ -3453,7 +3702,8 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1},
-		onPrepareHit: function () {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
 		},
 		onHit: function (target, source) {
@@ -3478,8 +3728,11 @@ let BattleMovedex = {
 		pp: 1,
 		priority: 0,
 		flags: {},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Subzero Slammer", target);
 			this.add('-anim', source, "Tectonic Rage", target);
 		},
@@ -3502,8 +3755,11 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, heal: 1},
 		drain: [1, 2],
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Fire Blast", target);
 			this.add('-anim', source, "Giga Drain", target);
 		},
@@ -3524,8 +3780,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, dance: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Revelation Dance", source);
 			this.add('-anim', source, "Air Slash", target);
 			this.add('-anim', source, "Air Slash", target);
@@ -3551,8 +3810,11 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Flame Charge", target);
 			this.add('-anim', source, "Overheat", target);
 		},
@@ -3594,8 +3856,11 @@ let BattleMovedex = {
 				return true;
 			}
 		},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Baton Pass", source);
 		},
 		onHit: function (target, source) {
@@ -3632,7 +3897,8 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
 		ignoreImmunity: true,
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
 		},
 		onTryHit: function (target, pokemon) {
@@ -3669,6 +3935,33 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		type: "Psychic",
 	},
+	// Zyg
+	thelifeofzyg: {
+		accuracy: true,
+		category: "Status",
+		desc: "Badly poisons the target all Pokemon on the field.",
+		shortDesc: "Badly poisons both Pokemon.",
+		id: "thelifeofzyg",
+		name: "The Life of Zyg",
+		isNonstandard: true,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMovePriority: 100,
+		onTryMove: function () {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
+			this.add('-anim', source, "Toxic", target);
+		},
+		onHit: function (target, source) {
+			target.trySetStatus('tox', source);
+			source.trySetStatus('tox', source);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Poison",
+	},
 	// Modified Moves \\
 	// Purple Pills is immune to taunt
 	"taunt": {
@@ -3701,30 +3994,6 @@ let BattleMovedex = {
 				}
 			},
 		},
-	},
-	// Zyg
-	thelifeofzyg: {
-		accuracy: true,
-		category: "Status",
-		desc: "Badly poisons the target all Pokemon on the field.",
-		shortDesc: "Badly poisons both Pokemon.",
-		id: "thelifeofzyg",
-		name: "The Life of Zyg",
-		isNonstandard: true,
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
-			this.attrLastMove('[still]');
-			this.add('-anim', source, "Toxic", target);
-		},
-		onHit: function (target, source) {
-			target.trySetStatus('tox', source);
-			source.trySetStatus('tox', source);
-		},
-		secondary: null,
-		target: "normal",
-		type: "Poison",
 	},
 };
 
