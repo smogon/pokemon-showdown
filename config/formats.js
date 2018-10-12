@@ -1565,6 +1565,17 @@ let Formats = [
 		banlist: ['OU', 'UUBL'],
 	},
 	{
+		name: "[Gen 3] NU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3503540/">ADV NU Viability Rankings</a>`,
+		],
+
+		mod: 'gen3',
+		searchShow: false,
+		ruleset: ['[Gen 3] UU'],
+		banlist: ['UU'],
+	},
+	{
 		name: "[Gen 3] Custom Game",
 
 		mod: 'gen3',
