@@ -1597,7 +1597,7 @@ let BattleMovedex = {
 		name: "B O I",
 		isNonstandard: true,
 		pp: 15,
-		priority: 1,
+		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');

@@ -157,7 +157,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold',
 			},
 			'cant say': {
-				species: 'Aegislash', ability: 'Stance Change', item: 'Weakness Policy', gender: 'M',
+				species: 'Aegislash', ability: 'Stance Change', item: ['Leftovers', 'Terrain Extender', 'Muscle Band'], gender: 'M',
 				moves: ['Shift Gear', 'Spectral Thief', 'Sacred Sword'],
 				signatureMove: 'a e s t h e t i s l a s h',
 				evs: {hp: 32, atk: 252, spd: 4, spe: 220}, nature: 'Jolly',
@@ -301,8 +301,8 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {spa: 252, spd: 4, spe: 252}, nature: 'Modest',
 			},
 			'imas': {
-				species: 'Skarmory', ability: 'Prankster', item: 'Sharp Beak', gender: 'M',
-				moves: ['Swords Dance', 'Roost', 'Taunt'],
+				species: 'Skarmory', ability: 'Gale Wings 1.0', item: 'Sharp Beak', gender: 'M',
+				moves: ['Swords Dance', 'Roost', ['Taunt', 'Stealth Rock']],
 				signatureMove: 'B O I',
 				evs: {hp: 252, atk: 252, spe: 4}, nature: 'Adamant',
 			},
