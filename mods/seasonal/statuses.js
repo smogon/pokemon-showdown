@@ -1136,6 +1136,25 @@ let BattleStatuses = {
 		onFaint: function () {
 			this.add(`c|+Snaquaza|How did you know I was scum?`);
 		},
+		onDamage: function (damage, pokemon) {
+			// @ts-ignore Hack for Snaquaza's Z move
+			if (!pokemon.claimHP) return;
+			// Prevent Snaquaza from fainting while using a fake claim to prevent visual bug
+			if (pokemon.hp - damage <= 0) return (pokemon.hp - 1);
+		},
+		onAfterDamage: function (damage, pokemon) {
+			// @ts-ignore Hack for Snaquaza's Z move
+			if (!pokemon.claimHP || pokemon.hp > 1) return;
+			// Now we handle the fake claim "fainting"
+			// @ts-ignore Hack for Snaquaza's Z move
+			pokemon.hp = pokemon.claimHP;
+			pokemon.formeChange(pokemon.baseTemplate.id);
+			pokemon.moveSlots = pokemon.moveSlots.slice(0, 4);
+			this.add('message', `${pokemon.name}'s fake claim was uncovered!`);
+			// @ts-ignore Hack for Snaquaza's Z move
+			delete pokemon.claimHP;
+			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+		},
 	},
 	spacebass: {
 		noCopy: true,

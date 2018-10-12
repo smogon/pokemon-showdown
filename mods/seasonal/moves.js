@@ -518,7 +518,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Summons Trick Room and Magnet Rise to combine for the following effects: for 5 turns, the user user is immune to Ground-type moves and the effects of Arena Trap, and the Speed of every Pokemon is recalculated for the purposes of determining turn order: each Pokemon's Speed is considered to be (10000 - its normal Speed), and if this value is greater than 8191, 8192 is subtracted from it. Ends the effect of Trick Room if used during that effect. The effects of Ingrain, Smack Down, and Thousand Arrows do not cause this move to fail, but still override its levitation effect, as does Iron Ball. Does not fail if the user is under the effect of Magnet Rise or this move used previously, but does not extend the duration of levitation effects.",
+		desc: "For 5 turns, the user is immune to Ground-type moves and the effects of Arena Trap, and the Speed of every Pokemon is recalculated for the purposes of determining turn order: each Pokemon's Speed is considered to be (10000 - its normal Speed), and if this value is greater than 8191, 8192 is subtracted from it. Ends the effect of Trick Room if used during that effect. The effects of Ingrain, Smack Down, and Thousand Arrows do not cause this move to fail, but still override its levitation effect, as does Iron Ball. Does not fail if the user is under the effect of Magnet Rise or this move used previously, but does not extend the duration of levitation effects.",
 		shortDesc: "5 turns: slower Pokemon move first, user levitates.",
 		id: "triviaroom",
 		name: "Trivia Room",
@@ -530,10 +530,29 @@ let BattleMovedex = {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Trick Room", source);
 		},
-		onHit: function (pokemon) {
-			pokemon.addVolatile('magnetrise', pokemon);
+		pseudoWeather: 'triviaroom',
+		effect: {
+			duration: 5,
+			durationCallback: function (source, effect) {
+				if (source && source.hasAbility('persistent')) {
+					this.add('-activate', source, 'ability: Persistent', effect);
+					return 7;
+				}
+				return 5;
+			},
+			onStart: function (target, source) {
+				this.add('-fieldstart', 'move: Trivia Room', '[of] ' + source);
+			},
+			onRestart: function (target, source) {
+				this.removePseudoWeather('triviaroom');
+			},
+			// Speed modification is changed in Pokemon.getActionSpeed() in mods/seasonal/scripts.js
+			// Levitation is handled in Pokemon.isGrounded in mods/seasonal/scripts.js
+			onResidualOrder: 23,
+			onEnd: function () {
+				this.add('-fieldend', 'move: Trivia Room');
+			},
 		},
-		pseudoWeather: 'trickroom',
 		secondary: null,
 		target: "self",
 		type: "Psychic",
@@ -3706,188 +3725,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Poison",
-	},
-	// Modified terrains to support proper ending of custom terrains
-	electricterrain: {
-		inherit: true,
-		effect: {
-			duration: 5,
-			durationCallback: function (source, effect) {
-				if (source && source.hasItem('terrainextender')) {
-					return 8;
-				}
-				return 5;
-			},
-			onSetStatus: function (status, target, source, effect) {
-				if (status.id === 'slp' && target.isGrounded() && !target.isSemiInvulnerable()) {
-					if (effect.effectType === 'Move' && !effect.secondaries) {
-						this.add('-activate', target, 'move: Electric Terrain');
-					}
-					return false;
-				}
-			},
-			onTryAddVolatile: function (status, target) {
-				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
-				if (status.id === 'yawn') {
-					this.add('-activate', target, 'move: Electric Terrain');
-					return null;
-				}
-			},
-			onBasePower: function (basePower, attacker, defender, move) {
-				if (move.type === 'Electric' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
-					this.debug('electric terrain boost');
-					return this.chainModify(1.5);
-				}
-			},
-			onStart: function (battle, source, effect) {
-				// @ts-ignore Hack to support custom terrains ending properly
-				if (this.lastTerrain) this.add('-fieldend', `move: ${this.getEffect(this.lastTerrain).name}`);
-				if (effect && effect.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Electric Terrain', '[from] ability: ' + effect, '[of] ' + source);
-				} else {
-					this.add('-fieldstart', 'move: Electric Terrain');
-				}
-			},
-			onResidualOrder: 21,
-			onResidualSubOrder: 2,
-			onEnd: function () {
-				this.add('-fieldend', 'move: Electric Terrain');
-			},
-		},
-	},
-	grassyterrain: {
-		inherit: true,
-		effect: {
-			duration: 5,
-			durationCallback: function (source, effect) {
-				if (source && source.hasItem('terrainextender')) {
-					return 8;
-				}
-				return 5;
-			},
-			onBasePower: function (basePower, attacker, defender, move) {
-				let weakenedMoves = ['earthquake', 'bulldoze', 'magnitude'];
-				if (weakenedMoves.includes(move.id)) {
-					this.debug('move weakened by grassy terrain');
-					return this.chainModify(0.5);
-				}
-				if (move.type === 'Grass' && attacker.isGrounded()) {
-					this.debug('grassy terrain boost');
-					return this.chainModify(1.5);
-				}
-			},
-			onStart: function (battle, source, effect) {
-				// @ts-ignore Hack to support custom terrains ending properly
-				if (this.lastTerrain) this.add('-fieldend', `move: ${this.getEffect(this.lastTerrain).name}`);
-				if (effect && effect.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Grassy Terrain', '[from] ability: ' + effect, '[of] ' + source);
-				} else {
-					this.add('-fieldstart', 'move: Grassy Terrain');
-				}
-			},
-			onResidualOrder: 5,
-			onResidualSubOrder: 3,
-			onResidual: function () {
-				this.eachEvent('Terrain');
-			},
-			onTerrain: function (pokemon) {
-				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
-					this.debug('Pokemon is grounded, healing through Grassy Terrain.');
-					this.heal(pokemon.maxhp / 16, pokemon, pokemon);
-				}
-			},
-			onEnd: function () {
-				if (!this.effectData.duration) this.eachEvent('Terrain');
-				this.add('-fieldend', 'move: Grassy Terrain');
-			},
-		},
-	},
-	mistyterrain: {
-		inherit: true,
-		effect: {
-			duration: 5,
-			durationCallback: function (source, effect) {
-				if (source && source.hasItem('terrainextender')) {
-					return 8;
-				}
-				return 5;
-			},
-			onSetStatus: function (status, target, source, effect) {
-				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
-				if (effect && effect.status) {
-					this.add('-activate', target, 'move: Misty Terrain');
-				}
-				return false;
-			},
-			onTryAddVolatile: function (status, target, source, effect) {
-				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
-				if (status.id === 'confusion') {
-					if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', target, 'move: Misty Terrain');
-					return null;
-				}
-			},
-			onBasePower: function (basePower, attacker, defender, move) {
-				if (move.type === 'Dragon' && defender.isGrounded() && !defender.isSemiInvulnerable()) {
-					this.debug('misty terrain weaken');
-					return this.chainModify(0.5);
-				}
-			},
-			onStart: function (battle, source, effect) {
-				// @ts-ignore Hack to support custom terrains ending properly
-				if (this.lastTerrain) this.add('-fieldend', `move: ${this.getEffect(this.lastTerrain).name}`);
-				if (effect && effect.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Misty Terrain', '[from] ability: ' + effect, '[of] ' + source);
-				} else {
-					this.add('-fieldstart', 'move: Misty Terrain');
-				}
-			},
-			onResidualOrder: 21,
-			onResidualSubOrder: 2,
-			onEnd: function (side) {
-				this.add('-fieldend', 'Misty Terrain');
-			},
-		},
-	},
-	psychicterrain: {
-		inherit: true,
-		effect: {
-			duration: 5,
-			durationCallback: function (source, effect) {
-				if (source && source.hasItem('terrainextender')) {
-					return 8;
-				}
-				return 5;
-			},
-			onTryHitPriority: 4,
-			onTryHit: function (target, source, effect) {
-				if (!target.isGrounded() || target.isSemiInvulnerable() || target.side === source.side) return;
-				if (effect && (effect.priority <= 0.1 || effect.target === 'self')) {
-					return;
-				}
-				this.add('-activate', target, 'move: Psychic Terrain');
-				return null;
-			},
-			onBasePower: function (basePower, attacker, defender, move) {
-				if (move.type === 'Psychic' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
-					this.debug('psychic terrain boost');
-					return this.chainModify(1.5);
-				}
-			},
-			onStart: function (battle, source, effect) {
-				// @ts-ignore Hack to support custom terrains ending properly
-				if (this.lastTerrain) this.add('-fieldend', `move: ${this.getEffect(this.lastTerrain).name}`);
-				if (effect && effect.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Psychic Terrain', '[from] ability: ' + effect, '[of] ' + source);
-				} else {
-					this.add('-fieldstart', 'move: Psychic Terrain');
-				}
-			},
-			onResidualOrder: 21,
-			onResidualSubOrder: 2,
-			onEnd: function () {
-				this.add('-fieldend', 'move: Psychic Terrain');
-			},
-		},
 	},
 };
 

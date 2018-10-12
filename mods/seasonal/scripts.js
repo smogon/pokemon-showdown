@@ -257,6 +257,63 @@ let BattleScripts = {
 			}
 		}
 	},
+	setTerrain(status, source = null, sourceEffect = null) {
+		status = this.getEffect(status);
+		if (!sourceEffect && this.effect) sourceEffect = this.effect;
+		if (!source && this.event && this.event.target) source = this.event.target;
+
+		if (this.terrain === status.id) return false;
+		if (this.terrain && !status.id) {
+			let oldstatus = this.getTerrain();
+			this.singleEvent('End', oldstatus, this.terrainData, this);
+		}
+		let prevTerrain = this.terrain;
+		let prevTerrainData = this.terrainData;
+		this.terrain = status.id;
+		this.terrainData = {id: status.id};
+		if (source) {
+			this.terrainData.source = source;
+			this.terrainData.sourcePosition = source.position;
+		}
+		if (status.duration) {
+			this.terrainData.duration = status.duration;
+		}
+		if (status.durationCallback) {
+			this.terrainData.duration = status.durationCallback.call(this, source, sourceEffect);
+		}
+		if (!this.singleEvent('Start', status, this.terrainData, this, source, sourceEffect)) {
+			this.terrain = prevTerrain;
+			this.terrainData = prevTerrainData;
+			return false;
+		}
+		// Always run a terrain end event to prevent a visual glitch with custom terrains
+		if (status.id) this.singleEvent('End', this.getEffect(prevTerrain), prevTerrainData, this);
+		return true;
+	},
+	pokemon: {
+		getActionSpeed() {
+			let speed = this.getStat('spe', false, false);
+			if (speed > 10000) speed = 10000;
+			if (this.battle.getPseudoWeather('trickroom') || this.battle.getPseudoWeather('triviaroom')) {
+				speed = 0x2710 - speed;
+			}
+			return speed & 0x1FFF;
+		},
+		isGrounded(negateImmunity = false) {
+			if ('gravity' in this.battle.pseudoWeather) return true;
+			if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;
+			if ('smackdown' in this.volatiles) return true;
+			let item = (this.ignoringItem() ? '' : this.item);
+			if (item === 'ironball') return true;
+			// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
+			if (!negateImmunity && this.hasType('Flying') && !('roost' in this.volatiles)) return false;
+			if (this.hasAbility('levitate') && !this.battle.suppressingAttackEvents()) return null;
+			if ('magnetrise' in this.volatiles) return false;
+			if ('telekinesis' in this.volatiles) return false;
+			if ('triviaroom' in this.battle.pseudoWeather && this.name === 'Bimp' && !this.illusion) return false;
+			return item !== 'airballoon';
+		},
+	},
 };
 
 exports.BattleScripts = BattleScripts;
