@@ -349,6 +349,7 @@ let BattleScripts = {
 				let firstDamage;
 				let i;
 				for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
+					move.hit = i + 1;
 					if (i === 0) {
 						// First hit, we calculate
 						moveDamage = this.moveHit(target, pokemon, move);

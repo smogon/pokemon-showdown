@@ -154,6 +154,7 @@ let BattleScripts = {
 			let i;
 			for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
 				if (pokemon.status === 'slp' && !isSleepUsable) break;
+				move.hit = i + 1;
 
 				if (move.multiaccuracy && i > 0) {
 					accuracy = move.accuracy;

@@ -218,6 +218,7 @@ let BattleScripts = {
 			let i;
 			for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
 				if (pokemon.status === 'slp' && !isSleepUsable) break;
+				move.hit = i + 1;
 
 				if (move.multiaccuracy && i > 0) {
 					accuracy = move.accuracy;
@@ -270,8 +271,7 @@ let BattleScripts = {
 		}
 
 		if (move.struggleRecoil) {
-			// @ts-ignore
-			this.directDamage(this.clampIntRange(Math.round(pokemon.maxhp / 4), 1), pokemon, pokemon, {id: 'strugglerecoil'});
+			this.directDamage(this.clampIntRange(Math.round(pokemon.maxhp / 4), 1), pokemon, pokemon, /** @type {Effect} */ ({id: 'strugglerecoil'}));
 		}
 
 		if (target && pokemon !== target) target.gotAttacked(move, damage, pokemon);
