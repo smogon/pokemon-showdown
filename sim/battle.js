@@ -1555,7 +1555,7 @@ class Battle extends Dex.ModdedDex {
 					if (attack.source.isActive) {
 						attack.thisTurn = false;
 					} else {
-						pokemon.hurtBy.slice(pokemon.hurtBy.indexOf(attack), 1);
+						pokemon.hurtBy.splice(pokemon.hurtBy.indexOf(attack), 1);
 					}
 				}
 
