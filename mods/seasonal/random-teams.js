@@ -301,7 +301,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {spa: 252, spd: 4, spe: 252}, nature: 'Modest',
 			},
 			'imas': {
-				species: 'Skarmory', ability: 'Gale Wings 1.0', item: 'Sharp Beak', gender: 'M',
+				species: 'Skarmory', ability: 'Gale Wings v1', item: 'Sharp Beak', gender: 'M',
 				moves: ['Swords Dance', 'Roost', ['Taunt', 'Stealth Rock']],
 				signatureMove: 'B O I',
 				evs: {hp: 252, atk: 252, spe: 4}, nature: 'Adamant',
@@ -511,7 +511,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {def: 252, spa: 4, spe: 252}, nature: 'Bold',
 			},
 			'Shiba': {
-				species: 'Fletchinder', ability: 'Gale Wings 1.0', item: 'Eviolite', gender: 'F',
+				species: 'Fletchinder', ability: 'Gale Wings v1', item: 'Eviolite', gender: 'F',
 				moves: ['Dragon Ascent', 'Sacred Fire', 'Roost'],
 				signatureMove: 'GO INDA',
 				evs: {atk: 252, hp: 248, spe: 8}, nature: 'Adamant',

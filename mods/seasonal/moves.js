@@ -106,7 +106,7 @@ let BattleMovedex = {
 		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Headbutt', target);
 		},
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, contact: 1},
 		secondary: null,
 		target: "normal",
 		type: "Grass",
@@ -260,7 +260,7 @@ let BattleMovedex = {
 		name: "TRU ANT",
 		isNonstandard: true,
 		pp: 5,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, contact: 1},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -486,7 +486,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, sound: 1},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -513,7 +513,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 5,
 		priority: 0,
-		flags: {mirror: 1, protect: 1},
+		flags: {mirror: 1, protect: 1, contact: 1},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -571,7 +571,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 5,
 		priority: -7,
-		flags: {snatch: 1, mirror: 1},
+		flags: {},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -591,6 +591,7 @@ let BattleMovedex = {
 			},
 			onStart: function (target, source) {
 				this.add('-fieldstart', 'move: Trivia Room', '[of] ' + source);
+				this.add('-message', `${source.side.name} is levitating due to its big trivia brain!`);
 			},
 			onRestart: function (target, source) {
 				this.removePseudoWeather('triviaroom');
@@ -600,6 +601,7 @@ let BattleMovedex = {
 			onResidualOrder: 23,
 			onEnd: function () {
 				this.add('-fieldend', 'move: Trivia Room');
+				this.add('-message', `Certain Pokemon are no longer levitating.`);
 			},
 		},
 		secondary: null,
@@ -661,7 +663,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, authentic: 1},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -824,13 +826,13 @@ let BattleMovedex = {
 		accuracy: true,
 		category: "Status",
 		desc: "Has a 50% chance to cause the target to fall asleep. Sets one layer of Spikes on the opponent's side of the field and boosts a random stat of the user by one stage, excluding Accuracy and Evasion, that is not already at maximum.",
-		shortDesc: "10% chance to sleep. Sets 1 Spike. Boosts a stat.",
+		shortDesc: "50% chance to sleep. Sets 1 Spike. Boosts a stat.",
 		id: "bringerofdarkness",
 		name: "Bringer of Darkness",
 		isNonstandard: true,
 		pp: 5,
 		priority: 0,
-		flags: {reflectable: 1, mirror: 1},
+		flags: {reflectable: 1, mirror: 1, snatch: 1},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -879,7 +881,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 5,
 		priority: 0,
-		flags: {mirror: 1, protect: 1},
+		flags: {mirror: 1, protect: 1, contact: 1},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -978,7 +980,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 25,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, contact: 1},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -1006,7 +1008,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 5,
 		priority: 0,
-		flags: {mirror: 1, snatch: 1},
+		flags: {mirror: 1, snatch: 1, reflectable: 1},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -1075,7 +1077,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 5,
 		priority: 1,
-		flags: {mirror: 1, protect: 1},
+		flags: {mirror: 1, protect: 1, contact: 1},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -1292,7 +1294,7 @@ let BattleMovedex = {
 		pp: 6,
 		noPPBoosts: true,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1},
 		selfdestruct: "ifHit",
 		onTryMovePriority: 100,
 		onTryMove: function () {
@@ -1700,7 +1702,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 10,
 		priority: 0,
-		flags: {authentic: 1, snatch: 1},
+		flags: {authentic: 1, snatch: 1, reflectable: 1},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -1770,7 +1772,7 @@ let BattleMovedex = {
 			for (const ally of pokemon.side.pokemon) {
 				if (ally.cureStatus()) success = true;
 			}
-			pokemon.setStatus('psn', pokemon);
+			if (pokemon.setStatus('psn', pokemon)) success = true;
 			return success;
 		},
 		secondary: null,
@@ -1823,7 +1825,7 @@ let BattleMovedex = {
 		},
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, contact: 1},
 		secondary: null,
 		target: "normal",
 		type: "Dragon",
@@ -1998,7 +2000,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 10,
 		priority: 3,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, contact: 1},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -2032,7 +2034,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, sound: 1},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -2069,7 +2071,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, dance: 1},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -2100,7 +2102,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 15,
 		priority: 0,
-		flags: {snatch: 1, mirror: 1},
+		flags: {},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -2436,7 +2438,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {protect: 1, mirror: 1, contact: 1},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -2619,7 +2621,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 20,
 		priority: 0,
-		flags: {mirror: 1, protect: 1, authentic: 1},
+		flags: {mirror: 1, protect: 1, authentic: 1, sound: 1},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -2905,7 +2907,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 5,
 		priority: 0,
-		flags: {nosky: 1},
+		flags: {},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Genesis Supernova", source);
@@ -2989,7 +2991,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 10,
 		priority: 0,
-		flags: {snatch: 1},
+		flags: {snatch: 1, mirror: 1},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -3144,7 +3146,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 10,
 		priority: -7,
-		flags: {mirror: 1, snatch: 1},
+		flags: {},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -3166,7 +3168,7 @@ let BattleMovedex = {
 		accuracy: true,
 		category: "Physical",
 		basePower: 1,
-		desc: "The user creates a substitute to take its place in battle. This substitute takes the sprite of a randomly selected Pokemon from a broad set of Random Battle-eligible Pokemon able to learn the move chosen as this move's base move. Upon its creation, the user's Illusion is broken until it next switches out. The substitute-face Pokemon is generated a Random Battle moveset with maximum PP that is added (except for duplicates) to the user's moveset; these additions are removed when this substitute is no longer active. This substitute retains the user's current stats (except for HP), base stats, stat stages, types, weight, gender, level, status conditions, trapping, binding, and pseudo-statuses such as confusion. The User's Ability is lost until switched out. Its HP is 100% of the user's maximum HP. When this substitute falls to zero HP, it breaks, and the user reverts to the state in which it used this move. This substitute absorbs indirect damage and authentic moves, but does not reset the counter of bad poison when broken, and cannot be transfered through Baton Pass. Transforming into this Substitute will not fail, and will give that move's user access to all 8 (if no duplicates) moves with 5 PP each.",
+		desc: "The user creates a substitute to take its place in battle. This substitute takes the sprite of a randomly selected Pokemon from a broad set of Random Battle-eligible Pokemon able to learn the move chosen as this move's base move. Upon its creation, the user's Illusion is broken until it next switches out. The substitute-face Pokemon is generated a Random Battle moveset with maximum PP that is added (except for duplicates) to the user's moveset; these additions are removed when this substitute is no longer active. This substitute retains the user's current stats (except for HP), base stats, stat stages, types, weight, gender, level, status conditions, trapping, binding, and pseudo-statuses such as confusion. The User's Ability is suppressed until switched out. Its HP is 100% of the user's maximum HP. When this substitute falls to zero HP, it breaks, and the user reverts to the state in which it used this move. This substitute absorbs indirect damage and authentic moves, but does not reset the counter of bad poison when broken, and cannot be transfered through Baton Pass. Transforming into this Substitute will not fail, and will give that move's user access to all 8 (if no duplicates) moves with 5 PP each.",
 		shortDesc: "Uses a Random Battle Pokemon as a Substitute.",
 		id: "fakeclaim",
 		name: "Fake Claim",
@@ -3209,10 +3211,10 @@ let BattleMovedex = {
 			// Generate new set
 			const generator = new RandomStaffBrosTeams('gen7randombattle', this.prng);
 			let set = generator.randomSet(claim);
+			// Suppress Ability now to prevent starting new abilities when transforming
+			source.addVolatile('gastroacid', source);
 			// Tranform into it
 			source.formeChange(set.species, move);
-			source.setAbility('No Ability');
-			this.add('-hint', `${source.name} has temporarily lost its ability.`);
 			for (let newMove of set.moves) {
 				let moveTemplate = this.getMove(newMove);
 				if (source.moves.includes(moveTemplate.id)) continue;
@@ -3308,7 +3310,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 10,
 		priority: 0,
-		flags: {snatch: 1},
+		flags: {snatch: 1, mirror: 1},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -3402,7 +3404,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, heal: 1},
+		flags: {protect: 1, mirror: 1, heal: 1, contact: 1},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -3557,7 +3559,7 @@ let BattleMovedex = {
 	},
 	// torkool
 	smokebomb: {
-		accuracy: 100,
+		accuracy: true,
 		category: "Status",
 		desc: "Moves all hazards that are on the user's side of the field to the foe's side of the field. Sets Stealth Rock on the foes side. The user then switches out.",
 		shortDesc: "Moves hazards to foe's side. Switches out.",
@@ -3566,7 +3568,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 10,
 		priority: 0,
-		flags: {snatch: 1, mirror: 1},
+		flags: {snatch: 1, mirror: 1, reflectable: 1, authentic: 1},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -3701,7 +3703,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 10,
 		priority: 0,
-		flags: {snatch: 1},
+		flags: {snatch: 1, mirror: 1},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -3844,7 +3846,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 10,
 		priority: -6,
-		flags: {snatch: 1, mirror: 1},
+		flags: {mirror: 1},
 		beforeTurnCallback: function (pokemon) {
 			pokemon.addVolatile('cutieescape');
 			this.add('-message', `${pokemon.name} is preparing to flee!`);
@@ -3955,8 +3957,10 @@ let BattleMovedex = {
 			this.add('-anim', source, "Toxic", target);
 		},
 		onHit: function (target, source) {
-			target.trySetStatus('tox', source);
-			source.trySetStatus('tox', source);
+			let success = false;
+			if (target.trySetStatus('tox', source)) success = true;
+			if (source.trySetStatus('tox', source)) success = true;
+			return success;
 		},
 		secondary: null,
 		target: "normal",

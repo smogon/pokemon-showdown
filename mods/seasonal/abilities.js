@@ -170,6 +170,7 @@ let BattleAbilities = {
 		effect: {
 			duration: 5,
 			onStart: function (pokemon) {
+				this.add('-start', pokemon, 'Adrenaline Rush', '[silent]');
 				this.add('-message', `${pokemon.name}'s Adrenaline Rush has begun.`);
 			},
 			onModifySpAPriority: 5,
@@ -180,6 +181,7 @@ let BattleAbilities = {
 				return this.chainModify(2);
 			},
 			onEnd: function (pokemon) {
+				this.add('-end', pokemon, 'Adrenaline Rush', '[silent]');
 				this.add('-message', `${pokemon.name}'s Adrenaline Rush has ended.`);
 			},
 		},
@@ -495,12 +497,12 @@ let BattleAbilities = {
 			return false;
 		},
 	},
-	// Shiba
-	galewings10: {
+	// Shiba and imas
+	galewingsv1: {
 		desc: "This Pokemon's Flying-type moves have their priority increased by 1.",
 		shortDesc: "This Pokemon's Flying-type moves have their priority increased by 1.",
-		id: "galewings10",
-		name: "Gale Wings 1.0",
+		id: "galewingsv1",
+		name: "Gale Wings v1",
 		isNonstandard: true,
 		onModifyPriority: function (priority, pokemon, target, move) {
 			if (move && move.type === 'Flying') return priority + 1;
