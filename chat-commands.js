@@ -1550,9 +1550,9 @@ const commands = {
 		room.hideText([userid, toId(this.inputUsername)]);
 
 		if (room.isPrivate !== true && room.chatRoomData) {
-			this.globalModlog("ROOMBAN", targetUser, ` by ${user.userid} ${(target ? `: ${target}` : ``)}`);
+			this.globalModlog("ROOMBAN", targetUser, ` by ${user.userid}${(target ? `: ${target}` : ``)}`);
 		} else {
-			this.modlog("ROOMBAN", targetUser, ` by ${user.userid} ${(target ? `: ${target}` : ``)}`);
+			this.modlog("ROOMBAN", targetUser, ` by ${user.userid}${(target ? `: ${target}` : ``)}`);
 		}
 		return true;
 	},
