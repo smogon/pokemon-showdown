@@ -521,7 +521,9 @@ let BattleMovedex = {
 		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Meteor Mash', target);
 		},
-		weather: 'raindance',
+		onAfterMoveSecondarySelf: function () {
+			this.setWeather('raindance');
+		},
 		secondary: {
 			chance: 100,
 			self: {
@@ -1153,7 +1155,9 @@ let BattleMovedex = {
 			this.add('-anim', source, 'Eruption', target);
 			this.add('-anim', source, 'Sunny Day', source);
 		},
-		weather: 'sunnyday',
+		onAfterMoveSecondarySelf: function () {
+			this.setWeather('sunnyday');
+		},
 		secondary: null,
 		target: "normal",
 		type: "Fire",
@@ -2055,7 +2059,9 @@ let BattleMovedex = {
 				},
 			},
 		],
-		weather: 'hail',
+		onAfterMoveSecondarySelf: function () {
+			this.setWeather('hail');
+		},
 		target: "normal",
 		type: "Ice",
 	},
@@ -2145,8 +2151,14 @@ let BattleMovedex = {
 						if (move.type === type2) offMove2.push(move);
 					}
 				}
-				newMovep.push(toId(offMove1[this.random(offMove1.length)]));
-				newMovep.push(toId(offMove2[this.random(offMove2.length)]));
+				let move1 = toId(offMove1[this.random(offMove1.length)]);
+				newMovep.push(move1);
+				let move2 = toId(offMove2[this.random(offMove2.length)]);
+				// Check to prevent move duplication
+				while (move1 === move2) {
+					move2 = toId(offMove2[this.random(offMove2.length)]);
+				}
+				newMovep.push(move2);
 				newMovep.push(toId(statMove[this.random(statMove.length)]));
 				newMovep.push('purplepills');
 				// Replace Moveset
@@ -3430,11 +3442,6 @@ let BattleMovedex = {
 			this.debug('' + power + ' bp');
 			return power;
 		},
-		onModifyMove: function (move) {
-			if (!this.pseudoWeather.trickroom) {
-				move.pseudoWeather = 'trickroom';
-			}
-		},
 		category: "Physical",
 		desc: "Power is equal to (25 * target's current Speed / user's current Speed) + 1, rounded down, but not more than 150. If the user's current Speed is 0, this move's power is 1. Summons Trick Room, but does not if Trick Room is already active.",
 		shortDesc: "More power if slower; sets Trick Room.",
@@ -3451,7 +3458,10 @@ let BattleMovedex = {
 		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Gyro Ball", target);
 		},
-		onHit: function () {
+		onAfterMoveSecondarySelf: function () {
+			if (!this.pseudoWeather.trickroom) {
+				this.addPseudoWeather('trickroom');
+			}
 			this.add('-fieldactivate', 'move: Pay Day'); // Coins are scattered on the ground
 		},
 		secondary: null,
