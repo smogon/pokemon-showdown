@@ -593,7 +593,7 @@ let BattleMovedex = {
 			},
 			onStart: function (target, source) {
 				this.add('-fieldstart', 'move: Trivia Room', '[of] ' + source);
-				this.add('-message', `${source.side.name} is levitating due to its big trivia brain!`);
+				this.add('-message', `${source.name} is levitating due to its big trivia brain!`);
 			},
 			onRestart: function (target, source) {
 				this.removePseudoWeather('triviaroom');
