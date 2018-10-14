@@ -80,7 +80,8 @@ let BattleAbilities = {
 		id: "logia",
 		name: "Logia",
 		onTryHit: function (target, source, move) {
-			if (target !== source && (move.type === 'Normal' || target.types.includes(move.type))) {
+			let plateType = this.getItem(target.item).onPlate;
+			if (target !== source && (move.type === 'Normal' || plateType === move.type)) {
 				this.add('-immune', target, '[msg]', '[from] ability: Logia');
 				return null;
 			}
