@@ -295,7 +295,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
 			},
 			'imagi': {
-				species: 'Tapu Lele', ability: 'Psychic Surge', item: 'Luminous Moss', gender: 'M',
+				species: 'Tapu Lele', ability: 'Psychic Surge', item: 'Luminous Moss', gender: 'N',
 				moves: [['Recover', 'Quiver Dance'], 'Nature\'s Madness', ['Psyshock', 'Moonblast']],
 				signatureMove: 'Delayed Promise',
 				evs: {spa: 252, spd: 4, spe: 252}, nature: 'Modest',
