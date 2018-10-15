@@ -90,7 +90,7 @@ let chatfilter = function (message, user, room) {
 			if (room) {
 				Punishments.autolock(user, room, 'ChatMonitor', `Filtered phrase: ${line}`, `<${room.id}> ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`, true);
 			} else {
-				this.errorReply(`Please do not say '${line}'.`);
+				this.errorReply(`Please do not say '${line.replace(/\\b/g, '')}'.`);
 			}
 			filterWords.autolock[i][3]++;
 			saveFilters();
@@ -108,7 +108,7 @@ let chatfilter = function (message, user, room) {
 		}
 		if (matched) {
 			if ((room && ((room.chatRoomData && room.id.endsWith('staff')) || room.id.startsWith('help-'))) || user.isStaff || (this.pmTarget && this.pmTarget.isStaff)) return `${message} __[would be filtered: ${line}${reason ? ` (${reason})` : ''}]__`;
-			this.errorReply(`Please do not say '${line}'.`);
+			this.errorReply(`Please do not say '${line.replace(/\\b/g, '')}'.`);
 			filterWords.warn[i][3]++;
 			saveFilters();
 			return false;
@@ -126,7 +126,7 @@ let chatfilter = function (message, user, room) {
 			}
 			if (matched) {
 				if ((room && ((room.chatRoomData && room.id.endsWith('staff')) || room.id.startsWith('help-'))) || user.isStaff || (this.pmTarget && this.pmTarget.isStaff)) return `${message} __[would be filtered in public: ${line}${reason ? ` (${reason})` : ''}]__`;
-				this.errorReply(`Please do not say '${line}'.`);
+				this.errorReply(`Please do not say '${line.replace(/\\b/g, '')}'.`);
 				filterWords.publicwarn[i][3]++;
 				saveFilters();
 				return false;
