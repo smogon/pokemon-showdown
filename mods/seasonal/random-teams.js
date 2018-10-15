@@ -304,7 +304,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				species: 'Skarmory', ability: 'Gale Wings v1', item: 'Sharp Beak', gender: 'M',
 				moves: ['Swords Dance', 'Roost', ['Taunt', 'Stealth Rock']],
 				signatureMove: 'B O I',
-				evs: {hp: 252, atk: 252, spe: 4}, nature: 'Adamant',
+				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant',
 			},
 			'Iyarito': {
 				species: 'Vaporeon', ability: 'Poison Heal', item: 'Leftovers', gender: 'F',

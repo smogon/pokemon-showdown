@@ -166,8 +166,11 @@ let BattleStatuses = {
 			}
 		},
 		onFaint: function (pokemon) {
-			if (pokemon.side.foe.active[0].template.speciesid === 'greninja') {
+			let activeMon = pokemon.side.foe.active[0].template.speciesid;
+			if (activeMon === 'greninja') {
 				this.add(`c|%Arcticblast|FRIENDS DON’T LET FRIENDS PLAY FROGS`);
+			} else if (activeMon === 'pumpkaboosuper') {
+				this.add(`c|%Arcticblast|WHY IS MY KAREN PRIZED`);
 			} else {
 				this.add(`c|%Arcticblast|FREE SKYMIN`);
 			}
