@@ -16,7 +16,7 @@ let BattleAbilities = {
 	// Please keep abilites organized alphabetically based on staff member name!
 	// 5gen
 	seasonsgift: {
-		desc: "If Sunny Day is active, the user's Attack is multiplied by 1.5 and its Speed is doubled.",
+		desc: "If Sunny Day is active, this Pokemon's Attack is 1.5x, and its Speed is doubled.",
 		shortDesc: "If Sunny Day is active, this Pokemon's Attack is 1.5x and its Speed is doubled.",
 		id: "seasonsgift",
 		name: "Season's Gift",
@@ -33,7 +33,7 @@ let BattleAbilities = {
 	},
 	// Akir
 	regrowth: {
-		desc: "This Pokemon's healing moves have their priority increased by 1. When switching out, this Pokemon restores 1/4 of its maximum HP.",
+		desc: "This Pokemon's healing moves have their priority increased by one stage. When switching out, this Pokemon restores 1/4 of its maximum HP, rounded down.",
 		shortDesc: "Healing moves have priority increased by 1. Heals 1/4 max HP when switching out.",
 		id: "regrowth",
 		name: "Regrowth",
@@ -47,7 +47,7 @@ let BattleAbilities = {
 	},
 	// Arrested
 	shellshocker: {
-		desc: "This Pokemon's Normal-type moves become Electric-type and have 1.2x power. In addition, this Pokemon heals 1/4 of its max HP when hit by Electric-type moves and is immune to Electric-type moves.",
+		desc: "This Pokemon's Normal-type moves become Electric-type and have 1.2x power. In addition, this Pokemon is immune to Electric-type moves and heals 1/4 of its maximum HP, rounded down, when hit by an Electric-type move.",
 		shortDesc: "Normal-type moves become Electric with 1.2x power; Electric hits heal 1/4 max HP.",
 		id: "shellshocker",
 		name: "Shell Shocker",
@@ -74,7 +74,7 @@ let BattleAbilities = {
 	},
 	// Arsenal
 	logia: {
-		desc: "If this Pokemon is an Arceus, its type changes to match its held Plate or Z-Crystal, and it is immune to Normal-type moves as well as to moves of the same type as itself.",
+		desc: "If this Pokemon is an Arceus, its type changes to match its held Plate or Z-Crystal, and it is immune to Normal and same-type moves.",
 		shortDesc: "Arceus: type matches held Plate or Z-Crystal; immunity to Normal and its own type.",
 		// Logia's type-changing itself is implemented in statuses.js
 		id: "logia",
@@ -91,7 +91,7 @@ let BattleAbilities = {
 	stimulatedpride: {
 		id: "stimulatedpride",
 		name: "Stimulated Pride",
-		desc: "On switch-in, this Pokemon summons Rain Dance, and it lowers the Attack of adjacent foes not behind a Substitute by 1 stage.",
+		desc: "On switch-in, this Pokemon summons Rain Dance, and it lowers the Attack of adjacent foes not behind a Substitute by one stage.",
 		shortDesc: "On switch-in, summons Rain Dance and lowers the Attack of adjacent foes by 1.",
 		isNonstandard: true,
 		onStart: function (pokemon) {
@@ -117,7 +117,7 @@ let BattleAbilities = {
 	},
 	// Bimp
 	learnsomethingnew: {
-		desc: "This Pokemon's Attack is raised by 1 stage when another Pokemon faints.",
+		desc: "This Pokemon's Attack is raised by one stage when another Pokemon faints.",
 		shortDesc: "This Pokemon's Attack is raised by 1 stage when another Pokemon faints.",
 		id: "learnsomethingnew",
 		name: "Learn Something New!",
@@ -128,7 +128,7 @@ let BattleAbilities = {
 	},
 	// Brandon
 	gracideamastery: {
-		desc: "If this Pokemon is a Shaymin, it will transform into Shaymin-Sky before using a Physical or Special attack. After using the attack, if this Pokemon was previously in its Shaymin forme, it will transform back into Shaymin.",
+		desc: "If this Pokemon is a Shaymin, it will transform into Shaymin-S before using a physical or special attack. After using the attack, if this Pokemon was originally in its base forme, it will transform back into Shaymin.",
 		shortDesc: "Transforms into Shaymin-Sky before attacking, then reverts to Shaymin-Land.",
 		id: "gracideamastery",
 		name: "Gracidea Mastery",

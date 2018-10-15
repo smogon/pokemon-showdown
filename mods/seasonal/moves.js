@@ -42,7 +42,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Raises the user's Attack by 2 stages, and cures user of burn/paralysis/poison. Ends Reflect, Light Screen, Aurora Veil, Safeguard, and Mist on the opponent's side, and removes Spikes, Toxic Spikes, Stealth Rock, and Sticky Web from both sides.",
+		desc: "Raises the user's Attack by two stages and cures the user of burns, paralysis, and poison. Removes Reflect, Light Screen, Aurora Veil, Safeguard, and Mist from the opponent's side and removes Spikes, Toxic Spikes, Stealth Rock, and Sticky Web from both sides.",
 		shortDesc: "Raises Attack by 2, clears hazards/user status.",
 		id: "noblehowl",
 		name: "Noble Howl",
@@ -93,7 +93,7 @@ let BattleMovedex = {
 			return move.basePower;
 		},
 		category: "Physical",
-		desc: "If the opponent switches out the turn this move is used, this move doubles in power.",
+		desc: "Base Power doubles if the foe switches out the turn this move is used.",
 		shortDesc: "Power doubles if foe switches out.",
 		id: "toomuchsaws",
 		name: "Too Much Saws",
@@ -115,7 +115,7 @@ let BattleMovedex = {
 	sparcedance: {
 		accuracy: true,
 		category: "Status",
-		desc: "The user's Attack, Defense, and Speed are boosted by 1.",
+		desc: "Boosts the user's Attack, Defense, and Speed by one stage.",
 		shortDesc: "+1 atk, def, and spe.",
 		id: "sparcedance",
 		name: "Sparce Dance",
@@ -140,7 +140,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 140,
 		category: "Special",
-		desc: "Has a 40% chance to paralyze the target. Lowers the user's SpA, SpD, and Spe by 1 stage.",
+		desc: "Has a 40% chance to paralyze the target. Lowers the user's Special Attakc, Special Defense, and Speed by one stage.",
 		shortDesc: "40% to paralyze. Lowers user's SpA, SpD, Spe.",
 		id: "energyfield",
 		name: "Energy Field",
@@ -165,12 +165,46 @@ let BattleMovedex = {
 		type: "Electric",
 		zMovePower: 200,
 	},
+	// Akir
+	compost: {
+		accuracy: true,
+		category: "Status",
+		desc: "If any of the user's allies fainted the previous turn, this move heals the active Pokemon by 50% of the user's HP on the following turn. Cures the user's party of all status conditions.",
+		shortDesc: "If ally fainted last turn, uses wish; cures party status.",
+		id: "compost",
+		name: "Compost",
+		isNonstandard: true,
+		pp: 5,
+		priority: 0,
+		flags: {snatch: 1, heal: 1},
+		heal: [1, 2],
+		onTryMovePriority: 100,
+		onTryMove: function () {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
+			this.add('-anim', source, "Ingrain", target);
+			let side = source.side;
+			if (side.faintedLastTurn) {
+				this.add('-anim', source, "Wish", target);
+				side.addSideCondition('wish', source);
+				this.add('-message', `${source.name} made a wish!`);
+			}
+			for (const ally of side.pokemon) {
+				if (ally.hasAbility('soundproof')) continue;
+				ally.cureStatus();
+			}
+		},
+		secondary: null,
+		target: "self",
+		type: "Ghost",
+	},
 	// Amaluna
 	turismosplash: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Sets Trick Room for 5 turns and raises the user's Special Attack by 1 stage.",
+		desc: "Summons Trick Room and raises the user's Special Attack by one stage.",
 		shortDesc: "User's Sp. Atk +1; sets Trick Room.",
 		id: "turismosplash",
 		name: "Turismo Splash",
@@ -203,7 +237,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 70,
 		category: "Physical",
-		desc: "If the target uses certain non-damaging moves this turn, the user steals that move to use itself. Fails if no move is stolen or if the user is under the effect of Sky Drop.",
+		desc: "If the target uses certain non-damaging moves this turn, the user steals the move to use itself. This move fails if no move is stolen or if the user is under the effect of Sky Drop.",
 		shortDesc: "Steals foe's move. Fails if target attacks. Priority.",
 		id: "pilfer",
 		name: "Pilfer",
@@ -280,46 +314,12 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Steel",
 	},
-	// Akir
-	compost: {
-		accuracy: true,
-		category: "Status",
-		desc: "If any ally of the user fainted last turn, this move heals the active Pokemon by 50% of Parasect's HP next turn, Cures the user's party of all status conditions.",
-		shortDesc: "If ally fainted last turn, uses wish; cures party status.",
-		id: "compost",
-		name: "Compost",
-		isNonstandard: true,
-		pp: 5,
-		priority: 0,
-		flags: {snatch: 1, heal: 1},
-		heal: [1, 2],
-		onTryMovePriority: 100,
-		onTryMove: function () {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit: function (target, source) {
-			this.add('-anim', source, "Ingrain", target);
-			let side = source.side;
-			if (side.faintedLastTurn) {
-				this.add('-anim', source, "Wish", target);
-				side.addSideCondition('wish', source);
-				this.add('-message', `${source.name} made a wish!`);
-			}
-			for (const ally of side.pokemon) {
-				if (ally.hasAbility('soundproof')) continue;
-				ally.cureStatus();
-			}
-		},
-		secondary: null,
-		target: "self",
-		type: "Ghost",
-	},
 	// A Quag to The Past
 	murkyambush: {
 		accuracy: true,
 		basePower: 150,
 		category: "Physical",
-		desc: "Fails unless the user is hit by a contact attack from an opponent this turn before it can execute the move. The foe's attacking contact move has it's secondary effects suppressed, and damage halved. If the user was hit and has not fainted, it attacks, and the effect ends.",
+		desc: "This move fails unless a foe uses a contact move on the user before the user can execute the move on the same turn. If this move is successful, the foe's move has its secondary effects suppressed and damage halved. If the user survives a hit, it attacks, and the effect ends.",
 		shortDesc: "User must be hit by a contact move before moving.",
 		id: "murkyambush",
 		name: "Murky Ambush",
@@ -387,7 +387,7 @@ let BattleMovedex = {
 		},
 		accuracy: 100,
 		category: "Physical",
-		desc: "Power rises by 20 for every non-fainted opponent that is not holding an item.",
+		desc: "This move's Base Power increases by 20 for every non-KOed foe that is not holding an item.",
 		shortDesc: "+ 20 power for each item-less opponent.",
 		id: "trashalanche",
 		name: "Trashalanche",
@@ -410,7 +410,7 @@ let BattleMovedex = {
 		accuracy: 90,
 		basePower: 90,
 		category: "Special",
-		desc: "Has a 50% chance to paralyze the target. Prevents the target from switching out or using any moves that the user also knows while the user is active.",
+		desc: "This move has a 50% change to paralyze the target and prevents the target from switching out or using any moves that the user also knows while the user is active.",
 		shortDesc: "50% chance to paralyze. Traps and imprisons.",
 		id: "jailshell",
 		name: "Jail Shell",
@@ -441,7 +441,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 100,
 		category: "Special",
-		desc: "This move's type depends on the user's held Plate. If the target has the same type as this move, the base power is boosted by 1.5.",
+		desc: "This move's type depends on the user's held Plate. If the target has the same type as this move, its Base Power is boosted by 1.5x.",
 		shortDesc: "Type = Plate. 1.5x base power if foe has the move's type.",
 		id: "comeonyougunners",
 		name: "Come on you Gunners",
@@ -506,7 +506,7 @@ let BattleMovedex = {
 		basePower: 85,
 		accuracy: 100,
 		category: "Physical",
-		desc: "Summons Rain Dance. Boosts user's Defense 1 stage.",
+		desc: "This move summons Rain Dance and boosts the user's Defense by one stage.",
 		shortDesc: "User's Def +1. Summons Rain Dance.",
 		id: "finalimpact",
 		name: "Final Impact",
@@ -540,7 +540,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 100,
 		category: "Physical",
-		desc: "If both the user and the target have not fainted, the target is forced to switch out and be replaced with a random unfainted ally. This effect fails if the target used Ingrain previously, has the Suction Cups Ability, or this move hit a substitute.",
+		desc: "If both the user and the target have not fainted, the target is forced to switch out to a random non-fained ally. This effect fails if the target used Ingrain previously, has the Suction Cups ability, or is behind a Substitute.",
 		shortDesc: "Forces the target to switch to a random ally.",
 		id: "foodrush",
 		name: "Food Rush",
@@ -566,7 +566,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "For 5 turns, the user is immune to Ground-type moves and the effects of Arena Trap, and the Speed of every Pokemon is recalculated for the purposes of determining turn order: each Pokemon's Speed is considered to be (10000 - its normal Speed), and if this value is greater than 8191, 8192 is subtracted from it. Ends the effect of Trick Room if used during that effect. The effects of Ingrain, Smack Down, and Thousand Arrows do not cause this move to fail, but still override its levitation effect, as does Iron Ball. Does not fail if the user is under the effect of Magnet Rise or this move used previously, but does not extend the duration of levitation effects.",
+		desc: "For 5 turns, the user is immune to Ground-type moves and the effects of Arena Trap, and the Speed of every Pokemon is recalculated for the purposes of determining turn order: every Pokemon's Speed is considered to be 10000 - its normal Speed, and if this value is greater than 8191, 8192 is subtracted from it. The effects of Ingrain, Smack Down, and Thousand Arrows do not cause this move to fail, but they still ground the user, as does Iron Ball. This move does not fail if the user is under the effect of Magnet Rise or this move , but it does not extend the duration.",
 		shortDesc: "5 turns: slower Pokemon move first, user levitates.",
 		id: "triviaroom",
 		name: "Trivia Room",
@@ -615,7 +615,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
-		desc: "If the target is a Ground type and is immune to Electric due to its typing, this move deals neutral damage regardless of its other type(s), and the target loses its type-based immunity to Electric.",
+		desc: "If the target is a Ground-type and is immune to Electric due to its typing, this move deals neutral damage regardless of other types, and the target loses its type-based immunity to Electric.",
 		shortDesc: "First hit neutral on Ground; removes its immunity.",
 		id: "thousandcircuitoverload",
 		name: "Thousand Circuit Overload",
@@ -658,7 +658,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 60,
 		category: "Special",
-		desc: "Removes Reflect, Light Screen, Aurora Veil, Safeguard, Mist, Spikes, Toxic Spikes, Stealth Rock, and Sticky Web from both sides, and removes any active weather condition or terrain.",
+		desc: "Removes Reflect, Light Screen, Aurora Veil, Safeguard, Mist, Spikes, Toxic Spikes, Stealth Rock, and Sticky Web from both sides, and it removes any active weather condition or Terrain.",
 		shortDesc: "Removes all field conditions and hazards.",
 		id: "blusterywinds",
 		name: "Blustery Winds",
@@ -698,7 +698,7 @@ let BattleMovedex = {
 	wondertrade: {
 		accuracy: true,
 		category: "Status",
-		desc: "Replaces every non-fainted member of the user's team, including the user, with a Super Staff Bros. Brawl set randomly selected from all sets except those with the move Wonder Trade. Percent of remaining HP, percent of remaining PP, and status conditions are carried over. Fails if used by a Pokemon that did not originally know this move.",
+		desc: "Replaces every non-fainted member of the user's team with a Super Staff Bros. Brawl set that is randomly selected from all sets, except those with the move Wonder Trade. Remaining HP and PP percentages, as well as status conditions, are transferred onto the replacement sets This move fails if it's used by a Pokemon that does not originally know this move.",
 		shortDesc: "Replaces user's team with random StaffBros. sets.",
 		id: "wondertrade",
 		name: "Wonder Trade",
@@ -776,7 +776,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 100,
 		category: "Physical",
-		desc: "The terrain becomes Grassy Terrain.",
+		desc: "Summons Grassy Terrain.",
 		shortDesc: "Summons Grassy Terrain.",
 		id: "aesthetislash",
 		name: "a e s t h e t i s l a s h",
