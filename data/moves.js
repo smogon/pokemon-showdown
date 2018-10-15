@@ -2767,7 +2767,7 @@ let BattleMovedex = {
 			onRedirectTargetPriority: -1,
 			onRedirectTarget: function (target, source, source2) {
 				if (source !== this.effectData.target) return;
-				if (target.volatiles['followme'] || target.volatiles['ragepowder']) return;
+				if (target.volatiles['followme'] || target.volatiles['ragepowder']) return target;
 				return source.side.foe.active[this.effectData.position];
 			},
 			onAfterDamage: function (damage, target, source, effect) {
@@ -10162,7 +10162,7 @@ let BattleMovedex = {
 			onRedirectTargetPriority: -1,
 			onRedirectTarget: function (target, source, source2) {
 				if (source !== this.effectData.target) return;
-				if (target.volatiles['followme'] || target.volatiles['ragepowder']) return;
+				if (target.volatiles['followme'] || target.volatiles['ragepowder']) return target;
 				return source.side.foe.active[this.effectData.position];
 			},
 			onAfterDamage: function (damage, target, source, effect) {
@@ -10500,7 +10500,7 @@ let BattleMovedex = {
 			onRedirectTargetPriority: -1,
 			onRedirectTarget: function (target, source, source2) {
 				if (source !== this.effectData.target) return;
-				if (target.volatiles['followme'] || target.volatiles['ragepowder']) return;
+				if (target.volatiles['followme'] || target.volatiles['ragepowder']) return target;
 				return source.side.foe.active[this.effectData.position];
 			},
 			onAfterDamage: function (damage, target, source, effect) {
