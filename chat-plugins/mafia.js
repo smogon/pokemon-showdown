@@ -1395,7 +1395,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (this.cohosts.includes(user.userid)) return `${targetString} a cohost.`;
 		if (!force) {
 			for (const alt of user.getAltUsers(true)) {
-				if (this.players[alt.userid]) return `${self ? `You already have` : `${user.userid} already has`} an alt in the game.`;
+				if (this.players[alt.userid] || this.played.includes(alt.userid)) return `${self ? `You already have` : `${user.userid} already has`} an alt in the game.`;
 				if (this.hostid === alt.userid || this.cohosts.includes(alt.userid)) return `${self ? `You have` : `${user.userid} has`} an alt as a game host.`;
 			}
 		}
