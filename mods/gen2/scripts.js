@@ -409,7 +409,7 @@ let BattleScripts = {
 				// That means that a move that does not share the type of the target can status it.
 				// This means tri-attack can burn fire-types and freeze ice-types.
 				// Unlike gen 1, though, paralysis works for all unless the target is immune to direct move (ie. ground-types and t-wave).
-				// Additionally, King's Rock only rolls for flinch once on multi-hit moves
+				// Additionally, multi-hit moves only roll for status once
 				if (!(secondary.status && ['brn', 'frz'].includes(secondary.status) && target && target.hasType(move.type)) && (typeof(move.hit) === 'undefined' || move.hit === 1)) {
 					let effectChance = Math.floor((secondary.chance || 100) * 255 / 100);
 					if ((typeof(secondary.chance) === 'undefined' || this.randomChance(effectChance, 256))) {
