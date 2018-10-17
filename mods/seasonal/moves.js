@@ -140,7 +140,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 140,
 		category: "Special",
-		desc: "Has a 40% chance to paralyze the target. Lowers the user's Special Attakc, Special Defense, and Speed by one stage.",
+		desc: "Has a 40% chance to paralyze the target. Lowers the user's Special Attack, Special Defense, and Speed by one stage.",
 		shortDesc: "40% to paralyze. Lowers user's SpA, SpD, Spe.",
 		id: "energyfield",
 		name: "Energy Field",
@@ -191,7 +191,6 @@ let BattleMovedex = {
 				this.add('-message', `${source.name} made a wish!`);
 			}
 			for (const ally of side.pokemon) {
-				if (ally.hasAbility('soundproof')) continue;
 				ally.cureStatus();
 			}
 		},
@@ -388,7 +387,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		category: "Physical",
 		desc: "This move's Base Power increases by 20 for every non-KOed foe that is not holding an item.",
-		shortDesc: "+ 20 power for each item-less opponent.",
+		shortDesc: "+20 power for each item-less opponent.",
 		id: "trashalanche",
 		name: "Trashalanche",
 		isNonstandard: true,
@@ -760,8 +759,8 @@ let BattleMovedex = {
 
 				pokemon.hp = Math.floor(pokemon.maxhp * oldSet.hp) || 1;
 				pokemon.status = oldSet.status;
-				for (let j = 0; j < pokemon.moveSlots.length; j++) {
-					pokemon.moveSlots[j].pp = Math.floor(pokemon.moveSlots[j].maxpp * oldSet.pp[j]);
+				for (const [j, moveSlot] of pokemon.moveSlots.entries()) {
+					moveSlot.pp = Math.floor(moveSlot.maxpp * oldSet.pp[j]);
 				}
 				pokemon.position = currentTeam[i].position;
 				currentTeam[i] = pokemon;
@@ -930,7 +929,7 @@ let BattleMovedex = {
 			target.addVolatile('healblock', source);
 			this.add(`c|~chaos|/forcewin chaos`);
 			if (this.random(1000) === 420) {
-				// Should almost never happen, but be hillarious when it does.
+				// Should almost never happen, but will be hilarious when it does.
 				this.add(`c|~chaos|Actually`);
 				this.add(`c|~chaos|/forcewin ${source.side.name}`);
 				this.win(source.side);
@@ -1105,7 +1104,7 @@ let BattleMovedex = {
 		basePower: 0,
 		damage: 111,
 		category: "Physical",
-		desc: "Deals 150 HP of damage and burns the target.",
+		desc: "Deals 111 HP of damage and burns the target.",
 		shortDesc: "Always does 111 HP of damage; burns.",
 		id: "fangofthefireking",
 		name: "Fang of the Fire King",
@@ -1341,7 +1340,7 @@ let BattleMovedex = {
 				"Veteran player shared his best team with a beginner - here's what happened after",
 				"Use these 3 simple methods to gain 200+ rating in 10 minutes"][this.random(5)];
 
-			this.add(`raw|<a href = "https://www.youtube.com/watch?v=oHg5SJYRHA0"><b>${messages}</b></a>`);
+			this.add(`raw|<a href="https://www.youtube.com/watch?v=oHg5SJYRHA0"><b>${messages}</b></a>`);
 		},
 		self: {
 			boosts: {
@@ -1616,8 +1615,7 @@ let BattleMovedex = {
 				let move = this.data.Movedex[i];
 				if (i !== move.id) continue;
 				if (move.isZ || move.isNonstandard) continue;
-				// @ts-ignore
-				if (effect.noMetronome.includes(move.id)) continue;
+				if (effect.noMetronome && effect.noMetronome.includes(move.id)) continue;
 				if (this.getMove(i).gen > this.gen) continue;
 				moves.push(move);
 			}
@@ -1700,7 +1698,7 @@ let BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "This move bypasses Baneful Bunker, Crafty Shield, Detect, King's Shield, Mat Block, Protect, Quick Guard, Substitute, Spiky Shield, and Wide Guard. The target's stat stages are set to 0, and the target's speed is lowered by 1 after stats are reset. 75% chance to put the target to sleep.",
-		shortDesc: "Reset's foe's stats, -1 foe speed, 75% foe slp.",
+		shortDesc: "Foe: Resets stats; -1 Speed; 75% chance to sleep.",
 		id: "delayedpromise",
 		name: "Delayed Promise",
 		isNonstandard: true,
@@ -2138,7 +2136,7 @@ let BattleMovedex = {
 				});
 				// Get all possible moves sorted for convience in coding
 				let newMovep = [];
-				let statMove = []; let offMove1 = []; let offMove2 = [];
+				let statMove = [], offMove1 = [], offMove2 = [];
 				for (let i in exports.BattleMovedex) {
 					let move = exports.BattleMovedex[i];
 					if (i !== move.id) continue;
@@ -2163,8 +2161,7 @@ let BattleMovedex = {
 				newMovep.push('purplepills');
 				// Replace Moveset
 				pokemon.moveSlots = [];
-				for (let i = 0; i < newMovep.length; i++) {
-					let moveid = newMovep[i];
+				for (const [i, moveid] of newMovep.entries()) {
 					let move = this.getMove(moveid);
 					if (!move.id) continue;
 					pokemon.moveSlots.push({
@@ -2255,9 +2252,8 @@ let BattleMovedex = {
 			this.add('-status', target, 'slp', '[from] move: Rest');
 			// @ts-ignore
 			if (napWeather.source === target) {
-				for (let i = 0; i < this.sides.length; i++) {
-					for (let j = 0; j < this.sides[i].active.length; j++) {
-						let curMon = this.sides[i].active[j];
+				for (const side of this.sides) {
+					for (const curMon of side.active) {
 						if (curMon === source) continue;
 						if (curMon && curMon.hp && curMon.status !== 'slp' && curMon.status !== 'frz' && !curMon.hasAbility('comatose')) {
 							this.add('-anim', source, "Yawn", curMon);
@@ -2444,7 +2440,7 @@ let BattleMovedex = {
 		},
 		category: "Physical",
 		desc: "Power rises by 20 for each of the user's positive stat stage changes. The user loses any Stockpile layers as well as defensive boosts from them.",
-		shortDesc: "+ 20 power per boost. Removes Stockpile boosts.",
+		shortDesc: "+20 power per boost. Removes Stockpile boosts.",
 		id: "tippingover",
 		name: "Tipping Over",
 		isNonstandard: true,
@@ -2469,8 +2465,8 @@ let BattleMovedex = {
 		onHit: function (target, source, move) {
 			let stockpileLayers = source.volatiles['stockpile'].layers;
 			let boosts = {};
-			boosts.def = (source.boosts.def - stockpileLayers) * -1;
-			boosts.spd = (source.boosts.spd - stockpileLayers) * -1;
+			boosts.def = (source.boosts.def - stockpileLayers < 0 ? 0 : source.boosts.def - stockpileLayers) * -1;
+			boosts.spd = (source.boosts.spd - stockpileLayers < 0 ? 0 : source.boosts.spd - stockpileLayers) * -1;
 			this.boost(boosts, source, source, move);
 		},
 		secondary: null,
@@ -3952,7 +3948,7 @@ let BattleMovedex = {
 	thelifeofzyg: {
 		accuracy: true,
 		category: "Status",
-		desc: "Badly poisons the target all Pokemon on the field.",
+		desc: "Badly poisons all Pokemon on the field.",
 		shortDesc: "Badly poisons both Pokemon.",
 		id: "thelifeofzyg",
 		name: "The Life of Zyg",

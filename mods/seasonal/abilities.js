@@ -91,8 +91,8 @@ let BattleAbilities = {
 	stimulatedpride: {
 		id: "stimulatedpride",
 		name: "Stimulated Pride",
-		desc: "On switch-in, this Pokemon summons Rain Dance, and it lowers the Attack of adjacent foes not behind a Substitute by one stage.",
-		shortDesc: "On switch-in, summons Rain Dance and lowers the Attack of adjacent foes by 1.",
+		desc: "On switch-in, this Pokemon lowers the Attack of adjacent foes not behind a Substitute by one stage. If Rain Dance is active, this Pokemon's Speed is doubled.",
+		shortDesc: "On switch-in, adjacent foes' Atk is lowered by by 1. Speed is doubled in rain.",
 		isNonstandard: true,
 		onStart: function (pokemon) {
 			let activated = false;
@@ -226,8 +226,8 @@ let BattleAbilities = {
 	},
 	// KingSwordYT
 	kungfupanda: {
-		desc: "This Pokemon's punch-based attacks have their power multiplied by 1.2, and this Pokemon's Speed is raised by 1 stage after it is damaged by an attack.",
-		shortDesc: "This Pokemon's punch-based attacks have 1.2x power. +1 Spe when attacked.",
+		desc: "This Pokemon's punch-based attacks have their power multiplied by 1.2, and this Pokemon's Speed is raised by 1 stage after it is damaged by a contact move.",
+		shortDesc: "This Pokemon's punch-based moves have 1.2x power. +1 Spe when a foe makes contact.",
 		id: "kungfupanda",
 		name: "Kung Fu Panda",
 		isNonstandard: true,
@@ -316,7 +316,7 @@ let BattleAbilities = {
 		id: "prismaticterrain",
 		name: "Prismatic Terrain",
 		isNonstandard: true,
-		onStart: function (source) {
+		onStart: function () {
 			this.setTerrain('prismaticterrain');
 		},
 		effect: {

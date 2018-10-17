@@ -359,7 +359,7 @@ let BattleStatuses = {
 	},
 	cleo: {
 		noCopy: true,
-		onSwitchIn: function () {
+		onStart: function () {
 			this.add(`c|+Cleo|Cleo! Cleo! Your friendly neighborhood Sea Leo!`);
 		},
 		onSwitchOut: function () {
@@ -469,8 +469,7 @@ let BattleStatuses = {
 			// Update movepool
 			target.moveSlots = [];
 			if (!formes[forme]) return; // should never happen
-			for (let i = 0; i < formes[forme].length; i++) {
-				let moveid = formes[forme][i];
+			for (const [i, moveid] of formes[forme].entries()) {
 				let move = this.getMove(moveid);
 				if (!move.id) continue;
 				target.moveSlots.push({
@@ -960,7 +959,7 @@ let BattleStatuses = {
 	},
 	osiris: {
 		noCopy: true,
-		onStart: function (target, source) {
+		onStart: function () {
 			this.add(`c|%Osiris|THE SECRET INGREDIENT IS`);
 		},
 		onSwitchOut: function () {
@@ -972,7 +971,7 @@ let BattleStatuses = {
 	},
 	overneat: {
 		noCopy: true,
-		onStart: function (target, source) {
+		onStart: function () {
 			this.add(`c|+Overneat|[muffled eurobeat playing in the distance]`);
 		},
 		onSwitchOut: function () {
@@ -1427,7 +1426,7 @@ let BattleStatuses = {
 			this.add('-message', `${pokemon.name} was trapped by love!`);
 		},
 		onBeforeMovePriority: 2,
-		onBeforeMove: function (pokemon, target, move) {
+		onBeforeMove: function (pokemon) {
 			this.add('-activate', pokemon, 'move: Attract', '[of] ' + this.effectData.source);
 			if (this.randomChance(1, 2)) {
 				this.add('cant', pokemon, 'Attract');

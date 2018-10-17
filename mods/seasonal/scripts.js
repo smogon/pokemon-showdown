@@ -165,6 +165,7 @@ let BattleScripts = {
 				zMove = this.getActiveMove(item.zMove);
 				// @ts-ignore Hack for Snaquaza's Z move
 				zMove.baseMove = move;
+				zMove.isZPowered = true;
 				return zMove;
 			}
 		}
@@ -172,12 +173,14 @@ let BattleScripts = {
 		if (move.category === 'Status') {
 			zMove = this.getActiveMove(move);
 			zMove.isZ = true;
+			zMove.isZPowered = true;
 			return zMove;
 		}
 		zMove = this.getActiveMove(this.zMoveTable[move.type]);
 		// @ts-ignore
 		zMove.basePower = move.zMovePower;
 		zMove.category = move.category;
+		zMove.isZPowered = true;
 		return zMove;
 	},
 	// Modded to allow each Pokemon on a team to use a Z move once per battle

@@ -140,7 +140,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'bobochan': {
 				species: 'Emolga', ability: 'Huge Power', item: 'Choice Band', gender: 'M',
-				moves: ['Brave Bird', ['Knock Off', 'Encore'], 'U-Turn'],
+				moves: ['Brave Bird', ['Knock Off', 'Encore'], 'U-turn'],
 				signatureMove: 'Thousand Circuit Overload',
 				evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 			},
@@ -188,7 +188,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'Chloe': {
 				species: 'Tapu Fini', ability: 'Prankster', item: 'Light Clay', gender: 'F',
-				moves: ['Fleur Cannon', 'Parting Shot', ['Taunt', 'Topsy Turvy']],
+				moves: ['Fleur Cannon', 'Parting Shot', ['Taunt', 'Topsy-Turvy']],
 				signatureMove: 'beskyttelsesnet',
 				evs: {hp: 248, def: 252, spa: 8}, ivs: {atk: 0}, nature: 'Bold',
 			},
@@ -380,7 +380,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'MajorBowman': {
 				species: 'Victini', ability: 'Victory Star', item: 'Victinium Z', gender: 'M',
-				moves: ['Bolt Strike', 'Zen Headbutt', 'U-Turn'],
+				moves: ['Bolt Strike', 'Zen Headbutt', 'U-turn'],
 				signatureMove: 'V-create',
 				evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
 			},
@@ -584,7 +584,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'Trickster': {
 				species: 'Hoopa', ability: 'Interdimensional', item: 'Life Orb', gender: 'M',
-				moves: ['Inferno', 'Zap Cannon', ['Roost', 'Grasswhistle']],
+				moves: ['Inferno', 'Zap Cannon', ['Roost', 'Grass Whistle']],
 				signatureMove: 'Mini Singularity',
 				evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
@@ -652,7 +652,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'Arsenal';
+				name = 'ptoad';
 				if (pool.indexOf(name) > -1) {
 					pool.splice(pool.indexOf(name), 1);
 				} else {
@@ -709,7 +709,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 					set.evs[ev] = ssbSet.evs[ev];
 				}
 			} else {
-				set.evs = {hp: 82, atk: 82, def: 82, spa: 82, spd: 82, spe: 82};
+				set.evs = {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84};
 			}
 			while (set.moves.length < 3 && ssbSet.moves.length > 0) {
 				let move = this.sampleNoReplace(ssbSet.moves);
