@@ -527,7 +527,7 @@ let BattleAbilities = {
 	},
 	// Teremiare
 	notprankster: {
-		desc: "This Pokemon's Status moves have priority raised by 1.",
+		desc: "This Pokemon's status moves have their priority raised by 1.",
 		shortDesc: "This Pokemon's Status moves have priority raised by 1.",
 		id: "notprankster",
 		name: "Not Prankster",
@@ -555,7 +555,7 @@ let BattleAbilities = {
 	},
 	// torkool
 	deflectiveshell: {
-		desc: "Summons Sunny Day on switch-in. Non-contact moves deal 33% less damage to this Pokemon.",
+		desc: "Summons Sunny Day as the user switches in. Non-contact moves deal 33% less damage to this Pokemon.",
 		shortDesc: "On switch-in, summons Sunny Day. Receives 2/3 damage from non-contact moves.",
 		id: "deflectiveshell",
 		name: "Deflective Shell",
@@ -575,7 +575,7 @@ let BattleAbilities = {
 	},
 	// Trickster
 	interdimensional: {
-		desc: "On switch-in, this Pokemon summons Gravity.",
+		desc: "As it switches in, this Pokemon summons Gravity.",
 		shortDesc: "On switch-in, this Pokemon Summons Gravity.",
 		id: "interdimensional",
 		name: "Interdimensional",
@@ -597,7 +597,7 @@ let BattleAbilities = {
 	},
 	// Yuki
 	snowstorm: {
-		desc: "On switch-in, this Pokemon summons Hail, which remains in effect until replaced by another weather or suppressed by the effects of Cloud Nine, Air Lock, or Delta Stream.",
+		desc: "As it switches in, this Pokemon summons a hailstorm that remains in effect until replaced by another weather or suppressed by the effects of Cloud Nine, Air Lock, or Delta Stream.",
 		shortDesc: "On switch-in, this Pokemon summons Hail which remains active until replaced.",
 		id: "snowstorm",
 		name: "Snow Storm",
