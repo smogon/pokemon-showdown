@@ -3596,7 +3596,7 @@ const commands = {
 	},
 
 	requestinputlog: 'exportinputlog',
-	exportinputlog(/** @type {string} */ target, /** @type {Room?} */ room, /** @type {User} */ user) {
+	exportinputlog(target, room, user) {
 		const battle = room.battle;
 		if (!battle) return this.errorReply(`This command only works in battle rooms.`);
 		if (!battle.inputLog) {
@@ -3628,7 +3628,7 @@ const commands = {
 	},
 	exportinputloghelp: [`/exportinputlog - Asks players in a battle for permission to export an inputlog. Requires: & ~`],
 
-	importinputlog(/** @type {string} */ target, /** @type {Room?} */ room, /** @type {User} */ user, /** @type {Connection} */ connection) {
+	importinputlog(target, room, user, connection) {
 		if (!this.can('broadcast')) return;
 		const formatIndex = target.indexOf(`"formatid":"`);
 		const nextQuoteIndex = target.indexOf(`"`, formatIndex + 12);
@@ -3658,7 +3658,7 @@ const commands = {
 			battleRoom.add(`|html|<div class="broadcast broadcast-blue"><strong>This is an imported replay</strong><br />Players will need to be manually added with <code>/addplayer</code> or <code>/restoreplayers</code></div>`);
 		}, 500);
 	},
-	importinputloghelp: [`/importinputlog [inputlog] - Starts a battle with a given inputlog. Requires: & ~`],
+	importinputloghelp: [`/importinputlog [inputlog] - Starts a battle with a given inputlog. Requires: + % @ * & ~`],
 
 	inputlog: function () {
 		this.parse(`/help exportinputlog`);
