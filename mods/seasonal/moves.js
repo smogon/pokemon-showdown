@@ -577,6 +577,13 @@ let BattleMovedex = {
 		onTryMove: function () {
 			this.attrLastMove('[still]');
 		},
+		onTryHit: function (target, source) {
+			if (source.name !== 'Bimp') {
+				this.add('-fail', source);
+				this.add('-hint', 'Only Bimp can use Trivia Room.');
+				return null;
+			}
+		},
 		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Trick Room", source);
 		},
