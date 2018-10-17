@@ -192,11 +192,11 @@ function getPlayerStreams(stream) {
 			const [type, data] = splitFirst(chunk, `\n`);
 			switch (type) {
 			case 'update':
-				const p1Update = data.replace(/\n\|split\n[^\n]*\n([^\n]*)\n[^\n]*\n[^\n]*/g, '\n$1');
+				const p1Update = data.replace(/\n\|split\n[^\n]*\n([^\n]*)\n[^\n]*\n[^\n]*/g, '\n$1').replace(/\n\n/g, '\n');
 				p1.push(p1Update);
-				const p2Update = data.replace(/\n\|split\n[^\n]*\n[^\n]*\n([^\n]*)\n[^\n]*/g, '\n$1');
+				const p2Update = data.replace(/\n\|split\n[^\n]*\n[^\n]*\n([^\n]*)\n[^\n]*/g, '\n$1').replace(/\n\n/g, '\n');
 				p2.push(p2Update);
-				const specUpdate = data.replace(/\n\|split\n([^\n]*)\n[^\n]*\n[^\n]*\n[^\n]*/g, '\n$1');
+				const specUpdate = data.replace(/\n\|split\n([^\n]*)\n[^\n]*\n[^\n]*\n[^\n]*/g, '\n$1').replace(/\n\n/g, '\n');
 				spectator.push(specUpdate);
 				const omniUpdate = data.replace(/\n\|split\n[^\n]*\n[^\n]*\n[^\n]*/g, '');
 				omniscient.push(omniUpdate);
