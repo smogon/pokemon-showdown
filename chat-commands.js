@@ -1191,6 +1191,37 @@ const commands = {
 		}
 	},
 
+	motd: function (target, room, user) {
+		if (!target) {
+			if (!room.motd) return this.sendReply(`This room does not have a MotD set.`);
+			return this.sendReply(`MotD: ${room.motd}`);
+		}
+		if (!this.can('ban', null, room)) return false;
+		target = target.trim();
+		if (target.length > 300) return this.errorReply(`The MotD cannot be longer than 300 characters.`);
+		this.privateModAction(`(${user.name} changed the MotD.)`);
+		this.modlog('MOTD');
+		this.roomlog(target);
+
+		room.motd = Chat.escapeHTML(target);
+		if (room.chatRoomData) {
+			room.chatRoomData.motd = room.motd;
+			Rooms.global.writeChatRoomData();
+		}
+	},
+	deletemotd: function (target, room, user) {
+		if (!this.can('ban', null, room)) return false;
+		this.privateModAction(`(${user.name} deleted the MotD.)`);
+		this.modlog('DELETEMOTD');
+		this.roomlog(target);
+
+		room.motd = '';
+		if (room.chatRoomData) {
+			room.chatRoomData.motd = '';
+			Rooms.global.writeChatRoomData();
+		}
+	},
+
 	roomalias: function (target, room, user) {
 		if (!target) {
 			if (!this.runBroadcast()) return;
