@@ -21,8 +21,12 @@
     "start": "node pokemon-showdown",
     "test": "eslint --cache . && tsc && mocha",
     "tsc": "tsc",
-    "lint": "eslint --cache .",
-    "prepush": "npm test"
+    "lint": "eslint --cache ."
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "eslint --cache ."
+    }
   },
   "bin": "./pokemon-showdown",
   "homepage": "http://pokemonshowdown.com",
