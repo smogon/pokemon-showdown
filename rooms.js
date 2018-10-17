@@ -1196,8 +1196,8 @@ class BasicChatRoom extends BasicRoom {
 		if (this.modjoin) {
 			roomMessage += `<br />You must be roomvoice or have room management capabilities to join the room right now.`;
 		}
-		if (this.slowchat && user.can('mute', null, this)) {
-			roomMessage += `<br />Your messages must have at least ${this.slowchat} seconds between them.`;
+		if (this.slowchat) {
+			roomMessage += `<br />${user.can('broadcast', null, this) ? "Regular users'" : "Your"} messages must have at least ${this.slowchat} seconds between them.`;
 		}
 		roomMessage += `</div>`;
 		if (this.introMessage) message += `\n|raw|<div class="infobox infobox-roomintro"><div ${(!this.isOfficial ? 'class="infobox-limited"' : '')}>${this.introMessage.replace(/\n/g, '')}</div>`;
