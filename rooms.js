@@ -1018,6 +1018,7 @@ class BasicChatRoom extends BasicRoom {
 		this.slowchat = false;
 		this.introMessage = '';
 		this.staffMessage = '';
+		this.motd = '';
 		this.autojoin = false;
 		this.staffAutojoin = /** @type {string | boolean} */ (false);
 
@@ -1190,14 +1191,17 @@ class BasicChatRoom extends BasicRoom {
 	getIntroMessage(user) {
 		let roomMessage = `\n|raw|<div class="infobox"> You have joined ${this.title}`;
 		let message = '';
+		if (this.motd) {
+			roomMessage += `<br />MotD: ${this.motd}`;
+		}
 		if (this.modchat) {
 			roomMessage += `<br />You must be rank ${this.modchat} or higher to talk right now.`;
 		}
 		if (this.modjoin) {
 			roomMessage += `<br />You must be roomvoice or have room management capabilities to join the room right now.`;
 		}
-		if (this.slowchat && user.can('mute', null, this)) {
-			roomMessage += `<br />Your messages must have at least ${this.slowchat} seconds between them.`;
+		if (this.slowchat) {
+			roomMessage += `<br />Unranked user's messages must have at least ${this.slowchat} seconds between them.`;
 		}
 		roomMessage += `</div>`;
 		if (this.introMessage) message += `\n|raw|<div class="infobox infobox-roomintro"><div ${(!this.isOfficial ? 'class="infobox-limited"' : '')}>${this.introMessage.replace(/\n/g, '')}</div>`;
