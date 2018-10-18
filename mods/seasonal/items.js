@@ -34,7 +34,7 @@ let BattleItems = {
 		zMoveFrom: "V-create",
 		zMoveUser: ["Victini"],
 		gen: 7,
-		desc: "If held by a Victini with V-Create, it can use Blaze of Glory.",
+		desc: "If held by a Victini with V-create, it can use Blaze of Glory.",
 	},
 	// SamJo
 	thicciniumz: {

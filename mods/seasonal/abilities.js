@@ -159,7 +159,7 @@ let BattleAbilities = {
 	},
 	// Cleo
 	adrenalinerush: {
-		desc: "On switch-in, this Pokemon's Special Attack and Speed are doubled for 5 turns. After five turns have passed, these effects are removed.",
+		desc: "As this Pokemon switches in, its Special Attack and Speed are doubled for 5 turns. After five turns have passed, these effects are removed.",
 		shortDesc: "On switch-in, this Pokemon's Special Attack and Speed are doubled for 5 turns.",
 		onStart: function (pokemon) {
 			pokemon.addVolatile('adrenalinerush');
@@ -246,8 +246,8 @@ let BattleAbilities = {
 	},
 	// Lionyx
 	frozenskin: {
-		desc: "If Hail is active, this Pokemon's Speed is doubled. This Pokemon takes no damage from Hail.",
-		shortDesc: "If Hail is active, this Pokemon's Speed is doubled; immunity to Hail.",
+		desc: "If hail is active, this Pokemon's Speed is doubled. This Pokemon takes no damage from hail.",
+		shortDesc: "If hail is active, this Pokemon's Speed is doubled; immunity to hail.",
 		id: "frozenskin",
 		name: "Frozen Skin",
 		isNonstandard: true,
@@ -262,7 +262,7 @@ let BattleAbilities = {
 	},
 	// Megazard
 	standuptall: {
-		desc: "This Pokemon's Defense or Special Defense is raised 1 stage at the end of each full turn it is on the field.",
+		desc: "This Pokemon's Defense or Special Defense is raised by 1 stage at the end of each full turn it is on the field.",
 		shortDesc: "Raises Defense or Special Defense by 1, at random, after each full turn on the field.",
 		id: "standuptall",
 		name: "Stand Up Tall",
@@ -281,7 +281,7 @@ let BattleAbilities = {
 	},
 	// MicktheSpud
 	fakecrash: {
-		desc: "If this Pokemon is a Lycanroc-Midnight, the first hit it takes in battle deals 0 neutral damage. Its disguise is then broken and it transforms into Lycanroc-Dusk. Confusion damage also breaks the disguise.",
+		desc: "If this Pokemon is a Lycanroc-Midnight, the first hit it takes in battle deals 0 neutral damage. Its disguise is then broken, and it transforms into Lycanroc-Dusk. Confusion damage also breaks the disguise.",
 		shortDesc: "If this Pokemon is a Lycanroc-Midnight, the first hit it takes in battle deals 0 damage.",
 		id: "fakecrash",
 		name: "Fake Crash",
@@ -369,7 +369,7 @@ let BattleAbilities = {
 	},
 	// Osiris
 	sacredshadow: {
-		desc: "This Pokemon's attacking stat is doubled while using a Ghost-type attack. If a Pokemon uses a Fire-type or FLying-type attack against this Pokemon, that Pokemon's attacking stat is halved when calculating the damage to this Pokemon. This Pokemon cannot be burned. Gaining this Ability while burned cures it.",
+		desc: "This Pokemon's attacking stats are doubled while using a Ghost-type attack. If a Pokemon uses a Fire-type or Flying-type attack against this Pokemon, that Pokemon's attacking stat is halved when calculating the damage to this Pokemon. This Pokemon cannot be burned. Gaining this Ability while burned cures it.",
 		shortDesc: "This Pokemon's Ghost power is 2x; can't be burned; Fire/Flying power against it is halved.",
 		id: "sacredshadow",
 		name: "Sacred Shadow",
@@ -447,7 +447,7 @@ let BattleAbilities = {
 	},
 	// Rory Mercury
 	recharge: {
-		desc: "Upon switching out, this Pokemon has its major status condition cured and restores 1/3 of its maximum HP, rounded down. When this Pokemon switches in, if it uses an Electric-type attack on the next turn, that attack's power will be doubled",
+		desc: "Upon switching out, this Pokemon has its major status condition cured and restores 1/3 of its maximum HP, rounded down. When this Pokemon switches in, if it uses an Electric-type attack on the next turn, that attack's power will be doubled.",
 		shortDesc: "Switch-out: heals status + 33% HP. Switch-in: 2x power on Electric move next turn.",
 		id: "recharge",
 		name: "Recharge",
