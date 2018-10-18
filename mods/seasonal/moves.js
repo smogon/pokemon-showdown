@@ -1077,7 +1077,7 @@ let BattleMovedex = {
 	// duck
 	holyduck: {
 		accuracy: 95,
-		basePower: 95,
+		basePower: 75,
 		category: "Physical",
 		desc: "If this attack hits, the effects of Reflect, Light Screen, and Aurora Veil end on the target's side of the field before damage is calculated.",
 		shortDesc: "Destroys screens, unless the target is immune.",
@@ -1489,7 +1489,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Psychic",
 	},
-	//hoeenhero
+	// HoeenHero
 	scriptedterrain: {
 		accuracy: 100,
 		category: "Status",
@@ -1500,7 +1500,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 5,
 		priority: 0,
-		flags: {nosky: 1},
+		flags: {nonsky: 1},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -1535,8 +1535,6 @@ let BattleMovedex = {
 				}
 			},
 			onStart: function (battle, source, effect) {
-				// @ts-ignore Hack to support custom terrains ending properly
-				if (this.lastTerrain) this.add('-fieldend', `move: ${this.getEffect(this.lastTerrain).name}`);
 				if (effect && effect.effectType === 'Ability') {
 					this.add('-fieldstart', 'move: Scripted Terrain', '[from] ability: ' + effect, '[of] ' + source);
 				} else {
@@ -2628,6 +2626,69 @@ let BattleMovedex = {
 		type: "Ghost",
 	},
 	// nui
+	prismaticterrain: {
+		accuracy: true,
+		category: "Status",
+		desc: "For 5 turns, the terrain becomes Prismatic Terrain. During the effect, the power of Ice-type attacks is multiplied by 0.5, even if the user is not grounded. Hazards are removed and cannot be set while Prismatic Terrain is active. Fails if the current terrain is Prismatic Terrain.",
+		shortDesc: "5 turns. No hazards,-Ice power even if floating.",
+		id: "prismaticterrain",
+		name: "Prismatic Terrain",
+		isNonstandard: true,
+		pp: 10,
+		priority: 0,
+		flags: {},
+		terrain: 'prismaticterrain',
+		effect: {
+			duration: 5,
+			durationCallback: function (source, effect) {
+				if (source && source.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onBeforeMovePriority: 2,
+			onBeforeMove: function (pokemon, target, move) {
+				let hazards = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'hazardpass', 'beskyttelsesnet', 'bringerofdarkness'];
+				if (hazards.includes(move.id)) {
+					this.add('-activate', target, 'move: Prismatic Terrain');
+					return false;
+				}
+			},
+			onBasePower: function (basePower, attacker, defender, move) {
+				if (move.type === 'Ice') {
+					this.debug('prismatic terrain weaken');
+					return this.chainModify(0.5);
+				}
+			},
+			onStart: function (battle, source, effect) {
+				if (effect && effect.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Prismatic Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Prismatic Terrain');
+				}
+				let success = false;
+				let removeAll = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+				for (const sideCondition of removeAll) {
+					if (source.side.foe.removeSideCondition(sideCondition)) {
+						this.add('-sideend', source.side.foe, this.getEffect(sideCondition).name, '[from] move: Prismatic Terrain', '[of] ' + source);
+						success = true;
+					} else if (source.side.removeSideCondition(sideCondition)) {
+						this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Prismatic Terrain', '[of] ' + source);
+						success = true;
+					}
+				}
+				return success;
+			},
+			onResidualOrder: 21,
+			onResidualSubOrder: 2,
+			onEnd: function () {
+				this.add('-fieldend', 'move: Prismatic Terrain');
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Fairy",
+	},
 	pyramidingsong: {
 		accuracy: 100,
 		category: "Status",
@@ -3263,13 +3324,13 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Before the turn starts, this Pokemon boosts it's Special Defense and Defense by 1 stage. When this move hits, this Pokemon uses Sleep Powder, Leech Seed, and Powder. This move's priority is 1 and cannot be affected by Prankster.",
-		shortDesc: "+1 Def, Spd + Sleep Powder, Leech Seed, & Powder.",
+		desc: "Before the turn starts, this Pokemon boosts its Defense and Special Defense by one stage and uses Powder on the target. When this move hits, this Pokemon uses Sleep Powder and Leech Seed. This move's priority is -1 and cannot be boosted by Prankster.",
+		shortDesc: "+1 Def/SpD, Powder, Leech Seed, Sleep Powder.",
 		id: "armyofmushrooms",
 		name: "Army of Mushrooms",
 		isNonstandard: true,
 		pp: 10,
-		priority: 1,
+		priority: -1,
 		flags: {snatch: 1},
 		onTryMovePriority: 100,
 		onTryMove: function () {
@@ -3277,11 +3338,11 @@ let BattleMovedex = {
 		},
 		beforeTurnCallback: function (pokemon) {
 			this.boost({def: 1, spd: 1}, pokemon, pokemon, 'mushroom army');
+			this.useMove("powder", pokemon);
 		},
 		onHit: function (pokemon) {
 			this.useMove("sleeppowder", pokemon);
 			this.useMove("leechseed", pokemon);
-			this.useMove("powder", pokemon);
 		},
 		secondary: null,
 		target: "self",
@@ -3411,11 +3472,11 @@ let BattleMovedex = {
 	},
 	// The Immortal
 	ultrasucc: {
-		accuracy: 95,
+		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
-		desc: "The user boosts its Speed by 1 stage and recovers half the HP lost by the target, rounded half up. If Big Root is held, the user recovers 1.3x the normal amount of HP, rounded half down.",
-		shortDesc: "+1 Spe, user heals 50% of the damage dealt.",
+		desc: "The user boosts its Speed by 1 stage and recovers half the HP lost by the target, rounded half up. This move has a 50% chance to boost the users Speed by 1 stage. If Big Root is held, the user recovers 1.3x the normal amount of HP, rounded half down.",
+		shortDesc: "Heals 50% of the damage dealt, 50% boost Spe.",
 		id: "ultrasucc",
 		name: "Ultra Succ",
 		isNonstandard: true,
@@ -3430,8 +3491,9 @@ let BattleMovedex = {
 			this.add('-anim', source, "Dragon Ascent", target);
 			this.add('-anim', source, "Draining Kiss", target);
 		},
-		self: {
-			boosts: {spe: 1},
+		secondary: {
+			chance: 50,
+			self: {boosts: {spe: 1}},
 		},
 		drain: [1, 2],
 		target: "normal",
@@ -3711,8 +3773,8 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Summons Attack Order, Defense Order, and Heal Order to combine for the following effects: has a Base Power of 90 and a higher chance for a critical hit, raises the user's Defense and Special Defense by 1 stage, and heals the user by half of its maximum HP, rounded half up.",
-		shortDesc: "Summons Attack, Defense, and Heal Order.",
+		desc: "Summons two of Attack Order, Defense Order, and Heal Order at random to combine for some assortment of the following effects: has a Base Power of 90 and a higher chance for a critical hit, raises the user's Defense and Special Defense by 1 stage, and heals the user by half of its maximum HP, rounded half up.",
+		shortDesc: "Summons two of Attack, Defense, and Heal Order.",
 		id: "holyorders",
 		name: "Holy Orders",
 		isNonstandard: true,
@@ -3724,9 +3786,13 @@ let BattleMovedex = {
 			this.attrLastMove('[still]');
 		},
 		onHit: function (target, source) {
-			this.useMove("healorder", source, source);
-			this.useMove("defendorder", source, source);
-			this.useMove("attackorder", source, source.side.foe.active[0]);
+			let orders = ["healorder", "defendorder", "attackorder"];
+			this.shuffle(orders);
+			for (const [i, order] of orders.entries()) {
+				if (i > 1) return;
+				let target = order === "attackorder" ? source.side.foe.active[0] : source;
+				this.useMove(order, source, target);
+			}
 		},
 		secondary: null,
 		target: "self",
@@ -3785,14 +3851,14 @@ let BattleMovedex = {
 		type: "Fire",
 	},
 	// Xayahh
-	cuttingdance: {
+	stunningdance: {
 		accuracy: 100,
 		basePower: 95,
 		category: "Special",
-		desc: "Has a 20% chance to make the target flinch.",
-		shortDesc: "Has a 20% chance to make the target flinch.",
-		id: "cuttingdance",
-		name: "Cutting Dance",
+		desc: "Has a 20% chance to make the target flinch and a 100% chance to paralyze the target.",
+		shortDesc: "20% to make target flinch; 100% to paralyze.",
+		id: "stunningdance",
+		name: "Stunning Dance",
 		isNonstandard: true,
 		pp: 10,
 		priority: 0,
@@ -3806,10 +3872,17 @@ let BattleMovedex = {
 			this.add('-anim', source, "Air Slash", target);
 			this.add('-anim', source, "Air Slash", target);
 		},
-		secondary: {
-			chance: 20,
-			volatileStatus: 'flinch',
-		},
+		volatileStatus: 'partiallytrapped',
+		secondaries: [
+			{
+				chance: 20,
+				volatileStatus: 'flinch',
+			},
+			{
+				chance: 100,
+				status: 'par',
+			},
+		],
 		zMovePower: 175,
 		target: "normal",
 		type: "Flying",

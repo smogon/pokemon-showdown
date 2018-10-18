@@ -241,7 +241,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
 			'EV': {
-				species: 'Eevee', ability: 'Anticipation', item: 'Leftovers', gender: 'M',
+				species: 'Eevee', ability: 'Adaptability', item: 'Leftovers', gender: 'M',
 				moves: ['Baton Pass', 'Wish', 'Protect'],
 				signatureMove: 'Evoblast',
 				evs: {hp: 252, spe: 252}, nature: 'Serious',
@@ -313,7 +313,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 252, def: 220, spd: 36}, nature: 'Bold', shiny: true,
 			},
 			'jdarden': {
-				species: 'Dragonair', ability: 'Fur Coat', item: 'Eviolite', gender: 'M',
+				species: 'Dragonair', ability: 'Fur Coat', item: 'Leftovers', gender: 'M',
 				moves: ['Rest', 'Sleep Talk', 'Quiver Dance'],
 				signatureMove: 'Wyvern\'s Wail',
 				evs: {hp: 248, def: 252, spd: 8}, ivs: {atk: 0}, nature: 'Bold',
@@ -433,7 +433,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 184, atk: 252, def: 68, spd: 4}, ivs: {spe: 0}, nature: 'Brave',
 			},
 			'nui': {
-				species: 'Milotic', ability: 'Prismatic Terrain', item: 'Waterium Z', gender: 'N',
+				species: 'Milotic', ability: 'Prismatic Surge', item: 'Waterium Z', gender: 'N',
 				moves: ['Steam Eruption', 'Toxic', 'Recover'],
 				signatureMove: 'Pyramiding Song',
 				evs: {hp: 252, def: 252, spd: 4}, ivs: {atk: 0}, nature: 'Bold', shiny: true,
@@ -620,8 +620,8 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'Xayahh': {
 				species: 'Noivern', ability: 'Dancer', item: 'Flyinium Z', gender: 'F',
-				moves: ['Clanging Scales', 'Roost', 'Glare'],
-				signatureMove: 'Cutting Dance',
+				moves: ['Clanging Scales', 'Roost', 'Fiery Dance'],
+				signatureMove: 'Stunning Dance',
 				evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
 			},
 			'XpRienzo ☑◡☑': {
@@ -652,7 +652,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let debug = false; // Programmers - Toggle this to use the code below
 			if (team.length === 1 && debug) {
 				// Force a specific set to appear for testing
-				name = 'ptoad';
+				name = 'SpaceBass';
 				if (pool.indexOf(name) > -1) {
 					pool.splice(pool.indexOf(name), 1);
 				} else {

@@ -256,13 +256,13 @@ let BattleStatuses = {
 	bobochan: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|%bobochan|Pika Pika! Just kidding, it's just a knock off clone.`);
+			this.add(`c|@bobochan|Pika Pika! Just kidding, it's just a knock off clone.`);
 		},
 		onSwitchOut: function () {
-			this.add(`c|%bobochan|Time to skedaddle!`);
+			this.add(`c|@bobochan|Time to skedaddle!`);
 		},
 		onFaint: function () {
-			this.add(`c|%bobochan|You cruel trainer for killing an innocent pokemon!`);
+			this.add(`c|@bobochan|You cruel trainer for killing an innocent pokemon!`);
 		},
 	},
 	brandon: {
@@ -464,8 +464,8 @@ let BattleStatuses = {
 			let forme = Object.keys(formes)[this.random(8)];
 			this.add(`-anim`, target, 'Geomancy', target);
 			target.formeChange(forme);
-			target.setAbility('Anticipation');
-			this.add('-hint', 'EV still has the Anticipation ability.');
+			target.setAbility('Adaptability');
+			this.add('-hint', 'EV still has the Adaptability ability.');
 			// Update movepool
 			target.moveSlots = [];
 			if (!formes[forme]) return; // should never happen
