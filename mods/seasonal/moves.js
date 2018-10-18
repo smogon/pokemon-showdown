@@ -2979,7 +2979,7 @@ let BattleMovedex = {
 		accuracy: true,
 		category: "Status",
 		desc: "For three turns, any Pokemon that raises a stat (even if not through a move) loses all PP on the move it used that turn.",
-		shortDesc: "3 turns: stat raisers lose all PP of turn's move.",
+		shortDesc: "7 turns: stat raisers lose all PP of turn's move.",
 		id: "literallycheating",
 		name: "Literally Cheating",
 		isNonstandard: true,
@@ -2992,7 +2992,7 @@ let BattleMovedex = {
 		},
 		pseudoWeather: 'literallycheating',
 		effect: {
-			duration: 3,
+			duration: 7,
 			onBoost: function (boost, target, source, effect) {
 				let positiveBoost = false;
 				let values = Object.values(boost);

@@ -482,7 +482,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'Quite Quiet': {
 				species: 'Misdreavus', ability: 'Levitate', item: 'Leftovers', gender: 'F',
-				moves: [['Moongeist Beam', 'Shadow Ball', 'Night Shade'], 'Recover', ['Heal Bell', 'Encore', 'Taunt', 'Swagger']],
+				moves: [['Moongeist Beam', 'Shadow Ball', 'Night Shade'], 'Recover', ['Flatter', 'Swagger']],
 				signatureMove: 'Literally Cheating',
 				evs: {hp: 252, def: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
