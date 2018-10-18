@@ -413,14 +413,14 @@ let BattleScripts = {
 					this.debug('Target immune to [' + secondary.status + ']');
 					continue;
 				}
-				if (secondary.volatileStatus === 'flinch' && !secondary.kingsrock && ['slp', 'frz'].includes(target.status)) {
-					this.debug('Cannot flinch a sleeping or frozen target (Gen 2)'); // King's Rock is exempt
+				if (secondary.volatileStatus === 'flinch' && target && ['slp', 'frz'].includes(target.status) && pokemon.item !== 'kingsrock') {
+					this.debug('Cannot flinch a sleeping or frozen target'); // King's Rock is exempt
 					continue;
 				}
 				// Multi-hit moves only roll for status once
 				if (!move.multihit || move.hit === 1) {
 					let effectChance = Math.floor((secondary.chance || 100) * 255 / 100);
-					if ((typeof(secondary.chance) === 'undefined' || this.randomChance(effectChance, 256))) {
+					if (typeof secondary.chance === 'undefined' || this.randomChance(effectChance, 256)) {
 						this.moveHit(target, pokemon, move, secondary, true, isSelf);
 					}
 				}
