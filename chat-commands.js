@@ -1550,9 +1550,9 @@ const commands = {
 		room.hideText([userid, toId(this.inputUsername)]);
 
 		if (room.isPrivate !== true && room.chatRoomData) {
-			this.globalModlog("ROOMBAN", targetUser, ` by ${user.userid} ${(target ? `: ${target}` : ``)}`);
+			this.globalModlog("ROOMBAN", targetUser, ` by ${user.userid}${(target ? `: ${target}` : ``)}`);
 		} else {
-			this.modlog("ROOMBAN", targetUser, ` by ${user.userid} ${(target ? `: ${target}` : ``)}`);
+			this.modlog("ROOMBAN", targetUser, ` by ${user.userid}${(target ? `: ${target}` : ``)}`);
 		}
 		return true;
 	},
@@ -3595,7 +3595,8 @@ const commands = {
 		targetUser.sendTo(room, `|html|<div class="chat"><code style="white-space: pre-wrap; overflow-wrap: break-word; display: block">${inputLog}</code></div>`);
 	},
 
-	exportinputlog(/** @type {string} */ target, /** @type {Room?} */ room, /** @type {User} */ user) {
+	requestinputlog: 'exportinputlog',
+	exportinputlog(target, room, user) {
 		const battle = room.battle;
 		if (!battle) return this.errorReply(`This command only works in battle rooms.`);
 		if (!battle.inputLog) {
@@ -3625,8 +3626,9 @@ const commands = {
 		const inputLog = battle.inputLog.map(Chat.escapeHTML).join(`<br />`);
 		user.sendTo(room, `|html|<div class="chat"><code style="white-space: pre-wrap; overflow-wrap: break-word; display: block">${inputLog}</code></div>`);
 	},
+	exportinputloghelp: [`/exportinputlog - Asks players in a battle for permission to export an inputlog. Requires: & ~`],
 
-	importinputlog(/** @type {string} */ target, /** @type {Room?} */ room, /** @type {User} */ user, /** @type {Connection} */ connection) {
+	importinputlog(target, room, user, connection) {
 		if (!this.can('broadcast')) return;
 		const formatIndex = target.indexOf(`"formatid":"`);
 		const nextQuoteIndex = target.indexOf(`"`, formatIndex + 12);
@@ -3655,6 +3657,12 @@ const commands = {
 			// timer to make sure this goes under the battle
 			battleRoom.add(`|html|<div class="broadcast broadcast-blue"><strong>This is an imported replay</strong><br />Players will need to be manually added with <code>/addplayer</code> or <code>/restoreplayers</code></div>`);
 		}, 500);
+	},
+	importinputloghelp: [`/importinputlog [inputlog] - Starts a battle with a given inputlog. Requires: + % @ * & ~`],
+
+	inputlog: function () {
+		this.parse(`/help exportinputlog`);
+		this.parse(`/help importinputlog`);
 	},
 
 	/*********************************************************

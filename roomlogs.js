@@ -88,9 +88,10 @@ class Roomlog {
 		}
 		log = [];
 		for (let i = 0; i < this.log.length; ++i) {
-			let line = this.log[i];
+			const line = this.log[i];
 			if (line === '|split') {
-				log.push(this.log[i + channel + 1]);
+				const ownLine = this.log[i + channel + 1];
+				if (ownLine) log.push(ownLine);
 				i += 4;
 			} else {
 				log.push(line);

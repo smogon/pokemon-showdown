@@ -230,6 +230,7 @@ let BattleScripts = {
 			let i;
 			for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
 				if (pokemon.status === 'slp' && !isSleepUsable) break;
+				move.hit = i + 1;
 				moveDamage = this.moveHit(target, pokemon, move);
 				if (moveDamage === false) break;
 				if (nullDamage && (moveDamage || moveDamage === 0 || moveDamage === undefined)) nullDamage = false;
