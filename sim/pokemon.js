@@ -154,9 +154,11 @@ class Pokemon {
 		 */
 		this.moveThisTurnResult = undefined;
 
+		/** used for Assurance check */
+		this.hurtThisTurn = false;
 		this.lastDamage = 0;
 		/**@type {{source: Pokemon, damage: number, thisTurn: boolean, move?: string}[]} */
-		this.hurtBy = [];
+		this.attackedBy = [];
 		this.usedItemThisTurn = false;
 		this.newlySwitched = false;
 		this.beingCalledBack = false;
@@ -611,18 +613,18 @@ class Pokemon {
 	gotAttacked(move, damage, source) {
 		if (!damage) damage = 0;
 		move = this.battle.getMove(move);
-		let lastHurtBy = {
+		let lastAttackedBy = {
 			source: source,
 			damage: damage,
 			move: move.id,
 			thisTurn: true,
 		};
-		this.hurtBy.push(lastHurtBy);
+		this.attackedBy.push(lastAttackedBy);
 	}
 
-	getLastHurtBy() {
-		if (this.hurtBy.length === 0) return undefined;
-		return this.hurtBy[this.hurtBy.length - 1];
+	getLastAttackedBy() {
+		if (this.attackedBy.length === 0) return undefined;
+		return this.attackedBy[this.attackedBy.length - 1];
 	}
 
 	/**
@@ -1044,7 +1046,8 @@ class Pokemon {
 		this.moveThisTurn = '';
 
 		this.lastDamage = 0;
-		this.hurtBy = [];
+		this.attackedBy = [];
+		this.hurtThisTurn = false;
 		this.newlySwitched = true;
 		this.beingCalledBack = false;
 
@@ -1095,11 +1098,9 @@ class Pokemon {
 	 * @param {Effect?} effect
 	 */
 	damage(d, source = null, effect = null) {
-		if (!this.hp) return 0;
+		if (!this.hp || isNaN(d) || d <= 0) return 0;
 		if (d < 1 && d > 0) d = 1;
 		d = Math.floor(d);
-		if (isNaN(d)) return 0;
-		if (d <= 0) return 0;
 		this.hp -= d;
 		if (this.hp <= 0) {
 			d += this.hp;

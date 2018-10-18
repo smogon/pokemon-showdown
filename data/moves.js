@@ -662,7 +662,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 60,
 		basePowerCallback: function (pokemon, target, move) {
-			if (pokemon.volatiles.assurance && pokemon.volatiles.assurance.hurt[target.position]) {
+			if (target.hurtThisTurn) {
 				this.debug('Boosted for being damaged this turn');
 				return move.basePower * 2;
 			}
@@ -676,20 +676,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		beforeTurnCallback: function (pokemon, target) {
-			pokemon.addVolatile('assurance');
-			pokemon.volatiles.assurance.hurt = [];
-		},
-		effect: {
-			duration: 1,
-			onFoeAfterDamage: function (damage, target) {
-				this.effectData.hurt[target.position] = true;
-				this.debug('damaged this turn');
-			},
-			onFoeSwitchOut: function (pokemon) {
-				this.effectData.hurt[pokemon.position] = false;
-			},
-		},
 		secondary: null,
 		target: "normal",
 		type: "Dark",
@@ -945,10 +931,10 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 60,
 		basePowerCallback: function (pokemon, target, move) {
-			let hurtByTarget = pokemon.hurtBy.some(p =>
+			let damagedByTarget = pokemon.attackedBy.some(p =>
 				p.source === target && p.damage > 0 && p.thisTurn
 			);
-			if (hurtByTarget) {
+			if (damagedByTarget) {
 				this.debug('Boosted for getting hit by ' + target);
 				return move.basePower * 2;
 			}
@@ -13393,10 +13379,10 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 60,
 		basePowerCallback: function (pokemon, target, move) {
-			let hurtByTarget = pokemon.hurtBy.some(p =>
+			let damagedByTarget = pokemon.attackedBy.some(p =>
 				p.source === target && p.damage > 0 && p.thisTurn
 			);
-			if (hurtByTarget) {
+			if (damagedByTarget) {
 				this.debug('Boosted for getting hit by ' + target);
 				return move.basePower * 2;
 			}
