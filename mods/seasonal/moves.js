@@ -2001,7 +2001,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 10,
 		category: "Physical",
-		desc: "Raises the user and target's Attack and Defense by 3 stages and confuses them.",
+		desc: "Raises the user and target's Attack and Defense by 3 stages and confuses them. This move fails if used in succession.",
 		shortDesc: "+3 Atk, -3 Def, confusion to user & target. Priority.",
 		id: "barfight",
 		name: "Bar Fight",
@@ -2452,7 +2452,7 @@ let BattleMovedex = {
 			return move.basePower + 20 * pokemon.positiveBoosts();
 		},
 		category: "Physical",
-		desc: "Power rises by 20 for each of the user's positive stat stage changes. The user loses any Stockpile layers as well as defensive boosts from them.",
+		desc: "Power rises by 20 for each of the user's positive stat stage changes. The user loses any defensive boosts from Stockpile.",
 		shortDesc: "+20 power per boost. Removes Stockpile boosts.",
 		id: "tippingover",
 		name: "Tipping Over",
@@ -2467,13 +2467,6 @@ let BattleMovedex = {
 		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Dragon Hammer", target);
 			this.add('-anim', target, "Earthquake", target);
-		},
-		onTry: function (pokemon) {
-			if (!pokemon.volatiles['stockpile']) {
-				this.add('-fail', pokemon);
-				this.add('-hint', "Stockpile needs to be used before this move.");
-				return false;
-			}
 		},
 		onHit: function (target, source, move) {
 			let stockpileLayers = source.volatiles['stockpile'].layers;
@@ -3253,7 +3246,7 @@ let BattleMovedex = {
 		accuracy: true,
 		category: "Physical",
 		basePower: 1,
-		desc: "The user creates a substitute to take its place in battle. This substitute is a Pokemon selected from a broad set of Random Battle-eligible Pokemon able to learn the move chosen as this move's base move. Upon the substitutes creation, this Pokemon's ability is suppressed until it switches out. The substitute Pokemon is generated with a Random Battle moveset with maximum PP that is added (except for duplicates) to the user's moveset; these additions are removed when this substitute is no longer active. The substitute uses its species's base stats, types, ability, and weight but retains the user's max HP, stat stages, gender, level, status conditions, trapping, binding, and pseudo-statuses such as confusion. Its HP is 100% of the user's maximum HP. When this substitute falls to zero HP, it breaks, and the user reverts to the state in which it used this move. This substitute absorbs indirect damage and authentic moves but does not reset the counter of bad poison when broken and cannot be transfered through Baton Pass. Transforming into this substitute will not fail. If the user switches out while the substitute is up, the substitute will be removed and the user will revert to the state in which it used this move.",
+		desc: "The user creates a substitute to take its place in battle. This substitute is a Pokemon selected from a broad set of Random Battle-eligible Pokemon able to learn the move chosen as this move's base move. Upon the substitutes creation, this Pokemon's ability is suppressed until it switches out. The substitute Pokemon is generated with a Random Battle moveset with maximum PP that is added (except for duplicates) to the user's moveset; these additions are removed when this substitute is no longer active. The substitute uses its species's base stats, types, ability, and weight but retains the user's max HP, stat stages, gender, level, status conditions, trapping, binding, and pseudo-statuses such as confusion. Its HP is 100% of the user's maximum HP. When this substitute falls to zero HP, it breaks, and the user reverts to the state in which it used this move. This substitute absorbs indirect damage and authentic moves but does not reset the counter of bad poison when broken and cannot be transfered through Baton Pass. Transforming into this substitute will not fail. If the user switches out while the substitute is up, the substitute will be removed and the user will revert to the state in which it used this move. This move's properties are based on the move Fake Claim is inheriting from.",
 		shortDesc: "Uses a Random Battle Pokemon as a Substitute.",
 		id: "fakeclaim",
 		name: "Fake Claim",
@@ -3444,7 +3437,7 @@ let BattleMovedex = {
 	rotate: {
 		accuracy: 100,
 		category: "Status",
-		desc: "The next Pokemon will switch out after using its move.",
+		desc: "The next Pokemon will switch out after using its move if the move is successful.",
 		shortDesc: "Next Pokemon will switch after using its move.",
 		id: "rotate",
 		name: "Rotate",
