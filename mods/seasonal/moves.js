@@ -3025,37 +3025,43 @@ let BattleMovedex = {
 		type: "Ghost",
 	},
 	// Rory Mercury
-	scavenge: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "If the user is holding a Berry, the user will heal 40% of their HP. If the user has no item or has an item that is not a Berry, the user will gain a random Berry and heal 60% of their HP.",
-		shortDesc: "Has Berry: Heal 40%; else: Heal 60% gain, Berry.",
-		id: "scavenge",
-		name: "Scavenge",
+	switchoff: {
+		accuracy: 100,
+		basePower: 60,
+		category: "Physical",
+		desc: "Before doing damage, the target's stat boosts are inverted. Ignores Ground-type immunity. The user switches out after damaging the target.",
+		shortDesc: "Hits Ground. Inverts target's boosts, then switches.",
+		id: "switchoff",
+		name: "Switch Off",
 		isNonstandard: true,
-		pp: 5,
+		pp: 10,
 		priority: 0,
-		flags: {snatch: 1, heal: 1},
+		flags: {mirror: 1, protect: 1},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit: function (target, source) {
-			this.add('-anim', source, "Dig", source);
+			this.add('-anim', source, "Topsy-Turvy", target);
+			this.add('-anim', source, "Zing Zap", target);
 		},
 		onTryHit: function (target, source, move) {
-			if (!source.item || !this.getItem(source.item).isBerry) {
-				move.heal = [6, 10];
-				let berries = ["Aguav Berry", "Apicot Berry", "Aspear Berry", "Babiri Berry", "Belue Berry", "Bluk Berry", "Charti Berry", "Cheri Berry", "Chesto Berry", "Chilan Berry", "Chople Berry", "Coba Berry", "Colbur Berry", "Cornn Berry", "Custap Berry", "Durin Berry", "Enigma Berry", "Figy Berry", "Ganlon Berry", "Grepa Berry", "Haban Berry", "Hondew Berry", "Iapapa Berry", "Jaboca Berry", "Kasib Berry", "Kebia Berry", "Kee Berry", "Kelpsy Berry", "Lansat Berry", "Leppa Berry", "Liechi Berry", "Lum Berry", "Mago Berry", "Magost Berry", "Maranga Berry", "Micle Berry", "Nanab Berry", "Nomel Berry", "Occa Berry", "Oran Berry", "Pamtre Berry", "Passho Berry", "Payapa Berry", "Pecha Berry", "Persim Berry", "Petaya Berry", "Pinap Berry", "Pomeg Berry", "Qualot Berry", "Rabuta Berry", "Rawst Berry", "Razz Berry", "Rindo Berry", "Roseli Berry", "Rowap Berry", "Salac Berry", "Shuca Berry", "Sitrus Berry", "Spelon Berry", "Starf Berry", "Tamato Berry", "Tanga Berry", "Wacan Berry", "Watmel Berry", "Wepear Berry", "Wiki Berry", "Yache Berry"];
-				let berry = berries[this.random(berries.length)];
-				source.setItem(berry);
-				this.add('-item', source, source.getItem(), '[from] move: Scavenge');
+			let success = false;
+			for (let i in target.boosts) {
+				// @ts-ignore
+				if (target.boosts[i] === 0) continue;
+				// @ts-ignore
+				target.boosts[i] = -target.boosts[i];
+				success = true;
 			}
+			if (!success) return;
+			this.add('-invertboost', target, '[from] move: Switch Off');
 		},
-		heal: [4, 10],
-		target: "self",
-		type: "Ground",
+		ignoreImmunity: {'Electric': true},
+		selfSwitch: true,
+		secondary: null,
+		target: "normal",
+		type: "Electric",
 	},
 	// Saburo
 	soulbend: {

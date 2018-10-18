@@ -1054,8 +1054,10 @@ let BattleStatuses = {
 	},
 	rorymercury: {
 		noCopy: true,
-		onStart: function () {
+		onStart: function (pokemon) {
 			this.add(`c|+Rory Mercury|guess I'm in charge now`);
+			if (pokemon.illusion) return;
+			this.boost({atk: 1}, pokemon);
 		},
 		onSwitchOut: function () {
 			this.add(`c|+Rory Mercury|brb`);
