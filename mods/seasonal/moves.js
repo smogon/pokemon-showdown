@@ -3291,7 +3291,7 @@ let BattleMovedex = {
 			// @ts-ignore Hack for Snaquaza's Z move
 			const baseMove = move.baseMove ? move.baseMove.id : 'bravebird';
 			const pool = claims[baseMove];
-			if (!pool) return false; // Should never happen
+			if (!pool) throw new Error(`SSB: Unable to find fake claim movepool for the move: "${baseMove}".`); // Should never happen
 			const claim = claims[baseMove][this.random(pool.length)];
 			// Generate new set
 			const generator = new RandomStaffBrosTeams('gen7randombattle', this.prng);

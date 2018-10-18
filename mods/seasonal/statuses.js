@@ -468,7 +468,7 @@ let BattleStatuses = {
 			this.add('-hint', 'EV still has the Adaptability ability.');
 			// Update movepool
 			target.moveSlots = [];
-			if (!formes[forme]) return; // should never happen
+			if (!formes[forme]) throw new Error(`SSB: Can't find moveset for EV's forme: "${forme}".`); // should never happen
 			for (const [i, moveid] of formes[forme].entries()) {
 				let move = this.getMove(moveid);
 				if (!move.id) continue;
