@@ -1216,17 +1216,14 @@ let BattleStatuses = {
 			if (source.illusion) return;
 			let target = source.side.foe.active[0];
 
-			let removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
-			let removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
-			for (const targetCondition of removeTarget) {
-				if (target.side.removeSideCondition(targetCondition)) {
-					if (!removeAll.includes(targetCondition)) continue;
-					this.add('-sideend', target.side, this.getEffect(targetCondition).name, '[from] move: No Fun Zone', '[of] ' + target);
-				}
-			}
+			let removeAll = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+			let silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 			for (const sideCondition of removeAll) {
+				if (target.side.removeSideCondition(sideCondition)) {
+					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', target.side, this.getEffect(sideCondition).name, '[from] move: No Fun Zone', '[of] ' + source);
+				}
 				if (source.side.removeSideCondition(sideCondition)) {
-					this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: No Fun Zone', '[of] ' + source);
+					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: No Fun Zone', '[of] ' + source);
 				}
 			}
 			this.add('-clearallboost');

@@ -18,6 +18,7 @@ let BattleItems = {
 	astleyiumz: {
 		id: "astleyiumz",
 		name: "Astleyium Z",
+		isNonstandard: true,
 		onTakeItem: false,
 		zMove: "Rickrollout",
 		zMoveFrom: "Rock Slide",
@@ -29,6 +30,7 @@ let BattleItems = {
 	victiniumz: {
 		id: "victiniumz",
 		name: "Victinium Z",
+		isNonstandard: true,
 		onTakeItem: false,
 		zMove: "Blaze of Glory",
 		zMoveFrom: "V-create",
@@ -40,6 +42,7 @@ let BattleItems = {
 	thicciniumz: {
 		id: "thicciniumz",
 		name: "Thiccinium Z",
+		isNonstandard: true,
 		onTakeItem: false,
 		zMove: "Extra T h i c c",
 		zMoveFrom: "Thicc",
@@ -51,6 +54,7 @@ let BattleItems = {
 	fakeclaimiumz: {
 		id: "fakeclaimiumz",
 		name: "Fakeclaimium Z",
+		isNonstandard: true,
 		onTakeItem: false,
 		zMove: "Fake Claim",
 		// @ts-ignore hack for Snaquaza's Z move.
@@ -63,6 +67,7 @@ let BattleItems = {
 	volcaroniumz: {
 		id: "volcaroniumz",
 		name: "Volcaronium Z",
+		isNonstandard: true,
 		onTakeItem: false,
 		zMove: "Scorching Global Vortex",
 		zMoveFrom: "Fiery Dance",
@@ -74,6 +79,7 @@ let BattleItems = {
 	tiksiumz: {
 		id: "tiksiumz",
 		name: "Tiksium Z",
+		isNonstandard: true,
 		onTakeItem: false,
 		zMove: "Devolution Wave",
 		zMoveFrom: "Rock Slide",
@@ -85,6 +91,7 @@ let BattleItems = {
 	nichiumz: {
 		id: "nichiumz",
 		name: "Nichium Z",
+		isNonstandard: true,
 		onTakeItem: false,
 		zMove: "Revamped Suspect Philosophy",
 		zMoveFrom: "Icicle Crash",

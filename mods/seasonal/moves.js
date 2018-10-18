@@ -97,6 +97,7 @@ let BattleMovedex = {
 		shortDesc: "Power doubles if foe switches out.",
 		id: "toomuchsaws",
 		name: "Too Much Saws",
+		isNonstandard: true,
 		pp: 10,
 		priority: 0,
 		onTryMovePriority: 100,
@@ -177,22 +178,25 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		heal: [1, 2],
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Ingrain", target);
+			let didSomething = false;
 			let side = source.side;
 			if (side.faintedLastTurn) {
 				this.add('-anim', source, "Wish", target);
 				side.addSideCondition('wish', source);
 				this.add('-message', `${source.name} made a wish!`);
+				didSomething = true;
 			}
 			for (const ally of side.pokemon) {
-				ally.cureStatus();
+				if (ally.cureStatus()) didSomething = true;
 			}
+			if (this.heal(source.maxhp / 2, source)) didSomething = true;
+			return didSomething;
 		},
 		secondary: null,
 		target: "self",
@@ -680,21 +684,18 @@ let BattleMovedex = {
 			this.add('-anim', source, "Defog", target);
 		},
 		onHit: function (target, source, move) {
+			let removeAll = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+			let silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
+			for (const sideCondition of removeAll) {
+				if (target.side.removeSideCondition(sideCondition)) {
+					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', target.side, this.getEffect(sideCondition).name, '[from] move: Blustery Winds', '[of] ' + source);
+				}
+				if (source.side.removeSideCondition(sideCondition)) {
+					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Blustery Winds', '[of] ' + source);
+				}
+			}
 			this.clearWeather();
 			this.clearTerrain();
-			let removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
-			let removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
-			for (const targetCondition of removeTarget) {
-				if (target.side.removeSideCondition(targetCondition)) {
-					if (!removeAll.includes(targetCondition)) continue;
-					this.add('-sideend', target.side, this.getEffect(targetCondition).name, '[from] move: Blustery Winds', '[of] ' + target);
-				}
-			}
-			for (const sideCondition of removeAll) {
-				if (source.side.removeSideCondition(sideCondition)) {
-					this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Blustery Winds', '[of] ' + source);
-				}
-			}
 		},
 		secondary: null,
 		target: "normal",
@@ -2625,7 +2626,7 @@ let BattleMovedex = {
 		target: "self",
 		type: "Ghost",
 	},
-	// nui
+	// Used for nui's ability
 	prismaticterrain: {
 		accuracy: true,
 		category: "Status",
@@ -2666,18 +2667,16 @@ let BattleMovedex = {
 				} else {
 					this.add('-fieldstart', 'move: Prismatic Terrain');
 				}
-				let success = false;
 				let removeAll = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+				let silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 				for (const sideCondition of removeAll) {
 					if (source.side.foe.removeSideCondition(sideCondition)) {
-						this.add('-sideend', source.side.foe, this.getEffect(sideCondition).name, '[from] move: Prismatic Terrain', '[of] ' + source);
-						success = true;
-					} else if (source.side.removeSideCondition(sideCondition)) {
-						this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Prismatic Terrain', '[of] ' + source);
-						success = true;
+						if (!(silentRemove.includes(sideCondition))) this.add('-sideend', source.side.foe, this.getEffect(sideCondition).name, '[from] move: Prismatic Terrain', '[of] ' + source);
+					}
+					if (source.side.removeSideCondition(sideCondition)) {
+						if (!(silentRemove.includes(sideCondition))) this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Prismatic Terrain', '[of] ' + source);
 					}
 				}
-				return success;
 			},
 			onResidualOrder: 21,
 			onResidualSubOrder: 2,
@@ -2689,6 +2688,7 @@ let BattleMovedex = {
 		target: "self",
 		type: "Fairy",
 	},
+	// nui
 	pyramidingsong: {
 		accuracy: 100,
 		category: "Status",

@@ -20,6 +20,7 @@ let BattleAbilities = {
 		shortDesc: "If Sunny Day is active, this Pokemon's Attack is 1.5x and its Speed is doubled.",
 		id: "seasonsgift",
 		name: "Season's Gift",
+		isNonstandard: true,
 		onModifyAtk: function (atk) {
 			if (this.isWeather(['sunnyday', 'desolateland'])) {
 				return this.chainModify(1.5);
@@ -79,6 +80,7 @@ let BattleAbilities = {
 		// Logia's type-changing itself is implemented in statuses.js
 		id: "logia",
 		name: "Logia",
+		isNonstandard: true,
 		onTryHit: function (target, source, move) {
 			let plateType = this.getItem(target.item).onPlate;
 			if (target !== source && (move.type === 'Normal' || plateType === move.type)) {
@@ -161,6 +163,9 @@ let BattleAbilities = {
 	adrenalinerush: {
 		desc: "As this Pokemon switches in, its Special Attack and Speed are doubled for 5 turns. After five turns have passed, these effects are removed.",
 		shortDesc: "On switch-in, this Pokemon's Special Attack and Speed are doubled for 5 turns.",
+		id: "adrenalinerush",
+		name: "Adrenaline Rush",
+		isNonstandard: true,
 		onStart: function (pokemon) {
 			pokemon.addVolatile('adrenalinerush');
 		},
@@ -186,8 +191,6 @@ let BattleAbilities = {
 				this.add('-message', `${pokemon.name}'s Adrenaline Rush has ended.`);
 			},
 		},
-		id: "adrenalinerush",
-		name: "Adrenaline Rush",
 	},
 	// E4 Flint
 	starkmountain: {
