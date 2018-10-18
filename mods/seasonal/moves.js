@@ -3879,7 +3879,9 @@ let BattleMovedex = {
 			this.add('-anim', source, "Air Slash", target);
 			this.add('-anim', source, "Air Slash", target);
 		},
-		volatileStatus: 'partiallytrapped',
+		onHit: function (target, source, move) {
+			if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
+		},
 		secondaries: [
 			{
 				chance: 20,
