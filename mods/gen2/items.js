@@ -49,6 +49,7 @@ let BattleItems = {
 				move.secondaries.push({
 					chance: 100*30/256,
 					volatileStatus: 'flinch',
+					kingsrock: true,
 				});
 			}
 		}
