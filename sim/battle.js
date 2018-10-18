@@ -1538,6 +1538,7 @@ class Battle extends Dex.ModdedDex {
 				pokemon.newlySwitched = false;
 				pokemon.moveLastTurnResult = pokemon.moveThisTurnResult;
 				pokemon.moveThisTurnResult = undefined;
+				pokemon.hurtThisTurn = false;
 
 				pokemon.maybeDisabled = false;
 				for (const moveSlot of pokemon.moveSlots) {
@@ -1548,14 +1549,14 @@ class Battle extends Dex.ModdedDex {
 				if (!pokemon.ateBerry) pokemon.disableMove('belch');
 
 				// If it was an illusion, it's not any more
-				if (pokemon.getLastHurtBy() && this.gen >= 7) pokemon.knownType = true;
+				if (pokemon.getLastAttackedBy() && this.gen >= 7) pokemon.knownType = true;
 
-				for (let i = pokemon.hurtBy.length - 1; i >= 0; i--) {
-					let attack = pokemon.hurtBy[i];
+				for (let i = pokemon.attackedBy.length - 1; i >= 0; i--) {
+					let attack = pokemon.attackedBy[i];
 					if (attack.source.isActive) {
 						attack.thisTurn = false;
 					} else {
-						pokemon.hurtBy.splice(pokemon.hurtBy.indexOf(attack), 1);
+						pokemon.attackedBy.splice(pokemon.attackedBy.indexOf(attack), 1);
 					}
 				}
 
@@ -1921,7 +1922,9 @@ class Battle extends Dex.ModdedDex {
 		}
 		if (damage !== 0) damage = this.clampIntRange(damage, 1);
 		damage = target.damage(damage, source, effect);
+		if (damage !== 0) target.hurtThisTurn = true;
 		if (source && effect.effectType === 'Move') source.lastDamage = damage;
+
 		let name = effect.fullname;
 		if (name === 'tox') name = 'psn';
 		switch (effect.id) {
