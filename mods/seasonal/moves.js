@@ -565,8 +565,8 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "For 5 turns, the user is immune to Ground-type moves and the effects of Arena Trap, and the Speed of every Pokemon is recalculated for the purposes of determining turn order: every Pokemon's Speed is considered to be 10000 - its normal Speed, and if this value is greater than 8191, 8192 is subtracted from it. The effects of Ingrain, Smack Down, and Thousand Arrows do not cause this move to fail, but they still ground the user, as does Iron Ball. This move does not fail if the user is under the effect of Magnet Rise or this move , but it does not extend the duration.",
-		shortDesc: "5 turns: slower Pokemon move first, user levitates.",
+		desc: "For 5 turns, the user is immune to Ground-type moves and the effects of Arena Trap, and the Speed of every Pokemon is recalculated for the purposes of determining turn order: every Pokemon's Speed is considered to be 10000 - its normal Speed, and if this value is greater than 8191, 8192 is subtracted from it. The effects of Ingrain, Smack Down, and Thousand Arrows do not cause this move to fail, but they still ground the user, as does Iron Ball. This move does not fail if the user is under the effect of Magnet Rise or this move , but it does not extend the duration. This move fails if the user is not Bimp.",
+		shortDesc: "Bimp: 5 turns: slower Pokemon move first, user levitates.",
 		id: "triviaroom",
 		name: "Trivia Room",
 		isNonstandard: true,
@@ -704,7 +704,7 @@ let BattleMovedex = {
 	wondertrade: {
 		accuracy: true,
 		category: "Status",
-		desc: "Replaces every non-fainted member of the user's team with a Super Staff Bros. Brawl set that is randomly selected from all sets, except those with the move Wonder Trade. Remaining HP and PP percentages, as well as status conditions, are transferred onto the replacement sets This move fails if it's used by a Pokemon that does not originally know this move.",
+		desc: "Replaces every non-fainted member of the user's team with a Super Staff Bros. Brawl set that is randomly selected from all sets, except those with the move Wonder Trade. Remaining HP and PP percentages, as well as status conditions, are transferred onto the replacement sets This move fails if it's used by a Pokemon that does not originally know this move. This move fails if the user is not bumbadabum.",
 		shortDesc: "Replaces user's team with random StaffBros. sets.",
 		id: "wondertrade",
 		name: "Wonder Trade",
@@ -2105,8 +2105,8 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user gains a random typing and 3 moves based on that typing (2 special moves and 1 status move). The user's attacks deal damage based off the user's Special Defense. If used again, returns the user to its original moveset and typing.",
-		shortDesc: "Gains 3 random moves and typing.",
+		desc: "The user gains a random typing and 3 moves based on that typing (2 special moves and 1 status move). The user's attacks deal damage based off the user's Special Defense. If used again, returns the user to its original moveset and typing. This move fails if the user is not Lycanium Z.",
+		shortDesc: "Lycanium Z: Gains 3 random moves and typing.",
 		id: "purplepills",
 		name: "Purple Pills",
 		isNonstandard: true,
@@ -2119,6 +2119,13 @@ let BattleMovedex = {
 		},
 		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Swallow", source);
+		},
+		onTryHit: function (target, source) {
+			if (source.name !== 'Lycanium Z') {
+				this.add('-fail', source);
+				this.add('-hint', 'Only Lycanium Z can use Purple Pills.');
+				return null;
+			}
 		},
 		volatileStatus: 'purplepills',
 		effect: {
@@ -2146,7 +2153,7 @@ let BattleMovedex = {
 				for (let i in exports.BattleMovedex) {
 					let move = exports.BattleMovedex[i];
 					if (i !== move.id) continue;
-					if (move.isZ || move.isNonstandard || !move.isViable) continue;
+					if (move.isZ || move.isNonstandard || !move.isViable || move.id === 'batonpass') continue;
 					if (move.type && !pokemon.types.includes(move.type)) continue;
 					// Time to sort!
 					if (move.category === 'Status') statMove.push(move);
