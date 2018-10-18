@@ -659,7 +659,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		let player = this.players[userid];
 		if (!player && this.dead[userid] && this.dead[userid].restless) player = this.dead[userid];
 		if (!player || !player.lynching) return this.sendUser(userid, `|error|You are not lynching anyone.`);
-		if (player.lastLynch + 2000 >= Date.now() && !force) this.sendUser(userid, `|error|You must wait another ${Chat.toDurationString((player.lastLynch + 2000) - Date.now()) || '1 second'} before you can change your lynch.`);
+		if (player.lastLynch + 2000 >= Date.now() && !force) return this.sendUser(userid, `|error|You must wait another ${Chat.toDurationString((player.lastLynch + 2000) - Date.now()) || '1 second'} before you can change your lynch.`);
 		let lynch = this.lynches[player.lynching];
 		lynch.count--;
 		lynch.trueCount -= this.getLynchValue(userid);
