@@ -2648,8 +2648,8 @@ let BattleMovedex = {
 				}
 				return 5;
 			},
-			onBeforeMovePriority: 2,
-			onBeforeMove: function (target, source, move) {
+			onTryHitPriority: 2,
+			onTryHit: function (target, source, move) {
 				let hazardMoves = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'hazardpass', 'beskyttelsesnet', 'bringerofdarkness', 'soulbend', 'smokebomb', 'hurl'];
 				if (hazardMoves.includes(move.id)) {
 					this.add('-message', `${source.name} couldn't use ${move.name} because of the prismatic terrain!`);
