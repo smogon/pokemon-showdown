@@ -259,6 +259,120 @@ represented by a space), and the rest of the string being their username.
 >
 > Possible queries include `/query roomlist` and `/query userdetails USERNAME`.
 
+### Tournament messages
+
+`|tournament|create|FORMAT|GENERATOR|PLAYERCAP`
+
+> `FORMAT` is the name of the format in which each battle will be played.
+> `GENERATOR` is either `Elimination` or `Round Robin` and describes the
+> type of bracket that will be used. `Elimination` includes a prefix
+> that denotes the number of times a player can lose before being
+> eliminated (`Single`, `Double`, etc.). `Round Robin` includes the
+> prefix `Double` if every matchup will battle twice.
+> `PLAYERCAP` is a number representing the maximum amount of players
+> that can join the tournament or `0` if no cap was specified.
+
+`|tournament|update|JSON`
+
+> `JSON` is a JSON object representing the changes in the tournament
+> since the last update you recieved or the start of the tournament.
+> These include:
+>
+    format: the tournament's custom name or the format being used
+    teambuilderFormat: the format being used; sent if a custom name was set
+    isStarted: whether or not the tournament has started
+    isJoined: whether or not you have joined the tournament
+    generator: the type of bracket being used by the tournament
+    playerCap: the player cap that was set or 0 if it was removed
+    bracketData: an object representing the current state of the bracket
+    challenges: a list of opponents that you can currently challenge
+    challengeBys: a list of opponents that can currently challenge you
+    challenged: the name of the opponent that has challenged you
+    challenging: the name of the opponent that you are challenging
+
+`|tournament|updateEnd`
+
+> Signals the end of an update period.
+
+`|tournament|error|ERROR`
+
+> An error of type `ERROR` occurred.
+
+`|tournament|forceend`
+
+> The tournament was forcibly ended.
+
+`|tournament|join|USER`
+
+> `USER` joined the tournament.
+
+`|tournament|leave|USER`
+
+> `USER` left the tournament.
+
+`|tournament|start`
+
+> The tournament started.
+
+`|tournament|replace|USER1|USER2`
+
+> `USER1` was replaced by `USER2`.
+
+`|tournament|disqualify|USER`
+
+> `USER` was disqualified from the tournament.
+
+`|tournament|battlestart|USER1|USER2|ROOMID`
+
+> A tournament battle started between `USER1` and `USER2`, and the battle room
+> has ID `ROOMID`.
+
+`|tournament|battleend|USER1|USER2|RESULT|SCORE|RECORDED|ROOMID`
+
+> The tournament battle between `USER1` and `USER2` in the battle room `ROOMID` ended.
+> `RESULT` describes the outcome of the battle from `USER1`'s perspective
+> (`win`, `loss`, or `draw`). `SCORE` is an array of length 2 that denotes the
+> number of Pokemon `USER1` had left and the number of Pokemon `USER2` had left.
+> `RECORDED` will be `fail` if the battle ended in a draw and the bracket type does
+> not support draws. Otherwise, it will be `success`.
+
+`|tournament|end|JSON`
+
+> The tournament ended. `JSON` is a JSON object containing:
+>
+    results: the name(s) of the winner(s) of the tournament
+    format: the tournament's custom name or the format that was used
+    generator: the type of bracket that was used by the tournament
+    bracketData: an object representing the final state of the bracket
+
+`|tournament|scouting|SETTING`
+
+> Players are now either allowed or not allowed to join other tournament
+> battles based on `SETTING` (`allow` or `disallow`).
+
+`|tournament|autostart|on|TIMEOUT`
+
+> A timer was set for the tournament to auto-start in `TIMEOUT` seconds.
+
+`|tournament|autostart|off`
+
+> The timer for the tournament to auto-start was turned off.
+
+`|tournament|autodq|on|TIMEOUT`
+
+> A timer was set for the tournament to auto-disqualify inactive players
+> every `TIMEOUT` seconds.
+
+`|tournament|autodq|off`
+
+> The timer for the tournament to auto-disqualify inactive players was
+> turned off.
+
+`|tournament|autodq|target|TIME`
+
+> You have `TIME` seconds to make or accept a challenge, or else you will be
+> disqualified for inactivity.
+
 Battle messages
 ---------------
 
