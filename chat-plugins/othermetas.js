@@ -132,7 +132,7 @@ const commands = {
 		}
 		//////////////////////////////////////////
 		let mixedTemplate = Dex.deepClone(template);
-		mixedTemplate.abilities = megaTemplate.abilities;
+		mixedTemplate.abilities = Object.assign({}, megaTemplate.abilities);
 		if (mixedTemplate.types[0] === deltas.type) { // Add any type gains
 			mixedTemplate.types = [deltas.type];
 		} else if (deltas.type) {
