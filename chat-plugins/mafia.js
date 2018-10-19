@@ -1050,7 +1050,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (oldPlayer.lynching) {
 			// Dont change plurality
 			let lynch = this.lynches[oldPlayer.lynching];
-			lynch.lynchers.splice(lynch.lynchers.indexOf(oldPlayer.userid, 1));
+			lynch.lynchers.splice(lynch.lynchers.indexOf(oldPlayer.userid), 1);
 			lynch.lynchers.push(newPlayer.userid);
 			newPlayer.lynching = oldPlayer.lynching;
 			oldPlayer.lynching = '';
