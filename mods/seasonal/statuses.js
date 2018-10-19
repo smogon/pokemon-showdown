@@ -465,7 +465,6 @@ let BattleStatuses = {
 			this.add(`-anim`, target, 'Geomancy', target);
 			target.formeChange(forme);
 			target.setAbility('Adaptability');
-			this.add('-hint', 'EV still has the Adaptability ability.');
 			// Update movepool
 			target.moveSlots = [];
 			if (!formes[forme]) throw new Error(`SSB: Can't find moveset for EV's forme: "${forme}".`); // should never happen
@@ -960,13 +959,13 @@ let BattleStatuses = {
 	osiris: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|%Osiris|THE SECRET INGREDIENT IS`);
+			this.add(`c|+Osiris|THE SECRET INGREDIENT IS`);
 		},
 		onSwitchOut: function () {
-			this.add(`c|%Osiris|god's plan`);
+			this.add(`c|+Osiris|god's plan`);
 		},
 		onFaint: function () {
-			this.add(`c|%Osiris|I'm getting too old for this x_x`);
+			this.add(`c|+Osiris|I'm getting too old for this x_x`);
 		},
 	},
 	overneat: {

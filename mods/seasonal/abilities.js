@@ -194,7 +194,7 @@ let BattleAbilities = {
 	},
 	// E4 Flint
 	starkmountain: {
-		desc: "The user summons Sunny Day when it switches in. In addition, Water-type attacks do halved damage against this pokemon.",
+		desc: "The user summons Sunny Day when it switches in. In addition, Water-type attacks do halved damage against this Pokemon.",
 		shortDesc: "On switch-in, summons Sunny Day. Water power against this Pokemon is halved.",
 		id: "starkmountain",
 		name: "Stark Mountain",

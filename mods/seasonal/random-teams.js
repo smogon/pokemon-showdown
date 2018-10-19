@@ -487,7 +487,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 252, def: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
 			'Rory Mercury': {
-				species: 'Charjabug', ability: 'Multiscale', item: 'Evolite', gender: 'M',
+				species: 'Charjabug', ability: 'Multiscale', item: 'Eviolite', gender: 'M',
 				moves: ['Spikes', ['Lunge', 'U-turn'], ['Poison Fang', 'Nuzzle']],
 				signatureMove: 'Switch Off',
 				evs: {hp: 248, atk: 252, def: 8}, ivs: {spe: 0}, nature: 'Brave',
@@ -670,7 +670,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let rejected = false;
 			for (let type of types) {
 				if (typePool[type] === undefined) typePool[type] = 0;
-				if (typePool[type] >= 3) {
+				if (typePool[type] >= 2) {
 					// Reject
 					rejected = true;
 					break;
