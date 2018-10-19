@@ -1494,7 +1494,7 @@ let BattleMovedex = {
 	scriptedterrain: {
 		accuracy: 100,
 		category: "Status",
-		desc: "Sets Scripted Terrain for 5 turns. The power of Bug type moves is boosted by 1.5, and there is a 5% chance for every move used to become Glitch Out instead. At the end of a turn, every Pokemon has a 5% chance to transform into a Missingno. with 3 random moves and Glitch Out. Switching out will restore the Pokemon to its normal state.",
+		desc: "Sets Scripted Terrain for 5 turns. The power of Bug type moves is boosted by 1.5, and there is a 5% chance for every move used to become Glitch Out instead. At the end of a turn, every Pokemon has a 5% chance to transform into a Missingno. with 3 random moves and Glitch Out. Switching out will restore the Pokemon to its normal state. This terrain affects floating Pokemon.",
 		shortDesc: "5 turns: +Bug power, glitchy effects.",
 		id: "scriptedterrain",
 		name: "Scripted Terrain",
@@ -1549,6 +1549,7 @@ let BattleMovedex = {
 			},
 			onTerrain: function (pokemon) {
 				if (pokemon.template.id === 'missingno') return;
+				if (pokemon.fainted || !pokemon.hp) return;
 				if (this.random(20) === 1) {
 					this.debug('Scripted terrain corrupt');
 					this.add('message', `${pokemon.name} was corrupted by a bug in the scripted terrain!`);
@@ -2648,10 +2649,10 @@ let BattleMovedex = {
 				return 5;
 			},
 			onBeforeMovePriority: 2,
-			onBeforeMove: function (pokemon, target, move) {
-				let hazards = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'hazardpass', 'beskyttelsesnet', 'bringerofdarkness'];
-				if (hazards.includes(move.id)) {
-					this.add('-activate', target, 'move: Prismatic Terrain');
+			onBeforeMove: function (target, source, move) {
+				let hazardMoves = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'hazardpass', 'beskyttelsesnet', 'bringerofdarkness', 'soulbend', 'smokebomb', 'hurl'];
+				if (hazardMoves.includes(move.id)) {
+					this.add('-message', `${source.name} couldn't use ${move.name} because of the prismatic terrain!`);
 					return false;
 				}
 			},
