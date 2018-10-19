@@ -153,16 +153,15 @@ let BattleStatuses = {
 		},
 		onModifyMove: function (move) {
 			if (move.id === 'knockoff') {
-				// Aesthetically pleasing so the phrase happens after the move
-				if (!move.secondaries) move.secondaries = [];
-				move.secondaries.push({
-					chance: 100,
-					self: {
-						onHit: function () {
+				move.onAfterHit = function (target, source) {
+					if (source.hp) {
+						let item = target.takeItem();
+						if (item) {
+							this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] ' + source);
 							this.add(`c|%Arcticblast|+20 ;)`);
-						},
-					},
-				});
+						}
+					}
+				};
 			}
 		},
 		onFaint: function (pokemon) {

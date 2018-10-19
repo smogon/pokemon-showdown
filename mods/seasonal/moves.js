@@ -2210,8 +2210,7 @@ let BattleMovedex = {
 				// Update movepool
 				let newMovep = ['moonlight', 'heartswap', 'batonpass', 'purplepills'];
 				pokemon.moveSlots = [];
-				for (let i = 0; i < newMovep.length; i++) {
-					let moveid = newMovep[i];
+				for (const [i, moveid] of newMovep.entries()) {
 					let move = this.getMove(moveid);
 					if (!move.id) continue;
 					pokemon.moveSlots.push({
@@ -2250,6 +2249,7 @@ let BattleMovedex = {
 			this.attrLastMove('[still]');
 			if (pokemon.hp < pokemon.maxhp && pokemon.status !== 'slp' && !pokemon.hasAbility('comatose')) return;
 			this.add('-fail', pokemon);
+			this.add('-hint', 'Nap Time fails if the user has full health, is already asleep, or has Comatose.');
 			return null;
 		},
 		onPrepareHit: function (target, source) {
@@ -2263,7 +2263,7 @@ let BattleMovedex = {
 			if (!target.setStatus('slp', napWeather.source, move)) return false;
 			target.statusData.time = 2;
 			target.statusData.startTime = 2;
-			this.heal(target.maxhp / 2); //Aesthetic only as the healing happens after you fall asleep in-game
+			this.heal(target.maxhp / 2); // Aesthetic only as the healing happens after you fall asleep in-game
 			this.add('-status', target, 'slp', '[from] move: Rest');
 			// @ts-ignore
 			if (napWeather.source === target) {
@@ -2314,6 +2314,7 @@ let BattleMovedex = {
 			this.heal(source.maxhp, source, source, 'Blaze of Glory');
 			this.add('-anim', source, "Final Gambit", target);
 		},
+		selfdestruct: "ifHit",
 		isZ: "victiniumz",
 		secondary: null,
 		target: "normal",
@@ -2811,7 +2812,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, heal: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, heal: 1},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -2870,10 +2871,16 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		onPrepareHit: function (target, source) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Hammer Arm", target);
+		},
+		onHit: function (target, source) {
+			if (target.name === 'HoeenHero') {
+				this.add(`c|@pluviometer|HoennHero*`);
+				this.add(`c|&HoeenHero|I can speel`);
+			}
 		},
 		secondary: {
 			chance: 100,
@@ -2951,7 +2958,7 @@ let BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "Raises the user's Speed by 1 stage. Gives Focus Energy",
-		shortDesc: "Raises the user's Speed by 1; Focus Energy",
+		shortDesc: "Raises user's Speed by 1; Focus Energy.",
 		id: "resolve",
 		name: "Resolve",
 		isNonstandard: true,
@@ -3482,7 +3489,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
-		desc: "The user boosts its Speed by 1 stage and recovers half the HP lost by the target, rounded half up. This move has a 50% chance to boost the users Speed by 1 stage. If Big Root is held, the user recovers 1.3x the normal amount of HP, rounded half down.",
+		desc: "This move has a 50% chance to boost the user's Speed by 1 stage, and this move recovers half the HP lost by the target, rounded half up. If Big Root is held, the user recovers 1.3x the normal amount of HP, rounded half down.",
 		shortDesc: "Heals 50% of the damage dealt, 50% boost Spe.",
 		id: "ultrasucc",
 		name: "Ultra Succ",
@@ -3708,7 +3715,7 @@ let BattleMovedex = {
 		},
 		category: "Special",
 		desc: "This move's Base Power is 20 if the target weighs less than 10 kg, 40 if its weight is less than 25 kg, 60 if its weight is less than 50 kg, 80 if its weight is less than 100 kg, 100 if its weight is less than 200 kg, and 120 if its weight is greater than or equal to 200 kg. After doing damage, the target's item is replaced with an Iron Ball, and the target's weight is doubled.",
-		shortDesc: "Heavier foe = more power. Increases foe's weight.",
+		shortDesc: "BP:weight; increases foe weight; foe item=Iron Ball.",
 		id: "minisingularity",
 		name: "Mini Singularity",
 		isNonstandard: true,
@@ -3862,8 +3869,8 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 95,
 		category: "Special",
-		desc: "Has a 20% chance to make the target flinch and a 100% chance to paralyze the target.",
-		shortDesc: "20% to make target flinch; 100% to paralyze.",
+		desc: "Has a 20% chance to make the target flinch and a 100% chance to paralyze the target. Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
+		shortDesc: "20% to flinch; 100% to paralyze; traps target.",
 		id: "stunningdance",
 		name: "Stunning Dance",
 		isNonstandard: true,
@@ -4001,6 +4008,11 @@ let BattleMovedex = {
 			this.attrLastMove('[still]');
 		},
 		onTryHit: function (target, pokemon) {
+			if (pokemon.name !== 'Zarel') {
+				this.add('-fail', pokemon);
+				this.add('-hint', 'Only Zarel can use Relic Song Dance.');
+				return null;
+			}
 			this.attrLastMove('[still]');
 			let move = pokemon.template.speciesid === 'meloettapirouette' ? 'Brick Break' : 'Relic Song';
 			this.add('-anim', pokemon, move, target);
