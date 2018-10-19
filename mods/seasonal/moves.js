@@ -170,8 +170,8 @@ let BattleMovedex = {
 	compost: {
 		accuracy: true,
 		category: "Status",
-		desc: "If any of the user's allies fainted the previous turn, this move heals the active Pokemon by 50% of the user's HP on the following turn. Cures the user's party of all status conditions.",
-		shortDesc: "If ally fainted last turn, uses wish; cures party status.",
+		desc: "The user recovers half their HP. If any of the user's allies fainted the previous turn, this move heals the active Pokemon by 50% of the user's HP on the following turn. Cures the user's party of all status conditions.",
+		shortDesc: "Heal 50%; cures party; If ally fained last turn: wish.",
 		id: "compost",
 		name: "Compost",
 		isNonstandard: true,
@@ -390,7 +390,7 @@ let BattleMovedex = {
 		},
 		accuracy: 100,
 		category: "Physical",
-		desc: "This move's Base Power increases by 20 for every non-KOed foe that is not holding an item.",
+		desc: "This move's Base Power increases by 20 for every foe that is not holding an item.",
 		shortDesc: "+20 power for each item-less opponent.",
 		id: "trashalanche",
 		name: "Trashalanche",
@@ -569,7 +569,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "For 5 turns, the user is immune to Ground-type moves and the effects of Arena Trap, and the Speed of every Pokemon is recalculated for the purposes of determining turn order: every Pokemon's Speed is considered to be 10000 - its normal Speed, and if this value is greater than 8191, 8192 is subtracted from it. The effects of Ingrain, Smack Down, and Thousand Arrows do not cause this move to fail, but they still ground the user, as does Iron Ball. This move does not fail if the user is under the effect of Magnet Rise or this move , but it does not extend the duration. This move fails if the user is not Bimp.",
+		desc: "For 5 turns, the user is immune to Ground-type moves and the effects of Arena Trap, and the Speed of every Pokemon is recalculated for the purposes of determining turn order: every Pokemon's Speed is considered to be 10000 - its normal Speed, and if this value is greater than 8191, 8192 is subtracted from it. The effects of Ingrain, Smack Down, and Thousand Arrows do not cause this move to fail, but they still ground the user, as does Iron Ball. This move does not fail if the user is under the effect of Magnet Rise or this move, but it does not extend the duration. This move fails if the user is not Bimp.",
 		shortDesc: "Bimp: 5 turns: slower Pokemon move first, user levitates.",
 		id: "triviaroom",
 		name: "Trivia Room",
@@ -1011,7 +1011,7 @@ let BattleMovedex = {
 	luciddreams: {
 		accuracy: 75,
 		category: "Status",
-		desc: "The foe falls asleep and is inflicted with the effects of Nightmare and Leech Seed. The user loses 1/2 of their maximum HP.",
+		desc: "The foe falls asleep and is inflicted with the effects of Nightmare and Leech Seed. The user loses 1/2 of their maximum HP unless this move had no effect.",
 		shortDesc: "Loses 1/2 HP. Foe: sleep, Nightmare, Leech Seed.",
 		id: "luciddreams",
 		name: "Lucid Dreams",
@@ -1386,13 +1386,13 @@ let BattleMovedex = {
 			return 40;
 		},
 		category: "Physical",
-		desc: "The power of this move depends on (user's weight / target's weight), rounded down. Power is equal to 120 if the result is 5 or more, 100 if 4, 80 if 3, 60 if 2, and 40 if 1 or less. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
-		shortDesc: "More power the heavier the user than the target.",
+		desc: "The power of this move depends on (user's weight / target's weight), rounded down. Power is equal to 120 if the result is 5 or more, 100 if 4, 80 if 3, 60 if 2, and 40 if 1 or less. Damage doubles and no accuracy check is done if the target has used Minimize while active. The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
+		shortDesc: "Stronger if user is heavier; Heals 50% of damage.",
 		id: "paintrain",
 		name: "Pain Train",
 		isNonstandard: true,
 		pp: 10,
-		flags: {contact: 1, protect: 1, mirror: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, heal: 1},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -1530,7 +1530,6 @@ let BattleMovedex = {
 				if (!effect || effect.id === 'glitchout' || source.volatiles['glitchout']) return;
 				if (this.random(20) === 1) {
 					this.add('message', `${source.name}'s move was glitched by the Scripted Terrain!`);
-					//source.addVolatile('glitchout');
 					this.useMove('Glitch Out', source, source.side.foe.active[0]);
 					return null;
 				}
@@ -1561,8 +1560,7 @@ let BattleMovedex = {
 						let move = this.getMove(i);
 						if (i !== move.id) continue;
 						if (move.isZ || move.isNonstandard) continue;
-						// @ts-ignore
-						if (metronome.noMetronome.includes(move.id)) continue;
+						if (metronome.noMetronome && metronome.noMetronome.includes(move.id)) continue;
 						if (this.getMove(i).gen > this.gen) continue;
 						moves.push(move);
 						if (moves.length >= 3) break;
@@ -2455,8 +2453,8 @@ let BattleMovedex = {
 			return move.basePower + 20 * pokemon.positiveBoosts();
 		},
 		category: "Physical",
-		desc: "Power rises by 20 for each of the user's positive stat stage changes. The user loses any defensive boosts from Stockpile.",
-		shortDesc: "+20 power per boost. Removes Stockpile boosts.",
+		desc: "Power rises by 20 for each of the user's positive stat stage changes. The user loses any defensive boosts not from Stockpile.",
+		shortDesc: "+20 power per boost. Removes non-Stockpile boosts.",
 		id: "tippingover",
 		name: "Tipping Over",
 		isNonstandard: true,
@@ -2986,8 +2984,8 @@ let BattleMovedex = {
 	literallycheating: {
 		accuracy: true,
 		category: "Status",
-		desc: "For three turns, any Pokemon that raises a stat (even if not through a move) loses all PP on the move it used that turn.",
-		shortDesc: "7 turns: stat raisers lose all PP of turn's move.",
+		desc: "For seven turns, any Pokemon that has a stat boosted (even if not through a move) loses all PP on the move it used last.",
+		shortDesc: "7 turns: stat boosted: lose all PP from last move.",
 		id: "literallycheating",
 		name: "Literally Cheating",
 		isNonstandard: true,

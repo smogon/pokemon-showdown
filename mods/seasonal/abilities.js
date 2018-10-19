@@ -93,7 +93,7 @@ let BattleAbilities = {
 	stimulatedpride: {
 		id: "stimulatedpride",
 		name: "Stimulated Pride",
-		desc: "On switch-in, this Pokemon lowers the Attack of adjacent foes not behind a Substitute by one stage. If Rain Dance is active, this Pokemon's Speed is doubled.",
+		desc: "On switch-in, this Pokemon lowers the Attack of adjacent foes not behind a Substitute by one stage. If the weather is rain, this Pokemon's Speed is doubled.",
 		shortDesc: "On switch-in, adjacent foes' Atk is lowered by by 1. Speed is doubled in rain.",
 		isNonstandard: true,
 		onStart: function (pokemon) {
@@ -388,7 +388,7 @@ let BattleAbilities = {
 	// Psynergy
 	wrath: {
 		desc: "This Pokemon has its critical hit ratio raised by 1 stage, and its moves have their accuracy multiplied by 1.1.",
-		shortDesc: "This Pokemon's critical hit ratio is raised by 1 and its moves have 1.1x accuracy.",
+		shortDesc: "This Pokemon's critical hit ratio is raised by 1, and its moves have 1.1x accuracy.",
 		id: "wrath",
 		name: "Wrath",
 		isNonstandard: true,
@@ -430,14 +430,14 @@ let BattleAbilities = {
 		onModifyAtkPriority: 6,
 		onSourceModifyAtk: function (atk, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire') {
-				this.debug('Thick Fat weaken');
+				this.debug('Thiccer Fat weaken');
 				return this.chainModify(0.5);
 			}
 		},
 		onModifySpAPriority: 5,
 		onSourceModifySpA: function (atk, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire') {
-				this.debug('Thick Fat weaken');
+				this.debug('Thiccer Fat weaken');
 				return this.chainModify(0.5);
 			}
 		},
@@ -511,7 +511,7 @@ let BattleAbilities = {
 	},
 	// torkool
 	deflectiveshell: {
-		desc: "Summons Sunny Day as the user switches in. Non-contact moves deal 33% less damage to this Pokemon.",
+		desc: "Summons Sunny Day as the user switches in. Non-contact moves deal 2/3 damage to this Pokemon.",
 		shortDesc: "On switch-in, summons Sunny Day. Receives 2/3 damage from non-contact moves.",
 		id: "deflectiveshell",
 		name: "Deflective Shell",
@@ -553,8 +553,8 @@ let BattleAbilities = {
 	},
 	// Yuki
 	snowstorm: {
-		desc: "As it switches in, this Pokemon summons a hailstorm that remains in effect until replaced by another weather or suppressed by the effects of Cloud Nine, Air Lock, or Delta Stream.",
-		shortDesc: "On switch-in, this Pokemon summons Hail which remains active until replaced.",
+		desc: "As it switches in, this Pokemon summons hail that remains in effect until replaced by another weather or suppressed by the effects of Cloud Nine, Air Lock, or Delta Stream.",
+		shortDesc: "On switch-in, this Pokemon summons hail which remains active until replaced.",
 		id: "snowstorm",
 		name: "Snow Storm",
 		isNonstandard: true,
