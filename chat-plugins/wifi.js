@@ -825,7 +825,9 @@ let commands = {
 			if (isNaN(newamount)) return this.errorReply("Please enter a valid amount.");
 			// @ts-ignore
 			if (newamount > room.gtsga.left) return this.errorReply("The new amount must be lower than the old amount.");
-
+			// @ts-ignore
+			if (newamount < room.gtsga.left - 1) this.modlog(`GTS GIVEAWAY`, null, `set to ${newamount} left by ${user.name}`);
+			
 			// @ts-ignore
 			room.gtsga.updateLeft(newamount);
 		},
