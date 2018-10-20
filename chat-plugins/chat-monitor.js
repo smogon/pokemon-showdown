@@ -6,7 +6,14 @@ const MONITOR_FILE = 'config/chat-plugins/chat-monitor.tsv';
 const WRITE_THROTTLE_TIME = 5 * 60 * 1000;
 
 /** @type {{[k: string]: string[]}} */
-let filterKeys = Chat.filterKeys = Object.assign(Chat.filterKeys, {publicwarn: ['PUBLIC', 'WARN', 'Filtered in public'], warn: ['EVERYWHERE', 'WARN', 'Filtered'], autolock: ['EVERYWHERE', 'AUTOLOCK', 'Autolock'], namefilter: ['NAMES', 'WARN', 'Filtered in usernames'], wordfilter: ['EVERYWHERE', 'FILTERTO', 'Filtered to a different phrase']});
+let filterKeys = Chat.filterKeys = Object.assign(Chat.filterKeys, {
+	publicwarn: ['PUBLIC', 'WARN', 'Filtered in public'],
+	warn: ['EVERYWHERE', 'WARN', 'Filtered'],
+	autolock: ['EVERYWHERE', 'AUTOLOCK', 'Autolock'],
+	namefilter: ['NAMES', 'WARN', 'Filtered in usernames'],
+	wordfilter: ['EVERYWHERE', 'FILTERTO', 'Filtered to a different phrase'],
+	shorteners: ['EVERYWHERE', 'SHORTENER', 'Url Shorteners'],
+});
 /** @type {{[k: string]: [(string | RegExp), string, string?, number][]}} */
 let filterWords = Chat.filterWords;
 
@@ -19,7 +26,7 @@ setImmediate(() => {
 	 * Columns Location and Punishment use keywords. Possible values:
 	 *
 	 * Location: EVERYWHERE, PUBLIC, NAMES
-	 * Punishment: AUTOLOCK, WARN, FILTERTO
+	 * Punishment: AUTOLOCK, WARN, FILTERTO, SHORTENER
 	 */
 	FS(MONITOR_FILE).readIfExists().then(data => {
 		const lines = data.split('\n');
@@ -34,11 +41,13 @@ setImmediate(() => {
 					if (punishment === 'FILTERTO') {
 						const filterTo = rest[0];
 						filterWords[key].push([new RegExp(word, 'ig'), reason, filterTo, parseInt(times) || 0]);
-						continue loop;
+					} else if (punishment === 'SHORTENER') {
+						const regex = new RegExp(`\\b${word.replace(/\\/g, '\\\\').replace(/\./g, '\\.')}\\b`);
+						filterWords[key].push([regex, reason, null, parseInt(times) || 0]);
 					} else {
 						filterWords[key].push([word, reason, null, parseInt(times) || 0]);
-						continue loop;
 					}
+					continue loop;
 				}
 			}
 			throw new Error(`Unrecognized [location, punishment] pair for filter word entry: ${[location, word, punishment, reason, times]}`);
@@ -52,7 +61,14 @@ setImmediate(() => {
  * @param {string} punishment
  */
 function renderEntry(location, word, punishment) {
-	const str = word[0] instanceof RegExp ? String(word[0]).slice(1, -3) : word[0];
+	let str = word[0];
+	if (word[0] instanceof RegExp) {
+		if (punishment === 'SHORTENER') {
+			str = String(word[0]).slice(3, -3).replace(/\\./g, '.');
+		} else {
+			str = String(word[0]).slice(1, -3);
+		}
+	}
 	return `${location}\t${str}\t${punishment}\t${word[1]}\t${word[3]}${word[2] ? `\t${word[2]}` : ''}\r\n`;
 }
 
@@ -113,6 +129,17 @@ let chatfilter = function (message, user, room) {
 			if (isStaff) return `${message} __[would be filtered: ${line}${reason ? ` (${reason})` : ''}]__`;
 			this.errorReply(`Please do not say '${line.replace(/\\b/g, '')}'.`);
 			filterWords.warn[i][3]++;
+			saveFilters();
+			return false;
+		}
+	}
+	for (let i = 0; i < filterWords.shorteners.length; i++) {
+		let [regex] = filterWords.shorteners[i];
+		if (typeof regex === 'string') throw new Error(`shortener filters should not have strings`);
+		if (regex.test(lcMessage)) {
+			if (isStaff) return `${message} __[shortener: ${String(regex).slice(3, -3).replace('\\.', '.')}]__`;
+			this.errorReply(`Please do not use URL shorteners like '${String(regex).slice(3, -3).replace('\\.', '.')}'.`);
+			filterWords.shorteners[i][3]++;
 			saveFilters();
 			return false;
 		}
@@ -274,6 +301,7 @@ const pages = {
 					if (filterTo) {
 						entry = `<abbr title="${reason}"><code>${str}</code></abbr> &rArr; ${filterTo}`;
 					} else {
+						if (filterKeys[key][1] === 'SHORTENER') str = String(str).slice(3, -3).replace(/\\./g, '.');
 						entry = `<abbr title="${reason}">${str}</abbr>`;
 					}
 					return `<tr><td>${entry}</td><td>${hits}</td></tr>`;
@@ -334,8 +362,14 @@ let commands = {
 				let [word, ...reasonParts] = rest;
 				word = word.trim();
 				let reason = reasonParts.join(',').trim();
-				if (filterWords[list].some(val => val[0] === word)) return this.errorReply(`${word} is already added to the ${list} list.`);
-				filterWords[list].push([word, reason, null, 0]);
+				if (filterKeys[list][1] === 'SHORTENER') {
+					if (filterWords[list].some(val => String(val[0]).slice(3, -3).replace(/\\./g, '.') === word)) return this.errorReply(`${word} is already added to the ${list} list.`);
+					const regex = new RegExp(`\\b${word.replace(/\\/g, '\\\\').replace(/\./g, '\\.')}\\b`);
+					filterWords[list].push([regex, reason, null, 0]);
+				} else {
+					if (filterWords[list].some(val => val[0] === word)) return this.errorReply(`${word} is already added to the ${list} list.`);
+					filterWords[list].push([word, reason, null, 0]);
+				}
 				this.globalModlog(`ADDFILTER`, null, `'${word}' to ${list} list by ${user.name}${reason ? ` (${reason})` : ''}`);
 				saveFilters(true);
 				return this.sendReply(`'${word}' was added to the ${list} list.`);
