@@ -634,4 +634,28 @@ exports.commands = {
 		`/banword delete [words] - Removes the comma-separated list of phrases from the banword list. Requires: # & ~`,
 		`/banword list - Shows the list of banned words in the current room. Requires: % @ * # & ~`,
 	],
+
+	hightraffic: function (target, room, user) {
+		if (!target) return this.sendReply(`This room is${!room.highTraffic ? ' not' : ''} currently marked as high traffic.`);
+		if (!this.can('makeroom')) return false;
+
+		if (this.meansYes(target)) {
+			room.highTraffic = true;
+		} else if (this.meansNo(target)) {
+			room.highTraffic = false;
+		} else {
+			return this.parse('/help hightraffic');
+		}
+
+		if (room.chatRoomData) {
+			room.chatRoomData.highTraffic = room.highTraffic;
+			Rooms.global.writeChatRoomData();
+		}
+		this.modlog(`HIGHTRAFFIC`, null, room.highTraffic);
+		this.sendReply(`This room was marked as high traffic by ${user.name}.`);
+	},
+	hightraffichelp: [
+		`/hightraffic [true|false] - (Un)marks a room as a high traffic room. Requires & ~`,
+		`When a room is marked as high-traffic, PS requires all messages sent to that room to contain at least 2 letters.`,
+	],
 };
