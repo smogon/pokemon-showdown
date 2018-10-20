@@ -282,11 +282,11 @@ class CommandContext {
 	}
 
 	/**
-	 * @param {any} [message]
+	 * @param {string} [message]
 	 * @return {any}
 	 */
 	parse(message) {
-		if (message) {
+		if (typeof message === 'string') {
 			// spawn subcontext
 			let subcontext = new CommandContext(this);
 			subcontext.recursionDepth++;
