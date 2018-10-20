@@ -478,7 +478,7 @@ class Ladder extends LadderStore {
 		const formatid = toId(this.formatid);
 		if (!user1 || !user2) {
 			// This should never happen.
-			require('./lib/crashlogger')(new Error(`Matched user ${user1 ? search2.userid : search1.userid} not found`), "The main process");
+			Monitor.crashlog(new Error(`Matched user ${user1 ? search2.userid : search1.userid} not found`), "The matchmaker");
 			return false;
 		}
 
