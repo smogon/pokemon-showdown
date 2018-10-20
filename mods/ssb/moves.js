@@ -2470,7 +2470,8 @@ let BattleMovedex = {
 			this.add('-anim', target, "Earthquake", target);
 		},
 		onHit: function (target, source, move) {
-			let stockpileLayers = source.volatiles['stockpile'].layers;
+			let stockpileLayers = 0;
+			if (source.volatiles['stockpile']) stockpileLayers = source.volatiles['stockpile'].layers;
 			let boosts = {};
 			boosts.def = (source.boosts.def - stockpileLayers < 0 ? 0 : source.boosts.def - stockpileLayers) * -1;
 			boosts.spd = (source.boosts.spd - stockpileLayers < 0 ? 0 : source.boosts.spd - stockpileLayers) * -1;
