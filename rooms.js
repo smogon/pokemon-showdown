@@ -964,16 +964,34 @@ class GlobalRoom extends BasicRoom {
 	/**
 	 * @param {Error} err
 	 */
-	reportCrash(err) {
-		if (this.lockdown) return;
+	reportCrash(err, crasher = "The server") {
 		const time = Date.now();
 		if (time - this.lastReportedCrash < CRASH_REPORT_THROTTLE) {
 			return;
 		}
 		this.lastReportedCrash = time;
 		// @ts-ignore
-		const stack = (err ? Chat.escapeHTML(err.stack).split(`\n`).slice(0, 2).join(`<br />`) : ``);
-		const crashMessage = `|html|<div class="broadcast-red"><b>The server has crashed:</b> ${stack}</div>`;
+		let stackLines = (err ? Chat.escapeHTML(err.stack).split(`\n`) : []);
+		if (stackLines.length > 2) {
+			for (let i = 1; i < stackLines.length; i++) {
+				if (stackLines[i].includes('&#x2f;') || stackLines[i].includes('\\')) {
+					if (!stackLines[i].includes('node_modules')) {
+						stackLines = [stackLines[0], stackLines[i]];
+						break;
+					}
+				}
+			}
+		}
+		if (stackLines.length > 2) {
+			for (let i = 1; i < stackLines.length; i++) {
+				if (stackLines[i].includes('&#x2f;') || stackLines[i].includes('\\')) {
+					stackLines = [stackLines[0], stackLines[i]];
+					break;
+				}
+			}
+		}
+		const stack = stackLines.slice(0, 2).join(`<br />`);
+		const crashMessage = `|html|<div class="broadcast-red"><b>${crasher} has crashed:</b> ${stack}</div>`;
 		const devRoom = Rooms('development');
 		if (devRoom) {
 			devRoom.add(crashMessage).update();

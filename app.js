@@ -122,20 +122,10 @@ Dnsbl.loadDatacenters();
 if (Config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting
 	process.on('uncaughtException', err => {
-		let crashType = require('./lib/crashlogger')(err, 'The main process');
-		if (crashType === 'lockdown') {
-			Rooms.global.startLockdown(err);
-		} else {
-			Rooms.global.reportCrash(err);
-		}
+		Monitor.crashlog(err, 'The main process');
 	});
 	process.on('unhandledRejection', err => {
-		let crashType = require('./lib/crashlogger')(err, 'A main process Promise');
-		if (crashType === 'lockdown') {
-			Rooms.global.startLockdown(err);
-		} else {
-			Rooms.global.reportCrash(err);
-		}
+		Monitor.crashlog(err, 'A main process Promise');
 	});
 }
 
