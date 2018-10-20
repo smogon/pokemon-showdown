@@ -844,7 +844,7 @@ let Formats = [
 		],
 
 		debug: true, // Remove me before merging
-		mod: 'seasonal',
+		mod: 'ssb',
 		team: 'randomStaffBros',
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
 		onBegin: function () {
