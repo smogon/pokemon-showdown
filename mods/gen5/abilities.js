@@ -39,6 +39,7 @@ let BattleAbilities = {
 				return null;
 			}
 		},
+		rating: 0.5,
 	},
 	"overcoat": {
 		inherit: true,
