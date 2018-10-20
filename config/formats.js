@@ -843,7 +843,6 @@ let Formats = [
 			`&bullet; <a href="https://www.smogon.com/articles/super-staff-bros-brawl">Introduction &amp; Roster</a>`,
 		],
 
-		debug: true, // Remove me before merging
 		mod: 'ssb',
 		team: 'randomStaffBros',
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],

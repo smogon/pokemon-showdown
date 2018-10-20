@@ -136,7 +136,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				species: 'Stakataka', ability: 'Learn Something New!', item: 'Rockium Z', gender: 'M',
 				moves: ['Gyro Ball', 'Stone Edge', 'Earthquake'],
 				signatureMove: 'Trivia Room',
-				evs: {hp: 248, atk: 252, spd: 8}, ivs: {spe: 0}, nature: 'Brave',
+				evs: {hp: 252, atk: 252, spd: 4}, ivs: {spe: 0}, nature: 'Brave',
 			},
 			'bobochan': {
 				species: 'Emolga', ability: 'Huge Power', item: 'Choice Band', gender: 'M',
@@ -316,7 +316,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				species: 'Dragonair', ability: 'Fur Coat', item: 'Leftovers', gender: 'M',
 				moves: ['Rest', 'Sleep Talk', 'Quiver Dance'],
 				signatureMove: 'Wyvern\'s Wail',
-				evs: {hp: 248, def: 252, spd: 8}, ivs: {atk: 0}, nature: 'Bold',
+				evs: {hp: 252, def: 252, spd: 4}, ivs: {atk: 0}, nature: 'Bold',
 			},
 			'Kaiju Bunny': {
 				species: 'Gligar', ability: 'Immunity', item: 'Eviolite', gender: 'F',
@@ -376,7 +376,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				species: 'Mantyke', ability: 'Water Veil', item: ['Life Orb', 'Normalium Z'], gender: 'M',
 				moves: ['Scald', 'Aeroblast', 'Sleep Talk'],
 				signatureMove: 'Nap Time',
-				evs: {hp: 248, spa: 84, spe: 176}, ivs: {atk: 0}, nature: 'Modest',
+				evs: {hp: 252, spa: 80, spe: 176}, ivs: {atk: 0}, nature: 'Modest',
 			},
 			'MajorBowman': {
 				species: 'Victini', ability: 'Victory Star', item: 'Victinium Z', gender: 'M',
@@ -490,7 +490,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				species: 'Charjabug', ability: 'Multiscale', item: 'Eviolite', gender: 'M',
 				moves: ['Spikes', ['Lunge', 'U-turn'], ['Poison Fang', 'Nuzzle']],
 				signatureMove: 'Switch Off',
-				evs: {hp: 248, atk: 252, def: 8}, ivs: {spe: 0}, nature: 'Brave',
+				evs: {hp: 252, atk: 252, def: 4}, ivs: {spe: 0}, nature: 'Brave',
 			},
 			'Saburo': {
 				species: 'Metagross', ability: 'Levitate', item: 'Metagrossite', gender: 'M',
@@ -520,7 +520,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				species: 'Beheeyem', ability: 'Psychic Surge', item: 'Psychium Z', gender: 'M',
 				moves: ['Nasty Plot', 'Psystrike', ['Aura Sphere', 'Earth Power', 'Shadow Ball']],
 				signatureMove: 'Alien Wave',
-				evs: {hp: 248, spa: 252, spd: 8}, ivs: {atk: 0, spe: 0}, nature: 'Quiet',
+				evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0, spe: 0}, nature: 'Quiet',
 			},
 			'Snaquaza': {
 				species: 'Honchkrow', ability: 'Illusion', item: 'Fakeclaimium Z', gender: 'M',
@@ -598,7 +598,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				species: 'Muk-Alola', ability: 'Focus Energy', item: 'Air Balloon', gender: 'M',
 				moves: ['Night Slash', 'Drill Run', 'Cross Poison'],
 				signatureMove: 'Holy Orders',
-				evs: {hp: 248, atk: 100, def: 136, spd: 24}, nature: 'Impish',
+				evs: {hp: 252, atk: 96, def: 136, spd: 24}, nature: 'Impish',
 			},
 			'Uselesscrab': {
 				species: 'Kyurem-Black', ability: 'Teravolt', item: 'Nichium Z', gender: 'M',
@@ -647,21 +647,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 		/** @type {{[type: string]: number}} */
 		let typePool = {};
 		while (pool.length && team.length < 6) {
-			let name = '';
-			// DEBUG CODE
-			let debug = false; // Programmers - Toggle this to use the code below
-			if (team.length === 1 && debug) {
-				// Force a specific set to appear for testing
-				name = 'Arcticblast';
-				if (pool.indexOf(name) > -1) {
-					pool.splice(pool.indexOf(name), 1);
-				} else {
-					// Was already picked
-					name = this.sampleNoReplace(pool);
-				}
-			} else {
-				name = this.sampleNoReplace(pool);
-			}
+			let name = this.sampleNoReplace(pool);
 			let ssbSet = sets[name];
 			// Enforce typing limits
 			let types = this.getTemplate(ssbSet.species).types;
