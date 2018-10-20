@@ -748,7 +748,9 @@ interface ModdedBattleSide {
 
 interface ModdedBattlePokemon {
 	boostBy?: (this: Pokemon, boost: SparseBoostsTable) => boolean
+	getActionSpeed?: (this: Pokemon) => number
 	getStat?: (this: Pokemon, statName: string, unboosted?: boolean, unmodified?: boolean) => number
+	isGrounded?: (this: Pokemon, negateImmunity: boolean | undefined) => boolean | null
 	modifyStat?: (this: Pokemon, statName: string, modifier: number) => void
 	moveUsed?: (this: Pokemon, move: Move, targetLoc?: number) => void
 	recalculateStats?: (this: Pokemon) => void
@@ -766,6 +768,7 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	getDamage?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: string | number | ActiveMove, suppressMessages: boolean) => number
 	init?: (this: Battle) => void
 	modifyDamage?: (this: Battle, baseDamage: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove, suppressMessages?: boolean) => void
+	setTerrain?: (this: Battle, status: string | Effect, source: Pokemon | null | undefined, sourceEffect: Effect | null | undefined) => boolean
 
 	// oms
 	doGetMixedTemplate?: (this: Battle, template: Template, deltas: AnyObject) => Template
