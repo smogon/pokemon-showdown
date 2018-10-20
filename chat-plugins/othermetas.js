@@ -71,7 +71,7 @@ const commands = {
 		if (!toId(target) || !target.includes('@')) return this.parse('/help mixandmega');
 		let sep = target.split('@');
 		let stone = getMegaStone(sep[1]);
-		let template = Object.assign({}, Dex.getTemplate(sep[0]));
+		let template = Dex.getTemplate(sep[0]);
 		if (!stone.exists) return this.errorReply(`Error: Mega Stone not found.`);
 		if (!template.exists) return this.errorReply(`Error: Pokemon not found.`);
 		if (template.isMega || template.name === 'Necrozma-Ultra') { // Mega Pokemon and Ultra Necrozma cannot be mega evolved
@@ -132,6 +132,7 @@ const commands = {
 		}
 		//////////////////////////////////////////
 		let mixedTemplate = Dex.deepClone(template);
+		mixedTemplate.abilities = Object.assign({}, megaTemplate.abilities);
 		if (mixedTemplate.types[0] === deltas.type) { // Add any type gains
 			mixedTemplate.types = [deltas.type];
 		} else if (deltas.type) {
