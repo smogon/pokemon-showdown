@@ -321,7 +321,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			'Kaiju Bunny': {
 				species: 'Gligar', ability: 'Immunity', item: 'Eviolite', gender: 'F',
 				moves: ['Earthquake', 'Roost', ['Toxic', 'Stealth Rock']],
-				signatureMove: 'Beastial Strike',
+				signatureMove: 'Bestial Strike',
 				evs: {hp: 252, def: 156, spd: 100}, nature: 'Impish',
 			},
 			'Kalalokki': {
