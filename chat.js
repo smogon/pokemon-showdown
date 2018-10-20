@@ -282,21 +282,22 @@ class CommandContext {
 	}
 
 	/**
-	 * @param {string} [message]
+	 * @param {string} [msg]
 	 * @return {any}
 	 */
-	parse(message) {
-		if (typeof message === 'string') {
+	parse(msg) {
+		if (typeof msg === 'string') {
 			// spawn subcontext
 			let subcontext = new CommandContext(this);
 			subcontext.recursionDepth++;
 			if (subcontext.recursionDepth > MAX_PARSE_RECURSION) {
 				throw new Error("Too much command recursion");
 			}
-			subcontext.message = message;
+			subcontext.message = msg;
 			return subcontext.parse();
 		}
-		message = this.message;
+		/** @type {any} */
+		let message = this.message;
 
 		let commandHandler = this.splitCommand(message);
 
