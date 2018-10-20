@@ -1812,7 +1812,7 @@ let BattleMovedex = {
 		type: "Flying",
 	},
 	// Kaiju Bunny
-	beastialstrike: {
+	bestialstrike: {
 		accuracy: 100,
 		basePower: 150,
 		basePowerCallback: function (pokemon, target, move) {
@@ -1821,8 +1821,8 @@ let BattleMovedex = {
 		category: "Physical",
 		desc: "Power is equal to (user's current HP * 150 / user's maximum HP), rounded down, but not less than 1.",
 		shortDesc: "Less power as user's HP decreases.",
-		id: "beastialstrike",
-		name: "Beastial Strike",
+		id: "bestialstrike",
+		name: "Bestial Strike",
 		isNonstandard: true,
 		onTryMovePriority: 100,
 		onTryMove: function () {
