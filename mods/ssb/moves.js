@@ -2995,7 +2995,7 @@ let BattleMovedex = {
 	literallycheating: {
 		accuracy: true,
 		category: "Status",
-		desc: "For seven turns, any Pokemon that boosts a stat (even if not through a move) loses all PP on the move the pokemon with the boosted stat used last.",
+		desc: "For seven turns, any Pokemon that has one of their stats boosted through any manner loses all PP on the last move they used.",
 		shortDesc: "7 turns: boosting stat: lose all PP from last move.",
 		id: "literallycheating",
 		name: "Literally Cheating",
