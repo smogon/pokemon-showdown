@@ -2134,8 +2134,8 @@ let BattleMovedex = {
 				this.add('-start', pokemon, 'Purple Pills', '[silent]');
 				this.add('-message', `${pokemon.name} swallowed some pills!`);
 				const allTypes = ['Normal', 'Fire', 'Fighting', 'Water', 'Flying', 'Grass', 'Poison', 'Electric', 'Ground', 'Psychic', 'Rock', 'Ice', 'Bug', 'Dragon', 'Ghost', 'Dark', 'Steel', 'Fairy'];
-				let type1 = allTypes[this.random(18)];
-				let type2 = allTypes[this.random(18)];
+				const type1 = allTypes[this.random(18)];
+				const type2 = allTypes[this.random(18)];
 				if (type1 === type2) {
 					pokemon.types = [type1];
 					this.add('-start', pokemon, 'typechange', `${type1}`);
@@ -2144,44 +2144,44 @@ let BattleMovedex = {
 					this.add('-start', pokemon, 'typechange', `${type1}/${type2}`);
 				}
 				// @ts-ignore track percentages to keep purple pills from resetting pp
-				pokemon.ppPercentages = pokemon.moveSlots.slice().map(m => {
-					return m.pp / m.maxpp;
-				});
+				pokemon.ppPercentages = pokemon.moveSlots.map(m =>
+					m.pp / m.maxpp
+				);
 				// Get all possible moves sorted for convience in coding
 				let newMovep = [];
 				let statMove = [], offMove1 = [], offMove2 = [];
-				for (let i in exports.BattleMovedex) {
-					let move = exports.BattleMovedex[i];
-					if (i !== move.id) continue;
+				for (const id in this.data.Movedex) {
+					const move = this.data.Movedex[id];
+					if (id !== move.id) continue;
 					if (move.isZ || move.isNonstandard || !move.isViable || move.id === 'batonpass') continue;
 					if (move.type && !pokemon.types.includes(move.type)) continue;
 					// Time to sort!
-					if (move.category === 'Status') statMove.push(move);
+					if (move.category === 'Status') statMove.push(move.id);
 					if (move.category === 'Special') {
 						if (type1 === type2) {
-							offMove1.push(move);
-							offMove2.push(move);
+							offMove1.push(move.id);
+							offMove2.push(move.id);
 						} else {
 							if (move.type === type1) {
-								offMove1.push(move);
+								offMove1.push(move.id);
 							} else if (move.type === type2) {
-								offMove2.push(move);
+								offMove2.push(move.id);
 							}
 						}
 					}
 				}
-				let move1 = offMove1[this.random(offMove1.length)];
-				if (offMove2.includes(move1)) offMove2.splice(offMove2.indexOf(move1), 1);
-				newMovep.push(toId(move1));
-				if (!offMove2.length) offMove2 = [exports.BattleMovedex['revelationdance']];
-				let move2 = offMove2[this.random(offMove2.length)];
-				newMovep.push(toId(move2));
-				newMovep.push(toId(statMove[this.random(statMove.length)]));
+				const move1 = offMove1[this.random(offMove1.length)];
+				offMove2 = offMove2.filter(move => move !== move1);
+				if (!offMove2.length) offMove2 = ['revelationdance'];
+				const move2 = offMove2[this.random(offMove2.length)];
+				newMovep.push(move1);
+				newMovep.push(move2);
+				newMovep.push(statMove[this.random(statMove.length)]);
 				newMovep.push('purplepills');
 				// Replace Moveset
 				pokemon.moveSlots = [];
 				for (const [i, moveid] of newMovep.entries()) {
-					let move = this.getMove(moveid);
+					const move = this.getMove(moveid);
 					if (!move.id) continue;
 					pokemon.moveSlots.push({
 						move: move.name,
