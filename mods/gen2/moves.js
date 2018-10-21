@@ -842,7 +842,10 @@ let BattleMovedex = {
 					this.debug('sub bypass: self hit');
 					return;
 				}
-				if (move.id === 'twineedle') delete move.secondaries;
+				if (move.id === 'twineedle') {
+					// @ts-ignore: Twineedle has move.secondaries defined
+					move.secondaries = move.secondaries.filter(p => !p.kingsrock);
+				}
 				if (move.drain) {
 					this.add('-hint', "In Gold/Silver/Crystal, draining moves always miss against Substitute.");
 					this.add('-miss', source);
