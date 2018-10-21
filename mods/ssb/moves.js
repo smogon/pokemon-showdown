@@ -2166,7 +2166,10 @@ let BattleMovedex = {
 				newMovep.push(move1);
 				let move2 = toId(offMove2[this.random(offMove2.length)]);
 				// Check to prevent move duplication
+				if (offMove2.length < 2) throw new Error(`crash`);
+				let tries = 0;
 				while (move1 === move2) {
+					if (++tries > 1000) throw new Error(`inf loop`);
 					move2 = toId(offMove2[this.random(offMove2.length)]);
 				}
 				newMovep.push(move2);
