@@ -2158,21 +2158,24 @@ let BattleMovedex = {
 					// Time to sort!
 					if (move.category === 'Status') statMove.push(move);
 					if (move.category === 'Special') {
-						if (move.type === type1) offMove1.push(move);
-						if (move.type === type2) offMove2.push(move);
+						if (type1 === type2) {
+							offMove1.push(move);
+							offMove2.push(move);
+						} else {
+							if (move.type === type1) {
+								offMove1.push(move);
+							} else if (move.type === type2) {
+								offMove2.push(move);
+							}
+						}
 					}
 				}
-				let move1 = toId(offMove1[this.random(offMove1.length)]);
-				newMovep.push(move1);
-				let move2 = toId(offMove2[this.random(offMove2.length)]);
-				// Check to prevent move duplication
-				if (offMove2.length < 2) throw new Error(`crash`);
-				let tries = 0;
-				while (move1 === move2) {
-					if (++tries > 1000) throw new Error(`inf loop`);
-					move2 = toId(offMove2[this.random(offMove2.length)]);
-				}
-				newMovep.push(move2);
+				let move1 = offMove1[this.random(offMove1.length)];
+				if (offMove2.includes(move1)) offMove2.splice(offMove2.indexOf(move1), 1);
+				newMovep.push(toId(move1));
+				if (!offMove2.length) offMove2 = [exports.BattleMovedex['revelationdance']];
+				let move2 = offMove2[this.random(offMove2.length)];
+				newMovep.push(toId(move2));
 				newMovep.push(toId(statMove[this.random(statMove.length)]));
 				newMovep.push('purplepills');
 				// Replace Moveset
