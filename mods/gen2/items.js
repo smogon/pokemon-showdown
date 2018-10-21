@@ -48,7 +48,7 @@ let BattleItems = {
 				// The kingsrock flag allows for differentiation from Snore,
 				// which can flinch and is also affected by King's Rock
 				move.secondaries.push({
-					chance: 100 * 30 / 256,
+					chance: 12,
 					volatileStatus: 'flinch',
 					kingsrock: true,
 				});
