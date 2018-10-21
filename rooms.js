@@ -1206,23 +1206,29 @@ class BasicChatRoom extends BasicRoom {
 	 * @param {User} user
 	 */
 	getIntroMessage(user) {
-		let roomMessage = `\n|raw|<div class="infobox"> You have joined ${this.title}`;
-		let message = '';
+		let message = `\n|raw|<div class="infobox"> You joined ${this.title}`;
 		if (this.modchat) {
-			roomMessage += `<br />You must be rank ${this.modchat} or higher to talk right now.`;
+			message += ` [${this.modchat} or higher to talk]`;
 		}
 		if (this.modjoin) {
-			roomMessage += `<br />You must be roomvoice or have room management capabilities to join the room right now.`;
+			let modjoin = this.modjoin === true ? this.modchat : this.modjoin;
+			message += ` [${modjoin} or higher to join]`;
 		}
 		if (this.slowchat) {
-			roomMessage += `<br />${user.can('broadcast', null, this) ? "Regular users'" : "Your"} messages must have at least ${this.slowchat} seconds between them.`;
+			message += ` [Slowchat ${this.slowchat}s]`;
 		}
-		roomMessage += `</div>`;
-		if (this.introMessage) message += `\n|raw|<div class="infobox infobox-roomintro"><div ${(!this.isOfficial ? 'class="infobox-limited"' : '')}>${this.introMessage.replace(/\n/g, '')}</div>`;
-		if (this.staffMessage && user.can('mute', null, this)) message += `${(message ? '<br />' : '\n|raw|<div class="infobox">')}(Staff intro:)<br /><div>${this.staffMessage.replace(/\n/g, '')}</div>`;
-		if (message) message += `</div>`;
-		let finalMessage = roomMessage + message;
-		return finalMessage;
+		message += `</div>`;
+		if (this.introMessage) {
+			message += `\n|raw|<div class="infobox infobox-roomintro"><div ${(!this.isOfficial ? 'class="infobox-limited"' : '')}>` +
+				this.introMessage.replace(/\n/g, '') +
+				`</div></div>`;
+		}
+		if (this.staffMessage && user.can('mute', null, this)) {
+			message += `\n|raw|<div class="infobox">(Staff intro:)<br /><div>` +
+				this.staffMessage.replace(/\n/g, '') +
+				`</div>`;
+		}
+		return message;
 	}
 	/**
 	 * @param {boolean} includeSecret
