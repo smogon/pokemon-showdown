@@ -74,6 +74,8 @@ let chatfilter = function (message, user, room) {
 	let lcMessage = message.replace(/\u039d/g, 'N').toLowerCase().replace(/[\u200b\u007F\u00AD]/g, '').replace(/\u03bf/g, 'o').replace(/\u043e/g, 'o').replace(/\u0430/g, 'a').replace(/\u0435/g, 'e').replace(/\u039d/g, 'e');
 	lcMessage = lcMessage.replace(/__|\*\*|``|\[\[|\]\]/g, '');
 
+	const isStaff = (room && ((room.chatRoomData && room.id.endsWith('staff')) || room.id.startsWith('help-'))) || user.isStaff || (this.pmTarget && this.pmTarget.isStaff);
+
 	for (let i = 0; i < filterWords.autolock.length; i++) {
 		let [line, reason] = filterWords.autolock[i];
 		let matched = false;
@@ -84,7 +86,7 @@ let chatfilter = function (message, user, room) {
 			matched = lcMessage.includes(line);
 		}
 		if (matched) {
-			if ((room && ((room.chatRoomData && room.id.endsWith('staff')) || room.id.startsWith('help-'))) || user.isStaff || (this.pmTarget && this.pmTarget.isStaff)) return `${message} __[would be locked: ${line}${reason ? ` (${reason})` : ''}]__`;
+			if (isStaff) return `${message} __[would be locked: ${line}${reason ? ` (${reason})` : ''}]__`;
 			message = message.replace(/(https?):\/\//g, '$1__:__//');
 			message = message.replace(/\./g, '__.__');
 			if (room) {
@@ -107,7 +109,7 @@ let chatfilter = function (message, user, room) {
 			matched = lcMessage.includes(line);
 		}
 		if (matched) {
-			if ((room && ((room.chatRoomData && room.id.endsWith('staff')) || room.id.startsWith('help-'))) || user.isStaff || (this.pmTarget && this.pmTarget.isStaff)) return `${message} __[would be filtered: ${line}${reason ? ` (${reason})` : ''}]__`;
+			if (isStaff) return `${message} __[would be filtered: ${line}${reason ? ` (${reason})` : ''}]__`;
 			this.errorReply(`Please do not say '${line.replace(/\\b/g, '')}'.`);
 			filterWords.warn[i][3]++;
 			saveFilters();
@@ -125,7 +127,7 @@ let chatfilter = function (message, user, room) {
 				matched = lcMessage.includes(line);
 			}
 			if (matched) {
-				if ((room && ((room.chatRoomData && room.id.endsWith('staff')) || room.id.startsWith('help-'))) || user.isStaff || (this.pmTarget && this.pmTarget.isStaff)) return `${message} __[would be filtered in public: ${line}${reason ? ` (${reason})` : ''}]__`;
+				if (isStaff) return `${message} __[would be filtered in public: ${line}${reason ? ` (${reason})` : ''}]__`;
 				this.errorReply(`Please do not say '${line.replace(/\\b/g, '')}'.`);
 				filterWords.publicwarn[i][3]++;
 				saveFilters();
