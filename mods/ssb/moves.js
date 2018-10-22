@@ -2006,7 +2006,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 10,
 		category: "Physical",
-		desc: "Raises the user and target's Attack by 3 stages, lowers the Defense by 3 stages and confuses them. Has a 100% chance to flinch the target. This move fails if used in succession.",
+		desc: "Raises the user and target's Attack by 3 stages, lowers their Defense by 3 stages, and confuses them. Has a 100% chance to flinch the target. This move fails if used in succession.",
 		shortDesc: "+3 Atk, -3 Def, confusion to user & target. Priority.",
 		id: "barfight",
 		name: "Bar Fight",
