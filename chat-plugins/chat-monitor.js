@@ -79,7 +79,7 @@ let chatfilter = function (message, user, room) {
 	for (let i = 0; i < filterWords.autolock.length; i++) {
 		let [line, reason] = filterWords.autolock[i];
 		let matched = false;
-		if (typeof line !== 'string') continue; // Failsafe to appease typescript.
+		if (typeof line !== 'string') throw new Error(`autolock filters should only have strings`);
 		if (line.startsWith('\\b') || line.endsWith('\\b')) {
 			matched = new RegExp(line).test(lcMessage);
 		} else {
@@ -102,7 +102,7 @@ let chatfilter = function (message, user, room) {
 	for (let i = 0; i < filterWords.warn.length; i++) {
 		let [line, reason] = filterWords.warn[i];
 		let matched = false;
-		if (typeof line !== 'string') continue; // Failsafe to appease typescript.
+		if (typeof line !== 'string') throw new Error(`warn filters should only have strings`);
 		if (line.startsWith('\\b') || line.endsWith('\\b')) {
 			matched = new RegExp(line).test(lcMessage);
 		} else {
@@ -120,7 +120,7 @@ let chatfilter = function (message, user, room) {
 		for (let i = 0; i < filterWords.publicwarn.length; i++) {
 			let [line, reason] = filterWords.publicwarn[i];
 			let matched = false;
-			if (typeof line !== 'string') continue; // Failsafe to appease typescript.
+			if (typeof line !== 'string') throw new Error(`publicwarn filters should only have strings`);
 			if (line.startsWith('\\b') || line.endsWith('\\b')) {
 				matched = new RegExp(line).test(lcMessage);
 			} else {
@@ -138,7 +138,7 @@ let chatfilter = function (message, user, room) {
 	if (!(room && room.chatRoomData && room.id.endsWith('staff'))) {
 		for (let line of filterWords.wordfilter) {
 			const regex = line[0];
-			if (typeof regex === 'string') continue;
+			if (typeof regex === 'string') throw new Error(`wordfilter filters should not have strings`);
 			let match = regex.exec(message);
 			while (match) {
 				let filtered = line[2] || '';
@@ -165,21 +165,21 @@ let namefilter = function (name, user) {
 	lcName = lcName.replace('herapist', '').replace('grape', '').replace('scrape', '');
 
 	for (let [line] of filterWords.autolock) {
-		if (typeof line !== 'string') continue; // Failsafe to appease typescript.
+		if (typeof line !== 'string') throw new Error(`autolock filters should only have strings`);
 		if (lcName.includes(line)) {
 			Punishments.autolock(user, Rooms('staff'), `NameMonitor`, `inappropriate name: ${name}`, `using an inappropriate name: ${name}`, false, true);
 			return '';
 		}
 	}
 	for (let [line] of filterWords.warn) {
-		if (typeof line !== 'string') continue; // Failsafe to appease typescript.
+		if (typeof line !== 'string') throw new Error(`warn filters should only have strings`);
 		if (lcName.includes(line)) {
 			user.trackRename = name;
 			return '';
 		}
 	}
 	for (let [line] of filterWords.publicwarn) {
-		if (typeof line !== 'string') continue; // Failsafe to appease typescript.
+		if (typeof line !== 'string') throw new Error(`publicwarn filters should only have strings`);
 		if (lcName.includes(line)) {
 			user.trackRename = name;
 			return '';
@@ -215,20 +215,20 @@ let nicknamefilter = function (name, user) {
 	lcName = lcName.replace('herapist', '').replace('grape', '').replace('scrape', '');
 
 	for (let [line] of filterWords.autolock) {
-		if (typeof line !== 'string') continue; // Failsafe to appease typescript.
+		if (typeof line !== 'string') throw new Error(`autolock filters should only have strings`);
 		if (lcName.includes(line)) {
 			Punishments.autolock(user, Rooms('staff'), `NicknameMonitor`, `inappropriate Pokémon nickname: ${name}`, `${toId(user)}: using an inappropriate Pokémon nickname: ${name}`, false);
 			return '';
 		}
 	}
 	for (let [line] of filterWords.warn) {
-		if (typeof line !== 'string') continue; // Failsafe to appease typescript.
+		if (typeof line !== 'string') throw new Error(`warn filters should only have strings`);
 		if (lcName.includes(line)) {
 			return '';
 		}
 	}
 	for (let [line] of filterWords.publicwarn) {
-		if (typeof line !== 'string') continue; // Failsafe to appease typescript.
+		if (typeof line !== 'string') throw new Error(`publicwarn filters should only have strings`);
 		if (lcName.includes(line)) {
 			return '';
 		}
