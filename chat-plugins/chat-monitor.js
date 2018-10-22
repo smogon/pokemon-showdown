@@ -74,7 +74,8 @@ let chatfilter = function (message, user, room) {
 	let lcMessage = message.replace(/\u039d/g, 'N').toLowerCase().replace(/[\u200b\u007F\u00AD]/g, '').replace(/\u03bf/g, 'o').replace(/\u043e/g, 'o').replace(/\u0430/g, 'a').replace(/\u0435/g, 'e').replace(/\u039d/g, 'e');
 	lcMessage = lcMessage.replace(/__|\*\*|``|\[\[|\]\]/g, '');
 
-	const isStaff = (room && ((room.chatRoomData && room.id.endsWith('staff')) || room.id.startsWith('help-'))) || user.isStaff || (this.pmTarget && this.pmTarget.isStaff);
+	const isStaffRoom = room && ((room.chatRoomData && room.id.endsWith('staff')) || room.id.startsWith('help-'));
+	const isStaff = isStaffRoom || user.isStaff || (this.pmTarget && this.pmTarget.isStaff);
 
 	for (let i = 0; i < filterWords.autolock.length; i++) {
 		let [line, reason] = filterWords.autolock[i];
