@@ -737,7 +737,7 @@ let BattleMovedex = {
 				carryOver.push({
 					hp: pokemon.hp / pokemon.maxhp,
 					status: pokemon.status,
-					statusTimer: pokemon.statusData.time,
+					statusData: pokemon.statusData,
 					pp: pokemon.moveSlots.slice().map(m => {
 						return m.pp / m.maxpp;
 					}),
@@ -768,7 +768,7 @@ let BattleMovedex = {
 
 				pokemon.hp = Math.floor(pokemon.maxhp * oldSet.hp) || 1;
 				pokemon.status = oldSet.status;
-				if (oldSet.statusTimer) pokemon.statusData.time = oldSet.statusTimer;
+				if (oldSet.statusData) pokemon.statusData = oldSet.statusData;
 				for (const [j, moveSlot] of pokemon.moveSlots.entries()) {
 					moveSlot.pp = Math.floor(moveSlot.maxpp * oldSet.pp[j]);
 				}
@@ -2006,7 +2006,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 10,
 		category: "Physical",
-		desc: "Raises the user and target's Attack by 3 stages and lowers the Defense by 3 stages; confuses them. Has a 100% chance to flinch the target. This move fails if used in succession.",
+		desc: "Raises the user and target's Attack by 3 stages, lowers the Defense by 3 stages and confuses them. Has a 100% chance to flinch the target. This move fails if used in succession.",
 		shortDesc: "+3 Atk, -3 Def, confusion to user & target. Priority.",
 		id: "barfight",
 		name: "Bar Fight",
