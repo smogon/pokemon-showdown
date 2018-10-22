@@ -188,13 +188,13 @@ exports.commands = {
 		`/movesearch [parameter], [parameter], [parameter], ... - Searches for moves that fulfill the selected criteria.`,
 		`Search categories are: type, category, gen, contest condition, flag, status inflicted, type boosted, and numeric range for base power, pp, and accuracy.`,
 		`Types must be followed by ' type', e.g., 'dragon type'.`,
-		`Stat boosts must be preceded with 'boosts ', and stat-lowering moves with 'lowers ', e.g., 'boosts attack' searches for moves that boost the attack stat of either Pok\u00e9mon.`,
-		`Z-stat boosts must be preceded with 'zboosts ', e.g., 'zboosts accuracy' searches for all status moves whose Z-Effects boost the user's accuracy.`,
+		`Stat boosts must be preceded with 'boosts ', and stat-lowering moves with 'lowers ', e.g., 'boosts attack' searches for moves that boost the Attack stat of either Pok\u00e9mon.`,
+		`Z-stat boosts must be preceded with 'zboosts ', e.g., 'zboosts accuracy' searches for all Status moves with Z-Effects that boost the user's accuracy.`,
 		`Moves that have a Z-Effect of fully restoring the user's health can be searched for with 'zrecovery'.`,
 		`Inequality ranges use the characters '>' and '<' though they behave as '≥' and '≤', e.g., 'bp > 100' searches for all moves equal to and greater than 100 base power.`,
-		`Parameters can be excluded through the use of '!', e.g., !water type' excludes all water type moves.`,
+		`Parameters can be excluded through the use of '!', e.g., !water type' excludes all Water-type moves.`,
 		`Valid flags are: authentic (bypasses substitute), bite, bullet, contact, defrost, powder, protect, pulse, punch, secondary, snatch, and sound.`,
-		`A search that includes '!protect' will show all moves that break protection.`,
+		`A search that includes '!protect' will show all moves that bypass protection.`,
 		`Parameters separated with '|' will be searched as alternatives for each other, e.g., 'fire | water' searches for all moves that are either Fire type or Water type.`,
 		`If a Pok\u00e9mon is included as a parameter, moves will be searched from its movepool.`,
 		`The order of the parameters does not matter.`,
@@ -903,6 +903,7 @@ function runMovesearch(target, cmd, canAll, message) {
 				switch (toId(targetParts[propSide])) {
 				case 'basepower': prop = 'basePower'; break;
 				case 'bp': prop = 'basePower'; break;
+				case 'power': prop = 'basePower'; break;
 				case 'acc': prop = 'accuracy'; break;
 				}
 				if (!allProperties.includes(prop)) return {reply: `'${escapeHTML(target)}' did not contain a valid property.`};
@@ -1055,6 +1056,7 @@ function runMovesearch(target, cmd, canAll, message) {
 			for (let flag in alts.flags) {
 				if (flag !== 'secondary') {
 					if ((flag in dex[move].flags) === alts.flags[flag]) {
+						if (flag === 'protect' && ['all', 'allyTeam', 'allySide', 'foeSide', 'self'].includes(dex[move].target)) continue;
 						matched = true;
 						break;
 					}
