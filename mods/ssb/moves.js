@@ -737,6 +737,7 @@ let BattleMovedex = {
 				carryOver.push({
 					hp: pokemon.hp / pokemon.maxhp,
 					status: pokemon.status,
+					statusData: pokemon.statusData,
 					pp: pokemon.moveSlots.slice().map(m => {
 						return m.pp / m.maxpp;
 					}),
@@ -767,6 +768,7 @@ let BattleMovedex = {
 
 				pokemon.hp = Math.floor(pokemon.maxhp * oldSet.hp) || 1;
 				pokemon.status = oldSet.status;
+				if (oldSet.statusData) pokemon.statusData = oldSet.statusData;
 				for (const [j, moveSlot] of pokemon.moveSlots.entries()) {
 					moveSlot.pp = Math.floor(moveSlot.maxpp * oldSet.pp[j]);
 				}
@@ -1687,8 +1689,11 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onPrepareHit: function (target, source) {
+		onTryMovePriority: 100,
+		onTryMove: function () {
 			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Gunk Shot', target);
 		},
 		onHit: function (target) {
@@ -1737,7 +1742,7 @@ let BattleMovedex = {
 		basePower: 120,
 		category: "Physical",
 		desc: "The user takes recoil damage equal to 33% the HP lost by the target, rounded half up, but not less than 1 HP.",
-		shortDesc: "Usually goes first. Has 33% recoil.",
+		shortDesc: "Has 33% recoil.",
 		id: "boi",
 		name: "B O I",
 		isNonstandard: true,
@@ -2001,7 +2006,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 10,
 		category: "Physical",
-		desc: "Raises the user and target's Attack and Defense by 3 stages and confuses them. This move fails if used in succession.",
+		desc: "Raises both the user's and the target's Attack by 3 stages, lowers the Defense of both by 3 stages, confuses both Pokemon, and has a 100% chance to cause the target to flinch.",
 		shortDesc: "+3 Atk, -3 Def, confusion to user & target. Priority.",
 		id: "barfight",
 		name: "Bar Fight",
@@ -2176,7 +2181,7 @@ let BattleMovedex = {
 				const move2 = offMove2[this.random(offMove2.length)];
 				newMovep.push(move1);
 				newMovep.push(move2);
-				newMovep.push(statMove[this.random(statMove.length)]);
+				newMovep.push(!statMove.length ? 'moonlight' : statMove[this.random(statMove.length)]);
 				newMovep.push('purplepills');
 				// Replace Moveset
 				pokemon.moveSlots = [];
@@ -2990,8 +2995,8 @@ let BattleMovedex = {
 	literallycheating: {
 		accuracy: true,
 		category: "Status",
-		desc: "For seven turns, any Pokemon that has a stat boosted (even if not through a move) loses all PP on the move it used last.",
-		shortDesc: "7 turns: stat boosted: lose all PP from last move.",
+		desc: "For seven turns, any Pokemon that has one of their stats boosted through any manner loses all PP on the last move they used.",
+		shortDesc: "7 turns: boosting stat: lose all PP from last move.",
 		id: "literallycheating",
 		name: "Literally Cheating",
 		isNonstandard: true,
