@@ -1115,8 +1115,8 @@ let BattleMovedex = {
 		basePower: 0,
 		damage: 111,
 		category: "Physical",
-		desc: "Deals 111 HP of damage and burns the target.",
-		shortDesc: "Always does 111 HP of damage; burns.",
+		desc: "Deals 111 HP of damage and burns the target. If the target already has a status ailment, it is replaced with a burn. Fails if the target is a Fire-type, or if the user is not a Fire-type.",
+		shortDesc: "Dmg=111HP; replace status w/burn; fail if foe=Fire.",
 		id: "fangofthefireking",
 		name: "Fang of the Fire King",
 		isNonstandard: true,
@@ -2300,9 +2300,13 @@ let BattleMovedex = {
 	blazeofglory: {
 		accuracy: true,
 		basePower: 0,
-		damageCallback: function (pokemon) {
+		damageCallback: function (pokemon, target) {
 			let damage = pokemon.hp;
 			pokemon.faint();
+			if (target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] || target.side.sideConditions['matblock'] || target.volatiles['protect'] || target.volatiles['spikyshield'] || target.volatiles['lilypadshield']) {
+				this.add('-zbroken', target);
+				return Math.floor(damage / 4);
+			}
 			return damage;
 		},
 		category: "Physical",
