@@ -138,7 +138,7 @@ const commands = {
 		if (target.startsWith('\n')) target = target.slice(1);
 		if (target.length >= 8192) return this.errorReply("Your code must be under 8192 characters long!");
 		const separator = '\n';
-		if (target.includes(separator)) {
+		if (target.includes(separator) || target.length > 150) {
 			const params = target.split(separator);
 			let output = [];
 			for (const param of params) {
