@@ -2368,9 +2368,6 @@ const commands = {
 		target = this.canHTML(target);
 		if (!target) return;
 
-		Rooms.rooms.forEach((curRoom, id) => {
-			if (id !== 'global') curRoom.addRaw(`<div class="broadcast-blue"><b>${target}</b></div>`).update();
-		});
 		Users.users.forEach(u => {
 			if (u.connected) u.send(`|pm|~|${u.group}${u.name}|/raw <div class="broadcast-blue"><b>${target}</b></div>`);
 		});
