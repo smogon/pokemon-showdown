@@ -1298,10 +1298,10 @@ let BattleMovedex = {
 	// False
 	frck: {
 		accuracy: true,
-		basePower: 1000,
+		damage: 1000,
 		category: "Physical",
-		desc: "Does not check accuracy. User faints if move hits.",
-		shortDesc: "Does not check accuracy. User faints if move hits.",
+		desc: "Does not check accuracy. Deals 1000 damage. User faints if move hits.",
+		shortDesc: "Deals 1000 dmg, always hits, user faints on success.",
 		id: "frck",
 		name: "fr*ck",
 		isNonstandard: true,
@@ -1856,7 +1856,7 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		volatileStatus: 'partiallytrapped',
+		volatileStatus: 'maelstrm',
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -1865,9 +1865,6 @@ let BattleMovedex = {
 			this.add('-anim', source, 'Dark Void', target);
 			this.add('-anim', source, 'Surf', target);
 		},
-		onHit: function (target, source) {
-			target.addVolatile('maelstrm', source);
-		},
 		effect: {
 			duration: 5,
 			durationCallback: function (target, source) {
@@ -1875,10 +1872,10 @@ let BattleMovedex = {
 					this.debug('maelstrm grip claw duration boost');
 					return 8;
 				}
-				return 5;
+				return this.random(5, 7);
 			},
 			onStart: function () {
-				this.add('message', 'It became trapped in an enormous maelström!');
+				this.add('-message', 'It became trapped in an enormous maelström!');
 			},
 			onResidualOrder: 11,
 			onResidual: function (pokemon) {
@@ -1889,8 +1886,8 @@ let BattleMovedex = {
 					this.damage(pokemon.maxhp / 8);
 				}
 			},
-			onEnd: function () {
-				this.add('message', 'The maelström dissipated.');
+			onEnd: function (pokemon) {
+				this.add('-message', 'The maelström dissipated.');
 			},
 			onTrapPokemon: function (pokemon) {
 				pokemon.tryTrap();
