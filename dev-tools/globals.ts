@@ -143,6 +143,7 @@ interface SecondaryEffect {
 	ability?: Ability
 	boosts?: SparseBoostsTable
 	dustproof?: boolean
+	kingsrock?: boolean
 	self?: SelfEffect
 	status?: string
 	volatileStatus?: string
@@ -538,6 +539,7 @@ interface ActiveMove extends Effect, MoveData {
 	hasSheerForce?: boolean
 	hasSTAB?: boolean
 	isExternal?: boolean
+	lastHit?: boolean
 	magnitude?: number
 	negateSecondary?: boolean
 	normalizeBoosted?: boolean
