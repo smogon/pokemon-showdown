@@ -1298,10 +1298,10 @@ let BattleMovedex = {
 	// False
 	frck: {
 		accuracy: true,
-		damage: 1000,
+		basePower: 0,
 		category: "Physical",
-		desc: "Does not check accuracy. Deals 1000 damage. User faints if move hits.",
-		shortDesc: "Deals 1000 dmg, always hits, user faints on success.",
+		desc: "Does not check accuracy. KOes the foe. User faints afterwards if move hits.",
+		shortDesc: "KOes foe. Always hits. User faints after on success.",
 		id: "frck",
 		name: "fr*ck",
 		isNonstandard: true,
@@ -1309,7 +1309,6 @@ let BattleMovedex = {
 		noPPBoosts: true,
 		priority: 0,
 		flags: {protect: 1},
-		selfdestruct: "ifHit",
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -1318,6 +1317,10 @@ let BattleMovedex = {
 			this.add('-activate', source, 'move: Celebrate');
 			this.add('-anim', source, 'Searing Sunraze Smash', target);
 			this.add('-anim', source, 'Explosion', target);
+		},
+		onHit: function (target, source) {
+			target.faint();
+			source.faint();
 		},
 		secondary: null,
 		target: "normal",
@@ -1886,7 +1889,7 @@ let BattleMovedex = {
 					this.damage(pokemon.maxhp / 8);
 				}
 			},
-			onEnd: function (pokemon) {
+			onEnd: function () {
 				this.add('-message', 'The maelström dissipated.');
 			},
 			onTrapPokemon: function (pokemon) {
