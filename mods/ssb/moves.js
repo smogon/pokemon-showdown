@@ -445,7 +445,7 @@ let BattleMovedex = {
 		basePower: 100,
 		category: "Special",
 		desc: "This move's type depends on the user's held Plate. If the target has the same type as this move, its Base Power is boosted by 1.5x.",
-		shortDesc: "Type = Plate. 1.5x base power if foe has the move's type.",
+		shortDesc: "Type = Plate. 1.5x power if foe has the move's type.",
 		id: "comeonyougunners",
 		name: "Come on you Gunners",
 		isNonstandard: true,
@@ -3387,7 +3387,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 1,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');

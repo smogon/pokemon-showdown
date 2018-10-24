@@ -456,7 +456,7 @@ let BattleStatuses = {
 				'vaporeon': ['Recover', 'Heal Bell', 'Baton Pass', 'Evoblast'],
 				'espeon': ['Aura Sphere', 'Lovely Kiss', 'Baton Pass', 'Evoblast'],
 				'umbreon': ['Knock Off', 'Toxic', 'Baton Pass', 'Evoblast'],
-				'leafeon': ['Synthesis', 'Hi Jump Kick', 'Baton Pass', 'Evoblast'],
+				'leafeon': ['Synthesis', 'High Jump Kick', 'Baton Pass', 'Evoblast'],
 				'glaceon': ['Blue Flare', 'Agility', 'Baton Pass', 'Evoblast'],
 				'sylveon': ['Earth Power', 'Calm Mind', 'Baton Pass', 'Evoblast'],
 			};
@@ -1342,13 +1342,13 @@ let BattleStatuses = {
 	volco: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c| Volco|Get Ready, I'm going to take you down!`);
+			this.add(`c|+Volco|Get Ready, I'm going to take you down!`);
 		},
 		onSwitchOut: function () {
-			this.add(`c| Volco|I've decided to spare you, lucky you.`);
+			this.add(`c|+Volco|I've decided to spare you, lucky you.`);
 		},
 		onFaint: function () {
-			this.add(`c| Volco|Well, seems I was got taken down instead.`);
+			this.add(`c|+Volco|Well, seems I was got taken down instead.`);
 		},
 	},
 	xayahh: {
