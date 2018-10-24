@@ -161,16 +161,24 @@ class OtdHandler {
 		if (this.voting) {
 			buffer += `<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:12pt;">Nominations for ${this.name} of the ${this.timeLabel} are in progress! Use <code>/${this.id} nom</code> to nominate a${['A', 'E', 'I', 'O', 'U'].includes(this.name[0]) ? 'n' : ''} ${this.name.toLowerCase()}!</p>`;
 			if (this.nominations.size) buffer += `<span style="font-weight:bold;">Nominations:</span>`;
-			buffer += `<ul>`;
 		} else {
 			buffer += `<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:10pt;">Pre-noms for ${this.name} of the ${this.timeLabel}:</p>`;
 		}
 
-		this.nominations.forEach((value, key) => {
-			buffer += Chat.html `<li><b>${value.nomination}</b> <i>(Submitted by ${value.name})</i></li>`;
+		/** @type {string[]} */
+		const entries = [];
+
+		this.nominations.forEach(value => {
+			entries.push(`<li><b>${value.nomination}</b> <i>(Submitted by ${value.name})</i></li>`);
 		});
 
-		buffer += `</ul></div>`;
+		if (entries.length > 20) {
+			buffer += `<table><tr><td><ul>${entries.slice(0, Math.ceil(entries.length / 2)).join('')}</ul></td><td><ul>${entries.slice(Math.ceil(entries.length / 2)).join('')}</ul></td></tr></table>`;
+		} else {
+			buffer += `<ul>${entries.join('')}</ul>`;
+		}
+
+		buffer += `</div>`;
 
 		return buffer;
 	}
