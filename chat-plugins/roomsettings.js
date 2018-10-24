@@ -287,6 +287,10 @@ exports.commands = {
 			this.sendReply("Your next battle will be invite-only.");
 		}
 	},
+	ionexthelp: [
+		`/ionext - Sets your next battle to be invite-only.`,
+		`/ionext off - Sets your next battle to be publicly visible.`,
+	],
 
 	inviteonly: function (target, room, user) {
 		if (!target) return this.parse('/help inviteonly');
