@@ -501,13 +501,13 @@ let BattleStatuses = {
 	'false': {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|@false|٩(•̤̀ᵕ•̤́๑)ᵒᵏᵎᵎᵎᵎ`);
+			this.add(`c|&false|٩(•̤̀ᵕ•̤́๑)ᵒᵏᵎᵎᵎᵎ`);
 		},
 		onSwitchOut: function () {
-			this.add(`c|@false|٩(๑•◡-๑)۶ⒽⓤⒼ❤`);
+			this.add(`c|&false|٩(๑•◡-๑)۶ⒽⓤⒼ❤`);
 		},
 		onFaint: function () {
-			this.add(`c|@false|ɢ∞פ⋆ᖙᵒᵝ ٩꒰”̮*ू꒱`);
+			this.add(`c|&false|ɢ∞פ⋆ᖙᵒᵝ ٩꒰”̮*ू꒱`);
 		},
 	},
 	fomg: {
@@ -784,7 +784,7 @@ let BattleStatuses = {
 	lycaniumz: {
 		noCopy: true,
 		onStart: function (pokemon) {
-			this.add(`c| Lycanium Z|It's either I win or you lose, 'cause I won't accept defeat.`);
+			this.add(`c|+Lycanium Z|It's either I win or you lose, 'cause I won't accept defeat.`);
 			if (pokemon.illusion) return;
 			let i = 0;
 			for (const moveSlot of pokemon.moveSlots) {
@@ -801,13 +801,13 @@ let BattleStatuses = {
 				return m.pp / m.maxpp;
 			});
 		},
-		onSwitchOut: function (pokemon) {
-			this.add(`c| Lycanium Z|What I gotta do to get it through to you? I'm superhuman.`);
+		onSwitchOut: function () {
+			this.add(`c|+Lycanium Z|What I gotta do to get it through to you? I'm superhuman.`);
 		},
 		onFaint: function () {
-			this.add(`c| Lycanium Z|How can I find you?`);
-			this.add(`c| Lycanium Z|Who do you turn to?`);
-			this.add(`c| Lycanium Z|How do I bind you?`);
+			this.add(`c|+Lycanium Z|How can I find you?`);
+			this.add(`c|+Lycanium Z|Who do you turn to?`);
+			this.add(`c|+Lycanium Z|How do I bind you?`);
 		},
 	},
 	macchaeger: {
