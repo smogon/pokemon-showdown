@@ -91,7 +91,7 @@ function getMoreButton(roomid, search, useExactSearch, lines, maxLines) {
 }
 
 async function runModlog(roomidList, searchString, exactSearch, maxLines) {
-	const useRipgrep = checkRipgrepAvailability() && searchString;
+	const useRipgrep = checkRipgrepAvailability();
 	let fileNameList = [];
 	let checkAllRooms = false;
 	for (const roomid of roomidList) {
@@ -126,7 +126,7 @@ async function runModlog(roomidList, searchString, exactSearch, maxLines) {
 	if (useRipgrep) {
 		// the entire directory is searched by default, no need to list every file manually
 		if (checkAllRooms) fileNameList = [LOG_PATH];
-		runRipgrepModlog(fileNameList, regexString, results);
+		runRipgrepModlog(fileNameList, regexString, results, maxLines);
 	} else {
 		const searchStringRegex = searchString ? new RegExp(regexString, 'i') : null;
 		for (const fileName of fileNameList) {
@@ -149,10 +149,20 @@ async function checkRoomModlog(path, regex, results) {
 	return results;
 }
 
-function runRipgrepModlog(paths, regexString, results) {
+function runRipgrepModlog(paths, regexString, results, lines) {
 	let stdout;
 	try {
-		stdout = execFileSync('rg', ['-i', '-e', regexString, '--no-filename', '--no-line-number', ...paths, '-g', '!modlog_global.txt'], {cwd: path.normalize(`${__dirname}/../`)});
+		const options = [
+			'-i',
+			'-m', '' + lines,
+			'--pre', 'tac',
+			'-e', regexString,
+			'--no-filename',
+			'--no-line-number',
+			...paths,
+			'-g', '!modlog_global.txt', '-g', '!README.md',
+		];
+		stdout = execFileSync('rg', options, {cwd: path.normalize(`${__dirname}/../`)});
 	} catch (error) {
 		return results;
 	}
@@ -164,7 +174,7 @@ function runRipgrepModlog(paths, regexString, results) {
 
 function prettifyResults(resultArray, roomid, searchString, exactSearch, addModlogLinks, hideIps, maxLines) {
 	if (resultArray === null) {
-		return "The modlog query has crashed.";
+		return "|popup|The modlog query has crashed.";
 	}
 	let roomName;
 	switch (roomid) {
