@@ -148,6 +148,7 @@ class HelpTicket extends Rooms.RoomGame {
 	forfeit(user) {
 		if (!(user.userid in this.players)) return;
 		this.removePlayer(user);
+		this.modnote(user, `${user.name} is no longer interested in this ticket.`);
 		if (this.playerCount - 1 > 0) return; // There are still users in the ticket room, dont close the ticket
 		this.close(user);
 		return true;
