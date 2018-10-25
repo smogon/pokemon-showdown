@@ -2642,7 +2642,7 @@ const commands = {
 			return this.errorReply(`Battle bans require a reason.`);
 		}
 		if (!room.battle && (!reason.includes('battle-') && cmd !== 'forcebattleban')) {
-			 return this.errorReply(`Battle bans require a battle replay if used outside of a battle, if the replay has expired use /forcebattleban.`);
+			 return this.errorReply(`Battle bans require a battle replay if used outside of a battle; if the battle has expired, use /forcebattleban.`);
 		}
 		if (!this.can('lock', targetUser)) return;
 		if (Punishments.isBattleBanned(targetUser)) return this.errorReply(`User '${targetUser.name}' is already banned from battling.`);
