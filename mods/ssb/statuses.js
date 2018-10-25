@@ -728,6 +728,7 @@ let BattleStatuses = {
 		noCopy: true,
 		onStart: function (target) {
 			this.add(`c|~LifeisDANK|!!!ლ(⁰⊖⁰ლ) Peent Peent.`);
+			if (target.illusion) return;
 			this.boost({spe: 2}, target);
 		},
 		onSwitchOut: function () {
