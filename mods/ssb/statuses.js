@@ -397,9 +397,6 @@ let BattleStatuses = {
 		onFaint: function () {
 			this.add(`c|@duck|Duck you! That move was too op anyway.`);
 		},
-		onModifyCritRatio: function (critRatio) {
-			return critRatio + 1;
-		},
 	},
 	e4flint: {
 		// Fire type when mega evolving implemented in scripts.js

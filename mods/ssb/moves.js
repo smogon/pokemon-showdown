@@ -1080,7 +1080,7 @@ let BattleMovedex = {
 	// duck
 	holyduck: {
 		accuracy: 95,
-		basePower: 75,
+		basePower: 90,
 		category: "Physical",
 		desc: "If this attack hits, the effects of Reflect, Light Screen, and Aurora Veil end on the target's side of the field before damage is calculated.",
 		shortDesc: "Destroys screens, unless the target is immune.",
