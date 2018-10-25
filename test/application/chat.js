@@ -49,6 +49,10 @@ describe('Chat', function () {
 			`hi <a href="mailto:email@email.com" rel="noopener" target="_blank">email@email.com</a> bye &gt;w&lt;`
 		);
 		assert.strictEqual(
+			Chat.formatText(`hi email@email.example bye >w<`),
+			`hi <a href="mailto:email@email.example" rel="noopener" target="_blank">email@email.example</a> bye &gt;w&lt;`
+		);
+		assert.strictEqual(
 			Chat.formatText(`>greentext`),
 			`<span class="greentext">&gt;greentext</span>`
 		);
