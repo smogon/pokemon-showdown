@@ -2628,7 +2628,8 @@ const commands = {
 		`/expiringblacklists OR /expiringbls - show a list of blacklisted users from the room whose blacklists are expiring in 3 months or less. Requires: % @ # & ~`,
 	],
 
-	battleban: function (target, room, user, connection) {
+	forcebattleban: 'battleban',
+	battleban: function (target, room, user, connection, cmd) {
 		if (!target) return this.parse(`/help battleban`);
 
 		const reason = this.splitTarget(target);
@@ -2639,6 +2640,9 @@ const commands = {
 		}
 		if (!reason) {
 			return this.errorReply(`Battle bans require a reason.`);
+		}
+		if (!room.battle && (!reason.includes('.pokemonshowdown.com/') && cmd !== 'forcebattleban')) {
+			 return this.errorReply(`Battle bans require a battle replay if used outside of a battle; if the battle has expired, use /forcebattleban.`);
 		}
 		if (!this.can('lock', targetUser)) return;
 		if (Punishments.isBattleBanned(targetUser)) return this.errorReply(`User '${targetUser.name}' is already banned from battling.`);
