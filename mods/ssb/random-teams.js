@@ -488,7 +488,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'Rory Mercury': {
 				species: 'Charjabug', ability: 'Recharge', item: 'Eviolite', gender: 'M',
-				moves: ['Spikes', ['Leech Life', 'U-turn'], ['Poison Fang', 'Nuzzle']],
+				moves: ['Spikes', 'Leech Life', ['Poison Fang', 'Nuzzle']],
 				signatureMove: 'Switch Off',
 				evs: {hp: 252, atk: 252, def: 4}, ivs: {spe: 0}, nature: 'Brave',
 			},

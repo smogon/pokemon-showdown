@@ -805,6 +805,10 @@ let BattleMovedex = {
 		onHit: function () {
 			this.setTerrain('grassyterrain');
 		},
+		onAfterMove: function (pokemon) {
+			if (pokemon.template.baseSpecies !== 'Aegislash' || pokemon.transformed) return;
+			if (pokemon.template.species !== 'Aegislash') pokemon.formeChange('Aegislash');
+		},
 		target: "normal",
 		type: "Steel",
 	},
@@ -3464,8 +3468,8 @@ let BattleMovedex = {
 	rotate: {
 		accuracy: 100,
 		category: "Status",
-		desc: "The next Pokemon will switch out after using its move if the move is successful.",
-		shortDesc: "Next Pokemon will switch after using its move.",
+		desc: "The user's replacement will switch out after using their move on the next turn if the replacement's move is successful.",
+		shortDesc: "User's replacement will switch after using its move.",
 		id: "rotate",
 		name: "Rotate",
 		isNonstandard: true,
@@ -3483,7 +3487,7 @@ let BattleMovedex = {
 		effect: {
 			duration: 2,
 			onStart: function () {
-				this.add('-message', `The next pokemon is going to rotate!`);
+				this.add('-message', `The user's replacement is going to rotate!`);
 			},
 			onModifyMove: function (move) {
 				move.selfSwitch = true;
@@ -3666,7 +3670,7 @@ let BattleMovedex = {
 		accuracy: true,
 		category: "Status",
 		desc: "Moves all hazards that are on the user's side of the field to the foe's side of the field. Sets Stealth Rock on the foe's side, after which the user switches out.",
-		shortDesc: "Moves hazards to foe's side. Switches out.",
+		shortDesc: "Hazards -> foe side. Set SR. User switches out.",
 		id: "smokebomb",
 		name: "Smoke Bomb",
 		isNonstandard: true,
