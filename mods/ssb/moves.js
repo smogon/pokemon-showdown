@@ -1844,7 +1844,7 @@ let BattleMovedex = {
 		flags: {protect: 1, mirror: 1, contact: 1},
 		secondary: null,
 		target: "normal",
-		type: "Dragon",
+		type: "Flying",
 	},
 	// kalalokki
 	maelstrm: {
