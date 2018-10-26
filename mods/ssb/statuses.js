@@ -279,13 +279,13 @@ let BattleStatuses = {
 	bumbadadabum: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|&bumbadadabum|The Light shall bring victory!`);
+			this.add(`c|~bumbadadabum|The Light shall bring victory!`);
 		},
 		onSwitchOut: function () {
-			this.add(`c|&bumbadadabum|Regenerator is very fair and balanced`);
+			this.add(`c|~bumbadadabum|Regenerator is very fair and balanced`);
 		},
 		onFaint: function () {
-			this.add(`c|&bumbadadabum|Who will lead my kingdom now?`);
+			this.add(`c|~bumbadadabum|Who will lead my kingdom now?`);
 		},
 	},
 	cantsay: {
