@@ -652,7 +652,7 @@ exports.commands = {
 			Rooms.global.writeChatRoomData();
 		}
 		this.modlog(`HIGHTRAFFIC`, null, room.highTraffic);
-		this.sendReply(`This room was marked as high traffic by ${user.name}.`);
+		this.addModAction(`This room was marked as high traffic by ${user.name}.`);
 	},
 	hightraffichelp: [
 		`/hightraffic [true|false] - (Un)marks a room as a high traffic room. Requires & ~`,
