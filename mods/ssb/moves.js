@@ -3506,8 +3506,8 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
-		desc: "This move has a 50% chance to boost the user's Speed by 1 stage, and this move recovers half the HP lost by the target, rounded half up. If Big Root is held, the user recovers 1.3x the normal amount of HP, rounded half down.",
-		shortDesc: "Heals 50% of the damage dealt, 50% boost Spe.",
+		desc: "This move recovers half the HP lost by the target, rounded half up. If Big Root is held, the user recovers 1.3x the normal amount of HP, rounded half down.",
+		shortDesc: "User recovers 50% of the damage dealt.",
 		id: "ultrasucc",
 		name: "Ultra Succ",
 		isNonstandard: true,
@@ -3521,10 +3521,6 @@ let BattleMovedex = {
 		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Dragon Ascent", target);
 			this.add('-anim', source, "Draining Kiss", target);
-		},
-		secondary: {
-			chance: 50,
-			self: {boosts: {spe: 1}},
 		},
 		drain: [1, 2],
 		target: "normal",
