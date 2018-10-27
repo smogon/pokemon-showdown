@@ -75,6 +75,18 @@ let BattleItems = {
 		gen: 7,
 		desc: "If held by a Volcarona with Fiery Dance, it can use Scorching Global Vortex.",
 	},
+	// The Immortal
+	buzzniumz: {
+		id: "buzzniumz",
+		name: "Buzznium Z",
+		isNonstandard: true,
+		onTakeItem: false,
+		zMove: "Ultra Succ",
+		zMoveFrom: "Drain Punch",
+		zMoveUser: ["Buzzwole"],
+		gen: 7,
+		desc: "If held by a Buzzwole with Drain Punch, it can use Ultra Succ.",
+	},
 	// Tiksi
 	tiksiumz: {
 		id: "tiksiumz",

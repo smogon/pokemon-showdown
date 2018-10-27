@@ -3503,26 +3503,33 @@ let BattleMovedex = {
 	},
 	// The Immortal
 	ultrasucc: {
-		accuracy: 100,
-		basePower: 90,
+		accuracy: true,
+		basePower: 140,
 		category: "Physical",
-		desc: "This move recovers half the HP lost by the target, rounded half up. If Big Root is held, the user recovers 1.3x the normal amount of HP, rounded half down.",
-		shortDesc: "User recovers 50% of the damage dealt.",
+		desc: "Has a 100% chance to raise the user's Speed by 1 stage.",
+		shortDesc: "100% chance to raise the user's Speed by 1.",
 		id: "ultrasucc",
 		name: "Ultra Succ",
 		isNonstandard: true,
-		pp: 10,
+		pp: 1,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, heal: 1, contact: 1},
+		flags: {},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Dragon Ascent", target);
-			this.add('-anim', source, "Draining Kiss", target);
 		},
-		drain: [1, 2],
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					spe: 1,
+				},
+			},
+		},
+		isZ: "buzzniumz",
 		target: "normal",
 		type: "Fighting",
 	},
