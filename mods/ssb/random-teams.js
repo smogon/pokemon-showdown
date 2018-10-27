@@ -559,10 +559,10 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 252, def: 136, spd: 120}, ivs: {atk: 0}, nature: 'Bold', shiny: true,
 			},
 			'The Immortal': {
-				species: 'Buzzwole', ability: 'Beast Boost 2', item: 'Assault Vest', gender: 'N', // confirm with TI
+				species: 'Buzzwole', ability: 'Beast Boost 2', item: ['Buzznium Z', 'Choice Scarf'], gender: 'M',
 				moves: ['Leech Life', 'Plasma Fists', 'Ice Punch'],
-				signatureMove: 'Ultra Succ',
-				evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
+				signatureMove: 'Drain Punch',
+				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 			},
 			'The Leprechaun': {
 				species: 'Bronzong', ability: 'Steelworker', item: 'Life Orb', gender: 'N',
@@ -703,6 +703,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				set.moves.push(move);
 			}
 			set.moves.push(ssbSet.signatureMove);
+			if (name === 'The Immortal' && set.item === 'Choice Scarf') set.moves[3] = 'Superpower';
 			team.push(set);
 		}
 		return team;
