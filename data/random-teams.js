@@ -916,6 +916,7 @@ class RandomTeams extends Dex.ModdedDex {
 				case 'superpower':
 					if (counter['Fighting'] > 1 && counter.setupType) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (hasAbility['Contrary']) isSetup = true;
 					break;
 				case 'vacuumwave':
 					if ((hasMove['closecombat'] || hasMove['machpunch']) && counter.setupType !== 'Special') rejected = true;
@@ -1031,6 +1032,7 @@ class RandomTeams extends Dex.ModdedDex {
 					break;
 				case 'psychocut': case 'zenheadbutt':
 					if ((hasMove['psychic'] || hasMove['psyshock']) && counter.setupType !== 'Physical') rejected = true;
+					if (hasMove['rest'] && hasMove['sleeptalk'] && (hasMove['superpower'] || movePool.includes('superpower'))) rejected = true;
 					break;
 				case 'psyshock':
 					if (movePool.length > 1) {
