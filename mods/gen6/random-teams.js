@@ -311,6 +311,7 @@ class RandomGen6Teams extends RandomTeams {
 				case 'superpower':
 					if (counter['Fighting'] > 1 && counter.setupType) rejected = true;
 					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (hasAbility['Contrary']) isSetup = true;
 					break;
 				case 'vacuumwave':
 					if ((hasMove['closecombat'] || hasMove['machpunch']) && counter.setupType !== 'Special') rejected = true;
