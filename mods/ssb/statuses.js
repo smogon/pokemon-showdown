@@ -279,13 +279,13 @@ let BattleStatuses = {
 	bumbadadabum: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|&bumbadadabum|The Light shall bring victory!`);
+			this.add(`c|~bumbadadabum|The Light shall bring victory!`);
 		},
 		onSwitchOut: function () {
-			this.add(`c|&bumbadadabum|Regenerator is very fair and balanced`);
+			this.add(`c|~bumbadadabum|Regenerator is very fair and balanced`);
 		},
 		onFaint: function () {
-			this.add(`c|&bumbadadabum|Who will lead my kingdom now?`);
+			this.add(`c|~bumbadadabum|Who will lead my kingdom now?`);
 		},
 	},
 	cantsay: {
@@ -298,10 +298,6 @@ let BattleStatuses = {
 		},
 		onFaint: function () {
 			this.add(`c|@cant say|bg haxor :(`);
-		},
-		onAfterMove: function (pokemon) {
-			if (pokemon.template.baseSpecies !== 'Aegislash' || pokemon.transformed) return;
-			if (pokemon.template.species !== 'Aegislash') pokemon.formeChange('Aegislash');
 		},
 	},
 	cc: {
@@ -397,9 +393,6 @@ let BattleStatuses = {
 		onFaint: function () {
 			this.add(`c|@duck|Duck you! That move was too op anyway.`);
 		},
-		onModifyCritRatio: function (critRatio) {
-			return critRatio + 1;
-		},
 	},
 	e4flint: {
 		// Fire type when mega evolving implemented in scripts.js
@@ -456,7 +449,7 @@ let BattleStatuses = {
 				'vaporeon': ['Recover', 'Heal Bell', 'Baton Pass', 'Evoblast'],
 				'espeon': ['Aura Sphere', 'Lovely Kiss', 'Baton Pass', 'Evoblast'],
 				'umbreon': ['Knock Off', 'Toxic', 'Baton Pass', 'Evoblast'],
-				'leafeon': ['Synthesis', 'Hi Jump Kick', 'Baton Pass', 'Evoblast'],
+				'leafeon': ['Synthesis', 'High Jump Kick', 'Baton Pass', 'Evoblast'],
 				'glaceon': ['Blue Flare', 'Agility', 'Baton Pass', 'Evoblast'],
 				'sylveon': ['Earth Power', 'Calm Mind', 'Baton Pass', 'Evoblast'],
 			};
@@ -501,13 +494,13 @@ let BattleStatuses = {
 	'false': {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|@false|٩(•̤̀ᵕ•̤́๑)ᵒᵏᵎᵎᵎᵎ`);
+			this.add(`c|&false|٩(•̤̀ᵕ•̤́๑)ᵒᵏᵎᵎᵎᵎ`);
 		},
 		onSwitchOut: function () {
-			this.add(`c|@false|٩(๑•◡-๑)۶ⒽⓤⒼ❤`);
+			this.add(`c|&false|٩(๑•◡-๑)۶ⒽⓤⒼ❤`);
 		},
 		onFaint: function () {
-			this.add(`c|@false|ɢ∞פ⋆ᖙᵒᵝ ٩꒰”̮*ू꒱`);
+			this.add(`c|&false|ɢ∞פ⋆ᖙᵒᵝ ٩꒰”̮*ू꒱`);
 		},
 	},
 	fomg: {
@@ -731,6 +724,7 @@ let BattleStatuses = {
 		noCopy: true,
 		onStart: function (target) {
 			this.add(`c|~LifeisDANK|!!!ლ(⁰⊖⁰ლ) Peent Peent.`);
+			if (target.illusion) return;
 			this.boost({spe: 2}, target);
 		},
 		onSwitchOut: function () {
@@ -784,7 +778,7 @@ let BattleStatuses = {
 	lycaniumz: {
 		noCopy: true,
 		onStart: function (pokemon) {
-			this.add(`c| Lycanium Z|It's either I win or you lose, 'cause I won't accept defeat.`);
+			this.add(`c|+Lycanium Z|It's either I win or you lose, 'cause I won't accept defeat.`);
 			if (pokemon.illusion) return;
 			let i = 0;
 			for (const moveSlot of pokemon.moveSlots) {
@@ -801,13 +795,13 @@ let BattleStatuses = {
 				return m.pp / m.maxpp;
 			});
 		},
-		onSwitchOut: function (pokemon) {
-			this.add(`c| Lycanium Z|What I gotta do to get it through to you? I'm superhuman.`);
+		onSwitchOut: function () {
+			this.add(`c|+Lycanium Z|What I gotta do to get it through to you? I'm superhuman.`);
 		},
 		onFaint: function () {
-			this.add(`c| Lycanium Z|How can I find you?`);
-			this.add(`c| Lycanium Z|Who do you turn to?`);
-			this.add(`c| Lycanium Z|How do I bind you?`);
+			this.add(`c|+Lycanium Z|How can I find you?`);
+			this.add(`c|+Lycanium Z|Who do you turn to?`);
+			this.add(`c|+Lycanium Z|How do I bind you?`);
 		},
 	},
 	macchaeger: {
@@ -1342,13 +1336,13 @@ let BattleStatuses = {
 	volco: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c| Volco|Get Ready, I'm going to take you down!`);
+			this.add(`c|+Volco|Get Ready, I'm going to take you down!`);
 		},
 		onSwitchOut: function () {
-			this.add(`c| Volco|I've decided to spare you, lucky you.`);
+			this.add(`c|+Volco|I've decided to spare you, lucky you.`);
 		},
 		onFaint: function () {
-			this.add(`c| Volco|Well, seems I was got taken down instead.`);
+			this.add(`c|+Volco|Well, seems I was got taken down instead.`);
 		},
 	},
 	xayahh: {

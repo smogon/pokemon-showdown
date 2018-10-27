@@ -211,7 +211,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 			},
 			'duck': {
-				species: 'Farfetch\'d', ability: 'Sniper', item: 'Stick', gender: 'M',
+				species: 'Farfetch\'d', ability: 'Super Luck', item: 'Stick', gender: 'M',
 				moves: ['Shift Gear', 'Superpower', 'Dragon Ascent'],
 				signatureMove: 'Holy Duck!',
 				evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
@@ -487,8 +487,8 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 252, def: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
 			'Rory Mercury': {
-				species: 'Charjabug', ability: 'Multiscale', item: 'Eviolite', gender: 'M',
-				moves: ['Spikes', ['Lunge', 'U-turn'], ['Poison Fang', 'Nuzzle']],
+				species: 'Charjabug', ability: 'Recharge', item: 'Eviolite', gender: 'M',
+				moves: ['Spikes', 'Leech Life', ['Poison Fang', 'Nuzzle']],
 				signatureMove: 'Switch Off',
 				evs: {hp: 252, atk: 252, def: 4}, ivs: {spe: 0}, nature: 'Brave',
 			},

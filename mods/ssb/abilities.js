@@ -404,7 +404,7 @@ let BattleAbilities = {
 	// Rory Mercury
 	recharge: {
 		desc: "Upon switching out, this Pokemon has its major status condition cured and restores 1/3 of its maximum HP, rounded down. When this Pokemon switches in, if it uses an Electric-type attack on the next turn, that attack's power will be doubled.",
-		shortDesc: "Switch-out: heals status + 33% HP. Switch-in: 2x power on Electric move next turn.",
+		shortDesc: "Switch-out: cures status + 33% HP. Switch-in: 2x power on Electric move next turn.",
 		id: "recharge",
 		name: "Recharge",
 		isNonstandard: true,
