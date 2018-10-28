@@ -170,6 +170,7 @@ class LoginServerInstance {
 					if (data) {
 						resolve([data[i], res.statusCode, null]);
 					} else {
+						if (buffer.includes('<')) buffer = 'invalid response';
 						resolve([null, res.statusCode, new Error(buffer)]);
 					}
 				}
