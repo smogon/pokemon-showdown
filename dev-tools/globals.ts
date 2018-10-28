@@ -552,6 +552,11 @@ interface ActiveMove extends Effect, MoveData {
 	statusRoll?: string
 	totalDamage?: number | false
 	willChangeForme?: boolean
+	/**
+	 * Whether or not this move is a Z-Move that broke protect
+	 * (affects damage calculation).
+	 * @type {boolean}
+	 */
 	zBrokeProtect?: boolean
 	/**
 	 * Has this move been boosted by a Z-crystal? Usually the same as

@@ -1032,13 +1032,6 @@ class Move extends Effect {
 		this.isZ = this.isZ || false;
 
 		/**
-		 * Whether or not this move is a Z-Move that broke protect
-		 * (affects damage calculation).
-		 * @type {boolean}
-		 */
-		this.zBrokeProtect = !!this.zBrokeProtect;
-
-		/**
 		 * @type {MoveFlags}
 		 * @readonly
 		 */
