@@ -1039,7 +1039,7 @@ const commands = {
 				if (result.charAt(0) === '1') {
 					connection.popup("Your team is valid for this tournament.");
 				} else {
-					const format = Dex.getFormat(tournament.originalFormat).name.replace(/\[/, '\\[').replace(/\]/, '\\]');
+					const format = Dex.getFormat(tournament.originalFormat).name.replace(/\[/g, '\\[').replace(/\]/g, '\\]');
 					connection.popup(`Your team was rejected for the following reasons:\n\n- ${result.slice(1).replace(/\n/g, '\n- ').replace(new RegExp(format, 'g'), 'this tournament')}`);
 				}
 			});
