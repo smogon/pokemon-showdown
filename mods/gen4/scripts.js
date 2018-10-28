@@ -52,7 +52,7 @@ let BattleScripts = {
 		baseDamage = this.randomizer(baseDamage);
 
 		// STAB
-		if (move.hasSTAB || type !== '???' && pokemon.hasType(type)) {
+		if (move.forceSTAB || type !== '???' && pokemon.hasType(type)) {
 			// The "???" type never gets STAB
 			// Not even if you Roost in Gen 4 and somehow manage to use
 			// Struggle in the same turn.

@@ -1104,7 +1104,7 @@ class Move extends Effect {
 		 * Forces the move to get STAB even if the type doesn't match
 		 * @type {boolean}
 		 */
-		this.hasSTAB = !!this.hasSTAB;
+		this.forceSTAB = !!this.forceSTAB;
 
 		/**
 		 * True if it can't be copied with Sketch

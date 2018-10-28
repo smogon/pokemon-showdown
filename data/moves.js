@@ -5048,11 +5048,11 @@ let BattleMovedex = {
 		onModifyMove: function (move) {
 			if (move.sourceEffect === 'waterpledge') {
 				move.type = 'Water';
-				move.hasSTAB = true;
+				move.forceSTAB = true;
 			}
 			if (move.sourceEffect === 'grasspledge') {
 				move.type = 'Fire';
-				move.hasSTAB = true;
+				move.forceSTAB = true;
 			}
 		},
 		onHit: function (target, source, move) {
@@ -6466,11 +6466,11 @@ let BattleMovedex = {
 		onModifyMove: function (move) {
 			if (move.sourceEffect === 'waterpledge') {
 				move.type = 'Grass';
-				move.hasSTAB = true;
+				move.forceSTAB = true;
 			}
 			if (move.sourceEffect === 'firepledge') {
 				move.type = 'Fire';
-				move.hasSTAB = true;
+				move.forceSTAB = true;
 			}
 		},
 		onHit: function (target, source, move) {
@@ -18416,11 +18416,11 @@ let BattleMovedex = {
 		onModifyMove: function (move) {
 			if (move.sourceEffect === 'grasspledge') {
 				move.type = 'Grass';
-				move.hasSTAB = true;
+				move.forceSTAB = true;
 			}
 			if (move.sourceEffect === 'firepledge') {
 				move.type = 'Water';
-				move.hasSTAB = true;
+				move.forceSTAB = true;
 			}
 		},
 		onHit: function (target, source, move) {
