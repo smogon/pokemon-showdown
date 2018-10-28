@@ -10,7 +10,6 @@ class RandomGen3Teams extends RandomGen4Teams {
 	 * @return {RandomTeamsTypes["RandomSet"]}
 	 */
 	randomSet(template, slot, teamDetails = {}) {
-		if (slot === undefined) slot = 1;
 		let baseTemplate = (template = this.getTemplate(template));
 		let species = template.species;
 
@@ -500,7 +499,6 @@ class RandomGen3Teams extends RandomGen4Teams {
 			}
 		}
 
-		item = 'Leftovers';
 		if (template.requiredItems) {
 			item = this.sample(template.requiredItems);
 
