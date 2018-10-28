@@ -2700,7 +2700,6 @@ class Battle extends Dex.ModdedDex {
 	 */
 	prioritizeAction(action, source, sourceEffect) {
 		if (this.event) {
-			if (!source) source = this.event.source;
 			if (!sourceEffect) sourceEffect = this.effect;
 		}
 		for (const [i, curAction] of this.queue.entries()) {

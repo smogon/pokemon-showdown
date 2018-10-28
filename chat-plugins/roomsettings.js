@@ -547,7 +547,7 @@ exports.commands = {
 					if (!user.can('makeroom')) return this.errorReply("Regex banwords are only allowed for leaders or above.");
 
 					try {
-						let test = new RegExp(word); // eslint-disable-line no-unused-vars
+						new RegExp(word); // eslint-disable-line no-new
 					} catch (e) {
 						return this.errorReply(e.message.startsWith('Invalid regular expression: ') ? e.message : `Invalid regular expression: /${word}/: ${e.message}`);
 					}

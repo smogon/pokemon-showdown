@@ -1556,9 +1556,10 @@ class RandomTeams extends Dex.ModdedDex {
 			item = 'Black Sludge';
 		}
 
-		let level = 75;
+		let level;
 
 		if (!isDoubles) {
+			/** @type {{[tier: string]: number}} */
 			let levelScale = {
 				LC: 88,
 				'LC Uber': 86,
@@ -1575,6 +1576,7 @@ class RandomTeams extends Dex.ModdedDex {
 				Uber: 73,
 				AG: 71,
 			};
+			/** @type {{[species: string]: number}} */
 			let customScale = {
 				// Banned Abilities
 				Dugtrio: 77, Gothitelle: 77, Pelipper: 79, Politoed: 79, Wobbuffet: 77,
@@ -1589,9 +1591,7 @@ class RandomTeams extends Dex.ModdedDex {
 			if (tier.charAt(0) === '(') {
 				tier = tier.slice(1, -1);
 			}
-			// @ts-ignore
 			level = levelScale[tier] || 75;
-			// @ts-ignore
 			if (customScale[template.name]) level = customScale[template.name];
 
 			// Custom level based on moveset

@@ -69,7 +69,7 @@
 		"no-sequences": "error",
 		"no-throw-literal": "error",
 		"no-unmodified-loop-condition": "error",
-		"no-unused-expressions": "error",
+		"no-unused-expressions": "off",
 		"no-useless-call": "error",
 		"no-useless-concat": "off",
 		"no-void": "off",

@@ -121,13 +121,12 @@ let BattleScripts = {
 		let doSelfDestruct = true;
 		/**@type {number | false} */
 		let damage = 0;
-		let hitResult = true;
 
 		if (move.selfdestruct && doSelfDestruct) {
 			this.faint(pokemon, pokemon, move);
 		}
 
-		hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move);
+		let hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move);
 		if (!hitResult) {
 			if (hitResult === false) this.add('-fail', target);
 			return false;
