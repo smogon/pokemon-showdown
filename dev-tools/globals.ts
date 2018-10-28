@@ -507,6 +507,7 @@ interface MoveData extends EffectData {
 	volatileStatus?: string
 	weather?: string
 	willCrit?: boolean
+	forceSTAB?: boolean
 	zMovePower?: number
 	zMoveEffect?: string
 	zMoveBoost?: SparseBoostsTable
@@ -537,7 +538,6 @@ interface ActiveMove extends Effect, MoveData {
 	hasAuraBreak?: boolean
 	hasBounced?: boolean
 	hasSheerForce?: boolean
-	hasSTAB?: boolean
 	isExternal?: boolean
 	lastHit?: boolean
 	magnitude?: number
