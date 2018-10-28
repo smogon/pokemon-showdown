@@ -290,7 +290,7 @@ let BattleScripts = {
 			hitResult = this.singleEvent('TryHit', moveData, {}, target, pokemon, move);
 
 			// Partial trapping moves still apply their volatile to Pokémon behind a Sub
-			let targetHadSub = (target && target.volatiles['substitute']);
+			const targetHadSub = !!target.volatiles['substitute'];
 			if (targetHadSub && moveData.volatileStatus && moveData.volatileStatus === 'partiallytrapped') {
 				target.addVolatile(moveData.volatileStatus, pokemon, move);
 			}

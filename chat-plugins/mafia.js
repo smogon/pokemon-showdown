@@ -2304,7 +2304,7 @@ const commands = {
 				if (isNaN(num)) {
 					if ((game.hostid === user.userid || game.cohosts.includes(user.userid)) && this.cmdToken === "!") {
 						const broadcastMessage = this.message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
-						if (room && room.lastBroadcast === broadcastMessage &&
+						if (room.lastBroadcast === broadcastMessage &&
 							room.lastBroadcastTime >= Date.now() - 20 * 1000) {
 							return this.errorReply("You can't broadcast this because it was just broadcasted.");
 						}
@@ -2444,7 +2444,7 @@ const commands = {
 			if (!game.started) return this.errorReply(`The game of mafia has not started yet.`);
 			if ((game.hostid === user.userid || game.cohosts.includes(user.userid)) && this.cmdToken === "!") {
 				const broadcastMessage = this.message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
-				if (room && room.lastBroadcast === broadcastMessage &&
+				if (room.lastBroadcast === broadcastMessage &&
 					room.lastBroadcastTime >= Date.now() - 20 * 1000) {
 					return this.errorReply("You can't broadcast this because it was just broadcasted.");
 				}
@@ -2465,7 +2465,7 @@ const commands = {
 			const game = /** @type {MafiaTracker} */ (room.game);
 			if ((game.hostid === user.userid || game.cohosts.includes(user.userid)) && this.cmdToken === "!") {
 				const broadcastMessage = this.message.toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
-				if (room && room.lastBroadcast === broadcastMessage &&
+				if (room.lastBroadcast === broadcastMessage &&
 					room.lastBroadcastTime >= Date.now() - 20 * 1000) {
 					return this.errorReply("You can't broadcast this because it was just broadcasted.");
 				}

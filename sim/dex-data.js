@@ -142,28 +142,28 @@ class Effect {
 		 * Whether or not the effect is ignored by Baton Pass.
 		 * @type {boolean}
 		 */
-		this.noCopy = this.noCopy;
+		this.noCopy = !!this.noCopy;
 		/**
 		 * Whether or not the effect affects fainted Pokemon.
 		 * @type {boolean}
 		 */
-		this.affectsFainted = this.affectsFainted;
+		this.affectsFainted = !!this.affectsFainted;
 		/**
 		 * The status that the effect may cause.
-		 * @type {string}
+		 * @type {string | undefined}
 		 */
-		this.status = this.status;
+		this.status = this.status || undefined;
 		/**
 		 * The weather that the effect may cause.
-		 * @type {string}
+		 * @type {string | undefined}
 		 */
-		this.weather = this.weather;
+		this.weather = this.weather || undefined;
 
 		/**
 		 * HP that the effect may drain.
 		 * @type {number[] | undefined}
 		 */
-		this.drain = this.drain;
+		this.drain = this.drain || undefined;
 
 		/**
 		 * @type {AnyObject}
@@ -299,7 +299,7 @@ class Format extends Effect {
 		 * random/fixed teams. null if players can bring teams.
 		 * @type {string | undefined}
 		 */
-		this.team = this.team;
+		this.team;
 		/** @type {'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule'} */
 		// @ts-ignore
 		this.effectType = Tools.getString(this.effectType) || 'Format';
@@ -307,12 +307,12 @@ class Format extends Effect {
 		 * Whether or not debug battle messages should be shown.
 		 * @type {boolean}
 		 */
-		this.debug = this.debug;
+		this.debug = !!this.debug;
 		/**
 		 * Whether or not a format is played for ladder points.
 		 * @type {boolean}
 		 */
-		this.rated = this.rated;
+		this.rated = !!this.rated;
 		/**
 		 * Game type.
 		 * @type {GameType}
@@ -354,12 +354,12 @@ class Format extends Effect {
 		 * the number that can actually be used.
 		 * @type {{battle?: number, validate?: [number, number]} | undefined}
 		 */
-		this.teamLength = this.teamLength;
+		this.teamLength = this.teamLength || undefined;
 		/**
 		 * An optional function that runs at the start of a battle.
-		 * @type {(this: Battle) => void}
+		 * @type {(this: Battle) => void | undefined}
 		 */
-		this.onBegin = this.onBegin;
+		this.onBegin = this.onBegin || undefined;
 
 		/**
 		 * If no team is selected, this format can generate a random team
@@ -399,7 +399,7 @@ class Format extends Effect {
 		 * instead.
 		 * @type {number | undefined}
 		 */
-		this.forcedLevel = this.forcedLevel;
+		this.forcedLevel = this.forcedLevel || undefined;
 		/**
 		 * Forces all pokemon above this level down to this level. This
 		 * will allow e.g. level 50 Hydreigon in Gen 5, which is not
@@ -407,7 +407,7 @@ class Format extends Effect {
 		 * 64.
 		 * @type {number | undefined}
 		 */
-		this.maxForcedLevel = this.maxForcedLevel;
+		this.maxForcedLevel = this.maxForcedLevel || undefined;
 
 		/** @type {boolean} */
 		this.noLog = !!this.noLog;
@@ -441,33 +441,33 @@ class Item extends Effect {
 		 * this item.
 		 * @type {FlingData | undefined}
 		 */
-		this.fling = this.fling;
+		this.fling = this.fling || undefined;
 		/**
 		 * If this is a Drive: The type it turns Techno Blast into.
 		 * undefined, if not a Drive.
 		 * @type {string | undefined}
 		 */
-		this.onDrive = this.onDrive;
+		this.onDrive = this.onDrive || undefined;
 		/**
 		 * If this is a Memory: The type it turns Multi-Attack into.
 		 * undefined, if not a Memory.
 		 * @type {string | undefined}
 		 */
-		this.onMemory = this.onMemory;
+		this.onMemory = this.onMemory || undefined;
 		/**
 		 * If this is a mega stone: The name (e.g. Charizard-Mega-X) of the
 		 * forme this allows transformation into.
 		 * undefined, if not a mega stone.
 		 * @type {string | undefined}
 		 */
-		this.megaStone = this.megaStone;
+		this.megaStone = this.megaStone || undefined;
 		/**
 		 * If this is a mega stone: The name (e.g. Charizard) of the
 		 * forme this allows transformation from.
 		 * undefined, if not a mega stone.
 		 * @type {string | undefined}
 		 */
-		this.megaEvolves = this.megaEvolves;
+		this.megaEvolves = this.megaEvolves || undefined;
 		/**
 		 * If this is a Z crystal: true if the Z Crystal is generic
 		 * (e.g. Firium Z). If species-specific, the name
@@ -476,14 +476,14 @@ class Item extends Effect {
 		 * undefined, if not a Z crystal.
 		 * @type {true | string | undefined}
 		*/
-		this.zMove = this.zMove;
+		this.zMove = this.zMove || undefined;
 		/**
 		 * If this is a generic Z crystal: The type (e.g. Fire) of the
 		 * Z Move this crystal allows the use of (e.g. Fire)
 		 * undefined, if not a generic Z crystal
 		 * @type {string | undefined}
 		 */
-		this.zMoveType = this.zMoveType;
+		this.zMoveType = this.zMoveType || undefined;
 		/**
 		 * If this is a species-specific Z crystal: The name
 		 * (e.g. Play Rough) of the move this crystal requires its
@@ -491,7 +491,7 @@ class Item extends Effect {
 		 * undefined, if not a species-specific Z crystal
 		 * @type {string | undefined}
 		 */
-		this.zMoveFrom = this.zMoveFrom;
+		this.zMoveFrom = this.zMoveFrom || undefined;
 		/**
 		 * If this is a species-specific Z crystal: An array of the
 		 * species of Pokemon that can use this crystal's Z move.
@@ -499,7 +499,7 @@ class Item extends Effect {
 		 * undefined, if not a species-specific Z crystal
 		 * @type {string[] | undefined}
 		 */
-		this.zMoveUser = this.zMoveUser;
+		this.zMoveUser = this.zMoveUser || undefined;
 		/**
 		 * Is this item a Berry?
 		 * @type {boolean}
@@ -510,19 +510,19 @@ class Item extends Effect {
 		 * Whether or not this item ignores the Klutz ability.
 		 * @type {boolean}
 		 */
-		this.ignoreKlutz = this.ignoreKlutz;
+		this.ignoreKlutz = !!this.ignoreKlutz;
 
 		/**
 		 * The type the holder will change into if it is an Arceus.
-		 * @type {string}
+		 * @type {string | undefined}
 		 */
-		this.onPlate = this.onPlate;
+		this.onPlate = this.onPlate || undefined;
 
 		/**
 		 * Is this item a Gem?
 		 * @type {boolean}
 		 */
-		this.isGem = this.isGem;
+		this.isGem = !!this.isGem;
 
 		if (!this.gen) {
 			if (this.num >= 689) {
@@ -563,7 +563,7 @@ class Ability extends Effect {
 		 * Represents how useful or detrimental this ability is.
 		 * @type {number}
 		 */
-		this.rating = this.rating;
+		this.rating;
 
 		/**
 		 * Whether or not this ability suppresses weather.
@@ -638,14 +638,14 @@ class Template extends Effect {
 		 * entry in `pokedex.js`.
 		 * @type {string[] | undefined}
 		 */
-		this.otherForms = this.otherForms;
+		this.otherForms = this.otherForms || undefined;
 
 		/**
 		 * Other formes. List of names of formes, appears only on the base
 		 * forme. Unlike forms, these have their own entry in `pokedex.js`.
 		 * @type {string[] | undefined}
 		 */
-		this.otherFormes = this.otherFormes;
+		this.otherFormes = this.otherFormes || undefined;
 
 		/**
 		 * Forme letter. One-letter version of the forme name. Usually the
@@ -672,13 +672,13 @@ class Template extends Effect {
 		 * Types
 		 * @type {string[]}
 		 */
-		this.types = this.types;
+		this.types;
 
 		/**
 		 * Added type (used in OMs)
 		 * @type {string | undefined}
 		 */
-		this.addedType = this.addedType;
+		this.addedType = this.addedType || undefined;
 
 		/**
 		 * Pre-evolution. '' if nothing evolves into this Pokemon.
@@ -710,7 +710,7 @@ class Template extends Effect {
 		 * Evolution level. falsy if doesn't evolve
 		 * @type {number | undefined}
 		 */
-		this.evoLevel = this.evoLevel;
+		this.evoLevel = this.evoLevel || undefined;
 
 		/**
 		 * Is NFE? True if this Pokemon can evolve (Mega evolution doesn't
@@ -745,7 +745,7 @@ class Template extends Effect {
 		 * Required item. Do not use this directly; see requiredItems.
 		 * @type {string | undefined}
 		 */
-		this.requiredItem = this.requiredItem;
+		this.requiredItem = this.requiredItem || undefined;
 
 		/**
 		 * Required items. Items required to be in this forme, e.g. a mega
@@ -759,19 +759,19 @@ class Template extends Effect {
 		 * Base stats
 		 * @type {StatsTable}
 		 */
-		this.baseStats = this.baseStats;
+		this.baseStats;
 
 		/**
 		 * Weight (in kg)
 		 * @type {number}
 		 */
-		this.weightkg = this.weightkg;
+		this.weightkg;
 
 		/**
 		 * Height (in m)
 		 * @type {number}
 		 */
-		this.heightm = this.heightm;
+		this.heightm;
 
 		/**
 		 * Color
@@ -796,13 +796,13 @@ class Template extends Effect {
 		 * Max HP. Used in the battle engine
 		 * @type {number | undefined}
 		 */
-		this.maxHP = this.maxHP;
+		this.maxHP = this.maxHP || undefined;
 
 		/**
 		 * Keeps track of exactly how a pokemon might learn a move, in the form moveid:sources[]
 		 * @type {{[moveid: string]: MoveSource[]} | undefined}
 		 */
-		this.learnset = this.learnset;
+		this.learnset = this.learnset || undefined;
 		/**
 		 * True if the only way to get this pokemon is from events.
 		 * @type {boolean}
@@ -812,7 +812,7 @@ class Template extends Effect {
 		 * List of event data for each event.
 		 * @type {EventInfo[] | undefined}
 		 */
-		this.eventPokemon = this.eventPokemon;
+		this.eventPokemon = this.eventPokemon || undefined;
 
 		if (!this.gen) {
 			if (this.num >= 722 || this.forme.startsWith('Alola')) {
@@ -895,13 +895,13 @@ class Move extends Effect {
 		 * Move base power.
 		 * @type {number}
 		 */
-		this.basePower = this.basePower;
+		this.basePower;
 
 		/**
 		 * Move base accuracy. True denotes a move that always hits
 		 * @type {true | number}
 		 */
-		this.accuracy = this.accuracy;
+		this.accuracy;
 
 		/**
 		 * Critical hit ratio. Defaults to 1.
@@ -910,22 +910,22 @@ class Move extends Effect {
 		this.critRatio = Number(this.critRatio) || 1;
 
 		/**
-		 * Will this move always be a critical hit?
-		 * @type {boolean}
+		 * Will this move always or never be a critical hit?
+		 * @type {boolean | undefined}
 		 */
-		this.willCrit = this.willCrit;
+		this.willCrit = this.willCrit || undefined;
 
 		/**
 		 * Is this move a critical hit?
-		 * @type {boolean}
+		 * @type {boolean | undefined}
 		 */
-		this.crit = this.crit;
+		this.crit = this.crit || undefined;
 
 		/**
 		 * Can this move OHKO foes?
-		 * @type {boolean | string}
+		 * @type {boolean | string | undefined}
 		 */
-		this.ohko = this.ohko;
+		this.ohko = this.ohko || undefined;
 
 		/**
 		 * Base move type. This is the move type as specified by the games,
@@ -960,50 +960,50 @@ class Move extends Effect {
 		 * Move category
 		 * @type {'Physical' | 'Special' | 'Status'}
 		 */
-		this.category = this.category;
+		this.category;
 
 		/**
 		 * Category that changes which defense to use when calculating
 		 * move damage.
 		 * @type {'Physical' | 'Special' | 'Status' | undefined}
 		 */
-		this.defensiveCategory = this.defensiveCategory;
+		this.defensiveCategory = this.defensiveCategory || undefined;
 
 		/**
 		 * Whether or not this move uses the target's boosts
 		 * @type {boolean}
 		 */
-		this.useTargetOffensive = this.useTargetOffensive;
+		this.useTargetOffensive = !!this.useTargetOffensive;
 
 		/**
 		 * Whether or not this move uses the user's boosts
 		 * @type {boolean}
 		 */
-		this.useSourceDefensive = this.useSourceDefensive;
+		this.useSourceDefensive = !!this.useSourceDefensive;
 
 		/**
 		 * Whether or not this move ignores negative attack boosts
 		 * @type {boolean}
 		 */
-		this.ignoreNegativeOffensive = this.ignoreNegativeOffensive;
+		this.ignoreNegativeOffensive = !!this.ignoreNegativeOffensive;
 
 		/**
 		 * Whether or not this move ignores positive defense boosts
 		 * @type {boolean}
 		 */
-		this.ignorePositiveDefensive = this.ignorePositiveDefensive;
+		this.ignorePositiveDefensive = !!this.ignorePositiveDefensive;
 
 		/**
 		 * Whether or not this move ignores attack boosts
 		 * @type {boolean}
 		 */
-		this.ignoreOffensive = this.ignoreOffensive;
+		this.ignoreOffensive = !!this.ignoreOffensive;
 
 		/**
 		 * Whether or not this move ignores defense boosts
 		 * @type {boolean}
 		 */
-		this.ignoreDefensive = this.ignoreDefensive;
+		this.ignoreDefensive = !!this.ignoreDefensive;
 
 		/**
 		 * Whether or not this move ignores type immunities. Defaults to
@@ -1017,26 +1017,26 @@ class Move extends Effect {
 		 * Base move PP.
 		 * @type {number}
 		 */
-		this.pp = this.pp;
+		this.pp;
 
 		/**
 		 * Whether or not this move can receive PP boosts.
 		 * @type {boolean}
 		 */
-		this.noPPBoosts = this.noPPBoosts;
+		this.noPPBoosts = !!this.noPPBoosts;
 
 		/**
 		 * Is this move a Z-Move?
-		 * @type {boolean | string | undefined}
+		 * @type {boolean | string}
 		 */
-		this.isZ = this.isZ;
+		this.isZ = this.isZ || false;
 
 		/**
 		 * Whether or not this move is a Z-Move that broke protect
 		 * (affects damage calculation).
 		 * @type {boolean}
 		 */
-		this.zBrokeProtect = this.zBrokeProtect;
+		this.zBrokeProtect = !!this.zBrokeProtect;
 
 		/**
 		 * @type {MoveFlags}
@@ -1046,9 +1046,9 @@ class Move extends Effect {
 
 		/**
 		 * Whether or not the user must switch after using this move.
-		 * @type {string | boolean}
+		 * @type {string | true | undefined}
 		 */
-		this.selfSwitch = this.selfSwitch;
+		this.selfSwitch = this.selfSwitch || undefined;
 
 		/**
 		 * Move target only used by Pressure
@@ -1057,7 +1057,7 @@ class Move extends Effect {
 		this.pressureTarget = this.pressureTarget || '';
 
 		/**
-		 * Move target used if the user is not a Ghost type
+		 * Move target used if the user is not a Ghost type (for Curse)
 		 * @type {string}
 		 */
 		this.nonGhostTarget = this.nonGhostTarget || '';
@@ -1066,33 +1066,33 @@ class Move extends Effect {
 		 * Whether or not the move ignores abilities
 		 * @type {boolean}
 		 */
-		this.ignoreAbility = this.ignoreAbility;
+		this.ignoreAbility = this.ignoreAbility || false;
 
 		/**
 		 * Move damage against the current target
-		 * @type {string | number | boolean}
+		 * @type {string | number | boolean | undefined}
 		 */
-		this.damage = this.damage;
+		this.damage = this.damage || undefined;
 
 		/**
 		 * Whether or not this move hit multiple targets
 		 * @type {boolean}
 		 */
-		this.spreadHit = this.spreadHit;
+		this.spreadHit = this.spreadHit || false;
 
 		/**
 		 * Modifier that affects damage when multiple targets
 		 * are hit
 		 * @type {number | undefined}
 		 */
-		this.spreadModifier = this.spreadModifier;
+		this.spreadModifier = this.spreadModifier || undefined;
 
 		/**
 		 * Modifier that affects damage when this move is
 		 * a critical hit
 		 * @type {number | undefined}
 		 */
-		this.critModifier = this.critModifier;
+		this.critModifier = this.critModifier || undefined;
 
 		/**
 		 * Damage modifier based on the user's types
@@ -1101,10 +1101,10 @@ class Move extends Effect {
 		this.typeMod = this.typeMod || 0;
 
 		/**
-		 * Whether or not this move gets STAB
+		 * Forces the move to get STAB even if the type doesn't match
 		 * @type {boolean}
 		 */
-		this.hasSTAB = this.hasSTAB;
+		this.hasSTAB = !!this.hasSTAB;
 
 		/**
 		 * True if it can't be copied with Sketch
@@ -1113,10 +1113,10 @@ class Move extends Effect {
 		this.noSketch = !!this.noSketch;
 
 		/**
-		 * STAB (can be modified by other effects)
+		 * STAB multiplier (can be modified by other effects) (default 1.5)
 		 * @type {number | undefined}
 		 */
-		this.stab = this.stab;
+		this.stab = this.stab || undefined;
 
 		if (!this.gen) {
 			if (this.num >= 622) {

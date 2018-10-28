@@ -242,7 +242,6 @@ class RandomGen1Teams extends RandomGen2Teams {
 	 * @return {RandomTeamsTypes["RandomSet"]}
 	 */
 	randomSet(template, slot) {
-		if (slot === undefined) slot = 1;
 		template = this.getTemplate(template);
 		if (!template.exists) template = this.getTemplate('pikachu'); // Because Gen 1.
 

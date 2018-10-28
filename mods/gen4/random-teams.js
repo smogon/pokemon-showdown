@@ -545,7 +545,6 @@ class RandomGen4Teams extends RandomGen5Teams {
 			}
 		}
 
-		item = 'Leftovers';
 		if (template.requiredItems) {
 			item = this.sample(template.requiredItems);
 

@@ -1710,7 +1710,7 @@ const commands = {
 			name = Chat.escapeHTML(user.name);
 			userid = user.userid;
 		} else {
-			target = this.splitTarget(target, true);
+			this.splitTarget(target, true);
 			name = Chat.escapeHTML(this.targetUsername);
 			userid = toId(name);
 		}

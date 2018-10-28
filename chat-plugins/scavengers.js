@@ -864,7 +864,7 @@ let commands = {
 			room.game = new ScavengerHunt(room, user, hosts, gameType, params.result);
 		}
 		this.privateModAction(`(A new scavenger hunt was created by ${user.name}.)`);
-		this.modlog('SCAV NEW', null, `${gameType ? gameType.toUpperCase() : ''}: creators - ${hosts.map(h => h.userid)}`);
+		this.modlog('SCAV NEW', null, `${gameType.toUpperCase()}: creators - ${hosts.map(h => h.userid)}`);
 	},
 
 	status: function (target, room, user) {

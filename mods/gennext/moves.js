@@ -654,7 +654,7 @@ let BattleMovedex = {
 			onDamage: function (damage, target, source, effect) {
 				if (!effect || effect.effectType !== 'Move') return;
 				if (!source || source.side === target.side) return;
-				if (effect && effect.effectType === 'Move' && damage >= target.hp) {
+				if (effect.effectType === 'Move' && damage >= target.hp) {
 					damage = target.hp - 1;
 				}
 				this.effectData.totalDamage += damage;

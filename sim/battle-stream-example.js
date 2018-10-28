@@ -96,10 +96,11 @@ const p2spec = {
 	team: Dex.packTeam(Dex.generateTeam('gen7randombattle')),
 };
 
-// eslint-disable-next-line no-unused-vars
 const p1 = new RandomPlayerAI(streams.p1);
-// eslint-disable-next-line no-unused-vars
 const p2 = new RandomPlayerAI(streams.p2);
+
+console.log("p1 is " + p1.constructor.name);
+console.log("p2 is " + p2.constructor.name);
 
 (async () => {
 	let chunk;
