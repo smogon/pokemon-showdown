@@ -543,12 +543,15 @@ let BattleStatuses = {
 		noCopy: true,
 		onStart: function () {
 			this.add(`c|@Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
+			this.add(`c|&HoeenHero|No, its not a bug Hippopotas, stop telling people to PM staff, its annoying.`);
 		},
 		onSwitchOut: function () {
 			this.add(`c|@Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
+			this.add(`c|&HoeenHero|There's still no bug!`);
 		},
 		onFaint: function () {
 			this.add(`c|@Hippopotas|Something broke. If you're seeing this message, please PM a staff member about it.`);
+			this.add(`c|&HoeenHero|My PMs are flooded with bug reports :(`);
 		},
 	},
 	hipstersigilyph: {
