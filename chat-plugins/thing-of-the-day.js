@@ -583,12 +583,14 @@ let commands = {
 		if (!this.runBroadcast()) return false;
 
 		const handler = selectHandler(this.message);
+		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
 
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 
 		handler.generateWinnerDisplay().then(text => {
 			if (!text) return this.errorReply("There is no winner yet.");
-			return this.sendReplyBox(text);
+			this.sendReplyBox(text);
+			this.room.update();
 		});
 	},
 };
