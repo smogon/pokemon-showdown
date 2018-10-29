@@ -785,7 +785,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 100,
 		category: "Physical",
-		desc: "Summons Grassy Terrain. If the user is an Aegislash, it changes to Shield Forme.",
+		desc: "Summons Grassy Terrain. If the user is an Aegislash, it changes forme to Aegislash-Blade, attacks, then goes back to its base forme.",
 		shortDesc: "Summons Grassy Terrain. Aegislash transforms.",
 		id: "aesthetislash",
 		name: "a e s t h e t i s l a s h",
