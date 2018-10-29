@@ -3034,7 +3034,7 @@ let BattleMovedex = {
 					}
 				}
 				this.add('-activate', target, 'move: Literally Cheating', target.lastMove.name, target.lastMove.pp);
-				this.add('-message', `${target.name} lost PP!`);
+				this.add('-message', `${target.name} lost all PP for the move ${target.lastMove.name}!`);
 			},
 			onStart: function (battle, source, effect) {
 				this.add('-fieldstart', 'move: Literally Cheating');
