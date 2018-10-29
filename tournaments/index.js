@@ -1039,8 +1039,10 @@ const commands = {
 				if (result.charAt(0) === '1') {
 					connection.popup("Your team is valid for this tournament.");
 				} else {
-					const format = Dex.getFormat(tournament.originalFormat).name.replace(/\[/g, '\\[').replace(/\]/g, '\\]');
-					connection.popup(`Your team was rejected for the following reasons:\n\n- ${result.slice(1).replace(/\n/g, '\n- ').replace(new RegExp(format, 'g'), 'this tournament')}`);
+					const formatName = Dex.getFormat(tournament.originalFormat).name;
+					// split/join is the easiest way to do a find/replace with an untrusted string, sadly
+					const reasons = result.slice(1).split(formatName).join('this tournament');
+					connection.popup(`Your team was rejected for the following reasons:\n\n- ${reasons.replace(/\n/g, '\n- ')}`);
 				}
 			});
 		},
