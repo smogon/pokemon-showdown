@@ -691,7 +691,7 @@ let commands = {
 	games: {
 		knockoutgames: 'kogames',
 		kogames: function (target, room, user) {
-			if (room.id !== 'scavengers') return this.errorReply("Scavenger games can only be created in the scavengers room.");
+			if (room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return this.errorReply("Scavenger games can only be created in the scavengers room.");
 			if (!this.can('mute', null, room)) return false;
 			if (room.game) return this.errorReply(`There is already a game in this room - ${room.game.title}.`);
 
@@ -701,7 +701,7 @@ let commands = {
 
 		jumpstart: {
 			"": function (target, room, user) {
-				if (room.id !== 'scavengers') return this.errorReply("Scavenger games can only be created in the scavengers room.");
+				if (room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return this.errorReply("Scavenger games can only be created in the scavengers room.");
 				if (!this.can('mute', null, room)) return false;
 				if (room.game) return this.errorReply(`There is already a game in this room - ${room.game.title}.`);
 
@@ -711,7 +711,6 @@ let commands = {
 			},
 
 			set: function (target, room, user) {
-				if (room.id !== 'scavengers') return this.errorReply("Scavenger games can only be created in the scavengers room.");
 				if (!this.can('mute', null, room)) return false;
 				if (!room.game || room.game.gameid !== "jumpstart") return this.errorReply("There is no Jump Start game currently running.");
 
@@ -722,7 +721,7 @@ let commands = {
 
 		scav: 'scavengergames',
 		scavengergames: function (target, room, user) {
-			if (room.id !== 'scavengers') return this.errorReply("Scavenger games can only be created in the scavengers room.");
+			if (room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return this.errorReply("Scavenger games can only be created in the scavengers room.");
 			if (!this.can('mute', null, room)) return false;
 			if (room.game) return this.errorReply(`There is already a game in this room - ${room.game.title}.`);
 
@@ -731,7 +730,7 @@ let commands = {
 		},
 
 		pointrally: function (target, room, user) {
-			if (room.id !== 'scavengers') return this.errorReply("Scavenger games can only be created in the scavengers room.");
+			if (room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return this.errorReply("Scavenger games can only be created in the scavengers room.");
 			if (!this.can('mute', null, room)) return false;
 			if (room.game) return this.errorReply(`There is already a game in this room - ${room.game.title}.`);
 
@@ -742,7 +741,7 @@ let commands = {
 		incog: 'incognito',
 		incognitomode: 'incognito',
 		incognito: function (target, room, user) {
-			if (room.id !== 'scavengers') return this.errorReply("Scavenger games can only be created in the scavengers room.");
+			if (room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return this.errorReply("Scavenger games can only be created in the scavengers room.");
 			if (!this.can('mute', null, room)) return false;
 			if (room.game) return this.errorReply(`There is already a game in this room - ${room.game.title}.`);
 
@@ -835,7 +834,7 @@ let commands = {
 	createunrated: 'create',
 	createmini: 'create',
 	create: function (target, room, user, connection, cmd) {
-		if (room.id !== 'scavengers') return this.errorReply("Scavenger hunts can only be created in the scavengers room.");
+		if (room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return this.errorReply("Scavenger hunts can only be created in the scavengers room.");
 		if (!this.can('mute', null, room)) return false;
 		if (room.game && !room.game.scavParentGame) return this.errorReply(`There is already a game in this room - ${room.game.title}.`);
 		let gameType = 'regular';
@@ -1005,7 +1004,7 @@ let commands = {
 	 * Hunt queuing
 	 */
 	queue: function (target, room, user) {
-		if (room.id !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		if (room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return this.errorReply("This command can only be used in the scavengers room.");
 		if (!target) return this.parse("/scavengers viewqueue");
 
 		if (!this.can('mute', null, room)) return false;
@@ -1029,7 +1028,7 @@ let commands = {
 	},
 
 	dequeue: function (target, room, user) {
-		if (room.id !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		if (room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return this.errorReply("This command can only be used in the scavengers room.");
 		if (!this.can('mute', null, room)) return false;
 		let id = parseInt(target);
 
@@ -1046,13 +1045,13 @@ let commands = {
 	},
 
 	viewqueue: function (target, room, user) {
-		if (room.id !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		if (room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return this.errorReply("This command can only be used in the scavengers room.");
 
 		this.sendReply(`|uhtml|scav-queue|${formatQueue(room.scavQueue, user, room)}`);
 	},
 
 	next: function (target, room, user) {
-		if (room.id !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		if (room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return this.errorReply("This command can only be used in the scavengers room.");
 		if (!this.can('mute', null, room)) return false;
 
 		if (!room.scavQueue || !room.scavQueue.length) return this.errorReply("The scavenger hunt queue is currently empty.");
@@ -1077,7 +1076,7 @@ let commands = {
 
 	enablequeue: 'disablequeue',
 	disablequeue: function (target, room, user) {
-		if (room.id !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		if (room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return this.errorReply("This command can only be used in the scavengers room.");
 		if (!this.can('mute', null, room)) return;
 
 		const state = this.cmd === 'disablequeue';
@@ -1094,7 +1093,7 @@ let commands = {
 	},
 
 	defaulttimer: function (target, room, user) {
-		if (room.id !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		if (room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return this.errorReply("This command can only be used in the scavengers room.");
 		if (!this.can('declare', null, room)) return;
 
 		if (!target) return this.sendReply(`The default scavenger timer is currently set at: ${room.defaultScavTimer || DEFAULT_TIMER_DURATION} minutes.`);
@@ -1159,7 +1158,7 @@ let commands = {
 	},
 	top: 'ladder',
 	ladder: function (target, room, user) {
-		if (room.id !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		if (room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return this.errorReply("This command can only be used in the scavengers room.");
 		if (!this.runBroadcast()) return false;
 
 		const isChange = (!this.broadcasting && target);
@@ -1176,7 +1175,7 @@ let commands = {
 	},
 
 	rank: function (target, room, user) {
-		if (room.id !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		if (room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return this.errorReply("This command can only be used in the scavengers room.");
 		if (!this.runBroadcast()) return false;
 
 		let targetId = toId(target) || user.userid;
@@ -1193,7 +1192,7 @@ let commands = {
 	 * Leaderboard Point Distribution Editing
 	 */
 	setblitz: function (target, room, user) {
-		if (room.id !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		if (room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return this.errorReply("This command can only be used in the scavengers room.");
 		if (!this.can('mute', null, room)) return false; // perms for viewing only
 
 		if (!target) {
@@ -1222,15 +1221,22 @@ let commands = {
 		}
 		this.privateModAction(`(${user.name} has set the points awarded for blitz for ${type} hunts to ${blitzPoints}.)`);
 		this.modlog('SCAV BLITZ', null, `${type}: ${blitzPoints}`);
+
+		// double modnote in scavs room if it is a subroomgroupchat
+		if (room.parent && !room.chatRoomData) {
+			scavsRoom.modlog(`(scavengers) SCAV BLITZ: by ${user.userid}: ${type}: ${blitzPoints}`);
+			scavsRoom.sendMods(`(${user.name} has set the points awarded for blitz for ${type} hunts to ${blitzPoints} in <<${room.id}>>.)`);
+			scavsRoom.roomlog(`(${user.name} has set the points awarded for blitz for ${type} hunts to ${blitzPoints} in <<${room.id}>>.)`);
+		}
 	},
 
 	setpoints: function (target, room, user) {
-		if (room.id !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		if (room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return this.errorReply("This command can only be used in the scavengers room.");
 		if (!this.can('mute', null, room)) return false; // perms for viewing only
 
 		if (!target) {
 			let points = [];
-			const source = Object.entries(Object.assign(DEFAULT_POINTS, room.winPoints || {}));
+			const source = Object.entries(Object.assign({}, DEFAULT_POINTS, room.winPoints || {}));
 			for (const entry of source) {
 				points.push(`${entry[0]}: ${entry[1].map((p, i) => `(${(i + 1)}) ${p}`).join(', ')}`);
 			}
@@ -1256,6 +1262,13 @@ let commands = {
 		const pointsDisplay = winPoints.map((p, i) => `(${(i + 1)}) ${p}`).join(', ');
 		this.privateModAction(`(${user.name} has set the points awarded for winning ${type} scavenger hunts to - ${pointsDisplay})`);
 		this.modlog('SCAV SETPOINTS', null, `${type}: ${pointsDisplay}`);
+
+		// double modnote in scavs room if it is a subroomgroupchat
+		if (room.parent && !room.chatRoomData) {
+			scavsRoom.modlog(`(scavengers) SCAV SETPOINTS: [room: ${room.id}] by ${user.userid}: ${type}: ${pointsDisplay}`);
+			scavsRoom.sendMods(`(${user.name} has set the points awarded for winning ${type} scavenger hunts to - ${pointsDisplay} in <<${room.id}>>)`);
+			scavsRoom.roomlog(`(${user.name} has set the points awarded for winning ${type} scavenger hunts to - ${pointsDisplay} in <<${room.id}>>)`);
+		}
 	},
 
 	/**
@@ -1379,7 +1392,7 @@ let commands = {
 	modsettings: {
 		'': 'update',
 		'update': function (target, room, user) {
-			if (!this.can('declare', null, room) || room.id !== 'scavengers') return false;
+			if (!this.can('declare', null, room) || room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return false;
 			let settings = room.scavmod || {};
 
 			this.sendReply(`|uhtml${this.cmd === 'update' ? 'change' : ''}|scav-modsettings|<div class=infobox><strong>Scavenger Moderation Settings:</strong><br /><br />` +
@@ -1388,9 +1401,9 @@ let commands = {
 		},
 
 		'ipcheck': function (target, room, user) {
-			if (!this.can('declare', null, room) || room.id !== 'scavengers') return false;
+			if (!this.can('declare', null, room) || room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return false;
 
-			let settings = scavsRoom.scavmod || {};
+			let settings = room.scavmod || {};
 			target = toId(target);
 
 			let setting = {
@@ -1404,8 +1417,8 @@ let commands = {
 			settings.ipcheck = setting[target];
 			room.scavmod = settings;
 
-			if (scavsRoom.chatRoomData) {
-				scavsRoom.chatRoomData.scavmod = scavsRoom.scavmod;
+			if (room.chatRoomData) {
+				room.chatRoomData.scavmod = room.scavmod;
 				Rooms.global.writeChatRoomData();
 			}
 
@@ -1461,7 +1474,7 @@ exports.commands = {
 	scavengerhelp: 'scavengershelp',
 	scavhelp: 'scavengershelp',
 	scavengershelp: function (target, room, user) {
-		if (!room || room.id !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
+		if (!room || room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return this.errorReply("This command can only be used in the scavengers room.");
 		if (!this.runBroadcast()) return false;
 
 		const userCommands = [
