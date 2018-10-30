@@ -1158,6 +1158,9 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "This move calls another move for use based on the battle terrain. Tri Attack in Wi-Fi battles.",
 		shortDesc: "Attack changes based on terrain. (Tri Attack)",
+		onHit: function (pokemon) {
+			this.useMove('triattack', pokemon);
+		},
 	},
 	odorsleuth: {
 		inherit: true,
