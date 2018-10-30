@@ -1087,6 +1087,7 @@ const commands = {
 
 	topic: 'roomintro',
 	roomintro: function (target, room, user, connection, cmd) {
+		if (room.battle) return this.errorReply("Battles do not support room intros.");
 		if (!target) {
 			if (!this.runBroadcast()) return;
 			if (!room.introMessage) return this.sendReply("This room does not have an introduction set.");
@@ -1141,6 +1142,7 @@ const commands = {
 
 	stafftopic: 'staffintro',
 	staffintro: function (target, room, user, connection, cmd) {
+		if (room.battle) return this.errorReply("Battles do not support staff intros.");
 		if (!target) {
 			if (!this.can('mute', null, room)) return false;
 			if (!room.staffMessage) return this.sendReply("This room does not have a staff introduction set.");
