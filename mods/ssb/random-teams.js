@@ -446,9 +446,9 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'Osiris': {
 				species: 'Pumpkaboo-Super', ability: 'Sacred Shadow', item: 'Eviolite', gender: 'M',
-				moves: ['Leech Seed', 'Will-O-Wisp', 'Seed Bomb'],
+				moves: [['Leech Seed', 'Will-O-Wisp'], 'Recover', 'Seed Bomb'],
 				signatureMove: 'Night March',
-				evs: {hp: 252, atk: 144, spd: 112}, nature: 'Adamant', shiny: true,
+				evs: {hp: 252, atk: 144, spd: 112}, ivs: {spe: 0}, nature: 'Brave', shiny: true,
 			},
 			'Overneat': {
 				species: 'Sylveon', ability: 'Fairy Aura', item: 'Life Orb', gender: 'F',
@@ -514,7 +514,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				species: 'Fletchinder', ability: 'Gale Wings v1', item: 'Eviolite', gender: 'F',
 				moves: ['Dragon Ascent', 'Sacred Fire', 'Roost'],
 				signatureMove: 'GO INDA',
-				evs: {atk: 252, hp: 248, spe: 8}, nature: 'Adamant',
+				evs: {hp: 248, atk: 252, spe: 8}, nature: 'Adamant',
 			},
 			'Slowbroth': {
 				species: 'Beheeyem', ability: 'Psychic Surge', item: 'Psychium Z', gender: 'M',

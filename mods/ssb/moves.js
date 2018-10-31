@@ -785,8 +785,8 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 100,
 		category: "Physical",
-		desc: "Summons Grassy Terrain.",
-		shortDesc: "Summons Grassy Terrain.",
+		desc: "Summons Grassy Terrain. If the user is an Aegislash, it changes forme to Aegislash-Blade, attacks, then goes back to its base forme.",
+		shortDesc: "Summons Grassy Terrain. Aegislash transforms.",
 		id: "aesthetislash",
 		name: "a e s t h e t i s l a s h",
 		isNonstandard: true,
@@ -1119,7 +1119,7 @@ let BattleMovedex = {
 		basePower: 0,
 		damage: 111,
 		category: "Physical",
-		desc: "Deals 111 HP of damage and burns the target. If the target already has a status ailment, it is replaced with a burn. Fails if the target is a Fire-type, or if the user is not a Fire-type.",
+		desc: "Deals 111 HP of damage and burns the target. If the target already has a status ailment, it is replaced with a burn. Fails if the target is a Fire-type or if the user is not a Fire-type.",
 		shortDesc: "Dmg=111HP; replace status w/burn; fail if foe=Fire.",
 		id: "fangofthefireking",
 		name: "Fang of the Fire King",
@@ -3034,7 +3034,7 @@ let BattleMovedex = {
 					}
 				}
 				this.add('-activate', target, 'move: Literally Cheating', target.lastMove.name, target.lastMove.pp);
-				this.add('-message', `${target.name} lost PP!`);
+				this.add('-message', `${target.name} lost all PP for the move ${target.lastMove.name}!`);
 			},
 			onStart: function (battle, source, effect) {
 				this.add('-fieldstart', 'move: Literally Cheating');

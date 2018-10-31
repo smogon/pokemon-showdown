@@ -963,6 +963,12 @@ let BattleStatuses = {
 		onFaint: function () {
 			this.add(`c|+Osiris|I'm getting too old for this x_x`);
 		},
+		onSourceModifyDamage: function (damage, source, target, move) {
+			if (move.typeMod > 0 && !target.illusion) {
+				this.debug('Solid Rock neutralize');
+				return this.chainModify(0.75);
+			}
+		},
 	},
 	overneat: {
 		noCopy: true,
