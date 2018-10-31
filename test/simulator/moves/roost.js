@@ -16,7 +16,7 @@ describe('Roost', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Clefable", item: 'leftovers', ability: 'unaware', moves: ['calmmind']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Dragonite", item: 'laggingtail', ability: 'multiscale', moves: ['roost']}]);
 		battle.makeChoices('move calmmind', 'move roost');
-		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-fail'));
+		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-fail|'));
 	});
 
 	it('should heal the user', function () {
