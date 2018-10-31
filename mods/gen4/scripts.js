@@ -95,8 +95,8 @@ let BattleScripts = {
 		let hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move);
 		if (!hitResult) {
 			if (hitResult === false) {
-				this.add('-fail');
-				this.hideLastTarget();
+				this.add('-fail', pokemon);
+				this.attrLastMove('[still]');
 			}
 			return false;
 		}
@@ -114,8 +114,8 @@ let BattleScripts = {
 			}
 			if (!hitResult) {
 				if (hitResult === false) {
-					this.add('-fail');
-					this.hideLastTarget();
+					this.add('-fail', pokemon);
+					this.attrLastMove('[still]');
 				}
 				return false;
 			}
@@ -189,8 +189,8 @@ let BattleScripts = {
 		hitResult = this.runEvent('TryHit', target, pokemon, move);
 		if (!hitResult) {
 			if (hitResult === false) {
-				this.add('-fail');
-				this.hideLastTarget();
+				this.add('-fail', pokemon);
+				this.attrLastMove('[still]');
 			}
 			return false;
 		}
