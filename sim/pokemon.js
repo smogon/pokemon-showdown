@@ -1234,7 +1234,8 @@ class Pokemon {
 			if (sourceEffect && sourceEffect.status === this.status) {
 				this.battle.add('-fail', this, this.status);
 			} else if (sourceEffect && sourceEffect.status) {
-				this.battle.add('-fail', this);
+				this.battle.add('-fail');
+				this.battle.hideLastTarget();
 			}
 			return false;
 		}

@@ -987,7 +987,8 @@ let BattleMovedex = {
 				}
 				let damage = this.getDamage(source, target, move);
 				if (!damage && damage !== 0) {
-					this.add('-fail', target);
+					this.add('-fail');
+					this.hideLastTarget();
 					return null;
 				}
 				damage = this.runEvent('SubDamage', target, source, move, damage);

@@ -3225,6 +3225,16 @@ class Battle extends Dex.ModdedDex {
 	}
 
 	/**
+	 * Ambiguates the target of the last move.
+	 */
+	hideLastTarget() {
+		let parts = this.log[this.lastMoveLine].split('|');
+		parts[4] = '';
+		this.log[this.lastMoveLine] = parts.join('|');
+		this.attrLastMove('[still]');
+	}
+
+	/**
 	 * @param {string} activity
 	 */
 	debug(activity) {
