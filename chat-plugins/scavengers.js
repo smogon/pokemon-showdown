@@ -1006,7 +1006,7 @@ let commands = {
 	 */
 	queue: function (target, room, user) {
 		if (room.id !== 'scavengers') return this.errorReply("This command can only be used in the scavengers room.");
-		if (!target) return this.parse(this.message.replace('queue', 'viewqueue'));
+		if (!target) return commands.viewqueue.call(this, target, room, user);
 
 		if (!this.can('mute', null, room)) return false;
 
