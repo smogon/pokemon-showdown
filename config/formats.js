@@ -1667,7 +1667,7 @@ let Formats = [
 		mod: 'gen4',
 		searchShow: false,
 		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber', 'OU', 'UUBL', 'Latias'],
+		banlist: ['Uber', 'OU', 'UUBL'],
 	},
 	{
 		name: "[Gen 4] NU",
