@@ -309,10 +309,13 @@ class Format extends Effect {
 		 */
 		this.debug = !!this.debug;
 		/**
-		 * Whether or not a format is played for ladder points.
+		 * Whether or not a format will update ladder points if searched
+		 * for using the "Battle!" button.
+		 * (Challenge and tournament games will never update ladder points.)
+		 * (Defaults to `true`.)
 		 * @type {boolean}
 		 */
-		this.rated = !!this.rated;
+		this.rated = (this.rated !== false);
 		/**
 		 * Game type.
 		 * @type {GameType}
