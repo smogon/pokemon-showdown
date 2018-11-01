@@ -614,7 +614,7 @@ let Formats = [
 		// @ts-ignore
 		onAfterSubDamagePriority: 999,
 		onAfterSubDamage: function (damage, target, source, move) {
-			// @ts-ignore 
+			// @ts-ignore
 			if (move.category !== 'Status' && source.forte && source.forte.onAfterSubDamage) this.singleEvent('AfterSubDamage', source.forte, null, target, source, move);
 		},
 	},
