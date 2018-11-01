@@ -605,6 +605,7 @@ let Formats = [
 				}
 			}
 		},
+		// @ts-ignore
 		onHitPriority: 999,
 		onHit: function (target, source, move) {
 			// @ts-ignore
