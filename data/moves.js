@@ -1977,6 +1977,7 @@ let BattleMovedex = {
 		onTryMove: function (pokemon, target, move) {
 			if (pokemon.hasType('Fire')) return;
 			this.add('-fail', pokemon, 'move: Burn Up');
+			this.attrLastMove('[still]');
 			return null;
 		},
 		self: {
@@ -5142,6 +5143,7 @@ let BattleMovedex = {
 		onTry: function (pokemon, target) {
 			if (pokemon.activeTurns > 1) {
 				this.add('-fail', pokemon);
+				this.attrLastMove('[still]');
 				this.add('-hint', "First Impression only works on your first turn out.");
 				return null;
 			}
@@ -16500,7 +16502,8 @@ let BattleMovedex = {
 				}
 				let damage = this.getDamage(source, target, move);
 				if (!damage && damage !== 0) {
-					this.add('-fail', target);
+					this.add('-fail', source);
+					this.attrLastMove('[still]');
 					return null;
 				}
 				damage = this.runEvent('SubDamage', target, source, move, damage);
@@ -16571,8 +16574,8 @@ let BattleMovedex = {
 		onTry: function (source, target) {
 			let action = this.willMove(target);
 			if (!action || action.choice !== 'move' || (action.move.category === 'Status' && action.move.id !== 'mefirst') || target.volatiles.mustrecharge) {
-				this.attrLastMove('[still]');
 				this.add('-fail', source);
+				this.attrLastMove('[still]');
 				return null;
 			}
 		},

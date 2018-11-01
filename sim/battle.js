@@ -3212,6 +3212,12 @@ class Battle extends Dex.ModdedDex {
 	 * @param {(string | number | Function | AnyObject)[]} args
 	 */
 	attrLastMove(...args) {
+		if (args.includes('[still]')) {
+			// If no animation plays, the target should never be known
+			let parts = this.log[this.lastMoveLine].split('|');
+			parts[4] = '';
+			this.log[this.lastMoveLine] = parts.join('|');
+		}
 		this.log[this.lastMoveLine] += `|${args.join('|')}`;
 	}
 
