@@ -605,6 +605,11 @@ let Formats = [
 				}
 			}
 		},
+		onHitPriority: 999,
+		onHit: function(target, source, move) {
+			// @ts-ignore
+			if (move.category !== 'Status' && source.forte && source.forte.onHit) this.singleEvent('Hit', source.forte, {}, target, source, move);
+		},
 	},
 	{
 		name: "[Gen 7] Averagemons",
