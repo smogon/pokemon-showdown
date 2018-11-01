@@ -1063,7 +1063,7 @@ let Formats = [
 
 		mod: 'gen4',
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause'],
-		banlist: ['Uber'],
+		banlist: ['Uber', 'Soul Dew'],
 		unbanlist: ['Latias'],
 	},
 	{
