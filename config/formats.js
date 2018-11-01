@@ -539,7 +539,7 @@ let Formats = [
 		name: "[Gen 7] Fortemons",
 		desc: `Pok&eacute;mon have all of their moves inherit the properties of the move in their item slot.`,
 		threads: [
-			`<a href="https://www.smogon.com/forums/threads/3638520/">Fortemons</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3638520/">Fortemons</a>`,
 		],
 
 		mod: 'fortemons',
