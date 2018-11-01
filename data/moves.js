@@ -15583,7 +15583,10 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
 		onHit: function (target) {
-			if (!target.setType('Water')) return false;
+			if (!target.setType('Water')) {
+				this.add('-fail', target);
+				return null;
+			}
 			this.add('-start', target, 'typechange', 'Water');
 		},
 		secondary: null,
