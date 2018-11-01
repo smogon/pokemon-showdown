@@ -611,6 +611,12 @@ let Formats = [
 			// @ts-ignore
 			if (move.category !== 'Status' && source.forte && source.forte.onHit) this.singleEvent('Hit', source.forte, {}, target, source, move);
 		},
+		// @ts-ignore
+		onAfterSubDamagePriority: 999,
+		onAfterSubDamage: function (damage, target, source, move) {
+			// @ts-ignore 
+			if (move.category !== 'Status' && source.forte && source.forte.onAfterSubDamage) this.singleEvent('AfterSubDamage', source.forte, null, target, source, move);
+		},
 	},
 	{
 		name: "[Gen 7] Averagemons",
