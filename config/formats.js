@@ -1143,6 +1143,7 @@ let Formats = [
 		mod: 'gen4',
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause'],
 		banlist: ['Uber'],
+		unbanlist: ['Latias'],
 	},
 	{
 		name: "[Gen 3] OU",
