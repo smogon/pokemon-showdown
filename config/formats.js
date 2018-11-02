@@ -617,7 +617,7 @@ let Formats = [
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
 		banlist: [
 			'Gengar-Mega', 'Mawile-Mega', 'Medicham-Mega', 'Smeargle',
-			'Arena Trap', 'Huge Power', 'Pure Power', 'Shadow Tag', 'Deep Sea Tooth', 'Eviolite', 'Light Ball', 'Thick Club', 'Chatter',
+			'Arena Trap', 'Huge Power', 'Pure Power', 'Shadow Tag', 'Deep Sea Tooth', 'Eviolite', 'Light Ball', 'Thick Club', 'Baton Pass', 'Chatter',
 		],
 		onModifyTemplate: function (template) {
 			let dex = this && this.deepClone ? this : Dex;
