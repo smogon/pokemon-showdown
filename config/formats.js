@@ -219,46 +219,6 @@ let Formats = [
 		},
 	},
 	{
-		name: "[Gen 7] Ultra Spooky Cup",
-		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3642514/">Ultra Spooky Cup</a>`],
-
-		mod: 'gen7',
-		forcedLevel: 50,
-		teamLength: {
-			validate: [3, 6],
-			battle: 3,
-		},
-		ruleset: ['Pokemon', 'Standard GBU'],
-		banlist: ['Mega'],
-		unbanlist: ['Darkrai', 'Hoopa-Base', 'Marshadow'],
-		onValidateSet: function (set) {
-			let spookyMonsList = [
-				'Abomasnow', 'Absol', 'Aegislash', 'Aerodactyl', 'Araquanid', 'Araquanid-Totem', 'Arbok', 'Ariados', 'Baltoy', 'Banette', 'Basculin',
-				'Basculin-Blue-Striped', 'Beheeyem', 'Bewear', 'Bisharp', 'Blacephalon', 'Cacnea', 'Cacturne', 'Carnivine', 'Carvanha', 'Chandelure',
-				'Claydol', 'Cofagrigus', 'Crawdaunt', 'Croagunk', 'Crobat', 'Cubone', 'Darkrai', 'Decidueye', 'Dewpider', 'Dhelmise', 'Ditto', 'Doublade',
-				'Drapion', 'Drifblim', 'Drifloon', 'Drowzee', 'Dusclops', 'Dusknoir', 'Duskull', 'Dustox', 'Eevee', 'Ekans', 'Electivire', 'Elgyem', 'Espeon',
-				'Espurr', 'Exploud', 'Frillish', 'Froslass', 'Galvantula', 'Garbodor', 'Gastly', 'Gengar', 'Gigalith', 'Glalie', 'Gligar', 'Gliscor', 'Golbat',
-				'Golett', 'Golisopod', 'Golurk', 'Gothita', 'Gothitelle', 'Gothorita', 'Gourgeist', 'Gourgeist-Large', 'Gourgeist-Small', 'Gourgeist-Super', 'Granbull',
-				'Grimer', 'Grimer-Alola', 'Gulpin', 'Guzzlord', 'Haunter', 'Honchkrow', 'Honedge', 'Hoopa', 'Hoothoot', 'Houndoom', 'Houndour', 'Huntail',
-				'Hydreigon', 'Hypno', 'Incineroar', 'Jellicent', 'Joltik', 'Kabuto', 'Kabutops', 'Koffing', 'Krokorok', 'Krookodile', 'Lampent', 'Larvesta',
-				'Liepard', 'Litwick', 'Loudred', 'Lunatone', 'Lycanroc-Midnight', 'Magmortar', 'Malamar', 'Mandibuzz', 'Mareanie', 'Marowak', 'Marowak-Alola',
-				'Marowak-Alola-Totem', 'Marshadow', 'Mawile', 'Meowstic', 'Meowstic-F', 'Meowth-Alola', 'Mightyena', 'Mimikyu', 'Mimikyu-Totem', 'Misdreavus',
-				'Mismagius', 'Mr. Mime', 'Muk', 'Muk-Alola', 'Murkrow', 'Naganadel', 'Nihilego', 'Noctowl', 'Noibat', 'Noivern', 'Omanyte', 'Omastar', 'Palossand',
-				'Pancham', 'Pangoro', 'Paras', 'Parasect', 'Persian-Alola', 'Phantump', 'Pikachu', 'Pinsir', 'Poipole', 'Pumpkaboo', 'Pumpkaboo-Large', 'Pumpkaboo-Small',
-				'Pumpkaboo-Super', 'Purrloin', 'Raticate', 'Raticate-Alola', 'Raticate-Alola-Totem', 'Rattata', 'Rattata-Alola', 'Rotom', 'Rotom-Fan', 'Rotom-Frost',
-				'Rotom-Heat', 'Rotom-Mow', 'Rotom-Wash', 'Sableye', 'Salandit', 'Salazzle', 'Salazzle-Totem', 'Sandygast', 'Scolipede', 'Seviper', 'Sharpedo', 'Shedinja',
-				'Shiftry', 'Shiinotic', 'Shuppet', 'Sigilyph', 'Silvally', 'Silvally-Bug', 'Silvally-Dark', 'Silvally-Dragon', 'Silvally-Electric', 'Silvally-Fairy',
-				'Silvally-Fighting', 'Silvally-Fire', 'Silvally-Flying', 'Silvally-Ghost', 'Silvally-Grass', 'Silvally-Ground', 'Silvally-Ice', 'Silvally-Poison',
-				'Silvally-Psychic', 'Silvally-Rock', 'Silvally-Steel', 'Silvally-Water', 'Skorupi', 'Skuntank', 'Slurpuff', 'Sneasel', 'Snorunt', 'Spinarak',
-				'Spiritomb', 'Stufful', 'Stunky', 'Swalot', 'Swirlix', 'Swoobat', 'Tangela', 'Tangrowth', 'Tentacool', 'Tentacruel', 'Toxapex', 'Toxicroak',
-				'Trevenant', 'Trubbish', 'Type: Null', 'Umbreon', 'Unown', 'Venipede', 'Victreebel', 'Vileplume', 'Volcarona', 'Vullaby', 'Weavile', 'Weezing',
-				'Whirlipede', 'Whismur', 'Wobbuffet', 'Woobat', 'Xurkitree', 'Yamask', 'Yanmega', 'Zangoose', 'Zoroark', 'Zorua', 'Zubat', 'Zweilous',
-			];
-			let template = this.getTemplate(set.species);
-			if (!spookyMonsList.includes(template.species)) return [`${template.species} is banned.`];
-		},
-	},
-	{
 		name: "[Gen 7] Custom Game",
 
 		mod: 'gen7',
