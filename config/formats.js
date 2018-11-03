@@ -564,18 +564,16 @@ let Formats = [
 				// @ts-ignore
 				if (pokemon.forte.self) {
 					// @ts-ignore
-					if (pokemon.forte.self.onHit) {
-						if (move.self && move.self.onHit) {
+					if (pokemon.forte.self.onHit && move.self && move.self.onHit) {
+						// @ts-ignore
+						for (let i in pokemon.forte.self) {
+							if (i.startsWith('onHit')) continue;
 							// @ts-ignore
-							for (let i in pokemon.forte.self) {
-								if (i.startsWith('onHit')) continue;
-								// @ts-ignore
-								move.self[i] = pokemon.forte.self[i];
-							}
-						} else {
-							// @ts-ignore
-							move.self = Object.assign(move.self || {}, pokemon.forte.self);
+							move.self[i] = pokemon.forte.self[i];
 						}
+					} else {
+						// @ts-ignore
+						move.self = Object.assign(move.self || {}, pokemon.forte.self);
 					}
 				}
 				// @ts-ignore
@@ -603,13 +601,22 @@ let Formats = [
 			// @ts-ignore
 			if (move && move.category !== 'Status' && source.forte && source.forte.onHit) this.singleEvent('Hit', source.forte, {}, target, source, move);
 			// @ts-ignore
-			if (move && move.category !== 'Status' && source.forte && source.forte.self && source.forte.self.onHit) this.singleEvent('Hit', source.forte, {}, target, source, move);
+			if (move && move.category !== 'Status' && source.forte && source.forte.self && source.forte.self.onHit) this.singleEvent('Hit', source.forte.self, {}, source, source, move);
 		},
 		// @ts-ignore
 		onAfterSubDamagePriority: 1,
 		onAfterSubDamage: function (damage, target, source, move) {
 			// @ts-ignore
 			if (move && move.category !== 'Status' && source.forte && source.forte.onAfterSubDamage) this.singleEvent('AfterSubDamage', source.forte, null, target, source, move);
+		},
+		onModifySecondaries: function (secondaries, target, source, move) {
+			if (secondaries.some(s => !!s.self)) move.selfDropped = false;
+		},
+		// @ts-ignore
+		onAfterMoveSecondarySelfPriority: 1,
+		onAfterMoveSecondarySelf: function (source, target, move) {
+			// @ts-ignore
+			if (move && move.category !== 'Status' && source.forte && source.forte.onAfterMoveSecondarySelf) this.singleEvent('AfterMoveSecondarySelf', source.forte, null, source, target, move);
 		},
 	},
 	{
