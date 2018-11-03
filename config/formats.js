@@ -548,17 +548,12 @@ let Formats = [
 				if (pokemon.forte.self) {
 					// @ts-ignore
 					if (pokemon.forte.self.onHit) {
-						if (move.self) {
-							if (move.self.onHit) {
+						if (move.self && move.self.onHit) {
+							// @ts-ignore
+							for (let i in pokemon.forte.self) {
+								if (i.startsWith('onHit')) continue;
 								// @ts-ignore
-								for (let i in pokemon.forte.self) {
-									if (i.startsWith('onHit')) continue;
-									// @ts-ignore
-									move.self[i] = pokemon.forte.self[i];
-								}
-							} else {
-								// @ts-ignore
-								move.self = Object.assign(move.self || {}, pokemon.forte.self);
+								move.self[i] = pokemon.forte.self[i];
 							}
 						} else {
 							// @ts-ignore
