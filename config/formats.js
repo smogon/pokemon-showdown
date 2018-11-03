@@ -601,9 +601,14 @@ let Formats = [
 		onHitPriority: 1,
 		onHit: function (target, source, move) {
 			// @ts-ignore
-			if (move && move.category !== 'Status' && source.forte && source.forte.onHit) this.singleEvent('Hit', source.forte, {}, target, source, move);
-			// @ts-ignore
-			if (move && move.category !== 'Status' && source.forte && source.forte.self && source.forte.self.onHit) this.singleEvent('Hit', source.forte.self, {}, source, source, move);
+			if (move && move.category !== 'Status' && source.forte) {
+				// @ts-ignore
+				if (source.forte.onHit) this.singleEvent('Hit', source.forte, {}, target, source, move);
+				// @ts-ignore
+				if (source.forte.self && source.forte.self.onHit) this.singleEvent('Hit', source.forte.self, {}, source, source, move);
+				// @ts-ignore
+				if (source.forte.onAfterHit) this.singleEvent('AfterHit', source.forte, {}, target, source, move);
+			}
 		},
 		// @ts-ignore
 		onAfterSubDamagePriority: 1,
