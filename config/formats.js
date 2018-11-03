@@ -412,7 +412,7 @@ let Formats = [
 		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3643177/">Battle Spot Special 13</a>`],
 
 		mod: 'gen7',
-		gametype: 'doubles',
+		gameType: 'doubles',
 		forcedLevel: 100,
 		teamLength: {
 			validate: [4, 6],
