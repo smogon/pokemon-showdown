@@ -422,27 +422,18 @@ let Formats = [
 		banlist: ['Unreleased', 'Illegal', 'Battle Bond'],
 		onValidateSet: function (set, format) {
 			let legalMonsList = [
-				'Zapdos', 'Moltres', 'Mewtwo', 'Mew', 'Raikou', 'Entei', 'Suicune', 'Lugia', 'Ho-Oh', 'Celebi',
-				'Regirock', 'Regice', 'Registeel', 'Latias', 'Latios', 'Kyogre', 'Groudon', 'Rayquaza', 'Jirachi',
-				'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Uxie', 'Mesprit', 'Azelf', 'Dialga',
-				'Palkia', 'Heatran', 'Regigigas', 'Giratina', 'Giratina-Origin', 'Cresselia', 'Phione', 'Manaphy',
-				'Darkrai', 'Shaymin', 'Shaymin-Sky', 'Arceus', 'Arceus-Bug', 'Arceus-Dark', 'Arceus-Dragon',
-				'Arceus-Electric', 'Arceus-Fairy', 'Arceus-Fighting', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Ghost',
-				'Arceus-Grass', 'Arceus-Ground', 'Arceus-Ice', 'Arceus-Poison', 'Arceus-Psychic', 'Arceus-Rock',
-				'Arceus-Steel', 'Arceus-Water', 'Victini', 'Cobalion', 'Terrakion', 'Virizion', 'Tornadus',
-				'Tornadus-Therian', 'Thundurus', 'Thundurus-Therian', 'Reshiram', 'Zekrom', 'Landorus', 'Landorus-Therian',
-				'Kyurem', 'Kyurem-Black', 'Kyurem-White', 'Keldeo', 'Keldeo-Resolute', 'Meloetta', 'Genesect', 'Xerneas',
-				'Yveltal', 'Zygarde', 'Diancie', 'Hoopa', 'Hoopa-Unbound', 'Volcanion', 'Type: Null', 'Silvally',
-				'Silvally-Bug', 'Silvally-Dark', 'Silvally-Dragon', 'Silvally-Electric', 'Silvally-Fairy',
-				'Silvally-Fighting', 'Silvally-Fire', 'Silvally-Flying', 'Silvally-Ghost', 'Silvally-Grass',
-				'Silvally-Ground', 'Silvally-Ice', 'Silvally-Poison',	'Silvally-Psychic', 'Silvally-Rock', 'Silvally-Steel',
-				'Silvally-Water', 'Tapu Koko', 'Tapu Lele', 'Tapu Bulu', 'Tapu Fini', 'Cosmog', 'Cosmoem', 'Solgaleo',
-				'Lunala', 'Nihilego', 'Buzzwole', 'Pheromosa', 'Xurkitree', 'Celesteela', 'Kartana', 'Guzzlord', 'Necrozma',
-				'Necrozma-Dusk-Mane', 'Necrozma-Dawn-Wings', 'Necrozma-Ultra', 'Magearna', 'Marshadow', 'Poipole',
-				'Naganadel', 'Stakataka', 'Blacephalon', 'Zeraora',
+				'Articuno', 'Zapdos', 'Moltres', 'Mewtwo', 'Mew', 'Raikou', 'Entei', 'Suicune', 'Lugia', 'Ho-Oh',
+				'Celebi', 'Regirock', 'Regice', 'Registeel', 'Latias', 'Latios', 'Kyogre', 'Groudon', 'Rayquaza',
+				'Jirachi', 'Deoxys', 'Uxie', 'Mesprit', 'Azelf', 'Dialga', 'Palkia', 'Heatran', 'Regigigas',
+				'Giratina', 'Cresselia', 'Phione', 'Manaphy', 'Darkrai', 'Shaymin', 'Arceus', 'Victini', 'Cobalion',
+				'Terrakion', 'Virizion', 'Tornadus', 'Thundurus', 'Reshiram', 'Zekrom', 'Landorus', 'Kyurem', 'Keldeo',
+				'Meloetta', 'Genesect', 'Xerneas', 'Yveltal', 'Zygarde', 'Diancie', 'Hoopa', 'Volcanion', 'Type: Null',
+				'Silvally', 'Tapu Koko', 'Tapu Lele', 'Tapu Bulu', 'Tapu Fini', 'Cosmog', 'Cosmoem', 'Solgaleo',
+				'Lunala', 'Nihilego', 'Buzzwole', 'Pheromosa', 'Xurkitree', 'Celesteela', 'Kartana', 'Guzzlord',
+				'Necrozma', 'Magearna', 'Marshadow', 'Poipole', 'Naganadel', 'Stakataka', 'Blacephalon', 'Zeraora',
 			];
 			let template = this.getTemplate(set.species);
-			if (!legalMonsList.includes(template.species)) return [`${template.species} is banned in ${format.name}`];
+			if (!legalMonsList.includes(template.baseSpecies)) return [`${template.species} is banned in ${format.name}`];
 		},
 	},
 	{
