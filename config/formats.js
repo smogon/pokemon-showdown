@@ -524,7 +524,7 @@ let Formats = [
 			return problems.length ? problems : null;
 		},
 		checkLearnset: function (move, template, lsetData, set) {
-			if (move.id === 'beatup' || move.id === 'fakeout' || move.damageCallback || Array.isArray(move.multihit)) return {type: 'invalid'};
+			if (move.id === 'beatup' || move.id === 'fakeout' || move.damageCallback || move.multihit) return {type: 'invalid'};
 			return this.checkLearnset(move, template, lsetData, set);
 		},
 		onBegin: function () {
@@ -548,7 +548,22 @@ let Formats = [
 				// @ts-ignore
 				Object.assign(move.flags, pokemon.forte.flags);
 				// @ts-ignore
-				if (pokemon.forte.self) move.self = Object.assign(move.self || {}, pokemon.forte.self);
+				if (pokemon.forte.self) {
+					// @ts-ignore
+					if (pokemon.forte.self.onHit) {
+						if (move.self && move.self.onHit) {
+							// @ts-ignore
+							for (let i in pokemon.forte.self) {
+								if (i.startsWith('onHit')) continue;
+								// @ts-ignore
+								move.self[i] = pokemon.forte.self[i];
+							}
+						} else {
+							// @ts-ignore
+							move.self = Object.assign(move.self || {}, pokemon.forte.self);
+						}
+					}
+				}
 				// @ts-ignore
 				if (pokemon.forte.secondaries) move.secondaries = (move.secondaries || []).concat(pokemon.forte.secondaries);
 				for (let prop of ['basePowerCallback', 'breaksProtect', 'critRatio', 'defensiveCategory', 'drain', 'forceSwitch', 'ignoreAbility', 'ignoreDefensive', 'ignoreEvasion', 'ignoreImmunity', 'pseudoWeather', 'recoil', 'selfSwitch', 'sleepUsable', 'stealsBoosts', 'thawsTarget', 'useTargetOffensive', 'volatileStatus', 'willCrit']) {
@@ -573,6 +588,8 @@ let Formats = [
 		onHit: function (target, source, move) {
 			// @ts-ignore
 			if (move && move.category !== 'Status' && source.forte && source.forte.onHit) this.singleEvent('Hit', source.forte, {}, target, source, move);
+			// @ts-ignore
+			if (move && move.category !== 'Status' && source.forte && source.forte.self && source.forte.self.onHit) this.singleEvent('Hit', source.forte, {}, target, source, move);
 		},
 		// @ts-ignore
 		onAfterSubDamagePriority: 1,
