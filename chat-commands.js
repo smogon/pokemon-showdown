@@ -835,8 +835,10 @@ const commands = {
 	secretroom: 'privateroom',
 	publicroom: 'privateroom',
 	privateroom: function (target, room, user, connection, cmd) {
-		if (room.battle || room.isPersonal) {
+		if (room.isPersonal) {
 			if (!this.can('editroom', null, room)) return;
+		} else if (room.battle) {
+			if (!this.can('battleprivacy', null, room)) return;
 		} else {
 			// registered chatrooms show up on the room list and so require
 			// higher permissions to modify privacy settings
@@ -1087,7 +1089,6 @@ const commands = {
 
 	topic: 'roomintro',
 	roomintro: function (target, room, user, connection, cmd) {
-		if (room.battle) return this.errorReply("Battles do not support room intros.");
 		if (!target) {
 			if (!this.runBroadcast()) return;
 			if (!room.introMessage) return this.sendReply("This room does not have an introduction set.");
@@ -1142,7 +1143,6 @@ const commands = {
 
 	stafftopic: 'staffintro',
 	staffintro: function (target, room, user, connection, cmd) {
-		if (room.battle) return this.errorReply("Battles do not support staff intros.");
 		if (!target) {
 			if (!this.can('mute', null, room)) return false;
 			if (!room.staffMessage) return this.sendReply("This room does not have a staff introduction set.");
