@@ -236,7 +236,7 @@ interface EventMethods {
 	onModifyDef?: (this: Battle, def: number, pokemon: Pokemon) => number | void
 	onModifyMove?: (this: Battle, move: ActiveMove, pokemon: Pokemon, target: Pokemon) => void
 	onModifyPriority?: (this: Battle, priority: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => number | void
-	onModifySecondaries?: (this: Battle, secondaries: SecondaryEffect[]) => void
+	onModifySecondaries?: (this: Battle, secondaries: SecondaryEffect[], target: Pokemon, source: Pokemon, move: ActiveMove) => void
 	onModifySpA?: (this: Battle, atk: number, attacker: Pokemon, defender: Pokemon, move: ActiveMove) => number | void
 	onModifySpD?: (this: Battle, spd: number, pokemon: Pokemon) => number | void
 	onModifySpe?: (this: Battle, spe: number, pokemon: Pokemon) => number | void
