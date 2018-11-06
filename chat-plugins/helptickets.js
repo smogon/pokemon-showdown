@@ -417,7 +417,6 @@ const pages = {
 
 				confirmpmharassment: `Report harassment in a private message (PM)`,
 				confirmbattleharassment: `Report harassment in a battle`,
-				confirmchatharassment: `Report harassment in a chatroom`,
 				confirminap: `Report inappropriate content`,
 				confirminapname: `Report an inappropriate username`,
 				confirminappokemon: `Report inappropriate Pok&eacute;mon nicknames`,
@@ -436,7 +435,6 @@ const pages = {
 			const ticketTitles = {
 				pmharassment: `PM Harassment`,
 				battleharassment: `Battle Harassment`,
-				chatharassment: `Chatroom Harassment`,
 				inap: `Inappropriate Content`,
 				inapname: `Inappropriate Username`,
 				inappokemon: `Inappropriate Pokemon Nicknames`,
@@ -480,10 +478,10 @@ const pages = {
 					buf += `<p><Button>other</Button></p>`;
 					break;
 				case 'harassment':
-					buf += `<p>If someone is harassing you, click the appropriate button below and a global staff member will take a look. Consider using <code>/ignore [username]</code> if it's minor instead.</p>`;
+					buf += `<p>If someone is harassing you in pms or a battle, click the appropriate button below and a global staff member will take a look. If you are being harassed in a chatroom, please ask a room staff member to handle it. Consider using <code>/ignore [username]</code> if it's minor instead.</p>`;
 					buf += `<p>If you are reporting harassment in a battle, please save a replay of the battle.</p>`;
 					if (!isLast) break;
-					buf += `<p><Button>confirmpmharassment</Button> <Button>confirmbattleharassment</Button> <Button>confirmchatharassment</Button></p>`;
+					buf += `<p><Button>confirmpmharassment</Button> <Button>confirmbattleharassment</Button></p>`;
 					break;
 				case 'inap':
 					buf += `<p>If a user has posted inappropriate content, has an inappropriate name, or has inappropriate Pok&eacute;mon nicknames, click the appropriate button below and a global staff member will take a look.</p>`;
@@ -754,7 +752,7 @@ let commands = {
 				}
 			}
 			if (Monitor.countTickets(user.latestIp)) return this.popupReply(`Due to high load, you are limited to creating ${Punishments.sharedIps.has(user.latestIp) ? `50` : `5`} tickets every hour.`);
-			if (!['PM Harassment', 'Battle Harassment', 'Chatroom Harassment', 'Inappropriate Content', 'Inappropriate Username', 'Inappropriate Pokemon Nicknames', 'Timerstalling', 'Room Owner Complaint', 'Global Staff Complaint', 'Appeal', 'IP-Appeal', 'Battle Ban Appeal', 'ISP-Appeal', 'Report Last Ticket', 'Public Room Assistance Request', 'Other'].includes(target)) return this.parse('/helpticket');
+			if (!['PM Harassment', 'Battle Harassment', 'Inappropriate Content', 'Inappropriate Username', 'Inappropriate Pokemon Nicknames', 'Timerstalling', 'Room Owner Complaint', 'Global Staff Complaint', 'Appeal', 'IP-Appeal', 'Battle Ban Appeal', 'ISP-Appeal', 'Report Last Ticket', 'Public Room Assistance Request', 'Other'].includes(target)) return this.parse('/helpticket');
 			let upper = false;
 			if (['Room Owner Complaint', 'Global Staff Complaint', 'Report Last Ticket'].includes(target)) upper = true;
 			if (target === 'Report Last Ticket') {
