@@ -390,14 +390,14 @@ let commands = {
 				if (notFound.length) return this.errorReply(`${notFound.join(', ')} ${Chat.plural(notFound, "are", "is")} not on the ${list} list.`);
 				filterWords[list] = filterWords[list].filter(entry => !words.includes(String(entry[0]).slice(1, -3)));
 				this.globalModlog(`REMOVEFILTER`, null, `'${words.join(', ')}' from ${list} list by ${user.name}`);
-				saveFilters();
+				saveFilters(true);
 				return this.sendReply(`'${words.join(', ')}' ${Chat.plural(words, "were", "was")} removed from the ${list} list.`);
 			} else {
 				const notFound = words.filter(val => !filterWords[list].filter(entry => entry[0] === val).length);
 				if (notFound.length) return this.errorReply(`${notFound.join(', ')} ${Chat.plural(notFound, "are", "is")} not on the ${list} list.`);
 				filterWords[list] = filterWords[list].filter(entry => !words.includes(String(entry[0]))); // This feels wrong
 				this.globalModlog(`REMOVEFILTER`, null, `'${words.join(', ')}' from ${list} list by ${user.name}`);
-				saveFilters();
+				saveFilters(true);
 				return this.sendReply(`'${words.join(', ')}' ${Chat.plural(words, "were", "was")} removed from the ${list} list.`);
 			}
 		},
