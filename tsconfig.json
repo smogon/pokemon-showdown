@@ -47,6 +47,7 @@
         "./chat-plugins/othermetas.js",
         "./chat-plugins/poll.js",
         "./chat-plugins/room-faqs.js",
+        "./chat-plugins/thecafe.js",
         "./chat-plugins/thing-of-the-day.js",
         "./chat-plugins/uno.js",
         "./chat-plugins/wifi.js",
