@@ -883,7 +883,7 @@ let BattleMovedex = {
 				if (target !== source.volatiles['twoturnmove'].source) return false;
 
 				if (target.hasType('Flying')) {
-					this.add('-immune', target, '[msg]');
+					this.add('-immune', target);
 					this.add('-end', target, 'Sky Drop');
 					return null;
 				}

@@ -126,12 +126,12 @@ let BattleScripts = {
 				}
 				return false;
 			} else if (naturalImmunity) {
-				this.add('-immune', target, '[msg]');
+				this.add('-immune', target);
 				return false;
 			}
 		} else {
 			if (naturalImmunity) {
-				this.add('-immune', target, '[msg]');
+				this.add('-immune', target);
 			} else {
 				if (!move.spreadHit) this.attrLastMove('[miss]');
 				this.add('-miss', pokemon, target);
