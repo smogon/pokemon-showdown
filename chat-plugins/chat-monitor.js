@@ -133,15 +133,17 @@ let chatfilter = function (message, user, room) {
 			return false;
 		}
 	}
-	for (let i = 0; i < filterWords.shorteners.length; i++) {
-		let [regex] = filterWords.shorteners[i];
-		if (typeof regex === 'string') throw new Error(`shortener filters should not have strings`);
-		if (regex.test(lcMessage)) {
-			if (isStaff) return `${message} __[shortener: ${String(regex).slice(3, -3).replace('\\.', '.')}]__`;
-			this.errorReply(`Please do not use URL shorteners like '${String(regex).slice(3, -3).replace('\\.', '.')}'.`);
-			filterWords.shorteners[i][3]++;
-			saveFilters();
-			return false;
+	if (!user.trusted || isStaffRoom) {
+		for (let i = 0; i < filterWords.shorteners.length; i++) {
+			let [regex] = filterWords.shorteners[i];
+			if (typeof regex === 'string') throw new Error(`shortener filters should not have strings`);
+			if (regex.test(lcMessage)) {
+				if (isStaff) return `${message} __[shortener: ${String(regex).slice(3, -3).replace('\\.', '.')}]__`;
+				this.errorReply(`Please do not use URL shorteners like '${String(regex).slice(3, -3).replace('\\.', '.')}'.`);
+				filterWords.shorteners[i][3]++;
+				saveFilters();
+				return false;
+			}
 		}
 	}
 	if ((room && room.isPrivate !== true) || !room) {
