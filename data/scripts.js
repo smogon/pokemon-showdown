@@ -361,13 +361,13 @@ let BattleScripts = {
 		}
 		if (move.flags['powder'] && target !== pokemon && !this.getImmunity('powder', target)) {
 			this.debug('natural powder immunity');
-			this.add('-immune', target, '[msg]');
+			this.add('-immune', target);
 			return false;
 		}
 		if (this.gen >= 7 && move.pranksterBoosted && pokemon.hasAbility('prankster') && target.side !== pokemon.side && !this.getImmunity('prankster', target)) {
 			this.debug('natural prankster immunity');
 			if (!target.illusion) this.add('-hint', "In gen 7, Dark is immune to Prankster moves.");
-			this.add('-immune', target, '[msg]');
+			this.add('-immune', target);
 			return false;
 		}
 

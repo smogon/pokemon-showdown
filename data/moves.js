@@ -3963,7 +3963,7 @@ let BattleMovedex = {
 		drain: [1, 2],
 		onTryHit: function (target) {
 			if (target.status !== 'slp' && !target.hasAbility('comatose')) {
-				this.add('-immune', target, '[msg]');
+				this.add('-immune', target);
 				return null;
 			}
 		},
@@ -4455,7 +4455,7 @@ let BattleMovedex = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onTry: function (pokemon, target) {
 			if (pokemon.hp >= target.hp) {
-				this.add('-immune', target, '[msg]');
+				this.add('-immune', target);
 				return null;
 			}
 		},
@@ -9149,7 +9149,7 @@ let BattleMovedex = {
 		},
 		onTryHit: function (target) {
 			if (target.hasType('Grass')) {
-				this.add('-immune', target, '[msg]');
+				this.add('-immune', target);
 				return null;
 			}
 		},
@@ -13805,7 +13805,7 @@ let BattleMovedex = {
 				for (const pokemon of side.active) {
 					if (!pokemon || !pokemon.isActive) continue;
 					if (!pokemon.runImmunity('Ground')) {
-						this.add('-immune', pokemon, '[msg]');
+						this.add('-immune', pokemon);
 						anyAirborne = true;
 						continue;
 					}
@@ -14941,7 +14941,7 @@ let BattleMovedex = {
 				if (target !== source.volatiles['twoturnmove'].source) return false;
 
 				if (target.hasType('Flying')) {
-					this.add('-immune', target, '[msg]');
+					this.add('-immune', target);
 					return null;
 				}
 			} else {
@@ -16850,7 +16850,7 @@ let BattleMovedex = {
 		flags: {protect: 1, mirror: 1, mystery: 1},
 		onTryHit: function (target) {
 			if (target.hasAbility('stickyhold')) {
-				this.add('-immune', target, '[msg]');
+				this.add('-immune', target);
 				return null;
 			}
 		},
@@ -16923,7 +16923,7 @@ let BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		onTryHit: function (target, source) {
 			if (!target.hasType(source.getTypes())) {
-				this.add('-immune', target, '[msg]');
+				this.add('-immune', target);
 				return null;
 			}
 		},
@@ -17247,7 +17247,7 @@ let BattleMovedex = {
 			onStart: function (target) {
 				if (['Diglett', 'Dugtrio', 'Palossand', 'Sandygast'].includes(target.baseTemplate.baseSpecies) ||
 						target.baseTemplate.species === 'Gengar-Mega') {
-					this.add('-immune', target, '[msg]');
+					this.add('-immune', target);
 					return null;
 				}
 				if (target.volatiles['smackdown'] || target.volatiles['ingrain']) return false;
@@ -17832,7 +17832,7 @@ let BattleMovedex = {
 		flags: {protect: 1, mirror: 1, mystery: 1},
 		onTryHit: function (target) {
 			if (target.hasAbility('stickyhold')) {
-				this.add('-immune', target, '[msg]');
+				this.add('-immune', target);
 				return null;
 			}
 		},
