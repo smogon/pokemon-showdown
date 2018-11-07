@@ -392,7 +392,7 @@ exports.disablehotpatchall = false;
  *     - room<rank>: /roompromote to <rank> (eg. roomvoice)
  *     - makeroom: Create/delete chatrooms, and set modjoin/roomdesc/privacy
  *     - editroom: Editing properties of rooms
- *     - battleprivacy: Set modjoin/privacy only for battles/groupchats
+ *     - battleprivacy: Set modjoin/privacy only for battles
  *     - ban: Banning and unbanning.
  *     - mute: Muting and unmuting.
  *     - lock: locking (ipmute) and unlocking.
