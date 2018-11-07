@@ -377,7 +377,7 @@ export class Pokemon {
 		this.staleWarned = false;
 
 		/**
-		 * An Object that can store miscelaneous data. Mostly for OMs.
+		 * An object for storing untyped data, for mods to use.
 		 */
 		this.m = {};
 	}
