@@ -510,12 +510,12 @@ let Formats = [
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Serene Grace'],
-		restrictedMoves: ['Bide', 'Chatter', 'Dynamic Punch', 'Fake Out', 'Inferno', 'Power Trip', 'Power-Up Punch', 'Pursuit', 'Stored Power', 'Zap Cannon'],
+		restrictedMoves: ['Bide', 'Chatter', 'Dynamic Punch', 'Fake Out', 'Frustration', 'Inferno', 'Power Trip', 'Power-Up Punch', 'Pursuit', 'Return', 'Stored Power', 'Zap Cannon'],
 		validateSet: function (set, teamHas) {
 			const restrictedMoves = this.format.restrictedMoves || [];
 			let item = set.item;
 			let move = this.dex.getMove(set.item);
-			if (!move.exists || move.type === 'Status' || restrictedMoves.includes(move.name) || move.flags['charge']) return this.validateSet(set, teamHas);
+			if (!move.exists || move.type === 'Status' || restrictedMoves.includes(move.name) || move.flags['charge'] || move.priority > 0) return this.validateSet(set, teamHas);
 			set.item = '';
 			let problems = this.validateSet(set, teamHas) || [];
 			set.item = item;
@@ -541,7 +541,23 @@ let Formats = [
 		},
 		onModifyPriority: function (priority, pokemon, target, move) {
 			// @ts-ignore
-			if (move.category !== 'Status' && pokemon && pokemon.forte) return priority + pokemon.forte.priority;
+			if (move.category !== 'Status' && pokemon && pokemon.forte) {
+				let abilPriority = pokemon.getAbility().onModifyPriority;
+				if (abilPriority) {
+					// @ts-ignore
+					if (typeof abilPriority.call(this, priority, pokemon, target, pokemon.forte) === 'number') {
+						if (typeof abilPriority.call(this, priority, pokemon, target, move) === 'number') {
+							// @ts-ignore
+							return abilPriority.call(this, priority, pokemon, target, move) + abilPriority.call(this, priority, pokemon, target, pokemon.forte);
+						} else {
+							// @ts-ignore
+							return priority + abilPriority.call(this, priority, pokemon, target, pokemon.forte);
+						}
+					}
+				}
+				// @ts-ignore
+				return priority + pokemon.forte.priority;
+			}
 		},
 		onModifyMovePriority: 1,
 		onModifyMove: function (move, pokemon) {
