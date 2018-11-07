@@ -228,7 +228,7 @@ const commands = {
 			/** @type {string} */
 			let text = this.canTalk(target);
 			if (!text) return this.errorReply("You cannot do this while unable to talk.");
-			if (target !== text) return this.errorReply("You are not allowed to use fitered words in polls.");
+			if (target !== text) return this.errorReply("You are not allowed to use filtered words in polls.");
 
 			const supportHTML = cmd === 'htmlcreate';
 			let separator = '';
