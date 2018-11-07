@@ -310,10 +310,8 @@ exports.commands = {
 			const modjoinSetting = room.modjoin === true ? "SYNC" : room.modjoin || "OFF";
 			return this.sendReply(`Modjoin is currently set to: ${modjoinSetting}`);
 		}
-		if (room.isPersonal) {
+		if (room.battle || room.isPersonal) {
 			if (!this.can('editroom', null, room)) return;
-		} else if (room.battle) {
-			if (!this.can('battleprivacy', null, room)) return;
 		} else {
 			if (!this.can('makeroom')) return;
 		}
