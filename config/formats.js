@@ -544,7 +544,7 @@ let Formats = [
 			if (move.category !== 'Status' && pokemon && pokemon.forte) {
 				let ability = pokemon.getAbility();
 				// @ts-ignore
-				if (ability.id === 'triage' && pokemon.forte.flags['heal']) return priority + (move.flags['heal'] ? -3 : 3);
+				if (ability.id === 'triage' && pokemon.forte.flags['heal']) return priority + (move.flags['heal'] ? 0 : 3);
 				// @ts-ignore
 				return priority + pokemon.forte.priority;
 			}
