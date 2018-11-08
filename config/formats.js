@@ -543,8 +543,8 @@ let Formats = [
 			// @ts-ignore
 			if (move.category !== 'Status' && pokemon && pokemon.forte) {
 				let ability = pokemon.getAbility();
-				if (ability.id === 'galewings' && move.type === 'Flying' && pokemon.hp === pokemon.maxhp) return priority + 1;
-				if (ability.id === 'stall') return Math.round(priority) - 0.1;
+				// @ts-ignore
+				if (ability.id === 'galewings' && pokemon.forte.type === 'Flying' && pokemon.hp === pokemon.maxhp) return priority + (move.type === 'Flying' ? -1 : 1);
 				// @ts-ignore
 				if (ability.id === 'triage' && pokemon.forte.flags['heal']) {
 					return priority + (move.flags['heal'] ? -3 : 3);
