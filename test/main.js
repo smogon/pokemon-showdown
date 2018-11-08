@@ -28,6 +28,7 @@ before('initialization', function () {
 	}
 	require('./../lib/process-manager').disabled = true;
 
+	Object.assign(config, require('../config/config-example'));
 	// Actually crash if we crash
 	config.crashguard = false;
 	// Don't allow config to be overridden while test is running
