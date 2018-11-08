@@ -552,7 +552,7 @@ let Formats = [
 					let abilForteCall = abilPriority.call(this, priority, pokemon, target, pokemon.forte);
 					// @ts-ignore
 					if (typeof abilForteCall === 'number') fortePriority = abilForteCall;
-					if (typeof movePriority === 'number') movePriority = abilMoveCall;
+					if (typeof abilMoveCall === 'number') movePriority = abilMoveCall;
 				}
 				return movePriority + fortePriority;
 			}
