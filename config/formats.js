@@ -545,6 +545,7 @@ let Formats = [
 				if (pokemon.getAbility().onModifyPriority) {
 					// @ts-ignore
 					priority += pokemon.forte.priority;
+					// @ts-ignore
 					return this.singleEvent('ModifyPriority', pokemon.getAbility(), pokemon.abilityData, pokemon, target, pokemon.forte, priority);
 				}
 				// @ts-ignore
