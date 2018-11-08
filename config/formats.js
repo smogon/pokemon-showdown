@@ -546,9 +546,8 @@ let Formats = [
 				// @ts-ignore
 				if (ability.id === 'galewings' && pokemon.forte.type === 'Flying' && pokemon.hp === pokemon.maxhp) return priority + (move.type === 'Flying' ? -1 : 1);
 				// @ts-ignore
-				if (ability.id === 'triage' && pokemon.forte.flags['heal']) {
-					return priority + (move.flags['heal'] ? -3 : 3);
-				}
+				if (ability.id === 'triage' && pokemon.forte.flags['heal']) return priority + (move.flags['heal'] ? -3 : 3);
+				// @ts-ignore
 				return priority + pokemon.forte.priority;
 			}
 		},
