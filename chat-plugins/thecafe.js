@@ -105,15 +105,22 @@ const commands = {
 		dish = dish.trim();
 		if (!dish || !ingredients.length) return this.parse('/help foodfight');
 		const id = toId(dish);
+		if (id === 'constructor') return this.errorReply("Invalid dish name.");
 		ingredients = ingredients.map(ingredient => ingredient.trim());
 
 		if (cmd === 'adddish') {
 			if (dishes[id]) return this.errorReply("This dish already exists.");
 			if (ingredients.length < 6) return this.errorReply("Dishes need at least 6 ingredients.");
+			if ([...ingredients.entries()].some(([index, ingredient]) => ingredients.indexOf(ingredient) !== index)) {
+				return this.errorReply("Please don't enter duplicate ingredients.");
+			}
 			dishes[id] = [dish];
 		} else {
 			if (!dishes[id]) return this.errorReply(`Dish not found: ${dish}`);
 			if (ingredients.some(ingredient => dishes[id].includes(ingredient))) return this.errorReply("Please don't enter duplicate ingredients.");
+			if ([...ingredients.entries()].some(([index, ingredient]) => ingredients.indexOf(ingredient) !== index)) {
+				return this.errorReply("Please don't enter duplicate ingredients.");
+			}
 		}
 
 		dishes[id] = dishes[id].concat(ingredients);
@@ -125,6 +132,7 @@ const commands = {
 		if (!this.can('mute', null, room)) return false;
 
 		const id = toId(target);
+		if (id === 'constructor') return this.errorReply("Invalid dish.");
 		if (!dishes[id]) return this.errorReply(`Dish '${target}' not found.`);
 
 		delete dishes[id];
