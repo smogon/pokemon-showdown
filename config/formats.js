@@ -543,20 +543,18 @@ let Formats = [
 			// @ts-ignore
 			if (move.category !== 'Status' && pokemon && pokemon.forte) {
 				let abilPriority = pokemon.getAbility().onModifyPriority;
-				if (abilPriority) {
-					// @ts-ignore
-					if (typeof abilPriority.call(this, priority, pokemon, target, pokemon.forte) === 'number') {
-						if (typeof abilPriority.call(this, priority, pokemon, target, move) === 'number') {
-							// @ts-ignore
-							return abilPriority.call(this, priority, pokemon, target, move) + abilPriority.call(this, priority, pokemon, target, pokemon.forte);
-						} else {
-							// @ts-ignore
-							return priority + abilPriority.call(this, priority, pokemon, target, pokemon.forte);
-						}
-					}
-				}
+				let movePriority = priority;
 				// @ts-ignore
-				return priority + pokemon.forte.priority;
+				let fortePriority = pokemon.forte.priority;
+				if (abilPriority) {
+					let abilMoveCall = abilPriority.call(this, priority, pokemon, target, move);
+					// @ts-ignore
+					let abilForteCall = abilPriority.call(this, priority, pokemon, target, pokemon.forte);
+					// @ts-ignore
+					if (typeof abilForteCall === 'number') fortePriority = abilForteCall;
+					if (typeof movePriority === 'number') movePriority = abilMoveCall;
+				}
+				return movePriority + fortePriority;
 			}
 		},
 		onModifyMovePriority: 1,
