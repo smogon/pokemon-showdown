@@ -542,13 +542,13 @@ let Formats = [
 		onModifyPriority: function (priority, pokemon, target, move) {
 			// @ts-ignore
 			if (move.category !== 'Status' && pokemon && pokemon.forte) {
-				if (pokemon.getAbility().onModifyPriority) {
-					// @ts-ignore
-					priority += pokemon.forte.priority;
-					// @ts-ignore
-					return this.singleEvent('ModifyPriority', pokemon.getAbility(), pokemon.abilityData, pokemon, target, pokemon.forte, priority);
-				}
+				let ability = pokemon.getAbility();
+				if (ability.id === 'galewings' && move.type === 'Flying' && pokemon.hp === pokemon.maxhp) return priority + 1;
+				if (ability.id === 'stall') return Math.round(priority) - 0.1;
 				// @ts-ignore
+				if (ability.id === 'triage' && pokemon.forte.flags['heal']) {
+					return priority + (move.flags['heal'] ? -3 : 3);
+				}
 				return priority + pokemon.forte.priority;
 			}
 		},
