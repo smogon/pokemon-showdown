@@ -444,6 +444,7 @@ exports.grouplist = [
 		globalonly: true,
 		gamemanagement: true,
 		exportinputlog: true,
+		editprivacy: true,
 	},
 	{
 		symbol: '#',
