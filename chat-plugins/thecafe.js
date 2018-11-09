@@ -3,6 +3,7 @@
 const FS = require('./../lib/fs');
 
 const DISHES_FILE = 'config/chat-plugins/thecafe-foodfight.json';
+const FOODFIGHT_COOLDOWN = 5 * 60 * 1000;
 
 const thecafe = /** @type {ChatRoom} */ (Rooms.get('thecafe'));
 
@@ -92,9 +93,27 @@ const commands = {
 		if (room !== thecafe) return this.errorReply("This command is only available in The Café.");
 
 		if (!Object.keys(dishes).length) return this.errorReply("No dishes found. Add some dishes first.");
+
+		// @ts-ignore
+		if (user.foodfight && user.foodfight.timestamp + FOODFIGHT_COOLDOWN > Date.now()) return this.errorReply("Please wait a few minutes before using this command again.");
+
 		const team = generateTeam(target);
 		const [dish, ingredients] = generateDish();
+		// @ts-ignore
+		user.foodfight = {team: team, dish: dish, ingredients: ingredients, timestamp: Date.now()};
 		return this.sendReplyBox(`<div class="ladder"><table style="text-align:center;"><tr><th colspan="7" style="font-size:10pt;">Your dish is: <u>${dish}</u></th></tr><tr><th>Team</th>${team.map(mon => `<td><psicon pokemon="${mon}"/> ${mon}</td>`).join('')}</tr><tr><th>Ingredients</th>${ingredients.map(ingredient => `<td>${ingredient}</td>`).join('')}</tr></table></div>`);
+	},
+	checkfoodfight: function (target, room, user) {
+		if (room !== thecafe) return this.errorReply("This command is only available in The Café.");
+
+		const targetUser = this.targetUserOrSelf(target, false);
+		if (!targetUser) return this.errorReply(`User ${this.targetUsername} not found.`);
+		const self = targetUser === user;
+		if (!self && !this.can('mute', targetUser, room)) return false;
+		// @ts-ignore
+		if (!targetUser.foodfight) return this.errorReply(`${self ? `You don't` : `This user doesn't`} have an active Foodfight team.`);
+		// @ts-ignore
+		return this.sendReplyBox(`<div class="ladder"><table style="text-align:center;"><tr><th colspan="7" style="font-size:10pt;">${self ? `Your` : `${this.targetUsername}'s`} dish is: <u>${targetUser.foodfight.dish}</u></th></tr><tr><th>Team</th>${targetUser.foodfight.team.map(mon => `<td><psicon pokemon="${mon}"/> ${mon}</td>`).join('')}</tr><tr><th>Ingredients</th>${targetUser.foodfight.ingredients.map(ingredient => `<td>${ingredient}</td>`).join('')}</tr></table></div>`);
 	},
 	addingredients: 'adddish',
 	adddish: function (target, room, user, connection, cmd) {
@@ -146,6 +165,7 @@ const commands = {
 	},
 	foodfighthelp: [
 		`/foodfight <generator> - Gives you a randomly generated Foodfight dish, ingredient list and team. Generator can be either 'ou' or 'ag', or left blank. If left blank, uses the normal Foodfight generator.`,
+		`/checkfoodfight <username> - Gives you the last team and dish generated for the entered user, or your own if left blank. Anyone can check their own info, checking other people requires: % @ * # & ~`,
 		`/adddish <dish>, <ingredient>, <ingredient>, ... - Adds a dish to the database. Requires: % @ * # & ~`,
 		`/addingredients <dish>, <ingredient>, <ingredient>, ... - Adds extra ingredients to a dish in the database. Requires: % @ * # & ~`,
 		`/removedish <dish> - Removes a dish from the database. Requires: % @ * # & ~`,
