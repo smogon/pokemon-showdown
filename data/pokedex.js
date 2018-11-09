@@ -471,7 +471,7 @@ let BattlePokedex = {
 		color: "Yellow",
 		prevo: "pichu",
 		evos: ["raichu", "raichualola"],
-		evoLevel: 1,
+		evoLevel: 2,
 		eggGroups: ["Field", "Fairy"],
 		otherFormes: ["pikachucosplay", "pikachurockstar", "pikachubelle", "pikachupopstar", "pikachuphd", "pikachulibre", "pikachuoriginal", "pikachuhoenn", "pikachusinnoh", "pikachuunova", "pikachukalos", "pikachualola", "pikachupartner"],
 	},
@@ -680,7 +680,7 @@ let BattlePokedex = {
 		weightkg: 30,
 		color: "Yellow",
 		prevo: "pikachu",
-		evoLevel: 1,
+		evoLevel: 2,
 		eggGroups: ["Field", "Fairy"],
 		otherFormes: ["raichualola"],
 	},
@@ -697,7 +697,7 @@ let BattlePokedex = {
 		weightkg: 21,
 		color: "Brown",
 		prevo: "pikachu",
-		evoLevel: 1,
+		evoLevel: 2,
 		eggGroups: ["Field", "Fairy"],
 	},
 	sandshrew: {
@@ -854,7 +854,7 @@ let BattlePokedex = {
 		color: "Pink",
 		prevo: "cleffa",
 		evos: ["clefable"],
-		evoLevel: 1,
+		evoLevel: 2,
 		eggGroups: ["Fairy"],
 	},
 	clefable: {
@@ -868,7 +868,7 @@ let BattlePokedex = {
 		weightkg: 40,
 		color: "Pink",
 		prevo: "clefairy",
-		evoLevel: 1,
+		evoLevel: 2,
 		eggGroups: ["Fairy"],
 	},
 	vulpix: {
@@ -945,7 +945,7 @@ let BattlePokedex = {
 		color: "Pink",
 		prevo: "igglybuff",
 		evos: ["wigglytuff"],
-		evoLevel: 1,
+		evoLevel: 2,
 		eggGroups: ["Fairy"],
 	},
 	wigglytuff: {
@@ -959,7 +959,7 @@ let BattlePokedex = {
 		weightkg: 12,
 		color: "Pink",
 		prevo: "jigglypuff",
-		evoLevel: 1,
+		evoLevel: 2,
 		eggGroups: ["Fairy"],
 	},
 	zubat: {
@@ -3762,7 +3762,7 @@ let BattlePokedex = {
 		weightkg: 220,
 		color: "Purple",
 		prevo: "mantyke",
-		evoLevel: 1,
+		evoLevel: 1
 		eggGroups: ["Water 1"],
 	},
 	skarmory: {
@@ -12421,7 +12421,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoLevel: 41,
 		eggGroups: ["Undiscovered"],
 	},
 	silvallydark: {
@@ -12438,7 +12438,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoLevel: 41,
 		eggGroups: ["Undiscovered"],
 	},
 	silvallydragon: {
@@ -12455,7 +12455,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoLevel: 41,
 		eggGroups: ["Undiscovered"],
 	},
 	silvallyelectric: {
@@ -12472,7 +12472,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoLevel: 41,
 		eggGroups: ["Undiscovered"],
 	},
 	silvallyfairy: {
@@ -12489,7 +12489,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoLevel: 41,
 		eggGroups: ["Undiscovered"],
 	},
 	silvallyfighting: {
@@ -12506,7 +12506,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoLevel: 41,
 		eggGroups: ["Undiscovered"],
 	},
 	silvallyfire: {
@@ -12523,7 +12523,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoLevel: 41,
 		eggGroups: ["Undiscovered"],
 	},
 	silvallyflying: {
@@ -12540,7 +12540,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoLevel: 41,
 		eggGroups: ["Undiscovered"],
 	},
 	silvallyghost: {
@@ -12557,7 +12557,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoLevel: 41,
 		eggGroups: ["Undiscovered"],
 	},
 	silvallygrass: {
@@ -12574,7 +12574,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoLevel: 41,
 		eggGroups: ["Undiscovered"],
 	},
 	silvallyground: {
@@ -12591,7 +12591,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoLevel: 41,
 		eggGroups: ["Undiscovered"],
 	},
 	silvallyice: {
@@ -12608,7 +12608,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoLevel: 41,
 		eggGroups: ["Undiscovered"],
 	},
 	silvallypoison: {
@@ -12625,7 +12625,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoLevel: 41,
 		eggGroups: ["Undiscovered"],
 	},
 	silvallypsychic: {
@@ -12642,7 +12642,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoLevel: 41,
 		eggGroups: ["Undiscovered"],
 	},
 	silvallyrock: {
@@ -12659,7 +12659,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoLevel: 41,
 		eggGroups: ["Undiscovered"],
 	},
 	silvallysteel: {
@@ -12676,7 +12676,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoLevel: 41,
 		eggGroups: ["Undiscovered"],
 	},
 	silvallywater: {
@@ -12693,7 +12693,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoLevel: 41,
 		eggGroups: ["Undiscovered"],
 	},
 	minior: {
@@ -13227,6 +13227,7 @@ let BattlePokedex = {
 		color: "Purple",
 		prevo: "poipole",
 		evoLevel: 41,
+		evoMove: "Dragon Pulse",
 		eggGroups: ["Undiscovered"],
 	},
 	stakataka: {
