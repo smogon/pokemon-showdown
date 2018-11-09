@@ -17,11 +17,11 @@ let filterKeys = Chat.filterKeys = Object.assign(Chat.filterKeys, {
 /** @type {{[k: string]: [(string | RegExp), string, string?, number][]}} */
 let filterWords = Chat.filterWords;
 
-setImmediate(() => {
-	for (const key in filterKeys) {
-		if (!filterWords[key]) filterWords[key] = [];
-	}
+for (const key in filterKeys) {
+	if (!filterWords[key]) filterWords[key] = [];
+}
 
+setImmediate(() => {
 	/*
 	 * Columns Location and Punishment use keywords. Possible values:
 	 *
