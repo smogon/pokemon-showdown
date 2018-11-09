@@ -3762,7 +3762,7 @@ let BattlePokedex = {
 		weightkg: 220,
 		color: "Purple",
 		prevo: "mantyke",
-		evoLevel: 1
+		evoLevel: 1,
 		eggGroups: ["Water 1"],
 	},
 	skarmory: {
