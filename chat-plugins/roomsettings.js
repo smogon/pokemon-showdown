@@ -313,7 +313,7 @@ exports.commands = {
 		if (room.isPersonal) {
 			if (!this.can('editroom', null, room)) return;
 		} else if (room.battle) {
-			if (!this.can('battleprivacy', null, room)) return;
+			if (!this.can('editprivacy', null, room)) return;
 		} else {
 			if (!this.can('makeroom')) return;
 		}
