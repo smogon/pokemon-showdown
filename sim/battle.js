@@ -2101,7 +2101,11 @@ class Battle extends Dex.ModdedDex {
 			numerator = numerator[0];
 		}
 		let modifier = Math.floor(numerator * 4096 / denominator);
-		return Math.floor((value * modifier + 2048 - 1) / 4096);
+		
+		// Modifiers always consist of a multiplication, followed by a division by 4096.
+		// The register is limited to 32 bits of storage at all times, so if multiplying
+		// exceeds that figure, the most significant bits will fall off prior to division.
+		return Math.floor((value * modifier % 4294967296 + 2048 - 1) / 4096);
 	}
 
 	/**
@@ -2248,8 +2252,8 @@ class Battle extends Dex.ModdedDex {
 		// @ts-ignore
 		defense = this.runEvent('Modify' + statTable[defenseStat], defender, attacker, move, defense);
 
-		//int(int(int(2 * L / 5 + 2) * A * P / D) / 50);
-		let baseDamage = Math.floor(Math.floor(Math.floor(2 * level / 5 + 2) * basePower * attack / defense) / 50);
+		//int(int(int(2 * L / 5 + 2) * A * P / D) / 50); (subject to 32-bit storage limitation)
+		let baseDamage = Math.floor(Math.floor(Math.floor(2 * level / 5 + 2) * basePower * attack % 4294967296 / defense) / 50);
 
 		// Calculate damage modifiers separately (order differs between generations)
 		return this.modifyDamage(baseDamage, pokemon, target, move, suppressMessages);
@@ -2278,12 +2282,12 @@ class Battle extends Dex.ModdedDex {
 		// weather modifier
 		baseDamage = this.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
 
-		// crit
+		// crit - not a modifier
 		if (move.crit) {
-			baseDamage = this.modify(baseDamage, move.critModifier || (this.gen >= 6 ? 1.5 : 2));
+			baseDamage = Math.floor(baseDamage * (move.critModifier || (this.gen >= 6 ? 1.5 : 2)));
 		}
 
-		// this is not a modifier
+		// random factor - not a modifier either
 		baseDamage = this.randomizer(baseDamage);
 
 		// STAB
@@ -2338,14 +2342,15 @@ class Battle extends Dex.ModdedDex {
 			return 1;
 		}
 
-		return Math.floor(baseDamage);
+		// Generations 5-7 all truncate damage to 16 bits as the last step of all
+		return Math.floor(baseDamage % 65536);
 	}
 
 	/**
 	 * @param {number} baseDamage
 	 */
 	randomizer(baseDamage) {
-		return Math.floor(baseDamage * (100 - this.random(16)) / 100);
+		return Math.floor(baseDamage * (100 - this.random(16)) % 4294967296 / 100);
 	}
 
 	/**
