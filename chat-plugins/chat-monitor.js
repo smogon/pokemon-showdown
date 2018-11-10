@@ -5,55 +5,8 @@ const FS = require('../lib/fs');
 const MONITOR_FILE = 'config/chat-plugins/chat-monitor.tsv';
 const WRITE_THROTTLE_TIME = 5 * 60 * 1000;
 
-/** @type {{[k: string]: string[]}} */
-let filterKeys = Chat.filterKeys = Object.assign(Chat.filterKeys, {
-	publicwarn: ['PUBLIC', 'WARN', 'Filtered in public'],
-	warn: ['EVERYWHERE', 'WARN', 'Filtered'],
-	autolock: ['EVERYWHERE', 'AUTOLOCK', 'Autolock'],
-	namefilter: ['NAMES', 'WARN', 'Filtered in usernames'],
-	wordfilter: ['EVERYWHERE', 'FILTERTO', 'Filtered to a different phrase'],
-	shorteners: ['EVERYWHERE', 'SHORTENER', 'Url Shorteners'],
-});
 /** @type {{[k: string]: [(string | RegExp), string, string?, number][]}} */
 let filterWords = Chat.filterWords;
-
-for (const key in filterKeys) {
-	if (!filterWords[key]) filterWords[key] = [];
-}
-
-setImmediate(() => {
-	/*
-	 * Columns Location and Punishment use keywords. Possible values:
-	 *
-	 * Location: EVERYWHERE, PUBLIC, NAMES
-	 * Punishment: AUTOLOCK, WARN, FILTERTO, SHORTENER
-	 */
-	FS(MONITOR_FILE).readIfExists().then(data => {
-		const lines = data.split('\n');
-		loop: for (const line of lines) {
-			if (!line || line === '\r') continue;
-			let [location, word, punishment, reason, times, ...rest] = line.split('\t').map(param => param.trim());
-			if (location === 'Location') continue;
-			if (!(location && word && punishment)) continue;
-
-			for (const key in filterKeys) {
-				if (filterKeys[key][0] === location && filterKeys[key][1] === punishment) {
-					if (punishment === 'FILTERTO') {
-						const filterTo = rest[0];
-						filterWords[key].push([new RegExp(word, 'ig'), reason, filterTo, parseInt(times) || 0]);
-					} else if (punishment === 'SHORTENER') {
-						const regex = new RegExp(`\\b${word.replace(/\\/g, '\\\\').replace(/\./g, '\\.')}\\b`);
-						filterWords[key].push([regex, reason, null, parseInt(times) || 0]);
-					} else {
-						filterWords[key].push([word, reason, null, parseInt(times) || 0]);
-					}
-					continue loop;
-				}
-			}
-			throw new Error(`Unrecognized [location, punishment] pair for filter word entry: ${[location, word, punishment, reason, times]}`);
-		}
-	});
-});
 
 /**
  * @param {string} location
@@ -78,12 +31,157 @@ function renderEntry(location, word, punishment) {
 function saveFilters(force = false) {
 	FS(MONITOR_FILE).writeUpdate(() => {
 		let buf = 'Location\tWord\tPunishment\tReason\tTimes\r\n';
-		for (const key in filterKeys) {
-			buf += filterWords[key].map(word => renderEntry(filterKeys[key][0], word, filterKeys[key][1])).join('');
+		for (const key in Chat.monitors) {
+			buf += filterWords[key].map(word => renderEntry(Chat.monitors[key].location, word, Chat.monitors[key].punishment)).join('');
 		}
 		return buf;
 	}, {throttle: force ? 0 : WRITE_THROTTLE_TIME});
 }
+
+// Register the chat monitors used
+
+Chat.registerMonitor('autolock', {
+	location: 'EVERYWHERE',
+	punishment: 'AUTOLOCK',
+	label: 'Autolock',
+	monitor(line, room, user, message, lcMessage, isStaff) {
+		let [word, reason] = line;
+		let matched = false;
+		if (typeof word !== 'string') throw new Error(`autolock filters should only have strings`);
+		if (word.startsWith('\\b') || word.endsWith('\\b')) {
+			matched = new RegExp(word).test(lcMessage);
+		} else {
+			matched = lcMessage.includes(word);
+		}
+		if (matched) {
+			if (isStaff) return `${message} __[would be locked: ${word}${reason ? ` (${reason})` : ''}]__`;
+			message = message.replace(/(https?):\/\//g, '$1__:__//');
+			message = message.replace(/\./g, '__.__');
+			if (room) {
+				Punishments.autolock(user, room, 'ChatMonitor', `Filtered phrase: ${word}`, `<${room.id}> ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`, true);
+			} else {
+				this.errorReply(`Please do not say '${word.replace(/\\b/g, '')}'.`);
+			}
+			return false;
+		}
+	},
+});
+
+Chat.registerMonitor('publicwarn', {
+	location: 'PUBLIC',
+	punishment: 'WARN',
+	label: 'Filtered in public',
+	monitor(line, room, user, message, lcMessage, isStaff) {
+		let [word, reason] = line;
+		let matched = false;
+		if (typeof word !== 'string') throw new Error(`publicwarn filters should only have strings`);
+		if (word.startsWith('\\b') || word.endsWith('\\b')) {
+			matched = new RegExp(word).test(lcMessage);
+		} else {
+			matched = lcMessage.includes(word);
+		}
+		if (matched) {
+			if (isStaff) return `${message} __[would be filtered in public: ${word}${reason ? ` (${reason})` : ''}]__`;
+			this.errorReply(`Please do not say '${word.replace(/\\b/g, '')}'.`);
+			return false;
+		}
+	},
+});
+
+Chat.registerMonitor('warn', {
+	location: 'EVERYWHERE',
+	punishment: 'WARN',
+	label: 'Filtered',
+	monitor(line, room, user, message, lcMessage, isStaff) {
+		let [word, reason] = line;
+		let matched = false;
+		if (typeof word !== 'string') throw new Error(`warn filters should only have strings`);
+		if (word.startsWith('\\b') || word.endsWith('\\b')) {
+			matched = new RegExp(word).test(lcMessage);
+		} else {
+			matched = lcMessage.includes(word);
+		}
+		if (matched) {
+			if (isStaff) return `${message} __[would be filtered: ${word}${reason ? ` (${reason})` : ''}]__`;
+			this.errorReply(`Please do not say '${word.replace(/\\b/g, '')}'.`);
+			return false;
+		}
+	},
+});
+
+Chat.registerMonitor('wordfilter', {
+	location: 'EVERYWHERE',
+	punishment: 'FILTERTO',
+	label: 'Filtered to a different phrase',
+	condition: 'notStaff',
+	monitor(line, room, user, message, lcMessage, isStaff) {
+		const [regex] = line;
+		if (typeof regex === 'string') throw new Error(`wordfilter filters should not have strings`);
+		let match = regex.exec(message);
+		while (match) {
+			let filtered = line[2] || '';
+			if (match[0] === match[0].toUpperCase()) filtered = filtered.toUpperCase();
+			if (match[0][0] === match[0][0].toUpperCase()) filtered = `${filtered ? filtered[0].toUpperCase() : ''}${filtered.slice(1)}`;
+			message = message.replace(match[0], filtered);
+			match = regex.exec(message);
+		}
+		return message;
+	},
+});
+
+Chat.registerMonitor('namefilter', {
+	location: 'NAMES',
+	punishment: 'WARN',
+	label: 'Filtered in names',
+});
+
+Chat.registerMonitor('shorteners', {
+	location: 'EVERYWHERE',
+	punishment: 'SHORTENER',
+	label: 'URL Shorteners',
+	condition: 'notTrusted',
+	monitor(line, room, user, message, lcMessage, isStaff) {
+		let [regex] = line;
+		if (typeof regex === 'string') throw new Error(`shortener filters should not have strings`);
+		if (regex.test(lcMessage)) {
+			if (isStaff) return `${message} __[shortener: ${String(regex).slice(3, -3).replace('\\.', '.')}]__`;
+			this.errorReply(`Please do not use URL shorteners like '${String(regex).slice(3, -3).replace('\\.', '.')}'.`);
+			return false;
+		}
+	},
+});
+
+/*
+ * Columns Location and Punishment use keywords. Possible values:
+ *
+ * Location: EVERYWHERE, PUBLIC, NAMES
+ * Punishment: AUTOLOCK, WARN, FILTERTO, SHORTENER
+ */
+FS(MONITOR_FILE).readIfExists().then(data => {
+	const lines = data.split('\n');
+	loop: for (const line of lines) {
+		if (!line || line === '\r') continue;
+		let [location, word, punishment, reason, times, ...rest] = line.split('\t').map(param => param.trim());
+		if (location === 'Location') continue;
+		if (!(location && word && punishment)) continue;
+
+		for (const key in Chat.monitors) {
+			if (Chat.monitors[key].location === location && Chat.monitors[key].punishment === punishment) {
+				if (punishment === 'FILTERTO') {
+					const filterTo = rest[0];
+					filterWords[key].push([new RegExp(word, 'ig'), reason, filterTo, parseInt(times) || 0]);
+				} else if (punishment === 'SHORTENER') {
+					const regex = new RegExp(`\\b${word.replace(/\\/g, '\\\\').replace(/\./g, '\\.')}\\b`);
+					filterWords[key].push([regex, reason, null, parseInt(times) || 0]);
+				} else {
+					filterWords[key].push([word, reason, null, parseInt(times) || 0]);
+				}
+				continue loop;
+			}
+		}
+		throw new Error(`Unrecognized [location, punishment] pair for filter word entry: ${[location, word, punishment, reason, times]}`);
+	}
+});
 
 /** @type {ChatFilter} */
 let chatfilter = function (message, user, room) {
@@ -93,94 +191,34 @@ let chatfilter = function (message, user, room) {
 	const isStaffRoom = room && ((room.chatRoomData && room.id.endsWith('staff')) || room.id.startsWith('help-'));
 	const isStaff = isStaffRoom || user.isStaff || (this.pmTarget && this.pmTarget.isStaff);
 
-	for (let i = 0; i < filterWords.autolock.length; i++) {
-		let [line, reason] = filterWords.autolock[i];
-		let matched = false;
-		if (typeof line !== 'string') throw new Error(`autolock filters should only have strings`);
-		if (line.startsWith('\\b') || line.endsWith('\\b')) {
-			matched = new RegExp(line).test(lcMessage);
-		} else {
-			matched = lcMessage.includes(line);
+	for (const list in Chat.monitors) {
+		const {location, condition, monitor} = Chat.monitors[list];
+		if (!monitor) continue;
+		if (location === 'PUBLIC' && room && room.isPrivate === true) continue;
+
+		switch (condition) {
+		case 'notTrusted':
+			if (user.trusted && !isStaffRoom) continue;
+			break;
+		case 'notStaff':
+			if (isStaffRoom) continue;
+			break;
 		}
-		if (matched) {
-			if (isStaff) return `${message} __[would be locked: ${line}${reason ? ` (${reason})` : ''}]__`;
-			message = message.replace(/(https?):\/\//g, '$1__:__//');
-			message = message.replace(/\./g, '__.__');
-			if (room) {
-				Punishments.autolock(user, room, 'ChatMonitor', `Filtered phrase: ${line}`, `<${room.id}> ${user.name}: ${message}${reason ? ` __(${reason})__` : ''}`, true);
-			} else {
-				this.errorReply(`Please do not say '${line.replace(/\\b/g, '')}'.`);
-			}
-			filterWords.autolock[i][3]++;
-			saveFilters();
-			return false;
-		}
-	}
-	for (let i = 0; i < filterWords.warn.length; i++) {
-		let [line, reason] = filterWords.warn[i];
-		let matched = false;
-		if (typeof line !== 'string') throw new Error(`warn filters should only have strings`);
-		if (line.startsWith('\\b') || line.endsWith('\\b')) {
-			matched = new RegExp(line).test(lcMessage);
-		} else {
-			matched = lcMessage.includes(line);
-		}
-		if (matched) {
-			if (isStaff) return `${message} __[would be filtered: ${line}${reason ? ` (${reason})` : ''}]__`;
-			this.errorReply(`Please do not say '${line.replace(/\\b/g, '')}'.`);
-			filterWords.warn[i][3]++;
-			saveFilters();
-			return false;
-		}
-	}
-	if (!user.trusted || isStaffRoom) {
-		for (let i = 0; i < filterWords.shorteners.length; i++) {
-			let [regex] = filterWords.shorteners[i];
-			if (typeof regex === 'string') throw new Error(`shortener filters should not have strings`);
-			if (regex.test(lcMessage)) {
-				if (isStaff) return `${message} __[shortener: ${String(regex).slice(3, -3).replace('\\.', '.')}]__`;
-				this.errorReply(`Please do not use URL shorteners like '${String(regex).slice(3, -3).replace('\\.', '.')}'.`);
-				filterWords.shorteners[i][3]++;
-				saveFilters();
-				return false;
-			}
-		}
-	}
-	if ((room && room.isPrivate !== true) || !room) {
-		for (let i = 0; i < filterWords.publicwarn.length; i++) {
-			let [line, reason] = filterWords.publicwarn[i];
-			let matched = false;
-			if (typeof line !== 'string') throw new Error(`publicwarn filters should only have strings`);
-			if (line.startsWith('\\b') || line.endsWith('\\b')) {
-				matched = new RegExp(line).test(lcMessage);
-			} else {
-				matched = lcMessage.includes(line);
-			}
-			if (matched) {
-				if (isStaff) return `${message} __[would be filtered in public: ${line}${reason ? ` (${reason})` : ''}]__`;
-				this.errorReply(`Please do not say '${line.replace(/\\b/g, '')}'.`);
-				filterWords.publicwarn[i][3]++;
-				saveFilters();
-				return false;
-			}
-		}
-	}
-	if (!(room && room.chatRoomData && room.id.endsWith('staff'))) {
-		for (let line of filterWords.wordfilter) {
-			const regex = line[0];
-			if (typeof regex === 'string') throw new Error(`wordfilter filters should not have strings`);
-			let match = regex.exec(message);
-			while (match) {
-				let filtered = line[2] || '';
-				if (match[0] === match[0].toUpperCase()) filtered = filtered.toUpperCase();
-				if (match[0][0] === match[0][0].toUpperCase()) filtered = `${filtered ? filtered[0].toUpperCase() : ''}${filtered.slice(1)}`;
-				message = message.replace(match[0], filtered);
+
+		for (const line of Chat.filterWords[list]) {
+			const ret = monitor.call(this, line, room, user, message, lcMessage, isStaff);
+			if (ret && ret !== message) {
 				line[3]++;
 				saveFilters();
-				match = regex.exec(message);
+			}
+			if (typeof ret === 'string') {
+				message = ret;
+			} else if (ret === false) {
+				return false;
 			}
 		}
 	}
+
 
 	return message;
 };
@@ -194,40 +232,28 @@ let namefilter = function (name, user) {
 	// Remove false positives.
 	lcName = lcName.replace('herapist', '').replace('grape', '').replace('scrape', '');
 
-	for (let [line] of filterWords.autolock) {
-		if (typeof line !== 'string') throw new Error(`autolock filters should only have strings`);
-		if (lcName.includes(line)) {
-			Punishments.autolock(user, Rooms('staff'), `NameMonitor`, `inappropriate name: ${name}`, `using an inappropriate name: ${name}`, false, true);
-			return '';
-		}
-	}
-	for (let [line] of filterWords.warn) {
-		if (typeof line !== 'string') throw new Error(`warn filters should only have strings`);
-		if (lcName.includes(line)) {
-			user.trackRename = name;
-			return '';
-		}
-	}
-	for (let [line] of filterWords.publicwarn) {
-		if (typeof line !== 'string') throw new Error(`publicwarn filters should only have strings`);
-		if (lcName.includes(line)) {
-			user.trackRename = name;
-			return '';
-		}
-	}
-	for (let line of filterWords.namefilter) {
-		const word = String(line[0]);
-		let matched;
-		if (word.startsWith('\\b') || word.endsWith('\\b')) {
-			matched = new RegExp(word).test(lcName);
-		} else {
-			matched = lcName.includes(word);
-		}
-		if (matched) {
-			user.trackRename = name;
-			line[3]++;
-			saveFilters();
-			return '';
+	for (const list in filterWords) {
+		for (let line of filterWords[list]) {
+			const word = line[0];
+
+			let matched;
+			if (typeof word !== 'string') {
+				matched = word.test(lcName);
+			} else if (word.startsWith('\\b') || word.endsWith('\\b')) {
+				matched = new RegExp(word).test(lcName);
+			} else {
+				matched = lcName.includes(word);
+			}
+			if (matched) {
+				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
+					Punishments.autolock(user, Rooms('staff'), `NameMonitor`, `inappropriate name: ${name} (from ${user.name})`, `using an inappropriate name: ${name} (from ${user.name})`, false, true);
+				} else {
+					user.trackRename = name;
+				}
+				line[3]++;
+				saveFilters();
+				return '';
+			}
 		}
 	}
 
@@ -244,40 +270,27 @@ let nicknamefilter = function (name, user) {
 	// Remove false positives.
 	lcName = lcName.replace('herapist', '').replace('grape', '').replace('scrape', '');
 
-	for (let [line] of filterWords.autolock) {
-		if (typeof line !== 'string') throw new Error(`autolock filters should only have strings`);
-		if (lcName.includes(line)) {
-			Punishments.autolock(user, Rooms('staff'), `NicknameMonitor`, `inappropriate Pokémon nickname: ${name}`, `${toId(user)}: using an inappropriate Pokémon nickname: ${name}`, false);
-			return '';
-		}
-	}
-	for (let [line] of filterWords.warn) {
-		if (typeof line !== 'string') throw new Error(`warn filters should only have strings`);
-		if (lcName.includes(line)) {
-			return '';
-		}
-	}
-	for (let [line] of filterWords.publicwarn) {
-		if (typeof line !== 'string') throw new Error(`publicwarn filters should only have strings`);
-		if (lcName.includes(line)) {
-			return '';
-		}
-	}
-	for (let line of filterWords.namefilter) {
-		const word = String(line[0]);
-		let matched;
-		if (word.startsWith('\\b') || word.endsWith('\\b')) {
-			matched = new RegExp(word).test(lcName);
-		} else {
-			matched = lcName.includes(word);
-		}
-		if (matched) return '';
-	}
+	for (const list in filterWords) {
+		for (let line of filterWords[list]) {
+			const word = line[0];
 
-	for (let line of filterWords.wordfilter) {
-		const regex = line[0];
-		if (typeof regex === 'string') continue;
-		if (regex.test(lcName)) return '';
+			let matched;
+			if (typeof word !== 'string') {
+				matched = word.test(lcName);
+			} else if (word.startsWith('\\b') || word.endsWith('\\b')) {
+				matched = new RegExp(word).test(lcName);
+			} else {
+				matched = lcName.includes(word);
+			}
+			if (matched) {
+				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
+					Punishments.autolock(user, Rooms('staff'), `NameMonitor`, `inappropriate Pokémon nickname: ${name}`, `using an inappropriate Pokémon nickname: ${name}`, false, true);
+				}
+				line[3]++;
+				saveFilters();
+				return '';
+			}
+		}
 	}
 
 	return name;
@@ -295,15 +308,15 @@ const pages = {
 			return buf + `<p>Access denied</p></div>`;
 		}
 		let content = ``;
-		for (const key in filterKeys) {
-			content += `<tr><th colspan="2"><h3>${filterKeys[key][2]} <span style="font-size:8pt;">[${key}]</span></h3></tr></th>`;
+		for (const key in Chat.monitors) {
+			content += `<tr><th colspan="2"><h3>${Chat.monitors[key].label} <span style="font-size:8pt;">[${key}]</span></h3></tr></th>`;
 			if (filterWords[key].length) {
 				content += filterWords[key].map(([str, reason, filterTo, hits]) => {
 					let entry = '';
 					if (filterTo) {
 						entry = `<abbr title="${reason}"><code>${str}</code></abbr> &rArr; ${filterTo}`;
 					} else {
-						if (filterKeys[key][1] === 'SHORTENER') str = String(str).slice(3, -3).replace(/\\./g, '.');
+						if (Chat.monitors[key].punishment === 'SHORTENER') str = String(str).slice(3, -3).replace(/\\./g, '.');
 						entry = `<abbr title="${reason}">${str}</abbr>`;
 					}
 					return `<tr><td>${entry}</td><td>${hits}</td></tr>`;
@@ -342,7 +355,7 @@ let commands = {
 
 			if (!(list in filterWords)) return this.errorReply(`Invalid list: ${list}. Possible options: ${Object.keys(filterWords).join(', ')}`);
 
-			if (filterKeys[list][1] === 'FILTERTO') {
+			if (Chat.monitors[list].punishment === 'FILTERTO') {
 				let [word, filterTo, ...reasonParts] = rest;
 				if (!filterTo) return this.errorReply(`Syntax for word filters: /filter add ${list}, regex, filter to, reason`);
 				word = word.trim();
@@ -364,7 +377,7 @@ let commands = {
 				let [word, ...reasonParts] = rest;
 				word = word.trim();
 				let reason = reasonParts.join(',').trim();
-				if (filterKeys[list][1] === 'SHORTENER') {
+				if (Chat.monitors[list].punishment === 'SHORTENER') {
 					if (filterWords[list].some(val => String(val[0]).slice(3, -3).replace(/\\./g, '.') === word)) return this.errorReply(`${word} is already added to the ${list} list.`);
 					const regex = new RegExp(`\\b${word.replace(/\\/g, '\\\\').replace(/\./g, '\\.')}\\b`);
 					filterWords[list].push([regex, reason, null, 0]);
@@ -387,7 +400,7 @@ let commands = {
 
 			if (!(list in filterWords)) return this.errorReply(`Invalid list: ${list}. Possible options: ${Object.keys(filterWords).join(', ')}`);
 
-			if (filterKeys[list][1] === 'FILTERTO') {
+			if (Chat.monitors[list].punishment === 'FILTERTO') {
 				const notFound = words.filter(val => !filterWords[list].filter(entry => String(entry[0]).slice(1, -3) === val).length);
 				if (notFound.length) return this.errorReply(`${notFound.join(', ')} ${Chat.plural(notFound, "are", "is")} not on the ${list} list.`);
 				filterWords[list] = filterWords[list].filter(entry => !words.includes(String(entry[0]).slice(1, -3)));
