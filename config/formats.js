@@ -531,7 +531,7 @@ let Formats = [
 		},
 		onBegin: function () {
 			for (const pokemon of this.p1.pokemon.concat(this.p2.pokemon)) {
-				let move = this.getMove(pokemon.set.item);
+				let move = this.getActiveMove(pokemon.set.item);
 				if (move.exists && move.category !== 'Status') {
 					// @ts-ignore
 					pokemon.forte = move;
