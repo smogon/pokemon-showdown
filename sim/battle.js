@@ -2101,7 +2101,7 @@ class Battle extends Dex.ModdedDex {
 			numerator = numerator[0];
 		}
 		let modifier = Math.floor(numerator * 4096 / denominator);
-		
+
 		// Modifiers always consist of a multiplication, followed by a division by 4096.
 		// The register is limited to 32 bits of storage at all times, so if multiplying
 		// exceeds that figure, the most significant bits will fall off prior to division.
