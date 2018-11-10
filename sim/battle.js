@@ -2105,7 +2105,17 @@ class Battle extends Dex.ModdedDex {
 		// Modifiers always consist of a multiplication, followed by a division by 4096.
 		// The register is limited to 32 bits of storage at all times, so if multiplying
 		// exceeds that figure, the most significant bits will fall off prior to division.
-		return Math.floor((value * modifier % 4294967296 + 2048 - 1) / 4096);
+		return Math.floor((bitTruncate(value * modifier, 32) + 2048 - 1) / 4096);
+	}
+
+	/**
+	 * @param {number} value
+	 * @param {number} bits
+	 */
+	bitTruncate(value, bits) {
+		if (bits < 1) return value;
+
+		return value % (1 << bits);
 	}
 
 	/**
@@ -2253,7 +2263,7 @@ class Battle extends Dex.ModdedDex {
 		defense = this.runEvent('Modify' + statTable[defenseStat], defender, attacker, move, defense);
 
 		//int(int(int(2 * L / 5 + 2) * A * P / D) / 50); (subject to 32-bit storage limitation)
-		let baseDamage = Math.floor(Math.floor(Math.floor(2 * level / 5 + 2) * basePower * attack % 4294967296 / defense) / 50);
+		let baseDamage = Math.floor(Math.floor(bitTruncate(Math.floor(2 * level / 5 + 2) * basePower * attack, 32) / defense) / 50);
 
 		// Calculate damage modifiers separately (order differs between generations)
 		return this.modifyDamage(baseDamage, pokemon, target, move, suppressMessages);
@@ -2343,14 +2353,14 @@ class Battle extends Dex.ModdedDex {
 		}
 
 		// Generations 5-7 all truncate damage to 16 bits as the last step of all
-		return Math.floor(baseDamage % 65536);
+		return bitTruncate(Math.floor(baseDamage), 16);
 	}
 
 	/**
 	 * @param {number} baseDamage
 	 */
 	randomizer(baseDamage) {
-		return Math.floor(baseDamage * (100 - this.random(16)) % 4294967296 / 100);
+		return Math.floor(bitTruncate(baseDamage * (100 - this.random(16)), 32) / 100);
 	}
 
 	/**
