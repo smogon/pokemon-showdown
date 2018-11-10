@@ -2115,7 +2115,7 @@ class Battle extends Dex.ModdedDex {
 	bitTruncate(value, bits) {
 		if (bits < 1) return value;
 
-		return value % (1 << bits);
+		return value % (2 ** bits);
 	}
 
 	/**
