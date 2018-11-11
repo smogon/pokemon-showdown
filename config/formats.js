@@ -14,11 +14,33 @@ let Formats = [
 	{
 		name: "[Gen 7] The New OU",
 		challengeShow: true,
-		rated: true,
 		mod: 'tnou',
 		searchShow: true,
 		ruleset: ['Sleep Clause Mod', 'Species Clause', 'OHKO Clause', 'Moody Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Pokemon', 'Standard', 'Team Preview'],
 		banlist: ['Uber', 'Stealth Rock', 'Spikes', 'Toxic Spikes', 'Sticky Web', 'Landorus-Therian', 'Finneon', 'Diglett', 'Dugtrio', 'Trapinch', 'Aegislash+Kings Shield', 'Kangaskhan-Mega+Seismic Toss', 'Landorus+Sheer Force', 'Toxapex+Regenerator'],
+		desc: "Prevents teams from having more than one Pok&eacute;mon from the same tier",
+	},
+	{
+		name: "[Gen 7] Six Pack",
+		desc: `An OU based metagame, but the player is limited to one Pok&eacute;mon from the same tier to encourage creativity.`,
+		challengeShow: true,
+		searchShow: true,
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		banlist: ['Uber', 'Arena Trap', 'Power Construct', 'Shadow Tag', 'Baton Pass'],
+		onStart: function () {
+			this.add('rule', 'Tier Clause: Limit one Pokémon from the same tier.');
+		},
+		onValidateTeam: function (team, format) {
+			/**@type {{[k: string]: true}} */
+			let speciesTable = {};
+			for (const set of team) {
+				let template = this.getTemplate(set.tier);
+				if (speciesTable[template]) {
+					return ["You are limited to one Pokémon from the same tier."];
+				}
+				speciesTable[template] = true;
+			}
+		},
 	},
 
 	// US/UM Singles
