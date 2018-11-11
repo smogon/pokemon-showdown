@@ -127,19 +127,21 @@ const commands = {
 		if (id === 'constructor') return this.errorReply("Invalid dish name.");
 		ingredients = ingredients.map(ingredient => ingredient.trim());
 
+		if ([...ingredients.entries()].some(([index, ingredient]) => ingredients.indexOf(ingredient) !== index)) {
+			return this.errorReply("Please don't enter duplicate ingredients.");
+		}
+
+		if (ingredients.some(ingredient => ingredient.length > 19)) {
+			return this.errorReply("Ingredients can only be 19 characters long.");
+		}
+
 		if (cmd === 'adddish') {
 			if (dishes[id]) return this.errorReply("This dish already exists.");
 			if (ingredients.length < 6) return this.errorReply("Dishes need at least 6 ingredients.");
-			if ([...ingredients.entries()].some(([index, ingredient]) => ingredients.indexOf(ingredient) !== index)) {
-				return this.errorReply("Please don't enter duplicate ingredients.");
-			}
 			dishes[id] = [dish];
 		} else {
 			if (!dishes[id]) return this.errorReply(`Dish not found: ${dish}`);
 			if (ingredients.some(ingredient => dishes[id].includes(ingredient))) return this.errorReply("Please don't enter duplicate ingredients.");
-			if ([...ingredients.entries()].some(([index, ingredient]) => ingredients.indexOf(ingredient) !== index)) {
-				return this.errorReply("Please don't enter duplicate ingredients.");
-			}
 		}
 
 		dishes[id] = dishes[id].concat(ingredients);
