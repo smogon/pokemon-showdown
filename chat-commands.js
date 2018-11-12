@@ -656,9 +656,6 @@ const commands = {
 		if (!user.autoconfirmed) {
 			return this.errorReply("You must be autoconfirmed to make a groupchat.");
 		}
-		if (!user.trusted) {
-			return this.errorReply("You must be global voice or roomdriver+ in some public room to make a groupchat.");
-		}
 		if (cmd === 'subroomgroupchat') {
 			if (!user.can('mute', null, room)) return this.errorReply("You can only create subroom groupchats for rooms you're staff in.");
 			if (room.battle) return this.errorReply("You cannot create a subroom of a battle.");
