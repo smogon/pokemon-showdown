@@ -635,6 +635,7 @@ class GtsGiveaway {
 		}
 		// @ts-ignore
 		delete this.room.gtsga;
+		return this.left;
 	}
 
 	// This currently doesn't match some of the edge cases the other pokemon matching function does account for (such as Type: Null). However, this should never be used as a fodder mon anyway, so I don't see a huge need to implement it.
@@ -804,8 +805,8 @@ let commands = {
 			// @ts-ignore
 			room.gtsga = new GtsGiveaway(room, targetUser, amount, summary, deposit, lookfor);
 
-			this.privateModAction(`(${user.name} started a GTS giveaway for ${targetUser.name})`);
-			this.modlog('GTS GIVEAWAY', null, `for ${targetUser.getLastId()}`);
+			this.privateModAction(`(${user.name} started a GTS giveaway for ${targetUser.name} with ${amount} Pokémon)`);
+			this.modlog('GTS GIVEAWAY', null, `for ${targetUser.getLastId()} with ${amount} Pokémon`);
 		},
 		left: function (target, room, user) {
 			if (room.id !== 'wifi') return false;
@@ -865,10 +866,10 @@ let commands = {
 				return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
 			}
 			// @ts-ignore
-			room.gtsga.end(true);
-			this.modlog('GTS END', null, target);
+			const amount = room.gtsga.end(true);
 			if (target) target = `: ${target}`;
-			this.privateModAction(`(The giveaway was forcibly ended by ${user.name}${target})`);
+			this.modlog('GTS END', null, `with ${amount} left${target}`);
+			this.privateModAction(`(The giveaway was forcibly ended by ${user.name} with ${amount} left${target})`);
 		},
 	},
 	// general.
