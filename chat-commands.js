@@ -737,7 +737,7 @@ const commands = {
 		return this.errorReply(`An unknown error occurred while trying to create the room '${title}'.`);
 	},
 	makegroupchathelp: [
-		`/makegroupchat [roomname] - Creates an invite-only group chat named [roomname]. Requires global voice or roomdriver+ in a public room to make a groupchat.`,
+		`/makegroupchat [roomname] - Creates an invite-only group chat named [roomname].`,
 		`/subroomgroupchat [roomname] - Creates a subroom groupchat of the current room. Can only be used in a public room you have staff in.`,
 	],
 
