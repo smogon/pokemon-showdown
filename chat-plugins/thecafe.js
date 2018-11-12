@@ -131,7 +131,7 @@ const commands = {
 		let team, importable;
 		const [dish, ingredients] = generateDish();
 		if (target === 'bf') {
-			const bfTeam = Dex.generateTeam('gen7battlefactory');
+			const bfTeam = Dex.generateTeam('gen7bssfactory');
 			importable = stringifyTeam(bfTeam, ingredients);
 			team = /** @type {Template[]} */ (bfTeam).map(val => val.species);
 		} else {
