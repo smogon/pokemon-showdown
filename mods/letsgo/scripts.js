@@ -19,10 +19,19 @@ let BattleScripts = {
 			if (set.happiness && set.happiness >= 255) {
 				modStats[statName] *= 1.1;
 			}
+			for (let pokemon of this.p1.pokemon.concat(this.p2.pokemon)) {
+				if (pokemon.id !== toId(set.species)) continue;
+				// @ts-ignore
+				modStats[statName] += pokemon.getAwakeningValues()[statName];
+			}
 		}
 		if ('hp' in baseStats) {
 			let stat = baseStats['hp'];
 			modStats['hp'] = Math.floor(Math.floor(2 * stat + set.ivs['hp'] + Math.floor(set.evs['hp'] / 4) + 100) * set.level / 100 + 10);
+			for (let pokemon of this.p1.pokemon.concat(this.p2.pokemon)) {
+				if (pokemon.id !== toId(set.species)) continue;
+				modStats['hp'] += pokemon.getAwakeningValues()['hp'];
+			}
 		}
 		return this.natureModify(modStats, set.nature);
 	},

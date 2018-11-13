@@ -444,7 +444,7 @@ let BattleFormatsData = {
 	},
 	pikachustarter: {
 		eventPokemon: [
-			{"generation": 7, "level": 5, "moves": ["thundershock", "tailwhip", "growl"], "pokeball": "pokeball"},
+			{"generation": 7, "level": 5, "perfectIVs": 6, "moves": ["thundershock", "tailwhip", "growl"], "pokeball": "pokeball"},
 		],
 		eventOnly: true,
 		isUnreleased: true,
@@ -1620,7 +1620,7 @@ let BattleFormatsData = {
 	},
 	eeveestarter: {
 		eventPokemon: [
-			{"generation": 7, "level": 5, "moves": ["tackle", "tailwhip", "growl"], "pokeball": "pokeball"},
+			{"generation": 7, "level": 5, "perfectIVs": 6, "moves": ["tackle", "tailwhip", "growl"], "pokeball": "pokeball"},
 		],
 		eventOnly: true,
 		isUnreleased: true,
