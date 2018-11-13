@@ -981,12 +981,14 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 90,
 		category: "Special",
-		shortDesc: "No additional effect.",
+		desc: "This move summons Reflect for 5 turns upon use.",
+		shortDesc: "Summons Reflect.",
 		id: "baddybad",
 		name: "Baddy Bad",
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1},
+		sideCondition: 'reflect',
 		secondary: null,
 		target: "normal",
 		type: "Dark",
@@ -6004,12 +6006,21 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 90,
 		category: "Special",
-		shortDesc: "No additional effect.",
+		desc: "Resets the stat stages of all active Pokemon to 0.",
+		shortDesc: "Eliminates all stat changes.",
 		id: "freezyfrost",
 		name: "Freezy Frost",
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1},
+		onHitField: function () {
+			this.add('-clearallboost');
+			for (const side of this.sides) {
+				for (const pokemon of side.active) {
+					if (pokemon && pokemon.isActive) pokemon.clearBoosts();
+				}
+			}
+		},
 		secondary: null,
 		target: "normal",
 		type: "Ice",
@@ -6507,12 +6518,14 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 90,
 		category: "Special",
-		shortDesc: "No additional effect.",
+		desc: "This move summons Light Screen for 5 turns upon use.",
+		shortDesc: "Summons Light Screen.",
 		id: "glitzyglow",
 		name: "Glitzy Glow",
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1},
+		sideCondition: 'lightscreen',
 		secondary: null,
 		target: "normal",
 		type: "Psychic",
@@ -14171,16 +14184,15 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
-		shortDesc: "No additional effect.",
+		desc: "This move summons Leech Seed on the foe.",
+		shortDesc: "Summons Leech Seed.",
 		id: "sappyseed",
 		name: "Sappy Seed",
 		pp: 15,
 		priority: 0,
+		volatileStatus: 'leechseed',
 		flags: {protect: 1, reflectable: 1},
-		secondary: {
-			chance: 100,
-			volatileStatus: 'leechseed',
-		},
+		secondary: null,
 		target: "normal",
 		type: "Grass",
 		contestType: "Clever",
@@ -15984,12 +15996,24 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 90,
 		category: "Special",
-		shortDesc: "No additional effect.",
+		desc: "Every Pokemon in the user's party is cured of its major status condition.",
+		shortDesc: "Cures the user's party of all status conditions.",
 		id: "sparklyswirl",
 		name: "Sparkly Swirl",
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1},
+		onHit: function (pokemon, source, move) {
+			this.add('-activate', source, 'move: Aromatherapy');
+			let success = false;
+			for (const ally of pokemon.side.pokemon) {
+				if (ally !== source && (ally.volatiles['substitute'] && !move.infiltrates)) {
+					continue;
+				}
+				if (ally.cureStatus()) success = true;
+			}
+			return success;
+		},
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
