@@ -1133,8 +1133,7 @@ let BattleStatuses = {
 		},
 		onSwitchOut(pokemon) {
 			this.add(`c|%Snaquaza|Lynch Hoeen while I'm away...`);
-			// @ts-ignore Hack for Snaquaza's Z move
-			if (pokemon.claimHP) delete pokemon.claimHP;
+			if (pokemon.m.claimHP) pokemon.m.claimHP = null;
 		},
 		onFaint() {
 			this.add(`c|%Snaquaza|How did you know I was scum?`);
@@ -1153,7 +1152,7 @@ let BattleStatuses = {
 			pokemon.formeChange(pokemon.baseTemplate.id);
 			pokemon.moveSlots = pokemon.moveSlots.slice(0, 4);
 			this.add('message', `${pokemon.name}'s fake claim was uncovered!`);
-			delete pokemon.m.claimHP;
+			pokemon.m.claimHP = null;
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
 	},
