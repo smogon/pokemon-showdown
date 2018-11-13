@@ -1675,10 +1675,25 @@ Chat.fitImage = async function (url, maxHeight = 300, maxWidth = 300) {
 	return [Math.round(width * ratio), Math.round(height * ratio)];
 };
 
-// Used (and populated) by ChatMonitor.
-/** @type {{[k: string]: string[]}} */
-Chat.filterKeys = {};
-/** @type {{[k: string]: [(string | RegExp), string, string?, number][]}} */
+/**
+ * Used by ChatMonitor.
+ * @typedef {[(string | RegExp), string, string?, number]} FilterWord
+ * @typedef {(this: CommandContext, line: FilterWord, room: ChatRoom, user: User, message: string, lcMessage: string, isStaff: boolean) => (string | false | undefined)} MonitorHandler
+ * @typedef {{location: string, punishment: string, label: string, condition?: string, monitor?: MonitorHandler}} Monitor
+ */
+
+/** @type {{[k: string]: FilterWord[]}} */
 Chat.filterWords = {};
+/** @type {{[k: string]: Monitor}} */
+Chat.monitors = {};
 /** @type {Map<string, string>} */
 Chat.namefilterwhitelist = new Map();
+
+/**
+ * @param {string} id
+ * @param {Monitor} entry
+ */
+Chat.registerMonitor = function (id, entry) {
+	if (!Chat.filterWords[id]) Chat.filterWords[id] = [];
+	Chat.monitors[id] = entry;
+};

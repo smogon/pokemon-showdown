@@ -3,8 +3,6 @@
 const FS = require('./../lib/fs');
 
 const MINUTE = 60 * 1000;
-const YEAR = 365 * 24 * 60 * MINUTE;
-
 const ROOMIDS = ['thestudio', 'jubilifetvfilms', 'youtube', 'thelibrary', 'prowrestling'];
 
 /** @type {{[k: string]: ChatRoom}} */
@@ -43,6 +41,9 @@ function savePrenoms() {
 function toNominationId(nomination) {
 	return nomination.toLowerCase().replace(/\s/g, '').replace(/\b&\b/g, '');
 }
+
+/** @typedef {(query: string[], user: User, connection: Connection) => (string | null | void)} PageHandler */
+/** @typedef {{[k: string]: PageHandler | PageTable}} PageTable */
 
 class OtdHandler {
 	/**
@@ -202,7 +203,16 @@ class OtdHandler {
 		if (!winner) return false; // Should never happen but shuts typescript up.
 		this.appendWinner(winner.nomination, winner.name);
 
-		this.room.add(Chat.html `|uhtml|otd|<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:12pt;">Nominations for ${this.name} of the ${this.timeLabel} are over!</p><p style="tex-align:center;font-size:10pt;">Out of ${keys.length} nominations, we randomly selected <strong>${winner.nomination}</strong> as the winner! (Nomination by ${winner.name})</p></div>`);
+		const names = Array.from(this.nominations.values()).map(obj => obj.name);
+
+		let columns = names.length > 27 ? 4 : names.length > 18 ? 3 : names.length > 9 ? 2 : 1;
+		let content = '';
+		for (let i = 0; i < columns; i++) {
+			content += `<td>${names.slice(Math.ceil((i / columns) * names.length), Math.ceil(((i + 1) / columns) * names.length)).join('<br/>')}</td>`;
+		}
+		const namesHTML = `<table><tr>${content}</tr></table></p></div>`;
+
+		this.room.add(Chat.html `|uhtml|otd|<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:12pt;">Nominations for ${this.name} of the ${this.timeLabel} are over!</p><p style="tex-align:center;font-size:10pt;">Out of ${keys.length} nominations, we randomly selected <strong>${winner.nomination}</strong> as the winner! (Nomination by ${winner.name})</p><p style="font-weight:bold;">Thanks to today's participants:` + namesHTML);
 		this.room.update();
 
 		this.finish();
@@ -314,43 +324,61 @@ class OtdHandler {
 	}
 
 	/**
-	 * @param {number} year
+	 * @type {PageHandler}
 	 */
-	generateWinnerList(year) {
-		let output = `|wide||html|`;
+	generateWinnerList() {
+		let buf = `|title|${this.id.toUpperCase()} Winners\n|pagehtml|<div class="pad ladder"><h2>${this.name} of the ${this.timeLabel} Winners</h2>`;
 
-		if (!this.winners.length) return output + `No past winners found.`;
+		// Only use specific fields for displaying in winners list.
+		/** @type {string[]} */
+		const columns = [];
+		const labels = [];
 
-		let now = Date.now();
-
-		for (let i = this.winners.length - 1; i >= 0; i--) {
-			let date = new Date(this.winners[i].time);
-			if (year) {
-				if (date.getFullYear() !== year) continue;
-			} else if (now - this.winners[i].time > YEAR) {
-				break;
+		for (let i = 0; i < this.keys.length; i++) {
+			if (i === 0 || ['song', 'event', 'time', 'link', 'tagline'].includes(this.keys[i]) && !(this.keys[i] === 'link' && this.keys.includes('song'))) {
+				columns.push(this.keys[i]);
+				labels.push(this.keyLabels[i]);
 			}
-
-			/** @param {number} num */
-			const pad = num => num < 10 ? '0' + num : num;
-
-			output += Chat.html `[${pad(date.getMonth() + 1)}-${pad(date.getDate())}-${date.getFullYear()}] ${this.winners[i][this.keys[0]]}${this.winners[i].author ? ` by ${this.winners[i].author}` : ''}`;
-			if (this.winners[i].event) output += Chat.html `(Event: ${this.winners[i].event}) `;
-			if (this.winners[i].song) {
-				output += `: `;
-				if (this.winners[i].link) {
-					output += Chat.html `<a href="${this.winners[i].link}">${this.winners[i].song}</a>`;
-				} else {
-					output += Chat.escapeHTML(this.winners[i].song);
-				}
-			} else if (this.winners[i].link) {
-				output += Chat.html `<a href="${this.winners[i].link}">${this.winners[i].link}</a>`;
-			}
-
-			output += Chat.html ` (nominated by ${this.winners[i].nominator})<br/>`;
 		}
 
-		return output;
+		let content = ``;
+
+		content += `<tr>${labels.map(label => `<th><h3>${label}</h3></th>`).join('')}</tr>`;
+		for (let i = this.winners.length - 1; i >= 0; i--) {
+			const entry = columns.map(col => {
+				let val = this.winners[i][col];
+				if (!val) return '';
+				switch (col) {
+				case 'time':
+					let date = new Date(this.winners[i].time);
+
+					/** @param {number} num */
+					const pad = num => num < 10 ? '0' + num : num;
+
+					return Chat.html `${pad(date.getMonth() + 1)}-${pad(date.getDate())}-${date.getFullYear()}`;
+				case 'song':
+					if (!this.winners[i].link) return val;
+					// falls through
+				case 'link':
+					return `<a href="${this.winners[i].link}">${val}</a>`;
+				case 'book':
+					val = `${val}${this.winners[i].author ? ` by ${this.winners[i].author}` : ''}`;
+					// falls through
+				case columns[0]:
+					return `${Chat.escapeHTML(val)}${this.winners[i].nominator ? Chat.html `<br/><span style="font-style:italic;font-size:8pt;">nominated by ${this.winners[i].nominator}</span>` : ''}`;
+				default:
+					return Chat.escapeHTML(val);
+				}
+			});
+			content += `<tr>${entry.map(val => `<td style="max-width:${600 / columns.length}px;word-wrap:break-word;">${val}</td>`).join('')}</tr>`;
+		}
+		if (!content) {
+			buf += `<p>There have been no ${this.id} winners.</p>`;
+		} else {
+			buf += `<table>${content}</table>`;
+		}
+		buf += `</div>`;
+		return buf;
 	}
 }
 
@@ -391,6 +419,7 @@ let commands = {
 
 		const handler = selectHandler(this.message);
 
+		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 		if (!this.can('mute', null, room)) return false;
 
@@ -407,6 +436,7 @@ let commands = {
 
 		const handler = selectHandler(this.message);
 
+		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 		if (!this.can('mute', null, room)) return false;
 
@@ -427,6 +457,7 @@ let commands = {
 
 		const handler = selectHandler(this.message);
 
+		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 
 		if (!toNominationId(target).length || target.length > 50) return this.sendReply(`'${target}' is not a valid ${handler.name.toLowerCase()} name.`);
@@ -441,6 +472,7 @@ let commands = {
 
 		const handler = selectHandler(this.message);
 
+		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 
 		if (this.broadcasting) {
@@ -456,6 +488,7 @@ let commands = {
 
 		const handler = selectHandler(this.message);
 
+		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 		if (!this.can('mute', null, room)) return false;
 
@@ -463,7 +496,7 @@ let commands = {
 		if (!userid) return this.errorReply(`'${target}' is not a valid username.`);
 
 		if (handler.removeNomination(userid)) {
-			this.privateModAction(`(${user.name} removed ${this.targetUsername}'s nomination for the ${handler.name} of the ${handler.timeLabel}.)`);
+			this.privateModAction(`(${user.name} removed ${target}'s nomination for the ${handler.name} of the ${handler.timeLabel}.)`);
 			this.modlog(`${handler.id.toUpperCase()} REMOVENOM`, userid);
 		} else {
 			this.sendReply(`User '${target}' has no nomination for the ${handler.name} of the ${handler.timeLabel}.`);
@@ -477,6 +510,7 @@ let commands = {
 
 		const handler = selectHandler(this.message);
 
+		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 		if (!this.can('declare', null, room)) return false;
 
@@ -494,6 +528,7 @@ let commands = {
 
 		const handler = selectHandler(this.message);
 
+		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 		if (!this.can('mute', null, room)) return false;
 
@@ -510,6 +545,7 @@ let commands = {
 
 		const handler = selectHandler(this.message);
 
+		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 		if (!this.can('mute', null, room)) return false;
 
@@ -572,11 +608,12 @@ let commands = {
 
 		const handler = selectHandler(this.message);
 
+		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 
-		return connection.popup(selectHandler(this.message).generateWinnerList(parseInt(target)));
+		return this.parse(`/join view-${handler.id}`);
 	},
-	winnershelp: [`/-otd winners [year] - Displays a list of previous things of the day of the past year. Optionally, specify a year to see all winners in that year.`],
+	winnershelp: [`/-otd winners - Displays a list of previous things of the day.`],
 
 	'': function (target, room) {
 		if (!this.canTalk()) return;
@@ -595,6 +632,17 @@ let commands = {
 	},
 };
 
+/** @type {PageTable} */
+const pages = {
+	aotd: aotd.generateWinnerList.bind(aotd),
+	fotd: fotd.generateWinnerList.bind(fotd),
+	sotd: sotd.generateWinnerList.bind(sotd),
+	cotd: cotd.generateWinnerList.bind(cotd),
+	botw: botw.generateWinnerList.bind(botw),
+	motw: motw.generateWinnerList.bind(motw),
+};
+exports.pages = pages;
+
 const help = [
 	`Thing of the Day plugin commands (aotd, fotd, sotd, cotd, botw, motw):`,
 	`- /-otd - View the current Thing of the Day.`,
@@ -605,7 +653,7 @@ const help = [
 	`- /-otd force [nomination] - Forcibly sets the Thing of the Day without a nomination round. Requires: # & ~`,
 	`- /-otd delay - Turns off the automatic 20 minute timer for Thing of the Day voting rounds. Requires: % @ # & ~`,
 	`- /-otd set property: value[, property: value] - Set the winner, quote, song, link or image for the current Thing of the Day. Requires: % @ * # & ~`,
-	`- /-otd winners [year] - Displays a list of previous things of the day of the past year. Optionally, specify a year to see all winners in that year.`,
+	`- /-otd winners - Displays a list of previous things of the day.`,
 ];
 
 exports.commands = {

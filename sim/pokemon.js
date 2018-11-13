@@ -313,6 +313,8 @@ class Pokemon {
 		// OMs
 
 		/**@type {string | undefined} */
+		this.innate = undefined;
+		/**@type {string | undefined} */
 		this.originalSpecies = undefined;
 		/**@type {?boolean} */
 		this.gluttonyFlag = null;
@@ -1234,7 +1236,8 @@ class Pokemon {
 			if (sourceEffect && sourceEffect.status === this.status) {
 				this.battle.add('-fail', this, this.status);
 			} else if (sourceEffect && sourceEffect.status) {
-				this.battle.add('-fail', this);
+				this.battle.add('-fail', source);
+				this.battle.attrLastMove('[still]');
 			}
 			return false;
 		}
@@ -1243,7 +1246,7 @@ class Pokemon {
 			// the game currently never ignores immunities
 			if (!this.runStatusImmunity(status.id === 'tox' ? 'psn' : status.id)) {
 				this.battle.debug('immune to status');
-				if (sourceEffect && sourceEffect.status) this.battle.add('-immune', this, '[msg]');
+				if (sourceEffect && sourceEffect.status) this.battle.add('-immune', this);
 				return false;
 			}
 		}
@@ -1491,7 +1494,7 @@ class Pokemon {
 		}
 		if (!this.runStatusImmunity(status.id)) {
 			this.battle.debug('immune to volatile status');
-			if (sourceEffect && sourceEffect.status) this.battle.add('-immune', this, '[msg]');
+			if (sourceEffect && sourceEffect.status) this.battle.add('-immune', this);
 			return false;
 		}
 		result = this.battle.runEvent('TryAddVolatile', this, source, sourceEffect, status);
@@ -1720,7 +1723,7 @@ class Pokemon {
 			isGrounded = this.isGrounded(!negateResult);
 			if (isGrounded === null) {
 				if (message) {
-					this.battle.add('-immune', this, '[msg]', '[from] ability: Levitate');
+					this.battle.add('-immune', this, '[from] ability: Levitate');
 				}
 				return false;
 			}
@@ -1728,7 +1731,7 @@ class Pokemon {
 		if (!negateResult) return true;
 		if ((isGrounded === undefined && !this.battle.getImmunity(type, this)) || isGrounded === false) {
 			if (message) {
-				this.battle.add('-immune', this, '[msg]');
+				this.battle.add('-immune', this);
 			}
 			return false;
 		}
@@ -1749,7 +1752,7 @@ class Pokemon {
 		if (!this.battle.getImmunity(type, this)) {
 			this.battle.debug('natural status immunity');
 			if (message) {
-				this.battle.add('-immune', this, '[msg]');
+				this.battle.add('-immune', this);
 			}
 			return false;
 		}
@@ -1757,7 +1760,7 @@ class Pokemon {
 		if (!immunity) {
 			this.battle.debug('artificial status immunity');
 			if (message && immunity !== null) {
-				this.battle.add('-immune', this, '[msg]');
+				this.battle.add('-immune', this);
 			}
 			return false;
 		}

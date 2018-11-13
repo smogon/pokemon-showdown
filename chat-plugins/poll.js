@@ -225,19 +225,23 @@ const commands = {
 			if (target.length > 1024) return this.errorReply("Poll too long.");
 			if (room.battle) return this.errorReply("Battles do not support polls.");
 
+			/** @type {string} */
+			let text = Chat.filter.call(this, target, user, room, connection);
+			if (target !== text) return this.errorReply("You are not allowed to use filtered words in polls.");
+
 			const supportHTML = cmd === 'htmlcreate';
 			let separator = '';
-			if (target.includes('\n')) {
+			if (text.includes('\n')) {
 				separator = '\n';
-			} else if (target.includes('|')) {
+			} else if (text.includes('|')) {
 				separator = '|';
-			} else if (target.includes(',')) {
+			} else if (text.includes(',')) {
 				separator = ',';
 			} else {
 				return this.errorReply("Not enough arguments for /poll new.");
 			}
 
-			let params = target.split(separator).map(param => param.trim());
+			let params = text.split(separator).map(param => param.trim());
 
 			if (!this.can('minigame', null, room)) return false;
 			if (supportHTML && !this.can('declare', null, room)) return false;

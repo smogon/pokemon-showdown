@@ -1019,7 +1019,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		onTryHit: function (target) {
 			if (target.hasType('Ground')) {
-				this.add('-immune', target, '[msg]');
+				this.add('-immune', target);
 				return null;
 			}
 		},

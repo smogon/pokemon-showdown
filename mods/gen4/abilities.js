@@ -66,7 +66,7 @@ let BattleAbilities = {
 					return;
 				}
 				if (!target.addVolatile('flashfire')) {
-					this.add('-immune', target, '[msg]', '[from] ability: Flash Fire');
+					this.add('-immune', target, '[from] ability: Flash Fire');
 				}
 				return null;
 			}
@@ -405,7 +405,7 @@ let BattleAbilities = {
 			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle' || move.id === 'firefang') return;
 			this.debug('Wonder Guard immunity: ' + move.id);
 			if (target.runEffectiveness(move) <= 0) {
-				this.add('-immune', target, '[msg]', '[from] ability: Wonder Guard');
+				this.add('-immune', target, '[from] ability: Wonder Guard');
 				return null;
 			}
 		},

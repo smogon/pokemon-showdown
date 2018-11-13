@@ -520,10 +520,11 @@ let BattleStatuses = {
 		num: 0,
 		effectType: 'Weather',
 		duration: 0,
-		onTryMove: function (target, source, effect) {
-			if (effect.type === 'Fire' && effect.category !== 'Status') {
+		onTryMove: function (attacker, defender, move) {
+			if (move.type === 'Fire' && move.category !== 'Status') {
 				this.debug('Primordial Sea fire suppress');
-				this.add('-fail', source, effect, '[from] Primordial Sea');
+				this.add('-fail', attacker, move, '[from] Primordial Sea');
+				this.attrLastMove('[still]');
 				return null;
 			}
 		},
@@ -593,10 +594,11 @@ let BattleStatuses = {
 		num: 0,
 		effectType: 'Weather',
 		duration: 0,
-		onTryMove: function (target, source, effect) {
-			if (effect.type === 'Water' && effect.category !== 'Status') {
+		onTryMove: function (attacker, defender, move) {
+			if (move.type === 'Water' && move.category !== 'Status') {
 				this.debug('Desolate Land water suppress');
-				this.add('-fail', source, effect, '[from] Desolate Land');
+				this.add('-fail', attacker, move, '[from] Desolate Land');
+				this.attrLastMove('[still]');
 				return null;
 			}
 		},

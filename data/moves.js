@@ -1977,6 +1977,7 @@ let BattleMovedex = {
 		onTryMove: function (pokemon, target, move) {
 			if (pokemon.hasType('Fire')) return;
 			this.add('-fail', pokemon, 'move: Burn Up');
+			this.attrLastMove('[still]');
 			return null;
 		},
 		self: {
@@ -3962,7 +3963,7 @@ let BattleMovedex = {
 		drain: [1, 2],
 		onTryHit: function (target) {
 			if (target.status !== 'slp' && !target.hasAbility('comatose')) {
-				this.add('-immune', target, '[msg]');
+				this.add('-immune', target);
 				return null;
 			}
 		},
@@ -4454,7 +4455,7 @@ let BattleMovedex = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onTry: function (pokemon, target) {
 			if (pokemon.hp >= target.hp) {
-				this.add('-immune', target, '[msg]');
+				this.add('-immune', target);
 				return null;
 			}
 		},
@@ -5142,6 +5143,7 @@ let BattleMovedex = {
 		onTry: function (pokemon, target) {
 			if (pokemon.activeTurns > 1) {
 				this.add('-fail', pokemon);
+				this.attrLastMove('[still]');
 				this.add('-hint', "First Impression only works on your first turn out.");
 				return null;
 			}
@@ -9147,7 +9149,7 @@ let BattleMovedex = {
 		},
 		onTryHit: function (target) {
 			if (target.hasType('Grass')) {
-				this.add('-immune', target, '[msg]');
+				this.add('-immune', target);
 				return null;
 			}
 		},
@@ -13803,7 +13805,7 @@ let BattleMovedex = {
 				for (const pokemon of side.active) {
 					if (!pokemon || !pokemon.isActive) continue;
 					if (!pokemon.runImmunity('Ground')) {
-						this.add('-immune', pokemon, '[msg]');
+						this.add('-immune', pokemon);
 						anyAirborne = true;
 						continue;
 					}
@@ -14939,7 +14941,7 @@ let BattleMovedex = {
 				if (target !== source.volatiles['twoturnmove'].source) return false;
 
 				if (target.hasType('Flying')) {
-					this.add('-immune', target, '[msg]');
+					this.add('-immune', target);
 					return null;
 				}
 			} else {
@@ -15581,7 +15583,10 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
 		onHit: function (target) {
-			if (!target.setType('Water')) return false;
+			if (!target.setType('Water')) {
+				this.add('-fail', target);
+				return null;
+			}
 			this.add('-start', target, 'typechange', 'Water');
 		},
 		secondary: null,
@@ -16500,7 +16505,8 @@ let BattleMovedex = {
 				}
 				let damage = this.getDamage(source, target, move);
 				if (!damage && damage !== 0) {
-					this.add('-fail', target);
+					this.add('-fail', source);
+					this.attrLastMove('[still]');
 					return null;
 				}
 				damage = this.runEvent('SubDamage', target, source, move, damage);
@@ -16571,8 +16577,8 @@ let BattleMovedex = {
 		onTry: function (source, target) {
 			let action = this.willMove(target);
 			if (!action || action.choice !== 'move' || (action.move.category === 'Status' && action.move.id !== 'mefirst') || target.volatiles.mustrecharge) {
-				this.attrLastMove('[still]');
 				this.add('-fail', source);
+				this.attrLastMove('[still]');
 				return null;
 			}
 		},
@@ -16844,7 +16850,7 @@ let BattleMovedex = {
 		flags: {protect: 1, mirror: 1, mystery: 1},
 		onTryHit: function (target) {
 			if (target.hasAbility('stickyhold')) {
-				this.add('-immune', target, '[msg]');
+				this.add('-immune', target);
 				return null;
 			}
 		},
@@ -16917,7 +16923,7 @@ let BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		onTryHit: function (target, source) {
 			if (!target.hasType(source.getTypes())) {
-				this.add('-immune', target, '[msg]');
+				this.add('-immune', target);
 				return null;
 			}
 		},
@@ -17241,7 +17247,7 @@ let BattleMovedex = {
 			onStart: function (target) {
 				if (['Diglett', 'Dugtrio', 'Palossand', 'Sandygast'].includes(target.baseTemplate.baseSpecies) ||
 						target.baseTemplate.species === 'Gengar-Mega') {
-					this.add('-immune', target, '[msg]');
+					this.add('-immune', target);
 					return null;
 				}
 				if (target.volatiles['smackdown'] || target.volatiles['ingrain']) return false;
@@ -17826,7 +17832,7 @@ let BattleMovedex = {
 		flags: {protect: 1, mirror: 1, mystery: 1},
 		onTryHit: function (target) {
 			if (target.hasAbility('stickyhold')) {
-				this.add('-immune', target, '[msg]');
+				this.add('-immune', target);
 				return null;
 			}
 		},

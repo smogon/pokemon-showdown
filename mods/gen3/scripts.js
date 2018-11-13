@@ -26,7 +26,10 @@ let BattleScripts = {
 
 		let hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move);
 		if (!hitResult) {
-			if (hitResult === false) this.add('-fail', target);
+			if (hitResult === false) {
+				this.add('-fail', pokemon);
+				this.attrLastMove('[still]');
+			}
 			return false;
 		}
 		this.runEvent('PrepareHit', pokemon, target, move);
@@ -42,7 +45,10 @@ let BattleScripts = {
 				hitResult = this.runEvent('TryHitSide', target, pokemon, move);
 			}
 			if (!hitResult) {
-				if (hitResult === false) this.add('-fail', target);
+				if (hitResult === false) {
+					this.add('-fail', pokemon);
+					this.attrLastMove('[still]');
+				}
 				return false;
 			}
 			return this.moveHit(target, pokemon, move);
@@ -114,15 +120,18 @@ let BattleScripts = {
 		if (accPass) {
 			hitResult = this.runEvent('TryHit', target, pokemon, move);
 			if (!hitResult) {
-				if (hitResult === false) this.add('-fail', target);
+				if (hitResult === false) {
+					this.add('-fail', pokemon);
+					this.attrLastMove('[still]');
+				}
 				return false;
 			} else if (naturalImmunity) {
-				this.add('-immune', target, '[msg]');
+				this.add('-immune', target);
 				return false;
 			}
 		} else {
 			if (naturalImmunity) {
-				this.add('-immune', target, '[msg]');
+				this.add('-immune', target);
 			} else {
 				if (!move.spreadHit) this.attrLastMove('[miss]');
 				this.add('-miss', pokemon, target);
