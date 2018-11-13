@@ -890,7 +890,8 @@ class CommandContext {
 			}
 			if (targetUser) {
 				if (lockType && !targetUser.can('lock')) {
-					return this.errorReply(`You are ${lockType} and can only private message members of the global moderation team (users marked by @ or above in the Help room). ${lockExpiration}`);
+					this.errorReply(`You are ${lockType} and can only private message members of the global moderation team. ${lockExpiration}`);
+					return this.sendReply(`|html|<a href="view-help-request--appeal" class="button">Get help with this</a>`);
 				}
 				if (targetUser.locked && !user.can('lock')) {
 					return this.errorReply(`The user "${targetUser.name}" is locked and cannot be PMed.`);
