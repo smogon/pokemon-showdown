@@ -442,6 +442,14 @@ let BattleFormatsData = {
 		tier: "(PU)",
 		doublesTier: "DUU",
 	},
+	pikachustarter: {
+		eventPokemon: [
+			{"generation": 7, "level": 5, "moves": ["thundershock", "tailwhip", "growl"], "pokeball": "pokeball"},
+		],
+		eventOnly: true,
+		isUnreleased: true,
+		tier: "Unreleased",
+	},
 	raichu: {
 		randomBattleMoves: ["nastyplot", "encore", "thunderbolt", "grassknot", "hiddenpowerice", "focusblast", "voltswitch"],
 		randomDoubleBattleMoves: ["fakeout", "encore", "thunderbolt", "grassknot", "hiddenpowerice", "focusblast", "voltswitch", "protect"],
@@ -1609,6 +1617,14 @@ let BattleFormatsData = {
 			{"generation": 7, "level": 10, "nature": "Jolly", "isHidden": false, "moves": ["celebrate", "sandattack", "babydolleyes"], "pokeball": "cherishball"},
 		],
 		tier: "LC",
+	},
+	eeveestarter: {
+		eventPokemon: [
+			{"generation": 7, "level": 5, "moves": ["tackle", "tailwhip", "growl"], "pokeball": "pokeball"},
+		],
+		eventOnly: true,
+		isUnreleased: true,
+		tier: "Unreleased",
 	},
 	vaporeon: {
 		randomBattleMoves: ["wish", "protect", "scald", "roar", "icebeam", "healbell"],
@@ -7332,6 +7348,14 @@ let BattleFormatsData = {
 		eventOnly: true,
 		tier: "UU",
 		doublesTier: "DOU",
+	},
+	meltan: {
+		isUnreleased: true,
+		tier: "Unreleased",
+	},
+	melmetal: {
+		isUnreleased: true,
+		tier: "Unreleased",
 	},
 	missingno: {
 		randomBattleMoves: ["watergun", "skyattack", "doubleedge", "metronome"],
