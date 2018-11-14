@@ -744,9 +744,9 @@ Punishments.lock = function (user, expireTime, id, ...reason) {
  * @param {string} reason
  * @param {string?} message
  * @param {boolean} week
- * @param {boolean} name
+ * @param {string?} [name]
  */
-Punishments.autolock = function (user, room, source, reason, message, week = false, name = false) {
+Punishments.autolock = function (user, room, source, reason, message, week = false, name) {
 	if (!message) message = reason;
 
 	let punishment = `LOCKED`;
@@ -757,7 +757,7 @@ Punishments.autolock = function (user, room, source, reason, message, week = fal
 	}
 	if (name) {
 		punishment = `NAMELOCKED`;
-		Punishments.namelock(user, expires, toId(user), `Autonamelock: ${user.name || toId(user)}: ${reason}`);
+		Punishments.namelock(user, expires, toId(name), `Autonamelock: ${user.name || toId(user)}: ${reason}`);
 	} else {
 		Punishments.lock(user, expires, toId(user), `Autolock: ${user.name || toId(user)}: ${reason}`);
 	}
@@ -1270,7 +1270,7 @@ Punishments.checkName = function (user, userid, registered) {
 	let bannedUnder = ``;
 	if (punishUserid !== userid) bannedUnder = ` because you have the same IP as banned user: ${punishUserid}`;
 
-	if ((id === 'LOCK' || id === 'NAMELOCK') && punishUserid !== user.userid && Punishments.sharedIps.has(user.latestIp)) {
+	if ((id === 'LOCK' || id === 'NAMELOCK') && punishUserid !== userid && Punishments.sharedIps.has(user.latestIp)) {
 		if (!user.autoconfirmed) {
 			user.semilocked = `#sharedip ${user.locked}`;
 		}

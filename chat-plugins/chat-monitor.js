@@ -246,7 +246,7 @@ let namefilter = function (name, user) {
 			}
 			if (matched) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
-					Punishments.autolock(user, Rooms('staff'), `NameMonitor`, `inappropriate name: ${name} (from ${user.name})`, `using an inappropriate name: ${name} (from ${user.name})`, false, true);
+					Punishments.autolock(user, Rooms('staff'), `NameMonitor`, `inappropriate name: ${name}`, `using an inappropriate name: ${name} (from ${user.name})`, false, name);
 				} else {
 					user.trackRename = name;
 				}
@@ -284,7 +284,7 @@ let nicknamefilter = function (name, user) {
 			}
 			if (matched) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
-					Punishments.autolock(user, Rooms('staff'), `NameMonitor`, `inappropriate Pokémon nickname: ${name}`, `using an inappropriate Pokémon nickname: ${name}`, false, true);
+					Punishments.autolock(user, Rooms('staff'), `NameMonitor`, `inappropriate Pokémon nickname: ${name}`, `using an inappropriate Pokémon nickname: ${name}`, false, user.name);
 				}
 				line[3]++;
 				saveFilters();
