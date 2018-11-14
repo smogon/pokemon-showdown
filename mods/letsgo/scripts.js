@@ -2,6 +2,54 @@
 
 /**@type {ModdedBattleScriptsData} */
 let BattleScripts = {
+	init: function () {
+		this.modData('Abilities', 'noability').isNonstandard = false;
+		for (let i in this.data.Pokedex) {
+			let template = this.getTemplate(i);
+			this.modData('Pokedex', i).abilities = {0: 'No Ability'};
+			if (this.data.FormatsData[i].requiredItem && this.data.Items[toId(this.data.FormatsData[i].requiredItem)].megaStone) {
+				this.modData('FormatsData', template.speciesid).requiredItem = undefined;
+			}
+		}
+	},
+	canMegaEvo(pokemon) {
+		let altForme = pokemon.baseTemplate.otherFormes && this.getTemplate(pokemon.baseTemplate.otherFormes[0]);
+		for (let i in this.data.Items) {
+			let item = this.getItem(i);
+			if (altForme && altForme.isMega && altForme.requiredMove && pokemon.baseMoves.includes(toId(altForme.requiredMove)) && !item.zMove) return altForme.species;
+			if (item.megaEvolves !== pokemon.baseTemplate.baseSpecies || item.megaStone === pokemon.species) {
+				return null;
+			}
+			return item.megaStone;
+		}
+	},
+	runMegaEvo(pokemon) {
+		const templateid = pokemon.canMegaEvo;
+		if (!templateid) return false;
+		const side = pokemon.side;
+
+		// Pokémon affected by Sky Drop cannot mega evolve. Enforce it here for now.
+		for (const foeActive of side.foe.active) {
+			if (foeActive.volatiles['skydrop'] && foeActive.volatiles['skydrop'].source === pokemon) {
+				return false;
+			}
+		}
+
+		for (let i in this.data.Items) {
+			let item = this.getItem(i);
+			if (!item.megaStone || item.megaStone !== templateid) continue;
+			pokemon.formeChange(templateid, item, true);
+		}
+
+		// Limit one mega evolution
+		let wasMega = pokemon.canMegaEvo;
+		for (const ally of side.pokemon) {
+			if (wasMega) ally.canMegaEvo = null;
+		}
+
+		this.runEvent('AfterMega', pokemon);
+		return true;
+	},
 	/**
 	 * Given a table of base stats and a pokemon set, return the actual stats.
 	 * @param {StatsTable} baseStats
@@ -37,6 +85,8 @@ let BattleScripts = {
 	},
 
 	pokemon: {
+		ability: '',
+		baseAbility: '',
 		getWeight() {
 			let weight = this.template.weightkg;
 			weight = this.battle.runEvent('ModifyWeight', this, null, null, weight);

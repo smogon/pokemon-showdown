@@ -754,8 +754,11 @@ interface ModdedBattleSide {
 }
 
 interface ModdedBattlePokemon {
+	ability?: string
+	baseAbility?: string
 	boostBy?: (this: Pokemon, boost: SparseBoostsTable) => boolean
 	calculateStat?: (this: Pokemon, statName: string, boost: number, modifier?: number) => number
+	formeChange?: (this: Pokemon, templateId: string | Template, source: Effect | null, isPermanent?: boolean, message?: string, abilitySlot?: '0' | '1' | 'H' | 'S') => boolean
 	getActionSpeed?: (this: Pokemon) => number
 	getStat?: (this: Pokemon, statName: string, unboosted?: boolean, unmodified?: boolean) => number
 	getWeight?: (this: Pokemon) => number
@@ -763,6 +766,7 @@ interface ModdedBattlePokemon {
 	modifyStat?: (this: Pokemon, statName: string, modifier: number) => void
 	moveUsed?: (this: Pokemon, move: Move, targetLoc?: number) => void
 	recalculateStats?: (this: Pokemon) => void
+	transformInto?: (this: Pokemon, pokemon: Pokemon, user: Pokemon, effect?: Effect) => boolean
 }
 
 interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
