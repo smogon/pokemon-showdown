@@ -478,18 +478,18 @@ class Pokemon {
 	}
 
 	getCombatPower() {
-		let baseStatSum = 0;
-		for (let stat in this.template.baseStats) {
+		let statSum = 0;
+		for (let stat in this.stats) {
 			// @ts-ignore
-			baseStatSum += this.template.baseStats[stat];
+			statSum += this.calculateStat(stat, this.boosts[stat]);
 		}
 		let awakeningSum = 0;
-		for (let boost in this.getAwakeningValues()) {
+		for (let stat in this.getAwakeningValues()) {
 			// @ts-ignore
-			awakeningSum += this.getAwakeningValues()[boost];
+			awakeningSum += this.calculateStat(stat, this.boosts[stat]) + this.getAwakeningValues()[stat];
 		}
 		if (!this.combatPower) this.combatPower = 0;
-		this.combatPower = Math.floor(Math.floor(baseStatSum * this.level * 6 / 100) + (Math.floor(baseStatSum + awakeningSum) * ((this.level * 4) / 100 + 2)));
+		this.combatPower = Math.floor(Math.floor(statSum * this.level * 6 / 100) + (Math.floor(awakeningSum) * Math.floor((this.level * 4) / 100 + 2)));
 		return this.combatPower;
 	}
 

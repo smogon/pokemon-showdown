@@ -14,11 +14,10 @@ let BattleFormats = {
 			if (set.species === set.name) delete set.name;
 			if ((baseTemplate.num > 151 || baseTemplate.num < 1) && ![808, 809].includes(baseTemplate.num) &&
 				!['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(template.forme)) {
-					problems.push(
-						`Only Pok\u00E9mon whose base formes are from Gen 1, Meltan, and Melmetal can be used.`,
-						`(${baseTemplate.species} is from Gen ${baseTemplate.gen}.)`
-					);
-				}
+				problems.push(
+					`Only Pok\u00E9mon whose base formes are from Gen 1, Meltan, and Melmetal can be used.`,
+					`(${baseTemplate.species} is from Gen ${baseTemplate.gen}.)`
+				);
 			}
 			set.ability = 'None';
 			set.item = '';
@@ -72,12 +71,10 @@ let BattleFormats = {
 			}
 
 			// only in gen 1 and 2 it was legal to max out all EVs
-			if (this.gen >= 3 && totalEV > 510) {
-				problems.push((set.name || set.species) + " has more than 510 total EVs.");
+			if (this.gen >= 3 && totalEV > 1200) {
+				problems.push((set.name || set.species) + " has more than 1200 total Awakening Values.");
 			}
 			set.gender = '';
-			set.ability = '';
-			set.item = '';
 
 			// Legendary Pokemon must have at least 3 perfect IVs in gen 6
 			if (set.ivs && this.gen >= 6 && (baseTemplate.gen >= 6 || format.requirePentagon) && (template.eggGroups[0] === 'Undiscovered' || template.species === 'Manaphy') && !template.prevo && !template.nfe &&
@@ -123,20 +120,6 @@ let BattleFormats = {
 			if (set.species !== template.species) {
 				// Autofixed forme.
 				template = this.getTemplate(set.species);
-
-				if (!this.getRuleTable(format).has('ignoreillegalabilities') && !format.noChangeAbility) {
-					// Ensure that the ability is (still) legal.
-					let legalAbility = false;
-					for (let i in template.abilities) {
-						// @ts-ignore
-						if (template.abilities[i] !== set.ability) continue;
-						legalAbility = true;
-						break;
-					}
-					if (!legalAbility) { // Default to first ability.
-						set.ability = template.abilities['0'];
-					}
-				}
 			}
 
 			return problems;
