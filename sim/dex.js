@@ -671,6 +671,20 @@ class ModdedDex {
 		return nature;
 	}
 	/**
+	 * @param {PokemonSet} set
+	 * @param {string} [statName]
+	 */
+	getAwakeningValues(set, statName) {
+		statName = toId(statName);
+		let avs = {};
+		for (let ev in set.evs) {
+			// @ts-ignore
+			avs[ev] = this.clampIntRange(set.evs[ev], 0, 200);
+		}
+		if (statName && statName in avs) return avs[statName];
+		return avs;
+	}
+	/**
 	 * Given a table of base stats and a pokemon set, return the actual stats.
 	 * @param {StatsTable} baseStats
 	 * @param {PokemonSet} set

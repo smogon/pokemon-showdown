@@ -145,6 +145,13 @@ let Formats = [
 		],
 	},
 	{
+		name: "[Gen 7] Let's Go! (Beta)",
+		desc: `Let's Go! (Beta)`,
+
+		mod: 'letsgo',
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+	},
+	{
 		name: "[Gen 7] Anything Goes",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3587441/">Anything Goes</a>`,

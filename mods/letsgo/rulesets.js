@@ -3,12 +3,31 @@
 /**@type {{[k: string]: ModdedFormatsData}} */
 let BattleFormats = {
 	pokemon: {
-		inherit: true,
+		effectType: 'ValidatorRule',
+		name: 'Pokemon',
+		onValidateTeam: function (team, format) {
+			let problems = [];
+			if (team.length > 6) problems.push('Your team has more than six Pok\u00E9mon.');
+			// ----------- legality line ------------------------------------------
+			if (!format || !this.getRuleTable(format).has('-illegal')) return problems;
+			// everything after this line only happens if we're doing legality enforcement
+			let hasStarter = 0;
+			for (const set of team) {
+				if (set.species === 'Pikachu-Starter' || set.species === 'Eevee-Starter') {
+					if (hasStarter > 1) {
+						problems.push(`You can only have one of Pikachu-Starter and Eevee-Starter on a team.`);
+						break;
+					}
+					hasStarter++;
+				}
+			}
+			return problems;
+		},
 		onChangeSet: function (set, format) {
 			let template = this.getTemplate(set.species);
 			let baseTemplate = this.getTemplate(template.baseSpecies);
 			let problems = [];
-			let totalEV = 0;
+			let totalAV = 0;
 			let allowCAP = !!(format && this.getRuleTable(format).has('allowcap'));
 
 			if (set.species === set.name) delete set.name;
@@ -19,8 +38,6 @@ let BattleFormats = {
 					`(${baseTemplate.species} is from Gen ${baseTemplate.gen}.)`
 				);
 			}
-			set.ability = 'None';
-			set.item = '';
 			if (set.moves) {
 				for (const moveid of set.moves) {
 					let move = this.getMove(moveid);
@@ -46,19 +63,16 @@ let BattleFormats = {
 
 			if (set.evs) {
 				for (let k in set.evs) {
+					let av = this.getAwakeningValues(set);
 					// @ts-ignore
-					if (typeof set.evs[k] !== 'number' || set.evs[k] < 0) {
-						// @ts-ignore
-						set.evs[k] = 0;
+					av[k] = set.evs[k];
+					// @ts-ignore
+					if (typeof av[k] !== 'number' || av < 0) {
+						av[k] = 0;
 					}
 					// @ts-ignore
-					totalEV += set.evs[k];
+					totalAV += av[k];
 				}
-			}
-
-			// In gen 6, it is impossible to battle other players with pokemon that break the EV limit
-			if (totalEV > 510 && this.gen === 6) {
-				problems.push((set.name || set.species) + " has more than 510 total EVs.");
 			}
 
 			// ----------- legality line ------------------------------------------
@@ -71,8 +85,13 @@ let BattleFormats = {
 			}
 
 			// only in gen 1 and 2 it was legal to max out all EVs
-			if (this.gen >= 3 && totalEV > 1200) {
+			if (this.gen >= 3 && totalAV > 1200) {
 				problems.push((set.name || set.species) + " has more than 1200 total Awakening Values.");
+			}
+			set.ability = 'No Ability';
+			if (set.item) {
+				let item = this.getItem(set.item);
+				if (item.megaEvolves && item.megaEvolves !== template.baseSpecies) set.item = '';
 			}
 			set.gender = '';
 
@@ -110,7 +129,6 @@ let BattleFormats = {
 				if (template.requiredMove && !set.moves.includes(toId(template.requiredMove))) {
 					problems.push(`${template.species} transforms in-battle with ${template.requiredMove}.`); // Meloetta-Pirouette, Rayquaza-Mega
 				}
-				if (!format.noChangeForme) set.species = template.baseSpecies; // Fix battle-only forme
 			} else {
 				if (template.requiredMove && !set.moves.includes(toId(template.requiredMove))) {
 					problems.push(`${(set.name || set.species)} needs to have the move ${template.requiredMove}.`); // Keldeo-Resolute

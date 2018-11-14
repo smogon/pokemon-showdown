@@ -280,7 +280,6 @@ class Pokemon {
 		/**@type {number?} */
 		this.combatPower = null;
 		/**@type {StatsTable?} */
-		this.awakeningValues = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
 
 		// This is used in gen 1 only, here to avoid code repetition.
 		// Only declared if gen 1 to avoid declaring an object we aren't going to need.
@@ -466,27 +465,14 @@ class Pokemon {
 		return speed & 0x1FFF;
 	}
 
-	getAwakeningValues() {
-		if (!this.awakeningValues) {
-			this.awakeningValues = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
-			for (let ev in this.set.evs) {
-				// @ts-ignore
-				this.awakeningValues[ev] = this.battle.clampIntRange(this.set.evs[ev], 0, 200);
-			}
-		}
-		return this.awakeningValues;
-	}
-
 	getCombatPower() {
 		let statSum = 0;
+		let awakeningSum = 0;
 		for (let stat in this.stats) {
 			// @ts-ignore
 			statSum += this.calculateStat(stat, this.boosts[stat]);
-		}
-		let awakeningSum = 0;
-		for (let stat in this.getAwakeningValues()) {
 			// @ts-ignore
-			awakeningSum += this.calculateStat(stat, this.boosts[stat]) + this.getAwakeningValues()[stat];
+			awakeningSum += this.calculateStat(stat, this.boosts[stat]) + this.dex.getAwakeningValues(this.set, stat);
 		}
 		if (!this.combatPower) this.combatPower = 0;
 		this.combatPower = Math.floor(Math.floor(statSum * this.level * 6 / 100) + (Math.floor(awakeningSum) * Math.floor((this.level * 4) / 100 + 2)));
