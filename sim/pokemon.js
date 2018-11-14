@@ -279,7 +279,6 @@ class Pokemon {
 		this.stats = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
 		/**@type {number?} */
 		this.combatPower = null;
-		/**@type {StatsTable?} */
 
 		// This is used in gen 1 only, here to avoid code repetition.
 		// Only declared if gen 1 to avoid declaring an object we aren't going to need.

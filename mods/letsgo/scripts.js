@@ -1,7 +1,5 @@
 'use strict';
 
-const Data = require('../../sim/dex-data');
-
 /**@type {ModdedBattleScriptsData} */
 let BattleScripts = {
 	init: function () {
@@ -28,161 +26,31 @@ let BattleScripts = {
 			// @ts-ignore
 			let stat = baseStats[statName];
 			// @ts-ignore
-			modStats[statName] = Math.floor(Math.floor(2 * stat + set.ivs[statName]) * set.level / 100 + 5);
-			if (set.happiness >= 255) {
-				modStats[statName] = Math.floor(modStats[statName] * 1.1);
-			}
-			modStats[statName] = modStats[statName] + this.getAwakeningValues(set, statName);
+			modStats[statName] = Math.floor((Math.floor(2 * stat + set.ivs[statName]) * set.level / 100 + 5) * Math.floor(set.happiness >= 255 ? 1.1 : 1));
 		}
 		if ('hp' in baseStats) {
 			let stat = baseStats['hp'];
 			modStats['hp'] = Math.floor(Math.floor(2 * stat + set.ivs['hp'] + 100) * set.level / 100 + 10);
-			modStats['hp'] = modStats['hp'] + this.getAwakeningValues(set, 'hp');
 		}
-		return this.natureModify(modStats, set.nature);
+		return this.natureModify(modStats, set);
 	},
 
 	/**
-	 * @param {Pokemon} pokemon
-	 * @param {Pokemon} target
-	 * @param {string | number | ActiveMove} move
-	 * @param {boolean} [suppressMessages]
+	 * @param {StatsTable} stats
+	 * @param {PokemonSet} set
+	 * @return {StatsTable}
 	 */
-	getDamage(pokemon, target, move, suppressMessages = false) {
-		if (typeof move === 'string') move = this.getActiveMove(move);
-
-		if (typeof move === 'number') {
-			let basePower = move;
-			move = /** @type {ActiveMove} */ (new Data.Move({
-				basePower,
-				type: '???',
-				category: 'Physical',
-				willCrit: false,
-			}));
-			move.hit = 0;
-		}
-
-		if (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) {
-			if (!target.runImmunity(move.type, !suppressMessages)) {
-				return false;
-			}
-		}
-
-		if (move.ohko) {
-			return target.maxhp;
-		}
-
-		if (move.damageCallback) {
-			return move.damageCallback.call(this, pokemon, target);
-		}
-		if (move.damage === 'level') {
-			return pokemon.level;
-		}
-		if (move.damage) {
-			return move.damage;
-		}
-
-		let category = this.getCategory(move);
-		let defensiveCategory = move.defensiveCategory || category;
-
-		let basePower = move.basePower;
-		if (move.basePowerCallback) {
-			basePower = move.basePowerCallback.call(this, pokemon, target, move);
-		}
-		if (!basePower) {
-			if (basePower === 0) return; // returning undefined means not dealing damage
-			return basePower;
-		}
-		basePower = this.clampIntRange(basePower, 1);
-
-		let critMult;
-		let critRatio = this.runEvent('ModifyCritRatio', pokemon, target, move, move.critRatio || 0);
-		if (this.gen <= 5) {
-			critRatio = this.clampIntRange(critRatio, 0, 5);
-			critMult = [0, 16, 8, 4, 3, 2];
-		} else {
-			critRatio = this.clampIntRange(critRatio, 0, 4);
-			if (this.gen === 6) {
-				critMult = [0, 16, 8, 2, 1];
-			} else {
-				critMult = [0, 24, 8, 2, 1];
-			}
-		}
-
-		move.crit = move.willCrit || false;
-		if (move.willCrit === undefined) {
-			if (critRatio) {
-				move.crit = this.randomChance(1, critMult[critRatio]);
-			}
-		}
-
-		if (move.crit) {
-			move.crit = this.runEvent('CriticalHit', target, null, move);
-		}
-
-		// happens after crit calculation
-		basePower = this.runEvent('BasePower', pokemon, target, move, basePower, true);
-
-		if (!basePower) return 0;
-		basePower = this.clampIntRange(basePower, 1);
-
-		let level = pokemon.level;
-
-		let attacker = pokemon;
-		let defender = target;
-		let attackStat = category === 'Physical' ? 'atk' : 'spa';
-		let defenseStat = defensiveCategory === 'Physical' ? 'def' : 'spd';
-		let statTable = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
-		let attack;
-		let defense;
-
+	natureModify(stats, set) {
+		let nature = this.getNature(set.nature);
 		// @ts-ignore
-		let atkBoosts = move.useTargetOffensive ? defender.boosts[attackStat] : attacker.boosts[attackStat];
+		if (nature.plus) stats[nature.plus] = Math.floor(stats[nature.plus] * 1.1);
 		// @ts-ignore
-		let defBoosts = move.useSourceDefensive ? attacker.boosts[defenseStat] : defender.boosts[defenseStat];
-
-		let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
-		let ignorePositiveDefensive = !!move.ignorePositiveDefensive;
-
-		if (move.crit) {
-			ignoreNegativeOffensive = true;
-			ignorePositiveDefensive = true;
+		if (nature.minus) stats[nature.minus] = Math.floor(stats[nature.minus] * 0.9);
+		for (const stat in stats) {
+			// @ts-ignore
+			stats[stat] += this.getAwakeningValues(stat, set);
 		}
-		let ignoreOffensive = !!(move.ignoreOffensive || (ignoreNegativeOffensive && atkBoosts < 0));
-		let ignoreDefensive = !!(move.ignoreDefensive || (ignorePositiveDefensive && defBoosts > 0));
-
-		if (ignoreOffensive) {
-			this.debug('Negating (sp)atk boost/penalty.');
-			atkBoosts = 0;
-		}
-		if (ignoreDefensive) {
-			this.debug('Negating (sp)def boost/penalty.');
-			defBoosts = 0;
-		}
-
-		if (move.useTargetOffensive) {
-			attack = defender.calculateStat(attackStat, atkBoosts);
-		} else {
-			attack = attacker.calculateStat(attackStat, atkBoosts);
-		}
-
-		if (move.useSourceDefensive) {
-			defense = attacker.calculateStat(defenseStat, defBoosts);
-		} else {
-			defense = defender.calculateStat(defenseStat, defBoosts);
-		}
-
-		// Apply Stat Modifiers
-		// @ts-ignore
-		attack = this.runEvent('Modify' + statTable[attackStat], attacker, defender, move, attack);
-		// @ts-ignore
-		defense = this.runEvent('Modify' + statTable[defenseStat], defender, attacker, move, defense);
-
-		//int(int(int(2 * L / 5 + 2) * A * P / D) / 50);
-		let baseDamage = Math.floor(Math.floor(Math.floor(2 * level / 5 + 2) * basePower * attack / defense) / 50);
-
-		// Calculate damage modifiers separately (order differs between generations)
-		return this.modifyDamage(baseDamage, pokemon, target, move, suppressMessages);
+		return stats;
 	},
 
 	pokemon: {

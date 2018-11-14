@@ -67,7 +67,8 @@ let BattleFormats = {
 					// @ts-ignore
 					av[k] = set.evs[k];
 					// @ts-ignore
-					if (typeof av[k] !== 'number' || av < 0) {
+					if (typeof av[k] !== 'number' || av[k] < 0) {
+						// @ts-ignore
 						av[k] = 0;
 					}
 					// @ts-ignore
