@@ -54,8 +54,6 @@ let BattleScripts = {
 	},
 
 	pokemon: {
-		ability: '',
-		baseAbility: '',
 		getWeight() {
 			let weight = this.template.weightkg;
 			weight = this.battle.runEvent('ModifyWeight', this, null, null, weight);

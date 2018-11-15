@@ -85,11 +85,12 @@ let BattleFormats = {
 				problems.push(`${set.species} cannot be obtained by legal means.`);
 			}
 
-			// only in gen 1 and 2 it was legal to max out all EVs
-			if (this.gen >= 3 && totalAV > 1200) {
+			// Pokemon cannot have more than 1200 total Awakening Values
+			if (totalAV > 1200) {
 				problems.push((set.name || set.species) + " has more than 1200 total Awakening Values.");
 			}
 			set.ability = 'No Ability';
+			// Temporary hack to allow mega evolution
 			if (set.item) {
 				let item = this.getItem(set.item);
 				if (item.megaEvolves && item.megaEvolves !== template.baseSpecies) set.item = '';
@@ -134,11 +135,6 @@ let BattleFormats = {
 				if (template.requiredMove && !set.moves.includes(toId(template.requiredMove))) {
 					problems.push(`${(set.name || set.species)} needs to have the move ${template.requiredMove}.`); // Keldeo-Resolute
 				}
-			}
-
-			if (set.species !== template.species) {
-				// Autofixed forme.
-				template = this.getTemplate(set.species);
 			}
 
 			return problems;
