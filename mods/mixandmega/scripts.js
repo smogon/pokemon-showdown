@@ -1,29 +1,32 @@
 'use strict';
 
-exports.BattleScripts = {
-	init: function () {
+/**@type {ModdedBattleScriptsData} */
+let BattleScripts = {
+	init() {
 		for (let id in this.data.Items) {
 			if (!this.data.Items[id].megaStone) continue;
 			this.modData('Items', id).onTakeItem = false;
 		}
 	},
-	canMegaEvo: function (pokemon) {
-		if (pokemon.template.isMega || pokemon.template.isPrimal) return false;
+	canMegaEvo(pokemon) {
+		if (pokemon.template.isMega || pokemon.template.isPrimal) return null;
 
 		const item = pokemon.getItem();
 		if (item.megaStone) {
-			if (item.megaStone === pokemon.species) return false;
+			if (item.megaStone === pokemon.species) return null;
 			return item.megaStone;
 		} else if (pokemon.baseMoves.includes('dragonascent')) {
 			return 'Rayquaza-Mega';
 		} else {
-			return false;
+			return null;
 		}
 	},
-	runMegaEvo: function (pokemon) {
+	runMegaEvo(pokemon) {
 		if (pokemon.template.isMega || pokemon.template.isPrimal) return false;
 
 		const isUltraBurst = !pokemon.canMegaEvo;
+		/**@type {Template} */
+		// @ts-ignore
 		const template = this.getMixedTemplate(pokemon.originalSpecies, pokemon.canMegaEvo || pokemon.canUltraBurst);
 		const side = pokemon.side;
 
@@ -34,46 +37,37 @@ exports.BattleScripts = {
 			}
 		}
 
-		pokemon.formeChange(template);
-		pokemon.baseTemplate = template; // Mega Evolution is permanent
-
 		// Do we have a proper sprite for it?
+		// @ts-ignore
 		if (this.getTemplate(pokemon.canMegaEvo).baseSpecies === pokemon.originalSpecies || isUltraBurst) {
-			pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
-			this.add('detailschange', pokemon, pokemon.details);
-			this.add((isUltraBurst ? '-burst' : '-mega'), pokemon, template.baseSpecies, template.requiredItem);
+			pokemon.formeChange(template, pokemon.getItem(), true);
 		} else {
 			let oTemplate = this.getTemplate(pokemon.originalSpecies);
 			let oMegaTemplate = this.getTemplate(template.originalMega);
-			if (template.originalMega === 'Rayquaza-Mega') {
-				this.add('message', "" + pokemon.side.name + "'s fervent wish has reached " + pokemon.species + "!");
-			} else {
-				this.add('message', "" + pokemon.species + "'s " + pokemon.getItem().name + " is reacting to " + pokemon.side.name + "'s Mega Bracelet!");
-			}
-			this.add('-formechange', pokemon, oTemplate.species, template.requiredItem);
-			this.add('message', template.baseSpecies + " has Mega Evolved into Mega " + template.baseSpecies + "!");
+			pokemon.formeChange(template, pokemon.getItem(), true);
 			this.add('-start', pokemon, oMegaTemplate.requiredItem || oMegaTemplate.requiredMove, '[silent]');
 			if (oTemplate.types.length !== pokemon.template.types.length || oTemplate.types[1] !== pokemon.template.types[1]) {
 				this.add('-start', pokemon, 'typechange', pokemon.template.types.join('/'), '[silent]');
 			}
 		}
 
-		pokemon.setAbility(template.abilities['0'], null, true);
-		pokemon.baseAbility = pokemon.ability;
-		pokemon.canMegaEvo = false;
-		if (isUltraBurst) pokemon.canUltraBurst = false;
+		pokemon.canMegaEvo = null;
+		if (isUltraBurst) pokemon.canUltraBurst = null;
 		return true;
 	},
-	getMixedTemplate: function (originalSpecies, megaSpecies) {
+	getMixedTemplate(originalSpecies, megaSpecies) {
 		let originalTemplate = this.getTemplate(originalSpecies);
 		let megaTemplate = this.getTemplate(megaSpecies);
 		if (originalTemplate.baseSpecies === megaTemplate.baseSpecies) return megaTemplate;
+		// @ts-ignore
 		let deltas = this.getMegaDeltas(megaTemplate);
+		// @ts-ignore
 		let template = this.doGetMixedTemplate(originalTemplate, deltas);
 		return template;
 	},
-	getMegaDeltas: function (megaTemplate) {
+	getMegaDeltas(megaTemplate) {
 		let baseTemplate = this.getTemplate(megaTemplate.baseSpecies);
+		/**@type {{ability: string, baseStats: {[k: string]: number}, weightkg: number, originalMega: string, requiredItem: string | undefined, type?: string, isMega?: boolean, isPrimal?: boolean}} */
 		let deltas = {
 			ability: megaTemplate.abilities['0'],
 			baseStats: {},
@@ -82,6 +76,7 @@ exports.BattleScripts = {
 			requiredItem: megaTemplate.requiredItem,
 		};
 		for (let statId in megaTemplate.baseStats) {
+			// @ts-ignore
 			deltas.baseStats[statId] = megaTemplate.baseStats[statId] - baseTemplate.baseStats[statId];
 		}
 		if (megaTemplate.types.length > baseTemplate.types.length) {
@@ -95,10 +90,9 @@ exports.BattleScripts = {
 		if (megaTemplate.isPrimal) deltas.isPrimal = true;
 		return deltas;
 	},
-	doGetMixedTemplate: function (template, deltas) {
+	doGetMixedTemplate(templateOrTemplateName, deltas) {
 		if (!deltas) throw new TypeError("Must specify deltas!");
-		if (!template || typeof template === 'string') template = this.getTemplate(template);
-		template = Object.assign({}, template);
+		let template = this.deepClone(this.getTemplate(templateOrTemplateName));
 		template.abilities = {'0': deltas.ability};
 		if (template.types[0] === deltas.type) {
 			template.types = [deltas.type];
@@ -106,9 +100,8 @@ exports.BattleScripts = {
 			template.types = [template.types[0], deltas.type];
 		}
 		let baseStats = template.baseStats;
-		template.baseStats = {};
 		for (let statName in baseStats) {
-			template.baseStats[statName] = this.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
+			baseStats[statName] = this.clampIntRange(baseStats[statName] + deltas.baseStats[statName], 1, 255);
 		}
 		template.weightkg = Math.max(0.1, template.weightkg + deltas.weightkg);
 		template.originalMega = deltas.originalMega;
@@ -118,3 +111,5 @@ exports.BattleScripts = {
 		return template;
 	},
 };
+
+exports.BattleScripts = BattleScripts;

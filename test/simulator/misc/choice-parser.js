@@ -70,11 +70,11 @@ describe('Choice parser', function () {
 
 				const badChoices = ['move 1', 'move 2 mega', 'team 1', 'pass', 'shift'];
 				for (const badChoice of badChoices) {
-					assert.false(battle.choose('p1', badChoice), `Choice '${badChoice}' should be rejected`);
+					assert.false(battle.p1.choose(badChoice), `Choice '${badChoice}' should be rejected`);
 				}
 
 				const validChoice = 'switch Bulbasaur';
-				assert(battle.choose('p1', validChoice));
+				assert(battle.p1.choose(validChoice));
 				battle.p1.clearChoice();
 			});
 		});
@@ -96,10 +96,10 @@ describe('Choice parser', function () {
 
 				const badChoices = ['move 1', 'move 2 mega', 'team 1', 'shift'];
 				for (const badChoice of badChoices) {
-					assert.false(battle.choose('p1', badChoice), `Choice '${badChoice}' should be rejected`);
+					assert.false(battle.p1.choose(badChoice), `Choice '${badChoice}' should be rejected`);
 				}
 
-				assert(battle.choose('p1', `pass, switch 3`), `Choice 'pass, switch 3' should be valid`);
+				assert(battle.p1.choose(`pass, switch 3`), `Choice 'pass, switch 3' should be valid`);
 			});
 
 			it('should reject choice details for `pass` choices', function () {

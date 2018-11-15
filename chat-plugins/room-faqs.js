@@ -5,6 +5,7 @@ const path = require('path');
 
 const ROOMFAQ_FILE = path.resolve(__dirname, '../config/chat-plugins/faqs.json');
 
+/** @type {{[k: string]: {[k: string]: string}}} */
 let roomFaqs = {};
 try {
 	roomFaqs = require(ROOMFAQ_FILE);
@@ -17,8 +18,13 @@ function saveRoomFaqs() {
 	fs.writeFile(ROOMFAQ_FILE, JSON.stringify(roomFaqs), () => {});
 }
 
-// Aliases are implemented as a "regular" FAQ entry starting with a >. EX: {a: "text", b: ">a"}
-// This is done to allow easy checking whether a key is associated with a value or alias as well as preserve backwards compatibility.
+/**
+ * @param {string} roomid
+ * @param {string} key
+ *
+ * Aliases are implemented as a "regular" FAQ entry starting with a >. EX: {a: "text", b: ">a"}
+ * This is done to allow easy checking whether a key is associated with a value or alias as well as preserve backwards compatibility.
+ */
 function getAlias(roomid, key) {
 	if (!roomFaqs[roomid]) return false;
 	let value = roomFaqs[roomid][key];
@@ -26,16 +32,20 @@ function getAlias(roomid, key) {
 	return false;
 }
 
-exports.commands = {
-	addfaq: function (target, room, user) {
-		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
+/** @type {ChatCommands} */
+const commands = {
+	addfaq: function (target, room, user, connection) {
 		if (!this.can('declare', null, room)) return false;
 		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
-		let [topic, ...text] = target.split(',');
+
+		/** @type {string} */
+		let input = Chat.filter.call(this, target, user, room, connection);
+		if (target !== input) return this.errorReply("You are not allowed to use fitered words in roomfaq entries.");
+		let [topic, ...rest] = input.split(',');
 
 		topic = toId(topic);
-		if (!(topic && text.length)) return this.parse('/help roomfaq');
-		text = text.join(',').trim();
+		if (!(topic && rest.length)) return this.parse('/help roomfaq');
+		let text = rest.join(',').trim();
 		if (topic.length > 25) return this.errorReply("FAQ topics should not exceed 25 characters.");
 		if (text.length > 500) return this.errorReply("FAQ entries should not exceed 500 characters.");
 
@@ -108,6 +118,8 @@ exports.commands = {
 		`/removefaq <topic> - Removes the entry for <topic> in this room. If used on an alias, removes the alias. Requires: # & ~`,
 	],
 };
+
+exports.commands = commands;
 
 process.nextTick(() => {
 	Chat.multiLinePattern.register('/addfaq ');

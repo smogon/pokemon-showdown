@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleAbilities = {
+/**@type {{[k: string]: ModdedAbilityData}} */
+let BattleAbilities = {
 	"aerilate": {
 		inherit: true,
 		desc: "This Pokemon's Normal-type moves become Flying-type moves and have their power multiplied by 1.3. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
@@ -19,7 +20,7 @@ exports.BattleAbilities = {
 	},
 	"damp": {
 		inherit: true,
-		desc: "While this Pokemon is active, Explosion, Self-Destruct, and the Ability Aftermath are prevented from having an effect.",
+		desc: "While this Pokemon is active, Explosion, Self-Destruct, and the Aftermath Ability are prevented from having an effect.",
 		shortDesc: "Prevents Explosion/Self-Destruct/Aftermath while this Pokemon is active.",
 	},
 	"galewings": {
@@ -47,6 +48,7 @@ exports.BattleAbilities = {
 		inherit: true,
 		onSourceTryHeal: function (damage, target, source, effect) {
 			this.debug("Heal is occurring: " + target + " <- " + source + " :: " + effect.id);
+			/**@type {{[k: string]: number}} */
 			let canOoze = {drain: 1, leechseed: 1};
 			if (canOoze[effect.id]) {
 				this.damage(damage, null, null, null, true);
@@ -60,7 +62,7 @@ exports.BattleAbilities = {
 	},
 	"mummy": {
 		inherit: true,
-		desc: "Pokemon making contact with this Pokemon have their Ability changed to Mummy. Does not affect the Abilities Multitype or Stance Change.",
+		desc: "Pokemon making contact with this Pokemon have their Ability changed to Mummy. Does not affect the Multitype or Stance Change Abilities.",
 	},
 	"normalize": {
 		inherit: true,
@@ -79,7 +81,7 @@ exports.BattleAbilities = {
 		desc: "This Pokemon's damaging moves become multi-hit moves that hit twice. The second hit has its damage halved. Does not affect multi-hit moves or moves that have multiple targets.",
 		shortDesc: "This Pokemon's damaging moves hit twice. The second hit has its damage halved.",
 		onBasePower: function (basePower, pokemon, target, move) {
-			if (move.hasParentalBond && ++move.hit > 1) return this.chainModify(0.5);
+			if (move.multihitType === 'parentalbond' && move.hit > 1) return this.chainModify(0.5);
 		},
 	},
 	"pixilate": {
@@ -127,3 +129,5 @@ exports.BattleAbilities = {
 		rating: 0.5,
 	},
 };
+
+exports.BattleAbilities = BattleAbilities;

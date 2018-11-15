@@ -4,13 +4,14 @@
   "description": "The server for the Pokémon Showdown battle simulator",
   "version": "0.11.2",
   "dependencies": {
+    "probe-image-size": "^4.0.0",
     "sockjs": "0.3.18"
   },
   "optionalDependencies": {
-    "cloud-env": "0.2.2",
+    "cloud-env": "^0.2.2",
     "node-oom-heapdump": "^1.0.10",
-    "node-static": "0.7.10",
-    "nodemailer": "4.4.0",
+    "node-static": "^0.7.10",
+    "nodemailer": "^4.6.8",
     "permessage-deflate": "^0.1.6"
   },
   "engines": {
@@ -20,9 +21,12 @@
     "start": "node pokemon-showdown",
     "test": "eslint --cache . && tsc && mocha",
     "tsc": "tsc",
-    "lint": "eslint --cache .",
-    "precommit": "npm run lint",
-    "prepush": "npm test"
+    "lint": "eslint --cache ."
+  },
+  "husky": {
+    "hooks": {
+      "pre-push": "eslint --cache ."
+    }
   },
   "bin": "./pokemon-showdown",
   "homepage": "http://pokemonshowdown.com",
@@ -50,11 +54,14 @@
   "private": true,
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^8.0.32",
-    "@types/nodemailer": "^4.3.0",
-    "eslint": "^4.16.0",
-    "husky": "^0.14.3",
-    "mocha": "^4.0.1",
-    "typescript": "^2.8.1"
+    "@types/cloud-env": "^0.2.0",
+    "@types/node": "^8.10.36",
+    "@types/node-static": "^0.7.2",
+    "@types/nodemailer": "^4.6.5",
+    "@types/sockjs": "^0.3.31",
+    "eslint": "^5.7.0",
+    "husky": "^1.1.2",
+    "mocha": "^5.2.0",
+    "typescript": "^3.1.3"
   }
 }

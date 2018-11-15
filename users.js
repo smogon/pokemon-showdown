@@ -41,12 +41,8 @@ const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
 const FS = require('./lib/fs');
 
 /*********************************************************
- * Users map
+ * Utility functions
  *********************************************************/
-
-let users = new Map();
-let prevUsers = new Map();
-let numUsers = 0;
 
 // Low-level functions for manipulating Users.users and Users.prevUsers
 // Keeping them all here makes it easy to ensure they stay consistent
@@ -105,7 +101,7 @@ function merge(user1, user2) {
  * Usage:
  *   Users.get(userid or username)
  *
- * Returns the corresponding User object, or undefined if no matching
+ * Returns the corresponding User object, or null if no matching
  * was found.
  *
  * By default, this function will track users across name changes.
@@ -120,16 +116,17 @@ function merge(user1, user2) {
 function getUser(name, exactName = false) {
 	if (!name || name === '!') return null;
 	// @ts-ignore
-	if (name && name.userid) return name;
+	if (name.userid) return name;
 	let userid = toId(name);
 	let i = 0;
 	if (!exactName) {
 		while (userid && !users.has(userid) && i < 1000) {
+			// @ts-ignore
 			userid = prevUsers.get(userid);
 			i++;
 		}
 	}
-	return users.get(userid);
+	return users.get(userid) || null;
 }
 
 /**
@@ -156,14 +153,14 @@ function getExactUser(name) {
  *   Users.findUsers([userids], [ips])
  * @param {string[]} userids
  * @param {string[]} ips
- * @param {{forPunishment: boolean, includeTrusted: boolean}} options
+ * @param {{forPunishment?: boolean, includeTrusted?: boolean}} options
  */
-function findUsers(userids, ips, options) {
+function findUsers(userids, ips, options = {}) {
 	let matches = /** @type {User[]} */ ([]);
-	if (options && options.forPunishment) ips = ips.filter(ip => !Punishments.sharedIps.has(ip));
+	if (options.forPunishment) ips = ips.filter(ip => !Punishments.sharedIps.has(ip));
 	for (const user of users.values()) {
-		if (!(options && options.forPunishment) && !user.named && !user.connected) continue;
-		if (!(options && options.includeTrusted) && user.trusted) continue;
+		if (!options.forPunishment && !user.named && !user.connected) continue;
+		if (!options.includeTrusted && user.trusted) continue;
 		if (userids.includes(user.userid)) {
 			matches.push(user);
 			continue;
@@ -221,6 +218,7 @@ function cacheGroupData() {
 
 	let groups = Config.groups;
 	let punishgroups = Config.punishgroups;
+	/** @type {{[k: string]: 'processing' | true}} */
 	let cachedGroups = {};
 
 	/**
@@ -428,6 +426,9 @@ class Connection {
 			Sockets.channelRemove(this.worker, room.id, this.socketid);
 		}
 	}
+	toString() {
+		return (this.user ? this.user.userid + '[' + this.user.connections.indexOf(this) + ']' : '[disconnected]') + ':' + this.ip + (this.protocol !== 'websocket' ? ':' + this.protocol : '');
+	}
 }
 
 /** @typedef {[string, string, Connection]} ChatQueueEntry */
@@ -465,7 +466,9 @@ class User {
 		this.locked = false;
 		/** @type {?false | string} */
 		this.semilocked = false;
+		/** @type {?boolean} */
 		this.namelocked = false;
+		/** @type {?false | string} */
 		this.permalocked = false;
 		this.prevNames = Object.create(null);
 		this.inRooms = new Set();
@@ -511,6 +514,9 @@ class User {
 		this.lockNotified = false;
 		/**@type {string} */
 		this.autoconfirmed = '';
+		// Used in punishments
+		/** @type {string} */
+		this.trackRename = '';
 		// initialize
 		Users.add(this);
 	}
@@ -599,7 +605,8 @@ class User {
 			return true;
 		}
 
-		let group = ' ';
+		/** @type {string} */
+		let group;
 		let targetGroup = '';
 		let targetUser = null;
 
@@ -609,9 +616,10 @@ class User {
 			targetUser = target;
 		}
 
-		if (room && room.auth) {
+		if (room && (room.auth || room.parent)) {
 			group = room.getAuth(this);
 			if (targetUser) targetGroup = room.getAuth(targetUser);
+			if (room.isPrivate === true && this.can('makeroom')) group = this.group;
 		} else {
 			group = this.group;
 			if (targetUser) targetGroup = targetUser.group;
@@ -715,11 +723,13 @@ class User {
 	 * @param {Connection} connection The connection asking for the rename
 	 */
 	async rename(name, token, newlyRegistered, connection) {
+		let userid = toId(name);
 		for (const roomid of this.games) {
+			if (userid === this.userid) break;
 			const game = Rooms(roomid).game;
 			if (!game || game.ended) continue; // should never happen
 			if (game.allowRenames || !this.named) continue;
-			this.popup(`You can't change your name right now because you're in ${Rooms(roomid).title}, which doesn't allow renaming.`);
+			this.popup(`You can't change your name right now because you're in ${game.title}, which doesn't allow renaming.`);
 			return false;
 		}
 
@@ -741,7 +751,6 @@ class User {
 			return false;
 		}
 
-		let userid = toId(name);
 		if (userid.length > 18) {
 			this.send(`|nametaken||Your name must be 18 characters or shorter.`);
 			return false;
@@ -940,7 +949,7 @@ class User {
 		this.name = name;
 
 		let joining = !this.named;
-		this.named = !userid.startsWith('guest') || this.namelocked;
+		this.named = !userid.startsWith('guest') || !!this.namelocked;
 
 		for (const connection of this.connections) {
 			//console.log('' + name + ' renaming: socket ' + i + ' of ' + this.connections.length);
@@ -1232,7 +1241,7 @@ class User {
 	 * @param {boolean} includeTrusted
 	 * @param {boolean} forPunishment
 	 */
-	getAltUsers(includeTrusted, forPunishment) {
+	getAltUsers(includeTrusted = false, forPunishment = false) {
 		let alts = findUsers([this.getLastId()], Object.keys(this.ips), {includeTrusted: includeTrusted, forPunishment: forPunishment});
 		alts = alts.filter(user => user !== this);
 		if (forPunishment) alts.unshift(this);
@@ -1548,7 +1557,7 @@ function pruneInactive(threshold) {
 
 /**
  * @param {any} worker
- * @param {string} workerid
+ * @param {string | number} workerid
  * @param {string} socketid
  * @param {string} ip
  * @param {string} protocol
@@ -1575,7 +1584,7 @@ function socketConnect(worker, workerid, socketid, ip, protocol) {
 		if (err) {
 			// It's not clear what sort of condition could cause this.
 			// For now, we'll basically assume it can't happen.
-			require('./lib/crashlogger')(err, 'randomBytes');
+			Monitor.crashlog(err, 'randomBytes');
 			// This is pretty crude, but it's the easiest way to deal
 			// with this case, which should be impossible anyway.
 			user.disconnectAll();
@@ -1591,7 +1600,7 @@ function socketConnect(worker, workerid, socketid, ip, protocol) {
 }
 /**
  * @param {any} worker
- * @param {string} workerid
+ * @param {string | number} workerid
  * @param {string} socketid
  */
 function socketDisconnect(worker, workerid, socketid) {
@@ -1603,7 +1612,7 @@ function socketDisconnect(worker, workerid, socketid) {
 }
 /**
  * @param {any} worker
- * @param {string} workerid
+ * @param {string | number} workerid
  * @param {string} socketid
  * @param {string} message
  */
@@ -1660,6 +1669,12 @@ function socketReceive(worker, workerid, socketid, message) {
 	}
 }
 
+/** @type {Map<string, User>} */
+let users = new Map();
+/** @type {Map<string, string>} */
+let prevUsers = new Map();
+let numUsers = 0;
+
 let Users = Object.assign(getUser, {
 	delete: deleteUser,
 	move: move,
@@ -1689,5 +1704,5 @@ let Users = Object.assign(getUser, {
 	}, 1000 * 60 * 30),
 	socketConnect: socketConnect,
 });
-
+// @ts-ignore
 module.exports = Users;

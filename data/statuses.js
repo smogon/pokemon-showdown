@@ -91,14 +91,7 @@ let BattleStatuses = {
 				this.add('-status', target, 'frz');
 			}
 			if (target.template.species === 'Shaymin-Sky' && target.baseTemplate.baseSpecies === 'Shaymin') {
-				let template = this.getTemplate('Shaymin');
-				target.formeChange(template);
-				target.baseTemplate = template;
-				target.setAbility(template.abilities['0'], null, true);
-				target.baseAbility = target.ability;
-				target.details = template.species + (target.level === 100 ? '' : ', L' + target.level) + (target.gender === '' ? '' : ', ' + target.gender) + (target.set.shiny ? ', shiny' : '');
-				this.add('detailschange', target, target.details);
-				this.add('-formechange', target, 'Shaymin', '[msg]');
+				target.formeChange('Shaymin', this.effect, true);
 			}
 		},
 		onBeforeMovePriority: 10,
@@ -304,9 +297,6 @@ let BattleStatuses = {
 		duration: 2,
 		onStart: function (target, source, effect) {
 			this.effectData.move = effect.id;
-			// source and target are reversed since the event target is the
-			// pokemon using the two-turn move
-			this.effectData.targetLoc = this.getTargetLoc(source, target);
 			target.addVolatile(effect.id, source);
 		},
 		onEnd: function (target) {
@@ -314,9 +304,6 @@ let BattleStatuses = {
 		},
 		onLockMove: function () {
 			return this.effectData.move;
-		},
-		onLockMoveTarget: function () {
-			return this.effectData.targetLoc;
 		},
 		onMoveAborted: function (pokemon) {
 			pokemon.removeVolatile('twoturnmove');
@@ -369,6 +356,7 @@ let BattleStatuses = {
 		onBeforeMove: function (pokemon) {
 			this.add('cant', pokemon, 'recharge');
 			pokemon.removeVolatile('mustrecharge');
+			pokemon.removeVolatile('truant');
 			return null;
 		},
 		onLockMove: function (pokemon) {
@@ -383,7 +371,6 @@ let BattleStatuses = {
 		num: 0,
 		onStart: function (side) {
 			this.effectData.positions = [];
-			// @ts-ignore
 			for (let i = 0; i < side.active.length; i++) {
 				this.effectData.positions[i] = null;
 			}
@@ -391,7 +378,6 @@ let BattleStatuses = {
 		onResidualOrder: 3,
 		onResidual: function (side) {
 			let finished = true;
-			// @ts-ignore
 			for (const [i, target] of side.active.entries()) {
 				let posData = this.effectData.positions[i];
 				if (!posData) continue;
@@ -405,8 +391,8 @@ let BattleStatuses = {
 
 				// time's up; time to hit! :D
 				const move = this.getMove(posData.move);
-				if (target.fainted) {
-					this.add('-hint', '' + move.name + ' did not hit because the target is fainted.');
+				if (target.fainted || target === posData.source) {
+					this.add('-hint', '' + move.name + ' did not hit because the target is ' + (target.fainted ? 'fainted' : 'the user') + '.');
 					this.effectData.positions[i] = null;
 					continue;
 				}
@@ -425,7 +411,6 @@ let BattleStatuses = {
 				this.effectData.positions[i] = null;
 			}
 			if (finished) {
-				// @ts-ignore
 				side.removeSideCondition('futuremove');
 			}
 		},
@@ -535,10 +520,11 @@ let BattleStatuses = {
 		num: 0,
 		effectType: 'Weather',
 		duration: 0,
-		onTryMove: function (target, source, effect) {
-			if (effect.type === 'Fire' && effect.category !== 'Status') {
+		onTryMove: function (attacker, defender, move) {
+			if (move.type === 'Fire' && move.category !== 'Status') {
 				this.debug('Primordial Sea fire suppress');
-				this.add('-fail', source, effect, '[from] Primordial Sea');
+				this.add('-fail', attacker, move, '[from] Primordial Sea');
+				this.attrLastMove('[still]');
 				return null;
 			}
 		},
@@ -608,10 +594,11 @@ let BattleStatuses = {
 		num: 0,
 		effectType: 'Weather',
 		duration: 0,
-		onTryMove: function (target, source, effect) {
-			if (effect.type === 'Water' && effect.category !== 'Status') {
+		onTryMove: function (attacker, defender, move) {
+			if (move.type === 'Water' && move.category !== 'Status') {
 				this.debug('Desolate Land water suppress');
-				this.add('-fail', source, effect, '[from] Desolate Land');
+				this.add('-fail', attacker, move, '[from] Desolate Land');
+				this.attrLastMove('[still]');
 				return null;
 			}
 		},
@@ -738,41 +725,41 @@ let BattleStatuses = {
 	// Multitype and RKS System, respectively, that changes their type,
 	// but their formes are specified to be their corresponding type
 	// in the Pokedex, so that needs to be overridden.
-	// This is mainly relevant for Hackmons and Balanced Hackmons.
+	// This is mainly relevant for Hackmons Cup and Balanced Hackmons.
 	arceus: {
 		name: 'Arceus',
 		id: 'arceus',
 		num: 493,
-		onSwitchInPriority: 101,
-		onSwitchIn: function (pokemon) {
+		onTypePriority: 1,
+		onType: function (types, pokemon) {
+			if (pokemon.transformed) return types;
+			/** @type {string | undefined} */
 			let type = 'Normal';
 			if (pokemon.ability === 'multitype') {
-				// @ts-ignore
 				type = pokemon.getItem().onPlate;
-				// @ts-ignore
-				if (!type || type === true) {
+				if (!type) {
 					type = 'Normal';
 				}
 			}
-			pokemon.setType(type, true);
+			return [type];
 		},
 	},
 	silvally: {
 		name: 'Silvally',
 		id: 'silvally',
 		num: 773,
-		onSwitchInPriority: 101,
-		onSwitchIn: function (pokemon) {
+		onTypePriority: 1,
+		onType: function (types, pokemon) {
+			if (pokemon.transformed) return types;
+			/** @type {string | undefined} */
 			let type = 'Normal';
 			if (pokemon.ability === 'rkssystem') {
-				// @ts-ignore
 				type = pokemon.getItem().onMemory;
-				// @ts-ignore
-				if (!type || type === true) {
+				if (!type) {
 					type = 'Normal';
 				}
 			}
-			pokemon.setType(type, true);
+			return [type];
 		},
 	},
 };

@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleAbilities = {
+/**@type {{[k: string]: ModdedAbilityData}} */
+let BattleAbilities = {
 	"frisk": {
 		inherit: true,
 		shortDesc: "On switch-in, this Pokemon identifies a random foe's held item.",
@@ -34,10 +35,11 @@ exports.BattleAbilities = {
 		},
 		onTryHit: function (pokemon, target, move) {
 			if (move.id === 'captivate') {
-				this.add('-immune', pokemon, '[msg]', '[from] Oblivious');
+				this.add('-immune', pokemon, '[from] Oblivious');
 				return null;
 			}
 		},
+		rating: 0.5,
 	},
 	"overcoat": {
 		inherit: true,
@@ -54,7 +56,7 @@ exports.BattleAbilities = {
 			if (move.secondaries && move.id !== 'secretpower') {
 				this.debug('doubling secondary chance');
 				for (const secondary of move.secondaries) {
-					secondary.chance *= 2;
+					if (secondary.chance) secondary.chance *= 2;
 				}
 			}
 		},
@@ -65,3 +67,5 @@ exports.BattleAbilities = {
 		onAllyTryHitSide: function () {},
 	},
 };
+
+exports.BattleAbilities = BattleAbilities;

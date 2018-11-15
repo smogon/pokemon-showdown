@@ -24,8 +24,8 @@ const MAX_TURN_TIME = 150;
 const STARTING_TIME_CHALLENGE = 280;
 const MAX_TURN_TIME_CHALLENGE = 300;
 
-const NOT_DISCONNECTED = 100;
 const DISCONNECTION_TICKS = 13;
+const DISCONNECTION_BANK_TICKS = 60;
 
 // time after a player disabling the timer before they can re-enable it
 const TIMER_COOLDOWN = 20 * 1000;
@@ -125,6 +125,12 @@ class BattleTimer {
 		 * @type {number[]}
 		 */
 		this.dcTicksLeft = [];
+		/**
+		 * Used to track a user's last known connection status, and display
+		 * the proper message when it changes.
+		 * @type {boolean[]}
+		 */
+		this.connected = [];
 
 		/**
 		 * Last tick.
@@ -132,13 +138,16 @@ class BattleTimer {
 		 */
 		this.lastTick = 0;
 
+		/** Debug mode; true to output detailed timer info every tick */
+		this.debug = false;
+
 		this.lastDisabledTime = 0;
 		this.lastDisabledByUser = null;
 
 		const hasLongTurns = Dex.getFormat(battle.format, true).gameType !== 'singles';
 		const isChallenge = (!battle.rated && !battle.room.tour);
 		const timerSettings = Dex.getFormat(battle.format, true).timer;
-		/**@type {{perTurnTicks: number, startingTicks: number, maxPerTurnTicks: number, maxFirstTurnTicks: number, dcTimer: boolean, starting?: number, perTurn?: number, maxPerTurn?: number, maxFirstTurn?: number, timeoutAutoChoose?: boolean, accelerate?: boolean}} */
+		/**@type {{perTurnTicks: number, startingTicks: number, maxPerTurnTicks: number, maxFirstTurnTicks: number, dcTimer: boolean, dcTimerBank?: boolean, starting?: number, perTurn?: number, maxPerTurn?: number, maxFirstTurn?: number, timeoutAutoChoose?: boolean, accelerate?: boolean}} */
 		// @ts-ignore
 		this.settings = Object.assign({}, timerSettings);
 		if (this.settings.perTurn === undefined) {
@@ -159,18 +168,20 @@ class BattleTimer {
 			this.settings.accelerate = !timerSettings;
 		}
 		this.settings.dcTimer = !isChallenge;
+		if (this.settings.dcTimerBank === undefined) this.settings.dcTimerBank = isChallenge;
 
 		for (let slotNum = 0; slotNum < 2; slotNum++) {
 			this.ticksLeft.push(this.settings.startingTicks);
 			this.turnTicksLeft.push(-1);
-			this.dcTicksLeft.push(NOT_DISCONNECTED);
+			this.dcTicksLeft.push(this.settings.dcTimerBank ? DISCONNECTION_BANK_TICKS : DISCONNECTION_TICKS);
+			this.connected.push(true);
 		}
 	}
 	start(/** @type {User} */ requester) {
 		let userid = requester ? requester.userid : 'staff';
 		if (this.timerRequesters.has(userid)) return false;
-		if (this.timer && requester) {
-			this.battle.room.add(`|inactive|${requester.name} also wants the timer to be on.`).update();
+		if (this.timer) {
+			this.battle.room.add(`|inactive|${requester ? requester.name : userid} also wants the timer to be on.`).update();
 			this.timerRequesters.add(userid);
 			return false;
 		}
@@ -213,26 +224,28 @@ class BattleTimer {
 		if (this.timer) clearTimeout(this.timer);
 		if (!this.timerRequesters.size) return;
 		const maxTurnTicks = (isFirst ? this.settings.maxFirstTurnTicks : 0) || this.settings.maxPerTurnTicks;
+
+		let perTurnTicks = this.settings.perTurnTicks;
+		if (this.settings.accelerate && perTurnTicks) {
+			// after turn 100ish: 15s/turn -> 10s/turn
+			if (this.battle.requestCount > 200) {
+				perTurnTicks--;
+			}
+			// after turn 200ish: 10s/turn -> 7s/turn
+			if (this.battle.requestCount > 400 && this.battle.requestCount % 2) {
+				perTurnTicks = 0;
+			}
+			// after turn 400ish: 7s/turn -> 6s/turn
+			if (this.battle.requestCount > 800 && this.battle.requestCount % 4) {
+				perTurnTicks = 0;
+			}
+		}
+
 		for (const slotNum of this.ticksLeft.keys()) {
 			const slot = /** @type {PlayerSlot} */ ('p' + (slotNum + 1));
 			const player = this.battle[slot];
 
-			let perTurnTicks = this.settings.perTurnTicks;
-			if (this.settings.accelerate && perTurnTicks) {
-				// after turn 100ish: 15s/turn -> 10s/turn
-				if (this.battle.requestCount > 200) {
-					perTurnTicks--;
-				}
-				// after turn 200ish: 10s/turn -> 7s/turn
-				if (this.battle.requestCount > 400 && this.battle.requestCount % 2) {
-					perTurnTicks = 0;
-				}
-				// after turn 400ish: 7s/turn -> 6s/turn
-				if (this.battle.requestCount > 800 && this.battle.requestCount % 4) {
-					perTurnTicks = 0;
-				}
-			}
-			this.ticksLeft[slotNum] += this.settings.perTurnTicks;
+			this.ticksLeft[slotNum] += perTurnTicks;
 			this.turnTicksLeft[slotNum] = Math.min(this.ticksLeft[slotNum], maxTurnTicks);
 
 			const ticksLeft = this.turnTicksLeft[slotNum];
@@ -245,28 +258,40 @@ class BattleTimer {
 		if (this.battle.ended) return;
 		for (const slotNum of this.ticksLeft.keys()) {
 			const slot = /** @type {PlayerSlot} */ ('p' + (slotNum + 1));
+			const connected = this.connected[slotNum];
 
 			if (!this.waitingForChoice(slot)) continue;
-			this.ticksLeft[slotNum]--;
-			this.turnTicksLeft[slotNum]--;
-
-			if (this.dcTicksLeft[slotNum] !== NOT_DISCONNECTED) {
+			if (connected) {
+				this.ticksLeft[slotNum]--;
+				this.turnTicksLeft[slotNum]--;
+			} else {
 				this.dcTicksLeft[slotNum]--;
+				if (!this.settings.dcTimerBank) {
+					this.ticksLeft[slotNum]--;
+					this.turnTicksLeft[slotNum]--;
+				}
 			}
 
 			let dcTicksLeft = this.dcTicksLeft[slotNum];
 			if (dcTicksLeft <= 0) this.turnTicksLeft[slotNum] = 0;
 			const ticksLeft = this.turnTicksLeft[slotNum];
 			if (!ticksLeft) continue;
-			if (ticksLeft < dcTicksLeft) dcTicksLeft = NOT_DISCONNECTED; // turn timer supersedes dc timer
 
-			if (dcTicksLeft <= 4) {
-				this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${dcTicksLeft * TICK_TIME} seconds to reconnect!`).update();
+			if (!connected && (dcTicksLeft <= ticksLeft || this.settings.dcTimerBank)) {
+				// dc timer is shown only if it's lower than turn timer or you're in timer bank mode
+				if (dcTicksLeft % 6 === 0 || dcTicksLeft <= 4) {
+					this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${dcTicksLeft * TICK_TIME} seconds to reconnect!`).update();
+				}
+			} else {
+				// regular turn timer shown
+				if (ticksLeft % 6 === 0 || ticksLeft <= 4) {
+					this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${ticksLeft * TICK_TIME} seconds left.`).update();
+				}
 			}
-			if (dcTicksLeft !== NOT_DISCONNECTED) continue;
-			if (ticksLeft % 3 === 0 || ticksLeft <= 4) {
-				this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} has ${ticksLeft * TICK_TIME} seconds left.`).update();
-			}
+		}
+		if (this.debug) {
+			this.battle.room.add(`||[${this.battle.playerNames[0]} has ${this.turnTicksLeft[0] * TICK_TIME}s this turn / ${this.ticksLeft[0] * TICK_TIME}s total]`);
+			this.battle.room.add(`||[${this.battle.playerNames[0]} has ${this.turnTicksLeft[0] * TICK_TIME}s this turn / ${this.ticksLeft[0] * TICK_TIME}s total]`);
 		}
 		if (!this.checkTimeout()) {
 			this.timer = setTimeout(() => this.nextTick(), TICK_TIME * 1000);
@@ -276,27 +301,41 @@ class BattleTimer {
 		for (const slotNum of this.ticksLeft.keys()) {
 			const slot = /** @type {PlayerSlot} */ ('p' + (slotNum + 1));
 			const player = this.battle[slot];
-			const isConnected = player && player.active;
+			const isConnected = !!(player && player.active);
 
-			if (!!isConnected === !!(this.dcTicksLeft[slotNum] === NOT_DISCONNECTED)) continue;
+			if (isConnected === this.connected[slotNum]) continue;
 
 			if (!isConnected) {
-				// player has disconnected: don't wait longer than 6 ticks (1 minute)
-				if (this.settings.dcTimer) {
-					this.dcTicksLeft[slotNum] = DISCONNECTION_TICKS;
-				} else {
-					this.dcTicksLeft[slotNum] = NOT_DISCONNECTED - 1;
-				}
-				if (this.timerRequesters.size) {
+				// player has disconnected
+				this.connected[slotNum] = false;
+				if (!this.settings.dcTimerBank) {
+					// don't wait longer than 6 ticks (1 minute)
 					if (this.settings.dcTimer) {
-						this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} disconnected and has a minute to reconnect!`).update();
+						this.dcTicksLeft[slotNum] = DISCONNECTION_TICKS;
 					} else {
-						this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} disconnected!`).update();
+						// arbitrary large number
+						this.dcTicksLeft[slotNum] = DISCONNECTION_TICKS * 10;
 					}
+				}
+
+				if (this.timerRequesters.size) {
+					let msg = `!`;
+
+					if (this.settings.dcTimer) {
+						msg = ` and has a minute to reconnect!`;
+					}
+					if (this.settings.dcTimerBank) {
+						if (this.dcTicksLeft[slotNum] > 0) {
+							msg = ` and has ${this.dcTicksLeft[slotNum] * TICK_TIME} seconds to reconnect!`;
+						} else {
+							msg = ` and has no disconnection time left!`;
+						}
+					}
+					this.battle.room.add(`|inactive|${this.battle.playerNames[slotNum]} disconnected${msg}`).update();
 				}
 			} else {
 				// player has reconnected
-				this.dcTicksLeft[slotNum] = NOT_DISCONNECTED;
+				this.connected[slotNum] = true;
 				if (this.timerRequesters.size) {
 					let timeLeft = ``;
 					if (this.waitingForChoice(slot)) {
@@ -319,7 +358,7 @@ class BattleTimer {
 		let didSomething = false;
 		for (const [slotNum, ticks] of this.turnTicksLeft.entries()) {
 			if (ticks) continue;
-			if (this.settings.timeoutAutoChoose && this.ticksLeft[slotNum] && this.dcTicksLeft[slotNum] === NOT_DISCONNECTED) {
+			if (this.settings.timeoutAutoChoose && this.ticksLeft[slotNum] && this.connected[slotNum]) {
 				const slot = 'p' + (slotNum + 1);
 				this.battle.stream.write(`>${slot} default`);
 				didSomething = true;
@@ -536,6 +575,13 @@ class Battle {
 		let next;
 		while ((next = await this.stream.read())) {
 			this.receive(next.split('\n'));
+		}
+		if (!this.ended) {
+			this.room.add(`|bigerror|The simulator process has crashed. We've been notified and will fix this ASAP.`);
+			Monitor.crashlog(new Error(`Process disconnected`), `A battle`);
+			this.started = true;
+			this.ended = true;
+			this.checkActive();
 		}
 	}
 	receive(/** @type {string[]} */ lines) {
@@ -875,6 +921,7 @@ class Battle {
 		this[slot] = player;
 		this.playerNames[slotNum] = player.name;
 
+		/**@type {{name: string, avatar: string, team?: string}} */
 		let options = {
 			name: player.name,
 			avatar: '' + user.avatar,
@@ -920,6 +967,7 @@ class Battle {
 	}
 
 	destroy() {
+		this.ended = true;
 		this.stream.destroy();
 		if (this.active) {
 			Rooms.global.battleCount += -1;
@@ -953,7 +1001,7 @@ const PM = new StreamProcessManager(module, () => {
 
 if (!PM.isParentProcess) {
 	// This is a child process!
-	// @ts-ignore
+	// @ts-ignore This file doesn't exist on the repository, so Travis checks fail if this isn't ignored
 	global.Config = require('./config/config');
 	global.Chat = require('./chat');
 	global.__version = '';

@@ -22,11 +22,11 @@ let BattleAbilities = {
 			if (move && move.flags['contact'] && !source.status) {
 				let r = this.random(300);
 				if (r < 10) {
-					source.setStatus('slp');
+					source.setStatus('slp', target);
 				} else if (r < 20) {
-					source.setStatus('par');
+					source.setStatus('par', target);
 				} else if (r < 30) {
-					source.setStatus('psn');
+					source.setStatus('psn', target);
 				}
 			}
 		},
@@ -54,7 +54,7 @@ let BattleAbilities = {
 					return;
 				}
 				if (!target.addVolatile('flashfire')) {
-					this.add('-immune', target, '[msg]', '[from] ability: Flash Fire');
+					this.add('-immune', target, '[from] ability: Flash Fire');
 				}
 				return null;
 			}
@@ -76,8 +76,8 @@ let BattleAbilities = {
 	},
 	"minus": {
 		inherit: true,
-		desc: "If an active Pokemon has the Ability Plus, this Pokemon's Special Attack is multiplied by 1.5.",
-		shortDesc: "If an active Pokemon has the Ability Plus, this Pokemon's Sp. Atk is 1.5x.",
+		desc: "If an active Pokemon has the Plus Ability, this Pokemon's Special Attack is multiplied by 1.5.",
+		shortDesc: "If an active Pokemon has the Plus Ability, this Pokemon's Sp. Atk is 1.5x.",
 		onModifySpA: function (spa, pokemon) {
 			let allActives = pokemon.side.active.concat(pokemon.side.foe.active);
 			for (const active of allActives) {
@@ -89,8 +89,8 @@ let BattleAbilities = {
 	},
 	"plus": {
 		inherit: true,
-		desc: "If an active Pokemon has the Ability Minus, this Pokemon's Special Attack is multiplied by 1.5.",
-		shortDesc: "If an active Pokemon has the Ability Minus, this Pokemon's Sp. Atk is 1.5x.",
+		desc: "If an active Pokemon has the Minus Ability, this Pokemon's Special Attack is multiplied by 1.5.",
+		shortDesc: "If an active Pokemon has the Minus Ability, this Pokemon's Sp. Atk is 1.5x.",
 		onModifySpA: function (spa, pokemon) {
 			let allActives = pokemon.side.active.concat(pokemon.side.foe.active);
 			for (const active of allActives) {
@@ -113,7 +113,16 @@ let BattleAbilities = {
 	},
 	"pressure": {
 		inherit: true,
-		onStart: function () { },
+		onStart: function (pokemon) {
+			this.add('split');
+			for (const line of [false, this.sides[0], this.sides[1], true]) {
+				if (line === true || line === pokemon.side) {
+					this.add('-ability', pokemon, 'Pressure', '[silent]');
+				} else {
+					this.log.push('');
+				}
+			}
+		},
 	},
 	"roughskin": {
 		inherit: true,
@@ -167,7 +176,7 @@ let BattleAbilities = {
 		onTryHit: function (target, source, move) {
 			if (target !== source && move.type === 'Electric' && move.id !== 'thunderwave') {
 				if (!this.heal(target.maxhp / 4)) {
-					this.add('-immune', target, '[msg]', '[from] ability: Volt Absorb');
+					this.add('-immune', target, '[from] ability: Volt Absorb');
 				}
 				return null;
 			}

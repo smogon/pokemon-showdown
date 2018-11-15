@@ -66,7 +66,7 @@ let BattleAbilities = {
 					return;
 				}
 				if (!target.addVolatile('flashfire')) {
-					this.add('-immune', target, '[msg]', '[from] ability: Flash Fire');
+					this.add('-immune', target, '[from] ability: Flash Fire');
 				}
 				return null;
 			}
@@ -171,8 +171,8 @@ let BattleAbilities = {
 		num: 98,
 	},
 	"minus": {
-		desc: "If an active ally has the Ability Plus, this Pokemon's Special Attack is multiplied by 1.5.",
-		shortDesc: "If an active ally has the Ability Plus, this Pokemon's Sp. Atk is 1.5x.",
+		desc: "If an active ally has the Plus Ability, this Pokemon's Special Attack is multiplied by 1.5.",
+		shortDesc: "If an active ally has the Plus Ability, this Pokemon's Sp. Atk is 1.5x.",
 		onModifySpA: function (spa, pokemon) {
 			let allyActive = pokemon.side.active;
 			if (allyActive.length === 1) {
@@ -234,8 +234,8 @@ let BattleAbilities = {
 		num: 53,
 	},
 	"plus": {
-		desc: "If an active ally has the Ability Minus, this Pokemon's Special Attack is multiplied by 1.5.",
-		shortDesc: "If an active ally has the Ability Minus, this Pokemon's Sp. Atk is 1.5x.",
+		desc: "If an active ally has the Minus Ability, this Pokemon's Special Attack is multiplied by 1.5.",
+		shortDesc: "If an active ally has the Minus Ability, this Pokemon's Sp. Atk is 1.5x.",
 		onModifySpA: function (spa, pokemon) {
 			let allyActive = pokemon.side.active;
 			if (allyActive.length === 1) {
@@ -273,8 +273,7 @@ let BattleAbilities = {
 			if (move.secondaries) {
 				this.debug('doubling secondary chance');
 				for (const secondary of move.secondaries) {
-					// @ts-ignore
-					secondary.chance *= 2;
+					if (secondary.chance) secondary.chance *= 2;
 				}
 			}
 		},
@@ -348,7 +347,7 @@ let BattleAbilities = {
 			let id = status.id;
 			if (id === 'slp' || id === 'frz') return;
 			if (id === 'tox') id = 'psn';
-			source.trySetStatus(id);
+			source.trySetStatus(id, target);
 		},
 	},
 	"thickfat": {
@@ -406,7 +405,7 @@ let BattleAbilities = {
 			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle' || move.id === 'firefang') return;
 			this.debug('Wonder Guard immunity: ' + move.id);
 			if (target.runEffectiveness(move) <= 0) {
-				this.add('-immune', target, '[msg]', '[from] ability: Wonder Guard');
+				this.add('-immune', target, '[from] ability: Wonder Guard');
 				return null;
 			}
 		},

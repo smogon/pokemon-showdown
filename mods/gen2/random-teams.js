@@ -17,16 +17,21 @@ class RandomGen2Teams extends RandomGen3Teams {
 		}
 
 		// Setup storage.
+		/**@type {{[k: string]: number}} */
 		let tierCount = {};
+		/**@type {{[k: string]: number}} */
 		let typeCount = {};
+		/**@type {{[k: string]: number}} */
 		let weaknessCount = {
 			'Normal': 0, 'Fighting': 0, 'Flying': 0, 'Poison': 0, 'Ground': 0, 'Rock': 0, 'Bug': 0, 'Ghost': 0, 'Steel': 0,
 			'Fire': 0, 'Water': 0, 'Grass': 0, 'Electric': 0, 'Psychic': 0, 'Ice': 0, 'Dragon': 0, 'Dark': 0,
 		};
+		/**@type {{[k: string]: number}} */
 		let resistanceCount = {
 			'Normal': 0, 'Fighting': 0, 'Flying': 0, 'Poison': 0, 'Ground': 0, 'Rock': 0, 'Bug': 0, 'Ghost': 0, 'Steel': 0,
 			'Fire': 0, 'Water': 0, 'Grass': 0, 'Electric': 0, 'Psychic': 0, 'Ice': 0, 'Dragon': 0, 'Dark': 0,
 		};
+		/**@type {{[k: string]: number}} */
 		let restrictMoves = {
 			'reflect': 1, 'lightscreen': 1, 'rapidspin': 1, 'spikes': 1, 'bellydrum': 1, 'haze': 1,
 			'healbell': 1, 'thief': 1, 'phazing': 1, 'sleeptalk': 2, 'sleeping': 2,
@@ -86,7 +91,6 @@ class RandomGen2Teams extends RandomGen3Teams {
 			if (set.other.discard && pokemonPool.length + 1 > pokemonLeft) continue;
 
 			// The set also passes the randomSet limitations.
-			// @ts-ignore
 			pokemon.push(set.moveset);
 
 			// Now let's update the counters. First, the Pokémon left.
@@ -289,12 +293,15 @@ class RandomGen2Teams extends RandomGen3Teams {
 			Unown: 98, Wobbuffet: 82, Ditto: 82,
 			Snorlax: 66, Nidoqueen: 70,
 		};
+		// @ts-ignore
 		let level = levelScale[template.tier] || 90;
+		// @ts-ignore
 		if (customScale[template.name]) level = customScale[template.name];
 
 		// @ts-ignore
 		return {
 			moveset: {
+				name: template.name,
 				species: template.name,
 				moves: moves,
 				ability: 'None',

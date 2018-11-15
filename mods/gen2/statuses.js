@@ -68,7 +68,7 @@ let BattleStatuses = {
 		onModifyMove: function () {},
 		onHit: function () {},
 		onAfterMoveSecondary: function (target, source, move) {
-			if ((move.secondary && move.secondary !== true && move.secondary.status === 'brn') || move.statusRoll === 'brn') {
+			if ((move.secondary && move.secondary.status === 'brn') || move.statusRoll === 'brn') {
 				target.cureStatus();
 			}
 		},
@@ -144,8 +144,7 @@ let BattleStatuses = {
 			if (this.randomChance(1, 2)) {
 				return;
 			}
-			// @ts-ignore
-			move = {
+			move = /** @type {ActiveMove} */ ({
 				basePower: 40,
 				type: '???',
 				baseMoveType: move.type,
@@ -154,7 +153,7 @@ let BattleStatuses = {
 				isSelfHit: true,
 				noDamageVariance: true,
 				flags: {},
-			};
+			});
 			this.directDamage(this.getDamage(pokemon, pokemon, move));
 			return false;
 		},

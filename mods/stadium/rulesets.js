@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleFormats = {
+/**@type {{[k: string]: ModdedFormatsData}} */
+let BattleFormats = {
 	standard: {
 		effectType: 'ValidatorRule',
 		name: 'Standard',
@@ -10,6 +11,7 @@ exports.BattleFormats = {
 			// limit one of each move in Standard
 			let moves = [];
 			if (set.moves) {
+				/**@type {{[k: string]: true}} */
 				let hasMove = {};
 				for (const setMoveid of set.moves) {
 					let move = this.getMove(setMoveid);
@@ -23,3 +25,5 @@ exports.BattleFormats = {
 		},
 	},
 };
+
+exports.BattleFormats = BattleFormats;

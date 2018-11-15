@@ -54,15 +54,24 @@ if (('Config' in global) &&
 	Config.loglevel = 2;
 }
 
-// @ts-ignore
+let crashlogger = require('./lib/crashlogger');
+
 const Monitor = module.exports = {
 	/*********************************************************
 	 * Logging
 	 *********************************************************/
 
-	/** @param {Error} error */
-	crashlog(error, source = 'The main process') {
-		require('./lib/crashlogger')(error, source);
+	/**
+	 * @param {Error} error
+	 * @param {string} [source]
+	 * @param {{}?} details
+	 */
+	crashlog(error, source = 'The main process', details = null) {
+		let crashType = crashlogger(error, source, details);
+		Rooms.global.reportCrash(error, source);
+		if (crashType === 'lockdown') {
+			Rooms.global.startLockdown(error);
+		}
 	},
 
 	/**
@@ -136,8 +145,11 @@ const Monitor = module.exports = {
 
 	/** @type {string | null} */
 	activeIp: null,
+	/** @type {{[k: string]: number}} */
 	networkUse: {},
+	/** @type {{[k: string]: number}} */
 	networkCount: {},
+	/** @type {{[k: string]: string}} */
 	hotpatchLock: {},
 
 	/**
@@ -236,9 +248,11 @@ const Monitor = module.exports = {
 	 */
 	countTickets(ip) {
 		let count = this.tickets.increment(ip, 60 * 60 * 1000)[0];
-		if (Punishments.sharedIps.has(ip) && count >= 50) return true;
-		if (count >= 5) return true;
-		return false;
+		if (Punishments.sharedIps.has(ip)) {
+			return count >= 20;
+		} else {
+			return count >= 5;
+		}
 	},
 
 	/**

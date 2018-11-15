@@ -21,6 +21,7 @@ if (cluster.isMaster) {
 		exec: require('path').resolve(__dirname, 'sockets'),
 	});
 
+	/** @type {Map<number, cluster.Worker>} */
 	const workers = exports.workers = new Map();
 
 	const spawnWorker = exports.spawnWorker = function () {
@@ -81,6 +82,7 @@ if (cluster.isMaster) {
 		// FIXME: this is a bad hack to get around a race condition in
 		// Connection#onDisconnect sending room deinit messages after already
 		// having removed the sockets from their channels.
+		// @ts-ignore
 		worker.send = () => {};
 
 		let count = 0;
@@ -96,6 +98,11 @@ if (cluster.isMaster) {
 		spawnWorker();
 	});
 
+	/**
+	 * @param {number} [port]
+	 * @param {string} [bindAddress]
+	 * @param {number} [workerCount]
+	 */
 	exports.listen = function (port, bindAddress, workerCount) {
 		if (port !== undefined && !isNaN(port)) {
 			Config.port = port;
@@ -106,21 +113,30 @@ if (cluster.isMaster) {
 			// Autoconfigure when running in cloud environments.
 			try {
 				const cloudenv = require('cloud-env');
+				// @ts-ignore
 				bindAddress = cloudenv.get('IP', bindAddress);
+				// @ts-ignore
 				port = cloudenv.get('PORT', port);
 			} catch (e) {}
 		}
 		if (bindAddress !== undefined) {
 			Config.bindaddress = bindAddress;
 		}
+		if (port !== undefined) {
+			Config.port = port;
+		}
 		if (workerCount === undefined) {
 			workerCount = (Config.workers !== undefined ? Config.workers : 1);
 		}
+		// @ts-ignore - remove when Config is typed
 		for (let i = 0; i < workerCount; i++) {
 			spawnWorker();
 		}
 	};
 
+	/**
+	 * @param {cluster.Worker} worker
+	 */
 	exports.killWorker = function (worker) {
 		let count = 0;
 		Users.connections.forEach(connection => {
@@ -138,52 +154,100 @@ if (cluster.isMaster) {
 		return count;
 	};
 
+	/**
+	 * @param {number} pid
+	 */
 	exports.killPid = function (pid) {
 		for (const worker of workers.values()) {
 			if (pid === worker.process.pid) {
+				// @ts-ignore
 				return this.killWorker(worker);
 			}
 		}
 		return false;
 	};
 
+	/**
+	 * @param {cluster.Worker} worker
+	 * @param {number} socketid
+	 * @param {string} message
+	 */
 	exports.socketSend = function (worker, socketid, message) {
 		worker.send(`>${socketid}\n${message}`);
 	};
+
+	/**
+	 * @param {cluster.Worker} worker
+	 * @param {number} socketid
+	 */
 	exports.socketDisconnect = function (worker, socketid) {
 		worker.send(`!${socketid}`);
 	};
 
+	/**
+	 * @param {string} channelid
+	 * @param {string} message
+	 */
 	exports.channelBroadcast = function (channelid, message) {
 		workers.forEach(worker => {
 			worker.send(`#${channelid}\n${message}`);
 		});
 	};
+
+	/**
+	 * @param {cluster.Worker} worker
+	 * @param {string} channelid
+	 * @param {string} message
+	 */
 	exports.channelSend = function (worker, channelid, message) {
 		worker.send(`#${channelid}\n${message}`);
 	};
+
+	/**
+	 * @param {cluster.Worker} worker
+	 * @param {string} channelid
+	 * @param {number} socketid
+	 */
 	exports.channelAdd = function (worker, channelid, socketid) {
 		worker.send(`+${channelid}\n${socketid}`);
 	};
+
+	/**
+	 * @param {cluster.Worker} worker
+	 * @param {string} channelid
+	 * @param {number} socketid
+	 */
 	exports.channelRemove = function (worker, channelid, socketid) {
 		worker.send(`-${channelid}\n${socketid}`);
 	};
 
+	/**
+	 * @param {string} channelid
+	 * @param {string} message
+	 */
 	exports.subchannelBroadcast = function (channelid, message) {
 		workers.forEach(worker => {
 			worker.send(`:${channelid}\n${message}`);
 		});
 	};
+
+	/**
+	 * @param {cluster.Worker} worker
+	 * @param {string} channelid
+	 * @param {string} subchannelid
+	 * @param {number} socketid
+	 */
 	exports.subchannelMove = function (worker, channelid, subchannelid, socketid) {
 		worker.send(`.${channelid}\n${subchannelid}\n${socketid}`);
 	};
 } else {
 	// is worker
+	// @ts-ignore This file doesn't exist on the repository, so Travis checks fail if this isn't ignored
 	global.Config = require('./config/config');
 
 	if (process.env.PSPORT) Config.port = +process.env.PSPORT;
 	if (process.env.PSBINDADDR) Config.bindaddress = process.env.PSBINDADDR;
-	if (+process.env.PSNOSSL) Config.ssl = null;
+	if (process.env.PSNOSSL && parseInt(process.env.PSNOSSL)) Config.ssl = null;
 
 	if (Config.ofe) {
 		try {
@@ -197,6 +261,7 @@ if (cluster.isMaster) {
 		}
 
 		// Create a heapdump if the process runs out of memory.
+		// @ts-ignore
 		require('node-oom-heapdump')({
 			addTimestamp: true,
 		});
@@ -219,6 +284,7 @@ if (cluster.isMaster) {
 	}
 
 	let app = require('http').createServer();
+	/** @type {?import('https').Server} */
 	let appssl = null;
 	if (Config.ssl) {
 		let key;
@@ -265,6 +331,10 @@ if (cluster.isMaster) {
 	const cssServer = new StaticServer('./config');
 	const avatarServer = new StaticServer('./config/avatars');
 	const staticServer = new StaticServer('./static');
+	/**
+	 * @param {import('http').IncomingMessage} req
+	 * @param {import('http').ServerResponse} res
+	 */
 	const staticRequestHandler = (req, res) => {
 		// console.log(`static rq: ${req.socket.remoteAddress}:${req.socket.remotePort} -> ${req.socket.localAddress}:${req.socket.localPort} - ${req.method} ${req.url} ${req.httpVersion} - ${req.rawHeaders.join('|')}`);
 		req.resume();
@@ -275,17 +345,20 @@ if (cluster.isMaster) {
 			}
 
 			let server = staticServer;
-			if (req.url === '/custom.css') {
-				server = cssServer;
-			} else if (req.url.startsWith('/avatars/')) {
-				req.url = req.url.substr(8);
-				server = avatarServer;
-			} else if (roomidRegex.test(req.url)) {
-				req.url = '/';
+			if (req.url) {
+				if (req.url === '/custom.css') {
+					server = cssServer;
+				} else if (req.url.startsWith('/avatars/')) {
+					req.url = req.url.substr(8);
+					server = avatarServer;
+				} else if (roomidRegex.test(req.url)) {
+					req.url = '/';
+				}
 			}
 
 			server.serve(req, res, e => {
-				if (e && (e.status === 404)) {
+				// @ts-ignore
+				if (e && e.status === 404) {
 					staticServer.serveFile('404.html', 404, {}, req, res);
 				}
 			});
@@ -304,6 +377,10 @@ if (cluster.isMaster) {
 	const options = {
 		sockjs_url: "//play.pokemonshowdown.com/js/lib/sockjs-1.1.1-nwjsfix.min.js",
 		prefix: '/showdown',
+		/**
+		 * @param {string} severity
+		 * @param {string} message
+		 */
 		log(severity, message) {
 			if (severity === 'error') console.log(`ERROR: ${message}`);
 		},
@@ -311,7 +388,9 @@ if (cluster.isMaster) {
 
 	if (Config.wsdeflate) {
 		try {
+			// @ts-ignore
 			const deflate = require('permessage-deflate').configure(Config.wsdeflate);
+			// @ts-ignore
 			options.faye_server_options = {extensions: [deflate]};
 		} catch (e) {
 			require('./lib/crashlogger')(new Error("Dependency permessage-deflate is not installed or is otherwise unaccessable. No message compression will take place until server restart."), "Sockets");
@@ -319,16 +398,19 @@ if (cluster.isMaster) {
 	}
 
 	const server = sockjs.createServer(options);
+	/** @type {Map<string, import('sockjs').Connection>} */
 	const sockets = new Map();
+	/** @type {Map<string, Map<string, import('sockjs').Connection>>} */
 	const channels = new Map();
+	/** @type {Map<string, Map<string, string>>} */
 	const subchannels = new Map();
 
 	// Deal with phantom connections.
 	const sweepSocketInterval = setInterval(() => {
 		sockets.forEach(socket => {
-			if (socket.protocol === 'xhr-streaming' &&
-				socket._session &&
-				socket._session.recv) {
+			// @ts-ignore
+			if (socket.protocol === 'xhr-streaming' && socket._session && socket._session.recv) {
+				// @ts-ignore
 				socket._session.recv.didClose();
 			}
 
@@ -338,9 +420,9 @@ if (cluster.isMaster) {
 			// Simply calling `_session.timeout_cb` (the function bound to the aformentioned timeout) manually
 			// on those connections kills those connections. For a bit of background, this timeout is the timeout
 			// that sockjs sets to wait for users to reconnect within that time to continue their session.
-			if (socket._session &&
-				socket._session.to_tref &&
-				!socket._session.to_tref._idlePrev) {
+			// @ts-ignore
+			if (socket._session && socket._session.to_tref && !socket._session.to_tref._idlePrev) {
+				// @ts-ignore
 				socket._session.timeout_cb();
 			}
 		});
@@ -348,10 +430,13 @@ if (cluster.isMaster) {
 
 	process.on('message', data => {
 		// console.log('worker received: ' + data);
+		/** @type {import('sockjs').Connection | undefined?} */
 		let socket = null;
 		let socketid = '';
+		/** @type {Map<string, import('sockjs').Connection> | undefined?} */
 		let channel = null;
 		let channelid = '';
+		/** @type {Map<string, string> | undefined?} */
 		let subchannel = null;
 		let subchannelid = '';
 		let nlLoc = -1;
@@ -456,6 +541,7 @@ if (cluster.isMaster) {
 			channel = channels.get(channelid);
 			if (!channel) return;
 
+			/** @type {[string?, string?, string?]} */
 			let messages = [null, null, null];
 			message = data.substr(nlLoc + 1);
 			subchannel = subchannels.get(channelid);
@@ -463,19 +549,19 @@ if (cluster.isMaster) {
 				switch (subchannel ? subchannel.get(socketid) : '0') {
 				case '1':
 					if (!messages[1]) {
-						messages[1] = message.replace(/\n\|split\n[^\n]*\n([^\n]*)\n[^\n]*\n[^\n]*/g, '\n$1');
+						messages[1] = message.replace(/\n\|split\n[^\n]*\n([^\n]*)\n[^\n]*\n[^\n]*/g, '\n$1').replace(/\n\n/g, '\n');
 					}
 					socket.write(messages[1]);
 					break;
 				case '2':
 					if (!messages[2]) {
-						messages[2] = message.replace(/\n\|split\n[^\n]*\n[^\n]*\n([^\n]*)\n[^\n]*/g, '\n$1');
+						messages[2] = message.replace(/\n\|split\n[^\n]*\n[^\n]*\n([^\n]*)\n[^\n]*/g, '\n$1').replace(/\n\n/g, '\n');
 					}
 					socket.write(messages[2]);
 					break;
 				default:
 					if (!messages[0]) {
-						messages[0] = message.replace(/\n\|split\n([^\n]*)\n[^\n]*\n[^\n]*\n[^\n]*/g, '\n$1');
+						messages[0] = message.replace(/\n\|split\n([^\n]*)\n[^\n]*\n[^\n]*\n[^\n]*/g, '\n$1').replace(/\n\n/g, '\n');
 					}
 					socket.write(messages[0]);
 					break;
@@ -541,6 +627,7 @@ if (cluster.isMaster) {
 			}
 		}
 
+		// @ts-ignore
 		process.send(`*${socketid}\n${socketip}\n${socket.protocol}`);
 
 		socket.on('data', message => {
@@ -558,10 +645,12 @@ if (cluster.isMaster) {
 			let pipeIndex = message.indexOf('|');
 			if (pipeIndex < 0 || pipeIndex === message.length - 1) return;
 
+			// @ts-ignore
 			process.send(`<${socketid}\n${message}`);
 		});
 
 		socket.once('close', () => {
+			// @ts-ignore
 			process.send(`!${socketid}`);
 			sockets.delete(socketid);
 			channels.forEach(channel => channel.delete(socketid));
@@ -572,6 +661,7 @@ if (cluster.isMaster) {
 	console.log(`Worker ${cluster.worker.id} now listening on ${Config.bindaddress}:${Config.port}`);
 
 	if (appssl) {
+		// @ts-ignore
 		server.installHandlers(appssl, {});
 		appssl.listen(Config.ssl.port, Config.bindaddress);
 		console.log(`Worker ${cluster.worker.id} now listening for SSL on port ${Config.ssl.port}`);

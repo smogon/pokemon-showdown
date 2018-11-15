@@ -17,7 +17,7 @@ const Side = require('./side');
 const Pokemon = require('./pokemon');
 const PRNG = require('./prng');
 const {BattleStream} = require('./battle-stream');
-const Validator = require('./team-validator').Validator; // eslint-disable-line no-unused-vars
+const TeamValidator = require('./team-validator');
 
 module.exports = {
 	Pokemon,
@@ -25,21 +25,7 @@ module.exports = {
 	Battle,
 	PRNG,
 	Dex,
+	TeamValidator,
 
 	BattleStream,
-
-	// typescript hacks
-
-	/**@type {Battle} */
-	// @ts-ignore
-	nullBattle: null,
-	/**@type {Pokemon} */
-	// @ts-ignore
-	nullPokemon: null,
-	/**@type {Side} */
-	// @ts-ignore
-	nullSide: null,
-	/**@type {Validator} */
-	// @ts-ignore
-	nullValidator: null,
 };

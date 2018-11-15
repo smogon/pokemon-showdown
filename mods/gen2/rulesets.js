@@ -72,6 +72,7 @@ let BattleFormats = {
 			// limit one of each move in Standard
 			let moves = [];
 			if (set.moves) {
+				/**@type {{[k: string]: true}} */
 				let hasMove = {};
 				for (const setMoveid of set.moves) {
 					let move = this.getMove(setMoveid);

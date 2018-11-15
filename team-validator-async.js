@@ -34,6 +34,8 @@ class ValidatorAsync {
 
 const QueryProcessManager = require('./lib/process-manager').QueryProcessManager;
 
+/**@type {QueryProcessManager} */
+// @ts-ignore
 const PM = new QueryProcessManager(module, async message => {
 	let {formatid, removeNicknames, team} = message;
 	let parsedTeam = Dex.fastUnpackTeam(team);
@@ -60,7 +62,7 @@ const PM = new QueryProcessManager(module, async message => {
 
 if (!PM.isParentProcess) {
 	// This is a child process!
-	// @ts-ignore
+	// @ts-ignore This file doesn't exist on the repository, so Travis checks fail if this isn't ignored
 	global.Config = require('./config/config');
 	global.TeamValidator = require('./sim/team-validator');
 

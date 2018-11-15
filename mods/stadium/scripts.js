@@ -3,74 +3,98 @@
 /**
  * Stadium mechanics inherit from gen 1 mechanics, but fixes some stuff.
  */
-exports.BattleScripts = {
+/**@type {ModdedBattleScriptsData} */
+let BattleScripts = {
 	inherit: 'gen1',
 	gen: 1,
 	// BattlePokemon scripts.
 	pokemon: {
 		// Stadium shares gen 1 code but it fixes some problems with it.
-		getStat: function (statName, unmodified) {
+		getStat(statName, unmodified) {
 			statName = toId(statName);
 			if (statName === 'hp') return this.maxhp;
 			if (unmodified) return this.stats[statName];
+			// @ts-ignore
 			return this.modifiedStats[statName];
 		},
 		// Gen 1 function to apply a stat modification that is only active until the stat is recalculated or mon switched.
 		// Modified stats are declared in the Pokemon object in sim/pokemon.js in about line 681.
-		modifyStat: function (stat, modifier) {
+		modifyStat(stat, modifier) {
 			if (!(stat in this.stats)) return;
+			// @ts-ignore
 			this.modifiedStats[stat] = this.battle.clampIntRange(Math.floor(this.modifiedStats[stat] * modifier), 1);
 		},
 		// This is run on Stadium after boosts and status changes.
-		recalculateStats: function () {
+		recalculateStats() {
 			for (let statName in this.stats) {
+				/**@type {number} */
+				// @ts-ignore
 				let stat = this.template.baseStats[statName];
+				// @ts-ignore
 				stat = Math.floor(Math.floor(2 * stat + this.set.ivs[statName] + Math.floor(this.set.evs[statName] / 4)) * this.level / 100 + 5);
+				// @ts-ignore
 				this.baseStats[statName] = this.stats[statName] = Math.floor(stat);
+				// @ts-ignore
 				this.modifiedStats[statName] = Math.floor(stat);
 				// Re-apply drops, if necessary.
+				// @ts-ignore
 				if (this.status === 'par') this.modifyStat('spe', 0.25);
+				// @ts-ignore
 				if (this.status === 'brn') this.modifyStat('atk', 0.5);
+				// @ts-ignore
 				if (this.boosts[statName] !== 0) {
+					// @ts-ignore
 					if (this.boosts[statName] >= 0) {
+						// @ts-ignore
 						this.modifyStat(statName, [1, 1.5, 2, 2.5, 3, 3.5, 4][this.boosts[statName]]);
 					} else {
+						// @ts-ignore
 						this.modifyStat(statName, [100, 66, 50, 40, 33, 28, 25][-this.boosts[statName]] / 100);
 					}
 				}
 			}
 		},
 		// Stadium's fixed boosting function.
-		boostBy: function (boost) {
+		boostBy(boost) {
 			let changed = false;
 			for (let i in boost) {
+				// @ts-ignore
 				let delta = boost[i];
+				if (delta === undefined) continue;
+				// @ts-ignore
 				this.boosts[i] += delta;
+				// @ts-ignore
 				if (this.boosts[i] > 6) {
+					// @ts-ignore
 					delta -= this.boosts[i] - 6;
+					// @ts-ignore
 					this.boosts[i] = 6;
 				}
+				// @ts-ignore
 				if (this.boosts[i] < -6) {
+					// @ts-ignore
 					delta -= this.boosts[i] - (-6);
+					// @ts-ignore
 					this.boosts[i] = -6;
 				}
 				if (delta) changed = true;
 			}
+			// @ts-ignore
 			this.recalculateStats();
 			return changed;
 		},
 	},
 	// Battle scripts.
-	runMove: function (move, pokemon, targetLoc, sourceEffect) {
-		let target = this.getTarget(pokemon, move, targetLoc);
-		move = this.getMove(move);
+	runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect) {
+		let target = this.getTarget(pokemon, moveOrMoveName, targetLoc);
+		let move = this.getActiveMove(moveOrMoveName);
 		if (!target) target = this.resolveTarget(pokemon, move);
 		if (target.subFainted) delete target.subFainted;
 
 		this.setActiveMove(move, pokemon, target);
 
-		if (pokemon.movedThisTurn || !this.runEvent('BeforeMove', pokemon, target, move)) {
-			this.debug('' + pokemon.id + ' move interrupted; movedThisTurn: ' + pokemon.movedThisTurn);
+		if (pokemon.moveThisTurn || !this.runEvent('BeforeMove', pokemon, target, move)) {
+			this.debug('' + pokemon.id + ' move interrupted; movedThisTurn: ' + pokemon.moveThisTurn);
 			this.clearActiveMove(true);
 			// This is only run for sleep
 			this.runEvent('AfterMoveSelf', pokemon, target, move);
@@ -115,13 +139,14 @@ exports.BattleScripts = {
 			} // If we move to here, the move failed and there's no partial trapping lock
 		}
 	},
-	tryMoveHit: function (target, pokemon, move, spreadHit) {
+	tryMoveHit(target, pokemon, move) {
 		let boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
 		let doSelfDestruct = true;
+		/**@type {number | false} */
 		let damage = 0;
 
 		// First, check if the Pokémon is immune to this move.
-		if (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type] && !target.runImmunity(move.type, true)) {
+		if ((!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) && !target.runImmunity(move.type, true)) {
 			if (move.selfdestruct) {
 				this.faint(pokemon, pokemon, move);
 			}
@@ -129,6 +154,7 @@ exports.BattleScripts = {
 		}
 
 		// Now, let's calculate the accuracy.
+		/**@type {number | true} */
 		let accuracy = move.accuracy;
 
 		// Partial trapping moves: true accuracy while it lasts
@@ -183,7 +209,7 @@ exports.BattleScripts = {
 			pokemon.lastDamage = 0;
 			if (move.multihit) {
 				let hits = move.multihit;
-				if (hits.length) {
+				if (Array.isArray(hits)) {
 					// Yes, it's hardcoded... meh
 					if (hits[0] === 2 && hits[1] === 5) {
 						hits = this.sample([2, 2, 3, 3, 4, 5]);
@@ -193,6 +219,7 @@ exports.BattleScripts = {
 				}
 				hits = Math.floor(hits);
 				// In gen 1, all the hits have the same damage for multihits move
+				/**@type {number | false} */
 				let moveDamage = 0;
 				let firstDamage;
 				let i;
@@ -214,7 +241,7 @@ exports.BattleScripts = {
 					}
 				}
 				move.damage = null;
-				if (i === 0) return true;
+				if (i === 0) return 1;
 				this.add('-hitcount', target, i);
 			} else {
 				damage = this.moveHit(target, pokemon, move);
@@ -245,11 +272,13 @@ exports.BattleScripts = {
 
 		return damage;
 	},
-	moveHit: function (target, pokemon, move, moveData, isSecondary, isSelf) {
+	moveHit(target, pokemon, moveOrMoveName, moveData, isSecondary, isSelf) {
+		/**@type {number | false} */
 		let damage = 0;
-		move = this.getMoveCopy(move);
+		let move = this.getActiveMove(moveOrMoveName);
 
 		if (!isSecondary && !isSelf) this.setActiveMove(move, pokemon, target);
+		/**@type {number | boolean} */
 		let hitResult = true;
 		if (!moveData) moveData = move;
 
@@ -261,7 +290,7 @@ exports.BattleScripts = {
 			hitResult = this.singleEvent('TryHit', moveData, {}, target, pokemon, move);
 
 			// Partial trapping moves still apply their volatile to Pokémon behind a Sub
-			let targetHadSub = (target && target.volatiles['substitute']);
+			const targetHadSub = !!target.volatiles['substitute'];
 			if (targetHadSub && moveData.volatileStatus && moveData.volatileStatus === 'partiallytrapped') {
 				target.addVolatile(moveData.volatileStatus, pokemon, move);
 			}
@@ -328,6 +357,7 @@ exports.BattleScripts = {
 			if (moveData.status) {
 				if (!target.status) {
 					target.setStatus(moveData.status, pokemon, move);
+					// @ts-ignore
 					target.recalculateStats();
 				} else if (!isSecondary) {
 					if (target.status === moveData.status) {
@@ -340,6 +370,7 @@ exports.BattleScripts = {
 			}
 			if (moveData.forceStatus) {
 				if (target.setStatus(moveData.forceStatus, pokemon, move)) {
+					// @ts-ignore
 					target.recalculateStats();
 					didSomething = true;
 				}
@@ -388,7 +419,7 @@ exports.BattleScripts = {
 				// That means that a move that does not share the type of the target can status it.
 				// If a move that was not fire-type would exist on Gen 1, it could burn a Pokémon.
 				if (!(secondary.status && ['par', 'brn', 'frz'].includes(secondary.status) && target && target.hasType(move.type))) {
-					let effectChance = Math.floor(secondary.chance * 255 / 100);
+					let effectChance = Math.floor((secondary.chance || 100) * 255 / 100);
 					if (typeof secondary.chance === 'undefined' || this.randomChance(effectChance + 1, 256)) {
 						this.moveHit(target, pokemon, move, secondary, true, isSelf);
 					}
@@ -401,17 +432,18 @@ exports.BattleScripts = {
 
 		return damage;
 	},
-	getDamage: function (pokemon, target, move, suppressMessages) {
+	getDamage(pokemon, target, move, suppressMessages) {
 		// First of all, we get the move.
-		if (typeof move === 'string') move = this.getMove(move);
-		if (typeof move === 'number') {
-			move = {
+		if (typeof move === 'string') {
+			move = this.getActiveMove(move);
+		} else if (typeof move === 'number') {
+			move = /** @type {ActiveMove} */ ({
 				basePower: move,
 				type: '???',
 				category: 'Physical',
 				willCrit: false,
 				flags: {},
-			};
+			});
 		}
 
 		// Let's see if the target is immune to the move.
@@ -628,7 +660,8 @@ exports.BattleScripts = {
 		// We are done, this is the final damage.
 		return Math.floor(damage);
 	},
-	damage: function (damage, target, source, effect) {
+	// @ts-ignore
+	damage(damage, target, source, effect) {
 		if (this.event) {
 			if (!target) target = this.event.target;
 			if (!source) source = this.event.source;
@@ -683,7 +716,7 @@ exports.BattleScripts = {
 
 		return damage;
 	},
-	directDamage: function (damage, target, source, effect) {
+	directDamage(damage, target, source, effect) {
 		if (this.event) {
 			if (!target) target = this.event.target;
 			if (!source) source = this.event.source;
@@ -710,3 +743,5 @@ exports.BattleScripts = {
 		return damage;
 	},
 };
+
+exports.BattleScripts = BattleScripts;

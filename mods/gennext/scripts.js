@@ -1,7 +1,8 @@
 'use strict';
 
-exports.BattleScripts = {
-	init: function () {
+/**@type {ModdedBattleScriptsData} */
+let BattleScripts = {
+	init() {
 		this.modData('Pokedex', 'cherrimsunshine').types = ['Grass', 'Fire'];
 
 		// Give Hurricane to all the Bug/Flying Quiver-dancers
@@ -149,3 +150,5 @@ exports.BattleScripts = {
 		}
 	},
 };
+
+exports.BattleScripts = BattleScripts;

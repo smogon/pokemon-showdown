@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleMovedex = {
+/**@type {{[k: string]: ModdedMoveData}} */
+let BattleMovedex = {
 	/******************************************************************
 	Perfect accuracy moves:
 	- base power increased to 90
@@ -653,7 +654,7 @@ exports.BattleMovedex = {
 			onDamage: function (damage, target, source, effect) {
 				if (!effect || effect.effectType !== 'Move') return;
 				if (!source || source.side === target.side) return;
-				if (effect && effect.effectType === 'Move' && damage >= target.hp) {
+				if (effect.effectType === 'Move' && damage >= target.hp) {
 					damage = target.hp - 1;
 				}
 				this.effectData.totalDamage += damage;
@@ -667,7 +668,7 @@ exports.BattleMovedex = {
 					pokemon.removeVolatile('bidestall');
 				}
 			},
-			onBeforeMove: function (pokemon) {
+			onBeforeMove: function (pokemon, target, move) {
 				if (this.effectData.duration === 1) {
 					if (!this.effectData.totalDamage) {
 						this.add('-end', pokemon, 'Bide');
@@ -676,7 +677,10 @@ exports.BattleMovedex = {
 					}
 					this.add('-end', pokemon, 'Bide');
 					let target = this.effectData.sourceSide.active[this.effectData.sourcePosition];
-					this.moveHit(target, pokemon, 'bide', {damage: this.effectData.totalDamage * 2});
+					let moveData = /** @type {ActiveMove} */ ({
+						damage: this.effectData.totalDamage * 2,
+					});
+					this.moveHit(target, pokemon, 'bide', moveData);
 					return false;
 				}
 				this.add('-activate', pokemon, 'Bide');
@@ -766,6 +770,7 @@ exports.BattleMovedex = {
 			if (pokemon.baseTemplate.species !== 'Meloetta' || pokemon.transformed) {
 				return;
 			}
+			/**@type {{[k: string]: string}} */
 			let natureChange = {
 				'Modest': 'Adamant',
 				'Adamant': 'Modest',
@@ -774,8 +779,7 @@ exports.BattleMovedex = {
 			};
 			let tmpAtkEVs;
 			let Atk2SpA;
-			if (pokemon.template.speciesid === 'meloettapirouette' && pokemon.formeChange('Meloetta')) {
-				this.add('-formechange', pokemon, 'Meloetta');
+			if (pokemon.template.speciesid === 'meloettapirouette' && pokemon.formeChange('Meloetta', this.effect, false, '[msg]')) {
 				tmpAtkEVs = pokemon.set.evs.atk;
 				pokemon.set.evs.atk = pokemon.set.evs.spa;
 				pokemon.set.evs.spa = tmpAtkEVs;
@@ -785,8 +789,7 @@ exports.BattleMovedex = {
 					atk: Atk2SpA,
 					spa: -Atk2SpA,
 				}, pokemon);
-			} else if (pokemon.formeChange('Meloetta-Pirouette')) {
-				this.add('-formechange', pokemon, 'Meloetta-Pirouette');
+			} else if (pokemon.formeChange('Meloetta-Pirouette', this.effect, false, '[msg]')) {
 				tmpAtkEVs = pokemon.set.evs.atk;
 				pokemon.set.evs.atk = pokemon.set.evs.spa;
 				pokemon.set.evs.spa = tmpAtkEVs;
@@ -880,12 +883,14 @@ exports.BattleMovedex = {
 				onHit: function (target, source) {
 					let stats = [];
 					for (let stat in target.boosts) {
+						// @ts-ignore
 						if (stat !== 'accuracy' && stat !== 'evasion' && stat !== 'atk' && target.boosts[stat] < 6) {
 							stats.push(stat);
 						}
 					}
 					if (stats.length) {
 						let randomStat = this.sample(stats);
+						/**@type {{[k: string]: number}} */
 						let boost = {};
 						boost[randomStat] = 1;
 						this.boost(boost);
@@ -912,12 +917,14 @@ exports.BattleMovedex = {
 				onHit: function (target, source) {
 					let stats = [];
 					for (let stat in target.boosts) {
+						// @ts-ignore
 						if (stat !== 'accuracy' && stat !== 'evasion' && stat !== 'atk' && target.boosts[stat] < 6) {
 							stats.push(stat);
 						}
 					}
 					if (stats.length) {
 						let randomStat = this.sample(stats);
+						/**@type {{[k: string]: number}} */
 						let boost = {};
 						boost[randomStat] = 1;
 						this.boost(boost);
@@ -938,12 +945,14 @@ exports.BattleMovedex = {
 				onHit: function (target, source) {
 					let stats = [];
 					for (let stat in target.boosts) {
+						// @ts-ignore
 						if (stat !== 'accuracy' && stat !== 'evasion' && stat !== 'atk' && target.boosts[stat] < 6) {
 							stats.push(stat);
 						}
 					}
 					if (stats.length) {
 						let randomStat = this.sample(stats);
+						/**@type {{[k: string]: number}} */
 						let boost = {};
 						boost[randomStat] = 1;
 						this.boost(boost);
@@ -966,9 +975,12 @@ exports.BattleMovedex = {
 	avalanche: {
 		inherit: true,
 		basePowerCallback: function (pokemon, source) {
-			if ((source.lastDamage > 0 && pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn)) {
-				this.debug('Boosted for getting hit by ' + pokemon.lastAttackedBy.move);
-				return this.isWeather('hail') ? 180 : 120;
+			let lastAttackedBy = pokemon.getLastAttackedBy();
+			if (lastAttackedBy) {
+				if (lastAttackedBy.damage > 0 && lastAttackedBy.thisTurn) {
+					this.debug('Boosted for getting hit by ' + lastAttackedBy.move);
+					return this.isWeather('hail') ? 180 : 120;
+				}
 			}
 			return this.isWeather('hail') ? 90 : 60;
 		},
@@ -1224,6 +1236,7 @@ exports.BattleMovedex = {
 		onModifyMove: function (move) {
 			switch (this.effectiveWeather()) {
 			case 'sunnyday':
+				// @ts-ignore
 				move.secondary.chance = 60;
 				break;
 			}
@@ -1236,6 +1249,7 @@ exports.BattleMovedex = {
 		onModifyMove: function (move) {
 			switch (this.effectiveWeather()) {
 			case 'sunnyday':
+				// @ts-ignore
 				move.secondary.chance = 60;
 				break;
 			}
@@ -2086,3 +2100,5 @@ exports.BattleMovedex = {
 		},
 	},
 };
+
+exports.BattleMovedex = BattleMovedex;

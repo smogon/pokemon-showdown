@@ -29,6 +29,9 @@ let BattleFormats = {
 				problems.push((set.name || set.species) + ' has more than four moves.');
 			}
 
+			if (set.evs) set.evs['spd'] = set.evs['spa'];
+			if (set.ivs) set.ivs['spd'] = set.ivs['spa'];
+
 			// Let's manually delete items.
 			set.item = '';
 
@@ -62,6 +65,7 @@ let BattleFormats = {
 			// limit one of each move in Standard
 			let moves = [];
 			if (set.moves) {
+				/**@type {{[k: string]: true}} */
 				let hasMove = {};
 				for (const setMoveid of set.moves) {
 					let move = this.getMove(setMoveid);

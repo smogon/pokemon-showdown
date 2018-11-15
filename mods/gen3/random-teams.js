@@ -10,7 +10,6 @@ class RandomGen3Teams extends RandomGen4Teams {
 	 * @return {RandomTeamsTypes["RandomSet"]}
 	 */
 	randomSet(template, slot, teamDetails = {}) {
-		if (slot === undefined) slot = 1;
 		let baseTemplate = (template = this.getTemplate(template));
 		let species = template.species;
 
@@ -44,15 +43,17 @@ class RandomGen3Teams extends RandomGen4Teams {
 			spd: 31,
 			spe: 31,
 		};
+		/**@type {{[k: string]: true}} */
 		let hasType = {};
 		hasType[template.types[0]] = true;
 		if (template.types[1]) {
 			hasType[template.types[1]] = true;
 		}
+		/**@type {{[k: string]: true}} */
 		let hasAbility = {};
 		hasAbility[template.abilities[0]] = true;
 		if (template.abilities[1]) {
-			// @ts-ignore
+			// @ts-ignore TypeScript bug
 			hasAbility[template.abilities[1]] = true;
 		}
 		let availableHP = 0;
@@ -304,9 +305,11 @@ class RandomGen3Teams extends RandomGen4Teams {
 					rejected = true;
 				}
 
+				// @ts-ignore
 				if (counter.setupType && !isSetup && move.category !== counter.setupType && counter[counter.setupType] < 2 && !hasMove['batonpass'] && moveid !== 'rest' && moveid !== 'sleeptalk') {
 					// Mono-attacking with setup and RestTalk is allowed
 					// Reject Status moves only if there is nothing else to reject
+					// @ts-ignore
 					if (move.category !== 'Status' || counter[counter.setupType] + counter.Status > 3 && counter['physicalsetup'] + counter['specialsetup'] < 2) rejected = true;
 				}
 
@@ -359,9 +362,9 @@ class RandomGen3Teams extends RandomGen4Teams {
 				}
 				if (reqMove) {
 					// reject a move
-					for (let move of moves) {
+					for (let [i, move] of moves.entries()) {
 						if (move === 'weatherball' || this.getMove(move).type in hasType) continue;
-						move = reqMove;
+						moves[i] = reqMove;
 						let reqMoveIndex = movePool.indexOf(reqMove);
 						if (reqMoveIndex !== -1) this.fastPop(movePool, reqMoveIndex);
 						break;
@@ -496,7 +499,6 @@ class RandomGen3Teams extends RandomGen4Teams {
 			}
 		}
 
-		item = 'Leftovers';
 		if (template.requiredItems) {
 			item = this.sample(template.requiredItems);
 
@@ -553,7 +555,9 @@ class RandomGen3Teams extends RandomGen4Teams {
 			Ditto: 99, Unown: 99,
 		};
 		let tier = template.tier;
+		// @ts-ignore
 		let level = levelScale[tier] || 75;
+		// @ts-ignore
 		if (customScale[template.name]) level = customScale[template.name];
 
 		// Prepare optimal HP
@@ -611,8 +615,11 @@ class RandomGen3Teams extends RandomGen4Teams {
 			pokemonPool.push(id);
 		}
 
+		/**@type {{[k: string]: number}} */
 		let typeCount = {};
+		/**@type {{[k: string]: number}} */
 		let typeComboCount = {};
+		/**@type {{[k: string]: number}} */
 		let baseFormes = {};
 		let uberCount = 0;
 		let nuCount = 0;

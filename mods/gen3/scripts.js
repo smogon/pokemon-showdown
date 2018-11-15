@@ -4,7 +4,7 @@
 let BattleScripts = {
 	inherit: 'gen4',
 	gen: 3,
-	init: function () {
+	init() {
 		for (let i in this.data.Pokedex) {
 			delete this.data.Pokedex[i].abilities['H'];
 		}
@@ -19,15 +19,17 @@ let BattleScripts = {
 			}
 		}
 	},
-	tryMoveHit: function (target, pokemon, move) {
+	tryMoveHit(target, pokemon, move) {
 		this.setActiveMove(move, pokemon, target);
-		let hitResult = true;
 		let naturalImmunity = false;
 		let accPass = true;
 
-		hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move);
+		let hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move);
 		if (!hitResult) {
-			if (hitResult === false) this.add('-fail', target);
+			if (hitResult === false) {
+				this.add('-fail', pokemon);
+				this.attrLastMove('[still]');
+			}
 			return false;
 		}
 		this.runEvent('PrepareHit', pokemon, target, move);
@@ -43,7 +45,10 @@ let BattleScripts = {
 				hitResult = this.runEvent('TryHitSide', target, pokemon, move);
 			}
 			if (!hitResult) {
-				if (hitResult === false) this.add('-fail', target);
+				if (hitResult === false) {
+					this.add('-fail', pokemon);
+					this.attrLastMove('[still]');
+				}
 				return false;
 			}
 			return this.moveHit(target, pokemon, move);
@@ -115,15 +120,18 @@ let BattleScripts = {
 		if (accPass) {
 			hitResult = this.runEvent('TryHit', target, pokemon, move);
 			if (!hitResult) {
-				if (hitResult === false) this.add('-fail', target);
+				if (hitResult === false) {
+					this.add('-fail', pokemon);
+					this.attrLastMove('[still]');
+				}
 				return false;
 			} else if (naturalImmunity) {
-				this.add('-immune', target, '[msg]');
+				this.add('-immune', target);
 				return false;
 			}
 		} else {
 			if (naturalImmunity) {
-				this.add('-immune', target, '[msg]');
+				this.add('-immune', target);
 			} else {
 				if (!move.spreadHit) this.attrLastMove('[miss]');
 				this.add('-miss', pokemon, target);
@@ -154,6 +162,7 @@ let BattleScripts = {
 			let i;
 			for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
 				if (pokemon.status === 'slp' && !isSleepUsable) break;
+				move.hit = i + 1;
 
 				if (move.multiaccuracy && i > 0) {
 					accuracy = move.accuracy;
@@ -221,7 +230,7 @@ let BattleScripts = {
 		return damage;
 	},
 
-	calcRecoilDamage: function (damageDealt, move) {
+	calcRecoilDamage(damageDealt, move) {
 		// @ts-ignore
 		return this.clampIntRange(Math.floor(damageDealt * move.recoil[0] / move.recoil[1]), 1);
 	},

@@ -32,6 +32,7 @@ const BLACKLIST_DURATION = 365 * 24 * 60 * 60 * 1000; // 1 year
 const USERID_REGEX = /^[a-z0-9]+$/;
 const PUNISH_TRUSTED = false;
 
+/**@type {{[k: string]: number}} */
 const PUNISHMENT_POINT_VALUES = {MUTE: 2, BLACKLIST: 3, BATTLEBAN: 4, ROOMBAN: 4};
 const AUTOLOCK_POINT_THRESHOLD = 8;
 
@@ -42,7 +43,7 @@ const AUTOLOCK_POINT_THRESHOLD = 8;
 
 /**
  * TODO: Properly Typescript this.
- * @typedef {any[]} PunishmentRow
+ * @typedef {User[]} PunishmentRow
  */
 
 /**
@@ -466,7 +467,6 @@ Punishments.punish = function (user, punishment, recursionKeys) {
 	if (user.trusted) {
 		Punishments.userids.set(user.trusted, punishment);
 		keys.add(user.trusted);
-		// @ts-ignore TODO: investigate if this is a bug
 		if (!PUNISH_TRUSTED && affected) affected.unshift(user);
 	}
 	if (!recursionKeys) {
@@ -597,7 +597,6 @@ Punishments.roomPunish = function (room, user, punishment, recursionKeys) {
 
 		if (typeof roomid === 'string' || !(room.isPrivate === true || room.isPersonal || room.battle)) Punishments.monitorRoomPunishments(user);
 
-		// @ts-ignore
 		return affected;
 	}
 };
@@ -717,9 +716,8 @@ Punishments.unban = function (name) {
  * @return {PunishmentRow}
  */
 Punishments.lock = function (user, expireTime, id, ...reason) {
-	// @ts-ignore
-	if (!id && user) id = user.getLastId();
 	if (!user || typeof user === 'string') user = Users(id);
+	if (!id && user) id = user.getLastId();
 
 	if (!expireTime) expireTime = Date.now() + LOCK_DURATION;
 	let punishment = ['LOCK', id, expireTime, ...reason];
@@ -745,9 +743,10 @@ Punishments.lock = function (user, expireTime, id, ...reason) {
  * @param {string} source
  * @param {string} reason
  * @param {string?} message
- * @param {boolean?} week
+ * @param {boolean} week
+ * @param {string?} [name]
  */
-Punishments.autolock = function (user, room, source, reason, message, week) {
+Punishments.autolock = function (user, room, source, reason, message, week = false, name) {
 	if (!message) message = reason;
 
 	let punishment = `LOCKED`;
@@ -756,9 +755,15 @@ Punishments.autolock = function (user, room, source, reason, message, week) {
 		expires = Date.now() + 7 * 24 * 60 * 60 * 1000;
 		punishment = `WEEKLOCKED`;
 	}
-	Punishments.lock(user, expires, toId(user), `Autolock: ${user.name || toId(user)}: ${reason}`);
+	if (name) {
+		punishment = `NAMELOCKED`;
+		Punishments.namelock(user, expires, toId(name), `Autonamelock: ${user.name || toId(user)}: ${reason}`);
+	} else {
+		Punishments.lock(user, expires, toId(user), `Autolock: ${user.name || toId(user)}: ${reason}`);
+	}
 	Monitor.log(`[${source}] ${punishment}: ${message}`);
-	Rooms.global.modlog(`(${toId(room)}) AUTOLOCK: [${toId(user)}]: ${reason}`);
+	const ipStr = typeof user !== 'string' ? ` [${user.latestIp}]` : '';
+	Rooms.global.modlog(`(${toId(room)}) AUTO${name ? `NAME` : ''}LOCK: [${toId(user)}]${ipStr}: ${reason}`);
 };
 /**
  * @param {string} name
@@ -1099,6 +1104,7 @@ Punishments.removeSharedIp = function (ip) {
 
 /**
  * @param {string} searchId
+ * @return {[string[], (string | number)[]?]}
  */
 Punishments.search = function (searchId) {
 	/** @type {string[]} */
@@ -1229,6 +1235,9 @@ Punishments.checkName = function (user, userid, registered) {
 		battleban = Punishments.roomUserids.get(Punishments.isBattleBanned(user));
 		if (!battleban) battleban = ['BATTLEBAN', Punishments.isBattleBanned(user), 0];
 	}
+
+	const ticket = Chat.pages.help ? `<a href="view-help-request--appeal"><button class="button"><strong>Appeal your punishment</strong></button></a>` : '';
+
 	if (battleban) {
 		if (battleban[1] !== user.userid && Punishments.sharedIps.has(user.latestIp) && user.autoconfirmed) {
 			Punishments.roomUnpunish("battle", userid, 'BATTLEBAN');
@@ -1236,8 +1245,9 @@ Punishments.checkName = function (user, userid, registered) {
 			Punishments.roomPunish("battle", user, battleban);
 			user.cancelReady();
 			if (!punishment) {
+				let appealLink = ticket || (Config.appealurl ? `appeal at: ${Config.appealurl}` : ``);
 				// Prioritize popups for other global punishments
-				user.send(`|popup|You are banned from battling${battleban[1] !== userid ? ` because you have the same IP as banned user: ${battleban[1]}` : ''}. Your battle ban will expire in a few days.${battleban[3] ? `||||Reason: ${battleban[3]}` : ``}${Config.appealurl ? `||||Or you can appeal at: ${Config.appealurl}` : ``}`);
+				user.send(`|popup||html|You are banned from battling${battleban[1] !== userid ? ` because you have the same IP as banned user: ${battleban[1]}` : ''}. Your battle ban will expire in a few days.${battleban[3] ? Chat.html `\n\nReason: ${battleban[3]}` : ``}${appealLink ? `\n\nOr you can ${appealLink}.` : ``}`);
 				user.punishmentNotified = true;
 				return;
 			}
@@ -1248,13 +1258,19 @@ Punishments.checkName = function (user, userid, registered) {
 	let id = punishment[0];
 	let punishUserid = punishment[1];
 	let reason = ``;
-	if (punishment[3]) reason = `\n\nReason: ${punishment[3]}`;
+	if (punishment[3]) reason = `\n\nReason: ${Chat.escapeHTML(punishment[3])}`;
 	let appeal = ``;
-	if (Config.appealurl) appeal = `\n\nOr you can appeal at: ${Config.appealurl}`;
+	if (user.permalocked && Config.appealurl) {
+		appeal += `\n\nPermanent punishments can be appealed: <a href="${Config.appealurl}">${Config.appealurl}</a>`;
+	} else if (ticket) {
+		appeal += `\n\nIf you feel you were unfairly punished or wish to otherwise appeal, you can ${ticket}.`;
+	} else if (Config.appealurl) {
+		appeal += `\n\nIf you wish to appeal your punishment, please use: <a href="${Config.appealurl}">${Config.appealurl}</a>`;
+	}
 	let bannedUnder = ``;
 	if (punishUserid !== userid) bannedUnder = ` because you have the same IP as banned user: ${punishUserid}`;
 
-	if ((id === 'LOCK' || id === 'NAMELOCK') && punishUserid !== user.userid && Punishments.sharedIps.has(user.latestIp)) {
+	if ((id === 'LOCK' || id === 'NAMELOCK') && punishUserid !== userid && Punishments.sharedIps.has(user.latestIp)) {
 		if (!user.autoconfirmed) {
 			user.semilocked = `#sharedip ${user.locked}`;
 		}
@@ -1264,15 +1280,14 @@ Punishments.checkName = function (user, userid, registered) {
 		return;
 	}
 	if (registered && id === 'BAN') {
-		user.popup(`Your username (${user.name}) is banned${bannedUnder}. Your ban will expire in a few days.${reason}${appeal}`);
+		user.popup(`Your username (${user.name}) is banned${bannedUnder}. Your ban will expire in a few days.${reason}${Config.appealurl ? `||||Or you can appeal at: ${Config.appealurl}` : ``}`);
 		user.punishmentNotified = true;
 		Punishments.punish(user, punishment);
 		user.disconnectAll();
 		return;
 	}
 	if (id === 'NAMELOCK' || user.namelocked) {
-		user.popup(`You are namelocked and can't have a username${bannedUnder}. Your namelock will expire in a few days.${reason}${appeal}`);
-		if (punishment[2]) Punishments.punish(user, punishment);
+		user.send(`|popup||html|You are namelocked and can't have a username${bannedUnder}. Your namelock will expire in a few days.${reason}${appeal}`);
 		user.locked = punishUserid;
 		user.namelocked = punishUserid;
 		user.resetName();
@@ -1281,10 +1296,10 @@ Punishments.checkName = function (user, userid, registered) {
 		if (punishUserid === '#hostfilter') {
 			user.popup(`Due to spam, you can't chat using a proxy. (Your IP ${user.latestIp} appears to be a proxy.)`);
 		} else if (!user.lockNotified) {
-			user.popup(`You are locked${bannedUnder}. Your lock will expire in a few days.${reason}${appeal}`);
+			user.send(`|popup||html|You are locked${bannedUnder}. ${user.permalocked ? `This lock is permanent.` : `Your lock will expire in a few days.`}${reason}${appeal}`);
 		}
 		user.lockNotified = true;
-		Punishments.punish(user, punishment);
+		if (user.userid === punishUserid) Punishments.punish(user, punishment);
 		user.locked = punishUserid;
 		user.updateIdentity();
 	}

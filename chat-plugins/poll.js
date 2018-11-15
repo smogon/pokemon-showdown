@@ -5,28 +5,40 @@
 
 'use strict';
 
+/** @typedef {{source: string, supportHTML: boolean}} QuestionData */
+/** @typedef {{name: string, votes: number}} Option */
+
 class Poll {
+	/**
+	 * @param {ChatRoom | GameRoom} room
+	 * @param {QuestionData} questionData
+	 * @param {string[]} options
+	 */
 	constructor(room, questionData, options) {
-		if (room.pollNumber) {
-			room.pollNumber++;
-		} else {
-			room.pollNumber = 1;
-		}
+		this.pollNumber = ++room.gameNumber;
 		this.room = room;
 		this.question = questionData.source;
 		this.supportHTML = questionData.supportHTML;
+		/** @type {{[k: string]: number}} */
 		this.voters = {};
+		/** @type {{[k: string]: number}} */
 		this.voterIps = {};
 		this.totalVotes = 0;
+		/** @type {NodeJS.Timer?} */
 		this.timeout = null;
 		this.timeoutMins = 0;
 
+		/** @type {Map<number, Option>} */
 		this.options = new Map();
 		for (const [i, option] of options.entries()) {
 			this.options.set(i + 1, {name: option, votes: 0});
 		}
 	}
 
+	/**
+	 * @param {User} user
+	 * @param {number} option
+	 */
 	vote(user, option) {
 		let ip = user.latestIp;
 		let userid = user.userid;
@@ -37,13 +49,17 @@ class Poll {
 
 		this.voters[userid] = option;
 		this.voterIps[ip] = option;
+		// @ts-ignore this is never undefined since we checked this earlier.
 		this.options.get(option).votes++;
 		this.totalVotes++;
 
 		this.update();
 	}
 
-	blankvote(user, option) {
+	/**
+	 * @param {User} user
+	 */
+	blankvote(user) {
 		let ip = user.latestIp;
 		let userid = user.userid;
 
@@ -66,7 +82,11 @@ class Poll {
 		return output;
 	}
 
-	generateResults(ended, option) {
+	/**
+	 * @param {boolean} [ended]
+	 * @param {number?} [option]
+	 */
+	generateResults(ended = false, option = 0) {
 		let icon = `<span style="border:1px solid #${ended ? '777;color:#555' : '6A6;color:#484'};border-radius:4px;padding:0 3px"><i class="fa fa-bar-chart"></i> ${ended ? "Poll ended" : "Poll"}</span>`;
 		let output = `<div class="infobox"><p style="margin: 2px 0 5px 0">${icon} <strong style="font-size:11pt">${this.getQuestionMarkup()}</strong></p>`;
 		let iter = this.options.entries();
@@ -91,6 +111,9 @@ class Poll {
 		return Chat.escapeHTML(this.question);
 	}
 
+	/**
+	 * @param {Option} option
+	 */
 	getOptionMarkup(option) {
 		if (this.supportHTML) return option.name;
 		return Chat.escapeHTML(option.name);
@@ -107,27 +130,34 @@ class Poll {
 		for (let i in this.room.users) {
 			let user = this.room.users[i];
 			if (user.userid in this.voters) {
-				user.sendTo(this.room, `|uhtmlchange|poll${this.room.pollNumber}|${results[this.voters[user.userid]]}`);
+				user.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${results[this.voters[user.userid]]}`);
 			} else if (user.latestIp in this.voterIps) {
-				user.sendTo(this.room, `|uhtmlchange|poll${this.room.pollNumber}|${results[this.voterIps[user.latestIp]]}`);
+				user.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${results[this.voterIps[user.latestIp]]}`);
 			}
 		}
 	}
 
-	updateTo(user, connection) {
-		if (!connection) connection = user;
+	/**
+	 * @param {User} user
+	 * @param {Connection?} [connection]
+	 */
+	updateTo(user, connection = null) {
+		const recipient = connection || user;
 		if (user.userid in this.voters) {
-			connection.sendTo(this.room, `|uhtmlchange|poll${this.room.pollNumber}|${this.generateResults(false, this.voters[user.userid])}`);
+			recipient.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateResults(false, this.voters[user.userid])}`);
 		} else if (user.latestIp in this.voterIps) {
-			connection.sendTo(this.room, `|uhtmlchange|poll${this.room.pollNumber}|${this.generateResults(false, this.voterIps[user.latestIp])}`);
+			recipient.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateResults(false, this.voterIps[user.latestIp])}`);
 		} else {
-			connection.sendTo(this.room, `|uhtmlchange|poll${this.room.pollNumber}|${this.generateVotes()}`);
+			recipient.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateVotes()}`);
 		}
 	}
 
+	/**
+	 * @param {User} user
+	 */
 	updateFor(user) {
 		if (user.userid in this.voters) {
-			user.sendTo(this.room, `|uhtmlchange|poll${this.room.pollNumber}|${this.generateResults(false, this.voters[user.userid])}`);
+			user.sendTo(this.room, `|uhtmlchange|poll${this.pollNumber}|${this.generateResults(false, this.voters[user.userid])}`);
 		}
 	}
 
@@ -143,41 +173,50 @@ class Poll {
 		for (let i in this.room.users) {
 			let thisUser = this.room.users[i];
 			if (thisUser.userid in this.voters) {
-				thisUser.sendTo(this.room, `|uhtml|poll${this.room.pollNumber}|${results[this.voters[thisUser.userid]]}`);
+				thisUser.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${results[this.voters[thisUser.userid]]}`);
 			} else if (thisUser.latestIp in this.voterIps) {
-				thisUser.sendTo(this.room, `|uhtml|poll${this.room.pollNumber}|${results[this.voterIps[thisUser.latestIp]]}`);
+				thisUser.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${results[this.voterIps[thisUser.latestIp]]}`);
 			} else {
-				thisUser.sendTo(this.room, `|uhtml|poll${this.room.pollNumber}|${votes}`);
+				thisUser.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${votes}`);
 			}
 		}
 	}
 
-	displayTo(user, connection) {
-		if (!connection) connection = user;
+	/**
+	 * @param {User} user
+	 * @param {Connection?} [connection]
+	 */
+	displayTo(user, connection = null) {
+		const recipient = connection || user;
 		if (user.userid in this.voters) {
-			connection.sendTo(this.room, `|uhtml|poll${this.room.pollNumber}|${this.generateResults(false, this.voters[user.userid])}`);
+			recipient.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${this.generateResults(false, this.voters[user.userid])}`);
 		} else if (user.latestIp in this.voterIps) {
-			connection.sendTo(this.room, `|uhtml|poll${this.room.pollNumber}|${this.generateResults(false, this.voterIps[user.latestIp])}`);
+			recipient.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${this.generateResults(false, this.voterIps[user.latestIp])}`);
 		} else {
-			connection.sendTo(this.room, `|uhtml|poll${this.room.pollNumber}|${this.generateVotes()}`);
+			recipient.sendTo(this.room, `|uhtml|poll${this.pollNumber}|${this.generateVotes()}`);
 		}
 	}
 
-	onConnect(user, connection) {
+	/**
+	 * @param {User} user
+	 * @param {Connection?} [connection]
+	 */
+	onConnect(user, connection = null) {
 		this.displayTo(user, connection);
 	}
 
 	end() {
 		let results = this.generateResults(true);
 
-		this.room.send(`|uhtmlchange|poll${this.room.pollNumber}|<div class="infobox">(The poll has ended &ndash; scroll down to see the results)</div>`);
+		this.room.send(`|uhtmlchange|poll${this.pollNumber}|<div class="infobox">(The poll has ended &ndash; scroll down to see the results)</div>`);
 		this.room.add(`|html|${results}`).update();
 	}
 }
 
 exports.Poll = Poll;
 
-exports.commands = {
+/** @type {ChatCommands} */
+const commands = {
 	poll: {
 		htmlcreate: 'new',
 		create: 'new',
@@ -186,19 +225,23 @@ exports.commands = {
 			if (target.length > 1024) return this.errorReply("Poll too long.");
 			if (room.battle) return this.errorReply("Battles do not support polls.");
 
+			/** @type {string} */
+			let text = Chat.filter.call(this, target, user, room, connection);
+			if (target !== text) return this.errorReply("You are not allowed to use filtered words in polls.");
+
 			const supportHTML = cmd === 'htmlcreate';
 			let separator = '';
-			if (target.includes('\n')) {
+			if (text.includes('\n')) {
 				separator = '\n';
-			} else if (target.includes('|')) {
+			} else if (text.includes('|')) {
 				separator = '|';
-			} else if (target.includes(',')) {
+			} else if (text.includes(',')) {
 				separator = ',';
 			} else {
 				return this.errorReply("Not enough arguments for /poll new.");
 			}
 
-			let params = target.split(separator).map(param => param.trim());
+			let params = text.split(separator).map(param => param.trim());
 
 			if (!this.can('minigame', null, room)) return false;
 			if (supportHTML && !this.can('declare', null, room)) return false;
@@ -206,6 +249,7 @@ exports.commands = {
 			if (room.poll) return this.errorReply("There is already a poll in progress in this room.");
 			if (params.length < 3) return this.errorReply("Not enough arguments for /poll new.");
 
+			// @ts-ignore In the case that any of these are null, the function is terminated, and the result never used.
 			if (supportHTML) params = params.map(parameter => this.canHTML(parameter));
 			if (params.some(parameter => !parameter)) return;
 
@@ -330,6 +374,8 @@ exports.commands = {
 		`/poll end - Ends a poll and displays the results. Requires: % @ * # & ~`,
 	],
 };
+
+exports.commands = commands;
 
 process.nextTick(() => {
 	Chat.multiLinePattern.register('/poll (new|create|htmlcreate) ');

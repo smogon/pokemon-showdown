@@ -39,13 +39,13 @@ const linkRegex = new RegExp(
 			')?' +
 		')?' +
 		// email address
-		'|[a-z0-9.]+\\b@' + domainRegex + '[.][a-z]{2,3}' +
+		'|[a-z0-9.]+\\b@' + domainRegex + '[.][a-z]{2,}' +
 	')' +
 	'(?![^ ]*&gt;)',
 	'ig'
 );
 // compiled from above
-// const linkRegex = /(?:(?:(?:https?:\/\/|\bwww[.])[a-z0-9-]+(?:[.][a-z0-9-]+)*|\b[a-z0-9-]+(?:[.][a-z0-9-]+)*[.](?:com?|org|net|edu|info|us|jp|[a-z]{2,3}(?=[:/])))(?:[:][0-9]+)?\b(?:\/(?:(?:[^\s()&<>]|&amp;|&quot;|[(](?:[^\s()<>&]|&amp;)*[)])*(?:[^\s`()[\]{}'".,!?;:&<>*`^~\\]|[(](?:[^\s()<>&]|&amp;)*[)]))?)?|[a-z0-9.]+\b@[a-z0-9-]+(?:[.][a-z0-9-]+)*[.][a-z]{2,3})(?![^ ]*&gt;)/ig;
+// const linkRegex = /(?:(?:(?:https?:\/\/|\bwww[.])[a-z0-9-]+(?:[.][a-z0-9-]+)*|\b[a-z0-9-]+(?:[.][a-z0-9-]+)*[.](?:com?|org|net|edu|info|us|jp|[a-z]{2,3}(?=[:/])))(?:[:][0-9]+)?\b(?:\/(?:(?:[^\s()&<>]|&amp;|&quot;|[(](?:[^\s()<>&]|&amp;)*[)])*(?:[^\s`()[\]{}'".,!?;:&<>*`^~\\]|[(](?:[^\s()<>&]|&amp;)*[)]))?)?|[a-z0-9.]+\b@[a-z0-9-]+(?:[.][a-z0-9-]+)*[.][a-z]{2,})(?![^ ]*&gt;)/ig;
 
 /**
  * @typedef {'_' | '*' | '~' | '^' | '\\' | '<' | '[' | '`' | 'a' | 'spoiler' | '>' | '('} SpanType
@@ -64,7 +64,7 @@ class TextFormatter {
 
 		// filter links first
 		str = str.replace(linkRegex, uri => {
-			let fulluri = uri;
+			let fulluri;
 			if (/^[a-z0-9.]+@/ig.test(uri)) {
 				fulluri = 'mailto:' + uri;
 			} else {
@@ -87,7 +87,8 @@ class TextFormatter {
 		this.stack = /** @type {FormatSpan[]} */ ([]);
 		this.isTrusted = isTrusted;
 		/** offset of str that's been parsed so far */
-		// @ts-ignore TypeScript bug: can't infer type
+		// TypeScript bug: [js] 'offset' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
+		/** @type {number} */
 		this.offset = 0;
 	}
 	// debugAt(i=0, j=i+1) { console.log(this.slice(0, i) + '[' + this.slice(i, j) + ']' + this.slice(j, this.str.length)); }

@@ -31,7 +31,7 @@ exports.commands = {
 			Rooms.global.writeChatRoomData();
 			return;
 		}
-		const quote = target.split('|')[0].replace('"', '');
+		const quote = target.split('|')[0].replace(/"/g, '');
 		const author = target.split('|')[1];
 		if (!quote) return;
 		if (!author) {

@@ -119,6 +119,25 @@ describe('Transform', function () {
 		battle.makeChoices('move transform', 'move transform');
 		assert.notStrictEqual(battle.p1.active[0].template, battle.p2.active[0].template);
 	});
+
+	it(`should copy the target's real type, even if the target is an Arceus`, function () {
+		battle = common.createBattle([
+			[{species: "Ditto", ability: 'limber', item: 'flameplate', moves: ['transform']}],
+			[{species: "Arceus-Steel", ability: 'multitype', item: 'ironplate', moves: ['rest']}],
+		]);
+		battle.makeChoices('move transform', 'move rest');
+		assert.deepStrictEqual(battle.p1.active[0].getTypes(), ["Steel"]);
+	});
+
+	it(`should ignore the effects of Roost`, function () {
+		battle = common.createBattle([
+			[{species: "Mew", ability: 'synchronize', moves: ['seismictoss', 'transform']}],
+			[{species: "Talonflame", ability: 'flamebody', moves: ['roost']}],
+		]);
+		battle.makeChoices('move seismictoss', 'move roost');
+		battle.makeChoices('move transform', 'move roost');
+		assert.deepStrictEqual(battle.p1.active[0].getTypes(), ["Fire", "Flying"]);
+	});
 });
 
 describe('Transform [Gen 5]', function () {
@@ -164,6 +183,7 @@ describe('Transform [Gen 4]', function () {
 		]);
 		battle.makeChoices('move transform', 'move rest');
 		assert.strictEqual(battle.p1.active[0].template.species, 'Arceus-Fire');
+		assert.deepStrictEqual(battle.p1.active[0].getTypes(), ["Fire"]);
 	});
 
 	it('should succeed against a Substitute', function () {

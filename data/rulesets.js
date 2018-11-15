@@ -54,7 +54,7 @@ let BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'Minimal GBU',
 		desc: "The standard ruleset for official tournaments, but without Restricted Legendary bans",
-		ruleset: ['Species Clause', 'Nickname Clause', 'Item Clause', 'Cancel Mod'],
+		ruleset: ['Species Clause', 'Nickname Clause', 'Item Clause', 'Team Preview', 'Cancel Mod'],
 		banlist: ['Unreleased', 'Illegal', 'Battle Bond',
 			'Mew',
 			'Celebi',
@@ -62,7 +62,7 @@ let BattleFormats = {
 			'Phione', 'Manaphy', 'Darkrai', 'Shaymin', 'Arceus',
 			'Victini', 'Keldeo', 'Meloetta', 'Genesect',
 			'Diancie', 'Hoopa', 'Volcanion',
-			'Magearna', 'Marshadow',
+			'Magearna', 'Marshadow', 'Zeraora',
 		],
 		onValidateSet(set, format) {
 			if (this.gen < 7 && toId(set.item) === 'souldew') {
@@ -126,9 +126,11 @@ let BattleFormats = {
 			if (template.gen > this.gen) {
 				problems.push(set.species + ' does not exist in gen ' + this.gen + '.');
 			}
-			if ((template.num === 25 || template.num === 172) && template.tier === 'Illegal') {
+			if (template.gen && template.gen !== this.gen && template.tier === 'Illegal') {
 				problems.push(set.species + ' does not exist outside of gen ' + template.gen + '.');
 			}
+			/**@type {Ability} */
+			// @ts-ignore
 			let ability = {};
 			if (set.ability) {
 				ability = this.getAbility(set.ability);
@@ -157,7 +159,7 @@ let BattleFormats = {
 			}
 
 			if (!allowCAP || !template.tier.startsWith('CAP')) {
-				if (template.isNonstandard) {
+				if (template.isNonstandard && template.num > -5000) {
 					problems.push(set.species + ' does not exist.');
 				}
 			}
@@ -186,10 +188,6 @@ let BattleFormats = {
 				}
 			}
 
-			if (this.gen <= 1) {
-				if (set.evs) set.evs['spd'] = set.evs['spa'];
-				if (set.ivs) set.ivs['spd'] = set.ivs['spa'];
-			}
 			// In gen 6, it is impossible to battle other players with pokemon that break the EV limit
 			if (totalEV > 510 && this.gen === 6) {
 				problems.push((set.name || set.species) + " has more than 510 total EVs.");
@@ -198,6 +196,11 @@ let BattleFormats = {
 			// ----------- legality line ------------------------------------------
 			if (!this.getRuleTable(format).has('-illegal')) return problems;
 			// everything after this line only happens if we're doing legality enforcement
+
+			// Pokestar studios
+			if (template.num <= -5000 && template.isNonstandard) {
+				problems.push(`${set.species} cannot be obtained by legal means.`);
+			}
 
 			// only in gen 1 and 2 it was legal to max out all EVs
 			if (this.gen >= 3 && totalEV > 510) {
@@ -210,7 +213,7 @@ let BattleFormats = {
 				}
 			} else {
 				if (set.gender !== 'M' && set.gender !== 'F') {
-					set.gender = undefined;
+					set.gender = '';
 				}
 			}
 
@@ -231,6 +234,7 @@ let BattleFormats = {
 			// limit one of each move
 			let moves = [];
 			if (set.moves) {
+				/**@type {{[k: string]: true}} */
 				let hasMove = {};
 				for (const moveId of set.moves) {
 					let move = this.getMove(moveId);
@@ -277,6 +281,7 @@ let BattleFormats = {
 			}
 
 			if (template.species === 'Pikachu-Cosplay') {
+				/**@type {{[k: string]: string}} */
 				let cosplay = {meteormash: 'Pikachu-Rock-Star', iciclecrash: 'Pikachu-Belle', drainingkiss: 'Pikachu-Pop-Star', electricterrain: 'Pikachu-PhD', flyingpress: 'Pikachu-Libre'};
 				for (const moveid of set.moves) {
 					if (moveid in cosplay) {
@@ -307,6 +312,10 @@ let BattleFormats = {
 
 			return problems;
 		},
+		banlist: [
+			'Chansey + Charm + Seismic Toss', 'Chansey + Charm + Psywave',
+			'Shiftry + Leaf Blade + Sucker Punch',
+		],
 	},
 	hoennpokedex: {
 		effectType: 'ValidatorRule',
@@ -415,6 +424,7 @@ let BattleFormats = {
 			this.add('rule', 'Species Clause: Limit one of each Pokémon');
 		},
 		onValidateTeam: function (team, format) {
+			/**@type {{[k: string]: true}} */
 			let speciesTable = {};
 			for (const set of team) {
 				let template = this.getTemplate(set.species);
@@ -430,6 +440,7 @@ let BattleFormats = {
 		name: 'Nickname Clause',
 		desc: "Prevents teams from having more than one Pok&eacute;mon with the same nickname",
 		onValidateTeam: function (team, format) {
+			/**@type {{[k: string]: true}} */
 			let nameTable = {};
 			for (const set of team) {
 				let name = set.name;
@@ -453,6 +464,7 @@ let BattleFormats = {
 			this.add('rule', 'Item Clause: Limit one of each item');
 		},
 		onValidateTeam: function (team, format) {
+			/**@type {{[k: string]: true}} */
 			let itemTable = {};
 			for (const set of team) {
 				let item = toId(set.item);
@@ -472,7 +484,9 @@ let BattleFormats = {
 			this.add('rule', 'Ability Clause: Limit two of each ability');
 		},
 		onValidateTeam: function (team, format) {
+			/**@type {{[k: string]: number}} */
 			let abilityTable = {};
+			/**@type {{[k: string]: string}} */
 			let base = {
 				airlock: 'cloudnine',
 				battlearmor: 'shellarmor',
@@ -537,6 +551,15 @@ let BattleFormats = {
 		banlist: ['Minimize', 'Double Team'],
 		onStart: function () {
 			this.add('rule', 'Evasion Moves Clause: Evasion moves are banned');
+		},
+	},
+	accuracymovesclause: {
+		effectType: 'ValidatorRule',
+		name: 'Accuracy Moves Clause',
+		desc: "Bans moves that have a chance to lower the target's accuracy when used",
+		banlist: ['Flash', 'Kinesis', 'Leaf Tornado', 'Mirror Shot', 'Mud Bomb', 'Mud-Slap', 'Muddy Water', 'Night Daze', 'Octazooka', 'Sand Attack', 'Smokescreen'],
+		onStart: function () {
+			this.add('rule', 'Accuracy Moves Clause: Accuracy-lowering moves are banned');
 		},
 	},
 	endlessbattleclause: {
@@ -778,6 +801,20 @@ let BattleFormats = {
 			}
 		},
 	},
+	arceusevclause: {
+		effectType: 'ValidatorRule',
+		name: 'Arceus EV Clause',
+		desc: "Restricts Arceus to a maximum of 100 EVs in any one stat",
+		onValidateSet(set, format) {
+			let template = this.getTemplate(set.species);
+			if (template.num === 493 && set.evs) {
+				for (let stat in set.evs) {
+					// @ts-ignore
+					if (set.evs[stat] > 100) return ["Arceus may not have more than 100 of any EVs."];
+				}
+			}
+		},
+	},
 	inversemod: {
 		effectType: 'Rule',
 		name: 'Inverse Mod',
@@ -821,12 +858,6 @@ let BattleFormats = {
 			}
 			return this.checkLearnset(move, template, lsetData, set);
 		},
-	},
-	allowonesketch: {
-		effectType: 'ValidatorRule',
-		name: 'Allow One Sketch',
-		desc: "Allows each Pok&eacute;mon to use one move they don't normally have access to via Sketch",
-		// Implemented in team-validator.js
 	},
 	allowcap: {
 		effectType: 'ValidatorRule',

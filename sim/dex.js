@@ -64,10 +64,10 @@ const DATA_FILES = {
 const nullEffect = new Data.PureEffect({name: '', exists: false});
 
 /** @typedef {{id: string, name: string, [k: string]: any}} DexTemplate */
-/** @typedef {{[id: string]: AnyObject}} DexTable */
 
-/** @typedef {{Pokedex: DexTable, Movedex: DexTable, Statuses: DexTable, TypeChart: DexTable, Scripts: DexTable, Items: DexTable, Abilities: DexTable, FormatsData: DexTable, Learnsets: DexTable, Aliases: {[id: string]: string}, Natures: DexTable, Formats: DexTable}} DexTableData */
+/** @typedef {{Pokedex: DexTable<Template>, Movedex: DexTable<Move>, Statuses: DexTable<EffectData>, TypeChart: DexTable<TypeData>, Scripts: DexTable<AnyObject>, Items: DexTable<Item>, Abilities: DexTable<Ability>, FormatsData: DexTable<ModdedTemplateFormatsData>, Learnsets: DexTable<{learnset: {[k: string]: MoveSource[]}}>, Aliases: {[id: string]: string}, Natures: DexTable<{[l: string]: string | undefined, name: string, plus?: string, minus?: string}>, Formats: DexTable<Format>}} DexTableData */
 
+/** @type {{[k: string]: {[l: string]: string | undefined, name: string, plus?: string, minus?: string}}} */
 const BattleNatures = {
 	adamant: {name: "Adamant", plus: 'atk', minus: 'spa'},
 	bashful: {name: "Bashful"},
@@ -117,7 +117,7 @@ class ModdedDex {
 
 		/** @type {?DexTableData} */
 		this.dataCache = null;
-		/** @type {?DexTable} */
+		/** @type {?DexTable<Format>} */
 		this.formatsCache = null;
 
 		/** @type {Map<string, Template>} */
@@ -160,7 +160,7 @@ class ModdedDex {
 	get data() {
 		return this.loadData();
 	}
-	/** @return {DexTable} */
+	/** @return {DexTable<Format>} */
 	get formats() {
 		this.includeFormats();
 		// @ts-ignore
@@ -251,8 +251,7 @@ class ModdedDex {
 	 */
 	getImmunity(source, target) {
 		/** @type {string} */
-		// @ts-ignore
-		let sourceType = source.type || source;
+		let sourceType = typeof source !== 'string' ? source.type : source;
 		/** @type {string[] | string} */
 		// @ts-ignore
 		let targetTyping = target.getTypes && target.getTypes() || target.types || target;
@@ -273,8 +272,7 @@ class ModdedDex {
 	 */
 	getEffectiveness(source, target) {
 		/** @type {string} */
-		// @ts-ignore
-		let sourceType = source.type || source;
+		let sourceType = typeof source !== 'string' ? source.type : source;
 		let totalTypeMod = 0;
 		/** @type {string[] | string} */
 		// @ts-ignore
@@ -330,6 +328,7 @@ class ModdedDex {
 		} else if (id === 'nidoran' && name.slice(-1) === '♂') {
 			id = 'nidoranm';
 		}
+		/** @type {any} */
 		let template = this.templateCache.get(id);
 		if (template) return template;
 		if (this.data.Aliases.hasOwnProperty(id)) {
@@ -381,14 +380,14 @@ class ModdedDex {
 			}
 			if (!template.tier && !template.doublesTier && template.baseSpecies !== template.species) {
 				if (template.baseSpecies === 'Mimikyu') {
-					template.tier = this.data.FormatsData[toId(template.baseSpecies)].tier;
-					template.doublesTier = this.data.FormatsData[toId(template.baseSpecies)].doublesTier;
+					template.tier = this.data.FormatsData[toId(template.baseSpecies)].tier || 'Illegal';
+					template.doublesTier = this.data.FormatsData[toId(template.baseSpecies)].doublesTier || 'Illegal';
 				} else if (template.speciesid.endsWith('totem')) {
-					template.tier = this.data.FormatsData[template.speciesid.slice(0, -5)].tier;
-					template.doublesTier = this.data.FormatsData[template.speciesid.slice(0, -5)].doublesTier;
+					template.tier = this.data.FormatsData[template.speciesid.slice(0, -5)].tier || 'Illegal';
+					template.doublesTier = this.data.FormatsData[template.speciesid.slice(0, -5)].doublesTier || 'Illegal';
 				} else {
-					template.tier = this.data.FormatsData[toId(template.baseSpecies)].tier;
-					template.doublesTier = this.data.FormatsData[toId(template.baseSpecies)].doublesTier;
+					template.tier = this.data.FormatsData[toId(template.baseSpecies)].tier || 'Illegal';
+					template.doublesTier = this.data.FormatsData[toId(template.baseSpecies)].doublesTier || 'Illegal';
 				}
 			}
 			if (!template.tier) template.tier = 'Illegal';
@@ -444,20 +443,20 @@ class ModdedDex {
 	 * Ensure we're working on a copy of a move (and make a copy if we aren't)
 	 *
 	 * Remember: "ensure" - by default, it won't make a copy of a copy:
-	 *     moveCopy === Dex.getMoveCopy(moveCopy)
+	 *     moveCopy === Dex.getActiveMove(moveCopy)
 	 *
 	 * If you really want to, use:
-	 *     moveCopyCopy = Dex.getMoveCopy(moveCopy.id)
+	 *     moveCopyCopy = Dex.getActiveMove(moveCopy.id)
 	 *
 	 * @param {Move | string} move - Move ID, move object, or movecopy object describing move to copy
-	 * @return {Move} movecopy object
+	 * @return {ActiveMove}
 	 */
-	getMoveCopy(move) {
+	getActiveMove(move) {
 		// @ts-ignore
-		if (move && move.isCopy) return move;
+		if (move && typeof move.hit === 'number') return move;
 		move = this.getMove(move);
-		let moveCopy = this.deepClone(move);
-		moveCopy.isCopy = true;
+		let moveCopy = /** @type {ActiveMove} */ (this.deepClone(move));
+		moveCopy.hit = 0;
 		return moveCopy;
 	}
 	/**
@@ -672,30 +671,36 @@ class ModdedDex {
 		return nature;
 	}
 	/**
-	 * @param {AnyObject} stats
-	 * @param {AnyObject} set
-	 * @return {AnyObject}
+	 * Given a table of base stats and a pokemon set, return the actual stats.
+	 * @param {StatsTable} baseStats
+	 * @param {PokemonSet} set
+	 * @return {StatsTable}
 	 */
-	spreadModify(stats, set) {
+	spreadModify(baseStats, set) {
+		/** @type {any} */
 		const modStats = {atk: 10, def: 10, spa: 10, spd: 10, spe: 10};
 		for (let statName in modStats) {
-			let stat = stats[statName];
+			// @ts-ignore
+			let stat = baseStats[statName];
+			// @ts-ignore
 			modStats[statName] = Math.floor(Math.floor(2 * stat + set.ivs[statName] + Math.floor(set.evs[statName] / 4)) * set.level / 100 + 5);
 		}
-		if ('hp' in stats) {
-			let stat = stats['hp'];
+		if ('hp' in baseStats) {
+			let stat = baseStats['hp'];
 			modStats['hp'] = Math.floor(Math.floor(2 * stat + set.ivs['hp'] + Math.floor(set.evs['hp'] / 4) + 100) * set.level / 100 + 10);
 		}
 		return this.natureModify(modStats, set.nature);
 	}
 	/**
-	 * @param {AnyObject} stats
+	 * @param {StatsTable} stats
 	 * @param {string | AnyObject} nature
-	 * @return {AnyObject}
+	 * @return {StatsTable}
 	 */
 	natureModify(stats, nature) {
 		nature = this.getNature(nature);
+		// @ts-ignore
 		if (nature.plus) stats[nature.plus] = Math.floor(stats[nature.plus] * 1.1);
+		// @ts-ignore
 		if (nature.minus) stats[nature.minus] = Math.floor(stats[nature.minus] * 0.9);
 		return stats;
 	}
@@ -766,9 +771,15 @@ class ModdedDex {
 			const ruleSpec = this.validateRule(rule, format);
 			if (typeof ruleSpec !== 'string') {
 				if (ruleSpec[0] === 'complexTeamBan') {
-					ruleTable.complexTeamBans.push(/** @type {any} */ (ruleSpec.slice(1)));
+					/**@type {[string, string, number, string[]]} */
+					// @ts-ignore
+					let complexTeamBan = ruleSpec.slice(1);
+					ruleTable.addComplexTeamBan(complexTeamBan[0], complexTeamBan[1], complexTeamBan[2], complexTeamBan[3]);
 				} else if (ruleSpec[0] === 'complexBan') {
-					ruleTable.complexBans.push(/** @type {any} */ (ruleSpec.slice(1)));
+					/**@type {[string, string, number, string[]]} */
+					// @ts-ignore
+					let complexBan = ruleSpec.slice(1);
+					ruleTable.addComplexBan(complexBan[0], complexBan[1], complexBan[2], complexBan[3]);
 				} else {
 					throw new Error(`Unrecognized rule spec ${ruleSpec}`);
 				}
@@ -777,9 +788,8 @@ class ModdedDex {
 			if ("!+-".includes(ruleSpec.charAt(0))) {
 				if (ruleSpec.charAt(0) === '+' && ruleTable.has('-' + ruleSpec.slice(1))) {
 					ruleTable.delete('-' + ruleSpec.slice(1));
-				} else {
-					ruleTable.set(ruleSpec, '');
 				}
+				ruleTable.set(ruleSpec, '');
 				continue;
 			}
 			const subformat = this.getFormat(ruleSpec);
@@ -794,10 +804,10 @@ class ModdedDex {
 				if (!ruleTable.has('!' + k)) ruleTable.set(k, v || subformat.name);
 			}
 			for (const [rule, source, limit, bans] of subRuleTable.complexBans) {
-				ruleTable.complexBans.push([rule, source || subformat.name, limit, bans]);
+				ruleTable.addComplexBan(rule, source || subformat.name, limit, bans);
 			}
 			for (const [rule, source, limit, bans] of subRuleTable.complexTeamBans) {
-				ruleTable.complexTeamBans.push([rule, source || subformat.name, limit, bans]);
+				ruleTable.addComplexTeamBan(rule, source || subformat.name, limit, bans);
 			}
 			if (subRuleTable.checkLearnset) {
 				if (ruleTable.checkLearnset) {
@@ -823,9 +833,9 @@ class ModdedDex {
 			if (rule.slice(1).includes('>') || rule.slice(1).includes('+')) {
 				let buf = rule.slice(1);
 				const gtIndex = buf.lastIndexOf('>');
-				let limit = 0;
+				let limit = rule.charAt(0) === '+' ? Infinity : 0;
 				if (gtIndex >= 0 && /^[0-9]+$/.test(buf.slice(gtIndex + 1).trim())) {
-					limit = parseInt(buf.slice(gtIndex + 1));
+					if (limit === 0) limit = parseInt(buf.slice(gtIndex + 1));
 					buf = buf.slice(0, gtIndex);
 				}
 				let checkTeam = buf.includes('++');
@@ -882,7 +892,7 @@ class ModdedDex {
 				// valid pokemontags
 				const validTags = [
 					// singles tiers
-					'uber', 'ou', 'uubl', 'uu', 'rubl', 'ru', 'nubl', 'nu', 'publ', 'pu', 'nfe', 'lcuber', 'lc', 'cap', 'caplc', 'capnfe',
+					'uber', 'ou', 'uubl', 'uu', 'rubl', 'ru', 'nubl', 'nu', 'publ', 'pu', 'zu', 'nfe', 'lcuber', 'lc', 'cap', 'caplc', 'capnfe',
 					//doubles tiers
 					'duber', 'dou', 'dbl', 'duu',
 					// custom tags
@@ -896,6 +906,7 @@ class ModdedDex {
 			if (table.hasOwnProperty(id)) {
 				if (matchType === 'pokemon') {
 					const template = table[id];
+					// @ts-ignore
 					if (template.otherFormes) {
 						matches.push('basepokemon:' + id);
 						continue;
@@ -1030,21 +1041,21 @@ class ModdedDex {
 			return false;
 		}
 
-		/** @type {DataType[]} */
 		searchIn = searchIn || ['Pokedex', 'Movedex', 'Abilities', 'Items', 'Natures'];
 
 		let searchFunctions = {Pokedex: 'getTemplate', Movedex: 'getMove', Abilities: 'getAbility', Items: 'getItem', Natures: 'getNature'};
 		let searchTypes = {Pokedex: 'pokemon', Movedex: 'move', Abilities: 'ability', Items: 'item', Natures: 'nature'};
 		/** @type {AnyObject[] | false} */
 		let searchResults = [];
-		for (const result of searchIn) {
+		for (const table of searchIn) {
 			/** @type {AnyObject} */
 			// @ts-ignore
-			let res = this[searchFunctions[result]](target);
+			let res = this[searchFunctions[table]](target);
 			if (res.exists && res.gen <= this.gen) {
 				searchResults.push({
 					isInexact: isInexact,
-					searchType: searchTypes[result],
+					// @ts-ignore
+					searchType: searchTypes[table],
 					name: res.species ? res.species : res.name,
 				});
 			}
@@ -1066,8 +1077,9 @@ class ModdedDex {
 			maxLd = 2;
 		}
 		searchResults = false;
-		for (let i = 0; i <= searchIn.length; i++) {
-			let searchObj = this.data[searchIn[i] || 'Aliases'];
+		for (const table of [...searchIn, 'Aliases']) {
+			// @ts-ignore
+			let searchObj = this.data[table];
 			if (!searchObj) {
 				continue;
 			}
@@ -1210,7 +1222,7 @@ class ModdedDex {
 
 		// limit to 24
 		for (let count = 0; count < 24; count++) {
-			let set = /** @type {any} */ ({});
+			let set = /** @type {PokemonSet} */ ({});
 			team.push(set);
 
 			// name
@@ -1327,11 +1339,12 @@ class ModdedDex {
 	 * @return {any}
 	 */
 	deepClone(obj) {
-		if (typeof obj === 'function') return obj;
 		if (obj === null || typeof obj !== 'object') return obj;
+		// @ts-ignore
 		if (Array.isArray(obj)) return obj.map(prop => this.deepClone(prop));
 		const clone = Object.create(Object.getPrototypeOf(obj));
 		for (const key of Object.keys(obj)) {
+			// @ts-ignore
 			clone[key] = this.deepClone(obj[key]);
 		}
 		return clone;
@@ -1412,11 +1425,14 @@ class ModdedDex {
 		// @ts-ignore
 		for (const dataType of DATA_TYPES.concat('Aliases')) {
 			if (dataType === 'Natures' && this.isBase) {
+				// @ts-ignore
 				dataCache[dataType] = BattleNatures;
 				continue;
 			}
 			let BattleData = this.loadDataFile(basePath, dataType);
+			// @ts-ignore
 			if (!BattleData || typeof BattleData !== 'object') throw new TypeError("Exported property `Battle" + dataType + "`from `" + './data/' + DATA_FILES[dataType] + "` must be an object except `null`.");
+			// @ts-ignore
 			if (BattleData !== dataCache[dataType]) dataCache[dataType] = Object.assign(BattleData, dataCache[dataType]);
 			if (dataType === 'Formats' && !parentDex) Object.assign(BattleData, this.formats);
 		}
@@ -1426,6 +1442,7 @@ class ModdedDex {
 		} else {
 			for (const dataType of DATA_TYPES) {
 				const parentTypedData = parentDex.data[dataType];
+				// @ts-ignore
 				const childTypedData = dataCache[dataType] || (dataCache[dataType] = {});
 				for (let entryId in parentTypedData) {
 					if (childTypedData[entryId] === null) {
@@ -1453,10 +1470,12 @@ class ModdedDex {
 					}
 				}
 			}
+			// @ts-ignore
 			dataCache['Aliases'] = parentDex.data['Aliases'];
 		}
 
 		// Flag the generation. Required for team validator.
+		// @ts-ignore
 		this.gen = dataCache.Scripts.gen || 7;
 		// @ts-ignore
 		this.dataCache = dataCache;

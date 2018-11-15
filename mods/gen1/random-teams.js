@@ -7,6 +7,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 	randomCCTeam() {
 		let team = [];
 
+		/**@type {{[k: string]: number}} */
 		let hasDexNumber = {};
 		/**@type {string[][]} */
 		let formes = [[], [], [], [], [], []];
@@ -66,11 +67,11 @@ class RandomGen1Teams extends RandomGen2Teams {
 			// Random DVs.
 			let ivs = {
 				hp: 0,
-				atk: this.random(15),
-				def: this.random(15),
-				spa: this.random(15),
+				atk: this.random(16),
+				def: this.random(16),
+				spa: this.random(16),
 				spd: 0,
-				spe: this.random(15),
+				spe: this.random(16),
 			};
 			ivs["hp"] = (ivs["atk"] % 2) * 16 + (ivs["def"] % 2) * 8 + (ivs["spe"] % 2) * 4 + (ivs["spa"] % 2) * 2;
 			ivs["atk"] = ivs["atk"] * 2;
@@ -139,7 +140,9 @@ class RandomGen1Teams extends RandomGen2Teams {
 		}
 
 		// Now let's store what we are getting.
+		/**@type {{[k: string]: number}} */
 		let typeCount = {};
+		/**@type {{[k: string]: number}} */
 		let weaknessCount = {'Electric': 0, 'Psychic': 0, 'Water': 0, 'Ice': 0, 'Ground': 0};
 		let uberCount = 0;
 		let nuCount = 0;
@@ -239,17 +242,19 @@ class RandomGen1Teams extends RandomGen2Teams {
 	 * @return {RandomTeamsTypes["RandomSet"]}
 	 */
 	randomSet(template, slot) {
-		if (slot === undefined) slot = 1;
 		template = this.getTemplate(template);
 		if (!template.exists) template = this.getTemplate('pikachu'); // Because Gen 1.
 
 		let movePool = template.randomBattleMoves ? template.randomBattleMoves.slice() : [];
 		/**@type {string[]} */
 		let moves = [];
+		/**@type {{[k: string]: true}} */
 		let hasType = {};
 		hasType[template.types[0]] = true;
 		if (template.types[1]) hasType[template.types[1]] = true;
+		/**@type {{[k: string]: true}} */
 		let hasMove = {};
+		/**@type {{[k: string]: number}} */
 		let counter = {};
 		// let setupType = '';
 
@@ -365,7 +370,9 @@ class RandomGen1Teams extends RandomGen2Teams {
 			Caterpie: 99, Metapod: 99, Weedle: 99, Kakuna: 99, Magikarp: 99,
 			Ditto: 88,
 		};
+		// @ts-ignore
 		let level = levelScale[template.tier] || 80;
+		// @ts-ignore
 		if (customScale[template.name]) level = customScale[template.name];
 
 		return {

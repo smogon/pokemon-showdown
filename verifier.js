@@ -22,6 +22,8 @@ const crypto = require('crypto');
 
 const QueryProcessManager = require('./lib/process-manager').QueryProcessManager;
 
+/**@type {QueryProcessManager} */
+// @ts-ignore
 const PM = new QueryProcessManager(module, async ({data, signature}) => {
 	let verifier = crypto.createVerify(Config.loginserverkeyalgo);
 	verifier.update(data);
@@ -35,7 +37,7 @@ const PM = new QueryProcessManager(module, async ({data, signature}) => {
 
 if (!PM.isParentProcess) {
 	// This is a child process!
-	// @ts-ignore
+	// @ts-ignore This file doesn't exist on the repository, so Travis checks fail if this isn't ignored
 	global.Config = require('./config/config');
 	require('./lib/repl').start('verifier', /** @param {string} cmd */ cmd => eval(cmd));
 } else {

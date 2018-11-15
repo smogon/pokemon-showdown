@@ -2,6 +2,10 @@
 
 /**@type {{[k: string]: ModdedItemData}} */
 let BattleItems = {
+	berryjuice: {
+		inherit: true,
+		isUnreleased: false,
+	},
 	brightpowder: {
 		inherit: true,
 		desc: "An attack against the holder has its accuracy out of 255 lowered by 20.",
@@ -10,10 +14,6 @@ let BattleItems = {
 			this.debug('brightpowder - decreasing accuracy');
 			return accuracy - 20;
 		},
-	},
-	berryjuice: {
-		inherit: true,
-		isUnreleased: false,
 	},
 	dragonfang: {
 		inherit: true,
@@ -39,12 +39,21 @@ let BattleItems = {
 			}
 		},
 	},
-	metalpowder: {
+	kingsrock: {
 		inherit: true,
-		desc: "If held by a Ditto, its Defense and Sp. Def are 1.5x, even while Transformed.",
-		// In Gen 2 this happens in stat calculation directly.
-		onModifyDef: function () {},
-		onModifySpD: function () {},
+		onModifyMove: function (move) {
+			let affectedByKingsRock = ['absorb', 'aeroblast', 'barrage', 'beatup', 'bide', 'bonerush', 'bonemerang', 'cometpunch', 'counter', 'crabhammer', 'crosschop', 'cut', 'dig', 'doublekick', 'doubleslap', 'doubleedge', 'dragonrage', 'drillpeck', 'eggbomb', 'explosion', 'extremespeed', 'falseswipe', 'feintattack', 'flail', 'fly', 'frustration', 'furyattack', 'furycutter', 'furyswipes', 'gigadrain', 'hiddenpower', 'highjumpkick', 'hornattack', 'hydropump', 'jumpkick', 'karatechop', 'leechlife', 'machpunch', 'magnitude', 'megadrain', 'megakick', 'megapunch', 'megahorn', 'mirrorcoat', 'nightshade', 'outrage', 'payday', 'peck', 'petaldance', 'pinmissile', 'pound', 'present', 'pursuit', 'psywave', 'quickattack', 'rage', 'rapidspin', 'razorleaf', 'razorwind', 'return', 'reversal', 'rockthrow', 'rollout', 'scratch', 'seismictoss', 'selfdestruct', 'skullbash', 'skyattack', 'slam', 'slash', 'snore', 'solarbeam', 'sonicboom', 'spikecannon', 'strength', 'struggle', 'submission', 'superfang', 'surf', 'swift', 'tackle', 'takedown', 'thief', 'thrash', 'triplekick', 'twineedle', 'vicegrip', 'vinewhip', 'vitalthrow', 'watergun', 'waterfall', 'wingattack'];
+			if (affectedByKingsRock.includes(move.id)) {
+				if (!move.secondaries) move.secondaries = [];
+				// The kingsrock flag allows for differentiation from Snore,
+				// which can flinch and is also affected by King's Rock
+				move.secondaries.push({
+					chance: 12,
+					volatileStatus: 'flinch',
+					kingsrock: true,
+				});
+			}
+		},
 	},
 	lightball: {
 		inherit: true,
@@ -60,6 +69,13 @@ let BattleItems = {
 				return 3;
 			}
 		},
+	},
+	metalpowder: {
+		inherit: true,
+		desc: "If held by a Ditto, its Defense and Sp. Def are 1.5x, even while Transformed.",
+		// In Gen 2 this happens in stat calculation directly.
+		onModifyDef: function () {},
+		onModifySpD: function () {},
 	},
 	quickclaw: {
 		inherit: true,

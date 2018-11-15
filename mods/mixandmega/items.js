@@ -1,6 +1,7 @@
 'use strict';
 
-exports.BattleItems = {
+/**@type {{[k: string]: ModdedItemData}} */
+let BattleItems = {
 	blueorb: {
 		inherit: true,
 		onSwitchIn: function (pokemon) {
@@ -9,21 +10,16 @@ exports.BattleItems = {
 			}
 		},
 		onPrimal: function (pokemon) {
+			/**@type {Template} */
+			// @ts-ignore
 			let template = this.getMixedTemplate(pokemon.originalSpecies, 'Kyogre-Primal');
-			pokemon.formeChange(template);
-			pokemon.baseTemplate = template;
 			if (pokemon.originalSpecies === 'Kyogre') {
-				pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.set.shiny ? ', shiny' : '');
-				this.add('detailschange', pokemon, pokemon.details);
+				pokemon.formeChange(template, this.effect, true);
 			} else {
-				if (pokemon.illusion) pokemon.ability = '';
-				let oTemplate = this.getTemplate(pokemon.illusion || pokemon.originalSpecies);
-				this.add('-formechange', pokemon, oTemplate.species);
+				pokemon.formeChange(template, this.effect, true);
+				pokemon.baseTemplate = template;
 				this.add('-start', pokemon, 'Blue Orb', '[silent]');
 			}
-			this.add('-primal', pokemon.illusion || pokemon);
-			pokemon.setAbility(template.abilities['0'], null, true);
-			pokemon.baseAbility = pokemon.ability;
 		},
 		onTakeItem: function (item) {
 			return false;
@@ -37,19 +33,19 @@ exports.BattleItems = {
 			}
 		},
 		onPrimal: function (pokemon) {
+			/**@type {Template} */
+			// @ts-ignore
 			let template = this.getMixedTemplate(pokemon.originalSpecies, 'Groudon-Primal');
-			pokemon.formeChange(template);
-			pokemon.baseTemplate = template;
 			if (pokemon.originalSpecies === 'Groudon') {
-				pokemon.details = template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.set.shiny ? ', shiny' : '');
-				this.add('detailschange', pokemon, pokemon.details);
+				pokemon.formeChange(template, this.effect, true);
 			} else {
-				let oTemplate = this.getTemplate(pokemon.illusion || pokemon.originalSpecies);
-				this.add('-formechange', pokemon, oTemplate.species);
+				pokemon.formeChange(template, this.effect, true);
+				pokemon.baseTemplate = template;
 				this.add('-start', pokemon, 'Red Orb', '[silent]');
+				let apparentSpecies = pokemon.illusion ? pokemon.illusion.template.species : pokemon.originalSpecies;
+				let oTemplate = this.getTemplate(apparentSpecies);
 				if (pokemon.illusion) {
-					pokemon.ability = '';
-					let types = pokemon.illusion.template.types;
+					let types = oTemplate.types;
 					if (types.length > 1 || types[types.length - 1] !== 'Fire') {
 						this.add('-start', pokemon, 'typechange', (types[0] !== 'Fire' ? types[0] + '/' : '') + 'Fire', '[silent]');
 					}
@@ -57,12 +53,11 @@ exports.BattleItems = {
 					this.add('-start', pokemon, 'typechange', pokemon.template.types.join('/'), '[silent]');
 				}
 			}
-			this.add('-primal', pokemon.illusion || pokemon);
-			pokemon.setAbility(template.abilities['0'], null, true);
-			pokemon.baseAbility = pokemon.ability;
 		},
 		onTakeItem: function (item) {
 			return false;
 		},
 	},
 };
+
+exports.BattleItems = BattleItems;

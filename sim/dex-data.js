@@ -142,28 +142,28 @@ class Effect {
 		 * Whether or not the effect is ignored by Baton Pass.
 		 * @type {boolean}
 		 */
-		this.noCopy = this.noCopy;
+		this.noCopy = !!this.noCopy;
 		/**
 		 * Whether or not the effect affects fainted Pokemon.
 		 * @type {boolean}
 		 */
-		this.affectsFainted = this.affectsFainted;
+		this.affectsFainted = !!this.affectsFainted;
 		/**
 		 * The status that the effect may cause.
-		 * @type {string}
+		 * @type {string | undefined}
 		 */
-		this.status = this.status;
+		this.status = this.status || undefined;
 		/**
 		 * The weather that the effect may cause.
-		 * @type {string}
+		 * @type {string | undefined}
 		 */
-		this.weather = this.weather;
+		this.weather = this.weather || undefined;
 
 		/**
 		 * HP that the effect may drain.
 		 * @type {number[] | undefined}
 		 */
-		this.drain = this.drain;
+		this.drain = this.drain || undefined;
 
 		/**
 		 * @type {AnyObject}
@@ -233,6 +233,55 @@ class RuleTable extends Map {
 		if (source === undefined) return '';
 		return source ? `banned by ${source}` : `banned`;
 	}
+
+	/**
+	 * @param {[string, string, number, string[]][]} complexBans
+	 * @param {string} rule
+	 * @return {number}
+	 */
+	getComplexBanIndex(complexBans, rule) {
+		let ruleId = toId(rule);
+		let complexBanIndex = -1;
+		for (let i = 0; i < complexBans.length; i++) {
+			if (toId(complexBans[i][0]) === ruleId) {
+				complexBanIndex = i;
+				break;
+			}
+		}
+		return complexBanIndex;
+	}
+
+	/**
+	 * @param {string} rule
+	 * @param {string} source
+	 * @param {number} limit
+	 * @param {string[]} bans
+	 */
+	addComplexBan(rule, source, limit, bans) {
+		let complexBanIndex = this.getComplexBanIndex(this.complexBans, rule);
+		if (complexBanIndex !== -1) {
+			if (this.complexBans[complexBanIndex][2] === Infinity) return;
+			this.complexBans[complexBanIndex] = [rule, source, limit, bans];
+		} else {
+			this.complexBans.push([rule, source, limit, bans]);
+		}
+	}
+
+	/**
+	 * @param {string} rule
+	 * @param {string} source
+	 * @param {number} limit
+	 * @param {string[]} bans
+	 */
+	addComplexTeamBan(rule, source, limit, bans) {
+		let complexBanTeamIndex = this.getComplexBanIndex(this.complexTeamBans, rule);
+		if (complexBanTeamIndex !== -1) {
+			if (this.complexTeamBans[complexBanTeamIndex][2] === Infinity) return;
+			this.complexTeamBans[complexBanTeamIndex] = [rule, source, limit, bans];
+		} else {
+			this.complexTeamBans.push([rule, source, limit, bans]);
+		}
+	}
 }
 
 class Format extends Effect {
@@ -258,12 +307,15 @@ class Format extends Effect {
 		 * Whether or not debug battle messages should be shown.
 		 * @type {boolean}
 		 */
-		this.debug = this.debug;
+		this.debug = !!this.debug;
 		/**
-		 * Whether or not a format is played for ladder points.
+		 * Whether or not a format will update ladder points if searched
+		 * for using the "Battle!" button.
+		 * (Challenge and tournament games will never update ladder points.)
+		 * (Defaults to `true`.)
 		 * @type {boolean}
 		 */
-		this.rated = this.rated;
+		this.rated = (this.rated !== false);
 		/**
 		 * Game type.
 		 * @type {GameType}
@@ -305,12 +357,12 @@ class Format extends Effect {
 		 * the number that can actually be used.
 		 * @type {{battle?: number, validate?: [number, number]} | undefined}
 		 */
-		this.teamLength = this.teamLength;
+		this.teamLength = this.teamLength || undefined;
 		/**
 		 * An optional function that runs at the start of a battle.
-		 * @type {(this: Battle) => void}
+		 * @type {(this: Battle) => void | undefined}
 		 */
-		this.onBegin = this.onBegin;
+		this.onBegin = this.onBegin || undefined;
 
 		/**
 		 * If no team is selected, this format can generate a random team
@@ -346,11 +398,13 @@ class Format extends Effect {
 		/**
 		 * Forces all pokemon brought in to this level. Certain Game Freak
 		 * formats will change level 1 and level 100 pokemon to level 50,
-		 * which is what you want here. You usually want maxForcedLevel
-		 * instead.
+		 * which is what this does.
+		 *
+		 * You usually want maxForcedLevel instead, which will bring level
+		 * 100 pokemon down, but not level 1 pokemon up.
 		 * @type {number | undefined}
 		 */
-		this.forcedLevel = this.forcedLevel;
+		this.forcedLevel = this.forcedLevel || undefined;
 		/**
 		 * Forces all pokemon above this level down to this level. This
 		 * will allow e.g. level 50 Hydreigon in Gen 5, which is not
@@ -358,7 +412,7 @@ class Format extends Effect {
 		 * 64.
 		 * @type {number | undefined}
 		 */
-		this.maxForcedLevel = this.maxForcedLevel;
+		this.maxForcedLevel = this.maxForcedLevel || undefined;
 
 		/** @type {boolean} */
 		this.noLog = !!this.noLog;
@@ -392,33 +446,65 @@ class Item extends Effect {
 		 * this item.
 		 * @type {FlingData | undefined}
 		 */
-		this.fling = this.fling;
+		this.fling = this.fling || undefined;
 		/**
 		 * If this is a Drive: The type it turns Techno Blast into.
 		 * undefined, if not a Drive.
 		 * @type {string | undefined}
 		 */
-		this.onDrive = this.onDrive;
+		this.onDrive = this.onDrive || undefined;
 		/**
 		 * If this is a Memory: The type it turns Multi-Attack into.
 		 * undefined, if not a Memory.
 		 * @type {string | undefined}
 		 */
-		this.onMemory = this.onMemory;
+		this.onMemory = this.onMemory || undefined;
 		/**
 		 * If this is a mega stone: The name (e.g. Charizard-Mega-X) of the
 		 * forme this allows transformation into.
 		 * undefined, if not a mega stone.
 		 * @type {string | undefined}
 		 */
-		this.megaStone = this.megaStone;
+		this.megaStone = this.megaStone || undefined;
 		/**
 		 * If this is a mega stone: The name (e.g. Charizard) of the
 		 * forme this allows transformation from.
 		 * undefined, if not a mega stone.
 		 * @type {string | undefined}
 		 */
-		this.megaEvolves = this.megaEvolves;
+		this.megaEvolves = this.megaEvolves || undefined;
+		/**
+		 * If this is a Z crystal: true if the Z Crystal is generic
+		 * (e.g. Firium Z). If species-specific, the name
+		 * (e.g. Inferno Overdrive) of the Z Move this crystal allows
+		 * the use of.
+		 * undefined, if not a Z crystal.
+		 * @type {true | string | undefined}
+		*/
+		this.zMove = this.zMove || undefined;
+		/**
+		 * If this is a generic Z crystal: The type (e.g. Fire) of the
+		 * Z Move this crystal allows the use of (e.g. Fire)
+		 * undefined, if not a generic Z crystal
+		 * @type {string | undefined}
+		 */
+		this.zMoveType = this.zMoveType || undefined;
+		/**
+		 * If this is a species-specific Z crystal: The name
+		 * (e.g. Play Rough) of the move this crystal requires its
+		 * holder to know to use its Z move.
+		 * undefined, if not a species-specific Z crystal
+		 * @type {string | undefined}
+		 */
+		this.zMoveFrom = this.zMoveFrom || undefined;
+		/**
+		 * If this is a species-specific Z crystal: An array of the
+		 * species of Pokemon that can use this crystal's Z move.
+		 * Note that these are the full names, e.g. 'Mimikyu-Busted'
+		 * undefined, if not a species-specific Z crystal
+		 * @type {string[] | undefined}
+		 */
+		this.zMoveUser = this.zMoveUser || undefined;
 		/**
 		 * Is this item a Berry?
 		 * @type {boolean}
@@ -429,19 +515,19 @@ class Item extends Effect {
 		 * Whether or not this item ignores the Klutz ability.
 		 * @type {boolean}
 		 */
-		this.ignoreKlutz = this.ignoreKlutz;
+		this.ignoreKlutz = !!this.ignoreKlutz;
 
 		/**
 		 * The type the holder will change into if it is an Arceus.
-		 * @type {string}
+		 * @type {string | undefined}
 		 */
-		this.onPlate = this.onPlate;
+		this.onPlate = this.onPlate || undefined;
 
 		/**
 		 * Is this item a Gem?
 		 * @type {boolean}
 		 */
-		this.isGem = this.isGem;
+		this.isGem = !!this.isGem;
 
 		if (!this.gen) {
 			if (this.num >= 689) {
@@ -557,14 +643,14 @@ class Template extends Effect {
 		 * entry in `pokedex.js`.
 		 * @type {string[] | undefined}
 		 */
-		this.otherForms = this.otherForms;
+		this.otherForms = this.otherForms || undefined;
 
 		/**
 		 * Other formes. List of names of formes, appears only on the base
 		 * forme. Unlike forms, these have their own entry in `pokedex.js`.
 		 * @type {string[] | undefined}
 		 */
-		this.otherFormes = this.otherFormes;
+		this.otherFormes = this.otherFormes || undefined;
 
 		/**
 		 * Forme letter. One-letter version of the forme name. Usually the
@@ -597,7 +683,7 @@ class Template extends Effect {
 		 * Added type (used in OMs)
 		 * @type {string | undefined}
 		 */
-		this.addedType = this.addedType;
+		this.addedType = this.addedType || undefined;
 
 		/**
 		 * Pre-evolution. '' if nothing evolves into this Pokemon.
@@ -629,7 +715,7 @@ class Template extends Effect {
 		 * Evolution level. falsy if doesn't evolve
 		 * @type {number | undefined}
 		 */
-		this.evoLevel = this.evoLevel;
+		this.evoLevel = this.evoLevel || undefined;
 
 		/**
 		 * Is NFE? True if this Pokemon can evolve (Mega evolution doesn't
@@ -664,7 +750,7 @@ class Template extends Effect {
 		 * Required item. Do not use this directly; see requiredItems.
 		 * @type {string | undefined}
 		 */
-		this.requiredItem = this.requiredItem;
+		this.requiredItem = this.requiredItem || undefined;
 
 		/**
 		 * Required items. Items required to be in this forme, e.g. a mega
@@ -715,13 +801,13 @@ class Template extends Effect {
 		 * Max HP. Used in the battle engine
 		 * @type {number | undefined}
 		 */
-		this.maxHP = this.maxHP;
+		this.maxHP = this.maxHP || undefined;
 
 		/**
 		 * Keeps track of exactly how a pokemon might learn a move, in the form moveid:sources[]
 		 * @type {{[moveid: string]: MoveSource[]} | undefined}
 		 */
-		this.learnset = this.learnset;
+		this.learnset = this.learnset || undefined;
 		/**
 		 * True if the only way to get this pokemon is from events.
 		 * @type {boolean}
@@ -731,7 +817,7 @@ class Template extends Effect {
 		 * List of event data for each event.
 		 * @type {EventInfo[] | undefined}
 		 */
-		this.eventPokemon = this.eventPokemon;
+		this.eventPokemon = this.eventPokemon || undefined;
 
 		if (!this.gen) {
 			if (this.num >= 722 || this.forme.startsWith('Alola')) {
@@ -829,20 +915,20 @@ class Move extends Effect {
 		this.critRatio = Number(this.critRatio) || 1;
 
 		/**
-		 * Will this move always be a critical hit?
-		 * @type {boolean}
+		 * Will this move always or never be a critical hit?
+		 * @type {boolean | undefined}
 		 */
 		this.willCrit = this.willCrit;
 
 		/**
 		 * Is this move a critical hit?
-		 * @type {boolean}
+		 * @type {boolean | undefined}
 		 */
 		this.crit = this.crit;
 
 		/**
 		 * Can this move OHKO foes?
-		 * @type {boolean | string}
+		 * @type {boolean | string | undefined}
 		 */
 		this.ohko = this.ohko;
 
@@ -851,22 +937,22 @@ class Move extends Effect {
 		 * tracked because it often differs from the real move type.
 		 * @type {string}
 		 */
-		this.baseType = Tools.getString(this.baseType) || this.type;
+		this.baseMoveType = Tools.getString(this.baseMoveType) || this.type;
 
 		/**
 		 * Secondary effect. You usually don't want to access this
 		 * directly; but through the secondaries array.
-		 * @type {boolean  | SecondaryEffect | undefined}
+		 * @type {SecondaryEffect | null}
 		 */
-		this.secondary = this.secondary;
+		this.secondary = this.secondary || null;
 
 		/**
 		 * Secondary effects. An array because there can be more than one
 		 * (for instance, Fire Fang has both a burn and a flinch
 		 * secondary).
-		 * @type {false | SecondaryEffect[] | undefined}
+		 * @type {SecondaryEffect[] | null}
 		 */
-		this.secondaries = this.secondaries || (this.secondary && typeof this.secondary !== 'boolean' && [this.secondary]);
+		this.secondaries = this.secondaries || (this.secondary && [this.secondary]) || null;
 
 		/**
 		 * Move priority. Higher priorities go before lower priorities,
@@ -886,43 +972,43 @@ class Move extends Effect {
 		 * move damage.
 		 * @type {'Physical' | 'Special' | 'Status' | undefined}
 		 */
-		this.defensiveCategory = this.defensiveCategory;
+		this.defensiveCategory = this.defensiveCategory || undefined;
 
 		/**
 		 * Whether or not this move uses the target's boosts
 		 * @type {boolean}
 		 */
-		this.useTargetOffensive = this.useTargetOffensive;
+		this.useTargetOffensive = !!this.useTargetOffensive;
 
 		/**
 		 * Whether or not this move uses the user's boosts
 		 * @type {boolean}
 		 */
-		this.useSourceDefensive = this.useSourceDefensive;
+		this.useSourceDefensive = !!this.useSourceDefensive;
 
 		/**
 		 * Whether or not this move ignores negative attack boosts
 		 * @type {boolean}
 		 */
-		this.ignoreNegativeOffensive = this.ignoreNegativeOffensive;
+		this.ignoreNegativeOffensive = !!this.ignoreNegativeOffensive;
 
 		/**
 		 * Whether or not this move ignores positive defense boosts
 		 * @type {boolean}
 		 */
-		this.ignorePositiveDefensive = this.ignorePositiveDefensive;
+		this.ignorePositiveDefensive = !!this.ignorePositiveDefensive;
 
 		/**
 		 * Whether or not this move ignores attack boosts
 		 * @type {boolean}
 		 */
-		this.ignoreOffensive = this.ignoreOffensive;
+		this.ignoreOffensive = !!this.ignoreOffensive;
 
 		/**
 		 * Whether or not this move ignores defense boosts
 		 * @type {boolean}
 		 */
-		this.ignoreDefensive = this.ignoreDefensive;
+		this.ignoreDefensive = !!this.ignoreDefensive;
 
 		/**
 		 * Whether or not this move ignores type immunities. Defaults to
@@ -942,20 +1028,13 @@ class Move extends Effect {
 		 * Whether or not this move can receive PP boosts.
 		 * @type {boolean}
 		 */
-		this.noPPBoosts = this.noPPBoosts;
+		this.noPPBoosts = !!this.noPPBoosts;
 
 		/**
 		 * Is this move a Z-Move?
-		 * @type {boolean | string | undefined}
+		 * @type {boolean | string}
 		 */
-		this.isZ = this.isZ;
-
-		/**
-		 * Whether or not this move is a Z-Move that broke protect
-		 * (affects damage calculation).
-		 * @type {boolean}
-		 */
-		this.zBrokeProtect = this.zBrokeProtect;
+		this.isZ = this.isZ || false;
 
 		/**
 		 * @type {MoveFlags}
@@ -965,9 +1044,9 @@ class Move extends Effect {
 
 		/**
 		 * Whether or not the user must switch after using this move.
-		 * @type {string | boolean}
+		 * @type {string | true | undefined}
 		 */
-		this.selfSwitch = this.selfSwitch;
+		this.selfSwitch = this.selfSwitch || undefined;
 
 		/**
 		 * Move target only used by Pressure
@@ -976,7 +1055,7 @@ class Move extends Effect {
 		this.pressureTarget = this.pressureTarget || '';
 
 		/**
-		 * Move target used if the user is not a Ghost type
+		 * Move target used if the user is not a Ghost type (for Curse)
 		 * @type {string}
 		 */
 		this.nonGhostTarget = this.nonGhostTarget || '';
@@ -985,11 +1064,11 @@ class Move extends Effect {
 		 * Whether or not the move ignores abilities
 		 * @type {boolean}
 		 */
-		this.ignoreAbility = this.ignoreAbility;
+		this.ignoreAbility = this.ignoreAbility || false;
 
 		/**
 		 * Move damage against the current target
-		 * @type {string | number | boolean}
+		 * @type {string | number | boolean | undefined}
 		 */
 		this.damage = this.damage;
 
@@ -997,7 +1076,7 @@ class Move extends Effect {
 		 * Whether or not this move hit multiple targets
 		 * @type {boolean}
 		 */
-		this.spreadHit = this.spreadHit;
+		this.spreadHit = this.spreadHit || false;
 
 		/**
 		 * Modifier that affects damage when multiple targets
@@ -1020,10 +1099,10 @@ class Move extends Effect {
 		this.typeMod = this.typeMod || 0;
 
 		/**
-		 * Whether or not this move gets STAB
+		 * Forces the move to get STAB even if the type doesn't match
 		 * @type {boolean}
 		 */
-		this.hasSTAB = this.hasSTAB;
+		this.forceSTAB = !!this.forceSTAB;
 
 		/**
 		 * True if it can't be copied with Sketch
@@ -1032,10 +1111,10 @@ class Move extends Effect {
 		this.noSketch = !!this.noSketch;
 
 		/**
-		 * STAB (can be modified by other effects)
+		 * STAB multiplier (can be modified by other effects) (default 1.5)
 		 * @type {number | undefined}
 		 */
-		this.stab = this.stab;
+		this.stab = this.stab || undefined;
 
 		if (!this.gen) {
 			if (this.num >= 622) {
@@ -1122,6 +1201,120 @@ class TypeInfo {
 	}
 }
 
+// class PokemonSet {
+// 	/**
+// 	 * @param {Partial<PokemonSet>} data
+// 	 */
+// 	constructor(data) {
+// 		/**
+// 		 * The Pokemon's set's nickname, which is identical to its base
+// 		 * species if not specified by the player, e.g. "Minior".
+// 		 * @type {string}
+// 		 */
+// 		this.name = '';
+// 		/**
+// 		 * The Pokemon's species, e.g. "Minior-Red".
+// 		 * This should always be converted to an id before use.
+// 		 * @type {string}
+// 		 */
+// 		this.species = '';
+// 		/**
+// 		 * The Pokemon's set's item. This can be an id, e.g. "whiteherb"
+// 		 * or a full name, e.g. "White Herb".
+// 		 * This should always be converted to an id before use.
+// 		 * @type {string}
+// 		 */
+// 		this.item = '';
+// 		/**
+// 		 * The Pokemon's set's ability. This can be an id, e.g. "shieldsdown"
+// 		 * or a full name, e.g. "Shields Down".
+// 		 * This should always be converted to an id before use.
+// 		 * @type {string}
+// 		 */
+// 		this.ability = 'noability';
+// 		/**
+// 		 * An array of the Pokemon's set's moves. Each move can be an id,
+// 		 * e.g. "shellsmash" or a full name, e.g. "Shell Smash"
+// 		 * These should always be converted to ids before use.
+// 		 * @type {string[]}
+// 		 */
+// 		this.moves = [];
+// 		/**
+// 		 * The Pokemon's set's nature. This can be an id, e.g. "adamant"
+// 		 * or a full name, e.g. "Adamant".
+// 		 * This should always be converted to an id before use.
+// 		 * @type {string}
+// 		 */
+// 		this.nature = '';
+// 		/**
+// 		 * The Pokemon's set's gender.
+// 		 * @type {GenderName}
+// 		 */
+// 		this.gender = '';
+// 		/**
+// 		 * The Pokemon's set's effort values, used in stat calculation.
+// 		 * These must be between 0 and 255, inclusive.
+// 		 * @type {StatsTable}
+// 		 */
+// 		this.evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
+// 		/**
+// 		 * The Pokemon's individual values, used in stat calculation.
+// 		 * These must be between 0 and 31, inclusive.
+// 		 * These are also used as DVs, or determinant values, in Gens
+// 		 * 1 and 2, which are represented as even numbers from 0 to 30.
+// 		 * From Gen 2 and on, IVs/DVs are used to determine Hidden Power's
+// 		 * type, although in Gen 7 a Pokemon may be legally altered such
+// 		 * that its stats are calculated as if these values were 31 via
+// 		 * Bottlecaps. Currently, PS handles this by considering any
+// 		 * IV of 31 in Gen 7 to count as either even or odd for the purpose
+// 		 * of validating a Hidden Power type, though restrictions on
+// 		 * possible IVs for event-only Pokemon are still considered.
+// 		 * @type {StatsTable}
+// 		 */
+// 		this.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+// 		/**
+// 		 * The Pokemon's level. This is usually between 1 and 100, inclusive,
+// 		 * but the simulator supports levels up to 9999 for testing purposes.
+// 		 * @type {number}
+// 		 */
+// 		this.level = 100;
+// 		/**
+// 		 * Whether the Pokemon is shiny or not. While having no direct
+// 		 * competitive effect except in a few OMs, certain Pokemon cannot
+// 		 * be legally obtained as shiny, either as a whole or with certain
+// 		 * event-only abilities or moves.
+// 		 * @type {boolean | undefined}
+// 		 */
+// 		this.shiny = undefined;
+// 		/**
+// 		 * The Pokemon's set's happiness value. This is used only for
+// 		 * calculating the base power of the moves Return and Frustration.
+// 		 * This value must be between 0 and 255, inclusive.
+// 		 * @type {number | undefined}
+// 		 */
+// 		this.happiness = 255; // :)
+// 		/**
+// 		 * The Pokemon's set's Hidden Power type. This value is intended
+// 		 * to be used to manually set a set's HP type in Gen 7 where
+// 		 * its IVs do not necessarily reflect the user's intended type.
+// 		 * TODO: actually support this in the teambuilder.
+// 		 * @type {string | undefined}
+// 		 */
+// 		this.hpType = undefined;
+// 		/**
+// 		 * The pokeball this Pokemon is in. Like shininess, this property
+// 		 * has no direct competitive effects, but has implications for
+// 		 * event legality. For example, any Rayquaza that knows V-Create
+// 		 * must be sent out from a Cherish Ball.
+// 		 * TODO: actually support this in the validator, switching animations,
+// 		 * and the teambuilder.
+// 		 * @type {string | undefined}
+// 		 */
+// 		this.pokeball = undefined;
+// 		Object.assign(this, data);
+// 	}
+// }
+
 exports.Tools = Tools;
 exports.Effect = Effect;
 exports.PureEffect = PureEffect;
@@ -1132,3 +1325,4 @@ exports.Template = Template;
 exports.Move = Move;
 exports.Ability = Ability;
 exports.TypeInfo = TypeInfo;
+//exports.PokemonSet = PokemonSet;

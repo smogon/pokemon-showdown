@@ -7,8 +7,25 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
+            "name": "Start Server",
             "program": "${workspaceFolder}\\app.js"
-        }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Run Mocha Tests",
+            "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
+            "args": [
+                "-u",
+                "tdd",
+                "--timeout",
+                "999999",
+                "--colors",
+                "-f",
+                // Make this string non-empty to run only tests whose names match it
+                ""
+            ],
+            "internalConsoleOptions": "openOnSessionStart"
+        },
     ]
 }
