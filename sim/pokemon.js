@@ -481,7 +481,7 @@ class Pokemon {
 		}
 		if (!this.combatPower) this.combatPower = 0;
 		this.combatPower = Math.floor(Math.floor(statSum * this.level * 6 / 100) + (Math.floor(awakeningSum) * Math.floor((this.level * 4) / 100 + 2)));
-		return this.combatPower;
+		return this.battle.clampIntRange(this.combatPower, 0, 10000);
 	}
 	 */
 

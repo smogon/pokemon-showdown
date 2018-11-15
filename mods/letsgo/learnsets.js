@@ -4904,7 +4904,7 @@ let BattleLearnsets = {
 		payday: ["7M"],
 		playrough: ["7M"],
 		poisonjab: ["7M"],
-		pound: ["7L1"],
+		pound: ["7L1", "7S0"],
 		protect: ["7M"],
 		psychic: ["7M", "7L77"],
 		psywave: ["7L33"],

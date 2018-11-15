@@ -137,6 +137,12 @@ let BattleFormatsData = {
 			{"generation": 7, "level": 70, "shiny": 1, "perfectIVs": 3, "moves": ["psychic", "recover", "amnesia", "swift"]},
 		],
 	},
+	mew: {
+		inherit: true,
+		eventPokemon: [
+			{"generation": 7, "level": 1, "perfectIVs": 3, "moves": ["pound"], "pokeball": "pokeball"},
+		],
+	},
 	meltan: {
 		inherit: true,
 		isUnreleased: false,

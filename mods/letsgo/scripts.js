@@ -8,8 +8,14 @@ let BattleScripts = {
 			this.modData('Pokedex', i).abilities = {0: 'No Ability'};
 		}
 		for (let i in this.data.FormatsData) {
+			let template = this.getTemplate(i);
+			let dataTemplate = this.modData('FormatsData', i);
 			if (this.data.FormatsData[i].requiredItem && this.data.Items[toId(this.data.FormatsData[i].requiredItem)].megaStone) {
-				this.modData('FormatsData', i).requiredItem = undefined;
+				dataTemplate.requiredItem = undefined;
+			}
+			dataTemplate.tier = 'LGPE';
+			if ((template.num > 151 || template.num < 1) && ![808, 809].includes(template.num)) {
+				dataTemplate.tier = 'Illegal';
 			}
 		}
 	},
@@ -26,7 +32,12 @@ let BattleScripts = {
 			// @ts-ignore
 			let stat = baseStats[statName];
 			// @ts-ignore
-			modStats[statName] = Math.floor((Math.floor(2 * stat + set.ivs[statName]) * set.level / 100 + 5) * Math.floor(set.happiness >= 255 ? 1.1 : 1));
+			modStats[statName] = Math.floor((Math.floor(2 * stat + set.ivs[statName]) * set.level / 100 + 5));
+			/**@type {number} */
+			let friendshipValue = parseFloat(Number(this.clampIntRange(set.happiness || 255, 0, 255) / 255).toPrecision(1)) || 0;
+			let friendshipEquation = (1 + (0.1 * friendshipValue));
+			// @ts-ignore
+			modStats[statName] = Math.floor(modStats[statName] * friendshipEquation);
 		}
 		if ('hp' in baseStats) {
 			let stat = baseStats['hp'];
@@ -48,7 +59,7 @@ let BattleScripts = {
 		if (nature.minus) stats[nature.minus] = Math.floor(stats[nature.minus] * 0.9);
 		for (const stat in stats) {
 			// @ts-ignore
-			stats[stat] += this.getAwakeningValues(stat, set);
+			stats[stat] += this.getAwakeningValues(set, stat);
 		}
 		return stats;
 	},
