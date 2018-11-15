@@ -1494,7 +1494,7 @@
 			"species": "Kommo-o",
 			"item": "Salac Berry",
 			"ability": "Bulletproof",
-			"evs": {"hp": 4, "atk": 252, "spe": 252},
+			"evs": {"hp": 12, "atk": 244, "spe": 252},
 			"nature": "Jolly",
 			"moves": [["Belly Drum"], ["Drain Punch"], ["Substitute"], ["Poison Jab", "Iron Head", "Shadow Claw", "Earthquake"]]
 		}]
