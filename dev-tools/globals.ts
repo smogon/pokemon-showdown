@@ -757,6 +757,7 @@ interface ModdedBattlePokemon {
 	boostBy?: (this: Pokemon, boost: SparseBoostsTable) => boolean
 	calculateStat?: (this: Pokemon, statName: string, boost: number, modifier?: number) => number
 	getActionSpeed?: (this: Pokemon) => number
+	getStat?: (this: Pokemon, statName: string, unboosted?: boolean, unmodified?: boolean) => number
 	getWeight?: (this: Pokemon) => number
 	isGrounded?: (this: Pokemon, negateImmunity: boolean | undefined) => boolean | null
 	modifyStat?: (this: Pokemon, statName: string, modifier: number) => void
