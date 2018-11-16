@@ -653,6 +653,7 @@ const commands = {
 
 	subroomgroupchat: 'makegroupchat',
 	makegroupchat: function (target, room, user, connection, cmd) {
+		if (!this.canTalk()) return;
 		if (!user.autoconfirmed) {
 			return this.errorReply("You must be autoconfirmed to make a groupchat.");
 		}
