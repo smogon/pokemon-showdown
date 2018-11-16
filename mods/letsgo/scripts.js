@@ -8,14 +8,9 @@ let BattleScripts = {
 			this.modData('Pokedex', i).abilities = {0: 'No Ability'};
 		}
 		for (let i in this.data.FormatsData) {
-			let template = this.getTemplate(i);
 			let dataTemplate = this.modData('FormatsData', i);
 			if (this.data.FormatsData[i].requiredItem && this.data.Items[toId(this.data.FormatsData[i].requiredItem)].megaStone) {
-				dataTemplate.requiredItem = undefined;
-			}
-			dataTemplate.tier = 'LGPE';
-			if ((template.num > 151 || template.num < 1) && ![808, 809].includes(template.num)) {
-				dataTemplate.tier = 'Illegal';
+				dataTemplate.requiredItem = '';
 			}
 		}
 	},

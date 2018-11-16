@@ -447,6 +447,7 @@ let BattleFormatsData = {
 			{"generation": 7, "level": 5, "perfectIVs": 6, "moves": ["thundershock", "tailwhip", "growl"], "pokeball": "pokeball"},
 		],
 		eventOnly: true,
+		isNonstandard: true,
 		isUnreleased: true,
 		tier: "Unreleased",
 	},
@@ -1623,6 +1624,7 @@ let BattleFormatsData = {
 			{"generation": 7, "level": 5, "perfectIVs": 6, "moves": ["tackle", "tailwhip", "growl"], "pokeball": "pokeball"},
 		],
 		eventOnly: true,
+		isNonstandard: true,
 		isUnreleased: true,
 		tier: "Unreleased",
 	},
@@ -7351,10 +7353,12 @@ let BattleFormatsData = {
 	},
 	meltan: {
 		isUnreleased: true,
+		isNonstandard: true,
 		tier: "Unreleased",
 	},
 	melmetal: {
 		isUnreleased: true,
+		isNonstandard: true,
 		tier: "Unreleased",
 	},
 	missingno: {

@@ -22,6 +22,7 @@ let BattleFormatsData = {
 	},
 	pikachustarter: {
 		inherit: true,
+		isNonstandard: false,
 		isUnreleased: false,
 	},
 	persian: {
@@ -60,6 +61,12 @@ let BattleFormatsData = {
 			{"generation": 7, "level": 30, "shiny": 1, "ivs": {hp: 25, atk: 31, def: 30, spa: 25, spd: 30, spe: 25}, "moves": ["firepunch", "icepunch", "thunderpunch", "dizzypunch"], "pokeball": "pokeball"},
 		],
 	},
+	chansey: {
+		inherit: true,
+		eventPokemon: [
+			{"generation": 7, "level": 1, "gender": "F", "nature": "Mild", "moves": ["celebrate", "pound"], "pokeball": "cherishball"},
+		],
+	},
 	lapras: {
 		inherit: true,
 		eventPokemon: [
@@ -80,6 +87,7 @@ let BattleFormatsData = {
 	},
 	eeveestarter: {
 		inherit: true,
+		isNonstandard: false,
 		isUnreleased: false,
 	},
 	porygon: {
@@ -145,10 +153,12 @@ let BattleFormatsData = {
 	},
 	meltan: {
 		inherit: true,
+		isNonstandard: false,
 		isUnreleased: false,
 	},
 	melmetal: {
 		inherit: true,
+		isNonstandard: false,
 		isUnreleased: false,
 	},
 };

@@ -31,11 +31,15 @@ let BattleFormats = {
 			let allowCAP = !!(format && this.getRuleTable(format).has('allowcap'));
 
 			if (set.species === set.name) delete set.name;
-			if ((baseTemplate.num > 151 || baseTemplate.num < 1) && ![808, 809].includes(baseTemplate.num) &&
-				!['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(template.forme)) {
+			if (((baseTemplate.num > 151 || baseTemplate.num < 1) && ![808, 809].includes(baseTemplate.num) &&
+				!['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(template.forme)) || template.speciesid.endsWith('totem')) {
+				let usedSpecies = baseTemplate.species;
+				if (template.speciesid.endsWith('totem')) {
+					usedSpecies = template.species;
+				}
 				problems.push(
 					`Only Pok\u00E9mon whose base formes are from Gen 1, Meltan, and Melmetal can be used.`,
-					`(${baseTemplate.species} is from Gen ${baseTemplate.gen}.)`
+					`(${usedSpecies} is from Gen ${baseTemplate.gen === 1 ? 7 : baseTemplate.gen}.)`
 				);
 			}
 			if (set.moves) {
@@ -95,7 +99,6 @@ let BattleFormats = {
 				let item = this.getItem(set.item);
 				if (item.megaEvolves && item.megaEvolves !== template.baseSpecies) set.item = '';
 			}
-			set.gender = '';
 
 			// Legendary Pokemon must have at least 3 perfect IVs in gen 6
 			if (set.ivs && this.gen >= 6 && (baseTemplate.gen >= 6 || format.requirePentagon) && (template.eggGroups[0] === 'Undiscovered' || template.species === 'Manaphy') && !template.prevo && !template.nfe &&
