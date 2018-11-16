@@ -3252,7 +3252,7 @@ let BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "For 5 turns, slower Pokemon move first. Psychic-type attacks can hit if the target is a Dark-type.",
-		shortDesc: "5 turns: slow Pokemon move 1st; Psychic hits Dark.",
+		shortDesc: "Creates Trick Room; 5 turns: Psychic hits Dark.",
 		id: "alienwave",
 		name: "Alien Wave",
 		isNonstandard: true,
