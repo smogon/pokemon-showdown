@@ -222,6 +222,7 @@ const commands = {
 		create: 'new',
 		new: function (target, room, user, connection, cmd, message) {
 			if (!target) return this.parse('/help poll new');
+			target = target.trim();
 			if (target.length > 1024) return this.errorReply("Poll too long.");
 			if (room.battle) return this.errorReply("Battles do not support polls.");
 
