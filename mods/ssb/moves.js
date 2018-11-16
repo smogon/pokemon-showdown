@@ -247,7 +247,7 @@ let BattleMovedex = {
 		isNonstandard: true,
 		pp: 5,
 		priority: 1,
-		flags: {protect: 1, mirror: 1, contact: 1, authentic: 1},
+		flags: {protect: 1, mirror: 1, contact: 1},
 		onTryMovePriority: 100,
 		onTryMove: function () {
 			this.attrLastMove('[still]');
@@ -257,7 +257,7 @@ let BattleMovedex = {
 			if (decision) {
 				let move = this.getActiveMove(decision.move.id);
 				if (move.category === 'Status' && move.id !== 'mefirst' && move.target) {
-					if (move.target === 'self') {
+					if (move.target === 'self' || move.target === 'all' || move.target === 'allySide' || move.target === 'allyTeam' || move.target === 'adjacentAllyOrSelf') {
 						 this.useMove(move, source, source);
 					} else {
 						 this.useMove(move, source, target);
@@ -269,7 +269,7 @@ let BattleMovedex = {
 			}
 			return false;
 		},
-		volatileStatus: 'pilfer',
+		sideCondition: 'pilfer',
 		effect: {
 			// Simulate the snatch effect while being able to use the pilfered move 1st
 			duration: 1,
@@ -1037,7 +1037,9 @@ let BattleMovedex = {
 			let hadEffect = false;
 			if (target.trySetStatus('slp')) hadEffect = true;
 			if (target.addVolatile('nightmare')) hadEffect = true;
-			if (target.addVolatile('leechseed')) hadEffect = true;
+			if (!target.hasType('Grass')) {
+				if (target.addVolatile('leechseed')) hadEffect = true;
+			}
 			if (!hadEffect) {
 				this.add('-fail', target);
 			} else {
@@ -2863,6 +2865,7 @@ let BattleMovedex = {
 		},
 		onTryHit: function (target, source, move) {
 			// hacky way of forcing toxic to effect poison / steel types without corrosion usage
+			if (target.volatiles['substitute'] && !move.infiltrates) return;
 			if (target.hasType('Steel') || target.hasType('Poison')) {
 				let status = this.getEffect(move.status);
 				target.status = status.id;
@@ -3249,7 +3252,7 @@ let BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "For 5 turns, slower Pokemon move first. Psychic-type attacks can hit if the target is a Dark-type.",
-		shortDesc: "5 turns: slower Pokemon move first, Psychic hits Dark.",
+		shortDesc: "5 turns: slow Pokemon move 1st; Psychic hits Dark.",
 		id: "alienwave",
 		name: "Alien Wave",
 		isNonstandard: true,
@@ -3264,12 +3267,25 @@ let BattleMovedex = {
 			this.add('-anim', source, "Telekinesis", source);
 			this.add('-anim', source, "Trick Room", source);
 		},
-		onHit: function (pokemon) {
-			this.addPseudoWeather('alienwave');
+		pseudoWeather: 'alienwave',
+		effect: {
+			duration: 5,
+			onStart: function (target, source) {
+				this.add('-fieldstart', 'move: Alien Wave');
+				this.add('-message', `Psychic-type attacks can hit Dark-type Pokemon!`);
+			},
+			onNegateImmunity: function (pokemon, type) {
+				if (pokemon.hasType('Dark') && type === 'Psychic') return false;
+			},
+			// Speed modification is changed in Pokemon.getActionSpeed() in mods/seasonal/scripts.js
+			onResidualOrder: 23,
+			onEnd: function () {
+				this.add('-fieldend', 'move: Alien Wave');
+				this.add('-message', `Psychic-type attacks can no longer hit Dark-type Pokemon.`);
+			},
 		},
-		pseudoWeather: 'trickroom',
 		secondary: null,
-		target: "self",
+		target: "all",
 		type: "Normal",
 	},
 	// Snaquaza
@@ -3368,6 +3384,7 @@ let BattleMovedex = {
 			this.attrLastMove('[still]');
 		},
 		beforeTurnCallback: function (pokemon) {
+			if (pokemon.status === 'slp' || pokemon.status === 'frz') return;
 			this.boost({def: 1, spd: 1}, pokemon, pokemon, 'mushroom army');
 			this.useMove("powder", pokemon);
 		},
@@ -3487,7 +3504,7 @@ let BattleMovedex = {
 		effect: {
 			duration: 2,
 			onStart: function (source) {
-				this.add('-message', `${source.name}'s replacement is going to switch out next turn!`);
+				this.add('-message', `${source.active[0].name}'s replacement is going to switch out next turn!`);
 			},
 			onModifyMove: function (move) {
 				move.selfSwitch = true;

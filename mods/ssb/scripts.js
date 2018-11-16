@@ -297,7 +297,7 @@ let BattleScripts = {
 		getActionSpeed() {
 			let speed = this.getStat('spe', false, false);
 			if (speed > 10000) speed = 10000;
-			if (this.battle.getPseudoWeather('trickroom') || this.battle.getPseudoWeather('triviaroom')) {
+			if (this.battle.getPseudoWeather('trickroom') || this.battle.getPseudoWeather('triviaroom') || this.battle.getPseudoWeather('alienwave')) {
 				speed = 0x2710 - speed;
 			}
 			return speed & 0x1FFF;

@@ -1381,13 +1381,13 @@ let BattleStatuses = {
 	yuki: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|%Yuki|My ice may be a little __cold__, but your plan has been put completely on __hold__!`);
+			this.add(`c|+Yuki|My ice may be a little __cold__, but your plan has been put completely on __hold__!`);
 		},
 		onSwitchOut: function () {
-			this.add(`c|%Yuki|I-It's too hot in here!`);
+			this.add(`c|+Yuki|I-It's too hot in here!`);
 		},
 		onFaint: function () {
-			this.add(`c|%Yuki|I'm melting...`);
+			this.add(`c|+Yuki|I'm melting...`);
 		},
 	},
 	zarel: {
@@ -1493,27 +1493,6 @@ let BattleStatuses = {
 				}
 			}
 			return [type];
-		},
-	},
-	// Slowbroth's Alien wave. This is here so Trick Room can be in the move's PseudoWeather.
-	alienwave: {
-		duration: 5,
-		onStart: function (target, source) {
-			this.add('-fieldstart', 'move: Alien Wave');
-			this.add('-message', `Psychic-type attacks can hit Dark-type Pokemon!`);
-		},
-		onNegateImmunity: function (pokemon, type) {
-			if (pokemon.hasType('Dark') && type === 'Psychic') return false;
-		},
-		onUpdate: function () {
-			if (!this.pseudoWeather.trickroom) {
-				this.removePseudoWeather('alienwave');
-			}
-		},
-		onResidualOrder: 23,
-		onEnd: function () {
-			this.add('-fieldend', 'move: Alien Wave');
-			this.add('-message', `Psychic-type attacks can no longer hit Dark-type Pokemon.`);
 		},
 	},
 };
