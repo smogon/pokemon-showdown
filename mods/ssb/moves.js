@@ -257,7 +257,7 @@ let BattleMovedex = {
 			if (decision) {
 				let move = this.getActiveMove(decision.move.id);
 				if (move.category === 'Status' && move.id !== 'mefirst' && move.target) {
-					if (move.target === 'self' || move.target === 'all' || move.target === 'allySide' || move.target === 'allyTeam' || move.target === 'adjacentAllyOrSelf') {
+					if (['all', 'adjacentAllyOrSelf', 'allySide', 'allyTeam', 'self'].includes(move.target)) {
 						 this.useMove(move, source, source);
 					} else {
 						 this.useMove(move, source, target);
