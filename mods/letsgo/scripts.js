@@ -35,6 +35,7 @@ let BattleScripts = {
 			modStats[statName] = Math.floor((Math.floor(2 * stat + set.ivs[statName]) * set.level / 100 + 5));
 			/**@type {number} */
 			let friendshipValue = parseFloat(Number(this.clampIntRange(set.happiness || 255, 0, 255) / 255).toPrecision(1)) || 0;
+			// Preliminary multiplier until it's actually datamined
 			let friendshipEquation = (1 + (0.1 * friendshipValue));
 			// @ts-ignore
 			modStats[statName] = Math.floor(modStats[statName] * friendshipEquation);

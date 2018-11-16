@@ -990,7 +990,9 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1},
-		sideCondition: 'reflect',
+		self: {
+			sideCondition: 'reflect',
+		},
 		secondary: null,
 		target: "normal",
 		type: "Dark",
@@ -6538,7 +6540,9 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1},
-		sideCondition: 'lightscreen',
+		self: {
+			sideCondition: 'lightscreen',
+		},
 		secondary: null,
 		target: "normal",
 		type: "Psychic",

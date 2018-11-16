@@ -74,6 +74,7 @@ let BattleMovedex = {
 		shortDesc: "User switches out.",
 		priority: -6,
 		selfSwitch: true,
+		onTryHit: true,
 	},
 	"veeveevolley": {
 		inherit: true,
