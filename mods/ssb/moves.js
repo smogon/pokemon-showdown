@@ -3486,14 +3486,14 @@ let BattleMovedex = {
 		sideCondition: "rotate",
 		effect: {
 			duration: 2,
-			onStart: function () {
-				this.add('-message', `The user's replacement is going to rotate!`);
+			onStart: function (source) {
+				this.add('-message', `${source.name}'s replacement is going to switch out next turn!`);
 			},
 			onModifyMove: function (move) {
 				move.selfSwitch = true;
 			},
 			onBeforeMove: function (source, move) {
-				this.add('-message', `${source.name} is preparing to rotate!`);
+				this.add('-message', `${source.name} is preparing to switch out!`);
 			},
 		},
 		selfSwitch: true,
