@@ -27,7 +27,7 @@ let BattleFormats = {
 			let template = this.getTemplate(set.species);
 			let baseTemplate = this.getTemplate(template.baseSpecies);
 			let problems = [];
-			let totalAV = 0;
+			let allowAVs = !!(format && this.getRuleTable(format).has('allowavs'));
 			let allowCAP = !!(format && this.getRuleTable(format).has('allowcap'));
 
 			if (set.species === set.name) delete set.name;
@@ -65,18 +65,10 @@ let BattleFormats = {
 				}
 			}
 
-			if (set.evs) {
+			if (!allowAVs && set.evs) {
 				for (let k in set.evs) {
-					let av = this.getAwakeningValues(set);
 					// @ts-ignore
-					av[k] = set.evs[k];
-					// @ts-ignore
-					if (typeof av[k] !== 'number' || av[k] < 0) {
-						// @ts-ignore
-						av[k] = 0;
-					}
-					// @ts-ignore
-					totalAV += av[k];
+					set.evs[k] = 0;
 				}
 			}
 
@@ -89,10 +81,6 @@ let BattleFormats = {
 				problems.push(`${set.species} cannot be obtained by legal means.`);
 			}
 
-			// Pokemon cannot have more than 1200 total Awakening Values
-			if (totalAV > 1200) {
-				problems.push((set.name || set.species) + " has more than 1200 total Awakening Values.");
-			}
 			set.ability = 'No Ability';
 			// Temporary hack to allow mega evolution
 			if (set.item) {
@@ -142,6 +130,41 @@ let BattleFormats = {
 
 			return problems;
 		},
+	},
+	allowavs: {
+		effectType: 'ValidatorRule',
+		name: 'Allow AVs',
+		desc: "Tells formats with the 'letsgo' mod to take Awakening Values into consideration when calculating stats",
+		onChangeSet: function (set, format) {
+			/**@type {string[]} */
+			let problems = ([]);
+			let totalAV = 0;
+			if (set.evs) {
+				for (let k in set.evs) {
+					let av = this.getAwakeningValues(set);
+					// @ts-ignore
+					av[k] = set.evs[k];
+					// @ts-ignore
+					if (typeof av[k] !== 'number' || av[k] < 0) {
+						// @ts-ignore
+						av[k] = 0;
+					}
+					// @ts-ignore
+					totalAV += av[k];
+				}
+			}
+
+			// ----------- legality line ------------------------------------------
+			if (!this.getRuleTable(format).has('-illegal')) return problems;
+			// everything after this line only happens if we're doing legality enforcement
+
+			// Pokemon cannot have more than 1200 total Awakening Values
+			if (totalAV > 1200) {
+				problems.push((set.name || set.species) + " has more than 1200 total Awakening Values.");
+			}
+			return problems;
+		},
+		// Partially implemented in the modified pokemon rule above
 	},
 };
 

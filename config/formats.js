@@ -145,16 +145,6 @@ let Formats = [
 		],
 	},
 	{
-		name: "[Gen 7] Let's Go! (Beta)",
-		desc: `This is the beta version of the Pok&eacute;mon Let's Go! ladder!`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3640426/">Let's Go! Discussion</a>`,
-		],
-
-		mod: 'letsgo',
-		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-	},
-	{
 		name: "[Gen 7] Anything Goes",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3587441/">Anything Goes</a>`,
@@ -931,6 +921,40 @@ let Formats = [
 		searchShow: false,
 		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
 		banlist: ['Uber'],
+	},
+
+	// Let's Go Metas
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "Let's Go!",
+	},
+	{
+		name: "[Gen 7] Let's Go!",
+		desc: `This is the beta version of the Pok&eacute;mon Let's Go! ladder with restrictions!`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3640426/">Let's Go! Discussion</a>`,
+		],
+
+		mod: 'letsgo',
+		forcedLevel: 50,
+		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		validateSet: function (set, teamHas) {
+			let problems = this.validateSet(set, teamHas) || [];
+			// Override the check for 0 total EVs in sim/team-validator.js
+			if (set.evs && !Object.values(set.evs).some(value => value > 0)) return null;
+			return problems.length ? problems : null;
+		},
+	},
+	{
+		name: "[Gen 7] Let's Go! No Restrictions",
+		desc: `This is the beta version of the Pok&eacute;mon Let's Go! (No Restrictions) ladder!`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3640426/">Let's Go! Discussion</a>`,
+		],
+
+		mod: 'letsgo',
+		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Allow AVs'],
 	},
 
 	// Randomized Metas
