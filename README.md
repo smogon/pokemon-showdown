@@ -174,6 +174,7 @@ Contributors
 - Ian Clail [Layell] - Art (battle graphics, sprites)
 - Jeremy Piemonte [panpawn] - Development
 - Kris Johnson [Kris] - Development
+- Leonard Craft III [DaWoblefet] - Research (game mechanics)
 - Neil Rashbrook [urkerab] - Development
 - Robin Vandenbrande [Quinella] - Development
 - [Ridaz] - Art (battle animations)
