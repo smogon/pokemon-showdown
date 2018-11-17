@@ -940,12 +940,6 @@ let Formats = [
 		mod: 'letsgo',
 		forcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
-		validateSet: function (set, teamHas) {
-			let problems = this.validateSet(set, teamHas) || [];
-			// Override the check for 0 total EVs in sim/team-validator.js
-			if (set.evs && !Object.values(set.evs).some(value => value > 0)) return null;
-			return problems.length ? problems : null;
-		},
 	},
 	{
 		name: "[Gen 7] Let's Go! No Restrictions",
