@@ -928,6 +928,7 @@ let Formats = [
 
 	{
 		section: "Let's Go!",
+		column: 2,
 	},
 	{
 		name: "[Gen 7] Let's Go!",
