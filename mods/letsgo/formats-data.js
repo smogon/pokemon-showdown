@@ -23,7 +23,7 @@ let BattleFormatsData = {
 	pikachustarter: {
 		inherit: true,
 		isNonstandard: false,
-		isUnreleased: false,
+		tier: 'PU',
 	},
 	persian: {
 		inherit: true,
@@ -88,7 +88,7 @@ let BattleFormatsData = {
 	eeveestarter: {
 		inherit: true,
 		isNonstandard: false,
-		isUnreleased: false,
+		tier: 'PU',
 	},
 	porygon: {
 		inherit: true,
@@ -154,12 +154,12 @@ let BattleFormatsData = {
 	meltan: {
 		inherit: true,
 		isNonstandard: false,
-		isUnreleased: false,
+		tier: 'LC',
 	},
 	melmetal: {
 		inherit: true,
 		isNonstandard: false,
-		isUnreleased: false,
+		tier: 'OU',
 	},
 };
 
