@@ -154,7 +154,7 @@ let BattleFormatsData = {
 	meltan: {
 		inherit: true,
 		isNonstandard: false,
-		tier: 'LC',
+		tier: 'PU',
 	},
 	melmetal: {
 		inherit: true,
