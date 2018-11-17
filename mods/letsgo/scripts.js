@@ -28,10 +28,6 @@ let BattleScripts = {
 			let stat = baseStats[statName];
 			// @ts-ignore
 			modStats[statName] = Math.floor((Math.floor(2 * stat + set.ivs[statName]) * set.level / 100 + 5));
-			let friendshipValue = (this.clampIntRange(set.happiness || 255, 0, 255) / 255 / 10) + 1;
-			let friendshipEquation = (100 * friendshipValue);
-			// @ts-ignore
-			modStats[statName] = Math.floor(modStats[statName] * friendshipEquation / 100);
 		}
 		if ('hp' in baseStats) {
 			let stat = baseStats['hp'];
@@ -51,7 +47,12 @@ let BattleScripts = {
 		if (nature.plus) stats[nature.plus] = Math.floor(stats[nature.plus] * 1.1);
 		// @ts-ignore
 		if (nature.minus) stats[nature.minus] = Math.floor(stats[nature.minus] * 0.9);
+		let friendshipValue = Math.floor((this.clampIntRange(set.happiness || 255, 0, 255) / 255 / 10 + 1) * 100);
 		for (const stat in stats) {
+			if (stat !== 'hp') {
+				// @ts-ignore
+				stats[stat] = Math.floor(stats[stat] * friendshipValue / 100);
+			}
 			// @ts-ignore
 			stats[stat] += this.getAwakeningValues(set, stat);
 		}
