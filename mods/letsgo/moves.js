@@ -57,7 +57,7 @@ let BattleMovedex = {
 				if (i !== move.id) continue;
 				if (move.isZ || move.isNonstandard) continue;
 				if (!canMetronome.includes(move.id)) continue;
-				if (move.gen > this.gen) continue;
+				if (move.gen !== 1) continue;
 				moves.push(move);
 			}
 			let randomMove = '';
@@ -71,7 +71,7 @@ let BattleMovedex = {
 	},
 	"pikapapow": {
 		inherit: true,
-		isNonstandard: false,
+		// These moves have valid numbers in the code but are only usable when shaking the Switch remote
 		isUnreleased: false,
 	},
 	"sappyseed": {
@@ -112,7 +112,7 @@ let BattleMovedex = {
 	},
 	"veeveevolley": {
 		inherit: true,
-		isNonstandard: false,
+		// These moves have valid numbers in the code but are only usable when shaking the Switch remote
 		isUnreleased: false,
 	},
 	"zippyzap": {
