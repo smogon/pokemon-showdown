@@ -52,7 +52,7 @@ let BattleMovedex = {
 		onHit: function (target, source, effect) {
 			let moves = [];
 			for (let i in exports.BattleMovedex) {
-				let move = this.getMove(i);
+				let move = /** @type {MoveData} */ (exports.BattleMovedex[i]);
 				if (i !== move.id) continue;
 				if (move.gen !== 1) continue;
 				// @ts-ignore
