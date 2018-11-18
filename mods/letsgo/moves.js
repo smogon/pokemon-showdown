@@ -51,13 +51,12 @@ let BattleMovedex = {
 		inherit: true,
 		onHit: function (target, source, effect) {
 			let moves = [];
-			for (let i in this.data.Movedex) {
-				let move = this.getMove(i);
-				let canMetronome = ['pound', 'karatechop', 'doubleslap', 'cometpunch', 'megapunch', 'payday', 'firepunch', 'icepunch', 'thunderpunch', 'scratch', 'vicegrip', 'guillotine', 'razorwind', 'swordsdance', 'cut', 'gust', 'wingattack', 'whirlwind', 'fly', 'bind', 'slam', 'vinewhip', 'stomp', 'doublekick', 'megakick', 'jumpkick', 'rollingkick', 'sandattack', 'headbutt', 'hornattack', 'furyattack', 'horndrill', 'tackle', 'bodyslam', 'wrap', 'takedown', 'thrash', 'doubleedge', 'tailwhip', 'poisonsting', 'twineedle', 'pinmissile', 'leer', 'bite', 'growl', 'roar', 'sing', 'supersonic', 'sonicboom', 'disable', 'acid', 'ember', 'flamethrower', 'mist', 'watergun', 'hydropump', 'surf', 'icebeam', 'blizzard', 'psybeam', 'bubblebeam', 'aurorabeam', 'hyperbeam', 'peck', 'drillpeck', 'submission', 'lowkick', 'counter', 'seismictoss', 'strength', 'absorb', 'megadrain', 'leechseed', 'growth', 'razorleaf', 'solarbeam', 'poisonpowder', 'stunspore', 'sleeppowder', 'petaldance', 'stringshot', 'dragonrage', 'firespin', 'thundershock', 'thunderbolt', 'thunderwave', 'thunder', 'rockthrow', 'earthquake', 'fissure', 'dig', 'toxic', 'confusion', 'psychic', 'hypnosis', 'meditate', 'agility', 'quickattack', 'rage', 'teleport', 'nightshade', 'mimic', 'screech', 'doubleteam', 'recover', 'harden', 'minimize', 'smokescreen', 'confuseray', 'withdraw', 'defensecurl', 'barrier', 'lightscreen', 'haze', 'reflect', 'focusenergy', 'bide', 'metronome', 'mirrormove', 'selfdestruct', 'eggbomb', 'lick', 'smog', 'sludge', 'boneclub', 'fireblast', 'waterfall', 'clamp', 'swift', 'skullbash', 'spikecannon', 'constrict', 'amnesia', 'kinesis', 'softboiled', 'highjumpkick', 'glare', 'dreameater', 'poisongas', 'barrage', 'leechlife', 'lovelykiss', 'skyattack', 'transform', 'bubble', 'dizzypunch', 'spore', 'flash', 'psywave', 'splash', 'acidarmor', 'crabhammer', 'explosion', 'furyswipes', 'bonemerang', 'rest', 'rockslide', 'hyperfang', 'sharpen', 'conversion', 'triattack', 'superfang', 'slash', 'substitute', 'protect', 'sludgebomb', 'outrage', 'megahorn', 'encore', 'irontail', 'crunch', 'mirrorcoat', 'shadowball', 'fakeout', 'heatwave', 'willowisp', 'facade', 'taunt', 'helpinghand', 'superpower', 'brickbreak', 'yawn', 'bulkup', 'calmmind', 'roost', 'feint', 'uturn', 'suckerpunch', 'flareblitz', 'poisonjab', 'darkpulse', 'airslash', 'xscissor', 'bugbuzz', 'dragonpulse', 'nastyplot', 'iceshard', 'flashcannon', 'powerwhip', 'stealthrock', 'aquajet', 'quiverdance', 'foulplay', 'clearsmog', 'scald', 'shellsmash', 'dragontail', 'drillrun', 'playrough', 'moonblast', 'dazzlinggleam', 'doubleironbash'];
+			for (let i in exports.BattleMovedex) {
+				let move = exports.BattleMovedex[i];
 				if (i !== move.id) continue;
-				if (move.isZ || move.isNonstandard) continue;
-				if (!canMetronome.includes(move.id)) continue;
-				if (move.gen !== 1) continue;
+				if (this.getMove(i).gen !== 1) continue;
+				// @ts-ignore
+				if (effect.noMetronome.includes(move.id)) continue;
 				moves.push(move);
 			}
 			let randomMove = '';
