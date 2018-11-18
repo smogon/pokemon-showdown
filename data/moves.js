@@ -19432,12 +19432,7 @@ let BattleMovedex = {
 		priority: 2,
 		flags: {contact: 1, protect: 1},
 		willCrit: true,
-		secondary: {
-			chance: 100,
-			boosts: {
-				evasion: -1,
-			},
-		},
+		secondary: null,
 		target: "normal",
 		type: "Electric",
 		contestType: "Cool",
