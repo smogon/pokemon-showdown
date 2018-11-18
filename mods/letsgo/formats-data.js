@@ -126,18 +126,21 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 7, "level": 50, "shiny": 1, "perfectIVs": 3, "moves": ["reflect", "agility", "icebeam", "mirrorcoat"]},
 		],
+		eventOnly: false,
 	},
 	zapdos: {
 		inherit: true,
 		eventPokemon: [
 			{"generation": 7, "level": 50, "shiny": 1, "perfectIVs": 3, "moves": ["lightscreen", "agility", "thunderbolt", "drillpeck"]},
 		],
+		eventOnly: false,
 	},
 	moltres: {
 		inherit: true,
 		eventPokemon: [
 			{"generation": 7, "level": 50, "shiny": 1, "perfectIVs": 3, "moves": ["heatwave", "agility", "flamethrower", "airslash"]},
 		],
+		eventOnly: false,
 	},
 	mewtwo: {
 		inherit: true,
