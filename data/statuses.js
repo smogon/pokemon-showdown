@@ -298,6 +298,7 @@ let BattleStatuses = {
 		onStart: function (target, source, effect) {
 			this.effectData.move = effect.id;
 			target.addVolatile(effect.id, source);
+			this.attrLastMove('[still]');
 		},
 		onEnd: function (target) {
 			target.removeVolatile(this.effectData.move);
