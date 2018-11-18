@@ -166,7 +166,7 @@ Major Contributors
 Contributors
 
 - Andrew Goodsell [Zracknel] - Art (battle weather backdrops)
-- Austin Couturier - Development
+- Austin Couturier [Austin] - Development
 - Avery Zimmer [Lyren, SolarisFox] - Development
 - Ben Davies [Morfent] - Development
 - Ben Frengley [TalkTakesTime] - Development
