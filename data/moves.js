@@ -6032,7 +6032,7 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1},
-		onHitField: function () {
+		onHit: function () {
 			this.add('-clearallboost');
 			for (const side of this.sides) {
 				for (const pokemon of side.active) {
