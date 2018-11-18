@@ -52,9 +52,9 @@ let BattleMovedex = {
 		onHit: function (target, source, effect) {
 			let moves = [];
 			for (let i in exports.BattleMovedex) {
-				let move = exports.BattleMovedex[i];
+				let move = this.getMove(i);
 				if (i !== move.id) continue;
-				if (this.getMove(i).gen !== 1) continue;
+				if (move.gen !== 1) continue;
 				// @ts-ignore
 				if (effect.noMetronome.includes(move.id)) continue;
 				moves.push(move);
