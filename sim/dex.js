@@ -680,7 +680,7 @@ class ModdedDex {
 		let avs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
 		for (let ev in set.evs) {
 			// @ts-ignore
-			avs[ev] = this.clampIntRange(set.evs[ev], 0, 200);
+			avs[ev] = set.evs[ev];
 		}
 		// @ts-ignore
 		if (typeof statName === 'string' && statName in avs) return avs[statName];

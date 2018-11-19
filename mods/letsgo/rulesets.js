@@ -138,19 +138,16 @@ let BattleFormats = {
 		onChangeSet: function (set, format) {
 			/**@type {string[]} */
 			let problems = ([]);
-			let totalAV = 0;
+			let avs = this.getAwakeningValues(set);
 			if (set.evs) {
 				for (let k in set.evs) {
-					let av = this.getAwakeningValues(set);
 					// @ts-ignore
-					av[k] = set.evs[k];
+					avs[k] = set.evs[k];
 					// @ts-ignore
-					if (typeof av[k] !== 'number' || av[k] < 0) {
+					if (typeof avs[k] !== 'number' || avs[k] < 0) {
 						// @ts-ignore
-						av[k] = 0;
+						avs[k] = 0;
 					}
-					// @ts-ignore
-					totalAV += av[k];
 				}
 			}
 
@@ -158,9 +155,13 @@ let BattleFormats = {
 			if (!this.getRuleTable(format).has('-illegal')) return problems;
 			// everything after this line only happens if we're doing legality enforcement
 
-			// Pokemon cannot have more than 1200 total Awakening Values
-			if (totalAV > 1200) {
-				problems.push((set.name || set.species) + " has more than 1200 total Awakening Values.");
+			// Pokemon cannot have more than 200 Awakening Values in a stat
+			for (let av in avs) {
+				let statNames = {hp: 'HP', atk: 'Attack', def: 'Defense', spa: 'Special Attack', spd: 'Special Defense', spe: 'Speed'};
+				if (avs[av] > 200) {
+					// @ts-ignore
+					problems.push(`${set.name || set.species} has more than 200 Awakening Values in its ${statNames[av]}.`);
+				}
 			}
 			return problems;
 		},

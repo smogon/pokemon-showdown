@@ -277,11 +277,6 @@ class Pokemon {
 		this.boosts = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0};
 		/**@type {{[k: string]: number}} */
 		this.stats = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
-		/**
-		 * Commented out until a use is found for Combat Power in Let's Go
-		 * @type {number?}
-		 * this.combatPower = null;
-		 */
 
 		// This is used in gen 1 only, here to avoid code repetition.
 		// Only declared if gen 1 to avoid declaring an object we aren't going to need.
@@ -479,9 +474,8 @@ class Pokemon {
 			// @ts-ignore
 			awakeningSum += this.calculateStat(stat, this.boosts[stat]) + this.dex.getAwakeningValues(this.set, stat);
 		}
-		if (!this.combatPower) this.combatPower = 0;
-		this.combatPower = Math.floor(Math.floor(statSum * this.level * 6 / 100) + (Math.floor(awakeningSum) * Math.floor((this.level * 4) / 100 + 2)));
-		return this.battle.clampIntRange(this.combatPower, 0, 10000);
+		let combatPower = Math.floor(Math.floor(statSum * this.level * 6 / 100) + (Math.floor(awakeningSum) * Math.floor((this.level * 4) / 100 + 2)));
+		return this.battle.clampIntRange(combatPower, 0, 10000);
 	}
 	 */
 
