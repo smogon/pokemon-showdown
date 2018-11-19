@@ -225,7 +225,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			'Earthbound Misfit': {
 				species: 'Zygarde', ability: 'Poison Heal', item: 'Leftovers', gender: 'N',
 				moves: ['Thousand Arrows', 'Stone Edge', 'Coil'],
-				signatureMove: 'The Life of Zyg',
+				signatureMove: 'My Life',
 				evs: {hp: 188, atk: 68, def: 252}, nature: 'Adamant',
 			},
 			'explodingdaisies': {

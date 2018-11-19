@@ -1151,13 +1151,13 @@ let BattleMovedex = {
 		type: "Fire",
 	},
 	// Earthbound Misfit
-	thelifeofzyg: {
+	mylife: {
 		accuracy: true,
 		category: "Status",
 		desc: "Badly poisons all Pokemon on the field.",
 		shortDesc: "Badly poisons all Pokemon on the field.",
-		id: "thelifeofzyg",
-		name: "The Life of Zyg",
+		id: "mylife",
+		name: "My Life",
 		isNonstandard: true,
 		pp: 10,
 		priority: 0,
