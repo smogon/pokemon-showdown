@@ -7165,7 +7165,7 @@ let BattleFormatsData = {
 	},
 	buzzwole: {
 		randomBattleMoves: ["superpower", "drainpunch", "leechlife", "stoneedge", "poisonjab", "earthquake"],
-		randomDoubleBattleMoves: ["hammerarm", "superpower", "leechlife", "icepunch", "poisonjab"],
+		randomDoubleBattleMoves: ["drainpunch", "superpower", "leechlife", "icepunch", "poisonjab", "protect"],
 		eventPokemon: [
 			{"generation": 7, "level": 65, "moves": ["counter", "hammerarm", "lunge", "dynamicpunch"]},
 			{"generation": 7, "level": 60, "shiny": 1, "moves": ["counter", "hammerarm", "lunge", "dynamicpunch"]},
