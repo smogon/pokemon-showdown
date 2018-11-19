@@ -935,6 +935,7 @@ let Formats = [
 		name: "[Gen 7] Let's Go! OU",
 
 		mod: 'letsgo',
+		forcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
 		banlist: ['Mewtwo'],
 	},
