@@ -415,7 +415,8 @@ exports.disablehotpatchall = false;
  *                  group and target group are both in jurisdiction.
  *     - room<rank>: /roompromote to <rank> (eg. roomvoice)
  *     - makeroom: Create/delete chatrooms, and set modjoin/roomdesc/privacy
- *     - editroom: Set modjoin/privacy only for battles/groupchats
+ *     - editroom: Editing properties of rooms
+ *     - editprivacy: Set modjoin/privacy only for battles
  *     - ban: Banning and unbanning.
  *     - mute: Muting and unmuting.
  *     - lock: locking (ipmute) and unlocking.
@@ -467,6 +468,7 @@ exports.grouplist = [
 		globalonly: true,
 		gamemanagement: true,
 		exportinputlog: true,
+		editprivacy: true,
 	},
 	{
 		symbol: '#',
@@ -503,9 +505,9 @@ exports.grouplist = [
 		roomvoice: true,
 		modchat: true,
 		roomonly: true,
-		editroom: true,
 		joinbattle: true,
 		nooverride: true,
+		editprivacy: true,
 	},
 	{
 		symbol: '*',
