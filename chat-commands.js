@@ -833,8 +833,10 @@ const commands = {
 	secretroom: 'privateroom',
 	publicroom: 'privateroom',
 	privateroom: function (target, room, user, connection, cmd) {
-		if (room.battle || room.isPersonal) {
+		if (room.isPersonal) {
 			if (!this.can('editroom', null, room)) return;
+		} else if (room.battle) {
+			if (!this.can('editprivacy', null, room)) return;
 		} else {
 			// registered chatrooms show up on the room list and so require
 			// higher permissions to modify privacy settings
