@@ -671,6 +671,22 @@ class ModdedDex {
 		return nature;
 	}
 	/**
+	 * @param {PokemonSet} set
+	 * @param {string} [statName]
+	 */
+	getAwakeningValues(set, statName) {
+		if (typeof statName === 'string') statName = toId(statName);
+		/** @type {StatsTable} */
+		let avs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
+		for (let ev in set.evs) {
+			// @ts-ignore
+			avs[ev] = set.evs[ev];
+		}
+		// @ts-ignore
+		if (typeof statName === 'string' && statName in avs) return avs[statName];
+		return avs;
+	}
+	/**
 	 * Given a table of base stats and a pokemon set, return the actual stats.
 	 * @param {StatsTable} baseStats
 	 * @param {PokemonSet} set
@@ -689,15 +705,15 @@ class ModdedDex {
 			let stat = baseStats['hp'];
 			modStats['hp'] = Math.floor(Math.floor(2 * stat + set.ivs['hp'] + Math.floor(set.evs['hp'] / 4) + 100) * set.level / 100 + 10);
 		}
-		return this.natureModify(modStats, set.nature);
+		return this.natureModify(modStats, set);
 	}
 	/**
 	 * @param {StatsTable} stats
-	 * @param {string | AnyObject} nature
+	 * @param {PokemonSet} set
 	 * @return {StatsTable}
 	 */
-	natureModify(stats, nature) {
-		nature = this.getNature(nature);
+	natureModify(stats, set) {
+		let nature = this.getNature(set.nature);
 		// @ts-ignore
 		if (nature.plus) stats[nature.plus] = Math.floor(stats[nature.plus] * 1.1);
 		// @ts-ignore
