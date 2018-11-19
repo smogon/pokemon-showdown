@@ -406,16 +406,16 @@ let BattleStatuses = {
 			this.add(`c|@E4 Flint|lul ok`);
 		},
 	},
-	earthboundtraveler: {
+	earthboundmisfit: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|+Earthbound Traveler|/me sighs`);
+			this.add(`c|+Earthbound Misfit|/me sighs`);
 		},
 		onSwitchOut: function () {
-			this.add(`c|+Earthbound Traveler|/me sighs`);
+			this.add(`c|+Earthbound Misfit|/me sighs`);
 		},
 		onFaint: function () {
-			this.add(`c|+Earthbound Traveler|Brexit means Brexit`);
+			this.add(`c|+Earthbound Misfit|Brexit means Brexit`);
 		},
 	},
 	explodingdaisies: {

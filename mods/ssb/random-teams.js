@@ -222,7 +222,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Fang of the Fire King',
 				evs: {hp: 252, atk: 36, def: 100, spd: 120}, ivs: {spe: 0}, nature: 'Brave',
 			},
-			'Earthbound Traveler': {
+			'Earthbound Misfit': {
 				species: 'Zygarde', ability: 'Poison Heal', item: 'Leftovers', gender: 'N',
 				moves: ['Thousand Arrows', 'Stone Edge', 'Coil'],
 				signatureMove: 'The Life of Zyg',

@@ -1150,7 +1150,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fire",
 	},
-	// Earthbound Traveler
+	// Earthbound Misfit
 	thelifeofzyg: {
 		accuracy: true,
 		category: "Status",
