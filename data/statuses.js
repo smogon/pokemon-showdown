@@ -404,6 +404,12 @@ let BattleStatuses = {
 				if (posData.source.hasAbility('infiltrator') && this.gen >= 6) {
 					posData.moveData.infiltrates = true;
 				}
+				if (posData.source.hasAbility('normalize') && this.gen >= 6) {
+					posData.moveData.type = 'Normal';
+				}
+				if (posData.source.hasAbility('adaptability') && this.gen >= 6) {
+					posData.moveData.stab = 2;
+				}
 				const hitMove = new this.Data.Move(posData.moveData);
 
 				this.tryMoveHit(target, posData.source, hitMove);
