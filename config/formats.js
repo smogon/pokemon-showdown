@@ -919,11 +919,12 @@ let Formats = [
 
 		mod: 'gennext',
 		searchShow: false,
+		challengeShow: false,
 		ruleset: ['Pokemon', 'Standard NEXT', 'Team Preview'],
 		banlist: ['Uber'],
 	},
 
-	// Let's Go Metas
+	// Let's Go!
 	///////////////////////////////////////////////////////////////////
 
 	{
@@ -931,25 +932,32 @@ let Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] Let's Go!",
-		desc: `This is the beta version of the Pok&eacute;mon Let's Go! ladder with restrictions!`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3643931/">Let's Go! Discussion</a>`,
-		],
+		name: "[Gen 7] Let's Go! OU",
 
 		mod: 'letsgo',
-		forcedLevel: 50,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
+		banlist: ['Mewtwo'],
 	},
 	{
-		name: "[Gen 7] Let's Go! No Restrictions",
-		desc: `This is the beta version of the Pok&eacute;mon Let's Go! (No Restrictions) ladder!`,
+		name: "[Gen 7] Let's Go! Singles",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3643931/">Let's Go! Discussion</a>`,
 		],
 
 		mod: 'letsgo',
-		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Allow AVs'],
+		ruleset: ['Pokemon', 'Allow AVs', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
+		banlist: ['Illegal', 'Unreleased'],
+	},
+	{
+		name: "[Gen 7] Let's Go! Doubles",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3643931/">Let's Go! Discussion</a>`,
+		],
+
+		mod: 'letsgo',
+		gameType: 'doubles',
+		ruleset: ['Pokemon', 'Allow AVs', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
+		banlist: ['Illegal', 'Unreleased'],
 	},
 
 	// Randomized Metas
