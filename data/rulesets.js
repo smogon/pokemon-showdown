@@ -871,6 +871,12 @@ let BattleFormats = {
 		desc: "Allows Gen 1 pokemon to have moves from their Gen 2 learnsets",
 		// Implemented in team-validator.js
 	},
+	allowavs: {
+		effectType: 'ValidatorRule',
+		name: 'Allow AVs',
+		desc: "Tells formats with the 'letsgo' mod to take Awakening Values into consideration when calculating stats",
+		// Implemented in mods/letsgo/rulesets.js
+	},
 };
 
 exports.BattleFormats = BattleFormats;

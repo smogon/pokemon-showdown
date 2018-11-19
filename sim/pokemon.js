@@ -462,6 +462,23 @@ class Pokemon {
 		return speed & 0x1FFF;
 	}
 
+	/**
+	 * Commented out for now until a use for Combat Power is found in Let's Go
+	 *
+	getCombatPower() {
+		let statSum = 0;
+		let awakeningSum = 0;
+		for (let stat in this.stats) {
+			// @ts-ignore
+			statSum += this.calculateStat(stat, this.boosts[stat]);
+			// @ts-ignore
+			awakeningSum += this.calculateStat(stat, this.boosts[stat]) + this.dex.getAwakeningValues(this.set, stat);
+		}
+		let combatPower = Math.floor(Math.floor(statSum * this.level * 6 / 100) + (Math.floor(awakeningSum) * Math.floor((this.level * 4) / 100 + 2)));
+		return this.battle.clampIntRange(combatPower, 0, 10000);
+	}
+	 */
+
 	getWeight() {
 		let weight = this.template.weightkg;
 		weight = this.battle.runEvent('ModifyWeight', this, null, null, weight);
