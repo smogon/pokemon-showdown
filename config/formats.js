@@ -934,7 +934,7 @@ let Formats = [
 		name: "[Gen 7] Let's Go!",
 		desc: `This is the beta version of the Pok&eacute;mon Let's Go! ladder with restrictions!`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3640426/">Let's Go! Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3643931/">Let's Go! Discussion</a>`,
 		],
 
 		mod: 'letsgo',
@@ -945,7 +945,7 @@ let Formats = [
 		name: "[Gen 7] Let's Go! No Restrictions",
 		desc: `This is the beta version of the Pok&eacute;mon Let's Go! (No Restrictions) ladder!`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3640426/">Let's Go! Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3643931/">Let's Go! Discussion</a>`,
 		],
 
 		mod: 'letsgo',
