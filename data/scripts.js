@@ -184,10 +184,6 @@ let BattleScripts = {
 
 		let attrs = '';
 
-		if (move.flags['charge'] && !pokemon.volatiles[move.id]) {
-			attrs = '|[still]'; // suppress the default move animation
-		}
-
 		let movename = move.name;
 		if (move.id === 'hiddenpower') movename = 'Hidden Power';
 		if (sourceEffect) attrs += '|[from]' + this.getEffect(sourceEffect);
@@ -271,7 +267,7 @@ let BattleScripts = {
 					lacksTarget = !this.isAdjacent(target, pokemon);
 				}
 			}
-			if (lacksTarget && (!move.flags['charge'] || pokemon.volatiles['twoturnmove']) && !move.isFutureMove) {
+			if (lacksTarget && !move.isFutureMove) {
 				this.attrLastMove('[notarget]');
 				this.add('-notarget');
 				if (move.target === 'normal') pokemon.isStaleCon = 0;
