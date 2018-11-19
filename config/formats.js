@@ -932,7 +932,7 @@ let Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] Let's Go! OU",
+		name: "[Gen 7 Let's Go] OU",
 
 		mod: 'letsgo',
 		forcedLevel: 50,
@@ -940,7 +940,7 @@ let Formats = [
 		banlist: ['Mewtwo'],
 	},
 	{
-		name: "[Gen 7] Let's Go! Singles",
+		name: "[Gen 7 Let's Go] Singles No Restrictions",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3643931/">Let's Go! Discussion</a>`,
 		],
@@ -950,7 +950,7 @@ let Formats = [
 		banlist: ['Illegal', 'Unreleased'],
 	},
 	{
-		name: "[Gen 7] Let's Go! Doubles",
+		name: "[Gen 7 Let's Go] Doubles No Restrictions",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3643931/">Let's Go! Discussion</a>`,
 		],
