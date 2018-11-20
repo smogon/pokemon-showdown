@@ -184,6 +184,10 @@ let BattleScripts = {
 
 		let attrs = '';
 
+		if (move.flags['charge'] && !pokemon.volatiles[move.id]) {
+			attrs = '|[still]'; // suppress the default move animation
+		}
+
 		let movename = move.name;
 		if (move.id === 'hiddenpower') movename = 'Hidden Power';
 		if (sourceEffect) attrs += '|[from]' + this.getEffect(sourceEffect);

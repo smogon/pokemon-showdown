@@ -1664,6 +1664,11 @@ let BattleMovedex = {
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
+		onTry: function (attacker, defender, move) {
+			if (!attacker.volatiles['twoturnmove']) {
+				this.add('-anim', attacker, move.name, defender);
+			}
+		},
 		effect: {
 			duration: 2,
 			onTryImmunity: function (target, source, move) {
@@ -3415,6 +3420,11 @@ let BattleMovedex = {
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
+		onTry: function (attacker, defender, move) {
+			if (!attacker.volatiles['twoturnmove']) {
+				this.add('-anim', attacker, move.name, defender);
+			}
+		},
 		effect: {
 			duration: 2,
 			onImmunity: function (type, pokemon) {
@@ -3578,6 +3588,11 @@ let BattleMovedex = {
 			}
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
+		},
+		onTry: function (attacker, defender, move) {
+			if (!attacker.volatiles['twoturnmove']) {
+				this.add('-anim', attacker, move.name, defender);
+			}
 		},
 		effect: {
 			duration: 2,
@@ -5672,6 +5687,11 @@ let BattleMovedex = {
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
+		onTry: function (attacker, defender, move) {
+			if (!attacker.volatiles['twoturnmove']) {
+				this.add('-anim', attacker, move.name, defender);
+			}
+		},
 		effect: {
 			duration: 2,
 			onTryImmunity: function (target, source, move) {
@@ -6002,6 +6022,11 @@ let BattleMovedex = {
 			}
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
+		},
+		onTry: function (attacker, defender, move) {
+			if (!attacker.volatiles['twoturnmove']) {
+				this.add('-anim', attacker, move.name, defender);
+			}
 		},
 		secondary: {
 			chance: 30,
@@ -6411,6 +6436,11 @@ let BattleMovedex = {
 			}
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
+		},
+		onTry: function (attacker, defender, move) {
+			if (!attacker.volatiles['twoturnmove']) {
+				this.add('-anim', attacker, move.name, defender);
+			}
 		},
 		boosts: {
 			spa: 2,
@@ -8430,6 +8460,11 @@ let BattleMovedex = {
 			}
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
+		},
+		onTry: function (attacker, defender, move) {
+			if (!attacker.volatiles['twoturnmove']) {
+				this.add('-anim', attacker, move.name, defender);
+			}
 		},
 		secondary: {
 			chance: 30,
@@ -11825,6 +11860,11 @@ let BattleMovedex = {
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
+		onTry: function (attacker, defender, move) {
+			if (!attacker.volatiles['twoturnmove']) {
+				this.add('-anim', attacker, move.name, defender);
+			}
+		},
 		effect: {
 			duration: 2,
 			onTryImmunity: function (target, source, move) {
@@ -13263,6 +13303,12 @@ let BattleMovedex = {
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
+		onTry: function (attacker, defender, move) {
+			if (!attacker.volatiles['twoturnmove']) {
+				this.add('-anim', attacker, move.name, defender);
+				delete move.onTry;
+			}
+		},
 		critRatio: 2,
 		secondary: null,
 		target: "allAdjacentFoes",
@@ -14594,6 +14640,11 @@ let BattleMovedex = {
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
+		onTry: function (attacker, defender, move) {
+			if (attacker.removeVolatile('twoturnmove')) {
+				this.add('-anim', attacker, move.name, defender);
+			}
+		},
 		effect: {
 			duration: 2,
 			onTryImmunity: function (target, source, move) {
@@ -15084,6 +15135,11 @@ let BattleMovedex = {
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
+		onTry: function (attacker, defender, move) {
+			if (!attacker.volatiles['twoturnmove']) {
+				this.add('-anim', attacker, move.name, defender);
+			}
+		},
 		secondary: null,
 		target: "normal",
 		type: "Normal",
@@ -15113,6 +15169,11 @@ let BattleMovedex = {
 			}
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
+		},
+		onTry: function (attacker, defender, move) {
+			if (!attacker.volatiles['twoturnmove']) {
+				this.add('-anim', attacker, move.name, defender);
+			}
 		},
 		secondary: {
 			chance: 30,
@@ -15851,6 +15912,11 @@ let BattleMovedex = {
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
+		onTry: function (attacker, defender, move) {
+			if (!attacker.volatiles['twoturnmove']) {
+				this.add('-anim', attacker, move.name, defender);
+			}
+		},
 		onBasePowerPriority: 4,
 		onBasePower: function (basePower, pokemon, target) {
 			if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
@@ -15886,6 +15952,11 @@ let BattleMovedex = {
 			}
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
+		},
+		onTry: function (attacker, defender, move) {
+			if (!attacker.volatiles['twoturnmove']) {
+				this.add('-anim', attacker, move.name, defender);
+			}
 		},
 		onBasePowerPriority: 4,
 		onBasePower: function (basePower, pokemon, target) {
