@@ -1150,6 +1150,35 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fire",
 	},
+	// Earthbound Misfit
+	mylife: {
+		accuracy: true,
+		category: "Status",
+		desc: "Badly poisons all Pokemon on the field.",
+		shortDesc: "Badly poisons all Pokemon on the field.",
+		id: "mylife",
+		name: "My Life",
+		isNonstandard: true,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMovePriority: 100,
+		onTryMove: function () {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit: function (target, source) {
+			this.add('-anim', source, "Toxic", target);
+		},
+		onHit: function (target, source) {
+			let success = false;
+			if (target.trySetStatus('tox', source)) success = true;
+			if (source.trySetStatus('tox', source)) success = true;
+			return success;
+		},
+		secondary: null,
+		target: "normal",
+		type: "Poison",
+	},
 	// explodingdaisies
 	doom: {
 		basePower: 100,
@@ -4082,35 +4111,6 @@ let BattleMovedex = {
 		},
 		target: "allAdjacentFoes",
 		type: "Psychic",
-	},
-	// Zyg
-	thelifeofzyg: {
-		accuracy: true,
-		category: "Status",
-		desc: "Badly poisons all Pokemon on the field.",
-		shortDesc: "Badly poisons all Pokemon on the field.",
-		id: "thelifeofzyg",
-		name: "The Life of Zyg",
-		isNonstandard: true,
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onTryMovePriority: 100,
-		onTryMove: function () {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit: function (target, source) {
-			this.add('-anim', source, "Toxic", target);
-		},
-		onHit: function (target, source) {
-			let success = false;
-			if (target.trySetStatus('tox', source)) success = true;
-			if (source.trySetStatus('tox', source)) success = true;
-			return success;
-		},
-		secondary: null,
-		target: "normal",
-		type: "Poison",
 	},
 	// Modified Moves \\
 	// Purple Pills is immune to taunt
