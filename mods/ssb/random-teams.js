@@ -222,6 +222,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Fang of the Fire King',
 				evs: {hp: 252, atk: 36, def: 100, spd: 120}, ivs: {spe: 0}, nature: 'Brave',
 			},
+			'Earthbound Misfit': {
+				species: 'Zygarde', ability: 'Poison Heal', item: 'Leftovers', gender: 'N',
+				moves: ['Thousand Arrows', 'Stone Edge', 'Coil'],
+				signatureMove: 'My Life',
+				evs: {hp: 188, atk: 68, def: 252}, nature: 'Adamant',
+			},
 			'explodingdaisies': {
 				species: 'Houndoom', ability: 'Flash Fire', item: 'Houndoominite', gender: 'M',
 				moves: ['Sludge Bomb', 'Nasty Plot', 'Dark Pulse'],
@@ -635,12 +641,6 @@ class RandomStaffBrosTeams extends RandomTeams {
 				moves: ['Lunar Dance', 'Fiery Dance', 'Perish Song', 'Petal Dance', 'Quiver Dance'],
 				signatureMove: 'Relic Song Dance',
 				evs: {hp: 4, atk: 252, spa: 252}, nature: 'Quiet',
-			},
-			'Zyg': {
-				species: 'Zygarde', ability: 'Poison Heal', item: 'Leftovers', gender: 'N',
-				moves: ['Thousand Arrows', 'Stone Edge', 'Coil'],
-				signatureMove: 'The Life of Zyg',
-				evs: {hp: 188, atk: 68, def: 252}, nature: 'Adamant',
 			},
 		};
 		let pool = Object.keys(sets);
