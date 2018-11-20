@@ -9,7 +9,7 @@ let BattleScripts = {
 		}
 		for (let i in this.data.FormatsData) {
 			let dataTemplate = this.modData('FormatsData', i);
-			if (this.data.FormatsData[i].requiredItem && this.data.Items[toId(this.data.FormatsData[i].requiredItem)].megaStone) {
+			if (this.data.FormatsData[i].requiredItem && this.getItem(this.data.FormatsData[i].requiredItem).megaStone) {
 				dataTemplate.requiredItem = '';
 			}
 		}
