@@ -85,7 +85,9 @@ let BattleFormats = {
 			// Temporary hack to allow mega evolution
 			if (set.item) {
 				let item = this.getItem(set.item);
-				if (item.megaEvolves && item.megaEvolves !== template.baseSpecies) set.item = '';
+				if (item.megaEvolves !== template.baseSpecies) {
+					problems.push(`Items aren't allowed in Let's Go.`);
+				}
 			}
 
 			// Legendary Pokemon must have at least 3 perfect IVs in gen 6
