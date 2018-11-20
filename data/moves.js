@@ -16016,16 +16016,18 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1},
-		onHit: function (pokemon, source, move) {
-			this.add('-activate', source, 'move: Sparkly Swirl');
-			let success = false;
-			for (const ally of pokemon.side.pokemon) {
-				if (ally !== source && (ally.volatiles['substitute'] && !move.infiltrates)) {
-					continue;
+		self: {
+			onHit: function (pokemon, source, move) {
+				this.add('-activate', source, 'move: Sparkly Swirl');
+				let success = false;
+				for (const ally of pokemon.side.pokemon) {
+					if (ally !== source && (ally.volatiles['substitute'] && !move.infiltrates)) {
+						continue;
+					}
+					if (ally.cureStatus()) success = true;
 				}
-				if (ally.cureStatus()) success = true;
-			}
-			return success;
+				return success;
+			},
 		},
 		secondary: null,
 		target: "normal",
