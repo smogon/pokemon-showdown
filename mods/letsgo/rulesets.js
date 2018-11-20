@@ -32,7 +32,7 @@ let BattleFormats = {
 
 			if (set.species === set.name) delete set.name;
 			if (((baseTemplate.num > 151 || baseTemplate.num < 1) && ![808, 809].includes(baseTemplate.num) &&
-				!['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(template.forme)) || template.speciesid.endsWith('totem')) {
+				!['Alola', 'Mega-X', 'Mega-Y', 'Starter'].includes(template.forme)) || template.speciesid.endsWith('totem')) {
 				let usedSpecies = baseTemplate.species;
 				if (template.speciesid.endsWith('totem')) {
 					usedSpecies = template.species;
