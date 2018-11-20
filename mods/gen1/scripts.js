@@ -215,7 +215,8 @@ let BattleScripts = {
 		if (!this.singleEvent('Try', move, null, pokemon, target, move)) {
 			return true;
 		}
-		if (!this.runEvent('TryMove', pokemon, target, move)) {
+		if (!this.singleEvent('TryMove', move, null, pokemon, target, move) ||
+			!this.runEvent('TryMove', pokemon, target, move)) {
 			return true;
 		}
 
