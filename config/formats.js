@@ -523,18 +523,13 @@ let Formats = [
 			let problems = this.validateSet(set, teamHas) || [];
 			set.item = item;
 			// @ts-ignore
-			let result = this.format.checkLearnset.call(this, move, this.dex.getTemplate(set.species));
-			if (result && result.type === 'banned') {
-				problems.push(`${move.name} cannot be used as a forte.`);
-			} else if (result) {
-				problems.push(`${set.species} can't learn ${move.name}.`);
-			}
+			if (this.format.checkLearnset.call(this, move, this.dex.getTemplate(set.species))) problems.push(`${set.species} can't learn ${move.name}.`);
 			// @ts-ignore
 			if (move.secondaries && move.secondaries.some(secondary => secondary.boosts && secondary.boosts.accuracy < 0)) problems.push(`${set.name || set.species}'s move ${move.name} can't be used as an item.`);
 			return problems.length ? problems : null;
 		},
 		checkLearnset: function (move, template, lsetData, set) {
-			if (move.id === 'beatup' || move.id === 'fakeout' || move.damageCallback || move.multihit) return {type: 'banned'};
+			if (move.id === 'beatup' || move.id === 'fakeout' || move.damageCallback || move.multihit) return {type: 'invalid'};
 			return this.checkLearnset(move, template, lsetData, set);
 		},
 		onBegin: function () {
