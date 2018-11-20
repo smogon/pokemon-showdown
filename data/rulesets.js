@@ -90,6 +90,7 @@ let BattleFormats = {
 			let kyurems = 0;
 			let ndm = 0;
 			let ndw = 0;
+			let starters = 0;
 			for (const set of team) {
 				if (set.species === 'Kyurem-White' || set.species === 'Kyurem-Black') {
 					if (kyurems > 0) {
@@ -111,6 +112,13 @@ let BattleFormats = {
 						break;
 					}
 					ndw++;
+				}
+				if (set.species === 'Pikachu-Starter' || set.species === 'Eevee-Starter') {
+					if (starters > 0) {
+						problems.push('You cannot have more than one Pikachu-Starter/Eevee-Starter.');
+						break;
+					}
+					starters++;
 				}
 			}
 			return problems;
