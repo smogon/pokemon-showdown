@@ -66,7 +66,14 @@ let BattleFormats = {
 			}
 
 			if (!allowAVs && set.evs) {
+				const statNames = {hp: 'HP', atk: 'Attack', def: 'Defense', spa: 'Special Attack', spd: 'Special Defense', spe: 'Speed'};
 				for (let k in set.evs) {
+					// @ts-ignore
+					if (set.evs[k]) {
+						// @ts-ignore
+						problems.push(`${set.name || set.species} has ${set.evs[k]} AVs/EVs in ${statNames[k]}, but AVs and EVs not allowed in this format.`);
+						break;
+					}
 					// @ts-ignore
 					set.evs[k] = 0;
 				}
