@@ -36,50 +36,6 @@ let BattleScripts = {
 		return this.natureModify(modStats, set);
 	},
 
-	runMegaEvo(pokemon) {
-		const templateid = pokemon.canMegaEvo || pokemon.canUltraBurst;
-		if (!templateid) return false;
-		const side = pokemon.side;
-
-		// Pokémon affected by Sky Drop cannot mega evolve. Enforce it here for now.
-		for (const foeActive of side.foe.active) {
-			if (foeActive.volatiles['skydrop'] && foeActive.volatiles['skydrop'].source === pokemon) {
-				return false;
-			}
-		}
-
-		if (templateid.split(',').length === 2) {
-			for (const moveSlot of pokemon.moveSlots) {
-				let template = this.getTemplate(templateid.split(',')[1]);
-				let hasMoveOfType = 0;
-				if (template.types.includes(moveSlot.type)) hasMoveOfType++;
-				let otherTemplate = this.getTemplate(templateid.split(',')[0]);
-				let hasMoveOfOtherType = 0;
-				if (otherTemplate.types.includes(moveSlot.type)) hasMoveOfOtherType++;
-				if (hasMoveOfType > hasMoveOfOtherType) {
-					pokemon.formeChange(templateid.split(',')[1], pokemon.getItem(), true);
-				} else {
-					pokemon.formeChange(templateid.split(',')[0], pokemon.getItem(), true);
-				}
-			}
-		} else {
-			pokemon.formeChange(templateid, pokemon.getItem(), true);
-		}
-
-		// Limit one mega evolution
-		let wasMega = pokemon.canMegaEvo;
-		for (const ally of side.pokemon) {
-			if (wasMega) {
-				ally.canMegaEvo = null;
-			} else {
-				ally.canUltraBurst = null;
-			}
-		}
-
-		this.runEvent('AfterMega', pokemon);
-		return true;
-	},
-
 	/**
 	 * @param {StatsTable} stats
 	 * @param {PokemonSet} set
