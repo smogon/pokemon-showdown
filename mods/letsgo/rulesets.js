@@ -31,16 +31,15 @@ let BattleFormats = {
 			let allowCAP = !!(format && this.getRuleTable(format).has('allowcap'));
 
 			if (set.species === set.name) delete set.name;
-			if (((baseTemplate.num > 151 || baseTemplate.num < 1) && ![808, 809].includes(baseTemplate.num) &&
-				!['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(template.forme)) || template.speciesid.endsWith('totem')) {
-				let usedSpecies = baseTemplate.species;
-				if (template.speciesid.endsWith('totem')) {
-					usedSpecies = template.species;
-				}
+			const validNum = (baseTemplate.num <= 151 && baseTemplate.num >= 1) || [808, 809].includes(baseTemplate.num);
+			if (!validNum) {
 				problems.push(
 					`Only Pok\u00E9mon whose base formes are from Gen 1, Meltan, and Melmetal can be used.`,
-					`(${usedSpecies} is from Gen ${baseTemplate.gen === 1 ? 7 : baseTemplate.gen}.)`
+					`(${set.species} is from Gen ${baseTemplate.gen === 1 ? 7 : baseTemplate.gen}.)`
 				);
+			}
+			if (template.forme && !['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(template.forme)) {
+				problems.push(`${set.species}'s forme ${template.forme} is not available in Let's Go.`);
 			}
 			if (set.moves) {
 				for (const moveid of set.moves) {
