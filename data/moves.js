@@ -14203,8 +14203,11 @@ let BattleMovedex = {
 		name: "Sappy Seed",
 		pp: 15,
 		priority: 0,
-		volatileStatus: 'leechseed',
 		flags: {protect: 1, reflectable: 1},
+		onHit: function (target, source) {
+			if (target.hasType('Grass')) return null;
+			target.addVolatile('leechseed', source);
+		},
 		secondary: null,
 		target: "normal",
 		type: "Grass",
@@ -16016,14 +16019,16 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1},
-		onHit: function (pokemon, source, move) {
-			this.add('-activate', source, 'move: Aromatherapy');
-			for (const ally of source.side.pokemon) {
-				if (ally !== source && (ally.volatiles['substitute'] && !move.infiltrates)) {
-					continue;
+		self: {
+			onHit: function (pokemon, source, move) {
+				this.add('-activate', source, 'move: Aromatherapy');
+				for (const ally of source.side.pokemon) {
+					if (ally !== source && (ally.volatiles['substitute'] && !move.infiltrates)) {
+						continue;
+					}
+					ally.cureStatus();
 				}
-				ally.cureStatus();
-			}
+			},
 		},
 		secondary: null,
 		target: "normal",
