@@ -772,6 +772,7 @@ let BattleMovedex = {
 	rest: {
 		inherit: true,
 		desc: "The user falls asleep for the next two turns and restores all of its HP, curing itself of any major status condition in the process. This does not remove the user's stat penalty for burn or paralysis. Fails if the user has full HP.",
+		onTryMove: function () {},
 		onHit: function (target) {
 			// Fails if the difference between
 			// max HP and current HP is 0, 255, or 511
