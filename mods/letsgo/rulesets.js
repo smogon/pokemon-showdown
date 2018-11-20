@@ -14,11 +14,11 @@ let BattleFormats = {
 			let hasStarter = 0;
 			for (const set of team) {
 				if (set.species === 'Pikachu-Starter' || set.species === 'Eevee-Starter') {
+					hasStarter++;
 					if (hasStarter > 1) {
-						problems.push(`You can only have one of Pikachu-Starter and Eevee-Starter on a team.`);
+						problems.push(`You can only have one of Pikachu-Starter or Eevee-Starter on a team.`);
 						break;
 					}
-					hasStarter++;
 				}
 			}
 			return problems;
