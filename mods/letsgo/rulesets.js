@@ -5,6 +5,23 @@ let BattleFormats = {
 	pokemon: {
 		effectType: 'ValidatorRule',
 		name: 'Pokemon',
+		onStart: function () {
+			for (const side of this.sides) {
+				for (const pokemon of side.pokemon) {
+					if (pokemon.baseTemplate.otherFormes) {
+						if (this.getTemplate(pokemon.baseTemplate.otherFormes[0]).isMega) {
+							if (pokemon.baseTemplate.otherFormes[1]) {
+								if (this.getTemplate(pokemon.baseTemplate.otherFormes[1]).isMega) {
+									pokemon.canMegaEvo = `${this.getTemplate(pokemon.baseTemplate.otherFormes[0]).species},${this.getTemplate(pokemon.baseTemplate.otherFormes[1]).species}`;
+								}
+							} else {
+								pokemon.canMegaEvo = this.getTemplate(pokemon.baseTemplate.otherFormes[0]).species;
+							}
+						}
+					}
+				}
+			}
+		},
 		onValidateTeam: function (team, format) {
 			let problems = [];
 			if (team.length > 6) problems.push('Your team has more than six Pok\u00E9mon.');
