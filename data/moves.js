@@ -3711,7 +3711,7 @@ let BattleMovedex = {
 		contestType: "Cool",
 	},
 	"doubleironbash": {
-		num: 544,
+		num: 742,
 		accuracy: 100,
 		basePower: 60,
 		category: "Physical",
@@ -18471,7 +18471,7 @@ let BattleMovedex = {
 		contestType: "Cool",
 	},
 	"veeveevolley": {
-		num: 732,
+		num: 741,
 		accuracy: true,
 		basePower: 0,
 		basePowerCallback: function (pokemon) {
