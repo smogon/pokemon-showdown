@@ -1275,6 +1275,7 @@ Punishments.checkName = function (user, userid, registered) {
 			user.semilocked = `#sharedip ${user.locked}`;
 		}
 		user.locked = false;
+		user.namelocked = false;
 
 		user.updateIdentity();
 		return;
