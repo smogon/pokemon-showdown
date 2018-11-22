@@ -139,7 +139,7 @@ const commands = {
 		}
 		// @ts-ignore
 		user.foodfight = {team: team, dish: dish, ingredients: ingredients, timestamp: Date.now()};
-		const importStr = importable ? `<tr><td colspan=7><details><summary>Importable team:</summary><div style="width:100%;height:400px;overflow:auto;font-family:monospace;background:white;text-align:left;">${importable}</textarea></details></td></tr>` : '';
+		const importStr = importable ? `<tr><td colspan=7><details><summary style="font-size:13pt;">Importable team:</summary><div style="width:100%;height:400px;overflow:auto;font-family:monospace;background:white;text-align:left;">${importable}</textarea></details></td></tr>` : '';
 		return this.sendReplyBox(`<div class="ladder"><table style="text-align:center;"><tr><th colspan="7" style="font-size:10pt;">Your dish is: <u>${dish}</u></th></tr><tr><th>Team</th>${team.map(mon => `<td><psicon pokemon="${mon}"/> ${mon}</td>`).join('')}</tr><tr><th>Ingredients</th>${ingredients.map(ingredient => `<td>${ingredient}</td>`).join('')}</tr>${importStr}</table></div>`);
 	},
 	checkfoodfight: function (target, room, user) {
