@@ -830,6 +830,9 @@ Punishments.unnamelock = function (name) {
 	let id = toId(name);
 	/** @type {string[]} */
 	let success = [];
+	// @ts-ignore
+	if (user && user.namelocked) name = user.namelocked;
+
 	let unpunished = Punishments.unpunish(name, 'NAMELOCK');
 	if (user && user.locked) {
 		id = user.locked;
@@ -837,16 +840,16 @@ Punishments.unnamelock = function (name) {
 		user.namelocked = false;
 		user.resetName();
 		success.push(user.getLastName());
-		if (id.charAt(0) !== '#') {
-			Users.users.forEach(curUser => {
-				if (curUser.locked === id) {
-					curUser.locked = false;
-					curUser.namelocked = false;
-					curUser.resetName();
-					success.push(curUser.getLastName());
-				}
-			});
-		}
+	}
+	if (id.charAt(0) !== '#') {
+		Users.users.forEach(curUser => {
+			if (curUser.locked === id) {
+				curUser.locked = false;
+				curUser.namelocked = false;
+				curUser.resetName();
+				success.push(curUser.getLastName());
+			}
+		});
 	}
 	if (unpunished && !success.length) success.push(name);
 	if (!success.length) return false;
