@@ -755,15 +755,17 @@ Punishments.autolock = function (user, room, source, reason, message, week = fal
 		expires = Date.now() + 7 * 24 * 60 * 60 * 1000;
 		punishment = `WEEKLOCKED`;
 	}
+
+	const userid = toId(user);
 	if (name) {
 		punishment = `NAMELOCKED`;
-		Punishments.namelock(user, expires, toId(name), `Autonamelock: ${user.name || toId(user)}: ${reason}`);
+		Punishments.namelock(user, expires, toId(name), `Autonamelock: ${user.name || userid}: ${reason}`);
 	} else {
-		Punishments.lock(user, expires, toId(user), `Autolock: ${user.name || toId(user)}: ${reason}`);
+		Punishments.lock(user, expires, toId(user), `Autolock: ${user.name || userid}: ${reason}`);
 	}
 	Monitor.log(`[${source}] ${punishment}: ${message}`);
 	const ipStr = typeof user !== 'string' ? ` [${user.latestIp}]` : '';
-	Rooms.global.modlog(`(${toId(room)}) AUTO${name ? `NAME` : ''}LOCK: [${toId(user)}]${ipStr}: ${reason}`);
+	Rooms.global.modlog(`(${toId(room)}) AUTO${name ? `NAME` : ''}LOCK: [${userid}]${ipStr}: ${reason}`);
 };
 /**
  * @param {string} name
