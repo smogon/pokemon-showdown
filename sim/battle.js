@@ -1834,7 +1834,7 @@ class Battle extends Dex.ModdedDex {
 		}
 		if (!target || !target.hp) return 0;
 		if (!target.isActive) return false;
-		if (this.gen > 5 && target === source && this.faintQueue.length === target.side.foe.pokemonLeft) return false;
+		if (this.gen > 5 && !target.side.foe.pokemonLeft) return false;
 		effect = this.getEffect(effect);
 		boost = this.runEvent('Boost', target, source, effect, Object.assign({}, boost));
 		let success = null;
