@@ -284,7 +284,7 @@ let nicknamefilter = function (name, user) {
 			}
 			if (matched) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
-					Punishments.autolock(user, Rooms('staff'), `NameMonitor`, `inappropriate Pokémon nickname: ${name}`, `using an inappropriate Pokémon nickname: ${name}`, false, user.name);
+					Punishments.autolock(user, Rooms('staff'), `NameMonitor`, `inappropriate Pokémon nickname: ${name}`, `${user.name} - using an inappropriate Pokémon nickname: ${name}`, false, user.name);
 				}
 				line[3]++;
 				saveFilters();
