@@ -256,23 +256,37 @@ function notifyStaff(upper = false) {
 		if (a.open !== b.open) {
 			return (a.open ? -1 : 1);
 		} else if (a.open && b.open) {
+			if (!!a.claimed !== !!b.claimed) {
+				return (a.claimed ? 1 : -1);
+			}
 			return a.created - b.created;
 		}
 		return 0;
 	});
 	let count = 0;
+	let hiddenTicketUnclaimedCount = 0;
+	let hiddenTicketCount = 0;
 	let hasUnclaimed = false;
 	for (const key of keys) {
 		let ticket = tickets[key];
-		if (count >= 3) break;
 		if (!ticket.open) continue;
 		if (!upper !== !ticket.escalated) continue;
+		if (count >= 3) {
+			hiddenTicketCount++;
+			if (!ticket.claimed) hiddenTicketUnclaimedCount++;
+			continue;
+		}
 		const escalator = ticket.escalator ? Chat.html` (escalated by ${ticket.escalator}).` : ``;
 		const creator = ticket.claimed ? Chat.html`${ticket.creator}` : Chat.html`<strong>${ticket.creator}</strong>`;
 		const notifying = ticket.claimed ? `` : ` notifying`;
 		if (!ticket.claimed) hasUnclaimed = true;
 		buf += `<a class="button${notifying}" href="/help-${ticket.userid}" title="${ticket.claimed ? `Claimed by: ${ticket.claimed}` : `Unclaimed`}">Help ${creator}: ${ticket.type}${escalator}</a> `;
 		count++;
+	}
+	if (hiddenTicketCount > 0) {
+		const notifying = hiddenTicketUnclaimedCount > 0 ? ` notifying` : ``;
+		if (hiddenTicketUnclaimedCount > 0) hasUnclaimed = true;
+		buf += `<a class="button${notifying}" href="/view-help-tickets">and ${hiddenTicketCount} more Help ticket${Chat.plural(hiddenTicketCount)} (${hiddenTicketUnclaimedCount} unclaimed)</a>`;
 	}
 	buf = `|${hasUnclaimed ? 'uhtml' : 'uhtmlchange'}|latest-tickets|<div class="infobox" style="padding: 6px 4px">${buf}${count === 0 ? `There were open Help tickets, but they've all been closed now.` : ``}</div>`;
 	room.send(buf);
