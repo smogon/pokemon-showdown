@@ -1143,15 +1143,15 @@ let BattleStatuses = {
 	snaquaza: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|+Snaquaza|Snaq is baq... with a vengeance!`);
+			this.add(`c|%Snaquaza|Snaq is baq... with a vengeance!`);
 		},
 		onSwitchOut: function (pokemon) {
-			this.add(`c|+Snaquaza|Lynch Hoeen while I'm away...`);
+			this.add(`c|%Snaquaza|Lynch Hoeen while I'm away...`);
 			// @ts-ignore Hack for Snaquaza's Z move
 			if (pokemon.claimHP) delete pokemon.claimHP;
 		},
 		onFaint: function () {
-			this.add(`c|+Snaquaza|How did you know I was scum?`);
+			this.add(`c|%Snaquaza|How did you know I was scum?`);
 		},
 		onDamage: function (damage, pokemon) {
 			// @ts-ignore Hack for Snaquaza's Z move
