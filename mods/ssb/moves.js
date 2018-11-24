@@ -2523,9 +2523,9 @@ let BattleMovedex = {
 			let stockpileLayers = 0;
 			if (source.volatiles['stockpile']) stockpileLayers = source.volatiles['stockpile'].layers;
 			let boosts = {};
-			boosts.def = (source.boosts.def - stockpileLayers < 0 ? 0 : source.boosts.def - stockpileLayers) * -1;
-			boosts.spd = (source.boosts.spd - stockpileLayers < 0 ? 0 : source.boosts.spd - stockpileLayers) * -1;
-			this.boost(boosts, source, source, move);
+			if (source.boosts.def > stockpileLayers) boosts.def = stockpileLayers - source.boosts.def;
+			if (source.boosts.spd > stockpileLayers) boosts.spd = stockpileLayers - source.boosts.spd;
+			if (boosts.def || boosts.spd) this.boost(boosts, source, source, move);
 		},
 		secondary: null,
 		target: "normal",
