@@ -404,10 +404,7 @@ const commands = {
 	pokedex: 'data',
 	data: function (target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
-		if (this.broadcasting) {
-			[, target] = Chat.splitFirst(this.message, ' ');
-		}
-
+		target = Chat.filter.call(this, target, user, room, connection);
 		let buffer = '';
 		let sep = target.split(',');
 		if (sep.length !== 2) sep = [target];
