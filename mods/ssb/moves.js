@@ -2800,7 +2800,7 @@ let BattleMovedex = {
 			this.add('-anim', source, "Heat Crash", target);
 		},
 		onHit: function () {
-			this.add(`c|%OM|Bang Bang`);
+			this.add(`c|@OM|Bang Bang`);
 		},
 		secondary: {
 			chance: 50,
