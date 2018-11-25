@@ -221,8 +221,11 @@ class Hangman extends Rooms.RoomGame {
 const commands = {
 	hangman: {
 		create: 'new',
-		new: function (target, room, user) {
-			let params = target.split(',');
+		new: function (target, room, user, connection) {
+			/** @type {string} */
+			let text = Chat.filter.call(this, target, user, room, connection);
+			if (target !== text) return this.errorReply("You are not allowed to use filtered words in hangmans.");
+			let params = text.split(',');
 
 			if (!this.can('minigame', null, room)) return false;
 			// @ts-ignore
