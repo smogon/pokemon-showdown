@@ -954,14 +954,14 @@ let BattleStatuses = {
 		noCopy: true,
 		onStart: function (target, source) {
 			source.types = ["Fire", "Fairy"];
-			this.add(`c|%OM|use shift gear`);
+			this.add(`c|@OM|use shift gear`);
 			this.add('-start', source, 'typeadd', 'Fairy');
 		},
 		onSwitchOut: function () {
-			this.add(`c|%OM|Ok brb I'm gonna ${["ladder Mix and Mega", "roll battle some surv regs real quick", "sweep y'all in mafia let's get it"][this.random(3)]}`);
+			this.add(`c|@OM|Ok brb I'm gonna ${["ladder Mix and Mega", "roll battle some surv regs real quick", "sweep y'all in mafia let's get it"][this.random(3)]}`);
 		},
 		onFaint: function () {
-			this.add(`c|%OM|${["Oh god I rolled a 1", "Killed Night 1, seriously?"][this.random(2)]}`);
+			this.add(`c|@OM|${["Oh god I rolled a 1", "Killed Night 1, seriously?"][this.random(2)]}`);
 		},
 	},
 	osiris: {
@@ -1143,15 +1143,15 @@ let BattleStatuses = {
 	snaquaza: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|+Snaquaza|Snaq is baq... with a vengeance!`);
+			this.add(`c|%Snaquaza|Snaq is baq... with a vengeance!`);
 		},
 		onSwitchOut: function (pokemon) {
-			this.add(`c|+Snaquaza|Lynch Hoeen while I'm away...`);
+			this.add(`c|%Snaquaza|Lynch Hoeen while I'm away...`);
 			// @ts-ignore Hack for Snaquaza's Z move
 			if (pokemon.claimHP) delete pokemon.claimHP;
 		},
 		onFaint: function () {
-			this.add(`c|+Snaquaza|How did you know I was scum?`);
+			this.add(`c|%Snaquaza|How did you know I was scum?`);
 		},
 		onDamage: function (damage, pokemon) {
 			// @ts-ignore Hack for Snaquaza's Z move
