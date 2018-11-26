@@ -571,6 +571,7 @@ type TemplateAbility = {0: string, 1?: string, H?: string, S?: string}
 interface TemplateData {
 	abilities: TemplateAbility
 	baseStats: StatsTable
+	canHatch?: boolean
 	color: string
 	eggGroups: string[]
 	heightm: number
@@ -583,10 +584,22 @@ interface TemplateData {
 	evoLevel?: number
 	evoMove?: string
 	evos?: string[]
+	evoType?: string
 	forme?: string
 	formeLetter?: string
 	gender?: GenderName
 	genderRatio?: {[k: string]: number}
+	lowestEncounter1?: number
+	lowestEncounter2?: number
+	lowestEncounter3?: number
+	lowestEncounter4?: number
+	lowestEncounter5?: number
+	lowestEncounter5H?: number
+	lowestEncounter6?: number
+	lowestEncounter6E?: number
+	lowestEncounter6N?: number
+	lowestEncounter7?: number
+	lowestEncounter7N?: number
 	maxHP?: number
 	otherForms?: string[]
 	otherFormes?: string[]
