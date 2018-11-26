@@ -2853,7 +2853,12 @@ const commands = {
 		Punishments.addSharedIp(ip, note);
 		note = ` (${note})`;
 		this.globalModlog('SHAREDIP', ip, ` by ${user.name}${note}`);
-		return this.addModAction(`The IP '${ip}' was marked as shared by ${user.name}.${note}`);
+
+		const message = `The IP '${ip}' was marked as shared by ${user.name}.${note}`;
+		const staffRoom = Rooms('staff');
+		if (staffRoom) return staffRoom.addByUser(user, message);
+
+		return this.addModAction(message);
 	},
 	marksharedhelp: [`/markshared [IP], [owner/organization of IP] - Marks an IP address as shared. Note: the owner/organization (i.e., University of Minnesota) of the shared IP is required. Requires @, &, ~`],
 
