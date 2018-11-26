@@ -529,10 +529,11 @@ let BattleStatuses = {
 	},
 	kalalokki: {
 		noCopy: true,
-		onStart: function () {
+		onStart: function (target) {
 			this.add(`c|@Kalalokki|(•_•)`);
 			this.add(`c|@Kalalokki|( •_•)>⌐■-■`);
 			this.add(`c|@Kalalokki|(⌐■_■)`);
+			if (target.illusion) return;
 			this.setWeather('raindance');
 		},
 		onFaint: function () {
