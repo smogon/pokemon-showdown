@@ -48,7 +48,7 @@ let BattleScripts = {
 		// @ts-ignore
 		if (nature.minus) stats[nature.minus] = Math.floor(stats[nature.minus] * 0.9);
 		let friendshipValue = 100;
-		if (set.happiness != 0) friendshipValue += Math.floor(((set.happiness || 255) / 255 / 10) * 100);
+		if (set.happiness !== 0) friendshipValue += Math.floor(((set.happiness || 255) / 255 / 10) * 100);
 		for (const stat in stats) {
 			if (stat !== 'hp') {
 				// @ts-ignore
