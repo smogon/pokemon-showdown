@@ -55,6 +55,7 @@ exports.wsdeflate = {
  *  The client requires port 443, so if you use a different port here,
  *  it will need to be forwarded to 443 through iptables rules or
  *  something.
+ * @type {{port: number, options: {key: string, cert: string}} | null}
  */
 exports.ssl = null;
 
