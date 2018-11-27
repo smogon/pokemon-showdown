@@ -1743,7 +1743,7 @@ let BattlePokedex = {
 		weightkg: 316,
 		color: "Gray",
 		prevo: "graveleralola",
-		evotype: "trade",
+		evoType: "trade",
 		eggGroups: ["Mineral"],
 	},
 	ponyta: {
@@ -3605,7 +3605,7 @@ let BattlePokedex = {
 		evos: ["azumarill"],
 		evoType: "levelHappy",
 		eggGroups: ["Water 1", "Fairy"],
-		canHatch: "true",
+		canHatch: true,
 	},
 	azumarill: {
 		num: 184,
@@ -3636,7 +3636,7 @@ let BattlePokedex = {
 		evoType: "levelMove",
 		evoMove: "Mimic",
 		eggGroups: ["Mineral"],
-		canHatch: "true",
+		canHatch: true,
 	},
 	politoed: {
 		num: 186,
@@ -7179,7 +7179,7 @@ let BattlePokedex = {
 		color: "Green",
 		evos: ["roselia"],
 		eggGroups: ["Undiscovered"],
-		canHatch: "true",
+		canHatch: true,
 	},
 	roserade: {
 		num: 407,
