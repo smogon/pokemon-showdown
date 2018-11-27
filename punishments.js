@@ -1089,6 +1089,7 @@ Punishments.addSharedIp = function (ip, note) {
 				user.semilocked = `#sharedip ${user.locked}`;
 			}
 			user.locked = false;
+			user.namelocked = false;
 
 			user.updateIdentity();
 		}
