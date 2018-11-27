@@ -584,7 +584,7 @@ interface TemplateData {
 	evoLevel?: number
 	evoMove?: string
 	evos?: string[]
-	evoType?: string
+	evoType?: 'trade' | 'stone' | 'levelMove' | 'levelHappy' | 'levelArea' | 'levelItem' | 'levelTeam' | 'levelAffect'
 	forme?: string
 	formeLetter?: string
 	gender?: GenderName
