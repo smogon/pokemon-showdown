@@ -450,12 +450,12 @@ class Pokemon {
 			// @ts-ignore
 			stat = this.battle.getStatCallback(stat, statName, this, unboosted);
 		}
+		if (statName === 'spe' && stat > 10000) stat = 10000;
 		return stat;
 	}
 
 	getActionSpeed() {
 		let speed = this.getStat('spe', false, false);
-		if (speed > 10000) speed = 10000;
 		if (this.battle.getPseudoWeather('trickroom')) {
 			speed = 0x2710 - speed;
 		}
