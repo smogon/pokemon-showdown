@@ -461,7 +461,7 @@ let BattleScripts = {
 					boosts[statName] = 0;
 				}
 				target.setBoost(boosts);
-				this.add('-anim', pokemon, "Spectral Thief", target);
+				this.addMove('-anim', pokemon, "Spectral Thief", target);
 			}
 		}
 
