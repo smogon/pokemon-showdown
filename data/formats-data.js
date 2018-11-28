@@ -714,7 +714,7 @@ let BattleFormatsData = {
 		randomBattleMoves: ["wish", "protect", "fireblast", "stealthrock", "dazzlinggleam", "hypervoice"],
 		randomDoubleBattleMoves: ["thunderwave", "reflect", "lightscreen", "protect", "dazzlinggleam", "fireblast", "icebeam", "hypervoice"],
 		encounters: [
-			{"generation": 1, "level": 22}
+			{"generation": 1, "level": 22},
 		],
 		tier: "(PU)",
 		doublesTier: "DUU",
@@ -1513,7 +1513,7 @@ let BattleFormatsData = {
 		],
 		encounters: [
 			{"generation": 1, "level": 14, "shiny": false},
-			{"generation": 1, "level": 40}
+			{"generation": 1, "level": 40},
 		],
 		tier: "LC",
 	},
