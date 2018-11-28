@@ -461,7 +461,7 @@ class Battle extends Dex.ModdedDex {
 	 * @param {AnyObject} a
 	 * @param {AnyObject} b
 	 */
-	comparePriority(a, b) {
+	static comparePriority(a, b) {
 		a.priority = a.priority || 0;
 		a.subPriority = a.subPriority || 0;
 		a.speed = a.speed || 0;
@@ -488,7 +488,7 @@ class Battle extends Dex.ModdedDex {
 		if (b.subOrder - a.subOrder) {
 			return -(b.subOrder - a.subOrder);
 		}
-		return this.random() - 0.5;
+		return 0;
 	}
 
 	/**
@@ -513,6 +513,39 @@ class Battle extends Dex.ModdedDex {
 	}
 
 	/**
+	 * Sort a list, resolving speed ties the way the games do.
+	 *
+	 * @param {T[]} list
+	 * @param {(a: T, b: T) => number} comparator
+	 * @template T
+	 */
+	speedSort(list, comparator = Battle.comparePriority) {
+		if (list.length < 2) return;
+		let sorted = 0;
+		while (sorted + 1 < list.length) {
+			let nextIndexes = [sorted];
+			// grab list of next indexes
+			for (let i = sorted + 1; i < list.length; i++) {
+				let delta = comparator(list[nextIndexes[0]], list[i]);
+				if (delta < 0) continue;
+				if (delta > 0) nextIndexes = [i];
+				if (delta === 0) nextIndexes.push(i);
+			}
+			// put list of next indexes where they belong
+			let nextCount = nextIndexes.length;
+			for (let i = 0; i < nextCount; i++) {
+				let index = nextIndexes[i];
+				while (index > sorted + i) {
+					[list[index], list[index - 1]] = [list[index - 1], list[index]];
+					index--;
+				}
+			}
+			if (nextCount > 1) this.prng.shuffle(list, sorted, sorted + nextCount);
+			sorted += nextCount;
+		}
+	}
+
+	/**
 	 * @param {string} eventid
 	 * @param {Effect} [effect]
 	 * @param {boolean} [relayVar]
@@ -525,12 +558,9 @@ class Battle extends Dex.ModdedDex {
 				if (pokemon) actives.push(pokemon);
 			}
 		}
-		actives.sort((a, b) => {
-			if (b.speed - a.speed) {
-				return b.speed - a.speed;
-			}
-			return this.random() - 0.5;
-		});
+		this.speedSort(actives, (a, b) =>
+			b.speed - a.speed
+		);
 		for (const pokemon of actives) {
 			this.runEvent(eventid, pokemon, null, effect, relayVar);
 		}
@@ -546,7 +576,7 @@ class Battle extends Dex.ModdedDex {
 	 */
 	residualEvent(eventid, relayVar) {
 		let statuses = this.getRelevantEffectsInner(this, 'on' + eventid, null, null, false, true, 'duration');
-		statuses.sort((a, b) => this.comparePriority(a, b));
+		this.speedSort(statuses);
 		while (statuses.length) {
 			let statusObj = statuses[0];
 			statuses.shift();
@@ -767,7 +797,7 @@ class Battle extends Dex.ModdedDex {
 		if (fastExit) {
 			statuses.sort(Battle.compareRedirectOrder);
 		} else {
-			statuses.sort((a, b) => this.comparePriority(a, b));
+			this.speedSort(statuses);
 		}
 		let hasRelayVar = true;
 		effect = this.getEffect(effect);
@@ -2661,7 +2691,7 @@ class Battle extends Dex.ModdedDex {
 	}
 
 	sortQueue() {
-		this.queue.sort((a, b) => this.comparePriority(a, b));
+		this.speedSort(this.queue);
 	}
 
 	/**
@@ -2683,7 +2713,7 @@ class Battle extends Dex.ModdedDex {
 		if (chosenAction.pokemon) chosenAction.pokemon.updateSpeed();
 		const action = this.resolveAction(chosenAction, midTurn);
 		for (const [i, curAction] of this.queue.entries()) {
-			if (this.comparePriority(action, curAction) < 0) {
+			if (Battle.comparePriority(action, curAction) < 0) {
 				this.queue.splice(i, 0, action);
 				return;
 			}
