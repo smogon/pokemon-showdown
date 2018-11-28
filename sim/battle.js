@@ -121,7 +121,7 @@ class Battle extends Dex.ModdedDex {
 		this.activeTarget = null;
 		this.midTurn = false;
 		this.currentRequest = '';
-		this.lastMoveLine = 0;
+		this.lastMoveLine = -1;
 		this.reportPercentages = false;
 		this.supportCancel = false;
 		/** @type {?AnyObject} */
@@ -3229,7 +3229,14 @@ class Battle extends Dex.ModdedDex {
 	 * @param {(string | number | Function | AnyObject)[]} args
 	 */
 	attrLastMove(...args) {
-		if (args.includes('[still]')) {
+		if (this.lastMoveLine < 0) return;
+		if (this.log[this.lastMoveLine].startsWith('|-anim|')) {
+			if (args.includes('[still]')) {
+				this.log.splice(this.lastMoveLine, 1);
+				this.lastMoveLine = -1;
+				return;
+			}
+		} else if (args.includes('[still]')) {
 			// If no animation plays, the target should never be known
 			let parts = this.log[this.lastMoveLine].split('|');
 			parts[4] = '';
@@ -3242,6 +3249,7 @@ class Battle extends Dex.ModdedDex {
 	 * @param {Pokemon} newTarget
 	 */
 	retargetLastMove(newTarget) {
+		if (this.lastMoveLine < 0) return;
 		let parts = this.log[this.lastMoveLine].split('|');
 		parts[4] = newTarget.toString();
 		this.log[this.lastMoveLine] = parts.join('|');

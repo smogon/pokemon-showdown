@@ -4261,7 +4261,7 @@ let BattleItems = {
 			if (pokemon.useItem()) {
 				this.debug('power herb - remove charge turn for ' + move.id);
 				this.attrLastMove('[still]');
-				this.add('-anim', pokemon, move.name, target);
+				this.addMove('-anim', pokemon, move.name, target);
 				return false; // skip charge turn
 			}
 		},
