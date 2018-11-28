@@ -68,7 +68,7 @@ class PRNG {
 		let result = (this.seed[0] << 16 >>> 0) + this.seed[1]; // Use the upper 32 bits
 		if (from) from = Math.floor(from);
 		if (to) to = Math.floor(to);
-		if (!from) {
+		if (from === undefined) {
 			result = result / 0x100000000;
 		} else if (!to) {
 			result = Math.floor(result * from / 0x100000000);
@@ -123,6 +123,25 @@ class PRNG {
 			throw new RangeError(`Cannot sample a sparse array`);
 		}
 		return item;
+	}
+
+	/**
+	 * This is how the game resolves speed ties.
+	 *
+	 * At least according to V4 in
+	 * https://github.com/Zarel/Pokemon-Showdown/issues/1157#issuecomment-214454873
+	 *
+	 * @param {T[]} items
+	 * @template T
+	 */
+	shuffle(items, start = 0, end = items.length) {
+		while (start < end - 1) {
+			const nextIndex = this.next(start, end);
+			if (start !== nextIndex) {
+				[items[start], items[nextIndex]] = [items[nextIndex], items[start]];
+			}
+			start++;
+		}
 	}
 
 	/**

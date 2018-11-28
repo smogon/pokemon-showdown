@@ -58,7 +58,7 @@ describe(`Pursuit`, function () {
 	});
 
 	it(`should not double in power or activate before a switch if targeting an ally`, function () {
-		battle = common.createBattle({gameType: 'doubles', seed: [1, 2, 3, 4]}, [[
+		battle = common.createBattle({gameType: 'doubles', seed: [1, 1, 1, 1]}, [[
 			{species: "Beedrill", ability: 'swarm', item: 'beedrillite', moves: ['pursuit']},
 			{species: "Clefable", ability: 'unaware', moves: ['calmmind']},
 			{species: "Furret", ability: 'frisk', moves: ['uturn']},
@@ -66,6 +66,8 @@ describe(`Pursuit`, function () {
 			{species: "Clefable", ability: 'magicguard', moves: ['calmmind']},
 			{species: "Alakazam", ability: 'unaware', moves: ['calmmind']},
 		]]);
-		assert.hurtsBy(battle.p1.pokemon[2], 61, () => battle.makeChoices('move Pursuit mega -2, switch 3', 'auto'));
+		const furret = battle.p1.pokemon[2];
+		battle.makeChoices('move Pursuit mega -2, switch 3', 'auto');
+		assert.equal(furret.maxhp - furret.hp, 66);
 	});
 });
