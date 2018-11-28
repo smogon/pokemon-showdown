@@ -139,6 +139,10 @@ class Battle extends Dex.ModdedDex {
 		this.prngSeed = this.prng.startingSeed.slice();
 		this.teamGenerator = null;
 
+		// bound function for faster speedSort
+		// (so speedSort doesn't need to bind before use)
+		this.comparePriority = this.comparePriority.bind(this);
+
 		/** @type {{formatid: string, seed: [number, number, number, number], rated?: string | true}} */
 		const inputOptions = {formatid: options.formatid, seed: this.prng.seed};
 		if (this.rated) inputOptions.rated = this.rated;
@@ -458,37 +462,27 @@ class Battle extends Dex.ModdedDex {
 	}
 
 	/**
+	 * Truncate a number into a 32-bit integer, for compatibility with
+	 * the cartridge games' math systems.
+	 *
+	 * @param {number} num
+	 * @param {number} bits
+	 */
+	trunc(num, bits = 0) {
+		if (bits) return (num >> 0) % (2 ** bits);
+		return num >> 0;
+	}
+
+	/**
 	 * @param {AnyObject} a
 	 * @param {AnyObject} b
 	 */
-	static comparePriority(a, b) {
-		a.priority = a.priority || 0;
-		a.subPriority = a.subPriority || 0;
-		a.speed = a.speed || 0;
-		b.priority = b.priority || 0;
-		b.subPriority = b.subPriority || 0;
-		b.speed = b.speed || 0;
-		if ((typeof a.order === 'number' || typeof b.order === 'number') && a.order !== b.order) {
-			if (typeof a.order !== 'number') {
-				return -1;
-			}
-			if (typeof b.order !== 'number') {
-				return 1;
-			}
-			if (b.order - a.order) {
-				return -(b.order - a.order);
-			}
-		}
-		if (b.priority - a.priority) {
-			return b.priority - a.priority;
-		}
-		if (b.speed - a.speed) {
-			return b.speed - a.speed;
-		}
-		if (b.subOrder - a.subOrder) {
-			return -(b.subOrder - a.subOrder);
-		}
-		return 0;
+	comparePriority(a, b) {
+		return -((b.order || 4294967296) - (a.order || 4294967296)) ||
+			((b.priority || 0) - (a.priority || 0)) ||
+			((b.speed || 0) - (a.speed || 0)) ||
+			-((b.subOrder || 0) - (a.subOrder || 0)) ||
+			0;
 	}
 
 	/**
@@ -496,20 +490,10 @@ class Battle extends Dex.ModdedDex {
 	 * @param {AnyObject} b
 	 */
 	static compareRedirectOrder(a, b) {
-		a.priority = a.priority || 0;
-		a.speed = a.speed || 0;
-		b.priority = b.priority || 0;
-		b.speed = b.speed || 0;
-		if (b.priority - a.priority) {
-			return b.priority - a.priority;
-		}
-		if (b.speed - a.speed) {
-			return b.speed - a.speed;
-		}
-		if (b.thing.abilityOrder - a.thing.abilityOrder) {
-			return -(b.thing.abilityOrder - a.thing.abilityOrder);
-		}
-		return 0;
+		return ((b.priority || 0) - (a.priority || 0)) ||
+			((b.speed || 0) - (a.speed || 0)) ||
+			-(b.thing.abilityOrder - a.thing.abilityOrder) ||
+			0;
 	}
 
 	/**
@@ -519,7 +503,7 @@ class Battle extends Dex.ModdedDex {
 	 * @param {(a: T, b: T) => number} comparator
 	 * @template T
 	 */
-	speedSort(list, comparator = Battle.comparePriority) {
+	speedSort(list, comparator = this.comparePriority) {
 		if (list.length < 2) return;
 		let sorted = 0;
 		while (sorted + 1 < list.length) {
@@ -2040,7 +2024,7 @@ class Battle extends Dex.ModdedDex {
 		}
 		effect = this.getEffect(effect);
 		if (damage && damage <= 1) damage = 1;
-		damage = Math.floor(damage);
+		damage = this.trunc(damage);
 		// for things like Liquid Ooze, the Heal event still happens when nothing is healed.
 		damage = this.runEvent('TryHeal', target, source, effect, damage);
 		if (!damage) return damage;
@@ -2082,15 +2066,15 @@ class Battle extends Dex.ModdedDex {
 	chain(previousMod, nextMod) {
 		// previousMod or nextMod can be either a number or an array [numerator, denominator]
 		if (Array.isArray(previousMod)) {
-			previousMod = Math.floor(previousMod[0] * 4096 / previousMod[1]);
+			previousMod = this.trunc(previousMod[0] * 4096 / previousMod[1]);
 		} else {
-			previousMod = Math.floor(previousMod * 4096);
+			previousMod = this.trunc(previousMod * 4096);
 		}
 
 		if (Array.isArray(nextMod)) {
-			nextMod = Math.floor(nextMod[0] * 4096 / nextMod[1]);
+			nextMod = this.trunc(nextMod[0] * 4096 / nextMod[1]);
 		} else {
-			nextMod = Math.floor(nextMod * 4096);
+			nextMod = this.trunc(nextMod * 4096);
 		}
 		return ((previousMod * nextMod + 2048) >> 12) / 4096; // M'' = ((M * M') + 0x800) >> 12
 	}
@@ -2100,7 +2084,7 @@ class Battle extends Dex.ModdedDex {
 	 * @param {number} [denominator]
 	 */
 	chainModify(numerator, denominator) {
-		let previousMod = Math.floor(this.event.modifier * 4096);
+		let previousMod = this.trunc(this.event.modifier * 4096);
 
 		if (Array.isArray(numerator)) {
 			denominator = numerator[1];
@@ -2110,7 +2094,7 @@ class Battle extends Dex.ModdedDex {
 		if (this.event.ceilModifier) {
 			nextMod = Math.ceil(numerator * 4096 / (denominator || 1));
 		} else {
-			nextMod = Math.floor(numerator * 4096 / (denominator || 1));
+			nextMod = this.trunc(numerator * 4096 / (denominator || 1));
 		}
 
 		this.event.modifier = ((previousMod * nextMod + 2048) >> 12) / 4096;
@@ -2130,8 +2114,9 @@ class Battle extends Dex.ModdedDex {
 			denominator = numerator[1];
 			numerator = numerator[0];
 		}
-		let modifier = Math.floor(numerator * 4096 / denominator);
-		return Math.floor((value * modifier + 2048 - 1) / 4096);
+		const tr = this.trunc;
+		let modifier = tr(numerator * 4096 / denominator);
+		return tr((tr(value * modifier) + 2048 - 1) / 4096);
 	}
 
 	/**
@@ -2278,8 +2263,10 @@ class Battle extends Dex.ModdedDex {
 		// @ts-ignore
 		defense = this.runEvent('Modify' + statTable[defenseStat], defender, attacker, move, defense);
 
+		const tr = this.trunc;
+
 		//int(int(int(2 * L / 5 + 2) * A * P / D) / 50);
-		let baseDamage = Math.floor(Math.floor(Math.floor(2 * level / 5 + 2) * basePower * attack / defense) / 50);
+		let baseDamage = tr(tr(tr(tr(2 * level / 5 + 2) * basePower * attack) / defense) / 50);
 
 		// Calculate damage modifiers separately (order differs between generations)
 		return this.modifyDamage(baseDamage, pokemon, target, move, suppressMessages);
@@ -2293,6 +2280,7 @@ class Battle extends Dex.ModdedDex {
 	 * @param {boolean} [suppressMessages]
 	 */
 	modifyDamage(baseDamage, pokemon, target, move, suppressMessages = false) {
+		const tr = this.trunc;
 		if (!move.type) move.type = '???';
 		let type = move.type;
 
@@ -2308,12 +2296,12 @@ class Battle extends Dex.ModdedDex {
 		// weather modifier
 		baseDamage = this.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
 
-		// crit
+		// crit - not a modifier
 		if (move.crit) {
-			baseDamage = this.modify(baseDamage, move.critModifier || (this.gen >= 6 ? 1.5 : 2));
+			baseDamage = tr(baseDamage * (move.critModifier || (this.gen >= 6 ? 1.5 : 2)));
 		}
 
-		// this is not a modifier
+		// random factor - also not a modifier
 		baseDamage = this.randomizer(baseDamage);
 
 		// STAB
@@ -2339,7 +2327,7 @@ class Battle extends Dex.ModdedDex {
 			if (!suppressMessages) this.add('-resisted', target);
 
 			for (let i = 0; i > move.typeMod; i--) {
-				baseDamage = Math.floor(baseDamage / 2);
+				baseDamage = tr(baseDamage / 2);
 			}
 		}
 
@@ -2352,9 +2340,7 @@ class Battle extends Dex.ModdedDex {
 		}
 
 		// Generation 5 sets damage to 1 before the final damage modifiers only
-		if (this.gen === 5 && !Math.floor(baseDamage)) {
-			baseDamage = 1;
-		}
+		if (this.gen === 5 && !baseDamage) baseDamage = 1;
 
 		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 		baseDamage = this.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
@@ -2364,18 +2350,19 @@ class Battle extends Dex.ModdedDex {
 			this.add('-zbroken', target);
 		}
 
-		if (this.gen !== 5 && !Math.floor(baseDamage)) {
-			return 1;
-		}
+		// Generations 5-7 all truncate damage to 16 bits as the last step of all
+		baseDamage = tr(baseDamage, 16);
 
-		return Math.floor(baseDamage);
+		if (this.gen !== 5 && !baseDamage) return 1;
+
+		return baseDamage;
 	}
 
 	/**
 	 * @param {number} baseDamage
 	 */
 	randomizer(baseDamage) {
-		return Math.floor(baseDamage * (100 - this.random(16)) / 100);
+		return this.trunc(baseDamage * (100 - this.random(16)) / 100);
 	}
 
 	/**
@@ -2713,7 +2700,7 @@ class Battle extends Dex.ModdedDex {
 		if (chosenAction.pokemon) chosenAction.pokemon.updateSpeed();
 		const action = this.resolveAction(chosenAction, midTurn);
 		for (const [i, curAction] of this.queue.entries()) {
-			if (Battle.comparePriority(action, curAction) < 0) {
+			if (this.comparePriority(action, curAction) < 0) {
 				this.queue.splice(i, 0, action);
 				return;
 			}
