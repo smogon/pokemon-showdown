@@ -1524,7 +1524,6 @@ let BattleFormatsData = {
 			{"generation": 1, "level": 3},
 			{"generation": 2, "level": 23},
 			{"generation": 3, "level": 3, "shiny": false, "nature": "Hasty", "ivs": {"hp": 19, "atk": 16, "def": 18, "spa": 25, "spd": 25, "spe": 19}, "abilities": ["static"], "pokeball": "pokeball"},
-},
 			{"generation": 4, "level": 23},
 		],
 		tier: "(PU)",
