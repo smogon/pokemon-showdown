@@ -123,6 +123,7 @@ type EventInfo = {
 	perfectIVs?: number,
 	isHidden?: boolean,
 	abilities?: string[],
+	maxEggMoves?: number,
 	moves?: string[],
 	pokeball?: string,
 	from?: string,
@@ -589,17 +590,6 @@ interface TemplateData {
 	formeLetter?: string
 	gender?: GenderName
 	genderRatio?: {[k: string]: number}
-	lowestEncounter1?: number
-	lowestEncounter2?: number
-	lowestEncounter3?: number
-	lowestEncounter4?: number
-	lowestEncounter5?: number
-	lowestEncounter5H?: number
-	lowestEncounter6?: number
-	lowestEncounter6E?: number
-	lowestEncounter6N?: number
-	lowestEncounter7?: number
-	lowestEncounter7N?: number
 	maxHP?: number
 	otherForms?: string[]
 	otherFormes?: string[]
@@ -614,6 +604,7 @@ interface TemplateFormatsData {
 	battleOnly?: boolean
 	comboMoves?: string[]
 	doublesTier?: string
+	encounters?: EventInfo[]
 	essentialMove?: string
 	eventOnly?: boolean
 	eventPokemon?: EventInfo[]
