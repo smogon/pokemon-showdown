@@ -116,7 +116,7 @@ type PokemonSources = {
 type EventInfo = {
 	generation: number,
 	level?: number,
-	shiny?: true | 1,
+	shiny?: boolean | 1,
 	gender?: GenderName,
 	nature?: string,
 	ivs?: SparseStatsTable,
