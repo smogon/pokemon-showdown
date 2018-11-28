@@ -4080,7 +4080,7 @@
 				"ability": ["Sturdy"],
 				"evs": {"hp": 252, "atk": 208, "spd": 48},
 				"ivs": {"spe": 0},
-				"brave": "Impish",
+				"nature": "Brave",
 				"moves": [["Stealth Rock"], ["Earthquake"], ["Gyro Ball"], ["Curse"]]
 			}]
 		},
