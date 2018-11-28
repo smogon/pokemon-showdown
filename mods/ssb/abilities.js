@@ -143,6 +143,7 @@ let BattleAbilities = {
 			}
 		},
 		onAfterMove: function (pokemon, move) {
+			if (pokemon.template.baseSpecies !== 'Shaymin' || pokemon.transformed) return;
 			pokemon.formeChange('Shaymin', this.effect);
 		},
 	},

@@ -529,10 +529,11 @@ let BattleStatuses = {
 	},
 	kalalokki: {
 		noCopy: true,
-		onStart: function () {
+		onStart: function (target) {
 			this.add(`c|@Kalalokki|(•_•)`);
 			this.add(`c|@Kalalokki|( •_•)>⌐■-■`);
 			this.add(`c|@Kalalokki|(⌐■_■)`);
+			if (target.illusion) return;
 			this.setWeather('raindance');
 		},
 		onFaint: function () {
@@ -1106,17 +1107,17 @@ let BattleStatuses = {
 	scotteh: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|&Scotteh|─────▄▄████▀█▄`);
-			this.add(`c|&Scotteh|───▄██████████████████▄`);
-			this.add(`c|&Scotteh|─▄█████.▼.▼.▼.▼.▼.▼.▼`);
+			this.add(`c|@Scotteh|─────▄▄████▀█▄`);
+			this.add(`c|@Scotteh|───▄██████████████████▄`);
+			this.add(`c|@Scotteh|─▄█████.▼.▼.▼.▼.▼.▼.▼`);
 		},
 		onSwitchOut: function () {
-			this.add(`c|&Scotteh|▄███████▄.▲.▲.▲.▲.▲.▲`);
-			this.add(`c|&Scotteh|█████████████████████▀▀`);
+			this.add(`c|@Scotteh|▄███████▄.▲.▲.▲.▲.▲.▲`);
+			this.add(`c|@Scotteh|█████████████████████▀▀`);
 		},
 		onFaint: function () {
-			this.add(`c|&Scotteh|▄███████▄.▲.▲.▲.▲.▲.▲`);
-			this.add(`c|&Scotteh|█████████████████████▀▀`);
+			this.add(`c|@Scotteh|▄███████▄.▲.▲.▲.▲.▲.▲`);
+			this.add(`c|@Scotteh|█████████████████████▀▀`);
 		},
 	},
 	shiba: {
