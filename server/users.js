@@ -1585,8 +1585,8 @@ function pruneInactive(threshold) {
 	for (const user of users.values()) {
 		let afkTimer = AFK_TIMER;
 		if (user.can('lock') && !user.can('bypassall')) afkTimer = STAFF_AFK_TIMER;
-		if (!user.connections.some(connection => now - connection.lastActiveTime < afkTimer)) {
-			user.popup(`You have been inactive for over ${afkTimer / (60000)} minutes, and have been logged out of your account as a result.`);
+		if (user.group !== '*' && !user.connections.some(connection => now - connection.lastActiveTime < afkTimer)) {
+			user.popup(`You have been inactive for over ${afkTimer / MINUTES} minutes, and have been logged out of your account as a result.`);
 			user.resetName(false);
 		}
 		if (user.connected) continue;
