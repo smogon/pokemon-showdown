@@ -906,6 +906,10 @@ class NumberModeTrivia extends Trivia {
 		return correctPlayers && (6 - (5 * correctPlayers / this.playerCount | 0));
 	}
 
+	getRoundLength() {
+		return 5 * 1000;
+	}
+
 	tallyAnswers() {
 		this.phase = INTERMISSION_PHASE;
 
