@@ -41,6 +41,9 @@ const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
 /** @type {typeof import('../lib/fs').FS} */
 const FS = require(/** @type {any} */('../.lib-dist/fs')).FS;
 
+const AFK_TIMER = 1000 * 60 * 180;
+const STAFF_AFK_TIMER = 1000 * 60 * 30;
+
 /*********************************************************
  * Utility functions
  *********************************************************/
@@ -373,6 +376,7 @@ class Connection {
 
 		this.challenge = '';
 		this.autojoins = '';
+		this.lastActiveTime = Date.now();
 	}
 	/**
  	* @param {string | BasicRoom?} roomid
@@ -1578,6 +1582,12 @@ class User extends Chat.MessageContext {
 function pruneInactive(threshold) {
 	let now = Date.now();
 	for (const user of users.values()) {
+		let afkTimer = AFK_TIMER;
+		if (user.can('lock') && !user.can('bypassall')) afkTimer = STAFF_AFK_TIMER;
+		if (!user.connections.some(connection => now - connection.lastActiveTime < afkTimer)) {
+			user.popup(`You have been inactive for over ${afkTimer / (60000)} minutes, and have been logged out of your account as a result.`);
+			user.resetName(false);
+		}
 		if (user.connected) continue;
 		if ((now - user.lastConnected) > threshold) {
 			user.destroy();
@@ -1655,6 +1665,7 @@ function socketReceive(worker, workerid, socketid, message) {
 
 	let connection = connections.get(id);
 	if (!connection) return;
+	connection.lastActiveTime = Date.now();
 
 	// Due to a bug in SockJS or Faye, if an exception propagates out of
 	// the `data` event handler, the user will be disconnected on the next
