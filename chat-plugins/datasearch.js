@@ -1582,7 +1582,7 @@ if (!PM.isParentProcess) {
 
 	if (Config.crashguard) {
 		process.on('uncaughtException', err => {
-			require('../lib/crashlogger')(err, 'A dexsearch process', true);
+			require('../lib/crashlogger')(err, 'A dexsearch process');
 		});
 	}
 

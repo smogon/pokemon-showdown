@@ -68,7 +68,7 @@ if (!PM.isParentProcess) {
 
 	if (Config.crashguard) {
 		process.on('uncaughtException', err => {
-			require('./lib/crashlogger')(err, `A team validator process`, true);
+			require('./lib/crashlogger')(err, `A team validator process`);
 		});
 	}
 
