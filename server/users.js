@@ -42,7 +42,7 @@ const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
 const FS = require(/** @type {any} */('../.lib-dist/fs')).FS;
 
 const AFK_TIMER = 1000 * 60 * 180;
-const STAFF_AFK_TIMER = 1000 * 60 * 30;
+const STAFF_AFK_TIMER = 1000 * 60 * 60;
 
 /*********************************************************
  * Utility functions
