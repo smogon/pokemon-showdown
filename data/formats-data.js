@@ -7436,6 +7436,30 @@ let BattleFormatsData = {
 		isNonstandard: true,
 		tier: "CAP",
 	},
+	caribolt: {
+		randomBattleMoves: ["swordsdance", "quickattack", "powerwhip", "return", "voltswitch"],
+		isNonstandard: true,
+		eventPokemon: [
+			{"generation": 7, "level": 50, "moves": ["celebrate", "hornleech", "wildcharge", "metronome"], "pokeball": "cherishball"},
+		],
+		tier: "CAP",
+	},
+	smokomodo: {
+		randomBattleMoves: ["flareblitz", "earthquake", "hiddenpowerice", "toxic", "stealthrock"],
+		isNonstandard: true,
+		eventPokemon: [
+			{"generation": 7, "level": 50, "moves": ["celebrate", "eruption", "magnitude", "camouflage"], "pokeball": "cherishball"},
+		],
+		tier: "CAP",
+	},
+	snaelstrom: {
+		randomBattleMoves: ["stealthrock", "icebeam", "toxic", "spikyshield", "scald", "rapidspin"],
+		isNonstandard: true,
+		eventPokemon: [
+			{"generation": 7, "level": 50, "moves": ["celebrate", "liquidation", "leechlife", "metronome"], "pokeball": "cherishball"},
+		],
+		tier: "CAP",
+	},
 	syclant: {
 		randomBattleMoves: ["bugbuzz", "icebeam", "blizzard", "earthpower", "spikes", "superpower", "tailglow", "uturn", "focusblast"],
 		isNonstandard: true,
