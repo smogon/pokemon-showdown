@@ -41,8 +41,9 @@ const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
 /** @type {typeof import('../lib/fs').FS} */
 const FS = require(/** @type {any} */('../.lib-dist/fs')).FS;
 
-const AFK_TIMER = 1000 * 60 * 180;
-const STAFF_AFK_TIMER = 1000 * 60 * 60;
+const MINUTES = 60 * 1000;
+const AFK_TIMER = 180 * MINUTES;
+const STAFF_AFK_TIMER = 60 * MINUTES;
 
 /*********************************************************
  * Utility functions
@@ -1746,8 +1747,8 @@ let Users = Object.assign(getUser, {
 	socketReceive: socketReceive,
 	pruneInactive: pruneInactive,
 	pruneInactiveTimer: setInterval(() => {
-		pruneInactive(Config.inactiveuserthreshold || 1000 * 60 * 60);
-	}, 1000 * 60 * 30),
+		pruneInactive(Config.inactiveuserthreshold || 60 * MINUTES);
+	}, 30 * MINUTES),
 	socketConnect: socketConnect,
 });
 // @ts-ignore
