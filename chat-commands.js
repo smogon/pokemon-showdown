@@ -705,7 +705,7 @@ const commands = {
 			return;
 		}
 
-		let titleMsg = Chat.html `Welcome to ${parent ? room.title : user.name}'s${!/^[0-9]+$/.test(title) ? ` ${title}` : ''}${parent ? 'subroom ' : ''} groupchat!`;
+		let titleMsg = Chat.html `Welcome to ${parent ? room.title : user.name}'s${!/^[0-9]+$/.test(title) ? ` ${title}` : ''}${parent ? ' subroom' : ''} groupchat!`;
 		let targetRoom = Rooms.createChatRoom(roomid, `[G] ${title}`, {
 			isPersonal: true,
 			isPrivate: 'hidden',
