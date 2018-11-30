@@ -462,11 +462,11 @@ class Battle extends Dex.ModdedDex {
 	}
 
 	/**
-	 * Truncate a number into a 32-bit integer, for compatibility with
-	 * the cartridge games' math systems.
+	 * Truncate a number into an unsigned 32-bit integer, for
+	 * compatibility with the cartridge games' math systems.
 	 *
 	 * @param {number} num
-	 * @param {number} bits
+	 * @param {number} bits Truncate to `bits`-bit integer instead
 	 */
 	trunc(num, bits = 0) {
 		if (bits) return (num >>> 0) % (2 ** bits);
