@@ -2361,7 +2361,8 @@ class Battle extends Dex.ModdedDex {
 	 * @param {number} baseDamage
 	 */
 	randomizer(baseDamage) {
-		return this.trunc(this.trunc(baseDamage * (100 - this.random(16))) / 100);
+		const tr = this.trunc;
+		return tr(tr(baseDamage * (100 - this.random(16))) / 100);
 	}
 
 	/**
