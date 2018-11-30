@@ -2349,12 +2349,12 @@ class Battle extends Dex.ModdedDex {
 			baseDamage = this.modify(baseDamage, 0.25);
 			this.add('-zbroken', target);
 		}
-		
+
 		// Generation 6-7 moves the check for minimum 1 damage after the final modifier...
 		if (this.gen !== 5 && !baseDamage) return 1;
 
 		// ...but 16-bit truncation happens even later, and can truncate to 0
-				return tr(baseDamage, 16);
+		return tr(baseDamage, 16);
 	}
 
 	/**
