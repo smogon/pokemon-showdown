@@ -469,8 +469,8 @@ class Battle extends Dex.ModdedDex {
 	 * @param {number} bits
 	 */
 	trunc(num, bits = 0) {
-		if (bits) return (num >> 0) % (2 ** bits);
-		return num >> 0;
+		if (bits) return (num >>> 0) % (2 ** bits);
+		return num >>> 0;
 	}
 
 	/**
@@ -2339,7 +2339,7 @@ class Battle extends Dex.ModdedDex {
 			}
 		}
 
-		// Generation 5 sets damage to 1 before the final damage modifiers only
+		// Generation 5, but nothing later, sets damage to 1 before the final damage modifiers
 		if (this.gen === 5 && !baseDamage) baseDamage = 1;
 
 		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
@@ -2349,20 +2349,19 @@ class Battle extends Dex.ModdedDex {
 			baseDamage = this.modify(baseDamage, 0.25);
 			this.add('-zbroken', target);
 		}
-
-		// Generations 5-7 all truncate damage to 16 bits as the last step of all
-		baseDamage = tr(baseDamage, 16);
-
+		
+		// Generation 6-7 moves the check for minimum 1 damage after the final modifier...
 		if (this.gen !== 5 && !baseDamage) return 1;
 
-		return baseDamage;
+		// ...but 16-bit truncation happens even later, and can truncate to 0
+				return tr(baseDamage, 16);
 	}
 
 	/**
 	 * @param {number} baseDamage
 	 */
 	randomizer(baseDamage) {
-		return this.trunc(baseDamage * (100 - this.random(16)) / 100);
+		return this.trunc(this.trunc(baseDamage * (100 - this.random(16))) / 100);
 	}
 
 	/**
