@@ -1103,15 +1103,6 @@ let Formats = [
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
-		name: "[Gen 6] Battle Factory",
-		desc: `Randomized teams of Pok&eacute;mon for a generated Smogon tier with sets that are competitively viable.`,
-
-		mod: 'gen6',
-		team: 'randomFactory',
-		searchShow: false,
-		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Mega Rayquaza Clause'],
-	},
-	{
 		name: "[Gen 5] Random Battle",
 
 		mod: 'gen5',
@@ -1164,41 +1155,38 @@ let Formats = [
 		column: 3,
 	},
 	{
-		name: "[Gen 6] Ubers",
+		name: "[Gen 1] UU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3522911/">ORAS Ubers</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3535106/">ORAS Ubers Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3573896/">RBY UU Discussion</a>`,
 		],
+
+		mod: 'gen1',
+		ruleset: ['[Gen 1] OU'],
+		banlist: ['OU'],
+	},
+	{
+		name: "[Gen 4] PU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/post/7260264/">DPP PU Resources</a>`,
+		],
+
+		mod: 'gen4',
+		ruleset: ['[Gen 4] NU'],
+		banlist: [
+			'Articuno', 'Camerupt', 'Charizard', 'Cradily', 'Crawdaunt', 'Dodrio', 'Drifblim', 'Electrode', 'Gardevoir', 'Gligar', 'Golem',
+			'Grumpig', 'Haunter', 'Hitmonchan', 'Hypno', 'Jumpluff', 'Jynx', 'Linoone', 'Magmortar', 'Magneton', 'Manectric', 'Mantine',
+			'Medicham', 'Meganium', 'Nidoqueen', 'Ninetales', 'Piloswine', 'Pinsir', 'Porygon2', 'Regice', 'Regirock', 'Roselia', 'Sandslash',
+			'Sharpedo', 'Shiftry', 'Skuntank', 'Slowking', 'Tauros', 'Torkoal', 'Typhlosion', 'Venomoth', 'Vileplume', 'Whiscash',
+		],
+	},
+	{
+		name: "[Gen 6] Battle Factory",
+		desc: `Randomized teams of Pok&eacute;mon for a generated Smogon tier with sets that are competitively viable.`,
 
 		mod: 'gen6',
+		team: 'randomFactory',
 		// searchShow: false,
-		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview', 'Mega Rayquaza Clause'],
-	},
-	{
-		name: "[Gen 2] NU",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3642565/">GSC NU Discussion</a>`,
-		],
-
-		mod: 'gen2',
-		ruleset: ['[Gen 2] UU'],
-		banlist: ['UU'],
-	},
-	{
-		name: "[Gen 5] Doubles OU",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3533424/">BW2 Doubles Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3533421/">BW2 Doubles Viability Ranking</a>`,
-		],
-
-		mod: 'gen5',
-		gameType: 'doubles',
-		// searchShow: false,
-		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Swagger Clause', 'Team Preview'],
-		banlist: [
-			'Arceus', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Jirachi',
-			'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Zekrom', 'Soul Dew', 'Dark Void', 'Sky Drop',
-		],
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Mega Rayquaza Clause'],
 	},
 
 	// Past Gens OU
@@ -1283,6 +1271,17 @@ let Formats = [
 	{
 		section: "OR/AS Singles",
 		column: 3,
+	},
+	{
+		name: "[Gen 6] Ubers",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3522911/">ORAS Ubers</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3535106/">ORAS Ubers Viability Rankings</a>`,
+		],
+
+		mod: 'gen6',
+		searchShow: false,
+		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview', 'Mega Rayquaza Clause'],
 	},
 	{
 		name: "[Gen 6] UU",
@@ -1628,6 +1627,22 @@ let Formats = [
 	{
 		section: 'B2/W2 Doubles',
 		column: 4,
+	},
+	{
+		name: "[Gen 5] Doubles OU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3533424/">BW2 Doubles Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3533421/">BW2 Doubles Viability Ranking</a>`,
+		],
+
+		mod: 'gen5',
+		gameType: 'doubles',
+		searchShow: false,
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Swagger Clause', 'Team Preview'],
+		banlist: [
+			'Arceus', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Jirachi',
+			'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Zekrom', 'Soul Dew', 'Dark Void', 'Sky Drop',
+		],
 	},
 	{
 		name: "[Gen 5] GBU Doubles",
