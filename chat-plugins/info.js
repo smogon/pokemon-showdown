@@ -79,8 +79,9 @@ const commands = {
 		if (!showAll) {
 			return this.sendReplyBox(buf);
 		}
+		const canViewAlts = (user === targetUser || user.can('alts', targetUser));
 		buf += '<br />';
-		if (user.can('alts', targetUser) || user.can('alts') && user === targetUser) {
+		if (canViewAlts) {
 			let prevNames = Object.keys(targetUser.prevNames).map(userid => {
 				const punishment = Punishments.userids.get(userid);
 				return userid + (punishment ? ` (${Punishments.punishmentTypes.get(punishment[0]) || 'punished'}${punishment[1] !== targetUser.userid ? ` as ${punishment[1]}` : ''})` : '');
@@ -172,15 +173,33 @@ const commands = {
 				buf += Chat.html`<br />Host: ${targetUser.latestHost}`;
 			}
 		}
-		if ((user === targetUser || user.can('alts', targetUser)) && hiddenrooms) {
+		if (canViewAlts && hiddenrooms) {
 			buf += `<br />Hidden rooms: ${hiddenrooms}`;
 		}
-		const staffViewingLocked = user.can('alts', targetUser) && targetUser.locked;
-		if ((user === targetUser || user.can('makeroom') || staffViewingLocked) && privaterooms) {
+		const staffViewingLocked = canViewAlts && targetUser.locked;
+		if ((user === targetUser || staffViewingLocked || user.can('makeroom')) && privaterooms) {
 			buf += `<br />Private rooms: ${privaterooms}`;
 		}
 
-		if (user.can('alts', targetUser) || (room.isPrivate !== true && user.can('mute', targetUser, room) && targetUser.userid in room.users)) {
+		let gameRooms = [];
+		for (const room of Rooms.rooms.values()) {
+			if (!room.game) continue;
+			if ((targetUser.userid in room.game.players && !targetUser.inRooms.has(room.id)) ||
+				room.auth[targetUser.userid] === Users.PLAYER_SYMBOL) {
+				if (room.isPrivate && !canViewAlts) {
+					continue;
+				}
+				gameRooms.push(room.id);
+			}
+		}
+		if (gameRooms.length) {
+			buf += '<br />Recent games: ' + gameRooms.map(id => {
+				let shortId = id.startsWith('battle-') ? id.slice(7) : id;
+				return Chat.html`<a href="/${id}">${shortId}</a>`;
+			}).join(' | ');
+		}
+
+		if (canViewAlts || (room.isPrivate !== true && user.can('mute', targetUser, room) && targetUser.userid in room.users)) {
 			let punishments = Punishments.getRoomPunishments(targetUser, {checkIps: true});
 
 			if (punishments.length) {
