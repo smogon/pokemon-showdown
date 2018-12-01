@@ -21,6 +21,8 @@ let BattleAliases = {
 	"aaa": "[Gen 7] Almost Any Ability",
 	"pic": "[Gen 7] Partners in Crime",
 	"2v2": "[Gen 7] 2v2 Doubles",
+	"letsgosingles": "[Gen 7 Let's Go] Singles No Restrictions",
+	"letsgodoubles": "[Gen 7 Let's Go] Doubles No Restrictions",
 	"cc1v1": "[Gen 7] Challenge Cup 1v1",
 	"cc2v2": "[Gen 7] Challenge Cup 2v2",
 	"hc": "[Gen 7] Hackmons Cup",
