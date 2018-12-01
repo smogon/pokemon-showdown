@@ -835,7 +835,7 @@ let Formats = [
 	},
 	{
 		name: "[Gen 7] ZU",
-		desc: `The usage-based tier below PU.`,
+		desc: `The unofficial usage-based tier below PU.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3629669/">ZeroUsed</a>`,
 		],
