@@ -652,6 +652,10 @@ let Formats = [
 	},
 	{
 		name: "[Gen 7 Let's Go] Hackmons",
+		desc: `Anything that can be hacked in-game and is usable in local battles is allowed.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/7973280/">Let's Go Hackmons</a>`,
+		],
 
 		mod: 'letsgo',
 		ruleset: ['Pokemon', 'Allow AVs', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
