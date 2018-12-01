@@ -37,6 +37,7 @@ const Pokemon = require('./pokemon');
  * @property {boolean | string} [rated] Rated string
  * @property {PlayerOptions} [p1] Player 1 data
  * @property {PlayerOptions} [p2] Player 2 data
+ * @property {boolean} [debug] show debug mode option
  */
 
 class Battle extends Dex.ModdedDex {
@@ -73,6 +74,7 @@ class Battle extends Dex.ModdedDex {
 		this.format = format.id;
 		this.formatid = options.formatid;
 		this.cachedFormat = format;
+		this.debugMode = format.debug || !!options.debug;
 		this.formatData = {id: format.id};
 
 		/** @type {Effect} */
@@ -3259,7 +3261,7 @@ class Battle extends Dex.ModdedDex {
 	 * @param {string} activity
 	 */
 	debug(activity) {
-		if (this.getFormat().debug) {
+		if (this.debugMode) {
 			this.add('debug', activity);
 		}
 	}

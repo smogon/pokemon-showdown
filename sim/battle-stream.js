@@ -45,8 +45,12 @@ function splitFirst(str, delimiter, limit = 1) {
 }
 
 class BattleStream extends Streams.ObjectReadWriteStream {
-	constructor() {
+	/**
+	 * @param {{debug?: boolean}} options
+	 */
+	constructor({debug} = {}) {
 		super();
+		this.debug = !!debug;
 		/** @type {Battle} */
 		// @ts-ignore
 		this.battle = null;
@@ -94,6 +98,7 @@ class BattleStream extends Streams.ObjectReadWriteStream {
 				if (Array.isArray(data)) data = data.join("\n");
 				this.push(`${type}\n${data}`);
 			};
+			if (this.debug) options.debug = true;
 			this.battle = new Battle(options);
 			break;
 		case 'player':
@@ -273,9 +278,12 @@ class BattlePlayer {
 }
 
 class BattleTextStream extends Streams.ReadWriteStream {
-	constructor() {
+	/**
+	 * @param {{debug?: boolean}} options
+	 */
+	constructor(options) {
 		super();
-		this.battleStream = new BattleStream();
+		this.battleStream = new BattleStream(options);
 		/** @type {string} */
 		this.currentMessage = '';
 		this._listen();
