@@ -78,15 +78,6 @@ let BattleFormats = {
 				}
 			}
 
-			// ----------- legality line ------------------------------------------
-			if (!this.getRuleTable(format).has('-illegal')) return problems;
-			// everything after this line only happens if we're doing legality enforcement
-
-			// Pokestar studios
-			if (template.num <= -5000 && template.isNonstandard) {
-				problems.push(`${set.species} cannot be obtained by legal means.`);
-			}
-
 			set.ability = 'No Ability';
 			// Temporary hack to allow mega evolution
 			if (set.item) {
@@ -94,6 +85,15 @@ let BattleFormats = {
 				if (item.megaEvolves !== template.baseSpecies) {
 					problems.push(`Items aren't allowed in Let's Go.`);
 				}
+			}
+
+			// ----------- legality line ------------------------------------------
+			if (!this.getRuleTable(format).has('-illegal')) return problems;
+			// everything after this line only happens if we're doing legality enforcement
+
+			// Pokestar studios
+			if (template.num <= -5000 && template.isNonstandard) {
+				problems.push(`${set.species} cannot be obtained by legal means.`);
 			}
 
 			// Legendary Pokemon must have at least 3 perfect IVs in gen 6
