@@ -80,7 +80,10 @@ const commands = {
 			return this.sendReplyBox(buf);
 		}
 		const canViewAlts = (user === targetUser || user.can('alts', targetUser));
+		const canViewPunishments = canViewAlts || (room.isPrivate !== true && user.can('mute', targetUser, room) && targetUser.userid in room.users);
+		const canViewSecretRooms = user === targetUser || (canViewAlts && targetUser.locked) || user.can('makeroom');
 		buf += '<br />';
+
 		if (canViewAlts) {
 			let prevNames = Object.keys(targetUser.prevNames).map(userid => {
 				const punishment = Punishments.userids.get(userid);
@@ -102,6 +105,8 @@ const commands = {
 				}).join(", ");
 				if (prevNames) buf += `<br />Previous names: ${prevNames}`;
 			}
+		}
+		if (canViewPunishments) {
 			if (targetUser.namelocked) {
 				buf += `<br />NAMELOCKED: ${targetUser.namelocked}`;
 				let punishment = Punishments.userids.get(targetUser.locked);
@@ -176,9 +181,8 @@ const commands = {
 		if (canViewAlts && hiddenrooms) {
 			buf += `<br />Hidden rooms: ${hiddenrooms}`;
 		}
-		const staffViewingLocked = canViewAlts && targetUser.locked;
-		if ((user === targetUser || staffViewingLocked || user.can('makeroom')) && privaterooms) {
-			buf += `<br />Private rooms: ${privaterooms}`;
+		if (canViewSecretRooms && privaterooms) {
+			buf += `<br />Secret rooms: ${privaterooms}`;
 		}
 
 		let gameRooms = [];
@@ -199,7 +203,7 @@ const commands = {
 			}).join(' | ');
 		}
 
-		if (canViewAlts || (room.isPrivate !== true && user.can('mute', targetUser, room) && targetUser.userid in room.users)) {
+		if (canViewPunishments) {
 			let punishments = Punishments.getRoomPunishments(targetUser, {checkIps: true});
 
 			if (punishments.length) {
