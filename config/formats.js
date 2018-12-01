@@ -665,7 +665,7 @@ let Formats = [
 			if (set.moves) {
 				for (const moveId of set.moves) {
 					let move = this.getMove(moveId);
-					if (move.num >= 729 || availableMoves.indexOf(move.name) < 0) problems.push(move.name + ' is not available in Let\'s Go.');
+					if (move.num < 729 && availableMoves.indexOf(move.name) < 0) problems.push(move.name + ' is not available in Let\'s Go.');
 				}
 			}
 			return problems;
