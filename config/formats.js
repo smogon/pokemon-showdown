@@ -580,6 +580,7 @@ let Formats = [
 				if (validSources.includes(evoFamily)) continue;
 
 				if (set.name === set.species) delete set.name;
+				set.species = donorTemplate.species;
 				problems = this.validateSet(set, teamHas) || [];
 
 				if (!problems.length) {
@@ -592,6 +593,7 @@ let Formats = [
 				}
 			}
 
+			set.species = template.species;
 			if (!validSources.length) {
 				if (pokemonWithAbility.length > 1) return [`${template.species}'s set is illegal.`];
 				problems.unshift(`${template.species} has an illegal set with an ability from ${Dex.getTemplate(pokemonWithAbility[0]).name}.`);
