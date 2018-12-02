@@ -531,12 +531,11 @@ let Formats = [
 			if (!this.format.abilityMap) {
 				let abilityMap = Object.create(null);
 				for (let speciesid in Dex.data.Pokedex) {
-					let pokemon = Dex.data.Pokedex[speciesid];
+					let pokemon = Dex.getTemplate(speciesid);
 					if (pokemon.num < 1 || pokemon.species === 'Smeargle') continue;
-					if (Dex.data.FormatsData[speciesid].requiredItem || Dex.data.FormatsData[speciesid].requiredMove) continue;
-					for (let key in pokemon.abilities) {
-						// @ts-ignore
-						let abilityId = toId(pokemon.abilities[key]);
+					if (pokemon.requiredItem || pokemon.requiredMove) continue;
+					for (const key of Object.values(pokemon.abilities)) {
+						let abilityId = toId(key);
 						if (abilityMap[abilityId]) {
 							abilityMap[abilityId][pokemon.evos ? 'push' : 'unshift'](speciesid);
 						} else {
@@ -549,14 +548,14 @@ let Formats = [
 			}
 
 			this.format.noChangeForme = false;
-			// @ts-ignore
-			let problems = Dex.getFormat('Pokemon').onChangeSet.call(Dex, set, this.format) || [];
+			let problems = [];
+			let pkmnRule = Dex.getFormat('pokemon');
+			if (pkmnRule.exists && pkmnRule.onChangeSet && pkmnRule.onChangeSet.call(Dex, set, this.format)) problems = pkmnRule.onChangeSet.call(Dex, set, this.format);
 			this.format.noChangeForme = true;
 
 			if (problems.length) return problems;
 
-			let species = toId(set.species);
-			let template = Dex.getTemplate(species);
+			let template = Dex.getTemplate(set.species);
 			if (!template.exists) return [`The Pokemon "${set.species}" does not exist.`];
 			if (template.isUnreleased) return [`${template.species} is unreleased.`];
 			let megaTemplate = Dex.getTemplate(Dex.getItem(set.item).megaStone);
@@ -564,12 +563,11 @@ let Formats = [
 
 			let name = set.name;
 
-			let abilityId = toId(set.ability);
-
-			if (!abilityId || !(abilityId in Dex.data.Abilities)) return [`${name} needs to have a valid ability.`];
+			let ability = Dex.getAbility(set.ability);
+			if (!ability.exists || ability.isNonstandard || ability.isUnreleased) return [`${name} needs to have a valid ability.`];
 			// @ts-ignore
-			let pokemonWithAbility = this.format.abilityMap[abilityId];
-			if (!pokemonWithAbility) return [`"${set.ability}" is not available on a legal Pokemon.`];
+			let pokemonWithAbility = this.format.abilityMap[ability.id];
+			if (!pokemonWithAbility) return [`"${set.ability}" is not available on a legal Pok\u00e9mon.`];
 
 			let canonicalSource = ''; // Specific for the basic implementation of Donor Clause (see onValidateTeam).
 			// @ts-ignore
@@ -579,7 +577,7 @@ let Formats = [
 				// @ts-ignore
 				let evoFamily = this.format.getEvoFamily(donorTemplate);
 
-				if (validSources.indexOf(evoFamily) >= 0) continue;
+				if (validSources.includes(evoFamily)) continue;
 
 				if (set.name === set.species) delete set.name;
 				set.species = donorTemplate.species;
@@ -596,10 +594,8 @@ let Formats = [
 			}
 
 			set.species = template.species;
-			if (!validSources.length && pokemonWithAbility.length > 1) {
-				return [`${template.species}'s set is illegal.`];
-			}
 			if (!validSources.length) {
+				if (pokemonWithAbility.length > 1) return [`${template.species}'s set is illegal.`];
 				problems.unshift(`${template.species} has an illegal set with an ability from ${Dex.getTemplate(pokemonWithAbility[0]).name}.`);
 				return problems;
 			}
@@ -665,7 +661,7 @@ let Formats = [
 			if (set.moves) {
 				for (const moveId of set.moves) {
 					let move = this.getMove(moveId);
-					if (move.num < 729 && availableMoves.indexOf(move.name) < 0) problems.push(move.name + ' is not available in Let\'s Go.');
+					if (move.num < 729 && !availableMoves.includes(move.name)) problems.push(`${move.name} is not available in Let's Go.`);
 				}
 			}
 			return problems;
