@@ -36,7 +36,7 @@ let BattleFormats = {
 					`(${set.species} is from Gen ${baseTemplate.gen === 1 ? 7 : baseTemplate.gen}.)`
 				);
 			}
-			if (template.forme && !['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(template.forme)) {
+			if (template.forme && (!['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(template.forme) || template.species === 'Pikachu-Alola')) {
 				problems.push(`${set.species}'s forme ${template.forme} is not available in Let's Go.`);
 			}
 			if (set.moves) {
