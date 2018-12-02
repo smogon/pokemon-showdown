@@ -95,73 +95,9 @@ Sets player information:
 >p2 CHOICE
 ```
 
-Makes a choice for a player (see "Choice specification")
+Makes a choice for a player. [Possible choices are documented in `SIM-PROTOCOL.md`][possible-choices].
 
-
-Choice specification
---------------------
-
-Using the Pokémon Showdown client, you can specify choices with `/choose CHOICE`, or, for move and switch choices, just `/CHOICE` works as well.
-
-Using the simulator API, you would write `>p1 CHOICE` or `>p2 CHOICE` into the battle stream.
-
-You can see the syntax in action by looking at the console when playing a battle in the Pokémon Showdown client.
-
-As an overview:
-
-- `switch Pikachu`, `switch pikachu`, or `switch 2` are all valid `CHOICE` strings to switch to a Pikachu in slot 2.
-
-- `move Focus Blast`, `move focusblast`, or `move 4` are all valid `CHOICE` strings to use Focus Blast, your active Pokemon's 4th move.
-
-In Doubles, decisions are delimited by `,`. If you have a Manectric and a Cresselia, `move Thunderbolt 1 mega, move Helping Hand -1` will make the Manectric mega evolve and use Thunderbolt at the opponent in slot 1, while Cresselia will use Helping Hand at Manectric.
-
-To be exact, `CHOICE` is one of:
-
-- `team TEAMSPEC`, during Team Preview, where `TEAMSPEC` is a list of pokemon slots.
-  - For instance, `team 213456` will swap the first two Pokemon and keep all other pokemon in order.
-  - `TEAMSPEC` does not have to be all pokemon: `team 5231` might be a choice in VGC.
-  - `TEAMSPEC` does not need separators unless you have over 10 Pokémon, but in custom games, separate slots with `,`. For instance: `team 2, 1, 3, 4, 5, 6, 7, 8, 9, 10`
-
-- `default`, to auto-choose a decision. This will be the first possible legal choice. This is what's used in VGC if you run out of Move Time.
-
-- `undo`, to cancel a previously-made choice. This can only be done if the another player needs to make a choice and hasn't done so yet (or if you are calling `side.choose()` directly, which doesn't auto-continue when both players have made a choice).
-
-- `POKEMONCHOICE` in Singles
-
-- `POKEMONCHOICE, POKEMONCHOICE` in Doubles
-
-`POKEMONCHOICE` is one of:
-
-- `default`, to auto-choose a decision
-
-- `pass`, to skip a slot in Doubles/Triples that doesn't need a decision (never required, but can be useful for readability, to mean "the pokemon in this slot is fainted and won't be making a move")
-
-- `move MOVESPEC`, to make a move
-
-- `move MOVESPEC mega`, to mega-evolve and make a move
-
-- `move MOVESPEC zmove`, to use a z-move version of a move
-
-- `switch SWITCHSPEC`, to make a switch
-
-`MOVESPEC` is:
-
-- `MOVESLOTSPEC` or `MOVESLOTSPEC TARGETSPEC`
-  - `MOVESLOTSPEC` is a move name (capitalization/spacing-insensitive) or 1-based move slot number
-  - `TARGETSPEC` is a 1-based target slot number. Add a `-` in front of it to refer to allies. Remember that slots oppose each other, so in a battle, the slots go as follows:
-
-         Triples       Doubles     Singles
-         3  2  1         2  1         1
-        -1 -2 -3        -1 -2        -1
-
-    (But note that slot numbers are unnecessary in Singles: you can never choose a target in Singles.)
-
-`SWITCHSPEC` is:
-
-- a pokemon nickname or 1-based slot number
-  - Note that if you have multiple Pokémon with the same nickname, using the nickname will select the first unfainted one. If you want another Pokémon, you'll need to specify it by slot number.
-
-Once a choice has been set for all players who need to make a choice, the battle will continue.
+  [possible-choices]: https://github.com/Zarel/Pokemon-Showdown/blob/master/sim/SIM-PROTOCOL.md#possible-choices
 
 
 Reading from the simulator
@@ -176,9 +112,9 @@ Messages start with a message type followed by `\n`. A message will never have t
 
 An update which should be sent to all players and spectators.
 
-The messages the simulator sends back are documented in `PROTOCOL.md`. You can also look at a replay log for examples.
+[The messages the simulator sends back are documented in `SIM-PROTOCOL.md`][sim-protocol]. You can also look at a replay log for examples.
 
-https://github.com/Zarel/Pokemon-Showdown/blob/master/PROTOCOL.md#battle-messages
+  [sim-protocol]: https://github.com/Zarel/Pokemon-Showdown/blob/master/sim/SIM-PROTOCOL.md
 
 One message type that only appears here is `|split`. This splits the next four lines into `spectator`, `p1`, `p2`, and `omniscient` messages. The `p1` and `p2` logs will have exact HP values only for the corresponding player, while the `spectator` log will not have exact HP values for either player, and the `omniscient` logs will have exact HP values for both.
 
@@ -190,9 +126,11 @@ Send messages to only one player. `|split` will never appear here.
 
 `PLAYERID` will be either `p1` or `p2`.
 
-Note that choice requests (updates telling the player what choices they have for using moves or switching pokemon) are sent this way. Choice requests are documented in:
+Note that choice requests (updates telling the player what choices they have for using moves or switching pokemon) are sent this way.
 
-https://github.com/Zarel/Pokemon-Showdown/blob/master/PROTOCOL.md#battle-progress
+[Choice requests are documented in "Choice requests" in `SIM-PROTOCOL.md`][choice-requests].
+
+  [choice-requests]: https://github.com/Zarel/Pokemon-Showdown/blob/master/sim/SIM-PROTOCOL.md#choice-requests
 
     end
     LOGDATA
