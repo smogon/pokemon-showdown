@@ -965,15 +965,6 @@ let Formats = [
 		banlist: ['Illegal', 'Unreleased', 'Uber'],
 	},
 	{
-		name: "[Gen 7 Let's Go] UU",
-		desc: `The usage-based tier below LGPE OU.`,
-
-		mod: 'letsgo',
-		forcedLevel: 50,
-		ruleset: ['[Gen 7 Let\'s Go] OU'],
-		banlist: ['OU', 'UUBL'],
-	},
-	{
 		name: "[Gen 7 Let's Go] Singles No Restrictions",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3643931/">Let's Go! Discussion</a>`,
