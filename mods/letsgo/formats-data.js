@@ -80,7 +80,7 @@ let BattleFormatsData = {
 	},
 	butterfree: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	weedle: {
@@ -93,12 +93,12 @@ let BattleFormatsData = {
 	},
 	beedrill: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	beedrillmega: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	pidgey: {
@@ -111,12 +111,12 @@ let BattleFormatsData = {
 	},
 	pidgeot: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	pidgeotmega: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	rattata: {
@@ -129,12 +129,12 @@ let BattleFormatsData = {
 	},
 	raticate: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	raticatealola: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	spearow: {
@@ -143,7 +143,7 @@ let BattleFormatsData = {
 	},
 	fearow: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	ekans: {
@@ -152,7 +152,7 @@ let BattleFormatsData = {
 	},
 	arbok: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	pikachu: {
@@ -167,12 +167,12 @@ let BattleFormatsData = {
 	},
 	raichu: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	raichualola: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	sandshrew: {
@@ -185,12 +185,12 @@ let BattleFormatsData = {
 	},
 	sandslash: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	sandslashalola: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	nidoranf: {
@@ -225,7 +225,7 @@ let BattleFormatsData = {
 	},
 	clefable: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	vulpix: {
@@ -238,12 +238,12 @@ let BattleFormatsData = {
 	},
 	ninetales: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	ninetalesalola: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	jigglypuff: {
@@ -252,7 +252,7 @@ let BattleFormatsData = {
 	},
 	wigglytuff: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	zubat: {
@@ -261,7 +261,7 @@ let BattleFormatsData = {
 	},
 	golbat: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	oddish: {
@@ -274,7 +274,7 @@ let BattleFormatsData = {
 	},
 	vileplume: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	paras: {
@@ -283,7 +283,7 @@ let BattleFormatsData = {
 	},
 	parasect: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	venonat: {
@@ -305,12 +305,12 @@ let BattleFormatsData = {
 	},
 	dugtrio: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	dugtrioalola: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	meowth: {
@@ -326,12 +326,12 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 7, "level": 16, "shiny": 1, "ivs": {hp: 30, atk: 30, def: 25, spa: 25, spd: 25, spe: 31}, "moves": ["feint", "payday", "taunt", "fakeout"], "pokeball": "pokeball"},
 		],
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	persianalola: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	psyduck: {
@@ -340,7 +340,7 @@ let BattleFormatsData = {
 	},
 	golduck: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	mankey: {
@@ -349,7 +349,7 @@ let BattleFormatsData = {
 	},
 	primeape: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	growlithe: {
@@ -361,7 +361,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 7, "level": 16, "shiny": 1, "ivs": {hp: 25, atk: 30, def: 25, spa: 30, spd: 25, spe: 31}, "moves": ["roar", "leer", "ember", "doubleedge"], "pokeball": "pokeball"},
 		],
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	poliwag: {
@@ -374,7 +374,7 @@ let BattleFormatsData = {
 	},
 	poliwrath: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	abra: {
@@ -405,7 +405,7 @@ let BattleFormatsData = {
 	},
 	machamp: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	bellsprout: {
@@ -418,7 +418,7 @@ let BattleFormatsData = {
 	},
 	victreebel: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	tentacool: {
@@ -427,7 +427,7 @@ let BattleFormatsData = {
 	},
 	tentacruel: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	geodude: {
@@ -448,12 +448,12 @@ let BattleFormatsData = {
 	},
 	golem: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	golemalola: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	ponyta: {
@@ -462,7 +462,7 @@ let BattleFormatsData = {
 	},
 	rapidash: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	slowpoke: {
@@ -485,12 +485,12 @@ let BattleFormatsData = {
 	},
 	magneton: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	farfetchd: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	doduo: {
@@ -499,7 +499,7 @@ let BattleFormatsData = {
 	},
 	dodrio: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	seel: {
@@ -508,7 +508,7 @@ let BattleFormatsData = {
 	},
 	dewgong: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	grimer: {
@@ -521,7 +521,7 @@ let BattleFormatsData = {
 	},
 	muk: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	mukalola: {
@@ -558,7 +558,7 @@ let BattleFormatsData = {
 	},
 	onix: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	drowzee: {
@@ -567,7 +567,7 @@ let BattleFormatsData = {
 	},
 	hypno: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	krabby: {
@@ -576,7 +576,7 @@ let BattleFormatsData = {
 	},
 	kingler: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	voltorb: {
@@ -591,7 +591,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 7, "level": 42, "shiny": 1, "perfectIVs": 3, "moves": ["thunderbolt", "screech", "selfdestruct", "swift"]},
 		],
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	exeggcute: {
@@ -600,7 +600,7 @@ let BattleFormatsData = {
 	},
 	exeggutor: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	exeggutoralola: {
@@ -614,12 +614,12 @@ let BattleFormatsData = {
 	},
 	marowak: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	marowakalola: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	hitmonlee: {
@@ -627,7 +627,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 7, "level": 30, "shiny": 1, "ivs": {hp: 25, atk: 30, def: 25, spa: 25, spd: 30, spe: 31}, "moves": ["jumpkick", "facade", "brickbreak", "feint"], "pokeball": "pokeball"},
 		],
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	hitmonchan: {
@@ -635,12 +635,12 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 7, "level": 30, "shiny": 1, "ivs": {hp: 25, atk: 31, def: 30, spa: 25, spd: 30, spe: 25}, "moves": ["firepunch", "icepunch", "thunderpunch", "dizzypunch"], "pokeball": "pokeball"},
 		],
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	lickitung: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	koffing: {
@@ -649,7 +649,7 @@ let BattleFormatsData = {
 	},
 	weezing: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	rhyhorn: {
@@ -671,17 +671,17 @@ let BattleFormatsData = {
 	},
 	tangela: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	kangaskhan: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	kangaskhanmega: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	horsea: {
@@ -690,7 +690,7 @@ let BattleFormatsData = {
 	},
 	seadra: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	goldeen: {
@@ -699,7 +699,7 @@ let BattleFormatsData = {
 	},
 	seaking: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	staryu: {
@@ -713,42 +713,42 @@ let BattleFormatsData = {
 	},
 	mrmime: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	scyther: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	jynx: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	electabuzz: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	magmar: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	pinsir: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	pinsirmega: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	tauros: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	magikarp: {
@@ -773,12 +773,12 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 7, "level": 34, "shiny": 1, "ivs": {hp: 31, atk: 25, def: 25, spa: 30, spd: 30, spe: 25}, "moves": ["bodyslam", "confuseray", "iceshard", "mist"], "pokeball": "pokeball"},
 		],
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	ditto: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	eevee: {
@@ -796,17 +796,17 @@ let BattleFormatsData = {
 	},
 	vaporeon: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	jolteon: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	flareon: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	porygon: {
@@ -814,7 +814,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 7, "level": 34, "shiny": 1, "ivs": {hp: 25, atk: 25, def: 30, spa: 31, spd: 30, spe: 25}, "moves": ["conversion", "thunderwave", "triattack", "barrier"], "pokeball": "pokeball"},
 		],
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	omanyte: {
@@ -826,7 +826,7 @@ let BattleFormatsData = {
 	},
 	omastar: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	kabuto: {
@@ -838,7 +838,7 @@ let BattleFormatsData = {
 	},
 	kabutops: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	aerodactyl: {
@@ -869,7 +869,7 @@ let BattleFormatsData = {
 			{"generation": 7, "level": 50, "shiny": 1, "perfectIVs": 3, "moves": ["reflect", "agility", "icebeam", "mirrorcoat"]},
 		],
 		eventOnly: false,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	zapdos: {
@@ -887,7 +887,7 @@ let BattleFormatsData = {
 			{"generation": 7, "level": 50, "shiny": 1, "perfectIVs": 3, "moves": ["heatwave", "agility", "flamethrower", "airslash"]},
 		],
 		eventOnly: false,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	dratini: {
@@ -932,7 +932,7 @@ let BattleFormatsData = {
 	meltan: {
 		inherit: true,
 		isNonstandard: false,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	melmetal: {
