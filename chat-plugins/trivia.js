@@ -907,7 +907,7 @@ class NumberModeTrivia extends Trivia {
 	}
 
 	getRoundLength() {
-		return 5 * 1000;
+		return 6 * 1000;
 	}
 
 	tallyAnswers() {
