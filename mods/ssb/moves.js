@@ -640,9 +640,8 @@ let BattleMovedex = {
 		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Plasma Fists', target);
 		},
-		onEffectiveness: function (typeMod, type, move) {
+		onEffectiveness: function (typeMod, target, type, move) {
 			if (move.type !== 'Electric') return;
-			let target = this.activeTarget;
 			if (!target) return; // avoid crashing when called from a chat plugin
 			if (!target.runImmunity('Electric')) {
 				if (target.hasType('Ground')) return 0;
@@ -1523,7 +1522,7 @@ let BattleMovedex = {
 			this.add('-anim', source, "Psystrike", target);
 		},
 		ignoreImmunity: {'Psychic': true},
-		onEffectiveness: function (typeMod, type) {
+		onEffectiveness: function (typeMod, target, type) {
 			if (type === 'Dark') return 1;
 		},
 		secondary: null,
@@ -2129,7 +2128,7 @@ let BattleMovedex = {
 		onPrepareHit: function (target, source) {
 			this.add('-anim', source, 'Outrage', target);
 		},
-		onEffectiveness: function (typeMod) {
+		onEffectiveness: function (typeMod, target) {
 			return -typeMod;
 		},
 		secondary: {
@@ -3503,7 +3502,7 @@ let BattleMovedex = {
 			this.add('-anim', source, "Fissure", target);
 		},
 		ignoreImmunity: {'Electric': true},
-		onEffectiveness: function (typeMod, type) {
+		onEffectiveness: function (typeMod, target, type) {
 			if (type === 'Ground') return 1;
 		},
 		secondary: null,

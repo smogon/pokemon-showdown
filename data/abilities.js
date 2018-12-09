@@ -715,10 +715,9 @@ let BattleAbilities = {
 			}
 		},
 		onEffectiveness: function (typeMod, target, type, move) {
-			if (!this.activeTarget) return;
-			let pokemon = this.activeTarget;
-			if (!['mimikyu', 'mimikyutotem'].includes(pokemon.template.speciesid) || pokemon.transformed || (pokemon.volatiles['substitute'] && !(move.flags['authentic'] || move.infiltrates))) return;
-			if (!pokemon.runImmunity(move.type)) return;
+			if (!target) return;
+			if (!['mimikyu', 'mimikyutotem'].includes(target.template.speciesid) || target.transformed || (target.volatiles['substitute'] && !(move.flags['authentic'] || move.infiltrates))) return;
+			if (!target.runImmunity(move.type)) return;
 			return 0;
 		},
 		onUpdate: function (pokemon) {

@@ -806,7 +806,7 @@ const commands = {
 			if (source.effectType !== 'Move' || source.category !== 'Status' && (source.basePower || source.basePowerCallback)) {
 				for (const type of defender.types) {
 					let baseMod = Dex.getEffectiveness(source, type);
-					let moveMod = source.onEffectiveness && source.onEffectiveness.call(Dex, baseMod, type, source);
+					let moveMod = source.onEffectiveness && source.onEffectiveness.call(Dex, baseMod, null, type, source);
 					totalTypeMod += typeof moveMod === 'number' ? moveMod : baseMod;
 				}
 			}
@@ -885,7 +885,7 @@ const commands = {
 				} else {
 					if (!mod.getImmunity(move.type, type) && !move.ignoreImmunity) continue;
 					let baseMod = mod.getEffectiveness(move, type);
-					let moveMod = move.onEffectiveness && move.onEffectiveness.call(mod, baseMod, type, move);
+					let moveMod = move.onEffectiveness && move.onEffectiveness.call(mod, baseMod, null, type, move);
 					eff = typeof moveMod === 'number' ? moveMod : baseMod;
 				}
 				if (eff > bestCoverage[type]) bestCoverage[type] = eff;
@@ -962,10 +962,10 @@ const commands = {
 							let curEff = 0;
 							if ((!mod.getImmunity((move.type || move), type1) || !mod.getImmunity((move.type || move), type2)) && !move.ignoreImmunity) continue;
 							let baseMod = mod.getEffectiveness(move, type1);
-							let moveMod = move.onEffectiveness && move.onEffectiveness.call(Dex, baseMod, type1, move);
+							let moveMod = move.onEffectiveness && move.onEffectiveness.call(Dex, baseMod, null, type1, move);
 							curEff += typeof moveMod === 'number' ? moveMod : baseMod;
 							baseMod = mod.getEffectiveness(move, type2);
-							moveMod = move.onEffectiveness && move.onEffectiveness.call(Dex, baseMod, type2, move);
+							moveMod = move.onEffectiveness && move.onEffectiveness.call(Dex, baseMod, null, type2, move);
 							curEff += typeof moveMod === 'number' ? moveMod : baseMod;
 
 							if (curEff > bestEff) bestEff = curEff;
