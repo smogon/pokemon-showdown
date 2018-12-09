@@ -187,12 +187,13 @@ let BattleStatuses = {
 				return;
 			}
 			this.activeTarget = pokemon;
-			this.damage(this.getDamage(pokemon, pokemon, 40), pokemon, pokemon, {
+			let damage = this.getDamage(pokemon, pokemon, 40);
+			if (typeof damage !== 'number') throw new Error("Confusion damage not dealt");
+			this.damage(damage, pokemon, pokemon, /** @type {ActiveMove} */ ({
 				id: 'confused',
 				effectType: 'Move',
-				// @ts-ignore
 				type: '???',
-			});
+			}));
 			return false;
 		},
 	},
@@ -234,7 +235,7 @@ let BattleStatuses = {
 		num: 0,
 		duration: 5,
 		durationCallback: function (target, source) {
-			if (source.hasItem('gripclaw')) return 8;
+			if (source && source.hasItem('gripclaw')) return 8;
 			return this.random(5, 7);
 		},
 		onStart: function (pokemon, source) {

@@ -227,7 +227,7 @@ const commands = {
 			if (room.battle) return this.errorReply("Battles do not support polls.");
 
 			/** @type {string} */
-			let text = Chat.filter.call(this, target, user, room, connection);
+			let text = Chat.filter(this, target, user, room, connection);
 			if (target !== text) return this.errorReply("You are not allowed to use filtered words in polls.");
 
 			const supportHTML = cmd === 'htmlcreate';

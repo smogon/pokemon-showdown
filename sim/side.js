@@ -192,10 +192,15 @@ class Side {
 
 	/**
 	 * @param {string | Effect} status
-	 * @param {Pokemon?} source
+	 * @param {Pokemon? | 'debug'} source
 	 * @param {Effect?} sourceEffect
+	 * @return {boolean} success
 	 */
 	addSideCondition(status, source = null, sourceEffect = null) {
+		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
+		if (source === 'debug') source = this.active[0];
+		if (!source) throw new Error(`setting sidecond without a source`);
+
 		status = this.battle.getEffect(status);
 		if (this.sideConditions[status.id]) {
 			if (!status.onRestart) return false;
@@ -211,7 +216,7 @@ class Side {
 			this.sideConditions[status.id].duration = status.duration;
 		}
 		if (status.durationCallback) {
-			this.sideConditions[status.id].duration = status.durationCallback.call(this.battle, this, source, sourceEffect);
+			this.sideConditions[status.id].duration = status.durationCallback.call(this.battle, this.active[0], source, sourceEffect);
 		}
 		if (!this.battle.singleEvent('Start', status, this.sideConditions[status.id], this, source, sourceEffect)) {
 			delete this.sideConditions[status.id];

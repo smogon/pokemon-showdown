@@ -79,7 +79,9 @@ let BattleStatuses = {
 				pokemon.removeVolatile('confusion');
 				return;
 			}
-			this.directDamage(this.getDamage(pokemon, pokemon, 30));
+			let damage = this.getDamage(pokemon, pokemon, 40);
+			if (typeof damage !== 'number') throw new Error("Confusion damage not dealt");
+			this.directDamage(damage);
 		},
 	},
 

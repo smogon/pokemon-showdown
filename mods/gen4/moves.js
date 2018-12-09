@@ -149,14 +149,17 @@ let BattleMovedex = {
 						this.add('-fail', pokemon);
 						return false;
 					}
-					if (!target.isActive) target = this.resolveTarget(pokemon, this.getMove('pound'));
-					if (!this.isAdjacent(pokemon, target)) {
-						this.add('-miss', pokemon, target);
-						return false;
+					if (!target.isActive) {
+						const possibleTarget = this.resolveTarget(pokemon, this.getMove('pound'));
+						if (!possibleTarget) {
+							this.add('-miss', pokemon);
+							return false;
+						}
+						target = possibleTarget;
 					}
 					/**@type {Move} */
 					// @ts-ignore
-					let moveData = {
+					let moveData = /** @type {ActiveMove} */ ({
 						id: 'bide',
 						name: "Bide",
 						accuracy: true,
@@ -167,7 +170,7 @@ let BattleMovedex = {
 						ignoreImmunity: true,
 						effectType: 'Move',
 						type: 'Normal',
-					};
+					});
 					this.tryMoveHit(target, pokemon, moveData);
 					return false;
 				}
@@ -849,7 +852,7 @@ let BattleMovedex = {
 			move.causedCrashDamage = true;
 			let damage = this.getDamage(source, target, move, true);
 			if (!damage) damage = target.maxhp;
-			this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, 'highjumpkick');
+			this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, move);
 		},
 	},
 	iciclespear: {
@@ -885,7 +888,7 @@ let BattleMovedex = {
 			move.causedCrashDamage = true;
 			let damage = this.getDamage(source, target, move, true);
 			if (!damage) damage = target.maxhp;
-			this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, 'jumpkick');
+			this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, move);
 		},
 	},
 	knockoff: {

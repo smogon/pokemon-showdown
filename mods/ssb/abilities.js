@@ -560,7 +560,7 @@ let BattleAbilities = {
 		name: "Snow Storm",
 		isNonstandard: true,
 		onStart: function () {
-			let snowStorm = this.getEffect('hail');
+			let snowStorm = this.deepClone(this.getEffect('hail'));
 			snowStorm.duration = -1;
 			this.setWeather(snowStorm);
 		},

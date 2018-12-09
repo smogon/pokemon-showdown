@@ -80,10 +80,13 @@ let BattleMovedex = {
 						this.add('-fail', pokemon);
 						return false;
 					}
-					if (!target.isActive) target = this.resolveTarget(pokemon, this.getMove('pound'));
-					if (!this.isAdjacent(pokemon, target)) {
-						this.add('-miss', pokemon, target);
-						return false;
+					if (!target.isActive) {
+						const possibleTarget = this.resolveTarget(pokemon, this.getMove('pound'));
+						if (!possibleTarget) {
+							this.add('-miss', pokemon);
+							return false;
+						}
+						target = possibleTarget;
 					}
 					/**@type {Move} */
 					// @ts-ignore
@@ -451,7 +454,8 @@ let BattleMovedex = {
 		onMoveFail: function (target, source, move) {
 			if (target.runImmunity('Fighting')) {
 				let damage = this.getDamage(source, target, move, true);
-				this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, 'highjumpkick');
+				if (typeof damage !== 'number') throw new Error("HJK recoil failed");
+				this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, move);
 			}
 		},
 	},
@@ -476,7 +480,8 @@ let BattleMovedex = {
 		onMoveFail: function (target, source, move) {
 			if (target.runImmunity('Fighting')) {
 				let damage = this.getDamage(source, target, move, true);
-				this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, 'jumpkick');
+				if (typeof damage !== 'number') throw new Error("Jump Kick didn't recoil");
+				this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, move);
 			}
 		},
 	},

@@ -61,7 +61,7 @@ const DATA_FILES = {
 	'Natures': 'natures',
 };
 
-const nullEffect = new Data.PureEffect({name: '', exists: false});
+const nullEffect = /** @type {PureEffect} */ (new Data.PureEffect({name: '', exists: false}));
 
 /** @typedef {{id: string, name: string, [k: string]: any}} DexTemplate */
 
@@ -460,21 +460,28 @@ class ModdedDex {
 		return moveCopy;
 	}
 	/**
+	 * While this function can technically return any kind of effect at
+	 * all, that's not a feature TypeScript needs to know about.
+	 *
 	 * @param {?string | Effect} [name]
-	 * @return {Effect}
+	 * @return {PureEffect}
 	 */
 	getEffect(name) {
 		if (!name) {
 			return nullEffect;
 		}
 		if (typeof name !== 'string') {
+			// @ts-ignore
 			return name;
 		}
 		if (name.startsWith('move:')) {
+			// @ts-ignore
 			return this.getMove(name.slice(5));
 		} else if (name.startsWith('item:')) {
+			// @ts-ignore
 			return this.getItem(name.slice(5));
 		} else if (name.startsWith('ability:')) {
+			// @ts-ignore
 			return this.getAbility(name.slice(8));
 		}
 		let id = toId(name);
@@ -499,6 +506,7 @@ class ModdedDex {
 		} else {
 			effect = new Data.PureEffect({name, exists: false});
 		}
+		// @ts-ignore
 		return effect;
 	}
 	/**

@@ -59,7 +59,7 @@ let BattleMovedex = {
 			this.add('-anim', source, 'Boomburst', source);
 		},
 		onHit: function (target, source, move) {
-			this.boost({atk: 2}, source, source, 'move: Noble Howl');
+			this.boost({atk: 2}, source, source, this.getActiveMove('Noble Howl'));
 			if (!(['', 'slp', 'frz'].includes(source.status))) {
 				source.cureStatus();
 			}
@@ -1072,7 +1072,7 @@ let BattleMovedex = {
 		},
 		onHit: function (pokemon, move) {
 			if (this.pseudoWeather.gravity) return false;
-			this.boost({atk: 2}, pokemon, pokemon, 'move: Earth\'s Blessing');
+			this.boost({atk: 2}, pokemon, pokemon, this.getActiveMove('EarthsBlessing'));
 			this.addPseudoWeather('gravity');
 			if (['', 'slp', 'frz'].includes(pokemon.status)) return;
 			pokemon.cureStatus();
@@ -2359,7 +2359,7 @@ let BattleMovedex = {
 		},
 		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Recover", source);
-			this.heal(source.maxhp, source, source, 'Blaze of Glory');
+			this.heal(source.maxhp, source, source, this.getActiveMove('Blaze of Glory'));
 			this.add('-anim', source, "Final Gambit", target);
 		},
 		selfdestruct: "ifHit",
@@ -2472,7 +2472,7 @@ let BattleMovedex = {
 			this.add('-anim', source, "Miracle Eye", target);
 		},
 		onHit: function (target, source) {
-			this.boost({atk: -2, spa: -2}, source, source, 'move: /scavenges u');
+			this.boost({atk: -2, spa: -2}, source, source, this.getActiveMove('/scavenges u'));
 			let targetBoosts = {};
 			let sourceBoosts = {};
 
@@ -2769,7 +2769,7 @@ let BattleMovedex = {
 		effect: {
 			duration: 1,
 			onSwitchIn: function (pokemon) {
-				this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.getMove('pyramidingsong'));
+				this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.getActiveMove('pyramidingsong'));
 			},
 		},
 		forceSwitch: true,
@@ -3414,7 +3414,7 @@ let BattleMovedex = {
 		},
 		beforeTurnCallback: function (pokemon) {
 			if (pokemon.status === 'slp' || pokemon.status === 'frz') return;
-			this.boost({def: 1, spd: 1}, pokemon, pokemon, 'mushroom army');
+			this.boost({def: 1, spd: 1}, pokemon, pokemon, this.getEffect('mushroom army'));
 			this.useMove("powder", pokemon);
 		},
 		onHit: function (pokemon) {
