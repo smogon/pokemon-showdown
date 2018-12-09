@@ -161,6 +161,7 @@ interface EventMethods {
 	onAfterEachBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon) => void
 	onAfterHit?: (this: Battle, source: Pokemon, target: Pokemon, move: ActiveMove) => void
 	onAfterSetStatus?: (this: Battle, status: PureEffect, target: Pokemon, source: Pokemon, effect: Effect) => void
+	onAfterSubDamage?: (this: Battle, damage: any, target: Pokemon, source: Pokemon, move: ActiveMove) => void
 	onAfterSwitchInSelf?: (this: Battle, pokemon: Pokemon) => void
 	onAfterUseItem?: (this: Battle, item: Item, pokemon: Pokemon) => void
 	onAfterBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void
@@ -210,6 +211,7 @@ interface EventMethods {
 	onDragOut?: (this: Battle, pokemon: Pokemon) => void
 	onEat?: ((this: Battle, pokemon: Pokemon) => void) | false
 	onEatItem?: (this: Battle, item: Item, pokemon: Pokemon) => void
+	onEffectiveness?: (this: Battle, typeMod: number, target: Pokemon | null, type: string, move: ActiveMove) => void
 	onEnd?: (this: Battle, pokemon: Pokemon & Side) => void
 	onFaint?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect) => void
 	onFlinch?: ((this: Battle, pokemon: Pokemon) => void) | boolean
@@ -290,10 +292,6 @@ interface EventMethods {
 	onAnyModifyDamagePhase2?: EventMethods["onAnyModifyDamagePhase1"]
 	onModifyDamagePhase1?: EventMethods["onAnyModifyDamagePhase1"]
 	onModifyDamagePhase2?: EventMethods["onAnyModifyDamagePhase1"]
-
-	// multiple definitions due to relayVar (currently not supported)
-	onAfterSubDamage?: (this: Battle, damage: any, target: Pokemon, source: Pokemon, move: ActiveMove) => void
-	onEffectiveness?: (this: Battle, typeMod: any, target: any, type: any, move: any) => void
 }
 
 interface EffectData extends EventMethods {

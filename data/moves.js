@@ -5714,7 +5714,7 @@ let BattleMovedex = {
 		name: "Flying Press",
 		pp: 10,
 		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nonsky: 1},
-		onEffectiveness: function (typeMod, type, move) {
+		onEffectiveness: function (typeMod, target, type, move) {
 			return typeMod + this.getEffectiveness('Flying', type);
 		},
 		priority: 0,
@@ -5972,7 +5972,7 @@ let BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onEffectiveness: function (typeMod, type) {
+		onEffectiveness: function (typeMod, target, type) {
 			if (type === 'Water') return 1;
 		},
 		secondary: {
@@ -17622,9 +17622,8 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, nonsky: 1},
-		onEffectiveness: function (typeMod, type, move) {
+		onEffectiveness: function (typeMod, target, type, move) {
 			if (move.type !== 'Ground') return;
-			let target = this.activeTarget;
 			if (!target) return; // avoid crashing when called from a chat plugin
 			// ignore effectiveness if the target is Flying type and immune to Ground
 			if (!target.runImmunity('Ground')) {

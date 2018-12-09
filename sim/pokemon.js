@@ -1721,7 +1721,7 @@ class Pokemon {
 		for (const type of this.getTypes()) {
 			let typeMod = this.battle.getEffectiveness(moveOrType, type);
 			if (move) {
-				typeMod = this.battle.singleEvent('Effectiveness', move, null, type, move, null, typeMod);
+				typeMod = this.battle.singleEvent('Effectiveness', move, null, this, type, move, typeMod);
 				totalTypeMod += this.battle.runEvent('Effectiveness', this, type, move, typeMod);
 			} else {
 				totalTypeMod += typeMod;
