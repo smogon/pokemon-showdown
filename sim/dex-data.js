@@ -54,7 +54,7 @@ class Tools {
 	}
 }
 const toId = Tools.getId;
-class Effect {
+class BasicEffect {
 	/**
 	 * @param {AnyObject} data
 	 * @param {?AnyObject} [moreData]
@@ -284,7 +284,7 @@ class RuleTable extends Map {
 	}
 }
 
-class Format extends Effect {
+class Format extends BasicEffect {
 	/**
 	 * @param {AnyObject} data
 	 * @param {?AnyObject} [moreData]
@@ -419,7 +419,7 @@ class Format extends Effect {
 	}
 }
 
-class PureEffect extends Effect {
+class PureEffect extends BasicEffect {
 	/**
 	 * @param {AnyObject} data
 	 * @param {?AnyObject} [moreData]
@@ -431,7 +431,7 @@ class PureEffect extends Effect {
 	}
 }
 
-class Item extends Effect {
+class Item extends BasicEffect {
 	/**
 	 * @param {AnyObject} data
 	 * @param {?AnyObject} [moreData]
@@ -553,7 +553,7 @@ class Item extends Effect {
 	}
 }
 
-class Ability extends Effect {
+class Ability extends BasicEffect {
 	/**
 	 * @param {AnyObject} data
 	 * @param {?AnyObject} [moreData]
@@ -592,7 +592,7 @@ class Ability extends Effect {
 	}
 }
 
-class Template extends Effect {
+class Template extends BasicEffect {
 	/**
 	 * @param {AnyObject} data
 	 * @param {?AnyObject} [moreData]
@@ -873,7 +873,7 @@ class Template extends Effect {
  * @property {1} [snatch] - Can be stolen from the original user and instead used by another Pokemon using Snatch.
  * @property {1} [sound] - Has no effect on Pokemon with the Ability Soundproof.
  */
-class Move extends Effect {
+class Move extends BasicEffect {
 	/**
 	 * @param {AnyObject} data
 	 * @param {?AnyObject} [moreData]
@@ -1068,7 +1068,11 @@ class Move extends Effect {
 
 		/**
 		 * Move damage against the current target
-		 * @type {string | number | boolean | undefined}
+		 * false = move will always fail with "But it failed!"
+		 * null = move will always silently fail
+		 * undefined = move does not deal fixed damage
+		 *
+		 * @type {number | 'level' | false | null}
 		 */
 		this.damage = this.damage;
 
@@ -1316,7 +1320,7 @@ class TypeInfo {
 // }
 
 exports.Tools = Tools;
-exports.Effect = Effect;
+exports.BasicEffect = BasicEffect;
 exports.PureEffect = PureEffect;
 exports.RuleTable = RuleTable;
 exports.Format = Format;

@@ -92,8 +92,7 @@ let BattleScripts = {
 	runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect) {
 		let target = this.getTarget(pokemon, moveOrMoveName, targetLoc);
 		let move = this.getActiveMove(moveOrMoveName);
-		if (!target) target = this.resolveTarget(pokemon, move);
-		if (target.subFainted) delete target.subFainted;
+		if (target && target.subFainted) delete target.subFainted;
 
 		this.setActiveMove(move, pokemon, target);
 
@@ -135,8 +134,8 @@ let BattleScripts = {
 		this.useMove(move, pokemon, target, sourceEffect);
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 
-		// If rival fainted
-		if (target.hp <= 0) {
+		// If target fainted
+		if (target && target.hp <= 0) {
 			// We remove recharge
 			if (pokemon.volatiles['mustrecharge']) pokemon.removeVolatile('mustrecharge');
 			delete pokemon.volatiles['partialtrappinglock'];
@@ -177,7 +176,7 @@ let BattleScripts = {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
 		let baseMove = this.getMove(moveOrMoveName);
 		let move = this.getActiveMove(baseMove);
-		if (!target) target = this.resolveTarget(pokemon, move);
+		if (target === undefined) target = this.resolveTarget(pokemon, move);
 		if (move.target === 'self') {
 			target = pokemon;
 		}
@@ -194,6 +193,7 @@ let BattleScripts = {
 		if (baseMove.target !== move.target) {
 			// Check again, this shouldn't ever happen on Gen 1.
 			target = this.resolveTarget(pokemon, move);
+			this.debug('not a gen 1 mechanic');
 		}
 		if (!move) return false;
 
@@ -224,9 +224,9 @@ let BattleScripts = {
 			move.ignoreImmunity = (move.category === 'Status');
 		}
 
-		/**@type {number | false} */
+		/** @type {number | undefined | false} */
 		let damage = false;
-		if (target.fainted) {
+		if (!target || target.fainted) {
 			this.attrLastMove('[notarget]');
 			this.add('-notarget');
 			return true;
@@ -241,7 +241,7 @@ let BattleScripts = {
 		}
 
 		// Go ahead with results of the used move.
-		if (!damage && damage !== 0) {
+		if (damage === false) {
 			this.singleEvent('MoveFail', move, null, target, pokemon, move);
 			return true;
 		}
@@ -258,7 +258,7 @@ let BattleScripts = {
 	tryMoveHit(target, pokemon, move) {
 		let boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
 		let doSelfDestruct = true;
-		/**@type {number | false} */
+		/** @type {number | false | undefined} */
 		let damage = 0;
 
 		// First, check if the target is semi-invulnerable
@@ -278,7 +278,7 @@ let BattleScripts = {
 		}
 
 		// Now, let's calculate the accuracy.
-		/**@type {number | true} */
+		/** @type {number | true} */
 		let accuracy = move.accuracy;
 
 		// Partial trapping moves: true accuracy while it lasts
@@ -345,23 +345,16 @@ let BattleScripts = {
 				}
 				hits = Math.floor(hits);
 				// In gen 1, all the hits have the same damage for multihits move
-				/**@type {number | false} */
+				/** @type {number | undefined | false} */
 				let moveDamage = 0;
-				let firstDamage;
 				let i;
 				for (i = 0; i < hits && target.hp && pokemon.hp; i++) {
 					move.hit = i + 1;
-					if (i === 0) {
-						// First hit, we calculate
-						moveDamage = this.moveHit(target, pokemon, move);
-						firstDamage = moveDamage;
-					} else {
-						// We get the previous damage to make it fix damage
-						move.damage = firstDamage;
-						moveDamage = this.moveHit(target, pokemon, move);
-					}
+					moveDamage = this.moveHit(target, pokemon, move);
 					if (moveDamage === false) break;
 					damage = (moveDamage || 0);
+					// Move damage is fixed to be the first move's damage
+					if (i === 0) move.damage = damage;
 					if (target.subFainted) {
 						i++;
 						break;
@@ -407,7 +400,7 @@ let BattleScripts = {
 	// It deals with the actual move hit, as the name indicates, dealing damage and/or effects.
 	// This function also deals with the Gen 1 Substitute behaviour on the hitting process.
 	moveHit(target, pokemon, move, moveData, isSecondary, isSelf) {
-		/**@type {number | false} */
+		/** @type {number | false | null | undefined} */
 		let damage = 0;
 
 		if (!isSecondary && !isSelf) this.setActiveMove(move, pokemon, target);
@@ -632,8 +625,8 @@ let BattleScripts = {
 			if (!source) source = this.event.source;
 			if (!effect) effect = this.effect;
 		}
+		if (typeof effect === 'string') effect = this.getEffect(effect);
 		if (!target || !target.hp) return 0;
-		effect = this.getEffect(effect);
 		boost = this.runEvent('Boost', target, source, effect, Object.assign({}, boost));
 		for (let i in boost) {
 			/** @type {SparseBoostsTable} */
@@ -664,7 +657,7 @@ let BattleScripts = {
 						target.removeVolatile('parspeeddrop');
 					}
 				}
-				if (effect.effectType === 'Move') {
+				if (!effect || effect.effectType === 'Move') {
 					// @ts-ignore
 					this.add(msg, target, i, boost[i]);
 				} else {
@@ -675,110 +668,6 @@ let BattleScripts = {
 			}
 		}
 		this.runEvent('AfterBoost', target, source, effect, boost);
-	},
-	// damage can be found in sim/battle.js on the Battle object. Not to confuse with BattlePokemon.prototype.damage
-	// It calculates and executes the damage damage from source to target with effect.
-	// It also deals with recoil and drains.
-	// @ts-ignore
-	damage(damage, target, source, effect) {
-		if (this.event) {
-			if (!target) target = this.event.target;
-			if (!source) source = this.event.source;
-			if (!effect) effect = this.effect;
-		}
-		if (!target || !target.hp) return 0;
-		effect = this.getEffect(effect);
-		if (!(damage || damage === 0)) return damage;
-		if (damage !== 0) damage = this.clampIntRange(damage, 1);
-
-		if (effect.id !== 'struggle-recoil') { // Struggle recoil is not affected by effects
-			damage = this.runEvent('Damage', target, source, effect, damage);
-			if (!(damage || damage === 0)) {
-				this.debug('damage event failed');
-				return damage;
-			}
-		}
-		if (damage !== 0) damage = this.clampIntRange(damage, 1);
-		if (!['recoil', 'drain'].includes(effect.id) && effect.effectType !== 'Status') {
-			// FIXME: The stored damage should be calculated ignoring Substitute.
-			// https://github.com/Zarel/Pokemon-Showdown/issues/2598
-			this.lastDamage = damage;
-		}
-		damage = target.damage(damage, source, effect);
-		if (source) source.lastDamage = damage;
-		let name = effect.fullname;
-		if (name === 'tox') name = 'psn';
-		switch (effect.id) {
-		case 'partiallytrapped':
-			this.add('-damage', target, target.getHealth, '[from] ' + this.effectData.sourceEffect.fullname, '[partiallytrapped]');
-			break;
-		default:
-			if (effect.effectType === 'Move') {
-				this.add('-damage', target, target.getHealth);
-			} else if (source && source !== target) {
-				this.add('-damage', target, target.getHealth, '[from] ' + effect.fullname, '[of] ' + source);
-			} else {
-				this.add('-damage', target, target.getHealth, '[from] ' + name);
-			}
-			break;
-		}
-
-		if (effect.recoil && source) {
-			this.damage(this.clampIntRange(Math.floor(damage * effect.recoil[0] / effect.recoil[1]), 1), source, target, 'recoil');
-		}
-		if (effect.drain && source) {
-			this.heal(this.clampIntRange(Math.floor(damage * effect.drain[0] / effect.drain[1]), 1), source, target, 'drain');
-		}
-
-		if (target.fainted || target.hp <= 0) {
-			this.faint(target);
-			this.queue = [];
-		} else {
-			// damage = this.runEvent('AfterDamage', target, source, effect, damage);
-		}
-
-		return damage;
-	},
-	// directDamage can be found on sim/battle.js in Battle object
-	// It deals direct damage damage from source to target with effect.
-	// It also deals with Gen 1 weird Substitute behaviour.
-	directDamage(damage, target, source, effect) {
-		if (this.event) {
-			if (!target) target = this.event.target;
-			if (!source) source = this.event.source;
-			if (!effect) effect = this.effect;
-		}
-		if (!target || !target.hp) return 0;
-		if (!damage) return 0;
-		damage = this.clampIntRange(damage, 1);
-		// Check here for Substitute on confusion since it's not exactly a move that causes the damage and thus it can't TryMoveHit.
-		// The hi jump kick recoil also hits the sub.
-		if (['confusion', 'highjumpkick'].includes(effect.id) && target.volatiles['substitute']) {
-			target.volatiles['substitute'].hp -= damage;
-			if (target.volatiles['substitute'].hp <= 0) {
-				target.removeVolatile('substitute');
-				target.subFainted = true;
-			} else {
-				this.add('-activate', target, 'Substitute', '[damage]');
-			}
-		} else {
-			damage = target.damage(damage, source, effect);
-			// Now we sent the proper -damage.
-			switch (effect.id) {
-			case 'strugglerecoil':
-				this.add('-damage', target, target.getHealth, '[from] recoil');
-				break;
-			case 'confusion':
-				this.add('-damage', target, target.getHealth, '[from] confusion');
-				break;
-			default:
-				this.add('-damage', target, target.getHealth);
-				break;
-			}
-			if (target.fainted) this.faint(target);
-		}
-
-		return damage;
 	},
 	// getDamage can be found on sim/battle.js on the Battle object.
 	// It calculates the damage pokemon does to target with move.
@@ -842,15 +731,13 @@ let BattleScripts = {
 		let type = move.type;
 
 		// We get the base power and apply basePowerCallback if necessary.
+		/** @type {number | false | null} */
 		let basePower = move.basePower;
 		if (move.basePowerCallback) {
 			basePower = move.basePowerCallback.call(this, pokemon, target, move);
 		}
-
-		// We check if the base power is proper.
 		if (!basePower) {
-			if (basePower === 0) return; // Returning undefined means not dealing damage
-			return basePower;
+			return basePower === 0 ? undefined : basePower;
 		}
 		basePower = this.clampIntRange(basePower, 1);
 
@@ -890,7 +777,7 @@ let BattleScripts = {
 		// Happens after crit calculation.
 		if (basePower) {
 			basePower = this.runEvent('BasePower', pokemon, target, move, basePower);
-			if (move.basePowerModifier) {
+			if (basePower && move.basePowerModifier) {
 				basePower *= move.basePowerModifier;
 			}
 		}

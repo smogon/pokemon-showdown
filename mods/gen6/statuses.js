@@ -28,12 +28,13 @@ let BattleStatuses = {
 			if (this.randomChance(1, 2)) {
 				return;
 			}
-			this.damage(this.getDamage(pokemon, pokemon, 40), pokemon, pokemon, {
+			let damage = this.getDamage(pokemon, pokemon, 40);
+			if (typeof damage !== 'number') throw new Error("Confusion damage not dealt");
+			this.damage(damage, pokemon, pokemon, /** @type {ActiveMove} */ ({
 				id: 'confused',
 				effectType: 'Move',
-				// @ts-ignore
 				type: '???',
-			});
+			}));
 			return false;
 		},
 	},

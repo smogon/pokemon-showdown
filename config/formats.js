@@ -544,9 +544,12 @@ let Formats = [
 			}
 
 			this.format.noChangeForme = false;
+			/** @type {string[]} */
 			let problems = [];
 			let pkmnRule = Dex.getFormat('pokemon');
-			if (pkmnRule.exists && pkmnRule.onChangeSet && pkmnRule.onChangeSet.call(Dex, set, this.format)) problems = pkmnRule.onChangeSet.call(Dex, set, this.format);
+			if (pkmnRule.exists && pkmnRule.onChangeSet && pkmnRule.onChangeSet.call(Dex, set, this.format)) {
+				problems = pkmnRule.onChangeSet.call(Dex, set, this.format) || [];
+			}
 			this.format.noChangeForme = true;
 
 			if (problems.length) return problems;

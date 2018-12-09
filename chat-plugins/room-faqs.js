@@ -39,7 +39,7 @@ const commands = {
 		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
 
 		/** @type {string} */
-		let input = Chat.filter.call(this, target, user, room, connection);
+		let input = Chat.filter(this, target, user, room, connection);
 		if (target !== input) return this.errorReply("You are not allowed to use fitered words in roomfaq entries.");
 		let [topic, ...rest] = input.split(',');
 

@@ -32,7 +32,13 @@ To reload chat commands:
 /** @typedef {(this: CommandContext, target: string, room: ChatRoom | GameRoom, user: User, connection: Connection, cmd: string, message: string) => (void)} ChatHandler */
 /** @typedef {{[k: string]: ChatHandler | string | true | string[] | ChatCommands}} ChatCommands */
 
-/** @typedef {(this: CommandContext, message: string, user: User, room: ChatRoom?, connection: Connection, targetUser: User?) => (string | boolean)} ChatFilter */
+/**
+ * Chat filters can choose to:
+ * 1. return false OR null - to not send a user's message
+ * 2. return an altered string - to alter a user's message
+ * 3. return undefined to send the original message through
+ * @typedef {(this: CommandContext, message: string, user: User, room: ChatRoom | GameRoom?, connection: Connection, targetUser: User?, originalMessage: string) => (string | false | null | undefined)} ChatFilter
+ */
 /** @typedef {(name: string, user: User) => (string)} NameFilter */
 
 const LINK_WHITELIST = ['*.pokemonshowdown.com', 'psim.us', 'smogtours.psim.us', '*.smogon.com', '*.pastebin.com', '*.hastebin.com'];
@@ -134,22 +140,23 @@ Chat.pages = undefined;
 /**@type {ChatFilter[]} */
 Chat.filters = [];
 /**
+ * @param {CommandContext} context
  * @param {string} message
  * @param {User} user
- * @param {ChatRoom} room
+ * @param {GameRoom | ChatRoom?} room
  * @param {Connection} connection
  * @param {User?} [targetUser]
  */
-Chat.filter = function (message, user, room, connection, targetUser = null) {
+Chat.filter = function (context, message, user, room, connection, targetUser = null) {
 	// Chat filters can choose to:
 	// 1. return false OR null - to not send a user's message
 	// 2. return an altered string - to alter a user's message
 	// 3. return undefined to send the original message through
 	const originalMessage = message;
 	for (const filter of Chat.filters) {
-		const output = filter.call(this, message, user, room, connection, targetUser, originalMessage);
+		const output = filter.call(context, message, user, room, connection, targetUser, originalMessage);
+		if (!output && output !== undefined) return message;
 		if (output !== undefined) message = output;
-		if (!message) return message;
 	}
 
 	return message;
@@ -776,7 +783,7 @@ class CommandContext {
 			const message = this.canTalk(suppressMessage || this.message);
 			if (!message) return false;
 
-			this.message = message;
+			this.message = /** @type {string} */ (message);
 			this.broadcastMessage = broadcastMessage;
 		}
 		return true;
@@ -833,8 +840,8 @@ class CommandContext {
 	}
 	/**
 	 * @param {string?} message
-	 * @param {BasicChatRoom?} [room]
-	 * @param {User?} [targetUser]
+	 * @param {GameRoom | ChatRoom?} room
+	 * @param {User?} targetUser
 	 */
 	canTalk(message = null, room = null, targetUser = null) {
 		if (!targetUser && this.pmTarget) {
@@ -995,7 +1002,7 @@ class CommandContext {
 		}
 
 		if (Chat.filters.length) {
-			return Chat.filter.call(this, message, user, room, connection, targetUser);
+			return Chat.filter(this, message, user, room, connection, targetUser);
 		}
 
 		return message;
@@ -1679,7 +1686,7 @@ Chat.fitImage = async function (url, maxHeight = 300, maxWidth = 300) {
 /**
  * Used by ChatMonitor.
  * @typedef {[(string | RegExp), string, string?, number]} FilterWord
- * @typedef {(this: CommandContext, line: FilterWord, room: ChatRoom, user: User, message: string, lcMessage: string, isStaff: boolean) => (string | false | undefined)} MonitorHandler
+ * @typedef {(this: CommandContext, line: FilterWord, room: ChatRoom | GameRoom?, user: User, message: string, lcMessage: string, isStaff: boolean) => (string | false | undefined)} MonitorHandler
  * @typedef {{location: string, punishment: string, label: string, condition?: string, monitor?: MonitorHandler}} Monitor
  */
 

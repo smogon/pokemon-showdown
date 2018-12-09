@@ -66,15 +66,15 @@ let BattleScripts = {
 	},
 	// Battle scripts.
 	runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect) {
-		let target = this.getTarget(pokemon, moveOrMoveName, targetLoc);
-		if (!sourceEffect && toId(moveOrMoveName) !== 'struggle') {
-			let changedMove = this.runEvent('OverrideAction', pokemon, target, moveOrMoveName);
+		let move = this.getActiveMove(moveOrMoveName);
+		let target = this.getTarget(pokemon, move, targetLoc);
+		if (!sourceEffect && move.id !== 'struggle') {
+			let changedMove = this.runEvent('OverrideAction', pokemon, target, move);
 			if (changedMove && changedMove !== true) {
-				moveOrMoveName = changedMove;
-				target = null;
+				move = this.getActiveMove(changedMove);
+				target = this.resolveTarget(pokemon, move);
 			}
 		}
-		let move = this.getActiveMove(moveOrMoveName);
 		if (!target && target !== false) target = this.resolveTarget(pokemon, move);
 
 		this.setActiveMove(move, pokemon, target);
@@ -119,7 +119,7 @@ let BattleScripts = {
 		let positiveBoostTable = [1, 1.33, 1.66, 2, 2.33, 2.66, 3];
 		let negativeBoostTable = [1, 0.75, 0.6, 0.5, 0.43, 0.36, 0.33];
 		let doSelfDestruct = true;
-		/**@type {number | false} */
+		/** @type {number | false | undefined} */
 		let damage = 0;
 
 		if (move.selfdestruct && doSelfDestruct) {
@@ -158,7 +158,7 @@ let BattleScripts = {
 			return false;
 		}
 
-		/**@type {number | true} */
+		/** @type {number | true} */
 		let accuracy = move.accuracy;
 		if (move.alwaysHit) {
 			accuracy = true;
@@ -222,7 +222,7 @@ let BattleScripts = {
 			}
 			hits = Math.floor(hits);
 			let nullDamage = true;
-			/**@type {number | false} */
+			/**@type {number | undefined | false} */
 			let moveDamage;
 
 			let isSleepUsable = move.sleepUsable || this.getMove(move.sourceEffect).sleepUsable;
@@ -263,7 +263,8 @@ let BattleScripts = {
 		return damage;
 	},
 	moveHit(target, pokemon, move, moveData, isSecondary, isSelf) {
-		let damage;
+		/** @type {number | false | null | undefined} */
+		let damage = undefined;
 		move = this.getActiveMove(move);
 
 		if (!moveData) moveData = move;
@@ -489,6 +490,7 @@ let BattleScripts = {
 		let type = move.type;
 
 		// We get the base power and apply basePowerCallback if necessary
+		/** @type {number | false | null | undefined} */
 		let basePower = move.basePower;
 		if (move.basePowerCallback) {
 			basePower = move.basePowerCallback.call(this, pokemon, target, move);
@@ -527,7 +529,7 @@ let BattleScripts = {
 			} else {
 				basePower = this.runEvent('BasePower', pokemon, target, move, basePower, true);
 			}
-			if (move.basePowerModifier) {
+			if (basePower && move.basePowerModifier) {
 				basePower *= move.basePowerModifier;
 			}
 		}
@@ -669,62 +671,6 @@ let BattleScripts = {
 		}
 
 		// We are done, this is the final damage
-		return damage;
-	},
-	damage(damage, target, source, effect) {
-		if (this.event) {
-			if (!target) target = this.event.target;
-			if (!source) source = this.event.source;
-			if (!effect) effect = this.effect;
-		}
-		if (!target || !target.hp) return 0;
-		effect = this.getEffect(effect);
-		if (!(damage || damage === 0)) return damage;
-		if (damage !== 0) damage = this.clampIntRange(damage, 1);
-
-		if (effect.id !== 'struggle-recoil') { // Struggle recoil is not affected by effects
-			if (effect.effectType === 'Weather' && !target.runStatusImmunity(effect.id)) {
-				this.debug('weather immunity');
-				return 0;
-			}
-			damage = this.runEvent('Damage', target, source, effect, damage);
-			if (!(damage || damage === 0)) {
-				this.debug('damage event failed');
-				return damage;
-			}
-		}
-		if (damage !== 0) damage = this.clampIntRange(damage, 1);
-		damage = target.damage(damage, source, effect);
-		if (source) source.lastDamage = damage;
-		let name = effect.fullname;
-		if (name === 'tox') name = 'psn';
-		switch (effect.id) {
-		case 'partiallytrapped':
-			this.add('-damage', target, target.getHealth, '[from] ' + this.effectData.sourceEffect.fullname, '[partiallytrapped]');
-			break;
-		default:
-			if (effect.effectType === 'Move') {
-				this.add('-damage', target, target.getHealth);
-			} else if (source && source !== target) {
-				this.add('-damage', target, target.getHealth, '[from] ' + effect.fullname, '[of] ' + source);
-			} else {
-				this.add('-damage', target, target.getHealth, '[from] ' + name);
-			}
-			break;
-		}
-
-		if (effect.drain && source) {
-			this.heal(Math.ceil(damage * effect.drain[0] / effect.drain[1]), source, target, 'drain');
-		}
-
-		if (target.fainted || target.hp <= 0) {
-			this.debug('instafaint: ' + this.faintQueue.map(entry => entry.target).map(pokemon => pokemon.name));
-			this.faintMessages(true);
-			target.faint();
-		} else {
-			damage = this.runEvent('AfterDamage', target, source, effect, damage);
-		}
-
 		return damage;
 	},
 };

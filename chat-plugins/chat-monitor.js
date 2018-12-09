@@ -189,7 +189,7 @@ let chatfilter = function (message, user, room) {
 	lcMessage = lcMessage.replace(/__|\*\*|``|\[\[|\]\]/g, '');
 
 	const isStaffRoom = room && ((room.chatRoomData && room.id.endsWith('staff')) || room.id.startsWith('help-'));
-	const isStaff = isStaffRoom || user.isStaff || (this.pmTarget && this.pmTarget.isStaff);
+	const isStaff = isStaffRoom || user.isStaff || !!(this.pmTarget && this.pmTarget.isStaff);
 
 	for (const list in Chat.monitors) {
 		const {location, condition, monitor} = Chat.monitors[list];

@@ -48,7 +48,7 @@ declare global {
 
 	// dex data
 	const Ability: typeof DataType.Ability
-	const Effect: typeof DataType.Effect
+	const BasicEffect: typeof DataType.BasicEffect
 	const Format: typeof DataType.Format
 	const Item: typeof DataType.Item
 	const Move: typeof DataType.Move

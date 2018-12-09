@@ -96,10 +96,13 @@ let BattleMovedex = {
 						this.add('-fail', pokemon);
 						return false;
 					}
-					if (!target.isActive) target = this.resolveTarget(pokemon, this.getMove('pound'));
-					if (!this.isAdjacent(pokemon, target)) {
-						this.add('-miss', pokemon, target);
-						return false;
+					if (!target.isActive) {
+						const possibleTarget = this.resolveTarget(pokemon, this.getMove('pound'));
+						if (!possibleTarget) {
+							this.add('-miss', pokemon);
+							return false;
+						}
+						target = possibleTarget;
 					}
 					/**@type {Move} */
 					// @ts-ignore
@@ -381,7 +384,8 @@ let BattleMovedex = {
 		onMoveFail: function (target, source, move) {
 			if (target.runImmunity('Fighting')) {
 				let damage = this.getDamage(source, target, move, true);
-				this.damage(this.clampIntRange(damage / 8, 1), source, source, 'highjumpkick');
+				if (typeof damage !== 'number') throw new Error("Couldn't get High Jump Kick recoil");
+				this.damage(this.clampIntRange(damage / 8, 1), source, source, move);
 			}
 		},
 	},
@@ -400,7 +404,8 @@ let BattleMovedex = {
 		onMoveFail: function (target, source, move) {
 			if (target.runImmunity('Fighting')) {
 				let damage = this.getDamage(source, target, move, true);
-				this.damage(this.clampIntRange(damage / 8, 1), source, source, 'jumpkick');
+				if (typeof damage !== 'number') throw new Error("Couldn't get Jump Kick recoil");
+				this.damage(this.clampIntRange(damage / 8, 1), source, source, move);
 			}
 		},
 	},
@@ -872,7 +877,7 @@ let BattleMovedex = {
 					return damage;
 				}
 				if (damage > target.volatiles['substitute'].hp) {
-					damage = target.volatiles['substitute'].hp;
+					damage = /** @type {number} */ (target.volatiles['substitute'].hp);
 				}
 				target.volatiles['substitute'].hp -= damage;
 				source.lastDamage = damage;

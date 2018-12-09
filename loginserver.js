@@ -78,7 +78,7 @@ class LoginServerInstance {
 			let req = http.get(urlObject, res => {
 				Streams.readAll(res).then(buffer => {
 					let data = parseJSON(buffer).json || null;
-					resolve([data, res.statusCode, null]);
+					resolve([data, res.statusCode || 0, null]);
 					this.openRequests--;
 				});
 			});
@@ -168,10 +168,10 @@ class LoginServerInstance {
 				}
 				for (const [i, resolve] of resolvers.entries()) {
 					if (data) {
-						resolve([data[i], res.statusCode, null]);
+						resolve([data[i], res.statusCode || 0, null]);
 					} else {
 						if (buffer.includes('<')) buffer = 'invalid response';
-						resolve([null, res.statusCode, new Error(buffer)]);
+						resolve([null, res.statusCode || 0, new Error(buffer)]);
 					}
 				}
 				this.requestEnd();
