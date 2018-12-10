@@ -2550,7 +2550,7 @@ class Battle extends Dex.ModdedDex {
 				// no valid target at all, return a foe for any possible redirection
 			}
 		}
-		return pokemon.side.foe.randomActive();
+		return pokemon.side.foe.randomActive() || pokemon.side.foe.active[0];
 	}
 
 	checkFainted() {
