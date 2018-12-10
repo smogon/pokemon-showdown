@@ -290,7 +290,7 @@ if (cluster.isMaster) {
 		let key;
 		try {
 			key = require('path').resolve(__dirname, Config.ssl.options.key);
-			if (!fs.lstatSync(key).isFile()) throw new Error();
+			if (!fs.statSync(key).isFile()) throw new Error();
 			try {
 				key = fs.readFileSync(key);
 			} catch (e) {
@@ -304,7 +304,7 @@ if (cluster.isMaster) {
 		let cert;
 		try {
 			cert = require('path').resolve(__dirname, Config.ssl.options.cert);
-			if (!fs.lstatSync(cert).isFile()) throw new Error();
+			if (!fs.statSync(cert).isFile()) throw new Error();
 			try {
 				cert = fs.readFileSync(cert);
 			} catch (e) {
