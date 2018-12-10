@@ -65,8 +65,8 @@ const fs = require('fs');
 exports.ssl = {
 	port: 443,
 	options: {
-		key: fs.readFileSync('./config/ssl/privkey.pem'),
-		cert: fs.readFileSync('./config/ssl/fullchain.pem'),
+		key: './config/ssl/privkey.pem',
+		cert: './config/ssl/fullchain.pem',
 	},
 };
 */
