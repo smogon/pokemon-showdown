@@ -19336,7 +19336,7 @@ let BattleMovedex = {
 			},
 			onEnd: function (target) {
 				this.add('-end', target, 'move: Yawn', '[silent]');
-				target.trySetStatus('slp');
+				target.trySetStatus('slp', this.effectData.source);
 			},
 		},
 		secondary: null,
