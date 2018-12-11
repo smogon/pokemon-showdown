@@ -37,7 +37,9 @@ const commands = {
 	addfaq: function (target, room, user, connection) {
 		if (!this.can('declare', null, room)) return false;
 		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+		if (!target) return this.parse('/help roomfaq');
 
+		target = target.trim();
 		/** @type {string} */
 		let input = Chat.filter(this, target, user, room, connection);
 		if (target !== input) return this.errorReply("You are not allowed to use fitered words in roomfaq entries.");
