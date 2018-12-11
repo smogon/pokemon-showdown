@@ -406,18 +406,6 @@ let BattleStatuses = {
 			this.add(`c|@E4 Flint|lul ok`);
 		},
 	},
-	earthboundmisfit: {
-		noCopy: true,
-		onStart: function () {
-			this.add(`c|+Earthbound Misfit|/me sighs`);
-		},
-		onSwitchOut: function () {
-			this.add(`c|+Earthbound Misfit|/me sighs`);
-		},
-		onFaint: function () {
-			this.add(`c|+Earthbound Misfit|Brexit means Brexit`);
-		},
-	},
 	explodingdaisies: {
 		noCopy: true,
 		onStart: function () {
@@ -1412,6 +1400,18 @@ let BattleStatuses = {
 			this.add(`c|~Zarel|Your mom`);
 			// message is shown after the "Zarel Fainted!" message
 			this.add('message', 'Zarel used your mom!');
+		},
+	},
+	zyguser: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|+Zyg|/me sighs`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|+Zyg|/me sighs`);
+		},
+		onFaint: function () {
+			this.add(`c|+Zyg|Brexit means Brexit`);
 		},
 	},
 	// Custom effect for Yuki
