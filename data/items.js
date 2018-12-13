@@ -2902,18 +2902,12 @@ let BattleItems = {
 		onUpdate: function (pokemon) {
 			if (!pokemon.hp) return;
 			if (pokemon.moveSlots.some(move => move.pp === 0)) {
-				pokemon.addVolatile('leppaberry');
 				pokemon.eatItem();
 			}
 		},
 		onEat: function (pokemon) {
-			let moveSlot;
-			if (pokemon.volatiles['leppaberry']) {
-				moveSlot = pokemon.moveSlots.find(move => move.pp === 0);
-				pokemon.removeVolatile('leppaberry');
-			} else {
-				moveSlot = pokemon.moveSlots.find(move => move.pp < move.maxpp);
-			}
+			let moveSlot = pokemon.moveSlots.find(move => move.pp === 0) ||
+				pokemon.moveSlots.find(move => move.pp < move.maxpp);
 			if (!moveSlot) return;
 			moveSlot.pp += 10;
 			if (moveSlot.pp > moveSlot.maxpp) moveSlot.pp = moveSlot.maxpp;
