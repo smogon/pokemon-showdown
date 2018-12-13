@@ -548,10 +548,10 @@ let BattleAbilities = {
 		desc: "While this Pokemon is active, Explosion, Mind Blown, Self-Destruct, and the Aftermath Ability are prevented from having an effect.",
 		shortDesc: "Prevents Explosion/Mind Blown/Self-Destruct/Aftermath while this Pokemon is active.",
 		id: "damp",
-		onAnyTryMove: function (target, source, effect) {
-			if (['explosion', 'mindblown', 'selfdestruct'].includes(effect.id)) {
+		onAnyTryMove: function (pokemon, target, move) {
+			if (['explosion', 'mindblown', 'selfdestruct'].includes(move.id)) {
 				this.attrLastMove('[still]');
-				this.add('cant', this.effectData.target, 'ability: Damp', effect, '[of] ' + target);
+				this.add('-fail', pokemon, move, '[from] ability: Damp', '[of] ' + this.effectData.target);
 				return false;
 			}
 		},
@@ -594,10 +594,10 @@ let BattleAbilities = {
 	"dazzling": {
 		desc: "While this Pokemon is active, priority moves from opposing Pokemon targeted at allies are prevented from having an effect.",
 		shortDesc: "While this Pokemon is active, allies are protected from opposing priority moves.",
-		onFoeTryMove: function (target, source, effect) {
-			if ((source.side === this.effectData.target.side || effect.id === 'perishsong') && effect.priority > 0.1 && effect.target !== 'foeSide') {
+		onFoeTryMove: function (pokemon, target, move) {
+			if ((target.side === this.effectData.target.side || move.id === 'perishsong') && move.priority > 0.1 && move.target !== 'foeSide') {
 				this.attrLastMove('[still]');
-				this.add('cant', this.effectData.target, 'ability: Dazzling', effect, '[of] ' + target);
+				this.add('-fail', pokemon, move, '[from] ability: Dazzling', '[of] ' + this.effectData.target);
 				return false;
 			}
 		},
@@ -2577,10 +2577,10 @@ let BattleAbilities = {
 	"queenlymajesty": {
 		desc: "While this Pokemon is active, priority moves from opposing Pokemon targeted at allies are prevented from having an effect.",
 		shortDesc: "While this Pokemon is active, allies are protected from opposing priority moves.",
-		onFoeTryMove: function (target, source, effect) {
-			if ((source.side === this.effectData.target.side || effect.id === 'perishsong') && effect.priority > 0.1 && effect.target !== 'foeSide') {
+		onFoeTryMove: function (pokemon, target, move) {
+			if ((target.side === this.effectData.target.side || move.id === 'perishsong') && move.priority > 0.1 && move.target !== 'foeSide') {
 				this.attrLastMove('[still]');
-				this.add('cant', this.effectData.target, 'ability: Queenly Majesty', effect, '[of] ' + target);
+				this.add('-fail', pokemon, move, '[from] ability: Queenly Majesty', '[of] ' + this.effectData.target);
 				return false;
 			}
 		},
