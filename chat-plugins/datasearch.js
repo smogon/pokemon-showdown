@@ -925,7 +925,7 @@ function runMovesearch(target, cmd, canAll, message) {
 			if (target.substr(0, 8) === 'priority') {
 				let sign = '';
 				target = target.substr(8).trim();
-				if (target === "+") {
+				if (target === "+" || target === "") {
 					sign = 'greater';
 				} else if (target === "-") {
 					sign = 'less';
@@ -936,7 +936,7 @@ function runMovesearch(target, cmd, canAll, message) {
 					return {reply: "Priority cannot be set with both shorthand and inequality range."};
 				} else {
 					orGroup.property['priority'] = {};
-					orGroup.property['priority'][sign] = (sign === 'less' ? -1 : 1);
+					orGroup.property['priority'][sign] = 0;
 				}
 				continue;
 			}
