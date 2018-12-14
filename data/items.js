@@ -2901,27 +2901,14 @@ let BattleItems = {
 		},
 		onUpdate: function (pokemon) {
 			if (!pokemon.hp) return;
-			let moveSlot = pokemon.lastMove && pokemon.getMoveData(pokemon.lastMove.id);
-			if (moveSlot && moveSlot.pp === 0) {
-				pokemon.addVolatile('leppaberry');
-				pokemon.volatiles['leppaberry'].moveSlot = moveSlot;
+			if (pokemon.moveSlots.some(move => move.pp === 0)) {
 				pokemon.eatItem();
 			}
 		},
 		onEat: function (pokemon) {
-			let moveSlot;
-			if (pokemon.volatiles['leppaberry']) {
-				moveSlot = pokemon.volatiles['leppaberry'].moveSlot;
-				pokemon.removeVolatile('leppaberry');
-			} else {
-				let pp = 99;
-				for (const possibleMoveSlot of pokemon.moveSlots) {
-					if (possibleMoveSlot.pp < pp) {
-						moveSlot = possibleMoveSlot;
-						pp = moveSlot.pp;
-					}
-				}
-			}
+			let moveSlot = pokemon.moveSlots.find(move => move.pp === 0) ||
+				pokemon.moveSlots.find(move => move.pp < move.maxpp);
+			if (!moveSlot) return;
 			moveSlot.pp += 10;
 			if (moveSlot.pp > moveSlot.maxpp) moveSlot.pp = moveSlot.maxpp;
 			this.add('-activate', pokemon, 'item: Leppa Berry', moveSlot.move, '[consumed]');
