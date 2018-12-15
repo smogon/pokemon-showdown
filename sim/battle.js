@@ -897,7 +897,7 @@ class Battle extends Dex.ModdedDex {
 		}
 
 		this.eventDepth--;
-		if (this.event.modifier !== 1 && typeof relayVar === 'number') {
+		if ( typeof relayVar === 'number') {
 			// this.debug(eventid + ' modifier: 0x' + ('0000' + (this.event.modifier * 4096).toString(16)).slice(-4).toUpperCase());
 			relayVar = this.modify(relayVar, this.event.modifier);
 		}
