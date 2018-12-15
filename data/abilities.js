@@ -3829,6 +3829,7 @@ let BattleAbilities = {
 		num: 84,
 	},
 	"unnerve": {
+		desc: "While this Pokemon is active, it prevents opposing Pokemon from using their Berries. Activation message broadcasts before other Abilities regardless of the Pokemon's Speed tiers.",
 		shortDesc: "While this Pokemon is active, it prevents opposing Pokemon from using their Berries.",
 		onPreStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Unnerve', pokemon.side.foe);
