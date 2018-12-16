@@ -23,11 +23,6 @@ function reformat(s) {
 	return s;
 }
 
-/** custom true/false contains */
-function strContain(haystack, needle) {
-	return haystack.indexOf(needle) > -1;
-}
-
 /** determine if char should be added to side */
 function isParseable(n, minus) {
 	return (!isNaN(n) || (n === "-" && !minus) || n === ".");
@@ -51,7 +46,7 @@ function getSide(haystack, middle, direction, minus) {
 /** fx to generically map a symbol to a function for parsing */
 function allocFx(eq, symbol, alloc, minus) {
 	minus = (typeof minus !== 'undefined'); // sometimes we want to capture minus signs, sometimes not
-	if (strContain(eq, symbol)) {
+	if (eq.includes(symbol)) {
 		let middleIndex = eq.indexOf(symbol);
 		let left = getSide(eq, middleIndex, -1, minus);
 		let right = getSide(eq, middleIndex, 1, false);
@@ -63,7 +58,7 @@ function allocFx(eq, symbol, alloc, minus) {
 /** main recursive fx + PEMDAS */
 function solveStr(eq) {
 	firstNest:
-	while (strContain(eq, "(")) { // while the string has any parentheses
+	while (eq.includes("(")) { // while the string has any parentheses
 		let first = eq.indexOf("("); // first get the earliest open parentheses
 		let last = first + 1; // start searching at the character after
 		let layer = 1; // we might run into more parentheses, so this integer will keep track
@@ -87,18 +82,18 @@ function solveStr(eq) {
 		let preStr = "(" + nested + ")";
 		eq = eq.replace(preStr, solvedStr); // replace parenthetical with value
 	}
-	while (strContain(eq, "^")) eq = allocFx(eq, "^", function (l, r) { return Math.pow(parseFloat(l), parseFloat(r)); }, false);
-	while (strContain(eq, "&")) eq = allocFx(eq, "&", function (l, r) { return Math.pow(parseFloat(l), parseFloat(r)); }); // account for things like (-3)^2
-	while (strContain(eq, "*") || strContain(eq, "/")) {
+	while (eq.includes("^")) eq = allocFx(eq, "^", function (l, r) { return Math.pow(parseFloat(l), parseFloat(r)); }, false);
+	while (eq.includes("&")) eq = allocFx(eq, "&", function (l, r) { return Math.pow(parseFloat(l), parseFloat(r)); }); // account for things like (-3)^2
+	while (eq.includes("*") || eq.includes("/")) {
 		let multiply = true;
 		if (eq.indexOf("*") < eq.indexOf("/")) {
-			multiply = (strContain(eq, "*"));
+			multiply = (eq.includes("*"));
 		} else {
-			multiply = !(strContain(eq, "/"));
+			multiply = !(eq.includes("/"));
 		}
 		eq = (multiply) ? allocFx(eq, "*", function (l, r) { return parseFloat(l) * parseFloat(r); }) : allocFx(eq, "/", function (l, r) { return parseFloat(l) / parseFloat(r); });
 	}
-	while (strContain(eq, "+")) eq = allocFx(eq, "+", function (l, r) { return parseFloat(l) + parseFloat(r); });
+	while (eq.includes("+")) eq = allocFx(eq, "+", function (l, r) { return parseFloat(l) + parseFloat(r); });
 	return eq;
 }
 
