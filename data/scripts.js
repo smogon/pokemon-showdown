@@ -728,7 +728,7 @@ let BattleScripts = {
 				didSomething = didSomething || hitResult;
 			}
 			if (moveData.forceSwitch) {
-				hitResult = this.canSwitch(target.side);
+				hitResult = !!this.canSwitch(target.side);
 				didSomething = didSomething || hitResult;
 			}
 			if (moveData.selfSwitch) {
