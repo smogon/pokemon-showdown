@@ -155,7 +155,7 @@ Chat.filter = function (context, message, user, room, connection, targetUser = n
 	const originalMessage = message;
 	for (const filter of Chat.filters) {
 		const output = filter.call(context, message, user, room, connection, targetUser, originalMessage);
-		if (!output && output !== undefined) return message;
+		if (!output && output !== undefined) return output;
 		if (output !== undefined) message = output;
 	}
 
