@@ -1,7 +1,11 @@
-"use strict";
+'use strict';
+
+/** replace all fx */
 function replaceAll(haystack, needle, replace) {
 	return haystack.split(needle).join(replace);
-} // replace all fx
+}
+
+/** standardize string format */
 function reformat(s) {
 	s = s.toLowerCase();
 	s = replaceAll(s, "-(", "-1*(");
@@ -17,13 +21,19 @@ function reformat(s) {
 	}
 	while (s.charAt(0) === "+") s = s.substr(1);
 	return s;
-} // standardize string format
+}
+
+/** custom true/false contains */
 function strContain(haystack, needle) {
 	return haystack.indexOf(needle) > -1;
-} // custom true/false contains
+}
+
+/** determine if char should be added to side */
 function isParseable(n, minus) {
 	return (!isNaN(n) || (n === "-" && !minus) || n === ".");
-} // determine if char should be added to side
+}
+
+/** general fx to get two terms of any fx (multiply, add, etc) */
 function getSide(haystack, middle, direction, minus) {
 	let i = middle + direction;
 	let term = "";
@@ -36,7 +46,9 @@ function getSide(haystack, middle, direction, minus) {
 		} else { return term; }
 	}
 	return term;
-} // general fx to get two terms of any fx (multiply, add, etc)
+}
+
+/** fx to generically map a symbol to a function for parsing */
 function allocFx(eq, symbol, alloc, minus) {
 	minus = (typeof minus !== 'undefined'); // sometimes we want to capture minus signs, sometimes not
 	if (strContain(eq, symbol)) {
@@ -46,7 +58,9 @@ function allocFx(eq, symbol, alloc, minus) {
 		eq = replaceAll(eq, left + symbol + right, alloc(left, right));
 	}
 	return eq;
-} // fx to generically map a symbol to a function for parsing
+}
+
+/** main recursive fx + PEMDAS */
 function solveStr(eq) {
 	firstNest:
 	while (strContain(eq, "(")) { // while the string has any parentheses
@@ -86,7 +100,8 @@ function solveStr(eq) {
 	}
 	while (strContain(eq, "+")) eq = allocFx(eq, "+", function (l, r) { return parseFloat(l) + parseFloat(r); });
 	return eq;
-} // main recursive fx + PEMDAS
+}
+
 exports.commands = {
 	calculate: function (target, room, user) {
 		let result = solveStr(reformat(target));
