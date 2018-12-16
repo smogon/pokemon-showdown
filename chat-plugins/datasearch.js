@@ -1445,8 +1445,8 @@ function runLearn(target, cmd) {
 		break;
 	}
 	if (!formatName) {
+		if (!Dex.mod(`gen${gen}`)) return {error: `Gen ${gen} does not exist.`};
 		format = new Dex.Data.Format(format, {mod: `gen${gen}`});
-		if (!format.exists) return {error: `Gen ${gen} does not exist.`};
 		formatName = `Gen ${gen}`;
 		if (format.requirePentagon) formatName += ' Pentagon';
 	}
