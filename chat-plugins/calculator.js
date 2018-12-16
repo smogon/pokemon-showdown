@@ -82,8 +82,12 @@ function solveStr(eq) {
 		let preStr = "(" + nested + ")";
 		eq = eq.replace(preStr, solvedStr); // replace parenthetical with value
 	}
-	while (eq.includes("^")) eq = allocFx(eq, "^", (l, r) => Math.pow(parseFloat(l), parseFloat(r)), false);
-	while (eq.includes("&")) eq = allocFx(eq, "&", (l, r) => Math.pow(parseFloat(l), parseFloat(r))); // account for things like (-3)^2
+	while (eq.includes("^")) {
+		eq = allocFx(eq, "^", (l, r) => Math.pow(parseFloat(l), parseFloat(r)), false);
+	}
+	while (eq.includes("&")) {
+		eq = allocFx(eq, "&", (l, r) => Math.pow(parseFloat(l), parseFloat(r))); // account for things like (-3)^2
+	}
 	while (eq.includes("*") || eq.includes("/")) {
 		let multiply = true;
 		if (eq.indexOf("*") < eq.indexOf("/")) {
@@ -91,9 +95,15 @@ function solveStr(eq) {
 		} else {
 			multiply = !(eq.includes("/"));
 		}
-		eq = (multiply) ? allocFx(eq, "*", (l, r) => parseFloat(l) * parseFloat(r)) : allocFx(eq, "/", (l, r) => parseFloat(l) / parseFloat(r));
+		if (multiply) {
+			eq = allocFx(eq, "*", (l, r) => parseFloat(l) * parseFloat(r));
+		} else {
+			eq = allocFx(eq, "/", (l, r) => parseFloat(l) / parseFloat(r));
+		}
 	}
-	while (eq.includes("+")) eq = allocFx(eq, "+", (l, r) => parseFloat(l) + parseFloat(r));
+	while (eq.includes("+")) {
+		eq = allocFx(eq, "+", (l, r) => parseFloat(l) + parseFloat(r));
+	}
 	return eq;
 }
 
