@@ -195,7 +195,7 @@ let BattleScripts = {
 
 		if (!target) {
 			this.attrLastMove('[notarget]');
-			this.add('-notarget');
+			this.add(this.gen >= 5 ? '-fail' : '-notarget', pokemon);
 			if (move.target === 'normal') pokemon.isStaleCon = 0;
 			return false;
 		}
@@ -239,7 +239,7 @@ let BattleScripts = {
 		} else if (move.target === 'allAdjacent' || move.target === 'allAdjacentFoes') {
 			if (!targets.length) {
 				this.attrLastMove('[notarget]');
-				this.add('-notarget');
+				this.add(this.gen >= 5 ? '-fail' : '-notarget', pokemon);
 				return false;
 			}
 			if (targets.length > 1) move.spreadHit = true;
@@ -267,7 +267,7 @@ let BattleScripts = {
 			}
 			if (lacksTarget && !move.isFutureMove) {
 				this.attrLastMove('[notarget]');
-				this.add('-notarget');
+				this.add(this.gen >= 5 ? '-fail' : '-notarget', pokemon);
 				if (move.target === 'normal') pokemon.isStaleCon = 0;
 				return false;
 			}
