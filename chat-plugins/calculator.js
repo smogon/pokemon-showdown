@@ -92,7 +92,7 @@ exports.commands = {
 		let result = solveStr(reformat(target));
 		if (!target) return this.parse('/help calculate');
 		if (!this.runBroadcast()) return;
-		let validation_regex = /^(?!.*([*\/+\-.]{2}|\.\d+\.+|^[*\/]))[\d+()\^*\-\/. ]+$/gm;
+		let validation_regex = /^(?!.*([*/+\-.]{2}|\.\d+\.+|^[*/]))[\d+()^*\-/. ]+$/gm;
 		if (validation_regex.test(target) === false) {
 			return this.errorReply("Invalid arithmetical question");
 		} else {
