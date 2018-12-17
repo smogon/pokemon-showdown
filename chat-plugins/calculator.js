@@ -44,11 +44,10 @@ function getSide(haystack, middle, direction, minus) {
 }
 
 /** fx to generically map a symbol to a function for parsing */
-function allocFx(eq, symbol, alloc, minus) {
-	minus = (typeof minus !== 'undefined'); // sometimes we want to capture minus signs, sometimes not
+function allocFx(eq, symbol, alloc) {
 	if (eq.includes(symbol)) {
 		let middleIndex = eq.indexOf(symbol);
-		let left = getSide(eq, middleIndex, -1, minus);
+		let left = getSide(eq, middleIndex, -1);
 		let right = getSide(eq, middleIndex, 1, false);
 		eq = replaceAll(eq, left + symbol + right, alloc(left, right));
 	}
@@ -83,7 +82,7 @@ function solveStr(eq) {
 		eq = eq.replace(preStr, solvedStr); // replace parenthetical with value
 	}
 	while (eq.includes("^")) {
-		eq = allocFx(eq, "^", (l, r) => Math.pow(parseFloat(l), parseFloat(r)), false);
+		eq = allocFx(eq, "^", (l, r) => Math.pow(parseFloat(l), parseFloat(r)));
 	}
 	while (eq.includes("&")) {
 		eq = allocFx(eq, "&", (l, r) => Math.pow(parseFloat(l), parseFloat(r))); // account for things like (-3)^2
