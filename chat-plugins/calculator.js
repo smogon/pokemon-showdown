@@ -89,7 +89,7 @@ function solveStr(eq) {
 		eq = allocFx(eq, "&", (l, r) => Math.pow(parseFloat(l), parseFloat(r))); // account for things like (-3)^2
 	}
 	while (eq.includes("*") || eq.includes("/")) {
-		let multiply = true;
+		let multiply;
 		if (eq.indexOf("*") < eq.indexOf("/")) {
 			multiply = (eq.includes("*"));
 		} else {
