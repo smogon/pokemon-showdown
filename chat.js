@@ -546,6 +546,8 @@ class CommandContext {
 	/**
 	 * @param {BasicChatRoom | undefined?} room
 	 * @param {string} message
+	 *
+	 * @return {boolean}
 	 */
 	checkBanwords(room, message) {
 		if (!room) return true;
@@ -560,7 +562,7 @@ class CommandContext {
 		if (room.banwordRegex !== true && room.banwordRegex.test(message)) {
 			return false;
 		}
-		return true;
+		return this.checkBanwords(/** @type {ChatRoom} */ (room.parent), message);
 	}
 	checkGameFilter() {
 		if (!this.room || !this.room.game || !this.room.game.onChatMessage) return false;
