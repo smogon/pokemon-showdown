@@ -1310,13 +1310,13 @@ let BattleStatuses = {
 	unleashourpassion: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|+UnleashOurPassion|1v1 me if real`);
+			this.add(`c|%UnleashOurPassion|1v1 me if real`);
 		},
 		onSwitchOut: function () {
-			this.add(`c|+UnleashOurPassion|Tfw you remember switching exists`);
+			this.add(`c|%UnleashOurPassion|Tfw you remember switching exists`);
 		},
 		onFaint: function () {
-			this.add(`c|+UnleashOurPassion|That's hax! You were supposed to miss`);
+			this.add(`c|%UnleashOurPassion|That's hax! You were supposed to miss`);
 		},
 	},
 	urkerab: {
