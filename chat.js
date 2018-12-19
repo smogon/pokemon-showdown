@@ -146,7 +146,7 @@ Chat.filters = [];
  * @param {GameRoom | ChatRoom?} room
  * @param {Connection} connection
  * @param {User?} [targetUser]
- * @return {string | false | null | undefined}
+ * @return {string | false | null}
  */
 Chat.filter = function (context, message, user, room, connection, targetUser = null) {
 	// Chat filters can choose to:
