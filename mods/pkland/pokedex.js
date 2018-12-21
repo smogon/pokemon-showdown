@@ -83,7 +83,7 @@ let BattlePokedex = {
 	necrozmaultra: {
 		inherit: true,
     abilities: {0: 'Wonder Guard'},
-		baseStats: {hp: 240, atk: 240, def: 240, spa: 240, spd: 240, spe: 240},
+		baseStats: {hp: 130, atk: 130, def: 130, spa: 130, spd: 130, spe: 130},
 	},
 };
 

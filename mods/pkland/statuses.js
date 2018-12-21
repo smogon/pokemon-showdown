@@ -442,7 +442,7 @@ let BattleStatuses = {
 			this.add(`c|Zatch|Even if I die in a way, I will make you bad again!`);
       this.add('message', 'Zatch appeared! Try to hit him!');
       this.boost({atk: 2, spa: 2, def: 2, spd: 2, spe: 2}, source);
-      this.add('-heal', source, source.getHealth);
+      source.heal(source.maxhp);
       source.cureStatus();
 					for (const moveSlot of target.moveSlots) {
 						moveSlot.pp = moveSlot.maxpp;
