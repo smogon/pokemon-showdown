@@ -156,7 +156,7 @@ let BattleStatuses = {
 		onStart: function (target, source) {
 			this.add(`c|Abby|Bangin' on a trash can, drummin' on a street light...`);
       			if (source.template.speciesid !== 'altariamega' || source.illusion) return;
-			     this.add('-start', pokemon, 'typeadd', 'Water');
+			     this.add('-start', source, 'typeadd', 'Water');
 		},
 		onSwitchOut: function () {
 			this.add(`c|Abby|To avoid music damage, I have to switch my banjo to a keyboard!`);
@@ -452,31 +452,6 @@ let BattleStatuses = {
 			this.add(`c|Zatch|Let's see how you do against the Photon Zatch Man!`);
 			// message is shown after something
 			this.add('message', 'Zatch used Photon Zatch Man!');
-			if (source.illusion) return;
-			let target = source.side.foe.active[0];
-
-			let removeAll = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
-			let silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
-			for (const sideCondition of removeAll) {
-				if (target.side.removeSideCondition(sideCondition)) {
-					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', target.side, this.getEffect(sideCondition).name, '[from] move: No Fun Zone', '[of] ' + source);
-				}
-				if (source.side.removeSideCondition(sideCondition)) {
-					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: No Fun Zone', '[of] ' + source);
-				}
-			}
-			this.add('-clearallboost');
-			for (const side of this.sides) {
-				for (const pokemon of side.active) {
-					if (pokemon && pokemon.isActive) pokemon.clearBoosts();
-				}
-			}
-			for (const clear in this.pseudoWeather) {
-				if (clear.endsWith('mod') || clear.endsWith('clause')) continue;
-				this.removePseudoWeather(clear);
-			}
-			this.clearWeather();
-			this.clearTerrain();
 		},
 		onFaint: function (source) {
 			this.add(`c|Zatch|I can't believe it! Aqua was right! You've changed into a good Pokémon!`);
