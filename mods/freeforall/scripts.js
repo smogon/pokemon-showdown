@@ -11,7 +11,7 @@ let BattleScripts = {
 			if (changedMove && changedMove !== true) {
 				baseMove = this.getActiveMove(changedMove);
 				if (pranksterBoosted) baseMove.pranksterBoosted = pranksterBoosted;
-				target = null;
+				target = this.resolveTarget(pokemon, baseMove);
 			}
 		}
 		let move = zMove ? this.getActiveZMove(baseMove, pokemon) : baseMove;
@@ -126,7 +126,8 @@ let BattleScripts = {
 
 		this.runEvent('AfterMega', pokemon);
 
-  
+		return true;
+	},
 	getZMove(move, pokemon, skipChecks) {
 		let item = pokemon.getItem();
 		if (!skipChecks) {
@@ -260,12 +261,10 @@ let BattleScripts = {
 		status = this.getEffect(status);
 		if (!sourceEffect && this.effect) sourceEffect = this.effect;
 		if (!source && this.event && this.event.target) source = this.event.target;
+		if (source === 'debug') source = this.p1.active[0];
+		if (!source) throw new Error(`setting terrain without a source`);
 
 		if (this.terrain === status.id) return false;
-		if (this.terrain && !status.id) {
-			let oldstatus = this.getTerrain();
-			this.singleEvent('End', oldstatus, this.terrainData, this);
-		}
 		let prevTerrain = this.terrain;
 		let prevTerrainData = this.terrainData;
 		this.terrain = status.id;
@@ -278,7 +277,7 @@ let BattleScripts = {
 			this.terrainData.duration = status.duration;
 		}
 		if (status.durationCallback) {
-			this.terrainData.duration = status.durationCallback.call(this, source, sourceEffect);
+			this.terrainData.duration = status.durationCallback.call(this, source, source, sourceEffect);
 		}
 		if (!this.singleEvent('Start', status, this.terrainData, this, source, sourceEffect)) {
 			this.terrain = prevTerrain;
@@ -286,7 +285,7 @@ let BattleScripts = {
 			return false;
 		}
 		// Always run a terrain end event to prevent a visual glitch with custom terrains
-		if (status.id) this.singleEvent('End', this.getEffect(prevTerrain), prevTerrainData, this);
+		if (prevTerrain) this.singleEvent('End', this.getEffect(prevTerrain), prevTerrainData, this);
 		return true;
 	},
 	pokemon: {
