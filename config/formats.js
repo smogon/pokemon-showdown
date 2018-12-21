@@ -1963,7 +1963,7 @@ let Formats = [
 		},
 	},
 	{
-		name: "[Gen 7] Free-For-All!",
+		name: "[Gen 7] Free-For-All",
 
 		mod: 'freeforall',
 		searchShow: false,
