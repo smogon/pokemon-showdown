@@ -531,7 +531,7 @@ let Formats = [
 				let abilityMap = Object.create(null);
 				for (let speciesid in Dex.data.Pokedex) {
 					let pokemon = Dex.getTemplate(speciesid);
-					if (pokemon.num < 1 || pokemon.species === 'Smeargle') continue;
+					if (pokemon.num < 1 || pokemon.species === 'Murkrow' || pokemon.species === 'Smeargle') continue;
 					if (pokemon.requiredItem || pokemon.requiredMove) continue;
 					for (const key of Object.values(pokemon.abilities)) {
 						let abilityId = toId(key);
