@@ -1,0 +1,8 @@
+{
+  "install": {
+    "include": [
+      "^.trigger-rebuild$"
+    ]
+  },
+  "throttle": 100
+}
