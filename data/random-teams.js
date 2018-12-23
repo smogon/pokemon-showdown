@@ -716,7 +716,7 @@ class RandomTeams extends Dex.ModdedDex {
 				case 'cottonguard': case 'defendorder':
 					if (!counter['recovery'] && !hasMove['rest']) rejected = true;
 					break;
-				case 'dig': case 'fly':
+				case 'bounce': case 'dig': case 'fly':
 					if (teamDetails.zMove || counter.setupType !== 'Physical') rejected = true;
 					break;
 				case 'focuspunch':
