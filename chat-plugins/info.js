@@ -1401,6 +1401,7 @@ const commands = {
 
 	'!bugs': true,
 	bugreport: 'bugs',
+	bugreports: 'bugs',
 	bugs: function (target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (room && room.battle) {
