@@ -7975,7 +7975,7 @@ let BattleMovedex = {
 		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1},
 		hasCustomRecoil: true,
 		onMoveFail: function (target, source, move) {
-			this.damage(source.maxhp / 2, source, source, move);
+			this.damage(source.maxhp / 2, source, source, 'crash');
 		},
 		secondary: null,
 		target: "normal",
@@ -8928,7 +8928,7 @@ let BattleMovedex = {
 		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1},
 		hasCustomRecoil: true,
 		onMoveFail: function (target, source, move) {
-			this.damage(source.maxhp / 2, source, source, move);
+			this.damage(source.maxhp / 2, source, source, 'crash');
 		},
 		secondary: null,
 		target: "normal",
