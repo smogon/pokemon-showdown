@@ -19105,6 +19105,7 @@ let BattleMovedex = {
 					hp: source.maxhp / 2,
 					duration: 2,
 				};
+				this.effectData.wishes = 1;
 			},
 			onRestart: function (side, source) {
 				if (this.effectData.positions[source.position]) return false;
@@ -19114,6 +19115,7 @@ let BattleMovedex = {
 					hp: source.maxhp / 2,
 					duration: 2,
 				};
+				this.effectData.wishes++;
 			},
 			onResidualOrder: 4,
 			onResidual: function (side) {
@@ -19125,6 +19127,7 @@ let BattleMovedex = {
 							if (damage) this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + wish.source.name);
 						}
 						this.effectData.positions[wish.position] = null;
+						if (--this.effectData.wishes === 0) return side.removeSideCondition('wish');
 					}
 				}
 			},
