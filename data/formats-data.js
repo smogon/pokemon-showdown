@@ -2036,7 +2036,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	ariados: {
-		randomBattleMoves: ["megahorn", "toxicspikes", "poisonjab", "suckerpunch", "stickyweb"],
+		randomBattleMoves: ["megahorn", "toxicspikes", "poisonjab", "suckerpunch", "stickyweb", "stompingtantrum"],
 		randomDoubleBattleMoves: ["protect", "megahorn", "stringshot", "poisonjab", "stickyweb", "ragepowder"],
 		tier: "(PU)",
 		doublesTier: "DUU",
