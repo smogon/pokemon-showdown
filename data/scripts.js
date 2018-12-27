@@ -159,7 +159,10 @@ let BattleScripts = {
 		if (move.target === 'self' || move.target === 'allies') {
 			target = pokemon;
 		}
-		if (sourceEffect) move.sourceEffect = sourceEffect.id;
+		if (sourceEffect) {
+			move.sourceEffect = sourceEffect.id;
+			move.ignoreAbility = false;
+		}
 		let moveResult = false;
 
 		this.setActiveMove(move, pokemon, target);
