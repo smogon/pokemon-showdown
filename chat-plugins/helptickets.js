@@ -267,6 +267,7 @@ function notifyStaff(upper = false) {
 	let hiddenTicketUnclaimedCount = 0;
 	let hiddenTicketCount = 0;
 	let hasUnclaimed = false;
+	let fourthTicketIndex = 0;
 	for (const key of keys) {
 		let ticket = tickets[key];
 		if (!ticket.open) continue;
@@ -274,7 +275,11 @@ function notifyStaff(upper = false) {
 		if (count >= 3) {
 			hiddenTicketCount++;
 			if (!ticket.claimed) hiddenTicketUnclaimedCount++;
-			continue;
+			if (hiddenTicketCount === 1) {
+				fourthTicketIndex = buf.length;
+			} else {
+				continue;
+			}
 		}
 		const escalator = ticket.escalator ? Chat.html` (escalated by ${ticket.escalator}).` : ``;
 		const creator = ticket.claimed ? Chat.html`${ticket.creator}` : Chat.html`<strong>${ticket.creator}</strong>`;
@@ -283,10 +288,10 @@ function notifyStaff(upper = false) {
 		buf += `<a class="button${notifying}" href="/help-${ticket.userid}" title="${ticket.claimed ? `Claimed by: ${ticket.claimed}` : `Unclaimed`}">Help ${creator}: ${ticket.type}${escalator}</a> `;
 		count++;
 	}
-	if (hiddenTicketCount > 0) {
+	if (hiddenTicketCount > 1) {
 		const notifying = hiddenTicketUnclaimedCount > 0 ? ` notifying` : ``;
 		if (hiddenTicketUnclaimedCount > 0) hasUnclaimed = true;
-		buf += `<a class="button${notifying}" href="/view-help-tickets">and ${hiddenTicketCount} more Help ticket${Chat.plural(hiddenTicketCount)} (${hiddenTicketUnclaimedCount} unclaimed)</a>`;
+		buf = buf.slice(0, fourthTicketIndex) + `<a class="button${notifying}" href="/view-help-tickets">and ${hiddenTicketCount} more Help ticket${Chat.plural(hiddenTicketCount)} (${hiddenTicketUnclaimedCount} unclaimed)</a>`;
 	}
 	buf = `|${hasUnclaimed ? 'uhtml' : 'uhtmlchange'}|latest-tickets|<div class="infobox" style="padding: 6px 4px">${buf}${count === 0 ? `There were open Help tickets, but they've all been closed now.` : ``}</div>`;
 	room.send(buf);
