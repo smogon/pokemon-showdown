@@ -47,7 +47,7 @@ describe(`Photon Geyser`, function () {
     assert.fullHP(p2.active[0], "incorrectly ignores abilities through Assist");
     pokemon.hp = pokemon.maxhp;
 		battle.makeChoices('move copycat', 'move spore');
-    assert.fullHP(p2.active[0]), "incorrectly ignores abilities through Copycat");
+    assert.fullHP(p2.active[0], "incorrectly ignores abilities through Copycat");
     pokemon.hp = pokemon.maxhp;
 		battle.makeChoices('move sleeptalk', 'move photongeyser');
     assert.fullHP(p2.active[0], "incorrectly ignores abilities through Sleep Talk");
