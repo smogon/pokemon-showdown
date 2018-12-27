@@ -814,7 +814,7 @@ const commands = {
 	},
 	deleteroomhelp: [
 		`/deleteroom [roomname] - Deletes room [roomname]. Must be typed in the room to delete. Requires: & ~`,
-		`/deletegroupchat - Deletes the current room, if it's a groupchat. Requires: & ~ #`,
+		`/deletegroupchat - Deletes the current room, if it's a groupchat. Requires: ★ # & ~`,
 	],
 
 	hideroom: 'privateroom',
