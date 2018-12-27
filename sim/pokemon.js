@@ -1172,7 +1172,6 @@ class Pokemon {
 			if (moveSlot.id === moveid && moveSlot.disabled !== true) {
 				moveSlot.disabled = (isHidden || true);
 				moveSlot.disabledSource = (sourceEffect ? sourceEffect.fullname : '');
-				break;
 			}
 		}
 	}
