@@ -588,6 +588,8 @@ class Battle extends Dex.ModdedDex {
 				}
 			}
 			this.singleEvent(eventid, status, statusObj.statusData, statusObj.thing, relayVar);
+			this.faintMessages();
+			if (this.ended) return;
 		}
 	}
 
