@@ -43,7 +43,7 @@ async function renderSpotlight(image, description) {
 	let imgHTML = '';
 
 	if (image) {
-		const [width, height] = await Chat.fitImage(image, 200, 400);
+		const [width, height] = await Chat.fitImage(image, 150, 300);
 		imgHTML = `<img src="${image}" width="${width}" height="${height}" style="vertical-align:middle;">`;
 	}
 
@@ -70,7 +70,7 @@ const pages = {
 					buf += `<table style="margin-bottom:30px;"><th colspan="2"><h3>${key}:</h3></th>`;
 					for (let i = 0; i < spotlights[room.id][key].length; i++) {
 						const html = await renderSpotlight(spotlights[room.id][key][i].image, spotlights[room.id][key][i].description);
-						buf += `<tr><td>${i ? i : 'Current'}</td><td><div class="infobox">${html}</div></td></tr>`;
+						buf += `<tr><td>${i ? i : 'Current'}</td><td>${html}</td></tr>`;
 					}
 					buf += '</table>';
 				}
