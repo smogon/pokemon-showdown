@@ -14,6 +14,9 @@
 /** @typedef {{name: string, roles: string[], picks: string[], choices: number}} MafiaIDEA */
 /** @typedef {{[k: string]: MafiaIDEA | string}} MafiaIDEAs */
 
+/** @typedef {{name: string, desc: string[]}} MafiaTerm */
+/** @typedef {{[k: string]: MafiaTerm | string}} MafiaTerms */
+
 /** @type {MafiaAlignments} */
 const alignments = {
 	//  Do not add Mafia variants, unless they are supported in a major theme (Werewolves, Replicants).
@@ -118,7 +121,7 @@ const alignments = {
 		name: `Mime`,
 		plural: `Mimes`,
 		id: `mime`,
-		color: `#A6B`,
+		color: `#590eb5`,
 		memo: [
 			`Factional Communication: If there are other Mime-aligned players, you may PM them during the game.`,
 			`Factional Roleblock: The Mimes may roleblock one player per night.`,
@@ -152,7 +155,6 @@ const alignments = {
 		],
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
 	},
-	// Will be added in SI soon.
 	hypnotist: {
 		name: `Hypnotist`,
 		plural: `Hypnotists`,
@@ -194,10 +196,49 @@ const roles = {
 		id: `goon`,
 		memo: [`Goon: Mafia player without any additional abilities.`],
 	},
+	aoat: `alien-of-all-trades`,
+	alien_of_all_trades: `alien-of-all-trades`,
+	'alien-of-all-trades': {
+		name: `Alien-of-all-Trades`,
+		id: `alienofalltrades`,
+		memo: [`Alien-of-all-Trades: Before the game starts, you may pick another role. You will gain any powers this role has for the rest of the game.`],
+	},
+	aligner: {
+		name: `Aligner`,
+		id: `aligner`,
+		alignment: `solo`,
+		memo: [`Aligner: Once a game, you may target someone. You will win if that person wins. Otherwise, you are a Survivor.`],
+	},
+	anti_survivor: `anti-survivor`,
+	antisurvivor: `anti-survivor`,
+	'anti-survivor': {
+		name: `Anti-Survivor`,
+		id: `antisurvivor`,
+		alignment: `solo`,
+		memo: [`Anti-Survivor: You are the only person who wins if you survive until the end of the game.`],
+	},
+	area51detective: `area_51_detective`,
+	area_51_detective: {
+		name: `Area 51 Detective`,
+		id: `area51detective`,
+		memo: [`Area 51 Detective: During the Night, you may PM the host the name of another player. This player will not be able to use an action if they are an Alien.`],
+	},
+	area51immunologist: `area_51_immunologist`,
+	area_51_immunologist: {
+		name: `Area 51 Immunologist`,
+		id: `area51immunologist`,
+		memo: [`Area 51 Immunologist: During the Night, you may PM the host the name of another player. This player will become permanently immune to Alien kills.`],
+	},
 	assassin: {
 		name: `Assassin`,
 		id: `assassin`,
+		alignment: `solo`,
 		memo: [`Assassin (Assassin in the Court): Wins when the King dies. Can shoot another player publicly once a game, but loses if this wasn't the King.`],
+	},
+	avoider: {
+		name: `Avoider`,
+		id: `avoider`,
+		memo: [`Avoider: During the Night, you may PM the host the name of another player. If this player targeted you with an action, this action fails.`],
 	},
 	baby_monarch: {
 		name: `Baby Monarch`,
@@ -210,16 +251,37 @@ const roles = {
 		memo: [`Babysitter: During the Night, you may PM the host the name of another player. This player will be protected from all nightkills for that Night, but if the Babysitter dies, its target will die too.`],
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-doctor.png"/>`,
 	},
+	bailiff: {
+		name: `Bailiff`,
+		id: `bailiff`,
+		memo: [`Bailiff: During the Night, you may PM the host the name of another player. If this player is an X-Shot role, they will lose all of their shots.`],
+	},
+	birthday_boy: {
+		name: `Birthday Boy`,
+		id: `birthdayboy`,
+		alignment: `solo`,
+		memo: [`Birthday Boy: You start as a Survivor. When you are lynched, you may pick another player. You become an exact copy of this player, including alignment.`],
+	},
 	black_goo: {
 		name: `Black Goo`,
 		id: `blackgoo`,
 		alignment: `town`,
 		memo: [`Black Goo: Anyone who targets you will join the Cult.`],
 	},
+	blackmailer: {
+		name: `Blackmailer`,
+		id: `blackmailer`,
+		memo: [`Blackmailer: During the Night, you may PM the host the name of another player. This player will kill their target.`],
+	},
 	blacksmith: {
 		name: `Blacksmith`,
 		id: `blacksmith`,
 		memo: [`Blacksmith: During the Day, you may PM the host the name of another player. This player will be protected from one kill that day.`],
+	},
+	blockade: {
+		name: `Blockade`,
+		id: `blockade`,
+		memo: [`Blockade: During the Night, you may PM the host the name of another player. This player will not be able to use an action, and you will get to know who, if anyone, they targeted.`],
 	},
 	bh: `bloodhound`,
 	bloodhound: {
@@ -240,10 +302,20 @@ const roles = {
 		memo: [`Bodyguard: During the Night, you may PM the host the name of another player. This player will be protected from all nightkills for that Night, but the Bodyguard will be killed instead.`],
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-doctor.png"/>`,
 	},
+	bouncer: {
+		name: `Bouncer`,
+		id: `bouncer`,
+		memo: [`Bouncer: During the Night, you may PM the host the name of another player. Anyone who targeted this player will die.`],
+	},
+	broken_vanillaiser: {
+		name: `Broken Vanillaiser`,
+		id: `broken_vanillaiser`,
+		memo: [`Broken Vanillaiser: Once a game, at night, you may PM the host that you want to activate the Broken Vanillaiser. For the next day and night, all players will be their Vanilla variants.`],
+	},
 	busdriver: {
 		name: `Bus Driver`,
 		id: `busdriver`,
-		memo: [`Bus Driver: During the Night, you may PM the host the names of the two players. People who targeted either of these players will instead target the other one.`],
+		memo: [`Bus Driver: During the Night, you may PM the host the names of two players. People who targeted either of these players will instead target the other one.`],
 	},
 	chameleon_goo: {
 		name: `Chameleon Goo`,
@@ -251,10 +323,20 @@ const roles = {
 		alignment: `goo`,
 		memo: [`Chameleon Goo: Anyone who targets you will join the Cult. You are a Mason, and will die after Night 2. There is no way to stop this death.`],
 	},
+	chauffeur: {
+		name: `Chauffeur`,
+		id: `chauffeur`,
+		memo: [`Chauffeur: During the Night, you may PM the host the names of two players. They will use the action the other player used. If either idled, it fails.`],
+	},
 	commuter: {
 		name: `Commuter`,
 		id: `commuter`,
 		memo: [`Commuter: During the Night, you may PM the host that you want to commute. No other player will be able to target you this night.`],
+	},
+	confidant: {
+		name: `Confidant`,
+		id: `confidant`,
+		memo: [`Confidant: During the Night, you may PM the host the name of another player. You will use the same action as the target, on the same target as them.`],
 	},
 	conspiracy_theorist: {
 		name: `Conspiracy Theorist`,
@@ -262,13 +344,20 @@ const roles = {
 		memo: [`Conspiracy Theorist: Each night you can PM the host the name of another player. You will be told if they are ALIEN or NOT ALIEN, or receive NO RESULT if your investigation failed. Additionally, you will always be inspected as an ALIEN when possible.`],
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
 	},
-	// Above cop so it gets checked first
+	// Above cop so they get checked first
+	backup_cop: `deputy`,
+	power_cop: {
+		name: `Power Cop`,
+		id: `powercop`,
+		memo: [`Power Cop: During the Night, you can PM the host the name of another player. They will tell you how strong that player's role is on a scale from 0 to 10.`],
+	},
 	role_cop: {
 		name: `Role Cop`,
 		id: `rolecop`,
 		memo: [`Role Cop: Each night you can PM the host the name of another player. You will be told their exact role, or NO RESULT if your investigation failed.`],
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
 	},
+	vanilla_cop: `neapolitan`,
 	cop: {
 		name: `Cop`,
 		id: `cop`,
@@ -299,16 +388,49 @@ const roles = {
 		id: `coronercrackingidea`,
 		memo: [`Coroner: Each night you can PM the host the name of another (dead) player. You learn the role(s) of the player who killed them, but not who this role belongs to. This also works when your target dies the night you used it.`],
 	},
+	corrupt_queen: {
+		name: `Corrupt Queen`,
+		id: `corruptqueen`,
+		alignment: `solo`,
+		memo: [`Corrupt Queen: During the Night, you may PM the host the name of another player. This player will become a King, and be the only person to be able to lynch the following day. However, after the following day, this player will die.`],
+	},
+	cowardly_hero: {
+		name: `Cowardly Hero`,
+		id: `cowardlyhero`,
+		memo: [`Cowardly Hero: During the Night, you may PM the host the name of another player. This player will be protected from nightkills. If you are killed, the player you protected will die instead. Afterwards, you will not be able to use this action anymor.`],
+	},
+	cpr_doctor: {
+		name: `CPR Doctor`,
+		id: `cprdoctor`,
+		memo: [`CPR Doctor: During the Night, you may PM the host the name of another player. This player will be protected from all nightkills for that Night. If they would not be nightkilled, you kill them instead.`],
+	},
 	cupid: {
 		name: `Cupid`,
 		id: `cupid`,
 		memo: [`Cupid: At Night One you can PM the host the name of another player. Every other player who targeted the target becomes Lovers with the target.`],
+	},
+	deputy: {
+		name: `Deputy`,
+		id: `deputy`,
+		memo: [`Deputy: If a Cop dies, you will inherit their ability and become a Cop yourself.`],
 	},
 	desperado: {
 		name: `Desperado`,
 		id: `desperado`,
 		memo: [`Desperado: At Night, you can PM the host the name of another player. You will kill this player if they're not aligned with the TOWN, but you will die if they are.`],
 	},
+	discard: {
+		name: `Discard`,
+		id: `discard`,
+		memo: [`Discard: In IDEAs you may not pick this role.`],
+	},
+	discard_vendor: {
+		name: `Discard Vendor`,
+		id: `discardvendor`,
+		memo: [`Discard Vendor: During the Night, you may PM the host the name of another player and a discarded role. The chosen player will receive a One-Shot version of the discarded role to use.`],
+	},
+	// Paired with doctor so its checked first
+	backup_doctor: `nurse`,
 	doc: `doctor`,
 	doctor: {
 		name: `Doctor`,
@@ -316,10 +438,30 @@ const roles = {
 		memo: [`Doctor: During the Night, you may PM the host the name of another player. This player will be protected from all nightkills for that Night.`],
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-doctor.png"/>`,
 	},
+	diyer: `do-it-yourselfer`,
+	do_it_yourselfer: `do-it-yourselfer`,
+	doityourselfer: `do-it-yourselfer`,
+	'do-it-yourselfer': {
+		name: `Do-It-Yourselfer`,
+		id: `doityourselfer`,
+		memo: [`Do-It-Yourselfer: Each Night, you may use a One-Shot ability of a discarded role. You may not use a discarded role multiple times.`],
+	},
 	drookez: {
 		name: `Drookez`,
 		id: `drookez`,
 		memo: [`Drookez: You are a Deathproof Mafia's Child Lover. This means that your role is revealed at the start of the game and that you can't die unless your Lover dies.`],
+	},
+	duskiller: {
+		name: `Duskiller`,
+		id: `duskiller`,
+		alignment: `solo`,
+		memo: [`Duskiller: At night you may PM the host the name of another player. This player will die after the following day.`],
+	},
+	et: {
+		name: `E.T.`,
+		id: `et`,
+		alignment: `solo`,
+		memo: [`E.T.: You win if either the Town or the Aliens win.`],
 	},
 	fbi_agent: {
 		name: `FBI Agent`,
@@ -332,15 +474,38 @@ const roles = {
 		id: `firefighter`,
 		memo: [`Firefighter: During the Night, you may PM the host the name of another player. This player can't be primed by an Arsonist that night.`],
 	},
+	flipflop: `flip_flop`,
+	flip_flop: {
+		name: `Flip Flop`,
+		id: `flipflop`,
+		alignment: `solo`,
+		memo: [`Flip Flop: Every odd Day and Night, you are aligned with the Town, and every even Day and Night with the Mafia.`],
+	},
+	follower: {
+		name: `Follower`,
+		id: `follower`,
+		memo: [`Follower: During the Night, you may PM the host the name of another player. You will get to know what action, if any, this player performed.`],
+		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
+	},
+	friend_recruiter: {
+		name: `Friend Recruiter`,
+		id: `friendrecruiter`,
+		memo: [`Besides your normal win-condition, you can win when only Friends are left alive. You can talk to other Friends. Once a game, at night, you may PM the host the name of another player. This player will be turned into a Friend.`],
+	},
 	fruit_vendor: {
 		name: `Fruit Vendor`,
 		id: `fruitvendor`,
-		memo: [`Fruit Vendor: During the Night, you may PM the host the name of another player. This player will receive fruit.`],
+		memo: [`Fruit Vendor: During the Night, you may PM the host the name of another player. This player will be notified that they received fruit.`],
 	},
 	gladiator: {
 		name: `Gladiator`,
 		id: `gladiator`,
 		memo: [`Gladiator: During the Night, you may PM the host the names of two players. These two players will be the only two who can be lynched the next day, assuming both of them are alive at the end of the night.`],
+	},
+	goofactory: {
+		name: `Goofactory`,
+		id: `goofactory`,
+		memo: [`goofactory: During the Night, you may PM the host the name of another player. You will be able to turn this player into a Goo type of your choice.`],
 	},
 	goomaker: {
 		name: `Goomaker`,
@@ -358,6 +523,11 @@ const roles = {
 		alignment: `goo`,
 		memo: [`Gray Goo: Anyone who targets you will join the Cult. You will die after Night 2. There is no way to stop this death.`],
 	},
+	gossiper: {
+		name: `Gossiper`,
+		id: `gossiper`,
+		memo: [`Gossiper: During the Night, you can PM the host the name of another player. This player will get to know who targeted you.`],
+	},
 	guard: {
 		name: `Guard`,
 		id: `guard`,
@@ -368,15 +538,43 @@ const roles = {
 		id: `gunsmith`,
 		memo: [`Gunsmith: Once per day or night, you can PM the name of a player to the host. This player will receive a gun, which they can kill someone with that day (if given at day) or the next day (if given at night).`],
 	},
+	halter: {
+		name: `Halter`,
+		id: `halter`,
+		memo: [`Halter: You can give the host a set of arbitrary roles, and the host will tell you if a setup with those roles will run indefinitely.`],
+	},
+	hasty_lover: {
+		name: `Hasty Lover`,
+		id: `hastylover`,
+		memo: [`Hasty Lover: During the Night, you must PM the name of a player to the host. For that night and the following day, you are Lovers.`],
+	},
+	hater: {
+		name: `Hater`,
+		id: `hater`,
+		memo: [`Hater: During the Night, you can PM the name of a player to the host. This player will take one less vote to be lynched the next day.`],
+	},
 	hider: {
 		name: `Hider`,
 		id: `hider`,
 		memo: [`Hider: During the Night, you may PM the host the name of another player. You will not be able to be targeted that night, but if the person you targeted died or is not aligned with the TOWN, you die.`],
 	},
+	homekeeper: {
+		name: `Homekeeper`,
+		id: `homekeeper`,
+		memo: [`Homekeeper: During the Night, you may PM the host the name of another player. If they idled, they will not be able to be nightkilled that night.`],
+	},
+	child: `innocent_child`,
 	innocent_child: {
 		name: `Innocent Child`,
 		id: `innocentchild`,
+		alignment: `Town`,
 		memo: [`Innocent Child: At any point during the game, you may PM the host to reveal you as TOWN publicly.`],
+	},
+	inquisitor: {
+		name: `Inquisitor`,
+		id: `inquisitor`,
+		alignment: `solo`,
+		memo: [`Inquisitor: During the Night, you may PM the host the name of another player. This player will die, if not, they will be recruited into your cult.`],
 	},
 	joat: `jack-of-all-trades`,
 	jack_of_all_trades: `jack-of-all-trades`,
@@ -399,6 +597,7 @@ const roles = {
 	jester: {
 		name: `Jester`,
 		id: `jester`,
+		alignment: `solo`,
 		memo: [`Jester: You are aligned with yourself. You win if you get lynched at any point during the game.`],
 	},
 	journalist: {
@@ -409,7 +608,13 @@ const roles = {
 	judas: {
 		name: `Judas`,
 		id: `judas`,
+		alignment: `solo`,
 		memo: [`Judas: You start off aligned with the TOWN, but when you get lynched for the first time you don't die. Instead, you become aligned with the MAFIA.`],
+	},
+	judge: {
+		name: `Judge`,
+		id: `judge`,
+		memo: [`Judge: During the Night, you can PM the host the name of a player. If they are of a different alignment than the person being lynched the day prior, they die.`],
 	},
 	king: {
 		name: `King`,
@@ -421,29 +626,97 @@ const roles = {
 		id: `kingmaker`,
 		memo: [`Kingmaker: Each night, you can PM the host the name of a player. The next day this person, if alive, will decide the lynch for that day.`],
 	},
+	leader: {
+		name: `Leader`,
+		id: `leader`,
+		memo: [`Leader: You are the leader of a faction. You may get special actions. Ask the host for more information.`],
+	},
+	litteliar: {
+		name: `Little Liar`,
+		id: `litteliar`,
+		memo: [`Little Liar: At any point during the game, you may PM the host to reveal you as TOWN publicly.`],
+	},
+	loner: {
+		name: `Loner`,
+		id: `loner`,
+		alignment: `solo`,
+		memo: [`Loner: You win when everyone else is dead, have no partners, and do not have a nightkill.`],
+	},
+	loverboy: {
+		name: `Loverboy`,
+		id: `loverboy`,
+		memo: [`Loverboy: During the Night, you can PM the host the name of another player. They will die if you die and are informed of this.`],
+	},
+	loyal_lover: {
+		name: `Loyal Lover`,
+		id: `loyallover`,
+		alignment: `solo`,
+		memo: [`Loyal Lover: Once a game, at night, you may PM the host the name of another player. You will become lovers with them. You can only win if the person you're lovers with wins.`],
+	},
+	stripper: `lure`,
+	lure: {
+		name: `Lure`,
+		id: `lure`,
+		memo: [`Lure: During the Night, you can PM the host the name of another player. This player will be forced to target you.`],
+	},
 	lyncher: {
 		name: `Lyncher`,
 		id: `lyncher`,
+		alignment: `solo`,
 		memo: [`Lyncher: You win when you get a specific player lynched.`],
+	},
+	magician: {
+		name: `Magician`,
+		id: `magician`,
+		memo: [`Magician: During the Night, you can PM the host the name of another player. This player will be removed from the game at the end of the night, without a reveal. While the Mafia's kill target (if successful) stays in the game. At the end of the next day, the Magician's target is added back, while the Mafia's kill is removed.`],
 	},
 	millermaker: {
 		name: `Millermaker`,
 		id: `millermaker`,
 		memo: [`Millermaker: Each night, you can PM the host the name of a player. This player will permanently show up as guilty to investigative role.`],
 	},
+	missionary: {
+		name: `Missionary`,
+		id: `missionary`,
+		memo: [`Missionary: During the Night, you can PM the host the name of another player. This player will not be able to kill anyone else.`],
+	},
+	modposter: {
+		name: `Modposter`,
+		id: `modposter`,
+		memo: [`Modposter: At any point during the game, you may PM the host a phrase. They will publicly, yet anonymously, post this phrase in chat.`],
+	},
 	monarch: {
 		name: `Monarch`,
 		id: `monarch`,
 		memo: [`Monarch: You are Bulletproof, Unlynchable and a Day Vigilante. However, all these abilities go away when any one of them has been activated.`],
 	},
-	vanilla_cop: `neapolitan`,
+	motion_detector: {
+		name: `Motion Detector`,
+		id: `motiondetector`,
+		memo: [`Motion Detector: During the Night, you may PM the host the name of another player. You will get to know whether any actions were performed on or by this player.`],
+		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
+	},
+	multiplier: {
+		name: `Multiplier`,
+		id: `multiplier`,
+		memo: [`Multiplier: During the Night, you can PM the host the name of another player. This player's action will target all players in the game.`],
+	},
 	neapolitan: {
 		name: `Neapolitan`,
 		id: `neapolitan`,
 		memo: [`Neapolitan: Each night, you can PM the host the name of a player. You will be told if they are VANILLA or NOT VANILLA, or receive NO RESULT if your investigation failed.`],
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
 	},
-	backup_doctor: `nurse`,
+	necromancer: {
+		name: `Necromancer`,
+		id: `necromancer`,
+		memo: [`Necromancer: Once a game at Night, you can PM the host to revive all dead players for the following Day and Night.`],
+	},
+	nightmare: {
+		name: `Nightmare`,
+		id: `nightmare`,
+		memo: [`Nightmare: During the Night, you can PM the host the name of another player. This player will not be able to talk or lynch the next day, but can use their action again.`],
+	},
 	nurse: {
 		name: `Nurse`,
 		id: `nurse`,
@@ -458,12 +731,30 @@ const roles = {
 	one_shot_townie: {
 		name: `One Shot Townie`,
 		id: `oneshottownie`,
+		alignment: `solo`,
 		memo: [`One Shot Townie: Starts out as a Town player. Turns into a Survivor at the start of Day 2.`],
 	},
 	oracle: {
 		name: `Oracle`,
 		id: `oracle`,
 		memo: [`Oracle: Each night, you can PM the host the name of a player. When you die, you'll publicly reveal this player's role, until you've chosen a different player.`],
+	},
+	oracle_si: `oraclesi`,
+	oracle_snaqs_idea: `oraclesi`,
+	oraclesi: {
+		name: `Oracle`,
+		id: `oraclesi`,
+		memo: [`Oracle: During the Night, you can PM the host a question about the setup of the game. They will answer you with YES or NO.`],
+	},
+	organ_donor: {
+		name: `Organ Donor`,
+		id: `organdonor`,
+		memo: [`Organ Donor: During the Night, you can PM the host the name of a dead player. You will die, but this player will be revived.`], // Said night because ESun automatically reverts all to day.
+	},
+	palette_goo: {
+		name: `Palette Goo`,
+		id: `palettegoo`,
+		memo: [`Palette Goo: During the Night, you may PM the the host a Goo type. You will turn into this type of Goo.`],
 	},
 	parrot: `parrot_role`,
 	wereparrot: `parrot_role`,
@@ -477,11 +768,16 @@ const roles = {
 		id: `politician`,
 		memo: [`Politician: Each night, you can PM the host the name of two players. You give the vote of the former player to the latter player for the next day.`],
 	},
+	praiser: {
+		name: `Praiser`,
+		id: `praiser`,
+		memo: [`Praiser: During the Night, you can PM the host the name of another player. This player will take one more lynch to be lynched the following day.`],
+	},
 	hooker: `pretty_lady`,
 	pl: `pretty_lady`,
 	pretty_lady: {
 		name: `Pretty Lady`,
-		id: `prettylady`,
+		id: `pretty_lady`,
 		memo: [`Pretty Lady: During the Night, you may PM the host the name of another player. This player won't be able to use an action this Night. If you target a Werewolf performing a kill, you redirect its kill onto you.`],
 	},
 	pi: `private_investigator`,
@@ -496,14 +792,21 @@ const roles = {
 		id: `prober`,
 		memo: [`Prober: Each night you can PM the host the name of another player. You will be told if they are WEREWOLF or NOT WEREWOLF, or receive NO RESULT if your investigation failed. Additionally, this player can't perform a night action that night.`],
 	},
+	pseudocider: {
+		name: `Pseudocider`,
+		id: `pseudocider`,
+		memo: [`Pseudocider: Once a game, during the Night, you can PM the host to remove you from the game. You will be removed without reveal, and can be added back during a future night upon choice.`],
+	},
 	pseudojester: {
 		name: `Pseudojester`,
 		id: `pseudojester`,
+		alignment: `solo`,
 		memo: [`Pseudojester: You are only able to win if you get lynched. You will be aligned with the player who placed the last lynch.`],
 	},
 	pseudolyncher: {
-		name: `Pseudolyncher`,
-		id: `pseudolyncher`,
+		name: `Pseudojester`,
+		id: `pseudojester`,
+		alignment: `solo`,
 		memo: [`Pseudolyncher: You are only able to win if you get your target lynched. You will be aligned with the alignment of this player.`],
 	},
 	psychiatrist: {
@@ -538,10 +841,21 @@ const roles = {
 		id: `redirector`,
 		memo: [`Redirector: During the Night, you may PM the host the names of two other players. The former player will target the latter player instead.`],
 	},
+	reviver: {
+		name: `Reviver`,
+		id: `reviver`,
+		memo: [`Reviver: During the Night, you may PM the host the name of a dead player. This player will be added back to the game.`],
+	},
 	roleblocker: {
 		name: `Roleblocker`,
 		id: `roleblocker`,
 		memo: [`Roleblocker: During the Night, you may PM the host the name of another player. This player won't be able to use an action this Night.`],
+	},
+	role_vanillaizer: `role_vanillaiser`,
+	role_vanillaiser: {
+		name: `Role Vanillaiser`,
+		id: `rolevanillaiser`,
+		memo: [`Role Vanillaiser: During the Night, you may PM the host the name of a role. If this role is in this setup, you will vanillaise any player with this role.`],
 	},
 	suppressor: `rolestopper`,
 	rolestopper: {
@@ -553,7 +867,18 @@ const roles = {
 	saulus: {
 		name: `Saulus`,
 		id: `saulus`,
+		alignment: `solo`,
 		memo: [`Saulus: You start off aligned with the MAFIA, but when you get lynched for the first time you don't die. Instead, you become aligned with the TOWN.`],
+	},
+	schemer: {
+		name: `Schemer`,
+		id: `schemer`,
+		memo: [`Schemer: During the Night, you may PM the host the name of another player. You will get to know what kind of action this player used, and may redirect it.`],
+	},
+	screamer: {
+		name: `Screamer`,
+		id: `screamer`,
+		memo: [`Screamer: During the Night, you may PM the host to scream. This will prevent anyone in the game from getting a result.`],
 	},
 	seer: {
 		name: `Seer`,
@@ -571,12 +896,39 @@ const roles = {
 	serial_killer: {
 		name: `Serial Killer`,
 		id: `serialkiller`,
+		alignment: `solo`,
 		memo: [`Serial Killer: You are aligned with yourself and win when you are the last player standing. During the Night, you may PM the host the name of another player. This player will die.`],
+	},
+	shadow: {
+		name: `Shadow`,
+		id: `shadow`,
+		alignment: `solo`,
+		memo: [`Shadow: Once a game at Night, you may PM the host the name of another player. You will copy any abilities this player has. Additionally, you may kill someone once each night.`],
 	},
 	silencer: {
 		name: `Silencer`,
 		id: `silencer`,
 		memo: [`Silencer: During the Night, you may PM the host the name of another player. This player will not be able to talk during the next day. Ask the host whether this player will be able to lynch or not.`],
+	},
+	solar_god: {
+		name: `Solar God`,
+		id: `solargod`,
+		memo: [`Solar God: During the Day, you may PM the host to end the Day. The Day will immediately end.`],
+	},
+	stalker: {
+		name: `Stalker`,
+		id: `stalker`,
+		memo: [`Stalker: During the Night, you may PM the host the name of another player. You will get to know who this player targeted, and their target will be roleblocked.`],
+	},
+	substitute: {
+		name: `Substitute`,
+		id: `substitute`,
+		memo: [`Substitute: Once a game, during the Night, you may PM the host the name of another player. If you die before this player, this player will die instead of you.`],
+	},
+	subway_recruiter: {
+		name: `Subway Recruiter`,
+		id: `subwayrecruiter`,
+		memo: [`Subway Recruiter: During the Night, you may PM the host to add a player. If there's a player on the sublist, they will be added to the game, as your alignment.`],
 	},
 	kamikaze_pilot: `suicide_bomber`,
 	suicide_bomber: {
@@ -584,15 +936,33 @@ const roles = {
 		id: `suicidebomber`,
 		memo: [`Suicide Bomber: During the Night, you may PM the host the name of another player. This player will be killed, but you will die as well.`],
 	},
+	super_townie: `super`,
+	super: {
+		name: `Super`,
+		id: `super`,
+		memo: [`Super: Once a game, during the Night, you may PM the host to activate. If you would die that night, or the following day, you survive and may kill someone instead.`],
+	},
 	survivor: {
 		name: `Survivor`,
 		id: `survivor`,
+		alignment: `solo`,
 		memo: [`Survivor: You are aligned with yourself. You win when you are alive when the game ends.`],
 	},
 	sympathiser: {
 		name: `Sympathiser`,
 		id: `sympathiser`,
 		memo: [`Sympathiser: You are aligned with a specified alignment when there are other players of this alignment in the game. Otherwise, you are TOWN.`],
+	},
+	sensor: `tallier`,
+	tallier: {
+		name: `Tallier`,
+		id: `tallier`,
+		memo: [`Tallier: During the Night, you may PM the host to get to know how many people on yesterday's lynch were not aligned with the Town.`],
+	},
+	teacher: {
+		name: `Teacher`,
+		id: `teacher`,
+		memo: [`Teacher: During the Night, you may PM the host the name of another player. This player will receive a One-Shot Cop to use, that gets TOWN / NOT TOWN results.`],
 	},
 	tourist: {
 		name: `Tourist`,
@@ -605,9 +975,15 @@ const roles = {
 		memo: [`Tracker: During the Night, you may PM the host the name of another player. You will be told who, if anyone, this player targeted.`],
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
 	},
+	trainwreck: {
+		name: `Trainwreck`,
+		id: `trainwreck`,
+		memo: [`Trainwreck: During the Night, you may PM the host the name of another player. Everyone who is lynching this person at the end of the day dies.`],
+	},
 	traitor: {
 		name: `Traitor`,
 		id: `traitor`,
+		alignment: `solo`,
 		memo: [`Traitor: You are aligned with the MAFIA, but are not able to perform the factional kill, and do not know the other members of the Mafia.`],
 	},
 	unblocker: {
@@ -618,16 +994,31 @@ const roles = {
 	underdog: {
 		name: `Underdog`,
 		id: `underdog`,
+		alignment: `solo`,
 		memo: [`Underdog: You are aligned with yourself. You start out as a Survivor, but turn into the alignment of the first player to die during a day when they die.`],
+	},
+	universal_sympathiser: {
+		name: `Universal Sympathiser`,
+		id: `univeralsympathiser`,
+		alignment: `solo`,
+		memo: [`Universal Sympathiser: You win if the Town does not win.`],
+	},
+	universal_usurper: {
+		name: `Universal Usurper`,
+		id: `universalusurper`,
+		alignment: `solo`,
+		memo: [`Universal Usurper: You win if you are alive and the Town does not win. No one else will win.`],
 	},
 	unjester: {
 		name: `Unjester`,
 		id: `unjester`,
+		alignment: `solo`,
 		memo: [`Unjester: You are aligned with yourself. You win when you are killed.`],
 	},
 	unlyncher: {
 		name: `Unlyncher`,
 		id: `unlyncher`,
+		alignment: `solo`,
 		memo: [`Unlyncher: You are aligned with yourself. To win, you must make sure a specific player is never lynched during the game.`],
 	},
 	vanillaiser: {
@@ -635,17 +1026,51 @@ const roles = {
 		id: `vanillaiser`,
 		memo: [`Vanillaiser: During the Night, you may PM the host the name of another player. Starting the next day, this player will lose any role they have, turning into a Vanilla role.`],
 	},
+	vanguard: {
+		name: `Vanguard`,
+		id: `vanguard`,
+		memo: [`Vanguard: During the Night, you may PM the host the name of another player. If this player used an action, they can't be killed that night.`],
+	},
 	vig: `vigilante`,
 	vigilante: {
 		name: `Vigilante`,
 		id: `vigilante`,
 		memo: [`Vigilante: During the Night, you may PM the host the name of another player. This player will be killed.`],
 	},
+	voyeur: {
+		name: `Voyeur`,
+		id: `voyeur`,
+		memo: [`Voyeur: During the Night, you may PM the host the name of another player. You will be told what actions, if any, targeted this player.`],
+		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
+	},
 	watcher: {
 		name: `Watcher`,
 		id: `watcher`,
 		memo: [`Watcher: During the Night, you may PM the host the name of another player. You will be told who, if anyone, targeted this player.`],
 		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
+	},
+	wild_card: {
+		name: `Wild Card`,
+		id: `wildcard`,
+		memo: [`Wild Card: During the Night, you may PM the host the name of another player. All actions used on the Wild Card, except kills, are redirected to the target.`],
+	},
+	wild_card_greater_idea: `wildcard_gi`,
+	wild_card_gi: {
+		name: `Wild Card`,
+		id: `wildcardgi`,
+		alignment: `solo`,
+		memo: [`Wild Card: You get a different randomised role.`],
+	},
+	wild_discard: {
+		name: `Wild disCard`,
+		id: `wilddiscard`,
+		alignment: `solo`,
+		memo: [`Wild disCard: You may choose a different role from the game's discards.`],
+	},
+	yogi_bear: {
+		name: `Yogi Bear`,
+		id: `yogibear`,
+		memo: [`Yogi Bear: During the Night, you may PM the host the name of another player. You will be told whether they are TREESTUMP or NOT TREESTUMP, or NO RESULT if your investigation failed.`],
 	},
 };
 
@@ -667,11 +1092,41 @@ const modifiers = {
 		id: `ascetic`,
 		memo: [`Ascetic: Actions on you will fail, excluding kills.`],
 	},
+	backup: {
+		name: `Backup`,
+		id: `backup`,
+		memo: [`Backup: If the role specified in your role PM dies, you become that role instead.`],
+	},
+	blue_goo: {
+		name: `Blue Goo`,
+		id: `bluegoo`,
+		memo: [`Blue Goo: If you die or are lynched, the player who kills you or casts the lynching vote becomes blue goo themselves.`],
+	},
+	bomb: {
+		name: `Bomb`,
+		id: `bomb`,
+		memo: [`Bomb: If you are killed, your killer will die too.`],
+	},
+	brown_goo: {
+		name: `Brown Goo`,
+		id: `browngoo`,
+		memo: [`Brown Goo: You will steal the vote of anyone who targets you for the next game day.`],
+	},
 	bp: `bulletproof`,
 	bulletproof: {
 		name: `Bulletproof`,
 		id: `bulletproof`,
 		memo: [`Bulletproof: You cannot be nightkilled.`],
+	},
+	card_dealer: {
+		name: `Card Dealer`,
+		id: `card_dealer`,
+		memo: [`Anyone who targets you, will have their role replaced by a random other role.`],
+	},
+	celebrity: {
+		name: `Celebrity`,
+		id: `celebrity`,
+		memo: [`It will be publicly revealed who targeted you each night.`],
 	},
 	clairvoyant: {
 		name: `Clairvoyant`,
@@ -689,15 +1144,35 @@ const modifiers = {
 		id: `compulsivechildkiller`,
 		memo: [`Compulsive Child Killer: Whenever an Innocent Child (or a variation of one) reveals itself, you will immediately kill them.`],
 	},
+	consistent: {
+		name: `Consistent`,
+		id: `consistent`,
+		memo: [`Consistent: Once you targeted someone, you may not target anyone else.`],
+	},
 	contrary: {
 		name: `Contrary`,
 		id: `contrary`,
 		memo: [`Contrary: Your action only succeeds when it'd fail without this modifier.`],
 	},
+	curfew_agent: {
+		name: `Curfew Agent`,
+		id: `curfewagent`,
+		memo: [`Curfew Agent: While you are alive, no one will die at night.`],
+	},
 	day: {
 		name: `Day`,
 		id: `day`,
 		memo: [`Day: You have to use your action during the Day.`],
+	},
+	deactivator: {
+		name: `Deactivator`,
+		id: `deactivator`,
+		memo: [`Deactivator: While you are alive, a specific role can't be used.`],
+	},
+	death_miller: {
+		name: `Death Miller`,
+		id: `deathmiller`,
+		memo: [`Death Miller: You are revealed as a Mafia Goon upon dying.`],
 	},
 	death: {
 		name: `Death`,
@@ -708,6 +1183,16 @@ const modifiers = {
 		name: `Deathproof`,
 		id: `deathproof`,
 		memo: [`Deathproof: You can't die.`],
+	},
+	detector: {
+		name: `Detector`,
+		id: `detector`,
+		memo: [`Detector: You will be informed of anyone who targeted you.`],
+	},
+	delayed: {
+		name: `Delayed`,
+		id: `delayed`,
+		memo: [`Delayed: Your action will only go through the following night.`],
 	},
 	doppelganger: {
 		name: `Doppelganger`,
@@ -724,20 +1209,56 @@ const modifiers = {
 		id: `evangelistic`,
 		memo: [`Evangelistic: You will be inspected as CULT.`],
 	},
+	excellent_sense_of_smell_townie: `excellent_sense_of_smell`,
+	excellent_sense_of_smell: {
+		name: `Excellent Sense of Smell`,
+		id: `ecxellentsenseofsmell`,
+		memo: [`Excellent Sense of Smell: You know how many Goo-aligned players there are in the game.`],
+	},
+	false: {
+		name: `False`,
+		id: `false`,
+		memo: [`False: You are not aware that this part of your role doesn't work.`],
+	},
 	friend: {
 		name: `Friend`,
 		id: `friend`,
 		memo: [`Friend: Besides your normal win-condition, you can win when only Friends are left alive. You can talk to other Friends.`],
+	},
+	gambit: {
+		name: `Gambit`,
+		id: `gambit`,
+		memo: [`Gambit: Your action only works if you die that same night.`],
 	},
 	godfather: {
 		name: `Godfather`,
 		id: `godfather`,
 		memo: [`Godfather: You will be inspected as NOT MAFIA.`],
 	},
+	gold_goo: {
+		name: `Gold Goo`,
+		id: `goldgoo`,
+		memo: [`Whenever someone targets you with a non-factional action, they lose the ability to use that action and you gain it.`],
+	},
 	gravedigger: {
 		name: `Gravedigger`,
 		id: `gravedigger`,
 		memo: [`Gravedigger: You will return as if you targeted the player who died to Watchers and Trackers.`],
+	},
+	green_goo: {
+		name: `Green Goo`,
+		id: `greengoo`,
+		memo: [`Whenever a player targets you with an action, they will become green goo and lose any powers they currently have. Their faction doesn't change.`],
+	},
+	grim_reaper: {
+		name: `Grim Reaper`,
+		id: `grimreaper`,
+		memo: [`Grim Reaper: While you are alive, all dead players are Restless Spirits.`],
+	},
+	hallucinator: {
+		name: `Hallucinator`,
+		id: `hallucinator`,
+		memo: [`Hallucinator: While you are alive, all dead players reveal a random role in the setup, instead of their own role.`],
 	},
 	haunting: {
 		name: `Haunting`,
@@ -754,6 +1275,52 @@ const modifiers = {
 		id: `hirsute`,
 		memo: [`Hirsute: You will be inspected as WEREWOLF.`],
 	},
+	hidden: {
+		name: `Hidden`,
+		id: `hidden`,
+		memo: [`Hidden: You are now aware of this part of your role.`],
+	},
+	hopefuly: {
+		name: `Hopeful`,
+		id: `hopeful`,
+		memo: [`Hopeful: You always receive VIGILANTE upon inspection.`],
+	},
+	illusionist: {
+		name: `Illusionist`,
+		id: `illusionist`,
+		memo: [`Illusionist: You may still lynch and talk after death.`],
+	},
+	immobile_os_parrot: 'immobile_parrot',
+	immobile_parrot: {
+		name: `Immobile Parrot`,
+		id: `immobile_parrot`,
+		memo: [`Immobile Parrot: Anyone who targets you, targets themselves instead.`],
+	},
+	inconsistent: {
+		name: `Inconsistent`,
+		id: `inconsistent`,
+		memo: [`Inconsistent: You may not target any player multiple times.`],
+	},
+	inheritor: {
+		name: `Inheritor`,
+		id: `inheritor`,
+		memo: [`Inheritor: You inherit the abilities of the most recently killed player.`],
+	},
+	insane: {
+		name: `Insane`,
+		id: `insane`,
+		memo: [`Insane: You receive the opposite results from expected upon inspection.`],
+	},
+	insomniac: {
+		name: `Insomniac`,
+		id: `insomniac`,
+		memo: [`Insomniac: You may talk at night.`],
+	},
+	lightkeeper: {
+		name: `Lightkeeper`,
+		id: `lightkeeper`,
+		memo: [`Lightkeeper: When you die, the next day is anonymous (and all messages go through the host).`],
+	},
 	lightning_rod: {
 		name: `Lightning Rod`,
 		id: `lightningrod`,
@@ -763,6 +1330,11 @@ const modifiers = {
 		name: `Lover`,
 		id: `lover`,
 		memo: [`Lover: You get a Lover partner, who you can talk with. If either of you dies, the other dies as well.`],
+	},
+	loyal: {
+		name: `Loyal`,
+		id: `loyal`,
+		memo: [`Loyal: Your actions only work on players with the same alignment as you.`],
 	},
 	lynchbait: {
 		name: `Lynchbait`,
@@ -780,6 +1352,7 @@ const modifiers = {
 		memo: [`Mason: You can speak to other Masons, who are confirmed to not be members of the MAFIA.`],
 	},
 	doublevoter: `mayor`,
+	double_voter: `mayor`,
 	mayor: {
 		name: `Mayor`,
 		id: `mayor`,
@@ -790,10 +1363,25 @@ const modifiers = {
 		id: `miller`,
 		memo: [`Miller: You will always be inspected as MAFIA.`],
 	},
+	mirror: {
+		name: `Mirror`,
+		id: `mirror`,
+		memo: [`Mirror: When someone targets you, you use the same action on them.`],
+	},
 	monk: {
 		name: `Monk`,
 		id: `monk`,
 		memo: [`Monk: You can speak to other Monks, who are confirmed to not be WEREWOLVES.`],
+	},
+	murderous: {
+		name: `Murderous`,
+		id: `murderous`,
+		memo: [`Murderous: You die if you don't kill anyone.`],
+	},
+	naive: {
+		name: `Naive`,
+		id: `naive`,
+		memo: [`Naive: You always receive a NOT GUILTY result upon inspection, or an equivalent to this.`],
 	},
 	named: {
 		name: `Named`,
@@ -804,6 +1392,11 @@ const modifiers = {
 		name: `Neighbor`,
 		id: `neighbor`,
 		memo: [`Neighbor: You can talk to other Neighbors.`],
+	},
+	nexus: {
+		name: `Nexus`,
+		id: `nexus`,
+		memo: [`Nexus: All actions targeting you, excluding kills, will be redirected to a random other player.`],
 	},
 	midnight: `night`,
 	night: {
@@ -821,11 +1414,37 @@ const modifiers = {
 		id: `omniscient`,
 		memo: [`Omniscient: You know all roles that are present in the setup.`],
 	},
+	orange_goo: {
+		name: `Orange Goo`,
+		id: `orangegoo`,
+		memo: [`Orange Goo: You will steal the vote of anyone who targets you for the rest of the game.`],
+	},
 	pacifist: {
 		name: `Pacifist`,
 		id: `pacifist`,
 		memo: [`Pacifist: You are unable to kill.`],
 	},
+	paranoid: {
+		name: `Paranoid`,
+		id: `paranoid`,
+		memo: [`Paranoid: You always receive GUILTY upon inspection, or an equivalent to this.`],
+	},
+	patron: {
+		name: `Patron`,
+		id: `patron`,
+		memo: [`Patron: Once you die, your faction loses.`],
+	},
+	prism: {
+		name: `Prism`,
+		id: `prism`,
+		memo: [`Prism: Any actions targeting you, target all players.`],
+	},
+	randomizer: {
+		name: `Randomizer`,
+		id: `randomizer`,
+		memo: [`Randomizer: If multiple people targeted you, they will target a random person who targeted you instead.`],
+	},
+	reflexive_vigilante: `paranoid_gun_owner`,
 	pgo: `paranoid_gun_owner`,
 	paranoid_gun_owner: {
 		name: `Paranoid Gun Owner`,
@@ -837,10 +1456,32 @@ const modifiers = {
 		id: `passive`,
 		memo: [`Passive: You cannot choose when to activate your role.`],
 	},
+	restriction: `post_restriction`,
+	post_restriction: {
+		name: `Post Restriction`,
+		id: `postrestriction`,
+		memo: [`Post Restriction: You have a certain limit on what you post.`],
+	},
 	psychotrooper: {
 		name: `Psychotrooper`,
 		id: `psychotrooper`,
 		memo: [`Psychotrooper: All investigative results are reversed while you are alive.`],
+	},
+	publishing: `public`,
+	public: {
+		name: `Public`,
+		id: `public`,
+		memo: [`Public: Your result is displayed publicly.`],
+	},
+	purple_goo: {
+		name: `Purple Goo`,
+		id: `purplegoo`,
+		memo: [`Purple Goo: Whenever someone targets you with an action, you switch roles with that player.`],
+	},
+	rainbow_goo: {
+		name: `Rainbow Goo`,
+		id: `rainbowgoo`,
+		memo: [`Rainbow Goo: Whenever a player targets you with an action, you do something random (anything any other color can do) to them.`],
 	},
 	random: {
 		name: `Random`,
@@ -851,6 +1492,11 @@ const modifiers = {
 		name: `Reflexive`,
 		id: `reflexive`,
 		memo: [`Reflexive: You use your action on people who target you.`],
+	},
+	reserved: {
+		name: `Reserved`,
+		id: `reserved`,
+		memo: [`Reserved: This player can PM anyone, and can be PMd back, but may not talk in the main chat (excluding lynches).`],
 	},
 	restless_spirit: {
 		name: `Restless Spirit`,
@@ -872,15 +1518,35 @@ const modifiers = {
 		id: `sacrifice`,
 		memo: [`Sacrifice: No one else can die, besides other Sacrifices, until you die.`],
 	},
+	sane: {
+		name: `Sane`,
+		id: `sane`,
+		memo: [`Sane: You receive the correct results upon inspection.`],
+	},
+	secret_agent: {
+		name: `Secret Agent`,
+		id: `secretagent`,
+		memo: [`Secret Agent: You are informed of which factions are in the game immediately.`],
+	},
 	self: {
 		name: `Self`,
 		id: `self`,
 		memo: [`Self: You must target yourself.`],
 	},
+	semilyncher: {
+		name: `Semilyncher`,
+		id: `semilyncher`,
+		memo: [`Semilyncher: If you get a specific player lynched, they turn into your alignment.`],
+	},
 	senpai: {
 		name: `Senpai`,
 		id: `senpai`,
 		memo: [`Senpai: When you get lynched, everyone who lynched you dies as well.`],
+	},
+	silver_goo: {
+		name: `Silver Goo`,
+		id: `silvergoo`,
+		memo: [`Silver Goo: Whenever another player targets you with an action, you become a perfect copy of that player.`],
 	},
 	strongman: {
 		name: `Strongman`,
@@ -906,6 +1572,16 @@ const modifiers = {
 		id: `supersaint`,
 		memo: [`Supersaint: When this player is lynched, the player who placed the hammering vote dies as well..`],
 	},
+	talkative: {
+		name: `Talkative`,
+		id: `talkative`,
+		memo: [`Talkative: If anyone else has an ability that causes them to be able to talk to other players, you may talk with them too.`],
+	},
+	teal_goo: {
+		name: `Teal Goo`,
+		id: `tealgoo`,
+		memo: [`Teal Goo: Anyone who targets you with an action will become a different role.`],
+	},
 	temporary: {
 		name: `Temporary`,
 		id: `temporary`,
@@ -916,21 +1592,54 @@ const modifiers = {
 		id: `tentacled`,
 		memo: [`Tentacled: You will always be inspected as ALIEN.`],
 	},
+	toxic_goo: {
+		name: `Toxic Goo`,
+		id: `toxicgoo`,
+		memo: [`Toxic Goo: Anyone who targets you with an ability will die of poison at the end of the next day.`],
+	},
 	tree: {
 		name: `Tree`,
 		id: `tree`,
-		memo: [`Tree: You can talk after your death, provided you died due to a lynch. You can still be primed and ignited by Arsonists afterwards.`],
+		memo: [`Tree: You can talk after your death, provided you died due to a lynch.`],
 	},
 	treestump: {
 		name: `Treestump`,
 		id: `treestump`,
 		memo: [`Treestump: You can talk after your death.`],
 	},
+	trypophobic: {
+		name: `Trypophobic`,
+		id: `trypophobic`,
+		memo: [`Trypophobic: You may vanillaise someone upon being lynched.`],
+	},
+	turquoise_goo: {
+		name: `Turquoise Goo`,
+		id: `turquoisegoo`,
+		memo: [`Turquoise Goo: When you die, you can turn another player into Turquoise Goo.`],
+	},
+	ugly_townie: `ugly`,
+	ugly: {
+		name: `Ugly`,
+		id: `ugly`,
+		memo: [`Ugly: You know how many Goo-aligned players there are, and can win with them as long as you survive. You are inspected as ALIEN.`],
+	},
+	unibackup: `universal_backup`,
+	uni_backup: `universal_backup`,
+	universal_backup: {
+		name: `Universal Backup`,
+		id: `universalbacup`,
+		memo: [`Universal Backup: You inherit the role of the first player who died.`],
+	},
 	lynchproof: `unlynchable`,
 	unlynchable: {
 		name: `Unlynchable`,
 		id: `unlynchable`,
 		memo: [`Unlynchable: You cannot be lynched. If you're lynched, you will survive and the game will turn to Night.`],
+	},
+	usurper: {
+		name: `Usurper`,
+		id: `usurper`,
+		memo: [`Usurper: You must outlive a Godfather before you can win.`],
 	},
 	vengeful: {
 		name: `Vengeful`,
@@ -947,6 +1656,16 @@ const modifiers = {
 		id: `weak`,
 		memo: [`Weak: You will die if you target a player who is not aligned with the TOWN.`],
 	},
+	whisperer: {
+		name: `Whisperer`,
+		id: `whisperer`,
+		memo: [`Whisperer: You may PM any player in the game, but they may not PM you back.`],
+	},
+	white_goo: {
+		name: `White Goo`,
+		id: `whitegoo`,
+		memo: [`White Goo: All dead players will turn to White Goo as they die. You show up as town on death.`],
+	},
 	wrong_place_at_the_wrong_time: {
 		name: `Wrong Place at the Wrong Time`,
 		id: `wrongplaceatthewrongtime`,
@@ -957,6 +1676,11 @@ const modifiers = {
 		name: `X-Shot`,
 		id: `xshot`,
 		memo: [`X-Shot: You may only use this ability X times during the game.`],
+	},
+	yellow_goo: {
+		name: `Yellow Goo`,
+		id: `yellowgoo`,
+		memo: [`Yellow Goo: Whenever someone targets you with an action, they lose the ability to use that action and you gain it. This even affects factional actions. That member of the faction can no longer perform that action. Other members of the faction can still perform it.`],
 	},
 };
 
@@ -985,7 +1709,7 @@ const themes = {
 		11: `Mafia Goon, Mafia Pretty Lady, Bulletproof Werewolf, Role Cop, Doctor, Pretty Lady, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		12: `Mafia Goon, Mafia Pretty Lady, Bulletproof Werewolf, Role Cop, Doctor, Pretty Lady, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		13: `Mafia Goon, Mafia Pretty Lady, Bulletproof Werewolf, Role Cop, Doctor, Pretty Lady, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
-		14: `Mafia Goon, Mafia Goon, Mafia Pretty Lady, Bulletproof Werewolf, Role Cop, Doctor, Pretty Lady, Jailkeeper, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		14: `Mafia Goon, Mafia Goon, Mafia Pretty Lady, Bulletproof Werewolf, Role Cop, Doctor, Pretty Lady, Jailkeeper, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		15: `Mafia Goon, Mafia Role Cop, Mafia Pretty Lady, Bulletproof Werewolf One-Shot Strongman, Role Cop, Doctor, Doctor, Pretty Lady, Jailkeeper, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		16: `Mafia Goon, Mafia Role Cop, Mafia Pretty Lady, Bulletproof Werewolf One-Shot Strongman, Role Cop, Doctor, Doctor, Pretty Lady, Jailkeeper, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		17: `Mafia Goon, Mafia Role Cop, Mafia Pretty Lady, Bulletproof Werewolf One-Shot Strongman, Role Cop, Doctor, Doctor, Pretty Lady, Jailkeeper, One-Shot Vigilante, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
@@ -998,7 +1722,6 @@ const themes = {
 		desc: `Dethy: Four Cops against one Mafia Goon. They just won't always get the correct results...`,
 		5: `Mafia Goon, Cop, Cop, Cop, Cop`,
 	},
-	esun: 'eternal_sun',
 	eternal_sun: {
 		name: `Eternal Sun`,
 		desc: `Eternal Sun: A theme without nights! Everyone can use their action once a day.`,
@@ -1020,7 +1743,7 @@ const themes = {
 	ff: `forest_fire`,
 	forest_fire: {
 		name: `Forest Fire`,
-		desc: `Forest Fire: The forest risks being burned down! Stop the Arsonists before it's too late.`,
+		desc: `Forest Fire: The forest risks being burned down! Stop the Arsonists before its too late.`,
 		9: `Arsonist, Arsonist, Tree, Tree, Tree, Tree, Tree, Tree, Firefighter`,
 	},
 	job: `jungle_of_bullshit`,
@@ -1070,6 +1793,12 @@ const themes = {
 		name: `Senpai`,
 		desc: `Senpai: When a Senpai dies, everyone who lynched them dies as well!`,
 		7: `Mafia Goon, Mafia Goon, Senpai, Senpai, Senpai, Senpai, Senpai`,
+	},
+	ss2: `supersaint2`,
+	supersaint2: {
+		name: `SS2`,
+		desc: `SS2: A two-player theme where you have to decide whether the opponent is Town or Mafia!`,
+		2: `Hated Mafia, Hated Supersaint, Hated Supersaint`,
 	},
 	ss3: `supersaint3`,
 	supersaint3: {
@@ -1220,11 +1949,8 @@ const IDEAs = {
 			`Mafia One-Shot Day Vigilante`,
 			`Mafia One-Shot Governor`,
 			`Mafia Reflexive Doctor`,
-			`Hirsute Mafia Goon`,
+			`Hirsute Goon`,
 			`Mafia Cupid`,
-			`Alpha Goon`,
-			`Mafia Compulsive Hider`,
-			`Mafia Fruit Vendor`,
 			`Werewolf`,
 			`Werewolf`,
 			`Werewolf`,
@@ -1263,7 +1989,7 @@ const IDEAs = {
 			`Solo Serial Killer (Immune to Alien Kills)`,
 			`One-Shot Cult Recruiter`,
 			`One-Shot Cult Goomaker`,
-			`Solo Wild Card`,
+			`Solo Wild Card Greater Idea`,
 		],
 		picks: [`role`],
 		choices: 2,
@@ -1373,7 +2099,7 @@ const IDEAs = {
 			`Mafia One-Shot Day Vigilante`,
 			`Mafia One-Shot Governor`,
 			`Mafia Reflexive Doctor`,
-			`Hirsute Mafia Goon`,
+			`Mafia Hirsute Goon`,
 			`Mafia Cupid`,
 			`Alpha Mafia Goon`,
 			`Mafia Compulsive Hider`,
@@ -1416,7 +2142,7 @@ const IDEAs = {
 			`Solo Serial Killer (Immune to Alien Kills)`,
 			`One-Shot Cult Recruiter`,
 			`One-Shot Cult Goomaker`,
-			`Solo Wild Card`,
+			`Solo Wild Card Greater Idea`,
 		],
 		picks: [`role`, `alignment`],
 		choices: 3,
@@ -1526,7 +2252,7 @@ const IDEAs = {
 			`Mafia One-Shot Day Vigilante`,
 			`Mafia One-Shot Governor`,
 			`Mafia Reflexive Doctor`,
-			`Hirsute Mafia Goon`,
+			`Hirsute Goon`,
 			`Mafia Cupid`,
 			`Alpha Mafia Goon`,
 			`Mafia Compulsive Hider`,
@@ -1569,7 +2295,7 @@ const IDEAs = {
 			`Solo Serial Killer (Immune to Alien Kills)`,
 			`One-Shot Cult Recruiter`,
 			`One-Shot Cult Goomaker`,
-			`Solo Wild Card`,
+			`Solo Wild Card Greater Idea`,
 		],
 		picks: [`role`],
 		choices: 2,
@@ -2098,10 +2824,154 @@ const IDEAs = {
 	},
 };
 
+/** @type {MafiaTerms} */
+const terms = {
+	bastard: {
+		name: `Bastard`,
+		desc: [`Bastard: Any kind of role may be in this setup, and the host may lie to the players.`],
+	},
+	bus: `bussing`,
+	bussing: {
+		name: `Bussing`,
+		desc: [`Bussing: A scum player lynching or scumreading their partner to appear town.`],
+	},
+	bw: `bandwagon`,
+	bandwagon: {
+		name: `Bandwagon`,
+		desc: [`Bandwagon: A group of people following a lynch or thought.`],
+	},
+	cc: `counter_claim`,
+	counterclaim: `counter_claim`,
+	counter_claim: {
+		name: `Counter Claim`,
+		desc: [`Counter Claim: When someone claims a role, in response of someone else claiming that role (of which there's usually only one left in the game).`],
+	},
+	defmaj: `definite_majority`,
+	definitemajority: `definite_majority`,
+	definite_majority: {
+		name: `Definite Majority`,
+		desc: [`The day only ends when hammer is reached.`],
+	},
+	dilemma: {
+		name: `Dilemma`,
+		desc: [`Dilemma: When town can only win by No Lynching and hoping the Anti-Town factions kill each other.`],
+	},
+	fillering: `filler`,
+	filler: {
+		name: `Filler`,
+		desc: [`Filler: Excessive talk about things that are not related or important to the game.`],
+	},
+	fos: `finger_of_suspect`,
+	finger_of_suspect: {
+		name: `Finger of Suspect`,
+		desc: [`Finger of Suspect: Pointing out that you scumread someone.`],
+	},
+	hammer: {
+		name: `Hammer`,
+		desc: [`Hammer: The amount of votes needed to have a majority of players lynching someone.`],
+	},
+	hypo: {
+		name: `Hypo`,
+		desc: [`Hypo: When everyone claims what they would've done if they were a specific role. This is done to not out the power role, but that Town still has access to their actions or results in case they die.`],
+	},
+	'l-1': `l-x`,	'l-2': `l-x`,	'l-3': `l-x`,	'l-4': `l-x`,	lx: `l-x`,	l1: `l-x`,	l2: `l-x`,	l3: `l-x`,	l4: `l-x`,
+	'l-x': {
+		name: `L-x`,
+		desc: [`L-x: When a player is a specific amount of votes away from hammer.`],
+	},
+	lurking: {
+		name: `Lurking`,
+		desc: [`Lurking: When someone is purposefully not talking in the chat, even while they're there.`],
+	},
+	lylo: {
+		name: `LyLo`,
+		desc: [`LyLo: If the wrong player is lynched today, or nobody is lynched, town loses.`],
+	},
+	maj: `majority`,
+	majority: {
+		name: `Majority`,
+		desc: [`Majority: If no hammer is reached at the deadline, no one is lynched.`],
+	},
+	majnox: {
+		name: `MajNoX`,
+		desc: [`MajNoX: Majority, without any extensions.`],
+	},
+	modplur: `modified_plurality`,
+	modified_plurality: {
+		name: `Modified Plurality`,
+		desc: [`Modified Plurality: Plurality, but if a certain amount of votes isn't reached at the deadline, no one is lynched.`],
+	},
+	mylo: {
+		name: `MyLo`,
+		desc: [`MyLo: If the wrong player is lynched today, town loses.`],
+	},
+	nullread: {
+		name: `Nullread`,
+		desc: [`Nullread: A player who you don't know whether they're Town or not.`],
+	},
+	omgus: {
+		name: `OMGUS`,
+		desc: [`OMGUS: Accusing someone solely because they accused you.`],
+	},
+	plop: {
+		name: `PLOP`,
+		desc: [`PLOP: "Pretty Lady Over-Powered", using the Pretty Lady (protected by a Doctor) to find solo scum, by judging whether the Nightkill went through.`],
+	},
+	plur: `plurality`,
+	plurality: {
+		name: `Plurality`,
+		desc: [`Plurality: If the deadline is reached, the player with the most votes will be lynched.`],
+	},
+	plurnox: {
+		name: `PlurNoX`,
+		desc: [`PlurNoX: Plurality, without any extensions.`],
+	},
+	plylo: {
+		name: `PLyLo`,
+		desc: [`PLyLo: "Potential LyLo", there's a chance but it's not definite that if the wrong person, or No Lynch is lynched, town loses.`],
+	},
+	pmylo: {
+		name: `PMyLo`,
+		desc: [`PMyLo: "Potential MyLo", there's a chance but it's not definite that if the wrong person is lynched, town loses.`],
+	},
+	qh: `quickhammer`,
+	quickhammer: {
+		name: `Quickhammer`,
+		desc: [`Quickhammer: When all of the Mafia quickly lynch someone, to reach hammer and cause a Mafia win.`],
+	},
+	scorched_earth: {
+		name: `Scorched Earth`,
+		desc: [`Scorched Earth: When no players are left alive.`],
+	},
+	sr: `scumread`,
+	scumread: {
+		name: `Scumread`,
+		desc: [`Scumread: A player who you think is not aligned with the Town.`],
+	},
+	snaq_bastard: {
+		name: `Snaq Bastard`,
+		desc: [`Snaq Bastard: Any role can be in the game, excluding Hidden or False ones. The host will not lie to the players.`],
+	},
+	tr: `townread`,
+	townread: {
+		name: `Townread`,
+		desc: [`Townread: A player who you think is aligned with the Town.`],
+	},
+	tunnel: {
+		name: `Tunnel`,
+		desc: [`Tunnel: When a player is convinced another player is scum, and will consider anything the player does scummy.`],
+	},
+	wifom: {
+		name: `WIFOM`,
+		desc: [`WIFOM: "Wine In Front Of Me", the circular reasoning that Mafia could've anticipated something, and did it because of that.`],
+	},
+};
+
 module.exports = {
 	alignments: Object.assign(Object.create(null), alignments),
 	roles: Object.assign(Object.create(null), roles),
 	modifiers: Object.assign(Object.create(null), modifiers),
 	themes: Object.assign(Object.create(null), themes),
 	IDEAs: Object.assign(Object.create(null), IDEAs),
+	terms: Object.assign(Object.create(null), terms),
 };
