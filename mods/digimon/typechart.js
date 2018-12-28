@@ -1,6 +1,8 @@
 'use strict';
-//1 SE 2 Resist 3 immune
-exports.BattleTypeChart = {
+
+// 1 SE 2 Resist 3 immune
+/**@type {{[k: string]: ModdedTypeData}} */
+let BattleTypeChart = {
 	"Flame": {
 		damageTaken: {
 			brn: 3,
@@ -879,3 +881,5 @@ exports.BattleTypeChart = {
 		},
 	},
 };
+
+exports.BattleTypeChart = BattleTypeChart;

@@ -91,8 +91,8 @@ class RandomDigimonTeams extends RandomTeams {
 				baseSignatureMove: "pepperbreath",
 				signatureMove: "Pepper Breath",
 			},
-			"Aruramon": {
-				species: "Aruramon",
+			"Aruraumon": {
+				species: "Aruraumon",
 				ability: "Virus",
 				moves: ['charmperfume', 'rootbind', 'venomdisaster', 'waterblitz', 'superstinkyjet', 'shadowfall', 'blackout'],
 				baseSignatureMove: "nemesisivy",
@@ -238,8 +238,8 @@ class RandomDigimonTeams extends RandomTeams {
 				baseSignatureMove: "puppyhowl",
 				signatureMove: "Puppy Howl",
 			},
-			"Shamamon": {
-				species: "Shamamon",
+			"Shamanmon": {
+				species: "Shamanmon",
 				ability: "Virus",
 				moves: ['charmperfume', 'rootbind', 'rockfall', 'musclecharge', 'warcry', 'reboundstrike', 'megatonpunch', 'shadowfall', 'pooptoss'],
 				baseSignatureMove: "dancingbone",
@@ -452,7 +452,7 @@ class RandomDigimonTeams extends RandomTeams {
 			"IceDevimon": {
 				species: "IceDevimon",
 				ability: "Virus",
-				moves: ['darkspirit', 'blackout', 'evilfantasy', 'chaoscloud', 'shadowfall', 'evilsquall', 'winterblast', 'gigafreeze'],
+				moves: ['waterblitz', 'blackout', 'evilfantasy', 'icestatue', 'shadowfall', 'evilsquall', 'winterblast', 'gigafreeze'],
 				baseSignatureMove: "frozenclaw",
 				signatureMove: "Frozen Claw",
 			},
@@ -856,22 +856,23 @@ class RandomDigimonTeams extends RandomTeams {
 				baseSignatureMove: "modestlystun",
 				signatureMove: "Modestly Stun",
 			},
-			"MeicrackmonVM": {
+			"MeicrackmonViciousMode": {
 				name: "Meicrackmon",
-				species: "meicrackmonvm",
+				species: "meicrackmonviciousmode",
 				ability: "Virus",
 				moves: ['warcry', 'windcutter', 'fightingaura', 'megatonpunch', 'mechanicalclaw', 'venomdisaster', 'shadowfall', 'evilsquall', 'blackout'],
 				baseSignatureMove: "berserkthinking",
 				signatureMove: "Berserk Thinking",
 			},
-			"MetalGreymon": {
-				species: "metalgreymon",
+			"MetalGreymonVaccine": {
+				name: "MetalGreymon",
+				species: "metalgreymonvaccine",
 				ability: "Vaccine",
 				moves: ['burningheart', 'heatbreath', 'firetower', 'infinityburn', 'musclecharge', 'sonicjab', 'reboundstrike', 'busterdrive', 'mechanicalclaw', 'gigawattlaser', 'deleteprogram'],
 				baseSignatureMove: "gigadestroyer",
 				signatureMove: "Giga Destroyer",
 			},
-			"MetalGreymonV": {
+			"MetalGreymonVirus": {
 				name: "MetalGreymon",
 				species: "metalgreymonvirus",
 				ability: "Virus",
@@ -1013,16 +1014,17 @@ class RandomDigimonTeams extends RandomTeams {
 				baseSignatureMove: "tomahawkstinger",
 				signatureMove: "Tomahawk Stinger",
 			},
-			"Cherubimon": {
-				species: "Cherubimonevil",
+			"CherubimonEvil": {
+				name: "Cherubimon",
+				species: "CherubimonEvil",
 				ability: "Virus",
 				moves: ['wingshoes', 'thunderjustice', 'megalospark', 'megatonpunch', 'blackout', 'chaoscloud', 'shadowfall', 'evilsquall', 'dgdimension', 'gigawattlaser'],
 				baseSignatureMove: "lightningspear",
 				signatureMove: "Lightning Spear",
 			},
-			"CherubimonG": {
+			"CherubimonGood": {
 				name: "Cherubimon",
-				species: "Cherubimongood",
+				species: "CherubimonGood",
 				ability: "Vaccine",
 				moves: ['wingshoes', 'thunderjustice', 'megalospark', 'megatonpunch', 'holybreath', 'saintray', 'holyjudgment', 'shiningnova', 'dgdimension', 'gigawattlaser'],
 				baseSignatureMove: "heavensjudgment",
@@ -1205,7 +1207,6 @@ class RandomDigimonTeams extends RandomTeams {
 					weakmonclause = true;
 				}
 			}
-
 			if (!set.name) set.name = name;
 
 			// Inherit how pokemon does it with Kuramon instead of sunkern
@@ -1235,10 +1236,10 @@ class RandomDigimonTeams extends RandomTeams {
 				level++;
 			}
 			level = level + 20; //Add 20. It lessens the level gap
-			if (level >= 100) {
+			if (level > 100) {
 				level = 100;
 			} else {
-				level = (level % 5) >= 2.5 ? parseInt(level / 5) * 5 + 5 : parseInt(level / 5) * 5; //Rounds to the Nearest 5 for simplicity
+				level = (level % 5) >= 2.5 ? (level / 5) * 5 + 5 : (level / 5) * 5; //Rounds to the Nearest 5 for simplicity
 			}
 			set.level = level;
 			set.nature = "Serious";

@@ -1,10 +1,11 @@
 'use strict';
-exports.BattleAbilities = {
+
+/**@type {{[k: string]: ModdedAbilityData}} */
+let BattleAbilities = {
 	"data": {
 		id: "data",
 		name: "Data",
 		desc: "1.2x against Vaccine; 0.8x against Virus. 30% chance to cure status conditions.",
-		onModifyDamagePriority: 8,
 		onModifyDamage: function (damage, source, target, move) {
 			if (target.volatiles['bug'] || source.volatiles['bug']) {
 				if (target.hasAbility('virus')) {
@@ -40,7 +41,6 @@ exports.BattleAbilities = {
 		id: "virus",
 		name: "Virus",
 		desc: "1.2x against Data; 0.8x against Vaccine. 30% chance to cure status conditions.",
-		onModifyDamagePriority: 8,
 		onModifyDamage: function (damage, source, target, move) {
 			if (target.volatiles['bug'] || source.volatiles['bug']) {
 				if (target.hasAbility('vaccine')) {
@@ -76,7 +76,6 @@ exports.BattleAbilities = {
 		id: "vaccine",
 		name: "Vaccine",
 		desc: "1.2x against Virus; 0.8x against Data. 30% chance to cure status conditions.",
-		onModifyDamagePriority: 8,
 		onModifyDamage: function (damage, source, target, move) {
 			if (target.volatiles['bug'] || source.volatiles['bug']) {
 				if (target.hasAbility('data')) {
@@ -132,9 +131,10 @@ exports.BattleAbilities = {
 		desc: "While this Pokemon is active, the power of Dark- and Evil-type moves used by active Pokemon is multiplied by 1.33.",
 		shortDesc: "While this Pokemon is active, all Dark/Evil attacks have 1.33x power.",
 		onAnyBasePower: function (basePower, source, target, move) {
-			if (target === source || move.category === 'Status' || (move.type !== 'Dark' && move.type !== 'Evil') || move.auraBoost) return;
-			move.auraBoost = move.hasAuraBreak ? 0x0C00 : 0x1547;
-			return this.chainModify([move.auraBoost, 0x1000]);
+			if (target === source || move.category === 'Status' || !['Dark', 'Evil'].includes(move.type)) return;
+			if (!move.auraBooster) move.auraBooster = this.effectData.target;
+			if (move.auraBooster !== this.effectData.target) return;
+			return this.chainModify([move.hasAuraBreak ? 0x0C00 : 0x1547, 0x1000]);
 		},
 	},
 	"dryskin": {
@@ -162,9 +162,10 @@ exports.BattleAbilities = {
 		desc: "While this Pokemon is active, the power of Fairy- and Holy-type moves used by active Pokemon is multiplied by 1.33.",
 		shortDesc: "While this Pokemon is active, all Fairy/Holy attacks have 1.33x power.",
 		onAnyBasePower: function (basePower, source, target, move) {
-			if (target === source || move.category === 'Status' || (move.type !== 'Fairy' && move.type !== 'Holy') || move.auraBoost) return;
-			move.auraBoost = move.hasAuraBreak ? 0x0C00 : 0x1547;
-			return this.chainModify([move.auraBoost, 0x1000]);
+			if (target === source || move.category === 'Status' || !['Fairy', 'Holy'].includes(move.type)) return;
+			if (!move.auraBooster) move.auraBooster = this.effectData.target;
+			if (move.auraBooster !== this.effectData.target) return;
+			return this.chainModify([move.hasAuraBreak ? 0x0C00 : 0x1547, 0x1000]);
 		},
 	},
 	"flashfire": {
@@ -212,7 +213,9 @@ exports.BattleAbilities = {
 			if ((source && target === source) || (!target.hasType('Grass') && !target.hasType('Nature'))) return;
 			let showMsg = false;
 			for (let i in boost) {
+				// @ts-ignore
 				if (boost[i] < 0) {
+					// @ts-ignore
 					delete boost[i];
 					showMsg = true;
 				}
@@ -552,3 +555,5 @@ exports.BattleAbilities = {
 		desc: "On switch-in, the weather becomes heavy rain that prevents damaging Fire- and Flame-type moves from executing, in addition to all the effects of Rain Dance. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by Delta Stream or Desolate Land.",
 	},
 };
+
+exports.BattleAbilities = BattleAbilities;

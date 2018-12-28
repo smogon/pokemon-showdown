@@ -1,6 +1,11 @@
 'use strict';
-exports.BattleStatuses = {
+
+/**@type {{[k: string]: ModdedEffectData}} */
+let BattleStatuses = {
 	panic: {
+		name: 'panic',
+		id: 'panic',
+		num: 0,
 		// this is a volatile status
 		onStart: function (target, source, sourceEffect) {
 			this.add('-start', target, 'panic');
@@ -23,6 +28,9 @@ exports.BattleStatuses = {
 		},
 	},
 	dot: {
+		name: 'dot',
+		id: 'dot',
+		num: 0,
 		// this is a volatile status
 		onStart: function (target, source, sourceEffect) {
 			this.add('-start', target, 'dot');
@@ -44,6 +52,9 @@ exports.BattleStatuses = {
 		},
 	},
 	bug: {
+		name: 'bug',
+		id: 'bug',
+		num: 0,
 		// this is a volatile status
 		onStart: function (target, source, sourceEffect) {
 			this.add('-start', target, 'bug');
@@ -78,7 +89,8 @@ exports.BattleStatuses = {
 		counterMax: 729,
 		onStart: function (side) {
 			let counter = 3;
-			for (let pokemon of side.active) {
+			// @ts-ignore
+			for (const pokemon of side.active) {
 				if (pokemon && pokemon.volatiles['stall'] && pokemon.volatiles['stall'].counter >= counter) {
 					counter = pokemon.volatiles['stall'].counter * 3;
 				}
@@ -91,6 +103,7 @@ exports.BattleStatuses = {
 			return this.randomChance(1, counter);
 		},
 		onRestart: function () {
+			// @ts-ignore
 			if (this.effectData.counter < this.effect.counterMax) {
 				this.effectData.counter *= 3;
 			}
@@ -166,3 +179,5 @@ exports.BattleStatuses = {
 		},
 	},
 };
+
+exports.BattleStatuses = BattleStatuses;
