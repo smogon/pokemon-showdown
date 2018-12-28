@@ -525,6 +525,9 @@ class Pokemon {
 					}
 				}
 			}
+			if (targets.length && !targets.includes(target)) {
+				this.battle.retargetLastMove(targets[targets.length - 1]);
+			}
 			break;
 		case 'allAdjacent':
 		case 'allAdjacentFoes':
@@ -539,6 +542,9 @@ class Pokemon {
 				if (this.battle.isAdjacent(this, foeActive)) {
 					targets.push(foeActive);
 				}
+			}
+			if (targets.length && !targets.includes(target)) {
+				this.battle.retargetLastMove(targets[targets.length - 1]);
 			}
 			break;
 		default:
