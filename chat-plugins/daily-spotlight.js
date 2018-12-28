@@ -33,8 +33,12 @@ function nextDaily() {
 
 const midnight = new Date();
 midnight.setHours(24, 0, 0, 0);
-setInterval(nextDaily, midnight - Date.now());
+setInterval(nextDaily, midnight.valueOf() - Date.now());
 
+/**
+ * @param {string?} image
+ * @param {string} description
+ */
 async function renderSpotlight(image, description) {
 	let imgHTML = '';
 
@@ -56,6 +60,7 @@ const pages = {
 			let buf = `|title|[${roomid}] Daily Spotlights\n|pagehtml|<div class="pad ladder"><h2>Daily Spotlights</h2>`;
 			if (!room) {
 				buf += `<p>Invalid room.</p></div>`;
+			// @ts-ignore Room is definitely a room here and not null.
 			} else if (!user.can('announce', null, room)) {
 				buf += `<p>Access denied</p></div>`;
 			} else if (!spotlights[room.id]) {
@@ -125,7 +130,7 @@ const commands = {
 		}
 		description = rest.join(',');
 		if (description.length > 500) return this.errorReply("Descriptions can be at most 500 characters long.");
-		const obj = {image: image, description: description};
+		const obj = {image: image || null, description: description};
 		if (!spotlights[room.id]) spotlights[room.id] = {};
 		if (!spotlights[room.id][key]) spotlights[room.id][key] = [];
 		if (cmd === 'setdaily') {
