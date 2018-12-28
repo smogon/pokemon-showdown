@@ -86,7 +86,7 @@ exports.pages = pages;
 
 /** @type {ChatCommands} */
 const commands = {
-	removedaily(target, room, user) {
+	removedaily: async function (target, room, user) {
 		let [key, rest] = target.split(',');
 		key = toId(key);
 		if (!key) return this.parse('/help daily');
@@ -112,7 +112,7 @@ const commands = {
 		}
 	},
 	queuedaily: 'setdaily',
-	async setdaily(target, room, user, connection, cmd) {
+	setdaily: async function (target, room, user, connection, cmd) {
 		let [key, ...rest] = target.split(',');
 		key = toId(key);
 		if (!key) return this.parse('/help daily');
@@ -147,7 +147,7 @@ const commands = {
 
 		saveSpotlights();
 	},
-	async daily(target, room, user) {
+	daily: async function (target, room, user) {
 		let key = toId(target);
 		if (!spotlights[room.id] || !spotlights[room.id][key]) return this.errorReply(`Cannot find a daily spotlight with name '${key}'`);
 
@@ -158,7 +158,7 @@ const commands = {
 
 		return this.sendReplyBox(html);
 	},
-	viewspotlights(target, room, user) {
+	viewspotlights: function (target, room, user) {
 		if (!this.can('announce', null, room)) return false;
 		return this.parse(`/join view-spotlights-${room.id}`);
 	},
