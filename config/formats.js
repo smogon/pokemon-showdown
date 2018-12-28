@@ -452,7 +452,7 @@ let Formats = [
 				// @ts-ignore
 				bst += template.baseStats[stat];
 			}
-			if (bst > 600) return [`${template.species} is banned.`, `(Pok\u00e9mon with a BST higher than 600 are banned)`];
+			if (bst > 625) return [`${template.species} is banned.`, `(Pok\u00e9mon with a BST higher than 625 are banned)`];
 			let item = this.getItem(set.item);
 			if (set.item && item.megaStone) {
 				let bstMega = 0;
@@ -461,7 +461,7 @@ let Formats = [
 					// @ts-ignore
 					bstMega += megaTemplate.baseStats[stat];
 				}
-				if (template.baseSpecies === item.megaEvolves && bstMega > 600) return [`${set.name || set.species}'s item ${item.name} is banned.`, `(Pok\u00e9mon with a BST higher than 600 are banned)`];
+				if (template.baseSpecies === item.megaEvolves && bstMega > 625) return [`${set.name || set.species}'s item ${item.name} is banned.`, `(Pok\u00e9mon with a BST higher than 625 are banned)`];
 			}
 			if (set.moves.length !== 1 || this.getMove(set.moves[0]).id !== 'metronome') return [`${set.name || set.species} has illegal moves.`, `(Pok\u00e9mon can only have one Metronome in their moveset)`];
 		},
