@@ -158,6 +158,18 @@ const commands = {
 
 		return this.sendReplyBox(html);
 	},
+	viewspotlights(target, room, user) {
+		if (!this.can('announce', null, room)) return false;
+		return this.parse(`/join view-spotlights-${room.id}`);
+	},
+
+	dailyhelp: [
+		`Daily spotlights plugin:`,
+		`- /setdaily [name], [image], [description] - Sets the daily spotlight. Image can be left out. Requires: % @ # & ~`,
+		`- /queuedaily [name], [image], [description] - Queues a daily spotlight. At midnight, the spotlight with this name will automatically switch to the next queued spotlight. Image can be left out. Requires: % @ # & ~`,
+		`- /removedaily [name][, queue number] - If no queue number is provided, deletes all queued and current spotlights with the given name. If a number is provided, removes a specific future spotlight from the queue. Requires: % @ # & ~`,
+		`- /viewspotlights - Shows all current and queued spotlights. Requires: % @ # & ~`,
+	],
 };
 
 exports.commands = commands;
