@@ -40,6 +40,25 @@ describe('Stomping Tantrum', function () {
 		battle.makeChoices('move stompingtantrum', 'move protect');
 	});
 
+	it('should double its Base Power if the last move used was a spread move that partially hit protect and otherwise failed', function () {
+		battle = common.createBattle({gameType: 'doubles'});
+		battle.join('p1', 'Guest 1', 1, [
+			{species: 'Cresselia', ability: 'levitate', moves: ['sunnyday']},
+			{species: 'Groudon', ability: 'drought', moves: ['stompingtantrum', 'precipiceblades']},
+		]);
+		battle.join('p2', 'Guest 2', 1, [
+			{species: 'Tapu lele', ability: 'psychicsurge', moves: ['protect', 'calmmind']},
+			{species: 'Ho-Oh', ability: 'pressure', moves: ['recover']},
+		]);
+
+		battle.onEvent('BasePower', battle.getFormat(), function (basePower) {
+			assert.strictEqual(basePower, 150);
+		});
+
+		battle.makeChoices('move sunnyday, move precipiceblades', 'move protect, move recover');
+		battle.makeChoices('move sunnyday, move stompingtantrum', 'move calmmind, move recover');
+	});
+
 	it('should not double its Base Power if the last move used on the previous turn was a successful Celebrate', function () {
 		battle = common.createBattle([
 			[{species: 'Snorlax', ability: 'thickfat', moves: ['celebrate', 'stompingtantrum']}],
