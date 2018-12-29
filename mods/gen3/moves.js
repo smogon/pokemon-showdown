@@ -298,6 +298,43 @@ let BattleMovedex = {
 		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Surf and Whirlpool, which have doubled power when used against it, and is also unaffected by weather.",
 		basePower: 60,
 	},
+	doomdesire: {
+		inherit: true,
+		onTry: function (source, target) {
+			target.side.addSideCondition('futuremove');
+			if (target.side.sideConditions['futuremove'].positions[target.position]) {
+				return false;
+			}
+			let moveData = /** @type {ActiveMove} */ ({
+				name: "Doom Desire",
+				basePower: 120,
+				category: "Physical",
+				flags: {},
+				willCrit: false,
+				type: '???',
+			});
+			let damage = this.getDamage(source, target, moveData, true);
+			target.side.sideConditions['futuremove'].positions[target.position] = {
+				duration: 3,
+				move: 'doomdesire',
+				source: source,
+				moveData: {
+					id: 'doomdesire',
+					name: "Doom Desire",
+					accuracy: 85,
+					basePower: 0,
+					damage: damage,
+					category: "Physical",
+					flags: {},
+					effectType: 'Move',
+					isFutureMove: true,
+					type: '???',
+				},
+			};
+			this.add('-start', source, 'Doom Desire');
+			return null;
+		},
+	},
 	doublekick: {
 		inherit: true,
 		desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit.",
