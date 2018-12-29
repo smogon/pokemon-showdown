@@ -1720,7 +1720,7 @@ let BattleMovedex = {
 		sideCondition: 'Wish',
 		effect: {
 			duration: 2,
-			onResidualOrder: 0,
+			onResidualOrder: 0.5,
 			onEnd: function (side) {
 				let target = side.active[this.effectData.sourcePosition];
 				if (!target.fainted) {
