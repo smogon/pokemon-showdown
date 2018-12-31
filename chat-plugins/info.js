@@ -1306,14 +1306,14 @@ const commands = {
 		const showGlobal = (target !== 'room' && target !== 'rooms');
 		this.sendReplyBox(
 			(showRoom ? `<strong>Room ranks</strong><br />` +
-			`+ <strong>Voice</strong> - They can use ! commands like !groups, and talk during moderated chat<br />` +
+			`+ <strong>Voice</strong> - They can use ! commands like !groups<br />` +
 			`% <strong>Driver</strong> - The above, and they can mute and warn<br />` +
 			`@ <strong>Moderator</strong> - The above, and they can room ban users<br />` +
 			`* <strong>Bot</strong> - Like Moderator, but makes it clear that this user is a bot<br />` +
 			`# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it<br />` : ``) +
 			(showRoom && showGlobal ? `<br />` : ``) +
 			(showGlobal ? `<strong>Global ranks</strong><br />` +
-			`+ <strong>Global Voice</strong> - They can use ! commands like !groups, and talk during moderated chat<br />` +
+			`+ <strong>Global Voice</strong> - They can use ! commands like !groups<br />` +
 			`% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts<br />` +
 			`@ <strong>Global Moderator</strong> - The above, and they can globally ban users<br />` +
 			`* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot<br />` +
