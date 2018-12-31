@@ -17,6 +17,8 @@ const REPORT_USER_STATS_INTERVAL = 10 * 60 * 1000;
 
 const CRASH_REPORT_THROTTLE = 60 * 60 * 1000;
 
+const LAST_BATTLE_WRITE_THROTTLE = 10;
+
 /** @type {null} */
 const RETRY_AFTER_LOGIN = null;
 
@@ -488,8 +490,12 @@ class GlobalRoom extends BasicRoom {
 		try {
 			lastBattle = FS('logs/lastbattle.txt').readSync('utf8');
 		} catch (e) {}
+		// TypeScript bug
 		/** @type {number} */
 		this.lastBattle = Number(lastBattle) || 0;
+		// TypeScript bug
+		/** @type {number} */
+		this.lastWrittenBattle = this.lastBattle;
 
 		// init users
 		this.users = Object.create(null);
@@ -522,9 +528,19 @@ class GlobalRoom extends BasicRoom {
 	}
 
 	writeNumRooms() {
-		FS('logs/lastbattle.txt').writeUpdate(() => (
-			`${this.lastBattle}`
-		), {throttle: 10 * 1000});
+		if (this.lockdown) {
+			if (this.lastBattle === this.lastWrittenBattle) return;
+			this.lastWrittenBattle = this.lastBattle;
+		} else {
+			// batch writes so we don't have to write them every new battle
+			// very probably premature optimization, considering by default we
+			// write significantly larger log files every new battle
+			if (this.lastBattle < this.lastWrittenBattle) return;
+			this.lastWrittenBattle = this.lastBattle + LAST_BATTLE_WRITE_THROTTLE;
+		}
+		FS('logs/lastbattle.txt').writeUpdate(() =>
+			`${this.lastWrittenBattle}`
+		);
 	}
 
 	reportUserStats() {
@@ -883,10 +899,10 @@ class GlobalRoom extends BasicRoom {
 		this.userCount--;
 	}
 	/**
-	 * @param {Error} err
+	 * @param {Error | null} err
 	 * @param {boolean} slow
 	 */
-	startLockdown(err, slow = false) {
+	startLockdown(err = null, slow = false) {
 		if (this.lockdown && err) return;
 		let devRoom = Rooms('development');
 		// @ts-ignore
@@ -920,6 +936,7 @@ class GlobalRoom extends BasicRoom {
 		}
 
 		this.lockdown = true;
+		this.writeNumRooms();
 		this.lastReportedCrash = Date.now();
 	}
 	automaticKillRequest() {
