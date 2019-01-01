@@ -1004,6 +1004,15 @@ let Formats = [
 		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
+		name: "[Gen 6] Battle Factory",
+		desc: `Randomized teams of Pok&eacute;mon for a generated Smogon tier with sets that are competitively viable.`,
+
+		mod: 'gen6',
+		team: 'randomFactory',
+		searchShow: false,
+		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Mega Rayquaza Clause'],
+	},
+	{
 		name: "[Gen 5] Random Battle",
 
 		mod: 'gen5',
@@ -1056,38 +1065,41 @@ let Formats = [
 		column: 3,
 	},
 	{
-		name: "[Gen 1] UU",
+		name: "[Gen 2] UU",
+		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3576710/">GSC UU</a>`],
+
+		mod: 'gen2',
+		// searchShow: false,
+		ruleset: ['[Gen 2] OU'],
+		banlist: ['OU', 'UUBL'],
+	},
+	{
+		name: "[Gen 3] ADV 200",
+		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3594876/">ADV 200</a>`],
+
+		mod: 'adv200',
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Uber', 'Apricot Berry', 'Ganlon Berry', 'Lansat Berry', 'Petaya Berry', 'Salac Berry', 'Starf Berry'],
+		onValidateSet: function (set, format) {
+			let dex = [
+				'Treecko', 'Grovyle', 'Sceptile', 'Torchic', 'Combusken', 'Blaziken', 'Mudkip', 'Marshtomp', 'Swampert', 'Poochyena', 'Mightyena', 'Zigzagoon', 'Linoone', 'Wurmple', 'Silcoone', 'Cascoone', 'Beautifly', 'Dustox', 'Lotad', 'Lombre', 'Ludicolo', 'Seedot', 'Nuzleaf', 'Shiftry', 'Taillow', 'Swellow', 'Wingull', 'Pelipper', 'Ralts', 'Kirlia', 'Gardevoir', 'Surskit', 'Masquerain', 'Shroomish', 'Breloom', 'Slakoth', 'Vigoroth', 'Slaking', 'Abra', 'Kadabra', 'Alakazam', 'Nincada', 'Ninjask', 'Shedinja', 'Whismur', 'Loudred', 'Exploud', 'Makuhita', 'Hariyama', 'Goldeen', 'Seaking', 'Magikarp', 'Gyarados', 'Azurill', 'Marill', 'Azumarill', 'Geodude', 'Graveler', 'Golem', 'Nosepass', 'Skitty', 'Delcatty', 'Zubat', 'Golbat', 'Crobat', 'Tentacool', 'Tentacruel', 'Sableye', 'Mawile', 'Aron', 'Lairon', 'Aggron', 'Machop', 'Machoke', 'Machamp', 'Meditite', 'Medicham', 'Electrike', 'Manectric', 'Plusle', 'Minun', 'Magnemite', 'Magneton', 'Voltorb', 'Electrode', 'Volbeat', 'Illumise', 'Oddish', 'Gloom', 'Vileplume', 'Bellossom', 'Doduo', 'Dodrio', 'Roselia', 'Gulpin', 'Swalot', 'Carvanha', 'Sharpedo', 'Wailmer', 'Wailord', 'Numel', 'Camerupt', 'Slugma', 'Magcargo', 'Torkoal', 'Grimer', 'Muk', 'Koffing', 'Weezing', 'Spoink', 'Grumpig', 'Sandshrew', 'Sandslash', 'Skarmory', 'Spinda', 'Trapinch', 'Vibrava', 'Flygon', 'Cacnea', 'Cacturne', 'Swablu', 'Altaria', 'Zangoose', 'Seviper', 'Lunatone', 'Solrock', 'Barboach', 'Whiscash', 'Corphish', 'Crawdaunt', 'Baltoy', 'Claydol', 'Lileep', 'Cradily', 'Anorith', 'Armaldo', 'Igglybuff', 'Jigglypuff', 'Wigglytuff', 'Feebas', 'Milotic', 'Castform', 'Staryu', 'Starmie', 'Kecleon', 'Shuppet', 'Banette', 'Duskull', 'Dusclops', 'Tropius', 'Chimecho', 'Absol', 'Vulpix', 'Ninetales', 'Pichu', 'Pikachu', 'Raichu', 'Psyduck', 'Golduck', 'Wynaut', 'Wobbuffet', 'Natu', 'Xatu', 'Girafarig', 'Phanpy', 'Donphan', 'Pinsir', 'Heracross', 'Rhyhorn', 'Rhydon', 'Snorunt', 'Glalie', 'Spheal', 'Sealeo', 'Walrein', 'Clamperl', 'Huntail', 'Gorebyss', 'Relicanth', 'Corsola', 'Chinchou', 'Lanturn', 'Luvdisc', 'Horsea', 'Seadra', 'Kingdra', 'Bagon', 'Shelgon', 'Salamence', 'Beldum', 'Metang', 'Metagross', 'Regirock', 'Regice', 'Registeel',
+			];
+			let template = this.getTemplate(set.species || set.name);
+			if (dex.indexOf(template.species) < 0) {
+				return [template.baseSpecies + " is banned from ADV 200."];
+			}
+		},
+	},
+	{
+		name: "[Gen 1] OU (no Tauros)",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3573896/">RBY UU Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3572352/">RBY OU Viability Ranking</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/6431045/">RBY Sample Teams</a>`,
 		],
 
 		mod: 'gen1',
-		ruleset: ['[Gen 1] OU'],
-		banlist: ['OU'],
-	},
-	{
-		name: "[Gen 4] PU",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/post/7260264/">DPP PU Resources</a>`,
-		],
-
-		mod: 'gen4',
-		ruleset: ['[Gen 4] NU'],
-		banlist: [
-			'Articuno', 'Camerupt', 'Charizard', 'Cradily', 'Crawdaunt', 'Dodrio', 'Drifblim', 'Electrode', 'Gardevoir', 'Gligar', 'Golem',
-			'Grumpig', 'Haunter', 'Hitmonchan', 'Hypno', 'Jumpluff', 'Jynx', 'Linoone', 'Magmortar', 'Magneton', 'Manectric', 'Mantine',
-			'Medicham', 'Meganium', 'Nidoqueen', 'Ninetales', 'Piloswine', 'Pinsir', 'Porygon2', 'Regice', 'Regirock', 'Roselia', 'Sandslash',
-			'Sharpedo', 'Shiftry', 'Skuntank', 'Slowking', 'Tauros', 'Torkoal', 'Typhlosion', 'Venomoth', 'Vileplume', 'Whiscash',
-		],
-	},
-	{
-		name: "[Gen 6] Battle Factory",
-		desc: `Randomized teams of Pok&eacute;mon for a generated Smogon tier with sets that are competitively viable.`,
-
-		mod: 'gen6',
-		team: 'randomFactory',
-		// searchShow: false,
-		ruleset: ['Pokemon', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Mega Rayquaza Clause'],
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Uber', 'Tauros'],
 	},
 
 	// Past Gens OU
@@ -1746,15 +1758,6 @@ let Formats = [
 		mod: 'gen2',
 		searchShow: false,
 		ruleset: ['Pokemon', 'Standard'],
-	},
-	{
-		name: "[Gen 2] UU",
-		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3576710/">GSC UU</a>`],
-
-		mod: 'gen2',
-		searchShow: false,
-		ruleset: ['[Gen 2] OU'],
-		banlist: ['OU', 'UUBL'],
 	},
 	{
 		name: "[Gen 2] Custom Game",
