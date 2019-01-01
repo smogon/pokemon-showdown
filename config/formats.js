@@ -538,9 +538,7 @@ let Formats = [
 	{
 		name: "[Gen 7 Let's Go] 1v1",
 		desc: `Bring three Pok&eacute;mon to Team Preview and choose one to battle.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3587523/">1v1</a>`,
-		],
+		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3587523/">1v1</a>`],
 
 		mod: 'letsgo',
 		forcedLevel: 50,
@@ -549,9 +547,7 @@ let Formats = [
 			battle: 1,
 		},
 		ruleset: ['Pokemon', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Accuracy Moves Clause', 'Swagger Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
-		banlist: [
-			'Illegal', 'Unreleased', 'Kangaskhan', 'Mewtwo', 'Perish Song',
-		],
+		banlist: ['Illegal', 'Unreleased', 'Charizard', 'Mewtwo', 'Perish Song'],
 	},
 	{
 		section: "Other Metagames",
