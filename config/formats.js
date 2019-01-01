@@ -43,9 +43,6 @@ let Formats = [
 		mod: 'gen7',
 		ruleset: ['Pokemon', 'Standard', 'Team Preview'],
 		banlist: ['Uber', 'Arena Trap', 'Power Construct', 'Shadow Tag', 'Baton Pass'],
-		onBegin: function () {
-			if (this.rated) this.add('html', `<div class="broadcast-green"><strong>OU is currently suspecting Zygarde! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3645049/">suspect thread</a>.</strong></div>`);
-		},
 	},
 	{
 		name: "[Gen 7] Ubers",
