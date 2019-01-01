@@ -493,171 +493,68 @@ let Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] Inheritance",
-		desc: `Pok&eacute;mon may use the ability and moves of another, as long as they forfeit their own learnset.`,
+		name: "[Gen 7] Sketchmons",
+		desc: `Pok&eacute;mon can learn one of any move they don't normally learn, barring the few that are banned.`,
 		threads: [
-			`&bullet; <a href="http://www.smogon.com/forums/threads/3592844/">Inheritance</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3587743/">Sketchmons</a>`,
 		],
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
-		banlist: [
-			'Blacephalon', 'Cresselia', 'Hoopa-Unbound', 'Kartana', 'Kyurem-Black', 'Regigigas', 'Shedinja', 'Slaking', 'Gyaradosite',
-			'Huge Power', 'Imposter', 'Innards Out', 'Pure Power', 'Speed Boost', 'Water Bubble', 'Assist', 'Chatter', 'Shell Smash',
+		banlist: ['Kartana', 'Porygon-Z', 'Battle Bond'],
+		restrictedMoves: [
+			'Belly Drum', 'Celebrate', 'Chatter', 'Conversion', 'Extreme Speed', "Forest's Curse", 'Geomancy', 'Happy Hour', 'Hold Hands',
+			'Lovely Kiss', 'Purify', 'Quiver Dance', 'Shell Smash', 'Shift Gear', 'Sketch', 'Spore', 'Sticky Web', 'Trick-or-Treat',
 		],
-		noChangeForme: true,
-		noChangeAbility: true,
-		// @ts-ignore
-		getEvoFamily: function (species) {
-			let template = Dex.getTemplate(species);
-			while (template.prevo) {
-				template = Dex.getTemplate(template.prevo);
-			}
-			return template.speciesid;
+		checkLearnset: function (move, template, lsetData, set) {
+			let problem = this.checkLearnset(move, template, lsetData, set);
+			if (!problem) return null;
+			const restrictedMoves = this.format.restrictedMoves || [];
+			if (move.isZ || restrictedMoves.includes(move.name)) return problem;
+			// @ts-ignore
+			if (set.sketchMove) return {type: 'oversketched', maxSketches: 1};
+			// @ts-ignore
+			set.sketchMove = move.id;
+			return null;
 		},
-		validateSet: function (set, teamHas) {
-			// @ts-ignore
-			if (!this.format.abilityMap) {
-				let abilityMap = Object.create(null);
-				for (let speciesid in Dex.data.Pokedex) {
-					let pokemon = Dex.getTemplate(speciesid);
-					if (pokemon.num < 1 || pokemon.species === 'Murkrow' || pokemon.species === 'Smeargle') continue;
-					if (pokemon.requiredItem || pokemon.requiredMove) continue;
-					for (const key of Object.values(pokemon.abilities)) {
-						let abilityId = toId(key);
-						if (abilityMap[abilityId]) {
-							abilityMap[abilityId][pokemon.evos ? 'push' : 'unshift'](speciesid);
-						} else {
-							abilityMap[abilityId] = [speciesid];
-						}
-					}
-				}
-				// @ts-ignore
-				this.format.abilityMap = abilityMap;
-			}
-
-			this.format.noChangeForme = false;
-			/** @type {string[]} */
-			let problems = [];
-			let pkmnRule = Dex.getFormat('pokemon');
-			if (pkmnRule.exists && pkmnRule.onChangeSet && pkmnRule.onChangeSet.call(Dex, set, this.format)) {
-				problems = pkmnRule.onChangeSet.call(Dex, set, this.format) || [];
-			}
-			this.format.noChangeForme = true;
-
-			if (problems.length) return problems;
-
-			let template = Dex.getTemplate(set.species);
-			if (!template.exists) return [`The Pokemon "${set.species}" does not exist.`];
-			if (template.isUnreleased) return [`${template.species} is unreleased.`];
-			let megaTemplate = Dex.getTemplate(Dex.getItem(set.item).megaStone);
-			if (template.tier === 'Uber' || megaTemplate.tier === 'Uber' || this.format.banlist.includes(template.species)) return [`${megaTemplate.tier === 'Uber' ? megaTemplate.species : template.species} is banned.`];
-
-			let name = set.name;
-
-			let ability = Dex.getAbility(set.ability);
-			if (!ability.exists || ability.isNonstandard || ability.isUnreleased) return [`${name} needs to have a valid ability.`];
-			// @ts-ignore
-			let pokemonWithAbility = this.format.abilityMap[ability.id];
-			if (!pokemonWithAbility) return [`"${set.ability}" is not available on a legal Pok\u00e9mon.`];
-
-			let canonicalSource = ''; // Specific for the basic implementation of Donor Clause (see onValidateTeam).
-			// @ts-ignore
-			let validSources = set.abilitySources = []; // Evolution families
-			for (const donor of pokemonWithAbility) {
-				let donorTemplate = Dex.getTemplate(donor);
-				// @ts-ignore
-				let evoFamily = this.format.getEvoFamily(donorTemplate);
-
-				if (validSources.includes(evoFamily)) continue;
-
-				if (set.name === set.species) delete set.name;
-				set.species = donorTemplate.species;
-				problems = this.validateSet(set, teamHas) || [];
-
-				if (!problems.length) {
-					canonicalSource = donorTemplate.species;
-					validSources.push(evoFamily);
-				}
-				if (validSources.length > 1) {
-					// Specific for the basic implementation of Donor Clause (see onValidateTeam).
-					break;
-				}
-			}
-
-			set.species = template.species;
-			if (!validSources.length) {
-				if (pokemonWithAbility.length > 1) return [`${template.species}'s set is illegal.`];
-				problems.unshift(`${template.species} has an illegal set with an ability from ${Dex.getTemplate(pokemonWithAbility[0]).name}.`);
-				return problems;
-			}
-
-			// Protocol: Include the data of the donor species in the `ability` data slot.
-			// Afterwards, we are going to reset the name to what the user intended. :]
-			set.ability = `${set.ability}0${canonicalSource}`;
-		},
-		onValidateTeam: function (team, format) {
-			// Donor Clause
-			let evoFamilyLists = [];
+		onValidateTeam: function (team, format, teamHas) {
+			let sketches = {};
 			for (const set of team) {
 				// @ts-ignore
-				if (!set.abilitySources) continue;
-				// @ts-ignore
-				evoFamilyLists.push(set.abilitySources.map(format.getEvoFamily));
-			}
-
-			// Checking actual full incompatibility would require expensive algebra.
-			// Instead, we only check the trivial case of multiple Pokémon only legal for exactly one family. FIXME?
-			let requiredFamilies = Object.create(null);
-			for (const evoFamilies of evoFamilyLists) {
-				if (evoFamilies.length !== 1) continue;
-				let [familyId] = evoFamilies;
-				if (!(familyId in requiredFamilies)) requiredFamilies[familyId] = 1;
-				requiredFamilies[familyId]++;
-				if (requiredFamilies[familyId] > 2) return [`You are limited to up to two inheritances from each evolution family by the Donor Clause.`, `(You inherit more than twice from ${this.getTemplate(familyId).species}).`];
-			}
-		},
-		onBegin: function () {
-			for (const pokemon of this.p1.pokemon.concat(this.p2.pokemon)) {
-				if (pokemon.baseAbility.includes('0')) {
-					let donor = pokemon.baseAbility.split('0')[1];
+				if (set.sketchMove) {
 					// @ts-ignore
-					pokemon.donor = toId(donor);
-					pokemon.baseAbility = pokemon.baseAbility.split('0')[0];
-					pokemon.ability = pokemon.baseAbility;
+					if (!sketches[set.sketchMove]) {
+						// @ts-ignore
+						sketches[set.sketchMove] = 1;
+					} else {
+						// @ts-ignore
+						sketches[set.sketchMove]++;
+					}
 				}
 			}
-		},
-		onSwitchIn: function (pokemon) {
 			// @ts-ignore
-			if (!pokemon.donor) return;
+			let overSketched = Object.keys(sketches).filter(move => sketches[move] > 1);
 			// @ts-ignore
-			let donorTemplate = this.getTemplate(pokemon.donor);
-			if (!donorTemplate.exists) return;
-			// Place volatiles on the Pokémon to show the donor details.
-			this.add('-start', pokemon, donorTemplate.species, '[silent]');
+			if (overSketched.length) return overSketched.map(move => `You are limited to 1 of ${this.getMove(move).name} by Sketch Clause. (You have sketched ${this.getMove(move).name} ${sketches[move]} times.)`);
 		},
 	},
 	{
-		name: "[Gen 7 Let's Go] Hackmons",
-		desc: `Anything that can be hacked in-game and is usable in local battles is allowed.`,
+		name: "[Gen 7 Let's Go] 1v1",
+		desc: `Bring three Pok&eacute;mon to Team Preview and choose one to battle.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/posts/7973280/">Let's Go Hackmons</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3587523/">1v1</a>`,
 		],
 
 		mod: 'letsgo',
-		ruleset: ['Pokemon', 'Allow AVs', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
-		onValidateSet: function (set) {
-			let availableMoves = ['Pound', 'Karate Chop', 'Double Slap', 'Comet Punch', 'Mega Punch', 'Pay Day', 'Fire Punch', 'Ice Punch', 'Thunder Punch', 'Scratch', 'Vice Grip', 'Guillotine', 'Razor Wind', 'Swords Dance', 'Cut', 'Gust', 'Wing Attack', 'Whirlwind', 'Fly', 'Bind', 'Slam', 'Vine Whip', 'Stomp', 'Double Kick', 'Mega Kick', 'Jump Kick', 'Rolling Kick', 'Sand Attack', 'Headbutt', 'Horn Attack', 'Fury Attack', 'Horn Drill', 'Tackle', 'Body Slam', 'Wrap', 'Take Down', 'Thrash', 'Double-Edge', 'Tail Whip', 'Poison Sting', 'Twineedle', 'Pin Missile', 'Leer', 'Bite', 'Growl', 'Roar', 'Sing', 'Supersonic', 'Sonic Boom', 'Disable', 'Acid', 'Ember', 'Flamethrower', 'Mist', 'Water Gun', 'Hydro Pump', 'Surf', 'Ice Beam', 'Blizzard', 'Psybeam', 'Bubble Beam', 'Aurora Beam', 'Hyper Beam', 'Peck', 'Drill Peck', 'Submission', 'Low Kick', 'Counter', 'Seismic Toss', 'Strength', 'Absorb', 'Mega Drain', 'Leech Seed', 'Growth', 'Razor Leaf', 'Solar Beam', 'Poison Powder', 'Stun Spore', 'Sleep Powder', 'Petal Dance', 'String Shot', 'Dragon Rage', 'Fire Spin', 'Thunder Shock', 'Thunderbolt', 'Thunder Wave', 'Thunder', 'Rock Throw', 'Earthquake', 'Fissure', 'Dig', 'Toxic', 'Confusion', 'Psychic', 'Hypnosis', 'Meditate', 'Agility', 'Quick Attack', 'Rage', 'Teleport', 'Night Shade', 'Mimic', 'Screech', 'Double Team', 'Recover', 'Harden', 'Minimize', 'Smokescreen', 'Confuse Ray', 'Withdraw', 'Defense Curl', 'Barrier', 'Light Screen', 'Haze', 'Reflect', 'Focus Energy', 'Bide', 'Metronome', 'Mirror Move', 'Self-Destruct', 'Egg Bomb', 'Lick', 'Smog', 'Sludge', 'Bone Club', 'Fire Blast', 'Waterfall', 'Clamp', 'Swift', 'Skull Bash', 'Spike Cannon', 'Constrict', 'Amnesia', 'Kinesis', 'Soft-Boiled', 'High Jump Kick', 'Glare', 'Dream Eater', 'Poison Gas', 'Barrage', 'Leech Life', 'Lovely Kiss', 'Sky Attack', 'Transform', 'Bubble', 'Dizzy Punch', 'Spore', 'Flash', 'Psywave', 'Splash', 'Acid Armor', 'Crabhammer', 'Explosion', 'Fury Swipes', 'Bonemerang', 'Rest', 'Rock Slide', 'Hyper Fang', 'Sharpen', 'Conversion', 'Tri Attack', 'Super Fang', 'Slash', 'Substitute', 'Protect', 'Sludge Bomb', 'Outrage', 'Megahorn', 'Encore', 'Iron Tail', 'Crunch', 'Mirror Coat', 'Shadow Ball', 'Fake Out', 'Heat Wave', 'Will-O-Wisp', 'Facade', 'Taunt', 'Helping Hand', 'Superpower', 'Brick Break', 'Yawn', 'Bulk Up', 'Calm Mind', 'Roost', 'Feint', 'U-turn', 'Sucker Punch', 'Flare Blitz', 'Poison Jab', 'Dark Pulse', 'Air Slash', 'X-Scissor', 'Bug Buzz', 'Dragon Pulse', 'Nasty Plot', 'Ice Shard', 'Flash Cannon', 'Power Whip', 'Stealth Rock', 'Aqua Jet', 'Quiver Dance', 'Foul Play', 'Clear Smog', 'Scald', 'Shell Smash', 'Dragon Tail', 'Drill Run', 'Play Rough', 'Moonblast', 'Dazzling Gleam'];
-			let problems = [];
-			if (set.moves) {
-				for (const moveId of set.moves) {
-					let move = this.getMove(moveId);
-					if (move.num < 729 && !availableMoves.includes(move.name)) problems.push(`${move.name} is not available in Let's Go.`);
-				}
-			}
-			return problems;
+		forcedLevel: 50,
+		teamLength: {
+			validate: [1, 3],
+			battle: 1,
 		},
+		ruleset: ['Pokemon', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Accuracy Moves Clause', 'Swagger Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
+		banlist: [
+			'Illegal', 'Unreleased', 'Kangaskhan', 'Mewtwo', 'Perish Song',
+		],
 	},
 	{
 		section: "Other Metagames",
@@ -794,7 +691,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
-		// searchShow: false,
+		searchShow: false,
 		ruleset: ['[Gen 7] OU', 'STABmons Move Legality'],
 		banlist: ['Aerodactyl-Mega', 'Blacephalon', 'Kartana', 'Komala', 'Kyurem-Black', 'Porygon-Z', 'Silvally', 'Tapu Koko', 'Tapu Lele', 'King\'s Rock', 'Razor Fang'],
 		restrictedMoves: ['Acupressure', 'Belly Drum', 'Chatter', 'Extreme Speed', 'Geomancy', 'Lovely Kiss', 'Shell Smash', 'Shift Gear', 'Spore', 'Thousand Arrows'],
@@ -844,7 +741,7 @@ let Formats = [
 
 		mod: 'pic',
 		gameType: 'doubles',
-		searchShow: false,
+		// searchShow: false,
 		ruleset: ['[Gen 7] Doubles OU', 'Sleep Clause Mod'],
 		banlist: [
 			'Kangaskhanite', 'Mawilite', 'Medichamite',
