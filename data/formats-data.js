@@ -6446,7 +6446,7 @@ let BattleFormatsData = {
 			{"generation": 7, "level": 100, "shiny": true, "isHidden": true, "moves": ["thousandarrows", "outrage", "extremespeed", "dragondance"], "pokeball": "cherishball"},
 		],
 		eventOnly: true,
-		tier: "OU",
+		tier: "Uber",
 		doublesTier: "DOU",
 	},
 	zygarde10: {
