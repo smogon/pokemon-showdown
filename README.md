@@ -183,7 +183,7 @@ Contributors
 - Leonard Craft III [DaWoblefet] - Research (game mechanics)
 - Luke Harmon-Vellotti [moo, CheeseMuffin] - Development
 - Robin Vandenbrande [Quinella] - Development
-- [SadisticMystic] - Research (game mechanics)
+- Russell Jones [SadisticMystic] - Research (game mechanics)
 - Tobias Mann [asgdf] - Development
 
 Special thanks
