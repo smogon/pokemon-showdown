@@ -1107,8 +1107,9 @@ let BattleAbilities = {
 				for (const moveSlot of target.moveSlots) {
 					let move = this.getMove(moveSlot.move);
 					let bp = move.basePower;
-					if (move.ohko) bp = 160;
+					if (move.ohko) bp = 150;
 					if (move.id === 'counter' || move.id === 'metalburst' || move.id === 'mirrorcoat') bp = 120;
+					if (bp === 1) bp = 80;
 					if (!bp && move.category !== 'Status') bp = 80;
 					if (bp > warnBp) {
 						warnMoves = [[move, target]];
