@@ -2547,7 +2547,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 2, "level": 40, "shiny": true, "moves": ["watergun", "bite", "scaryface", "slash"]},
 		],
-		tier: "NU",
+		tier: "UU",
 	},
 	sentret: {
 		eventPokemon: [
