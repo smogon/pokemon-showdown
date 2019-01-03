@@ -847,6 +847,13 @@ let Formats = [
 		banlist: ['Illegal', 'Unreleased', 'Uber'],
 	},
 	{
+		name: "[Gen 7 Let's Go] Random Battle",
+
+		mod: 'letsgo',
+		team: 'random',
+		ruleset: ['Pokemon', 'Allow AVs', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
+	},
+	{
 		name: "[Gen 7 Let's Go] Singles No Restrictions",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3643931/">Let's Go! Discussion</a>`,
