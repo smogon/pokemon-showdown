@@ -5319,7 +5319,7 @@ let BattleMovedex = {
 			}
 			for (const ally of target.side.active) {
 				if (ally && this.isAdjacent(target, ally)) {
-					this.damage(ally.maxhp / 16, ally, source, move);
+					this.damage(ally.maxhp / 16, ally, source, this.getEffect('Flame Burst'));
 				}
 			}
 		},
@@ -5329,7 +5329,7 @@ let BattleMovedex = {
 			}
 			for (const ally of target.side.active) {
 				if (ally && this.isAdjacent(target, ally)) {
-					this.damage(ally.maxhp / 16, ally, source, move);
+					this.damage(ally.maxhp / 16, ally, source, this.getEffect('Flame Burst'));
 				}
 			}
 		},
