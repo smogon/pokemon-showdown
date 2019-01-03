@@ -999,7 +999,7 @@ class CommandContext {
 			user.lastMessageTime = Date.now();
 		}
 
-		if (room && room.highTraffic && toId(message).replace(/[^a-z]+/, '').length < 2 && !user.can('mute', null, room)) {
+		if (room && room.highTraffic && toId(message).replace(/[^a-z]+/, '').length < 2 && !user.can('broadcast', null, room)) {
 			this.errorReply('Due to this room being a high traffic room, your message must contain at least two letters.');
 			return false;
 		}
