@@ -62,12 +62,12 @@ let BattleFormatsData = {
 	},
 	blastoise: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	blastoisemega: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	caterpie: {
@@ -162,7 +162,7 @@ let BattleFormatsData = {
 	pikachustarter: {
 		inherit: true,
 		isNonstandard: false,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	raichu: {
@@ -292,7 +292,7 @@ let BattleFormatsData = {
 	},
 	venomoth: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	diglett: {
@@ -310,7 +310,7 @@ let BattleFormatsData = {
 	},
 	dugtrioalola: {
 		inherit: true,
-		tier: "UU",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	meowth: {
@@ -374,7 +374,7 @@ let BattleFormatsData = {
 	},
 	poliwrath: {
 		inherit: true,
-		tier: "UU",
+		tier: "OU",
 		doublesTier: "DOU",
 	},
 	abra: {
@@ -471,12 +471,12 @@ let BattleFormatsData = {
 	},
 	slowbro: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	slowbromega: {
 		inherit: true,
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	magnemite: {
@@ -666,7 +666,7 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 7, "level": 1, "gender": "F", "nature": "Mild", "moves": ["celebrate", "pound"], "pokeball": "cherishball"},
 		],
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	tangela: {
