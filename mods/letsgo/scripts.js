@@ -7,12 +7,6 @@ let BattleScripts = {
 		for (let i in this.data.Pokedex) {
 			this.modData('Pokedex', i).abilities = {0: 'No Ability'};
 		}
-		for (let i in this.data.FormatsData) {
-			let dataTemplate = this.modData('FormatsData', i);
-			if (this.data.FormatsData[i].requiredItem && this.getItem(this.data.FormatsData[i].requiredItem).megaStone) {
-				dataTemplate.requiredItem = '';
-			}
-		}
 	},
 	/**
 	 * Given a table of base stats and a pokemon set, return the actual stats.
