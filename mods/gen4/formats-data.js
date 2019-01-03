@@ -1648,7 +1648,7 @@ let BattleFormatsData = {
 	latias: {
 		inherit: true,
 		randomBattleMoves: ["dragonpulse", "psychic", "surf", "roost", "calmmind", "refresh"],
-		tier: "Uber",
+		tier: "OU",
 	},
 	latios: {
 		inherit: true,
