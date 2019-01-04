@@ -873,9 +873,6 @@ let BattleFormatsData = {
 	},
 	eevee: {
 		inherit: true,
-		eventPokemon: [
-			{"generation": 7, "level": 30, "shiny": 1, "moves": ["doubleedge", "takedown", "swift", "bite"], "pokeball": "pokeball"},
-		],
 		tier: "LC",
 	},
 	eeveestarter: {
