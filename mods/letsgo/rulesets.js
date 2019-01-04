@@ -85,6 +85,10 @@ let BattleFormats = {
 				}
 			}
 
+			if (!set.happiness || set.happiness !== 70) {
+				problems.push(`Happiness values must be set to 70 in Let's Go.`);
+			}
+
 			// ----------- legality line ------------------------------------------
 			if (!this.getRuleTable(format).has('-illegal')) return problems;
 			// everything after this line only happens if we're doing legality enforcement
