@@ -547,7 +547,7 @@ let Formats = [
 			battle: 1,
 		},
 		ruleset: ['Pokemon', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Accuracy Moves Clause', 'Swagger Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
-		banlist: ['Illegal', 'Unreleased', 'Charizard', 'Mewtwo', 'Perish Song'],
+		banlist: ['Illegal', 'Unreleased', 'Charizard', 'Mewtwo'],
 	},
 	{
 		section: "Other Metagames",
