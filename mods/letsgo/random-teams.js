@@ -207,12 +207,13 @@ class RandomLetsGoTeams extends RandomTeams {
 			name: template.baseSpecies,
 			species: species,
 			level: 100,
+			happiness: 70,
 			gender: template.gender,
 			shiny: this.randomChance(1, 1024),
 			item: (template.requiredItem || ''),
 			ability: 'No Ability',
 			moves: moves,
-			evs: {hp: 200, atk: 200, def: 200, spa: 200, spd: 200, spe: 200},
+			evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0},
 			ivs: ivs,
 		};
 	}
