@@ -213,7 +213,7 @@ class RandomLetsGoTeams extends RandomTeams {
 			item: (template.requiredItem || ''),
 			ability: 'No Ability',
 			moves: moves,
-			evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0},
+			evs: {hp: 200, atk: 200, def: 200, spa: 200, spd: 200, spe: 200},
 			ivs: ivs,
 		};
 	}
