@@ -3250,7 +3250,6 @@
 216.187.64.0,216.187.127.255,PEER 1,http://www.peer1.com/
 216.189.144.0,216.189.159.255,Host US,http://hostus.us/
 216.211.128.0,216.211.143.255,Adhost,http://www.adhost.com/
-216.213.0.0,216.213.191.255,thorn.net,http://www.thorn.net/
 216.218.128.0,216.218.255.255,Hurricane Electic,http://www.he.net/
 216.219.80.0,216.219.95.255,Host Department LLC,http://www.hostdepartment.com/
 216.221.160.0,216.221.191.255,C I Host,http://www.cihost.com/
