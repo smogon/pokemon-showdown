@@ -86,7 +86,7 @@ let BattleFormats = {
 			}
 
 			if (!set.happiness || set.happiness !== 70) {
-				problems.push(`Happiness values must be set to 70 in Let's Go.`);
+				set.happiness = 70;
 			}
 
 			// ----------- legality line ------------------------------------------
