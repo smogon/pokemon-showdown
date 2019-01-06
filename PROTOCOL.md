@@ -19,6 +19,8 @@ Client implementations you might want to look at for reference include:
     https://github.com/TalkTakesTime/Pokemon-Showdown-Bot
 - Nixola's chat bot (Lua) -
     https://github.com/Nixola/NixPSbot
+- Morfent's chat bot (Perl 6) -
+    https://github.com/Kaiepi/p6-PSBot
 - the official client (HTML5 + JavaScript) -
     https://github.com/Zarel/Pokemon-Showdown-Client
 
