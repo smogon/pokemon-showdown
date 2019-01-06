@@ -3639,7 +3639,7 @@ let BattleFormatsData = {
 		randomBattleMoves: ["freezedry", "iceshard", "earthquake", "explosion", "return", "spikes"],
 		randomDoubleBattleMoves: ["crunch", "iceshard", "freezedry", "earthquake", "explosion", "protect", "return"],
 		requiredItem: "Glalitite",
-		tier: "UU",
+		tier: "NU",
 		doublesTier: "DUU",
 	},
 	froslass: {
