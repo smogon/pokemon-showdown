@@ -15,6 +15,7 @@
 
 const cluster = require('cluster');
 const fs = require('fs');
+const FS = require('./lib/fs');
 
 if (cluster.isMaster) {
 	cluster.setupMaster({
@@ -404,10 +405,14 @@ if (cluster.isMaster) {
 	const channels = new Map();
 	/** @type {Map<string, Map<string, string>>} */
 	const subchannels = new Map();
+	/** @type {WriteStream} */
+	const logger = FS(`logs/sockets-${process.pid}`).createAppendStream();
 
 	// Deal with phantom connections.
 	const sweepSocketInterval = setInterval(() => {
 		sockets.forEach(socket => {
+			logger.write(`Found a ghost connection with a protocol of ${socket.protocol}\n`);
+
 			// @ts-ignore
 			if (socket.protocol === 'xhr-streaming' && socket._session && socket._session.recv) {
 				// @ts-ignore
