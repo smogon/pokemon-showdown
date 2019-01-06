@@ -406,7 +406,7 @@ if (cluster.isMaster) {
 	/** @type {Map<string, Map<string, string>>} */
 	const subchannels = new Map();
 	/** @type {WriteStream} */
-	const logger = FS('logs/sockets').createAppendStream();
+	const logger = FS(`logs/sockets-${process.pid}`).createAppendStream();
 
 	// Deal with phantom connections.
 	const sweepSocketInterval = setInterval(() => {
