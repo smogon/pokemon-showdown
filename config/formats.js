@@ -900,7 +900,7 @@ let Formats = [
 			battle: 4,
 		},
 		ruleset: ['Pokemon', 'Species Clause', 'Nickname Clause', 'Evasion Moves Clause', 'OHKO Clause', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
-		banlist: ['Illegal', 'Unreleased', 'Mewtwo', 'Mew', 'Meltan', 'Melmetal', 'Pikachu', 'Pikachustarter', 'Eevee','Eeveestarter'],
+		banlist: ['Illegal', 'Unreleased', 'Mewtwo', 'Mew', 'Meltan', 'Melmetal', 'Pikachu', 'Pikachustarter', 'Eevee', 'Eeveestarter'],
 	},
 
 	// Randomized Metas
