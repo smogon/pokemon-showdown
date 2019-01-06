@@ -224,7 +224,7 @@ let BattleFormatsData = {
 	},
 	nidoqueen: {
 		inherit: true,
-		randomBattleMoves: ["earthquake", "stealthrock", "icepunch", "poisonjab", "dragontail"],
+		randomBattleMoves: ["earthquake", "stealthrock", "icebeam", "poisonjab", "dragontail"],
 		tier: "OU",
 		doublesTier: "DOU",
 	},
