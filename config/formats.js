@@ -886,6 +886,7 @@ let Formats = [
 		ruleset: ['Pokemon', 'Allow AVs', 'Endless Battle Clause', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Illegal', 'Unreleased'],
 	},
+	{
 		name: "[Gen 7 Let's Go] Let's Go VGC",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/let%E2%80%99s-go-vgc.3645766/">Lets go VGC</a>`,
@@ -899,7 +900,7 @@ let Formats = [
 			battle: 4,
 		},
 		ruleset: ['Pokemon', 'Species Clause', 'Nickname Clause', 'Evasion Moves Clause', 'OHKO Clause', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
-		banlist: ['Illegal', 'Unreleased', 'Mewtwo', 'Mew', 'Meltan', 'Melmetal', 'Eevee', 'Pikachu'],
+		banlist: ['Illegal', 'Unreleased', 'Mewtwo', 'Mew', 'Meltan', 'Melmetal', 'Pikachu', 'Pikachustarter', 'Eevee','Eeveestarter'],
 	},
 
 	// Randomized Metas
