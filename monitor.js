@@ -63,10 +63,18 @@ const Monitor = module.exports = {
 
 	/**
 	 * @param {Error} error
-	 * @param {string} [source]
+	 * @param {string} source
 	 * @param {{}?} details
 	 */
 	crashlog(error, source = 'The main process', details = null) {
+		if ((error.stack || '').startsWith('@@')) {
+			try {
+				let stack = (error.stack || '');
+				let nlIndex = stack.indexOf('\n');
+				[source, details] = JSON.parse(stack.slice(2, nlIndex));
+				error.stack = stack.slice(nlIndex + 1);
+			} catch (e) {}
+		}
 		let crashType = crashlogger(error, source, details);
 		Rooms.global.reportCrash(error, source);
 		if (crashType === 'lockdown') {
