@@ -399,11 +399,20 @@ if (cluster.isMaster) {
 	}
 
 	const server = sockjs.createServer(options);
-	/** @type {Map<string, import('sockjs').Connection>} */
+	/**
+	 * socketid:Connection
+	 * @type {Map<string, import('sockjs').Connection>}
+	 */
 	const sockets = new Map();
-	/** @type {Map<string, Map<string, import('sockjs').Connection>>} */
+	/**
+	 * channelid:socketid:Connection
+	 * @type {Map<string, Map<string, import('sockjs').Connection>>}
+	 */
 	const channels = new Map();
-	/** @type {Map<string, Map<string, string>>} */
+	/**
+	 * channelid:socketid:subchannelid
+	 * @type {Map<string, Map<string, string>>}
+	 */
 	const subchannels = new Map();
 	/** @type {WriteStream} */
 	const logger = FS(`logs/sockets-${process.pid}`).createAppendStream();
