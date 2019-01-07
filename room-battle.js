@@ -1004,6 +1004,19 @@ if (!PM.isParentProcess) {
 	// @ts-ignore This file doesn't exist on the repository, so Travis checks fail if this isn't ignored
 	global.Config = require('./config/config');
 	global.Chat = require('./chat');
+	// @ts-ignore ???
+	global.Monitor = {
+		/**
+		 * @param {Error} error
+		 * @param {string} source
+		 * @param {{}?} details
+		 */
+		crashlog(error, source = 'A simulator process', details = null) {
+			const repr = JSON.stringify([source, details]);
+			// @ts-ignore
+			process.send(`THROW\n@@${repr}\n${error.stack}`);
+		},
+	};
 	global.__version = '';
 	try {
 		const execSync = require('child_process').execSync;
@@ -1016,10 +1029,10 @@ if (!PM.isParentProcess) {
 	if (Config.crashguard) {
 		// graceful crash - allow current battles to finish before restarting
 		process.on('uncaughtException', err => {
-			require('./lib/crashlogger')(err, 'A simulator process');
+			Monitor.crashlog(err, 'A simulator process');
 		});
 		process.on('unhandledRejection', err => {
-			require('./lib/crashlogger')(err, 'A simulator process Promise');
+			Monitor.crashlog(err, 'A simulator process Promise');
 		});
 	}
 

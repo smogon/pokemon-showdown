@@ -66,7 +66,7 @@ class BattleStream extends Streams.ObjectReadWriteStream {
 			}
 		} catch (err) {
 			const battle = this.battle;
-			require('./../lib/crashlogger')(err, 'A battle', {
+			Monitor.crashlog(err, 'A battle', {
 				message: message,
 				inputLog: battle ? '\n' + battle.inputLog.join('\n') : '',
 				log: battle ? '\n' + battle.getDebugLog() : '',
