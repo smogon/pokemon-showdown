@@ -468,7 +468,15 @@ if (cluster.isMaster) {
 			if (!socket) return;
 			socket.destroy();
 			sockets.delete(socketid);
-			channels.forEach(channel => channel.delete(socketid));
+			channels.forEach((channel, channelid) => {
+				channel.delete(socketid);
+				subchannel = subchannels.get(channelid);
+				if (subchannel) subchannel.delete(socketid);
+				if (!channel.size) {
+					channels.delete(channelid);
+					if (subchannel) subchannels.delete(channelid);
+				}
+			});
 			break;
 
 		case '>':
