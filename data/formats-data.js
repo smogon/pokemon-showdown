@@ -6614,7 +6614,7 @@ let BattleFormatsData = {
 	crabominable: {
 		randomBattleMoves: ["icehammer", "closecombat", "earthquake", "stoneedge"],
 		randomDoubleBattleMoves: ["icehammer", "closecombat", "stoneedge", "protect", "wideguard", "earthquake"],
-		tier: "PU",
+		tier: "(PU)",
 		doublesTier: "DUU",
 	},
 	oricorio: {
