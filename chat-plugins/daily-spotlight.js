@@ -149,7 +149,9 @@ const commands = {
 	},
 	daily: async function (target, room, user) {
 		let key = toId(target);
-		if (!spotlights[room.id] || !spotlights[room.id][key]) return this.errorReply(`Cannot find a daily spotlight with name '${key}'`);
+		if (!spotlights[room.id] || !spotlights[room.id][key]) {
+			return this.errorReply(`Cannot find a daily spotlight with name '${key}'`);
+		}
 
 		if (!this.runBroadcast()) return;
 
