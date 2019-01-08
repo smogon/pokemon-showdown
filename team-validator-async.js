@@ -65,10 +65,26 @@ if (!PM.isParentProcess) {
 	// @ts-ignore This file doesn't exist on the repository, so Travis checks fail if this isn't ignored
 	global.Config = require('./config/config');
 	global.TeamValidator = require('./sim/team-validator');
+	// @ts-ignore ???
+	global.Monitor = {
+		/**
+		 * @param {Error} error
+		 * @param {string} source
+		 * @param {{}?} details
+		 */
+		crashlog(error, source = 'A team validator process', details = null) {
+			const repr = JSON.stringify([error.name, error.message, source, details]);
+			// @ts-ignore
+			process.send(`THROW\n@!!@${repr}\n${error.stack}`);
+		},
+	};
 
 	if (Config.crashguard) {
 		process.on('uncaughtException', err => {
-			require('./lib/crashlogger')(err, `A team validator process`);
+			Monitor.crashlog(err, `A team validator process`);
+		});
+		process.on('unhandledRejection', err => {
+			Monitor.crashlog(err, 'A team validator process Promise');
 		});
 	}
 
