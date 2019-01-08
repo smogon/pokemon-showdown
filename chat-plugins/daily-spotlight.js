@@ -96,7 +96,9 @@ const commands = {
 		if (rest) {
 			const queueNumber = parseInt(rest);
 			if (isNaN(queueNumber) || queueNumber < 1) return this.errorReply("Invalid queue number");
-			if (queueNumber >= spotlights[room.id][key].length) return this.errorReply(`Queue number needs to be between 1 and ${spotlights[room.id][key].length - 1}`);
+			if (queueNumber >= spotlights[room.id][key].length) {
+				return this.errorReply(`Queue number needs to be between 1 and ${spotlights[room.id][key].length - 1}`);
+			}
 			spotlights[room.id][key].splice(queueNumber, 1);
 			saveSpotlights();
 
