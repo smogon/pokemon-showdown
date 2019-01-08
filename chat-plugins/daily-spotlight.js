@@ -15,7 +15,7 @@ try {
 if (!spotlights || typeof spotlights !== 'object') spotlights = {};
 
 function saveSpotlights() {
-	FS(SPOTLIGHT_FILE).write(JSON.stringify(spotlights));
+	FS(SPOTLIGHT_FILE).writeUpdate(() => JSON.stringify(spotlights));
 }
 
 function nextDaily() {
