@@ -29,15 +29,7 @@ let BattleItems = {
 		inherit: true,
 		isUnreleased: false,
 	},
-	custapberry: {
-		inherit: true,
-		isUnreleased: false,
-	},
 	durinberry: {
-		inherit: true,
-		isUnreleased: false,
-	},
-	enigmaberry: {
 		inherit: true,
 		isUnreleased: false,
 	},
@@ -73,7 +65,6 @@ let BattleItems = {
 	},
 	jabocaberry: {
 		inherit: true,
-		isUnreleased: false,
 		onAfterDamage: function (damage, target, source, move) {
 			if (source && source !== target && move && move.category === 'Physical') {
 				if (target.eatItem()) {
@@ -117,10 +108,6 @@ let BattleItems = {
 		inherit: true,
 		isUnreleased: false,
 	},
-	micleberry: {
-		inherit: true,
-		isUnreleased: false,
-	},
 	nanabberry: {
 		inherit: true,
 		isUnreleased: false,
@@ -151,7 +138,6 @@ let BattleItems = {
 	},
 	rowapberry: {
 		inherit: true,
-		isUnreleased: false,
 		onAfterDamage: function (damage, target, source, move) {
 			if (source && source !== target && move && move.category === 'Special') {
 				if (target.eatItem()) {
