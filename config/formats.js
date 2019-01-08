@@ -221,6 +221,7 @@ let Formats = [
 			battle: 3,
 		},
 		ruleset: ['Pokemon', 'Standard GBU'],
+		banlist: ['Darmanitan'],
 		onValidateSet: function (set, format) {
 			let template = this.getTemplate(set.species);
 			if (!template.types) return [`Invalid pokemon ${set.name || set.species}`];
