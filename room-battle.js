@@ -1012,9 +1012,9 @@ if (!PM.isParentProcess) {
 		 * @param {{}?} details
 		 */
 		crashlog(error, source = 'A simulator process', details = null) {
-			const repr = JSON.stringify([source, details]);
+			const repr = JSON.stringify([error.name, error.message, source, details]);
 			// @ts-ignore
-			process.send(`THROW\n@@${repr}\n${error.stack}`);
+			process.send(`THROW\n@!!@${repr}\n${error.stack}`);
 		},
 	};
 	global.__version = '';

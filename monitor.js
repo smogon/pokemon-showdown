@@ -67,11 +67,11 @@ const Monitor = module.exports = {
 	 * @param {{}?} details
 	 */
 	crashlog(error, source = 'The main process', details = null) {
-		if ((error.stack || '').startsWith('@@')) {
+		if ((error.stack || '').startsWith('@!!@')) {
 			try {
 				let stack = (error.stack || '');
 				let nlIndex = stack.indexOf('\n');
-				[source, details] = JSON.parse(stack.slice(2, nlIndex));
+				[error.name, error.message, source, details] = JSON.parse(stack.slice(4, nlIndex));
 				error.stack = stack.slice(nlIndex + 1);
 			} catch (e) {}
 		}
