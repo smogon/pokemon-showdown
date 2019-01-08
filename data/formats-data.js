@@ -5199,7 +5199,7 @@ let BattleFormatsData = {
 			{"generation": 5, "level": 35, "isHidden": true, "moves": ["thrash", "bellydrum", "flareblitz", "hammerarm"]},
 			{"generation": 6, "level": 35, "gender": "M", "nature": "Calm", "ivs": {"hp": 30, "atk": 30, "def": 30, "spa": 30, "spd": 30, "spe": 30}, "isHidden": true, "moves": ["thrash", "bellydrum", "flareblitz", "hammerarm"], "pokeball": "cherishball"},
 		],
-		tier: "RU",
+		tier: "RUBL",
 		doublesTier: "DUU",
 	},
 	darmanitanzen: {
