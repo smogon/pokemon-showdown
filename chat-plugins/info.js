@@ -1304,21 +1304,205 @@ const commands = {
 		if (!this.runBroadcast()) return;
 		const showRoom = (target !== 'global');
 		const showGlobal = (target !== 'room' && target !== 'rooms');
+		const roomRanks = {
+			__proto__: null,
+			english: [
+				`<strong>Room ranks</strong>`,
+				`+ <strong>Voice</strong> - They can use ! commands like !groups`,
+				`% <strong>Driver</strong> - The above, and they can mute and warn`,
+				`@ <strong>Moderator</strong> - The above, and they can room ban users`,
+				`* <strong>Bot</strong> - Like Moderator, but makes it clear that this user is a bot`,
+				`# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it`,
+			],
+			portuguese: [
+				`<strong>Cargos da Sala</strong>`,
+				`+ <strong>Voice</strong> - Eles podem usar comandos com !, tal como !groups, e falar durante o chat moderado`,
+				`% <strong>Driver</strong> - O de cima, além de poderem dar mutes e avisos`,
+				`@ <strong>Moderator</strong> - O de cima, além de poderem banir usuários da sala`,
+				`* <strong>Bot</strong> - Igual ao cargo de Moderator, mas deixa claro que o usuário é um bot`,
+				`# <strong>Room Owners</strong> - Eles são os líderes da sala e podem controlá-la quase totalmente`,
+			],
+			spanish: [
+				`<strong>Rangos de Sala</strong>`,
+				`+ <strong>Voice</strong> - Pueden utilizar comandos con ! como !groups y hablar cuando haya modchat +`,
+				`% <strong>Driver</strong> - Lo mismo que arriba y además pueden sancionar dando advertencias o silenciando`,
+				`@ <strong>Moderator</strong> - Lo mismo que arriba y además pueden expulsar a usuarios de la sala`,
+				`* <strong>Bot</strong> - Igual que un moderador, pero el símbolo identifica que es un Bot`,
+				`# <strong>Room Owner</strong> - Líderes de la sala y tienen casi todo el control de lo que sucede en esta`,
+			],
+			italian: [
+				`<strong>Ruoli della Room</strong>`,
+				`+ <strong>Voice</strong> - Possono utilizzare i comandi con !, come !groups, e parlare quando la chat è moderata`,
+				`% <strong>Driver</strong> - Come i Voice, e possono mutare gli utenti`,
+				`@ <strong>Moderator</strong> - Come i Driver, e possono bannare gli utenti dalla room`,
+				`* <strong>Bot</strong> - Come i Moderator, ma il simbolo specifica che l'utente è un bot`,
+				`# <strong>Room Owner</strong> - Sono i leader della room e possono controllarla quasi del tutto`,
+			],
+			french: [
+				`<strong>Grades de room</strong>`,
+				`+ <strong>Voice</strong> - Ils peuvent utiliser les commandes contenant ! telles que !groups et parler pendant les chats restreints`,
+				`% <strong>Driver</strong> - Comme ci-dessus, en plus de pouvoir sanctionner via mute et warn`,
+				`@ <strong>Moderator</strong> - Comme ci-dessus, en plus de pouvoir bannir un utilisateur de la room`,
+				`* <strong>Bot</strong> - Comme les Moderator, à la différence que ces utilisateurs sont des bots`,
+				`# <strong>Room Owner</strong> - Ce sont les chefs/leaders de la room et ils peuvent les contrôler quasiment en totalité`,
+			],
+			simplifiedchinese: [
+				`<strong>房权限</strong>`,
+				`+ <strong>信任用户</strong> - 可以使用!广播指令，比如!groups，并可以在限制发言期间发言`,
+				`% <strong>见习管理</strong> - 同上，并可以禁止用户发言或警告用户`,
+				`@ <strong>管理员</strong> - 同上，并可以将用户从房间封禁`,
+				`* <strong>机器人</strong> - 跟管理员一样，只不过是机器`,
+				`# <strong>房主</strong> - 房中的领导，几乎拥有房间的全部管理权力`,
+			],
+			traditionalchinese: [
+				`<strong>房權限</strong>`,
+				`+ <strong>信任用戶</strong> - 可以使用!廣播指令，比如!groups，並可以在限制發言期間發言`,
+				`% <strong>見習管理</strong> - 同上，並可以禁止用戶發言或警告用戶`,
+				`@ <strong>管理員</strong> - 同上，並可以將用戶從房間封禁`,
+				`* <strong>機器人</strong> - 跟管理員一樣，隻不過是機器`,
+				`# <strong>房主</strong> - 房中的領導，幾乎擁有房間的全部管理權力`,
+			],
+			japanese: [
+				`<strong>日本語部屋のユーザーランク</strong>`,
+				`<strong>ボイス</strong>(+)：「!コマンド」を使ってコマンドの結果を部屋に表示することができる。`,
+				`<strong>ドライバー</strong>(%)：上記に加えて警告メッセージを出したりユーザーを短時間喋れなく（ミュート）することができる。`,
+				`<strong>モデレータ</strong>(@)：上記に加えてユーザーを部屋からBANすることができる。`,
+				`<strong>ボット</strong>(*)：権限はモデレータと同じだが、ボットだと分かるためのランク。`,
+				`<strong>ルームオーナー</strong>(#)：この部屋のリーダーでほとんどのことができる。`,
+			],
+			hindi: [
+				`<strong>रूम के पद</strong>`,
+				`+ <strong>Voice</strong> - ये लोग '!' commands का इस्तेमाल कर सकते हैं, जैसे की !groups`,
+				`% <strong>Driver</strong> - ये लोग ऊपर की चीज़ें और उसके अलावा mute और warn भी कर सकते हैं`,
+				`@ <strong>Moderator</strong> - ये लोग ऊपर की चीज़ें और उसके अलावा room ban भी कर सकते हैं`,
+				`* <strong>Bot</strong> - Moderator जैसा पर केवल Bots के लिए`,
+				`# <strong>Room Owner</strong> - ये लोग room के leader हैं और रूम लगभग पूरी तरह इनके अधीन है`,
+			],
+			dutch: [
+				`<strong>Roomrangen</strong>`,
+				`+ <strong>Voice</strong> - Ze kunnen ! commando's gebruiken en tijdens beperkte chat praten`,
+				`% <strong>Driver</strong> - Het bovenstaande en ze kunnen gebruikers muten en waarschuwen`,
+				`@ <strong>Moderator</strong> - Het bovenstaande en ze kunnen gebruikers uit de room bannen`,
+				`* <strong>Bot</strong> - Hetzelfde als een moderator maar dit symbool maakt duidelijk dat deze gebruiker een bot is`,
+				`# <strong>Room Owner</strong> - Zij zijn de leiders van de room en hebben bijna de gehele controle erover`,
+			],
+			german: [
+				`<strong>Raum-Ränge</strong>`,
+				`+ <strong>Voice</strong> - Sie können ! Befehle wie !groups benutzen, und während moderiertem Chat reden`,
+				`% <strong>Driver</strong> - Oben genanntes, und sie können verwarnen und muten`,
+				`@ <strong>Moderator</strong> - Oben genanntes, und sie können Nutzer aus dem Raum bannen`,
+				`* <strong>Bot</strong> - Wie Moderatoren, nur wird verdeutlicht, dass der Nutzer ein Bot ist`,
+				`# <strong>Room Owner</strong> - Sie sind die Leiter des Raumes und können beinahe vollständig über ihn bestimmen`,
+			],
+		};
+		const globalRanks = {
+			__proto__: null,
+			english: [
+				`<strong>Global ranks</strong>`,
+				`+ <strong>Global Voice</strong> - They can use ! commands like !groups`,
+				`% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts`,
+				`@ <strong>Global Moderator</strong> - The above, and they can globally ban users`,
+				`* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot`,
+				`&amp; <strong>Global Leader</strong> - The above, and they can promote to global moderator and force ties`,
+				`~ <strong>Global Administrator</strong> -  They can do anything, like change what this message says`,
+			],
+			portuguese: [
+				`<strong>Cargos Globais</strong>`,
+				`+ <strong>Global Voice</strong> - Eles podem usar comandos com !, tal como !groups, e falar durante o chat moderado`,
+				`% <strong>Global Driver</strong> - O de acima, além de poderem dar locks e verificar contas alternativas`,
+				`@ <strong>Global Moderator</strong> - O de cima, e banir usuários do servidor`,
+				`* <strong>Global Bot</strong> - Igual ao cargo de Moderator, mas deixa claro que o usuário é um bot`,
+				`&amp; <strong>Global Leader</strong> - O de cima, e promover usuários a global moderator e forçar empates`,
+				`~ <strong>Global Administrator</strong> - Eles podem fazer qualquer coisa, como mudar o que esta mensagem diz`,
+			],
+			spanish: [
+				`<strong>Rangos Globales</strong>`,
+				`+ <strong>Global Voice</strong> - Pueden utilizar comandos con ! como !groups y hablar cuando haya modchat +`,
+				`% <strong>Global Driver</strong> - Lo mismo que arriba y también pueden dar locks y revisar las alts`,
+				`@ <strong>Global Moderator</strong> - Lo mismo que arriba y además pueden expulsar globalmente del servidor`,
+				`* <strong>Global Bot</strong> - Igual que un moderador, pero el símbolo identifica que es un Bot`,
+				`&amp; <strong>Global Leader</strong> - Lo mismo que arriba y también pueden promover a otros a moderador global y forzar empates`,
+				`~ <strong>Global Administrator</strong> - Pueden hacer cualquier cosa, como cambiar lo que dice este mensaje`,
+			],
+			italian: [
+				`<strong>Ruoli Globali</strong>`,
+				`+ <strong>Global Voice</strong> - Possono utilizzare i comandi con !, come !groups, e parlare quando la chat è moderata`,
+				`% <strong>Global Driver</strong> - Come i Global Voice, e possono lockare gli utenti e controllare i loro alts`,
+				`@ <strong>Global Moderator</strong> - Come i Global Driver, e possono bannare globalmente gli utenti`,
+				`* <strong>Global Bot</strong> - Come i Global Moderator, ma il simbolo specifica che l'utente è un bot`,
+				`&amp; <strong>Global Leader</strong> - Come i Global Moderator, e possono promuovere gli utenti a moderatori globali e forzare i pareggi nelle battaglie`,
+				`~ <strong>Global Administrator</strong> - Possono fare di tutto, anche cambiare il contenuto di questo messaggio`,
+			],
+			french: [
+				`<strong>Grades globaux</strong>`,
+				`+ <strong>Global Voice</strong> - Ils peuvent utiliser les commandes contenant ! telles que !groups et parler pendant les chats restreints`,
+				`% <strong>Global Driver</strong> - Comme ci-dessus, en plus de pouvoir lock certains utilisateurs et vérifier leurs éventuels autres comptes`,
+				`@ <strong>Global Moderator</strong> - Comme ci-dessus, en plus de pouvoir bannir des utilisateurs du site`,
+				`* <strong>Global Bot</strong> - Comme les Moderator, à la différence que ces utilisateurs sont des bots`,
+				`&amp; <strong>Global Leader</strong> - Comme les précédents, en plus de pouvoir attribuer des promotions au rang de Global Moderator et de forcer les matchs nuls`,
+				`~ <strong>Global Administrator</strong> - Ils peuvent tout faire, comme changer ce que ce message affiche`,
+			],
+			simplifiedchinese: [
+				`<strong>全服权限</strong>`,
+				`+ <strong>全服信任用户</strong> -可以使用!广播指令，比如!groups，并可以在限制发言期间发言`,
+				`% <strong>全服见习管理</strong> - 同上，并可以锁定用户或查看他们的小号`,
+				`@ <strong>全服管理员</strong> - 同上，并可以将用户从服务器封禁`,
+				`* <strong>全服机器人</strong> - 跟全服管理员一样，只不过是机器`,
+				`&amp; <strong>全服领袖</strong> - 同上，并可以提拔用户至全服管理员、强制对战平局`,
+				`~ <strong>全服总管</strong> - 可以在服务器做任何事，例如修改你现在看到的这条信息`,
+			],
+			traditionalchinese: [
+				`<strong>全服權限</strong>`,
+				`+ <strong>全服信任用戶</strong> -可以使用!廣播指令，比如!groups，並可以在限制發言期間發言`,
+				`% <strong>全服見習管理</strong> - 同上，並可以鎖定用戶或查看他們的小號`,
+				`@ <strong>全服管理員</strong> - 同上，並可以將用戶從服務器封禁`,
+				`* <strong>全服機器人</strong> - 跟全服管理員一樣，隻不過是機器`,
+				`&amp; <strong>全服領袖</strong> - 同上，並可以提拔用戶至全服管理員、強制對戰平局`,
+				`~ <strong>全服總管</strong> - 可以在服務器做任何事，例如修改你現在看到的這條信息`,
+			],
+			japanese: [
+				`<strong>グローバルユーザーランク</strong>`,
+				`<strong>グローバルボイス</strong>(+)：「!コマンド」を使ってコマンドの結果を部屋に表示することができる。`,
+				`<strong>グローバルドライバー</strong>(%)：上記に加えてユーザーをロックしたり、他に使っているアカウントを確認することができる。`,
+				`<strong>グローバルモデレータ</strong>(@)：上記に加えてユーザーをサイト全体からBANできる。`,
+				`<strong>グローバルボット</strong>(*)：権限はモデレータと同じだが、ボットだと分かるためのランク。`,
+				`<strong>グローバルリーダー</strong>(&amp;)：上記に加えてユーザーをグローバルモデレータまで昇格したり、試合を強制的に引き分けにすることができる。`,
+				`<strong>グローバルアドミニストレーター</strong>(~)：何でもできる。この文章も編集できる。`,
+			],
+			hindi: [
+				`<strong>वैश्विक पद</strong>`,
+				`+ <strong>वैश्विक Voice</strong> - ये लोग '!' commands का इस्तेमाल कर सकते हैं, जैसे की !groups`,
+				`% <strong>वैश्विक Driver</strong> - ये लोग ऊपर की चीज़ें और उसके अलावा lock या alt भी जाँच सकते हैं`,
+				`@ <strong>वैश्विक Moderator</strong> - ये लोग ऊपर की चीज़ें और उसके अलावा वैश्विक स्तर पे ban भी कर सकते हैं`,
+				`* <strong>वैश्विक Bot</strong> - Moderator जैसा पर केवल Bots के लिए`,
+				`&amp; <strong>वैश्विक Leader</strong> - ये लोग ऊपर की चीज़ें और उसके अलावा वैश्विक Moderator तक नियुक्त और खेल रद्द कर सकते हैं`,
+				`~ <strong>वैश्विक Administrator</strong> - ये लोग कुछ भी कर सकते हैं, जैसे की इस सन्देश को बदलना`,
+			],
+			dutch: [
+				`<strong>Globale rangen</strong>`,
+				`+ <strong>Global Voice</strong> - Ze kunnen ! commando's gebruiken en tijdens beperkte chat praten`,
+				`% <strong>Global Driver</strong> - Het bovenstaande en ze kunnen gebruikers locken en alternatieve accounts inzien`,
+				`@ <strong>Global Moderator</strong> - Het bovenstaande en ze kunnen gebruikers van de server bannen`,
+				`* <strong>Global Bot</strong> - Hetzelfde als een moderator maar dit symbool maakt duidelijk dat deze gebruiker een bot is`,
+				`&amp; <strong>Global Leader</strong> - Het bovenstaande en ze kunnen gebruikers promoten tot global moderator en gelijkspel afdwingen`,
+				`~ <strong>Global Administrator</strong> - Zij kunnen alles doen, zoals veranderen wat hier staat`,
+			],
+			german: [
+				`<strong>Globale Ränge</strong>`,
+				`+ <strong>Global Voice</strong> - Sie können ! Befehle wie !groups benutzen, und während moderiertem Chat reden`,
+				`% <strong>Global Driver</strong> - Oben genanntes, und sie können Nutzer locken und alternative Accounts einsehen`,
+				`@ <strong>Global Moderator</strong> - Oben genanntes, und sie können Nutzer vom Server bannen`,
+				`* <strong>Global Bot</strong> - Wie Moderatoren, nur wird verdeutlicht, dass der Nutzer ein Bot ist`,
+				`&amp; <strong>Global Leader</strong> - Oben genanntes, und sie können bis zu Global Moderator befördern und in Kämpfen ein Unentschieden erzwingen`,
+				`~ <strong>Global Administrator</strong> - Sie können alles tun, zum Beispiel den Text dieser Nachricht ändern`,
+			],
+		};
+		let language = room && room.language ? room.language : 'english';
+		if (!(language in roomRanks)) language = 'english'; // Unsupported for this command
 		this.sendReplyBox(
-			(showRoom ? `<strong>Room ranks</strong><br />` +
-			`+ <strong>Voice</strong> - They can use ! commands like !groups<br />` +
-			`% <strong>Driver</strong> - The above, and they can mute and warn<br />` +
-			`@ <strong>Moderator</strong> - The above, and they can room ban users<br />` +
-			`* <strong>Bot</strong> - Like Moderator, but makes it clear that this user is a bot<br />` +
-			`# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it<br />` : ``) +
-			(showRoom && showGlobal ? `<br />` : ``) +
-			(showGlobal ? `<strong>Global ranks</strong><br />` +
-			`+ <strong>Global Voice</strong> - They can use ! commands like !groups<br />` +
-			`% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts<br />` +
-			`@ <strong>Global Moderator</strong> - The above, and they can globally ban users<br />` +
-			`* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot<br />` +
-			`&amp; <strong>Global Leader</strong> - The above, and they can promote to global moderator and force ties<br />` +
-			`~ <strong>Global Administrator</strong> -  They can do anything, like change what this message says` : ``)
+			(showRoom ? roomRanks[language].join('<br />') : ``) +
+			(showRoom && showGlobal ? `<br /><br />` : ``) +
+			(showGlobal ? globalRanks[language].join('<br />') : ``)
 		);
 	},
 	groupshelp: [
