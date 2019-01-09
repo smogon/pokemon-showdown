@@ -177,7 +177,7 @@ let BattleFormatsData = {
 	},
 	pikachustarter: {
 		inherit: true,
-		randomBattleMoves: ["zippyzappy", "splishysplash", "thunderbolt", "calmmind", "substitute"],
+		randomBattleMoves: ["zippyzap", "splishysplash", "thunderbolt", "calmmind", "substitute"],
 		isNonstandard: false,
 		tier: "UU",
 		doublesTier: "DOU",
