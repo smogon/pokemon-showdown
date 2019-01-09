@@ -1576,10 +1576,7 @@ let Formats = [
 		gameType: 'doubles',
 		searchShow: false,
 		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Swagger Clause', 'Team Preview'],
-		banlist: [
-			'Arceus', 'Dialga', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-White', 'Jirachi',
-			'Lugia', 'Mewtwo', 'Palkia', 'Rayquaza', 'Reshiram', 'Zekrom', 'Soul Dew', 'Dark Void', 'Sky Drop',
-		],
+		banlist: ['DUber', 'Soul Dew', 'Dark Void', 'Sky Drop'],
 	},
 	{
 		name: "[Gen 5] GBU Doubles",
