@@ -89,7 +89,6 @@ try {
 
 if (!triviaData || typeof triviaData !== 'object') triviaData = {};
 if (typeof triviaData.leaderboard !== 'object') triviaData.leaderboard = {};
-if (!Array.isArray(triviaData.ladder)) triviaData.ladder = [];
 if (!Array.isArray(triviaData.questions)) triviaData.questions = [];
 if (!Array.isArray(triviaData.submissions)) triviaData.submissions = [];
 if (triviaData.questions.some(q => !('type' in q))) {
@@ -159,6 +158,59 @@ function sliceCategory(category) {
 
 	return questions.slice(sliceFrom, sliceUpTo);
 }
+
+class Ladder {
+	constructor(leaderboard) {
+		this.leaderboard = leaderboard;
+		this.cache = null;
+	}
+
+	invalidateCache() {
+		this.cache = null;
+	}
+
+	get() {
+		if (this.cache) {
+			return this.cache;
+		}
+		this.cache = this.computeCachedLadder();
+		return this.cache;
+	}
+
+	computeCachedLadder() {
+		let leaders = Object.keys(this.leaderboard);
+		let ladder = [];
+		let ranks = {};
+		for (const leader of leaders) {
+			ranks[leader] = [];
+		}
+		for (let i = 0; i < 3; i++) {
+			leaders.sort((a, b) => this.leaderboard[b][i] - this.leaderboard[a][i]);
+
+			let max = Infinity;
+			let rank = 0;
+			for (const leader of leaders) {
+				let score = this.leaderboard[leader][i];
+				if (max !== score) {
+					if (!i && rank < 15) {
+						if (ladder[rank]) {
+							ladder[rank].push(leader);
+						} else {
+							ladder[rank] = [leader];
+						}
+					}
+
+					rank++;
+					max = score;
+				}
+				ranks[leader].push(rank);
+			}
+		}
+		return {ladder, ranks};
+	}
+}
+
+let cachedLadder = new Ladder(triviaData.leaderboard);
 
 class TriviaPlayer extends Rooms.RoomGamePlayer {
 	constructor(user, game) {
@@ -590,8 +642,6 @@ class Trivia extends Rooms.RoomGame {
 
 	/**
 	 * Ends the game after a player's score has exceeded the score cap.
-	 * FIXME: this class and trivia database logic don't belong in bed with
-	 * each other! Abstract all that away from this method as soon as possible.
 	 * @param {TriviaPlayer} winner
 	 * @param {string} buffer
 	 */
@@ -619,31 +669,7 @@ class Trivia extends Rooms.RoomGame {
 
 		if (winner) leaderboard[winner.userid][0] += prize;
 
-		let leaders = Object.keys(leaderboard);
-		let ladder = triviaData.ladder = [];
-		for (let i = 0; i < 3; i++) {
-			leaders.sort((a, b) => leaderboard[b][i] - leaderboard[a][i]);
-
-			let max = Infinity;
-			let rank = 0;
-			let rankIdx = i + 3;
-			for (const leader of leaders) {
-				let score = leaderboard[leader][i];
-				if (max !== score) {
-					if (!i && rank < 15) {
-						if (ladder[rank]) {
-							ladder[rank].push(leader);
-						} else {
-							ladder[rank] = [leader];
-						}
-					}
-
-					rank++;
-					max = score;
-				}
-				leaderboard[leader][rankIdx] = rank;
-			}
-		}
+		cachedLadder.invalidateCache();
 
 		for (let i in this.players) {
 			let player = this.players[i];
@@ -1722,11 +1748,12 @@ const commands = {
 		let score = triviaData.leaderboard[userid];
 		if (!score) return this.sendReplyBox(`User '${name}' has not played any trivia games yet.`);
 
+		let ranks = cachedLadder.get().ranks[userid];
 		this.sendReplyBox(
 			`User: <strong>${name}</strong><br />`	 +
-			`Leaderboard score: <strong>${score[0]}</strong> (#${score[3]})<br />` +
-			`Total game points: <strong>${score[1]}</strong> (#${score[4]})<br />` +
-			`Total correct answers: <strong>${score[2]}</strong> (#${score[5]})`
+			`Leaderboard score: <strong>${score[0]}</strong> (#${ranks[0]})<br />` +
+			`Total game points: <strong>${score[1]}</strong> (#${ranks[1]})<br />` +
+			`Total correct answers: <strong>${score[2]}</strong> (#${ranks[2]})`
 		);
 	},
 	rankhelp: [`/trivia rank [username] - View the rank of the specified user. If no name is given, view your own.`],
@@ -1734,7 +1761,7 @@ const commands = {
 	ladder: function (target, room) {
 		if (room.id !== 'trivia') return this.errorReply('This command can only be used in Trivia.');
 		if (!this.runBroadcast()) return false;
-		let ladder = triviaData.ladder;
+		let {ladder} = cachedLadder.get();
 		let leaderboard = triviaData.leaderboard;
 		if (!ladder.length) return this.errorReply("No trivia games have been played yet.");
 
