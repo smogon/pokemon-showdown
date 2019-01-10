@@ -671,7 +671,8 @@ class GlobalRoom extends BasicRoom {
 				desc: room.desc,
 				userCount: room.userCount,
 			};
-			if (room.subRooms) roomData.subRooms = room.getSubRooms().map(room => room.title);
+			const subrooms = room.getSubRooms().map(room => room.title);
+			if (subrooms.length) roomData.subRooms = subrooms;
 
 			if (room.isOfficial) {
 				roomsData.official.push(roomData);
