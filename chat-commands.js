@@ -717,7 +717,7 @@ const commands = {
 		});
 		if (targetRoom) {
 			// The creator is a Room Owner in subroom groupchats and a Host otherwise..
-			targetRoom.auth[user.userid] = parent ? '#' : '\u2605';
+			targetRoom.auth[user.userid] = parent ? '#' : Users.HOST_SYMBOL;
 			// Join after creating room. No other response is given.
 			user.joinRoom(targetRoom.id);
 			user.popup(`You've just made a groupchat; it is now your responsibility, regardless of whether or not you actively partake in the room. For more info, read your groupchat's staff intro.`);
@@ -1787,7 +1787,7 @@ const commands = {
 			Rooms.rooms.forEach((curRoom, id) => {
 				if (id === 'global' || !curRoom.auth) return;
 				// Destroy personal rooms of the locked user.
-				if (curRoom.isPersonal && curRoom.auth[userid] === '#') {
+				if (curRoom.isPersonal && curRoom.auth[userid] === Users.HOST_SYMBOL) {
 					curRoom.destroy();
 				} else {
 					if (curRoom.isPrivate || curRoom.battle) return;
@@ -1992,7 +1992,7 @@ const commands = {
 		for (const roomid of targetUser.inRooms) {
 			if (roomid === 'global') continue;
 			let targetRoom = Rooms.get(roomid);
-			if (targetRoom.isPersonal && targetRoom.auth[userid] === '#') {
+			if (targetRoom.isPersonal && targetRoom.auth[userid] === Users.HOST_SYMBOL) {
 				targetRoom.destroy();
 			}
 		}
