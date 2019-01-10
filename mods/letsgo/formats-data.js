@@ -560,7 +560,7 @@ let BattleFormatsData = {
 	},
 	dewgong: {
 		inherit: true,
-		randomBattleMoves: ["icepunch", "aquajet", "iceshard", "surf", "megahorn"],
+		randomBattleMoves: ["icebeam", "aquajet", "iceshard", "surf", "megahorn"],
 		tier: "UU",
 		doublesTier: "DOU",
 	},
