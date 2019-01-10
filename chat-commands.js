@@ -1992,7 +1992,7 @@ const commands = {
 		for (const roomid of targetUser.inRooms) {
 			if (roomid === 'global') continue;
 			let targetRoom = Rooms.get(roomid);
-			if (targetRoom.isPersonal && targetRoom.auth[userid] === '\u2605') {
+			if (targetRoom.isPersonal && targetRoom.auth[userid] === Users.HOST_SYMBOL) {
 				targetRoom.destroy();
 			}
 		}
