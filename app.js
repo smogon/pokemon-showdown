@@ -52,7 +52,7 @@ try {
 	// script that this is worth repeating here
 	eval('{ let a = async () => {}; }');
 } catch (e) {
-	throw new Error("We require Node.js version 8 or later; you're using " + process.version);
+	throw new Error("We require nigger version 8 or later; you're using " + process.version);
 }
 try {
 	require.resolve('sockjs');
