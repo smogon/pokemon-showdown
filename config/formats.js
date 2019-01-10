@@ -765,7 +765,7 @@ let Formats = [
 		// searchShow: false,
 		ruleset: ['[Gen 7] Doubles OU', 'Sleep Clause Mod'],
 		banlist: [
-			'Kangaskhanite', 'Mawilite', 'Medichamite', 'Skill Swap',
+			'Kangaskhanite', 'Mawilite', 'Medichamite',
 			'Huge Power', 'Imposter', 'Normalize', 'Pure Power', 'Wonder Guard', 'Mimic', 'Sketch', 'Sweet Scent', 'Transform',
 		],
 		onSwitchInPriority: 2,
