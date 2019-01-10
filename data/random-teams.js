@@ -470,7 +470,7 @@ class RandomTeams extends Dex.ModdedDex {
 		];
 		// Moves which boost Attack AND Special Attack:
 		let MixedSetup = [
-			'conversion', 'growth', 'shellsmash', 'workup',
+			'conversion', 'growth', 'happyhour', 'shellsmash', 'workup',
 		];
 		// Moves which boost Speed:
 		let SpeedSetup = [
@@ -711,7 +711,7 @@ class RandomTeams extends Dex.ModdedDex {
 				switch (moveid) {
 				// Not very useful without their supporting moves
 				case 'clangingscales': case 'happyhour':
-					if (teamDetails.zMove || hasMove['rest']) rejected = true;
+					if (teamDetails.zMove || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'cottonguard': case 'defendorder':
 					if (!counter['recovery'] && !hasMove['rest']) rejected = true;
@@ -1032,7 +1032,7 @@ class RandomTeams extends Dex.ModdedDex {
 					break;
 				case 'psychocut': case 'zenheadbutt':
 					if ((hasMove['psychic'] || hasMove['psyshock']) && counter.setupType !== 'Physical') rejected = true;
-					if (hasMove['rest'] && hasMove['sleeptalk'] && (hasMove['superpower'] || movePool.includes('superpower'))) rejected = true;
+					if (hasAbility['Contrary'] && !counter.setupType && !!counter['physicalpool']) rejected = true;
 					break;
 				case 'psyshock':
 					if (movePool.length > 1) {
@@ -1144,9 +1144,9 @@ class RandomTeams extends Dex.ModdedDex {
 				// @ts-ignore
 				if (!rejected && (counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || counter.setupType === 'Mixed' || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3)) &&
 					((counter.damagingMoves.length === 0 && !hasMove['metalburst']) ||
-					(!counter.stab && (counter.Status < 2 || counter.setupType || template.types.length > 1 || (template.types[0] !== 'Normal' && template.types[0] !== 'Psychic') || !hasMove['icebeam']) && (counter['physicalpool'] || counter['specialpool'])) ||
+					(!counter.stab && (counter.Status < 2 || counter.setupType || template.types.length > 1 || (template.types[0] !== 'Normal' && template.types[0] !== 'Psychic') || !hasMove['icebeam']) && (!!counter['physicalpool'] || !!counter['specialpool'])) ||
 					(hasType['Bug'] && (movePool.includes('megahorn') || movePool.includes('pinmissile') || (hasType['Flying'] && !hasMove['hurricane'] && movePool.includes('bugbuzz')))) ||
-					((hasType['Dark'] && !counter['Dark']) || hasMove['suckerpunch'] && counter.stab < template.types.length) ||
+					((hasType['Dark'] && !counter['Dark']) || hasMove['suckerpunch'] && !hasAbility['Contrary'] && counter.stab < template.types.length) ||
 					(hasType['Dragon'] && !counter['Dragon'] && !hasAbility['Aerilate'] && !hasAbility['Pixilate'] && !hasMove['rest'] && !hasMove['sleeptalk']) ||
 					(hasType['Electric'] && !counter['Electric'] && !hasAbility['Galvanize']) ||
 					(hasType['Fighting'] && !counter['Fighting'] && (counter.setupType || !counter['Status'])) ||
