@@ -285,6 +285,7 @@ let BattleFormatsData = {
 		randomBattleMoves: ["healingwish", "reflect", "thunderwave", "lightscreen", "toxic", "fireblast", "encore", "wish", "protect", "aromatherapy", "stealthrock", "moonblast", "knockoff", "moonlight"],
 		randomDoubleBattleMoves: ["reflect", "thunderwave", "lightscreen", "safeguard", "fireblast", "followme", "protect", "moonblast"],
 		tier: "PU",
+		doublesTier: "NFE",
 	},
 	clefable: {
 		randomBattleMoves: ["calmmind", "softboiled", "fireblast", "moonblast", "stealthrock", "thunderwave"],
@@ -483,6 +484,7 @@ let BattleFormatsData = {
 		randomBattleMoves: ["calmmind", "psychic", "psyshock", "hiddenpowerfighting", "shadowball", "encore", "substitute"],
 		randomDoubleBattleMoves: ["protect", "psychic", "psyshock", "hiddenpowerfighting", "shadowball", "encore", "substitute"],
 		tier: "PU",
+		doublesTier: "NFE",
 	},
 	alakazam: {
 		inherit: true,
@@ -508,6 +510,7 @@ let BattleFormatsData = {
 		randomBattleMoves: ["dynamicpunch", "bulkup", "icepunch", "rockslide", "bulletpunch", "poweruppunch", "knockoff"],
 		randomDoubleBattleMoves: ["dynamicpunch", "protect", "icepunch", "rockslide", "bulletpunch", "knockoff"],
 		tier: "PUBL",
+		doublesTier: "NFE",
 	},
 	machamp: {
 		inherit: true,
@@ -609,6 +612,7 @@ let BattleFormatsData = {
 		randomBattleMoves: ["thunderbolt", "substitute", "flashcannon", "hiddenpowerice", "voltswitch", "chargebeam", "hiddenpowerfire"],
 		randomDoubleBattleMoves: ["thunderbolt", "thunderwave", "magnetrise", "substitute", "flashcannon", "hiddenpowerice", "voltswitch", "protect", "electroweb", "discharge", "hiddenpowerfire"],
 		tier: "RU",
+		doublesTier: "NFE",
 	},
 	magnezone: {
 		randomBattleMoves: ["thunderbolt", "substitute", "flashcannon", "hiddenpowerice", "voltswitch", "hiddenpowerfire"],
@@ -682,6 +686,7 @@ let BattleFormatsData = {
 		randomBattleMoves: ["shadowball", "sludgebomb", "dazzlinggleam", "substitute", "destinybond"],
 		randomDoubleBattleMoves: ["shadowball", "sludgebomb", "hiddenpowerfighting", "thunderbolt", "substitute", "disable", "taunt", "hypnosis", "gigadrain", "trick", "dazzlinggleam", "protect"],
 		tier: "NU",
+		doublesTier: "NFE",
 	},
 	gengar: {
 		inherit: true,
@@ -835,6 +840,7 @@ let BattleFormatsData = {
 		randomBattleMoves: ["stealthrock", "earthquake", "rockblast", "roar", "swordsdance", "stoneedge", "megahorn", "rockpolish"],
 		randomDoubleBattleMoves: ["stoneedge", "earthquake", "aquatail", "megahorn", "stealthrock", "rockslide", "protect"],
 		tier: "NU",
+		doublesTier: "NFE",
 	},
 	rhyperior: {
 		randomBattleMoves: ["stoneedge", "earthquake", "aquatail", "megahorn", "stealthrock", "rockblast", "rockpolish", "dragontail"],
@@ -852,6 +858,7 @@ let BattleFormatsData = {
 		randomBattleMoves: ["softboiled", "healbell", "stealthrock", "thunderwave", "toxic", "seismictoss", "wish", "protect", "counter"],
 		randomDoubleBattleMoves: ["aromatherapy", "toxic", "thunderwave", "helpinghand", "softboiled", "lightscreen", "seismictoss", "protect", "wish"],
 		tier: "OU",
+		doublesTier: "NFE",
 	},
 	blissey: {
 		inherit: true,
@@ -865,6 +872,7 @@ let BattleFormatsData = {
 		randomBattleMoves: ["gigadrain", "sleeppowder", "hiddenpowerfire", "hiddenpowerice", "leechseed", "knockoff", "leafstorm", "sludgebomb", "synthesis"],
 		randomDoubleBattleMoves: ["gigadrain", "sleeppowder", "hiddenpowerrock", "hiddenpowerice", "leechseed", "knockoff", "leafstorm", "stunspore", "protect", "hiddenpowerfire"],
 		tier: "PU",
+		doublesTier: "LC Uber",
 	},
 	tangrowth: {
 		inherit: true,
@@ -947,6 +955,7 @@ let BattleFormatsData = {
 		randomBattleMoves: ["swordsdance", "roost", "bugbite", "quickattack", "brickbreak", "aerialace", "uturn", "knockoff"],
 		randomDoubleBattleMoves: ["swordsdance", "protect", "bugbite", "quickattack", "brickbreak", "aerialace", "feint", "uturn", "knockoff"],
 		tier: "NU",
+		doublesTier: "LC Uber",
 	},
 	scizor: {
 		inherit: true,
@@ -1488,6 +1497,7 @@ let BattleFormatsData = {
 		inherit: true,
 		randomBattleMoves: ["nastyplot", "thunderbolt", "dazzlinggleam", "willowisp", "shadowball", "taunt", "painsplit"],
 		tier: "PU",
+		doublesTier: "LC Uber",
 	},
 	mismagius: {
 		randomBattleMoves: ["nastyplot", "substitute", "willowisp", "shadowball", "thunderbolt", "dazzlinggleam", "taunt", "painsplit", "destinybond"],
@@ -1538,6 +1548,7 @@ let BattleFormatsData = {
 		inherit: true,
 		randomBattleMoves: ["stealthrock", "toxic", "roost", "defog", "earthquake", "uturn", "knockoff"],
 		tier: "UU",
+		doublesTier: "LC Uber",
 	},
 	gliscor: {
 		randomBattleMoves: ["roost", "substitute", "taunt", "earthquake", "protect", "toxic", "stealthrock", "knockoff"],
@@ -1588,6 +1599,7 @@ let BattleFormatsData = {
 		inherit: true,
 		randomBattleMoves: ["iceshard", "iciclecrash", "lowkick", "pursuit", "swordsdance", "knockoff"],
 		tier: "RU",
+		doublesTier: "LC Uber",
 	},
 	weavile: {
 		inherit: true,
@@ -1626,6 +1638,7 @@ let BattleFormatsData = {
 	piloswine: {
 		randomBattleMoves: ["earthquake", "iciclecrash", "iceshard", "endeavor", "stealthrock"],
 		tier: "NU",
+		doublesTier: "NFE",
 	},
 	mamoswine: {
 		inherit: true,
@@ -1822,6 +1835,7 @@ let BattleFormatsData = {
 	combusken: {
 		randomBattleMoves: ["flareblitz", "skyuppercut", "protect", "swordsdance", "shadowclaw"],
 		tier: "PU",
+		doublesTier: "NFE",
 	},
 	blaziken: {
 		inherit: true,
@@ -2023,6 +2037,7 @@ let BattleFormatsData = {
 	vigoroth: {
 		randomBattleMoves: ["bulkup", "return", "earthquake", "firepunch", "suckerpunch", "slackoff", "icepunch", "lowkick"],
 		tier: "PUBL",
+		doublesTier: "NFE",
 	},
 	slaking: {
 		inherit: true,
@@ -2217,6 +2232,7 @@ let BattleFormatsData = {
 		inherit: true,
 		randomBattleMoves: ["spikes", "toxicspikes", "sleeppowder", "gigadrain", "stunspore", "rest", "sludgebomb", "synthesis"],
 		tier: "PU",
+		doublesTier: "NFE",
 	},
 	roserade: {
 		randomBattleMoves: ["sludgebomb", "gigadrain", "sleeppowder", "leafstorm", "spikes", "toxicspikes", "rest", "synthesis", "hiddenpowerfire"],
@@ -2636,6 +2652,7 @@ let BattleFormatsData = {
 		inherit: true,
 		randomBattleMoves: ["stealthrock", "meteormash", "toxic", "earthquake", "bulletpunch", "zenheadbutt"],
 		tier: "PU",
+		doublesTier: "NFE",
 	},
 	metagross: {
 		inherit: true,
@@ -2797,6 +2814,7 @@ let BattleFormatsData = {
 	monferno: {
 		randomBattleMoves: ["stealthrock", "overheat", "hiddenpowergrass", "fakeout", "vacuumwave", "uturn", "gunkshot"],
 		tier: "PU",
+		doublesTier: "NFE",
 	},
 	infernape: {
 		inherit: true,
@@ -2813,6 +2831,7 @@ let BattleFormatsData = {
 	prinplup: {
 		randomBattleMoves: ["stealthrock", "hydropump", "scald", "icebeam", "hiddenpowerelectric", "hiddenpowerfire", "yawn", "defog"],
 		tier: "PU",
+		doublesTier: "NFE",
 	},
 	empoleon: {
 		inherit: true,
@@ -3051,6 +3070,7 @@ let BattleFormatsData = {
 	gabite: {
 		randomBattleMoves: ["outrage", "dragonclaw", "earthquake", "fireblast", "stoneedge", "stealthrock"],
 		tier: "PU",
+		doublesTier: "NFE",
 	},
 	garchomp: {
 		inherit: true,
@@ -3615,6 +3635,7 @@ let BattleFormatsData = {
 	gurdurr: {
 		randomBattleMoves: ["bulkup", "machpunch", "drainpunch", "icepunch", "knockoff"],
 		tier: "NU",
+		doublesTier: "NFE",
 	},
 	conkeldurr: {
 		randomBattleMoves: ["bulkup", "drainpunch", "icepunch", "knockoff", "machpunch"],
@@ -3952,6 +3973,7 @@ let BattleFormatsData = {
 	ferroseed: {
 		randomBattleMoves: ["spikes", "stealthrock", "leechseed", "seedbomb", "protect", "thunderwave", "gyroball"],
 		tier: "NU",
+		doublesTier: "LC",
 	},
 	ferrothorn: {
 		randomBattleMoves: ["spikes", "stealthrock", "leechseed", "powerwhip", "protect", "knockoff", "gyroball"],
@@ -4093,6 +4115,7 @@ let BattleFormatsData = {
 	pawniard: {
 		randomBattleMoves: ["swordsdance", "substitute", "suckerpunch", "ironhead", "brickbreak", "knockoff"],
 		tier: "PU",
+		doublesTier: "LC",
 	},
 	bisharp: {
 		randomBattleMoves: ["swordsdance", "knockoff", "ironhead", "suckerpunch", "lowkick"],
@@ -4121,6 +4144,7 @@ let BattleFormatsData = {
 	vullaby: {
 		randomBattleMoves: ["knockoff", "roost", "taunt", "whirlwind", "toxic", "defog", "uturn", "bravebird"],
 		tier: "PU",
+		doublesTier: "LC",
 	},
 	mandibuzz: {
 		inherit: true,
@@ -4379,6 +4403,7 @@ let BattleFormatsData = {
 	fletchinder: {
 		randomBattleMoves: ["roost", "swordsdance", "uturn", "return", "overheat", "flamecharge", "tailwind", "acrobatics"],
 		tier: "RU",
+		doublesTier: "NFE",
 	},
 	talonflame: {
 		randomBattleMoves: ["bravebird", "flareblitz", "roost", "swordsdance", "uturn", "willowisp", "tailwind"],
@@ -4482,6 +4507,7 @@ let BattleFormatsData = {
 		randomBattleMoves: ["swordsdance", "shadowclaw", "shadowsneak", "ironhead", "sacredsword"],
 		randomDoubleBattleMoves: ["swordsdance", "shadowclaw", "shadowsneak", "ironhead", "sacredsword", "rockslide", "protect"],
 		tier: "UU",
+		doublesTier: "NFE",
 	},
 	aegislash: {
 		inherit: true,
