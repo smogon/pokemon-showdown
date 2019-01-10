@@ -1787,7 +1787,7 @@ const commands = {
 			Rooms.rooms.forEach((curRoom, id) => {
 				if (id === 'global' || !curRoom.auth) return;
 				// Destroy personal rooms of the locked user.
-				if (curRoom.isPersonal && curRoom.auth[userid] === '#') {
+				if (curRoom.isPersonal && curRoom.auth[userid] === '\u2605') {
 					curRoom.destroy();
 				} else {
 					if (curRoom.isPrivate || curRoom.battle) return;
@@ -1992,7 +1992,7 @@ const commands = {
 		for (const roomid of targetUser.inRooms) {
 			if (roomid === 'global') continue;
 			let targetRoom = Rooms.get(roomid);
-			if (targetRoom.isPersonal && targetRoom.auth[userid] === '#') {
+			if (targetRoom.isPersonal && targetRoom.auth[userid] === '\u2605') {
 				targetRoom.destroy();
 			}
 		}
