@@ -82,10 +82,10 @@ function solveStr(eq) {
 		eq = eq.replace(preStr, solvedStr); // replace parenthetical with value
 	}
 	while (eq.includes("^")) {
-		eq = allocFx(eq, "^", (l, r) => Math.pow(parseFloat(l), parseFloat(r)));
+		eq = allocFx(eq, "^", (l, r) => Math.pow(parseFloat(l)));
 	}
 	while (eq.includes("&")) {
-		eq = allocFx(eq, "&", (l, r) => Math.pow(parseFloat(l), parseFloat(r))); // account for things like (-3)^2
+		eq = allocFx(eq, "&", (l, r) => Math.pow(parseFloat(l))); // account for things like (-3)^2
 	}
 	while (eq.includes("*") || eq.includes("/")) {
 		let multiply;
