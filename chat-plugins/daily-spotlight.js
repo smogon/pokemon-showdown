@@ -153,7 +153,7 @@ const commands = {
 	daily: async function (target, room, user) {
 		let key = toId(target);
 		if (!key) return this.parse('/help daily');
-		
+
 		if (!spotlights[room.id] || !spotlights[room.id][key]) {
 			return this.errorReply(`Cannot find a daily spotlight with name '${key}'`);
 		}
