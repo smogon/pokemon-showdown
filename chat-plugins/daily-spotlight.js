@@ -44,10 +44,10 @@ async function renderSpotlight(image, description) {
 
 	if (image) {
 		const [width, height] = await Chat.fitImage(image, 150, 300);
-		imgHTML = `<img src="${image}" width="${width}" height="${height}" style="vertical-align:middle;">`;
+		imgHTML = `<td><img src="${image}" width="${width}" height="${height}" style="vertical-align:middle;"></td>`;
 	}
 
-	return `<div style="text-align:center;margin:auto"><p style="display:inline-block;padding-right:10px;">${Chat.escapeHTML(description)}</p>${imgHTML}</div>`;
+	return `<table style="text-align:center;margin:auto"><tr><td style="padding-right:10px;">${Chat.formatText(description, true)}</td>${imgHTML}</tr></div>`;
 }
 
 /** @type {PageTable} */
@@ -105,7 +105,8 @@ const commands = {
 			this.modlog(`DAILY REMOVE`, `${key}[${queueNumber}]`);
 			this.sendReply(`Removed the ${queueNumber}th entry from the queue of the daily spotlight named '${key}'.`);
 		} else {
-			if (!spotlights[room.id][key].shift()) {
+			spotlights[room.id][key].shift();
+			if (!spotlights[room.id][key].length) {
 				delete spotlights[room.id][key];
 			}
 			saveSpotlights();
