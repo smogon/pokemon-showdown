@@ -161,7 +161,8 @@ const commands = {
 		const {image, description} = spotlights[room.id][key][0];
 		const html = await renderSpotlight(image, description);
 
-		return this.sendReplyBox(html);
+		this.sendReplyBox(html);
+		room.update();
 	},
 	viewspotlights: function (target, room, user) {
 		if (!this.can('announce', null, room)) return false;
