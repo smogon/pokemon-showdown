@@ -597,9 +597,10 @@ class RandomTeams extends Dex.ModdedDex {
 	 * @param {number} [slot]
 	 * @param {RandomTeamsTypes["TeamDetails"]} [teamDetails]
 	 * @param {boolean} [isDoubles]
+	 * @param {string | null} [monotypeType]
 	 * @return {RandomTeamsTypes["RandomSet"]}
 	 */
-	randomSet(template, slot = 1, teamDetails = {}, isDoubles = false) {
+	randomSet(template, slot = 1, teamDetails = {}, isDoubles = false, monotypeType = null) {
 		template = this.getTemplate(template);
 		let baseTemplate = template;
 		let species = template.species;
@@ -618,7 +619,12 @@ class RandomTeams extends Dex.ModdedDex {
 		}
 		let battleForme = this.checkBattleForme(template);
 		if (battleForme && battleForme.randomBattleMoves && template.otherFormes && (battleForme.isMega ? !teamDetails.megaStone : this.random(2))) {
-			template = this.getTemplate(template.otherFormes.length >= 2 ? this.sample(template.otherFormes) : template.otherFormes[0]);
+			let possibleTemplates = template.otherFormes
+				.map(t => this.getTemplate(t))
+				.filter(t => monotypeType === null || t.types.includes(monotypeType));
+			if (possibleTemplates.length) {
+				template = this.sample(possibleTemplates);
+			}
 		}
 
 		const randMoves = !isDoubles ? template.randomBattleMoves : template.randomDoubleBattleMoves || template.randomBattleMoves;
@@ -1392,20 +1398,18 @@ class RandomTeams extends Dex.ModdedDex {
 			item = 'Marshadium Z';
 		} else if (template.species === 'Mimikyu' && hasMove['playrough'] && counter.setupType && !teamDetails.zMove) {
 			item = 'Mimikium Z';
-		} else if ((template.species === 'Necrozma-Dusk-Mane' || template.species === 'Necrozma-Dawn-Wings') && !teamDetails.zMove) {
-			if (hasMove['autotomize'] && hasMove['sunsteelstrike']) {
-				item = 'Solganium Z';
-			} else if (hasMove['trickroom'] && hasMove['moongeistbeam']) {
-				item = 'Lunalium Z';
-			} else {
-				item = 'Ultranecrozium Z';
-				if (!hasMove['photongeyser']) {
-					for (const moveid of moves) {
-						let move = this.getMove(moveid);
-						if (move.category === 'Status' || hasType[move.type]) continue;
-						moves[moves.indexOf(moveid)] = 'photongeyser';
-						break;
-					}
+		} else if (template.species === 'Necrozma-Dusk-Mane' && hasMove['autotomize'] && hasMove['sunsteelstrike'] && !teamDetails.zMove) {
+			item = 'Solganium Z';
+		} else if (template.species === 'Necrozma-Dawn-Wings' && hasMove['trickroom'] && hasMove['moongeistbeam'] && !teamDetails.zMove) {
+			item = 'Lunalium Z';
+		} else if (['Necrozma-Dusk-Mane', 'Necrozma-Dawn-Wings'].includes(template.species) && [null, 'Psychic'].includes(monotypeType) && !teamDetails.zMove) {
+			item = 'Ultranecrozium Z';
+			if (!hasMove['photongeyser']) {
+				for (const moveid of moves) {
+					let move = this.getMove(moveid);
+					if (move.category === 'Status' || hasType[move.type]) continue;
+					moves[moves.indexOf(moveid)] = 'photongeyser';
+					break;
 				}
 			}
 		} else if (template.baseSpecies === 'Pikachu') {
@@ -1692,13 +1696,16 @@ class RandomTeams extends Dex.ModdedDex {
 
 		// For Monotype
 		let isMonotype = this.format.id === 'gen7monotyperandombattle';
-		let typePool = Object.keys(this.data.TypeChart);
-		let type = this.sample(typePool);
+		let type = null;
+		if (isMonotype) {
+			let typePool = Object.keys(this.data.TypeChart);
+			type = this.sample(typePool);
+		}
 
 		let pokemonPool = [];
 		for (let id in this.data.FormatsData) {
 			let template = this.getTemplate(id);
-			if (isMonotype) {
+			if (type !== null) {
 				let types = template.types;
 				if (template.battleOnly) types = this.getTemplate(template.baseSpecies).types;
 				if (types.indexOf(type) < 0) continue;
@@ -1799,7 +1806,7 @@ class RandomTeams extends Dex.ModdedDex {
 				if (skip) continue;
 			}
 
-			let set = this.randomSet(template, pokemon.length, teamDetails, this.format.gameType !== 'singles');
+			let set = this.randomSet(template, pokemon.length, teamDetails, this.format.gameType !== 'singles', type);
 
 			// Illusion shouldn't be the last Pokemon of the team
 			if (set.ability === 'Illusion' && pokemon.length > 4) continue;
