@@ -6997,7 +6997,7 @@ let BattleFormatsData = {
 	minior: {
 		randomBattleMoves: ["shellsmash", "powergem", "acrobatics", "earthquake"],
 		randomDoubleBattleMoves: ["shellsmash", "powergem", "acrobatics", "earthquake", "protect"],
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "DUU",
 	},
 	miniormeteor: {
