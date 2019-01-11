@@ -15,6 +15,7 @@
 
 const cluster = require('cluster');
 const fs = require('fs');
+const FS = require('./lib/fs');
 
 if (cluster.isMaster) {
 	cluster.setupMaster({
@@ -423,11 +424,15 @@ if (cluster.isMaster) {
 	 */
 	const subchannels = new Map();
 
+	/** @type {WriteStream} */
+	const logger = FS(`logs/sockets-${process.pid}`).createAppendStream();
+
 	// Deal with phantom connections.
 	const sweepSocketInterval = setInterval(() => {
 		sockets.forEach(socket => {
 			// @ts-ignore
 			if (socket.protocol === 'xhr-streaming' && socket._session && socket._session.recv) {
+				logger.write('Found a ghost connection with protocol xhr-streaming');
 				// @ts-ignore
 				socket._session.recv.didClose();
 			}
@@ -440,6 +445,7 @@ if (cluster.isMaster) {
 			// that sockjs sets to wait for users to reconnect within that time to continue their session.
 			// @ts-ignore
 			if (socket._session && socket._session.to_tref && !socket._session.to_tref._idlePrev) {
+				logger.write(`Found a ghost connection with protocol ${socket.protocol}`);
 				// @ts-ignore
 				socket._session.timeout_cb();
 			}
