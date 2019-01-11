@@ -307,10 +307,9 @@ class ModdedDex {
 		let template = this.getTemplate(id);
 		if (template.otherForms && template.otherForms.indexOf(id) >= 0) {
 			let form = id.slice(template.species.length);
-			return template.species + '-' + form[0].toUpperCase() + form.slice(1);
-		} else {
-			return template.species;
+			if (form) return template.species + '-' + form[0].toUpperCase() + form.slice(1);
 		}
+		return template.species;
 	}
 
 	/**
