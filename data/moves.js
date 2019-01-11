@@ -4866,7 +4866,11 @@ let BattleMovedex = {
 			if (pokemon.activeTurns > 1 || pokemon.lastMove) {
 				this.attrLastMove('[still]');
 				this.add('-fail', pokemon);
-				this.add('-hint', "Fake Out only works if it's your first move, on your first turn out.");
+				this.add('-hint',
+							pokemon.activeTurns > 1 ?
+							"Fake Out only works on your first turn out." :
+							"Fake Out doesn't work if you already used a move."
+				);
 				return null;
 			}
 		},
@@ -5235,7 +5239,11 @@ let BattleMovedex = {
 			if (pokemon.activeTurns > 1 || pokemon.lastMove) {
 				this.add('-fail', pokemon);
 				this.attrLastMove('[still]');
-				this.add('-hint', "First Impression only works if it's your first move, on your first turn out.");
+				this.add('-hint',
+							pokemon.activeTurns > 1 ?
+							"First Impression only works on your first turn out." :
+							"First Impression doesn't work if you already used a move."
+				);
 				return null;
 			}
 		},
@@ -10045,7 +10053,11 @@ let BattleMovedex = {
 		sideCondition: 'matblock',
 		onTryHitSide: function (side, source) {
 			if (source.activeTurns > 1 || source.lastMove) {
-				this.add('-hint', "Mat Block only works if it's your first move, on your first turn out.");
+				this.add('-hint',
+							source.activeTurns > 1 ?
+							"Mat Block only works on your first turn out.":
+							"Mat Block doesn't work if you already used a move."
+				);
 				return false;
 			}
 		},
