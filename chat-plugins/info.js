@@ -2091,10 +2091,14 @@ const commands = {
 				// Translated analysis do not support automatic redirects from a speciesid to the proper page
 				let pageid = pokemon.name.toLowerCase().replace(' ', '_');
 				this.sendReplyBox(`<a href="https://www.smogon.com/translations/${supportedLanguages[room.language]}/analyses/ou/${pageid}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
-			} else {
+			} else if (formatId === 'ou' && generation === 'sm') {
+			    let pageid = pokemon.name.toLowerCase().replace(' ', '_');
 				this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}${(formatId ? '/' + formatId : '')}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
-			}
-		}
+				this.sendReplyBox(`Other languages available here: <a href="https://www.smogon.com/translations/es/analyses/ou/${pageid}">es</a>, <a href="https://www.smogon.com/translations/fr/analyses/ou/${pageid}">fr</a>, <a href="https://www.smogon.com/translations/ita/analyses/ou/${pageid}">ita</a>, <a href="https://www.smogon.com/translations/ger/analyses/ou/${pageid}">ger</a>, <a href="https://www.smogon.com/translations/por/analyses/ou/${pageid}">por</a>`);
+			} else {
+			    this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}${(formatId ? '/' + formatId : '')}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
+		   }
+      }
 
 		// Item
 		if (item.exists && genNumber > 1 && item.gen <= genNumber) {
