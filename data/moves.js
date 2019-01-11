@@ -13,7 +13,7 @@ distance: Can target a Pokemon positioned anywhere in a Triple Battle.
 gravity: Prevented from being executed or selected during Gravity's effect.
 heal: Prevented from being executed or selected during Heal Block's effect.
 mirror: Can be copied by Mirror Move.
-mystery: Unknown effect.
+mystery: Displays its animation even if its target is a teammate.
 nonsky: Prevented from being executed or selected in a Sky Battle.
 powder: Has no effect on Grass-type Pokemon, Pokemon with the Overcoat Ability, and Pokemon holding Safety Goggles.
 protect: Blocked by Detect, Protect, Spiky Shield, and if not a Status move, King's Shield.
@@ -4863,10 +4863,14 @@ let BattleMovedex = {
 		priority: 3,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onTry: function (pokemon, target) {
-			if (pokemon.activeTurns > 1) {
+			if (pokemon.activeTurns > 1 || pokemon.lastMove) {
 				this.attrLastMove('[still]');
 				this.add('-fail', pokemon);
-				this.add('-hint', "Fake Out only works on your first turn out.");
+				this.add('-hint',
+					pokemon.activeTurns > 1 ?
+						"Fake Out only works on your first turn out." :
+						"Fake Out doesn't work if you already used a move."
+				);
 				return null;
 			}
 		},
@@ -5232,10 +5236,14 @@ let BattleMovedex = {
 		priority: 2,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onTry: function (pokemon, target) {
-			if (pokemon.activeTurns > 1) {
+			if (pokemon.activeTurns > 1 || pokemon.lastMove) {
 				this.add('-fail', pokemon);
 				this.attrLastMove('[still]');
-				this.add('-hint', "First Impression only works on your first turn out.");
+				this.add('-hint',
+					pokemon.activeTurns > 1 ?
+						"First Impression only works on your first turn out." :
+						"First Impression doesn't work if you already used a move."
+				);
 				return null;
 			}
 		},
@@ -10044,8 +10052,12 @@ let BattleMovedex = {
 		stallingMove: true,
 		sideCondition: 'matblock',
 		onTryHitSide: function (side, source) {
-			if (source.activeTurns > 1) {
-				this.add('-hint', "Mat Block only works on your first turn out.");
+			if (source.activeTurns > 1 || source.lastMove) {
+				this.add('-hint',
+					source.activeTurns > 1 ?
+						"Mat Block only works on your first turn out." :
+						"Mat Block doesn't work if you already used a move."
+				);
 				return false;
 			}
 		},
