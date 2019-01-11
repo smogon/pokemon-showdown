@@ -13,7 +13,7 @@ distance: Can target a Pokemon positioned anywhere in a Triple Battle.
 gravity: Prevented from being executed or selected during Gravity's effect.
 heal: Prevented from being executed or selected during Heal Block's effect.
 mirror: Can be copied by Mirror Move.
-mystery: Unknown effect.
+mystery: Displays its animation even if its target is a teammate.
 nonsky: Prevented from being executed or selected in a Sky Battle.
 powder: Has no effect on Grass-type Pokemon, Pokemon with the Overcoat Ability, and Pokemon holding Safety Goggles.
 protect: Blocked by Detect, Protect, Spiky Shield, and if not a Status move, King's Shield.
@@ -4866,7 +4866,7 @@ let BattleMovedex = {
 			if (pokemon.activeTurns > 1 || pokemon.lastMove) {
 				this.attrLastMove('[still]');
 				this.add('-fail', pokemon);
-				this.add('-hint', "Fake Out only works on your first turn out.");
+				this.add('-hint', "Fake Out only works if it's your first move, on your first turn out.");
 				return null;
 			}
 		},
@@ -5235,7 +5235,7 @@ let BattleMovedex = {
 			if (pokemon.activeTurns > 1 || pokemon.lastMove) {
 				this.add('-fail', pokemon);
 				this.attrLastMove('[still]');
-				this.add('-hint', "First Impression only works on your first turn out.");
+				this.add('-hint', "First Impression only works if it's your first move, on your first turn out.");
 				return null;
 			}
 		},
@@ -10045,7 +10045,7 @@ let BattleMovedex = {
 		sideCondition: 'matblock',
 		onTryHitSide: function (side, source) {
 			if (source.activeTurns > 1 || source.lastMove) {
-				this.add('-hint', "Mat Block only works on your first turn out.");
+				this.add('-hint', "Mat Block only works if it's your first move, on your first turn out.");
 				return false;
 			}
 		},
