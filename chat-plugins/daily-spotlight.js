@@ -152,6 +152,8 @@ const commands = {
 	},
 	daily: async function (target, room, user) {
 		let key = toId(target);
+		if (!key) return this.parse('/help daily');
+
 		if (!spotlights[room.id] || !spotlights[room.id][key]) {
 			return this.errorReply(`Cannot find a daily spotlight with name '${key}'`);
 		}
@@ -171,10 +173,12 @@ const commands = {
 
 	dailyhelp: [
 		`Daily spotlights plugin:`,
-		`- /setdaily [name], [image], [description] - Sets the daily spotlight. Image can be left out. Requires: % @ # & ~`,
-		`- /queuedaily [name], [image], [description] - Queues a daily spotlight. At midnight, the spotlight with this name will automatically switch to the next queued spotlight. Image can be left out. Requires: % @ # & ~`,
-		`- /removedaily [name][, queue number] - If no queue number is provided, deletes all queued and current spotlights with the given name. If a number is provided, removes a specific future spotlight from the queue. Requires: % @ # & ~`,
-		`- /viewspotlights - Shows all current and queued spotlights. Requires: % @ # & ~`,
+		`- /daily [name] - Shows the daily spotlight.`,
+		`- !daily [name] - Shows the daily spotlight to everyone. Requires: + % @ * # & ~`,
+		`- /setdaily [name], [image], [description] - Sets the daily spotlight. Image can be left out. Requires: % @ * # & ~`,
+		`- /queuedaily [name], [image], [description] - Queues a daily spotlight. At midnight, the spotlight with this name will automatically switch to the next queued spotlight. Image can be left out. Requires: % @ * # & ~`,
+		`- /removedaily [name][, queue number] - If no queue number is provided, deletes all queued and current spotlights with the given name. If a number is provided, removes a specific future spotlight from the queue. Requires: % @ * # & ~`,
+		`- /viewspotlights - Shows all current and queued spotlights. Requires: % @ * # & ~`,
 	],
 };
 
