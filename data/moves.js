@@ -4863,7 +4863,7 @@ let BattleMovedex = {
 		priority: 3,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onTry: function (pokemon, target) {
-			if (pokemon.activeTurns > 1) {
+			if (pokemon.activeTurns > 1 || pokemon.lastMove) {
 				this.attrLastMove('[still]');
 				this.add('-fail', pokemon);
 				this.add('-hint', "Fake Out only works on your first turn out.");
@@ -5232,7 +5232,7 @@ let BattleMovedex = {
 		priority: 2,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onTry: function (pokemon, target) {
-			if (pokemon.activeTurns > 1) {
+			if (pokemon.activeTurns > 1 || pokemon.lastMove) {
 				this.add('-fail', pokemon);
 				this.attrLastMove('[still]');
 				this.add('-hint', "First Impression only works on your first turn out.");
@@ -10044,7 +10044,7 @@ let BattleMovedex = {
 		stallingMove: true,
 		sideCondition: 'matblock',
 		onTryHitSide: function (side, source) {
-			if (source.activeTurns > 1) {
+			if (source.activeTurns > 1 || source.lastMove) {
 				this.add('-hint', "Mat Block only works on your first turn out.");
 				return false;
 			}
