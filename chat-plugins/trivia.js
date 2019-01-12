@@ -1835,7 +1835,8 @@ const commands = {
 
 		return this.sendReply(buffer);
 	},
-	ladderhelp: [`/trivia ladder [num] - View information about 100 users on the trivia leaderboard.`],
+	ladderhelp: [`/trivia ladder [num] - View information about 15 users on the trivia leaderboard.`],
+	alltimeladderhelp: [`/trivia ladder [num] - View information about 15 users on the all time trivia leaderboard.`],
 
 	clearquestions: 'clearqs',
 	clearqs: function (target, room, user) {
