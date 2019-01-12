@@ -447,7 +447,6 @@ let BattleAliases = {
 	"pokestarmonica2": "Pokestar Giant",
 	"pokestarufopropu1": "Pokestar UFO",
 	"pokestarpropu1": "Pokestar UFO",
-	"pokestarufopropu2": "Pokestar UFO-2",
 	"pokestarpropu2": "Pokestar UFO-2",
 	"pokestarbrycenmanprop": "Pokestar Brycen-Man",
 	"pokestarproph1": "Pokestar Brycen-Man",
