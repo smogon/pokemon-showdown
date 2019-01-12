@@ -198,20 +198,16 @@ class Ladder {
 			leaders.sort((a, b) => this.leaderboard[b][i] - this.leaderboard[a][i]);
 
 			let max = Infinity;
-			let rank = 0;
+			let rank = -1;
 			for (const leader of leaders) {
 				let score = this.leaderboard[leader][i];
 				if (max !== score) {
-					if (!i && rank < 15) {
-						if (ladder[rank]) {
-							ladder[rank].push(leader);
-						} else {
-							ladder[rank] = [leader];
-						}
-					}
-
 					rank++;
 					max = score;
+				}
+				if (i === 0 && rank < 15) {
+					if (!ladder[rank]) ladder[rank] = [];
+					ladder[rank].push(leader);
 				}
 				ranks[leader].push(rank);
 			}
@@ -1835,8 +1831,8 @@ const commands = {
 
 		return this.sendReply(buffer);
 	},
-	ladderhelp: [`/trivia ladder [num] - View information about 100 users on the trivia leaderboard.`],
-	alltimeladderhelp: [`/trivia ladder [num] - View information about 100 users on the all time trivia leaderboard.`],
+	ladderhelp: [`/trivia ladder [num] - View information about 15 users on the trivia leaderboard.`],
+	alltimeladderhelp: [`/trivia ladder [num] - View information about 15 users on the all time trivia leaderboard.`],
 
 	clearquestions: 'clearqs',
 	clearqs: function (target, room, user) {
