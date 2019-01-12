@@ -28,12 +28,12 @@ function nextDaily() {
 	}
 
 	saveSpotlights();
-	setInterval(nextDaily, DAY);
+	setTimeout(nextDaily, DAY);
 }
 
 const midnight = new Date();
 midnight.setHours(24, 0, 0, 0);
-setInterval(nextDaily, midnight.valueOf() - Date.now());
+setTimeout(nextDaily, midnight.valueOf() - Date.now());
 
 /**
  * @param {string?} image
@@ -140,11 +140,11 @@ const commands = {
 			spotlights[room.id][key].shift();
 			spotlights[room.id][key].unshift(obj);
 
-			this.modlog('SETDAILY', `${key}: ${image ? `${image}, ` : ''}${description}`);
+			this.modlog('SETDAILY', key, `${image ? `${image}, ` : ''}${description}`);
 			this.privateModAction(`${user.name} set the daily ${key}.`);
 		} else {
 			spotlights[room.id][key].push(obj);
-			this.modlog('QUEUEDAILY', `${key}: ${image ? `${image}, ` : ''}${description}`);
+			this.modlog('QUEUEDAILY', key, `${image ? `${image}, ` : ''}${description}`);
 			this.privateModAction(`${user.name} queued a daily ${key}.`);
 		}
 
