@@ -1014,11 +1014,10 @@ class NumberModeTrivia extends Trivia {
 			}
 
 			buffer = `Correct: ${innerBuffer.map(arr => arr[0]).join(', ')}<br />` +
-				`Answer(s): ${this.curAnswers.join(', ')}<br />`;
+				`Answer(s): ${this.curAnswers.join(', ')}<br />` +
+				`${Chat.plural(innerBuffer, "Each of them", "They")} gained <strong>${points}</strong> point(s)!`;
 
 			if (winner) return this.win(winner, buffer);
-
-			buffer += `${Chat.plural(innerBuffer, "Each of them", "They")} gained <strong>${points}</strong> point(s)!`;
 		} else {
 			for (let i in this.players) {
 				let player = this.players[i];
