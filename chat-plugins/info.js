@@ -2094,7 +2094,7 @@ const commands = {
 			} else if (formatId === 'ou' && generation === 'sm') {
 				let pageid = pokemon.name.toLowerCase().replace(' ', '_');
 				this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}${(formatId ? '/' + formatId : '')}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
-				this.sendReplyBox(`Other languages: <a href="https://www.smogon.com/translations/es/analyses/ou/${pageid}">es</a>, <a href="https://www.smogon.com/translations/fr/analyses/ou/${pageid}">fr</a>, <a href="https://www.smogon.com/translations/ita/analyses/ou/${pageid}">ita</a>, <a href="https://www.smogon.com/translations/ger/analyses/ou/${pageid}">ger</a>, <a href="https://www.smogon.com/translations/por/analyses/ou/${pageid}">por</a>`);
+				this.sendReplyBox(`Other languages: <a href="https://www.smogon.com/translations/es/analyses/ou/${pageid}">Español</a>, <a href="https://www.smogon.com/translations/fr/analyses/ou/${pageid}">Français</a>, <a href="https://www.smogon.com/translations/ita/analyses/ou/${pageid}">Italiano</a>, <a href="https://www.smogon.com/translations/ger/analyses/ou/${pageid}">Deutsch</a>, <a href="https://www.smogon.com/translations/por/analyses/ou/${pageid}">Português</a>`);
 			} else {
 				this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}${(formatId ? '/' + formatId : '')}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
 			}
