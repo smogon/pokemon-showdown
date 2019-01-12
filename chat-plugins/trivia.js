@@ -42,17 +42,26 @@ const TYPES = {
 };
 
 // NOTE: trivia code depends on this object's values being divisible by 5.
-const SCORE_CAPS = {
-	short: 20,
-	medium: 35,
-	long: 50,
+const LENGTHS = {
+	short: {
+		cap: 20,
+		prizes: [3, 2, 1],
+	},
+	medium: {
+		cap: 35,
+		prizes: [4, 2, 1],
+	},
+	long: {
+		cap: 50,
+		prizes: [5, 3, 1],
+	},
 };
 
 Object.setPrototypeOf(MAIN_CATEGORIES, null);
 Object.setPrototypeOf(SPECIAL_CATEGORIES, null);
 Object.setPrototypeOf(ALL_CATEGORIES, null);
 Object.setPrototypeOf(MODES, null);
-Object.setPrototypeOf(SCORE_CAPS, null);
+Object.setPrototypeOf(LENGTHS, null);
 
 const SIGNUP_PHASE = 'signups';
 const QUESTION_PHASE = 'question';
@@ -89,6 +98,7 @@ try {
 
 if (!triviaData || typeof triviaData !== 'object') triviaData = {};
 if (typeof triviaData.leaderboard !== 'object') triviaData.leaderboard = {};
+if (typeof triviaData.altLeaderboard !== 'object') triviaData.altLeaderboard = {};
 if (!Array.isArray(triviaData.questions)) triviaData.questions = [];
 if (!Array.isArray(triviaData.submissions)) triviaData.submissions = [];
 if (triviaData.questions.some(q => !('type' in q))) {
@@ -211,6 +221,7 @@ class Ladder {
 }
 
 let cachedLadder = new Ladder(triviaData.leaderboard);
+let cachedAltLadder = new Ladder(triviaData.altLeaderboard);
 
 class TriviaPlayer extends Rooms.RoomGamePlayer {
 	constructor(user, game) {
@@ -223,6 +234,10 @@ class TriviaPlayer extends Rooms.RoomGamePlayer {
 
 		/** @type {string} */
 		this.answer = '';
+		/** @type {number[]} */
+		this.currentAnsweredAt = [];
+		/** @type {number} */
+		this.lastQuestion = 0;
 		/** @type {number[]} */
 		this.answeredAt = [];
 		/** @type {boolean} */
@@ -237,15 +252,18 @@ class TriviaPlayer extends Rooms.RoomGamePlayer {
 	 */
 	setAnswer(answer, isCorrect) {
 		this.answer = answer;
-		this.answeredAt = process.hrtime();
+		this.currentAnsweredAt = process.hrtime();
 		this.isCorrect = !!isCorrect;
 	}
 
 	/**
 	 * @param {number?} [points = 0]
+	 * @param {number} [lastQuestion]
 	 */
-	incrementPoints(points = 0) {
+	incrementPoints(points = 0, lastQuestion) {
 		this.points += points;
+		this.answeredAt = this.currentAnsweredAt;
+		this.lastQuestion = lastQuestion;
 		this.correctAnswers++;
 	}
 
@@ -272,7 +290,7 @@ class Trivia extends Rooms.RoomGame {
 	 * @param {ChatRoom} room
 	 * @param {string} mode
 	 * @param {string} category
-	 * @param {number} length
+	 * @param {string} length
 	 * @param {TriviaQuestion[]} questions
 	 */
 	constructor(room, mode, category, length, questions) {
@@ -290,8 +308,8 @@ class Trivia extends Rooms.RoomGame {
 		this.canLateJoin = true;
 		/** @type {string} */
 		this.mode = MODES[mode];
-		/** @type {number} */
-		this.cap = SCORE_CAPS[length];
+		/** @type {string} */
+		this.length = length;
 		/** @type {string} */
 		this.category = '';
 		if (category === 'all') {
@@ -309,6 +327,8 @@ class Trivia extends Rooms.RoomGame {
 		/** @type {Timer?} */
 		this.phaseTimeout = null;
 
+		/** @type {number} */
+		this.questionNumber = 0;
 		/** @type {TriviaQuestions} */
 		this.questions = questions;
 		/** @type {string} */
@@ -319,6 +339,10 @@ class Trivia extends Rooms.RoomGame {
 		this.askedAt = [];
 
 		this.init();
+	}
+
+	getCap() {
+		return LENGTHS[this.length].cap;
 	}
 
 	/**
@@ -438,7 +462,7 @@ class Trivia extends Rooms.RoomGame {
 	init() {
 		this.broadcast(
 			'Signups for a new trivia game have begun!',
-			`Mode: ${this.mode} | Category: ${this.category} | Score cap: ${this.cap}<br />` +
+			`Mode: ${this.mode} | Category: ${this.category} | Score cap: ${this.getCap()}<br />` +
 			'Enter /trivia join to sign up for the trivia game.'
 		);
 	}
@@ -463,7 +487,7 @@ class Trivia extends Rooms.RoomGame {
 	 * @return {string}
 	 */
 	getDescription() {
-		return `Mode: ${this.mode} | Category: ${this.category} | Score cap: ${this.cap}`;
+		return `Mode: ${this.mode} | Category: ${this.category} | Score cap: ${this.getCap()}`;
 	}
 
 	/**
@@ -471,17 +495,11 @@ class Trivia extends Rooms.RoomGame {
 	 * @param {number?} count
 	 * @return {string}
 	 */
-	formatPlayerList(count) {
-		let players = Object.values(this.players);
-		let to = (isNaN(count) || count < 0 || count > players.length) ? players.length : count;
-		return players
-			.sort((p1, p2) => p2.points - p1.points)
-			.slice(0, to)
-			.map(player => {
-				const buf = Chat.html`${player.name} (${player.points})`;
-				return player.isAbsent ? `<span style="color: #444444">${buf}</span>` : buf;
-			})
-			.join(', ');
+	formatPlayerList(count = this.players.length) {
+		return this.getTopPlayers(count).map(player => {
+			const buf = Chat.html`${player.name} (${player.player.points})`;
+			return player.isAbsent ? `<span style="color: #444444">${buf}</span>` : buf;
+		}).join(', ');
 	}
 
 	/**
@@ -573,6 +591,7 @@ class Trivia extends Rooms.RoomGame {
 		this.askedAt = process.hrtime();
 
 		let question = this.questions.pop();
+		this.questionNumber++;
 		this.curQuestion = question.question;
 		this.curAnswers = question.answers;
 		this.sendQuestion(question);
@@ -642,39 +661,42 @@ class Trivia extends Rooms.RoomGame {
 
 	/**
 	 * Ends the game after a player's score has exceeded the score cap.
-	 * @param {TriviaPlayer} winner
 	 * @param {string} buffer
 	 */
-	win(winner, buffer) {
+	win(buffer) {
 		clearTimeout(this.phaseTimeout);
 		this.phaseTimeout = null;
-		let prize = (this.cap - 5) / 15 + 2;
-		buffer += Chat.html`${winner.name} won the game with a final score of <strong>${winner.points}</strong>, ` +
-			`and their leaderboard score has increased by <strong>${prize}</strong> points!`;
+		const winners = this.getTopPlayers(3);
+		buffer += '<br />' + this.getWinningMessage(winners);
 		this.broadcast('The answering period has ended!', buffer);
 
-		let leaderboard = triviaData.leaderboard;
-		for (let i in this.players) {
-			let player = this.players[i];
+		for (const userid in this.players) {
+			let player = this.players[userid];
 			if (!player.points) continue;
 
-			if (leaderboard[i]) {
-				let rank = leaderboard[i];
+			for (const leaderboard of [triviaData.leaderboard, triviaData.altLeaderboard]) {
+				if (!leaderboard[userid]) {
+					leaderboard[userid] = [0, 0, 0];
+				}
+				let rank = leaderboard[userid];
 				rank[1] += player.points;
 				rank[2] += player.correctAnswers;
-			} else {
-				leaderboard[i] = [0, player.points, player.correctAnswers];
 			}
 		}
 
-		if (winner) leaderboard[winner.userid][0] += prize;
+		const prizes = this.getPrizes();
+		triviaData.leaderboard[winners[0].userid][0] += prizes[0];
+		for (let i = 0; i < winners.length; i++) {
+			triviaData.altLeaderboard[winners[i].userid][0] += prizes[i];
+		}
 
 		cachedLadder.invalidateCache();
+		cachedAltLadder.invalidateCache();
 
 		for (let i in this.players) {
 			let player = this.players[i];
 			let user = Users.get(player.userid);
-			if (!user || user.userid === winner.userid) continue;
+			if (!user) continue;
 			user.sendTo(
 				this.room.id,
 				`You gained ${player.points} and answered ` +
@@ -682,21 +704,66 @@ class Trivia extends Rooms.RoomGame {
 			);
 		}
 
-		let buf = `(User ${winner.name} won the game of ${this.mode}` +
-			` mode trivia under the ${this.category} category with a cap of ` +
-			`${this.cap} points, with ${winner.points} points and ` +
-			`${winner.correctAnswers} correct answers!)`;
-
-		let logbuf = `(User ${winner.userid} won the game of ${this.mode}` +
-			` mode trivia under the ${this.category} category with a cap of ` +
-			`${this.cap} points, with ${winner.points} points and ` +
-			`${winner.correctAnswers} correct answers!)`;
+		const buf = this.getStaffEndMessage(winners, winner => winner.player.name);
+		const logbuf = this.getStaffEndMessage(winners, winner => winner.userid);
 		this.room.sendMods(buf);
 		this.room.roomlog(buf);
 		this.room.modlog(`(${this.room.id}) ${logbuf}`);
 
 		writeTriviaData();
 		this.destroy();
+	}
+
+	getPrizes() {
+		return LENGTHS[this.length].prizes;
+	}
+
+	getTopPlayers(max) {
+		const ranks = [];
+		for (const userid in this.players) {
+			const user = Users.get(userid);
+			const player = this.players[userid];
+			if (!player.points || !user) continue;
+			ranks.push({userid, player, name: user.name});
+		}
+		ranks.sort((a, b) => {
+			return b.player.points - a.player.points ||
+				b.player.lastQuestion - a.player.lastQuestion ||
+				a.player.answeredAt - b.player.answeredAt;
+		});
+		return ranks.slice(0, max);
+	}
+
+	getWinningMessage(winners) {
+		const prizes = this.getPrizes();
+		const [p1, p2, p3] = winners;
+		const initialPart = Chat.html`${p1.name} won the game with a final score of <strong>${p1.player.points}</strong>, and `;
+		switch (winners.length) {
+		case 1:
+			return `${initialPart}their leaderboard score has increased by <strong>${prizes[0]}</strong> points!`;
+		case 2:
+			return `${initialPart}their leaderboard score has increased by <strong>${prizes[0]}</strong> points! ` +
+				Chat.html`${p2.name} was a runner-up and their leaderboard score has increased by <strong>${prizes[1]}</strong> points!`;
+		case 3:
+			return initialPart + Chat.html`${p2.name} and ${p3.name} were runner-ups. ` +
+				`Their leaderboard has increased by ${prizes[0]}, ${prizes[1]}, and ${prizes[2]}, respectively!`;
+		}
+	}
+
+	getStaffEndMessage(winners, mapper) {
+		let message = "";
+		const winnerParts = [
+			winner => `User ${mapper(winner)} won the game of ${this.mode}` +
+				` mode trivia under the ${this.category} category with a cap of ` +
+				`${this.getCap()} points, with ${winner.player.points} points and ` +
+				`${winner.player.correctAnswers} correct answers!`,
+			winner => ` Second place: ${mapper(winner)}`,
+			winner => `, third place: ${mapper(winner)}`,
+		];
+		for (let i = 0; i < winners.length; i++) {
+			message += winnerParts[i](winners[i]);
+		}
+		return `(${message})`;
 	}
 
 	/**
@@ -740,14 +807,14 @@ class FirstModeTrivia extends Trivia {
 
 		let points = this.calculatePoints();
 		player.setAnswer(answer);
-		player.incrementPoints(points);
+		player.incrementPoints(points, this.questionNumber);
 
 		let buffer = Chat.html`Correct: ${user.name}<br />` +
 			`Answer(s): ${this.curAnswers.join(', ')}<br />` +
 			'They gained <strong>5</strong> points!<br />' +
 			`The top 5 players are: ${this.formatPlayerList(5)}`;
-		if (player.points >= this.cap) {
-			this.win(player, buffer);
+		if (player.points >= this.getCap()) {
+			this.win(buffer);
 			return;
 		}
 
@@ -831,7 +898,7 @@ class TimerModeTrivia extends Trivia {
 		);
 		let innerBuffer = new Map([5, 4, 3, 2, 1].map(n => [n, []]));
 
-		let winner;
+		let winner = false;
 
 		let now = hrtimeToNanoseconds(process.hrtime());
 		let askedAt = hrtimeToNanoseconds(this.askedAt);
@@ -843,25 +910,16 @@ class TimerModeTrivia extends Trivia {
 				continue;
 			}
 
-			let playerAnsweredAt = hrtimeToNanoseconds(player.answeredAt);
+			let playerAnsweredAt = hrtimeToNanoseconds(player.currentAnsweredAt);
 			let diff = playerAnsweredAt - askedAt;
 			let points = this.calculatePoints(diff, totalDiff);
-			player.incrementPoints(points);
+			player.incrementPoints(points, this.questionNumber);
 
 			let pointBuffer = innerBuffer.get(points);
 			pointBuffer.push([Chat.escapeHTML(player.name), playerAnsweredAt]);
 
-			if (winner) {
-				if (player.points > winner.points) {
-					winner = player;
-				} else if (winner.points === player.points) {
-					let winnerAnsweredAt = hrtimeToNanoseconds(winner.answeredAt);
-					if (playerAnsweredAt < winnerAnsweredAt) {
-						winner = player;
-					}
-				}
-			} else if (player.points >= this.cap) {
-				winner = player;
+			if (player.points >= this.getCap()) {
+				winner = true;
 			}
 
 			player.clearAnswer();
@@ -877,8 +935,8 @@ class TimerModeTrivia extends Trivia {
 				.map(a => a[0]);
 			buffer += (
 				'<tr style="background-color: #6688AA">' +
-					`<td style="text-align: center">${pointValue}</td>` +
-					`<td>${players.join(', ')}</td>` +
+				`<td style="text-align: center">${pointValue}</td>` +
+				`<td>${players.join(', ')}</td>` +
 				'</tr>'
 			);
 		});
@@ -886,19 +944,17 @@ class TimerModeTrivia extends Trivia {
 		if (!rowAdded) {
 			buffer += (
 				'<tr style="background-color: #6688AA">' +
-					'<td style="text-align: center">&#8212;</td>' +
-					'<td>No one answered correctly...</td>' +
+				'<td style="text-align: center">&#8212;</td>' +
+				'<td>No one answered correctly...</td>' +
 				'</tr>'
 			);
 		}
 
-		if (winner) {
-			buffer += '</table><br />';
-			return this.win(winner, buffer);
-		}
+		buffer += '</table>';
 
-		buffer += '</table><br />' +
-			`The top 5 players are: ${this.formatPlayerList(5)}`;
+		if (winner) return this.win(buffer);
+
+		buffer += `<br />The top 5 players are: ${this.formatPlayerList(5)}`;
 		this.broadcast('The answering period has ended!', buffer);
 		this.phaseTimeout = setTimeout(() => this.askQuestion(), INTERMISSION_INTERVAL);
 	}
@@ -950,23 +1006,13 @@ class NumberModeTrivia extends Trivia {
 
 		let points = this.calculatePoints(innerBuffer.length);
 		if (points) {
-			let winner;
+			let winner = false;
 			for (let i in this.players) {
 				let player = this.players[i];
-				if (player.isCorrect) player.incrementPoints(points);
+				if (player.isCorrect) player.incrementPoints(points, this.questionNumber);
 
-				if (winner) {
-					if (player.points > winner.points) {
-						winner = player;
-					} else if (player.points === winner.points) {
-						let playerAnsweredAt = hrtimeToNanoseconds(player.answeredAt);
-						let winnerAnsweredAt = hrtimeToNanoseconds(winner.answeredAt);
-						if (playerAnsweredAt < winnerAnsweredAt) {
-							winner = player;
-						}
-					}
-				} else if (player.points >= this.cap) {
-					winner = player;
+				if (player.points >= this.getCap()) {
+					winner = true;
 				}
 
 				player.clearAnswer();
@@ -1287,10 +1333,10 @@ const commands = {
 			questions = questions.filter(q => q.type === 'weakestlink');
 		} else {
 			length = toId(tars[2]);
-			if (!SCORE_CAPS[length]) return this.errorReply(`"${length}" is an invalid game length.`);
+			if (!LENGTHS[length]) return this.errorReply(`"${length}" is an invalid game length.`);
 
 			questions = questions.filter(q => q.type === 'trivia');
-			if (questions.length < SCORE_CAPS[length] / 5) {
+			if (questions.length < LENGTHS[length].cap / 5) {
 				if (isRandom) return this.errorReply("There are not enough questions in the randomly chosen category to finish a trivia game.");
 				if (isAll) return this.errorReply("There are not enough questions in the trivia database to finish a trivia game.");
 				return this.errorReply(`There are not enough questions under the category "${ALL_CATEGORIES[category]}" to finish a trivia game.`);
@@ -1422,7 +1468,7 @@ const commands = {
 
 		let game = room.game;
 		let buffer = `There is a trivia game in progress, and it is in its ${game.phase} phase.<br />` +
-			`Mode: ${game.mode} | Category: ${game.category} | Score cap: ${game.cap}`;
+			`Mode: ${game.mode} | Category: ${game.category} | Score cap: ${game.getCap()}`;
 
 		let player = game.players[tarUser.userid];
 		if (player) {
@@ -1565,7 +1611,7 @@ const commands = {
 				let left = Number(range[0]);
 				let right = Number(range[1]);
 				if (!Number.isInteger(left) || !Number.isInteger(right) ||
-						left < 1 || right > submissions.length || left === right) {
+					left < 1 || right > submissions.length || left === right) {
 					indices.splice(i, 1);
 					continue;
 				}
@@ -1745,24 +1791,30 @@ const commands = {
 			userid = toId(name);
 		}
 
-		let score = triviaData.leaderboard[userid];
-		if (!score) return this.sendReplyBox(`User '${name}' has not played any trivia games yet.`);
+		let allTimeScore = triviaData.leaderboard[userid];
+		if (!allTimeScore) return this.sendReplyBox(`User '${name}' has not played any trivia games yet.`);
+		let score = triviaData.altLeaderboard[userid] || [0, 0, 0];
 
-		let ranks = cachedLadder.get().ranks[userid];
+		let ranks = cachedAltLadder.get().ranks[userid];
+		let allTimeRanks = cachedLadder.get().ranks[userid];
+		const row = i => `<strong>${score[i]}</strong>${ranks ? ` (#${ranks[i]})` : ""}, ` +
+			`all time: <strong>${allTimeScore[i]}</strong> (#${allTimeRanks ? allTimeRanks[i] : allTimeRanks.length})<br />`;
 		this.sendReplyBox(
-			`User: <strong>${name}</strong><br />`	 +
-			`Leaderboard score: <strong>${score[0]}</strong> (#${ranks[0]})<br />` +
-			`Total game points: <strong>${score[1]}</strong> (#${ranks[1]})<br />` +
-			`Total correct answers: <strong>${score[2]}</strong> (#${ranks[2]})`
+			`User: <strong>${name}</strong><br />` +
+			`Leaderboard score: ${row(0)}` +
+			`Total game points: ${row(1)}` +
+			`Total correct answers: ${row(2)}`
 		);
 	},
 	rankhelp: [`/trivia rank [username] - View the rank of the specified user. If no name is given, view your own.`],
 
-	ladder: function (target, room) {
+	alltimeladder: 'ladder',
+	ladder: function (target, room, user, connection, cmd) {
 		if (room.id !== 'trivia') return this.errorReply('This command can only be used in Trivia.');
 		if (!this.runBroadcast()) return false;
-		let {ladder} = cachedLadder.get();
-		let leaderboard = triviaData.leaderboard;
+		let cache = cmd === 'ladder' ? cachedAltLadder : cachedLadder;
+		let {ladder} = cache.get();
+		let leaderboard = cache.leaderboard;
 		if (!ladder.length) return this.errorReply("No trivia games have been played yet.");
 
 		let buffer = "|raw|<div class=\"ladder\" style=\"overflow-y: scroll; max-height: 300px;\"><table>" +
@@ -1844,7 +1896,7 @@ module.exports = {
 	MAIN_CATEGORIES,
 	SPECIAL_CATEGORIES,
 	MODES,
-	SCORE_CAPS,
+	LENGTHS,
 
 	triviaData,
 	writeTriviaData,
@@ -1892,6 +1944,7 @@ module.exports = {
 			`- /trivia status [player] - lists the player's standings (your own if no player is specified) and the list of players in the current trivia game.`,
 			`- /trivia rank [username] - View the rank of the specified user. If none is given, view your own.`,
 			`- /trivia ladder - View information about the top 15 users on the trivia leaderboard.`,
+			`- /trivia alltimeladder - View information about the top 15 users on the all time trivia leaderboard`,
 			`Weakest Link Game commands:`,
 			`- /trivia bank - Bank when it is your turn.`,
 			`- /trivia vote [user] - Attempt to vote off a user during the voting phase.`,
