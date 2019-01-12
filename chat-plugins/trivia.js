@@ -488,12 +488,11 @@ class Trivia extends Rooms.RoomGame {
 
 	/**
 	 * Formats the player list for display when using /trivia players.
-	 * @param {number?} count
 	 * @return {string}
 	 */
-	formatPlayerList(count = this.players.length) {
-		return this.getTopPlayers(count).map(player => {
-			const buf = Chat.html`${player.name} (${player.player.points})`;
+	formatPlayerList(settings) {
+		return this.getTopPlayers(settings).map(player => {
+			const buf = Chat.html`${player.name} (${player.player.points || "0"})`;
 			return player.isAbsent ? `<span style="color: #444444">${buf}</span>` : buf;
 		}).join(', ');
 	}
@@ -662,7 +661,7 @@ class Trivia extends Rooms.RoomGame {
 	win(buffer) {
 		clearTimeout(this.phaseTimeout);
 		this.phaseTimeout = null;
-		const winners = this.getTopPlayers(3);
+		const winners = this.getTopPlayers({max: 3});
 		buffer += '<br />' + this.getWinningMessage(winners);
 		this.broadcast('The answering period has ended!', buffer);
 
@@ -714,12 +713,12 @@ class Trivia extends Rooms.RoomGame {
 		return LENGTHS[this.length].prizes;
 	}
 
-	getTopPlayers(max) {
+	getTopPlayers({max = null, requirePoints = true}) {
 		const ranks = [];
 		for (const userid in this.players) {
 			const user = Users.get(userid);
 			const player = this.players[userid];
-			if (!player.points || !user) continue;
+			if ((requirePoints && !player.points) || !user) continue;
 			ranks.push({userid, player, name: user.name});
 		}
 		ranks.sort((a, b) => {
@@ -727,7 +726,7 @@ class Trivia extends Rooms.RoomGame {
 				b.player.lastQuestion - a.player.lastQuestion ||
 				hrtimeToNanoseconds(a.player.answeredAt) - hrtimeToNanoseconds(b.player.answeredAt);
 		});
-		return ranks.slice(0, max);
+		return max === null ? ranks : ranks.slice(0, max);
 	}
 
 	getWinningMessage(winners) {
@@ -808,7 +807,7 @@ class FirstModeTrivia extends Trivia {
 		let buffer = Chat.html`Correct: ${user.name}<br />` +
 			`Answer(s): ${this.curAnswers.join(', ')}<br />` +
 			'They gained <strong>5</strong> points!<br />' +
-			`The top 5 players are: ${this.formatPlayerList(5)}`;
+			`The top 5 players are: ${this.formatPlayerList({count: 5})}`;
 		if (player.points >= this.getCap()) {
 			this.win(buffer);
 			return;
@@ -842,7 +841,7 @@ class FirstModeTrivia extends Trivia {
 			'Correct: no one...<br />' +
 			`Answers: ${this.curAnswers.join(', ')}<br />` +
 			'Nobody gained any points.<br />' +
-			`The top 5 players are: ${this.formatPlayerList(5)}`
+			`The top 5 players are: ${this.formatPlayerList({count: 5})}`
 		);
 
 		this.phaseTimeout = setTimeout(() => this.askQuestion(), INTERMISSION_INTERVAL);
@@ -950,7 +949,7 @@ class TimerModeTrivia extends Trivia {
 
 		if (winner) return this.win(buffer);
 
-		buffer += `<br />The top 5 players are: ${this.formatPlayerList(5)}`;
+		buffer += `<br />The top 5 players are: ${this.formatPlayerList({count: 5})}`;
 		this.broadcast('The answering period has ended!', buffer);
 		this.phaseTimeout = setTimeout(() => this.askQuestion(), INTERMISSION_INTERVAL);
 	}
@@ -1031,7 +1030,7 @@ class NumberModeTrivia extends Trivia {
 				'Nobody gained any points.';
 		}
 
-		buffer += `<br />The top 5 players are: ${this.formatPlayerList(5)}.`;
+		buffer += `<br />The top 5 players are: ${this.formatPlayerList({count: 5})}.`;
 		this.broadcast('The answering period has ended!', buffer);
 		this.phaseTimeout = setTimeout(() => this.askQuestion(), INTERMISSION_INTERVAL);
 	}
@@ -1475,7 +1474,7 @@ const commands = {
 			return this.errorReply(`User ${tarUser.name} is not a player in the current trivia game.`);
 		}
 
-		buffer += `<br />Players: ${room.game.formatPlayerList()}`;
+		buffer += `<br />Players: ${room.game.formatPlayerList({requirePoints: false})}`;
 
 		this.sendReplyBox(buffer);
 	},
