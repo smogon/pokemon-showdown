@@ -729,7 +729,7 @@ class Trivia extends Rooms.RoomGame {
 		ranks.sort((a, b) => {
 			return b.player.points - a.player.points ||
 				b.player.lastQuestion - a.player.lastQuestion ||
-				a.player.answeredAt - b.player.answeredAt;
+				hrtimeToNanoseconds(a.player.answeredAt) - hrtimeToNanoseconds(b.player.answeredAt);
 		});
 		return ranks.slice(0, max);
 	}
@@ -1000,7 +1000,7 @@ class NumberModeTrivia extends Trivia {
 			.filter(id => this.players[id].isCorrect)
 			.map(id => {
 				let player = this.players[id];
-				return [Chat.escapeHTML(player.name), hrtimeToNanoseconds(player.answeredAt)];
+				return [Chat.escapeHTML(player.name), hrtimeToNanoseconds(player.currentAnsweredAt)];
 			})
 			.sort((a, b) => a[1] - b[1]);
 
