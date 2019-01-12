@@ -1,118 +1,108 @@
 'use strict';
 
-/** replace all fx */
-function replaceAll(haystack, needle, replace) {
-	return haystack.split(needle).join(replace);
+function isNumeric(str) {
+	return !isNaN(parseFloat(str)) && isFinite(str);
 }
 
-/** standardize string format */
-function reformat(s) {
-	s = s.toLowerCase();
-	s = replaceAll(s, "-(", "-1*(");
-	s = replaceAll(s, ")(", ")*(");
-	s = replaceAll(s, " ", "");
-	s = replaceAll(s, "-", "+-");
-	s = replaceAll(s, "--", "+");
-	s = replaceAll(s, "++", "+");
-	s = replaceAll(s, "(+", "(");
+function clean(arr) {
 	let i;
-	for (i = 0; i < 10; i++) {
-		s = replaceAll(s, i + "(", i + "*" + "(");
+	for (i = 0; i < arr.length; i++) {
+		if (arr[i] === "") {
+			arr.splice(i, 1);
+		}
 	}
-	while (s.charAt(0) === "+") s = s.substr(1);
-	return s;
+	return arr;
 }
 
-/** determine if char should be added to side */
-function isParseable(n, minus) {
-	return (!isNaN(n) || (n === "-" && !minus) || n === ".");
-}
-
-/** general fx to get two terms of any fx (multiply, add, etc) */
-function getSide(haystack, middle, direction, minus) {
-	let i = middle + direction;
-	let term = "";
-	let limit = (direction === -1) ? 0 : haystack.length; // set the stopping point, when you have gone too far
-	while (i * direction <= limit) { // while the current position is >= 0, or <= upper limit
-		if (isParseable(haystack[i], minus)) {
-			if (direction === 1) term = term + haystack[i];
-			else term = haystack[i] + term;
-			i += direction;
-		} else { return term; }
-	}
-	return term;
-}
-
-/** fx to generically map a symbol to a function for parsing */
-function allocFx(eq, symbol, alloc, minus) {
-	minus = (typeof minus !== 'undefined'); // sometimes we want to capture minus signs, sometimes not
-	if (eq.includes(symbol)) {
-		let middleIndex = eq.indexOf(symbol);
-		let left = getSide(eq, middleIndex, -1, minus);
-		let right = getSide(eq, middleIndex, 1, false);
-		eq = replaceAll(eq, left + symbol + right, alloc(left, right));
-	}
-	return eq;
-}
-
-/** main recursive fx + PEMDAS */
-function solveStr(eq) {
-	firstNest:
-	while (eq.includes("(")) { // while the string has any parentheses
-		let first = eq.indexOf("("); // first get the earliest open parentheses
-		let last = first + 1; // start searching at the character after
-		let layer = 1; // we might run into more parentheses, so this integer will keep track
-		while (layer !== 0) { // loop this until we've found the close parenthesis
-			if (eq[last] === ")") { // if we run into a close parenthesis, then subtract one from "layer"
-				layer--;
-				if (layer === 0) break; // if it is the corresponding closing parenthesis for our outermost open parenthesis, then we can deal with this expression
-			} else if (eq[last] === "(") { // if we see an open parenthesis, add one to "layer"
-				layer++;
+function parseMathematicalExpression(infix) {
+	// Shunnting-yard Algorithm -- https://en.wikipedia.org/wiki/Shunting-yard_algorithm
+	let outputQueue = "";
+	let operatorStack = [];
+	let operators = {
+		"^": {
+			precedence: 4,
+			associativity: "Right",
+		},
+		"/": {
+			precedence: 3,
+			associativity: "Left",
+		},
+		"*": {
+			precedence: 3,
+			associativity: "Left",
+		},
+		"+": {
+			precedence: 2,
+			associativity: "Left",
+		},
+		"-": {
+			precedence: 2,
+			associativity: "Left",
+		},
+	};
+	infix = infix.replace(/\s+/g, "");
+	infix = infix.split(/([+\-*/^()])/);
+	infix = clean(infix);
+	let i;
+	for (i = 0; i < infix.length; i++) {
+		let token = infix[i];
+		if (isNumeric(token) === true) {
+			outputQueue += token + " ";
+		} else if ("^*/+-".indexOf(token) !== -1) {
+			let o1 = token;
+			let o2 = operatorStack[operatorStack.length - 1];
+			while ("^*/+-".indexOf(o2) !== -1 && ((operators[o1].associativity === "Left" && operators[o1].precedence <= operators[o2].precedence) || (operators[o1].associativity === "Right" && operators[o1].precedence < operators[o2].precedence))) {
+				outputQueue += operatorStack.pop() + " ";
+				o2 = operatorStack[operatorStack.length - 1];
 			}
-			last++; // increment the character we're looking at
-			if (last > eq.length) break firstNest;
+			operatorStack.push(o1);
+		} else if (token === "(") {
+			operatorStack.push(token);
+		} else if (token === ")") {
+			while (operatorStack[operatorStack.length - 1] !== "(") {
+				outputQueue += operatorStack.pop() + " ";
+			}
+			operatorStack.pop();
 		}
-		let nested = eq.substr(first + 1, last - first - 1); // get the expression between the parentheses
-		if (last + 1 <= eq.length) { // if there is exponentiation, change to a different symbol
-			if (eq[last + 1] === "^") {
-				eq = eq.substr(0, last + 1) + "&" + eq.substr((last + 1) + 1);
+	}
+	while (operatorStack.length > 0) {
+		outputQueue += operatorStack.pop() + " ";
+	}
+	return outputQueue.trim();
+}
+
+function solveRPN(rpn) {
+	let resultStack = [];
+	rpn = rpn.split(" ");
+	let i;
+	for (i = 0; i < rpn.length; i++) {
+		if (isNumeric(rpn[i]) === true) {
+			resultStack.push(rpn[i]);
+		} else {
+			let a = resultStack.pop();
+			let b = resultStack.pop();
+			if (rpn[i] === "+") {
+				resultStack.push(parseInt(a) + parseInt(b));
+			} else if (rpn[i] === "-") {
+				resultStack.push(parseInt(b) - parseInt(a));
+			} else if (rpn[i] === "*") {
+				resultStack.push(parseInt(a) * parseInt(b));
+			} else if (rpn[i] === "/") {
+				resultStack.push(parseInt(b) / parseInt(a));
+			} else if (rpn[i] === "^") {
+				resultStack.push(Math.pow(parseInt(b), parseInt(a)));
 			}
 		}
-		let solvedStr = solveStr(nested);
-		let preStr = "(" + nested + ")";
-		eq = eq.replace(preStr, solvedStr); // replace parenthetical with value
 	}
-	while (eq.includes("^")) {
-		eq = allocFx(eq, "^", (l, r) => Math.pow(parseFloat(l), parseFloat(r)), false);
-	}
-	while (eq.includes("&")) {
-		eq = allocFx(eq, "&", (l, r) => Math.pow(parseFloat(l), parseFloat(r))); // account for things like (-3)^2
-	}
-	while (eq.includes("*") || eq.includes("/")) {
-		let multiply;
-		if (eq.indexOf("*") < eq.indexOf("/")) {
-			multiply = (eq.includes("*"));
-		} else {
-			multiply = !(eq.includes("/"));
-		}
-		if (multiply) {
-			eq = allocFx(eq, "*", (l, r) => parseFloat(l) * parseFloat(r));
-		} else {
-			eq = allocFx(eq, "/", (l, r) => parseFloat(l) / parseFloat(r));
-		}
-	}
-	while (eq.includes("+")) {
-		eq = allocFx(eq, "+", (l, r) => parseFloat(l) + parseFloat(r));
-	}
-	return eq;
+	return resultStack.pop();
 }
 
 exports.commands = {
 	calculate: function (target, room, user) {
-		let result = solveStr(reformat(target));
 		if (!target) return this.parse('/help calculate');
 		if (!this.runBroadcast()) return;
-		let validation_regex = /^(?!.*([*/+\-.]{2}|\.\d+\.+|^[*/]))[\d+()^*\-/. ]+$/gm;
+		let result = solveRPN(parseMathematicalExpression(target));
+		let validation_regex = /^(?!.*([\^*/+\-.]{2}|\.\d+\.+|^[*/]))[\d+()^*\-/. ]+$/gm;
 		if (validation_regex.test(target) === false) {
 			return this.errorReply("Invalid arithmetical question");
 		} else {
