@@ -209,7 +209,7 @@ class Ladder {
 					if (!ladder[rank]) ladder[rank] = [];
 					ladder[rank].push(leader);
 				}
-				ranks[leader].push(rank);
+				ranks[leader].push(rank + 1);
 			}
 		}
 		return {ladder, ranks};
