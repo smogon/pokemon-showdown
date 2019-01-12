@@ -8,5 +8,6 @@ cache:
     - .eslintcache
 notifications:
   webhooks: https://www.travisbuddy.com/
+  on_success: change
 travisBuddy:
   insertMode: update
