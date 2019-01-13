@@ -5,7 +5,7 @@ function isNumeric(str) {
 }
 
 function parseMathematicalExpression(infix) {
-	// Shunnting-yard Algorithm -- https://en.wikipedia.org/wiki/Shunting-yard_algorithm
+	// Shunting-yard Algorithm -- https://en.wikipedia.org/wiki/Shunting-yard_algorithm
 	let outputQueue = [];
 	let operatorStack = [];
 	let operators = {
