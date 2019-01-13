@@ -874,7 +874,7 @@ let Formats = [
 		ruleset: ['Pokemon', 'Species Clause', 'Nickname Clause', 'Evasion Moves Clause', 'OHKO Clause', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 		banlist: ['Illegal', 'Unreleased', 'Uber'],
 		onBegin: function () {
-			if (this.rated) this.add('html', `<div class="broadcast-green"><strong>Let's Go OU is currently suspecting Mew! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/np-lgpe-ou-stage-01-dna.3645963/">suspect thread</a>.</strong></div>`);
+			if (this.rated) this.add('html', `<div class="broadcast-red"><strong>Let's Go OU is currently suspecting Mew! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3645963/">suspect thread</a>.</strong></div>`);
 		},
 	},
 	{
