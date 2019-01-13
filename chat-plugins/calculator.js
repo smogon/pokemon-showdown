@@ -37,13 +37,17 @@ function parseMathematicalExpression(infix) {
 	for (i = 0; i < infix.length; i++) {
 		let token = infix[i];
 		if ("^*/+-".includes(token)) {
-			let o1 = token;
-			let o2 = operatorStack[operatorStack.length - 1];
-			while ("^*/+-".includes(o2) && ((operators[o1].associativity === "Left" && operators[o1].precedence <= operators[o2].precedence) || (operators[o1].associativity === "Right" && operators[o1].precedence < operators[o2].precedence))) {
+			let op = operators[token];
+			let prevToken = operatorStack[operatorStack.length - 1];
+			let prevOp = operators[prevToken];
+			while ("^*/+-".includes(prevToken) && (
+				op.associativity === "Left" ? op.precedence <= prevOp.precedence : op.precedence < prevOp.precedence
+			)) {
 				outputQueue.push(operatorStack.pop());
-				o2 = operatorStack[operatorStack.length - 1];
+				prevToken = operatorStack[operatorStack.length - 1];
+				prevOp = operators[prevToken];
 			}
-			operatorStack.push(o1);
+			operatorStack.push(token);
 		} else if (token === "(") {
 			operatorStack.push(token);
 		} else if (token === ")") {
