@@ -70,16 +70,22 @@ function solveRPN(rpn) {
 		} else {
 			let a = parseFloat(resultStack.pop());
 			let b = parseFloat(resultStack.pop());
-			if (rpn[i] === "+") {
+			switch (rpn[i]) {
+			case "+":
 				resultStack.push(a + b);
-			} else if (rpn[i] === "-") {
+				break;
+			case "-":
 				resultStack.push(b - a);
-			} else if (rpn[i] === "*") {
+				break;
+			case "*":
 				resultStack.push(a * b);
-			} else if (rpn[i] === "/") {
+				break;
+			case "/":
 				resultStack.push(b / a);
-			} else if (rpn[i] === "^") {
-				resultStack.push(Math.pow(b, a));
+				break;
+			case "^":
+				resultStack.push(a ** b);
+				break;
 			}
 		}
 	}
