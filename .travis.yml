@@ -1,0 +1,13 @@
+sudo: false
+language: node_js
+node_js:
+  - '8'
+cache:
+  directories:
+    - node_modules
+    - .eslintcache
+notifications:
+  webhooks: https://www.travisbuddy.com/
+  on_success: change
+travisBuddy:
+  insertMode: update
