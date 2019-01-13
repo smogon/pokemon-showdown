@@ -6,7 +6,7 @@ function isNumeric(str) {
 
 function parseMathematicalExpression(infix) {
 	// Shunnting-yard Algorithm -- https://en.wikipedia.org/wiki/Shunting-yard_algorithm
-	let outputQueue = "";
+	let outputQueue = [];
 	let operatorStack = [];
 	let operators = {
 		"^": {
@@ -37,12 +37,12 @@ function parseMathematicalExpression(infix) {
 	for (i = 0; i < infix.length; i++) {
 		let token = infix[i];
 		if (isNumeric(token) === true) {
-			outputQueue += token + " ";
+			outputQueue.push(token);
 		} else if ("^*/+-".indexOf(token) !== -1) {
 			let o1 = token;
 			let o2 = operatorStack[operatorStack.length - 1];
 			while ("^*/+-".indexOf(o2) !== -1 && ((operators[o1].associativity === "Left" && operators[o1].precedence <= operators[o2].precedence) || (operators[o1].associativity === "Right" && operators[o1].precedence < operators[o2].precedence))) {
-				outputQueue += operatorStack.pop() + " ";
+				outputQueue.push(operatorStack.pop());
 				o2 = operatorStack[operatorStack.length - 1];
 			}
 			operatorStack.push(o1);
@@ -50,20 +50,19 @@ function parseMathematicalExpression(infix) {
 			operatorStack.push(token);
 		} else if (token === ")") {
 			while (operatorStack[operatorStack.length - 1] !== "(") {
-				outputQueue += operatorStack.pop() + " ";
+				outputQueue.push(operatorStack.pop());
 			}
 			operatorStack.pop();
 		}
 	}
 	while (operatorStack.length > 0) {
-		outputQueue += operatorStack.pop() + " ";
+		outputQueue.push(operatorStack.pop());
 	}
-	return outputQueue.trim();
+	return outputQueue;
 }
 
 function solveRPN(rpn) {
 	let resultStack = [];
-	rpn = rpn.split(" ");
 	let i;
 	for (i = 0; i < rpn.length; i++) {
 		if (isNumeric(rpn[i]) === true) {
