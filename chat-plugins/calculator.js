@@ -4,16 +4,6 @@ function isNumeric(str) {
 	return !isNaN(parseFloat(str)) && isFinite(str);
 }
 
-function clean(arr) {
-	let i;
-	for (i = 0; i < arr.length; i++) {
-		if (arr[i] === "") {
-			arr.splice(i, 1);
-		}
-	}
-	return arr;
-}
-
 function parseMathematicalExpression(infix) {
 	// Shunnting-yard Algorithm -- https://en.wikipedia.org/wiki/Shunting-yard_algorithm
 	let outputQueue = "";
@@ -42,7 +32,7 @@ function parseMathematicalExpression(infix) {
 	};
 	infix = infix.replace(/\s+/g, "");
 	infix = infix.split(/([+\-*/^()])/);
-	infix = clean(infix);
+	infix = infix.filter(token => token);
 	let i;
 	for (i = 0; i < infix.length; i++) {
 		let token = infix[i];
