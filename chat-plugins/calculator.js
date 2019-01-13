@@ -1,7 +1,7 @@
 'use strict';
 
 function isNumeric(str) {
-	return !isNaN(parseFloat(str)) && isFinite(str);
+	return !isNaN(parseFloat(str));
 }
 
 function parseMathematicalExpression(infix) {
