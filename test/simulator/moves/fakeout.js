@@ -32,7 +32,7 @@ describe('Fake Out', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Chansey', ability: 'naturalcure', moves: ['fakeout']},
-			{species: 'Blissey', ability: 'naturalcure', moves: ['fakeout']}
+			{species: 'Blissey', ability: 'naturalcure', moves: ['fakeout']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Venusaur', ability: 'overgrow', moves: ['swift', 'sleeptalk']}]);
 		battle.makeChoices('move fakeout', 'move swift');
@@ -46,7 +46,7 @@ describe('Fake Out', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Chansey', ability: 'naturalcure', moves: ['fakeout']},
-			{species: 'Oricorio', ability: 'dancer', moves: ['fakeout']}
+			{species: 'Oricorio', ability: 'dancer', moves: ['fakeout']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Venusaur', ability: 'overgrow', moves: ['swift', 'quiverdance']}]);
 		battle.makeChoices('switch 2', 'move quiverdance');
