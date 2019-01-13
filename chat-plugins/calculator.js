@@ -36,9 +36,7 @@ function parseMathematicalExpression(infix) {
 	let i;
 	for (i = 0; i < infix.length; i++) {
 		let token = infix[i];
-		if (isNumeric(token) === true) {
-			outputQueue.push(token);
-		} else if ("^*/+-".indexOf(token) !== -1) {
+		if ("^*/+-".indexOf(token) !== -1) {
 			let o1 = token;
 			let o2 = operatorStack[operatorStack.length - 1];
 			while ("^*/+-".indexOf(o2) !== -1 && ((operators[o1].associativity === "Left" && operators[o1].precedence <= operators[o2].precedence) || (operators[o1].associativity === "Right" && operators[o1].precedence < operators[o2].precedence))) {
@@ -53,6 +51,8 @@ function parseMathematicalExpression(infix) {
 				outputQueue.push(operatorStack.pop());
 			}
 			operatorStack.pop();
+		} else {
+			outputQueue.push(token);
 		}
 	}
 	while (operatorStack.length > 0) {
