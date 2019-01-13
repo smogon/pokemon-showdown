@@ -740,7 +740,7 @@ class Trivia extends Rooms.RoomGame {
 			return `${initialPart}their leaderboard score has increased by <strong>${prizes[0]}</strong> points! ` +
 				Chat.html`${p2.name} was a runner-up and their leaderboard score has increased by <strong>${prizes[1]}</strong> points!`;
 		case 3:
-			return initialPart + Chat.html`${p2.name} and ${p3.name} were runner-up. ` +
+			return initialPart + Chat.html`${p2.name} and ${p3.name} were runners-up. ` +
 				`Their leaderboard score has increased by ${prizes[0]}, ${prizes[1]}, and ${prizes[2]}, respectively!`;
 		}
 	}
