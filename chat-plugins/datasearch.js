@@ -622,7 +622,7 @@ function runDexsearch(target, cmd, canAll, message) {
 				if (alts.tiers[tier]) continue;
 				if (Object.values(alts.tiers).includes(false) && alts.tiers[tier] !== false) continue;
 				// some LC Pokemon are also in other tiers and need to be handled separately
-				if (alts.tiers.LC && !dex[mon].prevo && dex[mon].nfe && !Dex.formats.gen7lc.banlist.includes(dex[mon].species) && !Dex.formats.gen7lc.banlist.includes(dex[mon].species + "-Base") && tier !== 'NFE') continue;
+				if (alts.tiers.LC && !dex[mon].prevo && dex[mon].evos.some(evo => mod.getTemplate(evo).gen <= dex.gen) && !Dex.formats.gen7lc.banlist.includes(dex[mon].species) && !Dex.formats.gen7lc.banlist.includes(dex[mon].species + "-Base") && tier !== 'NFE') continue;
 			}
 
 			if (alts.doublesTiers && Object.keys(alts.doublesTiers).length) {
@@ -925,7 +925,7 @@ function runMovesearch(target, cmd, canAll, message) {
 			if (target.substr(0, 8) === 'priority') {
 				let sign = '';
 				target = target.substr(8).trim();
-				if (target === "+") {
+				if (target === "+" || target === "") {
 					sign = 'greater';
 				} else if (target === "-") {
 					sign = 'less';
@@ -936,7 +936,7 @@ function runMovesearch(target, cmd, canAll, message) {
 					return {reply: "Priority cannot be set with both shorthand and inequality range."};
 				} else {
 					orGroup.property['priority'] = {};
-					orGroup.property['priority'][sign] = (sign === 'less' ? -1 : 1);
+					orGroup.property['priority'][sign] = 0;
 				}
 				continue;
 			}
@@ -1445,6 +1445,7 @@ function runLearn(target, cmd) {
 		break;
 	}
 	if (!formatName) {
+		if (!Dex.mod(`gen${gen}`)) return {error: `Gen ${gen} does not exist.`};
 		format = new Dex.Data.Format(format, {mod: `gen${gen}`});
 		formatName = `Gen ${gen}`;
 		if (format.requirePentagon) formatName += ' Pentagon';
@@ -1582,7 +1583,7 @@ if (!PM.isParentProcess) {
 
 	if (Config.crashguard) {
 		process.on('uncaughtException', err => {
-			require('../lib/crashlogger')(err, 'A dexsearch process', true);
+			require('../lib/crashlogger')(err, 'A dexsearch process');
 		});
 	}
 

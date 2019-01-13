@@ -130,7 +130,7 @@ const commands = {
 
 		let team, importable;
 		const [dish, ingredients] = generateDish();
-		if (target === 'bf') {
+		if (!target) {
 			const bfTeam = Dex.generateTeam('gen7bssfactory');
 			importable = stringifyTeam(bfTeam, ingredients);
 			team = /** @type {Template[]} */ (bfTeam).map(val => val.species);
@@ -139,7 +139,7 @@ const commands = {
 		}
 		// @ts-ignore
 		user.foodfight = {team: team, dish: dish, ingredients: ingredients, timestamp: Date.now()};
-		const importStr = importable ? `<tr><td colspan=7><details><summary style="font-size:13pt;">Importable team:</summary><div style="width:100%;height:400px;overflow:auto;font-family:monospace;background:white;text-align:left;">${importable}</textarea></details></td></tr>` : '';
+		const importStr = importable ? `<tr><td colspan=7><details><summary style="font-size:13pt;">Importable team:</summary><div style="width:100%;height:400px;overflow:auto;color:black;font-family:monospace;background:white;text-align:left;">${importable}</textarea></details></td></tr>` : '';
 		return this.sendReplyBox(`<div class="ladder"><table style="text-align:center;"><tr><th colspan="7" style="font-size:10pt;">Your dish is: <u>${dish}</u></th></tr><tr><th>Team</th>${team.map(mon => `<td><psicon pokemon="${mon}"/> ${mon}</td>`).join('')}</tr><tr><th>Ingredients</th>${ingredients.map(ingredient => `<td>${ingredient}</td>`).join('')}</tr>${importStr}</table></div>`);
 	},
 	checkfoodfight: function (target, room, user) {
@@ -205,7 +205,7 @@ const commands = {
 		return this.parse(`/join view-foodfight`);
 	},
 	foodfighthelp: [
-		`/foodfight <generator> - Gives you a randomly generated Foodfight dish, ingredient list and team. Generator can be either 'ou' or 'ag', or left blank. If left blank, uses the normal Foodfight generator.`,
+		`/foodfight <generator> - Gives you a randomly generated Foodfight dish, ingredient list and team. Generator can be either 'random', 'ou', 'ag', or left blank. If left blank, uses Battle Factory to generate an importable team.`,
 		`/checkfoodfight <username> - Gives you the last team and dish generated for the entered user, or your own if left blank. Anyone can check their own info, checking other people requires: % @ * # & ~`,
 		`/adddish <dish>, <ingredient>, <ingredient>, ... - Adds a dish to the database. Requires: % @ * # & ~`,
 		`/addingredients <dish>, <ingredient>, <ingredient>, ... - Adds extra ingredients to a dish in the database. Requires: % @ * # & ~`,

@@ -705,30 +705,19 @@ const commands = {
 			return;
 		}
 
-		let groupChatLink = '<code>&lt;&lt;' + roomid + '>></code>';
-		let groupChatURL = '';
-		if (Config.serverid) {
-			groupChatURL = `http://${(Config.serverid === `showdown` ? `psim.us` : `${Config.serverid}.psim.us`)}/${roomid}`;
-			groupChatLink = `<a href="${groupChatURL}">${groupChatLink}</a>`;
-		}
-		let titleHTML = '';
-		if (/^[0-9]+$/.test(title)) {
-			titleHTML = groupChatLink;
-		} else {
-			titleHTML = `${Chat.escapeHTML(title)} <small style="font-weight:normal;font-size:9pt">${groupChatLink}</small>`;
-		}
+		let titleMsg = Chat.html `Welcome to ${parent ? room.title : user.name}'s${!/^[0-9]+$/.test(title) ? ` ${title}` : ''}${parent ? ' subroom' : ''} groupchat!`;
 		let targetRoom = Rooms.createChatRoom(roomid, `[G] ${title}`, {
 			isPersonal: true,
 			isPrivate: 'hidden',
 			modjoin: parent ? null : '+',
 			parentid: parent,
 			auth: {},
-			introMessage: `<h2 style="margin-top:0">${titleHTML}</h2><p>To invite people to this groupchat, use <code>/invite USERNAME</code> in the groupchat.<br /></p><p>This room will expire after 40 minutes of inactivity or when the server is restarted.</p><p style="margin-bottom:0"><button name="send" value="/roomhelp">Room management</button>`,
-			staffMessage: `<p>As creator of this groupchat, <u>you are entirely responsible for what occurs in this chatroom</u>. Global rules apply at all times.</p><p>If this room is used to break global rules or disrupt other areas of the server, <strong>you as the creator will be held accountable and punished</strong>.</p><p>Be cautious with who you invite.</p>`,
+			introMessage: `<div style="text-align: center"><table style="margin:auto;"><tr><td><img src="//play.pokemonshowdown.com/fx/groupchat.png" width=120 height=100></td><td><h2>${titleMsg}</h2><p>Follow the <a href="/rules">Pokémon Showdown Global Rules</a>!<br>Don't be disruptive to the rest of the site.</p></td></tr></table></div>`,
+			staffMessage: `<p>Groupchats are temporary rooms, and will expire if there hasn't been any activity in 40 minutes.</p><p>You can invite new users using <code>/invite</code>. Be careful with who you invite!</p><p>Commands: <button class="button" name="send" value="/roomhelp">Room Management</button> | <button class="button" name="send" value="/tournaments help">Tournaments</button></p><p>As creator of this groupchat, <u>you are entirely responsible for what occurs in this chatroom</u>. Global rules apply at all times.</p><p>If this room is used to break global rules or disrupt other areas of the server, <strong>you as the creator will be held accountable and punished</strong>.</p>`,
 		});
 		if (targetRoom) {
 			// The creator is a Room Owner in subroom groupchats and a Host otherwise..
-			targetRoom.auth[user.userid] = parent ? '#' : '\u2605';
+			targetRoom.auth[user.userid] = parent ? '#' : Users.HOST_SYMBOL;
 			// Join after creating room. No other response is given.
 			user.joinRoom(targetRoom.id);
 			user.popup(`You've just made a groupchat; it is now your responsibility, regardless of whether or not you actively partake in the room. For more info, read your groupchat's staff intro.`);
@@ -825,7 +814,7 @@ const commands = {
 	},
 	deleteroomhelp: [
 		`/deleteroom [roomname] - Deletes room [roomname]. Must be typed in the room to delete. Requires: & ~`,
-		`/deletegroupchat - Deletes the current room, if it's a groupchat. Requires: & ~ #`,
+		`/deletegroupchat - Deletes the current room, if it's a groupchat. Requires: ★ # & ~`,
 	],
 
 	hideroom: 'privateroom',
@@ -1798,7 +1787,7 @@ const commands = {
 			Rooms.rooms.forEach((curRoom, id) => {
 				if (id === 'global' || !curRoom.auth) return;
 				// Destroy personal rooms of the locked user.
-				if (curRoom.isPersonal && curRoom.auth[userid] === '#') {
+				if (curRoom.isPersonal && curRoom.auth[userid] === Users.HOST_SYMBOL) {
 					curRoom.destroy();
 				} else {
 					if (curRoom.isPrivate || curRoom.battle) return;
@@ -2003,7 +1992,7 @@ const commands = {
 		for (const roomid of targetUser.inRooms) {
 			if (roomid === 'global') continue;
 			let targetRoom = Rooms.get(roomid);
-			if (targetRoom.isPersonal && targetRoom.auth[userid] === '#') {
+			if (targetRoom.isPersonal && targetRoom.auth[userid] === Users.HOST_SYMBOL) {
 				targetRoom.destroy();
 			}
 		}
@@ -2534,10 +2523,7 @@ const commands = {
 		if (!targetUser && !room.log.hasUsername(target)) return this.errorReply(`User ${target} not found or has no roomlogs.`);
 		if (!targetUser && !user.can('lock')) return this.errorReply(`User ${name} not found.`);
 		let userid = toId(this.inputUsername);
-		if (!user.can('mute', targetUser, room) && !this.can('ban', targetUser, room)) return;
-
-		const localPunished = (targetUser && (targetUser.locked || Punishments.isRoomBanned(targetUser, room.id) || room.isMuted(targetUser)));
-		if (!(user.can('lock') || localPunished)) return this.errorReply(`User ${name} is neither locked nor muted/banned from this room.`);
+		if (!this.can('mute', targetUser, room)) return;
 
 		if (targetUser && (cmd === 'hidealtstext' || cmd === 'hidetextalts' || cmd === 'hidealttext')) {
 			room.sendByUser(user, `${name}'s alts messages were cleared from ${room.title} by ${user.name}.`);
@@ -2555,8 +2541,8 @@ const commands = {
 		}
 	},
 	hidetexthelp: [
-		`/hidetext [username] - Removes a locked or muted/banned user's messages from chat. Requires: % @ * # & ~`,
-		`/hidealtstext [username] - Removes a locked or muted/banned user's messages, and their alternate account's messages from the chat.  Requires: % @ * # & ~`,
+		`/hidetext [username] - Removes a user's messages from chat. Requires: % @ * # & ~`,
+		`/hidealtstext [username] - Removes a user's messages, and their alternate account's messages from the chat.  Requires: % @ * # & ~`,
 	],
 
 	ab: 'blacklist',
@@ -2853,7 +2839,12 @@ const commands = {
 		Punishments.addSharedIp(ip, note);
 		note = ` (${note})`;
 		this.globalModlog('SHAREDIP', ip, ` by ${user.name}${note}`);
-		return this.addModAction(`The IP '${ip}' was marked as shared by ${user.name}.${note}`);
+
+		const message = `The IP '${ip}' was marked as shared by ${user.name}.${note}`;
+		const staffRoom = Rooms('staff');
+		if (staffRoom) return staffRoom.addByUser(user, message);
+
+		return this.addModAction(message);
 	},
 	marksharedhelp: [`/markshared [IP], [owner/organization of IP] - Marks an IP address as shared. Note: the owner/organization (i.e., University of Minnesota) of the shared IP is required. Requires @, &, ~`],
 
@@ -3547,19 +3538,19 @@ const commands = {
 			break;
 		case 'sidecondition':
 		case 'sc':
-			room.battle.stream.write(`>eval let p=${getPlayer(targets[0])}.addSideCondition('${toId(targets[1])}')`);
+			room.battle.stream.write(`>eval let p=${getPlayer(targets[0])}.addSideCondition('${toId(targets[1])}', 'debug')`);
 			break;
 		case 'fieldcondition': case 'pseudoweather':
 		case 'fc':
-			room.battle.stream.write(`>eval battle.addPseudoWeather('${toId(targets[0])}')`);
+			room.battle.stream.write(`>eval battle.addPseudoWeather('${toId(targets[0])}', 'debug')`);
 			break;
 		case 'weather':
 		case 'w':
-			room.battle.stream.write(`>eval battle.setWeather('${toId(targets[0])}')`);
+			room.battle.stream.write(`>eval battle.setWeather('${toId(targets[0])}', 'debug')`);
 			break;
 		case 'terrain':
 		case 't':
-			room.battle.stream.write(`>eval battle.setTerrain('${toId(targets[0])}')`);
+			room.battle.stream.write(`>eval battle.setTerrain('${toId(targets[0])}', 'debug')`);
 			break;
 		default:
 			this.errorReply(`Unknown editbattle command: ${cmd}`);

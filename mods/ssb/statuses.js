@@ -406,18 +406,6 @@ let BattleStatuses = {
 			this.add(`c|@E4 Flint|lul ok`);
 		},
 	},
-	earthboundmisfit: {
-		noCopy: true,
-		onStart: function () {
-			this.add(`c|+Earthbound Misfit|/me sighs`);
-		},
-		onSwitchOut: function () {
-			this.add(`c|+Earthbound Misfit|/me sighs`);
-		},
-		onFaint: function () {
-			this.add(`c|+Earthbound Misfit|Brexit means Brexit`);
-		},
-	},
 	explodingdaisies: {
 		noCopy: true,
 		onStart: function () {
@@ -529,10 +517,11 @@ let BattleStatuses = {
 	},
 	kalalokki: {
 		noCopy: true,
-		onStart: function () {
+		onStart: function (target) {
 			this.add(`c|@Kalalokki|(•_•)`);
 			this.add(`c|@Kalalokki|( •_•)>⌐■-■`);
 			this.add(`c|@Kalalokki|(⌐■_■)`);
+			if (target.illusion) return;
 			this.setWeather('raindance');
 		},
 		onFaint: function () {
@@ -1106,17 +1095,17 @@ let BattleStatuses = {
 	scotteh: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|&Scotteh|─────▄▄████▀█▄`);
-			this.add(`c|&Scotteh|───▄██████████████████▄`);
-			this.add(`c|&Scotteh|─▄█████.▼.▼.▼.▼.▼.▼.▼`);
+			this.add(`c|@Scotteh|─────▄▄████▀█▄`);
+			this.add(`c|@Scotteh|───▄██████████████████▄`);
+			this.add(`c|@Scotteh|─▄█████.▼.▼.▼.▼.▼.▼.▼`);
 		},
 		onSwitchOut: function () {
-			this.add(`c|&Scotteh|▄███████▄.▲.▲.▲.▲.▲.▲`);
-			this.add(`c|&Scotteh|█████████████████████▀▀`);
+			this.add(`c|@Scotteh|▄███████▄.▲.▲.▲.▲.▲.▲`);
+			this.add(`c|@Scotteh|█████████████████████▀▀`);
 		},
 		onFaint: function () {
-			this.add(`c|&Scotteh|▄███████▄.▲.▲.▲.▲.▲.▲`);
-			this.add(`c|&Scotteh|█████████████████████▀▀`);
+			this.add(`c|@Scotteh|▄███████▄.▲.▲.▲.▲.▲.▲`);
+			this.add(`c|@Scotteh|█████████████████████▀▀`);
 		},
 	},
 	shiba: {
@@ -1321,13 +1310,13 @@ let BattleStatuses = {
 	unleashourpassion: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|+UnleashOurPassion|1v1 me if real`);
+			this.add(`c|%UnleashOurPassion|1v1 me if real`);
 		},
 		onSwitchOut: function () {
-			this.add(`c|+UnleashOurPassion|Tfw you remember switching exists`);
+			this.add(`c|%UnleashOurPassion|Tfw you remember switching exists`);
 		},
 		onFaint: function () {
-			this.add(`c|+UnleashOurPassion|That's hax! You were supposed to miss`);
+			this.add(`c|%UnleashOurPassion|That's hax! You were supposed to miss`);
 		},
 	},
 	urkerab: {
@@ -1411,6 +1400,18 @@ let BattleStatuses = {
 			this.add(`c|~Zarel|Your mom`);
 			// message is shown after the "Zarel Fainted!" message
 			this.add('message', 'Zarel used your mom!');
+		},
+	},
+	zyguser: {
+		noCopy: true,
+		onStart: function () {
+			this.add(`c|+Zyg|/me sighs`);
+		},
+		onSwitchOut: function () {
+			this.add(`c|+Zyg|/me sighs`);
+		},
+		onFaint: function () {
+			this.add(`c|+Zyg|Brexit means Brexit`);
 		},
 	},
 	// Custom effect for Yuki

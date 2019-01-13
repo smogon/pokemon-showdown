@@ -25,12 +25,10 @@ let BattleScripts = {
 			if (changedMove && changedMove !== true) {
 				baseMove = this.getActiveMove(changedMove);
 				if (pranksterBoosted) baseMove.pranksterBoosted = pranksterBoosted;
-				target = null;
+				target = this.resolveTarget(pokemon, baseMove);
 			}
 		}
 		let move = zMove ? this.getActiveZMove(baseMove, pokemon) : baseMove;
-
-		if (!target && target !== false) target = this.resolveTarget(pokemon, move);
 
 		move.isExternal = externalMove;
 
@@ -157,11 +155,14 @@ let BattleScripts = {
 			if (!move.hasBounced) move.pranksterBoosted = this.activeMove.pranksterBoosted;
 		}
 		let baseTarget = move.target;
-		if (!target && target !== false) target = this.resolveTarget(pokemon, move);
+		if (target === undefined) target = this.resolveTarget(pokemon, move);
 		if (move.target === 'self' || move.target === 'allies') {
 			target = pokemon;
 		}
-		if (sourceEffect) move.sourceEffect = sourceEffect.id;
+		if (sourceEffect) {
+			move.sourceEffect = sourceEffect.id;
+			move.ignoreAbility = false;
+		}
 		let moveResult = false;
 
 		this.setActiveMove(move, pokemon, target);
@@ -195,9 +196,9 @@ let BattleScripts = {
 
 		if (zMove) this.runZPower(move, pokemon);
 
-		if (target === false) {
+		if (!target) {
 			this.attrLastMove('[notarget]');
-			this.add('-notarget');
+			this.add(this.gen >= 5 ? '-fail' : '-notarget', pokemon);
 			if (move.target === 'normal') pokemon.isStaleCon = 0;
 			return false;
 		}
@@ -233,7 +234,7 @@ let BattleScripts = {
 			this.faint(pokemon, pokemon, move);
 		}
 
-		/**@type {number | false} */
+		/** @type {number | false | undefined} */
 		let damage = false;
 		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
 			damage = this.tryMoveHit(target, pokemon, move);
@@ -241,7 +242,7 @@ let BattleScripts = {
 		} else if (move.target === 'allAdjacent' || move.target === 'allAdjacentFoes') {
 			if (!targets.length) {
 				this.attrLastMove('[notarget]');
-				this.add('-notarget');
+				this.add(this.gen >= 5 ? '-fail' : '-notarget', pokemon);
 				return false;
 			}
 			if (targets.length > 1) move.spreadHit = true;
@@ -252,7 +253,7 @@ let BattleScripts = {
 					moveResult = true;
 					hitTargets.push(source.toString().substr(0, 3));
 				}
-				if (damage !== false) {
+				if (damage) {
 					damage += hitResult || 0;
 				} else {
 					damage = hitResult;
@@ -269,7 +270,7 @@ let BattleScripts = {
 			}
 			if (lacksTarget && !move.isFutureMove) {
 				this.attrLastMove('[notarget]');
-				this.add('-notarget');
+				this.add(this.gen >= 5 ? '-fail' : '-notarget', pokemon);
 				if (move.target === 'normal') pokemon.isStaleCon = 0;
 				return false;
 			}
@@ -461,12 +462,12 @@ let BattleScripts = {
 					boosts[statName] = 0;
 				}
 				target.setBoost(boosts);
-				this.add('-anim', pokemon, "Spectral Thief", target);
+				this.addMove('-anim', pokemon, "Spectral Thief", target);
 			}
 		}
 
 		move.totalDamage = 0;
-		/**@type {number | false} */
+		/** @type {number | false | undefined} */
 		let damage = 0;
 		pokemon.lastDamage = 0;
 		if (move.multihit) {
@@ -485,7 +486,7 @@ let BattleScripts = {
 			}
 			hits = Math.floor(hits);
 			let nullDamage = true;
-			/**@type {number | false} */
+			/** @type {number | false | undefined} */
 			let moveDamage;
 			// There is no need to recursively check the ´sleepUsable´ flag as Sleep Talk can only be used while asleep.
 			let isSleepUsable = move.sleepUsable || this.getMove(move.sourceEffect).sleepUsable;
@@ -569,12 +570,13 @@ let BattleScripts = {
 		return damage;
 	},
 	moveHit(target, pokemon, moveOrMoveName, moveData, isSecondary, isSelf) {
-		let damage;
+		/** @type {number | false | null | undefined} */
+		let damage = undefined;
 		let move = this.getActiveMove(moveOrMoveName);
 
 		if (!moveData) moveData = move;
 		if (!moveData.flags) moveData.flags = {};
-		/**@type {?boolean | number} */
+		/** @type {?boolean | number} */
 		let hitResult = true;
 
 		// TryHit events:
@@ -701,7 +703,7 @@ let BattleScripts = {
 			}
 			if (moveData.status) {
 				hitResult = target.trySetStatus(moveData.status, pokemon, moveData.ability ? moveData.ability : move);
-				if (!hitResult && move.status) return hitResult;
+				if (!hitResult && move.status) return false;
 				didSomething = didSomething || hitResult;
 			}
 			if (moveData.forceStatus) {
@@ -729,7 +731,7 @@ let BattleScripts = {
 				didSomething = didSomething || hitResult;
 			}
 			if (moveData.forceSwitch) {
-				hitResult = this.canSwitch(target.side);
+				hitResult = !!this.canSwitch(target.side);
 				didSomething = didSomething || hitResult;
 			}
 			if (moveData.selfSwitch) {

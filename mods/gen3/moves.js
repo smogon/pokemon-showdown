@@ -80,10 +80,13 @@ let BattleMovedex = {
 						this.add('-fail', pokemon);
 						return false;
 					}
-					if (!target.isActive) target = this.resolveTarget(pokemon, this.getMove('pound'));
-					if (!this.isAdjacent(pokemon, target)) {
-						this.add('-miss', pokemon, target);
-						return false;
+					if (!target.isActive) {
+						const possibleTarget = this.resolveTarget(pokemon, this.getMove('pound'));
+						if (!possibleTarget) {
+							this.add('-miss', pokemon);
+							return false;
+						}
+						target = possibleTarget;
 					}
 					/**@type {Move} */
 					// @ts-ignore
@@ -295,6 +298,43 @@ let BattleMovedex = {
 		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Surf and Whirlpool, which have doubled power when used against it, and is also unaffected by weather.",
 		basePower: 60,
 	},
+	doomdesire: {
+		inherit: true,
+		onTry: function (source, target) {
+			target.side.addSideCondition('futuremove');
+			if (target.side.sideConditions['futuremove'].positions[target.position]) {
+				return false;
+			}
+			let moveData = /** @type {ActiveMove} */ ({
+				name: "Doom Desire",
+				basePower: 120,
+				category: "Physical",
+				flags: {},
+				willCrit: false,
+				type: '???',
+			});
+			let damage = this.getDamage(source, target, moveData, true);
+			target.side.sideConditions['futuremove'].positions[target.position] = {
+				duration: 3,
+				move: 'doomdesire',
+				source: source,
+				moveData: {
+					id: 'doomdesire',
+					name: "Doom Desire",
+					accuracy: 85,
+					basePower: 0,
+					damage: damage,
+					category: "Physical",
+					flags: {},
+					effectType: 'Move',
+					isFutureMove: true,
+					type: '???',
+				},
+			};
+			this.add('-start', source, 'Doom Desire');
+			return null;
+		},
+	},
 	doublekick: {
 		inherit: true,
 		desc: "Hits twice. If the first hit breaks the target's substitute, it will take damage for the second hit.",
@@ -451,7 +491,8 @@ let BattleMovedex = {
 		onMoveFail: function (target, source, move) {
 			if (target.runImmunity('Fighting')) {
 				let damage = this.getDamage(source, target, move, true);
-				this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, 'highjumpkick');
+				if (typeof damage !== 'number') throw new Error("HJK recoil failed");
+				this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, move);
 			}
 		},
 	},
@@ -476,7 +517,8 @@ let BattleMovedex = {
 		onMoveFail: function (target, source, move) {
 			if (target.runImmunity('Fighting')) {
 				let damage = this.getDamage(source, target, move, true);
-				this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, 'jumpkick');
+				if (typeof damage !== 'number') throw new Error("Jump Kick didn't recoil");
+				this.damage(this.clampIntRange(damage / 2, 1, Math.floor(target.maxhp / 2)), source, source, move);
 			}
 		},
 	},

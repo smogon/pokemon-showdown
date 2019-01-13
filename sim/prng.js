@@ -68,7 +68,7 @@ class PRNG {
 		let result = (this.seed[0] << 16 >>> 0) + this.seed[1]; // Use the upper 32 bits
 		if (from) from = Math.floor(from);
 		if (to) to = Math.floor(to);
-		if (!from) {
+		if (from === undefined) {
 			result = result / 0x100000000;
 		} else if (!to) {
 			result = Math.floor(result * from / 0x100000000);
@@ -83,10 +83,10 @@ class PRNG {
 	 *
 	 * This function returns true with probability `P`, where `P = numerator
 	 * / denominator`. This function returns false with probability `1 - P`.
-         *
-         * The numerator must be a non-negative integer (`>= 0`).
-         *
-         * The denominator must be a positive integer (`> 0`).
+	 *
+	 * The numerator must be a non-negative integer (`>= 0`).
+	 *
+	 * The denominator must be a positive integer (`> 0`).
 	 *
 	 * @param {number} numerator - the top part of the probability fraction
 	 * @param {number} denominator - the bottom part of the probability fraction
@@ -126,61 +126,80 @@ class PRNG {
 	}
 
 	/**
-		The RNG is a Linear Congruential Generator (LCG) in the form: `x_{n + 1} = (a x_n + c) % m`
+	 * This is how the game resolves speed ties.
+	 *
+	 * At least according to V4 in
+	 * https://github.com/Zarel/Pokemon-Showdown/issues/1157#issuecomment-214454873
+	 *
+	 * @param {T[]} items
+	 * @template T
+	 */
+	shuffle(items, start = 0, end = items.length) {
+		while (start < end - 1) {
+			const nextIndex = this.next(start, end);
+			if (start !== nextIndex) {
+				[items[start], items[nextIndex]] = [items[nextIndex], items[start]];
+			}
+			start++;
+		}
+	}
 
-		Where: `x_0` is the seed, `x_n` is the random number after n iterations,
-
-		````
-		a = 0x5D588B656C078965
-		c = 0x00269EC3
-		m = 2^64
-		````
-
-		Javascript doesnt handle such large numbers properly, so this function does it in 16-bit parts.
-		````
-		x_{n + 1} = (x_n * a) + c
-		````
-
-		Let any 64 bit number:
-		````
-		n = (n[0] << 48) + (n[1] << 32) + (n[2] << 16) + n[3]
-		````
-
-		Then:
-		````
-		x_{n + 1} =
-			((a[3] x_n[0] + a[2] x_n[1] + a[1] x_n[2] + a[0] x_n[3] + c[0]) << 48) +
-			((a[3] x_n[1] + a[2] x_n[2] + a[1] x_n[3] + c[1]) << 32) +
-			((a[3] x_n[2] + a[2] x_n[3] + c[2]) << 16) +
-			a[3] x_n[3] + c[3]
-		````
-
-		Which can be generalised where b is the number of 16 bit words in the number:
-		````
-		((a[b-1] + x_n[b-1] + c[b-1]) << (16 * 0)) +
-		((a[b-1] x_n[b-2] + a[b-2] x_n[b-1] + c[b-2]) << (16 * 1)) +
-		((a[b-1] x_n[b-3] + a[b-2] x_n[b-2] + a[b-3] x_n[b-1] + c[b-3]) << (16 * 2)) +
-		...
-		((a[b-1] x_n[1] + a[b-2] x_n[2] + ... + a[2] x_n[b-2] + a[1] + x_n[b-1] + c[1]) << (16 * (b-2))) +
-		((a[b-1] x_n[0] + a[b-2] x_n[1] + ... + a[1] x_n[b-2] + a[0] + x_n[b-1] + c[0]) << (16 * (b-1)))
-		````
-
-		Which produces this equation:
-		````
-		\sum_{l=0}^{b-1}\left(\sum_{m=b-l-1}^{b-1}\left\{a[2b-m-l-2] x_n[m]\right\}+c[b-l-1]\ll16l\right)
-		````
-
-		Notice how the `a[]` word starts at `b-1`, and decrements every time it appears again on the line;
-		`x_n[]` starts at `b-<line#>-1` and increments to b-1 at the end of the line per line, limiting the length of the line;
-		`c[]` is at `b-<line#>-1` for each line and the left shift is `16 * <line#>`)
-
-		This is all ignoring overflow/carry because that cannot be shown in a pseudo-mathematical equation.
-		The below code implements a optimised version of that equation while also checking for overflow/carry.
-
-		@param {PRNGSeed} initialSeed
-		@param {number} [framesToAdvance = 1]
-		@return {PRNGSeed} the new seed
-	*/
+	/**
+	 * The RNG is a Linear Congruential Generator (LCG) in the form: `x_{n + 1} = (a x_n + c) % m`
+	 *
+	 * Where: `x_0` is the seed, `x_n` is the random number after n iterations,
+	 *
+	 * ````
+	 * a = 0x5D588B656C078965
+	 * c = 0x00269EC3
+	 * m = 2^64
+	 * ````
+	 *
+	 * Javascript doesnt handle such large numbers properly, so this function does it in 16-bit parts.
+	 * ````
+	 * x_{n + 1} = (x_n * a) + c
+	 * ````
+	 *
+	 * Let any 64 bit number:
+	 * ````
+	 * n = (n[0] << 48) + (n[1] << 32) + (n[2] << 16) + n[3]
+	 * ````
+	 *
+	 * Then:
+	 * ````
+	 * x_{n + 1} =
+	 * 	((a[3] x_n[0] + a[2] x_n[1] + a[1] x_n[2] + a[0] x_n[3] + c[0]) << 48) +
+	 * 	((a[3] x_n[1] + a[2] x_n[2] + a[1] x_n[3] + c[1]) << 32) +
+	 * 	((a[3] x_n[2] + a[2] x_n[3] + c[2]) << 16) +
+	 * 	a[3] x_n[3] + c[3]
+	 * ````
+	 *
+	 * Which can be generalised where b is the number of 16 bit words in the number:
+	 * ````
+	 * ((a[b-1] + x_n[b-1] + c[b-1]) << (16 * 0)) +
+	 * ((a[b-1] x_n[b-2] + a[b-2] x_n[b-1] + c[b-2]) << (16 * 1)) +
+	 * ((a[b-1] x_n[b-3] + a[b-2] x_n[b-2] + a[b-3] x_n[b-1] + c[b-3]) << (16 * 2)) +
+	 * ...
+	 * ((a[b-1] x_n[1] + a[b-2] x_n[2] + ... + a[2] x_n[b-2] + a[1] + x_n[b-1] + c[1]) << (16 * (b-2))) +
+	 * ((a[b-1] x_n[0] + a[b-2] x_n[1] + ... + a[1] x_n[b-2] + a[0] + x_n[b-1] + c[0]) << (16 * (b-1)))
+	 * ````
+	 *
+	 * Which produces this equation:
+	 * ````
+	 * \sum_{l=0}^{b-1}\left(\sum_{m=b-l-1}^{b-1}\left\{a[2b-m-l-2] x_n[m]\right\}+c[b-l-1]\ll16l\right)
+	 * ````
+	 *
+	 * Notice how the `a[]` word starts at `b-1`, and decrements every time it appears again on the line;
+	 * `x_n[]` starts at `b-<line#>-1` and increments to b-1 at the end of the line per line, limiting the length of the line;
+	 * `c[]` is at `b-<line#>-1` for each line and the left shift is `16 * <line#>`)
+	 *
+	 * This is all ignoring overflow/carry because that cannot be shown in a pseudo-mathematical equation.
+	 * The below code implements a optimised version of that equation while also checking for overflow/carry.
+	 *
+	 * @param {PRNGSeed} initialSeed
+	 * @param {number} [framesToAdvance = 1]
+	 * @return {PRNGSeed} the new seed
+	 */
 	nextFrame(initialSeed, framesToAdvance = 1) {
 		// Use Slice so we don't actually alter the original seed.
 		/** @type {PRNGSeed} */

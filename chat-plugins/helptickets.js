@@ -148,6 +148,7 @@ class HelpTicket extends Rooms.RoomGame {
 	forfeit(user) {
 		if (!(user.userid in this.players)) return;
 		this.removePlayer(user);
+		if (!this.ticket.open) return;
 		this.modnote(user, `${user.name} is no longer interested in this ticket.`);
 		if (this.playerCount - 1 > 0) return; // There are still users in the ticket room, dont close the ticket
 		this.close(user);
@@ -195,6 +196,11 @@ class HelpTicket extends Rooms.RoomGame {
 		this.modnote(staff, `${staff.name} closed this ticket.`);
 		notifyStaff(this.ticket.escalated);
 		this.room.pokeExpireTimer();
+		for (const ticketGameUser of Object.values(this.players)) {
+			this.removePlayer(ticketGameUser);
+			const user = Users(ticketGameUser.userid);
+			if (user) user.updateSearch();
+		}
 	}
 
 	/**
@@ -267,6 +273,7 @@ function notifyStaff(upper = false) {
 	let hiddenTicketUnclaimedCount = 0;
 	let hiddenTicketCount = 0;
 	let hasUnclaimed = false;
+	let fourthTicketIndex = 0;
 	for (const key of keys) {
 		let ticket = tickets[key];
 		if (!ticket.open) continue;
@@ -274,7 +281,11 @@ function notifyStaff(upper = false) {
 		if (count >= 3) {
 			hiddenTicketCount++;
 			if (!ticket.claimed) hiddenTicketUnclaimedCount++;
-			continue;
+			if (hiddenTicketCount === 1) {
+				fourthTicketIndex = buf.length;
+			} else {
+				continue;
+			}
 		}
 		const escalator = ticket.escalator ? Chat.html` (escalated by ${ticket.escalator}).` : ``;
 		const creator = ticket.claimed ? Chat.html`${ticket.creator}` : Chat.html`<strong>${ticket.creator}</strong>`;
@@ -283,10 +294,10 @@ function notifyStaff(upper = false) {
 		buf += `<a class="button${notifying}" href="/help-${ticket.userid}" title="${ticket.claimed ? `Claimed by: ${ticket.claimed}` : `Unclaimed`}">Help ${creator}: ${ticket.type}${escalator}</a> `;
 		count++;
 	}
-	if (hiddenTicketCount > 0) {
+	if (hiddenTicketCount > 1) {
 		const notifying = hiddenTicketUnclaimedCount > 0 ? ` notifying` : ``;
 		if (hiddenTicketUnclaimedCount > 0) hasUnclaimed = true;
-		buf += `<a class="button${notifying}" href="/view-help-tickets">and ${hiddenTicketCount} more Help ticket${Chat.plural(hiddenTicketCount)} (${hiddenTicketUnclaimedCount} unclaimed)</a>`;
+		buf = buf.slice(0, fourthTicketIndex) + `<a class="button${notifying}" href="/view-help-tickets">and ${hiddenTicketCount} more Help ticket${Chat.plural(hiddenTicketCount)} (${hiddenTicketUnclaimedCount} unclaimed)</a>`;
 	}
 	buf = `|${hasUnclaimed ? 'uhtml' : 'uhtmlchange'}|latest-tickets|<div class="infobox" style="padding: 6px 4px">${buf}${count === 0 ? `There were open Help tickets, but they've all been closed now.` : ``}</div>`;
 	room.send(buf);
@@ -789,7 +800,8 @@ let commands = {
 				'Inappropriate Pokemon Nicknames': 'Please save a replay of the battle and put it in chat so global staff can check.',
 				'Timerstalling': 'Please place the link to the battle in chat so global staff can check.',
 			};
-			const introMessage = `<h2 style="margin-top:0">Help Ticket - ${user.name}</h2><p><b>Issue</b>: ${ticket.type}<br />${upper ? `An Upper` : `A Global`} Staff member will be with you shortly.</p>${contexts[target] ? `<p style="text-decoration: underline">${contexts[target]}</p>` : ``}`;
+			const introMessage = Chat.html`<h2 style="margin-top:0">Help Ticket - ${user.name}</h2><p><b>Issue</b>: ${ticket.type}<br />${upper ? `An Upper` : `A Global`} Staff member will be with you shortly.</p>`;
+			const introHintMessage = contexts[target] ? Chat.html`<p style="text-decoration: underline">${contexts[target]}</p>` : ``;
 			const staffMessage = `${upper ? `<p><h3>Do not post sensitive information in this room.</h3>Drivers and moderators can access this room's logs via the log viewer; please PM the user instead.</p>` : ``}<p><button class="button" name="send" value="/helpticket close ${user.userid}">Close Ticket</button> <button class="button" name="send" value="/helpticket escalate ${user.userid}">Escalate</button> ${upper ? `` : `<button class="button" name="send" value="/helpticket escalate ${user.userid}, upperstaff">Escalate to Upper Staff</button>`} <button class="button" name="send" value="/helpticket ban ${user.userid}"><small>Ticketban</small></button></p>`;
 			let helpRoom = /** @type {ChatRoom?} */ (Rooms(`help-${user.userid}`));
 			if (!helpRoom) {
@@ -799,7 +811,7 @@ let commands = {
 					isPrivate: 'hidden',
 					modjoin: (upper ? '&' : '%'),
 					auth: {[user.userid]: '+'},
-					introMessage: introMessage,
+					introMessage: introMessage + introHintMessage,
 					staffMessage: staffMessage,
 				});
 				helpRoom.game = new HelpTicket(helpRoom, ticket);
@@ -816,7 +828,7 @@ let commands = {
 				} else if (!upper && helpRoom.modjoin === '&') {
 					helpRoom.modjoin = '%';
 				}
-				helpRoom.introMessage = introMessage;
+				helpRoom.introMessage = introMessage + introHintMessage;
 				helpRoom.staffMessage = staffMessage;
 				if (helpRoom.game) helpRoom.game.destroy();
 				helpRoom.game = new HelpTicket(helpRoom, ticket);

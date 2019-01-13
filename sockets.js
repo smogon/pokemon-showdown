@@ -15,6 +15,7 @@
 
 const cluster = require('cluster');
 const fs = require('fs');
+const FS = require('./lib/fs');
 
 if (cluster.isMaster) {
 	cluster.setupMaster({
@@ -279,7 +280,7 @@ if (cluster.isMaster) {
 	if (Config.crashguard) {
 		// graceful crash
 		process.on('uncaughtException', err => {
-			require('./lib/crashlogger')(err, `Socket process ${cluster.worker.id} (${process.pid})`, true);
+			require('./lib/crashlogger')(err, `Socket process ${cluster.worker.id} (${process.pid})`);
 		});
 	}
 
@@ -290,11 +291,11 @@ if (cluster.isMaster) {
 		let key;
 		try {
 			key = require('path').resolve(__dirname, Config.ssl.options.key);
-			if (!fs.lstatSync(key).isFile()) throw new Error();
+			if (!fs.statSync(key).isFile()) throw new Error();
 			try {
 				key = fs.readFileSync(key);
 			} catch (e) {
-				require('./lib/crashlogger')(new Error(`Failed to read the configured SSL private key PEM file:\n${e.stack}`), `Socket process ${cluster.worker.id} (${process.pid})`, true);
+				require('./lib/crashlogger')(new Error(`Failed to read the configured SSL private key PEM file:\n${e.stack}`), `Socket process ${cluster.worker.id} (${process.pid})`);
 			}
 		} catch (e) {
 			console.warn('SSL private key config values will not support HTTPS server option values in the future. Please set it to use the absolute path of its PEM file.');
@@ -304,11 +305,11 @@ if (cluster.isMaster) {
 		let cert;
 		try {
 			cert = require('path').resolve(__dirname, Config.ssl.options.cert);
-			if (!fs.lstatSync(cert).isFile()) throw new Error();
+			if (!fs.statSync(cert).isFile()) throw new Error();
 			try {
 				cert = fs.readFileSync(cert);
 			} catch (e) {
-				require('./lib/crashlogger')(new Error(`Failed to read the configured SSL certificate PEM file:\n${e.stack}`), `Socket process ${cluster.worker.id} (${process.pid})`, true);
+				require('./lib/crashlogger')(new Error(`Failed to read the configured SSL certificate PEM file:\n${e.stack}`), `Socket process ${cluster.worker.id} (${process.pid})`);
 			}
 		} catch (e) {
 			console.warn('SSL certificate config values will not support HTTPS server option values in the future. Please set it to use the absolute path of its PEM file.');
@@ -320,53 +321,62 @@ if (cluster.isMaster) {
 				// In case there are additional SSL config settings besides the key and cert...
 				appssl = require('https').createServer(Object.assign({}, Config.ssl.options, {key, cert}));
 			} catch (e) {
-				require('./lib/crashlogger')(`The SSL settings are misconfigured:\n${e.stack}`, `Socket process ${cluster.worker.id} (${process.pid})`, true);
+				require('./lib/crashlogger')(`The SSL settings are misconfigured:\n${e.stack}`, `Socket process ${cluster.worker.id} (${process.pid})`);
 			}
 		}
 	}
 
 	// Static server
-	const StaticServer = require('node-static').Server;
-	const roomidRegex = /^\/(?:[A-Za-z0-9][A-Za-z0-9-]*)\/?$/;
-	const cssServer = new StaticServer('./config');
-	const avatarServer = new StaticServer('./config/avatars');
-	const staticServer = new StaticServer('./static');
-	/**
-	 * @param {import('http').IncomingMessage} req
-	 * @param {import('http').ServerResponse} res
-	 */
-	const staticRequestHandler = (req, res) => {
-		// console.log(`static rq: ${req.socket.remoteAddress}:${req.socket.remotePort} -> ${req.socket.localAddress}:${req.socket.localPort} - ${req.method} ${req.url} ${req.httpVersion} - ${req.rawHeaders.join('|')}`);
-		req.resume();
-		req.addListener('end', () => {
-			if (Config.customhttpresponse &&
-					Config.customhttpresponse(req, res)) {
-				return;
-			}
-
-			let server = staticServer;
-			if (req.url) {
-				if (req.url === '/custom.css') {
-					server = cssServer;
-				} else if (req.url.startsWith('/avatars/')) {
-					req.url = req.url.substr(8);
-					server = avatarServer;
-				} else if (roomidRegex.test(req.url)) {
-					req.url = '/';
+	try {
+		if (Config.disablenodestatic) throw new Error("disablenodestatic");
+		const StaticServer = require('node-static').Server;
+		const roomidRegex = /^\/(?:[A-Za-z0-9][A-Za-z0-9-]*)\/?$/;
+		const cssServer = new StaticServer('./config');
+		const avatarServer = new StaticServer('./config/avatars');
+		const staticServer = new StaticServer('./static');
+		/**
+		 * @param {import('http').IncomingMessage} req
+		 * @param {import('http').ServerResponse} res
+		 */
+		const staticRequestHandler = (req, res) => {
+			// console.log(`static rq: ${req.socket.remoteAddress}:${req.socket.remotePort} -> ${req.socket.localAddress}:${req.socket.localPort} - ${req.method} ${req.url} ${req.httpVersion} - ${req.rawHeaders.join('|')}`);
+			req.resume();
+			req.addListener('end', () => {
+				if (Config.customhttpresponse &&
+						Config.customhttpresponse(req, res)) {
+					return;
 				}
-			}
 
-			server.serve(req, res, e => {
-				// @ts-ignore
-				if (e && e.status === 404) {
-					staticServer.serveFile('404.html', 404, {}, req, res);
+				let server = staticServer;
+				if (req.url) {
+					if (req.url === '/custom.css') {
+						server = cssServer;
+					} else if (req.url.startsWith('/avatars/')) {
+						req.url = req.url.substr(8);
+						server = avatarServer;
+					} else if (roomidRegex.test(req.url)) {
+						req.url = '/';
+					}
 				}
+
+				server.serve(req, res, e => {
+					// @ts-ignore
+					if (e && e.status === 404) {
+						staticServer.serveFile('404.html', 404, {}, req, res);
+					}
+				});
 			});
-		});
-	};
+		};
 
-	app.on('request', staticRequestHandler);
-	if (appssl) appssl.on('request', staticRequestHandler);
+		app.on('request', staticRequestHandler);
+		if (appssl) appssl.on('request', staticRequestHandler);
+	} catch (e) {
+		if (e.message === 'disablenodestatic') {
+			console.log('node-static is disabled');
+		} else {
+			console.log('Could not start node-static - try `npm install` if you want to use it');
+		}
+	}
 
 	// SockJS server
 
@@ -398,18 +408,31 @@ if (cluster.isMaster) {
 	}
 
 	const server = sockjs.createServer(options);
-	/** @type {Map<string, import('sockjs').Connection>} */
+	/**
+	 * socketid:Connection
+	 * @type {Map<string, import('sockjs').Connection>}
+	 */
 	const sockets = new Map();
-	/** @type {Map<string, Map<string, import('sockjs').Connection>>} */
+	/**
+	 * channelid:socketid:Connection
+	 * @type {Map<string, Map<string, import('sockjs').Connection>>}
+	 */
 	const channels = new Map();
-	/** @type {Map<string, Map<string, string>>} */
+	/**
+	 * channelid:socketid:subchannelid
+	 * @type {Map<string, Map<string, string>>}
+	 */
 	const subchannels = new Map();
+
+	/** @type {WriteStream} */
+	const logger = FS(`logs/sockets-${process.pid}`).createAppendStream();
 
 	// Deal with phantom connections.
 	const sweepSocketInterval = setInterval(() => {
 		sockets.forEach(socket => {
 			// @ts-ignore
 			if (socket.protocol === 'xhr-streaming' && socket._session && socket._session.recv) {
+				logger.write('Found a ghost connection with protocol xhr-streaming');
 				// @ts-ignore
 				socket._session.recv.didClose();
 			}
@@ -422,6 +445,7 @@ if (cluster.isMaster) {
 			// that sockjs sets to wait for users to reconnect within that time to continue their session.
 			// @ts-ignore
 			if (socket._session && socket._session.to_tref && !socket._session.to_tref._idlePrev) {
+				logger.write(`Found a ghost connection with protocol ${socket.protocol}`);
 				// @ts-ignore
 				socket._session.timeout_cb();
 			}
@@ -454,7 +478,15 @@ if (cluster.isMaster) {
 			if (!socket) return;
 			socket.destroy();
 			sockets.delete(socketid);
-			channels.forEach(channel => channel.delete(socketid));
+			channels.forEach((channel, channelid) => {
+				channel.delete(socketid);
+				subchannel = subchannels.get(channelid);
+				if (subchannel) subchannel.delete(socketid);
+				if (!channel.size) {
+					channels.delete(channelid);
+					if (subchannel) subchannels.delete(channelid);
+				}
+			});
 			break;
 
 		case '>':

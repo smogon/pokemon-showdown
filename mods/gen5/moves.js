@@ -996,7 +996,7 @@ let BattleMovedex = {
 					return damage;
 				}
 				if (damage > target.volatiles['substitute'].hp) {
-					damage = target.volatiles['substitute'].hp;
+					damage = /** @type {number} */ (target.volatiles['substitute'].hp);
 				}
 				target.volatiles['substitute'].hp -= damage;
 				source.lastDamage = damage;

@@ -314,6 +314,7 @@ let BattleFormats = {
 		},
 		banlist: [
 			'Chansey + Charm + Seismic Toss', 'Chansey + Charm + Psywave',
+			'Blissey + Charm + Seismic Toss', 'Blissey + Charm + Psywave',
 			'Shiftry + Leaf Blade + Sucker Punch',
 		],
 	},

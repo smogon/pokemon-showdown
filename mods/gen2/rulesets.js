@@ -42,8 +42,14 @@ let BattleFormats = {
 			// Automatically set ability to None
 			set.ability = 'None';
 
-			if (set.ivs && toId(set.item) === 'thickclub' && set.species === 'Marowak' && hasSD) {
-				set.ivs.atk = 26;
+			if (set.ivs && toId(set.item) === 'thickclub' && set.species === 'Marowak' && hasSD && (!set.level || set.level === 100)) {
+				if (!set.evs) set.evs = {hp: 252, atk: 252, def: 252, spa: 252, spd: 252, spe: 252};
+				if (set.evs.atk === undefined) set.evs.atk = 252;
+				if (set.ivs.atk === undefined) set.ivs.atk = 30;
+				set.ivs.atk = Math.floor(set.ivs.atk / 2) * 2;
+				while (set.evs.atk > 0 && 2 * 80 + set.ivs.atk + Math.floor(set.evs.atk / 4) + 5 > 255) {
+					set.evs.atk -= 4;
+				}
 			}
 
 			// They all also get a useless nature, since that didn't exist

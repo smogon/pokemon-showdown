@@ -715,10 +715,9 @@ let BattleAbilities = {
 			}
 		},
 		onEffectiveness: function (typeMod, target, type, move) {
-			if (!this.activeTarget) return;
-			let pokemon = this.activeTarget;
-			if (!['mimikyu', 'mimikyutotem'].includes(pokemon.template.speciesid) || pokemon.transformed || (pokemon.volatiles['substitute'] && !(move.flags['authentic'] || move.infiltrates))) return;
-			if (!pokemon.runImmunity(move.type)) return;
+			if (!target) return;
+			if (!['mimikyu', 'mimikyutotem'].includes(target.template.speciesid) || target.transformed || (target.volatiles['substitute'] && !(move.flags['authentic'] || move.infiltrates))) return;
+			if (!target.runImmunity(move.type)) return;
 			return 0;
 		},
 		onUpdate: function (pokemon) {
@@ -1108,8 +1107,9 @@ let BattleAbilities = {
 				for (const moveSlot of target.moveSlots) {
 					let move = this.getMove(moveSlot.move);
 					let bp = move.basePower;
-					if (move.ohko) bp = 160;
+					if (move.ohko) bp = 150;
 					if (move.id === 'counter' || move.id === 'metalburst' || move.id === 'mirrorcoat') bp = 120;
+					if (bp === 1) bp = 80;
 					if (!bp && move.category !== 'Status') bp = 80;
 					if (bp > warnBp) {
 						warnMoves = [[move, target]];
@@ -3830,6 +3830,7 @@ let BattleAbilities = {
 		num: 84,
 	},
 	"unnerve": {
+		desc: "While this Pokemon is active, it prevents opposing Pokemon from using their Berries. Activation message broadcasts before other Abilities regardless of the Pokemon's Speed tiers.",
 		shortDesc: "While this Pokemon is active, it prevents opposing Pokemon from using their Berries.",
 		onPreStart: function (pokemon) {
 			this.add('-ability', pokemon, 'Unnerve', pokemon.side.foe);
