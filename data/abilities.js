@@ -1635,7 +1635,7 @@ let BattleAbilities = {
 		},
 		id: "keeneye",
 		name: "Keen Eye",
-		rating: 1,
+		rating: 0.5,
 		num: 51,
 	},
 	"klutz": {
