@@ -33,9 +33,7 @@ function parseMathematicalExpression(infix) {
 	infix = infix.replace(/\s+/g, "");
 	infix = infix.split(/([+\-*/^()])/);
 	infix = infix.filter(token => token);
-	let i;
-	for (i = 0; i < infix.length; i++) {
-		let token = infix[i];
+	for (const token of infix) {
 		if ("^*/+-".includes(token)) {
 			let op = operators[token];
 			let prevToken = operatorStack[operatorStack.length - 1];
@@ -67,14 +65,13 @@ function parseMathematicalExpression(infix) {
 
 function solveRPN(rpn) {
 	let resultStack = [];
-	let i;
-	for (i = 0; i < rpn.length; i++) {
-		if (isNumeric(rpn[i]) === true) {
-			resultStack.push(rpn[i]);
+	for (const token of rpn) {
+		if (isNumeric(token) === true) {
+			resultStack.push(token);
 		} else {
 			let a = parseFloat(resultStack.pop());
 			let b = parseFloat(resultStack.pop());
-			switch (rpn[i]) {
+			switch (token) {
 			case "+":
 				resultStack.push(a + b);
 				break;
