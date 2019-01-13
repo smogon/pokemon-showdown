@@ -36,10 +36,10 @@ function parseMathematicalExpression(infix) {
 	let i;
 	for (i = 0; i < infix.length; i++) {
 		let token = infix[i];
-		if ("^*/+-".indexOf(token) !== -1) {
+		if ("^*/+-".includes(token)) {
 			let o1 = token;
 			let o2 = operatorStack[operatorStack.length - 1];
-			while ("^*/+-".indexOf(o2) !== -1 && ((operators[o1].associativity === "Left" && operators[o1].precedence <= operators[o2].precedence) || (operators[o1].associativity === "Right" && operators[o1].precedence < operators[o2].precedence))) {
+			while ("^*/+-".includes(o2) && ((operators[o1].associativity === "Left" && operators[o1].precedence <= operators[o2].precedence) || (operators[o1].associativity === "Right" && operators[o1].precedence < operators[o2].precedence))) {
 				outputQueue.push(operatorStack.pop());
 				o2 = operatorStack[operatorStack.length - 1];
 			}
