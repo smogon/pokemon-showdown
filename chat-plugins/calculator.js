@@ -85,7 +85,7 @@ function solveRPN(rpn) {
 				resultStack.push(b / a);
 				break;
 			case "^":
-				resultStack.push(a ** b);
+				resultStack.push(b ** a);
 				break;
 			}
 		}
