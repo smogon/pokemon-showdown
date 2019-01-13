@@ -196,6 +196,11 @@ class HelpTicket extends Rooms.RoomGame {
 		this.modnote(staff, `${staff.name} closed this ticket.`);
 		notifyStaff(this.ticket.escalated);
 		this.room.pokeExpireTimer();
+		for (const ticketGameUser of Object.values(this.players)) {
+			this.removePlayer(ticketGameUser);
+			const user = Users(ticketGameUser.userid);
+			if (user) user.updateSearch();
+		}
 	}
 
 	/**
