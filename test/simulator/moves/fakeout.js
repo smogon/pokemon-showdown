@@ -37,7 +37,7 @@ describe('Fake Out', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: 'Venusaur', ability: 'overgrow', moves: ['swift', 'sleeptalk']}]);
 		battle.makeChoices('move fakeout', 'move swift');
 		battle.makeChoices('switch 2', 'move sleeptalk');
-		battle.makeChoices('switch 1', 'move sleeptalk');
+		battle.makeChoices('switch 2', 'move sleeptalk');
 		battle.makeChoices('move fakeout', 'move swift');
 		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
