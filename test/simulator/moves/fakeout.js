@@ -39,7 +39,7 @@ describe('Fake Out', function () {
 		battle.makeChoices('switch 2', 'move sleeptalk');
 		battle.makeChoices('switch 1', 'move sleeptalk');
 		battle.makeChoices('move fakeout', 'move swift');
-		assert.StrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
+		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
 	it('should not flinch if the user has already used a Dancer move first', function () {
