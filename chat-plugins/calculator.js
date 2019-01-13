@@ -68,18 +68,18 @@ function solveRPN(rpn) {
 		if (isNumeric(rpn[i]) === true) {
 			resultStack.push(rpn[i]);
 		} else {
-			let a = resultStack.pop();
-			let b = resultStack.pop();
+			let a = parseFloat(resultStack.pop());
+			let b = parseFloat(resultStack.pop());
 			if (rpn[i] === "+") {
-				resultStack.push(parseInt(a) + parseInt(b));
+				resultStack.push(a + b);
 			} else if (rpn[i] === "-") {
-				resultStack.push(parseInt(b) - parseInt(a));
+				resultStack.push(b - a);
 			} else if (rpn[i] === "*") {
-				resultStack.push(parseInt(a) * parseInt(b));
+				resultStack.push(a * b);
 			} else if (rpn[i] === "/") {
-				resultStack.push(parseInt(b) / parseInt(a));
+				resultStack.push(b / a);
 			} else if (rpn[i] === "^") {
-				resultStack.push(Math.pow(parseInt(b), parseInt(a)));
+				resultStack.push(Math.pow(b, a));
 			}
 		}
 	}
