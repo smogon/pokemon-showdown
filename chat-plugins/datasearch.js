@@ -622,7 +622,7 @@ function runDexsearch(target, cmd, canAll, message) {
 				if (alts.tiers[tier]) continue;
 				if (Object.values(alts.tiers).includes(false) && alts.tiers[tier] !== false) continue;
 				// some LC Pokemon are also in other tiers and need to be handled separately
-				if (alts.tiers.LC && !dex[mon].prevo && dex[mon].nfe && !Dex.formats.gen7lc.banlist.includes(dex[mon].species) && !Dex.formats.gen7lc.banlist.includes(dex[mon].species + "-Base") && tier !== 'NFE') continue;
+				if (alts.tiers.LC && !dex[mon].prevo && dex[mon].evos.some(evo => mod.getTemplate(evo).gen <= dex.gen) && !Dex.formats.gen7lc.banlist.includes(dex[mon].species) && !Dex.formats.gen7lc.banlist.includes(dex[mon].species + "-Base") && tier !== 'NFE') continue;
 			}
 
 			if (alts.doublesTiers && Object.keys(alts.doublesTiers).length) {
