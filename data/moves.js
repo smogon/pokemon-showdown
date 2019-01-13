@@ -4820,7 +4820,7 @@ let BattleMovedex = {
 		effect: {
 			duration: 2,
 			onStart: function (target) {
-				this.add('-activate', target, 'move: Fairy Lock');
+				this.add('-fieldactivate', 'move: Fairy Lock');
 			},
 			onTrapPokemon: function (pokemon) {
 				pokemon.tryTrap();
