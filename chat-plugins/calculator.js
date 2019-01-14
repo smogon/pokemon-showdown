@@ -4,9 +4,9 @@ let isNumeric = (str) => !isNaN(parseFloat(str));
 
 function parseMathematicalExpression(infix) {
 	// Shunting-yard Algorithm -- https://en.wikipedia.org/wiki/Shunting-yard_algorithm
-	let outputQueue = [];
-	let operatorStack = [];
-	let operators = {
+	const OUTPUT_QUEUE = [];
+	const OPERATOR_STACK = [];
+	const OPERATORS = {
 		"^": {
 			precedence: 4,
 			associativity: "Right",
@@ -33,32 +33,32 @@ function parseMathematicalExpression(infix) {
 	infix = infix.filter(token => token);
 	for (const token of infix) {
 		if ("^*/+-".includes(token)) {
-			let op = operators[token];
-			let prevToken = operatorStack[operatorStack.length - 1];
-			let prevOp = operators[prevToken];
+			let op = OPERATORS[token];
+			let prevToken = OPERATOR_STACK[OPERATOR_STACK.length - 1];
+			let prevOp = OPERATORS[prevToken];
 			while ("^*/+-".includes(prevToken) && (
 				op.associativity === "Left" ? op.precedence <= prevOp.precedence : op.precedence < prevOp.precedence
 			)) {
-				outputQueue.push(operatorStack.pop());
-				prevToken = operatorStack[operatorStack.length - 1];
-				prevOp = operators[prevToken];
+				OUTPUT_QUEUE.push(OPERATOR_STACK.pop());
+				prevToken = OPERATOR_STACK[OPERATOR_STACK.length - 1];
+				prevOp = OPERATORS[prevToken];
 			}
-			operatorStack.push(token);
+			OPERATOR_STACK.push(token);
 		} else if (token === "(") {
-			operatorStack.push(token);
+			OPERATOR_STACK.push(token);
 		} else if (token === ")") {
-			while (operatorStack[operatorStack.length - 1] !== "(") {
-				outputQueue.push(operatorStack.pop());
+			while (OPERATOR_STACK[OPERATOR_STACK.length - 1] !== "(") {
+				OUTPUT_QUEUE.push(OPERATOR_STACK.pop());
 			}
-			operatorStack.pop();
+			OPERATOR_STACK.pop();
 		} else {
-			outputQueue.push(token);
+			OUTPUT_QUEUE.push(token);
 		}
 	}
-	while (operatorStack.length > 0) {
-		outputQueue.push(operatorStack.pop());
+	while (OPERATOR_STACK.length > 0) {
+		OUTPUT_QUEUE.push(OPERATOR_STACK.pop());
 	}
-	return outputQueue;
+	return OUTPUT_QUEUE;
 }
 
 function solveRPN(rpn) {
