@@ -133,6 +133,8 @@ Chat.basePages = undefined;
 /** @type {PageTable} */
 // @ts-ignore
 Chat.pages = undefined;
+/** @type {() => (void)[]} */
+Chat.destroyHandlers = [];
 
 /*********************************************************
  * Load chat filters
@@ -1300,11 +1302,19 @@ Chat.loadPlugins = function () {
 		Object.assign(commands, plugin.commands);
 		Object.assign(pages, plugin.pages);
 
+		if (plugin.destroy) Chat.destroyHandlers.push(plugin.destroy);
+
 		if (plugin.chatfilter) Chat.filters.push(plugin.chatfilter);
 		if (plugin.namefilter) Chat.namefilters.push(plugin.namefilter);
 		if (plugin.hostfilter) Chat.hostfilters.push(plugin.hostfilter);
 		if (plugin.loginfilter) Chat.loginfilters.push(plugin.loginfilter);
 		if (plugin.nicknamefilter) Chat.nicknamefilters.push(plugin.nicknamefilter);
+	}
+};
+
+Chat.destroy = function () {
+	for (const handler of Chat.destroyHandlers) {
+		handler();
 	}
 };
 

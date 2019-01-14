@@ -28,12 +28,12 @@ function nextDaily() {
 	}
 
 	saveSpotlights();
-	setTimeout(nextDaily, DAY);
+	timeout = setTimeout(nextDaily, DAY);
 }
 
 const midnight = new Date();
 midnight.setHours(24, 0, 0, 0);
-setTimeout(nextDaily, midnight.valueOf() - Date.now());
+let timeout = setTimeout(nextDaily, midnight.valueOf() - Date.now());
 
 /**
  * @param {string?} image
@@ -49,6 +49,10 @@ async function renderSpotlight(image, description) {
 
 	return `<table style="text-align:center;margin:auto"><tr><td style="padding-right:10px;">${Chat.formatText(description, true)}</td>${imgHTML}</tr></table>`;
 }
+
+exports.destroy = function () {
+	clearTimeout(timeout);
+};
 
 /** @type {PageTable} */
 const pages = {
