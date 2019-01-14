@@ -1,8 +1,6 @@
 'use strict';
 
-function isNumeric(str) {
-	return !isNaN(parseFloat(str));
-}
+let isNumeric = (str) => !isNaN(parseFloat(str));
 
 function parseMathematicalExpression(infix) {
 	// Shunting-yard Algorithm -- https://en.wikipedia.org/wiki/Shunting-yard_algorithm
