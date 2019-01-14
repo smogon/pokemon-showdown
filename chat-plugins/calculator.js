@@ -67,10 +67,10 @@ function solveRPN(rpn) {
 	let resultStack = [];
 	for (const token of rpn) {
 		if (isNumeric(token) === true) {
-			resultStack.push(token);
+			resultStack.push(Number(token));
 		} else {
-			let a = parseFloat(resultStack.pop());
-			let b = parseFloat(resultStack.pop());
+			let a = resultStack.pop();
+			let b = resultStack.pop();
 			switch (token) {
 			case "+":
 				resultStack.push(a + b);
