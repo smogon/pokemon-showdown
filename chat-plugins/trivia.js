@@ -1017,7 +1017,7 @@ class NumberModeTrivia extends Trivia {
 				`Answer(s): ${this.curAnswers.join(', ')}<br />` +
 				`${Chat.plural(innerBuffer, "Each of them", "They")} gained <strong>${points}</strong> point(s)!`;
 
-			if (winner) return this.win(winner, buffer);
+			if (winner) return this.win(buffer);
 		} else {
 			for (let i in this.players) {
 				let player = this.players[i];
