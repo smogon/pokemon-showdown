@@ -65,7 +65,7 @@ function parseMathematicalExpression(infix) {
 function solveRPN(rpn) {
 	let resultStack = [];
 	for (const token of rpn) {
-		if (isNumeric(token) === true) {
+		if (!"^*/+-".includes(token)) {
 			resultStack.push(Number(token));
 		} else {
 			let a = resultStack.pop();
