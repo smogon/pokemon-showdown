@@ -1,64 +1,65 @@
 'use strict';
 
+const OPERATORS = {
+	"^": {
+		precedence: 4,
+		associativity: "Right",
+	},
+	"/": {
+		precedence: 3,
+		associativity: "Left",
+	},
+	"*": {
+		precedence: 3,
+		associativity: "Left",
+	},
+	"+": {
+		precedence: 2,
+		associativity: "Left",
+	},
+	"-": {
+		precedence: 2,
+		associativity: "Left",
+	},
+};
+
 let isNumeric = (str) => !isNaN(parseFloat(str));
 
 function parseMathematicalExpression(infix) {
 	// Shunting-yard Algorithm -- https://en.wikipedia.org/wiki/Shunting-yard_algorithm
-	const OUTPUT_QUEUE = [];
-	const OPERATOR_STACK = [];
-	const OPERATORS = {
-		"^": {
-			precedence: 4,
-			associativity: "Right",
-		},
-		"/": {
-			precedence: 3,
-			associativity: "Left",
-		},
-		"*": {
-			precedence: 3,
-			associativity: "Left",
-		},
-		"+": {
-			precedence: 2,
-			associativity: "Left",
-		},
-		"-": {
-			precedence: 2,
-			associativity: "Left",
-		},
-	};
+	let outputQueue = [];
+	let operatorStack = [];
 	infix = infix.replace(/\s+/g, "");
 	infix = infix.split(/([+\-*/^()])/);
 	infix = infix.filter(token => token);
 	for (const token of infix) {
 		if ("^*/+-".includes(token)) {
 			let op = OPERATORS[token];
-			let prevToken = OPERATOR_STACK[OPERATOR_STACK.length - 1];
+			let prevToken = operatorStack[operatorStack.length - 1];
 			let prevOp = OPERATORS[prevToken];
 			while ("^*/+-".includes(prevToken) && (
 				op.associativity === "Left" ? op.precedence <= prevOp.precedence : op.precedence < prevOp.precedence
 			)) {
-				OUTPUT_QUEUE.push(OPERATOR_STACK.pop());
-				prevToken = OPERATOR_STACK[OPERATOR_STACK.length - 1];
+				outputQueue.push(operatorStack.pop());
+				prevToken = operatorStack[operatorStack.length - 1];
 				prevOp = OPERATORS[prevToken];
 			}
-			OPERATOR_STACK.push(token);
+			operatorStack.push(token);
 		} else if (token === "(") {
-			OPERATOR_STACK.push(token);
+			operatorStack.push(token);
 		} else if (token === ")") {
-			while (OPERATOR_STACK[OPERATOR_STACK.length - 1] !== "(") {
-				OUTPUT_QUEUE.push(OPERATOR_STACK.pop());
+			while (operatorStack[operatorStack.length - 1] !== "(") {
+				outputQueue.push(operatorStack.pop());
 			}
-			OPERATOR_STACK.pop();
+			operatorStack.pop();
 		} else {
-			OUTPUT_QUEUE.push(token);
+			outputQueue.push(token);
 		}
 	}
-	while (OPERATOR_STACK.length > 0) {
-		OUTPUT_QUEUE.push(OPERATOR_STACK.pop());
+	while (operatorStack.length > 0) {
+		outputQueue.push(operatorStack.pop());
 	}
-	return OUTPUT_QUEUE;
+	return outputQueue;
 }
 
 function solveRPN(rpn) {
