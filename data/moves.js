@@ -7973,7 +7973,7 @@ let BattleMovedex = {
 		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1},
 		hasCustomRecoil: true,
 		onMoveFail: function (target, source, move) {
-			this.damage(source.maxhp / 2, source, source, 'crash');
+			this.damage(source.maxhp / 2, source, source, this.getEffect('High Jump Kick'));
 		},
 		secondary: null,
 		target: "normal",
@@ -8926,7 +8926,7 @@ let BattleMovedex = {
 		flags: {contact: 1, protect: 1, mirror: 1, gravity: 1},
 		hasCustomRecoil: true,
 		onMoveFail: function (target, source, move) {
-			this.damage(source.maxhp / 2, source, source, 'crash');
+			this.damage(source.maxhp / 2, source, source, this.getEffect('Jump Kick'));
 		},
 		secondary: null,
 		target: "normal",
