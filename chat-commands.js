@@ -2884,6 +2884,8 @@ const commands = {
 				if (lock['chat']) return this.errorReply(`Hot-patching chat has been disabled by ${lock['chat'].by} (${lock['chat'].reason})`);
 				if (lock['tournaments']) return this.errorReply(`Hot-patching tournaments has been disabled by ${lock['tournaments'].by} (${lock['tournaments'].reason})`);
 
+				Chat.destroy();
+
 				const processManagers = require('./lib/process-manager').processManagers;
 				for (let manager of processManagers.slice()) {
 					if (manager.filename.startsWith(FS('chat-plugins').path)) {
