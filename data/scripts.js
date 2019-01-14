@@ -113,6 +113,8 @@ let BattleScripts = {
 				if (this.faintMessages()) break;
 				this.add('-activate', dancer, 'ability: Dancer');
 				this.runMove(move.id, dancer, 0, this.getAbility('dancer'), undefined, true);
+				// Using a Dancer move is enough to spoil Fake Out etc.
+				dancer.activeTurns++;
 			}
 		}
 		if (noLock && pokemon.volatiles.lockedmove) delete pokemon.volatiles.lockedmove;
