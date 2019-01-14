@@ -819,7 +819,7 @@ class Template extends BasicEffect {
 		 */
 		this.eventPokemon = this.eventPokemon || undefined;
 
-		if (!this.gen) {
+		if (!this.gen && this.num >= 1) {
 			if (this.num >= 722 || this.forme.startsWith('Alola')) {
 				this.gen = 7;
 			} else if (this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme)) {
@@ -840,7 +840,7 @@ class Template extends BasicEffect {
 				this.gen = 3;
 			} else if (this.num >= 152) {
 				this.gen = 2;
-			} else if (this.num >= 1) {
+			} else {
 				this.gen = 1;
 			}
 		}
