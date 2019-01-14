@@ -92,6 +92,7 @@ function solveRPN(rpn) {
 }
 
 exports.commands = {
+	math: "calculate",
 	calculate: function (target, room, user) {
 		if (!target) return this.parse('/help calculate');
 		if (!this.runBroadcast()) return;
