@@ -432,22 +432,9 @@ if (cluster.isMaster) {
 		sockets.forEach(socket => {
 			// @ts-ignore
 			if (socket.protocol === 'xhr-streaming' && socket._session && socket._session.recv) {
-				logger.write('Found a ghost connection with protocol xhr-streaming');
+				logger.write('Found a ghost connection with protocol xhr-streaming\n');
 				// @ts-ignore
 				socket._session.recv.didClose();
-			}
-
-			// A ghost connection's `_session.to_tref._idlePrev` (and `_idleNext`) property is `null` while
-			// it is an object for normal users. Under normal circumstances, those properties should only be
-			// `null` when the timeout has already been called, but somehow it's not happening for some connections.
-			// Simply calling `_session.timeout_cb` (the function bound to the aformentioned timeout) manually
-			// on those connections kills those connections. For a bit of background, this timeout is the timeout
-			// that sockjs sets to wait for users to reconnect within that time to continue their session.
-			// @ts-ignore
-			if (socket._session && socket._session.to_tref && !socket._session.to_tref._idlePrev) {
-				logger.write(`Found a ghost connection with protocol ${socket.protocol}`);
-				// @ts-ignore
-				socket._session.timeout_cb();
 			}
 		});
 	}, 1000 * 60 * 10);
@@ -657,6 +644,24 @@ if (cluster.isMaster) {
 					break;
 				}
 			}
+		}
+
+		// xhr-streamming connections sometimes end up becoming ghost
+		// connections. Since it already has keepalive set, we set a timeout
+		// instead and close the connection if it has been inactive for the
+		// configured SockJS heartbeat interval plus an extra second to account
+		// for any delay in receiving the SockJS heartbeat packet.
+		if (socket.protocol === 'xhr-streaming') {
+			// @ts-ignore
+			socket._session.recv.thingy.setTimeout(
+				// @ts-ignore
+				socket._session.recv.options.heartbeat_delay + 1000,
+				() => {
+					try {
+						socket.close();
+					} catch (e) {}
+				}
+			);
 		}
 
 		// @ts-ignore
