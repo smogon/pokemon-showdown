@@ -133,7 +133,7 @@ Chat.basePages = undefined;
 /** @type {PageTable} */
 // @ts-ignore
 Chat.pages = undefined;
-/** @type {() => (void)[]} */
+/** @type {(() => (void))[]} */
 Chat.destroyHandlers = [];
 
 /*********************************************************
