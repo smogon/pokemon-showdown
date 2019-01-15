@@ -528,6 +528,7 @@ let BattleStatuses = {
 		num: 0,
 		effectType: 'Weather',
 		duration: 0,
+		onTryMovePriority: 1,
 		onTryMove: function (attacker, defender, move) {
 			if (move.type === 'Fire' && move.category !== 'Status') {
 				this.debug('Primordial Sea fire suppress');
@@ -602,6 +603,7 @@ let BattleStatuses = {
 		num: 0,
 		effectType: 'Weather',
 		duration: 0,
+		onTryMovePriority: 1,
 		onTryMove: function (attacker, defender, move) {
 			if (move.type === 'Water' && move.category !== 'Status') {
 				this.debug('Desolate Land water suppress');
