@@ -1042,7 +1042,7 @@ let BattleMovedex = {
 				if (move.flags['contact']) {
 					source.trySetStatus('psn', target);
 				}
-				return null;
+				return this.NOT_FAILURE;
 			},
 			onHit: function (target, source, move) {
 				if (move.isZPowered && move.flags['contact']) {
@@ -2914,7 +2914,7 @@ let BattleMovedex = {
 			onTryHit: function (target, source, move) {
 				if (move && (move.target === 'self' || move.category !== 'Status')) return;
 				this.add('-activate', target, 'move: Crafty Shield');
-				return null;
+				return this.NOT_FAILURE;
 			},
 		},
 		secondary: null,
@@ -9019,7 +9019,7 @@ let BattleMovedex = {
 				if (move.flags['contact']) {
 					this.boost({atk: -2}, source, target, this.getActiveMove("King's Shield"));
 				}
-				return null;
+				return this.NOT_FAILURE;
 			},
 			onHit: function (target, source, move) {
 				if (move.isZPowered && move.flags['contact']) {
@@ -10071,7 +10071,7 @@ let BattleMovedex = {
 						delete source.volatiles['lockedmove'];
 					}
 				}
-				return null;
+				return this.NOT_FAILURE;
 			},
 		},
 		secondary: null,
@@ -12520,7 +12520,7 @@ let BattleMovedex = {
 						delete source.volatiles['lockedmove'];
 					}
 				}
-				return null;
+				return this.NOT_FAILURE;
 			},
 		},
 		secondary: null,
@@ -13039,7 +13039,7 @@ let BattleMovedex = {
 						delete source.volatiles['lockedmove'];
 					}
 				}
-				return null;
+				return this.NOT_FAILURE;
 			},
 		},
 		secondary: null,
@@ -15747,7 +15747,7 @@ let BattleMovedex = {
 				if (move.flags['contact']) {
 					this.damage(source.maxhp / 8, source, target);
 				}
-				return null;
+				return this.NOT_FAILURE;
 			},
 			onHit: function (target, source, move) {
 				if (move.isZPowered && move.flags['contact']) {
@@ -19007,7 +19007,7 @@ let BattleMovedex = {
 						delete source.volatiles['lockedmove'];
 					}
 				}
-				return null;
+				return this.NOT_FAILURE;
 			},
 		},
 		secondary: null,
