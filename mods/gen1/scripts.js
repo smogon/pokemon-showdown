@@ -224,7 +224,7 @@ let BattleScripts = {
 			move.ignoreImmunity = (move.category === 'Status');
 		}
 
-		/** @type {number | undefined | false} */
+		/** @type {number | undefined | false | ''} */
 		let damage = false;
 		if (!target || target.fainted) {
 			this.attrLastMove('[notarget]');

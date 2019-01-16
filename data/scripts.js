@@ -236,10 +236,11 @@ let BattleScripts = {
 			this.faint(pokemon, pokemon, move);
 		}
 
-		/** @type {number | false | undefined} */
+		/** @type {number | false | undefined | ''} */
 		let damage = false;
 		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
 			damage = this.tryMoveHit(target, pokemon, move);
+			if (damage === this.NOT_FAILURE) pokemon.moveThisTurnResult = null;
 			if (damage || damage === 0 || damage === undefined) moveResult = true;
 		} else if (move.target === 'allAdjacent' || move.target === 'allAdjacentFoes') {
 			if (!targets.length) {
@@ -258,8 +259,9 @@ let BattleScripts = {
 				if (damage) {
 					damage += hitResult || 0;
 				} else {
-					damage = hitResult;
+					if (damage !== false || hitResult !== this.NOT_FAILURE) damage = hitResult;
 				}
+				if (damage === this.NOT_FAILURE) pokemon.moveThisTurnResult = null;
 			}
 			if (move.spreadHit) this.attrLastMove('[spread] ' + hitTargets.join(','));
 		} else {
@@ -277,6 +279,7 @@ let BattleScripts = {
 				return false;
 			}
 			damage = this.tryMoveHit(target, pokemon, move);
+			if (damage === this.NOT_FAILURE) pokemon.moveThisTurnResult = null;
 			if (damage || damage === 0 || damage === undefined) moveResult = true;
 		}
 		if (move.selfBoost && moveResult) this.moveHit(pokemon, pokemon, move, move.selfBoost, false, true);
@@ -351,6 +354,8 @@ let BattleScripts = {
 			if (hitResult === false) {
 				this.add('-fail', pokemon);
 				this.attrLastMove('[still]');
+			} else if (hitResult === this.NOT_FAILURE) {
+				return hitResult;
 			}
 			return false;
 		}

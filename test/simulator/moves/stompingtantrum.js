@@ -29,7 +29,7 @@ describe('Stomping Tantrum', function () {
 	it('should not double its Base Power if the last move used on the previous turn hit protect', function () {
 		battle = common.createBattle([
 			[{species: 'Marowak', ability: 'rockhead', moves: ['stompingtantrum']}],
-			[{species: 'Manaphy', ability: 'hydration', moves: ['protect']}],
+			[{species: 'Manaphy', ability: 'hydration', moves: ['protect', 'tailglow']}],
 		]);
 
 		battle.onEvent('BasePower', battle.getFormat(), function (basePower) {
@@ -37,7 +37,7 @@ describe('Stomping Tantrum', function () {
 		});
 
 		battle.makeChoices('move stompingtantrum', 'move protect');
-		battle.makeChoices('move stompingtantrum', 'move protect');
+		battle.makeChoices('move stompingtantrum', 'move tailglow');
 	});
 
 	it('should double its Base Power if the last move used was a spread move that partially hit protect and otherwise failed', function () {
@@ -51,8 +51,8 @@ describe('Stomping Tantrum', function () {
 			{species: 'Ho-Oh', ability: 'pressure', moves: ['recover']},
 		]);
 
-		battle.onEvent('BasePower', battle.getFormat(), function (basePower) {
-			assert.strictEqual(basePower, 150);
+		battle.onEvent('BasePower', battle.getFormat(), function (basePower, attacker, defender, move) {
+			if (move.id === 'stompingtantrum') assert.strictEqual(basePower, 150);
 		});
 
 		battle.makeChoices('move sunnyday, move precipiceblades', 'move protect, move recover');
