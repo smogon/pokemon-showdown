@@ -13947,6 +13947,9 @@ let BattleMovedex = {
 		effect: {
 			duration: 1,
 			onResidualOrder: 20,
+			onStart: function (target) {
+				this.add('-singleturn', target, 'move: Roost');
+			},
 			onTypePriority: -1,
 			onType: function (types, pokemon) {
 				this.effectData.typeWas = types;
