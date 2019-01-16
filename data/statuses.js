@@ -245,6 +245,7 @@ let BattleStatuses = {
 		onResidual: function (pokemon) {
 			if (this.effectData.source && (!this.effectData.source.isActive || this.effectData.source.hp <= 0 || !this.effectData.source.activeTurns)) {
 				delete pokemon.volatiles['partiallytrapped'];
+				this.add('-end', pokemon, this.effectData.sourceEffect, '[partiallytrapped]', '[silent]');
 				return;
 			}
 			if (this.effectData.source.hasItem('bindingband')) {
