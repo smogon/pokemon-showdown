@@ -821,15 +821,15 @@ class Template extends BasicEffect {
 
 		/**
 		 * True if a pokemon is Mega
-		 * @type {boolean}
+		 * @type {boolean | undefined}
 		 */
-		this.isMega = !!(this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme));
+		this.isMega = !!(this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme)) || undefined;
 
 		/**
 		 * True if a pokemon is a forme that is only acessible in battle
-		 * @type {boolean}
+		 * @type {boolean | undefined}
 		 */
-		this.battleOnly = !!this.battleOnly || !!this.isMega;
+		this.battleOnly = !!this.battleOnly || !!this.isMega || undefined;
 
 		if (!this.gen && this.num >= 1) {
 			if (this.num >= 722 || this.forme.startsWith('Alola')) {
