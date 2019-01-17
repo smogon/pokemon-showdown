@@ -79,7 +79,10 @@ function solveRPN(rpn) {
 			if (!resultStack.length) throw new SyntaxError(`Unknown syntax error`);
 			resultStack.push(-resultStack.pop());
 		} else if (!"^*/+-".includes(token)) {
-			const number = Number(token);
+			let number = Number(token);
+			if (isNaN(number) && Math[token.toUpperCase()]) {
+				number = Math[token.toUpperCase()];
+			}
 			if (isNaN(number) && token !== 'NaN') {
 				throw new SyntaxError(`Unrecognized token ${token}`);
 			}
