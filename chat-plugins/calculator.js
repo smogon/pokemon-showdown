@@ -96,9 +96,9 @@ exports.commands = {
 		if (!target) return this.parse('/help calculate');
 		if (!this.runBroadcast()) return;
 		let result = solveRPN(parseMathematicalExpression(target));
-		let validation_regex = /^(?!.*([\^*/+\-.]{2}|\.\d+\.+|^[*/]))[\d+()^*\-/. ]+$/gm;
-		if (validation_regex.test(target) === false) {
-			return this.errorReply("Invalid arithmetical question");
+		let isNumeric = (str) => !isNaN(parseFloat(str));
+		if (isNumeric(result) === false) {
+			return this.errorReply("Something went wrong in the calculation. Maybe check your arithmetical question?");
 		} else {
 			return this.sendReplyBox(`Result: ${result}`);
 		}
