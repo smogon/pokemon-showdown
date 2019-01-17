@@ -54,7 +54,7 @@ function parseMathematicalExpression(infix) {
 			isExprExpected = true;
 		} else if (token === ")") {
 			if (isExprExpected) throw new SyntaxError(`Got ")" where an expression should be`);
-			while (operatorStack[operatorStack.length - 1] !== "(") {
+			while (operatorStack.length && operatorStack[operatorStack.length - 1] !== "(") {
 				outputQueue.push(operatorStack.pop());
 			}
 			operatorStack.pop();
@@ -67,7 +67,9 @@ function parseMathematicalExpression(infix) {
 	}
 	if (isExprExpected) throw new SyntaxError(`Input ended where an expression should be`);
 	while (operatorStack.length > 0) {
-		outputQueue.push(operatorStack.pop());
+		const token = operatorStack.pop();
+		if (token === '(') continue;
+		outputQueue.push(token);
 	}
 	return outputQueue;
 }
