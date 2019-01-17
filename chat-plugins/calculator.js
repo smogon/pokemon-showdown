@@ -30,8 +30,10 @@ function parseMathematicalExpression(infix) {
 	infix = infix.replace(/\s+/g, "");
 	infix = infix.split(/([+\-*/^()])/);
 	infix = infix.filter(token => token);
+	let isExprExpected = true;
 	for (const token of infix) {
 		if ("^*/+-".includes(token)) {
+			if (isExprExpected) throw new SyntaxError(`Got "${token}" where an expression should be`);
 			let op = OPERATORS[token];
 			let prevToken = operatorStack[operatorStack.length - 1];
 			let prevOp = OPERATORS[prevToken];
@@ -43,17 +45,25 @@ function parseMathematicalExpression(infix) {
 				prevOp = OPERATORS[prevToken];
 			}
 			operatorStack.push(token);
+			isExprExpected = true;
 		} else if (token === "(") {
+			if (!isExprExpected) throw new SyntaxError(`Got "(" where an operator should be`);
 			operatorStack.push(token);
+			isExprExpected = true;
 		} else if (token === ")") {
+			if (isExprExpected) throw new SyntaxError(`Got ")" where an expression should be`);
 			while (operatorStack[operatorStack.length - 1] !== "(") {
 				outputQueue.push(operatorStack.pop());
 			}
 			operatorStack.pop();
+			isExprExpected = false;
 		} else {
+			if (!isExprExpected) throw new SyntaxError(`Got "${token}" where an operator should be`);
 			outputQueue.push(token);
+			isExprExpected = false;
 		}
 	}
+	if (isExprExpected) throw new SyntaxError(`Input ended where an expression should be`);
 	while (operatorStack.length > 0) {
 		outputQueue.push(operatorStack.pop());
 	}
@@ -64,8 +74,13 @@ function solveRPN(rpn) {
 	let resultStack = [];
 	for (const token of rpn) {
 		if (!"^*/+-".includes(token)) {
-			resultStack.push(Number(token));
+			const number = Number(token);
+			if (isNaN(number) && token !== 'NaN') {
+				throw new SyntaxError(`Unrecognized token ${token}`);
+			}
+			resultStack.push(number);
 		} else {
+			if (resultStack.length < 2) throw new SyntaxError(`Unknown syntax error`);
 			let a = resultStack.pop();
 			let b = resultStack.pop();
 			switch (token) {
@@ -87,6 +102,7 @@ function solveRPN(rpn) {
 			}
 		}
 	}
+	if (resultStack.length !== 1) throw new SyntaxError(`Unknown syntax error`);
 	return resultStack.pop();
 }
 
@@ -95,12 +111,11 @@ exports.commands = {
 	calculate: function (target, room, user) {
 		if (!target) return this.parse('/help calculate');
 		if (!this.runBroadcast()) return;
-		let result = solveRPN(parseMathematicalExpression(target));
-		// Validate if the target is correct
-		if (isNaN(result)) {
-			return this.errorReply("Something went wrong in the calculation. Maybe check your arithmetical question?");
-		} else {
-			return this.sendReplyBox(`Result: ${result}`);
+		try {
+			let result = solveRPN(parseMathematicalExpression(target));
+			this.sendReplyBox(Chat.html`${target}<br />= <strong>${Chat.stringify(result)}</strong>`);
+		} catch (e) {
+			this.sendReplyBox(Chat.html`${target}<br />= <span class="message-error"><strong>Invalid input:</strong> ${e.message}</span>`);
 		}
 	},
 	calculatehelp: [
