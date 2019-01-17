@@ -32,7 +32,9 @@ function parseMathematicalExpression(infix) {
 	infix = infix.filter(token => token);
 	let isExprExpected = true;
 	for (const token of infix) {
-		if ("^*/+-".includes(token)) {
+		if (isExprExpected && "+-".includes(token)) {
+			if (token === '-') operatorStack.push('negative');
+		} else if ("^*/+-".includes(token)) {
 			if (isExprExpected) throw new SyntaxError(`Got "${token}" where an expression should be`);
 			let op = OPERATORS[token];
 			let prevToken = operatorStack[operatorStack.length - 1];
@@ -73,7 +75,10 @@ function parseMathematicalExpression(infix) {
 function solveRPN(rpn) {
 	let resultStack = [];
 	for (const token of rpn) {
-		if (!"^*/+-".includes(token)) {
+		if (token === 'negative') {
+			if (!resultStack.length) throw new SyntaxError(`Unknown syntax error`);
+			resultStack.push(-resultStack.pop());
+		} else if (!"^*/+-".includes(token)) {
 			const number = Number(token);
 			if (isNaN(number) && token !== 'NaN') {
 				throw new SyntaxError(`Unrecognized token ${token}`);
