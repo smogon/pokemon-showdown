@@ -97,6 +97,7 @@ exports.commands = {
 		if (!this.runBroadcast()) return;
 		let result = solveRPN(parseMathematicalExpression(target));
 		let isNumeric = (str) => !isNaN(parseFloat(str));
+		// Validate if the target is correct
 		if (isNumeric(result) === false) {
 			return this.errorReply("Something went wrong in the calculation. Maybe check your arithmetical question?");
 		} else {
