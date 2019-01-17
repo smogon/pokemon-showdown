@@ -820,13 +820,13 @@ class Template extends BasicEffect {
 		this.eventPokemon = this.eventPokemon || undefined;
 
 		/**
-		 * True if a pokemon is Mega
+		 * True if a pokemon is mega
 		 * @type {boolean | undefined}
 		 */
 		this.isMega = !!(this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme)) || undefined;
 
 		/**
-		 * True if a pokemon is a forme that is only acessible in battle
+		 * True if a pokemon is a forme that is only accessible in battle
 		 * @type {boolean | undefined}
 		 */
 		this.battleOnly = !!this.battleOnly || !!this.isMega || undefined;
