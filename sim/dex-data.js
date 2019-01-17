@@ -819,18 +819,26 @@ class Template extends BasicEffect {
 		 */
 		this.eventPokemon = this.eventPokemon || undefined;
 
+		/**
+		 * True if a pokemon is mega
+		 * @type {boolean | undefined}
+		 */
+		this.isMega = !!(this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme)) || undefined;
+
+		/**
+		 * True if a pokemon is a forme that is only accessible in battle
+		 * @type {boolean | undefined}
+		 */
+		this.battleOnly = !!this.battleOnly || !!this.isMega || undefined;
+
 		if (!this.gen && this.num >= 1) {
 			if (this.num >= 722 || this.forme.startsWith('Alola')) {
 				this.gen = 7;
-			} else if (this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme)) {
-				this.gen = 6;
-				this.isMega = true;
-				this.battleOnly = true;
 			} else if (this.forme === 'Primal') {
 				this.gen = 6;
 				this.isPrimal = true;
 				this.battleOnly = true;
-			} else if (this.num >= 650) {
+			} else if (this.num >= 650 || this.isMega) {
 				this.gen = 6;
 			} else if (this.num >= 494) {
 				this.gen = 5;
