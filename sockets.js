@@ -241,6 +241,14 @@ if (cluster.isMaster) {
 	exports.subchannelMove = function (worker, channelid, subchannelid, socketid) {
 		worker.send(`.${channelid}\n${subchannelid}\n${socketid}`);
 	};
+
+	/**
+	 * @param {cluster.Worker} worker
+	 * @param {string} query
+	 */
+	exports.eval = function (worker, query) {
+		worker.send(`$${query}`);
+	};
 } else {
 	// is worker
 	// @ts-ignore This file doesn't exist on the repository, so Travis checks fail if this isn't ignored
