@@ -129,6 +129,6 @@ exports.commands = {
 		}
 	},
 	calculatehelp: [
-		`/calculate [arithmetical question] - Calculates an arithmetical question. Supoorts only PEMDAS (Parenthesis, Exponents, Multiplication, Addition, Subtraction).`,
+		`/calculate [arithmetical question] - Calculates an arithmetical question. Supports PEMDAS (Parenthesis, Exponents, Multiplication, Division, Addition and Subtraction), pi and e.`,
 	],
 };
