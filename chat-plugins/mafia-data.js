@@ -1713,6 +1713,7 @@ const themes = {
 	classic: {
 		name: `Classic`,
 		desc: `Classic: A PS! Mafia Classic. It's common, strategic, and fun!`,
+		5: `Mafia Goon, Role Cop, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		6: `Mafia Goon, Mafia Goon, Role Cop, Jailkeeper, Vanilla Townie, Vanilla Townie`,
 		7: `Mafia Goon, Mafia Goon, Macho Role Cop, Doctor, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		8: `Mafia Pretty Lady, Mafia Goon, Role Cop, Doctor, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
@@ -1796,8 +1797,8 @@ const themes = {
 		16: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Lightkeeper, Lightkeeper, Gunsmith, Gunsmith, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle`,
 		17: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Lightkeeper, Lightkeeper, Gunsmith, Gunsmith, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle`,
 		18: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Lightkeeper, Lightkeeper, Gunsmith, Gunsmith, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle`,
-		19: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Lightkeeper, Lightkeeper, Gunsmith, Gunsmith, Three-Shot Oracle, Three-Shot Oracle, Three-Shot Oracle, Three-Shot Oracle, Three-Shot Oracle, Three-Shot Oracle, Three-Shot Oracle, Three-Shot Oracle, Three-Shot Oracle, Three-Shot Oracle`,
-		20: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Lightkeeper, Lightkeeper, Gunsmith, Gunsmith, Three-Shot Oracle, Three-Shot Oracle, Three-Shot Oracle, Three-Shot Oracle, Three-Shot Oracle, Three-Shot Oracle, Three-Shot Oracle, Three-Shot Oracle, Three-Shot Oracle, Three-Shot Oracle, Three-Shot Oracle`,
+		19: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Lightkeeper, Lightkeeper, Gunsmith, Gunsmith, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle`,
+		20: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Lightkeeper, Lightkeeper, Gunsmith, Gunsmith, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle, Two-Shot Oracle`,
 	},
 	medmaf: `medical_mafia`,
 	medical_mafia: {
