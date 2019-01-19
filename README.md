@@ -165,6 +165,8 @@ Major Contributors
 - Neil Rashbrook [urkerab] - Development
 - Quinton Lee [sirDonovan] - Development
 - [Ridaz] - Art (battle animations)
+- Tobias Mann [asgdf] - Development
+- William [MacChaeger] - Development
 
 Contributors
 
@@ -184,7 +186,6 @@ Contributors
 - Luke Harmon-Vellotti [moo, CheeseMuffin] - Development
 - Robin Vandenbrande [Quinella] - Development
 - Russell Jones [SadisticMystic] - Research (game mechanics)
-- Tobias Mann [asgdf] - Development
 
 Special thanks
 
