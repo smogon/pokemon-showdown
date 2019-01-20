@@ -4347,8 +4347,10 @@ let BattleMovedex = {
 			},
 			onModifyMovePriority: -2,
 			onModifyMove: function (move) {
-				this.debug('Electrify making move type electric');
-				move.type = 'Electric';
+				if (move.id !== 'struggle') {
+					this.debug('Electrify making move type electric');
+					move.type = 'Electric';
+				}
 			},
 		},
 		secondary: null,
