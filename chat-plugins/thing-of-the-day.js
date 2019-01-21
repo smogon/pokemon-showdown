@@ -123,7 +123,12 @@ class OtdHandler {
 			if (toId(user) in value.userids || user.latestIp in value.ips) return user.sendTo(this.room, `Since your nomination has been removed by staff, you cannot submit another ${this.name.toLowerCase()} until the next round.`);
 		}
 
-		if (this.nominations.has(id)) return user.sendTo(this.room, "This artist has already been nominated.");
+		const prevNom = this.nominations.get(id);
+		if (prevNom) {
+			if (!(toId(user) in prevNom.userids || user.latestIp in prevNom.ips)) {
+				return user.sendTo(this.room, `This ${this.name.toLowerCase()} has already been nominated.`);
+			}
+		}
 
 		for (const [key, value] of this.nominations) {
 			if (toId(user) in value.userids || user.latestIp in value.ips) {
