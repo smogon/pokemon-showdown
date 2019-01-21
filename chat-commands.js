@@ -1619,11 +1619,13 @@ const commands = {
 		if (!target) return this.parse('/help warn');
 		if (!this.canTalk()) return;
 		if (room.isPersonal && !user.can('warn')) return this.errorReply("Warning is unavailable in group chats.");
+		// If used in staff, help tickets or battles, log the warn to the global modlog.
+		const global = room.id === 'staff' || room.id.startsWith('help-') || (room.battle && !room.parent);
 
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User '${this.targetUsername}' not found.`);
-		if (!(targetUser in room.users)) {
+		if (!(targetUser in room.users) && room.id !== 'staff') {
 			return this.errorReply(`User ${this.targetUsername} is not in the room ${room.id}.`);
 		}
 		if (target.length > MAX_REASON_LENGTH) {
@@ -1634,6 +1636,9 @@ const commands = {
 
 		this.addModAction(`${targetUser.name} was warned by ${user.name}.${(target ? ` (${target})` : ``)}`);
 		this.modlog('WARN', targetUser, target, {noalts: 1});
+		if (global) {
+			this.globalModlog('WARN', targetUser, ` by ${user.userid}${(target ? `: ${target}` : ``)}`);
+		}
 		targetUser.send(`|c|~|/warn ${target}`);
 		let userid = targetUser.getLastId();
 		this.add(`|unlink|${userid}`);
