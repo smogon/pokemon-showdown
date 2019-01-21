@@ -272,7 +272,7 @@ exports.commands = {
 function runDexsearch(target, cmd, canAll, message) {
 	let searches = [];
 	let allTiers = {'uber': 'Uber', 'ubers': 'Uber', 'ou': 'OU', 'uubl': 'UUBL', 'uu': 'UU', 'rubl': 'RUBL', 'ru': 'RU', 'nubl': 'NUBL', 'nu': 'NU', 'publ': 'PUBL', 'pu': 'PU', 'zu': '(PU)', 'nfe': 'NFE', 'lcuber': 'LC Uber', 'lcubers': 'LC Uber', 'lc': 'LC', 'cap': 'CAP', 'caplc': 'CAP LC', 'capnfe': 'CAP NFE', __proto__: null};
-	let allDoublesTiers = {'doublesubers': 'DUber', 'doublesuber': 'DUber', 'duber': 'DUber', 'dubers': 'DUber', 'doublesou': 'DOU', 'dou': 'DOU', 'doublesbl': 'DBL', 'dbl': 'DBL', 'doublesuu': 'DUU', 'duu': 'DUU', 'doublesnu': 'DNU', 'dnu': 'DNU', __proto__: null};
+	let allDoublesTiers = {'doublesubers': 'DUber', 'doublesuber': 'DUber', 'duber': 'DUber', 'dubers': 'DUber', 'doublesou': 'DOU', 'dou': 'DOU', 'doublesbl': 'DBL', 'dbl': 'DBL', 'doublesuu': 'DUU', 'duu': 'DUU', __proto__: null};
 	let allTypes = Object.create(null);
 	for (let i in Dex.data.TypeChart) {
 		allTypes[toId(i)] = i;
