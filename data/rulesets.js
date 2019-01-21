@@ -685,7 +685,7 @@ let BattleFormats = {
 			if (item.zMove) return [`${set.name || set.species}'s item ${item.name} is banned by Z-Move Clause.`];
 		},
 		onStart: function () {
-			this.add('rule', 'Z-Move Clause: All Z-Moves are banned');
+			this.add('rule', 'Z-Move Clause: Z-Moves are banned');
 		},
 	},
 	hppercentagemod: {
