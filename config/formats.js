@@ -839,12 +839,8 @@ let Formats = [
 			validate: [2, 4],
 			battle: 2,
 		},
-		ruleset: ['[Gen 7] Doubles OU', 'Accuracy Moves Clause', 'Sleep Clause Mod'],
-		banlist: ['Salamence-Mega', 'Tapu Lele', 'Focus Sash', 'Final Gambit', 'Perish Song'],
-		onValidateSet: function (set) {
-			const item = this.getItem(set.item);
-			if (item.zMove) return [`${set.name || set.species}'s item ${item.name} is banned.`];
-		},
+		ruleset: ['Pokemon', 'Standard Doubles', 'Swagger Clause', 'Team Preview', 'Z-Move Clause', 'Accuracy Moves Clause', 'Sleep Clause Mod'],
+		banlist: ['Arceus', 'Dialga', 'Gengar-Mega', 'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Jirachi', 'Kangaskhan-Mega', 'Kyogre', 'Kyurem-White', 'Lugia', 'Lunala', 'Magearna', 'Marshadow', 'Mewtwo', 'Mewtwo-Mega-X', 'Mewtwo-Mega-Y', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Necrozma-Ultra', 'Palkia', 'Rayquaza', 'Rayquaza-Mega', 'Reshiram', 'Salamence-Mega', 'Snorlax', 'Solgaleo', 'Tapu Lele', 'Xerneas', 'Yveltal', 'Zekrom', 'Zygarde-Complete', 'Power Construct', 'Eevium Z', 'Focus Sash', 'Dark Void', 'Final Gambit', 'Perish Song', 'Gravity ++ Grass Whistle', 'Gravity ++ Hypnosis', 'Gravity ++ Lovely Kiss', 'Gravity ++ Sing', 'Gravity ++ Sleep Powder'],
 	},
 	{
 		name: "[Gen 6] Gen-NEXT OU",
