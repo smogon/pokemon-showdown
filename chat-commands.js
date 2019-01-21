@@ -2197,6 +2197,7 @@ const commands = {
 		}
 		if (!this.can('receiveauthmessages', null, room)) return false;
 		this.modlog('NOTE', null, target);
+		if (room.id === 'staff' || room.id === 'upperstaff') this.globalModlog('NOTE', null, ` by ${user.userid}: ${target}`);
 		return this.privateModAction(`(${user.name} notes: ${target})`);
 	},
 	modnotehelp: [`/modnote [note] - Adds a moderator note that can be read through modlog. Requires: % @ * # & ~`],
