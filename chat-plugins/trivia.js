@@ -723,7 +723,7 @@ class Trivia extends Rooms.RoomGame {
 		}
 		ranks.sort((a, b) => {
 			return b.player.points - a.player.points ||
-				b.player.lastQuestion - a.player.lastQuestion ||
+				a.player.lastQuestion - b.player.lastQuestion ||
 				hrtimeToNanoseconds(a.player.answeredAt) - hrtimeToNanoseconds(b.player.answeredAt);
 		});
 		return max === null ? ranks : ranks.slice(0, max);
