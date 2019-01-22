@@ -2453,8 +2453,8 @@ const commands = {
 		}
 		if (!this.can('forcerename', targetUser)) return false;
 
-		let entry = `${targetUser.name} was forced to choose a new name by ${user.name}${(reason ? `: ${reason}` : ``)}`;
-		this.privateModAction(`(${entry})`);
+		this.privateModAction(`(${targetUser.name} was forced to choose a new name by ${user.name}${(reason ? `: ${reason}` : ``)})`);
+		this.globalModlog('FORCERENAME', targetUser, ` by ${user.name}${(reason ? `: ${reason}` : ``)}`);
 		this.modlog('FORCERENAME', targetUser, reason, {noip: 1, noalts: 1});
 		Ladders.cancelSearches(targetUser);
 		targetUser.resetName(true);
