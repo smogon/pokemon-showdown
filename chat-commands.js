@@ -2191,12 +2191,14 @@ const commands = {
 	modnote: function (target, room, user, connection) {
 		if (!target) return this.parse('/help modnote');
 		if (!this.canTalk()) return;
+
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.errorReply(`The note is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
 		}
 		if (!this.can('receiveauthmessages', null, room)) return false;
 		target = target.replace(/\n/g, "; ");
 		this.modlog('NOTE', null, target);
+		if (room.id === 'staff' || room.id === 'upperstaff') this.globalModlog('NOTE', null, ` by ${user.userid}: ${target}`);
 		return this.privateModAction(`(${user.name} notes: ${target})`);
 	},
 	modnotehelp: [`/modnote [note] - Adds a moderator note that can be read through modlog. Requires: % @ * # & ~`],
