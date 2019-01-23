@@ -244,12 +244,19 @@ class BattleTimer {
 		for (const slotNum of this.ticksLeft.keys()) {
 			const slot = /** @type {PlayerSlot} */ ('p' + (slotNum + 1));
 			const player = this.battle[slot];
+			const playerName = this.battle.playerNames[slotNum];
 
 			this.ticksLeft[slotNum] += perTurnTicks;
 			this.turnTicksLeft[slotNum] = Math.min(this.ticksLeft[slotNum], maxTurnTicks);
 
 			const ticksLeft = this.turnTicksLeft[slotNum];
 			if (player) player.sendRoom(`|inactive|Time left: ${ticksLeft * TICK_TIME} sec this turn | ${this.ticksLeft[slotNum] * TICK_TIME} sec total`);
+			if (ticksLeft * TICK_TIME <= 30) {
+				this.battle.room.add(`|inactive|${playerName} has ${ticksLeft * TICK_TIME} seconds left this turn.`);
+			}
+			if (this.debug) {
+				this.battle.room.add(`||${playerName} | Time left: ${ticksLeft * TICK_TIME} sec this turn | ${this.ticksLeft[slotNum] * TICK_TIME} sec total | +${perTurnTicks * TICK_TIME} seconds`);
+			}
 		}
 		this.timer = setTimeout(() => this.nextTick(), TICK_TIME * 1000);
 	}
