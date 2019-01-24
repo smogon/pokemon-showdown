@@ -676,6 +676,18 @@ let BattleFormats = {
 			this.add('rule', 'CFZ Clause: Crystal-free Z-Moves are banned');
 		},
 	},
+	zmoveclause: {
+		effectType: 'ValidatorRule',
+		name: 'Z-Move Clause',
+		desc: "Bans Pok&eacute;mon from holding Z-Crystals",
+		onValidateSet: function (set) {
+			const item = this.getItem(set.item);
+			if (item.zMove) return [`${set.name || set.species}'s item ${item.name} is banned by Z-Move Clause.`];
+		},
+		onStart: function () {
+			this.add('rule', 'Z-Move Clause: Z-Moves are banned');
+		},
+	},
 	hppercentagemod: {
 		effectType: 'Rule',
 		name: 'HP Percentage Mod',
