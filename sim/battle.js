@@ -1992,14 +1992,16 @@ class Battle extends Dex.ModdedDex {
 			break;
 		}
 
-		if (this.gen <= 1 && effect.recoil && source) {
-			this.damage(this.clampIntRange(Math.floor(damage * effect.recoil[0] / effect.recoil[1]), 1), source, target, 'recoil');
-		}
-		if (this.gen <= 1 && effect.drain && source) {
-			this.heal(this.clampIntRange(Math.floor(damage * effect.drain[0] / effect.drain[1]), 1), source, target, 'drain');
-		}
-		if (this.gen > 1 && effect.drain && source) {
-			this.heal(Math.ceil(damage * effect.drain[0] / effect.drain[1]), source, target, 'drain');
+		if (damage) {
+			if (this.gen <= 1 && effect.recoil && source) {
+				this.damage(this.clampIntRange(Math.floor(damage * effect.recoil[0] / effect.recoil[1]), 1), source, target, 'recoil');
+			}
+			if (this.gen <= 4 && effect.drain && source) {
+				this.heal(this.clampIntRange(Math.floor(damage * effect.drain[0] / effect.drain[1]), 1), source, target, 'drain');
+			}
+			if (this.gen > 4 && effect.drain && source) {
+				this.heal(Math.round(damage * effect.drain[0] / effect.drain[1]), source, target, 'drain');
+			}
 		}
 
 		// @ts-ignore TODO: AfterDamage passes an Effect, not an ActiveMove
