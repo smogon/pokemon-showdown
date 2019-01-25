@@ -639,6 +639,18 @@ interface Template extends Readonly<BasicEffect & TemplateData & TemplateFormats
 
 type GameType = 'singles' | 'doubles' | 'triples' | 'rotation'
 
+interface GameTimerSettings {
+	dcTimer: boolean;
+	dcTimerBank: boolean;
+	starting: number;
+	grace: number;
+	addPerTurn: number;
+	maxPerTurn: number;
+	maxFirstTurn: number;
+	timeoutAutoChoose: boolean;
+	accelerate: boolean;
+}
+
 interface FormatsData extends EventMethods {
 	name: string
 	banlist?: string[]
@@ -671,7 +683,7 @@ interface FormatsData extends EventMethods {
 	team?: string
 	teamLength?: {validate?: [number, number], battle?: number}
 	threads?: string[]
-	timer?: {starting?: number, perTurn?: number, maxPerTurn?: number, maxFirstTurn?: number, timeoutAutoChoose?: boolean, accelerate?: boolean}
+	timer?: Partial<GameTimerSettings>
 	tournamentShow?: boolean
 	unbanlist?: string[]
 	checkLearnset?: (this: Validator, move: Move, template: Template, lsetData: PokemonSources, set: PokemonSet) => {type: string, [any: string]: any} | null

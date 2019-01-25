@@ -19,9 +19,10 @@ const FS = require('./lib/fs');
 const TICK_TIME = 5;
 
 // Timer constants: In seconds, should be multiple of TICK_TIME
-const STARTING_TIME = 210;
+const STARTING_TIME = 150;
 const MAX_TURN_TIME = 150;
-const STARTING_TIME_CHALLENGE = 280;
+const STARTING_TIME_CHALLENGE = 300;
+const STARTING_GRACE_TIME = 60;
 const MAX_TURN_TIME_CHALLENGE = 300;
 
 const DISCONNECTION_TICKS = 13;
@@ -101,27 +102,38 @@ class BattleTimer {
 		/** @type {Set<string>} */
 		this.timerRequesters = new Set();
 		/**
-		 * Overall timer.
-		 * Starts at 21 per player (210 seconds) in a ladder battle. Goes
-		 * down by 1 every tick (10 seconds). Goes up by 1 every request (2
-		 * if below 15). The player loses if this reaches 0.
+		 * Total timer.
+		 *
+		 * Starts at 42 per player (210 seconds) in a ladder battle. Goes
+		 * down by 1 every tick (5 seconds). Goes up by 2 every turn (with
+		 * some complications for long games and doubles), capped at
+		 * starting time. The player loses if this reaches 0.
+		 *
+		 * The equivalent of "Your Time" in VGC.
+		 *
 		 * @type {number[]}
 		 */
 		this.ticksLeft = [];
 		/**
 		 * Turn timer.
-		 * Set equal to the player's overall timer, but capped at 15 in a
-		 * ladder battle. Goes down by 1 every tick. Tracked separately from
-		 * the overall timer, and the player also loses if this reaches 0.
+		 *
+		 * Set equal to the player's overall timer, but capped at 150
+		 * seconds in ticks in a ladder battle. Goes down by 1 every tick.
+		 * Tracked separately from the overall timer, and the player also
+		 * loses if this reaches 0.
+		 *
 		 * @type {number[]}
 		 */
 		this.turnTicksLeft = [];
 		/**
 		 * Disconnect timer.
-		 * Normally 7 while the player is connected. If the player
-		 * disconnects, this will go down by 1 every tick. If the player
-		 * reconnects, this will reset to 7. Tracked separately from the
+		 * Starts at 60 seconds in ticks. While the player is disconnected,
+		 * this will go down by 1 every tick. Tracked separately from the
 		 * overall timer, and the player also loses if this reaches 0.
+		 *
+		 * Mostly used so impatient players don't have to wait the full
+		 * 150 seconds against a disconnected opponent.
+		 *
 		 * @type {number[]}
 		 */
 		this.dcTicksLeft = [];
@@ -147,7 +159,7 @@ class BattleTimer {
 		const hasLongTurns = Dex.getFormat(battle.format, true).gameType !== 'singles';
 		const isChallenge = (!battle.rated && !battle.room.tour);
 		const timerSettings = Dex.getFormat(battle.format, true).timer;
-		/**@type {{perTurnTicks: number, startingTicks: number, maxPerTurnTicks: number, maxFirstTurnTicks: number, dcTimer: boolean, dcTimerBank?: boolean, starting?: number, perTurn?: number, maxPerTurn?: number, maxFirstTurn?: number, timeoutAutoChoose?: boolean, accelerate?: boolean}} */
+		/**@type {{perTurnTicks: number, startingTicks: number, maxPerTurnTicks: number, maxFirstTurnTicks: number, dcTimer: boolean, dcTimerBank?: boolean, starting?: number, grace?: number, graceTicks: number, perTurn?: number, maxPerTurn?: number, maxFirstTurn?: number, timeoutAutoChoose?: boolean, accelerate?: boolean}} */
 		// @ts-ignore
 		this.settings = Object.assign({}, timerSettings);
 		if (this.settings.perTurn === undefined) {
@@ -156,12 +168,16 @@ class BattleTimer {
 		if (this.settings.starting === undefined) {
 			this.settings.starting = isChallenge ? STARTING_TIME_CHALLENGE : STARTING_TIME;
 		}
+		if (this.settings.grace === undefined) {
+			this.settings.grace = STARTING_GRACE_TIME;
+		}
 		if (this.settings.maxPerTurn === undefined) {
 			this.settings.maxPerTurn = isChallenge ? MAX_TURN_TIME_CHALLENGE : MAX_TURN_TIME;
 		}
 		if (this.settings.maxPerTurn <= 0) this.settings.maxPerTurn = Infinity;
 		this.settings.perTurnTicks = Math.floor(this.settings.perTurn / TICK_TIME);
 		this.settings.startingTicks = Math.ceil(this.settings.starting / TICK_TIME);
+		this.settings.graceTicks = Math.ceil(this.settings.grace / TICK_TIME);
 		this.settings.maxPerTurnTicks = Math.ceil(this.settings.maxPerTurn / TICK_TIME);
 		this.settings.maxFirstTurnTicks = Math.ceil((this.settings.maxFirstTurn || 0) / TICK_TIME);
 		if (this.settings.accelerate === undefined) {
@@ -171,7 +187,7 @@ class BattleTimer {
 		if (this.settings.dcTimerBank === undefined) this.settings.dcTimerBank = isChallenge;
 
 		for (let slotNum = 0; slotNum < 2; slotNum++) {
-			this.ticksLeft.push(this.settings.startingTicks);
+			this.ticksLeft.push(this.settings.startingTicks + this.settings.graceTicks);
 			this.turnTicksLeft.push(-1);
 			this.dcTicksLeft.push(this.settings.dcTimerBank ? DISCONNECTION_BANK_TICKS : DISCONNECTION_TICKS);
 			this.connected.push(true);
@@ -225,7 +241,7 @@ class BattleTimer {
 		if (!this.timerRequesters.size) return;
 		const maxTurnTicks = (isFirst ? this.settings.maxFirstTurnTicks : 0) || this.settings.maxPerTurnTicks;
 
-		let perTurnTicks = this.settings.perTurnTicks;
+		let perTurnTicks = isFirst ? 0 : this.settings.perTurnTicks;
 		if (this.settings.accelerate && perTurnTicks) {
 			// after turn 100ish: 15s/turn -> 10s/turn
 			if (this.battle.requestCount > 200) {
@@ -235,10 +251,6 @@ class BattleTimer {
 			if (this.battle.requestCount > 400 && this.battle.requestCount % 2) {
 				perTurnTicks = 0;
 			}
-			// after turn 400ish: 7s/turn -> 6s/turn
-			if (this.battle.requestCount > 800 && this.battle.requestCount % 4) {
-				perTurnTicks = 0;
-			}
 		}
 
 		for (const slotNum of this.ticksLeft.keys()) {
@@ -246,11 +258,15 @@ class BattleTimer {
 			const player = this.battle[slot];
 			const playerName = this.battle.playerNames[slotNum];
 
-			this.ticksLeft[slotNum] += perTurnTicks;
+			if (!isFirst) {
+				this.ticksLeft[slotNum] = Math.min(this.ticksLeft[slotNum] + perTurnTicks, this.settings.startingTicks);
+			}
 			this.turnTicksLeft[slotNum] = Math.min(this.ticksLeft[slotNum], maxTurnTicks);
 
 			const ticksLeft = this.turnTicksLeft[slotNum];
-			if (player) player.sendRoom(`|inactive|Time left: ${ticksLeft * TICK_TIME} sec this turn | ${this.ticksLeft[slotNum] * TICK_TIME} sec total`);
+			let grace = this.ticksLeft[slotNum] - this.settings.startingTicks;
+			if (grace < 0) grace = 0;
+			if (player) player.sendRoom(`|inactive|Time left: ${ticksLeft * TICK_TIME} sec this turn | ${this.ticksLeft[slotNum] * TICK_TIME} sec total` + (grace ? ` | ${grace * TICK_TIME} sec grace` : ``));
 			if (ticksLeft * TICK_TIME <= 30) {
 				this.battle.room.add(`|inactive|${playerName} has ${ticksLeft * TICK_TIME} seconds left this turn.`);
 			}
