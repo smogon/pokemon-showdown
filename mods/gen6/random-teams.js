@@ -901,7 +901,8 @@ class RandomGen6Teams extends RandomTeams {
 			if (hasMove['substitute'] && hasMove['reversal']) {
 				// Reversal users should be able to use four Substitutes
 				if (hp % 4 > 0) break;
-			} else if (hasMove['substitute'] && item === 'Sitrus Berry') {
+			} else if (hasMove['substitute'] && (item === 'Petaya Berry' || item === 'Sitrus Berry')) {
+				// Three Substitutes should activate Petaya Berry for Dedenne
 				// Two Substitutes should activate Sitrus Berry
 				if (hp % 4 === 0) break;
 			} else if (hasMove['bellydrum'] && item === 'Sitrus Berry') {
