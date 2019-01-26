@@ -489,7 +489,7 @@ let BattleScripts = {
 				return false;
 			}
 			if (moveData.boosts && !target.fainted) {
-				let d = this.boost(moveData.boosts, target, pokemon, move);
+				didSomething = !!this.boost(moveData.boosts, target, pokemon, move);
 				if (!d) {
 					this.add('-fail', target);
 					return false;
