@@ -2807,8 +2807,6 @@ const commands = {
 					}
 					buf += `${roles.join(', ')}<br/>`;
 				}
-			} else if (dataType === 'term') {
-				buf += `${result.desc.join('<br/>')}`;
 			} else {
 				buf += `${result.memo.join('<br/>')}`;
 			}
