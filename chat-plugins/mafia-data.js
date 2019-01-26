@@ -337,7 +337,7 @@ const roles = {
 		name: `Compatibility Checker`,
 		id: `compatibilitychecker`,
 		memo: [`Compatibility Checker: During the Night, you may PM the host the names of two players. You will get to know whether they are COMPATIBLE or NOT COMPATIBLE, depending on whether they are the same alignment or not.`],
-	}
+	},
 	confidant: {
 		name: `Confidant`,
 		id: `confidant`,
@@ -451,10 +451,12 @@ const roles = {
 		id: `doityourselfer`,
 		memo: [`Do-It-Yourselfer: Each Night, you may use a One-Shot ability of a discarded role. You may not use a discarded role multiple times.`],
 	},
+	deathproof_mafias_child_lover: `drookez`,
 	drookez: {
 		name: `Drookez`,
 		id: `drookez`,
-		memo: [`Drookez: You are a Deathproof Mafia's Child Lover. This means that your role is revealed at the start of the game and that you can't die unless your Lover dies.`],
+		alignment: `mafia`,
+		memo: [`Drookez: A Deathproof Mafia's Child Lover. Drookez gets revealed at the start of the game, but can only die when their (unknown) lover dies!`],
 	},
 	duskiller: {
 		name: `Duskiller`,
@@ -1204,13 +1206,6 @@ const modifiers = {
 		id: `doppelganger`,
 		memo: [`Doppelganger: All investigative actions on you return results for the target on the left of you on the userlist.`],
 	},
-	deathproof_mafias_child_lover: `drookez`,
-	drookez: {
-		name: `Drookez`,
-		id: `drookez`,
-		alignment: `mafia`,
-		memo: [`Drookez: A Deathproof Mafia's Child Lover. Drookez gets revealed at the start of the game, but can only die when their (unknown) lover dies!`],
-	}
 	enabler: {
 		name: `Enabler`,
 		id: `enabler`,
@@ -1740,7 +1735,7 @@ const themes = {
 		name: `Drookez is Mafia Mafia`,
 		desc: `Drookez is Mafia Mafia: Drookez is Mafia, but try to find his Lover! Drookez must survive with his Lover to win.`,
 		5: `Drookez, Solo Traitor Lover, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
-	}
+	},
 	eternal_sun: {
 		name: `Eternal Sun`,
 		desc: `Eternal Sun: A theme without nights! Everyone can use their action once a day.`,
@@ -1828,7 +1823,7 @@ const themes = {
 		18: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		19: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		20: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
-	}
+	},
 	nd: `neighbors_dilemma`,
 	neighbors_dilemma: {
 		name: `Neighbors Dilemma`,
@@ -1844,7 +1839,7 @@ const themes = {
 		11: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		15: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		19: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
-	}
+	},
 	no_setup: {
 		name: `No Setup`,
 		desc: `No Setup: Despite having a Vanilla role, you may use any action from a wide list of possible actions!`,
@@ -1865,13 +1860,13 @@ const themes = {
 		18: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		19: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		20: `Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
-	}
+	},
 	pairs: `pairings`,
 	pairings: {
 		name: `Pairings`,
 		desc: `Pairings: A theme where all players are paired up. Pairs have the same role and alignment, which is only revealed when both of them have died!`,
 		8: `Mafia Goon (Pair), Mafia Goon (Pair), Vanilla Townie (Pair), Vanilla Townie (Pair), Vanilla Townie (Pair), Vanilla Townie (Pair), Vanilla Townie (Pair), Vanilla Townie (Pair)`,
-	}
+	},
 	sacrifice: {
 		name: `Sacrifice`,
 		desc: `Sacrifice: The Vanilla Townies can't die until a Mafia Sacrifice has died. Use this to clear them!`,
@@ -1898,7 +1893,7 @@ const themes = {
 		name: `Triplets`,
 		desc: `Triplets: A nine-player theme, where at first everyone is split into groups of three. You must lynch someone in this group first!`,
 		9: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
-	}
+	},
 	nilla: `vanilla`,
 	vanilla: {
 		name: `Vanilla`,
