@@ -1782,23 +1782,6 @@ const commands = {
 			} else if (cmd === 'forcelock') {
 				return this.errorReply(`Use /lock; ${name} is not a trusted user.`);
 			}
-
-			let roomauth = [];
-			Rooms.rooms.forEach((curRoom, id) => {
-				if (id === 'global' || !curRoom.auth) return;
-				// Destroy personal rooms of the locked user.
-				if (curRoom.isPersonal && curRoom.auth[userid] === Users.HOST_SYMBOL) {
-					curRoom.destroy();
-				} else {
-					if (curRoom.isPrivate || curRoom.battle) return;
-
-					let group = curRoom.auth[userid];
-
-					if (group) roomauth.push(`${group}${id}`);
-				}
-			});
-
-			if (roomauth.length) Monitor.log(`[CrisisMonitor] Locked user ${name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`);
 		} else {
 			name = this.targetUsername;
 			userid = toId(this.targetUsername);
@@ -1814,26 +1797,6 @@ const commands = {
 			userReason = target.substr(0, proofIndex).trim();
 		}
 
-		let weekMsg = week ? ' for a week' : '';
-
-		if (targetUser) {
-			let appeal = ``;
-			if (Chat.pages.help) {
-				appeal += `<a href="view-help-request--appeal"><button class="button"><strong>Appeal your punishment</strong></button></a>`;
-			} else if (Config.appealurl) {
-				appeal += `appeal: <a href="${Config.appealurl}">${Config.appealurl}</a>`;
-			}
-			targetUser.send(`|popup||html||modal|${user.name} has locked you from talking in chats, battles, and PMing regular users${weekMsg}.${(userReason ? `\n\nReason: ${userReason}` : "")}\n\nIf you feel that your lock was unjustified, you can ${appeal}.\n\nYour lock will expire in a few days.`);
-		}
-
-		let lockMessage = `${name} was locked from talking${weekMsg} by ${user.name}.` + (userReason ? ` (${userReason})` : "");
-
-		this.addModAction(lockMessage);
-
-		// Notify staff room when a user is locked outside of it.
-		if (room.id !== 'staff' && Rooms('staff')) {
-			Rooms('staff').addByUser(user, `<<${room.id}>> ${lockMessage}`);
-		}
 
 		// Use default time for locks.
 		let duration = week ? Date.now() + 7 * 24 * 60 * 60 * 1000 : null;
@@ -1858,6 +1821,48 @@ const commands = {
 
 		const globalReason = (target ? `: ${userReason} ${proof}` : '');
 		this.globalModlog((week ? "WEEKLOCK" : "LOCK"), targetUser || userid, ` by ${user.userid}${globalReason}`);
+
+		let weekMsg = week ? ' for a week' : '';
+		let lockMessage = `${name} was locked from talking${weekMsg} by ${user.name}.` + (userReason ? ` (${userReason})` : "");
+		this.addModAction(lockMessage);
+		// Notify staff room when a user is locked outside of it.
+		if (room.id !== 'staff' && Rooms('staff')) {
+			Rooms('staff').addByUser(user, `<<${room.id}>> ${lockMessage}`);
+		}
+
+		if (targetUser) {
+			let message = `|popup||html|${user.name} has locked you from talking in chats, battles, and PMing regular users${weekMsg}`;
+			if (userReason) message += `\n\nReason: ${userReason}`;
+
+			let appeal = '';
+			if (Chat.pages.help) {
+				appeal += `<a href="view-help-request--appeal"><button class="button"><strong>Appeal your punishment</strong></button></a>`;
+			} else if (Config.appealurl) {
+				appeal += `appeal: <a href="${Config.appealurl}">${Config.appealurl}</a>`;
+			}
+
+			if (appeal) message += `\n\nIf you feel that your lock was unjustified, you can ${appeal}.`;
+			message += `\n\nYour lock will expire in a few days.`;
+			targetUser.send(message);
+
+			let roomauth = [];
+			Rooms.rooms.forEach((curRoom, id) => {
+				if (id === 'global' || !curRoom.auth) return;
+				// Destroy personal rooms of the locked user.
+				if (curRoom.isPersonal && curRoom.auth[userid] === Users.HOST_SYMBOL) {
+					curRoom.destroy();
+				} else {
+					if (curRoom.isPrivate || curRoom.battle) return;
+
+					let group = curRoom.auth[userid];
+
+					if (group) roomauth.push(`${group}${id}`);
+				}
+			});
+
+			if (roomauth.length) Monitor.log(`[CrisisMonitor] Locked user ${name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`);
+		}
+
 
 		// Automatically upload replays as evidence/reference to the punishment
 		if (room.battle) this.parse('/savereplay');
