@@ -355,13 +355,13 @@ let BattleStatuses = {
 	cleo: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|+Cleo|Cleo! Cleo! Your friendly neighborhood Sea Leo!`);
+			this.add(`c|%Cleo|Cleo! Cleo! Your friendly neighborhood Sea Leo!`);
 		},
 		onSwitchOut: function () {
-			this.add(`c|+Cleo|bbl~`);
+			this.add(`c|%Cleo|bbl~`);
 		},
 		onFaint: function () {
-			this.add(`c|+Cleo|n.n`);
+			this.add(`c|%Cleo|n.n`);
 		},
 	},
 	deg: {
@@ -652,13 +652,13 @@ let BattleStatuses = {
 	kaijubunny: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|+Kaiju Bunny|Hey there! Good luck!`);
+			this.add(`c|%Kaiju Bunny|Hey there! Good luck!`);
 		},
 		onSwitchOut: function () {
-			this.add(`c|+Kaiju Bunny|Don't keep her from battling for too long!`);
+			this.add(`c|%Kaiju Bunny|Don't keep her from battling for too long!`);
 		},
 		onFaint: function () {
-			this.add(`c|+Kaiju Bunny|She tried her best... ;;`);
+			this.add(`c|%Kaiju Bunny|She tried her best... ;;`);
 		},
 		// Kaiju Rage Innate
 		// onUpdate so toxic orb can activate after. Code mainly copied from Power Construct.
@@ -881,13 +881,13 @@ let BattleStatuses = {
 	mitsuki: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|+Mitsuki|SSSSSSSSSSSSS`);
+			this.add(`c|%Mitsuki|SSSSSSSSSSSSS`);
 		},
 		onSwitchOut: function () {
-			this.add(`c|+Mitsuki|sssssssssssss`);
+			this.add(`c|%Mitsuki|sssssssssssss`);
 		},
 		onFaint: function () {
-			this.add(`c|+Mitsuki|sss`);
+			this.add(`c|%Mitsuki|sss`);
 		},
 	},
 	moo: {
@@ -1192,13 +1192,13 @@ let BattleStatuses = {
 	teclis: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|+Teclis|Sometimes you have to fight to get your point across.`);
+			this.add(`c|%Teclis|Sometimes you have to fight to get your point across.`);
 		},
 		onSwitchOut: function () {
-			this.add(`c|+Teclis|You deserve a break.`);
+			this.add(`c|%Teclis|You deserve a break.`);
 		},
 		onFaint: function () {
-			this.add(`c|+Teclis|I'm convinced !`);
+			this.add(`c|%Teclis|I'm convinced !`);
 		},
 	},
 	tennisace: {

@@ -184,6 +184,8 @@ let BattleMovedex = {
 		},
 		onPrepareHit: function (target, source) {
 			this.add('-anim', source, "Ingrain", target);
+		},
+		onHit: function (target, source) {
 			let didSomething = false;
 			let side = source.side;
 			if (side.faintedLastTurn) {
@@ -743,7 +745,7 @@ let BattleMovedex = {
 				});
 				// Handle pokemon with less than 4 moves
 				while (carryOver[carryOver.length - 1].pp.length < 4) {
-					carryOver[carryOver.length - 1].pp.push(100);
+					carryOver[carryOver.length - 1].pp.push(1);
 				}
 			}
 			// Generate a new team
