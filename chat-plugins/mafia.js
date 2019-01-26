@@ -721,7 +721,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 		if (newMod === 1) {
 			delete this.lynchModifiers[target];
-			return this.sendUser(user, `|${targetPlayer.name} has had their lynch modifier removed.`);
+			return this.sendUser(user, `${targetPlayer.name} has had their lynch modifier removed.`);
 		} else {
 			this.lynchModifiers[target] = newMod;
 			return this.sendUser(user, `${targetPlayer.name} has been given a lynch modifier of ${newMod}`);
@@ -2356,7 +2356,7 @@ const commands = {
 		hate: 'love',
 		unhate: 'love',
 		unlove: 'love',
-		removelynchmodifier: 'love',
+		removehammermodifier: 'love',
 		love: function (target, room, user, connection, cmd) {
 			let mod;
 			switch (cmd) {
@@ -2366,7 +2366,7 @@ const commands = {
 			case 'love':
 				mod = 1;
 				break;
-			case 'unhate': case 'unlove': case 'removelynchmodifier':
+			case 'unhate': case 'unlove': case 'removehammermodifier':
 				mod = 0;
 				break;
 			}
@@ -2376,6 +2376,7 @@ const commands = {
 		voteless: 'mayor',
 		unvoteless: 'mayor',
 		unmayor: 'mayor',
+		removelynchmodifier: 'mayor',
 		mayor: function (target, room, user, connection, cmd) {
 			let mod;
 			switch (cmd) {
@@ -2385,7 +2386,7 @@ const commands = {
 			case 'voteless':
 				mod = 0;
 				break;
-			case 'unvoteless': case 'unmayor':
+			case 'unvoteless': case 'unmayor': case 'removelynchmodifier':
 				mod = 1;
 				break;
 			}
