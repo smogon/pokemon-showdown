@@ -1192,13 +1192,13 @@ let BattleStatuses = {
 	teclis: {
 		noCopy: true,
 		onStart: function () {
-			this.add(`c|+Teclis|Sometimes you have to fight to get your point across.`);
+			this.add(`c|%Teclis|Sometimes you have to fight to get your point across.`);
 		},
 		onSwitchOut: function () {
-			this.add(`c|+Teclis|You deserve a break.`);
+			this.add(`c|%Teclis|You deserve a break.`);
 		},
 		onFaint: function () {
-			this.add(`c|+Teclis|I'm convinced !`);
+			this.add(`c|%Teclis|I'm convinced !`);
 		},
 	},
 	tennisace: {
