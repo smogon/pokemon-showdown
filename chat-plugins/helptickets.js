@@ -391,7 +391,14 @@ for (const room of Rooms.rooms.values()) {
 const pages = {
 	help: {
 		request(query, user, connection) {
-			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
+			if (!user.named) {
+				let buf = `>view-help-request${query.length ? '-' + query.join('-') : ''}\n` +
+					`|init|html\n` +
+					`|title|Request Help\n` +
+					`|pagehtml|<div class="pad"><h2>Request help from global staff</h2><p>Please <button name="login" class="button">Log In</button> to request help.</p></div>`;
+				connection.send(buf);
+				return Rooms.RETRY_AFTER_LOGIN;
+			}
 			let buf = `|title|Request Help\n|pagehtml|<div class="pad"><h2>Request help from global staff</h2>`;
 
 			let banMsg = checkTicketBanned(user);
