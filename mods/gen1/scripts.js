@@ -489,8 +489,11 @@ let BattleScripts = {
 				return false;
 			}
 			if (moveData.boosts && !target.fainted) {
-				this.boost(moveData.boosts, target, pokemon, move);
-
+				if (!this.boost(moveData.boosts, target, pokemon, move)) {
+					this.add('-fail', target);
+					return false;
+				}
+				didSomething = true;
 				// Check the status of the Pokémon whose turn is not.
 				// When a move that affects stat levels is used, if the Pokémon whose turn it is not right now is paralyzed or
 				// burned, the correspoding stat penalties will be applied again to that Pokémon.
@@ -627,6 +630,7 @@ let BattleScripts = {
 		}
 		if (typeof effect === 'string') effect = this.getEffect(effect);
 		if (!target || !target.hp) return 0;
+		let success = null;
 		boost = this.runEvent('Boost', target, source, effect, Object.assign({}, boost));
 		for (let i in boost) {
 			/** @type {SparseBoostsTable} */
@@ -635,6 +639,7 @@ let BattleScripts = {
 			currentBoost[i] = boost[i];
 			// @ts-ignore
 			if (boost[i] !== 0 && target.boostBy(currentBoost)) {
+				success = true;
 				let msg = '-boost';
 				// @ts-ignore
 				if (boost[i] < 0) {
@@ -668,6 +673,7 @@ let BattleScripts = {
 			}
 		}
 		this.runEvent('AfterBoost', target, source, effect, boost);
+		return success;
 	},
 	// getDamage can be found on sim/battle.js on the Battle object.
 	// It calculates the damage pokemon does to target with move.

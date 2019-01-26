@@ -70,6 +70,31 @@ describe('Paralysis', function () {
 		battle.makeChoices('move aquaring', 'move thunderwave');
 		assert.strictEqual(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
 	});
+
+	it('should reapply its speed drop when an opponent uses a stat-altering move in Gen 1', function () {
+		battle = common.gen(1).createBattle([
+			[{species: 'Electrode', moves: ['rest']}],
+			[{species: 'Slowpoke', moves: ['amnesia', 'thunderwave']}],
+		]);
+		battle.makeChoices('move rest', 'move thunderwave');
+		let speed = battle.p1.active[0].getStat('spe');
+		battle.makeChoices('move rest', 'move amnesia');
+		assert.strictEqual(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
+	});
+
+	it('should not reapply its speed drop when an opponent uses a failed stat-altering move in Gen 1', function () {
+		battle = common.gen(1).createBattle([
+			[{species: 'Electrode', moves: ['rest']}],
+			[{species: 'Slowpoke', moves: ['amnesia', 'thunderwave']}],
+		]);
+		battle.makeChoices('move rest', 'move amnesia');
+		battle.makeChoices('move rest', 'move amnesia');
+		battle.makeChoices('move rest', 'move amnesia');
+		battle.makeChoices('move rest', 'move thunderwave');
+		let speed = battle.p1.active[0].getStat('spe');
+		battle.makeChoices('move rest', 'move amnesia');
+		assert.strictEqual(battle.p1.active[0].getStat('spe'), speed);
+	});
 });
 
 describe('Toxic Poison', function () {
