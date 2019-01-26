@@ -1641,9 +1641,9 @@ class RandomTeams extends Dex.ModdedDex {
 			if (hasMove['substitute'] && hasMove['reversal']) {
 				// Reversal users should be able to use four Substitutes
 				if (hp % 4 > 0) break;
-			} else if (hasMove['substitute'] && (item === 'Sitrus Berry' || ability === 'Power Construct' && item !== 'Leftovers' || item === 'Petaya Berry')) {
-				// Two Substitutes should activate Sitrus Berry or Power Construct
+			} else if (hasMove['substitute'] && (item === 'Petaya Berry' || item === 'Sitrus Berry' || ability === 'Power Construct' && item !== 'Leftovers')) {
 				// Three Substitutes should activate Petaya Berry for Dedenne
+				// Two Substitutes should activate Sitrus Berry or Power Construct
 				if (hp % 4 === 0) break;
 			} else if (hasMove['bellydrum'] && (item === 'Sitrus Berry' || ability === 'Gluttony')) {
 				// Belly Drum should activate Sitrus Berry
