@@ -40,7 +40,6 @@ class BattleReady {
 	}
 }
 
-
 /**
  * formatid:userid:BattleReady
  * @type {Map<string, Map<string, BattleReady>>}
@@ -484,6 +483,12 @@ class Ladder extends LadderStore {
 
 		// users must be different
 		if (user1 === user2) return false;
+
+		if (Config.fakeladder) {
+			user1.lastMatch = user2.userid;
+			user2.lastMatch = user1.userid;
+			return true;
+		}
 
 		// users must have different IPs
 		if (user1.latestIp === user2.latestIp) return false;
