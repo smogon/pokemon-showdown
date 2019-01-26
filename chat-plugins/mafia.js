@@ -2512,7 +2512,7 @@ const commands = {
 			if (game.hostid !== user.userid && !game.cohosts.includes(user.userid)) return this.errorReply(`Only the host can view roles.`);
 			if (!game.started) return this.errorReply(`The game has not started.`);
 			const players = [...Object.values(game.players), ...Object.values(game.dead)];
-			this.sendReplyBox(players.map(p => `${p.safeName}: ${p.role ? p.role.safeName : 'No role'}`).join('<br/>'));
+			this.sendReplyBox(players.map(p => `${p.safeName}: ${p.role ? (p.role.alignment === 'solo' ? 'Solo ' : '') + p.role.safeName : 'No role'}`).join('<br/>'));
 		},
 
 		spectate: 'view',
