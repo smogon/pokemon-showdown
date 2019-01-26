@@ -505,7 +505,7 @@ class Tournament {
 		};
 	}
 
-	disqualifyUser(userid, output, reason) {
+	disqualifyUser(userid, output, reason, isSelfDQ) {
 		const user = Users.get(userid);
 		let sendReply;
 		if (output) {
@@ -576,7 +576,11 @@ class Tournament {
 			this.inProgressMatches.set(matchTo, null);
 		}
 
-		this.room.add(`|tournament|disqualify|${player.name}`);
+		if (isSelfDQ) {
+			this.room.add(`|tournament|leave|${player.name}`);
+		} else {
+			this.room.add(`|tournament|disqualify|${player.name}`);
+		}
 		if (user) {
 			user.sendTo(this.room, '|tournament|update|{"isJoined":false}');
 			if (reason !== null) user.popup(`|modal|You have been disqualified from the tournament in ${this.room.title + (reason ? ':\n\n' + reason : '.')}`);
@@ -809,7 +813,7 @@ class Tournament {
 		this.update();
 	}
 	forfeit(user) {
-		this.disqualifyUser(user.userid, null, "You left the tournament");
+		this.disqualifyUser(user.userid, null, "You left the tournament", true);
 	}
 	onConnect(user, connection) {
 		this.updateFor(user, connection);
@@ -1002,7 +1006,7 @@ const commands = {
 		leave: function (tournament, user) {
 			if (tournament.isTournamentStarted) {
 				if (tournament.generator.getUsers(true).some(player => player.userid === user.userid)) {
-					tournament.disqualifyUser(user.userid, this);
+					tournament.disqualifyUser(user.userid, this, null, true);
 				} else {
 					this.errorReply("You have already been eliminated from this tournament.");
 				}
