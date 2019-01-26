@@ -13,6 +13,8 @@
 
 'use strict';
 
+const MINUTES = 60 * 1000;
+
 const cluster = require('cluster');
 const fs = require('fs');
 const FS = require('./lib/fs');
@@ -87,12 +89,12 @@ if (cluster.isMaster) {
 		worker.send = () => {};
 
 		let count = 0;
-		Users.connections.forEach(connection => {
+		for (const connection of Users.connections.values()) {
 			if (connection.worker === worker) {
 				Users.socketDisconnect(worker, worker.id, connection.socketid);
 				count++;
 			}
-		});
+		}
 		console.log(`${count} connections were lost.`);
 
 		// Attempt to recover.
@@ -140,12 +142,12 @@ if (cluster.isMaster) {
 	 */
 	exports.killWorker = function (worker) {
 		let count = 0;
-		Users.connections.forEach(connection => {
+		for (const connection of Users.connections.values()) {
 			if (connection.worker === worker) {
 				Users.socketDisconnect(worker, worker.id, connection.socketid);
 				count++;
 			}
-		});
+		}
 		console.log(`${count} connections were lost.`);
 
 		try {
@@ -190,9 +192,9 @@ if (cluster.isMaster) {
 	 * @param {string} message
 	 */
 	exports.channelBroadcast = function (channelid, message) {
-		workers.forEach(worker => {
+		for (const worker of workers.values()) {
 			worker.send(`#${channelid}\n${message}`);
-		});
+		}
 	};
 
 	/**
@@ -227,9 +229,9 @@ if (cluster.isMaster) {
 	 * @param {string} message
 	 */
 	exports.subchannelBroadcast = function (channelid, message) {
-		workers.forEach(worker => {
+		for (const worker of workers.values()) {
 			worker.send(`:${channelid}\n${message}`);
-		});
+		}
 	};
 
 	/**
@@ -437,15 +439,15 @@ if (cluster.isMaster) {
 
 	// Deal with phantom connections.
 	const sweepSocketInterval = setInterval(() => {
-		sockets.forEach(socket => {
+		for (const socket of sockets.values()) {
 			// @ts-ignore
 			if (socket.protocol === 'xhr-streaming' && socket._session && socket._session.recv) {
 				logger.write('Found a ghost connection with protocol xhr-streaming\n');
 				// @ts-ignore
 				socket._session.recv.didClose();
 			}
-		});
-	}, 1000 * 60 * 10);
+		}
+	}, 10 * MINUTES);
 
 	process.on('message', data => {
 		// console.log('worker received: ' + data);
@@ -473,7 +475,7 @@ if (cluster.isMaster) {
 			if (!socket) return;
 			socket.destroy();
 			sockets.delete(socketid);
-			channels.forEach((channel, channelid) => {
+			for (const [channelid, channel] of channels) {
 				channel.delete(socketid);
 				subchannel = subchannels.get(channelid);
 				if (subchannel) subchannel.delete(socketid);
@@ -481,7 +483,7 @@ if (cluster.isMaster) {
 					channels.delete(channelid);
 					if (subchannel) subchannels.delete(channelid);
 				}
-			});
+			}
 			break;
 
 		case '>':
@@ -503,7 +505,7 @@ if (cluster.isMaster) {
 			channel = channels.get(channelid);
 			if (!channel) return;
 			message = data.substr(nlLoc + 1);
-			channel.forEach(socket => socket.write(message));
+			for (const socket of channel.values()) socket.write(message);
 			break;
 
 		case '+':
@@ -572,7 +574,7 @@ if (cluster.isMaster) {
 			let messages = [null, null, null];
 			message = data.substr(nlLoc + 1);
 			subchannel = subchannels.get(channelid);
-			channel.forEach((socket, socketid) => {
+			for (const [socketid, socket] of channel) {
 				switch (subchannel ? subchannel.get(socketid) : '0') {
 				case '1':
 					if (!messages[1]) {
@@ -593,7 +595,7 @@ if (cluster.isMaster) {
 					socket.write(messages[0]);
 					break;
 				}
-			});
+			}
 			break;
 		}
 	});
@@ -604,11 +606,11 @@ if (cluster.isMaster) {
 	process.once('disconnect', () => {
 		clearInterval(sweepSocketInterval);
 
-		sockets.forEach(socket => {
+		for (const socket of sockets.values()) {
 			try {
 				socket.destroy();
 			} catch (e) {}
-		});
+		}
 		sockets.clear();
 		channels.clear();
 		subchannels.clear();
@@ -698,7 +700,7 @@ if (cluster.isMaster) {
 			// @ts-ignore
 			process.send(`!${socketid}`);
 			sockets.delete(socketid);
-			channels.forEach(channel => channel.delete(socketid));
+			for (const channel of channels.values()) channel.delete(socketid);
 		});
 	});
 	server.installHandlers(app, {});

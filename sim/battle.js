@@ -1835,10 +1835,10 @@ class Battle extends Dex.ModdedDex {
 		if (format.onBegin) {
 			format.onBegin.call(this);
 		}
-		this.getRuleTable(format).forEach((v, rule) => {
-			if (rule.startsWith('+') || rule.startsWith('-') || rule.startsWith('!')) return;
+		for (const rule of this.getRuleTable(format).keys()) {
+			if (rule.startsWith('+') || rule.startsWith('-') || rule.startsWith('!')) continue;
 			if (this.getFormat(rule).exists) this.addPseudoWeather(rule);
-		});
+		}
 
 		if (!this.p1.pokemon[0] || !this.p2.pokemon[0]) {
 			throw new Error('Battle not started: A player has an empty team.');
