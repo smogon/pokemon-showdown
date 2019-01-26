@@ -487,6 +487,7 @@ class User {
 		this.isStaff = false;
 		this.blockChallenges = false;
 		this.ignorePMs = false;
+		this.ignoreTickets = false;
 		this.lastConnected = 0;
 		this.inviteOnlyNextBattle = false;
 
