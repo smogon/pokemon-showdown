@@ -35,6 +35,8 @@ before('initialization', function () {
 	config.watchconfig = false;
 	// Don't try to write to file system
 	config.nofswriting = true;
+	// Test a normal ladder
+	config.fakeladder = false;
 
 	// Don't create a REPL
 	require('../lib/repl').start = noop;
