@@ -1846,19 +1846,19 @@ const commands = {
 			targetUser.send(message);
 
 			let roomauth = [];
-			Rooms.rooms.forEach((curRoom, id) => {
-				if (id === 'global' || !curRoom.auth) return;
+			for (const [id, curRoom] of Rooms.rooms) {
+				if (id === 'global' || !curRoom.auth) continue;
 				// Destroy personal rooms of the locked user.
 				if (curRoom.isPersonal && curRoom.auth[userid] === Users.HOST_SYMBOL) {
 					curRoom.destroy();
 				} else {
-					if (curRoom.isPrivate || curRoom.battle) return;
+					if (curRoom.isPrivate || curRoom.battle) continue;
 
 					let group = curRoom.auth[userid];
 
 					if (group) roomauth.push(`${group}${id}`);
 				}
-			});
+			}
 
 			if (roomauth.length) Monitor.log(`[CrisisMonitor] Locked user ${name} has public roomauth (${roomauth.join(', ')}), and should probably be demoted.`);
 		}
