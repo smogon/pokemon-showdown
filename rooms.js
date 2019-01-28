@@ -1617,6 +1617,23 @@ let Rooms = Object.assign(getRoom, {
 			return;
 		}
 
+		// @ts-ignore
+		if (p1 && p2 && (p1.specialNextBattle || p2.specialNextBattle)) {
+			// @ts-ignore
+			const p1special = p1.specialNextBattle, p2special = p2.specialNextBattle;
+			// @ts-ignore
+			p1.specialNextBattle = null;
+			// @ts-ignore
+			p2.specialNextBattle = null;
+
+			if (p1special !== p2special) {
+				p1.popup(`Your special battle settings don't match: "${p1special}" and "${p2special}"`);
+				p2.popup(`Your special battle settings don't match: "${p1special}" and "${p2special}"`);
+				return;
+			}
+			options.ratedMessage = p1special;
+		}
+
 		const roomid = Rooms.global.prepBattleRoom(formatid);
 		options.format = formatid;
 		// options.rated is a number representing the lower player rating, for searching purposes
