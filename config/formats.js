@@ -99,7 +99,7 @@ let Formats = [
 	{
 		name: "[Gen 7] PU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3639176/">PU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3645983/">PU Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3614892/">PU Viability Rankings</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3614470/">PU Sample Teams</a>`,
 		],
@@ -107,9 +107,6 @@ let Formats = [
 		mod: 'gen7',
 		ruleset: ['[Gen 7] NU'],
 		banlist: ['NU', 'PUBL'],
-		onBegin: function () {
-			if (this.rated) this.add('html', `<div class="broadcast-green"><strong>PU is currently suspecting Alolan Exeggutor! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3645983/">suspect thread</a>.</strong></div>`);
-		},
 	},
 	{
 		name: "[Gen 7] LC",
