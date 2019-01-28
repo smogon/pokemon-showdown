@@ -3103,11 +3103,18 @@
 				"moves": [["Taunt"], ["Draco Meteor"], ["Roost"], ["Dark Pulse"]]
 			}, {
 				"species": "Hydreigon",
-				"item": ["Life Orb", "Dragonium Z"],
+				"item": ["Dragonium Z"],
 				"ability": ["Levitate"],
 				"evs": {"spa": 252, "spd": 4, "spe": 252},
 				"nature": "Timid",
-				"moves": [["Defog"], ["Draco Meteor", "Fire Blast"], ["Roost"], ["Dark Pulse"]]
+				"moves": [["Defog"], ["Draco Meteor"], ["Roost"], ["Dark Pulse"]]
+			}, {
+				"species": "Hydreigon",
+				"item": ["Dread Plate"],
+				"ability": ["Levitate"],
+				"evs": {"spa": 252, "spd": 4, "spe": 252},
+				"nature": "Timid",
+				"moves": [["Defog"], ["Fire Blast"], ["Roost"], ["Dark Pulse"]]
 			}, {
 				"species": "Hydreigon",
 				"item": ["Fightinium Z"],
