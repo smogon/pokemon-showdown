@@ -14,7 +14,7 @@
 /** @typedef {{name: string, roles: string[], picks: string[], choices: number}} MafiaIDEA */
 /** @typedef {{[k: string]: MafiaIDEA | string}} MafiaIDEAs */
 
-/** @typedef {{name: string, desc: string[]}} MafiaTerm */
+/** @typedef {{name: string, memo: string[]}} MafiaTerm */
 /** @typedef {{[k: string]: MafiaTerm | string}} MafiaTerms */
 
 /** @type {MafiaAlignments} */
@@ -2916,142 +2916,142 @@ const IDEAs = {
 const terms = {
 	bastard: {
 		name: `Bastard`,
-		desc: [`Bastard: Any kind of role may be in this setup, and the host may lie to the players.`],
+		memo: [`Bastard: Any kind of role may be in this setup, and the host may lie to the players.`],
 	},
 	bus: `bussing`,
 	bussing: {
 		name: `Bussing`,
-		desc: [`Bussing: A scum player lynching or scumreading their partner to appear town.`],
+		memo: [`Bussing: A scum player lynching or scumreading their partner to appear town.`],
 	},
 	bw: `bandwagon`,
 	bandwagon: {
 		name: `Bandwagon`,
-		desc: [`Bandwagon: A group of people following a lynch or thought.`],
+		memo: [`Bandwagon: A group of people following a lynch or thought.`],
 	},
 	cc: `counter_claim`,
 	counterclaim: `counter_claim`,
 	counter_claim: {
 		name: `Counter Claim`,
-		desc: [`Counter Claim: When someone claims a role, in response of someone else claiming that role (of which there's usually only one left in the game).`],
+		memo: [`Counter Claim: When someone claims a role, in response of someone else claiming that role (of which there's usually only one left in the game).`],
 	},
 	defmaj: `definite_majority`,
 	definitemajority: `definite_majority`,
 	definite_majority: {
 		name: `Definite Majority`,
-		desc: [`The day only ends when hammer is reached.`],
+		memo: [`The day only ends when hammer is reached.`],
 	},
 	dilemma: {
 		name: `Dilemma`,
-		desc: [`Dilemma: When town can only win by No Lynching and hoping the Anti-Town factions kill each other.`],
+		memo: [`Dilemma: When town can only win by No Lynching and hoping the Anti-Town factions kill each other.`],
 	},
 	fillering: `filler`,
 	filler: {
 		name: `Filler`,
-		desc: [`Filler: Excessive talk about things that are not related or important to the game.`],
+		memo: [`Filler: Excessive talk about things that are not related or important to the game.`],
 	},
 	fos: `finger_of_suspect`,
 	finger_of_suspect: {
 		name: `Finger of Suspect`,
-		desc: [`Finger of Suspect: Pointing out that you scumread someone.`],
+		memo: [`Finger of Suspect: Pointing out that you scumread someone.`],
 	},
 	hammer: {
 		name: `Hammer`,
-		desc: [`Hammer: The amount of votes needed to have a majority of players lynching someone.`],
+		memo: [`Hammer: The amount of votes needed to have a majority of players lynching someone.`],
 	},
 	hypo: {
 		name: `Hypo`,
-		desc: [`Hypo: When everyone claims what they would've done if they were a specific role. This is done to not out the power role, but that Town still has access to their actions or results in case they die.`],
+		memo: [`Hypo: When everyone claims what they would've done if they were a specific role. This is done to not out the power role, but that Town still has access to their actions or results in case they die.`],
 	},
 	'l-1': `l-x`,	'l-2': `l-x`,	'l-3': `l-x`,	'l-4': `l-x`,	lx: `l-x`,	l1: `l-x`,	l2: `l-x`,	l3: `l-x`,	l4: `l-x`,
 	'l-x': {
 		name: `L-x`,
-		desc: [`L-x: When a player is a specific amount of votes away from hammer.`],
+		memo: [`L-x: When a player is a specific amount of votes away from hammer.`],
 	},
 	lurking: {
 		name: `Lurking`,
-		desc: [`Lurking: When someone is purposefully not talking in the chat, even while they're there.`],
+		memo: [`Lurking: When someone is purposefully not talking in the chat, even while they're there.`],
 	},
 	lylo: {
 		name: `LyLo`,
-		desc: [`LyLo: If the wrong player is lynched today, or nobody is lynched, town loses.`],
+		memo: [`LyLo: If the wrong player is lynched today, or nobody is lynched, town loses.`],
 	},
 	maj: `majority`,
 	majority: {
 		name: `Majority`,
-		desc: [`Majority: If no hammer is reached at the deadline, no one is lynched.`],
+		memo: [`Majority: If no hammer is reached at the deadline, no one is lynched.`],
 	},
 	majnox: {
 		name: `MajNoX`,
-		desc: [`MajNoX: Majority, without any extensions.`],
+		memo: [`MajNoX: Majority, without any extensions.`],
 	},
 	modplur: `modified_plurality`,
 	modified_plurality: {
 		name: `Modified Plurality`,
-		desc: [`Modified Plurality: Plurality, but if a certain amount of votes isn't reached at the deadline, no one is lynched.`],
+		memo: [`Modified Plurality: Plurality, but if a certain amount of votes isn't reached at the deadline, no one is lynched.`],
 	},
 	mylo: {
 		name: `MyLo`,
-		desc: [`MyLo: If the wrong player is lynched today, town loses.`],
+		memo: [`MyLo: If the wrong player is lynched today, town loses.`],
 	},
 	nullread: {
 		name: `Nullread`,
-		desc: [`Nullread: A player who you don't know whether they're Town or not.`],
+		memo: [`Nullread: A player who you don't know whether they're Town or not.`],
 	},
 	omgus: {
 		name: `OMGUS`,
-		desc: [`OMGUS: Accusing someone solely because they accused you.`],
+		memo: [`OMGUS: Accusing someone solely because they accused you.`],
 	},
 	plop: {
 		name: `PLOP`,
-		desc: [`PLOP: "Pretty Lady Over-Powered", using the Pretty Lady (protected by a Doctor) to find solo scum, by judging whether the Nightkill went through.`],
+		memo: [`PLOP: "Pretty Lady Over-Powered", using the Pretty Lady (protected by a Doctor) to find solo scum, by judging whether the Nightkill went through.`],
 	},
 	plur: `plurality`,
 	plurality: {
 		name: `Plurality`,
-		desc: [`Plurality: If the deadline is reached, the player with the most votes will be lynched.`],
+		memo: [`Plurality: If the deadline is reached, the player with the most votes will be lynched.`],
 	},
 	plurnox: {
 		name: `PlurNoX`,
-		desc: [`PlurNoX: Plurality, without any extensions.`],
+		memo: [`PlurNoX: Plurality, without any extensions.`],
 	},
 	plylo: {
 		name: `PLyLo`,
-		desc: [`PLyLo: "Potential LyLo", there's a chance but it's not definite that if the wrong person, or No Lynch is lynched, town loses.`],
+		memo: [`PLyLo: "Potential LyLo", there's a chance but it's not definite that if the wrong person, or No Lynch is lynched, town loses.`],
 	},
 	pmylo: {
 		name: `PMyLo`,
-		desc: [`PMyLo: "Potential MyLo", there's a chance but it's not definite that if the wrong person is lynched, town loses.`],
+		memo: [`PMyLo: "Potential MyLo", there's a chance but it's not definite that if the wrong person is lynched, town loses.`],
 	},
 	qh: `quickhammer`,
 	quickhammer: {
 		name: `Quickhammer`,
-		desc: [`Quickhammer: When all of the Mafia quickly lynch someone, to reach hammer and cause a Mafia win.`],
+		memo: [`Quickhammer: When all of the Mafia quickly lynch someone, to reach hammer and cause a Mafia win.`],
 	},
 	scorched_earth: {
 		name: `Scorched Earth`,
-		desc: [`Scorched Earth: When no players are left alive.`],
+		memo: [`Scorched Earth: When no players are left alive.`],
 	},
 	sr: `scumread`,
 	scumread: {
 		name: `Scumread`,
-		desc: [`Scumread: A player who you think is not aligned with the Town.`],
+		memo: [`Scumread: A player who you think is not aligned with the Town.`],
 	},
 	snaq_bastard: {
 		name: `Snaq Bastard`,
-		desc: [`Snaq Bastard: Any role can be in the game, excluding Hidden or False ones. The host will not lie to the players.`],
+		memo: [`Snaq Bastard: Any role can be in the game, excluding Hidden or False ones. The host will not lie to the players.`],
 	},
 	tr: `townread`,
 	townread: {
 		name: `Townread`,
-		desc: [`Townread: A player who you think is aligned with the Town.`],
+		memo: [`Townread: A player who you think is aligned with the Town.`],
 	},
 	tunnel: {
 		name: `Tunnel`,
-		desc: [`Tunnel: When a player is convinced another player is scum, and will consider anything the player does scummy.`],
+		memo: [`Tunnel: When a player is convinced another player is scum, and will consider anything the player does scummy.`],
 	},
 	wifom: {
 		name: `WIFOM`,
-		desc: [`WIFOM: "Wine In Front Of Me", the circular reasoning that Mafia could've anticipated something, and did it because of that.`],
+		memo: [`WIFOM: "Wine In Front Of Me", the circular reasoning that Mafia could've anticipated something, and did it because of that.`],
 	},
 };
 
