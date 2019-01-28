@@ -468,7 +468,9 @@ class Battle {
 		this.stream = PM.createStream();
 
 		let ratedMessage = '';
-		if (this.rated) {
+		if (options.ratedMessage) {
+			ratedMessage = options.ratedMessage;
+		} if (this.rated) {
 			ratedMessage = 'Rated battle';
 		} else if (this.room.tour) {
 			ratedMessage = 'Tournament battle';
