@@ -19,6 +19,7 @@ const DEFAULT_POINTS = {
 const DEFAULT_BLITZ_POINTS = {
 	official: 10,
 };
+const DEFAULT_HOST_POINTS = 4;
 const DEFAULT_TIMER_DURATION = 120;
 
 const path = require('path');
@@ -405,9 +406,15 @@ class ScavengerHunt extends Rooms.RoomGame {
 		if (!reset) {
 			// give points for winning and blitzes in official games
 
-			let winPoints = (this.room.winPoints && this.room.winPoints[this.gameType]) || DEFAULT_POINTS[this.gameType];
-			let blitzPoints = (this.room.blitzPoints && this.room.blitzPoints[this.gameType]) || DEFAULT_BLITZ_POINTS[this.gameType];
+			const winPoints = (this.room.winPoints && this.room.winPoints[this.gameType]) || DEFAULT_POINTS[this.gameType];
+			const blitzPoints = (this.room.blitzPoints && this.room.blitzPoints[this.gameType]) || DEFAULT_BLITZ_POINTS[this.gameType];
+			// only regular hunts give host points
+			let hostPoints;
+			if (this.gameType === 'regular') {
+				hostPoints = this.room.hasOwnProperty('hostPoints') ? this.room.hostPoints : DEFAULT_HOST_POINTS;
+			}
 
+			let didSomething = false;
 			if (winPoints || blitzPoints) {
 				for (const [i, completed] of this.completed.entries()) {
 					if (!completed.blitz && i >= winPoints.length) break; // there won't be any more need to keep going
@@ -415,8 +422,18 @@ class ScavengerHunt extends Rooms.RoomGame {
 					if (winPoints[i]) Leaderboard.addPoints(name, 'points', winPoints[i]);
 					if (blitzPoints && completed.blitz) Leaderboard.addPoints(name, 'points', blitzPoints);
 				}
-				Leaderboard.write();
+				didSomething = true;
 			}
+			if (hostPoints) {
+				if (this.hosts.length === 1) {
+					Leaderboard.addPoints(this.hosts[0].name, 'points', hostPoints, this.hosts[0].noUpdate);
+					didSomething = true;
+				} else {
+					this.room.sendMods('|notify|A scavenger hunt with multiple hosts needs points!');
+					this.room.sendMods('(A scavenger hunt with multiple hosts has ended.)');
+				}
+			}
+			if (didSomething) Leaderboard.write();
 
 			let sliceIndex = this.gameType === 'official' ? 5 : 3;
 
@@ -1231,6 +1248,29 @@ let commands = {
 		}
 	},
 
+	sethostpoints: function (target, room, user) {
+		if (room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return this.errorReply("This command can only be used in the scavengers room.");
+		if (!this.can('mute', null, room)) return false; // perms for viewing only
+		if (!target) return this.sendReply(`The points rewarded for hosting a regular hunt are ${room.hasOwnProperty('hostPoints') ? room.hostPoints : DEFAULT_HOST_POINTS}`);
+
+		if (!this.can('declare', null, room)) return false; // perms for editting
+		const points = parseInt(target);
+		if (isNaN(points)) return this.errorReply(`${target} is not a valid number of points.`);
+		room.hostPoints = points;
+		if (room.chatRoomData) {
+			room.chatRoomData.hostPoints = room.hostPoints;
+			Rooms.global.writeChatRoomData();
+		}
+		this.privateModAction(`(${user.name} has set the points awarded for hosting regular scavenger hunts to ${points})`);
+		this.modlog('SCAV SETHOSTPOINTS', null, points);
+
+		// double modnote in scavs room if it is a subroomgroupchat
+		if (room.parent && !room.chatRoomData) {
+			scavsRoom.modlog(`(scavengers) SCAV SETHOSTPOINTS: [room: ${room.id}] by ${user.userid}: ${points}`);
+			scavsRoom.sendMods(`(${user.name} has set the points awarded for hosting regular scavenger hunts to - ${points} in <<${room.id}>>)`);
+			scavsRoom.roomlog(`(${user.name} has set the points awarded for hosting regular scavenger hunts to - ${points} in <<${room.id}>>)`);
+		}
+	},
 	setpoints: function (target, room, user) {
 		if (room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return this.errorReply("This command can only be used in the scavengers room.");
 		if (!this.can('mute', null, room)) return false; // perms for viewing only
