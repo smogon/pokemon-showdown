@@ -721,7 +721,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		}
 		if (newMod === 1) {
 			delete this.lynchModifiers[target];
-			return this.sendUser(user, `|${targetPlayer.name} has had their lynch modifier removed.`);
+			return this.sendUser(user, `${targetPlayer.name} has had their lynch modifier removed.`);
 		} else {
 			this.lynchModifiers[target] = newMod;
 			return this.sendUser(user, `${targetPlayer.name} has been given a lynch modifier of ${newMod}`);
@@ -2356,7 +2356,7 @@ const commands = {
 		hate: 'love',
 		unhate: 'love',
 		unlove: 'love',
-		removelynchmodifier: 'love',
+		removehammermodifier: 'love',
 		love: function (target, room, user, connection, cmd) {
 			let mod;
 			switch (cmd) {
@@ -2366,7 +2366,7 @@ const commands = {
 			case 'love':
 				mod = 1;
 				break;
-			case 'unhate': case 'unlove': case 'removelynchmodifier':
+			case 'unhate': case 'unlove': case 'removehammermodifier':
 				mod = 0;
 				break;
 			}
@@ -2376,6 +2376,7 @@ const commands = {
 		voteless: 'mayor',
 		unvoteless: 'mayor',
 		unmayor: 'mayor',
+		removelynchmodifier: 'mayor',
 		mayor: function (target, room, user, connection, cmd) {
 			let mod;
 			switch (cmd) {
@@ -2385,7 +2386,7 @@ const commands = {
 			case 'voteless':
 				mod = 0;
 				break;
-			case 'unvoteless': case 'unmayor':
+			case 'unvoteless': case 'unmayor': case 'removelynchmodifier':
 				mod = 1;
 				break;
 			}
@@ -2512,7 +2513,7 @@ const commands = {
 			if (game.hostid !== user.userid && !game.cohosts.includes(user.userid)) return this.errorReply(`Only the host can view roles.`);
 			if (!game.started) return this.errorReply(`The game has not started.`);
 			const players = [...Object.values(game.players), ...Object.values(game.dead)];
-			this.sendReplyBox(players.map(p => `${p.safeName}: ${p.role ? p.role.safeName : 'No role'}`).join('<br/>'));
+			this.sendReplyBox(players.map(p => `${p.safeName}: ${p.role ? (p.role.alignment === 'solo' ? 'Solo ' : '') + p.role.safeName : 'No role'}`).join('<br/>'));
 		},
 
 		spectate: 'view',
@@ -2742,14 +2743,16 @@ const commands = {
 		},
 		endhelp: [`/mafia end - End the current game of mafia. Requires host + % @ * # & ~`],
 
+		'!data': true,
 		role: 'data',
 		modifier: 'data',
 		alignment: 'data',
 		theme: 'data',
+		term: 'data',
 		dt: 'data',
 		data: function (target, room, user, connection, cmd) {
-			if (!room || !room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
-			if (cmd === 'role' && !target) {
+			if (room && !room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
+			if (cmd === 'role' && !target && room) {
 				// Support /mafia role showing your current role if you're in a game
 				const game = /** @type {MafiaTracker} */ (room.game);
 				if (!game || game.id !== 'mafia') return this.errorReply(`There is no game of mafia running in this room. If you meant to display information about a role, use /mafia role [role name]`);
@@ -2762,12 +2765,12 @@ const commands = {
 			if (!target) return this.parse(`/help mafia data`);
 
 			/** @type {{[k: string]: string}} */
-			const types = {alignment: 'alignments', role: 'roles', modifier: 'modifiers', theme: 'themes'};
+			const types = {alignment: 'alignments', role: 'roles', modifier: 'modifiers', theme: 'themes', term: 'terms'};
 			let id = target.split(' ').map(toId).join('_');
 			let result = null;
 			let dataType = cmd;
 			if (cmd in types) {
-				let type = /** @type {'alignments' | 'roles' | 'modifiers' | 'themes'} */ (types[cmd]);
+				let type = /** @type {'alignments' | 'roles' | 'modifiers' | 'themes' | 'terms'} */ (types[cmd]);
 				let data = MafiaData[type];
 				if (!data) return this.errorReply(`"${type}" is not a valid search area.`); // Should never happen
 				if (!data[id]) return this.errorReply(`"${target} is not a valid ${cmd}."`);
@@ -2776,7 +2779,7 @@ const commands = {
 			} else {
 				// Search all
 				for (let i in types) {
-					let type = /** @type {'alignments' | 'roles' | 'modifiers' | 'themes'} */ (types[i]);
+					let type = /** @type {'alignments' | 'roles' | 'modifiers' | 'themes' | 'terms'} */ (types[i]);
 					let data = MafiaData[type];
 					if (!data) continue; // Should never happen
 					if (!data[id]) continue;
@@ -2809,7 +2812,7 @@ const commands = {
 			}
 			return this.sendReplyBox(buf);
 		},
-		datahelp: [`/mafia data [alignment|role|modifier|theme] - Get information on a mafia alignment, role, modifier, or theme.`],
+		datahelp: [`/mafia data [alignment|role|modifier|theme|term] - Get information on a mafia alignment, role, modifier, theme, or term.`],
 
 		winfaction: 'win',
 		win: function (target, room, user, connection, cmd) {
@@ -3021,7 +3024,7 @@ const commands = {
 			`/mafia lynches - Display the current lynch count, and whos lynching who.`,
 			`/mafia players - Display the current list of players, will highlight players.`,
 			`/mafia [rl|orl] - Display the role list or the original role list for the current game.`,
-			`/mafia data [alignment|role|modifier|theme] - Get information on a mafia alignment, role, modifier, or theme.`,
+			`/mafia data [alignment|role|modifier|theme|term] - Get information on a mafia alignment, role, modifier, theme, or term.`,
 			`/mafia subhost [user] - Substitues the user as the new game host. Requires % @ * # & ~`,
 			`/mafia cohost [user] - Adds the user as a cohost. Cohosts can talk during the game, as well as perform host actions. Requires % @ * # & ~`,
 			`/mafia uncohost [user] - Remove [user]'s cohost status. Requires % @ * # & ~`,
