@@ -555,6 +555,7 @@
 64.45.0.0,64.45.63.255,PEER 1,http://www.peer1.com/
 64.46.32.0,64.46.63.255,RackForce,http://www.rockforce.com/
 64.49.192.0,64.49.255.255,Rackspace,http://www.rackspace.com/
+64.52.96.0,64.52.104.255,CloudRoute,http://www.cloudroute.com/
 64.50.160.0,64.50.191.255,Lunar Pages,http://www.lunarpages.com/
 64.56.64.0,64.56.79.255,Perfect IP,http://www.perfectip.net/
 64.59.64.0,64.59.127.255,MojoHost,http://www.mojohost.com
@@ -804,6 +805,7 @@
 69.10.32.0,69.10.63.255,InterServer.net,http://www.interserver.net/
 69.10.128.0,69.10.159.255,RackForce,http://www.rockforce.com/
 69.13.0.0,69.13.255.255,C I Host,http://www.cihost.com/
+69.16.128.0,69.16.191.255,IP Vanish,http://ipvanish.com/
 69.16.192.0,69.16.255.255,Liquid Web,http://www.liquidweb.com/
 69.20.0.0,69.20.127.255,Rackspace,http://www.rackspace.com/
 69.24.64.0,69.24.95.255,Gearhost,http://www.gearhost.com/
@@ -2569,6 +2571,7 @@
 195.144.4.0,195.144.4.255,PatrikWeb,http://patrikweb.net/
 195.162.24.0,195.162.25.255,kylos.pl,http://www.kylos.pl/
 195.162.68.0,195.162.69.255,hostkey,http://www.hostkey.ru/
+195.181.168.0,195.181.169.255,Data Camp Limited,https://datacamp.co.uk/
 195.189.124.0,195.189.127.255,trueserver.nl,http://trueserver.nl/
 195.189.254.0,195.189.255.255,availo.no,http://www.availo.no/
 195.190.3.0,195.190.3.255,euro-web.com,http://fr.euro-web.com/
