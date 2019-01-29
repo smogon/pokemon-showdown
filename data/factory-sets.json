@@ -3122,7 +3122,7 @@
 				"evs": {"spa": 252, "spd": 4, "spe": 252},
 				"ivs": {"atk": 0},
 				"nature": "Timid",
-				"moves": [["Defog"], ["Focus Blast"], ["Roost"], ["Dark Pulse", "Fire Blast"]]
+				"moves": [["Defog"], ["Focus Blast"], ["Roost"], ["Dark Pulse"]]
 			}]
 		},
 		"latias": {
