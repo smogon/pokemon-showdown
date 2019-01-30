@@ -41,7 +41,6 @@ const TYPES = {
 	weakestlink: 'Weakest Link',
 };
 
-// NOTE: trivia code depends on this object's values being divisible by 5.
 const LENGTHS = {
 	short: {
 		cap: 20,
