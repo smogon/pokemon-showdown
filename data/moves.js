@@ -18187,7 +18187,7 @@ let BattleMovedex = {
 		basePower: 0,
 		category: "Status",
 		desc: "For 5 turns, the Speed of every Pokemon is recalculated for the purposes of determining turn order. During the effect, each Pokemon's Speed is considered to be (10000 - its normal Speed), and if this value is greater than 8191, 8192 is subtracted from it. If this move is used during the effect, the effect ends.",
-		shortDesc: "For 5 turns, slower Pokemon move first.",
+		shortDesc: "Goes last. For 5 turns, turn order is reversed.",
 		id: "trickroom",
 		name: "Trick Room",
 		pp: 5,
