@@ -2038,10 +2038,6 @@ const commands = {
 			if (genNumber < pokemon.gen) {
 				return this.sendReplyBox(`${pokemon.name} did not exist in ${generation.toUpperCase()}!`);
 			}
-			if (pokemon.tier === 'CAP') {
-				generation = 'cap';
-				this.errorReply(`CAP is not currently supported by Smogon Strategic Pokedex.`);
-			}
 
 			if ((pokemon.battleOnly && pokemon.baseSpecies !== 'Greninja') || pokemon.baseSpecies === 'Keldeo' || pokemon.baseSpecies === 'Genesect') {
 				pokemon = Dex.getTemplate(pokemon.baseSpecies);
@@ -2084,9 +2080,7 @@ const commands = {
 			let speciesid = pokemon.speciesid;
 			// Special case for Meowstic-M
 			if (speciesid === 'meowstic') speciesid = 'meowsticm';
-			if (pokemon.tier === 'CAP') {
-				this.sendReplyBox(`<a href="https://www.smogon.com/cap/pokemon/strategies/${speciesid}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} ${pokemon.name} analysis preview</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a> <a href="http://smogon.com/cap/">CAP Project</a>`);
-			} else if (formatId === 'ou' && generation === 'sm' && room && room.language in supportedLanguages) {
+			if (formatId === 'ou' && generation === 'sm' && room && room.language in supportedLanguages) {
 				// Limited support for translated analysis
 				// Translated analysis do not support automatic redirects from a speciesid to the proper page
 				let pageid = pokemon.name.toLowerCase().replace(' ', '_');
