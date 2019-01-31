@@ -209,9 +209,9 @@ class HelpTicket extends Rooms.RoomGame {
 	deleteTicket(staff) {
 		this.close(staff);
 		this.modnote(staff, `${staff.name} deleted this ticket.`);
-		notifyStaff(this.ticket.escalated);
 		delete tickets[this.ticket.userid];
 		writeTickets();
+		notifyStaff(this.ticket.escalated);
 		this.room.destroy();
 	}
 }
@@ -1061,9 +1061,9 @@ let commands = {
 				// @ts-ignore
 				targetRoom.game.deleteTicket(user);
 			} else {
-				notifyStaff(ticket.escalated);
 				delete tickets[ticket.userid];
 				writeTickets();
+				notifyStaff(ticket.escalated);
 			}
 			this.sendReply(`You deleted ${target}'s ticket.`);
 		},
