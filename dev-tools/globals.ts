@@ -761,6 +761,7 @@ interface ModdedBattlePokemon {
 	modifyStat?: (this: Pokemon, statName: string, modifier: number) => void
 	moveUsed?: (this: Pokemon, move: Move, targetLoc?: number) => void
 	recalculateStats?: (this: Pokemon) => void
+	transformInto?: (this: Pokemon, pokemon: Pokemon, effect: Effect | null) => boolean
 }
 
 interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {

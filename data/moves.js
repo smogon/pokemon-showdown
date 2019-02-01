@@ -18057,7 +18057,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {mystery: 1},
 		onHit: function (target, pokemon) {
-			if (!pokemon.transformInto(target, pokemon)) {
+			if (!pokemon.transformInto(target)) {
 				return false;
 			}
 		},
