@@ -28,12 +28,12 @@ exports.BattleScripts = {
 			ability = toId(ability);
 			return this.ability === ability || !!this.volatiles['ability' + ability];
 		},
-		transformInto: function (pokemon, user, effect) {
+		transformInto: function (pokemon, effect) {
 			let template = pokemon.template;
 			if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5)) {
 				return false;
 			}
-			if (!template.abilities || (pokemon && pokemon.transformed && this.battle.gen >= 2) || (user && user.transformed && this.battle.gen >= 5)) {
+			if (!template.abilities || (pokemon && pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5)) {
 				return false;
 			}
 			if (!this.formeChange(template, null)) {
