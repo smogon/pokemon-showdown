@@ -521,36 +521,6 @@ let Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] Pokebilities",
-		desc: `Pok&eacute;mon have all of their Abilities simultaneously, excluding unreleased or banned Abilities.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3588652/">Pok&eacute;bilities</a>`,
-		],
-
-		mod: 'pokebilities',
-		ruleset: ['[Gen 7] OU', 'Evasion Abilities Clause'],
-		banlist: ['Excadrill'],
-		onBegin: function () {
-			let ruleTable = this.getRuleTable(this.getFormat());
-			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
-			for (let pokemon of allPokemon) {
-				if (pokemon.ability === pokemon.template.abilities['S']) {
-					continue;
-				}
-				// @ts-ignore
-				pokemon.innates = Object.keys(pokemon.template.abilities).filter(key => key !== 'S' && (key !== 'H' || !pokemon.template.unreleasedHidden)).map(key => toId(pokemon.template.abilities[key])).filter(ability => ability !== pokemon.ability && !ruleTable.get('-ability:' + ability));
-			}
-		},
-		onSwitchInPriority: 2,
-		onSwitchIn: function (pokemon) {
-			if (pokemon.innates) pokemon.innates.forEach(innate => pokemon.addVolatile("ability" + innate, pokemon));
-		},
-		onAfterMega: function (pokemon) {
-			Object.keys(pokemon.volatiles).filter(innate => innate.startsWith('ability')).forEach(innate => pokemon.removeVolatile(innate));
-			pokemon.innates = undefined;
-		},
-	},
-	{
 		name: "[Gen 7] Hidden Type",
 		desc: `Pok&eacute;mon have an added type determined by their IVs. Same as the Hidden Power type.`,
 		threads: [
