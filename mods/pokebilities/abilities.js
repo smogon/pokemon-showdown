@@ -1,12 +1,15 @@
 'use strict';
 
+/**@type {{[k: string]: ModdedAbilityData}} */
 exports.BattleAbilities = {
 	trace: {
 		inherit: true,
 		onUpdate: function (pokemon) {
 			if (!pokemon.isStarted) return;
 			let isAbility = this.effect.effectType === "Ability";
+			/**@type {string[]} */
 			let possibleInnates = [];
+			/**@type {Pokemon[]} */
 			let possibleTargets = [];
 			for (let target of pokemon.side.foe.active) {
 				if (target && !target.fainted && target.innates) {
