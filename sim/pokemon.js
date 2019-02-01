@@ -314,6 +314,8 @@ class Pokemon {
 
 		/**@type {string | undefined} */
 		this.innate = undefined;
+		/**@type {string[] | undefined} */
+		this.innates = undefined;
 		/**@type {string | undefined} */
 		this.originalSpecies = undefined;
 		/**@type {?boolean} */
