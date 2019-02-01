@@ -1,7 +1,8 @@
 'use strict';
 
+/**@type {ModdedBattleScriptsData} */
 exports.BattleScripts = {
-	getEffect: function (name) {
+	getEffect(name) {
 		if (name && typeof name !== 'string') {
 			return name;
 		}
@@ -10,7 +11,7 @@ exports.BattleScripts = {
 		return Object.getPrototypeOf(this).getEffect.call(this, name);
 	},
 	pokemon: {
-		setAbility: function (ability, source, isFromFormechange) {
+		setAbility(ability, source, isFromFormechange) {
 			if (!this.hp) return false;
 			ability = this.battle.getAbility(ability);
 			let oldAbility = this.ability;
@@ -36,7 +37,7 @@ exports.BattleScripts = {
 			this.abilityOrder = this.battle.abilityOrder++;
 			return oldAbility;
 		},
-		hasAbility: function (ability) {
+		hasAbility(ability) {
 			if (!this.ignoringAbility()) {
 				if (Array.isArray(ability) ? ability.map(toId).includes(this.ability) : toId(ability) === this.ability) {
 					return true;
@@ -47,7 +48,7 @@ exports.BattleScripts = {
 			if (Array.isArray(ability)) return ability.map(toId).includes(ally.ability);
 			return toId(ability) === ally.ability;
 		},
-		getRequestData: function () {
+		getRequestData() {
 			let ally = this.side.active.find(ally => ally && ally !== this && !ally.fainted);
 			this.moveSlots = this.baseMoveSlots.concat(ally ? ally.baseMoveSlots : []);
 			for (const moveSlot of this.moveSlots) {
