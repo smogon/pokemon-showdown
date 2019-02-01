@@ -217,28 +217,6 @@ let Formats = [
 		},
 	},
 	{
-		name: "[Gen 7] Simple Symphony",
-		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3645825/">Simple Symphony Discussion</a>`],
-
-		mod: 'gen7',
-		forcedLevel: 50,
-		teamLength: {
-			validate: [3, 6],
-			battle: 3,
-		},
-		ruleset: ['Pokemon', 'Standard GBU'],
-		banlist: ['Darmanitan'],
-		onValidateSet: function (set, format) {
-			let template = this.getTemplate(set.species);
-			if (!template.types) return [`Invalid pokemon ${set.name || set.species}`];
-			if (template.types.length > 1) return [`${template.species} is dual-type, and cannot participate in ${format.name}.`];
-			if (set.item) {
-				let item = this.getItem(set.item);
-				if (item.megaStone) return [`${set.name || set.species} has ${item.name}, which is banned in ${format.name}.`];
-			}
-		},
-	},
-	{
 		name: "[Gen 7] Custom Game",
 
 		mod: 'gen7',
