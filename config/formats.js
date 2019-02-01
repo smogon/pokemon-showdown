@@ -521,64 +521,51 @@ let Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] Sketchmons",
-		desc: `Pok&eacute;mon can learn one of any move they don't normally learn, barring the few that are banned.`,
+		name: "[Gen 7] Pokebilities",
+		desc: `Pok&eacute;mon have all of their Abilities simultaneously, excluding unreleased or banned Abilities.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3587743/">Sketchmons</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3588652/">Pok&eacute;bilities</a>`,
+		],
+
+		mod: 'pokebilities',
+		ruleset: ['[Gen 7] OU', 'Evasion Abilities Clause'],
+		banlist: ['Excadrill'],
+		onBegin: function () {
+			let ruleTable = this.getRuleTable(this.getFormat());
+			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
+			for (let pokemon of allPokemon) {
+				if (pokemon.ability === pokemon.template.abilities['S']) {
+					continue;
+				}
+				// @ts-ignore
+				pokemon.innates = Object.keys(pokemon.template.abilities).filter(key => key !== 'S' && (key !== 'H' || !pokemon.template.unreleasedHidden)).map(key => toId(pokemon.template.abilities[key])).filter(ability => ability !== pokemon.ability && !ruleTable.get('-ability:' + ability));
+			}
+		},
+		onSwitchInPriority: 2,
+		onSwitchIn: function (pokemon) {
+			if (pokemon.innates) pokemon.innates.forEach(innate => pokemon.addVolatile("ability" + innate, pokemon));
+		},
+		onAfterMega: function (pokemon) {
+			Object.keys(pokemon.volatiles).filter(innate => innate.startsWith('ability')).forEach(innate => pokemon.removeVolatile(innate));
+			pokemon.innates = undefined;
+		},
+	},
+	{
+		name: "[Gen 7] Hidden Type",
+		desc: `Pok&eacute;mon have an added type determined by their IVs. Same as the Hidden Power type.`,
+		threads: [
+			`&bullet; <a href="http://www.smogon.com/forums/threads/3591194/">Hidden Type</a>`,
 		],
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
-		banlist: ['Kartana', 'Porygon-Z', 'Battle Bond'],
-		restrictedMoves: [
-			'Belly Drum', 'Celebrate', 'Chatter', 'Conversion', 'Extreme Speed', "Forest's Curse", 'Geomancy', 'Happy Hour', 'Hold Hands',
-			'Lovely Kiss', 'Purify', 'Quiver Dance', 'Shell Smash', 'Shift Gear', 'Sketch', 'Spore', 'Sticky Web', 'Trick-or-Treat',
-		],
-		checkLearnset: function (move, template, lsetData, set) {
-			let problem = this.checkLearnset(move, template, lsetData, set);
-			if (!problem) return null;
-			const restrictedMoves = this.format.restrictedMoves || [];
-			if (move.isZ || restrictedMoves.includes(move.name)) return problem;
-			// @ts-ignore
-			if (set.sketchMove) return {type: 'oversketched', maxSketches: 1};
-			// @ts-ignore
-			set.sketchMove = move.id;
-			return null;
+		onModifyTemplate: function (template, pokemon) {
+			if (template.types.includes(pokemon.hpType)) return;
+			let dex = this && this.deepClone ? this : Dex;
+			let newTemplate = dex.deepClone(template);
+			newTemplate.addedType = pokemon.hpType;
+			return newTemplate;
 		},
-		onValidateTeam: function (team, format, teamHas) {
-			let sketches = {};
-			for (const set of team) {
-				// @ts-ignore
-				if (set.sketchMove) {
-					// @ts-ignore
-					if (!sketches[set.sketchMove]) {
-						// @ts-ignore
-						sketches[set.sketchMove] = 1;
-					} else {
-						// @ts-ignore
-						sketches[set.sketchMove]++;
-					}
-				}
-			}
-			// @ts-ignore
-			let overSketched = Object.keys(sketches).filter(move => sketches[move] > 1);
-			// @ts-ignore
-			if (overSketched.length) return overSketched.map(move => `You are limited to 1 of ${this.getMove(move).name} by Sketch Clause. (You have sketched ${this.getMove(move).name} ${sketches[move]} times.)`);
-		},
-	},
-	{
-		name: "[Gen 7 Let's Go] 1v1",
-		desc: `Bring three Pok&eacute;mon to Team Preview and choose one to battle.`,
-		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3587523/">1v1</a>`],
-
-		mod: 'letsgo',
-		forcedLevel: 50,
-		teamLength: {
-			validate: [1, 3],
-			battle: 1,
-		},
-		ruleset: ['Pokemon', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Accuracy Moves Clause', 'Swagger Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
-		banlist: ['Illegal', 'Unreleased', 'Charizard', 'Mewtwo', 'Hypnosis', 'Lovely Kiss', 'Sing', 'Sleep Powder'],
 	},
 	{
 		section: "Other Metagames",
@@ -715,7 +702,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
-		searchShow: false,
+		// searchShow: false,
 		ruleset: ['[Gen 7] OU', 'STABmons Move Legality'],
 		banlist: ['Aerodactyl-Mega', 'Blacephalon', 'Kartana', 'Komala', 'Kyurem-Black', 'Porygon-Z', 'Silvally', 'Tapu Koko', 'Tapu Lele', 'King\'s Rock', 'Razor Fang'],
 		restrictedMoves: ['Acupressure', 'Belly Drum', 'Chatter', 'Extreme Speed', 'Geomancy', 'Lovely Kiss', 'Shell Smash', 'Shift Gear', 'Spore', 'Thousand Arrows'],
@@ -765,7 +752,7 @@ let Formats = [
 
 		mod: 'pic',
 		gameType: 'doubles',
-		// searchShow: false,
+		searchShow: false,
 		ruleset: ['[Gen 7] Doubles OU', 'Sleep Clause Mod'],
 		banlist: [
 			'Kangaskhanite', 'Mawilite', 'Medichamite',
