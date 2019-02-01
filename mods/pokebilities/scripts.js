@@ -77,9 +77,17 @@ exports.BattleScripts = {
 			} else {
 				this.battle.add('-transform', this, pokemon);
 			}
-			this.setAbility(pokemon.ability, this, {id: 'transform'});
-			this.innates.forEach(innate => this.removeVolatile('ability' + innate, this));
-			pokemon.innates.forEach(innate => this.addVolatile('ability' + innate, this));
+			this.setAbility(pokemon.ability, this, true);
+			if (this.innates) {
+				for (let innate of this.innates) {
+					this.removeVolatile('ability' + innate);
+				}
+			}
+			if (pokemon.innates) {
+				for (let innate of pokemon.innates) {
+					this.addVolatile('ability' + innate, this);
+				}
+			}
 			return true;
 		},
 	},
