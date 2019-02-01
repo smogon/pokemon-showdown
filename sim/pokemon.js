@@ -870,7 +870,7 @@ class Pokemon {
 		if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5)) {
 			return false;
 		}
-		if (!template.abilities || (pokemon && pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5)) {
+		if ((pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5)) {
 			return false;
 		}
 		if (!this.formeChange(template, null)) {
