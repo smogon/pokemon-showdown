@@ -108,10 +108,13 @@ let BattleScripts = {
 		pokemon.lastDamage = 0;
 		let lockedMove = this.runEvent('LockMove', pokemon);
 		if (lockedMove === true) lockedMove = false;
-		if (!lockedMove && !pokemon.volatiles['partialtrappinglock']) {
+		if (!lockedMove && (!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target)) {
 			pokemon.deductPP(move, null, target);
+			pokemon.side.lastMove = move;
+			pokemon.lastMove = move;
+		} else {
+			sourceEffect = move;
 		}
-		pokemon.moveUsed(move);
 		this.useMove(move, pokemon, target, sourceEffect);
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 
