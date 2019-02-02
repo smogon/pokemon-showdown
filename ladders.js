@@ -38,6 +38,28 @@ class BattleReady {
 		/** @type {number} */
 		this.time = Date.now();
 	}
+
+	/**
+	 * 
+	 * @param {BattleReady} first The first item to compare
+	 * @param {BattleReady} second The second item to compare
+	 */
+	static sameFormatAs(first, second) { 
+		return first.formatid === second.formatid;
+	}
+
+	/**
+	 * 
+	 * @param {[BattleReady]} battleReadies	An array of battle readies to validate if they are playing the same game. 
+	 */
+	static validatePlayingSameGame(battleReadies) {
+		const firstItem = battleReadies[0];
+		const allSameFormat = battleReadies.every((battleReady) => {
+			return BattleReady.sameFormatAs(firstItem, battleReady); 
+		});
+
+		return allSameFormat;
+	}
 }
 
 /**
@@ -255,7 +277,7 @@ class Ladder extends LadderStore {
 		const ready = await ladder.prepBattle(connection);
 		if (!ready) return false;
 		if (Ladder.removeChallenge(chall)) {
-			Ladders.match(chall.ready, ready);
+			Ladders.match([chall.ready, ready]);
 		}
 		return true;
 	}
@@ -538,7 +560,7 @@ class Ladder extends LadderStore {
 			const matched = this.matchmakingOK(search, newSearch, searcher, user);
 			if (matched) {
 				formatTable.delete(search.userid);
-				Ladder.match(search, newSearch);
+				Ladder.match([search, newSearch]);
 				return;
 			}
 		}
@@ -572,7 +594,7 @@ class Ladder extends LadderStore {
 				if (matched) {
 					formatTable.delete(search.userid);
 					formatTable.delete(longestSearch.userid);
-					Ladder.match(longestSearch, search);
+					Ladder.match([longestSearch, search]);
 					return;
 				}
 			}
@@ -580,28 +602,48 @@ class Ladder extends LadderStore {
 	}
 
 	/**
-	 * @param {BattleReady} ready1
-	 * @param {BattleReady} ready2
+	 * @param {[BattleReady]} battleReadies	An array of of battle readies indiciating the readniess to begin.
 	 */
-	static match(ready1, ready2) {
-		if (ready1.formatid !== ready2.formatid) throw new Error(`Format IDs don't match`);
-		const user1 = Users(ready1.userid);
-		const user2 = Users(ready2.userid);
-		if (!user1) {
-			if (!user2) return false;
-			user2.popup(`Sorry, your opponent ${ready1.userid} went offline before your battle could start.`);
+	static match(battleReadies) {
+		// Figure this out given 
+		if (!BattleReady.validatePlayingSameGame(battleReadies)) throw new Error(`Format IDs don't match`);
+		
+		const nomEmpty = (candidate) => candidate;
+
+		const getOfflinePlayers = () => {
+			const offlineReadyTokens = battleReadies
+				.filter((battleReady) => !Users(battleReady.userid))
+			return offlineReadyTokens;
+		};
+
+		const onlineUsers = battleReadies
+			.map((battleReady) => Users(battleReady.userid))
+			.filter(nomEmpty);
+
+		const offlinePlayers = getOfflinePlayers();
+
+		// Checking for players that have since logged off, and since this is the case, the challenge has to be terminated
+		if(offlinePlayers.length > 0) {
+			const opponentNames = offlinePlayers.map((user) => user.userid).join(', ');
+
+			onlineUsers.forEach((user) => {
+				user.popup(`Sorry, your opponent(s) {${opponentNames}} went offline before your battle could start, so the match was cancelled.3`)
+			});
+
 			return false;
 		}
-		if (!user2) {
-			user1.popup(`Sorry, your opponent ${ready2.userid} went offline before your battle could start.`);
-			return false;
-		}
-		Rooms.createBattle(ready1.formatid, {
+
+		// This chunk of code is hard-coded for two players since the downstream code is hard-coded for two players
+		// But in the future, we can go ahead and change the signature here, too so that it's not hard-coded to have two players max
+		const matchConfig = battleReadies[0];
+		const user1 = Users(battleReadies[0].userid);
+		const user2 = Users(battleReadies[1].userid);
+		Rooms.createBattle(matchConfig.formatid, {
 			p1: user1,
-			p1team: ready1.team,
+			p1team: battleReadies[0].team,
 			p2: user2,
-			p2team: ready2.team,
-			rated: Math.min(ready1.rating, ready2.rating),
+			p2team: battleReadies[1].team,
+			rated: Math.min(battleReadies[0].rating, battleReadies[1].rating),
 		});
 	}
 }

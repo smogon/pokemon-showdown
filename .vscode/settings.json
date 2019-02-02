@@ -1,4 +1,5 @@
 {
-    "editor.insertSpaces": false,
-    "typescript.tsdk": "node_modules/typescript/lib"
+  "editor.insertSpaces": false,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.formatOnSave": false
 }
