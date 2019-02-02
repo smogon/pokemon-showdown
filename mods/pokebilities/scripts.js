@@ -1,7 +1,8 @@
 'use strict';
 
+/**@type {ModdedBattleScriptsData} */
 exports.BattleScripts = {
-	getEffect: function (name) {
+	getEffect(name) {
 		if (name && typeof name !== 'string') {
 			return name;
 		}
@@ -22,13 +23,13 @@ exports.BattleScripts = {
 		return false;
 	},
 	pokemon: {
-		hasAbility: function (ability) {
+		hasAbility(ability) {
 			if (this.ignoringAbility()) return false;
 			if (Array.isArray(ability)) return ability.some(ability => this.hasAbility(ability));
 			ability = toId(ability);
 			return this.ability === ability || !!this.volatiles['ability' + ability];
 		},
-		transformInto: function (pokemon, effect) {
+		transformInto(pokemon, effect) {
 			let template = pokemon.template;
 			if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5)) {
 				return false;
@@ -70,6 +71,7 @@ exports.BattleScripts = {
 				});
 			}
 			for (let j in pokemon.boosts) {
+				// @ts-ignore
 				this.boosts[j] = pokemon.boosts[j];
 			}
 			if (effect) {
@@ -77,9 +79,17 @@ exports.BattleScripts = {
 			} else {
 				this.battle.add('-transform', this, pokemon);
 			}
-			this.setAbility(pokemon.ability, this, {id: 'transform'});
-			this.innates.forEach(innate => this.removeVolatile('ability' + innate, this));
-			pokemon.innates.forEach(innate => this.addVolatile('ability' + innate, this));
+			this.setAbility(pokemon.ability, this, true);
+			if (this.innates) {
+				for (let innate of this.innates) {
+					this.removeVolatile('ability' + innate);
+				}
+			}
+			if (pokemon.innates) {
+				for (let innate of pokemon.innates) {
+					this.addVolatile('ability' + innate, this);
+				}
+			}
 			return true;
 		},
 	},
