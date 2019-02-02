@@ -956,8 +956,6 @@ class Pokemon {
 	formeChange(templateId, source = this.battle.effect, isPermanent, message, abilitySlot = '0') {
 		let rawTemplate = this.battle.getTemplate(templateId);
 
-		if (!rawTemplate.abilities) return false;
-
 		let template = this.battle.singleEvent('ModifyTemplate', this.battle.getFormat(), null, this, source, null, rawTemplate);
 
 		if (!template) return false;
