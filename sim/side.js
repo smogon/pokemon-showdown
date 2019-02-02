@@ -155,6 +155,7 @@ class Side {
 			pokemon: [],
 		};
 		for (const pokemon of this.pokemon) {
+			/**@type {AnyObject} */
 			let entry = {
 				ident: pokemon.fullname,
 				details: pokemon.details,
@@ -177,7 +178,6 @@ class Side {
 				item: pokemon.item,
 				pokeball: pokemon.pokeball,
 			};
-			// @ts-ignore
 			if (this.battle.gen > 6) entry.ability = pokemon.ability;
 			data.pokemon.push(entry);
 		}
