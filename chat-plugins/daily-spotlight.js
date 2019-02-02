@@ -47,7 +47,7 @@ async function renderSpotlight(image, description) {
 		imgHTML = `<td><img src="${image}" width="${width}" height="${height}" style="vertical-align:middle;"></td>`;
 	}
 
-	return `<table style="text-align:center;margin:auto"><tr><td style="padding-right:10px;">${Chat.formatText(description, true)}</td>${imgHTML}</tr></table>`;
+	return `<table style="text-align:center;margin:auto"><tr><td style="padding-right:10px;">${Chat.formatText(description, true).replace(/\n/g, `<br />`)}</td>${imgHTML}</tr></table>`;
 }
 
 exports.destroy = function () {
@@ -185,3 +185,7 @@ const commands = {
 };
 
 exports.commands = commands;
+
+process.nextTick(() => {
+	Chat.multiLinePattern.register('/(queue|set)daily ');
+});
