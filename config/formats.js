@@ -522,7 +522,7 @@ let Formats = [
 	},
 	{
 		name: "[Gen 7] Pokebilities",
-		desc: `Pok&eacute;mon have all of their Abilities simultaneously, excluding unreleased or banned Abilities.`,
+		desc: `Pok&eacute;mon have all of their released Abilities simultaneously.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3588652/">Pok&eacute;bilities</a>`,
 		],
