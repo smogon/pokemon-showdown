@@ -528,17 +528,16 @@ let Formats = [
 		],
 
 		mod: 'pokebilities',
-		ruleset: ['[Gen 7] OU', 'Evasion Abilities Clause'],
-		banlist: ['Excadrill'],
+		ruleset: ['[Gen 7] OU'],
+		banlist: ['Diglett', 'Dugtrio', 'Excadrill', 'Gothita', 'Gothitelle', 'Gothorita', 'Trapinch', 'Wobbuffet', 'Wynaut'],
 		onBegin: function () {
-			let ruleTable = this.getRuleTable(this.getFormat());
 			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
 			for (let pokemon of allPokemon) {
 				if (pokemon.ability === pokemon.template.abilities['S']) {
 					continue;
 				}
 				// @ts-ignore
-				pokemon.innates = Object.keys(pokemon.template.abilities).filter(key => key !== 'S' && (key !== 'H' || !pokemon.template.unreleasedHidden)).map(key => toId(pokemon.template.abilities[key])).filter(ability => ability !== pokemon.ability && !ruleTable.get('-ability:' + ability));
+				pokemon.innates = Object.keys(pokemon.template.abilities).filter(key => key !== 'S' && (key !== 'H' || !pokemon.template.unreleasedHidden)).map(key => toId(pokemon.template.abilities[key])).filter(ability => ability !== pokemon.ability);
 			}
 		},
 		onSwitchInPriority: 2,
