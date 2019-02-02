@@ -755,12 +755,15 @@ interface ModdedBattlePokemon {
 	boostBy?: (this: Pokemon, boost: SparseBoostsTable) => boolean
 	calculateStat?: (this: Pokemon, statName: string, boost: number, modifier?: number) => number
 	getActionSpeed?: (this: Pokemon) => number
+	getRequestData?: (this: Pokemon) => {moves: {move: string, id: string, target?: string, disabled?: boolean}[], maybeDisabled?: boolean, trapped?: boolean, maybeTrapped?: boolean, canMegaEvo?: boolean, canUltraBurst?: boolean, canZMove?: AnyObject | null}
 	getStat?: (this: Pokemon, statName: string, unboosted?: boolean, unmodified?: boolean) => number
 	getWeight?: (this: Pokemon) => number
+	hasAbility?: (this: Pokemon, ability: string | string[]) => boolean
 	isGrounded?: (this: Pokemon, negateImmunity: boolean | undefined) => boolean | null
 	modifyStat?: (this: Pokemon, statName: string, modifier: number) => void
 	moveUsed?: (this: Pokemon, move: Move, targetLoc?: number) => void
 	recalculateStats?: (this: Pokemon) => void
+	setAbility?: (this: Pokemon, ability: string | Ability, source: Pokemon | null, isFromFormeChange: boolean) => string | false
 	transformInto?: (this: Pokemon, pokemon: Pokemon, effect: Effect | null) => boolean
 }
 
@@ -772,11 +775,13 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	boost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source?: Pokemon | null, effect?: Effect | string | null, isSecondary?: boolean, isSelf?: boolean) => boolean | null | 0
 	debug?: (this: Battle, activity: string) => void
 	getDamage?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: string | number | ActiveMove, suppressMessages: boolean) => number
+	getEffect?: (this: Battle, name: string | Effect | null) => Effect
 	init?: (this: Battle) => void
 	modifyDamage?: (this: Battle, baseDamage: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove, suppressMessages?: boolean) => void
 	natureModify?: (this: Battle, stats: StatsTable, set: PokemonSet) => StatsTable
 	setTerrain?: (this: Battle, status: string | Effect, source: Pokemon | null | 'debug', sourceEffect: Effect | null) => boolean
 	spreadModify?: (this: Battle, baseStats: StatsTable, set: PokemonSet) => StatsTable
+	suppressingWeather?: (this: Battle) => boolean
 
 	// oms
 	doGetMixedTemplate?: (this: Battle, template: Template, deltas: AnyObject) => Template

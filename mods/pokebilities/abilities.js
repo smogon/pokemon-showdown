@@ -1,16 +1,18 @@
 'use strict';
 
+/**@type {{[k: string]: ModdedAbilityData}} */
 exports.BattleAbilities = {
 	trace: {
 		inherit: true,
 		onUpdate: function (pokemon) {
 			if (!pokemon.isStarted) return;
 			let isAbility = this.effect.effectType === "Ability";
+			/**@type {string[]} */
 			let possibleInnates = [];
+			/**@type {Pokemon[]} */
 			let possibleTargets = [];
-			for (let i = 0; i < pokemon.side.foe.active.length; i++) {
-				let target = pokemon.side.foe.active[i];
-				if (target && !target.fainted) {
+			for (let target of pokemon.side.foe.active) {
+				if (target && !target.fainted && target.innates) {
 					possibleInnates = possibleInnates.concat(target.innates);
 					possibleTargets = possibleTargets.concat(target.innates.map(innate => target));
 				}
@@ -30,7 +32,7 @@ exports.BattleAbilities = {
 				if (isAbility) {
 					pokemon.setAbility(ability);
 				} else {
-					pokemon.removeVolatile("abilitytrace", pokemon);
+					pokemon.removeVolatile("abilitytrace");
 					pokemon.addVolatile("ability" + innate, pokemon);
 				}
 				return;
