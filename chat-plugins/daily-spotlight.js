@@ -64,9 +64,6 @@ const pages = {
 			let buf = `|title|[${roomid}] Daily Spotlights\n|pagehtml|<div class="pad ladder"><h2>Daily Spotlights</h2>`;
 			if (!room) {
 				buf += `<p>Invalid room.</p></div>`;
-			// @ts-ignore Room is definitely a room here and not null.
-			} else if (!user.can('announce', null, room)) {
-				buf += `<p>Access denied</p></div>`;
 			} else if (!spotlights[room.id]) {
 				buf += `<p>This room has no daily spotlights.</p></div>`;
 			} else {
@@ -75,6 +72,8 @@ const pages = {
 					for (let i = 0; i < spotlights[room.id][key].length; i++) {
 						const html = await renderSpotlight(spotlights[room.id][key][i].image, spotlights[room.id][key][i].description);
 						buf += `<tr><td>${i ? i : 'Current'}</td><td>${html}</td></tr>`;
+						// @ts-ignore room is definitely a proper room here.
+						if (!user.can('announce', null, room)) break;
 					}
 					buf += '</table>';
 				}
@@ -171,7 +170,6 @@ const commands = {
 		room.update();
 	},
 	viewspotlights: function (target, room, user) {
-		if (!this.can('announce', null, room)) return false;
 		return this.parse(`/join view-spotlights-${room.id}`);
 	},
 
@@ -182,7 +180,7 @@ const commands = {
 		`- /setdaily [name], [image], [description] - Sets the daily spotlight. Image can be left out. Requires: % @ * # & ~`,
 		`- /queuedaily [name], [image], [description] - Queues a daily spotlight. At midnight, the spotlight with this name will automatically switch to the next queued spotlight. Image can be left out. Requires: % @ * # & ~`,
 		`- /removedaily [name][, queue number] - If no queue number is provided, deletes all queued and current spotlights with the given name. If a number is provided, removes a specific future spotlight from the queue. Requires: % @ * # & ~`,
-		`- /viewspotlights - Shows all current and queued spotlights. Requires: % @ * # & ~`,
+		`- /viewspotlights - Shows all current spotlights in the room. For staff, also shows queued spotlights.`,
 	],
 };
 
