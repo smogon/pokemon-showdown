@@ -2724,7 +2724,16 @@ const commands = {
 		if (!room.battle && (!reason.includes('.pokemonshowdown.com/') && cmd !== 'forcebattleban')) {
 			 return this.errorReply(`Battle bans require a battle replay if used outside of a battle; if the battle has expired, use /forcebattleban.`);
 		}
-		if (!this.can('lock', targetUser)) return;
+		if (!this.can('rangeban', targetUser)) {
+			this.errorReply(`Battlebans have been deprecated. Alternatives:`);
+			this.errorReply(`- timerstalling and bragging about it: lock`);
+			this.errorReply(`- other timerstalling: they're not timerstalling, leave them alone`);
+			this.errorReply(`- bad nicknames: lock, locks prevent nicknames from appearing; you should always have been locking for this`);
+			this.errorReply(`- ladder cheating: gban, get a moderator if necessary`);
+			this.errorReply(`- serious ladder cheating: permaban, get a leader`);
+			this.errorReply(`- other: get a leader`);
+			return;
+		}
 		if (Punishments.isBattleBanned(targetUser)) return this.errorReply(`User '${targetUser.name}' is already banned from battling.`);
 
 		const reasonText = reason ? ` (${reason})` : `.`;
