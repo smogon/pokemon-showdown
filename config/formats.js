@@ -508,6 +508,7 @@ let Formats = [
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
 		onModifyTemplate: function (template, pokemon) {
+			if (!pokemon) return;
 			if (template.types.includes(pokemon.hpType)) return;
 			let dex = this && this.deepClone ? this : Dex;
 			let newTemplate = dex.deepClone(template);
