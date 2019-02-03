@@ -722,7 +722,8 @@ function runDexsearch(target, cmd, canAll, message) {
 	}
 	let results = [];
 	for (const mon of Object.keys(dex).sort()) {
-		if (dex[mon].forme !== "Alola" && dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies)) continue;
+		const isAlola = dex[mon].forme === "Alola" && dex[mon].species !== "Pikachu-Alola";
+		if (!isAlola && dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies)) continue;
 		results.push(dex[mon].species);
 	}
 
