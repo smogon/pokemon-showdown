@@ -278,6 +278,7 @@ exports.commands = {
 		return this.parse('/modjoin +');
 	},
 	'!ionext': true,
+	inviteonlynext: 'ionext',
 	ionext: function (target, room, user) {
 		if (this.meansNo(target)) {
 			user.inviteOnlyNextBattle = false;
@@ -303,6 +304,8 @@ exports.commands = {
 	inviteonlyhelp: [
 		`/inviteonly [on|off] - Sets modjoin +. Users can't join unless invited with /invite. Requires: # & ~`,
 		`/ioo - Shortcut for /inviteonly on`,
+		`/inviteonlynext OR /ionext - Sets your next battle to be invite-only.`,
+		`/ionext off - Sets your next battle to be publicly visible.`,
 	],
 
 	modjoin: function (target, room, user) {
