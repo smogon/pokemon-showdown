@@ -18,7 +18,7 @@
     "node": ">=7.7.0"
   },
   "scripts": {
-    "start": "node pokemon-showdown",
+    "start": "node pokemon-showdown start",
     "test": "eslint --cache . && tsc && mocha",
     "tsc": "tsc",
     "lint": "eslint --cache ."

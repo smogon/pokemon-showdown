@@ -36,7 +36,7 @@ const path = require('path');
 const Data = require('./dex-data');
 
 const DATA_DIR = path.resolve(__dirname, '../data');
-const MODS_DIR = path.resolve(__dirname, '../mods');
+const MODS_DIR = path.resolve(__dirname, '../data/mods');
 const FORMATS = path.resolve(__dirname, '../config/formats');
 
 /** @type {{[mod: string]: ModdedDex}} */

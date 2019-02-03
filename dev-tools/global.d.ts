@@ -1,3 +1,5 @@
+import child_process = require('child_process');
+
 import BattleType = require('./../sim/battle');
 import BattleStreamType = require('./../sim/battle-stream');
 import DataType = require('./../sim/dex-data');
@@ -7,15 +9,16 @@ import PokemonType = require('./../sim/pokemon');
 import PRNGType = require('./../sim/prng');
 import SideType = require('./../sim/side');
 import TeamValidatorType = require('./../sim/team-validator');
-import RoomsType = require('./../rooms');
-import RoomlogsType = require('./../roomlogs');
-import LadderStoreType = require('./../ladders-remote');
-import LaddersType = require('./../ladders');
-import UsersType = require('./../users');
-import PunishmentsType = require('./../punishments');
+
+import RoomsType = require('./../server/rooms');
+import RoomlogsType = require('./../server/roomlogs');
+import LadderStoreType = require('./../server/ladders-remote');
+import LaddersType = require('./../server/ladders');
+import UsersType = require('./../server/users');
+import PunishmentsType = require('./../server/punishments');
+import ChatType = require('./../server/chat');
+
 import StreamsType = require('./../lib/streams');
-import child_process = require('child_process');
-import ChatType = require('./../chat');
 
 declare global {
 	// modules

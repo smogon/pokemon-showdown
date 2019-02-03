@@ -3,10 +3,11 @@ type ModdedDex = typeof import('./../sim/dex')
 type Pokemon = import('./../sim/pokemon')
 type Side = import('./../sim/side')
 type Validator = ReturnType<typeof import('./../sim/team-validator')>
-type PageTable = import('./../chat').PageTable
-type ChatCommands = import('./../chat').ChatCommands
-type ChatFilter = import('./../chat').ChatFilter
-type NameFilter = import('./../chat').NameFilter
+
+type PageTable = import('./../server/chat').PageTable
+type ChatCommands = import('./../server/chat').ChatCommands
+type ChatFilter = import('./../server/chat').ChatFilter
+type NameFilter = import('./../server/chat').NameFilter
 
 interface AnyObject {[k: string]: any}
 type DexTable<T> = {[key: string]: T}
