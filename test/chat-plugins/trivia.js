@@ -34,7 +34,7 @@ describe('Trivia', function () {
 		// it makes reference to global.Config in the modules outermost scope,
 		// which makes the module fail to be loaded. Within the scope of thess
 		// unit test blocks however, Config is defined.
-		const trivia = require('../../chat-plugins/trivia');
+		const trivia = require('../../server/chat-plugins/trivia');
 		Trivia = trivia.Trivia;
 		FirstModeTrivia = trivia.FirstModeTrivia;
 		TimerModeTrivia = trivia.TimerModeTrivia;

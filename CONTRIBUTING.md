@@ -89,7 +89,7 @@ Some even older code returns `T | false`. This is a very old PHP convention that
 
 ### `false | null | undefined`
 
-The simulator (code in `sim/`, `data/`, and `mods/`) will often have functions with return signatures of the form `T | false | null | undefined`, especially in event handlers. These aren't optionals, they're different sentinel values.
+The simulator (code in `sim/` and `data/`) will often have functions with return signatures of the form `T | false | null | undefined`, especially in event handlers. These aren't optionals, they're different sentinel values.
 
 Specifically:
 
