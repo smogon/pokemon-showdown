@@ -438,6 +438,7 @@ let Formats = [
 
 		mod: 'gen7',
 		gameType: 'doubles',
+		allowMultisearch: true,
 		teamLength: {
 			validate: [2, 2],
 			battle: 2,
@@ -574,6 +575,7 @@ let Formats = [
 			validate: [1, 3],
 			battle: 1,
 		},
+		allowMultisearch: true,
 		ruleset: ['Pokemon', 'Species Clause', 'Nickname Clause', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Accuracy Moves Clause', 'Swagger Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 		banlist: [
 			'Illegal', 'Unreleased', 'Arceus', 'Darkrai', 'Deoxys-Base', 'Deoxys-Attack', 'Deoxys-Defense', 'Dialga', 'Giratina', 'Groudon',

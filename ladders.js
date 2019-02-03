@@ -13,8 +13,8 @@
 /** @type {typeof LadderStoreT} */
 const LadderStore = require(typeof Config === 'object' && Config.remoteladder ? './ladders-remote' : './ladders-local');
 
-/** @type {number} */
-const PERIODIC_MATCH_INTERVAL = 60 * 1000;
+const SECONDS = 1000;
+const PERIODIC_MATCH_INTERVAL = 60 * SECONDS;
 
 /**
  * This represents a user's search for a battle under a format.
@@ -230,7 +230,7 @@ class Ladder extends LadderStore {
 			connection.popup(`The user '${targetUser.name}' is not accepting challenges right now.`);
 			return false;
 		}
-		if (Date.now() < user.lastChallenge + 10000) {
+		if (Date.now() < user.lastChallenge + 10 * SECONDS) {
 			// 10 seconds ago, probable misclick
 			connection.popup(`You challenged less than 10 seconds after your last challenge! It's cancelled in case it's a misclick.`);
 			return false;
@@ -456,6 +456,18 @@ class Ladder extends LadderStore {
 			connection.popup(`Error: Your format ${format.id} is not ladderable.`);
 			return;
 		}
+
+		const roomid = this.needsToMove(user);
+		if (roomid) {
+			connection.popup(`Error: You need to make a move in <<${roomid}>> before you can look for another battle.`);
+			return;
+		}
+
+		if (roomid === null && Date.now() < user.lastDecision + 10 * SECONDS) {
+			connection.popup(`Error: You need to wait 7 seconds after making a move before you can look for another battle.`);
+			return;
+		}
+
 		let oldUserid = user.userid;
 		const search = await this.prepBattle(connection, null, format.rated !== false);
 
@@ -463,6 +475,27 @@ class Ladder extends LadderStore {
 		if (!search) return;
 
 		this.addSearch(search, user);
+	}
+
+	/**
+	 * null = all battles ok
+	 * undefined = not in any battle
+	 * @param {User} user
+	 */
+	needsToMove(user) {
+		let out = undefined;
+		for (const roomid of user.games) {
+			const room = Rooms(roomid);
+			if (!room || !room.battle || !room.battle.players[user.userid]) continue;
+			const battle = /** @type {RoomBattle} */ (room.battle);
+			if (Dex.getFormat(battle.format).allowMultisearch) {
+				continue;
+			}
+			const player = battle.players[user.userid];
+			if (!battle.requests[player.slot].isWait) return roomid;
+			out = null;
+		}
+		return out;
 	}
 
 	/**
