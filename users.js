@@ -473,8 +473,13 @@ class User {
 		this.prevNames = Object.create(null);
 		this.inRooms = new Set();
 
-		// Set of roomids
+		/**
+		 * Set of room IDs
+		 * @type {Set<string>}
+		 */
 		this.games = new Set();
+		/** Millisecond timestamp for last battle decision */
+		this.lastDecision = 0;
 
 		// misc state
 		this.lastChallenge = 0;
