@@ -151,8 +151,9 @@ let Formats = [
 	{
 		name: "[Gen 7] Anything Goes",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3587441/">Anything Goes Metgame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3587441/">Anything Goes Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3591711/">Anything Goes Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3646736/">Anything Goes Sample Teams/a>`,
 		],
 
 		mod: 'gen7',
@@ -187,6 +188,7 @@ let Formats = [
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3646743/">ZU Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3643412/">ZU Viability Rankings</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3646739/">ZU Sample Teams/a>`,
 		],
 
 		mod: 'gen7',
