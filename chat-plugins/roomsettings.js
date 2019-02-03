@@ -304,7 +304,7 @@ exports.commands = {
 	inviteonlyhelp: [
 		`/inviteonly [on|off] - Sets modjoin +. Users can't join unless invited with /invite. Requires: # & ~`,
 		`/ioo - Shortcut for /inviteonly on`,
-		`/ionext OR /inviteonlynext - Sets your next battle to be invite-only.`,
+		`/inviteonlynext OR /ionext - Sets your next battle to be invite-only.`,
 		`/ionext off - Sets your next battle to be publicly visible.`,
 	],
 
