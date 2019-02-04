@@ -419,7 +419,7 @@ class GlobalRoom extends BasicRoom {
 		this.chatRoomDataList = [];
 		try {
 			// @ts-ignore
-			this.chatRoomDataList = require('./config/chatrooms.json');
+			this.chatRoomDataList = require('../config/chatrooms.json');
 			if (!Array.isArray(this.chatRoomDataList)) this.chatRoomDataList = [];
 		} catch (e) {} // file doesn't exist [yet]
 
@@ -511,7 +511,7 @@ class GlobalRoom extends BasicRoom {
 	}
 
 	writeChatRoomData() {
-		FS('config/chatrooms.json').writeUpdate(() => (
+		FS('../config/chatrooms.json').writeUpdate(() => (
 			JSON.stringify(this.chatRoomDataList)
 				.replace(/\{"title":/g, '\n{"title":')
 				.replace(/\]$/, '\n]')
