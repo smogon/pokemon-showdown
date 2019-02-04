@@ -137,7 +137,7 @@ class Ladder extends LadderStore {
 		if (isRated && !Ladders.disabled) {
 			let userid = user.userid;
 			[valResult, rating] = await Promise.all([
-				TeamValidatorAsync(this.formatid).validateTeam(team, Boolean(user.locked || user.namelocked)),
+				TeamValidatorAsync(this.formatid).validateTeam(team, !!(user.locked || user.namelocked)),
 				this.getRating(userid),
 			]);
 			if (userid !== user.userid) {
