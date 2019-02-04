@@ -1472,6 +1472,7 @@ class Battle extends Dex.ModdedDex {
 		if (pos >= side.active.length) return false;
 		let pokemon = this.getRandomSwitchable(side);
 		if (!pokemon || pokemon.isActive) return false;
+		pokemon.isActive = true;
 		this.runEvent('BeforeSwitchIn', pokemon);
 		if (side.active[pos]) {
 			let oldActive = side.active[pos];
@@ -1503,7 +1504,6 @@ class Battle extends Dex.ModdedDex {
 			oldActive.clearVolatile();
 		}
 		side.active[pos] = pokemon;
-		pokemon.isActive = true;
 		pokemon.activeTurns = 0;
 		if (this.gen === 2) pokemon.draggedIn = this.turn;
 		for (let m in pokemon.moveSlots) {
