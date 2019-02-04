@@ -343,7 +343,7 @@ if (cluster.isMaster) {
 		const roomidRegex = /^\/(?:[A-Za-z0-9][A-Za-z0-9-]*)\/?$/;
 		const cssServer = new StaticServer('./config');
 		const avatarServer = new StaticServer('./config/avatars');
-		const staticServer = new StaticServer('./static');
+		const staticServer = new StaticServer('./server/static');
 		/**
 		 * @param {import('http').IncomingMessage} req
 		 * @param {import('http').ServerResponse} res
