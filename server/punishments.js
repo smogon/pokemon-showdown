@@ -1344,14 +1344,14 @@ Punishments.checkIp = function (user, connection) {
 			return null;
 		}
 		throw e;
-	}).then((/** @type {string} */ host) => {
+	}).then((/** @type {string | null} */ host) => {
 		user = connection.user || user;
 		if (host) user.latestHost = host;
-		Chat.hostfilter(host, user, connection);
+		Chat.hostfilter(host || '', user, connection);
 	});
 
 	if (Config.dnsbl) {
-		Dnsbl.query(connection.ip).then((/** @type {boolean} */ isBlocked) => {
+		Dnsbl.query(connection.ip).then((/** @type {string | null} */ isBlocked) => {
 			user = connection.user || user;
 			if (isBlocked) {
 				if (!user.locked && !user.autoconfirmed) {

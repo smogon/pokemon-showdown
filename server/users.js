@@ -789,16 +789,13 @@ class User {
 		let tokenData = token.substr(0, tokenSemicolonPos);
 		let tokenSig = token.substr(tokenSemicolonPos + 1);
 
-		let success = await Verifier.verify(tokenData, tokenSig);
-		if (!success) {
-			Monitor.warn(`verify failed: ${token}`);
-			Monitor.warn(`challenge was: ${challenge}`);
-			this.send(`|nametaken|${name}|Your verification signature was invalid.`);
+		let tokenDataSplit = tokenData.split(',');
+		let [signedChallenge, signedUserid, userType, signedDate, signedHostname] = tokenDataSplit;
+		if (signedHostname && Config.legalhosts && !Config.legalhosts.includes(signedHostname)) {
+			Monitor.warn(`forged assertion: ${tokenData}`);
+			this.send(`|nametaken|${name}|Your assertion is for the wrong server. This server is sim2.psim.us.`);
 			return false;
 		}
-
-		let tokenDataSplit = tokenData.split(',');
-		let [signedChallenge, signedUserid, userType, signedDate] = tokenDataSplit;
 
 		if (tokenDataSplit.length < 5) {
 			Monitor.warn(`outdated assertion format: ${tokenData}`);
@@ -809,21 +806,29 @@ class User {
 		if (signedUserid !== userid) {
 			// userid mismatch
 			this.send(`|nametaken|${name}|Your verification signature doesn't match your new username.`);
-			return;
+			return false;
 		}
 
 		if (signedChallenge !== challenge) {
 			// a user sent an invalid token
 			Monitor.debug(`verify token challenge mismatch: ${signedChallenge} <=> ${challenge}`);
 			this.send(`|nametaken|${name}|Your verification signature doesn't match your authentication token.`);
-			return;
+			return false;
 		}
 
 		let expiry = Config.tokenexpiry || 25 * 60 * 60;
 		if (Math.abs(parseInt(signedDate) - Date.now() / 1000) > expiry) {
 			Monitor.warn(`stale assertion: ${tokenData}`);
 			this.send(`|nametaken|${name}|Your assertion is stale. This usually means that the clock on the server computer is incorrect. If this is your server, please set the clock to the correct time.`);
-			return;
+			return false;
+		}
+
+		let success = await Verifier.verify(tokenData, tokenSig);
+		if (!success) {
+			Monitor.warn(`verify failed: ${token}`);
+			Monitor.warn(`challenge was: ${challenge}`);
+			this.send(`|nametaken|${name}|Your verification signature was invalid.`);
+			return false;
 		}
 
 		// future-proofing

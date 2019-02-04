@@ -57,8 +57,10 @@ function queryDnsblLoop(ip, callback, reversedIpDot, index) {
  * Dnsbl.query(ip, callback)
  *
  * Calls callback(blocklist), where blocklist is the blocklist domain
- * if the passed IP is in a blocklist, or boolean false if the IP is
- * not in any blocklist.
+ * if the passed IP is in a blocklist, or null if the IP is not in
+ * any blocklist.
+ *
+ * Return value matches isBlocked when treated as a boolean.
  *
  * @param {string} ip
  * @return {Promise<string?>}
