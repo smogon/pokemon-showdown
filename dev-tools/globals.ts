@@ -12,19 +12,19 @@ type NameFilter = import('./../server/chat').NameFilter
 interface AnyObject {[k: string]: any}
 type DexTable<T> = {[key: string]: T}
 
-let Config = require('../config/config');
+let Config = import('../config/config');
 
-let Monitor = require('../server/monitor');
+let Monitor = import('../server/monitor');
 
-let LoginServer = require('../server/loginserver');
+let LoginServer = import('../server/loginserver');
 
 // type RoomBattle = AnyObject;
 
-let Verifier = require('../server/verifier');
-let Dnsbl = require('../server/dnsbl');
-let Sockets = require('../server/sockets');
-// let TeamValidator = require('../sim/team-validator');
-let TeamValidatorAsync = require('../team-validator-async');
+let Verifier = import('../server/verifier');
+let Dnsbl = import('../server/dnsbl');
+let Sockets = import('../server/sockets');
+// let TeamValidator = import('../sim/team-validator');
+let TeamValidatorAsync = import('../server/team-validator-async');
 
 type GenderName = 'M' | 'F' | 'N' | '';
 type StatName = 'hp' | 'atk' | 'def' | 'spa' | 'spd' | 'spe';
