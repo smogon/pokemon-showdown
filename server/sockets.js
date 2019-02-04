@@ -172,7 +172,7 @@ if (cluster.isMaster) {
 
 	/**
 	 * @param {cluster.Worker} worker
-	 * @param {number} socketid
+	 * @param {string} socketid
 	 * @param {string} message
 	 */
 	exports.socketSend = function (worker, socketid, message) {
@@ -181,7 +181,7 @@ if (cluster.isMaster) {
 
 	/**
 	 * @param {cluster.Worker} worker
-	 * @param {number} socketid
+	 * @param {string} socketid
 	 */
 	exports.socketDisconnect = function (worker, socketid) {
 		worker.send(`!${socketid}`);
@@ -209,7 +209,7 @@ if (cluster.isMaster) {
 	/**
 	 * @param {cluster.Worker} worker
 	 * @param {string} channelid
-	 * @param {number} socketid
+	 * @param {string} socketid
 	 */
 	exports.channelAdd = function (worker, channelid, socketid) {
 		worker.send(`+${channelid}\n${socketid}`);
@@ -218,7 +218,7 @@ if (cluster.isMaster) {
 	/**
 	 * @param {cluster.Worker} worker
 	 * @param {string} channelid
-	 * @param {number} socketid
+	 * @param {string} socketid
 	 */
 	exports.channelRemove = function (worker, channelid, socketid) {
 		worker.send(`-${channelid}\n${socketid}`);
@@ -237,8 +237,8 @@ if (cluster.isMaster) {
 	/**
 	 * @param {cluster.Worker} worker
 	 * @param {string} channelid
-	 * @param {string} subchannelid
-	 * @param {number} socketid
+	 * @param {number} subchannelid
+	 * @param {string} socketid
 	 */
 	exports.subchannelMove = function (worker, channelid, subchannelid, socketid) {
 		worker.send(`.${channelid}\n${subchannelid}\n${socketid}`);

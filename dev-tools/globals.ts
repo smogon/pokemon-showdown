@@ -12,19 +12,19 @@ type NameFilter = import('./../server/chat').NameFilter
 interface AnyObject {[k: string]: any}
 type DexTable<T> = {[key: string]: T}
 
-let Config = require('../config/config');
+let Config: {[k: string]: any} = require('../config/config');
 
-let Monitor = require('../monitor');
+let Monitor: typeof import("../server/monitor") = require('../server/monitor');
 
-let LoginServer = require('../loginserver');
+let LoginServer: typeof import('../server/loginserver') = require('../server/loginserver');
 
 // type RoomBattle = AnyObject;
 
-let Verifier = require('../verifier');
-let Dnsbl = require('../dnsbl');
-let Sockets = require('../sockets');
-// let TeamValidator = require('../sim/team-validator');
-let TeamValidatorAsync = require('../team-validator-async');
+let Verifier: typeof import('../server/verifier') = require('../server/verifier');
+let Dnsbl: typeof import('../server/dnsbl') = require('../server/dnsbl');
+let Sockets: typeof import('../server/sockets') = require('../server/sockets');
+// let TeamValidator: typeof import('../sim/team-validator') = require('../sim/team-validator');
+let TeamValidatorAsync: typeof import('../server/team-validator-async') = require('../server/team-validator-async');
 
 type GenderName = 'M' | 'F' | 'N' | '';
 type StatName = 'hp' | 'atk' | 'def' | 'spa' | 'spd' | 'spe';

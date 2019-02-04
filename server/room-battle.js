@@ -59,7 +59,7 @@ class BattlePlayer {
 		let user = Users(this.userid);
 		if (user) {
 			for (const connection of user.connections) {
-				Sockets.subchannelMove(connection.worker, this.game.id, '0', connection.socketid);
+				Sockets.subchannelMove(connection.worker, this.game.id, 0, connection.socketid);
 			}
 			user.games.delete(this.game.id);
 			user.updateSearch();
