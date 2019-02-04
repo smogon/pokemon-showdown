@@ -14,15 +14,15 @@ type DexTable<T> = {[key: string]: T}
 
 let Config = require('../config/config');
 
-let Monitor = require('../monitor');
+let Monitor = require('../server/monitor');
 
-let LoginServer = require('../loginserver');
+let LoginServer = require('../server/loginserver');
 
 // type RoomBattle = AnyObject;
 
-let Verifier = require('../verifier');
-let Dnsbl = require('../dnsbl');
-let Sockets = require('../sockets');
+let Verifier = require('../server/verifier');
+let Dnsbl = require('../server/dnsbl');
+let Sockets = require('../server/sockets');
 // let TeamValidator = require('../sim/team-validator');
 let TeamValidatorAsync = require('../team-validator-async');
 
