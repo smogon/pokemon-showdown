@@ -217,17 +217,8 @@ class BasicRoom {
 	}
 
 	getUserList() {
-		let buffer = '';
-		let counter = 0;
-		for (let i in this.users) {
-			if (!this.users[i].named) {
-				continue;
-			}
-			counter++;
-			buffer += ',' + this.users[i].getIdentity(this.id);
-		}
-		let msg = '|users|' + counter + buffer;
-		return msg;
+		let users = Object.values(this.users).filter(u => !!u.named);
+		return '|users|' + users.length + ',' + users.map(u => u.getIdentity(this.id)).join(',');
 	}
 
 	// mute handling

@@ -11,6 +11,8 @@ package-lock.json
 
 # visual studio live share
 .vs
+*.njsproj
+*.sln
 
 # boilerplate #
 ###############
