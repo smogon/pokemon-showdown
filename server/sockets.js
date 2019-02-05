@@ -422,7 +422,11 @@ if (cluster.isMaster) {
 	const rooms = new Map();
 	/**
 <<<<<<< HEAD
+<<<<<<< HEAD
 	 * channelid:socketid:subchannelindex
+=======
+	 * roomid:socketid:channelIndex
+>>>>>>> 70b3e9a52... Rename channel -> room, subchannel -> channel
 =======
 	 * roomid:socketid:channelIndex
 >>>>>>> 70b3e9a52... Rename channel -> room, subchannel -> channel
