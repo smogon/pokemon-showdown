@@ -38,6 +38,7 @@
  * @typedef {Object} MafiaIDEAModule
  * @property {MafiaIDEAdata?} data
  * @property {NodeJS.Timer?} timer
+ * @property {boolean} discardsHidden
  * @property {string} discardsHtml
  * @property {string[]} waitingPick
  */
@@ -252,6 +253,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.IDEA = {
 			data: null,
 			timer: null,
+			discardsHidden: false,
 			discardsHtml: '',
 			waitingPick: [],
 		};
@@ -517,7 +519,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		// MafiaTracker#played gets set in distributeRoles
 		this.distributeRoles();
 		this.day(null, true);
-		if (this.IDEA.data) this.room.add(`|html|<div class="infobox"><details><summary>IDEA discards:</summary>${this.IDEA.discardsHtml}</details></div>`).update();
+		if (this.IDEA.data && !this.IDEA.discardsHidden) this.room.add(`|html|<div class="infobox"><details><summary>IDEA discards:</summary>${this.IDEA.discardsHtml}</details></div>`).update();
 	}
 
 	/**
@@ -1623,7 +1625,7 @@ const pages = {
 		}
 		if (game.IDEA.data) {
 			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">${game.IDEA.data.name} information</summary>`;
-			if (game.IDEA.discardsHtml) buf += `<details><summary class="button" style="text-align:left; display:inline-block">Discards:</summary><p>${game.IDEA.discardsHtml}</p></details>`;
+			if (game.IDEA.discardsHtml && (!game.IDEA.discardsHidden || isHost)) buf += `<details><summary class="button" style="text-align:left; display:inline-block">Discards:</summary><p>${game.IDEA.discardsHtml}</p></details>`;
 			buf += `<details><summary class="button" style="text-align:left; display:inline-block">Role list</summary><p>${game.IDEA.data.roles.join('<br />')}</p></details>`;
 			buf += `</details></p>`;
 		} else {
@@ -2113,14 +2115,34 @@ const commands = {
 		},
 		idearerollhelp: [`/mafia ideareroll - rerolls the roles for the current IDEA module. Requires host % @ * # & ~`],
 
+		discards: 'ideadiscards',
 		ideadiscards: function (target, room, user) {
 			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (room.game);
 			if (!game.IDEA.data) return this.errorReply(`There is no IDEA module in the mafia game.`);
+			if (target) {
+				if (game.hostid !== user.userid && !game.cohosts.includes(user.userid) && !this.can('mute', null, room)) return;
+				if (this.meansNo(target)) {
+					if (game.IDEA.discardsHidden) return this.errorReply(`IDEA discards are already hidden.`);
+					game.IDEA.discardsHidden = true;
+				} else if (this.meansYes(target)) {
+					if (!game.IDEA.discardsHidden) return this.errorReply(`IDEA discards are already visible.`);
+					game.IDEA.discardsHidden = false;
+				} else {
+					return this.parse('/help mafia ideadiscards');
+				}
+				return this.sendReply(`IDEA discards are now ${game.IDEA.discardsHidden ? 'hidden' : 'visible'}.`);
+			}
+			if (game.IDEA.discardsHidden) return this.errorReply(`Discards are not visible.`);
 			if (!game.IDEA.discardsHtml) return this.errorReply(`The IDEA module does not have finalised discards yet.`);
 			if (!this.runBroadcast()) return;
 			this.sendReplyBox(`<details><summary>IDEA discards:</summary>${game.IDEA.discardsHtml}</details>`);
 		},
+		ideadiscardshelp: [
+			`/mafia ideadiscards - shows the discarded roles`,
+			`/mafia ideadiscards off - hides discards from the players. Requires host % @ * # & ~`,
+			`/mafia ideadiscards on - shows discards to the players. Requires host % @ * # & ~`,
+		],
 
 		'!start': true,
 		start: function (target, room, user) {
@@ -3084,6 +3106,19 @@ const commands = {
 			`/mafia playerroles - View all the player's roles in chat. Requires host`,
 			`/mafia end - End the current game of mafia. Requires host % @ * # & ~`,
 		].join('<br/>');
+		buf += `</details><details><summary class="button">IDEA Module Commands</summary>`;
+		buf += [
+			`<br/><strong>Commands for using IDEA modules</strong><br/>`,
+			`/mafia idea [idea] - starts the IDEA module [idea]. Requires + % @ * # & ~, voices can only start for themselves`,
+			`/mafia ideareroll - rerolls the IDEA module. Requires host % @ * # & ~`,
+			`/mafia ideapick [selection], [role] - selects a role`,
+			`/mafia ideadiscards - shows the discarded roles`,
+			`/mafia ideadiscards off - hides discards from the players. Requires host % @ * # & ~`,
+			`/mafia ideadiscards on - shows discards to the players. Requires host % @ * # & ~`,
+			`/mafia customidea choices, picks (new line here, shift+enter)`,
+			`(comma or newline separated rolelist) - Starts an IDEA module with custom roles. Requires % @ # & ~`,
+		].join('<br/>');
+		buf += `</details>`;
 		buf += `</details><details><summary class="button">Mafia Room Specific Commands</summary>`;
 		buf += [
 			`<br/><strong>Commands that are only useable in the Mafia Room</strong>:<br/>`,
