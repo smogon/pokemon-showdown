@@ -373,7 +373,7 @@ class Connection {
 		this.autojoins = '';
 	}
 	/**
- 	* @param {string | number | BasicRoom?} roomid
+ 	* @param {string | BasicRoom?} roomid
  	* @param {string} data
  	*/
 	sendTo(roomid, data) {
