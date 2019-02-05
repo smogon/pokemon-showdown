@@ -4945,7 +4945,7 @@
 				"ability": ["Overcoat"],
 				"evs": {"hp": 252, "atk": 42, "spd": 204},
 				"nature": "Adamant",
-				"moves": [["Megahorn"], ["Iron Head"], ["Protect"], ["Pusuit"]]
+				"moves": [["Megahorn"], ["Iron Head"], ["Protect"], ["Pursuit"]]
 			}]
 		},
 		"espeon": {
