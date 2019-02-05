@@ -238,7 +238,7 @@ if (cluster.isMaster) {
 	/**
 	 * @param {cluster.Worker} worker
 	 * @param {string} channelid
-	 * @param {string} subchannelid
+	 * @param {number} subchannelid
 	 * @param {string} socketid
 	 */
 	exports.subchannelMove = function (worker, channelid, subchannelid, socketid) {
