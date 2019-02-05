@@ -172,7 +172,7 @@ if (cluster.isMaster) {
 
 	/**
 	 * @param {cluster.Worker} worker
-	 * @param {string|number} socketid
+	 * @param {string | number} socketid
 	 * @param {string} message
 	 */
 	exports.socketSend = function (worker, socketid, message) {
@@ -181,14 +181,15 @@ if (cluster.isMaster) {
 
 	/**
 	 * @param {cluster.Worker} worker
-	 * @param {string|number} socketid
+	 * @param {string | number} socketid
+	 * @param {string} socketid
 	 */
 	exports.socketDisconnect = function (worker, socketid) {
 		worker.send(`!${socketid}`);
 	};
 
 	/**
-	 * @param {string|number} channelid
+	 * @param {string | number} channelid
 	 * @param {string} message
 	 */
 	exports.channelBroadcast = function (channelid, message) {
@@ -208,8 +209,8 @@ if (cluster.isMaster) {
 
 	/**
 	 * @param {cluster.Worker} worker
-	 * @param {string|number} channelid
-	 * @param {string|number} socketid
+	 * @param {string | number} channelid
+	 * @param {string | number} socketid
 	 */
 	exports.channelAdd = function (worker, channelid, socketid) {
 		worker.send(`+${channelid}\n${socketid}`);
@@ -217,15 +218,15 @@ if (cluster.isMaster) {
 
 	/**
 	 * @param {cluster.Worker} worker
-	 * @param {string|number} channelid
-	 * @param {string|number} socketid
+	 * @param {string | number} channelid
+	 * @param {string | number} socketid
 	 */
 	exports.channelRemove = function (worker, channelid, socketid) {
 		worker.send(`-${channelid}\n${socketid}`);
 	};
 
 	/**
-	 * @param {string|number} channelid
+	 * @param {string | number} channelid
 	 * @param {string} message
 	 */
 	exports.subchannelBroadcast = function (channelid, message) {
@@ -236,9 +237,9 @@ if (cluster.isMaster) {
 
 	/**
 	 * @param {cluster.Worker} worker
-	 * @param {string|number} channelid
-	 * @param {string|number} subchannelid
-	 * @param {string|number} socketid
+	 * @param {string | number} channelid
+	 * @param {string | number} subchannelid
+	 * @param {string | number} socketid
 	 */
 	exports.subchannelMove = function (worker, channelid, subchannelid, socketid) {
 		worker.send(`.${channelid}\n${subchannelid}\n${socketid}`);

@@ -14,14 +14,14 @@ type DexTable<T> = {[key: string]: T}
 
 // type RoomBattle = AnyObject;
 
-let Config = require('../config/config'); // lgtm[js/unused-local-variable]
-let Monitor: typeof import('../server/monitor') = require('../server/monitor'); // lgtm[js/unused-local-variable]
-let LoginServer: typeof import('../server/loginserver') = require('../server/loginserver'); // lgtm[js/unused-local-variable]
-let Verifier: typeof import('../server/verifier') = require('../server/verifier'); // lgtm[js/unused-local-variable]
-let Dnsbl: typeof import('../server/dnsbl') = require('../server/dnsbl'); // lgtm[js/unused-local-variable]
-let Sockets: typeof import('../server/sockets') = require('../server/sockets'); // lgtm[js/unused-local-variable]
-// let TeamValidator: typeof import('../sim/team-validator') = import('../sim/team-validator');
-let TeamValidatorAsync: typeof import('../server/team-validator-async') = require('../server/team-validator-async'); // lgtm[js/unused-local-variable]
+let Config: {[k: string]: any} = require('../config/config');
+let Monitor: typeof import("../server/monitor") = require('../server/monitor');
+let LoginServer: typeof import('../server/loginserver') = require('../server/loginserver');
+let Verifier: typeof import('../server/verifier') = require('../server/verifier');
+let Dnsbl: typeof import('../server/dnsbl') = require('../server/dnsbl');
+let Sockets: typeof import('../server/sockets') = require('../server/sockets');
+// let TeamValidator: typeof import('../sim/team-validator') = require('../sim/team-validator');
+let TeamValidatorAsync: typeof import('../server/team-validator-async') = require('../server/team-validator-async');
 
 type GenderName = 'M' | 'F' | 'N' | '';
 type StatName = 'hp' | 'atk' | 'def' | 'spa' | 'spd' | 'spe';

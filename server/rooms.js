@@ -511,7 +511,7 @@ class GlobalRoom extends BasicRoom {
 	}
 
 	writeChatRoomData() {
-		FS('../config/chatrooms.json').writeUpdate(() => (
+		FS('config/chatrooms.json').writeUpdate(() => (
 			JSON.stringify(this.chatRoomDataList)
 				.replace(/\{"title":/g, '\n{"title":')
 				.replace(/\]$/, '\n]')
