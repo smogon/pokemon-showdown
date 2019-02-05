@@ -415,7 +415,7 @@ class Connection {
 	joinRoom(room) {
 		if (this.inRooms.has(room.id)) return;
 		this.inRooms.add(room.id);
-		Sockets.channelAdd(this.worker, room.id, this.socketid);
+		Sockets.roomAdd(this.worker, room.id, this.socketid);
 	}
 	/**
 	 * @param {GlobalRoom | GameRoom | ChatRoom} room
@@ -423,7 +423,7 @@ class Connection {
 	leaveRoom(room) {
 		if (this.inRooms.has(room.id)) {
 			this.inRooms.delete(room.id);
-			Sockets.channelRemove(this.worker, room.id, this.socketid);
+			Sockets.roomRemove(this.worker, room.id, this.socketid);
 		}
 	}
 	toString() {
@@ -793,7 +793,7 @@ class User {
 		let [signedChallenge, signedUserid, userType, signedDate, signedHostname] = tokenDataSplit;
 		if (signedHostname && Config.legalhosts && !Config.legalhosts.includes(signedHostname)) {
 			Monitor.warn(`forged assertion: ${tokenData}`);
-			this.send(`|nametaken|${name}|Your assertion is for the wrong server. This server is sim2.psim.us.`);
+			this.send(`|nametaken|${name}|Your assertion is for the wrong server. This server is ${Config.legalhosts[0]}.`);
 			return false;
 		}
 
@@ -1565,7 +1565,7 @@ function pruneInactive(threshold) {
 
 /**
  * @param {any} worker
- * @param {string | number} workerid
+ * @param {number} workerid
  * @param {string} socketid
  * @param {string} ip
  * @param {string} protocol
@@ -1608,7 +1608,7 @@ function socketConnect(worker, workerid, socketid, ip, protocol) {
 }
 /**
  * @param {any} worker
- * @param {string | number} workerid
+ * @param {number} workerid
  * @param {string} socketid
  */
 function socketDisconnect(worker, workerid, socketid) {
@@ -1620,7 +1620,7 @@ function socketDisconnect(worker, workerid, socketid) {
 }
 /**
  * @param {any} worker
- * @param {string | number} workerid
+ * @param {number} workerid
  * @param {string} socketid
  * @param {string} message
  */

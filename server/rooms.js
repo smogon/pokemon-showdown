@@ -127,7 +127,7 @@ class BasicRoom {
 	 */
 	send(message) {
 		if (this.id !== 'lobby') message = '>' + this.id + '\n' + message;
-		if (this.userCount) Sockets.channelBroadcast(this.id, message);
+		if (this.userCount) Sockets.roomBroadcast(this.id, message);
 	}
 	sendAuth() { throw new Error(`Obsolete command; use room.sendMods`); }
 	sendModCommand() { throw new Error(`Obsolete command; use room.sendMods`); }
@@ -695,7 +695,7 @@ class GlobalRoom extends BasicRoom {
 	 * @param {string} message
 	 */
 	send(message) {
-		Sockets.channelBroadcast(this.id, message);
+		Sockets.roomBroadcast(this.id, message);
 	}
 	/**
 	 * @param {string} message
@@ -1488,7 +1488,7 @@ class GameRoom extends BasicChatRoom {
 		if (!this.log.broadcastBuffer) return;
 
 		if (this.userCount) {
-			Sockets.subchannelBroadcast(this.id, '>' + this.id + '\n\n' + this.log.broadcastBuffer);
+			Sockets.channelBroadcast(this.id, '>' + this.id + '\n\n' + this.log.broadcastBuffer);
 		}
 		this.log.broadcastBuffer = '';
 

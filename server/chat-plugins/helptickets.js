@@ -325,7 +325,7 @@ function notifyStaff(upper = false) {
 	} else {
 		buf = `|tempnotifyoff|helptickets`;
 	}
-	if (room.userCount) Sockets.channelBroadcast(room.id, `>view-help-tickets\n${buf}`);
+	if (room.userCount) Sockets.roomBroadcast(room.id, `>view-help-tickets\n${buf}`);
 	if (hasUnclaimed) {
 		// only notify for people highlighting
 		buf = `${buf}|${hasAssistRequest ? 'Public Room Staff need help' : 'There are unclaimed Help tickets'}`;
