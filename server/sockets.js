@@ -84,7 +84,7 @@ if (cluster.isMaster) {
 		if (worker.isConnected()) worker.disconnect();
 		// FIXME: this is a bad hack to get around a race condition in
 		// Connection#onDisconnect sending room deinit messages after already
-		// having removed the sockets from their channels.
+		// having removed the sockets from their rooms.
 		// @ts-ignore
 		worker.send = () => {};
 
@@ -188,60 +188,51 @@ if (cluster.isMaster) {
 	};
 
 	/**
-	 * @param {string} channelid
+	 * @param {string} roomid
 	 * @param {string} message
 	 */
-	exports.channelBroadcast = function (channelid, message) {
+	exports.roomBroadcast = function (roomid, message) {
 		for (const worker of workers.values()) {
-			worker.send(`#${channelid}\n${message}`);
+			worker.send(`#${roomid}\n${message}`);
 		}
 	};
 
 	/**
 	 * @param {cluster.Worker} worker
-	 * @param {string} channelid
-	 * @param {string} message
+	 * @param {string} roomid
+	 * @param {string} socketid
 	 */
-	exports.channelSend = function (worker, channelid, message) {
-		worker.send(`#${channelid}\n${message}`);
+	exports.roomAdd = function (worker, roomid, socketid) {
+		worker.send(`+${roomid}\n${socketid}`);
 	};
 
 	/**
 	 * @param {cluster.Worker} worker
-	 * @param {string} channelid
+	 * @param {string} roomid
 	 * @param {string} socketid
 	 */
-	exports.channelAdd = function (worker, channelid, socketid) {
-		worker.send(`+${channelid}\n${socketid}`);
+	exports.roomRemove = function (worker, roomid, socketid) {
+		worker.send(`-${roomid}\n${socketid}`);
 	};
 
 	/**
-	 * @param {cluster.Worker} worker
-	 * @param {string} channelid
-	 * @param {string} socketid
-	 */
-	exports.channelRemove = function (worker, channelid, socketid) {
-		worker.send(`-${channelid}\n${socketid}`);
-	};
-
-	/**
-	 * @param {string} channelid
+	 * @param {string} roomid
 	 * @param {string} message
 	 */
-	exports.subchannelBroadcast = function (channelid, message) {
+	exports.channelBroadcast = function (roomid, message) {
 		for (const worker of workers.values()) {
-			worker.send(`:${channelid}\n${message}`);
+			worker.send(`:${roomid}\n${message}`);
 		}
 	};
 
 	/**
 	 * @param {cluster.Worker} worker
-	 * @param {string} channelid
-	 * @param {number} subchannelid
+	 * @param {string} roomid
+	 * @param {number} channelIndex
 	 * @param {string} socketid
 	 */
-	exports.subchannelMove = function (worker, channelid, subchannelid, socketid) {
-		worker.send(`.${channelid}\n${subchannelid}\n${socketid}`);
+	exports.channelMove = function (worker, roomid, channelIndex, socketid) {
+		worker.send(`.${roomid}\n${channelIndex}\n${socketid}`);
 	};
 
 	/**
@@ -424,15 +415,15 @@ if (cluster.isMaster) {
 	 */
 	const sockets = new Map();
 	/**
-	 * channelid:socketid:Connection
+	 * roomid:socketid:Connection
 	 * @type {Map<string, Map<string, import('sockjs').Connection>>}
 	 */
-	const channels = new Map();
+	const rooms = new Map();
 	/**
-	 * channelid:socketid:subchannelid
+	 * roomid:socketid:channelIndex
 	 * @type {Map<string, Map<string, string>>}
 	 */
-	const subchannels = new Map();
+	const roomChannels = new Map();
 
 	/** @type {WriteStream} */
 	const logger = FS(`logs/sockets-${process.pid}`).createAppendStream();
@@ -455,11 +446,11 @@ if (cluster.isMaster) {
 		let socket = null;
 		let socketid = '';
 		/** @type {Map<string, import('sockjs').Connection> | undefined?} */
-		let channel = null;
-		let channelid = '';
+		let room = null;
+		let roomid = '';
 		/** @type {Map<string, string> | undefined?} */
-		let subchannel = null;
-		let subchannelid = '';
+		let roomChannel = null;
+		let channelid = '';
 		let nlLoc = -1;
 		let message = '';
 
@@ -475,20 +466,20 @@ if (cluster.isMaster) {
 			if (!socket) return;
 			socket.destroy();
 			sockets.delete(socketid);
-			for (const [channelid, channel] of channels) {
-				channel.delete(socketid);
-				subchannel = subchannels.get(channelid);
-				if (subchannel) subchannel.delete(socketid);
-				if (!channel.size) {
-					channels.delete(channelid);
-					if (subchannel) subchannels.delete(channelid);
+			for (const [roomid, room] of rooms) {
+				room.delete(socketid);
+				roomChannel = roomChannels.get(roomid);
+				if (roomChannel) roomChannel.delete(socketid);
+				if (!room.size) {
+					rooms.delete(roomid);
+					if (roomChannel) roomChannels.delete(roomid);
 				}
 			}
 			break;
 
 		case '>':
 			// >socketid, message
-			// message
+			// message to single connection
 			nlLoc = data.indexOf('\n');
 			socketid = data.substr(1, nlLoc - 1);
 			socket = sockets.get(socketid);
@@ -498,84 +489,84 @@ if (cluster.isMaster) {
 			break;
 
 		case '#':
-			// #channelid, message
-			// message to channel
+			// #roomid, message
+			// message to all connections in room
 			nlLoc = data.indexOf('\n');
-			channelid = data.substr(1, nlLoc - 1);
-			channel = channels.get(channelid);
-			if (!channel) return;
+			roomid = data.substr(1, nlLoc - 1);
+			room = rooms.get(roomid);
+			if (!room) return;
 			message = data.substr(nlLoc + 1);
-			for (const socket of channel.values()) socket.write(message);
+			for (const socket of room.values()) socket.write(message);
 			break;
 
 		case '+':
-			// +channelid, socketid
-			// add to channel
+			// +roomid, socketid
+			// join room with connection
 			nlLoc = data.indexOf('\n');
 			socketid = data.substr(nlLoc + 1);
 			socket = sockets.get(socketid);
 			if (!socket) return;
-			channelid = data.substr(1, nlLoc - 1);
-			channel = channels.get(channelid);
-			if (!channel) {
-				channel = new Map();
-				channels.set(channelid, channel);
+			roomid = data.substr(1, nlLoc - 1);
+			room = rooms.get(roomid);
+			if (!room) {
+				room = new Map();
+				rooms.set(roomid, room);
 			}
-			channel.set(socketid, socket);
+			room.set(socketid, socket);
 			break;
 
 		case '-':
-			// -channelid, socketid
-			// remove from channel
+			// -roomid, socketid
+			// leave room with connection
 			nlLoc = data.indexOf('\n');
-			channelid = data.slice(1, nlLoc);
-			channel = channels.get(channelid);
-			if (!channel) return;
+			roomid = data.slice(1, nlLoc);
+			room = rooms.get(roomid);
+			if (!room) return;
 			socketid = data.slice(nlLoc + 1);
-			channel.delete(socketid);
-			subchannel = subchannels.get(channelid);
-			if (subchannel) subchannel.delete(socketid);
-			if (!channel.size) {
-				channels.delete(channelid);
-				if (subchannel) subchannels.delete(channelid);
+			room.delete(socketid);
+			roomChannel = roomChannels.get(roomid);
+			if (roomChannel) roomChannel.delete(socketid);
+			if (!room.size) {
+				rooms.delete(roomid);
+				if (roomChannel) roomChannels.delete(roomid);
 			}
 			break;
 
 		case '.':
-			// .channelid, subchannelid, socketid
-			// move subchannel
+			// .roomid, channelid, socketid
+			// move connection to different channel in room
 			nlLoc = data.indexOf('\n');
-			channelid = data.slice(1, nlLoc);
+			roomid = data.slice(1, nlLoc);
 			let nlLoc2 = data.indexOf('\n', nlLoc + 1);
-			subchannelid = data.slice(nlLoc + 1, nlLoc2);
+			channelid = data.slice(nlLoc + 1, nlLoc2);
 			socketid = data.slice(nlLoc2 + 1);
 
-			subchannel = subchannels.get(channelid);
-			if (!subchannel) {
-				subchannel = new Map();
-				subchannels.set(channelid, subchannel);
+			roomChannel = roomChannels.get(roomid);
+			if (!roomChannel) {
+				roomChannel = new Map();
+				roomChannels.set(roomid, roomChannel);
 			}
-			if (subchannelid === '0') {
-				subchannel.delete(socketid);
+			if (channelid === '0') {
+				roomChannel.delete(socketid);
 			} else {
-				subchannel.set(socketid, subchannelid);
+				roomChannel.set(socketid, channelid);
 			}
 			break;
 
 		case ':':
-			// :channelid, message
-			// message to subchannel
+			// :roomid, message
+			// message to a room, splitting `|split` by channel
 			nlLoc = data.indexOf('\n');
-			channelid = data.slice(1, nlLoc);
-			channel = channels.get(channelid);
-			if (!channel) return;
+			roomid = data.slice(1, nlLoc);
+			room = rooms.get(roomid);
+			if (!room) return;
 
 			/** @type {[string?, string?, string?]} */
 			let messages = [null, null, null];
 			message = data.substr(nlLoc + 1);
-			subchannel = subchannels.get(channelid);
-			for (const [socketid, socket] of channel) {
-				switch (subchannel ? subchannel.get(socketid) : '0') {
+			roomChannel = roomChannels.get(roomid);
+			for (const [socketid, socket] of room) {
+				switch (roomChannel ? roomChannel.get(socketid) : '0') {
 				case '1':
 					if (!messages[1]) {
 						messages[1] = message.replace(/\n\|split\n[^\n]*\n([^\n]*)\n[^\n]*\n[^\n]*/g, '\n$1').replace(/\n\n/g, '\n');
@@ -612,8 +603,8 @@ if (cluster.isMaster) {
 			} catch (e) {}
 		}
 		sockets.clear();
-		channels.clear();
-		subchannels.clear();
+		rooms.clear();
+		roomChannels.clear();
 
 		app.close();
 		if (appssl) appssl.close();
@@ -700,7 +691,7 @@ if (cluster.isMaster) {
 			// @ts-ignore
 			process.send(`!${socketid}`);
 			sockets.delete(socketid);
-			for (const channel of channels.values()) channel.delete(socketid);
+			for (const room of rooms.values()) room.delete(socketid);
 		});
 	});
 	server.installHandlers(app, {});

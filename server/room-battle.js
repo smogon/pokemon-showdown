@@ -51,7 +51,7 @@ class BattlePlayer {
 
 		for (const connection of user.connections) {
 			if (connection.inRooms.has(game.id)) {
-				Sockets.subchannelMove(connection.worker, this.game.id, this.slotNum + 1, connection.socketid);
+				Sockets.channelMove(connection.worker, this.game.id, this.slotNum + 1, connection.socketid);
 			}
 		}
 	}
@@ -59,21 +59,21 @@ class BattlePlayer {
 		let user = Users(this.userid);
 		if (user) {
 			for (const connection of user.connections) {
-				Sockets.subchannelMove(connection.worker, this.game.id, 0, connection.socketid);
+				Sockets.channelMove(connection.worker, this.game.id, 0, connection.socketid);
 			}
 			user.games.delete(this.game.id);
 			user.updateSearch();
 		}
 		this.game[this.slot] = null;
 	}
-	updateSubchannel(/** @type {User | Connection} */ user) {
+	updateChannel(/** @type {User | Connection} */ user) {
 		if (user instanceof Users.Connection) {
 			// "user" is actually a connection
-			Sockets.subchannelMove(user.worker, this.game.id, this.slotNum + 1, user.socketid);
+			Sockets.channelMove(user.worker, this.game.id, this.slotNum + 1, user.socketid);
 			return;
 		}
 		for (const connection of user.connections) {
-			Sockets.subchannelMove(connection.worker, this.game.id, this.slotNum + 1, connection.socketid);
+			Sockets.channelMove(connection.worker, this.game.id, this.slotNum + 1, connection.socketid);
 		}
 	}
 
@@ -770,7 +770,7 @@ class Battle {
 		// the battle
 		const player = this.players[user.userid];
 		if (!player) return;
-		player.updateSubchannel(connection || user);
+		player.updateChannel(connection || user);
 		const request = this.requests[player.slot];
 		if (request) {
 			let data = `|request|${request.request}`;
