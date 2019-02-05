@@ -2997,11 +2997,11 @@ const commands = {
 
 				Chat.uncache('./chat');
 				Chat.uncache('./chat-commands');
-				Chat.uncacheDir('./chat-plugins');
+				Chat.uncacheDir('./server/chat-plugins');
 				global.Chat = require('./chat');
 
 				let runningTournaments = Tournaments.tournaments;
-				Chat.uncacheDir('./tournaments');
+				Chat.uncacheDir('./server/tournaments');
 				global.Tournaments = require('./tournaments');
 				Tournaments.tournaments = runningTournaments;
 				this.sendReply("Chat commands have been hot-patched.");
