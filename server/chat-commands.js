@@ -3009,7 +3009,7 @@ const commands = {
 				if (lock['tournaments']) return this.errorReply(`Hot-patching tournaments has been disabled by ${lock['tournaments'].by} (${lock['tournaments'].reason})`);
 
 				let runningTournaments = Tournaments.tournaments;
-				Chat.uncacheDir('./tournaments');
+				Chat.uncacheDir('./server/tournaments');
 				global.Tournaments = require('./tournaments');
 				Tournaments.tournaments = runningTournaments;
 				this.sendReply("Tournaments have been hot-patched.");
@@ -3027,10 +3027,9 @@ const commands = {
 				// uncache the sim/dex.js dependency tree
 				Chat.uncacheDir('./sim');
 				Chat.uncacheDir('./data');
-				Chat.uncacheDir('./mods');
-				Chat.uncache('./config/formats');
+				Chat.uncache('../config/formats');
 				// reload sim/dex.js
-				global.Dex = require('./sim/dex');
+				global.Dex = require('../sim/dex');
 				// rebuild the formats list
 				delete Rooms.global.formatList;
 				// respawn validator processes
