@@ -2723,8 +2723,8 @@ const commands = {
 		if (!reason) {
 			return this.errorReply(`Battle bans require a reason.`);
 		}
-		if (!room.battle && (!reason.includes('.pokemonshowdown.com/') && cmd !== 'forcebattleban')) {
-			 return this.errorReply(`Battle bans require a battle replay if used outside of a battle; if the battle has expired, use /forcebattleban.`);
+		if (!room.battle && (!reason.includes('.pokemonshowdown.com/') && cmd !== 'forcebattleban')) { // lgtm[js/incomplete-url-substring-sanitization]
+			return this.errorReply(`Battle bans require a battle replay if used outside of a battle; if the battle has expired, use /forcebattleban.`);
 		}
 		if (!this.can('rangeban', targetUser)) {
 			this.errorReply(`Battlebans have been deprecated. Alternatives:`);
