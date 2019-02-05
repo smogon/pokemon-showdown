@@ -238,11 +238,11 @@ if (cluster.isMaster) {
 	/**
 	 * @param {cluster.Worker} worker
 	 * @param {string} channelid
-	 * @param {number} subchannelid
+	 * @param {number} subchannelindex
 	 * @param {string} socketid
 	 */
-	exports.subchannelMove = function (worker, channelid, subchannelid, socketid) {
-		worker.send(`.${channelid}\n${subchannelid}\n${socketid}`);
+	exports.subchannelMove = function (worker, channelid, subchannelindex, socketid) {
+		worker.send(`.${channelid}\n${subchannelindex}\n${socketid}`);
 	};
 
 	/**
@@ -430,7 +430,7 @@ if (cluster.isMaster) {
 	 */
 	const channels = new Map();
 	/**
-	 * channelid:socketid:subchannelid
+	 * channelid:socketid:subchannelindex
 	 * @type {Map<string, Map<string, string>>}
 	 */
 	const subchannels = new Map();
@@ -460,7 +460,7 @@ if (cluster.isMaster) {
 		let channelid = '';
 		/** @type {Map<string, string> | undefined?} */
 		let subchannel = null;
-		let subchannelid = '';
+		let subchannelindex = '';
 		let nlLoc = -1;
 		let message = '';
 
@@ -543,12 +543,12 @@ if (cluster.isMaster) {
 			break;
 
 		case '.':
-			// .channelid, subchannelid, socketid
+			// .channelid, subchannelindex, socketid
 			// move subchannel
 			nlLoc = data.indexOf('\n');
 			channelid = data.slice(1, nlLoc);
 			let nlLoc2 = data.indexOf('\n', nlLoc + 1);
-			subchannelid = data.slice(nlLoc + 1, nlLoc2);
+			subchannelindex = data.slice(nlLoc + 1, nlLoc2);
 			socketid = data.slice(nlLoc2 + 1);
 
 			subchannel = subchannels.get(channelid);
@@ -556,10 +556,10 @@ if (cluster.isMaster) {
 				subchannel = new Map();
 				subchannels.set(channelid, subchannel);
 			}
-			if (subchannelid === '0') {
+			if (subchannelindex === '0') {
 				subchannel.delete(socketid);
 			} else {
-				subchannel.set(socketid, subchannelid);
+				subchannel.set(socketid, subchannelindex);
 			}
 			break;
 

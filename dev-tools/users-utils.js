@@ -96,28 +96,28 @@ class Worker extends EventEmitter {
 		}
 	}
 
-	moveToSubchannel(channelid, subchannelid, socketid) {
+	moveToSubchannel(channelid, subchannelindex, socketid) {
 		socketid = +socketid;
 		if (!this.channels.has(channelid)) {
-			throw new Error(`Attempted to move socket ${socketid} to subchannel ${subchannelid} of nonexistent channel ${channelid}`);
+			throw new Error(`Attempted to move socket ${socketid} to subchannel ${subchannelindex} of nonexistent channel ${channelid}`);
 		}
 
 		if (!this.subchannels.has(channelid)) {
-			if (subchannelid === '0') return;
-			this.subchannels.set(channelid, new Map([[socketid, subchannelid]]));
+			if (subchannelindex === '0') return;
+			this.subchannels.set(channelid, new Map([[socketid, subchannelindex]]));
 			return;
 		}
 
 		let subchannel = this.subchannels.get(channelid);
 		if (!subchannel.has(socketid)) {
-			if (subchannelid !== '0') subchannel.set(socketid, subchannelid);
+			if (subchannelindex !== '0') subchannel.set(socketid, subchannelindex);
 			return;
 		}
 
-		if (subchannelid === '0') {
+		if (subchannelindex === '0') {
 			subchannel.delete(socketid);
 		} else {
-			subchannel.set(socketid, subchannelid);
+			subchannel.set(socketid, subchannelindex);
 		}
 	}
 
