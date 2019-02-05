@@ -496,9 +496,10 @@ class MafiaTracker extends Rooms.RoomGame {
 
 	/**
 	 * @param {User} user
+	 * @param {boolean?} night
 	 * @return {void}
 	 */
-	start(user) {
+	start(user, night) {
 		if (!user) return;
 		if (this.phase !== 'locked' && this.phase !== 'IDEAlocked') {
 			if (this.phase === 'signups') return user.sendTo(this.room, `You need to close the signups first.`);
@@ -518,7 +519,11 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.sendRoom(`The game of ${this.title} is starting!`, {declare: true});
 		// MafiaTracker#played gets set in distributeRoles
 		this.distributeRoles();
-		this.day(null, true);
+		if (night) {
+			this.night(false, true);
+		} else {
+			this.day(null, true);
+		}
 		if (this.IDEA.data && !this.IDEA.discardsHidden) this.room.add(`|html|<div class="infobox"><details><summary>IDEA discards:</summary>${this.IDEA.discardsHtml}</details></div>`).update();
 	}
 
@@ -585,10 +590,11 @@ class MafiaTracker extends Rooms.RoomGame {
 
 	/**
 	 * @param {boolean} early
+	 * @param {boolean} initial
 	 * @return {void}
 	 */
-	night(early = false) {
-		if (this.phase !== 'day') return;
+	night(early = false, initial = false) {
+		if (this.phase !== 'day' && !initial) return;
 		if (this.timer) this.setDeadline(0, true);
 		this.phase = 'night';
 		for (const hostid of [...this.cohosts, this.hostid]) {
@@ -598,7 +604,8 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.sendRoom(`Night ${this.dayNum}. PM the host your action, or idle.`, {declare: true});
 		const hasPlurality = this.getPlurality();
 		if (!early && hasPlurality) this.sendRoom(`Plurality is on ${this.players[hasPlurality] ? this.players[hasPlurality].name : 'No Lynch'}`);
-		if (!early) this.sendRoom(`|raw|<div class="infobox">${this.lynchBox()}</div>`);
+		if (!early && !initial) this.sendRoom(`|raw|<div class="infobox">${this.lynchBox()}</div>`);
+		if (initial) this.hammerCount = Math.floor(Object.keys(this.players).length / 2) + 1;
 		this.updatePlayers();
 	}
 
@@ -2145,7 +2152,8 @@ const commands = {
 		],
 
 		'!start': true,
-		start: function (target, room, user) {
+		nightstart: 'start',
+		start: function (target, room, user, connection, cmd) {
 			let targetRoom /** @type {ChatRoom?} */ = (Rooms(target));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
@@ -2157,10 +2165,10 @@ const commands = {
 			if (target) {
 				this.parse(`/mafia close`);
 				this.parse(`/mafia setroles ${target}`);
-				this.parse(`/mafia start`);
+				this.parse(`/mafia ${cmd}`);
 				return;
 			}
-			game.start(user);
+			game.start(user, cmd === 'nightstart');
 		},
 		starthelp: [`/mafia start - Start the game of mafia. Signups must be closed. Requires host % @ * # & ~`],
 
