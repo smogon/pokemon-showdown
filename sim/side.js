@@ -205,13 +205,13 @@ class Side {
 		if (this.sideConditions[status.id]) {
 			if (!status.onRestart) return false;
 			return this.battle.singleEvent('Restart', status, this.sideConditions[status.id], this, source, sourceEffect);
-	   }
-	   this.sideConditions[status.id] = {id: status.id, target: this, source: source, sourcePosition: source.position};
+		}
+		this.sideConditions[status.id] = {id: status.id, target: this, source: source, sourcePosition: source.position};
 		if (status.durationCallback) {
 			this.sideConditions[status.id].duration = status.durationCallback.call(this.battle, this.active[0], source, sourceEffect);
-	   } else if (status.duration) {
-		  this.sideConditions[status.id].duration = status.duration;
-	   }
+		} else if (status.duration) {
+			this.sideConditions[status.id].duration = status.duration;
+		}
 		if (!this.battle.singleEvent('Start', status, this.sideConditions[status.id], this, source, sourceEffect)) {
 			delete this.sideConditions[status.id];
 			return false;
