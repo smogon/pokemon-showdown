@@ -1,6 +1,8 @@
 var readline = require('readline'),
     rl = readline.createInterface(process.stdin, process.stdout);
 
+//test
+
 const Sim = require('./sim');
 stream = new Sim.BattleStream();
 
