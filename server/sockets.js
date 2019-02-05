@@ -182,7 +182,6 @@ if (cluster.isMaster) {
 	/**
 	 * @param {cluster.Worker} worker
 	 * @param {string} socketid
-	 * @param {string} socketid
 	 */
 	exports.socketDisconnect = function (worker, socketid) {
 		worker.send(`!${socketid}`);
@@ -421,15 +420,7 @@ if (cluster.isMaster) {
 	 */
 	const rooms = new Map();
 	/**
-<<<<<<< HEAD
-<<<<<<< HEAD
-	 * channelid:socketid:subchannelindex
-=======
 	 * roomid:socketid:channelIndex
->>>>>>> 70b3e9a52... Rename channel -> room, subchannel -> channel
-=======
-	 * roomid:socketid:channelIndex
->>>>>>> 70b3e9a52... Rename channel -> room, subchannel -> channel
 	 * @type {Map<string, Map<string, string>>}
 	 */
 	const roomChannels = new Map();
