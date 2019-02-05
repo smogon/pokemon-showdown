@@ -3,27 +3,28 @@ type ModdedDex = typeof import('./../sim/dex')
 type Pokemon = import('./../sim/pokemon')
 type Side = import('./../sim/side')
 type Validator = ReturnType<typeof import('./../sim/team-validator')>
-type PageTable = import('./../chat').PageTable
-type ChatCommands = import('./../chat').ChatCommands
-type ChatFilter = import('./../chat').ChatFilter
-type NameFilter = import('./../chat').NameFilter
+
+type PageTable = import('./../server/chat').PageTable
+type ChatCommands = import('./../server/chat').ChatCommands
+type ChatFilter = import('./../server/chat').ChatFilter
+type NameFilter = import('./../server/chat').NameFilter
 
 interface AnyObject {[k: string]: any}
 type DexTable<T> = {[key: string]: T}
 
-let Config = require('../config/config');
+let Config: {[k: string]: any} = require('../config/config');
 
-let Monitor = require('../monitor');
+let Monitor: typeof import("../server/monitor") = require('../server/monitor');
 
-let LoginServer = require('../loginserver');
+let LoginServer: typeof import('../server/loginserver') = require('../server/loginserver');
 
 // type RoomBattle = AnyObject;
 
-let Verifier = require('../verifier');
-let Dnsbl = require('../dnsbl');
-let Sockets = require('../sockets');
-// let TeamValidator = require('../sim/team-validator');
-let TeamValidatorAsync = require('../team-validator-async');
+let Verifier: typeof import('../server/verifier') = require('../server/verifier');
+let Dnsbl: typeof import('../server/dnsbl') = require('../server/dnsbl');
+let Sockets: typeof import('../server/sockets') = require('../server/sockets');
+// let TeamValidator: typeof import('../sim/team-validator') = require('../sim/team-validator');
+let TeamValidatorAsync: typeof import('../server/team-validator-async') = require('../server/team-validator-async');
 
 type GenderName = 'M' | 'F' | 'N' | '';
 type StatName = 'hp' | 'atk' | 'def' | 'spa' | 'spd' | 'spe';
@@ -680,6 +681,7 @@ interface FormatsData extends EventMethods {
 	restrictedStones?: string[]
 	ruleset?: string[]
 	searchShow?: boolean
+	allowMultisearch?: boolean
 	team?: string
 	teamLength?: {validate?: [number, number], battle?: number}
 	threads?: string[]
@@ -755,12 +757,16 @@ interface ModdedBattlePokemon {
 	boostBy?: (this: Pokemon, boost: SparseBoostsTable) => boolean
 	calculateStat?: (this: Pokemon, statName: string, boost: number, modifier?: number) => number
 	getActionSpeed?: (this: Pokemon) => number
+	getRequestData?: (this: Pokemon) => {moves: {move: string, id: string, target?: string, disabled?: boolean}[], maybeDisabled?: boolean, trapped?: boolean, maybeTrapped?: boolean, canMegaEvo?: boolean, canUltraBurst?: boolean, canZMove?: AnyObject | null}
 	getStat?: (this: Pokemon, statName: string, unboosted?: boolean, unmodified?: boolean) => number
 	getWeight?: (this: Pokemon) => number
+	hasAbility?: (this: Pokemon, ability: string | string[]) => boolean
 	isGrounded?: (this: Pokemon, negateImmunity: boolean | undefined) => boolean | null
 	modifyStat?: (this: Pokemon, statName: string, modifier: number) => void
 	moveUsed?: (this: Pokemon, move: Move, targetLoc?: number) => void
 	recalculateStats?: (this: Pokemon) => void
+	setAbility?: (this: Pokemon, ability: string | Ability, source: Pokemon | null, isFromFormeChange: boolean) => string | false
+	transformInto?: (this: Pokemon, pokemon: Pokemon, effect: Effect | null) => boolean
 }
 
 interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
@@ -771,11 +777,13 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	boost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source?: Pokemon | null, effect?: Effect | string | null, isSecondary?: boolean, isSelf?: boolean) => boolean | null | 0
 	debug?: (this: Battle, activity: string) => void
 	getDamage?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: string | number | ActiveMove, suppressMessages: boolean) => number
+	getEffect?: (this: Battle, name: string | Effect | null) => Effect
 	init?: (this: Battle) => void
 	modifyDamage?: (this: Battle, baseDamage: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove, suppressMessages?: boolean) => void
 	natureModify?: (this: Battle, stats: StatsTable, set: PokemonSet) => StatsTable
 	setTerrain?: (this: Battle, status: string | Effect, source: Pokemon | null | 'debug', sourceEffect: Effect | null) => boolean
 	spreadModify?: (this: Battle, baseStats: StatsTable, set: PokemonSet) => StatsTable
+	suppressingWeather?: (this: Battle) => boolean
 
 	// oms
 	doGetMixedTemplate?: (this: Battle, template: Template, deltas: AnyObject) => Template

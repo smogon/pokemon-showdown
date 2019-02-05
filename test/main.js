@@ -42,7 +42,7 @@ before('initialization', function () {
 	require('../lib/repl').start = noop;
 
 	// Start the server.
-	require('../app');
+	require('../server');
 
 	LoginServer.disabled = true;
 

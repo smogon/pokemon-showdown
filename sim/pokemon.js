@@ -314,6 +314,8 @@ class Pokemon {
 
 		/**@type {string | undefined} */
 		this.innate = undefined;
+		/**@type {string[] | undefined} */
+		this.innates = undefined;
 		/**@type {string | undefined} */
 		this.originalSpecies = undefined;
 		/**@type {?boolean} */
@@ -861,15 +863,14 @@ class Pokemon {
 
 	/**
 	 * @param {Pokemon} pokemon
-	 * @param {Pokemon} user
 	 * @param {?Effect} [effect]
 	 */
-	transformInto(pokemon, user, effect = null) {
+	transformInto(pokemon, effect = null) {
 		let template = pokemon.template;
 		if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5)) {
 			return false;
 		}
-		if (!template.abilities || (pokemon && pokemon.transformed && this.battle.gen >= 2) || (user && user.transformed && this.battle.gen >= 5)) {
+		if ((pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5)) {
 			return false;
 		}
 		if (!this.formeChange(template, null)) {
@@ -954,8 +955,6 @@ class Pokemon {
 	 */
 	formeChange(templateId, source = this.battle.effect, isPermanent, message, abilitySlot = '0') {
 		let rawTemplate = this.battle.getTemplate(templateId);
-
-		if (!rawTemplate.abilities) return false;
 
 		let template = this.battle.singleEvent('ModifyTemplate', this.battle.getFormat(), null, this, source, null, rawTemplate);
 
