@@ -8,7 +8,7 @@ const SPOTLIGHT_FILE = 'config/chat-plugins/spotlights.json';
 /** @type {{[k: string]: {[k: string]: {image: string?, description: string}[]}}} */
 let spotlights = {};
 try {
-	spotlights = require(`../${SPOTLIGHT_FILE}`);
+	spotlights = require(`../../${SPOTLIGHT_FILE}`);
 } catch (e) {
 	if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
 }

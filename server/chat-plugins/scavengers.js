@@ -10,7 +10,7 @@
 
 'use strict';
 
-const fs = require('fs');
+const FS = require('../../lib/fs');
 
 const RATED_TYPES = ['official', 'regular', 'mini'];
 const DEFAULT_POINTS = {
@@ -22,10 +22,9 @@ const DEFAULT_BLITZ_POINTS = {
 const DEFAULT_HOST_POINTS = 4;
 const DEFAULT_TIMER_DURATION = 120;
 
-const path = require('path');
-const DATA_FILE = path.resolve(__dirname, '../config/chat-plugins/scavdata.json');
-const HOST_DATA_FILE = path.resolve(__dirname, '../config/chat-plugins/scavhostdata.json');
-const PLAYER_DATA_FILE = path.resolve(__dirname, '../config/chat-plugins/scavplayerdata.json');
+const DATA_FILE = 'config/chat-plugins/scavdata.json';
+const HOST_DATA_FILE = 'config/chat-plugins/scavhostdata.json';
+const PLAYER_DATA_FILE = 'config/chat-plugins/scavplayerdata.json';
 
 const SCAVENGE_REGEX = /^((?:\s)?(?:\/{2,}|[^\w/]+)|\s\/)?(?:\s)?(?:s\W?cavenge|s\W?cav(?:engers)? guess|d\W?t|d\W?ata|d\W?etails|g\W?(?:uess)?|v)\b/i; // a regex of some of all the possible slips for leaks.
 const FILTER_LENIENCY = 7;
@@ -55,12 +54,11 @@ class Ladder {
 	}
 
 	load() {
-		fs.readFile(this.file, 'utf8', (err, content) => {
-			if (err && err.code === 'ENOENT') return false; // file doesn't exist (yet)
-			if (err) return console.log(`ERROR: Unable to load scavenger leaderboard: ${err}`);
-
-			this.data = JSON.parse(content);
-		});
+		try {
+			this.data = require(`../../${this.file}`);
+		} catch (e) {
+			if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
+		}
 	}
 
 	addPoints(name, aspect, points, noUpdate) {
@@ -83,9 +81,7 @@ class Ladder {
 	}
 
 	write() {
-		fs.writeFile(this.file, JSON.stringify(this.data), err => {
-			if (err) console.log(`ERROR: Failed to write scavengers ladder - ${err}`);
-		});
+		FS(this.file).writeUpdate(() => JSON.stringify(this.data));
 	}
 
 	visualize(sortBy, userid) {
