@@ -3056,7 +3056,6 @@ const commands = {
 			`/mafia sub in - Request to sub into the game, or cancel a request to sub out.`,
 			`/mafia sub out - Request to sub out of the game, or cancel a request to sub in.`,
 			`/mafia spectate - Spectate the game of mafia.`,
-			`/mafia ideadiscards - Shows the discarded roles list for an IDEA module.`,
 			`/mafia lynches - Display the current lynch count, and whos lynching who.`,
 			`/mafia players - Display the current list of players, will highlight players.`,
 			`/mafia [rl|orl] - Display the role list or the original role list for the current game.`,
@@ -3077,7 +3076,6 @@ const commands = {
 			`/mafia deadline - View the deadline for the current game.`,
 			`/mafia sub in - Request to sub into the game, or cancel a request to sub out.`,
 			`/mafia sub out - Request to sub out of the game, or cancel a request to sub in.`,
-			`/mafia ideapick [selection], [role] - Selects a role from an IDEA module`,
 		].join('<br/>');
 		buf += `</details><details><summary class="button">Host Commands</summary>`;
 		buf += [
@@ -3090,10 +3088,6 @@ const commands = {
 			`/mafia [enablenl|disablenl] - Allows or disallows players abstain from lynching. Requires host % @ # & ~`,
 			`/mafia setroles [comma seperated roles] - Set the roles for a game of mafia. You need to provide one role per player. Requires host % @ # & ~`,
 			`/mafia forcesetroles [comma seperated roles] - Forcibly set the roles for a game of mafia. No role PM information or alignment will be set. Requires host % @ # & ~`,
-			`/mafia idea [idea] - starts an IDEA module. Requires + % @ * # & ~, voices can only start for themselves`,
-			`/mafia ideareroll - rerolls the current IDEA module. Requires host % @ * # & ~`,
-			`/mafia customidea choices, picks (new line here, shift+enter)`,
-			`(comma or newline separated rolelist) - Starts an IDEA module with custom roles. Requires % @ # & ~`,
 			`/mafia start - Start the game of mafia. Signups must be closed. Requires host % @ * # & ~`,
 			`/mafia day - Move to the next game day. Requires host % @ * # & ~`,
 			`/mafia night - Move to the next game night. Requires host % @ * # & ~`,
