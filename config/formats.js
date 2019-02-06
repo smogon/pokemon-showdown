@@ -123,7 +123,7 @@ let Formats = [
 		banlist: [
 			'Aipom', 'Cutiefly', 'Drifloon', 'Gligar', 'Gothita', 'Meditite', 'Misdreavus', 'Murkrow', 'Porygon',
 			'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Torchic', 'Vulpix-Base', 'Wingull', 'Yanma',
-			'Eevium Z', 'Dragon Rage', 'Sonic Boom',
+			'Eevium Z', 'Baton Pass', 'Dragon Rage', 'Sonic Boom',
 		],
 	},
 	{
