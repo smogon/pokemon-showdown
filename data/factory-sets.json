@@ -7671,7 +7671,7 @@
 			}, {
 				"species": "Lilligant",
 				"item": ["Choice Specs"],
-				"ability": ["Own tempo"],
+				"ability": ["Own Tempo"],
 				"evs": {"spa": 252, "spd": 4, "spe": 252},
 				"nature": "Timid",
 				"moves": [["Petal Dance"], ["Giga Drain"], ["Healing Wish"], ["Hidden Power Rock"]]
@@ -8396,7 +8396,7 @@
 				"ability": ["Stamina"],
 				"evs": {"hp": 252, "atk": 56, "def": 44, "spd": 156},
 				"nature": "Adamant",
-				"moves": [["Earthquake"], ["Toxic"], ["Stealth Rock"], ["Rock SLide", "Protect", "Roar"]]
+				"moves": [["Earthquake"], ["Toxic"], ["Stealth Rock"], ["Rock Slide", "Protect", "Roar"]]
 			}]
 		},
 		"golem": {
@@ -10502,7 +10502,7 @@
 			}, {
 				"species": "Araquanid",
 				"item": ["Waterium Z"],
-				"ability": [" Water Bubble"],
+				"ability": ["Water Bubble"],
 				"evs": {"hp": 248, "atk": 252, "def": 8},
 				"nature": "Adamant",
 				"moves": [["Liquidation"], ["Leech Life"], ["Toxic"], ["Infestation"]]
@@ -10658,42 +10658,42 @@
 			}, {
 				"species": "Scizor",
 				"item": ["Scizorite"],
-				"ability": [" Light Metal"],
+				"ability": ["Light Metal"],
 				"evs": {"hp": 248, "atk": 252, "def": 8},
 				"nature": "Adamant",
 				"moves": [["Swords Dance"], ["Bullet Punch"], ["Roost"], ["Superpower", "Knock Off"]]
 			}, {
 				"species": "Scizor",
 				"item": ["Scizorite"],
-				"ability": [" Light Metal"],
+				"ability": ["Light Metal"],
 				"evs": {"atk": 252, "def": 4, "spe": 252},
 				"nature": "Adamant",
 				"moves": [["Swords Dance"], ["Bullet Punch"], ["Bug Bite"], ["Superpower", "Knock Off"]]
 			}, {
 				"species": "Scizor",
 				"item": ["Scizorite"],
-				"ability": [" Light Metal"],
+				"ability": ["Light Metal"],
 				"evs": {"hp": 248, "def": 252, "spd": 8},
 				"nature": "Impish",
 				"moves": [["Defog"], ["Roost"], ["Bullet Punch"], ["U-turn"]]
 			}, {
 				"species": "Scizor",
 				"item": ["Scizorite"],
-				"ability": [" Light Metal"],
+				"ability": ["Light Metal"],
 				"evs": {"hp": 200, "atk": 252, "spe": 56},
 				"nature": "Adamant",
 				"moves": [["Bullet Punch"], ["Bug Bite", "Superpower", "Knock Off"], ["Swords Dance"], ["Roost"]]
 			}, {
 				"species": "Scizor",
 				"item": ["Scizorite"],
-				"ability": [" Light Metal"],
+				"ability": ["Light Metal"],
 				"evs": {"atk": 252, "def": 4, "spe": 252},
 				"nature": "Jolly",
 				"moves": [["Bullet Punch"], ["Bug Bite"], ["Superpower"], ["Swords Dance"]]
 			}, {
 				"species": "Scizor",
 				"item": ["Scizorite"],
-				"ability": [" Light Metal"],
+				"ability": ["Light Metal"],
 				"evs": {"hp": 248, "def": 44, "spd": 216},
 				"nature": "Careful",
 				"moves": [["Bullet Punch"], ["U-turn"], ["Roost"], ["Swords Dance", "Toxic"]]
@@ -10750,7 +10750,7 @@
 			}, {
 				"species": "Scolipede",
 				"item": ["Waterium Z"],
-				"ability": [" Speed Boost"],
+				"ability": ["Speed Boost"],
 				"evs": {"atk": 252, "def": 4, "spe": 252},
 				"nature": "Adamant",
 				"moves": [["Swords Dance"], ["Poison Jab"], ["Aqua Tail"], ["Earthquake"]]
@@ -11952,35 +11952,35 @@
 			"sets": [{
 				"species": "Kommo-o",
 				"item": ["Kommonium Z"],
-				"ability": [" Bulletproof"],
+				"ability": ["Bulletproof"],
 				"evs": {"atk": 252, "def": 4, "spe": 252},
 				"nature": "Adamant",
 				"moves": [["Clanging Scales"], ["Close Combat"], ["Poison Jab"], ["Dragon Dance"]]
 			}, {
 				"species": "Kommo-o",
 				"item": ["Kommonium Z"],
-				"ability": [" Bulletproof"],
+				"ability": ["Bulletproof"],
 				"evs": {"atk": 4, "spa": 252, "spe": 252},
 				"nature": "Naive",
 				"moves": [["Clanging Scales"], ["Close Combat"], ["Flamethrower"], ["Flash Cannon"]]
 			}, {
 				"species": "Kommo-o",
 				"item": ["Kommonium Z"],
-				"ability": [" Soundproof"],
+				"ability": ["Soundproof"],
 				"evs": {"atk": 252, "spa": 4, "spe": 252},
 				"nature": "Naive",
 				"moves": [["Clanging Scales"], ["Poison Jab"], ["Earthquake"], ["Dragon Dance"]]
 			}, {
 				"species": "Kommo-o",
 				"item": ["Kommonium Z"],
-				"ability": [" Soundproof"],
+				"ability": ["Soundproof"],
 				"evs": {"atk": 4, "spa": 252, "spe": 252},
 				"nature": "Naive",
 				"moves": [["Clanging Scales"], ["Flamethrower"], ["Earthquake"], ["Dragon Dance"]]
 			}, {
 				"species": "Kommo-o",
 				"item": ["Kommonium Z"],
-				"ability": [" Soundproof"],
+				"ability": ["Soundproof"],
 				"evs": {"atk": 252, "spa": 4, "spe": 252},
 				"nature": "Naive",
 				"moves": [["Clanging Scales"], ["Close Combat"], ["Earthquake"], ["Dragon Dance"]]
@@ -12090,7 +12090,7 @@
 			"sets": [{
 				"species": "Goodra",
 				"item": ["Assault Vest"],
-				"ability": [" Gooey"],
+				"ability": ["Gooey"],
 				"evs": {"hp": 248, "spa": 252, "spd": 8},
 				"nature": "Modest",
 				"moves": [["Draco Meteor", "Dragon Pulse"], ["Fire Blast", "Flamethrower"], ["Sludge Bomb"], ["Ice Beam", "Thunderbolt", "Dragon Tail"]]
@@ -14834,7 +14834,7 @@
 			}, {
 				"species": "Seismitoad",
 				"item": ["Waterium Z"],
-				"ability": [" Swift Swim"],
+				"ability": ["Swift Swim"],
 				"evs": {"spa": 252, "spd": 4, "spe": 252},
 				"nature": "Timid",
 				"moves": [["Hydro Pump"], ["Earth Power"], ["Stealth Rock"], ["Sludge Wave"]]
@@ -15098,7 +15098,7 @@
 			}, {
 				"species": "Cloyster",
 				"item": ["Waterium Z"],
-				"ability": [" Skill Link"],
+				"ability": ["Skill Link"],
 				"evs": {"atk": 4, "spa": 252, "spe": 252},
 				"nature": "Naive",
 				"moves": [["Shell Smash"], ["Icicle Spear"], ["Hydro Pump"], ["Hidden Power Fire"]]
@@ -16306,7 +16306,7 @@
 			"sets": [{
 				"species": "Manaphy",
 				"item": ["Waterium Z"],
-				"ability": [" Hydration"],
+				"ability": ["Hydration"],
 				"evs": {"spa": 252, "spd": 4, "spe": 252},
 				"nature": "Timid",
 				"moves": [["Surf"], ["Psychic"], ["Rain Dance"], ["Tail Glow"]]

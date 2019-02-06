@@ -108,6 +108,7 @@ describe(`Factory sets`, function () {
 					for (const set of speciesData.sets) {
 						const template = Dex.getTemplate(set.species);
 						assert(template.exists, `invalid species "${set.species}" of ${species}`);
+						assert(template.name === set.species, `miscapitalized species "${set.species}" of ${species}`);
 
 						// currently failing due to a Piloswine labeled as a Mamoswine set
 						// assert(species.startsWith(toId(template.baseSpecies)), `non-matching species "${set.species}" of ${species}`);
@@ -116,16 +117,22 @@ describe(`Factory sets`, function () {
 
 						for (const itemName of [].concat(set.item)) {
 							if (!itemName && [].concat(...set.moves).includes("Acrobatics")) continue;
-							assert(Dex.getItem(itemName).exists, `invalid item "${itemName}" of ${species}`);
+							const item = Dex.getItem(itemName);
+							assert(item.exists, `invalid item "${itemName}" of ${species}`);
+							assert(item.name === itemName, `miscapitalized item "${itemName}" of ${species}`);
 						}
 
 						for (const abilityName of [].concat(set.ability)) {
-							assert(Dex.getAbility(abilityName).exists, `invalid ability "${abilityName}" of ${species}`);
+							const ability = Dex.getAbility(abilityName);
+							assert(ability.exists, `invalid ability "${abilityName}" of ${species}`);
+							assert(ability.name === abilityName, `miscapitalized ability "${abilityName}" of ${species}`);
 						}
 
 						for (const moveSpec of set.moves) {
 							for (const moveName of [].concat(moveSpec)) {
-								assert(Dex.getMove(moveName).exists, `invalid move "${moveName}" of ${species}`);
+								const move = Dex.getMove(moveName);
+								assert(move.exists, `invalid move "${moveName}" of ${species}`);
+								assert(move.name === moveName, `miscapitalized move "${moveName}" of ${species}`);
 							}
 						}
 					}
