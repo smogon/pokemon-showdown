@@ -4772,7 +4772,7 @@
 			"sets": [{
 				"species": "Araquanid",
 				"item": ["Splash Plate"],
-				"ability": ["Water bubble"],
+				"ability": ["Water Bubble"],
 				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": "Adamant",
 				"moves": [["Sticky Web"], ["Liquidation"], ["Magic Coat"], ["Leech Life"]]
@@ -4975,7 +4975,7 @@
 			"sets": [{
 				"species": "Florges",
 				"item": ["Leftovers"],
-				"ability": ["FLower Veil"],
+				"ability": ["Flower Veil"],
 				"evs": {"hp": 252, "def": 120, "spe": 136},
 				"nature": "Timid",
 				"moves": [["Defog"], ["Moonblast"], ["Synthesis"], ["Heal Bell"]]
@@ -5108,7 +5108,7 @@
 			"sets": [{
 				"species": "Houndoom",
 				"item": ["Darkinium Z"],
-				"ability": ["FLash Fire"],
+				"ability": ["Flash Fire"],
 				"evs": {"spa": 252, "spd": 4, "spe": 252},
 				"nature": "Timid",
 				"moves": [["Nasty Plot"], ["Dark Pulse"], ["Fire Blast"], ["Taunt"]]
@@ -5520,18 +5520,6 @@
 				"evs": {"hp": 188, "def": 128, "spd": 192},
 				"nature": "Careful",
 				"moves": [["Curse"], ["Frustration"], ["Rest"], ["Earthquake"]]
-			}]
-		},
-		"stakataka": {
-			"flags": {},
-			"sets": [{
-				"species": "Stakataka",
-				"item": ["Rockium Z"],
-				"ability": ["Beast Boost"],
-				"evs": {"hp": 252, "atk": 252, "spd": 4},
-				"ivs": {"def": 15, "spe": 0},
-				"nature": "Lonely",
-				"moves": [["Trick Room"], ["Gyro Ball"], ["Stone Edge"], ["Earthquake"]]
 			}]
 		},
 		"stoutland": {
