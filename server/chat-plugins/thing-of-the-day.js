@@ -23,7 +23,7 @@ const PRENOMS_FILE = 'config/chat-plugins/otd-prenoms.json';
 /** @type {{[k: string]: [string, AnyObject][]}} */
 let prenoms = {};
 try {
-	prenoms = require(`../${PRENOMS_FILE}`);
+	prenoms = require(`../../${PRENOMS_FILE}`);
 } catch (e) {
 	if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
 }

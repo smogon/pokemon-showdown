@@ -18,14 +18,14 @@ const STATS_FILE = 'config/chat-plugins/wifi.json';
 /** @type {{[k: string]: number[]}} */
 let stats = {};
 try {
-	stats = require(`../${STATS_FILE}`);
+	stats = require(`../../${STATS_FILE}`);
 } catch (e) {
 	if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
 }
 if (!stats || typeof stats !== 'object') stats = {};
 
 function saveStats() {
-	FS(STATS_FILE).write(JSON.stringify(stats));
+	FS(STATS_FILE).writeUpdate(() => JSON.stringify(stats));
 }
 
 /**

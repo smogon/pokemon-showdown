@@ -1,21 +1,20 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
+const FS = require('../../lib/fs');
 
-const ROOMFAQ_FILE = path.resolve(__dirname, '../config/chat-plugins/faqs.json');
+const ROOMFAQ_FILE = 'config/chat-plugins/faqs.json';
 
 /** @type {{[k: string]: {[k: string]: string}}} */
 let roomFaqs = {};
 try {
-	roomFaqs = require(ROOMFAQ_FILE);
+	roomFaqs = require(`../../${ROOMFAQ_FILE}`);
 } catch (e) {
 	if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
 }
 if (!roomFaqs || typeof roomFaqs !== 'object') roomFaqs = {};
 
 function saveRoomFaqs() {
-	fs.writeFile(ROOMFAQ_FILE, JSON.stringify(roomFaqs), () => {});
+	FS(ROOMFAQ_FILE).writeUpdate(() => JSON.stringify(roomFaqs));
 }
 
 /**

@@ -86,13 +86,15 @@ const NUM_FINALS_QUESTIONS = 5;
  * @typedef {{questions?: TriviaQuestions, submissions?: TriviaQuestions, leaderboard?: TriviaLeaderboard, ladder?: TriviaLadder, wlquestions?: TriviaQuestions, wlsubmissions?: TriviaQuestions}} TriviaData
  */
 
+const PATH = 'config/chat-plugins/triviadata.json';
+
 /**
  * TODO: move trivia database code to a separate file once relevant.
  * @type {TriviaData}
  */
 let triviaData = {};
 try {
-	triviaData = require('../config/chat-plugins/triviadata.json');
+	triviaData = require(`../../${PATH}`);
 } catch (e) {} // file doesn't exist or contains invalid JSON
 
 if (!triviaData || typeof triviaData !== 'object') triviaData = {};
@@ -107,7 +109,7 @@ if (triviaData.wlquestions) delete triviaData.wlquestions;
 if (triviaData.wlsubmissions) delete triviaData.wlsubmissions;
 
 function writeTriviaData() {
-	FS('config/chat-plugins/triviadata.json').writeUpdate(() => (
+	FS(PATH).writeUpdate(() => (
 		JSON.stringify(triviaData, null, 2)
 	));
 }
