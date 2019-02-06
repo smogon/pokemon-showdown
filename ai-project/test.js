@@ -1,4 +1,4 @@
-const Sim = require('./sim');
+const Sim = require('./../sim');
 var express = require('express');
 var readline = require('readline'),
     rl = readline.createInterface(process.stdin, process.stdout);
