@@ -36,8 +36,9 @@ rl.on('line', function(line) {
     process.exit(0);
 });
 
-app.get('/', function (req, res) {
+app.get('/output', function (req, res) {
    res.send(appOutput.toString());
+   appOutput = [];
 })
 
 var server = app.listen(8081, "127.0.0.1",function () {
