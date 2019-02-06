@@ -12,19 +12,19 @@ type NameFilter = import('./../server/chat').NameFilter
 interface AnyObject {[k: string]: any}
 type DexTable<T> = {[key: string]: T}
 
-let Config: {[k: string]: any} = require('../config/config');
+declare let Config: {[k: string]: any};
 
-let Monitor: typeof import("../server/monitor") = require('../server/monitor');
+declare let Monitor: typeof import("../server/monitor");
 
-let LoginServer: typeof import('../server/loginserver') = require('../server/loginserver');
+declare let LoginServer: typeof import('../server/loginserver');
 
 // type RoomBattle = AnyObject;
 
-let Verifier: typeof import('../server/verifier') = require('../server/verifier');
-let Dnsbl: typeof import('../server/dnsbl') = require('../server/dnsbl');
-let Sockets: typeof import('../server/sockets') = require('../server/sockets');
-// let TeamValidator: typeof import('../sim/team-validator') = require('../sim/team-validator');
-let TeamValidatorAsync: typeof import('../server/team-validator-async') = require('../server/team-validator-async');
+declare let Verifier: typeof import('../server/verifier');
+declare let Dnsbl: typeof import('../server/dnsbl');
+declare let Sockets: typeof import('../server/sockets');
+// let TeamValidator: typeof import('../sim/team-validator');
+declare let TeamValidatorAsync: typeof import('../server/team-validator-async');
 
 type GenderName = 'M' | 'F' | 'N' | '';
 type StatName = 'hp' | 'atk' | 'def' | 'spa' | 'spd' | 'spe';
