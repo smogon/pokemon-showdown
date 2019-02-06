@@ -163,7 +163,7 @@ function runRipgrepModlog(paths, regexString, results, lines) {
 			...paths,
 			'-g', '!modlog_global.txt', '-g', '!README.md',
 		];
-		stdout = execFileSync('rg', options, {cwd: path.normalize(`${__dirname}/../`)});
+		stdout = execFileSync('rg', options, {cwd: path.normalize(`${__dirname}/../../`)});
 	} catch (error) {
 		return results;
 	}
