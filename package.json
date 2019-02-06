@@ -61,7 +61,6 @@
     "@types/node-static": "^0.7.2",
     "@types/nodemailer": "^4.6.5",
     "@types/sockjs": "^0.3.31",
-    "eslint": "^5.7.0",
     "husky": "^1.1.2",
     "mocha": "^5.2.0",
     "typescript": "^3.2.1"
