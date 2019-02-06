@@ -4,6 +4,7 @@ var readline = require('readline'),
     rl = readline.createInterface(process.stdin, process.stdout);
 
 var app = express();
+var environmentRoot =  require('path').normalize(__dirname );
 
 stream = new Sim.BattleStream();
 
@@ -36,8 +37,16 @@ rl.on('line', function(line) {
     process.exit(0);
 });
 
-app.get('/output', function (req, res) {
-   res.send(appOutput.toString());
+
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+app.get('/output', function (req, res, next) {
+   res.send(JSON.stringify({"output": appOutput.toString()}));
    appOutput = [];
 })
 
