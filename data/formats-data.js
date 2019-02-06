@@ -7329,7 +7329,7 @@ let BattleFormatsData = {
 			{"generation": 7, "level": 60, "shiny": 1, "moves": ["irondefense", "ironhead", "rockblast", "wideguard"]},
 		],
 		eventOnly: true,
-		tier: "RU",
+		tier: "RUBL",
 		doublesTier: "DOU",
 	},
 	blacephalon: {
