@@ -1230,16 +1230,18 @@ Chat.package = {};
  * @param {string} root
  */
 Chat.uncacheTree = function (root) {
-	let uncache = [require.resolve(root)];
+	let uncache = [require.resolve('../' + root)];
 	do {
 		/** @type {string[]} */
 		let newuncache = [];
 		for (const target of uncache) {
 			if (require.cache[target]) {
-				newuncache.push.apply(newuncache,
-					require.cache[target].children
-						.filter(/** @param {{id: string}} cachedModule */ cachedModule => !cachedModule.id.endsWith('.node'))
-						.map(/** @param {{id: string}} cachedModule */ cachedModule => cachedModule.id)
+				/** @type {{id: string}[]} cachedModule */
+				let children = require.cache[target].children;
+				newuncache.push(
+					...(children
+						.filter(cachedModule => !cachedModule.id.endsWith('.node'))
+						.map(cachedModule => cachedModule.id))
 				);
 				delete require.cache[target];
 			}
@@ -1264,7 +1266,7 @@ Chat.uncacheDir = function (root) {
  * @param {string} path
  */
 Chat.uncache = function (path) {
-	const absolutePath = require.resolve(path);
+	const absolutePath = require.resolve('../' + path);
 	delete require.cache[absolutePath];
 };
 

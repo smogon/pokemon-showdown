@@ -2995,8 +2995,8 @@ const commands = {
 					}
 				}
 
-				Chat.uncache('./chat');
-				Chat.uncache('./chat-commands');
+				Chat.uncache('./server/chat');
+				Chat.uncache('./server/chat-commands');
 				Chat.uncacheDir('./server/chat-plugins');
 				global.Chat = require('./chat');
 
@@ -3042,7 +3042,7 @@ const commands = {
 				this.sendReply("Formats have been hot-patched.");
 			} else if (target === 'loginserver') {
 				FS('config/custom.css').unwatch();
-				Chat.uncache('./loginserver');
+				Chat.uncache('./server/loginserver');
 				global.LoginServer = require('./loginserver');
 				this.sendReply("The login server has been hot-patched. New login server requests will use the new code.");
 			} else if (target === 'learnsets' || target === 'validator') {
@@ -3054,7 +3054,7 @@ const commands = {
 			} else if (target === 'punishments') {
 				if (lock['punishments']) return this.errorReply(`Hot-patching punishments has been disabled by ${lock['punishments'].by} (${lock['punishments'].reason})`);
 
-				Chat.uncache('./punishments');
+				Chat.uncache('./server/punishments');
 				global.Punishments = require('./punishments');
 				this.sendReply("Punishments have been hot-patched.");
 			} else if (target === 'dnsbl' || target === 'datacenters') {
