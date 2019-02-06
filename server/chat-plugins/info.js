@@ -485,7 +485,7 @@ const commands = {
 			case 'pokemon':
 				let pokemon = mod.getTemplate(newTarget.name);
 				if (format && format.onModifyTemplate) {
-					pokemon = format.onModifyTemplate.call(require('../sim/battle'), pokemon) || pokemon;
+					pokemon = format.onModifyTemplate.call(Dex, pokemon) || pokemon;
 				}
 				let tier = pokemon.tier;
 				if (room && (room.id === 'smogondoubles' ||
