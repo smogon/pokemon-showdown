@@ -396,16 +396,11 @@ exports.pages = {
 		let title = `|title|[Battle Search][${userid}]`;
 		let buf = `\n|pagehtml|<div class="pad ladder"><h2>Battle Search</h2><p>Userid: ${userid}</p><p>Maximum Turns: ${turnLimit}</p>`;
 
-		let months = FS('logs/').readdirSync();
-		months = months.filter(f => f.length === 7 && f.includes('-')).sort((aKey, bKey) => {
+		const months = FS('logs/').readdirSync().filter(f => f.length === 7 && f.includes('-')).sort((aKey, bKey) => {
 			const a = aKey.split('-').map(parseInt);
 			const b = bKey.split('-').map(parseInt);
-			if (a[0] === b[0]) {
-				if (a[1] > b[1]) return -1;
-				return 1;
-			}
-			if (a[0] > b[0]) return -1;
-			return 1;
+			if (a[0] !== b[0]) return b[0] - a[0];
+			return b[1] - a[1];
 		});
 		let month = args.shift();
 		if (!month) {
@@ -421,21 +416,50 @@ exports.pages = {
 		}
 
 		let tierid = toId(args.shift());
-		const tiers = FS(`logs/${month}/`).readdirSync();
+		const tiers = FS(`logs/${month}/`).readdirSync().sort((a, b) => {
+			// First sort by gen with the latest being first
+			let aGen = 6;
+			let bGen = 6;
+			if (a.substring(0, 3) === 'gen') aGen = parseInt(a.substring(3, 4));
+			if (b.substring(0, 3) === 'gen') bGen = parseInt(b.substring(3, 4));
+			if (aGen !== bGen) return bGen - aGen;
+			// Sort alphabetically
+			let aTier = a.substring(4);
+			let bTier = b.substring(4);
+			if (aTier < bTier) return -1;
+			if (aTier > bTier) return 1;
+			return 0;
+		}).map(tier => {
+			// Use the official tier name
+			let format = Dex.getFormat(tier);
+			if (format && format.exists) tier = format.name;
+			// Otherwise format as best as possible
+			if (tier.substring(0, 3) === 'gen') {
+				return `[Gen ${tier.substring(3, 4)}] ${tier.substring(4)}`;
+			}
+			return tier;
+		});
 		if (!tierid) {
 			buf += `<p>Please select the tier to search:</p><ul style="list-style: none; display: block; padding: 0">`;
 			for (const tier of tiers) {
-				buf += `<li style="display: inline; list-style: none"><a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tier}" target="replace"><button class="button">${tier}</button></a></li>`;
+				buf += `<li style="display: inline; list-style: none"><a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${toId(tier)}" target="replace"><button class="button">${tier}</button></a></li>`;
 			}
 			return title + buf + `</ul></div>`;
 		} else {
-			if (!tiers.includes(tierid)) return title + buf + `Invalid tier selected. <a href="/view-battlesearch-${userid}-${turnLimit}-${month}" target="replace"><button class="button">Back to tier selection</button></a></div>`;
+			let tierids = tiers.map(toId);
+			if (!tierids.includes(tierid)) return title + buf + `Invalid tier selected. <a href="/view-battlesearch-${userid}-${turnLimit}-${month}" target="replace"><button class="button">Back to tier selection</button></a></div>`;
 			title += `[${tierid}]`;
 			buf += `<p><a href="/view-battlesearch-${userid}-${turnLimit}-${month}" target="replace"><button class="button">Back</button></a> <button class="button disabled">${tierid}</button></p>`;
 		}
 
 		let date = args.shift();
-		const days = FS(`logs/${month}/${tierid}/`).readdirSync();
+		const days = FS(`logs/${month}/${tierid}/`).readdirSync().sort((a, b) => {
+			a = a.split('-').map(parseInt);
+			b = b.split('-').map(parseInt);
+			if (a[0] !== b[0]) return b[0] - a[0];
+			if (a[1] !== b[1]) return b[1] - a[1];
+			return b[2] - a[2];
+		});
 		if (!date) {
 			buf += `<p>Please select the date to search:</p><ul style="list-style: none; display: block; padding: 0">`;
 			for (const day of days) {
