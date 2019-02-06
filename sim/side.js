@@ -206,15 +206,13 @@ class Side {
 			if (!status.onRestart) return false;
 			return this.battle.singleEvent('Restart', status, this.sideConditions[status.id], this, source, sourceEffect);
 		}
-		this.sideConditions[status.id] = {id: status.id};
-		this.sideConditions[status.id].target = this;
-		if (source) {
-			this.sideConditions[status.id].source = source;
-			this.sideConditions[status.id].sourcePosition = source.position;
-		}
-		if (status.duration) {
-			this.sideConditions[status.id].duration = status.duration;
-		}
+		this.sideConditions[status.id] = {
+			id: status.id,
+			target: this,
+			source: source,
+			sourcePosition: source.position,
+			duration: status.duration,
+		};
 		if (status.durationCallback) {
 			this.sideConditions[status.id].duration = status.durationCallback.call(this.battle, this.active[0], source, sourceEffect);
 		}

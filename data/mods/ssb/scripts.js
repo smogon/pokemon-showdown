@@ -271,14 +271,12 @@ let BattleScripts = {
 		let prevTerrain = this.terrain;
 		let prevTerrainData = this.terrainData;
 		this.terrain = status.id;
-		this.terrainData = {id: status.id};
-		if (source) {
-			this.terrainData.source = source;
-			this.terrainData.sourcePosition = source.position;
-		}
-		if (status.duration) {
-			this.terrainData.duration = status.duration;
-		}
+		this.terrainData = {
+			id: status.id,
+			source,
+			sourcePosition: source.position,
+			duration: status.duration,
+		};
 		if (status.durationCallback) {
 			this.terrainData.duration = status.durationCallback.call(this, source, source, sourceEffect);
 		}

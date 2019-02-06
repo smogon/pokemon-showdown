@@ -189,9 +189,9 @@ class LadderStore {
 			} else if (score > 0.5) {
 				K = 90 - (elo - 1000) * 40 / 200;
 			}
-		} else if (elo > 1350) {
+		} else if (elo > 1350 && elo <= 1600) {
 			K = 40;
-		} else if (elo > 1600) {
+		} else {
 			K = 32;
 		}
 
