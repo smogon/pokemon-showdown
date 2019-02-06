@@ -273,7 +273,7 @@
 			"evs": {"hp": 4, "spa": 252, "spe": 252},
 			"ivs": {"atk": 0},
 			"nature": "Timid",
-			"moves": [["Flamethrower ", "Fire Blast"], ["Shadow Ball"], ["Substitute"], ["Pain Split"]]
+			"moves": [["Flamethrower", "Fire Blast"], ["Shadow Ball"], ["Substitute"], ["Pain Split"]]
 		}, {
 			"species": "Blacephalon",
 			"item": "Mago Berry",
@@ -1139,7 +1139,7 @@
 			"ability": "Protean",
 			"evs": {"atk": 252, "spa": 4, "spe": 252},
 			"nature": "Naive",
-			"moves": [["Grass Knot", "U-Turn", "Low Kick"], ["Ice Beam"], ["Gunk Shot"], ["Dark Pulse", "Rock Slide", "Waterfall", "Rock Tomb"]]
+			"moves": [["Grass Knot", "U-turn", "Low Kick"], ["Ice Beam"], ["Gunk Shot"], ["Dark Pulse", "Rock Slide", "Waterfall", "Rock Tomb"]]
 		}, {
 			"species": "Greninja",
 			"item": "Rocky Helmet",
@@ -2257,7 +2257,7 @@
 			"evs": {"hp": 244, "def": 140, "spa": 20, "spd": 100, "spe": 4},
 			"ivs": {"atk": 0},
 			"nature": "Modest",
-			"moves": [["Recover"], ["Ice Beam"], ["Discharge ", "Thunderbolt"], ["Toxic"]]
+			"moves": [["Recover"], ["Ice Beam"], ["Discharge", "Thunderbolt"], ["Toxic"]]
 		}, {
 			"species": "Porygon2",
 			"item": "Eviolite",
@@ -2281,7 +2281,7 @@
 			"evs": {"hp": 244, "spa": 252, "spd": 12},
 			"ivs": {"atk": 0, "spe": 0},
 			"nature": "Quiet",
-			"moves": [["Ice Beam"], ["Tri Attack", "Shadow Ball"], ["Thunderbolt ", "Hidden Power Fire", "Hidden Power Ground"], ["Trick Room"]]
+			"moves": [["Ice Beam"], ["Tri Attack", "Shadow Ball"], ["Thunderbolt", "Hidden Power Fire", "Hidden Power Ground"], ["Trick Room"]]
 		}]
 	},
 	"primarina": {
@@ -2522,7 +2522,7 @@
 			"evs": {"hp": 108, "spa": 252, "spe": 148},
 			"ivs": {"atk": 0},
 			"nature": "Modest",
-			"moves": [["Hydro Pump"], ["Thunderbolt", "Electro Web"], ["Volt Switch"], ["Hidden Power Ice", "Will-O-Wisp"]]
+			"moves": [["Hydro Pump"], ["Thunderbolt", "Electroweb"], ["Volt Switch"], ["Hidden Power Ice", "Will-O-Wisp"]]
 		}, {
 			"species": "Rotom-Wash",
 			"item": "Sitrus Berry",
@@ -2538,7 +2538,7 @@
 			"evs": {"hp": 252, "spa": 252, "spe": 4},
 			"ivs": {"atk": 0},
 			"nature": "Modest",
-			"moves": [["Hydro Pump"], ["Thunderbolt", "Electro Web"], ["Volt Switch"], ["Hidden Power Ice", "Will-O-Wisp"]]
+			"moves": [["Hydro Pump"], ["Thunderbolt", "Electroweb"], ["Volt Switch"], ["Hidden Power Ice", "Will-O-Wisp"]]
 		}]
 	},
 	"salamence": {
@@ -2552,7 +2552,7 @@
 			"evs": {"hp": 4, "spa": 252, "spe": 252},
 			"ivs": {"atk": 0},
 			"nature": "Timid",
-			"moves": [["Hyper Voice"], ["Draco Meteor"], ["Flamethrower", "Fire Blast"], ["Roost", " Hyper Beam"]]
+			"moves": [["Hyper Voice"], ["Draco Meteor"], ["Flamethrower", "Fire Blast"], ["Roost", "Hyper Beam"]]
 		}, {
 			"species": "Salamence",
 			"item": "Salamencite",
