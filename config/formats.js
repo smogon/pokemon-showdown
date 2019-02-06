@@ -574,7 +574,7 @@ let Formats = [
 		onBegin: function () {
 			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
 			for (let pokemon of allPokemon) {
-				if (pokemon.ability === pokemon.template.abilities['S']) {
+				if (pokemon.ability === toId(pokemon.template.abilities['S'])) {
 					continue;
 				}
 				// @ts-ignore
