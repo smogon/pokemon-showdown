@@ -445,7 +445,6 @@ const pages = {
 				report: `I want to report someone`,
 				harassment: `Someone is harassing me`,
 				inap: `Someone is being inappropriate`,
-				timerstalling: `Someone is timerstalling`,
 				staff: `I want to report a staff member`,
 
 				appeal: `I want to appeal a punishment`,
@@ -469,7 +468,6 @@ const pages = {
 				confirminap: `Report inappropriate content`,
 				confirminapname: `Report an inappropriate username`,
 				confirminappokemon: `Report inappropriate Pok&eacute;mon nicknames`,
-				confirmtimerstalling: `Report timerstalling`,
 				confirmreportroomowner: `Report a Room Owner`,
 				confirmreportglobal: `Report a Global Staff member`,
 				confirmappeal: `Appeal your lock`,
@@ -486,7 +484,6 @@ const pages = {
 				inap: `Inappropriate Content`,
 				inapname: `Inappropriate Username`,
 				inappokemon: `Inappropriate Pokemon Nicknames`,
-				timerstalling: `Timerstalling`,
 				reportroomowner: `Room Owner Complaint`,
 				reportglobal: `Global Staff Complaint`,
 				appeal: `Appeal`,
@@ -521,7 +518,6 @@ const pages = {
 					if (!isLast) break;
 					buf += `<p><Button>harassment</Button></p>`;
 					buf += `<p><Button>inap</Button></p>`;
-					buf += `<p><Button>timerstalling</Button></p>`;
 					buf += `<p><Button>other</Button></p>`;
 					break;
 				case 'harassment':
@@ -534,13 +530,6 @@ const pages = {
 					buf += `<p>If a user has posted inappropriate content, has an inappropriate name, or has inappropriate Pok&eacute;mon nicknames, click the appropriate button below and a global staff member will take a look.</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirminap</Button> <Button>confirminapname</Button> <Button>confirminappokemon</Button></p>`;
-					break;
-				case 'timerstalling':
-					buf += `<p>Timerstalling is the act of intentionally using up almost all the time on the timer, and then moving.</p>`;
-					buf += `<p style="color: red; font-weight: bold">Please make sure your opponent is using up most of the timer each turn, has been doing this for at least two turns, and the battle has NOT ended.</p>`;
-					buf += `<p>If the above is true, please click the button below to call a global staff member.</p>`;
-					if (!isLast) break;
-					buf += `<p><Button>confirmtimerstalling</Button></p>`;
 					break;
 				case 'staff':
 					buf += `<p>If you have a complaint against a room staff member, please PM a Room Owner (marked with a #) in the room.</p>`;
@@ -803,7 +792,7 @@ let commands = {
 				}
 			}
 			if (Monitor.countTickets(user.latestIp)) return this.popupReply(`Due to high load, you are limited to creating ${Punishments.sharedIps.has(user.latestIp) ? `50` : `5`} tickets every hour.`);
-			if (!['PM Harassment', 'Battle Harassment', 'Inappropriate Content', 'Inappropriate Username', 'Inappropriate Pokemon Nicknames', 'Timerstalling', 'Room Owner Complaint', 'Global Staff Complaint', 'Appeal', 'IP-Appeal', 'Battle Ban Appeal', 'ISP-Appeal', 'Public Room Assistance Request', 'Other'].includes(target)) return this.parse('/helpticket');
+			if (!['PM Harassment', 'Battle Harassment', 'Inappropriate Content', 'Inappropriate Username', 'Inappropriate Pokemon Nicknames', 'Room Owner Complaint', 'Global Staff Complaint', 'Appeal', 'IP-Appeal', 'Battle Ban Appeal', 'ISP-Appeal', 'Public Room Assistance Request', 'Other'].includes(target)) return this.parse('/helpticket');
 			let upper = false;
 			if (['Room Owner Complaint', 'Global Staff Complaint'].includes(target)) upper = true;
 			ticket = {
@@ -820,7 +809,6 @@ let commands = {
 			const contexts = {
 				'Battle Harassment': 'Please post a link or replay in chat so global staff can check immediately after they join.',
 				'Inappropriate Pokemon Nicknames': 'Please post a link or replay in chat so global staff can check immediately after they join.',
-				'Timerstalling': 'Please post a link or replay in chat so global staff can check immediately after they join.',
 			};
 			/** @type {{[k: string]: string}} */
 			const staffContexts = {
