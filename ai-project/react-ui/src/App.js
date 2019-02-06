@@ -54,11 +54,16 @@ class App extends React.Component {
   };
 
   componentDidMount() {
+    this.timer = setInterval(()=> this.getItems(), 1000);
+  };
+
+  getItems = () => {
     fetch("http://localhost:8081/output")
       .then(res => res.json())
       .then(
         (result) => {
-          console.log(result["output"]);
+          if(result["output"] != "")
+            console.log(result["output"]);
           this.setState({
             outputData: result,
           });
@@ -70,8 +75,7 @@ class App extends React.Component {
           });
         }
       )
-  };
-
+  }
 
   transformData = () => {
     var p1name = "Bob";
@@ -105,7 +109,7 @@ class App extends React.Component {
       var headerData = this.transformData()
     }
 
-    console.log(headerData);
+    // console.log(headerData);
 
     return (
       <Grid container className={classes.root} spacing={16}>
