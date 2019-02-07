@@ -3,8 +3,8 @@ var express = require('express');
 var readline = require('readline'),
     rl = readline.createInterface(process.stdin, process.stdout);
 
+
 var app = express();
-var environmentRoot =  require('path').normalize(__dirname );
 
 stream = new Sim.BattleStream();
 
@@ -54,5 +54,5 @@ var server = app.listen(8081, "127.0.0.1",function () {
    var host = server.address().address
    var port = server.address().port
 
-   console.log("Example app listening at http://%s:%s", host, port)
+   console.log("Example app listening at http://%s:%s\n", host, port)
 })

@@ -1,0 +1,86 @@
+update
+|player|p1|Me|
+sideupdate
+p1
+|request|{"active":[{"moves":[{"move":"Ice Punch","id":"icepunch","pp":24,"maxpp":24,"target":"normal","disabled":false},{"move":"Substitute","id":"substitute","pp":16,"maxpp":16,"target":"self","disabled":false},{"move":"Drain Punch","id":"drainpunch","pp":16,"maxpp":16,"target":"normal","disabled":false},{"move":"Swords Dance","id":"swordsdance","pp":32,"maxpp":32,"target":"self","disabled":false}]}],"side":{"name":"Me","id":"p1","pokemon":[{"ident":"p1: Toxicroak","details":"Toxicroak, L79, M","condition":"261/261","active":true,"stats":{"atk":213,"def":148,"spa":181,"spd":148,"spe":180},"moves":["icepunch","substitute","drainpunch","swordsdance"],"baseAbility":"dryskin","item":"blacksludge","pokeball":"pokeball","ability":"dryskin"},{"ident":"p1: Clefable","details":"Clefable, L75, F","condition":"266/266","active":false,"stats":{"atk":110,"def":153,"spa":186,"spd":179,"spe":134},"moves":["thunderwave","softboiled","moonblast","stealthrock"],"baseAbility":"magicguard","item":"leftovers","pokeball":"pokeball","ability":"magicguard"},{"ident":"p1: Dragalge","details":"Dragalge, L79, M","condition":"232/232","active":false,"stats":{"atk":123,"def":188,"spa":199,"spd":240,"spe":115},"moves":["hiddenpowerfire60","toxicspikes","sludgewave","dracometeor"],"baseAbility":"adaptability","item":"lifeorb","pokeball":"pokeball","ability":"adaptability"},{"ident":"p1: Meganium","details":"Meganium, L83, F","condition":"268/268","active":false,"stats":{"atk":141,"def":214,"spa":185,"spd":214,"spe":180},"moves":["aromatherapy","synthesis","gigadrain","leechseed"],"baseAbility":"overgrow","item":"leftovers","pokeball":"pokeball","ability":"overgrow"},{"ident":"p1: Alakazam","details":"Alakazam, L75, F","condition":"206/206","active":false,"stats":{"atk":80,"def":111,"spa":246,"spd":186,"spe":224},"moves":["psyshock","focusblast","encore","shadowball"],"baseAbility":"magicguard","item":"alakazite","pokeball":"pokeball","ability":"magicguard"},{"ident":"p1: Unfezant","details":"Unfezant, L83, F","condition":"267/267","active":false,"stats":{"atk":239,"def":180,"spa":156,"spd":139,"spe":202},"moves":["hypnosis","tailwind","nightslash","return"],"baseAbility":"superluck","item":"scopelens","pokeball":"pokeball","ability":"superluck"}]}}
+sideupdate
+p2
+|request|{"active":[{"moves":[{"move":"Ice Beam","id":"icebeam","pp":16,"maxpp":16,"target":"normal","disabled":false},{"move":"Nasty Plot","id":"nastyplot","pp":32,"maxpp":32,"target":"self","disabled":false},{"move":"Focus Blast","id":"focusblast","pp":8,"maxpp":8,"target":"normal","disabled":false},{"move":"Lovely Kiss","id":"lovelykiss","pp":16,"maxpp":16,"target":"normal","disabled":false}]}],"side":{"name":"AI","id":"p2","pokemon":[{"ident":"p2: Jynx","details":"Jynx, L83, F","condition":"243/243","active":true,"stats":{"atk":88,"def":106,"spa":239,"spd":205,"spe":205},"moves":["icebeam","nastyplot","focusblast","lovelykiss"],"baseAbility":"dryskin","item":"focussash","pokeball":"pokeball","ability":"dryskin"},{"ident":"p2: Pelipper","details":"Pelipper, L79, F","condition":"223/223","active":false,"stats":{"atk":84,"def":204,"spa":196,"spd":156,"spe":148},"moves":["hurricane","toxic","scald","roost"],"baseAbility":"drizzle","item":"leftovers","pokeball":"pokeball","ability":"drizzle"},{"ident":"p2: Ariados","details":"Ariados, L83, M","condition":"251/251","active":false,"stats":{"atk":197,"def":164,"spa":147,"spd":164,"spe":114},"moves":["poisonjab","stickyweb","toxicspikes","megahorn"],"baseAbility":"insomnia","item":"blacksludge","pokeball":"pokeball","ability":"insomnia"},{"ident":"p2: Giratina","details":"Giratina-Origin, L73","condition":"339/339","active":false,"stats":{"atk":218,"def":188,"spa":218,"spd":188,"spe":174},"moves":["defog","shadowball","shadowsneak","dragontail"],"baseAbility":"levitate","item":"griseousorb","pokeball":"pokeball","ability":"levitate"},{"ident":"p2: Mothim","details":"Mothim, L83, M","condition":"251/251","active":false,"stats":{"atk":204,"def":131,"spa":204,"spd":131,"spe":157},"moves":["uturn","gigadrain","hiddenpowerground60","airslash"],"baseAbility":"tintedlens","item":"choicescarf","pokeball":"pokeball","ability":"tintedlens"},{"ident":"p2: Magearna","details":"Magearna, L75","condition":"244/244","active":false,"stats":{"atk":186,"def":216,"spa":239,"spd":216,"spe":141},"moves":["ironhead","shiftgear","thunderbolt","aurasphere"],"baseAbility":"soulheart","item":"leftovers","pokeball":"pokeball","ability":"soulheart"}]}}
+update
+|player|p2|AI|
+|teamsize|p1|6
+|teamsize|p2|6
+|gametype|singles
+|gen|7
+|tier|[Gen 7] Random Battle
+|split
+|seed|
+|seed|
+|seed|
+|seed|35163,37485,59495,29906
+|rule|Sleep Clause Mod: Limit one foe put to sleep
+|rule|HP Percentage Mod: HP is shown in percentages
+|
+|start
+|split
+|switch|p1a: Toxicroak|Toxicroak, L79, M|100/100
+|switch|p1a: Toxicroak|Toxicroak, L79, M|261/261
+|switch|p1a: Toxicroak|Toxicroak, L79, M|100/100
+|switch|p1a: Toxicroak|Toxicroak, L79, M|261/261
+|split
+|switch|p2a: Jynx|Jynx, L83, F|100/100
+|switch|p2a: Jynx|Jynx, L83, F|100/100
+|switch|p2a: Jynx|Jynx, L83, F|243/243
+|switch|p2a: Jynx|Jynx, L83, F|243/243
+|turn|1
+sideupdate
+p1
+|request|{"active":[{"moves":[{"move":"Ice Punch","id":"icepunch","pp":24,"maxpp":24,"target":"normal","disabled":false},{"move":"Substitute","id":"substitute","pp":15,"maxpp":16,"target":"self","disabled":false},{"move":"Drain Punch","id":"drainpunch","pp":16,"maxpp":16,"target":"normal","disabled":false},{"move":"Swords Dance","id":"swordsdance","pp":32,"maxpp":32,"target":"self","disabled":false}]}],"side":{"name":"Me","id":"p1","pokemon":[{"ident":"p1: Toxicroak","details":"Toxicroak, L79, M","condition":"212/261","active":true,"stats":{"atk":213,"def":148,"spa":181,"spd":148,"spe":180},"moves":["icepunch","substitute","drainpunch","swordsdance"],"baseAbility":"dryskin","item":"blacksludge","pokeball":"pokeball","ability":"dryskin"},{"ident":"p1: Clefable","details":"Clefable, L75, F","condition":"266/266","active":false,"stats":{"atk":110,"def":153,"spa":186,"spd":179,"spe":134},"moves":["thunderwave","softboiled","moonblast","stealthrock"],"baseAbility":"magicguard","item":"leftovers","pokeball":"pokeball","ability":"magicguard"},{"ident":"p1: Dragalge","details":"Dragalge, L79, M","condition":"232/232","active":false,"stats":{"atk":123,"def":188,"spa":199,"spd":240,"spe":115},"moves":["hiddenpowerfire60","toxicspikes","sludgewave","dracometeor"],"baseAbility":"adaptability","item":"lifeorb","pokeball":"pokeball","ability":"adaptability"},{"ident":"p1: Meganium","details":"Meganium, L83, F","condition":"268/268","active":false,"stats":{"atk":141,"def":214,"spa":185,"spd":214,"spe":180},"moves":["aromatherapy","synthesis","gigadrain","leechseed"],"baseAbility":"overgrow","item":"leftovers","pokeball":"pokeball","ability":"overgrow"},{"ident":"p1: Alakazam","details":"Alakazam, L75, F","condition":"206/206","active":false,"stats":{"atk":80,"def":111,"spa":246,"spd":186,"spe":224},"moves":["psyshock","focusblast","encore","shadowball"],"baseAbility":"magicguard","item":"alakazite","pokeball":"pokeball","ability":"magicguard"},{"ident":"p1: Unfezant","details":"Unfezant, L83, F","condition":"267/267","active":false,"stats":{"atk":239,"def":180,"spa":156,"spd":139,"spe":202},"moves":["hypnosis","tailwind","nightslash","return"],"baseAbility":"superluck","item":"scopelens","pokeball":"pokeball","ability":"superluck"}]}}
+sideupdate
+p2
+|request|{"active":[{"moves":[{"move":"Ice Beam","id":"icebeam","pp":16,"maxpp":16,"target":"normal","disabled":false},{"move":"Nasty Plot","id":"nastyplot","pp":31,"maxpp":32,"target":"self","disabled":false},{"move":"Focus Blast","id":"focusblast","pp":8,"maxpp":8,"target":"normal","disabled":false},{"move":"Lovely Kiss","id":"lovelykiss","pp":16,"maxpp":16,"target":"normal","disabled":false}]}],"side":{"name":"AI","id":"p2","pokemon":[{"ident":"p2: Jynx","details":"Jynx, L83, F","condition":"243/243","active":true,"stats":{"atk":88,"def":106,"spa":239,"spd":205,"spe":205},"moves":["icebeam","nastyplot","focusblast","lovelykiss"],"baseAbility":"dryskin","item":"focussash","pokeball":"pokeball","ability":"dryskin"},{"ident":"p2: Pelipper","details":"Pelipper, L79, F","condition":"223/223","active":false,"stats":{"atk":84,"def":204,"spa":196,"spd":156,"spe":148},"moves":["hurricane","toxic","scald","roost"],"baseAbility":"drizzle","item":"leftovers","pokeball":"pokeball","ability":"drizzle"},{"ident":"p2: Ariados","details":"Ariados, L83, M","condition":"251/251","active":false,"stats":{"atk":197,"def":164,"spa":147,"spd":164,"spe":114},"moves":["poisonjab","stickyweb","toxicspikes","megahorn"],"baseAbility":"insomnia","item":"blacksludge","pokeball":"pokeball","ability":"insomnia"},{"ident":"p2: Giratina","details":"Giratina-Origin, L73","condition":"339/339","active":false,"stats":{"atk":218,"def":188,"spa":218,"spd":188,"spe":174},"moves":["defog","shadowball","shadowsneak","dragontail"],"baseAbility":"levitate","item":"griseousorb","pokeball":"pokeball","ability":"levitate"},{"ident":"p2: Mothim","details":"Mothim, L83, M","condition":"251/251","active":false,"stats":{"atk":204,"def":131,"spa":204,"spd":131,"spe":157},"moves":["uturn","gigadrain","hiddenpowerground60","airslash"],"baseAbility":"tintedlens","item":"choicescarf","pokeball":"pokeball","ability":"tintedlens"},{"ident":"p2: Magearna","details":"Magearna, L75","condition":"244/244","active":false,"stats":{"atk":186,"def":216,"spa":239,"spd":216,"spe":141},"moves":["ironhead","shiftgear","thunderbolt","aurasphere"],"baseAbility":"soulheart","item":"leftovers","pokeball":"pokeball","ability":"soulheart"}]}}
+update
+|
+|move|p2a: Jynx|Nasty Plot|p2a: Jynx
+|-boost|p2a: Jynx|spa|2
+|move|p1a: Toxicroak|Substitute|p1a: Toxicroak
+|-start|p1a: Toxicroak|Substitute
+|split
+|-damage|p1a: Toxicroak|76/100
+|-damage|p1a: Toxicroak|196/261
+|-damage|p1a: Toxicroak|76/100
+|-damage|p1a: Toxicroak|196/261
+|
+|split
+|-heal|p1a: Toxicroak|82/100|[from] item: Black Sludge
+|-heal|p1a: Toxicroak|212/261|[from] item: Black Sludge
+|-heal|p1a: Toxicroak|82/100|[from] item: Black Sludge
+|-heal|p1a: Toxicroak|212/261|[from] item: Black Sludge
+|upkeep
+|turn|2
+sideupdate
+p1
+|request|{"active":[{"moves":[{"move":"Ice Punch","id":"icepunch","pp":24,"maxpp":24,"target":"normal","disabled":false},{"move":"Substitute","id":"substitute","pp":14,"maxpp":16,"target":"self","disabled":false},{"move":"Drain Punch","id":"drainpunch","pp":16,"maxpp":16,"target":"normal","disabled":false},{"move":"Swords Dance","id":"swordsdance","pp":32,"maxpp":32,"target":"self","disabled":false}]}],"side":{"name":"Me","id":"p1","pokemon":[{"ident":"p1: Toxicroak","details":"Toxicroak, L79, M","condition":"163/261","active":true,"stats":{"atk":213,"def":148,"spa":181,"spd":148,"spe":180},"moves":["icepunch","substitute","drainpunch","swordsdance"],"baseAbility":"dryskin","item":"blacksludge","pokeball":"pokeball","ability":"dryskin"},{"ident":"p1: Clefable","details":"Clefable, L75, F","condition":"266/266","active":false,"stats":{"atk":110,"def":153,"spa":186,"spd":179,"spe":134},"moves":["thunderwave","softboiled","moonblast","stealthrock"],"baseAbility":"magicguard","item":"leftovers","pokeball":"pokeball","ability":"magicguard"},{"ident":"p1: Dragalge","details":"Dragalge, L79, M","condition":"232/232","active":false,"stats":{"atk":123,"def":188,"spa":199,"spd":240,"spe":115},"moves":["hiddenpowerfire60","toxicspikes","sludgewave","dracometeor"],"baseAbility":"adaptability","item":"lifeorb","pokeball":"pokeball","ability":"adaptability"},{"ident":"p1: Meganium","details":"Meganium, L83, F","condition":"268/268","active":false,"stats":{"atk":141,"def":214,"spa":185,"spd":214,"spe":180},"moves":["aromatherapy","synthesis","gigadrain","leechseed"],"baseAbility":"overgrow","item":"leftovers","pokeball":"pokeball","ability":"overgrow"},{"ident":"p1: Alakazam","details":"Alakazam, L75, F","condition":"206/206","active":false,"stats":{"atk":80,"def":111,"spa":246,"spd":186,"spe":224},"moves":["psyshock","focusblast","encore","shadowball"],"baseAbility":"magicguard","item":"alakazite","pokeball":"pokeball","ability":"magicguard"},{"ident":"p1: Unfezant","details":"Unfezant, L83, F","condition":"267/267","active":false,"stats":{"atk":239,"def":180,"spa":156,"spd":139,"spe":202},"moves":["hypnosis","tailwind","nightslash","return"],"baseAbility":"superluck","item":"scopelens","pokeball":"pokeball","ability":"superluck"}]}}
+sideupdate
+p2
+|request|{"active":[{"moves":[{"move":"Ice Beam","id":"icebeam","pp":16,"maxpp":16,"target":"normal","disabled":false},{"move":"Nasty Plot","id":"nastyplot","pp":31,"maxpp":32,"target":"self","disabled":false},{"move":"Focus Blast","id":"focusblast","pp":7,"maxpp":8,"target":"normal","disabled":false},{"move":"Lovely Kiss","id":"lovelykiss","pp":16,"maxpp":16,"target":"normal","disabled":false}]}],"side":{"name":"AI","id":"p2","pokemon":[{"ident":"p2: Jynx","details":"Jynx, L83, F","condition":"243/243","active":true,"stats":{"atk":88,"def":106,"spa":239,"spd":205,"spe":205},"moves":["icebeam","nastyplot","focusblast","lovelykiss"],"baseAbility":"dryskin","item":"focussash","pokeball":"pokeball","ability":"dryskin"},{"ident":"p2: Pelipper","details":"Pelipper, L79, F","condition":"223/223","active":false,"stats":{"atk":84,"def":204,"spa":196,"spd":156,"spe":148},"moves":["hurricane","toxic","scald","roost"],"baseAbility":"drizzle","item":"leftovers","pokeball":"pokeball","ability":"drizzle"},{"ident":"p2: Ariados","details":"Ariados, L83, M","condition":"251/251","active":false,"stats":{"atk":197,"def":164,"spa":147,"spd":164,"spe":114},"moves":["poisonjab","stickyweb","toxicspikes","megahorn"],"baseAbility":"insomnia","item":"blacksludge","pokeball":"pokeball","ability":"insomnia"},{"ident":"p2: Giratina","details":"Giratina-Origin, L73","condition":"339/339","active":false,"stats":{"atk":218,"def":188,"spa":218,"spd":188,"spe":174},"moves":["defog","shadowball","shadowsneak","dragontail"],"baseAbility":"levitate","item":"griseousorb","pokeball":"pokeball","ability":"levitate"},{"ident":"p2: Mothim","details":"Mothim, L83, M","condition":"251/251","active":false,"stats":{"atk":204,"def":131,"spa":204,"spd":131,"spe":157},"moves":["uturn","gigadrain","hiddenpowerground60","airslash"],"baseAbility":"tintedlens","item":"choicescarf","pokeball":"pokeball","ability":"tintedlens"},{"ident":"p2: Magearna","details":"Magearna, L75","condition":"244/244","active":false,"stats":{"atk":186,"def":216,"spa":239,"spd":216,"spe":141},"moves":["ironhead","shiftgear","thunderbolt","aurasphere"],"baseAbility":"soulheart","item":"leftovers","pokeball":"pokeball","ability":"soulheart"}]}}
+update
+|
+|move|p2a: Jynx|Focus Blast|p1a: Toxicroak
+|-resisted|p1a: Toxicroak
+|-end|p1a: Toxicroak|Substitute
+|move|p1a: Toxicroak|Substitute|p1a: Toxicroak
+|-start|p1a: Toxicroak|Substitute
+|split
+|-damage|p1a: Toxicroak|57/100
+|-damage|p1a: Toxicroak|147/261
+|-damage|p1a: Toxicroak|57/100
+|-damage|p1a: Toxicroak|147/261
+|
+|split
+|-heal|p1a: Toxicroak|63/100|[from] item: Black Sludge
+|-heal|p1a: Toxicroak|163/261|[from] item: Black Sludge
+|-heal|p1a: Toxicroak|63/100|[from] item: Black Sludge
+|-heal|p1a: Toxicroak|163/261|[from] item: Black Sludge
+|upkeep
+|turn|3
