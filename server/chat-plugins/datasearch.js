@@ -842,6 +842,15 @@ function runMovesearch(target, cmd, canAll, message) {
 				continue;
 			}
 
+			if (target === 'recoil') {
+				if (!orGroup.recoil) {
+					orGroup.recoil = true;
+				} else if ((orGroup.recoil && isNotSearch) || (orGroup.recoil === false && !isNotSearch)) {
+					return {reply: 'A search cannot both exclude and include recoil moves.'};
+				}
+				continue;
+			}
+
 			if (target.substr(0, 6) === 'random' && cmd === 'randmove') {
 				//validation for this is in the /randmove command
 				randomOutput = parseInt(target.substr(6));
@@ -1084,6 +1093,10 @@ function runMovesearch(target, cmd, canAll, message) {
 					matched = true;
 					break;
 				}
+			}
+			if (matched) continue;
+			if (alts.recoil) {
+				if (dex[move].recoil) matched = true;
 			}
 			if (matched) continue;
 			for (let prop in alts.property) {
