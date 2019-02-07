@@ -50,9 +50,9 @@
 try {
 	// I've gotten enough reports by people who don't use the launch
 	// script that this is worth repeating here
-	eval('{ let a = async () => {}; }');
+	RegExp("\\p{Emoji}", "u");
 } catch (e) {
-	throw new Error("We require Node.js version 8 or later; you're using " + process.version);
+	throw new Error("We require Node.js version 10 or later; you're using " + process.version);
 }
 try {
 	require.resolve('sockjs');

@@ -11,7 +11,7 @@ true /*
 if nodepath="$(command -v node || command -v nodejs)"; then
 	exec "$nodepath" "--trace-warnings" "$0" "$@"
 fi
-echo "We require Node.js version 8 or later; Node.js not found"
+echo "We require Node.js version 10 or later; Node.js not found"
 exit 1
 */;
 
@@ -19,12 +19,12 @@ var child_process = require('child_process');
 var fs = require('fs');
 var path = require('path');
 
-// # Make sure we're Node 8+
+// # Make sure we're Node 10+
 
 try {
-	eval('{ let a = async () => {}; }');
+	RegExp("\\p{Emoji}", "u");
 } catch (e) {
-	console.log("We require Node.js version 8 or later; you're using " + process.version);
+	console.log("We require Node.js version 10 or later; you're using " + process.version);
 	process.exit(1);
 }
 
