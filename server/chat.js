@@ -349,6 +349,10 @@ class CommandContext {
 			}
 		}
 
+		if (this.room && this.room.game && this.room.game.onLogMessage) {
+			this.room.game.onLogMessage(message, this.user);
+		}
+
 		this.update();
 
 		return message;
