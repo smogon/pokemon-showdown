@@ -38,6 +38,7 @@
  * @typedef {Object} MafiaIDEAModule
  * @property {MafiaIDEAdata?} data
  * @property {NodeJS.Timer?} timer
+ * @property {boolean} discardsHidden
  * @property {string} discardsHtml
  * @property {string[]} waitingPick
  */
@@ -252,6 +253,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.IDEA = {
 			data: null,
 			timer: null,
+			discardsHidden: false,
 			discardsHtml: '',
 			waitingPick: [],
 		};
@@ -494,9 +496,10 @@ class MafiaTracker extends Rooms.RoomGame {
 
 	/**
 	 * @param {User} user
+	 * @param {boolean?} night
 	 * @return {void}
 	 */
-	start(user) {
+	start(user, night) {
 		if (!user) return;
 		if (this.phase !== 'locked' && this.phase !== 'IDEAlocked') {
 			if (this.phase === 'signups') return user.sendTo(this.room, `You need to close the signups first.`);
@@ -516,8 +519,12 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.sendRoom(`The game of ${this.title} is starting!`, {declare: true});
 		// MafiaTracker#played gets set in distributeRoles
 		this.distributeRoles();
-		this.day(null, true);
-		if (this.IDEA.data) this.room.add(`|html|<div class="infobox"><details><summary>IDEA discards:</summary>${this.IDEA.discardsHtml}</details></div>`).update();
+		if (night) {
+			this.night(false, true);
+		} else {
+			this.day(null, true);
+		}
+		if (this.IDEA.data && !this.IDEA.discardsHidden) this.room.add(`|html|<div class="infobox"><details><summary>IDEA discards:</summary>${this.IDEA.discardsHtml}</details></div>`).update();
 	}
 
 	/**
@@ -583,10 +590,11 @@ class MafiaTracker extends Rooms.RoomGame {
 
 	/**
 	 * @param {boolean} early
+	 * @param {boolean} initial
 	 * @return {void}
 	 */
-	night(early = false) {
-		if (this.phase !== 'day') return;
+	night(early = false, initial = false) {
+		if (this.phase !== 'day' && !initial) return;
 		if (this.timer) this.setDeadline(0, true);
 		this.phase = 'night';
 		for (const hostid of [...this.cohosts, this.hostid]) {
@@ -596,7 +604,8 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.sendRoom(`Night ${this.dayNum}. PM the host your action, or idle.`, {declare: true});
 		const hasPlurality = this.getPlurality();
 		if (!early && hasPlurality) this.sendRoom(`Plurality is on ${this.players[hasPlurality] ? this.players[hasPlurality].name : 'No Lynch'}`);
-		if (!early) this.sendRoom(`|raw|<div class="infobox">${this.lynchBox()}</div>`);
+		if (!early && !initial) this.sendRoom(`|raw|<div class="infobox">${this.lynchBox()}</div>`);
+		if (initial) this.hammerCount = Math.floor(Object.keys(this.players).length / 2) + 1;
 		this.updatePlayers();
 	}
 
@@ -1623,7 +1632,7 @@ const pages = {
 		}
 		if (game.IDEA.data) {
 			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">${game.IDEA.data.name} information</summary>`;
-			if (game.IDEA.discardsHtml) buf += `<details><summary class="button" style="text-align:left; display:inline-block">Discards:</summary><p>${game.IDEA.discardsHtml}</p></details>`;
+			if (game.IDEA.discardsHtml && (!game.IDEA.discardsHidden || isHost)) buf += `<details><summary class="button" style="text-align:left; display:inline-block">Discards:</summary><p>${game.IDEA.discardsHtml}</p></details>`;
 			buf += `<details><summary class="button" style="text-align:left; display:inline-block">Role list</summary><p>${game.IDEA.data.roles.join('<br />')}</p></details>`;
 			buf += `</details></p>`;
 		} else {
@@ -2113,17 +2122,38 @@ const commands = {
 		},
 		idearerollhelp: [`/mafia ideareroll - rerolls the roles for the current IDEA module. Requires host % @ * # & ~`],
 
+		discards: 'ideadiscards',
 		ideadiscards: function (target, room, user) {
 			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (room.game);
 			if (!game.IDEA.data) return this.errorReply(`There is no IDEA module in the mafia game.`);
+			if (target) {
+				if (game.hostid !== user.userid && !game.cohosts.includes(user.userid) && !this.can('mute', null, room)) return;
+				if (this.meansNo(target)) {
+					if (game.IDEA.discardsHidden) return this.errorReply(`IDEA discards are already hidden.`);
+					game.IDEA.discardsHidden = true;
+				} else if (this.meansYes(target)) {
+					if (!game.IDEA.discardsHidden) return this.errorReply(`IDEA discards are already visible.`);
+					game.IDEA.discardsHidden = false;
+				} else {
+					return this.parse('/help mafia ideadiscards');
+				}
+				return this.sendReply(`IDEA discards are now ${game.IDEA.discardsHidden ? 'hidden' : 'visible'}.`);
+			}
+			if (game.IDEA.discardsHidden) return this.errorReply(`Discards are not visible.`);
 			if (!game.IDEA.discardsHtml) return this.errorReply(`The IDEA module does not have finalised discards yet.`);
 			if (!this.runBroadcast()) return;
 			this.sendReplyBox(`<details><summary>IDEA discards:</summary>${game.IDEA.discardsHtml}</details>`);
 		},
+		ideadiscardshelp: [
+			`/mafia ideadiscards - shows the discarded roles`,
+			`/mafia ideadiscards off - hides discards from the players. Requires host % @ * # & ~`,
+			`/mafia ideadiscards on - shows discards to the players. Requires host % @ * # & ~`,
+		],
 
 		'!start': true,
-		start: function (target, room, user) {
+		nightstart: 'start',
+		start: function (target, room, user, connection, cmd) {
 			let targetRoom /** @type {ChatRoom?} */ = (Rooms(target));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
@@ -2132,7 +2162,13 @@ const commands = {
 			if (!targetRoom.game || targetRoom.game.gameid !== 'mafia') return user.sendTo(targetRoom, `|error|There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (targetRoom.game);
 			if (game.hostid !== user.userid && !game.cohosts.includes(user.userid) && !this.can('mute', null, room)) return;
-			game.start(user);
+			if (target) {
+				this.parse(`/mafia close`);
+				this.parse(`/mafia setroles ${target}`);
+				this.parse(`/mafia ${cmd}`);
+				return;
+			}
+			game.start(user, cmd === 'nightstart');
 		},
 		starthelp: [`/mafia start - Start the game of mafia. Signups must be closed. Requires host % @ * # & ~`],
 
@@ -3020,7 +3056,6 @@ const commands = {
 			`/mafia sub in - Request to sub into the game, or cancel a request to sub out.`,
 			`/mafia sub out - Request to sub out of the game, or cancel a request to sub in.`,
 			`/mafia spectate - Spectate the game of mafia.`,
-			`/mafia ideadiscards - Shows the discarded roles list for an IDEA module.`,
 			`/mafia lynches - Display the current lynch count, and whos lynching who.`,
 			`/mafia players - Display the current list of players, will highlight players.`,
 			`/mafia [rl|orl] - Display the role list or the original role list for the current game.`,
@@ -3041,7 +3076,6 @@ const commands = {
 			`/mafia deadline - View the deadline for the current game.`,
 			`/mafia sub in - Request to sub into the game, or cancel a request to sub out.`,
 			`/mafia sub out - Request to sub out of the game, or cancel a request to sub in.`,
-			`/mafia ideapick [selection], [role] - Selects a role from an IDEA module`,
 		].join('<br/>');
 		buf += `</details><details><summary class="button">Host Commands</summary>`;
 		buf += [
@@ -3054,10 +3088,6 @@ const commands = {
 			`/mafia [enablenl|disablenl] - Allows or disallows players abstain from lynching. Requires host % @ # & ~`,
 			`/mafia setroles [comma seperated roles] - Set the roles for a game of mafia. You need to provide one role per player. Requires host % @ # & ~`,
 			`/mafia forcesetroles [comma seperated roles] - Forcibly set the roles for a game of mafia. No role PM information or alignment will be set. Requires host % @ # & ~`,
-			`/mafia idea [idea] - starts an IDEA module. Requires + % @ * # & ~, voices can only start for themselves`,
-			`/mafia ideareroll - rerolls the current IDEA module. Requires host % @ * # & ~`,
-			`/mafia customidea choices, picks (new line here, shift+enter)`,
-			`(comma or newline separated rolelist) - Starts an IDEA module with custom roles. Requires % @ # & ~`,
 			`/mafia start - Start the game of mafia. Signups must be closed. Requires host % @ * # & ~`,
 			`/mafia day - Move to the next game day. Requires host % @ * # & ~`,
 			`/mafia night - Move to the next game night. Requires host % @ * # & ~`,
@@ -3084,6 +3114,19 @@ const commands = {
 			`/mafia playerroles - View all the player's roles in chat. Requires host`,
 			`/mafia end - End the current game of mafia. Requires host % @ * # & ~`,
 		].join('<br/>');
+		buf += `</details><details><summary class="button">IDEA Module Commands</summary>`;
+		buf += [
+			`<br/><strong>Commands for using IDEA modules</strong><br/>`,
+			`/mafia idea [idea] - starts the IDEA module [idea]. Requires + % @ * # & ~, voices can only start for themselves`,
+			`/mafia ideareroll - rerolls the IDEA module. Requires host % @ * # & ~`,
+			`/mafia ideapick [selection], [role] - selects a role`,
+			`/mafia ideadiscards - shows the discarded roles`,
+			`/mafia ideadiscards off - hides discards from the players. Requires host % @ * # & ~`,
+			`/mafia ideadiscards on - shows discards to the players. Requires host % @ * # & ~`,
+			`/mafia customidea choices, picks (new line here, shift+enter)`,
+			`(comma or newline separated rolelist) - Starts an IDEA module with custom roles. Requires % @ # & ~`,
+		].join('<br/>');
+		buf += `</details>`;
 		buf += `</details><details><summary class="button">Mafia Room Specific Commands</summary>`;
 		buf += [
 			`<br/><strong>Commands that are only useable in the Mafia Room</strong>:<br/>`,
