@@ -1096,7 +1096,7 @@ function runMovesearch(target, cmd, canAll, message) {
 			}
 			if (matched) continue;
 			if (alts.recoil) {
-				if (dex[move].recoil) matched = true;
+				if (dex[move].recoil || dex[move].hasCustomRecoil || dex[move].mindBlownRecoil) matched = true;
 			}
 			if (matched) continue;
 			for (let prop in alts.property) {
