@@ -1,5 +1,3 @@
-import logo from './logo.svg';
-import './App.css';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -18,38 +16,18 @@ const styles = theme => ({
   paper: {
     height: 300,
     width: 400,
-    ...theme.mixins.gutters(),
-    paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2,
-  },
-  testpaper: {
-    height: 30,
-    width: 125
+    margin: 20,
+    padding: 20
   },
   control: {
     padding: theme.spacing.unit * 2,
+    margin: 20
   },
-  listButton: {
-    padding: 10,
-  }
 });
 
-
-
 class App extends React.Component {
-  constructor(props){
-    super(props);
-    this.myRef  = React.createRef();
-  }
-
-  menuClick = (event, index) => {
-    // console.log(index);
-    this.setState({ selectedIndex: index, anchorEl: null });
-  };
-
   state = {
     spacing: '16',
-    anchorEl: null,
     outputData: null,
   };
 
@@ -62,11 +40,12 @@ class App extends React.Component {
       .then(res => res.json())
       .then(
         (result) => {
-          if(result["output"] != "")
+          if(result["output"] != ""){
             console.log(result["output"]);
-          this.setState({
-            outputData: result,
-          });
+            this.setState({
+              outputData: result["output"],
+            });
+          }
         },
         (error) => {
           this.setState({
@@ -98,39 +77,46 @@ class App extends React.Component {
     return reactData
   }
 
+  handleChange = key => (event, value) => {
+    this.setState({
+      [key]: value,
+    });
+  };
+
   render() {
     const { classes } = this.props;
     const { spacing } = this.state;
-    var tableData = {}
-    // console.log(this.state.outputData);
+
     var headerData = this.transformData()
 
     if(this.state.outputData != null){
       var headerData = this.transformData()
     }
 
-    // console.log(headerData);
-
     return (
       <Grid container className={classes.root} spacing={16}>
-        <Grid item xs={6}
-          style={{
-            paddingTop: "30px",
-            paddingLeft: "30px",
-            position: "relative",
-          }}>
+        <Grid item xs={12}>
           <Grid container className={classes.demo} justify="center" spacing={Number(spacing)}>
             {[0, 1].map(value => (
-              <Grid key={value} item xs={false}>
+              <Grid key={value} item>
                 <Paper className={classes.paper}>
-                    {headerData.header[value]}
-                    {headerData.desc[value].map(function(x, index){
-                      return x;
-                    })}
+                  {headerData.header[value]}
+                  {headerData.desc[value].map(function(x, index){
+                    return x;
+                  })}
                 </Paper>
               </Grid>
             ))}
           </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Paper className={classes.control}>
+            <Grid container>
+              <Grid item>
+                {this.state.outputData}
+              </Grid>
+            </Grid>
+          </Paper>
         </Grid>
       </Grid>
     );
