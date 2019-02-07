@@ -41,7 +41,7 @@ class App extends React.Component {
       .then(
         (result) => {
           if(result["output"] != ""){
-            console.log(result["output"]);
+            // console.log(result["output"]);
             this.setState({
               outputData: result["output"],
             });
@@ -56,7 +56,12 @@ class App extends React.Component {
       )
   }
 
-  transformData = () => {
+  transformData(outputData){
+    var lines = outputData.split("\n")
+    console.log(lines);
+  }
+
+  displayData = () => {
     var p1name = "Bob";
     var reactHeaderData = [<Typography variant="h5" component="h3">
                       Player 1:  {p1name};
@@ -87,10 +92,11 @@ class App extends React.Component {
     const { classes } = this.props;
     const { spacing } = this.state;
 
-    var headerData = this.transformData()
+    var headerData = this.displayData()
 
     if(this.state.outputData != null){
-      var headerData = this.transformData()
+      this.transformData(this.state.outputData)
+      var headerData = this.displayData()
     }
 
     return (
