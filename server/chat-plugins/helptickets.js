@@ -148,7 +148,7 @@ class HelpTicket extends Rooms.RoomGame {
 	 * @param {User} user
 	 */
 	onLogMessage(message, user) {
-		if (!user.isStaff && !this.ticket.active) {
+		if ((!user.isStaff || this.ticket.userid === user.userid) && !this.ticket.active) {
 			this.ticket.active = true;
 			notifyStaff(this.ticket.escalated);
 		}
@@ -340,7 +340,7 @@ function notifyStaff(upper = false) {
 		const escalator = ticket.escalator ? Chat.html` (escalated by ${ticket.escalator}).` : ``;
 		const creator = ticket.claimed ? Chat.html`${ticket.creator}` : Chat.html`<strong>${ticket.creator}</strong>`;
 		const notifying = ticket.claimed ? `` : ` notifying`;
-		const ticketRoom = Rooms(`help-${toId(ticket.creator)}`);
+		const ticketRoom = Rooms(`help-${ticket.userid}`);
 		const ticketGame = /** @type {HelpTicket} */ (ticketRoom.game);
 		if (!ticket.claimed) {
 			hasUnclaimed = true;
