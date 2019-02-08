@@ -488,6 +488,10 @@ class Ladder extends LadderStore {
 			const room = Rooms(roomid);
 			if (!room || !room.battle || !room.battle.players[user.userid]) continue;
 			const battle = /** @type {RoomBattle} */ (room.battle);
+			if (battle.requestCount < 6) {
+				// it's fine as long as it's before turn 5
+				continue;
+			}
 			if (Dex.getFormat(battle.format).allowMultisearch) {
 				continue;
 			}
