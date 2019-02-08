@@ -302,7 +302,7 @@ class Side {
 		}
 		const index = this.getChoiceIndex();
 		if (index >= this.active.length) {
-			return this.emitChoiceError(`Can't move: You do not have a Pokémon in slot ${index + 1}`);
+			return this.emitChoiceError(`Can't move: You sent more choices than unfainted Pokémon.`);
 		}
 		const autoChoose = !moveText;
 		/**@type {Pokemon} */
@@ -481,7 +481,10 @@ class Side {
 		}
 		const index = this.getChoiceIndex();
 		if (index >= this.active.length) {
-			return this.emitChoiceError(`Can't switch: You do not have a Pokémon in slot ${index + 1}`);
+			if (this.currentRequest === 'switch') {
+				return this.emitChoiceError(`Can't switch: You sent more switches than Pokémon that need to switch`);
+			}
+			return this.emitChoiceError(`Can't switch: You sent more choices than unfainted Pokémon`);
 		}
 		const pokemon = this.active[index];
 		const autoChoose = !slotText;
@@ -666,6 +669,10 @@ class Side {
 		this.clearChoice();
 
 		const choiceStrings = (input.startsWith('team ') ? [input] : input.split(','));
+
+		if (choiceStrings.length > this.active.length) {
+			this.emitChoiceError(`Can't make choices: You sent choices for ${choiceStrings.length} Pokémon, but this is a ${this.battle.gameType} game!`);
+		}
 
 		for (let choiceString of choiceStrings) {
 			let choiceType = '';
