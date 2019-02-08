@@ -31,6 +31,11 @@ Installing
 
 (Requires Node.js v10+)
 
+If your distro package manager has an old Node.js version, the simplest way to upgrade is `n` – usually no root necessary:
+
+    npm install --global n
+    n latest
+
 
 Detailed installation instructions
 ------------------------------------------------------------------------
