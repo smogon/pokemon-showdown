@@ -209,7 +209,9 @@ class HelpTicket extends Rooms.RoomGame {
 			if (!['c', 'c:'].includes(entry[0])) continue;
 			if (entry[0] === 'c:') entry.shift(); // c: includes a timestamp and needs an extra shift
 			entry.shift();
-			hoverText.push(entry.join(' '));
+			let user = entry.shift();
+			let message = entry.join('|');
+			hoverText.push(message.startsWith('/log ') ? message.slice(5) : `${user}: ${message}`);
 			if (hoverText.length >= 2) break;
 		}
 		if (!hoverText.length) return `title="The ticket creator has not spoken yet."`;
