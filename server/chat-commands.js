@@ -3014,13 +3014,7 @@ const commands = {
 				global.Tournaments = require('./tournaments');
 				Tournaments.tournaments = runningTournaments;
 				this.sendReply("Tournaments have been hot-patched.");
-			} else if (target === 'battles') {
-				if (lock['battles']) return this.errorReply(`Hot-patching battles has been disabled by ${lock['battles'].by} (${lock['battles'].reason})`);
-				if (lock['formats']) return this.errorReply(`Hot-patching formats has been disabled by ${lock['formats'].by} (${lock['formats'].reason})`);
-
-				Rooms.PM.respawn();
-				this.sendReply("Battles have been hot-patched. Any battles started after now will use the new code; however, in-progress battles will continue to use the old code.");
-			} else if (target === 'formats') {
+			} else if (target === 'formats' || target === 'battles') {
 				if (lock['formats']) return this.errorReply(`Hot-patching formats has been disabled by ${lock['formats'].by} (${lock['formats'].reason})`);
 				if (lock['battles']) return this.errorReply(`Hot-patching battles has been disabled by ${lock['battles'].by} (${lock['battles'].reason})`);
 				if (lock['validator']) return this.errorReply(`Hot-patching the validator has been disabled by ${lock['validator'].by} (${lock['validator'].reason})`);
@@ -3028,7 +3022,7 @@ const commands = {
 				// uncache the sim/dex.js dependency tree
 				Chat.uncacheDir('./sim');
 				Chat.uncacheDir('./data');
-				Chat.uncache('../config/formats');
+				Chat.uncache('./config/formats');
 				// reload sim/dex.js
 				global.Dex = require('../sim/dex');
 				// rebuild the formats list
@@ -3078,7 +3072,6 @@ const commands = {
 		`Hot-patching has greater memory requirements than restarting`,
 		`You can disable various hot-patches with /nohotpatch. For more information on this, see /help nohotpatch`,
 		`/hotpatch chat - reload chat-commands.js and the chat-plugins`,
-		`/hotpatch battles - spawn new simulator processes`,
 		`/hotpatch validator - spawn new team validator processes`,
 		`/hotpatch formats - reload the sim/dex.js tree, rebuild and rebroad the formats list, and spawn new simulator and team validator processes`,
 		`/hotpatch dnsbl - reloads Dnsbl datacenters`,
