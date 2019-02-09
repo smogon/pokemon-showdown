@@ -459,12 +459,12 @@ class Ladder extends LadderStore {
 
 		const roomid = this.needsToMove(user);
 		if (roomid) {
-			connection.popup(`Error: You need to make a move in <<${roomid}>> before you can look for another battle.`);
+			connection.popup(`Error: You need to make a move in <<${roomid}>> before you can look for another battle.\n\n(This restriction doesn't apply in the first five turns of a battle.)`);
 			return;
 		}
 
 		if (roomid === null && Date.now() < user.lastDecision + 10 * SECONDS) {
-			connection.popup(`Error: You need to wait 7 seconds after making a move before you can look for another battle.`);
+			connection.popup(`Error: You need to wait 7 seconds after making a move before you can look for another battle.\n\n(This restriction doesn't apply in the first five turns of a battle.)`);
 			return;
 		}
 
