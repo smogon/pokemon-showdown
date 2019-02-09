@@ -84,7 +84,7 @@ Dnsbl.query = function queryDnsbl(ip) {
  * @return {number}
  */
 Dnsbl.ipToNumber = function (ip) {
-	if (!ip.includes('.')) {
+	if (ip.includes(':') && !ip.includes('.')) {
 		// IPv6
 		return -1;
 	}
