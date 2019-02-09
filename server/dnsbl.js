@@ -84,6 +84,12 @@ Dnsbl.query = function queryDnsbl(ip) {
  * @return {number}
  */
 Dnsbl.ipToNumber = function (ip) {
+	if (!ip.includes('.')) {
+		// IPv6
+		return -1;
+	}
+	if (ip.startsWith('::ffff:')) ip = ip.slice(7);
+	else if (ip.startsWith('::')) ip = ip.slice(2);
 	let num = 0;
 	let parts = ip.split('.');
 	for (const part of parts) {
