@@ -682,7 +682,15 @@ const commands = {
 		if (!this.runBroadcast()) return;
 		target = target.trim();
 		let modName = target.split(',');
-		let mod = Dex.mod(toId(modName[modName.length - 1])) || Dex;
+		let mod = Dex;
+		/** @type {Format?} */
+		let format = null;
+		if (modName[modName.length - 1] && toId(modName[modName.length - 1]) in Dex.dexes) {
+			mod = Dex.mod(toId(modName[modName.length - 1]));
+		} else if (room && room.battle) {
+			format = Dex.getFormat(room.battle.format);
+			mod = Dex.mod(format.mod);
+		}
 		let targets = target.split(/ ?[,/] ?/);
 		/** @type {{types: string[], [k: string]: any}} */
 		let pokemon = mod.getTemplate(targets[0]);
@@ -831,8 +839,14 @@ const commands = {
 
 		let targets = target.split(/[,+]/);
 		let sources = [];
-		let mod = Dex.mod(toId(targets[targets.length - 1])) || Dex;
-
+		let mod = Dex;
+		if (room && room.battle) {
+			let format = Dex.getFormat(room.battle.format);
+			mod = Dex.mod(format.mod);
+		}
+		if (targets[targets.length - 1] && toId(targets[targets.length - 1]) in Dex.dexes) {
+			mod = Dex.mod(toId(targets[targets.length - 1]));
+		}
 		let dispTable = false;
 		let bestCoverage = {};
 		let hasThousandArrows = false;
