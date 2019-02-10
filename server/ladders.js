@@ -463,8 +463,8 @@ class Ladder extends LadderStore {
 			return;
 		}
 
-		if (roomid === null && Date.now() < user.lastDecision + 10 * SECONDS) {
-			connection.popup(`Error: You need to wait 7 seconds after making a move before you can look for another battle.\n\n(This restriction doesn't apply in the first five turns of a battle.)`);
+		if (roomid === null && Date.now() < user.lastDecision + 3 * SECONDS) {
+			connection.popup(`Error: You need to wait until after making a move before you can look for another battle.\n\n(This restriction doesn't apply in the first five turns of a battle.)`);
 			return;
 		}
 
