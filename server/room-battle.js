@@ -1026,7 +1026,7 @@ const StreamProcessManager = require('../lib/process-manager').StreamProcessMana
 
 const PM = new StreamProcessManager(module, () => {
 	const BattleStream = require('../sim/battle-stream').BattleStream;
-	return new BattleStream();
+	return new BattleStream({keepAlive: true});
 });
 
 if (!PM.isParentProcess) {

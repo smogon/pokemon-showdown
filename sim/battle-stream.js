@@ -46,11 +46,12 @@ function splitFirst(str, delimiter, limit = 1) {
 
 class BattleStream extends Streams.ObjectReadWriteStream {
 	/**
-	 * @param {{debug?: boolean}} options
+	 * @param {{debug?: boolean, keepAlive?: boolean}} options
 	 */
-	constructor({debug} = {}) {
+	constructor(options = {}) {
 		super();
-		this.debug = !!debug;
+		this.debug = !!options.debug;
+		this.keepAlive = !!options.keepAlive;
 		/** @type {Battle} */
 		// @ts-ignore
 		this.battle = null;
@@ -65,6 +66,7 @@ class BattleStream extends Streams.ObjectReadWriteStream {
 				if (line.charAt(0) === '>') this._writeLine(line.slice(1));
 			}
 		} catch (err) {
+			if (typeof Monitor === 'undefined') throw err;
 			const battle = this.battle;
 			Monitor.crashlog(err, 'A battle', {
 				message: message,
@@ -97,6 +99,10 @@ class BattleStream extends Streams.ObjectReadWriteStream {
 			options.send = (/** @type {string} */ type, /** @type {any} */ data) => {
 				if (Array.isArray(data)) data = data.join("\n");
 				this.push(`${type}\n${data}`);
+				if (type === 'end' && !this.keepAlive) {
+					this.push(null);
+					this._destroy();
+				}
 			};
 			if (this.debug) options.debug = true;
 			this.battle = new Battle(options);
@@ -115,7 +121,7 @@ class BattleStream extends Streams.ObjectReadWriteStream {
 			break;
 		case 'forcewin':
 		case 'forcetie':
-			this.battle.win(message);
+			this.battle.win(type === 'forcewin' ? message : null);
 			break;
 		case 'tiebreak':
 			this.battle.tiebreak();
@@ -176,6 +182,9 @@ function getPlayerStreams(stream) {
 	let omniscient = new Streams.ObjectReadWriteStream({
 		write(/** @type {string} */ data) {
 			stream.write(data);
+		},
+		end() {
+			stream.end();
 		},
 	});
 	let spectator = new Streams.ObjectReadStream({
