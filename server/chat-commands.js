@@ -2991,7 +2991,7 @@ const commands = {
 
 				const processManagers = require('../lib/process-manager').processManagers;
 				for (let manager of processManagers.slice()) {
-					if (manager.filename.startsWith(FS('chat-plugins').path)) {
+					if (manager.filename.startsWith(FS('server/chat-plugins').path)) {
 						manager.destroy();
 					}
 				}
