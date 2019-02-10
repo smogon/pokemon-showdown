@@ -433,7 +433,8 @@ if (cluster.isMaster) {
 		for (const socket of sockets.values()) {
 			// @ts-ignore
 			if (socket.protocol === 'xhr-streaming' && socket._session && socket._session.recv) {
-				logger.write('Found a ghost connection with protocol xhr-streaming\n');
+				// @ts-ignore
+				logger.write(`Found a ghost connection with protocol xhr-streaming and ready state ${socket._session.readyState}\n`);
 				// @ts-ignore
 				socket._session.recv.didClose();
 			}
@@ -658,9 +659,8 @@ if (cluster.isMaster) {
 				// @ts-ignore
 				socket._session.recv.options.heartbeat_delay + 1000,
 				() => {
-					try {
-						socket.close();
-					} catch (e) {}
+					// @ts-ignore
+					socket._session.recv.didClose();
 				}
 			);
 		}
