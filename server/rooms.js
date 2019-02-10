@@ -1320,9 +1320,13 @@ class BasicChatRoom extends BasicRoom {
 	 * @param {User} user
 	 */
 	onUpdateIdentity(user) {
-		if (user && user.connected && user.named) {
+		if (user && user.connected) {
 			if (!this.users[user.userid]) return false;
-			this.reportJoin('n', user.getIdentity(this.id) + '|' + user.userid);
+			if (user.named) {
+				this.reportJoin('n', user.getIdentity(this.id) + '|' + user.userid);
+			} else {
+				this.reportJoin('l', user.userid);
+			}
 		}
 		return true;
 	}
