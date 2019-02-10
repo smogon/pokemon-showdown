@@ -1285,6 +1285,8 @@ class Battle extends Dex.ModdedDex {
 	}
 
 	tiebreak() {
+		if (this.ended) return false;
+
 		this.inputLog.push(`>tiebreak`);
 		this.add('message', "Time's up! Going to tiebreaker...");
 		const notFainted = this.sides.map(side => (
@@ -1322,23 +1324,25 @@ class Battle extends Dex.ModdedDex {
 		if (tiedSides.length <= 1) {
 			return this.win(tiedSides[0]);
 		}
-		this.tie();
+		return this.tie();
 	}
 
 	/**
 	 * @param {PlayerSlot?} [side]
 	 */
 	forceWin(side = null) {
+		if (this.ended) return false;
+
 		if (side) {
 			this.inputLog.push(`>forcewin ${side}`);
 		} else {
 			this.inputLog.push(`>forcetie`);
 		}
-		this.win(side);
+		return this.win(side);
 	}
 
 	tie() {
-		this.win();
+		return this.win();
 	}
 
 	/**
