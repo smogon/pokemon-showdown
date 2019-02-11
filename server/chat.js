@@ -1532,14 +1532,14 @@ Chat.getDataPokemonHTML = function (template, gen = 7, tier = '') {
 		} else {
 			buf += '<span class="col abilitycol">' + template.abilities['0'] + '</span>';
 		}
-		if (template.abilities['S']) {
-			buf += '<span class="col twoabilitycol' + (template.unreleasedHidden ? ' unreleasedhacol' : '') + '"><em>' + template.abilities['H'] + '<br />' + template.abilities['S'] + '</em></span>';
-		} else if (template.abilities['H']) {
-			buf += '<span class="col abilitycol' + (template.unreleasedHidden ? ' unreleasedhacol' : '') + '"><em>' + template.abilities['H'] + '</em></span>';
-		} else {
-			buf += '<span class="col abilitycol"></span>';
+		buf += '<span class="col ' + ((template.abilities['S'] && template.abilities['H']) ? 'twoabilitycol' : 'abilitycol') + (template.unreleasedHidden ? ' unreleasedhacol' : '') + '"><em>';
+		if (template.abilities['H']) {
+			buf += template.abilities['H'];
 		}
-		buf += '</span>';
+		if (template.abilities['S']) {
+			buf += (template.abilities['H'] ? '<br/>' : '') + template.abilities['S'];
+		}
+		buf += '</em></span></span>';
 	}
 	let bst = 0;
 	for (let i in template.baseStats) {
