@@ -244,7 +244,7 @@ class BattleTimer {
 				addPerTurn -= TICK_TIME;
 			}
 			// after turn 200ish: 10s/turn -> 7s/turn
-			if (this.battle.requestCount > 400 && this.battle.requestCount % 2) {
+			if (this.battle.requestCount > 400 && Math.floor(this.battle.requestCount / 2) % 2) {
 				addPerTurn = 0;
 			}
 		}
