@@ -456,7 +456,8 @@ const pages = {
 				connection.send(buf);
 				return Rooms.RETRY_AFTER_LOGIN;
 			}
-			let buf = `|title|Request Help\n|pagehtml|<div class="pad"><h2>Request help from global staff</h2>`;
+			this.title = 'Request Help';
+			let buf = `<div class="pad"><h2>Request help from global staff</h2>`;
 
 			let banMsg = checkTicketBanned(user);
 			if (banMsg) return connection.popup(banMsg);
@@ -473,7 +474,7 @@ const pages = {
 					if (!helpRoom.auth[user.userid]) helpRoom.auth[user.userid] = '+';
 					connection.popup(`You already have a Help ticket.`);
 					user.joinRoom(`help-${ticket.userid}`);
-					return `|deinit`;
+					return this.close();
 				}
 			}
 
@@ -667,11 +668,9 @@ const pages = {
 		},
 		tickets(query, user, connection) {
 			if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-			let buf = `|title|Ticket List\n`;
-			if (!user.can('lock')) {
-				return buf + `|pagehtml|Access denied`;
-			}
-			buf += `|pagehtml|<div class="pad ladder"><button class="button" name="send" value="/helpticket list" style="float:left"><i class="fa fa-refresh"></i> Refresh</button><br /><br />`;
+			this.title = 'Ticket List';
+			if (!this.can('lock')) return;
+			let buf = `<div class="pad ladder"><button class="button" name="send" value="/helpticket list" style="float:left"><i class="fa fa-refresh"></i> Refresh</button><br /><br />`;
 			buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="5"><h2 style="margin: 5px auto">Help tickets</h1></th></tr>`;
 			buf += `<tr><th>Status</th><th>Creator</th><th>Ticket Type</th><th>Claimed by</th><th>Action</th></tr>`;
 
