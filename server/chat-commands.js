@@ -1664,7 +1664,7 @@ const commands = {
 			});
 		});
 
-		Promise.all(promises).then(ret => {
+		Promise.all(promises).then(() => {
 			connection.autojoins = autojoins.join(',');
 		});
 	},
