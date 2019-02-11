@@ -2095,7 +2095,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	probopass: {
-		randomBattleMoves: ["stealthrock", "thunderwave", "toxic", "flashcannon", "powergem", "voltswitch", "painsplit"],
+		randomBattleMoves: ["stealthrock", "thunderwave", "toxic", "flashcannon", "earthpower", "voltswitch"],
 		randomDoubleBattleMoves: ["stealthrock", "thunderwave", "helpinghand", "earthpower", "powergem", "wideguard", "protect", "voltswitch"],
 		tier: "PU",
 		doublesTier: "Untiered",
