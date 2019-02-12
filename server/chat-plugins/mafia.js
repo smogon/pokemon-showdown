@@ -1777,7 +1777,7 @@ const pages = {
 		const ladder = headers[query[0]];
 		if (!ladder) return this.close();
 		const mafiaRoom = /** @type {ChatRoom?} */ (Rooms('mafia'));
-		if (['hosts', 'plays', 'leavers'].includes(ladder.section) && !user.can('mute', null, mafiaRoom)) return this.close();
+		if (['hosts', 'plays', 'leavers'].includes(ladder.section) && !this.can('mute', null, mafiaRoom)) return;
 		this.title = `Mafia ${ladder.title} (${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()})`;
 		let buf = `<div class="pad ladder">`;
 		buf += `${query[1] === 'prev' ? '' : `<button class="button" name="send" value="/join view-mafialadder-${query[0]}" style="float:left"><i class="fa fa-refresh"></i> Refresh</button> <button class="button" name="send" value="/join view-mafialadder-${query[0]}-prev" style="float:left">View last month's ${ladder.title}</button>`}`;
