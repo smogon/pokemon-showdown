@@ -2158,6 +2158,8 @@ const commands = {
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
+			} else {
+				target = '';
 			}
 			if (!targetRoom.game || targetRoom.game.gameid !== 'mafia') return user.sendTo(targetRoom, `|error|There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (targetRoom.game);
