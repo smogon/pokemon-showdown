@@ -489,7 +489,7 @@ exports.commands = {
 	'!modlog': true,
 	ml: 'modlog',
 	timedmodlog: 'modlog',
-	modlog: function (target, room, user, connection, cmd) {
+	modlog(target, room, user, connection, cmd) {
 		if (!room) room = Rooms('global');
 		let roomid = (room.id === 'staff' ? 'global' : room.id);
 
@@ -530,7 +530,7 @@ exports.commands = {
 		`If you set [roomid] as [public], it searches for [search] in all public rooms' moderator logs, excluding battles. Requires: % @ * # & ~`,
 	],
 
-	battlesearch: function (target, room, user, connection) {
+	battlesearch(target, room, user, connection) {
 		if (!target.trim()) return this.parse('/help battlesearch');
 		if (!this.can('forcewin')) return;
 

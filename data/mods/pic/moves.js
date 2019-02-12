@@ -4,7 +4,7 @@
 exports.BattleMovedex = {
 	"skillswap": {
 		inherit: true,
-		onHit: function (target, source, move) {
+		onHit(target, source, move) {
 			let targetAbility = this.getAbility(target.ability);
 			let sourceAbility = this.getAbility(source.ability);
 			if (target.side === source.side) {

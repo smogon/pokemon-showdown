@@ -89,7 +89,7 @@ exports.pages = pages;
 
 /** @type {ChatCommands} */
 const commands = {
-	removedaily: async function (target, room, user) {
+	async removedaily(target, room, user) {
 		let [key, rest] = target.split(',');
 		key = toId(key);
 		if (!key) return this.parse('/help daily');
@@ -118,7 +118,7 @@ const commands = {
 		}
 	},
 	queuedaily: 'setdaily',
-	setdaily: async function (target, room, user, connection, cmd) {
+	async setdaily(target, room, user, connection, cmd) {
 		let [key, ...rest] = target.split(',');
 		key = toId(key);
 		if (!key) return this.parse('/help daily');
@@ -153,7 +153,7 @@ const commands = {
 
 		saveSpotlights();
 	},
-	daily: async function (target, room, user) {
+	async daily(target, room, user) {
 		let key = toId(target);
 		if (!key) return this.parse('/help daily');
 
@@ -169,7 +169,7 @@ const commands = {
 		this.sendReplyBox(html);
 		room.update();
 	},
-	viewspotlights: function (target, room, user) {
+	viewspotlights(target, room, user) {
 		return this.parse(`/join view-spotlights-${room.id}`);
 	},
 

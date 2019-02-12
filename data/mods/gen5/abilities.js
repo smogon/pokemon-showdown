@@ -5,7 +5,7 @@ let BattleAbilities = {
 	"frisk": {
 		inherit: true,
 		shortDesc: "On switch-in, this Pokemon identifies a random foe's held item.",
-		onStart: function (pokemon) {
+		onStart(pokemon) {
 			let target = pokemon.side.foe.randomActive();
 			if (target && target.item) {
 				this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon);
@@ -21,19 +21,19 @@ let BattleAbilities = {
 		inherit: true,
 		desc: "Prevents other Pokemon from lowering this Pokemon's accuracy stat stage.",
 		shortDesc: "Prevents other Pokemon from lowering this Pokemon's accuracy stat stage.",
-		onModifyMove: function () {},
+		onModifyMove() {},
 	},
 	"oblivious": {
 		inherit: true,
 		desc: "This Pokemon cannot be infatuated. Gaining this Ability while infatuated cures it.",
 		shortDesc: "This Pokemon cannot be infatuated. Gaining this Ability while infatuated cures it.",
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.volatiles['attract']) {
 				pokemon.removeVolatile('attract');
 				this.add('-end', pokemon, 'move: Attract', '[from] ability: Oblivious');
 			}
 		},
-		onTryHit: function (pokemon, target, move) {
+		onTryHit(pokemon, target, move) {
 			if (move.id === 'captivate') {
 				this.add('-immune', pokemon, '[from] Oblivious');
 				return null;
@@ -44,15 +44,15 @@ let BattleAbilities = {
 	"overcoat": {
 		inherit: true,
 		shortDesc: "This Pokemon is immune to damage from Sandstorm or Hail.",
-		onTryHit: function () {},
+		onTryHit() {},
 	},
 	"sapsipper": {
 		inherit: true,
-		onAllyTryHitSide: function () {},
+		onAllyTryHitSide() {},
 	},
 	"serenegrace": {
 		inherit: true,
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			if (move.secondaries && move.id !== 'secretpower') {
 				this.debug('doubling secondary chance');
 				for (const secondary of move.secondaries) {
@@ -64,7 +64,7 @@ let BattleAbilities = {
 	"soundproof": {
 		inherit: true,
 		shortDesc: "This Pokemon is immune to sound-based moves, except Heal Bell.",
-		onAllyTryHitSide: function () {},
+		onAllyTryHitSide() {},
 	},
 };
 

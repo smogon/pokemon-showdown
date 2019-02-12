@@ -4,12 +4,12 @@
 let BattleItems = {
 	blueorb: {
 		inherit: true,
-		onSwitchIn: function (pokemon) {
+		onSwitchIn(pokemon) {
 			if (pokemon.isActive && !pokemon.template.isPrimal) {
 				this.insertQueue({pokemon: pokemon, choice: 'runPrimal'});
 			}
 		},
-		onPrimal: function (pokemon) {
+		onPrimal(pokemon) {
 			/**@type {Template} */
 			// @ts-ignore
 			let template = this.getMixedTemplate(pokemon.originalSpecies, 'Kyogre-Primal');
@@ -21,18 +21,18 @@ let BattleItems = {
 				this.add('-start', pokemon, 'Blue Orb', '[silent]');
 			}
 		},
-		onTakeItem: function (item) {
+		onTakeItem(item) {
 			return false;
 		},
 	},
 	redorb: {
 		inherit: true,
-		onSwitchIn: function (pokemon) {
+		onSwitchIn(pokemon) {
 			if (pokemon.isActive && !pokemon.template.isPrimal) {
 				this.insertQueue({pokemon: pokemon, choice: 'runPrimal'});
 			}
 		},
-		onPrimal: function (pokemon) {
+		onPrimal(pokemon) {
 			/**@type {Template} */
 			// @ts-ignore
 			let template = this.getMixedTemplate(pokemon.originalSpecies, 'Groudon-Primal');
@@ -54,7 +54,7 @@ let BattleItems = {
 				}
 			}
 		},
-		onTakeItem: function (item) {
+		onTakeItem(item) {
 			return false;
 		},
 	},

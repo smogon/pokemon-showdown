@@ -6,13 +6,13 @@ let BattleAbilities = {
 		inherit: true,
 		desc: "This Pokemon's Normal-type moves become Flying-type moves and have their power multiplied by 1.3. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
 		shortDesc: "This Pokemon's Normal-type moves become Flying type and have 1.3x power.",
-		onBasePower: function (basePower, pokemon, target, move) {
+		onBasePower(basePower, pokemon, target, move) {
 			if (move.aerilateBoosted) return this.chainModify([0x14CD, 0x1000]);
 		},
 	},
 	"aftermath": {
 		inherit: true,
-		onAfterDamage: function (damage, target, source, move) {
+		onAfterDamage(damage, target, source, move) {
 			if (source && source !== target && move && move.flags['contact'] && !target.hp) {
 				this.damage(source.maxhp / 4, source, target, null, true);
 			}
@@ -26,7 +26,7 @@ let BattleAbilities = {
 	"galewings": {
 		inherit: true,
 		shortDesc: "This Pokemon's Flying-type moves have their priority increased by 1.",
-		onModifyPriority: function (priority, pokemon, target, move) {
+		onModifyPriority(priority, pokemon, target, move) {
 			if (move && move.type === 'Flying') return priority + 1;
 		},
 		rating: 4.5,
@@ -38,7 +38,7 @@ let BattleAbilities = {
 	},
 	"ironbarbs": {
 		inherit: true,
-		onAfterDamage: function (damage, target, source, move) {
+		onAfterDamage(damage, target, source, move) {
 			if (source && source !== target && move && move.flags['contact']) {
 				this.damage(source.maxhp / 8, source, target, null, true);
 			}
@@ -46,7 +46,7 @@ let BattleAbilities = {
 	},
 	"liquidooze": {
 		inherit: true,
-		onSourceTryHeal: function (damage, target, source, effect) {
+		onSourceTryHeal(damage, target, source, effect) {
 			this.debug("Heal is occurring: " + target + " <- " + source + " :: " + effect.id);
 			/**@type {{[k: string]: number}} */
 			let canOoze = {drain: 1, leechseed: 1};
@@ -69,7 +69,7 @@ let BattleAbilities = {
 		desc: "This Pokemon's moves are changed to be Normal type. This effect comes before other effects that change a move's type.",
 		shortDesc: "This Pokemon's moves are changed to be Normal type.",
 		onModifyMovePriority: 1,
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			if (move.id !== 'struggle' && this.getMove(move.id).type !== 'Normal') {
 				move.type = 'Normal';
 			}
@@ -80,7 +80,7 @@ let BattleAbilities = {
 		inherit: true,
 		desc: "This Pokemon's damaging moves become multi-hit moves that hit twice. The second hit has its damage halved. Does not affect multi-hit moves or moves that have multiple targets.",
 		shortDesc: "This Pokemon's damaging moves hit twice. The second hit has its damage halved.",
-		onBasePower: function (basePower, pokemon, target, move) {
+		onBasePower(basePower, pokemon, target, move) {
 			if (move.multihitType === 'parentalbond' && move.hit > 1) return this.chainModify(0.5);
 		},
 	},
@@ -88,7 +88,7 @@ let BattleAbilities = {
 		inherit: true,
 		desc: "This Pokemon's Normal-type moves become Fairy-type moves and have their power multiplied by 1.3. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
 		shortDesc: "This Pokemon's Normal-type moves become Fairy type and have 1.3x power.",
-		onBasePower: function (basePower, pokemon, target, move) {
+		onBasePower(basePower, pokemon, target, move) {
 			if (move.pixilateBoosted) return this.chainModify([0x14CD, 0x1000]);
 		},
 	},
@@ -101,13 +101,13 @@ let BattleAbilities = {
 		inherit: true,
 		desc: "This Pokemon's Normal-type moves become Ice-type moves and have their power multiplied by 1.3. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects.",
 		shortDesc: "This Pokemon's Normal-type moves become Ice type and have 1.3x power.",
-		onBasePower: function (basePower, pokemon, target, move) {
+		onBasePower(basePower, pokemon, target, move) {
 			if (move.refrigerateBoosted) return this.chainModify([0x14CD, 0x1000]);
 		},
 	},
 	"roughskin": {
 		inherit: true,
-		onAfterDamage: function (damage, target, source, move) {
+		onAfterDamage(damage, target, source, move) {
 			if (source && source !== target && move && move.flags['contact']) {
 				this.damage(source.maxhp / 8, source, target, null, true);
 			}
@@ -121,7 +121,7 @@ let BattleAbilities = {
 		inherit: true,
 		desc: "If a physical attack hits this Pokemon, its Defense is lowered by 1 stage and its Speed is raised by 1 stage.",
 		shortDesc: "If a physical attack hits this Pokemon, Defense is lowered by 1, Speed is raised by 1.",
-		onAfterDamage: function (damage, target, source, move) {
+		onAfterDamage(damage, target, source, move) {
 			if (move.category === 'Physical') {
 				this.boost({def: -1, spe: 1}, target, target);
 			}

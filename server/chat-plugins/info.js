@@ -21,7 +21,7 @@ const commands = {
 	alt: 'whois',
 	alts: 'whois',
 	whoare: 'whois',
-	whois: function (target, room, user, connection, cmd) {
+	whois(target, room, user, connection, cmd) {
 		if (room && room.id === 'staff' && !this.runBroadcast()) return;
 		if (!room) room = Rooms.global;
 		let targetUser = this.targetUserOrSelf(target, user.group === ' ');
@@ -232,7 +232,7 @@ const commands = {
 
 	'!offlinewhois': true,
 	checkpunishment: 'offlinewhois',
-	offlinewhois: function (target, room, user) {
+	offlinewhois(target, room, user) {
 		if (!user.trusted) {
 			return this.errorReply("/offlinewhois - Access denied.");
 		}
@@ -300,7 +300,7 @@ const commands = {
 	},
 
 	'!host': true,
-	host: function (target, room, user, connection, cmd) {
+	host(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help host');
 		if (!this.can('rangeban')) return;
 		target = target.trim();
@@ -315,7 +315,7 @@ const commands = {
 	searchip: 'ipsearch',
 	ipsearchall: 'ipsearch',
 	hostsearch: 'ipsearch',
-	ipsearch: function (target, room, user, connection, cmd) {
+	ipsearch(target, room, user, connection, cmd) {
 		if (!target.trim()) return this.parse(`/help ipsearch`);
 		if (!this.can('rangeban')) return;
 
@@ -366,7 +366,7 @@ const commands = {
 	},
 	ipsearchhelp: [`/ipsearch [ip|range|host], (room) - Find all users with specified IP, IP range, or host. If a room is provided only users in the room will be shown. Requires: & ~`],
 
-	checkchallenges: function (target, room, user) {
+	checkchallenges(target, room, user) {
 		if (!this.can('ban', null, room)) return false;
 		if (!this.runBroadcast(true)) return;
 		if (!this.broadcasting) {
@@ -411,7 +411,7 @@ const commands = {
 	 *********************************************************/
 
 	unignore: 'ignore',
-	ignore: function (target, room, user) {
+	ignore(target, room, user) {
 		if (!room) this.errorReply(`In PMs, this command can only be used by itself to ignore the person you're talking to: "/${this.cmd}", not "/${this.cmd} ${target}"`);
 		this.errorReply(`You're using a custom client that doesn't support the ignore command.`);
 	},
@@ -425,7 +425,7 @@ const commands = {
 	stats: 'data',
 	dex: 'data',
 	pokedex: 'data',
-	data: function (target, room, user, connection, cmd) {
+	data(target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
 
 		let buffer = '';
@@ -663,7 +663,7 @@ const commands = {
 
 	'!details': true,
 	dt: 'details',
-	details: function (target) {
+	details(target) {
 		if (!target) return this.parse('/help details');
 		this.run('data');
 	},
@@ -677,7 +677,7 @@ const commands = {
 	weaknesses: 'weakness',
 	weak: 'weakness',
 	resist: 'weakness',
-	weakness: function (target, room, user) {
+	weakness(target, room, user) {
 		if (!target) return this.parse('/help weakness');
 		if (!this.runBroadcast()) return;
 		target = target.trim();
@@ -769,7 +769,7 @@ const commands = {
 	eff: 'effectiveness',
 	type: 'effectiveness',
 	matchup: 'effectiveness',
-	effectiveness: function (target, room, user) {
+	effectiveness(target, room, user) {
 		let targets = target.split(/[,/]/).slice(0, 2);
 		if (targets.length !== 2) return this.errorReply("Attacker and defender must be separated with a comma.");
 
@@ -833,7 +833,7 @@ const commands = {
 
 	'!coverage': true,
 	cover: 'coverage',
-	coverage: function (target, room, user) {
+	coverage(target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (!target) return this.parse("/help coverage");
 
@@ -1028,7 +1028,7 @@ const commands = {
 	],
 
 	'!statcalc': true,
-	statcalc: function (target, room, user) {
+	statcalc(target, room, user) {
 		if (!target) return this.parse("/help statcalc");
 		if (!this.runBroadcast()) return;
 
@@ -1290,7 +1290,7 @@ const commands = {
 	 *********************************************************/
 
 	'!uptime': true,
-	uptime: function (target, room, user) {
+	uptime(target, room, user) {
 		if (!this.can('broadcast')) return false;
 		if (!this.runBroadcast()) return;
 		let uptime = process.uptime();
@@ -1307,14 +1307,14 @@ const commands = {
 	},
 
 	'!servertime': true,
-	servertime: function (target, room, user) {
+	servertime(target, room, user) {
 		if (!this.runBroadcast()) return;
 		let servertime = new Date();
 		this.sendReplyBox(`Server time: <b>${servertime.toLocaleString()}</b>`);
 	},
 
 	'!groups': true,
-	groups: function (target, room, user) {
+	groups(target, room, user) {
 		if (!this.runBroadcast()) return;
 		const showRoom = (target !== 'global');
 		const showGlobal = (target !== 'room' && target !== 'rooms');
@@ -1526,7 +1526,7 @@ const commands = {
 	],
 
 	'!punishments': true,
-	punishments: function (target, room, user) {
+	punishments(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			`<strong>Room punishments</strong>:<br />` +
@@ -1552,7 +1552,7 @@ const commands = {
 	repo: 'opensource',
 	repository: 'opensource',
 	git: 'opensource',
-	opensource: function (target, room, user) {
+	opensource(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			`Pok&eacute;mon Showdown is open source:<br />` +
@@ -1569,19 +1569,19 @@ const commands = {
 	],
 
 	'!staff': true,
-	staff: function (target, room, user) {
+	staff(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<a href="https://www.smogon.com/sim/staff_list">Pok&eacute;mon Showdown Staff List</a>`);
 	},
 
 	'!forums': true,
-	forums: function (target, room, user) {
+	forums(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<a href="https://www.smogon.com/forums/forums/209/">Pok&eacute;mon Showdown Forums</a>`);
 	},
 
 	'!privacypolicy': true,
-	privacypolicy: function (target, room, user) {
+	privacypolicy(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			`- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.<br />` +
@@ -1592,7 +1592,7 @@ const commands = {
 	},
 
 	'!suggestions': true,
-	suggestions: function (target, room, user) {
+	suggestions(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<a href="https://www.smogon.com/forums/threads/3534365/">Make a suggestion for Pok&eacute;mon Showdown</a>`);
 	},
@@ -1600,7 +1600,7 @@ const commands = {
 	'!bugs': true,
 	bugreport: 'bugs',
 	bugreports: 'bugs',
-	bugs: function (target, room, user) {
+	bugs(target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (room && room.battle) {
 			this.sendReplyBox(`<center><button name="saveReplay"><i class="fa fa-upload"></i> Save Replay</button> &mdash; <a href="https://www.smogon.com/forums/threads/3520646/">Questions</a> &mdash; <a href="https://www.smogon.com/forums/threads/3634749/">Bug Reports</a></center>`);
@@ -1614,7 +1614,7 @@ const commands = {
 	},
 
 	'!avatars': true,
-	avatars: function (target, room, user) {
+	avatars(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`You can <button name="avatars">change your avatar</button> by clicking on it in the <button name="openOptions"><i class="fa fa-cog"></i> Options</button> menu in the upper right. Custom avatars are only obtainable by staff.`);
 	},
@@ -1625,21 +1625,21 @@ const commands = {
 
 	'!optionsbutton': true,
 	optionbutton: 'optionsbutton',
-	optionsbutton: function (target, room, user) {
+	optionsbutton(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<button name="openOptions" class="button"><i style="font-size: 16px; vertical-align: -1px" class="fa fa-cog"></i> Options</button> (The Sound and Options buttons are at the top right, next to your username)`);
 	},
 	'!soundbutton': true,
 	soundsbutton: 'soundbutton',
 	volumebutton: 'soundbutton',
-	soundbutton: function (target, room, user) {
+	soundbutton(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`<button name="openSounds" class="button"><i style="font-size: 16px; vertical-align: -1px" class="fa fa-volume-up"></i> Sound</button> (The Sound and Options buttons are at the top right, next to your username)`);
 	},
 
 	'!intro': true,
 	introduction: 'intro',
-	intro: function (target, room, user) {
+	intro(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			`New to competitive Pok&eacute;mon?<br />` +
@@ -1657,7 +1657,7 @@ const commands = {
 	'!smogintro': true,
 	mentoring: 'smogintro',
 	smogonintro: 'smogintro',
-	smogintro: function (target, room, user) {
+	smogintro(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			`Welcome to Smogon's official simulator! The <a href="https://www.smogon.com/forums/forums/264">Smogon Info / Intro Hub</a> can help you get integrated into the community.<br />` +
@@ -1670,7 +1670,7 @@ const commands = {
 	calculator: 'calc',
 	damagecalculator: 'calc',
 	damagecalc: 'calc',
-	calc: function (target, room, user) {
+	calc(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			`Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko)<br />` +
@@ -1684,7 +1684,7 @@ const commands = {
 
 	'!cap': true,
 	capintro: 'cap',
-	cap: function (target, room, user) {
+	cap(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			`An introduction to the Create-A-Pok&eacute;mon project:<br />` +
@@ -1700,7 +1700,7 @@ const commands = {
 	],
 
 	'!gennext': true,
-	gennext: function (target, room, user) {
+	gennext(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			"NEXT (also called Gen-NEXT) is a mod that makes changes to the game:<br />" +
@@ -1719,7 +1719,7 @@ const commands = {
 	tiershelp: 'formathelp',
 	formatshelp: 'formathelp',
 	viewbanlist: 'formathelp',
-	formathelp: function (target, room, user, connection, cmd) {
+	formathelp(target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
 		if (!target) {
 			return this.sendReplyBox(
@@ -1822,7 +1822,7 @@ const commands = {
 	},
 
 	'!roomhelp': true,
-	roomhelp: function (target, room, user) {
+	roomhelp(target, room, user) {
 		if (!this.canBroadcast(false, '!htmlbox')) return;
 		if (this.broadcastMessage && !this.can('declare', null, room)) return false;
 
@@ -1871,7 +1871,7 @@ const commands = {
 	},
 
 	'!restarthelp': true,
-	restarthelp: function (target, room, user) {
+	restarthelp(target, room, user) {
 		if (!Rooms.global.lockdown && !this.can('lockdown')) return false;
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
@@ -1884,7 +1884,7 @@ const commands = {
 	},
 
 	'!processes': true,
-	processes: function (target, room, user) {
+	processes(target, room, user) {
 		if (!this.can('lockdown')) return false;
 
 		let buf = `<strong>${process.pid}</strong> - Main<br />`;
@@ -1907,7 +1907,7 @@ const commands = {
 
 	'!rules': true,
 	rule: 'rules',
-	rules: function (target, room, user) {
+	rules(target, room, user) {
 		if (!target) {
 			const languageTable = {
 				portuguese: ['Por favor siga as regras:', 'pages/rules-pt', 'Regras Globais', room ? `Regras da sala ${room.title}` : ``],
@@ -1967,7 +1967,7 @@ const commands = {
 	],
 
 	'!faq': true,
-	faq: function (target, room, user) {
+	faq(target, room, user) {
 		if (!this.runBroadcast()) return;
 		target = target.toLowerCase();
 		let showAll = target === 'all';
@@ -2007,7 +2007,7 @@ const commands = {
 	'!smogdex': true,
 	analysis: 'smogdex',
 	strategy: 'smogdex',
-	smogdex: function (target, room, user) {
+	smogdex(target, room, user) {
 		if (!target) return this.parse('/help smogdex');
 		if (!this.runBroadcast()) return;
 
@@ -2169,7 +2169,7 @@ const commands = {
 	],
 
 	'!veekun': true,
-	veekun: function (target, broadcast, user) {
+	veekun(target, broadcast, user) {
 		if (!target) return this.parse('/help veekun');
 		if (!this.runBroadcast()) return;
 
@@ -2251,7 +2251,7 @@ const commands = {
 	],
 
 	'!register': true,
-	register: function () {
+	register() {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`You will be prompted to register upon winning a rated battle. Alternatively, there is a register button in the <button name="openOptions"><i class="fa fa-cog"></i> Options</button> menu in the upper right.`);
 	},
@@ -2260,7 +2260,7 @@ const commands = {
 	 * Miscellaneous commands
 	 *********************************************************/
 
-	potd: function (target, room, user) {
+	potd(target, room, user) {
 		if (!this.can('potd')) return false;
 
 		Config.potd = target;
@@ -2277,7 +2277,7 @@ const commands = {
 
 	'!dice': true,
 	roll: 'dice',
-	dice: function (target, room, user) {
+	dice(target, room, user) {
 		if (!target || target.match(/[^\d\sdHL+-]/i)) return this.parse('/help dice');
 		if (!this.runBroadcast(true)) return;
 
@@ -2376,7 +2376,7 @@ const commands = {
 	'!pickrandom': true,
 	pr: 'pickrandom',
 	pick: 'pickrandom',
-	pickrandom: function (target, room, user) {
+	pickrandom(target, room, user) {
 		if (!target) return false;
 		if (!target.includes(',')) return this.parse('/help pick');
 		if (!this.runBroadcast(true)) return false;
@@ -2389,7 +2389,7 @@ const commands = {
 	},
 	pickrandomhelp: [`/pick [option], [option], ... - Randomly selects an item from a list containing 2 or more elements.`],
 
-	showimage: function (target, room, user) {
+	showimage(target, room, user) {
 		if (!target) return this.parse('/help showimage');
 		if (!this.can('declare', null, room)) return false;
 		if (!this.runBroadcast()) return;
@@ -2436,7 +2436,7 @@ const commands = {
 	},
 	showimagehelp: [`/showimage [url], [width], [height] - Show an image. Any CSS units may be used for the width or height (default: px). If width and height aren't provided, automatically scale the image to fit in chat. Requires: # & ~`],
 
-	htmlbox: function (target, room, user) {
+	htmlbox(target, room, user) {
 		if (!target) return this.parse('/help htmlbox');
 		target = this.canHTML(target);
 		if (!target) return;
@@ -2452,7 +2452,7 @@ const commands = {
 		`/htmlbox [message] - Displays a message, parsing HTML code contained.`,
 		`!htmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: * # & ~`,
 	],
-	addhtmlbox: function (target, room, user, connection, cmd) {
+	addhtmlbox(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help ' + cmd);
 		if (!this.canTalk()) return;
 		target = this.canHTML(target);
@@ -2468,7 +2468,7 @@ const commands = {
 	addhtmlboxhelp: [
 		`/addhtmlbox [message] - Shows everyone a message, parsing HTML code contained. Requires: * & ~`,
 	],
-	addrankhtmlbox: function (target, room, user, connection, cmd) {
+	addrankhtmlbox(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help ' + cmd);
 		if (!this.canTalk()) return;
 		let [rank, html] = this.splitOne(target);
@@ -2487,7 +2487,7 @@ const commands = {
 		`/addrankhtmlbox [rank], [message] - Shows everyone with the specified rank or higher a message, parsing HTML code contained. Requires: * & ~`,
 	],
 	changeuhtml: 'adduhtml',
-	adduhtml: function (target, room, user, connection, cmd) {
+	adduhtml(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help ' + cmd);
 		if (!this.canTalk()) return;
 
@@ -2511,7 +2511,7 @@ const commands = {
 		`/changeuhtml [name], [message] - Changes the message previously shown with /adduhtml [name]. Requires: * & ~`,
 	],
 	changerankuhtml: 'addrankuhtml',
-	addrankuhtml: function (target, room, user, connection, cmd) {
+	addrankuhtml(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help ' + cmd);
 		if (!this.canTalk()) return;
 

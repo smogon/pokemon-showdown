@@ -17,12 +17,12 @@ let BattleStatuses = {
 		id: 'brn',
 		num: 0,
 		effectType: 'Status',
-		onStart: function (target) {
+		onStart(target) {
 			this.add('-status', target, 'brn');
 			target.addVolatile('brnattackdrop');
 		},
 		onAfterMoveSelfPriority: 2,
-		onAfterMoveSelf: function (pokemon) {
+		onAfterMoveSelf(pokemon) {
 			let toxicCounter = 1;
 			if (pokemon.volatiles['residualdmg']) {
 				pokemon.volatiles['residualdmg'].counter++;
@@ -30,10 +30,10 @@ let BattleStatuses = {
 			}
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * toxicCounter, pokemon);
 		},
-		onSwitchIn: function (pokemon) {
+		onSwitchIn(pokemon) {
 			pokemon.addVolatile('brnattackdrop');
 		},
-		onAfterSwitchInSelf: function (pokemon) {
+		onAfterSwitchInSelf(pokemon) {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		},
 	},
@@ -42,12 +42,12 @@ let BattleStatuses = {
 		id: 'par',
 		num: 0,
 		effectType: 'Status',
-		onStart: function (target) {
+		onStart(target) {
 			this.add('-status', target, 'par');
 			target.addVolatile('parspeeddrop');
 		},
 		onBeforeMovePriority: 2,
-		onBeforeMove: function (pokemon) {
+		onBeforeMove(pokemon) {
 			if (this.randomChance(63, 256)) {
 				this.add('cant', pokemon, 'par');
 				pokemon.removeVolatile('bide');
@@ -60,7 +60,7 @@ let BattleStatuses = {
 				return false;
 			}
 		},
-		onSwitchIn: function (pokemon) {
+		onSwitchIn(pokemon) {
 			pokemon.addVolatile('parspeeddrop');
 		},
 	},
@@ -69,14 +69,14 @@ let BattleStatuses = {
 		id: 'slp',
 		num: 0,
 		effectType: 'Status',
-		onStart: function (target) {
+		onStart(target) {
 			this.add('-status', target, 'slp');
 			// 1-7 turns
 			this.effectData.startTime = this.random(1, 8);
 			this.effectData.time = this.effectData.startTime;
 		},
 		onBeforeMovePriority: 10,
-		onBeforeMove: function (pokemon, target, move) {
+		onBeforeMove(pokemon, target, move) {
 			pokemon.statusData.time--;
 			if (pokemon.statusData.time > 0) {
 				this.add('cant', pokemon, 'slp');
@@ -84,7 +84,7 @@ let BattleStatuses = {
 			pokemon.lastMove = null;
 			return false;
 		},
-		onAfterMoveSelf: function (pokemon) {
+		onAfterMoveSelf(pokemon) {
 			if (pokemon.statusData.time <= 0) pokemon.cureStatus();
 		},
 	},
@@ -93,16 +93,16 @@ let BattleStatuses = {
 		id: 'frz',
 		num: 0,
 		effectType: 'Status',
-		onStart: function (target) {
+		onStart(target) {
 			this.add('-status', target, 'frz');
 		},
 		onBeforeMovePriority: 10,
-		onBeforeMove: function (pokemon, target, move) {
+		onBeforeMove(pokemon, target, move) {
 			this.add('cant', pokemon, 'frz');
 			pokemon.lastMove = null;
 			return false;
 		},
-		onAfterMoveSecondary: function (target, source, move) {
+		onAfterMoveSecondary(target, source, move) {
 			if (move.secondary && move.secondary.status === 'brn') {
 				target.cureStatus();
 			}
@@ -113,11 +113,11 @@ let BattleStatuses = {
 		id: 'psn',
 		num: 0,
 		effectType: 'Status',
-		onStart: function (target) {
+		onStart(target) {
 			this.add('-status', target, 'psn');
 		},
 		onAfterMoveSelfPriority: 2,
-		onAfterMoveSelf: function (pokemon) {
+		onAfterMoveSelf(pokemon) {
 			let toxicCounter = 1;
 			if (pokemon.volatiles['residualdmg']) {
 				pokemon.volatiles['residualdmg'].counter++;
@@ -125,7 +125,7 @@ let BattleStatuses = {
 			}
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * toxicCounter, pokemon);
 		},
-		onAfterSwitchInSelf: function (pokemon) {
+		onAfterSwitchInSelf(pokemon) {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		},
 	},
@@ -134,21 +134,21 @@ let BattleStatuses = {
 		id: 'tox',
 		num: 0,
 		effectType: 'Status',
-		onStart: function (target) {
+		onStart(target) {
 			this.add('-status', target, 'tox');
 			if (!target.volatiles['residualdmg']) target.addVolatile('residualdmg');
 			target.volatiles['residualdmg'].counter = 0;
 		},
 		onAfterMoveSelfPriority: 2,
-		onAfterMoveSelf: function (pokemon) {
+		onAfterMoveSelf(pokemon) {
 			pokemon.volatiles['residualdmg'].counter++;
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter, pokemon, pokemon);
 		},
-		onSwitchIn: function (pokemon) {
+		onSwitchIn(pokemon) {
 			// Regular poison status and damage after a switchout -> switchin.
 			pokemon.setStatus('psn');
 		},
-		onAfterSwitchInSelf: function (pokemon) {
+		onAfterSwitchInSelf(pokemon) {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		},
 	},
@@ -157,7 +157,7 @@ let BattleStatuses = {
 		id: 'confusion',
 		num: 0,
 		// this is a volatile status
-		onStart: function (target, source, sourceEffect) {
+		onStart(target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.id === 'lockedmove') {
 				this.add('-start', target, 'confusion', '[silent]');
 			} else {
@@ -165,11 +165,11 @@ let BattleStatuses = {
 			}
 			this.effectData.time = this.random(2, 6);
 		},
-		onEnd: function (target) {
+		onEnd(target) {
 			this.add('-end', target, 'confusion');
 		},
 		onBeforeMovePriority: 3,
-		onBeforeMove: function (pokemon, target) {
+		onBeforeMove(pokemon, target) {
 			pokemon.volatiles.confusion.time--;
 			if (!pokemon.volatiles.confusion.time) {
 				pokemon.removeVolatile('confusion');
@@ -207,7 +207,7 @@ let BattleStatuses = {
 		num: 0,
 		duration: 1,
 		onBeforeMovePriority: 4,
-		onBeforeMove: function (pokemon) {
+		onBeforeMove(pokemon) {
 			if (!this.runEvent('Flinch', pokemon)) {
 				return;
 			}
@@ -220,7 +220,7 @@ let BattleStatuses = {
 		id: 'trapped',
 		num: 0,
 		noCopy: true,
-		onTrapPokemon: function (pokemon) {
+		onTrapPokemon(pokemon) {
 			if (!this.effectData.source || !this.effectData.source.isActive) {
 				delete pokemon.volatiles['trapped'];
 				return;
@@ -234,7 +234,7 @@ let BattleStatuses = {
 		num: 0,
 		duration: 2,
 		onBeforeMovePriority: 4,
-		onBeforeMove: function (pokemon) {
+		onBeforeMove(pokemon) {
 			this.add('cant', pokemon, 'partiallytrapped');
 			return false;
 		},
@@ -243,19 +243,19 @@ let BattleStatuses = {
 		name: 'partialtrappinglock',
 		id: 'partialtrappinglock',
 		num: 0,
-		durationCallback: function () {
+		durationCallback() {
 			let duration = this.sample([2, 2, 2, 3, 3, 3, 4, 5]);
 			return duration;
 		},
-		onResidual: function (target) {
+		onResidual(target) {
 			if (target.lastMove && target.lastMove.id === 'struggle' || target.status === 'slp') {
 				delete target.volatiles['partialtrappinglock'];
 			}
 		},
-		onStart: function (target, source, effect) {
+		onStart(target, source, effect) {
 			this.effectData.move = effect.id;
 		},
-		onDisableMove: function (pokemon) {
+		onDisableMove(pokemon) {
 			if (!pokemon.hasMove(this.effectData.move)) {
 				return;
 			}
@@ -269,7 +269,7 @@ let BattleStatuses = {
 	lockedmove: {
 		// Outrage, Thrash, Petal Dance...
 		inherit: true,
-		durationCallback: function () {
+		durationCallback() {
 			return this.random(3, 5);
 		},
 	},
@@ -280,10 +280,10 @@ let BattleStatuses = {
 		// Protect, Detect, Endure counter
 		duration: 2,
 		counterMax: 256,
-		onStart: function () {
+		onStart() {
 			this.effectData.counter = 2;
 		},
-		onStallMove: function () {
+		onStallMove() {
 			// this.effectData.counter should never be undefined here.
 			// However, just in case, use 1 if it is undefined.
 			let counter = this.effectData.counter || 1;
@@ -294,7 +294,7 @@ let BattleStatuses = {
 			this.debug("Success chance: " + Math.round(100 / counter) + "%");
 			return this.randomChance(1, counter);
 		},
-		onRestart: function () {
+		onRestart() {
 			// @ts-ignore
 			if (this.effectData.counter < this.effect.counterMax) {
 				this.effectData.counter *= 2;

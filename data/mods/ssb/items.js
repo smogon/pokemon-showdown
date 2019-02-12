@@ -7,7 +7,7 @@ let BattleItems = {
 		inherit: true,
 		megaStone: "Steelix-Mega",
 		megaEvolves: "Steelix",
-		onTakeItem: function (item, source) {
+		onTakeItem(item, source) {
 			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
 			return true;
 		},

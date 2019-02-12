@@ -4,7 +4,7 @@
 let BattleFormats = {
 	pokemon: {
 		inherit: true,
-		onValidateSet: function (set, format) {
+		onValidateSet(set, format) {
 			if (!format || !this.getRuleTable(format).has('-illegal')) return;
 			let template = this.getTemplate(set.species);
 			let item = this.getItem(set.item);

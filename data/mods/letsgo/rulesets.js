@@ -5,7 +5,7 @@ let BattleFormats = {
 	pokemon: {
 		effectType: 'ValidatorRule',
 		name: 'Pokemon',
-		onValidateTeam: function (team, format) {
+		onValidateTeam(team, format) {
 			let problems = [];
 			if (team.length > 6) problems.push('Your team has more than six Pok\u00E9mon.');
 			// Unlike Pokemon like Kyurem-B and Kyurem-W, the two Starter Pokemon cannot be hacked onto other games.
@@ -21,7 +21,7 @@ let BattleFormats = {
 			}
 			return problems;
 		},
-		onChangeSet: function (set, format) {
+		onChangeSet(set, format) {
 			let template = this.getTemplate(set.species);
 			let baseTemplate = this.getTemplate(template.baseSpecies);
 			let problems = [];
@@ -145,7 +145,7 @@ let BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'Allow AVs',
 		desc: "Tells formats with the 'letsgo' mod to take Awakening Values into consideration when calculating stats",
-		onChangeSet: function (set, format) {
+		onChangeSet(set, format) {
 			/**@type {string[]} */
 			let problems = ([]);
 			let avs = this.getAwakeningValues(set);

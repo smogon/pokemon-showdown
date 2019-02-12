@@ -652,7 +652,7 @@ let commands = {
 	// question giveaway.
 	quiz: 'question',
 	qg: 'question',
-	question: function (target, room, user) {
+	question(target, room, user) {
 		if (room.id !== 'wifi' || !target) return false;
 		// @ts-ignore
 		if (room.giveaway) return this.errorReply("There is already a giveaway going on!");
@@ -676,7 +676,7 @@ let commands = {
 		this.modlog('QUESTION GIVEAWAY', null, `for ${targetUser.getLastId()}`);
 	},
 	changeanswer: 'changequestion',
-	changequestion: function (target, room, user, conn, cmd) {
+	changequestion(target, room, user, conn, cmd) {
 		if (room.id !== 'wifi') return false;
 		// @ts-ignore
 		if (!room.giveaway) return this.errorReply("There is no giveaway going on at the moment.");
@@ -689,7 +689,7 @@ let commands = {
 		room.giveaway.change(cmd.substr(6), target, user);
 	},
 	showanswer: 'viewanswer',
-	viewanswer: function (target, room, user) {
+	viewanswer(target, room, user) {
 		if (room.id !== 'wifi') return false;
 		// @ts-ignore
 		let giveaway = room.giveaway;
@@ -701,7 +701,7 @@ let commands = {
 			`The answer${Chat.plural(giveaway.answers, 's are', ' is')} ${giveaway.answers.join(', ')}.`);
 	},
 	guessanswer: 'guess',
-	guess: function (target, room, user) {
+	guess(target, room, user) {
 		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
 		if (!this.canTalk()) return;
 		// @ts-ignore
@@ -715,7 +715,7 @@ let commands = {
 	// lottery giveaway.
 	lg: 'lottery',
 	lotto: 'lottery',
-	lottery: function (target, room, user) {
+	lottery(target, room, user) {
 		if (room.id !== 'wifi' || !target) return false;
 		// @ts-ignore
 		if (room.giveaway) return this.errorReply("There is already a giveaway going on!");
@@ -749,7 +749,7 @@ let commands = {
 	leave: 'join',
 	joinlotto: 'join',
 	joinlottery: 'join',
-	join: function (target, room, user, conn, cmd) {
+	join(target, room, user, conn, cmd) {
 		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
 		if (!this.canTalk() || user.semilocked) return;
 		// @ts-ignore
@@ -773,7 +773,7 @@ let commands = {
 	// gts commands
 	gts: {
 		new: 'start',
-		start: function (target, room, user) {
+		start(target, room, user) {
 			if (room.id !== 'wifi' || !target) return false;
 			// @ts-ignore
 			if (room.gtsga) return this.errorReply("There is already a GTS giveaway going on!");
@@ -794,7 +794,7 @@ let commands = {
 			this.privateModAction(`(${user.name} started a GTS giveaway for ${targetUser.name} with ${amount} Pokémon)`);
 			this.modlog('GTS GIVEAWAY', null, `for ${targetUser.getLastId()} with ${amount} Pokémon`);
 		},
-		left: function (target, room, user) {
+		left(target, room, user) {
 			if (room.id !== 'wifi') return false;
 			// @ts-ignore
 			if (!room.gtsga) return this.errorReply("There is no GTS giveaway going on!");
@@ -818,7 +818,7 @@ let commands = {
 			// @ts-ignore
 			room.gtsga.updateLeft(newamount);
 		},
-		sent: function (target, room, user) {
+		sent(target, room, user) {
 			if (room.id !== 'wifi') return false;
 			// @ts-ignore
 			if (!room.gtsga) return this.errorReply("There is no GTS giveaway going on!");
@@ -830,7 +830,7 @@ let commands = {
 			// @ts-ignore
 			room.gtsga.updateSent(target);
 		},
-		full: function (target, room, user) {
+		full(target, room, user) {
 			if (room.id !== 'wifi') return false;
 			// @ts-ignore
 			if (!room.gtsga) return this.errorReply("There is no GTS giveaway going on!");
@@ -842,7 +842,7 @@ let commands = {
 			// @ts-ignore
 			room.gtsga.stopDeposits();
 		},
-		end: function (target, room, user) {
+		end(target, room, user) {
 			if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
 			// @ts-ignore
 			if (!room.gtsga) return this.errorReply("There is no GTS giveaway going on at the moment.");
@@ -859,7 +859,7 @@ let commands = {
 		},
 	},
 	// general.
-	ban: function (target, room, user) {
+	ban(target, room, user) {
 		if (!target) return false;
 		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
 		if (!this.can('warn', null, room)) return false;
@@ -879,7 +879,7 @@ let commands = {
 		if (target) target = ` (${target})`;
 		this.privateModAction(`(${targetUser.name} was banned from entering giveaways by ${user.name}.${target})`);
 	},
-	unban: function (target, room, user) {
+	unban(target, room, user) {
 		if (!target) return false;
 		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
 		if (!this.can('warn', null, room)) return false;
@@ -894,7 +894,7 @@ let commands = {
 		this.modlog('GIVEAWAYUNBAN', targetUser, null, {noip: 1, noalts: 1});
 	},
 	stop: 'end',
-	end: function (target, room, user) {
+	end(target, room, user) {
 		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
 		// @ts-ignore
 		if (!room.giveaway) return this.errorReply("There is no giveaway going on at the moment.");
@@ -911,7 +911,7 @@ let commands = {
 		this.privateModAction(`(The giveaway was forcibly ended by ${user.name}${target})`);
 	},
 	rm: 'remind',
-	remind: function (target, room, user) {
+	remind(target, room, user) {
 		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
 		// @ts-ignore
 		let giveaway = room.giveaway;
@@ -926,7 +926,7 @@ let commands = {
 			room.giveaway.display();
 		}
 	},
-	count: function (target, room, user) {
+	count(target, room, user) {
 		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
 		target = Array.from(Giveaway.getSprite(target)[0])[0];
 		if (!target) return this.errorReply("No mon entered - /giveaway count pokemon.");
@@ -940,7 +940,7 @@ let commands = {
 		this.sendReplyBox(`This Pokémon has been given away ${Chat.count(count, "times")}, a total of ${Chat.count(recent, "times")} in the past month.`);
 	},
 	'': 'help',
-	help: function (target, room, user) {
+	help(target, room, user) {
 		if (room.id !== 'wifi') return this.errorReply("This command can only be used in the Wi-Fi room.");
 
 		let reply = '';

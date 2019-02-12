@@ -2,7 +2,7 @@
 
 /**@type {ModdedBattleScriptsData} */
 let BattleScripts = {
-	init: function () {
+	init() {
 		this.modData('Abilities', 'noability').isNonstandard = false;
 		for (let i in this.data.Pokedex) {
 			this.modData('Pokedex', i).abilities = {0: 'No Ability'};

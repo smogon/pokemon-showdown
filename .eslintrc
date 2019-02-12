@@ -136,6 +136,7 @@
 		"no-underscore-dangle": "off",
 		"no-unneeded-ternary": "error",
 		"object-curly-spacing": ["error", "never"],
+		"object-shorthand": ["error", "methods"],
 		"one-var": "off",
 		"operator-assignment": "off",
 		"operator-linebreak": ["error", "after"],

@@ -29,7 +29,7 @@ function getMegaStone(stone) {
 const commands = {
 	'!othermetas': true,
 	om: 'othermetas',
-	othermetas: function (target, room, user) {
+	othermetas(target, room, user) {
 		if (!this.runBroadcast()) return;
 		target = toId(target);
 		let buffer = ``;
@@ -66,7 +66,7 @@ const commands = {
 
 	'!mixandmega': true,
 	mnm: 'mixandmega',
-	mixandmega: function (target, room, user) {
+	mixandmega(target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (!toId(target) || !target.includes('@')) return this.parse('/help mixandmega');
 		let sep = target.split('@');
@@ -176,7 +176,7 @@ const commands = {
 	'!stone': true,
 	orb: 'stone',
 	megastone: 'stone',
-	stone: function (target) {
+	stone(target) {
 		if (!this.runBroadcast()) return;
 		let targetid = toId(target);
 		if (!targetid) return this.parse('/help stone');
@@ -275,7 +275,7 @@ const commands = {
 
 	'!350cup': true,
 	'350': '350cup',
-	'350cup': function (target, room, user) {
+	'350cup'(target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (!toId(target)) return this.parse('/help 350cup');
 		let template = Dex.deepClone(Dex.getTemplate(target));
@@ -293,7 +293,7 @@ const commands = {
 
 	'!tiershift': true,
 	ts: 'tiershift',
-	tiershift: function (target, room, user) {
+	tiershift(target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (!toId(target)) return this.parse('/help tiershift');
 		let template = Dex.deepClone(Dex.getTemplate(target));
@@ -324,7 +324,7 @@ const commands = {
 
 	'!scalemons': true,
 	scale: 'scalemons',
-	scalemons: function (target, room, user) {
+	scalemons(target, room, user) {
 		if (!this.runBroadcast()) return;
 		if (!toId(target)) return this.parse(`/help scalemons`);
 		let template = Dex.deepClone(Dex.getTemplate(target));
