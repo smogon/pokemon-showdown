@@ -389,12 +389,12 @@ exports.pages = {
 	},
 	battlesearch(args, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		if (!user.can('forcewin')) return `|title|[Battle Search]\n|pagehtml|<div class="pad ladder">/battlesearch - Access Denied.</div>`;
+		if (!this.can('forcewin')) return;
 		let userid = toId(args.shift());
 		let turnLimit = parseInt(args.shift());
 		if (!userid || !turnLimit || turnLimit < 1) return user.popup(`Some arguments are missing or invalid for battlesearch. Use /battlesearch to start over.`);
-		let title = `|title|[Battle Search][${userid}]`;
-		let buf = `\n|pagehtml|<div class="pad ladder"><h2>Battle Search</h2><p>Userid: ${userid}</p><p>Maximum Turns: ${turnLimit}</p>`;
+		this.title = `[Battle Search][${userid}]`;
+		let buf = `<div class="pad ladder"><h2>Battle Search</h2><p>Userid: ${userid}</p><p>Maximum Turns: ${turnLimit}</p>`;
 
 		const months = FS('logs/').readdirSync().filter(f => f.length === 7 && f.includes('-')).sort((aKey, bKey) => {
 			const a = aKey.split('-').map(parseInt);
@@ -408,10 +408,10 @@ exports.pages = {
 			for (const i of months) {
 				buf += `<li style="display: inline; list-style: none"><a href="/view-battlesearch-${userid}-${turnLimit}-${i}" target="replace"><button class="button">${i}</button></li>`;
 			}
-			return title + buf + `</ul></div>`;
+			return buf + `</ul></div>`;
 		} else {
 			month = month += `-${args.shift()}`;
-			if (!months.includes(month)) return title + buf + `Invalid month selected. <a href="/view-battlesearch-${userid}-${turnLimit}" target="replace"><button class="button">Back to month selection</button></a></div>`;
+			if (!months.includes(month)) return buf + `Invalid month selected. <a href="/view-battlesearch-${userid}-${turnLimit}" target="replace"><button class="button">Back to month selection</button></a></div>`;
 			buf += `<p><a href="/view-battlesearch-${userid}-${turnLimit}" target="replace"><button class="button">Back</button></a> <button class="button disabled">${month}</button></p>`;
 		}
 
@@ -444,11 +444,11 @@ exports.pages = {
 			for (const tier of tiers) {
 				buf += `<li style="display: inline; list-style: none"><a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${toId(tier)}" target="replace"><button class="button">${tier}</button></a></li>`;
 			}
-			return title + buf + `</ul></div>`;
+			return buf + `</ul></div>`;
 		} else {
 			let tierids = tiers.map(toId);
-			if (!tierids.includes(tierid)) return title + buf + `Invalid tier selected. <a href="/view-battlesearch-${userid}-${turnLimit}-${month}" target="replace"><button class="button">Back to tier selection</button></a></div>`;
-			title += `[${tierid}]`;
+			if (!tierids.includes(tierid)) return buf + `Invalid tier selected. <a href="/view-battlesearch-${userid}-${turnLimit}-${month}" target="replace"><button class="button">Back to tier selection</button></a></div>`;
+			this.title += `[${tierid}]`;
 			buf += `<p><a href="/view-battlesearch-${userid}-${turnLimit}-${month}" target="replace"><button class="button">Back</button></a> <button class="button disabled">${tierid}</button></p>`;
 		}
 
@@ -465,23 +465,23 @@ exports.pages = {
 			for (const day of days) {
 				buf += `<li style="display: inline; list-style: none"><a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}-${day}" target="replace"><button class="button">${day}</button></a></li>`;
 			}
-			return title + buf + `</ul></div>`;
+			return buf + `</ul></div>`;
 		} else {
 			date = date += `-${args.shift()}-${args.shift()}`;
-			if (!days.includes(date)) return title + buf + `Invalid date selected. <a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}" target="replace"><button class="button">Back to date selection</button></a></div>`;
-			title += `[${date}]`;
+			if (!days.includes(date)) return buf + `Invalid date selected. <a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}" target="replace"><button class="button">Back to date selection</button></a></div>`;
+			this.title += `[${date}]`;
 			buf += `<p><a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}" target="replace"><button class="button">Back</button></a> <button class="button disabled">${date}</button></p>`;
 		}
 
 		if (args[0] !== 'confirm') {
 			buf += `<p>Are you sure you want to run a battle search for for ${tierid} battles on ${date} where ${userid} was a player and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}?</p>`;
 			buf += `<p><a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}-${date}-confirm" target="replace"><button class="button notifying">Yes, run the battle search</button></a> <a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}" target="replace"><button class="button">No, go back</button></a></p>`;
-			return title + buf + `</div>`;
+			return buf + `</div>`;
 		}
 
 		// Run search
 		getBattleSearch(connection, userid, turnLimit, month, tierid, date);
-		return title + `\n|pagehtml|<div class="pad ladder"><h2>Battle Search</h2><p>Searching for ${tierid} battles on ${date} where ${userid} was a player and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}.</p><p>Loading... (this will take a while)</p></div>`;
+		return `<div class="pad ladder"><h2>Battle Search</h2><p>Searching for ${tierid} battles on ${date} where ${userid} was a player and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}.</p><p>Loading... (this will take a while)</p></div>`;
 	},
 };
 

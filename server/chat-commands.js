@@ -1655,12 +1655,18 @@ const commands = {
 		if (targets.length > 11 || connection.inRooms.size > 1) return;
 		Rooms.global.autojoinRooms(user, connection);
 		let autojoins = [];
-		for (const target of targets) {
-			if (user.tryJoinRoom(target, connection) === Rooms.RETRY_AFTER_LOGIN) {
-				autojoins.push(target);
-			}
-		}
-		connection.autojoins = autojoins.join(',');
+
+		const promises = targets.map(target =>
+			user.tryJoinRoom(target, connection).then(ret => {
+				if (ret === Rooms.RETRY_AFTER_LOGIN) {
+					autojoins.push(target);
+				}
+			})
+		);
+
+		Promise.all(promises).then(() => {
+			connection.autojoins = autojoins.join(',');
+		});
 	},
 
 	'!join': true,
@@ -1672,9 +1678,11 @@ const commands = {
 		if (target.startsWith('https://')) target = target.slice(8);
 		if (target.startsWith('play.pokemonshowdown.com/')) target = target.slice(25);
 		if (target.startsWith('psim.us/')) target = target.slice(8);
-		if (user.tryJoinRoom(target, connection) === Rooms.RETRY_AFTER_LOGIN) {
-			connection.sendTo(target, `|noinit|namerequired|The room '${target}' does not exist or requires a login to join.`);
-		}
+		user.tryJoinRoom(target, connection).then(ret => {
+			if (ret === Rooms.RETRY_AFTER_LOGIN) {
+				connection.sendTo(target, `|noinit|namerequired|The room '${target}' does not exist or requires a login to join.`);
+			}
+		});
 	},
 	joinhelp: [`/join [roomname] - Attempt to join the room [roomname].`],
 

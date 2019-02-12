@@ -1272,28 +1272,12 @@ class User {
 	 * @param {string | GlobalRoom | GameRoom | ChatRoom} roomid
 	 * @param {Connection} connection
 	 */
-	tryJoinRoom(roomid, connection) {
+	async tryJoinRoom(roomid, connection) {
 		// @ts-ignore
 		roomid = /** @type {string} */ (roomid && roomid.id ? roomid.id : roomid);
 		let room = Rooms.search(roomid);
 		if (!room && roomid.startsWith('view-')) {
-			// it's a page!
-			let parts = roomid.split('-');
-			/** @type {any} */
-			let handler = Chat.pages;
-			parts.shift();
-			while (handler) {
-				if (typeof handler === 'function') {
-					let res = handler(parts, this, connection);
-					if (typeof res === 'string') {
-						if (res !== '|deinit') res = `|init|html\n${res}`;
-						connection.send(`>${roomid}\n${res}`);
-						res = undefined;
-					}
-					return res;
-				}
-				handler = handler[parts.shift() || 'default'];
-			}
+			return Chat.resolvePage(roomid, this, connection);
 		}
 		if (!room || !room.checkModjoin(this)) {
 			if (!this.named) {
