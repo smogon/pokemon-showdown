@@ -1000,7 +1000,7 @@ class Battle extends Dex.ModdedDex {
 			// @ts-ignore
 			if (format[callbackType] !== undefined || (getAll && thing.formatData[getAll])) {
 				// @ts-ignore
-				statuses.push({status: format, callback: format[callbackType], statusData: this.formatData, end: function () {}, thing: thing, priority: format[callbackType + 'Priority'] || 0});
+				statuses.push({status: format, callback: format[callbackType], statusData: this.formatData, end() {}, thing: thing, priority: format[callbackType + 'Priority'] || 0});
 				this.resolveLastPriority(statuses, callbackType);
 			}
 			if (this.events && this.events[callbackType] !== undefined) {
@@ -1010,7 +1010,7 @@ class Battle extends Dex.ModdedDex {
 					case 'Format':
 						statusData = this.formatData;
 					}
-					statuses.push({status: handler.target, callback: handler.callback, statusData: statusData, end: function () {}, thing: thing, priority: handler.priority, order: handler.order, subOrder: handler.subOrder});
+					statuses.push({status: handler.target, callback: handler.callback, statusData: statusData, end() {}, thing: thing, priority: handler.priority, order: handler.order, subOrder: handler.subOrder});
 				}
 			}
 			if (bubbleDown) {
@@ -1087,7 +1087,7 @@ class Battle extends Dex.ModdedDex {
 		// @ts-ignore
 		if (species[callbackType] !== undefined) {
 			// @ts-ignore
-			statuses.push({status: species, callback: species[callbackType], statusData: thing.speciesData, end: function () {}, thing: thing});
+			statuses.push({status: species, callback: species[callbackType], statusData: thing.speciesData, end() {}, thing: thing});
 			this.resolveLastPriority(statuses, callbackType);
 		}
 

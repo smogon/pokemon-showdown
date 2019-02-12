@@ -7,19 +7,19 @@ let BattleStatuses = {
 		id: 'slp',
 		num: 0,
 		effectType: 'Status',
-		onStart: function (target) {
+		onStart(target) {
 			this.add('-status', target, 'slp');
 			// 1-4 turns
 			this.effectData.time = this.random(2, 6);
 			// Turns spent using Sleep Talk/Snore immediately before switching out while asleep
 			this.effectData.skippedTime = 0;
 		},
-		onSwitchIn: function (target) {
+		onSwitchIn(target) {
 			this.effectData.time += this.effectData.skippedTime;
 			this.effectData.skippedTime = 0;
 		},
 		onBeforeMovePriority: 10,
-		onBeforeMove: function (pokemon, target, move) {
+		onBeforeMove(pokemon, target, move) {
 			if (pokemon.hasAbility('earlybird')) {
 				pokemon.statusData.time--;
 			}
@@ -39,7 +39,7 @@ let BattleStatuses = {
 	},
 	frz: {
 		inherit: true,
-		onHit: function (target, source, move) {
+		onHit(target, source, move) {
 			if (move.thawsTarget || move.type === 'Fire' && move.category !== 'Status' && move.id !== 'hiddenpower' && move.id !== 'weatherball') {
 				target.cureStatus();
 			}
@@ -47,7 +47,7 @@ let BattleStatuses = {
 	},
 	sandstorm: {
 		inherit: true,
-		onModifySpD: function () { },
+		onModifySpD() { },
 	},
 };
 

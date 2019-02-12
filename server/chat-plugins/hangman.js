@@ -221,7 +221,7 @@ class Hangman extends Rooms.RoomGame {
 const commands = {
 	hangman: {
 		create: 'new',
-		new: function (target, room, user, connection) {
+		new(target, room, user, connection) {
 			let text = Chat.filter(this, target, user, room, connection);
 			if (target !== text) return this.errorReply("You are not allowed to use filtered words in hangmans.");
 			let params = text.split(',');
@@ -254,7 +254,7 @@ const commands = {
 		},
 		createhelp: ["/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ * # & ~"],
 
-		guess: function (target, room, user) {
+		guess(target, room, user) {
 			if (!target) return this.parse('/help guess');
 			if (!room.game || room.game.gameid !== 'hangman') return this.errorReply("There is no game of hangman running in this room.");
 			if (!this.canTalk()) return;
@@ -268,7 +268,7 @@ const commands = {
 		],
 
 		stop: 'end',
-		end: function (target, room, user) {
+		end(target, room, user) {
 			if (!this.can('minigame', null, room)) return false;
 			if (!this.canTalk()) return;
 			if (!room.game || room.game.gameid !== 'hangman') return this.errorReply("There is no game of hangman running in this room.");
@@ -280,7 +280,7 @@ const commands = {
 		},
 		endhelp: ["/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ * # & ~"],
 
-		disable: function (target, room, user) {
+		disable(target, room, user) {
 			if (!this.can('gamemanagement', null, room)) return;
 			// @ts-ignore
 			if (room.hangmanDisabled) {
@@ -296,7 +296,7 @@ const commands = {
 			return this.sendReply("Hangman has been disabled for this room.");
 		},
 
-		enable: function (target, room, user) {
+		enable(target, room, user) {
 			if (!this.can('gamemanagement', null, room)) return;
 			// @ts-ignore
 			if (!room.hangmanDisabled) {
@@ -312,7 +312,7 @@ const commands = {
 			return this.sendReply("Hangman has been enabled for this room.");
 		},
 
-		display: function (target, room, user) {
+		display(target, room, user) {
 			if (!room.game || room.game.title !== 'Hangman') return this.errorReply("There is no game of hangman running in this room.");
 			if (!this.runBroadcast()) return;
 			room.update();
@@ -321,7 +321,7 @@ const commands = {
 			game.display(user, this.broadcasting);
 		},
 
-		'': function (target, room, user) {
+		''(target, room, user) {
 			return this.parse('/help hangman');
 		},
 	},
@@ -337,7 +337,7 @@ const commands = {
 		`/hangman [enable/disable] - Enables or disables hangman from being started in a room. Requires: # & ~`,
 	],
 
-	guess: function (target, room, user) {
+	guess(target, room, user) {
 		if (!room.game) return this.errorReply("There is no game running in this room.");
 		if (!this.canTalk()) return;
 		// @ts-ignore

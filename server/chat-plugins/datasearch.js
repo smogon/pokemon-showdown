@@ -29,7 +29,7 @@ exports.commands = {
 	ds6: 'dexsearch',
 	ds7: 'dexsearch',
 	dsearch: 'dexsearch',
-	dexsearch: function (target, room, user, connection, cmd, message) {
+	dexsearch(target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast()) return;
 		if (!target) return this.parse('/help dexsearch');
 		let targetGen = parseInt(cmd[cmd.length - 1]);
@@ -74,7 +74,7 @@ exports.commands = {
 	'!randommove': true,
 	rollmove: 'randommove',
 	randmove: 'randommove',
-	randommove: function (target, room, user, connection, cmd, message) {
+	randommove(target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast(true)) return;
 		let targets = target.split(",");
 		let targetsBuffer = [];
@@ -118,7 +118,7 @@ exports.commands = {
 	'!randompokemon': true,
 	rollpokemon: 'randompokemon',
 	randpoke: 'randompokemon',
-	randompokemon: function (target, room, user, connection, cmd, message) {
+	randompokemon(target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast(true)) return;
 		let targets = target.split(",");
 		let targetsBuffer = [];
@@ -163,7 +163,7 @@ exports.commands = {
 	'!movesearch': true,
 	ms: 'movesearch',
 	msearch: 'movesearch',
-	movesearch: function (target, room, user, connection, cmd, message) {
+	movesearch(target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast()) return;
 		if (!target) return this.parse('/help movesearch');
 
@@ -203,7 +203,7 @@ exports.commands = {
 	'!itemsearch': true,
 	isearch: 'itemsearch',
 	is: 'itemsearch',
-	itemsearch: function (target, room, user, connection, cmd, message) {
+	itemsearch(target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast()) return;
 		if (!target) return this.parse('/help itemsearch');
 
@@ -241,7 +241,7 @@ exports.commands = {
 	dpplearn: 'learn',
 	bw2learn: 'learn',
 	oraslearn: 'learn',
-	learn: function (target, room, user, connection, cmd, message) {
+	learn(target, room, user, connection, cmd, message) {
 		if (!this.canBroadcast()) return;
 		if (!target) return this.parse('/help learn');
 

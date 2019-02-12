@@ -118,7 +118,7 @@ function generateDish() {
 
 /** @type {ChatCommands} */
 const commands = {
-	foodfight: function (target, room, user) {
+	foodfight(target, room, user) {
 		if (room !== thecafe) return this.errorReply("This command is only available in The Café.");
 
 		if (!Object.keys(dishes).length) return this.errorReply("No dishes found. Add some dishes first.");
@@ -142,7 +142,7 @@ const commands = {
 		const importStr = importable ? `<tr><td colspan=7><details><summary style="font-size:13pt;">Importable team:</summary><div style="width:100%;height:400px;overflow:auto;color:black;font-family:monospace;background:white;text-align:left;">${importable}</textarea></details></td></tr>` : '';
 		return this.sendReplyBox(`<div class="ladder"><table style="text-align:center;"><tr><th colspan="7" style="font-size:10pt;">Your dish is: <u>${dish}</u></th></tr><tr><th>Team</th>${team.map(mon => `<td><psicon pokemon="${mon}"/> ${mon}</td>`).join('')}</tr><tr><th>Ingredients</th>${ingredients.map(ingredient => `<td>${ingredient}</td>`).join('')}</tr>${importStr}</table></div>`);
 	},
-	checkfoodfight: function (target, room, user) {
+	checkfoodfight(target, room, user) {
 		if (room !== thecafe) return this.errorReply("This command is only available in The Café.");
 
 		const targetUser = this.targetUserOrSelf(target, false);
@@ -155,7 +155,7 @@ const commands = {
 		return this.sendReplyBox(`<div class="ladder"><table style="text-align:center;"><tr><th colspan="7" style="font-size:10pt;">${self ? `Your` : `${this.targetUsername}'s`} dish is: <u>${targetUser.foodfight.dish}</u></th></tr><tr><th>Team</th>${targetUser.foodfight.team.map(mon => `<td><psicon pokemon="${mon}"/> ${mon}</td>`).join('')}</tr><tr><th>Ingredients</th>${targetUser.foodfight.ingredients.map(ingredient => `<td>${ingredient}</td>`).join('')}</tr></table></div>`);
 	},
 	addingredients: 'adddish',
-	adddish: function (target, room, user, connection, cmd) {
+	adddish(target, room, user, connection, cmd) {
 		if (room !== thecafe) return this.errorReply("This command is only available in The Café.");
 		if (!this.can('mute', null, room)) return false;
 
@@ -187,7 +187,7 @@ const commands = {
 		saveDishes();
 		this.sendReply(`${cmd.slice(3)} '${dish}: ${ingredients.join(', ')}' added successfully.`);
 	},
-	removedish: function (target, room, user) {
+	removedish(target, room, user) {
 		if (room !== thecafe) return this.errorReply("This command is only available in The Café.");
 		if (!this.can('mute', null, room)) return false;
 
@@ -199,7 +199,7 @@ const commands = {
 		saveDishes();
 		this.sendReply(`Dish '${target}' deleted successfully.`);
 	},
-	viewdishes: function (target, room, user, connection) {
+	viewdishes(target, room, user, connection) {
 		if (room !== thecafe) return this.errorReply("This command is only available in The Café.");
 
 		return this.parse(`/join view-foodfight`);

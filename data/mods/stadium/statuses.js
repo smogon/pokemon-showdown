@@ -7,14 +7,14 @@ let BattleStatuses = {
 		id: 'brn',
 		num: 0,
 		effectType: 'Status',
-		onStart: function (target) {
+		onStart(target) {
 			this.add('-status', target, 'brn');
 		},
 		onAfterMoveSelfPriority: 2,
-		onAfterMoveSelf: function (pokemon) {
+		onAfterMoveSelf(pokemon) {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		},
-		onAfterSwitchInSelf: function (pokemon) {
+		onAfterSwitchInSelf(pokemon) {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		},
 	},
@@ -23,11 +23,11 @@ let BattleStatuses = {
 		id: 'par',
 		num: 0,
 		effectType: 'Status',
-		onStart: function (target) {
+		onStart(target) {
 			this.add('-status', target, 'par');
 		},
 		onBeforeMovePriority: 2,
-		onBeforeMove: function (pokemon) {
+		onBeforeMove(pokemon) {
 			if (this.randomChance(63, 256)) {
 				this.add('cant', pokemon, 'par');
 				pokemon.removeVolatile('bide');
@@ -47,20 +47,20 @@ let BattleStatuses = {
 		id: 'slp',
 		num: 0,
 		effectType: 'Status',
-		onStart: function (target) {
+		onStart(target) {
 			this.add('-status', target, 'slp');
 			// 1-3 turns
 			this.effectData.startTime = this.random(1, 4);
 			this.effectData.time = this.effectData.startTime;
 		},
 		onBeforeMovePriority: 2,
-		onBeforeMove: function (pokemon, target, move) {
+		onBeforeMove(pokemon, target, move) {
 			pokemon.statusData.time--;
 			this.add('cant', pokemon, 'slp');
 			pokemon.lastMove = null;
 			return false;
 		},
-		onAfterMoveSelf: function (pokemon) {
+		onAfterMoveSelf(pokemon) {
 			if (pokemon.statusData.time <= 0) pokemon.cureStatus();
 		},
 	},
@@ -69,16 +69,16 @@ let BattleStatuses = {
 		id: 'frz',
 		num: 0,
 		effectType: 'Status',
-		onStart: function (target) {
+		onStart(target) {
 			this.add('-status', target, 'frz');
 		},
 		onBeforeMovePriority: 2,
-		onBeforeMove: function (pokemon, target, move) {
+		onBeforeMove(pokemon, target, move) {
 			this.add('cant', pokemon, 'frz');
 			pokemon.lastMove = null;
 			return false;
 		},
-		onHit: function (target, source, move) {
+		onHit(target, source, move) {
 			if (move.type === 'Fire' && move.category !== 'Status') {
 				target.cureStatus();
 			}
@@ -89,14 +89,14 @@ let BattleStatuses = {
 		id: 'psn',
 		num: 0,
 		effectType: 'Status',
-		onStart: function (target) {
+		onStart(target) {
 			this.add('-status', target, 'psn');
 		},
 		onAfterMoveSelfPriority: 2,
-		onAfterMoveSelf: function (pokemon) {
+		onAfterMoveSelf(pokemon) {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		},
-		onAfterSwitchInSelf: function (pokemon) {
+		onAfterSwitchInSelf(pokemon) {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		},
 	},
@@ -105,14 +105,14 @@ let BattleStatuses = {
 		id: 'tox',
 		num: 0,
 		effectType: 'Status',
-		onStart: function (target) {
+		onStart(target) {
 			this.add('-status', target, 'tox');
 		},
 		onAfterMoveSelfPriority: 2,
-		onAfterMoveSelf: function (pokemon) {
+		onAfterMoveSelf(pokemon) {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		},
-		onAfterSwitchInSelf: function (pokemon) {
+		onAfterSwitchInSelf(pokemon) {
 			// Regular poison status and damage after a switchout -> switchin.
 			pokemon.setStatus('psn');
 			pokemon.addVolatile('residualdmg');
@@ -126,10 +126,10 @@ let BattleStatuses = {
 		num: 0,
 		duration: 2,
 		onBeforeMovePriority: 1,
-		onStart: function (target, source, effect) {
+		onStart(target, source, effect) {
 			this.add('-activate', target, 'move: ' + effect, '[of] ' + source);
 		},
-		onBeforeMove: function (pokemon) {
+		onBeforeMove(pokemon) {
 			if (this.effectData.source && (!this.effectData.source.isActive || this.effectData.source.hp <= 0)) {
 				pokemon.removeVolatile('partiallytrapped');
 				return;
@@ -137,7 +137,7 @@ let BattleStatuses = {
 			this.add('cant', pokemon, 'partiallytrapped');
 			return false;
 		},
-		onEnd: function (pokemon) {
+		onEnd(pokemon) {
 			this.add('-end', pokemon, this.effectData.sourceEffect, '[partiallytrapped]');
 		},
 	},

@@ -345,7 +345,7 @@ exports.pages = pages;
 let commands = {
 	filters: 'filter',
 	filter: {
-		add: function (target, room, user) {
+		add(target, room, user) {
 			if (!this.can('updateserver')) return false;
 
 			let [list, ...rest] = target.split(',');
@@ -390,7 +390,7 @@ let commands = {
 				return this.sendReply(`'${word}' was added to the ${list} list.`);
 			}
 		},
-		remove: function (target, room, user) {
+		remove(target, room, user) {
 			if (!this.can('updateserver')) return false;
 
 			let [list, ...words] = target.split(',').map(param => param.trim());
@@ -418,10 +418,10 @@ let commands = {
 		},
 		'': 'view',
 		list: 'view',
-		view: function (target, room, user) {
+		view(target, room, user) {
 			this.parse(`/join view-filters`);
 		},
-		help: function (target, room, user) {
+		help(target, room, user) {
 			this.parse(`/help filter`);
 		},
 	},
@@ -430,7 +430,7 @@ let commands = {
 		`- /filter remove list, words - Removes words from the given filter list. Requires: ~`,
 		`- /filter view - Opens the list of filtered words. Requires: % @ * & ~`,
 	],
-	allowname: function (target, room, user) {
+	allowname(target, room, user) {
 		if (!this.can('forcerename')) return false;
 		target = toId(target);
 		if (!target) return this.errorReply(`Syntax: /allowname username`);

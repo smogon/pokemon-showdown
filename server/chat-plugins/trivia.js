@@ -1289,7 +1289,7 @@ class WeakestLink extends Trivia {
 }
 
 const commands = {
-	new: function (target, room, user) {
+	new(target, room, user) {
 		if (room.id !== 'trivia') return this.errorReply("This command can only be used in the Trivia room.");
 		if (!this.can('broadcast', null, room) || !target) return false;
 		if (!this.canTalk()) return;
@@ -1354,7 +1354,7 @@ const commands = {
 	},
 	newhelp: [`/trivia new [mode], [category], [length] - Begin a new trivia game. Requires: + % @ # & ~`],
 
-	join: function (target, room, user) {
+	join(target, room, user) {
 		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
 		if (!room.game) return this.errorReply("There is no game of trivia in progress.");
 		if (room.game.gameid !== 'trivia') {
@@ -1366,7 +1366,7 @@ const commands = {
 	},
 	joinhelp: [`/trivia join - Join the current trivia game.`],
 
-	kick: function (target, room, user) {
+	kick(target, room, user) {
 		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
 		if (!this.can('mute', null, room)) return false;
 		if (!this.canTalk()) return;
@@ -1385,7 +1385,7 @@ const commands = {
 	},
 	kickhelp: [`/trivia kick [username] - Kick players from a trivia game by username. Requires: % @ # & ~`],
 
-	leave: function (target, room, user) {
+	leave(target, room, user) {
 		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
 		if (!room.game) return this.errorReply("There is no game of trivia in progress.");
 		if (room.game.gameid !== 'trivia') {
@@ -1398,7 +1398,7 @@ const commands = {
 	},
 	leavehelp: [`/trivia leave - Makes the player leave the game.`],
 
-	start: function (target, room) {
+	start(target, room) {
 		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
 		if (!this.can('broadcast', null, room)) return false;
 		if (!this.canTalk()) return;
@@ -1413,7 +1413,7 @@ const commands = {
 	},
 	starthelp: [`/trivia start - Ends the signup phase of a trivia game and begins the game. Requires: + % @ # & ~`],
 
-	answer: function (target, room, user) {
+	answer(target, room, user) {
 		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
 		if (!room.game) return this.errorReply("There is no game of trivia in progress.");
 		if (room.game.gameid !== 'trivia') {
@@ -1429,7 +1429,7 @@ const commands = {
 	},
 	answerhelp: [`/trivia answer OR /ta [answer] - Answer a pending question.`],
 
-	end: function (target, room, user) {
+	end(target, room, user) {
 		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
 		if (!this.can('broadcast', null, room)) return false;
 		if (!this.canTalk()) return;
@@ -1444,7 +1444,7 @@ const commands = {
 
 	'': 'status',
 	players: 'status',
-	status: function (target, room, user) {
+	status(target, room, user) {
 		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
 		if (!this.runBroadcast()) return false;
 		if (!room.game) return this.errorReply("There is no game of trivia in progress.");
@@ -1481,7 +1481,7 @@ const commands = {
 	statushelp: [`/trivia status [player] - lists the player's standings (your own if no player is specified) and the list of players in the current trivia game.`],
 
 	submit: 'add',
-	add: function (target, room, user, connection, cmd) {
+	add(target, room, user, connection, cmd) {
 		if (room.id !== 'questionworkshop') return this.errorReply('This command can only be used in Question Workshop.');
 		if ((cmd === 'add' && !this.can('mute', null, room)) ||
 			(cmd === 'submit' && !this.can('broadcast', null, room)) ||
@@ -1537,7 +1537,7 @@ const commands = {
 	submithelp: [`/trivia submit [category] | [question] | [answer1], [answer2] ... [answern] - Add a question to the submission database for staff to review. Requires: + % @ # & ~`],
 	addhelp: [`/trivia add [category] | [question] | [answer1], [answer2], ... [answern] - Add a question to the question database. Requires: % @ # & ~`],
 
-	review: function (target, room) {
+	review(target, room) {
 		if (room.id !== 'questionworkshop') return this.errorReply('This command can only be used in Question Workshop.');
 		if (!this.can('ban', null, room)) return false;
 
@@ -1561,7 +1561,7 @@ const commands = {
 	reviewhelp: [`/trivia review - View the list of submitted questions. Requires: @ # & ~`],
 
 	reject: 'accept',
-	accept: function (target, room, user, connection, cmd) {
+	accept(target, room, user, connection, cmd) {
 		if (room.id !== 'questionworkshop') return this.errorReply('This command can only be used in Question Workshop.');
 		if (!this.can('ban', null, room)) return false;
 		if (!this.canTalk()) return;
@@ -1645,7 +1645,7 @@ const commands = {
 	accepthelp: [`/trivia accept [index1], [index2], ... [indexn] OR all - Add questions from the submission database to the question database using their index numbers or ranges of them. Requires: @ # & ~`],
 	rejecthelp: [`/trivia reject [index1], [index2], ... [indexn] OR all - Remove questions from the submission database using their index numbers or ranges of them. Requires: @ # & ~`],
 
-	delete: function (target, room, user) {
+	delete(target, room, user) {
 		if (room.id !== 'questionworkshop') return this.errorReply('This command can only be used in Question Workshop.');
 		if (!this.can('mute', null, room)) return false;
 		if (!this.canTalk()) return;
@@ -1671,7 +1671,7 @@ const commands = {
 	},
 	deletehelp: [`/trivia delete [question] - Delete a question from the trivia database. Requires: % @ # & ~`],
 
-	qs: function (target, room, user) {
+	qs(target, room, user) {
 		if (room.id !== 'questionworkshop') return this.errorReply('This command can only be used in Question Workshop.');
 
 		let buffer = "|raw|<div class=\"ladder\" style=\"overflow-y: scroll; max-height: 300px;\"><table>";
@@ -1740,7 +1740,7 @@ const commands = {
 		"/trivia qs [category] - View the questions in the specified category. Requires: % @ # & ~",
 	],
 
-	search: function (target, room, user) {
+	search(target, room, user) {
 		if (room.id !== 'questionworkshop') return this.errorReply("This command can only be used in Question Workshop.");
 		if (!this.can('broadcast', null, room)) return false;
 		if (!target.includes(',')) return this.errorReply("No valid search arguments entered.");
@@ -1772,7 +1772,7 @@ const commands = {
 	},
 	searchhelp: [`/trivia search [type], [query] - Searches for questions based on their type and their query. Valid types: submissions, subs, questions, qs. Requires: + % @ * & ~`],
 
-	rank: function (target, room, user) {
+	rank(target, room, user) {
 		if (room.id !== 'trivia') return this.errorReply("This command can only be used in Trivia.");
 
 		let name;
@@ -1804,7 +1804,7 @@ const commands = {
 	rankhelp: [`/trivia rank [username] - View the rank of the specified user. If no name is given, view your own.`],
 
 	alltimeladder: 'ladder',
-	ladder: function (target, room, user, connection, cmd) {
+	ladder(target, room, user, connection, cmd) {
 		if (room.id !== 'trivia') return this.errorReply('This command can only be used in Trivia.');
 		if (!this.runBroadcast()) return false;
 		let cache = cmd === 'ladder' ? cachedAltLadder : cachedLadder;
@@ -1834,7 +1834,7 @@ const commands = {
 	alltimeladderhelp: [`/trivia ladder [num] - View information about 15 users on the all time trivia leaderboard.`],
 
 	clearquestions: 'clearqs',
-	clearqs: function (target, room, user) {
+	clearqs(target, room, user) {
 		if (room.id !== 'questionworkshop') return this.errorReply("This command can only be used in Question Workshop");
 		if (!this.can('declare', null, room)) return false;
 		const category = toId(target);
@@ -1852,28 +1852,28 @@ const commands = {
 	},
 	clearqshelp: [`/trivia clears [category] - Remove all questions of the given category. Requires: # & ~`],
 
-	bank: function (target, room, user) {
+	bank(target, room, user) {
 		if (!room.game || room.game.title !== 'Weakest Link') return this.errorReply("This command can only be used for games of the Weakest Link.");
 		let res = room.game.onBank(user);
 		if (res) return this.sendReply(res);
 	},
 	bankhelp: [`/trivia bank - Bank during a game of the Weakest Link.`],
 
-	decide: function (target, room, user) {
+	decide(target, room, user) {
 		if (!room.game || room.game.title !== 'Weakest Link') return this.errorReply("This command can only be used for games of the Weakest Link.");
 		let res = room.game.decide(target, user);
 		if (res) return this.sendReply(res);
 	},
 	decidehelp: [`/trivia decide [user] - If voting ends in a tie, this is used to break the tie by the strongest player.`],
 
-	vote: function (target, room, user) {
+	vote(target, room, user) {
 		if (!room.game || room.game.title !== 'Weakest Link') return this.errorReply("This command can only be used for games of the Weakest Link.");
 		let res = room.game.vote(target, user);
 		if (res) return this.sendReply(res);
 	},
 	votehelp: [`/trivia vote [user] - Choose your vote of who to eliminate in the Weakest link`],
 
-	checkvotes: function (target, room, user) {
+	checkvotes(target, room, user) {
 		if (!room.game || room.game.title !== 'Weakest Link') return this.errorReply("This command can only be used for games of the Weakest Link.");
 		if (!this.can('broadcast', null, room)) return;
 		if (!this.runBroadcast()) return;
@@ -1882,7 +1882,7 @@ const commands = {
 	},
 	checkvoteshelp: [`/trivia checkvotes - Check which players have not yet voted.`],
 
-	help: function (target, room, user) {
+	help(target, room, user) {
 		return this.parse("/help trivia");
 	},
 };

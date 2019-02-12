@@ -36,7 +36,7 @@ let BattleMovedex = {
 	},
 	astonish: {
 		inherit: true,
-		basePowerCallback: function (pokemon, target) {
+		basePowerCallback(pokemon, target) {
 			if (target.volatiles['minimize']) return 60;
 			return 30;
 		},
@@ -58,17 +58,17 @@ let BattleMovedex = {
 		effect: {
 			duration: 3,
 			onLockMove: 'bide',
-			onStart: function (pokemon) {
+			onStart(pokemon) {
 				this.effectData.totalDamage = 0;
 				this.add('-start', pokemon, 'move: Bide');
 			},
 			onDamagePriority: -101,
-			onDamage: function (damage, target, source, move) {
+			onDamage(damage, target, source, move) {
 				if (!move || move.effectType !== 'Move' || !source) return;
 				this.effectData.totalDamage += damage;
 				this.effectData.lastDamageSource = source;
 			},
-			onBeforeMove: function (pokemon, target, move) {
+			onBeforeMove(pokemon, target, move) {
 				if (this.effectData.duration === 1) {
 					this.add('-end', pokemon, 'move: Bide');
 					if (!this.effectData.totalDamage) {
@@ -106,10 +106,10 @@ let BattleMovedex = {
 				}
 				this.add('-activate', pokemon, 'move: Bide');
 			},
-			onMoveAborted: function (pokemon) {
+			onMoveAborted(pokemon) {
 				pokemon.removeVolatile('bide');
 			},
-			onEnd: function (pokemon) {
+			onEnd(pokemon) {
 				this.add('-end', pokemon, 'move: Bide', '[silent]');
 			},
 		},
@@ -122,7 +122,7 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "Has a 10% chance to freeze the target.",
 		shortDesc: "10% chance to freeze foe(s).",
-		onModifyMove: function () { },
+		onModifyMove() { },
 	},
 	block: {
 		inherit: true,
@@ -165,7 +165,7 @@ let BattleMovedex = {
 	conversion: {
 		inherit: true,
 		desc: "The user's type changes to match the original type of one of its known moves besides Curse, at random, but not either of its current types. Fails if the user cannot change its type, or if this move would only be able to select one of the user's current types.",
-		onHit: function (target) {
+		onHit(target) {
 			let possibleTypes = target.moveSlots.map(moveSlot => {
 				let move = this.getMove(moveSlot.id);
 				if (move.id !== 'curse' && !target.hasType(move.type)) {
@@ -189,7 +189,7 @@ let BattleMovedex = {
 	counter: {
 		inherit: true,
 		desc: "Deals damage to the last opposing Pokemon to hit the user with a physical attack this turn equal to twice the HP lost by the user from that attack. If that opposing Pokemon's position is no longer in use and there is another opposing Pokemon on the field, the damage is done to it instead. This move considers Hidden Power as Normal type, and only the last hit of a multi-hit attack is counted. Fails if the user was not hit by an opposing Pokemon's physical attack this turn, or if the user did not lose HP from the attack.",
-		damageCallback: function (pokemon) {
+		damageCallback(pokemon) {
 			let lastAttackedBy = pokemon.getLastAttackedBy();
 			if (lastAttackedBy && lastAttackedBy.move && lastAttackedBy.thisTurn && (this.getCategory(lastAttackedBy.move) === 'Physical' || this.getMove(lastAttackedBy.move).id === 'hiddenpower')) {
 				// @ts-ignore
@@ -200,17 +200,17 @@ let BattleMovedex = {
 		effect: {
 			duration: 1,
 			noCopy: true,
-			onStart: function (target, source, source2, move) {
+			onStart(target, source, source2, move) {
 				this.effectData.position = null;
 				this.effectData.damage = 0;
 			},
 			onRedirectTargetPriority: -1,
-			onRedirectTarget: function (target, source, source2) {
+			onRedirectTarget(target, source, source2) {
 				if (source !== this.effectData.target) return;
 				return source.side.foe.active[this.effectData.position];
 			},
 			onDamagePriority: -101,
-			onDamage: function (damage, target, source, effect) {
+			onDamage(damage, target, source, effect) {
 				if (effect && effect.effectType === 'Move' && source.side !== target.side && this.getCategory(effect.id) === 'Physical') {
 					this.effectData.position = source.position;
 					this.effectData.damage = 2 * damage;
@@ -251,11 +251,11 @@ let BattleMovedex = {
 		flags: {protect: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'disable',
 		effect: {
-			durationCallback: function () {
+			durationCallback() {
 				return this.random(2, 6);
 			},
 			noCopy: true,
-			onStart: function (pokemon) {
+			onStart(pokemon) {
 				if (!this.willMove(pokemon)) {
 					this.effectData.duration++;
 				}
@@ -275,16 +275,16 @@ let BattleMovedex = {
 				}
 				return false;
 			},
-			onEnd: function (pokemon) {
+			onEnd(pokemon) {
 				this.add('-end', pokemon, 'move: Disable');
 			},
-			onBeforeMove: function (attacker, defender, move) {
+			onBeforeMove(attacker, defender, move) {
 				if (move.id === this.effectData.move) {
 					this.add('cant', attacker, 'Disable', move);
 					return false;
 				}
 			},
-			onDisableMove: function (pokemon) {
+			onDisableMove(pokemon) {
 				for (const moveSlot of pokemon.moveSlots) {
 					if (moveSlot.id === this.effectData.move) {
 						pokemon.disableMove(moveSlot.id);
@@ -300,7 +300,7 @@ let BattleMovedex = {
 	},
 	doomdesire: {
 		inherit: true,
-		onTry: function (source, target) {
+		onTry(source, target) {
 			target.side.addSideCondition('futuremove');
 			if (target.side.sideConditions['futuremove'].positions[target.position]) {
 				return false;
@@ -354,10 +354,10 @@ let BattleMovedex = {
 		flags: {protect: 1, mirror: 1, authentic: 1},
 		volatileStatus: 'encore',
 		effect: {
-			durationCallback: function () {
+			durationCallback() {
 				return this.random(3, 7);
 			},
-			onStart: function (target, source) {
+			onStart(target, source) {
 				let noEncore = ['encore', 'mimic', 'mirrormove', 'sketch', 'struggle', 'transform'];
 				let moveIndex = target.lastMove ? target.moves.indexOf(target.lastMove.id) : -1;
 				if (!target.lastMove || noEncore.includes(target.lastMove.id) || !target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0) {
@@ -373,21 +373,21 @@ let BattleMovedex = {
 					this.effectData.duration++;
 				}
 			},
-			onOverrideAction: function (pokemon) {
+			onOverrideAction(pokemon) {
 				return this.effectData.move;
 			},
 			onResidualOrder: 13,
-			onResidual: function (target) {
+			onResidual(target) {
 				if (target.moves.includes(this.effectData.move) && target.moveSlots[target.moves.indexOf(this.effectData.move)].pp <= 0) {
 					// early termination if you run out of PP
 					delete target.volatiles.encore;
 					this.add('-end', target, 'Encore');
 				}
 			},
-			onEnd: function (target) {
+			onEnd(target) {
 				this.add('-end', target, 'Encore');
 			},
-			onDisableMove: function (pokemon) {
+			onDisableMove(pokemon) {
 				if (!this.effectData.move || !pokemon.hasMove(this.effectData.move)) {
 					return;
 				}
@@ -410,7 +410,7 @@ let BattleMovedex = {
 	extrasensory: {
 		inherit: true,
 		desc: "Has a 10% chance to flinch the target. Damage doubles if the target has used Minimize while active.",
-		basePowerCallback: function (pokemon, target) {
+		basePowerCallback(pokemon, target) {
 			if (target.volatiles['minimize']) return 160;
 			return 80;
 		},
@@ -473,11 +473,11 @@ let BattleMovedex = {
 	hiddenpower: {
 		inherit: true,
 		basePower: 0,
-		basePowerCallback: function (pokemon) {
+		basePowerCallback(pokemon) {
 			return pokemon.hpPower || 70;
 		},
 		category: "Physical",
-		onModifyMove: function (move, pokemon) {
+		onModifyMove(move, pokemon) {
 			move.type = pokemon.hpType || 'Dark';
 			let specialTypes = ['Fire', 'Water', 'Grass', 'Ice', 'Electric', 'Dark', 'Psychic', 'Dragon'];
 			move.category = specialTypes.includes(move.type) ? 'Special' : 'Physical';
@@ -488,7 +488,7 @@ let BattleMovedex = {
 		basePower: 85,
 		desc: "If this attack is not successful and the target was not immune, the user loses HP equal to half of the damage the target would have taken, rounded down, but no less than 1 HP and no more than half of the target's maximum HP, as crash damage.",
 		shortDesc: "If miss, user takes 1/2 damage it would've dealt.",
-		onMoveFail: function (target, source, move) {
+		onMoveFail(target, source, move) {
 			if (target.runImmunity('Fighting')) {
 				let damage = this.getDamage(source, target, move, true);
 				if (typeof damage !== 'number') throw new Error("HJK recoil failed");
@@ -514,7 +514,7 @@ let BattleMovedex = {
 		basePower: 70,
 		desc: "If this attack is not successful and the target was not immune, the user loses HP equal to half of the damage the target would have taken, rounded down, but no less than 1 HP and no more than half of the target's maximum HP, as crash damage.",
 		shortDesc: "If miss, user takes 1/2 damage it would've dealt.",
-		onMoveFail: function (target, source, move) {
+		onMoveFail(target, source, move) {
 			if (target.runImmunity('Fighting')) {
 				let damage = this.getDamage(source, target, move, true);
 				if (typeof damage !== 'number') throw new Error("Jump Kick didn't recoil");
@@ -577,17 +577,17 @@ let BattleMovedex = {
 		effect: {
 			duration: 1,
 			noCopy: true,
-			onStart: function (target, source, source2, move) {
+			onStart(target, source, source2, move) {
 				this.effectData.position = null;
 				this.effectData.damage = 0;
 			},
 			onRedirectTargetPriority: -1,
-			onRedirectTarget: function (target, source, source2) {
+			onRedirectTarget(target, source, source2) {
 				if (source !== this.effectData.target) return;
 				return source.side.foe.active[this.effectData.position];
 			},
 			onDamagePriority: -101,
-			onDamage: function (damage, target, source, effect) {
+			onDamage(damage, target, source, effect) {
 				if (effect && effect.effectType === 'Move' && source.side !== target.side && this.getCategory(effect.id) === 'Special') {
 					this.effectData.position = source.position;
 					this.effectData.damage = 2 * damage;
@@ -598,8 +598,8 @@ let BattleMovedex = {
 	mirrormove: {
 		inherit: true,
 		desc: "The user uses the last move that successfully targeted the user. The copied move is used with no specific target. Fails if no move has targeted the user, if the move missed, failed, or had no effect on the user, or if the move cannot be copied by this move.",
-		onTryHit: function () { },
-		onHit: function (pokemon) {
+		onTryHit() { },
+		onHit(pokemon) {
 			let noMirror = ['assist', 'curse', 'doomdesire', 'focuspunch', 'futuresight', 'magiccoat', 'metronome', 'mimic', 'mirrormove', 'naturepower', 'psychup', 'roleplay', 'sketch', 'sleeptalk', 'spikes', 'spitup', 'taunt', 'teeterdance', 'transform'];
 			let lastAttackedBy = pokemon.getLastAttackedBy();
 			if (!lastAttackedBy || !lastAttackedBy.source.lastMove || !lastAttackedBy.move || noMirror.includes(lastAttackedBy.move) || !lastAttackedBy.source.hasMove(lastAttackedBy.move)) {
@@ -614,14 +614,14 @@ let BattleMovedex = {
 		accuracy: true,
 		desc: "This move calls another move for use depending on the battle terrain. Swift in Wi-Fi battles.",
 		shortDesc: "Attack changes based on terrain. (Swift)",
-		onHit: function (target) {
+		onHit(target) {
 			this.useMove('swift', target);
 		},
 	},
 	needlearm: {
 		inherit: true,
 		desc: "Has a 30% chance to flinch the target. Damage doubles if the target has used Minimize while active.",
-		basePowerCallback: function (pokemon, target) {
+		basePowerCallback(pokemon, target) {
 			if (target.volatiles['minimize']) return 120;
 			return 60;
 		},
@@ -738,14 +738,14 @@ let BattleMovedex = {
 	sleeptalk: {
 		inherit: true,
 		desc: "One of the user's known moves, besides this move, is selected for use at random. Fails if the user is not asleep. The selected move does not have PP deducted from it, but if it currently has 0 PP it will fail to be used. This move cannot select Assist, Bide, Focus Punch, Metronome, Mirror Move, Sleep Talk, Uproar, or any two-turn move.",
-		beforeMoveCallback: function (pokemon) {
+		beforeMoveCallback(pokemon) {
 			if (pokemon.volatiles['choicelock'] || pokemon.volatiles['encore']) {
 				this.addMove('move', pokemon, 'Sleep Talk');
 				this.add('-fail', pokemon);
 				return true;
 			}
 		},
-		onHit: function (pokemon) {
+		onHit(pokemon) {
 			let moves = [];
 			for (const moveSlot of pokemon.moveSlots) {
 				let move = moveSlot.id;
@@ -791,7 +791,7 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "Causes the target's last move used to lose 2 to 5 PP, at random. Fails if the target has not made a move, if the move has 0 or 1 PP, or if it no longer knows the move.",
 		shortDesc: "Lowers the PP of the target's last move by 2-5.",
-		onHit: function (target) {
+		onHit(target) {
 			let roll = this.random(2, 6);
 			if (target.lastMove && target.deductPP(target.lastMove.id, roll)) {
 				this.add("-activate", target, 'move: Spite', target.lastMove.id, roll);
@@ -811,16 +811,16 @@ let BattleMovedex = {
 		pp: 10,
 		effect: {
 			noCopy: true,
-			onStart: function (target) {
+			onStart(target) {
 				this.effectData.layers = 1;
 				this.add('-start', target, 'stockpile' + this.effectData.layers);
 			},
-			onRestart: function (target) {
+			onRestart(target) {
 				if (this.effectData.layers >= 3) return false;
 				this.effectData.layers++;
 				this.add('-start', target, 'stockpile' + this.effectData.layers);
 			},
-			onEnd: function (target) {
+			onEnd(target) {
 				this.effectData.layers = 0;
 				this.add('-end', target, 'Stockpile');
 			},
@@ -862,21 +862,21 @@ let BattleMovedex = {
 		flags: {protect: 1, authentic: 1},
 		effect: {
 			duration: 2,
-			onStart: function (target) {
+			onStart(target) {
 				this.add('-start', target, 'move: Taunt');
 			},
 			onResidualOrder: 12,
-			onEnd: function (target) {
+			onEnd(target) {
 				this.add('-end', target, 'move: Taunt', '[silent]');
 			},
-			onDisableMove: function (pokemon) {
+			onDisableMove(pokemon) {
 				for (const moveSlot of pokemon.moveSlots) {
 					if (this.getMove(moveSlot.move).category === 'Status') {
 						pokemon.disableMove(moveSlot.id);
 					}
 				}
 			},
-			onBeforeMove: function (attacker, defender, move) {
+			onBeforeMove(attacker, defender, move) {
 				if (move.category === 'Status') {
 					this.add('cant', attacker, 'move: Taunt', move);
 					return false;
@@ -937,7 +937,7 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "Damage doubles if a weather condition is active, and this move's type changes to match. Ice type during Hail, Water type during Rain Dance, Rock type during Sandstorm, and Fire type during Sunny Day.",
 		shortDesc: "Damage doubles and type varies during weather.",
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			switch (this.effectiveWeather()) {
 			case 'sunnyday':
 				move.type = 'Fire';

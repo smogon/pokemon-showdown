@@ -92,7 +92,7 @@ let Formats = [
 		mod: 'gen7',
 		ruleset: ['[Gen 7] RU'],
 		banlist: ['RU', 'NUBL', 'Drought'],
-		onBegin: function () {
+		onBegin() {
 			if (this.rated) this.add('html', `<div class="broadcast-blue"><strong>NU is currently suspecting Vanilluxe! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3646596/">suspect thread</a>.</strong></div>`);
 		},
 	},
@@ -245,7 +245,7 @@ let Formats = [
 			battle: 3,
 		},
 		ruleset: ['Pokemon', 'Standard GBU'],
-		onValidateSet: function (set, format) {
+		onValidateSet(set, format) {
 			if (set.item) {
 				let item = this.getItem(set.item);
 				if (!item.isBerry) return [`${set.name || set.species} has ${item.name}, which is banned in ${format.name}.`];
@@ -330,7 +330,7 @@ let Formats = [
 		ruleset: ['Pokemon', 'Minimal GBU'],
 		banlist: ['Unown', 'Dragon Ascent', 'Custap Berry', 'Enigma Berry', 'Jaboca Berry', 'Micle Berry', 'Rowap Berry'],
 		requirePlus: true,
-		onValidateTeam: function (team) {
+		onValidateTeam(team) {
 			const legends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma'];
 			let n = 0;
 			let problems = [];
@@ -360,7 +360,7 @@ let Formats = [
 		ruleset: ['Pokemon', 'Minimal GBU'],
 		banlist: ['Unown', 'Dragon Ascent'],
 		requirePlus: true,
-		onValidateTeam: function (team) {
+		onValidateTeam(team) {
 			const legends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma'];
 			let n = 0;
 			let problems = [];
@@ -394,7 +394,7 @@ let Formats = [
 		ruleset: ['Pokemon', 'Minimal GBU'],
 		banlist: ['Unown'],
 		requirePlus: true,
-		onValidateTeam: function (team) {
+		onValidateTeam(team) {
 			const legends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma'];
 			let n = 0;
 			for (const set of team) {
@@ -511,7 +511,7 @@ let Formats = [
 			'Enigma Berry', 'Figy Berry', 'Gold Berry', 'Iapapa Berry', 'Kangaskhanite', 'Leftovers', 'Mago Berry', 'Mawilite', 'Medichamite', 'Normalium Z',
 			'Oran Berry', 'Rocky Helmet', 'Shell Bell', 'Sitrus Berry', 'Wiki Berry', 'Harvest + Rowap Berry', 'Harvest + Jaboca Berry', 'Shedinja + Sturdy',
 		],
-		onValidateSet: function (set) {
+		onValidateSet(set) {
 			let template = this.getTemplate(set.species);
 			let bst = 0;
 			for (let stat in template.baseStats) {
@@ -568,7 +568,7 @@ let Formats = [
 		mod: 'pokebilities',
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Bibarel', 'Bidoof', 'Diglett', 'Dugtrio', 'Excadrill', 'Glalie', 'Gothita', 'Gothitelle', 'Gothorita', 'Octillery', 'Remoraid', 'Smeargle', 'Snorunt', 'Trapinch', 'Wobbuffet', 'Wynaut'],
-		onBegin: function () {
+		onBegin() {
 			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
 			for (let pokemon of allPokemon) {
 				if (pokemon.ability === toId(pokemon.template.abilities['S'])) {
@@ -579,10 +579,10 @@ let Formats = [
 			}
 		},
 		onSwitchInPriority: 2,
-		onSwitchIn: function (pokemon) {
+		onSwitchIn(pokemon) {
 			if (pokemon.innates) pokemon.innates.forEach(innate => pokemon.addVolatile("ability" + innate, pokemon));
 		},
-		onAfterMega: function (pokemon) {
+		onAfterMega(pokemon) {
 			Object.keys(pokemon.volatiles).filter(innate => innate.startsWith('ability')).forEach(innate => pokemon.removeVolatile(innate));
 			pokemon.innates = undefined;
 		},
@@ -596,7 +596,7 @@ let Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
-		onModifyTemplate: function (template, pokemon) {
+		onModifyTemplate(template, pokemon) {
 			if (!pokemon || template.types.includes(pokemon.hpType)) return;
 			let dex = this && this.deepClone ? this : Dex;
 			let newTemplate = dex.deepClone(template);
@@ -620,7 +620,7 @@ let Formats = [
 		mod: 'gen7',
 		ruleset: ['Pokemon', 'Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'CFZ Clause', 'Endless Battle Clause', 'Sleep Clause Mod', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod'],
 		banlist: ['Groudon-Primal', 'Arena Trap', 'Huge Power', 'Illusion', 'Innards Out', 'Magnet Pull', 'Moody', 'Parental Bond', 'Protean', 'Psychic Surge', 'Pure Power', 'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard', 'Gengarite', 'Chatter', 'Comatose + Sleep Talk'],
-		onBegin: function () {
+		onBegin() {
 			if (this.rated) this.add('html', `<div class="broadcast-blue"><strong>BH is currently testing Sleep Clause! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3646869/">suspect thread</a>.</strong></div>`);
 		},
 	},
@@ -641,7 +641,7 @@ let Formats = [
 			'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Marshadow', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane',
 			'Palkia', 'Pheromosa', 'Rayquaza', 'Regigigas', 'Reshiram', 'Slaking', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zekrom',
 		],
-		onValidateTeam: function (team) {
+		onValidateTeam(team) {
 			/**@type {{[k: string]: true}} */
 			let itemTable = {};
 			for (const set of team) {
@@ -652,7 +652,7 @@ let Formats = [
 				itemTable[item.id] = true;
 			}
 		},
-		onValidateSet: function (set, format) {
+		onValidateSet(set, format) {
 			let template = this.getTemplate(set.species || set.name);
 			let item = this.getItem(set.item);
 			if (!item.megaEvolves && !['blueorb', 'redorb', 'ultranecroziumz'].includes(item.id)) return;
@@ -661,12 +661,12 @@ let Formats = [
 			let uberPokemon = format.cannotMega || [];
 			if (uberPokemon.includes(template.name) || set.ability === 'Power Construct' || uberStones.includes(item.name)) return ["" + template.species + " is not allowed to hold " + item.name + "."];
 		},
-		onBegin: function () {
+		onBegin() {
 			for (const pokemon of this.p1.pokemon.concat(this.p2.pokemon)) {
 				pokemon.originalSpecies = pokemon.baseTemplate.species;
 			}
 		},
-		onSwitchIn: function (pokemon) {
+		onSwitchIn(pokemon) {
 			let oMegaTemplate = this.getTemplate(pokemon.template.originalMega);
 			if (oMegaTemplate.exists && pokemon.originalSpecies !== oMegaTemplate.baseSpecies) {
 				// Place volatiles on the Pokémon to show its mega-evolved condition and details
@@ -677,7 +677,7 @@ let Formats = [
 				}
 			}
 		},
-		onSwitchOut: function (pokemon) {
+		onSwitchOut(pokemon) {
 			let oMegaTemplate = this.getTemplate(pokemon.template.originalMega);
 			if (oMegaTemplate.exists && pokemon.originalSpecies !== oMegaTemplate.baseSpecies) {
 				this.add('-end', pokemon, oMegaTemplate.requiredItem || oMegaTemplate.requiredMove, '[silent]');
@@ -700,7 +700,7 @@ let Formats = [
 			'Comatose', 'Contrary', 'Fluffy', 'Fur Coat', 'Huge Power', 'Illusion', 'Imposter', 'Innards Out',
 			'Parental Bond', 'Protean', 'Pure Power', 'Simple', 'Speed Boost', 'Stakeout', 'Water Bubble', 'Wonder Guard',
 		],
-		onValidateSet: function (set, format) {
+		onValidateSet(set, format) {
 			let restrictedAbilities = format.restrictedAbilities || [];
 			if (restrictedAbilities.includes(set.ability)) {
 				let template = this.getTemplate(set.species || set.name);
@@ -736,15 +736,15 @@ let Formats = [
 		searchShow: false,
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Kartana', 'Kyurem-Black', 'Shedinja'],
-		onModifyTemplate: function (template, target, source) {
+		onModifyTemplate(template, target, source) {
 			if (!source) return;
 			let types = [...new Set(target.baseMoveSlots.slice(0, 2).map(move => this.getMove(move.id).type))];
 			return Object.assign({}, template, {types: types});
 		},
-		onSwitchIn: function (pokemon) {
+		onSwitchIn(pokemon) {
 			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
 		},
-		onAfterMega: function (pokemon) {
+		onAfterMega(pokemon) {
 			this.add('-start', pokemon, 'typechange', pokemon.types.join('/'), '[silent]');
 		},
 	},
@@ -764,7 +764,7 @@ let Formats = [
 			'Huge Power', 'Imposter', 'Normalize', 'Pure Power', 'Wonder Guard', 'Mimic', 'Sketch', 'Sweet Scent', 'Transform',
 		],
 		onSwitchInPriority: 2,
-		onSwitchIn: function (pokemon) {
+		onSwitchIn(pokemon) {
 			if (this.p1.active.every(ally => ally && !ally.fainted)) {
 				let p1a = this.p1.active[0], p1b = this.p1.active[1];
 				if (p1a.ability !== p1b.ability) {
@@ -797,7 +797,7 @@ let Formats = [
 				}
 			}
 		},
-		onSwitchOut: function (pokemon) {
+		onSwitchOut(pokemon) {
 			if (pokemon.innate) {
 				pokemon.removeVolatile(pokemon.innate);
 				delete pokemon.innate;
@@ -808,7 +808,7 @@ let Formats = [
 				delete ally.innate;
 			}
 		},
-		onFaint: function (pokemon) {
+		onFaint(pokemon) {
 			if (pokemon.innate) {
 				pokemon.removeVolatile(pokemon.innate);
 				delete pokemon.innate;
@@ -937,12 +937,12 @@ let Formats = [
 		mod: 'ssb',
 		team: 'randomStaffBros',
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
-		onBegin: function () {
+		onBegin() {
 			this.add('raw|SUPER STAFF BROS <b>BRAWL</b>!!');
 			this.add('message', 'GET READY FOR THE NEXT BATTLE!');
 			this.add(`raw|<div class='broadcast-green'><b>Wondering what all these custom moves, abilities, and items do?<br />Check out the <a href="https://www.smogon.com/articles/super-staff-bros-brawl" target="_blank">Super Staff Bros Brawl Guide</a> and find out!</b></div>`);
 		},
-		onSwitchIn: function (pokemon) {
+		onSwitchIn(pokemon) {
 			let name = toId(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
 			if (this.getTemplate(name).exists) {
 				// Certain pokemon have volatiles named after their speciesid
@@ -1382,7 +1382,7 @@ let Formats = [
 			'Shaymin', 'Shaymin-Sky', 'Arceus', 'Victini', 'Keldeo', 'Meloetta', 'Genesect', 'Diancie', 'Hoopa', 'Hoopa-Unbound', 'Volcanion', 'Soul Dew',
 		],
 		requirePentagon: true,
-		onValidateTeam: function (team) {
+		onValidateTeam(team) {
 			const legends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde'];
 			let n = 0;
 			for (const set of team) {

@@ -4,7 +4,7 @@
 exports.BattleAbilities = {
 	trace: {
 		inherit: true,
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (!pokemon.isStarted) return;
 			let isAbility = this.effect.effectType === "Ability";
 			/**@type {string[]} */

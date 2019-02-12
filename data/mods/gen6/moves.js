@@ -41,7 +41,7 @@ let BattleMovedex = {
 		desc: "Causes the target to fall asleep.",
 		shortDesc: "Causes the foe(s) to fall asleep.",
 		accuracy: 80,
-		onTryMove: function () {},
+		onTryMove() {},
 	},
 	defog: {
 		inherit: true,
@@ -50,7 +50,7 @@ let BattleMovedex = {
 	destinybond: {
 		inherit: true,
 		desc: "Until the user's next turn, if an opposing Pokemon's attack knocks the user out, that Pokemon faints as well, unless the attack was Doom Desire or Future Sight.",
-		onPrepareHit: function (pokemon) {
+		onPrepareHit(pokemon) {
 			pokemon.removeVolatile('destinybond');
 		},
 	},
@@ -76,7 +76,7 @@ let BattleMovedex = {
 		desc: "For 3 turns, the target is forced to repeat its last move used. If the affected move runs out of PP, the effect ends. Fails if the target is already under this effect, if it has not made a move, if the move has 0 PP, or if the move is Encore, Mimic, Mirror Move, Sketch, Struggle, or Transform.",
 		effect: {
 			duration: 3,
-			onStart: function (target) {
+			onStart(target) {
 				let noEncore = ['encore', 'mimic', 'mirrormove', 'sketch', 'struggle', 'transform'];
 				let moveIndex = target.lastMove ? target.moves.indexOf(target.lastMove.id) : -1;
 				if (!target.lastMove || noEncore.includes(target.lastMove.id) || !target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0) {
@@ -90,20 +90,20 @@ let BattleMovedex = {
 					this.effectData.duration++;
 				}
 			},
-			onOverrideAction: function (pokemon, target, move) {
+			onOverrideAction(pokemon, target, move) {
 				if (move.id !== this.effectData.move) return this.effectData.move;
 			},
 			onResidualOrder: 13,
-			onResidual: function (target) {
+			onResidual(target) {
 				if (target.moves.includes(this.effectData.move) && target.moveSlots[target.moves.indexOf(this.effectData.move)].pp <= 0) { // early termination if you run out of PP
 					delete target.volatiles.encore;
 					this.add('-end', target, 'Encore');
 				}
 			},
-			onEnd: function (target) {
+			onEnd(target) {
 				this.add('-end', target, 'Encore');
 			},
-			onDisableMove: function (pokemon) {
+			onDisableMove(pokemon) {
 				if (!this.effectData.move || !pokemon.hasMove(this.effectData.move)) {
 					return;
 				}
@@ -132,7 +132,7 @@ let BattleMovedex = {
 		desc: "Raises the user's Attack by 2 stages if this move knocks out the target.",
 		shortDesc: "Raises user's Attack by 2 if this KOes the target.",
 		basePower: 30,
-		onAfterMoveSecondarySelf: function (pokemon, target, move) {
+		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (!target || target.fainted || target.hp <= 0) this.boost({atk: 2}, pokemon, pokemon, move);
 		},
 	},
@@ -151,7 +151,7 @@ let BattleMovedex = {
 	gastroacid: {
 		inherit: true,
 		desc: "Causes the target's Ability to be rendered ineffective as long as it remains active. If the target uses Baton Pass, the replacement will remain under this effect. If the target's Ability is Multitype or Stance Change, this move fails, and receiving the effect through Baton Pass ends the effect immediately.",
-		onTryHit: function (pokemon) {
+		onTryHit(pokemon) {
 			let bannedAbilities = ['multitype', 'stancechange'];
 			if (bannedAbilities.includes(pokemon.ability)) {
 				return false;
@@ -213,12 +213,12 @@ let BattleMovedex = {
 		desc: "Raises the user's evasiveness by 2 stages. Whether or not the user's evasiveness was changed, Body Slam, Dragon Rush, Flying Press, Heat Crash, Phantom Force, Shadow Force, Steamroller, and Stomp will not check accuracy and have their damage doubled if used against the user while it is active.",
 		effect: {
 			noCopy: true,
-			onSourceModifyDamage: function (damage, source, target, move) {
+			onSourceModifyDamage(damage, source, target, move) {
 				if (['stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'phantomforce', 'heatcrash', 'shadowforce'].includes(move.id)) {
 					return this.chainModify(2);
 				}
 			},
-			onAccuracy: function (accuracy, target, source, move) {
+			onAccuracy(accuracy, target, source, move) {
 				if (['stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'phantomforce', 'heatcrash', 'shadowforce'].includes(move.id)) {
 					return true;
 				}
@@ -235,26 +235,26 @@ let BattleMovedex = {
 		desc: "For 5 turns, the terrain becomes Misty Terrain. During the effect, the power of Dragon-type attacks used against grounded Pokemon is multiplied by 0.5 and grounded Pokemon cannot be inflicted with a major status condition. Camouflage transforms the user into a Fairy type, Nature Power becomes Moonblast, and Secret Power has a 30% chance to lower Special Attack by 1 stage. Fails if the current terrain is Misty Terrain.",
 		effect: {
 			duration: 5,
-			durationCallback: function (source, effect) {
+			durationCallback(source, effect) {
 				if (source && source.hasItem('terrainextender')) {
 					return 8;
 				}
 				return 5;
 			},
-			onSetStatus: function (status, target, source, effect) {
+			onSetStatus(status, target, source, effect) {
 				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
 				if (effect.id === 'synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
 					this.add('-activate', target, 'move: Misty Terrain');
 				}
 				return false;
 			},
-			onBasePower: function (basePower, attacker, defender, move) {
+			onBasePower(basePower, attacker, defender, move) {
 				if (move.type === 'Dragon' && defender.isGrounded() && !defender.isSemiInvulnerable()) {
 					this.debug('misty terrain weaken');
 					return this.chainModify(0.5);
 				}
 			},
-			onStart: function (battle, source, effect) {
+			onStart(battle, source, effect) {
 				if (effect && effect.effectType === 'Ability') {
 					this.add('-fieldstart', 'move: Misty Terrain', '[from] ability: ' + effect, '[of] ' + source);
 				} else {
@@ -263,7 +263,7 @@ let BattleMovedex = {
 			},
 			onResidualOrder: 21,
 			onResidualSubOrder: 2,
-			onEnd: function (side) {
+			onEnd(side) {
 				this.add('-fieldend', 'Misty Terrain');
 			},
 		},
@@ -305,11 +305,11 @@ let BattleMovedex = {
 		desc: "If the target uses a Fire-type move this turn, it is prevented from executing and the target loses 1/4 of its maximum HP, rounded half up. This effect happens before the Fire-type move would be prevented by Primordial Sea.",
 		effect: {
 			duration: 1,
-			onStart: function (target) {
+			onStart(target) {
 				this.add('-singleturn', target, 'Powder');
 			},
 			onTryMovePriority: 1,
-			onTryMove: function (pokemon, target, move) {
+			onTryMove(pokemon, target, move) {
 				if (move.type === 'Fire') {
 					this.add('-activate', pokemon, 'move: Powder');
 					this.damage(this.clampIntRange(Math.round(pokemon.maxhp / 4), 1));
@@ -371,7 +371,7 @@ let BattleMovedex = {
 	simplebeam: {
 		inherit: true,
 		desc: "Causes the target's Ability to become Simple. Fails if the target's Ability is Multitype, Simple, Stance Change, or Truant.",
-		onTryHit: function (pokemon) {
+		onTryHit(pokemon) {
 			let bannedAbilities = ['multitype', 'simple', 'stancechange', 'truant'];
 			if (bannedAbilities.includes(pokemon.ability)) {
 				return false;
@@ -381,7 +381,7 @@ let BattleMovedex = {
 	skillswap: {
 		inherit: true,
 		desc: "The user swaps its Ability with the target's Ability. Fails if either the user or the target's Ability is Illusion, Multitype, Stance Change, or Wonder Guard.",
-		onTryHit: function (target, source) {
+		onTryHit(target, source) {
 			let bannedAbilities = ['illusion', 'multitype', 'stancechange', 'wonderguard'];
 			if (bannedAbilities.includes(target.ability) || bannedAbilities.includes(source.ability)) {
 				return false;
@@ -471,11 +471,11 @@ let BattleMovedex = {
 		shortDesc: "Protects allies from multi-target hits this turn.",
 		effect: {
 			duration: 1,
-			onStart: function (target, source) {
+			onStart(target, source) {
 				this.add('-singleturn', source, 'Wide Guard');
 			},
 			onTryHitPriority: 4,
-			onTryHit: function (target, source, effect) {
+			onTryHit(target, source, effect) {
 				// Wide Guard blocks damaging spread moves
 				if (effect && (effect.category === 'Status' || (effect.target !== 'allAdjacent' && effect.target !== 'allAdjacentFoes'))) {
 					return;
@@ -495,7 +495,7 @@ let BattleMovedex = {
 	worryseed: {
 		inherit: true,
 		desc: "Causes the target's Ability to become Insomnia. Fails if the target's Ability is Insomnia, Multitype, Stance Change, or Truant.",
-		onTryHit: function (pokemon) {
+		onTryHit(pokemon) {
 			let bannedAbilities = ['insomnia', 'multitype', 'stancechange', 'truant'];
 			if (bannedAbilities.includes(pokemon.ability)) {
 				return false;

@@ -33,7 +33,7 @@ const REQUIRE_REASONS = true;
 const commands = {
 
 	'!version': true,
-	version: function (target, room, user) {
+	version(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(`Server version: <b>${Chat.package.version}</b>`);
 	},
@@ -43,7 +43,7 @@ const commands = {
 	stafflist: 'authority',
 	globalauth: 'authority',
 	authlist: 'authority',
-	authority: function (target, room, user, connection) {
+	authority(target, room, user, connection) {
 		if (target) {
 			let targetRoom = Rooms.search(target);
 			let availableRoom = targetRoom && targetRoom.checkModjoin(user);
@@ -78,7 +78,7 @@ const commands = {
 		`/auth [user] - Show what global and roomauth a user has.`,
 	],
 
-	userlist: function (target, room, user) {
+	userlist(target, room, user) {
 		let userList = [];
 
 		for (let i in room.users) {
@@ -96,7 +96,7 @@ const commands = {
 
 	'!me': true,
 	mee: 'me',
-	me: function (target, room, user) {
+	me(target, room, user) {
 		if (this.cmd === 'mee' && /[A-Z-a-z0-9/]/.test(target.charAt(0))) {
 			return this.errorReply(`/mee - must not start with a letter or number`);
 		}
@@ -120,14 +120,14 @@ const commands = {
 
 	'!battle': true,
 	'battle!': 'battle',
-	battle: function (target, room, user, connection, cmd) {
+	battle(target, room, user, connection, cmd) {
 		if (cmd === 'battle') return this.sendReply("What?! How are you not more excited to battle?! Try /battle! to show me you're ready.");
 		if (!target) target = "randombattle";
 		return this.parse(`/search ${target}`);
 	},
 
 	'!pi': true,
-	pi: function (target, room, user) {
+	pi(target, room, user) {
 		return this.sendReplyBox(
 			'Did you mean: 1. 3.1415926535897932384626... (Decimal)<br />' +
 			'2. 3.184809493B91866... (Duodecimal)<br />' +
@@ -135,7 +135,7 @@ const commands = {
 			'How many digits of pi do YOU know? Test it out <a href="http://guangcongluo.com/mempi/">here</a>!');
 	},
 
-	code: function (target, room, user) {
+	code(target, room, user) {
 		if (!target) return this.parse('/help code');
 		if (!this.canTalk()) return;
 		if (target.startsWith('\n')) target = target.slice(1);
@@ -166,7 +166,7 @@ const commands = {
 	],
 
 	'!avatar': true,
-	avatar: function (target, room, user) {
+	avatar(target, room, user) {
 		if (!target) return this.parse(`${this.cmdToken}avatars`);
 		let parts = target.split(',');
 		let avatar = parts[0].toLowerCase().replace(/[^a-z0-9-]+/g, '');
@@ -491,12 +491,12 @@ const commands = {
 
 	'!logout': true,
 	signout: 'logout',
-	logout: function (target, room, user) {
+	logout(target, room, user) {
 		user.resetName();
 	},
 
 	r: 'reply',
-	reply: function (target, room, user) {
+	reply(target, room, user) {
 		if (!target) return this.parse('/help reply');
 		if (!user.lastPM) {
 			return this.errorReply("No one has PMed you yet.");
@@ -509,7 +509,7 @@ const commands = {
 	pm: 'msg',
 	whisper: 'msg',
 	w: 'msg',
-	msg: function (target, room, user, connection) {
+	msg(target, room, user, connection) {
 		if (!target) return this.parse('/help msg');
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
@@ -539,7 +539,7 @@ const commands = {
 
 	'!invite': true,
 	inv: 'invite',
-	invite: function (target, room, user) {
+	invite(target, room, user) {
 		if (!target) return this.parse('/help invite');
 		if (!this.canTalk()) return;
 		if (room) target = this.splitTarget(target) || room.id;
@@ -577,7 +577,7 @@ const commands = {
 		`(in a PM) /invite [roomname] - Invites the player you're PMing to join the room [roomname].`,
 	],
 
-	pminfobox: function (target, room, user, connection) {
+	pminfobox(target, room, user, connection) {
 		if (!this.canTalk()) return;
 		if (!this.can('addhtml', null, room)) return false;
 		if (!target) return this.parse("/help pminfobox");
@@ -603,7 +603,7 @@ const commands = {
 	pminfoboxhelp: [`/pminfobox [user], [html]- PMs an [html] infobox to [user]. Requires * ~`],
 
 	pmuhtmlchange: 'pmuhtml',
-	pmuhtml: function (target, room, user, connection, cmd) {
+	pmuhtml(target, room, user, connection, cmd) {
 		if (!this.canTalk()) return;
 		if (!this.can('addhtml', null, room)) return false;
 		if (!target) return this.parse("/help " + cmd);
@@ -631,7 +631,7 @@ const commands = {
 	blockpm: 'ignorepms',
 	blockpms: 'ignorepms',
 	ignorepm: 'ignorepms',
-	ignorepms: function (target, room, user) {
+	ignorepms(target, room, user) {
 		if (user.ignorePMs === (target || true)) return this.errorReply("You are already blocking private messages! To unblock, use /unblockpms");
 		user.ignorePMs = true;
 		if (target in Config.groups) {
@@ -646,7 +646,7 @@ const commands = {
 	unblockpm: 'unignorepms',
 	unblockpms: 'unignorepms',
 	unignorepm: 'unignorepms',
-	unignorepms: function (target, room, user) {
+	unignorepms(target, room, user) {
 		if (!user.ignorePMs) return this.errorReply("You are not blocking private messages! To block, use /blockpms");
 		user.ignorePMs = false;
 		return this.sendReply("You are no longer blocking private messages.");
@@ -656,7 +656,7 @@ const commands = {
 	'!away': true,
 	idle: 'away',
 	afk: 'away',
-	away: function (target, room, user) {
+	away(target, room, user) {
 		this.parse('/blockchallenges');
 		this.parse(`/blockpms ${target}`);
 	},
@@ -665,14 +665,14 @@ const commands = {
 	'!back': true,
 	unaway: 'back',
 	unafk: 'back',
-	back: function () {
+	back() {
 		this.parse('/unblockpms');
 		this.parse('/unblockchallenges');
 	},
 	backhelp: [`/back - Unblocks challenges and/or private messages, if either are blocked.`],
 
 	'!rank': true,
-	rank: function (target, room, user) {
+	rank(target, room, user) {
 		if (!target) target = user.name;
 
 		Ladders.visualizeAll(target).then(values => {
@@ -693,7 +693,7 @@ const commands = {
 	},
 
 	makeprivatechatroom: 'makechatroom',
-	makechatroom: function (target, room, user, connection, cmd) {
+	makechatroom(target, room, user, connection, cmd) {
 		if (!this.can('makeroom')) return;
 
 		// `,` is a delimiter used by a lot of /commands
@@ -732,7 +732,7 @@ const commands = {
 	makechatroomhelp: [`/makechatroom [roomname] - Creates a new room named [roomname]. Requires: & ~`],
 
 	subroomgroupchat: 'makegroupchat',
-	makegroupchat: function (target, room, user, connection, cmd) {
+	makegroupchat(target, room, user, connection, cmd) {
 		if (!this.canTalk()) return;
 		if (!user.autoconfirmed) {
 			return this.errorReply("You must be autoconfirmed to make a groupchat.");
@@ -811,7 +811,7 @@ const commands = {
 		`/subroomgroupchat [roomname] - Creates a subroom groupchat of the current room. Can only be used in a public room you have staff in.`,
 	],
 
-	deregisterchatroom: function (target, room, user) {
+	deregisterchatroom(target, room, user) {
 		if (!this.can('makeroom')) return;
 		this.errorReply("NOTE: You probably want to use `/deleteroom` now that it exists.");
 		let id = toId(target);
@@ -840,7 +840,7 @@ const commands = {
 
 	deletechatroom: 'deleteroom',
 	deletegroupchat: 'deleteroom',
-	deleteroom: function (target, room, user, connection, cmd) {
+	deleteroom(target, room, user, connection, cmd) {
 		let roomid = target.trim();
 		if (!roomid) {
 			// allow deleting personal rooms without typing out the room name
@@ -901,7 +901,7 @@ const commands = {
 	hiddenroom: 'privateroom',
 	secretroom: 'privateroom',
 	publicroom: 'privateroom',
-	privateroom: function (target, room, user, connection, cmd) {
+	privateroom(target, room, user, connection, cmd) {
 		if (room.isPersonal) {
 			if (!this.can('editroom', null, room)) return;
 		} else if (room.battle) {
@@ -984,7 +984,7 @@ const commands = {
 	],
 
 	officialchatroom: 'officialroom',
-	officialroom: function (target, room, user) {
+	officialroom(target, room, user) {
 		if (!this.can('makeroom')) return;
 		if (!room.chatRoomData) {
 			return this.errorReply(`/officialroom - This room can't be made official`);
@@ -1006,7 +1006,7 @@ const commands = {
 		}
 	},
 
-	psplwinnerroom: function (target, room, user) {
+	psplwinnerroom(target, room, user) {
 		if (!this.can('makeroom')) return;
 		if (!room.chatRoomData) {
 			return this.errorReply(`/psplwinnerroom - This room can't be marked as a PSPL Winner room`);
@@ -1029,7 +1029,7 @@ const commands = {
 	},
 
 	setsubroom: 'subroom',
-	subroom: function (target, room, user) {
+	subroom(target, room, user) {
 		if (!user.can('makeroom')) return this.errorReply(`/subroom - Access denied. Did you mean /subrooms?`);
 		if (!target) return this.parse('/help subroom');
 
@@ -1070,7 +1070,7 @@ const commands = {
 
 	removesubroom: 'unsubroom',
 	desubroom: 'unsubroom',
-	unsubroom: function (target, room, user) {
+	unsubroom(target, room, user) {
 		if (!this.can('makeroom')) return;
 		if (!room.parent || !room.chatRoomData) return this.errorReply(`This room is not currently a subroom of a public room.`);
 
@@ -1094,7 +1094,7 @@ const commands = {
 	},
 
 	parentroom: 'subrooms',
-	subrooms: function (target, room, user, connection, cmd) {
+	subrooms(target, room, user, connection, cmd) {
 		if (cmd === 'parentroom') {
 			if (!room.parent) return this.errorReply(`This room is not a subroom.`);
 			return this.sendReply(`This is a subroom of ${room.parent.title}.`);
@@ -1121,7 +1121,7 @@ const commands = {
 		`/parentroom - Displays the current room's parent room.`,
 	],
 
-	roomdesc: function (target, room, user) {
+	roomdesc(target, room, user) {
 		if (!target) {
 			if (!this.runBroadcast()) return;
 			if (!room.desc) return this.sendReply(`This room does not have a description set.`);
@@ -1155,7 +1155,7 @@ const commands = {
 	},
 
 	topic: 'roomintro',
-	roomintro: function (target, room, user, connection, cmd) {
+	roomintro(target, room, user, connection, cmd) {
 		if (!target) {
 			if (!this.runBroadcast()) return;
 			if (!room.introMessage) return this.sendReply("This room does not have an introduction set.");
@@ -1193,7 +1193,7 @@ const commands = {
 	},
 
 	deletetopic: 'deleteroomintro',
-	deleteroomintro: function (target, room, user) {
+	deleteroomintro(target, room, user) {
 		if (!this.can('declare', null, room)) return false;
 		if (!room.introMessage) return this.errorReply("This room does not have a introduction set.");
 
@@ -1209,7 +1209,7 @@ const commands = {
 	},
 
 	stafftopic: 'staffintro',
-	staffintro: function (target, room, user, connection, cmd) {
+	staffintro(target, room, user, connection, cmd) {
 		if (!target) {
 			if (!this.can('mute', null, room)) return false;
 			if (!room.staffMessage) return this.sendReply("This room does not have a staff introduction set.");
@@ -1248,7 +1248,7 @@ const commands = {
 	},
 
 	deletestafftopic: 'deletestaffintro',
-	deletestaffintro: function (target, room, user) {
+	deletestaffintro(target, room, user) {
 		if (!this.can('ban', null, room)) return false;
 		if (!room.staffMessage) return this.errorReply("This room does not have a staff introduction set.");
 
@@ -1263,7 +1263,7 @@ const commands = {
 		}
 	},
 
-	roomalias: function (target, room, user) {
+	roomalias(target, room, user) {
 		if (!target) {
 			if (!this.runBroadcast()) return;
 			if (!room.aliases || !room.aliases.length) return this.sendReplyBox("This room does not have any aliases.");
@@ -1300,7 +1300,7 @@ const commands = {
 	deleteroomalias: 'removeroomalias',
 	deroomalias: 'removeroomalias',
 	unroomalias: 'removeroomalias',
-	removeroomalias: function (target, room, user) {
+	removeroomalias(target, room, user) {
 		if (!room.aliases) return this.errorReply("This room does not have any aliases.");
 		if (!this.can('makeroom')) return false;
 		if (target.includes(',')) {
@@ -1324,7 +1324,7 @@ const commands = {
 	},
 	removeroomaliashelp: [`/removeroomalias [alias] - removes the given room alias of the room the command was entered in. Requires: & ~`],
 
-	roomowner: function (target, room, user) {
+	roomowner(target, room, user) {
 		if (!room.chatRoomData) {
 			return this.sendReply("/roomowner - This room isn't designed for per-room moderation to be added");
 		}
@@ -1361,7 +1361,7 @@ const commands = {
 
 	'!roompromote': true,
 	roomdemote: 'roompromote',
-	roompromote: function (target, room, user, connection, cmd) {
+	roompromote(target, room, user, connection, cmd) {
 		if (!room) {
 			// this command isn't marked as room-only because it's usable in PMs through /invite
 			return this.errorReply("This command is only available in rooms");
@@ -1469,7 +1469,7 @@ const commands = {
 	'!roomauth': true,
 	roomstaff: 'roomauth',
 	roomauth1: 'roomauth',
-	roomauth: function (target, room, user, connection, cmd) {
+	roomauth(target, room, user, connection, cmd) {
 		let userLookup = '';
 		if (cmd === 'roomauth1') userLookup = `\n\nTo look up auth for a user, use /userauth ${target}`;
 		let targetRoom = room;
@@ -1515,7 +1515,7 @@ const commands = {
 	},
 
 	'!userauth': true,
-	userauth: function (target, room, user, connection) {
+	userauth(target, room, user, connection) {
 		let targetId = toId(target) || user.userid;
 		let targetUser = Users.getExact(targetId);
 		let targetUsername = (targetUser ? targetUser.name : target);
@@ -1572,7 +1572,7 @@ const commands = {
 	rb: 'ban',
 	roomban: 'ban',
 	b: 'ban',
-	ban: function (target, room, user, connection) {
+	ban(target, room, user, connection) {
 		if (!target) return this.parse('/help ban');
 		if (!this.canTalk()) return;
 
@@ -1632,7 +1632,7 @@ const commands = {
 
 	unroomban: 'unban',
 	roomunban: 'unban',
-	unban: function (target, room, user, connection) {
+	unban(target, room, user, connection) {
 		if (!target) return this.parse('/help unban');
 		if (!this.can('ban', null, room)) return false;
 
@@ -1650,7 +1650,7 @@ const commands = {
 	unbanhelp: [`/roomunban [username] - Unbans the user from the room you are in. Requires: @ # & ~`],
 
 	'!autojoin': true,
-	autojoin: function (target, room, user, connection) {
+	autojoin(target, room, user, connection) {
 		let targets = target.split(',');
 		if (targets.length > 11 || connection.inRooms.size > 1) return;
 		Rooms.global.autojoinRooms(user, connection);
@@ -1666,7 +1666,7 @@ const commands = {
 	'!join': true,
 	joim: 'join',
 	j: 'join',
-	join: function (target, room, user, connection) {
+	join(target, room, user, connection) {
 		if (!target) return this.parse('/help join');
 		if (target.startsWith('http://')) target = target.slice(7);
 		if (target.startsWith('https://')) target = target.slice(8);
@@ -1680,7 +1680,7 @@ const commands = {
 
 	'!part': true,
 	leave: 'part',
-	part: function (target, room, user, connection) {
+	part(target, room, user, connection) {
 		let targetRoom = target ? Rooms.search(target) : room;
 		if (!targetRoom || targetRoom === Rooms.global) {
 			if (target.startsWith('view-')) return;
@@ -1695,7 +1695,7 @@ const commands = {
 
 	kick: 'warn',
 	k: 'warn',
-	warn: function (target, room, user) {
+	warn(target, room, user) {
 		if (!target) return this.parse('/help warn');
 		if (!this.canTalk()) return;
 		if (room.isPersonal && !user.can('warn')) return this.errorReply("Warning is unavailable in group chats.");
@@ -1727,7 +1727,7 @@ const commands = {
 	warnhelp: [`/warn OR /k [username], [reason] - Warns a user showing them the Pok\u00e9mon Showdown Rules and [reason] in an overlay. Requires: % @ # & ~`],
 
 	redirect: 'redir',
-	redir: function (target, room, user, connection) {
+	redir(target, room, user, connection) {
 		if (!target) return this.parse('/help redirect');
 		if (room.isPrivate || room.isPersonal) return this.errorReply("Users cannot be redirected from private or personal rooms.");
 
@@ -1760,7 +1760,7 @@ const commands = {
 	redirhelp: [`/redirect OR /redir [username], [roomname] - Attempts to redirect the user [username] to the room [roomname]. Requires: % @ & ~`],
 
 	m: 'mute',
-	mute: function (target, room, user, connection, cmd) {
+	mute(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help mute');
 		if (!this.canTalk()) return;
 
@@ -1799,14 +1799,14 @@ const commands = {
 	mutehelp: [`/mute OR /m [username], [reason] - Mutes a user with reason for 7 minutes. Requires: % @ * # & ~`],
 
 	hm: 'hourmute',
-	hourmute: function (target) {
+	hourmute(target) {
 		if (!target) return this.parse('/help hourmute');
 		this.run('mute');
 	},
 	hourmutehelp: [`/hourmute OR /hm [username], [reason] - Mutes a user with reason for an hour. Requires: % @ * # & ~`],
 
 	um: 'unmute',
-	unmute: function (target, room, user) {
+	unmute(target, room, user) {
 		if (!target) return this.parse('/help unmute');
 		target = this.splitTarget(target);
 		if (target) return this.errorReply(`This command does not support specifying a reason.`);
@@ -1830,7 +1830,7 @@ const commands = {
 	ipmute: 'lock',
 	wl: 'lock',
 	weeklock: 'lock',
-	lock: function (target, room, user, connection, cmd) {
+	lock(target, room, user, connection, cmd) {
 		let week = cmd === 'wl' || cmd === 'weeklock';
 
 		if (!target) {
@@ -1958,7 +1958,7 @@ const commands = {
 		`/lock OR /l [username], [reason] spoiler: [proof] - Marks proof in modlog only.`,
 	],
 
-	unlock: function (target, room, user) {
+	unlock(target, room, user) {
 		if (!target) return this.parse('/help unlock');
 		if (!this.can('lock')) return false;
 
@@ -1986,7 +1986,7 @@ const commands = {
 			this.errorReply(`User '${target}' is not locked.`);
 		}
 	},
-	unlockname: function (target, room, user) {
+	unlockname(target, room, user) {
 		if (!target) return this.parse('/help unlock');
 		if (!this.can('lock')) return false;
 
@@ -2014,7 +2014,7 @@ const commands = {
 			Rooms('staff').addByUser(user, `<<${room.id}>> ${unlockMessage}`);
 		}
 	},
-	unlockip: function (target, room, user) {
+	unlockip(target, room, user) {
 		target = target.trim();
 		if (!target) return this.parse('/help unlock');
 		if (!this.can('ban')) return false;
@@ -2051,7 +2051,7 @@ const commands = {
 
 	forceglobalban: 'globalban',
 	gban: 'globalban',
-	globalban: function (target, room, user, connection, cmd) {
+	globalban(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help globalban');
 
 		target = this.splitTarget(target);
@@ -2137,7 +2137,7 @@ const commands = {
 	],
 
 	globalunban: 'unglobalban',
-	unglobalban: function (target, room, user) {
+	unglobalban(target, room, user) {
 		if (!target) return this.parse(`/help unglobalban`);
 		if (!this.can('ban')) return false;
 
@@ -2158,7 +2158,7 @@ const commands = {
 	},
 	unglobalbanhelp: [`/unglobalban [username] - Unban a user. Requires: @ * & ~`],
 
-	unbanall: function (target, room, user) {
+	unbanall(target, room, user) {
 		if (!this.can('rangeban')) return false;
 		if (!target) {
 			user.lastCommand = '/unbanall';
@@ -2178,7 +2178,7 @@ const commands = {
 	},
 	unbanallhelp: [`/unbanall - Unban all IP addresses. Requires: & ~`],
 
-	deroomvoiceall: function (target, room, user) {
+	deroomvoiceall(target, room, user) {
 		if (!this.can('editroom', null, room)) return false;
 		if (!room.auth) return this.errorReply("Room does not have roomauth.");
 		if (!target) {
@@ -2211,7 +2211,7 @@ const commands = {
 	deroomvoiceallhelp: [`/deroomvoiceall - Devoice all roomvoiced users. Requires: # & ~`],
 
 	rangeban: 'banip',
-	banip: function (target, room, user) {
+	banip(target, room, user) {
 		const [ip, reason] = this.splitOne(target);
 		if (!ip || !/^[0-9.]+(?:\.\*)?$/.test(ip)) return this.parse('/help banip');
 		if (!reason) return this.errorReply("/banip requires a ban reason");
@@ -2230,7 +2230,7 @@ const commands = {
 	baniphelp: [`/banip [ip] - Globally bans this IP or IP range for an hour. Accepts wildcards to ban ranges. Existing users on the IP will not be banned. Requires: & ~`],
 
 	unrangeban: 'unbanip',
-	unbanip: function (target, room, user) {
+	unbanip(target, room, user) {
 		target = target.trim();
 		if (!target) {
 			return this.parse('/help unbanip');
@@ -2246,7 +2246,7 @@ const commands = {
 	unbaniphelp: [`/unbanip [ip] - Unbans. Accepts wildcards to ban ranges. Requires: & ~`],
 
 	rangelock: 'lockip',
-	lockip: function (target, room, user) {
+	lockip(target, room, user) {
 		const [ip, reason] = this.splitOne(target);
 		if (!ip || !/^[0-9.]+(?:\.\*)?$/.test(ip)) return this.parse('/help lockip');
 		if (!reason) return this.errorReply("/lockip requires a lock reason");
@@ -2274,7 +2274,7 @@ const commands = {
 	 *********************************************************/
 
 	mn: 'modnote',
-	modnote: function (target, room, user, connection) {
+	modnote(target, room, user, connection) {
 		if (!target) return this.parse('/help modnote');
 		if (!this.canTalk()) return;
 
@@ -2290,7 +2290,7 @@ const commands = {
 	modnotehelp: [`/modnote [note] - Adds a moderator note that can be read through modlog. Requires: % @ * # & ~`],
 
 	globalpromote: 'promote',
-	promote: function (target, room, user, connection, cmd) {
+	promote(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help promote');
 
 		target = this.splitTarget(target, true);
@@ -2350,7 +2350,7 @@ const commands = {
 	promotehelp: [`/promote [username], [group] - Promotes the user to the specified group. Requires: & ~`],
 
 	confirmuser: 'trustuser',
-	trustuser: function (target, room, user) {
+	trustuser(target, room, user) {
 		if (!target) return this.parse('/help trustuser');
 		if (!this.can('promote')) return;
 
@@ -2373,13 +2373,13 @@ const commands = {
 	trustuserhelp: [`/trustuser [username] - Trusts the user (makes them immune to locks). Requires: & ~`],
 
 	globaldemote: 'demote',
-	demote: function (target) {
+	demote(target) {
 		if (!target) return this.parse('/help demote');
 		this.run('promote');
 	},
 	demotehelp: [`/demote [username], [group] - Demotes the user to the specified group. Requires: & ~`],
 
-	forcepromote: function (target, room, user) {
+	forcepromote(target, room, user) {
 		// warning: never document this command in /help
 		if (!this.can('forcepromote')) return false;
 		target = this.splitTarget(target, true);
@@ -2398,25 +2398,25 @@ const commands = {
 	},
 
 	devoice: 'deauth',
-	deauth: function (target, room, user) {
+	deauth(target, room, user) {
 		return this.parse(`/demote ${target}, deauth`);
 	},
 
 	deglobalvoice: 'globaldeauth',
 	deglobalauth: 'globaldeauth',
 	globaldevoice: 'globaldeauth',
-	globaldeauth: function (target, room, user) {
+	globaldeauth(target, room, user) {
 		return this.parse(`/globaldemote ${target}, deauth`);
 	},
 
 	deroomvoice: 'roomdeauth',
 	roomdevoice: 'roomdeauth',
 	deroomauth: 'roomdeauth',
-	roomdeauth: function (target, room, user) {
+	roomdeauth(target, room, user) {
 		return this.parse(`/roomdemote ${target}, deauth`);
 	},
 
-	declare: function (target, room, user) {
+	declare(target, room, user) {
 		target = target.trim();
 		if (!target) return this.parse('/help declare');
 		if (!this.can('declare', null, room)) return false;
@@ -2431,7 +2431,7 @@ const commands = {
 	},
 	declarehelp: [`/declare [message] - Anonymously announces a message. Requires: # * & ~`],
 
-	htmldeclare: function (target, room, user) {
+	htmldeclare(target, room, user) {
 		if (!target) return this.parse('/help htmldeclare');
 		if (!this.can('gdeclare', null, room)) return false;
 		if (!this.canTalk()) return;
@@ -2447,7 +2447,7 @@ const commands = {
 	htmldeclarehelp: [`/htmldeclare [message] - Anonymously announces a message using safe HTML. Requires: ~`],
 
 	gdeclare: 'globaldeclare',
-	globaldeclare: function (target, room, user) {
+	globaldeclare(target, room, user) {
 		if (!target) return this.parse('/help globaldeclare');
 		if (!this.can('gdeclare')) return false;
 		target = this.canHTML(target);
@@ -2461,7 +2461,7 @@ const commands = {
 	globaldeclarehelp: [`/globaldeclare [message] - Anonymously announces a message to every room on the server. Requires: ~`],
 
 	cdeclare: 'chatdeclare',
-	chatdeclare: function (target, room, user) {
+	chatdeclare(target, room, user) {
 		if (!target) return this.parse('/help chatdeclare');
 		if (!this.can('gdeclare')) return false;
 		target = this.canHTML(target);
@@ -2476,7 +2476,7 @@ const commands = {
 
 	'!announce': true,
 	wall: 'announce',
-	announce: function (target, room, user) {
+	announce(target, room, user) {
 		if (!target) return this.parse('/help announce');
 
 		if (room && !this.can('announce', null, room)) return false;
@@ -2489,7 +2489,7 @@ const commands = {
 	announcehelp: [`/announce OR /wall [message] - Makes an announcement. Requires: % @ * # & ~`],
 
 	notifyoffrank: 'notifyrank',
-	notifyrank: function (target, room, user, connection, cmd) {
+	notifyrank(target, room, user, connection, cmd) {
 		if (!target) return this.parse(`/help notifyrank`);
 		if (!this.can('addhtml', null, room)) return false;
 		if (!this.canTalk()) return;
@@ -2526,7 +2526,7 @@ const commands = {
 	],
 
 	fr: 'forcerename',
-	forcerename: function (target, room, user) {
+	forcerename(target, room, user) {
 		if (!target) return this.parse('/help forcerename');
 
 		let reason = this.splitTarget(target, true);
@@ -2552,7 +2552,7 @@ const commands = {
 	forcerenamehelp: [`/forcerename OR /fr [username], [reason] - Forcibly change a user's name and shows them the [reason]. Requires: % @ * & ~`],
 
 	nl: 'namelock',
-	namelock: function (target, room, user) {
+	namelock(target, room, user) {
 		if (!target) return this.parse('/help namelock');
 
 		let reason = this.splitTarget(target, true);
@@ -2582,7 +2582,7 @@ const commands = {
 	namelockhelp: [`/namelock OR /nl [username], [reason] - Name locks a user and shows them the [reason]. Requires: % @ * & ~`],
 
 	unl: 'unnamelock',
-	unnamelock: function (target, room, user) {
+	unnamelock(target, room, user) {
 		if (!target) return this.parse('/help unnamelock');
 		if (!this.can('forcerename')) return false;
 
@@ -2607,7 +2607,7 @@ const commands = {
 	hidetextalts: 'hidetext',
 	hidealttext: 'hidetext',
 	hidealtstext: 'hidetext',
-	hidetext: function (target, room, user, connection, cmd) {
+	hidetext(target, room, user, connection, cmd) {
 		if (!target) return this.parse(`/help hidetext`);
 
 		this.splitTarget(target);
@@ -2639,7 +2639,7 @@ const commands = {
 	],
 
 	ab: 'blacklist',
-	blacklist: function (target, room, user) {
+	blacklist(target, room, user) {
 		if (!target) return this.parse('/help blacklist');
 		if (!this.canTalk()) return;
 		if (toId(target) === 'show') return this.errorReply(`You're looking for /showbl`);
@@ -2711,7 +2711,7 @@ const commands = {
 	],
 
 	forcebattleban: 'battleban',
-	battleban: function (target, room, user, connection, cmd) {
+	battleban(target, room, user, connection, cmd) {
 		if (!target) return this.parse(`/help battleban`);
 
 		const reason = this.splitTarget(target);
@@ -2762,7 +2762,7 @@ const commands = {
 	},
 	battlebanhelp: [`/battleban [username], [reason] - Prevents the user from starting new battles for 2 days and shows them the [reason]. Requires: % @ * & ~`],
 
-	unbattleban: function (target, room, user) {
+	unbattleban(target, room, user) {
 		if (!target) return this.parse('/help unbattleban');
 		if (!this.can('lock')) return;
 
@@ -2780,7 +2780,7 @@ const commands = {
 	unbattlebanhelp: [`/unbattleban [username] - Allows a user to battle again. Requires: % @ * & ~`],
 
 	nameblacklist: 'blacklistname',
-	blacklistname: function (target, room, user) {
+	blacklistname(target, room, user) {
 		if (!target) return this.parse('/help blacklistname');
 		if (!this.canTalk()) return;
 		if (!this.can('editroom', null, room)) return false;
@@ -2826,7 +2826,7 @@ const commands = {
 	blacklistnamehelp: [`/blacklistname OR /nameblacklist [username1, username2, etc.] | reason - Blacklists the given username(s) from the room you are in for a year. Requires: # & ~`],
 
 	unab: 'unblacklist',
-	unblacklist: function (target, room, user) {
+	unblacklist(target, room, user) {
 		if (!target) return this.parse('/help unblacklist');
 		if (!this.can('editroom', null, room)) return false;
 
@@ -2843,7 +2843,7 @@ const commands = {
 	},
 	unblacklisthelp: [`/unblacklist [username] - Unblacklists the user from the room you are in. Requires: # & ~`],
 
-	unblacklistall: function (target, room, user) {
+	unblacklistall(target, room, user) {
 		if (!this.can('editroom', null, room)) return false;
 
 		if (!target) {
@@ -2868,7 +2868,7 @@ const commands = {
 	expiringblacklists: 'showblacklist',
 	blacklists: 'showblacklist',
 	showbl: 'showblacklist',
-	showblacklist: function (target, room, user, connection, cmd) {
+	showblacklist(target, room, user, connection, cmd) {
 		if (target) room = Rooms.search(target);
 		if (!room) return this.errorReply(`The room "${target}" was not found.`);
 		if (!this.can('mute', null, room)) return false;
@@ -2926,7 +2926,7 @@ const commands = {
 		`/expiringblacklists OR /expiringbls - show a list of blacklisted users from the room whose blacklists are expiring in 3 months or less. Requires: % @ # & ~`,
 	],
 
-	markshared: function (target, room, user) {
+	markshared(target, room, user) {
 		if (!target) return this.parse('/help markshared');
 		if (!this.can('ban')) return false;
 		let [ip, note] = this.splitOne(target);
@@ -2951,7 +2951,7 @@ const commands = {
 	},
 	marksharedhelp: [`/markshared [IP], [owner/organization of IP] - Marks an IP address as shared. Note: the owner/organization (i.e., University of Minnesota) of the shared IP is required. Requires @, &, ~`],
 
-	unmarkshared: function (target, room, user) {
+	unmarkshared(target, room, user) {
 		if (!target) return this.parse('/help unmarkshared');
 		if (!this.can('ban')) return false;
 		if (!/^[0-9.*]+$/.test(target)) return this.errorReply("Please enter a valid IP address.");
@@ -2968,7 +2968,7 @@ const commands = {
 	 * Server management commands
 	 *********************************************************/
 
-	hotpatch: function (target, room, user) {
+	hotpatch(target, room, user) {
 		if (!target) return this.parse('/help hotpatch');
 		if (!this.can('hotpatch')) return;
 
@@ -3081,7 +3081,7 @@ const commands = {
 	],
 
 	hotpatchlock: 'nohotpatch',
-	nohotpatch: function (target, room, user) {
+	nohotpatch(target, room, user) {
 		if (!this.can('declare')) return;
 		if (!target) return this.parse('/help nohotpatch');
 
@@ -3108,7 +3108,7 @@ const commands = {
 	},
 	nohotpatchhelp: [`/nohotpatch [chat|formats|battles|validator|tournaments|punishments|all] [reason] - Disables hotpatching the specified part of the simulator. Requires: & ~`],
 
-	savelearnsets: function (target, room, user) {
+	savelearnsets(target, room, user) {
 		if (!this.can('hotpatch')) return false;
 		this.sendReply("saving...");
 		FS('data/learnsets.js').write(`'use strict';\n\nexports.BattleLearnsets = {\n` +
@@ -3127,7 +3127,7 @@ const commands = {
 	},
 
 	widendatacenters: 'adddatacenters',
-	adddatacenters: function (target, room, user, connection, cmd) {
+	adddatacenters(target, room, user, connection, cmd) {
 		if (!this.can('hotpatch')) return false;
 		// should be in the format: IP, IP, name, URL
 		let widen = (cmd === 'widendatacenters');
@@ -3220,7 +3220,7 @@ const commands = {
 		});
 	},
 
-	disableladder: function (target, room, user) {
+	disableladder(target, room, user) {
 		if (!this.can('disableladder')) return false;
 		if (Ladders.disabled) {
 			return this.errorReply(`/disableladder - Ladder is already disabled.`);
@@ -3245,7 +3245,7 @@ const commands = {
 		});
 	},
 
-	enableladder: function (target, room, user) {
+	enableladder(target, room, user) {
 		if (!this.can('disableladder')) return false;
 		if (!Ladders.disabled) {
 			return this.errorReply(`/enable - Ladder is already enabled.`);
@@ -3268,7 +3268,7 @@ const commands = {
 		});
 	},
 
-	lockdown: function (target, room, user) {
+	lockdown(target, room, user) {
 		if (!this.can('lockdown')) return false;
 
 		Rooms.global.startLockdown();
@@ -3279,7 +3279,7 @@ const commands = {
 	lockdownhelp: [`/lockdown - locks down the server, which prevents new battles from starting so that the server can eventually be restarted. Requires: ~`],
 
 	autolockdown: 'autolockdownkill',
-	autolockdownkill: function (target, room, user) {
+	autolockdownkill(target, room, user) {
 		if (!this.can('lockdown')) return false;
 		if (Config.autolockdown === undefined) Config.autolockdown = true;
 
@@ -3304,7 +3304,7 @@ const commands = {
 		`/autolockdownkill off - Turns off the setting to enable the server to automatically kill itself upon the final battle finishing. Requires ~`,
 	],
 
-	prelockdown: function (target, room, user) {
+	prelockdown(target, room, user) {
 		if (!this.can('lockdown')) return false;
 		Rooms.global.lockdown = 'pre';
 		this.sendReply("Tournaments have been disabled in preparation for the server restart.");
@@ -3312,7 +3312,7 @@ const commands = {
 		logRoom.roomlog(`${user.name} used /prelockdown`);
 	},
 
-	slowlockdown: function (target, room, user) {
+	slowlockdown(target, room, user) {
 		if (!this.can('lockdown')) return false;
 
 		Rooms.global.startLockdown(undefined, true);
@@ -3321,7 +3321,7 @@ const commands = {
 		logRoom.roomlog(`${user.name} used /slowlockdown`);
 	},
 
-	endlockdown: function (target, room, user) {
+	endlockdown(target, room, user) {
 		if (!this.can('lockdown')) return false;
 
 		if (!Rooms.global.lockdown) {
@@ -3340,7 +3340,7 @@ const commands = {
 		logRoom.roomlog(`${user.name} used /endlockdown`);
 	},
 
-	emergency: function (target, room, user) {
+	emergency(target, room, user) {
 		if (!this.can('lockdown')) return false;
 
 		if (Config.emergency) {
@@ -3355,7 +3355,7 @@ const commands = {
 		logRoom.roomlog(`${user.name} used /emergency.`);
 	},
 
-	endemergency: function (target, room, user) {
+	endemergency(target, room, user) {
 		if (!this.can('lockdown')) return false;
 
 		if (!Config.emergency) {
@@ -3370,7 +3370,7 @@ const commands = {
 		logRoom.roomlog(`${user.name} used /endemergency.`);
 	},
 
-	kill: function (target, room, user) {
+	kill(target, room, user) {
 		if (!this.can('lockdown')) return false;
 
 		if (Rooms.global.lockdown !== true) {
@@ -3401,7 +3401,7 @@ const commands = {
 	},
 	killhelp: [`/kill - kills the server. Can't be done unless the server is in lockdown state. Requires: ~`],
 
-	loadbanlist: function (target, room, user, connection) {
+	loadbanlist(target, room, user, connection) {
 		if (!this.can('hotpatch')) return false;
 
 		connection.sendTo(room, "Loading ipbans.txt...");
@@ -3412,14 +3412,14 @@ const commands = {
 	},
 	loadbanlisthelp: [`/loadbanlist - Loads the bans located at ipbans.txt. The command is executed automatically at startup. Requires: ~`],
 
-	refreshpage: function (target, room, user) {
+	refreshpage(target, room, user) {
 		if (!this.can('hotpatch')) return false;
 		Rooms.global.send('|refresh|');
 		const logRoom = Rooms('staff') || room;
 		logRoom.roomlog(`${user.name} used /refreshpage`);
 	},
 
-	updateserver: async function (target, room, user, connection) {
+	async updateserver(target, room, user, connection) {
 		if (!user.can('hotpatch')) {
 			return this.errorReply(`/updateserver - Access denied.`);
 		}
@@ -3501,7 +3501,7 @@ const commands = {
 		Chat.updateServerLock = false;
 	},
 
-	crashfixed: function (target, room, user) {
+	crashfixed(target, room, user) {
 		if (Rooms.global.lockdown !== true) {
 			return this.errorReply('/crashfixed - There is no active crash.');
 		}
@@ -3518,7 +3518,7 @@ const commands = {
 	crashfixedhelp: [`/crashfixed - Ends the active lockdown caused by a crash without the need of a restart. Requires: ~`],
 
 	memusage: 'memoryusage',
-	memoryusage: function (target) {
+	memoryusage(target) {
 		if (!this.can('hotpatch')) return false;
 		let memUsage = process.memoryUsage();
 		let results = [memUsage.rss, memUsage.heapUsed, memUsage.heapTotal];
@@ -3530,7 +3530,7 @@ const commands = {
 		this.sendReply(`||[Main process] RSS: ${results[0]}, Heap: ${results[1]} / ${results[2]}`);
 	},
 
-	bash: function (target, room, user, connection) {
+	bash(target, room, user, connection) {
 		if (!user.hasConsoleAccess(connection)) {
 			return this.errorReply("/bash - Access denied.");
 		}
@@ -3543,7 +3543,7 @@ const commands = {
 	},
 	bashhelp: [`/bash [command] - Executes a bash command on the server. Requires: ~ console access`],
 
-	eval: async function (target, room, user, connection) {
+	async eval(target, room, user, connection) {
 		if (!user.hasConsoleAccess(connection)) {
 			return this.errorReply("/eval - Access denied.");
 		}
@@ -3569,7 +3569,7 @@ const commands = {
 		}
 	},
 
-	evalbattle: function (target, room, user, connection) {
+	evalbattle(target, room, user, connection) {
 		if (!user.hasConsoleAccess(connection)) {
 			return this.errorReply("/evalbattle - Access denied.");
 		}
@@ -3582,7 +3582,7 @@ const commands = {
 	},
 
 	ebat: 'editbattle',
-	editbattle: function (target, room, user) {
+	editbattle(target, room, user) {
 		if (!this.can('forcewin')) return false;
 		if (!target) return this.parse('/help editbattle');
 		if (!room.battle) {
@@ -3754,7 +3754,7 @@ const commands = {
 	},
 	importinputloghelp: [`/importinputlog [inputlog] - Starts a battle with a given inputlog. Requires: + % @ * & ~`],
 
-	inputlog: function () {
+	inputlog() {
 		this.parse(`/help exportinputlog`);
 		this.parse(`/help importinputlog`);
 	},
@@ -3763,7 +3763,7 @@ const commands = {
 	 * Battle commands
 	 *********************************************************/
 
-	forfeit: function (target, room, user) {
+	forfeit(target, room, user) {
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
 		if (!room.game.forfeit) {
 			return this.errorReply("This kind of game can't be forfeited.");
@@ -3773,7 +3773,7 @@ const commands = {
 		}
 	},
 
-	choose: function (target, room, user) {
+	choose(target, room, user) {
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
 		if (!room.game.choose) return this.errorReply("This game doesn't support /choose");
 
@@ -3782,20 +3782,20 @@ const commands = {
 
 	mv: 'move',
 	attack: 'move',
-	move: function (target, room, user) {
+	move(target, room, user) {
 		this.parse(`/choose move ${target}`);
 	},
 
 	sw: 'switch',
-	switch: function (target, room, user) {
+	switch(target, room, user) {
 		this.parse(`/choose switch ${target}`);
 	},
 
-	team: function (target, room, user) {
+	team(target, room, user) {
 		this.parse(`/choose team ${target}`);
 	},
 
-	undo: function (target, room, user) {
+	undo(target, room, user) {
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
 		if (!room.game.undo) return this.errorReply("This game doesn't support /undo");
 
@@ -3803,7 +3803,7 @@ const commands = {
 	},
 
 	uploadreplay: 'savereplay',
-	savereplay: async function (target, room, user, connection) {
+	async savereplay(target, room, user, connection) {
 		if (!room || !room.battle) return;
 		// retrieve spectator log (0) if there are privacy concerns
 		const format = Dex.getFormat(room.format, true);
@@ -3834,7 +3834,7 @@ const commands = {
 		}));
 	},
 
-	addplayer: function (target, room, user) {
+	addplayer(target, room, user) {
 		if (!target) return this.parse('/help addplayer');
 		if (!room.battle) return this.errorReply("You can only do this in battle rooms.");
 		if (room.rated) return this.errorReply("You can only add a Player to unrated battles.");
@@ -3866,7 +3866,7 @@ const commands = {
 		`/addplayer [username], p2 - Allow the specified user to join the battle as Player 2.`,
 	],
 
-	restoreplayers: function (target, room, user) {
+	restoreplayers(target, room, user) {
 		if (!room.battle) return this.errorReply("You can only do this in battle rooms.");
 		if (room.rated) return this.errorReply("You can only add a Player to unrated battles.");
 
@@ -3887,7 +3887,7 @@ const commands = {
 	],
 
 	joinbattle: 'joingame',
-	joingame: function (target, room, user) {
+	joingame(target, room, user) {
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
 		if (!room.game.joinGame) return this.errorReply("This game doesn't support /joingame");
 
@@ -3896,7 +3896,7 @@ const commands = {
 
 	leavebattle: 'leavegame',
 	partbattle: 'leavegame',
-	leavegame: function (target, room, user) {
+	leavegame(target, room, user) {
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
 		if (!room.game.leaveGame) return this.errorReply("This game doesn't support /leavegame");
 
@@ -3904,7 +3904,7 @@ const commands = {
 	},
 
 	kickbattle: 'kickgame',
-	kickgame: function (target, room, user) {
+	kickgame(target, room, user) {
 		if (!room.battle) return this.errorReply("You can only do this in battle rooms.");
 		if (room.battle.tour || room.battle.rated) return this.errorReply("You can only do this in unrated non-tour battles.");
 
@@ -3924,11 +3924,11 @@ const commands = {
 	},
 	kickbattlehelp: [`/kickbattle [username], [reason] - Kicks a user from a battle with reason. Requires: % @ * & ~`],
 
-	kickinactive: function (target, room, user) {
+	kickinactive(target, room, user) {
 		this.parse(`/timer on`);
 	},
 
-	timer: function (target, room, user) {
+	timer(target, room, user) {
 		target = toId(target);
 		if (!room.game || !room.game.timer) {
 			return this.errorReply(`You can only set the timer from inside a battle room.`);
@@ -3962,7 +3962,7 @@ const commands = {
 	},
 
 	autotimer: 'forcetimer',
-	forcetimer: function (target, room, user) {
+	forcetimer(target, room, user) {
 		target = toId(target);
 		if (!this.can('autotimer')) return;
 		if (this.meansNo(target) || target === 'stop') {
@@ -3977,7 +3977,7 @@ const commands = {
 	},
 
 	forcetie: 'forcewin',
-	forcewin: function (target, room, user) {
+	forcewin(target, room, user) {
 		if (!this.can('forcewin')) return false;
 		if (!room.battle) {
 			this.errorReply("/forcewin - This is not a battle room.");
@@ -4006,7 +4006,7 @@ const commands = {
 	 *********************************************************/
 
 	'!search': true,
-	search: function (target, room, user, connection) {
+	search(target, room, user, connection) {
 		if (target) {
 			if (Config.laddermodchat) {
 				let userGroup = user.group;
@@ -4023,7 +4023,7 @@ const commands = {
 	},
 
 	'!cancelsearch': true,
-	cancelsearch: function (target, room, user) {
+	cancelsearch(target, room, user) {
 		if (target) {
 			Ladders(toId(target)).cancelSearch(user);
 		} else {
@@ -4033,7 +4033,7 @@ const commands = {
 
 	'!challenge': true,
 	chall: 'challenge',
-	challenge: function (target, room, user, connection) {
+	challenge(target, room, user, connection) {
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) {
@@ -4060,7 +4060,7 @@ const commands = {
 	bch: 'blockchallenges',
 	blockchall: 'blockchallenges',
 	blockchalls: 'blockchallenges',
-	blockchallenges: function (target, room, user) {
+	blockchallenges(target, room, user) {
 		if (user.blockChallenges) return this.errorReply("You are already blocking challenges!");
 		user.blockChallenges = true;
 		this.sendReply("You are now blocking all incoming challenge requests.");
@@ -4072,7 +4072,7 @@ const commands = {
 	unblockchall: 'allowchallenges',
 	unblockchalls: 'allowchallenges',
 	unblockchallenges: 'allowchallenges',
-	allowchallenges: function (target, room, user) {
+	allowchallenges(target, room, user) {
 		if (!user.blockChallenges) return this.errorReply("You are already available for challenges!");
 		user.blockChallenges = false;
 		this.sendReply("You are available for challenges from now on.");
@@ -4081,12 +4081,12 @@ const commands = {
 
 	'!cancelchallenge': true,
 	cchall: 'cancelChallenge',
-	cancelchallenge: function (target, room, user) {
+	cancelchallenge(target, room, user) {
 		Ladders.cancelChallenging(user);
 	},
 
 	'!accept': true,
-	accept: function (target, room, user, connection) {
+	accept(target, room, user, connection) {
 		target = this.splitTarget(target);
 		if (target) return this.popupReply(`This command does not support specifying multiple users`);
 		const targetUser = this.targetUser || this.pmTarget;
@@ -4095,7 +4095,7 @@ const commands = {
 	},
 
 	'!reject': true,
-	reject: function (target, room, user) {
+	reject(target, room, user) {
 		target = toId(target);
 		if (!target && this.pmTarget) target = this.pmTarget.userid;
 		Ladders.rejectChallenge(user, target);
@@ -4104,12 +4104,12 @@ const commands = {
 	'!useteam': true,
 	saveteam: 'useteam',
 	utm: 'useteam',
-	useteam: function (target, room, user) {
+	useteam(target, room, user) {
 		user.team = target;
 	},
 
 	'!vtm': true,
-	vtm: function (target, room, user, connection) {
+	vtm(target, room, user, connection) {
 		if (Monitor.countPrepBattle(connection.ip, connection)) {
 			return;
 		}
@@ -4136,7 +4136,7 @@ const commands = {
 	'!crq': true,
 	cmd: 'crq',
 	query: 'crq',
-	crq: function (target, room, user, connection) {
+	crq(target, room, user, connection) {
 		// In emergency mode, clamp down on data returned from crq's
 		let trustable = (!Config.emergency || (user.named && user.registered));
 		let spaceIndex = target.indexOf(' ');
@@ -4206,7 +4206,7 @@ const commands = {
 	},
 
 	'!trn': true,
-	trn: function (target, room, user, connection) {
+	trn(target, room, user, connection) {
 		if (target === user.name) return false;
 
 		let commaIndex = target.indexOf(',');
@@ -4226,7 +4226,7 @@ const commands = {
 		user.rename(targetName, targetToken, targetRegistered, connection);
 	},
 
-	a: function (target, room, user) {
+	a(target, room, user) {
 		if (!this.can('rawpacket')) return false;
 		// secret sysop command
 		room.add(target);
@@ -4241,7 +4241,7 @@ const commands = {
 	h: 'help',
 	'?': 'help',
 	man: 'help',
-	help: function (target, room, user) {
+	help(target, room, user) {
 		if (!this.runBroadcast()) return;
 		target = target.toLowerCase();
 

@@ -4,7 +4,7 @@
 let BattleAbilities = {
 	"swiftswim": {
 		inherit: true,
-		onModifySpe: function (spe, pokemon) {
+		onModifySpe(spe, pokemon) {
 			if (this.isWeather(['raindance', 'primordialsea'])) {
 				return this.chainModify(1.5);
 			}
@@ -13,7 +13,7 @@ let BattleAbilities = {
 	},
 	"chlorophyll": {
 		inherit: true,
-		onModifySpe: function (spe) {
+		onModifySpe(spe) {
 			if (this.isWeather(['sunnyday', 'desolateland'])) {
 				return this.chainModify(1.5);
 			}
@@ -22,7 +22,7 @@ let BattleAbilities = {
 	},
 	"sandrush": {
 		inherit: true,
-		onModifySpe: function (spe, pokemon) {
+		onModifySpe(spe, pokemon) {
 			if (this.isWeather('sandstorm')) {
 				return this.chainModify(1.5);
 			}
@@ -31,7 +31,7 @@ let BattleAbilities = {
 	},
 	"slushrush": {
 		inherit: true,
-		onModifySpe: function (spe, pokemon) {
+		onModifySpe(spe, pokemon) {
 			if (this.isWeather('hail')) {
 				return this.chainModify(1.5);
 			}
@@ -40,7 +40,7 @@ let BattleAbilities = {
 	},
 	"forecast": {
 		inherit: true,
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			if (move.weather) {
 				let weather = move.weather;
 				move.weather = '';
@@ -56,16 +56,16 @@ let BattleAbilities = {
 	},
 	"thickfat": {
 		inherit: true,
-		onImmunity: function (type, pokemon) {
+		onImmunity(type, pokemon) {
 			if (type === 'hail') return false;
 		},
-		onSourceModifyAtk: function (atk, attacker, defender, move) {
+		onSourceModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire' || move.type === 'Fighting') {
 				this.add('-message', "The attack was weakened by Thick Fat!");
 				return this.chainModify(0.5);
 			}
 		},
-		onSourceModifySpA: function (atk, attacker, defender, move) {
+		onSourceModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire' || move.type === 'Fighting') {
 				this.add('-message', "The attack was weakened by Thick Fat!");
 				return this.chainModify(0.5);
@@ -76,7 +76,7 @@ let BattleAbilities = {
 	},
 	"marvelscale": {
 		inherit: true,
-		onImmunity: function (type, pokemon) {
+		onImmunity(type, pokemon) {
 			if (type === 'hail') return false;
 		},
 		desc: "If this Pokemon has a major status condition, its Defense is multiplied by 1.5. This Pokemon takes no damage from Hail.",
@@ -84,13 +84,13 @@ let BattleAbilities = {
 	},
 	"snowcloak": {
 		inherit: true,
-		onSourceBasePower: function (basePower) {
+		onSourceBasePower(basePower) {
 			if (this.isWeather('hail')) {
 				return basePower * 3 / 4;
 			}
 			return basePower * 7 / 8;
 		},
-		onModifyAccuracy: function () {},
+		onModifyAccuracy() {},
 		desc: "If Hail is active, attacks against this Pokemon do 25% less than normal. If Hail is not active, attacks against this Pokemon do 12.5% less than normal. This Pokemon takes no damage from Hail.",
 		shortDesc: "If Hail is active, attacks against this Pokemon do 25% less; immunity to Hail.",
 	},
@@ -98,16 +98,16 @@ let BattleAbilities = {
 		inherit: true,
 		desc: "If Sandstorm is active, attacks against this Pokemon do 25% less than normal. If Sandstorm is not active, attacks against this Pokemon do 12.5% less than normal. This Pokemon takes no damage from Sandstorm.",
 		shortDesc: "If Sandstorm is active, attacks against this Pokemon do 25% less; immunity to Sandstorm.",
-		onSourceBasePower: function (basePower) {
+		onSourceBasePower(basePower) {
 			if (this.isWeather('sandstorm')) {
 				return basePower * 4 / 5;
 			}
 		},
-		onModifyAccuracy: function () {},
+		onModifyAccuracy() {},
 	},
 	"waterveil": {
 		inherit: true,
-		onSourceBasePower: function (basePower) {
+		onSourceBasePower(basePower) {
 			if (this.isWeather(['raindance', 'primordialsea'])) {
 				return basePower * 3 / 4;
 			}
@@ -120,28 +120,28 @@ let BattleAbilities = {
 		inherit: true,
 		desc: "This Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This Pokemon takes no damage from Hail. There is a 30% chance a Pokemon making contact with this Pokemon will be frozen.",
 		shortDesc: "This Pokemon heals 1/16 of its max HP each turn; immunity to Hail; 30% chance a Pokemon making contact with this Pokemon will be frozen.",
-		onResidual: function (target, source, effect) {
+		onResidual(target, source, effect) {
 			this.heal(target.maxhp / 16);
 		},
-		onAfterDamage: function (damage, target, source, move) {
+		onAfterDamage(damage, target, source, move) {
 			if (move && move.flags['contact'] && this.isWeather('hail')) {
 				if (this.randomChance(3, 10)) {
 					source.trySetStatus('frz', target);
 				}
 			}
 		},
-		onWeather: function () {},
+		onWeather() {},
 	},
 	"flamebody": {
 		inherit: true,
-		onImmunity: function (type, pokemon) {
+		onImmunity(type, pokemon) {
 			if (type === 'hail') return false;
 		},
 		shortDesc: "30% chance a Pokemon making contact with this Pokemon will be burned; immunity to Hail.",
 	},
 	"static": {
 		inherit: true,
-		onAfterDamage: function (damage, target, source, move) {
+		onAfterDamage(damage, target, source, move) {
 			if (move && move.flags['contact']) {
 				source.trySetStatus('par', target);
 			}
@@ -150,7 +150,7 @@ let BattleAbilities = {
 	},
 	"cutecharm": {
 		inherit: true,
-		onAfterDamage: function (damage, target, source, move) {
+		onAfterDamage(damage, target, source, move) {
 			if (move && move.flags['contact']) {
 				source.addVolatile('Attract', target);
 			}
@@ -160,7 +160,7 @@ let BattleAbilities = {
 	},
 	"poisonpoint": {
 		inherit: true,
-		onAfterDamage: function (damage, target, source, move) {
+		onAfterDamage(damage, target, source, move) {
 			if (move && move.flags['contact']) {
 				source.trySetStatus('psn', target);
 			}
@@ -169,7 +169,7 @@ let BattleAbilities = {
 	},
 	"flowergift": {
 		inherit: true,
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			if (move.id === 'sunnyday') {
 				/**@type {string} */
 				// @ts-ignore
@@ -183,7 +183,7 @@ let BattleAbilities = {
 				move.sideCondition = 'flowergift';
 			}
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (this.isWeather(['sunnyday', 'desolateland'])) {
 				if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme !== 'Sunshine') {
 					this.effectData.forme = 'Sunshine';
@@ -197,7 +197,7 @@ let BattleAbilities = {
 		},
 		effect: {
 			onSwitchInPriority: 1,
-			onSwitchIn: function (target) {
+			onSwitchIn(target) {
 				if (!target.fainted) {
 					this.boost({spd: 1}, target, target, this.getAbility('flowergift'));
 				}
@@ -211,24 +211,24 @@ let BattleAbilities = {
 		inherit: true,
 		effect: {
 			duration: 3,
-			onStart: function (target) {
+			onStart(target) {
 				this.add('-start', target, 'Slow Start');
 			},
-			onModifyAtk: function (atk, pokemon) {
+			onModifyAtk(atk, pokemon) {
 				if (pokemon.ability !== 'slowstart') {
 					pokemon.removeVolatile('slowstart');
 					return;
 				}
 				return atk / 2;
 			},
-			onModifySpe: function (spe, pokemon) {
+			onModifySpe(spe, pokemon) {
 				if (pokemon.ability !== 'slowstart') {
 					pokemon.removeVolatile('slowstart');
 					return;
 				}
 				return spe / 2;
 			},
-			onEnd: function (target) {
+			onEnd(target) {
 				this.add('-end', target, 'Slow Start');
 			},
 		},
@@ -238,7 +238,7 @@ let BattleAbilities = {
 		inherit: true,
 		desc: "The accuracy of this Pokemon's moves receives a 60% increase; for example, a 50% accurate move becomes 80% accurate.",
 		shortDesc: "This Pokemon's moves have their Accuracy boosted to 1.6x.",
-		onSourceModifyAccuracy: function (accuracy) {
+		onSourceModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
 			this.debug('compoundeyes - enhancing accuracy');
 			return accuracy * 1.6;
@@ -248,7 +248,7 @@ let BattleAbilities = {
 		inherit: true,
 		desc: "The accuracy of this Pokemon's moves receives a 60% increase; for example, a 50% accurate move becomes 80% accurate.",
 		shortDesc: "This Pokemon's moves have their Accuracy boosted to 1.6x.",
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			if (typeof move.accuracy !== 'number') return;
 			this.debug('keeneye - enhancing accuracy');
 			move.accuracy *= 1.6;
@@ -257,7 +257,7 @@ let BattleAbilities = {
 	"solidrock": {
 		inherit: true,
 		shortDesc: "This Pokemon receives 1/2 damage from supereffective attacks.",
-		onSourceModifyDamage: function (damage, attacker, defender, move) {
+		onSourceModifyDamage(damage, attacker, defender, move) {
 			if (move.typeMod > 0) {
 				this.add('-message', "The attack was weakened by Solid Rock!");
 				return this.chainModify(0.5);
@@ -267,7 +267,7 @@ let BattleAbilities = {
 	"filter": {
 		inherit: true,
 		shortDesc: "This Pokemon receives 1/2 damage from supereffective attacks.",
-		onSourceModifyDamage: function (damage, attacker, defender, move) {
+		onSourceModifyDamage(damage, attacker, defender, move) {
 			if (move.typeMod > 0) {
 				this.add('-message', "The attack was weakened by Filter!");
 				return this.chainModify(0.5);
@@ -278,13 +278,13 @@ let BattleAbilities = {
 		inherit: true,
 		desc: "The user is completely immune to Fire-type moves and burn damage.",
 		shortDesc: "The user is immune to Fire type attacks and burn damage.",
-		onImmunity: function (type, pokemon) {
+		onImmunity(type, pokemon) {
 			if (type === 'Fire' || type === 'brn') return false;
 		},
 	},
 	"reckless": {
 		inherit: true,
-		onBasePower: function (basePower, attacker, defender, move) {
+		onBasePower(basePower, attacker, defender, move) {
 			if (move.recoil || move.hasCustomRecoil || attacker.item === 'lifeorb') {
 				this.debug('Reckless boost');
 				return basePower * 12 / 10;
@@ -295,7 +295,7 @@ let BattleAbilities = {
 	},
 	"clearbody": {
 		inherit: true,
-		onBoost: function (boost, target, source) {
+		onBoost(boost, target, source) {
 			for (let i in boost) {
 				// @ts-ignore
 				if (boost[i] < 0) {
@@ -309,7 +309,7 @@ let BattleAbilities = {
 	},
 	"whitesmoke": {
 		inherit: true,
-		onBoost: function (boost, target, source) {
+		onBoost(boost, target, source) {
 			for (let i in boost) {
 				// @ts-ignore
 				if (boost[i] < 0) {
@@ -323,7 +323,7 @@ let BattleAbilities = {
 	},
 	"rockhead": {
 		inherit: true,
-		onDamage: function (damage, target, source, effect) {
+		onDamage(damage, target, source, effect) {
 			if (effect && ['lifeorb', 'recoil'].includes(effect.id)) return false;
 		},
 		desc: "This Pokemon does not take recoil damage besides Struggle, and crash damage.",
@@ -331,7 +331,7 @@ let BattleAbilities = {
 	},
 	"download": {
 		inherit: true,
-		onStart: function (pokemon) {
+		onStart(pokemon) {
 			if (pokemon.template.baseSpecies === 'Genesect') {
 				if (!pokemon.getItem().onDrive) return;
 			}
@@ -353,7 +353,7 @@ let BattleAbilities = {
 	},
 	"victorystar": {
 		inherit: true,
-		onAllyModifyMove: function (move) {
+		onAllyModifyMove(move) {
 			if (typeof move.accuracy === 'number') {
 				move.accuracy *= 1.5;
 			}
@@ -362,7 +362,7 @@ let BattleAbilities = {
 	},
 	"shellarmor": {
 		inherit: true,
-		onDamage: function (damage, target, source, effect) {
+		onDamage(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.add('-message', "Its damage was reduced by Shell Armor!");
 				damage -= target.maxhp / 10;
@@ -370,7 +370,7 @@ let BattleAbilities = {
 				return damage;
 			}
 		},
-		onHit: function (target, source, move) {
+		onHit(target, source, move) {
 			if (move.id === 'shellsmash') {
 				target.setAbility('');
 			}
@@ -380,7 +380,7 @@ let BattleAbilities = {
 	},
 	"prismarmor": {
 		inherit: true,
-		onDamage: function (damage, target, source, effect) {
+		onDamage(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.add('-message', "Its damage was reduced by Prism Armor!");
 				damage -= target.maxhp / 10;
@@ -393,7 +393,7 @@ let BattleAbilities = {
 	},
 	"battlearmor": {
 		inherit: true,
-		onDamage: function (damage, target, source, effect) {
+		onDamage(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.add('-message', "Its damage was reduced by Battle Armor!");
 				damage -= target.maxhp / 10;
@@ -406,7 +406,7 @@ let BattleAbilities = {
 	},
 	"weakarmor": {
 		inherit: true,
-		onDamage: function (damage, target, source, effect) {
+		onDamage(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.add('-message', "Its damage was reduced by Weak Armor!");
 				damage -= target.maxhp / 10;
@@ -416,17 +416,17 @@ let BattleAbilities = {
 				return damage;
 			}
 		},
-		onAfterDamage: function () {},
+		onAfterDamage() {},
 		desc: "This ability reduces incoming move damage by 1/10 of the user's max HP and increases the user's Speed for the first hit after switch-in (and does not activate again until the next switch-in).",
 		shortDesc: "Reduces incoming move damage by 1/10 of the user's max HP and increases the user's Spe for the 1st hit after switch-in (doesn't activate until next switch-in).",
 	},
 	"magmaarmor": {
 		inherit: true,
-		onImmunity: function (type, pokemon) {
+		onImmunity(type, pokemon) {
 			if (type === 'hail') return false;
 			if (type === 'frz') return false;
 		},
-		onDamage: function (damage, target, source, effect) {
+		onDamage(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				damage -= target.maxhp / 10;
 				if (damage < 0) damage = 0;
@@ -445,7 +445,7 @@ let BattleAbilities = {
 	},
 	"multiscale": {
 		inherit: true,
-		onSourceModifyDamage: function (damage, source, target, move) {
+		onSourceModifyDamage(damage, source, target, move) {
 			if (target.hp >= target.maxhp) {
 				this.add('-message', "The attack was slightly weakened by Multiscale!");
 				return this.chainModify(2 / 3);
@@ -455,7 +455,7 @@ let BattleAbilities = {
 	},
 	"ironfist": {
 		inherit: true,
-		onBasePower: function (basePower, attacker, defender, move) {
+		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['punch']) {
 				return basePower * 1.33;
 			}
@@ -465,7 +465,7 @@ let BattleAbilities = {
 	},
 	"stench": {
 		inherit: true,
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			if (move.category !== "Status") {
 				this.debug('Adding Stench flinch');
 				if (!move.secondaries) move.secondaries = [];
@@ -482,7 +482,7 @@ let BattleAbilities = {
 	},
 	"aftermath": {
 		inherit: true,
-		onAfterDamage: function (damage, target, source, move) {
+		onAfterDamage(damage, target, source, move) {
 			if (source && source !== target && move && !target.hp) {
 				this.damage(source.maxhp / 3, source, target, null, true);
 			}
@@ -493,7 +493,7 @@ let BattleAbilities = {
 	"cursedbody": {
 		desc: "When this Pokemon faints, attacker is Cursed.",
 		shortDesc: "When this Pokemon faints, attacker is Cursed.",
-		onFaint: function (target, source, effect) {
+		onFaint(target, source, effect) {
 			if (effect && effect.effectType === 'Move' && source) {
 				source.addVolatile('curse');
 			}
@@ -507,7 +507,7 @@ let BattleAbilities = {
 		inherit: true,
 		onResidualOrder: 26,
 		onResidualSubOrder: 1,
-		onResidual: function (pokemon) {
+		onResidual(pokemon) {
 			if (!pokemon.gluttonyFlag && !pokemon.item && this.getItem(pokemon.lastItem).isBerry) {
 				pokemon.gluttonyFlag = true;
 				pokemon.setItem(pokemon.lastItem);
@@ -519,7 +519,7 @@ let BattleAbilities = {
 	},
 	"guts": {
 		inherit: true,
-		onDamage: function (damage, attacker, defender, effect) {
+		onDamage(damage, attacker, defender, effect) {
 			if (effect && (effect.id === 'brn' || effect.id === 'psn' || effect.id === 'tox')) {
 				return damage / 2;
 			}
@@ -529,7 +529,7 @@ let BattleAbilities = {
 	},
 	"quickfeet": {
 		inherit: true,
-		onDamage: function (damage, attacker, defender, effect) {
+		onDamage(damage, attacker, defender, effect) {
 			if (effect && (effect.id === 'brn' || effect.id === 'psn' || effect.id === 'tox')) {
 				return damage / 2;
 			}
@@ -539,7 +539,7 @@ let BattleAbilities = {
 	},
 	"toxicboost": {
 		inherit: true,
-		onDamage: function (damage, attacker, defender, effect) {
+		onDamage(damage, attacker, defender, effect) {
 			if (effect && (effect.id === 'psn' || effect.id === 'tox')) {
 				return damage / 2;
 			}
@@ -549,18 +549,18 @@ let BattleAbilities = {
 	},
 	"truant": {
 		inherit: true,
-		onBeforeMove: function () {},
-		onModifyMove: function (move, pokemon) {
+		onBeforeMove() {},
+		onModifyMove(move, pokemon) {
 			if (!move.self) move.self = {};
 			if (!move.self.volatileStatus) move.self.volatileStatus = 'truant';
 		},
 		effect: {
 			duration: 2,
-			onStart: function (pokemon) {
+			onStart(pokemon) {
 				this.add('-start', pokemon, 'Truant');
 			},
 			onBeforeMovePriority: 99,
-			onBeforeMove: function (pokemon, target, move) {
+			onBeforeMove(pokemon, target, move) {
 				if (pokemon.removeVolatile('truant')) {
 					this.add('cant', pokemon, 'ability: Truant');
 					this.heal(pokemon.maxhp / 3);
@@ -572,7 +572,7 @@ let BattleAbilities = {
 	},
 	"flareboost": {
 		inherit: true,
-		onDamage: function (damage, defender, attacker, effect) {
+		onDamage(damage, defender, attacker, effect) {
 			if (effect && (effect.id === 'brn')) {
 				return damage / 2;
 			}
@@ -582,16 +582,16 @@ let BattleAbilities = {
 	},
 	"telepathy": {
 		inherit: true,
-		onStart: function (target) {
+		onStart(target) {
 			this.add('-start', target, 'move: Imprison');
 		},
-		onFoeDisableMove: function (pokemon) {
+		onFoeDisableMove(pokemon) {
 			for (const moveSlot of this.effectData.target.moveSlots) {
 				pokemon.disableMove(moveSlot.id, 'hidden');
 			}
 			pokemon.maybeDisabled = true;
 		},
-		onFoeBeforeMove: function (attacker, defender, move) {
+		onFoeBeforeMove(attacker, defender, move) {
 			if (move.id !== 'struggle' && this.effectData.target.hasMove(move.id)) {
 				this.add('cant', attacker, 'move: Imprison', move);
 				return false;
@@ -602,7 +602,7 @@ let BattleAbilities = {
 	"speedboost": {
 		inherit: true,
 		onResidualPriority: -1,
-		onResidual: function (pokemon) {
+		onResidual(pokemon) {
 			if (pokemon.activeTurns && !pokemon.volatiles.stall) {
 				this.boost({spe: 1});
 			}
@@ -611,7 +611,7 @@ let BattleAbilities = {
 	},
 	"parentalbond": {
 		inherit: true,
-		onModifyMove: function (move, pokemon, target) {
+		onModifyMove(move, pokemon, target) {
 			if (move.category !== 'Status' && !move.selfdestruct && !move.multihit && ((target.side && target.side.active.length < 2) || ['any', 'normal', 'randomNormal'].includes(move.target))) {
 				move.multihit = 2;
 				move.accuracy = true;
@@ -621,7 +621,7 @@ let BattleAbilities = {
 		effect: {
 			duration: 1,
 			onBasePowerPriority: 8,
-			onBasePower: function (basePower) {
+			onBasePower(basePower) {
 				return this.chainModify(0.5);
 			},
 		},
@@ -630,7 +630,7 @@ let BattleAbilities = {
 	},
 	"swarm": {
 		inherit: true,
-		onFoeBasePower: function (basePower, attacker, defender, move) {
+		onFoeBasePower(basePower, attacker, defender, move) {
 			if (defender.hasType('Flying')) {
 				if (move.type === 'Rock' || move.type === 'Electric' || move.type === 'Ice') {
 					this.add('-message', "The attack was weakened by Swarm!");
@@ -638,7 +638,7 @@ let BattleAbilities = {
 				}
 			}
 		},
-		onDamage: function (damage, defender, attacker, effect) {
+		onDamage(damage, defender, attacker, effect) {
 			if (defender.hasType('Flying')) {
 				if (effect && effect.id === 'stealthrock') {
 					return damage / 2;
@@ -650,8 +650,8 @@ let BattleAbilities = {
 	},
 	"adaptability": {
 		inherit: true,
-		onModifyMove: function (move) {},
-		onBasePower: function (power, attacker, defender, move) {
+		onModifyMove(move) {},
+		onBasePower(power, attacker, defender, move) {
 			if (!attacker.hasType(move.type)) {
 				return this.chainModify(1.33);
 			}
@@ -663,28 +663,28 @@ let BattleAbilities = {
 		desc: "For the first turn after this Pokemon switches in, prevent adjacent opposing Pokemon from choosing to switch out unless they are immune to trapping or also have this Ability.",
 		shortDesc: "Prevents adjacent foes from choosing to switch for one turn.",
 		inherit: true,
-		onStart: function (pokemon) {
+		onStart(pokemon) {
 			pokemon.addVolatile('shadowtag');
 		},
 		effect: {
 			duration: 2,
-			onFoeTrapPokemon: function (pokemon) {
+			onFoeTrapPokemon(pokemon) {
 				if (pokemon.ability !== 'shadowtag') {
 					pokemon.tryTrap(true);
 				}
 			},
 		},
 		onBeforeMovePriority: 15,
-		onBeforeMove: function (pokemon) {
+		onBeforeMove(pokemon) {
 			pokemon.removeVolatile('shadowtag');
 		},
-		onFoeMaybeTrapPokemon: function (pokemon, source) {
+		onFoeMaybeTrapPokemon(pokemon, source) {
 			if (!source) source = this.effectData.target;
 			if (pokemon.ability !== 'shadowtag' && !source.volatiles.shadowtag) {
 				pokemon.maybeTrapped = true;
 			}
 		},
-		onFoeTrapPokemon: function (pokemon) {},
+		onFoeTrapPokemon(pokemon) {},
 	},
 };
 

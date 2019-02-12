@@ -4,9 +4,9 @@
 let BattleItems = {
 	"aguavberry": {
 		inherit: true,
-		onUpdate: function () {},
+		onUpdate() {},
 		onResidualOrder: 5,
-		onResidual: function (pokemon) {
+		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
@@ -14,9 +14,9 @@ let BattleItems = {
 	},
 	"apicotberry": {
 		inherit: true,
-		onUpdate: function () {},
+		onUpdate() {},
 		onResidualOrder: 5,
-		onResidual: function (pokemon) {
+		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4) {
 				pokemon.eatItem();
 			}
@@ -25,9 +25,9 @@ let BattleItems = {
 	"berryjuice": {
 		inherit: true,
 		isUnreleased: true,
-		onUpdate: function () {},
+		onUpdate() {},
 		onResidualOrder: 5,
-		onResidual: function (pokemon) {
+		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				if (this.runEvent('TryHeal', pokemon) && pokemon.useItem()) {
 					this.heal(20);
@@ -38,7 +38,7 @@ let BattleItems = {
 	"blackbelt": {
 		inherit: true,
 		desc: "Holder's Fighting-type attacks have 1.1x power.",
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Fighting') {
 				return basePower * 1.1;
 			}
@@ -47,7 +47,7 @@ let BattleItems = {
 	"blackglasses": {
 		inherit: true,
 		desc: "Holder's Dark-type attacks have 1.1x power.",
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Dark') {
 				return basePower * 1.1;
 			}
@@ -56,7 +56,7 @@ let BattleItems = {
 	"charcoal": {
 		inherit: true,
 		desc: "Holder's Fire-type attacks have 1.1x power.",
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Fire') {
 				return basePower * 1.1;
 			}
@@ -65,7 +65,7 @@ let BattleItems = {
 	"dragonfang": {
 		inherit: true,
 		desc: "Holder's Dragon-type attacks have 1.1x power.",
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Dragon') {
 				return basePower * 1.1;
 			}
@@ -83,9 +83,9 @@ let BattleItems = {
 	},
 	"figyberry": {
 		inherit: true,
-		onUpdate: function () {},
+		onUpdate() {},
 		onResidualOrder: 5,
-		onResidual: function (pokemon) {
+		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
@@ -93,9 +93,9 @@ let BattleItems = {
 	},
 	"ganlonberry": {
 		inherit: true,
-		onUpdate: function () {},
+		onUpdate() {},
 		onResidualOrder: 5,
-		onResidual: function (pokemon) {
+		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4) {
 				pokemon.eatItem();
 			}
@@ -104,7 +104,7 @@ let BattleItems = {
 	"hardstone": {
 		inherit: true,
 		desc: "Holder's Rock-type attacks have 1.1x power.",
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Rock') {
 				return basePower * 1.1;
 			}
@@ -112,9 +112,9 @@ let BattleItems = {
 	},
 	"iapapaberry": {
 		inherit: true,
-		onUpdate: function () {},
+		onUpdate() {},
 		onResidualOrder: 5,
-		onResidual: function (pokemon) {
+		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
@@ -122,7 +122,7 @@ let BattleItems = {
 	},
 	"kingsrock": {
 		inherit: true,
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			let affectedByKingsRock = ['aerialace', 'aeroblast', 'aircutter', 'armthrust', 'barrage', 'beatup', 'bide', 'bind', 'blastburn', 'bonerush', 'bonemerang', 'bounce', 'brickbreak', 'bulletseed', 'clamp', 'cometpunch', 'crabhammer', 'crosschop', 'cut', 'dig', 'dive', 'doublekick', 'doubleslap', 'doubleedge', 'dragonbreath', 'dragonclaw', 'dragonrage', 'drillpeck', 'earthquake', 'eggbomb', 'endeavor', 'eruption', 'explosion', 'extremespeed', 'falseswipe', 'feintattack', 'firespin', 'flail', 'fly', 'frenzyplant', 'frustration', 'furyattack', 'furycutter', 'furyswipes', 'gust', 'hiddenpower', 'highjumpkick', 'hornattack', 'hydrocannon', 'hydropump', 'hyperbeam', 'iceball', 'iciclespear', 'jumpkick', 'karatechop', 'leafblade', 'lowkick', 'machpunch', 'magicalleaf', 'magnitude', 'megakick', 'megapunch', 'megahorn', 'meteormash', 'mudshot', 'muddywater', 'nightshade', 'outrage', 'overheat', 'payday', 'peck', 'petaldance', 'pinmissile', 'poisontail', 'pound', 'psychoboost', 'psywave', 'quickattack', 'rage', 'rapidspin', 'razorleaf', 'razorwind', 'return', 'revenge', 'reversal', 'rockblast', 'rockthrow', 'rollingkick', 'rollout', 'sandtomb', 'scratch', 'seismictoss', 'selfdestruct', 'shadowpunch', 'shockwave', 'signalbeam', 'silverwind', 'skullbash', 'skyattack', 'skyuppercut', 'slam', 'slash', 'snore', 'solarbeam', 'sonicboom', 'spikecannon', 'spitup', 'steelwing', 'strength', 'struggle', 'submission', 'surf', 'swift', 'tackle', 'takedown', 'thrash', 'tickle', 'triplekick', 'twister', 'uproar', 'vicegrip', 'vinewhip', 'vitalthrow', 'volttackle', 'watergun', 'waterpulse', 'waterfall', 'weatherball', 'whirlpool', 'wingattack', 'wrap'];
 			if (affectedByKingsRock.includes(move.id)) {
 				if (!move.secondaries) move.secondaries = [];
@@ -135,9 +135,9 @@ let BattleItems = {
 	},
 	"lansatberry": {
 		inherit: true,
-		onUpdate: function () {},
+		onUpdate() {},
 		onResidualOrder: 5,
-		onResidual: function (pokemon) {
+		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4) {
 				pokemon.eatItem();
 			}
@@ -146,7 +146,7 @@ let BattleItems = {
 	"laxincense": {
 		inherit: true,
 		desc: "The accuracy of attacks against the holder is 0.95x.",
-		onModifyAccuracy: function (accuracy) {
+		onModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
 			this.debug('lax incense - decreasing accuracy');
 			return accuracy * 0.95;
@@ -154,9 +154,9 @@ let BattleItems = {
 	},
 	"liechiberry": {
 		inherit: true,
-		onUpdate: function () {},
+		onUpdate() {},
 		onResidualOrder: 5,
-		onResidual: function (pokemon) {
+		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4) {
 				pokemon.eatItem();
 			}
@@ -165,12 +165,12 @@ let BattleItems = {
 	"lightball": {
 		inherit: true,
 		desc: "If held by a Pikachu, its Special Attack is doubled.",
-		onModifyAtk: function () {},
+		onModifyAtk() {},
 	},
 	"magnet": {
 		inherit: true,
 		desc: "Holder's Electric-type attacks have 1.1x power.",
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Electric') {
 				return basePower * 1.1;
 			}
@@ -178,9 +178,9 @@ let BattleItems = {
 	},
 	"magoberry": {
 		inherit: true,
-		onUpdate: function () {},
+		onUpdate() {},
 		onResidualOrder: 5,
-		onResidual: function (pokemon) {
+		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
@@ -189,7 +189,7 @@ let BattleItems = {
 	"metalcoat": {
 		inherit: true,
 		desc: "Holder's Steel-type attacks have 1.1x power.",
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Steel') {
 				return basePower * 1.1;
 			}
@@ -198,7 +198,7 @@ let BattleItems = {
 	"miracleseed": {
 		inherit: true,
 		desc: "Holder's Grass-type attacks have 1.1x power.",
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Grass') {
 				return basePower * 1.1;
 			}
@@ -207,7 +207,7 @@ let BattleItems = {
 	"mysticwater": {
 		inherit: true,
 		desc: "Holder's Water-type attacks have 1.1x power.",
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Water') {
 				return basePower * 1.1;
 			}
@@ -216,7 +216,7 @@ let BattleItems = {
 	"nevermeltice": {
 		inherit: true,
 		desc: "Holder's Ice-type attacks have 1.1x power.",
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Ice') {
 				return basePower * 1.1;
 			}
@@ -224,9 +224,9 @@ let BattleItems = {
 	},
 	"oranberry": {
 		inherit: true,
-		onUpdate: function () {},
+		onUpdate() {},
 		onResidualOrder: 5,
-		onResidual: function (pokemon) {
+		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
@@ -234,9 +234,9 @@ let BattleItems = {
 	},
 	"petayaberry": {
 		inherit: true,
-		onUpdate: function () {},
+		onUpdate() {},
 		onResidualOrder: 5,
-		onResidual: function (pokemon) {
+		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4) {
 				pokemon.eatItem();
 			}
@@ -245,7 +245,7 @@ let BattleItems = {
 	"poisonbarb": {
 		inherit: true,
 		desc: "Holder's Poison-type attacks have 1.1x power.",
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Poison') {
 				return basePower * 1.1;
 			}
@@ -253,7 +253,7 @@ let BattleItems = {
 	},
 	"quickclaw": {
 		inherit: true,
-		onModifyPriority: function (priority, pokemon) {
+		onModifyPriority(priority, pokemon) {
 			if (this.randomChance(1, 5)) {
 				return Math.round(priority) + 0.1;
 			}
@@ -261,9 +261,9 @@ let BattleItems = {
 	},
 	"salacberry": {
 		inherit: true,
-		onUpdate: function () {},
+		onUpdate() {},
 		onResidualOrder: 5,
-		onResidual: function (pokemon) {
+		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4) {
 				pokemon.eatItem();
 			}
@@ -272,7 +272,7 @@ let BattleItems = {
 	"seaincense": {
 		inherit: true,
 		desc: "Holder's Water-type attacks have 1.05x power.",
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Water') {
 				return basePower * 1.05;
 			}
@@ -281,7 +281,7 @@ let BattleItems = {
 	"sharpbeak": {
 		inherit: true,
 		desc: "Holder's Flying-type attacks have 1.1x power.",
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Flying') {
 				return basePower * 1.1;
 			}
@@ -290,7 +290,7 @@ let BattleItems = {
 	"silkscarf": {
 		inherit: true,
 		desc: "Holder's Normal-type attacks have 1.1x power.",
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Normal') {
 				return basePower * 1.1;
 			}
@@ -299,7 +299,7 @@ let BattleItems = {
 	"silverpowder": {
 		inherit: true,
 		desc: "Holder's Bug-type attacks have 1.1x power.",
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Bug') {
 				return basePower * 1.1;
 			}
@@ -308,21 +308,21 @@ let BattleItems = {
 	"sitrusberry": {
 		inherit: true,
 		desc: "Restores 30 HP when at 1/2 max HP or less. Single use.",
-		onUpdate: function () {},
+		onUpdate() {},
 		onResidualOrder: 5,
-		onResidual: function (pokemon) {
+		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
 		},
-		onEat: function (pokemon) {
+		onEat(pokemon) {
 			this.heal(30);
 		},
 	},
 	"softsand": {
 		inherit: true,
 		desc: "Holder's Ground-type attacks have 1.1x power.",
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Ground') {
 				return basePower * 1.1;
 			}
@@ -331,7 +331,7 @@ let BattleItems = {
 	"spelltag": {
 		inherit: true,
 		desc: "Holder's Ghost-type attacks have 1.1x power.",
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Ghost') {
 				return basePower * 1.1;
 			}
@@ -339,9 +339,9 @@ let BattleItems = {
 	},
 	"starfberry": {
 		inherit: true,
-		onUpdate: function () {},
+		onUpdate() {},
 		onResidualOrder: 5,
-		onResidual: function (pokemon) {
+		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4) {
 				pokemon.eatItem();
 			}
@@ -350,7 +350,7 @@ let BattleItems = {
 	"twistedspoon": {
 		inherit: true,
 		desc: "Holder's Psychic-type attacks have 1.1x power.",
-		onBasePower: function (basePower, user, target, move) {
+		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Psychic') {
 				return basePower * 1.1;
 			}
@@ -358,9 +358,9 @@ let BattleItems = {
 	},
 	"wikiberry": {
 		inherit: true,
-		onUpdate: function () {},
+		onUpdate() {},
 		onResidualOrder: 5,
-		onResidual: function (pokemon) {
+		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}

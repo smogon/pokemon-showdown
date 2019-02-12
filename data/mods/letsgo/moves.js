@@ -49,7 +49,7 @@ let BattleMovedex = {
 	},
 	"metronome": {
 		inherit: true,
-		onHit: function (target, source, effect) {
+		onHit(target, source, effect) {
 			let moves = [];
 			for (let i in exports.BattleMovedex) {
 				let move = this.getMove(i);
