@@ -26,7 +26,7 @@ To reload chat commands:
 'use strict';
 /** @typedef {GlobalRoom | GameRoom | ChatRoom} Room */
 
-/** @typedef {(query: string[], user: User, connection: Connection) => (string | null | void)} PageHandler */
+/** @typedef {(this: PageContext, query: string[], user: User, connection: Connection) => (Promise<string | null | void> | string | null | void)} PageHandler */
 /** @typedef {{[k: string]: PageHandler | PageTable}} PageTable */
 
 /** @typedef {(this: CommandContext, target: string, room: ChatRoom | GameRoom, user: User, connection: Connection, cmd: string, message: string) => (void)} ChatHandler */
@@ -259,18 +259,153 @@ Chat.nicknamefilter = function (nickname, user) {
  * Parser
  *********************************************************/
 
-class CommandContext {
+class Context {
+	/**
+	 * @param {{user: User, connection: Connection, room: Room}} options
+	 */
+	constructor(options) {
+		this.recursionDepth = 0;
+
+		// user context
+		this.room = options.room;
+		this.user = options.user;
+		this.connection = options.connection;
+	}
+
+	/**
+	 * @param {string} target
+	 */
+	splitOne(target) {
+		let commaIndex = target.indexOf(',');
+		if (commaIndex < 0) {
+			return [target.trim(), ''];
+		}
+		return [target.substr(0, commaIndex).trim(), target.substr(commaIndex + 1).trim()];
+	}
+	/**
+	 * @param {string} text
+	 */
+	meansYes(text) {
+		switch (text.toLowerCase().trim()) {
+		case 'on': case 'enable': case 'yes': case 'true':
+			return true;
+		}
+		return false;
+	}
+	/**
+	 * @param {string} text
+	 */
+	meansNo(text) {
+		switch (text.toLowerCase().trim()) {
+		case 'off': case 'disable': case 'no': case 'false':
+			return true;
+		}
+		return false;
+	}
+}
+
+class PageContext extends Context {
+	/**
+	 * @param {{pageid: string, user: User, connection: Connection, room?: Room}} options
+	 */
+	constructor(options) {
+		const opts = {user: options.user, connection: options.connection, room: Rooms.global};
+		super(opts);
+
+		this.language = 'english';
+		this.pageid = options.pageid;
+
+		this.initialized = false;
+		this.title = 'Page';
+	}
+
+	/**
+	 * @param {string} permission
+	 * @param {string | User?} target
+	 * @param {BasicChatRoom?} room
+	 */
+	can(permission, target = null, room = null) {
+		if (!this.user.can(permission, target, room)) {
+			this.send(`<h2>Permission denied.</h2>`);
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * @param {string?} [pageid]
+	 */
+	extractRoom(pageid) {
+		if (!pageid) pageid = this.pageid;
+		let parts = pageid.split('-');
+
+		// Since we assume pageids are all in the form of view-pagename-roomid
+		// if someone is calling this function, so this is the only case we cover (for now)
+		const room = Rooms(parts[2]);
+		if (!room) {
+			this.send(`<h2>Invalid room.</h2>`);
+			return false;
+		}
+
+		this.room = room;
+		if (room.language) this.language = room.language;
+		return room.id;
+	}
+
+	/**
+	 * @param {string} content
+	 */
+	send(content) {
+		if (!content.startsWith('|deinit')) {
+			const roomid = this.room !== Rooms.global ? `[${this.room.id}] ` : '';
+			if (!this.initialized) {
+				content = `|init|html\n|title|${roomid}${this.title}\n|pagehtml|${content}`;
+				this.initialized = true;
+			} else {
+				content = `|title|${roomid}${this.title}\n|pagehtml|${content}`;
+			}
+		}
+		this.connection.send(`>${this.pageid}\n${content}`);
+	}
+
+	close() {
+		this.send('|deinit');
+	}
+
+	/**
+	 * @param {string?} [pageid]
+	 */
+	async resolve(pageid) {
+		if (pageid) this.pageid = pageid;
+
+		let parts = this.pageid.split('-');
+		/** @type {any} */
+		let handler = Chat.pages;
+		parts.shift();
+		while (handler) {
+			if (typeof handler === 'function') {
+				let res = await handler.bind(this)(parts, this.user, this.connection);
+				if (typeof res === 'string') {
+					this.send(res);
+					res = undefined;
+				}
+				return res;
+			}
+			handler = handler[parts.shift() || 'default'];
+		}
+	}
+}
+
+class CommandContext extends Context {
 	/**
 	 * @param {{message: string, room: Room, user: User, connection: Connection, pmTarget?: User, cmd?: string, cmdToken?: string, target?: string, fullCmd?: string}} options
 	 */
 	constructor(options) {
+		super(options);
+
 		this.message = options.message || ``;
-		this.recursionDepth = 0;
 
 		// message context
-		this.room = options.room;
-		this.user = options.user;
-		this.connection = options.connection;
 		this.pmTarget = options.pmTarget;
 
 		// command context
@@ -826,26 +961,6 @@ class CommandContext {
 		return true;
 	}
 	/**
-	 * @param {string} text
-	 */
-	meansYes(text) {
-		switch (text.toLowerCase().trim()) {
-		case 'on': case 'enable': case 'yes': case 'true':
-			return true;
-		}
-		return false;
-	}
-	/**
-	 * @param {string} text
-	 */
-	meansNo(text) {
-		switch (text.toLowerCase().trim()) {
-		case 'off': case 'disable': case 'no': case 'false':
-			return true;
-		}
-		return false;
-	}
-	/**
 	 * @param {string?} message
 	 * @param {GameRoom | ChatRoom?} room
 	 * @param {User?} targetUser
@@ -1139,16 +1254,7 @@ class CommandContext {
 		this.splitTarget(target, exactName);
 		return this.targetUser;
 	}
-	/**
-	 * @param {string} target
-	 */
-	splitOne(target) {
-		let commaIndex = target.indexOf(',');
-		if (commaIndex < 0) {
-			return [target.trim(), ''];
-		}
-		return [target.substr(0, commaIndex).trim(), target.substr(commaIndex + 1).trim()];
-	}
+
 	/**
 	 * Given a message in the form "USERNAME" or "USERNAME, MORE", splits
 	 * it apart:
@@ -1176,6 +1282,7 @@ class CommandContext {
 		return rest;
 	}
 }
+Chat.PageContext = PageContext;
 Chat.CommandContext = CommandContext;
 
 /**
@@ -1721,4 +1828,13 @@ Chat.namefilterwhitelist = new Map();
 Chat.registerMonitor = function (id, entry) {
 	if (!Chat.filterWords[id]) Chat.filterWords[id] = [];
 	Chat.monitors[id] = entry;
+};
+
+/**
+ * @param {string} pageid
+ * @param {User} user
+ * @param {Connection} connection
+ */
+Chat.resolvePage = function (pageid, user, connection) {
+	return (new PageContext({pageid: pageid, user: user, connection: connection})).resolve();
 };

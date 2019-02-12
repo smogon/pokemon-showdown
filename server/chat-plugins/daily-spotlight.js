@@ -56,33 +56,25 @@ exports.destroy = function () {
 
 /** @type {PageTable} */
 const pages = {
-	spotlights(query, user, connection) {
-		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		(async () => {
-			const roomid = query[0];
-			const room = Rooms(roomid);
-			let buf = `|title|[${roomid}] Daily Spotlights\n|pagehtml|<div class="pad ladder"><h2>Daily Spotlights</h2>`;
-			if (!room) {
-				buf += `<p>Invalid room.</p></div>`;
-			} else if (!spotlights[room.id]) {
-				buf += `<p>This room has no daily spotlights.</p></div>`;
-			} else {
-				for (let key in spotlights[room.id]) {
-					buf += `<table style="margin-bottom:30px;"><th colspan="2"><h3>${key}:</h3></th>`;
-					for (let i = 0; i < spotlights[room.id][key].length; i++) {
-						const html = await renderSpotlight(spotlights[room.id][key][i].image, spotlights[room.id][key][i].description);
-						buf += `<tr><td>${i ? i : 'Current'}</td><td>${html}</td></tr>`;
-						// @ts-ignore room is definitely a proper room here.
-						if (!user.can('announce', null, room)) break;
-					}
-					buf += '</table>';
+	async spotlights(query, user, connection) {
+		this.title = 'Daily Spotlights';
+		this.extractRoom();
+		let buf = `<div class="pad ladder"><h2>Daily Spotlights</h2>`;
+		if (!spotlights[this.room.id]) {
+			buf += `<p>This room has no daily spotlights.</p></div>`;
+		} else {
+			for (let key in spotlights[this.room.id]) {
+				buf += `<table style="margin-bottom:30px;"><th colspan="2"><h3>${key}:</h3></th>`;
+				for (const [i, spotlight] of spotlights[this.room.id][key].entries()) {
+					const html = await renderSpotlight(spotlight.image, spotlight.description);
+					buf += `<tr><td>${i ? i : 'Current'}</td><td>${html}</td></tr>`;
+					// @ts-ignore room is definitely a proper room here.
+					if (!user.can('announce', null, this.room)) break;
 				}
+				buf += '</table>';
 			}
-
-			// Really big hack to make async work
-			connection.send(`>view-spotlights-${roomid}\n|init|html\n${buf}`);
-		})();
-		return;
+		}
+		return buf;
 	},
 };
 exports.pages = pages;

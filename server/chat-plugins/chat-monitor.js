@@ -296,17 +296,13 @@ let nicknamefilter = function (name, user) {
 	return name;
 };
 
-/** @typedef {(query: string[], user: User, connection: Connection) => (string | null | void)} PageHandler */
-/** @typedef {{[k: string]: PageHandler | PageTable}} PageTable */
-
 /** @type {PageTable} */
 const pages = {
 	filters(query, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		let buf = `|title|Filters\n|pagehtml|<div class="pad ladder"><h2>Filters</h2>`;
-		if (!user.can('lock')) {
-			return buf + `<p>Access denied</p></div>`;
-		}
+		this.title = 'Filters';
+		let buf = `<div class="pad ladder"><h2>Filters</h2>`;
+		if (!this.can('lock')) return;
 		let content = ``;
 		for (const key in Chat.monitors) {
 			content += `<tr><th colspan="2"><h3>${Chat.monitors[key].label} <span style="font-size:8pt;">[${key}]</span></h3></tr></th>`;

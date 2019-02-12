@@ -42,9 +42,6 @@ function toNominationId(nomination) {
 	return nomination.toLowerCase().replace(/\s/g, '').replace(/\b&\b/g, '');
 }
 
-/** @typedef {(query: string[], user: User, connection: Connection) => (string | null | void)} PageHandler */
-/** @typedef {{[k: string]: PageHandler | PageTable}} PageTable */
-
 class OtdHandler {
 	/**
 	 * @param {string} id
@@ -329,10 +326,11 @@ class OtdHandler {
 	}
 
 	/**
-	 * @type {PageHandler}
+	 * @param {PageContext} context
 	 */
-	generateWinnerList() {
-		let buf = `|title|${this.id.toUpperCase()} Winners\n|pagehtml|<div class="pad ladder"><h2>${this.name} of the ${this.timeLabel} Winners</h2>`;
+	generateWinnerList(context) {
+		context.title = `${this.id.toUpperCase()} Winners`;
+		let buf = `<div class="pad ladder"><h2>${this.name} of the ${this.timeLabel} Winners</h2>`;
 
 		// Only use specific fields for displaying in winners list.
 		/** @type {string[]} */
@@ -639,12 +637,24 @@ let commands = {
 
 /** @type {PageTable} */
 const pages = {
-	aotd: aotd.generateWinnerList.bind(aotd),
-	fotd: fotd.generateWinnerList.bind(fotd),
-	sotd: sotd.generateWinnerList.bind(sotd),
-	cotd: cotd.generateWinnerList.bind(cotd),
-	botw: botw.generateWinnerList.bind(botw),
-	motw: motw.generateWinnerList.bind(motw),
+	aotd() {
+		return aotd.generateWinnerList(this);
+	},
+	fotd() {
+		return fotd.generateWinnerList(this);
+	},
+	sotd() {
+		return sotd.generateWinnerList(this);
+	},
+	cotd() {
+		return cotd.generateWinnerList(this);
+	},
+	botw() {
+		return botw.generateWinnerList(this);
+	},
+	motw() {
+		return motw.generateWinnerList(this);
+	},
 };
 exports.pages = pages;
 
