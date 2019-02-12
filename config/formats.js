@@ -92,9 +92,6 @@ let Formats = [
 		mod: 'gen7',
 		ruleset: ['[Gen 7] RU'],
 		banlist: ['RU', 'NUBL', 'Drought'],
-		onBegin() {
-			if (this.rated) this.add('html', `<div class="broadcast-blue"><strong>NU is currently suspecting Vanilluxe! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3646596/">suspect thread</a>.</strong></div>`);
-		},
 	},
 	{
 		name: "[Gen 7] PU",

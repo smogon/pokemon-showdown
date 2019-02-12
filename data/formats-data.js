@@ -5372,7 +5372,7 @@ let BattleFormatsData = {
 	vanilluxe: {
 		randomBattleMoves: ["blizzard", "explosion", "hiddenpowerground", "flashcannon", "autotomize", "freezedry"],
 		randomDoubleBattleMoves: ["blizzard", "taunt", "hiddenpowerground", "flashcannon", "autotomize", "protect", "freezedry"],
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "Untiered",
 	},
 	deerling: {
