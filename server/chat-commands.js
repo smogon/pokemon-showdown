@@ -1738,6 +1738,12 @@ const commands = {
 			return this.errorReply(`The room "${target}" does not exist.`);
 		}
 		if (!this.can('warn', targetUser, room) || !this.can('warn', targetUser, targetRoom)) return false;
+
+		if (!this.can('rangeban', targetUser)) {
+			this.errorReply(`Redirects have been deprecated. Instead of /redirect, use <<room links>> or /invite to guide users to the correct room, and punish if users don't cooperate.`);
+			return;
+		}
+
 		if (!targetUser || !targetUser.connected) {
 			return this.errorReply(`User ${this.targetUsername} not found.`);
 		}
