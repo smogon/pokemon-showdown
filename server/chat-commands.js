@@ -2791,7 +2791,7 @@ const commands = {
 			this.errorReply(`User ${target} is not banned from battling.`);
 		}
 	},
-	unbattlebanhelp: [`/unbattleban [username] - Allows a user to battle again. Requires: % @ * & ~`],
+	unbattlebanhelp: [`/unbattleban [username] - [DEPRECATED] Allows a user to battle again. Requires: % @ * & ~`],
 
 	nameblacklist: 'blacklistname',
 	blacklistname(target, room, user) {
