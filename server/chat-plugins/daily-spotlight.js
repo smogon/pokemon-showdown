@@ -65,8 +65,8 @@ const pages = {
 		} else {
 			for (let key in spotlights[this.room.id]) {
 				buf += `<table style="margin-bottom:30px;"><th colspan="2"><h3>${key}:</h3></th>`;
-				for (let i = 0; i < spotlights[this.room.id][key].length; i++) {
-					const html = await renderSpotlight(spotlights[this.room.id][key][i].image, spotlights[this.room.id][key][i].description);
+				for (const [i, spotlight] of spotlights[this.room.id][key].entries()) {
+					const html = await renderSpotlight(spotlight.image, spotlight.description);
 					buf += `<tr><td>${i ? i : 'Current'}</td><td>${html}</td></tr>`;
 					// @ts-ignore room is definitely a proper room here.
 					if (!user.can('announce', null, this.room)) break;
