@@ -298,7 +298,7 @@ let nicknamefilter = function (name, user) {
 
 /** @type {PageTable} */
 const pages = {
-	async filters(query, user, connection) {
+	filters(query, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		this.title = 'Filters';
 		let buf = `<div class="pad ladder"><h2>Filters</h2>`;

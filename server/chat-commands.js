@@ -1656,13 +1656,13 @@ const commands = {
 		Rooms.global.autojoinRooms(user, connection);
 		let autojoins = [];
 
-		const promises = targets.map(target => {
-			return user.tryJoinRoom(target, connection).then(ret => {
+		const promises = targets.map(target =>
+			user.tryJoinRoom(target, connection).then(ret => {
 				if (ret === Rooms.RETRY_AFTER_LOGIN) {
 					autojoins.push(target);
 				}
-			});
-		});
+			})
+		);
 
 		Promise.all(promises).then(() => {
 			connection.autojoins = autojoins.join(',');

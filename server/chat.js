@@ -26,7 +26,7 @@ To reload chat commands:
 'use strict';
 /** @typedef {GlobalRoom | GameRoom | ChatRoom} Room */
 
-/** @typedef {(this: PageContext, query: string[], user: User, connection: Connection) => Promise<string | null | void> | string | null | void} PageHandler */
+/** @typedef {(this: PageContext, query: string[], user: User, connection: Connection) => (Promise<string | null | void> | string | null | void)} PageHandler */
 /** @typedef {{[k: string]: PageHandler | PageTable}} PageTable */
 
 /** @typedef {(this: CommandContext, target: string, room: ChatRoom | GameRoom, user: User, connection: Connection, cmd: string, message: string) => (void)} ChatHandler */
