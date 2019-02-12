@@ -968,67 +968,66 @@ class Pokemon {
 		this.knownType = true;
 		if (this.battle.gen >= 7) this.removeVolatile('autotomize');
 
-		if (source) {
-			let stats = this.battle.spreadModify(this.template.baseStats, this.set);
-			if (!this.baseStats) this.baseStats = stats;
-			for (let statName in this.stats) {
-				// @ts-ignore
-				this.stats[statName] = stats[statName];
-				// @ts-ignore
-				this.baseStats[statName] = stats[statName];
-				// @ts-ignore
-				if (this.modifiedStats) this.modifiedStats[statName] = stats[statName]; // Gen 1: Reset modified stats.
-			}
-			if (this.battle.gen <= 1) {
-				// Gen 1: Re-Apply burn and para drops.
-				// FIXME: modifyStat() is only defined for the Gen 1 mod...
-				// @ts-ignore
-				if (this.status === 'par') this.modifyStat('spe', 0.25);
-				// @ts-ignore
-				if (this.status === 'brn') this.modifyStat('atk', 0.5);
-			}
-			this.speed = this.stats.spe;
-			if ((!source.id && !source.effectType) || this.battle.gen <= 2) return true;
+		let stats = this.battle.spreadModify(this.template.baseStats, this.set);
+		if (!this.baseStats) this.baseStats = stats;
+		for (let statName in this.stats) {
+			// @ts-ignore
+			this.stats[statName] = stats[statName];
+			// @ts-ignore
+			this.baseStats[statName] = stats[statName];
+			// @ts-ignore
+			if (this.modifiedStats) this.modifiedStats[statName] = stats[statName]; // Gen 1: Reset modified stats.
+		}
+		if (this.battle.gen <= 1) {
+			// Gen 1: Re-Apply burn and para drops.
+			// FIXME: modifyStat() is only defined for the Gen 1 mod...
+			// @ts-ignore
+			if (this.status === 'par') this.modifyStat('spe', 0.25);
+			// @ts-ignore
+			if (this.status === 'brn') this.modifyStat('atk', 0.5);
+		}
+		this.speed = this.stats.spe;
 
-			let apparentSpecies = this.illusion ? this.illusion.template.species : template.baseSpecies; // The species the opponent sees
-			if (isPermanent) {
-				this.baseTemplate = rawTemplate;
-				this.details = template.species + (this.level === 100 ? '' : ', L' + this.level) + (this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
-				this.battle.add('detailschange', this, (this.illusion || this).details);
-				if (source.effectType === 'Item') {
-					// @ts-ignore
-					if (source.zMove) {
-						this.battle.add('-burst', this, apparentSpecies, template.requiredItem);
-						this.moveThisTurnResult = true; // Ultra Burst counts as an action for Truant
-					} else if (source.onPrimal) {
-						if (this.illusion) {
-							this.ability = '';
-							this.battle.add('-primal', this.illusion);
-						} else {
-							this.battle.add('-primal', this);
-						}
+		if (!source || (!source.id && !source.effectType) || this.battle.gen <= 2) return true;
+
+		let apparentSpecies = this.illusion ? this.illusion.template.species : template.baseSpecies; // The species the opponent sees
+		if (isPermanent) {
+			this.baseTemplate = rawTemplate;
+			this.details = template.species + (this.level === 100 ? '' : ', L' + this.level) + (this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
+			this.battle.add('detailschange', this, (this.illusion || this).details);
+			if (source.effectType === 'Item') {
+				// @ts-ignore
+				if (source.zMove) {
+					this.battle.add('-burst', this, apparentSpecies, template.requiredItem);
+					this.moveThisTurnResult = true; // Ultra Burst counts as an action for Truant
+				} else if (source.onPrimal) {
+					if (this.illusion) {
+						this.ability = '';
+						this.battle.add('-primal', this.illusion);
 					} else {
-						this.battle.add('-mega', this, apparentSpecies, template.requiredItem);
-						this.moveThisTurnResult = true; // Mega Evolution counts as an action for Truant
+						this.battle.add('-primal', this);
 					}
-				} else if (source.effectType === 'Status') {
-					// Shaymin-Sky -> Shaymin
-					this.battle.add('-formechange', this, template.species, message);
-				}
-			} else {
-				if (source.effectType === 'Ability') {
-					this.battle.add('-formechange', this, template.species, message, `[from] ability: ${source.name}`);
 				} else {
-					this.battle.add('-formechange', this, this.illusion ? this.illusion.template.species : template.species, message);
+					this.battle.add('-mega', this, apparentSpecies, template.requiredItem);
+					this.moveThisTurnResult = true; // Mega Evolution counts as an action for Truant
 				}
+			} else if (source.effectType === 'Status') {
+				// Shaymin-Sky -> Shaymin
+				this.battle.add('-formechange', this, template.species, message);
 			}
-			if (source.effectType !== 'Ability' && source.id !== 'relicsong' && source.id !== 'zenmode') {
-				if (this.illusion) {
-					this.ability = ''; // Don't allow Illusion to wear off
-				}
-				this.setAbility(template.abilities[abilitySlot], null, true);
-				if (isPermanent) this.baseAbility = this.ability;
+		} else {
+			if (source.effectType === 'Ability') {
+				this.battle.add('-formechange', this, template.species, message, `[from] ability: ${source.name}`);
+			} else {
+				this.battle.add('-formechange', this, this.illusion ? this.illusion.template.species : template.species, message);
 			}
+		}
+		if (source.effectType !== 'Ability' && source.id !== 'relicsong' && source.id !== 'zenmode') {
+			if (this.illusion) {
+				this.ability = ''; // Don't allow Illusion to wear off
+			}
+			this.setAbility(template.abilities[abilitySlot], null, true);
+			if (isPermanent) this.baseAbility = this.ability;
 		}
 		return true;
 	}
@@ -1078,7 +1077,7 @@ class Pokemon {
 		this.newlySwitched = true;
 		this.beingCalledBack = false;
 
-		this.formeChange(this.baseTemplate);
+		this.formeChange(this.baseTemplate, null);
 	}
 
 	/**
