@@ -637,22 +637,22 @@ let commands = {
 
 /** @type {PageTable} */
 const pages = {
-	aotd: function () {
+	aotd() {
 		return aotd.generateWinnerList(this);
 	},
-	fotd: function () {
+	fotd() {
 		return fotd.generateWinnerList(this);
 	},
-	sotd: function () {
+	sotd() {
 		return sotd.generateWinnerList(this);
 	},
-	cotd: function () {
+	cotd() {
 		return cotd.generateWinnerList(this);
 	},
-	botw: function () {
+	botw() {
 		return botw.generateWinnerList(this);
 	},
-	motw: function () {
+	motw() {
 		return motw.generateWinnerList(this);
 	},
 };
