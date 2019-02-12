@@ -1670,8 +1670,18 @@ const commands = {
 	calculator: 'calc',
 	damagecalculator: 'calc',
 	damagecalc: 'calc',
-	calc(target, room, user) {
+	randomscalc: 'calc',
+	randbatscalc: 'calc',
+	rcalc: 'calc',
+	calc(target, room, user, connection, cmd) {
 		if (!this.runBroadcast()) return;
+		let isRandomBattle = (room && room.battle && room.battle.format === 'gen7randombattle');
+		if (['randomscalc', 'randbatscalc', 'rcalc'].includes(cmd) || isRandomBattle) {
+			return this.sendReplyBox(
+				`Random Battles damage calculator. (Courtesy of LegoFigure11 &amp; Smoochyena)<br />` +
+				`- <a href="https://randbatscalc.github.io/">Random Battles Damage Calcuator</a>`
+			);
+		}
 		this.sendReplyBox(
 			`Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko)<br />` +
 			`- <a href="https://pokemonshowdown.com/damagecalc/">Damage Calculator</a>`
@@ -1679,6 +1689,7 @@ const commands = {
 	},
 	calchelp: [
 		`/calc - Provides a link to a damage calculator`,
+		`/rcalc - Provides a link to the random battles damage calculator`,
 		`!calc - Shows everyone a link to a damage calculator. Requires: + % @ * # & ~`,
 	],
 
