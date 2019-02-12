@@ -358,7 +358,7 @@ class PageContext extends Context {
 	send(content) {
 		if (!content.startsWith('|deinit')) {
 			const roomid = this.room !== Rooms.global ? `[${this.room.id}] ` : '';
-			if (!this.initialized && !content.startsWith('|deinit')) {
+			if (!this.initialized) {
 				content = `|init|html\n|title|${roomid}${this.title}\n|pagehtml|${content}`;
 				this.initialized = true;
 			} else {
