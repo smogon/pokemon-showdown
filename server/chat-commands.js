@@ -1771,7 +1771,7 @@ const commands = {
 		this.modlog('REDIRECT', targetUser, `to ${targetRoom.title}`, {noip: 1, noalts: 1});
 		targetUser.leaveRoom(room);
 	},
-	redirhelp: [`/redirect OR /redir [username], [roomname] - Attempts to redirect the user [username] to the room [roomname]. Requires: % @ & ~`],
+	redirhelp: [`/redirect OR /redir [username], [roomname] - [DEPRECATED] Attempts to redirect the user [username] to the room [roomname]. Requires: & ~`],
 
 	m: 'mute',
 	mute(target, room, user, connection, cmd) {
@@ -2774,7 +2774,7 @@ const commands = {
 		if (room.battle) this.parse('/savereplay');
 		return true;
 	},
-	battlebanhelp: [`/battleban [username], [reason] - Prevents the user from starting new battles for 2 days and shows them the [reason]. Requires: % @ * & ~`],
+	battlebanhelp: [`/battleban [username], [reason] - [DEPRECATED] Prevents the user from starting new battles for 2 days and shows them the [reason]. Requires: & ~`],
 
 	unbattleban(target, room, user) {
 		if (!target) return this.parse('/help unbattleban');
