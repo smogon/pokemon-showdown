@@ -330,11 +330,8 @@ class RandomGen6Teams extends RandomTeams {
 				case 'overheat':
 					if (hasMove['lavaplume'] || counter.setupType === 'Special') rejected = true;
 					break;
-				case 'acrobatics':
-					if (hasMove['hurricane'] && counter.setupType !== 'Physical') rejected = true;
-					break;
-				case 'airslash':
-					if (hasMove['acrobatics'] || hasMove['bravebird'] || hasMove['hurricane']) rejected = true;
+				case 'airslash': case 'hurricane':
+					if (hasMove['acrobatics'] || hasMove['bravebird']) rejected = true;
 					break;
 				case 'shadowclaw':
 					if (hasMove['phantomforce'] || hasMove['shadowforce'] || hasMove['shadowsneak']) rejected = true;
@@ -526,6 +523,7 @@ class RandomGen6Teams extends RandomTeams {
 					(hasType['Fighting'] && !counter['Fighting'] && (counter.setupType || !counter['Status'])) ||
 					(hasType['Fire'] && !counter['Fire']) ||
 					(hasType['Ghost'] && !hasType['Dark'] && !counter['Ghost']) ||
+					(hasType['Grass'] && !hasType['Fairy'] && !hasType['Poison'] && !hasType['Steel'] && !counter['Grass']) ||
 					(hasType['Ground'] && !counter['Ground'] && !hasMove['rest'] && !hasMove['sleeptalk']) ||
 					(hasType['Ice'] && !counter['Ice'] && !hasAbility['Refrigerate']) ||
 					(hasType['Psychic'] && !!counter['Psychic'] && !hasType['Flying'] && !hasAbility['Pixilate'] && template.types.length > 1 && counter.stab < 2) ||

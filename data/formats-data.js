@@ -177,7 +177,7 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	pidgeot: {
-		randomBattleMoves: ["roost", "bravebird", "heatwave", "return", "doubleedge", "uturn", "hurricane"],
+		randomBattleMoves: ["roost", "bravebird", "heatwave", "return", "uturn", "defog"],
 		randomDoubleBattleMoves: ["bravebird", "heatwave", "return", "doubleedge", "uturn", "tailwind", "protect"],
 		eventPokemon: [
 			{"generation": 5, "level": 61, "gender": "M", "nature": "Naughty", "ivs": {"hp": 30, "atk": 30, "def": 30, "spa": 30, "spd": 30, "spe": 30}, "isHidden": false, "abilities": ["keeneye"], "moves": ["whirlwind", "wingattack", "skyattack", "mirrormove"], "pokeball": "cherishball"},
@@ -1821,8 +1821,8 @@ let BattleFormatsData = {
 		doublesTier: "DOU",
 	},
 	moltres: {
-		randomBattleMoves: ["fireblast", "hiddenpowergrass", "roost", "substitute", "toxic", "willowisp", "hurricane"],
-		randomDoubleBattleMoves: ["fireblast", "hiddenpowergrass", "airslash", "roost", "substitute", "protect", "uturn", "willowisp", "hurricane", "heatwave", "tailwind"],
+		randomBattleMoves: ["fireblast", "roost", "substitute", "toxic", "willowisp", "hurricane"],
+		randomDoubleBattleMoves: ["fireblast", "airslash", "roost", "substitute", "protect", "uturn", "willowisp", "hurricane", "heatwave", "tailwind"],
 		eventPokemon: [
 			{"generation": 3, "level": 50, "shiny": 1, "moves": ["firespin", "agility", "endure", "flamethrower"]},
 			{"generation": 3, "level": 70, "moves": ["agility", "endure", "flamethrower", "safeguard"], "pokeball": "pokeball"},
@@ -2011,7 +2011,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	noctowl: {
-		randomBattleMoves: ["roost", "whirlwind", "airslash", "nightshade", "toxic", "defog", "hurricane", "heatwave"],
+		randomBattleMoves: ["roost", "whirlwind", "nightshade", "toxic", "defog", "hurricane", "heatwave"],
 		randomDoubleBattleMoves: ["roost", "tailwind", "airslash", "hypervoice", "heatwave", "protect", "hypnosis"],
 		tier: "(PU)",
 		doublesTier: "Untiered",
@@ -5356,7 +5356,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	swanna: {
-		randomBattleMoves: ["airslash", "roost", "hurricane", "icebeam", "raindance", "defog", "scald"],
+		randomBattleMoves: ["bravebird", "roost", "hurricane", "icebeam", "raindance", "defog", "scald"],
 		randomDoubleBattleMoves: ["airslash", "roost", "hurricane", "surf", "icebeam", "raindance", "tailwind", "scald", "protect"],
 		tier: "(PU)",
 		doublesTier: "Untiered",
@@ -5744,7 +5744,7 @@ let BattleFormatsData = {
 		doublesTier: "Untiered",
 	},
 	tornadus: {
-		randomBattleMoves: ["bulkup", "acrobatics", "knockoff", "substitute", "hurricane", "heatwave", "superpower", "uturn", "taunt", "tailwind"],
+		randomBattleMoves: ["bulkup", "acrobatics", "hurricane", "heatwave", "superpower", "uturn", "defog", "tailwind"],
 		randomDoubleBattleMoves: ["hurricane", "airslash", "uturn", "superpower", "focusblast", "taunt", "substitute", "heatwave", "tailwind", "protect", "skydrop"],
 		eventPokemon: [
 			{"generation": 5, "level": 40, "shiny": 1, "isHidden": false, "moves": ["revenge", "aircutter", "extrasensory", "agility"]},
@@ -5760,7 +5760,7 @@ let BattleFormatsData = {
 		doublesTier: "Untiered",
 	},
 	tornadustherian: {
-		randomBattleMoves: ["hurricane", "airslash", "heatwave", "knockoff", "superpower", "uturn", "taunt"],
+		randomBattleMoves: ["hurricane", "heatwave", "knockoff", "superpower", "uturn", "taunt"],
 		randomDoubleBattleMoves: ["hurricane", "airslash", "focusblast", "uturn", "heatwave", "skydrop", "tailwind", "taunt", "protect"],
 		eventOnly: true,
 		tier: "OU",
@@ -6401,7 +6401,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	noivern: {
-		randomBattleMoves: ["dracometeor", "hurricane", "airslash", "flamethrower", "boomburst", "switcheroo", "uturn", "roost", "taunt"],
+		randomBattleMoves: ["dracometeor", "hurricane", "flamethrower", "boomburst", "switcheroo", "uturn", "roost", "taunt"],
 		randomDoubleBattleMoves: ["airslash", "hurricane", "dragonpulse", "dracometeor", "focusblast", "flamethrower", "uturn", "roost", "boomburst", "switcheroo", "tailwind", "taunt", "protect"],
 		tier: "RU",
 		doublesTier: "Untiered",

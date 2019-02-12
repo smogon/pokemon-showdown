@@ -134,7 +134,7 @@ let BattleFormatsData = {
 	},
 	pidgeot: {
 		inherit: true,
-		randomBattleMoves: ["roost", "bravebird", "heatwave", "return", "doubleedge", "uturn", "hurricane"],
+		randomBattleMoves: ["roost", "bravebird", "heatwave", "return", "uturn", "defog"],
 		randomDoubleBattleMoves: ["bravebird", "heatwave", "return", "doubleedge", "uturn", "tailwind", "protect"],
 		tier: "PU",
 		doublesTier: "Untiered",
@@ -4215,13 +4215,13 @@ let BattleFormatsData = {
 	},
 	tornadus: {
 		inherit: true,
-		randomBattleMoves: ["bulkup", "acrobatics", "knockoff", "substitute", "hurricane", "heatwave", "superpower", "uturn", "taunt", "tailwind"],
+		randomBattleMoves: ["bulkup", "acrobatics", "knockoff", "substitute", "hurricane", "heatwave", "superpower", "uturn", "tailwind"],
 		randomDoubleBattleMoves: ["hurricane", "airslash", "uturn", "superpower", "focusblast", "taunt", "substitute", "heatwave", "tailwind", "protect", "skydrop"],
 		tier: "UU",
 		doublesTier: "DUU",
 	},
 	tornadustherian: {
-		randomBattleMoves: ["hurricane", "airslash", "heatwave", "knockoff", "superpower", "uturn", "taunt"],
+		randomBattleMoves: ["hurricane", "heatwave", "knockoff", "superpower", "uturn", "taunt"],
 		randomDoubleBattleMoves: ["hurricane", "airslash", "focusblast", "uturn", "heatwave", "skydrop", "tailwind", "taunt", "protect"],
 		eventOnly: true,
 		tier: "OU",
@@ -4722,7 +4722,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	noivern: {
-		randomBattleMoves: ["dracometeor", "hurricane", "airslash", "flamethrower", "boomburst", "switcheroo", "uturn", "roost", "taunt"],
+		randomBattleMoves: ["dracometeor", "hurricane", "flamethrower", "boomburst", "switcheroo", "uturn", "roost", "taunt"],
 		randomDoubleBattleMoves: ["airslash", "hurricane", "dragonpulse", "dracometeor", "focusblast", "flamethrower", "uturn", "roost", "boomburst", "switcheroo", "tailwind", "taunt", "protect"],
 		tier: "RUBL",
 		doublesTier: "Untiered",
