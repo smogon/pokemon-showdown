@@ -1294,8 +1294,8 @@ let BattleFormatsData = {
 		doublesTier: "NFE",
 	},
 	rhyperior: {
-		randomBattleMoves: ["stoneedge", "earthquake", "aquatail", "megahorn", "stealthrock", "rockblast", "rockpolish", "dragontail"],
-		randomDoubleBattleMoves: ["stoneedge", "earthquake", "hammerarm", "megahorn", "stealthrock", "rockslide", "aquatail", "protect"],
+		randomBattleMoves: ["stoneedge", "earthquake", "icepunch", "megahorn", "stealthrock", "rockblast", "rockpolish", "dragontail"],
+		randomDoubleBattleMoves: ["stoneedge", "earthquake", "hammerarm", "megahorn", "stealthrock", "rockslide", "icepunch", "protect"],
 		tier: "RU",
 		doublesTier: "Untiered",
 	},
