@@ -1,0 +1,25 @@
+{
+	"name": "German",
+
+	"strings": {
+		"Please follow the rules:": "Bitte befolgt die Regeln:",
+		"[TN: Link to the PS rules for your language]https://pokemonshowdown.com/rules": "https://pokemonshowdown.com/pages/rules-de",
+		"Global Rules": "Globale Regeln",
+		"${room} room rules": "Regeln des ${room} Raumes",
+
+		"<strong>Global ranks</strong>": "<strong>Globale Ränge</strong>",
+		"+ <strong>Global Voice</strong> - They can use ! commands like !groups": "+ <strong>Global Voice</strong> - Sie können ! Befehle wie !groups benutzen",
+		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "% <strong>Global Driver</strong> - Oben genanntes, und sie können Nutzer locken und alternative Accounts einsehen",
+		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>Global Moderator</strong> - Oben genanntes, und sie können Nutzer vom Server bannen",
+		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Global Bot</strong> - Wie Moderatoren, nur wird verdeutlicht, dass der Nutzer ein Bot ist",
+		"&amp; <strong>Global Leader</strong> - The above, and they can promote to global moderator and force ties": "&amp; <strong>Global Leader</strong> - Oben genanntes, und sie können bis zu Global Moderator befördern und in Kämpfen ein Unentschieden erzwingen",
+		"~ <strong>Global Administrator</strong> -  They can do anything, like change what this message says": "~ <strong>Global Administrator</strong> - Sie können alles tun, zum Beispiel den Text dieser Nachricht ändern",
+
+		"<strong>Room ranks</strong>": "<strong>Raum-Ränge</strong>",
+		"+ <strong>Voice</strong> - They can use ! commands like !groups": "+ <strong>Voice</strong> - Sie können ! Befehle wie !groups benutzen",
+		"% <strong>Driver</strong> - The above, and they can mute and warn": "% <strong>Driver</strong> - Oben genanntes, und sie können verwarnen und muten",
+		"@ <strong>Moderator</strong> - The above, and they can room ban users": "@ <strong>Moderator</strong> - Oben genanntes, und sie können Nutzer aus dem Raum bannen",
+		"* <strong>Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Bot</strong> - Wie Moderatoren, nur wird verdeutlicht, dass der Nutzer ein Bot ist",
+		"# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it": "# <strong>Room Owner</strong> - Sie sind die Leiter des Raumes und können beinahe vollständig über ihn bestimmen"
+	}
+}
