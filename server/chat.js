@@ -53,6 +53,8 @@ const MAX_PARSE_RECURSION = 10;
 const VALID_COMMAND_TOKENS = '/!';
 const BROADCAST_TOKEN = '!';
 
+const TRANSLATION_DIRECTORY = 'translations/';
+
 const FS = require('../lib/fs');
 
 /** @type {(url: string) => Promise<{width: number, height: number}>} */
@@ -256,20 +258,85 @@ Chat.nicknamefilter = function (nickname, user) {
 };
 
 /*********************************************************
+ * Translations
+ *********************************************************/
+
+Chat.languages = new Map();
+Chat.translations = new Map();
+
+/**
+ * @param {string} string
+ */
+function stripTranslationNotes(string) {
+	return string.replace(/\${.+?}/g, '${}').replace(/\[TN: ?.+?\]/g, '');
+}
+
+FS(TRANSLATION_DIRECTORY).readdir().then(files => {
+	for (let fname of files) {
+		if (!fname.endsWith('.json')) continue;
+
+		const content = require(`../${TRANSLATION_DIRECTORY}${fname}`);
+		const id = fname.slice(0, -5);
+
+		Chat.languages.set(id, content.name || "Unknown Language");
+		Chat.translations.set(id, new Map());
+
+		if (content.strings) {
+			for (const key in content.strings) {
+				Chat.translations.get(id).set(stripTranslationNotes(key), stripTranslationNotes(content.strings[key]));
+			}
+		}
+	}
+});
+
+/**
+ * @param {string?} language
+ * @param {string[] | string} strings
+ * @param {any[]} keys
+ */
+Chat.tr = function (language, strings, ...keys) {
+	if (!language) language = 'english';
+	language = toId(language);
+	if (!Chat.translations.has(language)) throw new Error(`Trying to translate to a nonexistent language: ${language}`);
+	if (!strings.length) {
+		// @ts-ignore no this isn't any type
+		return (function (strings, ...keys) {
+			Chat.tr(language, strings, ...keys);
+		});
+	}
+
+	// If strings is an array (normally the case), combine before translating.
+	let string = Array.isArray(strings) ? strings.join('${}') : strings;
+	let translated = Chat.translations.get(language).get(string) || string;
+
+	// Replace the gaps in the template string
+	if (keys.length) {
+		let reconstructed = '';
+
+		for (let [i, str] of translated.split('${}').entries()) {
+			reconstructed += str;
+			if (keys[i]) reconstructed += keys[i];
+		}
+
+		translated = reconstructed;
+	}
+	return translated;
+};
+
+/*********************************************************
  * Parser
  *********************************************************/
 
-class Context {
+class MessageContext {
 	/**
-	 * @param {{user: User, connection: Connection, room: Room}} options
+	 * @param {User} user
+	 * @param {string?} [language]
 	 */
-	constructor(options) {
+	constructor(user, language) {
 		this.recursionDepth = 0;
 
-		// user context
-		this.room = options.room;
-		this.user = options.user;
-		this.connection = options.connection;
+		this.user = user;
+		this.language = language;
 	}
 
 	/**
@@ -302,17 +369,25 @@ class Context {
 		}
 		return false;
 	}
+
+	/**
+	 * @param {string[] | string} strings
+	 * @param {any[]} keys
+	 */
+	tr(strings, ...keys) {
+		return Chat.tr(this.language, strings, keys);
+	}
 }
 
-class PageContext extends Context {
+class PageContext extends MessageContext {
 	/**
-	 * @param {{pageid: string, user: User, connection: Connection, room?: Room}} options
+	 * @param {{pageid: string, user: User, connection: Connection, language?: string}} options
 	 */
 	constructor(options) {
-		const opts = {user: options.user, connection: options.connection, room: Rooms.global};
-		super(opts);
+		super(options.user, options.language);
 
-		this.language = 'english';
+		this.connection = options.connection;
+		this.room = Rooms('global');
 		this.pageid = options.pageid;
 
 		this.initialized = false;
@@ -348,7 +423,6 @@ class PageContext extends Context {
 		}
 
 		this.room = room;
-		if (room.language) this.language = room.language;
 		return room.id;
 	}
 
@@ -396,17 +470,19 @@ class PageContext extends Context {
 	}
 }
 
-class CommandContext extends Context {
+class CommandContext extends MessageContext {
 	/**
 	 * @param {{message: string, room: Room, user: User, connection: Connection, pmTarget?: User, cmd?: string, cmdToken?: string, target?: string, fullCmd?: string}} options
 	 */
 	constructor(options) {
-		super(options);
+		super(options.user, options.room.language || options.user.language);
 
 		this.message = options.message || ``;
 
 		// message context
 		this.pmTarget = options.pmTarget;
+		this.room = options.room;
+		this.connection = options.connection;
 
 		// command context
 		this.cmd = options.cmd || '';
@@ -1282,6 +1358,7 @@ class CommandContext extends Context {
 		return rest;
 	}
 }
+Chat.MessageContext = MessageContext;
 Chat.PageContext = PageContext;
 Chat.CommandContext = CommandContext;
 
