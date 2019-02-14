@@ -4789,19 +4789,6 @@
 				"moves": [["Close Combat"], ["Wild Charge"], ["Flare Blitz"], ["Extreme Speed"]]
 			}]
 		},
-		"banette": {
-			"flags": {
-				"megaOnly": 1
-			},
-			"sets": [{
-				"species": "Banette",
-				"item": ["Banettite"],
-				"ability": ["Frisk"],
-				"evs": {"hp": 40, "atk": 252, "spe": 216},
-				"nature": "Adamant",
-				"moves": [["Destiny Bond"], ["Shadow Claw"], ["Gunk Shot"], ["Taunt"]]
-			}]
-		},
 		"barbaracle": {
 			"flags": {},
 			"sets": [{
@@ -4822,17 +4809,6 @@
 				"evs": {"hp": 4, "atk": 252, "spe": 252},
 				"nature": "Adamant",
 				"moves": [["Return"], ["Superpower"], ["Ice Punch"], ["Earthquake"]]
-			}]
-		},
-		"bruxish": {
-			"flags": {},
-			"sets": [{
-				"species": "Bruxish",
-				"item": ["Life Orb"],
-				"ability": ["Strong Jaw"],
-				"evs": {"atk": 252, "Def": 4, "spe": 252},
-				"nature": "Jolly",
-				"moves": [["Swords Dance"], ["Psychic Fangs"], ["Aqua Jet"], ["Crunch"]]
 			}]
 		},
 		"blastoise": {
@@ -5092,17 +5068,6 @@
 				"moves": [["Brave Bird"], ["Sucker Punch"], ["Pursuit"], ["Superpower"]]
 			}]
 		},
-		"hoopa": {
-			"flags": {},
-			"sets": [{
-				"species": "Hoopa",
-				"item": ["Ghostium Z"],
-				"ability": ["Magician"],
-				"evs": {"spa": 248, "spd": 8, "spe": 252},
-				"nature": "Timid",
-				"moves": [["Shadow Ball"], ["Focus Blast"], ["Substitute"], ["Nasty Plot"]]
-			}]
-		},
 		"houndoom": {
 			"flags": {},
 			"sets": [{
@@ -5112,17 +5077,6 @@
 				"evs": {"spa": 252, "spd": 4, "spe": 252},
 				"nature": "Timid",
 				"moves": [["Nasty Plot"], ["Dark Pulse"], ["Fire Blast"], ["Taunt"]]
-			}]
-		},
-		"jellicent": {
-			"flags": {},
-			"sets": [{
-				"species": "Jellicent",
-				"item": ["Leftovers"],
-				"ability": ["Water Absorb"],
-				"evs": {"hp": 248, "def": 176, "spe": 84},
-				"nature": "Bold",
-				"moves": [["Taunt"], ["Scald"], ["Will-O-Wisp"], ["Recover"]]
 			}]
 		},
 		"kingdra": {
@@ -5222,17 +5176,6 @@
 				"evs": {"hp": 252, "def": 252, "spd": 4},
 				"nature": "Bold",
 				"moves": [["Scald"], ["Recover"], ["Haze"], ["Refresh"]]
-			}]
-		},
-		"minior": {
-			"flags": {},
-			"sets": [{
-				"species": "Minior",
-				"item": ["White Herb"],
-				"ability": ["Shields Down"],
-				"evs": {"atk": 252, "def": 4, "spe": 252},
-				"nature": "Adamant",
-				"moves": [["Shell Smash"], ["Acrobatics"], ["Stone Edge"], ["Earthquake"]]
 			}]
 		},
 		"mismagius": {
@@ -5517,6 +5460,7 @@
 				"species": "Snorlax",
 				"item": ["Leftovers"],
 				"ability": ["Thick Fat"],
+				"happiness": 0,
 				"evs": {"hp": 188, "def": 128, "spd": 192},
 				"nature": "Careful",
 				"moves": [["Curse"], ["Frustration"], ["Rest"], ["Earthquake"]]
