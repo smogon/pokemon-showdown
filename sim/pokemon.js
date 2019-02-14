@@ -1077,7 +1077,7 @@ class Pokemon {
 		this.newlySwitched = true;
 		this.beingCalledBack = false;
 
-		this.formeChange(this.baseTemplate, null);
+		this.formeChange(this.baseTemplate, /** @type {Effect} */ ({id: ''}));
 	}
 
 	/**
