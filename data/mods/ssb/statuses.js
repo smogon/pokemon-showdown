@@ -125,13 +125,13 @@ let BattleStatuses = {
 	ant: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|&ant|the superior ant is here`);
+			this.add(`c|@ant|the superior ant is here`);
 		},
 		onSwitchOut() {
-			this.add(`c|&ant|hasta la vista baby`);
+			this.add(`c|@ant|hasta la vista baby`);
 		},
 		onFaint() {
-			this.add(`c|&ant|I'M NOT ANTEMORTEM`);
+			this.add(`c|@ant|I'M NOT ANTEMORTEM`);
 		},
 	},
 	aquagtothepast: {
@@ -367,13 +367,13 @@ let BattleStatuses = {
 	deg: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%deg|rof`);
+			this.add(`c|+deg|rof`);
 		},
 		onSwitchOut() {
-			this.add(`c|%deg|rof`);
+			this.add(`c|+deg|rof`);
 		},
 		onFaint() {
-			this.add(`c|%deg|Dream Eater Gengar is an unset.`);
+			this.add(`c|+deg|Dream Eater Gengar is an unset.`);
 		},
 	},
 	dragonwhale: {
@@ -385,13 +385,13 @@ let BattleStatuses = {
 	duck: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@duck|Yes, I'm actually a duck. I know.`);
+			this.add(`c|+duck|Yes, I'm actually a duck. I know.`);
 		},
 		onSwitchOut() {
-			this.add(`c|@duck|/me waddles away`);
+			this.add(`c|+duck|/me waddles away`);
 		},
 		onFaint() {
-			this.add(`c|@duck|Duck you! That move was too op anyway.`);
+			this.add(`c|+duck|Duck you! That move was too op anyway.`);
 		},
 	},
 	e4flint: {
@@ -506,13 +506,13 @@ let BattleStatuses = {
 	fomg: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+FOMG|You got this, my friend!`);
+			this.add(`c|%FOMG|You got this, my friend!`);
 		},
 		onSwitchOut() {
-			this.add(`c|+FOMG|/me rolls out`);
+			this.add(`c|%FOMG|/me rolls out`);
 		},
 		onFaint() {
-			this.add(`c|+FOMG|Rock in peace...`);
+			this.add(`c|%FOMG|Rock in peace...`);
 		},
 	},
 	kalalokki: {
@@ -631,13 +631,13 @@ let BattleStatuses = {
 	iyarito: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@Iyarito|Iyarito is always right`);
+			this.add(`c|&Iyarito|Iyarito is always right`);
 		},
 		onSwitchOut() {
-			this.add(`c|@Iyarito|It's all Iyarito's fault`);
+			this.add(`c|&Iyarito|It's all Iyarito's fault`);
 		},
 		onFaint() {
-			this.add(`c|@Iyarito|RIP Patrona`);
+			this.add(`c|&Iyarito|RIP Patrona`);
 		},
 	},
 	jdarden: {
@@ -893,13 +893,13 @@ let BattleStatuses = {
 	moo: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@moo|/me moo`);
+			this.add(`c|+moo|/me moo`);
 		},
 		onSwitchOut() {
-			this.add(`c|@moo|/me moo`);
+			this.add(`c|+moo|/me moo`);
 		},
 		onFaint() {
-			this.add(`c|@moo|/me moo`);
+			this.add(`c|+moo|/me moo`);
 		},
 	},
 	morfent: {
