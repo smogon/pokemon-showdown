@@ -37,7 +37,7 @@ exports.BattleScripts = {
 			if (!template.abilities || (pokemon && pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5)) {
 				return false;
 			}
-			if (!this.formeChange(template, null)) {
+			if (!this.formeChange(template)) {
 				return false;
 			}
 			this.transformed = true;

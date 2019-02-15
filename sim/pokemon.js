@@ -873,7 +873,7 @@ class Pokemon {
 		if ((pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5)) {
 			return false;
 		}
-		if (!this.formeChange(template, null)) {
+		if (!this.setTemplate(template)) {
 			return false;
 		}
 		this.transformed = true;
@@ -945,20 +945,16 @@ class Pokemon {
 	}
 
 	/**
-	 * Changes this Pokemon's forme to match the given templateId (or template).
-	 * This function handles all changes to stats, ability, type, template, etc.
-	 * as well as sending all relevant messages sent to the client.
-	 * @param {string | Template} templateId
+	 * Changes this Pokemon's template to the given templateId (or template).
+	 * This function only handles changes to stats and type.
+	 * Use formChange to handle changes to ability and sending client messages.
+	 * @param {Template} rawTemplate
 	 * @param {Effect | null} source
-	 * @param {boolean} [isPermanent]
-	 * @param {string} [message]
 	 */
-	formeChange(templateId, source = this.battle.effect, isPermanent, message, abilitySlot = '0') {
-		let rawTemplate = this.battle.getTemplate(templateId);
-
+	setTemplate(rawTemplate, source = this.battle.effect) {
 		let template = this.battle.singleEvent('ModifyTemplate', this.battle.getFormat(), null, this, source, null, rawTemplate);
 
-		if (!template) return false;
+		if (!template) return null;
 
 		this.template = template;
 
@@ -987,8 +983,26 @@ class Pokemon {
 			if (this.status === 'brn') this.modifyStat('atk', 0.5);
 		}
 		this.speed = this.stats.spe;
+		return template;
+	}
 
-		if (!source || (!source.id && !source.effectType) || this.battle.gen <= 2) return true;
+	/**
+	 * Changes this Pokemon's forme to match the given templateId (or template).
+	 * This function handles all changes to stats, ability, type, template, etc.
+	 * as well as sending all relevant messages sent to the client.
+	 * @param {string | Template} templateId
+	 * @param {Effect} source
+	 * @param {boolean} [isPermanent]
+	 * @param {string} [message]
+	 * @param {'0' | '1' | 'H' | 'S'} [abilitySlot]
+	 */
+	formeChange(templateId, source = this.battle.effect, isPermanent, message, abilitySlot = '0') {
+		let rawTemplate = this.battle.getTemplate(templateId);
+
+		let template = this.setTemplate(rawTemplate, source);
+		if (!template) return false;
+
+		if (this.battle.gen <= 2) return true;
 
 		let apparentSpecies = this.illusion ? this.illusion.template.species : template.baseSpecies; // The species the opponent sees
 		if (isPermanent) {
@@ -1077,7 +1091,7 @@ class Pokemon {
 		this.newlySwitched = true;
 		this.beingCalledBack = false;
 
-		this.formeChange(this.baseTemplate, null);
+		this.setTemplate(this.baseTemplate);
 	}
 
 	/**
