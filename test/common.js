@@ -12,6 +12,7 @@ const RULE_FLAGS = {
 	preview: 4,
 	sleepClause: 8,
 	cancel: 16,
+	endlessBattleClause: 32,
 };
 
 function capitalize(word) {
@@ -84,6 +85,7 @@ class TestTools {
 		if (options.preview) format.ruleset.push('Team Preview');
 		if (options.sleepClause) format.ruleset.push('Sleep Clause Mod');
 		if (options.cancel) format.ruleset.push('Cancel Mod');
+		if (options.endlessBattleClause) format.ruleset.push('Endless Battle Clause');
 
 		this.dex.installFormat(formatId, format);
 		return format;
