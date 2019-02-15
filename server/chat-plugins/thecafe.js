@@ -72,7 +72,7 @@ function generateTeam(generator = '') {
 	case 'ag':
 		potentialPokemon = potentialPokemon.filter(mon => {
 			const template = Dex.getTemplate(mon);
-			const unviable = template.tier === 'NFE' || template.tier === 'PU' || template.tier === '(PU)' || template.tier.startsWith("LC");
+			const unviable = ['NFE', 'PU', 'Untiered'].includes(template.tier) || template.tier.startsWith("LC");
 			const illegal = template.tier === 'Unreleased' || template.tier === 'Illegal' || template.tier.startsWith("CAP");
 			return !(unviable || illegal);
 		});

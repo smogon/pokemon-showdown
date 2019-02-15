@@ -1588,6 +1588,9 @@ class RandomTeams extends Dex.ModdedDex {
 			if (tier.charAt(0) === '(') {
 				tier = tier.slice(1, -1);
 			}
+			if (tier === 'Untiered') {
+				tier = 'PU';
+			}
 			level = levelScale[tier] || 75;
 			if (customScale[template.name]) level = customScale[template.name];
 
