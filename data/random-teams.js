@@ -1558,9 +1558,6 @@ class RandomTeams extends Dex.ModdedDex {
 		if (!isDoubles) {
 			/** @type {{[tier: string]: number}} */
 			let levelScale = {
-				LC: 88,
-				'LC Uber': 86,
-				NFE: 84,
 				PU: 83,
 				PUBL: 82,
 				NU: 81,
@@ -1588,7 +1585,7 @@ class RandomTeams extends Dex.ModdedDex {
 			if (tier.charAt(0) === '(') {
 				tier = tier.slice(1, -1);
 			}
-			level = levelScale[tier] || 75;
+			level = levelScale[tier] || 84;
 			if (customScale[template.name]) level = customScale[template.name];
 
 			// Custom level based on moveset
