@@ -1628,7 +1628,7 @@ const commands = {
 		}
 		return true;
 	},
-	banhelp: [`/ban [username], [reason] - Bans the user from the room you are in. Requires: @ * # & ~`],
+	banhelp: [`/roomban [username], [reason] - Bans the user from the room you are in. Requires: @ * # & ~`],
 
 	unroomban: 'unban',
 	roomunban: 'unban',
@@ -1647,7 +1647,7 @@ const commands = {
 			this.errorReply(`User '${target}' is not banned from this room.`);
 		}
 	},
-	unbanhelp: [`/unban [username] - Unbans the user from the room you are in. Requires: @ * # & ~`],
+	unbanhelp: [`/roomunban [username] - Unbans the user from the room you are in. Requires: @ * # & ~`],
 
 	'!autojoin': true,
 	autojoin(target, room, user, connection) {
