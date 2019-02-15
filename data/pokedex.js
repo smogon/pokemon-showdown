@@ -26,8 +26,8 @@ let BattlePokedex = {
 		weightkg: 13,
 		color: "Green",
 		prevo: "bulbasaur",
-		evos: ["venusaur"],
 		evoLevel: 16,
+		evos: ["venusaur"],
 		eggGroups: ["Monster", "Grass"],
 	},
 	venusaur: {
@@ -84,8 +84,8 @@ let BattlePokedex = {
 		weightkg: 19,
 		color: "Red",
 		prevo: "charmander",
-		evos: ["charizard"],
 		evoLevel: 16,
+		evos: ["charizard"],
 		eggGroups: ["Monster", "Dragon"],
 	},
 	charizard: {
@@ -157,8 +157,8 @@ let BattlePokedex = {
 		weightkg: 22.5,
 		color: "Blue",
 		prevo: "squirtle",
-		evos: ["blastoise"],
 		evoLevel: 16,
+		evos: ["blastoise"],
 		eggGroups: ["Monster", "Water 1"],
 	},
 	blastoise: {
@@ -213,8 +213,8 @@ let BattlePokedex = {
 		weightkg: 9.9,
 		color: "Green",
 		prevo: "caterpie",
-		evos: ["butterfree"],
 		evoLevel: 7,
+		evos: ["butterfree"],
 		eggGroups: ["Bug"],
 	},
 	butterfree: {
@@ -252,8 +252,8 @@ let BattlePokedex = {
 		weightkg: 10,
 		color: "Yellow",
 		prevo: "weedle",
-		evos: ["beedrill"],
 		evoLevel: 7,
+		evos: ["beedrill"],
 		eggGroups: ["Bug"],
 	},
 	beedrill: {
@@ -306,8 +306,8 @@ let BattlePokedex = {
 		weightkg: 30,
 		color: "Brown",
 		prevo: "pidgey",
-		evos: ["pidgeot"],
 		evoLevel: 18,
+		evos: ["pidgeot"],
 		eggGroups: ["Flying"],
 	},
 	pidgeot: {
@@ -470,8 +470,8 @@ let BattlePokedex = {
 		weightkg: 6,
 		color: "Yellow",
 		prevo: "pichu",
+		evoType: "levelExtra",
 		evos: ["raichu", "raichualola"],
-		evoLevel: 1,
 		eggGroups: ["Field", "Fairy"],
 		otherFormes: ["pikachucosplay", "pikachurockstar", "pikachubelle", "pikachupopstar", "pikachuphd", "pikachulibre", "pikachuoriginal", "pikachuhoenn", "pikachusinnoh", "pikachuunova", "pikachukalos", "pikachualola", "pikachupartner", "pikachustarter"],
 	},
@@ -694,7 +694,7 @@ let BattlePokedex = {
 		weightkg: 30,
 		color: "Yellow",
 		prevo: "pikachu",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Field", "Fairy"],
 		otherFormes: ["raichualola"],
 	},
@@ -711,7 +711,7 @@ let BattlePokedex = {
 		weightkg: 21,
 		color: "Brown",
 		prevo: "pikachu",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Field", "Fairy"],
 	},
 	sandshrew: {
@@ -769,7 +769,7 @@ let BattlePokedex = {
 		weightkg: 55,
 		color: "Blue",
 		prevo: "sandshrewalola",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Field"],
 	},
 	nidoranf: {
@@ -796,8 +796,8 @@ let BattlePokedex = {
 		weightkg: 20,
 		color: "Blue",
 		prevo: "nidoranf",
-		evos: ["nidoqueen"],
 		evoLevel: 16,
+		evos: ["nidoqueen"],
 		eggGroups: ["Undiscovered"],
 	},
 	nidoqueen: {
@@ -811,7 +811,7 @@ let BattlePokedex = {
 		weightkg: 60,
 		color: "Blue",
 		prevo: "nidorina",
-		evoLevel: 16,
+		evoType: "stone",
 		eggGroups: ["Undiscovered"],
 	},
 	nidoranm: {
@@ -838,8 +838,8 @@ let BattlePokedex = {
 		weightkg: 19.5,
 		color: "Purple",
 		prevo: "nidoranm",
-		evos: ["nidoking"],
 		evoLevel: 16,
+		evos: ["nidoking"],
 		eggGroups: ["Monster", "Field"],
 	},
 	nidoking: {
@@ -853,7 +853,7 @@ let BattlePokedex = {
 		weightkg: 62,
 		color: "Purple",
 		prevo: "nidorino",
-		evoLevel: 16,
+		evoType: "stone",
 		eggGroups: ["Monster", "Field"],
 	},
 	clefairy: {
@@ -867,8 +867,8 @@ let BattlePokedex = {
 		weightkg: 7.5,
 		color: "Pink",
 		prevo: "cleffa",
+		evoType: "levelExtra",
 		evos: ["clefable"],
-		evoLevel: 1,
 		eggGroups: ["Fairy"],
 	},
 	clefable: {
@@ -882,7 +882,7 @@ let BattlePokedex = {
 		weightkg: 40,
 		color: "Pink",
 		prevo: "clefairy",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Fairy"],
 	},
 	vulpix: {
@@ -926,7 +926,7 @@ let BattlePokedex = {
 		weightkg: 19.9,
 		color: "Yellow",
 		prevo: "vulpix",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Field"],
 		otherFormes: ["ninetalesalola"],
 	},
@@ -944,7 +944,7 @@ let BattlePokedex = {
 		weightkg: 19.9,
 		color: "Blue",
 		prevo: "vulpixalola",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Field"],
 	},
 	jigglypuff: {
@@ -958,8 +958,8 @@ let BattlePokedex = {
 		weightkg: 5.5,
 		color: "Pink",
 		prevo: "igglybuff",
+		evoType: "levelExtra",
 		evos: ["wigglytuff"],
-		evoLevel: 1,
 		eggGroups: ["Fairy"],
 	},
 	wigglytuff: {
@@ -973,7 +973,7 @@ let BattlePokedex = {
 		weightkg: 12,
 		color: "Pink",
 		prevo: "jigglypuff",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Fairy"],
 	},
 	zubat: {
@@ -998,8 +998,8 @@ let BattlePokedex = {
 		weightkg: 55,
 		color: "Purple",
 		prevo: "zubat",
-		evos: ["crobat"],
 		evoLevel: 22,
+		evos: ["crobat"],
 		eggGroups: ["Flying"],
 	},
 	oddish: {
@@ -1024,8 +1024,8 @@ let BattlePokedex = {
 		weightkg: 8.6,
 		color: "Blue",
 		prevo: "oddish",
-		evos: ["vileplume", "bellossom"],
 		evoLevel: 21,
+		evos: ["vileplume", "bellossom"],
 		eggGroups: ["Grass"],
 	},
 	vileplume: {
@@ -1038,7 +1038,7 @@ let BattlePokedex = {
 		weightkg: 18.6,
 		color: "Red",
 		prevo: "gloom",
-		evoLevel: 21,
+		evoType: "stone",
 		eggGroups: ["Grass"],
 	},
 	paras: {
@@ -1204,7 +1204,7 @@ let BattlePokedex = {
 		weightkg: 33,
 		color: "Blue",
 		prevo: "meowthalola",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Field"],
 	},
 	psyduck: {
@@ -1281,7 +1281,7 @@ let BattlePokedex = {
 		weightkg: 155,
 		color: "Brown",
 		prevo: "growlithe",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Field"],
 	},
 	poliwag: {
@@ -1306,8 +1306,8 @@ let BattlePokedex = {
 		weightkg: 20,
 		color: "Blue",
 		prevo: "poliwag",
-		evos: ["poliwrath", "politoed"],
 		evoLevel: 25,
+		evos: ["poliwrath", "politoed"],
 		eggGroups: ["Water 1"],
 	},
 	poliwrath: {
@@ -1320,7 +1320,7 @@ let BattlePokedex = {
 		weightkg: 54,
 		color: "Blue",
 		prevo: "poliwhirl",
-		evoLevel: 25,
+		evoType: "stone",
 		eggGroups: ["Water 1"],
 	},
 	abra: {
@@ -1347,8 +1347,8 @@ let BattlePokedex = {
 		weightkg: 56.5,
 		color: "Brown",
 		prevo: "abra",
-		evos: ["alakazam"],
 		evoLevel: 16,
+		evos: ["alakazam"],
 		eggGroups: ["Human-Like"],
 	},
 	alakazam: {
@@ -1362,7 +1362,7 @@ let BattlePokedex = {
 		weightkg: 48,
 		color: "Brown",
 		prevo: "kadabra",
-		evoLevel: 16,
+		evoType: "trade",
 		eggGroups: ["Human-Like"],
 		otherFormes: ["alakazammega"],
 	},
@@ -1405,8 +1405,8 @@ let BattlePokedex = {
 		weightkg: 70.5,
 		color: "Gray",
 		prevo: "machop",
-		evos: ["machamp"],
 		evoLevel: 28,
+		evos: ["machamp"],
 		eggGroups: ["Human-Like"],
 	},
 	machamp: {
@@ -1420,7 +1420,7 @@ let BattlePokedex = {
 		weightkg: 130,
 		color: "Gray",
 		prevo: "machoke",
-		evoLevel: 28,
+		evoType: "trade",
 		eggGroups: ["Human-Like"],
 	},
 	bellsprout: {
@@ -1445,8 +1445,8 @@ let BattlePokedex = {
 		weightkg: 6.4,
 		color: "Green",
 		prevo: "bellsprout",
-		evos: ["victreebel"],
 		evoLevel: 21,
+		evos: ["victreebel"],
 		eggGroups: ["Grass"],
 	},
 	victreebel: {
@@ -1459,7 +1459,7 @@ let BattlePokedex = {
 		weightkg: 15.5,
 		color: "Green",
 		prevo: "weepinbell",
-		evoLevel: 21,
+		evoType: "stone",
 		eggGroups: ["Grass"],
 	},
 	tentacool: {
@@ -1525,8 +1525,8 @@ let BattlePokedex = {
 		weightkg: 105,
 		color: "Brown",
 		prevo: "geodude",
-		evos: ["golem"],
 		evoLevel: 25,
+		evos: ["golem"],
 		eggGroups: ["Mineral"],
 		otherFormes: ["graveleralola"],
 	},
@@ -1543,8 +1543,8 @@ let BattlePokedex = {
 		weightkg: 110,
 		color: "Gray",
 		prevo: "geodudealola",
-		evos: ["golemalola"],
 		evoLevel: 25,
+		evos: ["golemalola"],
 		eggGroups: ["Mineral"],
 	},
 	golem: {
@@ -1557,7 +1557,7 @@ let BattlePokedex = {
 		weightkg: 300,
 		color: "Brown",
 		prevo: "graveler",
-		evoLevel: 25,
+		evoType: "trade",
 		eggGroups: ["Mineral"],
 		otherFormes: ["golemalola"],
 	},
@@ -1574,7 +1574,7 @@ let BattlePokedex = {
 		weightkg: 316,
 		color: "Gray",
 		prevo: "graveleralola",
-		evoLevel: 25,
+		evoType: "trade",
 		eggGroups: ["Mineral"],
 	},
 	ponyta: {
@@ -1666,8 +1666,8 @@ let BattlePokedex = {
 		weightkg: 60,
 		color: "Gray",
 		prevo: "magnemite",
-		evos: ["magnezone"],
 		evoLevel: 30,
+		evos: ["magnezone"],
 		eggGroups: ["Mineral"],
 	},
 	farfetchd: {
@@ -1811,7 +1811,7 @@ let BattlePokedex = {
 		weightkg: 132.5,
 		color: "Purple",
 		prevo: "shellder",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Water 3"],
 	},
 	gastly: {
@@ -1836,8 +1836,8 @@ let BattlePokedex = {
 		weightkg: 0.1,
 		color: "Purple",
 		prevo: "gastly",
-		evos: ["gengar"],
 		evoLevel: 25,
+		evos: ["gengar"],
 		eggGroups: ["Amorphous"],
 	},
 	gengar: {
@@ -1850,7 +1850,7 @@ let BattlePokedex = {
 		weightkg: 40.5,
 		color: "Purple",
 		prevo: "haunter",
-		evoLevel: 25,
+		evoType: "trade",
 		eggGroups: ["Amorphous"],
 		otherFormes: ["gengarmega"],
 	},
@@ -1979,7 +1979,7 @@ let BattlePokedex = {
 		weightkg: 120,
 		color: "Yellow",
 		prevo: "exeggcute",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Grass"],
 		otherFormes: ["exeggutoralola"],
 	},
@@ -1996,7 +1996,7 @@ let BattlePokedex = {
 		weightkg: 415.6,
 		color: "Yellow",
 		prevo: "exeggcute",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Grass"],
 	},
 	cubone: {
@@ -2142,8 +2142,8 @@ let BattlePokedex = {
 		weightkg: 120,
 		color: "Gray",
 		prevo: "rhyhorn",
-		evos: ["rhyperior"],
 		evoLevel: 42,
+		evos: ["rhyperior"],
 		eggGroups: ["Monster", "Field"],
 	},
 	chansey: {
@@ -2157,9 +2157,10 @@ let BattlePokedex = {
 		weightkg: 34.6,
 		color: "Pink",
 		prevo: "happiny",
+		evoType: "levelExtra",
 		evos: ["blissey"],
-		evoLevel: 1,
 		eggGroups: ["Fairy"],
+		canHatch: true,
 	},
 	tangela: {
 		num: 114,
@@ -2223,8 +2224,8 @@ let BattlePokedex = {
 		weightkg: 25,
 		color: "Blue",
 		prevo: "horsea",
-		evos: ["kingdra"],
 		evoLevel: 32,
+		evos: ["kingdra"],
 		eggGroups: ["Water 1", "Dragon"],
 	},
 	goldeen: {
@@ -2276,7 +2277,7 @@ let BattlePokedex = {
 		weightkg: 80,
 		color: "Purple",
 		prevo: "staryu",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Water 3"],
 	},
 	mrmime: {
@@ -2289,9 +2290,10 @@ let BattlePokedex = {
 		weightkg: 54.5,
 		color: "Pink",
 		prevo: "mimejr",
-		evoLevel: 1,
+		evoType: "levelMove",
 		evoMove: "Mimic",
 		eggGroups: ["Human-Like"],
+		canHatch: true,
 	},
 	scyther: {
 		num: 123,
@@ -2330,8 +2332,8 @@ let BattlePokedex = {
 		weightkg: 30,
 		color: "Yellow",
 		prevo: "elekid",
-		evos: ["electivire"],
 		evoLevel: 30,
+		evos: ["electivire"],
 		eggGroups: ["Human-Like"],
 	},
 	magmar: {
@@ -2345,8 +2347,8 @@ let BattlePokedex = {
 		weightkg: 44.5,
 		color: "Red",
 		prevo: "magby",
-		evos: ["magmortar"],
 		evoLevel: 30,
+		evos: ["magmortar"],
 		eggGroups: ["Human-Like"],
 	},
 	pinsir: {
@@ -2490,7 +2492,7 @@ let BattlePokedex = {
 		weightkg: 29,
 		color: "Blue",
 		prevo: "eevee",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Field"],
 	},
 	jolteon: {
@@ -2504,7 +2506,7 @@ let BattlePokedex = {
 		weightkg: 24.5,
 		color: "Yellow",
 		prevo: "eevee",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Field"],
 	},
 	flareon: {
@@ -2518,7 +2520,7 @@ let BattlePokedex = {
 		weightkg: 25,
 		color: "Red",
 		prevo: "eevee",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Field"],
 	},
 	porygon: {
@@ -2627,8 +2629,9 @@ let BattlePokedex = {
 		weightkg: 460,
 		color: "Black",
 		prevo: "munchlax",
-		evoLevel: 1,
+		evoType: "levelExtra",
 		eggGroups: ["Monster"],
+		canHatch: true,
 	},
 	articuno: {
 		num: 144,
@@ -2688,8 +2691,8 @@ let BattlePokedex = {
 		weightkg: 16.5,
 		color: "Blue",
 		prevo: "dratini",
-		evos: ["dragonite"],
 		evoLevel: 30,
+		evos: ["dragonite"],
 		eggGroups: ["Water 1", "Dragon"],
 	},
 	dragonite: {
@@ -2784,8 +2787,8 @@ let BattlePokedex = {
 		weightkg: 15.8,
 		color: "Green",
 		prevo: "chikorita",
-		evos: ["meganium"],
 		evoLevel: 16,
+		evos: ["meganium"],
 		eggGroups: ["Monster", "Grass"],
 	},
 	meganium: {
@@ -2826,8 +2829,8 @@ let BattlePokedex = {
 		weightkg: 19,
 		color: "Yellow",
 		prevo: "cyndaquil",
-		evos: ["typhlosion"],
 		evoLevel: 14,
+		evos: ["typhlosion"],
 		eggGroups: ["Field"],
 	},
 	typhlosion: {
@@ -2868,8 +2871,8 @@ let BattlePokedex = {
 		weightkg: 25,
 		color: "Blue",
 		prevo: "totodile",
-		evos: ["feraligatr"],
 		evoLevel: 18,
+		evos: ["feraligatr"],
 		eggGroups: ["Monster", "Water 1"],
 	},
 	feraligatr: {
@@ -2996,7 +2999,7 @@ let BattlePokedex = {
 		weightkg: 75,
 		color: "Purple",
 		prevo: "golbat",
-		evoLevel: 23,
+		evoType: "levelExtra",
 		eggGroups: ["Flying"],
 	},
 	chinchou: {
@@ -3035,6 +3038,7 @@ let BattlePokedex = {
 		color: "Yellow",
 		evos: ["pikachu"],
 		eggGroups: ["Undiscovered"],
+		canHatch: true,
 		otherFormes: ["pichuspikyeared"],
 	},
 	pichuspikyeared: {
@@ -3063,6 +3067,7 @@ let BattlePokedex = {
 		color: "Pink",
 		evos: ["clefairy"],
 		eggGroups: ["Undiscovered"],
+		canHatch: true,
 	},
 	igglybuff: {
 		num: 174,
@@ -3076,6 +3081,7 @@ let BattlePokedex = {
 		color: "Pink",
 		evos: ["jigglypuff"],
 		eggGroups: ["Undiscovered"],
+		canHatch: true,
 	},
 	togepi: {
 		num: 175,
@@ -3089,6 +3095,7 @@ let BattlePokedex = {
 		color: "White",
 		evos: ["togetic"],
 		eggGroups: ["Undiscovered"],
+		canHatch: true,
 	},
 	togetic: {
 		num: 176,
@@ -3102,7 +3109,7 @@ let BattlePokedex = {
 		color: "White",
 		prevo: "togepi",
 		evos: ["togekiss"],
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Flying", "Fairy"],
 	},
 	natu: {
@@ -3152,8 +3159,8 @@ let BattlePokedex = {
 		weightkg: 13.3,
 		color: "Pink",
 		prevo: "mareep",
-		evos: ["ampharos"],
 		evoLevel: 15,
+		evos: ["ampharos"],
 		eggGroups: ["Monster", "Field"],
 	},
 	ampharos: {
@@ -3194,7 +3201,7 @@ let BattlePokedex = {
 		weightkg: 5.8,
 		color: "Green",
 		prevo: "gloom",
-		evoLevel: 21,
+		evoType: "stone",
 		eggGroups: ["Grass"],
 	},
 	marill: {
@@ -3208,8 +3215,9 @@ let BattlePokedex = {
 		color: "Blue",
 		prevo: "azurill",
 		evos: ["azumarill"],
-		evoLevel: 1,
+		evoType: "levelExtra",
 		eggGroups: ["Water 1", "Fairy"],
+		canHatch: true,
 	},
 	azumarill: {
 		num: 184,
@@ -3234,9 +3242,10 @@ let BattlePokedex = {
 		weightkg: 38,
 		color: "Brown",
 		prevo: "bonsly",
-		evoLevel: 1,
+		evoType: "levelMove",
 		evoMove: "Mimic",
 		eggGroups: ["Mineral"],
+		canHatch: true,
 	},
 	politoed: {
 		num: 186,
@@ -3248,7 +3257,7 @@ let BattlePokedex = {
 		weightkg: 33.9,
 		color: "Green",
 		prevo: "poliwhirl",
-		evoLevel: 25,
+		evoType: "trade",
 		eggGroups: ["Water 1"],
 	},
 	hoppip: {
@@ -3273,8 +3282,8 @@ let BattlePokedex = {
 		weightkg: 1,
 		color: "Green",
 		prevo: "hoppip",
-		evos: ["jumpluff"],
 		evoLevel: 18,
+		evos: ["jumpluff"],
 		eggGroups: ["Fairy", "Grass"],
 	},
 	jumpluff: {
@@ -3324,7 +3333,7 @@ let BattlePokedex = {
 		weightkg: 8.5,
 		color: "Yellow",
 		prevo: "sunkern",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Grass"],
 	},
 	yanma: {
@@ -3375,7 +3384,7 @@ let BattlePokedex = {
 		weightkg: 26.5,
 		color: "Purple",
 		prevo: "eevee",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Field"],
 	},
 	umbreon: {
@@ -3389,7 +3398,7 @@ let BattlePokedex = {
 		weightkg: 27,
 		color: "Black",
 		prevo: "eevee",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Field"],
 	},
 	murkrow: {
@@ -3414,7 +3423,7 @@ let BattlePokedex = {
 		weightkg: 79.5,
 		color: "Pink",
 		prevo: "slowpoke",
-		evoLevel: 1,
+		evoType: "trade",
 		eggGroups: ["Monster", "Water 1"],
 	},
 	misdreavus: {
@@ -3525,7 +3534,7 @@ let BattlePokedex = {
 		weightkg: 400,
 		color: "Gray",
 		prevo: "onix",
-		evoLevel: 1,
+		evoType: "trade",
 		eggGroups: ["Mineral"],
 		otherFormes: ["steelixmega"],
 	},
@@ -3591,7 +3600,7 @@ let BattlePokedex = {
 		weightkg: 118,
 		color: "Red",
 		prevo: "scyther",
-		evoLevel: 1,
+		evoType: "trade",
 		eggGroups: ["Bug"],
 		otherFormes: ["scizormega"],
 	},
@@ -3730,8 +3739,8 @@ let BattlePokedex = {
 		weightkg: 55.8,
 		color: "Brown",
 		prevo: "swinub",
-		evos: ["mamoswine"],
 		evoLevel: 33,
+		evos: ["mamoswine"],
 		eggGroups: ["Field"],
 	},
 	corsola: {
@@ -3792,8 +3801,9 @@ let BattlePokedex = {
 		weightkg: 220,
 		color: "Purple",
 		prevo: "mantyke",
-		evoLevel: 1,
+		evoType: "levelExtra",
 		eggGroups: ["Water 1"],
+		canHatch: true,
 	},
 	skarmory: {
 		num: 227,
@@ -3856,7 +3866,7 @@ let BattlePokedex = {
 		weightkg: 152,
 		color: "Blue",
 		prevo: "seadra",
-		evoLevel: 32,
+		evoType: "trade",
 		eggGroups: ["Water 1", "Dragon"],
 	},
 	phanpy: {
@@ -3895,8 +3905,8 @@ let BattlePokedex = {
 		weightkg: 32.5,
 		color: "Red",
 		prevo: "porygon",
+		evoType: "trade",
 		evos: ["porygonz"],
-		evoLevel: 1,
 		eggGroups: ["Mineral"],
 	},
 	stantler: {
@@ -3933,6 +3943,7 @@ let BattlePokedex = {
 		color: "Purple",
 		evos: ["hitmonlee", "hitmonchan", "hitmontop"],
 		eggGroups: ["Undiscovered"],
+		canHatch: true,
 	},
 	hitmontop: {
 		num: 237,
@@ -3960,6 +3971,7 @@ let BattlePokedex = {
 		color: "Pink",
 		evos: ["jynx"],
 		eggGroups: ["Undiscovered"],
+		canHatch: true,
 	},
 	elekid: {
 		num: 239,
@@ -3973,6 +3985,7 @@ let BattlePokedex = {
 		color: "Yellow",
 		evos: ["electabuzz"],
 		eggGroups: ["Undiscovered"],
+		canHatch: true,
 	},
 	magby: {
 		num: 240,
@@ -3986,6 +3999,7 @@ let BattlePokedex = {
 		color: "Red",
 		evos: ["magmar"],
 		eggGroups: ["Undiscovered"],
+		canHatch: true,
 	},
 	miltank: {
 		num: 241,
@@ -4010,7 +4024,7 @@ let BattlePokedex = {
 		weightkg: 46.8,
 		color: "Pink",
 		prevo: "chansey",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Fairy"],
 	},
 	raikou: {
@@ -4071,8 +4085,8 @@ let BattlePokedex = {
 		weightkg: 152,
 		color: "Gray",
 		prevo: "larvitar",
-		evos: ["tyranitar"],
 		evoLevel: 30,
+		evos: ["tyranitar"],
 		eggGroups: ["Monster"],
 	},
 	tyranitar: {
@@ -4163,8 +4177,8 @@ let BattlePokedex = {
 		weightkg: 21.6,
 		color: "Green",
 		prevo: "treecko",
-		evos: ["sceptile"],
 		evoLevel: 16,
+		evos: ["sceptile"],
 		eggGroups: ["Monster", "Dragon"],
 	},
 	sceptile: {
@@ -4221,8 +4235,8 @@ let BattlePokedex = {
 		weightkg: 19.5,
 		color: "Red",
 		prevo: "torchic",
-		evos: ["blaziken"],
 		evoLevel: 16,
+		evos: ["blaziken"],
 		eggGroups: ["Field"],
 	},
 	blaziken: {
@@ -4279,8 +4293,8 @@ let BattlePokedex = {
 		weightkg: 28,
 		color: "Blue",
 		prevo: "mudkip",
-		evos: ["swampert"],
 		evoLevel: 16,
+		evos: ["swampert"],
 		eggGroups: ["Monster", "Water 1"],
 	},
 	swampert: {
@@ -4385,8 +4399,8 @@ let BattlePokedex = {
 		weightkg: 10,
 		color: "White",
 		prevo: "wurmple",
-		evos: ["beautifly"],
 		evoLevel: 7,
+		evos: ["beautifly"],
 		eggGroups: ["Bug"],
 	},
 	beautifly: {
@@ -4412,8 +4426,8 @@ let BattlePokedex = {
 		weightkg: 11.5,
 		color: "Purple",
 		prevo: "wurmple",
-		evos: ["dustox"],
 		evoLevel: 7,
+		evos: ["dustox"],
 		eggGroups: ["Bug"],
 	},
 	dustox: {
@@ -4451,8 +4465,8 @@ let BattlePokedex = {
 		weightkg: 32.5,
 		color: "Green",
 		prevo: "lotad",
-		evos: ["ludicolo"],
 		evoLevel: 14,
+		evos: ["ludicolo"],
 		eggGroups: ["Water 1", "Grass"],
 	},
 	ludicolo: {
@@ -4465,7 +4479,7 @@ let BattlePokedex = {
 		weightkg: 55,
 		color: "Green",
 		prevo: "lombre",
-		evoLevel: 14,
+		evoType: "stone",
 		eggGroups: ["Water 1", "Grass"],
 	},
 	seedot: {
@@ -4490,8 +4504,8 @@ let BattlePokedex = {
 		weightkg: 28,
 		color: "Brown",
 		prevo: "seedot",
-		evos: ["shiftry"],
 		evoLevel: 14,
+		evos: ["shiftry"],
 		eggGroups: ["Field", "Grass"],
 	},
 	shiftry: {
@@ -4504,7 +4518,7 @@ let BattlePokedex = {
 		weightkg: 59.6,
 		color: "Brown",
 		prevo: "nuzleaf",
-		evoLevel: 14,
+		evoType: "stone",
 		eggGroups: ["Field", "Grass"],
 	},
 	taillow: {
@@ -4579,8 +4593,8 @@ let BattlePokedex = {
 		weightkg: 20.2,
 		color: "White",
 		prevo: "ralts",
-		evos: ["gardevoir", "gallade"],
 		evoLevel: 20,
+		evos: ["gardevoir", "gallade"],
 		eggGroups: ["Amorphous"],
 	},
 	gardevoir: {
@@ -4683,8 +4697,8 @@ let BattlePokedex = {
 		weightkg: 46.5,
 		color: "White",
 		prevo: "slakoth",
-		evos: ["slaking"],
 		evoLevel: 18,
+		evos: ["slaking"],
 		eggGroups: ["Field"],
 	},
 	slaking: {
@@ -4762,8 +4776,8 @@ let BattlePokedex = {
 		weightkg: 40.5,
 		color: "Blue",
 		prevo: "whismur",
-		evos: ["exploud"],
 		evoLevel: 20,
+		evos: ["exploud"],
 		eggGroups: ["Monster", "Field"],
 	},
 	exploud: {
@@ -4818,6 +4832,7 @@ let BattlePokedex = {
 		color: "Blue",
 		evos: ["marill"],
 		eggGroups: ["Undiscovered"],
+		canHatch: true,
 	},
 	nosepass: {
 		num: 299,
@@ -4855,7 +4870,7 @@ let BattlePokedex = {
 		weightkg: 32.6,
 		color: "Purple",
 		prevo: "skitty",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Field", "Fairy"],
 	},
 	sableye: {
@@ -4932,8 +4947,8 @@ let BattlePokedex = {
 		weightkg: 120,
 		color: "Gray",
 		prevo: "aron",
-		evos: ["aggron"],
 		evoLevel: 32,
+		evos: ["aggron"],
 		eggGroups: ["Monster"],
 	},
 	aggron: {
@@ -5100,9 +5115,10 @@ let BattlePokedex = {
 		weightkg: 2,
 		color: "Green",
 		prevo: "budew",
+		evoType: "levelExtra",
 		evos: ["roserade"],
-		evoLevel: 1,
 		eggGroups: ["Fairy", "Grass"],
+		canHatch: true,
 	},
 	gulpin: {
 		num: 316,
@@ -5584,7 +5600,7 @@ let BattlePokedex = {
 		weightkg: 162,
 		color: "Pink",
 		prevo: "feebas",
-		evoLevel: 1,
+		evoType: "trade",
 		eggGroups: ["Water 1", "Dragon"],
 	},
 	castform: {
@@ -5714,8 +5730,8 @@ let BattlePokedex = {
 		weightkg: 30.6,
 		color: "Black",
 		prevo: "duskull",
-		evos: ["dusknoir"],
 		evoLevel: 37,
+		evos: ["dusknoir"],
 		eggGroups: ["Amorphous"],
 	},
 	tropius: {
@@ -5739,8 +5755,9 @@ let BattlePokedex = {
 		weightkg: 1,
 		color: "Blue",
 		prevo: "chingling",
-		evoLevel: 1,
-		eggGroups: ["Amorphous"],
+		evoType: "levelExtra",
+		eggGroups: ["Undiscovered"],
+		canHatch: true,
 	},
 	absol: {
 		num: 359,
@@ -5779,6 +5796,7 @@ let BattlePokedex = {
 		color: "Blue",
 		evos: ["wobbuffet"],
 		eggGroups: ["Undiscovered"],
+		canHatch: true,
 	},
 	snorunt: {
 		num: 361,
@@ -5842,8 +5860,8 @@ let BattlePokedex = {
 		weightkg: 87.6,
 		color: "Blue",
 		prevo: "spheal",
-		evos: ["walrein"],
 		evoLevel: 32,
+		evos: ["walrein"],
 		eggGroups: ["Water 1", "Field"],
 	},
 	walrein: {
@@ -5881,7 +5899,7 @@ let BattlePokedex = {
 		weightkg: 27,
 		color: "Blue",
 		prevo: "clamperl",
-		evoLevel: 1,
+		evoType: "trade",
 		eggGroups: ["Water 1"],
 	},
 	gorebyss: {
@@ -5894,7 +5912,7 @@ let BattlePokedex = {
 		weightkg: 22.6,
 		color: "Pink",
 		prevo: "clamperl",
-		evoLevel: 1,
+		evoType: "trade",
 		eggGroups: ["Water 1"],
 	},
 	relicanth: {
@@ -5943,8 +5961,8 @@ let BattlePokedex = {
 		weightkg: 110.5,
 		color: "White",
 		prevo: "bagon",
-		evos: ["salamence"],
 		evoLevel: 30,
+		evos: ["salamence"],
 		eggGroups: ["Dragon"],
 	},
 	salamence: {
@@ -6304,8 +6322,8 @@ let BattlePokedex = {
 		weightkg: 97,
 		color: "Green",
 		prevo: "turtwig",
-		evos: ["torterra"],
 		evoLevel: 18,
+		evos: ["torterra"],
 		eggGroups: ["Monster", "Grass"],
 	},
 	torterra: {
@@ -6346,8 +6364,8 @@ let BattlePokedex = {
 		weightkg: 22,
 		color: "Brown",
 		prevo: "chimchar",
-		evos: ["infernape"],
 		evoLevel: 14,
+		evos: ["infernape"],
 		eggGroups: ["Field", "Human-Like"],
 	},
 	infernape: {
@@ -6388,8 +6406,8 @@ let BattlePokedex = {
 		weightkg: 23,
 		color: "Blue",
 		prevo: "piplup",
-		evos: ["empoleon"],
 		evoLevel: 16,
+		evos: ["empoleon"],
 		eggGroups: ["Water 1", "Field"],
 	},
 	empoleon: {
@@ -6428,8 +6446,8 @@ let BattlePokedex = {
 		weightkg: 15.5,
 		color: "Brown",
 		prevo: "starly",
-		evos: ["staraptor"],
 		evoLevel: 14,
+		evos: ["staraptor"],
 		eggGroups: ["Flying"],
 	},
 	staraptor: {
@@ -6517,8 +6535,8 @@ let BattlePokedex = {
 		weightkg: 30.5,
 		color: "Blue",
 		prevo: "shinx",
-		evos: ["luxray"],
 		evoLevel: 15,
+		evos: ["luxray"],
 		eggGroups: ["Field"],
 	},
 	luxray: {
@@ -6545,6 +6563,7 @@ let BattlePokedex = {
 		color: "Green",
 		evos: ["roselia"],
 		eggGroups: ["Undiscovered"],
+		canHatch: true,
 	},
 	roserade: {
 		num: 407,
@@ -6556,7 +6575,7 @@ let BattlePokedex = {
 		weightkg: 14.5,
 		color: "Green",
 		prevo: "roselia",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Fairy", "Grass"],
 	},
 	cranidos: {
@@ -6836,7 +6855,7 @@ let BattlePokedex = {
 		weightkg: 20.3,
 		color: "Purple",
 		prevo: "aipom",
-		evoLevel: 2,
+		evoType: "levelMove",
 		evoMove: "Double Hit",
 		eggGroups: ["Field"],
 	},
@@ -6887,7 +6906,7 @@ let BattlePokedex = {
 		weightkg: 33.3,
 		color: "Brown",
 		prevo: "buneary",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Field", "Human-Like"],
 		otherFormes: ["lopunnymega"],
 	},
@@ -6915,7 +6934,7 @@ let BattlePokedex = {
 		weightkg: 4.4,
 		color: "Purple",
 		prevo: "misdreavus",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Amorphous"],
 	},
 	honchkrow: {
@@ -6928,7 +6947,7 @@ let BattlePokedex = {
 		weightkg: 27.3,
 		color: "Black",
 		prevo: "murkrow",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Flying"],
 	},
 	glameow: {
@@ -6969,6 +6988,7 @@ let BattlePokedex = {
 		color: "Yellow",
 		evos: ["chimecho"],
 		eggGroups: ["Undiscovered"],
+		canHatch: true,
 	},
 	stunky: {
 		num: 434,
@@ -7033,6 +7053,7 @@ let BattlePokedex = {
 		color: "Brown",
 		evos: ["sudowoodo"],
 		eggGroups: ["Undiscovered"],
+		canHatch: true,
 	},
 	mimejr: {
 		num: 439,
@@ -7045,6 +7066,7 @@ let BattlePokedex = {
 		color: "Pink",
 		evos: ["mrmime"],
 		eggGroups: ["Undiscovered"],
+		canHatch: true,
 	},
 	happiny: {
 		num: 440,
@@ -7058,6 +7080,7 @@ let BattlePokedex = {
 		color: "Pink",
 		evos: ["chansey"],
 		eggGroups: ["Undiscovered"],
+		canHatch: true,
 	},
 	chatot: {
 		num: 441,
@@ -7103,8 +7126,8 @@ let BattlePokedex = {
 		weightkg: 56,
 		color: "Blue",
 		prevo: "gible",
-		evos: ["garchomp"],
 		evoLevel: 24,
+		evos: ["garchomp"],
 		eggGroups: ["Monster", "Dragon"],
 	},
 	garchomp: {
@@ -7147,6 +7170,7 @@ let BattlePokedex = {
 		color: "Black",
 		evos: ["snorlax"],
 		eggGroups: ["Undiscovered"],
+		canHatch: true,
 	},
 	riolu: {
 		num: 447,
@@ -7160,6 +7184,7 @@ let BattlePokedex = {
 		color: "Blue",
 		evos: ["lucario"],
 		eggGroups: ["Undiscovered"],
+		canHatch: true,
 	},
 	lucario: {
 		num: 448,
@@ -7172,7 +7197,7 @@ let BattlePokedex = {
 		weightkg: 54,
 		color: "Blue",
 		prevo: "riolu",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Field", "Human-Like"],
 		otherFormes: ["lucariomega"],
 	},
@@ -7313,6 +7338,7 @@ let BattlePokedex = {
 		color: "Blue",
 		evos: ["mantine"],
 		eggGroups: ["Undiscovered"],
+		canHatch: true,
 	},
 	snover: {
 		num: 459,
@@ -7364,7 +7390,7 @@ let BattlePokedex = {
 		weightkg: 34,
 		color: "Black",
 		prevo: "sneasel",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Field"],
 	},
 	magnezone: {
@@ -7378,7 +7404,7 @@ let BattlePokedex = {
 		weightkg: 180,
 		color: "Gray",
 		prevo: "magneton",
-		evoLevel: 31,
+		evoType: "levelExtra",
 		eggGroups: ["Mineral"],
 	},
 	lickilicky: {
@@ -7391,7 +7417,7 @@ let BattlePokedex = {
 		weightkg: 140,
 		color: "Pink",
 		prevo: "lickitung",
-		evoLevel: 2,
+		evoType: "levelMove",
 		evoMove: "Rollout",
 		eggGroups: ["Monster"],
 	},
@@ -7405,7 +7431,7 @@ let BattlePokedex = {
 		weightkg: 282.8,
 		color: "Gray",
 		prevo: "rhydon",
-		evoLevel: 42,
+		evoType: "trade",
 		eggGroups: ["Monster", "Field"],
 	},
 	tangrowth: {
@@ -7418,7 +7444,7 @@ let BattlePokedex = {
 		weightkg: 128.6,
 		color: "Blue",
 		prevo: "tangela",
-		evoLevel: 2,
+		evoType: "levelMove",
 		evoMove: "AncientPower",
 		eggGroups: ["Grass"],
 	},
@@ -7433,7 +7459,7 @@ let BattlePokedex = {
 		weightkg: 138.6,
 		color: "Yellow",
 		prevo: "electabuzz",
-		evoLevel: 30,
+		evoType: "trade",
 		eggGroups: ["Human-Like"],
 	},
 	magmortar: {
@@ -7447,7 +7473,7 @@ let BattlePokedex = {
 		weightkg: 68,
 		color: "Red",
 		prevo: "magmar",
-		evoLevel: 30,
+		evoType: "trade",
 		eggGroups: ["Human-Like"],
 	},
 	togekiss: {
@@ -7461,7 +7487,7 @@ let BattlePokedex = {
 		weightkg: 38,
 		color: "White",
 		prevo: "togetic",
-		evoLevel: 2,
+		evoType: "stone",
 		eggGroups: ["Flying", "Fairy"],
 	},
 	yanmega: {
@@ -7474,7 +7500,7 @@ let BattlePokedex = {
 		weightkg: 51.5,
 		color: "Green",
 		prevo: "yanma",
-		evoLevel: 2,
+		evoType: "levelMove",
 		evoMove: "AncientPower",
 		eggGroups: ["Bug"],
 	},
@@ -7489,7 +7515,7 @@ let BattlePokedex = {
 		weightkg: 25.5,
 		color: "Green",
 		prevo: "eevee",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Field"],
 	},
 	glaceon: {
@@ -7503,7 +7529,7 @@ let BattlePokedex = {
 		weightkg: 25.9,
 		color: "Blue",
 		prevo: "eevee",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Field"],
 	},
 	gliscor: {
@@ -7516,7 +7542,7 @@ let BattlePokedex = {
 		weightkg: 42.5,
 		color: "Purple",
 		prevo: "gligar",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Bug"],
 	},
 	mamoswine: {
@@ -7529,7 +7555,7 @@ let BattlePokedex = {
 		weightkg: 291,
 		color: "Brown",
 		prevo: "piloswine",
-		evoLevel: 34,
+		evoType: "levelMove",
 		evoMove: "AncientPower",
 		eggGroups: ["Field"],
 	},
@@ -7544,7 +7570,7 @@ let BattlePokedex = {
 		weightkg: 34,
 		color: "Red",
 		prevo: "porygon2",
-		evoLevel: 1,
+		evoType: "trade",
 		eggGroups: ["Mineral"],
 	},
 	gallade: {
@@ -7558,7 +7584,7 @@ let BattlePokedex = {
 		weightkg: 52,
 		color: "White",
 		prevo: "kirlia",
-		evoLevel: 20,
+		evoType: "stone",
 		eggGroups: ["Amorphous"],
 		otherFormes: ["gallademega"],
 	},
@@ -7587,7 +7613,7 @@ let BattlePokedex = {
 		weightkg: 340,
 		color: "Gray",
 		prevo: "nosepass",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Mineral"],
 	},
 	dusknoir: {
@@ -7600,7 +7626,7 @@ let BattlePokedex = {
 		weightkg: 106.6,
 		color: "Black",
 		prevo: "dusclops",
-		evoLevel: 37,
+		evoType: "trade",
 		eggGroups: ["Amorphous"],
 	},
 	froslass: {
@@ -7614,7 +7640,7 @@ let BattlePokedex = {
 		weightkg: 26.6,
 		color: "White",
 		prevo: "snorunt",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Fairy", "Mineral"],
 	},
 	rotom: {
@@ -7852,6 +7878,7 @@ let BattlePokedex = {
 		weightkg: 1.4,
 		color: "Blue",
 		eggGroups: ["Water 1", "Fairy"],
+		canHatch: false,
 	},
 	darkrai: {
 		num: 491,
@@ -8199,8 +8226,8 @@ let BattlePokedex = {
 		weightkg: 16,
 		color: "Green",
 		prevo: "snivy",
-		evos: ["serperior"],
 		evoLevel: 17,
+		evos: ["serperior"],
 		eggGroups: ["Field", "Grass"],
 	},
 	serperior: {
@@ -8241,8 +8268,8 @@ let BattlePokedex = {
 		weightkg: 55.5,
 		color: "Red",
 		prevo: "tepig",
-		evos: ["emboar"],
 		evoLevel: 17,
+		evos: ["emboar"],
 		eggGroups: ["Field"],
 	},
 	emboar: {
@@ -8283,8 +8310,8 @@ let BattlePokedex = {
 		weightkg: 24.5,
 		color: "Blue",
 		prevo: "oshawott",
-		evos: ["samurott"],
 		evoLevel: 17,
+		evos: ["samurott"],
 		eggGroups: ["Field"],
 	},
 	samurott: {
@@ -8348,8 +8375,8 @@ let BattlePokedex = {
 		weightkg: 14.7,
 		color: "Gray",
 		prevo: "lillipup",
-		evos: ["stoutland"],
 		evoLevel: 16,
+		evos: ["stoutland"],
 		eggGroups: ["Field"],
 	},
 	stoutland: {
@@ -8414,7 +8441,7 @@ let BattlePokedex = {
 		weightkg: 30.5,
 		color: "Green",
 		prevo: "pansage",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Field"],
 	},
 	pansear: {
@@ -8441,7 +8468,7 @@ let BattlePokedex = {
 		weightkg: 28,
 		color: "Red",
 		prevo: "pansear",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Field"],
 	},
 	panpour: {
@@ -8468,7 +8495,7 @@ let BattlePokedex = {
 		weightkg: 29,
 		color: "Blue",
 		prevo: "panpour",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Field"],
 	},
 	munna: {
@@ -8493,7 +8520,7 @@ let BattlePokedex = {
 		weightkg: 60.5,
 		color: "Pink",
 		prevo: "munna",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Field"],
 	},
 	pidove: {
@@ -8518,8 +8545,8 @@ let BattlePokedex = {
 		weightkg: 15,
 		color: "Gray",
 		prevo: "pidove",
-		evos: ["unfezant"],
 		evoLevel: 21,
+		evos: ["unfezant"],
 		eggGroups: ["Flying"],
 	},
 	unfezant: {
@@ -8582,8 +8609,8 @@ let BattlePokedex = {
 		weightkg: 102,
 		color: "Blue",
 		prevo: "roggenrola",
-		evos: ["gigalith"],
 		evoLevel: 25,
+		evos: ["gigalith"],
 		eggGroups: ["Mineral"],
 	},
 	gigalith: {
@@ -8596,7 +8623,7 @@ let BattlePokedex = {
 		weightkg: 260,
 		color: "Blue",
 		prevo: "boldore",
-		evoLevel: 25,
+		evoType: "trade",
 		eggGroups: ["Mineral"],
 	},
 	woobat: {
@@ -8621,7 +8648,7 @@ let BattlePokedex = {
 		weightkg: 10.5,
 		color: "Blue",
 		prevo: "woobat",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Flying", "Field"],
 	},
 	drilbur: {
@@ -8699,8 +8726,8 @@ let BattlePokedex = {
 		weightkg: 40,
 		color: "Gray",
 		prevo: "timburr",
-		evos: ["conkeldurr"],
 		evoLevel: 25,
+		evos: ["conkeldurr"],
 		eggGroups: ["Human-Like"],
 	},
 	conkeldurr: {
@@ -8714,7 +8741,7 @@ let BattlePokedex = {
 		weightkg: 87,
 		color: "Brown",
 		prevo: "gurdurr",
-		evoLevel: 25,
+		evoType: "trade",
 		eggGroups: ["Human-Like"],
 	},
 	tympole: {
@@ -8739,8 +8766,8 @@ let BattlePokedex = {
 		weightkg: 17,
 		color: "Blue",
 		prevo: "tympole",
-		evos: ["seismitoad"],
 		evoLevel: 25,
+		evos: ["seismitoad"],
 		eggGroups: ["Water 1"],
 	},
 	seismitoad: {
@@ -8802,8 +8829,8 @@ let BattlePokedex = {
 		weightkg: 7.3,
 		color: "Green",
 		prevo: "sewaddle",
-		evos: ["leavanny"],
 		evoLevel: 20,
+		evos: ["leavanny"],
 		eggGroups: ["Bug"],
 	},
 	leavanny: {
@@ -8816,7 +8843,7 @@ let BattlePokedex = {
 		weightkg: 20.5,
 		color: "Yellow",
 		prevo: "swadloon",
-		evoLevel: 21,
+		evoType: "levelExtra",
 		eggGroups: ["Bug"],
 	},
 	venipede: {
@@ -8841,8 +8868,8 @@ let BattlePokedex = {
 		weightkg: 58.5,
 		color: "Gray",
 		prevo: "venipede",
-		evos: ["scolipede"],
 		evoLevel: 22,
+		evos: ["scolipede"],
 		eggGroups: ["Bug"],
 	},
 	scolipede: {
@@ -8880,7 +8907,7 @@ let BattlePokedex = {
 		weightkg: 6.6,
 		color: "Green",
 		prevo: "cottonee",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Fairy", "Grass"],
 	},
 	petilil: {
@@ -8907,7 +8934,7 @@ let BattlePokedex = {
 		weightkg: 16.3,
 		color: "Green",
 		prevo: "petilil",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Grass"],
 	},
 	basculin: {
@@ -8959,8 +8986,8 @@ let BattlePokedex = {
 		weightkg: 33.4,
 		color: "Brown",
 		prevo: "sandile",
-		evos: ["krookodile"],
 		evoLevel: 29,
+		evos: ["krookodile"],
 		eggGroups: ["Field"],
 	},
 	krookodile: {
@@ -9246,7 +9273,7 @@ let BattlePokedex = {
 		weightkg: 7.5,
 		color: "Gray",
 		prevo: "minccino",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Field"],
 	},
 	gothita: {
@@ -9273,8 +9300,8 @@ let BattlePokedex = {
 		weightkg: 18,
 		color: "Purple",
 		prevo: "gothita",
-		evos: ["gothitelle"],
 		evoLevel: 32,
+		evos: ["gothitelle"],
 		eggGroups: ["Human-Like"],
 	},
 	gothitelle: {
@@ -9313,8 +9340,8 @@ let BattlePokedex = {
 		weightkg: 8,
 		color: "Green",
 		prevo: "solosis",
-		evos: ["reuniclus"],
 		evoLevel: 32,
+		evos: ["reuniclus"],
 		eggGroups: ["Amorphous"],
 	},
 	reuniclus: {
@@ -9377,8 +9404,8 @@ let BattlePokedex = {
 		weightkg: 41,
 		color: "White",
 		prevo: "vanillite",
-		evos: ["vanilluxe"],
 		evoLevel: 35,
+		evos: ["vanilluxe"],
 		eggGroups: ["Mineral"],
 	},
 	vanilluxe: {
@@ -9456,7 +9483,7 @@ let BattlePokedex = {
 		weightkg: 33,
 		color: "Gray",
 		prevo: "karrablast",
-		evoLevel: 1,
+		evoType: "trade",
 		eggGroups: ["Bug"],
 	},
 	foongus: {
@@ -9594,8 +9621,8 @@ let BattlePokedex = {
 		weightkg: 51,
 		color: "Gray",
 		prevo: "klink",
-		evos: ["klinklang"],
 		evoLevel: 38,
+		evos: ["klinklang"],
 		eggGroups: ["Mineral"],
 	},
 	klinklang: {
@@ -9634,8 +9661,8 @@ let BattlePokedex = {
 		weightkg: 22,
 		color: "Blue",
 		prevo: "tynamo",
-		evos: ["eelektross"],
 		evoLevel: 39,
+		evos: ["eelektross"],
 		eggGroups: ["Amorphous"],
 	},
 	eelektross: {
@@ -9648,7 +9675,7 @@ let BattlePokedex = {
 		weightkg: 80.5,
 		color: "Blue",
 		prevo: "eelektrik",
-		evoLevel: 39,
+		evoType: "stone",
 		eggGroups: ["Amorphous"],
 	},
 	elgyem: {
@@ -9698,8 +9725,8 @@ let BattlePokedex = {
 		weightkg: 13,
 		color: "Black",
 		prevo: "litwick",
-		evos: ["chandelure"],
 		evoLevel: 41,
+		evos: ["chandelure"],
 		eggGroups: ["Amorphous"],
 	},
 	chandelure: {
@@ -9712,7 +9739,7 @@ let BattlePokedex = {
 		weightkg: 34.3,
 		color: "Black",
 		prevo: "lampent",
-		evoLevel: 41,
+		evoType: "stone",
 		eggGroups: ["Amorphous"],
 	},
 	axew: {
@@ -9737,8 +9764,8 @@ let BattlePokedex = {
 		weightkg: 36,
 		color: "Green",
 		prevo: "axew",
-		evos: ["haxorus"],
 		evoLevel: 38,
+		evos: ["haxorus"],
 		eggGroups: ["Monster", "Dragon"],
 	},
 	haxorus: {
@@ -9813,7 +9840,7 @@ let BattlePokedex = {
 		weightkg: 25.3,
 		color: "Red",
 		prevo: "shelmet",
-		evoLevel: 1,
+		evoType: "trade",
 		eggGroups: ["Bug"],
 	},
 	stunfisk: {
@@ -10024,8 +10051,8 @@ let BattlePokedex = {
 		weightkg: 50,
 		color: "Blue",
 		prevo: "deino",
-		evos: ["hydreigon"],
 		evoLevel: 50,
+		evos: ["hydreigon"],
 		eggGroups: ["Dragon"],
 	},
 	hydreigon: {
@@ -10411,8 +10438,8 @@ let BattlePokedex = {
 		weightkg: 29,
 		color: "Green",
 		prevo: "chespin",
-		evos: ["chesnaught"],
 		evoLevel: 16,
+		evos: ["chesnaught"],
 		eggGroups: ["Field"],
 	},
 	chesnaught: {
@@ -10453,8 +10480,8 @@ let BattlePokedex = {
 		weightkg: 14.5,
 		color: "Red",
 		prevo: "fennekin",
-		evos: ["delphox"],
 		evoLevel: 16,
+		evos: ["delphox"],
 		eggGroups: ["Field"],
 	},
 	delphox: {
@@ -10495,8 +10522,8 @@ let BattlePokedex = {
 		weightkg: 10.9,
 		color: "Blue",
 		prevo: "froakie",
-		evos: ["greninja"],
 		evoLevel: 16,
+		evos: ["greninja"],
 		eggGroups: ["Water 1"],
 	},
 	greninja: {
@@ -10576,8 +10603,8 @@ let BattlePokedex = {
 		weightkg: 16,
 		color: "Red",
 		prevo: "fletchling",
-		evos: ["talonflame"],
 		evoLevel: 17,
+		evos: ["talonflame"],
 		eggGroups: ["Flying"],
 	},
 	talonflame: {
@@ -10615,8 +10642,8 @@ let BattlePokedex = {
 		weightkg: 8.4,
 		color: "Black",
 		prevo: "scatterbug",
-		evos: ["vivillon"],
 		evoLevel: 9,
+		evos: ["vivillon"],
 		eggGroups: ["Bug"],
 	},
 	vivillon: {
@@ -10716,8 +10743,8 @@ let BattlePokedex = {
 		weightkg: 0.9,
 		color: "White",
 		prevo: "flabebe",
-		evos: ["florges"],
 		evoLevel: 19,
+		evos: ["florges"],
 		eggGroups: ["Fairy"],
 		otherForms: ["floetteblue", "floetteorange", "floettewhite", "floetteyellow"],
 		otherFormes: ["floetteeternal"],
@@ -10749,7 +10776,7 @@ let BattlePokedex = {
 		weightkg: 10,
 		color: "White",
 		prevo: "floette",
-		evoLevel: 19,
+		evoType: "stone",
 		eggGroups: ["Fairy"],
 		otherForms: ["florgesblue", "florgesorange", "florgeswhite", "florgesyellow"],
 	},
@@ -10882,8 +10909,8 @@ let BattlePokedex = {
 		weightkg: 4.5,
 		color: "Brown",
 		prevo: "honedge",
-		evos: ["aegislash"],
 		evoLevel: 35,
+		evos: ["aegislash"],
 		eggGroups: ["Mineral"],
 	},
 	aegislash: {
@@ -10897,7 +10924,7 @@ let BattlePokedex = {
 		weightkg: 53,
 		color: "Brown",
 		prevo: "doublade",
-		evoLevel: 35,
+		evoType: "stone",
 		eggGroups: ["Mineral"],
 		otherFormes: ["aegislashblade"],
 	},
@@ -10914,7 +10941,7 @@ let BattlePokedex = {
 		weightkg: 53,
 		color: "Brown",
 		prevo: "doublade",
-		evoLevel: 35,
+		evoType: "stone",
 		eggGroups: ["Mineral"],
 	},
 	spritzee: {
@@ -10939,7 +10966,7 @@ let BattlePokedex = {
 		weightkg: 15.5,
 		color: "Pink",
 		prevo: "spritzee",
-		evoLevel: 1,
+		evoType: "trade",
 		eggGroups: ["Fairy"],
 	},
 	swirlix: {
@@ -10964,7 +10991,7 @@ let BattlePokedex = {
 		weightkg: 5,
 		color: "White",
 		prevo: "swirlix",
-		evoLevel: 1,
+		evoType: "trade",
 		eggGroups: ["Fairy"],
 	},
 	inkay: {
@@ -11089,7 +11116,7 @@ let BattlePokedex = {
 		weightkg: 21,
 		color: "Yellow",
 		prevo: "helioptile",
-		evoLevel: 1,
+		evoType: "stone",
 		eggGroups: ["Monster", "Dragon"],
 	},
 	tyrunt: {
@@ -11157,7 +11184,7 @@ let BattlePokedex = {
 		weightkg: 23.5,
 		color: "Pink",
 		prevo: "eevee",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Field"],
 	},
 	hawlucha: {
@@ -11216,8 +11243,8 @@ let BattlePokedex = {
 		weightkg: 17.5,
 		color: "Purple",
 		prevo: "goomy",
-		evos: ["goodra"],
 		evoLevel: 40,
+		evos: ["goodra"],
 		eggGroups: ["Dragon"],
 	},
 	goodra: {
@@ -11266,7 +11293,7 @@ let BattlePokedex = {
 		weightkg: 71,
 		color: "Brown",
 		prevo: "phantump",
-		evoLevel: 1,
+		evoType: "trade",
 		eggGroups: ["Grass", "Amorphous"],
 	},
 	pumpkaboo: {
@@ -11339,7 +11366,7 @@ let BattlePokedex = {
 		weightkg: 12.5,
 		color: "Brown",
 		prevo: "pumpkaboo",
-		evoLevel: 1,
+		evoType: "trade",
 		eggGroups: ["Amorphous"],
 		otherFormes: ["gourgeistsmall", "gourgeistlarge", "gourgeistsuper"],
 	},
@@ -11356,7 +11383,7 @@ let BattlePokedex = {
 		weightkg: 9.5,
 		color: "Brown",
 		prevo: "pumpkaboosmall",
-		evoLevel: 1,
+		evoType: "trade",
 		eggGroups: ["Amorphous"],
 	},
 	gourgeistlarge: {
@@ -11372,7 +11399,7 @@ let BattlePokedex = {
 		weightkg: 14,
 		color: "Brown",
 		prevo: "pumpkaboolarge",
-		evoLevel: 1,
+		evoType: "trade",
 		eggGroups: ["Amorphous"],
 	},
 	gourgeistsuper: {
@@ -11388,7 +11415,7 @@ let BattlePokedex = {
 		weightkg: 39,
 		color: "Brown",
 		prevo: "pumpkaboosuper",
-		evoLevel: 1,
+		evoType: "trade",
 		eggGroups: ["Amorphous"],
 	},
 	bergmite: {
@@ -11602,8 +11629,8 @@ let BattlePokedex = {
 		weightkg: 16,
 		color: "Brown",
 		prevo: "rowlet",
-		evos: ["decidueye"],
 		evoLevel: 17,
+		evos: ["decidueye"],
 		eggGroups: ["Flying"],
 	},
 	decidueye: {
@@ -11644,8 +11671,8 @@ let BattlePokedex = {
 		weightkg: 25,
 		color: "Red",
 		prevo: "litten",
-		evos: ["incineroar"],
 		evoLevel: 17,
+		evos: ["incineroar"],
 		eggGroups: ["Field"],
 	},
 	incineroar: {
@@ -11686,8 +11713,8 @@ let BattlePokedex = {
 		weightkg: 17.5,
 		color: "Blue",
 		prevo: "popplio",
-		evos: ["primarina"],
 		evoLevel: 17,
+		evos: ["primarina"],
 		eggGroups: ["Water 1", "Field"],
 	},
 	primarina: {
@@ -11726,8 +11753,8 @@ let BattlePokedex = {
 		weightkg: 14.8,
 		color: "Black",
 		prevo: "pikipek",
-		evos: ["toucannon"],
 		evoLevel: 14,
+		evos: ["toucannon"],
 		eggGroups: ["Flying"],
 	},
 	toucannon: {
@@ -11805,8 +11832,8 @@ let BattlePokedex = {
 		weightkg: 10.5,
 		color: "Green",
 		prevo: "grubbin",
-		evos: ["vikavolt"],
 		evoLevel: 20,
+		evos: ["vikavolt"],
 		eggGroups: ["Bug"],
 	},
 	vikavolt: {
@@ -11819,7 +11846,7 @@ let BattlePokedex = {
 		weightkg: 45,
 		color: "Blue",
 		prevo: "charjabug",
-		evoLevel: 21,
+		evoType: "levelExtra",
 		eggGroups: ["Bug"],
 		otherFormes: ["vikavolttotem"],
 	},
@@ -11859,7 +11886,7 @@ let BattlePokedex = {
 		weightkg: 180,
 		color: "White",
 		prevo: "crabrawler",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Water 3"],
 	},
 	oricorio: {
@@ -12295,8 +12322,8 @@ let BattlePokedex = {
 		weightkg: 8.2,
 		color: "Purple",
 		prevo: "bounsweet",
-		evos: ["tsareena"],
 		evoLevel: 18,
+		evos: ["tsareena"],
 		eggGroups: ["Grass"],
 	},
 	tsareena: {
@@ -12310,7 +12337,7 @@ let BattlePokedex = {
 		weightkg: 21.4,
 		color: "Purple",
 		prevo: "steenee",
-		evoLevel: 19,
+		evoType: "levelMove",
 		evoMove: "Stomp",
 		eggGroups: ["Grass"],
 	},
@@ -12433,7 +12460,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 41,
+		evoType: "levelExtra",
 		eggGroups: ["Undiscovered"],
 		otherFormes: ["silvallybug", "silvallydark", "silvallydragon", "silvallyelectric", "silvallyfairy", "silvallyfighting", "silvallyfire", "silvallyflying", "silvallyghost", "silvallygrass", "silvallyground", "silvallyice", "silvallypoison", "silvallypsychic", "silvallyrock", "silvallysteel", "silvallywater"],
 	},
@@ -12451,7 +12478,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Undiscovered"],
 	},
 	silvallydark: {
@@ -12468,7 +12495,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Undiscovered"],
 	},
 	silvallydragon: {
@@ -12485,7 +12512,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Undiscovered"],
 	},
 	silvallyelectric: {
@@ -12502,7 +12529,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Undiscovered"],
 	},
 	silvallyfairy: {
@@ -12519,7 +12546,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Undiscovered"],
 	},
 	silvallyfighting: {
@@ -12536,7 +12563,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Undiscovered"],
 	},
 	silvallyfire: {
@@ -12553,7 +12580,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Undiscovered"],
 	},
 	silvallyflying: {
@@ -12570,7 +12597,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Undiscovered"],
 	},
 	silvallyghost: {
@@ -12587,7 +12614,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Undiscovered"],
 	},
 	silvallygrass: {
@@ -12604,7 +12631,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Undiscovered"],
 	},
 	silvallyground: {
@@ -12621,7 +12648,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Undiscovered"],
 	},
 	silvallyice: {
@@ -12638,7 +12665,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Undiscovered"],
 	},
 	silvallypoison: {
@@ -12655,7 +12682,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Undiscovered"],
 	},
 	silvallypsychic: {
@@ -12672,7 +12699,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Undiscovered"],
 	},
 	silvallyrock: {
@@ -12689,7 +12716,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Undiscovered"],
 	},
 	silvallysteel: {
@@ -12706,7 +12733,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Undiscovered"],
 	},
 	silvallywater: {
@@ -12723,7 +12750,7 @@ let BattlePokedex = {
 		weightkg: 100.5,
 		color: "Gray",
 		prevo: "typenull",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Undiscovered"],
 	},
 	minior: {
@@ -12914,8 +12941,8 @@ let BattlePokedex = {
 		weightkg: 47,
 		color: "Gray",
 		prevo: "jangmoo",
-		evos: ["kommoo"],
 		evoLevel: 35,
+		evos: ["kommoo"],
 		eggGroups: ["Dragon"],
 	},
 	kommoo: {
@@ -13018,8 +13045,8 @@ let BattlePokedex = {
 		weightkg: 999.9,
 		color: "Blue",
 		prevo: "cosmog",
-		evos: ["solgaleo", "lunala"],
 		evoLevel: 43,
+		evos: ["solgaleo", "lunala"],
 		eggGroups: ["Undiscovered"],
 	},
 	solgaleo: {
@@ -13256,7 +13283,8 @@ let BattlePokedex = {
 		weightkg: 150,
 		color: "Purple",
 		prevo: "poipole",
-		evoLevel: 41,
+		evoType: "levelMove",
+		evoMove: "Dragon Pulse",
 		eggGroups: ["Undiscovered"],
 	},
 	stakataka: {
@@ -13305,6 +13333,7 @@ let BattlePokedex = {
 		heightm: 0.2,
 		weightkg: 8,
 		color: "Gray",
+		evos: ["melmetal"],
 		eggGroups: ["Undiscovered"],
 	},
 	melmetal: {
@@ -13317,6 +13346,7 @@ let BattlePokedex = {
 		heightm: 2.5,
 		weightkg: 800,
 		color: "Gray",
+		prevo: "meltan",
 		eggGroups: ["Undiscovered"],
 	},
 	missingno: {
@@ -13391,7 +13421,7 @@ let BattlePokedex = {
 		weightkg: 45,
 		color: "Gray",
 		prevo: "tactite",
-		evoLevel: 28,
+		evoType: "trade",
 		eggGroups: ["Undiscovered"],
 	},
 	arghonaut: {
@@ -13618,7 +13648,7 @@ let BattlePokedex = {
 		weightkg: 24.2,
 		color: "Pink",
 		prevo: "pluffle",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Fairy", "Human-Like"],
 	},
 	pajantom: {
@@ -13642,7 +13672,7 @@ let BattlePokedex = {
 		weightkg: 600,
 		color: "Brown",
 		prevo: "mumbao",
-		evoLevel: 2,
+		evoType: "levelExtra",
 		eggGroups: ["Grass"],
 	},
 	caribolt: {
@@ -13715,8 +13745,8 @@ let BattlePokedex = {
 		weightkg: 73,
 		color: "Brown",
 		prevo: "embirch",
-		evos: ["pyroak"],
 		evoLevel: 24,
+		evos: ["pyroak"],
 		eggGroups: ["Monster", "Dragon"],
 	},
 	breezi: {
@@ -13778,8 +13808,8 @@ let BattlePokedex = {
 		weightkg: 341.4,
 		color: "Gray",
 		prevo: "cupra",
-		evos: ["aurumoth"],
 		evoLevel: 30,
+		evos: ["aurumoth"],
 		eggGroups: ["Bug"],
 	},
 	brattler: {
@@ -13852,8 +13882,8 @@ let BattlePokedex = {
 		weightkg: 72.5,
 		color: "Gray",
 		prevo: "floatoy",
-		evos: ["naviathan"],
 		evoLevel: 21,
+		evos: ["naviathan"],
 		eggGroups: ["Water 1", "Field"],
 	},
 	pluffle: {
@@ -13892,8 +13922,8 @@ let BattlePokedex = {
 		weightkg: 16,
 		color: "Gray",
 		prevo: "rebble",
-		evos: ["stratagem"],
 		evoLevel: 28,
+		evos: ["stratagem"],
 		eggGroups: ["Undiscovered"],
 	},
 	privatyke: {
