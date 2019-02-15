@@ -873,7 +873,7 @@ class Pokemon {
 		if ((pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5)) {
 			return false;
 		}
-		if (!this.formeChange(template, null)) {
+		if (!this.formeChange(template)) {
 			return false;
 		}
 		this.transformed = true;
@@ -1077,7 +1077,7 @@ class Pokemon {
 		this.newlySwitched = true;
 		this.beingCalledBack = false;
 
-		this.formeChange(this.baseTemplate, /** @type {Effect} */ ({id: ''}));
+		this.formeChange(this.baseTemplate, null);
 	}
 
 	/**
