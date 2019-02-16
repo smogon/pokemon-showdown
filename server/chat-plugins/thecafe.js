@@ -10,7 +10,7 @@ const thecafe = /** @type {ChatRoom} */ (Rooms.get('thecafe'));
 /** @type {{[k: string]: string[]}} */
 let dishes = {};
 try {
-	dishes = require(`../${DISHES_FILE}`);
+	dishes = require(`../../${DISHES_FILE}`);
 } catch (e) {
 	if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
 }
