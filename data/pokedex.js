@@ -13631,7 +13631,7 @@ let BattlePokedex = {
 		formeLetter: "M",
 		types: ["Rock", "Poison"],
 		genderRatio: {M: 0.25, F: 0.75},
-		baseStats: {hp: 106, atk: 135, def: 75, spa: 85, spd: 125, spe: 114},
+		baseStats: {hp: 106, atk: 135, def: 75, spa: 91, spd: 125, spe: 108},
 		abilities: {0: "Magic Guard"},
 		heightm: 1.4,
 		weightkg: 22.5,
