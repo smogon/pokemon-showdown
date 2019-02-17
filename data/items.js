@@ -562,6 +562,17 @@ let BattleItems = {
 		gen: 3,
 		desc: "Cannot be eaten by the holder. No effect when eaten with Bug Bite or Pluck.",
 	},
+	"bottlecap": {
+		id: "bottlecap",
+		name: "Bottle Cap",
+		spritenum: 696,
+		fling: {
+			basePower: 30,
+		},
+		num: 795,
+		gen: 7,
+		desc: "Used for Hyper Training. One of a Pokemon's stats is calculated with an IV of 31.",
+	},
 	"brightpowder": {
 		id: "brightpowder",
 		name: "Bright Powder",
@@ -2114,6 +2125,17 @@ let BattleItems = {
 		num: 763,
 		gen: 6,
 		desc: "If held by a Glalie, this item allows it to Mega Evolve in battle.",
+	},
+	"goldbottlecap": {
+		id: "goldbottlecap",
+		name: "Gold Bottle Cap",
+		spritenum: 697,
+		fling: {
+			basePower: 30,
+		},
+		num: 796,
+		gen: 7,
+		desc: "Used for Hyper Training. All of a Pokemon's stats are calculated with an IV of 31.",
 	},
 	"grassgem": {
 		id: "grassgem",
