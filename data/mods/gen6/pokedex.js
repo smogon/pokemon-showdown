@@ -269,6 +269,10 @@ let BattlePokedex = {
 		inherit: true,
 		abilities: {0: "Water Veil", 1: "Heatproof", H: "Light Metal"},
 	},
+	crucibellemega: {
+		inherit: true,
+		baseStats: {hp: 106, atk: 135, def: 75, spa: 85, spd: 125, spe: 114},
+	},
 	syclant: {
 		inherit: true,
 		abilities: {0: "Compound Eyes", 1: "Mountaineer"},

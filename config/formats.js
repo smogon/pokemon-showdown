@@ -205,7 +205,7 @@ let Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU', 'Allow CAP'],
-		banlist: ['Tomohawk + Earth Power', 'Tomohawk + Reflect'],
+		banlist: ['Crucibelle + Head Smash', 'Crucibelle + Low Kick', 'Tomohawk + Earth Power', 'Tomohawk + Reflect'],
 	},
 	{
 		name: "[Gen 7] CAP LC",

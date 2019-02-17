@@ -62122,7 +62122,7 @@ let BattleLearnsets = {
 		grassknot: ["7M", "6M"],
 		gravity: ["6T"],
 		gunkshot: ["7L56", "6T", "6L56"],
-		headsmash: ["7L1", "6L1"],
+		headsmash: ["6L1"],
 		helpinghand: ["6T"],
 		hex: ["7L44", "6L44"],
 		hiddenpower: ["7M", "6M"],
