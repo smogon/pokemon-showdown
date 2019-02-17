@@ -287,6 +287,7 @@ let BattleScripts = {
 		}
 		// Always run a terrain end event to prevent a visual glitch with custom terrains
 		if (prevTerrain) this.singleEvent('End', this.getEffect(prevTerrain), prevTerrainData, this);
+		this.runEvent('TerrainStart', source, source, status);
 		return true;
 	},
 	pokemon: {

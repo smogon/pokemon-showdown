@@ -1504,8 +1504,13 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onUpdate(pokemon) {
-			if (this.isTerrain('electricterrain') && pokemon.useItem()) {
+		onStart(pokemon) {
+			if (!pokemon.ignoringItem() && this.isTerrain('electricterrain') && pokemon.useItem()) {
+				this.boost({def: 1});
+			}
+		},
+		onAnyTerrainStart() {
+			if (this.isTerrain('electricterrain') && this.effectData.target.useItem()) {
 				this.boost({def: 1});
 			}
 		},
@@ -2165,8 +2170,13 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onUpdate(pokemon) {
-			if (this.isTerrain('grassyterrain') && pokemon.useItem()) {
+		onStart(pokemon) {
+			if (!pokemon.ignoringItem() && this.isTerrain('grassyterrain') && pokemon.useItem()) {
+				this.boost({def: 1});
+			}
+		},
+		onAnyTerrainStart() {
+			if (this.isTerrain('grassyterrain') && this.effectData.target.useItem()) {
 				this.boost({def: 1});
 			}
 		},
@@ -3609,8 +3619,13 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onUpdate(pokemon) {
-			if (this.isTerrain('mistyterrain') && pokemon.useItem()) {
+		onStart(pokemon) {
+			if (!pokemon.ignoringItem() && this.isTerrain('mistyterrain') && pokemon.useItem()) {
+				this.boost({spd: 1});
+			}
+		},
+		onAnyTerrainStart() {
+			if (this.isTerrain('mistyterrain') && this.effectData.target.useItem()) {
 				this.boost({spd: 1});
 			}
 		},
@@ -4411,8 +4426,13 @@ let BattleItems = {
 		fling: {
 			basePower: 10,
 		},
-		onUpdate(pokemon) {
-			if (this.isTerrain('psychicterrain') && pokemon.useItem()) {
+		onStart(pokemon) {
+			if (!pokemon.ignoringItem() && this.isTerrain('psychicterrain') && pokemon.useItem()) {
+				this.boost({spd: 1});
+			}
+		},
+		onAnyTerrainStart() {
+			if (this.isTerrain('psychicterrain') && this.effectData.target.useItem()) {
 				this.boost({spd: 1});
 			}
 		},
