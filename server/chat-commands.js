@@ -2621,6 +2621,7 @@ const commands = {
 	hidetextalts: 'hidetext',
 	hidealttext: 'hidetext',
 	hidealtstext: 'hidetext',
+	htext: 'hidetext',
 	hidetext(target, room, user, connection, cmd) {
 		if (!target) return this.parse(`/help hidetext`);
 
