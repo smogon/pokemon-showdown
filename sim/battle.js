@@ -321,7 +321,6 @@ class Battle extends Dex.ModdedDex {
 			this.terrainData = prevTerrainData;
 			return false;
 		}
-		this.runEvent('TerrainStart', source, source, status);
 		return true;
 	}
 

@@ -186,7 +186,6 @@ interface EventMethods {
 	onAnyDamage?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect) => void
 	onAnyBasePower?: (this: Battle, basePower: number, source: Pokemon, target: Pokemon, move: ActiveMove) => void
 	onAnySetWeather?: (this: Battle, target: Pokemon, source: Pokemon, weather: PureEffect) => void
-	onAnyTerrainStart?: (this: Battle) => void
 	onAnyModifyDamage?: (this: Battle, damage: number, source: Pokemon, target: Pokemon, move: ActiveMove) => void
 	onAnyRedirectTarget?: (this: Battle, target: Pokemon, source: Pokemon, source2: Pokemon, move: ActiveMove) => void
 	onAnyAccuracy?: (this: Battle, accuracy: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void
