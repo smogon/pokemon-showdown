@@ -1713,7 +1713,7 @@ const commands = {
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User '${this.targetUsername}' not found.`);
-		if (!(targetUser in room.users) && room.id !== 'staff') {
+		if (!(targetUser in room.users) && !global) {
 			return this.errorReply(`User ${this.targetUsername} is not in the room ${room.id}.`);
 		}
 		if (target.length > MAX_REASON_LENGTH) {
