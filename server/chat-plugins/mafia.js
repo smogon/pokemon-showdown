@@ -178,7 +178,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 		if (this.game.ended) return user.send(`>view-mafia-${this.game.room.id}\n|deinit`);
 		// @ts-ignore
 		const buf = Chat.pages.mafia([this.game.room.id], user);
-		this.send(`>view-mafia-${this.game.room.id}\n|init|html\n${buf}`);
+		this.send(`>view-mafia-${this.game.room.id}\n|init|html\n|title|Mafia\n|pagehtml|${buf}`);
 	}
 }
 
@@ -1351,7 +1351,7 @@ class MafiaTracker extends Rooms.RoomGame {
 			if (this.ended) return host.send(`>view-mafia-${this.room.id}\n|deinit`);
 			// @ts-ignore
 			const buf = Chat.pages.mafia([this.room.id], host);
-			host.send(`>view-mafia-${this.room.id}\n|init|html\n${buf}`);
+			host.send(`>view-mafia-${this.room.id}\n|init|html\n|title|Mafia\n|pagehtml|${buf}`);
 		}
 	}
 
@@ -1856,7 +1856,7 @@ const commands = {
 			room.game = new MafiaTracker(room, targetUser);
 
 			// @ts-ignore
-			targetUser.send(`>view-mafia-${room.id}\n|init|html\n${Chat.pages.mafia([room.id], targetUser)}`);
+			targetUser.send(`>view-mafia-${room.id}\n|init|html\n|title|Mafia\n|pagehtml|${Chat.pages.mafia([room.id], targetUser)}`);
 			room.addByUser(user, `${targetUser.name} was appointed the mafia host by ${user.name}.`);
 			if (room.id === 'mafia') {
 				const queueIndex = hostQueue.indexOf(targetUser.userid);
