@@ -4929,7 +4929,7 @@
 			"sets": [{
 				"species": "Espeon",
 				"item": ["Leftovers"],
-				"ability": ["Magic Guard"],
+				"ability": ["Magic Bounce"],
 				"evs": {"def": 4, "spa": 252, "spe": 252},
 				"nature": "Timid",
 				"moves": [["Calm Mind"], ["Psychic"], ["Shadow Ball"], ["Morning Sun"]]
