@@ -660,7 +660,7 @@ if (cluster.isMaster) {
 				socket._session.recv.options.heartbeat_delay + 1000,
 				() => {
 					// @ts-ignore
-					socket._session.recv.didClose();
+					if (socket._session.recv) socket._session.recv.didClose();
 				}
 			);
 		}
