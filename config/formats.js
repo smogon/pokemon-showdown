@@ -737,6 +737,7 @@ let Formats = [
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Kartana', 'Kyurem-Black', 'Shedinja'],
 		onModifyTemplate(template, target, source) {
+			if (!target) return; // Chat command
 			if (source && ['imposter', 'transform'].includes(source.id)) return;
 			let types = [...new Set(target.baseMoveSlots.slice(0, 2).map(move => this.getMove(move.id).type))];
 			return Object.assign({}, template, {types: types});
