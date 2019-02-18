@@ -311,6 +311,7 @@ Chat.tr = function (language, strings, ...keys) {
 
 	// Replace the gaps in the template string
 	if (keys.length) {
+		keys = keys[0];
 		let reconstructed = '';
 
 		for (let [i, str] of translated.split('${}').entries()) {
