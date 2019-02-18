@@ -25,7 +25,7 @@ function apiRequest(url, onEnd, onError) {
 
 function wikiaSearch(subdomain, query) {
 	return new Promise(function (resolve, reject) {
-		apiRequest(`https://${subdomain}.wikia.com/api/v1/Search/List/?query=${encodeURIComponent(query)}&limit=1`, res => {
+		apiRequest(`https://${subdomain}.fandom.com/api/v1/Search/List/?query=${encodeURIComponent(query)}&limit=1`, res => {
 			let result;
 			try {
 				result = JSON.parse(res);
@@ -42,7 +42,7 @@ function wikiaSearch(subdomain, query) {
 }
 function getCardDetails(subdomain, id) {
 	return new Promise(function (resolve, reject) {
-		apiRequest(`https://${subdomain}.wikia.com/api/v1/Articles/Details?ids=${encodeURIComponent(id)}&abstract=0&width=80&height=115`, res => {
+		apiRequest(`https://${subdomain}.fandom.com/api/v1/Articles/Details?ids=${encodeURIComponent(id)}&abstract=0&width=80&height=115`, res => {
 			let result;
 			try {
 				result = JSON.parse(res);
@@ -65,6 +65,7 @@ exports.commands = {
 		if (room.id !== 'tcgtabletop') return this.errorReply("This command can only be used in the TCG & Tabletop room.");
 		let subdomain = 'yugioh';
 		let query = target.trim();
+		if (!query) return this.parse('/help yugioh');
 
 		wikiaSearch(subdomain, query).then(data => {
 			if (!this.runBroadcast()) return;
@@ -105,4 +106,5 @@ exports.commands = {
 			return room.add(`Error: ${err.message}`).update();
 		});
 	},
+	yugiohhelp: [`/yugioh [query] - Search the Yugioh wiki.`],
 };
