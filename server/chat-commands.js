@@ -1163,7 +1163,7 @@ const commands = {
 			if (!this.broadcasting && user.can('declare', null, room) && cmd !== 'topic') {
 				this.sendReply('Source:');
 				const code = Chat.escapeHTML(room.introMessage).replace(/\n/g, '<br />');
-				this.sendReplyBox(`<code style="white-space: pre-wrap;">/roomintro ${code}</code>`);
+				this.sendReplyBox(`<code style="white-space: pre-wrap">/roomintro ${code}</code>`);
 			}
 			return;
 		}
