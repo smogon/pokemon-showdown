@@ -1159,7 +1159,7 @@ const commands = {
 		if (!target) {
 			if (!this.runBroadcast()) return;
 			if (!room.introMessage) return this.sendReply("This room does not have an introduction set.");
-			this.sendReply('|raw|<div class="infobox infobox-limited">' + room.introMessage.replace(/\n/g, '') + '</div>');
+			this.sendReply('|raw|<div class="infobox infobox-limited" style="overflow: auto;">' + room.introMessage.replace(/\n/g, '') + '</div>');
 			if (!this.broadcasting && user.can('declare', null, room) && cmd !== 'topic') {
 				this.sendReply('Source:');
 				const code = Chat.escapeHTML(room.introMessage).replace(/\n/g, '<br />');
@@ -1180,7 +1180,7 @@ const commands = {
 
 		room.introMessage = target.replace(/\r/g, '');
 		this.sendReply("(The room introduction has been changed to:)");
-		this.sendReply(`|raw|<div class="infobox infobox-limited">${room.introMessage.replace(/\n/g, '')}</div>`);
+		this.sendReply(`|raw|<div class="infobox infobox-limited" style="overflow: auto;">${room.introMessage.replace(/\n/g, '')}</div>`);
 
 		this.privateModAction(`(${user.name} changed the roomintro.)`);
 		this.modlog('ROOMINTRO');
