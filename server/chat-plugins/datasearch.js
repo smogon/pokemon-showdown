@@ -1121,7 +1121,7 @@ function runMovesearch(target, cmd, canAll, message) {
 				}
 				if (typeof alts.property[prop].greater === "number") {
 					if ((dex[move][prop] === true && dex[move].category !== "status") ||
-						 dex[move][prop] > alts.property[prop].greater) {
+						dex[move][prop] > alts.property[prop].greater) {
 						matched = true;
 						break;
 					}
