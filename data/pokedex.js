@@ -5756,7 +5756,7 @@ let BattlePokedex = {
 		color: "Blue",
 		prevo: "chingling",
 		evoType: "levelExtra",
-		eggGroups: ["Undiscovered"],
+		eggGroups: ["Amorphous"],
 		canHatch: true,
 	},
 	absol: {
