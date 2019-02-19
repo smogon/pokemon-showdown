@@ -291,7 +291,7 @@ FS(TRANSLATION_DIRECTORY).readdir().then(files => {
 
 /**
  * @param {string?} language
- * @param {string[] | string} strings
+ * @param {TemplateStringsArray | string} strings
  * @param {any[]} keys
  */
 Chat.tr = function (language, strings, ...keys) {
@@ -372,7 +372,7 @@ class MessageContext {
 	}
 
 	/**
-	 * @param {string[] | string} strings
+	 * @param {TemplateStringsArray | string} strings
 	 * @param {any[]} keys
 	 */
 	tr(strings, ...keys) {
