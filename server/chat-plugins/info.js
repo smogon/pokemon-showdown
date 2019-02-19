@@ -518,7 +518,22 @@ const commands = {
 					pokemon.evos.forEach(evoName => {
 						const evo = mod.getTemplate(evoName);
 						if (evo.gen <= mod.gen) {
-							evos.push(evo.name + " (" + evo.evoLevel + ")");
+							switch (evo.evoType) {
+							case 'levelExtra':
+								evos.push(`${evo.name} (${evo.evoCondition})`);
+								break;
+							case 'stone':
+								evos.push(`${evo.name} (${evo.evoStone} Stone)`);
+								break;
+							case 'levelMove':
+								evos.push(`${evo.name} (${evo.evoMove})`);
+								break;
+							case 'trade':
+								evos.push(`${evo.name} (Trade)`);
+								break;
+							default:
+								evos.push(`${evo.name} (${evo.evoLevel})`);
+							}
 						}
 					});
 					if (!evos.length) {
