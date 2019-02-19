@@ -280,6 +280,8 @@ exports.commands = {
 	'!ionext': true,
 	inviteonlynext: 'ionext',
 	ionext(target, room, user) {
+		const groupConfig = Config.groups[Users.PLAYER_SYMBOL];
+		if (!(groupConfig && groupConfig.editprivacy)) return this.errorReply(`/ionext - Access denied.`);
 		if (this.meansNo(target)) {
 			user.inviteOnlyNextBattle = false;
 			this.sendReply("Your next battle will be publicly visible.");
