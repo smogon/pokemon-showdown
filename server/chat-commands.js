@@ -3836,7 +3836,7 @@ const commands = {
 			p2: players[1],
 			format: format.id,
 			rating: rating,
-			hidden: room.isPrivate ? '1' : '',
+			hidden: room.isPrivate || room.hideReplay ? '1' : '',
 			inputlog: room.battle.inputLog ? room.battle.inputLog.join('\n') : null,
 		});
 		if (success && success.errorip) {
