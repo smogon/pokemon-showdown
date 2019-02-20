@@ -5978,6 +5978,10 @@ let BattleItems = {
 			let activate = false;
 			/**@type {{[k: string]: number}} */
 			let boosts = {};
+			//doubles
+			if (pokemon.side.foe.pokemon.length > 1 && pokemon.side.foe.battle.abilityOrder !== 4) {
+				return;
+			}
 			for (let i in pokemon.boosts) {
 				// @ts-ignore
 				if (pokemon.boosts[i] < 0) {
@@ -5985,7 +5989,7 @@ let BattleItems = {
 					boosts[i] = 0;
 				}
 			}
-			if (activate && pokemon.useItem()) {
+			if (!pokemon.duringMove && activate && pokemon.useItem()) {
 				pokemon.setBoost(boosts);
 				this.add('-clearnegativeboost', pokemon, '[silent]');
 			}

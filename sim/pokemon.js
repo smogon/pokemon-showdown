@@ -1353,6 +1353,7 @@ class Pokemon {
 	 * @param {Effect} [sourceEffect]
 	 */
 	useItem(source, sourceEffect) {
+		//console.log("useItem");
 		if ((!this.hp && !this.getItem().isGem) || !this.isActive) return false;
 		if (!this.item) return false;
 
