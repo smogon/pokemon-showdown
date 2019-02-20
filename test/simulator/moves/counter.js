@@ -14,7 +14,7 @@ describe('Counter', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Sawk', ability: 'sturdy', moves: ['seismictoss']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Throh', ability: 'guts', moves: ['counter']}]);
-		assert.hurtsBy(battle.p1.active[0], 200, () => battle.commitDecisions());
+		assert.hurtsBy(battle.p1.active[0], 200, () => battle.makeChoices());
 	});
 
 	it('should deal damage based on the last hit from the last Physical attack', function () {
@@ -28,7 +28,7 @@ describe('Counter', function () {
 			}
 		});
 
-		battle.commitDecisions();
+		battle.makeChoices();
 		assert.strictEqual(battle.p1.active[0].maxhp - battle.p1.active[0].hp, 2 * lastDamage);
 	});
 
@@ -36,7 +36,7 @@ describe('Counter', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Sawk', ability: 'sturdy', moves: ['aurasphere']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Throh', ability: 'guts', moves: ['counter']}]);
-		assert.false.hurts(battle.p1.active[0], () => battle.commitDecisions());
+		assert.false.hurts(battle.p1.active[0], () => battle.makeChoices());
 	});
 
 	it('should target the opposing Pokemon that hit the user with a Physical attack most recently that turn', function () {
@@ -82,7 +82,7 @@ describe('Mirror Coat', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Espeon', ability: 'synchronize', moves: ['sonicboom']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Umbreon', ability: 'synchronize', moves: ['mirrorcoat']}]);
-		assert.hurtsBy(battle.p1.active[0], 40, () => battle.commitDecisions());
+		assert.hurtsBy(battle.p1.active[0], 40, () => battle.makeChoices());
 	});
 
 	it('should deal damage based on the last hit from the last Special attack', function () {
@@ -96,7 +96,7 @@ describe('Mirror Coat', function () {
 			}
 		});
 
-		battle.commitDecisions();
+		battle.makeChoices();
 		assert.strictEqual(battle.p1.active[0].maxhp - battle.p1.active[0].hp, 2 * lastDamage);
 	});
 
@@ -104,7 +104,7 @@ describe('Mirror Coat', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Espeon', ability: 'synchronize', moves: ['tackle']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Umbreon', ability: 'synchronize', moves: ['mirrorcoat']}]);
-		assert.false.hurts(battle.p1.active[0], () => battle.commitDecisions());
+		assert.false.hurts(battle.p1.active[0], () => battle.makeChoices());
 	});
 
 	it('should target the opposing Pokemon that hit the user with a Special attack most recently that turn', function () {
