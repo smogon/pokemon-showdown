@@ -1461,9 +1461,9 @@ const commands = {
 		if (room.chatRoomData) Rooms.global.writeChatRoomData();
 	},
 	roompromotehelp: [
-		`/roompromote OR /roomdemote [username], [group symbol] - Promotes/demotes the user to the specified room rank. Requires: @ * # & ~`,
-		`/room[group] [username] - Promotes/demotes the user to the specified room rank. Requires: @ * # & ~`,
-		`/roomdeauth [username] - Removes all room rank from the user. Requires: @ * # & ~`,
+		`/roompromote OR /roomdemote [username], [group symbol] - Promotes/demotes the user to the specified room rank. Requires: @ # & ~`,
+		`/room[group] [username] - Promotes/demotes the user to the specified room rank. Requires: @ # & ~`,
+		`/roomdeauth [username] - Removes all room rank from the user. Requires: @ # & ~`,
 	],
 
 	'!roomauth': true,
@@ -1628,7 +1628,7 @@ const commands = {
 		}
 		return true;
 	},
-	banhelp: [`/roomban [username], [reason] - Bans the user from the room you are in. Requires: @ # & ~`],
+	banhelp: [`/ban [username], [reason] - Bans the user from the room you are in. Requires: @ # & ~`],
 
 	unroomban: 'unban',
 	roomunban: 'unban',
@@ -1647,7 +1647,7 @@ const commands = {
 			this.errorReply(`User '${target}' is not banned from this room.`);
 		}
 	},
-	unbanhelp: [`/roomunban [username] - Unbans the user from the room you are in. Requires: @ # & ~`],
+	unbanhelp: [`/unban [username] - Unbans the user from the room you are in. Requires: @ # & ~`],
 
 	'!autojoin': true,
 	autojoin(target, room, user, connection) {
@@ -1810,14 +1810,14 @@ const commands = {
 
 		room.mute(targetUser, muteDuration, false);
 	},
-	mutehelp: [`/mute OR /m [username], [reason] - Mutes a user with reason for 7 minutes. Requires: % @ * # & ~`],
+	mutehelp: [`/mute OR /m [username], [reason] - Mutes a user with reason for 7 minutes. Requires: % @ # & ~`],
 
 	hm: 'hourmute',
 	hourmute(target) {
 		if (!target) return this.parse('/help hourmute');
 		this.run('mute');
 	},
-	hourmutehelp: [`/hourmute OR /hm [username], [reason] - Mutes a user with reason for an hour. Requires: % @ * # & ~`],
+	hourmutehelp: [`/hourmute OR /hm [username], [reason] - Mutes a user with reason for an hour. Requires: % @ # & ~`],
 
 	um: 'unmute',
 	unmute(target, room, user) {
@@ -1837,7 +1837,7 @@ const commands = {
 			this.errorReply(`${(targetUser ? targetUser.name : this.targetUsername)} is not muted.`);
 		}
 	},
-	unmutehelp: [`/unmute [username] - Removes mute from user. Requires: % @ * # & ~`],
+	unmutehelp: [`/unmute [username] - Removes mute from user. Requires: % @ # & ~`],
 
 	forcelock: 'lock',
 	l: 'lock',
@@ -1967,7 +1967,7 @@ const commands = {
 		return true;
 	},
 	lockhelp: [
-		`/lock OR /l [username], [reason] - Locks the user from talking in all chats. Requires: % @ * & ~`,
+		`/lock OR /l [username], [reason] - Locks the user from talking in all chats. Requires: % @ & ~`,
 		`/weeklock OR /wl [username], [reason] - Same as /lock, but locks users for a week.`,
 		`/lock OR /l [username], [reason] spoiler: [proof] - Marks proof in modlog only.`,
 	],
@@ -2055,12 +2055,12 @@ const commands = {
 		const broadcastRoom = Rooms('staff') || room;
 		broadcastRoom.addByUser(user, `${user.name} unlocked the ${range ? "IP range" : "IP"}: ${target}`);
 	},
-	unlockiphelp: [`/unlockip [ip] - Unlocks a punished ip while leaving the original punishment intact. Requires: @ * & ~`],
-	unlocknamehelp: [`/unlockname [username] - Unlocks a punished alt while leaving the original punishment intact. Requires: % @ * & ~`],
+	unlockiphelp: [`/unlockip [ip] - Unlocks a punished ip while leaving the original punishment intact. Requires: @ & ~`],
+	unlocknamehelp: [`/unlockname [username] - Unlocks a punished alt while leaving the original punishment intact. Requires: % @ & ~`],
 	unlockhelp: [
-		`/unlock [username] - Unlocks the user. Requires: % @ * & ~`,
-		`/unlockname [username] - Unlocks a punished alt while leaving the original punishment intact. Requires: % @ * & ~`,
-		`/unlockip [ip] - Unlocks a punished ip while leaving the original punishment intact. Requires: @ * & ~`,
+		`/unlock [username] - Unlocks the user. Requires: % @ & ~`,
+		`/unlockname [username] - Unlocks a punished alt while leaving the original punishment intact. Requires: % @ & ~`,
+		`/unlockip [ip] - Unlocks a punished ip while leaving the original punishment intact. Requires: @ & ~`,
 	],
 
 	forceglobalban: 'globalban',
@@ -2146,7 +2146,7 @@ const commands = {
 		return true;
 	},
 	globalbanhelp: [
-		`/globalban OR /gban [username], [reason] - Kick user from all rooms and ban user's IP address with reason. Requires: @ * & ~`,
+		`/globalban OR /gban [username], [reason] - Kick user from all rooms and ban user's IP address with reason. Requires: @ & ~`,
 		`/globalban OR /gban [username], [reason] spoiler: [proof] - Marks proof in modlog only.`,
 	],
 
@@ -2170,7 +2170,7 @@ const commands = {
 			this.errorReply(`User '${target}' is not globally banned.`);
 		}
 	},
-	unglobalbanhelp: [`/unglobalban [username] - Unban a user. Requires: @ * & ~`],
+	unglobalbanhelp: [`/unglobalban [username] - Unban a user. Requires: @ & ~`],
 
 	unbanall(target, room, user) {
 		if (!this.can('rangeban')) return false;
@@ -2301,7 +2301,7 @@ const commands = {
 		if (room.id === 'staff' || room.id === 'upperstaff') this.globalModlog('NOTE', null, ` by ${user.userid}: ${target}`);
 		return this.privateModAction(`(${user.name} notes: ${target})`);
 	},
-	modnotehelp: [`/modnote [note] - Adds a moderator note that can be read through modlog. Requires: % @ * # & ~`],
+	modnotehelp: [`/modnote [note] - Adds a moderator note that can be read through modlog. Requires: % @ # & ~`],
 
 	globalpromote: 'promote',
 	promote(target, room, user, connection, cmd) {
@@ -2500,7 +2500,7 @@ const commands = {
 
 		return `/announce ${target}`;
 	},
-	announcehelp: [`/announce OR /wall [message] - Makes an announcement. Requires: % @ * # & ~`],
+	announcehelp: [`/announce OR /wall [message] - Makes an announcement. Requires: % @ # & ~`],
 
 	notifyoffrank: 'notifyrank',
 	notifyrank(target, room, user, connection, cmd) {
@@ -2563,7 +2563,7 @@ const commands = {
 		targetUser.trackRename = targetUser.name;
 		return true;
 	},
-	forcerenamehelp: [`/forcerename OR /fr [username], [reason] - Forcibly change a user's name and shows them the [reason]. Requires: % @ * & ~`],
+	forcerenamehelp: [`/forcerename OR /fr [username], [reason] - Forcibly change a user's name and shows them the [reason]. Requires: % @ & ~`],
 
 	nl: 'namelock',
 	namelock(target, room, user) {
@@ -2593,7 +2593,7 @@ const commands = {
 		targetUser.popup(`|modal|${user.name} has locked your name and you can't change names anymore${reasonText}`);
 		return true;
 	},
-	namelockhelp: [`/namelock OR /nl [username], [reason] - Name locks a user and shows them the [reason]. Requires: % @ * & ~`],
+	namelockhelp: [`/namelock OR /nl [username], [reason] - Name locks a user and shows them the [reason]. Requires: % @ & ~`],
 
 	unl: 'unnamelock',
 	unnamelock(target, room, user) {
@@ -2616,7 +2616,7 @@ const commands = {
 			this.errorReply(`User '${target}' is not namelocked.`);
 		}
 	},
-	unnamelockhelp: [`/unnamelock [username] - Unnamelocks the user. Requires: % @ * & ~`],
+	unnamelockhelp: [`/unnamelock [username] - Unnamelocks the user. Requires: % @ & ~`],
 
 	hidetextalts: 'hidetext',
 	hidealttext: 'hidetext',
@@ -2649,8 +2649,8 @@ const commands = {
 		}
 	},
 	hidetexthelp: [
-		`/hidetext [username] - Removes a user's messages from chat. Requires: % @ * # & ~`,
-		`/hidealtstext [username] - Removes a user's messages, and their alternate account's messages from the chat.  Requires: % @ * # & ~`,
+		`/hidetext [username] - Removes a user's messages from chat. Requires: % @ # & ~`,
+		`/hidealtstext [username] - Removes a user's messages, and their alternate account's messages from the chat.  Requires: % @ # & ~`,
 	],
 
 	ab: 'blacklist',
@@ -2792,7 +2792,7 @@ const commands = {
 			this.errorReply(`User ${target} is not banned from battling.`);
 		}
 	},
-	unbattlebanhelp: [`/unbattleban [username] - [DEPRECATED] Allows a user to battle again. Requires: % @ * & ~`],
+	unbattlebanhelp: [`/unbattleban [username] - [DEPRECATED] Allows a user to battle again. Requires: % @ & ~`],
 
 	nameblacklist: 'blacklistname',
 	blacklistname(target, room, user) {
@@ -3767,7 +3767,7 @@ const commands = {
 			battleRoom.add(`|html|<div class="broadcast broadcast-blue"><strong>This is an imported replay</strong><br />Players will need to be manually added with <code>/addplayer</code> or <code>/restoreplayers</code></div>`);
 		}, 500);
 	},
-	importinputloghelp: [`/importinputlog [inputlog] - Starts a battle with a given inputlog. Requires: + % @ * & ~`],
+	importinputloghelp: [`/importinputlog [inputlog] - Starts a battle with a given inputlog. Requires: + % @ & ~`],
 
 	inputlog() {
 		this.parse(`/help exportinputlog`);
@@ -3937,7 +3937,7 @@ const commands = {
 			this.errorReply("/kickbattle - User isn't in battle.");
 		}
 	},
-	kickbattlehelp: [`/kickbattle [username], [reason] - Kicks a user from a battle with reason. Requires: % @ * & ~`],
+	kickbattlehelp: [`/kickbattle [username], [reason] - Kicks a user from a battle with reason. Requires: % @ & ~`],
 
 	kickinactive(target, room, user) {
 		this.parse(`/timer on`);
@@ -4267,8 +4267,8 @@ const commands = {
 			this.sendReply("COMMANDS: /msg, /reply, /logout, /challenge, /search, /rating, /whois, /user, /report, /join, /leave, /makegroupchat, /userauth, /roomauth");
 			this.sendReply("BATTLE ROOM COMMANDS: /savereplay, /hideroom, /inviteonly, /invite, /timer, /forfeit");
 			this.sendReply("OPTION COMMANDS: /nick, /avatar, /ignore, /away, /back, /timestamps, /highlight, /showjoins, /hidejoins, /blockchallenges, /blockpms");
-			this.sendReply("INFORMATIONAL/RESOURCE COMMANDS: /groups, /faq, /rules, /intro, /formatshelp, /othermetas, /analysis, /punishments, /calc, /git, /cap, /roomhelp, /roomfaq (replace / with ! to broadcast. Broadcasting requires: + % @ * # & ~)");
-			this.sendReply("DATA COMMANDS: /data, /dexsearch, /movesearch, /itemsearch, /learn, /statcalc, /effectiveness, /weakness, /coverage, /randommove, /randompokemon (replace / with ! to broadcast. Broadcasting requires: + % @ * # & ~)");
+			this.sendReply("INFORMATIONAL/RESOURCE COMMANDS: /groups, /faq, /rules, /intro, /formatshelp, /othermetas, /analysis, /punishments, /calc, /git, /cap, /roomhelp, /roomfaq (replace / with ! to broadcast. Broadcasting requires: + % @ # & ~)");
+			this.sendReply("DATA COMMANDS: /data, /dexsearch, /movesearch, /itemsearch, /learn, /statcalc, /effectiveness, /weakness, /coverage, /randommove, /randompokemon (replace / with ! to broadcast. Broadcasting requires: + % @ # & ~)");
 			if (user.group !== Config.groupsranking[0]) {
 				this.sendReply("DRIVER COMMANDS: /warn, /mute, /hourmute, /unmute, /alts, /forcerename, /modlog, /modnote, /lock, /weeklock, /unlock, /announce");
 				this.sendReply("MODERATOR COMMANDS: /globalban, /unglobalban, /ip, /modchat, /markshared, /unlockip");

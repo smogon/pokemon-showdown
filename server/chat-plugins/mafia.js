@@ -1866,7 +1866,7 @@ const commands = {
 			this.modlog('MAFIAHOST', targetUser, null, {noalts: true, noip: true});
 		},
 		hosthelp: [
-			`/mafia host [user] - Create a game of Mafia with [user] as the host. Requires + % @ * # & ~, voices can only host themselves`,
+			`/mafia host [user] - Create a game of Mafia with [user] as the host. Requires + % @ # & ~, voices can only host themselves`,
 		],
 
 		q: 'queue',
@@ -1990,7 +1990,7 @@ const commands = {
 			game.sendRoom(game.roomWindow(), {uhtml: true});
 			game.updatePlayers();
 		},
-		closehelp: [`/mafia close - Closes signups for the current game. Requires: host % @ * # & ~`],
+		closehelp: [`/mafia close - Closes signups for the current game. Requires: host % @ # & ~`],
 
 		'!closedsetup': true,
 		cs: 'closedsetup',
@@ -2013,7 +2013,7 @@ const commands = {
 			game.closedSetup = action === 'on';
 			game.updateHost();
 		},
-		closedsetuphelp: [`/mafia closedsetup [on|off] - Sets if the game is a closed setup. Closed setups don't show the role list to players. Requires host % @ * # & ~`],
+		closedsetuphelp: [`/mafia closedsetup [on|off] - Sets if the game is a closed setup. Closed setups don't show the role list to players. Requires host % @ # & ~`],
 
 		'!reveal': true,
 		reveal(target, room, user) {
@@ -2035,7 +2035,7 @@ const commands = {
 			game.sendRoom(`Revealing of roles has been ${action === 'off' ? 'disabled' : 'enabled'}.`, {declare: true});
 			game.updatePlayers();
 		},
-		revealhelp: [`/mafia reveal [on|off] - Sets if roles reveal on death or not. Requires host % @ * # & ~`],
+		revealhelp: [`/mafia reveal [on|off] - Sets if roles reveal on death or not. Requires host % @ # & ~`],
 
 		resetroles: 'setroles',
 		forceresetroles: 'setroles',
@@ -2069,8 +2069,8 @@ const commands = {
 			game.ideaInit(user, toId(target));
 		},
 		ideahelp: [
-			`/mafia idea [idea] - starts the IDEA module [idea]. Requires + % @ * # & ~, voices can only start for themselves`,
-			`/mafia ideareroll - rerolls the IDEA module. Requires host % @ * # & ~`,
+			`/mafia idea [idea] - starts the IDEA module [idea]. Requires + % @ # & ~, voices can only start for themselves`,
+			`/mafia ideareroll - rerolls the IDEA module. Requires host % @ # & ~`,
 			`/mafia ideapick [selection], [role] - selects a role`,
 			`/mafia ideadiscards - shows the discarded roles`,
 		],
@@ -2122,7 +2122,7 @@ const commands = {
 			if (game.hostid !== user.userid && !game.cohosts.includes(user.userid) && !this.can('mute', null, room)) return;
 			game.ideaDistributeRoles(user);
 		},
-		idearerollhelp: [`/mafia ideareroll - rerolls the roles for the current IDEA module. Requires host % @ * # & ~`],
+		idearerollhelp: [`/mafia ideareroll - rerolls the roles for the current IDEA module. Requires host % @ # & ~`],
 
 		discards: 'ideadiscards',
 		ideadiscards(target, room, user) {
@@ -2149,8 +2149,8 @@ const commands = {
 		},
 		ideadiscardshelp: [
 			`/mafia ideadiscards - shows the discarded roles`,
-			`/mafia ideadiscards off - hides discards from the players. Requires host % @ * # & ~`,
-			`/mafia ideadiscards on - shows discards to the players. Requires host % @ * # & ~`,
+			`/mafia ideadiscards off - hides discards from the players. Requires host % @ # & ~`,
+			`/mafia ideadiscards on - shows discards to the players. Requires host % @ # & ~`,
 		],
 
 		'!start': true,
@@ -2174,7 +2174,7 @@ const commands = {
 			}
 			game.start(user, cmd === 'nightstart');
 		},
-		starthelp: [`/mafia start - Start the game of mafia. Signups must be closed. Requires host % @ * # & ~`],
+		starthelp: [`/mafia start - Start the game of mafia. Signups must be closed. Requires host % @ # & ~`],
 
 		'!day': true,
 		extend: 'day',
@@ -2205,9 +2205,9 @@ const commands = {
 			}
 		},
 		dayhelp: [
-			`/mafia day - Move to the next game day. Requires host % @ * # & ~`,
-			`/mafia night - Move to the next game night. Requires host % @ * # & ~`,
-			`/mafia extend (minutes) - Return to the previous game day. If (minutes) is provided, set the deadline for (minutes) minutes. Requires host % @ * # & ~`,
+			`/mafia day - Move to the next game day. Requires host % @ # & ~`,
+			`/mafia night - Move to the next game night. Requires host % @ # & ~`,
+			`/mafia extend (minutes) - Return to the previous game day. If (minutes) is provided, set the deadline for (minutes) minutes. Requires host % @ # & ~`,
 		],
 
 		'!lynch': true,
@@ -2278,7 +2278,7 @@ const commands = {
 				return this.parse(`/help mafia selflynch`);
 			}
 		},
-		selflynchhelp: [`/mafia selflynch [on|hammer|off] - Allows players to self lynch themselves either at hammer or anytime. Requires host % @ * # & ~`],
+		selflynchhelp: [`/mafia selflynch [on|hammer|off] - Allows players to self lynch themselves either at hammer or anytime. Requires host % @ # & ~`],
 
 		'!kill': true,
 		treestump: 'kill',
@@ -2303,7 +2303,7 @@ const commands = {
 			game.eliminate(player, cmd);
 		},
 		killhelp: [
-			`/mafia kill [player] - Kill a player, eliminating them from the game. Requires host % @ * # & ~`,
+			`/mafia kill [player] - Kill a player, eliminating them from the game. Requires host % @ # & ~`,
 			`/mafia treestump [player] - Kills a player, but allows them to talk during the day still.`,
 			`/mafia spirit [player] - Kills a player, but allows them to vote on the lynch still.`,
 			`/mafia spiritstump [player] Kills a player, but allows them to talk during the day, and vote on the lynch.`,
@@ -2329,7 +2329,7 @@ const commands = {
 				game.revive(user, toId(targetUser), cmd === 'forceadd');
 			}
 		},
-		revivehelp: [`/mafia revive [player] - Revive a player who died or add a new player to the game. Requires host % @ * # & ~`],
+		revivehelp: [`/mafia revive [player] - Revive a player who died or add a new player to the game. Requires host % @ # & ~`],
 
 		dl: 'deadline',
 		deadline(target, room, user) {
@@ -2667,10 +2667,10 @@ const commands = {
 		subhelp: [
 			`/mafia sub in - Request to sub into the game, or cancel a request to sub out.`,
 			`/mafia sub out - Request to sub out of the game, or cancel a request to sub in.`,
-			`/mafia sub next, [player] - Forcibly sub [player] out of the game. Requires host % @ * # & ~`,
-			`/mafia sub remove, [user] - Remove [user] from the sublist. Requres host % @ * # & ~`,
-			`/mafia sub unrequest, [player] - Remove's a player's request to sub out of the game. Requires host % @ * # & ~`,
-			`/mafia sub [player], [user] - Forcibly sub [player] for [user]. Requires host % @ * # & ~`,
+			`/mafia sub next, [player] - Forcibly sub [player] out of the game. Requires host % @ # & ~`,
+			`/mafia sub remove, [user] - Remove [user] from the sublist. Requres host % @ # & ~`,
+			`/mafia sub unrequest, [player] - Remove's a player's request to sub out of the game. Requires host % @ # & ~`,
+			`/mafia sub [player], [user] - Forcibly sub [player] for [user]. Requires host % @ # & ~`,
 		],
 
 		"!autosub": true,
@@ -2699,7 +2699,7 @@ const commands = {
 				return this.parse(`/help mafia autosub`);
 			}
 		},
-		autosubhelp: [`/mafia autosub [yes|no] - Sets if players will automatically sub out if a user is on the sublist. Requires host % @ * # & ~`],
+		autosubhelp: [`/mafia autosub [yes|no] - Sets if players will automatically sub out if a user is on the sublist. Requires host % @ # & ~`],
 
 		cohost: 'subhost',
 		forcecohost: 'subhost',
@@ -2781,7 +2781,7 @@ const commands = {
 			this.room = targetRoom;
 			this.modlog('MAFIAEND', null);
 		},
-		endhelp: [`/mafia end - End the current game of mafia. Requires host + % @ * # & ~`],
+		endhelp: [`/mafia end - End the current game of mafia. Requires host + % @ # & ~`],
 
 		'!data': true,
 		role: 'data',
@@ -2969,7 +2969,7 @@ const commands = {
 		},
 		leaderboardhelp: [
 			`/mafia [leaderboard|mvpladder] - View the leaderboard or MVP ladder for the current or last month.`,
-			`/mafia [hostlost|playlogs|leaverlogs] - View the host, play, or leaver logs for the current or last month. Requires % @ * # & ~`,
+			`/mafia [hostlost|playlogs|leaverlogs] - View the host, play, or leaver logs for the current or last month. Requires % @ # & ~`,
 		],
 
 		unhostban: 'hostban',
@@ -3003,9 +3003,9 @@ const commands = {
 			room.add(`${targetUser} was ${isUnban ? 'un' : ''}banned from hosting games${!isUnban ? ` for ${duration} days` : ''} by ${user.name}.`).update();
 		},
 		hostbanhelp: [
-			`/mafia hostban [user], [duration] - Ban a user from hosting games for [duration] days. Requires % @ * # & ~`,
-			`/mafia unhostban [user] - Unbans a user from hosting games. Requires % @ * # & ~`,
-			`/mafia hostbans - Checks current hostbans. Requires % @ * # & ~`,
+			`/mafia hostban [user], [duration] - Ban a user from hosting games for [duration] days. Requires % @ # & ~`,
+			`/mafia unhostban [user] - Unbans a user from hosting games. Requires % @ # & ~`,
+			`/mafia hostbans - Checks current hostbans. Requires % @ # & ~`,
 		],
 
 		hostbans(target, room) {
@@ -3054,9 +3054,9 @@ const commands = {
 		buf += `<details><summary class="button">General Commands</summary>`;
 		buf += [
 			`<br/><strong>General Commands for the Mafia Plugin</strong>:<br/>`,
-			`/mafia host [user] - Create a game of Mafia with [user] as the host. Roomvoices can only host themselves. Requires + % @ * # & ~`,
-			`/mafia nexthost - Host the next user in the host queue. Only works in the Mafia Room. Requires + % @ * # & ~`,
-			`/mafia forcehost [user] - Bypass the host queue and host [user]. Only works in the Mafia Room. Requires % @ * # & ~`,
+			`/mafia host [user] - Create a game of Mafia with [user] as the host. Roomvoices can only host themselves. Requires + % @ # & ~`,
+			`/mafia nexthost - Host the next user in the host queue. Only works in the Mafia Room. Requires + % @ # & ~`,
+			`/mafia forcehost [user] - Bypass the host queue and host [user]. Only works in the Mafia Room. Requires % @ # & ~`,
 			`/mafia sub in - Request to sub into the game, or cancel a request to sub out.`,
 			`/mafia sub out - Request to sub out of the game, or cancel a request to sub in.`,
 			`/mafia spectate - Spectate the game of mafia.`,
@@ -3064,9 +3064,9 @@ const commands = {
 			`/mafia players - Display the current list of players, will highlight players.`,
 			`/mafia [rl|orl] - Display the role list or the original role list for the current game.`,
 			`/mafia data [alignment|role|modifier|theme|term] - Get information on a mafia alignment, role, modifier, theme, or term.`,
-			`/mafia subhost [user] - Substitues the user as the new game host. Requires % @ * # & ~`,
-			`/mafia cohost [user] - Adds the user as a cohost. Cohosts can talk during the game, as well as perform host actions. Requires % @ * # & ~`,
-			`/mafia uncohost [user] - Remove [user]'s cohost status. Requires % @ * # & ~`,
+			`/mafia subhost [user] - Substitues the user as the new game host. Requires % @ # & ~`,
+			`/mafia cohost [user] - Adds the user as a cohost. Cohosts can talk during the game, as well as perform host actions. Requires % @ # & ~`,
+			`/mafia uncohost [user] - Remove [user]'s cohost status. Requires % @ # & ~`,
 			`/mafia disable - Disables mafia in this room. Requires # & ~`,
 			`/mafia enable - Enables mafia in this room. Requires # & ~`,
 		].join('<br/>');
@@ -3085,48 +3085,48 @@ const commands = {
 		buf += [
 			`<br/><strong>Commands for game hosts and Cohosts to use</strong>:<br/>`,
 			`/mafia playercap [cap|none]- Limit the number of players able to join the game. Player cap cannot be more than 20 or less than 2. Requires: host % @ # & ~`,
-			`/mafia close - Closes signups for the current game. Requires: host % @ * # & ~`,
-			`/mafia closedsetup [on|off] - Sets if the game is a closed setup. Closed setups don't show the role list to players. Requires host % @ * # & ~`,
-			`/mafia reveal [on|off] - Sets if roles reveal on death or not. Requires host % @ * # & ~`,
-			`/mafia selflynch [on|hammer|off] - Allows players to self lynch themselves either at hammer or anytime. Requires host % @ * # & ~`,
+			`/mafia close - Closes signups for the current game. Requires: host % @ # & ~`,
+			`/mafia closedsetup [on|off] - Sets if the game is a closed setup. Closed setups don't show the role list to players. Requires host % @ # & ~`,
+			`/mafia reveal [on|off] - Sets if roles reveal on death or not. Requires host % @ # & ~`,
+			`/mafia selflynch [on|hammer|off] - Allows players to self lynch themselves either at hammer or anytime. Requires host % @ # & ~`,
 			`/mafia [enablenl|disablenl] - Allows or disallows players abstain from lynching. Requires host % @ # & ~`,
 			`/mafia setroles [comma seperated roles] - Set the roles for a game of mafia. You need to provide one role per player. Requires host % @ # & ~`,
 			`/mafia forcesetroles [comma seperated roles] - Forcibly set the roles for a game of mafia. No role PM information or alignment will be set. Requires host % @ # & ~`,
-			`/mafia start - Start the game of mafia. Signups must be closed. Requires host % @ * # & ~`,
-			`/mafia day - Move to the next game day. Requires host % @ * # & ~`,
-			`/mafia night - Move to the next game night. Requires host % @ * # & ~`,
-			`/mafia extend (minutes) - Return to the previous game day. If (minutes) is provided, set the deadline for (minutes) minutes. Requires host % @ * # & ~`,
-			`/mafia kill [player] - Kill a player, eliminating them from the game. Requires host % @ * # & ~`,
-			`/mafia treestump [player] - Kills a player, but allows them to talk during the day still. Requires host % @ * # & ~`,
-			`/mafia spirit [player] - Kills a player, but allows them to vote on the lynch still. Requires host % @ * # & ~`,
-			`/mafia spiritstump [player] - Kills a player, but allows them to talk during the day, and vote on the lynch. Requires host % @ * # & ~`,
-			`/mafia kick [player] - Kicks a player from the game without revealing their role. Requires host % @ * # & ~`,
-			`/mafia revive [player] - Revive a player who died or add a new player to the game. Requires host % @ * # & ~`,
+			`/mafia start - Start the game of mafia. Signups must be closed. Requires host % @ # & ~`,
+			`/mafia day - Move to the next game day. Requires host % @ # & ~`,
+			`/mafia night - Move to the next game night. Requires host % @ # & ~`,
+			`/mafia extend (minutes) - Return to the previous game day. If (minutes) is provided, set the deadline for (minutes) minutes. Requires host % @ # & ~`,
+			`/mafia kill [player] - Kill a player, eliminating them from the game. Requires host % @ # & ~`,
+			`/mafia treestump [player] - Kills a player, but allows them to talk during the day still. Requires host % @ # & ~`,
+			`/mafia spirit [player] - Kills a player, but allows them to vote on the lynch still. Requires host % @ # & ~`,
+			`/mafia spiritstump [player] - Kills a player, but allows them to talk during the day, and vote on the lynch. Requires host % @ # & ~`,
+			`/mafia kick [player] - Kicks a player from the game without revealing their role. Requires host % @ # & ~`,
+			`/mafia revive [player] - Revive a player who died or add a new player to the game. Requires host % @ # & ~`,
 			`/mafia deadline [minutes|off] - Sets or removes the deadline for the game. Cannot be more than 20 minutes.`,
-			`/mafia sub next, [player] - Forcibly sub [player] out of the game. Requires host % @ * # & ~`,
-			`/mafia sub remove, [user] - Forcibly remove [user] from the sublist. Requres host % @ * # & ~`,
-			`/mafia sub unrequest, [player] - Remove's a player's request to sub out of the game. Requires host % @ * # & ~`,
-			`/mafia sub [player], [user] - Forcibly sub [player] for [user]. Requires host % @ * # & ~`,
-			`/mafia autosub [yes|no] - Sets if players will automatically sub out if a user is on the sublist. Defaults to yes. Requires host % @ * # & ~`,
-			`/mafia [love|hate] [player] - Makes it take 1 more (love) or less (hate) lynch to hammer [player]. Requires host % @ * # & ~`,
-			`/mafia [unlove|unhate] [player] - Removes loved or hated status from [player]. Requires host % @ * # & ~`,
-			`/mafia [mayor|voteless] [player] - Makes [player]'s' lynch worth 2 votes (mayor) or makes [player]'s lynch worth 0 votes (voteless). Requires host % @ * # & ~`,
-			`/mafia [unmayor|unvoteless] [player] - Removes mayor or voteless status from [player]. Requires host % @ * # & ~`,
+			`/mafia sub next, [player] - Forcibly sub [player] out of the game. Requires host % @ # & ~`,
+			`/mafia sub remove, [user] - Forcibly remove [user] from the sublist. Requres host % @ # & ~`,
+			`/mafia sub unrequest, [player] - Remove's a player's request to sub out of the game. Requires host % @ # & ~`,
+			`/mafia sub [player], [user] - Forcibly sub [player] for [user]. Requires host % @ # & ~`,
+			`/mafia autosub [yes|no] - Sets if players will automatically sub out if a user is on the sublist. Defaults to yes. Requires host % @ # & ~`,
+			`/mafia [love|hate] [player] - Makes it take 1 more (love) or less (hate) lynch to hammer [player]. Requires host % @ # & ~`,
+			`/mafia [unlove|unhate] [player] - Removes loved or hated status from [player]. Requires host % @ # & ~`,
+			`/mafia [mayor|voteless] [player] - Makes [player]'s' lynch worth 2 votes (mayor) or makes [player]'s lynch worth 0 votes (voteless). Requires host % @ # & ~`,
+			`/mafia [unmayor|unvoteless] [player] - Removes mayor or voteless status from [player]. Requires host % @ # & ~`,
 			`/mafia hammer [hammer] - sets the hammer count to [hammer] and resets lynches`,
 			`/mafia shifthammer [hammer] - sets the hammer count to [hammer] without resetting lynches`,
 			`/mafia resethammer - sets the hammer to the default, resetting lynches`,
 			`/mafia playerroles - View all the player's roles in chat. Requires host`,
-			`/mafia end - End the current game of mafia. Requires host % @ * # & ~`,
+			`/mafia end - End the current game of mafia. Requires host % @ # & ~`,
 		].join('<br/>');
 		buf += `</details><details><summary class="button">IDEA Module Commands</summary>`;
 		buf += [
 			`<br/><strong>Commands for using IDEA modules</strong><br/>`,
-			`/mafia idea [idea] - starts the IDEA module [idea]. Requires + % @ * # & ~, voices can only start for themselves`,
-			`/mafia ideareroll - rerolls the IDEA module. Requires host % @ * # & ~`,
+			`/mafia idea [idea] - starts the IDEA module [idea]. Requires + % @ # & ~, voices can only start for themselves`,
+			`/mafia ideareroll - rerolls the IDEA module. Requires host % @ # & ~`,
 			`/mafia ideapick [selection], [role] - selects a role`,
 			`/mafia ideadiscards - shows the discarded roles`,
-			`/mafia ideadiscards off - hides discards from the players. Requires host % @ * # & ~`,
-			`/mafia ideadiscards on - shows discards to the players. Requires host % @ * # & ~`,
+			`/mafia ideadiscards off - hides discards from the players. Requires host % @ # & ~`,
+			`/mafia ideadiscards on - shows discards to the players. Requires host % @ # & ~`,
 			`/mafia customidea choices, picks (new line here, shift+enter)`,
 			`(comma or newline separated rolelist) - Starts an IDEA module with custom roles. Requires % @ # & ~`,
 		].join('<br/>');
@@ -3134,18 +3134,18 @@ const commands = {
 		buf += `</details><details><summary class="button">Mafia Room Specific Commands</summary>`;
 		buf += [
 			`<br/><strong>Commands that are only useable in the Mafia Room</strong>:<br/>`,
-			`/mafia queue add, [user] - Adds the user to the host queue. Requires % @ * # & ~.`,
-			`/mafia queue remove, [user] - Removes the user from the queue. You can remove yourself regardless of rank. Requires % @ * # & ~.`,
+			`/mafia queue add, [user] - Adds the user to the host queue. Requires % @ # & ~.`,
+			`/mafia queue remove, [user] - Removes the user from the queue. You can remove yourself regardless of rank. Requires % @ # & ~.`,
 			`/mafia queue - Shows the list of users who are in queue to host.`,
 			`/mafia win (points) [user1], [user2], [user3], ... - Award the specified users points to the mafia leaderboard for this month. The amount of points can be negative to take points. Defaults to 10 points.`,
-			`/mafia winfaction (points), [faction] - Award the specified points to all the players in the given faction. Requires % @ * # & ~`,
+			`/mafia winfaction (points), [faction] - Award the specified points to all the players in the given faction. Requires % @ # & ~`,
 			`/mafia mvp [user1], [user2], ... - Gives a MVP point and 10 leaderboard points to the users specified.`,
 			`/mafia unmvp [user1], [user2], ... - Takes away a MVP point and 10 leaderboard points from the users specified.`,
 			`/mafia [leaderboard|mvpladder] - View the leaderboard or MVP ladder for the current or last month.`,
-			`/mafia [hostlost|playlogs] - View the host logs or play logs for the current or last month. Requires % @ * # & ~`,
-			`/mafia hostban [user], [duration] - Ban a user from hosting games for [duration] days. Requires % @ * # & ~`,
-			`/mafia unhostban [user] - Unbans a user from hosting games. Requires % @ * # & ~`,
-			`/mafia hostbans - Checks current hostbans. Requires % @ * # & ~`,
+			`/mafia [hostlost|playlogs] - View the host logs or play logs for the current or last month. Requires % @ # & ~`,
+			`/mafia hostban [user], [duration] - Ban a user from hosting games for [duration] days. Requires % @ # & ~`,
+			`/mafia unhostban [user] - Unbans a user from hosting games. Requires % @ # & ~`,
+			`/mafia hostbans - Checks current hostbans. Requires % @ # & ~`,
 		].join('<br/>');
 		buf += `</details>`;
 
