@@ -147,7 +147,7 @@ const commands = {
 			for (const param of params) {
 				output.push(Chat.escapeHTML(param));
 			}
-			let code = `<div class="chat"><code style="white-space: pre-wrap; display: table">${output.join('<br />')}</code></div>`;
+			let code = `<div class="chat"><code style="white-space: pre-wrap; display: table; tab-size: 3">${output.join('<br />')}</code></div>`;
 			if (output.length > 3) code = `<details><summary>See code...</summary>${code}</details>`;
 
 			if (!this.canBroadcast(true, '!code')) return;
