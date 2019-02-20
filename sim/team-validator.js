@@ -496,15 +496,18 @@ class Validator {
 		// Minimum level validation
 		if (ruleTable.has('-illegal')) {
 			let minLevel = 0;
-			let allowHiddenAbility = true;
+			let allowHiddenAbility = [true, 0];
 			if (template.evoLevel) minLevel = template.evoLevel;
 			if (template.encounters) {
 				for (const encounter of template.encounters) {
-					if (encounter.level && encounter.level < minLevel) minLevel = encounter.level;
+					if (encounter.level && encounter.level < minLevel) {
+						minLevel = encounter.level;
+						// Check if an encounter can be obtained with its hidden ability
+						if (encounter.isHidden === false) allowHiddenAbility = [false, encounter.level];
+					}
 					// Check if an encounter can be obtained with its hidden ability
-					if (encounter.isHidden === false) allowHiddenAbility = false;
-					if (!allowHiddenAbility && set.ability === template.abilities['H'] && !ruleTable.has('ignoreillegalabilities')) {
-						problems.push(`${name} cannot have ${set.ability} as its ability because it cannot be obtained with that ability at that level.`);
+					if (!allowHiddenAbility[0] && set.ability === template.abilities['H'] && minLevel < allowHiddenAbility[1] && !ruleTable.has('ignoreillegalabilities')) {
+						problems.push(`${name} cannot have ${set.ability} as its ability because it cannot be obtained with that ability at ${set.level}.`);
 					}
 				}
 			}
