@@ -264,17 +264,13 @@ Chat.nicknamefilter = function (nickname, user) {
 Chat.languages = new Map();
 Chat.translations = new Map();
 
-/**
- * @param {string} string
- */
-function stripTranslationNotes(string) {
-	return string.replace(/\${.+?}/g, '${}').replace(/\[TN: ?.+?\]/g, '');
-}
-
 FS(TRANSLATION_DIRECTORY).readdir().then(files => {
 	for (let fname of files) {
 		if (!fname.endsWith('.json')) continue;
 
+		/**
+		 * @type {{name: string?, strings: {[k: string]: string}?}} content
+		 */
 		const content = require(`../${TRANSLATION_DIRECTORY}${fname}`);
 		const id = fname.slice(0, -5);
 
@@ -283,7 +279,19 @@ FS(TRANSLATION_DIRECTORY).readdir().then(files => {
 
 		if (content.strings) {
 			for (const key in content.strings) {
-				Chat.translations.get(id).set(stripTranslationNotes(key), stripTranslationNotes(content.strings[key]));
+				/** @type {string[]} */
+				const keyLabels = [];
+				/** @type {string[]} */
+				const valLabels = [];
+				const newKey = key.replace(/\${.+?}/g, string => {
+					keyLabels.push(string);
+					return '${}';
+				}).replace(/\[TN: ?.+?\]/g, '');
+				const val = content.strings[key].replace(/\${.+?}/g, string => {
+					valLabels.push(string);
+					return '${}';
+				}).replace(/\[TN: ?.+?\]/g, '');
+				Chat.translations.get(id).set(newKey, [val, keyLabels, valLabels]);
 			}
 		}
 	}
@@ -307,16 +315,27 @@ Chat.tr = function (language, strings, ...keys) {
 
 	// If strings is an array (normally the case), combine before translating.
 	let string = Array.isArray(strings) ? strings.join('${}') : strings;
-	let translated = Chat.translations.get(language).get(string) || string;
+
+	const entry = Chat.translations.get(language).get(string);
+	let [translated, keyLabels, valLabels] = entry || [string, [], []];
 
 	// Replace the gaps in the template string
 	if (keys.length) {
-		keys = keys[0];
 		let reconstructed = '';
 
+		const left = keyLabels.slice();
 		for (let [i, str] of translated.split('${}').entries()) {
 			reconstructed += str;
-			if (keys[i]) reconstructed += keys[i];
+			if (keys[i]) {
+				let index = left.indexOf(valLabels[i]);
+				if (index < 0) {
+					// @ts-ignore why
+					index = left.findIndex(val => !!val);
+				}
+				if (index < 0) index = i;
+				reconstructed += keys[index];
+				left[index] = null;
+			}
 		}
 
 		translated = reconstructed;
@@ -376,7 +395,7 @@ class MessageContext {
 	 * @param {any[]} keys
 	 */
 	tr(strings, ...keys) {
-		return Chat.tr(this.language, strings, keys);
+		return Chat.tr(this.language, strings, ...keys);
 	}
 }
 
