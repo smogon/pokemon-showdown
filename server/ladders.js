@@ -524,10 +524,10 @@ class Ladder extends LadderStore {
 		}
 
 		// users must have different IPs
-		//if (user1.latestIp === user2.latestIp) return false;
+		if (user1.latestIp === user2.latestIp) return false;
 
 		// users must not have been matched immediately previously
-		//if (user1.lastMatch === user2.userid || user2.lastMatch === user1.userid) return false;
+		if (user1.lastMatch === user2.userid || user2.lastMatch === user1.userid) return false;
 
 		// search must be within range
 		let searchRange = 100;
