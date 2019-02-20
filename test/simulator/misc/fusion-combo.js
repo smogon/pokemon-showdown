@@ -22,7 +22,7 @@ describe('Fusion Bolt + Fusion Flare', function () {
 		battle.onEvent('BasePower', battle.getFormat(), -100, function (bp, attacker, defender, move) {
 			bpModifiers.set(move.id, this.event.modifier);
 		});
-		battle.makeChoices('move fusionbolt 1, move fusionflare 1');
+		battle.makeChoices('move fusionbolt 1, move fusionflare 1', 'default');
 
 		assert.strictEqual(bpModifiers.get('fusionbolt'), 1);
 		assert.strictEqual(bpModifiers.get('fusionflare'), 2);
@@ -40,7 +40,7 @@ describe('Fusion Bolt + Fusion Flare', function () {
 		battle.onEvent('BasePower', battle.getFormat(), -100, function (bp, attacker, defender, move) {
 			bpModifiers.set(move.id, this.event.modifier);
 		});
-		battle.makeChoices('move fusionflare 2, move instruct -1');
+		battle.makeChoices('move fusionflare 2, move instruct -1', 'default');
 
 		assert.strictEqual(bpModifiers.get('fusionbolt'), 1);
 		assert.strictEqual(bpModifiers.get('fusionflare'), 2);
