@@ -130,7 +130,7 @@ class ModdedDex {
 		this.abilityCache = new Map();
 		/** @type {Map<string, TypeInfo>} */
 		this.typeCache = new Map();
-		/** @type {Map<string, PureEffect>} */
+		/** @type {Map<string, Effect | Move>} */
 		this.effectCache = new Map();
 
 		if (!isOriginal) {
@@ -462,45 +462,39 @@ class ModdedDex {
 	}
 
 	/**
-	 * @param {?string | Effect} [name]
-	 * @return {PureEffect}
-	 */
+	* While this function can technically return any kind of effect at
+	* all, that's not a feature TypeScript needs to know about.
+	*
+	* @param {string? | Effect} [name]
+	* @return {PureEffect}
+	*/
 	getEffect(name) {
 		if (!name) {
 			return nullEffect;
 		}
 		if (typeof name !== 'string') {
-			// @ts-ignore
-			return name;
+			return /** @type {PureEffect} */ (name);
 		}
 
-		let cached = this.effectCache.get(name);
-		if (!cached) {
-			cached = this.getEffectInner(name);
-			this.effectCache.set(name, cached);
+		let effect = this.effectCache.get(name);
+		if (effect) {
+			return /** @type {PureEffect} */ (effect);
 		}
-		return cached;
-	}
 
-	/**
-	* While this function can technically return any kind of effect at
-	* all, that's not a feature TypeScript needs to know about.
-	* @param {string} name
-	* @return {PureEffect}
-	*/
-	getEffectInner(name) {
 		if (name.startsWith('move:')) {
-			// @ts-ignore
-			return this.getMove(name.slice(5));
+			effect = this.getMove(name.slice(5));
 		} else if (name.startsWith('item:')) {
-			// @ts-ignore
-			return this.getItem(name.slice(5));
+			effect = this.getItem(name.slice(5));
 		} else if (name.startsWith('ability:')) {
-			// @ts-ignore
-			return this.getAbility(name.slice(8));
+			effect = this.getAbility(name.slice(8));
 		}
+		if (effect) {
+			this.effectCache.set(name, effect);
+			// @ts-ignore
+			return effect;
+		}
+
 		let id = toId(name);
-		let effect;
 		if (this.data.Statuses.hasOwnProperty(id)) {
 			effect = new Data.PureEffect({name}, this.data.Statuses[id]);
 		} else if (this.data.Movedex.hasOwnProperty(id) && this.data.Movedex[id].effect) {
@@ -521,8 +515,9 @@ class ModdedDex {
 		} else {
 			effect = new Data.PureEffect({name, exists: false});
 		}
-		// @ts-ignore
-		return effect;
+
+		this.effectCache.set(name, effect);
+		return /** @type {PureEffect} */ (effect);
 	}
 	/**
 	 * Returns a sanitized format ID if valid, or throws if invalid.
