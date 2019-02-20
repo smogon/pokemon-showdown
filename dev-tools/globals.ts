@@ -573,9 +573,9 @@ interface TemplateData {
 	evoLevel?: number
 	evoMove?: string
 	evoCondition?: string
-	evoStone?: 'Thunder' | 'Water' | 'Fire' | 'Moon' | 'Leaf' | 'Sun' | 'Shiny' | 'Dusk' | 'Dawn' | 'Ice'
+	evoItem?: string
 	evos?: string[]
-	evoType?: 'trade' | 'stone' | 'levelMove' | 'levelExtra' | 'level'
+	evoType?: 'trade' | 'stone' | 'levelMove' | 'levelExtra' | 'levelFriendship' | 'levelHold'
 	forme?: string
 	formeLetter?: string
 	gender?: GenderName
