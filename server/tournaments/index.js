@@ -813,7 +813,7 @@ class Tournament {
 		this.update();
 	}
 	forfeit(user) {
-		this.disqualifyUser(user.userid, null, "You left the tournament", true);
+		return this.disqualifyUser(user.userid, null, "You left the tournament", true);
 	}
 	onConnect(user, connection) {
 		this.updateFor(user, connection);
