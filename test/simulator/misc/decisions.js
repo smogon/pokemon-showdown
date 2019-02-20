@@ -224,20 +224,17 @@ describe('Choices', function () {
 				{species: 'Charizard', ability: 'blaze', moves: ['scratch']},
 			]]);
 
-			battle.p1.chooseSwitch(2);
-			battle.p2.chooseSwitch(3);
+			battle.makeChoices('switch 2', 'switch 3');
 
 			assert.species(battle.p1.active[0], 'Ivysaur');
 			assert.species(battle.p2.active[0], 'Charizard');
 
-			battle.p1.chooseSwitch(3);
-			battle.p2.chooseSwitch(3);
+			battle.makeChoices('switch 3', 'switch 3');
 
 			assert.species(battle.p1.active[0], 'Venusaur');
 			assert.species(battle.p2.active[0], 'Charmander');
 
-			battle.p1.chooseSwitch(2);
-			battle.p2.chooseSwitch(2);
+			battle.makeChoices('switch 2', 'switch 2');
 
 			assert.species(battle.p1.active[0], 'Bulbasaur');
 			assert.species(battle.p2.active[0], 'Charmeleon');
@@ -255,11 +252,10 @@ describe('Choices', function () {
 				{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
 				{species: "Golem", ability: 'sturdy', moves: ['defensecurl']},
 			]);
-			p1.chooseMove(1).chooseMove(1).chooseShift();
-			p2.chooseMove(1).chooseMove(1).chooseShift();
+			battle.makeChoices('move harden, move defensecurl, shift', 'move roost, move irondefense, shift');
 
-			['Pineco', 'Gastly', 'Geodude'].forEach((species, index) => assert.species(battle.p1.active[index], species));
-			['Skarmory', 'Golem', 'Aggron'].forEach((species, index) => assert.species(battle.p2.active[index], species));
+			['Pineco', 'Gastly', 'Geodude'].forEach((species, index) => assert.species(p1.active[index], species));
+			['Skarmory', 'Golem', 'Aggron'].forEach((species, index) => assert.species(p2.active[index], species));
 		});
 
 		it('should allow shifting the Pokémon on the right to the center', function () {
