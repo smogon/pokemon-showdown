@@ -10,7 +10,7 @@ describe('White Herb', function () {
 		battle.destroy();
 	});
 
-	it('it should use white herb after both intimidate', function () {
+	it('should use white herb after both intimidate', function () {
 		battle = common.createBattle({gameType: 'doubles'});
 
 		battle.join('p1', 'Guest 1', 1, [{species: "Arcanine", ability: 'intimidate', moves: ['bodyslam']},
