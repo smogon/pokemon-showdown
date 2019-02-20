@@ -65,8 +65,9 @@ describe('Prankster', function () {
 			[{species: "Liepard", ability: 'prankster', moves: ['encore', 'nastyplot']}, {species: "Tapu Fini", ability: 'mistysurge', moves: ['calmmind']}],
 			[{species: "Meowstic", ability: 'prankster', moves: ['frustration', 'leer']}, {species: "Lopunny", ability: 'limber', moves: ['agility']}],
 		]);
-		battle.p1.chooseMove('encore', 1).chooseMove('calmmind').foe.chooseMove('frustration', 2).chooseMove('agility');
-		battle.p1.chooseMove('encore', 1).chooseMove('calmmind').foe.chooseMove('leer').chooseMove('agility');
+
+		battle.makeChoices('move encore 1, move calmmind', 'move frustration 2, move agility');
+		battle.makeChoices('move encore 1, move calmmind', 'move leer, move agility');
 		assert(battle.p2.active[0].volatiles.encore, `Meowstic should be encored`);
 		assert.fullHP(battle.p1.active[0]);
 	});

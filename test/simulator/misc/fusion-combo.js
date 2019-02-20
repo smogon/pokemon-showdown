@@ -16,14 +16,13 @@ describe('Fusion Bolt + Fusion Flare', function () {
 			[{species: 'Dragonite', ability: 'Multiscale', moves: ['roost']}, {species: 'Lugia', ability: 'Multiscale', moves: ['roost']}],
 		]);
 
-		battle.commitDecisions();
+		battle.makeChoices();
 
 		let bpModifiers = new Map();
 		battle.onEvent('BasePower', battle.getFormat(), -100, function (bp, attacker, defender, move) {
 			bpModifiers.set(move.id, this.event.modifier);
 		});
-		battle.p1.chooseMove('fusionbolt', 1).chooseMove('fusionflare', 1);
-		battle.commitDecisions();
+		battle.makeChoices('move fusionbolt 1, move fusionflare 1', 'default');
 
 		assert.strictEqual(bpModifiers.get('fusionbolt'), 1);
 		assert.strictEqual(bpModifiers.get('fusionflare'), 2);
@@ -35,14 +34,13 @@ describe('Fusion Bolt + Fusion Flare', function () {
 			[{species: 'Dragonite', ability: 'Multiscale', moves: ['roost']}, {species: 'Lugia', ability: 'Multiscale', moves: ['roost']}],
 		]);
 
-		battle.commitDecisions();
+		battle.makeChoices();
 
 		let bpModifiers = new Map();
 		battle.onEvent('BasePower', battle.getFormat(), -100, function (bp, attacker, defender, move) {
 			bpModifiers.set(move.id, this.event.modifier);
 		});
-		battle.commitDecisions();
-		battle.p1.chooseMove('fusionflare', 2).chooseMove('instruct', -1).foe.chooseDefault();
+		battle.makeChoices('move fusionflare 2, move instruct -1', 'default');
 
 		assert.strictEqual(bpModifiers.get('fusionbolt'), 1);
 		assert.strictEqual(bpModifiers.get('fusionflare'), 2);

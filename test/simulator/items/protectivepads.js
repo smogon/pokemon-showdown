@@ -15,7 +15,7 @@ describe('Protective Pads', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Cofagrigus", ability: 'mummy', moves: ['calmmind']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Hariyama", ability: 'thickfat', item: 'protectivepads', moves: ['bulletpunch']}]);
 		const attacker = battle.p2.active[0];
-		battle.commitDecisions();
+		battle.makeChoices();
 		assert.strictEqual(attacker.ability, 'thickfat');
 		const mummyActivationMessages = battle.log.filter(logStr => logStr.startsWith('|-activate|') && logStr.includes('Mummy'));
 		assert.strictEqual(mummyActivationMessages.length, 1, "Mummy should activate only once");
@@ -27,7 +27,7 @@ describe('Protective Pads', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Purrloin", ability: 'prankster', item: 'protectivepads', moves: ['scratch']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Ferrothorn", ability: 'ironbarbs', moves: ['rest']}]);
-		battle.commitDecisions();
+		battle.makeChoices();
 		assert.fullHP(battle.p1.active[0], "Attacker should not be hurt");
 	});
 
@@ -35,7 +35,7 @@ describe('Protective Pads', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Purrloin", ability: 'prankster', item: 'protectivepads', moves: ['scratch']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Goodra", ability: 'gooey', moves: ['rest']}]);
-		battle.commitDecisions();
+		battle.makeChoices();
 		assert.statStage(battle.p1.active[0], 'spe', 0, "Speed should not be lowered");
 	});
 
@@ -43,7 +43,7 @@ describe('Protective Pads', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Weavile", ability: 'pickpocket', moves: ['swordsdance']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Liepard", ability: 'prankster', item: 'protectivepads', moves: ['scratch']}]);
-		battle.commitDecisions();
+		battle.makeChoices();
 		assert.false(battle.p2.active[0].item, "Attacker should lose their item");
 		assert.strictEqual(battle.p1.active[0].item, 'protectivepads', "Target should receive stolen item");
 	});
@@ -52,7 +52,7 @@ describe('Protective Pads', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Purrloin", ability: 'prankster', item: 'protectivepads', moves: ['scratch']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Cacnea", ability: 'waterabsorb', item: 'rockyhelmet', moves: ['synthesis']}]);
-		battle.commitDecisions();
+		battle.makeChoices();
 		assert.fullHP(battle.p1.active[0], "Attacker should not be hurt");
 	});
 
@@ -60,7 +60,7 @@ describe('Protective Pads', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Hariyama", ability: 'guts', item: 'protectivepads', moves: ['rest']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Galvantula", ability: 'swarm', moves: ['lunge']}]);
-		battle.commitDecisions();
+		battle.makeChoices();
 		assert.statStage(battle.p1.active[0], 'atk', -1, "Attack should be lowered");
 	});
 });
