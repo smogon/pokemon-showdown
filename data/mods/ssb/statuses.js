@@ -113,13 +113,13 @@ let BattleStatuses = {
 	andy: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@Andy >_>|**>_>**`);
+			this.add(`c|+Andy >_>|**>_>**`);
 		},
 		onSwitchOut() {
-			this.add(`c|@Andy >_>|**<_<**`);
+			this.add(`c|+Andy >_>|**<_<**`);
 		},
 		onFaint() {
-			this.add(`c|@Andy >_>|u sux >_>`);
+			this.add(`c|+Andy >_>|u sux >_>`);
 		},
 	},
 	ant: {
@@ -1322,13 +1322,13 @@ let BattleStatuses = {
 	urkerab: {
 		noCopy: true,
 		onStart() {
-			this.add(`j|%urkerab`);
+			this.add(`j|+urkerab`);
 		},
 		onSwitchOut() {
-			this.add(`l|%urkerab`);
+			this.add(`l|+urkerab`);
 		},
 		onFaint() {
-			this.add(`l|%urkerab`);
+			this.add(`l|+urkerab`);
 		},
 	},
 	uselesscrab: {
