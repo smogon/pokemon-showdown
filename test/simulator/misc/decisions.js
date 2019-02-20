@@ -553,8 +553,7 @@ describe('Choices', function () {
 				[{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle', 'growl']}],
 				[{species: "Charmander", ability: 'blaze', moves: ['scratch', 'growl']}],
 			]);
-			battle.p1.chooseMove(1);
-			battle.p2.chooseMove('growl');
+			battle.makeChoices('move 1', 'move growl');
 
 			const logText = battle.inputLog.join('\n');
 			const subString = '>p1 move tackle\n>p2 move growl';
@@ -569,8 +568,7 @@ describe('Choices', function () {
 				{species: "Charmander", ability: 'blaze', moves: ['scratch']},
 				{species: "Charizard", ability: 'blaze', moves: ['scratch']},
 			]]);
-			battle.p1.chooseMove(1, 1).chooseMove(1, 2);
-			battle.p2.chooseMove(1, 2).chooseMove(1, 1);
+			battle.makeChoices('move tackle 1, move tackle 2', 'move scratch 2, move scratch 1');
 
 			const logText = battle.inputLog.join('\n');
 			const subString = '>p1 move tackle 1, move tackle 2\n>p2 move scratch 2, move scratch 1';
@@ -585,8 +583,7 @@ describe('Choices', function () {
 				{species: "Charmander", ability: 'blaze', moves: ['scratch']},
 				{species: "Charizard", ability: 'blaze', moves: ['scratch']},
 			]]);
-			battle.p1.chooseMove(1).chooseMove(1);
-			battle.p2.chooseMove(1, 1).chooseMove(1, 1);
+			battle.makeChoices('move magnitude, move rockslide', 'move scratch 1, move scratch 1');
 
 			const logText = battle.inputLog.join('\n');
 			const subString = '>p1 move magnitude, move rockslide\n>p2 move scratch 1, move scratch 1';
