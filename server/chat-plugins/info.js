@@ -519,8 +519,6 @@ const commands = {
 						const evo = mod.getTemplate(evoName);
 						if (evo.gen <= mod.gen) {
 							let condition = evo.evoCondition ? ` ${evo.evoCondition}` : ``;
-							if (evo.evoCondition === '[Day]') condition = ' during the day';
-							if (evo.evoCondition === '[Night]') condition = ' at night';
 							switch (evo.evoType) {
 							case 'levelExtra':
 								evos.push(`${evo.name} (level-up${condition})`);
@@ -532,7 +530,7 @@ const commands = {
 								evos.push(`${evo.name} (level-up holding ${evo.evoItem}${condition})`);
 								break;
 							case 'stone':
-								evos.push(`${evo.name} (${evo.evoItem}${condition})`);
+								evos.push(`${evo.name} (${evo.evoItem})`);
 								break;
 							case 'levelMove':
 								evos.push(`${evo.name} (level-up with ${evo.evoMove}${condition})`);
