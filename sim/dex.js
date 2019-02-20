@@ -465,7 +465,7 @@ class ModdedDex {
 	* While this function can technically return any kind of effect at
 	* all, that's not a feature TypeScript needs to know about.
 	*
-	* @param {string?|Effect} [name]
+	* @param {string? | Effect} [name]
 	* @return {PureEffect}
 	*/
 	getEffect(name) {
