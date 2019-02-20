@@ -112,7 +112,6 @@ class TestTools {
 			// will be used.
 			seed: options.seed || DEFAULT_SEED,
 		});
-		battle.LEGACY_API_DO_NOT_USE = true;
 		if (teams) {
 			for (let i = 0; i < teams.length; i++) {
 				assert(Array.isArray(teams[i]), "Team provided is not an array");

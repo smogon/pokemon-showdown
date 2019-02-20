@@ -135,8 +135,6 @@ class Battle extends Dex.ModdedDex {
 		this.abilityOrder = 0;
 		/** @type {''} */
 		this.NOT_FAILURE = '';
-		/** @type {boolean} */
-		this.LEGACY_API_DO_NOT_USE = false;
 
 		/** @type {PRNG} */
 		this.prng = options.prng || new PRNG(options.seed || undefined);
@@ -3183,13 +3181,10 @@ class Battle extends Dex.ModdedDex {
 	 * @param {string[]} inputs
 	 */
 	makeChoices(...inputs) {
-		const oldFlag = this.LEGACY_API_DO_NOT_USE;
-		this.LEGACY_API_DO_NOT_USE = false;
 		for (const [i, input] of inputs.entries()) {
 			this.sides[i].choose(input);
 		}
 		this.commitDecisions();
-		this.LEGACY_API_DO_NOT_USE = oldFlag;
 	}
 
 	commitDecisions() {
@@ -3197,12 +3192,9 @@ class Battle extends Dex.ModdedDex {
 
 		let oldQueue = this.queue;
 		this.queue = [];
-		let oldFlag = this.LEGACY_API_DO_NOT_USE;
-		this.LEGACY_API_DO_NOT_USE = false;
 		for (const side of this.sides) {
 			side.autoChoose();
 		}
-		this.LEGACY_API_DO_NOT_USE = oldFlag;
 		let p1choice = this.p1.getChoice();
 		if (p1choice) this.inputLog.push(`>p1 ${p1choice}`);
 		let p2choice = this.p2.getChoice();

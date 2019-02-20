@@ -294,7 +294,6 @@ class Side {
 	 * @param {string | number} [moveText]
 	 * @param {number} [targetLoc]
 	 * @param {boolean | string} [megaOrZ]
-	 * @return {boolean | Side}
 	 */
 	chooseMove(moveText, targetLoc, megaOrZ) {
 		if (this.currentRequest !== 'move') {
@@ -467,13 +466,11 @@ class Side {
 		if (ultra) this.choice.ultra = true;
 		if (zMove) this.choice.zMove = true;
 
-		if (this.battle.LEGACY_API_DO_NOT_USE && !this.battle.checkActions()) return this;
 		return true;
 	}
 
 	/**
 	 * @param {string} [slotText]
-	 * @return {boolean | Side}
 	 */
 	chooseSwitch(slotText) {
 		if (this.currentRequest !== 'move' && this.currentRequest !== 'switch') {
@@ -548,13 +545,11 @@ class Side {
 			target: targetPokemon,
 		});
 
-		if (this.battle.LEGACY_API_DO_NOT_USE && !this.battle.checkActions()) return this;
 		return true;
 	}
 
 	/**
 	 * @param {string} [data]
-	 * @return {boolean | Side}
 	 */
 	chooseTeam(data) {
 		const autoFill = !data;
@@ -602,13 +597,9 @@ class Side {
 			});
 		}
 
-		if (this.battle.LEGACY_API_DO_NOT_USE && !this.battle.checkActions()) return this;
 		return true;
 	}
 
-	/**
-	 * @return {boolean | Side}
-	 */
 	chooseShift() {
 		const index = this.getChoiceIndex();
 		if (index >= this.active.length) {
@@ -628,7 +619,6 @@ class Side {
 			pokemon: pokemon,
 		});
 
-		if (this.battle.LEGACY_API_DO_NOT_USE && !this.battle.checkActions()) return this;
 		return true;
 	}
 
@@ -787,26 +777,7 @@ class Side {
 		this.choice.actions.push({
 			choice: 'pass',
 		});
-		if (this.battle.LEGACY_API_DO_NOT_USE && !this.battle.checkActions()) return this;
 		return true;
-	}
-
-	/**
-	 * @return {boolean | Side}
-	 */
-	chooseDefault() {
-		if (!this.battle.LEGACY_API_DO_NOT_USE) throw new Error(`This is a legacy API, it's called autoChoose now`);
-		if (this.isChoiceDone()) {
-			throw new Error(`You've already chosen actions for ${this.id}.`);
-		}
-		if (this.currentRequest === 'teampreview') {
-			this.chooseTeam();
-		} else if (this.currentRequest === 'switch') {
-			while (this.chooseSwitch() !== true && !this.isChoiceDone());
-		} else if (this.currentRequest === 'move') {
-			while (this.chooseMove() !== true && !this.isChoiceDone());
-		}
-		return this;
 	}
 
 	/**

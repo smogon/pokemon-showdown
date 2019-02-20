@@ -1164,17 +1164,19 @@ describe('Choice internals', function () {
 		]);
 
 		assert.strictEqual(battle.turn, 1);
-		p1.chooseMove(1).chooseSwitch(4);
-		assert(!p2.chooseSwitch(3));
-		p2.chooseMove(1).chooseMove(1);
+		p1.choose('move recover, switch 4');
+		assert(!p2.choose('switch 3'));
+		p2.choose('move recover, move recover');
+		battle.checkActions();
 
 		assert.strictEqual(battle.turn, 2);
 		assert.strictEqual(p1.active[0].name, 'Mew');
 		assert.strictEqual(p1.active[1].name, 'Ekans');
 
-		p1.chooseSwitch(4).chooseMove(1);
-		assert(!p2.chooseSwitch(3));
-		p2.chooseMove(1).chooseMove(1);
+		p1.choose('switch 4, move leer');
+		assert(!p2.choose('switch 3'));
+		p2.choose('move recover, move recover');
+		battle.checkActions();
 
 		assert.strictEqual(battle.turn, 3);
 		assert.strictEqual(p1.active[0].name, 'Bulbasaur');
