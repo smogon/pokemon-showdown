@@ -476,7 +476,7 @@ class ModdedDex {
 			// @ts-ignore
 			return name;
 		}
-		/** @type {Effect|undefined} */
+
 		let effect = this.effectCache.get(name);
 		if (effect) {
 			// @ts-ignore
