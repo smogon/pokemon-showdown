@@ -352,7 +352,7 @@ class MessageContext {
 	 * @param {User} user
 	 * @param {string?} [language]
 	 */
-	constructor(user, language) {
+	constructor(user, language = null) {
 		this.recursionDepth = 0;
 
 		this.user = user;
