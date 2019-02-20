@@ -473,14 +473,12 @@ class ModdedDex {
 			return nullEffect;
 		}
 		if (typeof name !== 'string') {
-			// @ts-ignore
-			return name;
+			return /** @type {PureEffect} */ (name);
 		}
 
 		let effect = this.effectCache.get(name);
 		if (effect) {
-			// @ts-ignore
-			return effect;
+			return /** @type {PureEffect} */ (effect);
 		}
 
 		if (name.startsWith('move:')) {
@@ -519,8 +517,7 @@ class ModdedDex {
 		}
 
 		this.effectCache.set(name, effect);
-		// @ts-ignore
-		return effect;
+		return /** @type {PureEffect} */ (effect);
 	}
 	/**
 	 * Returns a sanitized format ID if valid, or throws if invalid.
