@@ -1355,16 +1355,16 @@ let BattleStatuses = {
 			this.add(`c|+Volco|Well, seems I was got taken down instead.`);
 		},
 	},
-	xayahh: {
+	xayah: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+Xayahh|Let's dance!`);
+			this.add(`c|+Xayah|Let's dance!`);
 		},
 		onSwitchOut() {
-			this.add(`c|+Xayahh|Fine, I'll go.`);
+			this.add(`c|+Xayah|Fine, I'll go.`);
 		},
 		onFaint() {
-			this.add(`c|+Xayahh|All out of second dances...`);
+			this.add(`c|+Xayah|All out of second dances...`);
 		},
 	},
 	xprienzo: {

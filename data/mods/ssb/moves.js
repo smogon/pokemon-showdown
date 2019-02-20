@@ -3902,7 +3902,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fire",
 	},
-	// Xayahh
+	// Xayah
 	stunningdance: {
 		accuracy: 100,
 		basePower: 95,
