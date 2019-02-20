@@ -227,7 +227,7 @@ const commands = {
 	},
 	whoishelp: [
 		`/whois - Get details on yourself: alts, group, IP address, and rooms.`,
-		`/whois [username] - Get details on a username: alts (Requires: % @ * & ~), group, IP address (Requires: @ * & ~), and rooms.`,
+		`/whois [username] - Get details on a username: alts (Requires: % @ & ~), group, IP address (Requires: @ & ~), and rooms.`,
 	],
 
 	'!offlinewhois': true,
@@ -404,7 +404,7 @@ const commands = {
 		}
 		this.sendReplyBox(challenges.join(`<br />`));
 	},
-	checkchallengeshelp: [`!checkchallenges [user1], [user2] - Check if the specified users are challenging each other. Requires: @ * # & ~`],
+	checkchallengeshelp: [`!checkchallenges [user1], [user2] - Check if the specified users are challenging each other. Requires: @ # & ~`],
 
 	/*********************************************************
 	 * Client fallback
@@ -680,7 +680,7 @@ const commands = {
 	datahelp: [
 		`/data [pokemon/item/move/ability/nature] - Get details on this pokemon/item/move/ability/nature.`,
 		`/data [pokemon/item/move/ability/nature], Gen [generation number/format name] - Get details on this pokemon/item/move/ability/nature for that generation/format.`,
-		`!data [pokemon/item/move/ability/nature] - Show everyone these details. Requires: + % @ * # & ~`,
+		`!data [pokemon/item/move/ability/nature] - Show everyone these details. Requires: + % @ # & ~`,
 	],
 
 	'!details': true,
@@ -692,7 +692,7 @@ const commands = {
 	detailshelp: [
 		`/details [pokemon/item/move/ability/nature] - Get additional details on this pokemon/item/move/ability/nature.`,
 		`/details [pokemon/item/move/ability/nature], Gen [generation number/format name] - Get details on this pokemon/item/move/ability/nature for that generation/format.`,
-		`!details [pokemon/item/move/ability/nature] - Show everyone these details. Requires: + % @ * # & ~`,
+		`!details [pokemon/item/move/ability/nature] - Show everyone these details. Requires: + % @ # & ~`,
 	],
 
 	'!weakness': true,
@@ -783,8 +783,8 @@ const commands = {
 	weaknesshelp: [
 		`/weakness [pokemon] - Provides a Pok\u00e9mon's resistances, weaknesses, and immunities, ignoring abilities.`,
 		`/weakness [type 1]/[type 2] - Provides a type or type combination's resistances, weaknesses, and immunities, ignoring abilities.`,
-		`!weakness [pokemon] - Shows everyone a Pok\u00e9mon's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ * # & ~`,
-		`!weakness [type 1]/[type 2] - Shows everyone a type or type combination's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ * # & ~`,
+		`!weakness [pokemon] - Shows everyone a Pok\u00e9mon's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ # & ~`,
+		`!weakness [type 1]/[type 2] - Shows everyone a type or type combination's resistances, weaknesses, and immunities, ignoring abilities. Requires: + % @ # & ~`,
 	],
 
 	'!effectiveness': true,
@@ -1544,7 +1544,7 @@ const commands = {
 	groupshelp: [
 		`/groups - Explains what the symbols (like % and @) before people's names mean.`,
 		`/groups [global|room] - Explains only global or room symbols.`,
-		`!groups - Shows everyone that information. Requires: + % @ * # & ~`,
+		`!groups - Shows everyone that information. Requires: + % @ # & ~`,
 	],
 
 	'!punishments': true,
@@ -1567,7 +1567,7 @@ const commands = {
 	},
 	punishmentshelp: [
 		`/punishments - Explains punishments.`,
-		`!punishments - Show everyone that information. Requires: + % @ * # & ~`,
+		`!punishments - Show everyone that information. Requires: + % @ # & ~`,
 	],
 
 	'!opensource': true,
@@ -1587,7 +1587,7 @@ const commands = {
 	},
 	opensourcehelp: [
 		`/opensource - Links to PS's source code repository.`,
-		`!opensource - Show everyone that information. Requires: + % @ * # & ~`,
+		`!opensource - Show everyone that information. Requires: + % @ # & ~`,
 	],
 
 	'!staff': true,
@@ -1642,7 +1642,7 @@ const commands = {
 	},
 	avatarshelp: [
 		`/avatars - Explains how to change avatars.`,
-		`!avatars - Show everyone that information. Requires: + % @ * # & ~`,
+		`!avatars - Show everyone that information. Requires: + % @ # & ~`,
 	],
 
 	'!optionsbutton': true,
@@ -1673,7 +1673,7 @@ const commands = {
 	},
 	introhelp: [
 		`/intro - Provides an introduction to competitive Pok\u00e9mon.`,
-		`!intro - Show everyone that information. Requires: + % @ * # & ~`,
+		`!intro - Show everyone that information. Requires: + % @ # & ~`,
 	],
 
 	'!smogintro': true,
@@ -1712,7 +1712,7 @@ const commands = {
 	calchelp: [
 		`/calc - Provides a link to a damage calculator`,
 		`/rcalc - Provides a link to the random battles damage calculator`,
-		`!calc - Shows everyone a link to a damage calculator. Requires: + % @ * # & ~`,
+		`!calc - Shows everyone a link to a damage calculator. Requires: + % @ # & ~`,
 	],
 
 	'!cap': true,
@@ -1729,7 +1729,7 @@ const commands = {
 	},
 	caphelp: [
 		`/cap - Provides an introduction to the Create-A-Pok\u00e9mon project.`,
-		`!cap - Show everyone that information. Requires: + % @ * # & ~`,
+		`!cap - Show everyone that information. Requires: + % @ # & ~`,
 	],
 
 	'!gennext': true,
@@ -1994,7 +1994,7 @@ const commands = {
 	},
 	ruleshelp: [
 		`/rules - Show links to room rules and global rules.`,
-		`!rules - Show everyone links to room rules and global rules. Requires: + % @ * # & ~`,
+		`!rules - Show everyone links to room rules and global rules. Requires: + % @ # & ~`,
 		`/rules [url] - Change the room rules URL. Requires: # & ~`,
 		`/rules remove - Removes a room rules URL. Requires: # & ~`,
 	],
@@ -2034,7 +2034,7 @@ const commands = {
 	},
 	faqhelp: [
 		`/faq [theme] - Provides a link to the FAQ. Add autoconfirmed, badges, coil, ladder, staff, or tiers for a link to these questions. Add all for all of them.`,
-		`!faq [theme] - Shows everyone a link to the FAQ. Add autoconfirmed, badges, coil, ladder, staff, or tiers for a link to these questions. Add all for all of them. Requires: + % @ * # & ~`,
+		`!faq [theme] - Shows everyone a link to the FAQ. Add autoconfirmed, badges, coil, ladder, staff, or tiers for a link to these questions. Add all for all of them. Requires: + % @ # & ~`,
 	],
 
 	'!smogdex': true,
@@ -2198,7 +2198,7 @@ const commands = {
 	},
 	smogdexhelp: [
 		`/analysis [pokemon], [generation], [format] - Links to the Smogon University analysis for this Pok\u00e9mon in the given generation.`,
-		`!analysis [pokemon], [generation], [format] - Shows everyone this link. Requires: + % @ * # & ~`,
+		`!analysis [pokemon], [generation], [format] - Shows everyone this link. Requires: + % @ # & ~`,
 	],
 
 	'!veekun': true,
@@ -2280,7 +2280,7 @@ const commands = {
 	},
 	veekunhelp: [
 		`/veekun [pokemon] - Links to Veekun website for this pokemon/item/move/ability/nature.`,
-		`!veekun [pokemon] - Shows everyone this link. Requires: + % @ * # & ~`,
+		`!veekun [pokemon] - Shows everyone this link. Requires: + % @ # & ~`,
 	],
 
 	'!register': true,

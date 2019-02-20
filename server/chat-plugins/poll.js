@@ -265,7 +265,7 @@ const commands = {
 			this.modlog('POLL');
 			return this.privateModAction(`(A poll was started by ${user.name}.)`);
 		},
-		newhelp: [`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ * # & ~`],
+		newhelp: [`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # & ~`],
 
 		vote(target, room, user) {
 			if (!room.poll) return this.errorReply("There is no poll running in this room.");
@@ -318,8 +318,8 @@ const commands = {
 			}
 		},
 		timerhelp: [
-			`/poll timer [minutes] - Sets the poll to automatically end after [minutes] minutes. Requires: % @ * # & ~`,
-			`/poll timer clear - Clears the poll's timer. Requires: % @ * # & ~`,
+			`/poll timer [minutes] - Sets the poll to automatically end after [minutes] minutes. Requires: % @ # & ~`,
+			`/poll timer clear - Clears the poll's timer. Requires: % @ # & ~`,
 		],
 
 		results(target, room, user) {
@@ -342,7 +342,7 @@ const commands = {
 			this.modlog('POLL END');
 			return this.privateModAction(`(The poll was ended by ${user.name}.)`);
 		},
-		endhelp: [`/poll end - Ends a poll and displays the results. Requires: % @ * # & ~`],
+		endhelp: [`/poll end - Ends a poll and displays the results. Requires: % @ # & ~`],
 
 		show: 'display',
 		display(target, room, user, connection) {
@@ -365,13 +365,13 @@ const commands = {
 	pollhelp: [
 		`/poll allows rooms to run their own polls. These polls are limited to one poll at a time per room.`,
 		`Accepts the following commands:`,
-		`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ * # & ~`,
+		`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # & ~`,
 		`/poll htmlcreate [question], [option1], [option2], [...] - Creates a poll, with HTML allowed in the question and options. Requires: # & ~`,
 		`/poll vote [number] - Votes for option [number].`,
-		`/poll timer [minutes] - Sets the poll to automatically end after [minutes]. Requires: % @ * # & ~`,
+		`/poll timer [minutes] - Sets the poll to automatically end after [minutes]. Requires: % @ # & ~`,
 		`/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.`,
 		`/poll display - Displays the poll`,
-		`/poll end - Ends a poll and displays the results. Requires: % @ * # & ~`,
+		`/poll end - Ends a poll and displays the results. Requires: % @ # & ~`,
 	],
 };
 

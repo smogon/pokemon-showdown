@@ -440,8 +440,8 @@ exports.commands = {
 		}
 	},
 	slowchathelp: [
-		`/slowchat [number] - Sets a limit on how often users in the room can send messages, between 2 and 60 seconds. Requires @ * # & ~`,
-		`/slowchat off - Disables slowchat in the room. Requires @ * # & ~`,
+		`/slowchat [number] - Sets a limit on how often users in the room can send messages, between 2 and 60 seconds. Requires @ # & ~`,
+		`/slowchat off - Disables slowchat in the room. Requires @ # & ~`,
 	],
 
 	stretching: 'stretchfilter',
@@ -639,7 +639,7 @@ exports.commands = {
 	banwordhelp: [
 		`/banword add [words] - Adds the comma-separated list of phrases (& or ~ can also input regex) to the banword list of the current room. Requires: # & ~`,
 		`/banword delete [words] - Removes the comma-separated list of phrases from the banword list. Requires: # & ~`,
-		`/banword list - Shows the list of banned words in the current room. Requires: % @ * # & ~`,
+		`/banword list - Shows the list of banned words in the current room. Requires: % @ # & ~`,
 	],
 
 	hightraffic(target, room, user) {

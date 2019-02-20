@@ -61,7 +61,7 @@ const commands = {
 	},
 	othermetashelp: [
 		`/om - Provides links to information on the Other Metagames.`,
-		`!om - Show everyone that information. Requires: + % @ * # & ~`,
+		`!om - Show everyone that information. Requires: + % @ # & ~`,
 	],
 
 	'!mixandmega': true,
