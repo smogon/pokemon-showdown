@@ -518,18 +518,27 @@ const commands = {
 					pokemon.evos.forEach(evoName => {
 						const evo = mod.getTemplate(evoName);
 						if (evo.gen <= mod.gen) {
+							let condition = evo.evoCondition ? ` ${evo.evoCondition}` : ``;
+							if (evo.evoCondition === '[Day]') condition = ' during the day';
+							if (evo.evoCondition === '[Night]') condition = ' at night';
 							switch (evo.evoType) {
 							case 'levelExtra':
-								evos.push(`${evo.name} (${evo.evoCondition})`);
+								evos.push(`${evo.name} (level-up${condition})`);
+								break;
+							case 'levelFriendship':
+								evos.push(`${evo.name} (level-up with high Friendship${condition})`);
+								break;
+							case 'levelHold':
+								evos.push(`${evo.name} (level-up holding ${evo.evoItem}${condition})`);
 								break;
 							case 'stone':
-								evos.push(`${evo.name} (${evo.evoStone} Stone)`);
+								evos.push(`${evo.name} (${evo.evoItem}${condition})`);
 								break;
 							case 'levelMove':
-								evos.push(`${evo.name} (${evo.evoMove})`);
+								evos.push(`${evo.name} (level-up with ${evo.evoMove}${condition})`);
 								break;
 							case 'trade':
-								evos.push(`${evo.name} (Trade)`);
+								evos.push(`${evo.name} (trade)`);
 								break;
 							default:
 								evos.push(`${evo.name} (${evo.evoLevel})`);
