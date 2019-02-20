@@ -493,9 +493,29 @@ class Validator {
 				if (eventProblems) problems.push(...eventProblems);
 			}
 		}
-		if (ruleTable.has('-illegal') && set.level < (template.evoLevel || 0)) {
-			// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
-			problems.push(`${name} must be at least level ${template.evoLevel} to be evolved.`);
+		// Minimum level validation
+		if (ruleTable.has('-illegal')) {
+			let minLevel = 0;
+			let allowHiddenAbility = true;
+			if (template.evoLevel) minLevel = template.evoLevel;
+			if (template.encounters) {
+				for (const encounter of template.encounters) {
+					if (encounter.level && encounter.level < minLevel) minLevel = encounter.level;
+					// Check if an encounter can be obtained with its hidden ability
+					if (encounter.isHidden === false) allowHiddenAbility = false;
+					if (!allowHiddenAbility && set.ability === template.abilities['H'] && !ruleTable.has('ignoreillegalabilities')) {
+						problems.push(`${name} cannot have ${set.ability} as its ability because it cannot be obtained with that ability at that level.`);
+					}
+				}
+			}
+			if (template.eventPokemon) {
+				for (const event of template.eventPokemon) {
+					if (event.level && event.level < minLevel) minLevel = event.level;
+				}
+			}
+			if (set.level < minLevel) {
+				problems.push(`${name} must be at least level ${minLevel}.`);
+			}
 		}
 		if (ruleTable.has('-illegal') && template.id === 'keldeo' && set.moves.includes('secretsword') && (format.requirePlus || format.requirePentagon)) {
 			problems.push(`${name} has Secret Sword, which is only compatible with Keldeo-Ordinary obtained from Gen 5.`);
