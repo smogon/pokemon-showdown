@@ -130,7 +130,7 @@ class ModdedDex {
 		this.abilityCache = new Map();
 		/** @type {Map<string, TypeInfo>} */
 		this.typeCache = new Map();
-		/** @type {Map<string, Effect>} */
+		/** @type {Map<string, Effect | Move>} */
 		this.effectCache = new Map();
 
 		if (!isOriginal) {
@@ -484,7 +484,6 @@ class ModdedDex {
 		}
 
 		if (name.startsWith('move:')) {
-			// @ts-ignore
 			effect = this.getMove(name.slice(5));
 		} else if (name.startsWith('item:')) {
 			effect = this.getItem(name.slice(5));
@@ -519,9 +518,7 @@ class ModdedDex {
 			effect = new Data.PureEffect({name, exists: false});
 		}
 
-		if (effect) {
-			this.effectCache.set(name, effect);
-		}
+		this.effectCache.set(name, effect);
 		// @ts-ignore
 		return effect;
 	}
