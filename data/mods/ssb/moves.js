@@ -1291,12 +1291,12 @@ let BattleMovedex = {
 				break;
 			}
 		},
-		onHit(target, source) {
+		onAfterMoveSecondarySelf(pokemon) {
 			let stat = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy'][this.random(6)];
 			/** @type {{[stat: string]: number}} */
 			let boost = {};
 			boost[stat] = 1;
-			this.boost(boost, source);
+			this.boost(boost, pokemon);
 		},
 		secondary: null,
 		target: "normal",
@@ -3902,7 +3902,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fire",
 	},
-	// Xayahh
+	// Xayah
 	stunningdance: {
 		accuracy: 100,
 		basePower: 95,

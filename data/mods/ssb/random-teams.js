@@ -618,7 +618,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Cutie Escape',
 				evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
 			},
-			'Xayahh': {
+			'Xayah': {
 				species: 'Noivern', ability: 'Dancer', item: 'Flyinium Z', gender: 'F',
 				moves: ['Clanging Scales', 'Roost', 'Fiery Dance'],
 				signatureMove: 'Stunning Dance',
