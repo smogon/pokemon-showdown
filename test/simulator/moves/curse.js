@@ -138,7 +138,7 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 
 		// p1: Kecleon uses Curse last in the turn.
 		// p2: Electric attack on Kecleon, then Ghost.
-		battle.makeChoices('move curse, move lightscree, move harden', 'move aurasphere ' + (curseUser.position + 1) + ', move lick ' + (curseUser.position + 1) + ', move harden');
+		battle.makeChoices('move curse, move lightscreen, move harden', 'move aurasphere ' + (curseUser.position + 1) + ', move lick ' + (curseUser.position + 1) + ', move harden');
 
 		assert.ok(curseUser.hasType('Ghost')); // Curse user must be Ghost
 		assert.ok(curseUser.hp < curseUser.maxhp / 2); // Curse user cut its HP down
