@@ -378,12 +378,12 @@ class Battle extends Dex.ModdedDex {
 		if (source === 'debug') source = this.p1.active[0];
 		status = this.getEffect(status);
 
-		let pseudoWeather = this.pseudoWeather[status.id];
-		if (pseudoWeather) {
+		let effectData = this.pseudoWeather[status.id];
+		if (effectData) {
 			if (!status.onRestart) return false;
-			return this.singleEvent('Restart', status, pseudoWeather, this, source, sourceEffect);
+			return this.singleEvent('Restart', status, effectData, this, source, sourceEffect);
 		}
-		pseudoWeather = this.pseudoWeather[status.id] = {
+		effectData = this.pseudoWeather[status.id] = {
 			id: status.id,
 			source: source,
 			sourcePosition: source && source.position,
@@ -391,9 +391,9 @@ class Battle extends Dex.ModdedDex {
 		};
 		if (status.durationCallback) {
 			if (!source) throw new Error(`setting fieldcond without a source`);
-			pseudoWeather.duration = status.durationCallback.call(this, source, source, sourceEffect);
+			effectData.duration = status.durationCallback.call(this, source, source, sourceEffect);
 		}
-		if (!this.singleEvent('Start', status, pseudoWeather, this, source, sourceEffect)) {
+		if (!this.singleEvent('Start', status, effectData, this, source, sourceEffect)) {
 			delete this.pseudoWeather[status.id];
 			return false;
 		}
@@ -414,9 +414,9 @@ class Battle extends Dex.ModdedDex {
 	 */
 	removePseudoWeather(status) {
 		status = this.getEffect(status);
-		let pseudoWeather = this.pseudoWeather[status.id];
-		if (!pseudoWeather) return false;
-		this.singleEvent('End', status, pseudoWeather, this);
+		let effectData = this.pseudoWeather[status.id];
+		if (!effectData) return false;
+		this.singleEvent('End', status, effectData, this);
 		delete this.pseudoWeather[status.id];
 		return true;
 	}
@@ -648,9 +648,8 @@ class Battle extends Dex.ModdedDex {
 
 		// @ts-ignore
 		let callback = effect['on' + eventid];
-		let typeofCallback = typeof callback;
 
-		if (typeofCallback === 'undefined') return relayVar;
+		if (callback === undefined) return relayVar;
 		let parentEffect = this.effect;
 		let parentEffectData = this.effectData;
 		let parentEvent = this.event;
