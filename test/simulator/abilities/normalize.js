@@ -30,7 +30,7 @@ describe('Normalize', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Delcatty", ability: 'normalize', item: 'dousedrive', moves: ['technoblast']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Latias", ability: 'colorchange', moves: ['endure']}]);
-		battle.makeChoices('move technoblash', 'move endure');
+		battle.makeChoices('move technoblast', 'move endure');
 		assert.ok(battle.p2.active[0].hasType('Water'));
 	});
 
