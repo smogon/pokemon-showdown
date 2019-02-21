@@ -377,11 +377,13 @@ class Battle extends Dex.ModdedDex {
 		if (!source && this.event && this.event.target) source = this.event.target;
 		if (source === 'debug') source = this.p1.active[0];
 		status = this.getEffect(status);
-		if (this.pseudoWeather[status.id]) {
+
+		let effectData = this.pseudoWeather[status.id];
+		if (effectData) {
 			if (!status.onRestart) return false;
-			return this.singleEvent('Restart', status, this.pseudoWeather[status.id], this, source, sourceEffect);
+			return this.singleEvent('Restart', status, effectData, this, source, sourceEffect);
 		}
-		this.pseudoWeather[status.id] = {
+		effectData = this.pseudoWeather[status.id] = {
 			id: status.id,
 			source: source,
 			sourcePosition: source && source.position,
@@ -389,9 +391,9 @@ class Battle extends Dex.ModdedDex {
 		};
 		if (status.durationCallback) {
 			if (!source) throw new Error(`setting fieldcond without a source`);
-			this.pseudoWeather[status.id].duration = status.durationCallback.call(this, source, source, sourceEffect);
+			effectData.duration = status.durationCallback.call(this, source, source, sourceEffect);
 		}
-		if (!this.singleEvent('Start', status, this.pseudoWeather[status.id], this, source, sourceEffect)) {
+		if (!this.singleEvent('Start', status, effectData, this, source, sourceEffect)) {
 			delete this.pseudoWeather[status.id];
 			return false;
 		}
@@ -412,8 +414,9 @@ class Battle extends Dex.ModdedDex {
 	 */
 	removePseudoWeather(status) {
 		status = this.getEffect(status);
-		if (!this.pseudoWeather[status.id]) return false;
-		this.singleEvent('End', status, this.pseudoWeather[status.id], this);
+		let effectData = this.pseudoWeather[status.id];
+		if (!effectData) return false;
+		this.singleEvent('End', status, effectData, this);
 		delete this.pseudoWeather[status.id];
 		return true;
 	}
@@ -571,7 +574,7 @@ class Battle extends Dex.ModdedDex {
 	 */
 	residualEvent(eventid, relayVar) {
 		let callbackName = `on${eventid}`;
-		let handlers = this.findBattleEventHandlers(this, callbackName, 'duration');
+		let handlers = this.findBattleEventHandlers(callbackName, 'duration');
 		for (const side of this.sides) {
 			handlers = handlers.concat(this.findSideEventHandlers(side, callbackName, 'duration'));
 			for (const active of side.active) {
@@ -644,7 +647,9 @@ class Battle extends Dex.ModdedDex {
 		}
 
 		// @ts-ignore
-		if (effect['on' + eventid] === undefined) return relayVar;
+		let callback = effect['on' + eventid];
+
+		if (callback === undefined) return relayVar;
 		let parentEffect = this.effect;
 		let parentEffectData = this.effectData;
 		let parentEvent = this.event;
@@ -655,13 +660,10 @@ class Battle extends Dex.ModdedDex {
 		let args = [target, source, sourceEffect];
 		if (hasRelayVar) args.unshift(relayVar);
 		let returnVal;
-		// @ts-ignore
-		if (typeof effect['on' + eventid] === 'function') {
-			// @ts-ignore
-			returnVal = effect['on' + eventid].apply(this, args);
+		if (typeof callback === 'function') {
+			returnVal = callback.apply(this, args);
 		} else {
-			// @ts-ignore
-			returnVal = effect['on' + eventid];
+			returnVal = callback;
 		}
 		this.eventDepth--;
 		this.effect = parentEffect;
@@ -821,9 +823,10 @@ class Battle extends Dex.ModdedDex {
 
 		if (onEffect) {
 			if (!effect) throw new Error("onEffect passed without an effect");
-			if ('on' + eventid in effect) {
-				// @ts-ignore
-				handlers.unshift({status: effect, callback: effect['on' + eventid], statusData: {}, end: null, thing: target});
+			// @ts-ignore
+			let callback = effect[`on${eventid}`];
+			if (callback !== undefined) {
+				handlers.unshift({status: effect, callback: callback, statusData: {}, end: null, thing: target});
 			}
 		}
 		for (const handler of handlers) {
@@ -935,22 +938,10 @@ class Battle extends Dex.ModdedDex {
 	 * @param {string} callbackName
 	 */
 	resolveLastPriority(handlers, callbackName) {
-		let order = false;
-		let priority = 0;
-		let subOrder = 0;
 		let handler = handlers[handlers.length - 1];
-		if (handler.status[callbackName + 'Order']) {
-			order = handler.status[callbackName + 'Order'];
-		}
-		if (handler.status[callbackName + 'Priority']) {
-			priority = handler.status[callbackName + 'Priority'];
-		} else if (handler.status[callbackName + 'SubOrder']) {
-			subOrder = handler.status[callbackName + 'SubOrder'];
-		}
-
-		handler.order = order;
-		handler.priority = priority;
-		handler.subOrder = subOrder;
+		handler.order = handler.status[`${callbackName}Order`] || false;
+		handler.priority = handler.status[`${callbackName}Priority`] || 0;
+		handler.subOrder = handler.status[`${callbackName}SubOrder`] || 0;
 		if (handler.thing && handler.thing.getStat) handler.speed = handler.thing.speed;
 	}
 
@@ -985,54 +976,55 @@ class Battle extends Dex.ModdedDex {
 			handlers.push(...this.findSideEventHandlers(thing.foe, `onFoe${eventName}`));
 			handlers.push(...this.findSideEventHandlers(thing.foe, `onAny${eventName}`));
 		}
-		handlers.push(...this.findBattleEventHandlers(this, `on${eventName}`));
+		handlers.push(...this.findBattleEventHandlers(`on${eventName}`));
 		return handlers;
 	}
 
 	/**
-	 * @param {Pokemon} thing
+	 * @param {Pokemon} pokemon
 	 * @param {string} callbackName
 	 * @param {'duration'} [getKey]
 	 */
-	findPokemonEventHandlers(thing, callbackName, getKey) {
+	findPokemonEventHandlers(pokemon, callbackName, getKey) {
 		/**@type {AnyObject[]} */
 		let handlers = [];
 
-		let status = thing.getStatus();
+		let status = pokemon.getStatus();
 		// @ts-ignore
-		if (status[callbackName] !== undefined || (getKey && thing.statusData[getKey])) {
-			// @ts-ignore
-			handlers.push({status: status, callback: status[callbackName], statusData: thing.statusData, end: thing.clearStatus, thing: thing});
+		let callback = status[callbackName];
+		if (callback !== undefined || (getKey && pokemon.statusData[getKey])) {
+			handlers.push({status: status, callback: callback, statusData: pokemon.statusData, end: pokemon.clearStatus, thing: pokemon});
 			this.resolveLastPriority(handlers, callbackName);
 		}
-		for (let i in thing.volatiles) {
-			let volatile = thing.getVolatile(i);
+		for (let i in pokemon.volatiles) {
+			let volatileData = pokemon.volatiles[i];
+			let volatile = pokemon.getVolatile(i);
 			// @ts-ignore
-			if (volatile[callbackName] !== undefined || (getKey && thing.volatiles[i][getKey])) {
-				// @ts-ignore
-				handlers.push({status: volatile, callback: volatile[callbackName], statusData: thing.volatiles[i], end: thing.removeVolatile, thing: thing});
+			callback = volatile[callbackName];
+			if (callback !== undefined || (getKey && volatileData[getKey])) {
+				handlers.push({status: volatile, callback: callback, statusData: volatileData, end: pokemon.removeVolatile, thing: pokemon});
 				this.resolveLastPriority(handlers, callbackName);
 			}
 		}
-		let ability = thing.getAbility();
+		let ability = pokemon.getAbility();
 		// @ts-ignore
-		if (ability[callbackName] !== undefined || (getKey && thing.abilityData[getKey])) {
-			// @ts-ignore
-			handlers.push({status: ability, callback: ability[callbackName], statusData: thing.abilityData, end: thing.clearAbility, thing: thing});
+		callback = ability[callbackName];
+		if (callback !== undefined || (getKey && pokemon.abilityData[getKey])) {
+			handlers.push({status: ability, callback: callback, statusData: pokemon.abilityData, end: pokemon.clearAbility, thing: pokemon});
 			this.resolveLastPriority(handlers, callbackName);
 		}
-		let item = thing.getItem();
+		let item = pokemon.getItem();
 		// @ts-ignore
-		if (item[callbackName] !== undefined || (getKey && thing.itemData[getKey])) {
-			// @ts-ignore
-			handlers.push({status: item, callback: item[callbackName], statusData: thing.itemData, end: thing.clearItem, thing: thing});
+		callback = item[callbackName];
+		if (callback !== undefined || (getKey && pokemon.itemData[getKey])) {
+			handlers.push({status: item, callback: callback, statusData: pokemon.itemData, end: pokemon.clearItem, thing: pokemon});
 			this.resolveLastPriority(handlers, callbackName);
 		}
-		let species = thing.baseTemplate;
+		let species = pokemon.baseTemplate;
 		// @ts-ignore
-		if (species[callbackName] !== undefined) {
-			// @ts-ignore
-			handlers.push({status: species, callback: species[callbackName], statusData: thing.speciesData, end() {}, thing: thing});
+		callback = species[callbackName];
+		if (callback !== undefined) {
+			handlers.push({status: species, callback: callback, statusData: pokemon.speciesData, end() {}, thing: pokemon});
 			this.resolveLastPriority(handlers, callbackName);
 		}
 
@@ -1040,72 +1032,75 @@ class Battle extends Dex.ModdedDex {
 	}
 
 	/**
-	 * @param {Battle} thing
 	 * @param {string} callbackName
 	 * @param {'duration'} [getKey]
 	 */
-	findBattleEventHandlers(thing, callbackName, getKey) {
+	findBattleEventHandlers(callbackName, getKey) {
+		let callbackNamePriority = `${callbackName}Priority`;
 		/**@type {AnyObject[]} */
 		let handlers = [];
 
+		let callback;
 		for (let i in this.pseudoWeather) {
+			let pseudoWeatherData = this.pseudoWeather[i];
 			let pseudoWeather = this.getPseudoWeather(i);
 			// @ts-ignore
-			if (pseudoWeather[callbackName] !== undefined || (getKey && thing.pseudoWeather[i][getKey])) {
-				// @ts-ignore
-				handlers.push({status: pseudoWeather, callback: pseudoWeather[callbackName], statusData: this.pseudoWeather[i], end: this.removePseudoWeather, thing: thing});
+			callback = pseudoWeather[callbackName];
+			if (callback !== undefined || (getKey && pseudoWeatherData[getKey])) {
+				handlers.push({status: pseudoWeather, callback: callback, statusData: pseudoWeatherData, end: this.removePseudoWeather, thing: this});
 				this.resolveLastPriority(handlers, callbackName);
 			}
 		}
 		let weather = this.getWeather();
 		// @ts-ignore
-		if (weather[callbackName] !== undefined || (getKey && thing.weatherData[getKey])) {
+		callback = weather[callbackName];
+		if (callback !== undefined || (getKey && this.weatherData[getKey])) {
 			// @ts-ignore
-			handlers.push({status: weather, callback: weather[callbackName], statusData: this.weatherData, end: this.clearWeather, thing: thing, priority: weather[callbackName + 'Priority'] || 0});
+			handlers.push({status: weather, callback: callback, statusData: this.weatherData, end: this.clearWeather, thing: this, priority: weather[callbackNamePriority] || 0});
 			this.resolveLastPriority(handlers, callbackName);
 		}
 		let terrain = this.getTerrain();
 		// @ts-ignore
-		if (terrain[callbackName] !== undefined || (getKey && thing.terrainData[getKey])) {
+		callback = terrain[callbackName];
+		if (callback !== undefined || (getKey && this.terrainData[getKey])) {
 			// @ts-ignore
-			handlers.push({status: terrain, callback: terrain[callbackName], statusData: this.terrainData, end: this.clearTerrain, thing: thing, priority: terrain[callbackName + 'Priority'] || 0});
+			handlers.push({status: terrain, callback: callback, statusData: this.terrainData, end: this.clearTerrain, thing: this, priority: terrain[callbackNamePriority] || 0});
 			this.resolveLastPriority(handlers, callbackName);
 		}
 		let format = this.getFormat();
 		// @ts-ignore
-		if (format[callbackName] !== undefined || (getKey && thing.formatData[getKey])) {
+		callback = format[callbackName];
+		// @ts-ignore
+		if (callback !== undefined || (getKey && this.formatData[getKey])) {
 			// @ts-ignore
-			handlers.push({status: format, callback: format[callbackName], statusData: this.formatData, end() {}, thing: thing, priority: format[callbackName + 'Priority'] || 0});
+			handlers.push({status: format, callback: callback, statusData: this.formatData, end() {}, thing: this, priority: format[callbackNamePriority] || 0});
 			this.resolveLastPriority(handlers, callbackName);
 		}
-		if (this.events && this.events[callbackName] !== undefined) {
-			for (const handler of this.events[callbackName]) {
-				let statusData;
-				switch (handler.target.effectType) {
-				case 'Format':
-					statusData = this.formatData;
-				}
-				handlers.push({status: handler.target, callback: handler.callback, statusData: statusData, end() {}, thing: thing, priority: handler.priority, order: handler.order, subOrder: handler.subOrder});
+		if (this.events && (callback = this.events[callbackName]) !== undefined) {
+			for (const handler of callback) {
+				let statusData = (handler.target.effectType === 'Format') ? this.formatData : undefined;
+				handlers.push({status: handler.target, callback: handler.callback, statusData: statusData, end() {}, thing: this, priority: handler.priority, order: handler.order, subOrder: handler.subOrder});
 			}
 		}
 		return handlers;
 	}
 
 	/**
-	 * @param {Side} thing
+	 * @param {Side} side
 	 * @param {string} callbackName
 	 * @param {'duration'} [getKey]
 	 */
-	findSideEventHandlers(thing, callbackName, getKey) {
+	findSideEventHandlers(side, callbackName, getKey) {
 		/**@type {AnyObject[]} */
 		let handlers = [];
 
-		for (let i in thing.sideConditions) {
-			let sideCondition = thing.getSideCondition(i);
+		for (let i in side.sideConditions) {
+			let sideConditionData = side.sideConditions[i];
+			let sideCondition = side.getSideCondition(i);
 			// @ts-ignore
-			if (sideCondition[callbackName] !== undefined || (getKey && thing.sideConditions[i][getKey])) {
-				// @ts-ignore
-				handlers.push({status: sideCondition, callback: sideCondition[callbackName], statusData: thing.sideConditions[i], end: thing.removeSideCondition, thing: thing});
+			let callback = sideCondition[callbackName];
+			if (callback !== undefined || (getKey && sideConditionData[getKey])) {
+				handlers.push({status: sideCondition, callback: callback, statusData: sideConditionData, end: side.removeSideCondition, thing: side});
 				this.resolveLastPriority(handlers, callbackName);
 			}
 		}
@@ -1162,12 +1157,13 @@ class Battle extends Dex.ModdedDex {
 
 		let eventHandler = {callback, target, priority, order, subOrder};
 
-		let callbackName = `on${eventid}`;
 		if (!this.events) this.events = {};
-		if (this.events[callbackName] === undefined) {
+		let callbackName = `on${eventid}`;
+		let eventHandlers = this.events[callbackName];
+		if (eventHandlers === undefined) {
 			this.events[callbackName] = [eventHandler];
 		} else {
-			this.events[callbackName].push(eventHandler);
+			eventHandlers.push(eventHandler);
 		}
 	}
 
