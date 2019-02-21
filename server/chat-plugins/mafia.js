@@ -176,9 +176,9 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 		const user = Users(this.userid);
 		if (!user || !user.connected) return;
 		if (this.game.ended) return user.send(`>view-mafia-${this.game.room.id}\n|deinit`);
-		// @ts-ignore
-		const buf = Chat.pages.mafia([this.game.room.id], user);
-		this.send(`>view-mafia-${this.game.room.id}\n|init|html\n|title|Mafia\n|pagehtml|${buf}`);
+		for (const conn of user.connections) {
+			Chat.resolvePage(`view-mafia-${this.game.room.id}`, user, conn);
+		}
 	}
 }
 
@@ -290,8 +290,9 @@ class MafiaTracker extends Rooms.RoomGame {
 		subIndex = this.hostRequestedSub.indexOf(user.userid);
 		if (subIndex !== -1) this.hostRequestedSub.splice(subIndex, 1);
 		this.sendRoom(`${user.name} has left the game.`);
-		// @ts-ignore
-		user.send(`>view-mafia-${this.room.id}\n|init|html\n${Chat.pages.mafia([this.room.id], user)}`);
+		for (const conn of user.connections) {
+			Chat.resolvePage(`view-mafia-${this.room.id}`, user, conn);
+		}
 	}
 
 	/**
@@ -1079,8 +1080,9 @@ class MafiaTracker extends Rooms.RoomGame {
 			}
 		}
 		if (newUser && newUser.connected) {
-			// @ts-ignore
-			newUser.send(`>view-mafia-${this.room.id}\n|init|html\n${Chat.pages.mafia([this.room.id], newUser)}`);
+			for (const conn of newUser.connections) {
+				Chat.resolvePage(`view-mafia-${this.room.id}`, newUser, conn);
+			}
 			newUser.send(`>${this.room.id}\n|notify|You have been substituted in the mafia game for ${oldPlayer.safeName}.`);
 		}
 		if (this.started) this.played.push(newPlayer.userid);
@@ -1348,10 +1350,9 @@ class MafiaTracker extends Rooms.RoomGame {
 		for (const hostid of [...this.cohosts, this.hostid]) {
 			const host = Users(hostid);
 			if (!host || !host.connected) return;
-			if (this.ended) return host.send(`>view-mafia-${this.room.id}\n|deinit`);
-			// @ts-ignore
-			const buf = Chat.pages.mafia([this.room.id], host);
-			host.send(`>view-mafia-${this.room.id}\n|init|html\n|title|Mafia\n|pagehtml|${buf}`);
+			for (const conn of host.connections) {
+				Chat.resolvePage(`view-mafia-${this.room.id}`, host, conn);
+			}
 		}
 	}
 
@@ -1855,8 +1856,9 @@ const commands = {
 
 			room.game = new MafiaTracker(room, targetUser);
 
-			// @ts-ignore
-			targetUser.send(`>view-mafia-${room.id}\n|init|html\n|title|Mafia\n|pagehtml|${Chat.pages.mafia([room.id], targetUser)}`);
+			for (const conn of targetUser.connections) {
+				Chat.resolvePage(`view-mafia-${room.id}`, targetUser, conn);
+			}
 			room.addByUser(user, `${targetUser.name} was appointed the mafia host by ${user.name}.`);
 			if (room.id === 'mafia') {
 				const queueIndex = hostQueue.indexOf(targetUser.userid);
@@ -2726,8 +2728,9 @@ const commands = {
 			if (cmd.includes('cohost')) {
 				game.cohosts.push(targetUser.userid);
 				game.sendRoom(`${Chat.escapeHTML(targetUser.name)} has been added as a cohost by ${Chat.escapeHTML(user.name)}`, {declare: true});
-				// @ts-ignore
-				targetUser.send(`>view-mafia-${room.id}\n|init|html\n|${Chat.pages.mafia([room.id], targetUser)}`);
+				for (const conn of targetUser.connections) {
+					Chat.resolvePage(`view-mafia-${room.id}`, targetUser, conn);
+				}
 				this.modlog('MAFIACOHOST', targetUser, null, {noalts: true, noip: true});
 			} else {
 				const oldHostid = game.hostid;
@@ -2739,8 +2742,9 @@ const commands = {
 				game.host = Chat.escapeHTML(targetUser.name);
 				game.hostid = targetUser.userid;
 				game.played.push(targetUser.userid);
-				// @ts-ignore
-				targetUser.send(`>view-mafia-${room.id}\n|init|html\n${Chat.pages.mafia([room.id], targetUser)}`);
+				for (const conn of targetUser.connections) {
+					Chat.resolvePage(`view-mafia-${room.id}`, targetUser, conn);
+				}
 				game.sendRoom(`${Chat.escapeHTML(targetUser.name)} has been substituted as the new host, replacing ${oldHostid}.`, {declare: true});
 				this.modlog('MAFIASUBHOST', targetUser, `replacing ${oldHostid}`, {noalts: true, noip: true});
 			}
