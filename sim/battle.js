@@ -13,6 +13,9 @@ const PRNG = require('./prng');
 const Side = require('./side');
 const Pokemon = require('./pokemon');
 
+// TODO: build this set when loading data into Dex instead of hardcoding.
+const CALLBACK_TYPES = new Set(['onAccuracy', 'onAfterBoost', 'onAfterDamage', 'onAfterEachBoost', 'onAfterHit', 'onAfterMega', 'onAfterMove', 'onAfterMoveSecondary', 'onAfterMoveSecondarySelf', 'onAfterMoveSelf', 'onAfterSetStatus', 'onAfterSubDamage', 'onAfterSwitchInSelf', 'onAfterUseItem', 'onAllyAfterUseItem', 'onAllyBasePower', 'onAllyBoost', 'onAllyFaint', 'onAllyModifyAtk', 'onAllyModifyMove', 'onAllyModifySpD', 'onAllySetStatus', 'onAllyTryAddVolatile', 'onAllyTryHitSide', 'onAnyAccuracy', 'onAnyBasePower', 'onAnyDamage', 'onAnyDragOut', 'onAnyFaint', 'onAnyModifyBoost', 'onAnyModifyDamage', 'onAnyModifyDamagePhase1', 'onAnyModifyDamagePhase2', 'onAnyRedirectTarget', 'onAnySetStatus', 'onAnySetWeather', 'onAnyTerrainStart', 'onAnyTryImmunity', 'onAnyTryMove', 'onAnyTryPrimaryHit', 'onAttract', 'onBasePower', 'onBeforeFaint', 'onBeforeMove', 'onBeforeSwitchIn', 'onBeforeSwitchOut', 'onBeforeTurn', 'onBegin', 'onBoost', 'onChangeSet', 'onChargeMove', 'onCheckShow', 'onCopy', 'onCustap', 'onDamage', 'onDeductPP', 'onDisableMove', 'onDragOut', 'onEat', 'onEatItem', 'onEffectiveness', 'onEnd', 'onFaint', 'onFlinch', 'onFoeAfterDamage', 'onFoeBasePower', 'onFoeBeforeMove', 'onFoeDisableMove', 'onFoeMaybeTrapPokemon', 'onFoeModifyDef', 'onFoeRedirectTarget', 'onFoeSwitchOut', 'onFoeTrapPokemon', 'onFoeTryMove', 'onHit', 'onHitField', 'onHitSide', 'onImmunity', 'onLockMove', 'onLockMoveTarget', 'onModifyAccuracy', 'onModifyAtk', 'onModifyBoost', 'onModifyCritRatio', 'onModifyDamage', 'onModifyDamagePhase1', 'onModifyDamagePhase2', 'onModifyDef', 'onModifyMove', 'onModifyPriority', 'onModifySecondaries', 'onModifySpA', 'onModifySpD', 'onModifySpe', 'onModifyTemplate', 'onModifyWeight', 'onMoveAborted', 'onMoveFail', 'onNegateImmunity', 'onOverrideAction', 'onPreStart', 'onPrepareHit', 'onPrimal', 'onRedirectTarget', 'onResidual', 'onRestart', 'onSetAbility', 'onSetStatus', 'onSourceAccuracy', 'onSourceBasePower', 'onSourceFaint', 'onSourceHit', 'onSourceModifyAccuracy', 'onSourceModifyAtk', 'onSourceModifyDamage', 'onSourceModifySecondaries', 'onSourceModifySpA', 'onSourceTryHeal', 'onSourceTryPrimaryHit', 'onStallMove', 'onStart', 'onSwitchIn', 'onSwitchOut', 'onTakeItem', 'onTeamPreview', 'onTerrain', 'onTrapPokemon', 'onTry', 'onTryAddVolatile', 'onTryEatItem', 'onTryHeal', 'onTryHit', 'onTryHitField', 'onTryHitSide', 'onTryImmunity', 'onTryMove', 'onTryPrimaryHit', 'onType', 'onUpdate', 'onUseMoveMessage', 'onValidateSet', 'onValidateTeam', 'onWeather', 'onWeatherModifyDamage', 'onDrive', 'onMemory', 'onPlate', 'onCriticalHit']);
+
 /**
  * An object representing a Pokemon that has fainted
  *
@@ -968,10 +971,13 @@ class Battle extends Dex.ModdedDex {
 	 */
 	getRelevantEffectsInner(thing, callbackType, foeCallbackType, foeThing, bubbleUp, bubbleDown, getAll) {
 		if (!callbackType || !thing) return [];
+
+		let validCallbackType = !!getAll || CALLBACK_TYPES.has(callbackType);
 		/**@type {AnyObject[]} */
 		let statuses = [];
 
 		if (thing instanceof Battle) {
+			if (!validCallbackType) return statuses;
 			for (let i in this.pseudoWeather) {
 				let pseudoWeather = this.getPseudoWeather(i);
 				// @ts-ignore
@@ -1020,29 +1026,37 @@ class Battle extends Dex.ModdedDex {
 		}
 
 		if (thing instanceof Side) {
-			for (let i in thing.sideConditions) {
-				let sideCondition = thing.getSideCondition(i);
-				// @ts-ignore
-				if (sideCondition[callbackType] !== undefined || (getAll && thing.sideConditions[i][getAll])) {
+			if (validCallbackType) {
+				for (let i in thing.sideConditions) {
+					let sideCondition = thing.getSideCondition(i);
 					// @ts-ignore
-					statuses.push({status: sideCondition, callback: sideCondition[callbackType], statusData: thing.sideConditions[i], end: thing.removeSideCondition, thing: thing});
-					this.resolveLastPriority(statuses, callbackType);
+					if (sideCondition[callbackType] !== undefined || (getAll && thing.sideConditions[i][getAll])) {
+						// @ts-ignore
+						statuses.push({status: sideCondition, callback: sideCondition[callbackType], statusData: thing.sideConditions[i], end: thing.removeSideCondition, thing: thing});
+						this.resolveLastPriority(statuses, callbackType);
+					}
 				}
 			}
 			if (foeCallbackType) {
-				statuses = statuses.concat(this.getRelevantEffectsInner(thing.foe, foeCallbackType, null, null, false, false, getAll));
+				if (!!getAll || CALLBACK_TYPES.has(foeCallbackType)) {
+					statuses = statuses.concat(this.getRelevantEffectsInner(thing.foe, foeCallbackType, null, null, false, false, getAll));
+				}
 				if (foeCallbackType.substr(0, 5) === 'onFoe') {
-					let eventName = foeCallbackType.substr(5);
-					statuses = statuses.concat(this.getRelevantEffectsInner(thing.foe, 'onAny' + eventName, null, null, false, false, getAll));
-					statuses = statuses.concat(this.getRelevantEffectsInner(thing, 'onAny' + eventName, null, null, false, false, getAll));
+					let onAnyCallbackType = `onAny${foeCallbackType.substr(5)}`;
+					if (!!getAll || CALLBACK_TYPES.has(onAnyCallbackType)) {
+						statuses = statuses.concat(this.getRelevantEffectsInner(thing.foe, onAnyCallbackType, null, null, false, false, getAll));
+						statuses = statuses.concat(this.getRelevantEffectsInner(thing, onAnyCallbackType, null, null, false, false, getAll));
+					}
 				}
 			}
-			if (bubbleUp) {
-				statuses = statuses.concat(this.getRelevantEffectsInner(this, callbackType, null, null, true, false, getAll));
-			}
-			if (bubbleDown) {
-				for (const active of thing.active) {
-					statuses = statuses.concat(this.getRelevantEffectsInner(active, callbackType, null, null, false, true, getAll));
+			if (validCallbackType) {
+				if (bubbleUp) {
+					statuses = statuses.concat(this.getRelevantEffectsInner(this, callbackType, null, null, true, false, getAll));
+				}
+				if (bubbleDown) {
+					for (const active of thing.active) {
+						statuses = statuses.concat(this.getRelevantEffectsInner(active, callbackType, null, null, false, true, getAll));
+					}
 				}
 			}
 			return statuses;
@@ -1052,74 +1066,87 @@ class Battle extends Dex.ModdedDex {
 			//this.debug(JSON.stringify(thing));
 			return statuses;
 		}
-		let status = thing.getStatus();
-		// @ts-ignore
-		if (status[callbackType] !== undefined || (getAll && thing.statusData[getAll])) {
+		if (validCallbackType) {
+			let status = thing.getStatus();
 			// @ts-ignore
-			statuses.push({status: status, callback: status[callbackType], statusData: thing.statusData, end: thing.clearStatus, thing: thing});
-			this.resolveLastPriority(statuses, callbackType);
-		}
-		for (let i in thing.volatiles) {
-			let volatile = thing.getVolatile(i);
-			// @ts-ignore
-			if (volatile[callbackType] !== undefined || (getAll && thing.volatiles[i][getAll])) {
+			if (status[callbackType] !== undefined || (getAll && thing.statusData[getAll])) {
 				// @ts-ignore
-				statuses.push({status: volatile, callback: volatile[callbackType], statusData: thing.volatiles[i], end: thing.removeVolatile, thing: thing});
+				statuses.push({status: status, callback: status[callbackType], statusData: thing.statusData, end: thing.clearStatus, thing: thing});
+				this.resolveLastPriority(statuses, callbackType);
+			}
+			for (let i in thing.volatiles) {
+				let volatile = thing.getVolatile(i);
+				// @ts-ignore
+				if (volatile[callbackType] !== undefined || (getAll && thing.volatiles[i][getAll])) {
+					// @ts-ignore
+					statuses.push({status: volatile, callback: volatile[callbackType], statusData: thing.volatiles[i], end: thing.removeVolatile, thing: thing});
+					this.resolveLastPriority(statuses, callbackType);
+				}
+			}
+			let ability = thing.getAbility();
+			// @ts-ignore
+			if (ability[callbackType] !== undefined || (getAll && thing.abilityData[getAll])) {
+				// @ts-ignore
+				statuses.push({status: ability, callback: ability[callbackType], statusData: thing.abilityData, end: thing.clearAbility, thing: thing});
+				this.resolveLastPriority(statuses, callbackType);
+			}
+			let item = thing.getItem();
+			// @ts-ignore
+			if (item[callbackType] !== undefined || (getAll && thing.itemData[getAll])) {
+				// @ts-ignore
+				statuses.push({status: item, callback: item[callbackType], statusData: thing.itemData, end: thing.clearItem, thing: thing});
+				this.resolveLastPriority(statuses, callbackType);
+			}
+			let species = thing.baseTemplate;
+			// @ts-ignore
+			if (species[callbackType] !== undefined) {
+				// @ts-ignore
+				statuses.push({status: species, callback: species[callbackType], statusData: thing.speciesData, end() {}, thing: thing});
 				this.resolveLastPriority(statuses, callbackType);
 			}
 		}
-		let ability = thing.getAbility();
-		// @ts-ignore
-		if (ability[callbackType] !== undefined || (getAll && thing.abilityData[getAll])) {
-			// @ts-ignore
-			statuses.push({status: ability, callback: ability[callbackType], statusData: thing.abilityData, end: thing.clearAbility, thing: thing});
-			this.resolveLastPriority(statuses, callbackType);
-		}
-		let item = thing.getItem();
-		// @ts-ignore
-		if (item[callbackType] !== undefined || (getAll && thing.itemData[getAll])) {
-			// @ts-ignore
-			statuses.push({status: item, callback: item[callbackType], statusData: thing.itemData, end: thing.clearItem, thing: thing});
-			this.resolveLastPriority(statuses, callbackType);
-		}
-		let species = thing.baseTemplate;
-		// @ts-ignore
-		if (species[callbackType] !== undefined) {
-			// @ts-ignore
-			statuses.push({status: species, callback: species[callbackType], statusData: thing.speciesData, end() {}, thing: thing});
-			this.resolveLastPriority(statuses, callbackType);
-		}
 
-		if (foeThing && foeCallbackType && foeCallbackType.substr(0, 8) !== 'onSource') {
+		let validFoeCallbackType = !!getAll || (!foeCallbackType ? false : CALLBACK_TYPES.has(foeCallbackType));
+		if (foeThing && foeCallbackType && foeCallbackType.substr(0, 8) !== 'onSource' && validFoeCallbackType) {
 			statuses = statuses.concat(this.getRelevantEffectsInner(foeThing, foeCallbackType, null, null, false, false, getAll));
 		} else if (foeCallbackType) {
-			let eventName = '';
 			if (foeCallbackType.substr(0, 8) === 'onSource') {
-				eventName = foeCallbackType.substr(8);
-				if (foeThing) {
+				if (foeThing && validFoeCallbackType) {
 					statuses = statuses.concat(this.getRelevantEffectsInner(foeThing, foeCallbackType, null, null, false, false, getAll));
 				}
-				foeCallbackType = 'onFoe' + eventName;
+				foeCallbackType = `onFoe${foeCallbackType.substr(8)}`;
+				validFoeCallbackType = !!getAll || CALLBACK_TYPES.has(foeCallbackType);
 				foeThing = null;
 			}
 			if (foeCallbackType.substr(0, 5) === 'onFoe') {
-				eventName = foeCallbackType.substr(5);
-				for (const allyActive of thing.side.active) {
-					if (!allyActive || allyActive.fainted) continue;
-					statuses = statuses.concat(this.getRelevantEffectsInner(allyActive, 'onAlly' + eventName, null, null, false, false, getAll));
-					statuses = statuses.concat(this.getRelevantEffectsInner(allyActive, 'onAny' + eventName, null, null, false, false, getAll));
+				let eventName = foeCallbackType.substr(5);
+				let onAllyCallbackType = `onAlly${eventName}`;
+				let onAnyCallbackType = `onAny${eventName}`;
+				let validOnAllyCallbackType = !!getAll || CALLBACK_TYPES.has(onAllyCallbackType);
+				let validOnAnyCallbackType = !!getAll || CALLBACK_TYPES.has(onAnyCallbackType);
+
+				if (validOnAllyCallbackType || validOnAnyCallbackType) {
+					for (const allyActive of thing.side.active) {
+						if (!allyActive || allyActive.fainted) continue;
+						if (validOnAllyCallbackType) statuses = statuses.concat(this.getRelevantEffectsInner(allyActive, onAllyCallbackType, null, null, false, false, getAll));
+						if (validOnAnyCallbackType) statuses = statuses.concat(this.getRelevantEffectsInner(allyActive, onAnyCallbackType, null, null, false, false, getAll));
+					}
 				}
+				if (validOnAnyCallbackType) {
+					for (const foeActive of thing.side.foe.active) {
+						if (!foeActive || foeActive.fainted) continue;
+						statuses = statuses.concat(this.getRelevantEffectsInner(foeActive, onAnyCallbackType, null, null, false, false, getAll));
+					}
+				}
+			}
+			if (validFoeCallbackType) {
 				for (const foeActive of thing.side.foe.active) {
 					if (!foeActive || foeActive.fainted) continue;
-					statuses = statuses.concat(this.getRelevantEffectsInner(foeActive, 'onAny' + eventName, null, null, false, false, getAll));
+					statuses = statuses.concat(this.getRelevantEffectsInner(foeActive, foeCallbackType, null, null, false, false, getAll));
 				}
 			}
-			for (const foeActive of thing.side.foe.active) {
-				if (!foeActive || foeActive.fainted) continue;
-				statuses = statuses.concat(this.getRelevantEffectsInner(foeActive, foeCallbackType, null, null, false, false, getAll));
-			}
 		}
-		if (bubbleUp) {
+		if (bubbleUp && (validCallbackType || validFoeCallbackType)) {
 			statuses = statuses.concat(this.getRelevantEffectsInner(thing.side, callbackType, foeCallbackType, null, true, false, getAll));
 		}
 		return statuses;
