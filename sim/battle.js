@@ -570,21 +570,29 @@ class Battle extends Dex.ModdedDex {
 	 * @param {any} [relayVar]
 	 */
 	residualEvent(eventid, relayVar) {
-		let statuses = this.getRelevantBattleEffects(this, 'on' + eventid, null, null, false, true, 'duration');
-		this.speedSort(statuses);
-		while (statuses.length) {
-			let statusObj = statuses[0];
-			statuses.shift();
-			let status = statusObj.status;
-			if (statusObj.thing.fainted) continue;
-			if (statusObj.statusData && statusObj.statusData.duration) {
-				statusObj.statusData.duration--;
-				if (!statusObj.statusData.duration) {
-					statusObj.end.call(statusObj.thing, status.id);
+		let callbackName = `on${eventid}`;
+		let handlers = this.findBattleEventHandlers(this, callbackName, 'duration');
+		for (const side of this.sides) {
+			handlers = handlers.concat(this.findSideEventHandlers(side, callbackName, 'duration'));
+			for (const active of side.active) {
+				if (!active) continue;
+				handlers = handlers.concat(this.findPokemonEventHandlers(active, callbackName, 'duration'));
+			}
+		}
+		this.speedSort(handlers);
+		while (handlers.length) {
+			let handler = handlers[0];
+			handlers.shift();
+			let status = handler.status;
+			if (handler.thing.fainted) continue;
+			if (handler.statusData && handler.statusData.duration) {
+				handler.statusData.duration--;
+				if (!handler.statusData.duration) {
+					handler.end.call(handler.thing, status.id);
 					continue;
 				}
 			}
-			this.singleEvent(eventid, status, statusObj.statusData, statusObj.thing, relayVar);
+			this.singleEvent(eventid, status, handler.statusData, handler.thing, relayVar);
 			this.faintMessages();
 			if (this.ended) return;
 		}
@@ -791,11 +799,11 @@ class Battle extends Dex.ModdedDex {
 		if (!target) target = this;
 		let effectSource = null;
 		if (source instanceof Pokemon) effectSource = source;
-		let statuses = this.getRelevantEffects(target, 'on' + eventid, 'onSource' + eventid, effectSource);
+		let handlers = this.findEventHandlers(target, eventid, effectSource);
 		if (fastExit) {
-			statuses.sort(Battle.compareRedirectOrder);
+			handlers.sort(Battle.compareRedirectOrder);
 		} else {
-			this.speedSort(statuses);
+			this.speedSort(handlers);
 		}
 		let hasRelayVar = true;
 		let args = [target, source, effect];
@@ -815,12 +823,12 @@ class Battle extends Dex.ModdedDex {
 			if (!effect) throw new Error("onEffect passed without an effect");
 			if ('on' + eventid in effect) {
 				// @ts-ignore
-				statuses.unshift({status: effect, callback: effect['on' + eventid], statusData: {}, end: null, thing: target});
+				handlers.unshift({status: effect, callback: effect['on' + eventid], statusData: {}, end: null, thing: target});
 			}
 		}
-		for (const statusid of statuses) {
-			let status = statusid.status;
-			let thing = statusid.thing;
+		for (const handler of handlers) {
+			let status = handler.status;
+			let thing = handler.thing;
 			//this.debug('match ' + eventid + ': ' + status.id + ' ' + status.effectType);
 			if (status.effectType === 'Status' && thing.status !== status.id) {
 				// it's changed; call it off
@@ -873,19 +881,19 @@ class Battle extends Dex.ModdedDex {
 				continue;
 			}
 			let returnVal;
-			if (typeof statusid.callback === 'function') {
+			if (typeof handler.callback === 'function') {
 				let parentEffect = this.effect;
 				let parentEffectData = this.effectData;
-				this.effect = statusid.status;
-				this.effectData = statusid.statusData || {};
+				this.effect = handler.status;
+				this.effectData = handler.statusData || {};
 				this.effectData.target = thing;
 
-				returnVal = statusid.callback.apply(this, args);
+				returnVal = handler.callback.apply(this, args);
 
 				this.effect = parentEffect;
 				this.effectData = parentEffectData;
 			} else {
-				returnVal = statusid.callback;
+				returnVal = handler.callback;
 			}
 
 			if (returnVal !== undefined) {
@@ -923,235 +931,185 @@ class Battle extends Dex.ModdedDex {
 	}
 
 	/**
-	 * @param {AnyObject[]} statuses
-	 * @param {string} callbackType
+	 * @param {AnyObject[]} handlers
+	 * @param {string} callbackName
 	 */
-	resolveLastPriority(statuses, callbackType) {
+	resolveLastPriority(handlers, callbackName) {
 		let order = false;
 		let priority = 0;
 		let subOrder = 0;
-		let status = statuses[statuses.length - 1];
-		if (status.status[callbackType + 'Order']) {
-			order = status.status[callbackType + 'Order'];
+		let handler = handlers[handlers.length - 1];
+		if (handler.status[callbackName + 'Order']) {
+			order = handler.status[callbackName + 'Order'];
 		}
-		if (status.status[callbackType + 'Priority']) {
-			priority = status.status[callbackType + 'Priority'];
-		} else if (status.status[callbackType + 'SubOrder']) {
-			subOrder = status.status[callbackType + 'SubOrder'];
+		if (handler.status[callbackName + 'Priority']) {
+			priority = handler.status[callbackName + 'Priority'];
+		} else if (handler.status[callbackName + 'SubOrder']) {
+			subOrder = handler.status[callbackName + 'SubOrder'];
 		}
 
-		status.order = order;
-		status.priority = priority;
-		status.subOrder = subOrder;
-		if (status.thing && status.thing.getStat) status.speed = status.thing.speed;
+		handler.order = order;
+		handler.priority = priority;
+		handler.subOrder = subOrder;
+		if (handler.thing && handler.thing.getStat) handler.speed = handler.thing.speed;
 	}
 
 	/**
-	 * bubbles up to parents
 	 * @param {Pokemon | Side | Battle} thing
-	 * @param {string} callbackType
-	 * @param {string} foeCallbackType
-	 * @param {?Pokemon} [foeThing]
+	 * @param {string} eventName
+	 * @param {?Pokemon} [sourceThing]
 	 */
-	getRelevantEffects(thing, callbackType, foeCallbackType, foeThing) {
+	findEventHandlers(thing, eventName, sourceThing) {
+		/**@type {AnyObject[]} */
+		let handlers = [];
 		if (thing instanceof Pokemon) {
-			return this.getRelevantPokemonEffects(thing, callbackType, foeCallbackType, foeThing, true, false);
+			handlers = this.findPokemonEventHandlers(thing, `on${eventName}`);
+			for (const allyActive of thing.side.active) {
+				if (!allyActive || allyActive.fainted) continue;
+				handlers.push(...this.findPokemonEventHandlers(allyActive, `onAlly${eventName}`));
+				handlers.push(...this.findPokemonEventHandlers(allyActive, `onAny${eventName}`));
+			}
+			for (const foeActive of thing.side.foe.active) {
+				if (!foeActive || foeActive.fainted) continue;
+				handlers.push(...this.findPokemonEventHandlers(foeActive, `onFoe${eventName}`));
+				handlers.push(...this.findPokemonEventHandlers(foeActive, `onAny${eventName}`));
+			}
+			thing = thing.side;
+		}
+		if (sourceThing) {
+			handlers.push(...this.findPokemonEventHandlers(sourceThing, `onSource${eventName}`));
 		}
 		if (thing instanceof Side) {
-			return this.getRelevantSideEffects(thing, callbackType, foeCallbackType, foeThing, true, false);
+			handlers.push(...this.findSideEventHandlers(thing, `on${eventName}`));
+			handlers.push(...this.findSideEventHandlers(thing, `onAny${eventName}`));
+			handlers.push(...this.findSideEventHandlers(thing.foe, `onFoe${eventName}`));
+			handlers.push(...this.findSideEventHandlers(thing.foe, `onAny${eventName}`));
 		}
-		// @ts-ignore TypeScript bug
-		return this.getRelevantBattleEffects(thing, callbackType, foeCallbackType, foeThing, true, false);
+		handlers.push(...this.findBattleEventHandlers(this, `on${eventName}`));
+		return handlers;
 	}
 
 	/**
 	 * @param {Pokemon} thing
-	 * @param {string} callbackType
-	 * @param {?string} foeCallbackType
-	 * @param {?Pokemon} [foeThing]
-	 * @param {boolean} bubbleUp
-	 * @param {boolean} bubbleDown
-	 * @param {'duration'} [getAll]
+	 * @param {string} callbackName
+	 * @param {'duration'} [getKey]
 	 */
-	getRelevantPokemonEffects(thing, callbackType, foeCallbackType, foeThing, bubbleUp, bubbleDown, getAll) {
-		if (!callbackType || !thing) return [];
+	findPokemonEventHandlers(thing, callbackName, getKey) {
 		/**@type {AnyObject[]} */
-		let statuses = [];
+		let handlers = [];
 
 		let status = thing.getStatus();
 		// @ts-ignore
-		if (status[callbackType] !== undefined || (getAll && thing.statusData[getAll])) {
+		if (status[callbackName] !== undefined || (getKey && thing.statusData[getKey])) {
 			// @ts-ignore
-			statuses.push({status: status, callback: status[callbackType], statusData: thing.statusData, end: thing.clearStatus, thing: thing});
-			this.resolveLastPriority(statuses, callbackType);
+			handlers.push({status: status, callback: status[callbackName], statusData: thing.statusData, end: thing.clearStatus, thing: thing});
+			this.resolveLastPriority(handlers, callbackName);
 		}
 		for (let i in thing.volatiles) {
 			let volatile = thing.getVolatile(i);
 			// @ts-ignore
-			if (volatile[callbackType] !== undefined || (getAll && thing.volatiles[i][getAll])) {
+			if (volatile[callbackName] !== undefined || (getKey && thing.volatiles[i][getKey])) {
 				// @ts-ignore
-				statuses.push({status: volatile, callback: volatile[callbackType], statusData: thing.volatiles[i], end: thing.removeVolatile, thing: thing});
-				this.resolveLastPriority(statuses, callbackType);
+				handlers.push({status: volatile, callback: volatile[callbackName], statusData: thing.volatiles[i], end: thing.removeVolatile, thing: thing});
+				this.resolveLastPriority(handlers, callbackName);
 			}
 		}
 		let ability = thing.getAbility();
 		// @ts-ignore
-		if (ability[callbackType] !== undefined || (getAll && thing.abilityData[getAll])) {
+		if (ability[callbackName] !== undefined || (getKey && thing.abilityData[getKey])) {
 			// @ts-ignore
-			statuses.push({status: ability, callback: ability[callbackType], statusData: thing.abilityData, end: thing.clearAbility, thing: thing});
-			this.resolveLastPriority(statuses, callbackType);
+			handlers.push({status: ability, callback: ability[callbackName], statusData: thing.abilityData, end: thing.clearAbility, thing: thing});
+			this.resolveLastPriority(handlers, callbackName);
 		}
 		let item = thing.getItem();
 		// @ts-ignore
-		if (item[callbackType] !== undefined || (getAll && thing.itemData[getAll])) {
+		if (item[callbackName] !== undefined || (getKey && thing.itemData[getKey])) {
 			// @ts-ignore
-			statuses.push({status: item, callback: item[callbackType], statusData: thing.itemData, end: thing.clearItem, thing: thing});
-			this.resolveLastPriority(statuses, callbackType);
+			handlers.push({status: item, callback: item[callbackName], statusData: thing.itemData, end: thing.clearItem, thing: thing});
+			this.resolveLastPriority(handlers, callbackName);
 		}
 		let species = thing.baseTemplate;
 		// @ts-ignore
-		if (species[callbackType] !== undefined) {
+		if (species[callbackName] !== undefined) {
 			// @ts-ignore
-			statuses.push({status: species, callback: species[callbackType], statusData: thing.speciesData, end() {}, thing: thing});
-			this.resolveLastPriority(statuses, callbackType);
+			handlers.push({status: species, callback: species[callbackName], statusData: thing.speciesData, end() {}, thing: thing});
+			this.resolveLastPriority(handlers, callbackName);
 		}
 
-		if (foeThing && foeCallbackType && foeCallbackType.substr(0, 8) !== 'onSource') {
-			statuses = statuses.concat(this.getRelevantPokemonEffects(foeThing, foeCallbackType, null, null, false, false, getAll));
-		} else if (foeCallbackType) {
-			let eventName = '';
-			if (foeCallbackType.substr(0, 8) === 'onSource') {
-				eventName = foeCallbackType.substr(8);
-				if (foeThing) {
-					statuses = statuses.concat(this.getRelevantPokemonEffects(foeThing, foeCallbackType, null, null, false, false, getAll));
-				}
-				foeCallbackType = 'onFoe' + eventName;
-				foeThing = null;
-			}
-			if (foeCallbackType.substr(0, 5) === 'onFoe') {
-				eventName = foeCallbackType.substr(5);
-				for (const allyActive of thing.side.active) {
-					if (!allyActive || allyActive.fainted) continue;
-					statuses = statuses.concat(this.getRelevantPokemonEffects(allyActive, 'onAlly' + eventName, null, null, false, false, getAll));
-					statuses = statuses.concat(this.getRelevantPokemonEffects(allyActive, 'onAny' + eventName, null, null, false, false, getAll));
-				}
-				for (const foeActive of thing.side.foe.active) {
-					if (!foeActive || foeActive.fainted) continue;
-					statuses = statuses.concat(this.getRelevantPokemonEffects(foeActive, 'onAny' + eventName, null, null, false, false, getAll));
-				}
-			}
-			for (const foeActive of thing.side.foe.active) {
-				if (!foeActive || foeActive.fainted) continue;
-				statuses = statuses.concat(this.getRelevantPokemonEffects(foeActive, foeCallbackType, null, null, false, false, getAll));
-			}
-		}
-		if (bubbleUp) {
-			statuses = statuses.concat(this.getRelevantSideEffects(thing.side, callbackType, foeCallbackType, null, true, false, getAll));
-		}
-		return statuses;
+		return handlers;
 	}
 
 	/**
 	 * @param {Battle} thing
-	 * @param {string} callbackType
-	 * @param {?string} foeCallbackType
-	 * @param {?Pokemon} [foeThing]
-	 * @param {boolean} bubbleUp
-	 * @param {boolean} bubbleDown
-	 * @param {'duration'} [getAll]
+	 * @param {string} callbackName
+	 * @param {'duration'} [getKey]
 	 */
-	getRelevantBattleEffects(thing, callbackType, foeCallbackType, foeThing, bubbleUp, bubbleDown, getAll) {
-		if (!callbackType || !thing) return [];
+	findBattleEventHandlers(thing, callbackName, getKey) {
 		/**@type {AnyObject[]} */
-		let statuses = [];
+		let handlers = [];
 
 		for (let i in this.pseudoWeather) {
 			let pseudoWeather = this.getPseudoWeather(i);
 			// @ts-ignore
-			if (pseudoWeather[callbackType] !== undefined || (getAll && thing.pseudoWeather[i][getAll])) {
+			if (pseudoWeather[callbackName] !== undefined || (getKey && thing.pseudoWeather[i][getKey])) {
 				// @ts-ignore
-				statuses.push({status: pseudoWeather, callback: pseudoWeather[callbackType], statusData: this.pseudoWeather[i], end: this.removePseudoWeather, thing: thing});
-				this.resolveLastPriority(statuses, callbackType);
+				handlers.push({status: pseudoWeather, callback: pseudoWeather[callbackName], statusData: this.pseudoWeather[i], end: this.removePseudoWeather, thing: thing});
+				this.resolveLastPriority(handlers, callbackName);
 			}
 		}
 		let weather = this.getWeather();
 		// @ts-ignore
-		if (weather[callbackType] !== undefined || (getAll && thing.weatherData[getAll])) {
+		if (weather[callbackName] !== undefined || (getKey && thing.weatherData[getKey])) {
 			// @ts-ignore
-			statuses.push({status: weather, callback: weather[callbackType], statusData: this.weatherData, end: this.clearWeather, thing: thing, priority: weather[callbackType + 'Priority'] || 0});
-			this.resolveLastPriority(statuses, callbackType);
+			handlers.push({status: weather, callback: weather[callbackName], statusData: this.weatherData, end: this.clearWeather, thing: thing, priority: weather[callbackName + 'Priority'] || 0});
+			this.resolveLastPriority(handlers, callbackName);
 		}
 		let terrain = this.getTerrain();
 		// @ts-ignore
-		if (terrain[callbackType] !== undefined || (getAll && thing.terrainData[getAll])) {
+		if (terrain[callbackName] !== undefined || (getKey && thing.terrainData[getKey])) {
 			// @ts-ignore
-			statuses.push({status: terrain, callback: terrain[callbackType], statusData: this.terrainData, end: this.clearTerrain, thing: thing, priority: terrain[callbackType + 'Priority'] || 0});
-			this.resolveLastPriority(statuses, callbackType);
+			handlers.push({status: terrain, callback: terrain[callbackName], statusData: this.terrainData, end: this.clearTerrain, thing: thing, priority: terrain[callbackName + 'Priority'] || 0});
+			this.resolveLastPriority(handlers, callbackName);
 		}
 		let format = this.getFormat();
 		// @ts-ignore
-		if (format[callbackType] !== undefined || (getAll && thing.formatData[getAll])) {
+		if (format[callbackName] !== undefined || (getKey && thing.formatData[getKey])) {
 			// @ts-ignore
-			statuses.push({status: format, callback: format[callbackType], statusData: this.formatData, end() {}, thing: thing, priority: format[callbackType + 'Priority'] || 0});
-			this.resolveLastPriority(statuses, callbackType);
+			handlers.push({status: format, callback: format[callbackName], statusData: this.formatData, end() {}, thing: thing, priority: format[callbackName + 'Priority'] || 0});
+			this.resolveLastPriority(handlers, callbackName);
 		}
-		if (this.events && this.events[callbackType] !== undefined) {
-			for (const handler of this.events[callbackType]) {
+		if (this.events && this.events[callbackName] !== undefined) {
+			for (const handler of this.events[callbackName]) {
 				let statusData;
 				switch (handler.target.effectType) {
 				case 'Format':
 					statusData = this.formatData;
 				}
-				statuses.push({status: handler.target, callback: handler.callback, statusData: statusData, end() {}, thing: thing, priority: handler.priority, order: handler.order, subOrder: handler.subOrder});
+				handlers.push({status: handler.target, callback: handler.callback, statusData: statusData, end() {}, thing: thing, priority: handler.priority, order: handler.order, subOrder: handler.subOrder});
 			}
 		}
-		if (bubbleDown) {
-			statuses = statuses.concat(this.getRelevantSideEffects(this.p1, callbackType, null, null, false, true, getAll));
-			statuses = statuses.concat(this.getRelevantSideEffects(this.p2, callbackType, null, null, false, true, getAll));
-		}
-		return statuses;
+		return handlers;
 	}
 
 	/**
 	 * @param {Side} thing
-	 * @param {string} callbackType
-	 * @param {?string} foeCallbackType
-	 * @param {?Pokemon} [foeThing]
-	 * @param {boolean} bubbleUp
-	 * @param {boolean} bubbleDown
-	 * @param {'duration'} [getAll]
+	 * @param {string} callbackName
+	 * @param {'duration'} [getKey]
 	 */
-	getRelevantSideEffects(thing, callbackType, foeCallbackType, foeThing, bubbleUp, bubbleDown, getAll) {
-		if (!callbackType || !thing) return [];
+	findSideEventHandlers(thing, callbackName, getKey) {
 		/**@type {AnyObject[]} */
-		let statuses = [];
+		let handlers = [];
 
 		for (let i in thing.sideConditions) {
 			let sideCondition = thing.getSideCondition(i);
 			// @ts-ignore
-			if (sideCondition[callbackType] !== undefined || (getAll && thing.sideConditions[i][getAll])) {
+			if (sideCondition[callbackName] !== undefined || (getKey && thing.sideConditions[i][getKey])) {
 				// @ts-ignore
-				statuses.push({status: sideCondition, callback: sideCondition[callbackType], statusData: thing.sideConditions[i], end: thing.removeSideCondition, thing: thing});
-				this.resolveLastPriority(statuses, callbackType);
+				handlers.push({status: sideCondition, callback: sideCondition[callbackName], statusData: thing.sideConditions[i], end: thing.removeSideCondition, thing: thing});
+				this.resolveLastPriority(handlers, callbackName);
 			}
 		}
-		if (foeCallbackType) {
-			statuses = statuses.concat(this.getRelevantSideEffects(thing.foe, foeCallbackType, null, null, false, false, getAll));
-			if (foeCallbackType.substr(0, 5) === 'onFoe') {
-				let eventName = foeCallbackType.substr(5);
-				statuses = statuses.concat(this.getRelevantSideEffects(thing.foe, 'onAny' + eventName, null, null, false, false, getAll));
-				statuses = statuses.concat(this.getRelevantSideEffects(thing, 'onAny' + eventName, null, null, false, false, getAll));
-			}
-		}
-		if (bubbleUp) {
-			statuses = statuses.concat(this.getRelevantBattleEffects(this, callbackType, null, null, true, false, getAll));
-		}
-		if (bubbleDown) {
-			for (const active of thing.active) {
-				statuses = statuses.concat(this.getRelevantPokemonEffects(active, callbackType, null, null, false, true, getAll));
-			}
-		}
-		return statuses;
+		return handlers;
 	}
 
 	/**
@@ -1204,12 +1162,12 @@ class Battle extends Dex.ModdedDex {
 
 		let eventHandler = {callback, target, priority, order, subOrder};
 
-		let callbackType = `on${eventid}`;
+		let callbackName = `on${eventid}`;
 		if (!this.events) this.events = {};
-		if (this.events[callbackType] === undefined) {
-			this.events[callbackType] = [eventHandler];
+		if (this.events[callbackName] === undefined) {
+			this.events[callbackName] = [eventHandler];
 		} else {
-			this.events[callbackType].push(eventHandler);
+			this.events[callbackName].push(eventHandler);
 		}
 	}
 
