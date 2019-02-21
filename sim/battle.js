@@ -1079,11 +1079,7 @@ class Battle extends Dex.ModdedDex {
 		}
 		if (this.events && (callback = this.events[callbackName]) !== undefined) {
 			for (const handler of callback) {
-				let statusData;
-				switch (handler.target.effectType) {
-				case 'Format':
-					statusData = this.formatData;
-				}
+				let statusData = (handler.target.effectType === 'Format') ? this.formatData : undefined;
 				handlers.push({status: handler.target, callback: handler.callback, statusData: statusData, end() {}, thing: this, priority: handler.priority, order: handler.order, subOrder: handler.subOrder});
 			}
 		}
