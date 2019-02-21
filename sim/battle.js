@@ -972,7 +972,7 @@ class Battle extends Dex.ModdedDex {
 	getRelevantEffectsInner(thing, callbackType, foeCallbackType, foeThing, bubbleUp, bubbleDown, getAll) {
 		if (!callbackType || !thing) return [];
 
-		let validCallbackType = !!getAll || CALLBACK_TYPES.has(callbackType);
+		let validCallbackType = !!getAll || this.callbackTypes.has(callbackType);
 		/**@type {AnyObject[]} */
 		let statuses = [];
 
@@ -1038,12 +1038,12 @@ class Battle extends Dex.ModdedDex {
 				}
 			}
 			if (foeCallbackType) {
-				if (!!getAll || CALLBACK_TYPES.has(foeCallbackType)) {
+				if (!!getAll || this.callbackTypes.has(foeCallbackType)) {
 					statuses = statuses.concat(this.getRelevantEffectsInner(thing.foe, foeCallbackType, null, null, false, false, getAll));
 				}
 				if (foeCallbackType.substr(0, 5) === 'onFoe') {
 					let onAnyCallbackType = `onAny${foeCallbackType.substr(5)}`;
-					if (!!getAll || CALLBACK_TYPES.has(onAnyCallbackType)) {
+					if (!!getAll || this.callbackTypes.has(onAnyCallbackType)) {
 						statuses = statuses.concat(this.getRelevantEffectsInner(thing.foe, onAnyCallbackType, null, null, false, false, getAll));
 						statuses = statuses.concat(this.getRelevantEffectsInner(thing, onAnyCallbackType, null, null, false, false, getAll));
 					}
@@ -1106,7 +1106,7 @@ class Battle extends Dex.ModdedDex {
 			}
 		}
 
-		let validFoeCallbackType = !!getAll || (!foeCallbackType ? false : CALLBACK_TYPES.has(foeCallbackType));
+		let validFoeCallbackType = !!getAll || (!foeCallbackType ? false : this.callbackTypes.has(foeCallbackType));
 		if (foeThing && foeCallbackType && foeCallbackType.substr(0, 8) !== 'onSource' && validFoeCallbackType) {
 			statuses = statuses.concat(this.getRelevantEffectsInner(foeThing, foeCallbackType, null, null, false, false, getAll));
 		} else if (foeCallbackType) {
@@ -1115,15 +1115,15 @@ class Battle extends Dex.ModdedDex {
 					statuses = statuses.concat(this.getRelevantEffectsInner(foeThing, foeCallbackType, null, null, false, false, getAll));
 				}
 				foeCallbackType = `onFoe${foeCallbackType.substr(8)}`;
-				validFoeCallbackType = !!getAll || CALLBACK_TYPES.has(foeCallbackType);
+				validFoeCallbackType = !!getAll || this.callbackTypes.has(foeCallbackType);
 				foeThing = null;
 			}
 			if (foeCallbackType.substr(0, 5) === 'onFoe') {
 				let eventName = foeCallbackType.substr(5);
 				let onAllyCallbackType = `onAlly${eventName}`;
 				let onAnyCallbackType = `onAny${eventName}`;
-				let validOnAllyCallbackType = !!getAll || CALLBACK_TYPES.has(onAllyCallbackType);
-				let validOnAnyCallbackType = !!getAll || CALLBACK_TYPES.has(onAnyCallbackType);
+				let validOnAllyCallbackType = !!getAll || this.callbackTypes.has(onAllyCallbackType);
+				let validOnAnyCallbackType = !!getAll || this.callbackTypes.has(onAnyCallbackType);
 
 				if (validOnAllyCallbackType || validOnAnyCallbackType) {
 					for (const allyActive of thing.side.active) {

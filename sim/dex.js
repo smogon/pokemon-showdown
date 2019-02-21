@@ -45,6 +45,8 @@ let dexes = Object.create(null);
 /** @typedef {'Pokedex' | 'FormatsData' | 'Learnsets' | 'Movedex' | 'Statuses' | 'TypeChart' | 'Scripts' | 'Items' | 'Abilities' | 'Natures' | 'Formats'} DataType */
 /** @type {DataType[]} */
 const DATA_TYPES = ['Pokedex', 'FormatsData', 'Learnsets', 'Movedex', 'Statuses', 'TypeChart', 'Scripts', 'Items', 'Abilities', 'Natures', 'Formats'];
+/** @type {Set<string>} */
+const HAS_CALLBACKS = new Set(['Formats', 'Statuses', 'Items', 'Abilities', 'Formats']);
 
 const DATA_FILES = {
 	'Pokedex': 'pokedex',
@@ -132,6 +134,8 @@ class ModdedDex {
 		this.typeCache = new Map();
 		/** @type {Map<string, Effect | Move>} */
 		this.effectCache = new Map();
+		/** @type Set<string> */
+		this.callbackTypes = new Set();
 
 		if (!isOriginal) {
 			const original = dexes['base'].mod(mod).includeData();
@@ -1466,6 +1470,16 @@ class ModdedDex {
 			let BattleData = this.loadDataFile(basePath, dataType);
 			// @ts-ignore
 			if (!BattleData || typeof BattleData !== 'object') throw new TypeError("Exported property `Battle" + dataType + "`from `" + './data/' + DATA_FILES[dataType] + "` must be an object except `null`.");
+
+			if (HAS_CALLBACKS.has(dataType)) {
+				for (let data in BattleData) {
+					for (let k in BattleData[data]) {
+						if (k.startsWith('on')) {
+							this.callbackTypes.add(k);
+						}
+					}
+				}
+			}
 			// @ts-ignore
 			if (BattleData !== dataCache[dataType]) dataCache[dataType] = Object.assign(BattleData, dataCache[dataType]);
 			if (dataType === 'Formats' && !parentDex) Object.assign(BattleData, this.formats);
@@ -1506,6 +1520,10 @@ class ModdedDex {
 			}
 			// @ts-ignore
 			dataCache['Aliases'] = parentDex.data['Aliases'];
+
+			for (let callbackType of parentDex.callbackTypes) {
+				this.callbackTypes.add(callbackType);
+			}
 		}
 
 		// Flag the generation. Required for team validator.
