@@ -7344,7 +7344,7 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	toucannon: {
-		randomBattleMoves: ["substitute", "beakblast", "swordsdance", "roost", "brickbreak", "bulletseed", "rockblast"],
+		randomBattleMoves: ["return", "beakblast", "swordsdance", "roost", "brickbreak", "bulletseed"],
 		randomDoubleBattleMoves: ["bulletseed", "rockblast", "bravebird", "tailwind", "protect"],
 		encounters: [
 			{"generation": 7, "level": 26},
