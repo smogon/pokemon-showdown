@@ -540,11 +540,13 @@ stat boosts are minor actions.
 
 `|-singlemove|POKEMON|MOVE`
 
-> TODO movestatus?
+> The Pokémon `POKEMON` used move `MOVE` which causes a temporary effect lasting
+> the duration of the move. (For example: Grudge, Destiny Bond).
 
 `|-singleturn|POKEMON|MOVE`
 
-> TODO turnstatus?
+> The Pokémon `POKEMON` used move `MOVE` which causes a temporary effect lasting
+> the duration of the turn. (For example: Protect, Focus Punch, Roost).
 
 `|-start|POKEMON|???`
 
