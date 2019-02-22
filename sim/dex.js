@@ -964,9 +964,9 @@ class ModdedDex {
 	}
 
 	/**
-	 * TODO: TypeScript generics
-	 * @param {Array} arr
-	 * @return {Array}
+	 * @param {T[]} arr
+	 * @return {T[]}
+	 * @template T
 	 */
 	shuffle(arr) {
 		// In-place shuffle by Fisher-Yates algorithm
