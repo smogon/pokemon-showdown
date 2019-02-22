@@ -134,6 +134,10 @@ The beginning of a battle will look something like this:
 > `inactive` means that the timer is on at the time the message was sent,
 > while `inactiveoff` means that the timer is off.
 
+`|upkeep`
+
+> Signals the upkeep phase of the turn.
+
 `|turn|NUMBER`
 
 > It is now turn `NUMBER`.
@@ -283,10 +287,6 @@ message).
 `|faint|POKEMON`
 
 > The Pokémon `POKEMON` has fainted.
-
-`|upkeep`
-
-> TODO
 
 ### Minor actions
 
