@@ -2500,11 +2500,8 @@ class Battle extends Dex.ModdedDex {
 	/**
 	 * @param {Pokemon} pokemon
 	 * @param {string | Move} move
-	 * @return {Pokemon | null}
 	 */
 	resolveTarget(pokemon, move) {
-		// TODO: figure out why TypeScript thinks this is Pokemon | Pokemon
-
 		// A move was used without a chosen target
 
 		// For instance: Metronome chooses Ice Beam. Since the user didn't

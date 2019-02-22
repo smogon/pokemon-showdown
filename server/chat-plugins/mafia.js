@@ -535,7 +535,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		let roles = Dex.shuffle(this.roles.slice());
 		if (roles.length) {
 			for (let p in this.players) {
-				let role = roles.shift();
+				let role = /** @type {MafiaRole} */(roles.shift());
 				this.players[p].role = role;
 				let u = Users(p);
 				if (u && u.connected) u.send(`>${this.room.id}\n|notify|Your role is ${role.safeName}. For more details of your role, check your Role PM.`);
