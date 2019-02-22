@@ -39,6 +39,11 @@ const DATA_DIR = path.resolve(__dirname, '../data');
 const MODS_DIR = path.resolve(__dirname, '../data/mods');
 const FORMATS = path.resolve(__dirname, '../config/formats');
 
+/**
+ * @typedef PRNG {import("./prng").PRNG}
+ * @typedef PRNGSeed {import("./prng").PRNGSeed}
+ */
+
 /** @type {{[mod: string]: ModdedDex}} */
 let dexes = Object.create(null);
 

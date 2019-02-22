@@ -19,7 +19,7 @@
         "./dev-tools/global.d.ts",
         "./dev-tools/globals.ts",
         "./dev-tools/node.d.ts",
-        "./sim/*.js",
+        "./sim/*",
         "./lib/*.js",
         "./server/dnsbl.js",
         "./server/ladders-local.js",
