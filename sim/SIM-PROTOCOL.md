@@ -416,6 +416,17 @@ stat boosts are minor actions.
 
 > Indicates that the side condition `CONDITION` ended for the given `SIDE`.
 
+`|-start|POKEMON|EFFECT`
+
+> A [*volatile* status](https://bulbapedia.bulbagarden.net/wiki/Status_condition#Volatile_status)
+> has been inflicted on the `POKEMON` Pokémon by `EFFECT`. (For example:
+> confusion, Taunt, Substitute).
+
+`|-end|POKEMON|EFFECT`
+
+> The volatile status from `EFFECT` inflicted on the `POKEMON` Pokémon has
+> ended.
+
 `|-crit|POKEMON`
 
 > A move has dealt a critical hit against the `POKEMON`.
@@ -547,14 +558,6 @@ stat boosts are minor actions.
 
 > The Pokémon `POKEMON` used move `MOVE` which causes a temporary effect lasting
 > the duration of the turn. (For example: Protect, Focus Punch, Roost).
-
-`|-start|POKEMON|???`
-
-> TODO
-
-`|-end|POKEMON|???`
-
-> TODO
 
 
 Sending decisions
