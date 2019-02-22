@@ -33,7 +33,6 @@
         "./server/chat-formatter.js",
         "./server/room-game.js",
         "./server/room-battle.js",
-        "./server/process-manager.js",
         "./server/team-validator-async.js",
         "./server/verifier.js",
         "./server/chat.js",
