@@ -571,7 +571,7 @@ let Formats = [
 
 		mod: 'pokebilities',
 		ruleset: ['[Gen 7] OU'],
-		banlist: ['Bibarel', 'Bidoof', 'Diglett', 'Dugtrio', 'Excadrill', 'Glalie', 'Gothita', 'Gothitelle', 'Gothorita', 'Octillery', 'Remoraid', 'Smeargle', 'Snorunt', 'Trapinch', 'Wobbuffet', 'Wynaut'],
+		banlist: ['Bibarel', 'Bidoof', 'Diglett', 'Dugtrio', 'Excadrill', 'Glalie', 'Gothita', 'Gothitelle', 'Gothorita', 'Octillery', 'Porygon-Z', 'Remoraid', 'Smeargle', 'Snorunt', 'Trapinch', 'Wobbuffet', 'Wynaut'],
 		onBegin() {
 			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
 			for (let pokemon of allPokemon) {
