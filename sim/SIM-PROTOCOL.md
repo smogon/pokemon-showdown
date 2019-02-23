@@ -136,7 +136,8 @@ The beginning of a battle will look something like this:
 
 `|upkeep`
 
-> Signals the upkeep phase of the turn.
+> Signals the upkeep phase of the turn where the number of turns left for field
+> conditions are updated.
 
 `|turn|NUMBER`
 
@@ -543,7 +544,8 @@ stat boosts are minor actions.
 
 `|-nothing`
 
-> A move did absolutely nothing. (For example: Splash).
+> **DEPRECATED**: A move did absolutely nothing. (For example: Splash). In the
+> future this will be of the form `|-activate||move:Splash`.
 
 `|-hitcount|POKEMON|NUM`
 
