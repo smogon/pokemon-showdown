@@ -495,19 +495,18 @@ class ModdedDex {
 		}
 
 		let id = toId(name);
-		if (this.data.Statuses.hasOwnProperty(id)) {
-			effect = new Data.PureEffect({name}, this.data.Statuses[id]);
-		} else if (this.data.Movedex.hasOwnProperty(id) && this.data.Movedex[id].effect) {
-			name = this.data.Movedex[id].name || name;
-			effect = new Data.PureEffect({name}, this.data.Movedex[id].effect);
-		} else if (this.data.Abilities.hasOwnProperty(id) && this.data.Abilities[id].effect) {
-			name = this.data.Abilities[id].name || name;
-			effect = new Data.PureEffect({name}, this.data.Abilities[id].effect);
-		} else if (this.data.Items.hasOwnProperty(id) && this.data.Items[id].effect) {
-			name = this.data.Items[id].name || name;
-			effect = new Data.PureEffect({name}, this.data.Items[id].effect);
-		} else if (this.data.Formats.hasOwnProperty(id)) {
-			effect = new Data.Format({name}, this.data.Formats[id]);
+
+		let found;
+		if ((found = this.data.Formats[id])) {
+			effect = new Data.Format({name}, found);
+		} else if ((found = this.data.Statuses[id])) {
+			effect = new Data.PureEffect({name}, found);
+		} else if ((found = this.data.Movedex[id]) && found.effect) {
+			effect = new Data.PureEffect({name: found.name || name}, found.effect);
+		} else if ((found = this.data.Abilities[id]) && found.effect) {
+			effect = new Data.PureEffect({name: found.name || name}, found.effect);
+		} else if ((found = this.data.Items[id]) && found.effect) {
+			effect = new Data.PureEffect({name: found.name || name}, found.effect);
 		} else if (id === 'recoil') {
 			effect = new Data.PureEffect({name: 'Recoil', effectType: 'Recoil'});
 		} else if (id === 'drain') {
