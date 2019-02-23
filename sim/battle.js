@@ -40,6 +40,24 @@ const Pokemon = require('./pokemon');
  * @property {boolean} [debug] show debug mode option
  */
 
+/**
+ * @typedef {Object} EventHandler
+ * @property {Effect} status effect
+ * @property {Function} callback
+ * @property {AnyObject} statusData effectData
+ * @property {Function} end function to remove status
+ * @property {Pokemon | Side | Battle} thing effect holder
+ * @property {'p:' | 'p:Ally' | 'p:Foe' | 'p:Source' | 's:' | 's:Foe'} [filter]
+ * // TODO: are these really necessary?
+ * @property {number} [priority]
+ * @property {number} [order]
+ * @property {number} [subOrder]
+ */
+
+/**
+ * @typedef {'ability' | 'item' | 'status' | 'volatile' | 'sideCondition' | 'weather' | 'terrain' | 'pseudoWeather' | 'format' | 'custom'} ListenerType
+ */
+
 class Battle extends Dex.ModdedDex {
 	/**
 	 * @param {BattleOptions} options
@@ -128,6 +146,10 @@ class Battle extends Dex.ModdedDex {
 		this.supportCancel = false;
 		/** @type {?AnyObject} */
 		this.events = null;
+		/**
+		 * @type {Map<string, Set<EventHandler>>}
+		 */
+		this.eventListeners = new Map();
 
 		// gen 1 tracks a global lastDamage
 		this.lastDamage = 0;
@@ -579,7 +601,7 @@ class Battle extends Dex.ModdedDex {
 			handlers = handlers.concat(this.findSideEventHandlers(side, callbackName, 'duration'));
 			for (const active of side.active) {
 				if (!active) continue;
-				handlers = handlers.concat(this.findPokemonEventHandlers(active, callbackName, 'duration'));
+				handlers = handlers.concat(this.findPokemonEventHandlers(active, eventid, 'p:', 'duration'));
 			}
 		}
 		this.speedSort(handlers);
@@ -587,6 +609,7 @@ class Battle extends Dex.ModdedDex {
 			let handler = handlers[0];
 			handlers.shift();
 			let status = handler.status;
+			// @ts-ignore
 			if (handler.thing.fainted) continue;
 			if (handler.statusData && handler.statusData.duration) {
 				handler.statusData.duration--;
@@ -946,6 +969,67 @@ class Battle extends Dex.ModdedDex {
 	}
 
 	/**
+	 * @param {Effect} effect
+	 * @param {Pokemon | Side | Battle} holder
+	 * @param {AnyObject} effectData
+	 * @param {Function} end
+	 */
+	addListenersFrom(effect, holder, effectData, end) {
+		let holderType = 'b';
+		if (holder instanceof Pokemon) holderType = 'p';
+		else if (holder instanceof Side) holderType = 's';
+		for (let key in effect) {
+			if (key === 'duration' && !('onResidual' in effect)) key = 'onResidual';
+			if (!key.startsWith('on')) continue;
+			/** @type {string | undefined} */
+			let filter = `${holderType}:`;
+			let eventName = key.slice(2);
+			if (eventName.startsWith('Any')) {
+				eventName = eventName.slice(3);
+				filter = undefined;
+			} else if (eventName.startsWith('Source')) {
+				eventName = eventName.slice(6);
+				filter = 'p:Source';
+			} else if (eventName.startsWith('Ally')) {
+				eventName = eventName.slice(4);
+				filter = `${holderType}:Ally`;
+			} else if (eventName.startsWith('Foe')) {
+				eventName = eventName.slice(3);
+				filter = `${holderType}:Foe`;
+			}
+			let table = this.eventListeners.get(eventName);
+			if (!table) {
+				table = new Set();
+				this.eventListeners.set(eventName, table);
+			}
+			/** @type {EventHandler} */
+			let handler = {
+				status: effect,
+				callback: /** @type {any} */ (effect)[key],
+				statusData: effectData,
+				end: end,
+				thing: holder,
+				filter: /** @type {'p:'} */ (filter),
+			};
+			table.add(handler);
+		}
+	}
+
+	/**
+	 * @param {Effect | null} effect
+	 * @param {Pokemon | Side | Battle} holder
+	 */
+	removeListenersFrom(effect, holder) {
+		for (const table of this.eventListeners.values()) {
+			for (const handler of table) {
+				if ((!effect || handler.status === effect) && handler.thing === holder) {
+					table.delete(handler);
+				}
+			}
+		}
+	}
+
+	/**
 	 * @param {Pokemon | Side | Battle} thing
 	 * @param {string} eventName
 	 * @param {?Pokemon} [sourceThing]
@@ -954,21 +1038,21 @@ class Battle extends Dex.ModdedDex {
 		/**@type {AnyObject[]} */
 		let handlers = [];
 		if (thing instanceof Pokemon) {
-			handlers = this.findPokemonEventHandlers(thing, `on${eventName}`);
+			handlers = this.findPokemonEventHandlers(thing, eventName, 'p:');
 			for (const allyActive of thing.side.active) {
 				if (!allyActive || allyActive.fainted) continue;
-				handlers.push(...this.findPokemonEventHandlers(allyActive, `onAlly${eventName}`));
-				handlers.push(...this.findPokemonEventHandlers(allyActive, `onAny${eventName}`));
+				handlers.push(...this.findPokemonEventHandlers(allyActive, eventName, 'p:Ally'));
+				handlers.push(...this.findPokemonEventHandlers(allyActive, eventName, 'p:Any'));
 			}
 			for (const foeActive of thing.side.foe.active) {
 				if (!foeActive || foeActive.fainted) continue;
-				handlers.push(...this.findPokemonEventHandlers(foeActive, `onFoe${eventName}`));
-				handlers.push(...this.findPokemonEventHandlers(foeActive, `onAny${eventName}`));
+				handlers.push(...this.findPokemonEventHandlers(foeActive, eventName, 'p:Foe'));
+				handlers.push(...this.findPokemonEventHandlers(foeActive, eventName, 'p:Any'));
 			}
 			thing = thing.side;
 		}
 		if (sourceThing) {
-			handlers.push(...this.findPokemonEventHandlers(sourceThing, `onSource${eventName}`));
+			handlers.push(...this.findPokemonEventHandlers(sourceThing, eventName, 'p:Source'));
 		}
 		if (thing instanceof Side) {
 			handlers.push(...this.findSideEventHandlers(thing, `on${eventName}`));
@@ -982,11 +1066,14 @@ class Battle extends Dex.ModdedDex {
 
 	/**
 	 * @param {Pokemon} pokemon
-	 * @param {string} callbackName
+	 * @param {string} eventName
+	 * @param {string} filter
 	 * @param {'duration'} [getKey]
 	 */
-	findPokemonEventHandlers(pokemon, callbackName, getKey) {
-		/**@type {AnyObject[]} */
+	findPokemonEventHandlers(pokemon, eventName, filter, getKey) {
+		const callbackName = `on${filter.slice(2)}${eventName}`;
+
+		/**@type {EventHandler[]} */
 		let handlers = [];
 
 		let status = pokemon.getStatus();
@@ -996,14 +1083,13 @@ class Battle extends Dex.ModdedDex {
 			handlers.push({status: status, callback: callback, statusData: pokemon.statusData, end: pokemon.clearStatus, thing: pokemon});
 			this.resolveLastPriority(handlers, callbackName);
 		}
-		for (let i in pokemon.volatiles) {
-			let volatileData = pokemon.volatiles[i];
-			let volatile = pokemon.getVolatile(i);
-			// @ts-ignore
-			callback = volatile[callbackName];
-			if (callback !== undefined || (getKey && volatileData[getKey])) {
-				handlers.push({status: volatile, callback: callback, statusData: volatileData, end: pokemon.removeVolatile, thing: pokemon});
-				this.resolveLastPriority(handlers, callbackName);
+		const table = this.eventListeners.get(eventName);
+		if (table) {
+			for (const handler of table) {
+				if (handler.thing === pokemon && (!handler.filter || handler.filter === filter)) {
+					handlers.push(handler);
+					this.resolveLastPriority(handlers, callbackName);
+				}
 			}
 		}
 		let ability = pokemon.getAbility();
@@ -1037,13 +1123,13 @@ class Battle extends Dex.ModdedDex {
 	 */
 	findBattleEventHandlers(callbackName, getKey) {
 		let callbackNamePriority = `${callbackName}Priority`;
-		/**@type {AnyObject[]} */
+		/**@type {EventHandler[]} */
 		let handlers = [];
 
 		let callback;
 		for (let i in this.pseudoWeather) {
 			let pseudoWeatherData = this.pseudoWeather[i];
-			let pseudoWeather = this.getPseudoWeather(i);
+			let pseudoWeather = /** @type {PureEffect} */ (this.getPseudoWeather(i));
 			// @ts-ignore
 			callback = pseudoWeather[callbackName];
 			if (callback !== undefined || (getKey && pseudoWeatherData[getKey])) {
@@ -1078,7 +1164,7 @@ class Battle extends Dex.ModdedDex {
 		}
 		if (this.events && (callback = this.events[callbackName]) !== undefined) {
 			for (const handler of callback) {
-				let statusData = (handler.target.effectType === 'Format') ? this.formatData : undefined;
+				let statusData = this.formatData;
 				handlers.push({status: handler.target, callback: handler.callback, statusData: statusData, end() {}, thing: this, priority: handler.priority, order: handler.order, subOrder: handler.subOrder});
 			}
 		}
@@ -1091,12 +1177,12 @@ class Battle extends Dex.ModdedDex {
 	 * @param {'duration'} [getKey]
 	 */
 	findSideEventHandlers(side, callbackName, getKey) {
-		/**@type {AnyObject[]} */
+		/**@type {EventHandler[]} */
 		let handlers = [];
 
 		for (let i in side.sideConditions) {
 			let sideConditionData = side.sideConditions[i];
-			let sideCondition = side.getSideCondition(i);
+			let sideCondition = /** @type {PureEffect} */ (side.getSideCondition(i));
 			// @ts-ignore
 			let callback = sideCondition[callbackName];
 			if (callback !== undefined || (getKey && sideConditionData[getKey])) {

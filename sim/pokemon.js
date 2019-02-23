@@ -1077,6 +1077,7 @@ class Pokemon {
 			}
 		}
 		this.volatiles = {};
+		this.battle.removeListenersFrom(null, this);
 		if (includeSwitchFlags) {
 			this.switchFlag = false;
 			this.forceSwitchFlag = false;
@@ -1512,16 +1513,16 @@ class Pokemon {
 	}
 
 	/**
-	 * @param {string | PureEffect} status
+	 * @param {string | PureEffect} effect
 	 * @param {Pokemon?} source
 	 * @param {Effect?} sourceEffect
 	 * @param {string | PureEffect?} linkedStatus
 	 * @return {boolean | any}
 	 */
-	addVolatile(status, source = null, sourceEffect = null, linkedStatus = null) {
+	addVolatile(effect, source = null, sourceEffect = null, linkedStatus = null) {
 		let result;
-		status = this.battle.getEffect(status);
-		if (!this.hp && !status.affectsFainted) return false;
+		effect = this.battle.getEffect(effect);
+		if (!this.hp && !effect.affectsFainted) return false;
 		if (linkedStatus && source && !source.hp) return false;
 		if (this.battle.event) {
 			if (!source) source = this.battle.event.source;
@@ -1529,52 +1530,50 @@ class Pokemon {
 		}
 		if (!source) source = this;
 
-		if (this.volatiles[status.id]) {
-			if (!status.onRestart) return false;
-			return this.battle.singleEvent('Restart', status, this.volatiles[status.id], this, source, sourceEffect);
+		if (this.volatiles[effect.id]) {
+			if (!effect.onRestart) return false;
+			return this.battle.singleEvent('Restart', effect, this.volatiles[effect.id], this, source, sourceEffect);
 		}
-		if (!this.runStatusImmunity(status.id)) {
-			this.battle.debug('immune to volatile status');
-			if (sourceEffect && sourceEffect.status) this.battle.add('-immune', this);
+		if (!this.runStatusImmunity(effect.id)) {
+			this.battle.debug('immune to volatile effect');
+			if (sourceEffect && sourceEffect.effect) this.battle.add('-immune', this);
 			return false;
 		}
-		result = this.battle.runEvent('TryAddVolatile', this, source, sourceEffect, status);
+		result = this.battle.runEvent('TryAddVolatile', this, source, sourceEffect, effect);
 		if (!result) {
-			this.battle.debug('add volatile [' + status.id + '] interrupted');
+			this.battle.debug('add volatile [' + effect.id + '] interrupted');
 			return result;
 		}
-		this.volatiles[status.id] = {id: status.id};
-		this.volatiles[status.id].target = this;
-		if (source) {
-			this.volatiles[status.id].source = source;
-			this.volatiles[status.id].sourcePosition = source.position;
+		let effectData = {
+			id: effect.id,
+			target: this,
+			source: source,
+			sourcePosition: source && source.position,
+			sourceEffect: sourceEffect,
+			duration: effect.duration,
+		};
+		if (effect.durationCallback) {
+			effectData.duration = effect.durationCallback.call(this.battle, this, source, sourceEffect);
 		}
-		if (sourceEffect) {
-			this.volatiles[status.id].sourceEffect = sourceEffect;
-		}
-		if (status.duration) {
-			this.volatiles[status.id].duration = status.duration;
-		}
-		if (status.durationCallback) {
-			this.volatiles[status.id].duration = status.durationCallback.call(this.battle, this, source, sourceEffect);
-		}
-		result = this.battle.singleEvent('Start', status, this.volatiles[status.id], this, source, sourceEffect);
+		this.volatiles[effect.id] = effectData;
+		result = this.battle.singleEvent('Start', effect, effectData, this, source, sourceEffect);
 		if (!result) {
 			// cancel
-			delete this.volatiles[status.id];
+			delete this.volatiles[effect.id];
 			return result;
 		}
 		if (linkedStatus && source) {
 			if (!source.volatiles[linkedStatus.toString()]) {
 				source.addVolatile(linkedStatus, this, sourceEffect);
 				source.volatiles[linkedStatus.toString()].linkedPokemon = [this];
-				source.volatiles[linkedStatus.toString()].linkedStatus = status;
+				source.volatiles[linkedStatus.toString()].linkedStatus = effect;
 			} else {
 				source.volatiles[linkedStatus.toString()].linkedPokemon.push(this);
 			}
-			this.volatiles[status.toString()].linkedPokemon = [source];
-			this.volatiles[status.toString()].linkedStatus = linkedStatus;
+			this.volatiles[effect.id].linkedPokemon = [source];
+			this.volatiles[effect.id].linkedStatus = linkedStatus;
 		}
+		this.battle.addListenersFrom(effect, this, effectData, this.removeVolatile);
 		return true;
 	}
 
@@ -1594,6 +1593,7 @@ class Pokemon {
 		if (!this.hp) return false;
 		status = this.battle.getEffect(status);
 		if (!this.volatiles[status.id]) return false;
+		this.battle.removeListenersFrom(status, this);
 		this.battle.singleEvent('End', status, this.volatiles[status.id], this);
 		let linkedPokemon = this.volatiles[status.id].linkedPokemon;
 		let linkedStatus = this.volatiles[status.id].linkedStatus;

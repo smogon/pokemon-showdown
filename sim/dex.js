@@ -476,25 +476,22 @@ class ModdedDex {
 			return /** @type {PureEffect} */ (name);
 		}
 
-		let effect = this.effectCache.get(name);
-		if (effect) {
-			return /** @type {PureEffect} */ (effect);
-		}
-
 		if (name.startsWith('move:')) {
-			effect = this.getMove(name.slice(5));
-		} else if (name.startsWith('item:')) {
-			effect = this.getItem(name.slice(5));
-		} else if (name.startsWith('ability:')) {
-			effect = this.getAbility(name.slice(8));
-		}
-		if (effect) {
-			this.effectCache.set(name, effect);
 			// @ts-ignore
-			return effect;
+			return this.getMove(name.slice(5));
+		} else if (name.startsWith('item:')) {
+			// @ts-ignore
+			return this.getItem(name.slice(5));
+		} else if (name.startsWith('ability:')) {
+			// @ts-ignore
+			return this.getAbility(name.slice(8));
 		}
 
 		let id = toId(name);
+		let effect = this.effectCache.get(id);
+		if (effect) {
+			return /** @type {PureEffect} */ (effect);
+		}
 		if (this.data.Statuses.hasOwnProperty(id)) {
 			effect = new Data.PureEffect({name}, this.data.Statuses[id]);
 		} else if (this.data.Movedex.hasOwnProperty(id) && this.data.Movedex[id].effect) {
@@ -516,7 +513,7 @@ class ModdedDex {
 			effect = new Data.PureEffect({name, exists: false});
 		}
 
-		this.effectCache.set(name, effect);
+		this.effectCache.set(id, effect);
 		return /** @type {PureEffect} */ (effect);
 	}
 	/**
