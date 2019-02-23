@@ -621,8 +621,21 @@ function runDexsearch(target, cmd, canAll, message) {
 				if (tier[0] === '(') tier = tier.slice(1, -1);
 				if (alts.tiers[tier]) continue;
 				if (Object.values(alts.tiers).includes(false) && alts.tiers[tier] !== false) continue;
-				// some LC Pokemon are also in other tiers and need to be handled separately
-				if (alts.tiers.LC && !dex[mon].prevo && dex[mon].evos.some(evo => mod.getTemplate(evo).gen <= mod.gen) && !Dex.formats.gen7lc.banlist.includes(dex[mon].species) && !Dex.formats.gen7lc.banlist.includes(dex[mon].species + "-Base") && tier !== 'NFE') continue;
+				// LC handling, checks for LC Pokemon in higher tiers that need to be handled separately,
+				// as well as event-only Pokemon that are not eligible for LC despite being the first stage
+				let format = Dex.getFormat('gen' + maxGen + 'lc');
+				if (!format.exists) format = Dex.getFormat('gen7lc');
+				if (alts.tiers.LC && !dex[mon].prevo && dex[mon].evos.some(evo => mod.getTemplate(evo).gen <= mod.gen) && !format.banlist.includes(dex[mon].species) && !format.banlist.includes(dex[mon].species + "-Base")) {
+					if (dex[mon].eventPokemon && dex[mon].eventOnly) {
+						let validEvents = 0;
+						for (const event of dex[mon].eventPokemon) {
+							if (event.level && event.level <= 5) validEvents++;
+						}
+						if (validEvents > 0) continue;
+					} else {
+						continue;
+					}
+				}
 			}
 
 			if (alts.doublesTiers && Object.keys(alts.doublesTiers).length) {
@@ -1108,7 +1121,7 @@ function runMovesearch(target, cmd, canAll, message) {
 				}
 				if (typeof alts.property[prop].greater === "number") {
 					if ((dex[move][prop] === true && dex[move].category !== "status") ||
-					     dex[move][prop] > alts.property[prop].greater) {
+						dex[move][prop] > alts.property[prop].greater) {
 						matched = true;
 						break;
 					}
