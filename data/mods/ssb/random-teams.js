@@ -101,12 +101,6 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Trashalanche',
 				evs: {hp: 252, atk: 252, def: 4}, ivs: {spe: 0}, nature: 'Brave',
 			},
-			'Arrested': {
-				species: 'Blastoise', ability: 'Torrent', item: 'Blastoisinite', gender: 'M',
-				moves: ['Muddy Water', 'Ice Beam', 'Slack Off'],
-				signatureMove: 'Jail Shell',
-				evs: {hp: 252, def: 4, spa: 252}, nature: 'Modest',
-			},
 			'Arsenal': {
 				species: 'Arceus', ability: 'Logia', gender: 'M',
 				item: ["Draco Plate", "Dread Plate", "Earth Plate", "Fist Plate", "Flame Plate", "Icicle Plate", "Insect Plate", "Iron Plate", "Meadow Plate", "Mind Plate", "Pixie Plate", "Sky Plate", "Splash Plate", "Spooky Plate", "Stone Plate", "Toxic Plate", "Zap Plate"],
@@ -455,6 +449,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				moves: ['Nasty Plot', 'Psyshock', 'Earth Power'],
 				signatureMove: 'Total Leech',
 				evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+			},
+			'Pablo': {
+				species: 'Blastoise', ability: 'Torrent', item: 'Blastoisinite', gender: 'M',
+				moves: ['Muddy Water', 'Ice Beam', 'Slack Off'],
+				signatureMove: 'Jail Shell',
+				evs: {hp: 252, def: 4, spa: 252}, nature: 'Modest',
 			},
 			'Paradise': {
 				species: 'Muk', ability: 'Unaware', item: 'Black Sludge', gender: '',
