@@ -670,6 +670,7 @@ interface FormatsData extends EventMethods {
 	desc?: string
 	effectType?: string
 	forcedLevel?: number
+	hasEventHandler?: true | 'StartOnly'
 	gameType?: GameType
 	maxForcedLevel?: number
 	maxLevel?: number
