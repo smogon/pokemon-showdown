@@ -389,7 +389,6 @@ let BattleFormats = {
 		effectType: 'Rule',
 		name: 'Team Preview',
 		desc: "Allows each player to see the Pok&eacute;mon on their opponent's team before they choose their lead Pok&eacute;mon",
-		hasEventHandler: true,
 		onBegin() {
 			this.add('clearpoke');
 			for (const side of this.sides) {
@@ -719,7 +718,6 @@ let BattleFormats = {
 		name: 'Sleep Clause Mod',
 		desc: "Prevents players from putting more than one of their opponent's Pok&eacute;mon to sleep at a time, and bans Mega Gengar from using Hypnosis",
 		banlist: ['Hypnosis + Gengarite'],
-		hasEventHandler: true,
 		onBegin() {
 			this.add('rule', 'Sleep Clause Mod: Limit one foe put to sleep');
 		},
@@ -751,7 +749,6 @@ let BattleFormats = {
 		effectType: 'Rule',
 		name: 'Freeze Clause Mod',
 		desc: "Prevents players from freezing more than one of their opponent's Pok&eacute;mon at a time",
-		hasEventHandler: true,
 		onBegin() {
 			this.add('rule', 'Freeze Clause Mod: Limit one foe frozen');
 		},
@@ -835,7 +832,6 @@ let BattleFormats = {
 		name: 'Inverse Mod',
 		desc: "The mod for Inverse Battle which inverts the type effectiveness chart, swapping resistances and weaknesses with each other",
 		onNegateImmunity: false,
-		hasEventHandler: true,
 		onEffectiveness(typeMod, target, type, move) {
 			// The effectiveness of Freeze Dry on Water isn't reverted
 			if (move && move.id === 'freezedry' && type === 'Water') return;

@@ -572,7 +572,6 @@ let Formats = [
 		mod: 'pokebilities',
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Bibarel', 'Bidoof', 'Diglett', 'Dugtrio', 'Excadrill', 'Glalie', 'Gothita', 'Gothitelle', 'Gothorita', 'Octillery', 'Porygon-Z', 'Remoraid', 'Smeargle', 'Snorunt', 'Trapinch', 'Wobbuffet', 'Wynaut'],
-		hasEventHandler: true, // should not be used as a ruleset
 		onBegin() {
 			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
 			for (let pokemon of allPokemon) {
@@ -646,7 +645,6 @@ let Formats = [
 			'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Marshadow', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane',
 			'Palkia', 'Pheromosa', 'Rayquaza', 'Regigigas', 'Reshiram', 'Slaking', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zekrom',
 		],
-		hasEventHandler: true, // should not be used as a ruleset
 		onValidateTeam(team) {
 			/**@type {{[k: string]: true}} */
 			let itemTable = {};
@@ -742,7 +740,6 @@ let Formats = [
 		searchShow: false,
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Kartana', 'Kyurem-Black', 'Shedinja'],
-		hasEventHandler: true, // should not be used as a ruleset
 		onModifyTemplate(template, target, source) {
 			if (!target) return; // Chat command
 			if (source && ['imposter', 'transform'].includes(source.id)) return;
@@ -771,7 +768,6 @@ let Formats = [
 			'Kangaskhanite', 'Mawilite', 'Medichamite',
 			'Huge Power', 'Imposter', 'Normalize', 'Pure Power', 'Wonder Guard', 'Mimic', 'Sketch', 'Sweet Scent', 'Transform',
 		],
-		hasEventHandler: true, // should not be used as a ruleset
 		onSwitchInPriority: 2,
 		onSwitchIn(pokemon) {
 			if (this.p1.active.every(ally => ally && !ally.fainted)) {
@@ -946,7 +942,6 @@ let Formats = [
 		mod: 'ssb',
 		team: 'randomStaffBros',
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
-		hasEventHandler: true, // should not be used as a ruleset
 		onBegin() {
 			this.add('raw|SUPER STAFF BROS <b>BRAWL</b>!!');
 			this.add('message', 'GET READY FOR THE NEXT BATTLE!');
