@@ -13,9 +13,9 @@ type SSBSet = {
 	shiny?: boolean;
 };
 
-import {RandomTeams} from '../../random-teams';
+import RandomTeams =  require('../../random-teams');
 
-export class RandomStaffBrosTeams extends RandomTeams {
+class RandomStaffBrosTeams extends RandomTeams {
 	randomStaffBrosTeam() {
 		let team: PokemonSet[] = [];
 		let sets: SSBSets = {
@@ -702,3 +702,5 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		return team;
 	}
 }
+
+export = RandomStaffBrosTeams;
