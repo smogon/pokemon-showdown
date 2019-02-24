@@ -751,6 +751,7 @@ let BattleFormats = {
 		effectType: 'Rule',
 		name: 'Freeze Clause Mod',
 		desc: "Prevents players from freezing more than one of their opponent's Pok&eacute;mon at a time",
+		hasEventHandler: true,
 		onBegin() {
 			this.add('rule', 'Freeze Clause Mod: Limit one foe frozen');
 		},
