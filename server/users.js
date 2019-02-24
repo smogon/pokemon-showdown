@@ -434,11 +434,13 @@ class Connection {
 /** @typedef {[string, string, Connection]} ChatQueueEntry */
 
 // User
-class User {
+class User extends Chat.MessageContext {
 	/**
 	 * @param {Connection} connection
 	 */
 	constructor(connection) {
+		super(connection.user);
+		this.user = this;
 		this.mmrCache = Object.create(null);
 		this.guestNum = -1;
 		this.name = "";
