@@ -1820,12 +1820,9 @@ class Battle extends Dex.ModdedDex {
 		for (const rule of this.getRuleTable(format).keys()) {
 			if (rule.startsWith('+') || rule.startsWith('-') || rule.startsWith('!')) continue;
 			let subFormat = this.getFormat(rule);
-			if (subFormat.exists && subFormat.hasEventHandler) {
-				if (subFormat.hasEventHandler === 'StartOnly') {
-					this.singleEvent('Start', subFormat, null, this);
-				} else {
-					this.addPseudoWeather(rule);
-				}
+			if (subFormat.exists) {
+				if (subFormat.onBegin) subFormat.onBegin.call(this);
+				if (subFormat.hasEventHandler) this.addPseudoWeather(rule);
 			}
 		}
 
