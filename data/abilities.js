@@ -1534,7 +1534,7 @@ let BattleAbilities = {
 		onFlinch: false,
 		id: "innerfocus",
 		name: "Inner Focus",
-		rating: 1.5,
+		rating: 1,
 		num: 39,
 	},
 	"insomnia": {
@@ -3121,7 +3121,7 @@ let BattleAbilities = {
 		},
 		id: "sniper",
 		name: "Sniper",
-		rating: 1,
+		rating: 1.5,
 		num: 97,
 	},
 	"snowcloak": {
@@ -3437,7 +3437,7 @@ let BattleAbilities = {
 		},
 		id: "suctioncups",
 		name: "Suction Cups",
-		rating: 1.5,
+		rating: 1,
 		num: 21,
 	},
 	"superluck": {
