@@ -31,6 +31,10 @@ describe('Ingrain', function () {
 		battle.makeChoices('move uturn', 'move seismictoss');
 		battle.makeChoices('switch 2', 'pass');
 		assert.strictEqual(battle.p1.active[0].hp, Math.floor(battle.p1.active[0].maxhp * 17 / 16) - 100);
+
+		// should be gone after switching out and back in
+		battle.makeChoices('switch 2', 'move protect');
+		assert.strictEqual(battle.p1.active[0].hp, Math.floor(battle.p1.active[0].maxhp * 17 / 16) - 200);
 	});
 
 	it('should prevent the user from being forced out or switching out', function () {
