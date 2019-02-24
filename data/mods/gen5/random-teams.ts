@@ -1,15 +1,7 @@
-'use strict';
-
-const RandomGen6Teams = require('../../mods/gen6/random-teams');
+import RandomGen6Teams = require('../../mods/gen6/random-teams');
 
 class RandomGen5Teams extends RandomGen6Teams {
-	/**
-	 * @param {string | Template} template
-	 * @param {number} [slot]
-	 * @param {RandomTeamsTypes["TeamDetails"]} [teamDetails]
-	 * @return {RandomTeamsTypes["RandomSet"]}
-	 */
-	randomSet(template, slot, teamDetails = {}) {
+	randomSet(template: string | Template, slot?: number, teamDetails: RandomTeamsTypes["TeamDetails"] = {}): RandomTeamsTypes["RandomSet"] {
 		if (slot === undefined) slot = 1;
 		let baseTemplate = (template = this.getTemplate(template));
 		let species = template.species;
@@ -28,8 +20,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 		}
 
 		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : template.learnset ? Object.keys(template.learnset) : []);
-		/**@type {string[]} */
-		let moves = [];
+		let moves: string[] = [];
 		let ability = '';
 		let item = '';
 		let evs = {
@@ -48,14 +39,12 @@ class RandomGen5Teams extends RandomGen6Teams {
 			spd: 31,
 			spe: 31,
 		};
-		/**@type {{[k: string]: true}} */
-		let hasType = {};
+		let hasType: {[k: string]: true} = {};
 		hasType[template.types[0]] = true;
 		if (template.types[1]) {
 			hasType[template.types[1]] = true;
 		}
-		/**@type {{[k: string]: true}} */
-		let hasAbility = {};
+		let hasAbility: {[k: string]: true} = {};
 		hasAbility[template.abilities[0]] = true;
 		if (template.abilities[1]) {
 			// @ts-ignore
@@ -75,8 +64,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 
 		let counterAbilities = ['Adaptability', 'Contrary', 'Hustle', 'Iron Fist', 'Skill Link'];
 
-		/**@type {{[k: string]: boolean}} */
-		let hasMove = {};
+		let hasMove: {[k: string]: boolean} = {};
 		let counter;
 
 		do {
@@ -670,16 +658,12 @@ class RandomGen5Teams extends RandomGen6Teams {
 			pokemonPool.push(id);
 		}
 
-		/**@type {{[k: string]: number}} */
-		let typeCount = {};
-		/**@type {{[k: string]: number}} */
-		let typeComboCount = {};
-		/**@type {{[k: string]: number}} */
-		let baseFormes = {};
+		let typeCount: {[k: string]: number} = {};
+		let typeComboCount: {[k: string]: number} = {};
+		let baseFormes: {[k: string]: number} = {};
 		let uberCount = 0;
 		let nuCount = 0;
-		/**@type {RandomTeamsTypes["TeamDetails"]} */
-		let teamDetails = {};
+		let teamDetails: RandomTeamsTypes["TeamDetails"] = {};
 
 		while (pokemonPool.length && pokemon.length < 6) {
 			let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
@@ -794,4 +778,4 @@ class RandomGen5Teams extends RandomGen6Teams {
 	}
 }
 
-module.exports = RandomGen5Teams;
+export = RandomGen5Teams;

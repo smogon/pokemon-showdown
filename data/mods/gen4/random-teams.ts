@@ -1,15 +1,7 @@
-'use strict';
-
-const RandomGen5Teams = require('../../mods/gen5/random-teams');
+import RandomGen5Teams = require('../../mods/gen5/random-teams');
 
 class RandomGen4Teams extends RandomGen5Teams {
-	/**
-	 * @param {string | Template} template
-	 * @param {number} [slot]
-	 * @param {RandomTeamsTypes["TeamDetails"]} [teamDetails]
-	 * @return {RandomTeamsTypes["RandomSet"]}
-	 */
-	randomSet(template, slot, teamDetails = {}) {
+	randomSet(template: string | Template, slot?: number, teamDetails: RandomTeamsTypes["TeamDetails"] = {}): RandomTeamsTypes["RandomSet"] {
 		if (slot === undefined) slot = 1;
 		let baseTemplate = (template = this.getTemplate(template));
 		let species = template.species;
@@ -24,8 +16,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 		if (template.battleOnly) species = template.baseSpecies;
 
 		let movePool = (template.randomBattleMoves ? template.randomBattleMoves.slice() : template.learnset ? Object.keys(template.learnset) : []);
-		/**@type {string[]} */
-		let moves = [];
+		let moves: string[] = [];
 		let ability = '';
 		let item = '';
 		let evs = {
@@ -44,14 +35,14 @@ class RandomGen4Teams extends RandomGen5Teams {
 			spd: 31,
 			spe: 31,
 		};
-		/**@type {{[k: string]: true}} */
-		let hasType = {};
+
+		let hasType: {[k: string]: true} = {};
 		hasType[template.types[0]] = true;
 		if (template.types[1]) {
 			hasType[template.types[1]] = true;
 		}
-		/**@type {{[k: string]: true}} */
-		let hasAbility = {};
+
+		let hasAbility: {[k: string]: true} = {};
 		hasAbility[template.abilities[0]] = true;
 		if (template.abilities[1]) {
 			// @ts-ignore
@@ -70,8 +61,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 		let recoveryMoves = ['healorder', 'milkdrink', 'moonlight', 'morningsun', 'painsplit', 'recover', 'rest', 'roost', 'slackoff', 'softboiled', 'synthesis', 'wish'];
 		let defensiveStatusMoves = ['aromatherapy', 'haze', 'healbell', 'roar', 'whirlwind', 'willowisp', 'yawn'];
 
-		/**@type {{[k: string]: boolean}} */
-		let hasMove = {};
+		let hasMove: {[k: string]: boolean} = {};
 		let counter;
 
 		do {
@@ -697,4 +687,4 @@ class RandomGen4Teams extends RandomGen5Teams {
 	}
 }
 
-module.exports = RandomGen4Teams;
+export = RandomGen4Teams;

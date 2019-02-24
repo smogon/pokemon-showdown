@@ -1,6 +1,4 @@
-'use strict';
-
-const RandomGen3Teams = require('../../mods/gen3/random-teams');
+import RandomGen3Teams = require('../../mods/gen3/random-teams');
 
 class RandomGen2Teams extends RandomGen3Teams {
 	// @ts-ignore
@@ -17,22 +15,17 @@ class RandomGen2Teams extends RandomGen3Teams {
 		}
 
 		// Setup storage.
-		/**@type {{[k: string]: number}} */
-		let tierCount = {};
-		/**@type {{[k: string]: number}} */
-		let typeCount = {};
-		/**@type {{[k: string]: number}} */
-		let weaknessCount = {
+		let tierCount: {[k: string]: number} = {};
+		let typeCount: {[k: string]: number} = {};
+		let weaknessCount: {[k: string]: number} = {
 			'Normal': 0, 'Fighting': 0, 'Flying': 0, 'Poison': 0, 'Ground': 0, 'Rock': 0, 'Bug': 0, 'Ghost': 0, 'Steel': 0,
 			'Fire': 0, 'Water': 0, 'Grass': 0, 'Electric': 0, 'Psychic': 0, 'Ice': 0, 'Dragon': 0, 'Dark': 0,
 		};
-		/**@type {{[k: string]: number}} */
-		let resistanceCount = {
+		let resistanceCount: {[k: string]: number} = {
 			'Normal': 0, 'Fighting': 0, 'Flying': 0, 'Poison': 0, 'Ground': 0, 'Rock': 0, 'Bug': 0, 'Ghost': 0, 'Steel': 0,
 			'Fire': 0, 'Water': 0, 'Grass': 0, 'Electric': 0, 'Psychic': 0, 'Ice': 0, 'Dragon': 0, 'Dark': 0,
 		};
-		/**@type {{[k: string]: number}} */
-		let restrictMoves = {
+		let restrictMoves: {[k: string]: number} = {
 			'reflect': 1, 'lightscreen': 1, 'rapidspin': 1, 'spikes': 1, 'bellydrum': 1, 'haze': 1,
 			'healbell': 1, 'thief': 1, 'phazing': 1, 'sleeptalk': 2, 'sleeping': 2,
 		};
@@ -138,36 +131,25 @@ class RandomGen2Teams extends RandomGen3Teams {
 		return pokemon;
 	}
 
-	/**
-	 * @param {string | Template} template
-	 * @param {number} [slot]
-	 * @param {{[k: string]: number}} restrictMoves
-	 * @return {RandomTeamsTypes["RandomSet"]}
-	 */
-	randomSet(template, slot, restrictMoves) {
+	randomSet(template: string | Template, slot?: number, restrictMoves: {[k: string]: number} = {}): RandomTeamsTypes["RandomSet"] {
 		if (slot === undefined) slot = 1;
 		template = this.getTemplate(template);
 		if (!template.exists) template = this.getTemplate('unown');
 
 		let randomSetNumber = 0;
-		/**@type {RandomTeamsTypes["RandomSet"]} */
 		// @ts-ignore
-		let set = template.randomSet1;
-		/**@type {string[]} */
-		let moves = [];
-		/**@type {{[k: string]: number}} */
-		let hasMove = {};
+		let set: RandomTeamsTypes["RandomSet"] = template.randomSet1;
+		let moves: string[] = [];
+		let hasMove: {[k: string]: number} = {};
 		let item = '';
 		let ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
 
 		let discard = false;
 		let rerollsLeft = 3;
-		/**@param {string} move */
-		let isPhazingMove = function (move) {
+		let isPhazingMove = function (move: string) {
 			return (move === "roar" || move === "whirlwind");
 		};
-		/**@param {string} move */
-		let isSleepMove = function (move) {
+		let isSleepMove = function (move: string) {
 			return (move === "sleeppowder" || move === "lovelykiss" || move === "sing" || move === "hypnosis" || move === "spore");
 		};
 
@@ -319,12 +301,7 @@ class RandomGen2Teams extends RandomGen3Teams {
 		};
 	}
 
-	/**
-	 * @param {string[]} moves
-	 * @param {{[k: string]: number}} hasMove
-	 * @param {string[]} fillerMoves
-	 */
-	randomMove(moves, hasMove, fillerMoves) {
+	randomMove(moves: string[], hasMove: {[k: string]: number}, fillerMoves: string[]) {
 		let index = 0;
 		let done = false;
 
@@ -346,4 +323,4 @@ class RandomGen2Teams extends RandomGen3Teams {
 	}
 }
 
-module.exports = RandomGen2Teams;
+export = RandomGen2Teams;
