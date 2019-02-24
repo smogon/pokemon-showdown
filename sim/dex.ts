@@ -412,11 +412,15 @@ class ModdedDex {
 			id = matches[1];
 		}
 		if (id && this.data.Movedex.hasOwnProperty(id)) {
+			// @ts-ignore
 			move = new Data.Move({name}, this.data.Movedex[id]);
 		} else {
+			// @ts-ignore
 			move = new Data.Move({name, exists: false});
 		}
+		// @ts-ignore
 		if (move.exists) this.moveCache.set(id, move);
+		// @ts-ignore
 		return move;
 	}
 	/**

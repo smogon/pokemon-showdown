@@ -56,7 +56,7 @@ export class Side {
 	maxTeamSize: number;
 	id: 'p1' | 'p2';
 	foe: Side;
-	team: PokemonSet[].
+	team: PokemonSet[];
 	lastMove: Move | null;
 
 
@@ -130,6 +130,7 @@ export class Side {
 
 	getChoice() {
 		if (this.choice.actions.length > 1 && this.choice.actions.every(action => action.choice === 'team')) {
+			// @ts-ignore
 			return `team ` + this.choice.actions.map(action => action.pokemon.position + 1).join(', ');
 		}
 		return this.choice.actions.map(action => {
@@ -142,8 +143,10 @@ export class Side {
 				return `move ${action.moveid}${details}`;
 			case 'switch':
 			case 'instaswitch':
+				// @ts-ignore
 				return `switch ${action.target.position + 1}`;
 			case 'team':
+				// @ts-ignore
 				return `team ${action.pokemon.position + 1}`;
 			default:
 				return action.choice;

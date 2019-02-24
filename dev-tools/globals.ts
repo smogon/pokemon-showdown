@@ -1,8 +1,8 @@
 type Battle = import('./../sim/battle')
 type ModdedDex = typeof import('./../sim/dex')
-type Pokemon = import('./../sim/pokemon').Pokemon;
-type Side = import('./../sim/side')
-type Validator = ReturnType<typeof import('./../sim/team-validator')>
+type Pokemon = import('./../sim/pokemon').Pokemon
+type Side = import('./../sim/side').Side
+type Validator = typeof import('./../sim/team-validator')
 
 type PageTable = import('./../server/chat').PageTable
 type ChatCommands = import('./../server/chat').ChatCommands
