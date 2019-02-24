@@ -1,6 +1,6 @@
 type Battle = import('./../sim/battle')
 type ModdedDex = typeof import('./../sim/dex')
-type Pokemon = import('./../sim/pokemon')
+type Pokemon = import('./../sim/pokemon').Pokemon;
 type Side = import('./../sim/side')
 type Validator = ReturnType<typeof import('./../sim/team-validator')>
 
