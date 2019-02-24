@@ -1,0 +1,25 @@
+{
+	"name": "Japanese",
+
+	"strings": {
+		"Please follow the rules:": "ルールを守ってください:",
+		"[TN: Link to the PS rules for your language]https://pokemonshowdown.com/rules": "https://pokemonshowdown.com/pages/rules-ja",
+		"Global Rules": "全部屋共通ルール",
+		"${room} room rules": "${room}部屋のルール",
+
+		"<strong>Global ranks</strong>": "<strong>グローバルユーザーランク</strong>",
+		"+ <strong>Global Voice</strong> - They can use ! commands like !groups": "<strong>グローバルボイス</strong>(+)：「!コマンド」を使ってコマンドの結果を部屋に表示することができる。",
+		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "<strong>グローバルドライバー</strong>(%)：上記に加えてユーザーをロックしたり、他に使っているアカウントを確認することができる。",
+		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "<strong>グローバルモデレータ</strong>(@)：上記に加えてユーザーをサイト全体からBANできる。",
+		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "<strong>グローバルボット</strong>(*)：権限はモデレータと同じだが、ボットだと分かるためのランク。",
+		"&amp; <strong>Global Leader</strong> - The above, and they can promote to global moderator and force ties": "<strong>グローバルリーダー</strong>(&amp;)：上記に加えてユーザーをグローバルモデレータまで昇格したり、試合を強制的に引き分けにすることができる。",
+		"~ <strong>Global Administrator</strong> -  They can do anything, like change what this message says": "<strong>グローバルアドミニストレーター</strong>(~)：何でもできる。この文章も編集できる。",
+
+		"<strong>Room ranks</strong>": "<strong>日本語部屋のユーザーランク</strong>",
+		"+ <strong>Voice</strong> - They can use ! commands like !groups": "<strong>ボイス</strong>(+)：「!コマンド」を使ってコマンドの結果を部屋に表示することができる。",
+		"% <strong>Driver</strong> - The above, and they can mute and warn": "<strong>ドライバー</strong>(%)：上記に加えて警告メッセージを出したりユーザーを短時間喋れなく（ミュート）することができる。",
+		"@ <strong>Moderator</strong> - The above, and they can room ban users": "<strong>モデレータ</strong>(@)：上記に加えてユーザーを部屋からBANすることができる。",
+		"* <strong>Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "<strong>ボット</strong>(*)：権限はモデレータと同じだが、ボットだと分かるためのランク。",
+		"# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it": "<strong>ルームオーナー</strong>(#)：この部屋のリーダーでほとんどのことができる。"
+	}
+}

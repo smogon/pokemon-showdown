@@ -1,0 +1,25 @@
+{
+	"name": "Spanish",
+
+	"strings": {
+		"Please follow the rules:": "Por favor sigue las reglas:",
+		"[TN: Link to the PS rules for your language]https://pokemonshowdown.com/rules": "https://pokemonshowdown.com/pages/rules-es",
+		"Global Rules": "Reglas Globales",
+		"${room} room rules": "Reglas de la sala ${room}",
+
+		"<strong>Global ranks</strong>": "<strong>Rangos Globales</strong>",
+		"+ <strong>Global Voice</strong> - They can use ! commands like !groups": "+ <strong>Global Voice</strong> - Pueden utilizar comandos con ! como !groups",
+		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "% <strong>Global Driver</strong> - Lo mismo que arriba y también pueden dar locks y revisar las alts",
+		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>Global Moderator</strong> - Lo mismo que arriba y además pueden expulsar globalmente del servidor",
+		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Global Bot</strong> - Igual que un moderador, pero el símbolo identifica que es un Bot",
+		"&amp; <strong>Global Leader</strong> - The above, and they can promote to global moderator and force ties": "&amp; <strong>Global Leader</strong> - Lo mismo que arriba y también pueden promover a otros a moderador global y forzar empates",
+		"~ <strong>Global Administrator</strong> -  They can do anything, like change what this message says": "~ <strong>Global Administrator</strong> - Pueden hacer cualquier cosa, como cambiar lo que dice este mensaje",
+
+		"<strong>Room ranks</strong>": "<strong>Rangos de Sala</strong>",
+		"+ <strong>Voice</strong> - They can use ! commands like !groups": "+ <strong>Voice</strong> - Pueden utilizar comandos con ! como !groups",
+		"% <strong>Driver</strong> - The above, and they can mute and warn": "% <strong>Driver</strong> - Lo mismo que arriba y además pueden sancionar dando advertencias o silenciando",
+		"@ <strong>Moderator</strong> - The above, and they can room ban users": "@ <strong>Moderator</strong> - Lo mismo que arriba y además pueden expulsar a usuarios de la sala",
+		"* <strong>Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Bot</strong> - Igual que un moderador, pero el símbolo identifica que es un Bot",
+		"# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it": "# <strong>Room Owner</strong> - Líderes de la sala y tienen casi todo el control de lo que sucede en esta"
+	}
+}

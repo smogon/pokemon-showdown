@@ -1,0 +1,25 @@
+{
+	"name": "English",
+
+	"strings": {
+		"Please follow the rules:": "",
+		"[TN: Link to the PS rules for your language]https://pokemonshowdown.com/rules": "",
+		"Global Rules": "",
+		"${room} room rules": "",
+
+		"<strong>Global ranks</strong>": "",
+		"+ <strong>Global Voice</strong> - They can use ! commands like !groups": "",
+		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "",
+		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "",
+		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "",
+		"&amp; <strong>Global Leader</strong> - The above, and they can promote to global moderator and force ties": "",
+		"~ <strong>Global Administrator</strong> -  They can do anything, like change what this message says": "",
+
+		"<strong>Room ranks</strong>": "",
+		"+ <strong>Voice</strong> - They can use ! commands like !groups": "",
+		"% <strong>Driver</strong> - The above, and they can mute and warn": "",
+		"@ <strong>Moderator</strong> - The above, and they can room ban users": "",
+		"* <strong>Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "",
+		"# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it": ""
+	}
+}
