@@ -1732,7 +1732,6 @@ class RandomTeams extends Dex.ModdedDex {
 			} else if (tierCount[tier] > 1) {
 				continue;
 			}
-			tierCount[tier]++;
 
 			// Adjust rate for species with multiple formes
 			switch (template.baseSpecies) {
@@ -1815,6 +1814,7 @@ class RandomTeams extends Dex.ModdedDex {
 
 			// Now that our Pokemon has passed all checks, we can increment our counters
 			baseFormes[template.baseSpecies] = 1;
+			tierCount[tier]++;
 
 			// Increment type counters
 			for (const type of types) {
