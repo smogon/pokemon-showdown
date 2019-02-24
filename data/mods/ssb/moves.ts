@@ -1,11 +1,8 @@
-'use strict';
-
 // Used for bumbadadabum and Snaquaza's move
-const RandomStaffBrosTeams = require('./random-teams');
-const Pokemon = require('../../../sim/pokemon');
+import {RandomStaffBrosTeams} from './random-teams';
+import {Pokemon} from '../../../sim/pokemon';
 
-/** @type {{[k: string]: ModdedMoveData}} */
-let BattleMovedex = {
+let BattleMovedex: {[k: string]: ModdedMoveData} = {
 	/*
 	// Example
 	"moveid": {
@@ -763,7 +760,7 @@ let BattleMovedex = {
 
 				// Bit of a hack so client doesn't crash when formeChange is called for the new pokemon
 				let effect = this.effect;
-				this.effect = /** @type {Effect} */ ({id: ''});
+				this.effect = {id: ''} as Effect;
 				let pokemon = new Pokemon(set, source.side);
 				this.effect = effect;
 
@@ -868,8 +865,7 @@ let BattleMovedex = {
 			}
 			if (stats.length) {
 				let randomStat = this.sample(stats);
-				/** @type {{[stat: string]: number}} */
-				let boost = {};
+				let boost: {[stat: string]: number} = {};
 				boost[randomStat] = 1;
 				this.boost(boost, source);
 			}
@@ -1197,8 +1193,7 @@ let BattleMovedex = {
 		},
 		onHit(target, source, move) {
 			let baseForme = source.template.id;
-			/** @type {{[forme: string]: string}} */
-			let formes = {
+			let formes: {[forme: string]: string} = {
 				celebi: 'Future Sight',
 				jirachi: 'Doom Desire',
 				manaphy: 'Tail Glow',
@@ -1293,8 +1288,7 @@ let BattleMovedex = {
 		},
 		onAfterMoveSecondarySelf(pokemon) {
 			let stat = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy'][this.random(6)];
-			/** @type {{[stat: string]: number}} */
-			let boost = {};
+			let boost: {[stat: string]: number} = {};
 			boost[stat] = 1;
 			this.boost(boost, pokemon);
 		},
@@ -1434,8 +1428,7 @@ let BattleMovedex = {
 		},
 		onHitSide(target, source) {
 			// All possible hazards, and their maximum possible layer count
-			/** @type {{[key: string]: number}} */
-			let hazards = {stealthrock: 1, spikes: 3, toxicspikes: 2, stickyweb: 1};
+			let hazards: {[key: string]: number} = {stealthrock: 1, spikes: 3, toxicspikes: 2, stickyweb: 1};
 			// Check how many layers of each hazard can still be added to the foe's side
 			if (target.getSideCondition('stealthrock')) delete hazards.stealthrock;
 			if (target.getSideCondition('spikes')) {
@@ -2493,7 +2486,7 @@ let BattleMovedex = {
 		onHit(target, source, move) {
 			let stockpileLayers = 0;
 			if (source.volatiles['stockpile']) stockpileLayers = source.volatiles['stockpile'].layers;
-			let boosts = {};
+			let boosts: SparseBoostsTable = {};
 			if (source.boosts.def > stockpileLayers) boosts.def = stockpileLayers - source.boosts.def;
 			if (source.boosts.spd > stockpileLayers) boosts.spd = stockpileLayers - source.boosts.spd;
 			if (boosts.def || boosts.spd) this.boost(boosts, source, source, move);
@@ -3320,8 +3313,7 @@ let BattleMovedex = {
 			this.add('-anim', source, "Transform", source);
 		},
 		onHit(target, source, move) {
-			/** @type {{[move: string]: string[]}} */
-			let claims = {
+			let claims: {[move: string]: string[]} = {
 				bravebird: ['Braviary', 'Crobat', 'Decidueye', 'Dodrio', 'Farfetch\'d', 'Golbat', 'Mandibuzz', 'Pidgeot', 'Skarmory', 'Staraptor', 'Swanna', 'Swellow', 'Talonflame', 'Tapu Koko', 'Toucannon'],
 				superpower: ['Absol', 'Aggron', 'Armaldo', 'Avalugg', 'Azumarill', 'Barbaracle', 'Basculin', 'Beartic', 'Bewear', 'Bibarel', 'Bouffalant', 'Braviary', 'Breloom', 'Buzzwole', 'Cacturne', 'Carracosta', 'Celesteela', 'Chesnaught', 'Cobalion', 'Conkeldurr', 'Crabominable', 'Crawdaunt', 'Darmanitan', 'Diggersby', 'Donphan', 'Dragonite', 'Drampa', 'Druddigon', 'Durant', 'Eelektross', 'Emboar', 'Exeggutor-Alola', 'Feraligatr', 'Flareon', 'Flygon', 'Gigalith', 'Gogoat', 'Golem', 'Golurk', 'Goodra', 'Granbull', 'Gurdurr', 'Hariyama', 'Hawlucha', 'Haxorus', 'Heatmor', 'Hippowdon', 'Hitmonlee', 'Hydreigon', 'Incineroar', 'Kabutops', 'Keldeo', 'Kingler', 'Komala', 'Kommo-o', 'Krookodile', 'Landorus-Therian', 'Lurantis', 'Luxray', 'Machamp', 'Malamar', 'Mamoswine', 'Mew', 'Mudsdale', 'Nidoking', 'Nidoqueen', 'Pangoro', 'Passimian', 'Piloswine', 'Pinsir', 'Rampardos', 'Regice', 'Regigigas', 'Regirock', 'Registeel', 'Reuniclus', 'Rhydon', 'Rhyperior', 'Samurott', 'Sawk', 'Scizor', 'Scolipede', 'Simipour', 'Simisage', 'Simisear', 'Smeargle', 'Snorlax', 'Spinda', 'Stakataka', 'Stoutland', 'Swampert', 'Tapu Bulu', 'Terrakion', 'Throh', 'Thundurus', 'Torkoal', 'Tornadus', 'Torterra', 'Tyranitar', 'Tyrantrum', 'Ursaring', 'Virizion', 'Zeraora'],
 				suckerpunch: ['Absol', 'Arbok', 'Ariados', 'Banette', 'Bisharp', 'Cacturne', 'Celebi', 'Corsola', 'Decidueye', 'Delcatty', 'Drifblim', 'Druddigon', 'Dugtrio', 'Dusknoir', 'Electrode', 'Emboar', 'Froslass', 'Furfrou', 'Furret', 'Galvantula', 'Gengar', 'Girafarig', 'Golem', 'Golisopod', 'Heatmor', 'Hitmonlee', 'Hitmontop', 'Houndoom', 'Huntail', 'Kangaskhan', 'Kecleon', 'Komala', 'Lanturn', 'Latias', 'Liepard', 'Lycanroc', 'Maractus', 'Mawile', 'Meowstic', 'Mew', 'Mightyena', 'Mismagius', 'Nidoking', 'Nidoqueen', 'Purugly', 'Raticate', 'Rotom', 'Sableye', 'Seviper', 'Shiftry', 'Skuntank', 'Slaking', 'Smeargle', 'Spinda', 'Spiritomb', 'Stantler', 'Sudowoodo', 'Toxicroak', 'Umbreon', 'Victreebel', 'Wormadam', 'Xatu'],
