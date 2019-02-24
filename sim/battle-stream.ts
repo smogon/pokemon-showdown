@@ -222,10 +222,12 @@ export function getPlayerStreams(stream: BattleStream) {
 }
 
 export class BattlePlayer {
+	// @ts-ignore
 	stream: Streams.ObjectReadWriteStream;
 	log: string[];
 	debug: boolean;
 
+	// @ts-ignore
 	constructor(playerStream: Streams.ObjectReadWriteStream, debug: boolean = false) {
 		this.stream = playerStream;
 		this.log = [];

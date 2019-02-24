@@ -415,6 +415,7 @@ let BattleStatuses = {
 				}
 				const hitMove = new this.Data.Move(posData.moveData);
 
+				// @ts-ignore
 				this.tryMoveHit(target, posData.source, hitMove);
 
 				this.effectData.positions[i] = null;

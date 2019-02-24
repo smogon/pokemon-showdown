@@ -304,7 +304,7 @@ class ModdedDex {
 		return template.species;
 	}
 
-	getTemplate(name: string | Template): Template {
+	getTemplate(name?: string | Template): Template {
 		if (name && typeof name !== 'string') {
 			return name;
 		}
@@ -445,7 +445,7 @@ class ModdedDex {
 	* While this function can technically return any kind of effect at
 	* all, that's not a feature TypeScript needs to know about.
 	*/
-	getEffect(name: string | Effect | null): PureEffect {
+	getEffect(name?: string | Effect | null): PureEffect {
 		if (!name) {
 			return nullEffect;
 		}
@@ -518,7 +518,7 @@ class ModdedDex {
 		return validatedFormatid;
 	}
 
-	getFormat(name: string | Format, isTrusted = false): Format {
+	getFormat(name?: string | Format, isTrusted = false): Format {
 		if (name && typeof name !== 'string') {
 			return name;
 		}

@@ -87,7 +87,7 @@ export class Battle extends Dex.ModdedDex {
 	NOT_FAILURE: '';
 	prng: PRNG;
 	prngSeed: PRNGSeed;
-	teamGenerator: ReturnType<Dex.getTeamGenerator> | null;
+	teamGenerator: ReturnType<typeof Dex.getTeamGenerator> | null;
 	winner?: string;
 	firstStaleWarned?: boolean;
 	staleWarned?: boolean;

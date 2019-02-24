@@ -261,6 +261,7 @@ let BattleScripts = {
 		}
 		return damage;
 	},
+	/** @return {number | undefined | false} */
 	moveHit(target, pokemon, move, moveData, isSecondary, isSelf) {
 		/** @type {number | false | null | undefined} */
 		let damage = undefined;
@@ -341,6 +342,7 @@ let BattleScripts = {
 			}
 			if (moveData.status) {
 				hitResult = target.trySetStatus(moveData.status, pokemon, move);
+				// @ts-ignore
 				if (!hitResult && move.status) return hitResult;
 				didSomething = didSomething || hitResult;
 			}

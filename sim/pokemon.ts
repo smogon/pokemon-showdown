@@ -716,6 +716,7 @@ export class Pokemon {
 				}
 			}
 			let disabled = moveSlot.disabled;
+			// @ts-ignore
 			if ((moveSlot.pp <= 0 && !this.volatiles['partialtrappinglock']) || disabled && this.side.active.length >= 2 && this.battle.targetTypeChoices(target)) {
 				disabled = true;
 			} else if (disabled === 'hidden' && restrictData) {
