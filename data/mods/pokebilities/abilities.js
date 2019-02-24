@@ -76,9 +76,8 @@ exports.BattleAbilities = {
 					possibleTargets.splice(rand, 1);
 					continue;
 				}
-				rand = this.random(possibleAbilities.length);
-				let ability = this.getAbility(possibleAbilities[rand]);
-				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + possibleTargets[rand]);
+				let ability = this.getAbility(this.sample(possibleAbilities));
+				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
 				if (isAbility) {
 					pokemon.setAbility(ability);
 				} else {
