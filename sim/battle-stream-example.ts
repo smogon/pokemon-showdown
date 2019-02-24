@@ -9,7 +9,7 @@
  */
 
 import * as BattleStreams from './battle-stream';
-import * as Dex from './dex';
+import Dex from './dex';
 
 /*********************************************************************
  * Helper functions
