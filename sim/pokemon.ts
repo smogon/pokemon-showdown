@@ -201,7 +201,7 @@ export class Pokemon {
 		this.template = this.baseTemplate;
 		this.moveSlots = [];
 		this.baseMoveSlots = [];
-		// @ts-ignore - null used for this.formeChange(this.baseTemplate)
+		// @ts-ignore - null used for this.setTemplate(this.baseTemplate)
 		this.baseStats = null;
 		this.trapped = false;
 		this.maybeTrapped = false;
@@ -948,8 +948,17 @@ export class Pokemon {
 	 * This function only handles changes to stats and type.
 	 * Use formChange to handle changes to ability and sending client messages.
 	 */
+<<<<<<< HEAD:sim/pokemon.ts
 	setTemplate(rawTemplate: Template, source: Effect | null = this.battle.effect) {
 		let template = this.battle.singleEvent('ModifyTemplate', this.battle.getFormat(), null, this, source, null, rawTemplate);
+=======
+	setTemplate(rawTemplate, source = this.battle.effect) {
+		let template = this.battle.singleEvent('ModifyTemplate', this.battle.getFormat(), null, this, null, source, rawTemplate);
+		for (const rule of this.battle.getRuleTable(this.battle.getFormat()).keys()) {
+			let subFormat = this.battle.getFormat(rule);
+			if (subFormat && subFormat.onModifyTemplate) template = this.battle.singleEvent('ModifyTemplate', subFormat, null, this, null, source, template);
+		}
+>>>>>>> Run onModifyTemplate on rulesets for custom formats:sim/pokemon.js
 
 		if (!template) return null;
 
