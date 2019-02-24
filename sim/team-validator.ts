@@ -22,6 +22,7 @@ class Validator {
 
 	validateTeam(team: PokemonSet[] | null, removeNicknames: boolean = false): string[] | null {
 		if (team && this.format.validateTeam) {
+			// @ts-ignore
 			return this.format.validateTeam.call(this, team, removeNicknames) || null;
 		}
 		return this.baseValidateTeam(team, removeNicknames);
@@ -63,6 +64,7 @@ class Validator {
 		let teamHas: {[k: string]: number} = {};
 		for (const set of team) { // Changing this loop to for-of would require another loop/map statement to do removeNicknames
 			if (!set) return [`You sent invalid team data. If you're not using a custom client, please report this as a bug.`];
+			// @ts-ignore
 			let setProblems = (format.validateSet || this.validateSet).call(this, set, teamHas);
 			if (setProblems) {
 				problems = problems.concat(setProblems);

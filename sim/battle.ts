@@ -88,6 +88,10 @@ export class Battle extends Dex.ModdedDex {
 	prng: PRNG;
 	prngSeed: PRNGSeed;
 	teamGenerator: ReturnType<Dex.getTeamGenerator> | null;
+	winner?: string;
+	firstStaleWarned?: boolean;
+	staleWarned?: boolean;
+	activeTurns?: number;
 
 	constructor(options: BattleOptions) {
 		let format = Dex.getFormat(options.formatid, true);
@@ -176,7 +180,7 @@ export class Battle extends Dex.ModdedDex {
 		return 'Battle: ' + this.format;
 	}
 
-	random(m: number, n: number) {
+	random(m?: number, n?: number) {
 		return this.prng.next(m, n);
 	}
 
@@ -496,7 +500,7 @@ export class Battle extends Dex.ModdedDex {
 		}
 	}
 
-	residualEvent(eventid: string, relayVar: any) {
+	residualEvent(eventid: string, relayVar?: any) {
 		let callbackName = `on${eventid}`;
 		let handlers = this.findBattleEventHandlers(callbackName, 'duration');
 		for (const side of this.sides) {
@@ -844,8 +848,7 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	findEventHandlers(thing: Pokemon | Side | Battle, eventName: string, sourceThing?: Pokemon | null) {
-		/**@type {AnyObject[]} */
-		let handlers = [];
+		let handlers: AnyObject[] = [];
 		if (thing instanceof Pokemon) {
 			handlers = this.findPokemonEventHandlers(thing, `on${eventName}`);
 			for (const allyActive of thing.side.active) {
@@ -874,8 +877,7 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	findPokemonEventHandlers(pokemon: Pokemon, callbackName: string, getKey?: 'duration') {
-		/**@type {AnyObject[]} */
-		let handlers = [];
+		let handlers: AnyObject[] = [];
 
 		let status = pokemon.getStatus();
 		// @ts-ignore
@@ -921,8 +923,7 @@ export class Battle extends Dex.ModdedDex {
 
 	findBattleEventHandlers(callbackName: string, getKey?: 'duration') {
 		let callbackNamePriority = `${callbackName}Priority`;
-		/**@type {AnyObject[]} */
-		let handlers = [];
+		let handlers: AnyObject[] = [];
 
 		let callback;
 		for (let i in this.pseudoWeather) {
@@ -970,8 +971,7 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	findSideEventHandlers(side: Side, callbackName: string, getKey?: 'duration') {
-		/**@type {AnyObject[]} */
-		let handlers = [];
+		let handlers: AnyObject[] = [];
 
 		for (let i in side.sideConditions) {
 			let sideConditionData = side.sideConditions[i];
@@ -1063,10 +1063,8 @@ export class Battle extends Dex.ModdedDex {
 		}
 
 		// default to no request
-		/** @type {any} */
-		let p1request = null;
-		/** @type {any} */
-		let p2request = null;
+		let p1request: any = null;
+		let p2request: any = null;
 		this.p1.currentRequest = '';
 		this.p2.currentRequest = '';
 		let switchTable = [];
@@ -1178,10 +1176,7 @@ export class Battle extends Dex.ModdedDex {
 		return this.tie();
 	}
 
-	/**
-	 * @param {PlayerSlot?} [side]
-	 */
-	forceWin(side = null) {
+	forceWin(side: PlayerSlot | null = null) {
 		if (this.ended) return false;
 
 		if (side) {
@@ -1384,8 +1379,7 @@ export class Battle extends Dex.ModdedDex {
 	nextTurn() {
 		this.turn++;
 		let allStale = true;
-		/** @type {?Pokemon} */
-		let oneStale = null;
+		let oneStale: Pokemon | null = null;
 		for (const side of this.sides) {
 			for (const pokemon of side.active) {
 				if (!pokemon) continue;
@@ -1653,7 +1647,7 @@ export class Battle extends Dex.ModdedDex {
 			if (this.rated === 'Rated battle') this.rated = true;
 			this.add('rated', typeof this.rated === 'string' ? this.rated : '');
 		}
-		this.add('seed', /**@param {Side} side */side => Battle.logReplay(this.prngSeed.join(','), side));
+		this.add('seed', (side: Side) => Battle.logReplay(this.prngSeed.join(','), side));
 
 		if (format.onBegin) {
 			format.onBegin.call(this);
@@ -1828,7 +1822,7 @@ export class Battle extends Dex.ModdedDex {
 		return damage;
 	}
 
-	directDamage(damage: number, target? Pokemon, source: Pokemon | null = null, effect?: Effect | null = null) {
+	directDamage(damage: number, target?: Pokemon, source: Pokemon | null = null, effect: Effect | null = null) {
 		if (this.event) {
 			if (!target) target = this.event.target;
 			if (!source) source = this.event.source;
@@ -2108,7 +2102,7 @@ export class Battle extends Dex.ModdedDex {
 		return this.modifyDamage(baseDamage, pokemon, target, move, suppressMessages);
 	}
 
-	modifyDamage(baseDamage: number, pokemon: Pokemon, target: Pokemon, move: ActiveMOve, suppressMessages: boolean = false) {
+	modifyDamage(baseDamage: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove, suppressMessages: boolean = false) {
 		const tr = this.trunc;
 		if (!move.type) move.type = '???';
 		let type = move.type;
@@ -2220,7 +2214,7 @@ export class Battle extends Dex.ModdedDex {
 		return false;
 	}
 
-	getTargetLoc(target: Pokemon, source: sourcr) {
+	getTargetLoc(target: Pokemon, source: Pokemon) {
 		if (target.side === source.side) {
 			return -(target.position + 1);
 		} else {
@@ -2778,7 +2772,7 @@ export class Battle extends Dex.ModdedDex {
 			// In Gen 7, the action order is recalculated for a Pokémon that mega evolves.
 			const moveIndex = this.queue.findIndex(queuedAction => queuedAction.pokemon === action.pokemon && queuedAction.choice === 'move');
 			if (moveIndex >= 0) {
-				const moveAction = /** @type {Actions["MoveAction"]} */ (this.queue.splice(moveIndex, 1)[0]);
+				const moveAction = this.queue.splice(moveIndex, 1)[0] as Actions["MoveAction"];
 				moveAction.mega = 'done';
 				this.insertQueue(moveAction, true);
 			}
@@ -2963,8 +2957,7 @@ export class Battle extends Dex.ModdedDex {
 			return;
 		}
 		this.log.push('|split');
-		/** @type {(Side | boolean)[]} */
-		let sides = [false, this.sides[0], this.sides[1], true];
+		let sides: (Side | boolean)[] = [false, this.sides[0], this.sides[1], true];
 		for (const side of sides) {
 			let sideUpdate = '|' + parts.map(part => {
 				if (typeof part !== 'function') return part;
@@ -3014,7 +3007,7 @@ export class Battle extends Dex.ModdedDex {
 		return this.log.join('\n').replace(/\|split\n.*\n.*\n.*\n/g, '');
 	}
 
-	debugError(activit: string) {
+	debugError(activity: string) {
 		this.add('debug', activity);
 	}
 

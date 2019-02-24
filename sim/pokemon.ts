@@ -170,6 +170,7 @@ export class Pokemon {
 	innates?: string[];
 	originalSpecies?: string;
 	gluttonyFlag: boolean | null;
+	lastMoveTargetLoc?: number;
 
 	constructor(set: string | AnyObject, side: Side) {
 		this.side = side;
@@ -334,11 +335,6 @@ export class Pokemon {
 		/**@type {?boolean} */
 		this.subFainted = null;
 
-		this.isStale = 0;
-		this.isStaleCon = 0;
-		this.isStaleHP = this.maxhp;
-		this.isStalePPTurns = 0;
-
 		// Transform copies IVs in gen 4 and earlier, so we track the base IVs/HP-type/power
 		this.baseIvs = this.set.ivs;
 		this.baseHpType = this.hpType;
@@ -353,7 +349,12 @@ export class Pokemon {
 		this.apparentType = this.baseTemplate.types.join('/');
 
 		this.maxhp = this.template.maxHP || this.baseStats.hp;
-		this.hp = this.hp || this.maxhp;
+		this.hp = this.maxhp;
+
+		this.isStale = 0;
+		this.isStaleCon = 0;
+		this.isStaleHP = this.maxhp;
+		this.isStalePPTurns = 0;
 
 		this.staleWarned = false;
 		this.showCure = false;
@@ -520,7 +521,7 @@ export class Pokemon {
 	}
 
 	getMoveData(move: string | Move) {
-		move = this.battle.getMove(move);
+		move = this.battle.getMove(move) as Move;
 		for (const moveSlot of this.moveSlots) {
 			if (moveSlot.id === move.id) {
 				return moveSlot;
@@ -618,7 +619,7 @@ export class Pokemon {
 
 	deductPP(move: string | Move, amount?: number | null, target?: Pokemon | null | false) {
 		let gen = this.battle.gen;
-		move = this.battle.getMove(move);
+		move = this.battle.getMove(move) as Move;
 		let ppData = this.getMoveData(move);
 		if (!ppData) return 0;
 		ppData.used = true;
@@ -650,7 +651,7 @@ export class Pokemon {
 
 	gotAttacked(move: string | Move, damage: number | false | undefined, source: Pokemon) {
 		if (!damage) damage = 0;
-		move = this.battle.getMove(move);
+		move = this.battle.getMove(move) as Move;
 		let lastAttackedBy = {
 			source: source,
 			damage: damage,
@@ -853,7 +854,7 @@ export class Pokemon {
 		}
 	}
 
-	transformInto(pokemon: Pokemon, effect?: Effect | null = null) {
+	transformInto(pokemon: Pokemon, effect: Effect | null = null) {
 		let template = pokemon.template;
 		if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5)) {
 			return false;
@@ -977,7 +978,7 @@ export class Pokemon {
 	 * This function handles all changes to stats, ability, type, template, etc.
 	 * as well as sending all relevant messages sent to the client.
 	 */
-	formeChange(templateId: string | Template, source: Effect = this.battle.effect, isPermanent?: boolean, message?: string, abilitySlot?: '0' | '1' | 'H' | 'S' = '0') {
+	formeChange(templateId: string | Template, source: Effect = this.battle.effect, isPermanent?: boolean, message?: string, abilitySlot: '0' | '1' | 'H' | 'S' = '0') {
 		let rawTemplate = this.battle.getTemplate(templateId);
 
 		let template = this.setTemplate(rawTemplate, source);
@@ -1204,7 +1205,7 @@ export class Pokemon {
 
 	setStatus(status: string | Effect, source: Pokemon | null = null, sourceEffect: Effect | null = null, ignoreImmunities: boolean = false) {
 		if (!this.hp) return false;
-		status = this.battle.getEffect(status);
+		status = this.battle.getEffect(status) as Effect;
 		if (this.battle.event) {
 			if (!source) source = this.battle.event.source;
 			if (!sourceEffect) sourceEffect = this.battle.effect;
@@ -1346,9 +1347,9 @@ export class Pokemon {
 		return false;
 	}
 
-	setItem(item: string | Otem, source?: Pokemon, effect?: Effect) {
+	setItem(item: string | Item, source?: Pokemon, effect?: Effect) {
 		if (!this.hp || !this.isActive) return false;
-		if (typeof item === 'string') item = this.battle.getItem(item);
+		if (typeof item === 'string') item = this.battle.getItem(item) as Item;
 
 		let effectid;
 		if (this.battle.effect) effectid = this.battle.effect.id;
@@ -1383,7 +1384,7 @@ export class Pokemon {
 
 	setAbility(ability: string | Ability, source?: Pokemon | null, isFromFormeChange?: boolean) {
 		if (!this.hp) return false;
-		if (typeof ability === 'string') ability = this.battle.getAbility(ability);
+		if (typeof ability === 'string') ability = this.battle.getAbility(ability) as Ability;
 		let oldAbility = this.ability;
 		if (!isFromFormeChange) {
 			if (['illusion', 'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange'].includes(ability.id)) return false;
@@ -1427,7 +1428,7 @@ export class Pokemon {
 
 	addVolatile(status: string | PureEffect, source: Pokemon | null = null, sourceEffect: Effect | null = null, linkedStatus: string | PureEffect | null = null): boolean | any {
 		let result;
-		status = this.battle.getEffect(status);
+		status = this.battle.getEffect(status) as PureEffect;
 		if (!this.hp && !status.affectsFainted) return false;
 		if (linkedStatus && source && !source.hp) return false;
 		if (this.battle.event) {
@@ -1486,14 +1487,14 @@ export class Pokemon {
 	}
 
 	getVolatile(status: string | Effect) {
-		status = this.battle.getEffect(status);
+		status = this.battle.getEffect(status) as Effect;
 		if (!this.volatiles[status.id]) return null;
 		return status;
 	}
 
 	removeVolatile(status: string | Effect) {
 		if (!this.hp) return false;
-		status = this.battle.getEffect(status);
+		status = this.battle.getEffect(status) as Effect;
 		if (!this.volatiles[status.id]) return false;
 		this.battle.singleEvent('End', status, this.volatiles[status.id], this);
 		let linkedPokemon = this.volatiles[status.id].linkedPokemon;

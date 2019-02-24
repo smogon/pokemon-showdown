@@ -42,9 +42,9 @@ export class Side {
 	active: Pokemon[];
 	sideConditions: AnyObject;
 	pokemonLeft: number;
-	faintedLastTurn: false;
-	faintedThisTurn: false;
-	zMoveUsed: false;
+	faintedLastTurn: boolean;
+	faintedThisTurn: boolean;
+	zMoveUsed: boolean;
 	choice: Choice;
 	/**
 	 *  'move' - Move request, at the beginning of every turn
@@ -58,7 +58,6 @@ export class Side {
 	foe: Side;
 	team: PokemonSet[];
 	lastMove: Move | null;
-
 
 	constructor(name: string, battle: Battle, sideNum: number, team: PokemonSet[]) {
 		let sideScripts = battle.data.Scripts.side;
@@ -204,7 +203,7 @@ export class Side {
 		if (source === 'debug') source = this.active[0];
 		if (!source) throw new Error(`setting sidecond without a source`);
 
-		status = this.battle.getEffect(status);
+		status = this.battle.getEffect(status) as Effect;
 		if (this.sideConditions[status.id]) {
 			if (!status.onRestart) return false;
 			return this.battle.singleEvent('Restart', status, this.sideConditions[status.id], this, source, sourceEffect);
@@ -227,13 +226,13 @@ export class Side {
 	}
 
 	getSideCondition(status: string | Effect) {
-		status = this.battle.getEffect(status);
+		status = this.battle.getEffect(status) as Effect;
 		if (!this.sideConditions[status.id]) return null;
 		return status;
 	}
 
 	removeSideCondition(status: string | Effect) {
-		status = this.battle.getEffect(status);
+		status = this.battle.getEffect(status) as Effect;
 		if (!this.sideConditions[status.id]) return false;
 		this.battle.singleEvent('End', status, this.sideConditions[status.id], this);
 		delete this.sideConditions[status.id];
