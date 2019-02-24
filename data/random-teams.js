@@ -1346,8 +1346,6 @@ class RandomTeams extends Dex.ModdedDex {
 				ability = 'Sheer Force';
 			} else if (template.species === 'Torterra' && !counter['Grass']) {
 				ability = 'Shell Armor';
-			} else if (template.species === 'Umbreon') {
-				ability = 'Synchronize';
 			} else if (template.id === 'venusaurmega') {
 				ability = 'Chlorophyll';
 			}
@@ -1567,8 +1565,8 @@ class RandomTeams extends Dex.ModdedDex {
 				UU: 77,
 				UUBL: 76,
 				OU: 75,
+				Unreleased: 75,
 				Uber: 73,
-				AG: 71,
 			};
 			/** @type {{[species: string]: number}} */
 			let customScale = {
@@ -1579,9 +1577,6 @@ class RandomTeams extends Dex.ModdedDex {
 				Unown: 100,
 			};
 			let tier = template.tier;
-			if (tier.includes('Unreleased') && baseTemplate.tier === 'Uber') {
-				tier = 'Uber';
-			}
 			if (tier.charAt(0) === '(') {
 				tier = tier.slice(1, -1);
 			}
@@ -1710,13 +1705,13 @@ class RandomTeams extends Dex.ModdedDex {
 		}
 
 		/**@type {{[k: string]: number}} */
+		let tierCount = {};
+		/**@type {{[k: string]: number}} */
+		let baseFormes = {};
+		/**@type {{[k: string]: number}} */
 		let typeCount = {};
 		/**@type {{[k: string]: number}} */
 		let typeComboCount = {};
-		/**@type {{[k: string]: number}} */
-		let baseFormes = {};
-		let uberCount = 0;
-		let puCount = 0;
 		/**@type {RandomTeamsTypes["TeamDetails"]} */
 		let teamDetails = {};
 
@@ -1730,20 +1725,14 @@ class RandomTeams extends Dex.ModdedDex {
 			// Only certain NFE Pokemon are allowed
 			if (template.evos.length && !allowedNFE.includes(template.species)) continue;
 
-			let tier = template.tier;
-			switch (tier) {
-			case 'Uber':
-				// Ubers are limited to 2 but have a 20% chance of being added anyway.
-				if (uberCount > 1 && this.randomChance(4, 5)) continue;
-				break;
-			case 'PU':
-				// PUs are limited to 2 but have a 20% chance of being added anyway.
-				if (puCount > 1 && this.randomChance(4, 5)) continue;
-				break;
-			case 'Unreleased': case 'CAP':
-				// Unreleased and CAP have 20% the normal rate
-				if (this.randomChance(4, 5)) continue;
+			// Limit two Pokemon per tier
+			let tier = toId(template.tier);
+			if (!tierCount[tier]) {
+				tierCount[tier] = 1;
+			} else if (tierCount[tier] > 1) {
+				continue;
 			}
+			tierCount[tier]++;
 
 			// Adjust rate for species with multiple formes
 			switch (template.baseSpecies) {
@@ -1839,13 +1828,6 @@ class RandomTeams extends Dex.ModdedDex {
 				typeComboCount[typeCombo]++;
 			} else {
 				typeComboCount[typeCombo] = 1;
-			}
-
-			// Increment Uber/PU counters
-			if (tier === 'Uber') {
-				uberCount++;
-			} else if (tier === 'PU') {
-				puCount++;
 			}
 
 			// Team has Mega/weather/hazards
