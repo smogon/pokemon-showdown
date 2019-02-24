@@ -20,7 +20,7 @@
         "./data/*",
         "./data/mods/*/*",
         "./dev-tools/*.ts",
-        "./lib/*.js",
+        "./lib/*",
         "./server/*",
         "./server/chat-plugins/chat-monitor.js",
         "./server/chat-plugins/daily-spotlight.js",
@@ -36,6 +36,6 @@
         "./server/chat-plugins/uno.js",
         "./server/chat-plugins/wifi.js",
         "./server/tournaments/generator-round-robin.js",
-        "./sim/*.js"
+        "./sim/*"
     ]
 }
