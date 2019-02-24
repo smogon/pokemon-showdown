@@ -9,8 +9,6 @@
  * @license MIT
  */
 
-'use strict';
-
 import * as Streams from './../lib/streams';
 import * as Battle from './battle';
 

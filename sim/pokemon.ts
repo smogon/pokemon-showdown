@@ -4,9 +4,8 @@
  *
  * @license MIT license
  */
-'use strict';
 
-/** An object representing a Pokemon's move */
+ /** A Pokemon's move slot. */
 type MoveSlot = {
 	id: string; // TODO: ID
 	move: string;

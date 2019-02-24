@@ -8,8 +8,6 @@
  * @author Guangcong Luo <guangcongluo@gmail.com>
  */
 
-'use strict';
-
 import * as BattleStreams from './battle-stream';
 import * as Dex from './dex';
 
