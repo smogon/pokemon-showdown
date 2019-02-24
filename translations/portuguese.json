@@ -3,8 +3,8 @@
 
 	"strings": {
 		"Please follow the rules:": "Por favor siga as regras:",
-		"[TN: Link to the PS rules for your language]https://pokemonshowdown.com/rules": "",
-		"Global Rules": "https://pokemonshowdown.com/pages/rules-pt",
+		"[TN: Link to the PS rules for your language]https://pokemonshowdown.com/rules": "https://pokemonshowdown.com/pages/rules-pt",
+		"Global Rules": "Regras Globais",
 		"${room} room rules": "Reglas de la sala ${room}",
 
 		"<strong>Global ranks</strong>": "<strong>Cargos Globais</strong>",
