@@ -284,11 +284,6 @@ class Pokemon {
 		/**@type {?boolean} */
 		this.subFainted = null;
 
-		this.isStale = 0;
-		this.isStaleCon = 0;
-		this.isStaleHP = this.maxhp;
-		this.isStalePPTurns = 0;
-
 		// Transform copies IVs in gen 4 and earlier, so we track the base IVs/HP-type/power
 		this.baseIvs = this.set.ivs;
 		this.baseHpType = this.hpType;
@@ -305,7 +300,12 @@ class Pokemon {
 		/**@type {number} */
 		this.maxhp = this.template.maxHP || this.baseStats.hp;
 		/**@type {number} */
-		this.hp = this.hp || this.maxhp;
+		this.hp = this.maxhp;
+
+		this.isStale = 0;
+		this.isStaleCon = 0;
+		this.isStaleHP = this.maxhp;
+		this.isStalePPTurns = 0;
 
 		this.staleWarned = false;
 		this.showCure = false;
