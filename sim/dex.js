@@ -476,7 +476,8 @@ class ModdedDex {
 			return /** @type {PureEffect} */ (name);
 		}
 
-		let effect = this.effectCache.get(name);
+		let id = toId(name);
+		let effect = this.effectCache.get(id);
 		if (effect) {
 			return /** @type {PureEffect} */ (effect);
 		}
@@ -489,25 +490,20 @@ class ModdedDex {
 			effect = this.getAbility(name.slice(8));
 		}
 		if (effect) {
-			this.effectCache.set(name, effect);
+			this.effectCache.set(id, effect);
 			// @ts-ignore
 			return effect;
 		}
 
-		let id = toId(name);
-		if (this.data.Statuses.hasOwnProperty(id)) {
-			effect = new Data.PureEffect({name}, this.data.Statuses[id]);
-		} else if (this.data.Movedex.hasOwnProperty(id) && this.data.Movedex[id].effect) {
-			name = this.data.Movedex[id].name || name;
-			effect = new Data.PureEffect({name}, this.data.Movedex[id].effect);
-		} else if (this.data.Abilities.hasOwnProperty(id) && this.data.Abilities[id].effect) {
-			name = this.data.Abilities[id].name || name;
-			effect = new Data.PureEffect({name}, this.data.Abilities[id].effect);
-		} else if (this.data.Items.hasOwnProperty(id) && this.data.Items[id].effect) {
-			name = this.data.Items[id].name || name;
-			effect = new Data.PureEffect({name}, this.data.Items[id].effect);
-		} else if (this.data.Formats.hasOwnProperty(id)) {
+		let found;
+		if (this.data.Formats.hasOwnProperty(id)) {
 			effect = new Data.Format({name}, this.data.Formats[id]);
+		} else if (this.data.Statuses.hasOwnProperty(id)) {
+			effect = new Data.PureEffect({name}, this.data.Statuses[id]);
+		} else if ((this.data.Movedex.hasOwnProperty(id) && (found = this.data.Movedex[id]).effect) ||
+							 (this.data.Abilities.hasOwnProperty(id) && (found = this.data.Abilities[id]).effect) ||
+							 (this.data.Items.hasOwnProperty(id) && (found = this.data.Items[id]).effect)) {
+			effect = new Data.PureEffect({name: found.name || name}, found.effect);
 		} else if (id === 'recoil') {
 			effect = new Data.PureEffect({name: 'Recoil', effectType: 'Recoil'});
 		} else if (id === 'drain') {
@@ -516,7 +512,7 @@ class ModdedDex {
 			effect = new Data.PureEffect({name, exists: false});
 		}
 
-		this.effectCache.set(name, effect);
+		this.effectCache.set(id, effect);
 		return /** @type {PureEffect} */ (effect);
 	}
 	/**
