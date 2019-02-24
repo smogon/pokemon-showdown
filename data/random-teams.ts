@@ -4,20 +4,6 @@ import {PRNG, PRNGSeed} from './../sim/prng';
 const randomBSSFactorySets: AnyObject = require('./bss-factory-sets.json');
 const randomFactorySets: AnyObject = require('./factory-sets.json');
 
-export type TeamData = {
-	typeCount: {[k: string]: number};
-	typeComboCount: {[k: string]: number};
-	baseFormes: {[k: string]: number};
-	megaCount: number;
-	zCount?: number;
-	has: {[k: string]: number};
-	forceResult: boolean;
-	weaknesses: {[k: string]: number};
-	resistances: {[k: string]: number};
-	weather?: string;
-	eeveeLimCount?: number;
-}
-
 class RandomTeams extends Dex.ModdedDex {
 	randomBSSFactorySets: AnyObject;
 	randomFactorySets: AnyObject;
@@ -1919,7 +1905,7 @@ class RandomTeams extends Dex.ModdedDex {
 		let typePool = Object.keys(this.data.TypeChart);
 		const type = this.sample(typePool);
 
-		let teamData: TeamData = {typeCount: {}, typeComboCount: {}, baseFormes: {}, megaCount: 0, zCount: 0, has: {}, forceResult: forceResult, weaknesses: {}, resistances: {}};
+		let teamData: RandomTeamsTypes["TeamData"] = {typeCount: {}, typeComboCount: {}, baseFormes: {}, megaCount: 0, zCount: 0, has: {}, forceResult: forceResult, weaknesses: {}, resistances: {}};
 		let requiredMoveFamilies = ['hazardSet', 'hazardClear'];
 		let requiredMoves: {[k: string]: string} = {'stealthrock': 'hazardSet', 'rapidspin': 'hazardClear', 'defog': 'hazardClear'};
 		let weatherAbilitiesSet: {[k: string]: string} = {'drizzle': 'raindance', 'drought': 'sunnyday', 'snowwarning': 'hail', 'sandstream': 'sandstorm'};
@@ -2153,7 +2139,7 @@ class RandomTeams extends Dex.ModdedDex {
 
 		let pokemonPool = Object.keys(this.randomBSSFactorySets);
 
-		let teamData: TeamData = {typeCount: {}, typeComboCount: {}, baseFormes: {}, megaCount: 0, zCount: 0, eeveeLimCount: 0, has: {}, forceResult: forceResult, weaknesses: {}, resistances: {}};
+		let teamData: RandomTeamsTypes["TeamData"] = {typeCount: {}, typeComboCount: {}, baseFormes: {}, megaCount: 0, zCount: 0, eeveeLimCount: 0, has: {}, forceResult: forceResult, weaknesses: {}, resistances: {}};
 		let requiredMoveFamilies: string[] = [];
 		let requiredMoves: {[k: string]: string} = {};
 		let weatherAbilitiesSet: {[k: string]: string} = {'drizzle': 'raindance', 'drought': 'sunnyday', 'snowwarning': 'hail', 'sandstream': 'sandstorm'};

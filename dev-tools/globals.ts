@@ -902,6 +902,19 @@ interface Actions {
 }
 
 interface RandomTeamsTypes {
+  TeamData: {
+		typeCount: {[k: string]: number};
+		typeComboCount: {[k: string]: number};
+		baseFormes: {[k: string]: number};
+		megaCount: number;
+		zCount?: number;
+		has: {[k: string]: number};
+		forceResult: boolean;
+		weaknesses: {[k: string]: number};
+		resistances: {[k: string]: number};
+		weather?: string;
+		eeveeLimCount?: number;
+	}
 	TeamDetails: {
 		megaStone?: number
 		zMove?: number

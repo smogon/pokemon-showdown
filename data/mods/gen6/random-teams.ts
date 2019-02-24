@@ -1014,7 +1014,7 @@ class RandomGen6Teams extends RandomTeams {
 
 		let pokemonPool = Object.keys(this.randomFactorySets[chosenTier]);
 
-		let teamData: import('../../random-teams').TeamData = {typeCount: {}, typeComboCount: {}, baseFormes: {}, megaCount: 0, has: {}, forceResult: forceResult, weaknesses: {}, resistances: {}};
+		let teamData: RandomTeamsTypes["TeamData"] = {typeCount: {}, typeComboCount: {}, baseFormes: {}, megaCount: 0, has: {}, forceResult: forceResult, weaknesses: {}, resistances: {}};
 		let requiredMoveFamilies = ['hazardSet', 'hazardClear'];
 		let requiredMoves: {[k: string]: string} = {'stealthrock': 'hazardSet', 'rapidspin': 'hazardClear', 'defog': 'hazardClear'};
 		let weatherAbilitiesSet: {[k: string]: string} = {'drizzle': 'raindance', 'drought': 'sunnyday', 'snowwarning': 'hail', 'sandstream': 'sandstorm'};
