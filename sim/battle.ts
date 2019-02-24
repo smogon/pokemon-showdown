@@ -4,7 +4,7 @@
  *
  * @license MIT
  */
-import Dex from './dex';
+import Dex = require('./dex');
 global.toId = Dex.getId;
 import * as Data from './dex-data';
 import {PRNG, PRNGSeed} from './prng';

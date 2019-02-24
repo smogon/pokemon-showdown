@@ -9,7 +9,7 @@
  */
 
 import * as BattleStreams from './battle-stream';
-import Dex from './dex';
+import Dex = require('./dex');
 
 /*********************************************************************
  * Helper functions

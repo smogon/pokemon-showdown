@@ -1453,4 +1453,4 @@ dexes['base'] = new ModdedDex(undefined, true);
 // "gen7" is an alias for the current base data
 dexes['gen7'] = dexes['base'];
 
-export default dexes['gen7'];
+export = dexes['gen7'];

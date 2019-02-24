@@ -10,7 +10,7 @@
  */
 
 import * as Streams from './../lib/streams';
-import * as Battle from './battle';
+import {Battle} from './battle';
 
 /**
  * Like string.split(delimiter), but only recognizes the first `limit`

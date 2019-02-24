@@ -7,7 +7,7 @@
  * @license MIT
  */
 
-import Dex from './dex';
+import Dex = require('./dex');
 
 class Validator {
 	format: Format;
@@ -1273,4 +1273,4 @@ const TeamValidator = Object.assign(getValidator, {
 	Validator: Validator,
 });
 
-export default TeamValidator;
+export = TeamValidator;

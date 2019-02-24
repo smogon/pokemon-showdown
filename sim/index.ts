@@ -9,17 +9,15 @@
  *
  * @license MIT license
  */
-'use strict';
+import Dex = require('./dex');
+import {Battle} from './battle';
+import {Side} from './side';
+import {Pokemon} from './pokemon';
+import {PRNG} from './prng';
+import {BattleStream}  from './battle-stream';
+import TeamValidator = require('./team-validator');
 
-const Dex = require('./dex');
-const Battle = require('./battle');
-const Side = require('./side');
-const Pokemon = require('./pokemon');
-const PRNG = require('./prng');
-const {BattleStream} = require('./battle-stream');
-const TeamValidator = require('./team-validator');
-
-module.exports = {
+export = {
 	Pokemon,
 	Side,
 	Battle,
