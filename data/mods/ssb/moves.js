@@ -3340,7 +3340,7 @@ let BattleMovedex = {
 			// Suppress Ability now to prevent starting new abilities when transforming
 			pokemon.addVolatile('gastroacid', pokemon);
 			// Tranform into it
-			pokemon.formeChange(set.species, move);
+			pokemon.formeChange(set.species);
 			for (let newMove of set.moves) {
 				let moveTemplate = this.getMove(newMove);
 				if (pokemon.moves.includes(moveTemplate.id)) continue;
@@ -3358,7 +3358,7 @@ let BattleMovedex = {
 			// Update HP
 			// @ts-ignore Hack for Snaquaza's Z Move
 			pokemon.claimHP = pokemon.hp;
-			pokemon.heal(pokemon.maxhp - pokemon.hp, pokemon, move);
+			pokemon.heal(pokemon.maxhp - pokemon.hp, pokemon);
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 			this.add('message', `${pokemon.name} claims to be a ${set.species}!`);
 		},
