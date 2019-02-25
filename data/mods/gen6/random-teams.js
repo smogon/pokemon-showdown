@@ -1,13 +1,26 @@
-import RandomTeams =  require('../../random-teams');
-import {PRNG, PRNGSeed} from './../../../sim/prng';
+'use strict';
+
+const RandomTeams = require('../../random-teams');
 
 class RandomGen6Teams extends RandomTeams {
-	constructor(format: Format | string, prng?: PRNG | PRNGSeed | null) {
+	/**
+	 * @param {Format | string} format
+	 * @param {?PRNG | [number, number, number, number]} [prng]
+	 */
+	constructor(format, prng) {
 		super(format, prng);
+		/**@type {AnyObject} */
+		// @ts-ignore
 		this.randomFactorySets = require('./factory-sets.json');
 	}
 
-	randomSet(template: string | Template, slot?: number, teamDetails: RandomTeamsTypes["TeamDetails"] = {}): RandomTeamsTypes["RandomSet"] {
+	/**
+	 * @param {string | Template} template
+	 * @param {number} [slot]
+	 * @param {RandomTeamsTypes["TeamDetails"]} [teamDetails]
+	 * @return {RandomTeamsTypes["RandomSet"]}
+	 */
+	randomSet(template, slot, teamDetails = {}) {
 		if (slot === undefined) slot = 1;
 		let baseTemplate = (template = this.getTemplate(template));
 		let species = template.species;
@@ -50,13 +63,14 @@ class RandomGen6Teams extends RandomTeams {
 			spd: 31,
 			spe: 31,
 		};
-		let hasType: {[k: string]: true} = {};
+		/**@type {{[k: string]: true}} */
+		let hasType = {};
 		hasType[template.types[0]] = true;
 		if (template.types[1]) {
 			hasType[template.types[1]] = true;
 		}
-
-		let hasAbility: {[k: string]: true} = {};
+		/**@type {{[k: string]: true}} */
+		let hasAbility = {};
 		hasAbility[template.abilities[0]] = true;
 		if (template.abilities[1]) {
 			// @ts-ignore
@@ -77,7 +91,8 @@ class RandomGen6Teams extends RandomTeams {
 		let counterAbilities = ['Adaptability', 'Contrary', 'Hustle', 'Iron Fist', 'Skill Link'];
 		let ateAbilities = ['Aerilate', 'Pixilate', 'Refrigerate'];
 
-		let hasMove: {[k: string]: boolean} = {};
+		/**@type {{[k: string]: boolean}} */
+		let hasMove = {};
 		let counter;
 
 		do {
@@ -923,15 +938,26 @@ class RandomGen6Teams extends RandomTeams {
 		};
 	}
 
-	randomFactorySet(template: Template, slot: number, teamData: RandomTeamsTypes["FactoryTeamDetails"], tier: string): RandomTeamsTypes["RandomFactorySet"] | false {
+	/**
+	 * @param {Template} template
+	 * @param {number} slot
+	 * @param {RandomTeamsTypes["FactoryTeamDetails"]} teamData
+	 * @param {string} tier
+	 * @return {RandomTeamsTypes["RandomFactorySet"] | false}
+	 */
+	randomFactorySet(template, slot, teamData, tier) {
 		let speciesId = toId(template.species);
 		// let flags = this.randomFactorySets[tier][speciesId].flags;
 		let setList = this.randomFactorySets[tier][speciesId].sets;
 
-		let itemsMax: {[k: string]: number} = {'choicespecs': 1, 'choiceband': 1, 'choicescarf': 1};
-		let movesMax: {[k: string]: number} = {'rapidspin': 1, 'batonpass': 1, 'stealthrock': 1, 'defog': 1, 'spikes': 1, 'toxicspikes': 1};
-		let requiredMoves: {[k: string]: string} = {'stealthrock': 'hazardSet', 'rapidspin': 'hazardClear', 'defog': 'hazardClear'};
-		let weatherAbilitiesRequire: {[k: string]: string} = {
+		/**@type {{[k: string]: number}} */
+		let itemsMax = {'choicespecs': 1, 'choiceband': 1, 'choicescarf': 1};
+		/**@type {{[k: string]: number}} */
+		let movesMax = {'rapidspin': 1, 'batonpass': 1, 'stealthrock': 1, 'defog': 1, 'spikes': 1, 'toxicspikes': 1};
+		/**@type {{[k: string]: string}} */
+		let requiredMoves = {'stealthrock': 'hazardSet', 'rapidspin': 'hazardClear', 'defog': 'hazardClear'};
+		/**@type {{[k: string]: string}} */
+		let weatherAbilitiesRequire = {
 			'hydration': 'raindance', 'swiftswim': 'raindance',
 			'leafguard': 'sunnyday', 'solarpower': 'sunnyday', 'chlorophyll': 'sunnyday',
 			'sandforce': 'sandstorm', 'sandrush': 'sandstorm', 'sandveil': 'sandstorm',
@@ -941,7 +967,8 @@ class RandomGen6Teams extends RandomTeams {
 
 		// Build a pool of eligible sets, given the team partners
 		// Also keep track of sets with moves the team requires
-		let effectivePool: {set: AnyObject, moveVariants?: number[], itemVariants?: number, abilityVariants?: number}[] = [];
+		/**@type {{set: AnyObject, moveVariants?: number[], itemVariants?: number, abilityVariants?: number}[]} */
+		let effectivePool = [];
 		let priorityPool = [];
 		for (const curSet of setList) {
 			let itemData = this.getItem(curSet.item);
@@ -1002,7 +1029,11 @@ class RandomGen6Teams extends RandomTeams {
 		};
 	}
 
-	randomFactoryTeam(depth: number = 0): RandomTeamsTypes["RandomFactorySet"][] {
+	/**
+	 * @param {number} [depth]
+	 * @return {RandomTeamsTypes["RandomFactorySet"][]}
+	 */
+	randomFactoryTeam(depth = 0) {
 		let forceResult = (depth >= 4);
 
 		// The teams generated depend on the tier choice in such a way that
@@ -1014,11 +1045,15 @@ class RandomGen6Teams extends RandomTeams {
 
 		let pokemonPool = Object.keys(this.randomFactorySets[chosenTier]);
 
-		let teamData: import('../../random-teams').TeamData = {typeCount: {}, typeComboCount: {}, baseFormes: {}, megaCount: 0, has: {}, forceResult: forceResult, weaknesses: {}, resistances: {}};
+		/**@type {import('../../random-teams').TeamData} */
+		let teamData = {typeCount: {}, typeComboCount: {}, baseFormes: {}, megaCount: 0, has: {}, forceResult: forceResult, weaknesses: {}, resistances: {}};
 		let requiredMoveFamilies = ['hazardSet', 'hazardClear'];
-		let requiredMoves: {[k: string]: string} = {'stealthrock': 'hazardSet', 'rapidspin': 'hazardClear', 'defog': 'hazardClear'};
-		let weatherAbilitiesSet: {[k: string]: string} = {'drizzle': 'raindance', 'drought': 'sunnyday', 'snowwarning': 'hail', 'sandstream': 'sandstorm'};
-		let resistanceAbilities: {[k: string]: string[]} = {
+		/**@type {{[k: string]: string}} */
+		let requiredMoves = {'stealthrock': 'hazardSet', 'rapidspin': 'hazardClear', 'defog': 'hazardClear'};
+		/**@type {{[k: string]: string}} */
+		let weatherAbilitiesSet = {'drizzle': 'raindance', 'drought': 'sunnyday', 'snowwarning': 'hail', 'sandstream': 'sandstorm'};
+		/**@type {{[k: string]: string[]}} */
+		let resistanceAbilities = {
 			'dryskin': ['Water'], 'waterabsorb': ['Water'], 'stormdrain': ['Water'],
 			'flashfire': ['Fire'], 'heatproof': ['Fire'],
 			'lightningrod': ['Electric'], 'motordrive': ['Electric'], 'voltabsorb': ['Electric'],
@@ -1135,4 +1170,4 @@ class RandomGen6Teams extends RandomTeams {
 	}
 }
 
-export = RandomGen6Teams;
+module.exports = RandomGen6Teams;

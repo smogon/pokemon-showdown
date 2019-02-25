@@ -1,10 +1,10 @@
 import Dex = require('./../sim/dex');
-import {PRNG, PRNGSeed} from './../sim/prng';
+import {PRNG} from './../sim/prng';
 
 const randomBSSFactorySets: AnyObject = require('./bss-factory-sets.json');
 const randomFactorySets: AnyObject = require('./factory-sets.json');
 
-export type TeamData = {
+type TeamData = {
 	typeCount: {[k: string]: number};
 	typeComboCount: {[k: string]: number};
 	baseFormes: {[k: string]: number};
@@ -18,7 +18,7 @@ export type TeamData = {
 	eeveeLimCount?: number;
 }
 
-class RandomTeams extends Dex.ModdedDex {
+export class RandomTeams extends Dex.ModdedDex {
 	randomBSSFactorySets: AnyObject;
 	randomFactorySets: AnyObject;
 	factoryTier: string;
@@ -2278,5 +2278,3 @@ class RandomTeams extends Dex.ModdedDex {
 		return pokemon;
 	}
 }
-
-export = RandomTeams;
