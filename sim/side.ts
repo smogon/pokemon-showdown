@@ -99,7 +99,6 @@ export class Side {
 		this.maxTeamSize = 6;
 
 		this.id = sideNum ? 'p2' : 'p1';
-		/**@type {Side} */
 		this.foe = sideNum ? this.battle.sides[0] : this.battle.sides[1];
 
 		switch (this.battle.gameType) {
@@ -239,6 +238,7 @@ export class Side {
 		return true;
 	}
 
+	// tslint:disable-next-line:ban-types
 	send(...parts: (string | number | Function | AnyObject)[]) {
 		let sideUpdate = '|' + parts.map(part => {
 			if (typeof part !== 'function') return part;
@@ -283,8 +283,7 @@ export class Side {
 			return this.emitChoiceError(`Can't move: You sent more choices than unfainted Pokémon.`);
 		}
 		const autoChoose = !moveText;
-		/**@type {Pokemon} */
-		const pokemon = this.active[index];
+		const pokemon: Pokemon = this.active[index];
 
 		if (megaOrZ === true) megaOrZ = 'mega';
 		if (!targetLoc) targetLoc = 0;
@@ -471,13 +470,13 @@ export class Side {
 			while (this.choice.switchIns.has(slot) || this.pokemon[slot].fainted) slot++;
 		} else {
 			// @ts-ignore
-			slot = parseInt(slotText) - 1;
+			slot = parseInt(slotText, 10) - 1;
 		}
 		if (isNaN(slot) || slot < 0) {
 			// maybe it's a name!
 			slot = -1;
-			for (const [i, pokemon] of this.pokemon.entries()) {
-				if (slotText === pokemon.name) {
+			for (const [i, mon] of this.pokemon.entries()) {
+				if (slotText === mon.name) {
 					slot = i;
 					break;
 				}
@@ -515,6 +514,7 @@ export class Side {
 
 		this.choice.switchIns.add(slot);
 
+		// tslint:disable-next-line:no-object-literal-type-assertion
 		this.choice.actions.push({
 			choice: (this.currentRequest === 'switch' ? 'instaswitch' : 'switch'),
 			pokemon,
@@ -530,9 +530,9 @@ export class Side {
 		if (!data) data = `123456`;
 		let positions;
 		if (data.includes(',')) {
-			positions = ('' + data).split(',').map(datum => parseInt(datum) - 1);
+			positions = ('' + data).split(',').map(datum => parseInt(datum, 10) - 1);
 		} else {
-			positions = ('' + data).split('').map(datum => parseInt(datum) - 1);
+			positions = ('' + data).split('').map(datum => parseInt(datum, 10) - 1);
 		}
 
 		if (autoFill && this.choice.actions.length >= this.maxTeamSize) return true;
@@ -562,6 +562,7 @@ export class Side {
 			}
 
 			this.choice.switchIns.add(pos);
+			// tslint:disable-next-line:no-object-literal-type-assertion
 			this.choice.actions.push({
 				choice: 'team',
 				index,
@@ -584,9 +585,9 @@ export class Side {
 		} else if (index === 1) {
 			return this.emitChoiceError(`Can't shift: You can only shift from the edge to the center`);
 		}
-		/**@type {Pokemon} */
-		const pokemon = this.active[index];
+		const pokemon: Pokemon = this.active[index];
 
+		// tslint:disable-next-line:no-object-literal-type-assertion
 		this.choice.actions.push({
 			choice: 'shift',
 			pokemon,
@@ -650,7 +651,7 @@ export class Side {
 			case 'move':
 				let targetLoc = 0;
 				if (/\s-?[1-3]$/.test(data)) {
-					targetLoc = parseInt(data.slice(-2));
+					targetLoc = parseInt(data.slice(-2), 10);
 					data = data.slice(0, data.lastIndexOf(' '));
 				}
 				const willMega = data.endsWith(' mega') ? 'mega' : '';
@@ -717,8 +718,7 @@ export class Side {
 	choosePass(): boolean | Side {
 		const index = this.getChoiceIndex(true);
 		if (index >= this.active.length) return false;
-		/**@type {Pokemon} */
-		const pokemon = this.active[index];
+		const pokemon: Pokemon = this.active[index];
 
 		switch (this.currentRequest) {
 		case 'switch':
@@ -738,6 +738,7 @@ export class Side {
 			return this.emitChoiceError(`Can't pass: Not a move or switch request`);
 		}
 
+		// tslint:disable-next-line:no-object-literal-type-assertion
 		this.choice.actions.push({
 			choice: 'pass',
 		} as ChosenAction);

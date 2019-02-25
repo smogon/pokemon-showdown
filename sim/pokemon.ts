@@ -183,8 +183,8 @@ export class Pokemon {
 
 		// "pre-bound" functions for nicer syntax
 		// allows them to be passed directly to Battle#add
-		this.getHealth = (side: Side) => this.getHealthInner(side);
-		this.getDetails = (side: Side) => this.getDetailsInner(side);
+		this.getHealth = (s: Side) => this.getHealthInner(s);
+		this.getDetails = (s: Side) => this.getDetailsInner(s);
 
 		this.set = set as PokemonSet;
 
@@ -244,7 +244,8 @@ export class Pokemon {
 		this.pokeball = this.set.pokeball || 'pokeball';
 
 		this.fullname = this.side.id + ': ' + this.name;
-		this.details = this.species + (this.level === 100 ? '' : ', L' + this.level) + (this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
+		this.details = this.species + (this.level === 100 ? '' : ', L' + this.level) +
+			(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
 
 		this.id = this.fullname; // shouldn't really be used anywhere
 
@@ -319,20 +320,15 @@ export class Pokemon {
 		}
 
 		let hpData = this.battle.getHiddenPower(this.set.ivs);
-		/**@type {string} */
 		this.hpType = set.hpType || hpData.type;
-		/**@type {number} */
 		this.hpPower = hpData.power;
 
-		/**@type {BoostsTable} */
 		this.boosts = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0};
-		/**@type {{[k: string]: number}} */
 		this.stats = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
 
 		// This is used in gen 1 only, here to avoid code repetition.
 		// Only declared if gen 1 to avoid declaring an object we aren't going to need.
 		if (this.battle.gen === 1) this.modifiedStats = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
-		/**@type {?boolean} */
 		this.subFainted = null;
 
 		// Transform copies IVs in gen 4 and earlier, so we track the base IVs/HP-type/power
@@ -344,7 +340,6 @@ export class Pokemon {
 
 		/**
 		 * Keeps track of what type the client sees for this Pokemon
-		 * @type {string}
 		 */
 		this.apparentType = this.baseTemplate.types.join('/');
 
@@ -384,7 +379,8 @@ export class Pokemon {
 
 	getDetailsInner(side: Side) {
 		if (this.illusion) {
-			let illusionDetails = this.illusion.template.species + (this.level === 100 ? '' : ', L' + this.level) + (this.illusion.gender === '' ? '' : ', ' + this.illusion.gender) + (this.illusion.set.shiny ? ', shiny' : '');
+			let illusionDetails = this.illusion.template.species + (this.level === 100 ? '' : ', L' + this.level) +
+				(this.illusion.gender === '' ? '' : ', ' + this.illusion.gender) + (this.illusion.set.shiny ? ', shiny' : '');
 			return illusionDetails + '|' + this.getHealthInner(side);
 		}
 		return this.details + '|' + this.getHealthInner(side);
@@ -496,9 +492,7 @@ export class Pokemon {
 		return this.battle.trunc(speed, 13);
 	}
 
-	/**
-	 * Commented out for now until a use for Combat Power is found in Let's Go
-	 *
+	/* Commented out for now until a use for Combat Power is found in Let's Go
 	getCombatPower() {
 		let statSum = 0;
 		let awakeningSum = 0;
@@ -508,10 +502,11 @@ export class Pokemon {
 			// @ts-ignore
 			awakeningSum += this.calculateStat(stat, this.boosts[stat]) + this.dex.getAwakeningValues(this.set, stat);
 		}
-		let combatPower = Math.floor(Math.floor(statSum * this.level * 6 / 100) + (Math.floor(awakeningSum) * Math.floor((this.level * 4) / 100 + 2)));
+		let combatPower = Math.floor(Math.floor(statSum * this.level * 6 / 100) +
+			(Math.floor(awakeningSum) * Math.floor((this.level * 4) / 100 + 2)));
 		return this.battle.clampIntRange(combatPower, 0, 10000);
 	}
-	 */
+	*/
 
 	getWeight() {
 		let weight = this.template.weightkg;
@@ -609,12 +604,17 @@ export class Pokemon {
 	}
 
 	ignoringAbility() {
-		return !!((this.battle.gen >= 5 && !this.isActive) || (this.volatiles['gastroacid'] && !['battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange'].includes(this.ability)));
+		const unignored = new Set([
+			'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange',
+		]);
+		return !!((this.battle.gen >= 5 && !this.isActive) || (this.volatiles['gastroacid'] && !unignored.has(this.ability)));
 	}
 
 	ignoringItem() {
 		// @ts-ignore
-		return !!((this.battle.gen >= 5 && !this.isActive) || (this.hasAbility('klutz') && !this.getItem().ignoreKlutz) || this.volatiles['embargo'] || this.battle.pseudoWeather['magicroom']);
+		return !!((this.battle.gen >= 5 && !this.isActive) ||
+			(this.hasAbility('klutz') && !this.getItem().ignoreKlutz) ||
+			this.volatiles['embargo'] || this.battle.pseudoWeather['magicroom']);
 	}
 
 	deductPP(move: string | Move, amount?: number | null, target?: Pokemon | null | false) {
@@ -716,8 +716,9 @@ export class Pokemon {
 				}
 			}
 			let disabled = moveSlot.disabled;
-			// @ts-ignore
-			if ((moveSlot.pp <= 0 && !this.volatiles['partialtrappinglock']) || disabled && this.side.active.length >= 2 && this.battle.targetTypeChoices(target)) {
+			if ((moveSlot.pp <= 0 && !this.volatiles['partialtrappinglock']) || disabled &&
+				// @ts-ignore
+				this.side.active.length >= 2 && this.battle.targetTypeChoices(target)) {
 				disabled = true;
 			} else if (disabled === 'hidden' && restrictData) {
 				disabled = false;
@@ -746,7 +747,15 @@ export class Pokemon {
 		let isLastActive = this.isLastActive();
 		let canSwitchIn = this.battle.canSwitch(this.side) > 0;
 		let moves = this.getMoves(lockedMove, isLastActive);
-		let data: {moves: {move: string, id: string, target?: string, disabled?: boolean}[], maybeDisabled?: boolean, trapped?: boolean, maybeTrapped?: boolean, canMegaEvo?: boolean, canUltraBurst?: boolean, canZMove?: AnyObject | null} = {moves: moves.length ? moves : [{move: 'Struggle', id: 'struggle', target: 'randomNormal', disabled: false}]};
+		let data: {
+			moves: {move: string, id: string, target?: string, disabled?: boolean}[],
+			maybeDisabled?: boolean,
+			trapped?: boolean,
+			maybeTrapped?: boolean,
+			canMegaEvo?: boolean,
+			canUltraBurst?: boolean,
+			canZMove?: AnyObject | null,
+		} = {moves: moves.length ? moves : [{move: 'Struggle', id: 'struggle', target: 'randomNormal', disabled: false}]};
 
 		if (isLastActive) {
 			if (this.maybeDisabled) {
@@ -979,7 +988,9 @@ export class Pokemon {
 	 * This function handles all changes to stats, ability, type, template, etc.
 	 * as well as sending all relevant messages sent to the client.
 	 */
-	formeChange(templateId: string | Template, source: Effect = this.battle.effect, isPermanent?: boolean, message?: string, abilitySlot: '0' | '1' | 'H' | 'S' = '0') {
+	formeChange(
+		templateId: string | Template, source: Effect = this.battle.effect, isPermanent?: boolean,
+		message?: string, abilitySlot: '0' | '1' | 'H' | 'S' = '0') {
 		let rawTemplate = this.battle.getTemplate(templateId);
 
 		let template = this.setTemplate(rawTemplate, source);
@@ -990,7 +1001,8 @@ export class Pokemon {
 		let apparentSpecies = this.illusion ? this.illusion.template.species : template.baseSpecies; // The species the opponent sees
 		if (isPermanent) {
 			this.baseTemplate = rawTemplate;
-			this.details = template.species + (this.level === 100 ? '' : ', L' + this.level) + (this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
+			this.details = template.species + (this.level === 100 ? '' : ', L' + this.level) +
+				(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
 			this.battle.add('detailschange', this, (this.illusion || this).details);
 			if (source.effectType === 'Item') {
 				// @ts-ignore
@@ -1234,8 +1246,7 @@ export class Pokemon {
 		let prevStatus = this.status;
 		let prevStatusData = this.statusData;
 		if (status.id) {
-			/** @type {boolean} */
-			let result = this.battle.runEvent('SetStatus', this, source, sourceEffect, status);
+			let result: boolean = this.battle.runEvent('SetStatus', this, source, sourceEffect, status);
 			if (!result) {
 				this.battle.debug('set status [' + status.id + '] interrupted');
 				return result;
@@ -1388,14 +1399,17 @@ export class Pokemon {
 		if (typeof ability === 'string') ability = this.battle.getAbility(ability) as Ability;
 		let oldAbility = this.ability;
 		if (!isFromFormeChange) {
-			if (['illusion', 'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange'].includes(ability.id)) return false;
-			if (['battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange'].includes(oldAbility)) return false;
+			if (['illusion', 'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct',
+				'rkssystem', 'schooling', 'shieldsdown', 'stancechange'].includes(ability.id)) return false;
+			if (['battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem',
+				'schooling', 'shieldsdown', 'stancechange'].includes(oldAbility)) return false;
 			if (this.battle.gen >= 7 && (ability.id === 'zenmode' || oldAbility === 'zenmode')) return false;
 		}
 		if (!this.battle.runEvent('SetAbility', this, source, this.battle.effect, ability)) return false;
 		this.battle.singleEvent('End', this.battle.getAbility(oldAbility), this.abilityData, this, source);
 		if (this.battle.effect && this.battle.effect.effectType === 'Move') {
-			this.battle.add('-endability', this, this.battle.getAbility(oldAbility), '[from] move: ' + this.battle.getMove(this.battle.effect.id));
+			this.battle.add('-endability', this, this.battle.getAbility(oldAbility), '[from] move: ' +
+				this.battle.getMove(this.battle.effect.id));
 		}
 		this.ability = ability.id;
 		this.abilityData = {id: ability.id, target: this};
@@ -1427,7 +1441,9 @@ export class Pokemon {
 		return this.battle.getNature(this.set.nature);
 	}
 
-	addVolatile(status: string | PureEffect, source: Pokemon | null = null, sourceEffect: Effect | null = null, linkedStatus: string | PureEffect | null = null): boolean | any {
+	addVolatile(
+		status: string | PureEffect, source: Pokemon | null = null, sourceEffect: Effect | null = null,
+		linkedStatus: string | PureEffect | null = null): boolean | any {
 		let result;
 		status = this.battle.getEffect(status) as PureEffect;
 		if (!this.hp && !status.affectsFainted) return false;
@@ -1599,7 +1615,8 @@ export class Pokemon {
 	}
 
 	isSemiInvulnerable() {
-		if (this.volatiles['fly'] || this.volatiles['bounce'] || this.volatiles['dive'] || this.volatiles['dig'] || this.volatiles['phantomforce'] || this.volatiles['shadowforce'] || this.isSkyDropped()) {
+		if (this.volatiles['fly'] || this.volatiles['bounce'] || this.volatiles['dive'] || this.volatiles['dig'] ||
+			this.volatiles['phantomforce'] || this.volatiles['shadowforce'] || this.isSkyDropped()) {
 			return true;
 		}
 		return false;
