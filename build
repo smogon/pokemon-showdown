@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+
+if (!require('assert').strict) {
+	console.error("We require Node.js version 10 or later; you're using " + process.version);
+	process.exit(1);
+}
+
+var execSync = require('child_process').execSync;
+var fs = require('fs');
+var path = require('path');
+
+try {
+	require.resolve('sucrase');
+} catch (e) {
+	console.log('Installing dependencies...');
+	execSync('npm install', {stdio: 'inherit'});
+}
+
+execSync('npx sucrase ./sim -d ./sim --transforms typescript,imports');
