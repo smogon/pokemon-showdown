@@ -50,5 +50,8 @@
         "semicolon": [true, "always", "strict-bound-class-methods"],
         "space-before-function-paren": [true, {"anonymous": "always", "named": "never", "asyncArrow": "always"}]
     },
-    "rulesDirectory": []
+    "rulesDirectory": [],
+    "linterOptions": {
+      "exclude": ["node_modules/**/*", "**/*.js", "dev-tools/*"]
+     }
 }
