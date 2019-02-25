@@ -1822,7 +1822,9 @@ class Battle extends Dex.ModdedDex {
 			let subFormat = this.getFormat(rule);
 			if (subFormat.exists) {
 				if (subFormat.onBegin) subFormat.onBegin.call(this);
-				let hasEventHandler = Object.keys(subFormat).some(val => val.startsWith('on') && !['onBegin', 'onValidateTeam', 'onChangeSet', 'onValidateSet', 'onModifyTemplate'].includes(val));
+				let hasEventHandler = Object.keys(subFormat).some(val =>
+					val.startsWith('on') && !['onBegin', 'onValidateTeam', 'onChangeSet', 'onValidateSet', 'onModifyTemplate'].includes(val)
+				);
 				if (hasEventHandler) this.addPseudoWeather(rule);
 			}
 		}
