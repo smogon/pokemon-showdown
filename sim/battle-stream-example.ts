@@ -1,3 +1,4 @@
+/* tslint:disable:no-console no-conditional-assignment */
 /**
  * Battle Stream Example
  * Pokemon Showdown - http://pokemonshowdown.com/
@@ -53,9 +54,9 @@ class RandomPlayerAI extends BattleStreams.BattlePlayer {
 			const choices = request.active.map((pokemon: AnyObject, i: number) => {
 				if (request.side.pokemon[i].condition.endsWith(` fnt`)) return `pass`;
 				let canMove = [1, 2, 3, 4].slice(0, pokemon.moves.length);
-				canMove = canMove.filter(i => (
+				canMove = canMove.filter(j => (
 					// not disabled
-					!pokemon.moves[i - 1].disabled
+					!pokemon.moves[j - 1].disabled
 				));
 				const move = randomElem(canMove);
 				const targetable = request.active.length > 1 && ['normal', 'any'].includes(pokemon.moves[move - 1].target);

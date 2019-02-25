@@ -1,3 +1,4 @@
+/* tslint:disable:no-console no-conditional-assignment */
 /**
  * Battle Stream
  * Pokemon Showdown - http://pokemonshowdown.com/
@@ -86,9 +87,9 @@ export class BattleStream extends Streams.ObjectReadWriteStream {
 		switch (type) {
 		case 'start':
 			const options = JSON.parse(message);
-			options.send = (type: string, data: any) => {
+			options.send = (t: string, data: any) => {
 				if (Array.isArray(data)) data = data.join("\n");
-				this.push(`${type}\n${data}`);
+				this.push(`${t}\n${data}`);
 				if (type === 'end' && !this.keepAlive) {
 					this.push(null);
 					this._destroy();
@@ -117,7 +118,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream {
 			this.battle.tiebreak();
 			break;
 		case 'eval':
-			/* eslint-disable no-eval, no-unused-vars */
+			/* tslint:disable:no-eval */
 			let battle = this.battle;
 			let p1 = battle && battle.p1;
 			let p2 = battle && battle.p2;
@@ -145,7 +146,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream {
 			} catch (e) {
 				battle.add('', '<<< error: ' + e.message);
 			}
-			/* eslint-enable no-eval, no-unused-vars */
+			/* tslint:enable:no-eval */
 			break;
 		}
 	}
