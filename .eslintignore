@@ -2,26 +2,4 @@ server/tournaments/lib/
 logs/
 dev-tools/globals.js
 node_modules/
-
-# Typescript
-data/mods/gen1/random-teams.js
-data/mods/gen2/random-teams.js
-data/mods/gen3/random-teams.js
-data/mods/gen4/random-teams.js
-data/mods/gen5/random-teams.js
-data/mods/gen6/random-teams.js
-data/mods/letsgo/random-teams.js
-data/mods/ssb/moves.js
-data/mods/ssb/random-teams.js
-data/random-teams.js
-dev-tools/globals.js
-sim/battle-stream-example.js
-sim/battle-stream.js
-sim/battle.js
-sim/dex-data.js
-sim/dex.js
-sim/index.js
-sim/pokemon.js
-sim/prng.js
-sim/side.js
-sim/team-validator.js
+sim/*.js
