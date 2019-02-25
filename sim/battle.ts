@@ -115,6 +115,7 @@ export class Battle extends Dex.ModdedDex {
 		this.cachedFormat = format;
 		this.debugMode = format.debug || !!options.debug;
 		this.formatData = {id: format.id};
+		// tslint:disable-next-line:no-object-literal-type-assertion
 		this.effect = {id: ''} as Effect;
 		this.effectData = {id: ''};
 		this.event = {id: ''};
@@ -533,7 +534,10 @@ export class Battle extends Dex.ModdedDex {
 	 * The entire event system revolves around this function
 	 * (and its helper functions, getRelevant * )
 	 */
-	singleEvent(eventid: string, effect: Effect, effectData: AnyObject | null, target: string | Pokemon | Side | Battle | null, source?: string | Pokemon | Effect | false | null, sourceEffect?: Effect | string | null, relayVar?: any) {
+	singleEvent(
+		eventid: string, effect: Effect, effectData: AnyObject | null,
+		target: string | Pokemon | Side | Battle | null, source?: string | Pokemon | Effect | false | null,
+		sourceEffect?: Effect | string | null, relayVar?: any) {
 		if (this.eventDepth >= 8) {
 			// oh fuck
 			this.add('message', 'STACK LIMIT EXCEEDED');
@@ -554,7 +558,8 @@ export class Battle extends Dex.ModdedDex {
 			// it's changed; call it off
 			return relayVar;
 		}
-		if (eventid !== 'Start' && eventid !== 'TakeItem' && eventid !== 'Primal' && effect.effectType === 'Item' && (target instanceof Pokemon) && target.ignoringItem()) {
+		if (eventid !== 'Start' && eventid !== 'TakeItem' && eventid !== 'Primal' &&
+			effect.effectType === 'Item' && (target instanceof Pokemon) && target.ignoringItem()) {
 			this.debug(eventid + ' handler suppressed by Embargo, Klutz or Magic Room');
 			return relayVar;
 		}
@@ -562,7 +567,8 @@ export class Battle extends Dex.ModdedDex {
 			this.debug(eventid + ' handler suppressed by Gastro Acid');
 			return relayVar;
 		}
-		if (effect.effectType === 'Weather' && eventid !== 'Start' && eventid !== 'Residual' && eventid !== 'End' && this.suppressingWeather()) {
+		if (effect.effectType === 'Weather' && eventid !== 'Start' && eventid !== 'Residual' &&
+			eventid !== 'End' && this.suppressingWeather()) {
 			this.debug(eventid + ' handler suppressed by Air Lock');
 			return relayVar;
 		}
@@ -647,12 +653,12 @@ export class Battle extends Dex.ModdedDex {
 	 * After an event handler is run, its return value helps determine what
 	 * happens next:
 	 * 1. If the return value isn't `undefined`, relayVar is set to the return
-	 *	value
+	 *    value
 	 * 2. If relayVar is falsy, no more event handlers are run
 	 * 3. Otherwise, if there are more event handlers, the next one is run and
-	 *	we go back to step 1.
+	 *    we go back to step 1.
 	 * 4. Once all event handlers are run (or one of them results in a falsy
-	 *	relayVar), relayVar is returned by runEvent
+	 *    relayVar), relayVar is returned by runEvent
 	 *
 	 * As a shortcut, an event handler that isn't a function will be interpreted
 	 * as a function that returns that value.
@@ -698,7 +704,9 @@ export class Battle extends Dex.ModdedDex {
 	 *   variables that are passed as arguments to the event handler, but
 	 *   they're useful for functions called by the event handler.
 	 */
-	runEvent(eventid: string, target?: Pokemon | Side | Battle | null, source?: string | Pokemon | false | null, effect?: Effect | null, relayVar?: any, onEffect?: boolean, fastExit?: boolean) {
+	runEvent(
+		eventid: string, target?: Pokemon | Side | Battle | null, source?: string | Pokemon | false | null,
+		effect?: Effect | null, relayVar?: any, onEffect?: boolean, fastExit?: boolean) {
 		// if (Battle.eventCounter) {
 		// 	if (!Battle.eventCounter[eventid]) Battle.eventCounter[eventid] = 0;
 		// 	Battle.eventCounter[eventid]++;
@@ -781,7 +789,8 @@ export class Battle extends Dex.ModdedDex {
 					continue;
 				}
 			}
-			if (eventid !== 'Start' && eventid !== 'SwitchIn' && eventid !== 'TakeItem' && status.effectType === 'Item' && (thing instanceof Pokemon) && thing.ignoringItem()) {
+			if (eventid !== 'Start' && eventid !== 'SwitchIn' && eventid !== 'TakeItem' &&
+				status.effectType === 'Item' && (thing instanceof Pokemon) && thing.ignoringItem()) {
 				if (eventid !== 'Update') {
 					this.debug(eventid + ' handler suppressed by Embargo, Klutz or Magic Room');
 				}
@@ -792,7 +801,8 @@ export class Battle extends Dex.ModdedDex {
 				}
 				continue;
 			}
-			if ((status.effectType === 'Weather' || eventid === 'Weather') && eventid !== 'Residual' && eventid !== 'End' && this.suppressingWeather()) {
+			if ((status.effectType === 'Weather' || eventid === 'Weather') &&
+				eventid !== 'Residual' && eventid !== 'End' && this.suppressingWeather()) {
 				this.debug(eventid + ' handler suppressed by Air Lock');
 				continue;
 			}
@@ -835,7 +845,9 @@ export class Battle extends Dex.ModdedDex {
 	 * priorityEvent works just like runEvent, except it exits and returns
 	 * on the first non-undefined value instead of only on null/false.
 	 */
-	priorityEvent(eventid: string, target: Pokemon | Side | Battle, source?: Pokemon | null, effect?: Effect, relayVar?: any, onEffect?: boolean): any {
+	priorityEvent(
+		eventid: string, target: Pokemon | Side | Battle, source?: Pokemon | null,
+		effect?: Effect, relayVar?: any, onEffect?: boolean): any {
 		return this.runEvent(eventid, target, source, effect, relayVar, onEffect, true);
 	}
 
@@ -940,16 +952,20 @@ export class Battle extends Dex.ModdedDex {
 		// @ts-ignore
 		callback = weather[callbackName];
 		if (callback !== undefined || (getKey && this.weatherData[getKey])) {
-			// @ts-ignore
-			handlers.push({status: weather, callback, statusData: this.weatherData, end: this.clearWeather, thing: this, priority: weather[callbackNamePriority] || 0});
+			handlers.push({
+				status: weather, callback, statusData: this.weatherData, end: this.clearWeather, thing: this,
+				// @ts-ignore
+				priority: weather[callbackNamePriority] || 0});
 			this.resolveLastPriority(handlers, callbackName);
 		}
 		let terrain = this.getTerrain();
 		// @ts-ignore
 		callback = terrain[callbackName];
 		if (callback !== undefined || (getKey && this.terrainData[getKey])) {
-			// @ts-ignore
-			handlers.push({status: terrain, callback, statusData: this.terrainData, end: this.clearTerrain, thing: this, priority: terrain[callbackNamePriority] || 0});
+			handlers.push({
+				status: terrain, callback, statusData: this.terrainData, end: this.clearTerrain, thing: this,
+				// @ts-ignore
+				priority: terrain[callbackNamePriority] || 0});
 			this.resolveLastPriority(handlers, callbackName);
 		}
 		let format = this.getFormat();
@@ -957,14 +973,19 @@ export class Battle extends Dex.ModdedDex {
 		callback = format[callbackName];
 		// @ts-ignore
 		if (callback !== undefined || (getKey && this.formatData[getKey])) {
-			// @ts-ignore
-			handlers.push({status: format, callback, statusData: this.formatData, end() {}, thing: this, priority: format[callbackNamePriority] || 0});
+			handlers.push({
+				status: format, callback, statusData: this.formatData, end() {}, thing: this,
+				// @ts-ignore
+				priority: format[callbackNamePriority] || 0});
 			this.resolveLastPriority(handlers, callbackName);
 		}
+		// tslint:disable-next-line:no-conditional-assignment
 		if (this.events && (callback = this.events[callbackName]) !== undefined) {
 			for (const handler of callback) {
 				let statusData = (handler.target.effectType === 'Format') ? this.formatData : undefined;
-				handlers.push({status: handler.target, callback: handler.callback, statusData, end() {}, thing: this, priority: handler.priority, order: handler.order, subOrder: handler.subOrder});
+				handlers.push({
+					status: handler.target, callback: handler.callback, statusData, end() {},
+					thing: this, priority: handler.priority, order: handler.order, subOrder: handler.subOrder});
 			}
 		}
 		return handlers;
@@ -1011,6 +1032,7 @@ export class Battle extends Dex.ModdedDex {
 			throw new TypeError(`${target.name} is a ${target.effectType} but only Format targets are supported right now`);
 		}
 
+		// tslint:disable-next-line:one-variable-per-declaration
 		let callback, priority, order, subOrder, data;
 		if (rest.length === 1) {
 			[callback] = rest;
@@ -1211,8 +1233,8 @@ export class Battle extends Dex.ModdedDex {
 		this.ended = true;
 		this.active = false;
 		this.currentRequest = '';
-		for (const side of this.sides) {
-			side.currentRequest = '';
+		for (const s of this.sides) {
+			s.currentRequest = '';
 		}
 		return true;
 	}
@@ -1668,7 +1690,9 @@ export class Battle extends Dex.ModdedDex {
 		if (!this.currentRequest) this.go();
 	}
 
-	boost(boost: SparseBoostsTable, target: Pokemon | null = null, source: Pokemon | null = null, effect: Effect | null = null, isSecondary: boolean = false, isSelf: boolean = false) {
+	boost(
+		boost: SparseBoostsTable, target: Pokemon | null = null, source: Pokemon | null = null,
+		effect: Effect | null = null, isSecondary: boolean = false, isSelf: boolean = false) {
 		if (this.event) {
 			if (!target) target = this.event.target;
 			if (!source) source = this.event.source;
@@ -1731,7 +1755,9 @@ export class Battle extends Dex.ModdedDex {
 		return success;
 	}
 
-	damage(damage: number, target: Pokemon | null = null, source: Pokemon | null = null, effect: 'drain' | 'recoil' | Effect | null = null, instafaint: boolean = false) {
+	damage(
+		damage: number, target: Pokemon | null = null, source: Pokemon | null = null,
+		effect: 'drain' | 'recoil' | Effect | null = null, instafaint: boolean = false) {
 		if (this.event) {
 			if (!target) target = this.event.target;
 			if (!source) source = this.event.source;
@@ -1835,7 +1861,8 @@ export class Battle extends Dex.ModdedDex {
 		if (typeof effect === 'string' || !effect) effect = this.getEffect(effect);
 
 		// In Gen 1 BUT NOT STADIUM, Substitute also takes confusion and HJK recoil damage
-		if (this.gen <= 1 && this.currentMod !== 'stadium' && ['confusion', 'highjumpkick'].includes(effect.id) && target.volatiles['substitute']) {
+		if (this.gen <= 1 && this.currentMod !== 'stadium' &&
+			['confusion', 'highjumpkick'].includes(effect.id) && target.volatiles['substitute']) {
 			target.volatiles['substitute'].hp -= damage;
 			if (target.volatiles['substitute'].hp <= 0) {
 				target.removeVolatile('substitute');
@@ -1964,7 +1991,9 @@ export class Battle extends Dex.ModdedDex {
 	 * Normal PS return value rules apply:
 	 * undefined = success, null = silent failure, false = loud failure
 	 */
-	getDamage(pokemon: Pokemon, target: Pokemon, move: string | number | ActiveMove, suppressMessages: boolean = false): number | undefined | null | false {
+	getDamage(
+		pokemon: Pokemon, target: Pokemon, move: string | number | ActiveMove,
+		suppressMessages: boolean = false): number | undefined | null | false {
 		if (typeof move === 'string') move = this.getActiveMove(move);
 
 		if (typeof move === 'number') {
@@ -2274,7 +2303,8 @@ export class Battle extends Dex.ModdedDex {
 			if (adjacentAllies.length) return this.sample(adjacentAllies);
 			return null;
 		}
-		if (move.target === 'self' || move.target === 'all' || move.target === 'allySide' || move.target === 'allyTeam' || move.target === 'adjacentAllyOrSelf') {
+		if (move.target === 'self' || move.target === 'all' || move.target === 'allySide' ||
+				move.target === 'allyTeam' || move.target === 'adjacentAllyOrSelf') {
 			return pokemon;
 		}
 		if (pokemon.side.active.length > 2) {
@@ -2700,7 +2730,9 @@ export class Battle extends Dex.ModdedDex {
 			break;
 		case 'runSwitch':
 			this.runEvent('SwitchIn', action.pokemon);
-			if (this.gen <= 2 && !action.pokemon.side.faintedThisTurn && action.pokemon.draggedIn !== this.turn) this.runEvent('AfterSwitchInSelf', action.pokemon);
+			if (this.gen <= 2 && !action.pokemon.side.faintedThisTurn && action.pokemon.draggedIn !== this.turn) {
+				this.runEvent('AfterSwitchInSelf', action.pokemon);
+			}
 			if (!action.pokemon.hp) break;
 			action.pokemon.isStarted = true;
 			if (!action.pokemon.fainted) {
@@ -2968,11 +3000,13 @@ export class Battle extends Dex.ModdedDex {
 		}
 	}
 
+// tslint:disable-next-line:ban-types
 	addMove(...args: (string | number | Function | AnyObject)[]) {
 		this.lastMoveLine = this.log.length;
 		this.log.push(`|${args.join('|')}`);
 	}
 
+// tslint:disable-next-line:ban-types
 	attrLastMove(...args: (string | number | Function | AnyObject)[]) {
 		if (this.lastMoveLine < 0) return;
 		if (this.log[this.lastMoveLine].startsWith('|-anim|')) {
@@ -3115,7 +3149,9 @@ export class Battle extends Dex.ModdedDex {
 		throw new Error(`The tryMoveHit function needs to be implemented in scripts.js or the battle format.`);
 	}
 
-	moveHit(target: Pokemon | null, pokemon: Pokemon, move: string | Move, moveData?: ActiveMove | SelfEffect | SecondaryEffect, isSecondary?: boolean, isSelf?: boolean): number | undefined | false {
+	moveHit(
+		target: Pokemon | null, pokemon: Pokemon, move: string | Move,
+		moveData?: ActiveMove | SelfEffect | SecondaryEffect, isSecondary?: boolean, isSelf?: boolean): number | undefined | false {
 		throw new Error(`The tryMoveHit function needs to be implemented in scripts.js or the battle format.`);
 	}
 
