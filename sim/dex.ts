@@ -60,13 +60,13 @@ const DATA_FILES = {
 
 const nullEffect: PureEffect = new Data.PureEffect({name: '', exists: false});
 
-type DexTemplate = {
+interface DexTemplate {
 	id: string;
 	name: string;
 	[k: string]: any;
 };
 
-type DexTableData = {
+interface DexTableData {
 	Pokedex: DexTable<Template>;
 	Movedex: DexTable<Move>;
 	Statuses: DexTable<EffectData>;

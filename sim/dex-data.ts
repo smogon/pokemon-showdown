@@ -756,7 +756,7 @@ export class Template extends BasicEffect {
 }
 
 /** Possible move flags. */
-type MoveFlags = {
+interface MoveFlags {
 	authentic?: 1 // Ignores a target's substitute.
 	bite?: 1 // Power is multiplied by 1.5 when used by a Pokemon with the Ability Strong Jaw.
 	bullet?: 1 // Has no effect on Pokemon with the Ability Bulletproof.

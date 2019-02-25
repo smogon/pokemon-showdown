@@ -12,19 +12,19 @@ import {Side} from './side';
 import {Pokemon} from './pokemon';
 
 /** A Pokemon that has fainted. */
-type FaintedPokemon = {
+interface FaintedPokemon {
 	target: Pokemon;
 	source: Pokemon | null;
 	effect: Effect | null;
 }
 
-type PlayerOptions = {
+interface PlayerOptions {
 	name?: string;
 	avatar?: string;
 	team?: PokemonSet[] | string | null;
 }
 
-type BattleOptions = {
+interface BattleOptions {
 	formatid: string; // Format ID
 	send?: (type: string, data: string | string[]) => void; // Output callback
 	prng?: PRNG; // PRNG override (you usually don't need this, just pass a seed)

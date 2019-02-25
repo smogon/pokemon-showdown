@@ -6,7 +6,7 @@
  */
 
  /** A Pokemon's move slot. */
-type MoveSlot = {
+interface MoveSlot {
 	id: string;
 	move: string;
 	pp: number;

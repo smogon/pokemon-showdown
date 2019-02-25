@@ -7,7 +7,7 @@
 import {Pokemon} from './pokemon';
 
 /** A single action that can be chosen. */
-type ChosenAction = {
+interface ChosenAction {
 	choice: 'move' | 'switch' | 'instaswitch' | 'team' | 'shift' | 'pass'; 	// action type
 	pokemon?: Pokemon; // the pokemon doing the action
 	targetLoc?: number; // relative location of the target to pokemon (move action only)
@@ -21,7 +21,7 @@ type ChosenAction = {
 };
 
 /** What the player has chosen to happen. */
-type Choice  = {
+interface Choice {
 	cantUndo: boolean; // true if the choice can't be cancelled because of the maybeTrapped issue
 	error: string; // contains error text in the case of a choice error
 	actions: ChosenAction[]; // array of chosen actions
