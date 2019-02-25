@@ -924,7 +924,7 @@ class ModdedDex {
 					// singles tiers
 					'uber', 'ou', 'uubl', 'uu', 'rubl', 'ru', 'nubl', 'nu', 'publ', 'pu', 'zu', 'nfe', 'lcuber', 'lc', 'cap', 'caplc', 'capnfe',
 					//doubles tiers
-					'duber', 'dou', 'dbl', 'duu',
+					'duber', 'dou', 'dbl', 'duu', 'dnu',
 					// custom tags
 					'mega',
 				];
