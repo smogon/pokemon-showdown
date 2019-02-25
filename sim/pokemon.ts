@@ -869,7 +869,7 @@ export class Pokemon {
 		this.transformed = true;
 
 		let types = pokemon.getTypes(true);
-		this.setType(pokemon.volatiles.roost ? pokemon.volatiles.roost.typeWas : types);
+		this.setType(pokemon.volatiles.roost ? pokemon.volatiles.roost.typeWas : types, true);
 		this.addedType = pokemon.addedType;
 		this.knownType = this.side === pokemon.side && pokemon.knownType;
 		this.apparentType = pokemon.apparentType;

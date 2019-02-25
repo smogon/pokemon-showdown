@@ -103,11 +103,11 @@ global.LoginServer = require('./loginserver');
 
 global.Ladders = require('./ladders');
 
+global.Chat = require('./chat');
+
 global.Users = require('./users');
 
 global.Punishments = require('./punishments');
-
-global.Chat = require('./chat');
 
 global.Rooms = require('./rooms');
 
