@@ -189,6 +189,7 @@ export class RuleTable extends Map {
 	complexBans: [string, string, number, string[]][];
 	/** rule, source, limit, bans */
 	complexTeamBans: [string, string, number, string[]][];
+	// tslint:disable-next-line:ban-types
 	checkLearnset: [Function, string] | null;
 
 	constructor() {
@@ -428,7 +429,7 @@ export class Item extends BasicEffect {
 	 * (e.g. Inferno Overdrive) of the Z Move this crystal allows
 	 * the use of.
 	 * undefined, if not a Z crystal.
-	*/
+	 */
 	zMove?: true | string;
 	/**
 	 * If this is a generic Z crystal: The type (e.g. Fire) of the
@@ -657,7 +658,7 @@ export class Template extends BasicEffect {
 	eventOnly: boolean;
 	/** List of event data for each event. */
 	eventPokemon?: EventInfo[] ;
-	/** True if a pokemon is mega.*/
+	/** True if a pokemon is mega. */
 	isMega?: boolean;
 	/** True if a pokemon is a forme that is only accessible in battle. */
 	battleOnly?: boolean;

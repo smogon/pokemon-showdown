@@ -362,7 +362,8 @@ class Validator {
 			}
 		}
 		if (set.hpType === 'Fighting' && ruleTable.has('pokemon')) {
-			if (template.gen >= 6 && template.eggGroups[0] === 'Undiscovered' && !template.nfe && (template.baseSpecies !== 'Diancie' || !set.shiny)) {
+			if (template.gen >= 6 && template.eggGroups[0] === 'Undiscovered' && !template.nfe &&
+				(template.baseSpecies !== 'Diancie' || !set.shiny)) {
 				// Legendary Pokemon must have at least 3 perfect IVs in gen 6+
 				problems.push(`${name} must not have Hidden Power Fighting because it starts with 3 perfect IVs because it's a gen 6+ legendary.`);
 			}
@@ -446,7 +447,8 @@ class Validator {
 				if (eventProblems) problems.push(...eventProblems);
 			}
 		} else if (ruleTable.has('-illegal') && template.eventOnly) {
-			let eventTemplate = !template.learnset && template.baseSpecies !== template.species && template.id !== 'zygarde10' ? dex.getTemplate(template.baseSpecies) : template;
+			let eventTemplate = !template.learnset && template.baseSpecies !== template.species &&
+				template.id !== 'zygarde10' ? dex.getTemplate(template.baseSpecies) : template;
 			const eventPokemon = eventTemplate.eventPokemon;
 			if (!eventPokemon) throw new Error(`Event-only template ${template.species} has no eventPokemon table`);
 			let legal = false;
@@ -484,13 +486,15 @@ class Validator {
 			// FIXME: Event pokemon given at a level under what it normally can be attained at gives a false positive
 			problems.push(`${name} must be at least level ${template.evoLevel} to be evolved.`);
 		}
-		if (ruleTable.has('-illegal') && template.id === 'keldeo' && set.moves.includes('secretsword') && (format.requirePlus || format.requirePentagon)) {
+		if (ruleTable.has('-illegal') && template.id === 'keldeo' && set.moves.includes('secretsword') &&
+			(format.requirePlus || format.requirePentagon)) {
 			problems.push(`${name} has Secret Sword, which is only compatible with Keldeo-Ordinary obtained from Gen 5.`);
 		}
 		if (!lsetData.sources && lsetData.sourcesBefore <= 3 && dex.getAbility(set.ability).gen === 4 && !template.prevo && dex.gen <= 5) {
 			problems.push(`${name} has a gen 4 ability and isn't evolved - it can't use moves from gen 3.`);
 		}
-		if (!lsetData.sources && lsetData.sourcesBefore < 6 && lsetData.sourcesBefore >= 3 && (isHidden || dex.gen <= 5) && template.gen <= lsetData.sourcesBefore) {
+		if (!lsetData.sources && lsetData.sourcesBefore < 6 && lsetData.sourcesBefore >= 3 &&
+			(isHidden || dex.gen <= 5) && template.gen <= lsetData.sourcesBefore) {
 			let oldAbilities = dex.mod('gen' + lsetData.sourcesBefore).getTemplate(set.species).abilities;
 			if (ability.name !== oldAbilities['0'] && ability.name !== oldAbilities['1'] && !oldAbilities['H']) {
 				problems.push(`${name} has moves incompatible with its ability.`);
@@ -554,7 +558,7 @@ class Validator {
 		if (source.charAt(1) === 'S') {
 			let splitSource = source.substr(source.charAt(2) === 'T' ? 3 : 2).split(' ');
 			eventTemplate = this.dex.getTemplate(splitSource[1]);
-			if (eventTemplate.eventPokemon) eventData = eventTemplate.eventPokemon[parseInt(splitSource[0])];
+			if (eventTemplate.eventPokemon) eventData = eventTemplate.eventPokemon[parseInt(splitSource[0], 10)];
 			if (!eventData) {
 				throw new Error(`${eventTemplate.species} from ${template.species} doesn't have data for event ${source}`);
 			}
@@ -733,7 +737,9 @@ class Validator {
 		if (eventData.gender) set.gender = eventData.gender;
 	}
 
-	reconcileLearnset(species: Template, lsetData: PokemonSources, problem: {type: string, moveName: string, [any: string]: any} | null, name: string = species.species) {
+	reconcileLearnset(
+		species: Template, lsetData: PokemonSources, problem: {type: string, moveName: string, [key: string]: any} | null,
+		name: string = species.species) {
 		const dex = this.dex;
 		let problems = [];
 
@@ -744,7 +750,7 @@ class Validator {
 			} else if (problem.type === 'incompatible') {
 				problemString = `${name}'s moves ${(lsetData.restrictiveMoves || []).join(', ')} are incompatible.`;
 			} else if (problem.type === 'oversketched') {
-				let plural = (parseInt(problem.maxSketches) === 1 ? '' : 's');
+				let plural = (parseInt(problem.maxSketches, 10) === 1 ? '' : 's');
 				problemString += ` can't be Sketched because it can only Sketch ${problem.maxSketches} move${plural}.`;
 			} else if (problem.type === 'pastgen') {
 				problemString += ` is not available in generation ${problem.gen} or later.`;
@@ -760,7 +766,7 @@ class Validator {
 
 		if (lsetData.isHidden) {
 			lsetData.sources = lsetData.sources.filter(source =>
-				parseInt(source.charAt(0)) >= 5
+				parseInt(source.charAt(0), 10) >= 5
 			);
 			if (lsetData.sourcesBefore < 5) lsetData.sourcesBefore = 0;
 			if (!lsetData.sourcesBefore && !lsetData.sources.length) {
@@ -789,7 +795,7 @@ class Validator {
 				let validFatherExists = false;
 				for (const source of lsetData.sources) {
 					if (source.charAt(1) === 'S' || source.charAt(1) === 'D') continue;
-					let eggGen = parseInt(source.charAt(0));
+					let eggGen = parseInt(source.charAt(0), 10);
 					if (source.charAt(1) !== 'E' || eggGen === 6) {
 						// (There is a way to obtain this pokemon without past-gen breeding.)
 						// In theory, limitedEgg should not exist in this case.
@@ -888,7 +894,10 @@ class Validator {
 		return problems.length ? problems : null;
 	}
 
-	checkLearnset(move: Move, species: Template, lsetData: PokemonSources = {sources: [], sourcesBefore: this.dex.gen}, set: AnyObject = {}): {type: string, [any: string]: any} | null {
+	checkLearnset(
+		// tslint:disable-next-line:variable-name
+		move: Move, species: Template, lsetData: PokemonSources = {sources: [], sourcesBefore: this.dex.gen}, set: AnyObject = {}):
+		{type: string, [key: string]: any} | null {
 		const dex = this.dex;
 
 		let moveid = toId(move);
@@ -1001,7 +1010,7 @@ class Validator {
 					//   (i.e. get the pokemon however you want, transfer to that gen,
 					//   teach it, and transfer it to the current gen.)
 
-					let learnedGen = parseInt(learned.charAt(0));
+					let learnedGen = parseInt(learned.charAt(0), 10);
 					if (learnedGen < minPastGen) continue;
 					if (noFutureGen && learnedGen > dex.gen) continue;
 
@@ -1015,15 +1024,17 @@ class Validator {
 					}
 					if (!template.isNonstandard) {
 						// HMs can't be transferred
-						if (dex.gen >= 4 && learnedGen <= 3 && ['cut', 'fly', 'surf', 'strength', 'flash', 'rocksmash', 'waterfall', 'dive'].includes(moveid)) continue;
-						if (dex.gen >= 5 && learnedGen <= 4 && ['cut', 'fly', 'surf', 'strength', 'rocksmash', 'waterfall', 'rockclimb'].includes(moveid)) continue;
+						if (dex.gen >= 4 && learnedGen <= 3 &&
+							['cut', 'fly', 'surf', 'strength', 'flash', 'rocksmash', 'waterfall', 'dive'].includes(moveid)) continue;
+						if (dex.gen >= 5 && learnedGen <= 4 &&
+							['cut', 'fly', 'surf', 'strength', 'rocksmash', 'waterfall', 'rockclimb'].includes(moveid)) continue;
 						// Defog and Whirlpool can't be transferred together
 						if (dex.gen >= 5 && ['defog', 'whirlpool'].includes(moveid) && learnedGen <= 4) blockedHM = true;
 					}
 
 					if (learned.charAt(1) === 'L') {
 						// special checking for level-up moves
-						if (level >= parseInt(learned.substr(2)) || learnedGen >= 7) {
+						if (level >= parseInt(learned.substr(2), 10) || learnedGen >= 7) {
 							// we're past the required level to learn it
 							// (gen 7 level-up moves can be relearnered at any level)
 							// falls through to LMT check below
@@ -1211,14 +1222,14 @@ class Validator {
 			// in sources, so we fill the other array in preparation for intersection
 			if (sourcesBefore > lsetData.sourcesBefore) {
 				for (const oldSource of lsetData.sources) {
-					const oldSourceGen = parseInt(oldSource.charAt(0));
+					const oldSourceGen = parseInt(oldSource.charAt(0), 10);
 					if (oldSourceGen <= sourcesBefore) {
 						sources.push(oldSource);
 					}
 				}
 			} else if (lsetData.sourcesBefore > sourcesBefore) {
 				for (const source of sources) {
-					const sourceGen = parseInt(source.charAt(0));
+					const sourceGen = parseInt(source.charAt(0), 10);
 					if (sourceGen <= lsetData.sourcesBefore) {
 						lsetData.sources.push(source);
 					}

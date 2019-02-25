@@ -10,7 +10,7 @@
  * @license MIT license
  */
 import {Battle} from './battle';
-import {BattleStream}  from './battle-stream';
+import {BattleStream} from './battle-stream';
 import Dex = require('./dex');
 import {Pokemon} from './pokemon';
 import {PRNG} from './prng';

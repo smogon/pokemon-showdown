@@ -40,8 +40,13 @@ const FORMATS = path.resolve(__dirname, '../config/formats');
 
 let dexes: {[mod: string]: ModdedDex} = Object.create(null);
 
-type DataType = 'Pokedex' | 'FormatsData' | 'Learnsets' | 'Movedex' | 'Statuses' | 'TypeChart' | 'Scripts' | 'Items' | 'Abilities' | 'Natures' | 'Formats';
-const DATA_TYPES: DataType[] = ['Pokedex', 'FormatsData', 'Learnsets', 'Movedex', 'Statuses', 'TypeChart', 'Scripts', 'Items', 'Abilities', 'Natures', 'Formats'];
+type DataType =
+	'Pokedex' | 'FormatsData' | 'Learnsets' | 'Movedex' | 'Statuses' | 'TypeChart' |
+	'Scripts' | 'Items' | 'Abilities' | 'Natures' | 'Formats';
+const DATA_TYPES: DataType[] = [
+	'Pokedex', 'FormatsData', 'Learnsets', 'Movedex', 'Statuses', 'TypeChart',
+	'Scripts', 'Items', 'Abilities', 'Natures', 'Formats',
+];
 
 const DATA_FILES = {
 	Pokedex: 'pokedex',
@@ -442,9 +447,9 @@ class ModdedDex {
 	}
 
 	/**
-	* While this function can technically return any kind of effect at
-	* all, that's not a feature TypeScript needs to know about.
-	*/
+	 * While this function can technically return any kind of effect at
+	 * all, that's not a feature TypeScript needs to know about.
+	 */
 	getEffect(name?: string | Effect | null): PureEffect {
 		if (!name) {
 			return nullEffect;
@@ -686,7 +691,10 @@ class ModdedDex {
 	}
 
 	getHiddenPower(ivs: AnyObject) {
-		const hpTypes = ['Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel', 'Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Ice', 'Dragon', 'Dark'];
+		const hpTypes = [
+			'Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel',
+			'Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Ice', 'Dragon', 'Dark',
+		];
 		const stats = {hp: 31, atk: 31, def: 31, spe: 31, spa: 31, spd: 31};
 		if (this.gen <= 2) {
 			// Gen 2 specific Hidden Power check. IVs are still treated 0-31 so we get them 0-15
@@ -700,7 +708,8 @@ class ModdedDex {
 			};
 		} else {
 			// Hidden Power check for gen 3 onwards
-			let hpTypeX = 0, hpPowerX = 0;
+			let hpTypeX = 0;
+			let hpPowerX = 0;
 			let i = 1;
 			for (const s in stats) {
 				hpTypeX += i * (ivs[s] % 2);
@@ -773,15 +782,19 @@ class ModdedDex {
 			for (const [k, v] of subRuleTable) {
 				if (!ruleTable.has('!' + k)) ruleTable.set(k, v || subformat.name);
 			}
+			// tslint:disable-next-line:no-shadowed-variable
 			for (const [rule, source, limit, bans] of subRuleTable.complexBans) {
 				ruleTable.addComplexBan(rule, source || subformat.name, limit, bans);
 			}
+			// tslint:disable-next-line:no-shadowed-variable
 			for (const [rule, source, limit, bans] of subRuleTable.complexTeamBans) {
 				ruleTable.addComplexTeamBan(rule, source || subformat.name, limit, bans);
 			}
 			if (subRuleTable.checkLearnset) {
 				if (ruleTable.checkLearnset) {
-					throw new Error(`"${format.name}" has conflicting move validation rules from "${ruleTable.checkLearnset[1]}" and "${subRuleTable.checkLearnset[1]}"`);
+					throw new Error(
+						`"${format.name}" has conflicting move validation rules from ` +
+						`"${ruleTable.checkLearnset[1]}" and "${subRuleTable.checkLearnset[1]}"`);
 				}
 				ruleTable.checkLearnset = subRuleTable.checkLearnset;
 			}
@@ -801,7 +814,7 @@ class ModdedDex {
 				const gtIndex = buf.lastIndexOf('>');
 				let limit = rule.charAt(0) === '+' ? Infinity : 0;
 				if (gtIndex >= 0 && /^[0-9]+$/.test(buf.slice(gtIndex + 1).trim())) {
-					if (limit === 0) limit = parseInt(buf.slice(gtIndex + 1));
+					if (limit === 0) limit = parseInt(buf.slice(gtIndex + 1), 10);
 					buf = buf.slice(0, gtIndex);
 				}
 				let checkTeam = buf.includes('++');
@@ -924,15 +937,15 @@ class ModdedDex {
 
 		// Step 3
 		for (let i = 1; i <= n; i++) {
-			let s_i = s.charAt(i - 1);
+			let si = s.charAt(i - 1);
 
 			// Step 4
 			for (let j = 1; j <= m; j++) {
 				// Check the jagged ld total so far
 				if (i === j && d[i][j] > 4) return n;
 
-				let t_j = t.charAt(j - 1);
-				let cost = (s_i === t_j) ? 0 : 1; // Step 5
+				let tj = t.charAt(j - 1);
+				let cost = (si === tj) ? 0 : 1; // Step 5
 
 				// Calculate the minimum
 				let mi = d[i - 1][j] + 1;
@@ -1140,10 +1153,12 @@ class ModdedDex {
 		}
 
 		let team = [];
-		let i = 0, j = 0;
+		let i = 0;
+		let j = 0;
 
 		// limit to 24
 		for (let count = 0; count < 24; count++) {
+			// tslint:disable-next-line:no-object-literal-type-assertion
 			let set: PokemonSet = {} as PokemonSet;
 			team.push(set);
 
@@ -1233,7 +1248,7 @@ class ModdedDex {
 			// level
 			j = buf.indexOf('|', i);
 			if (j < 0) return null;
-			if (i !== j) set.level = parseInt(buf.substring(i, j));
+			if (i !== j) set.level = parseInt(buf.substring(i, j), 10);
 			i = j + 1;
 
 			// happiness
@@ -1273,8 +1288,12 @@ class ModdedDex {
 			const filePath = basePath + DATA_FILES[dataType];
 			const dataObject = require(filePath);
 			const key = `Battle${dataType}`;
-			if (!dataObject || typeof dataObject !== 'object') return new TypeError(`${filePath}, if it exists, must export a non-null object`);
-			if (!dataObject[key] || typeof dataObject[key] !== 'object') return new TypeError(`${filePath}, if it exists, must export an object whose '${key}' property is a non-null object`);
+			if (!dataObject || typeof dataObject !== 'object') {
+				return new TypeError(`${filePath}, if it exists, must export a non-null object`);
+			}
+			if (!dataObject[key] || typeof dataObject[key] !== 'object') {
+				return new TypeError(`${filePath}, if it exists, must export an object whose '${key}' property is a non-null object`);
+			}
 			return dataObject[key];
 		} catch (e) {
 			if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') {
@@ -1321,7 +1340,11 @@ class ModdedDex {
 		let parentDex;
 		if (this.parentMod) {
 			parentDex = dexes[this.parentMod];
-			if (!parentDex || parentDex === this) throw new Error("Unable to load " + this.currentMod + ". `inherit` should specify a parent mod from which to inherit data, or must be not specified.");
+			if (!parentDex || parentDex === this) {
+				throw new Error(
+					"Unable to load " + this.currentMod + ". `inherit` should specify a parent mod " +
+					"from which to inherit data, or must be not specified.");
+			}
 		}
 
 		// @ts-ignore
@@ -1332,8 +1355,12 @@ class ModdedDex {
 				continue;
 			}
 			let BattleData = this.loadDataFile(basePath, dataType);
-			// @ts-ignore
-			if (!BattleData || typeof BattleData !== 'object') throw new TypeError("Exported property `Battle" + dataType + "`from `" + './data/' + DATA_FILES[dataType] + "` must be an object except `null`.");
+			if (!BattleData || typeof BattleData !== 'object') {
+				throw new TypeError(
+					"Exported property `Battle" + dataType + "`from `" + './data/' +
+					// @ts-ignore
+					DATA_FILES[dataType] + "` must be an object except `null`.");
+			}
 			// @ts-ignore
 			if (BattleData !== dataCache[dataType]) dataCache[dataType] = Object.assign(BattleData, dataCache[dataType]);
 			if (dataType === 'Formats' && !parentDex) Object.assign(BattleData, this.formats);
