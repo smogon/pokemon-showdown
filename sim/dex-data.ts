@@ -345,7 +345,6 @@ export class Format extends BasicEffect {
 		super(data, moreData, moreData2);
 		// @ts-ignore
 		this.mod = Tools.getString(this.mod) || 'gen7';
-		this.team = this.team;
 		// @ts-ignore
 		this.effectType = Tools.getString(this.effectType) || 'Format';
 		// @ts-ignore
@@ -516,6 +515,7 @@ export class Item extends BasicEffect {
 export class Ability extends BasicEffect {
 	effectType: 'Ability';
 	/** Represents how useful or detrimental this ability is. */
+	// @ts-ignore
 	rating: number;
 	/** Whether or not this ability suppresses weather. */
 	suppressWeather: boolean;
@@ -524,8 +524,6 @@ export class Ability extends BasicEffect {
 		super(data, moreData);
 		this.fullname = 'ability: ' + this.name;
 		this.effectType = 'Ability';
-		// @ts-ignore
-		this.rating = this.rating;
 		// @ts-ignore
 		this.suppressWeather = !!this.suppressWeather;
 
@@ -594,6 +592,7 @@ export class Template extends BasicEffect {
 	/** Abilities. */
 	abilities: TemplateAbility;
 	/** Types. */
+	// @ts-ignore
 	types: string[];
 	/** Added type (used in OMs). */
 	addedType?: string;
@@ -633,10 +632,13 @@ export class Template extends BasicEffect {
 	 */
 	requiredItems?: string[];
 	/** Base stats. */
+	// @ts-ignore
 	baseStats: StatsTable;
 	/** Weight (in kg). */
+	// @ts-ignore
 	weightkg: number;
 	/** Height (in m). */
+	// @ts-ignore
 	heightm: number;
 	/** Color. */
 	color: string;
@@ -667,65 +669,57 @@ export class Template extends BasicEffect {
 		super(data, moreData);
 		if (moreData2) Object.assign(this, moreData2);
 		if (moreData3) Object.assign(this, moreData3);
-		// @ts-ignore;
+		// @ts-ignore
 		this.fullname = 'pokemon: ' + this.name;
 		this.effectType = 'Pokemon';
-		// @ts-ignore;
+		// @ts-ignore
 		this.speciesid = this.speciesid || this.id;
-		// @ts-ignore;
+		// @ts-ignore
 		this.species = this.species || this.name;
 		this.name = this.species;
-		// @ts-ignore;
+		// @ts-ignore
 		this.baseSpecies = this.baseSpecies || this.name;
-		// @ts-ignore;
+		// @ts-ignore
 		this.forme = this.forme || '';
 		this.otherForms = this.otherForms || undefined;
 		this.otherFormes = this.otherFormes || undefined;
-		// @ts-ignore;
+		// @ts-ignore
 		this.formeLetter = this.formeLetter || '';
-		// @ts-ignore;
+		// @ts-ignore
 		this.spriteid = this.spriteid || (toId(this.baseSpecies) + (this.baseSpecies !== this.name ? '-' + toId(this.forme) : ''));
-		// @ts-ignore;
+		// @ts-ignore
 		this.abilities = this.abilities || {0: ""};
-		// @ts-ignore;
-		this.types = this.types;
 		this.addedType = this.addedType || undefined;
-		// @ts-ignore;
+		// @ts-ignore
 		this.prevo = this.prevo || '';
-		// @ts-ignore;
+		// @ts-ignore
 		this.tier = this.tier || '';
-		// @ts-ignore;
+		// @ts-ignore
 		this.doublesTier = this.doublesTier || '';
-		// @ts-ignore;
+		// @ts-ignore
 		this.evos = this.evos || [];
 		this.evoLevel = this.evoLevel || undefined;
 		this.nfe = !!this.evos.length;
-		// @ts-ignore;
+		// @ts-ignore
 		this.eggGroups = this.eggGroups || [];
-		// @ts-ignore;
+		// @ts-ignore
 		this.gender = this.gender || '';
-		// @ts-ignore;
+		// @ts-ignore
 		this.genderRatio = this.genderRatio || (this.gender === 'M' ? {M: 1, F: 0} :
 			this.gender === 'F' ? {M: 0, F: 1} :
 				this.gender === 'N' ? {M: 0, F: 0} :
 					{M: 0.5, F: 0.5});
 		this.requiredItem = this.requiredItem || undefined;
 		this.requiredItems = this.requiredItems || (this.requiredItem ? [this.requiredItem] : undefined);
-		// @ts-ignore;
-		this.baseStats = this.baseStats;
-		// @ts-ignore;
-		this.weightkg = this.weightkg;
-		// @ts-ignore;
-		this.heightm = this.heightm;
-		// @ts-ignore;
+		// @ts-ignore
 		this.color = this.color || '';
-		// @ts-ignore;
+		// @ts-ignore
 		this.unreleasedHidden = !!this.unreleasedHidden;
-		// @ts-ignore;
+		// @ts-ignore
 		this.maleOnlyHidden = !!this.maleOnlyHidden;
 		this.maxHP = this.maxHP || undefined;
 		this.learnset = this.learnset || undefined;
-		// @ts-ignore;
+		// @ts-ignore
 		this.eventOnly = !!this.eventOnly;
 		this.eventPokemon = this.eventPokemon || undefined;
 		this.isMega = !!(this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme)) || undefined;
@@ -736,7 +730,7 @@ export class Template extends BasicEffect {
 				this.gen = 7;
 			} else if (this.forme === 'Primal') {
 				this.gen = 6;
-				// @ts-ignore;
+				// @ts-ignore
 				this.isPrimal = true;
 				this.battleOnly = true;
 			} else if (this.num >= 650 || this.isMega) {
@@ -788,8 +782,10 @@ export class Move extends BasicEffect {
 	/** Move target. */
 	target: string;
 	/** Move base power. */
+	// @ts-ignore
 	basePower: number;
 	/** Move base accuracy. True denotes a move that always hits. */
+	// @ts-ignore
 	accuracy: true | number;
 	/** Critical hit ratio. Defaults to 1. */
 	critRatio: number;
@@ -821,6 +817,7 @@ export class Move extends BasicEffect {
 	 */
 	priority: number;
 	/** Move category. */
+	// @ts-ignore
 	category: 'Physical' | 'Special' | 'Status';
 	/**
 	 * Category that changes which defense to use when calculating
@@ -845,6 +842,7 @@ export class Move extends BasicEffect {
 	 */
 	readonly ignoreImmunity: AnyObject | boolean;
 	/** Base move PP. */
+	// @ts-ignore
 	pp: number;
 	/** Whether or not this move can receive PP boosts. */
 	noPPBoosts: boolean;
@@ -865,6 +863,7 @@ export class Move extends BasicEffect {
 	 * null = move will always silently fail
 	 * undefined = move does not deal fixed damage
 	 */
+	// @ts-ignore
 	damage: number | 'level' | false | null;
 	/** Whether or not this move hit multiple targets. */
 	spreadHit: boolean;
@@ -890,14 +889,7 @@ export class Move extends BasicEffect {
 		// @ts-ignore
 		this.target = Tools.getString(this.target);
 		// @ts-ignore
-		this.basePower = this.basePower;
-		// @ts-ignore
-		this.accuracy = this.accuracy;
-		// @ts-ignore
 		this.critRatio = Number(this.critRatio) || 1;
-		this.willCrit = this.willCrit;
-		this.crit = this.crit;
-		this.ohko = this.ohko;
 		// @ts-ignore
 		this.baseMoveType = Tools.getString(this.baseMoveType) || this.type;
 		// @ts-ignore
@@ -906,8 +898,6 @@ export class Move extends BasicEffect {
 		this.secondaries = this.secondaries || (this.secondary && [this.secondary]) || null;
 		// @ts-ignore
 		this.priority = Number(this.priority) || 0;
-		// @ts-ignore
-		this.category = this.category;
 		this.defensiveCategory = this.defensiveCategory || undefined;
 		// @ts-ignore
 		this.useTargetOffensive = !!this.useTargetOffensive;
@@ -924,8 +914,6 @@ export class Move extends BasicEffect {
 		// @ts-ignore
 		this.ignoreImmunity = (this.ignoreImmunity !== undefined ? this.ignoreImmunity : this.category === 'Status');
 		// @ts-ignore
-		this.pp = this.pp;
-		// @ts-ignore
 		this.noPPBoosts = !!this.noPPBoosts;
 		// @ts-ignore
 		this.isZ = this.isZ || false;
@@ -939,12 +927,7 @@ export class Move extends BasicEffect {
 		// @ts-ignore
 		this.ignoreAbility = this.ignoreAbility || false;
 		// @ts-ignore
-		this.damage = this.damage;
-		// @ts-ignore
 		this.spreadHit = this.spreadHit || false;
-		// @ts-ignore
-		this.spreadModifier = this.spreadModifier;
-		this.critModifier = this.critModifier;
 		// @ts-ignore
 		this.typeMod = this.typeMod || 0;
 		// @ts-ignore
