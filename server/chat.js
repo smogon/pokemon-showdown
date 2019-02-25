@@ -495,7 +495,7 @@ class CommandContext extends MessageContext {
 	 * @param {{message: string, room: Room, user: User, connection: Connection, pmTarget?: User, cmd?: string, cmdToken?: string, target?: string, fullCmd?: string}} options
 	 */
 	constructor(options) {
-		super(options.user, options.room.language || options.user.language);
+		super(options.user, options.room && options.room.language ? options.room.language : options.user.language);
 
 		this.message = options.message || ``;
 
