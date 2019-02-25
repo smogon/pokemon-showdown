@@ -7,7 +7,7 @@
 
  /** A Pokemon's move slot. */
 type MoveSlot = {
-	id: string; // TODO: ID
+	id: string;
 	move: string;
 	pp: number;
 	maxpp: number;
@@ -27,7 +27,7 @@ export class Pokemon {
 	baseTemplate: Template;
 	species: string;
 	name: string;
-	speciesid: string; // TODO: ID
+	speciesid: string;
 	template: Template;
 	moveSlots: MoveSlot[];
 	baseMoveSlots: MoveSlot[];
@@ -133,12 +133,12 @@ export class Pokemon {
 	volatiles: AnyObject;
 	heightm: number;
 	weightkg: number;
-	baseAbility: string; // TODO ID
-	ability: string; // TODO ID
-	item: string; // TODO ID
+	baseAbility: string;
+	ability: string;
+	item: string;
 	abilityData: {[k: string]: string | Pokemon};
 	itemData: {[k: string]: string | Pokemon};
-	speciesData: AnyObject; // TODO
+	speciesData: AnyObject;
 	types: string[];
 	addedType: string;
 	knownType: boolean;
