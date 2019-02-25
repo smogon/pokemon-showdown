@@ -9,6 +9,9 @@ npm-debug.log
 .eslintcache
 package-lock.json
 
+# Typescript
+sim/*.js
+
 # visual studio live share
 .vs
 
@@ -53,6 +56,3 @@ local_settings.py
 .svn
 
 pip-log.txt
-
-# Typescript
-sim/*.js

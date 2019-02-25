@@ -5,7 +5,8 @@
   "version": "0.11.2",
   "dependencies": {
     "probe-image-size": "^4.0.0",
-    "sockjs": "0.3.18"
+    "sockjs": "0.3.18",
+    "sucrase": "^3.9.5"
   },
   "optionalDependencies": {
     "cloud-env": "^0.2.2",
@@ -19,9 +20,8 @@
   },
   "scripts": {
     "start": "node pokemon-showdown start",
-    "compile": "sucrase ./sim -d ./sim --transforms typescript,imports",
-    "clean": "rm -f sim/*.js",
-    "test": "eslint --cache . && tsc && npm run compile && mocha",
+    "compile": "node build",
+    "test": "eslint --cache . && tslint **/*.ts && tsc && node build && mocha",
     "tsc": "tsc",
     "lint": "eslint --cache ."
   },
@@ -64,7 +64,7 @@
     "eslint": "^5.13.0",
     "husky": "^1.1.2",
     "mocha": "^5.2.0",
-    "sucrase": "^3.9.5",
+    "tslint": "^5.13.0",
     "typescript": "~3.3.3333"
   }
 }
