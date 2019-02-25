@@ -1819,7 +1819,14 @@ class Battle extends Dex.ModdedDex {
 		}
 		for (const rule of this.getRuleTable(format).keys()) {
 			if (rule.startsWith('+') || rule.startsWith('-') || rule.startsWith('!')) continue;
-			if (this.getFormat(rule).exists) this.addPseudoWeather(rule);
+			let subFormat = this.getFormat(rule);
+			if (subFormat.exists) {
+				if (subFormat.onBegin) subFormat.onBegin.call(this);
+				let hasEventHandler = Object.keys(subFormat).some(val =>
+					val.startsWith('on') && !['onBegin', 'onValidateTeam', 'onChangeSet', 'onValidateSet', 'onModifyTemplate'].includes(val)
+				);
+				if (hasEventHandler) this.addPseudoWeather(rule);
+			}
 		}
 
 		if (!this.p1.pokemon[0] || !this.p2.pokemon[0]) {
