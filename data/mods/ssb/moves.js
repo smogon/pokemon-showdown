@@ -764,6 +764,7 @@ let BattleMovedex = {
 				// Bit of a hack so client doesn't crash when formeChange is called for the new pokemon
 				let effect = this.effect;
 				this.effect = /** @type {Effect} */ ({id: ''});
+				// @ts-ignore
 				let pokemon = new Pokemon(set, source.side);
 				this.effect = effect;
 

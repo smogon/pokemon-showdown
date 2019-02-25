@@ -1,7 +1,7 @@
 'use strict';
 
 const Dex = require('./../sim/dex');
-const PRNG = require('./../sim/prng');
+const PRNG = require('./../sim/prng').PRNG;
 
 /**@type {AnyObject} */
 // @ts-ignore
