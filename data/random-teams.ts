@@ -18,7 +18,7 @@ type TeamData = {
 	eeveeLimCount?: number;
 }
 
-export class RandomTeams extends Dex.ModdedDex {
+class RandomTeams extends Dex.ModdedDex {
 	randomBSSFactorySets: AnyObject;
 	randomFactorySets: AnyObject;
 	factoryTier: string;
@@ -2278,3 +2278,5 @@ export class RandomTeams extends Dex.ModdedDex {
 		return pokemon;
 	}
 }
+
+module.exports = RandomTeams;

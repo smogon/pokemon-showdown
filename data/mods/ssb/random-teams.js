@@ -1,24 +1,29 @@
-type SSBSets = {[name: string]: SSBSet};
-type SSBSet = {
-	species: string;
-	ability: string | string[];
-	item: string | string[];
-	gender: GenderName;
-	moves: (string | string[])[];
-	signatureMove: string;
-	evs?: SparseStatsTable;
-	ivs?: SparseStatsTable;
-	nature: string | string[];
-	level?: number;
-	shiny?: boolean;
-};
+'use strict';
 
-import {RandomTeams} from '../../random-teams';
+/** @typedef {{[name: string]: SSBSet}} SSBSets */
+/**
+ * @typedef {Object} SSBSet
+ * @property {string} species
+ * @property {string | string[]} ability
+ * @property {string | string[]} item
+ * @property {GenderName} gender
+ * @property {(string | string[])[]} moves
+ * @property {string} signatureMove
+ * @property {{hp?: number, atk?: number, def?: number, spa?: number, spd?: number, spe?: number}=} evs
+ * @property {{hp?: number, atk?: number, def?: number, spa?: number, spd?: number, spe?: number}=} ivs
+ * @property {string | string[]} nature
+ * @property {number=} level
+ * @property {boolean=} shiny
+ */
 
-export class RandomStaffBrosTeams extends RandomTeams {
+const RandomTeams = require('../../random-teams');
+
+class RandomStaffBrosTeams extends RandomTeams {
 	randomStaffBrosTeam() {
-		let team: PokemonSet[] = [];
-		let sets: SSBSets = {
+		/** @type {PokemonSet[]} */
+		let team = [];
+		/** @type {SSBSets} */
+		let sets = {
 			/*
 			// Example:
 			'Username': {
@@ -639,7 +644,8 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			},
 		};
 		let pool = Object.keys(sets);
-		let typePool: {[type: string]: number} = {};
+		/** @type {{[type: string]: number}} */
+		let typePool = {};
 		while (pool.length && team.length < 6) {
 			let name = this.sampleNoReplace(pool);
 			let ssbSet = sets[name];
@@ -661,7 +667,8 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			for (let type of types) {
 				typePool[type]++;
 			}
-			let set: PokemonSet = {
+			/** @type {PokemonSet} */
+			let set = {
 				name: name,
 				species: ssbSet.species,
 				item: Array.isArray(ssbSet.item) ? this.sampleNoReplace(ssbSet.item) : ssbSet.item,
@@ -702,3 +709,5 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		return team;
 	}
 }
+
+module.exports = RandomStaffBrosTeams;
