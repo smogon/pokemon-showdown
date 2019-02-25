@@ -271,7 +271,7 @@ exports.commands = {
 
 function runDexsearch(target, cmd, canAll, message) {
 	let searches = [];
-	let allTiers = {'uber': 'Uber', 'ubers': 'Uber', 'ou': 'OU', 'uubl': 'UUBL', 'uu': 'UU', 'rubl': 'RUBL', 'ru': 'RU', 'nubl': 'NUBL', 'nu': 'NU', 'publ': 'PUBL', 'pu': 'PU', 'zu': 'Untiered', 'nfe': 'NFE', 'lcuber': 'LC Uber', 'lcubers': 'LC Uber', 'lc': 'LC', 'cap': 'CAP', 'caplc': 'CAP LC', 'capnfe': 'CAP NFE', __proto__: null};
+	let allTiers = {'uber': 'Uber', 'ubers': 'Uber', 'ou': 'OU', 'uubl': 'UUBL', 'uu': 'UU', 'rubl': 'RUBL', 'ru': 'RU', 'nubl': 'NUBL', 'nu': 'NU', 'publ': 'PUBL', 'pu': 'PU', 'zu': '(PU)', 'nfe': 'NFE', 'lcuber': 'LC Uber', 'lcubers': 'LC Uber', 'lc': 'LC', 'cap': 'CAP', 'caplc': 'CAP LC', 'capnfe': 'CAP NFE', __proto__: null};
 	let allDoublesTiers = {'doublesubers': 'DUber', 'doublesuber': 'DUber', 'duber': 'DUber', 'dubers': 'DUber', 'doublesou': 'DOU', 'dou': 'DOU', 'doublesbl': 'DBL', 'dbl': 'DBL', 'doublesuu': 'DUU', 'duu': 'DUU', __proto__: null};
 	let allTypes = Object.create(null);
 	for (let i in Dex.data.TypeChart) {
@@ -618,7 +618,7 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			if (alts.tiers && Object.keys(alts.tiers).length) {
 				let tier = dex[mon].tier;
-				if (tier[0] === '(') tier = tier.slice(1, -1);
+				if (tier[0] === '(' && tier !== '(PU)') tier = tier.slice(1, -1);
 				if (alts.tiers[tier]) continue;
 				if (Object.values(alts.tiers).includes(false) && alts.tiers[tier] !== false) continue;
 				// LC handling, checks for LC Pokemon in higher tiers that need to be handled separately,
