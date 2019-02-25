@@ -1696,5 +1696,3 @@ export class Pokemon {
 		this.side = null;
 	}
 }
-
-module.exports = Pokemon;

@@ -782,5 +782,3 @@ export class Side {
 		this.foe = null;
 	}
 }
-
-module.exports = Side;
