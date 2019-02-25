@@ -26,7 +26,7 @@ To reload chat commands:
 'use strict';
 /** @typedef {GlobalRoom | GameRoom | ChatRoom} Room */
 
-/** @typedef {(query: string[], user: User, connection: Connection) => (string | null | void)} PageHandler */
+/** @typedef {(this: PageContext, query: string[], user: User, connection: Connection) => (Promise<string | null | void> | string | null | void)} PageHandler */
 /** @typedef {{[k: string]: PageHandler | PageTable}} PageTable */
 
 /** @typedef {(this: CommandContext, target: string, room: ChatRoom | GameRoom, user: User, connection: Connection, cmd: string, message: string) => (void)} ChatHandler */
@@ -53,6 +53,8 @@ const MAX_PARSE_RECURSION = 10;
 const VALID_COMMAND_TOKENS = '/!';
 const BROADCAST_TOKEN = '!';
 
+const TRANSLATION_DIRECTORY = 'translations/';
+
 const FS = require('../lib/fs');
 
 /** @type {(url: string) => Promise<{width: number, height: number}>} */
@@ -61,9 +63,7 @@ const probe = require('probe-image-size');
 
 let Chat = module.exports;
 
-// Matches U+FE0F and all Emoji_Presentation characters. More details on
-// http://www.unicode.org/Public/emoji/5.0/emoji-data.txt
-const emojiRegex = /[\u231A\u231B\u23E9-\u23EC\u23F0\u23F3\u25FD\u25FE\u2614\u2615\u2648-\u2653\u267F\u2693\u26A1\u26AA\u26AB\u26BD\u26BE\u26C4\u26C5\u26CE\u26D4\u26EA\u26F2\u26F3\u26F5\u26FA\u26FD\u2705\u270A\u270B\u2728\u274C\u274E\u2753-\u2755\u2757\u2795-\u2797\u27B0\u27BF\u2B1B\u2B1C\u2B50\u2B55\uFE0F\u{1F004}\u{1F0CF}\u{1F18E}\u{1F191}-\u{1F19A}\u{1F1E6}-\u{1F1FF}\u{1F201}\u{1F21A}\u{1F22F}\u{1F232}-\u{1F236}\u{1F238}-\u{1F23A}\u{1F250}\u{1F251}\u{1F300}-\u{1F320}\u{1F32D}-\u{1F335}\u{1F337}-\u{1F37C}\u{1F37E}-\u{1F393}\u{1F3A0}-\u{1F3CA}\u{1F3CF}-\u{1F3D3}\u{1F3E0}-\u{1F3F0}\u{1F3F4}\u{1F3F8}-\u{1F43E}\u{1F440}\u{1F442}-\u{1F4FC}\u{1F4FF}-\u{1F53D}\u{1F54B}-\u{1F54E}\u{1F550}-\u{1F567}\u{1F57A}\u{1F595}\u{1F596}\u{1F5A4}\u{1F5FB}-\u{1F64F}\u{1F680}-\u{1F6C5}\u{1F6CC}\u{1F6D0}-\u{1F6D2}\u{1F6EB}\u{1F6EC}\u{1F6F4}-\u{1F6F8}\u{1F910}-\u{1F93A}\u{1F93C}-\u{1F93E}\u{1F940}-\u{1F945}\u{1F947}-\u{1F94C}\u{1F950}-\u{1F96B}\u{1F980}-\u{1F997}\u{1F9C0}\u{1F9D0}-\u{1F9E6}]/u;
+const emojiRegex = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
 
 class PatternTester {
 	// This class sounds like a RegExp
@@ -258,22 +258,251 @@ Chat.nicknamefilter = function (nickname, user) {
 };
 
 /*********************************************************
+ * Translations
+ *********************************************************/
+
+Chat.languages = new Map();
+Chat.translations = new Map();
+
+FS(TRANSLATION_DIRECTORY).readdir().then(files => {
+	for (let fname of files) {
+		if (!fname.endsWith('.json')) continue;
+
+		/**
+		 * @type {{name: string?, strings: {[k: string]: string}?}} content
+		 */
+		const content = require(`../${TRANSLATION_DIRECTORY}${fname}`);
+		const id = fname.slice(0, -5);
+
+		Chat.languages.set(id, content.name || "Unknown Language");
+		Chat.translations.set(id, new Map());
+
+		if (content.strings) {
+			for (const key in content.strings) {
+				/** @type {string[]} */
+				const keyLabels = [];
+				/** @type {string[]} */
+				const valLabels = [];
+				const newKey = key.replace(/\${.+?}/g, string => {
+					keyLabels.push(string);
+					return '${}';
+				}).replace(/\[TN: ?.+?\]/g, '');
+				const val = content.strings[key].replace(/\${.+?}/g, string => {
+					valLabels.push(string);
+					return '${}';
+				}).replace(/\[TN: ?.+?\]/g, '');
+				Chat.translations.get(id).set(newKey, [val, keyLabels, valLabels]);
+			}
+		}
+	}
+});
+
+/**
+ * @param {string?} language
+ * @param {TemplateStringsArray | string} strings
+ * @param {any[]} keys
+ */
+Chat.tr = function (language, strings, ...keys) {
+	if (!language) language = 'english';
+	language = toId(language);
+	if (!Chat.translations.has(language)) throw new Error(`Trying to translate to a nonexistent language: ${language}`);
+	if (!strings.length) {
+		// @ts-ignore no this isn't any type
+		return (function (strings, ...keys) {
+			Chat.tr(language, strings, ...keys);
+		});
+	}
+
+	// If strings is an array (normally the case), combine before translating.
+	let string = Array.isArray(strings) ? strings.join('${}') : strings;
+
+	const entry = Chat.translations.get(language).get(string);
+	let [translated, keyLabels, valLabels] = entry || [string, [], []];
+
+	// Replace the gaps in the template string
+	if (keys.length) {
+		let reconstructed = '';
+
+		const left = keyLabels.slice();
+		for (let [i, str] of translated.split('${}').entries()) {
+			reconstructed += str;
+			if (keys[i]) {
+				let index = left.indexOf(valLabels[i]);
+				if (index < 0) {
+					// @ts-ignore why
+					index = left.findIndex(val => !!val);
+				}
+				if (index < 0) index = i;
+				reconstructed += keys[index];
+				left[index] = null;
+			}
+		}
+
+		translated = reconstructed;
+	}
+	return translated;
+};
+
+/*********************************************************
  * Parser
  *********************************************************/
 
-class CommandContext {
+class MessageContext {
+	/**
+	 * @param {User} user
+	 * @param {string?} [language]
+	 */
+	constructor(user, language = null) {
+		this.recursionDepth = 0;
+
+		this.user = user;
+		this.language = language;
+	}
+
+	/**
+	 * @param {string} target
+	 */
+	splitOne(target) {
+		let commaIndex = target.indexOf(',');
+		if (commaIndex < 0) {
+			return [target.trim(), ''];
+		}
+		return [target.substr(0, commaIndex).trim(), target.substr(commaIndex + 1).trim()];
+	}
+	/**
+	 * @param {string} text
+	 */
+	meansYes(text) {
+		switch (text.toLowerCase().trim()) {
+		case 'on': case 'enable': case 'yes': case 'true':
+			return true;
+		}
+		return false;
+	}
+	/**
+	 * @param {string} text
+	 */
+	meansNo(text) {
+		switch (text.toLowerCase().trim()) {
+		case 'off': case 'disable': case 'no': case 'false':
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * @param {TemplateStringsArray | string} strings
+	 * @param {any[]} keys
+	 */
+	tr(strings, ...keys) {
+		return Chat.tr(this.language, strings, ...keys);
+	}
+}
+
+class PageContext extends MessageContext {
+	/**
+	 * @param {{pageid: string, user: User, connection: Connection, language?: string}} options
+	 */
+	constructor(options) {
+		super(options.user, options.language);
+
+		this.connection = options.connection;
+		this.room = Rooms('global');
+		this.pageid = options.pageid;
+
+		this.initialized = false;
+		this.title = 'Page';
+	}
+
+	/**
+	 * @param {string} permission
+	 * @param {string | User?} target
+	 * @param {BasicChatRoom?} room
+	 */
+	can(permission, target = null, room = null) {
+		if (!this.user.can(permission, target, room)) {
+			this.send(`<h2>Permission denied.</h2>`);
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * @param {string?} [pageid]
+	 */
+	extractRoom(pageid) {
+		if (!pageid) pageid = this.pageid;
+		let parts = pageid.split('-');
+
+		// Since we assume pageids are all in the form of view-pagename-roomid
+		// if someone is calling this function, so this is the only case we cover (for now)
+		const room = Rooms(parts[2]);
+		if (!room) {
+			this.send(`<h2>Invalid room.</h2>`);
+			return false;
+		}
+
+		this.room = room;
+		return room.id;
+	}
+
+	/**
+	 * @param {string} content
+	 */
+	send(content) {
+		if (!content.startsWith('|deinit')) {
+			const roomid = this.room !== Rooms.global ? `[${this.room.id}] ` : '';
+			if (!this.initialized) {
+				content = `|init|html\n|title|${roomid}${this.title}\n|pagehtml|${content}`;
+				this.initialized = true;
+			} else {
+				content = `|title|${roomid}${this.title}\n|pagehtml|${content}`;
+			}
+		}
+		this.connection.send(`>${this.pageid}\n${content}`);
+	}
+
+	close() {
+		this.send('|deinit');
+	}
+
+	/**
+	 * @param {string?} [pageid]
+	 */
+	async resolve(pageid) {
+		if (pageid) this.pageid = pageid;
+
+		let parts = this.pageid.split('-');
+		/** @type {any} */
+		let handler = Chat.pages;
+		parts.shift();
+		while (handler) {
+			if (typeof handler === 'function') {
+				let res = await handler.bind(this)(parts, this.user, this.connection);
+				if (typeof res === 'string') {
+					this.send(res);
+					res = undefined;
+				}
+				return res;
+			}
+			handler = handler[parts.shift() || 'default'];
+		}
+	}
+}
+
+class CommandContext extends MessageContext {
 	/**
 	 * @param {{message: string, room: Room, user: User, connection: Connection, pmTarget?: User, cmd?: string, cmdToken?: string, target?: string, fullCmd?: string}} options
 	 */
 	constructor(options) {
+		super(options.user, options.room.language || options.user.language);
+
 		this.message = options.message || ``;
-		this.recursionDepth = 0;
 
 		// message context
-		this.room = options.room;
-		this.user = options.user;
-		this.connection = options.connection;
 		this.pmTarget = options.pmTarget;
+		this.room = options.room;
+		this.connection = options.connection;
 
 		// command context
 		this.cmd = options.cmd || '';
@@ -349,6 +578,10 @@ class CommandContext {
 			} else {
 				this.room.add(`|c|${this.user.getIdentity(this.room.id)}|${message}`);
 			}
+		}
+
+		if (this.room && this.room.game && this.room.game.onLogMessage) {
+			this.room.game.onLogMessage(message, this.user);
 		}
 
 		this.update();
@@ -824,26 +1057,6 @@ class CommandContext {
 		return true;
 	}
 	/**
-	 * @param {string} text
-	 */
-	meansYes(text) {
-		switch (text.toLowerCase().trim()) {
-		case 'on': case 'enable': case 'yes': case 'true':
-			return true;
-		}
-		return false;
-	}
-	/**
-	 * @param {string} text
-	 */
-	meansNo(text) {
-		switch (text.toLowerCase().trim()) {
-		case 'off': case 'disable': case 'no': case 'false':
-			return true;
-		}
-		return false;
-	}
-	/**
 	 * @param {string?} message
 	 * @param {GameRoom | ChatRoom?} room
 	 * @param {User?} targetUser
@@ -1137,16 +1350,7 @@ class CommandContext {
 		this.splitTarget(target, exactName);
 		return this.targetUser;
 	}
-	/**
-	 * @param {string} target
-	 */
-	splitOne(target) {
-		let commaIndex = target.indexOf(',');
-		if (commaIndex < 0) {
-			return [target.trim(), ''];
-		}
-		return [target.substr(0, commaIndex).trim(), target.substr(commaIndex + 1).trim()];
-	}
+
 	/**
 	 * Given a message in the form "USERNAME" or "USERNAME, MORE", splits
 	 * it apart:
@@ -1174,6 +1378,8 @@ class CommandContext {
 		return rest;
 	}
 }
+Chat.MessageContext = MessageContext;
+Chat.PageContext = PageContext;
 Chat.CommandContext = CommandContext;
 
 /**
@@ -1230,16 +1436,18 @@ Chat.package = {};
  * @param {string} root
  */
 Chat.uncacheTree = function (root) {
-	let uncache = [require.resolve(root)];
+	let uncache = [require.resolve('../' + root)];
 	do {
 		/** @type {string[]} */
 		let newuncache = [];
 		for (const target of uncache) {
 			if (require.cache[target]) {
-				newuncache.push.apply(newuncache,
-					require.cache[target].children
-						.filter(/** @param {{id: string}} cachedModule */ cachedModule => !cachedModule.id.endsWith('.node'))
-						.map(/** @param {{id: string}} cachedModule */ cachedModule => cachedModule.id)
+				/** @type {{id: string}[]} cachedModule */
+				let children = require.cache[target].children;
+				newuncache.push(
+					...(children
+						.filter(cachedModule => !cachedModule.id.endsWith('.node'))
+						.map(cachedModule => cachedModule.id))
 				);
 				delete require.cache[target];
 			}
@@ -1264,7 +1472,7 @@ Chat.uncacheDir = function (root) {
  * @param {string} path
  */
 Chat.uncache = function (path) {
-	const absolutePath = require.resolve(path);
+	const absolutePath = require.resolve('../' + path);
 	delete require.cache[absolutePath];
 };
 
@@ -1717,4 +1925,13 @@ Chat.namefilterwhitelist = new Map();
 Chat.registerMonitor = function (id, entry) {
 	if (!Chat.filterWords[id]) Chat.filterWords[id] = [];
 	Chat.monitors[id] = entry;
+};
+
+/**
+ * @param {string} pageid
+ * @param {User} user
+ * @param {Connection} connection
+ */
+Chat.resolvePage = function (pageid, user, connection) {
+	return (new PageContext({pageid: pageid, user: user, connection: connection})).resolve();
 };

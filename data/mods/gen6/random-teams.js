@@ -330,11 +330,8 @@ class RandomGen6Teams extends RandomTeams {
 				case 'overheat':
 					if (hasMove['lavaplume'] || counter.setupType === 'Special') rejected = true;
 					break;
-				case 'acrobatics':
-					if (hasMove['hurricane'] && counter.setupType !== 'Physical') rejected = true;
-					break;
-				case 'airslash':
-					if (hasMove['acrobatics'] || hasMove['bravebird'] || hasMove['hurricane']) rejected = true;
+				case 'airslash': case 'hurricane':
+					if (hasMove['acrobatics'] || hasMove['bravebird']) rejected = true;
 					break;
 				case 'shadowclaw':
 					if (hasMove['phantomforce'] || hasMove['shadowforce'] || hasMove['shadowsneak']) rejected = true;
@@ -526,6 +523,7 @@ class RandomGen6Teams extends RandomTeams {
 					(hasType['Fighting'] && !counter['Fighting'] && (counter.setupType || !counter['Status'])) ||
 					(hasType['Fire'] && !counter['Fire']) ||
 					(hasType['Ghost'] && !hasType['Dark'] && !counter['Ghost']) ||
+					(hasType['Grass'] && !hasType['Fairy'] && !hasType['Poison'] && !hasType['Steel'] && !counter['Grass']) ||
 					(hasType['Ground'] && !counter['Ground'] && !hasMove['rest'] && !hasMove['sleeptalk']) ||
 					(hasType['Ice'] && !counter['Ice'] && !hasAbility['Refrigerate']) ||
 					(hasType['Psychic'] && !!counter['Psychic'] && !hasType['Flying'] && !hasAbility['Pixilate'] && template.types.length > 1 && counter.stab < 2) ||
@@ -711,8 +709,6 @@ class RandomGen6Teams extends RandomTeams {
 				ability = 'Sheer Force';
 			} else if (template.species === 'Torterra' && !counter['Grass']) {
 				ability = 'Shell Armor';
-			} else if (template.species === 'Umbreon') {
-				ability = 'Synchronize';
 			} else if (template.id === 'venusaurmega') {
 				ability = 'Chlorophyll';
 			}
@@ -854,10 +850,8 @@ class RandomGen6Teams extends RandomTeams {
 			item = 'Black Sludge';
 		}
 
+		/** @type {{[tier: string]: number}} */
 		let levelScale = {
-			LC: 88,
-			'LC Uber': 86,
-			NFE: 84,
 			PU: 83,
 			PUBL: 82,
 			NU: 81,
@@ -868,10 +862,9 @@ class RandomGen6Teams extends RandomTeams {
 			UUBL: 76,
 			OU: 75,
 			Unreleased: 75,
-			CAP: 75,
 			Uber: 73,
-			AG: 71,
 		};
+		/** @type {{[species: string]: number}} */
 		let customScale = {
 			// Between OU and Uber
 			Aegislash: 74, Blaziken: 74, 'Blaziken-Mega': 74, Genesect: 74, 'Genesect-Burn': 74, 'Genesect-Chill': 74, 'Genesect-Douse': 74, 'Genesect-Shock': 74, Greninja: 74, 'Lucario-Mega': 74, 'Mawile-Mega': 74,
@@ -886,9 +879,7 @@ class RandomGen6Teams extends RandomTeams {
 		if (tier.charAt(0) === '(') {
 			tier = tier.slice(1, -1);
 		}
-		// @ts-ignore
-		let level = levelScale[tier] || 75;
-		// @ts-ignore
+		let level = levelScale[tier] || 84;
 		if (customScale[template.name]) level = customScale[template.name];
 
 		if (template.name === 'Slurpuff' && !counter.setupType) level = 81;

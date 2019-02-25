@@ -158,13 +158,12 @@ class RoomSettings {
 		}
 	}
 	language() {
-		const languageList = ['Portuguese', 'Spanish', 'Italian', 'French', 'Simplified Chinese', 'Traditional Chinese', 'Japanese', 'Hindi', 'Turkish', 'Dutch', 'German'];
-		if (!this.user.can('editroom', null, this.room)) return this.button(this.room.language ? this.room.language : 'English', true);
+		if (!this.user.can('editroom', null, this.room)) return this.button(this.room.language ? Chat.languages.get(this.room.language) : 'English', true);
 
 		let languageOutput = [];
 		languageOutput.push(this.button(`English`, !this.room.language, 'roomlanguage english'));
-		for (let language of languageList) {
-			languageOutput.push(this.button(`${language}`, this.room.language === toId(language), `roomlanguage ${toId(language)}`));
+		for (let [id, text] of Chat.languages) {
+			languageOutput.push(this.button(text, this.room.language === id, `roomlanguage ${id}`));
 		}
 		return languageOutput.join(' ');
 	}
@@ -189,7 +188,7 @@ class RoomSettings {
 
 exports.commands = {
 	roomsetting: 'roomsettings',
-	roomsettings: function (target, room, user, connection) {
+	roomsettings(target, room, user, connection) {
 		if (room.battle) return this.errorReply("This command cannot be used in battle rooms.");
 		const settings = new RoomSettings(user, room, connection);
 
@@ -203,7 +202,7 @@ exports.commands = {
 	},
 	roomsettingshelp: [`/roomsettings - Shows current room settings with buttons to change them (if you can).`],
 
-	modchat: function (target, room, user) {
+	modchat(target, room, user) {
 		if (!target) {
 			const modchatSetting = (room.modchat || "OFF");
 			return this.sendReply(`Moderated chat is currently set to: ${modchatSetting}`);
@@ -274,12 +273,14 @@ exports.commands = {
 	},
 	modchathelp: [`/modchat [off/autoconfirmed/+/%/@/*/player/#/&/~] - Set the level of moderated chat. Requires: * @ \u2606 for off/autoconfirmed/+ options, # & ~ for all the options`],
 
-	ioo: function (target, room, user) {
+	ioo(target, room, user) {
 		return this.parse('/modjoin +');
 	},
 	'!ionext': true,
 	inviteonlynext: 'ionext',
-	ionext: function (target, room, user) {
+	ionext(target, room, user) {
+		const groupConfig = Config.groups[Users.PLAYER_SYMBOL];
+		if (!(groupConfig && groupConfig.editprivacy)) return this.errorReply(`/ionext - Access denied.`);
 		if (this.meansNo(target)) {
 			user.inviteOnlyNextBattle = false;
 			this.sendReply("Your next battle will be publicly visible.");
@@ -293,7 +294,7 @@ exports.commands = {
 		`/ionext off - Sets your next battle to be publicly visible.`,
 	],
 
-	inviteonly: function (target, room, user) {
+	inviteonly(target, room, user) {
 		if (!target) return this.parse('/help inviteonly');
 		if (this.meansYes(target)) {
 			return this.parse("/modjoin +");
@@ -308,7 +309,7 @@ exports.commands = {
 		`/ionext off - Sets your next battle to be publicly visible.`,
 	],
 
-	modjoin: function (target, room, user) {
+	modjoin(target, room, user) {
 		if (!target) {
 			const modjoinSetting = room.modjoin === true ? "SYNC" : room.modjoin || "OFF";
 			return this.sendReply(`Modjoin is currently set to: ${modjoinSetting}`);
@@ -370,28 +371,12 @@ exports.commands = {
 		`/modjoin [sync|off] - Sets modjoin. Only users who can speak in modchat can join this room. Requires: \u2606 # & ~`,
 	],
 
-	roomlanguage: function (target, room, user) {
-		const languageTable = {
-			__proto__: null,
-			portuguese: 'Portuguese',
-			spanish: 'Spanish',
-			italian: 'Italian',
-			french: 'French',
-			simplifiedchinese: 'Simplified Chinese',
-			traditionalchinese: 'Traditional Chinese',
-			japanese: 'Japanese',
-			hindi: 'Hindi',
-			turkish: 'Turkish',
-			dutch: 'Dutch',
-			german: 'German',
-			// Listed as "false" under room.language
-			english: 'English',
-		};
-		if (!target) return this.sendReply(`This room's primary language is ${languageTable[room.language] || 'English'}`);
+	roomlanguage(target, room, user) {
+		if (!target) return this.sendReply(`This room's primary language is ${Chat.languages.get(room.language) || 'English'}`);
 		if (!this.can('editroom', null, room)) return false;
 
 		let targetLanguage = toId(target);
-		if (!(targetLanguage in languageTable)) return this.errorReply(`"${target}" is not a supported language.`);
+		if (!Chat.languages.has(targetLanguage)) return this.errorReply(`"${target}" is not a supported language.`);
 
 		room.language = targetLanguage === 'english' ? false : targetLanguage;
 
@@ -399,15 +384,15 @@ exports.commands = {
 			room.chatRoomData.language = room.language;
 			Rooms.global.writeChatRoomData();
 		}
-		this.modlog(`LANGUAGE`, null, languageTable[targetLanguage]);
-		this.sendReply(`The room's language has been set to ${languageTable[targetLanguage]}`);
+		this.modlog(`LANGUAGE`, null, Chat.languages.get(targetLanguage));
+		this.sendReply(`The room's language has been set to ${Chat.languages.get(targetLanguage)}`);
 	},
 	roomlanguagehelp: [
 		`/roomlanguage [language] - Sets the the language for the room, which changes language of a few commands. Requires # & ~`,
 		`Supported Languages: English, Spanish, Italian, French, Simplified Chinese, Traditional Chinese, Japanese, Hindi, Turkish, Dutch, German.`,
 	],
 
-	slowchat: function (target, room, user) {
+	slowchat(target, room, user) {
 		if (!target) {
 			const slowchatSetting = (room.slowchat || "OFF");
 			return this.sendReply(`Slow chat is currently set to: ${slowchatSetting}`);
@@ -438,13 +423,13 @@ exports.commands = {
 		}
 	},
 	slowchathelp: [
-		`/slowchat [number] - Sets a limit on how often users in the room can send messages, between 2 and 60 seconds. Requires @ * # & ~`,
-		`/slowchat off - Disables slowchat in the room. Requires @ * # & ~`,
+		`/slowchat [number] - Sets a limit on how often users in the room can send messages, between 2 and 60 seconds. Requires @ # & ~`,
+		`/slowchat off - Disables slowchat in the room. Requires @ # & ~`,
 	],
 
 	stretching: 'stretchfilter',
 	stretchingfilter: 'stretchfilter',
-	stretchfilter: function (target, room, user) {
+	stretchfilter(target, room, user) {
 		if (!target) {
 			const stretchSetting = (room.filterStretching ? "ON" : "OFF");
 			return this.sendReply(`This room's stretch filter is currently: ${stretchSetting}`);
@@ -474,7 +459,7 @@ exports.commands = {
 
 	capitals: 'capsfilter',
 	capitalsfilter: 'capsfilter',
-	capsfilter: function (target, room, user) {
+	capsfilter(target, room, user) {
 		if (!target) {
 			const capsSetting = (room.filterCaps ? "ON" : "OFF");
 			return this.sendReply(`This room's caps filter is currently: ${capsSetting}`);
@@ -504,7 +489,7 @@ exports.commands = {
 
 	emojis: 'emojifilter',
 	emoji: 'emojifilter',
-	emojifilter: function (target, room, user) {
+	emojifilter(target, room, user) {
 		if (!target) {
 			const emojiSetting = (room.filterEmojis ? "ON" : "OFF");
 			return this.sendReply(`This room's emoji filter is currently: ${emojiSetting}`);
@@ -534,7 +519,7 @@ exports.commands = {
 
 	banwords: 'banword',
 	banword: {
-		add: function (target, room, user) {
+		add(target, room, user) {
 			if (!target || target === ' ') return this.parse('/help banword');
 			if (!this.can('declare', null, room)) return false;
 
@@ -586,7 +571,7 @@ exports.commands = {
 			}
 		},
 
-		delete: function (target, room, user) {
+		delete(target, room, user) {
 			if (!target) return this.parse('/help banword');
 			if (!this.can('declare', null, room)) return false;
 
@@ -622,7 +607,7 @@ exports.commands = {
 			}
 		},
 
-		list: function (target, room, user) {
+		list(target, room, user) {
 			if (!this.can('mute', null, room)) return false;
 
 			if (!room.banwords) return this.sendReply("This room has no banned phrases.");
@@ -630,17 +615,17 @@ exports.commands = {
 			return this.sendReply(`Banned phrases in room ${room.id}: ${room.banwords.join(', ')}`);
 		},
 
-		"": function (target, room, user) {
+		""(target, room, user) {
 			return this.parse("/help banword");
 		},
 	},
 	banwordhelp: [
 		`/banword add [words] - Adds the comma-separated list of phrases (& or ~ can also input regex) to the banword list of the current room. Requires: # & ~`,
 		`/banword delete [words] - Removes the comma-separated list of phrases from the banword list. Requires: # & ~`,
-		`/banword list - Shows the list of banned words in the current room. Requires: % @ * # & ~`,
+		`/banword list - Shows the list of banned words in the current room. Requires: % @ # & ~`,
 	],
 
-	hightraffic: function (target, room, user) {
+	hightraffic(target, room, user) {
 		if (!target) return this.sendReply(`This room is${!room.highTraffic ? ' not' : ''} currently marked as high traffic.`);
 		if (!this.can('makeroom')) return false;
 

@@ -163,7 +163,7 @@ function runRipgrepModlog(paths, regexString, results, lines) {
 			...paths,
 			'-g', '!modlog_global.txt', '-g', '!README.md',
 		];
-		stdout = execFileSync('rg', options, {cwd: path.normalize(`${__dirname}/../`)});
+		stdout = execFileSync('rg', options, {cwd: path.normalize(`${__dirname}/../../`)});
 	} catch (error) {
 		return results;
 	}
@@ -389,23 +389,18 @@ exports.pages = {
 	},
 	battlesearch(args, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		if (!user.can('forcewin')) return `|title|[Battle Search]\n|pagehtml|<div class="pad ladder">/battlesearch - Access Denied.</div>`;
+		if (!this.can('forcewin')) return;
 		let userid = toId(args.shift());
 		let turnLimit = parseInt(args.shift());
 		if (!userid || !turnLimit || turnLimit < 1) return user.popup(`Some arguments are missing or invalid for battlesearch. Use /battlesearch to start over.`);
-		let title = `|title|[Battle Search][${userid}]`;
-		let buf = `\n|pagehtml|<div class="pad ladder"><h2>Battle Search</h2><p>Userid: ${userid}</p><p>Maximum Turns: ${turnLimit}</p>`;
+		this.title = `[Battle Search][${userid}]`;
+		let buf = `<div class="pad ladder"><h2>Battle Search</h2><p>Userid: ${userid}</p><p>Maximum Turns: ${turnLimit}</p>`;
 
-		let months = FS('logs/').readdirSync();
-		months = months.filter(f => f.length === 7 && f.includes('-')).sort((aKey, bKey) => {
+		const months = FS('logs/').readdirSync().filter(f => f.length === 7 && f.includes('-')).sort((aKey, bKey) => {
 			const a = aKey.split('-').map(parseInt);
 			const b = bKey.split('-').map(parseInt);
-			if (a[0] === b[0]) {
-				if (a[1] > b[1]) return -1;
-				return 1;
-			}
-			if (a[0] > b[0]) return -1;
-			return 1;
+			if (a[0] !== b[0]) return b[0] - a[0];
+			return b[1] - a[1];
 		});
 		let month = args.shift();
 		if (!month) {
@@ -413,51 +408,80 @@ exports.pages = {
 			for (const i of months) {
 				buf += `<li style="display: inline; list-style: none"><a href="/view-battlesearch-${userid}-${turnLimit}-${i}" target="replace"><button class="button">${i}</button></li>`;
 			}
-			return title + buf + `</ul></div>`;
+			return buf + `</ul></div>`;
 		} else {
 			month = month += `-${args.shift()}`;
-			if (!months.includes(month)) return title + buf + `Invalid month selected. <a href="/view-battlesearch-${userid}-${turnLimit}" target="replace"><button class="button">Back to month selection</button></a></div>`;
+			if (!months.includes(month)) return buf + `Invalid month selected. <a href="/view-battlesearch-${userid}-${turnLimit}" target="replace"><button class="button">Back to month selection</button></a></div>`;
 			buf += `<p><a href="/view-battlesearch-${userid}-${turnLimit}" target="replace"><button class="button">Back</button></a> <button class="button disabled">${month}</button></p>`;
 		}
 
 		let tierid = toId(args.shift());
-		const tiers = FS(`logs/${month}/`).readdirSync();
+		const tiers = FS(`logs/${month}/`).readdirSync().sort((a, b) => {
+			// First sort by gen with the latest being first
+			let aGen = 6;
+			let bGen = 6;
+			if (a.substring(0, 3) === 'gen') aGen = parseInt(a.substring(3, 4));
+			if (b.substring(0, 3) === 'gen') bGen = parseInt(b.substring(3, 4));
+			if (aGen !== bGen) return bGen - aGen;
+			// Sort alphabetically
+			let aTier = a.substring(4);
+			let bTier = b.substring(4);
+			if (aTier < bTier) return -1;
+			if (aTier > bTier) return 1;
+			return 0;
+		}).map(tier => {
+			// Use the official tier name
+			let format = Dex.getFormat(tier);
+			if (format && format.exists) tier = format.name;
+			// Otherwise format as best as possible
+			if (tier.substring(0, 3) === 'gen') {
+				return `[Gen ${tier.substring(3, 4)}] ${tier.substring(4)}`;
+			}
+			return tier;
+		});
 		if (!tierid) {
 			buf += `<p>Please select the tier to search:</p><ul style="list-style: none; display: block; padding: 0">`;
 			for (const tier of tiers) {
-				buf += `<li style="display: inline; list-style: none"><a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tier}" target="replace"><button class="button">${tier}</button></a></li>`;
+				buf += `<li style="display: inline; list-style: none"><a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${toId(tier)}" target="replace"><button class="button">${tier}</button></a></li>`;
 			}
-			return title + buf + `</ul></div>`;
+			return buf + `</ul></div>`;
 		} else {
-			if (!tiers.includes(tierid)) return title + buf + `Invalid tier selected. <a href="/view-battlesearch-${userid}-${turnLimit}-${month}" target="replace"><button class="button">Back to tier selection</button></a></div>`;
-			title += `[${tierid}]`;
+			let tierids = tiers.map(toId);
+			if (!tierids.includes(tierid)) return buf + `Invalid tier selected. <a href="/view-battlesearch-${userid}-${turnLimit}-${month}" target="replace"><button class="button">Back to tier selection</button></a></div>`;
+			this.title += `[${tierid}]`;
 			buf += `<p><a href="/view-battlesearch-${userid}-${turnLimit}-${month}" target="replace"><button class="button">Back</button></a> <button class="button disabled">${tierid}</button></p>`;
 		}
 
 		let date = args.shift();
-		const days = FS(`logs/${month}/${tierid}/`).readdirSync();
+		const days = FS(`logs/${month}/${tierid}/`).readdirSync().sort((a, b) => {
+			a = a.split('-').map(parseInt);
+			b = b.split('-').map(parseInt);
+			if (a[0] !== b[0]) return b[0] - a[0];
+			if (a[1] !== b[1]) return b[1] - a[1];
+			return b[2] - a[2];
+		});
 		if (!date) {
 			buf += `<p>Please select the date to search:</p><ul style="list-style: none; display: block; padding: 0">`;
 			for (const day of days) {
 				buf += `<li style="display: inline; list-style: none"><a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}-${day}" target="replace"><button class="button">${day}</button></a></li>`;
 			}
-			return title + buf + `</ul></div>`;
+			return buf + `</ul></div>`;
 		} else {
 			date = date += `-${args.shift()}-${args.shift()}`;
-			if (!days.includes(date)) return title + buf + `Invalid date selected. <a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}" target="replace"><button class="button">Back to date selection</button></a></div>`;
-			title += `[${date}]`;
+			if (!days.includes(date)) return buf + `Invalid date selected. <a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}" target="replace"><button class="button">Back to date selection</button></a></div>`;
+			this.title += `[${date}]`;
 			buf += `<p><a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}" target="replace"><button class="button">Back</button></a> <button class="button disabled">${date}</button></p>`;
 		}
 
 		if (args[0] !== 'confirm') {
 			buf += `<p>Are you sure you want to run a battle search for for ${tierid} battles on ${date} where ${userid} was a player and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}?</p>`;
 			buf += `<p><a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}-${date}-confirm" target="replace"><button class="button notifying">Yes, run the battle search</button></a> <a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${tierid}" target="replace"><button class="button">No, go back</button></a></p>`;
-			return title + buf + `</div>`;
+			return buf + `</div>`;
 		}
 
 		// Run search
 		getBattleSearch(connection, userid, turnLimit, month, tierid, date);
-		return title + `\n|pagehtml|<div class="pad ladder"><h2>Battle Search</h2><p>Searching for ${tierid} battles on ${date} where ${userid} was a player and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}.</p><p>Loading... (this will take a while)</p></div>`;
+		return `<div class="pad ladder"><h2>Battle Search</h2><p>Searching for ${tierid} battles on ${date} where ${userid} was a player and the battle lasted less than ${turnLimit} turn${Chat.plural(turnLimit)}.</p><p>Loading... (this will take a while)</p></div>`;
 	},
 };
 
@@ -465,7 +489,7 @@ exports.commands = {
 	'!modlog': true,
 	ml: 'modlog',
 	timedmodlog: 'modlog',
-	modlog: function (target, room, user, connection, cmd) {
+	modlog(target, room, user, connection, cmd) {
 		if (!room) room = Rooms('global');
 		let roomid = (room.id === 'staff' ? 'global' : room.id);
 
@@ -503,10 +527,10 @@ exports.commands = {
 	modloghelp: [
 		`/modlog OR /ml [roomid], [search] - Searches the moderator log - defaults to the current room unless specified otherwise.`,
 		`If you set [roomid] as [all], it searches for [search] on all rooms' moderator logs.`,
-		`If you set [roomid] as [public], it searches for [search] in all public rooms' moderator logs, excluding battles. Requires: % @ * # & ~`,
+		`If you set [roomid] as [public], it searches for [search] in all public rooms' moderator logs, excluding battles. Requires: % @ # & ~`,
 	],
 
-	battlesearch: function (target, room, user, connection) {
+	battlesearch(target, room, user, connection) {
 		if (!target.trim()) return this.parse('/help battlesearch');
 		if (!this.can('forcewin')) return;
 

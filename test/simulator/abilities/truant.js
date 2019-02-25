@@ -16,8 +16,8 @@ describe('Truant', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: "Steelix", ability: 'sturdy', moves: ['endure']}]);
 		let pokemon = battle.p2.active[0];
 
-		assert.hurts(pokemon, () => battle.commitDecisions());
-		assert.false.hurts(pokemon, () => battle.commitDecisions());
+		assert.hurts(pokemon, () => battle.makeChoices());
+		assert.false.hurts(pokemon, () => battle.makeChoices());
 	});
 
 	it('should allow the user to act after a recharge turn', function () {
@@ -26,9 +26,9 @@ describe('Truant', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: "Steelix", ability: 'sturdy', moves: ['endure']}]);
 		let pokemon = battle.p2.active[0];
 
-		assert.hurts(pokemon, () => battle.commitDecisions());
-		assert.false.hurts(pokemon, () => battle.commitDecisions());
-		assert.hurts(pokemon, () => battle.commitDecisions());
+		assert.hurts(pokemon, () => battle.makeChoices());
+		assert.false.hurts(pokemon, () => battle.makeChoices());
+		assert.hurts(pokemon, () => battle.makeChoices());
 	});
 
 	it('should not allow the user to act the turn it wakes up, if it moved the turn it fell asleep', function () {
@@ -65,8 +65,8 @@ describe('Truant', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: "Steelix", ability: 'sturdy', moves: ['endure']}]);
 		let pokemon = battle.p2.active[0];
 
-		assert.false.hurts(pokemon, () => battle.commitDecisions());
-		assert.false.hurts(pokemon, () => battle.commitDecisions());
+		assert.false.hurts(pokemon, () => battle.makeChoices());
+		assert.false.hurts(pokemon, () => battle.makeChoices());
 	});
 
 	it('should prevent a newly-Mega Evolved Pokemon from acting if given the ability', function () {

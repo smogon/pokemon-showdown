@@ -13,7 +13,7 @@ exports.commands = {
 	events: 'roomevents',
 	roomevent: 'roomevents',
 	roomevents: {
-		'': function (target, room, user) {
+		''(target, room, user) {
 			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!room.events || !Object.keys(room.events).length) {
 				return this.errorReply("There are currently no planned upcoming events for this room.");
@@ -30,7 +30,7 @@ exports.commands = {
 		new: 'add',
 		create: 'add',
 		edit: 'add',
-		add: function (target, room, user) {
+		add(target, room, user) {
 			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!this.can('ban', null, room)) return false;
 			if (!room.events) room.events = Object.create(null);
@@ -61,7 +61,7 @@ exports.commands = {
 			Rooms.global.writeChatRoomData();
 		},
 		delete: 'remove',
-		remove: function (target, room, user) {
+		remove(target, room, user) {
 			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!this.can('ban', null, room)) return false;
 			if (!room.events || Object.keys(room.events).length === 0) {
@@ -77,7 +77,7 @@ exports.commands = {
 			room.chatRoomData.events = room.events;
 			Rooms.global.writeChatRoomData();
 		},
-		view: function (target, room, user) {
+		view(target, room, user) {
 			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!room.events || !Object.keys(room.events).length) {
 				return this.errorReply("There are currently no planned upcoming events for this room.");
@@ -91,10 +91,10 @@ exports.commands = {
 			this.sendReplyBox(`<table border="1" cellspacing="0" cellpadding="3"><tr><td>${Chat.escapeHTML(room.events[target].eventName)}</td><td>${Chat.formatText(room.events[target].desc, true)}</td><td><time>${Chat.escapeHTML(room.events[target].date)}</time></td></tr></table>`);
 			if (!this.broadcasting && user.can('ban', null, room)) this.sendReplyBox(Chat.html`<code>/roomevents add ${room.events[target].eventName} | ${room.events[target].date} | ${room.events[target].desc}</code>`);
 		},
-		help: function (target, room, user) {
+		help(target, room, user) {
 			return this.parse('/help roomevents');
 		},
-		sortby: function (target, room, user) {
+		sortby(target, room, user) {
 			// preconditions
 			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
 			if (!room.events || !Object.keys(room.events).length) {

@@ -24,7 +24,7 @@ describe('Trump Card', function () {
 		});
 
 		for (let i = 0; i < 5; i++) {
-			battle.commitDecisions();
+			battle.makeChoices();
 		}
 
 		assert.deepStrictEqual(basePowers, [40, 50, 60, 80, 200]);
@@ -46,7 +46,7 @@ describe('Trump Card', function () {
 		battle.p1.active[0].moveSlots[0].pp = 2;
 
 		for (let i = 0; i < 2; i++) {
-			battle.commitDecisions();
+			battle.makeChoices();
 		}
 
 		assert.deepStrictEqual(basePowers, [80, 200]);

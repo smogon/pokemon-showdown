@@ -176,7 +176,7 @@ describe('Choice parser', function () {
 					{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
 				]);
 				battle.makeChoices('move selfdestruct, move selfdestruct', 'move roost, move irondefense'); // Both p1 active Pokémon faint
-				battle.choose('p1', 'pass, switch 3'); // Koffing switches in at slot #2
+				battle.makeChoices('pass, switch 3', 'pass'); // Koffing switches in at slot #2
 
 				assert.fainted(p1.active[0]);
 				assert.species(p1.active[1], 'Koffing');
@@ -292,7 +292,7 @@ describe('Choice parser', function () {
 				]);
 				battle.makeChoices('move selfdestruct, move selfdestruct, move lunardance', 'move roost, move irondefense, move defensecurl'); // All p1 active Pokémon faint
 
-				p1.choosePass().chooseSwitch(4).chooseDefault(); // Forretress switches in to slot #2
+				battle.makeChoices('pass, switch 4, default', 'pass'); // Forretress switches in to slot #2
 				assert.species(p1.active[1], 'Forretress');
 
 				const validChoices = ['move spikes', 'move 1'];

@@ -21,12 +21,12 @@ let BattleAbilities = {
 		id: "seasonsgift",
 		name: "Season's Gift",
 		isNonstandard: true,
-		onModifyAtk: function (atk) {
+		onModifyAtk(atk) {
 			if (this.isWeather(['sunnyday', 'desolateland'])) {
 				return this.chainModify(1.5);
 			}
 		},
-		onModifySpe: function (spe) {
+		onModifySpe(spe) {
 			if (this.isWeather(['sunnyday', 'desolateland'])) {
 				return this.chainModify(2);
 			}
@@ -39,10 +39,10 @@ let BattleAbilities = {
 		id: "regrowth",
 		name: "Regrowth",
 		isNonstandard: true,
-		onModifyPriority: function (priority, pokemon, target, move) {
+		onModifyPriority(priority, pokemon, target, move) {
 			if (move && move.flags['heal']) return priority + 1;
 		},
-		onSwitchOut: function (pokemon) {
+		onSwitchOut(pokemon) {
 			pokemon.heal(pokemon.maxhp / 4);
 		},
 	},
@@ -54,17 +54,17 @@ let BattleAbilities = {
 		name: "Shell Shocker",
 		isNonstandard: true,
 		onModifyMovePriority: -1,
-		onModifyMove: function (move, pokemon) {
+		onModifyMove(move, pokemon) {
 			if (move.type === 'Normal' && !['judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'weatherball'].includes(move.id) && !(move.isZ && move.category !== 'Status')) {
 				move.type = 'Electric';
 				move.galvanizeBoosted = true;
 			}
 		},
 		onBasePowerPriority: 8,
-		onBasePower: function (basePower, pokemon, target, move) {
+		onBasePower(basePower, pokemon, target, move) {
 			if (move.galvanizeBoosted) return this.chainModify([0x1333, 0x1000]);
 		},
-		onTryHit: function (target, source, move) {
+		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Electric') {
 				if (!this.heal(target.maxhp / 4)) {
 					this.add('-immune', target, '[from] ability: Shell Shocker');
@@ -81,7 +81,7 @@ let BattleAbilities = {
 		id: "logia",
 		name: "Logia",
 		isNonstandard: true,
-		onTryHit: function (target, source, move) {
+		onTryHit(target, source, move) {
 			let plateType = this.getItem(target.item).onPlate;
 			if (target !== source && (move.type === 'Normal' || plateType === move.type)) {
 				this.add('-immune', target, '[from] ability: Logia');
@@ -96,7 +96,7 @@ let BattleAbilities = {
 		desc: "On switch-in, this Pokemon lowers the Attack of adjacent foes not behind a Substitute by one stage. If the weather is rain, this Pokemon's Speed is doubled.",
 		shortDesc: "On switch-in, adjacent foes' Atk is lowered by by 1. Speed is doubled in rain.",
 		isNonstandard: true,
-		onStart: function (pokemon) {
+		onStart(pokemon) {
 			let activated = false;
 			for (const target of pokemon.side.foe.active) {
 				if (!target || !this.isAdjacent(target, pokemon)) continue;
@@ -111,7 +111,7 @@ let BattleAbilities = {
 				}
 			}
 		},
-		onModifySpe: function (spe, pokemon) {
+		onModifySpe(spe, pokemon) {
 			if (this.isWeather(['raindance', 'primordialsea'])) {
 				return this.chainModify(2);
 			}
@@ -124,7 +124,7 @@ let BattleAbilities = {
 		id: "learnsomethingnew",
 		name: "Learn Something New!",
 		isNonstandard: true,
-		onAnyFaint: function () {
+		onAnyFaint() {
 			this.boost({atk: 1}, this.effectData.target);
 		},
 	},
@@ -135,14 +135,14 @@ let BattleAbilities = {
 		id: "gracideamastery",
 		name: "Gracidea Mastery",
 		isNonstandard: true,
-		onPrepareHit: function (source, target, move) {
+		onPrepareHit(source, target, move) {
 			if (!target || !move) return;
 			if (source.template.baseSpecies !== 'Shaymin' || source.transformed) return;
 			if (target !== source && move.category !== 'Status') {
 				source.formeChange('Shaymin-Sky', this.effect);
 			}
 		},
-		onAfterMove: function (pokemon, move) {
+		onAfterMove(pokemon, move) {
 			if (pokemon.template.baseSpecies !== 'Shaymin' || pokemon.transformed) return;
 			pokemon.formeChange('Shaymin', this.effect);
 		},
@@ -154,7 +154,7 @@ let BattleAbilities = {
 		id: "lurking",
 		name: "Lurking",
 		isNonstandard: true,
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			if (typeof move.accuracy === 'number') {
 				move.accuracy *= 1.3;
 			}
@@ -167,27 +167,27 @@ let BattleAbilities = {
 		id: "adrenalinerush",
 		name: "Adrenaline Rush",
 		isNonstandard: true,
-		onStart: function (pokemon) {
+		onStart(pokemon) {
 			pokemon.addVolatile('adrenalinerush');
 		},
-		onEnd: function (pokemon) {
+		onEnd(pokemon) {
 			delete pokemon.volatiles['adrenalinerush'];
 			this.add('-end', pokemon, 'Adrenaline Rush', '[silent]');
 		},
 		effect: {
 			duration: 5,
-			onStart: function (pokemon) {
+			onStart(pokemon) {
 				this.add('-start', pokemon, 'Adrenaline Rush', '[silent]');
 				this.add('-message', `${pokemon.name}'s Adrenaline Rush has begun.`);
 			},
 			onModifySpAPriority: 5,
-			onModifySpA: function (spa, pokemon) {
+			onModifySpA(spa, pokemon) {
 				return this.chainModify(2);
 			},
-			onModifySpe: function (spe, pokemon) {
+			onModifySpe(spe, pokemon) {
 				return this.chainModify(2);
 			},
-			onEnd: function (pokemon) {
+			onEnd(pokemon) {
 				this.add('-end', pokemon, 'Adrenaline Rush', '[silent]');
 				this.add('-message', `${pokemon.name}'s Adrenaline Rush has ended.`);
 			},
@@ -200,10 +200,10 @@ let BattleAbilities = {
 		id: "starkmountain",
 		name: "Stark Mountain",
 		isNonstandard: true,
-		onStart: function (target, source) {
+		onStart(target, source) {
 			this.setWeather('sunnyday', source);
 		},
-		onSourceBasePower: function (basePower, attacker, defender, move) {
+		onSourceBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Water') {
 				return this.chainModify(0.5);
 			}
@@ -216,13 +216,13 @@ let BattleAbilities = {
 		id: "scripter",
 		name: "Scripter",
 		isNonstandard: true,
-		onModifyDamage: function (damage, source, target, move) {
+		onModifyDamage(damage, source, target, move) {
 			if (this.isTerrain('scriptedterrain')) {
 				this.debug('Scripter boost');
 				return this.chainModify(1.5);
 			}
 		},
-		onModifySpe: function (spe, pokemon) {
+		onModifySpe(spe, pokemon) {
 			if (this.isTerrain('scriptedterrain')) {
 				return this.chainModify(2);
 			}
@@ -236,13 +236,13 @@ let BattleAbilities = {
 		name: "Kung Fu Panda",
 		isNonstandard: true,
 		onBasePowerPriority: 8,
-		onBasePower: function (basePower, attacker, defender, move) {
+		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['punch']) {
 				this.debug('Kung Fu Panda boost');
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
-		onAfterDamage: function (damage, target, source, effect) {
+		onAfterDamage(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move' && effect.flags.contact && effect.id !== 'confused') {
 				this.boost({spe: 1});
 			}
@@ -255,12 +255,12 @@ let BattleAbilities = {
 		id: "frozenskin",
 		name: "Frozen Skin",
 		isNonstandard: true,
-		onModifySpe: function (spe, pokemon) {
+		onModifySpe(spe, pokemon) {
 			if (this.isWeather('hail')) {
 				return this.chainModify(2);
 			}
 		},
-		onImmunity: function (type, pokemon) {
+		onImmunity(type, pokemon) {
 			if (type === 'hail') return false;
 		},
 	},
@@ -273,7 +273,7 @@ let BattleAbilities = {
 		isNonstandard: true,
 		onResidualOrder: 26,
 		onResidualSubOrder: 1,
-		onResidual: function (pokemon) {
+		onResidual(pokemon) {
 			if (pokemon.activeTurns) {
 				if (this.randomChance(1, 2)) {
 					this.boost({def: 1});
@@ -291,20 +291,20 @@ let BattleAbilities = {
 		name: "Fake Crash",
 		isNonstandard: true,
 		onDamagePriority: 1,
-		onDamage: function (damage, target, source, effect) {
+		onDamage(damage, target, source, effect) {
 			if (effect && effect.effectType === 'Move' && target.template.speciesid === 'lycanrocmidnight' && !target.transformed) {
 				this.add('-activate', target, 'ability: Fake Crash');
 				this.effectData.busted = true;
 				return 0;
 			}
 		},
-		onEffectiveness: function (typeMod, target, type, move) {
+		onEffectiveness(typeMod, target, type, move) {
 			if (!target) return;
 			if (target.template.speciesid !== 'lycanrocmidnight' || target.transformed || (target.volatiles['substitute'] && !(move.flags['authentic'] || move.infiltrates))) return;
 			if (!target.runImmunity(move.type)) return;
 			return 0;
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.template.speciesid === 'lycanrocmidnight' && this.effectData.busted) {
 				let templateid = 'Lycanroc-Dusk';
 				pokemon.formeChange(templateid, this.effect, true);
@@ -319,7 +319,7 @@ let BattleAbilities = {
 		id: "prismaticsurge",
 		name: "Prismatic Surge",
 		isNonstandard: true,
-		onStart: function () {
+		onStart() {
 			this.setTerrain('prismaticterrain');
 		},
 	},
@@ -331,34 +331,34 @@ let BattleAbilities = {
 		name: "Sacred Shadow",
 		isNonstandard: true,
 		onModifyAtkPriority: 5,
-		onSourceModifyAtk: function (atk, attacker, defender, move) {
+		onSourceModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Fire' || move.type === 'Flying') {
 				return this.chainModify(0.5);
 			}
 		},
 		onModifySpAPriority: 5,
-		onSourceModifySpA: function (atk, attacker, defender, move) {
+		onSourceModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Fire' || move.type === 'Flying') {
 				return this.chainModify(0.5);
 			}
 		},
-		onModifyAtk: function (atk, attacker, defender, move) {
+		onModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Ghost') {
 				return this.chainModify(2);
 			}
 		},
-		onModifySpA: function (atk, attacker, defender, move) {
+		onModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Ghost') {
 				return this.chainModify(2);
 			}
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.status === 'brn') {
 				this.add('-activate', pokemon, 'ability: Sacred Shadow');
 				pokemon.cureStatus();
 			}
 		},
-		onSetStatus: function (status, target, source, effect) {
+		onSetStatus(status, target, source, effect) {
 			if (status.id !== 'brn') return;
 			if (!effect || !effect.status) return false;
 			this.add('-immune', target, '[from] ability: Sacred Shadow');
@@ -372,14 +372,14 @@ let BattleAbilities = {
 		id: "fatrain",
 		name: "Fat Rain",
 		isNonstandard: true,
-		onStart: function (source) {
+		onStart(source) {
 			for (const action of this.queue) {
 				if (action.choice === 'runPrimal' && action.pokemon === source && source.template.speciesid === 'kyogre') return;
 				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
 			}
 			this.setWeather('raindance');
 		},
-		onModifyDef: function (def, pokemon) {
+		onModifyDef(def, pokemon) {
 			if (this.isWeather(['raindance', 'primordialsea'])) {
 				return this.chainModify(1.5);
 			}
@@ -392,10 +392,10 @@ let BattleAbilities = {
 		id: "wrath",
 		name: "Wrath",
 		isNonstandard: true,
-		onModifyCritRatio: function (critRatio) {
+		onModifyCritRatio(critRatio) {
 			return critRatio + 1;
 		},
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			if (typeof move.accuracy === 'number') {
 				move.accuracy *= 1.1;
 			}
@@ -408,11 +408,11 @@ let BattleAbilities = {
 		id: "recharge",
 		name: "Recharge",
 		isNonstandard: true,
-		onSwitchIn: function (pokemon) {
+		onSwitchIn(pokemon) {
 			this.add('-activate', pokemon, 'ability: Recharge');
 			pokemon.addVolatile('charge');
 		},
-		onSwitchOut: function (pokemon) {
+		onSwitchOut(pokemon) {
 			pokemon.heal(pokemon.maxhp / 3);
 
 			if (!pokemon.status) return;
@@ -428,26 +428,26 @@ let BattleAbilities = {
 		name: "Thiccer Fat",
 		isNonstandard: true,
 		onModifyAtkPriority: 6,
-		onSourceModifyAtk: function (atk, attacker, defender, move) {
+		onSourceModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire') {
 				this.debug('Thiccer Fat weaken');
 				return this.chainModify(0.5);
 			}
 		},
 		onModifySpAPriority: 5,
-		onSourceModifySpA: function (atk, attacker, defender, move) {
+		onSourceModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire') {
 				this.debug('Thiccer Fat weaken');
 				return this.chainModify(0.5);
 			}
 		},
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			if (pokemon.status === 'brn') {
 				this.add('-activate', pokemon, 'ability: Thiccer Fat');
 				pokemon.cureStatus();
 			}
 		},
-		onSetStatus: function (status, target, source, effect) {
+		onSetStatus(status, target, source, effect) {
 			if (status.id !== 'brn') return;
 			if (!effect || !effect.status) return false;
 			this.add('-immune', target, '[from] ability: Thiccer Fat');
@@ -461,7 +461,7 @@ let BattleAbilities = {
 		id: "galewingsv1",
 		name: "Gale Wings v1",
 		isNonstandard: true,
-		onModifyPriority: function (priority, pokemon, target, move) {
+		onModifyPriority(priority, pokemon, target, move) {
 			if (move && move.type === 'Flying') return priority + 1;
 		},
 	},
@@ -472,7 +472,7 @@ let BattleAbilities = {
 		id: "solarflare",
 		name: "Solar Flare",
 		isNonstandard: true,
-		onTryHit: function (target, source, move) {
+		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Rock') {
 				if (!this.heal(target.maxhp / 4)) {
 					this.add('-immune', target, '[from] ability: Solar Flare');
@@ -488,7 +488,7 @@ let BattleAbilities = {
 		id: "notprankster",
 		name: "Not Prankster",
 		isNonstandard: true,
-		onModifyPriority: function (priority, pokemon, target, move) {
+		onModifyPriority(priority, pokemon, target, move) {
 			if (move && move.category === 'Status') {
 				return priority + 1;
 			}
@@ -501,7 +501,7 @@ let BattleAbilities = {
 		id: "beastboost2",
 		name: "Beast Boost 2",
 		isNonstandard: true,
-		onSourceFaint: function (target, source, effect) {
+		onSourceFaint(target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				let statOrder = Object.keys(source.stats)
 				    .sort((stat1, stat2) => source.stats[stat2] - source.stats[stat1]);
@@ -516,14 +516,14 @@ let BattleAbilities = {
 		id: "deflectiveshell",
 		name: "Deflective Shell",
 		isNonstandard: true,
-		onStart: function (source) {
+		onStart(source) {
 			for (const action of this.queue) {
 				if (action.choice === 'runPrimal' && action.pokemon === source && source.template.speciesid === 'groudon') return;
 				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
 			}
 			this.setWeather('sunnyday');
 		},
-		onSourceModifyDamage: function (damage, source, target, move) {
+		onSourceModifyDamage(damage, source, target, move) {
 			let mod = 1;
 			if (!move.flags['contact']) mod = (mod / 3) * 2; // 2/3
 			return this.chainModify(mod);
@@ -536,7 +536,7 @@ let BattleAbilities = {
 		id: "interdimensional",
 		name: "Interdimensional",
 		isNonstandard: true,
-		onStart: function (target, source) {
+		onStart(target, source) {
 			this.addPseudoWeather('gravity', source);
 		},
 	},
@@ -547,7 +547,7 @@ let BattleAbilities = {
 		id: "focusenergy",
 		name: "Focus Energy",
 		isNonstandard: true,
-		onStart: function (pokemon) {
+		onStart(pokemon) {
 			pokemon.addVolatile('focusenergy');
 		},
 	},
@@ -558,7 +558,7 @@ let BattleAbilities = {
 		id: "snowstorm",
 		name: "Snow Storm",
 		isNonstandard: true,
-		onStart: function () {
+		onStart() {
 			let snowStorm = this.deepClone(this.getEffect('hail'));
 			snowStorm.duration = -1;
 			this.setWeather(snowStorm);
@@ -567,7 +567,7 @@ let BattleAbilities = {
 	// Modified Illusion to support SSB volatiles
 	illusion: {
 		inherit: true,
-		onEnd: function (pokemon) {
+		onEnd(pokemon) {
 			if (pokemon.illusion) {
 				this.debug('illusion cleared');
 				let disguisedAs = toId(pokemon.illusion.name);
@@ -592,7 +592,7 @@ let BattleAbilities = {
 	// Modified Prankster to not boost Army of Mushrooms
 	prankster: {
 		inherit: true,
-		onModifyPriority: function (priority, pokemon, target, move) {
+		onModifyPriority(priority, pokemon, target, move) {
 			if (move && move.category === 'Status' && move.id !== 'armyofmushrooms') {
 				move.pranksterBoosted = true;
 				return priority + 1;

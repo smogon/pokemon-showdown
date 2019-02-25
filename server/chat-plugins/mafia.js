@@ -38,6 +38,7 @@
  * @typedef {Object} MafiaIDEAModule
  * @property {MafiaIDEAdata?} data
  * @property {NodeJS.Timer?} timer
+ * @property {boolean} discardsHidden
  * @property {string} discardsHtml
  * @property {string[]} waitingPick
  */
@@ -175,9 +176,9 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 		const user = Users(this.userid);
 		if (!user || !user.connected) return;
 		if (this.game.ended) return user.send(`>view-mafia-${this.game.room.id}\n|deinit`);
-		// @ts-ignore
-		const buf = Chat.pages.mafia([this.game.room.id], user);
-		this.send(`>view-mafia-${this.game.room.id}\n|init|html\n${buf}`);
+		for (const conn of user.connections) {
+			Chat.resolvePage(`view-mafia-${this.game.room.id}`, user, conn);
+		}
 	}
 }
 
@@ -252,6 +253,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.IDEA = {
 			data: null,
 			timer: null,
+			discardsHidden: false,
 			discardsHtml: '',
 			waitingPick: [],
 		};
@@ -288,8 +290,9 @@ class MafiaTracker extends Rooms.RoomGame {
 		subIndex = this.hostRequestedSub.indexOf(user.userid);
 		if (subIndex !== -1) this.hostRequestedSub.splice(subIndex, 1);
 		this.sendRoom(`${user.name} has left the game.`);
-		// @ts-ignore
-		user.send(`>view-mafia-${this.room.id}\n|init|html\n${Chat.pages.mafia([this.room.id], user)}`);
+		for (const conn of user.connections) {
+			Chat.resolvePage(`view-mafia-${this.room.id}`, user, conn);
+		}
 	}
 
 	/**
@@ -494,9 +497,10 @@ class MafiaTracker extends Rooms.RoomGame {
 
 	/**
 	 * @param {User} user
+	 * @param {boolean?} night
 	 * @return {void}
 	 */
-	start(user) {
+	start(user, night) {
 		if (!user) return;
 		if (this.phase !== 'locked' && this.phase !== 'IDEAlocked') {
 			if (this.phase === 'signups') return user.sendTo(this.room, `You need to close the signups first.`);
@@ -516,8 +520,12 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.sendRoom(`The game of ${this.title} is starting!`, {declare: true});
 		// MafiaTracker#played gets set in distributeRoles
 		this.distributeRoles();
-		this.day(null, true);
-		if (this.IDEA.data) this.room.add(`|html|<div class="infobox"><details><summary>IDEA discards:</summary>${this.IDEA.discardsHtml}</details></div>`).update();
+		if (night) {
+			this.night(false, true);
+		} else {
+			this.day(null, true);
+		}
+		if (this.IDEA.data && !this.IDEA.discardsHidden) this.room.add(`|html|<div class="infobox"><details><summary>IDEA discards:</summary>${this.IDEA.discardsHtml}</details></div>`).update();
 	}
 
 	/**
@@ -527,7 +535,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		let roles = Dex.shuffle(this.roles.slice());
 		if (roles.length) {
 			for (let p in this.players) {
-				let role = roles.shift();
+				let role = /** @type {MafiaRole} */(roles.shift());
 				this.players[p].role = role;
 				let u = Users(p);
 				if (u && u.connected) u.send(`>${this.room.id}\n|notify|Your role is ${role.safeName}. For more details of your role, check your Role PM.`);
@@ -583,10 +591,11 @@ class MafiaTracker extends Rooms.RoomGame {
 
 	/**
 	 * @param {boolean} early
+	 * @param {boolean} initial
 	 * @return {void}
 	 */
-	night(early = false) {
-		if (this.phase !== 'day') return;
+	night(early = false, initial = false) {
+		if (this.phase !== 'day' && !initial) return;
 		if (this.timer) this.setDeadline(0, true);
 		this.phase = 'night';
 		for (const hostid of [...this.cohosts, this.hostid]) {
@@ -596,7 +605,8 @@ class MafiaTracker extends Rooms.RoomGame {
 		this.sendRoom(`Night ${this.dayNum}. PM the host your action, or idle.`, {declare: true});
 		const hasPlurality = this.getPlurality();
 		if (!early && hasPlurality) this.sendRoom(`Plurality is on ${this.players[hasPlurality] ? this.players[hasPlurality].name : 'No Lynch'}`);
-		if (!early) this.sendRoom(`|raw|<div class="infobox">${this.lynchBox()}</div>`);
+		if (!early && !initial) this.sendRoom(`|raw|<div class="infobox">${this.lynchBox()}</div>`);
+		if (initial) this.hammerCount = Math.floor(Object.keys(this.players).length / 2) + 1;
 		this.updatePlayers();
 	}
 
@@ -1070,8 +1080,9 @@ class MafiaTracker extends Rooms.RoomGame {
 			}
 		}
 		if (newUser && newUser.connected) {
-			// @ts-ignore
-			newUser.send(`>view-mafia-${this.room.id}\n|init|html\n${Chat.pages.mafia([this.room.id], newUser)}`);
+			for (const conn of newUser.connections) {
+				Chat.resolvePage(`view-mafia-${this.room.id}`, newUser, conn);
+			}
 			newUser.send(`>${this.room.id}\n|notify|You have been substituted in the mafia game for ${oldPlayer.safeName}.`);
 		}
 		if (this.started) this.played.push(newPlayer.userid);
@@ -1339,10 +1350,9 @@ class MafiaTracker extends Rooms.RoomGame {
 		for (const hostid of [...this.cohosts, this.hostid]) {
 			const host = Users(hostid);
 			if (!host || !host.connected) return;
-			if (this.ended) return host.send(`>view-mafia-${this.room.id}\n|deinit`);
-			// @ts-ignore
-			const buf = Chat.pages.mafia([this.room.id], host);
-			host.send(`>view-mafia-${this.room.id}\n|init|html\n${buf}`);
+			for (const conn of host.connections) {
+				Chat.resolvePage(`view-mafia-${this.room.id}`, host, conn);
+			}
 		}
 	}
 
@@ -1575,17 +1585,18 @@ class MafiaTracker extends Rooms.RoomGame {
 
 /** @type {PageTable} */
 const pages = {
-	mafia: function (query, user) {
+	mafia(query, user) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		if (!query.length) return `|deinit`;
+		if (!query.length) return this.close();
 		let roomid = query.shift();
 		if (roomid === 'groupchat') roomid += `-${query.shift()}-${query.shift()}`;
 		const room = /** @type {ChatRoom} */ (Rooms(roomid));
-		if (!room || !room.users[user.userid] || !room.game || room.game.gameid !== 'mafia' || room.game.ended) return `|deinit`;
+		if (!room || !room.users[user.userid] || !room.game || room.game.gameid !== 'mafia' || room.game.ended) return this.close();
 		const game = /** @type {MafiaTracker} */ (room.game);
 		const isPlayer = user.userid in game.players;
 		const isHost = user.userid === game.hostid || game.cohosts.includes(user.userid);
-		let buf = `|title|${game.title}\n|pagehtml|<div class="pad broadcast-blue">`;
+		this.title = game.title;
+		let buf = `<div class="pad broadcast-blue">`;
 		buf += `<button class="button" name="send" value="/join view-mafia-${room.id}" style="float:left"><i class="fa fa-refresh"></i> Refresh</button>`;
 		buf += `<br/><br/><h1 style="text-align:center;">${game.title}</h1><h3>Host: ${game.host}</h3>`;
 		buf += `<p style="font-weight:bold;">Players (${game.playerCount}): ${Object.keys(game.players).sort().map(p => game.players[p].safeName).join(', ')}</p><hr/>`;
@@ -1623,7 +1634,7 @@ const pages = {
 		}
 		if (game.IDEA.data) {
 			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">${game.IDEA.data.name} information</summary>`;
-			if (game.IDEA.discardsHtml) buf += `<details><summary class="button" style="text-align:left; display:inline-block">Discards:</summary><p>${game.IDEA.discardsHtml}</p></details>`;
+			if (game.IDEA.discardsHtml && (!game.IDEA.discardsHidden || isHost)) buf += `<details><summary class="button" style="text-align:left; display:inline-block">Discards:</summary><p>${game.IDEA.discardsHtml}</p></details>`;
 			buf += `<details><summary class="button" style="text-align:left; display:inline-block">Role list</summary><p>${game.IDEA.data.roles.join('<br />')}</p></details>`;
 			buf += `</details></p>`;
 		} else {
@@ -1750,9 +1761,9 @@ const pages = {
 		buf += `</div>`;
 		return buf;
 	},
-	mafialadder: function (query, user) {
+	mafialadder(query, user) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		if (!query.length || !Rooms('mafia')) return `|deinit`;
+		if (!query.length || !Rooms('mafia')) return this.close();
 		/** @type {{[k: string]: {title: string, type: string, section: MafiaLogSection}}} */
 		const headers = {
 			leaderboard: {title: 'Leaderboard', type: 'Points', section: 'leaderboard'},
@@ -1765,10 +1776,11 @@ const pages = {
 		if (query[1] === 'prev') date.setMonth(date.getMonth() - 1);
 		const month = date.toLocaleString("en-us", {month: "numeric", year: "numeric"});
 		const ladder = headers[query[0]];
-		if (!ladder) return `|deinit`;
+		if (!ladder) return this.close();
 		const mafiaRoom = /** @type {ChatRoom?} */ (Rooms('mafia'));
-		if (['hosts', 'plays', 'leavers'].includes(ladder.section) && !user.can('mute', null, mafiaRoom)) return `|deinit`;
-		let buf = `|title|Mafia ${ladder.title} (${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()})\n|pagehtml|<div class="pad ladder">`;
+		if (['hosts', 'plays', 'leavers'].includes(ladder.section) && !this.can('mute', null, mafiaRoom)) return;
+		this.title = `Mafia ${ladder.title} (${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()})`;
+		let buf = `<div class="pad ladder">`;
 		buf += `${query[1] === 'prev' ? '' : `<button class="button" name="send" value="/join view-mafialadder-${query[0]}" style="float:left"><i class="fa fa-refresh"></i> Refresh</button> <button class="button" name="send" value="/join view-mafialadder-${query[0]}-prev" style="float:left">View last month's ${ladder.title}</button>`}`;
 		buf += `<br /><br />`;
 		const section = ladder.section;
@@ -1793,7 +1805,7 @@ const pages = {
 /** @type {ChatCommands} */
 const commands = {
 	mafia: {
-		'': function (target, room, user) {
+		''(target, room, user) {
 			const game = /** @type {MafiaTracker?} */ (room.game);
 			if (game && game.gameid === 'mafia') {
 				if (!this.runBroadcast()) return;
@@ -1804,7 +1816,7 @@ const commands = {
 
 		forcehost: 'host',
 		nexthost: 'host',
-		host: function (target, room, user, connection, cmd) {
+		host(target, room, user, connection, cmd) {
 			if (!room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (!this.canTalk()) return;
 			if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
@@ -1844,8 +1856,9 @@ const commands = {
 
 			room.game = new MafiaTracker(room, targetUser);
 
-			// @ts-ignore
-			targetUser.send(`>view-mafia-${room.id}\n|init|html\n${Chat.pages.mafia([room.id], targetUser)}`);
+			for (const conn of targetUser.connections) {
+				Chat.resolvePage(`view-mafia-${room.id}`, targetUser, conn);
+			}
 			room.addByUser(user, `${targetUser.name} was appointed the mafia host by ${user.name}.`);
 			if (room.id === 'mafia') {
 				const queueIndex = hostQueue.indexOf(targetUser.userid);
@@ -1855,11 +1868,11 @@ const commands = {
 			this.modlog('MAFIAHOST', targetUser, null, {noalts: true, noip: true});
 		},
 		hosthelp: [
-			`/mafia host [user] - Create a game of Mafia with [user] as the host. Requires + % @ * # & ~, voices can only host themselves`,
+			`/mafia host [user] - Create a game of Mafia with [user] as the host. Requires + % @ # & ~, voices can only host themselves`,
 		],
 
 		q: 'queue',
-		queue: function (target, room, user) {
+		queue(target, room, user) {
 			if (!room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (room.id !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
 			const args = target.split(',').map(toId);
@@ -1907,21 +1920,21 @@ const commands = {
 		qadd: 'queueadd',
 		qforceadd: 'queueadd',
 		queueforceadd: 'queueadd',
-		queueadd: function (target, room, user, connection, cmd) {
+		queueadd(target, room, user, connection, cmd) {
 			this.parse(`/mafia queue ${cmd.includes('force') ? `forceadd` : `add`}, ${target}`);
 		},
 
 		qdel: 'queueremove',
 		qdelete: 'queueremove',
 		qremove: 'queueremove',
-		queueremove: function (target, room, user) {
+		queueremove(target, room, user) {
 			this.parse(`/mafia queue remove, ${target}`);
 		},
 
 		'!mafjoin': true,
 		// Typescript doesn't like "join" as the command name for some reason, so this is a hack to get around that.
 		join: 'mafjoin',
-		mafjoin: function (target, room, user) {
+		mafjoin(target, room, user) {
 			let targetRoom = /** @type {ChatRoom} */ (Rooms(target));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
@@ -1936,7 +1949,7 @@ const commands = {
 		joinhelp: [`/mafia join - Join the game.`],
 
 		'!leave': true,
-		leave: function (target, room, user) {
+		leave(target, room, user) {
 			let targetRoom /** @type {ChatRoom?} */ = (Rooms(target));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
@@ -1948,7 +1961,7 @@ const commands = {
 		},
 		leavehelp: [`/mafia leave - Leave the game. Can only be done while signups are open.`],
 
-		playercap: function (target, room, user) {
+		playercap(target, room, user) {
 			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (room.game);
 			if (game.hostid !== user.userid && !game.cohosts.includes(user.userid) && !this.can('mute', null, room)) return;
@@ -1964,7 +1977,7 @@ const commands = {
 		playercaphelp: [`/mafia playercap [cap|none]- Limit the number of players being able to join the game. Player cap cannot be more than 20 or less than 2. Requires: host % @ # & ~`],
 
 		'!close': true,
-		close: function (target, room, user) {
+		close(target, room, user) {
 			let targetRoom /** @type {ChatRoom?} */ = (Rooms(target));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
@@ -1979,11 +1992,11 @@ const commands = {
 			game.sendRoom(game.roomWindow(), {uhtml: true});
 			game.updatePlayers();
 		},
-		closehelp: [`/mafia close - Closes signups for the current game. Requires: host % @ * # & ~`],
+		closehelp: [`/mafia close - Closes signups for the current game. Requires: host % @ # & ~`],
 
 		'!closedsetup': true,
 		cs: 'closedsetup',
-		closedsetup: function (target, room, user) {
+		closedsetup(target, room, user) {
 			const args = target.split(',');
 			let targetRoom /** @type {ChatRoom?} */ = (Rooms(args[0]));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
@@ -2002,10 +2015,10 @@ const commands = {
 			game.closedSetup = action === 'on';
 			game.updateHost();
 		},
-		closedsetuphelp: [`/mafia closedsetup [on|off] - Sets if the game is a closed setup. Closed setups don't show the role list to players. Requires host % @ * # & ~`],
+		closedsetuphelp: [`/mafia closedsetup [on|off] - Sets if the game is a closed setup. Closed setups don't show the role list to players. Requires host % @ # & ~`],
 
 		'!reveal': true,
-		reveal: function (target, room, user) {
+		reveal(target, room, user) {
 			const args = target.split(',');
 			let targetRoom /** @type {ChatRoom?} */ = (Rooms(args[0]));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
@@ -2024,12 +2037,12 @@ const commands = {
 			game.sendRoom(`Revealing of roles has been ${action === 'off' ? 'disabled' : 'enabled'}.`, {declare: true});
 			game.updatePlayers();
 		},
-		revealhelp: [`/mafia reveal [on|off] - Sets if roles reveal on death or not. Requires host % @ * # & ~`],
+		revealhelp: [`/mafia reveal [on|off] - Sets if roles reveal on death or not. Requires host % @ # & ~`],
 
 		resetroles: 'setroles',
 		forceresetroles: 'setroles',
 		forcesetroles: 'setroles',
-		setroles: function (target, room, user, connection, cmd) {
+		setroles(target, room, user, connection, cmd) {
 			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (room.game);
 			if (game.hostid !== user.userid && !game.cohosts.includes(user.userid) && !this.can('mute', null, room)) return;
@@ -2049,7 +2062,7 @@ const commands = {
 			`/mafia resetroles [comma separated roles] - Reset the roles in an ongoing game.`,
 		],
 
-		idea: function (target, room, user) {
+		idea(target, room, user) {
 			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (room.game);
 			if (!user.can('broadcast', null, room) || (!user.can('mute', null, room) && game.hostid !== user.userid && !game.cohosts.includes(user.userid))) return this.errorReply(`/mafia idea - Access denied.`);
@@ -2058,13 +2071,13 @@ const commands = {
 			game.ideaInit(user, toId(target));
 		},
 		ideahelp: [
-			`/mafia idea [idea] - starts the IDEA module [idea]. Requires + % @ * # & ~, voices can only start for themselves`,
-			`/mafia ideareroll - rerolls the IDEA module. Requires host % @ * # & ~`,
+			`/mafia idea [idea] - starts the IDEA module [idea]. Requires + % @ # & ~, voices can only start for themselves`,
+			`/mafia ideareroll - rerolls the IDEA module. Requires host % @ # & ~`,
 			`/mafia ideapick [selection], [role] - selects a role`,
 			`/mafia ideadiscards - shows the discarded roles`,
 		],
 
-		customidea: function (target, room, user) {
+		customidea(target, room, user) {
 			if (!this.can('mute', null, room)) return;
 			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (room.game);
@@ -2083,7 +2096,7 @@ const commands = {
 			`(comma or newline separated rolelist) - Starts an IDEA module with custom roles. Requires % @ # & ~`,
 		],
 		'!ideapick': true,
-		ideapick: function (target, room, user) {
+		ideapick(target, room, user) {
 			const args = target.split(',');
 			let targetRoom /** @type {ChatRoom?} */ = (Rooms(args[0]));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
@@ -2100,7 +2113,7 @@ const commands = {
 		},
 
 		'!ideareroll': true,
-		ideareroll: function (target, room, user) {
+		ideareroll(target, room, user) {
 			let targetRoom /** @type {ChatRoom?} */ = (Rooms(target));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
@@ -2111,35 +2124,64 @@ const commands = {
 			if (game.hostid !== user.userid && !game.cohosts.includes(user.userid) && !this.can('mute', null, room)) return;
 			game.ideaDistributeRoles(user);
 		},
-		idearerollhelp: [`/mafia ideareroll - rerolls the roles for the current IDEA module. Requires host % @ * # & ~`],
+		idearerollhelp: [`/mafia ideareroll - rerolls the roles for the current IDEA module. Requires host % @ # & ~`],
 
-		ideadiscards: function (target, room, user) {
+		discards: 'ideadiscards',
+		ideadiscards(target, room, user) {
 			if (!room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (room.game);
 			if (!game.IDEA.data) return this.errorReply(`There is no IDEA module in the mafia game.`);
+			if (target) {
+				if (game.hostid !== user.userid && !game.cohosts.includes(user.userid) && !this.can('mute', null, room)) return;
+				if (this.meansNo(target)) {
+					if (game.IDEA.discardsHidden) return this.errorReply(`IDEA discards are already hidden.`);
+					game.IDEA.discardsHidden = true;
+				} else if (this.meansYes(target)) {
+					if (!game.IDEA.discardsHidden) return this.errorReply(`IDEA discards are already visible.`);
+					game.IDEA.discardsHidden = false;
+				} else {
+					return this.parse('/help mafia ideadiscards');
+				}
+				return this.sendReply(`IDEA discards are now ${game.IDEA.discardsHidden ? 'hidden' : 'visible'}.`);
+			}
+			if (game.IDEA.discardsHidden) return this.errorReply(`Discards are not visible.`);
 			if (!game.IDEA.discardsHtml) return this.errorReply(`The IDEA module does not have finalised discards yet.`);
 			if (!this.runBroadcast()) return;
 			this.sendReplyBox(`<details><summary>IDEA discards:</summary>${game.IDEA.discardsHtml}</details>`);
 		},
+		ideadiscardshelp: [
+			`/mafia ideadiscards - shows the discarded roles`,
+			`/mafia ideadiscards off - hides discards from the players. Requires host % @ # & ~`,
+			`/mafia ideadiscards on - shows discards to the players. Requires host % @ # & ~`,
+		],
 
 		'!start': true,
-		start: function (target, room, user) {
+		nightstart: 'start',
+		start(target, room, user, connection, cmd) {
 			let targetRoom /** @type {ChatRoom?} */ = (Rooms(target));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 				targetRoom = room;
+			} else {
+				target = '';
 			}
 			if (!targetRoom.game || targetRoom.game.gameid !== 'mafia') return user.sendTo(targetRoom, `|error|There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (targetRoom.game);
 			if (game.hostid !== user.userid && !game.cohosts.includes(user.userid) && !this.can('mute', null, room)) return;
-			game.start(user);
+			if (target) {
+				this.parse(`/mafia close`);
+				this.parse(`/mafia setroles ${target}`);
+				this.parse(`/mafia ${cmd}`);
+				return;
+			}
+			game.start(user, cmd === 'nightstart');
 		},
-		starthelp: [`/mafia start - Start the game of mafia. Signups must be closed. Requires host % @ * # & ~`],
+		starthelp: [`/mafia start - Start the game of mafia. Signups must be closed. Requires host % @ # & ~`],
 
 		'!day': true,
 		extend: 'day',
 		night: 'day',
-		day: function (target, room, user, connection, cmd) {
+		day(target, room, user, connection, cmd) {
 			const args = target.split(',');
 			let targetRoom /** @type {ChatRoom?} */ = (Rooms(args[0]));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
@@ -2165,14 +2207,14 @@ const commands = {
 			}
 		},
 		dayhelp: [
-			`/mafia day - Move to the next game day. Requires host % @ * # & ~`,
-			`/mafia night - Move to the next game night. Requires host % @ * # & ~`,
-			`/mafia extend (minutes) - Return to the previous game day. If (minutes) is provided, set the deadline for (minutes) minutes. Requires host % @ * # & ~`,
+			`/mafia day - Move to the next game day. Requires host % @ # & ~`,
+			`/mafia night - Move to the next game night. Requires host % @ # & ~`,
+			`/mafia extend (minutes) - Return to the previous game day. If (minutes) is provided, set the deadline for (minutes) minutes. Requires host % @ # & ~`,
 		],
 
 		'!lynch': true,
 		l: 'lynch',
-		lynch: function (target, room, user) {
+		lynch(target, room, user) {
 			const args = target.split(',');
 			let targetRoom /** @type {ChatRoom?} */ = (Rooms(args[0]));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
@@ -2193,7 +2235,7 @@ const commands = {
 		ul: 'unlynch',
 		unl: 'unlynch',
 		unnolynch: 'unlynch',
-		unlynch: function (target, room, user) {
+		unlynch(target, room, user) {
 			let targetRoom /** @type {ChatRoom?} */ = (Rooms(target));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
@@ -2208,13 +2250,13 @@ const commands = {
 		unlynchhelp: [`/mafia unlynch - Withdraw your lynch vote. Fails if you're not voting to lynch anyone`],
 
 		nl: 'nolynch',
-		nolynch: function () {
+		nolynch() {
 			this.parse('/mafia lynch nolynch');
 		},
 
 		'!selflynch': true,
 		enableself: 'selflynch',
-		selflynch: function (target, room, user, connection, cmd) {
+		selflynch(target, room, user, connection, cmd) {
 			const args = target.split(',');
 			let targetRoom /** @type {ChatRoom?} */ = (Rooms(args[0]));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
@@ -2238,14 +2280,14 @@ const commands = {
 				return this.parse(`/help mafia selflynch`);
 			}
 		},
-		selflynchhelp: [`/mafia selflynch [on|hammer|off] - Allows players to self lynch themselves either at hammer or anytime. Requires host % @ * # & ~`],
+		selflynchhelp: [`/mafia selflynch [on|hammer|off] - Allows players to self lynch themselves either at hammer or anytime. Requires host % @ # & ~`],
 
 		'!kill': true,
 		treestump: 'kill',
 		spirit: 'kill',
 		spiritstump: 'kill',
 		kick: 'kill',
-		kill: function (target, room, user, connection, cmd) {
+		kill(target, room, user, connection, cmd) {
 			const args = target.split(',');
 			let targetRoom /** @type {ChatRoom?} */ = (Rooms(args[0]));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
@@ -2263,7 +2305,7 @@ const commands = {
 			game.eliminate(player, cmd);
 		},
 		killhelp: [
-			`/mafia kill [player] - Kill a player, eliminating them from the game. Requires host % @ * # & ~`,
+			`/mafia kill [player] - Kill a player, eliminating them from the game. Requires host % @ # & ~`,
 			`/mafia treestump [player] - Kills a player, but allows them to talk during the day still.`,
 			`/mafia spirit [player] - Kills a player, but allows them to vote on the lynch still.`,
 			`/mafia spiritstump [player] Kills a player, but allows them to talk during the day, and vote on the lynch.`,
@@ -2272,7 +2314,7 @@ const commands = {
 		'!revive': true,
 		forceadd: 'revive',
 		add: 'revive',
-		revive: function (target, room, user, connection, cmd) {
+		revive(target, room, user, connection, cmd) {
 			const args = target.split(',');
 			let targetRoom /** @type {ChatRoom?} */ = (Rooms(args[0]));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
@@ -2289,10 +2331,10 @@ const commands = {
 				game.revive(user, toId(targetUser), cmd === 'forceadd');
 			}
 		},
-		revivehelp: [`/mafia revive [player] - Revive a player who died or add a new player to the game. Requires host % @ * # & ~`],
+		revivehelp: [`/mafia revive [player] - Revive a player who died or add a new player to the game. Requires host % @ # & ~`],
 
 		dl: 'deadline',
-		deadline: function (target, room, user) {
+		deadline(target, room, user) {
 			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (room.game);
 			target = toId(target);
@@ -2328,7 +2370,7 @@ const commands = {
 		deadlinehelp: [`/mafia deadline [minutes|off] - Sets or removes the deadline for the game. Cannot be more than 20 minutes.`],
 
 		applylynchmodifier: 'applyhammermodifier',
-		applyhammermodifier: function (target, room, user, connection, cmd) {
+		applyhammermodifier(target, room, user, connection, cmd) {
 			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (room.game);
 			if (game.hostid !== user.userid && !game.cohosts.includes(user.userid) && !this.can('mute', null, room)) return;
@@ -2341,7 +2383,7 @@ const commands = {
 			}
 		},
 		clearlynchmodifiers: 'clearhammermodifiers',
-		clearhammermodifiers: function (target, room, user, connection, cmd) {
+		clearhammermodifiers(target, room, user, connection, cmd) {
 			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (room.game);
 			if (game.hostid !== user.userid && !game.cohosts.includes(user.userid) && !this.can('mute', null, room)) return;
@@ -2357,7 +2399,7 @@ const commands = {
 		unhate: 'love',
 		unlove: 'love',
 		removehammermodifier: 'love',
-		love: function (target, room, user, connection, cmd) {
+		love(target, room, user, connection, cmd) {
 			let mod;
 			switch (cmd) {
 			case 'hate':
@@ -2377,7 +2419,7 @@ const commands = {
 		unvoteless: 'mayor',
 		unmayor: 'mayor',
 		removelynchmodifier: 'mayor',
-		mayor: function (target, room, user, connection, cmd) {
+		mayor(target, room, user, connection, cmd) {
 			let mod;
 			switch (cmd) {
 			case 'doublevoter': case 'mayor':
@@ -2395,7 +2437,7 @@ const commands = {
 
 		shifthammer: 'hammer',
 		resethammer: 'hammer',
-		hammer: function (target, room, user, connection, cmd) {
+		hammer(target, room, user, connection, cmd) {
 			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (room.game);
 			if (game.hostid !== user.userid && !game.cohosts.includes(user.userid) && !this.can('mute', null, room)) return;
@@ -2422,7 +2464,7 @@ const commands = {
 
 		'!enablenl': true,
 		disablenl: 'enablenl',
-		enablenl: function (target, room, user, connection, cmd) {
+		enablenl(target, room, user, connection, cmd) {
 			let targetRoom /** @type {ChatRoom?} */ = (Rooms(target));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
@@ -2439,7 +2481,7 @@ const commands = {
 		},
 		enablenlhelp: [`/mafia [enablenl|disablenl] - Allows or disallows players abstain from lynching. Requires host % @ # & ~`],
 
-		lynches: function (target, room, user) {
+		lynches(target, room, user) {
 			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (room.game);
 			if (!game.started) return this.errorReply(`The game of mafia has not started yet.`);
@@ -2461,7 +2503,7 @@ const commands = {
 		},
 
 		pl: 'players',
-		players: function (target, room, user) {
+		players(target, room, user) {
 			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (room.game);
 			if ((game.hostid === user.userid || game.cohosts.includes(user.userid)) && this.cmdToken === "!") {
@@ -2488,7 +2530,7 @@ const commands = {
 		originalrolelist: 'rolelist',
 		orl: 'rolelist',
 		rl: 'rolelist',
-		rolelist: function (target, room, user, connection, cmd) {
+		rolelist(target, room, user, connection, cmd) {
 			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (room.game);
 			if (game.closedSetup) return this.errorReply(`You cannot show roles in a closed setup.`);
@@ -2507,7 +2549,7 @@ const commands = {
 			this.sendReplyBox(`${showOrl ? `Original Rolelist: ` : `Rolelist: `}${roleString}`);
 		},
 
-		playerroles: function (target, room, user) {
+		playerroles(target, room, user) {
 			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (room.game);
 			if (game.hostid !== user.userid && !game.cohosts.includes(user.userid)) return this.errorReply(`Only the host can view roles.`);
@@ -2517,7 +2559,7 @@ const commands = {
 		},
 
 		spectate: 'view',
-		view: function (target, room, user, connection) {
+		view(target, room, user, connection) {
 			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			if (!this.runBroadcast()) return;
 			if (this.broadcasting) return this.sendReplyBox(`<button name="joinRoom" value="view-mafia-${room.id}" class="button"><strong>Spectate the game</strong></button>`);
@@ -2527,7 +2569,7 @@ const commands = {
 		'!mafsub': true,
 		forcesub: 'mafsub',
 		sub: 'mafsub', // Typescript doesn't like "sub" as the command name for some reason, so this is a hack to get around that.
-		mafsub: function (target, room, user, connection, cmd) {
+		mafsub(target, room, user, connection, cmd) {
 			const args = target.split(',');
 			let targetRoom /** @type {ChatRoom?} */ = (Rooms(args[0]));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
@@ -2627,14 +2669,14 @@ const commands = {
 		subhelp: [
 			`/mafia sub in - Request to sub into the game, or cancel a request to sub out.`,
 			`/mafia sub out - Request to sub out of the game, or cancel a request to sub in.`,
-			`/mafia sub next, [player] - Forcibly sub [player] out of the game. Requires host % @ * # & ~`,
-			`/mafia sub remove, [user] - Remove [user] from the sublist. Requres host % @ * # & ~`,
-			`/mafia sub unrequest, [player] - Remove's a player's request to sub out of the game. Requires host % @ * # & ~`,
-			`/mafia sub [player], [user] - Forcibly sub [player] for [user]. Requires host % @ * # & ~`,
+			`/mafia sub next, [player] - Forcibly sub [player] out of the game. Requires host % @ # & ~`,
+			`/mafia sub remove, [user] - Remove [user] from the sublist. Requres host % @ # & ~`,
+			`/mafia sub unrequest, [player] - Remove's a player's request to sub out of the game. Requires host % @ # & ~`,
+			`/mafia sub [player], [user] - Forcibly sub [player] for [user]. Requires host % @ # & ~`,
 		],
 
 		"!autosub": true,
-		autosub: function (target, room, user) {
+		autosub(target, room, user) {
 			const args = target.split(',');
 			let targetRoom /** @type {ChatRoom?} */ = (Rooms(args[0]));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
@@ -2659,12 +2701,12 @@ const commands = {
 				return this.parse(`/help mafia autosub`);
 			}
 		},
-		autosubhelp: [`/mafia autosub [yes|no] - Sets if players will automatically sub out if a user is on the sublist. Requires host % @ * # & ~`],
+		autosubhelp: [`/mafia autosub [yes|no] - Sets if players will automatically sub out if a user is on the sublist. Requires host % @ # & ~`],
 
 		cohost: 'subhost',
 		forcecohost: 'subhost',
 		forcesubhost: 'subhost',
-		subhost: function (target, room, user, connection, cmd) {
+		subhost(target, room, user, connection, cmd) {
 			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (room.game);
 			if (!this.canTalk()) return;
@@ -2686,8 +2728,9 @@ const commands = {
 			if (cmd.includes('cohost')) {
 				game.cohosts.push(targetUser.userid);
 				game.sendRoom(`${Chat.escapeHTML(targetUser.name)} has been added as a cohost by ${Chat.escapeHTML(user.name)}`, {declare: true});
-				// @ts-ignore
-				targetUser.send(`>view-mafia-${room.id}\n|init|html\n|${Chat.pages.mafia([room.id], targetUser)}`);
+				for (const conn of targetUser.connections) {
+					Chat.resolvePage(`view-mafia-${room.id}`, targetUser, conn);
+				}
 				this.modlog('MAFIACOHOST', targetUser, null, {noalts: true, noip: true});
 			} else {
 				const oldHostid = game.hostid;
@@ -2699,8 +2742,9 @@ const commands = {
 				game.host = Chat.escapeHTML(targetUser.name);
 				game.hostid = targetUser.userid;
 				game.played.push(targetUser.userid);
-				// @ts-ignore
-				targetUser.send(`>view-mafia-${room.id}\n|init|html\n${Chat.pages.mafia([room.id], targetUser)}`);
+				for (const conn of targetUser.connections) {
+					Chat.resolvePage(`view-mafia-${room.id}`, targetUser, conn);
+				}
 				game.sendRoom(`${Chat.escapeHTML(targetUser.name)} has been substituted as the new host, replacing ${oldHostid}.`, {declare: true});
 				this.modlog('MAFIASUBHOST', targetUser, `replacing ${oldHostid}`, {noalts: true, noip: true});
 			}
@@ -2709,7 +2753,7 @@ const commands = {
 		cohosthelp: [`/mafia cohost [user] - Adds the user as a cohost. Cohosts can talk during the game, as well as perform host actions.`],
 
 		uncohost: 'removecohost',
-		removecohost: function (target, room, user) {
+		removecohost(target, room, user) {
 			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
 			const game = /** @type {MafiaTracker} */ (room.game);
 			if (!this.canTalk()) return;
@@ -2728,7 +2772,7 @@ const commands = {
 		},
 
 		'!end': true,
-		end: function (target, room, user) {
+		end(target, room, user) {
 			let targetRoom /** @type {ChatRoom?} */ = (Rooms(target));
 			if (!targetRoom || targetRoom.type !== 'chat' || !targetRoom.users[user.userid]) {
 				if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
@@ -2741,7 +2785,7 @@ const commands = {
 			this.room = targetRoom;
 			this.modlog('MAFIAEND', null);
 		},
-		endhelp: [`/mafia end - End the current game of mafia. Requires host + % @ * # & ~`],
+		endhelp: [`/mafia end - End the current game of mafia. Requires host + % @ # & ~`],
 
 		'!data': true,
 		role: 'data',
@@ -2750,7 +2794,7 @@ const commands = {
 		theme: 'data',
 		term: 'data',
 		dt: 'data',
-		data: function (target, room, user, connection, cmd) {
+		data(target, room, user, connection, cmd) {
 			if (room && !room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (cmd === 'role' && !target && room) {
 				// Support /mafia role showing your current role if you're in a game
@@ -2815,7 +2859,7 @@ const commands = {
 		datahelp: [`/mafia data [alignment|role|modifier|theme|term] - Get information on a mafia alignment, role, modifier, theme, or term.`],
 
 		winfaction: 'win',
-		win: function (target, room, user, connection, cmd) {
+		win(target, room, user, connection, cmd) {
 			if (!room || !room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (room.id !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
 			if (cmd === 'winfaction' && (!room.game || room.game.gameid !== 'mafia')) return this.errorReply(`There is no game of mafia running in the room`);
@@ -2873,7 +2917,7 @@ const commands = {
 		],
 
 		unmvp: 'mvp',
-		mvp: function (target, room, user, connection, cmd) {
+		mvp(target, room, user, connection, cmd) {
 			if (!room || !room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (room.id !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
 			if (!this.can('mute', null, room)) return;
@@ -2914,7 +2958,7 @@ const commands = {
 		leaverlogs: 'leaderboard',
 		mvpladder: 'leaderboard',
 		lb: 'leaderboard',
-		leaderboard: function (target, room, user, connection, cmd) {
+		leaderboard(target, room, user, connection, cmd) {
 			if (!room || !room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (room.id !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
 			if (['hostlogs', 'playlogs', 'leaverlogs'].includes(cmd)) {
@@ -2929,11 +2973,11 @@ const commands = {
 		},
 		leaderboardhelp: [
 			`/mafia [leaderboard|mvpladder] - View the leaderboard or MVP ladder for the current or last month.`,
-			`/mafia [hostlost|playlogs|leaverlogs] - View the host, play, or leaver logs for the current or last month. Requires % @ * # & ~`,
+			`/mafia [hostlost|playlogs|leaverlogs] - View the host, play, or leaver logs for the current or last month. Requires % @ # & ~`,
 		],
 
 		unhostban: 'hostban',
-		hostban: function (target, room, user, connection, cmd) {
+		hostban(target, room, user, connection, cmd) {
 			if (!room || !room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (room.id !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
 
@@ -2963,12 +3007,12 @@ const commands = {
 			room.add(`${targetUser} was ${isUnban ? 'un' : ''}banned from hosting games${!isUnban ? ` for ${duration} days` : ''} by ${user.name}.`).update();
 		},
 		hostbanhelp: [
-			`/mafia hostban [user], [duration] - Ban a user from hosting games for [duration] days. Requires % @ * # & ~`,
-			`/mafia unhostban [user] - Unbans a user from hosting games. Requires % @ * # & ~`,
-			`/mafia hostbans - Checks current hostbans. Requires % @ * # & ~`,
+			`/mafia hostban [user], [duration] - Ban a user from hosting games for [duration] days. Requires % @ # & ~`,
+			`/mafia unhostban [user] - Unbans a user from hosting games. Requires % @ # & ~`,
+			`/mafia hostbans - Checks current hostbans. Requires % @ # & ~`,
 		],
 
-		hostbans: function (target, room) {
+		hostbans(target, room) {
 			if (!room || room.id !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
 			if (!this.can('mute', null, room)) return;
 			let buf = 'Hostbanned users:';
@@ -2978,7 +3022,7 @@ const commands = {
 			return this.sendReplyBox(buf);
 		},
 
-		disable: function (target, room, user) {
+		disable(target, room, user) {
 			if (!room || !this.can('gamemanagement', null, room)) return;
 			if (!room.mafiaEnabled) {
 				return this.errorReply("Mafia is already disabled.");
@@ -2993,7 +3037,7 @@ const commands = {
 		},
 		disablehelp: [`/mafia disable - Disables mafia in this room. Requires # & ~`],
 
-		enable: function (target, room, user) {
+		enable(target, room, user) {
 			if (!room || !this.can('gamemanagement', null, room)) return;
 			if (room.mafiaEnabled) {
 				return this.errorReply("Mafia is already enabled.");
@@ -3008,26 +3052,25 @@ const commands = {
 		},
 		enablehelp: [`/mafia enable - Enables mafia in this room. Requires # & ~`],
 	},
-	mafiahelp: function (target, room, user) {
+	mafiahelp(target, room, user) {
 		if (!this.runBroadcast()) return;
 		let buf = `<strong>Commands for the Mafia Plugin</strong><br/>Most commands are used through buttons in the game screen.<br/><br/>`;
 		buf += `<details><summary class="button">General Commands</summary>`;
 		buf += [
 			`<br/><strong>General Commands for the Mafia Plugin</strong>:<br/>`,
-			`/mafia host [user] - Create a game of Mafia with [user] as the host. Roomvoices can only host themselves. Requires + % @ * # & ~`,
-			`/mafia nexthost - Host the next user in the host queue. Only works in the Mafia Room. Requires + % @ * # & ~`,
-			`/mafia forcehost [user] - Bypass the host queue and host [user]. Only works in the Mafia Room. Requires % @ * # & ~`,
+			`/mafia host [user] - Create a game of Mafia with [user] as the host. Roomvoices can only host themselves. Requires + % @ # & ~`,
+			`/mafia nexthost - Host the next user in the host queue. Only works in the Mafia Room. Requires + % @ # & ~`,
+			`/mafia forcehost [user] - Bypass the host queue and host [user]. Only works in the Mafia Room. Requires % @ # & ~`,
 			`/mafia sub in - Request to sub into the game, or cancel a request to sub out.`,
 			`/mafia sub out - Request to sub out of the game, or cancel a request to sub in.`,
 			`/mafia spectate - Spectate the game of mafia.`,
-			`/mafia ideadiscards - Shows the discarded roles list for an IDEA module.`,
 			`/mafia lynches - Display the current lynch count, and whos lynching who.`,
 			`/mafia players - Display the current list of players, will highlight players.`,
 			`/mafia [rl|orl] - Display the role list or the original role list for the current game.`,
 			`/mafia data [alignment|role|modifier|theme|term] - Get information on a mafia alignment, role, modifier, theme, or term.`,
-			`/mafia subhost [user] - Substitues the user as the new game host. Requires % @ * # & ~`,
-			`/mafia cohost [user] - Adds the user as a cohost. Cohosts can talk during the game, as well as perform host actions. Requires % @ * # & ~`,
-			`/mafia uncohost [user] - Remove [user]'s cohost status. Requires % @ * # & ~`,
+			`/mafia subhost [user] - Substitues the user as the new game host. Requires % @ # & ~`,
+			`/mafia cohost [user] - Adds the user as a cohost. Cohosts can talk during the game, as well as perform host actions. Requires % @ # & ~`,
+			`/mafia uncohost [user] - Remove [user]'s cohost status. Requires % @ # & ~`,
 			`/mafia disable - Disables mafia in this room. Requires # & ~`,
 			`/mafia enable - Enables mafia in this room. Requires # & ~`,
 		].join('<br/>');
@@ -3041,64 +3084,72 @@ const commands = {
 			`/mafia deadline - View the deadline for the current game.`,
 			`/mafia sub in - Request to sub into the game, or cancel a request to sub out.`,
 			`/mafia sub out - Request to sub out of the game, or cancel a request to sub in.`,
-			`/mafia ideapick [selection], [role] - Selects a role from an IDEA module`,
 		].join('<br/>');
 		buf += `</details><details><summary class="button">Host Commands</summary>`;
 		buf += [
 			`<br/><strong>Commands for game hosts and Cohosts to use</strong>:<br/>`,
 			`/mafia playercap [cap|none]- Limit the number of players able to join the game. Player cap cannot be more than 20 or less than 2. Requires: host % @ # & ~`,
-			`/mafia close - Closes signups for the current game. Requires: host % @ * # & ~`,
-			`/mafia closedsetup [on|off] - Sets if the game is a closed setup. Closed setups don't show the role list to players. Requires host % @ * # & ~`,
-			`/mafia reveal [on|off] - Sets if roles reveal on death or not. Requires host % @ * # & ~`,
-			`/mafia selflynch [on|hammer|off] - Allows players to self lynch themselves either at hammer or anytime. Requires host % @ * # & ~`,
+			`/mafia close - Closes signups for the current game. Requires: host % @ # & ~`,
+			`/mafia closedsetup [on|off] - Sets if the game is a closed setup. Closed setups don't show the role list to players. Requires host % @ # & ~`,
+			`/mafia reveal [on|off] - Sets if roles reveal on death or not. Requires host % @ # & ~`,
+			`/mafia selflynch [on|hammer|off] - Allows players to self lynch themselves either at hammer or anytime. Requires host % @ # & ~`,
 			`/mafia [enablenl|disablenl] - Allows or disallows players abstain from lynching. Requires host % @ # & ~`,
 			`/mafia setroles [comma seperated roles] - Set the roles for a game of mafia. You need to provide one role per player. Requires host % @ # & ~`,
 			`/mafia forcesetroles [comma seperated roles] - Forcibly set the roles for a game of mafia. No role PM information or alignment will be set. Requires host % @ # & ~`,
-			`/mafia idea [idea] - starts an IDEA module. Requires + % @ * # & ~, voices can only start for themselves`,
-			`/mafia ideareroll - rerolls the current IDEA module. Requires host % @ * # & ~`,
-			`/mafia customidea choices, picks (new line here, shift+enter)`,
-			`(comma or newline separated rolelist) - Starts an IDEA module with custom roles. Requires % @ # & ~`,
-			`/mafia start - Start the game of mafia. Signups must be closed. Requires host % @ * # & ~`,
-			`/mafia day - Move to the next game day. Requires host % @ * # & ~`,
-			`/mafia night - Move to the next game night. Requires host % @ * # & ~`,
-			`/mafia extend (minutes) - Return to the previous game day. If (minutes) is provided, set the deadline for (minutes) minutes. Requires host % @ * # & ~`,
-			`/mafia kill [player] - Kill a player, eliminating them from the game. Requires host % @ * # & ~`,
-			`/mafia treestump [player] - Kills a player, but allows them to talk during the day still. Requires host % @ * # & ~`,
-			`/mafia spirit [player] - Kills a player, but allows them to vote on the lynch still. Requires host % @ * # & ~`,
-			`/mafia spiritstump [player] - Kills a player, but allows them to talk during the day, and vote on the lynch. Requires host % @ * # & ~`,
-			`/mafia kick [player] - Kicks a player from the game without revealing their role. Requires host % @ * # & ~`,
-			`/mafia revive [player] - Revive a player who died or add a new player to the game. Requires host % @ * # & ~`,
+			`/mafia start - Start the game of mafia. Signups must be closed. Requires host % @ # & ~`,
+			`/mafia day - Move to the next game day. Requires host % @ # & ~`,
+			`/mafia night - Move to the next game night. Requires host % @ # & ~`,
+			`/mafia extend (minutes) - Return to the previous game day. If (minutes) is provided, set the deadline for (minutes) minutes. Requires host % @ # & ~`,
+			`/mafia kill [player] - Kill a player, eliminating them from the game. Requires host % @ # & ~`,
+			`/mafia treestump [player] - Kills a player, but allows them to talk during the day still. Requires host % @ # & ~`,
+			`/mafia spirit [player] - Kills a player, but allows them to vote on the lynch still. Requires host % @ # & ~`,
+			`/mafia spiritstump [player] - Kills a player, but allows them to talk during the day, and vote on the lynch. Requires host % @ # & ~`,
+			`/mafia kick [player] - Kicks a player from the game without revealing their role. Requires host % @ # & ~`,
+			`/mafia revive [player] - Revive a player who died or add a new player to the game. Requires host % @ # & ~`,
 			`/mafia deadline [minutes|off] - Sets or removes the deadline for the game. Cannot be more than 20 minutes.`,
-			`/mafia sub next, [player] - Forcibly sub [player] out of the game. Requires host % @ * # & ~`,
-			`/mafia sub remove, [user] - Forcibly remove [user] from the sublist. Requres host % @ * # & ~`,
-			`/mafia sub unrequest, [player] - Remove's a player's request to sub out of the game. Requires host % @ * # & ~`,
-			`/mafia sub [player], [user] - Forcibly sub [player] for [user]. Requires host % @ * # & ~`,
-			`/mafia autosub [yes|no] - Sets if players will automatically sub out if a user is on the sublist. Defaults to yes. Requires host % @ * # & ~`,
-			`/mafia [love|hate] [player] - Makes it take 1 more (love) or less (hate) lynch to hammer [player]. Requires host % @ * # & ~`,
-			`/mafia [unlove|unhate] [player] - Removes loved or hated status from [player]. Requires host % @ * # & ~`,
-			`/mafia [mayor|voteless] [player] - Makes [player]'s' lynch worth 2 votes (mayor) or makes [player]'s lynch worth 0 votes (voteless). Requires host % @ * # & ~`,
-			`/mafia [unmayor|unvoteless] [player] - Removes mayor or voteless status from [player]. Requires host % @ * # & ~`,
+			`/mafia sub next, [player] - Forcibly sub [player] out of the game. Requires host % @ # & ~`,
+			`/mafia sub remove, [user] - Forcibly remove [user] from the sublist. Requres host % @ # & ~`,
+			`/mafia sub unrequest, [player] - Remove's a player's request to sub out of the game. Requires host % @ # & ~`,
+			`/mafia sub [player], [user] - Forcibly sub [player] for [user]. Requires host % @ # & ~`,
+			`/mafia autosub [yes|no] - Sets if players will automatically sub out if a user is on the sublist. Defaults to yes. Requires host % @ # & ~`,
+			`/mafia [love|hate] [player] - Makes it take 1 more (love) or less (hate) lynch to hammer [player]. Requires host % @ # & ~`,
+			`/mafia [unlove|unhate] [player] - Removes loved or hated status from [player]. Requires host % @ # & ~`,
+			`/mafia [mayor|voteless] [player] - Makes [player]'s' lynch worth 2 votes (mayor) or makes [player]'s lynch worth 0 votes (voteless). Requires host % @ # & ~`,
+			`/mafia [unmayor|unvoteless] [player] - Removes mayor or voteless status from [player]. Requires host % @ # & ~`,
 			`/mafia hammer [hammer] - sets the hammer count to [hammer] and resets lynches`,
 			`/mafia shifthammer [hammer] - sets the hammer count to [hammer] without resetting lynches`,
 			`/mafia resethammer - sets the hammer to the default, resetting lynches`,
 			`/mafia playerroles - View all the player's roles in chat. Requires host`,
-			`/mafia end - End the current game of mafia. Requires host % @ * # & ~`,
+			`/mafia end - End the current game of mafia. Requires host % @ # & ~`,
 		].join('<br/>');
+		buf += `</details><details><summary class="button">IDEA Module Commands</summary>`;
+		buf += [
+			`<br/><strong>Commands for using IDEA modules</strong><br/>`,
+			`/mafia idea [idea] - starts the IDEA module [idea]. Requires + % @ # & ~, voices can only start for themselves`,
+			`/mafia ideareroll - rerolls the IDEA module. Requires host % @ # & ~`,
+			`/mafia ideapick [selection], [role] - selects a role`,
+			`/mafia ideadiscards - shows the discarded roles`,
+			`/mafia ideadiscards off - hides discards from the players. Requires host % @ # & ~`,
+			`/mafia ideadiscards on - shows discards to the players. Requires host % @ # & ~`,
+			`/mafia customidea choices, picks (new line here, shift+enter)`,
+			`(comma or newline separated rolelist) - Starts an IDEA module with custom roles. Requires % @ # & ~`,
+		].join('<br/>');
+		buf += `</details>`;
 		buf += `</details><details><summary class="button">Mafia Room Specific Commands</summary>`;
 		buf += [
 			`<br/><strong>Commands that are only useable in the Mafia Room</strong>:<br/>`,
-			`/mafia queue add, [user] - Adds the user to the host queue. Requires % @ * # & ~.`,
-			`/mafia queue remove, [user] - Removes the user from the queue. You can remove yourself regardless of rank. Requires % @ * # & ~.`,
+			`/mafia queue add, [user] - Adds the user to the host queue. Requires % @ # & ~.`,
+			`/mafia queue remove, [user] - Removes the user from the queue. You can remove yourself regardless of rank. Requires % @ # & ~.`,
 			`/mafia queue - Shows the list of users who are in queue to host.`,
 			`/mafia win (points) [user1], [user2], [user3], ... - Award the specified users points to the mafia leaderboard for this month. The amount of points can be negative to take points. Defaults to 10 points.`,
-			`/mafia winfaction (points), [faction] - Award the specified points to all the players in the given faction. Requires % @ * # & ~`,
+			`/mafia winfaction (points), [faction] - Award the specified points to all the players in the given faction. Requires % @ # & ~`,
 			`/mafia mvp [user1], [user2], ... - Gives a MVP point and 10 leaderboard points to the users specified.`,
 			`/mafia unmvp [user1], [user2], ... - Takes away a MVP point and 10 leaderboard points from the users specified.`,
 			`/mafia [leaderboard|mvpladder] - View the leaderboard or MVP ladder for the current or last month.`,
-			`/mafia [hostlost|playlogs] - View the host logs or play logs for the current or last month. Requires % @ * # & ~`,
-			`/mafia hostban [user], [duration] - Ban a user from hosting games for [duration] days. Requires % @ * # & ~`,
-			`/mafia unhostban [user] - Unbans a user from hosting games. Requires % @ * # & ~`,
-			`/mafia hostbans - Checks current hostbans. Requires % @ * # & ~`,
+			`/mafia [hostlost|playlogs] - View the host logs or play logs for the current or last month. Requires % @ # & ~`,
+			`/mafia hostban [user], [duration] - Ban a user from hosting games for [duration] days. Requires % @ # & ~`,
+			`/mafia unhostban [user] - Unbans a user from hosting games. Requires % @ # & ~`,
+			`/mafia hostbans - Checks current hostbans. Requires % @ # & ~`,
 		].join('<br/>');
 		buf += `</details>`;
 

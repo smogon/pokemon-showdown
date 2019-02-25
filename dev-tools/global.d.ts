@@ -82,4 +82,5 @@ declare global {
 	// chat
 	const Chat: typeof ChatType
 	const CommandContext: typeof ChatType.CommandContext
+	const PageContext: typeof ChatType.PageContext
 }

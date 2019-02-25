@@ -4,21 +4,21 @@
 let BattleMovedex = {
 	bind: {
 		inherit: true,
-		onBeforeMove: function () {},
+		onBeforeMove() {},
 	},
 	clamp: {
 		inherit: true,
-		onBeforeMove: function () {},
+		onBeforeMove() {},
 	},
 	firespin: {
 		inherit: true,
-		onBeforeMove: function () {},
+		onBeforeMove() {},
 	},
 	highjumpkick: {
 		inherit: true,
 		desc: "If this attack misses the target, the user takes 1 HP of damage.",
 		shortDesc: "User takes 1 HP damage it would have dealt if miss.",
-		onMoveFail: function (target, source, move) {
+		onMoveFail(target, source, move) {
 			if (!target.types.includes('Ghost')) {
 				this.directDamage(1, source);
 			}
@@ -28,19 +28,19 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "If this attack misses the target, the user 1HP of damage.",
 		shortDesc: "User takes 1 HP damage if miss.",
-		onMoveFail: function (target, source, move) {
+		onMoveFail(target, source, move) {
 			this.damage(1, source);
 		},
 	},
 	leechseed: {
 		inherit: true,
-		onHit: function () {},
+		onHit() {},
 		effect: {
-			onStart: function (target) {
+			onStart(target) {
 				this.add('-start', target, 'move: Leech Seed');
 			},
 			onAfterMoveSelfPriority: 1,
-			onAfterMoveSelf: function (pokemon) {
+			onAfterMoveSelf(pokemon) {
 				let leecher = pokemon.side.foe.active[pokemon.volatiles['leechseed'].sourcePosition];
 				if (!leecher || leecher.fainted || leecher.hp <= 0) {
 					this.debug('Nothing to leech into');
@@ -60,27 +60,27 @@ let BattleMovedex = {
 		effect: {
 			// Rage lock
 			duration: 255,
-			onStart: function (target, source, effect) {
+			onStart(target, source, effect) {
 				this.effectData.move = 'rage';
 			},
 			onLockMove: 'rage',
-			onTryHit: function (target, source, move) {
+			onTryHit(target, source, move) {
 				if (target.boosts.atk < 6 && move.id === 'disable') {
 					this.boost({atk: 1});
 				}
 			},
-			onHit: function (target, source, move) {
+			onHit(target, source, move) {
 				if (target.boosts.atk < 6 && move.category !== 'Status') {
 					this.boost({atk: 1});
 				}
 			},
-			onMoveFail: function () {},
+			onMoveFail() {},
 		},
 	},
 	recover: {
 		inherit: true,
 		heal: null,
-		onHit: function (target) {
+		onHit(target) {
 			if (target.hp === target.maxhp) {
 				return false;
 			}
@@ -89,7 +89,7 @@ let BattleMovedex = {
 	},
 	rest: {
 		inherit: true,
-		onHit: function (target) {
+		onHit(target) {
 			// Fails if the difference between
 			// max HP and current HP is 0, 255, or 511
 			if (target.hp >= target.maxhp) return false;
@@ -103,7 +103,7 @@ let BattleMovedex = {
 	softboiled: {
 		inherit: true,
 		heal: null,
-		onHit: function (target) {
+		onHit(target) {
 			// Fail when health is 255 or 511 less than max
 			if (target.hp === target.maxhp) {
 				return false;
@@ -114,13 +114,13 @@ let BattleMovedex = {
 	substitute: {
 		inherit: true,
 		effect: {
-			onStart: function (target) {
+			onStart(target) {
 				this.add('-start', target, 'Substitute');
 				this.effectData.hp = Math.floor(target.maxhp / 4);
 				delete target.volatiles['partiallytrapped'];
 			},
 			onTryHitPriority: -1,
-			onTryHit: function (target, source, move) {
+			onTryHit(target, source, move) {
 				if (target === source) {
 					this.debug('sub bypass: self hit');
 					return;
@@ -168,7 +168,7 @@ let BattleMovedex = {
 				}
 				return 0;
 			},
-			onEnd: function (target) {
+			onEnd(target) {
 				this.add('-end', target, 'Substitute');
 			},
 		},
@@ -178,7 +178,7 @@ let BattleMovedex = {
 	},
 	wrap: {
 		inherit: true,
-		onBeforeMove: function () {},
+		onBeforeMove() {},
 	},
 };
 

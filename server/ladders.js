@@ -459,12 +459,12 @@ class Ladder extends LadderStore {
 
 		const roomid = this.needsToMove(user);
 		if (roomid) {
-			connection.popup(`Error: You need to make a move in <<${roomid}>> before you can look for another battle.`);
+			connection.popup(`Error: You need to make a move in <<${roomid}>> before you can look for another battle.\n\n(This restriction doesn't apply in the first five turns of a battle.)`);
 			return;
 		}
 
-		if (roomid === null && Date.now() < user.lastDecision + 10 * SECONDS) {
-			connection.popup(`Error: You need to wait 7 seconds after making a move before you can look for another battle.`);
+		if (roomid === null && Date.now() < user.lastDecision + 3 * SECONDS) {
+			connection.popup(`Error: You need to wait until after making a move before you can look for another battle.\n\n(This restriction doesn't apply in the first five turns of a battle.)`);
 			return;
 		}
 
@@ -488,6 +488,11 @@ class Ladder extends LadderStore {
 			const room = Rooms(roomid);
 			if (!room || !room.battle || !room.battle.players[user.userid]) continue;
 			const battle = /** @type {RoomBattle} */ (room.battle);
+			if (battle.requestCount <= 16) {
+				// it's fine as long as it's before turn 5
+				// to be safe, we count off 8 requests for Team Preview, U-turn, and faints
+				continue;
+			}
 			if (Dex.getFormat(battle.format).allowMultisearch) {
 				continue;
 			}

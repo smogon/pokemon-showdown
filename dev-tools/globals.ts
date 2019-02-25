@@ -12,19 +12,19 @@ type NameFilter = import('./../server/chat').NameFilter
 interface AnyObject {[k: string]: any}
 type DexTable<T> = {[key: string]: T}
 
-let Config: {[k: string]: any} = require('../config/config');
+declare let Config: {[k: string]: any};
 
-let Monitor: typeof import("../server/monitor") = require('../server/monitor');
+declare let Monitor: typeof import("../server/monitor");
 
-let LoginServer: typeof import('../server/loginserver') = require('../server/loginserver');
+declare let LoginServer: typeof import('../server/loginserver');
 
 // type RoomBattle = AnyObject;
 
-let Verifier: typeof import('../server/verifier') = require('../server/verifier');
-let Dnsbl: typeof import('../server/dnsbl') = require('../server/dnsbl');
-let Sockets: typeof import('../server/sockets') = require('../server/sockets');
-// let TeamValidator: typeof import('../sim/team-validator') = require('../sim/team-validator');
-let TeamValidatorAsync: typeof import('../server/team-validator-async') = require('../server/team-validator-async');
+declare let Verifier: typeof import('../server/verifier');
+declare let Dnsbl: typeof import('../server/dnsbl');
+declare let Sockets: typeof import('../server/sockets');
+// let TeamValidator: typeof import('../sim/team-validator');
+declare let TeamValidatorAsync: typeof import('../server/team-validator-async');
 
 type GenderName = 'M' | 'F' | 'N' | '';
 type StatName = 'hp' | 'atk' | 'def' | 'spa' | 'spd' | 'spe';
@@ -117,13 +117,14 @@ type PokemonSources = {
 type EventInfo = {
 	generation: number,
 	level?: number,
-	shiny?: true | 1,
+	shiny?: boolean | 1,
 	gender?: GenderName,
 	nature?: string,
 	ivs?: SparseStatsTable,
 	perfectIVs?: number,
 	isHidden?: boolean,
 	abilities?: string[],
+	maxEggMoves?: number,
 	moves?: string[],
 	pokeball?: string,
 	from?: string,
@@ -185,6 +186,7 @@ interface EventMethods {
 	onAnyDamage?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect) => void
 	onAnyBasePower?: (this: Battle, basePower: number, source: Pokemon, target: Pokemon, move: ActiveMove) => void
 	onAnySetWeather?: (this: Battle, target: Pokemon, source: Pokemon, weather: PureEffect) => void
+	onAnyTerrainStart?: (this: Battle) => void
 	onAnyModifyDamage?: (this: Battle, damage: number, source: Pokemon, target: Pokemon, move: ActiveMove) => void
 	onAnyRedirectTarget?: (this: Battle, target: Pokemon, source: Pokemon, source2: Pokemon, move: ActiveMove) => void
 	onAnyAccuracy?: (this: Battle, accuracy: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void
@@ -558,6 +560,7 @@ type TemplateAbility = {0: string, 1?: string, H?: string, S?: string}
 interface TemplateData {
 	abilities: TemplateAbility
 	baseStats: StatsTable
+	canHatch?: boolean
 	color: string
 	eggGroups: string[]
 	heightm: number
@@ -569,7 +572,10 @@ interface TemplateData {
 	baseSpecies?: string
 	evoLevel?: number
 	evoMove?: string
+	evoCondition?: string
+	evoItem?: string
 	evos?: string[]
+	evoType?: 'trade' | 'stone' | 'levelMove' | 'levelExtra' | 'levelFriendship' | 'levelHold'
 	forme?: string
 	formeLetter?: string
 	gender?: GenderName
@@ -588,6 +594,7 @@ interface TemplateFormatsData {
 	battleOnly?: boolean
 	comboMoves?: string[]
 	doublesTier?: string
+	encounters?: EventInfo[]
 	essentialMove?: string
 	eventOnly?: boolean
 	eventPokemon?: EventInfo[]

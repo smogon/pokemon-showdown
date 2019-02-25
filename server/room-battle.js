@@ -244,7 +244,7 @@ class BattleTimer {
 				addPerTurn -= TICK_TIME;
 			}
 			// after turn 200ish: 10s/turn -> 7s/turn
-			if (this.battle.requestCount > 400 && this.battle.requestCount % 2) {
+			if (this.battle.requestCount > 400 && Math.floor(this.battle.requestCount / 2) % 2) {
 				addPerTurn = 0;
 			}
 		}
@@ -1026,7 +1026,7 @@ const StreamProcessManager = require('../lib/process-manager').StreamProcessMana
 
 const PM = new StreamProcessManager(module, () => {
 	const BattleStream = require('../sim/battle-stream').BattleStream;
-	return new BattleStream();
+	return new BattleStream({keepAlive: true});
 });
 
 if (!PM.isParentProcess) {

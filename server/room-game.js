@@ -251,6 +251,15 @@ class RoomGame {
 	onChatMessage(message, user) {
 		return false;
 	}
+
+	/**
+	 * Called for every message a user sends while this game is active.
+	 * Unlike onChatMessage, this function runs after the message has been added to the room's log.
+	 * Do not try to use this to block messages, use onChatMessage for that.
+	 * @param {string} message
+	 * @param {User} user
+	 */
+	onLogMessage(message, user) {}
 }
 
 // these exports are traditionally attached to rooms.js

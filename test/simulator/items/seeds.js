@@ -11,14 +11,24 @@ describe('Seeds', function () {
 	});
 
 	it('should activate even in a double-switch-in', function () {
-		battle = common.createBattle();
-		const p1 = battle.join('p1', 'Guest 1', 1, [
-			{species: 'tapukoko', ability: 'electricsurge', item: 'grassyseed', moves: ['protect']},
+		battle = common.createBattle([
+			[{species: 'Tapu Koko', ability: 'electricsurge', item: 'grassyseed', moves: ['protect']}],
+			[{species: 'Tapu Bulu', ability: 'grassysurge', item: 'electricseed', moves: ['protect']}],
 		]);
-		const p2 = battle.join('p2', 'Guest 2', 1, [
-			{species: 'tapubulu', ability: 'grassysurge', item: 'electricseed', moves: ['protect']},
+		assert.false(battle.p1.active[0].item);
+		assert.false(battle.p2.active[0].item);
+	});
+
+	it('should not activate when Magic Room ends', function () {
+		battle = common.createBattle([
+			[
+				{species: 'Tapu Koko', ability: 'electricsurge', item: 'terrainextender', moves: ['protect']},
+				{species: 'Hawlucha', ability: 'unburden', item: 'electricseed', moves: ['protect']},
+			],
+			[{species: 'Alakazam', ability: 'magicguard', moves: ['magicroom']}],
 		]);
-		assert.false(p1.active[0].item);
-		assert.false(p2.active[0].item);
+		battle.makeChoices('move protect', 'move magicroom');
+		battle.makeChoices('switch 2', 'move magicroom');
+		assert.strictEqual(battle.p1.active[0].item, 'electricseed');
 	});
 });

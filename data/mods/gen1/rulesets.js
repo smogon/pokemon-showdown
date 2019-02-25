@@ -5,7 +5,7 @@ let BattleFormats = {
 	pokemon: {
 		effectType: 'ValidatorRule',
 		name: 'Pokemon',
-		onValidateSet: function (set, format) {
+		onValidateSet(set, format) {
 			let template = this.getTemplate(set.species);
 			let problems = [];
 			if (set.species === set.name) delete set.name;
@@ -61,7 +61,7 @@ let BattleFormats = {
 			'Jolteon + Tackle + Growl', 'Jolteon + Focus Energy + Thunder Shock',
 			'Flareon + Tackle + Growl', 'Flareon + Focus Energy + Ember',
 		],
-		onValidateSet: function (set) {
+		onValidateSet(set) {
 			// limit one of each move in Standard
 			let moves = [];
 			if (set.moves) {

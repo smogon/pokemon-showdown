@@ -206,15 +206,13 @@ class Side {
 			if (!status.onRestart) return false;
 			return this.battle.singleEvent('Restart', status, this.sideConditions[status.id], this, source, sourceEffect);
 		}
-		this.sideConditions[status.id] = {id: status.id};
-		this.sideConditions[status.id].target = this;
-		if (source) {
-			this.sideConditions[status.id].source = source;
-			this.sideConditions[status.id].sourcePosition = source.position;
-		}
-		if (status.duration) {
-			this.sideConditions[status.id].duration = status.duration;
-		}
+		this.sideConditions[status.id] = {
+			id: status.id,
+			target: this,
+			source: source,
+			sourcePosition: source.position,
+			duration: status.duration,
+		};
 		if (status.durationCallback) {
 			this.sideConditions[status.id].duration = status.durationCallback.call(this.battle, this.active[0], source, sourceEffect);
 		}
@@ -296,7 +294,6 @@ class Side {
 	 * @param {string | number} [moveText]
 	 * @param {number} [targetLoc]
 	 * @param {boolean | string} [megaOrZ]
-	 * @return {boolean | Side}
 	 */
 	chooseMove(moveText, targetLoc, megaOrZ) {
 		if (this.currentRequest !== 'move') {
@@ -304,7 +301,7 @@ class Side {
 		}
 		const index = this.getChoiceIndex();
 		if (index >= this.active.length) {
-			return this.emitChoiceError(`Can't move: You do not have a Pokémon in slot ${index + 1}`);
+			return this.emitChoiceError(`Can't move: You sent more choices than unfainted Pokémon.`);
 		}
 		const autoChoose = !moveText;
 		/**@type {Pokemon} */
@@ -469,13 +466,11 @@ class Side {
 		if (ultra) this.choice.ultra = true;
 		if (zMove) this.choice.zMove = true;
 
-		if (this.battle.LEGACY_API_DO_NOT_USE && !this.battle.checkActions()) return this;
 		return true;
 	}
 
 	/**
 	 * @param {string} [slotText]
-	 * @return {boolean | Side}
 	 */
 	chooseSwitch(slotText) {
 		if (this.currentRequest !== 'move' && this.currentRequest !== 'switch') {
@@ -483,7 +478,10 @@ class Side {
 		}
 		const index = this.getChoiceIndex();
 		if (index >= this.active.length) {
-			return this.emitChoiceError(`Can't switch: You do not have a Pokémon in slot ${index + 1}`);
+			if (this.currentRequest === 'switch') {
+				return this.emitChoiceError(`Can't switch: You sent more switches than Pokémon that need to switch`);
+			}
+			return this.emitChoiceError(`Can't switch: You sent more choices than unfainted Pokémon`);
 		}
 		const pokemon = this.active[index];
 		const autoChoose = !slotText;
@@ -547,13 +545,11 @@ class Side {
 			target: targetPokemon,
 		});
 
-		if (this.battle.LEGACY_API_DO_NOT_USE && !this.battle.checkActions()) return this;
 		return true;
 	}
 
 	/**
 	 * @param {string} [data]
-	 * @return {boolean | Side}
 	 */
 	chooseTeam(data) {
 		const autoFill = !data;
@@ -601,13 +597,9 @@ class Side {
 			});
 		}
 
-		if (this.battle.LEGACY_API_DO_NOT_USE && !this.battle.checkActions()) return this;
 		return true;
 	}
 
-	/**
-	 * @return {boolean | Side}
-	 */
 	chooseShift() {
 		const index = this.getChoiceIndex();
 		if (index >= this.active.length) {
@@ -627,7 +619,6 @@ class Side {
 			pokemon: pokemon,
 		});
 
-		if (this.battle.LEGACY_API_DO_NOT_USE && !this.battle.checkActions()) return this;
 		return true;
 	}
 
@@ -668,6 +659,10 @@ class Side {
 		this.clearChoice();
 
 		const choiceStrings = (input.startsWith('team ') ? [input] : input.split(','));
+
+		if (choiceStrings.length > this.active.length) {
+			this.emitChoiceError(`Can't make choices: You sent choices for ${choiceStrings.length} Pokémon, but this is a ${this.battle.gameType} game!`);
+		}
 
 		for (let choiceString of choiceStrings) {
 			let choiceType = '';
@@ -782,26 +777,7 @@ class Side {
 		this.choice.actions.push({
 			choice: 'pass',
 		});
-		if (this.battle.LEGACY_API_DO_NOT_USE && !this.battle.checkActions()) return this;
 		return true;
-	}
-
-	/**
-	 * @return {boolean | Side}
-	 */
-	chooseDefault() {
-		if (!this.battle.LEGACY_API_DO_NOT_USE) throw new Error(`This is a legacy API, it's called autoChoose now`);
-		if (this.isChoiceDone()) {
-			throw new Error(`You've already chosen actions for ${this.id}.`);
-		}
-		if (this.currentRequest === 'teampreview') {
-			this.chooseTeam();
-		} else if (this.currentRequest === 'switch') {
-			while (this.chooseSwitch() !== true && !this.isChoiceDone());
-		} else if (this.currentRequest === 'move') {
-			while (this.chooseMove() !== true && !this.isChoiceDone());
-		}
-		return this;
 	}
 
 	/**

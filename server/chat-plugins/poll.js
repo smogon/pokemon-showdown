@@ -220,7 +220,7 @@ const commands = {
 	poll: {
 		htmlcreate: 'new',
 		create: 'new',
-		new: function (target, room, user, connection, cmd, message) {
+		new(target, room, user, connection, cmd, message) {
 			if (!target) return this.parse('/help poll new');
 			target = target.trim();
 			if (target.length > 1024) return this.errorReply("Poll too long.");
@@ -265,9 +265,9 @@ const commands = {
 			this.modlog('POLL');
 			return this.privateModAction(`(A poll was started by ${user.name}.)`);
 		},
-		newhelp: [`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ * # & ~`],
+		newhelp: [`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # & ~`],
 
-		vote: function (target, room, user) {
+		vote(target, room, user) {
 			if (!room.poll) return this.errorReply("There is no poll running in this room.");
 			if (!target) return this.parse('/help poll vote');
 
@@ -285,7 +285,7 @@ const commands = {
 		},
 		votehelp: [`/poll vote [number] - Votes for option [number].`],
 
-		timer: function (target, room, user) {
+		timer(target, room, user) {
 			if (!room.poll) return this.errorReply("There is no poll running in this room.");
 
 			if (target) {
@@ -318,11 +318,11 @@ const commands = {
 			}
 		},
 		timerhelp: [
-			`/poll timer [minutes] - Sets the poll to automatically end after [minutes] minutes. Requires: % @ * # & ~`,
-			`/poll timer clear - Clears the poll's timer. Requires: % @ * # & ~`,
+			`/poll timer [minutes] - Sets the poll to automatically end after [minutes] minutes. Requires: % @ # & ~`,
+			`/poll timer clear - Clears the poll's timer. Requires: % @ # & ~`,
 		],
 
-		results: function (target, room, user) {
+		results(target, room, user) {
 			if (!room.poll) return this.errorReply("There is no poll running in this room.");
 
 			return room.poll.blankvote(user);
@@ -331,7 +331,7 @@ const commands = {
 
 		close: 'end',
 		stop: 'end',
-		end: function (target, room, user) {
+		end(target, room, user) {
 			if (!this.can('minigame', null, room)) return false;
 			if (!this.canTalk()) return;
 			if (!room.poll) return this.errorReply("There is no poll running in this room.");
@@ -342,10 +342,10 @@ const commands = {
 			this.modlog('POLL END');
 			return this.privateModAction(`(The poll was ended by ${user.name}.)`);
 		},
-		endhelp: [`/poll end - Ends a poll and displays the results. Requires: % @ * # & ~`],
+		endhelp: [`/poll end - Ends a poll and displays the results. Requires: % @ # & ~`],
 
 		show: 'display',
-		display: function (target, room, user, connection) {
+		display(target, room, user, connection) {
 			if (!room.poll) return this.errorReply("There is no poll running in this room.");
 			if (!this.runBroadcast()) return;
 			room.update();
@@ -358,20 +358,20 @@ const commands = {
 		},
 		displayhelp: [`/poll display - Displays the poll`],
 
-		'': function (target, room, user) {
+		''(target, room, user) {
 			this.parse('/help poll');
 		},
 	},
 	pollhelp: [
 		`/poll allows rooms to run their own polls. These polls are limited to one poll at a time per room.`,
 		`Accepts the following commands:`,
-		`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ * # & ~`,
+		`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # & ~`,
 		`/poll htmlcreate [question], [option1], [option2], [...] - Creates a poll, with HTML allowed in the question and options. Requires: # & ~`,
 		`/poll vote [number] - Votes for option [number].`,
-		`/poll timer [minutes] - Sets the poll to automatically end after [minutes]. Requires: % @ * # & ~`,
+		`/poll timer [minutes] - Sets the poll to automatically end after [minutes]. Requires: % @ # & ~`,
 		`/poll results - Shows the results of the poll without voting. NOTE: you can't go back and vote after using this.`,
 		`/poll display - Displays the poll`,
-		`/poll end - Ends a poll and displays the results. Requires: % @ * # & ~`,
+		`/poll end - Ends a poll and displays the results. Requires: % @ # & ~`,
 	],
 };
 

@@ -130,6 +130,8 @@ class ModdedDex {
 		this.abilityCache = new Map();
 		/** @type {Map<string, TypeInfo>} */
 		this.typeCache = new Map();
+		/** @type {Map<string, Effect | Move>} */
+		this.effectCache = new Map();
 
 		if (!isOriginal) {
 			const original = dexes['base'].mod(mod).includeData();
@@ -458,46 +460,50 @@ class ModdedDex {
 		moveCopy.hit = 0;
 		return moveCopy;
 	}
+
 	/**
-	 * While this function can technically return any kind of effect at
-	 * all, that's not a feature TypeScript needs to know about.
-	 *
-	 * @param {?string | Effect} [name]
-	 * @return {PureEffect}
-	 */
+	* While this function can technically return any kind of effect at
+	* all, that's not a feature TypeScript needs to know about.
+	*
+	* @param {string? | Effect} [name]
+	* @return {PureEffect}
+	*/
 	getEffect(name) {
 		if (!name) {
 			return nullEffect;
 		}
 		if (typeof name !== 'string') {
-			// @ts-ignore
-			return name;
+			return /** @type {PureEffect} */ (name);
 		}
-		if (name.startsWith('move:')) {
-			// @ts-ignore
-			return this.getMove(name.slice(5));
-		} else if (name.startsWith('item:')) {
-			// @ts-ignore
-			return this.getItem(name.slice(5));
-		} else if (name.startsWith('ability:')) {
-			// @ts-ignore
-			return this.getAbility(name.slice(8));
-		}
+
 		let id = toId(name);
-		let effect;
-		if (this.data.Statuses.hasOwnProperty(id)) {
-			effect = new Data.PureEffect({name}, this.data.Statuses[id]);
-		} else if (this.data.Movedex.hasOwnProperty(id) && this.data.Movedex[id].effect) {
-			name = this.data.Movedex[id].name || name;
-			effect = new Data.PureEffect({name}, this.data.Movedex[id].effect);
-		} else if (this.data.Abilities.hasOwnProperty(id) && this.data.Abilities[id].effect) {
-			name = this.data.Abilities[id].name || name;
-			effect = new Data.PureEffect({name}, this.data.Abilities[id].effect);
-		} else if (this.data.Items.hasOwnProperty(id) && this.data.Items[id].effect) {
-			name = this.data.Items[id].name || name;
-			effect = new Data.PureEffect({name}, this.data.Items[id].effect);
-		} else if (this.data.Formats.hasOwnProperty(id)) {
+		let effect = this.effectCache.get(id);
+		if (effect) {
+			return /** @type {PureEffect} */ (effect);
+		}
+
+		if (name.startsWith('move:')) {
+			effect = this.getMove(name.slice(5));
+		} else if (name.startsWith('item:')) {
+			effect = this.getItem(name.slice(5));
+		} else if (name.startsWith('ability:')) {
+			effect = this.getAbility(name.slice(8));
+		}
+		if (effect) {
+			this.effectCache.set(id, effect);
+			// @ts-ignore
+			return effect;
+		}
+
+		let found;
+		if (this.data.Formats.hasOwnProperty(id)) {
 			effect = new Data.Format({name}, this.data.Formats[id]);
+		} else if (this.data.Statuses.hasOwnProperty(id)) {
+			effect = new Data.PureEffect({name}, this.data.Statuses[id]);
+		} else if ((this.data.Movedex.hasOwnProperty(id) && (found = this.data.Movedex[id]).effect) ||
+							 (this.data.Abilities.hasOwnProperty(id) && (found = this.data.Abilities[id]).effect) ||
+							 (this.data.Items.hasOwnProperty(id) && (found = this.data.Items[id]).effect)) {
+			effect = new Data.PureEffect({name: found.name || name}, found.effect);
 		} else if (id === 'recoil') {
 			effect = new Data.PureEffect({name: 'Recoil', effectType: 'Recoil'});
 		} else if (id === 'drain') {
@@ -505,8 +511,9 @@ class ModdedDex {
 		} else {
 			effect = new Data.PureEffect({name, exists: false});
 		}
-		// @ts-ignore
-		return effect;
+
+		this.effectCache.set(id, effect);
+		return /** @type {PureEffect} */ (effect);
 	}
 	/**
 	 * Returns a sanitized format ID if valid, or throws if invalid.
@@ -917,7 +924,7 @@ class ModdedDex {
 					// singles tiers
 					'uber', 'ou', 'uubl', 'uu', 'rubl', 'ru', 'nubl', 'nu', 'publ', 'pu', 'zu', 'nfe', 'lcuber', 'lc', 'cap', 'caplc', 'capnfe',
 					//doubles tiers
-					'duber', 'dou', 'dbl', 'duu',
+					'duber', 'dou', 'dbl', 'duu', 'dnu',
 					// custom tags
 					'mega',
 				];
@@ -953,9 +960,9 @@ class ModdedDex {
 	}
 
 	/**
-	 * TODO: TypeScript generics
-	 * @param {Array} arr
-	 * @return {Array}
+	 * @param {T[]} arr
+	 * @return {T[]}
+	 * @template T
 	 */
 	shuffle(arr) {
 		// In-place shuffle by Fisher-Yates algorithm

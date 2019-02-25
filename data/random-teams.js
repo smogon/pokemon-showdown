@@ -936,11 +936,8 @@ class RandomTeams extends Dex.ModdedDex {
 				case 'overheat':
 					if (hasMove['fireblast'] || hasMove['lavaplume'] || counter.setupType === 'Special') rejected = true;
 					break;
-				case 'acrobatics':
-					if (hasMove['hurricane'] && counter.setupType !== 'Physical') rejected = true;
-					break;
-				case 'airslash':
-					if (hasMove['acrobatics'] || hasMove['bravebird'] || hasMove['hurricane']) rejected = true;
+				case 'airslash': case 'hurricane':
+					if (hasMove['acrobatics'] || hasMove['bravebird']) rejected = true;
 					break;
 				case 'hex':
 					if (!hasMove['willowisp']) rejected = true;
@@ -1152,6 +1149,7 @@ class RandomTeams extends Dex.ModdedDex {
 					(hasType['Fighting'] && !counter['Fighting'] && (counter.setupType || !counter['Status'])) ||
 					(hasType['Fire'] && !counter['Fire']) ||
 					(hasType['Ghost'] && !hasType['Dark'] && !counter['Ghost'] && !hasAbility['Steelworker']) ||
+					(hasType['Grass'] && !hasType['Fairy'] && !hasType['Poison'] && !hasType['Steel'] && !counter['Grass']) ||
 					(hasType['Ground'] && !counter['Ground'] && !hasMove['rest'] && !hasMove['sleeptalk']) ||
 					(hasType['Ice'] && !counter['Ice'] && !hasAbility['Refrigerate']) ||
 					(hasType['Psychic'] && !!counter['Psychic'] && !hasType['Flying'] && !hasAbility['Pixilate'] && template.types.length > 1 && counter.stab < 2) ||
@@ -1163,7 +1161,6 @@ class RandomTeams extends Dex.ModdedDex {
 					(hasAbility['Contrary'] && !counter['contrary'] && template.species !== 'Shuckle') ||
 					(hasAbility['Dark Aura'] && !counter['Dark']) ||
 					(hasAbility['Gale Wings'] && !counter['Flying']) ||
-					(hasAbility['Grassy Surge'] && !counter['Grass']) ||
 					(hasAbility['Guts'] && hasType['Normal'] && movePool.includes('facade')) ||
 					(hasAbility['Psychic Surge'] && !counter['Psychic']) ||
 					(hasAbility['Slow Start'] && movePool.includes('substitute')) ||
@@ -1349,8 +1346,6 @@ class RandomTeams extends Dex.ModdedDex {
 				ability = 'Sheer Force';
 			} else if (template.species === 'Torterra' && !counter['Grass']) {
 				ability = 'Shell Armor';
-			} else if (template.species === 'Umbreon') {
-				ability = 'Synchronize';
 			} else if (template.id === 'venusaurmega') {
 				ability = 'Chlorophyll';
 			}
@@ -1445,7 +1440,7 @@ class RandomTeams extends Dex.ModdedDex {
 			item = 'Groundium Z';
 		} else if (hasMove['mindblown'] && !!counter['Status'] && !teamDetails.zMove) {
 			item = 'Firium Z';
-		} else if (!teamDetails.zMove && (hasMove['fly'] || ((hasMove['bounce'] || (hasAbility['Gale Wings'] && hasMove['bravebird'])) && counter.setupType))) {
+		} else if (!teamDetails.zMove && (hasMove['fly'] || (hasMove['hurricane'] && template.baseStats.spa >= 125) || ((hasMove['bounce'] || (hasAbility['Gale Wings'] && hasMove['bravebird'])) && counter.setupType))) {
 			item = 'Flyinium Z';
 		} else if (hasMove['solarbeam'] && !hasAbility['Drought'] && !hasMove['sunnyday'] && !teamDetails['sun']) {
 			item = !teamDetails.zMove ? 'Grassium Z' : 'Power Herb';
@@ -1561,9 +1556,6 @@ class RandomTeams extends Dex.ModdedDex {
 		if (!isDoubles) {
 			/** @type {{[tier: string]: number}} */
 			let levelScale = {
-				LC: 88,
-				'LC Uber': 86,
-				NFE: 84,
 				PU: 83,
 				PUBL: 82,
 				NU: 81,
@@ -1573,8 +1565,8 @@ class RandomTeams extends Dex.ModdedDex {
 				UU: 77,
 				UUBL: 76,
 				OU: 75,
+				Unreleased: 75,
 				Uber: 73,
-				AG: 71,
 			};
 			/** @type {{[species: string]: number}} */
 			let customScale = {
@@ -1585,13 +1577,10 @@ class RandomTeams extends Dex.ModdedDex {
 				Unown: 100,
 			};
 			let tier = template.tier;
-			if (tier.includes('Unreleased') && baseTemplate.tier === 'Uber') {
-				tier = 'Uber';
-			}
 			if (tier.charAt(0) === '(') {
 				tier = tier.slice(1, -1);
 			}
-			level = levelScale[tier] || 75;
+			level = levelScale[tier] || 84;
 			if (customScale[template.name]) level = customScale[template.name];
 
 			// Custom level based on moveset
@@ -1716,13 +1705,13 @@ class RandomTeams extends Dex.ModdedDex {
 		}
 
 		/**@type {{[k: string]: number}} */
+		let tierCount = {};
+		/**@type {{[k: string]: number}} */
+		let baseFormes = {};
+		/**@type {{[k: string]: number}} */
 		let typeCount = {};
 		/**@type {{[k: string]: number}} */
 		let typeComboCount = {};
-		/**@type {{[k: string]: number}} */
-		let baseFormes = {};
-		let uberCount = 0;
-		let puCount = 0;
 		/**@type {RandomTeamsTypes["TeamDetails"]} */
 		let teamDetails = {};
 
@@ -1736,19 +1725,12 @@ class RandomTeams extends Dex.ModdedDex {
 			// Only certain NFE Pokemon are allowed
 			if (template.evos.length && !allowedNFE.includes(template.species)) continue;
 
-			let tier = template.tier;
-			switch (tier) {
-			case 'Uber':
-				// Ubers are limited to 2 but have a 20% chance of being added anyway.
-				if (uberCount > 1 && this.randomChance(4, 5)) continue;
-				break;
-			case 'PU':
-				// PUs are limited to 2 but have a 20% chance of being added anyway.
-				if (puCount > 1 && this.randomChance(4, 5)) continue;
-				break;
-			case 'Unreleased': case 'CAP':
-				// Unreleased and CAP have 20% the normal rate
-				if (this.randomChance(4, 5)) continue;
+			// Limit two Pokemon per tier
+			let tier = toId(template.tier);
+			if (!tierCount[tier]) {
+				tierCount[tier] = 1;
+			} else if (tierCount[tier] > 1) {
+				continue;
 			}
 
 			// Adjust rate for species with multiple formes
@@ -1832,6 +1814,7 @@ class RandomTeams extends Dex.ModdedDex {
 
 			// Now that our Pokemon has passed all checks, we can increment our counters
 			baseFormes[template.baseSpecies] = 1;
+			tierCount[tier]++;
 
 			// Increment type counters
 			for (const type of types) {
@@ -1845,13 +1828,6 @@ class RandomTeams extends Dex.ModdedDex {
 				typeComboCount[typeCombo]++;
 			} else {
 				typeComboCount[typeCombo] = 1;
-			}
-
-			// Increment Uber/PU counters
-			if (tier === 'Uber') {
-				uberCount++;
-			} else if (tier === 'PU') {
-				puCount++;
 			}
 
 			// Team has Mega/weather/hazards
