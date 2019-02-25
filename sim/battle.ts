@@ -115,26 +115,8 @@ export class Battle extends Dex.ModdedDex {
 		this.cachedFormat = format;
 		this.debugMode = format.debug || !!options.debug;
 		this.formatData = {id: format.id};
-<<<<<<< HEAD:sim/battle.ts
 		// tslint:disable-next-line:no-object-literal-type-assertion
 		this.effect = {id: ''} as Effect;
-=======
-
-		for (const rule of this.getRuleTable(format).keys()) {
-			if (rule.startsWith('+') || rule.startsWith('-') || rule.startsWith('!')) continue;
-			let subFormat = this.getFormat(rule);
-			if (subFormat.exists) {
-				let hasEventHandler = Object.keys(subFormat).some(val =>
-					val.startsWith('on') && !['onBegin', 'onValidateTeam', 'onChangeSet', 'onValidateSet'].includes(val)
-				);
-				if (hasEventHandler) this.addPseudoWeather(rule);
-			}
-		}
-
-		/** @type {Effect} */
-		this.effect = /** @type {Effect} */ ({id: ''});
-		/** @type {AnyObject} */
->>>>>>> Use runEvent:sim/battle.js
 		this.effectData = {id: ''};
 		this.event = {id: ''};
 		this.itemData = {id: ''};
@@ -877,21 +859,9 @@ export class Battle extends Dex.ModdedDex {
 		if (handler.thing && handler.thing.getStat) handler.speed = handler.thing.speed;
 	}
 
-<<<<<<< HEAD:sim/battle.ts
 	findEventHandlers(thing: Pokemon | Side | Battle, eventName: string, sourceThing?: Pokemon | null) {
 		let handlers: AnyObject[] = [];
-		if (thing instanceof Pokemon) {
-=======
-	/**
-	 * @param {Pokemon | Side | Battle} thing
-	 * @param {string} eventName
-	 * @param {?Pokemon} [sourceThing]
-	 */
-	findEventHandlers(thing, eventName, sourceThing) {
-		/**@type {AnyObject[]} */
-		let handlers = [];
 		if (thing instanceof Pokemon && thing.isStarted) {
->>>>>>> Use runEvent:sim/battle.js
 			handlers = this.findPokemonEventHandlers(thing, `on${eventName}`);
 			for (const allyActive of thing.side.active) {
 				if (!allyActive || allyActive.fainted) continue;
