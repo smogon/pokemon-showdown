@@ -1,4 +1,3 @@
-/* tslint:disable:no-console no-conditional-assignment */
 /**
  * Battle Stream Example
  * Pokemon Showdown - http://pokemonshowdown.com/
@@ -92,15 +91,18 @@ const p2spec = {
 const p1 = new RandomPlayerAI(streams.p1);
 const p2 = new RandomPlayerAI(streams.p2);
 
+/* tslint:disable:no-console */
 console.log("p1 is " + p1.constructor.name);
 console.log("p2 is " + p2.constructor.name);
 
 (async () => {
 	let chunk;
+	// tslint:disable-next-line no-conditional-assignment
 	while ((chunk = await streams.omniscient.read())) {
 		console.log(chunk);
 	}
 })();
+/* tslint:enable:no-console */
 
 streams.omniscient.write(`>start ${JSON.stringify(spec)}
 >player p1 ${JSON.stringify(p1spec)}

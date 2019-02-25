@@ -9,7 +9,7 @@ npm-debug.log
 .eslintcache
 package-lock.json
 
-# Typescript
+# Typescript build artifacts
 sim/*.js
 
 # visual studio live share

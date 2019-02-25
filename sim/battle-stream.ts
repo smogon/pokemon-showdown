@@ -1,4 +1,3 @@
-/* tslint:disable:no-console no-conditional-assignment */
 /**
  * Battle Stream
  * Pokemon Showdown - http://pokemonshowdown.com/
@@ -78,6 +77,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream {
 		if (this.battle) this.battle.sendUpdates();
 		let deltaTime = Date.now() - startTime;
 		if (deltaTime > 1000) {
+			// tslint:disable-next-line:no-console
 			console.log(`[slow battle] ${deltaTime}ms - ${message}`);
 		}
 	}
@@ -192,6 +192,7 @@ export function getPlayerStreams(stream: BattleStream) {
 	});
 	(async () => {
 		let chunk;
+		// tslint:disable-next-line:no-conditional-assignment
 		while ((chunk = await stream.read())) {
 			const [type, data] = splitFirst(chunk, `\n`);
 			switch (type) {
@@ -237,6 +238,7 @@ export class BattlePlayer {
 	}
 	async listen() {
 		let chunk;
+		// tslint:disable-next-line:no-conditional-assignment
 		while ((chunk = await this.stream.read())) {
 			this.receive(chunk);
 		}
@@ -249,6 +251,7 @@ export class BattlePlayer {
 	}
 
 	receiveLine(line: string) {
+		// tslint:disable-next-line:no-console
 		if (this.debug) console.log(line);
 		if (line.charAt(0) !== '|') return;
 		const [cmd, rest] = splitFirst(line.slice(1), '|');
@@ -294,6 +297,7 @@ export class BattleTextStream extends Streams.ReadWriteStream {
 	}
 	async _listen() {
 		let message: string;
+		// tslint:disable-next-line:no-conditional-assignment
 		while ((message = await this.battleStream.read())) {
 			if (!message.endsWith('\n')) message += '\n';
 			this.push(message + '\n');

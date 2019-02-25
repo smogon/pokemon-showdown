@@ -895,7 +895,6 @@ class Validator {
 	}
 
 	checkLearnset(
-		// tslint:disable-next-line:variable-name
 		move: Move, species: Template, lsetData: PokemonSources = {sources: [], sourcesBefore: this.dex.gen}, set: AnyObject = {}):
 		{type: string, [key: string]: any} | null {
 		const dex = this.dex;

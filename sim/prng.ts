@@ -17,6 +17,7 @@ export type PRNGSeed = [number, number, number, number];
 export class PRNG {
 	initialSeed: PRNGSeed;
 	seed: PRNGSeed;
+	/** Creates a new source of randomness for the given seed. */
 	constructor(seed: PRNGSeed | null = null) {
 		if (!seed) seed = PRNG.generateSeed();
 		this.initialSeed = seed.slice() as PRNGSeed; // make a copy
