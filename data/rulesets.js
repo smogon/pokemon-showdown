@@ -379,7 +379,7 @@ let BattleFormats = {
 	potd: {
 		effectType: 'Rule',
 		name: 'PotD',
-		onStart() {
+		onBegin() {
 			if (global.Config && global.Config.potd) {
 				this.add('rule', "Pokemon of the Day: " + this.getTemplate(Config.potd).name);
 			}
@@ -389,8 +389,7 @@ let BattleFormats = {
 		effectType: 'Rule',
 		name: 'Team Preview',
 		desc: "Allows each player to see the Pok&eacute;mon on their opponent's team before they choose their lead Pok&eacute;mon",
-		onStartPriority: -10,
-		onStart() {
+		onBegin() {
 			this.add('clearpoke');
 			for (const side of this.sides) {
 				for (const pokemon of side.pokemon) {
@@ -421,7 +420,7 @@ let BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'Species Clause',
 		desc: "Prevents teams from having more than one Pok&eacute;mon from the same species",
-		onStart() {
+		onBegin() {
 			this.add('rule', 'Species Clause: Limit one of each Pokémon');
 		},
 		onValidateTeam(team, format) {
@@ -461,7 +460,7 @@ let BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'Item Clause',
 		desc: "Prevents teams from having more than one Pok&eacute;mon with the same item",
-		onStart() {
+		onBegin() {
 			this.add('rule', 'Item Clause: Limit one of each item');
 		},
 		onValidateTeam(team, format) {
@@ -481,7 +480,7 @@ let BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'Ability Clause',
 		desc: "Prevents teams from having more than two Pok&eacute;mon with the same ability",
-		onStart() {
+		onBegin() {
 			this.add('rule', 'Ability Clause: Limit two of each ability');
 		},
 		onValidateTeam(team, format) {
@@ -522,7 +521,7 @@ let BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'OHKO Clause',
 		desc: "Bans all OHKO moves, such as Fissure",
-		onStart() {
+		onBegin() {
 			this.add('rule', 'OHKO Clause: OHKO moves are banned');
 		},
 		onValidateSet(set) {
@@ -541,7 +540,7 @@ let BattleFormats = {
 		name: 'Evasion Abilities Clause',
 		desc: "Bans abilities that boost Evasion under certain weather conditions",
 		banlist: ['Sand Veil', 'Snow Cloak'],
-		onStart() {
+		onBegin() {
 			this.add('rule', 'Evasion Abilities Clause: Evasion abilities are banned');
 		},
 	},
@@ -550,7 +549,7 @@ let BattleFormats = {
 		name: 'Evasion Moves Clause',
 		desc: "Bans moves that consistently raise the user's evasion when used",
 		banlist: ['Minimize', 'Double Team'],
-		onStart() {
+		onBegin() {
 			this.add('rule', 'Evasion Moves Clause: Evasion moves are banned');
 		},
 	},
@@ -559,7 +558,7 @@ let BattleFormats = {
 		name: 'Accuracy Moves Clause',
 		desc: "Bans moves that have a chance to lower the target's accuracy when used",
 		banlist: ['Flash', 'Kinesis', 'Leaf Tornado', 'Mirror Shot', 'Mud Bomb', 'Mud-Slap', 'Muddy Water', 'Night Daze', 'Octazooka', 'Sand Attack', 'Smokescreen'],
-		onStart() {
+		onBegin() {
 			this.add('rule', 'Accuracy Moves Clause: Accuracy-lowering moves are banned');
 		},
 	},
@@ -591,7 +590,7 @@ let BattleFormats = {
 		//   with one
 		// - OR it has eaten a Leppa berry it isn't holding
 
-		onStart() {
+		onBegin() {
 			this.add('rule', 'Endless Battle Clause: Forcing endless battles is banned');
 		},
 	},
@@ -600,7 +599,7 @@ let BattleFormats = {
 		name: 'Moody Clause',
 		desc: "Bans the ability Moody",
 		banlist: ['Moody'],
-		onStart() {
+		onBegin() {
 			this.add('rule', 'Moody Clause: Moody is banned');
 		},
 	},
@@ -609,7 +608,7 @@ let BattleFormats = {
 		name: 'Swagger Clause',
 		desc: "Bans the move Swagger",
 		banlist: ['Swagger'],
-		onStart() {
+		onBegin() {
 			this.add('rule', 'Swagger Clause: Swagger is banned');
 		},
 	},
@@ -618,7 +617,7 @@ let BattleFormats = {
 		name: 'Baton Pass Clause',
 		desc: "Stops teams from having more than one Pok&eacute;mon with Baton Pass, and no Pok&eacute;mon may be capable of passing boosts to both Speed and another stat",
 		banlist: ["Baton Pass > 1"],
-		onStart() {
+		onBegin() {
 			this.add('rule', 'Baton Pass Clause: Limit one Baton Passer, can\'t pass Spe and other stats simultaneously');
 		},
 		onValidateSet(set, format, setHas) {
@@ -672,7 +671,7 @@ let BattleFormats = {
 		name: 'CFZ Clause',
 		desc: "Bans the use of crystal-free Z-Moves",
 		banlist: ['10,000,000 Volt Thunderbolt', 'Acid Downpour', 'All-Out Pummeling', 'Black Hole Eclipse', 'Bloom Doom', 'Breakneck Blitz', 'Catastropika', 'Clangorous Soulblaze', 'Continental Crush', 'Corkscrew Crash', 'Devastating Drake', 'Extreme Evoboost', 'Genesis Supernova', 'Gigavolt Havoc', 'Guardian of Alola', 'Hydro Vortex', 'Inferno Overdrive', 'Let\'s Snuggle Forever', 'Light That Burns the Sky', 'Malicious Moonsault', 'Menacing Moonraze Maelstrom', 'Never-Ending Nightmare', 'Oceanic Operetta', 'Pulverizing Pancake', 'Savage Spin-Out', 'Searing Sunraze Smash', 'Shattered Psyche', 'Sinister Arrow Raid', 'Soul-Stealing 7-Star Strike', 'Splintered Stormshards', 'Stoked Sparksurfer', 'Subzero Slammer', 'Supersonic Skystrike', 'Tectonic Rage', 'Twinkle Tackle'],
-		onStart() {
+		onBegin() {
 			this.add('rule', 'CFZ Clause: Crystal-free Z-Moves are banned');
 		},
 	},
@@ -684,7 +683,7 @@ let BattleFormats = {
 			const item = this.getItem(set.item);
 			if (item.zMove) return [`${set.name || set.species}'s item ${item.name} is banned by Z-Move Clause.`];
 		},
-		onStart() {
+		onBegin() {
 			this.add('rule', 'Z-Move Clause: Z-Moves are banned');
 		},
 	},
@@ -692,7 +691,7 @@ let BattleFormats = {
 		effectType: 'Rule',
 		name: 'HP Percentage Mod',
 		desc: "Shows the HP of Pok&eacute;mon in percentages",
-		onStart() {
+		onBegin() {
 			this.add('rule', 'HP Percentage Mod: HP is shown in percentages');
 			this.reportPercentages = true;
 		},
@@ -701,7 +700,7 @@ let BattleFormats = {
 		effectType: 'Rule',
 		name: 'Exact HP Mod',
 		desc: "Shows the exact HP of all Pok&eacute;mon",
-		onStart() {
+		onBegin() {
 			this.add('rule', 'Exact HP Mod: Exact HP is shown');
 			this.reportExactHP = true;
 		},
@@ -710,7 +709,7 @@ let BattleFormats = {
 		effectType: 'Rule',
 		name: 'Cancel Mod',
 		desc: "Allows players to change their own choices before their opponents make one",
-		onStart() {
+		onBegin() {
 			this.supportCancel = true;
 		},
 	},
@@ -719,7 +718,7 @@ let BattleFormats = {
 		name: 'Sleep Clause Mod',
 		desc: "Prevents players from putting more than one of their opponent's Pok&eacute;mon to sleep at a time, and bans Mega Gengar from using Hypnosis",
 		banlist: ['Hypnosis + Gengarite'],
-		onStart() {
+		onBegin() {
 			this.add('rule', 'Sleep Clause Mod: Limit one foe put to sleep');
 		},
 		onSetStatus(status, target, source) {
@@ -742,7 +741,7 @@ let BattleFormats = {
 		effectType: 'Rule',
 		name: 'Switch Priority Clause Mod',
 		desc: "Makes a faster Pokémon switch first when double-switching, unlike in Emerald link battles, where player 1's Pokémon would switch first",
-		onStart() {
+		onBegin() {
 			this.add('rule', 'Switch Priority Clause Mod: Faster Pokémon switch first');
 		},
 	},
@@ -750,7 +749,7 @@ let BattleFormats = {
 		effectType: 'Rule',
 		name: 'Freeze Clause Mod',
 		desc: "Prevents players from freezing more than one of their opponent's Pok&eacute;mon at a time",
-		onStart() {
+		onBegin() {
 			this.add('rule', 'Freeze Clause Mod: Limit one foe frozen');
 		},
 		onSetStatus(status, target, source) {
@@ -771,7 +770,7 @@ let BattleFormats = {
 		effectType: 'ValidatorRule',
 		name: 'Same Type Clause',
 		desc: "Forces all Pok&eacute;mon on a team to share a type with each other",
-		onStart() {
+		onBegin() {
 			this.add('rule', 'Same Type Clause: Pokémon in a team must share a type');
 		},
 		onValidateTeam(team) {
@@ -805,7 +804,7 @@ let BattleFormats = {
 		effectType: 'Rule',
 		name: 'Mega Rayquaza Clause',
 		desc: "Prevents Rayquaza from mega evolving",
-		onStart() {
+		onBegin() {
 			this.add('rule', 'Mega Rayquaza Clause: You cannot mega evolve Rayquaza');
 			for (const side of this.sides) {
 				for (const pokemon of side.pokemon) {
