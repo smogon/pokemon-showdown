@@ -44,18 +44,18 @@ type DataType = 'Pokedex' | 'FormatsData' | 'Learnsets' | 'Movedex' | 'Statuses'
 const DATA_TYPES: DataType[] = ['Pokedex', 'FormatsData', 'Learnsets', 'Movedex', 'Statuses', 'TypeChart', 'Scripts', 'Items', 'Abilities', 'Natures', 'Formats'];
 
 const DATA_FILES = {
-	'Pokedex': 'pokedex',
-	'Movedex': 'moves',
-	'Statuses': 'statuses',
-	'TypeChart': 'typechart',
-	'Scripts': 'scripts',
-	'Items': 'items',
-	'Abilities': 'abilities',
-	'Formats': 'rulesets',
-	'FormatsData': 'formats-data',
-	'Learnsets': 'learnsets',
-	'Aliases': 'aliases',
-	'Natures': 'natures',
+	Pokedex: 'pokedex',
+	Movedex: 'moves',
+	Statuses: 'statuses',
+	TypeChart: 'typechart',
+	Scripts: 'scripts',
+	Items: 'items',
+	Abilities: 'abilities',
+	Formats: 'rulesets',
+	FormatsData: 'formats-data',
+	Learnsets: 'learnsets',
+	Aliases: 'aliases',
+	Natures: 'natures',
 };
 
 const nullEffect: PureEffect = new Data.PureEffect({name: '', exists: false});
@@ -64,7 +64,7 @@ interface DexTemplate {
 	id: string;
 	name: string;
 	[k: string]: any;
-};
+}
 
 interface DexTableData {
 	Pokedex: DexTable<Template>;
@@ -84,7 +84,7 @@ interface DexTableData {
 		minus?: string
 	}>;
 	Formats: DexTable<Format>;
-};
+}
 
 const BattleNatures: {[k: string]: {[l: string]: string | undefined, name: string, plus?: string, minus?: string}} = {
 	adamant: {name: "Adamant", plus: 'atk', minus: 'spa'},
@@ -134,7 +134,7 @@ class ModdedDex {
 	getString: (str: any) => string;
 	getId: (text: any) => string;
 	ModdedDex: typeof ModdedDex;
-	Data: typeof Data; 
+	Data: typeof Data;
 
 	constructor(mod: string = 'base', isOriginal: boolean = false) {
 		this.gen = 0;
@@ -856,7 +856,7 @@ class ModdedDex {
 				const validTags = [
 					// singles tiers
 					'uber', 'ou', 'uubl', 'uu', 'rubl', 'ru', 'nubl', 'nu', 'publ', 'pu', 'zu', 'nfe', 'lcuber', 'lc', 'cap', 'caplc', 'capnfe',
-					//doubles tiers
+					// doubles tiers
 					'duber', 'dou', 'dbl', 'duu', 'dnu',
 					// custom tags
 					'mega',
@@ -902,7 +902,6 @@ class ModdedDex {
 		}
 		return arr;
 	}
-
 
 	levenshtein(s: string, t: string, l: number): number {
 		// Original levenshtein distance function by James Westgate, turned out to be the fastest
@@ -984,7 +983,7 @@ class ModdedDex {
 			let res: AnyObject = this[searchFunctions[table]](target);
 			if (res.exists && res.gen <= this.gen) {
 				searchResults.push({
-					isInexact: isInexact,
+					isInexact,
 					// @ts-ignore
 					searchType: searchTypes[table],
 					name: res.species ? res.species : res.name,
@@ -1140,7 +1139,7 @@ class ModdedDex {
 			buf = this.packTeam(JSON.parse(buf));
 		}
 
-		let team = []; 
+		let team = [];
 		let i = 0, j = 0;
 
 		// limit to 24

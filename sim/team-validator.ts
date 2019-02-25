@@ -1129,7 +1129,7 @@ class Validator {
 						// event moves:
 						//   only if that was the source
 						// Event Pokémon:
-						//	Available as long as the past gen can get the Pokémon and then trade it back.
+						// 	Available as long as the past gen can get the Pokémon and then trade it back.
 						if (tradebackEligible && learnedGen === 2 && move.gen <= 1) {
 							// can tradeback
 							sources.push('1ST' + learned.slice(2) + ' ' + template.id);
@@ -1273,7 +1273,7 @@ function getValidator(format: string | Format) {
 }
 
 const TeamValidator = Object.assign(getValidator, {
-	Validator: Validator,
+	Validator,
 });
 
 export = TeamValidator;

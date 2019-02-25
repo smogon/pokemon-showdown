@@ -61,7 +61,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream {
 			if (typeof Monitor === 'undefined') throw err;
 			const battle = this.battle;
 			Monitor.crashlog(err, 'A battle', {
-				message: message,
+				message,
 				inputLog: battle ? '\n' + battle.inputLog.join('\n') : '',
 				log: battle ? '\n' + battle.getDebugLog() : '',
 			});

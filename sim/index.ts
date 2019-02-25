@@ -9,12 +9,12 @@
  *
  * @license MIT license
  */
-import Dex = require('./dex');
 import {Battle} from './battle';
-import {Side} from './side';
+import {BattleStream}  from './battle-stream';
+import Dex = require('./dex');
 import {Pokemon} from './pokemon';
 import {PRNG} from './prng';
-import {BattleStream}  from './battle-stream';
+import {Side} from './side';
 import TeamValidator = require('./team-validator');
 
 export = {

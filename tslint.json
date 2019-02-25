@@ -31,6 +31,7 @@
         "new-parens": false,
         "no-bitwise": false,
         "prefer-conditional-expression": false,
+        "prefer-object-spread": false,
         "no-shadowed-variable": [true, {"temporalDeadZone": false}],
         "object-literal-sort-keys": false,
         "object-literal-key-quotes": [true, "as-needed"],

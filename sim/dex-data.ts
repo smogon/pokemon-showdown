@@ -757,28 +757,28 @@ export class Template extends BasicEffect {
 
 /** Possible move flags. */
 interface MoveFlags {
-	authentic?: 1 // Ignores a target's substitute.
-	bite?: 1 // Power is multiplied by 1.5 when used by a Pokemon with the Ability Strong Jaw.
-	bullet?: 1 // Has no effect on Pokemon with the Ability Bulletproof.
-	charge?: 1 // The user is unable to make a move between turns.
-	contact?: 1 // Makes contact.
-	dance?: 1 // When used by a Pokemon, other Pokemon with the Ability Dancer can attempt to execute the same move.
-	defrost?: 1 // Thaws the user if executed successfully while the user is frozen.
-	distance?: 1 // Can target a Pokemon positioned anywhere in a Triple Battle.
-	gravity?: 1 // Prevented from being executed or selected during Gravity's effect.
-	heal?: 1 // Prevented from being executed or selected during Heal Block's effect.
-	mirror?: 1 // Can be copied by Mirror Move.
-	mystery?: 1 // Unknown effect.
-	nonsky?: 1 // Prevented from being executed or selected in a Sky Battle.
-	powder?: 1 // Has no effect on Grass-type Pokemon, Pokemon with the Ability Overcoat, and Pokemon holding Safety Goggles.
-	protect?: 1 // Blocked by Detect, Protect, Spiky Shield, and if not a Status move, King's Shield.
-	pulse?: 1 // Power is multiplied by 1.5 when used by a Pokemon with the Ability Mega Launcher.
-	punch?: 1 // Power is multiplied by 1.2 when used by a Pokemon with the Ability Iron Fist.
-	recharge?: 1 // If this move is successful, the user must recharge on the following turn and cannot make a move.
-	reflectable?: 1 // Bounced back to the original user by Magic Coat or the Ability Magic Bounce.
-	snatch?: 1 // Can be stolen from the original user and instead used by another Pokemon using Snatch.
-	sound?: 1 // Has no effect on Pokemon with the Ability Soundproof.
-};
+	authentic?: 1; // Ignores a target's substitute.
+	bite?: 1; // Power is multiplied by 1.5 when used by a Pokemon with the Ability Strong Jaw.
+	bullet?: 1; // Has no effect on Pokemon with the Ability Bulletproof.
+	charge?: 1; // The user is unable to make a move between turns.
+	contact?: 1; // Makes contact.
+	dance?: 1; // When used by a Pokemon, other Pokemon with the Ability Dancer can attempt to execute the same move.
+	defrost?: 1; // Thaws the user if executed successfully while the user is frozen.
+	distance?: 1; // Can target a Pokemon positioned anywhere in a Triple Battle.
+	gravity?: 1; // Prevented from being executed or selected during Gravity's effect.
+	heal?: 1; // Prevented from being executed or selected during Heal Block's effect.
+	mirror?: 1; // Can be copied by Mirror Move.
+	mystery?: 1; // Unknown effect.
+	nonsky?: 1; // Prevented from being executed or selected in a Sky Battle.
+	powder?: 1; // Has no effect on Grass-type Pokemon, Pokemon with the Ability Overcoat, and Pokemon holding Safety Goggles.
+	protect?: 1; // Blocked by Detect, Protect, Spiky Shield, and if not a Status move, King's Shield.
+	pulse?: 1; // Power is multiplied by 1.5 when used by a Pokemon with the Ability Mega Launcher.
+	punch?: 1; // Power is multiplied by 1.2 when used by a Pokemon with the Ability Iron Fist.
+	recharge?: 1; // If this move is successful, the user must recharge on the following turn and cannot make a move.
+	reflectable?: 1; // Bounced back to the original user by Magic Coat or the Ability Magic Bounce.
+	snatch?: 1; // Can be stolen from the original user and instead used by another Pokemon using Snatch.
+	sound?: 1; // Has no effect on Pokemon with the Ability Soundproof.
+}
 
 export class Move extends BasicEffect {
 	effectType: 'Move';
@@ -788,7 +788,7 @@ export class Move extends BasicEffect {
 	target: string;
 	/** Move base power. */
 	basePower: number;
-	/** Move base accuracy. True denotes a move that always hits. */ 
+	/** Move base accuracy. True denotes a move that always hits. */
 	accuracy: true | number;
 	/** Critical hit ratio. Defaults to 1. */
 	critRatio: number;
@@ -991,7 +991,7 @@ export class TypeInfo {
 	 * for an effect that doesn't exist, you get a dummy effect that
 	 * doesn't do anything, and this field set to false.
 	 */
-	exists: boolean;;
+	exists: boolean;
 	/**
 	 * The generation of Pokemon game this was INTRODUCED (NOT
 	 * necessarily the current gen being simulated.) Not all effects

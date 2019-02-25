@@ -17,7 +17,7 @@ export type PRNGSeed = [number, number, number, number];
 export class PRNG {
 	initialSeed: PRNGSeed;
 	seed: PRNGSeed;
-	constructor(seed: PRNGSeed|null = null) {
+	constructor(seed: PRNGSeed | null = null) {
 		if (!seed) seed = PRNG.generateSeed();
 		this.initialSeed = seed.slice() as PRNGSeed; // make a copy
 		this.seed = seed.slice() as PRNGSeed;

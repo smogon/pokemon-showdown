@@ -18,7 +18,7 @@ interface ChosenAction {
 	mega?: boolean | null; // true if megaing or ultra bursting
 	zmove?: string; // if zmoving, the name of the zmove
 	priority?: number; // priority of the action
-};
+}
 
 /** What the player has chosen to happen. */
 interface Choice {
@@ -31,7 +31,7 @@ interface Choice {
 	zMove: boolean; // true if a Z-move has already been selected
 	mega: boolean; // true if a mega evolution has already been selected
 	ultra: boolean; // true if an ultra burst has already been selected
-};
+}
 
 export class Side {
 	battle: Battle;
@@ -115,7 +115,7 @@ export class Side {
 
 		this.team = team;
 		for (let i = 0; i < this.team.length && i < 24; i++) {
-			//console.log("NEW POKEMON: " + (this.team[i] ? this.team[i].name : '[unidentified]'));
+			// console.log("NEW POKEMON: " + (this.team[i] ? this.team[i].name : '[unidentified]'));
 			this.pokemon.push(new Pokemon(this.team[i], this));
 		}
 		this.pokemonLeft = this.pokemon.length;
@@ -211,7 +211,7 @@ export class Side {
 		this.sideConditions[status.id] = {
 			id: status.id,
 			target: this,
-			source: source,
+			source,
 			sourcePosition: source.position,
 			duration: status.duration,
 		};
@@ -372,7 +372,7 @@ export class Side {
 			const lockedMoveTarget = pokemon.lastMoveTargetLoc;
 			this.choice.actions.push({
 				choice: 'move',
-				pokemon: pokemon,
+				pokemon,
 				targetLoc: lockedMoveTarget || 0,
 				moveid: toId(lockedMove),
 			});
@@ -430,9 +430,9 @@ export class Side {
 
 		this.choice.actions.push({
 			choice: 'move',
-			pokemon: pokemon,
-			targetLoc: targetLoc,
-			moveid: moveid,
+			pokemon,
+			targetLoc,
+			moveid,
 			mega: mega || ultra,
 			zmove: zMove,
 		});
@@ -517,7 +517,7 @@ export class Side {
 
 		this.choice.actions.push({
 			choice: (this.currentRequest === 'switch' ? 'instaswitch' : 'switch'),
-			pokemon: pokemon,
+			pokemon,
 			target: targetPokemon,
 		} as ChosenAction);
 
@@ -564,7 +564,7 @@ export class Side {
 			this.choice.switchIns.add(pos);
 			this.choice.actions.push({
 				choice: 'team',
-				index: index,
+				index,
 				pokemon: this.pokemon[pos],
 				priority: -index,
 			} as ChosenAction);
@@ -589,7 +589,7 @@ export class Side {
 
 		this.choice.actions.push({
 			choice: 'shift',
-			pokemon: pokemon,
+			pokemon,
 		} as ChosenAction);
 
 		return true;

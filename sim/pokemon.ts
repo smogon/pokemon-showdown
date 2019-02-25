@@ -32,12 +32,12 @@ export class Pokemon {
 	moveSlots: MoveSlot[];
 	baseMoveSlots: MoveSlot[];
 	baseStats: StatsTable;
-	trapped: boolean | "hidden"
-	maybeTrapped: boolean
+	trapped: boolean | "hidden";
+	maybeTrapped: boolean;
 	maybeDisabled: boolean;
 	illusion: Pokemon | null;
 	fainted: boolean;
-	faintQueued:boolean;
+	faintQueued: boolean;
 	lastItem: string;
 	ateBerry: boolean;
 	status: string;
@@ -653,8 +653,8 @@ export class Pokemon {
 		if (!damage) damage = 0;
 		move = this.battle.getMove(move) as Move;
 		let lastAttackedBy = {
-			source: source,
-			damage: damage,
+			source,
+			damage,
 			move: move.id,
 			thisTurn: true,
 		};
@@ -730,8 +730,8 @@ export class Pokemon {
 				id: moveSlot.id,
 				pp: moveSlot.pp,
 				maxpp: moveSlot.maxpp,
-				target: target,
-				disabled: disabled,
+				target,
+				disabled,
 			});
 		}
 		if (hasValidMove) return moves;
@@ -1104,8 +1104,8 @@ export class Pokemon {
 		this.faintQueued = true;
 		this.battle.faintQueue.push({
 			target: this,
-			source: source,
-			effect: effect,
+			source,
+			effect,
 		});
 		return d;
 	}
