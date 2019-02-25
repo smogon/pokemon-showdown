@@ -19,7 +19,9 @@
   },
   "scripts": {
     "start": "node pokemon-showdown start",
-    "test": "eslint --cache . && tsc && mocha",
+    "compile": "sucrase ./sim -d ./sim --transforms typescript,imports",
+    "clean": "rm -f sim/*.js",
+    "test": "eslint --cache . && tsc && npm run compile && mocha",
     "tsc": "tsc",
     "lint": "eslint --cache ."
   },
