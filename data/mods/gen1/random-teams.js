@@ -1,12 +1,16 @@
-import RandomGen2Teams = require('../../mods/gen2/random-teams');
+'use strict';
+
+const RandomGen2Teams = require('../../mods/gen2/random-teams');
 
 class RandomGen1Teams extends RandomGen2Teams {
 	// Challenge Cup or CC teams are basically fully random teams.
 	randomCCTeam() {
 		let team = [];
 
-		let hasDexNumber: {[k: string]: number} = {};
-		let formes: string[][] = [[], [], [], [], [], []];
+		/**@type {{[k: string]: number}} */
+		let hasDexNumber = {};
+		/**@type {string[][]} */
+		let formes = [[], [], [], [], [], []];
 
 		// Pick six random Pokémon, no repeats.
 		let num;
@@ -136,8 +140,10 @@ class RandomGen1Teams extends RandomGen2Teams {
 		}
 
 		// Now let's store what we are getting.
-		let typeCount: {[k: string]: number} = {};
-		let weaknessCount: {[k: string]: number} = {'Electric': 0, 'Psychic': 0, 'Water': 0, 'Ice': 0, 'Ground': 0};
+		/**@type {{[k: string]: number}} */
+		let typeCount = {};
+		/**@type {{[k: string]: number}} */
+		let weaknessCount = {'Electric': 0, 'Psychic': 0, 'Water': 0, 'Ice': 0, 'Ground': 0};
 		let uberCount = 0;
 		let nuCount = 0;
 		let hasShitmon = false;
@@ -231,18 +237,25 @@ class RandomGen1Teams extends RandomGen2Teams {
 
 	/**
 	 * Random set generation for Gen 1 Random Battles.
+	 * @param {string | Template} template
+	 * @param {number} [slot]
+	 * @return {RandomTeamsTypes["RandomSet"]}
 	 */
-	randomSet(template: string | Template, slot?: number): RandomTeamsTypes["RandomSet"] {
+	randomSet(template, slot) {
 		template = this.getTemplate(template);
 		if (!template.exists) template = this.getTemplate('pikachu'); // Because Gen 1.
 
 		let movePool = template.randomBattleMoves ? template.randomBattleMoves.slice() : [];
-		let moves: string[] = [];
-		let hasType: {[k: string]: true} = {};
+		/**@type {string[]} */
+		let moves = [];
+		/**@type {{[k: string]: true}} */
+		let hasType = {};
 		hasType[template.types[0]] = true;
 		if (template.types[1]) hasType[template.types[1]] = true;
-		let hasMove: {[k: string]: true} = {};
-		let counter: {[k: string]: number} = {};
+		/**@type {{[k: string]: true}} */
+		let hasMove = {};
+		/**@type {{[k: string]: number}} */
+		let counter = {};
 		// let setupType = '';
 
 		// Moves that boost Attack:
@@ -377,4 +390,4 @@ class RandomGen1Teams extends RandomGen2Teams {
 	}
 }
 
-export = RandomGen1Teams;
+module.exports = RandomGen1Teams;

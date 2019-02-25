@@ -1,5 +1,5 @@
 // Used for bumbadadabum and Snaquaza's move
-import RandomStaffBrosTeams = require('./random-teams');
+import {RandomStaffBrosTeams} from './random-teams';
 import {Pokemon} from '../../../sim/pokemon';
 
 let BattleMovedex: {[k: string]: ModdedMoveData} = {
