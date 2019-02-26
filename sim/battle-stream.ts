@@ -76,7 +76,6 @@ export class BattleStream extends Streams.ObjectReadWriteStream {
 		if (this.battle) this.battle.sendUpdates();
 		let deltaTime = Date.now() - startTime;
 		if (deltaTime > 1000) {
-			// tslint:disable-next-line:no-console
 			console.log(`[slow battle] ${deltaTime}ms - ${message}`);
 		}
 	}
@@ -249,7 +248,6 @@ export class BattlePlayer {
 	}
 
 	receiveLine(line: string) {
-		// tslint:disable-next-line:no-console
 		if (this.debug) console.log(line);
 		if (line.charAt(0) !== '|') return;
 		const [cmd, rest] = splitFirst(line.slice(1), '|');

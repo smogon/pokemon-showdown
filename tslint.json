@@ -30,6 +30,7 @@
         // they look weird in `new class {...}`
         "new-parens": false,
         "no-bitwise": false,
+        "no-console": false,
         "prefer-conditional-expression": false,
         "prefer-object-spread": false,
         "no-shadowed-variable": [true, {"temporalDeadZone": false}],
