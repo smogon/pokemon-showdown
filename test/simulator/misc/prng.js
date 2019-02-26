@@ -1,6 +1,6 @@
 'use strict';
 
-const PRNG = require('../../../.sim-dist/prng').PRNG;
+const PRNG = require('../../../sim/prng').PRNG;
 const assert = require('../../assert');
 
 const testSeed = [1, 2, 3, 4];

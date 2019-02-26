@@ -16,7 +16,6 @@
         "./server/chat-commands.js"
     ],
     "include": [
-				"./.sim-dist/*",
         "./config/formats.js",
         "./data/*",
         "./data/mods/*/*",
