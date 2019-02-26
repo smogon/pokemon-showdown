@@ -2,10 +2,7 @@
 
 // Used for bumbadadabum and Snaquaza's move
 const RandomStaffBrosTeams = require('./random-teams');
-// Typescript workaround
-const pokemonLoc = '../../../.sim-dist/pokemon';
-/** @type {import('../../../sim/pokemon')} */
-const Pokemon = require(pokemonLoc);
+const Pokemon = require(/** @type {any} */ ('../../../.sim-dist/pokemon'));
 
 /** @type {{[k: string]: ModdedMoveData}} */
 let BattleMovedex = {

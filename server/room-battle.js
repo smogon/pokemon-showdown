@@ -1025,9 +1025,7 @@ exports.RoomBattle = Battle;
 const StreamProcessManager = require('../lib/process-manager').StreamProcessManager;
 
 const PM = new StreamProcessManager(module, () => {
-	const battleStreamLoc = '../.sim-dist/battle-stream'; // Typescript workaround
-	/** @type {import('../sim/battle-stream').BattleStream} */
-	const BattleStream = require(battleStreamLoc).BattleStream;
+	const BattleStream = require(/** @type {any} */ ('../.sim-dist/battle-stream')).BattleStream;
 	return new BattleStream({keepAlive: true});
 });
 
