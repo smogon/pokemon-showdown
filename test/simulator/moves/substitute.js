@@ -86,4 +86,19 @@ describe('Substitute', function () {
 		battle.makeChoices('move roost', 'move dualchop');
 		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
+
+	it('should track what the actual damage would have been without the substitute in Gen 1', function () {
+		battle = common.gen(1).createBattle([
+			[{species: 'Ponyta', moves: ['substitute', 'growl'], evs: {hp: 252, spd: 252}}],
+			[{species: 'Cloyster', moves: ['clamp'], evs: {spa: 252}}],
+		]);
+
+		const pokemon = battle.p1.active[0];
+		battle.makeChoices('move substitute', 'move clamp');
+		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
+
+		const hp = pokemon.hp;
+		battle.makeChoices('move growl', 'move clamp');
+		assert.bounded(hp - pokemon.hp, [91, 108]);
+	});
 });

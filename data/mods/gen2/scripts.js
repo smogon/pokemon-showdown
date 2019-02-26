@@ -245,8 +245,6 @@ let BattleScripts = {
 			move.totalDamage = damage;
 		}
 		if (move.category !== 'Status') {
-			// FIXME: The stored damage should be calculated ignoring Substitute.
-			// https://github.com/Zarel/Pokemon-Showdown/issues/2598
 			target.gotAttacked(move, damage, pokemon);
 		}
 		if (move.ohko) this.add('-ohko');

@@ -943,12 +943,15 @@ let BattleMovedex = {
 					return;
 				}
 				if (move.volatileStatus && target === source) return;
-				let damage = this.getDamage(source, target, move);
-				if (!damage) return null;
-				damage = this.runEvent('SubDamage', target, source, move, damage);
-				if (!damage) return damage;
-				target.volatiles['substitute'].hp -= damage;
-				source.lastDamage = damage;
+				// NOTE: In future generations the damage is capped to the remaining HP of the
+				// Substitute, here we deliberately use the uncapped damage when tracking lastDamage etc.
+				let uncappedDamage = this.getDamage(source, target, move);
+				if (!uncappedDamage) return null;
+				uncappedDamage = this.runEvent('SubDamage', target, source, move, uncappedDamage);
+				if (!uncappedDamage) return uncappedDamage;
+				source.lastDamage = uncappedDamage;
+				target.volatiles['substitute'].hp -= uncappedDamage > target.volatiles['substitute'].hp ?
+					/** @type {number} */(target.volatiles['substitute'].hp) : uncappedDamage;
 				if (target.volatiles['substitute'].hp <= 0) {
 					target.removeVolatile('substitute');
 					target.subFainted = true;
@@ -958,20 +961,20 @@ let BattleMovedex = {
 				// Drain/recoil does not happen if the substitute breaks
 				if (target.volatiles['substitute']) {
 					if (move.recoil) {
-						this.damage(Math.round(damage * move.recoil[0] / move.recoil[1]), source, target, 'recoil');
+						this.damage(Math.round(uncappedDamage * move.recoil[0] / move.recoil[1]), source, target, 'recoil');
 					}
 					if (move.drain) {
-						this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
+						this.heal(Math.ceil(uncappedDamage * move.drain[0] / move.drain[1]), source, target, 'drain');
 					}
 				}
-				this.runEvent('AfterSubDamage', target, source, move, damage);
+				this.runEvent('AfterSubDamage', target, source, move, uncappedDamage);
 				// Add here counter damage
 				let lastAttackedBy = target.getLastAttackedBy();
 				if (!lastAttackedBy) {
-					target.attackedBy.push({source: source, move: move.id, damage: damage, thisTurn: true});
+					target.attackedBy.push({source: source, move: move.id, damage: uncappedDamage, thisTurn: true});
 				} else {
 					lastAttackedBy.move = move.id;
-					lastAttackedBy.damage = damage;
+					lastAttackedBy.damage = uncappedDamage;
 				}
 				return 0;
 			},

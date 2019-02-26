@@ -369,8 +369,6 @@ let BattleScripts = {
 		}
 
 		if (move.category !== 'Status') {
-			// FIXME: The stored damage should be calculated ignoring Substitute.
-			// https://github.com/Zarel/Pokemon-Showdown/issues/2598
 			target.gotAttacked(move, damage, pokemon);
 		}
 
@@ -887,7 +885,6 @@ let BattleScripts = {
 			damage *= this.random(217, 256);
 			damage = Math.floor(damage / 255);
 			if (damage > target.hp && !target.volatiles['substitute']) damage = target.hp;
-			if (target.volatiles['substitute'] && damage > target.volatiles['substitute'].hp) damage = target.volatiles['substitute'].hp;
 		}
 
 		// And we are done.
