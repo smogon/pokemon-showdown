@@ -1791,8 +1791,6 @@ export class Battle extends Dex.ModdedDex {
 		if (damage !== 0) damage = this.clampIntRange(damage, 1);
 
 		if (this.gen <= 1) {
-			// FIXME: The stored damage should be calculated ignoring Substitute.
-			// https://github.com/Zarel/Pokemon-Showdown/issues/2598
 			if (this.currentMod === 'stadium' ||
 				!['recoil', 'drain'].includes(effect.id) && effect.effectType !== 'Status') {
 				this.lastDamage = damage;
