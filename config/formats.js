@@ -1781,6 +1781,15 @@ let Formats = [
 		banlist: ['OU', 'UUBL'],
 	},
 	{
+		name: "[Gen 2] NU",
+		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3642565/">GSC NU</a>`],
+
+		mod: 'gen2',
+		searchShow: false,
+		ruleset: ['[Gen 2] UU'],
+		banlist: ['UU'],
+	},
+	{
 		name: "[Gen 2] Custom Game",
 
 		mod: 'gen2',
