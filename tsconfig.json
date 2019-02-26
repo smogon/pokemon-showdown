@@ -12,7 +12,6 @@
     "types": ["node"],
     "exclude": [
         "./.sim-dist/*",
-        "./data/mods/gen1/pokedex.js",
         "./server/index.js",
         "./server/chat-commands.js"
     ],
