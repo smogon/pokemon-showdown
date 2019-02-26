@@ -2435,6 +2435,7 @@ class Battle extends Dex.ModdedDex {
 
 		switch (targetType) {
 		case 'randomNormal':
+		case 'scripted':
 		case 'normal':
 			return isAdjacent;
 		case 'adjacentAlly':
@@ -2443,7 +2444,6 @@ class Battle extends Dex.ModdedDex {
 			return isAdjacent && !isFoe || isSelf;
 		case 'adjacentFoe':
 			return isAdjacent && isFoe;
-		case 'scripted':
 		case 'any':
 			return !isSelf;
 		}
