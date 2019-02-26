@@ -65,8 +65,7 @@ if (!PM.isParentProcess) {
 	// @ts-ignore This file doesn't exist on the repository, so Travis checks fail if this isn't ignored
 	global.Config = require('../config/config');
 
-	const teamValidatorLoc = '../.sim-dist/team-validator'; // Typescript Workaround
-	global.TeamValidator = require(teamValidatorLoc).TeamValidator;
+	global.TeamValidator = require(/** @type {any} */ ('../.sim-dist/team-validator')).TeamValidator;
 	// @ts-ignore ???
 	global.Monitor = {
 		/**
@@ -90,8 +89,7 @@ if (!PM.isParentProcess) {
 		});
 	}
 
-	const dexLoc = '../.sim-dist/dex'; // Typescript Workaround
-	global.Dex = (/** @type {typeof import('../sim/dex')} */(require(dexLoc))).includeData();
+	global.Dex = (/** @type {typeof import('../sim/dex')} */(require(/** @type {any} */ ('../.sim-dist/dex')))).includeData();
 	global.toId = Dex.getId;
 	global.Chat = require('./chat');
 
