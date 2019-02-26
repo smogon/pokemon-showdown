@@ -485,7 +485,7 @@ class ModdedDex {
 		} else if ((this.data.Movedex.hasOwnProperty(id) && (found = this.data.Movedex[id]).effect) ||
 							 (this.data.Abilities.hasOwnProperty(id) && (found = this.data.Abilities[id]).effect) ||
 							 (this.data.Items.hasOwnProperty(id) && (found = this.data.Items[id]).effect)) {
-			effect = new Data.PureEffect({name: found.name || name}, found.effect);
+			effect = new Data.PureEffect({name: found.name || name}, found.effect!);
 		} else if (id === 'recoil') {
 			effect = new Data.PureEffect({name: 'Recoil', effectType: 'Recoil'});
 		} else if (id === 'drain') {
