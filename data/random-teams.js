@@ -3,7 +3,7 @@
 // Typescript workaround
 const dexLoc = './../.sim-dist/dex';
 const prngLoc = './../.sim-dist/prng';
-/** @type {import('./../sim/dex')} */
+/** @type {typeof import('./../sim/dex')} */
 const Dex = require(dexLoc);
 /** @type {import('./../sim/prng').PRNG} */
 const PRNG = require(prngLoc).PRNG;
@@ -43,6 +43,7 @@ class RandomTeams extends Dex.ModdedDex {
 
 		this.factoryTier = '';
 		this.format = format;
+		// @ts-ignore
 		this.prng = prng && !Array.isArray(prng) ? prng : new PRNG(prng);
 	}
 

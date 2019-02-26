@@ -4,7 +4,7 @@
 const RandomStaffBrosTeams = require('./random-teams');
 // Typescript workaround
 const pokemonLoc = '../../../.sim-dist/pokemon';
-/** @type {import('../../../sim/pokemon')} */
+/** @type {import('../../../sim/pokemon').Pokemon} */
 const Pokemon = require(pokemonLoc);
 
 /** @type {{[k: string]: ModdedMoveData}} */

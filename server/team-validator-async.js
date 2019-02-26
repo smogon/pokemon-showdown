@@ -66,7 +66,7 @@ if (!PM.isParentProcess) {
 	global.Config = require('../config/config');
 
 	const teamValidatorLoc = '../.sim-dist/team-validator'; // Typescript Workaround
-	global.TeamValidator = /** @type {import('../sim/team-validator')} */(require(teamValidatorLoc));
+	global.TeamValidator = /** @type {typeof import('../sim/team-validator')} */(require(teamValidatorLoc));
 	// @ts-ignore ???
 	global.Monitor = {
 		/**
@@ -90,7 +90,8 @@ if (!PM.isParentProcess) {
 		});
 	}
 
-	global.Dex = require('../.sim-dist/dex').includeData();
+	const dexLoc = '../.sim-dist/dex'; // Typescript Workaround
+	global.Dex = (/** @type {typeof import('../sim/dex')} */(require(dexLoc))).includeData();
 	global.toId = Dex.getId;
 	global.Chat = require('./chat');
 
