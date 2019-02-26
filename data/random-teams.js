@@ -1,6 +1,8 @@
 'use strict';
 
+/** @type {import('./../sim/dex')} */
 const Dex = require('./../.sim-dist/dex');
+/** @type {import('./../sim/prng').PRNG} */
 const PRNG = require('./../.sim-dist/prng').PRNG;
 
 /**@type {AnyObject} */
