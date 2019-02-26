@@ -15,9 +15,9 @@ import Dex = require('./dex');
 import {Pokemon} from './pokemon';
 import {PRNG} from './prng';
 import {Side} from './side';
-import TeamValidator = require('./team-validator');
+import {TeamValidator} from './team-validator';
 
-export = {
+export {
 	Pokemon,
 	Side,
 	Battle,

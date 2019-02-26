@@ -8,7 +8,7 @@ import SimType = require('./../sim/index');
 import {Pokemon as PokemonType} from './../sim/pokemon';
 import {PRNG as PRNGType, PRNGSeed as PRNGSeedType} from './../sim/prng';
 import {Side as SideType} from './../sim/side';
-import TeamValidatorType = require('./../sim/team-validator');
+import {TeamValidator as TeamValidatorType} from'./../sim/team-validator';
 
 import RoomsType = require('./../server/rooms');
 import RoomlogsType = require('./../server/roomlogs');

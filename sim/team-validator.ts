@@ -9,7 +9,7 @@
 
 import Dex = require('./dex');
 
-class Validator {
+export class Validator {
 	format: Format;
 	dex: ModdedDex;
 	ruleTable: RuleTable;
@@ -1282,8 +1282,6 @@ function getValidator(format: string | Format) {
 	return new Validator(format);
 }
 
-const TeamValidator = Object.assign(getValidator, {
+export const TeamValidator = Object.assign(getValidator, {
 	Validator,
 });
-
-export = TeamValidator;

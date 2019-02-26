@@ -1026,9 +1026,8 @@ const StreamProcessManager = require('../lib/process-manager').StreamProcessMana
 
 const PM = new StreamProcessManager(module, () => {
 	const battleStreamLoc = '../.sim-dist/battle-stream'; // Typescript workaround
-	/** @type {import('../sim/battle-stream').BattleStream} */
+	/** @type {typeof import('../sim/battle-stream').BattleStream} */
 	const BattleStream = require(battleStreamLoc).BattleStream;
-	// @ts-ignore
 	return new BattleStream({keepAlive: true});
 });
 

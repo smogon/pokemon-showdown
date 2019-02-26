@@ -5,7 +5,7 @@ const dexLoc = './../.sim-dist/dex';
 const prngLoc = './../.sim-dist/prng';
 /** @type {typeof import('./../sim/dex')} */
 const Dex = require(dexLoc);
-/** @type {import('./../sim/prng').PRNG} */
+/** @type {typeof import('./../sim/prng').PRNG} */
 const PRNG = require(prngLoc).PRNG;
 
 /**@type {AnyObject} */
@@ -43,7 +43,6 @@ class RandomTeams extends Dex.ModdedDex {
 
 		this.factoryTier = '';
 		this.format = format;
-		// @ts-ignore
 		this.prng = prng && !Array.isArray(prng) ? prng : new PRNG(prng);
 	}
 

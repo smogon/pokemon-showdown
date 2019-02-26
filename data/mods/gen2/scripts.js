@@ -340,7 +340,6 @@ let BattleScripts = {
 			}
 			if (moveData.status) {
 				hitResult = target.trySetStatus(moveData.status, pokemon, move);
-				// @ts-ignore
 				if (!hitResult && move.status) return hitResult;
 				didSomething = didSomething || hitResult;
 			}

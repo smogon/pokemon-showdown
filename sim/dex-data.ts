@@ -856,7 +856,7 @@ export class Move extends BasicEffect {
 	/** Move target used if the user is not a Ghost type (for Curse). */
 	nonGhostTarget: string;
 	/** Whether or not the move ignores abilities. */
-	ignoreAbility: string;
+	ignoreAbility: boolean;
 	/**
 	 * Move damage against the current target
 	 * false = move will always fail with "But it failed!"

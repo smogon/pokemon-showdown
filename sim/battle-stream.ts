@@ -41,13 +41,12 @@ function splitFirst(str: string, delimiter: string, limit: number = 1) {
 export class BattleStream extends Streams.ObjectReadWriteStream {
 	debug: boolean;
 	keepAlive: boolean;
-	battle: Battle;
+	battle: Battle | null;
 
 	constructor(options: {debug?: boolean, keepAlive?: boolean} = {}) {
 		super();
 		this.debug = !!options.debug;
 		this.keepAlive = !!options.keepAlive;
-		// @ts-ignore
 		this.battle = null;
 	}
 
@@ -100,26 +99,26 @@ export class BattleStream extends Streams.ObjectReadWriteStream {
 			break;
 		case 'player':
 			const [slot, optionsText] = splitFirst(message, ' ');
-			this.battle.setPlayer(slot as PlayerSlot, JSON.parse(optionsText));
+			this.battle!.setPlayer(slot as PlayerSlot, JSON.parse(optionsText));
 			break;
 		case 'p1':
 		case 'p2':
 			if (message === 'undo') {
-				this.battle.undoChoice(type);
+				this.battle!.undoChoice(type);
 			} else {
-				this.battle.choose(type, message);
+				this.battle!.choose(type, message);
 			}
 			break;
 		case 'forcewin':
 		case 'forcetie':
-			this.battle.win(type === 'forcewin' ? message : null);
+			this.battle!.win(type === 'forcewin' ? message : null);
 			break;
 		case 'tiebreak':
-			this.battle.tiebreak();
+			this.battle!.tiebreak();
 			break;
 		case 'eval':
 			/* tslint:disable:no-eval */
-			let battle = this.battle;
+			let battle = this.battle!;
 			let p1 = battle && battle.p1;
 			let p2 = battle && battle.p2;
 			let p1active = p1 && p1.active[0];
@@ -159,7 +158,6 @@ export class BattleStream extends Streams.ObjectReadWriteStream {
 		if (this.battle) {
 			this.battle.destroy();
 		}
-		// @ts-ignore
 		this.battle = null;
 	}
 }

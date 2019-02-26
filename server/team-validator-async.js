@@ -66,7 +66,7 @@ if (!PM.isParentProcess) {
 	global.Config = require('../config/config');
 
 	const teamValidatorLoc = '../.sim-dist/team-validator'; // Typescript Workaround
-	global.TeamValidator = /** @type {typeof import('../sim/team-validator')} */(require(teamValidatorLoc));
+	global.TeamValidator = require(teamValidatorLoc).TeamValidator;
 	// @ts-ignore ???
 	global.Monitor = {
 		/**
