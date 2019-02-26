@@ -4,71 +4,79 @@
  *
  * @license MIT license
  */
-'use strict';
+import {Pokemon} from './pokemon';
 
-const Pokemon = require('./pokemon');
+/** A single action that can be chosen. */
+interface ChosenAction {
+	choice: 'move' | 'switch' | 'instaswitch' | 'team' | 'shift' | 'pass'; 	// action type
+	pokemon?: Pokemon; // the pokemon doing the action
+	targetLoc?: number; // relative location of the target to pokemon (move action only)
+	moveid: string; // a move to use (move action only)
+	target?: Pokemon; // the target of the action
+	index?: number; // the chosen index in Team Preview
+	side?: Side; // the action's side
+	mega?: boolean | null; // true if megaing or ultra bursting
+	zmove?: string; // if zmoving, the name of the zmove
+	priority?: number; // priority of the action
+}
 
-/**
- * An object representing a single action that can be chosen.
- *
- * @typedef {Object} ChosenAction
- * @property {'move' | 'switch' | 'instaswitch' | 'team' | 'shift' | 'pass'} choice - action type
- * @property {Pokemon} [pokemon] - the pokemon doing the action
- * @property {number} [targetLoc] - relative location of the target to pokemon (move action only)
- * @property {string} [moveid] - a move to use (move action only)
- * @property {Pokemon} [target] - the target of the action
- * @property {number} [index] - the chosen index in Team Preview
- * @property {Side} [side] - the action's side
- * @property {?boolean} [mega] - true if megaing or ultra bursting
- * @property {string | undefined} [zmove] - if zmoving, the name of the zmove
- * @property {number} [priority] - priority of the action
- */
+/** What the player has chosen to happen. */
+interface Choice {
+	cantUndo: boolean; // true if the choice can't be cancelled because of the maybeTrapped issue
+	error: string; // contains error text in the case of a choice error
+	actions: ChosenAction[]; // array of chosen actions
+	forcedSwitchesLeft: number; // number of switches left that need to be performed
+	forcedPassesLeft: number; // number of passes left that need to be performed
+	switchIns: Set<number>; // indexes of pokemon chosen to switch in
+	zMove: boolean; // true if a Z-move has already been selected
+	mega: boolean; // true if a mega evolution has already been selected
+	ultra: boolean; // true if an ultra burst has already been selected
+}
 
-/**
- * An object representing what the player has chosen to happen.
- *
- * @typedef {Object} Choice
- * @property {boolean} cantUndo - true if the choice can't be cancelled because of the maybeTrapped issue
- * @property {string} error - contains error text in the case of a choice error
- * @property {ChosenAction[]} actions - array of chosen actions
- * @property {number} forcedSwitchesLeft - number of switches left that need to be performed
- * @property {number} forcedPassesLeft - number of passes left that need to be performed
- * @property {Set<number>} switchIns - indexes of pokemon chosen to switch in
- * @property {boolean} zMove - true if a Z-move has already been selected
- * @property {boolean} mega - true if a mega evolution has already been selected
- * @property {boolean} ultra - true if an ultra burst has already been selected
- */
-
-class Side {
+export class Side {
+	battle: Battle;
+	n: number;
+	name: string;
+	avatar: string;
+	pokemon: Pokemon[];
+	active: Pokemon[];
+	sideConditions: AnyObject;
+	pokemonLeft: number;
+	faintedLastTurn: boolean;
+	faintedThisTurn: boolean;
+	zMoveUsed: boolean;
+	choice: Choice;
 	/**
-	 * @param {string} name
-	 * @param {Battle} battle
-	 * @param {number} sideNum
-	 * @param {PokemonSet[]} team
+	 *  'move' - Move request, at the beginning of every turn
+	 * 'switch' - Switch request, at the end of every turn with fainted Pokémon, or mid-turn for U-turn etc
+	 * 'teampreview' - Team Preview, at the beginning of a battle
+	 * '' - No request (waiting for other player's switch request)
 	 */
-	constructor(name, battle, sideNum, team) {
+	currentRequest: 'move' | 'switch' | 'teampreview' | '';
+	maxTeamSize: number;
+	id: 'p1' | 'p2';
+	foe: Side;
+	team: PokemonSet[];
+	lastMove: Move | null;
+
+	constructor(name: string, battle: Battle, sideNum: number, team: PokemonSet[]) {
 		let sideScripts = battle.data.Scripts.side;
 		if (sideScripts) Object.assign(this, sideScripts);
 
-		/**@type {Battle} */
 		this.battle = battle;
 		this.n = sideNum;
 		this.name = name;
 		this.avatar = '';
 
-		/** @type {Pokemon[]} */
 		this.pokemon = [];
-		/** @type {Pokemon[]} */
 		// @ts-ignore
 		this.active = [null];
-		/**@type {AnyObject} */
 		this.sideConditions = {};
 
 		this.pokemonLeft = 0;
 		this.faintedLastTurn = false;
 		this.faintedThisTurn = false;
 		this.zMoveUsed = false;
-		/** @type {Choice} */
 		this.choice = {
 			cantUndo: false,
 			error: ``,
@@ -91,7 +99,6 @@ class Side {
 		this.maxTeamSize = 6;
 
 		this.id = sideNum ? 'p2' : 'p1';
-		/**@type {Side} */
 		this.foe = sideNum ? this.battle.sides[0] : this.battle.sides[1];
 
 		switch (this.battle.gameType) {
@@ -107,7 +114,7 @@ class Side {
 
 		this.team = team;
 		for (let i = 0; i < this.team.length && i < 24; i++) {
-			//console.log("NEW POKEMON: " + (this.team[i] ? this.team[i].name : '[unidentified]'));
+			// console.log("NEW POKEMON: " + (this.team[i] ? this.team[i].name : '[unidentified]'));
 			this.pokemon.push(new Pokemon(this.team[i], this));
 		}
 		this.pokemonLeft = this.pokemon.length;
@@ -116,12 +123,12 @@ class Side {
 		}
 
 		// old-gens
-		/**@type {?Move} */
 		this.lastMove = null;
 	}
 
 	getChoice() {
 		if (this.choice.actions.length > 1 && this.choice.actions.every(action => action.choice === 'team')) {
+			// @ts-ignore
 			return `team ` + this.choice.actions.map(action => action.pokemon.position + 1).join(', ');
 		}
 		return this.choice.actions.map(action => {
@@ -134,8 +141,10 @@ class Side {
 				return `move ${action.moveid}${details}`;
 			case 'switch':
 			case 'instaswitch':
+				// @ts-ignore
 				return `switch ${action.target.position + 1}`;
 			case 'team':
+				// @ts-ignore
 				return `team ${action.pokemon.position + 1}`;
 			default:
 				return action.choice;
@@ -151,12 +160,10 @@ class Side {
 		let data = {
 			name: this.name,
 			id: this.id,
-			/**@type {AnyObject[]} */
-			pokemon: [],
+			pokemon: [] as AnyObject[],
 		};
 		for (const pokemon of this.pokemon) {
-			/**@type {AnyObject} */
-			let entry = {
+			let entry: AnyObject = {
 				ident: pokemon.fullname,
 				details: pokemon.details,
 				condition: pokemon.getHealth(pokemon.side),
@@ -190,18 +197,12 @@ class Side {
 		return this.battle.sample(actives);
 	}
 
-	/**
-	 * @param {string | Effect} status
-	 * @param {Pokemon? | 'debug'} source
-	 * @param {Effect?} sourceEffect
-	 * @return {boolean} success
-	 */
-	addSideCondition(status, source = null, sourceEffect = null) {
+	addSideCondition(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null): boolean {
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.active[0];
 		if (!source) throw new Error(`setting sidecond without a source`);
 
-		status = this.battle.getEffect(status);
+		status = this.battle.getEffect(status) as Effect;
 		if (this.sideConditions[status.id]) {
 			if (!status.onRestart) return false;
 			return this.battle.singleEvent('Restart', status, this.sideConditions[status.id], this, source, sourceEffect);
@@ -209,7 +210,7 @@ class Side {
 		this.sideConditions[status.id] = {
 			id: status.id,
 			target: this,
-			source: source,
+			source,
 			sourcePosition: source.position,
 			duration: status.duration,
 		};
@@ -223,30 +224,22 @@ class Side {
 		return true;
 	}
 
-	/**
-	 * @param {string | Effect} status
-	 */
-	getSideCondition(status) {
-		status = this.battle.getEffect(status);
+	getSideCondition(status: string | Effect) {
+		status = this.battle.getEffect(status) as Effect;
 		if (!this.sideConditions[status.id]) return null;
 		return status;
 	}
 
-	/**
-	 * @param {string | Effect} status
-	 */
-	removeSideCondition(status) {
-		status = this.battle.getEffect(status);
+	removeSideCondition(status: string | Effect) {
+		status = this.battle.getEffect(status) as Effect;
 		if (!this.sideConditions[status.id]) return false;
 		this.battle.singleEvent('End', status, this.sideConditions[status.id], this);
 		delete this.sideConditions[status.id];
 		return true;
 	}
 
-	/**
-	 * @param {(string | number | Function | AnyObject)[]} parts
-	 */
-	send(...parts) {
+	// tslint:disable-next-line:ban-types
+	send(...parts: (string | number | Function | AnyObject)[]) {
 		let sideUpdate = '|' + parts.map(part => {
 			if (typeof part !== 'function') return part;
 			return part(this);
@@ -254,24 +247,15 @@ class Side {
 		this.battle.send('sideupdate', `${this.id}\n${sideUpdate}`);
 	}
 
-	/**
-	 * @param {(string | number | AnyObject)[]} args
-	 */
-	emitCallback(...args) {
+	emitCallback(...args: (string | number | AnyObject)[]) {
 		this.battle.send('sideupdate', `${this.id}\n|callback|${args.join('|')}`);
 	}
 
-	/**
-	 * @param {AnyObject} update
-	 */
-	emitRequest(update) {
+	emitRequest(update: AnyObject) {
 		this.battle.send('sideupdate', `${this.id}\n|request|${JSON.stringify(update)}`);
 	}
 
-	/**
-	 * @param {string} message
-	 */
-	emitChoiceError(message) {
+	emitChoiceError(message: string) {
 		this.choice.error = message;
 		this.battle.send('sideupdate', `${this.id}\n|error|[Invalid choice] ${message}`);
 		return false;
@@ -290,12 +274,7 @@ class Side {
 		return this.choice.actions.length >= this.active.length;
 	}
 
-	/**
-	 * @param {string | number} [moveText]
-	 * @param {number} [targetLoc]
-	 * @param {boolean | string} [megaOrZ]
-	 */
-	chooseMove(moveText, targetLoc, megaOrZ) {
+	chooseMove(moveText?: string | number, targetLoc?: number, megaOrZ?: boolean | string) {
 		if (this.currentRequest !== 'move') {
 			return this.emitChoiceError(`Can't move: You need a ${this.currentRequest} response`);
 		}
@@ -304,8 +283,7 @@ class Side {
 			return this.emitChoiceError(`Can't move: You sent more choices than unfainted Pokémon.`);
 		}
 		const autoChoose = !moveText;
-		/**@type {Pokemon} */
-		const pokemon = this.active[index];
+		const pokemon: Pokemon = this.active[index];
 
 		if (megaOrZ === true) megaOrZ = 'mega';
 		if (!targetLoc) targetLoc = 0;
@@ -393,7 +371,7 @@ class Side {
 			const lockedMoveTarget = pokemon.lastMoveTargetLoc;
 			this.choice.actions.push({
 				choice: 'move',
-				pokemon: pokemon,
+				pokemon,
 				targetLoc: lockedMoveTarget || 0,
 				moveid: toId(lockedMove),
 			});
@@ -451,9 +429,9 @@ class Side {
 
 		this.choice.actions.push({
 			choice: 'move',
-			pokemon: pokemon,
-			targetLoc: targetLoc,
-			moveid: moveid,
+			pokemon,
+			targetLoc,
+			moveid,
 			mega: mega || ultra,
 			zmove: zMove,
 		});
@@ -469,10 +447,7 @@ class Side {
 		return true;
 	}
 
-	/**
-	 * @param {string} [slotText]
-	 */
-	chooseSwitch(slotText) {
+	chooseSwitch(slotText?: string) {
 		if (this.currentRequest !== 'move' && this.currentRequest !== 'switch') {
 			return this.emitChoiceError(`Can't switch: You need a ${this.currentRequest} response`);
 		}
@@ -495,13 +470,13 @@ class Side {
 			while (this.choice.switchIns.has(slot) || this.pokemon[slot].fainted) slot++;
 		} else {
 			// @ts-ignore
-			slot = parseInt(slotText) - 1;
+			slot = parseInt(slotText, 10) - 1;
 		}
 		if (isNaN(slot) || slot < 0) {
 			// maybe it's a name!
 			slot = -1;
-			for (const [i, pokemon] of this.pokemon.entries()) {
-				if (slotText === pokemon.name) {
+			for (const [i, mon] of this.pokemon.entries()) {
+				if (slotText === mon.name) {
 					slot = i;
 					break;
 				}
@@ -539,27 +514,25 @@ class Side {
 
 		this.choice.switchIns.add(slot);
 
+		// tslint:disable-next-line:no-object-literal-type-assertion
 		this.choice.actions.push({
 			choice: (this.currentRequest === 'switch' ? 'instaswitch' : 'switch'),
-			pokemon: pokemon,
+			pokemon,
 			target: targetPokemon,
-		});
+		} as ChosenAction);
 
 		return true;
 	}
 
-	/**
-	 * @param {string} [data]
-	 */
-	chooseTeam(data) {
+	chooseTeam(data?: string) {
 		const autoFill = !data;
 		// default to sending team in order
 		if (!data) data = `123456`;
 		let positions;
 		if (data.includes(',')) {
-			positions = ('' + data).split(',').map(datum => parseInt(datum) - 1);
+			positions = ('' + data).split(',').map(datum => parseInt(datum, 10) - 1);
 		} else {
-			positions = ('' + data).split('').map(datum => parseInt(datum) - 1);
+			positions = ('' + data).split('').map(datum => parseInt(datum, 10) - 1);
 		}
 
 		if (autoFill && this.choice.actions.length >= this.maxTeamSize) return true;
@@ -589,12 +562,13 @@ class Side {
 			}
 
 			this.choice.switchIns.add(pos);
+			// tslint:disable-next-line:no-object-literal-type-assertion
 			this.choice.actions.push({
 				choice: 'team',
-				index: index,
+				index,
 				pokemon: this.pokemon[pos],
 				priority: -index,
-			});
+			} as ChosenAction);
 		}
 
 		return true;
@@ -611,13 +585,13 @@ class Side {
 		} else if (index === 1) {
 			return this.emitChoiceError(`Can't shift: You can only shift from the edge to the center`);
 		}
-		/**@type {Pokemon} */
-		const pokemon = this.active[index];
+		const pokemon: Pokemon = this.active[index];
 
+		// tslint:disable-next-line:no-object-literal-type-assertion
 		this.choice.actions.push({
 			choice: 'shift',
-			pokemon: pokemon,
-		});
+			pokemon,
+		} as ChosenAction);
 
 		return true;
 	}
@@ -644,10 +618,7 @@ class Side {
 		};
 	}
 
-	/**
-	 * @param {string} input
-	 */
-	choose(input) {
+	choose(input: string) {
 		if (!this.currentRequest) {
 			return this.emitChoiceError(this.battle.ended ? `Can't do anything: The game is over` : `Can't do anything: It's not your turn`);
 		}
@@ -680,7 +651,7 @@ class Side {
 			case 'move':
 				let targetLoc = 0;
 				if (/\s-?[1-3]$/.test(data)) {
-					targetLoc = parseInt(data.slice(-2));
+					targetLoc = parseInt(data.slice(-2), 10);
 					data = data.slice(0, data.lastIndexOf(' '));
 				}
 				const willMega = data.endsWith(' mega') ? 'mega' : '';
@@ -720,10 +691,7 @@ class Side {
 		return true;
 	}
 
-	/**
-	 * @param {boolean} [isPass]
-	 */
-	getChoiceIndex(isPass) {
+	getChoiceIndex(isPass?: boolean) {
 		let index = this.choice.actions.length;
 
 		if (!isPass) {
@@ -747,14 +715,10 @@ class Side {
 		return index;
 	}
 
-	/**
-	 * @return {boolean | Side}
-	 */
-	choosePass() {
+	choosePass(): boolean | Side {
 		const index = this.getChoiceIndex(true);
 		if (index >= this.active.length) return false;
-		/**@type {Pokemon} */
-		const pokemon = this.active[index];
+		const pokemon: Pokemon = this.active[index];
 
 		switch (this.currentRequest) {
 		case 'switch':
@@ -774,9 +738,10 @@ class Side {
 			return this.emitChoiceError(`Can't pass: Not a move or switch request`);
 		}
 
+		// tslint:disable-next-line:no-object-literal-type-assertion
 		this.choice.actions.push({
 			choice: 'pass',
-		});
+		} as ChosenAction);
 		return true;
 	}
 
@@ -818,5 +783,3 @@ class Side {
 		this.foe = null;
 	}
 }
-
-module.exports = Side;

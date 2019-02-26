@@ -1,14 +1,14 @@
 import child_process = require('child_process');
 
-import BattleType = require('./../sim/battle');
-import BattleStreamType = require('./../sim/battle-stream');
-import DataType = require('./../sim/dex-data');
+import {Battle as BattleType} from './../sim/battle';
+import * as BattleStreamType from './../sim/battle-stream';
+import * as DataType from './../sim/dex-data';
 import DexType = require('./../sim/dex');
 import SimType = require('./../sim/index');
-import PokemonType = require('./../sim/pokemon');
-import PRNGType = require('./../sim/prng');
-import SideType = require('./../sim/side');
-import TeamValidatorType = require('./../sim/team-validator');
+import {Pokemon as PokemonType} from './../sim/pokemon';
+import {PRNG as PRNGType, PRNGSeed as PRNGSeedType} from './../sim/prng';
+import {Side as SideType} from './../sim/side';
+import {TeamValidator as TeamValidatorType} from'./../sim/team-validator';
 
 import RoomsType = require('./../server/rooms');
 import RoomlogsType = require('./../server/roomlogs');
@@ -38,29 +38,29 @@ declare global {
 
 	// sim
 	type PlayerSlot = 'p1' | 'p2'
-	type PRNGSeed = [number, number, number, number]
-	const Battle: typeof BattleType
+	type PRNGSeed = PRNGSeedType
+	const Battle: BattleType
 	const ModdedDex: typeof DexType
-	const Pokemon: typeof PokemonType
-	const PRNG: typeof PRNGType
-	const Side: typeof SideType
+	const Pokemon: PokemonType
+	const PRNG: PRNGType
+	const Side: SideType
 	const Sim: typeof SimType
 	const TeamValidator: typeof TeamValidatorType
 	const Validator: typeof TeamValidatorType.Validator
-	const BattleStream: typeof BattleStreamType.BattleStream
+	const BattleStream: BattleStreamType.BattleStream
 
 	// dex data
-	const Ability: typeof DataType.Ability
-	const BasicEffect: typeof DataType.BasicEffect
-	const Format: typeof DataType.Format
-	const Item: typeof DataType.Item
-	const Move: typeof DataType.Move
-	const TypeInfo: typeof DataType.TypeInfo
-	const PureEffect: typeof DataType.PureEffect
-	const RuleTable: typeof DataType.RuleTable
-	const Template: typeof DataType.Template
+	const Ability: DataType.Ability
+	const BasicEffect: DataType.BasicEffect
+	const Format: DataType.Format
+	const Item: DataType.Item
+	const Move: DataType.Move
+	const TypeInfo: DataType.TypeInfo
+	const PureEffect: DataType.PureEffect
+	const RuleTable: DataType.RuleTable
+	const Template: DataType.Template
 	const toId: typeof DataType.Tools.getId
-	const Tools: typeof DataType.Tools
+	const Tools: DataType.Tools
 
 	// rooms
 	const GlobalRoom: typeof RoomsType.GlobalRoom

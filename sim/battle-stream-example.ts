@@ -8,19 +8,14 @@
  * @author Guangcong Luo <guangcongluo@gmail.com>
  */
 
-'use strict';
-
-const BattleStreams = require('./battle-stream');
-const Dex = require('./dex');
+import * as BattleStreams from './battle-stream';
+import Dex = require('./dex');
 
 /*********************************************************************
  * Helper functions
  *********************************************************************/
 
-/**
- * @param {number[]} array
- */
-function randomElem(array) {
+function randomElem(array: number[]) {
 	return array[Math.floor(Math.random() * array.length)];
 }
 
@@ -29,18 +24,15 @@ function randomElem(array) {
  *********************************************************************/
 
 class RandomPlayerAI extends BattleStreams.BattlePlayer {
-	/**
-	 * @param {AnyObject} request
-	 */
-	receiveRequest(request) {
+	receiveRequest(request: AnyObject) {
 		if (request.wait) {
 			// wait request
 			// do nothing
 		} else if (request.forceSwitch) {
 			// switch request
 			const pokemon = request.side.pokemon;
-			let chosen = /** @type {number[]} */ ([]);
-			const choices = request.forceSwitch.map((/** @type {AnyObject} */ mustSwitch) => {
+			let chosen: number[] = [];
+			const choices = request.forceSwitch.map((mustSwitch: AnyObject) => {
 				if (!mustSwitch) return `pass`;
 				let canSwitch = [1, 2, 3, 4, 5, 6];
 				canSwitch = canSwitch.filter(i => (
@@ -58,12 +50,12 @@ class RandomPlayerAI extends BattleStreams.BattlePlayer {
 			this.choose(choices.join(`, `));
 		} else if (request.active) {
 			// move request
-			const choices = request.active.map((/** @type {AnyObject} */ pokemon, /** @type {number} */ i) => {
+			const choices = request.active.map((pokemon: AnyObject, i: number) => {
 				if (request.side.pokemon[i].condition.endsWith(` fnt`)) return `pass`;
 				let canMove = [1, 2, 3, 4].slice(0, pokemon.moves.length);
-				canMove = canMove.filter(i => (
+				canMove = canMove.filter(j => (
 					// not disabled
-					!pokemon.moves[i - 1].disabled
+					!pokemon.moves[j - 1].disabled
 				));
 				const move = randomElem(canMove);
 				const targetable = request.active.length > 1 && ['normal', 'any'].includes(pokemon.moves[move - 1].target);
@@ -104,6 +96,7 @@ console.log("p2 is " + p2.constructor.name);
 
 (async () => {
 	let chunk;
+	// tslint:disable-next-line no-conditional-assignment
 	while ((chunk = await streams.omniscient.read())) {
 		console.log(chunk);
 	}

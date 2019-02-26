@@ -53,6 +53,17 @@ try {
 	);
 }
 
+// # Make sure the Typescript sources have been compiled into Javascript.
+
+try {
+	require.resolve('./.sim-dist/dex');
+} catch(err) {
+	if (err.code !== 'MODULE_NOT_FOUND') throw err; // should never happen
+
+	console.log('Building project...');
+	child_process.execSync('npm run build', {stdio: 'inherit'});
+}
+
 if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 	// Start the server.
 	//
@@ -89,7 +100,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		console.log('pokemon-showdown simulate-battle');
 		console.log('');
 		console.log('  Simulates a battle, taking input to stdin and writing output to stdout');
-		console.log('  Protocol is documented in ./sim/README.md');
+		console.log('  Protocol is documented in ./.sim-dist/README.md');
 		console.log('');
 		console.log('pokemon-showdown unpack-team');
 		console.log('');
@@ -114,7 +125,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		}
 	case 'generate-team':
 		{
-			var Dex = require('./sim/dex');
+			var Dex = require('./.sim-dist/dex');
 			global.toId = Dex.getId;
 			var seed = process.argv[4] ? process.argv[4].split(',').map(Number) : undefined;
 			console.log(Dex.packTeam(Dex.generateTeam(process.argv[3], seed)));
@@ -122,8 +133,8 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		break;
 	case 'validate-team':
 		{
-			var Dex = require('./sim/dex');
-			var TeamValidator = require('./sim/team-validator');
+			var Dex = require('./.sim-dist/dex');
+			var TeamValidator = require('./.sim-dist/team-validator');
 			var validator = TeamValidator(process.argv[3]);
 			var Streams = require('./lib/streams');
 			var stdin = new Streams.ReadStream(process.stdin);
@@ -146,7 +157,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		break;
 	case 'simulate-battle':
 		{
-			var BattleTextStream = require('./sim/battle-stream').BattleTextStream;
+			var BattleTextStream = require('./.sim-dist/battle-stream').BattleTextStream;
 			var Streams = require('./lib/streams');
 			var stdin = new Streams.ReadStream(process.stdin);
 			var stdout = new Streams.WriteStream(process.stdout);
@@ -160,7 +171,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		break;
 	case 'unpack-team':
 		{
-			var Dex = require('./sim/dex');
+			var Dex = require('./.sim-dist/dex');
 			var Streams = require('./lib/streams');
 			var stdin = new Streams.ReadStream(process.stdin);
 
@@ -178,7 +189,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		break;
 	case 'pack-team':
 		{
-			var Dex = require('./sim/dex');
+			var Dex = require('./.sim-dist/dex');
 			var Streams = require('./lib/streams');
 			var stdin = new Streams.ReadStream(process.stdin);
 

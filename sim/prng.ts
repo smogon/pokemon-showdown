@@ -6,37 +6,30 @@
  *
  * @license MIT license
  */
-'use strict';
 
-/**
- * 64-bit, [high -> low]
- * @typedef {[number, number, number, number]} PRNGSeed
- */
+/** 64-bit [high -> low] */
+export type PRNGSeed = [number, number, number, number];
 
 /**
  * A PRNG intended to emulate the on-cartridge PRNG for Gen 5 with a 64-bit
  * initial seed.
  */
-class PRNG {
-	/**
-	 * Creates a new source of randomness for the given seed.
-	 *
-	 * @param {PRNGSeed?} [seed]
-	 */
-	constructor(seed = null) {
+export class PRNG {
+	initialSeed: PRNGSeed;
+	seed: PRNGSeed;
+	/** Creates a new source of randomness for the given seed. */
+	constructor(seed: PRNGSeed | null = null) {
 		if (!seed) seed = PRNG.generateSeed();
-		this.initialSeed = /** @type {PRNGSeed} */ (seed.slice()); // make a copy
-		/** @type {PRNGSeed} */ // TypeScript bug: can't infer type
-		this.seed = /** @type {PRNGSeed} */ (seed.slice());
+		this.initialSeed = seed.slice() as PRNGSeed; // make a copy
+		this.seed = seed.slice() as PRNGSeed;
 	}
 
 	/**
 	 * Getter to the initial seed.
 	 *
 	 * This should be considered a hack and is only here for backwards compatibility.
-	 * @return {PRNGSeed}
 	 */
-	get startingSeed() {
+	get startingSeed(): PRNGSeed {
 		return this.initialSeed;
 	}
 
@@ -44,10 +37,8 @@ class PRNG {
 	 * Creates a clone of the current PRNG.
 	 *
 	 * The new PRNG will have its initial seed set to the seed of the current instance.
-	 *
-	 * @return {PRNG} - clone
 	 */
-	clone() {
+	clone(): PRNG {
 		return new PRNG(this.seed);
 	}
 
@@ -58,12 +49,8 @@ class PRNG {
 	 * - random(n) returns an integer in [0, n)
 	 * - random(m, n) returns an integer in [m, n)
 	 * m and n are converted to integers via Math.floor. If the result is NaN, they are ignored.
-	 *
-	 * @param {number} [from]
-	 * @param {number} [to]
-	 * @return {number} - a real number in [0, 1) if no arguments are specified, an integer in [0, from) if from is specified, an integer in [from, to) if from and to are specified
 	 */
-	next(from, to) {
+	next(from?: number, to?: number): number {
 		this.seed = this.nextFrame(this.seed); // Advance the RNG
 		let result = (this.seed[0] << 16 >>> 0) + this.seed[1]; // Use the upper 32 bits
 		if (from) from = Math.floor(from);
@@ -87,12 +74,8 @@ class PRNG {
 	 * The numerator must be a non-negative integer (`>= 0`).
 	 *
 	 * The denominator must be a positive integer (`> 0`).
-	 *
-	 * @param {number} numerator - the top part of the probability fraction
-	 * @param {number} denominator - the bottom part of the probability fraction
-	 * @return {boolean} - randomly true or false
 	 */
-	randomChance(numerator, denominator) {
+	randomChance(numerator: number, denominator: number): boolean {
 		return this.next(denominator) < numerator;
 	}
 
@@ -108,12 +91,8 @@ class PRNG {
 	 * The array must contain at least one item.
 	 *
 	 * The array must not be sparse.
-	 *
-	 * @param {ReadonlyArray<T>} items - the items to choose from
-	 * @return {T} - a random item from items
-	 * @template T
 	 */
-	sample(items) {
+	sample<T>(items: ReadonlyArray<T>): T {
 		if (items.length === 0) {
 			throw new RangeError(`Cannot sample an empty array`);
 		}
@@ -130,11 +109,8 @@ class PRNG {
 	 *
 	 * At least according to V4 in
 	 * https://github.com/Zarel/Pokemon-Showdown/issues/1157#issuecomment-214454873
-	 *
-	 * @param {T[]} items
-	 * @template T
 	 */
-	shuffle(items, start = 0, end = items.length) {
+	shuffle<T>(items: T[], start: number = 0, end: number = items.length) {
 		while (start < end - 1) {
 			const nextIndex = this.next(start, end);
 			if (start !== nextIndex) {
@@ -195,22 +171,15 @@ class PRNG {
 	 *
 	 * This is all ignoring overflow/carry because that cannot be shown in a pseudo-mathematical equation.
 	 * The below code implements a optimised version of that equation while also checking for overflow/carry.
-	 *
-	 * @param {PRNGSeed} initialSeed
-	 * @param {number} [framesToAdvance = 1]
-	 * @return {PRNGSeed} the new seed
 	 */
-	nextFrame(initialSeed, framesToAdvance = 1) {
+	nextFrame(initialSeed: PRNGSeed, framesToAdvance: number = 1): PRNGSeed {
 		// Use Slice so we don't actually alter the original seed.
-		/** @type {PRNGSeed} */
-		// @ts-ignore TypeScript bug
-		let seed = initialSeed.slice();
+		let seed: PRNGSeed = initialSeed.slice() as PRNGSeed;
 		for (let frame = 0; frame < framesToAdvance; ++frame) {
 			const a = [0x5D58, 0x8B65, 0x6C07, 0x8965];
 			const c = [0, 0, 0x26, 0x9EC3];
 
-			/** @type {PRNGSeed} */
-			const nextSeed = [0, 0, 0, 0];
+			const nextSeed: PRNGSeed = [0, 0, 0, 0];
 			let carry = 0;
 
 			for (let cN = seed.length - 1; cN >= 0; --cN) {
@@ -233,16 +202,13 @@ class PRNG {
 		return seed;
 	}
 
-	/**
-	 * @return {PRNGSeed}
-	 */
 	static generateSeed() {
 		return [
 			Math.floor(Math.random() * 0x10000),
 			Math.floor(Math.random() * 0x10000),
 			Math.floor(Math.random() * 0x10000),
 			Math.floor(Math.random() * 0x10000),
-		];
+		] as PRNGSeed;
 	}
 }
 
@@ -253,7 +219,7 @@ class PRNG {
 // m and n are converted to integers via Math.floor. If the result is NaN, they
 // are ignored.
 /*
-random(m, n) {
+random(m: number, n: number) {
 	this.seed = (this.seed * 0x41C64E6D + 0x6073) >>> 0; // truncate the result to the last 32 bits
 	let result = this.seed >>> 16; // the first 16 bits of the seed are the random value
 	m = Math.floor(m)
@@ -261,5 +227,3 @@ random(m, n) {
 	return (m ? (n ? (result % (n - m)) + m : result % m) : result / 0x10000)
 }
 */
-
-module.exports = PRNG;
