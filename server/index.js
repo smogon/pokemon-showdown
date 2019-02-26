@@ -20,7 +20,7 @@
  *   rooms.js. There's also a global room which every user is in, and
  *   handles miscellaneous things like welcoming the user.
  *
- * Dex - from sim/dex.js
+ * Dex - from .sim-dist/dex.js
  *
  *   Handles getting data about Pokemon, items, etc.
  *
@@ -96,7 +96,7 @@ if (Config.watchconfig) {
  * Set up most of our globals
  *********************************************************/
 
-global.Dex = require('../sim/dex');
+global.Dex = require('../.sim-dist/dex');
 global.toId = Dex.getId;
 
 global.LoginServer = require('./loginserver');

@@ -1025,7 +1025,7 @@ exports.RoomBattle = Battle;
 const StreamProcessManager = require('../lib/process-manager').StreamProcessManager;
 
 const PM = new StreamProcessManager(module, () => {
-	const BattleStream = require('../sim/battle-stream').BattleStream;
+	const BattleStream = require('../.sim-dist/battle-stream').BattleStream;
 	return new BattleStream({keepAlive: true});
 });
 

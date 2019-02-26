@@ -14,4 +14,4 @@ try {
 	execSync('npm install', {stdio: 'inherit'});
 }
 
-execSync('npx sucrase ./sim -d ./sim --transforms typescript,imports');
+execSync('npx sucrase ./sim -d ./.sim-dist --transforms typescript,imports');

@@ -64,7 +64,7 @@ if (!PM.isParentProcess) {
 	// This is a child process!
 	// @ts-ignore This file doesn't exist on the repository, so Travis checks fail if this isn't ignored
 	global.Config = require('../config/config');
-	global.TeamValidator = require('../sim/team-validator');
+	global.TeamValidator = require('../.sim-dist/team-validator');
 	// @ts-ignore ???
 	global.Monitor = {
 		/**
@@ -88,7 +88,7 @@ if (!PM.isParentProcess) {
 		});
 	}
 
-	global.Dex = require('../sim/dex').includeData();
+	global.Dex = require('../.sim-dist/dex').includeData();
 	global.toId = Dex.getId;
 	global.Chat = require('./chat');
 
