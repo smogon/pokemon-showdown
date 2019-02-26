@@ -1,9 +1,12 @@
 'use strict';
 
+// Typescript workaround
+const dexLoc = './../.sim-dist/dex';
+const prngLoc = './../.sim-dist/prng';
 /** @type {import('./../sim/dex')} */
-const Dex = require('./../.sim-dist/dex');
+const Dex = require(dexLoc);
 /** @type {import('./../sim/prng').PRNG} */
-const PRNG = require('./../.sim-dist/prng').PRNG;
+const PRNG = require(prngLoc).PRNG;
 
 /**@type {AnyObject} */
 // @ts-ignore

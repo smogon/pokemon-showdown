@@ -64,8 +64,9 @@ if (!PM.isParentProcess) {
 	// This is a child process!
 	// @ts-ignore This file doesn't exist on the repository, so Travis checks fail if this isn't ignored
 	global.Config = require('../config/config');
-  
-	global.TeamValidator = /** @type {import('../sim/team-validator')} */(require('../.sim-dist/team-validator'));
+
+	const teamValidatorLoc = '../.sim-dist/team-validator'; // Typescript Workaround
+	global.TeamValidator = /** @type {import('../sim/team-validator')} */(require(teamValidatorLoc));
 	// @ts-ignore ???
 	global.Monitor = {
 		/**
