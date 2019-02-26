@@ -596,7 +596,7 @@ if (!PM.isParentProcess) {
 			require('../../lib/crashlogger')(err, 'A modlog child process');
 		}
 	});
-	global.Dex = require('../../sim/dex');
+	global.Dex = require('../../.sim-dist/dex');
 	global.toId = Dex.getId;
 
 	require('../../lib/repl').start('modlog', cmd => eval(cmd));

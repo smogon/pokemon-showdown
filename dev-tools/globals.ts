@@ -1,8 +1,8 @@
-type Battle = import('./../sim/battle')
+type Battle = import('./../sim/battle').Battle
 type ModdedDex = typeof import('./../sim/dex')
-type Pokemon = import('./../sim/pokemon')
-type Side = import('./../sim/side')
-type Validator = ReturnType<typeof import('./../sim/team-validator')>
+type Pokemon = import('./../sim/pokemon').Pokemon
+type Side = import('./../sim/side').Side
+type Validator = import('./../sim/team-validator').Validator
 
 type PageTable = import('./../server/chat').PageTable
 type ChatCommands = import('./../server/chat').ChatCommands
@@ -782,7 +782,7 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	side?: ModdedBattleSide
 	boost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source?: Pokemon | null, effect?: Effect | string | null, isSecondary?: boolean, isSelf?: boolean) => boolean | null | 0
 	debug?: (this: Battle, activity: string) => void
-	getDamage?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: string | number | ActiveMove, suppressMessages: boolean) => number
+	getDamage?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: string | number | ActiveMove, suppressMessages: boolean) => number | undefined | null | false
 	getEffect?: (this: Battle, name: string | Effect | null) => Effect
 	init?: (this: Battle) => void
 	modifyDamage?: (this: Battle, baseDamage: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove, suppressMessages?: boolean) => void

@@ -1614,10 +1614,10 @@ if (!PM.isParentProcess) {
 		});
 	}
 
-	global.Dex = require('../../sim/dex');
+	global.Dex = require('../../.sim-dist/dex');
 	global.toId = Dex.getId;
 	Dex.includeData();
-	global.TeamValidator = require('../../sim/team-validator');
+	global.TeamValidator = require('../../.sim-dist/team-validator').TeamValidator;
 
 	require('../../lib/repl').start('dexsearch', cmd => eval(cmd));
 } else {

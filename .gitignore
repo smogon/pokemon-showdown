@@ -9,6 +9,9 @@ npm-debug.log
 .eslintcache
 package-lock.json
 
+# Typescript build artifacts
+.sim-dist/
+
 # visual studio live share
 .vs
 
@@ -31,7 +34,6 @@ tmp/**/*
 .installed.cfg
 
 downloads
-build
 dist
 
 # egg related
@@ -53,4 +55,3 @@ local_settings.py
 .svn
 
 pip-log.txt
-

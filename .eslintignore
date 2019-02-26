@@ -2,3 +2,4 @@ server/tournaments/lib/
 logs/
 dev-tools/globals.js
 node_modules/
+.sim-dist/

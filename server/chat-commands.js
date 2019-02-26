@@ -3035,12 +3035,12 @@ const commands = {
 				if (lock['battles']) return this.errorReply(`Hot-patching battles has been disabled by ${lock['battles'].by} (${lock['battles'].reason})`);
 				if (lock['validator']) return this.errorReply(`Hot-patching the validator has been disabled by ${lock['validator'].by} (${lock['validator'].reason})`);
 
-				// uncache the sim/dex.js dependency tree
+				// uncache the .sim-dist/dex.js dependency tree
 				Chat.uncacheDir('./sim');
 				Chat.uncacheDir('./data');
 				Chat.uncache('./config/formats');
-				// reload sim/dex.js
-				global.Dex = require('../sim/dex');
+				// reload .sim-dist/dex.js
+				global.Dex = require('../.sim-dist/dex');
 				// rebuild the formats list
 				delete Rooms.global.formatList;
 				// respawn validator processes
@@ -3089,7 +3089,7 @@ const commands = {
 		`You can disable various hot-patches with /nohotpatch. For more information on this, see /help nohotpatch`,
 		`/hotpatch chat - reload chat-commands.js and the chat-plugins`,
 		`/hotpatch validator - spawn new team validator processes`,
-		`/hotpatch formats - reload the sim/dex.js tree, rebuild and rebroad the formats list, and spawn new simulator and team validator processes`,
+		`/hotpatch formats - reload the .sim-dist/dex.js tree, rebuild and rebroad the formats list, and spawn new simulator and team validator processes`,
 		`/hotpatch dnsbl - reloads Dnsbl datacenters`,
 		`/hotpatch punishments - reloads new punishments code`,
 		`/hotpatch tournaments - reloads new tournaments code`,
