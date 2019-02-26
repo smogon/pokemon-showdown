@@ -2234,6 +2234,7 @@ export class Battle extends Dex.ModdedDex {
 
 		switch (targetType) {
 		case 'randomNormal':
+		case 'scripted':
 		case 'normal':
 			return isAdjacent;
 		case 'adjacentAlly':
