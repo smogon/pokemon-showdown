@@ -57,7 +57,7 @@ describe('Counter', function () {
 		assert.false.fullHP(battle.p2.active[1]);
 	});
 
-	it('should bypass Follow Me', function () {
+	it('should respect Follow Me', function () {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Bastiodon', ability: 'sturdy', moves: ['counter']},
@@ -68,8 +68,8 @@ describe('Counter', function () {
 			{species: 'Clefable', ability: 'unaware', moves: ['followme']},
 		]);
 		battle.makeChoices('move counter, move splash', 'move acrobatics 1, move followme');
-		assert.fullHP(battle.p2.active[1]);
-		assert.false.fullHP(battle.p2.active[0]);
+		assert.false.fullHP(battle.p2.active[1]);
+		assert.fullHP(battle.p2.active[0]);
 	});
 });
 
@@ -123,7 +123,7 @@ describe('Mirror Coat', function () {
 		assert.false.fullHP(battle.p2.active[1]);
 	});
 
-	it('should bypass Follow Me', function () {
+	it('should respect Follow Me', function () {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.join('p1', 'Guest 1', 1, [
 			{species: 'Mew', ability: 'synchronize', moves: ['mirrorcoat']},
@@ -134,7 +134,7 @@ describe('Mirror Coat', function () {
 			{species: 'Clefable', ability: 'unaware', moves: ['followme']},
 		]);
 		battle.makeChoices('move mirrorcoat, move splash', 'move venoshock 1, move followme');
-		assert.fullHP(battle.p2.active[1]);
-		assert.false.fullHP(battle.p2.active[0]);
+		assert.false.fullHP(battle.p2.active[1]);
+		assert.fullHP(battle.p2.active[0]);
 	});
 });

@@ -2443,6 +2443,7 @@ class Battle extends Dex.ModdedDex {
 			return isAdjacent && !isFoe || isSelf;
 		case 'adjacentFoe':
 			return isAdjacent && isFoe;
+		case 'scripted':
 		case 'any':
 			return !isSelf;
 		}
