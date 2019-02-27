@@ -14757,10 +14757,11 @@ let BattleMovedex = {
 		beforeTurnCallback(pokemon) {
 			pokemon.addVolatile('shelltrap');
 		},
-		beforeMoveCallback(pokemon) {
+		onTry(pokemon) {
 			if (pokemon.volatiles['shelltrap'] && !pokemon.volatiles['shelltrap'].gotHit) {
+				this.attrLastMove('[still]');
 				this.add('cant', pokemon, 'Shell Trap', 'Shell Trap');
-				return true;
+				return false;
 			}
 		},
 		effect: {
