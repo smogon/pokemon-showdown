@@ -5809,7 +5809,7 @@ let BattleMovedex = {
 				this.add('-singleturn', pokemon, 'move: Focus Punch');
 			},
 			onHit(pokemon, source, move) {
-				if (move.category !== 'Status') {
+				if (move.category !== 'Status' && !pokemon.volatiles['encore']) {
 					pokemon.volatiles['focuspunch'].lostFocus = true;
 				}
 			},
@@ -14769,7 +14769,7 @@ let BattleMovedex = {
 				this.add('-singleturn', pokemon, 'move: Shell Trap');
 			},
 			onHit(pokemon, source, move) {
-				if (pokemon.side !== source.side && move.category === 'Physical') {
+				if (pokemon.side !== source.side && move.category === 'Physical' && !pokemon.volatiles['encore']) {
 					pokemon.volatiles['shelltrap'].gotHit = true;
 				}
 			},
