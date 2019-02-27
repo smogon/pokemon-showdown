@@ -32,7 +32,7 @@ describe('Encore', function () {
 		battle.makeChoices('move focuspunch 1, move teleport', 'move encore 1, move extremespeed 1');
 		assert.strictEqual(hp, battle.p2.active[0].hp);
 
-		// During subequent turns the normal Focus Punch behavior applies.
+		// During subsequent turns the normal Focus Punch behavior applies.
 		battle.makeChoices('move focuspunch 1, move teleport', 'move splash, move extremespeed 1');
 		assert.strictEqual(hp, battle.p2.active[0].hp);
 	});
@@ -49,10 +49,10 @@ describe('Encore', function () {
 			],
 		]);
 
-		// If the Focus Punch user is not interrupted the attack is expected to be successful.
-		battle.makeChoices('move focuspunch 1, move knockoff', 'move splash, move extremespeed 2');
+		// If the Focus Punch user is interrupted the attack is not expected to be successful.
+		battle.makeChoices('move focuspunch 1, move knockoff', 'move splash, move extremespeed 1');
 		let hp = battle.p2.active[0].hp;
-		assert.notStrictEqual(hp, battle.p2.active[0].maxhp);
+		assert.strictEqual(hp, battle.p2.active[0].maxhp);
 
 		// The Pokemon Encored into Focus Punch is not subject to the negative effects of Focus Punch; that is,
 		// if it is hit at any time before or after the Encore, it still uses Focus Punch like normal. It doesn't matter
@@ -61,7 +61,7 @@ describe('Encore', function () {
 		assert.notStrictEqual(hp, battle.p2.active[0].hp);
 		hp = battle.p2.active[0].hp;
 
-		// During subequent turns the normal Focus Punch behavior applies.
+		// During subsequent turns the normal Focus Punch behavior applies.
 		battle.makeChoices('move focuspunch 1, move teleport', 'move splash, move extremespeed 1');
 		assert.strictEqual(hp, battle.p2.active[0].hp);
 	});
