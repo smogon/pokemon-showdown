@@ -526,6 +526,7 @@ let BattleScripts = {
 		return undefined;
 	},
 	afterMoveSecondaryEvent(targets, pokemon, move) {
+		// console.log(`${targets}, ${pokemon}, ${move}`)
 		if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
 			this.singleEvent('AfterMoveSecondary', move, null, targets[0], pokemon, move);
 			this.runEvent('AfterMoveSecondary', targets, pokemon, move);
@@ -836,12 +837,12 @@ let BattleScripts = {
 		// There is no need to recursively check the ´sleepUsable´ flag as Sleep Talk can only be used while asleep.
 		let isSleepUsable = move.sleepUsable || this.getMove(move.sourceEffect).sleepUsable;
 		let i;
-		/** @type {(Pokemon | false | null)[]} */
-		let targetsCopy = targets.slice(0);
-		for (i = 0; i < hits && !targetsCopy.includes(false) && pokemon.hp; i++) {
+		for (i = 0; i < hits && !damage.includes(false) && pokemon.hp; i++) {
 			if (pokemon.status === 'slp' && !isSleepUsable) break;
 			move.hit = i + 1;
 
+			/** @type {(Pokemon | false | null)[]} */
+			let targetsCopy = targets.slice(0);
 			let target = targetsCopy[0]; // some relevant-to-single-target-moves-only things are hardcoded
 
 			// like this (Triple Kick)
