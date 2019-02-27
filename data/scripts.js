@@ -299,7 +299,7 @@ let BattleScripts = {
 		];
 		if (this.gen >= 7) {
 			// Swap step 1 with step 2
-			moveSteps.splice(2, 0, moveSteps.splice(1, 1)[0]);
+			[moveSteps[1], moveSteps[2]] = [moveSteps[2], moveSteps[1]];
 		}
 
 		this.setActiveMove(move, pokemon, targets[0]);
