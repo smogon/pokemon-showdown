@@ -46,33 +46,6 @@ let BattleAbilities = {
 			pokemon.heal(pokemon.maxhp / 4);
 		},
 	},
-	// Arrested
-	shellshocker: {
-		desc: "This Pokemon's Normal-type moves become Electric-type and have 1.2x power. In addition, this Pokemon is immune to Electric-type moves and heals 1/4 of its maximum HP, rounded down, when hit by an Electric-type move.",
-		shortDesc: "Normal-type moves become Electric with 1.2x power; Electric hits heal 1/4 max HP.",
-		id: "shellshocker",
-		name: "Shell Shocker",
-		isNonstandard: true,
-		onModifyMovePriority: -1,
-		onModifyMove(move, pokemon) {
-			if (move.type === 'Normal' && !['judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'weatherball'].includes(move.id) && !(move.isZ && move.category !== 'Status')) {
-				move.type = 'Electric';
-				move.galvanizeBoosted = true;
-			}
-		},
-		onBasePowerPriority: 8,
-		onBasePower(basePower, pokemon, target, move) {
-			if (move.galvanizeBoosted) return this.chainModify([0x1333, 0x1000]);
-		},
-		onTryHit(target, source, move) {
-			if (target !== source && move.type === 'Electric') {
-				if (!this.heal(target.maxhp / 4)) {
-					this.add('-immune', target, '[from] ability: Shell Shocker');
-				}
-				return null;
-			}
-		},
-	},
 	// Arsenal
 	logia: {
 		desc: "If this Pokemon is an Arceus, its type changes to match its held Plate or Z-Crystal, and it is immune to Normal and same-type moves.",
@@ -363,6 +336,33 @@ let BattleAbilities = {
 			if (!effect || !effect.status) return false;
 			this.add('-immune', target, '[from] ability: Sacred Shadow');
 			return false;
+		},
+	},
+	// Pablo
+	shellshocker: {
+		desc: "This Pokemon's Normal-type moves become Electric-type and have 1.2x power. In addition, this Pokemon is immune to Electric-type moves and heals 1/4 of its maximum HP, rounded down, when hit by an Electric-type move.",
+		shortDesc: "Normal-type moves become Electric with 1.2x power; Electric hits heal 1/4 max HP.",
+		id: "shellshocker",
+		name: "Shell Shocker",
+		isNonstandard: true,
+		onModifyMovePriority: -1,
+		onModifyMove(move, pokemon) {
+			if (move.type === 'Normal' && !['judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'weatherball'].includes(move.id) && !(move.isZ && move.category !== 'Status')) {
+				move.type = 'Electric';
+				move.galvanizeBoosted = true;
+			}
+		},
+		onBasePowerPriority: 8,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.galvanizeBoosted) return this.chainModify([0x1333, 0x1000]);
+		},
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Electric') {
+				if (!this.heal(target.maxhp / 4)) {
+					this.add('-immune', target, '[from] ability: Shell Shocker');
+				}
+				return null;
+			}
 		},
 	},
 	// ptoad

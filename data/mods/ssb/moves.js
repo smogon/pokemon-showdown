@@ -411,37 +411,6 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Poison",
 	},
-	// Arrested
-	jailshell: {
-		accuracy: 90,
-		basePower: 90,
-		category: "Special",
-		desc: "This move has a 50% change to paralyze the target and prevents the target from switching out or using any moves that the user also knows while the user is active.",
-		shortDesc: "50% chance to paralyze. Traps and imprisons.",
-		id: "jailshell",
-		name: "Jail Shell",
-		isNonstandard: true,
-		pp: 5,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onTryMovePriority: 100,
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, "Anchor Shot", target);
-		},
-		onHit(target, source, move) {
-			if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-			source.addVolatile('imprison', source, move);
-		},
-		secondary: {
-			chance: 50,
-			status: 'par',
-		},
-		target: "normal",
-		type: "Normal",
-	},
 	// Arsenal
 	comeonyougunners: {
 		accuracy: 100,
@@ -2845,6 +2814,37 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fairy",
 	},
+	// Pablo
+	jailshell: {
+		accuracy: 90,
+		basePower: 90,
+		category: "Special",
+		desc: "This move has a 50% change to paralyze the target and prevents the target from switching out or using any moves that the user also knows while the user is active.",
+		shortDesc: "50% chance to paralyze. Traps and imprisons.",
+		id: "jailshell",
+		name: "Jail Shell",
+		isNonstandard: true,
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Anchor Shot", target);
+		},
+		onHit(target, source, move) {
+			if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
+			source.addVolatile('imprison', source, move);
+		},
+		secondary: {
+			chance: 50,
+			status: 'par',
+		},
+		target: "normal",
+		type: "Normal",
+	},
 	// Paradise
 	corrosivetoxic: {
 		accuracy: true,
@@ -3320,7 +3320,7 @@ let BattleMovedex = {
 			this.add('-anim', source, zmove.name, target);
 			this.add('-anim', source, "Transform", source);
 		},
-		onHit(target, source, move) {
+		onAfterMoveSecondarySelf(pokemon, move) {
 			/** @type {{[move: string]: string[]}} */
 			let claims = {
 				bravebird: ['Braviary', 'Crobat', 'Decidueye', 'Dodrio', 'Farfetch\'d', 'Golbat', 'Mandibuzz', 'Pidgeot', 'Skarmory', 'Staraptor', 'Swanna', 'Swellow', 'Talonflame', 'Tapu Koko', 'Toucannon'],
@@ -3339,13 +3339,13 @@ let BattleMovedex = {
 			const generator = new RandomStaffBrosTeams('gen7randombattle', this.prng);
 			let set = generator.randomSet(claim);
 			// Suppress Ability now to prevent starting new abilities when transforming
-			source.addVolatile('gastroacid', source);
+			pokemon.addVolatile('gastroacid', pokemon);
 			// Tranform into it
-			source.formeChange(set.species, move);
+			pokemon.formeChange(set.species);
 			for (let newMove of set.moves) {
 				let moveTemplate = this.getMove(newMove);
-				if (source.moves.includes(moveTemplate.id)) continue;
-				source.moveSlots.push({
+				if (pokemon.moves.includes(moveTemplate.id)) continue;
+				pokemon.moveSlots.push({
 					move: moveTemplate.name,
 					id: moveTemplate.id,
 					pp: ((moveTemplate.noPPBoosts || moveTemplate.isZ) ? moveTemplate.pp : moveTemplate.pp * 8 / 5),
@@ -3358,10 +3358,10 @@ let BattleMovedex = {
 			}
 			// Update HP
 			// @ts-ignore Hack for Snaquaza's Z Move
-			source.claimHP = source.hp;
-			source.heal(source.maxhp - source.hp, source, move);
-			this.add('-heal', source, source.getHealth, '[silent]');
-			this.add('message', `${source.name} claims to be a ${set.species}!`);
+			pokemon.claimHP = pokemon.hp;
+			pokemon.heal(pokemon.maxhp - pokemon.hp, pokemon);
+			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+			this.add('message', `${pokemon.name} claims to be a ${set.species}!`);
 		},
 		isZ: "fakeclaimiumz",
 		secondary: null,

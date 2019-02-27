@@ -180,18 +180,6 @@ let BattleStatuses = {
 			}
 		},
 	},
-	arrested: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|%Arrested|Let's get this party started.`);
-		},
-		onSwitchOut() {
-			this.add(`c|%Arrested|I need a break, this is getting boring.`);
-		},
-		onFaint() {
-			this.add(`c|%Arrested|It's cool, I didn't wanna battle anyway.`);
-		},
-	},
 	arsenal: {
 		noCopy: true,
 		onStart() {
@@ -981,6 +969,18 @@ let BattleStatuses = {
 		},
 		onFaint() {
 			this.add(`c|+Overneat|It’s over for me?`);
+		},
+	},
+	pablo: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|%Pablo|Let's get this party started.`);
+		},
+		onSwitchOut() {
+			this.add(`c|%Pablo|I need a break, this is getting boring.`);
+		},
+		onFaint() {
+			this.add(`c|%Pablo|It's cool, I didn't wanna battle anyway.`);
 		},
 	},
 	paradise: {
