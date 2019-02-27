@@ -15,9 +15,9 @@
 
 'use strict';
 
-const FS = require('../../lib/fs');
+const FS = require('../../.lib-dist/fs').FS;
 const path = require('path');
-const Dashycode = require('../../lib/dashycode');
+const Dashycode = require('../../.lib-dist/dashycode');
 const util = require('util');
 const execFile = util.promisify(require('child_process').execFile);
 
@@ -559,7 +559,7 @@ exports.commands = {
  * Process manager
  *********************************************************/
 
-const QueryProcessManager = require('../../lib/process-manager').QueryProcessManager;
+const QueryProcessManager = require('../../.lib-dist/process-manager').QueryProcessManager;
 
 const PM = new QueryProcessManager(module, async data => {
 	switch (data.cmd) {
@@ -568,7 +568,7 @@ const PM = new QueryProcessManager(module, async data => {
 		try {
 			return await runModlog(roomidList, searchString, exactSearch, maxLines);
 		} catch (err) {
-			require('../../lib/crashlogger')(err, 'A modlog query', {
+			require('../../.lib-dist/crashlogger')(err, 'A modlog query', {
 				roomidList,
 				searchString,
 				exactSearch,
@@ -581,7 +581,7 @@ const PM = new QueryProcessManager(module, async data => {
 		try {
 			return await runBattleSearch(userid, turnLimit, month, tierid, date);
 		} catch (err) {
-			require('../../lib/crashlogger')(err, 'A battle search query', {
+			require('../../.lib-dist/crashlogger')(err, 'A battle search query', {
 				userid,
 				turnLimit,
 				month,
@@ -599,13 +599,13 @@ if (!PM.isParentProcess) {
 	global.Config = require('../../config/config');
 	process.on('uncaughtException', err => {
 		if (Config.crashguard) {
-			require('../../lib/crashlogger')(err, 'A modlog child process');
+			require('../../.lib-dist/crashlogger')(err, 'A modlog child process');
 		}
 	});
 	global.Dex = require('../../.sim-dist/dex');
 	global.toId = Dex.getId;
 
-	require('../../lib/repl').start('modlog', cmd => eval(cmd));
+	require('../../.lib-dist/repl').start('modlog', cmd => eval(cmd));
 } else {
 	PM.spawn(MAX_PROCESSES);
 }

@@ -1580,7 +1580,7 @@ function runSearch(query) {
  * Process manager
  *********************************************************/
 
-const QueryProcessManager = require('../../lib/process-manager').QueryProcessManager;
+const QueryProcessManager = require('../../.lib-dist/process-manager').QueryProcessManager;
 
 const PM = new QueryProcessManager(module, async query => {
 	try {
@@ -1599,7 +1599,7 @@ const PM = new QueryProcessManager(module, async query => {
 			return null;
 		}
 	} catch (err) {
-		require('../../lib/crashlogger')(err, 'A search query', query);
+		require('../../.lib-dist/crashlogger')(err, 'A search query', query);
 	}
 	return {error: "Sorry! Our search engine crashed on your query. We've been automatically notified and will fix this crash."};
 });
@@ -1610,7 +1610,7 @@ if (!PM.isParentProcess) {
 
 	if (Config.crashguard) {
 		process.on('uncaughtException', err => {
-			require('../../lib/crashlogger')(err, 'A dexsearch process');
+			require('../../.lib-dist/crashlogger')(err, 'A dexsearch process');
 		});
 	}
 
@@ -1619,7 +1619,7 @@ if (!PM.isParentProcess) {
 	Dex.includeData();
 	global.TeamValidator = require('../../.sim-dist/team-validator').TeamValidator;
 
-	require('../../lib/repl').start('dexsearch', cmd => eval(cmd));
+	require('../../.lib-dist/repl').start('dexsearch', cmd => eval(cmd));
 } else {
 	PM.spawn(MAX_PROCESSES);
 }
