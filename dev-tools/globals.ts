@@ -736,21 +736,39 @@ interface Format extends Readonly<BasicEffect & FormatsData> {
 interface BattleScriptsData {
 	gen: number
 	zMoveTable?: {[k: string]: string}
+	accuracy?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean[]
+	afterMoveSecondaryEvent?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => undefined
+	breakProtect?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => undefined
 	calcRecoilDamage?: (this: Battle, damageDealt: number, move: Move) => number
 	canMegaEvo?: (this: Battle, pokemon: Pokemon) => string | undefined | null
 	canUltraBurst?: (this: Battle, pokemon: Pokemon) => string | null
 	canZMove?: (this: Battle, pokemon: Pokemon) => (AnyObject | null)[] | void
+	forceSwitch?: (this: Battle, damage:(number | boolean | undefined)[], targets: (Pokemon | false | null)[], source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary: boolean | undefined, isSelf: boolean | undefined) => (number | boolean | undefined)[]
 	getZMove?: (this: Battle, move: Move, pokemon: Pokemon, skipChecks?: boolean) => string | undefined
 	getActiveZMove?: (this: Battle, move: Move, pokemon: Pokemon) => ActiveMove
+	getSpreadDamage?: (this: Battle, damage:(number | boolean | undefined)[], targets: (Pokemon | false | null)[], source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary: boolean | undefined, isSelf: boolean | undefined) => (number | boolean | undefined)[]
 	isAdjacent?: (this: Battle, pokemon1: Pokemon, pokemon2: Pokemon) => boolean
 	moveHit?: (this: Battle, target: Pokemon | null, pokemon: Pokemon, move: ActiveMove, moveData?: ActiveMove, isSecondary?: boolean, isSelf?: boolean) => number | undefined | false
+	spreadMoveHit?: (this: Battle, targets: (Pokemon | false | null)[], pokemon: Pokemon, move: ActiveMove, moveData?: ActiveMove, isSecondary?: boolean, isSelf?: boolean) => (number | undefined | boolean)[]
+	moveHitLoop?: (this: Battle, targets: (Pokemon | false | null)[], pokemon: Pokemon, move: ActiveMove) => (number | undefined | boolean)[]
+	powderImmunity?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean[]
+	pranksterImmunity?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean[]
 	resolveAction?: (this: Battle, action: AnyObject, midTurn?: boolean) => Actions["Action"]
 	runAction?: (this: Battle, action: Actions["Action"]) => void
 	runMegaEvo?: (this: Battle, pokemon: Pokemon) => boolean
 	runMove?: (this: Battle, move: Move, pokemon: Pokemon, targetLoc: number, sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean) => void
+	runMoveEffects?: (this: Battle, damage:(number | boolean | undefined)[], targets: (Pokemon | false | null)[], source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary: boolean | undefined, isSelf: boolean | undefined) => (number | boolean | undefined)[]
 	runZPower?: (this: Battle, move: ActiveMove, pokemon: Pokemon) => void
+	secondaries?: (this: Battle, targets: (Pokemon | false | null)[], source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary: boolean | undefined) => void
+	selfDrops?: (this: Battle, targets: (Pokemon | false | null)[], source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary: boolean | undefined) => void
+	stealBoosts?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => undefined
 	targetTypeChoices?: (this: Battle, targetType: string) => boolean
 	tryMoveHit?: (this: Battle, target: Pokemon, pokemon: Pokemon, move: ActiveMove) => number | undefined | false | ''
+	trySpreadMoveHit?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean
+	tryHitEvent?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => (boolean | '')[]
+	tryImmunityEvent?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean[]
+	tryPrimaryHitEvent?: (this: Battle, damage: (number | boolean | undefined)[], targets: (Pokemon | false | null)[], pokemon: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary: boolean | undefined) => (number | boolean | undefined)[]
+	typeImmunity?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean[]
 	useMove?: (this: Battle, move: Move, pokemon: Pokemon, target?: Pokemon | null | undefined, sourceEffect?: Effect | null, zMove?: string) => boolean
 	useMoveInner?: (this: Battle, move: Move, pokemon: Pokemon, target?: Pokemon | null | undefined, sourceEffect?: Effect | null, zMove?: string) => boolean
 }
