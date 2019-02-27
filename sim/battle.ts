@@ -164,6 +164,17 @@ export class Battle extends Dex.ModdedDex {
 			this.inputLog.push(`>version ${global.__version}`);
 		}
 		this.inputLog.push(`>start ` + JSON.stringify(inputOptions));
+
+		for (const rule of this.getRuleTable(format).keys()) {
+			if (rule.startsWith('+') || rule.startsWith('-') || rule.startsWith('!')) continue;
+			let subFormat = this.getFormat(rule);
+			if (subFormat.exists) {
+				let hasEventHandler = Object.keys(subFormat).some(val =>
+					val.startsWith('on') && !['onBegin', 'onValidateTeam', 'onChangeSet', 'onValidateSet'].includes(val)
+				);
+				if (hasEventHandler) this.addPseudoWeather(rule);
+			}
+		}
 		if (options.p1) {
 			this.setPlayer('p1', options.p1);
 		}
@@ -861,7 +872,7 @@ export class Battle extends Dex.ModdedDex {
 
 	findEventHandlers(thing: Pokemon | Side | Battle, eventName: string, sourceThing?: Pokemon | null) {
 		let handlers: AnyObject[] = [];
-		if (thing instanceof Pokemon) {
+		if (thing instanceof Pokemon && thing.isActive) {
 			handlers = this.findPokemonEventHandlers(thing, `on${eventName}`);
 			for (const allyActive of thing.side.active) {
 				if (!allyActive || allyActive.fainted) continue;
@@ -1679,10 +1690,6 @@ export class Battle extends Dex.ModdedDex {
 			let subFormat = this.getFormat(rule);
 			if (subFormat.exists) {
 				if (subFormat.onBegin) subFormat.onBegin.call(this);
-				let hasEventHandler = Object.keys(subFormat).some(val =>
-					val.startsWith('on') && !['onBegin', 'onValidateTeam', 'onChangeSet', 'onValidateSet', 'onModifyTemplate'].includes(val)
-				);
-				if (hasEventHandler) this.addPseudoWeather(rule);
 			}
 		}
 
