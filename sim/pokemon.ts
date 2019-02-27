@@ -201,7 +201,7 @@ export class Pokemon {
 		this.template = this.baseTemplate;
 		this.moveSlots = [];
 		this.baseMoveSlots = [];
-		// @ts-ignore - null used for this.formeChange(this.baseTemplate)
+		// @ts-ignore - null used for this.setTemplate(this.baseTemplate)
 		this.baseStats = null;
 		this.trapped = false;
 		this.maybeTrapped = false;
@@ -949,7 +949,7 @@ export class Pokemon {
 	 * Use formChange to handle changes to ability and sending client messages.
 	 */
 	setTemplate(rawTemplate: Template, source: Effect | null = this.battle.effect) {
-		let template = this.battle.singleEvent('ModifyTemplate', this.battle.getFormat(), null, this, source, null, rawTemplate);
+		let template = this.battle.runEvent('ModifyTemplate', this, null, source, rawTemplate);
 
 		if (!template) return null;
 
