@@ -912,6 +912,7 @@ export class Pokemon {
 			this.boosts[j] = pokemon.boosts[j];
 		}
 		if (this.battle.gen >= 6 && pokemon.volatiles['focusenergy']) this.addVolatile('focusenergy');
+		if (pokemon.volatiles['laserfocus']) this.addVolatile('laserfocus');
 		if (effect) {
 			this.battle.add('-transform', this, pokemon, '[from] ' + effect.fullname);
 		} else {

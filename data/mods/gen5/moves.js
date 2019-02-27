@@ -709,6 +709,16 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "The user is protected from most attacks made by other Pokemon during this turn. This move has a 1/X chance of being successful, where X starts at 1 and doubles each time this move is successfully used. X resets to 1 if this move fails or if the user's last move used is not Detect, Endure, Protect, Quick Guard, or Wide Guard. Fails if the user moves last this turn.",
 	},
+	psychup: {
+		inherit: true,
+		onHit(target, source) {
+			for (let i in target.boosts) {
+				// @ts-ignore
+				source.boosts[i] = target.boosts[i];
+			}
+			this.add('-copyboost', source, target, '[from] move: Psych Up');
+		},
+	},
 	psychoshift: {
 		inherit: true,
 		accuracy: 90,
