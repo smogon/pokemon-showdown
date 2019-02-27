@@ -319,29 +319,23 @@ let BattleScripts = {
 			return false;
 		}
 
-		let finalResult;
-		let hitResults;
+		let atLeastOneFailure;
 		for (const step of moveSteps) {
-			hitResults = step.call(this, targets, pokemon, move);
+			/** @type {(number | boolean | "" | undefined)[] | undefined} */
+			let hitResults = step.call(this, targets, pokemon, move);
 			if (!hitResults) continue;
-			for (let i = 0; i < targets.length; i++) {
-				if (!hitResults[i] && hitResults[i] !== 0) {
-					// hit resolved for this target.
-					// remove target and corresponding hitResults entry from their respective arrays
-					targets.splice(i, 1);
-					let targetResult = hitResults.splice(i, 1)[0];
-					i--;
-					// store failure/NOT_FAILURE in finalResult, with the following priority:
-					// false > '' > undefined
-					if (finalResult !== false) {
-						finalResult = targetResult;
-					}
+			// @ts-ignore
+			targets = targets.filter((val, i) => hitResults[i] || hitResults[i] === 0);
+			hitResults = hitResults.filter(val => {
+				if (val === false) {
+					atLeastOneFailure = true;
 				}
-			}
+				return val || val === 0;
+			});
 		}
 
 		let moveResult = !!targets.length;
-		if (!moveResult && finalResult === this.NOT_FAILURE) pokemon.moveThisTurnResult = null;
+		if (!moveResult && atLeastOneFailure) pokemon.moveThisTurnResult = null;
 		if (move.spreadHit) this.attrLastMove('[spread] ' + targets.join(','));
 		return moveResult;
 	},
