@@ -304,7 +304,7 @@ interface EffectData extends EventMethods {
 	affectsFainted?: boolean
 	counterMax?: number
 	desc?: string
-	drain?: number[]
+	drain?: [number, number]
 	duration?: number
 	effect?: Partial<EffectData>
 	effectType?: string
@@ -372,10 +372,10 @@ interface ModdedEffectData extends Partial<EffectData> {
 	inherit?: boolean
 }
 
-type EffectTypes = 'Effect' | 'Pokemon' | 'Move' | 'Item' | 'Ability' | 'Format' | 'Ruleset' | 'Weather' | 'Status' | 'Rule' | 'ValidatorRule'
+type EffectType = 'Effect' | 'Pokemon' | 'Move' | 'Item' | 'Ability' | 'Format' | 'Ruleset' | 'Weather' | 'Status' | 'Rule' | 'ValidatorRule'
 
 interface BasicEffect extends EffectData {
-	effectType: EffectTypes
+	effectType: EffectType
 	exists: boolean
 	flags: AnyObject
 	fullname: string
@@ -698,7 +698,7 @@ interface FormatsData extends EventMethods {
 	onAfterMega?: (this: Battle, pokemon: Pokemon) => void
 	onBegin?: (this: Battle) => void
 	onChangeSet?: (this: ModdedDex, set: PokemonSet, format: Format, setHas?: AnyObject, teamHas?: AnyObject) => string[] | void
-	onModifyTemplate?: (this: Battle, template: Template, target: Pokemon, source: Pokemon) => Template | void
+	onModifyTemplate?: (this: Battle, template: Template, target: Pokemon, source: Pokemon, effect: Effect) => Template | void
 	onTeamPreview?: (this: Battle) => void
 	onValidateSet?: (this: ModdedDex, set: PokemonSet, format: Format, setHas: AnyObject, teamHas: AnyObject) => string[] | void
 	onValidateTeam?: (this: ModdedDex, team: PokemonSet[], format: Format, teamHas: AnyObject) => string[] | void
@@ -807,15 +807,15 @@ interface ModdedTypeData extends Partial<TypeData> {
 	inherit?: boolean
 }
 
-interface TypeInfo extends TypeData {
-	effectType: 'Type' | 'EffectType'
-	exists: boolean
-	gen: number
-	HPdvs: SparseStatsTable
-	HPivs: SparseStatsTable
-	id: string
-	name: string
-	toString: () => string
+interface TypeInfo extends Readonly<TypeData> {
+	readonly effectType: 'Type' | 'EffectType'
+	readonly exists: boolean
+	readonly gen: number
+	readonly HPdvs: SparseStatsTable
+	readonly HPivs: SparseStatsTable
+	readonly id: string
+	readonly name: string
+	readonly toString: () => string
 }
 
 interface Actions {

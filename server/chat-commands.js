@@ -2983,7 +2983,7 @@ const commands = {
 	 * Server management commands
 	 *********************************************************/
 
-	hotpatch(target, room, user) {
+	async hotpatch(target, room, user) {
 		if (!target) return this.parse('/help hotpatch');
 		if (!this.can('hotpatch')) return;
 
@@ -3036,7 +3036,11 @@ const commands = {
 				if (lock['validator']) return this.errorReply(`Hot-patching the validator has been disabled by ${lock['validator'].by} (${lock['validator'].reason})`);
 
 				// uncache the .sim-dist/dex.js dependency tree
-				Chat.uncacheDir('./sim');
+				this.sendReply('Rebuilding...');
+				await new Promise(resolve => {
+					require('child_process').exec('../build', {cwd: __dirname}, resolve);
+				});
+				Chat.uncacheDir('./.sim-dist');
 				Chat.uncacheDir('./data');
 				Chat.uncache('./config/formats');
 				// reload .sim-dist/dex.js

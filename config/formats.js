@@ -737,9 +737,9 @@ let Formats = [
 		searchShow: false,
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Kartana', 'Kyurem-Black', 'Shedinja'],
-		onModifyTemplate(template, target, source) {
+		onModifyTemplate(template, target, source, effect) {
 			if (!target) return; // Chat command
-			if (source && ['imposter', 'transform'].includes(source.id)) return;
+			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
 			let types = [...new Set(target.baseMoveSlots.slice(0, 2).map(move => this.getMove(move.id).type))];
 			return Object.assign({}, template, {types: types});
 		},
@@ -1779,6 +1779,15 @@ let Formats = [
 		searchShow: false,
 		ruleset: ['[Gen 2] OU'],
 		banlist: ['OU', 'UUBL'],
+	},
+	{
+		name: "[Gen 2] NU",
+		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3642565/">GSC NU</a>`],
+
+		mod: 'gen2',
+		searchShow: false,
+		ruleset: ['[Gen 2] UU'],
+		banlist: ['UU'],
 	},
 	{
 		name: "[Gen 2] Custom Game",
