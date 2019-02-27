@@ -325,17 +325,15 @@ let BattleScripts = {
 			hitResults = step.call(this, targets, pokemon, move);
 			if (!hitResults) continue;
 			for (let i = 0; i < targets.length; i++) {
-				if (!hitResults[i]) {
+				if (!hitResults[i] && hitResults[i] !== 0) {
 					// hit resolved for this target.
 					// remove target and corresponding hitResults entry from their respective arrays
 					targets.splice(i, 1);
 					let targetResult = hitResults.splice(i, 1)[0];
 					i--;
 					// store failure/NOT_FAILURE in finalResult, with the following priority:
-					// truthy/number > false > '' > undefined
-					if (targetResult || targetResult === 0) {
-						finalResult = targetResult;
-					} else if (finalResult !== false || targetResult !== this.NOT_FAILURE) {
+					// false > '' > undefined
+					if (finalResult !== false) {
 						finalResult = targetResult;
 					}
 				}
