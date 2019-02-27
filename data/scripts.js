@@ -327,6 +327,10 @@ let BattleScripts = {
 			// @ts-ignore
 			targets = targets.filter((val, i) => hitResults[i] || hitResults[i] === 0);
 			atLeastOneFailure = atLeastOneFailure || hitResults.some(val => val === false);
+			if (!targets.length) {
+				// console.log(step.name);
+				break;
+			}
 		}
 
 		let moveResult = !!targets.length;
@@ -341,7 +345,7 @@ let BattleScripts = {
 				if (!move.spreadHit) this.attrLastMove('[miss]');
 				this.add('-miss', pokemon, target);
 			} else {
-				hitResults[index] = false;
+				hitResults[index] = hitResults[index] || false;
 			}
 		});
 		return hitResults;
@@ -365,7 +369,7 @@ let BattleScripts = {
 			this.attrLastMove('[still]');
 		}
 		for (let i = 0; i < targets.length; i++) {
-			if (hitResults[i] !== this.NOT_FAILURE) hitResults[i] = false;
+			if (hitResults[i] !== this.NOT_FAILURE) hitResults[i] = hitResults[i] || false;
 		}
 		return hitResults;
 	},
