@@ -55,9 +55,9 @@ try {
 	throw new Error("We require Node.js version 10 or later; you're using " + process.version);
 }
 try {
-	require.resolve('sockjs');
+	require.resolve('../.sim-dist/index');
 } catch (e) {
-	throw new Error("Dependencies are unmet; run node pokemon-showdown before launching Pokemon Showdown again.");
+	throw new Error("Dependencies are unmet; run `node build` before launching Pokemon Showdown again.");
 }
 
 const FS = require('../lib/fs');
@@ -66,14 +66,6 @@ const FS = require('../lib/fs');
  * Load configuration
  *********************************************************/
 
-try {
-	// @ts-ignore This file doesn't exist on the repository, so Travis checks fail if this isn't ignored
-	require.resolve('../config/config');
-} catch (err) {
-	if (err.code !== 'MODULE_NOT_FOUND') throw err; // should never happen
-	throw new Error('config.js does not exist; run node pokemon-showdown to set up the default config file before launching Pokemon Showdown again.');
-}
-// @ts-ignore This file doesn't exist on the repository, so Travis checks fail if this isn't ignored
 global.Config = require('../config/config');
 
 global.Monitor = require('./monitor');

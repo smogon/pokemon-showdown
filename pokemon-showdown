@@ -1,68 +1,7 @@
-#!/bin/sh
+#!/usr/bin/env node
 
-true /*
-# Shell script will interpret above as a command and execute everything after
-# it, while JavaScript will interpret this as beginning of a comment and skip
-# shell script contents.
-#
-# As shell script parses lines only when they are needed, nothing after exit 1
-# can possibly cause a syntax error.
-
-if nodepath="$(command -v node || command -v nodejs)"; then
-	exec "$nodepath" "--trace-warnings" "$0" "$@"
-fi
-echo "We require Node.js version 10 or later; Node.js not found"
-exit 1
-*/;
-
-var child_process = require('child_process');
-var fs = require('fs');
-var path = require('path');
-
-// # Make sure we're Node 10+
-
-try {
-	RegExp("\\p{Emoji}", "u");
-} catch (e) {
-	console.log("We require Node.js version 10 or later; you're using " + process.version);
-	process.exit(1);
-}
-
-// # Make sure our dependencies are available, and install them if they
-// # aren't
-
-try {
-	require.resolve('sockjs');
-} catch (e) {
-	console.log('Installing dependencies...');
-	child_process.execSync('npm install --production', {stdio: 'inherit'});
-}
-
-// # Make sure config.js exists. If not, copy it over synchronously from
-// # config-example.js, since it's needed before we can start the server
-
-try {
-	require.resolve('./config/config');
-} catch (err) {
-	if (err.code !== 'MODULE_NOT_FOUND') throw err; // should never happen
-
-	console.log('config.js does not exist. Creating one with default settings...');
-	fs.writeFileSync(
-		path.resolve(__dirname, 'config/config.js'),
-		fs.readFileSync(path.resolve(__dirname, 'config/config-example.js'))
-	);
-}
-
-// # Make sure the Typescript sources have been compiled into Javascript.
-
-try {
-	require.resolve('./.sim-dist/dex');
-} catch(err) {
-	if (err.code !== 'MODULE_NOT_FOUND') throw err; // should never happen
-
-	console.log('Building project...');
-	child_process.execSync('npm run build', {stdio: 'inherit'});
-}
+// build everything
+require('./build');
 
 if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 	// Start the server.

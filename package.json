@@ -21,7 +21,7 @@
   "scripts": {
     "start": "node pokemon-showdown start",
     "build": "node build",
-    "test": "eslint --cache . && tslint --project . && node build && tsc && mocha",
+    "test": "eslint --cache . && tslint --project . && node build && mocha && tsc",
     "tsc": "tsc",
     "lint": "eslint --cache ."
   },
