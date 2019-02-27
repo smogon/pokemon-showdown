@@ -326,12 +326,7 @@ let BattleScripts = {
 			if (!hitResults) continue;
 			// @ts-ignore
 			targets = targets.filter((val, i) => hitResults[i] || hitResults[i] === 0);
-			hitResults = hitResults.filter(val => {
-				if (val === false) {
-					atLeastOneFailure = true;
-				}
-				return val || val === 0;
-			});
+			atLeastOneFailure = atLeastOneFailure || hitResults.some(val => val === false);
 		}
 
 		let moveResult = !!targets.length;
