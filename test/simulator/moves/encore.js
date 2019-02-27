@@ -86,7 +86,7 @@ describe('Encore', function () {
 		// If a user's previous move was Shell Trap and it is Encored into Shell Trap while attempting to
 		// execute the move, the regular "you must be hit" effect for Shell Trap will be enforced
 		battle.makeChoices('move shelltrap, move teleport', 'move encore 1, move extremespeed 1');
-		assert.notStrictEqual( battle.p2.active[0].hp, hp);
+		assert.notStrictEqual(battle.p2.active[0].hp, hp);
 		hp = battle.p2.active[0].hp;
 
 		// During subequent turns the normal Shell Trap behavior applies.

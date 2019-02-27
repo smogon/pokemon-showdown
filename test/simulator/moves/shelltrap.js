@@ -11,14 +11,21 @@ describe('Shell Trap', function () {
 	});
 
 	it('should deduct PP regardless if it was successful', function () {
-		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Turtonator', ability: 'shellarmor', moves: ['shelltrap']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Turtonator', ability: 'shellarmor', moves: ['tackle', 'irondefense']}]);
+		battle = common.createBattle({gameType: 'doubles'}, [
+			[
+				{species: 'Turtonator', ability: 'shellarmor', moves: ['shelltrap']},
+				{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
+			],
+			[
+				{species: 'Turtonator', ability: 'shellarmor', moves: ['tackle', 'irondefense']},
+				{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
+			],
+		]);
 
 		const move = battle.p1.active[0].getMoveData(Dex.getMove('shelltrap'));
-		battle.makeChoices('move shelltrap', 'move irondefense');
+		battle.makeChoices('move shelltrap, move splash', 'move irondefense, move splash');
 		assert.strictEqual(move.pp, move.maxpp - 1);
-		battle.makeChoices('move shelltrap', 'move tackle');
+		battle.makeChoices('move shelltrap, move splash', 'move tackle, move splash');
 		assert.strictEqual(move.pp, move.maxpp - 2);
 	});
 });
