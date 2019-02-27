@@ -41,7 +41,7 @@ describe('Encore', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [
 			[
 				{species: "Smeargle", level: 50, ability: 'owntempo', moves: ['splash', 'focuspunch']},
-				{species: "Abra", letvel: 1, ability: 'innerfocus', moves: ['knockoff', 'teleport']},
+				{species: "Abra", level: 1, ability: 'innerfocus', moves: ['knockoff', 'teleport']},
 			],
 			[
 				{species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['encore', 'splash']},
@@ -49,10 +49,9 @@ describe('Encore', function () {
 			],
 		]);
 
-		// If the Focus Punch user is interrupted the attack is not expected to be successful.
-		battle.makeChoices('move focuspunch 1, move knockoff', 'move splash, move extremespeed 1');
+		battle.makeChoices('move focuspunch 1, move knockoff', 'move splash, move extremespeed 2');
 		let hp = battle.p2.active[0].hp;
-		assert.strictEqual(hp, battle.p2.active[0].maxhp);
+		assert.notStrictEqual(hp, battle.p2.active[0].maxhp);
 
 		// The Pokemon Encored into Focus Punch is not subject to the negative effects of Focus Punch; that is,
 		// if it is hit at any time before or after the Encore, it still uses Focus Punch like normal. It doesn't matter
