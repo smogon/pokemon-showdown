@@ -880,7 +880,7 @@ export class Battle extends Dex.ModdedDex {
 		}
 		this.event = parentEvent;
 
-		return targetRelayVars.length ? targetRelayVars : relayVar;
+		return target instanceof Array ? targetRelayVars : relayVar;
 	}
 
 	/**
