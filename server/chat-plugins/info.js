@@ -1767,6 +1767,7 @@ const commands = {
 	rule: 'rules',
 	rules(target, room, user) {
 		if (!target) {
+			if (!this.runBroadcast()) return;
 			this.sendReplyBox(
 				`${room ? this.tr("Please follow the rules:") + '<br />' : ``}` +
 				(room && room.rulesLink ? Chat.html`- <a href="${room.rulesLink}">${this.tr `${room.title} room rules`}</a><br />` : ``) +
