@@ -27,5 +27,7 @@ describe('Shell Trap', function () {
 		assert.strictEqual(move.pp, move.maxpp - 1);
 		battle.makeChoices('move shelltrap, move splash', 'move tackle, move splash');
 		assert.strictEqual(move.pp, move.maxpp - 2);
+
+		assert.bounded(battle.p2.active[0].maxhp - battle.p2.active[0].hp, [31, 37]);
 	});
 });
