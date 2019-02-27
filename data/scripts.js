@@ -1093,6 +1093,7 @@ let BattleScripts = {
 					this.add('-fail', pokemon);
 					this.attrLastMove('[still]');
 					this.debug('heal interrupted');
+					didAnything = didAnything || false;
 					continue;
 				}
 				this.add('-heal', target, target.getHealth);
@@ -1101,6 +1102,7 @@ let BattleScripts = {
 			if (moveData.status) {
 				hitResult = target.trySetStatus(moveData.status, pokemon, moveData.ability ? moveData.ability : move);
 				if (!hitResult && move.status) {
+					didAnything = didAnything || false;
 					continue;
 				}
 				didSomething = didSomething || hitResult;
