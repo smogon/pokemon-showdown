@@ -334,7 +334,7 @@ let BattleScripts = {
 		}
 
 		let moveResult = !!targets.length;
-		if (!moveResult && atLeastOneFailure) pokemon.moveThisTurnResult = null;
+		if (!moveResult && !atLeastOneFailure) pokemon.moveThisTurnResult = null;
 		if (move.spreadHit) this.attrLastMove('[spread] ' + targets.join(','));
 		return moveResult;
 	},
