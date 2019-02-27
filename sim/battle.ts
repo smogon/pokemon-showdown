@@ -453,14 +453,14 @@ export class Battle extends Dex.ModdedDex {
 			((b.priority || 0) - (a.priority || 0)) ||
 			((b.speed || 0) - (a.speed || 0)) ||
 			-((b.subOrder || 0) - (a.subOrder || 0)) ||
-			-(b.thing.abilityOrder - a.thing.abilityOrder) ||
+			((a.thing && b.thing) ? -(b.thing.abilityOrder - a.thing.abilityOrder) : 0) ||
 			0;
 	}
 
 	static compareRedirectOrder(a: AnyObject, b: AnyObject) {
 		return ((b.priority || 0) - (a.priority || 0)) ||
 			((b.speed || 0) - (a.speed || 0)) ||
-			-(b.thing.abilityOrder - a.thing.abilityOrder) ||
+			((a.thing && b.thing) ? -(b.thing.abilityOrder - a.thing.abilityOrder) : 0) ||
 			0;
 	}
 
