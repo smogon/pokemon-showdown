@@ -862,7 +862,7 @@ export class Battle extends Dex.ModdedDex {
 				if (!relayVar || fastExit) {
 					if (handler.index !== undefined) {
 						targetRelayVars[handler.index] = relayVar;
-						if (!targetRelayVars.includes(true)) break;
+						if (targetRelayVars.every(val => !val)) break;
 					} else {
 						break;
 					}
@@ -3354,7 +3354,7 @@ export class Battle extends Dex.ModdedDex {
 		throw new Error(`The afterMoveSecondaryEvent function needs to be implemented in scripts.js or the battle format.`);
 	}
 
-	moveHitLoop(targets: (Pokemon | false | null)[], pokemon: Pokemon, move: ActiveMove): (number | undefined | boolean)[] {
+	moveHitLoop(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): (number | undefined | boolean)[] {
 		throw new Error(`The moveHitLoop function needs to be implemented in scripts.js or the battle format.`);
 	}
 

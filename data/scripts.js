@@ -265,6 +265,7 @@ let BattleScripts = {
 		}
 		if (targets.length > 1) move.spreadHit = true;
 
+		/** @type {((targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => (number | boolean | "" | undefined)[] | undefined)[]} */
 		let moveSteps = [
 			// 0. check for semi invulnerability
 			this.tryImmunityEvent,
@@ -321,7 +322,7 @@ let BattleScripts = {
 		let finalResult;
 		let hitResults;
 		for (const step of moveSteps) {
-			hitResults = step(targets, pokemon, move);
+			hitResults = step.call(this, targets, pokemon, move);
 			if (!hitResults) continue;
 			for (let i = 0; i < targets.length; i++) {
 				if (!hitResults[i]) {
@@ -844,11 +845,12 @@ let BattleScripts = {
 		// There is no need to recursively check the ´sleepUsable´ flag as Sleep Talk can only be used while asleep.
 		let isSleepUsable = move.sleepUsable || this.getMove(move.sourceEffect).sleepUsable;
 		let i;
-		for (i = 0; i < hits && !targets.includes(false) && pokemon.hp; i++) {
+		/** @type {(Pokemon | false | null)[]} */
+		let targetsCopy = targets.slice(0);
+		for (i = 0; i < hits && !targetsCopy.includes(false) && pokemon.hp; i++) {
 			if (pokemon.status === 'slp' && !isSleepUsable) break;
 			move.hit = i + 1;
 
-			let targetsCopy = targets.slice(0);
 			let target = targetsCopy[0]; // some relevant-to-single-target-moves-only things are hardcoded
 
 			// like this (Triple Kick)
