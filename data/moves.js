@@ -14757,7 +14757,8 @@ let BattleMovedex = {
 		beforeTurnCallback(pokemon) {
 			pokemon.addVolatile('shelltrap');
 		},
-		// TODO: Switch this to onTry after spread move over is reworked to fix PP usage.
+		// TODO: In order to correct PP usage, after spread move order has been reworked,
+		// switch this to `onTry` + add `this.attrLastMove('[still]');`.
 		beforeMoveCallback(pokemon) {
 			if (pokemon.volatiles['shelltrap'] && !pokemon.volatiles['shelltrap'].gotHit) {
 				this.add('cant', pokemon, 'Shell Trap', 'Shell Trap');
