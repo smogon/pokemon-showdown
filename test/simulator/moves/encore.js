@@ -88,7 +88,7 @@ describe('Encore', function () {
 		assert.notStrictEqual(battle.p2.active[0].hp, hp);
 		hp = battle.p2.active[0].hp;
 
-		// During subequent turns the normal Shell Trap behavior applies.
+		// During subesquent turns the normal Shell Trap behavior applies.
 		battle.makeChoices('move shelltrap, move teleport', 'move splash, move extremespeed 1');
 		assert.notStrictEqual(battle.p2.active[0].hp, hp);
 	});
@@ -116,7 +116,7 @@ describe('Encore', function () {
 		battle.makeChoices('move splash, move teleport', 'move encore 1, move extremespeed 1');
 		assert.strictEqual(battle.p2.active[0].hp, hp);
 
-		// During subequent turns the normal Shell Trap behavior applies.
+		// During subsequent turns the normal Shell Trap behavior applies.
 		battle.makeChoices('move shelltrap, move teleport', 'move splash, move extremespeed 1');
 		assert.notStrictEqual(battle.p2.active[0].hp, hp);
 	});
