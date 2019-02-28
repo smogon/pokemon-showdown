@@ -89,7 +89,7 @@ describe('Encore', function () {
 		hp = battle.p2.active[0].hp;
 
 		// During subequent turns the normal Shell Trap behavior applies.
-		battle.makeChoices('move focuspunch 1, move teleport', 'move splash, move extremespeed 1');
+		battle.makeChoices('move shelltrap, move teleport', 'move splash, move extremespeed 1');
 		assert.notStrictEqual(battle.p2.active[0].hp, hp);
 	});
 
@@ -117,7 +117,7 @@ describe('Encore', function () {
 		assert.strictEqual(battle.p2.active[0].hp, hp);
 
 		// During subequent turns the normal Shell Trap behavior applies.
-		battle.makeChoices('move focuspunch 1, move teleport', 'move splash, move extremespeed 1');
+		battle.makeChoices('move shelltrap, move teleport', 'move splash, move extremespeed 1');
 		assert.notStrictEqual(battle.p2.active[0].hp, hp);
 	});
 });
