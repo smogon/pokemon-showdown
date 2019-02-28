@@ -49,7 +49,6 @@ export class Tools {
 }
 const toId = Tools.getId;
 
-// TODO: readonly?
 export class BasicEffect implements EffectData {
 	/**
 	 * ID. This will be a lowercase version of the name with all the
@@ -165,7 +164,6 @@ type ComplexTeamBan = ComplexBan;
  * - '+[thing]' or '+[category]:[thing]' allow a thing (override a ban)
  * [category] is one of: item, move, ability, species, basespecies
  */
-// TODO: readonly?
 export class RuleTable extends Map {
 	complexBans: ComplexBan[];
 	complexTeamBans: ComplexTeamBan[];
@@ -225,69 +223,68 @@ export class RuleTable extends Map {
 
 type FormatEffectType = 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
 
-// TODO: readonly?
-export class Format extends BasicEffect implements FormatsData {
-	mod: string;
+export class Format extends BasicEffect implements Readonly<BasicEffect & FormatsData> {
+	readonly mod: string;
 	/**
 	 * Name of the team generator algorithm, if this format uses
 	 * random/fixed teams. null if players can bring teams.
 	 */
-	team?: string;
-	effectType: FormatEffectType;
-	debug: boolean;
+	readonly team?: string;
+	readonly effectType: FormatEffectType;
+	readonly debug: boolean;
 	/**
 	 * Whether or not a format will update ladder points if searched
 	 * for using the "Battle!" button.
 	 * (Challenge and tournament games will never update ladder points.)
 	 * (Defaults to `true`.)
 	 */
-	rated: boolean;
+	readonly rated: boolean;
 	/** Game type. */
-	gameType: GameType;
+	readonly gameType: GameType;
 	/** List of rule names. */
-	ruleset: string[];
+	readonly ruleset: string[];
 	/**
 	 * Base list of rule names as specified in "./config/formats.js".
 	 * Used in a custom format to correctly display the altered ruleset.
 	 */
-	baseRuleset: string[];
+	readonly baseRuleset: string[];
 	/** List of banned effects. */
-	banlist: string[];
+	readonly banlist: string[];
 	/** List of inherited banned effects to override. */
-	unbanlist: string[];
+	readonly unbanlist: string[];
 	/** List of ruleset and banlist changes in a custom format. */
-	customRules: string[] | null;
+	readonly customRules: string[] | null;
 	/** Table of rule names and banned effects. */
 	ruleTable: RuleTable | null;
 	/**
 	 * The number of Pokemon players can bring to battle and
 	 * the number that can actually be used.
 	 */
-	teamLength?: {battle?: number, validate?: [number, number]};
+	readonly teamLength?: {battle?: number, validate?: [number, number]};
 	/** An optional function that runs at the start of a battle. */
-	onBegin?: (this: Battle) => void;
+	readonly onBegin?: (this: Battle) => void;
 	/**
 	 * If no team is selected, this format can generate a random team
 	 * for the player.
 	 */
-	canUseRandomTeam: boolean;
+	readonly canUseRandomTeam: boolean;
 	/** Pokemon must be obtained from Gen 6 or later. */
-	requirePentagon: boolean;
+	readonly requirePentagon: boolean;
 	/** Pokemon must be obtained from Gen 7 or later. */
-	requirePlus: boolean;
+	readonly requirePlus: boolean;
 	/**
 	 * Maximum possible level pokemon you can bring. Note that this is
 	 * still 100 in VGC, because you can bring level 100 pokemon,
 	 * they'll just be set to level 50. Can be above 100 in special
 	 * formats.
 	 */
-	maxLevel: number;
+	readonly maxLevel: number;
 	/**
 	 * Default level of a pokemon without level specified. Mainly
 	 * relevant to Custom Game where the default level is still 100
 	 * even though higher level pokemon can be brought.
 	 */
-	defaultLevel: number;
+	readonly defaultLevel: number;
 	/**
 	 * Forces all pokemon brought in to this level. Certain Game Freak
 	 * formats will change level 1 and level 100 pokemon to level 50,
@@ -296,15 +293,15 @@ export class Format extends BasicEffect implements FormatsData {
 	 * You usually want maxForcedLevel instead, which will bring level
 	 * 100 pokemon down, but not level 1 pokemon up.
 	 */
-	forcedLevel?: number;
+	readonly forcedLevel?: number;
 	/**
 	 * Forces all pokemon above this level down to this level. This
 	 * will allow e.g. level 50 Hydreigon in Gen 5, which is not
 	 * normally legal because Hydreigon doesn't evolve until level
 	 * 64.
 	 */
-	maxForcedLevel?: number;
-	noLog: boolean;
+	readonly maxForcedLevel?: number;
+	readonly noLog: boolean;
 
 	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
 		super(data, ...moreData);

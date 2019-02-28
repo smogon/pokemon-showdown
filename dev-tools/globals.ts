@@ -720,17 +720,17 @@ interface RuleTable extends Map<string, string> {
 	getReason: (key: string) => string
 }
 
-interface Format extends BasicEffect, FormatsData {
-	effectType: 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule'
-	baseRuleset: string[]
-	banlist: string[]
-	customRules: string[] | null
-	defaultLevel: number
-	maxLevel: number
-	noLog: boolean
-	ruleset: string[]
+interface Format extends Readonly<BasicEffect & FormatsData> {
+	readonly effectType: 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule'
+	readonly baseRuleset: string[]
+	readonly banlist: string[]
+	readonly customRules: string[] | null
+	readonly defaultLevel: number
+	readonly maxLevel: number
+	readonly noLog: boolean
+	readonly ruleset: string[]
+	readonly unbanlist: string[]
 	ruleTable: RuleTable | null
-	unbanlist: string[]
 }
 
 interface BattleScriptsData {

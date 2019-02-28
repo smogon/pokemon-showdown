@@ -725,8 +725,8 @@ class ModdedDex {
 	}
 
 	getRuleTable(format: Format, depth: number = 0): RuleTable {
-		let ruleTable = new Data.RuleTable();
 		if (format.ruleTable) return format.ruleTable;
+		let ruleTable = new Data.RuleTable();
 
 		let ruleset = format.ruleset.slice();
 		for (const ban of format.banlist) {
