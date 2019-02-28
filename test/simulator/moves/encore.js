@@ -120,23 +120,36 @@ describe('Encore', function () {
 		battle.makeChoices('move shelltrap, move teleport', 'move splash, move quickattack 1');
 		assert.notStrictEqual(battle.p2.active[0].hp, hp);
 	});
-});
 
-describe('Encore [Gen 4]', function () {
-	afterEach(function () {
-		battle.destroy();
+	it('should use the last successful move the target did not make a move during its turn', function () {
+		battle = common.createBattle({seed: [1, 2, 1, 2]}, [
+			[{species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['seismictoss', 'splash']}],
+			[{species: "Smeargle", ability: 'owntempo', moves: ['thunderwave', 'encore', 'splash']}],
+		]);
+
+		battle.makeChoices('move splash', 'move splash');
+		battle.resetRNG(); // Rigged to ensure P1 is fully paralyzed.
+		battle.makeChoices('move seismictoss', 'move thunderwave');
+		// Should P2's encore should cause Splash from turn 1 to be selected.
+		battle.makeChoices('move seismictoss', 'move encore');
+		// P2 should be forced to use Splash.
+		battle.makeChoices('move seismictoss', 'move splash');
+
+		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
-	it('should fail if the target did not make a move during its turn', function () {
+	it('should fail if the target did not make a move during its turn (Gen 4)', function () {
 		battle = common.gen(4).createBattle({seed: [1, 2, 1, 2]}, [
 			[{species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['seismictoss', 'splash']}],
 			[{species: "Smeargle", ability: 'owntempo', moves: ['thunderwave', 'encore', 'splash']}],
 		]);
 
-		battle.resetRNG(); // Rigged to ensure P1 is fully paralyzed
+		battle.makeChoices('move splash', 'move splash');
+		battle.resetRNG(); // Rigged to ensure P1 is fully paralyzed.
 		battle.makeChoices('move seismictoss', 'move thunderwave');
-		// Should P2's encore should fail because P1's move failed, so P1 should be free to use Seismic Toss
+		// Should P2's encore should fail because P1's move failed.
 		battle.makeChoices('move splash', 'move encore');
+		// P2 should now be free to use Seismic Toss, given it is not Encored.
 		battle.makeChoices('move seismictoss', 'move splash');
 
 		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp - 100);
