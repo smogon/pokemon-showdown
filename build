@@ -20,7 +20,7 @@ try {
 	shell('npm install');
 }
 
-shell('npx sucrase -q ./sim -d ./.sim-dist --transforms typescript,imports');
+shell('npx sucrase -q ./sim -d ./.sim-dist --transforms typescript,imports --enable-legacy-typescript-module-interop');
 
 // Make sure config.js exists. If not, copy it over synchronously from
 // config-example.js, since it's needed before we can start the server
