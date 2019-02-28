@@ -324,6 +324,7 @@ if (cluster.isMaster) {
 				appssl = require('https').createServer(Object.assign({}, Config.ssl.options, {key, cert}));
 			} catch (e) {
 				require(/** @type {any} */('../.lib-dist/crashlogger'))(`The SSL settings are misconfigured:\n${e.stack}`, `Socket process ${cluster.worker.id} (${process.pid})`);
+				require(/** @type {any} */('../.lib-dist/crashlogger'))(new Error(`The SSL settings are misconfigured:\n${e.stack}`), `Socket process ${cluster.worker.id} (${process.pid})`);
 			}
 		}
 	}
