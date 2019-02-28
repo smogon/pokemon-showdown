@@ -82,7 +82,7 @@ if (cluster.isMaster) {
 			workers.delete(worker.id);
 		} else if (code > 0) {
 			// Worker was killed abnormally, likely because of a crash.
-			Monitor.crashlog(new Error(`Worker ${worker.id} abruptly died with code ${code} and signal ${signal}`), "The main process");
+			require('../.lib-dist/crashlogger')(new Error(`Worker ${worker.id} abruptly died with code ${code} and signal ${signal}`), "The main process");
 			// Don't delete the worker so it can be inspected if need be.
 		}
 
@@ -286,7 +286,7 @@ if (cluster.isMaster) {
 	if (Config.crashguard) {
 		// graceful crash
 		process.on('uncaughtException', err => {
-			Monitor.crashlog(err, `Socket process ${cluster.worker.id} (${process.pid})`);
+			require('../.lib-dist/crashlogger')(err, `Socket process ${cluster.worker.id} (${process.pid})`);
 		});
 	}
 
@@ -301,7 +301,7 @@ if (cluster.isMaster) {
 			try {
 				key = fs.readFileSync(key);
 			} catch (e) {
-				Monitor.crashlog(new Error(`Failed to read the configured SSL private key PEM file:\n${e.stack}`), `Socket process ${cluster.worker.id} (${process.pid})`);
+				require('../.lib-dist/crashlogger')(new Error(`Failed to read the configured SSL private key PEM file:\n${e.stack}`), `Socket process ${cluster.worker.id} (${process.pid})`);
 			}
 		} catch (e) {
 			console.warn('SSL private key config values will not support HTTPS server option values in the future. Please set it to use the absolute path of its PEM file.');
@@ -315,7 +315,7 @@ if (cluster.isMaster) {
 			try {
 				cert = fs.readFileSync(cert);
 			} catch (e) {
-				Monitor.crashlog(new Error(`Failed to read the configured SSL certificate PEM file:\n${e.stack}`), `Socket process ${cluster.worker.id} (${process.pid})`);
+				require('../.lib-dist/crashlogger')(new Error(`Failed to read the configured SSL certificate PEM file:\n${e.stack}`), `Socket process ${cluster.worker.id} (${process.pid})`);
 			}
 		} catch (e) {
 			console.warn('SSL certificate config values will not support HTTPS server option values in the future. Please set it to use the absolute path of its PEM file.');
@@ -327,7 +327,7 @@ if (cluster.isMaster) {
 				// In case there are additional SSL config settings besides the key and cert...
 				appssl = require('https').createServer(Object.assign({}, Config.ssl.options, {key, cert}));
 			} catch (e) {
-				Monitor.crashlog(new Error(`The SSL settings are misconfigured:\n${e.stack}`), `Socket process ${cluster.worker.id} (${process.pid})`);
+				require('../.lib-dist/crashlogger')(new Error(`The SSL settings are misconfigured:\n${e.stack}`), `Socket process ${cluster.worker.id} (${process.pid})`);
 			}
 		}
 	}
@@ -409,7 +409,7 @@ if (cluster.isMaster) {
 			// @ts-ignore
 			options.faye_server_options = {extensions: [deflate]};
 		} catch (e) {
-			Monitor.crashlog(new Error("Dependency permessage-deflate is not installed or is otherwise unaccessable. No message compression will take place until server restart."), "Sockets");
+			require('../.lib-dist/crashlogger')(new Error("Dependency permessage-deflate is not installed or is otherwise unaccessable. No message compression will take place until server restart."), "Sockets");
 		}
 	}
 

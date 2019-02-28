@@ -152,4 +152,3 @@ TeamValidatorAsync.PM.spawn();
  *********************************************************/
 
 require('../.lib-dist/repl').Repl.start('app', cmd => eval(cmd));
-
