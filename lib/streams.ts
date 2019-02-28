@@ -64,12 +64,12 @@ export class ReadStream {
 				this.push(null);
 			});
 
-			options.read = function (unusedBytes: number) {
-				this.nodeReadableStream.resume();
+			options.read = function (this: ReadStream, unusedBytes: number) {
+				this.nodeReadableStream!.resume();
 			};
 
-			options.pause = function (unusedBytes: number) {
-				this.nodeReadableStream.pause();
+			options.pause = function (this: ReadStream, unusedBytes: number) {
+				this.nodeReadableStream!.pause();
 			};
 		}
 
@@ -579,9 +579,9 @@ export class ObjectWriteStream<T> {
 			const nodeStream: NodeJS.ReadableStream = options.nodeStream;
 			this.nodeWritableStream = nodeStream;
 
-			options.write = function (data: T) {
+			options.write = function (this: WriteStream, data: T) {
 				// @ts-ignore
-				const result = this.nodeWritableStream.write(data);
+				const result = this.nodeWritableStream!.write(data);
 				if (result === false) {
 					return new Promise(resolve => {
 						// @ts-ignore

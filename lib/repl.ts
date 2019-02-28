@@ -8,18 +8,18 @@
  * @license MIT
  */
 
-import { chmodSync, readdirSync, statSync, unlink, unlinkSync } from 'fs';
+import * as fs from 'fs';
 import * as net from 'net';
 import * as path from 'path';
 import * as repl from 'repl';
 
-const Repl = {
+export const Repl = new class {
 	/**
 	 * Contains the pathnames of all active REPL sockets.
 	 */
-	socketPathnames: new Set() as Set<string>,
+	socketPathnames: Set<string> = new Set();
 
-	listenersSetup: false,
+	listenersSetup: boolean = false;
 
 	setupListeners() {
 		if (Repl.listenersSetup) return;
@@ -28,7 +28,7 @@ const Repl = {
 		process.once('exit', code => {
 			Repl.socketPathnames.forEach(s => {
 				try {
-					unlinkSync(s);
+					fs.unlinkSync(s);
 				} catch (e) {}
 			});
 			if (code === 129 || code === 130) {
@@ -41,7 +41,7 @@ const Repl = {
 		if (!process.listeners('SIGINT').length) {
 			process.once('SIGINT', () => process.exit(128 + 2));
 		}
-	},
+	}
 
 	/**
 	 * Starts a REPL server, using a UNIX socket for IPC. The eval function
@@ -60,16 +60,16 @@ const Repl = {
 		if (filename === 'app') {
 			// Clean up old REPL sockets.
 			let directory = path.dirname(path.resolve(__dirname, '..', Config.replsocketprefix || 'logs/repl', 'app'));
-			for (let file of readdirSync(directory)) {
+			for (let file of fs.readdirSync(directory)) {
 				let pathname = path.resolve(directory, file);
-				let stat = statSync(pathname);
+				let stat = fs.statSync(pathname);
 				if (!stat.isSocket()) continue;
 
 				let socket = net.connect(pathname, () => {
 					socket.end();
 					socket.destroy();
 				}).on('error', () => {
-					unlink(pathname, () => {});
+					fs.unlink(pathname, () => {});
 				});
 			}
 		}
@@ -92,14 +92,14 @@ const Repl = {
 
 		let pathname = path.resolve(__dirname, '..', Config.replsocketprefix || 'logs/repl', filename);
 		server.listen(pathname, () => {
-			chmodSync(pathname, Config.replsocketmode || 0o600);
+			fs.chmodSync(pathname, Config.replsocketmode || 0o600);
 			Repl.socketPathnames.add(pathname);
 		});
 
 		server.once('error', (err: NodeJS.ErrnoException) => {
 			if (err.code === "EADDRINUSE") {
 				// tslint:disable-next-line:variable-name
-				unlink(pathname, _err => {
+				fs.unlink(pathname, _err => {
 					if (_err && _err.code !== "ENOENT") {
 						require('./crashlogger')(_err, `REPL: ${filename}`);
 					}
@@ -115,7 +115,5 @@ const Repl = {
 			Repl.socketPathnames.delete(pathname);
 			Repl.start(filename, evalFunction);
 		});
-	},
+	}
 };
-
-export = Repl;

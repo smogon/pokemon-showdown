@@ -11,14 +11,14 @@
 
 import * as child_process from 'child_process';
 import * as path from 'path';
-import { ObjectReadStream, ObjectReadWriteStream } from './streams';
+import * as Streams from './streams';
 
 const ROOT_DIR = path.resolve(__dirname, '..');
 
 export const processManagers: ProcessManager[] = [];
 export const disabled = false;
 
-class SubprocessStream extends ObjectReadWriteStream {
+class SubprocessStream extends Streams.ObjectReadWriteStream {
 	constructor(public process: ChildProcess, public taskId: number) {
 		super();
 		this.process = process;
@@ -344,11 +344,11 @@ export class QueryProcessManager extends ProcessManager {
 
 export class StreamProcessManager extends ProcessManager {
 	/* taskid: stream used only in child process */
-	activeStreams: Map<string, ObjectReadWriteStream>;
+	activeStreams: Map<string, Streams.ObjectReadWriteStream>;
 	// tslint:disable-next-line:variable-name
-	_createStream: () => ObjectReadWriteStream;
+	_createStream: () => Streams.ObjectReadWriteStream;
 
-	constructor(module: NodeJS.Module, createStream: () => ObjectReadWriteStream) {
+	constructor(module: NodeJS.Module, createStream: () => Streams.ObjectReadWriteStream) {
 		super(module);
 		this.activeStreams = new Map();
 		this._createStream = createStream;
@@ -363,7 +363,7 @@ export class StreamProcessManager extends ProcessManager {
 	createProcess() {
 		return new StreamProcessWrapper(this.filename);
 	}
-	async pipeStream(taskId: string, stream: ObjectReadStream) {
+	async pipeStream(taskId: string, stream: Streams.ObjectReadStream) {
 		/* tslint:disable */
 		let value, done;
 		while (({value, done} = await stream.next(), !done)) {

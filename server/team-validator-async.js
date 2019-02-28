@@ -94,8 +94,8 @@ if (!PM.isParentProcess) {
 	global.toId = Dex.getId;
 	global.Chat = require('./chat');
 
-	/** @type {typeof import('../lib/repl')} */
-	const Repl = require(/** @type {any} */('../.lib-dist/repl'));
+	/** @type {typeof import('../lib/repl').Repl} */
+	const Repl = require(/** @type {any} */('../.lib-dist/repl')).Repl;
 	Repl.start(`team-validator-${process.pid}`, cmd => eval(cmd));
 } else {
 	PM.spawn(global.Config ? Config.validatorprocesses : 1);

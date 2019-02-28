@@ -40,8 +40,8 @@ if (!PM.isParentProcess) {
 	// This is a child process!
 	// @ts-ignore This file doesn't exist on the repository, so Travis checks fail if this isn't ignored
 	global.Config = require('../config/config');
-	/** @type {typeof import('../lib/repl')} */
-	const Repl = require(/** @type {any} */('../.lib-dist/repl'));
+	/** @type {typeof import('../lib/repl').Repl} */
+	const Repl = require(/** @type {any} */('../.lib-dist/repl')).Repl;
 	Repl.start('verifier', /** @param {string} cmd */ cmd => eval(cmd));
 } else {
 	PM.spawn(global.Config ? Config.verifierprocesses : 1);
