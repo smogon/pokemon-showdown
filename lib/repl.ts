@@ -8,7 +8,7 @@
  * @license MIT
  */
 
-import * as fs from 'fs';
+import { chmodSync, readdirSync, statSync, unlink, unlinkSync } from 'fs';
 import * as net from 'net';
 import * as path from 'path';
 import * as repl from 'repl';
@@ -28,7 +28,7 @@ const Repl = {
 		process.once('exit', code => {
 			Repl.socketPathnames.forEach(s => {
 				try {
-					fs.unlinkSync(s);
+					unlinkSync(s);
 				} catch (e) {}
 			});
 			if (code === 129 || code === 130) {
@@ -60,16 +60,16 @@ const Repl = {
 		if (filename === 'app') {
 			// Clean up old REPL sockets.
 			let directory = path.dirname(path.resolve(__dirname, '..', Config.replsocketprefix || 'logs/repl', 'app'));
-			for (let file of fs.readdirSync(directory)) {
+			for (let file of readdirSync(directory)) {
 				let pathname = path.resolve(directory, file);
-				let stat = fs.statSync(pathname);
+				let stat = statSync(pathname);
 				if (!stat.isSocket()) continue;
 
 				let socket = net.connect(pathname, () => {
 					socket.end();
 					socket.destroy();
 				}).on('error', () => {
-					fs.unlink(pathname, () => {});
+					unlink(pathname, () => {});
 				});
 			}
 		}
@@ -92,14 +92,14 @@ const Repl = {
 
 		let pathname = path.resolve(__dirname, '..', Config.replsocketprefix || 'logs/repl', filename);
 		server.listen(pathname, () => {
-			fs.chmodSync(pathname, Config.replsocketmode || 0o600);
+			chmodSync(pathname, Config.replsocketmode || 0o600);
 			Repl.socketPathnames.add(pathname);
 		});
 
 		server.once('error', (err: NodeJS.ErrnoException) => {
 			if (err.code === "EADDRINUSE") {
 				// tslint:disable-next-line:variable-name
-				fs.unlink(pathname, _err => {
+				unlink(pathname, _err => {
 					if (_err && _err.code !== "ENOENT") {
 						require('./crashlogger')(_err, `REPL: ${filename}`);
 					}
