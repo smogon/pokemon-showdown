@@ -783,8 +783,8 @@ export class Battle extends Dex.ModdedDex {
 		for (const handler of handlers) {
 			if (handler.index !== undefined) {
 				if (!targetRelayVars[handler.index]) continue;
-				if (handler.target && args[hasRelayVar] !== handler.target) args.splice(hasRelayVar, 1, handler.target);
-				if (hasRelayVar) args.splice(0, 1, targetRelayVars[handler.index]);
+				if (handler.target) args[hasRelayVar] = handler.target;
+				if (hasRelayVar) args[0] = targetRelayVars[handler.index];
 			}
 			let status = handler.status;
 			let thing = handler.thing;
@@ -904,11 +904,13 @@ export class Battle extends Dex.ModdedDex {
 	findEventHandlers(thing: Pokemon | Pokemon[] | Side | Battle, eventName: string, sourceThing?: Pokemon | null) {
 		let handlers: AnyObject[] = [];
 		if (thing instanceof Array) {
-			for (const pokemon of thing) {
+			for (let i = 0; i < thing.length; i++) {
+				const pokemon = thing[i];
+				// console.log(`Event: ${eventName}, Target: ${'' + pokemon}, ${i}`);
 				let curHandlers = this.findEventHandlers(pokemon, eventName, sourceThing);
-				curHandlers.forEach((val, index) => {
+				curHandlers.forEach(val => {
 					val.target = pokemon; // Original "thing"
-					val.index = index;
+					val.index = i;
 				});
 				handlers = handlers.concat(curHandlers);
 			}

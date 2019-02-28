@@ -1082,7 +1082,7 @@ let BattleScripts = {
 			if (!target) continue;
 			let hitResult;
 			/**@type {?boolean | number | undefined} */
-			let didSomething = damage.some(val => !!val || val === 0);
+			let didSomething = !!damage[i] || damage[i] === 0;
 			if (moveData.boosts && !target.fainted) {
 				hitResult = this.boost(moveData.boosts, target, pokemon, move, isSecondary, isSelf);
 				didSomething = didSomething || hitResult;
