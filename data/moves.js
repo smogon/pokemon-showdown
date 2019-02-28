@@ -14760,7 +14760,7 @@ let BattleMovedex = {
 		// TODO: In order to correct PP usage, after spread move order has been reworked,
 		// switch this to `onTry` + add `this.attrLastMove('[still]');`.
 		beforeMoveCallback(pokemon) {
-			if (pokemon.volatiles['shelltrap'] && !pokemon.volatiles['shelltrap'].gotHit) {
+			if (!pokemon.volatiles['shelltrap'] || !pokemon.volatiles['shelltrap'].gotHit) {
 				this.add('cant', pokemon, 'Shell Trap', 'Shell Trap');
 				return true;
 			}

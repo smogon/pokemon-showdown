@@ -68,56 +68,56 @@ describe('Encore', function () {
 	it('should not affect Shell Trap if the user\'s decision is not changed', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [
 			[
-				{species: "Smeargle", ability: 'owntempo', moves: ['shelltrap', 'splash']},
+				{species: "Smeargle", level: 99, ability: 'owntempo', moves: ['shelltrap', 'splash']},
 				{species: "Abra", level: 1, ability: 'innerfocus', moves: ['knockoff', 'teleport']},
 			],
 			[
-				{species: "Smeargle", ability: 'owntempo', moves: ['encore', 'splash']},
-				{species: "Zigzagoon", ability: 'pickup', moves: ['extremespeed']},
+				{species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['encore', 'splash']},
+				{species: "Zigzagoon", ability: 'pickup', item: 'assaultvest', moves: ['quickattack']},
 			],
 		]);
 
 		// If the Shell Trap user is hit the attack is expected to be successful.
-		battle.makeChoices('move shelltrap, move knockoff 1', 'move splash, move extremespeed 1');
+		battle.makeChoices('move shelltrap, move knockoff 1', 'move splash, move quickattack 1');
 		let hp = battle.p2.active[0].hp;
 		assert.notStrictEqual(hp, battle.p2.active[0].maxhp);
 
 		// If a user's previous move was Shell Trap and it is Encored into Shell Trap while attempting to
 		// execute the move, the regular "you must be hit" effect for Shell Trap will be enforced
-		battle.makeChoices('move shelltrap, move teleport', 'move encore 1, move extremespeed 1');
+		battle.makeChoices('move shelltrap, move teleport', 'move encore 1, move quickattack 1');
 		assert.notStrictEqual(battle.p2.active[0].hp, hp);
 		hp = battle.p2.active[0].hp;
 
 		// During subesquent turns the normal Shell Trap behavior applies.
-		battle.makeChoices('move shelltrap, move teleport', 'move splash, move extremespeed 1');
+		battle.makeChoices('move shelltrap, move teleport', 'move splash, move quickattack 1');
 		assert.notStrictEqual(battle.p2.active[0].hp, hp);
 	});
 
 	it('should make Shell Trap always fail if the user\'s decision is changed', function () {
 		battle = common.createBattle({gameType: 'doubles'}, [
 			[
-				{species: "Smeargle", ability: 'owntempo', moves: ['splash', 'shelltrap']},
+				{species: "Smeargle", level: 99, ability: 'owntempo', moves: ['splash', 'shelltrap']},
 				{species: "Abra", level: 1, ability: 'innerfocus', moves: ['knockoff', 'teleport']},
 			],
 			[
-				{species: "Smeargle", ability: 'owntempo', moves: ['encore', 'splash']},
-				{species: "Zigzagoon", ability: 'pickup', moves: ['extremespeed']},
+				{species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['encore', 'splash']},
+				{species: "Zigzagoon", ability: 'pickup', item: 'assaultvest', moves: ['quickattack']},
 			],
 		]);
 
 		// If the Shell Trap user is hit the attack is expected to be successful.
-		battle.makeChoices('move shelltrap, move knockoff 1', 'move splash, move extremespeed 1');
+		battle.makeChoices('move shelltrap, move knockoff 1', 'move splash, move quickattack 1');
 		let hp = battle.p2.active[0].hp;
 		assert.notStrictEqual(hp, battle.p2.active[0].maxhp);
 
 		// Shell Trap which has been encored will never be successful - even if it is hit with contact moves, it will never
 		// attack, and will always say "<Pokemon>'s shell trap didn't work. It doesn't matter in the case of Shell Trap if
 		// the user was hit before or after the Encore; Shell Trap will still always fail.
-		battle.makeChoices('move splash, move teleport', 'move encore 1, move extremespeed 1');
+		battle.makeChoices('move splash, move teleport', 'move encore 1, move quickattack 1');
 		assert.strictEqual(battle.p2.active[0].hp, hp);
 
 		// During subsequent turns the normal Shell Trap behavior applies.
-		battle.makeChoices('move shelltrap, move teleport', 'move splash, move extremespeed 1');
+		battle.makeChoices('move shelltrap, move teleport', 'move splash, move quickattack 1');
 		assert.notStrictEqual(battle.p2.active[0].hp, hp);
 	});
 });
