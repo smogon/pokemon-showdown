@@ -28,7 +28,7 @@
  * @license MIT license
  */
 
-import {readdirSync} from 'fs';
+import * as fs from 'fs';
 import * as path from 'path';
 
 import * as Data from './dex-data';
@@ -1307,7 +1307,7 @@ class ModdedDex {
 		if (!this.isBase) throw new Error(`This must be called on the base Dex`);
 		if (this.modsLoaded) return this;
 
-		for (const mod of readdirSync(MODS_DIR)) {
+		for (const mod of fs.readdirSync(MODS_DIR)) {
 			dexes[mod] = new ModdedDex(mod, true);
 		}
 		this.modsLoaded = true;
