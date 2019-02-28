@@ -568,7 +568,7 @@ const PM = new QueryProcessManager(module, async data => {
 		try {
 			return await runModlog(roomidList, searchString, exactSearch, maxLines);
 		} catch (err) {
-			require('../../.lib-dist/crashlogger')(err, 'A modlog query', {
+			Monitor.crashlog(err, 'A modlog query', {
 				roomidList,
 				searchString,
 				exactSearch,
@@ -581,7 +581,7 @@ const PM = new QueryProcessManager(module, async data => {
 		try {
 			return await runBattleSearch(userid, turnLimit, month, tierid, date);
 		} catch (err) {
-			require('../../.lib-dist/crashlogger')(err, 'A battle search query', {
+			Monitor.crashlog(err, 'A battle search query', {
 				userid,
 				turnLimit,
 				month,
@@ -612,7 +612,7 @@ if (!PM.isParentProcess) {
 	};
 	process.on('uncaughtException', err => {
 		if (Config.crashguard) {
-			require('../../.lib-dist/crashlogger')(err, 'A modlog child process');
+			Monitor.crashlog(err, 'A modlog child process');
 		}
 	});
 	global.Dex = require('../../.sim-dist/dex');

@@ -1599,7 +1599,7 @@ const PM = new QueryProcessManager(module, async query => {
 			return null;
 		}
 	} catch (err) {
-		require('../../.lib-dist/crashlogger')(err, 'A search query', query);
+		Monitor.crashlog(err, 'A search query', query);
 	}
 	return {error: "Sorry! Our search engine crashed on your query. We've been automatically notified and will fix this crash."};
 });
@@ -1622,7 +1622,7 @@ if (!PM.isParentProcess) {
 	};
 	if (Config.crashguard) {
 		process.on('uncaughtException', err => {
-			require('../../.lib-dist/crashlogger')(err, 'A dexsearch process');
+			Monitor.crashlog(err, 'A dexsearch process');
 		});
 	}
 
