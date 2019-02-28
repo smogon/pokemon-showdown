@@ -62,4 +62,28 @@ describe('Focus Punch', function () {
 		assert.strictEqual(battle.p1.active[0].status, 'tox');
 		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
+
+	it('should not deduct PP if the user lost focus', function () {
+		battle = common.createBattle();
+		battle.join('p1', 'Guest 1', 1, [{species: 'Chansey', ability: 'naturalcure', moves: ['focuspunch']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: 'Venusaur', ability: 'overgrow', moves: ['magicalleaf', 'toxic']}]);
+
+		const move = battle.p1.active[0].getMoveData(Dex.getMove('focuspunch'));
+		battle.makeChoices('move focuspunch', 'move magicalleaf');
+		assert.strictEqual(move.pp, move.maxpp);
+		battle.makeChoices('move focuspunch', 'move toxic');
+		assert.strictEqual(move.pp, move.maxpp - 1);
+	});
+
+	it('should deduct PP if the user lost focus before Gen 5', function () {
+		battle = common.gen(4).createBattle();
+		battle.join('p1', 'Guest 1', 1, [{species: 'Chansey', ability: 'naturalcure', moves: ['focuspunch']}]);
+		battle.join('p2', 'Guest 2', 1, [{species: 'Venusaur', ability: 'overgrow', moves: ['magicalleaf', 'toxic']}]);
+
+		const move = battle.p1.active[0].getMoveData(Dex.getMove('focuspunch'));
+		battle.makeChoices('move focuspunch', 'move magicalleaf');
+		assert.strictEqual(move.pp, move.maxpp - 1);
+		battle.makeChoices('move focuspunch', 'move toxic');
+		assert.strictEqual(move.pp, move.maxpp - 2);
+	});
 });
