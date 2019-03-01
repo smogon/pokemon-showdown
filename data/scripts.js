@@ -44,12 +44,7 @@ let BattleScripts = {
 		} */
 		let willTryMove = this.runEvent('BeforeMove', pokemon, target, move);
 		if (!willTryMove) {
-			this.runEvent('MoveAborted', pokemon, target, move);
-			this.clearActiveMove(true);
-			// The event 'BeforeMove' could have returned false or null
-			// false indicates that this counts as a move failing for the purpose of calculating Stomping Tantrum's base power
-			// null indicates the opposite, as the Pokemon didn't have an option to choose anything
-			pokemon.moveThisTurnResult = willTryMove;
+			this.abortMove(move, pokemon, target, willTryMove);
 			return;
 		}
 		if (move.beforeMoveCallback) {
@@ -118,6 +113,14 @@ let BattleScripts = {
 			}
 		}
 		if (noLock && pokemon.volatiles.lockedmove) delete pokemon.volatiles.lockedmove;
+	},
+	abortMove(move, pokemon, target, willTryMove) {
+		this.runEvent('MoveAborted', pokemon, target, move);
+		this.clearActiveMove(true);
+		// The event 'BeforeMove' could have returned false or null
+		// false indicates that this counts as a move failing for the purpose of calculating Stomping Tantrum's base power
+		// null indicates the opposite, as the Pokemon didn't have an option to choose anything
+		pokemon.moveThisTurnResult = willTryMove;
 	},
 	/**
 	 * useMove is the "inside" move caller. It handles effects of the

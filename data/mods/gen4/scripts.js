@@ -10,6 +10,14 @@ let BattleScripts = {
 		}
 	},
 
+	abortMove(move, pokemon, target, willTryMove) {
+		this.runEvent('MoveAborted', pokemon, target, move);
+		this.clearActiveMove(true);
+		pokemon.moveThisTurnResult = willTryMove;
+		// Reset lastMove
+		pokemon.moveUsed();
+	},
+
 	modifyDamage(baseDamage, pokemon, target, move, suppressMessages = false) {
 		// DPP divides modifiers into several mathematically important stages
 		// The modifiers run earlier than other generations are called with ModifyDamagePhase1 and ModifyDamagePhase2
@@ -89,6 +97,7 @@ let BattleScripts = {
 
 		return Math.floor(baseDamage);
 	},
+
 	tryMoveHit(target, pokemon, move) {
 		this.setActiveMove(move, pokemon, target);
 

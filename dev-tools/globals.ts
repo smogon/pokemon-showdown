@@ -751,6 +751,7 @@ interface BattleScriptsData {
 	runZPower?: (this: Battle, move: ActiveMove, pokemon: Pokemon) => void
 	targetTypeChoices?: (this: Battle, targetType: string) => boolean
 	tryMoveHit?: (this: Battle, target: Pokemon, pokemon: Pokemon, move: ActiveMove) => number | undefined | false | ''
+	abortMove?: (this: Battle, move: ActiveMove, pokemon: Pokemon, target: Pokemon | null | undefined, willTryMove: boolean) => void
 	useMove?: (this: Battle, move: Move, pokemon: Pokemon, target?: Pokemon | null | undefined, sourceEffect?: Effect | null, zMove?: string) => boolean
 	useMoveInner?: (this: Battle, move: Move, pokemon: Pokemon, target?: Pokemon | null | undefined, sourceEffect?: Effect | null, zMove?: string) => boolean
 }

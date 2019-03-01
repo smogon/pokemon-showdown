@@ -3146,6 +3146,10 @@ export class Battle extends Dex.ModdedDex {
 		throw new Error(`The runMove function needs to be implemented in scripts.js or the battle format.`);
 	}
 
+	abortMove(move: ActiveMove, pokemon: Pokemon, target: Pokemon | null | undefined, willTryMove: boolean): void {
+		throw new Error(`The abortMove function needs to be implemented in scripts.js or the battle format.`);
+	}
+
 	useMove(move: string | Move, pokemon: Pokemon, target?: Pokemon | null, sourceEffect?: Effect | null, zMove?: string): boolean {
 		throw new Error(`The useMove function needs to be implemented in scripts.js or the battle format.`);
 	}

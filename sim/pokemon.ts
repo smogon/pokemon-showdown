@@ -643,10 +643,16 @@ export class Pokemon {
 		return amount;
 	}
 
-	moveUsed(move: Move, targetLoc?: number) {
-		this.lastMove = move;
-		this.lastMoveTargetLoc = targetLoc;
-		this.moveThisTurn = move.id;
+	moveUsed(move?: Move, targetLoc?: number) {
+		if (move) {
+			this.lastMove = move;
+			this.lastMoveTargetLoc = targetLoc;
+			this.moveThisTurn = move.id;
+		} else {
+			this.lastMove = null;
+			this.lastMoveTargetLoc = undefined;
+			this.moveThisTurn = '';
+		}
 	}
 
 	gotAttacked(move: string | Move, damage: number | false | undefined, source: Pokemon) {
