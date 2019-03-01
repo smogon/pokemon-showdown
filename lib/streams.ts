@@ -299,7 +299,7 @@ export class WriteStream {
 		if (options.nodeStream) {
 			const nodeStream: NodeJS.ReadableStream = options.nodeStream;
 			this.nodeWritableStream = nodeStream;
-			options.write = function (data: string | Buffer) {
+			options.write = function (this: WriteStream, data: string | Buffer) {
 				// @ts-ignore
 				const result = this.nodeWritableStream.write(data);
 				if (result !== false) return undefined;
@@ -428,12 +428,12 @@ export class ObjectReadStream {
 				this.push(null);
 			});
 
-			options.read = function (unusedBytes: number) {
-				this.nodeReadableStream.resume();
+			options.read = function (this: ReadStream, unusedBytes: number) {
+				this.nodeReadableStream!.resume();
 			};
 
-			options.pause = function (unusedBytes: number) {
-				this.nodeReadableStream.pause();
+			options.pause = function (this: ReadStream, unusedBytes: number) {
+				this.nodeReadableStream!.pause();
 			};
 		}
 

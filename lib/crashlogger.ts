@@ -22,10 +22,10 @@ let transport: any;
  * Logs when a crash happens to console, then e-mails those who are configured
  * to receive them.
  */
-export = function crashlogger(err: Error | string, description: string, data: object | null = null): string | null {
+export = function crashlogger(error: Error | string, description: string, data: object | null = null): string | null {
 	const datenow = Date.now();
 
-	let stack = typeof err === 'string' ? err : err.stack;
+	let stack = typeof error === 'string' ? error : error.stack;
 	if (data) {
 		stack += `\n\nAdditional information:\n`;
 		for (let k in data) {
@@ -39,8 +39,8 @@ export = function crashlogger(err: Error | string, description: string, data: ob
 	out.on('open', () => {
 		out.write(`\n${stack}\n`);
 		out.end();
-	}).on('error', (e: Error) => {
-		console.error(`\nSUBCRASH: ${e.stack}\n`);
+	}).on('error', (err: Error) => {
+		console.error(`\nSUBCRASH: ${err.stack}\n`);
 	});
 
 	if (Config.crashguardemail && ((datenow - lastCrashLog) > CRASH_EMAIL_THROTTLE)) {
@@ -76,8 +76,8 @@ export = function crashlogger(err: Error | string, description: string, data: ob
 			to: Config.crashguardemail.to,
 			subject: Config.crashguardemail.subject,
 			text,
-		}, (e: Error | null) => {
-			if (e) console.error(`Error sending email: ${e}`);
+		}, (err: Error | null) => {
+			if (err) console.error(`Error sending email: ${err}`);
 		});
 	}
 
