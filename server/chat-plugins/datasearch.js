@@ -1614,7 +1614,7 @@ if (!PM.isParentProcess) {
 		 * @param {string} source
 		 * @param {{}?} details
 		 */
-		crashlog(error, source = 'A simulator process', details = null) {
+		crashlog(error, source = 'A datasearch process', details = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			// @ts-ignore
 			process.send(`THROW\n@!!@${repr}\n${error.stack}`);
@@ -1631,7 +1631,7 @@ if (!PM.isParentProcess) {
 	Dex.includeData();
 	global.TeamValidator = require('../../.sim-dist/team-validator').TeamValidator;
 
-	require('../../.lib-dist/repl').start('dexsearch', cmd => eval(cmd));
+	require('../../.lib-dist/repl').Repl.start('dexsearch', cmd => eval(cmd));
 } else {
 	PM.spawn(MAX_PROCESSES);
 }

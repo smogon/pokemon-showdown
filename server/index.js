@@ -151,4 +151,4 @@ TeamValidatorAsync.PM.spawn();
  * Start up the REPL server
  *********************************************************/
 
-require('../.lib-dist/repl').start('app', cmd => eval(cmd));
+require('../.lib-dist/repl').Repl.start('app', cmd => eval(cmd));
