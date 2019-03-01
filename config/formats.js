@@ -81,7 +81,7 @@ let Formats = [
 		banlist: ['UU', 'RUBL', 'Aurora Veil'],
 		unbanlist: ['Drought'],
 		onBegin() {
-			if (this.rated) this.add('html', `<div class="broadcast-green"><strong>RU is currently suspecting Zygarde-10%! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3647724/">suspect thread</a>.</strong></div>`);
+			if (this.rated && this.format === 'gen7ru') this.add('html', `<div class="broadcast-green"><strong>RU is currently suspecting Zygarde-10%! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3647724/">suspect thread</a>.</strong></div>`);
 		},
 	},
 	{
@@ -126,7 +126,7 @@ let Formats = [
 			'Eevium Z', 'Baton Pass', 'Dragon Rage', 'Sonic Boom',
 		],
 		onBegin() {
-			if (this.rated) this.add('html', `<div class="broadcast-blue"><strong>LC is currently suspecting Abra! For more information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3647220/">suspect thread</a>.</strong></div>`);
+			if (this.rated && this.format === 'gen7lc') this.add('html', `<div class="broadcast-blue"><strong>LC is currently suspecting Abra! For more information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3647220/">suspect thread</a>.</strong></div>`);
 		},
 	},
 	{
