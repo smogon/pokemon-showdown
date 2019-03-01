@@ -343,37 +343,30 @@ const commands = {
 			return type.toLowerCase();
 		};
 
-		let response = () => {
-			for (const row of raw_modlog.split("\n")) {
-				if (!row || row === '\r') continue;
-				if (/\b(?:MUTE|HOURMUTE|ROOMBAN|BLACKLIST)\b:/g.test(row) === false) continue;
-				let punishmentType = findPunishmentType(row);
-				if (didPunishmentExpire(row, punishmentType) === true) continue;
-				let punishedUser = findPunishedUser(row);
-				let targetUser = this.targetUserOrSelf(punishedUser, user.group === ' ');
-				let punishments = Punishments.getRoomPunishments(targetUser, {checkIps: true});
-				output.push(punishments.map(([roomOfPunishment, punishment]) => {
-					if (room !== roomOfPunishment) return "";
-					const [punishType, punishUserid, expireTime, reason] = punishment;
-					let punishDesc = Punishments.roomPunishmentTypes.get(punishType);
-					if (!punishDesc) punishDesc = `punished`;
-					if (punishUserid !== punishedUser) punishDesc += ` as ${punishUserid}`;
-					let expiresIn = new Date(expireTime).getTime() - Date.now();
-					let expireString = Chat.toDurationString(expiresIn, {precision: 1});
-					punishDesc += ` for ${expireString}`;
-					if (reason) punishDesc += `: ${reason}`;
-					return `${punishedUser} is ${punishDesc}`;
-				}).join("<br />"));
-			}
-			let uniqueOutput = [...new Set(output)];
-			return uniqueOutput;
-		};
-
-		if (!`${response()}`) {
-			return this.sendReplyBox("No user in this room is currently punished.");
-		} else {
-			return this.sendReplyBox(`${response()}`);
+		for (const row of raw_modlog.split("\n")) {
+			if (!row || row === '\r') continue;
+			if (/\b(?:MUTE|HOURMUTE|ROOMBAN|BLACKLIST)\b:/g.test(row) === false) continue;
+			let punishmentType = findPunishmentType(row);
+			if (didPunishmentExpire(row, punishmentType) === true) continue;
+			let punishedUser = findPunishedUser(row);
+			let targetUser = this.targetUserOrSelf(punishedUser, user.group === ' ');
+			let punishments = Punishments.getRoomPunishments(targetUser, {checkIps: true});
+			output.push(punishments.map(([roomOfPunishment, punishment]) => {
+				if (room !== roomOfPunishment) return "";
+				const [punishType, punishUserid, expireTime, reason] = punishment;
+				let punishDesc = Punishments.roomPunishmentTypes.get(punishType);
+				if (!punishDesc) punishDesc = `punished`;
+				if (punishUserid !== punishedUser) punishDesc += ` as ${punishUserid}`;
+				let expiresIn = new Date(expireTime).getTime() - Date.now();
+				let expireString = Chat.toDurationString(expiresIn, {precision: 1});
+				punishDesc += ` for ${expireString}`;
+				if (reason) punishDesc += `: ${reason}`;
+				return `${punishedUser} is ${punishDesc}`;
+			}).join("<br />"));
 		}
+		let response = '' + [...new Set(output)];
+
+		return this.sendReplyBox(response || "No user in this room is currently punished.");
 	},
 	roomstatushelp: [`/roomstatus - Shows the current punishments in the room`],
 
