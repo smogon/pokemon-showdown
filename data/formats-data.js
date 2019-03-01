@@ -3101,7 +3101,7 @@ let BattleFormatsData = {
 		encounters: [
 			{"generation": 4, "level": 20},
 		],
-		tier: "NU",
+		tier: "PU",
 		doublesTier: "(DUU)",
 	},
 	houndoommega: {
