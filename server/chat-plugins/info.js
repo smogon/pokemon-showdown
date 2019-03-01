@@ -301,8 +301,7 @@ const commands = {
 		this.sendReplyBox(buf);
 	},
 
-	rs: 'roomstatus',
-	roomstatus(target, room, user) {
+	showpunishments(target, room, user) {
 		const modlog_room = `../../logs/modlog/modlog_${room}.txt`;
 		const raw_modlog = fs.readFileSync(modlog_room, 'utf-8');
 		let output = [];
@@ -368,7 +367,7 @@ const commands = {
 
 		return this.sendReplyBox(response || "No user in this room is currently punished.");
 	},
-	roomstatushelp: [`/roomstatus - Shows the current punishments in the room`],
+	showpunishmentshelp: [`/showpunishments - Shows the current punishments in the room`],
 
 	'!host': true,
 	host(target, room, user, connection, cmd) {
