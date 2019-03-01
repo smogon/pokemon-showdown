@@ -1342,6 +1342,8 @@ class RandomTeams extends Dex.ModdedDex {
 				ability = 'Pickup';
 			} else if (template.baseSpecies === 'Basculin') {
 				ability = 'Adaptability';
+			} else if (template.baseSpecies === 'Glalie') {
+				ability = 'Inner Focus';
 			} else if (template.species === 'Lopunny' && hasMove['switcheroo'] && this.randomChance(2, 3)) {
 				ability = 'Klutz';
 			} else if ((template.species === 'Rampardos' && !hasMove['headsmash']) || hasMove['rockclimb']) {
@@ -1364,13 +1366,8 @@ class RandomTeams extends Dex.ModdedDex {
 			} else {
 				item = this.sample(template.requiredItems);
 			}
-		} else if (hasMove['magikarpsrevenge']) {
-			// PoTD Magikarp
-			item = 'Choice Band';
 
 		// First, the extra high-priority items
-		} else if (template.species === 'Clamperl' && !hasMove['shellsmash']) {
-			item = 'Deep Sea Tooth';
 		} else if (template.species === 'Cubone' || template.baseSpecies === 'Marowak') {
 			item = 'Thick Club';
 		} else if (template.species === 'Decidueye' && hasMove['spiritshackle'] && counter.setupType && !teamDetails.zMove) {
@@ -1566,23 +1563,20 @@ class RandomTeams extends Dex.ModdedDex {
 				RUBL: 78,
 				UU: 77,
 				UUBL: 76,
+				'(OU)': 75,
 				OU: 75,
 				Unreleased: 75,
 				Uber: 73,
 			};
 			/** @type {{[species: string]: number}} */
 			let customScale = {
-				// Banned Abilities
+				// Banned Ability
 				Dugtrio: 77, Gothitelle: 77, Pelipper: 79, Politoed: 79, Wobbuffet: 77,
 
 				// Holistic judgement
 				Unown: 100,
 			};
-			let tier = template.tier;
-			if (tier.charAt(0) === '(') {
-				tier = tier.slice(1, -1);
-			}
-			level = levelScale[tier] || 84;
+			level = levelScale[template.tier] || 84;
 			if (customScale[template.name]) level = customScale[template.name];
 
 			// Custom level based on moveset
@@ -1707,9 +1701,9 @@ class RandomTeams extends Dex.ModdedDex {
 		}
 
 		/**@type {{[k: string]: number}} */
-		let tierCount = {};
-		/**@type {{[k: string]: number}} */
 		let baseFormes = {};
+		/**@type {{[k: string]: number}} */
+		let tierCount = {};
 		/**@type {{[k: string]: number}} */
 		let typeCount = {};
 		/**@type {{[k: string]: number}} */
@@ -1721,59 +1715,44 @@ class RandomTeams extends Dex.ModdedDex {
 			let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
 			if (!template.exists) continue;
 
-			// Limit to one of each species (Species Clause)
-			if (baseFormes[template.baseSpecies]) continue;
-
 			// Only certain NFE Pokemon are allowed
 			if (template.evos.length && !allowedNFE.includes(template.species)) continue;
 
-			// Limit two Pokemon per tier
-			let tier = toId(template.tier);
-			if (!tierCount[tier]) {
-				tierCount[tier] = 1;
-			} else if (tierCount[tier] > 1) {
-				continue;
-			}
+			// Limit to one of each species (Species Clause)
+			if (baseFormes[template.baseSpecies]) continue;
 
 			// Adjust rate for species with multiple formes
 			switch (template.baseSpecies) {
 			case 'Arceus': case 'Silvally':
 				if (this.randomChance(17, 18)) continue;
 				break;
-			case 'Pikachu':
-				if (this.randomChance(6, 7)) continue;
-				continue;
 			case 'Genesect':
 				if (this.randomChance(4, 5)) continue;
 				break;
 			case 'Castform': case 'Gourgeist': case 'Oricorio':
 				if (this.randomChance(3, 4)) continue;
 				break;
+			case 'Necrozma':
+				if (this.randomChance(2, 3)) continue;
+				break;
 			case 'Basculin': case 'Cherrim': case 'Greninja': case 'Hoopa': case 'Meloetta': case 'Meowstic':
 				if (this.randomChance(1, 2)) continue;
 				break;
 			}
 
-			if (potd && potd.exists) {
-				// The Pokemon of the Day belongs in slot 2
-				if (pokemon.length === 1) {
-					template = potd;
-					if (template.species === 'Magikarp') {
-						// @ts-ignore
-						template.randomBattleMoves = ['bounce', 'flail', 'splash', 'magikarpsrevenge'];
-					} else if (template.species === 'Delibird') {
-						// @ts-ignore
-						template.randomBattleMoves = ['present', 'bestow'];
-					}
-				} else if (template.species === potd.species) {
-					continue; // No thanks, I've already got one
-				}
+			let tier = template.tier;
+
+			// Limit two Pokemon per tier
+			if (!tierCount[tier]) {
+				tierCount[tier] = 1;
+			} else if (tierCount[tier] > 1) {
+				continue;
 			}
 
 			let types = template.types;
 
 			if (!isMonotype) {
-				// Limit 2 of any type
+				// Limit two of any type
 				let skip = false;
 				for (const type of types) {
 					if (typeCount[type] > 1 && this.randomChance(4, 5)) {
@@ -1782,6 +1761,15 @@ class RandomTeams extends Dex.ModdedDex {
 					}
 				}
 				if (skip) continue;
+			}
+
+			if (potd && potd.exists) {
+				// The Pokemon of the Day belongs in slot 2
+				if (pokemon.length === 1) {
+					template = potd;
+				} else if (template.species === potd.species) {
+					continue; // No thanks, I've already got it
+				}
 			}
 
 			let set = this.randomSet(template, pokemon.length, teamDetails, this.format.gameType !== 'singles');
@@ -1794,7 +1782,7 @@ class RandomTeams extends Dex.ModdedDex {
 			let intersectMoves = set.moves.filter(move => incompatibleMoves.includes(move));
 			if (intersectMoves.length > 1) continue;
 
-			// Limit 1 of any type combination, 2 in monotype
+			// Limit 1 of any type combination, 2 in Monotype
 			let typeCombo = types.slice().sort().join();
 			if (set.ability === 'Drought' || set.ability === 'Drizzle' || set.ability === 'Sand Stream') {
 				// Drought, Drizzle and Sand Stream don't count towards the type combo limit
