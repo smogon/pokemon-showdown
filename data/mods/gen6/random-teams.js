@@ -703,6 +703,8 @@ class RandomGen6Teams extends RandomTeams {
 				ability = 'Pickup';
 			} else if (template.baseSpecies === 'Basculin') {
 				ability = 'Adaptability';
+			} else if (template.baseSpecies === 'Glalie') {
+				ability = 'Inner Focus';
 			} else if (template.species === 'Lopunny' && hasMove['switcheroo'] && this.randomChance(2, 3)) {
 				ability = 'Klutz';
 			} else if ((template.species === 'Rampardos' && !hasMove['headsmash']) || hasMove['rockclimb']) {
@@ -860,6 +862,7 @@ class RandomGen6Teams extends RandomTeams {
 			RUBL: 78,
 			UU: 77,
 			UUBL: 76,
+			'(OU)': 75,
 			OU: 75,
 			Unreleased: 75,
 			Uber: 73,
@@ -875,11 +878,7 @@ class RandomGen6Teams extends RandomTeams {
 			// Holistic judgement
 			Unown: 100,
 		};
-		let tier = template.tier;
-		if (tier.charAt(0) === '(') {
-			tier = tier.slice(1, -1);
-		}
-		let level = levelScale[tier] || 84;
+		let level = levelScale[template.tier] || 84;
 		if (customScale[template.name]) level = customScale[template.name];
 
 		if (template.name === 'Slurpuff' && !counter.setupType) level = 81;
