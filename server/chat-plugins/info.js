@@ -302,7 +302,7 @@ const commands = {
 	},
 
 	rs: 'roomstatus',
-	roomstatus: function (target, room, user) {
+	roomstatus(target, room, user) {
 		const modlog_room = `../../logs/modlog/modlog_${room}.txt`;
 		const raw_modlog = fs.readFileSync(modlog_room, 'utf-8');
 		let output = [];
@@ -368,7 +368,7 @@ const commands = {
 			let uniqueOutput = [...new Set(output)];
 			return uniqueOutput;
 		};
-		
+
 		if (!`${response()}`) {
 			return this.sendReplyBox("No user in this room is currently punished.");
 		} else {
