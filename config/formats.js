@@ -1768,6 +1768,16 @@ let Formats = [
 		banlist: ['Berry Juice', 'Soul Dew', 'Dragon Rage', 'Sonic Boom', 'LC Uber', 'Sand Rush', 'Gligar', 'Murkrow', 'Scyther', 'Sneasel', 'Tangela'],
 	},
 	{
+		name: "[Gen 5] Monotype",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/7421333/">BW Monotype</a>`,
+		],
+
+		mod: 'gen5',
+		searchShow: false,
+		ruleset: ['[Gen 5] OU', 'Same Type Clause'],
+	},
+	{
 		name: "[Gen 5] GBU Singles",
 
 		mod: 'gen5',
