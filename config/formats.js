@@ -572,7 +572,7 @@ let Formats = [
 			"&bullet; <a href=\"https://www.smogon.com/forums/threads/3646310/\">Megamons</a>",
 		],
 		ruleset: ['Species Clause', 'Nickname Clause', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Swagger Clause', 'Mega Rayquaza Clause', 'Sleep Clause Mod', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
-		banlist: ['Unreleased', 'Illegal', 'Blaziken-Mega', 'Gengar-Mega', 'Mewtwo-Mega-Y'],
+		banlist: ['Unreleased', 'Illegal', 'Blaziken-Mega', 'Gengar-Mega', 'Mewtwo-Mega-Y', 'Rayquaza-Mega'],
 		onChangeSet(set, format) {
 			let item = this.getItem(set.item);
 			let template = this.getTemplate(set.species);
@@ -644,11 +644,6 @@ let Formats = [
 					// @ts-ignore
 					totalEV += set.evs[k];
 				}
-			}
-
-			// In gen 6, it is impossible to battle other players with pokemon that break the EV limit
-			if (totalEV > 510 && this.gen === 6) {
-				problems.push((set.name || set.species) + " has more than 510 total EVs.");
 			}
 
 			// ----------- legality line ------------------------------------------
@@ -735,17 +730,6 @@ let Formats = [
 				// It only remains to assign the right forme to a set with the base species (Arceus/Genesect/Giratina/Silvally).
 				if (item.forcedForme && template.species === this.getTemplate(item.forcedForme).baseSpecies && !format.noChangeForme) {
 					set.species = item.forcedForme;
-				}
-			}
-
-			if (template.species === 'Pikachu-Cosplay') {
-				/**@type {{[k: string]: string}} */
-				let cosplay = {meteormash: 'Pikachu-Rock-Star', iciclecrash: 'Pikachu-Belle', drainingkiss: 'Pikachu-Pop-Star', electricterrain: 'Pikachu-PhD', flyingpress: 'Pikachu-Libre'};
-				for (const moveid of set.moves) {
-					if (moveid in cosplay) {
-						set.species = cosplay[moveid];
-						break;
-					}
 				}
 			}
 
