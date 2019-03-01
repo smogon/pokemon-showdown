@@ -1817,7 +1817,7 @@ export class Battle extends Dex.ModdedDex {
 		damage: (number | boolean | undefined)[], targetArray: (false | Pokemon | null)[] | null = null,
 		source: Pokemon | null = null, effect: 'drain' | 'recoil' | Effect | null = null, instafaint: boolean = false) {
 		if (!targetArray) return [0];
-		let retVals = [];
+		let retVals: (number | boolean | undefined)[] = [];
 		if (typeof effect === 'string' || !effect) effect = this.getEffect(effect);
 		for (let i = 0; i < damage.length; i++) {
 			let target = targetArray[i];
@@ -1845,7 +1845,7 @@ export class Battle extends Dex.ModdedDex {
 				targetDamage = this.runEvent('Damage', target, source, effect, targetDamage);
 				if (!(targetDamage || targetDamage === 0)) {
 					this.debug('damage event failed');
-					retVals[i] = damage;
+					retVals[i] = damage[i];
 					continue;
 				}
 			}
@@ -1900,14 +1900,14 @@ export class Battle extends Dex.ModdedDex {
 			}
 		}
 
+		// @ts-ignore TODO: AfterDamage passes an Effect, not an ActiveMove
+		if (!effect.flags) effect.flags = {};
 		if (instafaint) {
 			for (let i = 0; i < targetArray.length; i++) {
 				if (!retVals[i]) continue;
-				// @ts-ignore TODO: AfterDamage passes an Effect, not an ActiveMove
-				if (!effect.flags) effect.flags = {};
-
 				let target = targetArray[i];
 				if (!target) continue;
+
 				if (target.hp <= 0) {
 					this.debug('instafaint: ' + this.faintQueue.map(entry => entry.target.name));
 					this.faintMessages(true);
@@ -1915,11 +1915,10 @@ export class Battle extends Dex.ModdedDex {
 						target.faint();
 						if (this.gen <= 1) this.queue = [];
 					}
-				} else {
-					retVals = this.runEvent('AfterDamage', target, source, effect, damage[i]);
 				}
 			}
 		}
+		retVals = this.runEvent('AfterDamage', (targetArray.filter(val => !!val)) as Pokemon[], source, effect, damage);
 
 		return retVals;
 	}

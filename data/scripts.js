@@ -837,7 +837,7 @@ let BattleScripts = {
 		// There is no need to recursively check the ´sleepUsable´ flag as Sleep Talk can only be used while asleep.
 		let isSleepUsable = move.sleepUsable || this.getMove(move.sourceEffect).sleepUsable;
 		let i;
-		for (i = 0; i < hits && !damage.includes(false) && pokemon.hp; i++) {
+		for (i = 0; i < hits && !damage.includes(false); i++) {
 			if (pokemon.status === 'slp' && !isSleepUsable) break;
 			move.hit = i + 1;
 
@@ -912,6 +912,7 @@ let BattleScripts = {
 				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.getEffect('Mind Blown'), true);
 			}
 			this.eachEvent('Update');
+			if (!pokemon.hp) break;
 		}
 		if (i === 0) return damage.fill(false);
 		if (nullDamage) damage.fill(false);
