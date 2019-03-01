@@ -809,7 +809,6 @@ let Formats = [
 			pokemon.ability = pokemon.baseAbility = allies[1].ability;
 		},
 	},
-	},
 	{
 		section: "Other Metagames",
 		column: 2,
