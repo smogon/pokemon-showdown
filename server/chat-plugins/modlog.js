@@ -25,6 +25,8 @@ const MAX_PROCESSES = 1;
 const MAX_QUERY_LENGTH = 2500;
 const DEFAULT_RESULTS_LENGTH = 100;
 const MORE_BUTTON_INCREMENTS = [200, 400, 800, 1600, 3200];
+// If a modlog query takes longer than this, it will be logged.
+const LONG_QUERY_DURATION = 2000;
 const LINES_SEPARATOR = 'lines=';
 const MAX_RESULTS_LENGTH = MORE_BUTTON_INCREMENTS[MORE_BUTTON_INCREMENTS.length - 1];
 const LOG_PATH = 'logs/modlog/';
@@ -282,9 +284,12 @@ async function getModlog(connection, roomid = 'global', searchString = '', maxLi
 		roomidList = [roomid];
 	}
 
-	const response = await PM.query({cmd: 'modlog', roomidList, searchString, exactSearch, maxLines});
+	const query = {cmd: 'modlog', roomidList, searchString, exactSearch, maxLines};
+	const response = await PM.query(query);
 	connection.send(prettifyResults(response, roomid, searchString, exactSearch, addModlogLinks, hideIps, maxLines));
-	if (timed) connection.popup(`The modlog query took ${Date.now() - startTime} ms to complete.`);
+	const duration = Date.now() - startTime;
+	if (timed) connection.popup(`The modlog query took ${duration} ms to complete.`);
+	if (duration > LONG_QUERY_DURATION) console.log(`Long modlog query took ${duration} ms to complete:`, query);
 }
 
 /*********************************************************
