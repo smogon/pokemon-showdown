@@ -12,6 +12,8 @@
 
 'use strict';
 
+const fs = require('fs');
+
 /** @type {ChatCommands} */
 const commands = {
 
@@ -298,6 +300,82 @@ const commands = {
 		}
 		this.sendReplyBox(buf);
 	},
+
+	rs: 'roomstatus',
+	roomstatus: function (target, room, user) {
+		const modlog_room = `../../logs/modlog/modlog_${room}.txt`;
+		const raw_modlog = fs.readFileSync(modlog_room, 'utf-8');
+		let output = [];
+
+		let findPunishedUser = (str) => {
+			let user = str.match(/\[[a-z0-9]+\]/g).toString().replace(/\[|\]/g, "");
+			return user;
+		};
+
+		let didPunishmentExpire = (str, punishmentType) => {
+			let raw_date = str.match(/\d+-\d+-\d+T\d+:\d+:\d+/g).toString().replace("T", " ");
+			let now = new Date();
+			let expiresIn;
+			switch (punishmentType) {
+			case "mute":
+				expiresIn = (new Date(raw_date).getTime() + 420000) - new Date(now.getTime() + (now.getTimezoneOffset() * 60000)).getTime();
+				break;
+			case "hourmute":
+				expiresIn = (new Date(raw_date).getTime() + 3600000) - new Date(now.getTime() + (now.getTimezoneOffset() * 60000)).getTime();
+				break;
+			case "roomban":
+				expiresIn = (new Date(raw_date).getTime() + 172800000) - new Date(now.getTime() + (now.getTimezoneOffset() * 60000)).getTime();
+				break;
+			case "blacklist":
+				expiresIn = (new Date(raw_date).getTime() + 31557600000) - new Date(now.getTime() + (now.getTimezoneOffset() * 60000)).getTime();
+				break;
+			}
+			if (expiresIn <= 0) {
+				return true;
+			} else {
+				return false;
+			}
+		};
+
+		let findPunishmentType = (str) => {
+			if (/\b(?:MUTE|HOURMUTE|ROOMBAN|BLACKLIST)\b:/g.test(str) === false) return;
+			let type = str.match(/\b(?:MUTE|HOURMUTE|ROOMBAN|BLACKLIST)\b:/g).toString().replace(":", "");
+			return type.toLowerCase();
+		};
+
+		let response = () => {
+			for (const row of raw_modlog.split("\n")) {
+				if (!row || row === '\r') continue;
+				if (/\b(?:MUTE|HOURMUTE|ROOMBAN|BLACKLIST)\b:/g.test(row) === false) continue;
+				let punishmentType = findPunishmentType(row);
+				if (didPunishmentExpire(row, punishmentType) === true) continue;
+				let punishedUser = findPunishedUser(row);
+				let targetUser = this.targetUserOrSelf(punishedUser, user.group === ' ');
+				let punishments = Punishments.getRoomPunishments(targetUser, {checkIps: true});
+				output.push(punishments.map(([roomOfPunishment, punishment]) => {
+					if (room !== roomOfPunishment) return "";
+					const [punishType, punishUserid, expireTime, reason] = punishment;
+					let punishDesc = Punishments.roomPunishmentTypes.get(punishType);
+					if (!punishDesc) punishDesc = `punished`;
+					if (punishUserid !== punishedUser) punishDesc += ` as ${punishUserid}`;
+					let expiresIn = new Date(expireTime).getTime() - Date.now();
+					let expireString = Chat.toDurationString(expiresIn, {precision: 1});
+					punishDesc += ` for ${expireString}`;
+					if (reason) punishDesc += `: ${reason}`;
+					return `${punishedUser} is ${punishDesc}`;
+				}).join("<br />"));
+			}
+			let uniqueOutput = [...new Set(output)];
+			return uniqueOutput;
+		};
+		
+		if (!`${response()}`) {
+			return this.sendReplyBox("No user in this room is currently punished.");
+		} else {
+			return this.sendReplyBox(`${response()}`);
+		}
+	},
+	roomstatushelp: [`/roomstatus - Shows the current punishments in the room`],
 
 	'!host': true,
 	host(target, room, user, connection, cmd) {
