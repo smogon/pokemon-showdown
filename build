@@ -12,7 +12,7 @@ var fs = require('fs');
 var path = require('path');
 
 function shell(cmd) { child_process.execSync(cmd, {stdio: 'inherit', cwd: __dirname}); }
-function sucrase(src, out) { 
+function sucrase(src, out) {
   shell(`npx sucrase -q ${src} -d ${out} --transforms typescript,imports --enable-legacy-typescript-module-interop`);
 }
 

@@ -39,7 +39,7 @@ before('initialization', function () {
 	config.fakeladder = false;
 
 	// Don't create a REPL
-	require('../.lib-dist/repl').start = noop;
+	require('../.lib-dist/repl').Repl.start = noop;
 
 	// Start the server.
 	require('../server');
