@@ -805,6 +805,7 @@ let Formats = [
 			pokemon.canMegaEvo = null;
 			// @ts-ignore
 			pokemon.baseTemplate.baseSpecies = pokemon.baseTemplate.species += '-Chimera';
+			// @ts-ignore
 			pokemon.baseTemplate.speciesid += 'chimera';
 			pokemon.formeChange(pokemon.baseTemplate);
 			pokemon.ability = pokemon.baseAbility = allies[1].ability;
