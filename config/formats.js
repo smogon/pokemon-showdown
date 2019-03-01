@@ -573,7 +573,7 @@ let Formats = [
 		],
 		ruleset: ['Species Clause', 'Nickname Clause', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Swagger Clause', 'Mega Rayquaza Clause', 'Sleep Clause Mod', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 		banlist: ['Unreleased', 'Illegal', 'Blaziken-Mega', 'Gengar-Mega', 'Mewtwo-Mega-Y'],
-		onChangeSet: function(set, format) {
+		onChangeSet(set, format) {
 			let item = this.getItem(set.item);
 			let template = this.getTemplate(set.species);
 			let problems = [];
@@ -770,7 +770,7 @@ let Formats = [
 
 			return problems;
 		},
-		onSwitchIn: function(pokemon) {
+		onSwitchIn(pokemon) {
 			let item = pokemon.getItem();
 			if (item.megaEvolves && pokemon.template.species === item.megaEvolves) {
 				pokemon.canMegaEvo = item.megaStone;
