@@ -255,6 +255,11 @@ let BattleScripts = {
 			return false;
 		}
 
+		if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
+			this.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
+			this.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
+		}
+
 		return true;
 	},
 	trySpreadMoveHit(targets, pokemon, move) {
