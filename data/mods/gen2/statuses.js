@@ -12,10 +12,16 @@ let BattleStatuses = {
 		},
 		onAfterMoveSelfPriority: 3,
 		onAfterMoveSelf(pokemon) {
-			this.damage(pokemon.maxhp / 8);
+			let toxicCounter = 1;
+			if (pokemon.volatiles['residualdmg']) {
+				pokemon.volatiles['residualdmg'].counter++;
+				toxicCounter = pokemon.volatiles['residualdmg'].counter;
+			}
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 8), 1) * toxicCounter, pokemon);
+			if (toxicCounter > 1) this.add('-hint', 'In GSC, Toxic\'s counter is retained through Baton Pass/Heal Bell and applies to PSN/BRN.');
 		},
 		onAfterSwitchInSelf(pokemon) {
-			this.damage(pokemon.maxhp / 8);
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 8), 1));
 		},
 	},
 	par: {
@@ -89,10 +95,16 @@ let BattleStatuses = {
 		},
 		onAfterMoveSelfPriority: 3,
 		onAfterMoveSelf(pokemon) {
-			this.damage(pokemon.maxhp / 8);
+			let toxicCounter = 1;
+			if (pokemon.volatiles['residualdmg']) {
+				pokemon.volatiles['residualdmg'].counter++;
+				toxicCounter = pokemon.volatiles['residualdmg'].counter;
+			}
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 8), 1) * toxicCounter, pokemon);
+			if (toxicCounter > 1) this.add('-hint', 'In GSC, Toxic\'s counter is retained through Baton Pass/Heal Bell and applies to PSN/BRN.');
 		},
 		onAfterSwitchInSelf(pokemon) {
-			this.damage(pokemon.maxhp / 8);
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 8), 1));
 		},
 	},
 	tox: {
@@ -102,18 +114,16 @@ let BattleStatuses = {
 		effectType: 'Status',
 		onStart(target) {
 			this.add('-status', target, 'tox');
-			this.effectData.stage = 0;
+			if (!target.volatiles['residualdmg']) target.addVolatile('residualdmg');
+			target.volatiles['residualdmg'].counter = 0;
 		},
 		onAfterMoveSelfPriority: 3,
 		onAfterMoveSelf(pokemon) {
-			if (this.effectData.stage < 15) {
-				this.effectData.stage++;
-			}
-			this.damage(this.clampIntRange(pokemon.maxhp / 16, 1) * this.effectData.stage);
+			pokemon.volatiles['residualdmg'].counter++;
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter, pokemon, pokemon);
 		},
 		onSwitchIn(pokemon) {
 			// Regular poison status and damage after a switchout -> switchin.
-			this.effectData.stage = 0;
 			pokemon.setStatus('psn');
 		},
 		onAfterSwitchInSelf(pokemon) {
