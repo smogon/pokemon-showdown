@@ -3456,6 +3456,10 @@ export class Battle extends Dex.ModdedDex {
 		throw new Error(`The targetTypeChoices function needs to be implemented in scripts.js or the battle format.`);
 	}
 
+	reduceMoveResults(results: (number | boolean | null | undefined)[]): number | boolean | null | undefined {
+		throw new Error(`The reduceMoveResults function needs to be implemented in scripts.js or the battle format.`);
+	}
+
 	destroy() {
 		// deallocate ourself
 
