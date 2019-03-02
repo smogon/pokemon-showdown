@@ -1737,10 +1737,13 @@ Chat.getDataPokemonHTML = function (template, gen = 7, tier = '') {
 		} else {
 			buf += '<span class="col abilitycol">' + template.abilities['0'] + '</span>';
 		}
-		if (template.abilities['S']) {
-			buf += '<span class="col twoabilitycol' + (template.unreleasedHidden ? ' unreleasedhacol' : '') + '"><em>' + template.abilities['H'] + '<br />' + template.abilities['S'] + '</em></span>';
+		if (template.abilities['H'] && template.abilities['S']) {
+			buf += '<span class="col twoabilitycol' + (template.unreleasedHidden ? ' unreleasedhacol' : '') + '"><em>' + template.abilities['H'] + '<br />(' + template.abilities['S'] + ')</em></span>';
 		} else if (template.abilities['H']) {
 			buf += '<span class="col abilitycol' + (template.unreleasedHidden ? ' unreleasedhacol' : '') + '"><em>' + template.abilities['H'] + '</em></span>';
+		} else if (template.abilities['S']) {
+			// special case for Zygarde
+			buf += '<span class="col abilitycol"><em>(' + template.abilities['S'] + ')</em></span>';
 		} else {
 			buf += '<span class="col abilitycol"></span>';
 		}
