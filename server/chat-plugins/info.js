@@ -2396,20 +2396,31 @@ const pages = {
 		if (!user.can('mute')) {
 			return buf + `<div class="notice message-error">Access denied.</div>`;
 		}
-		const subMap = Punishments.roomUserIds.get(this.room.id);
+		const store = new Map();
 		const muteQueue = this.room.muteQueue;
 		const possessive = (word) => {
 			const suffix = word.endsWith('s') ? `'` : `'s`;
 			return `${word}${suffix}`;
 		};
-		if (subMap) {
-			for (const punishment of subMap) {
-				let [, [punishType, id, expireTime]] = punishment;
-				let expiresIn = new Date(expireTime).getTime() - Date.now();
-				let expireString = Chat.toDurationString(expiresIn, {precision: 1});
-				buf += `<p>- ${possessive(id)} ${punishType.toLowerCase()} expires in ${expireString}.</p>`;
-			}
+
+		for (let [key, value] of Punishments.roomUserids.get(this.room.id)) {
+			if (!store.has(value)) store.set(value, [new Set([value.id]), new Set()]);
+			store.get(value)[0].add(key);
 		}
+
+		for (let [key, value] of Punishments.roomIps.get(this.room.id)) {
+			if (!store.has(value)) store.set(value, [new Set([value.id]), new Set()]);
+			store.get(value)[1].add(key);
+		}
+
+		for (const punishment of store) {
+			let [[punishType, id, expireTime]] = punishment;
+			console.log("Punishment", punishment);
+			let expiresIn = new Date(expireTime).getTime() - Date.now();
+			let expireString = Chat.toDurationString(expiresIn, {precision: 1});
+			buf += `<p>- ${possessive(id)} ${punishType.toLowerCase()} expires in ${expireString}.</p>`;
+		}
+
 		if (muteQueue) {
 			for (const entry of muteQueue) {
 				let expiresIn = new Date(entry.time).getTime() - Date.now();
