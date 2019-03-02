@@ -841,13 +841,14 @@ let BattleScripts = {
 		let moveDamage;
 		// There is no need to recursively check the ´sleepUsable´ flag as Sleep Talk can only be used while asleep.
 		let isSleepUsable = move.sleepUsable || this.getMove(move.sourceEffect).sleepUsable;
+
+		/** @type {(Pokemon | false | null)[]} */
+		let targetsCopy = targets.slice(0);
 		let i;
 		for (i = 0; i < hits && !damage.includes(false); i++) {
 			if (pokemon.status === 'slp' && !isSleepUsable) break;
 			move.hit = i + 1;
-
-			/** @type {(Pokemon | false | null)[]} */
-			let targetsCopy = targets.slice(0);
+			targetsCopy = targets.slice(0);
 			let target = targetsCopy[0]; // some relevant-to-single-target-moves-only things are hardcoded
 
 			// like this (Triple Kick)
@@ -898,17 +899,17 @@ let BattleScripts = {
 			}
 
 			// Modifies targetsCopy (which is why it's a copy)
-			moveDamage = this.spreadMoveHit(targetsCopy, pokemon, move, moveData);
+			[moveDamage, targetsCopy] = this.spreadMoveHit(targetsCopy, pokemon, move, moveData);
 
 			if (!moveDamage.some(val => val !== false)) {
 				break;
 			}
 			nullDamage = false;
 
-			for (let i = 0; i < targets.length; i++) {
+			for (let i = 0; i < damage.length; i++) {
 				// Damage from each hit is individually counted for the
 				// purposes of Counter, Metal Burst, and Mirror Coat.
-				damage[i] = (moveDamage[i] || 0);
+				damage[i] = moveDamage[i] === true || !moveDamage[i] ? 0 : moveDamage[i];
 				// Total damage dealt is accumulated for the purposes of recoil (Parental Bond).
 				// @ts-ignore
 				move.totalDamage += damage[i];
@@ -932,8 +933,8 @@ let BattleScripts = {
 			this.directDamage(this.clampIntRange(Math.round(pokemon.maxhp / 4), 1), pokemon, pokemon, {id: 'strugglerecoil'});
 		}
 
-		for (let i = 0; i < targets.length; i++) {
-			let target = targets[i];
+		for (let i = 0; i < targetsCopy.length; i++) {
+			let target = targetsCopy[i];
 			if (target && pokemon !== target) {
 				// @ts-ignore damage[i] can't be true if target is truthy
 				target.gotAttacked(move, damage[i], pokemon);
@@ -971,13 +972,18 @@ let BattleScripts = {
 				this.add('-fail', pokemon);
 				this.attrLastMove('[still]');
 			}
-			return [false]; // single-target only
+			return [[false], targets]; // single-target only
 		}
 
 		// 0. check for substitute
 		damage = this.tryPrimaryHitEvent(damage, targets, pokemon, move, moveData, isSecondary);
 
 		for (let i = 0; i < targets.length; i++) {
+			if (damage[i] === 0) {
+				// special substitute flag
+				damage[i] = true;
+				targets[i] = null;
+			}
 			if (!damage[i]) targets[i] = false;
 		}
 		// 1. call to this.getDamage
@@ -1017,7 +1023,7 @@ let BattleScripts = {
 			if (!damage[j] && damage[j] !== 0) targets[j] = false;
 		}
 
-		return damage;
+		return [damage, targets];
 	},
 	tryPrimaryHitEvent(damage, targets, pokemon, move, moveData, isSecondary) {
 		damage = [];
@@ -1025,11 +1031,6 @@ let BattleScripts = {
 			const target = targets[i];
 			if (!target) continue;
 			damage[i] = this.runEvent('TryPrimaryHit', target, pokemon, moveData);
-			if (damage[i] === 0) {
-				// special Substitute flag
-				damage[i] = true;
-				targets[i] = null;
-			}
 			if (targets[i] && isSecondary && !moveData.self) {
 				damage[i] = true;
 			}
@@ -1037,10 +1038,10 @@ let BattleScripts = {
 		return damage;
 	},
 	getSpreadDamage(damage, targets, pokemon, move, moveData, isSecondary, isSelf) {
-		damage.fill(undefined);
 		for (let i = 0; i < targets.length; i++) {
 			let target = targets[i];
 			if (!target) continue;
+			damage[i] = undefined;
 			let curDamage = this.getDamage(pokemon, target, moveData);
 			// getDamage has several possible return values:
 			//

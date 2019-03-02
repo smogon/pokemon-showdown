@@ -749,7 +749,7 @@ interface BattleScriptsData {
 	getSpreadDamage?: (this: Battle, damage:(number | boolean | undefined)[], targets: (Pokemon | false | null)[], source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary: boolean | undefined, isSelf: boolean | undefined) => (number | boolean | undefined)[]
 	isAdjacent?: (this: Battle, pokemon1: Pokemon, pokemon2: Pokemon) => boolean
 	moveHit?: (this: Battle, target: Pokemon | null, pokemon: Pokemon, move: ActiveMove, moveData?: ActiveMove, isSecondary?: boolean, isSelf?: boolean) => number | undefined | false
-	spreadMoveHit?: (this: Battle, targets: (Pokemon | false | null)[], pokemon: Pokemon, move: ActiveMove, moveData?: ActiveMove, isSecondary?: boolean, isSelf?: boolean) => (number | undefined | boolean)[]
+	spreadMoveHit?: (this: Battle, targets: (Pokemon | false | null)[], pokemon: Pokemon, move: ActiveMove, moveData?: ActiveMove, isSecondary?: boolean, isSelf?: boolean) => [(number | undefined | boolean)[], (Pokemon | false | null)[]]
 	moveHitLoop?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => (number | undefined | boolean)[]
 	powderImmunity?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean[]
 	pranksterImmunity?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean[]

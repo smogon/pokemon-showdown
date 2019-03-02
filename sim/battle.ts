@@ -3361,7 +3361,7 @@ export class Battle extends Dex.ModdedDex {
 
 	spreadMoveHit(
 		targets: (Pokemon | false | null)[], pokemon: Pokemon, move: ActiveMove, moveData?: ActiveMove,
-		isSecondary?: boolean, isSelf?: boolean): (number | undefined | boolean)[] {
+		isSecondary?: boolean, isSelf?: boolean): [(number | undefined | boolean)[], (Pokemon | false | null)[]] {
 		throw new Error(`The spreadMoveHit function needs to be implemented in scripts.js or the battle format.`);
 	}
 
