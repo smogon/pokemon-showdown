@@ -782,7 +782,9 @@ export class Battle extends Dex.ModdedDex {
 		}
 		for (const handler of handlers) {
 			if (handler.index !== undefined) {
-				if (!targetRelayVars[handler.index]) continue;
+				// TODO: find a better way to do this
+				if (!targetRelayVars[handler.index] && !(targetRelayVars[handler.index] === 0 &&
+					eventid === 'AfterDamage' && handler.status.id === 'counter')) continue;
 				if (handler.target) {
 					args[hasRelayVar] = handler.target;
 					this.event.target = handler.target;
@@ -1921,7 +1923,7 @@ export class Battle extends Dex.ModdedDex {
 				}
 			}
 		}
-		retVals = this.runEvent('AfterDamage', (targetArray.filter(val => !!val)) as Pokemon[], source, effect, damage);
+		retVals = this.runEvent('AfterDamage', (targetArray.filter(val => !!val)) as Pokemon[], source, effect, retVals);
 
 		return retVals;
 	}
