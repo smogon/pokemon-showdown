@@ -2398,15 +2398,16 @@ const pages = {
 		}
 		const subMap = Punishments.roomIps.get(this.room.id);
 		const muteQueue = this.room.muteQueue;
+		const possessive = (word) => {
+			const suffix = word.endsWith('s') ? `'` : `'s`;
+			return `${word}${suffix}`;
+		};
 		if (subMap) {
 			for (const punishment of subMap) {
 				let [, [punishType, id, expireTime]] = punishment;
-				let punishDesc = Punishments.roomPunishmentTypes.get(punishType);
-				if (!punishDesc) punishDesc = `punished`;
 				let expiresIn = new Date(expireTime).getTime() - Date.now();
 				let expireString = Chat.toDurationString(expiresIn, {precision: 1});
-				punishDesc += ` for ${expireString}`;
-				buf += `<p>${id} is ${punishDesc}.</p>`;
+				buf += `<p>- ${possessive(id)} ${punishType.toLowerCase()} expires in ${expireString}.</p>`;
 			}
 		}
 		if (muteQueue) {
@@ -2414,7 +2415,7 @@ const pages = {
 				let expiresIn = new Date(entry.time).getTime() - Date.now();
 				if (expiresIn < 0) continue;
 				let expireString = Chat.toDurationString(expiresIn, {precision: 1});
-				buf += `<p>${entry.userid} is muted for ${expireString}.</p>`;
+				buf += `<p>- ${possessive(entry.userid)} mute expires in ${expireString}.</p>`;
 			}
 		}
 		buf += `</div>`;
