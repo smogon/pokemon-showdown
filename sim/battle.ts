@@ -783,7 +783,10 @@ export class Battle extends Dex.ModdedDex {
 		for (const handler of handlers) {
 			if (handler.index !== undefined) {
 				if (!targetRelayVars[handler.index]) continue;
-				if (handler.target) args[hasRelayVar] = handler.target;
+				if (handler.target) {
+					args[hasRelayVar] = handler.target;
+					this.event.target = handler.target;
+				}
 				if (hasRelayVar) args[0] = targetRelayVars[handler.index];
 			}
 			let status = handler.status;
