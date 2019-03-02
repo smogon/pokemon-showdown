@@ -131,12 +131,12 @@ class RandomGen1Teams extends RandomGen2Teams {
 		let nuTiers = ['UU', 'UUBL', 'NFE', 'LC', 'NU'];
 		let uuTiers = ['NFE', 'UU', 'UUBL', 'NU'];
 
-		let n = 1;
 		let pokemonPool = [];
 		for (let id in this.data.FormatsData) {
-			// FIXME: Not ES-compliant
-			if (n++ > 151 || !this.data.FormatsData[id].randomBattleMoves) continue;
-			pokemonPool.push(id);
+			let template = this.getTemplate(id);
+			if (template.gen <= this.gen && template.randomBattleMoves) {
+				pokemonPool.push(id);
+			}
 		}
 
 		// Now let's store what we are getting.

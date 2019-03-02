@@ -8,12 +8,12 @@ class RandomGen2Teams extends RandomGen3Teams {
 		let pokemonLeft = 6;
 		let pokemon = [];
 
-		let n = 1;
 		let pokemonPool = [];
 		for (let id in this.data.FormatsData) {
-			// FIXME: Not ES-compliant
-			if (n++ > 251 || !this.data.FormatsData[id].randomSet1) continue;
-			pokemonPool.push(id);
+			let template = this.getTemplate(id);
+			if (template.gen <= this.gen && this.data.FormatsData[id].randomSet1) {
+				pokemonPool.push(id);
+			}
 		}
 
 		// Setup storage.
