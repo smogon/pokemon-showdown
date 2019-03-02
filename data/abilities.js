@@ -147,7 +147,7 @@ let BattleAbilities = {
 		shortDesc: "On switch-in, this Pokemon shudders if any foe has a supereffective or OHKO move.",
 		onStart(pokemon) {
 			for (const target of pokemon.side.foe.active) {
-				if (target.fainted) continue;
+				if (!target || target.fainted) continue;
 				for (const moveSlot of target.moveSlots) {
 					let move = this.getMove(moveSlot.move);
 					if (move.category !== 'Status' && (this.getImmunity(move.type, pokemon) && this.getEffectiveness(move.type, pokemon) > 0 || move.ohko)) {
