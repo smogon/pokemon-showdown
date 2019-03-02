@@ -4271,7 +4271,7 @@ let BattleFormatsData = {
 	},
 	kyurem: {
 		inherit: true,
-		randomBattleMoves: ["dracometeor", "icebeam", "earthpower", "outrage", "substitute", "dragonpulse", "focusblast", "roost"],
+		randomBattleMoves: ["dracometeor", "icebeam", "earthpower", "outrage", "substitute", "focusblast", "roost"],
 		randomDoubleBattleMoves: ["substitute", "icebeam", "dracometeor", "dragonpulse", "focusblast", "glaciate", "earthpower", "roost", "protect"],
 		tier: "RUBL",
 		doublesTier: "(DUU)",
