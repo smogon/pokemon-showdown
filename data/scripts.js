@@ -298,9 +298,6 @@ let BattleScripts = {
 
 			// 8. loop that processes each hit of the move (has its own steps per iteration)
 			this.moveHitLoop,
-
-			// 9. effects that run after secondary effects, such as Color Change
-			this.afterMoveSecondaryEvent,
 		];
 		if (this.gen >= 7) {
 			// Swap step 1 with step 2
@@ -933,6 +930,9 @@ let BattleScripts = {
 		if (!damage.some(val => !!val || val === 0)) return damage;
 
 		this.eachEvent('Update');
+
+		// @ts-ignore
+		this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val), pokemon, move);
 
 		return damage;
 	},
