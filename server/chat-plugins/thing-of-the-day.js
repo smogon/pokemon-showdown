@@ -1,6 +1,7 @@
 'use strict';
 
-const FS = require('../../lib/fs');
+/** @type {typeof import('../../lib/fs').FS} */
+const FS = require(/** @type {any} */('../../.lib-dist/fs')).FS;
 
 const MINUTE = 60 * 1000;
 const ROOMIDS = ['thestudio', 'jubilifetvfilms', 'youtube', 'thelibrary', 'prowrestling'];

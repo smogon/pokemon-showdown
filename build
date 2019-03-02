@@ -12,6 +12,9 @@ var fs = require('fs');
 var path = require('path');
 
 function shell(cmd) { child_process.execSync(cmd, {stdio: 'inherit', cwd: __dirname}); }
+function sucrase(src, out) {
+  shell(`npx sucrase -q ${src} -d ${out} --transforms typescript,imports --enable-legacy-typescript-module-interop`);
+}
 
 try {
 	require.resolve('sucrase');
@@ -20,7 +23,9 @@ try {
 	shell('npm install');
 }
 
-shell('npx sucrase -q ./sim -d ./.sim-dist --transforms typescript,imports --enable-legacy-typescript-module-interop');
+sucrase('./sim', './.sim-dist');
+sucrase('./lib', './.lib-dist');
+shell('npx replace --silent \'(require\\\(.*?)(lib)(.*?\\\))\' \'$1.lib-dist$3\' .sim-dist/*');
 
 // Make sure config.js exists. If not, copy it over synchronously from
 // config-example.js, since it's needed before we can start the server

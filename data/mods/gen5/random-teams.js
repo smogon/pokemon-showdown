@@ -19,7 +19,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 			template = this.getTemplate('unown');
 
 			let err = new Error('Template incompatible with random battles: ' + species);
-			require('../../../lib/crashlogger')(err, 'The gen 5 randbat set generator');
+			Monitor.crashlog(err, 'The gen 5 randbat set generator');
 		}
 
 		if (template.battleOnly) {

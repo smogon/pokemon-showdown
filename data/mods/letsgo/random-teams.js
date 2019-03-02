@@ -17,7 +17,7 @@ class RandomLetsGoTeams extends RandomTeams {
 			template = this.getTemplate('bulbasaur');
 
 			let err = new Error('Template incompatible with random battles: ' + species);
-			require('../../../lib/crashlogger')(err, 'The Let\'s Go randbat set generator');
+			Monitor.crashlog(err, 'The Let\'s Go randbat set generator');
 		}
 
 		if (template.battleOnly) {

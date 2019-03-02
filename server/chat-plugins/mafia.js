@@ -49,7 +49,8 @@
  * @property {Object} picks
  */
 
-const FS = require('../../lib/fs');
+/** @type {typeof import('../../lib/fs').FS} */
+const FS = require(/** @type {any} */('../../.lib-dist/fs')).FS;
 const LOGS_FILE = 'config/chat-plugins/mafia-logs.json';
 const BANS_FILE = 'config/chat-plugins/mafia-bans.json';
 const MafiaData = require('./mafia-data.js');

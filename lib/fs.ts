@@ -23,71 +23,64 @@
 
 'use strict';
 
-const pathModule = require('path');
-const fs = require('fs');
-const Streams = require('./streams');
-const WriteStream = Streams.WriteStream;
+import * as fs from 'fs';
+import * as pathModule from 'path';
+import { ReadStream, WriteStream } from './streams';
 
 const ROOT_PATH = pathModule.resolve(__dirname, '..');
 
-/*eslint no-unused-expressions: ["error", { "allowTernary": true }]*/
+interface PendingUpdate {
+	isWriting: boolean; // true: waiting on a call to FS.write, false: waiting on a throttle
+	pendingDataFetcher: (() => string | Buffer) | null;
+	pendingOptions: object | null;
+	throttleTime: number; // throttling until time (0 for no throttle)
+	throttleTimer: NodeJS.Timer | null;
+}
+
+const pendingUpdates: Map<string, PendingUpdate> = new Map();
 
 class FSPath {
-	/**
-	 * @param {string} path
-	 */
-	constructor(path) {
+	path: string;
+
+	constructor(path: string) {
 		this.path = pathModule.resolve(ROOT_PATH, path);
 	}
+
 	parentDir() {
 		return new FSPath(pathModule.dirname(this.path));
 	}
-	/**
-	 * @param {AnyObject | string} [options]
-	 * @return {Promise<string>}
-	 */
-	read(options = 'utf8') {
+
+	read(options: AnyObject | string = 'utf8'): Promise<string> {
 		if (typeof options !== 'string' && options.encoding === undefined) {
 			options.encoding = 'utf8';
 		}
 		return new Promise((resolve, reject) => {
 			fs.readFile(this.path, options, (err, data) => {
-				err ? reject(err) : resolve(/** @type {string} */ (data));
+				err ? reject(err) : resolve(data as string);
 			});
 		});
 	}
-	/**
-	 * @param {AnyObject | string} [options]
-	 * @return {string}
-	 */
-	readSync(/** @type {AnyObject | string} */ options = 'utf8') {
+
+	readSync(options: AnyObject | string = 'utf8'): string {
 		if (typeof options !== 'string' && options.encoding === undefined) {
 			options.encoding = 'utf8';
 		}
-		return /** @type {string} */ (fs.readFileSync(this.path, options));
+		return fs.readFileSync(this.path, options) as string;
 	}
-	/**
-	 * @param {AnyObject | string} [options]
-	 * @return {Promise<Buffer>}
-	 */
-	readBuffer(/** @type {AnyObject | string} */ options = {}) {
+
+	readBuffer(options: AnyObject | string = {}): Promise<Buffer> {
 		return new Promise((resolve, reject) => {
 			fs.readFile(this.path, options, (err, data) => {
-				err ? reject(err) : resolve(/** @type {Buffer} */ (data));
+				err ? reject(err) : resolve(data as Buffer);
 			});
 		});
 	}
-	/**
-	 * @param {AnyObject | string} [options]
-	 * @return {Buffer}
-	 */
-	readBufferSync(/** @type {AnyObject | string} */ options = {}) {
-		return /** @type {Buffer} */ (fs.readFileSync(this.path, options));
+
+	readBufferSync(options: AnyObject | string = {}) {
+		return fs.readFileSync(this.path, options) as Buffer;
 	}
-	/**
-	 * @return {Promise<string>}
-	 */
-	readIfExists() {
+
+	readIfExists(): Promise<string> {
 		return new Promise((resolve, reject) => {
 			fs.readFile(this.path, 'utf8', (err, data) => {
 				if (err && err.code === 'ENOENT') return resolve('');
@@ -95,6 +88,7 @@ class FSPath {
 			});
 		});
 	}
+
 	readIfExistsSync() {
 		try {
 			return fs.readFileSync(this.path, 'utf8');
@@ -103,11 +97,8 @@ class FSPath {
 		}
 		return '';
 	}
-	/**
-	 * @param {string | Buffer} data
-	 * @param {Object} options
-	 */
-	write(data, options = {}) {
+
+	write(data: string | Buffer, options: object = {}) {
 		if (Config.nofswriting) return Promise.resolve();
 		return new Promise((resolve, reject) => {
 			fs.writeFile(this.path, data, options, err => {
@@ -115,44 +106,34 @@ class FSPath {
 			});
 		});
 	}
-	/**
-	 * @param {string | Buffer} data
-	 * @param {Object} options
-	 */
-	writeSync(data, options = {}) {
+
+	writeSync(data: string | Buffer, options: object = {}) {
 		if (Config.nofswriting) return;
 		return fs.writeFileSync(this.path, data, options);
 	}
+
 	/**
 	 * Writes to a new file before renaming to replace an old file. If
 	 * the process crashes while writing, the old file won't be lost.
 	 * Does not protect against simultaneous writing; use writeUpdate
 	 * for that.
-	 *
-	 * @param {string | Buffer} data
-	 * @param {Object} options
 	 */
-	async safeWrite(data, options = {}) {
+	async safeWrite(data: string | Buffer, options: object = {}) {
 		await FS(this.path + '.NEW').write(data, options);
 		await FS(this.path + '.NEW').rename(this.path);
 	}
-	/**
-	 * @param {string | Buffer} data
-	 * @param {Object} options
-	 */
-	safeWriteSync(data, options = {}) {
+
+	safeWriteSync(data: string | Buffer, options: object = {}) {
 		FS(this.path + '.NEW').writeSync(data, options);
 		FS(this.path + '.NEW').renameSync(this.path);
 	}
-	/**
-	 * @param {number} time
-	 * @return {Promise<void>}
-	 */
-	waitUntil(time) {
+
+	waitUntil(time: number): Promise<void> {
 		return new Promise(resolve => {
 			setTimeout(() => resolve(), time - Date.now());
 		});
 	}
+
 	/**
 	 * Safest way to update a file with in-memory state. Pass a callback
 	 * that fetches the data to be written. It will write an update,
@@ -164,15 +145,12 @@ class FSPath {
 	 *
 	 * No synchronous version because there's no risk of race conditions
 	 * with synchronous code; just use `safeWriteSync`.
-	 *
-	 * @param {() => string | Buffer} dataFetcher
-	 * @param {Object} options
 	 */
-	writeUpdate(dataFetcher, options = {}) {
+	writeUpdate(dataFetcher: () => string | Buffer, options: object = {}) {
 		if (Config.nofswriting) return;
-		/** @type {PendingUpdate | undefined} */
-		let pendingUpdate = FS.pendingUpdates.get(this.path);
+		let pendingUpdate: PendingUpdate | undefined = pendingUpdates.get(this.path);
 
+		// @ts-ignore
 		const throttleTime = options.throttle ? Date.now() + options.throttle : 0;
 
 		if (pendingUpdate) {
@@ -188,38 +166,36 @@ class FSPath {
 
 		this.writeUpdateNow(dataFetcher, options);
 	}
-	/**
-	 * @param {() => string | Buffer} dataFetcher
-	 * @param {Object} options
-	 */
-	writeUpdateNow(dataFetcher, options) {
+
+	writeUpdateNow(dataFetcher: () => string | Buffer, options: object) {
+		// @ts-ignore
 		const throttleTime = options.throttle ? Date.now() + options.throttle : 0;
 		const update = {
 			isWriting: true,
 			pendingDataFetcher: null,
 			pendingOptions: null,
-			throttleTime: throttleTime,
+			throttleTime,
 			throttleTimer: null,
 		};
-		FS.pendingUpdates.set(this.path, update);
+		pendingUpdates.set(this.path, update);
 		this.safeWrite(dataFetcher(), options).then(() => this.finishUpdate());
 	}
 	checkNextUpdate() {
-		let pendingUpdate = FS.pendingUpdates.get(this.path);
+		let pendingUpdate = pendingUpdates.get(this.path);
 		if (!pendingUpdate) throw new Error(`FS: Pending update not found`);
 		if (pendingUpdate.isWriting) throw new Error(`FS: Conflicting update`);
 
 		const {pendingDataFetcher: dataFetcher, pendingOptions: options} = pendingUpdate;
 		if (!dataFetcher || !options) {
 			// no pending update
-			FS.pendingUpdates.delete(this.path);
+			pendingUpdates.delete(this.path);
 			return;
 		}
 
 		this.writeUpdateNow(dataFetcher, options);
 	}
 	finishUpdate() {
-		let pendingUpdate = FS.pendingUpdates.get(this.path);
+		let pendingUpdate = pendingUpdates.get(this.path);
 		if (!pendingUpdate) throw new Error(`FS: Pending update not found`);
 		if (!pendingUpdate.isWriting) throw new Error(`FS: Conflicting update`);
 
@@ -232,11 +208,8 @@ class FSPath {
 
 		pendingUpdate.throttleTimer = setTimeout(() => this.checkNextUpdate(), throttleTime - Date.now());
 	}
-	/**
-	 * @param {string | Buffer} data
-	 * @param {Object} options
-	 */
-	append(data, options = {}) {
+
+	append(data: string | Buffer, options: object = {}) {
 		if (Config.nofswriting) return Promise.resolve();
 		return new Promise((resolve, reject) => {
 			fs.appendFile(this.path, data, options, err => {
@@ -244,18 +217,13 @@ class FSPath {
 			});
 		});
 	}
-	/**
-	 * @param {string | Buffer} data
-	 * @param {Object} options
-	 */
-	appendSync(data, options = {}) {
+
+	appendSync(data: string | Buffer, options: object = {}) {
 		if (Config.nofswriting) return;
 		return fs.appendFileSync(this.path, data, options);
 	}
-	/**
-	 * @param {string} target
-	 */
-	symlinkTo(target) {
+
+	symlinkTo(target: string) {
 		if (Config.nofswriting) return Promise.resolve();
 		return new Promise((resolve, reject) => {
 			fs.symlink(target, this.path, err => {
@@ -263,17 +231,13 @@ class FSPath {
 			});
 		});
 	}
-	/**
-	 * @param {string} target
-	 */
-	symlinkToSync(target) {
+
+	symlinkToSync(target: string) {
 		if (Config.nofswriting) return;
 		return fs.symlinkSync(target, this.path);
 	}
-	/**
-	 * @param {string} target
-	 */
-	rename(target) {
+
+	rename(target: string) {
 		if (Config.nofswriting) return Promise.resolve();
 		return new Promise((resolve, reject) => {
 			fs.rename(this.path, target, err => {
@@ -281,30 +245,29 @@ class FSPath {
 			});
 		});
 	}
-	/**
-	 * @param {string} target
-	 */
-	renameSync(target) {
+
+	renameSync(target: string) {
 		if (Config.nofswriting) return;
 		return fs.renameSync(this.path, target);
 	}
-	readdir() {
+
+	readdir(): Promise<string[]> {
 		return new Promise((resolve, reject) => {
 			fs.readdir(this.path, (err, data) => {
 				err ? reject(err) : resolve(data);
 			});
 		});
 	}
+
 	readdirSync() {
 		return fs.readdirSync(this.path);
 	}
+
 	createReadStream() {
 		return new FileReadStream(this.path);
 	}
-	/**
-	 * @return {WriteStream}
-	 */
-	createWriteStream(options = {}) {
+
+	createWriteStream(options = {}): WriteStream {
 		if (Config.nofswriting) {
 			// @ts-ignore
 			return new WriteStream({write() {}});
@@ -312,10 +275,8 @@ class FSPath {
 		// @ts-ignore
 		return new WriteStream(fs.createWriteStream(this.path, options));
 	}
-	/**
-	 * @return {WriteStream}
-	 */
-	createAppendStream(options = {}) {
+
+	createAppendStream(options = {}): WriteStream {
 		if (Config.nofswriting) {
 			// @ts-ignore
 			return new WriteStream({write() {}});
@@ -325,6 +286,7 @@ class FSPath {
 		// @ts-ignore
 		return new WriteStream(fs.createWriteStream(this.path, options));
 	}
+
 	unlinkIfExists() {
 		if (Config.nofswriting) return Promise.resolve();
 		return new Promise((resolve, reject) => {
@@ -334,6 +296,7 @@ class FSPath {
 			});
 		});
 	}
+
 	unlinkIfExistsSync() {
 		if (Config.nofswriting) return;
 		try {
@@ -342,10 +305,8 @@ class FSPath {
 			if (err.code !== 'ENOENT') throw err;
 		}
 	}
-	/**
-	 * @param {string | number} mode
-	 */
-	mkdir(mode = 0o755) {
+
+	mkdir(mode: string | number = 0o755) {
 		if (Config.nofswriting) return Promise.resolve();
 		return new Promise((resolve, reject) => {
 			fs.mkdir(this.path, mode, err => {
@@ -353,17 +314,13 @@ class FSPath {
 			});
 		});
 	}
-	/**
-	 * @param {string | number} mode
-	 */
-	mkdirSync(mode = 0o755) {
+
+	mkdirSync(mode: string | number = 0o755) {
 		if (Config.nofswriting) return;
 		return fs.mkdirSync(this.path, mode);
 	}
-	/**
-	 * @param {string | number} mode
-	 */
-	mkdirIfNonexistent(mode = 0o755) {
+
+	mkdirIfNonexistent(mode: string | number = 0o755) {
 		if (Config.nofswriting) return Promise.resolve();
 		return new Promise((resolve, reject) => {
 			fs.mkdir(this.path, mode, err => {
@@ -372,10 +329,8 @@ class FSPath {
 			});
 		});
 	}
-	/**
-	 * @param {string | number} mode
-	 */
-	mkdirIfNonexistentSync(mode = 0o755) {
+
+	mkdirIfNonexistentSync(mode: string | number = 0o755) {
 		if (Config.nofswriting) return;
 		try {
 			fs.mkdirSync(this.path, mode);
@@ -383,12 +338,12 @@ class FSPath {
 			if (err.code !== 'EEXIST') throw err;
 		}
 	}
+
 	/**
 	 * Creates the directory (and any parent directories if necessary).
 	 * Does not throw if the directory already exists.
-	 * @param {string | number} mode
 	 */
-	async mkdirp(mode = 0o755) {
+	async mkdirp(mode: string | number = 0o755) {
 		try {
 			await this.mkdirIfNonexistent(mode);
 		} catch (err) {
@@ -397,12 +352,12 @@ class FSPath {
 			await this.mkdirIfNonexistent(mode);
 		}
 	}
+
 	/**
 	 * Creates the directory (and any parent directories if necessary).
 	 * Does not throw if the directory already exists. Synchronous.
-	 * @param {string | number} mode
 	 */
-	mkdirpSync(mode = 0o755) {
+	mkdirpSync(mode: string | number = 0o755) {
 		try {
 			this.mkdirIfNonexistentSync(mode);
 		} catch (err) {
@@ -411,36 +366,33 @@ class FSPath {
 			this.mkdirIfNonexistentSync(mode);
 		}
 	}
-	/**
-	 * Calls the callback if the file is modified.
-	 * @param {function (): void} callback
-	 */
-	onModify(callback) {
+
+	/** Calls the callback if the file is modified. */
+	onModify(callback: () => void) {
 		fs.watchFile(this.path, (curr, prev) => {
 			if (curr.mtime > prev.mtime) return callback();
 		});
 	}
-	/**
-	 * Clears callbacks added with onModify()
-	 */
+
+	/** Clears callbacks added with onModify(). */
 	unwatch() {
 		fs.unwatchFile(this.path);
 	}
 }
 
-class FileReadStream extends Streams.ReadStream {
-	/**
-	 * @param {string} file
-	 */
-	constructor(file) {
+class FileReadStream extends ReadStream {
+	fd: Promise<number>;
+
+	constructor(file: string) {
 		super();
-		/** @type {Promise<number>} */
 		this.fd = new Promise((resolve, reject) => {
 			fs.open(file, 'r', (err, fd) => err ? reject(err) : resolve(fd));
 		});
 		this.atEOF = false;
 	}
-	_read(size = 16384) {
+
+	// @ts-ignore
+	_read(size: number = 16384) {
 		return new Promise((resolve, reject) => {
 			if (this.atEOF) return resolve(false);
 			this.ensureCapacity(size);
@@ -460,38 +412,20 @@ class FileReadStream extends Streams.ReadStream {
 			});
 		});
 	}
+
 	_destroy() {
-		return /** @type {Promise<void>} */ (new Promise(resolve => {
+		return new Promise(resolve => {
 			this.fd.then(fd => {
 				fs.close(fd, () => resolve());
 			});
-		}));
+		});
 	}
 }
 
-/**
- * @param {string} path
- */
-function getFs(path) {
+function getFs(path: string) {
 	return new FSPath(path);
 }
 
-/**
- * @typedef {object} PendingUpdate
- * @property {boolean} isWriting true: waiting on a call to FS.write, false: waiting on a throttle
- * @property {(() => string | Buffer)?} pendingDataFetcher
- * @property {Object?} pendingOptions
- * @property {number} throttleTime throttling until time (0 for no throttle)
- * @property {NodeJS.Timer?} throttleTimer
- */
-
-const FS = Object.assign(getFs, {
+export const FS = Object.assign(getFs, {
 	FileReadStream,
-
-	/**
-	 * @type {Map<string, PendingUpdate>}
-	 */
-	pendingUpdates: new Map(),
 });
-
-module.exports = FS;

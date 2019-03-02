@@ -5,6 +5,7 @@
   "version": "0.11.2",
   "dependencies": {
     "probe-image-size": "^4.0.0",
+    "replace": "^1.0.1",
     "sockjs": "0.3.18",
     "sucrase": "^3.9.5"
   },

@@ -8,45 +8,38 @@
  * @license MIT
  */
 
-'use strict';
-
-const fs = require('fs');
-const path = require('path');
+import * as fs from 'fs';
+import * as path from 'path';
 
 const CRASH_EMAIL_THROTTLE = 5 * 60 * 1000; // 5 minutes
 const LOCKDOWN_PERIOD = 30 * 60 * 1000; // 30 minutes
 
 const logPath = path.resolve(__dirname, '../logs/errors.txt');
 let lastCrashLog = 0;
-/** @type {any} */
-let transport;
+let transport: any;
 
 /**
  * Logs when a crash happens to console, then e-mails those who are configured
  * to receive them.
- *
- * @param {Error | string} err
- * @param {string} description
- * @param {?Object} [data = null]
- * @return {?string}
  */
-module.exports = function crashlogger(err, description, data = null) {
+export = function crashlogger(error: Error | string, description: string, data: object | null = null): string | null {
 	const datenow = Date.now();
 
-	let stack = typeof err === 'string' ? err : err.stack;
+	let stack = typeof error === 'string' ? error : error.stack;
 	if (data) {
 		stack += `\n\nAdditional information:\n`;
 		for (let k in data) {
+			// @ts-ignore
 			stack += `  ${k} = ${data[k]}\n`;
 		}
 	}
 
 	console.error(`\nCRASH: ${stack}\n`);
-	let out = fs.createWriteStream(logPath, {'flags': 'a'});
+	let out = fs.createWriteStream(logPath, {flags: 'a'});
 	out.on('open', () => {
 		out.write(`\n${stack}\n`);
 		out.end();
-	}).on('error', /** @param {Error} err */ err => {
+	}).on('error', (err: Error) => {
 		console.error(`\nSUBCRASH: ${err.stack}\n`);
 	});
 
@@ -69,6 +62,7 @@ module.exports = function crashlogger(err, description, data = null) {
 			text += `again with this stack trace:\n${stack}`;
 		} else {
 			try {
+				// tslint:disable-next-line:no-implicit-dependencies
 				transport = require('nodemailer').createTransport(Config.crashguardemail.options);
 			} catch (e) {
 				throw new Error("Failed to start nodemailer; are you sure you've configured Config.crashguardemail correctly?");
@@ -82,7 +76,7 @@ module.exports = function crashlogger(err, description, data = null) {
 			to: Config.crashguardemail.to,
 			subject: Config.crashguardemail.subject,
 			text,
-		}, /** @param {?Error} err */ err => {
+		}, (err: Error | null) => {
 			if (err) console.error(`Error sending email: ${err}`);
 		});
 	}

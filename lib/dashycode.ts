@@ -12,8 +12,6 @@
  * @license MIT
  */
 
-'use strict';
-
 const CODE_MAP = "23456789abcdefghijkmnpqrstuvwxyz";
 const UNSAFE_MAP = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
 
@@ -31,19 +29,14 @@ const UNSAFE_MAP = "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
  * An object representing a Dashycode bitstream.
  * The stream can be either a read stream or a write stream, but not
  * both simultaneously.
- *
- * @typedef {Object} DashyStream
- * @property {string} codeBuf
- * @property {number} buf
- * @property {number} bufLength
  */
+interface DashyStream {
+	codeBuf: string;
+	buf: number;
+	bufLength: number;
+}
 
-/**
- * @param {DashyStream} stream
- * @param {number} writeBufLength in bits
- * @param {number} writeBuf
- */
-function streamWrite(stream, writeBufLength, writeBuf) {
+function streamWrite(stream: DashyStream, writeBufLength: number, writeBuf: number) {
 	stream.buf += (writeBuf << stream.bufLength);
 	stream.bufLength += writeBufLength;
 	while (stream.bufLength >= 5) {
@@ -52,10 +45,8 @@ function streamWrite(stream, writeBufLength, writeBuf) {
 		stream.bufLength -= 5;
 	}
 }
-/**
- * @param {DashyStream} stream
- */
-function streamGetCode(stream) {
+
+function streamGetCode(stream: DashyStream) {
 	const buf = stream.codeBuf + CODE_MAP.charAt(stream.buf);
 
 	// truncate trailing `2`s (0b00000 chunks)
@@ -64,12 +55,7 @@ function streamGetCode(stream) {
 	return end2Len ? buf.slice(0, -end2Len) : buf;
 }
 
-/**
- * @param {DashyStream} stream
- * @param {number} readLength
- * @param {number} readMask passed for "perf"
- */
-function streamPeek(stream, readLength, readMask = 0xFFFF >> (16 - readLength)) {
+function streamPeek(stream: DashyStream, readLength: number, readMask: number = 0xFFFF >> (16 - readLength)) {
 	while (stream.bufLength < readLength && stream.codeBuf.length) {
 		const next5Bits = CODE_MAP.indexOf(stream.codeBuf.charAt(0));
 		if (next5Bits < 0) throw new Error("Invalid character in coded buffer");
@@ -79,12 +65,8 @@ function streamPeek(stream, readLength, readMask = 0xFFFF >> (16 - readLength)) 
 	}
 	return stream.buf & readMask;
 }
-/**
- * @param {DashyStream} stream
- * @param {number} readLength
- * @param {number} readMask passed for "perf"
- */
-function streamRead(stream, readLength, readMask = 0xFFFF >> (16 - readLength)) {
+
+function streamRead(stream: DashyStream, readLength: number, readMask: number = 0xFFFF >> (16 - readLength)) {
 	const output = streamPeek(stream, readLength, readMask);
 	// Note: bufLength can go negative! Streams have infinite trailing 0s
 	stream.buf >>= readLength;
@@ -92,17 +74,14 @@ function streamRead(stream, readLength, readMask = 0xFFFF >> (16 - readLength)) 
 	return output;
 }
 
-/**
- * @param {string} str
- */
-function encode(str, allowCaps = false) {
+export function encode(str: string, allowCaps: boolean = false) {
 	if (!str) return '0--0';
 	let safePart = '';
-	let unsafeStream = /** @type {DashyStream} */ ({
+	let unsafeStream: DashyStream = {
 		codeBuf: '',
 		buf: 0x0,
 		bufLength: 0,
-	});
+	};
 	let isSafe = true;
 	let alphaIndex = 0;
 	let capBuffer = 0x0;
@@ -169,6 +148,7 @@ function encode(str, allowCaps = false) {
 			streamWrite(unsafeStream, 2, 0x0);
 		} else if (curCharCode === 32) { // space
 			streamWrite(unsafeStream, 3, 0x3);
+			// tslint:disable-next-line:no-conditional-assignment
 		} else if ((unsafeMapIndex = UNSAFE_MAP.indexOf(str.charAt(i))) >= 0) {
 			curCharCode = (unsafeMapIndex << 2) + 0x2;
 			streamWrite(unsafeStream, 7, curCharCode);
@@ -194,10 +174,7 @@ function encode(str, allowCaps = false) {
 	return safePart + '--' + unsafePart;
 }
 
-/**
- * @param {string} codedStr
- */
-function decode(codedStr) {
+export function decode(codedStr: string) {
 	let str = '';
 	let lastDashIndex = codedStr.lastIndexOf('--');
 	if (lastDashIndex < 0) {
@@ -216,11 +193,11 @@ function decode(codedStr) {
 		codedStr = '-' + codedStr.slice(0, -1);
 		lastDashIndex += 1;
 	}
-	let unsafeStream = /** @type {DashyStream} */ ({
+	let unsafeStream: DashyStream = {
 		codeBuf: codedStr.slice(lastDashIndex + 2),
 		buf: 0x0,
 		bufLength: 0,
-	});
+	};
 	/**
 	 * Status:
 	 * 1 : awaiting next read
@@ -289,10 +266,7 @@ function decode(codedStr) {
 	return str;
 }
 
-/**
- * @param {string} codeBuf
- */
-function vizStream(codeBuf, translate = true) {
+export function vizStream(codeBuf: string, translate: boolean = true) {
 	let spacedStream = '';
 	if (codeBuf.charAt(0) === '0') {
 		codeBuf = codeBuf.slice(1);
@@ -302,16 +276,18 @@ function vizStream(codeBuf, translate = true) {
 		codeBuf = codeBuf.slice(0, -1);
 		spacedStream = ' [start unsafe]' + spacedStream;
 	}
-	let stream = /** @type {DashyStream} */ ({
+	let stream: DashyStream = {
 		codeBuf,
 		buf: 0x0,
 		bufLength: 0,
-	});
-	function vizBlock(/** @type {DashyStream} */ stream, /** @type {number} */ bufLen) {
-		const buf = streamRead(stream, bufLen);
+	};
+
+	function vizBlock(s: DashyStream, bufLen: number) {
+		const buf = streamRead(s, bufLen);
 		// @ts-ignore
 		return buf.toString(2).padStart(bufLen, '0');
 	}
+
 	while (stream.bufLength > 0 || stream.codeBuf) {
 		switch (streamRead(stream, 2)) {
 		case 0x0:
@@ -338,9 +314,3 @@ function vizStream(codeBuf, translate = true) {
 	}
 	return spacedStream;
 }
-
-module.exports = {
-	encode,
-	decode,
-	vizStream,
-};

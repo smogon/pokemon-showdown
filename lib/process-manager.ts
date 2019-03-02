@@ -9,25 +9,23 @@
  * @license MIT
  */
 
-'use strict';
+import * as child_process from 'child_process';
+import * as path from 'path';
+import * as Streams from './streams';
 
-const path = require('path');
-const child_process = require('child_process');
-const Streams = require('./streams');
 const ROOT_DIR = path.resolve(__dirname, '..');
 
+export const processManagers: ProcessManager[] = [];
+export const disabled = false;
+
 class SubprocessStream extends Streams.ObjectReadWriteStream {
-	/**
-	 * @param {ChildProcess} process
-	 * @param {number} taskId
-	 */
-	constructor(process, taskId) {
+	constructor(public process: ChildProcess, public taskId: number) {
 		super();
 		this.process = process;
 		this.taskId = taskId;
 		this.process.send(`${taskId}\nNEW`);
 	}
-	_write(/** @type {string} */ message) {
+	_write(message: string) {
 		if (!this.process.connected) return;
 		this.process.send(`${this.taskId}\nWRITE\n${message}`);
 		// responses are handled in ProcessWrapper
@@ -38,27 +36,27 @@ class SubprocessStream extends Streams.ObjectReadWriteStream {
 	}
 }
 
-/**
- * @typedef {Object} ProcessWrapper
- * @property {number} load
- * @property {() => Promise<void>} release
- */
+interface ProcessWrapper {
+	load: number;
+	release: () => Promise<void>;
+}
 
-/**
- * Wraps the process object in the PARENT process
- */
-class QueryProcessWrapper {
-	constructor(/** @type {string} */ file) {
+/** Wraps the process object in the PARENT process. */
+export class QueryProcessWrapper {
+	process: ChildProcess;
+	taskId: number;
+	pendingTasks: Map<number, (resp: string) => void>;
+	pendingRelease: Promise<void> | null;
+	resolveRelease: (() => void) | null;
+
+	constructor(file: string) {
 		this.process = child_process.fork(file, [], {cwd: ROOT_DIR});
 		this.taskId = 0;
-		/** @type {Map<number, (resp: string) => void>} */
 		this.pendingTasks = new Map();
-		/** @type {Promise<void>?} */
 		this.pendingRelease = null;
-		/** @type {(() => void)?} */
 		this.resolveRelease = null;
 
-		this.process.on('message', /** @param {string} message */ message => {
+		this.process.on('message', (message: string) => {
 			const nlLoc = message.indexOf('\n');
 			if (nlLoc <= 0) throw new Error(`Invalid response ${message}`);
 			if (message.slice(0, nlLoc) === 'THROW') {
@@ -67,7 +65,7 @@ class QueryProcessWrapper {
 				throw error;
 			}
 
-			const taskId = parseInt(message.slice(0, nlLoc));
+			const taskId = parseInt(message.slice(0, nlLoc), 10);
 			const resolve = this.pendingTasks.get(taskId);
 			if (!resolve) throw new Error(`Invalid taskId ${message.slice(0, nlLoc)}`);
 			this.pendingTasks.delete(taskId);
@@ -84,11 +82,7 @@ class QueryProcessWrapper {
 		return this.pendingTasks.size;
 	}
 
-	/**
-	 * @param {any} input
-	 * @return {Promise<any>}
-	 */
-	query(input) {
+	query(input: any): Promise<any> {
 		this.taskId++;
 		const taskId = this.taskId;
 		this.process.send(`${taskId}\n${JSON.stringify(input)}`);
@@ -97,10 +91,7 @@ class QueryProcessWrapper {
 		});
 	}
 
-	/**
-	 * @return {Promise<void>}
-	 */
-	release() {
+	release(): Promise<void> {
 		if (this.pendingRelease) return this.pendingRelease;
 		if (!this.load) {
 			this.destroy();
@@ -109,7 +100,7 @@ class QueryProcessWrapper {
 				this.resolveRelease = resolve;
 			});
 		}
-		return /** @type {Promise<void>} */ (this.pendingRelease);
+		return this.pendingRelease as Promise<void>;
 	}
 
 	destroy() {
@@ -132,21 +123,22 @@ class QueryProcessWrapper {
 	}
 }
 
-/**
- * Wraps the process object in the PARENT process
- */
-class StreamProcessWrapper {
-	constructor(/** @type {string} */ file) {
+/** Wraps the process object in the PARENT process. */
+export class StreamProcessWrapper {
+	process: ChildProcess;
+	taskId: number;
+	activeStreams: Map<number, SubprocessStream>;
+	pendingRelease: Promise<void> | null;
+	resolveRelease: (() => void) | null;
+
+	constructor(file: string) {
 		this.process = child_process.fork(file, [], {cwd: ROOT_DIR});
 		this.taskId = 0;
-		/** @type {Map<number, SubprocessStream>} */
 		this.activeStreams = new Map();
-		/** @type {Promise<void>?} */
 		this.pendingRelease = null;
-		/** @type {(() => void)?} */
 		this.resolveRelease = null;
 
-		this.process.on('message', /** @param {string} message */ message => {
+		this.process.on('message', (message: string) => {
 			let nlLoc = message.indexOf('\n');
 			if (nlLoc <= 0) throw new Error(`Invalid response ${message}`);
 			if (message.slice(0, nlLoc) === 'THROW') {
@@ -155,7 +147,7 @@ class StreamProcessWrapper {
 				throw error;
 			}
 
-			const taskId = parseInt(message.slice(0, nlLoc));
+			const taskId = parseInt(message.slice(0, nlLoc), 10);
 			const stream = this.activeStreams.get(taskId);
 			if (!stream) throw new Error(`Invalid taskId ${message.slice(0, nlLoc)}`);
 
@@ -183,7 +175,7 @@ class StreamProcessWrapper {
 		});
 	}
 
-	deleteStream(/** @type {number} */ taskId) {
+	deleteStream(taskId: number) {
 		this.activeStreams.delete(taskId);
 		// try to release
 		if (this.resolveRelease && !this.load) this.destroy();
@@ -193,10 +185,7 @@ class StreamProcessWrapper {
 		return this.activeStreams.size;
 	}
 
-	/**
-	 * @return {SubprocessStream}
-	 */
-	createStream() {
+	createStream(): SubprocessStream {
 		this.taskId++;
 		const taskId = this.taskId;
 		const stream = new SubprocessStream(this.process, taskId);
@@ -204,10 +193,7 @@ class StreamProcessWrapper {
 		return stream;
 	}
 
-	/**
-	 * @return {Promise<void>}
-	 */
-	release() {
+	release(): Promise<void> {
 		if (this.pendingRelease) return this.pendingRelease;
 		if (!this.load) {
 			this.destroy();
@@ -216,7 +202,7 @@ class StreamProcessWrapper {
 				this.resolveRelease = resolve;
 			});
 		}
-		return /** @type {Promise<void>} */ (this.pendingRelease);
+		return this.pendingRelease as Promise<void>;
 	}
 
 	destroy() {
@@ -242,19 +228,22 @@ class StreamProcessWrapper {
  * A ProcessManager wraps a query function: A function that takes a
  * string and returns a string or Promise<string>.
  */
-class ProcessManager {
-	/**
-	 * @param {NodeJS.Module} module
-	 */
-	constructor(module) {
-		/** @type {ProcessWrapper[]} */
+export class ProcessManager {
+	processes: ProcessWrapper[];
+	releasingProcesses: ProcessWrapper[];
+	// @ts-ignore
+	module: NodeJs.Module;
+	filename: string;
+	basename: string;
+	isParentProcess: boolean;
+
+	// @ts-ignore
+	constructor(module: NodeJs.Module) {
 		this.processes = [];
-		/** @type {ProcessWrapper[]} */
 		this.releasingProcesses = [];
 		this.module = module;
 		this.filename = module.filename;
 		this.basename = path.basename(module.filename);
-
 		this.isParentProcess = (process.mainModule !== module || !process.send);
 
 		this.listen();
@@ -285,48 +274,41 @@ class ProcessManager {
 	}
 	spawn(count = 1) {
 		if (!this.isParentProcess) return;
-		if (PMLib.disabled) return;
+		if (disabled) return;
 		while (this.processes.length < count) {
 			this.processes.push(this.createProcess());
 		}
 	}
-	respawn(/** @type {number?} */ count = null) {
+	respawn(count: number | null = null) {
 		if (count === null) count = this.processes.length;
 		this.unspawn();
 		this.spawn(count);
 	}
-	/**
-	 * @return {ProcessWrapper}
-	 */
-	createProcess() {
+	createProcess(): ProcessWrapper {
 		throw new Error(`implemented by subclass`);
 	}
 	listen() {
 		throw new Error(`implemented by subclass`);
 	}
 	destroy() {
-		const index = PMLib.processManagers.indexOf(this);
-		if (index) PMLib.processManagers.splice(index, 1);
+		const index = processManagers.indexOf(this);
+		if (index) processManagers.splice(index, 1);
 		this.unspawn();
 	}
 }
 
-class QueryProcessManager extends ProcessManager {
-	/**
-	 * @param {NodeJS.Module} module
-	 * @param {(input: any) => any} query
-	 */
-	constructor(module, query) {
+export class QueryProcessManager extends ProcessManager {
+	// tslint:disable-next-line:variable-name
+	_query: (input: any) => any;
+
+	constructor(module: NodeJS.Module, query: (input: any) => any) {
 		super(module);
 		this._query = query;
 
-		PMLib.processManagers.push(this);
+		processManagers.push(this);
 	}
-	/**
-	 * @param {any} input
-	 */
-	query(input) {
-		const process = /** @type {QueryProcessWrapper} */ (this.acquire());
+	query(input: any) {
+		const process = this.acquire() as QueryProcessWrapper;
 		if (!process) return Promise.resolve(this._query(input));
 		return process.query(input);
 	}
@@ -336,15 +318,17 @@ class QueryProcessManager extends ProcessManager {
 	listen() {
 		if (this.isParentProcess) return;
 		// child process
-		process.on('message', async (/** @type {string} */ message) => {
+		process.on('message', async (message: string) => {
 			let nlLoc = message.indexOf('\n');
 			if (nlLoc <= 0) throw new Error(`Invalid response ${message}`);
 			const taskId = message.slice(0, nlLoc);
 			message = message.slice(nlLoc + 1);
 
 			if (taskId.startsWith('EVAL')) {
+				/* tslint:disable:no-eval */
 				// @ts-ignore guaranteed to be defined here
 				process.send(`${taskId}\n` + eval(message));
+				/* tslint:enable:no-eval */
 				return;
 			}
 
@@ -357,37 +341,36 @@ class QueryProcessManager extends ProcessManager {
 		});
 	}
 }
-class StreamProcessManager extends ProcessManager {
-	/**
-	 * @param {NodeJS.Module} module
-	 * @param {() => ObjectReadWriteStream} createStream
-	 */
-	constructor(module, createStream) {
+
+export class StreamProcessManager extends ProcessManager {
+	/* taskid: stream used only in child process */
+	activeStreams: Map<string, Streams.ObjectReadWriteStream>;
+	// tslint:disable-next-line:variable-name
+	_createStream: () => Streams.ObjectReadWriteStream;
+
+	constructor(module: NodeJS.Module, createStream: () => Streams.ObjectReadWriteStream) {
 		super(module);
-		/** @type {Map<string, ObjectReadWriteStream>} taskid: stream used only in child process */
 		this.activeStreams = new Map();
 		this._createStream = createStream;
 
-		PMLib.processManagers.push(this);
+		processManagers.push(this);
 	}
 	createStream() {
-		const process = /** @type {StreamProcessWrapper} */ (this.acquire());
+		const process = this.acquire() as StreamProcessWrapper;
 		if (!process) return this._createStream();
 		return process.createStream();
 	}
 	createProcess() {
 		return new StreamProcessWrapper(this.filename);
 	}
-	/**
-	 * @param {string} taskId
-	 * @param {ObjectReadStream} stream
-	 */
-	async pipeStream(taskId, stream) {
+	async pipeStream(taskId: string, stream: Streams.ObjectReadStream) {
+		/* tslint:disable */
 		let value, done;
 		while (({value, done} = await stream.next(), !done)) {
 			// @ts-ignore Guaranteed to be a child process
 			process.send(`${taskId}\nPUSH\n${value}`);
 		}
+		/* tslint:enable */
 		// @ts-ignore Guaranteed to be a child process
 		process.send(`${taskId}\nEND`);
 		this.activeStreams.delete(taskId);
@@ -395,7 +378,7 @@ class StreamProcessManager extends ProcessManager {
 	listen() {
 		if (this.isParentProcess) return;
 		// child process
-		process.on('message', async (/** @type {string} */ message) => {
+		process.on('message', async (message: string) => {
 			let nlLoc = message.indexOf('\n');
 			if (nlLoc <= 0) throw new Error(`Invalid request ${message}`);
 			const taskId = message.slice(0, nlLoc);
@@ -408,8 +391,10 @@ class StreamProcessManager extends ProcessManager {
 			message = message.slice(nlLoc + 1);
 
 			if (taskId.startsWith('EVAL')) {
+				/* tslint:disable:no-eval */
 				// @ts-ignore guaranteed to be a child process
 				process.send(`${taskId}\n` + eval(message));
+				/* tslint:enable:no-eval */
 				return;
 			}
 
@@ -434,17 +419,3 @@ class StreamProcessManager extends ProcessManager {
 		});
 	}
 }
-
-const PMLib = {
-	QueryProcessWrapper,
-	StreamProcessWrapper,
-	ProcessManager,
-	QueryProcessManager,
-	StreamProcessManager,
-
-	/** @type {ProcessManager[]} */
-	processManagers: [],
-	disabled: false,
-};
-// @ts-ignore Typescript bug
-module.exports = PMLib;

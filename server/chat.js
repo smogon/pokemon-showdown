@@ -55,7 +55,8 @@ const BROADCAST_TOKEN = '!';
 
 const TRANSLATION_DIRECTORY = 'translations/';
 
-const FS = require('../lib/fs');
+/** @type {typeof import('../lib/fs').FS} */
+const FS = require(/** @type {any} */('../.lib-dist/fs')).FS;
 
 /** @type {(url: string) => Promise<{width: number, height: number}>} */
 // @ts-ignore ignoring until there is a ts typedef available for this module.

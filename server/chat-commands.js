@@ -18,7 +18,7 @@
 /* eslint no-else-return: "error" */
 
 const crypto = require('crypto');
-const FS = require('../lib/fs');
+const FS = require('../.lib-dist/fs').FS;
 
 const MAX_REASON_LENGTH = 300;
 const MUTE_LENGTH = 7 * 60 * 1000;
@@ -3005,7 +3005,7 @@ const commands = {
 
 				Chat.destroy();
 
-				const processManagers = require('../lib/process-manager').processManagers;
+				const processManagers = require('../.lib-dist/process-manager').processManagers;
 				for (let manager of processManagers.slice()) {
 					if (manager.filename.startsWith(FS('server/chat-plugins').path)) {
 						manager.destroy();
