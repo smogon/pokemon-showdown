@@ -10,7 +10,7 @@ npm-debug.log
 package-lock.json
 
 # Typescript build artifacts
-.sim-dist/
+.*-dist/
 
 # visual studio live share
 .vs

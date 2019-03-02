@@ -1749,8 +1749,8 @@ const commands = {
 		for (const worker of Sockets.workers.values()) {
 			buf += `<strong>${worker.pid || worker.process.pid}</strong> - Sockets ${worker.id}<br />`;
 		}
-
-		const processManagers = require('../../lib/process-manager').processManagers;
+		/** @type {typeof import('../../lib/process-manager').processManagers} */
+		const processManagers = require(/** @type {any} */('../../.lib-dist/process-manager')).processManagers;
 		for (const manager of processManagers) {
 			for (const [i, process] of manager.processes.entries()) {
 				buf += `<strong>${process.process.pid}</strong> - ${manager.basename} ${i} (load ${process.load})<br />`;
@@ -1767,6 +1767,7 @@ const commands = {
 	rule: 'rules',
 	rules(target, room, user) {
 		if (!target) {
+			if (!this.runBroadcast()) return;
 			this.sendReplyBox(
 				`${room ? this.tr("Please follow the rules:") + '<br />' : ``}` +
 				(room && room.rulesLink ? Chat.html`- <a href="${room.rulesLink}">${this.tr `${room.title} room rules`}</a><br />` : ``) +

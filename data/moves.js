@@ -5765,7 +5765,7 @@ let BattleMovedex = {
 			onStart(target, source, effect) {
 				if (effect && effect.id === 'zpower') {
 					this.add('-start', target, 'move: Focus Energy', '[zeffect]');
-				} else if (effect && (effect.id === 'transform' || effect.id === 'imposter')) {
+				} else if (effect && (['imposter', 'psychup', 'transform'].includes(effect.id))) {
 					this.add('-start', target, 'move: Focus Energy', '[silent]');
 				} else {
 					this.add('-start', target, 'move: Focus Energy');
@@ -9103,8 +9103,12 @@ let BattleMovedex = {
 		volatileStatus: 'laserfocus',
 		effect: {
 			duration: 2,
-			onStart(pokemon) {
-				this.add('-start', pokemon, 'move: Laser Focus');
+			onStart(pokemon, source, effect) {
+				if (effect && (['imposter', 'psychup', 'transform'].includes(effect.id))) {
+					this.add('-start', pokemon, 'move: Laser Focus', '[silent]');
+				} else {
+					this.add('-start', pokemon, 'move: Laser Focus');
+				}
 			},
 			onRestart(pokemon) {
 				this.effectData.duration = 2;
@@ -12569,6 +12573,8 @@ let BattleMovedex = {
 				// @ts-ignore
 				source.boosts[i] = target.boosts[i];
 			}
+			if (target.volatiles['focusenergy']) source.addVolatile('focusenergy');
+			if (target.volatiles['laserfocus']) source.addVolatile('laserfocus');
 			this.add('-copyboost', source, target, '[from] move: Psych Up');
 		},
 		secondary: null,
@@ -14757,8 +14763,10 @@ let BattleMovedex = {
 		beforeTurnCallback(pokemon) {
 			pokemon.addVolatile('shelltrap');
 		},
+		// TODO: In order to correct PP usage, after spread move order has been reworked,
+		// switch this to `onTry` + add `this.attrLastMove('[still]');`.
 		beforeMoveCallback(pokemon) {
-			if (pokemon.volatiles['shelltrap'] && !pokemon.volatiles['shelltrap'].gotHit) {
+			if (!pokemon.volatiles['shelltrap'] || !pokemon.volatiles['shelltrap'].gotHit) {
 				this.add('cant', pokemon, 'Shell Trap', 'Shell Trap');
 				return true;
 			}
