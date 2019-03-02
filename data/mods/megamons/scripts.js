@@ -17,10 +17,10 @@ let BattleScripts = {
 				case 'Mega':
 				case 'Mega-X':
 				case 'Mega-Y':
-					this.modData('Pokedex', i).gen = 7;
-					this.modData('Pokedex', i).isMega = true;
-					this.modData('Pokedex', i).battleOnly = false;
-					delete this.modData('FormatsData', i).requiredItem;
+					if (this.modData('Pokedex', i).species === 'Crucibelle-Mega') break;
+					this.modData('FormatsData', i).isMega = true;
+					this.modData('FormatsData', i).battleOnly = false;
+					this.modData('FormatsData', i).requiredItem = undefined;
 				}
 			}
 		}
