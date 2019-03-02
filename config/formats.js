@@ -125,9 +125,6 @@ let Formats = [
 			'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Torchic', 'Vulpix-Base', 'Wingull', 'Yanma',
 			'Eevium Z', 'Baton Pass', 'Dragon Rage', 'Sonic Boom',
 		],
-		onBegin() {
-			if (this.rated && this.format === 'gen7lc') this.add('html', `<div class="broadcast-blue"><strong>LC is currently suspecting Abra! For more information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3647220/">suspect thread</a>.</strong></div>`);
-		},
 	},
 	{
 		name: "[Gen 7] Monotype",
