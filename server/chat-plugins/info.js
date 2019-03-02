@@ -301,30 +301,7 @@ const commands = {
 
 	sp: 'showpunishments',
 	showpunishments(target, room, user) {
-		if (!this.can('mute')) return false;
-		let buf = "";
-		const subMap = Punishments.roomIps.get(room.id);
-		const muteQueue = room.muteQueue;
-		if (subMap) {
-			for (const punishment of subMap) {
-				let [, [punishType, id, expireTime]] = punishment;
-				let punishDesc = Punishments.roomPunishmentTypes.get(punishType);
-				if (!punishDesc) punishDesc = `punished`;
-				let expiresIn = new Date(expireTime).getTime() - Date.now();
-				let expireString = Chat.toDurationString(expiresIn, {precision: 1});
-				punishDesc += ` for ${expireString}`;
-				buf += `${id} is ${punishDesc}.<br />`;
-			}
-		}
-		if (muteQueue) {
-			for (const entry of muteQueue) {
-				let expiresIn = new Date(entry.time).getTime() - Date.now();
-				if (expiresIn < 0) continue;
-				let expireString = Chat.toDurationString(expiresIn, {precision: 1});
-				buf += `${entry.userid} is muted for ${expireString}.<br />`;
-			}
-		}
-		return this.sendReplyBox(buf || "No user in this room is currently punished.");
+		return this.parse(`/join view-punishments-${room}`);
 	},
 	showpunishmentshelp: [`/showpunishments - Shows the current punishments in the room`],
 
@@ -2409,6 +2386,43 @@ const commands = {
 	],
 };
 
+/** @type {PageTable} */
+const pages = {
+	punishments(query, user, connection) {
+		let buf = "";
+		this.extractRoom();
+		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
+		buf += `|title|Punishments\n|pagehtml|<div class="pad"><h2>List of active punishments:</h2>`;
+		if (!user.can('mute')) {
+			return buf + `<div class="notice message-error">Access denied.</div>`;
+		}
+		const subMap = Punishments.roomIps.get(this.room.id);
+		const muteQueue = this.room.muteQueue;
+		if (subMap) {
+			for (const punishment of subMap) {
+				let [, [punishType, id, expireTime]] = punishment;
+				let punishDesc = Punishments.roomPunishmentTypes.get(punishType);
+				if (!punishDesc) punishDesc = `punished`;
+				let expiresIn = new Date(expireTime).getTime() - Date.now();
+				let expireString = Chat.toDurationString(expiresIn, {precision: 1});
+				punishDesc += ` for ${expireString}`;
+				buf += `<p>${id} is ${punishDesc}.</p>`;
+			}
+		}
+		if (muteQueue) {
+			for (const entry of muteQueue) {
+				let expiresIn = new Date(entry.time).getTime() - Date.now();
+				if (expiresIn < 0) continue;
+				let expireString = Chat.toDurationString(expiresIn, {precision: 1});
+				buf += `<p>${entry.userid} is muted for ${expireString}.</p>`;
+			}
+		}
+		buf += `</div>`;
+		return buf;
+	},
+};
+
+exports.pages = pages;
 exports.commands = commands;
 
 process.nextTick(() => {
