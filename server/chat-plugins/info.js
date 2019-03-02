@@ -2389,10 +2389,11 @@ const commands = {
 /** @type {PageTable} */
 const pages = {
 	punishments(query, user, connection) {
+		this.title = 'Punishments';
 		let buf = "";
 		this.extractRoom();
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		buf += `|title|Punishments\n|pagehtml|<div class="pad"><h2>List of active punishments:</h2>`;
+		buf += `<div class="pad"><h2>List of active punishments:</h2>`;
 		if (!user.can('mute')) {
 			return buf + `<div class="notice message-error">Access denied.</div>`;
 		}
