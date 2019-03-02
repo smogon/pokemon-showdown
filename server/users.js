@@ -38,7 +38,8 @@ const PERMALOCK_CACHE_TIME = 30 * 24 * 60 * 60 * 1000;
 
 const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
 
-const FS = require('../lib/fs');
+/** @type {typeof import('../lib/fs').FS} */
+const FS = require(/** @type {any} */('../.lib-dist/fs')).FS;
 
 /*********************************************************
  * Utility functions

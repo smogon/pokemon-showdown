@@ -6,7 +6,8 @@
 
 'use strict';
 
-const FS = require('../../lib/fs');
+/** @type {typeof import('../../lib/fs').FS} */
+const FS = require(/** @type {any} */('../../.lib-dist/fs')).FS;
 
 Punishments.roomPunishmentTypes.set('GIVEAWAYBAN', 'banned from giveaways');
 

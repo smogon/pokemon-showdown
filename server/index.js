@@ -60,7 +60,7 @@ try {
 	throw new Error("Dependencies are unmet; run `node build` before launching Pokemon Showdown again.");
 }
 
-const FS = require('../lib/fs');
+const FS = require('../.lib-dist/fs').FS;
 
 /*********************************************************
  * Load configuration
@@ -151,4 +151,4 @@ TeamValidatorAsync.PM.spawn();
  * Start up the REPL server
  *********************************************************/
 
-require('../lib/repl').start('app', cmd => eval(cmd));
+require('../.lib-dist/repl').Repl.start('app', cmd => eval(cmd));

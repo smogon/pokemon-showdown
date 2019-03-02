@@ -611,7 +611,7 @@ class RandomTeams extends Dex.ModdedDex {
 			template = this.getTemplate('unown');
 
 			let err = new Error('Template incompatible with random battles: ' + species);
-			require('../lib/crashlogger')(err, 'The randbat set generator');
+			Monitor.crashlog(err, 'The randbat set generator');
 		}
 
 		if (template.battleOnly) {

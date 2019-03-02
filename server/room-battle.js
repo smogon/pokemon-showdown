@@ -13,7 +13,8 @@
 
 'use strict';
 
-const FS = require('../lib/fs');
+/** @type {typeof import('../lib/fs').FS} */
+const FS = require(/** @type {any} */('../.lib-dist/fs')).FS;
 
 /** 5 seconds */
 const TICK_TIME = 5;
@@ -1022,7 +1023,8 @@ exports.RoomBattle = Battle;
  * Process manager
  *********************************************************/
 
-const StreamProcessManager = require('../lib/process-manager').StreamProcessManager;
+/** @type {typeof import('../lib/process-manager').StreamProcessManager} */
+const StreamProcessManager = require(/** @type {any} */('../.lib-dist/process-manager')).StreamProcessManager;
 
 const PM = new StreamProcessManager(module, () => {
 	/** @type {typeof import('../sim/battle-stream').BattleStream} */
@@ -1067,7 +1069,9 @@ if (!PM.isParentProcess) {
 		});
 	}
 
-	require('../lib/repl').start(`sim-${process.pid}`, cmd => eval(cmd));
+	/** @type {typeof import('../lib/repl').Repl} */
+	const Repl = require(/** @type {any} */('../.lib-dist/repl')).Repl;
+	Repl.start(`sim-${process.pid}`, cmd => eval(cmd));
 } else {
 	PM.spawn(global.Config ? Config.simulatorprocesses : 1);
 }
