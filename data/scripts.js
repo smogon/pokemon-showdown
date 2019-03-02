@@ -1101,7 +1101,8 @@ let BattleScripts = {
 					this.add('-fail', pokemon);
 					this.attrLastMove('[still]');
 					this.debug('heal interrupted');
-					didAnything = this.combineResults(didAnything, false);
+					damage[i] = this.combineResults(damage[i], false);
+					didAnything = this.combineResults(didAnything, null);
 					continue;
 				}
 				this.add('-heal', target, target.getHealth);
@@ -1110,7 +1111,8 @@ let BattleScripts = {
 			if (moveData.status) {
 				hitResult = target.trySetStatus(moveData.status, pokemon, moveData.ability ? moveData.ability : move);
 				if (!hitResult && move.status) {
-					didAnything = this.combineResults(didAnything, false);
+					damage[i] = this.combineResults(damage[i], false);
+					didAnything = this.combineResults(didAnything, null);
 					continue;
 				}
 				didSomething = this.combineResults(didSomething, hitResult);
@@ -1145,7 +1147,7 @@ let BattleScripts = {
 			}
 			if (moveData.selfSwitch) {
 				// If the move is Parting Shot and it fails to change the target's stats in gen 7, didSomething will be null instead of undefined.
-				// Leaving didSomething as null will cause this function to return before setting the switch flag, preventing the switch.
+				// Leaving didSomething as null will cause this function to return without setting the switch flag, preventing the switch.
 				if (this.canSwitch(pokemon.side) && (didSomething !== null || this.gen < 7)) {
 					didSomething = true;
 				} else {
