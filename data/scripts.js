@@ -882,21 +882,8 @@ let BattleScripts = {
 				}
 			}
 
-			/** @type {?boolean | number} */
-			let hitResult = true;
 			let moveData = move;
 			if (!moveData.flags) moveData.flags = {};
-			// hardcoded for single-target moves
-			if (target) {
-				hitResult = this.singleEvent('TryHit', moveData, {}, target, pokemon, move);
-			}
-			if (!hitResult) {
-				if (hitResult === false) {
-					this.add('-fail', pokemon);
-					this.attrLastMove('[still]');
-				}
-				break;
-			}
 
 			// Modifies targetsCopy (which is why it's a copy)
 			[moveDamage, targetsCopy] = this.spreadMoveHit(targetsCopy, pokemon, move, moveData);
