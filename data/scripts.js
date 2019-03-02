@@ -1083,16 +1083,17 @@ let BattleScripts = {
 	},
 	runMoveEffects(damage, targets, pokemon, move, moveData, isSecondary, isSelf) {
 		/**@type {?boolean | number | null | undefined} */
-		let didAnything = this.reduceMoveResults(damage);
+		// @ts-ignore
+		let didAnything = damage.reduce(this.combineResults);
 		for (let i = 0; i < targets.length; i++) {
 			let target = targets[i];
 			if (!target) continue;
 			let hitResult;
 			/**@type {?boolean | number | undefined} */
-			let didSomething = !!damage[i] || damage[i] === 0;
+			let didSomething = damage[i];
 			if (moveData.boosts && !target.fainted) {
 				hitResult = this.boost(moveData.boosts, target, pokemon, move, isSecondary, isSelf);
-				didSomething = this.reduceMoveResults([didSomething, false]);
+				didSomething = this.combineResults(didSomething, hitResult);
 			}
 			if (moveData.heal && !target.fainted) {
 				let d = target.heal((this.gen < 5 ? Math.floor : Math.round)(target.maxhp * moveData.heal[0] / moveData.heal[1]));
@@ -1100,7 +1101,7 @@ let BattleScripts = {
 					this.add('-fail', pokemon);
 					this.attrLastMove('[still]');
 					this.debug('heal interrupted');
-					didAnything = this.reduceMoveResults([didAnything, false]);
+					didAnything = this.combineResults(didAnything, false);
 					continue;
 				}
 				this.add('-heal', target, target.getHealth);
@@ -1109,38 +1110,38 @@ let BattleScripts = {
 			if (moveData.status) {
 				hitResult = target.trySetStatus(moveData.status, pokemon, moveData.ability ? moveData.ability : move);
 				if (!hitResult && move.status) {
-					didAnything = this.reduceMoveResults([didAnything, false]);
+					didAnything = this.combineResults(didAnything, false);
 					continue;
 				}
-				didSomething = this.reduceMoveResults([didSomething, hitResult]);
+				didSomething = this.combineResults(didSomething, hitResult);
 			}
 			if (moveData.forceStatus) {
 				hitResult = target.setStatus(moveData.forceStatus, pokemon, move);
-				didSomething = this.reduceMoveResults([didSomething, hitResult]);
+				didSomething = this.combineResults(didSomething, hitResult);
 			}
 			if (moveData.volatileStatus) {
 				hitResult = target.addVolatile(moveData.volatileStatus, pokemon, move);
-				didSomething = this.reduceMoveResults([didSomething, hitResult]);
+				didSomething = this.combineResults(didSomething, hitResult);
 			}
 			if (moveData.sideCondition) {
 				hitResult = target.side.addSideCondition(moveData.sideCondition, pokemon, move);
-				didSomething = this.reduceMoveResults([didSomething, hitResult]);
+				didSomething = this.combineResults(didSomething, hitResult);
 			}
 			if (moveData.weather) {
 				hitResult = this.setWeather(moveData.weather, pokemon, move);
-				didSomething = this.reduceMoveResults([didSomething, hitResult]);
+				didSomething = this.combineResults(didSomething, hitResult);
 			}
 			if (moveData.terrain) {
 				hitResult = this.setTerrain(moveData.terrain, pokemon, move);
-				didSomething = this.reduceMoveResults([didSomething, hitResult]);
+				didSomething = this.combineResults(didSomething, hitResult);
 			}
 			if (moveData.pseudoWeather) {
 				hitResult = this.addPseudoWeather(moveData.pseudoWeather, pokemon, move);
-				didSomething = this.reduceMoveResults([didSomething, hitResult]);
+				didSomething = this.combineResults(didSomething, hitResult);
 			}
 			if (moveData.forceSwitch) {
 				hitResult = !!this.canSwitch(target.side);
-				didSomething = this.reduceMoveResults([didSomething, hitResult]);
+				didSomething = this.combineResults(didSomething, hitResult);
 			}
 			if (moveData.selfSwitch) {
 				// If the move is Parting Shot and it fails to change the target's stats in gen 7, didSomething will be null instead of undefined.
@@ -1148,7 +1149,7 @@ let BattleScripts = {
 				if (this.canSwitch(pokemon.side) && (didSomething !== null || this.gen < 7)) {
 					didSomething = true;
 				} else {
-					didSomething = this.reduceMoveResults([didSomething, false]);
+					didSomething = this.combineResults(didSomething, false);
 				}
 			}
 			// Hit events
@@ -1157,34 +1158,34 @@ let BattleScripts = {
 			if (move.target === 'all' && !isSelf) {
 				if (moveData.onHitField) {
 					hitResult = this.singleEvent('HitField', moveData, {}, target, pokemon, move);
-					didSomething = this.reduceMoveResults([didSomething, hitResult]);
+					didSomething = this.combineResults(didSomething, hitResult);
 				}
 			} else if ((move.target === 'foeSide' || move.target === 'allySide') && !isSelf) {
 				if (moveData.onHitSide) {
 					hitResult = this.singleEvent('HitSide', moveData, {}, target.side, pokemon, move);
-					didSomething = this.reduceMoveResults([didSomething, hitResult]);
+					didSomething = this.combineResults(didSomething, hitResult);
 				}
 			} else {
 				if (moveData.onHit) {
 					hitResult = this.singleEvent('Hit', moveData, {}, target, pokemon, move);
-					didSomething = this.reduceMoveResults([didSomething, hitResult]);
+					didSomething = this.combineResults(didSomething, hitResult);
 				}
 				if (!isSelf && !isSecondary) {
 					this.runEvent('Hit', target, pokemon, move);
 				}
 				if (moveData.onAfterHit) {
 					hitResult = this.singleEvent('AfterHit', moveData, {}, target, pokemon, move);
-					didSomething = this.reduceMoveResults([didSomething, hitResult]);
+					didSomething = this.combineResults(didSomething, hitResult);
 				}
 			}
 			// Move didn't fail because it didn't try to do anything
 			if (didSomething === undefined) didSomething = true;
 			if (!didSomething && !moveData.self && !moveData.selfdestruct) {
 				damage[i] = false;
-			} else if (!damage[i] && damage[i] !== 0) {
-				damage[i] = didSomething === null ? false : didSomething;
+			} else {
+				damage[i] = this.combineResults(damage[i], didSomething === null ? false : didSomething);
 			}
-			didAnything = this.reduceMoveResults([didAnything, didSomething]);
+			didAnything = this.combineResults(didAnything, didSomething);
 		}
 
 
@@ -1702,19 +1703,17 @@ let BattleScripts = {
 		return CHOOSABLE_TARGETS.has(targetType);
 	},
 
-	reduceMoveResults(states) {
-		return states.reduce((total, val) => {
-			if (typeof total === 'number') {
-				if (typeof val === 'number') {
-					return total + val;
-				} else {
-					return total;
-				}
-			} else if (typeof val === 'number' || (val === true || val === null) && !total || total === undefined) {
-				return val;
-			}
-			return total;
-		});
+	combineResults(left, right) {
+		const NOT_FAILURE = 'string';
+		const NULL = 'object';
+		let resultsPriorities = ['undefined', NOT_FAILURE, NULL, 'boolean', 'number'];
+		if (resultsPriorities.indexOf(typeof left) > resultsPriorities.indexOf(typeof right)) {
+			return left;
+		} else if (left && !right && right !== 0) {
+			return left;
+		} else {
+			return right;
+		}
 	},
 };
 

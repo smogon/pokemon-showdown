@@ -3456,8 +3456,9 @@ export class Battle extends Dex.ModdedDex {
 		throw new Error(`The targetTypeChoices function needs to be implemented in scripts.js or the battle format.`);
 	}
 
-	reduceMoveResults(results: (number | boolean | null | undefined)[]): number | boolean | null | undefined {
-		throw new Error(`The reduceMoveResults function needs to be implemented in scripts.js or the battle format.`);
+	combineResults<T extends number | boolean | null | '' | undefined, U extends number | boolean | null | '' | undefined>(
+		left: T, right: U): T | U {
+		throw new Error(`The combineResults function needs to be implemented in scripts.js or the battle format.`);
 	}
 
 	destroy() {
