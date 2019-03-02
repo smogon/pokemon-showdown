@@ -2396,7 +2396,7 @@ const pages = {
 		if (!user.can('mute')) {
 			return buf + `<div class="notice message-error">Access denied.</div>`;
 		}
-		const subMap = Punishments.roomIps.get(this.room.id);
+		const subMap = Punishments.roomUserIds.get(this.room.id);
 		const muteQueue = this.room.muteQueue;
 		const possessive = (word) => {
 			const suffix = word.endsWith('s') ? `'` : `'s`;
