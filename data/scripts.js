@@ -302,6 +302,9 @@ let BattleScripts = {
 		if (this.gen >= 7) {
 			// Swap step 1 with step 2
 			[moveSteps[1], moveSteps[2]] = [moveSteps[2], moveSteps[1]];
+		} else if (this.gen === 4) {
+			// Swap step 5 with step 2
+			[moveSteps[2], moveSteps[5]] = [moveSteps[5], moveSteps[2]];
 		}
 
 		this.setActiveMove(move, pokemon, targets[0]);
