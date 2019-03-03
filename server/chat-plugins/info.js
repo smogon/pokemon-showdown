@@ -301,6 +301,7 @@ const commands = {
 
 	sp: 'showpunishments',
 	showpunishments(target, room, user) {
+		if (room.id.includes('-')) return this.errorReply('This command can only be used in public, hidden or private rooms.');
 		return this.parse(`/join view-punishments-${room}`);
 	},
 	showpunishmentshelp: [`/showpunishments - Shows the current punishments in the room`],
