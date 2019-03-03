@@ -279,7 +279,7 @@ async function getModlog(connection, roomid = 'global', searchString = '', maxLi
 	// handle this here so the child process doesn't have to load rooms data
 	if (roomid === 'public') {
 		const isPublicRoom = (room => !(room.isPrivate || room.battle || room.isPersonal || room.id === 'global'));
-		roomidList = Array.from(Rooms.rooms.values()).filter(isPublicRoom).map(room => room.id);
+		roomidList = [...Rooms.rooms.values()].filter(isPublicRoom).map(room => room.id);
 	} else {
 		roomidList = [roomid];
 	}

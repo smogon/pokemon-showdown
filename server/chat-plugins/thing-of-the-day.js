@@ -199,14 +199,14 @@ class OtdHandler {
 	}
 
 	rollWinner() {
-		let keys = Array.from(this.nominations.keys());
+		let keys = [...this.nominations.keys()];
 		if (!keys.length) return false;
 
 		let winner = this.nominations.get(keys[Math.floor(Math.random() * keys.length)]);
 		if (!winner) return false; // Should never happen but shuts typescript up.
 		this.appendWinner(winner.nomination, winner.name);
 
-		const names = Array.from(this.nominations.values()).map(obj => obj.name);
+		const names = [...this.nominations.values()].map(obj => obj.name);
 
 		let columns = names.length > 27 ? 4 : names.length > 18 ? 3 : names.length > 9 ? 2 : 1;
 		let content = '';

@@ -941,12 +941,12 @@ const commands = {
 			if (room.isPersonal) return this.errorReply(`This room can't be made public.`);
 			if (room.privacySetter && user.can('nooverride', null, room) && !user.can('makeroom')) {
 				if (!room.privacySetter.has(user.userid)) {
-					const privacySetters = Array.from(room.privacySetter).join(', ');
+					const privacySetters = [...room.privacySetter].join(', ');
 					return this.errorReply(`You can't make the room public since you didn't make it private - only ${privacySetters} can.`);
 				}
 				room.privacySetter.delete(user.userid);
 				if (room.privacySetter.size) {
-					const privacySetters = Array.from(room.privacySetter).join(', ');
+					const privacySetters = [...room.privacySetter].join(', ');
 					return this.sendReply(`You are no longer forcing the room to stay private, but ${privacySetters} also need${Chat.plural(room.privacySetter, "", "s")} to use /publicroom to make the room public.`);
 				}
 			}
