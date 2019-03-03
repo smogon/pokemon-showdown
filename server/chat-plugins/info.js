@@ -2425,11 +2425,10 @@ const pages = {
 			let punishDesc;
 			if (reason) punishDesc = ` Reason: ${reason}.`;
 			if (alts.length) punishDesc = ` Alts: ${alts.join(", ")}.`;
-			buf += `<p>- ${possessive(id)} ${punishType.toLowerCase()} expires in ${expireString}.${punishDesc}`;
 			if (user.can('ban') && ip.length) {
-				buf += ` IPs: ${ip}.`;
+				punishDesc += ` IPs: ${ip}.`;
 			}
-			buf += `</p>`;
+			buf += `<p>- ${possessive(id)} ${punishType.toLowerCase()} expires in ${expireString}.${punishDesc}</p>`;
 		});
 
 		if (muteQueue) {
