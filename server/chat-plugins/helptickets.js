@@ -1019,7 +1019,7 @@ let commands = {
 						userids.add(key);
 					}
 				}
-				affected = Users.findUsers(Array.from(userids), Array.from(ips), {includeTrusted: true, forPunishment: true});
+				affected = Users.findUsers([...userids], [...ips], {includeTrusted: true, forPunishment: true});
 				affected.unshift(userid);
 			}
 

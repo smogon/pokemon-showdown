@@ -194,7 +194,7 @@ class RandomTeams extends Dex.ModdedDex {
 				pool = Object.keys(template.learnset);
 				if (template.species.substr(0, 6) === 'Rotom-') {
 					const learnset = this.getTemplate(template.baseSpecies).learnset;
-					if (learnset) pool = Array.from(new Set(pool.concat(Object.keys(learnset))));
+					if (learnset) pool = [...new Set(pool.concat(Object.keys(learnset)))];
 				}
 			} else {
 				const learnset = this.getTemplate(template.baseSpecies).learnset;
