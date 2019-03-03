@@ -275,16 +275,16 @@ let BattleScripts = {
 			// 0. check for semi invulnerability
 			this.tryImmunityEvent,
 
-			// 1. check for type immunity (this is step 2 in gen 7+)
-			this.typeImmunity,
-
-			// 2. run the 'TryHit' event (Protect, Magic Bounce, Volt Absorb, etc.) (this is step 1 in gen 7)
+			// 1. run the 'TryHit' event (Protect, Magic Bounce, Volt Absorb, etc.) (this is step 2 in gens 5 & 6, and step 5 in gen 4)
 			this.tryHitEvent,
 
-			// 3. check for powder immunity
+			// 2. check for type immunity (this is step 1 in gens 4-6)
+			this.typeImmunity,
+
+			// 3. check for powder immunity (gen 6+ only)
 			this.powderImmunity,
 
-			// 4. check for prankster immunity
+			// 4. check for prankster immunity (gen 6+ only)
 			this.pranksterImmunity,
 
 			// 5. check accuracy
@@ -299,11 +299,12 @@ let BattleScripts = {
 			// 8. loop that processes each hit of the move (has its own steps per iteration)
 			this.moveHitLoop,
 		];
-		if (this.gen >= 7) {
+		if (this.gen <= 6) {
 			// Swap step 1 with step 2
 			[moveSteps[1], moveSteps[2]] = [moveSteps[2], moveSteps[1]];
-		} else if (this.gen === 4) {
-			// Swap step 5 with step 2
+		}
+		if (this.gen === 4) {
+			// Swap step 5 with new step 2 (old step 1)
 			[moveSteps[2], moveSteps[5]] = [moveSteps[5], moveSteps[2]];
 		}
 
