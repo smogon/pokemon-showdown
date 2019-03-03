@@ -127,6 +127,12 @@ describe('Team Validator', function () {
 		assert.strictEqual(illegal, null);
 
 		team = [
+			{species: 'marowak', moves: ['swordsdance', 'rockslide', 'bodyslam']},
+		];
+		illegal = TeamValidator('gen2ou').validateTeam(team);
+		assert.strictEqual(illegal, null);
+
+		team = [
 			{species: 'skarmory', ability: 'keeneye', moves: ['curse', 'drillpeck'], evs: {hp: 1}},
 		];
 		illegal = TeamValidator('gen3ou').validateTeam(team);
