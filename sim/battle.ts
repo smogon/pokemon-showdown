@@ -786,7 +786,7 @@ export class Battle extends Dex.ModdedDex {
 			if (handler.index !== undefined) {
 				// TODO: find a better way to do this
 				if (!targetRelayVars[handler.index] && !(targetRelayVars[handler.index] === 0 &&
-					eventid === 'AfterDamage' && handler.status.id === 'counter')) continue;
+					eventid === 'AfterDamage')) continue;
 				if (handler.target) {
 					args[hasRelayVar] = handler.target;
 					this.event.target = handler.target;
