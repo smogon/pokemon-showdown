@@ -2844,6 +2844,7 @@ export class Battle extends Dex.ModdedDex {
 			}
 			if (action.pokemon.hp) {
 				action.pokemon.beingCalledBack = true;
+				this.ejecting = false;
 				const sourceEffect = action.sourceEffect;
 				// @ts-ignore
 				if (sourceEffect && sourceEffect.selfSwitch === 'copyvolatile') {
