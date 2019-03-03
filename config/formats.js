@@ -782,6 +782,7 @@ let Formats = [
 
 			// Stats
 			template.baseStats = allies[2].baseTemplate.baseStats;
+			pokemon.maxhp = allies[2].maxhp;
 			pokemon.set.evs = allies[2].set.evs;
 			pokemon.set.nature = allies[2].getNature().name;
 			pokemon.set.ivs = pokemon.baseIvs = allies[2].set.ivs;
