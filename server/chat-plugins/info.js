@@ -2416,7 +2416,6 @@ const pages = {
 
 		for (const punishment of store) {
 			let [[punishType, id, expireTime]] = punishment;
-			console.log("Punishment", punishment);
 			let expiresIn = new Date(expireTime).getTime() - Date.now();
 			let expireString = Chat.toDurationString(expiresIn, {precision: 1});
 			buf += `<p>- ${possessive(id)} ${punishType.toLowerCase()} expires in ${expireString}.</p>`;
