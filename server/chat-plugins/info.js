@@ -2404,9 +2404,11 @@ const pages = {
 			return `${word}${suffix}`;
 		};
 
-		for (let [key, value] of Punishments.roomUserids.get(this.room.id)) {
-			if (!store.has(value)) store.set(value, [new Set([value.id]), new Set()]);
-			store.get(value)[0].add(key);
+		if (Punishments.roomUserids.get(this.room.id)) {
+			for (let [key, value] of Punishments.roomUserids.get(this.room.id)) {
+				if (!store.has(value)) store.set(value, [new Set([value.id]), new Set()]);
+				store.get(value)[0].add(key);
+			}
 		}
 
 		for (let [key, value] of Punishments.roomIps.get(this.room.id)) {
