@@ -801,6 +801,10 @@ export class Validator {
 						// In theory, limitedEgg should not exist in this case.
 						throw new Error(`invalid limitedEgg on ${name}: ${limitedEgg} with ${source}`);
 					}
+					if (eggGen === 1) {
+						// tradebacks are supported in Gen 2
+						eggGen = 2;
+					}
 					let potentialFather = dex.getTemplate(source.slice(source.charAt(2) === 'T' ? 3 : 2));
 					if (potentialFather.id === 'smeargle') {
 						validFatherExists = true;
