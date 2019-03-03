@@ -105,4 +105,28 @@ describe(`Emergency Exit`, function () {
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
 		assert.strictEqual(battle.currentRequest, 'move');
 	});
+
+	it(`should activate in an order that respects speed`, function () {
+		battle = common.createBattle({gameType: 'doubles'});
+		const p1 = battle.join('p1', 'Guest 1', 1, [
+			{species: 'Golisopod', ability: 'emergencyexit', moves: ['sleeptalk']},
+			{species: 'Golisopod', evs: {spe: 252}, ability: 'emergencyexit', moves: ['sleeptalk']},
+			{species: 'Clefable', ability: 'Unaware', moves: ['metronome']},
+		]);
+		battle.join('p2', 'Guest 2', 1, [
+			{species: 'Rayquaza', ability: 'noguard', moves: ['aircutter']},
+			{species: 'Nidoking', ability: 'rivalry', moves: ['sleeptalk']},
+		]);
+
+		const eePokemon1 = p1.active[0];
+		const eePokemon2 = p1.active[1];
+		assert.strictEqual(eePokemon2.speed, 179); // faster Golisopod
+		battle.makeChoices('move sleeptalk, move sleeptalk', 'move aircutter, move sleeptalk');
+		assert.atMost(eePokemon1.hp, eePokemon1.maxhp / 2);
+		assert.atMost(eePokemon2.hp, eePokemon2.maxhp / 2);
+		assert.strictEqual(battle.currentRequest, 'switch');
+		battle.makeChoices('switch 3');
+		assert.strictEqual(p1.active[0].speed, 116); // slower Golisopod
+		assert.strictEqual(p1.active[1].speed, 156); // Clefable
+	});
 });

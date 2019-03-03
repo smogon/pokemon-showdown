@@ -855,7 +855,8 @@ let BattleAbilities = {
 		onAfterMoveSecondary(target, source, move) {
 			if (!source || source === target || !target.hp || !move.totalDamage) return;
 			if (target.hp <= target.maxhp / 2 && target.hp + move.totalDamage > target.maxhp / 2) {
-				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
+				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag || this.ejecting) return;
+				this.ejecting = true;
 				target.switchFlag = true;
 				source.switchFlag = false;
 				this.add('-activate', target, 'ability: Emergency Exit');
@@ -864,7 +865,8 @@ let BattleAbilities = {
 		onAfterDamage(damage, target, source, effect) {
 			if (!target.hp || effect.effectType === 'Move') return;
 			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
-				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
+				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag || this.ejecting) return;
+				this.ejecting = true;
 				target.switchFlag = true;
 				this.add('-activate', target, 'ability: Emergency Exit');
 			}
@@ -4016,7 +4018,8 @@ let BattleAbilities = {
 		onAfterMoveSecondary(target, source, move) {
 			if (!source || source === target || !target.hp || !move.totalDamage) return;
 			if (target.hp <= target.maxhp / 2 && target.hp + move.totalDamage > target.maxhp / 2) {
-				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
+				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag || this.ejecting) return;
+				this.ejecting = true;
 				target.switchFlag = true;
 				source.switchFlag = false;
 				this.add('-activate', target, 'ability: Wimp Out');
@@ -4025,7 +4028,8 @@ let BattleAbilities = {
 		onAfterDamage(damage, target, source, effect) {
 			if (!target.hp || effect.effectType === 'Move') return;
 			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
-				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
+				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag || this.ejecting) return;
+				this.ejecting = true;
 				target.switchFlag = true;
 				this.add('-activate', target, 'ability: Wimp Out');
 			}

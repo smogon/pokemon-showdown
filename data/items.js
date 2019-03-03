@@ -1451,8 +1451,9 @@ let BattleItems = {
 		onAfterMoveSecondaryPriority: 2,
 		onAfterMoveSecondary(target, source, move) {
 			if (source && source !== target && target.hp && move && move.category !== 'Status') {
-				if (!this.canSwitch(target.side) || target.forceSwitchFlag) return;
+				if (!this.canSwitch(target.side) || target.forceSwitchFlag || this.ejecting) return;
 				if (target.useItem()) {
+					this.ejecting = true;
 					target.switchFlag = true;
 					source.switchFlag = false;
 				}
