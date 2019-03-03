@@ -19,6 +19,14 @@ let BattleScripts = {
 			}
 		}
 	},
+	trySpreadMoveHit(targets, pokemon, move) {
+		let moveResult = false;
+		for (const target of targets) {
+			let targetResult = this.tryMoveHit(target, pokemon, move);
+			if (targetResult || targetResult === 0 || targetResult === undefined) moveResult = true;
+		}
+		return moveResult;
+	},
 	tryMoveHit(target, pokemon, move) {
 		this.setActiveMove(move, pokemon, target);
 		let naturalImmunity = false;
