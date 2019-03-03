@@ -2416,12 +2416,21 @@ const pages = {
 			store.get(value)[1].add(key);
 		}
 
-		for (const punishment of store) {
-			let [[punishType, id, expireTime]] = punishment;
+		store.forEach((data, punishment) => {
+			let [punishType, id, expireTime, reason] = punishment;
+			let alts = [...data[0]].filter(user => user !== id);
+			let ip = [...data[1]];
 			let expiresIn = new Date(expireTime).getTime() - Date.now();
 			let expireString = Chat.toDurationString(expiresIn, {precision: 1});
-			buf += `<p>- ${possessive(id)} ${punishType.toLowerCase()} expires in ${expireString}.</p>`;
-		}
+			let punishDesc;
+			if (reason) punishDesc = ` Reason: ${reason}.`;
+			if (alts.length) punishDesc = ` Alts: ${alts.join(", ")}.`;
+			buf += `<p>- ${possessive(id)} ${punishType.toLowerCase()} expires in ${expireString}.${punishDesc}`;
+			if (user.can('ban') && ip.length) {
+				buf += ` IP: ${ip}.`;
+			}
+			buf += `</p>`;
+		});
 
 		if (muteQueue) {
 			for (const entry of muteQueue) {
