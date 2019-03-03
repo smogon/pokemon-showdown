@@ -2411,9 +2411,11 @@ const pages = {
 			}
 		}
 
-		for (let [key, value] of Punishments.roomIps.get(this.room.id)) {
-			if (!store.has(value)) store.set(value, [new Set([value.id]), new Set()]);
-			store.get(value)[1].add(key);
+		if (Punishments.roomIps.get(this.room.id)) {
+			for (let [key, value] of Punishments.roomIps.get(this.room.id)) {
+				if (!store.has(value)) store.set(value, [new Set([value.id]), new Set()]);
+				store.get(value)[1].add(key);
+			}
 		}
 
 		store.forEach((data, punishment) => {
