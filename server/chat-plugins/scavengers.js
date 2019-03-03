@@ -54,11 +54,8 @@ class Ladder {
 	}
 
 	load() {
-		try {
-			this.data = require(`../../${this.file}`);
-		} catch (e) {
-			if (e.code !== 'MODULE_NOT_FOUND' && e.code !== 'ENOENT') throw e;
-		}
+		const json = FS(this.file).readIfExistsSync();
+		if (json) this.data = JSON.parse(json);
 	}
 
 	addPoints(name, aspect, points, noUpdate) {
