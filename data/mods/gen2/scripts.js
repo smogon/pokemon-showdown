@@ -114,11 +114,6 @@ let BattleScripts = {
 		this.singleEvent('AfterMove', move, null, pokemon, target, move);
 		if (!move.selfSwitch && target && target.hp > 0) this.runEvent('AfterMoveSelf', pokemon, target, move);
 	},
-	trySpreadMoveHit(targets, pokemon, move) {
-		// Gen 2 doesn't have doubles, and thus has no spread moves
-		let retVal = this.tryMoveHit(targets[0], pokemon, move);
-		return !!retVal || retVal === 0 || retVal === undefined;
-	},
 	tryMoveHit(target, pokemon, move) {
 		let positiveBoostTable = [1, 1.33, 1.66, 2, 2.33, 2.66, 3];
 		let negativeBoostTable = [1, 0.75, 0.6, 0.5, 0.43, 0.36, 0.33];
