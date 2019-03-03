@@ -17,7 +17,7 @@ function sucrase(src, out) {
 }
 
 try {
-	require.resolve('sucrase');
+	require.resolve('replace');
 } catch (e) {
 	console.log('Installing dependencies...');
 	shell('npm install');
