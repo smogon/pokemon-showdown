@@ -7807,7 +7807,7 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	typenull: {
-		randomBattleMoves: ["return", "uturn", "rest", "sleeptalk"],
+		randomBattleMoves: ["return", "uturn", "swordsdance", "rest", "sleeptalk"],
 		eventPokemon: [
 			{"generation": 7, "level": 40, "shiny": 1, "perfectIVs": 3, "moves": ["crushclaw", "scaryface", "xscissor", "takedown"]},
 			{"generation": 7, "level": 60, "shiny": 1, "perfectIVs": 3, "moves": ["metalsound", "ironhead", "doublehit", "airslash"]},
