@@ -6029,17 +6029,17 @@ let BattleItems = {
 			}
 		},
 		onUpdate(pokemon) {
-			let lastMoveAttackDown = false;
+			let lastMoveBoostDown = false;
 			if (this.lastMove && this.lastMove.boosts) {
 				for (let i in this.lastMove.boosts) {
 					// @ts-ignore
 					if (this.lastMove.boosts[i] < 0) {
-						lastMoveAttackDown = true;
+						lastMoveBoostDown = true;
 						break;
 					}
 				}
 			}
-			if ((this.gameType === "doubles") && !lastMoveAttackDown) {
+			if ((this.gameType === "doubles") && !lastMoveBoostDown) {
 				return;
 			}
 			let activate = false;
