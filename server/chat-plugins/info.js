@@ -1836,6 +1836,9 @@ const commands = {
 		if (showAll || target === 'badge' || target === 'badges') {
 			buffer.push(`<a href="https://www.smogon.com/badge_faq">Badge FAQ</a>`);
 		}
+		if (showAll || target === 'rng') {
+			buffer.push(`<a href="https://pokemonshowdown.com/pages/rng">How Pokémon Showdown's RNG works</a>`);
+		}
 		if (showAll || !buffer.length) {
 			buffer.unshift(`<a href="https://www.smogon.com/forums/posts/6774128/">Frequently Asked Questions</a>`);
 		}
