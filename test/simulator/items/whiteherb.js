@@ -5,11 +5,32 @@ const common = require('./../../common');
 
 let battle;
 
-describe('White Herb', function () {
+describe('White Herb 5678765567', function () {
 	afterEach(function () {
 		battle.destroy();
 	});
+	it('should use white herb during active turn', function () {
+		battle = common.createBattle({gameType: 'doubles'});
+
+		battle.join('p1', 'Guest 1', 1, [
+			{species: "chansey", ability: 'shellarmor', item: 'ironball', moves: ['memento']},
+			{species: "clefable", ability: 'levitate', item: 'ironball', moves: ['memento']},
+			{species: "aerodactyl", ability: 'shellarmor', item: 'ironball', moves: ['stealthrock']},
+			{species: "rotom", ability: 'levitate', item: 'ironball', moves: ['rest']}]);
+		battle.join('p2', 'Guest 2', 2, [
+			{species: "aegislash", ability: 'stancechange', item: 'whiteherb', moves: ['autotomize']},
+			{species: "pelipper", ability: 'sandveil', item: 'lifeorb', moves: ['protect']}]);
+
+		battle.makeChoices('move memento 0, move memento 0', 'move autotomize, move protect');
+		battle.makeChoices('switch aerodactyl, switch rotom', 'move autotomize, move protect');
+
+		const holder = battle.p2.active[0];
+
+		assert.false.holdsItem(holder);
+		assert.statStage(holder, 'atk', -2);
+	});
 	it('should use white herb after both intimidate', function () {
+		let battle;
 		battle = common.createBattle({gameType: 'doubles'});
 
 		battle.join('p1', 'Guest 1', 1, [{species: "Arcanine", ability: 'intimidate', moves: ['bodyslam']},
@@ -25,8 +46,8 @@ describe('White Herb', function () {
 		assert.false.holdsItem(holder);
 		assert.statStage(holder, 'atk', 0);
 	});
-
 	it('should use white herb after one intimidate', function () {
+		let battle;
 		battle = common.createBattle({gameType: 'doubles'});
 
 		battle.join('p1', 'Guest 1', 1, [{species: "Arcanine", ability: 'flashfire', moves: ['bodyslam']},
@@ -42,8 +63,8 @@ describe('White Herb', function () {
 		assert.false.holdsItem(holder);
 		assert.statStage(holder, 'atk', 0);
 	});
-
 	it('should use white herb after two intimidate switch in', function () {
+		let battle;
 		battle = common.createBattle({gameType: 'doubles'});
 
 		battle.join('p1', 'Guest 1', 1, [
@@ -66,8 +87,8 @@ describe('White Herb', function () {
 		assert.false.holdsItem(holder);
 		assert.statStage(holder, 'atk', 0);
 	});
-
 	it('should use white herb after one intimidate switch in', function () {
+		let battle;
 		battle = common.createBattle({gameType: 'doubles'});
 
 		battle.join('p1', 'Guest 1', 1, [

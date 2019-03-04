@@ -6008,9 +6008,35 @@ let BattleItems = {
 				}
 			},
 		},
+		onResidual(pokemon) {
+			if (!(this.gameType === "doubles")) {
+				return;
+			}
+			let activate = false;
+			/**@type {{[k: string]: number}} */
+			let boosts = {};
+			/**@type {{[k: string]: number}} */
+			for (let i in pokemon.boosts) {
+				// @ts-ignore
+				if (pokemon.boosts[i] < 0) {
+					activate = true;
+					boosts[i] = 0;
+				}
+			}
+			if (activate && pokemon.useItem()) {
+				pokemon.setBoost(boosts);
+				this.add('-clearnegativeboost', pokemon, '[silent]');
+			}
+		},
 		onUpdate(pokemon) {
-			//run after switchin
-			if ((this.gameType === "doubles") && !(this.queue.length === 0)) {
+			let lastMoveAttackDown = false;
+			if (this.lastMove &&
+				(this.lastMove.id === 'memento' ||
+				this.lastMove.id === 'growl' ||
+				this.lastMove.id === 'partingshot')) {
+				lastMoveAttackDown = true;
+			}
+			if ((this.gameType === "doubles") && !lastMoveAttackDown) {
 				return;
 			}
 			let activate = false;
