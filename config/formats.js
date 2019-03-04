@@ -183,9 +183,6 @@ let Formats = [
 			'Mimikyu', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Rayquaza', 'Reshiram', 'Salamence-Mega', 'Shaymin-Sky',
 			'Snorlax', 'Solgaleo', 'Tapu Koko', 'Xerneas', 'Yveltal', 'Zekrom', 'Focus Sash', 'Perish Song', 'Detect + Fightinium Z',
 		],
-		onBegin() {
-			if (this.rated) this.add('html', `<div class="broadcast-blue"><strong>1v1 is currently suspecting Kyurem-Black! For more information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3647326/">suspect thread</a>.</strong></div>`);
-		},
 	},
 	{
 		name: "[Gen 7] ZU",
@@ -865,6 +862,7 @@ let Formats = [
 			for (const pokemon of this.p1.pokemon.concat(this.p2.pokemon)) {
 				pokemon.originalSpecies = pokemon.baseTemplate.species;
 			}
+			if (this.rated) this.add('html', `<div class="broadcast-blue"><strong>Mix and Mega is currently suspecting Landorus-Therian! For more information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3647835/">suspect thread</a>.</strong></div>`);
 		},
 		onSwitchIn(pokemon) {
 			let oMegaTemplate = this.getTemplate(pokemon.template.originalMega);
