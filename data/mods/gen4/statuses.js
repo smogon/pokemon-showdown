@@ -52,9 +52,6 @@ let BattleStatuses = {
 	},
 	substitutebroken: {
 		noCopy: true,
-		onBeforeTurn(pokemon) {
-			pokemon.removeVolatile('substitutebroken');
-		},
 	},
 	trapped: {
 		inherit: true,

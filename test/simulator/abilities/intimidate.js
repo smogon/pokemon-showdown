@@ -32,17 +32,28 @@ describe('Intimidate', function () {
 	});
 
 	it('should not activate if U-turn breaks the Substitute in Gen 4', function () {
-		battle = common.gen(4).createBattle();
+		battle = common.gen(4).createBattle({gameType: 'doubles'});
 		battle.join('p1', 'Guest 1', 1, [
 			{species: "Gengar", level: 1, item: 'leftovers', ability: 'levitate', moves: ['substitute']},
+			{species: "Suicune", level: 1, item: 'leftovers', ability: 'pressure', moves: ['substitute']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [
-			{species: "Scizor", item: 'laggingtail', ability: 'technician', moves: ['uturn']},
+			{species: "Gliscor", item: 'laggingtail', ability: 'sandveil', moves: ['uturn']},
+			{species: "Scizor", item: 'laggingtail', ability: 'technician', moves: ['batonpass']},
 			{species: "Gyarados", item: 'leftovers', ability: 'intimidate', moves: ['splash']},
+			{species: "Salamence", item: 'leftovers', ability: 'intimidate', moves: ['splash']},
 		]);
-		battle.makeChoices('move substitute', 'move uturn');
-		battle.makeChoices('pass', 'switch gyarados');
+		battle.makeChoices('move substitute, move substitute', 'move uturn, move batonpass');
+		battle.makeChoices('pass, pass', 'switch 3, pass');
+
+		const activate = '|-ability|p2a: Gyarados|Intimidate|boost';
+		assert.strictEqual(battle.log.filter(m => m === activate).length, 0);
 		assert.statStage(battle.p1.active[0], 'atk', 0);
+		assert.statStage(battle.p1.active[1], 'atk', 0);
+
+		battle.makeChoices('pass, pass', 'pass, switch 4');
+		assert.statStage(battle.p1.active[0], 'atk', -1);
+		assert.statStage(battle.p1.active[1], 'atk', 0);
 	});
 
 	it('should affect adjacent foes only', function () {
