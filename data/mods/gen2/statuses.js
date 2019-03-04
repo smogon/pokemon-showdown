@@ -12,16 +12,10 @@ let BattleStatuses = {
 		},
 		onAfterMoveSelfPriority: 3,
 		onAfterMoveSelf(pokemon) {
-			let toxicCounter = 1;
-			if (pokemon.volatiles['residualdmg']) {
-				pokemon.volatiles['residualdmg'].counter++;
-				toxicCounter = pokemon.volatiles['residualdmg'].counter;
-			}
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 8), 1) * toxicCounter, pokemon);
-			if (toxicCounter > 1) this.add('-hint', 'In GSC, Toxic\'s counter is retained through Baton Pass/Heal Bell and applies to PSN/BRN.');
+			residualdmg(this, pokemon);
 		},
 		onAfterSwitchInSelf(pokemon) {
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 8), 1));
+			residualdmg(this, pokemon);
 		},
 	},
 	par: {
@@ -95,16 +89,10 @@ let BattleStatuses = {
 		},
 		onAfterMoveSelfPriority: 3,
 		onAfterMoveSelf(pokemon) {
-			let toxicCounter = 1;
-			if (pokemon.volatiles['residualdmg']) {
-				pokemon.volatiles['residualdmg'].counter++;
-				toxicCounter = pokemon.volatiles['residualdmg'].counter;
-			}
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 8), 1) * toxicCounter, pokemon);
-			if (toxicCounter > 1) this.add('-hint', 'In GSC, Toxic\'s counter is retained through Baton Pass/Heal Bell and applies to PSN/BRN.');
+			residualdmg(this, pokemon);
 		},
 		onAfterSwitchInSelf(pokemon) {
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 8), 1));
+			residualdmg(this, pokemon);
 		},
 	},
 	tox: {
@@ -119,7 +107,6 @@ let BattleStatuses = {
 		},
 		onAfterMoveSelfPriority: 3,
 		onAfterMoveSelf(pokemon) {
-			pokemon.volatiles['residualdmg'].counter++;
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter, pokemon, pokemon);
 		},
 		onSwitchIn(pokemon) {
@@ -236,6 +223,31 @@ let BattleStatuses = {
 			this.effectData.duration = 2;
 		},
 	},
+	residualdmg: {
+		name: 'residualdmg',
+		id: 'residualdmg',
+		num: 0,
+		onStart(target) {
+			target.volatiles['residualdmg'].counter = 0;
+		},
+		onAfterMoveSelfPriority: 100,
+		onAfterMoveSelf(pokemon) {
+			pokemon.volatiles['residualdmg'].counter++;
+		},
+	},
 };
+
+/**
+ * @param {Battle} battle
+ * @param {Pokemon} pokemon
+ */
+function residualdmg(battle, pokemon) {
+	if (pokemon.volatiles['residualdmg']) {
+		battle.damage(battle.clampIntRange(Math.floor(pokemon.maxhp / 16) * pokemon.volatiles['residualdmg'].counter, 1), pokemon);
+		battle.add('-hint', 'In GSC, Toxic\'s counter is retained through Baton Pass/Heal Bell and applies to PSN/BRN.');
+	} else {
+		battle.damage(battle.clampIntRange(Math.floor(pokemon.maxhp / 8), 1), pokemon);
+	}
+}
 
 exports.BattleStatuses = BattleStatuses;

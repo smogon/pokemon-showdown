@@ -236,8 +236,7 @@ describe('Toxic Poison [Gen 2]', function () {
 		battle.resetRNG(); // Guarantee Sacred Fire burns
 		battle.makeChoices('move sacredfire', 'move splash');
 		let pokemon = battle.p2.active[0];
-		// Guarantee Toxic hits. NB: counter in Gen 2 doesn't start until next turn.
-		battle.resetRNG();
+		battle.resetRNG(); // Guarantee Toxic hits.
 		battle.makeChoices('move toxic', 'switch 2');
 		battle.makeChoices('move splash', 'move splash');
 		battle.makeChoices('move splash', 'move splash');
@@ -245,7 +244,13 @@ describe('Toxic Poison [Gen 2]', function () {
 		battle.makeChoices('pass', 'switch 2');
 		let hp = pokemon.hp;
 		battle.makeChoices('move splash', 'move splash');
-		assert.strictEqual(hp - pokemon.hp, Math.floor(pokemon.maxhp / 8) * 3);
+		assert.strictEqual(hp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 3);
+
+		// Damage counter should be removed on regular switch out
+		battle.makeChoices('move splash', 'switch 2');
+		hp = pokemon.hp;
+		battle.makeChoices('move splash', 'switch 2');
+		assert.strictEqual(hp - pokemon.hp, Math.floor(pokemon.maxhp / 8));
 	});
 
 	it('should not have its damage counter affected by Heal Bell', function () {
@@ -260,7 +265,7 @@ describe('Toxic Poison [Gen 2]', function () {
 		battle.makeChoices('move sacredfire', 'move splash');
 		let hp = pokemon.hp;
 		battle.makeChoices('move splash', 'move splash');
-		assert.strictEqual(hp - pokemon.hp, Math.floor(pokemon.maxhp / 8) * 3);
+		assert.strictEqual(hp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 4);
 		hp = pokemon.hp;
 
 		battle.makeChoices('move splash', 'move healbell');
