@@ -304,7 +304,7 @@ const commands = {
 		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
 		return this.parse(`/join view-punishments-${room}`);
 	},
-	showpunishmentshelp: [`/showpunishments - Shows the current punishments in the room`],
+	showpunishmentshelp: [`/showpunishments - Shows the current punishments in the room. Requires: % @ # & ~`],
 
 	'!host': true,
 	host(target, room, user, connection, cmd) {
