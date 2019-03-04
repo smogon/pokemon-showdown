@@ -422,6 +422,7 @@ let BattleScripts = {
 					let effectChance = Math.floor((secondary.chance || 100) * 255 / 100);
 					if (typeof secondary.chance === 'undefined' || this.randomChance(effectChance, 256)) {
 						this.moveHit(target, pokemon, move, secondary, true, isSelf);
+            // TODO hint
 					}
 				}
 			}
@@ -588,6 +589,7 @@ let BattleScripts = {
 		}
 
 		// Gen 2 Present has a glitched damage calculation using the secondary types of the Pokemon for the Attacker's Level and Defender's Defense.
+    // TODO hint
 		if (move.id === 'present') {
 			/**@type {{[k: string]: number}} */
 			const typeIndexes = {"Normal": 0, "Fighting": 1, "Flying": 2, "Poison": 3, "Ground": 4, "Rock": 5, "Bug": 7, "Ghost": 8, "Steel": 9, "Fire": 20, "Water": 21, "Grass": 22, "Electric": 23, "Psychic": 24, "Ice": 25, "Dragon": 26, "Dark": 27};
@@ -603,11 +605,17 @@ let BattleScripts = {
 			}
 		}
 
-		// When either attack or defense are higher than 256, they are both divided by 4 and moded by 256.
-		// This is what cuases the roll over bugs.
+		// When either attack or defense are higher than 256, they are both divided by 4 and modded by 256.
+		// This is what causes the rollover bugs.
 		if (attack >= 256 || defense >= 256) {
+      const attackBefore = attack;
+      const defenseBefore = defense;
 			attack = this.clampIntRange(Math.floor(attack / 4) % 256, 1);
 			defense = this.clampIntRange(Math.floor(defense / 4) % 256, 1);
+      if (defense < defenseBefore || attack < attackBefore) {
+        // TODO hint, but add after damage? Split?
+        //this.add('hint', 'In Gen 2, stat will rollover if they are larger than 1024');
+      }
 		}
 
 		// Self destruct moves halve defense at this point.
