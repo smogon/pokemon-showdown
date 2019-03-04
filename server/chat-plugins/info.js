@@ -2429,7 +2429,7 @@ const pages = {
 			if (reason) punishDesc = ` Reason: ${reason}.`;
 			if (alts.length) punishDesc = ` Alts: ${alts.join(", ")}.`;
 			if (user.can('ban') && ip.length) {
-				punishDesc += ` IPs: ${ip}.`;
+				punishDesc += ` IPs: ${ip.join(", ")}.`;
 			}
 			buf += `<p>- ${possessive(id)} ${punishType.toLowerCase()} expires in ${expireString}.${punishDesc}</p>`;
 		});
