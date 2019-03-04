@@ -146,8 +146,17 @@ let BattleAbilities = {
 				}
 			}
 
-			// In Gen 4, Intimidate won't even activate if every target has a substitute.
-			if (!activated) return;
+			if (!activated) {
+				this.add('split');
+				for (const line of [false, this.sides[0], this.sides[1], true]) {
+					if (line === true || line === pokemon.side) {
+						this.add('-hint', 'In Gen 4, Intimidate does not activate if every target has a Substitute (or the Substitute was just broken by U-turn).');
+					} else {
+						this.log.push('');
+					}
+				}
+				return;
+			}
 			this.add('-ability', pokemon, 'Intimidate', 'boost');
 
 			for (const target of pokemon.side.foe.active) {
