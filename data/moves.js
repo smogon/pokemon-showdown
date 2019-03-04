@@ -16450,7 +16450,8 @@ let BattleMovedex = {
 				if (this.effectData.layers >= 3) return false;
 				this.effectData.layers++;
 				this.add('-start', target, 'stockpile' + this.effectData.layers);
-				let [curDef, curSpD] = [target.boosts.def, target.boosts.spd];
+				const curDef = target.boosts.def;
+				const curSpD = target.boosts.spd;
 				this.boost({def: 1, spd: 1}, target, target);
 				if (curDef !== target.boosts.def) this.effectData.def--;
 				if (curSpD !== target.boosts.spd) this.effectData.spd--;
