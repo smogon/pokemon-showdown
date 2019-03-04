@@ -246,6 +246,9 @@ describe('Toxic Poison [Gen 2]', function () {
 		battle.makeChoices('move splash', 'move splash');
 		assert.strictEqual(hp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 3);
 
+		// Only hint about this once per battle, not every turn.
+		assert.strictEqual(battle.log.filter(m => m.startsWith('|-hint')).length, 1);
+
 		// Damage counter should be removed on regular switch out
 		battle.makeChoices('move splash', 'switch 2');
 		hp = pokemon.hp;
