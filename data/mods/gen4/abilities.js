@@ -138,11 +138,20 @@ let BattleAbilities = {
 		onStart(pokemon) {
 			let activated = false;
 			for (const target of pokemon.side.foe.active) {
-				if (!target || !this.isAdjacent(target, pokemon)) continue;
-				if (!activated) {
-					this.add('-ability', pokemon, 'Intimidate', 'boost');
+				if (target && this.isAdjacent(target, pokemon) &&
+					!(target.volatiles['substitute'] ||
+						target.volatiles['substitutebroken'] && target.volatiles['substitutebroken'].move === 'uturn')) {
 					activated = true;
+					break;
 				}
+			}
+
+			// In Gen 4, Intimidate won't even activate if every target has a substitute.
+			if (!activated) return;
+			this.add('-ability', pokemon, 'Intimidate', 'boost');
+
+			for (const target of pokemon.side.foe.active) {
+				if (!target || !this.isAdjacent(target, pokemon)) continue;
 
 				if (target.volatiles['substitute']) {
 					this.add('-immune', target);
