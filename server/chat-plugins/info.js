@@ -301,7 +301,7 @@ const commands = {
 
 	sp: 'showpunishments',
 	showpunishments(target, room, user) {
-		if (room.id.includes('-')) return this.errorReply('This command can only be used in public, hidden or private rooms.');
+		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
 		return this.parse(`/join view-punishments-${room}`);
 	},
 	showpunishmentshelp: [`/showpunishments - Shows the current punishments in the room`],
@@ -2397,6 +2397,9 @@ const pages = {
 		buf += `<div class="pad"><h2>List of active punishments:</h2>`;
 		if (!user.can('mute')) {
 			return buf + `<div class="notice message-error">Access denied.</div>`;
+		}
+		if (!this.room.chatRoomData) {
+			return buf + `<div class="notice message-error">This page is unavailable in temporary rooms</div>`;
 		}
 		const store = new Map();
 		const muteQueue = this.room.muteQueue;
