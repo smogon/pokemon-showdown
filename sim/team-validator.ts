@@ -739,7 +739,8 @@ export class Validator {
 
 	reconcileLearnset(
 		species: Template, lsetData: PokemonSources, problem: {type: string, moveName: string, [key: string]: any} | null,
-		name: string = species.species) {
+		name: string = species.species
+	) {
 		const dex = this.dex;
 		let problems = [];
 
@@ -781,7 +782,7 @@ export class Validator {
 			// This code hasn't been closely audited for multi-gen interaction, but
 			// since egg moves don't get removed between gens, it's unlikely to have
 			// any serious problems.
-			let limitedEgg = Array.from(new Set(lsetData.limitedEgg));
+			let limitedEgg = [...new Set(lsetData.limitedEgg)];
 			if (limitedEgg.length <= 1) {
 				// Only one source, can't conflict with anything else
 			} else if (limitedEgg.includes('self')) {
@@ -800,6 +801,10 @@ export class Validator {
 						// (There is a way to obtain this pokemon without past-gen breeding.)
 						// In theory, limitedEgg should not exist in this case.
 						throw new Error(`invalid limitedEgg on ${name}: ${limitedEgg} with ${source}`);
+					}
+					if (eggGen === 1) {
+						// tradebacks are supported in Gen 2
+						eggGen = 2;
 					}
 					let potentialFather = dex.getTemplate(source.slice(source.charAt(2) === 'T' ? 3 : 2));
 					if (potentialFather.id === 'smeargle') {
@@ -895,8 +900,8 @@ export class Validator {
 	}
 
 	checkLearnset(
-		move: Move, species: Template, lsetData: PokemonSources = {sources: [], sourcesBefore: this.dex.gen}, set: AnyObject = {}):
-		{type: string, [key: string]: any} | null {
+		move: Move, species: Template, lsetData: PokemonSources = {sources: [], sourcesBefore: this.dex.gen}, set: AnyObject = {}
+	): {type: string, [key: string]: any} | null {
 		const dex = this.dex;
 
 		let moveid = toId(move);
@@ -1105,7 +1110,7 @@ export class Validator {
 							if (!father.eggGroups.some(eggGroup => eggGroupsSet.has(eggGroup))) continue;
 
 							// detect unavailable egg moves
-							if (noPastGenBreeding) {
+							if (noPastGenBreeding && fatherSources) {
 								const fatherLatestMoveGen = fatherSources[0].charAt(0);
 								if (father.tier.startsWith('Bank') || father.doublesTier.startsWith('Bank') || fatherLatestMoveGen !== '7') continue;
 								atLeastOne = true;

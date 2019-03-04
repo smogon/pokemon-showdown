@@ -147,7 +147,7 @@ let BattleAbilities = {
 		shortDesc: "On switch-in, this Pokemon shudders if any foe has a supereffective or OHKO move.",
 		onStart(pokemon) {
 			for (const target of pokemon.side.foe.active) {
-				if (target.fainted) continue;
+				if (!target || target.fainted) continue;
 				for (const moveSlot of target.moveSlots) {
 					let move = this.getMove(moveSlot.move);
 					if (move.category !== 'Status' && (this.getImmunity(move.type, pokemon) && this.getEffectiveness(move.type, pokemon) > 0 || move.ohko)) {
@@ -422,7 +422,7 @@ let BattleAbilities = {
 			let type = move.type;
 			if (target.isActive && move.effectType === 'Move' && move.category !== 'Status' && type !== '???' && !target.hasType(type)) {
 				if (!target.setType(type)) return false;
-				this.add('-start', target, 'typechange', type, '[from] Color Change');
+				this.add('-start', target, 'typechange', type, '[from] ability: Color Change');
 
 				if (target.side.active.length === 2 && target.position === 1) {
 					// Curse Glitch
@@ -2546,7 +2546,7 @@ let BattleAbilities = {
 			let type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
-				this.add('-start', source, 'typechange', type, '[from] Protean');
+				this.add('-start', source, 'typechange', type, '[from] ability: Protean');
 			}
 		},
 		id: "protean",

@@ -8,21 +8,18 @@
  * @license MIT
  */
 
-'use strict';
+import * as fs from 'fs';
+import * as net from 'net';
+import * as path from 'path';
+import * as repl from 'repl';
 
-const fs = require('fs');
-const path = require('path');
-const net = require('net');
-const repl = require('repl');
-
-const Repl = {
+export const Repl = new class {
 	/**
 	 * Contains the pathnames of all active REPL sockets.
-	 * @type {Set<string>}
 	 */
-	socketPathnames: new Set(),
+	socketPathnames: Set<string> = new Set();
 
-	listenersSetup: false,
+	listenersSetup: boolean = false;
 
 	setupListeners() {
 		if (Repl.listenersSetup) return;
@@ -44,17 +41,14 @@ const Repl = {
 		if (!process.listeners('SIGINT').length) {
 			process.once('SIGINT', () => process.exit(128 + 2));
 		}
-	},
+	}
 
 	/**
 	 * Starts a REPL server, using a UNIX socket for IPC. The eval function
 	 * parametre is passed in because there is no other way to access a file's
 	 * non-global context.
-	 *
-	 * @param {string} filename
-	 * @param {(input: string) => any} evalFunction
 	 */
-	start(filename, evalFunction) {
+	start(filename: string, evalFunction: (input: string) => any) {
 		if ('repl' in Config && !Config.repl) return;
 
 		// TODO: Windows does support the REPL when using named pipes. For now,
@@ -84,14 +78,8 @@ const Repl = {
 			repl.start({
 				input: socket,
 				output: socket,
-				/**
-				 * @param {string} cmd
-				 * @param {any} context
-				 * @param {string} filename
-				 * @param {Function} callback
-				 * @return {any}
-				 */
-				eval(cmd, context, filename, callback) {
+				// tslint:disable-next-line:ban-types
+				eval(cmd: string, context: any, unusedFilename: string, callback: Function): any {
 					try {
 						return callback(null, evalFunction(cmd));
 					} catch (e) {
@@ -108,8 +96,9 @@ const Repl = {
 			Repl.socketPathnames.add(pathname);
 		});
 
-		server.once('error', /** @param {NodeJS.ErrnoException} err */ err => {
+		server.once('error', (err: NodeJS.ErrnoException) => {
 			if (err.code === "EADDRINUSE") {
+				// tslint:disable-next-line:variable-name
 				fs.unlink(pathname, _err => {
 					if (_err && _err.code !== "ENOENT") {
 						require('./crashlogger')(_err, `REPL: ${filename}`);
@@ -126,7 +115,5 @@ const Repl = {
 			Repl.socketPathnames.delete(pathname);
 			Repl.start(filename, evalFunction);
 		});
-	},
+	}
 };
-
-module.exports = Repl;

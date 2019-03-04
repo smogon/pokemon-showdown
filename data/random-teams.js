@@ -194,7 +194,7 @@ class RandomTeams extends Dex.ModdedDex {
 				pool = Object.keys(template.learnset);
 				if (template.species.substr(0, 6) === 'Rotom-') {
 					const learnset = this.getTemplate(template.baseSpecies).learnset;
-					if (learnset) pool = Array.from(new Set(pool.concat(Object.keys(learnset))));
+					if (learnset) pool = [...new Set(pool.concat(Object.keys(learnset)))];
 				}
 			} else {
 				const learnset = this.getTemplate(template.baseSpecies).learnset;
@@ -611,7 +611,7 @@ class RandomTeams extends Dex.ModdedDex {
 			template = this.getTemplate('unown');
 
 			let err = new Error('Template incompatible with random battles: ' + species);
-			require('../lib/crashlogger')(err, 'The randbat set generator');
+			Monitor.crashlog(err, 'The randbat set generator');
 		}
 
 		if (template.battleOnly) {
@@ -1674,7 +1674,7 @@ class RandomTeams extends Dex.ModdedDex {
 		let pokemon = [];
 
 		const excludedTiers = ['NFE', 'LC Uber', 'LC'];
-		const allowedNFE = ['Chansey', 'Doublade', 'Gligar', 'Porygon2', 'Scyther', 'Togetic'];
+		const allowedNFE = ['Chansey', 'Doublade', 'Gligar', 'Porygon2', 'Scyther', 'Togetic', 'Type: Null'];
 
 		// For Monotype
 		let isMonotype = this.format.id === 'gen7monotyperandombattle';

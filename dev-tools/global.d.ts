@@ -18,7 +18,7 @@ import UsersType = require('./../server/users');
 import PunishmentsType = require('./../server/punishments');
 import ChatType = require('./../server/chat');
 
-import StreamsType = require('./../lib/streams');
+import * as StreamsType from './../lib/streams';
 
 declare global {
 	// modules
