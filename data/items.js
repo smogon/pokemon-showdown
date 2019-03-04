@@ -6030,11 +6030,14 @@ let BattleItems = {
 		},
 		onUpdate(pokemon) {
 			let lastMoveAttackDown = false;
-			if (this.lastMove &&
-				(this.lastMove.id === 'memento' ||
-				this.lastMove.id === 'growl' ||
-				this.lastMove.id === 'partingshot')) {
-				lastMoveAttackDown = true;
+			if (this.lastMove && this.lastMove.boosts) {
+				for (let i in this.lastMove.boosts) {
+					// @ts-ignore
+					if (this.lastMove.boosts[i] < 0) {
+						lastMoveAttackDown = true;
+						break;
+					}
+				}
 			}
 			if ((this.gameType === "doubles") && !lastMoveAttackDown) {
 				return;
