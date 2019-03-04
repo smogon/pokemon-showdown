@@ -400,6 +400,29 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon making contact with the user lose 1/8 of their maximum HP, rounded down. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
 	},
+	stockpile: {
+		inherit: true,
+		effect: {
+			noCopy: true,
+			onStart(target) {
+				this.effectData.layers = 1;
+				this.add('-start', target, 'stockpile' + this.effectData.layers);
+				this.boost({def: 1, spd: 1}, target, target);
+			},
+			onRestart(target) {
+				if (this.effectData.layers >= 3) return false;
+				this.effectData.layers++;
+				this.add('-start', target, 'stockpile' + this.effectData.layers);
+				this.boost({def: 1, spd: 1}, target, target);
+			},
+			onEnd(target) {
+				let layers = this.effectData.layers * -1;
+				this.effectData.layers = 0;
+				this.boost({def: layers, spd: layers}, target, target);
+				this.add('-end', target, 'Stockpile');
+			},
+		},
+	},
 	struggle: {
 		inherit: true,
 		desc: "Deals typeless damage to a random adjacent opposing Pokemon. If this move was successful, the user loses 1/4 of its maximum HP, rounded half up, and the Rock Head Ability does not prevent this. This move is automatically used if none of the user's known moves can be selected.",

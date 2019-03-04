@@ -16438,19 +16438,26 @@ let BattleMovedex = {
 			noCopy: true,
 			onStart(target) {
 				this.effectData.layers = 1;
+				this.effectData.def = 0;
+				this.effectData.spd = 0;
 				this.add('-start', target, 'stockpile' + this.effectData.layers);
+				let [curDef, curSpD] = [target.boosts.def, target.boosts.spd];
 				this.boost({def: 1, spd: 1}, target, target);
+				if (curDef !== target.boosts.def) this.effectData.def--;
+				if (curSpD !== target.boosts.spd) this.effectData.spd--;
 			},
 			onRestart(target) {
 				if (this.effectData.layers >= 3) return false;
 				this.effectData.layers++;
 				this.add('-start', target, 'stockpile' + this.effectData.layers);
+				let [curDef, curSpD] = [target.boosts.def, target.boosts.spd];
 				this.boost({def: 1, spd: 1}, target, target);
+				if (curDef !== target.boosts.def) this.effectData.def--;
+				if (curSpD !== target.boosts.spd) this.effectData.spd--;
 			},
 			onEnd(target) {
-				let layers = this.effectData.layers * -1;
 				this.effectData.layers = 0;
-				this.boost({def: layers, spd: layers}, target, target);
+				this.boost({def: this.effectData.def, spd: this.effectData.spd}, target, target);
 				this.add('-end', target, 'Stockpile');
 			},
 		},
