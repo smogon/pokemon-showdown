@@ -572,7 +572,7 @@ let Formats = [
 
 		mod: 'gen7',
 		ruleset: ['Species Clause', 'Nickname Clause', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Swagger Clause', 'Mega Rayquaza Clause', 'Sleep Clause Mod', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
-		banlist: ['Unreleased', 'Illegal', 'Blaziken-Mega', 'Gengar-Mega', 'Mewtwo-Mega-Y', 'Rayquaza-Mega'],
+		banlist: ['Unreleased', 'Illegal', 'Baton Pass'],
 		onChangeSet(set, format) {
 			let item = this.getItem(set.item);
 			let template = this.getTemplate(set.species);
@@ -753,6 +753,11 @@ let Formats = [
 			}
 
 			return problems;
+		},
+		onValidateSet(set) {
+			if (set.species in {'Blaziken-Mega': 1, 'Gengar-Mega': 1, 'Mewtwo-Mega-Y': 1, 'Rayquaza-Mega': 1}) {
+				return [`${set.species} is banned.`];
+			}
 		},
 		onSwitchIn(pokemon) {
 			let item = pokemon.getItem();
