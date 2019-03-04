@@ -9,7 +9,7 @@ describe('White Herb 5678765567', function () {
 	afterEach(function () {
 		battle.destroy();
 	});
-	it('should use white herb during active turn', function () {
+	it('should use white herb after memento during active turn', function () {
 		battle = common.createBattle({gameType: 'doubles'});
 
 		battle.join('p1', 'Guest 1', 1, [
@@ -25,9 +25,45 @@ describe('White Herb 5678765567', function () {
 		battle.makeChoices('switch aerodactyl, switch rotom', 'move autotomize, move protect');
 
 		const holder = battle.p2.active[0];
-
 		assert.false.holdsItem(holder);
 		assert.statStage(holder, 'atk', -2);
+	});
+	it('should use white herb after growl during active turn', function () {
+		battle = common.createBattle({gameType: 'doubles'});
+
+		battle.join('p1', 'Guest 1', 1, [
+			{species: "chansey", ability: 'shellarmor', item: 'ironball', moves: ['growl']},
+			{species: "clefable", ability: 'levitate', item: 'ironball', moves: ['growl']},
+			{species: "aerodactyl", ability: 'shellarmor', item: 'ironball', moves: ['stealthrock']},
+			{species: "rotom", ability: 'levitate', item: 'ironball', moves: ['rest']}]);
+		battle.join('p2', 'Guest 2', 2, [
+			{species: "aegislash", ability: 'stancechange', item: 'whiteherb', moves: ['autotomize']},
+			{species: "pelipper", ability: 'sandveil', item: 'lifeorb', moves: ['protect']}]);
+
+		battle.makeChoices('move growl 0, move growl 0', 'move autotomize, move protect');
+
+		const holder = battle.p2.active[0];
+		assert.false.holdsItem(holder);
+		assert.statStage(holder, 'atk', -1);
+	});
+	it('should use white herb after partingshot during active turn', function () {
+		battle = common.createBattle({gameType: 'doubles'});
+
+		battle.join('p1', 'Guest 1', 1, [
+			{species: "chansey", ability: 'shellarmor', item: 'ironball', moves: ['partingshot']},
+			{species: "clefable", ability: 'levitate', item: 'ironball', moves: ['partingshot']},
+			{species: "aerodactyl", ability: 'shellarmor', item: 'ironball', moves: ['stealthrock']},
+			{species: "rotom", ability: 'levitate', item: 'ironball', moves: ['rest']}]);
+		battle.join('p2', 'Guest 2', 2, [
+			{species: "aegislash", ability: 'stancechange', item: 'whiteherb', moves: ['autotomize']},
+			{species: "pelipper", ability: 'sandveil', item: 'lifeorb', moves: ['protect']}]);
+
+		battle.makeChoices('move partingshot 0, move partingshot 0', 'move autotomize, move protect');
+		battle.makeChoices('switch aerodactyl, switch rotom', 'move autotomize, move protect');
+
+		const holder = battle.p2.active[0];
+		assert.false.holdsItem(holder);
+		assert.statStage(holder, 'atk', -1);
 	});
 	it('should use white herb after both intimidate', function () {
 		let battle;
