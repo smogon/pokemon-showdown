@@ -28,7 +28,7 @@
  * @license MIT license
  */
 
-import {readdirSync} from 'fs';
+import * as fs from 'fs';
 import * as path from 'path';
 
 import * as Data from './dex-data';
@@ -485,7 +485,7 @@ class ModdedDex {
 		} else if ((this.data.Movedex.hasOwnProperty(id) && (found = this.data.Movedex[id]).effect) ||
 							 (this.data.Abilities.hasOwnProperty(id) && (found = this.data.Abilities[id]).effect) ||
 							 (this.data.Items.hasOwnProperty(id) && (found = this.data.Items[id]).effect)) {
-			effect = new Data.PureEffect({name: found.name || name}, found.effect);
+			effect = new Data.PureEffect({name: found.name || name}, found.effect!);
 		} else if (id === 'recoil') {
 			effect = new Data.PureEffect({name: 'Recoil', effectType: 'Recoil'});
 		} else if (id === 'drain') {
@@ -725,8 +725,8 @@ class ModdedDex {
 	}
 
 	getRuleTable(format: Format, depth: number = 0): RuleTable {
-		let ruleTable = new Data.RuleTable();
 		if (format.ruleTable) return format.ruleTable;
+		let ruleTable = new Data.RuleTable();
 
 		let ruleset = format.ruleset.slice();
 		for (const ban of format.banlist) {
@@ -1307,7 +1307,7 @@ class ModdedDex {
 		if (!this.isBase) throw new Error(`This must be called on the base Dex`);
 		if (this.modsLoaded) return this;
 
-		for (const mod of readdirSync(MODS_DIR)) {
+		for (const mod of fs.readdirSync(MODS_DIR)) {
 			dexes[mod] = new ModdedDex(mod, true);
 		}
 		this.modsLoaded = true;

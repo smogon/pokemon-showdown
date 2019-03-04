@@ -493,6 +493,7 @@
 52.192.0.0,52.193.255.255,Amazon AWS,http://www.amazon.com/aws/
 52.196.0.0,52.215.255.255,Amazon AWS,http://www.amazon.com/aws/
 52.220.0.0,52.222.127.255,Amazon AWS,http://www.amazon.com/aws/
+54.37.136.0,54.37.139.255,OVH,https://www.ovh.pl/
 54.64.0.0,54.95.255.255,Amazon AWS,http://www.amazon.com/aws/
 54.144.0.0,54.179.255.255,Amazon AWS,http://www.amazon.com/aws/
 54.183.0.0,54.191.255.255,Amazon AWS,http://www.amazon.com/aws/
@@ -1888,6 +1889,7 @@
 162.248.72.0,162.248.79.255,Volume Drive,http://volumedrive.com
 162.248.160.0,162.248.167.255,KW Datacenter CA,http://www.kwdatacentre.com/
 162.250.120.0,162.250.127.255,InterServer.net,http://www.interserver.net/
+162.251.232.0,162.251.239.255,Fiberhub,https://www.fiberhub.com/
 162.252.240.0,162.252.243.255,KW Datacenter CA,http://www.kwdatacentre.com/
 162.254.132.0,162.254.135.255,Yesup Ecommerce Solutions,http://www.yesup.com/
 162.254.205.88,162.254.205.95,Privatix,https://privatix.com/
@@ -2430,6 +2432,7 @@
 192.198.96.0,192.198.127.255,servermania.com,http://www.servermania.com/
 192.198.192.0,192.198.207.255,Secure Servers,http://www.securedservers.com/
 192.199.240.0,192.199.255.255,wehostwebsites.com,http://wehostwebsites.com/
+192.200.16.0,192.200.31.255,Micfo,https://www.micfo.com/
 192.200.96.0,192.200.127.255,Gorilla Servers,http://gorillaservers.com/
 192.208.176.0,192.208.191.255,Continuum Data Centers,http://www.continuumdatacenters.com/
 192.210.48.0,192.210.63.255,Psychz Networks,http://psychz.net/

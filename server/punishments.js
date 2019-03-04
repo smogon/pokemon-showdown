@@ -15,7 +15,8 @@
 
 let Punishments = module.exports;
 
-const FS = require('../lib/fs');
+/** @type {typeof import('../lib/fs').FS} */
+const FS = require(/** @type {any} */('../.lib-dist/fs')).FS;
 
 const PUNISHMENT_FILE = 'config/punishments.tsv';
 const ROOM_PUNISHMENT_FILE = 'config/room-punishments.tsv';
@@ -473,7 +474,7 @@ Punishments.punish = function (user, punishment, recursionKeys) {
 		const [punishType, id, ...rest] = punishment;
 		keys.delete(id);
 		Punishments.appendPunishment({
-			keys: Array.from(keys),
+			keys: [...keys],
 			punishType: punishType,
 			rest: rest,
 		}, id, PUNISHMENT_FILE);
@@ -503,10 +504,10 @@ Punishments.punishName = function (userid, punishment) {
 		Punishments.ips.set(ip, punishment);
 	});
 	const [punishType, id, ...rest] = punishment;
-	let affected = Users.findUsers(Array.from(userids), Array.from(ips), {includeTrusted: PUNISH_TRUSTED, forPunishment: true});
+	let affected = Users.findUsers([...userids], [...ips], {includeTrusted: PUNISH_TRUSTED, forPunishment: true});
 	userids.delete(id);
 	Punishments.appendPunishment({
-		keys: Array.from(userids).concat(Array.from(ips)),
+		keys: [...userids, ...ips],
 		punishType: punishType,
 		rest: rest,
 	}, id, PUNISHMENT_FILE);
@@ -590,7 +591,7 @@ Punishments.roomPunish = function (room, user, punishment, recursionKeys) {
 		const [punishType, id, ...rest] = punishment;
 		keys.delete(id);
 		Punishments.appendPunishment({
-			keys: Array.from(keys),
+			keys: [...keys],
 			punishType: punishType,
 			rest: rest,
 		}, roomid + ':' + id, ROOM_PUNISHMENT_FILE);
@@ -624,10 +625,10 @@ Punishments.roomPunishName = function (room, userid, punishment) {
 		Punishments.roomIps.nestedSet(room.id, ip, punishment);
 	});
 	const [punishType, id, ...rest] = punishment;
-	let affected = Users.findUsers(Array.from(userids), Array.from(ips), {includeTrusted: PUNISH_TRUSTED, forPunishment: true});
+	let affected = Users.findUsers([...userids], [...ips], {includeTrusted: PUNISH_TRUSTED, forPunishment: true});
 	userids.delete(id);
 	Punishments.appendPunishment({
-		keys: Array.from(userids).concat(Array.from(ips)),
+		keys: [...userids, ...ips],
 		punishType: punishType,
 		rest: rest,
 	}, room.id + ':' + id, ROOM_PUNISHMENT_FILE);

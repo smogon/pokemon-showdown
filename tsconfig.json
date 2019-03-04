@@ -11,7 +11,7 @@
     },
     "types": ["node"],
     "exclude": [
-        "./.sim-dist/*",
+        "./.*-dist/*",
         "./server/index.js",
         "./server/chat-commands.js"
     ],

@@ -304,7 +304,7 @@ interface EffectData extends EventMethods {
 	affectsFainted?: boolean
 	counterMax?: number
 	desc?: string
-	drain?: number[]
+	drain?: [number, number]
 	duration?: number
 	effect?: Partial<EffectData>
 	effectType?: string
@@ -372,10 +372,10 @@ interface ModdedEffectData extends Partial<EffectData> {
 	inherit?: boolean
 }
 
-type EffectTypes = 'Effect' | 'Pokemon' | 'Move' | 'Item' | 'Ability' | 'Format' | 'Ruleset' | 'Weather' | 'Status' | 'Rule' | 'ValidatorRule'
+type EffectType = 'Effect' | 'Pokemon' | 'Move' | 'Item' | 'Ability' | 'Format' | 'Ruleset' | 'Weather' | 'Status' | 'Rule' | 'ValidatorRule'
 
 interface BasicEffect extends EffectData {
-	effectType: EffectTypes
+	effectType: EffectType
 	exists: boolean
 	flags: AnyObject
 	fullname: string
@@ -720,17 +720,17 @@ interface RuleTable extends Map<string, string> {
 	getReason: (key: string) => string
 }
 
-interface Format extends BasicEffect, FormatsData {
-	effectType: 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule'
-	baseRuleset: string[]
-	banlist: string[]
-	customRules: string[] | null
-	defaultLevel: number
-	maxLevel: number
-	noLog: boolean
-	ruleset: string[]
+interface Format extends Readonly<BasicEffect & FormatsData> {
+	readonly effectType: 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule'
+	readonly baseRuleset: string[]
+	readonly banlist: string[]
+	readonly customRules: string[] | null
+	readonly defaultLevel: number
+	readonly maxLevel: number
+	readonly noLog: boolean
+	readonly ruleset: string[]
+	readonly unbanlist: string[]
 	ruleTable: RuleTable | null
-	unbanlist: string[]
 }
 
 interface BattleScriptsData {
@@ -807,15 +807,15 @@ interface ModdedTypeData extends Partial<TypeData> {
 	inherit?: boolean
 }
 
-interface TypeInfo extends TypeData {
-	effectType: 'Type' | 'EffectType'
-	exists: boolean
-	gen: number
-	HPdvs: SparseStatsTable
-	HPivs: SparseStatsTable
-	id: string
-	name: string
-	toString: () => string
+interface TypeInfo extends Readonly<TypeData> {
+	readonly effectType: 'Type' | 'EffectType'
+	readonly exists: boolean
+	readonly gen: number
+	readonly HPdvs: SparseStatsTable
+	readonly HPivs: SparseStatsTable
+	readonly id: string
+	readonly name: string
+	readonly toString: () => string
 }
 
 interface Actions {

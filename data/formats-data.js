@@ -3101,7 +3101,7 @@ let BattleFormatsData = {
 		encounters: [
 			{"generation": 4, "level": 20},
 		],
-		tier: "NU",
+		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
 	houndoommega: {
@@ -3364,7 +3364,7 @@ let BattleFormatsData = {
 			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["scratch", "growl", "focusenergy", "ember"]},
 			{"generation": 6, "level": 10, "gender": "M", "isHidden": true, "moves": ["scratch", "growl", "focusenergy", "ember"], "pokeball": "cherishball"},
 		],
-		tier: "LC Uber",
+		tier: "LC",
 	},
 	combusken: {
 		randomBattleMoves: ["flareblitz", "skyuppercut", "protect", "swordsdance", "shadowclaw"],
@@ -6756,7 +6756,7 @@ let BattleFormatsData = {
 		doublesTier: "DOU",
 	},
 	kyurem: {
-		randomBattleMoves: ["dracometeor", "icebeam", "earthpower", "outrage", "substitute", "dragonpulse", "focusblast", "roost"],
+		randomBattleMoves: ["dracometeor", "icebeam", "earthpower", "outrage", "substitute", "focusblast", "roost"],
 		randomDoubleBattleMoves: ["substitute", "icebeam", "dracometeor", "dragonpulse", "focusblast", "glaciate", "earthpower", "roost", "protect"],
 		eventPokemon: [
 			{"generation": 5, "level": 75, "shiny": 1, "moves": ["glaciate", "dragonpulse", "imprison", "endeavor"]},
@@ -7807,7 +7807,7 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	typenull: {
-		randomBattleMoves: ["return", "uturn", "rest", "sleeptalk"],
+		randomBattleMoves: ["return", "uturn", "swordsdance", "rest", "sleeptalk"],
 		eventPokemon: [
 			{"generation": 7, "level": 40, "shiny": 1, "perfectIVs": 3, "moves": ["crushclaw", "scaryface", "xscissor", "takedown"]},
 			{"generation": 7, "level": 60, "shiny": 1, "perfectIVs": 3, "moves": ["metalsound", "ironhead", "doublehit", "airslash"]},
