@@ -2399,7 +2399,7 @@ const pages = {
 			return buf + `<div class="notice message-error">Access denied.</div>`;
 		}
 		if (!this.room.chatRoomData) {
-			return buf + `<div class="notice message-error">This page is unavailable in temporary rooms</div>`;
+			return buf + `<div class="notice message-error">This page is unavailable in temporary rooms / non-existent rooms.</div>`;
 		}
 		const store = new Map();
 		const muteQueue = this.room.muteQueue;
