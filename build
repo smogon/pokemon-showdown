@@ -10,10 +10,19 @@ try {
 var child_process = require('child_process');
 var fs = require('fs');
 var path = require('path');
+var replace = require('replace');
 
 function shell(cmd) { child_process.execSync(cmd, {stdio: 'inherit', cwd: __dirname}); }
 function sucrase(src, out) {
-  shell(`npx sucrase -q ${src} -d ${out} --transforms typescript,imports --enable-legacy-typescript-module-interop`);
+	shell(`npx sucrase -q ${src} -d ${out} --transforms typescript,imports --enable-legacy-typescript-module-interop`);
+}
+function rewrite(src, out, dist) {
+	replace({
+		regex: `(require\\\(.*?)(${src})(.*?\\\))`,
+		replacement: `$1${out}$3`,
+		paths: fs.readdirSync(dist).map(f => path.join(__dirname, dist, f)),
+		silent: true,
+	});
 }
 
 try {
@@ -25,7 +34,7 @@ try {
 
 sucrase('./sim', './.sim-dist');
 sucrase('./lib', './.lib-dist');
-shell('npx replace --silent \'(require\\\(.*?)(lib)(.*?\\\))\' \'$1.lib-dist$3\' .sim-dist/*');
+rewrite('lib', '.lib-dist', '.sim-dist');
 
 // Make sure config.js exists. If not, copy it over synchronously from
 // config-example.js, since it's needed before we can start the server
