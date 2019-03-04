@@ -29,6 +29,9 @@ let BattleStatuses = {
 		onSwitchIn(pokemon) {
 			pokemon.addVolatile('brnattackdrop');
 		},
+		onAfterSwitchInSelf(pokemon) {
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
+		},
 	},
 	par: {
 		name: 'par',
@@ -113,6 +116,9 @@ let BattleStatuses = {
 		onAfterMoveSelf(pokemon) {
 			let toxicCounter = pokemon.volatiles['residualdmg'] ? pokemon.volatiles['residualdmg'].counter : 1;
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * toxicCounter, pokemon);
+		},
+		onAfterSwitchInSelf(pokemon) {
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		},
 	},
 	tox: {
