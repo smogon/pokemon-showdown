@@ -18,9 +18,11 @@ function sucrase(src, out) {
 }
 function rewrite(src, out, dist) {
 	replace({
+		async: true,
+		paths: [dist],
+		recursive: true,
 		regex: `(require\\\(.*?)(${src})(.*?\\\))`,
 		replacement: `$1${out}$3`,
-		paths: fs.readdirSync(dist).map(f => path.join(__dirname, dist, f)),
 		silent: true,
 	});
 }
