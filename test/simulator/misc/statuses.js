@@ -205,3 +205,76 @@ describe('Toxic Poison [Gen 1]', function () {
 		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 6);
 	});
 });
+
+
+describe('Toxic Poison [Gen 2]', function () {
+	afterEach(function () {
+		battle.destroy();
+	});
+
+	it('should not affect Leech Seed damage counter', function () {
+		battle = common.gen(2).createBattle([
+			[{species: 'Venusaur', moves: ['toxic', 'leechseed']}],
+			[{species: 'Chansey', moves: ['splash']}],
+		]);
+		battle.makeChoices('move toxic', 'move splash');
+		let pokemon = battle.p2.active[0];
+		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16));
+		battle.makeChoices('move leechseed', 'move splash');
+		// (1/16) + (2/16) + (1/8) = (5/16)
+		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 5);
+	});
+
+	it('should pass the damage counter to Pokemon with Baton Pass', function () {
+		battle = common.gen(2).createBattle([
+			[{species: 'Smeargle', moves: ['toxic', 'sacredfire', 'splash']}],
+			[
+				{species: 'Chansey', moves: ['splash']},
+				{species: 'Celebi', moves: ['batonpass', 'splash']},
+			],
+		]);
+		battle.resetRNG(); // Guarantee Sacred Fire burns
+		battle.makeChoices('move sacredfire', 'move splash');
+		let pokemon = battle.p2.active[0];
+		battle.resetRNG(); // Guarantee Toxic hits.
+		battle.makeChoices('move toxic', 'switch 2');
+		battle.makeChoices('move splash', 'move splash');
+		battle.makeChoices('move splash', 'move splash');
+		battle.makeChoices('move splash', 'move batonpass');
+		battle.makeChoices('pass', 'switch 2');
+		let hp = pokemon.hp;
+		battle.makeChoices('move splash', 'move splash');
+		assert.strictEqual(hp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 4);
+
+		// Only hint about this once per battle, not every turn.
+		assert.strictEqual(battle.log.filter(m => m.startsWith('|-hint')).length, 1);
+
+		// Damage counter should be removed on regular switch out
+		battle.makeChoices('move splash', 'switch 2');
+		hp = pokemon.hp;
+		battle.makeChoices('move splash', 'switch 2');
+		assert.strictEqual(hp - pokemon.hp, Math.floor(pokemon.maxhp / 8));
+	});
+
+	it('should not have its damage counter affected by Heal Bell', function () {
+		battle = common.gen(2).createBattle([
+			[{species: 'Smeargle', moves: ['toxic', 'sacredfire', 'splash']}],
+			[{species: 'Chansey', moves: ['splash', 'healbell']}],
+		]);
+		battle.makeChoices('move toxic', 'move splash');
+		let pokemon = battle.p2.active[0];
+		battle.makeChoices('move splash', 'move healbell');
+		battle.resetRNG(); // Guarantee Sacred Fire burns
+		battle.makeChoices('move sacredfire', 'move splash');
+		let hp = pokemon.hp;
+		battle.makeChoices('move splash', 'move splash');
+		assert.strictEqual(hp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 3);
+		hp = pokemon.hp;
+
+		battle.makeChoices('move splash', 'move healbell');
+		battle.resetRNG(); // Guarantee Toxic hits
+		battle.makeChoices('move toxic', 'move splash');
+		// Toxic counter should be reset by a successful Toxic
+		assert.strictEqual(hp - pokemon.hp, Math.floor(pokemon.maxhp / 16));
+	});
+});
