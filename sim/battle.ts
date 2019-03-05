@@ -2989,7 +2989,7 @@ export class Battle extends Dex.ModdedDex {
 		return false;
 	}
 
-	hint(hint: string, once?: boolean, sideid?: 'p1'|'p2') {
+	hint(hint: string, once?: boolean, sideid?: 'p1' | 'p2') {
 		if (this.hints.has(hint)) return;
 
 		if (sideid) {
