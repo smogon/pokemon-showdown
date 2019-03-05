@@ -232,7 +232,7 @@ let BattleStatuses = {
 		},
 		onAfterMoveSelfPriority: 100,
 		onAfterMoveSelf(pokemon) {
-			pokemon.volatiles['residualdmg'].counter++;
+			if (['brn', 'psn', 'tox'].includes(pokemon.status)) pokemon.volatiles['residualdmg'].counter++;
 		},
 	},
 };
