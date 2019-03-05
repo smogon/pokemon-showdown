@@ -830,8 +830,11 @@ let BattleFormats = {
 	inversemod: {
 		effectType: 'Rule',
 		name: 'Inverse Mod',
-		desc: "The mod for Inverse Battle which inverts the type effectiveness chart, swapping resistances and weaknesses with each other",
+		desc: "The mod for Inverse Battle which inverts the type effectiveness chart; weaknesses become resistances, while resistances and immunities become weaknesses",
 		onNegateImmunity: false,
+		onBegin() {
+			this.add('rule', 'Inverse Mod: Weaknesses become resistances, while resistances and immunities become weaknesses.');
+		},
 		onEffectiveness(typeMod, target, type, move) {
 			// The effectiveness of Freeze Dry on Water isn't reverted
 			if (move && move.id === 'freezedry' && type === 'Water') return;
