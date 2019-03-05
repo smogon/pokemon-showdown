@@ -10,25 +10,38 @@ try {
 var child_process = require('child_process');
 var fs = require('fs');
 var path = require('path');
-var replace = require('replace');
 
-function shell(cmd) { child_process.execSync(cmd, {stdio: 'inherit', cwd: __dirname}); }
+function shell(cmd) {
+	child_process.execSync(cmd, {stdio: 'inherit', cwd: __dirname});
+}
+
 function sucrase(src, out) {
 	shell(`npx sucrase -q ${src} -d ${out} --transforms typescript,imports --enable-legacy-typescript-module-interop`);
 }
+
+// TODO: switch to async approach with bounded number of open files.
+function replace(regex, replacement, file) {
+	var stats = fs.lstatSync(file);
+	if (stats.isSymbolicLink()) return;
+	if (stats.isFile()) {
+		var text = fs.readFileSync(file, "utf-8");
+		var match = text.match(regex);
+		if (!match) return;
+		fs.writeFileSync(file, text.replace(regex, replacement));
+	} else if (stats.isDirectory()) {
+		var files = fs.readdirSync(file);
+		for (var i = 0; i < files.length; i++) {
+			replace(regex, replacement, path.join(file, files[i]));
+		}
+	}
+}
+
 function rewrite(src, out, dist) {
-	replace({
-		async: true,
-		paths: [path.join(__dirname, dist)],
-		recursive: true,
-		regex: `(require\\\(.*?)(${src})(.*?\\\))`,
-		replacement: `$1${out}$3`,
-		silent: true,
-	});
+	replace(new RegExp(`(require\\\(.*?)(${src})(.*?\\\))`), `$1${out}$3`, path.join(__dirname, dist));
 }
 
 try {
-	require.resolve('replace');
+	require.resolve('sucrase');
 } catch (e) {
 	console.log('Installing dependencies...');
 	shell('npm install');
