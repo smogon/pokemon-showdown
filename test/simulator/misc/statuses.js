@@ -268,7 +268,7 @@ describe('Toxic Poison [Gen 2]', function () {
 		battle.makeChoices('move sacredfire', 'move splash');
 		let hp = pokemon.hp;
 		battle.makeChoices('move splash', 'move splash');
-		assert.strictEqual(hp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 4);
+		assert.strictEqual(hp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 3);
 		hp = pokemon.hp;
 
 		battle.makeChoices('move splash', 'move healbell');
