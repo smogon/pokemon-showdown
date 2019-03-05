@@ -147,14 +147,7 @@ let BattleAbilities = {
 			}
 
 			if (!activated) {
-				this.add('split');
-				for (const line of [false, this.sides[0], this.sides[1], true]) {
-					if (line === true || line === pokemon.side) {
-						this.add('-hint', 'In Gen 4, Intimidate does not activate if every target has a Substitute (or the Substitute was just broken by U-turn).');
-					} else {
-						this.log.push('');
-					}
-				}
+				this.hint('In Gen 4, Intimidate does not activate if every target has a Substitute (or the Substitute was just broken by U-turn).', false, pokemon.side.id);
 				return;
 			}
 			this.add('-ability', pokemon, 'Intimidate', 'boost');
@@ -165,7 +158,7 @@ let BattleAbilities = {
 				if (target.volatiles['substitute']) {
 					this.add('-immune', target);
 				} else if (target.volatiles['substitutebroken'] && target.volatiles['substitutebroken'].move === 'uturn') {
-					this.add('-hint', 'In Gen 4, if U-turn breaks Substitute the incoming Intimidate does nothing');
+					this.hint('In Gen 4, if U-turn breaks Substitute the incoming Intimidate does nothing.');
 				} else {
 					this.boost({atk: -1}, target, pokemon);
 				}
