@@ -2993,6 +2993,7 @@ export class Battle extends Dex.ModdedDex {
 		if (this.hints.has(hint)) return;
 
 		if (sideid) {
+			this.add('split');
 			for (const line of [false, this.sides[0], this.sides[1], true]) {
 				if (line === true || (line && line.id === sideid)) {
 					this.add('-hint', hint);
