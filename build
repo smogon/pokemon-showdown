@@ -19,21 +19,29 @@ function sucrase(src, out) {
 	shell(`npx sucrase -q ${src} -d ${out} --transforms typescript,imports --enable-legacy-typescript-module-interop`);
 }
 
-// TODO: switch to async approach with bounded number of open files.
 function replace(regex, replacement, file) {
-	var stats = fs.lstatSync(file);
-	if (stats.isSymbolicLink()) return;
-	if (stats.isFile()) {
-		var text = fs.readFileSync(file, "utf-8");
-		var match = text.match(regex);
-		if (!match) return;
-		fs.writeFileSync(file, text.replace(regex, replacement));
-	} else if (stats.isDirectory()) {
-		var files = fs.readdirSync(file);
-		for (var i = 0; i < files.length; i++) {
-			replace(regex, replacement, path.join(file, files[i]));
+	fs.lstat(file, function (err, stats) {
+		if (err) throw err;
+		if (stats.isSymbolicLink()) return;
+		if (stats.isFile()) {
+			if (!file.endsWith('.js')) return;
+			fs.readFile(file, "utf-8", function (err, text) {
+					if (err) throw err;
+					var match = text.match(regex);
+					if (!match) return;
+					fs.writeFile(file, text.replace(regex, replacement), function (err) {
+						if (err) throw err;
+					});
+				});
+		} else if (stats.isDirectory()) {
+			fs.readdir(file, function (err, files) {
+				if (err) throw err;
+				for (var i = 0; i < files.length; i++) {
+					replace(regex, replacement, path.join(file, files[i]));
+				}
+			});
 		}
-	}
+	});
 }
 
 function rewrite(src, out, dist) {
