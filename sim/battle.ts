@@ -92,6 +92,7 @@ export class Battle extends Dex.ModdedDex {
 	firstStaleWarned?: boolean;
 	staleWarned?: boolean;
 	activeTurns?: number;
+	hints: Set<string>;
 
 	constructor(options: BattleOptions) {
 		let format = Dex.getFormat(options.formatid, true);
@@ -157,6 +158,7 @@ export class Battle extends Dex.ModdedDex {
 		// bound function for faster speedSort
 		// (so speedSort doesn't need to bind before use)
 		this.comparePriority = this.comparePriority.bind(this);
+		this.hints = new Set();
 
 		const inputOptions: {formatid: string, seed: PRNGSeed, rated?: string | true} = {formatid: options.formatid, seed: this.prng.seed};
 		if (this.rated) inputOptions.rated = this.rated;
@@ -2985,6 +2987,24 @@ export class Battle extends Dex.ModdedDex {
 			return true;
 		}
 		return false;
+	}
+
+	hint(hint: string, once?: boolean, sideid?: 'p1' | 'p2') {
+		if (this.hints.has(hint)) return;
+
+		if (sideid) {
+			for (const line of [false, this.sides[0], this.sides[1], true]) {
+				if (line === true || (line && line.id === sideid)) {
+					this.add('-hint', hint);
+				} else {
+					this.log.push('');
+				}
+			}
+		} else {
+			this.add('-hint', hint);
+		}
+
+		if (once) this.hints.add(hint);
 	}
 
 	add(...parts: (string | number | boolean | ((side: Side | boolean) => string) | AnyObject | null | undefined)[]) {
