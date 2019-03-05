@@ -6143,7 +6143,8 @@ let BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onHit(target, source) {
+		onHit(target, source, move) {
+			if (move.hit === 1) return;
 			source.addVolatile('furycutter');
 		},
 		effect: {
@@ -16438,20 +16439,30 @@ let BattleMovedex = {
 			noCopy: true,
 			onStart(target) {
 				this.effectData.layers = 1;
+				this.effectData.def = 0;
+				this.effectData.spd = 0;
 				this.add('-start', target, 'stockpile' + this.effectData.layers);
+				let [curDef, curSpD] = [target.boosts.def, target.boosts.spd];
 				this.boost({def: 1, spd: 1}, target, target);
+				if (curDef !== target.boosts.def) this.effectData.def--;
+				if (curSpD !== target.boosts.spd) this.effectData.spd--;
 			},
 			onRestart(target) {
 				if (this.effectData.layers >= 3) return false;
 				this.effectData.layers++;
 				this.add('-start', target, 'stockpile' + this.effectData.layers);
+				const curDef = target.boosts.def;
+				const curSpD = target.boosts.spd;
 				this.boost({def: 1, spd: 1}, target, target);
+				if (curDef !== target.boosts.def) this.effectData.def--;
+				if (curSpD !== target.boosts.spd) this.effectData.spd--;
 			},
 			onEnd(target) {
-				let layers = this.effectData.layers * -1;
-				this.effectData.layers = 0;
-				this.boost({def: layers, spd: layers}, target, target);
+				this.boost({def: this.effectData.def, spd: this.effectData.spd}, target, target);
 				this.add('-end', target, 'Stockpile');
+				if (this.effectData.def !== this.effectData.layers * -1 || this.effectData.spd !== this.effectData.layers * -1) {
+					this.add('-hint', "In Gen 7, Stockpile keeps track of how many times it successfully altered each stat individually.");
+				}
 			},
 		},
 		secondary: null,

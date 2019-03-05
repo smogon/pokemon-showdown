@@ -23,11 +23,7 @@ let BattleStatuses = {
 		},
 		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf(pokemon) {
-			let toxicCounter = 1;
-			if (pokemon.volatiles['residualdmg']) {
-				pokemon.volatiles['residualdmg'].counter++;
-				toxicCounter = pokemon.volatiles['residualdmg'].counter;
-			}
+			let toxicCounter = pokemon.volatiles['residualdmg'] ? pokemon.volatiles['residualdmg'].counter : 1;
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * toxicCounter, pokemon);
 		},
 		onSwitchIn(pokemon) {
@@ -118,11 +114,7 @@ let BattleStatuses = {
 		},
 		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf(pokemon) {
-			let toxicCounter = 1;
-			if (pokemon.volatiles['residualdmg']) {
-				pokemon.volatiles['residualdmg'].counter++;
-				toxicCounter = pokemon.volatiles['residualdmg'].counter;
-			}
+			let toxicCounter = pokemon.volatiles['residualdmg'] ? pokemon.volatiles['residualdmg'].counter : 1;
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * toxicCounter, pokemon);
 		},
 		onAfterSwitchInSelf(pokemon) {
@@ -130,27 +122,8 @@ let BattleStatuses = {
 		},
 	},
 	tox: {
-		name: 'tox',
-		id: 'tox',
-		num: 0,
-		effectType: 'Status',
-		onStart(target) {
-			this.add('-status', target, 'tox');
-			if (!target.volatiles['residualdmg']) target.addVolatile('residualdmg');
-			target.volatiles['residualdmg'].counter = 0;
-		},
+		inherit: true,
 		onAfterMoveSelfPriority: 2,
-		onAfterMoveSelf(pokemon) {
-			pokemon.volatiles['residualdmg'].counter++;
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter, pokemon, pokemon);
-		},
-		onSwitchIn(pokemon) {
-			// Regular poison status and damage after a switchout -> switchin.
-			pokemon.setStatus('psn');
-		},
-		onAfterSwitchInSelf(pokemon) {
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
-		},
 	},
 	confusion: {
 		name: 'confusion',
