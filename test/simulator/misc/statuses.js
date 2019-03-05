@@ -244,7 +244,7 @@ describe('Toxic Poison [Gen 2]', function () {
 		battle.makeChoices('pass', 'switch 2');
 		let hp = pokemon.hp;
 		battle.makeChoices('move splash', 'move splash');
-		assert.strictEqual(hp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 3);
+		assert.strictEqual(hp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 4);
 
 		// Only hint about this once per battle, not every turn.
 		assert.strictEqual(battle.log.filter(m => m.startsWith('|-hint')).length, 1);
