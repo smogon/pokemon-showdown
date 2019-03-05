@@ -978,7 +978,7 @@ class RandomTeams extends Dex.ModdedDex {
 					if (hasMove['earthquake'] && counter.setupType !== 'Special') rejected = true;
 					break;
 				case 'icebeam':
-					if (hasMove['blizzard'] || hasMove['freezedry']) rejected = true;
+					if (hasMove['blizzard'] || hasMove['freezedry'] || hasMove['icepunch']) rejected = true;
 					break;
 				case 'iceshard':
 					if (hasMove['freezedry']) rejected = true;
