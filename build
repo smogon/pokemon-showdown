@@ -19,7 +19,7 @@ function sucrase(src, out) {
 function rewrite(src, out, dist) {
 	replace({
 		async: true,
-		paths: [dist],
+		paths: [path.join(__dirname, dist)],
 		recursive: true,
 		regex: `(require\\\(.*?)(${src})(.*?\\\))`,
 		replacement: `$1${out}$3`,
