@@ -602,6 +602,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	readonly isPrimal?: boolean;
 	/** True if a pokemon is a forme that is only accessible in battle. */
 	readonly battleOnly?: boolean;
+	readonly originalMega?: string;
 
 	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
 		super(data, ...moreData);
