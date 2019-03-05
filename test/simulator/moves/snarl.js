@@ -15,8 +15,8 @@ describe('Snarl', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Deoxys-Attack", ability: 'victorystar', item: 'laggingtail', moves: ['splash', 'snarl']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest']}]);
 
+		battle.makeChoices('move Splash', 'move Substitute');
 		battle.makeChoices('move Snarl', 'move Rest');
-		battle.makeChoices('move Rest', 'move Snarl');
 
 		assert.strictEqual(battle.p2.active[0].item, '');
 	});
