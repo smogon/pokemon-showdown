@@ -1876,7 +1876,7 @@ export class Battle extends Dex.ModdedDex {
 
 		// In Gen 1 BUT NOT STADIUM, Substitute also takes confusion and HJK recoil damage
 		if (this.gen <= 1 && this.currentMod !== 'stadium' &&
-			['confusion', 'highjumpkick'].includes(effect.id) && target.volatiles['substitute']) {
+			['confusion', 'jumpkick', 'highjumpkick'].includes(effect.id) && target.volatiles['substitute']) {
 			target.volatiles['substitute'].hp -= damage;
 			if (target.volatiles['substitute'].hp <= 0) {
 				target.removeVolatile('substitute');

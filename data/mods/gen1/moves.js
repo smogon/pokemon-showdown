@@ -537,7 +537,9 @@ let BattleMovedex = {
 		desc: "If this attack misses the target, the user takes 1 HP of crash damage. If the user has a substitute, the crash damage is dealt to the target's substitute if it has one, otherwise no crash damage is dealt.",
 		shortDesc: "User takes 1 HP of damage if it misses.",
 		onMoveFail(target, source, move) {
-			this.damage(1, source);
+			if (!target.types.includes('Ghost')) {
+				this.directDamage(1, source);
+			}
 		},
 	},
 	karatechop: {
