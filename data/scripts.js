@@ -346,14 +346,14 @@ let BattleScripts = {
 	},
 	tryImmunityEvent(targets, pokemon, move) {
 		let hitResults = this.runEvent('TryImmunity', targets, pokemon, move);
-		targets.forEach((target, index) => {
-			if (hitResults[index] === false) {
+		for (let i = 0; i < targets.length; i++) {
+			if (hitResults[i] === false) {
 				if (!move.spreadHit) this.attrLastMove('[miss]');
-				this.add('-miss', pokemon, target);
+				this.add('-miss', pokemon, targets[i]);
 			} else {
-				hitResults[index] = hitResults[index] || false;
+				hitResults[i] = hitResults[i] || false;
 			}
-		});
+		}
 		return hitResults;
 	},
 	typeImmunity(targets, pokemon, move) {

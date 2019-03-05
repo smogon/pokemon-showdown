@@ -91,13 +91,13 @@ let BattleScripts = {
 	},
 	tryImmunityEvent(targets, pokemon, move) {
 		let hitResults = this.runEvent('TryImmunity', targets, pokemon, move);
-		targets.forEach((target, index) => {
-			if (!hitResults[index]) {
+		for (let i = 0; i < targets.length; i++) {
+			if (!hitResults[i]) {
 				this.attrLastMove('[miss]');
-				this.add('-miss', pokemon, target);
+				this.add('-miss', pokemon, targets[i]);
 			}
-			hitResults[index] = hitResults[index] || false;
-		});
+			hitResults[i] = hitResults[i] || false;
+		}
 		return hitResults;
 	},
 
