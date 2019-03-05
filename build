@@ -24,6 +24,7 @@ function replace(regex, replacement, file) {
 		if (err) throw err;
 		if (stats.isSymbolicLink()) return;
 		if (stats.isFile()) {
+			if (!file.endsWith('.js')) return;
 			fs.readFile(file, "utf-8", function (err, text) {
 					if (err) throw err;
 					var match = text.match(regex);
