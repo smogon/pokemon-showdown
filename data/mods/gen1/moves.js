@@ -518,7 +518,7 @@ let BattleMovedex = {
 		shortDesc: "User takes 1 HP of damage if it misses.",
 		onMoveFail(target, source, move) {
 			if (!target.types.includes('Ghost')) {
-				this.directDamage(1, source);
+				this.directDamage(1, source, target);
 			}
 		},
 	},
@@ -538,7 +538,7 @@ let BattleMovedex = {
 		shortDesc: "User takes 1 HP of damage if it misses.",
 		onMoveFail(target, source, move) {
 			if (!target.types.includes('Ghost')) {
-				this.directDamage(1, source);
+				this.directDamage(1, source, target);
 			}
 		},
 	},
