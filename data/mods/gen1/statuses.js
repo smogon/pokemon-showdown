@@ -156,18 +156,8 @@ let BattleStatuses = {
 			}
 			this.add('-activate', pokemon, 'confusion');
 			if (!this.randomChance(128, 256)) {
-				// We check here to implement the substitute bug since otherwise we need to change directDamage to take target.
 				let damage = Math.floor(Math.floor(((Math.floor(2 * pokemon.level / 5) + 2) * pokemon.getStat('atk') * 40) / pokemon.getStat('def', false)) / 50) + 2;
-				if (pokemon.volatiles['substitute']) {
-					// If there is Substitute, we check for opposing substitute.
-					if (target.volatiles['substitute']) {
-						// Damage that one instead.
-						this.directDamage(damage, target);
-					}
-				} else {
-					// No substitute, direct damage to itself.
-					this.directDamage(damage);
-				}
+				this.directDamage(damage, pokemon, target);
 				pokemon.removeVolatile('bide');
 				pokemon.removeVolatile('twoturnmove');
 				pokemon.removeVolatile('fly');
