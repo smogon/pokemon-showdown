@@ -1877,14 +1877,22 @@ export class Battle extends Dex.ModdedDex {
 		// In Gen 1 BUT NOT STADIUM, Substitute also takes confusion and HJK recoil damage
 		if (this.gen <= 1 && this.currentMod !== 'stadium' &&
 			['confusion', 'jumpkick', 'highjumpkick'].includes(effect.id) && target.volatiles['substitute']) {
-			target.volatiles['substitute'].hp -= damage;
-			if (target.volatiles['substitute'].hp <= 0) {
-				target.removeVolatile('substitute');
-				target.subFainted = true;
+
+			const hint = "In Gen 1, if a Pokemon with a Substitute hurts itself due to confusion or Jump Kick/Hi Jump Kick recoil and the target";
+			if (source && source.volatiles['substitute']) {
+				source.volatiles['substitute'].hp -= damage;
+				if (source.volatiles['substitute'].hp <= 0) {
+					source.removeVolatile('substitute');
+					source.subFainted = true;
+				} else {
+					this.add('-activate', source, 'Substitute', '[damage]');
+				}
+				this.hint(hint + " has a Substitute, the target's Substitute takes the damage.");
+				return damage;
 			} else {
-				this.add('-activate', target, 'Substitute', '[damage]');
+				this.hint(hint + " does not have a Substitute there is no damage dealt.");
+				return 0;
 			}
-			return damage;
 		}
 
 		damage = target.damage(damage, source, effect);
