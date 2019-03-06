@@ -1892,7 +1892,6 @@ export class Battle extends Dex.ModdedDex {
 			} else {
 				this.hint(hint + " does not have a Substitute there is no damage dealt.");
 				return 0;
-
 			}
 		}
 

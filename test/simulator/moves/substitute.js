@@ -53,24 +53,30 @@ describe('Substitute', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Hitmonlee', moves: ['substitute', 'highjumpkick']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Hitmonchan', moves: ['substitute', 'agility']}]);
 		battle.makeChoices('move substitute', 'move substitute');
+
+		let subhp = battle.p1.active[0].volatiles['substitute'].hp;
+		assert.strictEqual(subhp, battle.p2.active[0].volatiles['substitute'].hp);
+
 		battle.resetRNG(); // Make Hi Jump Kick miss and cause recoil.
 		battle.makeChoices('move highjumpkick', 'move agility');
 
 		// Both Pokemon had a substitute, so the *target* Substitute takes recoil damage.
 		let pokemon = battle.p1.active[0];
 		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
-		assert.strictEqual(pokemon.volatiles['substitute'].hp, Math.floor(pokemon.maxhp / 4));
+		assert.strictEqual(pokemon.volatiles['substitute'].hp, subhp);
 		pokemon = battle.p2.active[0];
 		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
-		assert.strictEqual(pokemon.volatiles['substitute'].hp, Math.floor(pokemon.maxhp / 4) - 1);
+		assert.strictEqual(pokemon.volatiles['substitute'].hp, subhp - 1);
 
+		// Hi Jump Kick hits and breaks the Substitite.
+		battle.makeChoices('move highjumpkick', 'move agility');
 		battle.resetRNG(); // Make Hi Jump Kick miss and cause recoil.
 		battle.makeChoices('move highjumpkick', 'move agility');
 
-		// Only P1 had a substitute, so no one takes recoil damage.
+		// Only P1 has a substitute, so no one takes recoil damage.
 		pokemon = battle.p1.active[0];
 		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
-		assert.strictEqual(pokemon.volatiles['substitute'].hp, Math.floor(pokemon.maxhp / 4));
+		assert.strictEqual(pokemon.volatiles['substitute'].hp, subhp);
 		pokemon = battle.p2.active[0];
 		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
 	});
