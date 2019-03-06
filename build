@@ -52,7 +52,7 @@ try {
 	require.resolve('sucrase');
 } catch (e) {
 	console.log('Installing dependencies...');
-	shell('npm install');
+	shell('npm install --production');
 }
 
 sucrase('./sim', './.sim-dist');
