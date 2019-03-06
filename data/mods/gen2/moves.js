@@ -853,7 +853,7 @@ let BattleMovedex = {
 				}
 				if (move.drain) {
 					this.add('-miss', source);
-					this.hint("In Gen 1, draining moves always miss against Substitute.");
+					this.hint("In Gen 2, draining moves always miss against Substitute.");
 					return null;
 				}
 				if (move.category === 'Status') {

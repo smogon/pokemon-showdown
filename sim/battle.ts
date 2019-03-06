@@ -2718,7 +2718,7 @@ export class Battle extends Dex.ModdedDex {
 					// in gen 2-4, the switch still happens
 					action.priority = -101;
 					this.queue.unshift(action);
-					this.hint('Pursuit target fainted, switch continues in Gen 2-4');
+					this.hint("Previously chosen switches continue in Gen 2-4 after a Pursuit target faints.");
 					break;
 				}
 				// in gen 5+, the switch is cancelled
@@ -2726,7 +2726,7 @@ export class Battle extends Dex.ModdedDex {
 				break;
 			}
 			if (action.target.isActive) {
-				this.hint('Switch failed; switch target is already active');
+				this.hint("A switch failed because the Pokémon trying to switch in is already in.");
 				break;
 			}
 			if (action.choice === 'switch' && action.pokemon.activeTurns === 1) {

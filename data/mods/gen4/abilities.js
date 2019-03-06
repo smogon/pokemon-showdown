@@ -403,7 +403,7 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon is only damaged by Fire Fang, supereffective moves, indirect damage.",
 		onTryHit(target, source, move) {
 			if (move.id === 'firefang') {
-				this.hint('In Gen 4, Fire Fang is always able to hit through Wonder Guard.');
+				this.hint("In Gen 4, Fire Fang is always able to hit through Wonder Guard.");
 				return;
 			}
 			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle') return;

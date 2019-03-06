@@ -129,7 +129,7 @@ let BattleScripts = {
 				moveSlot.pp = 63;
 				pokemon.isStale = 2;
 				pokemon.isStaleSource = 'ppoverflow';
-				this.hint('In Gen 1, if a player has no choice in using a move with 0 PP the move will underflow to have 63 PP.');
+				this.hint('In Gen 1, if a player is forced to use a move with 0 PP, the move will underflow to have 63 PP.');
 			}
 		}
 		this.useMove(move, pokemon, target, sourceEffect);
