@@ -3138,7 +3138,7 @@ let BattleMovedex = {
 				return;
 			}
 			this.add('-fail', pokemon, 'move: Dark Void');
-			this.add('-hint', "Only a Pokemon whose form is Darkrai can use this move.");
+			this.hint("Only a Pokemon whose form is Darkrai can use this move.");
 			return null;
 		},
 		secondary: null,
@@ -4868,7 +4868,7 @@ let BattleMovedex = {
 			if (pokemon.activeTurns > 1) {
 				this.attrLastMove('[still]');
 				this.add('-fail', pokemon);
-				this.add('-hint', "Fake Out only works on your first turn out.");
+				this.hint("Fake Out only works on your first turn out.");
 				return null;
 			}
 		},
@@ -5237,7 +5237,7 @@ let BattleMovedex = {
 			if (pokemon.activeTurns > 1) {
 				this.add('-fail', pokemon);
 				this.attrLastMove('[still]');
-				this.add('-hint', "First Impression only works on your first turn out.");
+				this.hint("First Impression only works on your first turn out.");
 				return null;
 			}
 		},
@@ -8267,7 +8267,7 @@ let BattleMovedex = {
 			if (pokemon.template.species === 'Hoopa-Unbound') {
 				return;
 			}
-			this.add('-hint', "Only a Pokemon whose form is Hoopa Unbound can use this move.");
+			this.hint("Only a Pokemon whose form is Hoopa Unbound can use this move.");
 			if (pokemon.template.species === 'Hoopa') {
 				this.add('-fail', pokemon, 'move: Hyperspace Fury', '[forme]');
 				return null;
@@ -10054,7 +10054,7 @@ let BattleMovedex = {
 		sideCondition: 'matblock',
 		onTryHitSide(side, source) {
 			if (source.activeTurns > 1) {
-				this.add('-hint', "Mat Block only works on your first turn out.");
+				this.hint("Mat Block only works on your first turn out.");
 				return false;
 			}
 		},
@@ -16461,7 +16461,7 @@ let BattleMovedex = {
 				this.boost({def: this.effectData.def, spd: this.effectData.spd}, target, target);
 				this.add('-end', target, 'Stockpile');
 				if (this.effectData.def !== this.effectData.layers * -1 || this.effectData.spd !== this.effectData.layers * -1) {
-					this.add('-hint', "In Gen 7, Stockpile keeps track of how many times it successfully altered each stat individually.");
+					this.hint("In Gen 7, Stockpile keeps track of how many times it successfully altered each stat individually.");
 				}
 			},
 		},

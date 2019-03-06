@@ -564,12 +564,14 @@ let BattleMovedex = {
 				}
 				// We check if leeched Pokémon has Toxic to increase leeched damage.
 				let toxicCounter = 1;
-				if (pokemon.volatiles['residualdmg']) {
-					pokemon.volatiles['residualdmg'].counter++;
-					toxicCounter = pokemon.volatiles['residualdmg'].counter;
+				let residualdmg = pokemon.volatiles['residualdmg'];
+				if (residualdmg) {
+					residualdmg.counter++;
+					toxicCounter = residualdmg.counter;
 				}
 				let toLeech = this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * toxicCounter;
 				let damage = this.damage(toLeech, pokemon, leecher);
+				if (residualdmg) this.hint("In Gen 1, Leech Seed's damage is affected by Toxic's counter.", true);
 				if (damage) this.heal(damage, leecher, pokemon);
 			},
 		},
@@ -738,6 +740,7 @@ let BattleMovedex = {
 		onHit(target) {
 			// Fail when health is 255 or 511 less than max
 			if (target.hp === (target.maxhp - 255) || target.hp === (target.maxhp - 511) || target.hp === target.maxhp) {
+				this.hint("In Gen 1, recovery moves fail if (user's maximum HP - user's current HP + 1) is divisible by 256.");
 				return false;
 			}
 			this.heal(Math.floor(target.maxhp / 2), target, target);
@@ -858,6 +861,7 @@ let BattleMovedex = {
 		onHit(target) {
 			// Fail when health is 255 or 511 less than max
 			if (target.hp === (target.maxhp - 255) || target.hp === (target.maxhp - 511) || target.hp === target.maxhp) {
+				this.hint("In Gen 1, recovery moves fail if (user's maximum HP - user's current HP + 1) is divisible by 256.");
 				return false;
 			}
 			this.heal(Math.floor(target.maxhp / 2), target, target);
