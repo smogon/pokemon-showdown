@@ -6008,39 +6008,13 @@ let BattleItems = {
 				}
 			},
 		},
-		onResidual(pokemon) {
-			if (!(this.gameType === "doubles")) {
-				return;
-			}
-			let activate = false;
-			/**@type {{[k: string]: number}} */
-			let boosts = {};
-			/**@type {{[k: string]: number}} */
-			for (let i in pokemon.boosts) {
-				// @ts-ignore
-				if (pokemon.boosts[i] < 0) {
-					activate = true;
-					boosts[i] = 0;
-				}
-			}
-			if (activate && pokemon.useItem()) {
-				pokemon.setBoost(boosts);
-				this.add('-clearnegativeboost', pokemon, '[silent]');
-			}
-		},
 		onUpdate(pokemon) {
-			let lastMoveBoostDown = false;
-			if (this.lastMove && this.lastMove.boosts) {
-				for (let i in this.lastMove.boosts) {
-					// @ts-ignore
-					if (this.lastMove.boosts[i] < 0) {
-						lastMoveBoostDown = true;
-						break;
+			if ((this.gameType === "doubles")) {
+				for (const action of this.queue) {
+					if (action.choice === 'runSwitch') {
+						return;
 					}
 				}
-			}
-			if ((this.gameType === "doubles") && !lastMoveBoostDown) {
-				return;
 			}
 			let activate = false;
 			/**@type {{[k: string]: number}} */

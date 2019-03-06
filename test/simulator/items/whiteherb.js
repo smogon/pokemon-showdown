@@ -66,7 +66,6 @@ describe('White Herb', function () {
 		assert.statStage(holder, 'atk', -1);
 	});
 	it('should use white herb after both intimidate', function () {
-		let battle;
 		battle = common.createBattle({gameType: 'doubles'});
 
 		battle.join('p1', 'Guest 1', 1, [{species: "Arcanine", ability: 'intimidate', moves: ['bodyslam']},
@@ -83,7 +82,6 @@ describe('White Herb', function () {
 		assert.statStage(holder, 'atk', 0);
 	});
 	it('should use white herb after one intimidate', function () {
-		let battle;
 		battle = common.createBattle({gameType: 'doubles'});
 
 		battle.join('p1', 'Guest 1', 1, [{species: "Arcanine", ability: 'flashfire', moves: ['bodyslam']},
@@ -100,7 +98,6 @@ describe('White Herb', function () {
 		assert.statStage(holder, 'atk', 0);
 	});
 	it('should use white herb after two intimidate switch in', function () {
-		let battle;
 		battle = common.createBattle({gameType: 'doubles'});
 
 		battle.join('p1', 'Guest 1', 1, [
@@ -121,10 +118,35 @@ describe('White Herb', function () {
 		const holder = battle.p2.active[0];
 
 		assert.false.holdsItem(holder);
-		assert.statStage(holder, 'atk', 0);
+		assert.statStage(holder, 'atk', -1);
+	});
+	it('should use white herb after two intimidate switch in after faint 5678765567', function () {
+		battle = common.createBattle({gameType: 'doubles'});
+
+		battle.join('p1', 'Guest 1', 1, [
+			{species: "aegislash", ability: 'stancechange', item: 'ironball', moves: ['storedpower']},
+			{species: "aegislash", ability: 'stancechange', item: 'ironball', moves: ['storedpower']},
+			{species: "Arcanine", ability: 'intimidate', moves: ['bodyslam']},
+			{species: "Incineroar", ability: 'intimidate', moves: ['agility']}]);
+		battle.join('p2', 'Guest 2', 2, [
+			{species: "Rotom", ability: 'levitate', item: 'whiteherb', moves: ['overheat']},
+			{species: "Rotom", ability: 'levitate', item: 'whiteherb', moves: ['overheat']},
+			{species: "Thundurus", ability: 'prankster', item: 'ironball', moves: ['electricterrain']},
+			{species: 'Klefki', ability: 'prankster', moves: ['confuseray']}]);
+
+		battle.makeChoices('move stringshot, move stringshot', 'move overheat, move overheat');
+
+		battle.makeChoices('switch Arcanine, switch Incineroar', 'move overheat, move overheat');
+		battle.makeChoices('move stringshot, move stringshot', 'move overheat, move overheat');
+
+		const holder = battle.p2.active[0];
+
+		console.log(battle.log);
+
+		assert.false.holdsItem(holder);
+		assert.statStage(holder, 'atk', -2);
 	});
 	it('should use white herb after one intimidate switch in', function () {
-		let battle;
 		battle = common.createBattle({gameType: 'doubles'});
 
 		battle.join('p1', 'Guest 1', 1, [
