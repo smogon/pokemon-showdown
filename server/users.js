@@ -942,7 +942,7 @@ class User extends Chat.MessageContext {
 		if (users.has(userid) && users.get(userid) !== this) {
 			return false;
 		}
-		
+
 		let oldname = this.name;
 		let oldid = this.userid;
 		if (userid !== this.userid) {
