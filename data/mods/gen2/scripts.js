@@ -602,7 +602,7 @@ let BattleScripts = {
 			if (move.crit) {
 				level *= 2;
 			}
-			this.add('hint', 'Gen 2 Present has a glitched damage calculation using the secondary types of the Pokemon for the Attacker\'s Level and Defender\'s Defense.', true);
+			this.hint('Gen 2 Present has a glitched damage calculation using the secondary types of the Pokemon for the Attacker\'s Level and Defender\'s Defense.', true);
 		}
 
 		// When either attack or defense are higher than 256, they are both divided by 4 and modded by 256.
@@ -613,7 +613,7 @@ let BattleScripts = {
 			attack = this.clampIntRange(Math.floor(attack / 4) % 256, 1);
 			defense = this.clampIntRange(Math.floor(defense / 4) % 256, 1);
 			if (defense < defenseBefore || attack < attackBefore) {
-				this.add('hint', 'In Gen 2, a stat will rollover if it is larger than 1024.', false, attacker.side.id);
+				this.hint('In Gen 2, a stat will rollover if it is larger than 1024.', false, attacker.side.id);
 			}
 		}
 

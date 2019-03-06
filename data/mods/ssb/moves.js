@@ -556,7 +556,7 @@ let BattleMovedex = {
 		onTryHit(target, source) {
 			if (source.name !== 'Bimp') {
 				this.add('-fail', source);
-				this.add('-hint', 'Only Bimp can use Trivia Room.');
+				this.hint('Only Bimp can use Trivia Room.');
 				return null;
 			}
 		},
@@ -696,7 +696,7 @@ let BattleMovedex = {
 		onTryHit(target, source) {
 			if (source.name !== 'bumbadadabum') {
 				this.add('-fail', source);
-				this.add('-hint', 'Only bumbadadabum can use Wonder Trade.');
+				this.hint('Only bumbadadabum can use Wonder Trade.');
 				return null;
 			}
 		},
@@ -2105,7 +2105,7 @@ let BattleMovedex = {
 		onTryHit(target, source) {
 			if (source.name !== 'Lycanium Z') {
 				this.add('-fail', source);
-				this.add('-hint', 'Only Lycanium Z can use Purple Pills.');
+				this.hint('Only Lycanium Z can use Purple Pills.');
 				return null;
 			}
 		},
@@ -2235,7 +2235,7 @@ let BattleMovedex = {
 			this.attrLastMove('[still]');
 			if (pokemon.hp < pokemon.maxhp && pokemon.status !== 'slp' && !pokemon.hasAbility('comatose')) return;
 			this.add('-fail', pokemon);
-			this.add('-hint', 'Nap Time fails if the user has full health, is already asleep, or has Comatose.');
+			this.hint('Nap Time fails if the user has full health, is already asleep, or has Comatose.');
 			return null;
 		},
 		onPrepareHit(target, source) {
@@ -3997,7 +3997,7 @@ let BattleMovedex = {
 		beforeMoveCallback(pokemon) {
 			if (!pokemon.volatiles['cutieescape'] || !pokemon.volatiles['cutieescape'].tookDamage) {
 				this.add('-fail', pokemon, 'move: Cutie Escape');
-				this.add('-hint', 'Cutie Escape only works when Yuki is hit in the same turn the move is used.');
+				this.hint('Cutie Escape only works when Yuki is hit in the same turn the move is used.');
 				return true;
 			}
 		},
@@ -4049,7 +4049,7 @@ let BattleMovedex = {
 		onTryHit(target, pokemon) {
 			if (pokemon.name !== 'Zarel') {
 				this.add('-fail', pokemon);
-				this.add('-hint', 'Only Zarel can use Relic Song Dance.');
+				this.hint('Only Zarel can use Relic Song Dance.');
 				return null;
 			}
 			this.attrLastMove('[still]');
@@ -4069,7 +4069,7 @@ let BattleMovedex = {
 			if (pokemon.template.speciesid === 'meloettapirouette') {
 				pokemon.formeChange('Meloetta');
 			}
-			this.add('-hint', 'Zarel still has the Serene Grace ability.');
+			this.hint('Zarel still has the Serene Grace ability.');
 		},
 		effect: {
 			duration: 1,
