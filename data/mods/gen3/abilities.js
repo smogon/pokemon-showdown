@@ -60,6 +60,34 @@ let BattleAbilities = {
 			}
 		},
 	},
+	"intimidate": {
+		inherit: true,
+		onStart(pokemon) {
+			let activated = false;
+			for (const target of pokemon.side.foe.active) {
+				if (target && this.isAdjacent(target, pokemon) && !target.volatiles['substitute']) {
+					activated = true;
+					break;
+				}
+			}
+
+			if (!activated) {
+				this.hint('In Gen 3, Intimidate does not activate if every target has a Substitute.', false, pokemon.side.id);
+				return;
+			}
+			this.add('-ability', pokemon, 'Intimidate', 'boost');
+
+			for (const target of pokemon.side.foe.active) {
+				if (!target || !this.isAdjacent(target, pokemon)) continue;
+
+				if (target.volatiles['substitute']) {
+					this.add('-immune', target);
+				} else {
+					this.boost({atk: -1}, target, pokemon);
+				}
+			}
+		},
+	},
 	"lightningrod": {
 		desc: "If this Pokemon is not the target of a single-target Electric-type move used by an opposing Pokemon, this Pokemon redirects that move to itself. This effect considers Hidden Power a Normal-type move.",
 		shortDesc: "This Pokemon draws single-target Electric moves used by opponents to itself.",

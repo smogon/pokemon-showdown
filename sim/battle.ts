@@ -2755,6 +2755,11 @@ export class Battle extends Dex.ModdedDex {
 				action.pokemon.abilityOrder = this.abilityOrder++;
 				this.singleEvent('Start', action.pokemon.getItem(), action.pokemon.itemData, action.pokemon);
 			}
+			if (this.gen === 4) {
+				for (const foeActive of action.pokemon.side.foe.active) {
+					foeActive.removeVolatile('substitutebroken');
+				}
+			}
 			delete action.pokemon.draggedIn;
 			break;
 		case 'runPrimal':
