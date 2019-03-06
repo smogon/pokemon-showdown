@@ -228,7 +228,7 @@ let chatfilter = function (message, user, room) {
 let namefilter = function (name, user) {
 	let id = toId(name);
 	if (Chat.namefilterwhitelist.has(id)) return name;
-	if (id === user.trackRename) return '';
+	if (id === toId(user.trackRename)) return '';
 	let lcName = name.replace(/\u039d/g, 'N').toLowerCase().replace(/[\u200b\u007F\u00AD]/g, '').replace(/\u03bf/g, 'o').replace(/\u043e/g, 'o').replace(/\u0430/g, 'a').replace(/\u0435/g, 'e').replace(/\u039d/g, 'e');
 	// Remove false positives.
 	lcName = lcName.replace('herapist', '').replace('grape', '').replace('scrape', '');
