@@ -2561,7 +2561,6 @@ const commands = {
 		Ladders.cancelSearches(targetUser);
 		targetUser.resetName(true);
 		targetUser.send(`|nametaken||${user.name} considers your name inappropriate${(reason ? `: ${reason}` : ".")}`);
-		targetUser.trackRename = targetUser.name;
 		return true;
 	},
 	forcerenamehelp: [`/forcerename OR /fr [username], [reason] - Forcibly change a user's name and shows them the [reason]. Requires: % @ & ~`],
