@@ -531,7 +531,8 @@ let BattleScripts = {
 						target.removeVolatile('mustrecharge');
 						this.hint(
 							"In Gen 1, if a Pokémon that has just used Hyper Beam and has yet to recharge is targeted with a sleep inducing move, " +
-							"any other status it may already have will be ignored and sleep will be induced regardless.");
+							"any other status it may already have will be ignored and sleep will be induced regardless."
+						);
 					}
 				} else if (!target.status) {
 					if (target.setStatus(moveData.status, pokemon, move)) {
