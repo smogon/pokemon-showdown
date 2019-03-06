@@ -942,7 +942,8 @@ class User extends Chat.MessageContext {
 		if (users.has(userid) && users.get(userid) !== this) {
 			return false;
 		}
-
+		
+		let oldname = this.name;
 		let oldid = this.userid;
 		if (userid !== this.userid) {
 			this.cancelReady();
@@ -983,6 +984,7 @@ class User extends Chat.MessageContext {
 		for (const roomid of this.inRooms) {
 			Rooms(roomid).onRename(this, oldid, joining);
 		}
+		if (isForceRenamed) this.trackRename = oldname;
 		return true;
 	}
 	/**
