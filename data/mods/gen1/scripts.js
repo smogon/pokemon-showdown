@@ -129,6 +129,7 @@ let BattleScripts = {
 				moveSlot.pp = 63;
 				pokemon.isStale = 2;
 				pokemon.isStaleSource = 'ppoverflow';
+				this.hint('In Gen 1, if a player is forced to use a move with 0 PP, the move will underflow to have 63 PP.');
 			}
 		}
 		this.useMove(move, pokemon, target, sourceEffect);
@@ -257,7 +258,6 @@ let BattleScripts = {
 	// It deals with partial trapping weirdness and accuracy bugs as well.
 	tryMoveHit(target, pokemon, move) {
 		let boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
-		let doSelfDestruct = true;
 		/** @type {number | false | undefined} */
 		let damage = 0;
 
@@ -327,6 +327,7 @@ let BattleScripts = {
 		if (accuracy !== true && !this.randomChance(accuracy, 256)) {
 			this.attrLastMove('[miss]');
 			this.add('-miss', pokemon);
+			if (accuracy === 255) this.hint('In Gen 1, moves with 100% accurracy can still miss 1/256 of the time.');
 			damage = false;
 		}
 
@@ -372,10 +373,12 @@ let BattleScripts = {
 			target.gotAttacked(move, damage, pokemon);
 		}
 
-		// Checking if substitute fainted
-		if (target.subFainted) doSelfDestruct = false;
-		if (move.selfdestruct && doSelfDestruct) {
-			this.faint(pokemon, pokemon, move);
+		if (move.selfdestruct) {
+			if (!target.subFainted) {
+				this.faint(pokemon, pokemon, move);
+			} else {
+				this.hint(`In Gen 1, the user of ${move.name} will not take damage if it breaks a Substitute.`);
+			}
 		}
 
 		// The move missed.
@@ -526,6 +529,9 @@ let BattleScripts = {
 					// Do not clear recharge in that case.
 					if (target.setStatus(moveData.status, pokemon, move)) {
 						target.removeVolatile('mustrecharge');
+						this.hint(
+							'In Gen 1, if a Pokémon that has just used Hyper Beam and has yet to recharge is targeted with a sleep inducing move, ' +
+							'any other status it may already have will be ignored and sleep will be induced regardless.');
 					}
 				} else if (!target.status) {
 					if (target.setStatus(moveData.status, pokemon, move)) {

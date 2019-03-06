@@ -247,7 +247,7 @@ let BattleStatuses = {
 function residualdmg(battle, pokemon) {
 	if (pokemon.volatiles['residualdmg']) {
 		battle.damage(battle.clampIntRange(Math.floor(pokemon.maxhp / 16) * pokemon.volatiles['residualdmg'].counter, 1), pokemon);
-		battle.hint('In GSC, Toxic\'s counter is retained through Baton Pass/Heal Bell and applies to PSN/BRN.', true);
+		battle.hint("In Gen 2, Toxic's counter is retained through Baton Pass/Heal Bell and applies to PSN/BRN.", true);
 	} else {
 		battle.damage(battle.clampIntRange(Math.floor(pokemon.maxhp / 8), 1), pokemon);
 	}
