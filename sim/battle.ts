@@ -1884,7 +1884,7 @@ export class Battle extends Dex.ModdedDex {
 			} else {
 				this.add('-activate', target, 'Substitute', '[damage]');
 			}
-			this.hint('In Gen 1, Substitute also takes confusion and Jump Kick/Hi Jump Kick recoil damage.');
+			this.hint("In Gen 1, Substitute also takes confusion and Jump Kick/Hi Jump Kick recoil damage.");
 			return damage;
 		}
 
