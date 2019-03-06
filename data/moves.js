@@ -16779,7 +16779,7 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, nonsky: 1},
-		volatileStatus: 'Substitute',
+		volatileStatus: 'substitute',
 		onTryHit(target) {
 			if (target.volatiles['substitute']) {
 				this.add('-fail', target, 'move: Substitute');
