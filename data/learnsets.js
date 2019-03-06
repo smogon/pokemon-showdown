@@ -61559,7 +61559,6 @@ let BattleLearnsets = {
 		ominouswind: ["7E", "5L7"],
 		painsplit: ["7L45", "6T", "5L40"],
 		payback: ["7M", "5M"],
-		phantomforce: ["7L61"],
 		poisonfang: ["7L1", "5L1"],
 		powerwhip: ["7L56", "5L60"],
 		protect: ["7M", "5M"],
