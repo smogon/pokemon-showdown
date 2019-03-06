@@ -43,6 +43,7 @@ let BattleScripts = {
 			pokemon.formeChange(template, pokemon.getItem(), true);
 		} else {
 			let oTemplate = this.getTemplate(pokemon.originalSpecies);
+			// @ts-ignore
 			let oMegaTemplate = this.getTemplate(template.originalMega);
 			pokemon.formeChange(template, pokemon.getItem(), true);
 			this.add('-start', pokemon, oMegaTemplate.requiredItem || oMegaTemplate.requiredMove, '[silent]');

@@ -117,7 +117,7 @@ export class BasicEffect implements EffectData {
 	/** The status that the effect may cause. */
 	status?: string;
 	/** The weather that the effect may cause. */
-	weather?: undefined;
+	weather?: string;
 	/** HP that the effect may drain. */
 	drain?: [number, number];
 	flags: AnyObject;
