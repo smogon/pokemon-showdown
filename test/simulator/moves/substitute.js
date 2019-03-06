@@ -54,9 +54,7 @@ describe('Substitute', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: 'Hitmonchan', moves: ['substitute', 'agility']}]);
 		battle.makeChoices('move substitute', 'move substitute');
 		battle.resetRNG(); // Make Hi Jump Kick miss and cause recoil.
-		console.log(battle.p1.active[0].volatiles.substitute.hp, battle.p2.active[0].volatiles.substitute.hp);
 		battle.makeChoices('move highjumpkick', 'move agility');
-		console.log(battle.p1.active[0].volatiles.substitute.hp, battle.p2.active[0].volatiles.substitute.hp);
 
 		// Both Pokemon had a substitute, so the *target* Substitute takes recoil damage.
 		let pokemon = battle.p1.active[0];
