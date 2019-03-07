@@ -1160,7 +1160,7 @@ export class Battle extends Dex.ModdedDex {
 		}
 
 		// default to no request
-		let requests: any[] = [null, null, null, null];
+		let requests: any[] = Array(this.sides.length).fill(null);
 		for (const side of this.sides) {
 			side.currentRequest = '';
 		}
@@ -2952,7 +2952,9 @@ export class Battle extends Dex.ModdedDex {
 			return false;
 		}
 
-		let switches = this.sides.map(side => side.active.some(mon => mon && !!mon.switchFlag));
+		let switches = this.sides.map(side =>
+			side.active.some(pokemon => pokemon && !!pokemon.switchFlag)
+		);
 
 		for (let i = 0; i < this.sides.length; i++) {
 			if (switches[i] && !this.canSwitch(this.sides[i])) {
