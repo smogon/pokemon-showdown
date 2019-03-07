@@ -60,7 +60,28 @@ export class Pokemon {
 	volatiles: AnyObject;
 	showCure: boolean;
 
+	/**
+	 * These are the basic stats that appear on the in-game stats screen:
+	 * calculated purely from the species base stats, level, IVs, EVs,
+	 * and Nature, before modifications from item, ability, etc.
+	 *
+	 * `stats` are reset to `baseStats` on switch-out.
+	 */
 	baseStats: StatsTable;
+	/**
+	 * These are pre-modification stored stats in-battle. At switch-in,
+	 * they're identical to `baseStats`, but can be temporarily changed
+	 * until switch-out by effects such as Power Trick and Transform.
+	 *
+	 * Stat multipliers from abilities, items, and volatiles, such as
+	 * Solar Power, Choice Band, or Swords Dance, are not stored in
+	 * `stats`, but applied on top and accessed by `pokemon.getStat`.
+	 *
+	 * (Except in Gen 1, where stat multipliers are stored, leading
+	 * to several famous glitches.)
+	 *
+	 * `stats` are reset to `baseStats` on switch-out.
+	 */
 	stats: {[k: string]: number};
 	boosts: BoostsTable;
 
@@ -298,8 +319,8 @@ export class Pokemon {
 		this.baseHpType = this.hpType;
 		this.baseHpPower = this.hpPower;
 
-		// @ts-ignore - null used for this.setTemplate(this.baseTemplate)
-		this.baseStats = null;
+		// initialized in this.setTemplate(this.baseTemplate)
+		this.baseStats = null!;
 		this.stats = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
 		this.boosts = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0};
 
@@ -379,14 +400,6 @@ export class Pokemon {
 
 	get baseMoves() {
 		return this.baseMoveSlots.map(moveSlot => moveSlot.id);
-	}
-
-	get heightm() {
-		return this.template.heightm;
-	}
-
-	get weightkg() {
-		return this.template.weightkg;
 	}
 
 	toString() {
@@ -507,7 +520,7 @@ export class Pokemon {
 	*/
 
 	getWeight() {
-		const weight = this.battle.runEvent('ModifyWeight', this, null, null, this.weightkg);
+		const weight = this.battle.runEvent('ModifyWeight', this, null, null, this.template.weightkg);
 		return (weight < 0.1) ? 0.1 : weight;
 	}
 
@@ -1066,8 +1079,10 @@ export class Pokemon {
 			for (const typeid of type) {
 				if (this.hasType(typeid)) return true;
 			}
-		} else if (this.getTypes().includes(type)) {
-			return true;
+		} else {
+			if (this.getTypes().includes(type)) {
+				return true;
+			}
 		}
 		return false;
 	}
