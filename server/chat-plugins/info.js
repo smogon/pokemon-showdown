@@ -2400,7 +2400,6 @@ const pages = {
 			return buf + `<div class="notice message-error">This page is unavailable in temporary rooms / non-existent rooms.</div>`;
 		}
 		const store = new Map();
-		const muteQueue = this.room.muteQueue;
 		const possessive = (word) => {
 			const suffix = word.endsWith('s') ? `'` : `'s`;
 			return `${word}${suffix}`;
@@ -2435,8 +2434,8 @@ const pages = {
 			buf += `<p>- ${possessive(id)} ${punishType.toLowerCase()} expires in ${expireString}.${punishDesc}</p>`;
 		});
 
-		if (muteQueue) {
-			for (const entry of muteQueue) {
+		if (this.room.muteQueue) {
+			for (const entry of this.room.muteQueue) {
 				let expiresIn = new Date(entry.time).getTime() - Date.now();
 				if (expiresIn < 0) continue;
 				let expireString = Chat.toDurationString(expiresIn, {precision: 1});
