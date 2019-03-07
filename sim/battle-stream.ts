@@ -118,6 +118,10 @@ export class BattleStream extends Streams.ObjectReadWriteStream {
 		case 'eval':
 			/* tslint:disable:no-eval */
 			const battle = this.battle!;
+			const p1 = battle && battle.p1;
+			const p2 = battle && battle.p2;
+			const p1active = p1 && p1.active[0];
+			const p2active = p2 && p2.active[0];
 			battle.inputLog.push(line);
 			message = message.replace(/\f/g, '\n');
 			battle.add('', '>>> ' + message.replace(/\n/g, '\n||'));
