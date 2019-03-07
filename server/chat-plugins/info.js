@@ -341,7 +341,7 @@ const commands = {
 			// IP range
 			this.sendReply(`Users in IP range ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
 			ip = ip.slice(0, -1);
-			for (const curUser of Users.users) {
+			for (const curUser of Users.users.values()) {
 				if (results.length > 100 && !isAll) return;
 				if (!curUser.latestIp.startsWith(ip)) return;
 				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) return;
