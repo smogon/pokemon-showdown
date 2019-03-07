@@ -37,8 +37,7 @@ export class Pokemon {
 	readonly happiness: number;
 	readonly pokeball: string;
 
-	/** Transform copies IVs in gen 4 and earlier, so we track the base IVs/HP-type/power. */
-	readonly baseIvs: StatsTable;
+	/** Transform keeps the original pre-transformed Hidden Power in Gen 2-4. */
 	readonly baseHpType: string;
 	readonly baseHpPower: number;
 
@@ -315,7 +314,6 @@ export class Pokemon {
 		this.hpType = set.hpType || hpData.type;
 		this.hpPower = hpData.power;
 
-		this.baseIvs = this.set.ivs;
 		this.baseHpType = this.hpType;
 		this.baseHpPower = this.hpPower;
 
@@ -1047,7 +1045,6 @@ export class Pokemon {
 
 		this.transformed = false;
 		this.ability = this.baseAbility;
-		this.set.ivs = this.baseIvs;
 		this.hpType = this.baseHpType;
 		this.hpPower = this.baseHpPower;
 		for (const i in this.volatiles) {
