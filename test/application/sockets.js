@@ -18,10 +18,10 @@ describe.skip('Sockets', function () {
 	});
 
 	afterEach(function () {
-		Sockets.workers.forEach((worker, workerid) => {
+		for (const [worker, workerid] of Sockets.workers) {
 			worker.kill();
 			Sockets.workers.delete(workerid);
-		});
+		}
 	});
 
 	describe('master', function () {

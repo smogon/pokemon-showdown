@@ -923,7 +923,7 @@ class TimerModeTrivia extends Trivia {
 		}
 
 		let rowAdded = false;
-		innerBuffer.forEach((players, pointValue) => {
+		for (let [players, pointValue] of innerBuffer) {
 			if (!players.length) return false;
 
 			rowAdded = true;
@@ -936,7 +936,7 @@ class TimerModeTrivia extends Trivia {
 				`<td>${players.join(', ')}</td>` +
 				'</tr>'
 			);
-		});
+		}
 
 		if (!rowAdded) {
 			buffer += (

@@ -186,7 +186,7 @@ class Giveaway {
 		}
 		text = toId(text);
 		if (mons.size) {
-			mons.forEach(function (value, key) {
+			for (const [key, value] of mons) {
 				let spriteid = value.spriteid;
 				if (value.otherForms) {
 					for (let i = 0; i < value.otherForms.length; i++) {
@@ -195,7 +195,7 @@ class Giveaway {
 							break; // We don't want to end up with deerling-summer-spring
 						}
 					}
-				}
+			}
 				if (value.otherFormes) {
 					for (let i = 0; i < value.otherFormes.length; i++) {
 						// Allow "alolan <name>" to match as well.
