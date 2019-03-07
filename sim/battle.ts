@@ -26,6 +26,8 @@ interface BattleOptions {
 	rated?: boolean | string; // Rated string
 	p1?: PlayerOptions; // Player 1 data
 	p2?: PlayerOptions; // Player 2 data
+	p3?: PlayerOptions; // Player 3 data
+	p4?: PlayerOptions; // Player 4 data
 	debug?: boolean; // show debug mode option
 }
 
@@ -102,8 +104,9 @@ export class Battle extends Dex.ModdedDex {
 		this.inputLog = [];
 		this.sentLogPos = 0;
 		this.sentEnd = false;
+		this.gameType = (format.gameType || 'singles');
 		// @ts-ignore
-		this.sides = [null, null];
+		this.sides = this.gameType === 'multi' || this.gameType === 'free-for-all' ? [null, null, null, null] : [null, null];
 		// @ts-ignore
 		this.rated = options.rated;
 		this.weatherData = {id: ''};
@@ -119,7 +122,6 @@ export class Battle extends Dex.ModdedDex {
 		this.effectData = {id: ''};
 		this.event = {id: ''};
 		this.itemData = {id: ''};
-		this.gameType = (format.gameType || 'singles');
 		this.reportExactHP = !!format.debug;
 		this.queue = [];
 		this.faintQueue = [];
@@ -184,6 +186,12 @@ export class Battle extends Dex.ModdedDex {
 		}
 		if (options.p2) {
 			this.setPlayer('p2', options.p2);
+		}
+		if (options.p3) {
+			this.setPlayer('p3', options.p3);
+		}
+		if (options.p4) {
+			this.setPlayer('p4', options.p4);
 		}
 	}
 
@@ -432,13 +440,10 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	updateSpeed() {
-		let actives = this.p1.active;
-		for (const active of actives) {
-			if (active) active.updateSpeed();
-		}
-		actives = this.p2.active;
-		for (const active of actives) {
-			if (active) active.updateSpeed();
+		for (const side of this.sides) {
+			for (const pokemon of side.active) {
+				if (pokemon) pokemon.updateSpeed();
+			}
 		}
 	}
 
@@ -1136,11 +1141,10 @@ export class Battle extends Dex.ModdedDex {
 
 	getPokemon(id: string | Pokemon) {
 		if (typeof id !== 'string') id = id.id;
-		for (const pokemon of this.p1.pokemon) {
-			if (pokemon.id === id) return pokemon;
-		}
-		for (const pokemon of this.p2.pokemon) {
-			if (pokemon.id === id) return pokemon;
+		for (const side of this.sides) {
+			for (const pokemon of side.pokemon) {
+				if (pokemon.id === id) return pokemon;
+			}
 		}
 		return null;
 	}
@@ -1148,35 +1152,31 @@ export class Battle extends Dex.ModdedDex {
 	makeRequest(type?: string) {
 		if (type) {
 			this.currentRequest = type;
-			this.p1.clearChoice();
-			this.p2.clearChoice();
+			for (const side of this.sides) {
+				side.clearChoice();
+			}
 		} else {
 			type = this.currentRequest;
 		}
 
 		// default to no request
-		let p1request: any = null;
-		let p2request: any = null;
-		this.p1.currentRequest = '';
-		this.p2.currentRequest = '';
-		let switchTable = [];
+		let requests: any[] = [null, null, null, null];
+		for (const side of this.sides) {
+			side.currentRequest = '';
+		}
 
 		switch (type) {
 		case 'switch': {
-			for (const active of this.p1.active) {
-				switchTable.push(!!(active && active.switchFlag));
-			}
-			if (switchTable.some(flag => flag === true)) {
-				this.p1.currentRequest = 'switch';
-				p1request = {forceSwitch: switchTable, side: this.p1.getRequestData()};
-			}
-			switchTable = [];
-			for (const active of this.p2.active) {
-				switchTable.push(!!(active && active.switchFlag));
-			}
-			if (switchTable.some(flag => flag === true)) {
-				this.p2.currentRequest = 'switch';
-				p2request = {forceSwitch: switchTable, side: this.p2.getRequestData()};
+			for (let i = 0; i < this.sides.length; i++) {
+				let side = this.sides[i];
+				let switchTable = [];
+				for (const pokemon of side.active) {
+					switchTable.push(!!(pokemon && pokemon.switchFlag));
+				}
+				if (switchTable.some(flag => flag === true)) {
+					side.currentRequest = 'switch';
+					requests[i] = {forceSwitch: switchTable, side: side.getRequestData()};
+				}
 			}
 			break;
 		}
@@ -1186,42 +1186,49 @@ export class Battle extends Dex.ModdedDex {
 			let maxTeamSize = teamLengthData && teamLengthData.battle;
 			this.add('teampreview' + (maxTeamSize ? '|' + maxTeamSize : ''));
 			if (!maxTeamSize) maxTeamSize = 6;
-			this.p1.maxTeamSize = maxTeamSize;
-			this.p2.maxTeamSize = maxTeamSize;
-			this.p1.currentRequest = 'teampreview';
-			p1request = {teamPreview: true, maxTeamSize, side: this.p1.getRequestData()};
-			this.p2.currentRequest = 'teampreview';
-			p2request = {teamPreview: true, maxTeamSize, side: this.p2.getRequestData()};
+			for (let i = 0; i < this.sides.length; i++) {
+				let side = this.sides[i];
+				side.maxTeamSize = maxTeamSize;
+				side.currentRequest = 'teampreview';
+				requests[i] = {teamPreview: true, maxTeamSize, side: side.getRequestData()};
+			}
 			break;
 
 		default: {
-			this.p1.currentRequest = 'move';
-			let activeData = this.p1.active.map(pokemon => pokemon && pokemon.getRequestData());
-			p1request = {active: activeData, side: this.p1.getRequestData()};
-
-			this.p2.currentRequest = 'move';
-			activeData = this.p2.active.map(pokemon => pokemon && pokemon.getRequestData());
-			p2request = {active: activeData, side: this.p2.getRequestData()};
+			for (let i = 0; i < this.sides.length; i++) {
+				let side = this.sides[i];
+				side.currentRequest = 'move';
+				let activeData = side.active.map(pokemon => pokemon && pokemon.getRequestData());
+				requests[i] = {active: activeData, side: side.getRequestData()};
+			}
 			break;
 		}
 		}
 
-		if (p1request) {
-			if (!this.supportCancel || !p2request) p1request.noCancel = true;
-			this.p1.emitRequest(p1request);
-		} else {
-			this.p1.emitRequest({wait: true, side: this.p1.getRequestData()});
+		let allRequestsMade = true;
+		for (const request of requests) {
+			if (!request) allRequestsMade = false;
+		}
+		for (let i = 0; i < this.sides.length; i++) {
+			let side = this.sides[i];
+			let request = requests[i];
+			if (request) {
+				if (!this.supportCancel || allRequestsMade) request.noCancel = true;
+				side.emitRequest(request);
+			} else {
+				side.emitRequest({wait: true, side: side.getRequestData()});
+			}
 		}
 
-		if (p2request) {
-			if (!this.supportCancel || !p1request) p2request.noCancel = true;
-			this.p2.emitRequest(p2request);
-		} else {
-			this.p2.emitRequest({wait: true, side: this.p2.getRequestData()});
-		}
-
-		if (this.p1.isChoiceDone() && this.p2.isChoiceDone()) {
-			throw new Error(`Choices are done immediately after a request`);
+		let choiceDone = false;
+		for (const side of this.sides) {
+			if (side.isChoiceDone()) {
+				if (choiceDone) {
+					throw new Error(`Choices are done immediately after a request`);
+				} else {
+					choiceDone = true;
+				}
+			}
 		}
 	}
 
@@ -1287,10 +1294,14 @@ export class Battle extends Dex.ModdedDex {
 		if (this.ended) {
 			return false;
 		}
-		if (side === 'p1' || side === 'p2') {
-			side = this[side];
-		} else if (side !== this.p1 && side !== this.p2) {
+		if (side instanceof Side && !this.sides.includes(side)) {
 			side = null;
+		} else if (typeof side === 'string') {
+			if (['p1', 'p2', 'p3', 'p4'].includes(side)) {
+				side = this.sides[parseInt(side[1], 10)];
+			} else {
+				side = null;
+			}
 		}
 		this.winner = side ? side.name : '';
 
@@ -1712,9 +1723,11 @@ export class Battle extends Dex.ModdedDex {
 	start() {
 		if (this.active) return;
 
-		if (!this.p1 || !this.p2) {
-			// need two players to start
-			return;
+		for (const side of this.sides) {
+			if (!side) {
+				// need two players to start
+				return;
+			}
 		}
 
 		if (this.started) {
@@ -1724,6 +1737,12 @@ export class Battle extends Dex.ModdedDex {
 		this.started = true;
 		this.p2.foe = this.p1;
 		this.p1.foe = this.p2;
+		if (this.gameType === 'multi') {
+			this.sides[0].ally = this.sides[2];
+			this.sides[1].ally = this.sides[3];
+			this.sides[2].ally = this.sides[0];
+			this.sides[3].ally = this.sides[1];
+		}
 
 		for (const side of this.sides) {
 			this.add('teamsize', side.id, side.pokemon.length);
@@ -1751,8 +1770,10 @@ export class Battle extends Dex.ModdedDex {
 			}
 		}
 
-		if (!this.p1.pokemon[0] || !this.p2.pokemon[0]) {
-			throw new Error('Battle not started: A player has an empty team.');
+		for (const side of this.sides) {
+			if (!side.pokemon[0]) {
+				throw new Error('Battle not started: A player has an empty team.');
+			}
 		}
 
 		this.residualEvent('TeamPreview');
@@ -2434,16 +2455,12 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	checkFainted() {
-		for (const pokemon of this.p1.active) {
-			if (pokemon.fainted) {
-				pokemon.status = 'fnt';
-				pokemon.switchFlag = true;
-			}
-		}
-		for (const pokemon of this.p2.active) {
-			if (pokemon.fainted) {
-				pokemon.status = 'fnt';
-				pokemon.switchFlag = true;
+		for (const side of this.sides) {
+			for (const pokemon of side.active) {
+				if (pokemon.fainted) {
+					pokemon.status = 'fnt';
+					pokemon.switchFlag = true;
+				}
 			}
 		}
 	}
@@ -2492,15 +2509,19 @@ export class Battle extends Dex.ModdedDex {
 			}
 		}
 
-		if (!this.p1.pokemonLeft && !this.p2.pokemonLeft) {
+		let team1PokemonLeft = this.p1.pokemonLeft;
+		if (this.p1.ally) team1PokemonLeft += this.p1.ally.pokemonLeft;
+		let team2PokemonLeft = this.p2.pokemonLeft;
+		if (this.p2.ally) team2PokemonLeft += this.p2.ally.pokemonLeft;
+		if (!team1PokemonLeft && !team2PokemonLeft) {
 			this.win(faintData ? faintData.target.side : null);
 			return true;
 		}
-		if (!this.p1.pokemonLeft) {
+		if (!team1PokemonLeft) {
 			this.win(this.p2);
 			return true;
 		}
-		if (!this.p2.pokemonLeft) {
+		if (!team2PokemonLeft) {
 			this.win(this.p1);
 			return true;
 		}
@@ -2718,29 +2739,28 @@ export class Battle extends Dex.ModdedDex {
 			const format = this.getFormat();
 
 			// Remove Pokémon duplicates remaining after `team` decisions.
-			this.p1.pokemon = this.p1.pokemon.slice(0, this.p1.pokemonLeft);
-			this.p2.pokemon = this.p2.pokemon.slice(0, this.p2.pokemonLeft);
+			for (const side of this.sides) {
+				side.pokemon = side.pokemon.slice(0, side.pokemonLeft);
+			}
 
 			if (format.teamLength && format.teamLength.battle) {
 				// Trim the team: not all of the Pokémon brought to Preview will battle.
-				this.p1.pokemon = this.p1.pokemon.slice(0, format.teamLength.battle);
-				this.p1.pokemonLeft = this.p1.pokemon.length;
-				this.p2.pokemon = this.p2.pokemon.slice(0, format.teamLength.battle);
-				this.p2.pokemonLeft = this.p2.pokemon.length;
+				for (const side of this.sides) {
+					side.pokemon = side.pokemon.slice(0, format.teamLength.battle);
+					side.pokemonLeft = side.pokemon.length;
+				}
 			}
 
 			this.add('start');
-			for (let pos = 0; pos < this.p1.active.length; pos++) {
-				this.switchIn(this.p1.pokemon[pos], pos);
+			for (const side of this.sides) {
+				for (let pos = 0; pos < side.active.length; pos++) {
+					this.switchIn(side.pokemon[pos], pos);
+				}
 			}
-			for (let pos = 0; pos < this.p2.active.length; pos++) {
-				this.switchIn(this.p2.pokemon[pos], pos);
-			}
-			for (const pokemon of this.p1.pokemon) {
-				this.singleEvent('Start', this.getEffect(pokemon.species), pokemon.speciesData, pokemon);
-			}
-			for (const pokemon of this.p2.pokemon) {
-				this.singleEvent('Start', this.getEffect(pokemon.species), pokemon.speciesData, pokemon);
+			for (const side of this.sides) {
+				for (const pokemon of side.pokemon) {
+					this.singleEvent('Start', this.getEffect(pokemon.species), pokemon.speciesData, pokemon);
+				}
 			}
 			this.midTurn = true;
 			break;
@@ -2894,16 +2914,12 @@ export class Battle extends Dex.ModdedDex {
 		}
 
 		// phazing (Roar, etc)
-		for (const pokemon of this.p1.active) {
-			if (pokemon.forceSwitchFlag) {
-				if (pokemon.hp) this.dragIn(pokemon.side, pokemon.position);
-				pokemon.forceSwitchFlag = false;
-			}
-		}
-		for (const pokemon of this.p2.active) {
-			if (pokemon.forceSwitchFlag) {
-				if (pokemon.hp) this.dragIn(pokemon.side, pokemon.position);
-				pokemon.forceSwitchFlag = false;
+		for (const side of this.sides) {
+			for (const pokemon of side.active) {
+				if (pokemon.forceSwitchFlag) {
+					if (pokemon.hp) this.dragIn(pokemon.side, pokemon.position);
+					pokemon.forceSwitchFlag = false;
+				}
 			}
 		}
 
@@ -2936,28 +2952,25 @@ export class Battle extends Dex.ModdedDex {
 			return false;
 		}
 
-		let p1switch = this.p1.active.some(mon => mon && !!mon.switchFlag);
-		let p2switch = this.p2.active.some(mon => mon && !!mon.switchFlag);
+		let switches = this.sides.map(side => side.active.some(mon => mon && !!mon.switchFlag));
 
-		if (p1switch && !this.canSwitch(this.p1)) {
-			for (const pokemon of this.p1.active) {
-				pokemon.switchFlag = false;
+		for (let i = 0; i < this.sides.length; i++) {
+			if (switches[i] && !this.canSwitch(this.sides[i])) {
+				for (const pokemon of this.sides[i].active) {
+					pokemon.switchFlag = false;
+				}
+				switches[i] = false;
 			}
-			p1switch = false;
-		}
-		if (p2switch && !this.canSwitch(this.p2)) {
-			for (const pokemon of this.p2.active) {
-				pokemon.switchFlag = false;
-			}
-			p2switch = false;
 		}
 
-		if (p1switch || p2switch) {
-			if (this.gen >= 5) {
-				this.eachEvent('Update');
+		for (const playerSwitch of switches) {
+			if (playerSwitch) {
+				if (this.gen >= 5) {
+					this.eachEvent('Update');
+				}
+				this.makeRequest('switch');
+				return true;
 			}
-			this.makeRequest('switch');
-			return true;
 		}
 
 		this.eachEvent('Update');
@@ -3012,9 +3025,9 @@ export class Battle extends Dex.ModdedDex {
 	 * Takes a choice string passed from the client. Starts the next
 	 * turn if all required choices have been made.
 	 */
-	choose(sideid: string, input: string) {
+	choose(sideid: SideID, input: string) {
 		let side = null;
-		if (sideid === 'p1' || sideid === 'p2') side = this[sideid];
+		if (['p1', 'p2', 'p3', 'p4'].includes(sideid)) side = this.sides[parseInt(sideid[1], 10) - 1];
 		if (!side) throw new Error(`Invalid side ${sideid}`);
 
 		if (!side.choose(input)) return false;
@@ -3045,10 +3058,10 @@ export class Battle extends Dex.ModdedDex {
 		for (const side of this.sides) {
 			side.autoChoose();
 		}
-		const p1choice = this.p1.getChoice();
-		if (p1choice) this.inputLog.push(`>p1 ${p1choice}`);
-		const p2choice = this.p2.getChoice();
-		if (p2choice) this.inputLog.push(`>p2 ${p2choice}`);
+		for (let i = 0; i < this.sides.length; i++) {
+			const choice = this.sides[i].getChoice();
+			if (choice) this.inputLog.push(`>p${i + 1} ${choice}`);
+		}
 		for (const side of this.sides) {
 			this.addToQueue(side.choice.actions);
 		}
@@ -3057,15 +3070,16 @@ export class Battle extends Dex.ModdedDex {
 		Array.prototype.push.apply(this.queue, oldQueue);
 
 		this.currentRequest = '';
-		this.p1.currentRequest = '';
-		this.p2.currentRequest = '';
+		for (const side of this.sides) {
+			side.currentRequest = '';
+		}
 
 		this.go();
 	}
 
-	undoChoice(sideid: string) {
+	undoChoice(sideid: SideID) {
 		let side = null;
-		if (sideid === 'p1' || sideid === 'p2') side = this[sideid];
+		if (['p1', 'p2', 'p3', 'p4'].includes(sideid)) side = this.sides[parseInt(sideid[1], 10) - 1];
 		if (!side) throw new Error(`Invalid side ${sideid}`);
 		if (!side.currentRequest) return;
 
@@ -3082,13 +3096,11 @@ export class Battle extends Dex.ModdedDex {
 	 */
 	checkActions() {
 		let totalActions = 0;
-		if (this.p1.isChoiceDone()) {
-			if (!this.supportCancel) this.p1.choice.cantUndo = true;
-			totalActions++;
-		}
-		if (this.p2.isChoiceDone()) {
-			if (!this.supportCancel) this.p2.choice.cantUndo = true;
-			totalActions++;
+		for (const side of this.sides) {
+			if (side.isChoiceDone()) {
+				if (!this.supportCancel) side.choice.cantUndo = true;
+				totalActions++;
+			}
 		}
 		if (totalActions >= this.sides.length) {
 			this.commitDecisions();
@@ -3212,20 +3224,20 @@ export class Battle extends Dex.ModdedDex {
 		return team as PokemonSet[];
 	}
 
-	setPlayer(slot: 'p1' | 'p2', options: PlayerOptions) {
+	setPlayer(slot: SideID, options: PlayerOptions) {
 		let side;
 		let didSomething = true;
-		if (!this[slot]) {
+		const slotNum = parseInt(slot[1], 10) - 1;
+		if (!this.sides[slotNum]) {
 			// create player
-			const slotNum = (slot === 'p2' ? 1 : 0);
 			const team = this.getTeam(options);
 			side = new Side(options.name || `Player ${slotNum + 1}`, this, slotNum, team);
 			if (options.avatar) side.avatar = '' + options.avatar;
-			this[slot] = side;
+			if (slot === 'p1' || slot === 'p2') this[slot] = side;
 			this.sides[slotNum] = side;
 		} else {
 			// edit player
-			side = this[slot];
+			side = this.sides[slotNum];
 			didSomething = false;
 			if (options.name && side.name !== options.name) {
 				side.name = options.name;
@@ -3269,6 +3281,7 @@ export class Battle extends Dex.ModdedDex {
 				turns: this.turn,
 				p1: this.p1.name,
 				p2: this.p2.name,
+				// TODO: Update this with new protocol for 4 player battles
 				p1team: this.p1.team,
 				p2team: this.p2.team,
 				score: [this.p1.pokemonLeft, this.p2.pokemonLeft],

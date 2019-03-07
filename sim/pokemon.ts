@@ -535,6 +535,22 @@ export class Pokemon {
 		return null;
 	}
 
+	allies(adjacentOnly?: boolean): Pokemon[] {
+		let allies = this.side.active;
+		if (this.side.ally) allies = allies.concat(this.side.ally.active);
+		if (adjacentOnly) allies = allies.filter(ally => this.battle.isAdjacent(this, ally));
+		return allies.filter(ally => ally && !ally.fainted);
+	}
+
+	foes(adjacentOnly?: boolean): Pokemon[] {
+		let foes = [];
+		for (const side of this.battle.sides) {
+			if (side !== this.side && side !== this.side.ally) foes.push(...side.active);
+		}
+		if (adjacentOnly) foes = foes.filter(foe => this.battle.isAdjacent(this, foe));
+		return foes.filter(foe => foe && !foe.fainted);
+	}
+
 	getMoveTargets(move: Move, target: Pokemon): Pokemon[] {
 		const targets = [];
 		switch (move.target) {
@@ -543,37 +559,20 @@ export class Pokemon {
 		case 'allySide':
 		case 'allyTeam':
 			if (!move.target.startsWith('foe')) {
-				for (const allyActive of this.side.active) {
-					if (!allyActive.fainted) {
-						targets.push(allyActive);
-					}
-				}
+				targets.push(...this.allies());
 			}
 			if (!move.target.startsWith('ally')) {
-				for (const foeActive of this.side.foe.active) {
-					if (!foeActive.fainted) {
-						targets.push(foeActive);
-					}
-				}
+				targets.push(...this.foes());
 			}
 			if (targets.length && !targets.includes(target)) {
 				this.battle.retargetLastMove(targets[targets.length - 1]);
 			}
 			break;
 		case 'allAdjacent':
+			targets.push(...this.allies(true));
+			// falls through
 		case 'allAdjacentFoes':
-			if (move.target === 'allAdjacent') {
-				for (const allyActive of this.side.active) {
-					if (this.battle.isAdjacent(this, allyActive)) {
-						targets.push(allyActive);
-					}
-				}
-			}
-			for (const foeActive of this.side.foe.active) {
-				if (this.battle.isAdjacent(this, foeActive)) {
-					targets.push(foeActive);
-				}
-			}
+			targets.push(...this.foes(true));
 			if (targets.length && !targets.includes(target)) {
 				this.battle.retargetLastMove(targets[targets.length - 1]);
 			}
@@ -602,11 +601,7 @@ export class Pokemon {
 			if (move.pressureTarget) {
 				// At the moment, this is the only supported target.
 				if (move.pressureTarget === 'foeSide') {
-					for (const foeActive of this.side.foe.active) {
-						if (foeActive && !foeActive.fainted) {
-							targets.push(foeActive);
-						}
-					}
+					targets.push(...this.foes());
 				}
 			}
 		}

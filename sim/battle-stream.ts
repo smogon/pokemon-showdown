@@ -69,11 +69,12 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			});
 
 			this.push(`update\n|html|<div class="broadcast-red"><b>The battle crashed</b><br />Don't worry, we're working on fixing it.</div>`);
-			if (battle && battle.p1 && battle.p1.currentRequest) {
-				this.push(`sideupdate\np1\n|error|[Invalid choice] The battle crashed`);
-			}
-			if (battle && battle.p2 && battle.p2.currentRequest) {
-				this.push(`sideupdate\np2\n|error|[Invalid choice] The battle crashed`);
+			if (battle) {
+				for (let i = 0; i < battle.sides.length; i++) {
+					if (battle.sides[i] && battle.sides[i].currentRequest) {
+						this.push(`sideupdate\np${i + 1}\n|error|[Invalid choice] The battle crashed`);
+					}
+				}
 			}
 		}
 		if (this.battle) this.battle.sendUpdates();
