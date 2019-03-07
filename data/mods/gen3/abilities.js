@@ -72,7 +72,7 @@ let BattleAbilities = {
 			}
 
 			if (!activated) {
-				this.hint('In Gen 3, Intimidate does not activate if every target has a Substitute.', false, pokemon.side.id);
+				this.hint("In Gen 3, Intimidate does not activate if every target has a Substitute.", false, pokemon.side);
 				return;
 			}
 			this.add('-ability', pokemon, 'Intimidate', 'boost');

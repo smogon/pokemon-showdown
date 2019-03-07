@@ -129,7 +129,7 @@ let BattleScripts = {
 				moveSlot.pp = 63;
 				pokemon.isStale = 2;
 				pokemon.isStaleSource = 'ppoverflow';
-				this.hint('In Gen 1, if a player is forced to use a move with 0 PP, the move will underflow to have 63 PP.');
+				this.hint("In Gen 1, if a player is forced to use a move with 0 PP, the move will underflow to have 63 PP.");
 			}
 		}
 		this.useMove(move, pokemon, target, sourceEffect);
@@ -327,7 +327,7 @@ let BattleScripts = {
 		if (accuracy !== true && !this.randomChance(accuracy, 256)) {
 			this.attrLastMove('[miss]');
 			this.add('-miss', pokemon);
-			if (accuracy === 255) this.hint('In Gen 1, moves with 100% accurracy can still miss 1/256 of the time.');
+			if (accuracy === 255) this.hint("In Gen 1, moves with 100% accurracy can still miss 1/256 of the time.");
 			damage = false;
 		}
 
@@ -530,8 +530,9 @@ let BattleScripts = {
 					if (target.setStatus(moveData.status, pokemon, move)) {
 						target.removeVolatile('mustrecharge');
 						this.hint(
-							'In Gen 1, if a Pokémon that has just used Hyper Beam and has yet to recharge is targeted with a sleep inducing move, ' +
-							'any other status it may already have will be ignored and sleep will be induced regardless.');
+							"In Gen 1, if a Pokémon that has just used Hyper Beam and has yet to recharge is targeted with a sleep inducing move, " +
+							"any other status it may already have will be ignored and sleep will be induced regardless."
+						);
 					}
 				} else if (!target.status) {
 					if (target.setStatus(moveData.status, pokemon, move)) {
