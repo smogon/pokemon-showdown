@@ -2395,9 +2395,7 @@ const pages = {
 		this.extractRoom();
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		buf += `<div class="pad"><h2>List of active punishments:</h2>`;
-		if (!user.can('mute')) {
-			return buf + `<div class="notice message-error">Access denied.</div>`;
-		}
+		if (!this.can('mute')) return;
 		if (!this.room.chatRoomData) {
 			return buf + `<div class="notice message-error">This page is unavailable in temporary rooms / non-existent rooms.</div>`;
 		}
