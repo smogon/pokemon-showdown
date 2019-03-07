@@ -608,13 +608,11 @@ let BattleScripts = {
 		// When either attack or defense are higher than 256, they are both divided by 4 and modded by 256.
 		// This is what causes the rollover bugs.
 		if (attack >= 256 || defense >= 256) {
-			const attackBefore = attack;
-			const defenseBefore = defense;
+			if (attack >= 1024 || defense >= 1024) {
+				this.hint("In Gen 2, a stat will roll over to a small number if it is larger than 1024.");
+			}
 			attack = this.clampIntRange(Math.floor(attack / 4) % 256, 1);
 			defense = this.clampIntRange(Math.floor(defense / 4) % 256, 1);
-			if (defense < defenseBefore || attack < attackBefore) {
-				this.hint("In Gen 2, a stat will rollover if it is larger than 1024.", false, attacker.side);
-			}
 		}
 
 		// Self destruct moves halve defense at this point.
