@@ -801,9 +801,12 @@ let Formats = [
 			pokemon.hp = pokemon.maxhp = template.maxHP = allies[2].maxhp;
 			pokemon.set.evs = allies[2].set.evs;
 			pokemon.set.nature = allies[2].getNature().name;
+			// @ts-ignore
 			pokemon.set.ivs = pokemon.baseIvs = allies[2].set.ivs;
+			// @ts-ignore
 			pokemon.hpType = pokemon.baseHpType = allies[2].baseHpType;
 
+			// @ts-ignore
 			pokemon.moveSlots = pokemon.baseMoveSlots = allies[3].baseMoveSlots.slice(0, 2).concat(allies[4].baseMoveSlots.slice(2)).filter((move, index, moveSlots) => moveSlots.find(othermove => othermove.id === move.id) === move);
 			pokemon.setTemplate(template);
 		},

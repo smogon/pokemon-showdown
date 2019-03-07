@@ -31,11 +31,10 @@ class RandomPlayerAI extends BattleStreams.BattlePlayer {
 		} else if (request.forceSwitch) {
 			// switch request
 			const pokemon = request.side.pokemon;
-			let chosen: number[] = [];
+			const chosen: number[] = [];
 			const choices = request.forceSwitch.map((mustSwitch: AnyObject) => {
 				if (!mustSwitch) return `pass`;
-				let canSwitch = [1, 2, 3, 4, 5, 6];
-				canSwitch = canSwitch.filter(i => (
+				const canSwitch = [1, 2, 3, 4, 5, 6].filter(i => (
 					// not active
 					i > request.forceSwitch.length &&
 					// not chosen for a simultaneous switch
@@ -52,8 +51,7 @@ class RandomPlayerAI extends BattleStreams.BattlePlayer {
 			// move request
 			const choices = request.active.map((pokemon: AnyObject, i: number) => {
 				if (request.side.pokemon[i].condition.endsWith(` fnt`)) return `pass`;
-				let canMove = [1, 2, 3, 4].slice(0, pokemon.moves.length);
-				canMove = canMove.filter(j => (
+				const canMove = [1, 2, 3, 4].slice(0, pokemon.moves.length).filter(j => (
 					// not disabled
 					!pokemon.moves[j - 1].disabled
 				));

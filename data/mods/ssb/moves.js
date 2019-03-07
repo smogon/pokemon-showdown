@@ -1959,6 +1959,7 @@ let BattleMovedex = {
 		},
 		onHit(pokemon) {
 			const template = pokemon.template;
+			// @ts-ignore
 			pokemon.level += 5;
 			pokemon.set.level = pokemon.level;
 			pokemon.formeChange(template);
