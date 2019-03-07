@@ -195,7 +195,7 @@ class Giveaway {
 							break; // We don't want to end up with deerling-summer-spring
 						}
 					}
-			}
+				}
 				if (value.otherFormes) {
 					for (let i = 0; i < value.otherFormes.length; i++) {
 						// Allow "alolan <name>" to match as well.
@@ -218,7 +218,7 @@ class Giveaway {
 					let shiny = (text.includes("shiny") && !text.includes("shinystone") ? '-shiny' : '');
 					output += `<img src="/sprites/xyani${shiny}/${spriteid}.gif">`;
 				}
-			});
+			}
 		}
 		return [monIds, output];
 	}
