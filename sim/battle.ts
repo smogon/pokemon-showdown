@@ -1131,6 +1131,12 @@ export class Battle extends Dex.ModdedDex {
 			side = this.getSide(side);
 		} else if (!side || !this.sides.includes(side)) {
 			side = null;
+		} else if (typeof side === 'string') {
+			if (['p1', 'p2', 'p3', 'p4'].includes(side)) {
+				side = this.sides[parseInt(side[1], 10)];
+			} else {
+				side = null;
+			}
 		}
 		this.winner = side ? side.name : '';
 
