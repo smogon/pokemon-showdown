@@ -120,7 +120,7 @@ describe('White Herb', function () {
 		assert.false.holdsItem(holder);
 		assert.statStage(holder, 'atk', -1);
 	});
-	it('should use white herb after two intimidate switch in after faint 5678765567', function () {
+	it('should use white herb after two intimidate switch in after faint', function () {
 		battle = common.createBattle({gameType: 'doubles'});
 
 		battle.join('p1', 'Guest 1', 1, [
@@ -144,7 +144,33 @@ describe('White Herb', function () {
 		console.log(battle.log);
 
 		assert.false.holdsItem(holder);
-		assert.statStage(holder, 'atk', -2);
+		assert.statStage(holder, 'atk', -1);
+	});
+	it('should use white herb after all pokemon switch in after faint 5678765567', function () {
+		battle = common.createBattle({gameType: 'doubles'});
+
+		battle.join('p1', 'Guest 1', 1, [
+			{species: "oddish", ability: 'stancechange', item: 'ironball', moves: ['storedpower']},
+			{species: "oddish", ability: 'stancechange', item: 'ironball', moves: ['storedpower']},
+			{species: "Arcanine", ability: 'intimidate', moves: ['bodyslam']},
+			{species: "Incineroar", ability: 'intimidate', moves: ['agility']}]);
+		battle.join('p2', 'Guest 2', 2, [
+			{species: "Rotom", ability: 'levitate', item: 'firiumz', moves: ['searingshot']},
+			{species: "Rotom", ability: 'levitate', item: 'firiumz', moves: ['searingshot']},
+			{species: "Thundurus", ability: 'prankster', item: 'whiteherb', moves: ['electricterrain']},
+			{species: 'Klefki', ability: 'prankster', moves: ['confuseray']}]);
+
+		battle.makeChoices('move storedpower, move storedpower', 'move infernooverdrive, move infernooverdrive');
+
+		battle.makeChoices('switch Arcanine, switch Incineroar', 'switch Thundurus, switch Klefki');
+		battle.makeChoices('move stringshot, move stringshot', 'move overheat, move overheat');
+
+		const holder = battle.p2.active[0];
+
+		console.log(battle.log);
+
+		assert.false.holdsItem(holder);
+		assert.statStage(holder, 'atk', -1);
 	});
 	it('should use white herb after one intimidate switch in', function () {
 		battle = common.createBattle({gameType: 'doubles'});

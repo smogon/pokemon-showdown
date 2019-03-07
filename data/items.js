@@ -6011,7 +6011,7 @@ let BattleItems = {
 		onUpdate(pokemon) {
 			if ((this.gameType === "doubles")) {
 				for (const action of this.queue) {
-					if (action.choice === 'runSwitch') {
+					if (action.choice === 'runSwitch' || action.choice === 'switch') {
 						return;
 					}
 				}
