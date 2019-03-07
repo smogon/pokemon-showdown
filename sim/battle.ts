@@ -3002,13 +3002,13 @@ export class Battle extends Dex.ModdedDex {
 		return false;
 	}
 
-	hint(hint: string, once?: boolean, sideid?: 'p1' | 'p2') {
+	hint(hint: string, once?: boolean, side?: Side) {
 		if (this.hints.has(hint)) return;
 
-		if (sideid) {
+		if (side) {
 			this.add('split');
 			for (const line of [false, this.sides[0], this.sides[1], true]) {
-				if (line === true || (line && line.id === sideid)) {
+				if (line === true || line === side) {
 					this.add('-hint', hint);
 				} else {
 					this.log.push('');

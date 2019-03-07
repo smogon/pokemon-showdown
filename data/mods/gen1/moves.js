@@ -911,7 +911,7 @@ let BattleMovedex = {
 		name: "Substitute",
 		pp: 10,
 		priority: 0,
-		volatileStatus: 'Substitute',
+		volatileStatus: 'substitute',
 		onTryHit(target) {
 			if (target.volatiles['substitute']) {
 				this.add('-fail', target, 'move: Substitute');
