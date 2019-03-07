@@ -3000,7 +3000,7 @@ export class Battle extends Dex.ModdedDex {
 		if (side) {
 			this.add('split');
 			for (const line of [false, this.sides[0], this.sides[1], true]) {
-				if (line === true || (line && line === side)) {
+				if (line === true || line === side) {
 					this.add('-hint', hint);
 				} else {
 					this.log.push('');
