@@ -28,19 +28,18 @@ let BattleScripts = {
 	// BattlePokemon scripts.
 	pokemon: {
 		getStat(statName, unmodified) {
-			statName = toId(statName);
-			if (statName === 'hp') return this.maxhp;
-			const s = /** @type {StatNameExceptHP} */(statName);
-			if (unmodified) return this.storedStats[s];
+			statName = /** @type {StatNameExceptHP} */(toId(statName));
+			// @ts-ignore - type checking prevents 'hp' from being passed, but we're paranoid
+			if (statName === 'hp') throw new Error("Please read `maxhp` directly");
+			if (unmodified) return this.storedStats[statName];
 			// @ts-ignore
-			return this.modifiedStats[s];
+			return this.modifiedStats[statName];
 		},
 		// Gen 1 function to apply a stat modification that is only active until the stat is recalculated or mon switched.
-		// Modified stats are declared in the Pokemon object in sim/pokemon.js in about line 681.
-		modifyStat(stat, modifier) {
-			if (!(stat in this.storedStats)) return;
+		modifyStat(statName, modifier) {
+			if (!(statName in this.storedStats)) throw new Error("Invalid `statName` passed to `modifyStat`");
 			// @ts-ignore
-			this.modifiedStats[stat] = this.battle.clampIntRange(Math.floor(this.modifiedStats[stat] * modifier), 1, 999);
+			this.modifiedStats[statName] = this.battle.clampIntRange(Math.floor(this.modifiedStats[statName] * modifier), 1, 999);
 		},
 		// In generation 1, boosting function increases the stored modified stat and checks for opponent's status.
 		boostBy(boost) {
@@ -802,7 +801,9 @@ let BattleScripts = {
 		let defender = target;
 		if (move.useTargetOffensive) attacker = target;
 		if (move.useSourceDefensive) defender = pokemon;
+		/** @type {StatNameExceptHP} */
 		let atkType = (move.category === 'Physical') ? 'atk' : 'spa';
+		/** @type {StatNameExceptHP} */
 		let defType = (move.defensiveCategory === 'Physical') ? 'def' : 'spd';
 		let attack = attacker.getStat(atkType);
 		let defense = defender.getStat(defType);

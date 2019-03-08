@@ -7,23 +7,14 @@
 let BattleScripts = {
 	inherit: 'gen1',
 	gen: 1,
-	// BattlePokemon scripts.
+	// BattlePokemon scripts. Stadium shares gen 1 code but it fixes some problems with it.
 	pokemon: {
-		// Stadium shares gen 1 code but it fixes some problems with it.
-		getStat(statName, unmodified) {
-			statName = toId(statName);
-			if (statName === 'hp') return this.maxhp;
-			const s = /** @type {StatNameExceptHP} */(statName);
-			if (unmodified) return this.storedStats[s];
-			// @ts-ignore
-			return this.modifiedStats[s];
-		},
 		// Gen 1 function to apply a stat modification that is only active until the stat is recalculated or mon switched.
 		// Modified stats are declared in the Pokemon object in sim/pokemon.js in about line 681.
-		modifyStat(stat, modifier) {
-			if (!(stat in this.storedStats)) return;
+		modifyStat(statName, modifier) {
+			if (!(statName in this.storedStats)) throw new Error("Invalid `statName` passed to `modifyStat`");
 			// @ts-ignore
-			this.modifiedStats[stat] = this.battle.clampIntRange(Math.floor(this.modifiedStats[stat] * modifier), 1);
+			this.modifiedStats[statName] = this.battle.clampIntRange(Math.floor(this.modifiedStats[statName] * modifier), 1);
 		},
 		// This is run on Stadium after boosts and status changes.
 		recalculateStats() {
@@ -559,7 +550,9 @@ let BattleScripts = {
 		let defender = target;
 		if (move.useTargetOffensive) attacker = target;
 		if (move.useSourceDefensive) defender = pokemon;
+		/** @type {StatNameExceptHP} */
 		let atkType = (move.category === 'Physical') ? 'atk' : 'spa';
+		/** @type {StatNameExceptHP} */
 		let defType = (move.defensiveCategory === 'Physical') ? 'def' : 'spd';
 		let attack = attacker.getStat(atkType);
 		let defense = defender.getStat(defType);

@@ -208,7 +208,7 @@ export class Pokemon {
 
 	// Gen 1 only
 	modifiedStats?: StatsExceptHPTable;
-	modifyStat?: (this: Pokemon, statName: string, modifier: number) => void;
+	modifyStat?: (this: Pokemon, statName: StatNameExceptHP, modifier: number) => void;
 
 	// OMs
 	innate?: string;
@@ -419,12 +419,13 @@ export class Pokemon {
 		this.speed = this.getActionSpeed();
 	}
 
-	calculateStat(statName: string, boost: number, modifier?: number) {
-		statName = toId(statName);
-		if (statName === 'hp') return this.maxhp; // please just read .maxhp directly
+	calculateStat(statName: StatNameExceptHP, boost: number, modifier?: number) {
+		statName = toId(statName) as StatNameExceptHP;
+		// @ts-ignore - type checking prevents 'hp' from being passed, but we're paranoid
+		if (statName === 'hp') throw new Error("Please read `maxhp` directly");
 
 		// base stat
-		let stat = this.storedStats[statName as StatNameExceptHP];
+		let stat = this.storedStats[statName];
 
 		// Wonder Room swaps defenses before calculating anything else
 		if ('wonderroom' in this.battle.pseudoWeather) {
@@ -454,12 +455,13 @@ export class Pokemon {
 		return this.battle.modify(stat, (modifier || 1));
 	}
 
-	getStat(statName: string, unboosted?: boolean, unmodified?: boolean) {
-		statName = toId(statName);
-		if (statName === 'hp') return this.maxhp; // please just read .maxhp directly
+	getStat(statName: StatNameExceptHP, unboosted?: boolean, unmodified?: boolean) {
+		statName = toId(statName) as StatNameExceptHP;
+		// @ts-ignore - type checking prevents 'hp' from being passed, but we're paranoid
+		if (statName === 'hp') throw new Error("Please read `maxhp` directly");
 
 		// base stat
-		let stat = this.storedStats[statName as StatNameExceptHP];
+		let stat = this.storedStats[statName];
 
 		// Download ignores Wonder Room's effect, but this results in
 		// stat stages being calculated on the opposite defensive stat
