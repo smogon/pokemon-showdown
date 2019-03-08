@@ -16,7 +16,7 @@ describe('Clear Body', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: 'Arbok', ability: 'intimidate', moves: ['acidspray', 'leer', 'scaryface', 'charm', 'confide']}]);
 
 		const stats = ['spd', 'def', 'spe', 'atk', 'spa'];
-		for (const [index, stat] of stats) {
+		for (const [index, stat] of stats.entries()) {
 			battle.makeChoices('move recover', 'move ' + (index + 1));
 			assert.statStage(battle.p1.active[0], stat, 0);
 		}

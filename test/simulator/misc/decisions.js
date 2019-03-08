@@ -254,7 +254,7 @@ describe('Choices', function () {
 			]);
 			battle.makeChoices('move harden, move defensecurl, shift', 'move roost, move irondefense, shift');
 
-			for (const [index, species] of ['Skarmory', 'Golem', 'Aggron'].entries()) {
+			for (const [index, species] of ['Pineco', 'Gastly', 'Geodude'].entries()) {
 				assert.species(p1.active[index], species);
 			}
 			for (const [index, species] of ['Skarmory', 'Golem', 'Aggron'].entries()) {
@@ -893,7 +893,7 @@ describe('Choice extensions', function () {
 				if (mode === 'revoke') battle.undoChoice('p1');
 				battle.makeChoices('move synthesis', 'move scratch');
 
-				for (const [index, species] of ['Ivysaur', 'Bulbasaur', 'Venusaur']) {
+				for (const [index, species] of ['Ivysaur', 'Bulbasaur', 'Venusaur'].entries()) {
 					assert.species(battle.p1.pokemon[index], species);
 				}
 
