@@ -904,7 +904,7 @@ describe('Choice extensions', function () {
 				if (mode === 'revoke') battle.undoChoice('p1');
 				battle.makeChoices('switch 3', 'move scratch');
 
-				for (const [index, species] of ['Ivysaur', 'Bulbasaur', 'Venusaur']) {
+				for (const [index, species] of ['Ivysaur', 'Bulbasaur', 'Venusaur'].entries()) {
 					assert.species(battle.p1.pokemon[index], species);
 				}
 			});
