@@ -62,7 +62,9 @@ try {
 sucrase('./sim', './.sim-dist');
 sucrase('./lib', './.lib-dist');
 // NOTE: replace is asynchronous - add additional replacements for the same path in one call instead of making multiple calls.
-replace(path.join(__dirname, '.sim-dist'), [{regex: new RegExp(`(require\\\(.*?)(lib)(.*?\\\))`), replace: `$1.lib-dist$3`}]);
+replace(path.join(__dirname, '.sim-dist'), [
+	{regex: new RegExp(`(require\\\(.*?)(lib)(.*?\\\))`), replace: `$1.lib-dist$3`},
+]);
 
 // Make sure config.js exists. If not, copy it over synchronously from
 // config-example.js, since it's needed before we can start the server
