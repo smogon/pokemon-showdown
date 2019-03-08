@@ -3260,7 +3260,7 @@ const commands = {
 			if (curRoom.type === 'battle') curRoom.rated = false;
 			if (curRoom.id !== 'global') curRoom.addRaw(`<div class="broadcast-red">${innerHTML}</div>`).update();
 		}
-		for (const u of Users.users) {
+		for (const u of Users.users.values()) {
 			if (u.connected) u.send(`|pm|~|${u.group}${u.name}|/raw <div class="broadcast-red">${innerHTML}</div>`);
 		}
 	},
@@ -3283,7 +3283,7 @@ const commands = {
 		for (const curRoom of Rooms.rooms.values()) {
 			if (curRoom.id !== 'global') curRoom.addRaw(`<div class="broadcast-green">${innerHTML}</div>`).update();
 		}
-		for (const u of Users.users) {
+		for (const u of Users.users.values()) {
 			if (u.connected) u.send(`|pm|~|${u.group}${u.name}|/raw <div class="broadcast-green">${innerHTML}</div>`);
 		}
 	},
@@ -3401,7 +3401,7 @@ const commands = {
 			return this.errorReply("Wait for /updateserver to finish before using /kill.");
 		}
 
-		for (const worker of Sockets.workers) {
+		for (const worker of Sockets.workers.values()) {
 			worker.kill();
 		}
 
