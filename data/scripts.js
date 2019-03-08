@@ -68,7 +68,7 @@ let BattleScripts = {
 				if (!pokemon.deductPP(baseMove, null, target) && (move.id !== 'struggle')) {
 					this.add('cant', pokemon, 'nopp', move);
 					let gameConsole = [null, 'Game Boy', 'Game Boy', 'Game Boy Advance', 'DS', 'DS'][this.gen] || '3DS';
-					this.add('-hint', "This is not a bug, this is really how it works on the " + gameConsole + "; try it yourself if you don't believe us.");
+					this.hint(`This is not a bug, this is really how it works on the ${gameConsole}; try it yourself if you don't believe us.`);
 					this.clearActiveMove(true);
 					pokemon.moveThisTurnResult = false;
 					return;
@@ -409,7 +409,7 @@ let BattleScripts = {
 		for (let [i, target] of targets.entries()) {
 			if (targets[i].side !== pokemon.side && !this.getImmunity('prankster', target)) {
 				this.debug('natural prankster immunity');
-				if (!target.illusion) this.add('-hint', "In gen 7, Dark is immune to Prankster moves.");
+				if (!target.illusion) this.hint("In gen 7, Dark is immune to Prankster moves.");
 				this.add('-immune', target);
 				hitResults[i] = false;
 			} else {

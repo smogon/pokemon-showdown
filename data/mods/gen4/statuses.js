@@ -50,6 +50,9 @@ let BattleStatuses = {
 			return false;
 		},
 	},
+	substitutebroken: {
+		noCopy: true,
+	},
 	trapped: {
 		inherit: true,
 		noCopy: false,

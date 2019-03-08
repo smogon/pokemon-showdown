@@ -642,7 +642,6 @@ interface Template extends Readonly<BasicEffect & TemplateData & TemplateFormats
 	readonly isMega?: boolean
 	readonly isPrimal?: boolean
 	readonly learnset?: {[k: string]: MoveSource[]}
-	readonly originalMega?: string
 }
 
 type GameType = 'singles' | 'doubles' | 'triples' | 'rotation'

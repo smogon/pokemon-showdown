@@ -1811,7 +1811,7 @@ const commands = {
 	'!faq': true,
 	faq(target, room, user) {
 		if (!this.runBroadcast()) return;
-		target = target.toLowerCase();
+		target = target.toLowerCase().trim();
 		let showAll = target === 'all';
 		if (showAll && this.broadcasting) {
 			return this.sendReplyBox("You cannot broadcast all FAQs at once.");

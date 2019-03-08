@@ -3138,7 +3138,7 @@ let BattleMovedex = {
 				return;
 			}
 			this.add('-fail', pokemon, 'move: Dark Void');
-			this.add('-hint', "Only a Pokemon whose form is Darkrai can use this move.");
+			this.hint("Only a Pokemon whose form is Darkrai can use this move.");
 			return null;
 		},
 		secondary: null,
@@ -4868,7 +4868,7 @@ let BattleMovedex = {
 			if (pokemon.activeTurns > 1) {
 				this.attrLastMove('[still]');
 				this.add('-fail', pokemon);
-				this.add('-hint', "Fake Out only works on your first turn out.");
+				this.hint("Fake Out only works on your first turn out.");
 				return null;
 			}
 		},
@@ -5237,7 +5237,7 @@ let BattleMovedex = {
 			if (pokemon.activeTurns > 1) {
 				this.add('-fail', pokemon);
 				this.attrLastMove('[still]');
-				this.add('-hint', "First Impression only works on your first turn out.");
+				this.hint("First Impression only works on your first turn out.");
 				return null;
 			}
 		},
@@ -6143,7 +6143,8 @@ let BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onHit(target, source) {
+		onHit(target, source, move) {
+			if (move.hit === 1) return;
 			source.addVolatile('furycutter');
 		},
 		effect: {
@@ -8266,7 +8267,7 @@ let BattleMovedex = {
 			if (pokemon.template.species === 'Hoopa-Unbound') {
 				return;
 			}
-			this.add('-hint', "Only a Pokemon whose form is Hoopa Unbound can use this move.");
+			this.hint("Only a Pokemon whose form is Hoopa Unbound can use this move.");
 			if (pokemon.template.species === 'Hoopa') {
 				this.add('-fail', pokemon, 'move: Hyperspace Fury', '[forme]');
 				return null;
@@ -10053,7 +10054,7 @@ let BattleMovedex = {
 		sideCondition: 'matblock',
 		onTryHitSide(side, source) {
 			if (source.activeTurns > 1) {
-				this.add('-hint', "Mat Block only works on your first turn out.");
+				this.hint("Mat Block only works on your first turn out.");
 				return false;
 			}
 		},
@@ -16438,20 +16439,30 @@ let BattleMovedex = {
 			noCopy: true,
 			onStart(target) {
 				this.effectData.layers = 1;
+				this.effectData.def = 0;
+				this.effectData.spd = 0;
 				this.add('-start', target, 'stockpile' + this.effectData.layers);
+				let [curDef, curSpD] = [target.boosts.def, target.boosts.spd];
 				this.boost({def: 1, spd: 1}, target, target);
+				if (curDef !== target.boosts.def) this.effectData.def--;
+				if (curSpD !== target.boosts.spd) this.effectData.spd--;
 			},
 			onRestart(target) {
 				if (this.effectData.layers >= 3) return false;
 				this.effectData.layers++;
 				this.add('-start', target, 'stockpile' + this.effectData.layers);
+				const curDef = target.boosts.def;
+				const curSpD = target.boosts.spd;
 				this.boost({def: 1, spd: 1}, target, target);
+				if (curDef !== target.boosts.def) this.effectData.def--;
+				if (curSpD !== target.boosts.spd) this.effectData.spd--;
 			},
 			onEnd(target) {
-				let layers = this.effectData.layers * -1;
-				this.effectData.layers = 0;
-				this.boost({def: layers, spd: layers}, target, target);
+				this.boost({def: this.effectData.def, spd: this.effectData.spd}, target, target);
 				this.add('-end', target, 'Stockpile');
+				if (this.effectData.def !== this.effectData.layers * -1 || this.effectData.spd !== this.effectData.layers * -1) {
+					this.hint("In Gen 7, Stockpile keeps track of how many times it successfully altered each stat individually.");
+				}
 			},
 		},
 		secondary: null,
@@ -16768,7 +16779,7 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, nonsky: 1},
-		volatileStatus: 'Substitute',
+		volatileStatus: 'substitute',
 		onTryHit(target) {
 			if (target.volatiles['substitute']) {
 				this.add('-fail', target, 'move: Substitute');

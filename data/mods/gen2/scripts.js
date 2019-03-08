@@ -422,6 +422,8 @@ let BattleScripts = {
 					let effectChance = Math.floor((secondary.chance || 100) * 255 / 100);
 					if (typeof secondary.chance === 'undefined' || this.randomChance(effectChance, 256)) {
 						this.moveHit(target, pokemon, move, secondary, true, isSelf);
+					} else if (effectChance === 255) {
+						this.hint("In Gen 2, moves with a 100% secondary effect chance will not trigger in 1/256 uses.");
 					}
 				}
 			}
@@ -587,7 +589,6 @@ let BattleScripts = {
 			defense = target.getStat(defType, true, true);
 		}
 
-		// Gen 2 Present has a glitched damage calculation using the secondary types of the Pokemon for the Attacker's Level and Defender's Defense.
 		if (move.id === 'present') {
 			/**@type {{[k: string]: number}} */
 			const typeIndexes = {"Normal": 0, "Fighting": 1, "Flying": 2, "Poison": 3, "Ground": 4, "Rock": 5, "Bug": 7, "Ghost": 8, "Steel": 9, "Fire": 20, "Water": 21, "Grass": 22, "Electric": 23, "Psychic": 24, "Ice": 25, "Dragon": 26, "Dark": 27};
@@ -601,11 +602,15 @@ let BattleScripts = {
 			if (move.crit) {
 				level *= 2;
 			}
+			this.hint("Gen 2 Present has a glitched damage calculation using the secondary types of the Pokemon for the Attacker's Level and Defender's Defense.", true);
 		}
 
-		// When either attack or defense are higher than 256, they are both divided by 4 and moded by 256.
-		// This is what cuases the roll over bugs.
+		// When either attack or defense are higher than 256, they are both divided by 4 and modded by 256.
+		// This is what causes the rollover bugs.
 		if (attack >= 256 || defense >= 256) {
+			if (attack >= 1024 || defense >= 1024) {
+				this.hint("In Gen 2, a stat will roll over to a small number if it is larger than 1024.");
+			}
 			attack = this.clampIntRange(Math.floor(attack / 4) % 256, 1);
 			defense = this.clampIntRange(Math.floor(defense / 4) % 256, 1);
 		}

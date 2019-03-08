@@ -13572,7 +13572,7 @@ let BattlePokedex = {
 		species: "Necturna",
 		types: ["Grass", "Ghost"],
 		gender: "F",
-		baseStats: {hp: 64, atk: 120, def: 100, spa: 85, spd: 120, spe: 81},
+		baseStats: {hp: 64, atk: 120, def: 100, spa: 85, spd: 120, spe: 58},
 		abilities: {0: "Forewarn", H: "Telepathy"},
 		heightm: 1.65,
 		weightkg: 49.6,

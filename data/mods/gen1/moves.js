@@ -518,7 +518,7 @@ let BattleMovedex = {
 		shortDesc: "User takes 1 HP of damage if it misses.",
 		onMoveFail(target, source, move) {
 			if (!target.types.includes('Ghost')) {
-				this.directDamage(1, source);
+				this.directDamage(1, source, target);
 			}
 		},
 	},
@@ -537,7 +537,9 @@ let BattleMovedex = {
 		desc: "If this attack misses the target, the user takes 1 HP of crash damage. If the user has a substitute, the crash damage is dealt to the target's substitute if it has one, otherwise no crash damage is dealt.",
 		shortDesc: "User takes 1 HP of damage if it misses.",
 		onMoveFail(target, source, move) {
-			this.damage(1, source);
+			if (!target.types.includes('Ghost')) {
+				this.directDamage(1, source, target);
+			}
 		},
 	},
 	karatechop: {
@@ -562,12 +564,14 @@ let BattleMovedex = {
 				}
 				// We check if leeched Pokémon has Toxic to increase leeched damage.
 				let toxicCounter = 1;
-				if (pokemon.volatiles['residualdmg']) {
-					pokemon.volatiles['residualdmg'].counter++;
-					toxicCounter = pokemon.volatiles['residualdmg'].counter;
+				let residualdmg = pokemon.volatiles['residualdmg'];
+				if (residualdmg) {
+					residualdmg.counter++;
+					toxicCounter = residualdmg.counter;
 				}
 				let toLeech = this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * toxicCounter;
 				let damage = this.damage(toLeech, pokemon, leecher);
+				if (residualdmg) this.hint("In Gen 1, Leech Seed's damage is affected by Toxic's counter.", true);
 				if (damage) this.heal(damage, leecher, pokemon);
 			},
 		},
@@ -736,6 +740,7 @@ let BattleMovedex = {
 		onHit(target) {
 			// Fail when health is 255 or 511 less than max
 			if (target.hp === (target.maxhp - 255) || target.hp === (target.maxhp - 511) || target.hp === target.maxhp) {
+				this.hint("In Gen 1, recovery moves fail if (user's maximum HP - user's current HP + 1) is divisible by 256.");
 				return false;
 			}
 			this.heal(Math.floor(target.maxhp / 2), target, target);
@@ -856,6 +861,7 @@ let BattleMovedex = {
 		onHit(target) {
 			// Fail when health is 255 or 511 less than max
 			if (target.hp === (target.maxhp - 255) || target.hp === (target.maxhp - 511) || target.hp === target.maxhp) {
+				this.hint("In Gen 1, recovery moves fail if (user's maximum HP - user's current HP + 1) is divisible by 256.");
 				return false;
 			}
 			this.heal(Math.floor(target.maxhp / 2), target, target);
@@ -905,7 +911,7 @@ let BattleMovedex = {
 		name: "Substitute",
 		pp: 10,
 		priority: 0,
-		volatileStatus: 'Substitute',
+		volatileStatus: 'substitute',
 		onTryHit(target) {
 			if (target.volatiles['substitute']) {
 				this.add('-fail', target, 'move: Substitute');

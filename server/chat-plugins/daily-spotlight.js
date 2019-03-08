@@ -83,6 +83,7 @@ exports.pages = pages;
 /** @type {ChatCommands} */
 const commands = {
 	async removedaily(target, room, user) {
+		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
 		let [key, rest] = target.split(',');
 		key = toId(key);
 		if (!key) return this.parse('/help daily');
@@ -112,6 +113,7 @@ const commands = {
 	},
 	queuedaily: 'setdaily',
 	async setdaily(target, room, user, connection, cmd) {
+		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
 		let [key, ...rest] = target.split(',');
 		key = toId(key);
 		if (!key) return this.parse('/help daily');
@@ -147,6 +149,7 @@ const commands = {
 		saveSpotlights();
 	},
 	async daily(target, room, user) {
+		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
 		let key = toId(target);
 		if (!key) return this.parse('/help daily');
 
@@ -163,6 +166,7 @@ const commands = {
 		room.update();
 	},
 	viewspotlights(target, room, user) {
+		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
 		return this.parse(`/join view-spotlights-${room.id}`);
 	},
 
