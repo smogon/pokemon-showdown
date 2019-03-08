@@ -165,7 +165,6 @@ describe('White Herb', function () {
 
 		const holder = battle.p2.active[0];
 		const util = require('util');
-		console.log(util.inspect(battle.log, {maxArrayLength: null}));
 
 		assert.false.holdsItem(holder);
 		assert.statStage(holder, 'atk', 0);
