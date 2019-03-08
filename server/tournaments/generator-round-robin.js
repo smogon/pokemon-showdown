@@ -114,7 +114,7 @@ class RoundRobin {
 		let userIndex = this.users.indexOf(user);
 
 		for (const [col, match] of this.matches[userIndex].entries()) {
-			if (!match || match.state !== 'available') return;
+			if (!match || match.state !== 'available') continue;
 			match.state = 'finished';
 			match.result = 'loss';
 			match.score = [0, 1];
@@ -124,7 +124,7 @@ class RoundRobin {
 
 		for (const [row, challenges] of this.matches.entries()) {
 			let match = challenges[userIndex];
-			if (!match || match.state !== 'available') return;
+			if (!match || match.state !== 'available') continue;
 			match.state = 'finished';
 			match.result = 'win';
 			match.score = [1, 0];
@@ -157,7 +157,7 @@ class RoundRobin {
 		let matches = [];
 		for (const [row, challenges] of this.matches.entries()) {
 			for (const [col, match] of challenges.entries()) {
-				if (!match) return;
+				if (!match) continue;
 				if (match.state === 'available' && !this.isUsersBusy[row] && !this.isUsersBusy[col]) {
 					matches.push([this.users[row], this.users[col]]);
 				}

@@ -329,9 +329,9 @@ const commands = {
 			// host
 			this.sendReply(`Users with host ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
 			for (const curUser of Users.users.values()) {
-				if (results.length > 100 && !isAll) return;
-				if (!curUser.latestHost || !curUser.latestHost.endsWith(ip)) return;
-				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) return;
+				if (results.length > 100 && !isAll) continue;
+				if (!curUser.latestHost || !curUser.latestHost.endsWith(ip)) continue;
+				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) continue;
 				results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
 			}
 			if (results.length > 100 && !isAll) {
@@ -342,9 +342,9 @@ const commands = {
 			this.sendReply(`Users in IP range ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
 			ip = ip.slice(0, -1);
 			for (const curUser of Users.users.values()) {
-				if (results.length > 100 && !isAll) return;
-				if (!curUser.latestIp.startsWith(ip)) return;
-				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) return;
+				if (results.length > 100 && !isAll) continue;
+				if (!curUser.latestIp.startsWith(ip)) continue;
+				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) continue;
 				results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
 			}
 			if (results.length > 100 && !isAll) {
@@ -353,8 +353,8 @@ const commands = {
 		} else {
 			this.sendReply(`Users with IP ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
 			for (const curUser of Users.users.values()) {
-				if (curUser.latestIp !== ip) return;
-				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) return;
+				if (curUser.latestIp !== ip) continue;
+				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) continue;
 				results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
 			}
 		}

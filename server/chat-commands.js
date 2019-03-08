@@ -2928,7 +2928,7 @@ const commands = {
 
 		for (const [userid, data] of blMap) {
 			const [expireTime, ...alts] = data;
-			if (soonExpiring && expireTime > Date.now() + SOON_EXPIRING_TIME) return;
+			if (soonExpiring && expireTime > Date.now() + SOON_EXPIRING_TIME) continue;
 			const expiresIn = new Date(expireTime).getTime() - Date.now();
 			const expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
 			buf += `- <strong>${userid}</strong>, for ${Chat.count(expiresDays, "days")}`;

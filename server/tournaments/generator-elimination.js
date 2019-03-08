@@ -68,7 +68,7 @@ class Elimination {
 	getUsers(remaining) {
 		let users = [];
 		for (const [key, value] of this.users) {
-			if (remaining && (value.isEliminated || value.isDisqualified)) return;
+			if (remaining && (value.isEliminated || value.isDisqualified)) continue;
 			users.push(key);
 		}
 		return users;

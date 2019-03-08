@@ -493,7 +493,7 @@ class Tournament {
 
 		const now = Date.now();
 		for (const [user, availableMatches] of this.availableMatches) {
-			if (oldAvailableMatches.get(user)) return;
+			if (oldAvailableMatches.get(user)) continue;
 
 			if (availableMatches.size) this.lastActionTimes.set(user, now);
 		}
