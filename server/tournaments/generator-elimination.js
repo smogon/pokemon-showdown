@@ -84,7 +84,7 @@ class Elimination {
 					nextLayerLeafNodes: [],
 				};
 				this.tree.currentLayerLeafNodes.push(this.tree.tree);
-				return;
+				continue;
 			}
 			let targetNode = this.tree.currentLayerLeafNodes.shift();
 

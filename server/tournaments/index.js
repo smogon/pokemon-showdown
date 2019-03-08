@@ -651,9 +651,9 @@ class Tournament {
 
 			if (!availableMatches && !pendingChallenge) {
 				this.autoDisqualifyWarnings.delete(player);
-				return;
+				continue;
 			}
-			if (pendingChallenge && pendingChallenge.to) return;
+			if (pendingChallenge && pendingChallenge.to) continue;
 
 			if (now > time + this.autoDisqualifyTimeout && this.autoDisqualifyWarnings.has(player)) {
 				let reason;
@@ -665,7 +665,7 @@ class Tournament {
 				this.disqualifyUser(player.userid, output, reason);
 				this.room.update();
 			} else if (now > time + this.autoDisqualifyTimeout - AUTO_DISQUALIFY_WARNING_TIMEOUT) {
-				if (this.autoDisqualifyWarnings.has(player)) return;
+				if (this.autoDisqualifyWarnings.has(player)) continue;
 				let remainingTime = this.autoDisqualifyTimeout - now + time;
 				if (remainingTime <= 0) {
 					remainingTime = AUTO_DISQUALIFY_WARNING_TIMEOUT;
