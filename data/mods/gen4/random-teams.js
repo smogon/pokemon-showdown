@@ -284,7 +284,6 @@ class RandomGen4Teams extends RandomGen5Teams {
 					break;
 				case 'machpunch':
 					if (hasType['Fighting'] && counter.stab < 2 && !hasAbility['Technician']) rejected = true;
-					if (hasMove['vacuumwave'] && counter.setupType !== 'Physical') rejected = true;
 					if (counter.damagingMoves.length <= counter['Fighting']) rejected = true;
 					break;
 				case 'seismictoss':
@@ -324,8 +323,8 @@ class RandomGen4Teams extends RandomGen5Teams {
 				case 'pursuit':
 					if (counter.setupType || hasMove['payback']) rejected = true;
 					break;
-				case 'gyroball': case 'flashcannon':
-					if (hasMove['ironhead'] && counter.setupType !== 'Special') rejected = true;
+				case 'flashcannon':
+					if ((hasMove['ironhead'] || movePool.includes('ironhead')) && counter.setupType !== 'Special') rejected = true;
 					break;
 
 				// Status:
@@ -621,7 +620,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 			item = 'Black Sludge';
 		} else if (this.getEffectiveness('Rock', template) >= 1 || hasMove['roar']) {
 			item = 'Leftovers';
-		} else if (counter.Status <= 1 && !hasMove['rapidspin'] && !hasMove['superfang']) {
+		} else if (counter.Status <= 1 && !hasMove['metalburst'] && !hasMove['rapidspin'] && !hasMove['superfang']) {
 			item = 'Life Orb';
 		} else {
 			item = 'Leftovers';

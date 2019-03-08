@@ -480,7 +480,7 @@ class RandomTeams extends Dex.ModdedDex {
 		];
 		// Moves that shouldn't be the only STAB moves:
 		let NoStab = [
-			'aquajet', 'bounce', 'explosion', 'fakeout', 'firstimpression', 'flamecharge', 'fly', 'iceshard', 'pursuit', 'quickattack', 'skyattack', 'suckerpunch',
+			'aquajet', 'bounce', 'explosion', 'fakeout', 'firstimpression', 'flamecharge', 'fly', 'iceshard', 'pursuit', 'quickattack', 'selfdestruct', 'skyattack', 'suckerpunch',
 			'chargebeam', 'clearsmog', 'eruption', 'vacuumwave', 'waterspout',
 		];
 
