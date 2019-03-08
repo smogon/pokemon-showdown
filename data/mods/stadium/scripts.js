@@ -13,27 +13,27 @@ let BattleScripts = {
 		getStat(statName, unmodified) {
 			statName = toId(statName);
 			if (statName === 'hp') return this.maxhp;
-			if (unmodified) return this.stats[statName];
+			if (unmodified) return this.storedStats[statName];
 			// @ts-ignore
 			return this.modifiedStats[statName];
 		},
 		// Gen 1 function to apply a stat modification that is only active until the stat is recalculated or mon switched.
 		// Modified stats are declared in the Pokemon object in sim/pokemon.js in about line 681.
 		modifyStat(stat, modifier) {
-			if (!(stat in this.stats)) return;
+			if (!(stat in this.storedStats)) return;
 			// @ts-ignore
 			this.modifiedStats[stat] = this.battle.clampIntRange(Math.floor(this.modifiedStats[stat] * modifier), 1);
 		},
 		// This is run on Stadium after boosts and status changes.
 		recalculateStats() {
-			for (let statName in this.stats) {
+			for (let statName in this.storedStats) {
 				/**@type {number} */
 				// @ts-ignore
 				let stat = this.template.baseStats[statName];
 				// @ts-ignore
 				stat = Math.floor(Math.floor(2 * stat + this.set.ivs[statName] + Math.floor(this.set.evs[statName] / 4)) * this.level / 100 + 5);
 				// @ts-ignore
-				this.baseStats[statName] = this.stats[statName] = Math.floor(stat);
+				this.baseStoredStats[statName] = this.storedStats[statName] = Math.floor(stat);
 				// @ts-ignore
 				this.modifiedStats[statName] = Math.floor(stat);
 				// Re-apply drops, if necessary.

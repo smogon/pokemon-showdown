@@ -81,7 +81,7 @@ describe('Primordial Sea', function () {
 		battle.makeChoices('move sonicboom', 'move weatherball');
 		assert.species(p2.active[0], 'Castform-Rainy');
 		battle.makeChoices('move sonicboom', 'switch 2');
-		assert.strictEqual(battle.p2.active[0].getStat('spe'), 2 * battle.p2.active[0].stats['spe'], "Kingdra's Speed should be doubled by Swift Swim");
+		assert.strictEqual(battle.p2.active[0].getStat('spe'), 2 * battle.p2.active[0].storedStats['spe'], "Kingdra's Speed should be doubled by Swift Swim");
 		battle.makeChoices('move sonicboom', 'switch 3');
 		assert.notStrictEqual(battle.p2.active[0].maxhp - battle.p2.active[0].hp, 20);
 		battle.makeChoices('move sonicboom', 'switch 4');

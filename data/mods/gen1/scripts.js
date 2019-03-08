@@ -30,14 +30,14 @@ let BattleScripts = {
 		getStat(statName, unmodified) {
 			statName = toId(statName);
 			if (statName === 'hp') return this.maxhp;
-			if (unmodified) return this.stats[statName];
+			if (unmodified) return this.storedStats[statName];
 			// @ts-ignore
 			return this.modifiedStats[statName];
 		},
 		// Gen 1 function to apply a stat modification that is only active until the stat is recalculated or mon switched.
 		// Modified stats are declared in the Pokemon object in sim/pokemon.js in about line 681.
 		modifyStat(stat, modifier) {
-			if (!(stat in this.stats)) return;
+			if (!(stat in this.storedStats)) return;
 			// @ts-ignore
 			this.modifiedStats[stat] = this.battle.clampIntRange(Math.floor(this.modifiedStats[stat] * modifier), 1, 999);
 		},
@@ -71,7 +71,7 @@ let BattleScripts = {
 				// @ts-ignore
 				stat = Math.floor(Math.floor(2 * stat + this.set.ivs[i] + Math.floor(this.set.evs[i] / 4)) * this.level / 100 + 5);
 				// @ts-ignore
-				this.modifiedStats[i] = this.stats[i] = Math.floor(stat);
+				this.modifiedStats[i] = this.storedStats[i] = Math.floor(stat);
 				// @ts-ignore
 				if (this.boosts[i] >= 0) {
 					// @ts-ignore

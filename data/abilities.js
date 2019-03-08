@@ -282,10 +282,10 @@ let BattleAbilities = {
 			if (effect && effect.effectType === 'Move') {
 				let stat = 'atk';
 				let bestStat = 0;
-				for (let i in source.stats) {
-					if (source.stats[i] > bestStat) {
+				for (let i in source.storedStats) {
+					if (source.storedStats[i] > bestStat) {
 						stat = i;
-						bestStat = source.stats[i];
+						bestStat = source.storedStats[i];
 					}
 				}
 				this.boost({[stat]: 1}, source);

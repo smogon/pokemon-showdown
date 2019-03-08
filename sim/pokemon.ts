@@ -64,24 +64,24 @@ export class Pokemon {
 	 * calculated purely from the species base stats, level, IVs, EVs,
 	 * and Nature, before modifications from item, ability, etc.
 	 *
-	 * `stats` are reset to `baseStats` on switch-out.
+	 * `storedStats` are reset to `baseStoredStats` on switch-out.
 	 */
-	baseStats: StatsTable;
+	baseStoredStats: StatsTable;
 	/**
 	 * These are pre-modification stored stats in-battle. At switch-in,
-	 * they're identical to `baseStats`, but can be temporarily changed
+	 * they're identical to `baseStoredStats`, but can be temporarily changed
 	 * until switch-out by effects such as Power Trick and Transform.
 	 *
 	 * Stat multipliers from abilities, items, and volatiles, such as
 	 * Solar Power, Choice Band, or Swords Dance, are not stored in
-	 * `stats`, but applied on top and accessed by `pokemon.getStat`.
+	 * `storedStats`, but applied on top and accessed by `pokemon.getStat`.
 	 *
 	 * (Except in Gen 1, where stat multipliers are stored, leading
 	 * to several famous glitches.)
 	 *
-	 * `stats` are reset to `baseStats` on switch-out.
+	 * `storedStats` are reset to `baseStoredStats` on switch-out.
 	 */
-	stats: {[k: string]: number};
+	storedStats: {[k: string]: number};
 	boosts: BoostsTable;
 
 	baseAbility: string;
@@ -318,8 +318,8 @@ export class Pokemon {
 		this.baseHpPower = this.hpPower;
 
 		// initialized in this.setTemplate(this.baseTemplate)
-		this.baseStats = null!;
-		this.stats = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
+		this.baseStoredStats = null!;
+		this.storedStats = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
 		this.boosts = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0};
 
 		this.baseAbility = toId(set.ability);
@@ -377,7 +377,7 @@ export class Pokemon {
 		if (this.battle.gen === 1) this.modifiedStats = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
 
 		this.clearVolatile();
-		this.maxhp = this.template.maxHP || this.baseStats.hp;
+		this.maxhp = this.template.maxHP || this.baseStoredStats.hp;
 		this.hp = this.maxhp;
 
 		this.isStale = 0;
@@ -424,14 +424,14 @@ export class Pokemon {
 		if (statName === 'hp') return this.maxhp; // please just read .maxhp directly
 
 		// base stat
-		let stat = this.stats[statName];
+		let stat = this.storedStats[statName];
 
 		// Wonder Room swaps defenses before calculating anything else
 		if ('wonderroom' in this.battle.pseudoWeather) {
 			if (statName === 'def') {
-				stat = this.stats['spd'];
+				stat = this.storedStats['spd'];
 			} else if (statName === 'spd') {
-				stat = this.stats['def'];
+				stat = this.storedStats['def'];
 			}
 		}
 
@@ -459,7 +459,7 @@ export class Pokemon {
 		if (statName === 'hp') return this.maxhp; // please just read .maxhp directly
 
 		// base stat
-		let stat = this.stats[statName];
+		let stat = this.storedStats[statName];
 
 		// Download ignores Wonder Room's effect, but this results in
 		// stat stages being calculated on the opposite defensive stat
@@ -872,8 +872,8 @@ export class Pokemon {
 		this.knownType = this.side === pokemon.side && pokemon.knownType;
 		this.apparentType = pokemon.apparentType;
 
-		for (const statName in this.stats) {
-			this.stats[statName] = pokemon.stats[statName];
+		for (const statName in this.storedStats) {
+			this.storedStats[statName] = pokemon.storedStats[statName];
 		}
 		this.moveSlots = [];
 		this.set.ivs = (this.battle.gen >= 5 ? this.set.ivs : pokemon.set.ivs);
@@ -950,11 +950,11 @@ export class Pokemon {
 		if (this.battle.gen >= 7) this.removeVolatile('autotomize');
 
 		const stats = this.battle.spreadModify(this.template.baseStats, this.set);
-		if (!this.baseStats) this.baseStats = stats;
-		for (const statName in this.stats) {
+		if (!this.baseStoredStats) this.baseStoredStats = stats;
+		for (const statName in this.storedStats) {
 			const s = statName as keyof StatsTable;
-			this.stats[s] = stats[s];
-			this.baseStats[s] = stats[s];
+			this.storedStats[s] = stats[s];
+			this.baseStoredStats[s] = stats[s];
 			if (this.modifiedStats) this.modifiedStats[s] = stats[s]; // Gen 1: Reset modified stats.
 		}
 		if (this.battle.gen <= 1) {
@@ -962,7 +962,7 @@ export class Pokemon {
 			if (this.status === 'par') this.modifyStat!('spe', 0.25);
 			if (this.status === 'brn') this.modifyStat!('atk', 0.5);
 		}
-		this.speed = this.stats.spe;
+		this.speed = this.storedStats.spe;
 		return template;
 	}
 
