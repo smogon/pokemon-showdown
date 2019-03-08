@@ -769,7 +769,7 @@ export class Side {
 		this.pokemon = [];
 		this.active = [];
 
-		for (const action of this.choice.actions.values()) {
+		for (const action of this.choice.actions) {
 			delete action.side;
 			delete action.pokemon;
 			delete action.target;
