@@ -6,9 +6,9 @@
     "configurations": [
         {
             "type": "node",
-            "request": "launch",
+            "request": "attach",
             "name": "Start Server",
-            "program": "${workspaceFolder}\\app.js"
+            "port": 9229
         },
         {
             "type": "node",

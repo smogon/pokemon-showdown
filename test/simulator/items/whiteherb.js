@@ -5,7 +5,7 @@ const common = require('./../../common');
 
 let battle;
 
-describe('White Herb', function () {
+describe('White Herb 5678765567', function () {
 	afterEach(function () {
 		battle.destroy();
 	});
@@ -146,7 +146,7 @@ describe('White Herb', function () {
 		assert.false.holdsItem(holder);
 		assert.statStage(holder, 'atk', -1);
 	});
-	it('should use white herb after all pokemon switch in after faint 5678765567', function () {
+	it('should use white herb after all pokemon switch in after faint', function () {
 		battle = common.createBattle({gameType: 'doubles'});
 
 		battle.join('p1', 'Guest 1', 1, [
@@ -155,22 +155,22 @@ describe('White Herb', function () {
 			{species: "Arcanine", ability: 'intimidate', moves: ['bodyslam']},
 			{species: "Incineroar", ability: 'intimidate', moves: ['agility']}]);
 		battle.join('p2', 'Guest 2', 2, [
-			{species: "Rotom", ability: 'levitate', item: 'firiumz', moves: ['searingshot']},
-			{species: "Rotom", ability: 'levitate', item: 'firiumz', moves: ['searingshot']},
+			{species: "Rotom", ability: 'levitate', item: 'whiteherb', moves: ['searingshot']},
+			{species: "Rotom", ability: 'levitate', item: 'whiteherb', moves: ['searingshot']},
 			{species: "Thundurus", ability: 'prankster', item: 'whiteherb', moves: ['electricterrain']},
 			{species: 'Klefki', ability: 'prankster', moves: ['confuseray']}]);
 
-		battle.makeChoices('move storedpower, move storedpower', 'move infernooverdrive, move infernooverdrive');
+		battle.makeChoices('move storedpower, move storedpower', 'move searingshot, move searingshot');
 
 		battle.makeChoices('switch Arcanine, switch Incineroar', 'switch Thundurus, switch Klefki');
 		battle.makeChoices('move stringshot, move stringshot', 'move overheat, move overheat');
 
 		const holder = battle.p2.active[0];
-
-		console.log(battle.log);
+		const util = require('util');
+		console.log(util.inspect(battle.log, {maxArrayLength: null}));
 
 		assert.false.holdsItem(holder);
-		assert.statStage(holder, 'atk', -1);
+		assert.statStage(holder, 'atk', 0);
 	});
 	it('should use white herb after one intimidate switch in', function () {
 		battle = common.createBattle({gameType: 'doubles'});
