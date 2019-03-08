@@ -2483,7 +2483,9 @@ const commands = {
 		if (!target) return;
 
 		for (const curRoom of Rooms.rooms.values()) {
-			if (curRoom.id !== 'global' && curRoom.type !== 'battle') curRoom.addRaw(`<div class="broadcast-blue"><b>${target}</b></div>`).update();
+			if (curRoom.id !== 'global' && curRoom.type !== 'battle') {
+				curRoom.addRaw(`<div class="broadcast-blue"><b>${target}</b></div>`).update();
+			}
 		}
 		this.modlog(`CHATDECLARE`, null, target);
 	},
@@ -2926,7 +2928,7 @@ const commands = {
 
 		for (const [userid, data] of blMap) {
 			const [expireTime, ...alts] = data;
-			if (soonExpiring && expireTime > Date.now() + SOON_EXPIRING_TIME) return;
+			if (soonExpiring && expireTime > Date.now() + SOON_EXPIRING_TIME) continue;
 			const expiresIn = new Date(expireTime).getTime() - Date.now();
 			const expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
 			buf += `- <strong>${userid}</strong>, for ${Chat.count(expiresDays, "days")}`;
