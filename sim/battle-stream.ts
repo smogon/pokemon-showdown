@@ -23,9 +23,9 @@ import {Battle} from './battle';
  * Returns an array of length exactly limit + 1.
  */
 function splitFirst(str: string, delimiter: string, limit: number = 1) {
-	let splitStr: string[] = [];
+	const splitStr: string[] = [];
 	while (splitStr.length < limit) {
-		let delimiterIndex = str.indexOf(delimiter);
+		const delimiterIndex = str.indexOf(delimiter);
 		if (delimiterIndex >= 0) {
 			splitStr.push(str.slice(0, delimiterIndex));
 			str = str.slice(delimiterIndex + delimiter.length);
@@ -39,8 +39,8 @@ function splitFirst(str: string, delimiter: string, limit: number = 1) {
 }
 
 export class BattleStream extends Streams.ObjectReadWriteStream {
-	debug: boolean;
-	keepAlive: boolean;
+	readonly debug: boolean;
+	readonly keepAlive: boolean;
 	battle: Battle | null;
 
 	constructor(options: {debug?: boolean, keepAlive?: boolean} = {}) {
@@ -51,7 +51,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream {
 	}
 
 	_write(message: string) {
-		let startTime = Date.now();
+		const startTime = Date.now();
 		try {
 			for (const line of message.split('\n')) {
 				if (line.charAt(0) === '>') this._writeLine(line.slice(1));
@@ -74,7 +74,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream {
 			}
 		}
 		if (this.battle) this.battle.sendUpdates();
-		let deltaTime = Date.now() - startTime;
+		const deltaTime = Date.now() - startTime;
 		if (deltaTime > 1000) {
 			console.log(`[slow battle] ${deltaTime}ms - ${message}`);
 		}
@@ -117,11 +117,11 @@ export class BattleStream extends Streams.ObjectReadWriteStream {
 			break;
 		case 'eval':
 			/* tslint:disable:no-eval */
-			let battle = this.battle!;
-			let p1 = battle && battle.p1;
-			let p2 = battle && battle.p2;
-			let p1active = p1 && p1.active[0];
-			let p2active = p2 && p2.active[0];
+			const battle = this.battle!;
+			const p1 = battle && battle.p1;
+			const p2 = battle && battle.p2;
+			const p1active = p1 && p1.active[0];
+			const p2active = p2 && p2.active[0];
 			battle.inputLog.push(line);
 			message = message.replace(/\f/g, '\n');
 			battle.add('', '>>> ' + message.replace(/\n/g, '\n||'));
@@ -166,7 +166,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream {
  * streams, for ease of consumption.
  */
 export function getPlayerStreams(stream: BattleStream) {
-	let omniscient = new Streams.ObjectReadWriteStream({
+	const omniscient = new Streams.ObjectReadWriteStream({
 		write(data: string) {
 			stream.write(data);
 		},
@@ -174,15 +174,15 @@ export function getPlayerStreams(stream: BattleStream) {
 			stream.end();
 		},
 	});
-	let spectator = new Streams.ObjectReadStream({
+	const spectator = new Streams.ObjectReadStream({
 		read() {},
 	});
-	let p1 = new Streams.ObjectReadWriteStream({
+	const p1 = new Streams.ObjectReadWriteStream({
 		write(data: string) {
 			stream.write(data.replace(/(^|\n)/g, `$1>p1 `));
 		},
 	});
-	let p2 = new Streams.ObjectReadWriteStream({
+	const p2 = new Streams.ObjectReadWriteStream({
 		write(data: string) {
 			stream.write(data.replace(/(^|\n)/g, `$1>p2 `));
 		},
@@ -221,12 +221,10 @@ export function getPlayerStreams(stream: BattleStream) {
 }
 
 export class BattlePlayer {
-	// @ts-ignore
-	stream: Streams.ObjectReadWriteStream;
-	log: string[];
-	debug: boolean;
+	readonly stream: Streams.ObjectReadWriteStream;
+	readonly log: string[];
+	readonly debug: boolean;
 
-	// @ts-ignore
 	constructor(playerStream: Streams.ObjectReadWriteStream, debug: boolean = false) {
 		this.stream = playerStream;
 		this.log = [];
@@ -270,7 +268,7 @@ export class BattlePlayer {
 }
 
 export class BattleTextStream extends Streams.ReadWriteStream {
-	battleStream: BattleStream;
+	readonly battleStream: BattleStream;
 	currentMessage: string;
 
 	constructor(options: {debug?: boolean}) {
@@ -282,7 +280,7 @@ export class BattleTextStream extends Streams.ReadWriteStream {
 
 	_write(message: string | Buffer) {
 		this.currentMessage += '' + message;
-		let index = this.currentMessage.lastIndexOf('\n');
+		const index = this.currentMessage.lastIndexOf('\n');
 		if (index >= 0) {
 			this.battleStream.write(this.currentMessage.slice(0, index));
 			this.currentMessage = this.currentMessage.slice(index + 1);

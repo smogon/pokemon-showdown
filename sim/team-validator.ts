@@ -10,9 +10,9 @@
 import Dex = require('./dex');
 
 export class Validator {
-	format: Format;
-	dex: ModdedDex;
-	ruleTable: RuleTable;
+	readonly format: Format;
+	readonly dex: ModdedDex;
+	readonly ruleTable: RuleTable;
 
 	constructor(format: string | Format) {
 		this.format = Dex.getFormat(format);
@@ -22,7 +22,6 @@ export class Validator {
 
 	validateTeam(team: PokemonSet[] | null, removeNicknames: boolean = false): string[] | null {
 		if (team && this.format.validateTeam) {
-			// @ts-ignore
 			return this.format.validateTeam.call(this, team, removeNicknames) || null;
 		}
 		return this.baseValidateTeam(team, removeNicknames);
@@ -64,7 +63,6 @@ export class Validator {
 		let teamHas: {[k: string]: number} = {};
 		for (const set of team) { // Changing this loop to for-of would require another loop/map statement to do removeNicknames
 			if (!set) return [`You sent invalid team data. If you're not using a custom client, please report this as a bug.`];
-			// @ts-ignore
 			let setProblems = (format.validateSet || this.validateSet).call(this, set, teamHas);
 			if (setProblems) {
 				problems = problems.concat(setProblems);
@@ -143,8 +141,7 @@ export class Validator {
 		let nameTemplate = dex.getTemplate(set.name);
 		if (nameTemplate.exists && nameTemplate.name.toLowerCase() === set.name.toLowerCase()) {
 			// Name must not be the name of another pokemon
-			// @ts-ignore
-			set.name = null;
+			set.name = '';
 		}
 		set.name = set.name || template.baseSpecies;
 		let name = set.species;
@@ -352,9 +349,9 @@ export class Validator {
 			if (dex.gen <= 2) {
 				let HPdvs = dex.getType(set.hpType).HPdvs;
 				ivs = set.ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
-				for (let i in HPdvs) {
-					// @ts-ignore TypeScript index signature bug
-					ivs[i] = HPdvs[i] * 2;
+				let stat: keyof StatsTable;
+				for (stat in HPdvs) {
+					ivs[stat] = HPdvs[stat]! * 2;
 				}
 				ivs.hp = -1;
 			} else if (!canBottleCap) {
@@ -644,13 +641,11 @@ export class Validator {
 
 			if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 			let statTable = {hp: 'HP', atk: 'Attack', def: 'Defense', spa: 'Special Attack', spd: 'Special Defense', spe: 'Speed'};
-			for (let statId in eventData.ivs) {
-				// @ts-ignore
+			let statId: keyof StatsTable;
+			for (statId in eventData.ivs) {
 				if (canBottleCap && set.ivs[statId] === 31) continue;
-				// @ts-ignore
 				if (set.ivs[statId] !== eventData.ivs[statId]) {
 					if (fastReturn) return true;
-					// @ts-ignore
 					problems.push(`${name} must have ${eventData.ivs[statId]} ${statTable[statId]} IVs${etc}.`);
 				}
 			}
@@ -676,9 +671,9 @@ export class Validator {
 			// Legendary Pokemon must have at least 3 perfect IVs in gen 6
 			// Events can also have a certain amount of guaranteed perfect IVs
 			let perfectIVs = 0;
-			for (let i in set.ivs) {
-				// @ts-ignore
-				if (set.ivs[i] >= 31) perfectIVs++;
+			let stat: keyof StatsTable;
+			for (stat in set.ivs) {
+				if (set.ivs[stat] >= 31) perfectIVs++;
 			}
 			if (perfectIVs < requiredIVs) {
 				if (fastReturn) return true;
@@ -1274,9 +1269,10 @@ export class Validator {
 	static fillStats(stats: SparseStatsTable | null, fillNum: number = 0): StatsTable {
 		let filledStats: StatsTable = {hp: fillNum, atk: fillNum, def: fillNum, spa: fillNum, spd: fillNum, spe: fillNum};
 		if (stats) {
-			for (const stat in filledStats) {
-				// @ts-ignore TypeScript index signature bug
-				if (typeof stats[stat] === 'number') filledStats[stat] = stats[stat];
+			let stat: keyof StatsTable;
+			for (stat in filledStats) {
+				let val = stats[stat];
+				if (typeof val === 'number') filledStats[stat] = val;
 			}
 		}
 		return filledStats;

@@ -19,29 +19,100 @@ interface MoveSlot {
 }
 
 export class Pokemon {
-	side: Side;
-	battle: Battle;
-	set: PokemonSet;
-	getHealth: (side: Side) => string;
-	getDetails: (side: Side) => string;
-	baseTemplate: Template;
-	species: string;
-	name: string;
-	speciesid: string;
-	template: Template;
+	readonly side: Side;
+	readonly battle: Battle;
+
+	/** "pre-bound" functions for nicer syntax allows them to be passed directly to Battle#add. */
+	readonly getHealth: (side: Side) => string;
+	readonly getDetails: (side: Side) => string;
+
+	readonly set: PokemonSet;
+	readonly name: string;
+	readonly fullname: string;
+	readonly id: string; // shouldn't really be used anywhere
+	readonly species: string;
+	readonly speciesid: string;
+	readonly level: number;
+	readonly gender: GenderName;
+	readonly happiness: number;
+	readonly pokeball: string;
+
+	/** Transform keeps the original pre-transformed Hidden Power in Gen 2-4. */
+	readonly baseHpType: string;
+	readonly baseHpPower: number;
+
+	readonly baseMoveSlots: MoveSlot[];
 	moveSlots: MoveSlot[];
-	baseMoveSlots: MoveSlot[];
+
+	hpType: string;
+	hpPower: number;
+
+	position: number;
+	details: string;
+
+	baseTemplate: Template;
+	template: Template;
+	speciesData: AnyObject;
+
+	status: string;
+	statusData: AnyObject;
+	volatiles: AnyObject;
+	showCure: boolean;
+
+	/**
+	 * These are the basic stats that appear on the in-game stats screen:
+	 * calculated purely from the species base stats, level, IVs, EVs,
+	 * and Nature, before modifications from item, ability, etc.
+	 *
+	 * `stats` are reset to `baseStats` on switch-out.
+	 */
 	baseStats: StatsTable;
+	/**
+	 * These are pre-modification stored stats in-battle. At switch-in,
+	 * they're identical to `baseStats`, but can be temporarily changed
+	 * until switch-out by effects such as Power Trick and Transform.
+	 *
+	 * Stat multipliers from abilities, items, and volatiles, such as
+	 * Solar Power, Choice Band, or Swords Dance, are not stored in
+	 * `stats`, but applied on top and accessed by `pokemon.getStat`.
+	 *
+	 * (Except in Gen 1, where stat multipliers are stored, leading
+	 * to several famous glitches.)
+	 *
+	 * `stats` are reset to `baseStats` on switch-out.
+	 */
+	stats: {[k: string]: number};
+	boosts: BoostsTable;
+
+	baseAbility: string;
+	ability: string;
+	abilityData: {[k: string]: string | Pokemon};
+
+	item: string;
+	itemData: {[k: string]: string | Pokemon};
+	lastItem: string;
+	usedItemThisTurn: boolean;
+	ateBerry: boolean;
+
 	trapped: boolean | "hidden";
 	maybeTrapped: boolean;
 	maybeDisabled: boolean;
+
 	illusion: Pokemon | null;
+	transformed: boolean;
+
+	maxhp: number;
+	hp: number;
 	fainted: boolean;
 	faintQueued: boolean;
-	lastItem: string;
-	ateBerry: boolean;
-	status: string;
-	position: number;
+	subFainted: boolean | null;
+
+	types: string[];
+	addedType: string;
+	knownType: boolean;
+	/** Keeps track of what type the client sees for this Pokemon. */
+	apparentType: string;
+
 	/**
 	 * If the switch is called by an effect with a special switch
 	 * message, like U-turn or Baton Pass, this will be the fullname of
@@ -51,7 +122,11 @@ export class Pokemon {
 	forceSwitchFlag: boolean;
 	switchCopyFlag: boolean;
 	draggedIn: number | null;
+	newlySwitched: boolean;
+	beingCalledBack: boolean;
+
 	lastMove: Move | null;
+	lastMoveTargetLoc?: number;
 	moveThisTurn: string | boolean;
 	/**
 	 * The result of the last move used on the previous turn by this
@@ -111,66 +186,35 @@ export class Pokemon {
 	hurtThisTurn: boolean;
 	lastDamage: number;
 	attackedBy: {source: Pokemon, damage: number, thisTurn: boolean, move?: string}[];
-	usedItemThisTurn: boolean;
-	newlySwitched: boolean;
-	beingCalledBack: boolean;
+
 	isActive: boolean;
 	activeTurns: number;
 	/** Have this pokemon's Start events run yet? */
 	isStarted: boolean;
-	transformed: boolean;
 	duringMove: boolean;
+
 	speed: number;
 	abilityOrder: number;
-	level: number;
-	gender: GenderName;
-	happiness: number;
-	pokeball: string;
-	fullname: string;
-	details: string;
-	id: string; // shouldn't really be used anywhere
-	statusData: AnyObject;
-	volatiles: AnyObject;
-	heightm: number;
-	weightkg: number;
-	baseAbility: string;
-	ability: string;
-	item: string;
-	abilityData: {[k: string]: string | Pokemon};
-	itemData: {[k: string]: string | Pokemon};
-	speciesData: AnyObject;
-	types: string[];
-	addedType: string;
-	knownType: boolean;
+
 	canMegaEvo: string | null | undefined;
 	canUltraBurst: string | null | undefined;
-	hpType: string;
-	hpPower: number;
-	boosts: BoostsTable;
-	stats: {[k: string]: number};
-	modifiedStats?: {[k: string]: number};
-	subFainted: boolean | null;
+
 	isStale: number;
 	isStaleCon: number;
 	isStaleHP: number;
 	isStalePPTurns: number;
-	baseIvs: StatsTable;
-	baseHpType: string;
-	baseHpPower: number;
-	/**
-	 * Keeps track of what type the client sees for this Pokemon
-	 */
-	apparentType: string;
-	maxhp: number;
-	hp: number;
-	staleWarned: boolean;
-	showCure: boolean;
 	isStaleSource?: string;
+	staleWarned: boolean;
+
+	// Gen 1 only
+	modifiedStats?: {[k: string]: number};
+	modifyStat?: (this: Pokemon, statName: string, modifier: number) => void;
+
+	// OMs
 	innate?: string;
 	innates?: string[];
 	originalSpecies?: string;
 	gluttonyFlag: boolean | null;
-	lastMoveTargetLoc?: number;
 
 	constructor(set: string | AnyObject, side: Side) {
 		this.side = side;
@@ -179,93 +223,38 @@ export class Pokemon {
 		let pokemonScripts = this.battle.data.Scripts.pokemon;
 		if (pokemonScripts) Object.assign(this, pokemonScripts);
 
-		if (typeof set === 'string') set = {name: set};
-
-		// "pre-bound" functions for nicer syntax
-		// allows them to be passed directly to Battle#add
 		this.getHealth = (s: Side) => this.getHealthInner(s);
 		this.getDetails = (s: Side) => this.getDetailsInner(s);
 
+		if (typeof set === 'string') set = {name: set};
 		this.set = set as PokemonSet;
 
 		this.baseTemplate = this.battle.getTemplate(set.species || set.name);
 		if (!this.baseTemplate.exists) {
 			throw new Error(`Unidentified species: ${this.baseTemplate.name}`);
 		}
+		this.template = this.baseTemplate;
 		this.species = this.battle.getSpecies(set.species);
+		this.speciesid = toId(this.species);
 		if (set.name === set.species || !set.name) {
 			set.name = this.baseTemplate.baseSpecies;
 		}
+		this.speciesData = {id: this.speciesid};
+
 		this.name = set.name.substr(0, 20);
-		this.speciesid = toId(this.species);
-		this.template = this.baseTemplate;
-		this.moveSlots = [];
-		this.baseMoveSlots = [];
-		// @ts-ignore - null used for this.setTemplate(this.baseTemplate)
-		this.baseStats = null;
-		this.trapped = false;
-		this.maybeTrapped = false;
-		this.maybeDisabled = false;
-		this.illusion = null;
-		this.fainted = false;
-		this.faintQueued = false;
-		this.lastItem = '';
-		this.ateBerry = false;
-		this.status = '';
-		this.position = 0;
-		this.switchFlag = false;
-		this.forceSwitchFlag = false;
-		this.switchCopyFlag = false;
-		this.draggedIn = null;
-		this.lastMove = null;
-		this.moveThisTurn = '';
-		this.hurtThisTurn = false;
-		this.lastDamage = 0;
-		this.attackedBy = [];
-		this.usedItemThisTurn = false;
-		this.newlySwitched = false;
-		this.beingCalledBack = false;
-		this.isActive = false;
-		this.activeTurns = 0;
-		this.isStarted = false;
-		this.transformed = false;
-		this.duringMove = false;
-		this.speed = 0;
-		this.abilityOrder = 0;
+		this.fullname = this.side.id + ': ' + this.name;
+		this.id = this.fullname;
 
 		set.level = this.battle.clampIntRange(set.forcedLevel || set.level || 100, 1, 9999);
 		this.level = set.level;
-
-		let genders = {M: 'M', F: 'F', N: 'N'};
-		// @ts-ignore
+		let genders: {[key: string]: GenderName} = {M: 'M', F: 'F', N: 'N'};
 		this.gender = genders[set.gender] || this.template.gender || (this.battle.random() * 2 < 1 ? 'M' : 'F');
 		if (this.gender === 'N') this.gender = '';
 		this.happiness = typeof set.happiness === 'number' ? this.battle.clampIntRange(set.happiness, 0, 255) : 255;
 		this.pokeball = this.set.pokeball || 'pokeball';
 
-		this.fullname = this.side.id + ': ' + this.name;
-		this.details = this.species + (this.level === 100 ? '' : ', L' + this.level) +
-			(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
-
-		this.id = this.fullname; // shouldn't really be used anywhere
-
-		this.statusData = {};
-		this.volatiles = {};
-
-		this.heightm = this.template.heightm;
-		this.weightkg = this.template.weightkg;
-
-		this.baseAbility = toId(set.ability);
-		this.ability = this.baseAbility;
-		this.item = toId(set.item);
-		this.abilityData = {id: this.ability};
-		this.itemData = {id: this.item};
-		this.speciesData = {id: this.speciesid};
-
-		this.types = this.baseTemplate.types;
-		this.addedType = '';
-		this.knownType = true;
-
+		this.baseMoveSlots = [];
+		this.moveSlots = [];
 		if (this.set.moves) {
 			for (const moveid of this.set.moves) {
 				let move = this.battle.getMove(moveid);
@@ -287,8 +276,14 @@ export class Pokemon {
 			}
 		}
 
-		this.canMegaEvo = this.battle.canMegaEvo(this);
-		this.canUltraBurst = this.battle.canUltraBurst(this);
+		this.position = 0;
+		this.details = this.species + (this.level === 100 ? '' : ', L' + this.level) +
+			(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
+
+		this.status = '';
+		this.statusData = {};
+		this.volatiles = {};
+		this.showCure = false;
 
 		if (!this.set.evs) {
 			this.set.evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
@@ -296,26 +291,22 @@ export class Pokemon {
 		if (!this.set.ivs) {
 			this.set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 		}
-		let stats = {hp: 31, atk: 31, def: 31, spe: 31, spa: 31, spd: 31};
-		for (let i in stats) {
-			// @ts-ignore
-			if (!this.set.evs[i]) this.set.evs[i] = 0;
-			// @ts-ignore
-			if (!this.set.ivs[i] && this.set.ivs[i] !== 0) this.set.ivs[i] = 31;
+		let stats: StatsTable = {hp: 31, atk: 31, def: 31, spe: 31, spa: 31, spd: 31};
+		let stat: keyof StatsTable;
+		for (stat in stats) {
+			if (!this.set.evs[stat]) this.set.evs[stat] = 0;
+			if (!this.set.ivs[stat] && this.set.ivs[stat] !== 0) this.set.ivs[stat] = 31;
 		}
-		for (let i in this.set.evs) {
-			// @ts-ignore
-			this.set.evs[i] = this.battle.clampIntRange(this.set.evs[i], 0, 255);
+		for (stat in this.set.evs) {
+			this.set.evs[stat] = this.battle.clampIntRange(this.set.evs[stat], 0, 255);
 		}
-		for (let i in this.set.ivs) {
-			// @ts-ignore
-			this.set.ivs[i] = this.battle.clampIntRange(this.set.ivs[i], 0, 31);
+		for (stat in this.set.ivs) {
+			this.set.ivs[stat] = this.battle.clampIntRange(this.set.ivs[stat], 0, 31);
 		}
 		if (this.battle.gen && this.battle.gen <= 2) {
 			// We represent DVs using even IVs. Ensure they are in fact even.
-			for (let i in this.set.ivs) {
-				// @ts-ignore Typescript bug: [js] Object is possibly 'undefined'. (It's not, we just set them all in the last loop.)
-				this.set.ivs[i] &= 30;
+			for (stat in this.set.ivs) {
+				this.set.ivs[stat] &= 30;
 			}
 		}
 
@@ -323,26 +314,69 @@ export class Pokemon {
 		this.hpType = set.hpType || hpData.type;
 		this.hpPower = hpData.power;
 
-		this.boosts = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0};
+		this.baseHpType = this.hpType;
+		this.baseHpPower = this.hpPower;
+
+		// initialized in this.setTemplate(this.baseTemplate)
+		this.baseStats = null!;
 		this.stats = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
+		this.boosts = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0, accuracy: 0, evasion: 0};
+
+		this.baseAbility = toId(set.ability);
+		this.ability = this.baseAbility;
+		this.abilityData = {id: this.ability};
+
+		this.item = toId(set.item);
+		this.itemData = {id: this.item};
+		this.lastItem = '';
+		this.usedItemThisTurn = false;
+		this.ateBerry = false;
+
+		this.trapped = false;
+		this.maybeTrapped = false;
+		this.maybeDisabled = false;
+
+		this.illusion = null;
+		this.transformed = false;
+
+		this.fainted = false;
+		this.faintQueued = false;
+		this.subFainted = null;
+
+		this.types = this.baseTemplate.types;
+		this.addedType = '';
+		this.knownType = true;
+		this.apparentType = this.baseTemplate.types.join('/');
+
+		this.switchFlag = false;
+		this.forceSwitchFlag = false;
+		this.switchCopyFlag = false;
+		this.draggedIn = null;
+		this.newlySwitched = false;
+		this.beingCalledBack = false;
+
+		this.lastMove = null;
+		this.moveThisTurn = '';
+		this.hurtThisTurn = false;
+		this.lastDamage = 0;
+		this.attackedBy = [];
+
+		this.isActive = false;
+		this.activeTurns = 0;
+		this.isStarted = false;
+		this.duringMove = false;
+
+		this.speed = 0;
+		this.abilityOrder = 0;
+
+		this.canMegaEvo = this.battle.canMegaEvo(this);
+		this.canUltraBurst = this.battle.canUltraBurst(this);
 
 		// This is used in gen 1 only, here to avoid code repetition.
 		// Only declared if gen 1 to avoid declaring an object we aren't going to need.
 		if (this.battle.gen === 1) this.modifiedStats = {atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
-		this.subFainted = null;
-
-		// Transform copies IVs in gen 4 and earlier, so we track the base IVs/HP-type/power
-		this.baseIvs = this.set.ivs;
-		this.baseHpType = this.hpType;
-		this.baseHpPower = this.hpPower;
 
 		this.clearVolatile();
-
-		/**
-		 * Keeps track of what type the client sees for this Pokemon
-		 */
-		this.apparentType = this.baseTemplate.types.join('/');
-
 		this.maxhp = this.template.maxHP || this.baseStats.hp;
 		this.hp = this.maxhp;
 
@@ -350,36 +384,31 @@ export class Pokemon {
 		this.isStaleCon = 0;
 		this.isStaleHP = this.maxhp;
 		this.isStalePPTurns = 0;
-
 		this.staleWarned = false;
-		this.showCure = false;
-
-		// OMs
 
 		this.innate = undefined;
 		this.innates = undefined;
 		this.originalSpecies = undefined;
 		this.gluttonyFlag = null;
 	}
+
 	get moves() {
 		return this.moveSlots.map(moveSlot => moveSlot.id);
 	}
+
 	get baseMoves() {
 		return this.baseMoveSlots.map(moveSlot => moveSlot.id);
 	}
 
 	toString() {
-		let fullname = this.fullname;
-		if (this.illusion) fullname = this.illusion.fullname;
-
-		let positionList = 'abcdef';
-		if (this.isActive) return fullname.substr(0, 2) + positionList[this.position] + fullname.substr(2);
-		return fullname;
+		const fullname = (this.illusion) ? this.illusion.fullname : this.fullname;
+		const positionList = 'abcdef';
+		return this.isActive ? fullname.substr(0, 2) + positionList[this.position] + fullname.substr(2) : fullname;
 	}
 
 	getDetailsInner(side: Side) {
 		if (this.illusion) {
-			let illusionDetails = this.illusion.template.species + (this.level === 100 ? '' : ', L' + this.level) +
+			const illusionDetails = this.illusion.template.species + (this.level === 100 ? '' : ', L' + this.level) +
 				(this.illusion.gender === '' ? '' : ', ' + this.illusion.gender) + (this.illusion.set.shiny ? ', shiny' : '');
 			return illusionDetails + '|' + this.getHealthInner(side);
 		}
@@ -392,7 +421,6 @@ export class Pokemon {
 
 	calculateStat(statName: string, boost: number, modifier?: number) {
 		statName = toId(statName);
-
 		if (statName === 'hp') return this.maxhp; // please just read .maxhp directly
 
 		// base stat
@@ -408,14 +436,12 @@ export class Pokemon {
 		}
 
 		// stat boosts
-		// boost = this.boosts[statName];
-		let boosts = {};
-		// @ts-ignore
-		boosts[statName] = boost;
+		let boosts: SparseBoostsTable = {};
+		const boostKey = statName as keyof SparseBoostsTable;
+		boosts[boostKey] = boost;
 		boosts = this.battle.runEvent('ModifyBoost', this, null, null, boosts);
-		// @ts-ignore
-		boost = boosts[statName];
-		let boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
+		boost = boosts[boostKey]!;
+		const boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
 		if (boost > 6) boost = 6;
 		if (boost < -6) boost = -6;
 		if (boost >= 0) {
@@ -425,20 +451,11 @@ export class Pokemon {
 		}
 
 		// stat modifier
-		stat = this.battle.modify(stat, (modifier || 1));
-
-		// @ts-ignore
-		if (this.battle.getStatCallback) {
-			// @ts-ignore
-			stat = this.battle.getStatCallback(stat, statName, this);
-		}
-
-		return stat;
+		return this.battle.modify(stat, (modifier || 1));
 	}
 
 	getStat(statName: string, unboosted?: boolean, unmodified?: boolean) {
 		statName = toId(statName);
-
 		if (statName === 'hp') return this.maxhp; // please just read .maxhp directly
 
 		// base stat
@@ -456,9 +473,9 @@ export class Pokemon {
 
 		// stat boosts
 		if (!unboosted) {
-			let boosts = this.battle.runEvent('ModifyBoost', this, null, null, Object.assign({}, this.boosts));
+			const boosts = this.battle.runEvent('ModifyBoost', this, null, null, Object.assign({}, this.boosts));
 			let boost = boosts[statName];
-			let boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
+			const boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
 			if (boost > 6) boost = 6;
 			if (boost < -6) boost = -6;
 			if (boost >= 0) {
@@ -470,16 +487,10 @@ export class Pokemon {
 
 		// stat modifier effects
 		if (!unmodified) {
-			let statTable = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
-			// @ts-ignore
-			stat = this.battle.runEvent('Modify' + statTable[statName], this, null, null, stat);
+			const statTable: {[s in keyof StatsTable]?: string} = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
+			stat = this.battle.runEvent('Modify' + statTable[statName as keyof StatsTable], this, null, null, stat);
 		}
 
-		// @ts-ignore
-		if (this.battle.getStatCallback) {
-			// @ts-ignore
-			stat = this.battle.getStatCallback(stat, statName, this, unboosted);
-		}
 		if (statName === 'spe' && stat > 10000) stat = 10000;
 		return stat;
 	}
@@ -496,23 +507,19 @@ export class Pokemon {
 	getCombatPower() {
 		let statSum = 0;
 		let awakeningSum = 0;
-		for (let stat in this.stats) {
-			// @ts-ignore
-			statSum += this.calculateStat(stat, this.boosts[stat]);
-			// @ts-ignore
-			awakeningSum += this.calculateStat(stat, this.boosts[stat]) + this.dex.getAwakeningValues(this.set, stat);
+		for (const stat in this.stats) {
+			statSum += this.calculateStat(stat, this.boosts[stat as keyof BoostsTable]);
+			awakeningSum += this.calculateStat(stat, this.boosts[stat as keyof BoostsTable]) + this.battle.getAwakeningValues(this.set, stat);
 		}
-		let combatPower = Math.floor(Math.floor(statSum * this.level * 6 / 100) +
+		const combatPower = Math.floor(Math.floor(statSum * this.level * 6 / 100) +
 			(Math.floor(awakeningSum) * Math.floor((this.level * 4) / 100 + 2)));
 		return this.battle.clampIntRange(combatPower, 0, 10000);
 	}
 	*/
 
 	getWeight() {
-		let weight = this.template.weightkg;
-		weight = this.battle.runEvent('ModifyWeight', this, null, null, weight);
-		if (weight < 0.1) weight = 0.1;
-		return weight;
+		const weight = this.battle.runEvent('ModifyWeight', this, null, null, this.template.weightkg);
+		return (weight < 0.1) ? 0.1 : weight;
 	}
 
 	getMoveData(move: string | Move) {
@@ -526,7 +533,7 @@ export class Pokemon {
 	}
 
 	getMoveTargets(move: Move, target: Pokemon): Pokemon[] {
-		let targets = [];
+		const targets = [];
 		switch (move.target) {
 		case 'all':
 		case 'foeSide':
@@ -569,7 +576,7 @@ export class Pokemon {
 			}
 			break;
 		default:
-			let selectedTarget = target;
+			const selectedTarget = target;
 			if (!target || (target.fainted && target.side !== this.side)) {
 				// If a targeted foe faints, the move is retargeted
 				const possibleTarget = this.battle.resolveTarget(this, move);
@@ -586,7 +593,7 @@ export class Pokemon {
 			if (selectedTarget !== target) {
 				this.battle.retargetLastMove(target);
 			}
-			targets = [target];
+			targets.push(target);
 
 			// Resolve apparent targets for Pressure.
 			if (move.pressureTarget) {
@@ -604,23 +611,22 @@ export class Pokemon {
 	}
 
 	ignoringAbility() {
-		const unignored = new Set([
+		const abilities = [
 			'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange',
-		]);
-		return !!((this.battle.gen >= 5 && !this.isActive) || (this.volatiles['gastroacid'] && !unignored.has(this.ability)));
+		];
+		return !!((this.battle.gen >= 5 && !this.isActive) || (this.volatiles['gastroacid'] && !abilities.includes(this.ability)));
 	}
 
 	ignoringItem() {
-		// @ts-ignore
 		return !!((this.battle.gen >= 5 && !this.isActive) ||
 			(this.hasAbility('klutz') && !this.getItem().ignoreKlutz) ||
 			this.volatiles['embargo'] || this.battle.pseudoWeather['magicroom']);
 	}
 
 	deductPP(move: string | Move, amount?: number | null, target?: Pokemon | null | false) {
-		let gen = this.battle.gen;
+		const gen = this.battle.gen;
 		move = this.battle.getMove(move) as Move;
-		let ppData = this.getMoveData(move);
+		const ppData = this.getMoveData(move);
 		if (!ppData) return 0;
 		ppData.used = true;
 		if (!ppData.pp && gen > 1) return 0;
@@ -652,13 +658,12 @@ export class Pokemon {
 	gotAttacked(move: string | Move, damage: number | false | undefined, source: Pokemon) {
 		if (!damage) damage = 0;
 		move = this.battle.getMove(move) as Move;
-		let lastAttackedBy = {
+		this.attackedBy.push({
 			source,
 			damage,
 			move: move.id,
 			thisTurn: true,
-		};
-		this.attackedBy.push(lastAttackedBy);
+		});
 	}
 
 	getLastAttackedBy() {
@@ -667,9 +672,8 @@ export class Pokemon {
 	}
 
 	getLockedMove(): string | null {
-		let lockedMove = this.battle.runEvent('LockMove', this);
-		if (lockedMove === true) lockedMove = null;
-		return lockedMove;
+		const lockedMove = this.battle.runEvent('LockMove', this);
+		return (lockedMove === true) ? null : lockedMove;
 	}
 
 	getMoves(lockedMove?: string | null, restrictData?: boolean) {
@@ -695,7 +699,7 @@ export class Pokemon {
 				id: lockedMove,
 			}];
 		}
-		let moves = [];
+		const moves = [];
 		let hasValidMove = false;
 		for (const moveSlot of this.moveSlots) {
 			let moveName = moveSlot.move;
@@ -703,11 +707,11 @@ export class Pokemon {
 				moveName = 'Hidden Power ' + this.hpType;
 				if (this.battle.gen < 6) moveName += ' ' + this.hpPower;
 			} else if (moveSlot.id === 'return') {
-				// @ts-ignore
-				moveName = 'Return ' + this.battle.getMove('return').basePowerCallback(this);
+				// @ts-ignore - Return's basePowerCallback only takes one parameter
+				moveName = 'Return ' + this.battle.getMove('return')!.basePowerCallback(this);
 			} else if (moveSlot.id === 'frustration') {
-				// @ts-ignore
-				moveName = 'Frustration ' + this.battle.getMove('frustration').basePowerCallback(this);
+				// @ts-ignore - Frustration's basePowerCallback only takes one parameter
+				moveName = 'Frustration ' + this.battle.getMove('frustration')!.basePowerCallback(this);
 			}
 			let target = moveSlot.target;
 			if (moveSlot.id === 'curse') {
@@ -717,8 +721,7 @@ export class Pokemon {
 			}
 			let disabled = moveSlot.disabled;
 			if ((moveSlot.pp <= 0 && !this.volatiles['partialtrappinglock']) || disabled &&
-				// @ts-ignore
-				this.side.active.length >= 2 && this.battle.targetTypeChoices(target)) {
+				this.side.active.length >= 2 && this.battle.targetTypeChoices(target!)) {
 				disabled = true;
 			} else if (disabled === 'hidden' && restrictData) {
 				disabled = false;
@@ -735,19 +738,17 @@ export class Pokemon {
 				disabled,
 			});
 		}
-		if (hasValidMove) return moves;
-
-		return [];
+		return hasValidMove ? moves : [];
 	}
 
 	getRequestData() {
-		let lockedMove = this.getLockedMove();
+		const lockedMove = this.getLockedMove();
 
 		// Information should be restricted for the last active Pokémon
-		let isLastActive = this.isLastActive();
-		let canSwitchIn = this.battle.canSwitch(this.side) > 0;
-		let moves = this.getMoves(lockedMove, isLastActive);
-		let data: {
+		const isLastActive = this.isLastActive();
+		const canSwitchIn = this.battle.canSwitch(this.side) > 0;
+		const moves = this.getMoves(lockedMove, isLastActive);
+		const data: {
 			moves: {move: string, id: string, target?: string, disabled?: boolean}[],
 			maybeDisabled?: boolean,
 			trapped?: boolean,
@@ -776,7 +777,7 @@ export class Pokemon {
 		if (!lockedMove) {
 			if (this.canMegaEvo) data.canMegaEvo = true;
 			if (this.canUltraBurst) data.canUltraBurst = true;
-			let canZMove = this.battle.canZMove(this);
+			const canZMove = this.battle.canZMove(this);
 			if (canZMove) data.canZMove = canZMove;
 		}
 
@@ -785,8 +786,7 @@ export class Pokemon {
 
 	isLastActive() {
 		if (!this.isActive) return false;
-
-		let allyActive = this.side.active;
+		const allyActive = this.side.active;
 		for (let i = this.position + 1; i < allyActive.length; i++) {
 			if (allyActive[i] && !allyActive[i].fainted) return false;
 		}
@@ -795,56 +795,49 @@ export class Pokemon {
 
 	positiveBoosts() {
 		let boosts = 0;
-		for (let i in this.boosts) {
-			// @ts-ignore
-			if (this.boosts[i] > 0) boosts += this.boosts[i];
+		let boost: keyof BoostsTable;
+		for (boost in this.boosts) {
+			if (this.boosts[boost] > 0) boosts += this.boosts[boost];
 		}
 		return boosts;
 	}
 
-	boostBy(boost: SparseBoostsTable) {
+	boostBy(boosts: SparseBoostsTable) {
 		let delta = 0;
-		for (let i in boost) {
-			// @ts-ignore
-			delta = boost[i];
-			// @ts-ignore
-			this.boosts[i] += delta;
-			// @ts-ignore
-			if (this.boosts[i] > 6) {
-				// @ts-ignore
-				delta -= this.boosts[i] - 6;
-				// @ts-ignore
-				this.boosts[i] = 6;
+		let boost: keyof BoostsTable;
+		for (boost in boosts) {
+			delta = boosts[boost]!;
+			this.boosts[boost] += delta;
+			if (this.boosts[boost] > 6) {
+				delta -= this.boosts[boost] - 6;
+				this.boosts[boost] = 6;
 			}
-			// @ts-ignore
-			if (this.boosts[i] < -6) {
-				// @ts-ignore
-				delta -= this.boosts[i] - (-6);
-				// @ts-ignore
-				this.boosts[i] = -6;
+			if (this.boosts[boost] < -6) {
+				delta -= this.boosts[boost] - (-6);
+				this.boosts[boost] = -6;
 			}
 		}
 		return delta;
 	}
 
 	clearBoosts() {
-		for (let i in this.boosts) {
-			// @ts-ignore
-			this.boosts[i] = 0;
+		let boost: keyof BoostsTable;
+		for (boost in this.boosts) {
+			this.boosts[boost] = 0;
 		}
 	}
 
-	setBoost(boost: SparseBoostsTable) {
-		for (let i in boost) {
-			// @ts-ignore
-			this.boosts[i] = boost[i];
+	setBoost(boosts: SparseBoostsTable) {
+		let boost: keyof BoostsTable;
+		for (boost in boosts) {
+			this.boosts[boost] = boosts[boost]!;
 		}
 	}
 
 	copyVolatileFrom(pokemon: Pokemon) {
 		this.clearVolatile();
 		this.boosts = pokemon.boosts;
-		for (let i in pokemon.volatiles) {
+		for (const i in pokemon.volatiles) {
 			if (this.battle.getEffect(i).noCopy) continue;
 			// shallow clones
 			this.volatiles[i] = Object.assign({}, pokemon.volatiles[i]);
@@ -852,38 +845,34 @@ export class Pokemon {
 				delete pokemon.volatiles[i].linkedPokemon;
 				delete pokemon.volatiles[i].linkedStatus;
 				for (const linkedPoke of this.volatiles[i].linkedPokemon) {
-					let linkedPokeLinks = linkedPoke.volatiles[this.volatiles[i].linkedStatus].linkedPokemon;
+					const linkedPokeLinks = linkedPoke.volatiles[this.volatiles[i].linkedStatus].linkedPokemon;
 					linkedPokeLinks[linkedPokeLinks.indexOf(pokemon)] = this;
 				}
 			}
 		}
 		pokemon.clearVolatile();
-		for (let i in this.volatiles) {
+		for (const i in this.volatiles) {
 			const volatile = this.getVolatile(i) as PureEffect;
 			this.battle.singleEvent('Copy', volatile, this.volatiles[i], this);
 		}
 	}
 
 	transformInto(pokemon: Pokemon, effect: Effect | null = null) {
-		let template = pokemon.template;
-		if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5)) {
-			return false;
-		}
-		if ((pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5)) {
-			return false;
-		}
-		if (!this.setTemplate(template)) {
-			return false;
+		const template = pokemon.template;
+		if (pokemon.fainted || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
+			(pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5) ||
+			!this.setTemplate(template)) {
+ 			return false;
 		}
 		this.transformed = true;
 
-		let types = pokemon.getTypes(true);
+		const types = pokemon.getTypes(true);
 		this.setType(pokemon.volatiles.roost ? pokemon.volatiles.roost.typeWas : types, true);
 		this.addedType = pokemon.addedType;
 		this.knownType = this.side === pokemon.side && pokemon.knownType;
 		this.apparentType = pokemon.apparentType;
 
-		for (let statName in this.stats) {
+		for (const statName in this.stats) {
 			this.stats[statName] = pokemon.stats[statName];
 		}
 		this.moveSlots = [];
@@ -907,9 +896,9 @@ export class Pokemon {
 			});
 			this.moves.push(toId(moveName));
 		}
-		for (let j in pokemon.boosts) {
-			// @ts-ignore
-			this.boosts[j] = pokemon.boosts[j];
+		let boost: keyof BoostsTable;
+		for (boost in pokemon.boosts) {
+			this.boosts[boost] = pokemon.boosts[boost]!;
 		}
 		if (this.battle.gen >= 6 && pokemon.volatiles['focusenergy']) this.addVolatile('focusenergy');
 		if (pokemon.volatiles['laserfocus']) this.addVolatile('laserfocus');
@@ -933,8 +922,8 @@ export class Pokemon {
 			}
 			if (this.template.num === 493) {
 				// Arceus formes
-				let item = this.getItem();
-				let targetForme = (item && item.onPlate ? 'Arceus-' + item.onPlate : 'Arceus');
+				const item = this.getItem();
+				const targetForme = (item && item.onPlate ? 'Arceus-' + item.onPlate : 'Arceus');
 				if (this.template.species !== targetForme) {
 					this.formeChange(targetForme);
 				}
@@ -950,10 +939,8 @@ export class Pokemon {
 	 * Use formChange to handle changes to ability and sending client messages.
 	 */
 	setTemplate(rawTemplate: Template, source: Effect | null = this.battle.effect) {
-		let template = this.battle.runEvent('ModifyTemplate', this, null, source, rawTemplate);
-
+		const template = this.battle.runEvent('ModifyTemplate', this, null, source, rawTemplate);
 		if (!template) return null;
-
 		this.template = template;
 
 		this.setType(template.types, true);
@@ -962,23 +949,18 @@ export class Pokemon {
 		this.knownType = true;
 		if (this.battle.gen >= 7) this.removeVolatile('autotomize');
 
-		let stats = this.battle.spreadModify(this.template.baseStats, this.set);
+		const stats = this.battle.spreadModify(this.template.baseStats, this.set);
 		if (!this.baseStats) this.baseStats = stats;
-		for (let statName in this.stats) {
-			// @ts-ignore
-			this.stats[statName] = stats[statName];
-			// @ts-ignore
-			this.baseStats[statName] = stats[statName];
-			// @ts-ignore
-			if (this.modifiedStats) this.modifiedStats[statName] = stats[statName]; // Gen 1: Reset modified stats.
+		for (const statName in this.stats) {
+			const s = statName as keyof StatsTable;
+			this.stats[s] = stats[s];
+			this.baseStats[s] = stats[s];
+			if (this.modifiedStats) this.modifiedStats[s] = stats[s]; // Gen 1: Reset modified stats.
 		}
 		if (this.battle.gen <= 1) {
 			// Gen 1: Re-Apply burn and para drops.
-			// FIXME: modifyStat() is only defined for the Gen 1 mod...
-			// @ts-ignore
-			if (this.status === 'par') this.modifyStat('spe', 0.25);
-			// @ts-ignore
-			if (this.status === 'brn') this.modifyStat('atk', 0.5);
+			if (this.status === 'par') this.modifyStat!('spe', 0.25);
+			if (this.status === 'brn') this.modifyStat!('atk', 0.5);
 		}
 		this.speed = this.stats.spe;
 		return template;
@@ -992,21 +974,20 @@ export class Pokemon {
 	formeChange(
 		templateId: string | Template, source: Effect = this.battle.effect, isPermanent?: boolean,
 		message?: string, abilitySlot: '0' | '1' | 'H' | 'S' = '0') {
-		let rawTemplate = this.battle.getTemplate(templateId);
+		const rawTemplate = this.battle.getTemplate(templateId);
 
-		let template = this.setTemplate(rawTemplate, source);
+		const template = this.setTemplate(rawTemplate, source);
 		if (!template) return false;
 
 		if (this.battle.gen <= 2) return true;
 
-		let apparentSpecies = this.illusion ? this.illusion.template.species : template.baseSpecies; // The species the opponent sees
+		const apparentSpecies = this.illusion ? this.illusion.template.species : template.baseSpecies; // The species the opponent sees
 		if (isPermanent) {
 			this.baseTemplate = rawTemplate;
 			this.details = template.species + (this.level === 100 ? '' : ', L' + this.level) +
 				(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
 			this.battle.add('detailschange', this, (this.illusion || this).details);
 			if (source.effectType === 'Item') {
-				// @ts-ignore
 				if (source.zMove) {
 					this.battle.add('-burst', this, apparentSpecies, template.requiredItem);
 					this.moveThisTurnResult = true; // Ultra Burst counts as an action for Truant
@@ -1054,8 +1035,8 @@ export class Pokemon {
 		};
 
 		if (this.battle.gen === 1 && this.baseMoves.includes('mimic') && !this.transformed) {
-			let moveslot = this.baseMoves.indexOf('mimic');
-			let mimicPP = this.moveSlots[moveslot] ? this.moveSlots[moveslot].pp : 16;
+			const moveslot = this.baseMoves.indexOf('mimic');
+			const mimicPP = this.moveSlots[moveslot] ? this.moveSlots[moveslot].pp : 16;
 			this.moveSlots = this.baseMoveSlots.slice();
 			this.moveSlots[moveslot].pp = mimicPP;
 		} else {
@@ -1064,10 +1045,9 @@ export class Pokemon {
 
 		this.transformed = false;
 		this.ability = this.baseAbility;
-		this.set.ivs = this.baseIvs;
 		this.hpType = this.baseHpType;
 		this.hpPower = this.baseHpPower;
-		for (let i in this.volatiles) {
+		for (const i in this.volatiles) {
 			if (this.volatiles[i].linkedStatus) {
 				this.removeLinkedVolatiles(this.volatiles[i].linkedStatus, this.volatiles[i].linkedPokemon);
 			}
@@ -1097,7 +1077,9 @@ export class Pokemon {
 				if (this.hasType(typeid)) return true;
 			}
 		} else {
-			if (this.getTypes().includes(type)) return true;
+			if (this.getTypes().includes(type)) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -1111,7 +1093,7 @@ export class Pokemon {
 	 */
 	faint(source: Pokemon | null = null, effect: Effect | null = null) {
 		if (this.fainted || this.faintQueued) return 0;
-		let d = this.hp;
+		const d = this.hp;
 		this.hp = 0;
 		this.switchFlag = false;
 		this.faintQueued = true;
@@ -1136,12 +1118,10 @@ export class Pokemon {
 	}
 
 	tryTrap(isHidden: boolean = false) {
-		if (this.runStatusImmunity('trapped')) {
-			if (this.trapped && isHidden) return true;
-			this.trapped = isHidden ? 'hidden' : true;
-			return true;
-		}
-		return false;
+		if (!this.runStatusImmunity('trapped')) return false;
+		if (this.trapped && isHidden) return true;
+		this.trapped = isHidden ? 'hidden' : true;
+		return true;
 	}
 
 	hasMove(moveid: string) {
@@ -1203,10 +1183,7 @@ export class Pokemon {
 		return this.setStatus(this.status || status, source, sourceEffect);
 	}
 
-	/**
-	 * Unlike clearStatus, gives cure message
-	 * @param {boolean} [silent]
-	 */
+	/** Unlike clearStatus, gives cure message */
 	cureStatus(silent = false) {
 		if (!this.hp || !this.status) return false;
 		this.battle.add('-curestatus', this, this.status, silent ? '[silent]' : '[msg]');
@@ -1244,10 +1221,10 @@ export class Pokemon {
 				return false;
 			}
 		}
-		let prevStatus = this.status;
-		let prevStatusData = this.statusData;
+		const prevStatus = this.status;
+		const prevStatusData = this.statusData;
 		if (status.id) {
-			let result: boolean = this.battle.runEvent('SetStatus', this, source, sourceEffect, status);
+			const result: boolean = this.battle.runEvent('SetStatus', this, source, sourceEffect, status);
 			if (!result) {
 				this.battle.debug('set status [' + status.id + '] interrupted');
 				return result;
@@ -1257,9 +1234,7 @@ export class Pokemon {
 		this.status = status.id;
 		this.statusData = {id: status.id, target: this};
 		if (source) this.statusData.source = source;
-		if (status.duration) {
-			this.statusData.duration = status.duration;
-		}
+		if (status.duration) this.statusData.duration = status.duration;
 		if (status.durationCallback) {
 			this.statusData.duration = status.durationCallback.call(this.battle, this, source, sourceEffect);
 		}
@@ -1294,7 +1269,7 @@ export class Pokemon {
 
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
-		let item = this.getItem();
+		const item = this.getItem();
 		if (this.battle.runEvent('UseItem', this, null, null, item) && this.battle.runEvent('TryEatItem', this, null, null, item)) {
 			this.battle.add('-enditem', this, item, '[eat]');
 
@@ -1318,7 +1293,7 @@ export class Pokemon {
 
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
-		let item = this.getItem();
+		const item = this.getItem();
 		if (this.battle.runEvent('UseItem', this, null, null, item)) {
 			switch (item.id) {
 			case 'redcard':
@@ -1351,7 +1326,7 @@ export class Pokemon {
 			if (toId(this.ability) === 'multitype') return false;
 			if (source && toId(source.ability) === 'multitype') return false;
 		}
-		let item = this.getItem();
+		const item = this.getItem();
 		if (this.battle.runEvent('TakeItem', this, source, null, item)) {
 			this.item = '';
 			this.itemData = {id: '', target: this};
@@ -1364,8 +1339,7 @@ export class Pokemon {
 		if (!this.hp || !this.isActive) return false;
 		if (typeof item === 'string') item = this.battle.getItem(item) as Item;
 
-		let effectid;
-		if (this.battle.effect) effectid = this.battle.effect.id;
+		const effectid = this.battle.effect ? this.battle.effect.id : '';
 		if (item.id === 'leppaberry' && effectid !== 'trick' && effectid !== 'switcheroo') {
 			this.isStale = 2;
 			this.isStaleSource = 'getleppa';
@@ -1384,10 +1358,8 @@ export class Pokemon {
 
 	hasItem(item: string | string[]) {
 		if (this.ignoringItem()) return false;
-		let ownItem = this.item;
-		if (!Array.isArray(item)) {
-			return ownItem === toId(item);
-		}
+		const ownItem = this.item;
+		if (!Array.isArray(item)) return ownItem === toId(item);
 		return item.map(toId).includes(ownItem);
 	}
 
@@ -1398,12 +1370,12 @@ export class Pokemon {
 	setAbility(ability: string | Ability, source?: Pokemon | null, isFromFormeChange?: boolean) {
 		if (!this.hp) return false;
 		if (typeof ability === 'string') ability = this.battle.getAbility(ability) as Ability;
-		let oldAbility = this.ability;
+		const oldAbility = this.ability;
 		if (!isFromFormeChange) {
-			if (['illusion', 'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct',
-				'rkssystem', 'schooling', 'shieldsdown', 'stancechange'].includes(ability.id)) return false;
-			if (['battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem',
-				'schooling', 'shieldsdown', 'stancechange'].includes(oldAbility)) return false;
+			const abilities = [
+				'battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange',
+			];
+			if ('illusion' === ability.id || abilities.includes(ability.id) || abilities.includes(oldAbility)) return false;
 			if (this.battle.gen >= 7 && (ability.id === 'zenmode' || oldAbility === 'zenmode')) return false;
 		}
 		if (!this.battle.runEvent('SetAbility', this, source, this.battle.effect, ability)) return false;
@@ -1427,10 +1399,8 @@ export class Pokemon {
 
 	hasAbility(ability: string | string[]) {
 		if (this.ignoringAbility()) return false;
-		let ownAbility = this.ability;
-		if (!Array.isArray(ability)) {
-			return ownAbility === toId(ability);
-		}
+		const ownAbility = this.ability;
+		if (!Array.isArray(ability)) return ownAbility === toId(ability);
 		return ability.map(toId).includes(ownAbility);
 	}
 
@@ -1475,12 +1445,8 @@ export class Pokemon {
 			this.volatiles[status.id].source = source;
 			this.volatiles[status.id].sourcePosition = source.position;
 		}
-		if (sourceEffect) {
-			this.volatiles[status.id].sourceEffect = sourceEffect;
-		}
-		if (status.duration) {
-			this.volatiles[status.id].duration = status.duration;
-		}
+		if (sourceEffect) this.volatiles[status.id].sourceEffect = sourceEffect;
+		if (status.duration) this.volatiles[status.id].duration = status.duration;
 		if (status.durationCallback) {
 			this.volatiles[status.id].duration = status.durationCallback.call(this.battle, this, source, sourceEffect);
 		}
@@ -1515,8 +1481,8 @@ export class Pokemon {
 		status = this.battle.getEffect(status) as Effect;
 		if (!this.volatiles[status.id]) return false;
 		this.battle.singleEvent('End', status, this.volatiles[status.id], this);
-		let linkedPokemon = this.volatiles[status.id].linkedPokemon;
-		let linkedStatus = this.volatiles[status.id].linkedStatus;
+		const linkedPokemon = this.volatiles[status.id].linkedPokemon;
+		const linkedStatus = this.volatiles[status.id].linkedStatus;
 		delete this.volatiles[status.id];
 		if (linkedPokemon) {
 			this.removeLinkedVolatiles(linkedStatus, linkedPokemon);
@@ -1541,20 +1507,20 @@ export class Pokemon {
 		let hpstring;
 		// side === true in replays
 		if (side === this.side || side === true) {
-			hpstring = '' + this.hp + '/' + this.maxhp;
+			hpstring = `${this.hp}/${this.maxhp}`;
 		} else {
-			let ratio = this.hp / this.maxhp;
+			const ratio = this.hp / this.maxhp;
 			if (this.battle.reportPercentages) {
 				// HP Percentage Mod mechanics
 				let percentage = Math.ceil(ratio * 100);
 				if ((percentage === 100) && (ratio < 1.0)) {
 					percentage = 99;
 				}
-				hpstring = '' + percentage + '/100';
+				hpstring = `${percentage}/100`;
 			} else {
 				// In-game accurate pixel health mechanics
-				let pixels = Math.floor(ratio * 48) || 1;
-				hpstring = '' + pixels + '/48';
+				const pixels = Math.floor(ratio * 48) || 1;
+				hpstring = `${pixels}/48`;
 				if ((pixels === 9) && (ratio > 0.2)) {
 					hpstring += 'y'; // force yellow HP bar
 				} else if ((pixels === 24) && (ratio > 0.5)) {
@@ -1587,16 +1553,12 @@ export class Pokemon {
 	/** Removes any types added previously and adds another one. */
 	addType(newType: string) {
 		this.addedType = newType;
-
 		return true;
 	}
 
-	getTypes(excludeAdded?: boolean) {
-		let types = this.types;
-		types = this.battle.runEvent('Type', this, null, null, types);
-		if (!excludeAdded && this.addedType) {
-			types = types.concat(this.addedType);
-		}
+	getTypes(excludeAdded?: boolean): string[] {
+		const types = this.battle.runEvent('Type', this, null, null, this.types);
+		if (!excludeAdded && this.addedType) return types.concat(this.addedType);
 		if (types.length) return types;
 		return [this.battle.gen >= 5 ? 'Normal' : '???'];
 	}
@@ -1605,7 +1567,7 @@ export class Pokemon {
 		if ('gravity' in this.battle.pseudoWeather) return true;
 		if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;
 		if ('smackdown' in this.volatiles) return true;
-		let item = (this.ignoringItem() ? '' : this.item);
+		const item = (this.ignoringItem() ? '' : this.item);
 		if (item === 'ironball') return true;
 		// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
 		if (!negateImmunity && this.hasType('Flying') && !('roost' in this.volatiles)) return false;
@@ -1616,11 +1578,8 @@ export class Pokemon {
 	}
 
 	isSemiInvulnerable() {
-		if (this.volatiles['fly'] || this.volatiles['bounce'] || this.volatiles['dive'] || this.volatiles['dig'] ||
-			this.volatiles['phantomforce'] || this.volatiles['shadowforce'] || this.isSkyDropped()) {
-			return true;
-		}
-		return false;
+		return (this.volatiles['fly'] || this.volatiles['bounce'] || this.volatiles['dive'] || this.volatiles['dig'] ||
+			this.volatiles['phantomforce'] || this.volatiles['shadowforce'] || this.isSkyDropped());
 	}
 
 	isSkyDropped() {
@@ -1635,7 +1594,7 @@ export class Pokemon {
 
 	runEffectiveness(moveOrType: ActiveMove | string) {
 		let totalTypeMod = 0;
-		let move = (typeof moveOrType !== 'string' ? moveOrType : null);
+		const move = (typeof moveOrType !== 'string' ? moveOrType : null);
 		for (const type of this.getTypes()) {
 			let typeMod = this.battle.getEffectiveness(moveOrType, type);
 			if (move) {
@@ -1649,18 +1608,15 @@ export class Pokemon {
 	}
 
 	runImmunity(type: string, message?: string | boolean) {
-		if (!type || type === '???') {
-			return true;
-		}
+		if (!type || type === '???') return true;
 		if (!(type in this.battle.data.TypeChart)) {
 			if (type === 'Fairy' || type === 'Dark' || type === 'Steel') return true;
 			throw new Error("Use runStatusImmunity for " + type);
 		}
-		if (this.fainted) {
-			return false;
-		}
+		if (this.fainted) return false;
+
+		const negateResult = this.battle.runEvent('NegateImmunity', this, type);
 		let isGrounded;
-		let negateResult = this.battle.runEvent('NegateImmunity', this, type);
 		if (type === 'Ground') {
 			isGrounded = this.isGrounded(!negateResult);
 			if (isGrounded === null) {
@@ -1681,12 +1637,9 @@ export class Pokemon {
 	}
 
 	runStatusImmunity(type: string, message?: string) {
-		if (this.fainted) {
-			return false;
-		}
-		if (!type) {
-			return true;
-		}
+		if (this.fainted) return false;
+		if (!type) return true;
+
 		if (!this.battle.getImmunity(type, this)) {
 			this.battle.debug('natural status immunity');
 			if (message) {
@@ -1694,7 +1647,7 @@ export class Pokemon {
 			}
 			return false;
 		}
-		let immunity = this.battle.runEvent('Immunity', this, null, null, type);
+		const immunity = this.battle.runEvent('Immunity', this, null, null, type);
 		if (!immunity) {
 			this.battle.debug('artificial status immunity');
 			if (message && immunity !== null) {
