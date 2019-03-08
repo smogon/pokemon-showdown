@@ -672,7 +672,8 @@ export class Pokemon {
 		return lockedMove;
 	}
 
-	getMoves(lockedMove?: string | null, restrictData?: boolean) {
+	getMoves(lockedMove?: string | null, restrictData?: boolean):
+	{move: string, id: string, disabled?: string | boolean, disabledSource?: string, target?: string, pp?: number, maxpp?: number}[] {
 		if (lockedMove) {
 			lockedMove = toId(lockedMove);
 			this.trapped = true;
@@ -748,7 +749,7 @@ export class Pokemon {
 		let canSwitchIn = this.battle.canSwitch(this.side) > 0;
 		let moves = this.getMoves(lockedMove, isLastActive);
 		let data: {
-			moves: {move: string, id: string, target?: string, disabled?: boolean}[],
+			moves: {move: string, id: string, target?: string, disabled?: string | boolean}[],
 			maybeDisabled?: boolean,
 			trapped?: boolean,
 			maybeTrapped?: boolean,
