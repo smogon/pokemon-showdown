@@ -69,7 +69,9 @@ class PunishmentMap extends Map {
 	forEach(callback) {
 		for (const [k, punishment] of super.entries()) {
 			if (Date.now() < punishment[2]) {
-				return callback(punishment, k, this);
+				// eslint-disable-next-line callback-return
+				callback(punishment, k, this);
+				continue;
 			}
 			this.delete(k);
 		}
