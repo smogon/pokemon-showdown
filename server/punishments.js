@@ -69,8 +69,7 @@ class PunishmentMap extends Map {
 	forEach(callback) {
 		for (const [k, punishment] of super.entries()) {
 			if (Date.now() < punishment[2]) {
-				callback(punishment, k, this);
-				continue;
+				return callback(punishment, k, this);
 			}
 			this.delete(k);
 		}
