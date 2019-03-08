@@ -164,7 +164,6 @@ describe('White Herb', function () {
 		battle.makeChoices('move stringshot, move stringshot', 'move overheat, move overheat');
 
 		const holder = battle.p2.active[0];
-		const util = require('util');
 
 		assert.false.holdsItem(holder);
 		assert.statStage(holder, 'atk', 0);
