@@ -15,7 +15,7 @@ export type PRNGSeed = [number, number, number, number];
  * initial seed.
  */
 export class PRNG {
-	initialSeed: PRNGSeed;
+	readonly initialSeed: PRNGSeed;
 	seed: PRNGSeed;
 	/** Creates a new source of randomness for the given seed. */
 	constructor(seed: PRNGSeed | null = null) {
@@ -188,7 +188,7 @@ export class PRNG {
 
 				let aN = seed.length - 1;
 				for (let seedN = cN; seedN < seed.length; --aN, ++seedN) {
-					let nextWord = a[aN] * seed[seedN];
+					const nextWord = a[aN] * seed[seedN];
 					carry += nextWord >>> 16;
 					nextSeed[cN] += nextWord & 0xFFFF;
 				}
