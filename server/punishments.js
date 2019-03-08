@@ -406,9 +406,9 @@ Punishments.appendSharedIp = function (ip, note) {
 
 Punishments.saveSharedIps = function () {
 	let buf = 'IP\tType\tNote\r\n';
-	for (const [/** @type {string} */note, /** @type {string} */ip] of Punishments.sharedIps) {
+	Punishments.sharedIps.forEach((/** @type {string} */ note, /** @type {string} */ ip) => {
 		buf += `${ip}\tSHARED\t${note}\r\n`;
-	}
+	});
 
 	FS(SHAREDIPS_FILE).write(buf);
 };
