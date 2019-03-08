@@ -422,7 +422,8 @@ let commands = {
 		if (!this.canTalk()) return;
 
 		const handler = selectHandler(this.message);
-
+		
+		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 		if (!this.can('mute', null, room)) return false;
 

@@ -261,7 +261,7 @@ class Tournament {
 	}
 
 	addUser(user, isAllowAlts, output) {
-		/*if (!user.named) {
+		if (!user.named) {
 			output.sendReply('|tournament|error|UserNotNamed');
 			return;
 		}
@@ -296,7 +296,7 @@ class Tournament {
 					return;
 				}
 			}
-		}*/
+		}
 
 		let player = new Rooms.RoomGamePlayer(user, this);
 		let error = this.generator.addUser(player);
