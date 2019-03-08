@@ -299,7 +299,7 @@ Punishments.savePunishments = function () {
 Punishments.saveRoomPunishments = function () {
 	FS(ROOM_PUNISHMENT_FILE).writeUpdate(() => {
 		const saveTable = new Map();
-		Punishments.roomIps.nestedforEach((/** @type {Punishment} */ punishment, /** @type {string} */ roomid, /** @type {string} */ ip) => {
+		Punishments.roomIps.nestedForEach((/** @type {Punishment} */ punishment, /** @type {string} */ roomid, /** @type {string} */ ip) => {
 			const [punishType, punishUserid, ...rest] = punishment;
 			const id = roomid + ':' + punishUserid;
 			if (id.charAt(0) === '#') return;
@@ -317,7 +317,7 @@ Punishments.saveRoomPunishments = function () {
 			};
 			saveTable.set(id, entry);
 		});
-		Punishments.roomUserids.nestedforEach((/** @type {Punishment} */ punishment, /** @type {string} */ roomid, /** @type {string} */ userid) => {
+		Punishments.roomUserids.nestedForEach((/** @type {Punishment} */ punishment, /** @type {string} */ roomid, /** @type {string} */ userid) => {
 			const [punishType, punishUserid, ...rest] = punishment;
 			const id = roomid + ':' + punishUserid;
 			let entry = saveTable.get(id);
@@ -1135,7 +1135,7 @@ Punishments.search = function (searchId) {
 			foundRest = rest;
 		}
 	});
-	Punishments.roomIps.nestedforEach((/** @type {Punishment} */punishment, /** @type {string} */roomid, /** @type {string} */ip) => {
+	Punishments.roomIps.nestedForEach((/** @type {Punishment} */punishment, /** @type {string} */roomid, /** @type {string} */ip) => {
 		const [, punishUserid, ...rest] = punishment;
 
 		if (searchId === punishUserid || searchId === ip) {
@@ -1143,7 +1143,7 @@ Punishments.search = function (searchId) {
 			foundRest = rest;
 		}
 	});
-	Punishments.roomUserids.nestedforEach((/** @type {Punishment} */punishment, /** @type {string} */roomid, /** @type {string} */userid) => {
+	Punishments.roomUserids.nestedForEach((/** @type {Punishment} */punishment, /** @type {string} */roomid, /** @type {string} */userid) => {
 		const [, punishUserid, ...rest] = punishment;
 
 		if (searchId === punishUserid || searchId === userid) {
