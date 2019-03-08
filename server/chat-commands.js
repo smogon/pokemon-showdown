@@ -2483,7 +2483,9 @@ const commands = {
 		if (!target) return;
 
 		for (const curRoom of Rooms.rooms.values()) {
-			if (curRoom.id !== 'global' && curRoom.type !== 'battle') curRoom.addRaw(`<div class="broadcast-blue"><b>${target}</b></div>`).update();
+			if (curRoom.id !== 'global' && curRoom.type !== 'battle') {
+				curRoom.addRaw(`<div class="broadcast-blue"><b>${target}</b></div>`).update();
+			}
 		}
 		this.modlog(`CHATDECLARE`, null, target);
 	},
