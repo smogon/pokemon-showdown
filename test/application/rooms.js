@@ -28,10 +28,10 @@ describe('Rooms features', function () {
 		let room;
 		let parent;
 		afterEach(function () {
-			Users.users.forEach(user => {
+			for (const user of Users.users.values()) {
 				user.disconnectAll();
 				user.destroy();
-			});
+			}
 			if (room) room.destroy();
 			if (parent) parent.destroy();
 		});

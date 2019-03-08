@@ -46,9 +46,9 @@ class Worker extends EventEmitter {
 			throw new Error(`Attempted to disconnect nonexistent socket ${socketid}`);
 		}
 		this.sockets.delete(socketid);
-		this.rooms.forEach((room, roomid) => {
+		for (const room of this.rooms.values()) {
 			room.delete(socketid);
-		});
+		}
 	}
 
 	sendToSocket(socketid, msg) {

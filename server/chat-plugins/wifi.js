@@ -186,7 +186,7 @@ class Giveaway {
 		}
 		text = toId(text);
 		if (mons.size) {
-			mons.forEach(function (value, key) {
+			for (const [key, value] of mons) {
 				let spriteid = value.spriteid;
 				if (value.otherForms) {
 					for (let i = 0; i < value.otherForms.length; i++) {
@@ -218,7 +218,7 @@ class Giveaway {
 					let shiny = (text.includes("shiny") && !text.includes("shinystone") ? '-shiny' : '');
 					output += `<img src="/sprites/xyani${shiny}/${spriteid}.gif">`;
 				}
-			});
+			}
 		}
 		return [monIds, output];
 	}

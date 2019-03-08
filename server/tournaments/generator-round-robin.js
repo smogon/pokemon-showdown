@@ -113,24 +113,24 @@ class RoundRobin {
 
 		let userIndex = this.users.indexOf(user);
 
-		this.matches[userIndex].forEach((match, col) => {
-			if (!match || match.state !== 'available') return;
+		for (const [col, match] of this.matches[userIndex].entries()) {
+			if (!match || match.state !== 'available') continue;
 			match.state = 'finished';
 			match.result = 'loss';
 			match.score = [0, 1];
 			++this.userScores[col];
 			--this.totalPendingMatches;
-		});
+		}
 
-		this.matches.forEach((challenges, row) => {
+		for (const [row, challenges] of this.matches.entries()) {
 			let match = challenges[userIndex];
-			if (!match || match.state !== 'available') return;
+			if (!match || match.state !== 'available') continue;
 			match.state = 'finished';
 			match.result = 'win';
 			match.score = [1, 0];
 			++this.userScores[row];
 			--this.totalPendingMatches;
-		});
+		}
 
 		user.destroy();
 	}
@@ -155,14 +155,14 @@ class RoundRobin {
 
 		/** @type {[User, User][]} */
 		let matches = [];
-		this.matches.forEach((challenges, row) => {
-			challenges.forEach((match, col) => {
-				if (!match) return;
+		for (const [row, challenges] of this.matches.entries()) {
+			for (const [col, match] of challenges.entries()) {
+				if (!match) continue;
 				if (match.state === 'available' && !this.isUsersBusy[row] && !this.isUsersBusy[col]) {
 					matches.push([this.users[row], this.users[col]]);
 				}
-			});
-		});
+			}
+		}
 		return matches;
 	}
 	/**
@@ -226,14 +226,14 @@ class RoundRobin {
 		/** @type {User[]} */
 		let currentRank = [];
 		results.push(currentRank);
-		sortedScores.forEach(score => {
+		for (const score of sortedScores.values()) {
 			if (score.score < currentScore) {
 				currentScore = score.score;
 				currentRank = [];
 				results.push(currentRank);
 			}
 			currentRank.push(this.users[score.userIndex]);
-		});
+		}
 		return results;
 	}
 }

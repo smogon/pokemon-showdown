@@ -254,8 +254,12 @@ describe('Choices', function () {
 			]);
 			battle.makeChoices('move harden, move defensecurl, shift', 'move roost, move irondefense, shift');
 
-			['Pineco', 'Gastly', 'Geodude'].forEach((species, index) => assert.species(p1.active[index], species));
-			['Skarmory', 'Golem', 'Aggron'].forEach((species, index) => assert.species(p2.active[index], species));
+			for (const [index, species] of ['Pineco', 'Gastly', 'Geodude'].entries()) {
+				assert.species(p1.active[index], species);
+			}
+			for (const [index, species] of ['Skarmory', 'Golem', 'Aggron'].entries()) {
+				assert.species(p2.active[index], species);
+			}
 		});
 
 		it('should allow shifting the Pokémon on the right to the center', function () {
@@ -272,8 +276,12 @@ describe('Choices', function () {
 			]);
 			battle.makeChoices('shift, move harden, move defensecurl', 'shift, move roost, move irondefense');
 
-			['Geodude', 'Pineco', 'Gastly'].forEach((species, index) => assert.species(battle.p1.active[index], species));
-			['Aggron', 'Skarmory', 'Golem'].forEach((species, index) => assert.species(battle.p2.active[index], species));
+			for (const [index, species] of ['Geodude', 'Pineco', 'Gastly'].entries()) {
+				assert.species(battle.p1.active[index], species);
+			}
+			for (const [index, species] of ['Aggron', 'Skarmory', 'Golem'].entries()) {
+				assert.species(battle.p2.active[index], species);
+			}
 		});
 
 		it('should force Struggle usage on move attempt for no valid moves', function () {
@@ -393,12 +401,20 @@ describe('Choices', function () {
 			]]);
 
 			battle.makeChoices('move lunardance, move lunardance', 'move lunardance, move lunardance');
-			battle.sides.forEach(side => side.active.forEach(pokemon => assert.fainted(pokemon)));
+			for (const side of battle.sides.values()) {
+				for (const pokemon of side.active) {
+					assert.fainted(pokemon);
+				}
+			}
 
 			battle.makeChoices('pass, switch 3', 'switch 3, pass');
 
-			['Latias', 'Venusaur'].forEach((species, index) => assert.species(battle.p1.active[index], species));
-			['Charizard', 'Charmeleon'].forEach((species, index) => assert.species(battle.p2.active[index], species));
+			for (const [index, species] of ['Latias', 'Venusaur'].entries()) {
+				assert.species(battle.p1.active[index], species);
+			}
+			for (const [index, species] of ['Charizard', 'Charmeleon'].entries()) {
+				assert.species(battle.p2.active[index], species);
+			}
 
 			assert.fainted(battle.p1.active[0]);
 			assert.fainted(battle.p2.active[1]);
@@ -422,8 +438,12 @@ describe('Choices', function () {
 				battle.makeChoices('pass, pass, switch 4', 'pass, switch 4, pass');
 			}, "The turn should be resolved");
 
-			['Bulbasaur', 'Clefable', 'Venusaur'].forEach((species, index) => assert.species(battle.p1.active[index], species));
-			['Charmander', 'Charizard', 'Latias'].forEach((species, index) => assert.species(battle.p2.active[index], species));
+			for (const [index, species] of ['Bulbasaur', 'Clefable', 'Venusaur'].entries()) {
+				assert.species(battle.p1.active[index], species);
+			}
+			for (const [index, species] of ['Charmander', 'Charizard', 'Latias'].entries()) {
+				assert.species(battle.p2.active[index], species);
+			}
 		});
 
 		it('should disallow passing when there are enough available switch-ins', function () {
@@ -440,7 +460,11 @@ describe('Choices', function () {
 			]]);
 
 			battle.makeChoices('move lunardance, move lunardance', 'move lunardance, move lunardance');
-			battle.sides.forEach(side => side.active.forEach(pokemon => assert.fainted(pokemon)));
+			for (const side of battle.sides.values()) {
+				for (const pokemon of side.active) {
+					assert.fainted(pokemon);
+				}
+			}
 
 			assert.constant(() => battle.turn, () => {
 				battle.p1.choosePass();
@@ -449,7 +473,11 @@ describe('Choices', function () {
 				battle.p2.choosePass();
 			});
 
-			battle.sides.forEach(side => side.active.forEach(pokemon => assert.fainted(pokemon)));
+			for (const side of battle.sides.values()) {
+				for (const pokemon of side.active) {
+					assert.fainted(pokemon);
+				}
+			}
 		});
 	});
 
@@ -471,8 +499,12 @@ describe('Choices', function () {
 				const teamOrder = [BASE_TEAM_ORDER, BASE_TEAM_ORDER].map(teamOrder => Dex.shuffle(teamOrder.slice(0, 4)));
 				battle = common.createBattle({preview: true}, TEAMS);
 				battle.makeChoices(`team ${teamOrder[0].join('')}`, `team ${teamOrder[1].join('')}`);
-				battle.p1.pokemon.forEach((pokemon, index) => assert.species(pokemon, TEAMS[0][teamOrder[0][index] - 1].species));
-				battle.p2.pokemon.forEach((pokemon, index) => assert.species(pokemon, TEAMS[1][teamOrder[1][index] - 1].species));
+				for (const [index, pokemon] of battle.p1.pokemon.entries()) {
+					assert.species(pokemon, TEAMS[0][teamOrder[0][index] - 1].species);
+				}
+				for (const [index, pokemon] of battle.p2.pokemon.entries()) {
+					assert.species(pokemon, TEAMS[1][teamOrder[1][index] - 1].species);
+				}
 
 				if (i < 9) battle.destroy();
 			}
@@ -487,7 +519,9 @@ describe('Choices', function () {
 
 				battle.makeChoices(`team ${teamOrder.join('')}`, 'default');
 
-				fullTeamOrder.forEach((oSlot, index) => assert.species(battle.p1.pokemon[index], SINGLES_TEAMS.full[0][oSlot - 1].species));
+				for (const [index, oSlot] of fullTeamOrder.entries()) {
+					assert.species(battle.p1.pokemon[index], SINGLES_TEAMS.full[0][oSlot - 1].species);
+				}
 
 				if (i < 4) battle.destroy();
 			}
@@ -500,7 +534,9 @@ describe('Choices', function () {
 
 				battle.makeChoices(`team ${teamOrder.join('')}`, 'default');
 
-				teamOrder.forEach((oSlot, index) => assert.species(battle.p1.pokemon[index], SINGLES_TEAMS.illusion[0][oSlot - 1].species));
+				for (const [index, oSlot] of teamOrder.entries()) {
+					assert.species(battle.p1.pokemon[index], SINGLES_TEAMS.illusion[0][oSlot - 1].species);
+				}
 
 				if (i < 4) battle.destroy();
 			}
@@ -513,7 +549,9 @@ describe('Choices', function () {
 
 				battle.makeChoices(`team ${teamOrder.join('')}`, 'default');
 
-				teamOrder.forEach((oSlot, index) => assert.species(battle.p1.pokemon[index], DOUBLES_TEAMS.full[0][oSlot - 1].species));
+				for (const [index, oSlot] of teamOrder.entries()) {
+					assert.species(battle.p1.pokemon[index], DOUBLES_TEAMS.full[0][oSlot - 1].species);
+				}
 
 				if (i < 4) battle.destroy();
 			}
@@ -526,7 +564,9 @@ describe('Choices', function () {
 
 				battle.makeChoices(`team ${teamOrder.join('')}`, 'default');
 
-				teamOrder.forEach((oSlot, index) => assert.species(battle.p1.pokemon[index], TRIPLES_TEAMS.full[0][oSlot - 1].species));
+				for (const [index, oSlot] of teamOrder.entries()) {
+					assert.species(battle.p1.pokemon[index], TRIPLES_TEAMS.full[0][oSlot - 1].species);
+				}
 
 				if (i < 4) battle.destroy();
 			}
@@ -540,7 +580,9 @@ describe('Choices', function () {
 
 				battle.makeChoices(`team ${teamOrder.slice(0, 2).join('')}`, 'default');
 
-				fullTeamOrder.forEach((oSlot, index) => assert.species(battle.p1.pokemon[index], SINGLES_TEAMS.full[0][oSlot - 1].species));
+				for (const [index, oSlot] of fullTeamOrder.entries()) {
+					assert.species(battle.p1.pokemon[index], SINGLES_TEAMS.full[0][oSlot - 1].species);
+				}
 
 				if (i < 4) battle.destroy();
 			}
@@ -769,7 +811,9 @@ describe('Choice extensions', function () {
 				if (mode === 'revoke') battle.undoChoice('p1');
 				battle.makeChoices('move 1', 'move 1');
 
-				['Bulbasaur', 'Ivysaur', 'Venusaur'].forEach((species, index) => assert.species(battle.p1.pokemon[index], species));
+				for (const [index, species] of ['Bulbasaur', 'Ivysaur', 'Venusaur'].entries()) {
+					assert.species(battle.p1.pokemon[index], species);
+				}
 				assert.strictEqual(battle.p1.active[0].lastMove.id, 'synthesis');
 
 				battle.destroy();
@@ -779,7 +823,9 @@ describe('Choice extensions', function () {
 				if (mode === 'revoke') battle.undoChoice('p1');
 				battle.makeChoices('switch 3', 'move 1');
 
-				['Venusaur', 'Ivysaur', 'Bulbasaur'].forEach((species, index) => assert.species(battle.p1.pokemon[index], species));
+				for (const [index, species] of ['Venusaur', 'Ivysaur', 'Bulbasaur'].entries()) {
+					assert.species(battle.p1.pokemon[index], species);
+				}
 			});
 
 			it(`should disallow to ${mode} switch decisions on move requests for maybe-trapped Pokémon`, function () {
@@ -847,7 +893,9 @@ describe('Choice extensions', function () {
 				if (mode === 'revoke') battle.undoChoice('p1');
 				battle.makeChoices('move synthesis', 'move scratch');
 
-				['Ivysaur', 'Bulbasaur', 'Venusaur'].forEach((species, index) => assert.species(battle.p1.pokemon[index], species));
+				for (const [index, species] of ['Ivysaur', 'Bulbasaur', 'Venusaur'].entries()) {
+					assert.species(battle.p1.pokemon[index], species);
+				}
 
 				battle.destroy();
 				battle = common.createBattle(TEAMS);
@@ -856,7 +904,9 @@ describe('Choice extensions', function () {
 				if (mode === 'revoke') battle.undoChoice('p1');
 				battle.makeChoices('switch 3', 'move scratch');
 
-				['Ivysaur', 'Bulbasaur', 'Venusaur'].forEach((species, index) => assert.species(battle.p1.pokemon[index], species));
+				for (const [index, species] of ['Ivysaur', 'Bulbasaur', 'Venusaur'].entries()) {
+					assert.species(battle.p1.pokemon[index], species);
+				}
 			});
 
 			it(`should support to ${mode} shift decisions on move requests`, function () {
@@ -875,7 +925,9 @@ describe('Choice extensions', function () {
 				if (mode === 'revoke') battle.undoChoice('p1');
 				battle.makeChoices('move 1, move 1, move 1', 'move 1, move 1, move 1');
 
-				['Bulbasaur', 'Ivysaur', 'Venusaur'].forEach((species, index) => assert.species(battle.p1.active[index], species));
+				for (const [index, species] of ['Bulbasaur', 'Ivysaur', 'Venusaur'].entries()) {
+					assert.species(battle.p1.active[index], species);
+				}
 				assert.strictEqual(battle.p1.active[0].lastMove.id, 'synthesis');
 
 				battle.destroy();
@@ -885,7 +937,9 @@ describe('Choice extensions', function () {
 				if (mode === 'revoke') battle.undoChoice('p1');
 				battle.makeChoices('move 1, move 1, move 1', 'move 1, move 1, move 1');
 
-				['Bulbasaur', 'Ivysaur', 'Venusaur'].forEach((species, index) => assert.species(battle.p1.active[index], species));
+				for (const [index, species] of ['Bulbasaur', 'Ivysaur', 'Venusaur'].entries()) {
+					assert.species(battle.p1.active[index], species);
+				}
 				assert.strictEqual(battle.p1.active[2].lastMove.id, 'synthesis');
 			});
 
@@ -905,7 +959,9 @@ describe('Choice extensions', function () {
 				if (mode === 'revoke') battle.undoChoice('p1');
 				battle.makeChoices('move 1, move 1, move 1', 'move 1, move 1, move 1');
 
-				['Ivysaur', 'Bulbasaur', 'Venusaur'].forEach((species, index) => assert.species(battle.p1.active[index], species));
+				for (const [index, species] of ['Ivysaur', 'Bulbasaur', 'Venusaur'].entries()) {
+					assert.species(battle.p1.active[index], species);
+				}
 				assert.strictEqual(battle.p1.active[0].lastMove.id, 'growth');
 
 				battle.destroy();
@@ -915,7 +971,9 @@ describe('Choice extensions', function () {
 				if (mode === 'revoke') battle.undoChoice('p1');
 				battle.makeChoices('move 1, move 1, move 1', 'move 1, move 1, move 1');
 
-				['Bulbasaur', 'Venusaur', 'Ivysaur'].forEach((species, index) => assert.species(battle.p1.active[index], species));
+				for (const [index, species] of ['Bulbasaur', 'Venusaur', 'Ivysaur'].entries()) {
+					assert.species(battle.p1.active[index], species);
+				}
 				assert.strictEqual(battle.p1.active[2].lastMove.id, 'growth');
 			});
 
@@ -961,7 +1019,9 @@ describe('Choice extensions', function () {
 				if (mode === 'revoke') battle.undoChoice('p1');
 				battle.makeChoices('switch 3, pass', 'pass, switch 3');
 
-				['Chikorita', 'Bulbasaur'].forEach((species, index) => assert.species(battle.p1.active[index], species));
+				for (const [index, species] of ['Chikorita', 'Bulbasaur'].entries()) {
+					assert.species(battle.p1.active[index], species);
+				}
 			});
 
 			it(`should disallow to ${mode} switch decisions on switch requests by default`, function () {
@@ -983,7 +1043,9 @@ describe('Choice extensions', function () {
 				if (mode === 'revoke') battle.undoChoice('p1');
 				battle.makeChoices('switch 4, switch 3', 'pass');
 
-				['Ivysaur', 'Venusaur'].forEach((species, index) => assert.species(battle.p1.active[index], species));
+				for (const [index, species] of ['Ivysaur', 'Venusaur'].entries()) {
+					assert.species(battle.p1.active[index], species);
+				}
 			});
 
 			it(`should disallow to ${mode} pass decisions on switch requests by default`, function () {
@@ -1004,7 +1066,9 @@ describe('Choice extensions', function () {
 				if (mode === 'revoke') battle.undoChoice('p1');
 				battle.makeChoices('switch 3, pass', 'pass');
 
-				['Latias', 'Venusaur'].forEach((species, index) => assert.species(battle.p1.active[index], species));
+				for (const [index, species] of ['Latias', 'Venusaur'].entries()) {
+					assert.species(battle.p1.active[index], species);
+				}
 			});
 
 			it(`should disallow to ${mode} switch decisions on double switch requests by default`, function () {
@@ -1048,7 +1112,9 @@ describe('Choice extensions', function () {
 				if (mode === 'revoke') battle.undoChoice('p1');
 				battle.makeChoices('switch 3, pass', 'pass, switch 3');
 
-				['Deoxys-Attack', 'Chikorita'].forEach((species, index) => assert.species(battle.p1.active[index], species));
+				for (const [index, species] of ['Deoxys-Attack', 'Chikorita'].entries()) {
+					assert.species(battle.p1.active[index], species);
+				}
 			});
 
 			it(`should support to ${mode} team order action on team preview requests`, function () {
@@ -1061,7 +1127,9 @@ describe('Choice extensions', function () {
 				if (mode === 'revoke') battle.undoChoice('p1');
 				battle.makeChoices('team 21', 'team 12');
 
-				['Ivysaur', 'Bulbasaur'].forEach((species, index) => assert.species(battle.p1.pokemon[index], species));
+				for (const [index, species] of ['Ivysaur', 'Bulbasaur'].entries()) {
+					assert.species(battle.p1.pokemon[index], species);
+				}
 				battle.destroy();
 
 				battle = common.createBattle({preview: true, cancel: true}, [
@@ -1073,7 +1141,9 @@ describe('Choice extensions', function () {
 				if (mode === 'revoke') battle.undoChoice('p1');
 				battle.makeChoices('team 12', 'team 12');
 
-				['Bulbasaur', 'Ivysaur'].forEach((species, index) => assert.species(battle.p1.pokemon[index], species));
+				for (const [index, species] of ['Bulbasaur', 'Ivysaur'].entries()) {
+					assert.species(battle.p1.pokemon[index], species);
+				}
 			});
 
 			it(`should disallow to ${mode} team order action on team preview requests by default`, function () {
@@ -1086,7 +1156,9 @@ describe('Choice extensions', function () {
 				if (mode === 'revoke') battle.undoChoice('p1');
 				battle.makeChoices('team 21', 'team 12');
 
-				['Bulbasaur', 'Ivysaur'].forEach((species, index) => assert.species(battle.p1.pokemon[index], species));
+				for (const [index, species] of ['Bulbasaur', 'Ivysaur'].entries()) {
+					assert.species(battle.p1.pokemon[index], species);
+				}
 			});
 		}
 	});

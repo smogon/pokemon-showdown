@@ -769,11 +769,11 @@ export class Side {
 		this.pokemon = [];
 		this.active = [];
 
-		this.choice.actions.forEach(action => {
+		for (const action of this.choice.actions) {
 			delete action.side;
 			delete action.pokemon;
 			delete action.target;
-		});
+		}
 		this.choice.actions = [];
 
 		// get rid of some possibly-circular references

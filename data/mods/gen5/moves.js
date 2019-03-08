@@ -23,7 +23,9 @@ let BattleMovedex = {
 		desc: "Every Pokemon in the user's party is cured of its major status condition.",
 		onHit(target, source) {
 			this.add('-activate', source, 'move: Aromatherapy');
-			source.side.pokemon.forEach(pokemon => pokemon.cureStatus());
+			for (const pokemon of source.side.pokemon) {
+				pokemon.cureStatus();
+			}
 		},
 	},
 	assist: {
@@ -383,7 +385,9 @@ let BattleMovedex = {
 		flags: {snatch: 1, sound: 1},
 		onHit(target, source) {
 			this.add('-activate', source, 'move: Heal Bell');
-			source.side.pokemon.forEach(pokemon => pokemon.cureStatus());
+			for (const pokemon of source.side.pokemon) {
+				pokemon.cureStatus();
+			}
 		},
 	},
 	healpulse: {
