@@ -404,9 +404,9 @@ Punishments.appendSharedIp = function (ip, note) {
 
 Punishments.saveSharedIps = function () {
 	let buf = 'IP\tType\tNote\r\n';
-	Punishments.sharedIps.forOf((/** @type {string} */ note, /** @type {string} */ ip) => {
+	for (const [/** @type {string} */note, /** @type {string} */ip] of Punishments.sharedIps) {
 		buf += `${ip}\tSHARED\t${note}\r\n`;
-	});
+	}
 
 	FS(SHAREDIPS_FILE).write(buf);
 };
@@ -656,21 +656,21 @@ Punishments.roomUnpunish = function (room, id, punishType, ignoreWrite) {
 	let success;
 	const ipSubMap = Punishments.roomIps.get(roomid);
 	if (ipSubMap) {
-		ipSubMap.forOf((/** @type {Punishment} */punishment, /** @type {string} */key) => {
+		for (const [/** @type {string} */key, /** @type {Punishment} */punishment] of ipSubMap) {
 			if (punishment[1] === id && punishment[0] === punishType) {
 				ipSubMap.delete(key);
 				success = id;
 			}
-		});
+		}
 	}
 	const useridSubMap = Punishments.roomUserids.get(roomid);
 	if (useridSubMap) {
-		useridSubMap.forOf((/** @type {Punishment} */punishment, /** @type {string} */key) => {
+		for (const [/** @type {string} */key, /** @type {Punishment} */punishment] of useridSubMap) {
 			if (punishment[1] === id && punishment[0] === punishType) {
 				useridSubMap.delete(key);
 				success = id;
 			}
-		});
+		}
 	}
 	if (success && !ignoreWrite) {
 		Punishments.saveRoomPunishments();
@@ -783,7 +783,7 @@ Punishments.unlock = function (name) {
 		user.updateIdentity();
 		success.push(user.getLastName());
 		if (id.charAt(0) !== '#') {
-			for (const [, curUser] of Users.users) {
+			for (const curUser of Users.users.values()) {
 				if (curUser.locked === id) {
 					curUser.locked = false;
 					curUser.namelocked = false;
@@ -845,7 +845,7 @@ Punishments.unnamelock = function (name) {
 		success.push(user.getLastName());
 	}
 	if (id.charAt(0) !== '#') {
-		for (const [, curUser] of Users.users) {
+		for (const curUser of Users.users.values()) {
 			if (curUser.locked === id) {
 				curUser.locked = false;
 				curUser.namelocked = false;
@@ -1084,7 +1084,7 @@ Punishments.addSharedIp = function (ip, note) {
 	Punishments.sharedIps.set(ip, note);
 	Punishments.appendSharedIp(ip, note);
 
-	for (const [, user] of Users.users) {
+	for (const user of Users.users.values()) {
 		if (user.locked && user.locked !== user.userid && ip in user.ips) {
 			if (!user.autoconfirmed) {
 				user.semilocked = `#sharedip ${user.locked}`;
@@ -1133,7 +1133,7 @@ Punishments.search = function (searchId) {
 			foundRest = rest;
 		}
 	});
-	Punishments.roomIps.nestedForEach((/** @type {Punishment} */punishment, /** @type {string} */roomid, /** @type {string} */ip) => {
+	Punishments.roomIps.nestedForOf((/** @type {Punishment} */punishment, /** @type {string} */roomid, /** @type {string} */ip) => {
 		const [, punishUserid, ...rest] = punishment;
 
 		if (searchId === punishUserid || searchId === ip) {
@@ -1141,7 +1141,7 @@ Punishments.search = function (searchId) {
 			foundRest = rest;
 		}
 	});
-	Punishments.roomUserids.nestedForEach((/** @type {Punishment} */punishment, /** @type {string} */roomid, /** @type {string} */userid) => {
+	Punishments.roomUserids.nestedForOf((/** @type {Punishment} */punishment, /** @type {string} */roomid, /** @type {string} */userid) => {
 		const [, punishUserid, ...rest] = punishment;
 
 		if (searchId === punishUserid || searchId === userid) {

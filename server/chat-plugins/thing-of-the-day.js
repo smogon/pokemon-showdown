@@ -172,7 +172,7 @@ class OtdHandler {
 		/** @type {string[]} */
 		const entries = [];
 
-		for (const [, value] of this.nominations.entries()) {
+		for (const value of this.nominations.values()) {
 			entries.push(`<li><b>${value.nomination}</b> <i>(Submitted by ${value.name})</i></li>`);
 		}
 
@@ -423,7 +423,6 @@ let commands = {
 
 		const handler = selectHandler(this.message);
 
-		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 		if (!this.can('mute', null, room)) return false;
 

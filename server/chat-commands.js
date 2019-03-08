@@ -1527,23 +1527,23 @@ const commands = {
 		if (group) {
 			buffer.push(`Global auth: ${group.charAt(0)}`);
 		}
-		for (const [id, curRoom] of Rooms.rooms) {
-			if (!curRoom.auth || curRoom.isPrivate) return;
+		for (const curRoom of Rooms.rooms.values()) {
+			if (!curRoom.auth || curRoom.isPrivate) continue;
 			group = curRoom.auth[targetId];
-			if (!group) return;
-			innerBuffer.push(group + id);
+			if (!group) continue;
+			innerBuffer.push(group + curRoom.id);
 		}
 		if (innerBuffer.length) {
 			buffer.push(`Room auth: ${innerBuffer.join(', ')}`);
 		}
 		if (targetId === user.userid || user.can('lock')) {
 			innerBuffer = [];
-			for (const [id, curRoom] of Rooms.rooms) {
-				if (!curRoom.auth || !curRoom.isPrivate) return;
-				if (curRoom.isPrivate === true) return;
+			for (const curRoom of Rooms.rooms.values()) {
+				if (!curRoom.auth || !curRoom.isPrivate) continue;
+				if (curRoom.isPrivate === true) continue;
 				let auth = curRoom.auth[targetId];
-				if (!auth) return;
-				innerBuffer.push(auth + id);
+				if (!auth) continue;
+				innerBuffer.push(auth + curRoom.id);
 			}
 			if (innerBuffer.length) {
 				buffer.push(`Hidden room auth: ${innerBuffer.join(', ')}`);
@@ -2468,7 +2468,7 @@ const commands = {
 		target = this.canHTML(target);
 		if (!target) return;
 
-		for (const u of Users.users.values()) {
+		for (const u of Users.users) {
 			if (u.connected) u.send(`|pm|~|${u.group}${u.name}|/raw <div class="broadcast-blue"><b>${target}</b></div>`);
 		}
 		this.modlog(`GLOBALDECLARE`, null, target);
@@ -2482,8 +2482,8 @@ const commands = {
 		target = this.canHTML(target);
 		if (!target) return;
 
-		for (const [curRoom, id] of Rooms.rooms) {
-			if (id !== 'global' && curRoom.type !== 'battle') curRoom.addRaw(`<div class="broadcast-blue"><b>${target}</b></div>`).update();
+		for (const curRoom of Rooms.rooms.values()) {
+			if (curRoom.id !== 'global' && curRoom.type !== 'battle') curRoom.addRaw(`<div class="broadcast-blue"><b>${target}</b></div>`).update();
 		}
 		this.modlog(`CHATDECLARE`, null, target);
 	},
@@ -3256,9 +3256,9 @@ const commands = {
 			`Rated games will no longer update the ladder. It will be back momentarily.`
 		);
 
-		for (const [curRoom, id] of Rooms.rooms) {
+		for (const curRoom of Rooms.rooms.values()) {
 			if (curRoom.type === 'battle') curRoom.rated = false;
-			if (id !== 'global') curRoom.addRaw(`<div class="broadcast-red">${innerHTML}</div>`).update();
+			if (curRoom.id !== 'global') curRoom.addRaw(`<div class="broadcast-red">${innerHTML}</div>`).update();
 		}
 		for (const u of Users.users) {
 			if (u.connected) u.send(`|pm|~|${u.group}${u.name}|/raw <div class="broadcast-red">${innerHTML}</div>`);
@@ -3280,8 +3280,8 @@ const commands = {
 			`Rated games will update the ladder now..`
 		);
 
-		for (const [curRoom, id] of Rooms.rooms) {
-			if (id !== 'global') curRoom.addRaw(`<div class="broadcast-green">${innerHTML}</div>`).update();
+		for (const curRoom of Rooms.rooms.values()) {
+			if (curRoom.id !== 'global') curRoom.addRaw(`<div class="broadcast-green">${innerHTML}</div>`).update();
 		}
 		for (const u of Users.users) {
 			if (u.connected) u.send(`|pm|~|${u.group}${u.name}|/raw <div class="broadcast-green">${innerHTML}</div>`);
@@ -3348,8 +3348,8 @@ const commands = {
 			return this.errorReply("We're not under lockdown right now.");
 		}
 		if (Rooms.global.lockdown === true) {
-			for (const [curRoom, id] of Rooms.rooms) {
-				if (id !== 'global') curRoom.addRaw(`<div class="broadcast-green"><b>The server restart was canceled.</b></div>`).update();
+			for (const curRoom of Rooms.rooms.values()) {
+				if (curRoom.id !== 'global') curRoom.addRaw(`<div class="broadcast-green"><b>The server restart was canceled.</b></div>`).update();
 			}
 		} else {
 			this.sendReply("Preparation for the server shutdown was canceled.");
@@ -3367,8 +3367,8 @@ const commands = {
 			return this.errorReply("We're already in emergency mode.");
 		}
 		Config.emergency = true;
-		for (const [curRoom, id] of Rooms.rooms) {
-			if (id !== 'global') curRoom.addRaw(`<div class="broadcast-red">The server has entered emergency mode. Some features might be disabled or limited.</div>`).update();
+		for (const curRoom of Rooms.rooms.values()) {
+			if (curRoom.id !== 'global') curRoom.addRaw(`<div class="broadcast-red">The server has entered emergency mode. Some features might be disabled or limited.</div>`).update();
 		}
 
 		const logRoom = Rooms('staff') || room;
@@ -3382,8 +3382,8 @@ const commands = {
 			return this.errorReply("We're not in emergency mode.");
 		}
 		Config.emergency = false;
-		for (const [curRoom, id] of Rooms.rooms) {
-			if (id !== 'global') curRoom.addRaw(`<div class="broadcast-green"><b>The server is no longer in emergency mode.</b></div>`).update();
+		for (const curRoom of Rooms.rooms.values()) {
+			if (curRoom.id !== 'global') curRoom.addRaw(`<div class="broadcast-green"><b>The server is no longer in emergency mode.</b></div>`).update();
 		}
 
 		const logRoom = Rooms('staff') || room;
@@ -3401,7 +3401,7 @@ const commands = {
 			return this.errorReply("Wait for /updateserver to finish before using /kill.");
 		}
 
-		for (const worker of Sockets.workers.values()) {
+		for (const worker of Sockets.workers) {
 			worker.kill();
 		}
 

@@ -18,7 +18,7 @@ describe.skip('Sockets', function () {
 	});
 
 	afterEach(function () {
-		for (const [worker, workerid] of Sockets.workers) {
+		for (const [workerid, worker] of Sockets.workers) {
 			worker.kill();
 			Sockets.workers.delete(workerid);
 		}

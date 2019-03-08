@@ -139,7 +139,7 @@ class Elimination {
 	}
 	freezeBracket() {
 		this.isBracketFrozen = true;
-		for (const user of this.users) {
+		for (const user of this.users.values()) {
 			user.isBusy = false;
 			user.isDisqualified = false;
 			user.loseCount = 0;

@@ -226,7 +226,7 @@ class RoundRobin {
 		/** @type {User[]} */
 		let currentRank = [];
 		results.push(currentRank);
-		for (const score of sortedScores) {
+		for (const score of sortedScores.values()) {
 			if (score.score < currentScore) {
 				currentScore = score.score;
 				currentRank = [];

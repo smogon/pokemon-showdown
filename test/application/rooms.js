@@ -28,7 +28,7 @@ describe('Rooms features', function () {
 		let room;
 		let parent;
 		afterEach(function () {
-			for (const [, user] of Users.users) {
+			for (const user of Users.users.values()) {
 				user.disconnectAll();
 				user.destroy();
 			}

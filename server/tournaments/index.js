@@ -154,7 +154,7 @@ class Tournament {
 	forceEnd() {
 		if (this.isTournamentStarted) {
 			if (this.autoDisqualifyTimer) clearTimeout(this.autoDisqualifyTimer);
-			for (const match of this.inProgressMatches) {
+			for (const match of this.inProgressMatches.values()) {
 				if (match) {
 					match.room.tour = null;
 					match.room.parent = null;
@@ -234,11 +234,10 @@ class Tournament {
 		if (this.isTournamentStarted && this.isAvailableMatchesInvalidated) {
 			this.availableMatchesCache = this.getAvailableMatches();
 			this.isAvailableMatchesInvalidated = false;
-
-			for (const [opponents, player] of this.availableMatchesCache) {
+			for (const [player, opponents] of this.availableMatchesCache.challenges) {
 				player.sendRoom(`|tournament|update|${JSON.stringify({challenges: usersToNames(opponents)})}`);
 			}
-			for (const [opponents, player] of this.availableMatchesCache.challengeBys) {
+			for (const [player, opponents] of this.availableMatchesCache.challengeBys) {
 				player.sendRoom(`|tournament|update|${JSON.stringify({challengeBys: usersToNames(opponents)})}`);
 			}
 		}
@@ -262,7 +261,7 @@ class Tournament {
 	}
 
 	addUser(user, isAllowAlts, output) {
-		if (!user.named) {
+		/*if (!user.named) {
 			output.sendReply('|tournament|error|UserNotNamed');
 			return;
 		}
@@ -297,7 +296,7 @@ class Tournament {
 					return;
 				}
 			}
-		}
+		}*/
 
 		let player = new Rooms.RoomGamePlayer(user, this);
 		let error = this.generator.addUser(player);
@@ -493,7 +492,7 @@ class Tournament {
 		}
 
 		const now = Date.now();
-		for (const [availableMatches, user] of this.availableMatches) {
+		for (const [user, availableMatches] of this.availableMatches) {
 			if (oldAvailableMatches.get(user)) return;
 
 			if (availableMatches.size) this.lastActionTimes.set(user, now);
@@ -564,7 +563,7 @@ class Tournament {
 		}
 
 		let matchTo = null;
-		for (const [match, playerFrom] of this.inProgressMatch) {
+		for (const [playerFrom, match] of this.inProgressMatch) {
 			if (match && match.to === player) matchTo = playerFrom;
 		}
 		if (matchTo) {
@@ -645,7 +644,7 @@ class Tournament {
 		}
 		if (this.autoDisqualifyTimer) clearTimeout(this.autoDisqualifyTimer);
 		const now = Date.now();
-		for (const [time, player] of this.lastActionTimes) {
+		for (const [player, time] of this.lastActionTimes) {
 			let availableMatches = false;
 			if (this.availableMatches.get(player).size) availableMatches = true;
 			const pendingChallenge = this.pendingChallenges.get(player);

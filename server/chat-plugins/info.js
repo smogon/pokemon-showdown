@@ -328,7 +328,7 @@ const commands = {
 		if (/[a-z]/.test(ip)) {
 			// host
 			this.sendReply(`Users with host ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
-			for (const curUser of Users.users) {
+			for (const curUser of Users.users.values()) {
 				if (results.length > 100 && !isAll) return;
 				if (!curUser.latestHost || !curUser.latestHost.endsWith(ip)) return;
 				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) return;
@@ -352,7 +352,7 @@ const commands = {
 			}
 		} else {
 			this.sendReply(`Users with IP ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
-			for (const curUser of Users.users) {
+			for (const curUser of Users.users.values()) {
 				if (curUser.latestIp !== ip) return;
 				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) return;
 				results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
