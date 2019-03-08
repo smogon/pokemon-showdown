@@ -66,7 +66,7 @@ class PunishmentMap extends Map {
 	/**
 	 * @param {(punishment: Punishment, id: string, map: PunishmentMap) => void} callback
 	 */
-	forOf(callback) {
+	forEach(callback) {
 		for (const [k, punishment] of super.entries()) {
 			if (Date.now() < punishment[2]) {
 				callback(punishment, k, this);
@@ -138,7 +138,7 @@ class NestedPunishmentMap extends Map {
 	/**
 	 * @param {(punishment: Punishment, roomid: string, userid: string) => void} callback
 	 */
-	nestedForOf(callback) {
+	nestedForEach(callback) {
 		for (const [k1, subMap] of this.entries()) {
 			for (const [k2, punishment] of subMap.entries()) {
 				if (Date.now() < punishment[2]) return callback(punishment, k1, k2);
@@ -255,7 +255,7 @@ Punishments.loadRoomPunishments = async function () {
 Punishments.savePunishments = function () {
 	FS(PUNISHMENT_FILE).writeUpdate(() => {
 		const saveTable = new Map();
-		Punishments.ips.forOf((/** @type {Punishment} */ punishment, /** @type {string} */ ip) => {
+		Punishments.ips.forEach((/** @type {Punishment} */ punishment, /** @type {string} */ ip) => {
 			const [punishType, id, ...rest] = punishment;
 			if (id.charAt(0) === '#') return;
 			let entry = saveTable.get(id);
@@ -272,7 +272,7 @@ Punishments.savePunishments = function () {
 			};
 			saveTable.set(id, entry);
 		});
-		Punishments.userids.forOf((/** @type {Punishment} */ punishment, /** @type {string} */ userid) => {
+		Punishments.userids.forEach((/** @type {Punishment} */ punishment, /** @type {string} */ userid) => {
 			const [punishType, id, ...rest] = punishment;
 			if (id.charAt(0) === '#') return;
 			let entry = saveTable.get(id);
@@ -300,7 +300,7 @@ Punishments.savePunishments = function () {
 Punishments.saveRoomPunishments = function () {
 	FS(ROOM_PUNISHMENT_FILE).writeUpdate(() => {
 		const saveTable = new Map();
-		Punishments.roomIps.nestedForOf((/** @type {Punishment} */ punishment, /** @type {string} */ roomid, /** @type {string} */ ip) => {
+		Punishments.roomIps.nestedforEach((/** @type {Punishment} */ punishment, /** @type {string} */ roomid, /** @type {string} */ ip) => {
 			const [punishType, punishUserid, ...rest] = punishment;
 			const id = roomid + ':' + punishUserid;
 			if (id.charAt(0) === '#') return;
@@ -318,7 +318,7 @@ Punishments.saveRoomPunishments = function () {
 			};
 			saveTable.set(id, entry);
 		});
-		Punishments.roomUserids.nestedForOf((/** @type {Punishment} */ punishment, /** @type {string} */ roomid, /** @type {string} */ userid) => {
+		Punishments.roomUserids.nestedforEach((/** @type {Punishment} */ punishment, /** @type {string} */ roomid, /** @type {string} */ userid) => {
 			const [punishType, punishUserid, ...rest] = punishment;
 			const id = roomid + ':' + punishUserid;
 			let entry = saveTable.get(id);
@@ -533,13 +533,13 @@ Punishments.unpunish = function (id, punishType) {
 
 	/** @type {false | string} */
 	let success = false;
-	Punishments.ips.forOf((/** @type {Punishment} */punishment, /** @type {string} */key) => {
+	Punishments.ips.forEach((/** @type {Punishment} */punishment, /** @type {string} */key) => {
 		if (punishment[1] === id && punishment[0] === punishType) {
 			Punishments.ips.delete(key);
 			success = id;
 		}
 	});
-	Punishments.userids.forOf((/** @type {Punishment} */punishment, /** @type {string} */key) => {
+	Punishments.userids.forEach((/** @type {Punishment} */punishment, /** @type {string} */key) => {
 		if (punishment[1] === id && punishment[0] === punishType) {
 			Punishments.userids.delete(key);
 			success = id;
@@ -1068,7 +1068,7 @@ Punishments.roomUnblacklistAll = function (room) {
 	/** @type {string[]} */
 	let unblacklisted = [];
 
-	roombans.forOf((/** @type {Punishment} */punishment, /** @type {string} */userid) => {
+	roombans.forEach((/** @type {Punishment} */punishment, /** @type {string} */userid) => {
 		if (punishment[0] === 'BLACKLIST') {
 			Punishments.roomUnblacklist(room, userid, true);
 			unblacklisted.push(userid);
@@ -1120,7 +1120,7 @@ Punishments.search = function (searchId) {
 	/** @type {string[]} */
 	let foundKeys = [];
 	let foundRest = null;
-	Punishments.ips.forOf((/** @type {Punishment} */ punishment, /** @type {string} */ ip) => {
+	Punishments.ips.forEach((/** @type {Punishment} */ punishment, /** @type {string} */ ip) => {
 		const [, id, ...rest] = punishment;
 
 		if (searchId === id || searchId === ip) {
@@ -1128,7 +1128,7 @@ Punishments.search = function (searchId) {
 			foundRest = rest;
 		}
 	});
-	Punishments.userids.forOf((/** @type {Punishment} */punishment, /** @type {string} */userid) => {
+	Punishments.userids.forEach((/** @type {Punishment} */punishment, /** @type {string} */userid) => {
 		const [, id, ...rest] = punishment;
 
 		if (searchId === id || searchId === userid) {
@@ -1136,7 +1136,7 @@ Punishments.search = function (searchId) {
 			foundRest = rest;
 		}
 	});
-	Punishments.roomIps.nestedForOf((/** @type {Punishment} */punishment, /** @type {string} */roomid, /** @type {string} */ip) => {
+	Punishments.roomIps.nestedforEach((/** @type {Punishment} */punishment, /** @type {string} */roomid, /** @type {string} */ip) => {
 		const [, punishUserid, ...rest] = punishment;
 
 		if (searchId === punishUserid || searchId === ip) {
@@ -1144,7 +1144,7 @@ Punishments.search = function (searchId) {
 			foundRest = rest;
 		}
 	});
-	Punishments.roomUserids.nestedForOf((/** @type {Punishment} */punishment, /** @type {string} */roomid, /** @type {string} */userid) => {
+	Punishments.roomUserids.nestedforEach((/** @type {Punishment} */punishment, /** @type {string} */roomid, /** @type {string} */userid) => {
 		const [, punishUserid, ...rest] = punishment;
 
 		if (searchId === punishUserid || searchId === userid) {
