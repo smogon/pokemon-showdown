@@ -142,7 +142,11 @@ class NestedPunishmentMap extends Map {
 	nestedForEach(callback) {
 		for (const [k1, subMap] of this.entries()) {
 			for (const [k2, punishment] of subMap.entries()) {
-				if (Date.now() < punishment[2]) return callback(punishment, k1, k2);
+				if (Date.now() < punishment[2]) {
+					// eslint-disable-next-line callback-return
+					callback(punishment, k1, k2);
+					continue;
+				}
 				this.nestedDelete(k1, k2);
 			}
 		}
