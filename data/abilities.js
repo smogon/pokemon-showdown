@@ -750,7 +750,7 @@ let BattleAbilities = {
 		},
 		id: "download",
 		name: "Download",
-		rating: 4,
+		rating: 3.5,
 		num: 88,
 	},
 	"drizzle": {
