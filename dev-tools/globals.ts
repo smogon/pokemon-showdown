@@ -27,10 +27,13 @@ declare let Sockets: typeof import('../server/sockets');
 declare let TeamValidatorAsync: typeof import('../server/team-validator-async');
 
 type GenderName = 'M' | 'F' | 'N' | '';
-type StatName = 'hp' | 'atk' | 'def' | 'spa' | 'spd' | 'spe';
-type StatsTable = {hp: number, atk: number, def: number, spa: number, spd: number, spe: number};
+type StatNameExceptHP = 'atk' | 'def' | 'spa' | 'spd' | 'spe';
+type StatName = 'hp' | StatNameExceptHP;
+type StatsExceptHPTable = {[stat in StatNameExceptHP]: number};
+type StatsTable = {[stat in StatName]: number };
 type SparseStatsTable = Partial<StatsTable>;
-type BoostsTable = {atk: number, def: number, spa: number, spd: number, spe: number, accuracy: number, evasion: number};
+type BoostName = StatNameExceptHP | 'accuracy' | 'evasion';
+type BoostsTable = {[boost in BoostName]: number };
 type SparseBoostsTable = Partial<BoostsTable>;
 type PokemonSet = {
 	name: string,

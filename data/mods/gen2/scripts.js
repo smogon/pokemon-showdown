@@ -15,7 +15,7 @@ let BattleScripts = {
 			if (statName === 'hp') return this.maxhp;
 
 			// base stat
-			let stat = this.storedStats[statName];
+			let stat = this.storedStats[/** @type {StatNameExceptHP} */(statName)];
 
 			// Stat boosts.
 			if (!unboosted) {

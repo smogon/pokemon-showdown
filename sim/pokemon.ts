@@ -81,7 +81,7 @@ export class Pokemon {
 	 *
 	 * `storedStats` are reset to `baseStoredStats` on switch-out.
 	 */
-	storedStats: {[k: string]: number};
+	storedStats: StatsExceptHPTable;
 	boosts: BoostsTable;
 
 	baseAbility: string;
@@ -207,7 +207,7 @@ export class Pokemon {
 	staleWarned: boolean;
 
 	// Gen 1 only
-	modifiedStats?: {[k: string]: number};
+	modifiedStats?: StatsExceptHPTable;
 	modifyStat?: (this: Pokemon, statName: string, modifier: number) => void;
 
 	// OMs
@@ -292,7 +292,7 @@ export class Pokemon {
 			this.set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 		}
 		let stats: StatsTable = {hp: 31, atk: 31, def: 31, spe: 31, spa: 31, spd: 31};
-		let stat: keyof StatsTable;
+		let stat: StatName;
 		for (stat in stats) {
 			if (!this.set.evs[stat]) this.set.evs[stat] = 0;
 			if (!this.set.ivs[stat] && this.set.ivs[stat] !== 0) this.set.ivs[stat] = 31;
@@ -424,7 +424,7 @@ export class Pokemon {
 		if (statName === 'hp') return this.maxhp; // please just read .maxhp directly
 
 		// base stat
-		let stat = this.storedStats[statName];
+		let stat = this.storedStats[statName as StatNameExceptHP];
 
 		// Wonder Room swaps defenses before calculating anything else
 		if ('wonderroom' in this.battle.pseudoWeather) {
@@ -437,10 +437,10 @@ export class Pokemon {
 
 		// stat boosts
 		let boosts: SparseBoostsTable = {};
-		const boostKey = statName as keyof SparseBoostsTable;
-		boosts[boostKey] = boost;
+		const boostName = statName as BoostName;
+		boosts[boostName] = boost;
 		boosts = this.battle.runEvent('ModifyBoost', this, null, null, boosts);
-		boost = boosts[boostKey]!;
+		boost = boosts[boostName]!;
 		const boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
 		if (boost > 6) boost = 6;
 		if (boost < -6) boost = -6;
@@ -459,7 +459,7 @@ export class Pokemon {
 		if (statName === 'hp') return this.maxhp; // please just read .maxhp directly
 
 		// base stat
-		let stat = this.storedStats[statName];
+		let stat = this.storedStats[statName as StatNameExceptHP];
 
 		// Download ignores Wonder Room's effect, but this results in
 		// stat stages being calculated on the opposite defensive stat
@@ -487,8 +487,8 @@ export class Pokemon {
 
 		// stat modifier effects
 		if (!unmodified) {
-			const statTable: {[s in keyof StatsTable]?: string} = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
-			stat = this.battle.runEvent('Modify' + statTable[statName as keyof StatsTable], this, null, null, stat);
+			const statTable: {[s in StatNameExceptHP]?: string} = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
+			stat = this.battle.runEvent('Modify' + statTable[statName as StatNameExceptHP], this, null, null, stat);
 		}
 
 		if (statName === 'spe' && stat > 10000) stat = 10000;
@@ -508,8 +508,8 @@ export class Pokemon {
 		let statSum = 0;
 		let awakeningSum = 0;
 		for (const stat in this.stats) {
-			statSum += this.calculateStat(stat, this.boosts[stat as keyof BoostsTable]);
-			awakeningSum += this.calculateStat(stat, this.boosts[stat as keyof BoostsTable]) + this.battle.getAwakeningValues(this.set, stat);
+			statSum += this.calculateStat(stat, this.boosts[stat as BoostName]);
+			awakeningSum += this.calculateStat(stat, this.boosts[stat as BoostName]) + this.battle.getAwakeningValues(this.set, stat);
 		}
 		const combatPower = Math.floor(Math.floor(statSum * this.level * 6 / 100) +
 			(Math.floor(awakeningSum) * Math.floor((this.level * 4) / 100 + 2)));
@@ -795,7 +795,7 @@ export class Pokemon {
 
 	positiveBoosts() {
 		let boosts = 0;
-		let boost: keyof BoostsTable;
+		let boost: BoostName;
 		for (boost in this.boosts) {
 			if (this.boosts[boost] > 0) boosts += this.boosts[boost];
 		}
@@ -804,33 +804,33 @@ export class Pokemon {
 
 	boostBy(boosts: SparseBoostsTable) {
 		let delta = 0;
-		let boost: keyof BoostsTable;
-		for (boost in boosts) {
-			delta = boosts[boost]!;
-			this.boosts[boost] += delta;
-			if (this.boosts[boost] > 6) {
-				delta -= this.boosts[boost] - 6;
-				this.boosts[boost] = 6;
+		let boostName: BoostName;
+		for (boostName in boosts) {
+			delta = boosts[boostName]!;
+			this.boosts[boostName] += delta;
+			if (this.boosts[boostName] > 6) {
+				delta -= this.boosts[boostName] - 6;
+				this.boosts[boostName] = 6;
 			}
-			if (this.boosts[boost] < -6) {
-				delta -= this.boosts[boost] - (-6);
-				this.boosts[boost] = -6;
+			if (this.boosts[boostName] < -6) {
+				delta -= this.boosts[boostName] - (-6);
+				this.boosts[boostName] = -6;
 			}
 		}
 		return delta;
 	}
 
 	clearBoosts() {
-		let boost: keyof BoostsTable;
-		for (boost in this.boosts) {
-			this.boosts[boost] = 0;
+		let boostName: BoostName;
+		for (boostName in this.boosts) {
+			this.boosts[boostName] = 0;
 		}
 	}
 
 	setBoost(boosts: SparseBoostsTable) {
-		let boost: keyof BoostsTable;
-		for (boost in boosts) {
-			this.boosts[boost] = boosts[boost]!;
+		let boostName: BoostName;
+		for (boostName in boosts) {
+			this.boosts[boostName] = boosts[boostName]!;
 		}
 	}
 
@@ -872,7 +872,8 @@ export class Pokemon {
 		this.knownType = this.side === pokemon.side && pokemon.knownType;
 		this.apparentType = pokemon.apparentType;
 
-		for (const statName in this.storedStats) {
+		let statName: StatNameExceptHP;
+		for (statName in this.storedStats) {
 			this.storedStats[statName] = pokemon.storedStats[statName];
 		}
 		this.moveSlots = [];
@@ -896,9 +897,9 @@ export class Pokemon {
 			});
 			this.moves.push(toId(moveName));
 		}
-		let boost: keyof BoostsTable;
-		for (boost in pokemon.boosts) {
-			this.boosts[boost] = pokemon.boosts[boost]!;
+		let boostName: BoostName;
+		for (boostName in pokemon.boosts) {
+			this.boosts[boostName] = pokemon.boosts[boostName]!;
 		}
 		if (this.battle.gen >= 6 && pokemon.volatiles['focusenergy']) this.addVolatile('focusenergy');
 		if (pokemon.volatiles['laserfocus']) this.addVolatile('laserfocus');
@@ -951,11 +952,11 @@ export class Pokemon {
 
 		const stats = this.battle.spreadModify(this.template.baseStats, this.set);
 		if (!this.baseStoredStats) this.baseStoredStats = stats;
-		for (const statName in this.storedStats) {
-			const s = statName as keyof StatsTable;
-			this.storedStats[s] = stats[s];
-			this.baseStoredStats[s] = stats[s];
-			if (this.modifiedStats) this.modifiedStats[s] = stats[s]; // Gen 1: Reset modified stats.
+		let statName: StatNameExceptHP;
+		for (statName in this.storedStats) {
+			this.storedStats[statName] = stats[statName];
+			this.baseStoredStats[statName] = stats[statName];
+			if (this.modifiedStats) this.modifiedStats[statName] = stats[statName]; // Gen 1: Reset modified stats.
 		}
 		if (this.battle.gen <= 1) {
 			// Gen 1: Re-Apply burn and para drops.
