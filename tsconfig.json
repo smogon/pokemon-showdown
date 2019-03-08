@@ -11,7 +11,7 @@
     },
     "types": ["node"],
     "exclude": [
-        "./.*-dist/*",
+        "./.*-dist/**/*",
         "./server/index.js",
         "./server/chat-commands.js"
     ],
@@ -36,6 +36,6 @@
         "./server/chat-plugins/uno.js",
         "./server/chat-plugins/wifi.js",
         "./server/tournaments/generator-round-robin.js",
-        "./sim/*"
+        "./sim/**/*"
     ]
 }
