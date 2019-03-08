@@ -230,6 +230,7 @@
 37.72.168.0,37.72.168.255,Swiftway,http://swiftway.net/
 37.72.171.0,37.72.171.255,Swiftway,http://swiftway.net/
 37.72.173.0,37.72.173.127,Swiftway,http://swiftway.net/
+37.120.128.0,37.120.159.255,M247,https://m247.com/
 37.122.208.0,37.122.211.255,Webfusion,http://www.webfusion.com/
 37.123.112.0,37.123.112.255,UK2 Group,http://www.uk2.net/
 37.123.114.0,37.123.115.255,UK2 Group,http://www.vps.net/
@@ -1175,8 +1176,7 @@
 84.22.160.0,84.22.191.255,iomart,http://www.iomart.com/
 84.23.64.0,84.23.95.255,ISPpro Germany,http://isppro.de/
 84.33.39.0,84.33.39.255,incubatec GmbH - Srl,http://www.incubatec.com
-84.39.114.0,84.39.114.255,M247,http://www.m247.com/
-84.39.117.0,84.39.117.15,M247,http://www.m247.com/
+84.39.112.0,84.39.119.255,M247,https://m247.com/
 84.40.0.0,84.40.63.255,Hostway Corporation,http://hostway.co.uk/
 84.53.128.0,84.53.191.255,Akamai,http://akamai.com/
 84.200.0.0,84.201.63.255,accelerated.de,http://accelerated.de/
@@ -2494,6 +2494,7 @@
 193.169.244.0,193.169.245.255,deltahost,http://deltahost.com.ua/
 193.169.250.0,193.169.251.255,wehostall,http://wehostall.ru/
 193.176.16.0,193.176.31.255,PatrikWeb,http://patrikweb.net/
+193.176.84.0,193.176.87.255,M247,https://m247.com/
 193.176.136.0,193.176.143.255,PatrikWeb,http://patrikweb.net/
 193.178.144.0,193.178.147.255,mirohost.net,http://mirohost.net/
 193.189.106.0,193.189.107.255,servhost.de,http://servhost.de/
@@ -2520,6 +2521,7 @@
 194.30.168.0,194.30.168.255,smart-hosting.ro,http://smart-hosting.ro/
 194.30.189.0,194.30.189.255,NetBenefit,http://www.netbenefit.com/
 194.54.88.0,194.54.91.255,hosting.ua,http://hosting.ua/
+194.59.249.0,194.59.251.255,M247,https://m247.com/
 194.63.140.0,194.63.143.255,nthost.ru,http://nthost.ru/
 194.79.28.0,194.79.31.255,OpenHosting UK Internet Solutions,http://openhosting.co.uk/
 194.87.0.0,194.87.255.255,demos,http://demos.ru/
@@ -3128,6 +3130,7 @@
 212.83.128.0,212.83.153.255,Online.net Iliad,https://www.online.net/en
 212.95.32.0,212.95.63.255,Leaseweb,http://www.leaseweb.com/
 212.100.224.0,212.100.255.255,Rackspace,http://www.rackspace.com/
+212.103.48.0,212.103.50.255,M247,https://m247.com/
 212.109.218.0,212.109.219.255,ISPSystem,https://www.ispsystem.com/
 212.112.224.0,212.112.255.255,IP Exchange GmbH,http://www.ip-exchange.de/
 212.117.160.0,212.117.191.255,root S.A.,http://www.site.lu/
