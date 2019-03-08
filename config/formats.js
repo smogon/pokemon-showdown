@@ -777,7 +777,7 @@ let Formats = [
 			validate: [6, 6],
 			battle: 6,
 		},
-		ruleset: ['Pokemon', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
+		ruleset: ['Pokemon', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview', 'Mega Rayquaza Clause'],
 		banlist: [
 			'Illegal', 'Unreleased', 'Shedinja', 'Smeargle', 'Huge Power', 'Pure Power', 'Deep Sea Tooth', 'Eviolite', 'Focus Sash', 'Light Ball', 'Lucky Punch',
 			'Stick', 'Thick Club', 'Dark Void', 'Grass Whistle', 'Hypnosis', 'Lovely Kiss', 'Perish Song', 'Sing', 'Sleep Powder', 'Spore', 'Transform',
@@ -785,7 +785,7 @@ let Formats = [
 		onValidateSet(set) {
 			if (set && set.item) {
 				let item = this.getItem(set.item);
-				if (item.zMoveUser || item.megaStone) return [`${set.name || set.species}'s item ${set.item} is banned.`];
+				if (item.zMoveUser || item.megaStone || item.onPrimal) return [`${set.name || set.species}'s item ${set.item} is banned.`];
 			}
 		},
 		onBeforeSwitchIn(pokemon) {
