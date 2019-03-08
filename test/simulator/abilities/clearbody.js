@@ -16,11 +16,13 @@ describe('Clear Body', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: 'Arbok', ability: 'intimidate', moves: ['acidspray', 'leer', 'scaryface', 'charm', 'confide']}]);
 
 		const stats = ['spd', 'def', 'spe', 'atk', 'spa'];
-		stats.forEach((stat, index) => {
+		for (const [index, stat] of stats.entries()) {
 			battle.makeChoices('move recover', 'move ' + (index + 1));
 			assert.statStage(battle.p1.active[0], stat, 0);
-		});
-		stats.forEach(stat => assert.statStage(battle.p1.active[0], stat, 0));
+		}
+		for (const stat of stats) {
+			assert.statStage(battle.p1.active[0], stat, 0);
+		}
 	});
 
 	it('should not negate stat drops from the user\'s moves', function () {

@@ -26,11 +26,11 @@ export const Repl = new class {
 		Repl.listenersSetup = true;
 		// Clean up REPL sockets and child processes on forced exit.
 		process.once('exit', code => {
-			Repl.socketPathnames.forEach(s => {
+			for (const s of Repl.socketPathnames) {
 				try {
 					fs.unlinkSync(s);
 				} catch (e) {}
-			});
+			}
 			if (code === 129 || code === 130) {
 				process.exitCode = 0;
 			}

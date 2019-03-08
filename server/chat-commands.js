@@ -1527,24 +1527,24 @@ const commands = {
 		if (group) {
 			buffer.push(`Global auth: ${group.charAt(0)}`);
 		}
-		Rooms.rooms.forEach((curRoom, id) => {
-			if (!curRoom.auth || curRoom.isPrivate) return;
+		for (const curRoom of Rooms.rooms.values()) {
+			if (!curRoom.auth || curRoom.isPrivate) continue;
 			group = curRoom.auth[targetId];
-			if (!group) return;
-			innerBuffer.push(group + id);
-		});
+			if (!group) continue;
+			innerBuffer.push(group + curRoom.id);
+		}
 		if (innerBuffer.length) {
 			buffer.push(`Room auth: ${innerBuffer.join(', ')}`);
 		}
 		if (targetId === user.userid || user.can('lock')) {
 			innerBuffer = [];
-			Rooms.rooms.forEach((curRoom, id) => {
-				if (!curRoom.auth || !curRoom.isPrivate) return;
-				if (curRoom.isPrivate === true) return;
+			for (const curRoom of Rooms.rooms.values()) {
+				if (!curRoom.auth || !curRoom.isPrivate) continue;
+				if (curRoom.isPrivate === true) continue;
 				let auth = curRoom.auth[targetId];
-				if (!auth) return;
-				innerBuffer.push(auth + id);
-			});
+				if (!auth) continue;
+				innerBuffer.push(auth + curRoom.id);
+			}
 			if (innerBuffer.length) {
 				buffer.push(`Hidden room auth: ${innerBuffer.join(', ')}`);
 			}
@@ -2468,9 +2468,9 @@ const commands = {
 		target = this.canHTML(target);
 		if (!target) return;
 
-		Users.users.forEach(u => {
+		for (const u of Users.users.values()) {
 			if (u.connected) u.send(`|pm|~|${u.group}${u.name}|/raw <div class="broadcast-blue"><b>${target}</b></div>`);
-		});
+		}
 		this.modlog(`GLOBALDECLARE`, null, target);
 	},
 	globaldeclarehelp: [`/globaldeclare [message] - Anonymously announces a message to every room on the server. Requires: ~`],
@@ -2482,9 +2482,11 @@ const commands = {
 		target = this.canHTML(target);
 		if (!target) return;
 
-		Rooms.rooms.forEach((curRoom, id) => {
-			if (id !== 'global' && curRoom.type !== 'battle') curRoom.addRaw(`<div class="broadcast-blue"><b>${target}</b></div>`).update();
-		});
+		for (const curRoom of Rooms.rooms.values()) {
+			if (curRoom.id !== 'global' && curRoom.type !== 'battle') {
+				curRoom.addRaw(`<div class="broadcast-blue"><b>${target}</b></div>`).update();
+			}
+		}
 		this.modlog(`CHATDECLARE`, null, target);
 	},
 	chatdeclarehelp: [`/cdeclare [message] - Anonymously announces a message to all chatrooms on the server. Requires: ~`],
@@ -2898,41 +2900,41 @@ const commands = {
 		let blMap = new Map();
 		let ips = '';
 
-		subMap.forEach((punishment, userid) => {
+		for (const [userid, punishment] of subMap) {
 			const [punishType, id, expireTime] = punishment;
 			if (punishType === 'BLACKLIST') {
 				if (!blMap.has(id)) blMap.set(id, [expireTime]);
 				if (id !== userid) blMap.get(id).push(userid);
 			}
-		});
+		}
 
 		if (user.can('ban')) {
 			const subMap = Punishments.roomIps.get(room.id);
 
 			if (subMap) {
 				ips = '/ips';
-				subMap.forEach((punishment, ip) => {
+				for (const [ip, punishment] of subMap) {
 					const [punishType, id] = punishment;
 					if (punishType === 'BLACKLIST') {
 						if (!blMap.has(id)) blMap.set(id, []);
 						blMap.get(id).push(ip);
 					}
-				});
+				}
 			}
 		}
 
 		let soonExpiring = (cmd === 'expiringblacklists' || cmd === 'expiringbls');
 		let buf = Chat.html`Blacklist for ${room.title}${soonExpiring ? ` (expiring within 3 months)` : ''}:<br />`;
 
-		blMap.forEach((data, userid) => {
+		for (const [userid, data] of blMap) {
 			const [expireTime, ...alts] = data;
-			if (soonExpiring && expireTime > Date.now() + SOON_EXPIRING_TIME) return;
+			if (soonExpiring && expireTime > Date.now() + SOON_EXPIRING_TIME) continue;
 			const expiresIn = new Date(expireTime).getTime() - Date.now();
 			const expiresDays = Math.round(expiresIn / 1000 / 60 / 60 / 24);
 			buf += `- <strong>${userid}</strong>, for ${Chat.count(expiresDays, "days")}`;
 			if (alts.length) buf += `, alts${ips}: ${alts.join(', ')}`;
 			buf += `<br />`;
-		});
+		}
 
 		this.sendReplyBox(buf);
 	},
@@ -3256,13 +3258,13 @@ const commands = {
 			`Rated games will no longer update the ladder. It will be back momentarily.`
 		);
 
-		Rooms.rooms.forEach((curRoom, id) => {
+		for (const curRoom of Rooms.rooms.values()) {
 			if (curRoom.type === 'battle') curRoom.rated = false;
-			if (id !== 'global') curRoom.addRaw(`<div class="broadcast-red">${innerHTML}</div>`).update();
-		});
-		Users.users.forEach(u => {
+			if (curRoom.id !== 'global') curRoom.addRaw(`<div class="broadcast-red">${innerHTML}</div>`).update();
+		}
+		for (const u of Users.users.values()) {
 			if (u.connected) u.send(`|pm|~|${u.group}${u.name}|/raw <div class="broadcast-red">${innerHTML}</div>`);
-		});
+		}
 	},
 
 	enableladder(target, room, user) {
@@ -3280,12 +3282,12 @@ const commands = {
 			`Rated games will update the ladder now..`
 		);
 
-		Rooms.rooms.forEach((curRoom, id) => {
-			if (id !== 'global') curRoom.addRaw(`<div class="broadcast-green">${innerHTML}</div>`).update();
-		});
-		Users.users.forEach(u => {
+		for (const curRoom of Rooms.rooms.values()) {
+			if (curRoom.id !== 'global') curRoom.addRaw(`<div class="broadcast-green">${innerHTML}</div>`).update();
+		}
+		for (const u of Users.users.values()) {
 			if (u.connected) u.send(`|pm|~|${u.group}${u.name}|/raw <div class="broadcast-green">${innerHTML}</div>`);
-		});
+		}
 	},
 
 	lockdown(target, room, user) {
@@ -3348,9 +3350,9 @@ const commands = {
 			return this.errorReply("We're not under lockdown right now.");
 		}
 		if (Rooms.global.lockdown === true) {
-			Rooms.rooms.forEach((curRoom, id) => {
-				if (id !== 'global') curRoom.addRaw(`<div class="broadcast-green"><b>The server restart was canceled.</b></div>`).update();
-			});
+			for (const curRoom of Rooms.rooms.values()) {
+				if (curRoom.id !== 'global') curRoom.addRaw(`<div class="broadcast-green"><b>The server restart was canceled.</b></div>`).update();
+			}
 		} else {
 			this.sendReply("Preparation for the server shutdown was canceled.");
 		}
@@ -3367,9 +3369,9 @@ const commands = {
 			return this.errorReply("We're already in emergency mode.");
 		}
 		Config.emergency = true;
-		Rooms.rooms.forEach((curRoom, id) => {
-			if (id !== 'global') curRoom.addRaw(`<div class="broadcast-red">The server has entered emergency mode. Some features might be disabled or limited.</div>`).update();
-		});
+		for (const curRoom of Rooms.rooms.values()) {
+			if (curRoom.id !== 'global') curRoom.addRaw(`<div class="broadcast-red">The server has entered emergency mode. Some features might be disabled or limited.</div>`).update();
+		}
 
 		const logRoom = Rooms('staff') || room;
 		logRoom.roomlog(`${user.name} used /emergency.`);
@@ -3382,9 +3384,9 @@ const commands = {
 			return this.errorReply("We're not in emergency mode.");
 		}
 		Config.emergency = false;
-		Rooms.rooms.forEach((curRoom, id) => {
-			if (id !== 'global') curRoom.addRaw(`<div class="broadcast-green"><b>The server is no longer in emergency mode.</b></div>`).update();
-		});
+		for (const curRoom of Rooms.rooms.values()) {
+			if (curRoom.id !== 'global') curRoom.addRaw(`<div class="broadcast-green"><b>The server is no longer in emergency mode.</b></div>`).update();
+		}
 
 		const logRoom = Rooms('staff') || room;
 		logRoom.roomlog(`${user.name} used /endemergency.`);
@@ -3401,7 +3403,9 @@ const commands = {
 			return this.errorReply("Wait for /updateserver to finish before using /kill.");
 		}
 
-		Sockets.workers.forEach(worker => worker.kill());
+		for (const worker of Sockets.workers.values()) {
+			worker.kill();
+		}
 
 		if (!room.destroyLog) {
 			process.exit();

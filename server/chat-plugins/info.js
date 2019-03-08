@@ -328,12 +328,12 @@ const commands = {
 		if (/[a-z]/.test(ip)) {
 			// host
 			this.sendReply(`Users with host ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
-			Users.users.forEach(curUser => {
-				if (results.length > 100 && !isAll) return;
-				if (!curUser.latestHost || !curUser.latestHost.endsWith(ip)) return;
-				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) return;
+			for (const curUser of Users.users.values()) {
+				if (results.length > 100 && !isAll) continue;
+				if (!curUser.latestHost || !curUser.latestHost.endsWith(ip)) continue;
+				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) continue;
 				results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
-			});
+			}
 			if (results.length > 100 && !isAll) {
 				return this.sendReply(`More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.`);
 			}
@@ -341,22 +341,22 @@ const commands = {
 			// IP range
 			this.sendReply(`Users in IP range ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
 			ip = ip.slice(0, -1);
-			Users.users.forEach(curUser => {
-				if (results.length > 100 && !isAll) return;
-				if (!curUser.latestIp.startsWith(ip)) return;
-				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) return;
+			for (const curUser of Users.users.values()) {
+				if (results.length > 100 && !isAll) continue;
+				if (!curUser.latestIp.startsWith(ip)) continue;
+				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) continue;
 				results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
-			});
+			}
 			if (results.length > 100 && !isAll) {
 				return this.sendReply(`More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.`);
 			}
 		} else {
 			this.sendReply(`Users with IP ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
-			Users.users.forEach(curUser => {
-				if (curUser.latestIp !== ip) return;
-				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) return;
+			for (const curUser of Users.users.values()) {
+				if (curUser.latestIp !== ip) continue;
+				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) continue;
 				results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
-			});
+			}
 		}
 		if (!results.length) {
 			if (!ip.includes('.')) return this.errorReply(`${ip} is not a valid IP or host.`);
@@ -515,7 +515,7 @@ const commands = {
 					if (pokemon.color && mod.gen >= 5) details["Dex Colour"] = pokemon.color;
 					if (pokemon.eggGroups && mod.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
 					let evos = /** @type {string[]} */ ([]);
-					pokemon.evos.forEach(evoName => {
+					for (const evoName of pokemon.evos) {
 						const evo = mod.getTemplate(evoName);
 						if (evo.gen <= mod.gen) {
 							let condition = evo.evoCondition ? ` ${evo.evoCondition}` : ``;
@@ -542,7 +542,7 @@ const commands = {
 								evos.push(`${evo.name} (${evo.evoLevel})`);
 							}
 						}
-					});
+					}
 					if (!evos.length) {
 						details['<font color="#686868">Does Not Evolve</font>'] = "";
 					} else {

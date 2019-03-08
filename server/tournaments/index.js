@@ -98,13 +98,13 @@ class Tournament {
 		}
 
 		let isErrored = false;
-		this.generator.getUsers().forEach(user => {
+		for (const user of this.generator.getUsers()) {
 			let error = generator.addUser(user);
 			if (typeof error === 'string') {
 				output.sendReply(`|tournament|error|${error}`);
 				isErrored = true;
 			}
-		});
+		}
 
 		if (isErrored) return;
 
@@ -154,13 +154,13 @@ class Tournament {
 	forceEnd() {
 		if (this.isTournamentStarted) {
 			if (this.autoDisqualifyTimer) clearTimeout(this.autoDisqualifyTimer);
-			this.inProgressMatches.forEach(match => {
+			for (const match of this.inProgressMatches.values()) {
 				if (match) {
 					match.room.tour = null;
 					match.room.parent = null;
 					match.room.addRaw(`<div class="broadcast-red"><b>The tournament was forcefully ended.</b><br />You can finish playing, but this battle is no longer considered a tournament battle.</div>`);
 				}
-			});
+			}
 		} else if (this.autoStartTimer) {
 			clearTimeout(this.autoStartTimer);
 		}
@@ -234,13 +234,12 @@ class Tournament {
 		if (this.isTournamentStarted && this.isAvailableMatchesInvalidated) {
 			this.availableMatchesCache = this.getAvailableMatches();
 			this.isAvailableMatchesInvalidated = false;
-
-			this.availableMatchesCache.challenges.forEach((opponents, player) => {
+			for (const [player, opponents] of this.availableMatchesCache.challenges) {
 				player.sendRoom(`|tournament|update|${JSON.stringify({challenges: usersToNames(opponents)})}`);
-			});
-			this.availableMatchesCache.challengeBys.forEach((opponents, player) => {
+			}
+			for (const [player, opponents] of this.availableMatchesCache.challengeBys) {
 				player.sendRoom(`|tournament|update|${JSON.stringify({challengeBys: usersToNames(opponents)})}`);
-			});
+			}
 		}
 		this.room.send('|tournament|updateEnd');
 	}
@@ -390,18 +389,18 @@ class Tournament {
 
 				if (node.team) node.team = node.team.name;
 
-				node.children.forEach(child => {
+				for (const child of node.children) {
 					queue.push(child);
-				});
+				}
 			}
 		} else if (data.type === 'table') {
 			if (this.isTournamentStarted) {
-				data.tableContents.forEach((row, r) => {
+				for (const [r, row] of data.tableContents.entries()) {
 					let pendingChallenge = this.pendingChallenges.get(data.tableHeaders.rows[r]);
 					let inProgressMatch = this.inProgressMatches.get(data.tableHeaders.rows[r]);
 					if (pendingChallenge || inProgressMatch) {
-						row.forEach((cell, c) => {
-							if (!cell) return;
+						for (const [c, cell] of row) {
+							if (!cell) continue;
 
 							if (pendingChallenge && data.tableHeaders.cols[c] === pendingChallenge.to) {
 								cell.state = 'challenging';
@@ -411,9 +410,9 @@ class Tournament {
 								cell.state = 'inprogress';
 								cell.room = inProgressMatch.room.id;
 							}
-						});
+						}
 					}
-				});
+				}
 			}
 			data.tableHeaders.cols = usersToNames(data.tableHeaders.cols);
 			data.tableHeaders.rows = usersToNames(data.tableHeaders.rows);
@@ -443,13 +442,13 @@ class Tournament {
 		this.autoDisqualifyWarnings = new Map();
 		this.lastActionTimes = new Map();
 		const now = Date.now();
-		users.forEach(user => {
+		for (const user of users) {
 			this.availableMatches.set(user, new Map());
 			this.inProgressMatches.set(user, null);
 			this.pendingChallenges.set(user, null);
 			this.disqualifiedUsers.set(user, false);
 			this.lastActionTimes.set(user, now);
-		});
+		}
 
 		this.isTournamentStarted = true;
 		if (this.autoStartTimer) clearTimeout(this.autoStartTimer);
@@ -472,7 +471,7 @@ class Tournament {
 		const challengeBys = new Map();
 		const oldAvailableMatches = new Map();
 
-		users.forEach(user => {
+		for (const user of users) {
 			challenges.set(user, []);
 			challengeBys.set(user, []);
 
@@ -483,21 +482,21 @@ class Tournament {
 				availableMatches.clear();
 			}
 			oldAvailableMatches.set(user, oldAvailableMatch);
-		});
+		}
 
-		matches.forEach(match => {
+		for (const match of matches) {
 			challenges.get(match[0]).push(match[1]);
 			challengeBys.get(match[1]).push(match[0]);
 
 			this.availableMatches.get(match[0]).set(match[1], true);
-		});
+		}
 
 		const now = Date.now();
-		this.availableMatches.forEach((availableMatches, user) => {
-			if (oldAvailableMatches.get(user)) return;
+		for (const [user, availableMatches] of this.availableMatches) {
+			if (oldAvailableMatches.get(user)) continue;
 
 			if (availableMatches.size) this.lastActionTimes.set(user, now);
-		});
+		}
 
 		return {
 			challenges: challenges,
@@ -564,9 +563,9 @@ class Tournament {
 		}
 
 		let matchTo = null;
-		this.inProgressMatches.forEach((match, playerFrom) => {
+		for (const [playerFrom, match] of this.inProgressMatch) {
 			if (match && match.to === player) matchTo = playerFrom;
-		});
+		}
 		if (matchTo) {
 			this.generator.setUserBusy(matchTo, false);
 			let matchRoom = this.inProgressMatches.get(matchTo).room;
@@ -645,16 +644,16 @@ class Tournament {
 		}
 		if (this.autoDisqualifyTimer) clearTimeout(this.autoDisqualifyTimer);
 		const now = Date.now();
-		this.lastActionTimes.forEach((time, player) => {
+		for (const [player, time] of this.lastActionTimes) {
 			let availableMatches = false;
 			if (this.availableMatches.get(player).size) availableMatches = true;
 			const pendingChallenge = this.pendingChallenges.get(player);
 
 			if (!availableMatches && !pendingChallenge) {
 				this.autoDisqualifyWarnings.delete(player);
-				return;
+				continue;
 			}
-			if (pendingChallenge && pendingChallenge.to) return;
+			if (pendingChallenge && pendingChallenge.to) continue;
 
 			if (now > time + this.autoDisqualifyTimeout && this.autoDisqualifyWarnings.has(player)) {
 				let reason;
@@ -666,7 +665,7 @@ class Tournament {
 				this.disqualifyUser(player.userid, output, reason);
 				this.room.update();
 			} else if (now > time + this.autoDisqualifyTimeout - AUTO_DISQUALIFY_WARNING_TIMEOUT) {
-				if (this.autoDisqualifyWarnings.has(player)) return;
+				if (this.autoDisqualifyWarnings.has(player)) continue;
 				let remainingTime = this.autoDisqualifyTimeout - now + time;
 				if (remainingTime <= 0) {
 					remainingTime = AUTO_DISQUALIFY_WARNING_TIMEOUT;
@@ -678,7 +677,7 @@ class Tournament {
 			} else {
 				this.autoDisqualifyWarnings.delete(player);
 			}
-		});
+		}
 		if (!this.isEnded) this.autoDisqualifyTimer = setTimeout(() => this.runAutoDisqualify(), this.autoDisqualifyTimeout);
 	}
 

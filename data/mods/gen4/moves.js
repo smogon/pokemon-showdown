@@ -40,7 +40,9 @@ let BattleMovedex = {
 		inherit: true,
 		onHit(target, source) {
 			this.add('-cureteam', source, '[from] move: Aromatherapy');
-			source.side.pokemon.forEach(pokemon => pokemon.clearStatus());
+			for (const pokemon of source.side.pokemon) {
+				pokemon.clearStatus();
+			}
 		},
 	},
 	aquaring: {
@@ -763,9 +765,9 @@ let BattleMovedex = {
 		desc: "Every Pokemon in the user's party is cured of its major status condition. Pokemon with the Soundproof Ability are not cured.",
 		onHit(target, source) {
 			this.add('-activate', source, 'move: Heal Bell');
-			source.side.pokemon.forEach(pokemon => {
+			for (const pokemon of source.side.pokemon) {
 				if (!pokemon.hasAbility('soundproof')) pokemon.cureStatus(true);
-			});
+			}
 		},
 	},
 	healblock: {

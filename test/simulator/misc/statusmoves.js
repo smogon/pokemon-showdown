@@ -86,8 +86,8 @@ describe('Poison-inflicting status moves [Gen 2]', function () {
 		battle.onEvent('Accuracy', battle.getFormat(), true);
 
 		const target = battle.p2.active[0];
-		POISON_STATUS_MOVES.forEach(move => {
+		for (const move of POISON_STATUS_MOVES) {
 			assert.constant(() => target.status, () => battle.makeChoices('move ' + move, 'move sleeptalk'));
-		});
+		}
 	});
 });
