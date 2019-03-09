@@ -169,11 +169,11 @@ export class Side {
 				condition: pokemon.getHealth(pokemon.side),
 				active: (pokemon.position < pokemon.side.active.length),
 				stats: {
-					atk: pokemon.baseStats['atk'],
-					def: pokemon.baseStats['def'],
-					spa: pokemon.baseStats['spa'],
-					spd: pokemon.baseStats['spd'],
-					spe: pokemon.baseStats['spe'],
+					atk: pokemon.baseStoredStats['atk'],
+					def: pokemon.baseStoredStats['def'],
+					spa: pokemon.baseStoredStats['spa'],
+					spd: pokemon.baseStoredStats['spd'],
+					spe: pokemon.baseStoredStats['spe'],
 				},
 				moves: pokemon.moves.map(move => {
 					if (move === 'hiddenpower') {

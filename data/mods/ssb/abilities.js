@@ -503,8 +503,8 @@ let BattleAbilities = {
 		isNonstandard: true,
 		onSourceFaint(target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
-				let statOrder = Object.keys(source.stats)
-				    .sort((stat1, stat2) => source.stats[stat2] - source.stats[stat1]);
+				// @ts-ignore
+				let statOrder = Object.keys(source.storedStats).sort((stat1, stat2) => source.storedStats[stat2] - source.storedStats[stat1]);
 				this.boost({[statOrder[0]]: 1, [statOrder[1]]: 1}, source);
 			}
 		},

@@ -349,9 +349,9 @@ export class Validator {
 			if (dex.gen <= 2) {
 				let HPdvs = dex.getType(set.hpType).HPdvs;
 				ivs = set.ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
-				let stat: keyof StatsTable;
-				for (stat in HPdvs) {
-					ivs[stat] = HPdvs[stat]! * 2;
+				let statName: StatName;
+				for (statName in HPdvs) {
+					ivs[statName] = HPdvs[statName]! * 2;
 				}
 				ivs.hp = -1;
 			} else if (!canBottleCap) {
@@ -641,12 +641,12 @@ export class Validator {
 
 			if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 			let statTable = {hp: 'HP', atk: 'Attack', def: 'Defense', spa: 'Special Attack', spd: 'Special Defense', spe: 'Speed'};
-			let statId: keyof StatsTable;
-			for (statId in eventData.ivs) {
-				if (canBottleCap && set.ivs[statId] === 31) continue;
-				if (set.ivs[statId] !== eventData.ivs[statId]) {
+			let statName: StatName;
+			for (statName in eventData.ivs) {
+				if (canBottleCap && set.ivs[statName] === 31) continue;
+				if (set.ivs[statName] !== eventData.ivs[statName]) {
 					if (fastReturn) return true;
-					problems.push(`${name} must have ${eventData.ivs[statId]} ${statTable[statId]} IVs${etc}.`);
+					problems.push(`${name} must have ${eventData.ivs[statName]} ${statTable[statName]} IVs${etc}.`);
 				}
 			}
 
@@ -671,9 +671,9 @@ export class Validator {
 			// Legendary Pokemon must have at least 3 perfect IVs in gen 6
 			// Events can also have a certain amount of guaranteed perfect IVs
 			let perfectIVs = 0;
-			let stat: keyof StatsTable;
-			for (stat in set.ivs) {
-				if (set.ivs[stat] >= 31) perfectIVs++;
+			let statName: StatName;
+			for (statName in set.ivs) {
+				if (set.ivs[statName] >= 31) perfectIVs++;
 			}
 			if (perfectIVs < requiredIVs) {
 				if (fastReturn) return true;
@@ -1269,10 +1269,10 @@ export class Validator {
 	static fillStats(stats: SparseStatsTable | null, fillNum: number = 0): StatsTable {
 		let filledStats: StatsTable = {hp: fillNum, atk: fillNum, def: fillNum, spa: fillNum, spd: fillNum, spe: fillNum};
 		if (stats) {
-			let stat: keyof StatsTable;
-			for (stat in filledStats) {
-				let val = stats[stat];
-				if (typeof val === 'number') filledStats[stat] = val;
+			let statName: StatName;
+			for (statName in filledStats) {
+				const stat = stats[statName];
+				if (typeof stat === 'number') filledStats[statName] = stat;
 			}
 		}
 		return filledStats;

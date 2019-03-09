@@ -2096,8 +2096,8 @@ export class Battle extends Dex.ModdedDex {
 
 		let attacker = pokemon;
 		let defender = target;
-		let attackStat = category === 'Physical' ? 'atk' : 'spa';
-		let defenseStat = defensiveCategory === 'Physical' ? 'def' : 'spd';
+		let attackStat: StatNameExceptHP = category === 'Physical' ? 'atk' : 'spa';
+		let defenseStat: StatNameExceptHP = defensiveCategory === 'Physical' ? 'def' : 'spd';
 		let statTable = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
 		let attack;
 		let defense;
