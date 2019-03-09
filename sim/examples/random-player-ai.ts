@@ -57,13 +57,14 @@ export class RandomPlayerAI extends BattlePlayer {
 			this.choose(choices.join(`, `));
 		} else if (request.active) {
 			// move request
-			let canMegaEvo = true;
+			let [canMegaEvo, canUltraBurst, canZMove] = [true, true, true];
 			const pokemon = request.side.pokemon;
 			const chosen: number[] = [];
 			const choices = request.active.map((active: AnyObject, i: number) => {
 				if (pokemon[i].condition.endsWith(` fnt`)) return `pass`;
 
 				canMegaEvo = canMegaEvo && active.canMegaEvo;
+				canUltraBurst = canUltraBurst && active.canUltraBurst;
 
 				const canMove = [1, 2, 3, 4].slice(0, active.moves.length).filter(j => (
 					// not disabled
@@ -99,9 +100,14 @@ export class RandomPlayerAI extends BattlePlayer {
 					return `switch ${target}`;
 				} else {
 					let move = this.prng.sample(moves);
-					if (this.prng.next() < this.mega && canMegaEvo) {
-						canMegaEvo = false;
-						return `${move} mega`;
+					if ((canMegaEvo || canUltraBurst) && this.prng.next() < this.mega) {
+						if (canMegaEvo) {
+							canMegaEvo = false;
+							return `${move} mega`;
+						} else {
+							canUltraBurst = false;
+							return `${move} ultra`;
+						}
 					} else {
 						return move;
 					}
