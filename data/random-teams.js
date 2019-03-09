@@ -1440,6 +1440,8 @@ class RandomTeams extends Dex.ModdedDex {
 			item = 'Firium Z';
 		} else if (!teamDetails.zMove && (hasMove['fly'] || (hasMove['hurricane'] && template.baseStats.spa >= 125) || ((hasMove['bounce'] || (hasAbility['Gale Wings'] && hasMove['bravebird'])) && counter.setupType))) {
 			item = 'Flyinium Z';
+		} else if (hasMove['doubleedge'] && counter.setupType && !teamDetails.zMove) {
+			item = 'Normalium Z';
 		} else if (hasMove['solarbeam'] && !hasAbility['Drought'] && !hasMove['sunnyday'] && !teamDetails['sun']) {
 			item = !teamDetails.zMove ? 'Grassium Z' : 'Power Herb';
 		} else if (template.evos.length) {

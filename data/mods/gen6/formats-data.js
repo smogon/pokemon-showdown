@@ -1112,7 +1112,7 @@ let BattleFormatsData = {
 	},
 	leafeon: {
 		inherit: true,
-		randomBattleMoves: ["swordsdance", "leafblade", "healbell", "xscissor", "synthesis", "knockoff"],
+		randomBattleMoves: ["swordsdance", "leafblade", "healbell", "return", "synthesis", "knockoff"],
 		randomDoubleBattleMoves: ["swordsdance", "leafblade", "substitute", "xscissor", "protect", "helpinghand", "knockoff"],
 		tier: "PU",
 		doublesTier: "(DUU)",

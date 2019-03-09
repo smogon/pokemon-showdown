@@ -2174,7 +2174,7 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	leafeon: {
-		randomBattleMoves: ["swordsdance", "leafblade", "healbell", "xscissor", "synthesis", "knockoff"],
+		randomBattleMoves: ["swordsdance", "leafblade", "healbell", "doubleedge", "synthesis", "knockoff"],
 		randomDoubleBattleMoves: ["swordsdance", "leafblade", "substitute", "xscissor", "protect", "helpinghand", "knockoff"],
 		eventPokemon: [
 			{"generation": 5, "level": 10, "gender": "M", "isHidden": true, "moves": ["tailwhip", "tackle", "helpinghand", "sandattack"]},
