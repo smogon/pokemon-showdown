@@ -629,18 +629,36 @@ export class Side {
 
 			switch (choiceType) {
 			case 'move':
-				const willMega = data.endsWith(' mega') ? 'mega' : '';
-				if (willMega) data = data.slice(0, -5);
-				const willUltra = data.endsWith(' ultra') ? 'ultra' : '';
-				if (willUltra) data = data.slice(0, -6);
-				const willZ = data.endsWith(' zmove') ? 'zmove' : '';
-				if (willZ) data = data.slice(0, -6);
+				const parseLoc = (d: string): [number, string] => {
+					let targetLoc = 0;
+					if (/\s-?[1-3]$/.test(d)) {
+						targetLoc = parseInt(d.slice(-2), 10);
+						d = d.slice(0, d.lastIndexOf(' '));
+					}
+					return [targetLoc, d];
+				};
 
-				let targetLoc = 0;
-				if (/\s-?[1-3]$/.test(data)) {
-					targetLoc = parseInt(data.slice(-2), 10);
-					data = data.slice(0, data.lastIndexOf(' '));
+				const parseFlags = (d: string) => {
+					const willMega = d.endsWith(' mega') ? 'mega' : '';
+					if (willMega) d = d.slice(0, -5);
+					const willUltra = d.endsWith(' ultra') ? 'ultra' : '';
+					if (willUltra) d = d.slice(0, -6);
+					const willZ = d.endsWith(' zmove') ? 'zmove' : '';
+					if (willZ) d = d.slice(0, -6);
+					return [willMega, willUltra, willZ, d];
+				};
+
+				let [targetLoc, willMega, willUltra, willZ] = [0, '', '', ''];
+				// We're flexible with the ordering of target vs. flags - if `data `ends
+				// with a number then we assume target comes last, otherwise flags.
+				if (/[1-3]$/.test(data)) {
+					[targetLoc, data] = parseLoc(data);
+					[willMega, willUltra, willZ, data] = parseFlags(data);
+				} else {
+					[willMega, willUltra, willZ, data] = parseFlags(data);
+					[targetLoc, data] = parseLoc(data);
 				}
+
 				this.chooseMove(data, targetLoc, willMega || willUltra || willZ);
 				break;
 			case 'switch':
