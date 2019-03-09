@@ -9,9 +9,9 @@
  * @author Guangcong Luo <guangcongluo@gmail.com>
  */
 
-import {RandomPlayerAI} from './random-player-ai';
 import {BattleStream, getPlayerStreams} from '../battle-stream';
 import Dex = require('../dex');
+import {RandomPlayerAI} from './random-player-ai';
 
 /*********************************************************************
  * Run AI
