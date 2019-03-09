@@ -629,17 +629,18 @@ export class Side {
 
 			switch (choiceType) {
 			case 'move':
-				let targetLoc = 0;
-				if (/\s-?[1-3]$/.test(data)) {
-					targetLoc = parseInt(data.slice(-2), 10);
-					data = data.slice(0, data.lastIndexOf(' '));
-				}
 				const willMega = data.endsWith(' mega') ? 'mega' : '';
 				if (willMega) data = data.slice(0, -5);
 				const willUltra = data.endsWith(' ultra') ? 'ultra' : '';
 				if (willUltra) data = data.slice(0, -6);
 				const willZ = data.endsWith(' zmove') ? 'zmove' : '';
 				if (willZ) data = data.slice(0, -6);
+
+				let targetLoc = 0;
+				if (/\s-?[1-3]$/.test(data)) {
+					targetLoc = parseInt(data.slice(-2), 10);
+					data = data.slice(0, data.lastIndexOf(' '));
+				}
 				this.chooseMove(data, targetLoc, willMega || willUltra || willZ);
 				break;
 			case 'switch':

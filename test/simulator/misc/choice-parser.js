@@ -80,6 +80,20 @@ describe('Choice parser', function () {
 		});
 
 		describe('Doubles/Triples', function () {
+			it('should allow mega evolving and targeting in the same move', function () {
+				battle = common.createBattle({gameType: 'doubles'});
+				battle.join('p1', 'Guest 1', 1, [
+					{species: "Gengar", ability: 'cursedbody', item: "gengarite", moves: ['shadowball']},
+					{species: "Koffing", ability: 'levitate', moves: ['smog']},
+				]);
+				battle.join('p2', 'Guest 2', 1, [
+					{species: "Skarmory", ability: 'sturdy', moves: ['roost']},
+					{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
+				]);
+
+				assert.ok(battle.choose('p1', `move 1 1 mega, move smog 1`));
+			});
+
 			it('should accept only `switch` and `pass` choices', function () {
 				battle = common.createBattle({gameType: 'doubles'});
 				battle.join('p1', 'Guest 1', 1, [
