@@ -4262,7 +4262,7 @@ const commands = {
 				roominfo.users.push(userinfo);
 			}
 
-			connection.send(`|queryresponse|roomroominfo|${JSON.stringify(roominfo)}`);
+			connection.send(`|queryresponse|roominfo|${JSON.stringify(roominfo)}`);
 		} else {
 			// default to sending null
 			connection.send(`|queryresponse|${cmd}|null`);
