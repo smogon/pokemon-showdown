@@ -4244,7 +4244,7 @@ const commands = {
 				type: targetRoom.type,
 				visibility: visibility,
 				modchat: targetRoom.modchat,
-				modjoin: (targetRoom.modjoin === true) ? targetRoom.modchat : targetRoom.modjoin,
+				modjoin: targetRoom.modjoin,
 				auth: {},
 				users: [],
 			};
