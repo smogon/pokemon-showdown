@@ -32,7 +32,7 @@ describe('Choice parser', function () {
 				[{species: "Rhydon", ability: 'prankster', moves: ['splash']}],
 			]);
 
-			for (const side of battle.sides.values()) {
+			for (const side of battle.sides) {
 				assert.false(battle.choose(side.id, 'team Rhydon'));
 				assert.false(battle.choose(side.id, 'team Mew'));
 				assert.false(battle.choose(side.id, 'team first'));
@@ -134,7 +134,7 @@ describe('Choice parser', function () {
 				battle.join('p1', 'Guest 1', 1, [{species: "Mew", ability: 'synchronize', moves: ['recover']}]);
 				battle.join('p2', 'Guest 2', 1, [{species: "Rhydon", ability: 'prankster', moves: ['splash']}]);
 
-				for (const side of battle.sides.values()) {
+				for (const side of battle.sides) {
 					assert.false(battle.choose(side.id, 'pass'));
 				}
 			});
