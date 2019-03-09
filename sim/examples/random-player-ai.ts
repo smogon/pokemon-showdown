@@ -47,6 +47,8 @@ export class RandomPlayerAI extends BattlePlayer {
 					// not fainted
 					!pokemon[i - 1].condition.endsWith(` fnt`)
 				));
+
+				if (!canSwitch.length) return `pass`;
 				const target = this.prng.sample(canSwitch);
 				chosen.push(target);
 				return `switch ${target}`;
@@ -65,7 +67,7 @@ export class RandomPlayerAI extends BattlePlayer {
 				canUltraBurst = canUltraBurst && active.canUltraBurst;
 				canZMove = canZMove && !!active.canZMove;
 
-				const canMove = [1, 2, 3, 4].slice(0, active.moves.length).filter(j => (
+				let canMove = [1, 2, 3, 4].slice(0, active.moves.length).filter(j => (
 					// not disabled
 					!active.moves[j - 1].disabled &&
 					// has pp
@@ -87,15 +89,21 @@ export class RandomPlayerAI extends BattlePlayer {
 						})));
 				}
 
+				// Filter out adjacentAlly moves if we have no allies left.
+				canMove = canMove.filter(
+					m => m.target !== `adjacentAlly` ||
+					!pokemon[i ^ 1].condition.endsWith(` fnt`));
+
 				const moves = canMove.map(m => {
 					let move = `move ${m.slot}`;
-					// NOTE: We don't generate all posible targeting combinations.
+					// NOTE: We don't generate all possible targeting combinations.
 					if (request.active.length > 1) {
-						const target = m.target;
-						if ([`normal`, `any`].includes(target)) {
+						if ([`normal`, `any`].includes(m.target)) {
 							move += ` ${1 + Math.floor(this.prng.next() * 2)}`;
 						}
-						// TODO targetting adjacentAlly etc
+						if (m.target === `adjacentAlly`) {
+							move += ` -${(i ^ 1) + 1}`;
+						}
 					}
 					if (m.zMove) move += ` zmove`;
 					return move;
