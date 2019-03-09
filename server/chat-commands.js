@@ -4223,6 +4223,46 @@ const commands = {
 			Ladders(toId(target)).getTop().then(result => {
 				connection.send('|queryresponse|laddertop|' + JSON.stringify(result));
 			});
+		} else if (cmd === 'roominfo') {
+			if (!trustable) return false;
+
+			let targetRoom = Rooms.get(target);
+			if (!targetRoom) return false;
+			if (targetRoom.isPrivate && !user.inRooms.has(room.id) && !user.games.has(room.id)) {
+				return false;
+			}
+
+			let visibility;
+			if (targetRoom.isPrivate) {
+				visibility = (targetRoom.isPrivate === 'hidden') ? 'hidden' : 'private';
+			} else {
+				visibility = 'public';
+			}
+
+			let roominfo = {
+				title: targetRoom.title,
+				type: targetRoom.type,
+				visibility: visibility,
+				modjoin: targetRoom.modjoin || targetRoom.modchat,
+				auth: {},
+				users: [],
+			};
+
+			if (targetRoom.auth) {
+				for (let userid in targetRoom.auth) {
+					let rank = targetRoom.auth[userid];
+					if (!roominfo.auth[rank]) roominfo.auth[rank] = [];
+					roominfo.auth[rank].push(userid);
+				}
+			}
+
+			for (let userid in targetRoom.users) {
+				let user = targetRoom.users[userid];
+				let userinfo = user.getIdentity(room.id);
+				roominfo.users.push(userinfo);
+			}
+
+			connection.send(`|queryresponse|roominfo|${JSON.stringify(roominfo)}`);
 		} else {
 			// default to sending null
 			connection.send(`|queryresponse|${cmd}|null`);
