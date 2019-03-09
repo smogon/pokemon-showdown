@@ -648,7 +648,8 @@ export class Side {
 					return [willMega, willUltra, willZ, d];
 				};
 
-				let [targetLoc, willMega, willUltra, willZ] = [0, '', '', ''];
+				// tslint:disable-next-line:one-variable-per-declaration
+				let targetLoc, willMega, willUltra, willZ;
 				// We're flexible with the ordering of target vs. flags - if `data `ends
 				// with a number then we assume target comes last, otherwise flags.
 				if (/[1-3]$/.test(data)) {
