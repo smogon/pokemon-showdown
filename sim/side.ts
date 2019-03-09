@@ -89,7 +89,7 @@ export class Side {
 		}
 
 		switch (this.battle.gameType) {
-		case 'doubles':
+		case 'doubles': case 'multi': case 'free-for-all':
 			this.active = [null!, null!];
 			break;
 		case 'triples': case 'rotation':
