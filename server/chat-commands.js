@@ -4243,7 +4243,8 @@ const commands = {
 				title: targetRoom.title,
 				type: targetRoom.type,
 				visibility: visibility,
-				modjoin: targetRoom.modjoin || targetRoom.modchat,
+				modchat: targetRoom.modchat,
+				modjoin: (targetRoom.modjoin === true) ? targetRoom.modchat : targetRoom.modjoin,
 				auth: {},
 				users: [],
 			};
