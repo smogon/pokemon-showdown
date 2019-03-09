@@ -678,7 +678,8 @@ export class Pokemon {
 		return (lockedMove === true) ? null : lockedMove;
 	}
 
-	getMoves(lockedMove?: string | null, restrictData?: boolean) {
+	getMoves(lockedMove?: string | null, restrictData?: boolean):
+	{move: string, id: string, disabled?: string | boolean, disabledSource?: string, target?: string, pp?: number, maxpp?: number}[] {
 		if (lockedMove) {
 			lockedMove = toId(lockedMove);
 			this.trapped = true;
@@ -751,7 +752,7 @@ export class Pokemon {
 		const canSwitchIn = this.battle.canSwitch(this.side) > 0;
 		const moves = this.getMoves(lockedMove, isLastActive);
 		const data: {
-			moves: {move: string, id: string, target?: string, disabled?: boolean}[],
+			moves: {move: string, id: string, target?: string, disabled?: string | boolean}[],
 			maybeDisabled?: boolean,
 			trapped?: boolean,
 			maybeTrapped?: boolean,
@@ -1664,9 +1665,9 @@ export class Pokemon {
 	destroy() {
 		// deallocate ourself
 		// get rid of some possibly-circular references
-		// @ts-ignore - prevent type | null
-		this.battle = null;
-		// @ts-ignore - prevent type | null
-		this.side = null;
+		// @ts-ignore - readonly
+		this.battle = null!;
+		// @ts-ignore - readonly
+		this.side = null!;
 	}
 }
