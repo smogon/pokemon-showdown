@@ -90,11 +90,11 @@ let BattleScripts = {
 		return Math.floor(baseDamage);
 	},
 	tryImmunityEvent(targets, pokemon, move) {
-		let hitResults = this.runEvent('TryImmunity', targets, pokemon, move);
-		for (let i = 0; i < targets.length; i++) {
+		const hitResults = this.runEvent('TryImmunity', targets, pokemon, move);
+		for (const [i, target] of targets.entries()) {
 			if (!hitResults[i]) {
 				this.attrLastMove('[miss]');
-				this.add('-miss', pokemon, targets[i]);
+				this.add('-miss', pokemon, target);
 			}
 			hitResults[i] = hitResults[i] || false;
 		}

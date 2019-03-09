@@ -38,7 +38,7 @@ let BattleScripts = {
 			move.priority = this.activeMove.priority;
 			if (!move.hasBounced) move.pranksterBoosted = this.activeMove.pranksterBoosted;
 		}
-		let baseTarget = move.target;
+		const baseTarget = move.target;
 		if (target === undefined) target = this.resolveTarget(pokemon, move);
 		if (move.target === 'self' || move.target === 'allies') {
 			target = pokemon;
@@ -71,7 +71,7 @@ let BattleScripts = {
 
 		let movename = move.name;
 		if (move.id === 'hiddenpower') movename = 'Hidden Power';
-		if (sourceEffect) attrs += '|[from]' + this.getEffect(sourceEffect);
+		if (sourceEffect) attrs += `|[from]${this.getEffect(sourceEffect)}`;
 		if (zMove && move.isZ === true) {
 			attrs = '|[anim]' + movename + attrs;
 			movename = 'Z-' + movename;
@@ -87,12 +87,12 @@ let BattleScripts = {
 			return false;
 		}
 
-		let targets = pokemon.getMoveTargets(move, target);
+		const targets = pokemon.getMoveTargets(move, target);
 
 		if (!sourceEffect || sourceEffect.id === 'pursuit') {
 			let extraPP = 0;
 			for (const source of targets) {
-				let ppDrop = this.runEvent('DeductPP', source, pokemon, move);
+				const ppDrop = this.runEvent('DeductPP', source, pokemon, move);
 				if (ppDrop !== true) {
 					extraPP += ppDrop || 0;
 				}
@@ -131,9 +131,9 @@ let BattleScripts = {
 				return false;
 			}
 			if (targets.length > 1) move.spreadHit = true;
-			let hitTargets = [];
+			const hitTargets = [];
 			for (const source of targets) {
-				let hitResult = this.tryMoveHit(source, pokemon, move);
+				const hitResult = this.tryMoveHit(source, pokemon, move);
 				if (hitResult || hitResult === 0 || hitResult === undefined) {
 					moveResult = true;
 					hitTargets.push(source.toString().substr(0, 3));

@@ -339,17 +339,17 @@ let BattleScripts = {
 			}
 		}
 
-		let moveResult = !!targets.length;
+		const moveResult = !!targets.length;
 		if (!moveResult && !atLeastOneFailure) pokemon.moveThisTurnResult = null;
 		if (move.spreadHit) this.attrLastMove('[spread] ' + targets.join(','));
 		return moveResult;
 	},
 	tryImmunityEvent(targets, pokemon, move) {
-		let hitResults = this.runEvent('TryImmunity', targets, pokemon, move);
-		for (let i = 0; i < targets.length; i++) {
+		const hitResults = this.runEvent('TryImmunity', targets, pokemon, move);
+		for (const [i, target] of targets.entries()) {
 			if (hitResults[i] === false) {
 				if (!move.spreadHit) this.attrLastMove('[miss]');
-				this.add('-miss', pokemon, targets[i]);
+				this.add('-miss', pokemon, target);
 			} else {
 				hitResults[i] = hitResults[i] || false;
 			}
@@ -361,7 +361,7 @@ let BattleScripts = {
 			move.ignoreImmunity = (move.category === 'Status');
 		}
 
-		let hitResults = [];
+		const hitResults = [];
 		for (let i = 0; i < targets.length; i++) {
 			hitResults[i] = (move.ignoreImmunity && (move.ignoreImmunity === true || move.ignoreImmunity[move.type])) || targets[i].runImmunity(move.type, true);
 		}
@@ -369,7 +369,7 @@ let BattleScripts = {
 		return hitResults;
 	},
 	tryHitEvent(targets, pokemon, move) {
-		let hitResults = this.runEvent('TryHit', targets, pokemon, move);
+		const hitResults = this.runEvent('TryHit', targets, pokemon, move);
 		if (!hitResults.includes(true) && hitResults.includes(false)) {
 			this.add('-fail', pokemon);
 			this.attrLastMove('[still]');
@@ -380,7 +380,7 @@ let BattleScripts = {
 		return hitResults;
 	},
 	powderImmunity(targets, pokemon, move) {
-		let hitResults = [];
+		const hitResults = [];
 		if (!move.flags['powder']) {
 			for (let i = 0; i < targets.length; i++) {
 				hitResults[i] = true;
@@ -399,7 +399,7 @@ let BattleScripts = {
 		return hitResults;
 	},
 	pranksterImmunity(targets, pokemon, move) {
-		let hitResults = [];
+		const hitResults = [];
 		if (this.gen < 7 || !move.pranksterBoosted || !pokemon.hasAbility('prankster')) {
 			for (let i = 0; i < targets.length; i++) {
 				hitResults[i] = true;
@@ -419,7 +419,7 @@ let BattleScripts = {
 		return hitResults;
 	},
 	accuracy(targets, pokemon, move) {
-		let hitResults = [];
+		const hitResults = [];
 		for (let [i, target] of targets.entries()) {
 			// calculate true accuracy
 			/** @type {number | true} */ // TypeScript bug: incorrectly infers {number | true} as {number | boolean}
@@ -439,7 +439,7 @@ let BattleScripts = {
 					}
 				}
 			} else {
-				let boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
+				const boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
 
 				let boosts, boost;
 				if (accuracy !== true) {
@@ -481,7 +481,7 @@ let BattleScripts = {
 	},
 	breakProtect(targets, pokemon, move) {
 		if (move.breaksProtect) {
-			for (let target of targets) {
+			for (const target of targets) {
 				let broke = false;
 				for (const effectid of ['banefulbunker', 'kingsshield', 'protect', 'spikyshield']) {
 					if (target.removeVolatile(effectid)) broke = true;
@@ -504,14 +504,14 @@ let BattleScripts = {
 		return undefined;
 	},
 	stealBoosts(targets, pokemon, move) {
-		let target = targets[0]; // hardcoded
+		const target = targets[0]; // hardcoded
 		if (move.stealsBoosts) {
 			/** @type {{[k: string]: number}} */
-			let boosts = {};
+			const boosts = {};
 			let stolen = false;
-			for (let statName in target.boosts) {
+			for (const statName in target.boosts) {
 				// @ts-ignore
-				let stage = target.boosts[statName];
+				const stage = target.boosts[statName];
 				if (stage > 0) {
 					boosts[statName] = stage;
 					stolen = true;
@@ -522,7 +522,7 @@ let BattleScripts = {
 				this.add('-clearpositiveboost', target, pokemon, 'move: ' + move.name);
 				this.boost(boosts, pokemon, pokemon);
 
-				for (let statName in boosts) {
+				for (const statName in boosts) {
 					boosts[statName] = 0;
 				}
 				target.setBoost(boosts);
@@ -573,7 +573,7 @@ let BattleScripts = {
 	},
 	moveHitLoop(targets, pokemon, move) { // temp name
 		/** @type {(number | boolean | undefined)[]} */
-		let damage = [];
+		const damage = [];
 		for (let i = 0; i < targets.length; i++) damage[i] = 0;
 		move.totalDamage = 0;
 		pokemon.lastDamage = 0;
@@ -609,11 +609,11 @@ let BattleScripts = {
 			// like this (Triple Kick)
 			if (target && move.multiaccuracy && i > 0) {
 				let accuracy = move.accuracy;
-				let boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
+				const boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
 				if (accuracy !== true) {
 					if (!move.ignoreAccuracy) {
-						let boosts = this.runEvent('ModifyBoost', pokemon, null, null, Object.assign({}, pokemon.boosts));
-						let boost = this.clampIntRange(boosts['accuracy'], -6, 6);
+						const boosts = this.runEvent('ModifyBoost', pokemon, null, null, Object.assign({}, pokemon.boosts));
+						const boost = this.clampIntRange(boosts['accuracy'], -6, 6);
 						if (boost > 0) {
 							accuracy *= boostTable[boost];
 						} else {
@@ -621,8 +621,8 @@ let BattleScripts = {
 						}
 					}
 					if (!move.ignoreEvasion) {
-						let boosts = this.runEvent('ModifyBoost', target, null, null, Object.assign({}, target.boosts));
-						let boost = this.clampIntRange(boosts['evasion'], -6, 6);
+						const boosts = this.runEvent('ModifyBoost', target, null, null, Object.assign({}, target.boosts));
+						const boost = this.clampIntRange(boosts['evasion'], -6, 6);
 						if (boost > 0) {
 							accuracy /= boostTable[boost];
 						} else if (boost < 0) {
@@ -637,7 +637,7 @@ let BattleScripts = {
 				}
 			}
 
-			let moveData = move;
+			const moveData = move;
 			if (!moveData.flags) moveData.flags = {};
 
 			// Modifies targetsCopy (which is why it's a copy)
@@ -697,11 +697,11 @@ let BattleScripts = {
 	spreadMoveHit(targets, pokemon, moveOrMoveName, moveData, isSecondary, isSelf) {
 		// Hardcoded for single-target purposes
 		// (no spread moves have any kind of onTryHit handler)
-		let target = targets[0];
+		const target = targets[0];
 		/** @type {(number | boolean | undefined)[]} */
 		let damage = [];
 		for (let i = 0; i < targets.length; i++) damage[i] = true;
-		let move = this.getActiveMove(moveOrMoveName);
+		const move = this.getActiveMove(moveOrMoveName);
 		/** @type {?boolean | number} */
 		let hitResult = true;
 		if (!moveData) moveData = move;
@@ -834,8 +834,7 @@ let BattleScripts = {
 		/**@type {?boolean | number | null | undefined} */
 		// @ts-ignore
 		let didAnything = damage.reduce(this.combineResults, undefined);
-		for (let i = 0; i < targets.length; i++) {
-			let target = targets[i];
+		for (const [i, target] of targets.entries()) {
 			if (!target) continue;
 			let hitResult;
 			/**@type {?boolean | number | undefined} */
@@ -986,8 +985,7 @@ let BattleScripts = {
 		}
 	},
 	forceSwitch(damage, targets, pokemon, move) {
-		for (let i = 0; i < targets.length; i++) {
-			let target = targets[i];
+		for (const [i, target] of targets.entries()) {
 			if (target && target.hp > 0 && pokemon.hp > 0 && this.canSwitch(target.side)) {
 				let hitResult = this.runEvent('DragOut', target, pokemon, move);
 				if (hitResult) {
@@ -1210,7 +1208,7 @@ let BattleScripts = {
 	combineResults(left, right) {
 		const NOT_FAILURE = 'string';
 		const NULL = 'object';
-		let resultsPriorities = ['undefined', NOT_FAILURE, NULL, 'boolean', 'number'];
+		const resultsPriorities = ['undefined', NOT_FAILURE, NULL, 'boolean', 'number'];
 		if (resultsPriorities.indexOf(typeof left) > resultsPriorities.indexOf(typeof right)) {
 			return left;
 		} else if (left && !right && right !== 0) {

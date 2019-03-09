@@ -913,14 +913,13 @@ export class Battle extends Dex.ModdedDex {
 	findEventHandlers(thing: Pokemon | Pokemon[] | Side | Battle, eventName: string, sourceThing?: Pokemon | null) {
 		let handlers: AnyObject[] = [];
 		if (thing instanceof Array) {
-			for (let i = 0; i < thing.length; i++) {
-				const pokemon = thing[i];
+			for (const [i, pokemon] of thing.entries()) {
 				// console.log(`Event: ${eventName}, Target: ${'' + pokemon}, ${i}`);
-				let curHandlers = this.findEventHandlers(pokemon, eventName, sourceThing);
-				curHandlers.forEach(val => {
-					val.target = pokemon; // Original "thing"
-					val.index = i;
-				});
+				const curHandlers = this.findEventHandlers(pokemon, eventName, sourceThing);
+				for (const handler of curHandlers) {
+					handler.target = pokemon; // Original "thing"
+					handler.index = i;
+				}
 				handlers = handlers.concat(curHandlers);
 			}
 			return handlers;
@@ -1823,14 +1822,14 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	spreadDamage(
-		damage: (number | boolean | undefined)[], targetArray: (false | Pokemon | null)[] | null = null,
+		damage: SpreadMoveDamage, targetArray: (false | Pokemon | null)[] | null = null,
 		source: Pokemon | null = null, effect: 'drain' | 'recoil' | Effect | null = null, instafaint: boolean = false) {
 		if (!targetArray) return [0];
-		let retVals: (number | boolean | undefined)[] = [];
+		let retVals: SpreadMoveDamage = [];
 		if (typeof effect === 'string' || !effect) effect = this.getEffect(effect);
-		for (let i = 0; i < damage.length; i++) {
-			let target = targetArray[i];
-			let targetDamage = damage[i];
+		for (const [i, curDamage] of damage.entries()) {
+			const target = targetArray[i];
+			let targetDamage = curDamage;
 			if (!target || !target.hp) {
 				retVals[i] = 0;
 				continue;
@@ -1854,15 +1853,13 @@ export class Battle extends Dex.ModdedDex {
 				targetDamage = this.runEvent('Damage', target, source, effect, targetDamage);
 				if (!(targetDamage || targetDamage === 0)) {
 					this.debug('damage event failed');
-					retVals[i] = damage[i];
+					retVals[i] = curDamage;
 					continue;
 				}
 			}
 			if (targetDamage !== 0) targetDamage = this.clampIntRange(targetDamage, 1);
 
 			if (this.gen <= 1) {
-				// FIXME: The stored damage should be calculated ignoring Substitute.
-				// https://github.com/Zarel/Pokemon-Showdown/issues/2598
 				if (this.currentMod === 'stadium' ||
 					!['recoil', 'drain'].includes(effect.id) && effect.effectType !== 'Status') {
 					this.lastDamage = targetDamage;
@@ -1873,8 +1870,7 @@ export class Battle extends Dex.ModdedDex {
 			if (targetDamage !== 0) target.hurtThisTurn = true;
 			if (source && effect.effectType === 'Move') source.lastDamage = targetDamage;
 
-			let name = effect.fullname;
-			if (name === 'tox') name = 'psn';
+			const name = effect.fullname === 'tox' ? 'psn' : effect.fullname;
 			switch (effect.id) {
 			case 'partiallytrapped':
 				this.add('-damage', target, target.getHealth, '[from] ' + this.effectData.sourceEffect.fullname, '[partiallytrapped]');
@@ -1912,10 +1908,8 @@ export class Battle extends Dex.ModdedDex {
 		// @ts-ignore TODO: AfterDamage passes an Effect, not an ActiveMove
 		if (!effect.flags) effect.flags = {};
 		if (instafaint) {
-			for (let i = 0; i < targetArray.length; i++) {
-				if (!retVals[i]) continue;
-				let target = targetArray[i];
-				if (!target) continue;
+			for (const [i, target] of targetArray.entries()) {
+				if (!retVals[i] || !target) continue;
 
 				if (target.hp <= 0) {
 					this.debug('instafaint: ' + this.faintQueue.map(entry => entry.target.name));
@@ -3397,52 +3391,52 @@ export class Battle extends Dex.ModdedDex {
 		throw new Error(`The afterMoveSecondaryEvent function needs to be implemented in scripts.js or the battle format.`);
 	}
 
-	moveHitLoop(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): (number | undefined | boolean)[] {
+	moveHitLoop(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): SpreadMoveDamage {
 		throw new Error(`The moveHitLoop function needs to be implemented in scripts.js or the battle format.`);
 	}
 
 	spreadMoveHit(
-		targets: (Pokemon | false | null)[], pokemon: Pokemon, move: ActiveMove, moveData?: ActiveMove,
-		isSecondary?: boolean, isSelf?: boolean): [(number | undefined | boolean)[], (Pokemon | false | null)[]] {
+		targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove, moveData?: ActiveMove,
+		isSecondary?: boolean, isSelf?: boolean): [SpreadMoveDamage, SpreadMoveTargets] {
 		throw new Error(`The spreadMoveHit function needs to be implemented in scripts.js or the battle format.`);
 	}
 
 	tryPrimaryHitEvent(
-		damage: (number | boolean | undefined)[], targets: (Pokemon | false | null)[], pokemon: Pokemon, move: ActiveMove,
-		moveData: ActiveMove, isSecondary: boolean | undefined): (number | boolean | undefined)[] {
+		damage: SpreadMoveDamage, targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove,
+		moveData: ActiveMove, isSecondary: boolean | undefined): SpreadMoveDamage {
 		throw new Error(`The tryPrimaryHitEvent function needs to be implemented in scripts.js or the battle format.`);
 	}
 
 	getSpreadDamage(
-		damage: (number | boolean | undefined)[], targets: (Pokemon | false | null)[], pokemon: Pokemon, move: ActiveMove,
+		damage: SpreadMoveDamage, targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove,
 		moveData: ActiveMove, isSecondary: boolean | undefined, isSelf: boolean | undefined):
-		(number | boolean | undefined)[] {
+		SpreadMoveDamage {
 		throw new Error(`The getSpreadDamage function needs to be implemented in scripts.js or the battle format.`);
 	}
 
 	runMoveEffects(
-		damage: (number | boolean | undefined)[], targets: (Pokemon | false | null)[], pokemon: Pokemon, move: ActiveMove,
+		damage: SpreadMoveDamage, targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove,
 		moveData: ActiveMove, isSecondary: boolean | undefined, isSelf: boolean | undefined):
-		(number | boolean | undefined)[] {
+		SpreadMoveDamage {
 		throw new Error(`The runMoveEffects function needs to be implemented in scripts.js or the battle format.`);
 	}
 
 	selfDrops(
-		targets: (Pokemon | false | null)[], pokemon: Pokemon, move: ActiveMove, moveData: ActiveMove,
-		isSecondary: boolean | undefined): (number | boolean | undefined)[] {
+		targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove, moveData: ActiveMove,
+		isSecondary: boolean | undefined): SpreadMoveDamage {
 		throw new Error(`The selfDrops function needs to be implemented in scripts.js or the battle format.`);
 	}
 
 	secondaries(
-		targets: (Pokemon | false | null)[], pokemon: Pokemon, move: ActiveMove, moveData: ActiveMove,
-		isSecondary: boolean | undefined): (number | boolean | undefined)[] {
+		targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove, moveData: ActiveMove,
+		isSecondary: boolean | undefined): SpreadMoveDamage {
 		throw new Error(`The secondaries function needs to be implemented in scripts.js or the battle format.`);
 	}
 
 	forceSwitch(
-		damage: (number | boolean | undefined)[], targets: (Pokemon | false | null)[], pokemon: Pokemon, move: ActiveMove,
+		damage: SpreadMoveDamage, targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove,
 		moveData: ActiveMove, isSecondary: boolean | undefined, isSelf: boolean | undefined):
-		(number | boolean | undefined)[] {
+		SpreadMoveDamage {
 		throw new Error(`The forceSwitch function needs to be implemented in scripts.js or the battle format.`);
 	}
 
