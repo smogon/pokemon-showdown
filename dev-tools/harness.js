@@ -1,6 +1,5 @@
 /**
  * Random Simulation harness for testing and benchmarking purposes.
- * NOTE: Run with `node --random-seed=<SEED> harness` to get repeatable results.
  *
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
@@ -34,8 +33,10 @@ const argv = require('minimist')(process.argv.slice(2));
 const BattleStreams = require('../.sim-dist/battle-stream');
 const Dex = require('../.sim-dist/dex');
 const RandomPlayerAI = require('../.sim-dist/examples/random-player-ai').RandomPlayerAI;
-const PRNG = new (require('../.sim-dist/prng').PRNG)();
+const PRNG = require('../.sim-dist/prng').PRNG;
 
+const DEFAULT_SEED = [0x09917, 0x06924, 0x0e1c8, 0x06af0];
+const SEED = argv.seed ? argv.seed.split(',').map(s => Number(s)) : DEFAULT_SEED;
 const NUM_GAMES = Number(argv._[0] || argv.num) || 100;
 const LOGS = !!argv.logs;
 const SILENT = !LOGS || !!argv.silent;
@@ -43,7 +44,7 @@ const ALL = !!argv.all;
 const ASYNC = !!argv.async;
 const FORMAT = argv.format;
 
-const AI_OPTIONS = {move: 0.7, mega: 0.3, zmove: 0.3};
+const AI_OPTIONS = {move: 0.7, mega: 0.6, zmove: 0.5};
 
 const FORMATS = [
 	'gen7randombattle', 'gen7randomdoublesbattle',
@@ -52,6 +53,8 @@ const FORMATS = [
 	'gen2randombattle', 'gen1randombattle',
 ];
 
+const prng = new PRNG(SEED);
+
 let formatIndex = 0;
 let numGames = 0;
 function getNextFormat() {
@@ -59,7 +62,7 @@ function getNextFormat() {
 	if (formatIndex > FORMATS.length) {
 		return false;
 	} else if (numGames++ < NUM_GAMES) {
-		return ALL ? FORMATS[formatIndex] : PRNG.sample(FORMATS);
+		return ALL ? FORMATS[formatIndex] : prng.sample(FORMATS);
 	} else if (!ALL) {
 		return false;
 	} else {
@@ -70,18 +73,20 @@ function getNextFormat() {
 }
 
 function generateTeam(format) {
-	return Dex.packTeam(Dex.generateTeam(format));
+	return Dex.packTeam(Dex.generateTeam(format, prng));
 }
 
 async function runGame(format) {
 	const streams = BattleStreams.getPlayerStreams(new BattleStreams.BattleStream());
-	const spec = {formatid: format};
+	const spec = {formatid: format, seed: prng.nextFrame(prng.seed)};
 	const p1spec = {name: "Bot 1", team: generateTeam(format)};
 	const p2spec = {name: "Bot 2", team: generateTeam(format)};
 
 	/* eslint-disable no-unused-vars */
-	const p1 = new RandomPlayerAI(streams.p1, AI_OPTIONS);
-	const p2 = new RandomPlayerAI(streams.p2, AI_OPTIONS);
+	const p1 = new RandomPlayerAI(streams.p1,
+		Object.assign({seed: prng.nextFrame(prng.seed)}, AI_OPTIONS));
+	const p2 = new RandomPlayerAI(streams.p2,
+		Object.assign({seed: prng.nextFrame(prng.seed)}, AI_OPTIONS));
 	/* eslint-enable no-unused-vars */
 
 	streams.omniscient.write(`>start ${JSON.stringify(spec)}
