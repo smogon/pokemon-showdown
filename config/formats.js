@@ -486,7 +486,7 @@ let Formats = [
 		},
 		ruleset: ['Pokemon', 'Standard Doubles', 'Accuracy Moves Clause', 'Swagger Clause', 'Z-Move Clause', 'Sleep Clause Mod', 'Team Preview'],
 		banlist: [
-			'Arceus', 'Dialga', 'Gengar-Mega', 'Giratina', 'Groudon', 'Ho-Oh', 'Jirachi', 'Kangaskhan-Mega', 'Kyogre', 'Kyurem-White',
+			'Arceus', 'Dialga', 'Giratina', 'Groudon', 'Ho-Oh', 'Jirachi', 'Kangaskhan-Mega', 'Kyogre', 'Kyurem-White',
 			'Lugia', 'Lunala', 'Magearna', 'Marshadow', 'Mewtwo', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia',
 			'Rayquaza', 'Reshiram', 'Salamence-Mega', 'Snorlax', 'Solgaleo', 'Tapu Lele', 'Xerneas', 'Yveltal', 'Zekrom',
 			'Power Construct', 'Eevium Z', 'Focus Sash', 'Dark Void', 'Final Gambit', 'Perish Song',
