@@ -88,7 +88,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream {
 			options.send = (t: string, data: any) => {
 				if (Array.isArray(data)) data = data.join("\n");
 				this.push(`${t}\n${data}`);
-				if (type === 'end' && !this.keepAlive) {
+				if (t === 'end' && !this.keepAlive) {
 					this.push(null);
 					this._destroy();
 				}
@@ -290,7 +290,7 @@ export class BattleTextStream extends Streams.ReadWriteStream {
 		this.battleStream.end();
 	}
 	async _listen() {
-		let message: string;
+		let message;
 		// tslint:disable-next-line:no-conditional-assignment
 		while ((message = await this.battleStream.read())) {
 			if (!message.endsWith('\n')) message += '\n';
