@@ -44,7 +44,7 @@ const ALL = !!argv.all;
 const ASYNC = !!argv.async;
 const FORMAT = argv.format;
 
-const AI_OPTIONS = {move: 0.7, mega: 0.6, zmove: 0.5};
+const AI_OPTIONS = {move: 0.7, mega: 0.6};
 
 const FORMATS = [
 	'gen7randombattle', 'gen7randomdoublesbattle',
