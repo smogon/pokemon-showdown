@@ -4,21 +4,28 @@
 //
 // Simply doing `require('../build')` here doesn't work because the `replace`
 // step of the build is asynchronous and we can't wait for it to finish easily
-// unless we shell out and use `execSync`. However, the heuristic of simply 
+// unless we shell out and use `execSync`. However, the heuristic of simply
 // checking for the presence of  './.sim-dist/dex' to determine whether a build
 // is required is somewhat risky as it only is valid from a clean repository -
-// if you make edits or have previous build artifacts lying arround, this 
+// if you make edits or have previous build artifacts lying arround, this
 // script could potentially be missing additional sources or the compiled output
-// may be out of date. 
+// may be out of date.
 //
-// We're OK with risking being stale here because we want to keep this script 
-// as fast as possible for `simulate-battle` to be usable as way of interfacing
-// with the simulator from non-JS languages. To be completely safe (or if you
-// experience any errors), you should run `node build` before running this script.
-try {
-	require.resolve('./.sim-dist/dex');
-} catch(err) {
-	if (err.code !== 'MODULE_NOT_FOUND') throw err; // should never happen
+// We're OK with risking being stale here if the command is `simulate-battle`
+// because we want to keep this script as fast as possible to be usable as a way
+// of interfacing with the simulator from non-JS languages. Otherwise we error
+// on the side of caution and run `node build` to ensure we're always running
+// with the latest code.
+var build = true;
+if (process.argv[2] === 'simulate-battle') {
+	try {
+		require.resolve('./.sim-dist/dex');
+		build = false;
+	} catch (err) {
+		if (err.code !== 'MODULE_NOT_FOUND') throw err; // should never happen
+	}
+}
+if (build) {
 	require('child_process').execSync('node build', {stdio: 'inherit', cwd: __dirname});
 }
 
