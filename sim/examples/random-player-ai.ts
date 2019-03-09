@@ -15,18 +15,16 @@ import {PRNG, PRNGSeed} from '../prng';
 export class RandomPlayerAI extends BattlePlayer {
 	readonly move: number;
 	readonly mega: number;
-	readonly zmove: number;
 	readonly prng: PRNG;
 
 	constructor(
 		playerStream: ObjectReadWriteStream,
-		options: {move?: number, mega?: number, zmove?: number, seed?: PRNG | PRNGSeed | null } = {},
+		options: {move?: number, mega?: number, seed?: PRNG | PRNGSeed | null } = {},
 		debug: boolean = false
 	) {
 		super(playerStream, debug);
 		this.move = options.move || 1.0;
 		this.mega = options.mega || 0;
-		this.zmove = options.zmove || 0;
 		this.prng = options.seed && !Array.isArray(options.seed) ? options.seed : new PRNG(options.seed);
 	}
 
@@ -65,23 +63,42 @@ export class RandomPlayerAI extends BattlePlayer {
 
 				canMegaEvo = canMegaEvo && active.canMegaEvo;
 				canUltraBurst = canUltraBurst && active.canUltraBurst;
+				canZMove = canZMove && !!active.canZMove;
 
 				const canMove = [1, 2, 3, 4].slice(0, active.moves.length).filter(j => (
 					// not disabled
-					!active.moves[j - 1].disabled
-				));
+					!active.moves[j - 1].disabled &&
+					// has pp
+					active.moves[j - 1].pp !== 0
+				)).map(j => ({
+					slot: j,
+					move: active.moves[j - 1].move,
+					target: active.moves[j  - 1].target,
+					zMove: false,
+				}));
+				if (canZMove) {
+					canMove.push(...[1, 2, 3, 4].slice(0, active.canZMove.length)
+						.filter(j => active.canZMove[j - 1])
+						.map(j => ({
+							slot: j,
+							move: active.canZMove[j - 1].move,
+							target: active.canZMove[j - 1].target,
+							zMove: true,
+						})));
+				}
 
-				// TODO zmove?
-				const moves = canMove.map(j => {
+				const moves = canMove.map(m => {
+					let move = `move ${m.slot}`;
 					// NOTE: We don't generate all posible targeting combinations.
 					if (request.active.length > 1) {
-						const target = active.moves[j - 1].target;
-						if (['normal', 'any'].includes(target)) {
-							return `move ${j} ${1 + Math.floor(this.prng.next() * 2)}`;
+						const target = m.target;
+						if ([`normal`, `any`].includes(target)) {
+							move += ` ${1 + Math.floor(this.prng.next() * 2)}`;
 						}
 						// TODO targetting adjacentAlly etc
 					}
-					return `move ${j}`;
+					if (m.zMove) move += ` zmove`;
+					return move;
 				});
 
 				const canSwitch = [1, 2, 3, 4, 5, 6].filter(j => (
@@ -100,7 +117,10 @@ export class RandomPlayerAI extends BattlePlayer {
 					return `switch ${target}`;
 				} else {
 					let move = this.prng.sample(moves);
-					if ((canMegaEvo || canUltraBurst) && this.prng.next() < this.mega) {
+					if (move.endsWith(` zmove`)) {
+						canZMove = false;
+						return move;
+					} else if ((canMegaEvo || canUltraBurst) && this.prng.next() < this.mega) {
 						if (canMegaEvo) {
 							canMegaEvo = false;
 							return `${move} mega`;
