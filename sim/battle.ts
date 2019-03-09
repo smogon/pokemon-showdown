@@ -3047,13 +3047,13 @@ export class Battle extends Dex.ModdedDex {
 		}
 	}
 
-// tslint:disable-next-line:ban-types
+	// tslint:disable-next-line:ban-types
 	addMove(...args: (string | number | Function | AnyObject)[]) {
 		this.lastMoveLine = this.log.length;
 		this.log.push(`|${args.join('|')}`);
 	}
 
-// tslint:disable-next-line:ban-types
+	// tslint:disable-next-line:ban-types
 	attrLastMove(...args: (string | number | Function | AnyObject)[]) {
 		if (this.lastMoveLine < 0) return;
 		if (this.log[this.lastMoveLine].startsWith('|-anim|')) {
