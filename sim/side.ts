@@ -35,7 +35,7 @@ interface Choice {
 
 export class Side {
 	readonly battle: Battle;
-	readonly id: 'p1' | 'p2';
+	readonly id: SideID;
 	readonly n: number;
 
 	name: string;
@@ -69,7 +69,7 @@ export class Side {
 		if (sideScripts) Object.assign(this, sideScripts);
 
 		this.battle = battle;
-		this.id = sideNum ? 'p2' : 'p1';
+		this.id = ['p1', 'p2', 'p3', 'p4'][sideNum] as SideID;
 		this.n = sideNum;
 
 		this.name = name;
@@ -88,7 +88,7 @@ export class Side {
 		}
 
 		switch (this.battle.gameType) {
-		case 'doubles':
+		case 'doubles': case 'multi': case 'free-for-all':
 			this.active = [null!, null!];
 			break;
 		case 'triples': case 'rotation':

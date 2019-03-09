@@ -105,8 +105,8 @@ export class Battle extends Dex.ModdedDex {
 		this.sentLogPos = 0;
 		this.sentEnd = false;
 		this.gameType = (format.gameType || 'singles');
-		// @ts-ignore
-		this.sides = this.gameType === 'multi' || this.gameType === 'free-for-all' ? [null, null, null, null] : [null, null];
+		const isFourPlayer = this.gameType === 'multi' || this.gameType === 'free-for-all';
+		this.sides = Array(isFourPlayer ? 4 : 2).fill(null!);
 		// @ts-ignore
 		this.rated = options.rated;
 		this.weatherData = {id: ''};
@@ -219,7 +219,7 @@ export class Battle extends Dex.ModdedDex {
 		status = this.getEffect(status);
 		if (!sourceEffect && this.effect) sourceEffect = this.effect;
 		if (!source && this.event && this.event.target) source = this.event.target;
-		if (source === 'debug') source = this.p1.active[0];
+		if (source === 'debug') source = this.sides[0].active[0];
 
 		if (this.weather === status.id) {
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
@@ -298,7 +298,7 @@ export class Battle extends Dex.ModdedDex {
 		status = this.getEffect(status);
 		if (!sourceEffect && this.effect) sourceEffect = this.effect;
 		if (!source && this.event && this.event.target) source = this.event.target;
-		if (source === 'debug') source = this.p1.active[0];
+		if (source === 'debug') source = this.sides[0].active[0];
 		if (!source) throw new Error(`setting terrain without a source`);
 
 		if (this.terrain === status.id) return false;
@@ -364,7 +364,7 @@ export class Battle extends Dex.ModdedDex {
 		sourceEffect: Effect | null = null
 	): boolean {
 		if (!source && this.event && this.event.target) source = this.event.target;
-		if (source === 'debug') source = this.p1.active[0];
+		if (source === 'debug') source = this.sides[0].active[0];
 		status = this.getEffect(status);
 
 		let effectData = this.pseudoWeather[status.id];
@@ -1220,15 +1220,8 @@ export class Battle extends Dex.ModdedDex {
 			}
 		}
 
-		let choiceDone = false;
-		for (const side of this.sides) {
-			if (side.isChoiceDone()) {
-				if (choiceDone) {
-					throw new Error(`Choices are done immediately after a request`);
-				} else {
-					choiceDone = true;
-				}
-			}
+		if (this.sides.every(side => side.isChoiceDone())) {
+			throw new Error(`Choices are done immediately after a request`);
 		}
 	}
 
@@ -1275,7 +1268,7 @@ export class Battle extends Dex.ModdedDex {
 		return this.tie();
 	}
 
-	forceWin(side: PlayerSlot | null = null) {
+	forceWin(side: SideID | null = null) {
 		if (this.ended) return false;
 
 		if (side) {
@@ -1290,18 +1283,14 @@ export class Battle extends Dex.ModdedDex {
 		return this.win();
 	}
 
-	win(side?: string | Side | null) {
+	win(side?: SideID | '' | Side | null) {
 		if (this.ended) {
 			return false;
 		}
-		if (side instanceof Side && !this.sides.includes(side)) {
+		if (side && typeof side === 'string') {
+			side = this.getSide(side);
+		} else if (!side || !this.sides.includes(side)) {
 			side = null;
-		} else if (typeof side === 'string') {
-			if (['p1', 'p2', 'p3', 'p4'].includes(side)) {
-				side = this.sides[parseInt(side[1], 10)];
-			} else {
-				side = null;
-			}
 		}
 		this.winner = side ? side.name : '';
 
@@ -1723,26 +1712,16 @@ export class Battle extends Dex.ModdedDex {
 	start() {
 		if (this.active) return;
 
-		for (const side of this.sides) {
-			if (!side) {
-				// need two players to start
-				return;
-			}
-		}
+		// need two players to start
+		if (!this.sides.every(side => !!side)) return;
 
 		if (this.started) {
 			return;
 		}
 		this.activeTurns = 0;
 		this.started = true;
-		this.p2.foe = this.p1;
-		this.p1.foe = this.p2;
-		if (this.gameType === 'multi') {
-			this.sides[0].ally = this.sides[2];
-			this.sides[1].ally = this.sides[3];
-			this.sides[2].ally = this.sides[0];
-			this.sides[3].ally = this.sides[1];
-		}
+		this.sides[1].foe = this.sides[0];
+		this.sides[0].foe = this.sides[1];
 
 		for (const side of this.sides) {
 			this.add('teamsize', side.id, side.pokemon.length);
@@ -1770,10 +1749,8 @@ export class Battle extends Dex.ModdedDex {
 			}
 		}
 
-		for (const side of this.sides) {
-			if (!side.pokemon[0]) {
-				throw new Error('Battle not started: A player has an empty team.');
-			}
+		if (this.sides.some(side => !side.pokemon[0])) {
+			throw new Error('Battle not started: A player has an empty team.');
 		}
 
 		this.residualEvent('TeamPreview');
@@ -2268,7 +2245,7 @@ export class Battle extends Dex.ModdedDex {
 
 		// multi-target modifier (doubles only)
 		if (move.spreadHit) {
-			const spreadModifier = move.spreadModifier || 0.75;
+			const spreadModifier = move.spreadModifier || this.gameType === 'free-for-all' ? 0.5 : 0.75;
 			this.debug('Spread modifier: ' + spreadModifier);
 			baseDamage = this.modify(baseDamage, spreadModifier);
 		}
@@ -2509,20 +2486,32 @@ export class Battle extends Dex.ModdedDex {
 			}
 		}
 
-		let team1PokemonLeft = this.p1.pokemonLeft;
-		if (this.p1.ally) team1PokemonLeft += this.p1.ally.pokemonLeft;
-		let team2PokemonLeft = this.p2.pokemonLeft;
-		if (this.p2.ally) team2PokemonLeft += this.p2.ally.pokemonLeft;
-		if (!team1PokemonLeft && !team2PokemonLeft) {
+		let team1PokemonLeft = this.sides[0].pokemonLeft;
+		let team2PokemonLeft = this.sides[1].pokemonLeft;
+		let team3PokemonLeft = this.gameType === 'free-for-all' && this.sides[2].pokemonLeft;
+		let team4PokemonLeft = this.gameType === 'free-for-all' && this.sides[3].pokemonLeft;
+		if (this.gameType === 'multi') {
+			team1PokemonLeft = this.sides.reduce((total, side) => total + (side.n % 2 === 0 ? side.pokemonLeft : 0), 0);
+			team2PokemonLeft = this.sides.reduce((total, side) => total + (side.n % 2 === 1 ? side.pokemonLeft : 0), 0);
+		}
+		if (!team1PokemonLeft && !team2PokemonLeft && !team3PokemonLeft && !team4PokemonLeft) {
 			this.win(faintData ? faintData.target.side : null);
 			return true;
 		}
-		if (!team1PokemonLeft) {
-			this.win(this.p2);
+		if (!team2PokemonLeft && !team3PokemonLeft && !team4PokemonLeft) {
+			this.win(this.sides[0]);
 			return true;
 		}
-		if (!team2PokemonLeft) {
-			this.win(this.p1);
+		if (!team1PokemonLeft && !team3PokemonLeft && !team4PokemonLeft) {
+			this.win(this.sides[1]);
+			return true;
+		}
+		if (!team1PokemonLeft && !team2PokemonLeft && !team4PokemonLeft) {
+			this.win(this.sides[2]);
+			return true;
+		}
+		if (!team1PokemonLeft && !team2PokemonLeft && !team3PokemonLeft) {
+			this.win(this.sides[3]);
 			return true;
 		}
 		return false;
@@ -3028,9 +3017,7 @@ export class Battle extends Dex.ModdedDex {
 	 * turn if all required choices have been made.
 	 */
 	choose(sideid: SideID, input: string) {
-		let side = null;
-		if (['p1', 'p2', 'p3', 'p4'].includes(sideid)) side = this.sides[parseInt(sideid[1], 10) - 1];
-		if (!side) throw new Error(`Invalid side ${sideid}`);
+		let side = this.getSide(sideid);
 
 		if (!side.choose(input)) return false;
 
@@ -3060,9 +3047,9 @@ export class Battle extends Dex.ModdedDex {
 		for (const side of this.sides) {
 			side.autoChoose();
 		}
-		for (let i = 0; i < this.sides.length; i++) {
-			const choice = this.sides[i].getChoice();
-			if (choice) this.inputLog.push(`>p${i + 1} ${choice}`);
+		for (const side of this.sides) {
+			const choice = side.getChoice();
+			if (choice) this.inputLog.push(`>${side.id} ${choice}`);
 		}
 		for (const side of this.sides) {
 			this.addToQueue(side.choice.actions);
@@ -3080,9 +3067,7 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	undoChoice(sideid: SideID) {
-		let side = null;
-		if (['p1', 'p2', 'p3', 'p4'].includes(sideid)) side = this.sides[parseInt(sideid[1], 10) - 1];
-		if (!side) throw new Error(`Invalid side ${sideid}`);
+		let side = this.getSide(sideid);
 		if (!side.currentRequest) return;
 
 		if (side.choice.cantUndo) {
@@ -3261,14 +3246,14 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	/** @deprecated */
-	join(slot: 'p1' | 'p2', name: string, avatar: string, team: PokemonSet[] | string | null) {
+	join(slot: SideID, name: string, avatar: string, team: PokemonSet[] | string | null) {
 		this.setPlayer(slot, {
 			name,
 			avatar,
 			team,
 		});
 
-		return this[slot];
+		return this.getSide(slot);
 	}
 
 	sendUpdates() {
@@ -3281,12 +3266,15 @@ export class Battle extends Dex.ModdedDex {
 				winner: this.winner,
 				seed: this.prngSeed,
 				turns: this.turn,
-				p1: this.p1.name,
-				p2: this.p2.name,
-				// TODO: Update this with new protocol for 4 player battles
-				p1team: this.p1.team,
-				p2team: this.p2.team,
-				score: [this.p1.pokemonLeft, this.p2.pokemonLeft],
+				p1: this.sides[0].name,
+				p2: this.sides[1].name,
+				p3: this.sides[2] && this.sides[2].name,
+				p4: this.sides[3] && this.sides[3].name,
+				p1team: this.sides[0].team,
+				p2team: this.sides[1].team,
+				p3team: this.sides[2] && this.sides[2].team,
+				p4team: this.sides[3] && this.sides[3].team,
+				score: [this.sides[0].pokemonLeft, this.sides[1].pokemonLeft],
 				inputLog: this.inputLog,
 			};
 			this.send('end', JSON.stringify(log));
@@ -3311,6 +3299,10 @@ export class Battle extends Dex.ModdedDex {
 		} else {
 			return right;
 		}
+	}
+
+	getSide(sideid: SideID): Side {
+		return this.sides[parseInt(sideid[1], 10) - 1];
 	}
 
 	runMove(
@@ -3494,9 +3486,9 @@ export class Battle extends Dex.ModdedDex {
 			if (side) side.destroy();
 		}
 		// @ts-ignore - prevent type | null
-		this.p1 = null;
+		this.sides[0] = null;
 		// @ts-ignore - prevent type | null
-		this.p2 = null;
+		this.sides[1] = null;
 		for (const action of this.queue) {
 			delete action.pokemon;
 		}

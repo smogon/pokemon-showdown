@@ -537,15 +537,25 @@ export class Pokemon {
 
 	allies(adjacentOnly?: boolean): Pokemon[] {
 		let allies = this.side.active;
-		if (this.side.ally) allies = allies.concat(this.side.ally.active);
+		if (this.battle.gameType === 'multi') {
+			const team = this.side.n % 2;
+			// @ts-ignore
+			allies = this.battle.sides.flatMap(side =>
+				side.n % 2 === team ? side.active : []
+			);
+		}
 		if (adjacentOnly) allies = allies.filter(ally => this.battle.isAdjacent(this, ally));
 		return allies.filter(ally => ally && !ally.fainted);
 	}
 
 	foes(adjacentOnly?: boolean): Pokemon[] {
-		let foes = [];
-		for (const side of this.battle.sides) {
-			if (side !== this.side && side !== this.side.ally) foes.push(...side.active);
+		let foes = this.side.foe.active;
+		if (this.battle.gameType === 'multi') {
+			const team = this.side.foe.n % 2;
+			// @ts-ignore
+			foes = this.battle.sides.flatMap(side =>
+				side.n % 2 === team ? side.active : []
+			);
 		}
 		if (adjacentOnly) foes = foes.filter(foe => this.battle.isAdjacent(this, foe));
 		return foes.filter(foe => foe && !foe.fainted);
