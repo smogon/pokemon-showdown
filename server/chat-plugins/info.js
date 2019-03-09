@@ -2419,7 +2419,7 @@ const pages = {
 			}
 		}
 
-		store.forEach((data, punishment) => {
+		for (const [punishment, data] of store) {
 			let [punishType, id, expireTime, reason] = punishment;
 			let alts = [...data[0]].filter(user => user !== id);
 			let ip = [...data[1]];
@@ -2432,7 +2432,7 @@ const pages = {
 				punishDesc += ` IPs: ${ip.join(", ")}.`;
 			}
 			buf += `<p>- ${possessive(id)} ${punishType.toLowerCase()} expires in ${expireString}.${punishDesc}</p>`;
-		});
+		}
 
 		if (this.room.muteQueue) {
 			for (const entry of this.room.muteQueue) {
