@@ -2395,7 +2395,7 @@ const pages = {
 		this.extractRoom();
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		buf += `<div class="pad"><h2>List of active punishments:</h2>`;
-		if (!this.can('mute')) return;
+		if (!this.can('mute', null, this.room)) return;
 		if (!this.room.chatRoomData) {
 			return buf + `<div class="notice message-error">This page is unavailable in temporary rooms / non-existent rooms.</div>`;
 		}
@@ -2428,7 +2428,7 @@ const pages = {
 			let punishDesc = "";
 			if (reason) punishDesc += ` Reason: ${reason}.`;
 			if (alts.length) punishDesc += ` Alts: ${alts.join(", ")}.`;
-			if (user.can('ban') && ip.length) {
+			if (user.can('ban', null, this.room) && ip.length) {
 				punishDesc += ` IPs: ${ip.join(", ")}.`;
 			}
 			buf += `<p>- ${possessive(id)} ${punishType.toLowerCase()} expires in ${expireString}.${punishDesc}</p>`;
