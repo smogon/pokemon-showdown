@@ -10,25 +10,24 @@
 
 import {ObjectReadWriteStream} from '../../lib/streams';
 import {BattlePlayer} from '../battle-stream';
-
-function randomElem<T>(array: T[]): T {
-	return array[Math.floor(Math.random() * array.length)];
-}
+import {PRNG, PRNGSeed} from '../prng';
 
 export class RandomPlayerAI extends BattlePlayer {
 	readonly move: number;
 	readonly mega: number;
 	readonly zmove: number;
+	readonly prng: PRNG;
 
 	constructor(
 		playerStream: ObjectReadWriteStream,
-		options: {move?: number, mega?: number, zmove?: number} = {},
+		options: {move?: number, mega?: number, zmove?: number, seed?: PRNG | PRNGSeed | null } = {},
 		debug: boolean = false
 	) {
 		super(playerStream, debug);
 		this.move = options.move || 1.0;
 		this.mega = options.mega || 0;
 		this.zmove = options.zmove || 0;
+		this.prng = options.seed && !Array.isArray(options.seed) ? options.seed : new PRNG(options.seed);
 	}
 
 	receiveRequest(request: AnyObject) {
@@ -50,7 +49,7 @@ export class RandomPlayerAI extends BattlePlayer {
 					// not fainted
 					!pokemon[i - 1].condition.endsWith(` fnt`)
 				));
-				const target = randomElem(canSwitch);
+				const target = this.prng.sample(canSwitch);
 				chosen.push(target);
 				return `switch ${target}`;
 			});
@@ -77,7 +76,7 @@ export class RandomPlayerAI extends BattlePlayer {
 					if (request.active.length > 1) {
 						const target = active.moves[j - 1].target;
 						if (['normal', 'any'].includes(target)) {
-							return `move ${j} ${1 + Math.floor(Math.random() * 2)}`;
+							return `move ${j} ${1 + Math.floor(this.prng.next() * 2)}`;
 						}
 						// TODO targetting adjacentAlly etc
 					}
@@ -94,13 +93,13 @@ export class RandomPlayerAI extends BattlePlayer {
 				));
 				const switches = (active.trapped || active.maybeTrapped) ? [] : canSwitch;
 
-				if (Math.random() > this.move && switches.length) {
-					const target = randomElem(switches);
+				if (this.prng.next() > this.move && switches.length) {
+					const target = this.prng.sample(switches);
 					chosen.push(target);
 					return `switch ${target}`;
 				} else {
-					let move = randomElem(moves);
-					if (Math.random() < this.mega && canMegaEvo) {
+					let move = this.prng.sample(moves);
+					if (this.prng.next() < this.mega && canMegaEvo) {
 						canMegaEvo = false;
 						return `${move} mega`;
 					} else {
