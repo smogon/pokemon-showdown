@@ -11,11 +11,12 @@ let BattleScripts = {
 	// BattlePokemon scripts.
 	pokemon: {
 		getStat(statName, unboosted, unmodified) {
-			statName = toId(statName);
-			if (statName === 'hp') return this.maxhp;
+			statName = /** @type {StatNameExceptHP} */(toId(statName));
+			// @ts-ignore - type checking prevents 'hp' from being passed, but we're paranoid
+			if (statName === 'hp') throw new Error("Please read `maxhp` directly");
 
 			// base stat
-			let stat = this.stats[statName];
+			let stat = this.storedStats[statName];
 
 			// Stat boosts.
 			if (!unboosted) {
@@ -549,7 +550,9 @@ let BattleScripts = {
 		let defender = target;
 		if (move.useTargetOffensive) attacker = target;
 		if (move.useSourceDefensive) defender = pokemon;
+		/** @type {StatNameExceptHP} */
 		let atkType = (move.category === 'Physical') ? 'atk' : 'spa';
+		/** @type {StatNameExceptHP} */
 		let defType = (move.defensiveCategory === 'Physical') ? 'def' : 'spd';
 		let unboosted = false;
 		let noburndrop = false;

@@ -339,8 +339,8 @@ let BattleAbilities = {
 			let totalspd = 0;
 			for (const foe of pokemon.side.foe.active) {
 				if (!foe || foe.fainted) continue;
-				totaldef += foe.stats.def;
-				totalspd += foe.stats.spd;
+				totaldef += foe.storedStats.def;
+				totalspd += foe.storedStats.spd;
 			}
 			if (totaldef && totaldef >= totalspd) {
 				this.boost({spa: 1});

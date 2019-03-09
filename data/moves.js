@@ -6925,12 +6925,12 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mystery: 1},
 		onHit(target, source) {
-			let newdef = Math.floor((target.stats.def + source.stats.def) / 2);
-			target.stats.def = newdef;
-			source.stats.def = newdef;
-			let newspd = Math.floor((target.stats.spd + source.stats.spd) / 2);
-			target.stats.spd = newspd;
-			source.stats.spd = newspd;
+			let newdef = Math.floor((target.storedStats.def + source.storedStats.def) / 2);
+			target.storedStats.def = newdef;
+			source.storedStats.def = newdef;
+			let newspd = Math.floor((target.storedStats.spd + source.storedStats.spd) / 2);
+			target.storedStats.spd = newspd;
+			source.storedStats.spd = newspd;
 			this.add('-activate', source, 'move: Guard Split', '[of] ' + target);
 		},
 		secondary: null,
@@ -12261,12 +12261,12 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mystery: 1},
 		onHit(target, source) {
-			let newatk = Math.floor((target.stats.atk + source.stats.atk) / 2);
-			target.stats.atk = newatk;
-			source.stats.atk = newatk;
-			let newspa = Math.floor((target.stats.spa + source.stats.spa) / 2);
-			target.stats.spa = newspa;
-			source.stats.spa = newspa;
+			let newatk = Math.floor((target.storedStats.atk + source.storedStats.atk) / 2);
+			target.storedStats.atk = newatk;
+			source.storedStats.atk = newatk;
+			let newspa = Math.floor((target.storedStats.spa + source.storedStats.spa) / 2);
+			target.storedStats.spa = newspa;
+			source.storedStats.spa = newspa;
 			this.add('-activate', source, 'move: Power Split', '[of] ' + target);
 		},
 		secondary: null,
@@ -12325,23 +12325,23 @@ let BattleMovedex = {
 		effect: {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Power Trick');
-				let newatk = pokemon.stats.def;
-				let newdef = pokemon.stats.atk;
-				pokemon.stats.atk = newatk;
-				pokemon.stats.def = newdef;
+				let newatk = pokemon.storedStats.def;
+				let newdef = pokemon.storedStats.atk;
+				pokemon.storedStats.atk = newatk;
+				pokemon.storedStats.def = newdef;
 			},
 			onCopy(pokemon) {
-				let newatk = pokemon.stats.def;
-				let newdef = pokemon.stats.atk;
-				pokemon.stats.atk = newatk;
-				pokemon.stats.def = newdef;
+				let newatk = pokemon.storedStats.def;
+				let newdef = pokemon.storedStats.atk;
+				pokemon.storedStats.atk = newatk;
+				pokemon.storedStats.def = newdef;
 			},
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'Power Trick');
-				let newatk = pokemon.stats.def;
-				let newdef = pokemon.stats.atk;
-				pokemon.stats.atk = newatk;
-				pokemon.stats.def = newdef;
+				let newatk = pokemon.storedStats.def;
+				let newdef = pokemon.storedStats.atk;
+				pokemon.storedStats.atk = newatk;
+				pokemon.storedStats.def = newdef;
 			},
 			onRestart(pokemon) {
 				pokemon.removeVolatile('Power Trick');
@@ -15707,9 +15707,9 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, authentic: 1, mystery: 1},
 		onHit(target, source) {
-			const targetSpe = target.stats.spe;
-			target.stats.spe = source.stats.spe;
-			source.stats.spe = targetSpe;
+			const targetSpe = target.storedStats.spe;
+			target.storedStats.spe = source.storedStats.spe;
+			source.storedStats.spe = targetSpe;
 			this.add('-activate', source, 'move: Speed Swap', '[of] ' + target);
 		},
 		secondary: null,
