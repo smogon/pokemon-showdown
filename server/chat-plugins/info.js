@@ -2425,9 +2425,9 @@ const pages = {
 			let ip = [...data[1]];
 			let expiresIn = new Date(expireTime).getTime() - Date.now();
 			let expireString = Chat.toDurationString(expiresIn, {precision: 1});
-			let punishDesc;
-			if (reason) punishDesc = ` Reason: ${reason}.`;
-			if (alts.length) punishDesc = ` Alts: ${alts.join(", ")}.`;
+			let punishDesc = "";
+			if (reason) punishDesc += ` Reason: ${reason}.`;
+			if (alts.length) punishDesc += ` Alts: ${alts.join(", ")}.`;
 			if (user.can('ban') && ip.length) {
 				punishDesc += ` IPs: ${ip.join(", ")}.`;
 			}
