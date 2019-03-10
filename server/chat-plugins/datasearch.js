@@ -281,6 +281,7 @@ function runDexsearch(target, cmd, canAll, message) {
 	let allEggGroups = {'amorphous': 'Amorphous', 'bug': 'Bug', 'ditto': 'Ditto', 'dragon': 'Dragon', 'fairy': 'Fairy', 'field': 'Field', 'flying': 'Flying', 'grass': 'Grass', 'humanlike': 'Human-Like', 'mineral': 'Mineral', 'monster': 'Monster', 'undiscovered': 'Undiscovered', 'water1': 'Water 1', 'water2': 'Water 2', 'water3': 'Water 3', __proto__: null};
 	let allStats = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'bst', 'weight', 'height', 'gen'];
 	let showAll = false;
+	let order = null;
 	let megaSearch = null;
 	let capSearch = null;
 	let randomOutput = 0;
@@ -417,6 +418,29 @@ function runDexsearch(target, cmd, canAll, message) {
 				if (invalid) return {reply: invalid};
 				orGroup.gens[targetInt] = !isNotSearch;
 				continue;
+			}
+
+			if (target.substr(0, 3) === 'asc' || target.substr(0, 3) === 'des') {
+				if (parameters.length > 1) return {reply: `The parameter '${target.substr(0, 3)}' cannot have alternative parameters`};
+				let stat = target.split(' ')[1];
+				if (!allStats.includes(stat)) return {reply: `'${escapeHTML(target)}' did not contain a valid stat.`};
+				switch (toId(stat)) {
+				case 'attack': stat = 'atk'; break;
+				case 'defense': stat = 'def'; break;
+				case 'specialattack': stat = 'spa'; break;
+				case 'spc': stat = 'spa'; break;
+				case 'special': stat = 'spa'; break;
+				case 'spatk': stat = 'spa'; break;
+				case 'specialdefense': stat = 'spd'; break;
+				case 'spdef': stat = 'spd'; break;
+				case 'speed': stat = 'spe'; break;
+				case 'wt': stat = 'weight'; break;
+				case 'ht': stat = 'height'; break;
+				case 'generation': stat = 'gen'; break;
+				}
+				order = `${target.substr(0, 3) === 'asc' ? '+' : '-'}${stat}`;
+				orGroup.skip = true;
+				break;
 			}
 
 			if (target === 'all') {
@@ -805,7 +829,6 @@ function runMovesearch(target, cmd, canAll, message) {
 		allTypes[toId(i)] = i;
 	}
 	let showAll = false;
-	let order = null;
 	let lsetData = {};
 	let targetMon = '';
 	let randomOutput = 0;
@@ -872,29 +895,6 @@ function runMovesearch(target, cmd, canAll, message) {
 				showAll = true;
 				orGroup.skip = true;
 				continue;
-			}
-
-			if (target.substr(0, 3) === 'asc' || target.substr(0, 3) === 'des') {
-				if (parameters.length > 1) return {reply: `The parameter '${target.substr(0, 3)}' cannot have alternative parameters`};
-				let stat = target.split(' ')[1];
-				if (!allStats.includes(stat)) return {reply: `'${escapeHTML(target)}' did not contain a valid stat.`};
-				switch (toId(stat)) {
-				case 'attack': stat = 'atk'; break;
-				case 'defense': stat = 'def'; break;
-				case 'specialattack': stat = 'spa'; break;
-				case 'spc': stat = 'spa'; break;
-				case 'special': stat = 'spa'; break;
-				case 'spatk': stat = 'spa'; break;
-				case 'specialdefense': stat = 'spd'; break;
-				case 'spdef': stat = 'spd'; break;
-				case 'speed': stat = 'spe'; break;
-				case 'wt': stat = 'weight'; break;
-				case 'ht': stat = 'height'; break;
-				case 'generation': stat = 'gen'; break;
-				}
-				order = `${target.substr(0, 3) === 'asc' ? '+' : '-'}${stat}`;
-				orGroup.skip = true;
-				break;
 			}
 
 			if (target === 'recovery') {
