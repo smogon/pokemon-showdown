@@ -143,21 +143,44 @@ describe('Choice parser', function () {
 				battle = common.createBattle({gameType: 'doubles'});
 				battle.join('p1', 'Guest 1', 1, [
 					{species: "Gengar", ability: 'cursedbody', item: 'gengarite', moves: ['shadowball']},
-					{species: "Porygon", ability: 'download', moves: ['conversion2']},
+					{species: "Zigzagoon", ability: 'pickup', moves: ['tackle']},
 				]);
 				battle.join('p2', 'Guest 2', 1, [
-					{species: "Porygon-Z", ability: 'adaptability', item: 'normaliumz', moves: ['conversion2']},
+					{species: "Blaziken", ability: 'blaze', item: 'firiumz', moves: ['blazekick']},
 					{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
 				]);
 
 				const badChoices = [`move 1 1 2`, `move 1 1 mega ultra`, `move 1 mega zmove 2`];
 				for (const badChoice of badChoices) {
-					const choice = `${badChoice}, move Conversion 2`;
+					const choice = `${badChoice}, move tackle 1`;
 					assert.false(battle.choose('p1', choice), `Choice '${choice}' should be rejected`);
 				}
 
-				assert.ok(battle.choose('p1', `move 1 1 mega, move Conversion 2 1`));
-				assert.ok(battle.choose('p2', `move Conversion 2 1 zmove, move irondefense`));
+				assert(battle.choose('p1', `move 1 1 mega, move tackle 1`));
+				assert(battle.choose('p2', `move Blaze Kick zmove 1, move irondefense`));
+			});
+
+			it('should handle Conversion 2', function () {
+				battle = common.createBattle({gameType: 'doubles'});
+				battle.join('p1', 'Guest 1', 1, [
+					{species: "Porygon-Z", ability: 'adaptability', item: 'normaliumz', moves: ['conversion', 'conversion2']},
+					{species: "Porygon", ability: 'download', moves: ['conversion', 'conversion2']},
+				]);
+				battle.join('p2', 'Guest 2', 1, [
+					{species: "Gengar", ability: 'cursedbody', moves: ['lick']},
+					{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
+				]);
+
+				assert(battle.choose('p1', `move 1, move Conversion 2 2`));
+				assert.strictEqual(battle.p1.getChoice(), `move conversion, move conversion2 2`);
+				battle.p1.clearChoice();
+
+				assert.false(battle.choose('p1', `move 1, move Conversion -2`));
+				battle.p1.clearChoice();
+
+				assert(battle.choose('p1', `move Conversion 2 zmove 2, move 1`));
+				assert.strictEqual(battle.p1.getChoice(), `move conversion2 2 zmove, move conversion`);
+				battle.p1.clearChoice();
 			});
 		});
 
