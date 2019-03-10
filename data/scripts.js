@@ -1204,21 +1204,6 @@ let BattleScripts = {
 	targetTypeChoices(targetType) {
 		return CHOOSABLE_TARGETS.has(targetType);
 	},
-
-	combineResults(left, right) {
-		const NOT_FAILURE = 'string';
-		const NULL = 'object';
-		const resultsPriorities = ['undefined', NOT_FAILURE, NULL, 'boolean', 'number'];
-		if (resultsPriorities.indexOf(typeof left) > resultsPriorities.indexOf(typeof right)) {
-			return left;
-		} else if (left && !right && right !== 0) {
-			return left;
-		} else if (typeof left === 'number' && typeof right === 'number') {
-			return /** @type {any} */ (left + right);
-		} else {
-			return right;
-		}
-	},
 };
 
 exports.BattleScripts = BattleScripts;

@@ -760,7 +760,6 @@ interface BattleScriptsData {
 	moveHit?: (this: Battle, target: Pokemon | null, pokemon: Pokemon, move: ActiveMove, moveData?: ActiveMove, isSecondary?: boolean, isSelf?: boolean) => number | undefined | false
 	spreadMoveHit?: (this: Battle, targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove, moveData?: ActiveMove, isSecondary?: boolean, isSelf?: boolean) => [SpreadMoveDamage, SpreadMoveTargets]
 	resolveAction?: (this: Battle, action: AnyObject, midTurn?: boolean) => Actions["Action"]
-	combineResults?: <T extends number | boolean | null | '' | undefined, U extends number | boolean | null | '' | undefined>(this: Battle, left: T, right: U) => T | U
 	runAction?: (this: Battle, action: Actions["Action"]) => void
 	runMegaEvo?: (this: Battle, pokemon: Pokemon) => boolean
 	runMove?: (this: Battle, move: Move, pokemon: Pokemon, targetLoc: number, sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean) => void

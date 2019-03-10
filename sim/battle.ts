@@ -3248,6 +3248,23 @@ export class Battle extends Dex.ModdedDex {
 		}
 	}
 
+	combineResults<T extends number | boolean | null | '' | undefined, U extends number | boolean | null | '' | undefined>(
+		left: T, right: U): T | U {
+		const NOT_FAILURE = 'string';
+		const NULL = 'object';
+		const resultsPriorities = ['undefined', NOT_FAILURE, NULL, 'boolean', 'number'];
+		if (resultsPriorities.indexOf(typeof left) > resultsPriorities.indexOf(typeof right)) {
+			return left;
+		} else if (left && !right && right !== 0) {
+			return left;
+		} else if (typeof left === 'number' && typeof right === 'number') {
+			// @ts-ignore
+			return left + right;
+		} else {
+			return right;
+		}
+	}
+
 	runMove(move: string | Move, target: Pokemon, targetLoc?: number, sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean) {
 		throw new Error(`The runMove function needs to be implemented in scripts.js or the battle format.`);
 	}
@@ -3407,11 +3424,6 @@ export class Battle extends Dex.ModdedDex {
 
 	targetTypeChoices(targetType: string): boolean {
 		throw new Error(`The targetTypeChoices function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	combineResults<T extends number | boolean | null | '' | undefined, U extends number | boolean | null | '' | undefined>(
-		left: T, right: U): T | U {
-		throw new Error(`The combineResults function needs to be implemented in scripts.js or the battle format.`);
 	}
 
 	destroy() {
