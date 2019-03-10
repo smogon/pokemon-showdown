@@ -3352,44 +3352,44 @@ export class Battle extends Dex.ModdedDex {
 		throw new Error(`The trySpreadMoveHit function needs to be implemented in scripts.js or the battle format.`);
 	}
 
-	tryImmunityEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
-		throw new Error(`The tryImmunityEvent function needs to be implemented in scripts.js or the battle format.`);
+	hitStepTryImmunityEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
+		throw new Error(`The hitStepTryImmunityEvent function needs to be implemented in scripts.js or the battle format.`);
 	}
 
-	typeImmunity(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
-		throw new Error(`The typeImmunity function needs to be implemented in scripts.js or the battle format.`);
+	hitStepTryHitEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): (boolean | '')[] {
+		throw new Error(`The hitStepTryHitEvent function needs to be implemented in scripts.js or the battle format.`);
 	}
 
-	tryHitEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): (boolean | '')[] {
-		throw new Error(`The tryHitEvent function needs to be implemented in scripts.js or the battle format.`);
+	hitStepTypeImmunity(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
+		throw new Error(`The hitStepTypeImmunity function needs to be implemented in scripts.js or the battle format.`);
 	}
 
-	powderImmunity(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
-		throw new Error(`The powderImmunity function needs to be implemented in scripts.js or the battle format.`);
+	hitStepPowderImmunity(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
+		throw new Error(`The hitStepPowderImmunity function needs to be implemented in scripts.js or the battle format.`);
 	}
 
-	pranksterImmunity(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
-		throw new Error(`The pranksterImmunity function needs to be implemented in scripts.js or the battle format.`);
+	hitStepPranksterImmunity(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
+		throw new Error(`The hitStepPranksterImmunity function needs to be implemented in scripts.js or the battle format.`);
 	}
 
-	accuracy(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
-		throw new Error(`The accuracy function needs to be implemented in scripts.js or the battle format.`);
+	hitStepAccuracy(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
+		throw new Error(`The hitStepAccuracy function needs to be implemented in scripts.js or the battle format.`);
 	}
 
-	breakProtect(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): undefined {
-		throw new Error(`The breakProtect function needs to be implemented in scripts.js or the battle format.`);
+	hitStepBreakProtect(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): undefined {
+		throw new Error(`The hitStepBreakProtect function needs to be implemented in scripts.js or the battle format.`);
 	}
 
-	stealBoosts(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): undefined {
-		throw new Error(`The stealBoosts function needs to be implemented in scripts.js or the battle format.`);
+	hitStepStealBoosts(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): undefined {
+		throw new Error(`The hitStepStealBoosts function needs to be implemented in scripts.js or the battle format.`);
 	}
 
 	afterMoveSecondaryEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): undefined {
 		throw new Error(`The afterMoveSecondaryEvent function needs to be implemented in scripts.js or the battle format.`);
 	}
 
-	moveHitLoop(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): SpreadMoveDamage {
-		throw new Error(`The moveHitLoop function needs to be implemented in scripts.js or the battle format.`);
+	hitStepMoveHitLoop(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): SpreadMoveDamage {
+		throw new Error(`The hitStepMoveHitLoop function needs to be implemented in scripts.js or the battle format.`);
 	}
 
 	spreadMoveHit(

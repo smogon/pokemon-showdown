@@ -273,31 +273,31 @@ let BattleScripts = {
 		/** @type {((targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => (number | boolean | "" | undefined)[] | undefined)[]} */
 		let moveSteps = [
 			// 0. check for semi invulnerability
-			this.tryImmunityEvent,
+			this.hitStepTryImmunityEvent,
 
 			// 1. run the 'TryHit' event (Protect, Magic Bounce, Volt Absorb, etc.) (this is step 2 in gens 5 & 6, and step 5 in gen 4)
-			this.tryHitEvent,
+			this.hitStepTryHitEvent,
 
 			// 2. check for type immunity (this is step 1 in gens 4-6)
-			this.typeImmunity,
+			this.hitStepTypeImmunity,
 
 			// 3. check for powder immunity (gen 6+ only)
-			this.powderImmunity,
+			this.hitStepPowderImmunity,
 
 			// 4. check for prankster immunity (gen 6+ only)
-			this.pranksterImmunity,
+			this.hitStepPranksterImmunity,
 
 			// 5. check accuracy
-			this.accuracy,
+			this.hitStepAccuracy,
 
 			// 6. break protection effects
-			this.breakProtect,
+			this.hitStepBreakProtect,
 
 			// 7. steal positive boosts (Spectral Thief)
-			this.stealBoosts,
+			this.hitStepStealBoosts,
 
 			// 8. loop that processes each hit of the move (has its own steps per iteration)
-			this.moveHitLoop,
+			this.hitStepMoveHitLoop,
 		];
 		if (this.gen <= 6) {
 			// Swap step 1 with step 2
@@ -344,7 +344,7 @@ let BattleScripts = {
 		if (move.spreadHit) this.attrLastMove('[spread] ' + targets.join(','));
 		return moveResult;
 	},
-	tryImmunityEvent(targets, pokemon, move) {
+	hitStepTryImmunityEvent(targets, pokemon, move) {
 		const hitResults = this.runEvent('TryImmunity', targets, pokemon, move);
 		for (const [i, target] of targets.entries()) {
 			if (hitResults[i] === false) {
@@ -356,7 +356,18 @@ let BattleScripts = {
 		}
 		return hitResults;
 	},
-	typeImmunity(targets, pokemon, move) {
+	hitStepTryHitEvent(targets, pokemon, move) {
+		const hitResults = this.runEvent('TryHit', targets, pokemon, move);
+		if (!hitResults.includes(true) && hitResults.includes(false)) {
+			this.add('-fail', pokemon);
+			this.attrLastMove('[still]');
+		}
+		for (let i = 0; i < targets.length; i++) {
+			if (hitResults[i] !== this.NOT_FAILURE) hitResults[i] = hitResults[i] || false;
+		}
+		return hitResults;
+	},
+	hitStepTypeImmunity(targets, pokemon, move) {
 		if (move.ignoreImmunity === undefined) {
 			move.ignoreImmunity = (move.category === 'Status');
 		}
@@ -368,18 +379,7 @@ let BattleScripts = {
 
 		return hitResults;
 	},
-	tryHitEvent(targets, pokemon, move) {
-		const hitResults = this.runEvent('TryHit', targets, pokemon, move);
-		if (!hitResults.includes(true) && hitResults.includes(false)) {
-			this.add('-fail', pokemon);
-			this.attrLastMove('[still]');
-		}
-		for (let i = 0; i < targets.length; i++) {
-			if (hitResults[i] !== this.NOT_FAILURE) hitResults[i] = hitResults[i] || false;
-		}
-		return hitResults;
-	},
-	powderImmunity(targets, pokemon, move) {
+	hitStepPowderImmunity(targets, pokemon, move) {
 		const hitResults = [];
 		if (!move.flags['powder']) {
 			for (let i = 0; i < targets.length; i++) {
@@ -398,7 +398,7 @@ let BattleScripts = {
 		}
 		return hitResults;
 	},
-	pranksterImmunity(targets, pokemon, move) {
+	hitStepPranksterImmunity(targets, pokemon, move) {
 		const hitResults = [];
 		if (this.gen < 7 || !move.pranksterBoosted || !pokemon.hasAbility('prankster')) {
 			for (let i = 0; i < targets.length; i++) {
@@ -418,7 +418,7 @@ let BattleScripts = {
 		}
 		return hitResults;
 	},
-	accuracy(targets, pokemon, move) {
+	hitStepAccuracy(targets, pokemon, move) {
 		const hitResults = [];
 		for (let [i, target] of targets.entries()) {
 			// calculate true accuracy
@@ -479,7 +479,7 @@ let BattleScripts = {
 		}
 		return hitResults;
 	},
-	breakProtect(targets, pokemon, move) {
+	hitStepBreakProtect(targets, pokemon, move) {
 		if (move.breaksProtect) {
 			for (const target of targets) {
 				let broke = false;
@@ -503,7 +503,7 @@ let BattleScripts = {
 		}
 		return undefined;
 	},
-	stealBoosts(targets, pokemon, move) {
+	hitStepStealBoosts(targets, pokemon, move) {
 		const target = targets[0]; // hardcoded
 		if (move.stealsBoosts) {
 			/** @type {{[k: string]: number}} */
@@ -571,7 +571,7 @@ let BattleScripts = {
 		}
 		return this.moveHit(target, pokemon, move);
 	},
-	moveHitLoop(targets, pokemon, move) { // temp name
+	hitStepMoveHitLoop(targets, pokemon, move) { // temp name
 		/** @type {(number | boolean | undefined)[]} */
 		const damage = [];
 		for (let i = 0; i < targets.length; i++) damage[i] = 0;
