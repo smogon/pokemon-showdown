@@ -84,7 +84,6 @@ export class Battle extends Dex.ModdedDex {
 	events: AnyObject | null;
 	lastDamage: number;
 	abilityOrder: number;
-	ejecting: boolean;
 	NOT_FAILURE: '';
 	prng: PRNG;
 	prngSeed: PRNGSeed;
@@ -152,7 +151,6 @@ export class Battle extends Dex.ModdedDex {
 		this.events = null;
 		this.lastDamage = 0;
 		this.abilityOrder = 0;
-		this.ejecting = false;
 		this.NOT_FAILURE = '';
 		this.prng = options.prng || new PRNG(options.seed || undefined);
 		this.prngSeed = this.prng.startingSeed.slice() as PRNGSeed;
@@ -2848,7 +2846,6 @@ export class Battle extends Dex.ModdedDex {
 			}
 			if (action.pokemon.hp) {
 				action.pokemon.beingCalledBack = true;
-				this.ejecting = false;
 				const sourceEffect = action.sourceEffect;
 				// @ts-ignore
 				if (sourceEffect && sourceEffect.selfSwitch === 'copyvolatile') {
