@@ -3249,7 +3249,8 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	combineResults<T extends number | boolean | null | '' | undefined, U extends number | boolean | null | '' | undefined>(
-		left: T, right: U): T | U {
+		left: T, right: U
+	): T | U {
 		const NOT_FAILURE = 'string';
 		const NULL = 'object';
 		const resultsPriorities = ['undefined', NOT_FAILURE, NULL, 'boolean', 'number'];
@@ -3331,13 +3332,15 @@ export class Battle extends Dex.ModdedDex {
 
 	spreadMoveHit(
 		targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove, moveData?: ActiveMove,
-		isSecondary?: boolean, isSelf?: boolean): [SpreadMoveDamage, SpreadMoveTargets] {
+		isSecondary?: boolean, isSelf?: boolean
+	): [SpreadMoveDamage, SpreadMoveTargets] {
 		throw new Error(`The spreadMoveHit function needs to be implemented in scripts.js or the battle format.`);
 	}
 
 	tryPrimaryHitEvent(
 		damage: SpreadMoveDamage, targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove,
-		moveData: ActiveMove, isSecondary: boolean | undefined): SpreadMoveDamage {
+		moveData: ActiveMove, isSecondary: boolean | undefined
+	): SpreadMoveDamage {
 		throw new Error(`The tryPrimaryHitEvent function needs to be implemented in scripts.js or the battle format.`);
 	}
 
