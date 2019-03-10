@@ -158,6 +158,7 @@ export class StreamProcessWrapper {
 			message = message.slice(nlLoc + 1);
 
 			if (messageType === 'END') {
+				// tslint:disable-next-line:no-floating-promises FIXME
 				stream.end();
 				this.deleteStream(taskId);
 			} else if (messageType === 'PUSH') {
@@ -212,6 +213,7 @@ export class StreamProcessWrapper {
 		}
 		this.process.disconnect();
 		for (const stream of this.activeStreams.values()) {
+			// tslint:disable-next-line:no-floating-promises FIXME
 			stream.destroy();
 		}
 		this.activeStreams.clear();
@@ -262,6 +264,7 @@ export class ProcessManager {
 	}
 	unspawn() {
 		for (const process of this.processes) {
+			// tslint:disable-next-line:no-floating-promises FIXME
 			process.release().then(() => {
 				const index = this.releasingProcesses.indexOf(process);
 				if (index >= 0) {
@@ -402,9 +405,11 @@ export class StreamProcessManager extends ProcessManager {
 				if (stream) throw new Error(`NEW: taskId ${taskId} already exists`);
 				const newStream = this._createStream();
 				this.activeStreams.set(taskId, newStream);
+				// tslint:disable-next-line:no-floating-promises FIXME
 				this.pipeStream(taskId, newStream);
 			} else if (messageType === 'DESTROY') {
 				if (!stream) throw new Error(`DESTROY: Invalid taskId ${taskId}`);
+				// tslint:disable-next-line:no-floating-promises FIXME
 				stream.destroy();
 				this.activeStreams.delete(taskId);
 			} else if (messageType === 'WRITE') {
