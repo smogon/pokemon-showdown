@@ -775,8 +775,8 @@ export class Battle extends Dex.ModdedDex {
 		}
 
 		let targetRelayVars = [];
-		if (target instanceof Array) {
-			if (relayVar instanceof Array) {
+		if (Array.isArray(target)) {
+			if (Array.isArray(relayVar)) {
 				targetRelayVars = relayVar;
 			} else {
 				for (let i = 0; i < target.length; i++) targetRelayVars[i] = true;
@@ -887,7 +887,7 @@ export class Battle extends Dex.ModdedDex {
 		}
 		this.event = parentEvent;
 
-		return target instanceof Array ? targetRelayVars : relayVar;
+		return Array.isArray(target) ? targetRelayVars : relayVar;
 	}
 
 	/**
@@ -910,7 +910,7 @@ export class Battle extends Dex.ModdedDex {
 
 	findEventHandlers(thing: Pokemon | Pokemon[] | Side | Battle, eventName: string, sourceThing?: Pokemon | null) {
 		let handlers: AnyObject[] = [];
-		if (thing instanceof Array) {
+		if (Array.isArray(thing)) {
 			for (const [i, pokemon] of thing.entries()) {
 				// console.log(`Event: ${eventName}, Target: ${'' + pokemon}, ${i}`);
 				const curHandlers = this.findEventHandlers(pokemon, eventName, sourceThing);
