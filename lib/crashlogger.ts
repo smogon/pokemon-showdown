@@ -28,14 +28,14 @@ export = function crashlogger(error: Error | string, description: string, data: 
 	let stack = typeof error === 'string' ? error : error.stack;
 	if (data) {
 		stack += `\n\nAdditional information:\n`;
-		for (let k in data) {
+		for (const k in data) {
 			// @ts-ignore
 			stack += `  ${k} = ${data[k]}\n`;
 		}
 	}
 
 	console.error(`\nCRASH: ${stack}\n`);
-	let out = fs.createWriteStream(logPath, {flags: 'a'});
+	const out = fs.createWriteStream(logPath, {flags: 'a'});
 	out.on('open', () => {
 		out.write(`\n${stack}\n`);
 		out.end();

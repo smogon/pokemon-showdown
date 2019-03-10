@@ -319,7 +319,7 @@ export class QueryProcessManager extends ProcessManager {
 		if (this.isParentProcess) return;
 		// child process
 		process.on('message', async (message: string) => {
-			let nlLoc = message.indexOf('\n');
+			const nlLoc = message.indexOf('\n');
 			if (nlLoc <= 0) throw new Error(`Invalid response ${message}`);
 			const taskId = message.slice(0, nlLoc);
 			message = message.slice(nlLoc + 1);

@@ -260,7 +260,10 @@ class ModdedDex {
 	 * Returns false if the target is immune; true otherwise.
 	 * Also checks immunity to some statuses.
 	 */
-	getImmunity(source: {type: string} | string, target: {getTypes: () => string[]} | {types: string[]} | string[] | string): boolean {
+	getImmunity(
+		source: {type: string} | string,
+		target: {getTypes: () => string[]} | {types: string[]} | string[] | string): boolean {
+
 		const sourceType: string = typeof source !== 'string' ? source.type : source;
 		// @ts-ignore
 		const targetTyping: string[] | string = target.getTypes && target.getTypes() || target.types || target;
@@ -275,7 +278,10 @@ class ModdedDex {
 		return true;
 	}
 
-	getEffectiveness(source: {type: string} | string, target: {getTypes: () => string[]} | {types: string[]} | string[] | string): number {
+	getEffectiveness(
+		source: {type: string} | string,
+		target: {getTypes: () => string[]} | {types: string[]} | string[] | string): number {
+
 		const sourceType: string = typeof source !== 'string' ? source.type : source;
 		// @ts-ignore
 		const targetTyping: string[] | string = target.getTypes && target.getTypes() || target.types || target;
@@ -326,7 +332,7 @@ class ModdedDex {
 		if (this.data.Aliases.hasOwnProperty(id)) {
 			if (this.data.FormatsData.hasOwnProperty(id)) {
 				// special event ID, like Rockruff-Dusk
-				let baseId = toId(this.data.Aliases[id]);
+				const baseId = toId(this.data.Aliases[id]);
 				template = new Data.Template({name}, this.data.Pokedex[baseId], this.data.FormatsData[id], this.data.Learnsets[id]);
 				template.name = id;
 				template.species = id;
@@ -653,11 +659,13 @@ class ModdedDex {
 		let statName: keyof StatsTable;
 		for (statName in modStats) {
 			const stat = baseStats[statName];
-			modStats[statName] = Math.floor(Math.floor(2 * stat + set.ivs[statName] + Math.floor(set.evs[statName] / 4)) * set.level / 100 + 5);
+			modStats[statName] = Math.floor(Math.floor(2 * stat + set.ivs[statName] +
+				Math.floor(set.evs[statName] / 4)) * set.level / 100 + 5);
 		}
 		if ('hp' in baseStats) {
 			const stat = baseStats['hp'];
-			modStats['hp'] = Math.floor(Math.floor(2 * stat + set.ivs['hp'] + Math.floor(set.evs['hp'] / 4) + 100) * set.level / 100 + 10);
+			modStats['hp'] = Math.floor(Math.floor(2 * stat + set.ivs['hp'] +
+				Math.floor(set.evs['hp'] / 4) + 100) * set.level / 100 + 10);
 		}
 		return this.natureModify(modStats as StatsTable, set);
 	}
@@ -690,7 +698,8 @@ class ModdedDex {
 			const spcDV = Math.floor(ivs.spa / 2);
 			return {
 				type: hpTypes[4 * (atkDV % 4) + (defDV % 4)],
-				power: Math.floor((5 * ((spcDV >> 3) + (2 * (speDV >> 3)) + (4 * (defDV >> 3)) + (8 * (atkDV >> 3))) + (spcDV % 4)) / 2 + 31),
+				power: Math.floor(
+					(5 * ((spcDV >> 3) + (2 * (speDV >> 3)) + (4 * (defDV >> 3)) + (8 * (atkDV >> 3))) + (spcDV % 4)) / 2 + 31),
 			};
 		} else {
 			// Hidden Power check for Gen 3 onwards
@@ -880,7 +889,8 @@ class ModdedDex {
 			}
 		}
 		if (matches.length > 1) {
-			throw new Error(`More than one thing matches "${rule}"; please use something like "-item:metronome" to disambiguate`);
+			throw new Error(
+				`More than one thing matches "${rule}"; please use something like "-item:metronome" to disambiguate`);
 		}
 		if (matches.length < 1) {
 			throw new Error(`Nothing matches "${rule}"`);
@@ -967,14 +977,16 @@ class ModdedDex {
 
 		searchIn = searchIn || ['Pokedex', 'Movedex', 'Abilities', 'Items', 'Natures'];
 
-		const searchFunctions = {Pokedex: 'getTemplate', Movedex: 'getMove', Abilities: 'getAbility', Items: 'getItem', Natures: 'getNature'};
+		const searchFunctions = {
+			Pokedex: 'getTemplate', Movedex: 'getMove', Abilities: 'getAbility', Items: 'getItem', Natures: 'getNature',
+		};
 		const searchTypes: {[k in DataType]?: string} = {
 			Pokedex: 'pokemon', Movedex: 'move', Abilities: 'ability', Items: 'item', Natures: 'nature',
 		};
 		let searchResults: AnyObject[] | false = [];
 		for (const table of searchIn) {
 			// @ts-ignore
-			let res: AnyObject = this[searchFunctions[table]](target);
+			const res: AnyObject = this[searchFunctions[table]](target);
 			if (res.exists && res.gen <= this.gen) {
 				searchResults.push({
 					isInexact,
@@ -1160,8 +1172,9 @@ class ModdedDex {
 			if (j < 0) return null;
 			const ability = buf.substring(i, j);
 			const template = dexes['base'].getTemplate(set.species);
-			// @ts-ignore
-			set.ability = (template.abilities && ['', '0', '1', 'H'].includes(ability) ? template.abilities[ability || '0'] : ability);
+			set.ability = (template.abilities && ['', '0', '1', 'H'].includes(ability)
+				// @ts-ignore
+				? template.abilities[ability || '0'] : ability);
 			i = j + 1;
 
 			// moves
@@ -1265,7 +1278,8 @@ class ModdedDex {
 				return new TypeError(`${filePath}, if it exists, must export a non-null object`);
 			}
 			if (!dataObject[key] || typeof dataObject[key] !== 'object') {
-				return new TypeError(`${filePath}, if it exists, must export an object whose '${key}' property is a non-null object`);
+				return new TypeError(
+					`${filePath}, if it exists, must export an object whose '${key}' property is a non-null object`);
 			}
 			return dataObject[key];
 		} catch (e) {
@@ -1325,7 +1339,7 @@ class ModdedDex {
 				dataCache[dataType] = BattleNatures;
 				continue;
 			}
-			let BattleData = this.loadDataFile(basePath, dataType);
+			const BattleData = this.loadDataFile(basePath, dataType);
 			if (!BattleData || typeof BattleData !== 'object') {
 				throw new TypeError(
 					"Exported property `Battle" + dataType + "`from `" + './data/' +
@@ -1398,8 +1412,9 @@ class ModdedDex {
 				throw e;
 			}
 		}
-		if (!Array.isArray(Formats)) throw new TypeError(`Exported property 'Formats' from "./config/formats.js" must be an array`);
-
+		if (!Array.isArray(Formats)) {
+			throw new TypeError(`Exported property 'Formats' from "./config/formats.js" must be an array`);
+		}
 		let section = '';
 		let column = 1;
 		for (const [i, format] of Formats.entries()) {
@@ -1407,7 +1422,9 @@ class ModdedDex {
 			if (format.section) section = format.section;
 			if (format.column) column = format.column;
 			if (!format.name && format.section) continue;
-			if (!id) throw new RangeError(`Format #${i + 1} must have a name with alphanumeric characters, not '${format.name}'`);
+			if (!id) {
+				throw new RangeError(`Format #${i + 1} must have a name with alphanumeric characters, not '${format.name}'`);
+			}
 			if (!format.section) format.section = section;
 			if (!format.column) format.column = column;
 			if (this.formatsCache[id]) throw new Error(`Format #${i + 1} has a duplicate ID: '${id}'`);
