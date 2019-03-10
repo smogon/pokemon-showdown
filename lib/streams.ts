@@ -267,7 +267,7 @@ export class ReadStream {
 			await outStream.write(value);
 		}
 		/* tslint:enable */
-		if (!options.noEnd) outStream.end();
+		if (!options.noEnd) return outStream.end();
 	}
 }
 
@@ -550,7 +550,7 @@ export class ObjectReadStream {
 			await outStream.write(value);
 		}
 		/* tslint:enable */
-		if (!options.noEnd) outStream.end();
+		if (!options.noEnd) return outStream.end();
 	}
 }
 

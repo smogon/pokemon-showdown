@@ -22,6 +22,7 @@
                 "ignore-pattern": "\\.replace\\(('\\[|/)|^\\s*(// \\s*)?(return |(let |const )?[a-zA-Z0-9$.]+ \\+?= (\\$\\()?|[a-zA-Z0-9$.]+\\()?['\"`]"
             }
         },
+        "no-floating-promises": true,
         "interface-name": false,
         "forin": false,
         // maybe one day
