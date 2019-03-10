@@ -59,8 +59,6 @@ export class Battle extends Dex.ModdedDex {
 	messageLog: string[];
 	send: (type: string, data: string | string[]) => void;
 	turn: number;
-	p1: Side;
-	p2: Side;
 	lastUpdate: number;
 	weather: string;
 	terrain: string;
@@ -128,10 +126,6 @@ export class Battle extends Dex.ModdedDex {
 		this.messageLog = [];
 		this.send = options.send || (() => {});
 		this.turn = 0;
-		// @ts-ignore
-		this.p1 = null;
-		// @ts-ignore
-		this.p2 = null;
 		this.lastUpdate = 0;
 		this.weather = '';
 		this.terrain = '';
@@ -193,6 +187,14 @@ export class Battle extends Dex.ModdedDex {
 		if (options.p4) {
 			this.setPlayer('p4', options.p4);
 		}
+	}
+
+	get p1() {
+		return this.sides[0];
+	}
+
+	get p2() {
+		return this.sides[1];
 	}
 
 	toString() {
@@ -3220,7 +3222,6 @@ export class Battle extends Dex.ModdedDex {
 			const team = this.getTeam(options);
 			side = new Side(options.name || `Player ${slotNum + 1}`, this, slotNum, team);
 			if (options.avatar) side.avatar = '' + options.avatar;
-			if (slot === 'p1' || slot === 'p2') this[slot] = side;
 			this.sides[slotNum] = side;
 		} else {
 			// edit player
