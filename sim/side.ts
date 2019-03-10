@@ -629,25 +629,26 @@ export class Side {
 
 			switch (choiceType) {
 			case 'move':
-				let [targetLoc, willMega, willUltra, willZ] = [0, '', '', ''];
+				let targetLoc = 0;
+				let megaOrZ = '';
 				while (true) {
 					if (/\s-?[1-3]$/.test(data)) {
 						targetLoc = parseInt(data.slice(-2), 10);
-						data = data.slice(0, data.lastIndexOf(' '));
+						data = data.slice(0, -2).trim();
 					} else if (data.endsWith(' mega')) {
-						willMega = 'mega';
+						megaOrZ = 'mega';
 						data = data.slice(0, -5);
 					} else if (data.endsWith(' zmove')) {
-						willUltra = 'zmove';
+						megaOrZ = 'zmove';
 						data = data.slice(0, -6);
 					} else if (data.endsWith(' ultra')) {
-						willZ = 'ultra';
+						megaOrZ = 'ultra';
 						data = data.slice(0, -6);
 					} else {
 						break;
 					}
 				}
-				this.chooseMove(data, targetLoc, willMega || willUltra || willZ);
+				this.chooseMove(data, targetLoc, megaOrZ);
 				break;
 			case 'switch':
 				this.chooseSwitch(data);
