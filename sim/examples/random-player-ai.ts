@@ -1,11 +1,9 @@
 /**
- * Battle Stream Example
- * Pokemon Showdown - http://pokemonshowdown.com/
- *
  * Example random player AI.
  *
+ * Pokemon Showdown - http://pokemonshowdown.com/
+ *
  * @license MIT
- * @author Guangcong Luo <guangcongluo@gmail.com>
  */
 
 import {ObjectReadWriteStream} from '../../lib/streams';
@@ -26,6 +24,12 @@ export class RandomPlayerAI extends BattlePlayer {
 		this.move = options.move || 1.0;
 		this.mega = options.mega || 0;
 		this.prng = options.seed && !Array.isArray(options.seed) ? options.seed : new PRNG(options.seed);
+	}
+
+	receiveError(error: Error) {
+		if (!error.message.startsWith('[Invalid choice]')) throw error;
+		// Somehow we had a choice error - just let the simulator autochoose for us.
+		this.choose(`default`);
 	}
 
 	receiveRequest(request: AnyObject) {
@@ -119,11 +123,11 @@ export class RandomPlayerAI extends BattlePlayer {
 				));
 				const switches = (active.trapped || active.maybeTrapped) ? [] : canSwitch;
 
-				if (this.prng.next() > this.move && switches.length) {
+				if (switches.length && (!moves.length || this.prng.next() > this.move)) {
 					const target = this.prng.sample(switches);
 					chosen.push(target);
 					return `switch ${target}`;
-				} else {
+				} else if (moves.length) {
 					let move = this.prng.sample(moves);
 					if (move.endsWith(` zmove`)) {
 						canZMove = false;
@@ -139,6 +143,9 @@ export class RandomPlayerAI extends BattlePlayer {
 					} else {
 						return move;
 					}
+				} else {
+					// Just give up if we couldn't come up with any moves or switches.
+					return `default`;
 				}
 			});
 			this.choose(choices.join(`, `));
