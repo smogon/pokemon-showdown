@@ -629,37 +629,24 @@ export class Side {
 
 			switch (choiceType) {
 			case 'move':
-				const parseLoc = (d: string): [number, string] => {
-					let targetLoc = 0;
-					if (/\s-?[1-3]$/.test(d)) {
-						targetLoc = parseInt(d.slice(-2), 10);
-						d = d.slice(0, d.lastIndexOf(' '));
+				let [targetLoc, willMega, willUltra, willZ] = [0, '', '', ''];
+				while (true) {
+					if (/\s-?[1-3]$/.test(data)) {
+						targetLoc = parseInt(data.slice(-2), 10);
+						data = data.slice(0, data.lastIndexOf(' '));
+					} else if (data.endsWith(' mega')) {
+						willMega = 'mega';
+						data = data.slice(0, -5);
+					} else if (data.endsWith(' zmove')) {
+						willUltra = 'zmove';
+						data = data.slice(0, -6);
+					} else if (data.endsWith(' ultra')) {
+						willZ = 'ultra';
+						data = data.slice(0, -6);
+					} else {
+						break;
 					}
-					return [targetLoc, d];
-				};
-
-				const parseFlags = (d: string) => {
-					const willMega = d.endsWith(' mega') ? 'mega' : '';
-					if (willMega) d = d.slice(0, -5);
-					const willUltra = d.endsWith(' ultra') ? 'ultra' : '';
-					if (willUltra) d = d.slice(0, -6);
-					const willZ = d.endsWith(' zmove') ? 'zmove' : '';
-					if (willZ) d = d.slice(0, -6);
-					return [willMega, willUltra, willZ, d];
-				};
-
-				// tslint:disable-next-line:one-variable-per-declaration
-				let targetLoc, willMega, willUltra, willZ;
-				// We're flexible with the ordering of target vs. flags - if `data `ends
-				// with a number then we assume target comes last, otherwise flags.
-				if (/[1-3]$/.test(data)) {
-					[targetLoc, data] = parseLoc(data);
-					[willMega, willUltra, willZ, data] = parseFlags(data);
-				} else {
-					[willMega, willUltra, willZ, data] = parseFlags(data);
-					[targetLoc, data] = parseLoc(data);
 				}
-
 				this.chooseMove(data, targetLoc, willMega || willUltra || willZ);
 				break;
 			case 'switch':
