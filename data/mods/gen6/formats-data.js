@@ -463,7 +463,7 @@ let BattleFormatsData = {
 	},
 	poliwrath: {
 		inherit: true,
-		randomBattleMoves: ["hydropump", "focusblast", "icebeam", "rest", "sleeptalk", "scald", "circlethrow", "raindance"],
+		randomBattleMoves: ["hydropump", "focusblast", "icepunch", "rest", "sleeptalk", "scald", "circlethrow", "raindance"],
 		randomDoubleBattleMoves: ["bellydrum", "encore", "waterfall", "protect", "icepunch", "earthquake", "brickbreak", "rockslide"],
 		tier: "NU",
 		doublesTier: "(DUU)",
