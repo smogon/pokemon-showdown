@@ -33,10 +33,10 @@ const DISCONNECTION_BANK_TIME = 300;
 // time after a player disabling the timer before they can re-enable it
 const TIMER_COOLDOWN = 20 * SECONDS;
 
-class BattlePlayer {
+class RoomBattlePlayer {
 	/**
 	 * @param {User} user
-	 * @param {Battle} game
+	 * @param {RoomBattle} game
 	 * @param {PlayerSlot} slot
 	 */
 	constructor(user, game, slot) {
@@ -91,12 +91,12 @@ class BattlePlayer {
 	}
 }
 
-class BattleTimer {
+class RoomBattleTimer {
 	/**
-	 * @param {Battle} battle
+	 * @param {RoomBattle} battle
 	 */
 	constructor(battle) {
-		/** @type {Battle} */
+		/** @type {RoomBattle} */
 		this.battle = battle;
 
 		/** @type {NodeJS.Timer?} */
@@ -403,7 +403,7 @@ class BattleTimer {
  * @property {string} choice
  */
 
-class Battle {
+class RoomBattle {
 	/**
 	 * @param {GameRoom} room
 	 * @param {string} formatid
@@ -430,13 +430,13 @@ class Battle {
 		this.ended = false;
 		this.active = false;
 
-		/** @type {{[userid: string]: BattlePlayer}} */
+		/** @type {{[userid: string]: RoomBattlePlayer}} */
 		this.players = Object.create(null);
 		this.playerCount = 0;
 		this.playerCap = 2;
-		/** @type {BattlePlayer?} */
+		/** @type {RoomBattlePlayer?} */
 		this.p1 = null;
-		/** @type {BattlePlayer?} */
+		/** @type {RoomBattlePlayer?} */
 		this.p2 = null;
 
 		/**
@@ -452,7 +452,7 @@ class Battle {
 			p1: /** @type {BattleRequestTracker} */ ({rqid: 0, request: '', isWait: 'cantUndo', choice: ''}),
 			p2: /** @type {BattleRequestTracker} */ ({rqid: 0, request: '', isWait: 'cantUndo', choice: ''}),
 		};
-		this.timer = new BattleTimer(this);
+		this.timer = new RoomBattleTimer(this);
 
 		// data to be logged
 		/**
@@ -948,7 +948,7 @@ class Battle {
 
 		if (this[slot]) throw new Error(`Player already exists in ${slot} in ${this.id}`);
 		let slotNum = parseInt(slot.charAt(1)) - 1;
-		let player = new BattlePlayer(user, this, slot);
+		let player = new RoomBattlePlayer(user, this, slot);
 		this[slot] = player;
 		this.playerNames[slotNum] = player.name;
 
@@ -1015,9 +1015,9 @@ class Battle {
 	}
 }
 
-exports.RoomBattlePlayer = BattlePlayer;
-exports.RoomBattleTimer = BattleTimer;
-exports.RoomBattle = Battle;
+exports.RoomBattlePlayer = RoomBattlePlayer;
+exports.RoomBattleTimer = RoomBattleTimer;
+exports.RoomBattle = RoomBattle;
 
 /*********************************************************
  * Process manager
