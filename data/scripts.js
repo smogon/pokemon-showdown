@@ -1205,7 +1205,6 @@ let BattleScripts = {
 		return CHOOSABLE_TARGETS.has(targetType);
 	},
 
-	// @ts-ignore I can add two numbers and return a number, ok?
 	combineResults(left, right) {
 		const NOT_FAILURE = 'string';
 		const NULL = 'object';
@@ -1215,7 +1214,7 @@ let BattleScripts = {
 		} else if (left && !right && right !== 0) {
 			return left;
 		} else if (typeof left === 'number' && typeof right === 'number') {
-			return left + right;
+			return /** @type {any} */ (left + right);
 		} else {
 			return right;
 		}
