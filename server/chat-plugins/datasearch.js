@@ -747,6 +747,33 @@ function runDexsearch(target, cmd, canAll, message) {
 	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${escapeHTML(message)}:</span><br />`);
 	if (results.length > 1) {
 		results.sort();
+		if (order) {
+			let stat = order.substr(1);
+			let sort = order[0];
+			results.sort((a, b) => {
+				let mon1 = mod.getTemplate(sort === '+' ? a : b), mon2 = mod.getTemplate(sort === '+' ? b : a);
+				let monStat1, monStat2;
+				if (stat === 'bst') {
+					for (let monStats in mon1.baseStats) {
+						monStat1 += mon1.baseStats[monStats];
+						monStat2 += mon2.baseStats[monStats];
+					}
+				} else if (stat === 'weight') {
+					monStat1 = mon1.weightkg;
+					monStat2 = mon2.weightkg;
+				} else if (stat === 'height') {
+					monStat1 = mon1.heightm;
+					monStat2 = mon2.heightm;
+				} else if (stat === 'gen') {
+					monStat1 = mon1.gen;
+					monStat2 = mon2.gen;
+				} else {
+					monStat1 = mon1.baseStats[stat];
+					monStat2 = mon2.baseStats[stat];
+				}
+				return monStat1 - monStat2;
+			})
+		}
 		let notShown = 0;
 		if (!showAll && results.length > RESULTS_MAX_LENGTH + 5) {
 			notShown = results.length - RESULTS_MAX_LENGTH;
@@ -778,6 +805,7 @@ function runMovesearch(target, cmd, canAll, message) {
 		allTypes[toId(i)] = i;
 	}
 	let showAll = false;
+	let order = null;
 	let lsetData = {};
 	let targetMon = '';
 	let randomOutput = 0;
@@ -844,6 +872,29 @@ function runMovesearch(target, cmd, canAll, message) {
 				showAll = true;
 				orGroup.skip = true;
 				continue;
+			}
+
+			if (target.substr(0, 3) === 'asc' || target.substr(0, 3) === 'des') {
+				if (parameters.length > 1) return {reply: `The parameter '${target.substr(0, 3)}' cannot have alternative parameters`};
+				let stat = target.split(' ')[1];
+				if (!allStats.includes(stat)) return {reply: `'${escapeHTML(target)}' did not contain a valid stat.`};
+				switch (toId(stat)) {
+				case 'attack': stat = 'atk'; break;
+				case 'defense': stat = 'def'; break;
+				case 'specialattack': stat = 'spa'; break;
+				case 'spc': stat = 'spa'; break;
+				case 'special': stat = 'spa'; break;
+				case 'spatk': stat = 'spa'; break;
+				case 'specialdefense': stat = 'spd'; break;
+				case 'spdef': stat = 'spd'; break;
+				case 'speed': stat = 'spe'; break;
+				case 'wt': stat = 'weight'; break;
+				case 'ht': stat = 'height'; break;
+				case 'generation': stat = 'gen'; break;
+				}
+				order = `${target.substr(0, 3) === 'asc' ? '+' : '-'}${stat}`;
+				orGroup.skip = true;
+				break;
 			}
 
 			if (target === 'recovery') {
