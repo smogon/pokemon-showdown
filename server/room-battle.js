@@ -36,7 +36,7 @@ const TIMER_COOLDOWN = 20 * SECONDS;
 class BattlePlayer {
 	/**
 	 * @param {User} user
-	 * @param {Battle} game
+	 * @param {BattleGame} game
 	 * @param {PlayerSlot} slot
 	 */
 	constructor(user, game, slot) {
@@ -93,10 +93,10 @@ class BattlePlayer {
 
 class BattleTimer {
 	/**
-	 * @param {Battle} battle
+	 * @param {BattleGame} battle
 	 */
 	constructor(battle) {
-		/** @type {Battle} */
+		/** @type {BattleGame} */
 		this.battle = battle;
 
 		/** @type {NodeJS.Timer?} */
@@ -403,7 +403,7 @@ class BattleTimer {
  * @property {string} choice
  */
 
-class Battle {
+class BattleGame {
 	/**
 	 * @param {GameRoom} room
 	 * @param {string} formatid
@@ -1017,7 +1017,7 @@ class Battle {
 
 exports.RoomBattlePlayer = BattlePlayer;
 exports.RoomBattleTimer = BattleTimer;
-exports.RoomBattle = Battle;
+exports.RoomBattle = BattleGame;
 
 /*********************************************************
  * Process manager
