@@ -635,19 +635,19 @@ export class Side {
 				let megaOrZ = '';
 				while (true) {
 					if (/\s-?[1-3]$/.test(data)) {
-						if (targetLoc !== undefined) error();
+						if (targetLoc !== undefined) return error();
 						targetLoc = parseInt(data.slice(-2), 10);
 						data = data.slice(0, -2).trim();
 					} else if (data.endsWith(' mega')) {
-						if (megaOrZ) error();
+						if (megaOrZ) return error();
 						megaOrZ = 'mega';
 						data = data.slice(0, -5);
 					} else if (data.endsWith(' zmove')) {
-						if (megaOrZ) error();
+						if (megaOrZ) return error();
 						megaOrZ = 'zmove';
 						data = data.slice(0, -6);
 					} else if (data.endsWith(' ultra')) {
-						if (megaOrZ) error();
+						if (megaOrZ) return error();
 						megaOrZ = 'ultra';
 						data = data.slice(0, -6);
 					} else {
