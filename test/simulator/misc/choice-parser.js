@@ -57,27 +57,6 @@ describe('Choice parser', function () {
 			});
 		});
 
-		it('should allow mega evolving and targeting in the same move in either order', function () {
-			battle = common.createBattle({gameType: 'doubles'});
-			battle.join('p1', 'Guest 1', 1, [
-				{species: "Gengar", ability: 'cursedbody', item: 'gengarite', moves: ['shadowball']},
-				{species: "Koffing", ability: 'levitate', moves: ['smog']},
-			]);
-			battle.join('p2', 'Guest 2', 1, [
-				{species: "Blaziken", ability: 'speedboost', item: 'blazikenite', moves: ['blazekick']},
-				{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
-			]);
-
-			const badChoices = [`move 1 1 2`, `move 1 1 mega ultra`, `move 1 mega zmove 2`];
-			for (const badChoice of badChoices) {
-				const choice = `${badChoice}, move smog 1`;
-				assert.false(battle.choose('p1', choice), `Choice '${choice}' should be rejected`);
-			}
-
-			assert.ok(battle.choose('p1', `move 1 1 mega, move smog 1`));
-			assert.ok(battle.choose('p2', `move 1 mega 2, move irondefense`));
-		});
-
 		describe('Singles', function () {
 			it('should accept only `switch` choices', function () {
 				battle = common.createBattle();
@@ -159,6 +138,27 @@ describe('Choice parser', function () {
 					assert.false(battle.choose(side.id, 'pass'));
 				}
 			});
+		});
+
+		it('should allow mega evolving and targeting in the same move in either order', function () {
+			battle = common.createBattle({gameType: 'doubles'});
+			battle.join('p1', 'Guest 1', 1, [
+				{species: "Gengar", ability: 'cursedbody', item: 'gengarite', moves: ['shadowball']},
+				{species: "Koffing", ability: 'levitate', moves: ['smog']},
+			]);
+			battle.join('p2', 'Guest 2', 1, [
+				{species: "Blaziken", ability: 'speedboost', item: 'blazikenite', moves: ['blazekick']},
+				{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
+			]);
+
+			const badChoices = [`move 1 1 2`, `move 1 1 mega ultra`, `move 1 mega zmove 2`];
+			for (const badChoice of badChoices) {
+				const choice = `${badChoice}, move smog 1`;
+				assert.false(battle.choose('p1', choice), `Choice '${choice}' should be rejected`);
+			}
+
+			assert.ok(battle.choose('p1', `move 1 1 mega, move smog 1`));
+			assert.ok(battle.choose('p2', `move 1 mega 2, move irondefense`));
 		});
 
 		describe('Singles', function () {
