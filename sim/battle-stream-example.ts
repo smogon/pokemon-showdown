@@ -98,7 +98,7 @@ console.log("p2 is " + p2.constructor.name);
 	while ((chunk = await streams.omniscient.read())) {
 		console.log(chunk);
 	}
-})();
+})().catch(err => console.error(err));
 
 streams.omniscient.write(`>start ${JSON.stringify(spec)}
 >player p1 ${JSON.stringify(p1spec)}
