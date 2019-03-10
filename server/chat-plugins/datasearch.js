@@ -194,6 +194,7 @@ exports.commands = {
 		`Moves that have a Z-Effect of fully restoring the user's health can be searched for with 'zrecovery'.`,
 		`Inequality ranges use the characters '>' and '<' though they behave as '≥' and '≤', e.g., 'bp > 100' searches for all moves equal to and greater than 100 base power.`,
 		`Parameters can be excluded through the use of '!', e.g., !water type' excludes all Water-type moves.`,
+		`'asc' or 'des' followed by a move property will arrange the names in ascending or descending order of that property respectively, e.g., asc basepower will arrange moves in ascending order of their basepowers.`,
 		`Valid flags are: authentic (bypasses substitute), bite, bullet, contact, defrost, powder, protect, pulse, punch, secondary, snatch, and sound.`,
 		`A search that includes '!protect' will show all moves that bypass protection.`,
 		`Parameters separated with '|' will be searched as alternatives for each other, e.g., 'fire | water' searches for all moves that are either Fire type or Water type.`,
@@ -830,6 +831,7 @@ function runMovesearch(target, cmd, canAll, message) {
 		allTypes[toId(i)] = i;
 	}
 	let showAll = false;
+	let order = null;
 	let lsetData = {};
 	let targetMon = '';
 	let randomOutput = 0;
@@ -896,6 +898,21 @@ function runMovesearch(target, cmd, canAll, message) {
 				showAll = true;
 				orGroup.skip = true;
 				continue;
+			}
+
+			if (target.substr(0, 3) === 'asc' || target.substr(0, 3) === 'des') {
+				if (parameters.length > 1) return {reply: `The parameter '${target.substr(0, 3)}' cannot have alternative parameters`};
+				let prop = target.split(' ')[1];
+				switch (toId(prop)) {
+				case 'basepower': prop = 'basePower'; break;
+				case 'bp': prop = 'basePower'; break;
+				case 'power': prop = 'basePower'; break;
+				case 'acc': prop = 'accuracy'; break;
+				}
+				if (!allProperties.includes(prop)) return {reply: `'${escapeHTML(target)}' did not contain a valid property.`};
+				order = `${target.substr(0, 3) === 'asc' ? '+' : '-'}${prop}`;
+				orGroup.skip = true;
+				break;
 			}
 
 			if (target === 'recovery') {
@@ -1264,12 +1281,20 @@ function runMovesearch(target, cmd, canAll, message) {
 	}
 	if (results.length > 1) {
 		results.sort();
+		if (order) {
+			let prop = order.substr(1);
+			let sort = order[0];
+			results.sort((a, b) => {
+				let move1 = dex[toId(sort === '+' ? a : b)], move2 = dex[toId(sort === '+' ? b : a)];
+				return move1[prop] - move2[prop];
+			});
+		}
 		let notShown = 0;
 		if (!showAll && results.length > RESULTS_MAX_LENGTH + 5) {
 			notShown = results.length - RESULTS_MAX_LENGTH;
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
-		resultsStr += results.map(result => `<a href="//dex.pokemonshowdown.com/moves/${toId(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>`).join(", ");
+		resultsStr += results.map(result => `<a href="//dex.pokemonshowdown.com/moves/${toId(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>${order ? ' (' + dex[toId(result)][order.substr(1)] + ')' : ''}`).join(", ");
 		if (notShown) {
 			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
 		}
