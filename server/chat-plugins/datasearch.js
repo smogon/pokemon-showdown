@@ -1286,7 +1286,21 @@ function runMovesearch(target, cmd, canAll, message) {
 			let sort = order[0];
 			results.sort((a, b) => {
 				let move1 = dex[toId(sort === '+' ? a : b)], move2 = dex[toId(sort === '+' ? b : a)];
-				return move1[prop] - move2[prop];
+				if (move1[prop] === true) {
+					if (move2[prop] === true) {
+						return 0;
+					} else {
+						return 1;
+					}
+				} else if (move2[prop] === true) {
+					if (move1[prop] === true) {
+						return 0;
+					} else {
+						return -1;
+					}
+				} else {
+					return move1[prop] - move2[prop];
+				}
 			});
 		}
 		let notShown = 0;
@@ -1294,7 +1308,7 @@ function runMovesearch(target, cmd, canAll, message) {
 			notShown = results.length - RESULTS_MAX_LENGTH;
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
-		resultsStr += results.map(result => `<a href="//dex.pokemonshowdown.com/moves/${toId(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>${order ? ' (' + dex[toId(result)][order.substr(1)] + ')' : ''}`).join(", ");
+		resultsStr += results.map(result => `<a href="//dex.pokemonshowdown.com/moves/${toId(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>${order ? ' (' + (dex[toId(result)][order.substr(1)] === true ? '-' : dex[toId(result)][order.substr(1)]) + ')' : ''}`).join(", ");
 		if (notShown) {
 			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
 		}
