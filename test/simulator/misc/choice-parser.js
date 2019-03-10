@@ -138,27 +138,27 @@ describe('Choice parser', function () {
 					assert.false(battle.choose(side.id, 'pass'));
 				}
 			});
-		});
 
-		it('should allow mega evolving and targeting in the same move in either order', function () {
-			battle = common.createBattle({gameType: 'doubles'});
-			battle.join('p1', 'Guest 1', 1, [
-				{species: "Gengar", ability: 'cursedbody', item: 'gengarite', moves: ['shadowball']},
-				{species: "Porygon", ability: 'download', moves: ['conversion2']},
-			]);
-			battle.join('p2', 'Guest 2', 1, [
-				{species: "Porygon-Z", ability: 'adaptability', item: 'normaliumz', moves: ['conversion2']},
-				{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
-			]);
+			it('should allow mega evolving and targeting in the same move in either order', function () {
+				battle = common.createBattle({gameType: 'doubles'});
+				battle.join('p1', 'Guest 1', 1, [
+					{species: "Gengar", ability: 'cursedbody', item: 'gengarite', moves: ['shadowball']},
+					{species: "Porygon", ability: 'download', moves: ['conversion2']},
+				]);
+				battle.join('p2', 'Guest 2', 1, [
+					{species: "Porygon-Z", ability: 'adaptability', item: 'normaliumz', moves: ['conversion2']},
+					{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
+				]);
 
-			const badChoices = [`move 1 1 2`, `move 1 1 mega ultra`, `move 1 mega zmove 2`];
-			for (const badChoice of badChoices) {
-				const choice = `${badChoice}, move Conversion 2`;
-				assert.false(battle.choose('p1', choice), `Choice '${choice}' should be rejected`);
-			}
+				const badChoices = [`move 1 1 2`, `move 1 1 mega ultra`, `move 1 mega zmove 2`];
+				for (const badChoice of badChoices) {
+					const choice = `${badChoice}, move Conversion 2`;
+					assert.false(battle.choose('p1', choice), `Choice '${choice}' should be rejected`);
+				}
 
-			assert.ok(battle.choose('p1', `move 1 1 mega, move Conversion 2 1`));
-			assert.ok(battle.choose('p2', `move Conversion 2 1 zmove, move irondefense`));
+				assert.ok(battle.choose('p1', `move 1 1 mega, move Conversion 2 1`));
+				assert.ok(battle.choose('p2', `move Conversion 2 1 zmove, move irondefense`));
+			});
 		});
 
 		describe('Singles', function () {
