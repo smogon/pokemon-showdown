@@ -1714,7 +1714,7 @@ export class Battle extends Dex.ModdedDex {
 	start() {
 		if (this.active) return;
 
-		// need two players to start
+		// need all players to start
 		if (!this.sides.every(side => !!side)) return;
 
 		if (this.started) {

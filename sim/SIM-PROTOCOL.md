@@ -44,20 +44,21 @@ The beginning of a battle will look something like this:
 > Player details.
 >
 > - `PLAYER` is `p1` or `p2`
+> - `PLAYER` may also be `p3` or `p4` in 4 player battles
 > - `USERNAME` is the username
 > - `AVATAR` is the player's avatar identifier (usually a number, but other
 >    values can be used for custom avatars)
 
 `|teamsize|PLAYER|NUMBER`
 
-> - `PLAYER` is `p1` or `p2`
+> - `PLAYER` is `p1`, `p2`, `p3`, or `p4`
 > - `NUMBER` is the number of Pokémon your opponent starts with. In games
 >   without Team Preview, you don't know which Pokémon your opponent has, but
 >   you at least know how many there are.
 
 `|gametype|GAMETYPE`
 
-> - `GAMETYPE` is `singles`, `doubles`, or `triples`.
+> - `GAMETYPE` is `singles`, `doubles`, `triples`, `multi`, or `free-for-all`.
 
 `|gen|GENNUM`
 
@@ -180,6 +181,15 @@ Doubles, player 2's perspective:
 
     p1b p1a
     p2a p2b
+
+In multi and free-for-all battles, players are grouped by parity. That is,
+`p1` and `p3` share a side, as do `p2` and `p4`. The position letters still
+follow the same conventions as in double battles, so the layout looks like:
+
+Multi, player 1's perspective
+
+    p4b p2a
+    p1a p3b
 
 - `NAME` is the nickname of the Pokémon (or the species name, if no nickname
   is given).
