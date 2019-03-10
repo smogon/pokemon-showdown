@@ -12,6 +12,7 @@ const BattleStreams = require('../.sim-dist/battle-stream');
 const Dex = require('../.sim-dist/dex');
 const PRNG = require('../.sim-dist/prng').PRNG;
 const RandomPlayerAI = require('../.sim-dist/examples/random-player-ai').RandomPlayerAI;
+const Streams = require('../.lib-dist/streams');
 
 const DEFAULT_SEED = [0x09917, 0x06924, 0x0e1c8, 0x06af0];
 const AI_OPTIONS = {move: 0.7, mega: 0.6};
@@ -47,7 +48,6 @@ class Runner {
 			}
 
 			let seed = this.prng.seed;
-			// TODO: try/catch doesn't work because unhandled rejections don't throw!
 			try {
 				const game = this.runGame(format);
 				if (!this.async) await game;
@@ -63,15 +63,21 @@ class Runner {
 	}
 
 	async runGame(format) {
-		const streams = BattleStreams.getPlayerStreams(new BattleStreams.BattleStream());
+		const errors = new Streams.ObjectReadWriteStream({
+			write(err) {
+				this.push(err);
+			},
+		});
+		const errorHandler = err => { errors.write(err); };
+		const streams = BattleStreams.getPlayerStreams(new BattleStreams.BattleStream(), errorHandler);
 		const spec = {formatid: format, seed: this.prng.seed};
 		const p1spec = {name: "Bot 1", team: this.generateTeam(format)};
 		const p2spec = {name: "Bot 2", team: this.generateTeam(format)};
 
 		/* eslint-disable no-unused-vars */
-		const p1 = new RandomPlayerAI(streams.p1,
+		const p1 = new RandomPlayerAI(streams.p1, errorHandler,
 			Object.assign({seed: this.nextSeed()}, this.p1options));
-		const p2 = new RandomPlayerAI(streams.p2,
+		const p2 = new RandomPlayerAI(streams.p2, errorHandler,
 			Object.assign({seed: this.nextSeed()}, this.p2options));
 		/* eslint-enable no-unused-vars */
 
@@ -80,7 +86,8 @@ class Runner {
 			`>player p2 ${JSON.stringify(p2spec)}`);
 
 		let chunk;
-		while ((chunk = await streams.omniscient.read())) {
+		while ((chunk = await Promise.race([streams.omniscient.read(), errors.read()]))) {
+			if (chunk instanceof Error) throw chunk;
 			if (this.silent || !this.logs) continue;
 			console.log(chunk);
 		}
@@ -143,10 +150,6 @@ if (require.main === module) {
 		// If we have one arg, treat it as the total number of games to play.
 		options.totalGames = Number(process.argv[2]) || options.totalGames;
 	}
-
-	process.on('unhandledRejection', (reason, p) => {
-		process.exit(1);
-	});
 
 	// Run options.totalGames, exiting with the number of games with errors.
 	(async () => process.exit(await new Runner(options).run()))();
