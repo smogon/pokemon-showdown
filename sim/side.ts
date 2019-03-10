@@ -630,17 +630,25 @@ export class Side {
 			switch (choiceType) {
 			case 'move':
 				let targetLoc = 0;
-				if (/\s-?[1-3]$/.test(data)) {
-					targetLoc = parseInt(data.slice(-2), 10);
-					data = data.slice(0, data.lastIndexOf(' '));
+				let megaOrZ = '';
+				while (true) {
+					if (/\s-?[1-3]$/.test(data)) {
+						targetLoc = parseInt(data.slice(-2), 10);
+						data = data.slice(0, -2).trim();
+					} else if (data.endsWith(' mega')) {
+						megaOrZ = 'mega';
+						data = data.slice(0, -5);
+					} else if (data.endsWith(' zmove')) {
+						megaOrZ = 'zmove';
+						data = data.slice(0, -6);
+					} else if (data.endsWith(' ultra')) {
+						megaOrZ = 'ultra';
+						data = data.slice(0, -6);
+					} else {
+						break;
+					}
 				}
-				const willMega = data.endsWith(' mega') ? 'mega' : '';
-				if (willMega) data = data.slice(0, -5);
-				const willUltra = data.endsWith(' ultra') ? 'ultra' : '';
-				if (willUltra) data = data.slice(0, -6);
-				const willZ = data.endsWith(' zmove') ? 'zmove' : '';
-				if (willZ) data = data.slice(0, -6);
-				this.chooseMove(data, targetLoc, willMega || willUltra || willZ);
+				this.chooseMove(data, targetLoc, megaOrZ);
 				break;
 			case 'switch':
 				this.chooseSwitch(data);
