@@ -423,7 +423,6 @@ function runDexsearch(target, cmd, canAll, message) {
 			if (target.substr(0, 3) === 'asc' || target.substr(0, 3) === 'des') {
 				if (parameters.length > 1) return {reply: `The parameter '${target.substr(0, 3)}' cannot have alternative parameters`};
 				let stat = target.split(' ')[1];
-				if (!allStats.includes(stat)) return {reply: `'${escapeHTML(target)}' did not contain a valid stat.`};
 				switch (toId(stat)) {
 				case 'attack': stat = 'atk'; break;
 				case 'defense': stat = 'def'; break;
@@ -438,6 +437,7 @@ function runDexsearch(target, cmd, canAll, message) {
 				case 'ht': stat = 'height'; break;
 				case 'generation': stat = 'gen'; break;
 				}
+				if (!allStats.includes(stat)) return {reply: `'${escapeHTML(target)}' did not contain a valid stat.`};
 				order = `${target.substr(0, 3) === 'asc' ? '+' : '-'}${stat}`;
 				orGroup.skip = true;
 				break;
@@ -796,7 +796,7 @@ function runDexsearch(target, cmd, canAll, message) {
 					monStat2 = mon2.baseStats[stat];
 				}
 				return monStat1 - monStat2;
-			})
+			});
 		}
 		let notShown = 0;
 		if (!showAll && results.length > RESULTS_MAX_LENGTH + 5) {
