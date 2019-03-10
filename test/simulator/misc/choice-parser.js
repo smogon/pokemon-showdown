@@ -144,21 +144,21 @@ describe('Choice parser', function () {
 			battle = common.createBattle({gameType: 'doubles'});
 			battle.join('p1', 'Guest 1', 1, [
 				{species: "Gengar", ability: 'cursedbody', item: 'gengarite', moves: ['shadowball']},
-				{species: "Koffing", ability: 'levitate', moves: ['smog']},
+				{species: "Porygon", ability: 'download', moves: ['conversion2']},
 			]);
 			battle.join('p2', 'Guest 2', 1, [
-				{species: "Blaziken", ability: 'speedboost', item: 'blazikenite', moves: ['blazekick']},
+				{species: "Porygon-Z", ability: 'adaptability', item: 'normaliumz', moves: ['conversion2']},
 				{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
 			]);
 
 			const badChoices = [`move 1 1 2`, `move 1 1 mega ultra`, `move 1 mega zmove 2`];
 			for (const badChoice of badChoices) {
-				const choice = `${badChoice}, move smog 1`;
+				const choice = `${badChoice}, move Conversion 2`;
 				assert.false(battle.choose('p1', choice), `Choice '${choice}' should be rejected`);
 			}
 
-			assert.ok(battle.choose('p1', `move 1 1 mega, move smog 1`));
-			assert.ok(battle.choose('p2', `move 1 mega 2, move irondefense`));
+			assert.ok(battle.choose('p1', `move 1 1 mega, move Conversion 2 1`));
+			assert.ok(battle.choose('p2', `move Conversion 2 1 zmove, move irondefense`));
 		});
 
 		describe('Singles', function () {
