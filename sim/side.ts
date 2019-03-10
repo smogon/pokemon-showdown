@@ -456,10 +456,10 @@ export class Side {
 			slot = parseInt(slotText!, 10) - 1;
 		}
 		if (isNaN(slot) || slot < 0) {
-			// maybe it's a name!
+			// maybe it's a name/species id!
 			slot = -1;
 			for (const [i, mon] of this.pokemon.entries()) {
-				if (slotText === mon.name) {
+				if (slotText!.toLowerCase() === mon.name.toLowerCase() || toId(slotText) === mon.speciesid) {
 					slot = i;
 					break;
 				}
