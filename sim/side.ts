@@ -638,7 +638,7 @@ export class Side {
 					// We need to special case 'Conversion 2' so it doesn't get
 					// confused with 'Conversion' erroneously sent with the target
 					// '2' (since Conversion targets 'self', targetLoc can't be 2).
-					if (/\s-?[1-3]$/.test(data) && toId(data) !== 'conversion2') {
+					if (/\s(?:-|\+)?[1-3]$/.test(data) && toId(data) !== 'conversion2') {
 						if (targetLoc !== undefined) return error();
 						targetLoc = parseInt(data.slice(-2), 10);
 						data = data.slice(0, -2).trim();
