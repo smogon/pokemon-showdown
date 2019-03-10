@@ -62,7 +62,7 @@ exports.commands = {
 		`Types can be searched for by either having the type precede 'type' or just using the type itself as a parameter, e.g., both 'fire type' and 'fire' show all Fire types; however, using 'psychic' as a parameter will show all Pok\u00e9mon that learn the move Psychic and not Psychic types.`,
 		`'resists' followed by a type will show Pok\u00e9mon that resist that typing, e.g., 'resists normal'.`,
 		`'weak' followed by a type will show Pok\u00e9mon that are weak to that typing, e.g., 'weak fire'.`,
-		`'asc' or 'des' followed by a stat will show the Pok\u00e9mon in ascending or descending order of that stat respectively, e.g., 'asc speed'.`,
+		`'asc' or 'desc' followed by a stat will show the Pok\u00e9mon in ascending or descending order of that stat respectively, e.g., 'asc speed'.`,
 		`Inequality ranges use the characters '>=' for '≥' and '<=' for '≤', e.g., 'hp <= 95' searches all Pok\u00e9mon with HP less than or equal to 95.`,
 		`Parameters can be excluded through the use of '!', e.g., '!water type' excludes all water types.`,
 		`The parameter 'mega' can be added to search for Mega Evolutions only, and the parameter 'NFE' can be added to search not-fully evolved Pok\u00e9mon only.`,
@@ -194,7 +194,7 @@ exports.commands = {
 		`Moves that have a Z-Effect of fully restoring the user's health can be searched for with 'zrecovery'.`,
 		`Inequality ranges use the characters '>' and '<' though they behave as '≥' and '≤', e.g., 'bp > 100' searches for all moves equal to and greater than 100 base power.`,
 		`Parameters can be excluded through the use of '!', e.g., !water type' excludes all Water-type moves.`,
-		`'asc' or 'des' followed by a move property will arrange the names in ascending or descending order of that property respectively, e.g., asc basepower will arrange moves in ascending order of their basepowers.`,
+		`'asc' or 'desc' followed by a move property will arrange the names in ascending or descending order of that property respectively, e.g., asc basepower will arrange moves in ascending order of their basepowers.`,
 		`Valid flags are: authentic (bypasses substitute), bite, bullet, contact, defrost, powder, protect, pulse, punch, secondary, snatch, and sound.`,
 		`A search that includes '!protect' will show all moves that bypass protection.`,
 		`Parameters separated with '|' will be searched as alternatives for each other, e.g., 'fire | water' searches for all moves that are either Fire type or Water type.`,
@@ -422,8 +422,8 @@ function runDexsearch(target, cmd, canAll, message) {
 				continue;
 			}
 
-			if (target.substr(0, 3) === 'asc' || target.substr(0, 3) === 'des') {
-				if (parameters.length > 1) return {reply: `The parameter '${target.substr(0, 3)}' cannot have alternative parameters`};
+			if (target.split(' ')[0] === 'asc' || target.split(' ')[0] === 'desc') {
+				if (parameters.length > 1) return {reply: `The parameter '${target.split(' ')[0]}' cannot have alternative parameters`};
 				let stat = target.split(' ')[1];
 				switch (toId(stat)) {
 				case 'attack': stat = 'atk'; break;
@@ -900,8 +900,8 @@ function runMovesearch(target, cmd, canAll, message) {
 				continue;
 			}
 
-			if (target.substr(0, 3) === 'asc' || target.substr(0, 3) === 'des') {
-				if (parameters.length > 1) return {reply: `The parameter '${target.substr(0, 3)}' cannot have alternative parameters`};
+			if (target.split(' ')[0] === 'asc' || target.split(' ')[0] === 'desc') {
+				if (parameters.length > 1) return {reply: `The parameter '${target.split(' ')[0]}' cannot have alternative parameters`};
 				let prop = target.split(' ')[1];
 				switch (toId(prop)) {
 				case 'basepower': prop = 'basePower'; break;
