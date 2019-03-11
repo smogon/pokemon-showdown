@@ -82,12 +82,12 @@ assert.cantMove = function (fn, pokemon, move) {
 	if (pokemon && move) {
 		assert.throws(() => fn(), Error, new RegExp(`\\[Invalid choice\\] Can't move:.*${pokemon}.*${move}`, 'i'));
 	} else {
-		assert.throws(() => fn(), Error, new RegExp(`\\[Invalid choice\\] Can't move:`));
+		assert.throws(() => fn(), Error, /\[Invalid choice\] Can't move:/);
 	}
 };
 
 assert.cantUndo = function (fn) {
-	assert.throws(() => fn(), Error, new RegExp("\\[Invalid choice\\] Can't undo:"));
+	assert.throws(() => fn(), Error, /\[Invalid choice\] Can't undo:/);
 };
 
 assert.cantTarget = function (fn, move) {
