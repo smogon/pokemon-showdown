@@ -6009,11 +6009,9 @@ let BattleItems = {
 			},
 		},
 		onUpdate(pokemon) {
-			if ((this.gameType === "doubles")) {
-				for (const action of this.queue) {
-					if (action.choice === 'runSwitch') {
-						return;
-					}
+			for (const action of this.queue) {
+				if (action.choice === 'runSwitch') {
+					return;
 				}
 			}
 			let activate = false;
