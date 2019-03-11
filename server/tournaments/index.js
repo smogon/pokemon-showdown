@@ -563,7 +563,7 @@ class Tournament {
 		}
 
 		let matchTo = null;
-		for (const [playerFrom, match] of this.inProgressMatch) {
+		for (const [playerFrom, match] of this.inProgressMatches) {
 			if (match && match.to === player) matchTo = playerFrom;
 		}
 		if (matchTo) {
