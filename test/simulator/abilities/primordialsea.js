@@ -46,7 +46,7 @@ describe('Primordial Sea', function () {
 	});
 
 	it('should prevent moves and abilities from setting the weather to Sunny Day, Rain Dance, Sandstorm, or Hail', function () {
-		battle = common.createBattle();
+		battle = common.createBattle({strictChoices: false});
 		battle.join('p1', 'Guest 1', 1, [{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Abra", ability: 'magicguard', moves: ['teleport']},

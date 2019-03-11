@@ -43,7 +43,7 @@ describe('Simple [Gen 4]', function () {
 			[{species: "Gyarados", ability: 'intimidate', moves: ['splash']}],
 		]);
 		battle.makeChoices('move batonpass', 'move splash');
-		battle.makeChoices('switch 2', 'move splash');
+		battle.makeChoices('switch 2', '');
 		assert.strictEqual(battle.p1.active[0].boosts['atk'], -1);
 		assert.strictEqual(battle.p1.active[0].getStat('atk'), Math.floor(0.5 * battle.p1.active[0].getStat('atk', true)));
 	});

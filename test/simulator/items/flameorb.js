@@ -20,7 +20,7 @@ describe('Flame Orb', function () {
 			{species: 'Breloom', ability: 'technician', moves: ['bulletseed']},
 		]);
 		battle.makeChoices('move splash', 'move bulletseed');
-		battle.makeChoices('switch 2', 'move bulletseed');
+		battle.makeChoices('switch 2', '');
 		assert.notStrictEqual(battle.p1.active[0].status, 'brn');
 	});
 

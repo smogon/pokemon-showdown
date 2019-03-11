@@ -22,8 +22,8 @@ describe('Mail', function () {
 		assert.constant(() => holder.item, () => battle.makeChoices('move softboiled', 'move grassknot'));
 		battle.makeChoices('move softboiled', 'switch 2');
 		assert.constant(() => holder.item, () => battle.makeChoices('move softboiled', 'move trick'));
-		battle.makeChoices('move softboiled', 'switch 2');
-		assert.constant(() => holder.item, () => battle.makeChoices('move softboild', 'move switcheroo'));
+		battle.makeChoices('move softboiled', 'switch 3');
+		assert.constant(() => holder.item, () => battle.makeChoices('move softboiled', 'move switcheroo'));
 	});
 
 	it('should not be removed by Fling', function () {

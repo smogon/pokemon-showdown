@@ -112,13 +112,17 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 
 		// p1: Kecleon uses Curse last in the turn.
 		// p2: Fighting attack on Kecleon, then Ghost.
-		battle.makeChoices('move curse, move lightscreen', 'move aurasphere ' + (curseUser.position + 1) + ', move lick ' + (curseUser.position + 1));
+		battle.makeChoices(
+			`move ${battle.p1.active[0].set.moves[0]}, move ${battle.p1.active[1].set.moves[0]}`,
+			`move aurasphere ${curseUser.position + 1}, move lick ${curseUser.position + 1}`);
 
 		assert.ok(curseUser.hasType('Ghost')); // Curse user must be Ghost
 		assert.ok(curseUser.hp < curseUser.maxhp / 2); // Curse user cut its HP down
 
 		let foeHP = [p2active[0].hp, p2active[1].hp];
-		battle.makeChoices('move curse, move lightscreen', 'move calmmind, move calmmind');
+		battle.makeChoices(
+			`move ${battle.p1.active[0].set.moves[0]}, move ${battle.p1.active[1].set.moves[0]}`,
+			`move calmmind, move calmmind`);
 
 		assert.notStrictEqual(curseUser.hp, curseUser.maxhp); // Curse user cut its HP down
 		if (curseUser.position === 0) {
@@ -138,7 +142,9 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 
 		// p1: Kecleon uses Curse last in the turn.
 		// p2: Electric attack on Kecleon, then Ghost.
-		battle.makeChoices('move curse, move lightscreen, move harden', 'move aurasphere ' + (curseUser.position + 1) + ', move lick ' + (curseUser.position + 1) + ', move harden');
+		battle.makeChoices(
+			`move ${battle.p1.active[0].set.moves[0]}, move ${battle.p1.active[1].set.moves[0]}, move ${battle.p1.active[2].set.moves[0]}`,
+			`move aurasphere ${curseUser.position + 1}, move lick ${curseUser.position + 1}, move harden`);
 
 		assert.ok(curseUser.hasType('Ghost')); // Curse user must be Ghost
 		assert.ok(curseUser.hp < curseUser.maxhp / 2); // Curse user cut its HP down
@@ -161,12 +167,12 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 	}
 
 	it('should target an opponent in Doubles if the user is on left side and becomes Ghost the same turn', function () {
-		battle = common.createBattle({gameType: 'doubles'}, doublesTeams.slice());
+		battle = common.createBattle({gameType: 'doubles', strictChoices: false}, doublesTeams.slice());
 		runDoublesTest(battle, battle.p1.active[0]);
 	});
 
 	it('should target the ally in Doubles if the user is on right side and becomes Ghost the same turn', function () {
-		battle = common.createBattle({gameType: 'doubles'}, [
+		battle = common.createBattle({gameType: 'doubles', strictChoices: false}, [
 			[doublesTeams[0][1], doublesTeams[0][0]],
 			doublesTeams[1],
 		]);

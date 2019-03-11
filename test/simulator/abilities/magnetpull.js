@@ -11,7 +11,7 @@ describe('Magnet Pull', function () {
 	});
 
 	it('should prevent Steel-type Pokemon from switching out normally', function () {
-		battle = common.createBattle();
+		battle = common.createBattle({strictChoices: false});
 		battle.join('p1', 'Guest 1', 1, [{species: "Magnezone", ability: 'magnetpull', moves: ['soak', 'charge']}]);
 		battle.join('p2', 'Guest 2', 1, [
 			{species: "Heatran", ability: 'flashfire', moves: ['curse']},
@@ -34,7 +34,7 @@ describe('Magnet Pull', function () {
 			{species: "Tentacruel", ability: 'clearbody', moves: ['rapidspin']},
 		]);
 		battle.makeChoices('move toxic', 'move batonpass');
-		battle.makeChoices('move toxic', 'switch 2');
+		battle.makeChoices('', 'switch 2');
 		assert.species(battle.p2.active[0], 'Tentacruel');
 	});
 

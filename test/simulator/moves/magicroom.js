@@ -30,8 +30,9 @@ describe('Magic Room', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Lopunny", ability: 'limber', item: 'assaultvest', moves: ['protect']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Golem", ability: 'noguard', moves: ['magicroom']}]);
-		battle.makeChoices('move protect', 'move magicroom');
-		battle.makeChoices('move protect', 'move magicroom');
+		battle.makeChoices('default', 'move magicroom');
+		assert.strictEqual(battle.p1.active[0].lastMove.id, 'struggle');
+		battle.makeChoices('default', 'move magicroom');
 		assert.strictEqual(battle.p1.active[0].lastMove.id, 'protect');
 	});
 
@@ -60,7 +61,7 @@ describe('Magic Room', function () {
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Meowstic", ability: 'prankster', moves: ['magicroom']}]);
 		battle.makeChoices('move voltswitch', 'move magicroom');
-		battle.makeChoices('switch groudon', 'move magicroom');
+		battle.makeChoices('switch groudon', '');
 		assert.strictEqual(battle.p1.active[0].template.speciesid, 'groudonprimal');
 	});
 });

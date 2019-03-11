@@ -41,7 +41,7 @@ describe('Shed Shell', function () {
 			{species: "Heatran", ability: 'flashfire', moves: ['rest']},
 		]);
 		battle.makeChoices('move skydrop', 'move sleeptalk');
-		battle.makeChoices('move skydrop', 'switch 2');
+		assert.trapped(() => battle.makeChoices('move skydrop', 'switch 2'));
 		assert.species(battle.p2.active[0], 'Magnezone');
 	});
 });

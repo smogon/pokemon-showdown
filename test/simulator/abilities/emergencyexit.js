@@ -57,13 +57,13 @@ describe(`Emergency Exit`, function () {
 		assert.false.holdsItem(eePokemon);
 		assert.strictEqual(battle.currentRequest, 'switch');
 
-		battle.makeChoices('move sleeptalk', 'move voltswitch');
+		battle.makeChoices('default', '');
 		assert.species(battle.p1.active[0], 'Clefable');
 		assert.species(battle.p2.active[0], 'Zekrom');
 	});
 
 	it(`should not prevent Red Card's activation`, function () {
-		battle = common.createBattle([
+		battle = common.createBattle({strictChoices: false}, [
 			[{species: "Golisopod", ability: 'emergencyexit', item: 'redcard', moves: ['sleeptalk'], ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
 			[{species: "Raticate", ability: 'guts', moves: ['superfang']}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
 		]);
@@ -80,7 +80,7 @@ describe(`Emergency Exit`, function () {
 	});
 
 	it(`should not prevent Eject Button's activation`, function () {
-		battle = common.createBattle([
+		battle = common.createBattle({strictChoices: false}, [
 			[{species: "Golisopod", ability: 'emergencyexit', item: 'ejectbutton', moves: ['sleeptalk'], ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
 			[{species: "Raticate", ability: 'guts', moves: ['superfang']}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
 		]);

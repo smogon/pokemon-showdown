@@ -27,6 +27,7 @@ interface BattleOptions {
 	p1?: PlayerOptions; // Player 1 data
 	p2?: PlayerOptions; // Player 2 data
 	debug?: boolean; // show debug mode option
+	strictChoices?: boolean; // whether invalid choices should throw
 }
 
 export class Battle extends Dex.ModdedDex {
@@ -45,6 +46,7 @@ export class Battle extends Dex.ModdedDex {
 	formatid: string;
 	cachedFormat: Format;
 	debugMode: boolean;
+	strictChoices: boolean;
 	formatData: AnyObject;
 	effect: Effect;
 	effectData: AnyObject;
@@ -113,6 +115,7 @@ export class Battle extends Dex.ModdedDex {
 		this.formatid = options.formatid;
 		this.cachedFormat = format;
 		this.debugMode = format.debug || !!options.debug;
+		this.strictChoices = !!options.strictChoices;
 		this.formatData = {id: format.id};
 		// tslint:disable-next-line:no-object-literal-type-assertion
 		this.effect = {id: ''} as Effect;
@@ -2937,7 +2940,7 @@ export class Battle extends Dex.ModdedDex {
 	 */
 	makeChoices(...inputs: string[]) {
 		for (const [i, input] of inputs.entries()) {
-			this.sides[i].choose(input);
+			if (input) this.sides[i].choose(input);
 		}
 		this.commitDecisions();
 	}

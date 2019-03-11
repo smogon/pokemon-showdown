@@ -33,7 +33,7 @@ describe('Pressure', function () {
 	});
 
 	it('should deduct PP even if the move fails or misses', function () {
-		battle = common.createBattle();
+		battle = common.createBattle({strictChoices: false});
 		battle.join('p1', 'Guest 1', 1, [{species: "Giratina", ability: 'pressure', item: 'laggingtail', moves: ['mistyterrain', 'shadowforce']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Smeargle", ability: 'desolateland', moves: ['doubleedge', 'spore', 'moonblast', 'surf']}]);
 		battle.makeChoices('move mistyterrain', 'move doubleedge');
@@ -128,7 +128,7 @@ describe('Pressure [Gen 4]', function () {
 			[{species: "Palkia", ability: 'pressure', moves: ['rest']}, {species: "Dialga", ability: 'pressure', moves: ['rest']}],
 			[{species: "Lugia", ability: 'pressure', moves: ['hail']}, {species: "Ho-Oh", ability: 'pressure', moves: ['earthquake']}],
 		]);
-		battle.makeChoices('move rest', 'move earthquake');
+		battle.makeChoices('move rest, move rest', 'move hail, move earthquake');
 		assert.strictEqual(battle.p2.active[0].getMoveData(Dex.getMove('hail')).pp, 12);
 		assert.strictEqual(battle.p2.active[1].getMoveData(Dex.getMove('earthquake')).pp, 12);
 	});

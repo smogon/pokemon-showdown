@@ -112,6 +112,7 @@ class TestTools {
 			// a default seed (guaranteed to be the same across test executions)
 			// will be used.
 			seed: options.seed || DEFAULT_SEED,
+			strictChoices: options.strictChoices !== false,
 		};
 
 		if (!teams) return new Sim.Battle(battleOptions);

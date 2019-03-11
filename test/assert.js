@@ -74,6 +74,26 @@ assert.holdsItem = function (pokemon, message) {
 	});
 };
 
+assert.trapped = function (fn) {
+	assert.throws(() => fn(), Error, "[Invalid choice] Can't switch: The active Pokémon is trapped");
+};
+
+assert.cantMove = function (fn, pokemon, move) {
+	if (pokemon && move) {
+		assert.throws(() => fn(), Error, new RegExp(`[Invalid choice] Can't move:.*${pokemon}.*${move}`, 'i'));
+	} else {
+		assert.throws(() => fn(), Error, new RegExp(`[Invalid choice] Can't move:`));
+	}
+};
+
+assert.cantUndo = function (fn) {
+	assert.throws(() => fn(), Error, new RegExp("[Invalid choice] Can't undo:"));
+};
+
+assert.cantTarget = function (fn, move) {
+	assert.cantMove(fn, 'target', move);
+};
+
 assert.statStage = function (pokemon, statName, stage, message) {
 	const actual = pokemon.boosts[statName];
 	if (actual === stage) return;
