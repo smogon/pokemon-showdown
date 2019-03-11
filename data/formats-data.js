@@ -4276,16 +4276,17 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	castformsunny: {
-		randomBattleMoves: ["sunnyday", "weatherball", "solarbeam", "icebeam"],
+		randomBattleMoves: ["sunnyday", "fireblast", "solarbeam", "icebeam"],
 		requiredAbility: 'Forecast',
 		battleOnly: true,
 	},
 	castformrainy: {
-		randomBattleMoves: ["raindance", "weatherball", "thunder", "hurricane"],
+		randomBattleMoves: ["raindance", "hydropump", "thunder", "hurricane"],
 		requiredAbility: 'Forecast',
 		battleOnly: true,
 	},
 	castformsnowy: {
+		randomBattleMoves: ["hail", "blizzard", "thunderbolt", "fireblast"],
 		requiredAbility: 'Forecast',
 		battleOnly: true,
 	},
@@ -7432,7 +7433,7 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	hoopaunbound: {
-		randomBattleMoves: ["nastyplot", "substitute", "psyshock", "psychic", "darkpulse", "focusblast", "hyperspacefury", "zenheadbutt", "icepunch", "drainpunch", "gunkshot", "knockoff", "trick"],
+		randomBattleMoves: ["nastyplot", "substitute", "psychic", "darkpulse", "focusblast", "hyperspacefury", "zenheadbutt", "icepunch", "drainpunch", "gunkshot", "knockoff", "trick"],
 		randomDoubleBattleMoves: ["psychic", "darkpulse", "focusblast", "protect", "hyperspacefury", "zenheadbutt", "icepunch", "drainpunch", "gunkshot"],
 		eventOnly: true,
 		tier: "UUBL",
