@@ -5117,8 +5117,8 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	spiritomb: {
-		randomBattleMoves: ["shadowsneak", "suckerpunch", "pursuit", "willowisp", "darkpulse", "rest", "sleeptalk", "foulplay", "painsplit", "calmmind"],
-		randomDoubleBattleMoves: ["shadowsneak", "suckerpunch", "icywind", "willowisp", "snarl", "darkpulse", "protect", "foulplay", "painsplit"],
+		randomBattleMoves: ["suckerpunch", "pursuit", "willowisp", "darkpulse", "rest", "sleeptalk", "foulplay", "painsplit", "calmmind"],
+		randomDoubleBattleMoves: ["suckerpunch", "icywind", "willowisp", "snarl", "darkpulse", "protect", "foulplay", "painsplit"],
 		eventPokemon: [
 			{"generation": 5, "level": 61, "gender": "F", "nature": "Quiet", "ivs": {"hp": 30, "atk": 30, "def": 30, "spa": 30, "spd": 30, "spe": 30}, "isHidden": false, "moves": ["darkpulse", "psychic", "silverwind", "embargo"], "pokeball": "cherishball"},
 		],
