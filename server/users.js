@@ -663,21 +663,18 @@ class User extends Chat.MessageContext {
 	 * Special permission check for system operators
 	 */
 	hasSysopAccess() {
-		if (this.isSysop && Config.backdoor) {
-			// This is the Pokemon Showdown system operator backdoor.
+		// This is the Pokemon Showdown system operator backdoor.
 
-			// Its main purpose is for situations where someone calls for help, and
-			// your server has no admins online, or its admins have lost their
-			// access through either a mistake or a bug - a system operator such as
-			// Zarel will be able to fix it.
+		// Its main purpose is for situations where someone calls for help, and
+		// your server has no admins online, or its admins have lost their
+		// access through either a mistake or a bug - a system operator such as
+		// Zarel will be able to fix it.
 
-			// This relies on trusting Pokemon Showdown. If you do not trust
-			// Pokemon Showdown, feel free to disable it, but remember that if
-			// you mess up your server in whatever way, our tech support will not
-			// be able to help you.
-			return true;
-		}
-		return false;
+		// This relies on trusting Pokemon Showdown. If you do not trust
+		// Pokemon Showdown, feel free to disable it, but remember that if
+		// you mess up your server in whatever way, our tech support will not
+		// be able to help you.
+		return this.isSysop && Config.backdoor;
 	}
 	/**
 	 * Permission check for using the dev console

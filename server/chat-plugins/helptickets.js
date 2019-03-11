@@ -1080,12 +1080,11 @@ let commands = {
 		unbanhelp: [`/helpticket unban [user] - Ticket unbans a user. Requires: % @ & ~`],
 
 		ignore(target, room, user) {
-			if (!this.can('lock')) return;
 			if (user.ignoreTickets) return this.errorReply(`You are already ignoring help ticket notifications. Use /helpticket unignore to receive notifications again.`);
 			user.ignoreTickets = true;
 			this.sendReply(`You are now ignoring help ticket notifications.`);
 		},
-		ignorehelp: [`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ & ~`],
+		ignorehelp: [`/helpticket ignore - Ignore notifications for unclaimed help tickets.`],
 
 		unignore(target, room, user) {
 			if (!this.can('lock')) return;
