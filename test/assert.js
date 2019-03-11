@@ -80,17 +80,14 @@ assert.trapped = function (fn) {
 
 assert.cantMove = function (fn, pokemon, move) {
 	if (pokemon && move) {
-		// eslint-disable-next-line no-useless-escape
-		assert.throws(() => fn(), Error, new RegExp(`\[Invalid choice\] Can't move:.*${pokemon}.*${move}`, 'i'));
+		assert.throws(() => fn(), Error, new RegExp(`\\[Invalid choice\\] Can't move:.*${pokemon}.*${move}`, 'i'));
 	} else {
-		// eslint-disable-next-line no-useless-escape
-		assert.throws(() => fn(), Error, new RegExp(`\[Invalid choice\] Can't move:`));
+		assert.throws(() => fn(), Error, new RegExp(`\\[Invalid choice\\] Can't move:`));
 	}
 };
 
 assert.cantUndo = function (fn) {
-	// eslint-disable-next-line no-useless-escape
-	assert.throws(() => fn(), Error, new RegExp("\[Invalid choice\] Can't undo:"));
+	assert.throws(() => fn(), Error, new RegExp("\\[Invalid choice\\] Can't undo:"));
 };
 
 assert.cantTarget = function (fn, move) {
