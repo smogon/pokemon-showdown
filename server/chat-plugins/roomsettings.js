@@ -325,12 +325,12 @@ exports.commands = {
 		if (target === 'player') target = Users.PLAYER_SYMBOL;
 		if (this.meansNo(target)) {
 			if (!room.modjoin) return this.errorReply(`Modjoin is already turned off in this room.`);
-			delete room.modjoin;
+			room.modjoin = null;
 			this.add(`|raw|<div class="broadcast-blue"><strong>This room is no longer invite only!</strong><br />Anyone may now join.</div>`);
 			this.addModAction(`${user.name} turned off modjoin.`);
 			this.modlog('MODJOIN', null, 'OFF');
 			if (room.chatRoomData) {
-				delete room.chatRoomData.modjoin;
+				room.chatRoomData.modjoin = null;
 				Rooms.global.writeChatRoomData();
 			}
 			return;
