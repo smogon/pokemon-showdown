@@ -164,7 +164,7 @@ class FSPath {
 			return;
 		}
 
-		return this.writeUpdateNow(dataFetcher, options);
+		this.writeUpdateNow(dataFetcher, options);
 	}
 
 	writeUpdateNow(dataFetcher: () => string | Buffer, options: object) {
@@ -178,7 +178,7 @@ class FSPath {
 			throttleTimer: null,
 		};
 		pendingUpdates.set(this.path, update);
-		return this.safeWrite(dataFetcher(), options).then(() => this.finishUpdate());
+		this.safeWrite(dataFetcher(), options).then(() => this.finishUpdate());
 	}
 	checkNextUpdate() {
 		let pendingUpdate = pendingUpdates.get(this.path);
@@ -192,7 +192,7 @@ class FSPath {
 			return;
 		}
 
-		return this.writeUpdateNow(dataFetcher, options);
+		this.writeUpdateNow(dataFetcher, options);
 	}
 	finishUpdate() {
 		let pendingUpdate = pendingUpdates.get(this.path);
@@ -396,7 +396,7 @@ class FileReadStream extends ReadStream {
 		return new Promise((resolve, reject) => {
 			if (this.atEOF) return resolve(false);
 			this.ensureCapacity(size);
-			return this.fd.then(fd => {
+			this.fd.then(fd => {
 				fs.read(fd, this.buf, this.bufEnd, size, null, (err, bytesRead, buf) => {
 					if (err) return reject(err);
 					if (!bytesRead) {
@@ -415,7 +415,7 @@ class FileReadStream extends ReadStream {
 
 	_destroy() {
 		return new Promise(resolve => {
-			return this.fd.then(fd => {
+			this.fd.then(fd => {
 				fs.close(fd, () => resolve());
 			});
 		});
