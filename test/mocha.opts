@@ -1,5 +1,4 @@
-test/simulator/items/whiteherb.js
--g 6789987678
+test/main.js test/simulator/**/*.js test/application/*.js test/chat-plugins/*.js
 -R dot
 -u bdd
 --exit
