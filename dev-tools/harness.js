@@ -57,7 +57,8 @@ class Runner {
 				if (!this.async) await game;
 				games.push(game);
 			} catch (e) {
-				console.error(`Error running game with seed: [${seed}]\n`, e);
+				console.error(`Run \`node dev-tools/harness 1 --format=` +
+					`${format} --seed=${seed.join(',')} --logs\` to debug:\n`, e);
 			}
 			lastFormat = format;
 		}
