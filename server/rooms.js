@@ -741,25 +741,23 @@ class GlobalRoom extends BasicRoom {
 	}
 
 	/**
-	 * @param {User} p1
-	 * @param {User} p2
+	 * @param {User[]} players
 	 * @param {GameRoom} room
 	 * @param {AnyObject} options
 	 */
-	onCreateBattleRoom(p1, p2, room, options) {
+	onCreateBattleRoom(players, room, options) {
 		if (Config.reportbattles) {
 			let reportRoom = Rooms(Config.reportbattles === true ? 'lobby' : Config.reportbattles);
 			if (reportRoom) {
+				const reportPlayers = players.map(p => p.getIdentity()).join('|');
 				reportRoom
-					.add(`|b|${room.id}|${p1.getIdentity()}|${p2.getIdentity()}`)
+					.add(`|b|${room.id}|${reportPlayers}`)
 					.update();
 			}
 		}
 		if (Config.logladderip && options.rated) {
-			this.ladderIpLog.write(
-				`${p1.userid}: ${p1.latestIp}\n` +
-				`${p2.userid}: ${p2.latestIp}\n`
-			);
+			const ladderIpLogString = players.map(p => `${p.userid}: ${p.latestIp}\n`).join();
+			this.ladderIpLog.write(ladderIpLogString);
 		}
 	}
 
