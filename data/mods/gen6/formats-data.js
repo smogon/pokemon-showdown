@@ -3059,8 +3059,8 @@ let BattleFormatsData = {
 	},
 	spiritomb: {
 		inherit: true,
-		randomBattleMoves: ["shadowsneak", "suckerpunch", "pursuit", "willowisp", "darkpulse", "rest", "sleeptalk", "foulplay", "painsplit", "calmmind"],
-		randomDoubleBattleMoves: ["shadowsneak", "suckerpunch", "icywind", "willowisp", "snarl", "darkpulse", "protect", "foulplay", "painsplit"],
+		randomBattleMoves: ["suckerpunch", "pursuit", "willowisp", "darkpulse", "rest", "sleeptalk", "foulplay", "painsplit", "calmmind"],
+		randomDoubleBattleMoves: ["suckerpunch", "icywind", "willowisp", "snarl", "darkpulse", "protect", "foulplay", "painsplit"],
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
