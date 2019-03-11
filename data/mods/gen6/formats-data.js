@@ -2479,6 +2479,7 @@ let BattleFormatsData = {
 		battleOnly: true,
 	},
 	castformsnowy: {
+		randomBattleMoves: ["hail", "blizzard", "thunderbolt", "fireblast"],
 		battleOnly: true,
 	},
 	kecleon: {
@@ -4762,7 +4763,7 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	hoopaunbound: {
-		randomBattleMoves: ["nastyplot", "substitute", "psyshock", "psychic", "darkpulse", "focusblast", "hyperspacefury", "zenheadbutt", "icepunch", "drainpunch", "gunkshot", "knockoff", "trick"],
+		randomBattleMoves: ["nastyplot", "substitute", "psychic", "darkpulse", "focusblast", "hyperspacefury", "zenheadbutt", "icepunch", "drainpunch", "gunkshot", "knockoff", "trick"],
 		randomDoubleBattleMoves: ["psychic", "darkpulse", "focusblast", "protect", "hyperspacefury", "zenheadbutt", "icepunch", "drainpunch", "gunkshot"],
 		eventOnly: true,
 		tier: "Uber",
