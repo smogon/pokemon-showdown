@@ -65,7 +65,7 @@ describe('White Herb', function () {
 		assert.false.holdsItem(holder);
 		assert.statStage(holder, 'atk', -1);
 	});
-	it('should use white herb after both intimidate', function () {
+	it('should use white herb after both Intimidate', function () {
 		battle = common.createBattle({gameType: 'doubles'});
 
 		battle.join('p1', 'Guest 1', 1, [{species: "Arcanine", ability: 'intimidate', moves: ['bodyslam']},
@@ -81,7 +81,7 @@ describe('White Herb', function () {
 		assert.false.holdsItem(holder);
 		assert.statStage(holder, 'atk', 0);
 	});
-	it('should use white herb after one intimidate', function () {
+	it('should use white herb after one Intimidate', function () {
 		battle = common.createBattle({gameType: 'doubles'});
 
 		battle.join('p1', 'Guest 1', 1, [{species: "Arcanine", ability: 'flashfire', moves: ['bodyslam']},
@@ -97,7 +97,7 @@ describe('White Herb', function () {
 		assert.false.holdsItem(holder);
 		assert.statStage(holder, 'atk', 0);
 	});
-	it('should use white herb after two intimidate switch in', function () {
+	it('should use white herb after two Intimidate switch in', function () {
 		battle = common.createBattle({gameType: 'doubles'});
 
 		battle.join('p1', 'Guest 1', 1, [
@@ -120,7 +120,7 @@ describe('White Herb', function () {
 		assert.false.holdsItem(holder);
 		assert.statStage(holder, 'atk', -1);
 	});
-	it('should use white herb after two intimidate switch in', function () {
+	it('should use white herb after two Intimidate switch in after faint', function () {
 		battle = common.createBattle({gameType: 'doubles'});
 
 		battle.join('p1', 'Guest 1', 1, [
@@ -168,7 +168,7 @@ describe('White Herb', function () {
 		assert.false.holdsItem(holder);
 		assert.statStage(holder, 'atk', 0);
 	});
-	it('should use white herb after one intimidate switch in', function () {
+	it('should use white herb after one Intimidate switch in', function () {
 		battle = common.createBattle({gameType: 'doubles'});
 
 		battle.join('p1', 'Guest 1', 1, [
@@ -192,7 +192,7 @@ describe('White Herb', function () {
 		assert.statStage(holder, 'atk', 0);
 	});
 
-	it('should use white herb after one intimidate switch in [singles]', function () {
+	it('should use white herb after one Intimidate switch in [singles]', function () {
 		battle = common.createBattle();
 
 		battle.join('p1', 'Guest 1', 1, [
@@ -214,7 +214,7 @@ describe('White Herb', function () {
 		assert.false.holdsItem(holder);
 		assert.statStage(holder, 'atk', 0);
 	});
-	it('should use white herb after one intimidate [singles]', function () {
+	it('should use white herb after one Intimidate [singles]', function () {
 		battle = common.createBattle();
 
 		battle.join('p1', 'Guest 1', 1, [
