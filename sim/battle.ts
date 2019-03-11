@@ -3278,10 +3278,18 @@ export class Battle extends Dex.ModdedDex {
 				score: [this.sides[0].pokemonLeft, this.sides[1].pokemonLeft],
 				inputLog: this.inputLog,
 			};
-			if (!log.p3) delete log.p3;
-			if (!log.p4) delete log.p4;
-			if (!log.p3team) delete log.p3team;
-			if (!log.p4team) delete log.p4team;
+			if (this.sides[2]) {
+				log.score.push(this.sides[2].pokemonLeft);
+			} else {
+				delete log.p3;
+				delete log.p3team;
+			}
+			if (this.sides[3]) {
+				log.score.push(this.sides[3].pokemonLeft);
+			} else {
+				delete log.p4;
+				delete log.p4team;
+			}
 			this.send('end', JSON.stringify(log));
 			this.sentEnd = true;
 		}
