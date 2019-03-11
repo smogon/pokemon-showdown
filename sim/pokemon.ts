@@ -402,8 +402,8 @@ export class Pokemon {
 
 	toString() {
 		const fullname = (this.illusion) ? this.illusion.fullname : this.fullname;
-		const positionList = 'abcdef';
-		return this.isActive ? fullname.substr(0, 2) + positionList[this.position] + fullname.substr(2) : fullname;
+		const position = 'abcdef'[this.position + Math.floor(this.side.n / 2) * this.side.active.length];
+		return this.isActive ? fullname.substr(0, 2) + position + fullname.substr(2) : fullname;
 	}
 
 	getDetailsInner(side: Side) {
