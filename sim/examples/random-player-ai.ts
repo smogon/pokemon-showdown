@@ -17,11 +17,10 @@ export class RandomPlayerAI extends BattlePlayer {
 
 	constructor(
 		playerStream: ObjectReadWriteStream,
-		errorHandler?: (e: any) => void,
 		options: {move?: number, mega?: number, seed?: PRNG | PRNGSeed | null } = {},
 		debug: boolean = false
 	) {
-		super(playerStream, debug, errorHandler);
+		super(playerStream, debug);
 		this.move = options.move || 1.0;
 		this.mega = options.mega || 0;
 		this.prng = options.seed && !Array.isArray(options.seed) ? options.seed : new PRNG(options.seed);
