@@ -399,7 +399,7 @@ class Tournament {
 					let pendingChallenge = this.pendingChallenges.get(data.tableHeaders.rows[r]);
 					let inProgressMatch = this.inProgressMatches.get(data.tableHeaders.rows[r]);
 					if (pendingChallenge || inProgressMatch) {
-						for (const [c, cell] of row) {
+						for (const [c, cell] of row.entries()) {
 							if (!cell) continue;
 
 							if (pendingChallenge && data.tableHeaders.cols[c] === pendingChallenge.to) {
