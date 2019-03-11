@@ -295,7 +295,7 @@ Punishments.savePunishments = function () {
 		});
 
 		let buf = 'Punishment\tUser ID\tIPs and alts\tExpires\r\n';
-		for (const [entry, id] of saveTable) {
+		for (const [id, entry] of saveTable) {
 			buf += Punishments.renderEntry(entry, id);
 		}
 		return buf;
@@ -341,7 +341,7 @@ Punishments.saveRoomPunishments = function () {
 		});
 
 		let buf = 'Punishment\tRoom ID:User ID\tIPs and alts\tExpires\r\n';
-		for (const [entry, id] of saveTable) {
+		for (const [id, entry] of saveTable) {
 			buf += Punishments.renderEntry(entry, id);
 		}
 		return buf;
