@@ -1308,7 +1308,7 @@ function runMovesearch(target, cmd, canAll, message) {
 			notShown = results.length - RESULTS_MAX_LENGTH;
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
-		resultsStr += results.map(result => `<a href="//dex.pokemonshowdown.com/moves/${toId(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>${order ? ' (' + (dex[toId(result)][order.substr(1)] === true ? '-' : dex[toId(result)][order.substr(1)]) + ')' : ''}`).join(", ");
+		resultsStr += results.map(result => `<a href="//dex.pokemonshowdown.com/moves/${toId(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>${order ? ' (' + (dex[toId(result)][order.substr(0, order.length - 1)] === true ? '-' : dex[toId(result)][order.substr(0, order.length - 1)]) + ')' : ''}`).join(", ");
 		if (notShown) {
 			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
 		}
