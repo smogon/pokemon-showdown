@@ -134,7 +134,7 @@ const commands = {
 		if (!target) {
 			const bfTeam = Dex.generateTeam('gen7bssfactory');
 			importable = stringifyTeam(bfTeam, ingredients);
-			team = /** @type {Template[]} */ (bfTeam).map(val => val.species);
+			team = /** @type {PokemonSet[]} */ (bfTeam).map(val => val.species);
 		} else {
 			team = generateTeam(target);
 		}

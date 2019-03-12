@@ -43,6 +43,9 @@ class RandomTeams extends Dex.ModdedDex {
 		this.prng = prng && !Array.isArray(prng) ? prng : new PRNG(prng);
 	}
 
+	/**
+	 * @return {PokemonSet[]}
+	 */
 	generateTeam() {
 		const generatorName = typeof this.format.team === 'string' && this.format.team.startsWith('random') ? this.format.team + 'Team' : '';
 		// @ts-ignore
