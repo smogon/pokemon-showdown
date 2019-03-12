@@ -71,6 +71,16 @@ describe('Paralysis', function () {
 		assert.strictEqual(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
 	});
 
+	it('should reduce speed to 25% of its original value in Stadium', function () {
+		battle = common.mod('stadium').createBattle([
+			[{species: 'Vaporeon', moves: ['growl']}],
+			[{species: 'Jolteon', moves: ['thunderwave']}],
+		]);
+		let speed = battle.p1.active[0].getStat('spe');
+		battle.makeChoices('move growl', 'move thunderwave');
+		assert.strictEqual(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
+	});
+
 	it('should reapply its speed drop when an opponent uses a stat-altering move in Gen 1', function () {
 		battle = common.gen(1).createBattle([
 			[{species: 'Electrode', moves: ['rest']}],

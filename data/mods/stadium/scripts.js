@@ -9,6 +9,7 @@ let BattleScripts = {
 	gen: 1,
 	// BattlePokemon scripts. Stadium shares gen 1 code but it fixes some problems with it.
 	pokemon: {
+		inherit: true,
 		// Gen 1 function to apply a stat modification that is only active until the stat is recalculated or mon switched.
 		// Modified stats are declared in the Pokemon object in sim/pokemon.js in about line 681.
 		modifyStat(statName, modifier) {
