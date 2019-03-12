@@ -9,7 +9,6 @@
 'use strict';
 
 const child_process = require('child_process');
-const crypto = require('crypto');
 const shell = cmd => child_process.execSync(cmd, {stdio: 'inherit', cwd: __dirname});
 // `require('../build')` is not safe because `replace` is async.
 shell('node ../build');
@@ -27,7 +26,7 @@ const FORMATS = [
 class Runner {
 	constructor(options) {
 		this.prng = ((options.prng && !Array.isArray(options.prng))
-			? options.prng : new PRNG(options.prng || newInitialSeed()))
+			? options.prng : new PRNG(options.prng))
 		this.format = options.format;
 		this.totalGames = options.totalGames;
 		this.all = !!options.all;
@@ -74,9 +73,9 @@ class Runner {
 
 		/* eslint-disable no-unused-vars */
 		const p1 = new RandomPlayerAI(streams.p1,
-			Object.assign({seed: this.nextSeed()}, this.p1options));
+			Object.assign({seed: this.newSeed()}, this.p1options));
 		const p2 = new RandomPlayerAI(streams.p2,
-			Object.assign({seed: this.nextSeed()}, this.p2options));
+			Object.assign({seed: this.newSeed()}, this.p2options));
 		/* eslint-enable no-unused-vars */
 
 		streams.omniscient.write(`>start ${JSON.stringify(spec)}\n` +
@@ -90,12 +89,17 @@ class Runner {
 		}
 	}
 
-	nextSeed() {
-		return (this.prng.seed = this.prng.nextFrame(this.prng.seed));
+	newSeed() {
+		return [
+			Math.floor(this.prng.next() * 0x10000),
+			Math.floor(this.prng.next() * 0x10000),
+			Math.floor(this.prng.next() * 0x10000),
+			Math.floor(this.prng.next() * 0x10000),
+		];
 	}
 
 	generateTeam(format) {
-		return Dex.packTeam(Dex.generateTeam(format, this.nextSeed()));
+		return Dex.packTeam(Dex.generateTeam(format, this.newSeed()));
 	}
 
 	getNextFormat() {
@@ -113,16 +117,6 @@ class Runner {
 			return FORMATS[this.formatIndex];
 		}
 	}
-}
-
-function newInitialSeed() {
-	const bytes = crypto.randomBytes(8);
-	return [
-		(bytes[0] << 8) | bytes[1],
-		(bytes[2] << 8) | bytes[3],
-		(bytes[4] << 8) | bytes[5],
-		(bytes[6] << 8) | bytes[7],
-	];
 }
 
 module.exports = Runner;
@@ -161,6 +155,5 @@ if (require.main === module) {
 	}
 
 	// Run options.totalGames, exiting with the number of games with errors.
-	//(async () => process.exit(await new Runner(options).run()))();
-	console.log(newInitialSeed());
+	(async () => process.exit(await new Runner(options).run()))();
 }
