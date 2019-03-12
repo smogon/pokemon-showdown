@@ -121,7 +121,7 @@ class Runner {
 
 module.exports = Runner;
 
-// Run the Runner if we're being run from the command line.
+// Kick off the Runner if we're being called from the command line.
 if (require.main === module) {
 	// *Seed scientifically chosen after incredibly detailed and thoughtful analysis.*
 	// The default seed used when running the harness for benchmarking purposes - all we
