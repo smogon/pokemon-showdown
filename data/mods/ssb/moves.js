@@ -719,8 +719,7 @@ let BattleMovedex = {
 				}
 			}
 			// Generate a new team
-			let generator = new RandomStaffBrosTeams(this.format, this.prng);
-			let team = generator.generateTeam();
+			let team = this.teamGenerator.getTeam({name: source.side.name});
 			// Overwrite un-fainted pokemon other than the user
 			for (let i = 0; i < currentTeam.length; i++) {
 				if (currentTeam[i].fainted || !currentTeam[i].hp || currentTeam[i].position === source.position) continue;

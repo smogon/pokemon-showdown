@@ -3106,7 +3106,7 @@ export class Battle extends Dex.ModdedDex {
 			this.teamGenerator.setSeed(options.seed);
 		}
 
-		team = this.teamGenerator.generateTeam();
+		team = this.teamGenerator.getTeam(options);
 
 		return team as PokemonSet[];
 	}
