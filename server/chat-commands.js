@@ -4205,6 +4205,7 @@ const commands = {
 				userid: targetUser.userid,
 				avatar: targetUser.avatar,
 				group: targetUser.group,
+				autoconfirmed: !!targetUser.autoconfirmed,
 				rooms: roomList,
 			};
 			connection.send('|queryresponse|userdetails|' + JSON.stringify(userdetails));
