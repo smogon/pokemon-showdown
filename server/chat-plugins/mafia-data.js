@@ -1693,7 +1693,7 @@ const modifiers = {
 
 /** @type {MafiaThemes} */
 const themes = {
-	1999: {
+	"1999": {
 		name: `1999`,
 		desc: `1999: Get the Town in the safe room, before the bomb explodes!`,
 		8: `Mafia Goon, Mafia Goon, President, DC Cop, Ambassador, Citizen, Citizen, Citizen`,
@@ -1718,6 +1718,15 @@ const themes = {
 		5: `Solo Assassin, Guard, Guard, Guard, King`,
 		6: `Solo Assassin, Guard, Guard, Guard, Guard, King`,
 		7: `Solo Assassin, Guard, Guard, Guard, Guard, Guard, King`,
+	},
+	tms: `baby_too_much_scum`,
+	btms: `baby_too_much_scum`,
+	too_much_scum: `baby_too_much_scum`,
+	baby_too_much_scum: {
+		name: `Too Much Scum`,
+		desc: `Too Much Scum: Find the many scum, reminiscent of the Jungle Republic setup.`,
+		8: `Mafia Goon, Mafia Goon, Solo Serial Killer, FBI Agent, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+		12: `Mafia Goon, Mafia Goon, Mafia Goon, Werewolf, Werewolf, Solo Lyncher, Cop, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 	},
 	brothel_mafia: `brothel`,
 	brothel: {
@@ -1776,6 +1785,11 @@ const themes = {
 		5: `Mafia Goon, Cop, Cop, Cop, Cop`,
 		11: `Mafia Goon, Mafia Goon, Mafia Goon, Cop, Cop, Cop, Cop, Cop, Cop, Cop, Cop`,
 	},
+	donner_party: {
+		name: `Donner Party`,
+		desc: `Donner Party: Many kills happen... but they won't just flip that easily!`,
+		12: `Cannibal Mafia Goon, Cannibal Mafia Goon, Cannibal Serial Killer, Cannibal Vigilante, Dietist, Roleblocker, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+	},
 	double_day: {
 		name: `Double Day`,
 		desc: `Double Day: Like Vanilla, but with two Days prior to each Night. Double the chances to lynch scum!`,
@@ -1810,6 +1824,11 @@ const themes = {
 		18: `Mafia Compulsive Janitor, Mafia Coroners, Mafia Coroners, Mafia Goons, Mafia Goons, Coroners, Coroners, Coroners, Gunsmith, One-Shot Reviver, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie,`,
 		19: `Mafia Compulsive Janitor, Mafia Coroners, Mafia Coroners, Mafia Goons, Mafia Goons, Coroners, Coroners, Coroners, Gunsmith, One-Shot Reviver, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie,`,
 		20: `Mafia Compulsive Janitor, Mafia Coroners, Mafia Coroners, Mafia Goons, Mafia Goons, Coroners, Coroners, Coroners, Gunsmith, One-Shot Reviver, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie,`,
+	},
+	eyes: {
+		name: `Eyes`,
+		desc: `Eyes: Avoid the Tracker and Watcher to last till the end!`,
+		7: `Mafia Roleblocker, Mafia Goon, Watcher, Tracker, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 	},
 	fee: `friends_and_enemies_and_enemies`,
 	friends_and_enemies_and_enemies: {
@@ -1875,7 +1894,7 @@ const themes = {
 	kat: `kill_all_townies`,
 	kill_all_townies: {
 		name: `Kill All Townies`,
-		desc: `Kill All Townies: The more Town deaths, the more days! For each Town role's death at Night, there's a Day.`
+		desc: `Kill All Townies: The more Town deaths, the more days! For each Town role's death at Night, there's a Day.`,
 		17: `Mafia Goon, Mafia Godfather, Mafia Doctor, Werewolf, Alpha Werewolf, Werewolf Doctor, Cop, Seer, Vigilante, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 	},
 	kwg: `kids_with_guns`,
@@ -1892,6 +1911,11 @@ const themes = {
 		11: `Mafia Goon, Mafia Goon, Solo Serial Killer, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		14: `Mafia Goon, Mafia Goon, Mafia Goon, Solo Serial Killer, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 		16: `Mafia Goon, Mafia Goon, Mafia Goon, Solo One-Shot Bulletproof Serial Killer, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+	},
+	less_pressure: {
+		name: `Less Pressure`,
+		desc: `Less Pressure: Lead the town as an Innocent Child by finding the 3 Mafia Goons. Be aware, they get to kill someone upon dying.`,
+		8: `Mafia Goon, Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Innocent Child, Innocent Child`,
 	},
 	lod: `life_or_death`,
 	lod6: `life_or_death`,
@@ -2069,11 +2093,12 @@ const themes = {
 		desc: `Sacrifice: The Vanilla Townies can't die until a Mafia Sacrifice has died. Use this to clear them!`,
 		4: `Mafia Sacrifice, Mafia Sacrifice, Vanilla Townie, Vanilla Townie`,
 	},
+	semi_nightless: `seminightless`,
 	seminightless: {
 		name: `Semi-Nightless`,
 		desc: `Semi-Nightless: Mafia can't kill Night 1 and 2!`,
 		11: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
-	}
+	},
 	senpai: {
 		name: `Senpai`,
 		desc: `Senpai: When a Senpai dies, everyone who lynched them dies as well!`,
@@ -2131,6 +2156,11 @@ const themes = {
 		name: `Shortnight`,
 		desc: `Shortnight: A smaller version of Triplets, where you play in two groups of three.`,
 		6: `Mafia Goon, Mafia Goon, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
+	},
+	twin_trap: {
+		name: `Twin Trap`,
+		desc: `Twin Trap: The Mafia has to make a choice. Who is more at risk of being spotted?`,
+		9: `Track-Immune Mafia Goon, Watch-Immune Mafia Goon, Tracker, Watcher, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
 	},
 	nilla: `vanilla`,
 	vanilla: {
