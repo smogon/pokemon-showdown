@@ -262,8 +262,8 @@ class ModdedDex {
 	 */
 	getImmunity(
 		source: {type: string} | string,
-		target: {getTypes: () => string[]} | {types: string[]} | string[] | string): boolean {
-
+		target: {getTypes: () => string[]} | {types: string[]} | string[] | string
+	): boolean {
 		const sourceType: string = typeof source !== 'string' ? source.type : source;
 		// @ts-ignore
 		const targetTyping: string[] | string = target.getTypes && target.getTypes() || target.types || target;
@@ -280,8 +280,8 @@ class ModdedDex {
 
 	getEffectiveness(
 		source: {type: string} | string,
-		target: {getTypes: () => string[]} | {types: string[]} | string[] | string): number {
-
+		target: {getTypes: () => string[]} | {types: string[]} | string[] | string
+	): number {
 		const sourceType: string = typeof source !== 'string' ? source.type : source;
 		// @ts-ignore
 		const targetTyping: string[] | string = target.getTypes && target.getTypes() || target.types || target;
