@@ -3787,6 +3787,7 @@ const commands = {
 	 * Battle commands
 	 *********************************************************/
 
+	ff: 'forfeit',
 	forfeit(target, room, user) {
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
 		if (!room.game.forfeit) {
