@@ -958,7 +958,7 @@ class ModdedDex {
 		return new TeamGenerator(format, seed);
 	}
 
-	generateTeam(format: Format | string, seed: PRNG | PRNGSeed | null = null) {
+	generateTeam(format: Format | string, seed: PRNG | PRNGSeed | null = null): PokemonSet[] {
 		return this.getTeamGenerator(format, seed).generateTeam();
 	}
 
