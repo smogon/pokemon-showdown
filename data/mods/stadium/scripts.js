@@ -9,6 +9,14 @@ let BattleScripts = {
 	gen: 1,
 	// BattlePokemon scripts. Stadium shares gen 1 code but it fixes some problems with it.
 	pokemon: {
+		getStat(statName, unmodified) {
+			statName = /** @type {StatNameExceptHP} */(toId(statName));
+			// @ts-ignore - type checking prevents 'hp' from being passed, but we're paranoid
+			if (statName === 'hp') throw new Error("Please read `maxhp` directly");
+			if (unmodified) return this.storedStats[statName];
+			// @ts-ignore
+			return this.modifiedStats[statName];
+		},
 		// Gen 1 function to apply a stat modification that is only active until the stat is recalculated or mon switched.
 		// Modified stats are declared in the Pokemon object in sim/pokemon.js in about line 681.
 		modifyStat(statName, modifier) {
