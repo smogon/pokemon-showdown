@@ -762,6 +762,7 @@ interface ModdedBattleSide {
 }
 
 interface ModdedBattlePokemon {
+	inherit?: boolean
 	boostBy?: (this: Pokemon, boost: SparseBoostsTable) => boolean
 	calculateStat?: (this: Pokemon, statName: StatNameExceptHP, boost: number, modifier?: number) => number
 	getActionSpeed?: (this: Pokemon) => number
