@@ -9,6 +9,7 @@
 'use strict';
 
 const child_process = require('child_process');
+const crypto = require('crypto');
 const shell = cmd => child_process.execSync(cmd, {stdio: 'inherit', cwd: __dirname});
 // `require('../build')` is not safe because `replace` is async.
 shell('node ../build');
@@ -18,9 +19,6 @@ const Dex = require('../.sim-dist/dex');
 const PRNG = require('../.sim-dist/prng').PRNG;
 const RandomPlayerAI = require('../.sim-dist/examples/random-player-ai').RandomPlayerAI;
 
-const DEFAULT_SEED = [0x09917, 0x06924, 0x0e1c8, 0x06af0];
-const AI_OPTIONS = {move: 0.7, mega: 0.6};
-
 const FORMATS = [
 	'gen7randombattle', 'gen7randomdoublesbattle', 'gen7battlefactory', 'gen6randombattle', 'gen6battlefactory',
 	'gen5randombattle', 'gen4randombattle', 'gen3randombattle', 'gen2randombattle', 'gen1randombattle',
@@ -28,7 +26,8 @@ const FORMATS = [
 
 class Runner {
 	constructor(options) {
-		this.prng = new PRNG(options.seed);
+		this.prng = ((options.prng && !Array.isArray(options.prng))
+			? options.prng : new PRNG(options.prng || newInitialSeed()))
 		this.format = options.format;
 		this.totalGames = options.totalGames;
 		this.all = !!options.all;
@@ -116,10 +115,28 @@ class Runner {
 	}
 }
 
+function newInitialSeed() {
+	const bytes = crypto.randomBytes(8);
+	return [
+		(bytes[0] << 8) | bytes[1],
+		(bytes[2] << 8) | bytes[3],
+		(bytes[4] << 8) | bytes[5],
+		(bytes[6] << 8) | bytes[7],
+	];
+}
+
 module.exports = Runner;
 
 // Run the Runner if we're being run from the command line.
 if (require.main === module) {
+	// *Seed scientifically chosen after incredibly detailed and thoughtful analysis.*
+	// The default seed used when running the harness for benchmarking purposes - all we
+	// really care about is consistency between runs, we don't have any specific concerns
+	// about the randomness provided it results in pseudo-realistic game playouts.
+	const DEFAULT_SEED = [0x01234, 0x05678, 0x09123, 0x04567];
+	// 'move' 70% of the time (ie. 'switch' 30%) and ' mega' 60% of the time that its an option.
+	const AI_OPTIONS = {move: 0.7, mega: 0.6};
+
 	const options = {seed: DEFAULT_SEED, totalGames: 100, p1options: AI_OPTIONS, p2options: AI_OPTIONS};
 	// If we have more than one arg, or the arg looks like a flag, we need minimist to understand it.
 	if (process.argv.length > 2 || process.argv.length === 2 && process.argv[2].startsWith('-')) {
@@ -144,5 +161,6 @@ if (require.main === module) {
 	}
 
 	// Run options.totalGames, exiting with the number of games with errors.
-	(async () => process.exit(await new Runner(options).run()))();
+	//(async () => process.exit(await new Runner(options).run()))();
+	console.log(newInitialSeed());
 }
