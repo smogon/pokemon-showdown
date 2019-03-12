@@ -1785,7 +1785,7 @@ let BattleFormatsData = {
 	},
 	lugia: {
 		inherit: true,
-		randomBattleMoves: ["toxic", "roost", "substitute", "whirlwind", "thunderwave", "dragontail", "aeroblast"],
+		randomBattleMoves: ["toxic", "roost", "substitute", "whirlwind", "thunderwave", "aeroblast"],
 		randomDoubleBattleMoves: ["aeroblast", "roost", "substitute", "tailwind", "icebeam", "psychic", "calmmind", "skydrop", "protect"],
 		tier: "Uber",
 		doublesTier: "DUber",
@@ -3059,8 +3059,8 @@ let BattleFormatsData = {
 	},
 	spiritomb: {
 		inherit: true,
-		randomBattleMoves: ["suckerpunch", "pursuit", "willowisp", "darkpulse", "rest", "sleeptalk", "foulplay", "painsplit", "calmmind"],
-		randomDoubleBattleMoves: ["suckerpunch", "icywind", "willowisp", "snarl", "darkpulse", "protect", "foulplay", "painsplit"],
+		randomBattleMoves: ["shadowsneak", "pursuit", "willowisp", "darkpulse", "rest", "sleeptalk", "foulplay", "calmmind"],
+		randomDoubleBattleMoves: ["shadowsneak", "icywind", "willowisp", "snarl", "darkpulse", "protect", "foulplay", "painsplit"],
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
