@@ -524,7 +524,7 @@ class RoomBattle {
 			} else if (this.playerCap > 2) {
 				if (!this.p3 || !this.p3.active) {
 					active = false;
-				} else if (!this.p3 || !this.p3.active) {
+				} else if (!this.p4 || !this.p4.active) {
 					active = false;
 				}
 			}
