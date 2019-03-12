@@ -656,16 +656,15 @@ class ModdedDex {
 	/** Given a table of base stats and a pokemon set, return the actual stats. */
 	spreadModify(baseStats: StatsTable, set: PokemonSet): StatsTable {
 		const modStats: SparseStatsTable = {atk: 10, def: 10, spa: 10, spd: 10, spe: 10};
+		const tr = this.trunc;
 		let statName: keyof StatsTable;
 		for (statName in modStats) {
 			const stat = baseStats[statName];
-			modStats[statName] = Math.floor(Math.floor(2 * stat + set.ivs[statName] +
-				Math.floor(set.evs[statName] / 4)) * set.level / 100 + 5);
+			modStats[statName] = tr(tr(2 * stat + set.ivs[statName] + tr(set.evs[statName] / 4)) * set.level / 100 + 5);
 		}
 		if ('hp' in baseStats) {
 			const stat = baseStats['hp'];
-			modStats['hp'] = Math.floor(Math.floor(2 * stat + set.ivs['hp'] +
-				Math.floor(set.evs['hp'] / 4) + 100) * set.level / 100 + 10);
+			modStats['hp'] = tr(tr(2 * stat + set.ivs['hp'] + tr(set.evs['hp'] / 4) + 100) * set.level / 100 + 10);
 		}
 		return this.natureModify(modStats as StatsTable, set);
 	}
@@ -961,6 +960,15 @@ class ModdedDex {
 		if (min !== undefined && num < min) num = min;
 		if (max !== undefined && num > max) num = max;
 		return num;
+	}
+
+	/**
+	 * Truncate a number into an unsigned 32-bit integer, for
+	 * compatibility with the cartridge games' math systems.
+	 */
+	trunc(num: number, bits: number = 0) {
+		if (bits) return (num >>> 0) % (2 ** bits);
+		return num >>> 0;
 	}
 
 	getTeamGenerator(format: Format | string, seed: PRNG | PRNGSeed | null = null) {

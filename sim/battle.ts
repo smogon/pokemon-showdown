@@ -447,15 +447,6 @@ export class Battle extends Dex.ModdedDex {
 		}
 	}
 
-	/**
-	 * Truncate a number into an unsigned 32-bit integer, for
-	 * compatibility with the cartridge games' math systems.
-	 */
-	trunc(num: number, bits: number = 0) {
-		if (bits) return (num >>> 0) % (2 ** bits);
-		return num >>> 0;
-	}
-
 	comparePriority(a: AnyObject, b: AnyObject) {
 		return -((b.order || 4294967296) - (a.order || 4294967296)) ||
 			((b.priority || 0) - (a.priority || 0)) ||
@@ -1858,15 +1849,16 @@ export class Battle extends Dex.ModdedDex {
 
 		if (damage) {
 			if (this.gen <= 1 && effect.recoil && source) {
-				this.damage(
-					this.clampIntRange(Math.floor(damage * effect.recoil[0] / effect.recoil[1]), 1), source, target, 'recoil');
+				const amount = this.clampIntRange(Math.floor(damage * effect.recoil[0] / effect.recoil[1]), 1);
+				this.damage(amount, source, target, 'recoil');
 			}
 			if (this.gen <= 4 && effect.drain && source) {
-				this.heal(
-					this.clampIntRange(Math.floor(damage * effect.drain[0] / effect.drain[1]), 1), source, target, 'drain');
+				const amount = this.clampIntRange(Math.floor(damage * effect.drain[0] / effect.drain[1]), 1);
+				this.heal(amount, source, target, 'drain');
 			}
 			if (this.gen > 4 && effect.drain && source) {
-				this.heal(Math.round(damage * effect.drain[0] / effect.drain[1]), source, target, 'drain');
+				const amount = Math.round(damage * effect.drain[0] / effect.drain[1]);
+				this.heal(amount, source, target, 'drain');
 			}
 		}
 
