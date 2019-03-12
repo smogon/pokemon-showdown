@@ -12,7 +12,9 @@
         "no-empty": [true, "allow-empty-catch", "allow-empty-functions"],
         "no-string-literal": false,
         "interface-over-type-literal": false,
-        "prefer-const": true,
+        "prefer-const": {
+            "severity": "warning"
+        },
         "max-line-length": {
             "severity": "warning",
             "options": {
