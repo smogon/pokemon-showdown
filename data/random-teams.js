@@ -44,6 +44,13 @@ class RandomTeams extends Dex.ModdedDex {
 	}
 
 	/**
+	 * @param {?PRNG | [number, number, number, number]} [prng]
+	 */
+	setSeed(prng) {
+		this.prng = prng && !Array.isArray(prng) ? prng : new PRNG(prng);
+	}
+
+	/**
 	 * @return {PokemonSet[]}
 	 */
 	generateTeam() {
