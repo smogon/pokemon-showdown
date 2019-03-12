@@ -30,11 +30,13 @@ class Runner {
 		this.format = options.format;
 		this.totalGames = options.totalGames;
 		this.all = !!options.all;
-		this.logs = !!options.logs;
-		this.silent = !this.logs || !!options.silent;
 		this.async = !!options.async;
 		this.p1options = options.p1options;
 		this.p2options = options.p2options;
+		// silence is golden (trumps noisy options)
+		this.silent = !!options.silent;
+		this.logs = !this.silent && !!options.logs;
+		this.verbose = !this.silent && !!options.verbose;
 
 		this.formatIndex = 0;
 		this.numGames = 0;
@@ -50,13 +52,18 @@ class Runner {
 			}
 
 			let seed = this.prng.seed;
+			let battleStream;
 			try {
-				const game = this.runGame(format);
+				battleStream = new BattleStreams.BattleStream();
+				const game = this.runGame(format, battleStream);
 				if (!this.async) await game;
 				games.push(game);
 			} catch (e) {
+				if (battleStream && battleStream.battle && this.logs) {
+					console.error(`${battleStream.battle.inputLog.join('\n')}\n\n`);
+				}
 				console.error(`Run \`node dev-tools/harness 1 --format=` +
-					`${format} --seed=${seed.join(',')} --logs\` to debug:\n`, e);
+					`${format} --seed=${seed.join(',')} --verbose\` to debug:\n`, e);
 			}
 			lastFormat = format;
 		}
@@ -65,18 +72,20 @@ class Runner {
 		return this.totalGames - (await Promise.all(games)).length;
 	}
 
-	async runGame(format) {
-		const streams = BattleStreams.getPlayerStreams(new BattleStreams.BattleStream());
+	async runGame(format, battleStream) {
+		const streams = BattleStreams.getPlayerStreams(battleStream || new BattleStreams.BattleStream());
+		// The seed used is the intial seed to begin with (its important that nothing
+		// advances the PRNG before the initial `runGame` call for repro purposes), but 
+		// later is advanced by the four `newSeed()` calls, so each iteration should be
+		// 16 frames off the previous.
 		const spec = {formatid: format, seed: this.prng.seed};
 		const p1spec = {name: "Bot 1", team: this.generateTeam(format)};
 		const p2spec = {name: "Bot 2", team: this.generateTeam(format)};
 
-		/* eslint-disable no-unused-vars */
-		const p1 = new RandomPlayerAI(streams.p1,
-			Object.assign({seed: this.newSeed()}, this.p1options));
-		const p2 = new RandomPlayerAI(streams.p2,
-			Object.assign({seed: this.newSeed()}, this.p2options));
-		/* eslint-enable no-unused-vars */
+		// Set up the random players - no need to save them in a variable because they
+		// start asynchronously listening in their constructors.
+		new RandomPlayerAI(streams.p1, Object.assign({seed: this.newSeed()}, this.p1options));
+	  new RandomPlayerAI(streams.p2, Object.assign({seed: this.newSeed()}, this.p2options));
 
 		streams.omniscient.write(`>start ${JSON.stringify(spec)}\n` +
 			`>player p1 ${JSON.stringify(p1spec)}\n` +
@@ -84,11 +93,12 @@ class Runner {
 
 		let chunk;
 		while ((chunk = await streams.omniscient.read())) {
-			if (this.silent || !this.logs) continue;
-			console.log(chunk);
+			if (this.verbose) console.log(chunk);
 		}
 	}
 
+	// Same as PRNG#generatedSeed, only deterministic.
+	// NOTE: advances this.prng's seed by 4.
 	newSeed() {
 		return [
 			Math.floor(this.prng.next() * 0x10000),
@@ -144,8 +154,9 @@ if (require.main === module) {
 		const argv = require('minimist')(process.argv.slice(2));
 		if (argv.seed) options.seed = argv.seed.split(',').map(s => Number(s));
 		options.totalGames = Number(argv._[0] || argv.num) || options.totalGames;
-		options.logs = argv.logs;
+		options.verbose = argv.verbose;
 		options.silent = argv.silent;
+		options.logs = argv.logs;
 		options.all = argv.all;
 		options.async = argv.async;
 		options.format = argv.format;
