@@ -440,9 +440,9 @@ class RoomBattle {
 		this.p1 = null;
 		/** @type {RoomBattlePlayer?} */
 		this.p2 = null;
-		/** @type {BattlePlayer?} */
+		/** @type {RoomBattlePlayer?} */
 		this.p3 = null;
-		/** @type {BattlePlayer?} */
+		/** @type {RoomBattlePlayer?} */
 		this.p4 = null;
 
 		/**
