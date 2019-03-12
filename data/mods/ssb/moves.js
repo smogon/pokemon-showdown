@@ -773,10 +773,8 @@ let BattleMovedex = {
 			this.add('-anim', source, 'Swords Dance', source);
 			this.add('-anim', source, 'Bloom Doom', target);
 		},
-		onHit() {
-			this.setTerrain('grassyterrain');
-		},
 		onAfterMove(pokemon) {
+			this.setTerrain('grassyterrain');
 			if (pokemon.template.baseSpecies !== 'Aegislash' || pokemon.transformed) return;
 			if (pokemon.template.species !== 'Aegislash') pokemon.formeChange('Aegislash');
 		},
@@ -3311,6 +3309,8 @@ let BattleMovedex = {
 			move.basePower = move.baseMove ? move.baseMove.basePower : move.basePower;
 			// @ts-ignore Hack for Snaquaza's Z move
 			move.category = move.baseMove ? move.baseMove.category : move.category;
+			// @ts-ignore Hack for Snaquaza's Z move
+			this.claimMove = move.baseMove;
 		},
 		onTryMovePriority: 100,
 		onTryMove() {
@@ -3332,7 +3332,7 @@ let BattleMovedex = {
 				icebeam: ['Abomasnow', 'Absol', 'Aggron', 'Alomomola', 'Altaria', 'Araquanid', 'Articuno', 'Audino', 'Aurorus', 'Avalugg', 'Azumarill', 'Barbaracle', 'Basculin', 'Bastiodon', 'Beartic', 'Bibarel', 'Blastoise', 'Blissey', 'Bruxish', 'Carracosta', 'Castform', 'Chansey', 'Clawitzer', 'Claydol', 'Clefable', 'Clefairy', 'Cloyster', 'Corsola', 'Crabominable', 'Crawdaunt', 'Cresselia', 'Cryogonal', 'Delcatty', 'Delibird', 'Dewgong', 'Dragonite', 'Drampa', 'Dunsparce', 'Dusknoir', 'Empoleon', 'Exploud', 'Feraligatr', 'Floatzel', 'Froslass', 'Furret', 'Gastrodon', 'Glaceon', 'Glalie', 'Golduck', 'Golisopod', 'Golurk', 'Goodra', 'Gorebyss', 'Greninja', 'Gyarados', 'Huntail', 'Jellicent', 'Jynx', 'Kabutops', 'Kangaskhan', 'Kecleon', 'Kingdra', 'Kingler', 'Kyurem', 'Lanturn', 'Lapras', 'Latias', 'Latios', 'Lickilicky', 'Linoone', 'Lopunny', 'Ludicolo', 'Lumineon', 'Lunatone', 'Luvdisc', 'Magearna', 'Mamoswine', 'Manaphy', 'Mantine', 'Marowak', 'Masquerain', 'Mawile', 'Mesprit', 'Mew', 'Milotic', 'Miltank', 'Nidoking', 'Nidoqueen', 'Ninetales-Alola', 'Octillery', 'Omastar', 'Pelipper', 'Phione', 'Piloswine', 'Politoed', 'Poliwrath', 'Porygon-Z', 'Porygon2', 'Primarina', 'Quagsire', 'Qwilfish', 'Rampardos', 'Raticate', 'Regice', 'Relicanth', 'Rhydon', 'Rhyperior', 'Samurott', 'Seaking', 'Sharpedo', 'Sigilyph', 'Silvally', 'Simipour', 'Slaking', 'Slowbro', 'Slowking', 'Smeargle', 'Sneasel', 'Snorlax', 'Starmie', 'Suicune', 'Swalot', 'Swampert', 'Swanna', 'Tapu Fini', 'Tauros', 'Tentacruel', 'Toxapex', 'Tyranitar', 'Vanilluxe', 'Vaporeon', 'Wailord', 'Walrein', 'Weavile', 'Whiscash', 'Wigglytuff', 'Wishiwashi', 'Zangoose'],
 			};
 			// @ts-ignore Hack for Snaquaza's Z move
-			const baseMove = move.baseMove ? move.baseMove.id : 'bravebird';
+			const baseMove = this.claimMove ? this.claimMove.id : 'bravebird';
 			const pool = claims[baseMove];
 			if (!pool) throw new Error(`SSB: Unable to find fake claim movepool for the move: "${baseMove}".`); // Should never happen
 			const claim = claims[baseMove][this.random(pool.length)];

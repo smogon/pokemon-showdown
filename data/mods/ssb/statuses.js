@@ -291,13 +291,13 @@ let BattleStatuses = {
 	cc: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%cc|Yo guys! :]`);
+			this.add(`c|+cc|Yo guys! :]`);
 		},
 		onSwitchOut() {
-			this.add(`c|%cc|Gotta go brb`);
+			this.add(`c|+cc|Gotta go brb`);
 		},
 		onFaint() {
-			this.add(`c|%cc|Unfort`);
+			this.add(`c|+cc|Unfort`);
 		},
 	},
 	cerberax: {
