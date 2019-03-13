@@ -18,12 +18,6 @@ interface FaintedPokemon {
 	effect: Effect | null;
 }
 
-interface PlayerOptions {
-	name?: string;
-	avatar?: string;
-	team?: PokemonSet[] | string | null;
-}
-
 interface BattleOptions {
 	formatid: string; // Format ID
 	send?: (type: string, data: string | string[]) => void; // Output callback
@@ -3094,17 +3088,25 @@ export class Battle extends Dex.ModdedDex {
 
 	// players
 
-	getTeam(team: PokemonSet[] | string | null): PokemonSet[] {
+	getTeam(options: PlayerOptions): PokemonSet[] {
 		const format = this.getFormat();
+		let team = options.team;
 		if (typeof team === 'string') team = Dex.fastUnpackTeam(team);
 		if (!format.team && team) {
 			return team;
 		}
 
-		if (!this.teamGenerator) {
-			this.teamGenerator = this.getTeamGenerator(format, this.prng);
+		if (!options.seed) {
+			options.seed = PRNG.generateSeed();
 		}
-		team = this.teamGenerator.generateTeam();
+
+		if (!this.teamGenerator) {
+			this.teamGenerator = this.getTeamGenerator(format, options.seed);
+		} else {
+			this.teamGenerator.setSeed(options.seed);
+		}
+
+		team = this.teamGenerator.getTeam(options);
 
 		return team as PokemonSet[];
 	}
@@ -3115,7 +3117,7 @@ export class Battle extends Dex.ModdedDex {
 		if (!this[slot]) {
 			// create player
 			const slotNum = (slot === 'p2' ? 1 : 0);
-			const team = this.getTeam(options.team || null);
+			const team = this.getTeam(options);
 			side = new Side(options.name || `Player ${slotNum + 1}`, this, slotNum, team);
 			if (options.avatar) side.avatar = '' + options.avatar;
 			this[slot] = side;
