@@ -10,8 +10,10 @@
 
 const child_process = require('child_process');
 const shell = cmd => child_process.execSync(cmd, {stdio: 'inherit', cwd: __dirname});
-// `require('../build')` is not safe because `replace` is async.
-shell('node ../build');
+
+// Run the build script if we're being called from the command line.
+// NOTE: `require('../build')` is not safe because `replace` is async.
+if (require.main === module) shell('node ../build');
 
 const BattleStreams = require('../.sim-dist/battle-stream');
 const Dex = require('../.sim-dist/dex');
@@ -137,11 +139,11 @@ if (require.main === module) {
 	// The default seed used when running the harness for benchmarking purposes - all we
 	// really care about is consistency between runs, we don't have any specific concerns
 	// about the randomness provided it results in pseudo-realistic game playouts.
-	const DEFAULT_SEED = [0x01234, 0x05678, 0x09123, 0x04567];
+	const BENCHMARK_SEED = [0x01234, 0x05678, 0x09123, 0x04567];
 	// 'move' 70% of the time (ie. 'switch' 30%) and ' mega' 60% of the time that its an option.
 	const AI_OPTIONS = {move: 0.7, mega: 0.6};
 
-	const options = {seed: DEFAULT_SEED, totalGames: 100, p1options: AI_OPTIONS, p2options: AI_OPTIONS};
+	const options = {seed: BENCHMARK_SEED, totalGames: 100, p1options: AI_OPTIONS, p2options: AI_OPTIONS};
 	// If we have more than one arg, or the arg looks like a flag, we need minimist to understand it.
 	if (process.argv.length > 2 || process.argv.length === 2 && process.argv[2].startsWith('-')) {
 		try {
