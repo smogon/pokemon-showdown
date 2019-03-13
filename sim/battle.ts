@@ -3103,8 +3103,8 @@ export class Battle extends Dex.ModdedDex {
 
 		if (side) {
 			this.add('split');
-			for (const line of [false, ...this.sides, true]) {
-				if (line === true || line === side) {
+			for (const line of [false, this.p1, this.p2, true]) {
+				if (line === true || line && line.n === side.n % 2) {
 					this.add('-hint', hint);
 				} else {
 					this.log.push('');
@@ -3132,7 +3132,7 @@ export class Battle extends Dex.ModdedDex {
 			return;
 		}
 		this.log.push('|split');
-		const sides: (Side | boolean)[] = [false, ...this.sides, true];
+		const sides: (Side | boolean)[] = [false, this.p1, this.p2, true];
 		for (const side of sides) {
 			const sideUpdate = '|' + parts.map(part => {
 				if (typeof part !== 'function') return part;

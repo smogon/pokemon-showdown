@@ -1528,7 +1528,7 @@ export class Pokemon {
 		if (!this.hp) return '0 fnt';
 		let hpstring;
 		// side === true in replays
-		if (side === this.side || side === true) {
+		if (side === true || side && side.n === this.side.n % 2) {
 			hpstring = `${this.hp}/${this.maxhp}`;
 		} else {
 			const ratio = this.hp / this.maxhp;

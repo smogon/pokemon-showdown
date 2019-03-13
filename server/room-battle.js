@@ -71,11 +71,11 @@ class RoomBattlePlayer {
 	updateChannel(/** @type {User | Connection} */ user) {
 		if (user instanceof Users.Connection) {
 			// "user" is actually a connection
-			Sockets.channelMove(user.worker, this.game.id, this.slotNum + 1, user.socketid);
+			Sockets.channelMove(user.worker, this.game.id, this.slotNum % 2 + 1, user.socketid);
 			return;
 		}
 		for (const connection of user.connections) {
-			Sockets.channelMove(connection.worker, this.game.id, this.slotNum + 1, connection.socketid);
+			Sockets.channelMove(connection.worker, this.game.id, this.slotNum % 2 + 1, connection.socketid);
 		}
 	}
 
@@ -748,7 +748,7 @@ class RoomBattle {
 		let logData = this.logData;
 		if (!logData) return;
 		this.logData = null; // deallocate to save space
-		logData.log = this.room.getLog(5).split('\n'); // replay log (exact damage)
+		logData.log = this.room.getLog(3).split('\n'); // replay log (exact damage)
 
 		// delete some redundant data
 		for (const rating of [p1rating, p2rating, p3rating, p4rating]) {
