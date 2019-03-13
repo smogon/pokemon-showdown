@@ -821,6 +821,13 @@ interface TypeInfo extends Readonly<TypeData> {
 	readonly toString: () => string
 }
 
+interface PlayerOptions {
+	name?: string;
+	avatar?: string;
+	team?: PokemonSet[] | string | null;
+	seed?: PRNGSeed;
+}
+
 interface Actions {
 	/** A move action */
 	MoveAction: {
