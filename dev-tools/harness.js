@@ -131,6 +131,18 @@ class Runner {
 	}
 }
 
+// 'Timer' used when we're not benchmarking and don't need it to be operational.
+const ID = a => a;
+const STATS = {stats: new Map()};
+const NOOP_TIMER = new class {
+	count() {}
+	add() {}
+	start() {}
+	stop() {}
+	time() { return ID; }
+	stats() { return STATS; }
+}();
+
 module.exports = Runner;
 
 // Kick off the Runner if we're being called from the command line.
@@ -143,17 +155,35 @@ if (require.main === module) {
 	// 'move' 70% of the time (ie. 'switch' 30%) and ' mega' 60% of the time that its an option.
 	const AI_OPTIONS = {move: 0.7, mega: 0.6};
 
-	const options = {seed: BENCHMARK_SEED, totalGames: 100, p1options: AI_OPTIONS, p2options: AI_OPTIONS};
+	const options = {totalGames: 100, p1options: AI_OPTIONS, p2options: AI_OPTIONS, timer: () => NOOP_TIMER};
 	// If we have more than one arg, or the arg looks like a flag, we need minimist to understand it.
 	if (process.argv.length > 2 || process.argv.length === 2 && process.argv[2].startsWith('-')) {
-		try {
-			require.resolve('minimist');
-		} catch (err) {
-			if (err.code !== 'MODULE_NOT_FOUND') throw err;
-			shell('npm install minimist');
-		}
+		const missing = dep => {
+			try {
+				require.resolve(dep);
+				return false;
+			} catch (err) {
+				if (err.code !== 'MODULE_NOT_FOUND') throw err;
+				return true;
+			}
+		};
 
+		if (missing('minimist')) shell('npm install minimist');
 		const argv = require('minimist')(process.argv.slice(2));
+
+		if (!!argv.benchmark) {
+			options.seed = BENCHMARK_SEED;
+
+			let deps = '';
+			if (missing('trakr')) deps += 'trakr';
+			if (missing('table')) deps += 'table';
+			if (deps) shell(`npm install ${deps}`);
+
+			const trakr = require('trakr');
+			options.timer = () => new trakr.Timer();
+
+			// TODO create display function with table, pass with options.
+		}
 		if (argv.seed) options.seed = argv.seed.split(',').map(s => Number(s));
 		options.totalGames = Number(argv._[0] || argv.num) || options.totalGames;
 		options.verbose = argv.verbose;
