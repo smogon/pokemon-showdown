@@ -165,7 +165,7 @@ export class StreamProcessWrapper {
 			} else if (messageType === 'THROW') {
 				const error = new Error();
 				error.stack = message;
-				throw error;
+				stream.pushError(error);
 			} else {
 				throw new Error(`Unrecognized messageType ${messageType}`);
 			}
@@ -364,15 +364,17 @@ export class StreamProcessManager extends ProcessManager {
 		return new StreamProcessWrapper(this.filename);
 	}
 	async pipeStream(taskId: string, stream: Streams.ObjectReadStream<string>) {
-		/* tslint:disable */
-		let value, done;
-		while (({value, done} = await stream.next(), !done)) {
-			// @ts-ignore Guaranteed to be a child process
-			process.send(`${taskId}\nPUSH\n${value}`);
+		let done = false;
+		while (!done) {
+			try {
+				let value;
+				({value, done} = await stream.next());
+				process.send!(`${taskId}\nPUSH\n${value}`);
+			} catch (err) {
+				process.send!(`${taskId}\nTHROW\n${err.stack}`);
+			}
 		}
-		/* tslint:enable */
-		// @ts-ignore Guaranteed to be a child process
-		process.send(`${taskId}\nEND`);
+		process.send!(`${taskId}\nEND`);
 		this.activeStreams.delete(taskId);
 	}
 	listen() {

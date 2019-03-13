@@ -57,7 +57,10 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 				if (line.charAt(0) === '>') this._writeLine(line.slice(1));
 			}
 		} catch (err) {
-			if (typeof Monitor === 'undefined') throw err;
+			if (typeof Monitor === 'undefined') {
+				this.pushError(err);
+				return;
+			}
 			const battle = this.battle;
 			Monitor.crashlog(err, 'A battle', {
 				message,
