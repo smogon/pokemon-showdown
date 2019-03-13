@@ -116,8 +116,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			break;
 		case 'forcewin':
 		case 'forcetie':
-			// @ts-ignore
-			this.battle!.win(type === 'forcewin' ? message : null);
+			this.battle!.win(type === 'forcewin' ? message as SideID : null);
 			break;
 		case 'tiebreak':
 			this.battle!.tiebreak();
