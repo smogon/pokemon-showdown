@@ -516,17 +516,15 @@ class RoomBattle {
 		let active = true;
 		if (this.ended || !this.started) {
 			active = false;
-		} else {
-			if (!this.p1 || !this.p1.active) {
+		} else if (!this.p1 || !this.p1.active) {
+			active = false;
+		} else if (!this.p2 || !this.p2.active) {
+			active = false;
+		} else if (this.playerCap > 2) {
+			if (!this.p3 || !this.p3.active) {
 				active = false;
-			} else if (!this.p2 || !this.p2.active) {
+			} else if (!this.p4 || !this.p4.active) {
 				active = false;
-			} else if (this.playerCap > 2) {
-				if (!this.p3 || !this.p3.active) {
-					active = false;
-				} else if (!this.p4 || !this.p4.active) {
-					active = false;
-				}
 			}
 		}
 		Rooms.global.battleCount += (active ? 1 : 0) - (this.active ? 1 : 0);
@@ -943,8 +941,8 @@ class RoomBattle {
 		this.room.auth[user.userid] = Users.PLAYER_SYMBOL;
 		if (user.inRooms.has(this.id)) this.onConnect(user);
 		if (this.playerCount >= this.playerCap) {
-			// @ts-ignore
-			this.room.title = `${this.p1.name} vs. ${this.p2.name}`;
+				// @ts-ignore
+				this.room.title = `${this.p1.name} vs. ${this.p2.name}`;
 			this.room.send(`|title|${this.room.title}`);
 		}
 		if (!initializing) {
