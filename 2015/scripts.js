@@ -635,6 +635,128 @@ exports.BattleScripts = {
 		return team;
 	},
 
+	randomSeasonalMulanTeam: function (side) {
+		let armySide = 'china';
+		let team = [];
+		let pokemon = '';
+		let template, set;
+		let teamDetails = {megaStone: 0};
+		let pokemonLeft = 0;
+
+		// If the other team has been chosen, we get its opposing force.
+		if (this.takenSide) {
+			armySide = (this.takenSide === 'hun' ? 'china' : 'hun');
+		} else {
+			// First team being generated, pick a armySide at random.
+			armySide = (Math.random() > 0.5 ? 'china' : 'hun');
+			this.takenSide = armySide;
+		}
+
+		if (armySide === 'china') {
+			const chinese = [
+				'accelgor', 'bisharp', 'gallade', 'hitmonchan', 'hitmonlee', 'hitmontop', 'infernape', 'lucario', 'machoke', 'medicham',
+				'medicham', 'mienshao', 'pangoro', 'sawk', 'scrafty', 'scizor', 'throh', 'ursaring', 'vigoroth', 'weavile', 'zangoose',
+			];
+
+			const weakCount = {};
+
+			// Add the members of the army.
+			const names = ["Li Shang", "Mulan", "Yao", "Ling"];
+
+			for (let i = 0; i < chinese.length && pokemonLeft < 4; i++) {
+				pokemon = this.sampleNoReplace(chinese);
+				template = this.getTemplate(pokemon);
+
+				// Li Shang shouldn't be an NFE Pokemon.
+				if (names[pokemonLeft] === "Li Shang" && template.evos.length) continue;
+
+				// We don't want too many Fighting or Flying weaknesses, since those moves will be common
+				// Hard limit it to two, since after factoring in Chien-Po we might have a lot of common weakness
+				const mainWeakness = {};
+				if (Tools.getEffectiveness('Flying', template) > 0) mainWeakness['Flying'] = true;
+				if (Tools.getEffectiveness('Fighting', template) > 0) mainWeakness['Fighting'] = true;
+				if (mainWeakness['Fighting'] && weakCount['Fighting'] >= 2) continue;
+				if (mainWeakness['Flying'] && weakCount['Flying'] >= 2) continue;
+
+				for (const type in mainWeakness) {
+					if (type in weakCount) {
+						weakCount[type]++;
+					} else {
+						weakCount[type] = 1;
+					}
+				}
+
+				set = this.randomSet(template, pokemonLeft, teamDetails);
+				if (this.getItem(set.item).megaStone) teamDetails.megaStone++;
+				set.species = toId(set.name);
+				set.name = names[pokemonLeft];
+				set.gender = (set.name === "Mulan" ? 'F' : 'M');
+				set.moves[4] = 'searingshot';
+				if (set.name === "Li Shang") {
+					set.moves[5] = 'sing';
+				}
+
+				// Baton Pass is not allowed.
+				let bpIndex = set.moves.indexOf('batonpass');
+				if (bpIndex >= 0) {
+					set.moves[bpIndex] = 'secretpower';
+				}
+
+				team.push(set);
+				pokemonLeft++;
+			}
+
+			// Chien Po is very large, so he samples from a different pool of Pokemon
+			pokemon = this.sample(['blastoise', 'snorlax', 'golem', 'lickilicky', 'poliwrath', 'hariyama', 'magmortar']);
+			template = this.getTemplate(pokemon);
+			set = this.randomSet(template, 4, teamDetails);
+			if (this.getItem(set.item).megaStone) teamDetails.megaStone++;
+			set.species = toId(set.name);
+			set.name = "Chien-Po";
+			set.gender = 'M';
+			set.moves[4] = 'searingshot';
+			team.push(set);
+
+			// Add Eddie Murphy-- I mean, Mushu, to the team as a Dragonair.
+			template = this.getTemplate('dragonair');
+			template.randomBattleMoves = ['dragondance', 'aquatail', 'waterfall', 'wildcharge', 'extremespeed', 'dracometeor', 'dragonascent'];
+			set = this.randomSet(template, 5);
+			set.species = toId(set.name);
+			set.name = "Mushu";
+			set.gender = 'M';
+			set.ability = "Turboblaze";
+			set.moves[4] = 'sacredfire';
+			set.moves[5] = 'dragonrush';
+			team.push(set);
+		} else {
+			const huns = [
+				'aggron', 'chesnaught', 'conkeldurr', 'drapion', 'electivire', 'emboar', 'exploud', 'feraligatr', 'granbull',
+				'haxorus', 'machamp', 'nidoking', 'rhyperior', 'swampert', 'tyranitar',
+			];
+
+			for (let i = 0; i < huns.length && pokemonLeft < 5; i++) {
+				pokemon = this.sampleNoReplace(huns);
+				template = this.getTemplate(pokemon);
+				set = this.randomSet(template, pokemonLeft, teamDetails);
+				if (this.getItem(set.item).megaStone) teamDetails.megaStone++;
+				set.species = toId(set.name);
+				set.name = (i === 0 ? "Shan Yu" : "Hun " + template.species);
+				set.gender = 'M';
+				team.push(set);
+				pokemonLeft++;
+			}
+
+			// Add Hayabusa the falcon.
+			pokemon = this.sample(['fearow', 'pidgeot', 'staraptor', 'honchkrow', 'aerodactyl', 'archeops', 'braviary', 'noivern']);
+			template = this.getTemplate(pokemon);
+			set = this.randomSet(template, 5, teamDetails);
+			set.species = toId(set.name);
+			set.name = "Hayabusa";
+			team.push(set);
+		}
+		return team;
+	},
+
 	randomSeasonalStaffTeam: function (side) {
 		let team = [];
 		let variant = this.random(2);
