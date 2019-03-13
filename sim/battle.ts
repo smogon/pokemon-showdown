@@ -203,14 +203,6 @@ export class Battle extends Dex.ModdedDex {
 		return this.sides[1];
 	}
 
-	get p1() {
-		return this.sides[0];
-	}
-
-	get p2() {
-		return this.sides[1];
-	}
-
 	toString() {
 		return `Battle: ${this.format}`;
 	}
