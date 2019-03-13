@@ -9,7 +9,7 @@
 'use strict';
 
 exports.BattleScripts = {
-	randomSeasonalTeam: function (side) {
+	randomSeasonalTeam(side) {
 		let seasonalPokemonList = [
 			'alakazam', 'machamp', 'hypno', 'hitmonlee', 'hitmonchan', 'mrmime', 'jynx', 'hitmontop',
 			'hariyama', 'sableye', 'medicham', 'toxicroak', 'electivire', 'magmortar', 'conkeldurr',
@@ -30,7 +30,7 @@ exports.BattleScripts = {
 		}
 		return team;
 	},
-	randomSeasonalWWTeam: function (side) {
+	randomSeasonalWWTeam(side) {
 		let seasonalPokemonList = [
 			'raichu', 'nidoqueen', 'nidoking', 'clefable', 'wigglytuff', 'rapidash', 'dewgong', 'cloyster',
 			'exeggutor', 'starmie', 'jynx', 'lapras', 'snorlax', 'articuno', 'azumarill', 'granbull', 'delibird',

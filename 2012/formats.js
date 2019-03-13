@@ -26,11 +26,11 @@ exports.Formats = [
 		mod: 'gen5',
 
 		team: 'randomSeasonalWW',
-		onBegin: function () {
+		onBegin() {
 			this.setWeather('Hail');
 			delete this.weatherData.duration;
 		},
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			if (move.id === 'present') {
 				move.category = 'Status';
 				move.basePower = 0;

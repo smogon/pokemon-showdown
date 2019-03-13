@@ -3,7 +3,7 @@
 exports.BattleAbilities = {
 	// Asty
 	astyabsorb: {
-		onTryHit: function (target, source, move) {
+		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Water') {
 				if (!this.heal(target.maxhp / 4)) {
 					this.add('-immune', target, '[msg]', '[from] ability: Asty Absorb');
@@ -11,22 +11,22 @@ exports.BattleAbilities = {
 				return null;
 			}
 			if (target !== source && move.type === 'Grass') {
-				if (!this.boost({atk:1})) {
+				if (!this.boost({atk: 1})) {
 					this.add('-immune', target, '[msg]', '[from] ability: Asty Absorb');
 				}
 				return null;
 			}
 		},
-		onAllyTryHitSide: function (target, source, move) {
+		onAllyTryHitSide(target, source, move) {
 			if (target === this.effectData.target || target.side !== source.side) return;
 			if (move.type === 'Grass') {
-				this.boost({atk:1}, this.effectData.target);
+				this.boost({atk: 1}, this.effectData.target);
 			}
 		},
 	},
 	// GeoffBruedley
 	baitkai: {
-		onAfterDamage: function (damage, target, source, move) {
+		onAfterDamage(damage, target, source, move) {
 			if (move && move.flags['contact']) {
 				source.addVolatile('attract', target);
 				source.addVolatile('confusion', target);
@@ -38,7 +38,7 @@ exports.BattleAbilities = {
 	},
 	// Frysinger
 	funhouse: {
-		onStart: function (source) {
+		onStart(source) {
 			this.useMove('Topsy-Turvy', source);
 		},
 		id: "funhouse",
@@ -48,7 +48,7 @@ exports.BattleAbilities = {
 	// MattL
 	gravitationalfield: {
 		shortDesc: "On switch-in, this Pokemon causes the effects of Gravity to occur.",
-		onStart: function (source) {
+		onStart(source) {
 			this.addPseudoWeather('gravity', source);
 		},
 		id: "gravitationalfield",
@@ -58,7 +58,7 @@ exports.BattleAbilities = {
 	// TEG
 	hiddentype: {
 		onSwitchInPriority: 101,
-		onSwitchIn: function (pokemon) {
+		onSwitchIn(pokemon) {
 			let type = 'Normal';
 			type = pokemon.getItem().onPlate;
 			if (!type || type === true) {
@@ -73,24 +73,24 @@ exports.BattleAbilities = {
 	},
 	// Snowy
 	holyhail: {
-		onStart: function () {
+		onStart() {
 			this.setWeather('hail');
 		},
-		onAnySetWeather: function (target, source, weather) {
+		onAnySetWeather(target, source, weather) {
 			if (weather.id !== 'hail') {
 				this.add('message', 'The Holy Hail resisted the attempt to change the weather!');
 				return false;
 			}
 		},
-		onImmunity: function (type) {
+		onImmunity(type) {
 			if (type === 'hail') return false;
 		},
-		onModifySpe: function () {
+		onModifySpe() {
 			if (this.isWeather(['hail'])) {
 				return this.chainModify(2);
 			}
 		},
-		onWeather: function (target, source, effect) {
+		onWeather(target, source, effect) {
 			if (effect.id === 'hail') {
 				this.heal(target.maxhp / 16);
 			}
@@ -101,24 +101,24 @@ exports.BattleAbilities = {
 	},
 	// Sunfished
 	killjoy: {
-		onStart: function (pokemon) {
+		onStart(pokemon) {
 			this.add('-ability', pokemon, 'Killjoy');
 			this.addPseudoWeather('killjoy', pokemon, "Killjoy");
 		},
-		onEnd: function (pokemon) {
+		onEnd(pokemon) {
 			const foes = pokemon.side.foe.active;
 			if (this.pseudoWeather['killjoy'] && !(foes.length && foes[0].hasAbility('killjoy'))) {
 				this.removePseudoWeather('killjoy', pokemon);
 			}
 		},
 		effect: {
-			onStart: function () {
+			onStart() {
 				this.add('message', 'All status moves will gain priority and cause recharge in the user!');
 			},
-			onModifyPriority: function (priority, pokemon, target, move) {
+			onModifyPriority(priority, pokemon, target, move) {
 				if (move && move.category === 'Status') return priority + 1;
 			},
-			onModifyMove: function (move) {
+			onModifyMove(move) {
 				if (move.category === 'Status') {
 					move.flags.recharge = 1;
 					move.onAfterMove = function (source) {
@@ -126,7 +126,7 @@ exports.BattleAbilities = {
 					};
 				}
 			},
-			onEnd: function () {
+			onEnd() {
 				this.add('message', 'The priority of status moves have returned to normal.');
 			},
 		},
@@ -136,13 +136,13 @@ exports.BattleAbilities = {
 	},
 	// Halite
 	lightlysalted: {
-		onModifyPriority: function (priority, pokemon, target, move) {
+		onModifyPriority(priority, pokemon, target, move) {
 			if (move && move.category === 'Status') {
 				return priority + 1;
 			}
 		},
 		onModifyMovePriority: 90,
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			if (move.category === "Physical") {
 				move.category = "Special";
 			}
@@ -161,11 +161,11 @@ exports.BattleAbilities = {
 	},
 	// Golui
 	specialsnowflake: {
-		onStart: function (source) {
+		onStart(source) {
 			this.add('-ability', source, 'Special Snowflake');
 			this.add('message', 'All moves that target a Special Snowflake will become Special!');
 		},
-		onTryHit: function (target, source, move) {
+		onTryHit(target, source, move) {
 			if (move.category !== 'Status') {
 				move.category = 'Special';
 			}

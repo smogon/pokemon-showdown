@@ -17,7 +17,7 @@ exports.Formats = [
 
 		team: 'randomSeasonalSFT',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
-		onBegin: function () {
+		onBegin() {
 			this.add('message', "Dialga and Palkia have distorted space and time!");
 
 			const scenarios = {
@@ -60,14 +60,14 @@ exports.Formats = [
 				delete this.weatherData.duration;
 			}
 		},
-		onFaint: function (target, source) {
+		onFaint(target, source) {
 			if (this.seasonal.scenario === 'gen1') {
 				if (source && source.removeVolatile) source.removeVolatile('mustrecharge');
 				if (target && target.side) target.side.removeSideCondition('reflect');
 				this.queue = [];
 			}
 		},
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			if (this.seasonal.scenario === 'gen1') {
 				if (move.id === 'blizzard') {
 					move.accuracy = 90;
@@ -76,7 +76,7 @@ exports.Formats = [
 					move.secondary = {chance: 33, boosts: {spd: -1, spa: -1}};
 				}
 				if (move.id === 'amnesia') {
-					move.boosts = {spa:2, spd:2};
+					move.boosts = {spa: 2, spd: 2};
 				}
 				if (move.id === 'hyperbeam') {
 					move.category = 'Physical';
@@ -104,26 +104,26 @@ exports.Formats = [
 				}
 			}
 		},
-		onSwitchIn: function (pokemon) {
+		onSwitchIn(pokemon) {
 			if (this.seasonal.scenario === 'lotr') {
 				if (pokemon.name === 'Frodo') {
 					this.add('-message', 'The One Ring gives power to Frodo!');
-					this.boost({def:2, spd:2, evasion:2}, pokemon);
+					this.boost({def: 2, spd: 2, evasion: 2}, pokemon);
 					if (pokemon.setType(['Ground', 'Fairy'])) {
 						this.add('-start', pokemon, 'typechange', 'Ground/Fairy', '[silent]');
 					}
 				}
 				if (pokemon.name === 'Gandalf') {
 					this.add('-message', 'Fly, you fools!');
-					this.boost({spe:1}, pokemon);
+					this.boost({spe: 1}, pokemon);
 				}
 				if (pokemon.name === 'Saruman') {
 					this.add('-message', 'Against the power of Mordor there can be no victory.');
-					this.boost({spd:1}, pokemon);
+					this.boost({spd: 1}, pokemon);
 				}
 				if (pokemon.name === 'Legolas') {
 					this.add('-message', "They're taking the hobbits to Isengard!");
-					this.boost({atk:1, spa:1}, pokemon);
+					this.boost({atk: 1, spa: 1}, pokemon);
 				}
 				if (pokemon.name === 'Boromir') {
 					this.add('-message', 'One does not simply walk into Mordor.');
@@ -131,22 +131,22 @@ exports.Formats = [
 				}
 				if (pokemon.name === 'Aragorn') {
 					this.add('-message', 'Aragorn, son of Arathor, king of Gondor.');
-					this.boost({spd:1}, pokemon);
+					this.boost({spd: 1}, pokemon);
 				}
 				if (pokemon.name === 'Pippin') {
 					this.add('-message', 'How about second breakfast?');
-					this.boost({def:1, spd:1}, pokemon);
+					this.boost({def: 1, spd: 1}, pokemon);
 				}
 				if (pokemon.name === 'Merry') {
 					this.add('-message', "I don't think he knows about second breakfast, Pippin.");
-					this.boost({def:1, spd:1}, pokemon);
+					this.boost({def: 1, spd: 1}, pokemon);
 				}
 				if (pokemon.name === 'Samwise') {
 					this.add('-message', 'Mr. Frodo!!');
 					if (pokemon.setType(['Normal', 'Fairy'])) {
 						this.add('-start', pokemon, 'typechange', 'Normal/Fairy', '[silent]');
 					}
-					this.boost({spe:3}, pokemon);
+					this.boost({spe: 3}, pokemon);
 				}
 				if (pokemon.name === 'Nazgûl') {
 					this.add('-message', 'One ring to rule them all.');
@@ -156,15 +156,15 @@ exports.Formats = [
 				}
 				if (pokemon.name === 'Treebeard') {
 					this.add('-message', 'Come, my friends. The ents are going to war!');
-					this.boost({spe:2}, pokemon);
+					this.boost({spe: 2}, pokemon);
 				}
 				if (pokemon.name === 'Bard') {
 					this.add('-message', 'Black arrow! Go now and speed well!');
-					this.boost({accuracy:1, evasion:1}, pokemon);
+					this.boost({accuracy: 1, evasion: 1}, pokemon);
 				}
 				if (pokemon.name === 'Gollum') {
 					this.add('-message', 'My preciousssss!');
-					this.boost({accuracy:6, evasion:1}, pokemon);
+					this.boost({accuracy: 6, evasion: 1}, pokemon);
 				}
 			}
 			if (this.seasonal.scenario === 'gen1') {
@@ -173,7 +173,7 @@ exports.Formats = [
 			if (this.seasonal.scenario === 'desert') {
 				if (pokemon.name === 'Moses') {
 					this.add('-message', 'Let my people go!');
-					this.boost({spd:1}, pokemon);
+					this.boost({spd: 1}, pokemon);
 				}
 			}
 		},
@@ -188,7 +188,7 @@ exports.Formats = [
 
 		team: 'randomSeasonalMulan',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
-		onBegin: function () {
+		onBegin() {
 			this.add('message', "General Li Shang! The Huns are marching towards the Imperial City! Train your recruits quickly and make your stand!");
 			this.seasonal = {
 				songCount: 0,
@@ -209,7 +209,7 @@ exports.Formats = [
 				morale: 0,
 			};
 		},
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			if (move.id === 'sing') {
 				move.name = "Train Recruits";
 				move.accuracy = 100;
@@ -259,7 +259,7 @@ exports.Formats = [
 				delete move.secondaries;
 			}
 		},
-		onSwitchIn: function (pokemon) {
+		onSwitchIn(pokemon) {
 			this.seasonal.morale = this.seasonal.morale || 0;
 			if (pokemon.name in {'Mulan': 1, 'Yao': 1, 'Ling': 1, 'Chien-Po': 1}) {
 				const offense = Math.ceil(this.seasonal.morale / 2) - 1;
@@ -273,7 +273,7 @@ exports.Formats = [
 				this.add('-start', pokemon, 'typeadd', 'Fire', '[from] ' + pokemon);
 			}
 		},
-		onResidual: function () {
+		onResidual() {
 			if (this.seasonal.songCount < this.seasonal.song.length) {
 				this.add('-message', '"' + this.seasonal.song[this.seasonal.songCount] + '"');
 				if (this.seasonal.verses[this.seasonal.songCount]) {
@@ -306,7 +306,7 @@ exports.Formats = [
 
 		team: 'randomSeasonalStaff',
 		ruleset: ['Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
-		onBegin: function () {
+		onBegin() {
 			// This seasonal gets a bit from Super Smash Bros., that's where the initial message comes from.
 			this.add('message', "GET READY FOR THE NEXT BATTLE!");
 			// This link leads to a post where all signature moves can be found so the user can use this resource while battling.
@@ -365,7 +365,7 @@ exports.Formats = [
 			}
 		},
 		// Here we add some flavour or design immunities.
-		onImmunity: function (type, pokemon) {
+		onImmunity(type, pokemon) {
 			// Great Sage is naturally immune to Attract.
 			if (type === 'attract' && toId(pokemon.name) === 'greatsage') {
 				this.add('-immune', pokemon, '[from] Irrelevant');
@@ -378,13 +378,13 @@ exports.Formats = [
 			}
 			// Somalia's Ban Spree makes it immune to some move types, since he's too mad to feel pain.
 			// Types have been chosen from types you can be immune against with an ability.
-			if (toId(pokemon.name) === 'somalia' && type in {'Ground':1, 'Water':1, 'Fire':1, 'Grass':1, 'Poison':1, 'Normal':1, 'Electric':1}) {
+			if (toId(pokemon.name) === 'somalia' && type in {'Ground': 1, 'Water': 1, 'Fire': 1, 'Grass': 1, 'Poison': 1, 'Normal': 1, 'Electric': 1}) {
 				this.add('-message', "You can't stop SOMALIA in middle of his Ban Spree!");
 				return false;
 			}
 		},
 		// Hacks for megas changed abilities. This allow for their changed abilities.
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			let name = toId(pokemon.name);
 
 			if (pokemon.template.isMega) {
@@ -419,7 +419,7 @@ exports.Formats = [
 		},
 		// Here we treat many things, read comments inside for information.
 		onSwitchInPriority: 1,
-		onSwitchIn: function (pokemon) {
+		onSwitchIn(pokemon) {
 			let name = toId(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
 			// No OP pls. Balance stuff, changing them upon switch in. Wonder Guard gets curse to minimise their turns out.
 			if (pokemon.getAbility().id === 'wonderguard') {
@@ -429,19 +429,19 @@ exports.Formats = [
 			// Weak Pokémon get a boost so they can fight amongst the other monsters.
 			// Innovamania is just useless, so the boosts are a prank.
 			if (name === 'test2017' && !pokemon.illusion) {
-				this.boost({atk:1}, pokemon, pokemon, 'innate ability');
+				this.boost({atk: 1}, pokemon, pokemon, 'innate ability');
 			}
 			if (name === 'okuu' && !pokemon.illusion) {
-				this.boost({def:2, spd:1}, pokemon, pokemon, 'innate ability');
+				this.boost({def: 2, spd: 1}, pokemon, pokemon, 'innate ability');
 			}
 			if (name === 'innovamania' && !pokemon.illusion) {
-				this.boost({atk:6, def:6, spa:6, spd:6, spe:6, accuracy:6}, pokemon, pokemon, 'divine grace');
+				this.boost({atk: 6, def: 6, spa: 6, spd: 6, spe: 6, accuracy: 6}, pokemon, pokemon, 'divine grace');
 			}
 			if (name === 'bloobblob' && !pokemon.illusion) {
-				this.boost({def:1, spd:1, spe:2}, pokemon, pokemon, 'innate ability');
+				this.boost({def: 1, spd: 1, spe: 2}, pokemon, pokemon, 'innate ability');
 			}
 			if (name === 'timbuktu' && !pokemon.illusion) {
-				this.boost({def:-2, spd:-1}, pokemon, pokemon, 'innate ability');
+				this.boost({def: -2, spd: -1}, pokemon, pokemon, 'innate ability');
 			}
 			if (name === 'electrolyte') {
 				pokemon.lastAttackType = 'None';
@@ -1092,7 +1092,7 @@ exports.Formats = [
 			}
 		},
 		// Here we deal with some special mechanics due to custom sets and moves.
-		onBeforeMove: function (pokemon, target, move) {
+		onBeforeMove(pokemon, target, move) {
 			let name = toId(pokemon.name);
 			// Special Shaymin forme change.
 			if (name === 'shaymin' && !pokemon.illusion) {
@@ -1119,11 +1119,11 @@ exports.Formats = [
 				let dice = this.random(3);
 				pokemon.removeVolatile('needles');
 				if (dice === 2) {
-					this.boost({atk:1, spe:1, def:-1}, pokemon, pokemon, 'used needles');
+					this.boost({atk: 1, spe: 1, def: -1}, pokemon, pokemon, 'used needles');
 				} else if (dice === 1) {
-					this.boost({def:1, spd:1, spe:-1}, pokemon, pokemon, 'used needles');
+					this.boost({def: 1, spd: 1, spe: -1}, pokemon, pokemon, 'used needles');
 				} else {
-					this.boost({atk:1, def:1, spe:-1}, pokemon, pokemon, 'used needles');
+					this.boost({atk: 1, def: 1, spe: -1}, pokemon, pokemon, 'used needles');
 				}
 			}
 
@@ -1134,7 +1134,7 @@ exports.Formats = [
 			}
 		},
 		// Add here salty tears, that is, custom faint phrases.
-		onFaint: function (pokemon) {
+		onFaint(pokemon) {
 			if (pokemon.kupoTransformed) {
 				pokemon.name = '@kupo';
 				pokemon.kupoTransformed = false;
@@ -1581,7 +1581,7 @@ exports.Formats = [
 			}
 		},
 		// Special switch-out events for some mons.
-		onSwitchOut: function (pokemon) {
+		onSwitchOut(pokemon) {
 			if (toId(pokemon.name) === 'hippopotas' && !pokemon.illusion) {
 				this.add('-message', 'The sandstorm subsided.');
 			}
@@ -1600,7 +1600,7 @@ exports.Formats = [
 			// Transform
 			if (pokemon.originalName) pokemon.name = pokemon.originalName;
 		},
-		onDragOut: function (pokemon) {
+		onDragOut(pokemon) {
 			// Prevents qtrx from being red carded by chaos while in the middle of using sig move, which causes a visual glitch.
 			if (pokemon.isDuringAttack) {
 				this.add('-message', "But the Unown Aura absorbed the effect!");
@@ -1611,13 +1611,13 @@ exports.Formats = [
 				pokemon.kupoTransformed = false;
 			}
 		},
-		onAfterMoveSelf: function (source, target, move) {
+		onAfterMoveSelf(source, target, move) {
 			// Make haunter not immune to Life Orb as a means to balance.
 			if (toId(source.name) === 'haunter') {
 				this.damage(source.maxhp / 10, source, source, this.getItem('lifeorb'));
 			}
 		},
-		onDisableMove: function (pokemon) {
+		onDisableMove(pokemon) {
 			let name = toId(pokemon.name);
 			// Enforce choice item locking on custom moves.
 			// qtrx only has one move anyway. This isn't implemented for Cathy since her moves are all custom. Don't trick her a Scarf!
@@ -1644,7 +1644,7 @@ exports.Formats = [
 		},
 		// Specific residual events for custom moves.
 		// This allows the format to have kind of custom side effects and volatiles.
-		onResidual: function (battle) {
+		onResidual(battle) {
 			for (let s in battle.sides) {
 				let thisSide = battle.sides[s];
 				if (thisSide.premonTimer > 4) {
@@ -1661,7 +1661,7 @@ exports.Formats = [
 					if (pokemon.side.premonEffect) {
 						pokemon.side.premonEffect = false;
 						this.add('c|@zdrup|...dary! __**LEGENDARY!**__');
-						this.boost({atk:1, def:1, spa:1, spd:1, spe:1, accuracy:1}, pokemon, pokemon, 'legendary premonition');
+						this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1, accuracy: 1}, pokemon, pokemon, 'legendary premonition');
 						pokemon.addVolatile('aquaring');
 						pokemon.addVolatile('focusenergy');
 					}
@@ -1704,13 +1704,13 @@ exports.Formats = [
 						// Dell hasn't been attacked.
 						pokemon.removeVolatile('parry');
 						this.add('-message', "Untouched, the Aura Parry grows stronger still!");
-						this.boost({def:1, spd:1}, pokemon, pokemon, 'Aura Parry');
+						this.boost({def: 1, spd: 1}, pokemon, pokemon, 'Aura Parry');
 					}
 				}
 			}
 		},
 		// This is where the signature moves are actually done.
-		onModifyMove: function (move, pokemon) {
+		onModifyMove(move, pokemon) {
 			// This is to make signature moves work when transformed.
 			if (move.id === 'transform') {
 				move.onHit = function (target, pokemon) {
@@ -1753,7 +1753,7 @@ exports.Formats = [
 			}
 			if (move.id === 'quiverdance' && name === 'haunter') {
 				move.name = 'Genius Dance';
-				move.boosts = {spd:1, spe:1, accuracy:2, evasion:-1, def:-1};
+				move.boosts = {spd: 1, spe: 1, accuracy: 2, evasion: -1, def: -1};
 				move.onTryHit = function (pokemon) {
 					if (pokemon.volatiles['haunterino']) return false;
 				};
@@ -1767,11 +1767,11 @@ exports.Formats = [
 				move.onHit = function (target, pokemon) {
 					this.add("raw|<div class=\"broadcast-red\"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>");
 				};
-				move.self = {boosts: {atk:6}};
+				move.self = {boosts: {atk: 6}};
 			}
 			if (move.id === 'milkdrink' && name === 'joim') {
 				move.name = 'Red Bull Drink';
-				move.boosts = {spa:1, spe:1, accuracy:1, evasion:-1};
+				move.boosts = {spa: 1, spe: 1, accuracy: 1, evasion: -1};
 				delete move.heal;
 				move.onTryHit = function (pokemon) {
 					if (pokemon.volatiles['redbull']) return false;
@@ -1862,7 +1862,7 @@ exports.Formats = [
 				move.name = 'Meme Mime';
 				move.flags = {};
 				move.onTry = function () {};
-				move.boosts = {atk:1, def:1, spa:1, spd:1, spe:1, accuracy:1};
+				move.boosts = {atk: 1, def: 1, spa: 1, spd: 1, spe: 1, accuracy: 1};
 				move.onTryHit = function (target, source, move) {
 					this.attrLastMove('[still]');
 					this.add('-anim', pokemon, "Geomancy", pokemon);
@@ -1887,7 +1887,7 @@ exports.Formats = [
 				move.type = 'Fire';
 				move.priority = 2;
 				move.status = 'brn';
-				move.self = {boosts: {spa:-1}};
+				move.self = {boosts: {spa: -1}};
 				move.onHit = function (target, source) {
 					let oldAbility = target.setAbility('solarpower');
 					if (oldAbility) {
@@ -1901,7 +1901,7 @@ exports.Formats = [
 				move.type = 'Fairy';
 				move.basePower = 120;
 				move.accuracy = 100;
-				move.self = {boosts: {spe:1}};
+				move.self = {boosts: {spe: 1}};
 				move.onHit = function (target, pokemon) {
 					let decision = this.willMove(pokemon);
 					if (decision && target.gender === 'F') {
@@ -1990,7 +1990,7 @@ exports.Formats = [
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Pursuit", target);
 				};
-				move.boosts = {atk:-1, spa:-1, accuracy:-2};
+				move.boosts = {atk: -1, spa: -1, accuracy: -2};
 			}
 			if (move.id === 'triattack' && name === 'ascriptmaster') {
 				move.name = 'Spectrum Beam';
@@ -2033,13 +2033,13 @@ exports.Formats = [
 				move.onHit = function (pokemon) {
 					this.add('-message', 'I get it now!');
 					if (this.randomChance(7, 10)) {
-						this.boost({spa:-1, spd:-1}, pokemon, pokemon, move.sourceEffect);
+						this.boost({spa: -1, spd: -1}, pokemon, pokemon, move.sourceEffect);
 					}
 				};
 			}
 			if (move.id === 'detect' && name === 'audiosurfer') {
 				move.name = 'Audioshield';
-				move.secondary = {chance: 50, self: {boosts: {accuracy:-1}}};
+				move.secondary = {chance: 50, self: {boosts: {accuracy: -1}}};
 				move.onTryHit = function (target) {
 					this.add('-anim', target, "Boomburst", target);
 					return !!this.willAct() && this.runEvent('StallMove', target);
@@ -2049,14 +2049,14 @@ exports.Formats = [
 					if (foe.ability !== 'soundproof') {
 						this.add('-message', 'The Audioshield is making a deafening noise!');
 						this.damage(foe.maxhp / 12, foe, pokemon);
-						if (this.randomChance(1, 2)) this.boost({atk:-1, spa:-1}, foe, foe, 'noise damage');
+						if (this.randomChance(1, 2)) this.boost({atk: -1, spa: -1}, foe, foe, 'noise damage');
 					}
 					pokemon.addVolatile('stall');
 				};
 			}
 			if (move.id === 'bulkup' && name === 'barton') {
 				move.name = 'MDMA Huff';
-				move.boosts = {atk:2, spe:1, accuracy:-1};
+				move.boosts = {atk: 2, spe: 1, accuracy: -1};
 			}
 			if (move.id === 'glare' && name === 'bean') {
 				move.name = 'Coin Toss';
@@ -2075,13 +2075,13 @@ exports.Formats = [
 				move.name = 'Buzzing of the Swarm';
 				move.category = 'Physical';
 				move.basePower = 100;
-				move.secondaries = [{chance:10, volatileStatus: 'flinch'}];
+				move.secondaries = [{chance: 10, volatileStatus: 'flinch'}];
 			}
 			if (move.id === 'dragontail' && name === 'biggie') {
 				move.name = 'Food Rush';
 				move.basePower = 100;
 				move.type = 'Normal';
-				move.self = {boosts: {evasion:-1}};
+				move.self = {boosts: {evasion: -1}};
 			}
 			if (move.id === 'quickattack' && name === 'birkal') {
 				move.name = 'Caw';
@@ -2100,7 +2100,7 @@ exports.Formats = [
 					return target.hp / 2;
 				};
 				move.onImmunity = function (type) {
-					if (type in {'Normal':1, 'Ghost':1}) return false;
+					if (type in {'Normal': 1, 'Ghost': 1}) return false;
 				};
 				move.onTryHit = function (target, source, move) {
 					this.attrLastMove('[still]');
@@ -2123,7 +2123,7 @@ exports.Formats = [
 			if (move.id === 'detect' && name === 'dell') {
 				let dmg = Math.ceil(pokemon.maxhp / (pokemon.ability === 'simple' ? 2 : 4));
 				move.name = 'Aura Parry';
-				move.self = {boosts: {atk:1, spa:1, spe:1}};
+				move.self = {boosts: {atk: 1, spa: 1, spe: 1}};
 				move.onTryHit = function (target, source) {
 					if (source.hp <= dmg) return false;
 					this.attrLastMove('[still]');
@@ -2157,7 +2157,7 @@ exports.Formats = [
 				if (move.id === 'entrainment') {
 					move.name = 'Study';
 					move.priority = 1;
-					move.flags = {protect:1};
+					move.flags = {protect: 1};
 					move.onTryHit = function (target, source) {
 						if (source.lastAttackType === 'None') {
 							this.add('-hint', "Study only works when preceded by an attacking move.");
@@ -2192,7 +2192,7 @@ exports.Formats = [
 			if (move.id === 'fakeout' && name === 'enguarde') {
 				move.name = 'Ready Stance';
 				move.type = 'Steel';
-				move.secondaries = [{chance:100, boosts:{atk:-1, spa:-1}, volatileStatus: 'flinch'}];
+				move.secondaries = [{chance: 100, boosts: {atk: -1, spa: -1}, volatileStatus: 'flinch'}];
 				move.onTryHit = function (target, source) {
 					if (source.activeTurns > 1) {
 						this.add('-hint', "Ready Stance only works on your first turn out.");
@@ -2215,7 +2215,7 @@ exports.Formats = [
 			}
 			if (move.id === 'roleplay' && name === 'formerhope') {
 				move.volatileStatus = 'taunt';
-				move.self = {boosts: {spa:1}};
+				move.self = {boosts: {spa: 1}};
 				move.onTryHit = function (target, source) {
 					this.add('c|@Former Hope|/me godmodes');
 				};
@@ -2225,7 +2225,7 @@ exports.Formats = [
 				move.name = "Grind you're mum";
 				move.basePower = 30;
 				move.onHit = function (target, pokemon) {
-					if (target.fainted || target.hp <= 0) this.boost({atk:2, spa:2, spe:1}, pokemon, pokemon, move);
+					if (target.fainted || target.hp <= 0) this.boost({atk: 2, spa: 2, spe: 1}, pokemon, pokemon, move);
 				};
 			}
 			if (move.id === 'partingshot' && name === 'hippopotas') {
@@ -2366,7 +2366,7 @@ exports.Formats = [
 			}
 			if (move.id === 'shellsmash' && name === 'legitimateusername') {
 				move.name = 'Shell Fortress';
-				move.boosts = {def:2, spd:2, atk:-4, spa:-4, spe:-4};
+				move.boosts = {def: 2, spd: 2, atk: -4, spa: -4, spe: -4};
 			}
 			if (move.id === 'trumpcard' && name === 'level51') {
 				move.name = 'Next Level Strats';
@@ -2392,7 +2392,7 @@ exports.Formats = [
 			}
 			if (move.id === 'protect' && name === 'layell') {
 				move.name = 'Pixel Protection';
-				move.self = {boosts: {def:3, spd:2}};
+				move.self = {boosts: {def: 3, spd: 2}};
 				move.onTryHit = function (pokemon) {
 					if (pokemon.volatiles['pixels']) {
 						this.add('-hint', "Pixel Protection only works once per outing.");
@@ -2429,13 +2429,13 @@ exports.Formats = [
 				if (move.id === 'fireblast') {
 					move.name = 'Tanned';
 					move.accuracy = 100;
-					move.secondaries = [{status:'brn', chance:100}];
+					move.secondaries = [{status: 'brn', chance: 100}];
 					move.onTryHit = function (target, source, move) {
 						this.attrLastMove('[still]');
 						this.add('-anim', source, "Eruption", target);
 					};
 					move.onHit = function (target, source) {
-						this.boost({atk:1, spa:1, evasion:-1, accuracy:-1}, source, source);
+						this.boost({atk: 1, spa: 1, evasion: -1, accuracy: -1}, source, source);
 					};
 				} else if (move.id === 'topsyturvy') {
 					move.name = 'rof';
@@ -2445,8 +2445,8 @@ exports.Formats = [
 				move.name = 'Beautiful Disaster';
 				move.type = 'Normal';
 				move.secondaries = [{
-					chance:100,
-					onHit: function (target, source) {
+					chance: 100,
+					onHit(target, source) {
 						if (this.randomChance(1, 2)) {
 							target.trySetStatus('brn', source);
 						} else {
@@ -2467,7 +2467,7 @@ exports.Formats = [
 			if (move.id === 'whirlpool' && name === 'phil') {
 				move.name = 'Slug Attack';
 				move.basePower = 50;
-				move.secondaries = [{chance:100, status:'tox'}];
+				move.secondaries = [{chance: 100, status: 'tox'}];
 			}
 			if (move.id === 'meditate' && name === 'qtrx') {
 				move.name = 'KEYBOARD SMASH';
@@ -2508,7 +2508,7 @@ exports.Formats = [
 				};
 				move.onHit = function (target, source) {
 					if (!target.volatiles.curse) {
-						this.boost({atk:1, def:1, spa:1, spd:1, spe:1, accuracy:1}, source, source);
+						this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1, accuracy: 1}, source, source);
 						target.addVolatile('curse');
 					} else {
 						this.boost({atk: 1}, source, source);
@@ -2522,7 +2522,7 @@ exports.Formats = [
 				move.basePower = 125;
 				move.type = 'Rock';
 				move.accuracy = 90;
-				move.secondaries = [{chance:10, volatileStatus:'flinch'}];
+				move.secondaries = [{chance: 10, volatileStatus: 'flinch'}];
 			}
 			if (move.id === 'stockpile' && name === 'relados') {
 				move.name = 'Loyalty';
@@ -2555,7 +2555,7 @@ exports.Formats = [
 				move.name = 'fat monkey';
 				move.accuracy = 95;
 				move.flags = {contact: 1, protect: 1};
-				move.self = {boosts: {def:-1, spe:-1}};
+				move.self = {boosts: {def: -1, spe: -1}};
 				move.onTryHit = function (target, source, move) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Brave Bird", target);
@@ -2570,13 +2570,13 @@ exports.Formats = [
 			if (move.id === 'frenzyplant' && name === 'rosiethevenusaur') {
 				move.name = 'Swag Plant';
 				move.volatileStatus = 'confusion';
-				move.self = {boosts: {atk:1, def:1}};
+				move.self = {boosts: {atk: 1, def: 1}};
 			}
 			if (move.id === 'icebeam' && name === 'scalarmotion') {
 				move.name = 'Eroding Frost';
 				move.basePower = 65;
 				move.onEffectiveness = function (typeMod, type) {
-					if (type in {'Fire':1, 'Water': 1}) return 1;
+					if (type in {'Fire': 1, 'Water': 1}) return 1;
 				};
 				move.onTryHit = function (target, source, move) {
 					this.attrLastMove('[still]');
@@ -2630,7 +2630,7 @@ exports.Formats = [
 						this.attrLastMove('[still]');
 						this.add('-anim', pokemon, "Fire Blast", pokemon);
 					};
-					move.self = {boosts: {atk:2, def:2, spa:2, spd:2, spe:2}};
+					move.self = {boosts: {atk: 2, def: 2, spa: 2, spd: 2, spe: 2}};
 				}
 				move.onHit = function (target, pokemon) {
 					if (target.fainted || target.hp <= 0) pokemon.killedSome = 1;
@@ -2660,7 +2660,7 @@ exports.Formats = [
 				move.name = 'SPOOPY EDGE CUT';
 				move.basePower = 90;
 				move.accuracy = 100;
-				move.self = {boosts: {evasion:-1}};
+				move.self = {boosts: {evasion: -1}};
 				move.onTryHit = function (target, source) {
 					this.add('-message', '*@Temporaryanonymous teleports behind you*');
 					this.attrLastMove('[still]');
@@ -2694,13 +2694,13 @@ exports.Formats = [
 				move.basePower = 150;
 				move.type = 'Water';
 				move.category = 'Special';
-				move.self = {boosts: {spa:-1, spd:-1, def:-1}};
+				move.self = {boosts: {spa: -1, spd: -1, def: -1}};
 			}
 			if (move.id === 'return' && name === 'tgmd') {
 				delete move.basePowerCallback;
 				move.name = 'Canine Carnage';
 				move.basePower = 120;
-				move.secondaries = [{chance:10, volatileStatus:'flinch'}, {chance:100, boosts:{def:-1}}];
+				move.secondaries = [{chance: 10, volatileStatus: 'flinch'}, {chance: 100, boosts: {def: -1}}];
 				move.accuracy = 90;
 				move.onTryHit = function (target, source) {
 					this.attrLastMove('[still]');
@@ -2732,11 +2732,11 @@ exports.Formats = [
 				move.category = 'Special';
 				move.type = 'Fairy';
 				move.basePower = 80;
-				move.secondaries = [{chance:30, status:'brn'}, {chance:30, status:'frz'}];
+				move.secondaries = [{chance: 30, status: 'brn'}, {chance: 30, status: 'frz'}];
 				move.onEffectiveness = function (typeMod, type, move) {
 					return typeMod + this.getEffectiveness('Ice', type);
 				};
-				move.self = {boosts: {accuracy:-1}};
+				move.self = {boosts: {accuracy: -1}};
 				move.onTryHit = function (target, source) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Simple Beam", target);
@@ -2813,7 +2813,7 @@ exports.Formats = [
 			}
 			if (move.id === 'detect' && name === 'zebraiken') {
 				move.name = 'bzzt';
-				move.self = {boosts: {spa:1, atk:1}};
+				move.self = {boosts: {spa: 1, atk: 1}};
 			}
 			if (move.id === 'wish' && name === 'zdrup') {
 				move.name = 'Premonition';
@@ -2835,8 +2835,8 @@ exports.Formats = [
 				move.name = 'Energy Field';
 				move.accuracy = 100;
 				move.basePower = 150;
-				move.secondaries = [{chance:40, status:'par'}];
-				move.self = {boosts:{spa:-1, spd:-1, spe:-1}};
+				move.secondaries = [{chance: 40, status: 'par'}];
+				move.self = {boosts: {spa: -1, spd: -1, spe: -1}};
 			}
 			if (move.id === 'psychoboost' && name === 'arcticblast') {
 				move.name = 'Doubles Purism';
@@ -2861,7 +2861,7 @@ exports.Formats = [
 			}
 			if (move.id === 'whirlwind' && name === 'articuno') {
 				move.name = 'True Support';
-				move.self = {boosts: {def:1, spd:1}};
+				move.self = {boosts: {def: 1, spd: 1}};
 				move.onHit = function (target, source) {
 					this.useMove('substitute', target, target);
 				};
@@ -2869,8 +2869,8 @@ exports.Formats = [
 			if (move.id === 'toxic' && name === 'asty') {
 				move.name = 'Amphibian Toxin';
 				move.accuracy = 100;
-				move.self = {boosts:{atk:-1, spa:-1}};
-				move.boosts = {atk:-1, spa:-1};
+				move.self = {boosts: {atk: -1, spa: -1}};
+				move.boosts = {atk: -1, spa: -1};
 				move.onHit = function (target, source) {
 					target.side.addSideCondition('toxicspikes');
 					target.side.addSideCondition('toxicspikes');
@@ -2908,7 +2908,7 @@ exports.Formats = [
 				move.type = 'Electric';
 				move.basePower = 110;
 				move.accuracy = 95;
-				move.secondaries = [{chance:20, self:{boosts:{spa:-1}}, volatileStatus:'disable'}];
+				move.secondaries = [{chance: 20, self: {boosts: {spa: -1}}, volatileStatus: 'disable'}];
 				move.onTryHit = function (target, source) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Dark Void", target);
@@ -2936,7 +2936,7 @@ exports.Formats = [
 				move.onHit = function () {
 					this.add('c|%Crestfall|' + this.sample(['The die is cast...', 'Time for reckoning.']));
 				};
-				move.self = {boosts: {spe:2, evasion:1, def:-2, spd:-2}};
+				move.self = {boosts: {spe: 2, evasion: 1, def: -2, spd: -2}};
 			}
 			if (move.id === 'dragonrush' && name === 'dtc') {
 				move.name = 'Dragon Smash';
@@ -2952,7 +2952,7 @@ exports.Formats = [
 					move.name = 'Falcon Punch';
 					move.basePower = 150;
 					move.accuracy = 85;
-					move.self = {boosts: {atk:-1, def:-1, spd:-1}};
+					move.self = {boosts: {atk: -1, def: -1, spd: -1}};
 					move.onTryHit = function (target, source) {
 						this.add('c|%Feliburn|FAALCOOOOOOON');
 						this.attrLastMove('[still]');
@@ -3013,9 +3013,9 @@ exports.Formats = [
 				move.type = 'Steel';
 				move.basePower = 90;
 				move.secondaries = [{
-					chance:50,
-					self:{boosts:{atk:1, spd:1}},
-					onHit: function (target, source) {
+					chance: 50,
+					self: {boosts: {atk: 1, spd: 1}},
+					onHit(target, source) {
 						if (target.gender === 'F') {
 							target.addVolatile('attract');
 						} else if (target.gender === 'M') {
@@ -3041,7 +3041,7 @@ exports.Formats = [
 				move.type = 'Electric';
 				move.category = 'Status';
 				move.basePower = 0;
-				move.self = {volatileStatus:'torment'};
+				move.self = {volatileStatus: 'torment'};
 				move.onTryHit = function (target, source) {
 					if (pokemon.activeTurns > 1) {
 						this.add('-hint', "Focus Laser only works on your first turn out.");
@@ -3054,7 +3054,7 @@ exports.Formats = [
 					}
 					this.add('-message', "%Majorbling's power level is increasing! It's over nine thousand!");
 					target.addVolatile('focuspunch');
-					this.boost({spa:2, atk:2, spe:2}, target, target);
+					this.boost({spa: 2, atk: 2, spe: 2}, target, target);
 				};
 				move.onHit = function (target, source) {
 					this.useMove('discharge', source, target);
@@ -3070,7 +3070,7 @@ exports.Formats = [
 			}
 			if (move.id === 'spikes' && name === 'quotecs') {
 				move.name = 'Diversify';
-				move.self = {boosts: {atk:1, spd:1}};
+				move.self = {boosts: {atk: 1, spd: 1}};
 				move.onTryHit = function (target, source) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Eruption", source);
@@ -3089,7 +3089,7 @@ exports.Formats = [
 			if (move.id === 'superpower' && name === 'aldaron') {
 				move.name = 'Admin Decision';
 				move.basePower = 80;
-				move.self = {boosts: {def:1, spd:1, spe:-2}};
+				move.self = {boosts: {def: 1, spd: 1, spe: -2}};
 				move.onEffectiveness = function () {
 					return 1;
 				};
@@ -3111,7 +3111,7 @@ exports.Formats = [
 				}
 				if (move.id === 'calmmind') {
 					move.name = 'Surplus of Humour';
-					move.self = {boosts: {spa:1, atk:1}};
+					move.self = {boosts: {spa: 1, atk: 1}};
 					move.onTryHit = function (target, source) {
 						this.attrLastMove('[still]');
 						this.add('-anim', target, "Geomancy", target);
@@ -3140,7 +3140,7 @@ exports.Formats = [
 				}
 				if (move.id === 'flashcannon') {
 					move.name = 'Fun Cannon';
-					move.secondaries = [{chance:60, boosts:{spd:-1}}];
+					move.secondaries = [{chance: 60, boosts: {spd: -1}}];
 					move.onTryHit = function (target, source) {
 						this.attrLastMove('[still]');
 						this.add('-anim', source, "Hydro Pump", target);
@@ -3247,7 +3247,7 @@ exports.Formats = [
 			if (move.id === 'detect' && name === 'shaymin') {
 				move.name = 'Flower Garden';
 				move.type = 'Grass';
-				move.self = {boosts: {def:1, spa:1, spd:1}};
+				move.self = {boosts: {def: 1, spa: 1, spd: 1}};
 				move.onTryHit = function (target, source) {
 					if (source.volatiles['flowergarden']) return false;
 					this.attrLastMove('[still]');
@@ -3300,11 +3300,11 @@ exports.Formats = [
 		mod: 'you-are-not-prepared',
 		gameType: 'triples',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
-		onBegin: function () {
+		onBegin() {
 			this.add('raw|<b><font color="red">IMPORTANT!</font></b> All moves on this seasonal are custom. Use the command <b>/seasonaldata</b>, <b>/sdata</b>, or <b>/sdt</b> to know what they do.');
 			this.add('raw|More information can be found <a href="http://www.smogon.com/forums/threads/3491902/page-12#post-6202283">here</a>');
 		},
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			// Shows legit name after use...
 			let legitNames = {
 				recover: "Cura", softboiled: "Curaga", reflect: "Wild Growth", acupressure: "Power Shield",
@@ -3320,7 +3320,7 @@ exports.Formats = [
 				move.name = legitNames[move.id];
 			}
 		},
-		onFaint: function (pokemon) {
+		onFaint(pokemon) {
 			let message = {
 				'Amy': 'French?', 'Princess Leia': 'Why, you stuck up, half-witted, scruffy-looking Nerf herder.',
 				'Scruffy': "Scruffy's gonna die the way he lived. [Turns page of Zero-G Juggs magazine.] Mmhm.",
@@ -3354,7 +3354,7 @@ exports.Formats = [
 
 		team: "randomRainbow",
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
-		onBegin: function () {
+		onBegin() {
 			this.add('message', "The last attack on each Pok\u00e9mon is based on their Pok\u00e9dex color.");
 			this.add('-message', "Red/Pink beats Yellow/Green, which beats Blue/Purple, which beats Red/Pink.");
 			this.add('-message', "Using a color move on a Pok\u00e9mon in the same color group is a neutral hit.");
@@ -3379,7 +3379,7 @@ exports.Formats = [
 				}
 			}
 		},
-		onBeforeTurn: function (pokemon) {
+		onBeforeTurn(pokemon) {
 			let side = pokemon.side;
 			side.item = '';
 
@@ -3469,7 +3469,7 @@ exports.Formats = [
 				}
 			}
 		},
-		onAccuracy: function (accuracy, target, source, move) {
+		onAccuracy(accuracy, target, source, move) {
 			if (source.hasAbility('keeneye')) return;
 			let modifier = 1;
 			if (source.side.item === 'blooper' && !source.hasAbility('clearbody')) {
@@ -3480,7 +3480,7 @@ exports.Formats = [
 			}
 			return this.chainModify(modifier);
 		},
-		onDisableMove: function (pokemon) {
+		onDisableMove(pokemon) {
 			// Enforce Choice Item locking on color moves
 			// Technically this glitches with Klutz, but Lopunny is Brown and will never appear :D
 			if (!pokemon.ignoringItem() && pokemon.getItem().isChoice && pokemon.lastMove === 'swift') {
@@ -3493,7 +3493,7 @@ exports.Formats = [
 			}
 		},
 		onEffectivenessPriority: -5,
-		onEffectiveness: function (typeMod, target, type, move) {
+		onEffectiveness(typeMod, target, type, move) {
 			if (move.id !== 'swift') return;
 			// Only calculate color effectiveness once
 			if (target.getTypes()[0] !== type) return 0;
@@ -3509,17 +3509,17 @@ exports.Formats = [
 			};
 			return effectiveness[sourceColor][targetColor];
 		},
-		onModifyDamage: function (damage, source, target, effect) {
+		onModifyDamage(damage, source, target, effect) {
 			if (source === target || effect.effectType !== 'Move') return;
 			if (target.side.item === 'lightning') return this.chainModify(2);
 			if (source.side.item === 'lightning') return this.chainModify(0.5);
 		},
-		onModifySpe: function (speMod, pokemon) {
+		onModifySpe(speMod, pokemon) {
 			if (pokemon.side.sideConditions['goldenmushroom'] || pokemon.side.sideConditions['mushroom']) {
 				return this.chainModify(1.75);
 			}
 		},
-		onResidual: function (battle) {
+		onResidual(battle) {
 			let side;
 			for (let i = 0; i < battle.sides.length; i++) {
 				side = battle.sides[i];
@@ -3545,7 +3545,7 @@ exports.Formats = [
 				side.item = '';
 			}
 		},
-		onModifyMove: function (move, pokemon) {
+		onModifyMove(move, pokemon) {
 			if (move.id !== 'swift') return;
 			let physicalnames = {
 				'Red': 'Crimson Crash', 'Pink': 'Rose Rush', 'Yellow': 'Saffron Strike', 'Green': 'Viridian Slash',
@@ -3563,7 +3563,7 @@ exports.Formats = [
 			move.type = '???';
 			if (move.category === 'Physical') move.flags['contact'] = true;
 		},
-		onPrepareHit: function (pokemon, target, move) {
+		onPrepareHit(pokemon, target, move) {
 			if (move.id !== 'swift') return;
 			let animations = {
 				'Crimson Crash': 'Flare Blitz', 'Scarlet Shine': 'Fusion Flare', 'Rose Rush': 'Play Rough',
@@ -3574,7 +3574,7 @@ exports.Formats = [
 			this.attrLastMove('[anim] ' + animations[move.name]);
 		},
 		onSwitchInPriority: -9,
-		onSwitchIn: function (pokemon) {
+		onSwitchIn(pokemon) {
 			if (!pokemon.hp) return;
 			this.add('-start', pokemon, pokemon.template.color, '[silent]');
 			if (pokemon.side.item === 'lightning') {
@@ -3584,7 +3584,7 @@ exports.Formats = [
 				this.add('-start', pokemon, 'goldenmushroom', '[silent]');
 			}
 		},
-		onSwitchOut: function (pokemon) {
+		onSwitchOut(pokemon) {
 			this.add('-end', pokemon, pokemon.template.color, '[silent]');
 		},
 	},
@@ -3599,12 +3599,12 @@ exports.Formats = [
 
 		team: 'randomSpoopy',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
-		onSwitchIn: function (pokemon) {
+		onSwitchIn(pokemon) {
 			if (pokemon.species === 'Magikarp') {
-				this.boost({spe:4, spd:2, def:2}, pokemon, pokemon, 'the power of dank');
+				this.boost({spe: 4, spd: 2, def: 2}, pokemon, pokemon, 'the power of dank');
 			}
 		},
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			if (move.id === 'aquaring') {
 				move.volatileStatus = 'wonderring';
 				move.onHit = function (pokemon) {
@@ -3694,7 +3694,7 @@ exports.Formats = [
 				}
 			}
 		},
-		onResidual: function () {
+		onResidual() {
 			let allpokes = this.p1.active.concat(this.p2.active);
 			let pokemon;
 			for (let i = 0; i < allpokes.length; i++) {
@@ -3716,11 +3716,11 @@ exports.Formats = [
 
 		team: 'randomSeasonalHero',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
-		onEffectiveness: function (typeMod, target, move, type) {
+		onEffectiveness(typeMod, target, move, type) {
 			if (this.activePokemon && this.activePokemon.name === 'Magneto' && move.id === 'flashcannon' && type === 'Steel') return 1;
 		},
 		onSwitchInPriority: 10,
-		onSwitchIn: function (pokemon) {
+		onSwitchIn(pokemon) {
 			switch (pokemon.name) {
 			case 'Iron Man':
 				if (pokemon.addType('Steel')) {

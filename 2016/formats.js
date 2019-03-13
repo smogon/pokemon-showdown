@@ -19,11 +19,11 @@ exports.Formats = [
 
 		team: 'randomSeasonalPolar',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
-		onBegin: function () {
+		onBegin() {
 			this.add('-message', "NOTE: This is an Inverse Battle! Type effectivenesses are reversed!");
 		},
 		onNegateImmunity: false,
-		onEffectiveness: function (typeMod, target, type, move) {
+		onEffectiveness(typeMod, target, type, move) {
 			// The effectiveness of Freeze Dry on Water isn't reverted
 			if (move && move.id === 'freezedry' && type === 'Water') return;
 			if (move && !this.getImmunity(move, type)) return 1;
@@ -41,7 +41,7 @@ exports.Formats = [
 
 		team: 'randomSeasonalDimensional',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
-		onBegin: function () {
+		onBegin() {
 			this.add('-message', "The world is about to end!");
 			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
 			for (let i = 0, len = allPokemon.length; i < len; i++) {
@@ -55,7 +55,7 @@ exports.Formats = [
 				}
 			}
 		},
-		onSwitchIn: function (pokemon) {
+		onSwitchIn(pokemon) {
 			let name = toId(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
 			if (name === 'rick') {
 				this.add('-message', 'WUBBA LUBBA DUB DUB!!');
@@ -97,9 +97,9 @@ exports.Formats = [
 				this.add('-message', 'I can buy and sell you, old man!');
 			}
 		},
-		onModifyMove: function (move, pokemon) {
+		onModifyMove(move, pokemon) {
 			let name = toId(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
-			if (move.id === 'watergun' && name in {'rick':1, 'evilrick':1}) {
+			if (move.id === 'watergun' && name in {'rick': 1, 'evilrick': 1}) {
 				move.name = 'Portal Gun';
 				move.type = 'Psychic';
 				move.basePower = 66;
@@ -395,13 +395,13 @@ exports.Formats = [
 				pokemon.addVolatile('deltastreaminnate', pokemon);
 			}
 			if (name === 'hashtag') {
-				this.boost({spe:1}, pokemon, pokemon, 'innate ability');
+				this.boost({spe: 1}, pokemon, pokemon, 'innate ability');
 			}
 			if (name === 'haund') {
 				pokemon.addVolatile('prodigy', pokemon);
 			}
 			if (name === 'innovamania' && !pokemon.illusion) {
-				this.boost({atk:6, def:6, spa:6, spd:6, spe:6, accuracy:6}, pokemon, pokemon, 'divinegrace');
+				this.boost({atk: 6, def: 6, spa: 6, spd: 6, spe: 6, accuracy: 6}, pokemon, pokemon, 'divinegrace');
 			}
 			if (name === 'jackhiggins') {
 				this.setWeather('sunnyday');
@@ -1193,7 +1193,7 @@ exports.Formats = [
 				pokemon.say(`>:Y`);
 			}
 			if (name === 'flyingkebab') {
-				pokemon.say(`${this.sample(["I\'ll see you in hell!", "/me vanishes to the depths of hell"])}`);
+				pokemon.say(`${this.sample(["I'll see you in hell!", "/me vanishes to the depths of hell"])}`);
 			}
 			if (name === 'formerhope') {
 				pokemon.say(`Now I have Former Hope.`);
@@ -1627,7 +1627,7 @@ exports.Formats = [
 
 		team: 'randomSeasonalJubilee',
 		ruleset: ['Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
-		onBegin: function () {
+		onBegin() {
 			this.add(
 				'message', "You are traveling with your fellow Delibird around the world, " +
 				"when your mortal enemy attacks you, seeking revenge since you defeated them on June 2013. " +
@@ -1637,9 +1637,9 @@ exports.Formats = [
 			this.setWeather('Sunny Day');
 			delete this.weatherData.duration;
 
-			this.seasonal = {'none':false, 'drizzle':false, 'hail':false};
+			this.seasonal = {'none': false, 'drizzle': false, 'hail': false};
 		},
-		onBeforeMove: function (pokemon, target, move) {
+		onBeforeMove(pokemon, target, move) {
 			// Reshiram changes weather with its tail until you reach the arctic
 			if (pokemon.template.speciesid === 'reshiram' && this.turn < 15) {
 				let weatherMsg = '';
@@ -1679,7 +1679,7 @@ exports.Formats = [
 				this.seasonal.hail = true;
 			}
 		},
-		onFaint: function (pokemon) {
+		onFaint(pokemon) {
 			if (pokemon.template.id === 'delibird') {
 				let name = pokemon.side.name;
 				let winner = pokemon.side.id === 'p1' ? 'p2' : 'p1';
@@ -1701,14 +1701,14 @@ exports.Formats = [
 
 		team: 'randomSeasonalFireworks',
 		ruleset: ['Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
-		onBegin: function () {
+		onBegin() {
 			this.add('message', "A fireworks show is starting!");
 			// this.add('-weather', 'Fireworks'); // un-comment when the client supports custom named weathers
 		},
-		onResidual: function () {
+		onResidual() {
 			if (this.isWeather('')) this.eachEvent('Weather');
 		},
-		onWeather: function (target) {
+		onWeather(target) {
 			if (!target.hasType('Fire')) this.damage(target.maxhp / 16, target, null, 'exploding fireworks');
 		},
 	},

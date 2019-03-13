@@ -12,11 +12,11 @@ exports.BattleMovedex = {
 		pp: 16,
 		priority: 0,
 		flags: {heal: 1},
-		onTry: function (attacker) {
+		onTry(attacker) {
 			this.attrLastMove('[still]');
 			this.add('-anim', attacker, "Wish", attacker);
 		},
-		onHitSide: function (side, source) {
+		onHitSide(side, source) {
 			this.add('-message', source.name + "'s Cura heals its team!");
 			let targets = [];
 			for (let p in side.active) {
@@ -42,11 +42,11 @@ exports.BattleMovedex = {
 		pp: 16,
 		priority: 0,
 		flags: {heal: 1},
-		onTry: function (attacker) {
+		onTry(attacker) {
 			this.attrLastMove('[still]');
 			this.add('-anim', attacker, "Geomancy", attacker);
 		},
-		onHitSide: function (side, source) {
+		onHitSide(side, source) {
 			this.add('-message', source.name + "'s Curaga greatly heals its team!");
 			let targets = [];
 			for (let p in side.active) {
@@ -89,7 +89,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1},
 		volatileStatus: 'powershield',
-		onTry: function (attacker, defender) {
+		onTry(attacker, defender) {
 			this.attrLastMove('[still]');
 			this.add('-anim', defender, "Synthesis", defender);
 		},
@@ -109,7 +109,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, distance: 1, heal: 1},
 		volatileStatus: 'rejuvenation',
-		onTry: function (attacker, defender) {
+		onTry(attacker, defender) {
 			this.attrLastMove('[still]');
 			this.add('-anim', defender, "Bulk Up", defender);
 		},
@@ -129,7 +129,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1},
 		sideCondition: 'fairyward',
-		onTry: function (attacker) {
+		onTry(attacker) {
 			this.attrLastMove('[still]');
 			this.add('-anim', attacker, "Misty Terrain", attacker);
 		},
@@ -149,7 +149,7 @@ exports.BattleMovedex = {
 		priority: 3,
 		flags: {},
 		volatileStatus: 'taunting',
-		onTry: function (attacker) {
+		onTry(attacker) {
 			this.attrLastMove('[still]');
 			this.add('-anim', attacker, "Follow Me", attacker);
 		},
@@ -169,7 +169,7 @@ exports.BattleMovedex = {
 		priority: 3,
 		flags: {},
 		volatileStatus: 'sacrifice',
-		onTry: function (attacker) {
+		onTry(attacker) {
 			this.attrLastMove('[still]');
 			this.add('-anim', attacker, "Bulk Up", attacker);
 		},
@@ -188,15 +188,15 @@ exports.BattleMovedex = {
 		pp: 15,
 		priority: 1,
 		flags: {},
-		onTry: function (attacker, defender) {
+		onTry(attacker, defender) {
 			this.attrLastMove('[still]');
 			this.add('-anim', attacker, "Ally Switch", defender);
 		},
-		onTryHit: function (target, source) {
+		onTryHit(target, source) {
 			if (source.side.active.length === 1) return false;
 			if (target.side !== source.side) return false;
 		},
-		onHit: function (target, source) {
+		onHit(target, source) {
 			if (!target) return false;
 			let newPosition = target.position;
 			if (!source.side.active[newPosition]) return false;
@@ -218,7 +218,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
-		onHit: function (target, source) {
+		onHit(target, source) {
 			if (target.deductPP(target.lastMove, 8)) {
 				this.add("-activate", target, 'move: Slow Down', target.lastMove, 8);
 				source.addVolatile('disable');
@@ -242,11 +242,11 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, distance: 1, heal: 1},
-		onTry: function (attacker, defender) {
+		onTry(attacker, defender) {
 			this.attrLastMove('[still]');
 			this.add('-anim', attacker, "Heal Pulse", defender);
 		},
-		onHit: function (target, source) {
+		onHit(target, source) {
 			this.heal(Math.ceil(target.maxhp * 0.6));
 		},
 		secondary: false,
@@ -264,11 +264,11 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, distance: 1, heal: 1},
-		onTry: function (attacker) {
+		onTry(attacker) {
 			this.attrLastMove('[still]');
 			this.add('-anim', attacker, "Heal Bell", attacker);
 		},
-		onHit: function (target, source) {
+		onHit(target, source) {
 			this.heal(Math.ceil(target.maxhp * 0.125));
 			target.addVolatile('penance');
 		},
@@ -288,11 +288,11 @@ exports.BattleMovedex = {
 		priority: 10,
 		flags: {contact: 1, protect: 1, mirror: 1},
 		ignoreImmunity: true,
-		onTry: function (attacker, defender) {
+		onTry(attacker, defender) {
 			this.attrLastMove('[still]');
 			this.add('-anim', defender, "Recover", defender);
 		},
-		onHit: function (target, source) {
+		onHit(target, source) {
 			source.addVolatile('disable');
 		},
 		secondary: {
@@ -314,10 +314,10 @@ exports.BattleMovedex = {
 		priority: 4,
 		flags: {},
 		volatileStatus: 'laststand',
-		onTryHit: function (pokemon) {
+		onTryHit(pokemon) {
 			return this.willAct();
 		},
-		onHit: function (pokemon) {
+		onHit(pokemon) {
 			pokemon.addVolatile('disable');
 		},
 		secondary: false,
@@ -336,7 +336,7 @@ exports.BattleMovedex = {
 		priority: 4,
 		flags: {},
 		volatileStatus: 'barkskin',
-		onTry: function (attacker, defender) {
+		onTry(attacker, defender) {
 			this.attrLastMove('[still]');
 			this.add('-anim', attacker, "Bulk Up", attacker);
 		},
@@ -349,7 +349,7 @@ exports.BattleMovedex = {
 		num: -15,
 		accuracy: 100,
 		basePower: 0,
-		damageCallback: function (pokemon) {
+		damageCallback(pokemon) {
 			return pokemon.hp / 3;
 		},
 		category: "Physical",
@@ -360,7 +360,7 @@ exports.BattleMovedex = {
 		priority: -1,
 		flags: {contact: 1, protect: 1, mirror: 1, nonsky: 1},
 		ignoreImmunity: true,
-		onTry: function (attacker, defender) {
+		onTry(attacker, defender) {
 			this.attrLastMove('[still]');
 			this.add('-anim', attacker, "Seismic Toss", defender);
 		},
@@ -373,7 +373,7 @@ exports.BattleMovedex = {
 		num: -16,
 		accuracy: 100,
 		basePower: 30,
-		basePowerCallback: function (pokemon, target) {
+		basePowerCallback(pokemon, target) {
 			if (target.status === 'brn') return 40;
 			return 30;
 		},
@@ -383,7 +383,7 @@ exports.BattleMovedex = {
 		pp: 8,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTry: function (attacker, defender) {
+		onTry(attacker, defender) {
 			this.attrLastMove('[still]');
 			this.add('-anim', attacker, "Eruption", defender);
 		},
@@ -402,7 +402,7 @@ exports.BattleMovedex = {
 		pp: 16,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTry: function (attacker, defender) {
+		onTry(attacker, defender) {
 			this.attrLastMove('[still]');
 			this.add('-anim', attacker, "Overheat", defender);
 		},
@@ -421,7 +421,7 @@ exports.BattleMovedex = {
 		pp: 16,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTry: function (attacker, defender) {
+		onTry(attacker, defender) {
 			this.attrLastMove('[still]');
 			this.add('-anim', attacker, "Moonblast", defender);
 		},
@@ -434,7 +434,7 @@ exports.BattleMovedex = {
 		num: -19,
 		accuracy: 100,
 		basePower: 30,
-		basePowerCallback: function (pokemon, target) {
+		basePowerCallback(pokemon, target) {
 			if (target.volatiles['moonfire']) return 40;
 			return 30;
 		},
@@ -444,7 +444,7 @@ exports.BattleMovedex = {
 		pp: 16,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTry: function (attacker, defender) {
+		onTry(attacker, defender) {
 			this.attrLastMove('[still]');
 			this.add('-anim', attacker, "Secret Power", defender);
 		},
@@ -463,7 +463,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		volatileStatus: 'corruption',
-		onTry: function (attacker, defender) {
+		onTry(attacker, defender) {
 			this.attrLastMove('[still]');
 			this.add('-anim', attacker, "Spore", defender);
 		},
@@ -484,14 +484,14 @@ exports.BattleMovedex = {
 		volatileStatus: 'leechseed',
 		effect: {
 			duration: 4,
-			onStart: function (target) {
+			onStart(target) {
 				this.add('-start', target, 'move: Soul Leech');
 			},
-			onEnd: function (target) {
+			onEnd(target) {
 				this.add('-end', target, 'move: Soul Leech');
 			},
 			onResidualOrder: 8,
-			onResidual: function (pokemon) {
+			onResidual(pokemon) {
 				let target = this.effectData.source.side.active[pokemon.volatiles['leechseed'].sourcePosition];
 				if (!target || target.fainted || target.hp <= 0) {
 					this.debug('Nothing to leech into');
@@ -511,7 +511,7 @@ exports.BattleMovedex = {
 		num: -22,
 		accuracy: 100,
 		basePower: 30,
-		basePowerCallback: function (pokemon, target) {
+		basePowerCallback(pokemon, target) {
 			if (target.volatiles['chilled']) return 40;
 			return 30;
 		},
@@ -521,7 +521,7 @@ exports.BattleMovedex = {
 		pp: 8,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTry: function (attacker, defender) {
+		onTry(attacker, defender) {
 			this.attrLastMove('[still]');
 			this.add('-anim', attacker, "Icicle Crash", defender);
 		},
@@ -540,7 +540,7 @@ exports.BattleMovedex = {
 		pp: 8,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTry: function (attacker, defender) {
+		onTry(attacker, defender) {
 			this.attrLastMove('[still]');
 			this.add('-anim', attacker, "Ice Beam", defender);
 		},
@@ -575,7 +575,7 @@ exports.BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTry: function (attacker, defender) {
+		onTry(attacker, defender) {
 			this.attrLastMove('[still]');
 			this.add('-anim', attacker, "Surf", defender);
 		},
@@ -587,7 +587,7 @@ exports.BattleMovedex = {
 		num: -26,
 		accuracy: 100,
 		basePower: 15,
-		basePowerCallback: function (pokemon, target) {
+		basePowerCallback(pokemon, target) {
 			if (pokemon.volatiles['furycharge']) return 100;
 			return 15;
 		},
@@ -599,11 +599,11 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		ignoreImmunity: true,
-		onTry: function (attacker, defender) {
+		onTry(attacker, defender) {
 			this.attrLastMove('[still]');
 			this.add('-anim', attacker, "Head Smash", defender);
 		},
-		onHit: function (target, source) {
+		onHit(target, source) {
 			source.addVolatile('disable');
 			source.addVolatile('furycharge');
 		},
@@ -621,7 +621,7 @@ exports.BattleMovedex = {
 		pp: 16,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTry: function (attacker, defender) {
+		onTry(attacker, defender) {
 			this.attrLastMove('[still]');
 			this.add('-anim', attacker, "Slash", defender);
 		},
@@ -634,7 +634,7 @@ exports.BattleMovedex = {
 		num: -28,
 		accuracy: 100,
 		basePower: 27,
-		basePowerCallback: function (pokemon, target) {
+		basePowerCallback(pokemon, target) {
 			let bP = 27;
 			if (target.volatiles['bleed']) bP += 10;
 			if (target.status === 'psn') bP += 10;
@@ -646,7 +646,7 @@ exports.BattleMovedex = {
 		pp: 8,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTry: function (attacker, defender) {
+		onTry(attacker, defender) {
 			this.attrLastMove('[still]');
 			this.add('-anim', attacker, "Return", defender);
 		},
@@ -681,13 +681,13 @@ exports.BattleMovedex = {
 		pp: 16,
 		priority: 1,
 		flags: {heal: 1},
-		onTryHitSide: function (side, source) {
+		onTryHitSide(side, source) {
 			if (source.hp < source.maxhp / 4) {
 				this.add('-hint', "Sacred Shield requires 25% of your HP to work.");
 				return false;
 			}
 		},
-		onHitSide: function (side, source) {
+		onHitSide(side, source) {
 			this.directDamage(source.maxhp / 4, source, source);
 			for (let p in side.active) {
 				side.active[p].addVolatile('sacredshield');

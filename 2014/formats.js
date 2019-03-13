@@ -18,12 +18,12 @@ exports.Formats = [
 		team: 'randomSeasonalWinter',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
 		maxLevel: 1000,
-		onBegin: function () {
+		onBegin() {
 			this.setWeather('Hail');
 			delete this.weatherData.duration;
 		},
 		onNegateImmunity: false,
-		onEffectiveness: function (typeMod, target, type, move) {
+		onEffectiveness(typeMod, target, type, move) {
 			// The effectiveness of Freeze Dry on Water isn't reverted
 			if (move && move.id === 'freezedry' && type === 'Water') return;
 			if (move && !this.getImmunity(move, type)) return 1;
@@ -38,10 +38,10 @@ exports.Formats = [
 		gameType: 'doubles',
 		team: 'randomSeasonalFFY',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
-		onBegin: function () {
+		onBegin() {
 			this.add('-message', "新年快乐");
 		},
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			if (move.id === 'explosion') {
 				move.name = 'Firecrackers';
 			} else if (move.type === 'Fire') {
@@ -49,7 +49,7 @@ exports.Formats = [
 			}
 		},
 		onNegateImmunity: false,
-		onEffectiveness: function (typeMod, target, type, move) {
+		onEffectiveness(typeMod, target, type, move) {
 			// The effectiveness of Freeze Dry on Water isn't reverted
 			if (move && move.id === 'freezedry' && type === 'Water') return;
 			if (move && !this.getImmunity(move, type)) return 1;
@@ -64,10 +64,10 @@ exports.Formats = [
 		gameType: 'triples',
 		team: 'randomSeasonalSB',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
-		onBegin: function () {
+		onBegin() {
 			this.add('-message', "V4 is a big poo-poo!");
 		},
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			// Change present mechanics
 			if (move.id === 'present') {
 				move.category = 'Status';
@@ -235,14 +235,14 @@ exports.Formats = [
 				}
 			}
 		},
-		onSwitchIn: function (pokemon) {
+		onSwitchIn(pokemon) {
 			if (this.randomChance(1, 4)) {
 				this.add('-message', pokemon.name + " drank way too much!");
 				pokemon.addVolatile('confusion');
 				pokemon.statusData.time = 0;
 			}
 		},
-		onFaint: function (pokemon) {
+		onFaint(pokemon) {
 			// A poem every time a Pokemon faints
 			let haikus = [
 				"You suck a lot / You are a bad trainer / let a mon faint", "they see me driving / round town with the girl i love / and I'm like, haikou",
@@ -263,11 +263,11 @@ exports.Formats = [
 
 		team: 'randomSeasonalSleigh',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
-		onBegin: function () {
+		onBegin() {
 			this.add('-message', "Yikes! You are a grinch in a reckless, regretless sleigh race, running for Showdownville to ruin christmas. But, to achieve that, you must first defeat your opponent. Fight hard and take care with the obstacles!");
 			this.seasonal = {position: [0, 0], weight: [2500, 2500]};
 		},
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			if (move.type === 'Fire') {
 				move.onHit = function (pokemon, source) {
 					this.add('-message', "The fire melts the snow, slowing down the sleigh!");
@@ -375,7 +375,7 @@ exports.Formats = [
 				}
 			}
 		},
-		onBeforeMove: function (pokemon, target, move) {
+		onBeforeMove(pokemon, target, move) {
 			// Before every move, trainers advance on their sleighs. There might be obstacles.
 			// The speed depends on the current load of the sleigh. Less load, more speed.
 			let speed = Math.abs(pokemon.speed) + Math.ceil((2500 - this.seasonal.weight[pokemon.side.n]) / 25);
@@ -420,7 +420,7 @@ exports.Formats = [
 				this.win(pokemon.side.id);
 			}
 		},
-		onHit: function (target) {
+		onHit(target) {
 			// Getting hit thaws the ice if you are frozen.
 			if (target.status === 'frz') target.cureStatus();
 		},

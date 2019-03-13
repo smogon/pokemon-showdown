@@ -43,26 +43,26 @@ exports.Formats = [
 			'minun', 'carvanha', 'huntail', 'bagon', 'shelgon', 'salamence', 'latios', 'tangrowth', 'seismitoad', 'jellicent',
 			'elektross', 'druddigon', 'bronzor', 'bronzong', 'gallade',
 		]),
-		onBegin: function () {
+		onBegin() {
 			if (this.randomChance(3, 4)) {
 				this.add('-message', "March and April showers bring May flowers...");
 				this.setWeather('Rain Dance');
 				delete this.weatherData.duration;
 			}
 		},
-		onSwitchIn: function (pokemon) {
+		onSwitchIn(pokemon) {
 			if (this.getFormat().greenPokemon.has(pokemon.template.speciesid)) {
 				this.add('-message', pokemon.name + " drank way too much!");
 				pokemon.addVolatile('confusion');
 				pokemon.statusData.time = 0;
 			}
 		},
-		onBeforeMove: function (attacker, defender, move) {
+		onBeforeMove(attacker, defender, move) {
 			if (move.id === 'barrage') {
 				this.add('-message', "You found a little chocolate egg!");
 			}
 		},
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			if (move.id === 'barrage') {
 				move.category = 'Special';
 				move.type = 'Grass';
@@ -103,7 +103,7 @@ exports.Formats = [
 		mod: 'gen5',
 
 		team: 'randomSeasonalFF',
-		onBegin: function () {
+		onBegin() {
 			let dice = this.random(100);
 			if (dice < 65) {
 				this.add('-message', "April showers bring May flowers...");
@@ -117,16 +117,16 @@ exports.Formats = [
 			}
 			delete this.weatherData.duration;
 		},
-		onSwitchIn: function (pokemon) {
+		onSwitchIn(pokemon) {
 			let name = (pokemon.ability === 'illusion' && pokemon.illusion) ? pokemon.illusion.name : pokemon.name;
-			let stonedPokemon = {Koffing:1, Weezing:1, Slowpoke:1, Slowbro:1, Slowking:1, Psyduck:1, Spinda:1};
+			let stonedPokemon = {Koffing: 1, Weezing: 1, Slowpoke: 1, Slowbro: 1, Slowking: 1, Psyduck: 1, Spinda: 1};
 			let stonerQuotes = ['your face is green!', 'I just realised that Arceus fainted for our sins', 'I can, you know, feel the colors',
 				"you're my bro", "I'm imaginining a new color!", "I'm smelling the things I see!", 'hehe, hehe, funny', "I'm hungry!", 'we are pokemanz',
 				'Did you know that Eevee backwards is eevee?! AMAZING', 'aaaam gonna be the verrrry best like no one evar wasss',
 				"I feel like someone is watching us through a screen!", "come at me bro"];
 			if (name in stonedPokemon) {
 				this.add('-message', name + ": Duuuuuude, " + this.sample(stonerQuotes));
-				this.boost({spe:-1, def:1, spd:1}, pokemon, pokemon, {fullname:'high'});
+				this.boost({spe: -1, def: 1, spd: 1}, pokemon, pokemon, {fullname: 'high'});
 			}
 			// Pokemon switch in messages
 			let msg = '';
@@ -174,7 +174,7 @@ exports.Formats = [
 				this.add('-message', msg);
 			}
 		},
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			let dice = this.random(100);
 			if (dice < 40) {
 				let type = '';
@@ -287,7 +287,7 @@ exports.Formats = [
 				};
 			}
 		},
-		onFaint: function (pokemon) {
+		onFaint(pokemon) {
 			// A poem every time a Pokemon faints
 			let haikus = [
 				"You suck a lot / You are a bad trainer / let a mon faint", "they see me driving / round town with the girl i love / and I'm like, haikou",
@@ -307,7 +307,7 @@ exports.Formats = [
 		mod: 'gen5',
 
 		team: 'randomSeasonalMM',
-		onBegin: function () {
+		onBegin() {
 			// Shameless plug
 			let day = new Date().getDay();
 			if (day === 12) {
@@ -317,7 +317,7 @@ exports.Formats = [
 				this.add('-message', 'Wish a HAPPY BIRTHDAY to Joim!!');
 			}
 		},
-		onSwitchIn: function (pokemon) {
+		onSwitchIn(pokemon) {
 			let dice = this.random(100);
 			if (dice < 25) {
 				this.add('-message', 'Never gonna give you up, never gonna let you down');
@@ -330,7 +330,7 @@ exports.Formats = [
 
 		team: 'randomSeasonalJJ',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
-		onBegin: function () {
+		onBegin() {
 			this.add(
 				'-message', "Greetings, trainer! Delibird needs your help! It's lost in the US and it needs to find its way back to the arctic " +
 				"before summer starts! Help your Delibird while travelling north, but you must defeat the opponent before he reaches there first!"
@@ -338,9 +338,9 @@ exports.Formats = [
 			this.setWeather('Sunny Day');
 			delete this.weatherData.duration;
 
-			this.seasonal = {'none':false, 'drizzle':false, 'hail':false};
+			this.seasonal = {'none': false, 'drizzle': false, 'hail': false};
 		},
-		onBeforeMove: function (pokemon, target, move) {
+		onBeforeMove(pokemon, target, move) {
 			// Reshiram changes weather with its tail until you reach the arctic
 			if (pokemon.template.speciesid === 'reshiram' && this.turn < 15) {
 				let weatherMsg = '';
@@ -380,7 +380,7 @@ exports.Formats = [
 				this.seasonal.hail = true;
 			}
 		},
-		onFaint: function (pokemon) {
+		onFaint(pokemon) {
 			if (pokemon.template.id === 'delibird') {
 				let name = pokemon.side.name;
 				let winner = '';
@@ -403,7 +403,7 @@ exports.Formats = [
 
 		team: 'randomSeasonalJuly',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
-		onBegin: function () {
+		onBegin() {
 			this.add('-message', "You and your faithful favourite Pokémon are travelling around the world, and you will fight this trainer in many places until either win or finish the travel!");
 			// ~learn international independence days with PS~
 			switch (new Date().getDay()) {
@@ -448,17 +448,17 @@ exports.Formats = [
 					'Auckland', 'Pretoria', 'Cape Town',
 				],
 			};
-			this.currentPlace = {'hemisphere':'N', 'city':'Townsville'};
+			this.currentPlace = {'hemisphere': 'N', 'city': 'Townsville'};
 			this.cities.N = this.shuffle(this.cities.N.slice());
 			this.cities.S = this.shuffle(this.cities.S.slice());
-			this.indexes = {'N':0, 'S':0};
+			this.indexes = {'N': 0, 'S': 0};
 
 			// We choose a hemisphere and city to be in at the beginning
 			if (this.randomChance(1, 2)) this.currentPlace.hemisphere = 'S';
 			this.currentPlace.city = this.cities[this.currentPlace.hemisphere][0];
 			this.indexes[this.currentPlace.hemisphere]++;
 		},
-		onBeforeMove: function (pokemon) {
+		onBeforeMove(pokemon) {
 			if (this.randomChance(1, 4)) {
 				// Snarky comments from one trainer to another
 				let comments = [
@@ -498,12 +498,12 @@ exports.Formats = [
 					// Otherwise, move to the next city
 					this.currentPlace.city = this.cities[this.currentPlace.hemisphere][this.indexes[this.currentPlace.hemisphere]];
 					this.indexes[this.currentPlace.hemisphere]++;
-					let hemispheres = {'N':'northern', 'S':'southern'};
+					let hemispheres = {'N': 'northern', 'S': 'southern'};
 					this.add('-message', "Travelling around the world, you have arrived to a new city in the " + hemispheres[this.currentPlace.hemisphere] + " hemisphere, " + this.currentPlace.city + "!");
 				}
 			}
 		},
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			if (move.id === 'fireblast') move.name = 'July 4th Fireworks';
 		},
 	},
@@ -519,7 +519,7 @@ exports.Formats = [
 			'TIbot', 'CDXCIV', 'Srs Bsns Trts', 'Leemz', 'Eggymad', 'Snoffles', 'bmelted', 'Poopes', 'Hugonedugen',
 			'Il Haunter', 'chaospwns', 'WaterBro', 'niggie', 'DOOM', 'qhore', 'Jizzmine', 'Aldarown',
 		],
-		onBegin: function () {
+		onBegin() {
 			// What does player 1 lead with?
 			let p1Where = 'boat';
 			let p2Where = 'boat';
@@ -528,8 +528,8 @@ exports.Formats = [
 			let ships = this.getFormat().shipNames;
 			let shipName = `S. S. ${ships[Math.floor(Math.random() * ships.length)]}`;
 			let whereAreThey = (p1Where === 'boat' && p2Where === 'boat') ? 'You both were aboard the fantastic ship ' + shipName :
-			((p1Where === 'pirates' && p2Where === 'pirates') ? 'You are two pirate gangs on a summer sea storm about to raze the ship ' + shipName :
-			((p1Where === 'pirates') ? this.p1.name : this.p2.name) + ' leads a pirate boat to raze the ship ' + shipName +
+				((p1Where === 'pirates' && p2Where === 'pirates') ? 'You are two pirate gangs on a summer sea storm about to raze the ship ' + shipName :
+					((p1Where === 'pirates') ? this.p1.name : this.p2.name) + ' leads a pirate boat to raze the ship ' + shipName +
 			' where ' + ((p1Where === 'pirates') ? this.p2.name : this.p1.name)) + ' is enjoying a sea travel,';
 
 			this.add('-message',
@@ -538,7 +538,7 @@ exports.Formats = [
 				"so you'll have to fight to access a life boat! Good luck! You have to be fast to not to be hit by the Hurricane!"
 			);
 		},
-		onSwitchIn: function () {
+		onSwitchIn() {
 			if (!this.turn) return;
 			let notifyActivate = false;
 			let allActives = this.p1.active.concat(this.p2.active);
@@ -574,7 +574,7 @@ exports.Formats = [
 		team: 'randomSeasonalOF',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
 
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			if (move.id === 'trick') {
 				delete move.onHit;
 				switch (this.random(17)) {
@@ -715,7 +715,7 @@ exports.Formats = [
 				move.pp = 10;
 				move.priority = 0;
 				move.name = 'Offer Beer';
-				move.boosts = {'atk':-1, 'spa':-1, 'def':1, 'spd':1, 'spe':-1, 'accuracy':-1, 'evasion':1};
+				move.boosts = {'atk': -1, 'spa': -1, 'def': 1, 'spd': 1, 'spe': -1, 'accuracy': -1, 'evasion': 1};
 				move.onTryHit = function () {
 					this.add('-message', "Oh, why, thank you! This beer is delicious!");
 				};
@@ -737,11 +737,11 @@ exports.Formats = [
 
 		team: 'randomSeasonalCC',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
-		onBegin: function () {
+		onBegin() {
 			this.setWeather('Hail');
 			delete this.weatherData.duration;
 		},
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			if (move.id === 'present') {
 				move.category = 'Status';
 				move.basePower = 0;

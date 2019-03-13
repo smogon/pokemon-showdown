@@ -3,7 +3,7 @@
 exports.commands = {
 	sdt: 'seasonaldata',
 	sdata: 'seasonaldata',
-	seasonaldata: function (target, room, user) {
+	seasonaldata(target, room, user) {
 		if (!this.canBroadcast()) return;
 
 		let buffer = '|raw|';

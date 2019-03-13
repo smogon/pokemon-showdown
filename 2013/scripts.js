@@ -9,7 +9,7 @@
 'use strict';
 
 exports.BattleScripts = {
-	randomSeasonalVVTeam: function (side) {
+	randomSeasonalVVTeam(side) {
 		let couples = [
 			'nidoranf+nidoranm', 'nidorina+nidorino', 'nidoqueen+nidoking', 'gallade+gardevoir', 'plusle+minun', 'illumise+volbeat',
 			'latias+latios', 'skitty+wailord', 'tauros+miltank', 'rufflet+vullaby', 'braviary+mandibuzz', 'mew+mesprit',
@@ -52,7 +52,7 @@ exports.BattleScripts = {
 
 		return team;
 	},
-	randomSeasonalSFTeam: function (side) {
+	randomSeasonalSFTeam(side) {
 		// This is the huge list of all the Pokemon in this seasonal
 		let seasonalPokemonList = [
 			'togepi', 'togetic', 'togekiss', 'happiny', 'chansey', 'blissey', 'exeggcute', 'exeggutor', 'lopunny', 'buneary',
@@ -76,17 +76,17 @@ exports.BattleScripts = {
 
 		// Pokemon that must be shiny to be green
 		let mustBeShiny = {
-			kakuna:1, beedrill:1, sandshrew:1, nidoqueen:1, zubat:1, golbat:1, oddish:1, gloom:1, mankey:1, poliwrath:1,
-			machoke:1, machamp:1, doduo:1, dodrio:1, grimer:1, muk:1, kingler:1, cubone:1, marowak:1, hitmonlee:1, tangela:1,
-			mrmime:1, tauros:1, kabuto:1, dragonite:1, mewtwo:1, marill:1, hoppip:1, espeon:1, teddiursa:1, ursaring:1,
-			cascoon:1, taillow:1, swellow:1, pelipper:1, masquerain:1, azurill:1, minun:1, carvanha:1, huntail:1, bagon:1,
-			shelgon:1, salamence:1, latios:1, tangrowth:1, seismitoad:1, jellicent:1, elektross:1, druddigon:1,
-			bronzor:1, bronzong:1, golett:1, golurk:1,
+			kakuna: 1, beedrill: 1, sandshrew: 1, nidoqueen: 1, zubat: 1, golbat: 1, oddish: 1, gloom: 1, mankey: 1, poliwrath: 1,
+			machoke: 1, machamp: 1, doduo: 1, dodrio: 1, grimer: 1, muk: 1, kingler: 1, cubone: 1, marowak: 1, hitmonlee: 1, tangela: 1,
+			mrmime: 1, tauros: 1, kabuto: 1, dragonite: 1, mewtwo: 1, marill: 1, hoppip: 1, espeon: 1, teddiursa: 1, ursaring: 1,
+			cascoon: 1, taillow: 1, swellow: 1, pelipper: 1, masquerain: 1, azurill: 1, minun: 1, carvanha: 1, huntail: 1, bagon: 1,
+			shelgon: 1, salamence: 1, latios: 1, tangrowth: 1, seismitoad: 1, jellicent: 1, elektross: 1, druddigon: 1,
+			bronzor: 1, bronzong: 1, golett: 1, golurk: 1,
 		};
 		// Pokemon that are in for their natural Super Luck ability
-		let superLuckPokemon = {murkrow:1, honchkrow:1, absol:1, pidove:1, tranquill:1, unfezant:1};
+		let superLuckPokemon = {murkrow: 1, honchkrow: 1, absol: 1, pidove: 1, tranquill: 1, unfezant: 1};
 		// Pokemon that are in for their natural Serene Grace ability
-		let sereneGracePokemon = {dunsparce:1, jirachi:1, deerling:1, sawsbuck:1, meloetta:1};
+		let sereneGracePokemon = {dunsparce: 1, jirachi: 1, deerling: 1, sawsbuck: 1, meloetta: 1};
 		let team = [];
 
 		// Now, let's make the team!
@@ -139,7 +139,7 @@ exports.BattleScripts = {
 
 		return team;
 	},
-	randomSeasonalFFYTeam: function (side) {
+	randomSeasonalFFYTeam(side) {
 		// Seasonal Pokemon list
 		let seasonalPokemonList = [
 			'missingno', 'koffing', 'weezing', 'slowpoke', 'slowbro', 'slowking', 'psyduck', 'spinda', 'whimsicott', 'liepard', 'sableye',
@@ -226,7 +226,7 @@ exports.BattleScripts = {
 
 		return team;
 	},
-	randomSeasonalMMTeam: function (side) {
+	randomSeasonalMMTeam(side) {
 		// Seasonal Pokemon list
 		let seasonalPokemonList = [
 			'cherrim', 'joltik', 'surskit', 'combee', 'kricketot', 'kricketune', 'ferrothorn', 'roserade', 'roselia', 'budew', 'clefairy', 'clefable',
@@ -246,7 +246,7 @@ exports.BattleScripts = {
 			let template = this.getTemplate(pokemon);
 			let set = this.randomSet(template, i);
 			// Use metronome because month of music
-			if (set.item in {'Choice Scarf':1, 'Choice Band':1, 'Choice Specs':1, 'Life Orb':1}) {
+			if (set.item in {'Choice Scarf': 1, 'Choice Band': 1, 'Choice Specs': 1, 'Life Orb': 1}) {
 				set.item = 'Metronome';
 			// Berries over other items since spring
 			} else if (set.item === 'Leftovers' || set.item === 'Black Sludge') {
@@ -283,7 +283,7 @@ exports.BattleScripts = {
 
 		return team;
 	},
-	randomSeasonalJJTeam: function (side) {
+	randomSeasonalJJTeam(side) {
 		// Seasonal Pokemon list
 		let seasonalPokemonList = [
 			'accelgor', 'aggron', 'arceusbug', 'ariados', 'armaldo', 'aurumoth', 'beautifly', 'beedrill', 'bellossom', 'blastoise',
@@ -306,13 +306,13 @@ exports.BattleScripts = {
 			let pokemon = this.sampleNoReplace(seasonalPokemonList);
 			let template = this.getTemplate(pokemon);
 			let set = this.randomSet(template, i);
-			if (template.id in {'vanilluxe':1, 'vanillite':1, 'vanillish':1}) {
+			if (template.id in {'vanilluxe': 1, 'vanillite': 1, 'vanillish': 1}) {
 				set.moves = ['icebeam', 'weatherball', 'autotomize', 'flashcannon'];
 			}
-			if (template.id in {'pikachu':1, 'raichu':1}) {
+			if (template.id in {'pikachu': 1, 'raichu': 1}) {
 				set.moves = ['thunderbolt', 'surf', 'substitute', 'nastyplot'];
 			}
-			if (template.id in {'rhydon':1, 'rhyperior':1}) {
+			if (template.id in {'rhydon': 1, 'rhyperior': 1}) {
 				set.moves = ['surf', 'megahorn', 'earthquake', 'rockblast'];
 			}
 			if (template.id === 'reshiram') {
@@ -329,7 +329,7 @@ exports.BattleScripts = {
 
 		return team;
 	},
-	randomSeasonalJulyTeam: function (side) {
+	randomSeasonalJulyTeam(side) {
 		// Seasonal Pokemon list
 		let seasonalPokemonList = [
 			'alomomola', 'arcanine', 'arceusfire', 'basculin', 'beautifly', 'beedrill', 'blastoise', 'blaziken', 'bouffalant',
@@ -373,7 +373,7 @@ exports.BattleScripts = {
 
 		return team;
 	},
-	randomSeasonalAATeam: function (side) {
+	randomSeasonalAATeam(side) {
 		// First we choose the lead
 		let lead = (this.randomChance(50, 100)) ? 'groudon' : 'kyogre';
 		let groudonsSailors = [
@@ -427,7 +427,7 @@ exports.BattleScripts = {
 
 		return team;
 	},
-	randomSeasonalSSTeam: function (side) {
+	randomSeasonalSSTeam(side) {
 		let fashion = [
 			'Choice Scarf', 'Choice Specs', 'Silk Scarf', 'Wise Glasses', 'Choice Band', 'Wide Lens',
 			'Zoom Lens', 'Destiny Knot', 'BlackGlasses', 'Expert Belt', 'Black Belt', 'Macho Brace',
@@ -467,7 +467,7 @@ exports.BattleScripts = {
 
 		return team;
 	},
-	randomSeasonalOFTeam: function (side) {
+	randomSeasonalOFTeam(side) {
 		let seasonalPokemonList = [
 			'absol', 'alakazam', 'banette', 'beheeyem', 'bellossom', 'bisharp', 'blissey', 'cacturne', 'carvanha', 'chandelure',
 			'cofagrigus', 'conkeldurr', 'crawdaunt', 'darkrai', 'deino', 'drapion', 'drifblim', 'drifloon', 'dusclops',
@@ -498,7 +498,7 @@ exports.BattleScripts = {
 
 		return team;
 	},
-	randomSeasonalTTTeam: function (side) {
+	randomSeasonalTTTeam(side) {
 		let seasonalPokemonList = [
 			'alakazam', 'machamp', 'hypno', 'hitmonlee', 'hitmonchan', 'mrmime', 'jynx', 'hitmontop', 'hariyama', 'sableye', 'medicham',
 			'toxicroak', 'electivire', 'magmortar', 'conkeldurr', 'throh', 'sawk', 'gothitelle', 'beheeyem', 'bisharp', 'volbeat', 'illumise',
@@ -519,7 +519,7 @@ exports.BattleScripts = {
 		}
 		return team;
 	},
-	randomSeasonalCCTeam: function (side) {
+	randomSeasonalCCTeam(side) {
 		let seasonalPokemonList = [
 			'raichu', 'nidoqueen', 'nidoking', 'clefable', 'wigglytuff', 'rapidash', 'dewgong', 'cloyster', 'exeggutor', 'starmie', 'jynx',
 			'lapras', 'snorlax', 'articuno', 'azumarill', 'granbull', 'delibird', 'stantler', 'miltank', 'blissey', 'swalot', 'lunatone',

@@ -9,7 +9,7 @@
 'use strict';
 
 exports.BattleScripts = {
-	randomSeasonalWinterTeam: function (side) {
+	randomSeasonalWinterTeam(side) {
 		let seasonalPokemonList = [
 			'raichu', 'nidoqueen', 'nidoking', 'clefable', 'wigglytuff', 'rapidash', 'dewgong', 'cloyster', 'exeggutor', 'starmie', 'jynx',
 			'lapras', 'snorlax', 'articuno', 'azumarill', 'granbull', 'delibird', 'stantler', 'miltank', 'blissey', 'swalot', 'lunatone',
@@ -26,7 +26,7 @@ exports.BattleScripts = {
 		}
 		return team;
 	},
-	randomSeasonalFFTeam: function (side) {
+	randomSeasonalFFTeam(side) {
 		let seasonalPokemonList = [
 			'charizard', 'ninetales', 'houndoom', 'arceusfire', 'arcanine', 'moltres', 'rapidash', 'magmar', 'quilava', 'typhlosion',
 			'entei', 'hooh', 'blaziken', 'rotomheat', 'chandelure', 'magcargo', 'reshiram', 'zekrom', 'heatran', 'arceusdragon',
@@ -44,7 +44,7 @@ exports.BattleScripts = {
 		}
 		return team;
 	},
-	randomSeasonalSBTeam: function (side) {
+	randomSeasonalSBTeam(side) {
 		let crypto = require('crypto');
 		let date = new Date();
 		let hash = parseInt(crypto.createHash('md5').update(toId(side.name)).digest('hex').slice(0, 8), 16) + date.getDate();
@@ -79,7 +79,7 @@ exports.BattleScripts = {
 
 		return team;
 	},
-	randomSeasonalSleighTeam: function (side) {
+	randomSeasonalSleighTeam(side) {
 		// All Pokémon in this Seasonal. They are meant to pull the sleigh.
 		let seasonalPokemonList = [
 			'abomasnow', 'accelgor', 'aggron', 'arbok', 'arcanine', 'arceus', 'ariados', 'armaldo', 'audino', 'aurorus', 'avalugg',

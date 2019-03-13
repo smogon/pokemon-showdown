@@ -10,7 +10,7 @@
 'use strict';
 
 exports.BattleScripts = {
-	randomSeasonalPolarTeam: function () {
+	randomSeasonalPolarTeam() {
 		let pokemonLeft = 0;
 		let pokemon = [];
 
@@ -92,7 +92,7 @@ exports.BattleScripts = {
 		return pokemon;
 	},
 
-	randomSeasonalDimensionalTeam: function () {
+	randomSeasonalDimensionalTeam() {
 		let side = 'good';
 		let team = [];
 		let pokemon = '';
@@ -163,7 +163,7 @@ exports.BattleScripts = {
 		return team;
 	},
 
-	randomSeasonalJubileeTeam: function (side) {
+	randomSeasonalJubileeTeam(side) {
 		let seasonalPokemonList = [
 			'accelgor', 'aggron', 'arceusbug', 'ariados', 'armaldo', 'aurumoth', 'beautifly', 'beedrill', 'bellossom', 'blastoise',
 			'butterfree', 'castform', 'charizard', 'cherrim', 'crawdaunt', 'crustle', 'delcatty', 'drifblim', 'durant',
@@ -183,13 +183,13 @@ exports.BattleScripts = {
 			let pokemon = this.sampleNoReplace(seasonalPokemonList);
 			let template = Object.assign({}, this.getTemplate(pokemon));
 
-			if (template.id in {'vanilluxe':1, 'vanillite':1, 'vanillish':1}) {
+			if (template.id in {'vanilluxe': 1, 'vanillite': 1, 'vanillish': 1}) {
 				template.randomBattleMoves = ['icebeam', 'weatherball', 'autotomize', 'flashcannon'];
 			}
-			if (template.id in {'pikachu':1, 'raichu':1}) {
+			if (template.id in {'pikachu': 1, 'raichu': 1}) {
 				template.randomBattleMoves = ['thunderbolt', 'surf', 'substitute', 'nastyplot'];
 			}
-			if (template.id in {'rhydon':1, 'rhyperior':1}) {
+			if (template.id in {'rhydon': 1, 'rhyperior': 1}) {
 				template.randomBattleMoves = ['surf', 'megahorn', 'earthquake', 'rockblast'];
 			}
 			if (template.id === 'reshiram') {
@@ -213,7 +213,7 @@ exports.BattleScripts = {
 		return team;
 	},
 
-	randomSeasonalFireworksTeam: function (side) {
+	randomSeasonalFireworksTeam(side) {
 		let seasonalPokemonList = [
 			"aerodactyl", "altaria", "archeops", "articuno", "azelf", "beautifly", "braviary", "bronzong",
 			"butterfree", "carnivine", "charizard", "chingling", "claydol", "cresselia", "crobat", "cryogonal",

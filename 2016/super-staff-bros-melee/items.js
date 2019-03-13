@@ -6,7 +6,7 @@ exports.BattleItems = {
 		name: "Keyboard",
 		megaStone: "Missingno.",
 		megaEvolves: "Unown",
-		onTakeItem: function () {
+		onTakeItem() {
 			return false;
 		},
 		gen: 6,

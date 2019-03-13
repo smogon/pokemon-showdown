@@ -9,7 +9,7 @@
 'use strict';
 
 exports.BattleScripts = {
-	randomSeasonalSFTTeam: function (side) {
+	randomSeasonalSFTTeam(side) {
 		// Let's get started!
 		let lead = 'gallade';
 		let team = [];
@@ -18,12 +18,12 @@ exports.BattleScripts = {
 
 		// If the other team has been chosen, we get its opposing force.
 		if (this.scenario) {
-			lead = {'lotr':'reshiram', 'redblue':'pidgeot', 'terminator':'alakazam', 'gen1':'gengar', 'desert':'probopass', 'shipwreck':'machamp'}[this.scenario];
+			lead = {'lotr': 'reshiram', 'redblue': 'pidgeot', 'terminator': 'alakazam', 'gen1': 'gengar', 'desert': 'probopass', 'shipwreck': 'machamp'}[this.scenario];
 		} else {
 			// First team being generated, let's get one of the possibilities.
 			// We need a fix lead for obvious reasons.
 			lead = this.sample(['gallade', 'pikachu', 'genesect', 'gengar', 'groudon', 'kyogre']);
-			this.scenario = {'scenario': {'gallade':'lotr', 'pikachu':'redblue', 'genesect':'terminator', 'gengar':'gen1', 'groudon':'desert', 'kyogre':'shipwreck'}[lead]};
+			this.scenario = {'scenario': {'gallade': 'lotr', 'pikachu': 'redblue', 'genesect': 'terminator', 'gengar': 'gen1', 'groudon': 'desert', 'kyogre': 'shipwreck'}[lead]};
 		}
 
 		// Gen 1 mons and blue/red teams have their own set maker.
@@ -273,7 +273,7 @@ exports.BattleScripts = {
 			let elf = this.sample(['jynx', 'azelf', 'celebi', 'victini', 'landorustherian']);
 			set = this.randomSet(this.getTemplate(elf), team.length, {});
 			set.species = toId(set.name);
-			set.name = {'jynx':'Galadriel', 'azelf':'Legolas', 'celebi':'Celeborn', 'victini':'Elrond', 'landorustherian':'Bard'}[elf];
+			set.name = {'jynx': 'Galadriel', 'azelf': 'Legolas', 'celebi': 'Celeborn', 'victini': 'Elrond', 'landorustherian': 'Bard'}[elf];
 			if (elf === 'landorustherian') {
 				set.item = 'Earth Plate';
 				set.moves = ['thousandarrows', 'thousandwaves', 'uturn', 'superpower'];
@@ -281,7 +281,7 @@ exports.BattleScripts = {
 			team.push(set);
 
 			// Now we add some other characters from the fellowship.
-			let fellowship = {'hoopa':'Gandalf', 'baltoy':'Frodo', 'munchlax':'Samwise'};
+			let fellowship = {'hoopa': 'Gandalf', 'baltoy': 'Frodo', 'munchlax': 'Samwise'};
 			for (let p in fellowship) {
 				let template = this.getTemplate(p);
 				set = this.randomSet(template, team.length, {});
@@ -315,16 +315,16 @@ exports.BattleScripts = {
 			set = this.randomSet(this.getTemplate(goodguy), team.length, {});
 			set.species = toId(set.name);
 			set.name = {
-				'primeape':'Gimli', 'aegislash':'Faramir', 'mimejr':'Pippin', 'timburr':'Merry', 'lucario':'Boromir',
-				'trevenant':'Treebeard', 'sudowoodo':'Birchseed', 'abomasnow':'Fimbrethil', 'shiftry':'Quickbeam',
-				'cacturne':'Finglas', 'nuzleaf':'Lindenroot', 'pidgeot':'Great Eagle', 'staraptor':'Great Eagle',
-				'braviary':'Great Eagle', 'aerodactyl':'Great Eagle', 'noivern':'Great Eagle', 'lugia':'Great Eagle',
-				'hooh':'Great Eagle', 'moltres':'Great Eagle', 'articuno':'Great Eagle', 'zapdos':'Great Eagle',
+				'primeape': 'Gimli', 'aegislash': 'Faramir', 'mimejr': 'Pippin', 'timburr': 'Merry', 'lucario': 'Boromir',
+				'trevenant': 'Treebeard', 'sudowoodo': 'Birchseed', 'abomasnow': 'Fimbrethil', 'shiftry': 'Quickbeam',
+				'cacturne': 'Finglas', 'nuzleaf': 'Lindenroot', 'pidgeot': 'Great Eagle', 'staraptor': 'Great Eagle',
+				'braviary': 'Great Eagle', 'aerodactyl': 'Great Eagle', 'noivern': 'Great Eagle', 'lugia': 'Great Eagle',
+				'hooh': 'Great Eagle', 'moltres': 'Great Eagle', 'articuno': 'Great Eagle', 'zapdos': 'Great Eagle',
 			}[goodguy];
 			team.push(set);
 		} else if (lead === 'reshiram') {
 			// This is the Mordor team from the LOTR battle.
-			let mordor = {'reshiram':'Smaug', 'yveltal':'Nazgûl', 'hoopaunbound':'Saruman'};
+			let mordor = {'reshiram': 'Smaug', 'yveltal': 'Nazgûl', 'hoopaunbound': 'Saruman'};
 			for (let p in mordor) {
 				set = this.randomSet(this.getTemplate(p), team.length, {});
 				set.species = toId(set.name);
@@ -635,7 +635,7 @@ exports.BattleScripts = {
 		return team;
 	},
 
-	randomSeasonalMulanTeam: function (side) {
+	randomSeasonalMulanTeam(side) {
 		let armySide = 'china';
 		let team = [];
 		let pokemon = '';
@@ -757,7 +757,7 @@ exports.BattleScripts = {
 		return team;
 	},
 
-	randomSeasonalStaffTeam: function (side) {
+	randomSeasonalStaffTeam(side) {
 		let team = [];
 		let variant = this.random(2);
 		// Hardcoded sets of the available Pokémon.
@@ -1428,7 +1428,7 @@ exports.BattleScripts = {
 				species: 'Minun', ability: 'Wonder Guard', item: 'Air Balloon', gender: 'M',
 				moves: ['nastyplot', 'thunderbolt', 'icebeam'],
 				baseSignatureMove: 'recover', signatureMove: "Recover",
-				evs:{hp: 4, spa: 252, spe: 252}, nature: 'Modest',
+				evs: {hp: 4, spa: 252, spe: 252}, nature: 'Modest',
 			},
 			'+shaymin': {
 				species: 'Shaymin-Sky', ability: 'Serene Grace', item: 'Expert Belt', gender: 'F',
@@ -1481,7 +1481,7 @@ exports.BattleScripts = {
 		return team;
 	},
 
-	randomRainbowTeam: function () {
+	randomRainbowTeam() {
 		let pokemonLeft = 0;
 		let pokemon = [];
 
@@ -1639,7 +1639,7 @@ exports.BattleScripts = {
 		return pokemon;
 	},
 
-	randomSpoopyTeam: function () {
+	randomSpoopyTeam() {
 		let pool = [
 			'ekans', 'arbok', 'golbat', 'parasect', 'muk', 'gengar', 'marowak', 'weezing', 'tangela', 'mr. mime', 'ditto',
 			'kabutops', 'noctowl', 'ariados', 'crobat', 'umbreon', 'murkrow', 'misdreavus', 'gligar', 'granbull', 'sneasel',
@@ -1696,7 +1696,7 @@ exports.BattleScripts = {
 		return team;
 	},
 
-	randomSeasonalHeroTeam: function () {
+	randomSeasonalHeroTeam() {
 		let teams = [
 			['Wolverine', 'Professor X', 'Cyclops', 'Nightcrawler', 'Phoenix', 'Emma Frost', 'Storm', 'Iceman'],
 			['Magneto', 'Mystique', 'Quicksilver', 'Scarlet Witch', 'Blob', 'Pyro', 'Sabretooth', 'Juggernaut', 'Toad'],
