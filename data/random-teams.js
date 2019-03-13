@@ -920,7 +920,7 @@ class RandomTeams extends Dex.ModdedDex {
 					break;
 				case 'superpower':
 					if (counter['Fighting'] > 1 && counter.setupType) rejected = true;
-					if (hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
+					if (hasMove['rest'] && hasMove['sleeptalk'] && !hasAbility['Contrary']) rejected = true;
 					if (hasAbility['Contrary']) isSetup = true;
 					break;
 				case 'vacuumwave':
