@@ -78,7 +78,11 @@ export class Battle extends Dex.ModdedDex {
 	events: AnyObject | null;
 	lastDamage: number;
 	abilityOrder: number;
-	NOT_FAILURE: '';
+
+	NOT_FAIL: '';
+	FAIL: false;
+	SILENT_FAIL: null;
+
 	prng: PRNG;
 	prngSeed: PRNGSeed;
 	teamGenerator: ReturnType<typeof Dex.getTeamGenerator> | null;
@@ -145,7 +149,9 @@ export class Battle extends Dex.ModdedDex {
 		this.events = null;
 		this.lastDamage = 0;
 		this.abilityOrder = 0;
-		this.NOT_FAILURE = '';
+		this.NOT_FAIL = '';
+		this.FAIL = false;
+		this.SILENT_FAIL = null;
 		this.prng = options.prng || new PRNG(options.seed || undefined);
 		this.prngSeed = this.prng.startingSeed.slice() as PRNGSeed;
 		this.teamGenerator = null;
