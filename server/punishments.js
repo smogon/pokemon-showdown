@@ -1559,6 +1559,46 @@ Punishments.getRoomPunishments = function (user, options) {
 	return punishments;
 };
 
+/** @param {Room} room */
+Punishments.getPunishmentsOfRoom = function (room) {
+	let output = [];
+	const store = new Map();
+
+	if (Punishments.roomUserids.get(room.id)) {
+		for (let [key, value] of Punishments.roomUserids.get(room.id)) {
+			if (!store.has(value)) store.set(value, [new Set([]), new Set()]);
+			store.get(value)[0].add(key);
+		}
+	}
+
+	if (Punishments.roomIps.get(room.id)) {
+		for (let [key, value] of Punishments.roomIps.get(room.id)) {
+			if (!store.has(value)) store.set(value, [new Set([]), new Set()]);
+			store.get(value)[1].add(key);
+		}
+	}
+
+	if (store) {
+		for (const [punishment, data] of store) {
+			let [punishType, id, expireTime, reason] = punishment;
+			let alts = [...data[0]].filter(user => user !== id);
+			let ip = [...data[1]];
+			let expiresIn = new Date(expireTime).getTime() - Date.now();
+			output.push({"punishType": punishType, "id": id, "expiresIn": expiresIn, "reason": reason, "alts": alts, "ip": ip});
+		}
+	}
+
+	if (room.muteQueue) {
+		for (const entry of room.muteQueue) {
+			let expiresIn = new Date(entry.time).getTime() - Date.now();
+			if (expiresIn < 0) continue;
+			output.push({"punishType": 'MUTE', "id": entry.userid, "expiresIn": expiresIn});
+		}
+	}
+	return output.sort((a, b) => {
+		return a.expiresIn - b.expiresIn;
+	});
+};
 /**
  * Notifies staff if a user has three or more room punishments.
  *
