@@ -19,6 +19,7 @@ export class ReadStream {
 	bufCapacity: number;
 	readSize: number;
 	atEOF: boolean;
+	errorBuf: Error[] | null;
 	encoding: string;
 	isReadable: boolean;
 	isWritable: boolean;
@@ -34,6 +35,7 @@ export class ReadStream {
 		this.bufCapacity = BUF_SIZE;
 		this.readSize = 0;
 		this.atEOF = false;
+		this.errorBuf = null;
 		this.encoding = 'utf8';
 		this.isReadable = true;
 		this.isWritable = false;
@@ -135,6 +137,26 @@ export class ReadStream {
 		this.resolvePush();
 	}
 
+	pushError(err: Error) {
+		if (!this.errorBuf) this.errorBuf = [];
+		this.errorBuf.push(err);
+		this.resolvePush();
+	}
+
+	readError() {
+		if (this.errorBuf) {
+			const err = this.errorBuf.shift();
+			if (!this.errorBuf.length) this.errorBuf = null;
+			throw err;
+		}
+	}
+
+	peekError() {
+		if (this.errorBuf) {
+			throw this.errorBuf[0];
+		}
+	}
+
 	resolvePush() {
 		if (!this.nextPushResolver) throw new Error(`Push after end of read stream`);
 		this.nextPushResolver();
@@ -167,6 +189,7 @@ export class ReadStream {
 	}
 
 	async peek(byteCount: number | null = null, encoding: string = this.encoding) {
+		this.peekError();
 		if (byteCount === null && this.bufSize) return this.buf.toString(encoding, this.bufStart, this.bufEnd);
 		await this.loadIntoBuffer(byteCount);
 		if (byteCount === null) return this.buf.toString(encoding, this.bufStart, this.bufEnd);
@@ -176,6 +199,7 @@ export class ReadStream {
 	}
 
 	async peekBuffer(byteCount: number | null = null) {
+		this.peekError();
 		if (byteCount === null && this.bufSize) return this.buf.slice(this.bufStart, this.bufEnd);
 		await this.loadIntoBuffer(byteCount);
 		if (byteCount === null) return this.buf.slice(this.bufStart, this.bufEnd);
@@ -185,6 +209,7 @@ export class ReadStream {
 	}
 
 	async read(byteCount: number | string | null = null, encoding = this.encoding) {
+		this.readError();
 		if (typeof byteCount === 'string') {
 			encoding = byteCount;
 			byteCount = null;
@@ -200,6 +225,7 @@ export class ReadStream {
 	}
 
 	async readBuffer(byteCount: number | null = null) {
+		this.readError();
 		const out = await this.peekBuffer(byteCount);
 		if (byteCount === null || byteCount >= this.bufSize) {
 			this.bufStart = 0;
@@ -390,6 +416,7 @@ export class ObjectReadStream {
 	buf: any[];
 	readSize: number;
 	atEOF: boolean;
+	errorBuf: Error[] | null;
 	isReadable: boolean;
 	isWritable: boolean;
 	nodeReadableStream: NodeJS.ReadableStream | null;
@@ -401,6 +428,7 @@ export class ObjectReadStream {
 		this.buf = [];
 		this.readSize = 0;
 		this.atEOF = false;
+		this.errorBuf = null;
 		this.isReadable = true;
 		this.isWritable = false;
 		this.nodeReadableStream = null;
@@ -459,6 +487,26 @@ export class ObjectReadStream {
 		this.resolvePush();
 	}
 
+	pushError(err: Error) {
+		if (!this.errorBuf) this.errorBuf = [];
+		this.errorBuf.push(err);
+		this.resolvePush();
+	}
+
+	readError() {
+		if (this.errorBuf) {
+			const err = this.errorBuf.shift();
+			if (!this.errorBuf.length) this.errorBuf = null;
+			throw err;
+		}
+	}
+
+	peekError() {
+		if (this.errorBuf) {
+			throw this.errorBuf[0];
+		}
+	}
+
 	resolvePush() {
 		if (!this.nextPushResolver) throw new Error(`Push after end of read stream`);
 		this.nextPushResolver();
@@ -493,12 +541,14 @@ export class ObjectReadStream {
 	}
 
 	async peek() {
+		this.peekError();
 		if (this.buf.length) return this.buf[0];
 		await this.loadIntoBuffer();
 		return this.buf[0];
 	}
 
 	async read() {
+		this.readError();
 		if (this.buf.length) return this.buf.shift();
 		await this.loadIntoBuffer();
 		if (!this.buf.length) return null;
@@ -506,6 +556,7 @@ export class ObjectReadStream {
 	}
 
 	async peekArray(count: number | null = null) {
+		this.peekError();
 		await this.loadIntoBuffer(count || 1);
 		if (count === null || count === Infinity) {
 			return this.buf.slice();
@@ -514,12 +565,14 @@ export class ObjectReadStream {
 	}
 
 	async readArray(count: number | null = null) {
+		this.readError();
 		const out = await this.peekArray(count);
 		this.buf = this.buf.slice(out.length);
 		return out;
 	}
 
 	async readAll() {
+		this.readError();
 		await this.loadIntoBuffer(Infinity);
 		const out = this.buf;
 		this.buf = [];
@@ -527,6 +580,7 @@ export class ObjectReadStream {
 	}
 
 	async peekAll() {
+		this.peekError();
 		await this.loadIntoBuffer(Infinity);
 		return this.buf.slice();
 	}
