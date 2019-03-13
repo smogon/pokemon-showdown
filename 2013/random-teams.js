@@ -1,14 +1,14 @@
 /**
  * Seasonal Ladders of Pokémon Showdown
- * The formats with the mod-like tweaks go into /data/formats.js
- * The team making scripts go into /data/scripts.js
+ * The formats with the mod-like tweaks go into /config/formats.js
+ * The team making scripts go into /data/random-teams.js
  *
  * THIS IS A BACKUP FILE.
  */
 
 'use strict';
 
-exports.BattleScripts = {
+class RandomTeams extends Dex.ModdedDex {
 	randomSeasonalVVTeam(side) {
 		let couples = [
 			'nidoranf+nidoranm', 'nidorina+nidorino', 'nidoqueen+nidoking', 'gallade+gardevoir', 'plusle+minun', 'illumise+volbeat',
@@ -51,7 +51,8 @@ exports.BattleScripts = {
 		}
 
 		return team;
-	},
+	}
+
 	randomSeasonalSFTeam(side) {
 		// This is the huge list of all the Pokemon in this seasonal
 		let seasonalPokemonList = [
@@ -138,7 +139,8 @@ exports.BattleScripts = {
 		}
 
 		return team;
-	},
+	}
+
 	randomSeasonalFFYTeam(side) {
 		// Seasonal Pokemon list
 		let seasonalPokemonList = [
@@ -225,7 +227,8 @@ exports.BattleScripts = {
 		}
 
 		return team;
-	},
+	}
+
 	randomSeasonalMMTeam(side) {
 		// Seasonal Pokemon list
 		let seasonalPokemonList = [
@@ -282,7 +285,8 @@ exports.BattleScripts = {
 		}
 
 		return team;
-	},
+	}
+
 	randomSeasonalJJTeam(side) {
 		// Seasonal Pokemon list
 		let seasonalPokemonList = [
@@ -328,7 +332,8 @@ exports.BattleScripts = {
 		}
 
 		return team;
-	},
+	}
+
 	randomSeasonalJulyTeam(side) {
 		// Seasonal Pokemon list
 		let seasonalPokemonList = [
@@ -372,7 +377,8 @@ exports.BattleScripts = {
 		}
 
 		return team;
-	},
+	}
+
 	randomSeasonalAATeam(side) {
 		// First we choose the lead
 		let lead = (this.randomChance(50, 100)) ? 'groudon' : 'kyogre';
@@ -426,7 +432,8 @@ exports.BattleScripts = {
 		}
 
 		return team;
-	},
+	}
+
 	randomSeasonalSSTeam(side) {
 		let fashion = [
 			'Choice Scarf', 'Choice Specs', 'Silk Scarf', 'Wise Glasses', 'Choice Band', 'Wide Lens',
@@ -466,7 +473,8 @@ exports.BattleScripts = {
 		}
 
 		return team;
-	},
+	}
+
 	randomSeasonalOFTeam(side) {
 		let seasonalPokemonList = [
 			'absol', 'alakazam', 'banette', 'beheeyem', 'bellossom', 'bisharp', 'blissey', 'cacturne', 'carvanha', 'chandelure',
@@ -497,7 +505,8 @@ exports.BattleScripts = {
 		}
 
 		return team;
-	},
+	}
+
 	randomSeasonalTTTeam(side) {
 		let seasonalPokemonList = [
 			'alakazam', 'machamp', 'hypno', 'hitmonlee', 'hitmonchan', 'mrmime', 'jynx', 'hitmontop', 'hariyama', 'sableye', 'medicham',
@@ -518,7 +527,8 @@ exports.BattleScripts = {
 			team.push(set);
 		}
 		return team;
-	},
+	}
+
 	randomSeasonalCCTeam(side) {
 		let seasonalPokemonList = [
 			'raichu', 'nidoqueen', 'nidoking', 'clefable', 'wigglytuff', 'rapidash', 'dewgong', 'cloyster', 'exeggutor', 'starmie', 'jynx',
@@ -535,5 +545,5 @@ exports.BattleScripts = {
 			team.push(set);
 		}
 		return team;
-	},
-};
+	}
+}

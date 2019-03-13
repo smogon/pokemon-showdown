@@ -1,7 +1,7 @@
 /**
  * Seasonal Ladders of Pokémon Showdown
  * The formats with the mod-like tweaks go into /config/formats.js
- * The team making scripts go into /data/scripts.js
+ * The team making scripts go into /data/random-teams.js
  *
  * THIS IS A BACKUP FILE.
  */

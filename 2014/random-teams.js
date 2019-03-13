@@ -1,14 +1,14 @@
 /**
  * Seasonal Ladders of Pokémon Showdown
- * The formats with the mod-like tweaks go into /data/formats.js
- * The team making scripts go into /data/scripts.js
+ * The formats with the mod-like tweaks go into /config/formats.js
+ * The team making scripts go into /data/random-teams.js
  *
  * THIS IS A BACKUP FILE.
  */
 
 'use strict';
 
-exports.BattleScripts = {
+class RandomTeams extends Dex.ModdedDex {
 	randomSeasonalWinterTeam(side) {
 		let seasonalPokemonList = [
 			'raichu', 'nidoqueen', 'nidoking', 'clefable', 'wigglytuff', 'rapidash', 'dewgong', 'cloyster', 'exeggutor', 'starmie', 'jynx',
@@ -25,7 +25,8 @@ exports.BattleScripts = {
 			team.push(set);
 		}
 		return team;
-	},
+	}
+
 	randomSeasonalFFTeam(side) {
 		let seasonalPokemonList = [
 			'charizard', 'ninetales', 'houndoom', 'arceusfire', 'arcanine', 'moltres', 'rapidash', 'magmar', 'quilava', 'typhlosion',
@@ -43,7 +44,8 @@ exports.BattleScripts = {
 			team.push(set);
 		}
 		return team;
-	},
+	}
+
 	randomSeasonalSBTeam(side) {
 		let crypto = require('crypto');
 		let date = new Date();
@@ -78,7 +80,8 @@ exports.BattleScripts = {
 		}
 
 		return team;
-	},
+	}
+
 	randomSeasonalSleighTeam(side) {
 		// All Pokémon in this Seasonal. They are meant to pull the sleigh.
 		let seasonalPokemonList = [
@@ -123,5 +126,5 @@ exports.BattleScripts = {
 
 		// Done, return the result.
 		return team;
-	},
-};
+	}
+}

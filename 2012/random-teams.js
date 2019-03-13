@@ -1,14 +1,14 @@
 /**
  * Seasonal Ladders of Pokémon Showdown
- * The formats with the mod-like tweaks go into /data/formats.js
- * The team making scripts go into /data/scripts.js
+ * The formats with the mod-like tweaks go into /config/formats.js
+ * The team making scripts go into /data/random-teams.js
  *
  * THIS IS A BACKUP FILE.
  */
 
 'use strict';
 
-exports.BattleScripts = {
+class RandomTeams extends Dex.ModdedDex {
 	randomSeasonalTeam(side) {
 		let seasonalPokemonList = [
 			'alakazam', 'machamp', 'hypno', 'hitmonlee', 'hitmonchan', 'mrmime', 'jynx', 'hitmontop',
@@ -29,7 +29,8 @@ exports.BattleScripts = {
 			team.push(set);
 		}
 		return team;
-	},
+	}
+
 	randomSeasonalWWTeam(side) {
 		let seasonalPokemonList = [
 			'raichu', 'nidoqueen', 'nidoking', 'clefable', 'wigglytuff', 'rapidash', 'dewgong', 'cloyster',
@@ -64,5 +65,5 @@ exports.BattleScripts = {
 		}
 
 		return team;
-	},
-};
+	}
+}

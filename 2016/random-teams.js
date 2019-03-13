@@ -1,15 +1,15 @@
 
 /**
  * Seasonal Ladders of Pokémon Showdown
- * The formats with the mod-like tweaks go into /data/formats.js
- * The team making scripts go into /data/scripts.js
+ * The formats with the mod-like tweaks go into /config/formats.js
+ * The team making scripts go into /data/random-teams.js
  *
  * THIS IS A BACKUP FILE.
  */
 
 'use strict';
 
-exports.BattleScripts = {
+class RandomTeams extends Dex.ModdedDex {
 	randomSeasonalPolarTeam() {
 		let pokemonLeft = 0;
 		let pokemon = [];
@@ -90,7 +90,8 @@ exports.BattleScripts = {
 			if (set.moves.indexOf('defog') >= 0 || set.moves.indexOf('rapidspin') >= 0) teamDetails['hazardClear'] = 1;
 		}
 		return pokemon;
-	},
+	}
+
 
 	randomSeasonalDimensionalTeam() {
 		let side = 'good';
@@ -161,7 +162,8 @@ exports.BattleScripts = {
 		}
 
 		return team;
-	},
+	}
+
 
 	randomSeasonalJubileeTeam(side) {
 		let seasonalPokemonList = [
@@ -211,7 +213,8 @@ exports.BattleScripts = {
 		}
 
 		return team;
-	},
+	}
+
 
 	randomSeasonalFireworksTeam(side) {
 		let seasonalPokemonList = [
@@ -347,5 +350,5 @@ exports.BattleScripts = {
 		}
 
 		return team;
-	},
-};
+	}
+}
