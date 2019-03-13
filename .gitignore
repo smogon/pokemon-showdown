@@ -16,6 +16,12 @@
 npm-debug.log
 .eslintcache
 
+# Typescript build artifacts
+.*-dist/
+
+# visual studio live share
+.vs
+
 # boilerplate #
 ###############
 
