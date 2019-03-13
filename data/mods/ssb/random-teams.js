@@ -19,7 +19,10 @@
 const RandomTeams = require('../../random-teams');
 
 class RandomStaffBrosTeams extends RandomTeams {
-	randomStaffBrosTeam() {
+	/**
+	 * @param {PlayerOptions} [side]
+	 */
+	randomStaffBrosTeam(side) {
 		/** @type {PokemonSet[]} */
 		let team = [];
 		/** @type {SSBSets} */
@@ -643,11 +646,22 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 188, atk: 68, def: 252}, nature: 'Adamant',
 			},
 		};
-		let pool = Object.keys(sets);
+
+		const playerUserid = toId(side && side.name);
+		const pool = Object.keys(sets);
+
+		let selfIndex = this.randomChance(1, 2) ? pool.findIndex(name => toId(name) === playerUserid) : -1;
+
 		/** @type {{[type: string]: number}} */
 		let typePool = {};
 		while (pool.length && team.length < 6) {
-			let name = this.sampleNoReplace(pool);
+			let name = '';
+			if (selfIndex >= 0 && this.randomChance(1, 6 - team.length)) {
+				name = this.fastPop(pool, selfIndex);
+				selfIndex = -1;
+			} else {
+				name = this.sampleNoReplace(pool);
+			}
 			let ssbSet = sets[name];
 			// Enforce typing limits
 			let types = this.getTemplate(ssbSet.species).types;
