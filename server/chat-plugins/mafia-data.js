@@ -1797,6 +1797,8 @@ const themes = {
 	},
 	dv3: `dayvig3`,
 	dayvig3: {
+		name: `Day-Vig3`,
+		desc: `Day-Vig3: Shoot the other Day-Vig, before they shoot you!`,
 		3: `Mafia One-Shot Day-Vigilante, One-Shot Day-Vigilante, Vanilla Townie`,
 	},
 	dimm: `drookez_is_mafia_mafia`,
