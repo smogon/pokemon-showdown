@@ -3956,7 +3956,7 @@ exports.BattleMovedex = {
 		onPrepareHit: function (target, source, move) {
 			this.attrLastMove('[anim] Tri Attack');
 			move.types = move.typechart.slice();
-			Tools.shuffle(move.types);
+			this.shuffle(move.types);
 			move.types.splice(3);
 			source.say(`Go! ${move.types.join(', ')}! Spectrum Triplet Beam!!!`);
 			move.hitcount = 0;
@@ -4595,7 +4595,7 @@ exports.BattleMovedex = {
 				'quiverdance', 'shellsmash', 'dragondance', 'recover', 'toxic', 'willowisp', 'leechseed',
 			];
 			for (let i = 0; i < pokemon.moveSlots.length; i++) {
-				let moveData = Tools.getMove(this.sampleNoReplace(newMoves));
+				let moveData = this.getMove(this.sampleNoReplace(newMoves));
 				let moveBuffer = {
 					move: moveData.name,
 					id: moveData.id,

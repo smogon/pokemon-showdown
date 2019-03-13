@@ -673,8 +673,8 @@ exports.BattleScripts = {
 				// We don't want too many Fighting or Flying weaknesses, since those moves will be common
 				// Hard limit it to two, since after factoring in Chien-Po we might have a lot of common weakness
 				const mainWeakness = {};
-				if (Tools.getEffectiveness('Flying', template) > 0) mainWeakness['Flying'] = true;
-				if (Tools.getEffectiveness('Fighting', template) > 0) mainWeakness['Fighting'] = true;
+				if (Dex.getEffectiveness('Flying', template) > 0) mainWeakness['Flying'] = true;
+				if (Dex.getEffectiveness('Fighting', template) > 0) mainWeakness['Fighting'] = true;
 				if (mainWeakness['Fighting'] && weakCount['Fighting'] >= 2) continue;
 				if (mainWeakness['Flying'] && weakCount['Flying'] >= 2) continue;
 
