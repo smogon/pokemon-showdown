@@ -63,7 +63,7 @@ describe(`Emergency Exit`, function () {
 	});
 
 	it(`should not prevent Red Card's activation`, function () {
-		battle = common.createBattle({strictChoices: false}, [
+		battle = common.createBattle([
 			[{species: "Golisopod", ability: 'emergencyexit', item: 'redcard', moves: ['sleeptalk'], ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
 			[{species: "Raticate", ability: 'guts', moves: ['superfang']}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
 		]);
@@ -74,7 +74,7 @@ describe(`Emergency Exit`, function () {
 		assert.false.holdsItem(eePokemon);
 		assert.strictEqual(battle.currentRequest, 'switch');
 
-		battle.makeChoices('move metronome', 'move metronome');
+		battle.makeChoices('auto', '');
 		assert.species(battle.p1.active[0], 'Clefable');
 		assert.species(battle.p2.active[0], 'Clefable');
 	});
@@ -85,13 +85,13 @@ describe(`Emergency Exit`, function () {
 			[{species: "Raticate", ability: 'guts', moves: ['superfang']}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
 		]);
 		const eePokemon = battle.p1.active[0];
-		battle.makeChoices('move sleeptalk', 'move superfang');
+		battle.makeChoices('auto', 'auto');
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
 
 		assert.false.holdsItem(eePokemon);
 		assert.strictEqual(battle.currentRequest, 'switch');
 
-		battle.makeChoices('move metronome', 'move superfang');
+		battle.makeChoices('auto', 'auto');
 		assert.species(battle.p1.active[0], 'Clefable');
 	});
 
