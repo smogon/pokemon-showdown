@@ -185,8 +185,8 @@ export class Battle extends Dex.ModdedDex {
 		}
 	}
 
-	static logReplay(data: string, isReplay: boolean | Side) {
-		if (isReplay === true) return data;
+	static logReplay(data: string, splitSide: boolean | Side) {
+		if (splitSide === true) return data;
 		return '';
 	}
 
@@ -1682,7 +1682,6 @@ export class Battle extends Dex.ModdedDex {
 			if (this.rated === 'Rated battle') this.rated = true;
 			this.add('rated', typeof this.rated === 'string' ? this.rated : '');
 		}
-		this.add('seed', (side: Side) => Battle.logReplay(this.prngSeed.join(','), side));
 
 		if (format.onBegin) {
 			format.onBegin.call(this);
@@ -3148,6 +3147,9 @@ export class Battle extends Dex.ModdedDex {
 		if (!didSomething) return;
 		this.inputLog.push(`>player ${slot} ` + JSON.stringify(options));
 		this.add('player', side.id, side.name, side.avatar);
+		if (options.seed) {
+			this.add('seed', (splitSide: Side) => Battle.logReplay(options.seed!.join(','), splitSide));
+		}
 		this.start();
 	}
 
