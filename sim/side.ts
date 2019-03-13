@@ -34,49 +34,78 @@ interface Choice {
 }
 
 export class Side {
-	battle: Battle;
-	n: number;
+	readonly battle: Battle;
+	readonly id: 'p1' | 'p2';
+	readonly n: number;
+
 	name: string;
 	avatar: string;
+	maxTeamSize: number;
+	foe: Side;
+	team: PokemonSet[];
 	pokemon: Pokemon[];
 	active: Pokemon[];
-	sideConditions: AnyObject;
+
 	pokemonLeft: number;
 	faintedLastTurn: boolean;
 	faintedThisTurn: boolean;
 	zMoveUsed: boolean;
-	choice: Choice;
+
+	sideConditions: AnyObject;
+
 	/**
-	 *  'move' - Move request, at the beginning of every turn
+	 * 'move' - Move request, at the beginning of every turn
 	 * 'switch' - Switch request, at the end of every turn with fainted Pokémon, or mid-turn for U-turn etc
 	 * 'teampreview' - Team Preview, at the beginning of a battle
 	 * '' - No request (waiting for other player's switch request)
 	 */
 	currentRequest: 'move' | 'switch' | 'teampreview' | '';
-	maxTeamSize: number;
-	id: 'p1' | 'p2';
-	foe: Side;
-	team: PokemonSet[];
+	choice: Choice;
+
 	lastMove: Move | null;
 
 	constructor(name: string, battle: Battle, sideNum: number, team: PokemonSet[]) {
-		let sideScripts = battle.data.Scripts.side;
+		const sideScripts = battle.data.Scripts.side;
 		if (sideScripts) Object.assign(this, sideScripts);
 
 		this.battle = battle;
+		this.id = sideNum ? 'p2' : 'p1';
 		this.n = sideNum;
+
 		this.name = name;
 		this.avatar = '';
+		this.maxTeamSize = 6;
+		this.foe = sideNum ? this.battle.sides[0] : this.battle.sides[1];
 
+		this.team = team;
 		this.pokemon = [];
-		// @ts-ignore
-		this.active = [null];
-		this.sideConditions = {};
+		for (let i = 0; i < this.team.length && i < 24; i++) {
+			// console.log("NEW POKEMON: " + (this.team[i] ? this.team[i].name : '[unidentified]'));
+			this.pokemon.push(new Pokemon(this.team[i], this));
+		}
+		for (const [i, pokemon] of this.pokemon.entries()) {
+			pokemon.position = i;
+		}
 
-		this.pokemonLeft = 0;
+		switch (this.battle.gameType) {
+		case 'doubles':
+			this.active = [null!, null!];
+			break;
+		case 'triples': case 'rotation':
+			this.active = [null!, null!, null!];
+			break;
+		default:
+			this.active = [null!];
+		}
+
+		this.pokemonLeft = this.pokemon.length;
 		this.faintedLastTurn = false;
 		this.faintedThisTurn = false;
 		this.zMoveUsed = false;
+
+		this.sideConditions = {};
+
+		this.currentRequest = '';
 		this.choice = {
 			cantUndo: false,
 			error: ``,
@@ -88,39 +117,6 @@ export class Side {
 			mega: false,
 			ultra: false,
 		};
-		/**
-		 * Must be one of:
-		 * 'move' - Move request, at the beginning of every turn
-		 * 'switch' - Switch request, at the end of every turn with fainted Pokémon, or mid-turn for U-turn etc
-		 * 'teampreview' - Team Preview, at the beginning of a battle
-		 * '' - No request (waiting for other player's switch request)
-		 */
-		this.currentRequest = '';
-		this.maxTeamSize = 6;
-
-		this.id = sideNum ? 'p2' : 'p1';
-		this.foe = sideNum ? this.battle.sides[0] : this.battle.sides[1];
-
-		switch (this.battle.gameType) {
-		case 'doubles':
-			// @ts-ignore
-			this.active = [null, null];
-			break;
-		case 'triples': case 'rotation':
-			// @ts-ignore
-			this.active = [null, null, null];
-			break;
-		}
-
-		this.team = team;
-		for (let i = 0; i < this.team.length && i < 24; i++) {
-			// console.log("NEW POKEMON: " + (this.team[i] ? this.team[i].name : '[unidentified]'));
-			this.pokemon.push(new Pokemon(this.team[i], this));
-		}
-		this.pokemonLeft = this.pokemon.length;
-		for (const [i, pokemon] of this.pokemon.entries()) {
-			pokemon.position = i;
-		}
 
 		// old-gens
 		this.lastMove = null;
@@ -128,24 +124,21 @@ export class Side {
 
 	getChoice() {
 		if (this.choice.actions.length > 1 && this.choice.actions.every(action => action.choice === 'team')) {
-			// @ts-ignore
-			return `team ` + this.choice.actions.map(action => action.pokemon.position + 1).join(', ');
+			return `team ` + this.choice.actions.map(action => action.pokemon!.position + 1).join(', ');
 		}
 		return this.choice.actions.map(action => {
 			switch (action.choice) {
 			case 'move':
 				let details = ``;
 				if (action.targetLoc && this.active.length > 1) details += ` ${action.targetLoc}`;
-				if (action.mega) details += ` mega`;
+				if (action.mega) details += (action.pokemon!.item === 'ultranecroziumz' ? ` ultra` : ` mega`);
 				if (action.zmove) details += ` zmove`;
 				return `move ${action.moveid}${details}`;
 			case 'switch':
 			case 'instaswitch':
-				// @ts-ignore
-				return `switch ${action.target.position + 1}`;
+				return `switch ${action.target!.position + 1}`;
 			case 'team':
-				// @ts-ignore
-				return `team ${action.pokemon.position + 1}`;
+				return `team ${action.pokemon!.position + 1}`;
 			default:
 				return action.choice;
 			}
@@ -153,27 +146,27 @@ export class Side {
 	}
 
 	toString() {
-		return this.id + ': ' + this.name;
+		return `${this.id}: ${this.name}`;
 	}
 
 	getRequestData() {
-		let data = {
+		const data = {
 			name: this.name,
 			id: this.id,
 			pokemon: [] as AnyObject[],
 		};
 		for (const pokemon of this.pokemon) {
-			let entry: AnyObject = {
+			const entry: AnyObject = {
 				ident: pokemon.fullname,
 				details: pokemon.details,
 				condition: pokemon.getHealth(pokemon.side),
 				active: (pokemon.position < pokemon.side.active.length),
 				stats: {
-					atk: pokemon.baseStats['atk'],
-					def: pokemon.baseStats['def'],
-					spa: pokemon.baseStats['spa'],
-					spd: pokemon.baseStats['spd'],
-					spe: pokemon.baseStats['spe'],
+					atk: pokemon.baseStoredStats['atk'],
+					def: pokemon.baseStoredStats['def'],
+					spa: pokemon.baseStoredStats['spa'],
+					spd: pokemon.baseStoredStats['spd'],
+					spe: pokemon.baseStoredStats['spe'],
 				},
 				moves: pokemon.moves.map(move => {
 					if (move === 'hiddenpower') {
@@ -192,7 +185,7 @@ export class Side {
 	}
 
 	randomActive() {
-		let actives = this.active.filter(active => active && !active.fainted);
+		const actives = this.active.filter(active => active && !active.fainted);
 		if (!actives.length) return null;
 		return this.battle.sample(actives);
 	}
@@ -240,7 +233,7 @@ export class Side {
 
 	// tslint:disable-next-line:ban-types
 	send(...parts: (string | number | Function | AnyObject)[]) {
-		let sideUpdate = '|' + parts.map(part => {
+		const sideUpdate = '|' + parts.map(part => {
 			if (typeof part !== 'function') return part;
 			return part(this);
 		}).join('|');
@@ -302,8 +295,7 @@ export class Side {
 				return this.emitChoiceError(`Can't move: Your ${pokemon.name} doesn't have a move ${moveIndex + 1}`);
 			}
 			moveid = requestMoves[moveIndex].id;
-			// @ts-ignore
-			targetType = requestMoves[moveIndex].target;
+			targetType = requestMoves[moveIndex].target!;
 		} else {
 			// Parse a move ID.
 			// Move names are also allowed, but may cause ambiguity (see client issue #167).
@@ -325,11 +317,9 @@ export class Side {
 		if (autoChoose) {
 			for (const [i, move] of requestMoves.entries()) {
 				if (move.disabled) continue;
-				// @ts-ignore
 				if (i < moves.length && move.id === moves[i].id && moves[i].disabled) continue;
 				moveid = move.id;
-				// @ts-ignore
-				targetType = move.target;
+				targetType = move.target!;
 				break;
 			}
 		}
@@ -342,7 +332,6 @@ export class Side {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't use ${move.name} as a Z-move`);
 		}
 		if (zMove && this.choice.zMove) {
-			// TODO: The client shouldn't have sent this request in the first place.
 			this.emitCallback('cantz', pokemon);
 			return this.emitChoiceError(`Can't move: You can't Z-move more than once per battle`);
 		}
@@ -385,16 +374,13 @@ export class Side {
 			// Check for disabled moves
 			let isEnabled = false;
 			let disabledSource = '';
-			for (const moveId of moves) {
-				if (moveId.id !== moveid) continue;
-				// @ts-ignore
-				if (!moveId.disabled) {
+			for (const m of moves) {
+				if (m.id !== moveid) continue;
+				if (!m.disabled) {
 					isEnabled = true;
 					break;
-				// @ts-ignore
-				} else if (moveId.disabledSource) {
-					// @ts-ignore
-					disabledSource = moveId.disabledSource;
+				} else if (m.disabledSource) {
+					disabledSource = m.disabledSource;
 				}
 			}
 			if (!isEnabled) {
@@ -413,7 +399,6 @@ export class Side {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't mega evolve`);
 		}
 		if (mega && this.choice.mega) {
-			// TODO: The client shouldn't have sent this request in the first place.
 			this.emitCallback('cantmega', pokemon);
 			return this.emitChoiceError(`Can't move: You can only mega-evolve once per battle`);
 		}
@@ -422,7 +407,6 @@ export class Side {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't mega evolve`);
 		}
 		if (ultra && this.choice.ultra) {
-			// TODO: The client shouldn't have sent this request in the first place.
 			this.emitCallback('cantmega', pokemon);
 			return this.emitChoiceError(`Can't move: You can only ultra burst once per battle`);
 		}
@@ -469,14 +453,13 @@ export class Side {
 			slot = this.active.length;
 			while (this.choice.switchIns.has(slot) || this.pokemon[slot].fainted) slot++;
 		} else {
-			// @ts-ignore
-			slot = parseInt(slotText, 10) - 1;
+			slot = parseInt(slotText!, 10) - 1;
 		}
 		if (isNaN(slot) || slot < 0) {
-			// maybe it's a name!
+			// maybe it's a name/species id!
 			slot = -1;
 			for (const [i, mon] of this.pokemon.entries()) {
-				if (slotText === mon.name) {
+				if (slotText!.toLowerCase() === mon.name.toLowerCase() || toId(slotText) === mon.speciesid) {
 					slot = i;
 					break;
 				}
@@ -528,12 +511,9 @@ export class Side {
 		const autoFill = !data;
 		// default to sending team in order
 		if (!data) data = `123456`;
-		let positions;
-		if (data.includes(',')) {
-			positions = ('' + data).split(',').map(datum => parseInt(datum, 10) - 1);
-		} else {
-			positions = ('' + data).split('').map(datum => parseInt(datum, 10) - 1);
-		}
+		const positions = (('' + data)
+			.split(data.includes(',') ? ',' : '')
+			.map(datum => parseInt(datum, 10) - 1));
 
 		if (autoFill && this.choice.actions.length >= this.maxTeamSize) return true;
 		if (this.currentRequest !== 'teampreview') {
@@ -632,14 +612,16 @@ export class Side {
 		const choiceStrings = (input.startsWith('team ') ? [input] : input.split(','));
 
 		if (choiceStrings.length > this.active.length) {
-			this.emitChoiceError(`Can't make choices: You sent choices for ${choiceStrings.length} Pokémon, but this is a ${this.battle.gameType} game!`);
+			return this.emitChoiceError(
+				`Can't make choices: You sent choices for ${choiceStrings.length} Pokémon, but this is a ${this.battle.gameType} game!`
+			);
 		}
 
 		for (let choiceString of choiceStrings) {
 			let choiceType = '';
 			let data = '';
 			choiceString = choiceString.trim();
-			let firstSpaceIndex = choiceString.indexOf(' ');
+			const firstSpaceIndex = choiceString.indexOf(' ');
 			if (firstSpaceIndex >= 0) {
 				data = choiceString.slice(firstSpaceIndex + 1).trim();
 				choiceType = choiceString.slice(0, firstSpaceIndex);
@@ -649,18 +631,36 @@ export class Side {
 
 			switch (choiceType) {
 			case 'move':
-				let targetLoc = 0;
-				if (/\s-?[1-3]$/.test(data)) {
-					targetLoc = parseInt(data.slice(-2), 10);
-					data = data.slice(0, data.lastIndexOf(' '));
+				const original = data;
+				const error = () => this.emitChoiceError(`Conflicting arguments for "move": ${original}`);
+				let targetLoc: number | undefined;
+				let megaOrZ = '';
+				while (true) {
+					// If data ends with a number, treat it as a target location.
+					// We need to special case 'Conversion 2' so it doesn't get
+					// confused with 'Conversion' erroneously sent with the target
+					// '2' (since Conversion targets 'self', targetLoc can't be 2).
+					if (/\s(?:-|\+)?[1-3]$/.test(data) && toId(data) !== 'conversion2') {
+						if (targetLoc !== undefined) return error();
+						targetLoc = parseInt(data.slice(-2), 10);
+						data = data.slice(0, -2).trim();
+					} else if (data.endsWith(' mega')) {
+						if (megaOrZ) return error();
+						megaOrZ = 'mega';
+						data = data.slice(0, -5);
+					} else if (data.endsWith(' zmove')) {
+						if (megaOrZ) return error();
+						megaOrZ = 'zmove';
+						data = data.slice(0, -6);
+					} else if (data.endsWith(' ultra')) {
+						if (megaOrZ) return error();
+						megaOrZ = 'ultra';
+						data = data.slice(0, -6);
+					} else {
+						break;
+					}
 				}
-				const willMega = data.endsWith(' mega') ? 'mega' : '';
-				if (willMega) data = data.slice(0, -5);
-				const willUltra = data.endsWith(' ultra') ? 'ultra' : '';
-				if (willUltra) data = data.slice(0, -6);
-				const willZ = data.endsWith(' zmove') ? 'zmove' : '';
-				if (willZ) data = data.slice(0, -6);
-				this.chooseMove(data, targetLoc, willMega || willUltra || willZ);
+				this.chooseMove(data, targetLoc, megaOrZ);
 				break;
 			case 'switch':
 				this.chooseSwitch(data);
@@ -677,6 +677,7 @@ export class Side {
 				if (data) return this.emitChoiceError(`Unrecognized data after "pass": ${data}`);
 				this.choosePass();
 				break;
+			case 'auto':
 			case 'default':
 				this.autoChoose();
 				break;
@@ -686,9 +687,7 @@ export class Side {
 			}
 		}
 
-		if (this.choice.error) return false;
-
-		return true;
+		return !this.choice.error;
 	}
 
 	getChoiceIndex(isPass?: boolean) {
@@ -745,9 +744,7 @@ export class Side {
 		return true;
 	}
 
-	/**
-	 * Automatically finish a choice if not currently complete
-	 */
+	/** Automatically finish a choice if not currently complete. */
 	autoChoose() {
 		if (this.currentRequest === 'teampreview') {
 			if (!this.isChoiceDone()) this.chooseTeam();
@@ -766,20 +763,19 @@ export class Side {
 		for (const pokemon of this.pokemon) {
 			if (pokemon) pokemon.destroy();
 		}
-		this.pokemon = [];
-		this.active = [];
 
-		this.choice.actions.forEach(action => {
+		for (const action of this.choice.actions) {
 			delete action.side;
 			delete action.pokemon;
 			delete action.target;
-		});
+		}
 		this.choice.actions = [];
 
 		// get rid of some possibly-circular references
-		// @ts-ignore - prevent type | null
-		this.battle = null;
-		// @ts-ignore - prevent type | null
-		this.foe = null;
+		this.pokemon = [];
+		this.active = [];
+		// @ts-ignore - readonly
+		this.battle = null!;
+		this.foe = null!;
 	}
 }

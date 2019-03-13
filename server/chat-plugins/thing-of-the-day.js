@@ -172,9 +172,9 @@ class OtdHandler {
 		/** @type {string[]} */
 		const entries = [];
 
-		this.nominations.forEach(value => {
+		for (const value of this.nominations.values()) {
 			entries.push(`<li><b>${value.nomination}</b> <i>(Submitted by ${value.name})</i></li>`);
-		});
+		}
 
 		if (entries.length > 20) {
 			buffer += `<table><tr><td><ul>${entries.slice(0, Math.ceil(entries.length / 2)).join('')}</ul></td><td><ul>${entries.slice(Math.ceil(entries.length / 2)).join('')}</ul></td></tr></table>`;

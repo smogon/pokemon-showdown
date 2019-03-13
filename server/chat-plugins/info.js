@@ -299,6 +299,13 @@ const commands = {
 		this.sendReplyBox(buf);
 	},
 
+	sp: 'showpunishments',
+	showpunishments(target, room, user) {
+		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+		return this.parse(`/join view-punishments-${room}`);
+	},
+	showpunishmentshelp: [`/showpunishments - Shows the current punishments in the room. Requires: % @ # & ~`],
+
 	'!host': true,
 	host(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help host');
@@ -328,12 +335,12 @@ const commands = {
 		if (/[a-z]/.test(ip)) {
 			// host
 			this.sendReply(`Users with host ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
-			Users.users.forEach(curUser => {
-				if (results.length > 100 && !isAll) return;
-				if (!curUser.latestHost || !curUser.latestHost.endsWith(ip)) return;
-				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) return;
+			for (const curUser of Users.users.values()) {
+				if (results.length > 100 && !isAll) continue;
+				if (!curUser.latestHost || !curUser.latestHost.endsWith(ip)) continue;
+				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) continue;
 				results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
-			});
+			}
 			if (results.length > 100 && !isAll) {
 				return this.sendReply(`More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.`);
 			}
@@ -341,22 +348,22 @@ const commands = {
 			// IP range
 			this.sendReply(`Users in IP range ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
 			ip = ip.slice(0, -1);
-			Users.users.forEach(curUser => {
-				if (results.length > 100 && !isAll) return;
-				if (!curUser.latestIp.startsWith(ip)) return;
-				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) return;
+			for (const curUser of Users.users.values()) {
+				if (results.length > 100 && !isAll) continue;
+				if (!curUser.latestIp.startsWith(ip)) continue;
+				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) continue;
 				results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
-			});
+			}
 			if (results.length > 100 && !isAll) {
 				return this.sendReply(`More than 100 users match the specified IP range. Use /ipsearchall to retrieve the full list.`);
 			}
 		} else {
 			this.sendReply(`Users with IP ${ip}${targetRoom ? ` in the room ${targetRoom.title}` : ``}:`);
-			Users.users.forEach(curUser => {
-				if (curUser.latestIp !== ip) return;
-				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) return;
+			for (const curUser of Users.users.values()) {
+				if (curUser.latestIp !== ip) continue;
+				if (targetRoom && !curUser.inRooms.has(targetRoom.id)) continue;
 				results.push((curUser.connected ? " \u25C9 " : " \u25CC ") + " " + curUser.name);
-			});
+			}
 		}
 		if (!results.length) {
 			if (!ip.includes('.')) return this.errorReply(`${ip} is not a valid IP or host.`);
@@ -515,7 +522,7 @@ const commands = {
 					if (pokemon.color && mod.gen >= 5) details["Dex Colour"] = pokemon.color;
 					if (pokemon.eggGroups && mod.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
 					let evos = /** @type {string[]} */ ([]);
-					pokemon.evos.forEach(evoName => {
+					for (const evoName of pokemon.evos) {
 						const evo = mod.getTemplate(evoName);
 						if (evo.gen <= mod.gen) {
 							let condition = evo.evoCondition ? ` ${evo.evoCondition}` : ``;
@@ -542,7 +549,7 @@ const commands = {
 								evos.push(`${evo.name} (${evo.evoLevel})`);
 							}
 						}
-					});
+					}
 					if (!evos.length) {
 						details['<font color="#686868">Does Not Evolve</font>'] = "";
 					} else {
@@ -2383,6 +2390,67 @@ const commands = {
 	],
 };
 
+/** @type {PageTable} */
+const pages = {
+	punishments(query, user, connection) {
+		this.title = 'Punishments';
+		let buf = "";
+		this.extractRoom();
+		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
+		buf += `<div class="pad"><h2>List of active punishments:</h2>`;
+		if (!this.can('mute', null, this.room)) return;
+		if (!this.room.chatRoomData) {
+			return buf + `<div class="notice message-error">This page is unavailable in temporary rooms / non-existent rooms.</div>`;
+		}
+		const store = new Map();
+		const possessive = (word) => {
+			const suffix = word.endsWith('s') ? `'` : `'s`;
+			return `${word}${suffix}`;
+		};
+
+		if (Punishments.roomUserids.get(this.room.id)) {
+			for (let [key, value] of Punishments.roomUserids.get(this.room.id)) {
+				if (!store.has(value)) store.set(value, [new Set([value.id]), new Set()]);
+				store.get(value)[0].add(key);
+			}
+		}
+
+		if (Punishments.roomIps.get(this.room.id)) {
+			for (let [key, value] of Punishments.roomIps.get(this.room.id)) {
+				if (!store.has(value)) store.set(value, [new Set([value.id]), new Set()]);
+				store.get(value)[1].add(key);
+			}
+		}
+
+		for (const [punishment, data] of store) {
+			let [punishType, id, expireTime, reason] = punishment;
+			let alts = [...data[0]].filter(user => user !== id);
+			let ip = [...data[1]];
+			let expiresIn = new Date(expireTime).getTime() - Date.now();
+			let expireString = Chat.toDurationString(expiresIn, {precision: 1});
+			let punishDesc = "";
+			if (reason) punishDesc += ` Reason: ${reason}.`;
+			if (alts.length) punishDesc += ` Alts: ${alts.join(", ")}.`;
+			if (user.can('ban') && ip.length) {
+				punishDesc += ` IPs: ${ip.join(", ")}.`;
+			}
+			buf += `<p>- ${possessive(id)} ${punishType.toLowerCase()} expires in ${expireString}.${punishDesc}</p>`;
+		}
+
+		if (this.room.muteQueue) {
+			for (const entry of this.room.muteQueue) {
+				let expiresIn = new Date(entry.time).getTime() - Date.now();
+				if (expiresIn < 0) continue;
+				let expireString = Chat.toDurationString(expiresIn, {precision: 1});
+				buf += `<p>- ${possessive(entry.userid)} mute expires in ${expireString}.</p>`;
+			}
+		}
+		buf += `</div>`;
+		return buf;
+	},
+};
+
+exports.pages = pages;
 exports.commands = commands;
 
 process.nextTick(() => {

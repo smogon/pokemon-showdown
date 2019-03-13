@@ -154,8 +154,8 @@ export class BasicEffect implements EffectData {
 }
 
 /** rule, source, limit, bans */
-type ComplexBan = [string, string, number, string[]];
-type ComplexTeamBan = ComplexBan;
+export type ComplexBan = [string, string, number, string[]];
+export type ComplexTeamBan = ComplexBan;
 
 /**
  * A RuleTable keeps track of the rules that a format has. The key can be:

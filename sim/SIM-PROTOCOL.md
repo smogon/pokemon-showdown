@@ -648,9 +648,9 @@ To be exact, `CHOICE` is one of:
 
 `SWITCHSPEC` is:
 
-- a pokemon nickname or 1-based slot number
-  - Note that if you have multiple Pokémon with the same nickname, using the
-    nickname will select the first unfainted one. If you want another Pokémon,
+- a Pokémon nickname/species or 1-based slot number
+  - Note that if you have multiple Pokémon with the same nickname/species, using the
+    nickname/species will select the first unfainted one. If you want another Pokémon,
     you'll need to specify it by slot number.
 
 Once a choice has been set for all players who need to make a choice, the

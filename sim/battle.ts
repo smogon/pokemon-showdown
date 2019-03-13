@@ -18,12 +18,6 @@ interface FaintedPokemon {
 	effect: Effect | null;
 }
 
-interface PlayerOptions {
-	name?: string;
-	avatar?: string;
-	team?: PokemonSet[] | string | null;
-}
-
 interface BattleOptions {
 	formatid: string; // Format ID
 	send?: (type: string, data: string | string[]) => void; // Output callback
@@ -84,7 +78,11 @@ export class Battle extends Dex.ModdedDex {
 	events: AnyObject | null;
 	lastDamage: number;
 	abilityOrder: number;
-	NOT_FAILURE: '';
+
+	NOT_FAIL: '';
+	FAIL: false;
+	SILENT_FAIL: null;
+
 	prng: PRNG;
 	prngSeed: PRNGSeed;
 	teamGenerator: ReturnType<typeof Dex.getTeamGenerator> | null;
@@ -151,7 +149,9 @@ export class Battle extends Dex.ModdedDex {
 		this.events = null;
 		this.lastDamage = 0;
 		this.abilityOrder = 0;
-		this.NOT_FAILURE = '';
+		this.NOT_FAIL = '';
+		this.FAIL = false;
+		this.SILENT_FAIL = null;
 		this.prng = options.prng || new PRNG(options.seed || undefined);
 		this.prngSeed = this.prng.startingSeed.slice() as PRNGSeed;
 		this.teamGenerator = null;
@@ -185,8 +185,8 @@ export class Battle extends Dex.ModdedDex {
 		}
 	}
 
-	static logReplay(data: string, isReplay: boolean | Side) {
-		if (isReplay === true) return data;
+	static logReplay(data: string, splitSide: boolean | Side) {
+		if (splitSide === true) return data;
 		return '';
 	}
 
@@ -1730,7 +1730,6 @@ export class Battle extends Dex.ModdedDex {
 			if (this.rated === 'Rated battle') this.rated = true;
 			this.add('rated', typeof this.rated === 'string' ? this.rated : '');
 		}
-		this.add('seed', (side: Side) => Battle.logReplay(this.prngSeed.join(','), side));
 
 		if (format.onBegin) {
 			format.onBegin.call(this);
@@ -2168,8 +2167,8 @@ export class Battle extends Dex.ModdedDex {
 
 		let attacker = pokemon;
 		let defender = target;
-		let attackStat = category === 'Physical' ? 'atk' : 'spa';
-		let defenseStat = defensiveCategory === 'Physical' ? 'def' : 'spd';
+		let attackStat: StatNameExceptHP = category === 'Physical' ? 'atk' : 'spa';
+		let defenseStat: StatNameExceptHP = defensiveCategory === 'Physical' ? 'def' : 'spd';
 		let statTable = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
 		let attack;
 		let defense;
@@ -3119,13 +3118,13 @@ export class Battle extends Dex.ModdedDex {
 		}
 	}
 
-// tslint:disable-next-line:ban-types
+	// tslint:disable-next-line:ban-types
 	addMove(...args: (string | number | Function | AnyObject)[]) {
 		this.lastMoveLine = this.log.length;
 		this.log.push(`|${args.join('|')}`);
 	}
 
-// tslint:disable-next-line:ban-types
+	// tslint:disable-next-line:ban-types
 	attrLastMove(...args: (string | number | Function | AnyObject)[]) {
 		if (this.lastMoveLine < 0) return;
 		if (this.log[this.lastMoveLine].startsWith('|-anim|')) {
@@ -3166,17 +3165,25 @@ export class Battle extends Dex.ModdedDex {
 
 	// players
 
-	getTeam(team: PokemonSet[] | string | null): PokemonSet[] {
+	getTeam(options: PlayerOptions): PokemonSet[] {
 		const format = this.getFormat();
+		let team = options.team;
 		if (typeof team === 'string') team = Dex.fastUnpackTeam(team);
 		if (!format.team && team) {
 			return team;
 		}
 
-		if (!this.teamGenerator) {
-			this.teamGenerator = this.getTeamGenerator(format, this.prng);
+		if (!options.seed) {
+			options.seed = PRNG.generateSeed();
 		}
-		team = this.teamGenerator.generateTeam();
+
+		if (!this.teamGenerator) {
+			this.teamGenerator = this.getTeamGenerator(format, options.seed);
+		} else {
+			this.teamGenerator.setSeed(options.seed);
+		}
+
+		team = this.teamGenerator.getTeam(options);
 
 		return team as PokemonSet[];
 	}
@@ -3187,7 +3194,7 @@ export class Battle extends Dex.ModdedDex {
 		if (!this[slot]) {
 			// create player
 			const slotNum = (slot === 'p2' ? 1 : 0);
-			const team = this.getTeam(options.team || null);
+			const team = this.getTeam(options);
 			side = new Side(options.name || `Player ${slotNum + 1}`, this, slotNum, team);
 			if (options.avatar) side.avatar = '' + options.avatar;
 			this[slot] = side;
@@ -3212,6 +3219,9 @@ export class Battle extends Dex.ModdedDex {
 		if (!didSomething) return;
 		this.inputLog.push(`>player ${slot} ` + JSON.stringify(options));
 		this.add('player', side.id, side.name, side.avatar);
+		if (options.seed) {
+			this.add('seed', (splitSide: Side) => Battle.logReplay(options.seed!.join(','), splitSide));
+		}
 		this.start();
 	}
 

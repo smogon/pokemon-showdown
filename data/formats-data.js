@@ -1005,7 +1005,7 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	poliwrath: {
-		randomBattleMoves: ["hydropump", "focusblast", "icebeam", "rest", "sleeptalk", "scald", "circlethrow", "raindance"],
+		randomBattleMoves: ["hydropump", "focusblast", "icepunch", "rest", "sleeptalk", "scald", "circlethrow", "raindance"],
 		randomDoubleBattleMoves: ["bellydrum", "encore", "waterfall", "protect", "icepunch", "earthquake", "brickbreak", "rockslide"],
 		eventPokemon: [
 			{"generation": 3, "level": 42, "moves": ["helpinghand", "hydropump", "raindance", "brickbreak"]},
@@ -2212,7 +2212,7 @@ let BattleFormatsData = {
 		doublesTier: "DOU",
 	},
 	porygonz: {
-		randomBattleMoves: ["triattack", "shadowball", "icebeam", "thunderbolt", "conversion", "trick", "nastyplot"],
+		randomBattleMoves: ["triattack", "shadowball", "icebeam", "thunderbolt", "trick", "nastyplot"],
 		randomDoubleBattleMoves: ["protect", "triattack", "darkpulse", "hiddenpowerfighting", "icebeam", "thunderbolt", "agility", "trick", "nastyplot"],
 		tier: "UUBL",
 		doublesTier: "DUU",
@@ -3265,7 +3265,7 @@ let BattleFormatsData = {
 		doublesTier: "DOU",
 	},
 	lugia: {
-		randomBattleMoves: ["toxic", "roost", "substitute", "whirlwind", "thunderwave", "dragontail", "aeroblast"],
+		randomBattleMoves: ["toxic", "roost", "substitute", "whirlwind", "thunderwave", "psychic"],
 		randomDoubleBattleMoves: ["aeroblast", "roost", "substitute", "tailwind", "icebeam", "psychic", "calmmind", "skydrop", "protect"],
 		eventPokemon: [
 			{"generation": 3, "level": 70, "shiny": 1, "moves": ["recover", "hydropump", "raindance", "swift"]},
@@ -4276,16 +4276,17 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	castformsunny: {
-		randomBattleMoves: ["sunnyday", "weatherball", "solarbeam", "icebeam"],
+		randomBattleMoves: ["sunnyday", "fireblast", "solarbeam", "icebeam"],
 		requiredAbility: 'Forecast',
 		battleOnly: true,
 	},
 	castformrainy: {
-		randomBattleMoves: ["raindance", "weatherball", "thunder", "hurricane"],
+		randomBattleMoves: ["raindance", "hydropump", "thunder", "hurricane"],
 		requiredAbility: 'Forecast',
 		battleOnly: true,
 	},
 	castformsnowy: {
+		randomBattleMoves: ["hail", "blizzard", "thunderbolt", "fireblast"],
 		requiredAbility: 'Forecast',
 		battleOnly: true,
 	},
@@ -5116,8 +5117,8 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	spiritomb: {
-		randomBattleMoves: ["shadowsneak", "suckerpunch", "pursuit", "willowisp", "darkpulse", "rest", "sleeptalk", "foulplay", "painsplit", "calmmind"],
-		randomDoubleBattleMoves: ["shadowsneak", "suckerpunch", "icywind", "willowisp", "snarl", "darkpulse", "protect", "foulplay", "painsplit"],
+		randomBattleMoves: ["shadowsneak", "pursuit", "willowisp", "darkpulse", "rest", "sleeptalk", "foulplay", "calmmind"],
+		randomDoubleBattleMoves: ["shadowsneak", "icywind", "willowisp", "snarl", "darkpulse", "protect", "foulplay", "painsplit"],
 		eventPokemon: [
 			{"generation": 5, "level": 61, "gender": "F", "nature": "Quiet", "ivs": {"hp": 30, "atk": 30, "def": 30, "spa": 30, "spd": 30, "spe": 30}, "isHidden": false, "moves": ["darkpulse", "psychic", "silverwind", "embargo"], "pokeball": "cherishball"},
 		],
@@ -5385,7 +5386,7 @@ let BattleFormatsData = {
 		doublesTier: "DUber",
 	},
 	heatran: {
-		randomBattleMoves: ["fireblast", "lavaplume", "stealthrock", "earthpower", "flashcannon", "protect", "toxic", "roar"],
+		randomBattleMoves: ["magmastorm", "lavaplume", "stealthrock", "earthpower", "flashcannon", "protect", "toxic", "roar"],
 		randomDoubleBattleMoves: ["heatwave", "substitute", "earthpower", "protect", "eruption", "willowisp"],
 		eventPokemon: [
 			{"generation": 4, "level": 70, "shiny": 1, "moves": ["scaryface", "lavaplume", "firespin", "ironhead"]},
@@ -6419,8 +6420,8 @@ let BattleFormatsData = {
 		tier: "NFE",
 	},
 	haxorus: {
-		randomBattleMoves: ["dragondance", "swordsdance", "outrage", "dragonclaw", "earthquake", "poisonjab", "taunt", "substitute"],
-		randomDoubleBattleMoves: ["dragondance", "swordsdance", "protect", "dragonclaw", "earthquake", "poisonjab", "taunt", "substitute"],
+		randomBattleMoves: ["dragondance", "swordsdance", "outrage", "earthquake", "poisonjab", "taunt"],
+		randomDoubleBattleMoves: ["dragondance", "swordsdance", "protect", "dragonclaw", "earthquake", "poisonjab", "taunt"],
 		eventPokemon: [
 			{"generation": 5, "level": 59, "gender": "F", "nature": "Naive", "ivs": {"hp": 30, "atk": 30, "def": 30, "spa": 30, "spd": 30, "spe": 30}, "isHidden": false, "abilities": ["moldbreaker"], "moves": ["earthquake", "dualchop", "xscissor", "dragondance"], "pokeball": "cherishball"},
 		],
@@ -6834,7 +6835,7 @@ let BattleFormatsData = {
 		battleOnly: true,
 	},
 	genesect: {
-		randomBattleMoves: ["uturn", "bugbuzz", "icebeam", "flamethrower", "thunderbolt", "ironhead", "shiftgear", "extremespeed", "blazekick"],
+		randomBattleMoves: ["technoblast", "uturn", "icebeam", "flamethrower", "thunderbolt", "ironhead", "shiftgear", "extremespeed", "blazekick"],
 		randomDoubleBattleMoves: ["uturn", "bugbuzz", "icebeam", "flamethrower", "thunderbolt", "ironhead", "shiftgear", "extremespeed", "blazekick", "protect"],
 		eventPokemon: [
 			{"generation": 5, "level": 50, "moves": ["technoblast", "magnetbomb", "solarbeam", "signalbeam"], "pokeball": "cherishball"},
@@ -6847,26 +6848,18 @@ let BattleFormatsData = {
 		doublesTier: "DOU",
 	},
 	genesectburn: {
-		randomBattleMoves: ["uturn", "bugbuzz", "icebeam", "technoblast", "thunderbolt", "ironhead", "extremespeed"],
-		randomDoubleBattleMoves: ["uturn", "bugbuzz", "icebeam", "technoblast", "thunderbolt", "ironhead", "extremespeed", "protect"],
 		eventOnly: true,
 		requiredItem: "Burn Drive",
 	},
 	genesectchill: {
-		randomBattleMoves: ["uturn", "bugbuzz", "technoblast", "flamethrower", "thunderbolt", "ironhead", "extremespeed"],
-		randomDoubleBattleMoves: ["uturn", "bugbuzz", "technoblast", "flamethrower", "thunderbolt", "ironhead", "extremespeed", "protect"],
 		eventOnly: true,
 		requiredItem: "Chill Drive",
 	},
 	genesectdouse: {
-		randomBattleMoves: ["uturn", "bugbuzz", "icebeam", "flamethrower", "thunderbolt", "technoblast", "ironhead", "extremespeed"],
-		randomDoubleBattleMoves: ["uturn", "bugbuzz", "icebeam", "flamethrower", "thunderbolt", "technoblast", "ironhead", "extremespeed", "protect"],
 		eventOnly: true,
 		requiredItem: "Douse Drive",
 	},
 	genesectshock: {
-		randomBattleMoves: ["uturn", "bugbuzz", "icebeam", "flamethrower", "technoblast", "ironhead", "extremespeed"],
-		randomDoubleBattleMoves: ["uturn", "bugbuzz", "icebeam", "flamethrower", "technoblast", "ironhead", "extremespeed", "protect"],
 		eventOnly: true,
 		requiredItem: "Shock Drive",
 	},
@@ -7440,7 +7433,7 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	hoopaunbound: {
-		randomBattleMoves: ["nastyplot", "substitute", "psyshock", "psychic", "darkpulse", "focusblast", "hyperspacefury", "zenheadbutt", "icepunch", "drainpunch", "gunkshot", "knockoff", "trick"],
+		randomBattleMoves: ["nastyplot", "substitute", "psychic", "darkpulse", "focusblast", "hyperspacefury", "zenheadbutt", "icepunch", "drainpunch", "gunkshot", "knockoff", "trick"],
 		randomDoubleBattleMoves: ["psychic", "darkpulse", "focusblast", "protect", "hyperspacefury", "zenheadbutt", "icepunch", "drainpunch", "gunkshot"],
 		eventOnly: true,
 		tier: "UUBL",
@@ -8238,7 +8231,7 @@ let BattleFormatsData = {
 		doublesTier: "DUber",
 	},
 	magearna: {
-		randomBattleMoves: ["shiftgear", "flashcannon", "aurasphere", "fleurcannon", "ironhead", "thunderbolt", "icebeam"],
+		randomBattleMoves: ["shiftgear", "ironhead", "calmmind", "fleurcannon", "flashcannon", "thunderbolt", "focusblast"],
 		randomDoubleBattleMoves: ["dazzlinggleam", "flashcannon", "substitute", "protect", "trickroom", "fleurcannon", "aurasphere", "voltswitch"],
 		eventPokemon: [
 			{"generation": 7, "level": 50, "moves": ["fleurcannon", "flashcannon", "luckychant", "helpinghand"], "pokeball": "cherishball"},

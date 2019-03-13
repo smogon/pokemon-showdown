@@ -107,8 +107,12 @@ let BattleScripts = {
 				}
 			}
 			// Dancer activates in order of lowest speed stat to highest
+			// Note that the speed stat used is after any volatile replacements like Speed Swap,
+			// but before any multipliers like Agility or Choice Scarf
 			// Ties go to whichever Pokemon has had the ability for the least amount of time
-			dancers.sort(function (a, b) { return -(b.stats['spe'] - a.stats['spe']) || b.abilityOrder - a.abilityOrder; });
+			dancers.sort((a, b) =>
+				-(b.storedStats['spe'] - a.storedStats['spe']) || b.abilityOrder - a.abilityOrder
+			);
 			for (const dancer of dancers) {
 				if (this.faintMessages()) break;
 				this.add('-activate', dancer, 'ability: Dancer');
@@ -240,7 +244,7 @@ let BattleScripts = {
 		let damage = false;
 		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
 			damage = this.tryMoveHit(target, pokemon, move);
-			if (damage === this.NOT_FAILURE) pokemon.moveThisTurnResult = null;
+			if (damage === this.NOT_FAIL) pokemon.moveThisTurnResult = null;
 			if (damage || damage === 0 || damage === undefined) moveResult = true;
 		} else {
 			moveResult = this.trySpreadMoveHit(targets, pokemon, move);
@@ -363,7 +367,7 @@ let BattleScripts = {
 			this.attrLastMove('[still]');
 		}
 		for (let i = 0; i < targets.length; i++) {
-			if (hitResults[i] !== this.NOT_FAILURE) hitResults[i] = hitResults[i] || false;
+			if (hitResults[i] !== this.NOT_FAIL) hitResults[i] = hitResults[i] || false;
 		}
 		return hitResults;
 	},
