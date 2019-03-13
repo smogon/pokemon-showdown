@@ -1,13 +1,26 @@
 "use strict";
 
 exports.BattleScripts = {
+	inherit: 'gen6',
+	gen: 6,
+
+	say(phrase) {
+		if (!this.activePokemon) return;
+		return this.activePokemon.say(phrase);
+	},
+
+	pokemon: {
+		say(phrase) {
+			this.battle.add('chat', this.name, phrase);
+		},
+	},
 	randomSeasonalMeleeTeam: function (side) {
 		let team = [];
-		let variant = (this.random(2) === 1);
+		let variant = this.randomChance(1, 2);
 		let sets = {
 			'Acast': {
 				species: 'Gourgeist-Super', ability: 'Prankster', item: 'Mental Herb', gender: 'M',
-				moves: ['willowisp', 'recover', ['seedbomb', 'shadowstrike'][this.random(2)]],
+				moves: ['willowisp', 'recover', this.sample(['seedbomb', 'shadowstrike'])],
 				signatureMove: 'Needs More Screens',
 				evs: {hp:248, def:8, spd:252}, nature: 'Careful',
 			},
@@ -19,7 +32,7 @@ exports.BattleScripts = {
 			},
 			'Aelita': {
 				species: 'Porygon-Z', ability: 'Protean', item: 'Life Orb', gender: 'N',
-				moves: [['boomburst', 'moonblast'][this.random(2)], 'quiverdance', 'chatter'],
+				moves: [this.sample(['boomburst', 'moonblast']), 'quiverdance', 'chatter'],
 				signatureMove: "Energy Field",
 				evs: {hp:4, spa:252, spe:252}, nature: 'Modest',
 			},
@@ -72,7 +85,7 @@ exports.BattleScripts = {
 				evs: {spa:252, spd:4, spe:252}, nature: 'Modest',
 			},
 			'Anty': {
-				species: 'Durant', ability: 'Hustle', item: (variant ? 'Life Orb' : 'Choice Band'), gender: ['M', 'F', 'N'][this.random(3)],
+				species: 'Durant', ability: 'Hustle', item: (variant ? 'Life Orb' : 'Choice Band'), gender: this.sample(['M', 'F', 'N']),
 				moves: ['attackorder', 'superpower', (variant ? 'coil' : 'diamondstorm')],
 				signatureMove: 'Double-Edgy',
 				evs: {hp:4, atk:252, spe:252}, nature: 'Adamant',
@@ -85,12 +98,12 @@ exports.BattleScripts = {
 			},
 			'Ascriptmaster': {
 				species: 'Rotom', ability: 'Teravolt', item: 'Expert Belt', gender: 'M',
-				moves: ['thunderbolt', 'mysticalfire', ['psyshock', 'aurorabeam'][this.random(2)]],
+				moves: ['thunderbolt', 'mysticalfire', this.sample(['psyshock', 'aurorabeam'])],
 				signatureMove: 'Spectrum Triplet Beam',
 				evs: {hp:4, spa:252, spe:252}, ivs: {atk:0}, nature: 'Timid',
 			},
 			'Astara': {
-				species: 'Jirachi', ability: 'Cursed Body', item: ['Leftovers', 'Sitrus Berry'][this.random(2)], gender: 'F', shiny: true,
+				species: 'Jirachi', ability: 'Cursed Body', item: this.sample(['Leftovers', 'Sitrus Berry']), gender: 'F', shiny: true,
 				moves: ['psystrike', 'moonblast', 'nastyplot', 'scald', 'recover'],
 				signatureMove: 'Star Bolt Desperation',
 				evs: {hp:4, spa:252, spe:252}, nature: 'Modest',
@@ -121,7 +134,7 @@ exports.BattleScripts = {
 			},
 			'Beowulf': {
 				species: 'Beedrill', ability: 'Download', item: 'Beedrillite', gender: 'M',
-				moves: ['spikyshield', 'gunkshot', ['sacredfire', 'boltstrike', 'diamondstorm'][this.random(3)]],
+				moves: ['spikyshield', 'gunkshot', this.sample(['sacredfire', 'boltstrike', 'diamondstorm'])],
 				signatureMove: "Buzzing of the Swarm",
 				evs: {def:4, atk:252, spe:252}, nature: 'Jolly',
 			},
@@ -132,20 +145,20 @@ exports.BattleScripts = {
 				evs: {hp:4, atk:252, spd:252}, nature: 'Adamant',
 			},
 			'Blast Chance': {
-				species: 'Malamar', ability: 'Contrary', item: 'Leftovers', gender: ['M', 'F', 'N'][this.random(3)],
+				species: 'Malamar', ability: 'Contrary', item: 'Leftovers', gender: this.sample(['M', 'F', 'N']),
 				moves: ['knockoff', 'rest', 'superpower'],
 				signatureMove: "Doesn\'t this just win?",
 				evs: {hp:252, def:4, spd:252}, nature: 'Careful',
 			},
 			'Blitzamirin': {
 				species: 'Chandelure', ability: 'Prankster', item: 'Red Card', gender: 'M',
-				moves: [['darkvoid', 'substitute'][this.random(2)], 'shadowball', 'blueflare'],
+				moves: [this.sample(['darkvoid', 'substitute']), 'shadowball', 'blueflare'],
 				signatureMove: "Pneuma Relinquish",
 				evs: {def:4, spa:252, spe:252}, ivs: {atk:0}, nature: 'Timid',
 			},
 			'bludz': {
 				species: 'Kakuna', ability: 'Wonder Guard', item: 'Focus Sash', gender: 'M', shiny: true,
-				moves: [['toxic', 'spikyshield'][this.random(2)], ['infestation', 'whirlpool', 'sandtomb', 'magmastorm'][this.random(4)], ['conversion2', 'uturn'][this.random(2)]],
+				moves: [this.sample(['toxic', 'spikyshield']), this.sample(['infestation', 'whirlpool', 'sandtomb', 'magmastorm']), this.sample(['conversion2', 'uturn'])],
 				signatureMove: "Splatter",
 				evs: {atk:4, spa:252, spe:252}, nature: 'Naive',
 			},
@@ -156,14 +169,14 @@ exports.BattleScripts = {
 				evs: {hp:4, atk:252, spe:252}, nature: 'Jolly',
 			},
 			'boTTT': {
-				species: 'Regigigas', ability: ['Scrappy', 'Magic Guard'][this.random(2)], item: (variant ? 'Leftovers' : 'Chesto Berry'), gender: 'N', shiny: variant,
+				species: 'Regigigas', ability: this.sample(['Scrappy', 'Magic Guard']), item: (variant ? 'Leftovers' : 'Chesto Berry'), gender: 'N', shiny: variant,
 				moves: ['bodyslam', 'drainpunch', (variant ? 'aromatherapy' : 'rest')],
 				signatureMove: "Auto-Moderation",
 				evs: {hp:60, atk:252, spe:196}, nature: 'Adamant',
 			},
 			'Brandon': {
 				species: 'Meowstic-M', ability: 'Prankster', item: 'Leftovers', gender: 'M',
-				moves: [['assist', 'barrier'][this.random(2)], 'calmmind', 'rest'],
+				moves: [this.sample(['assist', 'barrier']), 'calmmind', 'rest'],
 				signatureMove: 'Wave of Indifference',
 				evs: {hp:252, def:252, spd:4}, nature: 'Bold',
 			},
@@ -181,7 +194,7 @@ exports.BattleScripts = {
 			},
 			'chaos': {
 				species: 'Bouffalant', ability: 'Fur Coat', item: 'Red Card', gender: 'M',
-				moves: ['precipiceblades', ['recover', 'stockpile', 'swordsdance'][this.random(3)], 'extremespeed', 'explosion'],
+				moves: ['precipiceblades', this.sample(['recover', 'stockpile', 'swordsdance']), 'extremespeed', 'explosion'],
 				signatureMove: "Forcewin",
 				evs: {hp:4, atk:252, spe:252}, nature: 'Adamant',
 			},
@@ -193,13 +206,13 @@ exports.BattleScripts = {
 			},
 			'Clefairy': {
 				species: 'Exploud', ability: 'Suction Cups', item: 'Life Orb', gender: 'M',
-				moves: ['boomburst', 'focusblast', ['surf', 'fireblast', 'extrasensory', 'icebeam', 'shadowball', 'futuresight', 'mudslap'][this.random(7)]],
+				moves: ['boomburst', 'focusblast', this.sample(['surf', 'fireblast', 'extrasensory', 'icebeam', 'shadowball', 'futuresight', 'mudslap'])],
 				signatureMove: "Hyperspace Earrape",
 				evs: {def:4, spa:252, spe:252}, nature: 'Timid',
 			},
 			'CoolStoryBrobat': {
 				species: 'Crobat', ability: 'Gale Wings', item: 'Black Glasses', gender: 'M',
-				moves: [['roost', 'bulkup', 'closecombat'][this.random(3)], 'knockoff', 'defog'],
+				moves: [this.sample(['roost', 'bulkup', 'closecombat']), 'knockoff', 'defog'],
 				baseSignatureMove: 'bravebird', signatureMove: "Brave Bat",
 				evs: {hp:4, atk:252, spe:252}, nature: 'Jolly',
 			},
@@ -247,13 +260,13 @@ exports.BattleScripts = {
 			},
 			'Eevee General': {
 				species: 'Eevee', ability: 'Prankster', item: 'Eviolite', gender: 'M',
-				moves: ['extremespeed', 'swordsdance', ['milkdrink', 'knockoff', 'encore'][this.random(3)]],
+				moves: ['extremespeed', 'swordsdance', this.sample(['milkdrink', 'knockoff', 'encore'])],
 				signatureMove: "Admin Things",
 				evs: {hp:252, def:4, spe: 252}, nature: 'Jolly',
 			},
 			'Eyan': {
 				species: 'Keldeo', ability: 'Serene Grace', item: 'Life Orb', gender: 'M',
-				moves: ['steameruption', ['icebeam', 'moonblast'][this.random(2)], ['seedflare', 'discharge'][this.random(2)]],
+				moves: ['steameruption', this.sample(['icebeam', 'moonblast']), this.sample(['seedflare', 'discharge'])],
 				signatureMove: 'Attack of the TOUCAN',
 				evs: {spa:252, spd:4, spe:252}, nature: 'Timid',
 			},
@@ -271,7 +284,7 @@ exports.BattleScripts = {
 			},
 			'Flying Kebab': {
 				species: 'Cloyster', ability: 'Skill Link', item: 'King\'s Rock', gender: 'M',
-				moves: ['watershuriken', ['bulletseed', 'pinmissile'][this.random(2)], 'iciclespear'],
+				moves: ['watershuriken', this.sample(['bulletseed', 'pinmissile']), 'iciclespear'],
 				signatureMove: "Frozen Kebab Skewers",
 				evs: {atk:252, spd:4, spe:252}, nature: 'Jolly',
 			},
@@ -301,7 +314,7 @@ exports.BattleScripts = {
 			},
 			'galbia': {
 				species: 'Stoutland', ability: 'Sand Rush', item: 'Life Orb', gender: 'M',
-				moves: [['closecombat', 'earthquake'][this.random(2)], 'firefang', 'extremespeed'],
+				moves: [this.sample(['closecombat', 'earthquake']), 'firefang', 'extremespeed'],
 				signatureMove: "(dog)",
 				evs: {atk:252, spe:252}, nature: 'Adamant',
 			},
@@ -342,14 +355,14 @@ exports.BattleScripts = {
 				evs: {hp:4, spa:252, spe:252}, nature: 'Timid',
 			},
 			'grimAuxiliatrix': {
-				species: 'Krookodile', ability: 'Intimidate', item: 'Choice Band', gender: ['M', 'F', 'N'][this.random(3)],
+				species: 'Krookodile', ability: 'Intimidate', item: 'Choice Band', gender: this.sample(['M', 'F', 'N']),
 				moves: ['superpower', 'stoneedge', 'earthquake'],
 				signatureMove: 'Buzz Axe Rampage',
 				evs: {atk:252, def:4, spe:252}, nature: 'Jolly',
 			},
 			'Halite': {
 				species: 'Glaceon', ability: 'Lightly Salted', item: 'Leftovers', gender: 'M',
-				moves: [['encore', 'taunt'][this.random(2)], 'tailslap', 'recover'],
+				moves: [this.sample(['encore', 'taunt']), 'tailslap', 'recover'],
 				signatureMove: "Saltstorm",
 				evs: {hp:252, def:216, spa:200}, nature: 'Bold',
 			},
@@ -391,13 +404,13 @@ exports.BattleScripts = {
 			},
 			'hollywood': {
 				species: 'Mr. Mime', ability: 'Prankster', item: 'Leftovers', gender: 'M',
-				moves: ['batonpass', ['substitute', 'milkdrink'][this.random(2)], 'encore'],
+				moves: ['batonpass', this.sample(['substitute', 'milkdrink']), 'encore'],
 				signatureMove: "Meme Mime",
 				evs: {hp:252, def:4, spe:252}, ivs: {atk:0, spa:0}, nature: 'Timid',
 			},
 			'ih8ih8sn0w': {
 				species: 'Deoxys-Speed', ability: 'Pressure', item: 'Leftovers', gender: 'N', shiny: true,
-				moves: ['meteormash', 'stealthrock', ['taunt', 'magiccoat'][this.random(2)]],
+				moves: ['meteormash', 'stealthrock', this.sample(['taunt', 'magiccoat'])],
 				signatureMove: "Imprisonform",
 				evs: {atk:252, spd:4, spe:252}, nature: 'Jolly',
 			},
@@ -409,7 +422,7 @@ exports.BattleScripts = {
 			},
 			'imas234': {
 				species: 'Kyurem', ability: 'Sheer Force', item: 'Life Orb', gender: 'M',
-				moves: ['icebeam', 'earthpower', ['agility', 'substitute'][this.random(2)]],
+				moves: ['icebeam', 'earthpower', this.sample(['agility', 'substitute'])],
 				signatureMove: 'Sweg',
 				evs: {def:4, spa:252, spe:252}, nature: 'Timid',
 			},
@@ -427,13 +440,13 @@ exports.BattleScripts = {
 			},
 			'innovamania': {
 				species: 'Arceus', ability: 'Pick Up', item: 'Black Glasses', gender: 'M',
-				moves: [['holdhands', 'trickortreat'][this.random(2)], ['swordsdance', 'agility'][this.random(2)], 'celebrate'],
+				moves: [this.sample(['holdhands', 'trickortreat']), this.sample(['swordsdance', 'agility']), 'celebrate'],
 				signatureMove: "Rage Quit",
 				evs: {hp:4, atk:252, spe:252}, nature: 'Jolly',
 			},
 			'Jack Higgins': {
 				species: 'Maractus', ability: 'Chlorophyll', item: 'Focus Sash', gender: 'M',
-				moves: [['eruption', 'blueflare'][this.random(2)], 'leafstorm', ['voltswitch', 'synthesis', 'destinybond', 'healingwish', 'growth'][this.random(5)]],
+				moves: [this.sample(['eruption', 'blueflare']), 'leafstorm', this.sample(['voltswitch', 'synthesis', 'destinybond', 'healingwish', 'growth'])],
 				signatureMove: "Splinters",
 				evs: {hp:4, spa:252, spe:252}, nature: 'Modest',
 			},
@@ -475,13 +488,13 @@ exports.BattleScripts = {
 			},
 			'Kid Wizard': {
 				species: 'Hoopa', ability: 'Speed Boost', item: 'Life Orb', gender: 'N',
-				moves: ['protect', 'storedpower', ['energyball', 'flamethrower', 'scald'][this.random(3)]],
+				moves: ['protect', 'storedpower', this.sample(['energyball', 'flamethrower', 'scald'])],
 				signatureMove: "Broken Wand",
 				evs: {spa:252, spd:4, spe:252}, nature: 'Timid',
 			},
 			'Layell': {
 				species: 'Sneasel', ability: 'Technician', item: "King's Rock", gender: 'M',
-				moves: ['iceshard', 'iciclespear', ['machpunch', 'pursuit', 'knockoff'][this.random(3)]],
+				moves: ['iceshard', 'iciclespear', this.sample(['machpunch', 'pursuit', 'knockoff'])],
 				signatureMove: "Pixel Protection",
 				evs: {def:4, atk:252, spe:252}, nature: 'Adamant',
 			},
@@ -499,7 +512,7 @@ exports.BattleScripts = {
 			},
 			'Level 51': {
 				species: 'Togekiss', ability: 'Parental Bond', item: 'Leftovers', gender: 'M',
-				moves: ['superfang', ['roost', 'cottonguard'][this.random(2)], ['seismictoss', 'nightshade'][this.random(2)]],
+				moves: ['superfang', this.sample(['roost', 'cottonguard']), this.sample(['seismictoss', 'nightshade'])],
 				signatureMove: "Next Level Strats",
 				evs: {hp:248, spd:184, spe:76}, nature: 'Jolly',
 			},
@@ -540,8 +553,8 @@ exports.BattleScripts = {
 				evs: {atk:252, def:4, spe:252}, nature: 'Adamant',
 			},
 			'McMeghan': {
-				species: 'Scrafty', ability: ['Moxie', 'Clear Body', 'Stench'][this.random(3)], item: 'Leftovers', gender: 'M',
-				moves: [['dragondance', 'agility'][this.random(2)], ['knockoff', 'rockslide'][this.random(2)], ['highjumpkick', 'drainpunch', 'substitute'][this.random(3)]],
+				species: 'Scrafty', ability: this.sample(['Moxie', 'Clear Body', 'Stench']), item: 'Leftovers', gender: 'M',
+				moves: [this.sample(['dragondance', 'agility']), this.sample(['knockoff', 'rockslide']), this.sample(['highjumpkick', 'drainpunch', 'substitute'])],
 				signatureMove: 'Odd Punch',
 				evs: {hp:192, atk:80, spe:236}, nature: 'Jolly',
 			},
@@ -612,7 +625,7 @@ exports.BattleScripts = {
 				evs: {def:4, spa:252, spe:252}, nature: 'Timid',
 			},
 			'Raseri': {
-				species: 'Musharna', ability: 'Synchronize', item: 'Leftovers', gender: ['M', 'F', 'N'][this.random(3)],
+				species: 'Musharna', ability: 'Synchronize', item: 'Leftovers', gender: this.sample(['M', 'F', 'N']),
 				moves: ['barrier', 'storedpower', 'moonblast'],
 				signatureMove: "Purify Soul",
 				evs: {hp:248, def:252, spd:8}, nature: 'Bold',
@@ -631,7 +644,7 @@ exports.BattleScripts = {
 			},
 			'RosieTheVenusaur': {
 				species: 'Venusaur', ability: 'Moxie', item: 'Leftovers', gender: 'F',
-				moves: [['fusionflare', 'sacredfire'][this.random(2)], 'extremespeed', 'knockoff', 'closecombat'],
+				moves: [this.sample(['fusionflare', 'sacredfire']), 'extremespeed', 'knockoff', 'closecombat'],
 				signatureMove: "Swag Plant",
 				evs: {hp:252, atk:252, def:4}, nature: 'Adamant',
 			},
@@ -679,13 +692,13 @@ exports.BattleScripts = {
 			},
 			'sirDonovan': {
 				species: 'Togetic', ability: 'Gale Wings', item: 'Eviolite', gender: 'M',
-				moves: ['roost', 'hurricane', ['charm', 'defog'][this.random(2)]],
+				moves: ['roost', 'hurricane', this.sample(['charm', 'defog'])],
 				signatureMove: "Ladies First",
 				evs: {hp:252, spa:252, spe:4}, nature: 'Modest',
 			},
 			'Skitty': {
 				species: 'Audino', ability: 'Intimidate', item: 'Audinite', gender: 'M',
-				moves: ['acupressure', 'recover', ['taunt', 'cosmicpower', 'magiccoat'][this.random(3)]],
+				moves: ['acupressure', 'recover', this.sample(['taunt', 'cosmicpower', 'magiccoat'])],
 				signatureMove: "Ultimate Dismissal",
 				evs: {hp:252, def:252, spd:4}, nature: 'Bold',
 			},
@@ -702,13 +715,13 @@ exports.BattleScripts = {
 				evs: {spa:252, spd:4, spe:252}, nature: 'Modest',
 			},
 			'SolarisFox': {
-				species: 'Delphox', ability: 'Klutz', item: ['Choice Scarf', 'Choice Band', 'Choice Specs', 'Assault Vest', 'Lagging Tail', 'Flame Orb', 'Toxic Orb'][this.random(7)], gender: 'M',
+				species: 'Delphox', ability: 'Klutz', item: this.sample(['Choice Scarf', 'Choice Band', 'Choice Specs', 'Assault Vest', 'Lagging Tail', 'Flame Orb', 'Toxic Orb']), gender: 'M',
 				moves: ['trick', 'lavaplume', 'psyshock'],
 				signatureMove: "Wonder Bark",
 				evs: {hp:40, spa:216, spe:252}, ivs: {atk:0}, nature: 'Timid',
 			},
 			'Sonired': {
-				species: 'Anorith', ability: 'Sniper', item: 'Choice Band', gender: ['M', 'F', 'N'][this.random(3)],
+				species: 'Anorith', ability: 'Sniper', item: 'Choice Band', gender: this.sample(['M', 'F', 'N']),
 				moves: ['rockslide', 'megahorn', 'knockoff'],
 				signatureMove: "God Turn",
 				evs: {def:4, atk:252, spe:252}, nature: 'Jolly',
@@ -768,29 +781,29 @@ exports.BattleScripts = {
 				evs: {spa:252, spd:4, spe:252}, nature: 'Modest',
 			},
 			'talkingtree': {
-				species: 'Trevenant', ability: 'Harvest', item: ['sitrusberry', 'custapberry'][this.random(2)], gender: 'M',
-				moves: ['woodhammer', 'shadowforce', ['shadowsneak', 'leechseed', 'refresh', 'poweruppunch'][this.random(3)]],
+				species: 'Trevenant', ability: 'Harvest', item: this.sample(['sitrusberry', 'custapberry']), gender: 'M',
+				moves: ['woodhammer', 'shadowforce', this.sample(['shadowsneak', 'leechseed', 'refresh', 'poweruppunch'])],
 				signatureMove: 'I Want You Back',
 				evs: {hp:252, atk:156, def:32, spd:72}, ivs: {spa:1, spe:9}, nature: 'Brave',
 			},
 			'TEG': {
 				species: 'Thundurus', ability: 'Hidden Type', gender: 'M',
-				item: [
+				item: this.sample([
 					'Draco', 'Dread', 'Earth', 'Fist', 'Flame', 'Icicle', 'Insect', 'Iron',
 					'Meadow', 'Mind', 'Pixie', 'Splash', 'Spooky', 'Stone', 'Toxic',
-				][this.random(15)] + ' Plate',
+				]) + ' Plate',
 				moves: ['judgment', 'oblivionwing', 'voltswitch'],
 				signatureMove: 'Bad Code',
 				evs: {spa:252, spd:4, spe:252}, nature: 'Timid',
 			},
 			'Temporaryanonymous': {
 				species: 'Doublade', ability: 'Tough Claws', item: 'Eviolite', gender: 'M',
-				moves: ['swordsdance', ['xscissor', 'sacredsword', 'knockoff'][this.random(3)], 'geargrind'],
+				moves: ['swordsdance', this.sample(['xscissor', 'sacredsword', 'knockoff']), 'geargrind'],
 				signatureMove: "SPOOPY EDGE CUT",
 				evs: {hp:252, atk:252, def:4}, nature: 'Adamant',
 			},
 			'Teremiare': {
-				species: 'Zorua', ability: 'Multiscale', item: 'Red Card', gender: ['M', 'F', 'N'][this.random(3)], shiny: true,
+				species: 'Zorua', ability: 'Multiscale', item: 'Red Card', gender: this.sample(['M', 'F', 'N']), shiny: true,
 				moves: ['encore', 'foulplay', 'batonpass'],
 				signatureMove: "Broken Mirror",
 				evs: {hp:252, spa:4, spe:252}, ivs: {atk:0}, nature: 'Timid',
@@ -809,7 +822,7 @@ exports.BattleScripts = {
 			},
 			'Trickster': {
 				species: 'Whimsicott', ability: 'Illuminate', item: 'Quick Claw', gender: 'M',
-				moves: [['substitute', 'defog'][this.random(2)], 'sing', 'gigadrain'],
+				moves: [this.sample(['substitute', 'defog']), 'sing', 'gigadrain'],
 				signatureMove: "Sacred Spear Explosion",
 				evs: {hp:252, def:4, spe:252}, nature: 'Timid',
 			},
@@ -845,7 +858,7 @@ exports.BattleScripts = {
 			},
 			'Winry': {
 				species: 'Buizel', ability: 'Water Veil', item: 'Life Orb', gender: 'F', shiny: true,
-				moves: ['watershuriken', ['jumpkick', 'iciclecrash'][this.random(2)], 'waterfall'],
+				moves: ['watershuriken', this.sample(['jumpkick', 'iciclecrash']), 'waterfall'],
 				signatureMove: 'Fight to the Death',
 				evs: {atk:252, def:4, spe:252}, nature: 'Jolly',
 			},
@@ -875,13 +888,13 @@ exports.BattleScripts = {
 			},
 			'Zebraiken': {
 				species: 'zebstrika', ability: 'Compound Eyes', item: 'Life Orb', gender: 'M',
-				moves: ['thunder', ['fire blast', 'focusblast', 'highjumpkick', 'headsmash'][this.random(3)], ['blizzard', 'iciclecrash', 'sleeppowder'][this.random(3)]],
+				moves: ['thunder', this.sample(['fire blast', 'focusblast', 'highjumpkick', 'headsmash']), this.sample(['blizzard', 'iciclecrash', 'sleeppowder'])],
 				signatureMove: "bzzt",
 				evs: {atk:4, spa:252, spe:252}, nature: 'Hasty',
 			},
 			'Zero Lux Given': {
 				species: 'Luxray', ability: 'Guts', item: 'Flame Orb', gender: 'M',
-				moves: ['fusionbolt', 'facade', ['iceshard', 'petalblizzard'][this.random(2)]],
+				moves: ['fusionbolt', 'facade', this.sample(['iceshard', 'petalblizzard'])],
 				signatureMove: "Pun Ray",
 				evs: {atk:252, def:4, spe:252}, ivs: {spa:0}, nature: 'Adamant',
 			},

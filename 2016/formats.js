@@ -15,6 +15,7 @@ exports.Formats = [
 	{
 		name: "[Seasonal] Polar Opposites",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a>"],
+		mod: 'gen6',
 
 		team: 'randomSeasonalPolar',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
@@ -36,6 +37,7 @@ exports.Formats = [
 	{
 		name: "[Seasonal] Dimension Doom",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a>"],
+		mod: 'gen6',
 
 		team: 'randomSeasonalDimensional',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
@@ -47,9 +49,8 @@ exports.Formats = [
 				if (pokemon.set.signatureMove) {
 					let last = pokemon.moves.length - 1;
 					if (pokemon.moves[last]) {
-						pokemon.moves[last] = toId(pokemon.set.signatureMove);
-						pokemon.moveset[last].move = pokemon.set.signatureMove;
-						pokemon.baseMoveset[last].move = pokemon.set.signatureMove;
+						pokemon.moveSlots[last].move = pokemon.set.signatureMove;
+						pokemon.baseMoveSlots[last].move = pokemon.set.signatureMove;
 					}
 				}
 			}
@@ -234,57 +235,36 @@ exports.Formats = [
 
 	{
 		name: "[Seasonal] Super Staff Bros. Melee",
-		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a>"],
+		desc: [`&bullet; <a href="https://www.smogon.com/forums/threads/3491902/">Seasonal Ladder</a>`],
 
-		mod: 'seasonal',
+		mod: 'super-staff-bros-melee',
 		team: 'randomSeasonalMelee',
 		ruleset: ['Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
-		onBegin: function () {
-			this.add("raw|Super Staff Bros. <b>MELEEEEEEEEEEEEEE</b>!!");
-			this.add('message', "SURVIVAL! GET READY FOR THE NEXT BATTLE!");
+		onBegin() {
+			this.add('raw', `Super Staff Bros. <strong>MELEEEEEEEEEEEEEE</strong>!!`);
+			this.add('message', `SURVIVAL! GET READY FOR THE NEXT BATTLE!`);
 
-			let globalRenamedMoves = {};
-			let customRenamedMoves = {};
-
-			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
-			for (let i = 0, len = allPokemon.length; i < len; i++) {
-				let pokemon = allPokemon[i];
-				let last = pokemon.moves.length - 1;
-				if (pokemon.moves[last]) {
-					pokemon.moves[last] = toId(pokemon.set.signatureMove);
-					pokemon.moveset[last].move = pokemon.set.signatureMove;
-					pokemon.baseMoveset[last].move = pokemon.set.signatureMove;
-				}
-				for (let j = 0; j < pokemon.moveset.length; j++) {
-					let moveData = pokemon.moveset[j];
-					if (globalRenamedMoves[moveData.id]) {
-						pokemon.moves[j] = toId(pokemon.set.signatureMove);
-						moveData.move = globalRenamedMoves[moveData.id];
-						pokemon.baseMoveset[j].move = globalRenamedMoves[moveData.id];
-					}
-
-					let customRenamedSet = customRenamedMoves[toId(pokemon.name)];
-					if (customRenamedSet && customRenamedSet[moveData.id]) {
-						pokemon.moves[j] = toId(pokemon.set.signatureMove);
-						moveData.move = customRenamedSet[moveData.id];
-						pokemon.baseMoveset[j].move = customRenamedSet[moveData.id];
-					}
+			for (const pokemon of this.p1.pokemon.concat(this.p2.pokemon)) {
+				const lastIndex = pokemon.moves.length - 1;
+				if (pokemon.moves[lastIndex]) {
+					pokemon.moveSlots[lastIndex].move = pokemon.set.signatureMove;
+					pokemon.baseMoveSlots[lastIndex].move = pokemon.set.signatureMove;
 				}
 			}
 		},
 		// Here we add some flavour or design immunities.
-		onImmunity: function (type, pokemon) {
+		onImmunity(type, pokemon) {
 			if (toId(pokemon.name) === 'juanma' && type === 'Fire') {
-				this.add('-message', "Did you think fire would stop __him__? You **fool**!");
+				this.add('-message', `Did you think fire would stop __him__? You **fool**!`);
 				return false;
 			}
 		},
-		onNegateImmunity: function (pokemon, type) {
+		onNegateImmunity(pokemon, type) {
 			if (pokemon.volatiles['flipside']) return false;
 			const foes = pokemon.side.foe.active;
 			if (foes.length && foes[0].volatiles['samuraijack'] && pokemon.hasType('Dark') && type === 'Psychic') return false;
 		},
-		onEffectiveness: function (typeMod, target, type, move) {
+		onEffectiveness(typeMod, target, type, move) {
 			if (!target.volatiles['flipside']) return;
 			if (move && move.id === 'retreat') return;
 			if (move && move.id === 'freezedry' && type === 'Water') return;
@@ -292,7 +272,7 @@ exports.Formats = [
 			return -typeMod;
 		},
 		// Hacks for megas changed abilities. This allow for their changed abilities.
-		onUpdate: function (pokemon) {
+		onUpdate(pokemon) {
 			let name = toId(pokemon.name);
 			if (pokemon.template.isMega) {
 				if (name === 'andy' && pokemon.getAbility().id === 'magicbounce') {
@@ -324,18 +304,21 @@ exports.Formats = [
 				}
 			}
 			if (!this.shownTip) {
-				this.add('raw|<div class=\"broadcast-green\">Huh? But what do all these weird moves do??<br><b>Protip: Refer to the <a href="https://github.com/Zarel/Pokemon-Showdown/blob/129d35d5eefb295b1ec24f3e1985a586da3f049c/mods/seasonal/README.md">PLAYER\'S MANUAL</a>!</b></div>');
+				this.add('raw',
+					`<div class="broadcast-green">Huh? But what do all these weird moves do??<br>` +
+					`<strong>Protip: Refer to the <a href="https://github.com/Zarel/Pokemon-Showdown/blob/129d35d5eefb295b1ec24f3e1985a586da3f049c/mods/seasonal/README.md">PLAYER'S MANUAL</a>!</strong></div`
+				);
 				this.shownTip = true;
 			}
 		},
 		// Here we treat many things, read comments inside for information.
 		onSwitchInPriority: 1,
-		onSwitchIn: function (pokemon) {
+		onSwitchIn(pokemon) {
 			let name = toId(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
 			// Wonder Guard is available, but it curses you.
 			if (pokemon.getAbility().id === 'wonderguard' && pokemon.baseTemplate.baseSpecies !== 'Shedinja' && pokemon.baseTemplate.baseSpecies !== 'Kakuna') {
 				pokemon.addVolatile('curse', pokemon);
-				this.add('-message', pokemon.name + "'s Wonder Guard has cursed it!");
+				this.add('-message', `${pokemon.name}'s Wonder Guard has cursed it!`);
 			}
 
 			// Add here more hacky stuff for mega abilities.
@@ -418,7 +401,7 @@ exports.Formats = [
 				pokemon.addVolatile('prodigy', pokemon);
 			}
 			if (name === 'innovamania' && !pokemon.illusion) {
-				this.boost({atk:6, def:6, spa:6, spd:6, spe:6, accuracy:6}, pokemon, pokemon, 'divine grace');
+				this.boost({atk:6, def:6, spa:6, spd:6, spe:6, accuracy:6}, pokemon, pokemon, 'divinegrace');
 			}
 			if (name === 'jackhiggins') {
 				this.setWeather('sunnyday');
@@ -513,271 +496,271 @@ exports.Formats = [
 			let sentence = '';
 
 			if (name === 'acast') {
-				this.add('c|%Acast|__A wild Castform appeared!__');
+				pokemon.say(`__A wild Castform appeared!__`);
 			}
 			if (name === 'ace') {
-				this.add('c|@Ace|Lmaonade');
+				pokemon.say(`Lmaonade`);
 			}
 			if (name === 'aelita') {
-				this.add('c|%Aelita|Transfer, Aelita. Scanner, Aelita. Virtualization!');
+				pokemon.say(`Transfer, Aelita. Scanner, Aelita. Virtualization!`);
 			}
 			if (name === 'ajhockeystar') {
-				this.add('c|+ajhockeystar|Here comes the greatest hockey player alive!');
+				pokemon.say(`Here comes the greatest hockey player alive!`);
 			}
 			if (name === 'albacore') {
-				this.add('c|@Albacore|do I have to?');
+				pokemon.say(`do I have to?`);
 			}
 			if (name === 'albert') {
-				this.add('c|+Albert|Art is risk.');
+				pokemon.say(`Art is risk.`);
 			}
 			if (name === 'always') {
-				sentence = (pokemon.side.foe.active.length && pokemon.side.foe.active[0].hp ? pokemon.side.foe.active[0].name : "... ohh nobody's there...");
-				this.add('c|+Always|Oh it\'s ' + sentence);
+				sentence = (pokemon.side.foe.active.length && pokemon.side.foe.active[0].hp ? pokemon.side.foe.active[0].name : `... ohh nobody's there...`);
+				pokemon.say(`Oh it's ${sentence}`);
 			}
 			if (name === 'am') {
-				this.add('c|+AM|Lucky and Bad');
+				pokemon.say(`Lucky and Bad`);
 			}
 			if (name === 'andy') {
-				this.add('c|%AndrewGoncel|:I');
+				pokemon.say(`:I`);
 			}
 			if (name === 'antemortem') {
-				this.add('c|&antemortem|I Am Here To Oppress Users');
+				pokemon.say(`I Am Here To Oppress Users`);
 			}
 			if (name === 'anttya') {
-				this.add('c|+Anttya|Those crits didn\'t even matter');
+				pokemon.say(`Those crits didn't even matter`);
 			}
 			if (name === 'anty') {
-				this.add('c|+Anty|mhm');
+				pokemon.say(`mhm`);
 			}
 			if (name === 'articuno') {
-				this.add('c|%Articuno|Abolish the patriarchy!');
+				pokemon.say(`Abolish the patriarchy!`);
 			}
 			if (name === 'ascriptmaster') {
-				this.add("c|@Ascriptmaster|It's time for a hero to take the stage!");
+				pokemon.say(`It's time for a hero to take the stage!`);
 			}
 			if (name === 'astara') {
-				this.add('c|%Ast☆arA|I\'d rather take a nap, I hope you won\'t be a petilil shit, Eat some rare candies and get on my level.');
+				pokemon.say(`I'd rather take a nap, I hope you won't be a petilil shit, Eat some rare candies and get on my level.`);
 			}
 			if (name === 'asty') {
-				this.add('c|@Asty|Top kek :^)');
+				pokemon.say(`Top kek :^)`);
 			}
 			if (name === 'atomicllamas') {
-				this.add('c|&atomicllamas|(celebrate)(dog)(celebrate)');
+				pokemon.say(`(celebrate)(dog)(celebrate)`);
 			}
 			if (name === 'aurora') {
-				this.add('c|@Aurora|Best of luck to all competitors!');
+				pokemon.say(`Best of luck to all competitors!`);
 			}
 			if (name === 'reisen') {
-				this.add('c|%Reisen|Fite me irl bruh.');
+				pokemon.say(`Fite me irl bruh.`);
 			}
 			if (name === 'beowulf') {
-				this.add('c|@Beowulf|Grovel peasant, you are in the presence of the RNGesus');
+				pokemon.say(`Grovel peasant, you are in the presence of the RNGesus`);
 			}
 			if (name === 'biggie') {
 				sentences = ["Now I'm in the limelight cause I rhyme tight", "HAPPY FEET! WOMBO COMBO!", "You finna mess around and get dunked on"];
-				this.add('c|@biggie|' + sentences[this.random(3)]);
+				pokemon.say(this.sample(sentences));
 			}
 			if (name === 'blastchance') {
-				this.add("c|+Blast Chance|MAN BALAMAR");
+				pokemon.say(`MAN BALAMAR`);
 			}
 			if (name === 'blitzamirin') {
-				this.add('c|@Blitzamirin|How Can Mirrors Be Real If Our Eyes Aren\'t Real? ╰( ~ ◕ ᗜ ◕ ~ )੭━☆ﾟ.*･｡ﾟ');
+				pokemon.say(`How Can Mirrors Be Real If Our Eyes Aren't Real? ╰( ~ ◕ ᗜ ◕ ~ )੭━☆ﾟ.*･｡ﾟ`);
 			}
 			if (name === 'bludz') {
-				this.add('c|+bludz|420 blaze it');
+				pokemon.say(`420 blaze it`);
 			}
 			if (name === 'bondie') {
-				this.add('c|+Bondie|__(\\/) snip snip (\\/)__');
+				pokemon.say(`__(\\/) snip snip (\\/)__`);
 			}
 			if (name === 'bottt') {
-				this.add('c|boTTT|Beep, boop');
+				pokemon.say(`Beep, boop`);
 			}
 			if (name === 'brandon') {
-				this.add("c|+Brrandon|Life's too short to take it seriously ALL the time.");
+				pokemon.say(`Life's too short to take it seriously ALL the time.`);
 			}
 			if (name === 'bumbadadabum') {
-				this.add('c|@bumbadadabum|Time for card games on motorcycles!');
-				if (pokemon.side.foe.active.length && pokemon.side.foe.active[0].name === 'Scotteh') this.add('c|@bumbadadabum|Also, fuck you Scotteh');
+				pokemon.say(`Time for card games on motorcycles!`);
+				if (pokemon.side.foe.active.length && pokemon.side.foe.active[0].name === 'Scotteh') pokemon.say(`Also, fuck you Scotteh`);
 			}
 			if (name === 'bummer') {
-				this.add("c|&Bummer|Oh hi.");
+				pokemon.say(`Oh hi.`);
 			}
 			if (name === 'chaos') {
-				this.add("c|~chaos|I always win");
+				pokemon.say(`I always win`);
 			}
 			if (name === 'ciran') {
-				this.add("c|+Ciran|You called?");
+				pokemon.say(`You called?`);
 			}
 			if (name === 'clefairy') {
-				this.add('c|+Clefairy|google "dj clefairyfreak" now');
+				pokemon.say(`google "dj clefairyfreak" now`);
 			}
 			if (name === 'coolstorybrobat') {
-				sentence = [
+				sentence = this.sample([
 					"Time to GET SLAYED", "BRUH!", "Ahem! Gentlemen...", "I spent 6 months training in the mountains for this day!",
 					"Shoutout to all the pear...",
-				][this.random(5)];
-				this.add('c|@CoolStoryBrobat|' + sentence);
+				]);
+				pokemon.say(`${sentence}`);
 			}
 			if (name === 'crestfall') {
-				this.add('c|%Crestfall|To say that we\'re in love is dangerous');
+				pokemon.say(`To say that we're in love is dangerous`);
 			}
 			if (name === 'deathonwings') {
-				this.add('c|+Death on Wings|rof');
+				pokemon.say(`rof`);
 			}
 			if (name === 'dirpz') {
-				this.add('c|+Dirpz|IT\'S A WATER/FAIRY TYPE!!11!');
+				pokemon.say(`IT'S A WATER/FAIRY TYPE!!11!`);
 			}
 			if (name === 'dmt') {
-				this.add('c|+DMT|DMT');
+				pokemon.say(`DMT`);
 			}
 			if (name === 'dreameatergengar') {
-				this.add('c|+Dream Eater Gengar|Goodnight sweet prince.');
+				pokemon.say(`Goodnight sweet prince.`);
 			}
 			if (name === 'duck') {
-				this.add('c|@Duck|Don\'t duck with me!');
+				pokemon.say(`Don't duck with me!`);
 			}
 			if (name === 'e4flint') {
-				this.add('c|+E4 Flint|hf lul');
+				pokemon.say(`hf lul`);
 			}
 			if (name === 'eeveegeneral') {
 				sentences = ['yo', 'anyone seen goku?'];
-				this.add('c|~Eevee General|' + sentences[this.random(2)]);
+				pokemon.say(this.sample(sentences));
 			}
 			if (name === 'eyan') {
-				this.add('c|@Eyan|░░░░░░░░▄▄▄▀▀▀▄▄███▄░░░░░░░░░░░░░░░░░');
-				this.add('c|@Eyan|░░░░░▄▀▀░░░░░░░▐░▀██▌░░░░░░░░░░░░░░░░');
-				this.add('c|@Eyan|░░░▄▀░░░░▄▄███░▌▀▀░▀█░░░░░░░░░░░░░░░░');
-				this.add('c|@Eyan|░░▄█░░▄▀▀▒▒▒▒▒▄▐░░░░█▌░░░░░░░░░░░░░░░ ');
-				this.add('c|@Eyan|░▐█▀▄▀▄▄▄▄▀▀▀▀▌░░░░░▐█▄░░░░░░░░░░░░░░');
-				this.add('c|@Eyan|░▌▄▄▀▀░░░░░░░░▌░░░░▄███████▄░░░░░░░░░');
-				this.add('c|@Eyan|░░░░░░░░░░░░░▐░░░░▐███████████▄░░░░░░');
-				this.add('c|@Eyan|░░░░░le░░░░░░░▐░░░░▐█████████████▄░░░');
-				this.add('c|@Eyan|░░░░toucan░░░░░░▀▄░░░▐██████████████▄');
-				this.add('c|@Eyan|░░░░░░has░░░░░░░░▀▄▄████████████████▄');
-				this.add('c|@Eyan|░░░░░arrived░░░░░░░░░░░░█▀██████░░░░░');
-				this.add('c|@Eyan|WELCOME TO COMPETITIVE TOUCANNING');
+				pokemon.say(`░░░░░░░░▄▄▄▀▀▀▄▄███▄░░░░░░░░░░░░░░░░░`);
+				pokemon.say(`░░░░░▄▀▀░░░░░░░▐░▀██▌░░░░░░░░░░░░░░░░`);
+				pokemon.say(`░░░▄▀░░░░▄▄███░▌▀▀░▀█░░░░░░░░░░░░░░░░`);
+				pokemon.say(`░░▄█░░▄▀▀▒▒▒▒▒▄▐░░░░█▌░░░░░░░░░░░░░░░ `);
+				pokemon.say(`░▐█▀▄▀▄▄▄▄▀▀▀▀▌░░░░░▐█▄░░░░░░░░░░░░░░`);
+				pokemon.say(`░▌▄▄▀▀░░░░░░░░▌░░░░▄███████▄░░░░░░░░░`);
+				pokemon.say(`░░░░░░░░░░░░░▐░░░░▐███████████▄░░░░░░`);
+				pokemon.say(`░░░░░le░░░░░░░▐░░░░▐█████████████▄░░░`);
+				pokemon.say(`░░░░toucan░░░░░░▀▄░░░▐██████████████▄`);
+				pokemon.say(`░░░░░░has░░░░░░░░▀▄▄████████████████▄`);
+				pokemon.say(`░░░░░arrived░░░░░░░░░░░░█▀██████░░░░░`);
+				pokemon.say(`WELCOME TO COMPETITIVE TOUCANNING`);
 			}
 			if (name === 'feliburn') {
-				this.add('c|@Feliburn|you don\'t go hand to hand with a fighter noob');
+				pokemon.say(`you don't go hand to hand with a fighter noob`);
 			}
 			if (name === 'fireburn') {
-				this.add('c|+Fireburn|:V');
+				pokemon.say(`:V`);
 			}
 			if (name === 'flyingkebab') {
-				this.add("c|+Flying Kebab|Kebab > Pizza");
+				pokemon.say(`Kebab > Pizza`);
 			}
 			if (name === 'formerhope') {
-				this.add('c|@Former Hope|I have Hope');
+				pokemon.say(`I have Hope`);
 			}
 			if (name === 'freeroamer') {
-				this.add('c|%Freeroamer|lol this is a wrap');
+				pokemon.say(`lol this is a wrap`);
 			}
 			if (name === 'frysinger') {
-				this.add("c|+Frysinger|Nice boosts kid.");
+				pokemon.say(`Nice boosts kid.`);
 			}
 			if (name === 'fx') {
-				this.add("c|+f(x)|love is 4 wawawawawawawalls");
+				pokemon.say(`love is 4 wawawawawawawalls`);
 			}
 			if (name === 'galbia') {
-				this.add('c|@galbia|(dog)');
+				pokemon.say(`(dog)`);
 			}
 			if (name === 'galom') {
-				this.add('c|+Galom|To the end.');
+				pokemon.say(`To the end.`);
 			}
 			if (name === 'rodan') { // don't delete
-				this.add("c|+RODAN|Here I Come, Rougher Than The Rest of 'Em.");
+				pokemon.say(`Here I Come, Rougher Than The Rest of 'Em.`);
 			}
 			if (name === 'geoffbruedly') {
-				this.add("c|%GeoffBruedly|FOR WINRY");
+				pokemon.say(`FOR WINRY`);
 			}
 			if (name === 'giagantic') {
-				this.add("c|%Giagantic|e.e");
+				pokemon.say(`e.e`);
 			}
 			if (name === 'golui') {
-				this.add("c|+Golui|Golly gee");
+				pokemon.say(`Golly gee`);
 			}
 			if (name === 'goodmorningespeon') {
-				this.add("c|+GoodMorningEspeon|type /part to continue participating in this battle :)");
+				pokemon.say(`type /part to continue participating in this battle :)`);
 			}
 			if (name === 'grimauxiliatrix') {
-				this.add("c|%grimAuxiliatrix|ᕕ( ᐛ )ᕗ");
+				pokemon.say(`ᕕ( ᐛ )ᕗ`);
 			}
 			if (name === 'halite') {
-				this.add('c|@Halite|You’re gonna get haxxed kid :^)');
+				pokemon.say(`You’re gonna get haxxed kid :^)`);
 			}
 			if (name === 'hannah') {
-				this.add('c|+Hannahh|♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥');
+				pokemon.say(`♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥♥`);
 			}
 			if (name === 'hashtag') {
-				this.add("c|#Hashtag|hey opponent, you get 5 hashtag points if you forfeit right now ;}");
+				pokemon.say(`hey opponent, you get 5 hashtag points if you forfeit right now ;}`);
 			}
 			if (name === 'haund') {
-				this.add('c|%Haund|le balanced normal flying bird has arrived');
+				pokemon.say(`le balanced normal flying bird has arrived`);
 			}
 			if (name === 'healndeal') {
-				this.add('c|+HeaLnDeaL|screw clerics');
+				pokemon.say(`screw clerics`);
 			}
 			if (name === 'himynamesl') {
-				this.add('c|@HiMyNamesL|There’s no such thing as winning or losing. There is won and there is lost, there is victory and defeat. There are absolutes. Everything in between is still left to fight for.');
-				this.add('c|@HiMyNamesL|' + pokemon.side.foe.name + ' will have won only when there is no one left to stand against them. Until then, there is only the struggle, because tides do what tides do – they turn.');
+				pokemon.say(`There’s no such thing as winning or losing. There is won and there is lost, there is victory and defeat. There are absolutes. Everything in between is still left to fight for.`);
+				pokemon.say(`${pokemon.side.foe.name} will have won only when there is no one left to stand against them. Until then, there is only the struggle, because tides do what tides do – they turn.`);
 			}
 			if (name === 'hippopotas') {
 				this.add('-message', '@Hippopotas\'s Sand Stream whipped up a sandstorm!');
 			}
 			if (name === 'hollywood') {
-				this.add('c|+hollywood|Kappa');
+				pokemon.say(`Kappa`);
 			}
 			if (name === 'ih8ih8sn0w') {
-				this.add('c|+ih8ih8sn0w|*sips tea*');
+				pokemon.say(`*sips tea*`);
 			}
 			if (name === 'imanalt') {
-				this.add('c|+imanalt|muh bulk');
+				pokemon.say(`muh bulk`);
 			}
 			if (name === 'imas234') {
-				this.add('c|@imas234|hlo');
+				pokemon.say(`hlo`);
 			}
 			if (name === 'innovamania') {
 				sentences = ['Don\'t take this seriously', 'These Black Glasses sure look cool', 'Ready for some fun?( ͡° ͜ʖ ͡°)', '( ͡° ͜ʖ ͡°'];
-				this.add('c|@innovamania|' + sentences[this.random(4)]);
+				pokemon.say(this.sample(sentences));
 			}
 			if (name === 'iplaytennislol') {
-				this.add('c|%iplaytennislol|KACAW');
+				pokemon.say(`KACAW`);
 			}
 			if (name === 'iyarito') {
-				this.add('c|+Iyarito|Welp');
+				pokemon.say(`Welp`);
 			}
 			if (name === 'jackhiggins') {
-				this.add("c|+Jack Higgins|Ciran was right, fun deserved to be banned");
+				pokemon.say(`Ciran was right, fun deserved to be banned`);
 			}
 			if (name === 'jasmine') {
-				this.add("c|+Jasmine|I'm still relevant!");
+				pokemon.say(`I'm still relevant!`);
 			}
 			if (name === 'jdarden') {
-				this.add('c|@jdarden|Did someone call for some BALK?');
+				pokemon.say(`Did someone call for some BALK?`);
 			}
 			if (name === 'jetpack') {
-				this.add('c|+Jetpack|You\'ve met with a terrible fate, haven\'t you?');
+				pokemon.say(`You've met with a terrible fate, haven't you?`);
 			}
 			if (name === 'joim') {
 				let dice = this.random(8);
 				if (dice === 1) {
-					this.add('c|~Joim|░░░░░░░░░░░░▄▐');
-					this.add('c|~Joim|░░░░░░▄▄▄░░▄██▄');
-					this.add('c|~Joim|░░░░░▐▀█▀▌░░░░▀█▄');
-					this.add('c|~Joim|░░░░░▐█▄█▌░░░░░░▀█▄');
-					this.add('c|~Joim|░░░░░░▀▄▀░░░▄▄▄▄▄▀▀');
-					this.add('c|~Joim|░░░░▄▄▄██▀▀▀▀');
-					this.add('c|~Joim|░░░█▀▄▄▄█░▀▀');
-					this.add('c|~Joim|░░░▌░▄▄▄▐▌▀▀▀');
-					this.add('c|~Joim|▄░▐░░░▄▄░█░▀▀ U HAVE BEEN SPOOKED');
-					this.add('c|~Joim|▀█▌░░░▄░▀█▀░▀');
-					this.add('c|~Joim|░░░░░░░▄▄▐▌▄▄ BY THE');
-					this.add('c|~Joim|░░░░░░░▀███▀█░▄');
-					this.add('c|~Joim|░░░░░░▐▌▀▄▀▄▀▐▄ SPOOKY SKILENTON');
-					this.add('c|~Joim|░░░░░░▐▀░░░░░░▐▌');
-					this.add('c|~Joim|░░░░░░█░░░░░░░░█');
-					this.add('c|~Joim|░░░░░▐▌░░░░░░░░░█');
-					this.add('c|~Joim|░░░░░█░░░░░░░░░░▐▌ SEND THIS TO 7 PPL OR SKELINTONS WILL EAT YOU');
+					pokemon.say(`░░░░░░░░░░░░▄▐`);
+					pokemon.say(`░░░░░░▄▄▄░░▄██▄`);
+					pokemon.say(`░░░░░▐▀█▀▌░░░░▀█▄`);
+					pokemon.say(`░░░░░▐█▄█▌░░░░░░▀█▄`);
+					pokemon.say(`░░░░░░▀▄▀░░░▄▄▄▄▄▀▀`);
+					pokemon.say(`░░░░▄▄▄██▀▀▀▀`);
+					pokemon.say(`░░░█▀▄▄▄█░▀▀`);
+					pokemon.say(`░░░▌░▄▄▄▐▌▀▀▀`);
+					pokemon.say(`▄░▐░░░▄▄░█░▀▀ U HAVE BEEN SPOOKED`);
+					pokemon.say(`▀█▌░░░▄░▀█▀░▀`);
+					pokemon.say(`░░░░░░░▄▄▐▌▄▄ BY THE`);
+					pokemon.say(`░░░░░░░▀███▀█░▄`);
+					pokemon.say(`░░░░░░▐▌▀▄▀▄▀▐▄ SPOOKY SKILENTON`);
+					pokemon.say(`░░░░░░▐▀░░░░░░▐▌`);
+					pokemon.say(`░░░░░░█░░░░░░░░█`);
+					pokemon.say(`░░░░░▐▌░░░░░░░░░█`);
+					pokemon.say(`░░░░░█░░░░░░░░░░▐▌ SEND THIS TO 7 PPL OR SKELINTONS WILL EAT YOU`);
 				} else {
 					sentences = [
 						"Finally a good reason to punch a teenager in the face!", "WUBBA LUBBA DUB DUB",
@@ -785,224 +768,226 @@ exports.Formats = [
 						"A man chooses, a slave obeys.", "You're gonna have a bad time.", "Would you kindly let me win?",
 						"I'm sorry, but I only enjoy vintage memes from the early 00's.",
 					];
-					sentence = sentences[this.random(8)];
-					this.add('c|~Joim|' + sentence);
+					pokemon.say(this.sample(sentences));
 				}
 			}
 			if (name === 'juanma') {
-				this.add("c|+Juanma|Okay, well, sometimes, science is more art than science, " + pokemon.side.name + ". A lot of people don't get that.");
+				pokemon.say(`Okay, well, sometimes, science is more art than science, ${pokemon.side.name}. A lot of people don't get that.`);
 			}
 			if (name === 'kalalokki') {
-				this.add('c|+Kalalokki|(•_•)');
-				this.add('c|+Kalalokki|( •_•)>⌐■-■');
-				this.add('c|+Kalalokki|(⌐■_■)');
+				pokemon.say(`(•_•)`);
+				pokemon.say(`( •_•)>⌐■-■`);
+				pokemon.say(`(⌐■_■)`);
 			}
 			if (name === 'kidwizard') {
-				this.add('c|+Kid Wizard|Eevee General room mod me.');
+				pokemon.say(`Eevee General room mod me.`);
 			}
 			if (name === 'layell') {
-				this.add('c|@Layell|Enter stage left');
+				pokemon.say(`Enter stage left`);
 			}
 			if (name === 'legitimateusername') {
-				sentence = ["This isn't my fault.", "I'm not sorry."][this.random(2)];
-				this.add('c|@LegitimateUsername|``' + sentence + '``');
+				const CODE_MARKER = '``';
+				sentence = this.sample(["This isn't my fault.", "I'm not sorry."]);
+				pokemon.say(`${CODE_MARKER}${sentence}${CODE_MARKER}`);
 			}
 			if (name === 'lemonade') {
-				this.add('c|+Lemonade|Pasta');
+				pokemon.say(`Pasta`);
 			}
 			if (name === 'level51') {
-				this.add('c|@Level 51|n_n!');
+				pokemon.say(`n_n!`);
 			}
 			if (name === 'lj') {
-				this.add('c|%LJDarkrai|Powerfulll');
+				pokemon.say(`Powerfulll`);
 			}
 			if (name === 'lyto') {
 				sentences = ["This is divine retribution!", "I will handle this myself!", "Let battle commence!"];
-				this.add('c|@Lyto|' + sentences[this.random(3)]);
+				pokemon.say(this.sample(sentences));
 			}
 			if (name === 'macle') {
-				this.add("c|+macle|Follow the Frog Blog");
+				pokemon.say(`Follow the Frog Blog`);
 			}
 			if (name === 'manu11') {
-				this.add("c|@manu 11|/me is pet by ihateyourpancreas");
+				pokemon.say(`/me is pet by ihateyourpancreas`);
 			}
 			if (name === 'marshmallon') {
-				this.add("c|%Marshmallon|Marshtomb be like");
-				this.add("c|%Marshmallon|- He sees you when you're sleeping -");
-				this.add("c|%Marshmallon|- He knows when you're awake -");
-				this.add("c|%Marshmallon|- He knows if you've been bad or good -");
-				this.add("c|%Marshmallon|- So be good for goodness sake -");
+				pokemon.say(`Marshtomb be like`);
+				pokemon.say(`- He sees you when you're sleeping -`);
+				pokemon.say(`- He knows when you're awake -`);
+				pokemon.say(`- He knows if you've been bad or good -`);
+				pokemon.say(`- So be good for goodness sake -`);
 			}
 			if (name === 'mattl') {
-				this.add('c|+MattL|If you strike me down, I shall become more powerful than you can possibly imagine.');
+				pokemon.say(`If you strike me down, I shall become more powerful than you can possibly imagine.`);
 			}
 			if (name === 'mcmeghan') {
-				this.add("c|&McMeghan|A Game of Odds");
+				pokemon.say(`A Game of Odds`);
 			}
 			if (name === 'megazard') {
-				this.add('c|+Megazard|New tricks');
+				pokemon.say(`New tricks`);
 			}
 			if (name === 'mizuhime') {
-				this.add('c|+Mizuhime|Thou Shalt Double Laser From The Edge');
+				pokemon.say(`Thou Shalt Double Laser From The Edge`);
 			}
 			if (name === 'nv') {
-				this.add('c|+nv|Who tf is nv?');
+				pokemon.say(`Who tf is nv?`);
 			}
 			if (name === 'omegaxis') {
-				this.add('c|+Omega-Xis|lol this isn’t even my final form');
+				pokemon.say(`lol this isn’t even my final form`);
 			}
 			if (name === 'orday') {
-				this.add('c|%Orda-Y|❄');
+				pokemon.say(`❄`);
 			}
 			if (name === 'overneat') {
-				this.add('c|+Overneat|tsk, tsk, is going to be funny');
+				pokemon.say(`tsk, tsk, is going to be funny`);
 			}
 			if (name === 'paradise') {
-				this.add('c|%Paradise~|I sexually identify as a hazard setter');
+				pokemon.say(`I sexually identify as a hazard setter`);
 			}
 			if (name === 'pikachuun') {
 				sentences = ['Reisen is best waifu', 'Hey look I coded myself into the game', 'sup (\'.w.\')'];
-				this.add('c|+Pikachuun|' + sentences[this.random(3)]);
+				pokemon.say(this.sample(sentences));
 			}
 			if (name === 'pluviometer') {
-				this.add('c|+pluviometer|p^2laceholder');
+				pokemon.say(`p^2laceholder`);
 			}
 			if (name === 'qtrx') {
 				sentences = ["cutie are ex", "q-trix", "quarters", "cute T-rex", "Qatari", "random letters", "spammy letters", "asgdf"];
-				this.add("c|@qtrx|omg DONT call me '" + sentences[this.random(8)] + "' pls respect my name its very special!!1!");
+				pokemon.say(`omg DONT call me '${this.sample(sentences)}' pls respect my name its very special!!1!`);
 			}
 			if (name === 'quitequiet') {
-				this.add("c|@Quite Quiet|I'll give it a shot.");
+				pokemon.say(`I'll give it a shot.`);
 			}
 			if (name === 'raseri') {
-				this.add('c|&Raseri|gg');
+				pokemon.say(`gg`);
 			}
 			if (name === 'raven') {
-				this.add('c|&Raven|Are you ready? Then let the challenge... Begin!');
+				pokemon.say(`Are you ready? Then let the challenge... Begin!`);
 			}
 			if (name === 'rekeri') {
-				this.add('c|@rekeri|Get Rekeri\'d :]');
+				pokemon.say(`Get Rekeri'd :]`);
 			}
 			if (name === 'rosiethevenusaur') {
 				sentences = ['!dt party', 'Are you Wifi whitelisted?', 'Read the roomintro!'];
-				this.add('c|@RosieTheVenusaur|' + sentences[this.random(3)]);
+				pokemon.say(this.sample(sentences));
 			}
 			if (name === 'rssp1') {
-				this.add('c|+rssp1|Witness the power of the almighty Rufflet!');
+				pokemon.say(`Witness the power of the almighty Rufflet!`);
 			}
 			if (name === 'sailorcosmos') {
-				this.add("c|+SailorCosmos|Cosmos Prism Power Make Up!");
+				pokemon.say(`Cosmos Prism Power Make Up!`);
 			}
 			if (name === 'scotteh') {
-				this.add('c|&Scotteh|─────▄▄████▀█▄');
-				this.add('c|&Scotteh|───▄██████████████████▄');
-				if (pokemon.side.foe.active.length && pokemon.side.foe.active[0].name === 'bumbadadabum') this.add('c|@bumbadadabum|Fuck you Scotteh');
-				this.add('c|&Scotteh|─▄█████.▼.▼.▼.▼.▼.▼.▼');
+				pokemon.say(`─────▄▄████▀█▄`);
+				pokemon.say(`───▄██████████████████▄`);
+				if (pokemon.side.foe.active.length && pokemon.side.foe.active[0].name === 'bumbadadabum') {
+					pokemon.side.foe.active[0].say(`Fuck you Scotteh`);
+				}
+				pokemon.say(`─▄█████.▼.▼.▼.▼.▼.▼.▼`);
 			}
 			if (name === 'scpinion') {
-				this.add('c|@scpinion|/me welcomes funbro');
+				pokemon.say(`/me welcomes funbro`);
 			}
 			if (name === 'scythernoswiping') {
-				this.add('c|%Scyther NO Swiping|/me prepares to swipe victory');
+				pokemon.say(`/me prepares to swipe victory`);
 			}
 			if (name === 'shrang') {
-				this.add('raw| [15:30] @<b>Scrappie</b>: It is I, the great and powerful shrang, who is superior to you proles in every conceivable way.');
+				this.add('raw', `[15:30] @<strong>Scrappie</strong>: It is I, the great and powerful shrang, who is superior to you proles in every conceivable way.`);
 			}
 			if (name === 'sigilyph') {
-				this.add('c|@Sigilyph|Prepare to feel the mighty power of an exploding star!');
+				pokemon.say(`Prepare to feel the mighty power of an exploding star!`);
 			}
 			if (name === 'sirdonovan') {
-				this.add('c|&sirDonovan|Oh, a battle? Let me finish my tea and crumpets');
+				pokemon.say(`Oh, a battle? Let me finish my tea and crumpets`);
 			}
 			if (name === 'skitty') {
-				this.add('c|@Skitty|\\_$-_-$_/');
+				pokemon.say(`\\_$-_-$_/`);
 			}
 			if (name === 'snobalt') {
-				this.add('c|+Snobalt|By the power vested in me from the great Lord Tomohawk...');
+				pokemon.say(`By the power vested in me from the great Lord Tomohawk...`);
 			}
 			if (name === 'snowy') {
-				this.add('c|+Snowy|Why do a lot of black people call each other monica?');
+				pokemon.say(`Why do a lot of black people call each other monica?`);
 			}
 			if (name === 'solarisfox') {
-				this.add('raw|<div class="chat chatmessage-solarisfox"><small>%</small><b><font color="#2D8F1E"><span class="username" data-name="SolarisFox">SolarisFox</span>:</font></b> <em><marquee behavior="alternate" scrollamount=3 scrolldelay="60" width="108">[Intense vibrating]</marquee></em></div>');
+				pokemon.say(`/html <em><marquee behavior="alternate" scrollamount=3 scrolldelay="60" width="108">[Intense vibrating]</marquee></em>`);
 			}
 			if (name === 'sonired') {
-				this.add('c|+Sonired|~');
+				pokemon.say(`~`);
 			}
 			if (name === 'spacebass') {
-				this.add('c|@SpaceBass|He aims his good ear best he can towards conversation and sometimes leans in awkward toward your seat');
-				this.add('c|@SpaceBass|And if by chance one feels their space too invaded, then try your best to calmly be discreet');
-				this.add('c|@SpaceBass|Because this septic breathed man that stands before you is a champion from days gone by');
+				pokemon.say(`He aims his good ear best he can towards conversation and sometimes leans in awkward toward your seat`);
+				pokemon.say(`And if by chance one feels their space too invaded, then try your best to calmly be discreet`);
+				pokemon.say(`Because this septic breathed man that stands before you is a champion from days gone by`);
 			}
 			if (name === 'sparktrain') {
-				this.add('c|+sparktrain|hi');
+				pokemon.say(`hi`);
 			}
 			if (name === 'specsmegabeedrill') {
-				this.add('c|+SpecsMegaBeedrill|(◕‿◕✿)');
+				pokemon.say(`(◕‿◕✿)`);
 			}
 			if (name === 'spy') {
 				sentences = ['curry consumer', 'try to keep up', 'fucking try to knock me down', 'Sometimes I slather myself in vasoline and pretend I\'m a slug', 'I\'m really feeling it!'];
-				this.add('c|+Spy|' + sentences[this.random(5)]);
+				pokemon.say(this.sample(sentences));
 			}
 			if (name === 'starmei') {
-				this.add('c|+Starmei|Starmei wins again');
+				pokemon.say(`Starmei wins again`);
 			}
 			if (name === 'starry') {
-				this.add('c|%starry|oh');
+				pokemon.say(`oh`);
 			}
 			if (name === 'steamroll') {
-				this.add('c|@Steamroll|Banhammer ready!');
+				pokemon.say(`Banhammer ready!`);
 			}
 			if (name === 'sunfished') {
-				this.add('c|+Sunfished|*raptor screeches*');
+				pokemon.say(`*raptor screeches*`);
 			}
 			if (name === 'sweep') {
-				this.add('c|&Sweep|(ninjacat)(beer)');
+				pokemon.say(`(ninjacat)(beer)`);
 			}
 			if (name === 'talkingtree') {
-				this.add('c|+talkingtree|I am Groot n_n');
+				pokemon.say(`I am Groot n_n`);
 			}
 			if (name === 'teg') {
-				this.add("c|+TEG|It's __The__ Eevee General");
+				pokemon.say(`It's __The__ Eevee General`);
 			}
 			if (name === 'temporaryanonymous') {
 				sentences = ['Hey, hey, can I gently scramble your insides (just for laughs)? ``hahahaha``', 'check em', 'If you strike me down, I shall become more powerful than you can possibly imagine! I have a strong deathrattle effect and I cannot be silenced!'];
-				this.add('c|@Temporaryanonymous|' + sentences[this.random(3)]);
+				pokemon.say(this.sample(sentences));
 			}
 			if (name === 'teremiare') {
-				this.add('c|%Teremiare|I like to call it skill');
+				pokemon.say(`I like to call it skill`);
 			}
 			if (name === 'theimmortal') {
-				this.add('c|~The Immortal|Give me my robe, put on my crown!');
+				pokemon.say(`Give me my robe, put on my crown!`);
 			}
 			if (name === 'tone114') {
-				this.add('c|+TONE114|Haven\'t you heard the new sensation sweeping the nation?');
+				pokemon.say(`Haven't you heard the new sensation sweeping the nation?`);
 			}
 			if (name === 'trickster') {
 				sentences = ["heh….watch out before you get cut on my edge", "AaAaAaAAaAaAAa"];
-				this.add('c|@Trickster|' + sentences[this.random(2)]);
+				pokemon.say(this.sample(sentences));
 			}
 			if (name === 'unfixable') {
-				this.add('c|+unfixable|eevee general sucks lol');
+				pokemon.say(`eevee general sucks lol`);
 			}
 			if (name === 'urkerab') {
 				this.add('j|urkerab');
 			}
 			if (name === 'uselesstrainer') {
 				sentences = ['huehuehuehue', 'PIZA', 'SPAGUETI', 'RAVIOLI RAVIOLI GIVE ME THE FORMUOLI', 'get ready for PUN-ishment', 'PIU\' RUSPE PER TUTTI, E I MARO\'???'];
-				this.add('c|@useless trainer|' + sentences[this.random(6)]);
+				pokemon.say(this.sample(sentences));
 			}
 			if (name === 'vapo') {
-				this.add('c|%Vapo|/me vapes');
+				pokemon.say(`/me vapes`);
 			}
 			if (name === 'vexeniv') {
-				this.add('c|+Vexen IV|The Arcana is the means by which all is revealed.');
+				pokemon.say(`The Arcana is the means by which all is revealed.`);
 			}
 			if (name === 'winry') {
-				this.add('c|@Winry|fight me irl');
+				pokemon.say(`fight me irl`);
 			}
 			if (name === 'xfix') {
-				if (this.random(2)) {
+				if (this.randomChance(1, 2)) {
 					// The classic one
 					const hazards = {stealthrock: 1, spikes: 1, toxicspikes: 1, burnspikes: 1, stickyweb: 1};
 					let hasHazards = false;
@@ -1013,42 +998,42 @@ exports.Formats = [
 						}
 					}
 					if (hasHazards) {
-						this.add('c|+xfix|(no haz... too late)');
+						pokemon.say(`(no haz... too late)`);
 					} else {
-						this.add('c|+xfix|(no hazards, attacks only, final destination)');
+						pokemon.say(`(no hazards, attacks only, final destination)`);
 					}
 				} else {
-					this.add("c|+xfix|//starthunt 1 + 1 | 2 | 2 + 2 | 4 | Opponent's status soon (answer with three letters) | FNT :)");
+					pokemon.say(`/starthunt 1 + 1 | 2 | 2 + 2 | 4 | Opponent's status soon (answer with three letters) | FNT :)`);
 				}
 			}
 			if (name === 'xjoelituh') {
-				this.add("c|%xJoelituh|I won't be haxed again, you will be the next one. UUUUUU");
+				pokemon.say(`I won't be haxed again, you will be the next one. UUUUUU`);
 			}
 			if (name === 'xshiba') { // dd
-				this.add("c|+xShiba|LINDA IS INDA");
+				pokemon.say(`LINDA IS INDA`);
 			}
 			if (name === 'zarel') {
-				this.add('c|~Zarel|Your mom');
+				pokemon.say(`Your mom`);
 			}
 			if (name === 'zebraiken') {
 				pokemon.phraseIndex = this.random(3);
 				//  Zeb's faint and entry phrases correspond to each other.
 				if (pokemon.phraseIndex === 2) {
-					this.add('c|&Zebraiken|bzzt n_n');
+					pokemon.say(`bzzt n_n`);
 				} else if (pokemon.phraseIndex === 1) {
-					this.add('c|&Zebraiken|bzzt *_*');
+					pokemon.say(`bzzt *_*`);
 				} else {
-					this.add('c|&Zebraiken|bzzt o_o');
+					pokemon.say(`bzzt o_o`);
 				}
 			}
 			if (name === 'zeroluxgiven') {
-				this.add('c|%Zero Lux Given|This should be an electrifying battle!');
+				pokemon.say(`This should be an electrifying battle!`);
 			}
 			if (name === 'zodiax') {
-				this.add('c|%Zodiax|Introducing 7 time Grand Champion to the battle!');
+				pokemon.say(`Introducing 7 time Grand Champion to the battle!`);
 			}
 		},
-		onFaint: function (pokemon, source, effect) {
+		onFaint(pokemon, source, effect) {
 			let name = toId(pokemon.name);
 
 			if (name === 'innovamania') {
@@ -1059,496 +1044,502 @@ exports.Formats = [
 			// This message is different from others, as it triggers when
 			// opponent faints
 			if (source && source.name === 'galbia') {
-				this.add('c|@galbia|literally 2HKOged');
+				pokemon.say(`literally 2HKOged`);
 			}
 			// Actual faint phrases
 			if (name === 'acast') {
-				this.add('c|%Acast|If only I had more screens...');
+				pokemon.say(`If only I had more screens...`);
 			}
 			if (name === 'ace') {
-				this.add('c|@Ace|inhale all of this');
+				pokemon.say(`inhale all of this`);
 			}
 			if (name === 'aelita') {
-				this.add('c|%Aelita|CODE: LYOKO. Tower deactivated...');
+				pokemon.say(`CODE: LYOKO. Tower deactivated...`);
 			}
 			if (name === 'ajhockeystar') {
-				this.add('c|+ajhockeystar|You may have beaten me in battle, but never in hockey.');
+				pokemon.say(`You may have beaten me in battle, but never in hockey.`);
 			}
 			if (name === 'albacore') {
-				this.add('c|@Albacore|Joke\'s on you, I was just testing!');
+				pokemon.say(`Joke's on you, I was just testing!`);
 			}
 			if (name === 'albert') {
-				this.add("c|+Albert|You may be good looking, but you're not a piece of art.");
+				pokemon.say(`You may be good looking, but you're not a piece of art.`);
 			}
 			if (name === 'always') {
-				this.add('c|+Always|i swear to fucking god how can a single person be this lucky after getting played all the fucking way. you are a mere slave you glorified heap of trash.');
+				pokemon.say(`i swear to fucking god how can a single person be this lucky after getting played all the fucking way. you are a mere slave you glorified heap of trash.`);
 			}
 			if (name === 'am') {
-				this.add('c|+AM|RIP');
+				pokemon.say(`RIP`);
 			}
 			if (name === 'andy') {
-				this.add('c|%AndrewGoncel|wow r00d! :c');
+				pokemon.say(`wow r00d! :c`);
 			}
 			if (name === 'antemortem') {
-				this.add('c|&antemortem|FUCKING CAMPAIGNERS');
+				pokemon.say(`FUCKING CAMPAIGNERS`);
 			}
 			if (name === 'anttya') {
-				this.add('c|+Anttya|Can\'t beat hax ¯\\_(ツ)_/¯');
+				pokemon.say(`Can't beat hax ¯\\_(ツ)_/¯`);
 			}
 			if (name === 'anty') {
-				this.add('c|+Anty|k');
+				pokemon.say(`k`);
 			}
 			if (name === 'articuno') {
-				this.add('c|%Articuno|This is why you don\'t get any girls.');
+				pokemon.say(`This is why you don't get any girls.`);
 			}
 			if (name === 'ascriptmaster') {
-				this.add('c|@Ascriptmaster|Farewell, my friends. May we meet another day...');
+				pokemon.say(`Farewell, my friends. May we meet another day...`);
 			}
 			if (name === 'astara') {
 				sentences = ['/me twerks into oblivion', 'good night ♥', 'Astara Vista Baby'];
-				this.add('c|%Ast☆arA|' + sentences[this.random(3)]);
+				pokemon.say(this.sample(sentences));
 			}
 			if (name === 'asty') {
-				this.add('c|@Asty|Bottom kek :^(');
+				pokemon.say(`Bottom kek :^(`);
 			}
 			if (name === 'atomicllamas') {
-				this.add('c|&atomicllamas|(puke)');
+				pokemon.say(`(puke)`);
 			}
 			if (name === 'aurora') {
-				this.add('c|@Aurora|are you serious you\'re so bad oh my god haxed ughhhhh');
+				pokemon.say(`are you serious you're so bad oh my god haxed ughhhhh`);
 			}
 			if (name === 'reisen') {
-				this.add("c|%Reisen|No need for goodbye. I'll see you on the flip side.");
+				pokemon.say(`No need for goodbye. I'll see you on the flip side.`);
 			}
 			if (name === 'beowulf') {
-				this.add('c|@Beowulf|There is no need to be mad');
+				pokemon.say(`There is no need to be mad`);
 			}
 			if (name === 'biggie') {
 				sentences = ['It was all a dream', 'It\'s gotta be the shoes', 'ヽ༼ຈل͜ຈ༽ﾉ RIOT ヽ༼ຈل͜ຈ༽ﾉ'];
-				this.add('c|@biggie|' + sentences[this.random(3)]);
+				pokemon.say(this.sample(sentences));
 			}
 			if (name === 'blastchance') {
-				this.add("c|+Blast Chance|**oh no!**");
+				pokemon.say(`**oh no!**`);
 			}
 			if (name === 'blitzamirin') {
-				this.add('c|@Blitzamirin|The Mirror Can Lie It Doesn\'t Show What\'s Inside ╰( ~ ◕ ᗜ ◕ ~ )੭━☆ﾟ.*･｡ﾟ');
+				pokemon.say(`The Mirror Can Lie It Doesn't Show What's Inside ╰( ~ ◕ ᗜ ◕ ~ )੭━☆ﾟ.*･｡ﾟ`);
 			}
 			if (name === 'bludz') {
-				this.add('c|+bludz|zzz');
+				pokemon.say(`zzz`);
 			}
 			if (name === 'bondie') {
-				this.add('c|+Bondie|Sigh...');
+				pokemon.say(`Sigh...`);
 			}
 			if (name === 'bottt') {
-				this.add("c| boTTT|No longer being maintained...");
+				pokemon.say(`No longer being maintained...`);
 			}
 			if (name === 'brandon') {
-				this.add("c|+Brrandon|Always leave the crowd wanting more~");
+				pokemon.say(`Always leave the crowd wanting more~`);
 			}
 			if (name === 'bumbadadabum') {
-				this.add("c|@bumbadadabum|Find another planet make the same mistakes.");
+				pokemon.say(`Find another planet make the same mistakes.`);
 			}
 			if (name === 'bummer') {
-				this.add('c|&Bummer|Thanks for considering me!');
+				pokemon.say(`Thanks for considering me!`);
 			}
 			if (name === 'chaos') {
-				this.add('c|~chaos|//forcewin chaos');
-				if (this.random(1000) === 420) {
+				pokemon.say(`/forcewin chaos`);
+				if (this.randomChance(1, 1000)) {
 					// Shouldn't happen much, but if this happens it's hilarious.
-					this.add('c|~chaos|actually');
-					this.add('c|~chaos|//forcewin ' + pokemon.side.name);
+					pokemon.say(`actually`);
+					pokemon.say(`/forcewin ${pokemon.side.name}`);
 					this.win(pokemon.side);
 				}
 			}
 			if (name === 'ciran') {
-				this.add("c|+Ciran|Fun is still banned in the Wi-Fi room!");
+				pokemon.say(`Fun is still banned in the Wi-Fi room!`);
 			}
 			if (name === 'clefairy') {
-				this.add('c|+Clefairy|flex&no flex zone nightcore remix dj clefairyfreak 2015');
+				pokemon.say(`flex&no flex zone nightcore remix dj clefairyfreak 2015`);
 			}
 			if (name === 'coolstorybrobat') {
-				let sentence = [
+				let sentence = this.sample([
 					"Lol I got slayed", "BRUH!", "I tried", "Going back to those mountains to train brb", "I forgot what fruit had... tasted like...",
-				][this.random(5)];
-				this.add('c|@CoolStoryBrobat|' + sentence);
+				]);
+				pokemon.say(`${sentence}`);
 			}
 			if (name === 'crestfall') {
-				this.add("c|%Crestfall|Her pistol go (bang bang, boom boom, pop pop)");
+				pokemon.say(`Her pistol go (bang bang, boom boom, pop pop)`);
 			}
 			if (name === 'deathonwings') {
-				this.add('c|+Death on Wings|DEG\'s a nub');
+				pokemon.say(`DEG's a nub`);
 			}
 			if (name === 'dirpz') {
-				this.add('c|+Dirpz|sylveon is an eeeveeeeeeelutioooooon....');
+				pokemon.say(`sylveon is an eeeveeeeeeelutioooooon....`);
 			}
 			if (name === 'dmt') {
-				this.add('c|+DMT|DMT');
+				pokemon.say(`DMT`);
 			}
 			if (name === 'dreameatergengar') {
-				this.add('c|+Dream Eater Gengar|In the darkness I fade. Remember ghosts don\'t die!');
+				pokemon.say(`In the darkness I fade. Remember ghosts don't die!`);
 			}
 			if (name === 'duck') {
-				this.add('c|@Duck|Duck you!');
+				pokemon.say(`Duck you!`);
 			}
 			if (name === 'e4flint') {
-				this.add('c|#E4 Flint|+n1');
-				this.add('c|+sparkyboTTT|nice 1');
+				this.add('chat', `#E4 Flint`, `+n1`);
+				this.add('chat', `+sparkyboTTT`, `nice 1`);
 			}
 			if (name === 'eeveegeneral') {
 				sentences = ["bye room, Electrolyte is in charge", "/me secretly cries", "inap!"];
-				this.add("c|~Eevee General|" + sentences[this.random(3)]);
+				pokemon.say(this.sample(sentences));
 			}
 			if (name === 'eyan') {
-				this.add("c|@Eyan|;-;7");
+				pokemon.say(`;-;7`);
 			}
 			if (name === 'feliburn') {
-				this.add('c|@Feliburn|gg la verga de tu madre');
+				pokemon.say(`gg la verga de tu madre`);
 			}
 			if (name === 'fireburn') {
-				this.add('c|+Fireburn|>:Y');
+				pokemon.say(`>:Y`);
 			}
 			if (name === 'flyingkebab') {
-				this.add("c|+Flying Kebab|" + ["I\'ll see you in hell!", "/me vanishes to the depths of hell"][this.random(2)]);
+				pokemon.say(`${this.sample(["I\'ll see you in hell!", "/me vanishes to the depths of hell"])}`);
 			}
 			if (name === 'formerhope') {
-				this.add('c|@Former Hope|Now I have Former Hope.');
+				pokemon.say(`Now I have Former Hope.`);
 			}
 			if (name === 'freeroamer') {
-				this.add('c|%Freeroamer|how do people get these matchups...');
+				pokemon.say(`how do people get these matchups...`);
 			}
 			if (name === 'frysinger') {
-				this.add("c|+Frysinger|/me teleports away from the battle and eats a senzu bean");
+				pokemon.say(`/me teleports away from the battle and eats a senzu bean`);
 			}
 			if (name === 'fx') {
-				this.add("c|+f(x)|mirror, mirror");
+				pokemon.say(`mirror, mirror`);
 			}
 			if (name === 'galbia') {
-				this.add('c|@galbia|(dog)');
+				pokemon.say(`(dog)`);
 			}
 			if (name === 'galom') {
-				this.add('c|+Galom|GAME OVER.');
+				pokemon.say(`GAME OVER.`);
 			}
 			if (name === 'rodan') {
-				this.add("c|+RODAN|The Great Emeralds power allows me to feel... ");
+				pokemon.say(`The Great Emeralds power allows me to feel... `);
 			}
 			if (name === 'geoffbruedly') {
-				this.add("c|%GeoffBruedly|IM SORRY WINRY");
+				pokemon.say(`IM SORRY WINRY`);
 			}
 			if (name === 'giagantic') {
-				this.add("c|%Giagantic|x.x");
+				pokemon.say(`x.x`);
 			}
 			if (name === 'golui') {
-				this.add("c|+Golui|Freeze in hell");
+				pokemon.say(`Freeze in hell`);
 			}
 			if (name === 'goodmorningespeon') {
-				this.add("c|+GoodMorningEspeon|gg wp good hunt would scavenge again");
+				pokemon.say(`gg wp good hunt would scavenge again`);
 			}
 			if (name === 'grimauxiliatrix') {
-				this.add("c|%grimAuxiliatrix|∠( ᐛ 」∠)_");
+				pokemon.say(`∠( ᐛ 」∠)_`);
 			}
 			if (name === 'halite') {
-				this.add('c|@Halite|Today was your lucky day...');
+				pokemon.say(`Today was your lucky day...`);
 			}
 			if (name === 'hannah') {
-				this.add('c|+Hannahh|Nooo! ;~;');
+				pokemon.say(`Nooo! ;~;`);
 			}
 			if (name === 'hashtag') {
-				this.add("c|#Hashtag|fukn immigrants,,, slash me spits");
+				pokemon.say(`fukn immigrants,,, slash me spits`);
 			}
 			if (name === 'haund') {
-				this.add('c|%Haund|omg noob team report');
+				pokemon.say(`omg noob team report`);
 			}
 			if (name === 'healndeal') {
-				this.add('c|+HeaLnDeaL|sadface I should have been a Sylveon');
+				pokemon.say(`sadface I should have been a Sylveon`);
 			}
 			if (name === 'himynamesl') {
-				this.add('c|@HiMyNamesL|hey ' + pokemon.side.name + ', get good');
+				pokemon.say(`hey ${pokemon.side.name}, get good`);
 			}
 			if (name === 'hippopotas') {
 				this.add('-message', 'The sandstorm subsided.');
 			}
 			if (name === 'hollywood') {
-				this.add('c|+hollywood|BibleThump');
+				pokemon.say(`BibleThump`);
 			}
 			if (name === 'ih8ih8sn0w') {
-				this.add('c|+ih8ih8sn0w|nice hax :(');
+				pokemon.say(`nice hax :(`);
 			}
 			if (name === 'imanalt') {
-				this.add('c|+imanalt|bshax imo');
+				pokemon.say(`bshax imo`);
 			}
 			if (name === 'imas234') {
-				this.add('c|@imas234|bg no re');
+				pokemon.say(`bg no re`);
 			}
 			if (name === 'innovamania') {
 				sentences = ['Did you rage quit?', 'How\'d you lose with this set?'];
-				this.add('c|@innovamania|' + sentences[this.random(2)]);
+				pokemon.say(this.sample(sentences));
 			}
 			if (name === 'iplaytennislol') {
-				this.add('c|%iplaytennislol|/me des');
+				pokemon.say(`/me des`);
 			}
 			if (name === 'iyarito') {
-				this.add('c|+Iyarito|Owwnn ;_;');
+				pokemon.say(`Owwnn ;_;`);
 			}
 			if (name === 'jackhiggins') {
-				this.add("c|+Jack Higgins|I blame HiMyNamesL");
+				pokemon.say(`I blame HiMyNamesL`);
 			}
 			if (name === 'jasmine') {
-				this.add("raw|<div class=\"broadcast-red\"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>");
+				this.add('raw',
+					`<div class="broadcast-red"><b>The server is restarting soon.</b><br />` +
+					`Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>`
+				);
 			}
 			if (name === 'jdarden') {
-				this.add('c|@jdarden|;-;7');
+				pokemon.say(`;-;7`);
 			}
 			if (name === 'jetpack') {
-				this.add('c|+Jetpack|You shouldn\'t of done that. ;_;');
+				pokemon.say(`You shouldn't of done that. ;_;`);
 			}
 			if (name === 'joim') {
 				sentences = ['AVENGE ME, KIDS! AVEEEENGEEE MEEEEEE!!', 'OBEY!', '``This was a triumph, I\'m making a note here: HUGE SUCCESS.``', '``Remember when you tried to kill me twice? Oh how we laughed and laughed! Except I wasn\'t laughing.``', '``I\'m not even angry, I\'m being so sincere right now, even though you broke my heart and killed me. And tore me to pieces. And threw every piece into a fire.``'];
-				this.add('c|~Joim|' + sentences[this.random(4)]);
+				pokemon.say(this.sample(sentences));
 			}
 			if (name === 'juanma') {
-				this.add("c|+Juanma|I guess you were right, now you must be the happiest person in the world, " + pokemon.side.name + "! You get to be major of 'I-told-you-so' town!");
+				pokemon.say(`I guess you were right, now you must be the happiest person in the world, ${pokemon.side.name}! You get to be major of 'I-told-you-so' town!`);
 			}
 			if (name === 'kalalokki') {
-				this.add('c|+Kalalokki|(⌐■_■)');
-				this.add('c|+Kalalokki|( •_•)>⌐■-■');
-				this.add('c|+Kalalokki|(x_x)');
+				pokemon.say(`(⌐■_■)`);
+				pokemon.say(`( •_•)>⌐■-■`);
+				pokemon.say(`(x_x)`);
 			}
 			if (name === 'kidwizard') {
-				this.add('c|+Kid Wizard|Go to hell.');
+				pokemon.say(`Go to hell.`);
 			}
 			if (name === 'layell') {
-				this.add('c|@Layell|' + ['Alas poor me', 'Goodnight sweet prince'][this.random(2)]);
+				pokemon.say(`${this.sample(['Alas poor me', 'Goodnight sweet prince'])}`);
 			}
 			if (name === 'legitimateusername') {
-				this.add('c|@LegitimateUsername|``This isn\'t brave. It\'s murder. What did I ever do to you?``');
+				const CODE_MARKER = '``';
+				pokemon.say(`${CODE_MARKER}This isn't brave. It's murder. What did I ever do to you?${CODE_MARKER}`);
 			}
 			if (name === 'lemonade') {
-				this.add('c|+Lemonade|Pasta');
+				pokemon.say(`Pasta`);
 			}
 			if (name === 'level51') {
-				this.add('c|@Level 51|u_u!');
+				pokemon.say(`u_u!`);
 			}
 			if (name === 'lj') {
-				this.add('c|%LJDarkrai|.Blast');
+				pokemon.say(`.Blast`);
 			}
 			if (name === 'lyto') {
-				this.add('c|@Lyto|' + ['Unacceptable!', 'Mrgrgrgrgr...'][this.random(2)]);
+				pokemon.say(`${this.sample(['Unacceptable!', 'Mrgrgrgrgr...'])}`);
 			}
 			if (name === 'macle') {
-				this.add("c|+macle|Follow the Frog Blog - https://gonefroggin.wordpress.com/");
+				pokemon.say(`Follow the Frog Blog - https://gonefroggin.wordpress.com/`);
 			}
 			if (name === 'manu11') {
-				this.add("c|@manu 11|so much hax, why do I even try");
+				pokemon.say(`so much hax, why do I even try`);
 			}
 			if (name === 'marshmallon') {
-				this.add("c|%Marshmallon|Shoutouts to sombolo and Rory Mercury ... for this trash set -_-");
+				pokemon.say(`Shoutouts to sombolo and Rory Mercury ... for this trash set -_-`);
 			}
 			if (name === 'mattl') {
-				this.add('c|+MattL|Forgive me. I feel it again... the call from the light.');
+				pokemon.say(`Forgive me. I feel it again... the call from the light.`);
 			}
 			if (name === 'mcmeghan') {
-				this.add("c|&McMeghan|Out-odded");
+				pokemon.say(`Out-odded`);
 			}
 			if (name === 'megazard') {
-				this.add('c|+Megazard|Old dog');
+				pokemon.say(`Old dog`);
 			}
 			if (name === 'mizuhime') {
-				this.add('c|+Mizuhime|I got Gimped.');
+				pokemon.say(`I got Gimped.`);
 			}
 			if (name === 'nv') {
-				this.add('c|+nv|Too cute for this game ;~;');
+				pokemon.say(`Too cute for this game ;~;`);
 			}
 			if (name === 'omegaxis') {
-				this.add('c|+Omega-Xis|bull shit bull sHit thats ✖️ some bullshit rightth ere right✖️there ✖️✖️if i do ƽaү so my selｆ ‼️ i say so ‼️ thats what im talking about right there right there (chorus: ʳᶦᵍʰᵗ ᵗʰᵉʳᵉ) mMMMMᎷМ‼️ HO0ОଠＯOOＯOОଠଠOoooᵒᵒᵒᵒᵒᵒᵒᵒᵒ ‼️ Bull shit');
+				pokemon.say(`bull shit bull sHit thats ✖️ some bullshit rightth ere right✖️there ✖️✖️if i do ƽaү so my selｆ ‼️ i say so ‼️ thats what im talking about right there right there (chorus: ʳᶦᵍʰᵗ ᵗʰᵉʳᵉ) mMMMMᎷМ‼️ HO0ОଠＯOOＯOОଠଠOoooᵒᵒᵒᵒᵒᵒᵒᵒᵒ ‼️ Bull shit`);
 			}
 			if (name === 'orday') {
-				this.add('c|%Orda-Y|❄_❄');
+				pokemon.say(`❄_❄`);
 			}
 			if (name === 'overneat') {
-				this.add('c|+Overneat|Ugh! I failed you Iya-sama');
+				pokemon.say(`Ugh! I failed you Iya-sama`);
 			}
 			if (name === 'paradise') {
-				this.add('c|%Paradise~|RIP THE DREAM');
+				pokemon.say(`RIP THE DREAM`);
 			}
 			if (name === 'pikachuun') {
 				sentences = ['press f to pay respects ;_;7', 'this wouldn\'t have happened in my version', 'wait we were battling?'];
-				this.add('c|+Pikachuun|' + sentences[this.random(3)]);
+				pokemon.say(this.sample(sentences));
 			}
 			if (name === 'pluviometer') {
-				this.add('c|+pluviometer|GP 2/2');
+				pokemon.say(`GP 2/2`);
 			}
 			if (name === 'qtrx') {
 				sentences = ['Keyboard not found; press **Ctrl + W** to continue...', 'hfowurfbiEU;DHBRFEr92he', 'At least my name ain\'t asgdf...'];
-				this.add('c|@qtrx|' + sentences[this.random(3)]);
+				pokemon.say(this.sample(sentences));
 			}
 			if (name === 'quitequiet') {
-				this.add('c|@Quite Quiet|Well, I tried at least.');
+				pokemon.say(`Well, I tried at least.`);
 			}
 			if (name === 'raseri') {
-				this.add('c|&Raseri|you killed a mush :(');
+				pokemon.say(`you killed a mush :(`);
 			}
 			if (name === 'raven') {
-				this.add('c|&Raven|I failed the challenge, and for that, I must lose a life. At least I had one to lose in the first place, nerd.');
+				pokemon.say(`I failed the challenge, and for that, I must lose a life. At least I had one to lose in the first place, nerd.`);
 			}
 			if (name === 'rekeri') {
-				this.add('c|@rekeri|lucky af :[');
+				pokemon.say(`lucky af :[`);
 			}
 			if (name === 'rssp1') {
-				this.add('c|+rssp1|Witness the power of the almighty Rufflet!');
+				pokemon.say(`Witness the power of the almighty Rufflet!`);
 			}
 			if (name === 'rosiethevenusaur') {
-				this.add('c|@RosieTheVenusaur|' + ['SD SKARM SHALL LIVE AGAIN!!!', 'Not my WiFi!'][this.random(2)]);
+				pokemon.say(`${this.sample(['SD SKARM SHALL LIVE AGAIN!!!', 'Not my WiFi!'])}`);
 			}
 			if (name === 'sailorcosmos') {
-				this.add("c|+SailorCosmos|Cosmos Gorgeous Retreat!");
+				pokemon.say(`Cosmos Gorgeous Retreat!`);
 			}
 			if (name === 'scotteh') {
-				this.add('c|&Scotteh|▄███████▄.▲.▲.▲.▲.▲.▲');
-				this.add('c|&Scotteh|█████████████████████▀▀');
+				pokemon.say(`▄███████▄.▲.▲.▲.▲.▲.▲`);
+				pokemon.say(`█████████████████████▀▀`);
 			}
 			if (name === 'scpinion') {
-				this.add("c|@scpinion|guys, I don't even know how to pronounce scpinion");
+				pokemon.say(`guys, I don't even know how to pronounce scpinion`);
 			}
 			if (name === 'scythernoswiping') {
-				this.add('c|%Scyther NO Swiping|Aww man!');
+				pokemon.say(`Aww man!`);
 			}
 			if (name === 'shrang') {
-				this.add('c|@shrang|FUCKING 2 YO KID');
+				pokemon.say(`FUCKING 2 YO KID`);
 			}
 			if (name === 'sigilyph') {
-				this.add('c|@Sigilyph|FROM THE BACK FROM THE BACK FROM THE BACK FROM THE BACK **ANDD**');
+				pokemon.say(`FROM THE BACK FROM THE BACK FROM THE BACK FROM THE BACK **ANDD**`);
 			}
 			if (name === 'sirdonovan') {
 				this.add('-message', 'RIP sirDonovan');
 			}
 			if (name === 'skitty') {
-				this.add('c|@Skitty|!learn skitty, roleplay');
-				this.add('raw|<div class="infobox">In Gen 6, Skitty <span class="message-learn-cannotlearn">can\'t</span> learn Role Play</div>');
+				pokemon.say(`!learn skitty, roleplay`);
+				this.add('raw',
+					`<div class="games light">In Gen 6, Skitty <span class="message-learn-cannotlearn">can't</span> learn Role Play</div>`
+				);
 			}
 			if (name === 'solarisfox') {
-				this.add('c|%SolarisFox|So long, and thanks for all the fish.');
+				pokemon.say(`So long, and thanks for all the fish.`);
 			}
 			if (name === 'sonired') {
-				this.add('c|+Sonired|sigh lucky players.');
+				pokemon.say(`sigh lucky players.`);
 			}
 			if (name === 'sparktrain') {
-				this.add('c|+sparktrain|nice');
+				pokemon.say(`nice`);
 			}
 			if (name === 'spy') {
 				sentences = ['lolhax', 'crit mattered', 'bruh cum @ meh', '>thinking Pokemon takes any skill'];
-				this.add('c|+Spy|' + sentences[this.random(4)]);
+				pokemon.say(this.sample(sentences));
 			}
 			if (name === 'snobalt') {
-				this.add('c|+Snobalt|Blasphemy!');
+				pokemon.say(`Blasphemy!`);
 			}
 			if (name === 'snowy') {
-				this.add('c|+Snowy|i never understood this i always hear them be like "yo whats up monica" "u tryna blaze monica"');
+				pokemon.say(`i never understood this i always hear them be like "yo whats up monica" "u tryna blaze monica"`);
 			}
 			if (name === 'spacebass') {
-				this.add('c|@SpaceBass|And the tales of whales and woe off his liquored toungue will flow, the light will soft white twinkle off the cataracts in his eye');
-				this.add("c|@SpaceBass|So if by chance you're cornered near the bathroom, or he blocks you sprawled in his aisle seat");
-				this.add("c|@SpaceBass|Embrace the chance to hear some tales of greatness, 'cause he's the most interesting ball of toxins you're ever apt to meet");
+				pokemon.say(`And the tales of whales and woe off his liquored toungue will flow, the light will soft white twinkle off the cataracts in his eye`);
+				pokemon.say(`So if by chance you're cornered near the bathroom, or he blocks you sprawled in his aisle seat`);
+				pokemon.say(`Embrace the chance to hear some tales of greatness, 'cause he's the most interesting ball of toxins you're ever apt to meet`);
 			}
 			if (name === 'specsmegabeedrill') {
-				this.add('c|+SpecsMegaBeedrill|Tryhard.');
+				pokemon.say(`Tryhard.`);
 			}
 			if (name === 'starmei') {
-				this.add('c|+Starmei|//message AM, must be nice being this lucky');
+				pokemon.say(`//message AM, must be nice being this lucky`);
 			}
 			if (name === 'starry') {
-				this.add('c|%starry|o-oh');
+				pokemon.say(`o-oh`);
 			}
 			if (name === 'steamroll') {
-				this.add('c|@Steamroll|Not my problem anymore!');
+				pokemon.say(`Not my problem anymore!`);
 			}
 			if (name === 'sunfished') {
-				this.add('c|+Sunfished|*raptor screeches*');
+				pokemon.say(`*raptor screeches*`);
 			}
 			if (name === 'sweep') {
-				this.add('c|&Sweep|You offended :C');
+				pokemon.say(`You offended :C`);
 			}
 			if (name === 'talkingtree') {
-				this.add('c|+talkingtree|I am Groot u_u');
+				pokemon.say(`I am Groot u_u`);
 			}
 			if (name === 'teg') {
 				sentences = ['Save me, Joim!', 'Arcticblast is the worst OM leader in history'];
-				this.add('c|+TEG|' + sentences[this.random(2)]);
+				pokemon.say(this.sample(sentences));
 			}
 			if (name === 'temporaryanonymous') {
 				sentences = [';_;7', 'This kills the tempo', 'I\'m kill. rip.', 'S-senpai! Y-you\'re being too rough! >.<;;;;;;;;;;;;;;;;;', 'A-at least you checked my dubs right?', 'B-but that\'s impossible! This can\'t be! AAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHGH'];
-				this.add('c|@Temporaryanonymous|' + sentences[this.random(6)]);
+				pokemon.say(this.sample(sentences));
 			}
 			if (name === 'teremiare') {
-				this.add('c|%Teremiare|sigh...');
+				pokemon.say(`sigh...`);
 			}
 			if (name === 'theimmortal') {
-				this.add('c|~The Immortal|Oh how wrong we were to think immortality meant never dying.');
+				pokemon.say(`Oh how wrong we were to think immortality meant never dying.`);
 			}
 			if (name === 'tone114') {
-				this.add('c|+TONE114|I don\'t have to take this. I\'m going for a walk.');
+				pokemon.say(`I don't have to take this. I'm going for a walk.`);
 			}
 			if (name === 'trickster') {
-				this.add('c|@Trickster|UPLOADING VIRUS.EXE \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588] 99% COMPLETE');
+				pokemon.say(`UPLOADING VIRUS.EXE \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588] 99% COMPLETE`);
 			}
 			if (name === 'unfixable') {
-				this.add('c|+unfixable|i may be dead but my eyebrows are better than yours will ever be');
+				pokemon.say(`i may be dead but my eyebrows are better than yours will ever be`);
 			}
 			if (name === 'urkerab') {
-				this.add('l|urkerab');
+				this.add('l', 'urkerab');
 			}
 			if (name === 'uselesstrainer') {
 				sentences = ['TIME TO SET UP', 'One day I\'ll become a beautiful butterfly'];
-				this.add('c|@useless trainer|' + sentences[this.random(2)]);
+				pokemon.say(this.sample(sentences));
 			}
 			if (name === 'vapo') {
-				this.add('c|%Vapo|( ; _> ;)');
+				pokemon.say(`( ; _> ;)`);
 			}
 			if (name === 'vexeniv') {
-				this.add('c|+Vexen IV|brb burning my dread');
+				pokemon.say(`brb burning my dread`);
 			}
 			if (name === 'winry') {
-				this.add('c|@Winry|I AM NOT A WEEB');
+				pokemon.say(`I AM NOT A WEEB`);
 			}
 			if (name === 'xfix') {
 				const foe = pokemon.side.foe.active[0];
 				if (foe.name === 'xfix') {
-					this.add("c|+xfix|(I won. I lost. I... huh... ~~can somebody tell me what actually happened?~~)");
+					pokemon.say(`(I won. I lost. I... huh... ~~can somebody tell me what actually happened?~~)`);
 				} else if (foe.ability === 'magicbounce') {
-					this.add('c|+xfix|(How do mirrors work... oh right, when you use a mirror, your opponent has a mirror as well... or something, ~~that\'s how you "balance" this game~~)');
+					pokemon.say(`(How do mirrors work... oh right, when you use a mirror, your opponent has a mirror as well... or something, ~~that's how you "balance" this game~~)`);
 				} else {
-					this.add('c|+xfix|~~That must have been a glitch. Hackers.~~');
+					pokemon.say(`~~That must have been a glitch. Hackers.~~`);
 				}
 			}
 			if (name === 'xjoelituh') {
-				this.add("c|%xJoelituh|THAT FOR SURE MATTERED. Blame Nayuki. I'm going to play CSGO then.");
+				pokemon.say(`THAT FOR SURE MATTERED. Blame Nayuki. I'm going to play CSGO then.`);
 			}
 			if (name === 'xshiba') {
-				this.add("c|+xShiba|Lol that feeling when you just win but get haxed..");
+				pokemon.say(`Lol that feeling when you just win but get haxed..`);
 			}
 			if (name === 'zarel') {
-				this.add('c|~Zarel|your mom');
+				pokemon.say(`your mom`);
 				// Followed by the usual '~Zarel fainted'.
-				this.add('-message', '~Zarel used your mom!');
+				this.add('-message', `~Zarel used your mom!`);
 			}
 			if (name === 'zebraiken') {
 				if (pokemon.phraseIndex === 2) {
-					this.add('c|&Zebraiken|bzzt u_u');
+					pokemon.say(`bzzt u_u`);
 				} else if (pokemon.phraseIndex === 1) {
-					this.add('c|&Zebraiken|bzzt ._.');
+					pokemon.say(`bzzt ._.`);
 				} else {
 					// Default faint.
-					this.add('c|&Zebraiken|bzzt x_x');
+					pokemon.say(`bzzt x_x`);
 				}
 			}
 			if (name === 'zeroluxgiven') {
-				this.add('c|%Zero Lux Given|I\'ve been beaten, what a shock!');
+				pokemon.say(`I've been beaten, what a shock!`);
 			}
 			if (name === 'zodiax') {
-				this.add('c|%Zodiax|We need to go full out again soon...');
+				pokemon.say(`We need to go full out again soon...`);
 			}
 		},
 		// Special switch-out events for some mons.
-		onSwitchOut: function (pokemon) {
+		onSwitchOut(pokemon) {
 			let name = toId(pokemon.name);
 
 			if (!pokemon.illusion) {
@@ -1560,17 +1551,16 @@ exports.Formats = [
 			// Transform
 			if (pokemon.originalName) pokemon.name = pokemon.originalName;
 		},
-		onModifyPokemon: function (pokemon) {
+		onDisableMove(pokemon) {
 			let name = toId(pokemon.name);
 			// Enforce choice item locking on custom moves.
 			// qtrx only has one move anyway.
 			if (name !== 'qtrx') {
-				let moves = pokemon.moveset;
-				if (pokemon.getItem().isChoice && pokemon.lastMove === moves[3].id) {
+				let moves = pokemon.moveSlots;
+				if (pokemon.getItem().isChoice && pokemon.lastMove && pokemon.lastMove.id === moves[3].id) {
 					for (let i = 0; i < 3; i++) {
 						if (!moves[i].disabled) {
 							pokemon.disableMove(moves[i].id, false);
-							moves[i].disabled = true;
 						}
 					}
 				}
@@ -1578,9 +1568,11 @@ exports.Formats = [
 		},
 		// Specific residual events for custom moves.
 		// This allows the format to have kind of custom side effects and volatiles.
-		onResidual: function (battle) {
+		onResidual(battle) {
 			// Deal with swapping from qtrx's mega signature move.
-			let swapmon1, swapmon2;
+			let swapmon1;
+
+			let swapmon2;
 			let swapped = false;
 			for (let i = 1; i < 6 && !swapped; i++) {
 				swapmon1 = battle.sides[0].pokemon[i];
@@ -1591,12 +1583,12 @@ exports.Formats = [
 						if (swapmon2.swapping && swapmon2.hp > 0) {
 							swapmon2.swapping = false;
 
-							this.add('message', "Link standby... Please wait.");
+							this.add('message', `Link standby... Please wait.`);
 							swapmon1.side = battle.sides[1];
-							swapmon1.fullname = swapmon1.side.id + ': ' + swapmon1.name;
+							swapmon1.fullname = `${swapmon1.side.id}: ${swapmon1.name}`;
 							swapmon1.id = swapmon1.fullname;
 							swapmon2.side = battle.sides[0];
-							swapmon2.fullname = swapmon2.side.id + ': ' + swapmon2.name;
+							swapmon2.fullname = `${swapmon2.side.id}: ${swapmon2.name}`;
 							swapmon2.id = swapmon2.fullname;
 							let oldpos = swapmon1.position;
 							swapmon1.position = swapmon2.position;
@@ -1604,18 +1596,18 @@ exports.Formats = [
 							battle.sides[0].pokemon[i] = swapmon2;
 							battle.sides[1].pokemon[j] = swapmon1;
 
-							this.add("c|\u2605" + swapmon1.side.name + "|Bye-bye, " + swapmon2.name + "!");
-							this.add("c|\u2605" + swapmon2.side.name + "|Bye-bye, " + swapmon1.name + "!");
+							this.add('chat', `\u2605${swapmon1.side.name}`, `Bye-bye, ${swapmon2.name}!`);
+							this.add('chat', `\u2605${swapmon2.side.name}`, `Bye-bye, ${swapmon1.name}!`);
 							if (swapmon1.side.active[0].hp && swapmon2.side.active[0].hp) {
 								this.add('-anim', swapmon1.side.active, "Healing Wish", swapmon1.side.active);
 								this.add('-anim', swapmon2.side.active, "Aura Sphere", swapmon2.side.active);
-								this.add('message', swapmon2.side.name + " received " + swapmon2.name + "! Take good care of " + swapmon2.name + "!");
+								this.add('message', `${swapmon2.side.name} received ${swapmon2.name}! Take good care of ${swapmon2.name}!`);
 								this.add('-anim', swapmon2.side.active, "Healing Wish", swapmon2.side.active);
 								this.add('-anim', swapmon1.side.active, "Aura Sphere", swapmon1.side.active);
-								this.add('message', swapmon1.side.name + " received " + swapmon1.name + "! Take good care of " + swapmon1.name + "!");
+								this.add('message', `${swapmon1.side.name} received ${swapmon1.name}! Take good care of ${swapmon1.name}!`);
 							} else {
-								this.add('message', swapmon2.side.name + " received " + swapmon2.name + "! Take good care of " + swapmon2.name + "!");
-								this.add('message', swapmon1.side.name + " received " + swapmon1.name + "! Take good care of " + swapmon1.name + "!");
+								this.add('message', `${swapmon2.side.name} received ${swapmon2.name}! Take good care of ${swapmon2.name}!`);
+								this.add('message', `${swapmon1.side.name} received ${swapmon1.name}! Take good care of ${swapmon1.name}!`);
 							}
 							swapped = true;
 							break;
@@ -1626,17 +1618,21 @@ exports.Formats = [
 		},
 	},
 
-
 	// June Jubilee: Revenge, June 2016
 	// https://github.com/Zarel/Pokemon-Showdown/tree/b54a1ac9163771f200f13d271624a519120baa49
 
 	{
 		name: "[Seasonal] June Jubilee: Revenge",
+		mod: 'gen6',
 
 		team: 'randomSeasonalJubilee',
 		ruleset: ['Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],
 		onBegin: function () {
-			this.add('message', "You are traveling with your fellow Delibird around the world, when your mortal enemy attacks you, seeking revenge since you defeated them on June 2013. Palkia inverted space, so you need to help it reach the south pole before summer starts!");
+			this.add(
+				'message', "You are traveling with your fellow Delibird around the world, " +
+				"when your mortal enemy attacks you, seeking revenge since you defeated them on June 2013. " +
+				"Palkia inverted space, so you need to help it reach the south pole before summer starts!"
+			);
 			this.add("raw|<font color='red'><b>Don't let your Delibird faint, or you will automatically lose the battle!</b></font>");
 			this.setWeather('Sunny Day');
 			delete this.weatherData.duration;
@@ -1687,7 +1683,10 @@ exports.Formats = [
 			if (pokemon.template.id === 'delibird') {
 				let name = pokemon.side.name;
 				let winner = pokemon.side.id === 'p1' ? 'p2' : 'p1';
-				this.add('-message', "No!! You let Delibird down. It trusted you. You lost the battle, " + name + ". But you lost something else: your Pokémon's trust.");
+				this.add(
+					'-message', "No!! You let Delibird down. It trusted you. You lost the battle, " + name +
+					". But you lost something else: your Pokémon's trust."
+				);
 				pokemon.battle.win(winner);
 			}
 		},
@@ -1698,6 +1697,7 @@ exports.Formats = [
 	{
 		name: "[Seasonal] Fireworks Frenzy",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a>"],
+		mod: 'gen6',
 
 		team: 'randomSeasonalFireworks',
 		ruleset: ['Sleep Clause Mod', 'Freeze Clause Mod', 'HP Percentage Mod', 'Cancel Mod'],

@@ -1,6 +1,8 @@
 'use strict';
 
 exports.BattleScripts = {
+	inherit: 'gen6',
+	gen: 6,
 	init: function () {
 		let tankStats = {hp:90, atk:30, def:120, spa:130, spd:120, spe:50};
 		let healerStats = {hp:50, atk:10, def:95, spa:80, spd:95, spe:10};

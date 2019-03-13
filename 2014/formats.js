@@ -12,10 +12,11 @@ exports.Formats = [
 	// Winter's Wont, January 2014
 	{
 		name: "[Seasonal] Winter's Wont",
+		mod: 'gen6',
 
 		gameType: 'doubles',
 		team: 'randomSeasonalWinter',
-		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
 		maxLevel: 1000,
 		onBegin: function () {
 			this.setWeather('Hail');
@@ -32,10 +33,11 @@ exports.Formats = [
 	// Fabulous February, February 2014
 	{
 		name: "[Seasonal] Fabulous February",
+		mod: 'gen6',
 
 		gameType: 'doubles',
 		team: 'randomSeasonalFFY',
-		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
 		onBegin: function () {
 			this.add('-message', "新年快乐");
 		},
@@ -57,10 +59,11 @@ exports.Formats = [
 	// Strikes Back, November 2014
 	{
 		name: "[Seasonal] Strikes Back",
+		mod: 'gen6',
 
 		gameType: 'triples',
 		team: 'randomSeasonalSB',
-		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
 		onBegin: function () {
 			this.add('-message', "V4 is a big poo-poo!");
 		},
@@ -176,7 +179,7 @@ exports.Formats = [
 				}
 			} else {
 				// Change move type time to time only when the move is not Present.
-				if (this.random(100) < 35 && move.target !== 'self') {
+				if (this.randomChance(35, 100) && move.target !== 'self') {
 					let type = '';
 					switch (move.type.toLowerCase()) {
 					case 'rock':
@@ -233,7 +236,7 @@ exports.Formats = [
 			}
 		},
 		onSwitchIn: function (pokemon) {
-			if (this.random(100) < 25) {
+			if (this.randomChance(1, 4)) {
 				this.add('-message', pokemon.name + " drank way too much!");
 				pokemon.addVolatile('confusion');
 				pokemon.statusData.time = 0;
@@ -256,9 +259,10 @@ exports.Formats = [
 	// Sleigh Showdown, December 2014
 	{
 		name: "[Seasonal] Sleigh Showdown",
+		mod: 'gen6',
 
 		team: 'randomSeasonalSleigh',
-		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
 		onBegin: function () {
 			this.add('-message', "Yikes! You are a grinch in a reckless, regretless sleigh race, running for Showdownville to ruin christmas. But, to achieve that, you must first defeat your opponent. Fight hard and take care with the obstacles!");
 			this.seasonal = {position: [0, 0], weight: [2500, 2500]};
@@ -271,7 +275,7 @@ exports.Formats = [
 				};
 			}
 			if (move.type === 'Water') {
-				if (this.random(100) < 25) {
+				if (this.randomChance(1, 4)) {
 					this.add('-message', "The cold froze your Water-type attack, making it Ice-type instead!");
 					move.type = 'Ice';
 				}
@@ -378,7 +382,7 @@ exports.Formats = [
 
 			// If no obstacles are found, we advance as much distance as the speed is.
 			// However, the faster the sleigh, the higher the chances of meeting an obstacle are!
-			if (this.random(100) < Math.ceil(speed * 0.083) + 5) {
+			if (this.randomChance(Math.ceil(speed * 0.083) + 5, 100)) {
 				let name = pokemon.illusion ? pokemon.illusion.name : pokemon.name;
 				// If an obstacle is found, the trainer won't advance this turn.
 				switch (this.random(6)) {

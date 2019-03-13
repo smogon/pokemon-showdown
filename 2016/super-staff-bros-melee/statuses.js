@@ -142,7 +142,7 @@ exports.BattleStatuses = {
 		onAfterDamage: function (damage, target, source, move) {
 			if (!source || source.volatiles['disable']) return;
 			if (source !== target && move && move.effectType === 'Move') {
-				if (this.random(10) < 3) {
+				if (this.randomChance(3, 10)) {
 					source.addVolatile('disable');
 				}
 			}
@@ -333,7 +333,7 @@ exports.BattleStatuses = {
 		onResidual: function (pokemon) {
 			if (!pokemon.hp) return;
 			this.add('-message', pokemon.name + "'s aura of spammy letters is tearing at the very fabric of reality!");
-			this.useMove(((this.random(2) === 1) ? 'trickroom' : 'wonderroom'), pokemon);
+			this.useMove(this.randomChance(1, 2) ? 'trickroom' : 'wonderroom', pokemon);
 		},
 	},
 	// sparktrain

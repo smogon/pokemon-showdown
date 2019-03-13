@@ -13,13 +13,22 @@ exports.Formats = [
 	// https://github.com/Zarel/Pokemon-Showdown/tree/7fb61bf240975a9c93e302c9a2059b55ee458ffb
 	{
 		name: "[Seasonal] Spacetime Funtimes",
+		mod: 'gen6',
 
 		team: 'randomSeasonalSFT',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
 		onBegin: function () {
 			this.add('message', "Dialga and Palkia have distorted space and time!");
-			// This shouldn't happen.
-			if (!this.seasonal) this.seasonal = {scenario: 'lotr'};
+
+			const scenarios = {
+				'gallade': 'lotr', 'reshiram': 'lotr',
+				'pikachu': 'redblue', 'pidgeot': 'redblue',
+				'genesect': 'terminator', 'alakazam': 'terminator',
+				'gengar': 'gen1',
+				'groudon': 'desert', 'probopass': 'desert',
+				'kyogre': 'shipwreck', 'machamp': 'shipwreck',
+			};
+			this.seasonal = {scenario: scenarios[this.p1.pokemon[0].speciesid]};
 
 			// Add the message for the scenario.
 			this.add('-message', {
@@ -42,7 +51,7 @@ exports.Formats = [
 				this.addPseudoWeather('magicroom', this.p1.pokemon[0], null, '[of] Seasonal');
 				delete this.pseudoWeather.magicroom.duration;
 			} else if (this.seasonal.scenario === 'desert') {
-				this.setWeather(['Sandstorm', 'Sunnyday'][this.random(2)]);
+				this.setWeather(this.sample(['Sandstorm', 'Sunnyday']));
 				delete this.weatherData.duration;
 			} else if (this.seasonal.scenario === 'shipwreck') {
 				this.setWeather('raindance');
@@ -211,29 +220,27 @@ exports.Formats = [
 					'hyperbeam': "/ban",
 				},
 			};
+
 			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
 
 			for (let i = 0, len = allPokemon.length; i < len; i++) {
 				let pokemon = allPokemon[i];
 				let last = pokemon.moves.length - 1;
 				if (pokemon.moves[last]) {
-					pokemon.moves[last] = toId(pokemon.set.signatureMove);
-					pokemon.moveset[last].move = pokemon.set.signatureMove;
-					pokemon.baseMoveset[last].move = pokemon.set.signatureMove;
+					pokemon.moveSlots[last].move = pokemon.set.signatureMove;
+					pokemon.baseMoveSlots[last].move = pokemon.set.signatureMove;
 				}
-				for (let j = 0; j < pokemon.moveset.length; j++) {
-					let moveData = pokemon.moveset[j];
+				for (let j = 0; j < pokemon.moveSlots.length; j++) {
+					let moveData = pokemon.moveSlots[j];
 					if (globalRenamedMoves[moveData.id]) {
-						pokemon.moves[j] = toId(pokemon.set.signatureMove);
 						moveData.move = globalRenamedMoves[moveData.id];
-						pokemon.baseMoveset[j].move = globalRenamedMoves[moveData.id];
+						pokemon.baseMoveSlots[j].move = moveData.move;
 					}
 
 					let customRenamedSet = customRenamedMoves[toId(pokemon.name)];
 					if (customRenamedSet && customRenamedSet[moveData.id]) {
-						pokemon.moves[j] = toId(pokemon.set.signatureMove);
 						moveData.move = customRenamedSet[moveData.id];
-						pokemon.baseMoveset[j].move = customRenamedSet[moveData.id];
+						pokemon.baseMoveSlots[j].move = moveData.move;
 					}
 				}
 			}
@@ -409,8 +416,8 @@ exports.Formats = [
 				if (this[((pokemon.side.id === 'p1') ? 'p2' : 'p1')].active[0].name.charAt(0) === '%') {
 					sentence = "Back in my day we didn't have Drivers.";
 				} else {
-					sentences = ["Your mum says hi.", "Sorry I was just enjoying a slice of pineapple pizza, what was I supposed to do again?", "I could go for some Cheesy Chips right about now.", "I'd tap that.", "/me throws coffee at the server"].randomize();
-					sentence = sentences[0];
+					sentences = ["Your mum says hi.", "Sorry I was just enjoying a slice of pineapple pizza, what was I supposed to do again?", "I could go for some Cheesy Chips right about now.", "I'd tap that.", "/me throws coffee at the server"];
+					sentence = this.sample(sentences);
 				}
 				this.add('c|~Jasmine|' + sentence);
 			}
@@ -461,17 +468,16 @@ exports.Formats = [
 					this.add('-message', '░░█░░░░░░░░░░░░░░░░░▀▄░░░░░░░░░░▄▀░░░░░░░░░░░░█');
 					this.add('-message', '░░░█░░░░░░░░░░░░░░░░░░▀▄▄▄▄▄▄▄▀▀░░░░░░░░░░░░░█');
 				} else {
-					sentences = ["Gen 1 OU is a true skill metagame.", "Finally a good reason to punch a teenager in the face!", "So here we are again, it's always such a pleasure.", "( ͝° ͜ʖ͡°)"].randomize();
-					sentence = sentences[0];
-					this.add('c|~Joim|' + sentence);
+					sentences = ["Gen 1 OU is a true skill metagame.", "Finally a good reason to punch a teenager in the face!", "So here we are again, it's always such a pleasure.", "( ͝° ͜ʖ͡°)"];
+					this.add('c|~Joim|' + this.sample(sentences));
 				}
 			}
 			if (name === 'theimmortal') {
 				this.add('c|~The Immortal|Give me my robe, put on my crown!');
 			}
 			if (name === 'v4') {
-				sentences = ["Oh right. I'm still here...", "WHAT ELSE WERE YOU EXPECTING?!", "Soaring on beautiful buttwings."].randomize();
-				this.add('c|~V4|' + sentences[0]);
+				sentences = ["Oh right. I'm still here...", "WHAT ELSE WERE YOU EXPECTING?!", "Soaring on beautiful buttwings."];
+				this.add('c|~V4|' + this.sample(sentences));
 			}
 			if (name === 'zarel') {
 				this.add('c|~Zarel|Your mom');
@@ -485,8 +491,8 @@ exports.Formats = [
 				this.add('c|&jdarden|Did someone call for some BALK?');
 			}
 			if (name === 'okuu') {
-				sentences = ["Current Discussion Topics: Benefits of Nuclear Energy, green raymoo worst raymoo, ...", "Current Discussion Topics: I ate the Sun - AMA, Card Games inside of Fighting Games, ...", "Current Discussion Topics: Our testing process shouldn't include Klaxons, Please remove Orin from keyboard prior to entering chat, ...", "Current Discussion Topics: Please refrain from eating crow, We'll get out of Beta once we handle all of this Alpha Decay, ...", "Current Discussion Topics: Schroedinger's Chen might still be in that box, I'm So Meta Even This Acronym, ...", "Current Discussion Topics: What kind of idiot throws knives into a thermonuclear explosion?, わからない ハハハ, ..."].randomize();
-				this.add("raw|<div class=\"broadcast-blue\"><b>" + sentences[0] + "</b></div>");
+				sentences = ["Current Discussion Topics: Benefits of Nuclear Energy, green raymoo worst raymoo, ...", "Current Discussion Topics: I ate the Sun - AMA, Card Games inside of Fighting Games, ...", "Current Discussion Topics: Our testing process shouldn't include Klaxons, Please remove Orin from keyboard prior to entering chat, ...", "Current Discussion Topics: Please refrain from eating crow, We'll get out of Beta once we handle all of this Alpha Decay, ...", "Current Discussion Topics: Schroedinger's Chen might still be in that box, I'm So Meta Even This Acronym, ...", "Current Discussion Topics: What kind of idiot throws knives into a thermonuclear explosion?, わからない ハハハ, ..."];
+				this.add("raw|<div class=\"broadcast-blue\"><b>" + this.sample(sentences) + "</b></div>");
 			}
 			if (name === 'sirdonovan') {
 				this.add('c|&sirDonovan|Oh, a battle? Let me finish my tea and crumpets');
@@ -512,14 +518,14 @@ exports.Formats = [
 				this.add("c|@Ascriptmaster|Good luck, I'm behind 7 proxies");
 			}
 			if (name === 'asgdf') {
-				sentences = ["Steel waters run deep, they say!", "I will insteell fear in your heart!", "Man the harpuns!"].randomize();
-				this.add('c|@asgdf|' + sentences[0]);
+				sentences = ["Steel waters run deep, they say!", "I will insteell fear in your heart!", "Man the harpuns!"];
+				this.add('c|@asgdf|' + this.sample(sentences));
 			}
 			if (name === 'audiosurfer') {
 				pokemon.phraseIndex = this.random(3);
 				if (pokemon.phraseIndex === 2) {
 					let singers = ['Waxahatchee', 'Speedy Ortiz', 'Sufjan Stevens', 'Kendrick Lamar'];
-					this.add('c|@Audiosurfer|Have you heard the new ' + singers[this.random(4)] + ' song?');
+					this.add('c|@Audiosurfer|Have you heard the new ' + this.sample(singers) + ' song?');
 				} else if (pokemon.phraseIndex === 1) {
 					this.add('c|@Audiosurfer|If you were worth playing you wouldn\'t be on the ladder.');
 				} else {
@@ -530,21 +536,21 @@ exports.Formats = [
 				this.add('c|@barton|free passion');
 			}
 			if (name === 'bean') {
-				sentences = ["Everybody wants to be a cat", "if you KO me i'll ban u on PS", "just simply outplay the coin-toss"].randomize();
-				this.add('c|@bean|' + sentences[0]);
+				sentences = ["Everybody wants to be a cat", "if you KO me i'll ban u on PS", "just simply outplay the coin-toss"];
+				this.add('c|@bean|' + this.sample(sentences));
 			}
 			if (name === 'beowulf') {
 				this.add('c|@Beowulf|Grovel peasant, you are in the presence of the RNGesus');
 			}
 			if (name === 'biggie') {
-				sentences = ["Now I'm in the limelight cause I rhyme tight", "HAPPY FEET! WOMBO COMBO!", "You finna mess around and get dunked on"].randomize();
-				this.add('c|@BiGGiE|' + sentences[0]);
+				sentences = ["Now I'm in the limelight cause I rhyme tight", "HAPPY FEET! WOMBO COMBO!", "You finna mess around and get dunked on"];
+				this.add('c|@BiGGiE|' + this.sample(sentences));
 			}
 			if (name === 'blitzamirin') {
 				this.add('c|@Blitzamirin|How Can Mirrors Be Real If Our Eyes Aren\'t Real? ╰( ~ ◕ ᗜ ◕ ~ )੭━☆ﾟ.*･｡ﾟ');
 			}
 			if (name === 'businesstortoise') {
-				this.add('c|@Business Tortoise|' + ["Another day, another smile :)", "Hello this is steve, how may I help you?"][this.random(2)]);
+				this.add('c|@Business Tortoise|' + this.sample(["Another day, another smile :)", "Hello this is steve, how may I help you?"]));
 			}
 			if (name === 'coolstorybrobat') {
 				pokemon.phraseIndex = this.random(5);
@@ -571,7 +577,7 @@ exports.Formats = [
 			}
 			if (name === 'eeveegeneral') {
 				sentences = ['Eevee army assemble!', 'To the ramparts!', 'You and what army?'];
-				this.add('c|@Eevee General|' + sentences[this.random(3)]);
+				this.add('c|@Eevee General|' + this.sample(sentences));
 			}
 			if (name === 'electrolyte') {
 				this.add('c|@Electrolyte|Eyyy where the middle school azn girls at??');
@@ -624,8 +630,8 @@ exports.Formats = [
 					this.add('-message', '░░░▀▀████████████████████▀');
 					this.add('c|@Genesect|/me tips fedora');
 				} else {
-					sentences = ["(ง ͠ ͠° ͟ل͜ ͡°)ง sᴏᴜɴᴅs ᴅᴏɴɢᴇʀᴏᴜs... ɪᴍ ɪɴ (ง ͠ ͠° ͟ل͜ ͡°)ง", 'http://pastebin.com/8r0jgDd7 become a mod today!'].randomize();
-					this.add('c|@Genesect|' + sentences[0]);
+					sentences = ["(ง ͠ ͠° ͟ل͜ ͡°)ง sᴏᴜɴᴅs ᴅᴏɴɢᴇʀᴏᴜs... ɪᴍ ɪɴ (ง ͠ ͠° ͟ل͜ ͡°)ง", 'http://pastebin.com/8r0jgDd7 become a mod today!'];
+					this.add('c|@Genesect|' + this.sample(sentences));
 				}
 			}
 			if (name === 'hippopotas') {
@@ -636,13 +642,13 @@ exports.Formats = [
 			}
 			if (name === 'innovamania') {
 				sentences = ['Don\'t take this seriously', 'These Black Glasses sure look cool', 'Ready for some fun?( ͡° ͜ʖ ͡°)', '( ͡° ͜ʖ ͡°'];
-				this.add('c|@innovamania|' + sentences[this.random(4)]);
+				this.add('c|@innovamania|' + this.sample(sentences));
 			}
 			if (name === 'jac') {
 				this.add('c|@Jac|YAAAAAAAAAAAAAAAS');
 			}
 			if (name === 'jinofthegale') {
-				this.add('c|@jin of the gale|' + ['3...2...1... LET IT RIP!', 'My bit-beast is going to eat you alive!'][this.random(2)]);
+				this.add('c|@jin of the gale|' + this.sample(['3...2...1... LET IT RIP!', 'My bit-beast is going to eat you alive!']));
 			}
 			if (name === 'kostitsynkun') {
 				this.add('c|@Kostitsyn-kun|Kyun ★ Kyun~');
@@ -667,8 +673,8 @@ exports.Formats = [
 				this.add('c|@Level 51|Happiness and rainbows, hurrah!');
 			}
 			if (name === 'lyto') {
-				sentences = ["This is divine retribution!", "I will handle this myself!", "Let battle commence!"].randomize();
-				this.add('c|@Lyto|' + sentences[0]);
+				sentences = ["This is divine retribution!", "I will handle this myself!", "Let battle commence!"];
+				this.add('c|@Lyto|' + this.sample(sentences));
 			}
 			if (name === 'marty') {
 				this.add('c|@Marty|Prepare yourself.');
@@ -690,7 +696,7 @@ exports.Formats = [
 			}
 			if (name === 'qtrx') {
 				sentences = ["cutie are ex", "q-trix", "quarters", "cute T-rex", "Qatari", "random letters", "spammy letters", "asgdf"];
-				this.add('c|@qtrx|omg DONT call me \'' + sentences[this.random(8)] + '\' pls respect my name its very special!!1!');
+				this.add('c|@qtrx|omg DONT call me \'' + this.sample(sentences) + '\' pls respect my name its very special!!1!');
 			}
 			if (name === 'queez') {
 				this.add('c|@Queez|B-be gentle');
@@ -704,7 +710,7 @@ exports.Formats = [
 					this.add('c|@Relados|lol italians');
 				} else {
 					sentences = ['lmfao why are you even playing this game', 'and now, to unleash screaming temporal doom', 'rof'];
-					this.add('c|@Relados|' + sentences[this.random(3)]);
+					this.add('c|@Relados|' + this.sample(sentences));
 				}
 			}
 			if (name === 'reverb') {
@@ -712,7 +718,7 @@ exports.Formats = [
 			}
 			if (name === 'rosiethevenusaur') {
 				sentences = ['!dt party', 'Are you Wifi whitelisted?', 'Read the roomintro!'];
-				this.add('c|@RosieTheVenusaur|' + sentences[this.random(3)]);
+				this.add('c|@RosieTheVenusaur|' + this.sample(sentences));
 			}
 			if (name === 'scalarmotion') {
 				this.add('-message', 'sraclrlamtio got prmotd to driier');
@@ -724,30 +730,30 @@ exports.Formats = [
 			}
 			if (name === 'shamethat') {
 				sentences = ['no guys stop fighting', 'mature people use their words', 'please direct all attacks to user: beowulf'];
-				this.add('c|@Shame That|' + sentences[this.random(3)]);
+				this.add('c|@Shame That|' + this.sample(sentences));
 			}
 			if (name === 'skitty') {
 				this.add('c|@Skitty|\\_$-_-$_/');
 			}
 			if (name === 'spydreigon') {
 				sentences = ['curry consumer', 'try to keep up', 'fucking try to knock me down', 'Sometimes I slather myself in vasoline and pretend I\'m a slug', 'I\'m really feeling it!'];
-				this.add('c|@Spydreigon|' + sentences[this.random(5)]);
+				this.add('c|@Spydreigon|' + this.sample(sentences));
 			}
 			if (name === 'steamroll') {
 				if (!pokemon.isLead) {
 					sentences = ['You\'re in for it now!', 'Welcome to a new world of pain!', 'This is going to be **__fun__**...', 'Awesome! Imma deck you in the shnoz!'];
-					this.add('c|@Steamroll|' + sentences[this.random(4)]);
+					this.add('c|@Steamroll|' + this.sample(sentences));
 				} else {
 					pokemon.isLead = false;
 				}
 			}
 			if (name === 'steeledges') {
-				sentences = ["In this moment, I am euphoric. Not because of any phony god's blessing. But because, I am enlightened by my own intelligence.", "Potent Potables for $200, Alex."].randomize();
-				this.add('c|@SteelEdges|' + sentences[0]);
+				sentences = ["In this moment, I am euphoric. Not because of any phony god's blessing. But because, I am enlightened by my own intelligence.", "Potent Potables for $200, Alex."];
+				this.add('c|@SteelEdges|' + this.sample(sentences));
 			}
 			if (name === 'temporaryanonymous') {
 				sentences = ['Hey, hey, can I gently scramble your insides (just for laughs)? ``hahahaha``', 'check em', 'If you strike me down, I shall become more powerful than you can possibly imagine! I have a strong deathrattle effect and I cannot be silenced!'];
-				this.add('c|@Temporaryanonymous|' + sentences[this.random(3)]);
+				this.add('c|@Temporaryanonymous|' + this.sample(sentences));
 			}
 			if (name === 'test2017') {
 				let quacks = '';
@@ -755,12 +761,12 @@ exports.Formats = [
 				do {
 					count++;
 					quacks = quacks + 'QUACK!';
-				} while (this.random(3) !== 2 && count < 15);
+				} while (this.randomChance(2, 3) && count < 15);
 				this.add('c|@Test2017|' + quacks);
 			}
 			if (name === 'tfc') {
 				sentences = ['Here comes the king', ' this chat sucks', 'Coronis smells'];
-				this.add('c|@TFC|' + sentences[this.random(3)]);
+				this.add('c|@TFC|' + this.sample(sentences));
 			}
 			if (name === 'tgmd') {
 				this.add('c|@TGMD|I\'m a dog :]');
@@ -769,7 +775,7 @@ exports.Formats = [
 				this.add('c|@Timbuktu|plot twist');
 			}
 			if (name === 'trickster') {
-				this.add('c|@Trickster|' + ['I do this for free, you know.', 'Believe in the me that believes in you!'][this.random(2)]);
+				this.add('c|@Trickster|' + this.sample(['I do this for free, you know.', 'Believe in the me that believes in you!']));
 			}
 			if (name === 'trinitrotoluene') {
 				this.add('c|@trinitrotoluene|pls no hax');
@@ -813,11 +819,11 @@ exports.Formats = [
 			}
 			if (name === 'arcticblast') {
 				sentences = ['BEAR MY ARCTIC BLAST', 'lmao what kind of team is this', 'guys guys guess what?!?!?!?!', 'Double battles are completely superior to single battles.', 'I miss the days when PS never broke 100 users and all the old auth were still around.'];
-				this.add('c|%Arcticblast|' + sentences[this.random(5)]);
+				this.add('c|%Arcticblast|' + this.sample(sentences));
 			}
 			if (name === 'articuno') {
 				sentences = ['Don\'t hurt me, I\'m a gril!', '/me quivers **violently**', 'Don\'t make me use my ban whip...'];
-				this.add('c|%Articuno|' + sentences[this.random(3)]);
+				this.add('c|%Articuno|' + this.sample(sentences));
 			}
 			if (name === 'astara') {
 				this.add('c|%Ast☆arA|I\'d rather take a nap, I hope you won\'t be a petilil shit, Eat some rare candies and get on my level.');
@@ -836,7 +842,7 @@ exports.Formats = [
 			}
 			if (name === 'crestfall') {
 				sentences = ['On wings of night.', 'Let us hunt those who have fallen to darkness.'];
-				this.add('c|%Crestfall|' + sentences[this.random(2)]);
+				this.add('c|%Crestfall|' + this.sample(sentences));
 			}
 			if (name === 'feliburn') {
 				this.add('c|%Feliburn|Come on!');
@@ -858,7 +864,7 @@ exports.Formats = [
 			}
 			if (name === 'majorbling') {
 				sentences = ['(ゞ๑⚈ ˳̫⚈๑) ♡', 'If you can\'t win contests as well as battles, your team is bad~ <3', '♡ Dedenne is too cute to KO ♡'];
-				this.add('c|%Majorbling|' + sentences[this.random(3)]);
+				this.add('c|%Majorbling|' + this.sample(sentences));
 			}
 			if (name === 'raseri') {
 				this.add('c|%raseri|ban prinplup');
@@ -868,7 +874,7 @@ exports.Formats = [
 			}
 			if (name === 'uselesstrainer') {
 				sentences = ['huehuehuehue', 'PIZA', 'SPAGUETI', 'RAVIOLI RAVIOLI GIVE ME THE FORMUOLI', 'get ready for PUN-ishment'];
-				this.add('c|%useless trainer|' + sentences[this.random(5)]);
+				this.add('c|%useless trainer|' + this.sample(sentences));
 			}
 			if (name === 'vacate') {
 				this.add('c|%Vacate|sticky situation');
@@ -896,7 +902,7 @@ exports.Formats = [
 				} else {
 					switch (foe) {
 					case 'bmelts':
-						sentence = ['attacks bmelts with a heavy dosage of fun', 'destroys bmelts with an ion ray of fun times'][this.random(2)];
+						sentence = this.sample(['attacks bmelts with a heavy dosage of fun', 'destroys bmelts with an ion ray of fun times']);
 						break;
 					case 'snowflakes':
 						sentence = 'pounces on Snowflakes with a surplus of humour';
@@ -932,7 +938,7 @@ exports.Formats = [
 				} else {
 					switch (name) {
 					case 'bmelts':
-						sentence = ['attacks bmelts with a heavy dosage of fun', 'destroys bmelts with an ion ray of fun times'][this.random(2)];
+						sentence = this.sample(['attacks bmelts with a heavy dosage of fun', 'destroys bmelts with an ion ray of fun times']);
 						break;
 					case 'snowflakes':
 						sentence = 'pounces on Snowflakes with a surplus of humour';
@@ -975,8 +981,8 @@ exports.Formats = [
 
 				if (targetSpecies !== pokemon.template.species) {
 					this.add('message', pokemon.name + ((move.category === 'Status') ? ' has reverted to Land Forme!' : ' took to the sky once again!'));
-					let template = this.getTemplate(targetSpecies);
-					pokemon.formeChange(targetSpecies);
+					pokemon.formeChange(this.getTemplate(targetSpecies));
+					let template = pokemon.template;
 					pokemon.baseTemplate = template;
 					pokemon.setAbility(template.abilities['0']);
 					pokemon.baseAbility = template.ability;
@@ -986,7 +992,7 @@ exports.Formats = [
 			}
 
 			// Break the secondary of Dell's sig if an attack is attempted.
-			if (target.volatiles['parry'] && move.category !== 'Status') {
+			if (target && target.volatiles['parry'] && move.category !== 'Status') {
 				target.removeVolatile('parry');
 			}
 
@@ -1024,7 +1030,7 @@ exports.Formats = [
 			}
 			if (name === 'chaos') {
 				if (name === toId(pokemon.name)) this.add('c|~chaos|//forcewin chaos');
-				if (this.random(1000) === 420) {
+				if (this.randomChance(1, 1000)) {
 					// Shouldn't happen much, but if this happens it's hilarious.
 					this.add('c|~chaos|actually');
 					this.add('c|~chaos|//forcewin ' + pokemon.side.name);
@@ -1035,17 +1041,17 @@ exports.Formats = [
 				this.add('c|~haunter|you can\'t compare with my powers');
 			}
 			if (name === 'jasmine') {
-				this.add('c|~Jasmine|' + ['I meant to do that.', 'God, I\'m the worse digimon.'][this.random(2)]);
+				this.add('c|~Jasmine|' + this.sample(['I meant to do that.', 'God, I\'m the worse digimon.']));
 			}
 			if (name === 'joim') {
 				sentences = ['AVENGE ME, KIDS! AVEEEENGEEE MEEEEEE!!', '``This was a triumph, I\'m making a note here: HUGE SUCCESS.``', '``Remember when you tried to kill me twice? Oh how we laughed and laughed! Except I wasn\'t laughing.``', '``I\'m not even angry, I\'m being so sincere right now, even though you broke my heart and killed me. And tore me to pieces. And threw every piece into a fire.``'];
-				this.add('c|~Joim|' + sentences[this.random(4)]);
+				this.add('c|~Joim|' + this.sample(sentences));
 			}
 			if (name === 'theimmortal') {
 				this.add('c|~The Immortal|Oh how wrong we were to think immortality meant never dying.');
 			}
 			if (name === 'v4') {
-				this.add('c|~V4|' + ['Back to irrevelance for now n_n', 'Well that was certainly a pleasant fall.'][this.random(2)]);
+				this.add('c|~V4|' + this.sample(['Back to irrevelance for now n_n', 'Well that was certainly a pleasant fall.']));
 			}
 			if (name === 'zarel') {
 				this.add('c|~Zarel|your mom');
@@ -1090,7 +1096,7 @@ exports.Formats = [
 				this.add('c|@Ascriptmaster|Too overpowered. I\'m nerfing you next patch');
 			}
 			if (name === 'asgdf') {
-				this.add('c|@asgdf|' + ['Looks like I spoke too hasteely', 'You only won because I couldn\'t think of a penguin pun!'][this.random(2)]);
+				this.add('c|@asgdf|' + this.sample(['Looks like I spoke too hasteely', 'You only won because I couldn\'t think of a penguin pun!']));
 			}
 			if (name === 'audiosurfer') {
 				if (pokemon.phraseIndex === 2) {
@@ -1102,18 +1108,18 @@ exports.Formats = [
 				}
 			}
 			if (name === 'barton') {
-				this.add('c|@barton|' + ['ok', 'haha?'][this.random(2)]);
+				this.add('c|@barton|' + this.sample(['ok', 'haha?']));
 			}
 			if (name === 'bean') {
 				sentences = ['that\'s it ur getting banned', 'meow', '(✖╭╮✖)'];
-				this.add('c|@bean|' + sentences[this.random(3)]);
+				this.add('c|@bean|' + this.sample(sentences));
 			}
 			if (name === 'beowulf') {
 				this.add('c|@Beowulf|There is no need to be mad');
 			}
 			if (name === 'biggie') {
 				sentences = ['It was all a dream', 'It\'s gotta be the shoes', 'ヽ༼ຈل͜ຈ༽ﾉ RIOT ヽ༼ຈل͜ຈ༽ﾉ'];
-				this.add('c|@BiGGiE|' + sentences[this.random(3)]);
+				this.add('c|@BiGGiE|' + this.sample(sentences));
 			}
 			if (name === 'blitzamirin') {
 				this.add('c|@Blitzamirin| The Mirror Can Lie It Doesn\'t Show What\'s Inside! ╰〳~ ✖ Д ✖ ~〵⊃━☆ﾟ.*･｡ﾟ');
@@ -1175,7 +1181,7 @@ exports.Formats = [
 				this.add('c|@Dell|──▀████████▀▀███████▀──────────');
 			}
 			if (name === 'eeveegeneral') {
-				this.add('c|@Eevee General|' + ['Retreat!', 'You may have won the battle, but you haven\'t won the war!', 'I salute you o7'][this.random(3)]);
+				this.add('c|@Eevee General|' + this.sample(['Retreat!', 'You may have won the battle, but you haven\'t won the war!', 'I salute you o7']));
 			}
 			if (name === 'electrolyte') {
 				this.add('c|@Electrolyte|just wait till I hit puberty...');
@@ -1216,14 +1222,14 @@ exports.Formats = [
 			}
 			if (name === 'innovamania') {
 				sentences = ['Did you rage quit?', 'How\'d you lose with this set?', 'Pm Nani Man to complain about this set ( ͡° ͜ʖ ͡°)'];
-				this.add('c|@innovamania|' + sentences[this.random(3)]);
+				this.add('c|@innovamania|' + this.sample(sentences));
 			}
 			if (name === 'jac') {
 				this.add('c|@Jac|bruh');
 			}
 			if (name === 'jinofthegale') {
 				sentences = ['ヽ༼ຈل͜ຈ༽ﾉ You\'ve upped your game ヽ༼ຈل͜ຈ༽ﾉ?', 'Please don\'t steal my bit-beast!', 'Should have used Black'];
-				this.add('c|@jin of the gale|' + sentences[this.random(3)]);
+				this.add('c|@jin of the gale|' + this.sample(sentences));
 			}
 			if (name === 'kostitsynkun') {
 				this.add('c|@Kostitsyn-kun|Kyun ★ Kyun~');
@@ -1235,7 +1241,7 @@ exports.Formats = [
 				this.add('c|@Lawrence III|Fuck off.');
 			}
 			if (name === 'layell') {
-				this.add('c|@Layell|' + ['Alas poor me', 'Goodnight sweet prince'][this.random(2)]);
+				this.add('c|@Layell|' + this.sample(['Alas poor me', 'Goodnight sweet prince']));
 			}
 			if (name === 'legitimateusername') {
 				this.add('c|@LegitimateUsername|``This isn\'t brave. It\'s murder. What did I ever do to you?``');
@@ -1244,25 +1250,25 @@ exports.Formats = [
 				this.add('c|@Level 51|You made me sad. That\'s the opposite of happy.');
 			}
 			if (name === 'lyto') {
-				this.add('c|@Lyto|' + ['Unacceptable!', 'Mrgrgrgrgr...'][this.random(2)]);
+				this.add('c|@Lyto|' + this.sample(['Unacceptable!', 'Mrgrgrgrgr...']));
 			}
 			if (name === 'marty') {
 				this.add('c|@Marty|Your fate is sealed');
 			}
 			if (name === 'morfent') {
 				sentences = ['Hacking claims the lives of over 2,000 registered laddering alts every day.', 'Every 60 seconds in Africa, a minute passes. Together we can stop this. Please spread the word.', 'SOOOOOO $TONED FUCK MAN AW $HIT NIGGA HELLA MOTHER FUCKING 666 ODD FUTURE MAN BRO CHECK THIS OUT MY SWAG WITH THE WHAT WHOLE 666 420 $$$$ HOLLA HOLLA GET DOLLA SWED CASH FUCKING MARIJUANA CIGARETTES GANGSTA GANGSTA EAZY-E C;;R;E;A;M; SO BAKED OFF THE BOBMARLEY GANJA 420 SHIT PURE OG KUUSSHHH LEGALIZE CRYSTAL WEED'];
-				this.add('c|@Morfent|' + sentences[this.random(3)]);
+				this.add('c|@Morfent|' + this.sample(sentences));
 			}
 			if (name === 'naniman') {
 				sentences = ['rof', "deck'd", '**praise** TI'];
-				this.add('c|@Nani Man|' + sentences[this.random(3)]);
+				this.add('c|@Nani Man|' + this.sample(sentences));
 			}
 			if (name === 'phil') {
 				this.add('c|@phil|The salt is real right now');
 			}
 			if (name === 'qtrx') {
 				sentences = ['Keyboard not found; press **Ctrl + W** to continue...', 'hfowurfbiEU;DHBRFEr92he', 'At least my name ain\t asgdf...'];
-				this.add('c|@qtrx|' + sentences[this.random(3)]);
+				this.add('c|@qtrx|' + this.sample(sentences));
 			}
 			if (name === 'queez') {
 				this.add('c|@Queez|(◕‿◕✿)');
@@ -1272,13 +1278,13 @@ exports.Formats = [
 			}
 			if (name === 'relados') {
 				sentences = ['BS HAX', 'rekt', 'rof'];
-				this.add('c|@Relados|' + sentences[this.random(3)]);
+				this.add('c|@Relados|' + this.sample(sentences));
 			}
 			if (name === 'reverb') {
 				this.add('c|@Reverb|stupid communist dipshit');
 			}
 			if (name === 'rosiethevenusaur') {
-				this.add('c|@RosieTheVenusaur|' + ['SD SKARM SHALL LIVE AGAIN!!!', 'Not my WiFi!'][this.random(2)]);
+				this.add('c|@RosieTheVenusaur|' + this.sample(['SD SKARM SHALL LIVE AGAIN!!!', 'Not my WiFi!']));
 			}
 			if (name === 'scalarmotion') {
 				this.add('-message', 'scalarmotion was banned by Nani Man. (spangj)');
@@ -1289,7 +1295,7 @@ exports.Formats = [
 			}
 			if (name === 'shamethat') {
 				sentences = ["ok agree to disagree", "rematch, don't attack this time", "i blame beowulf"];
-				this.add('c|@Shame That|' + sentences[this.random(3)]);
+				this.add('c|@Shame That|' + this.sample(sentences));
 			}
 			if (name === 'skitty') {
 				this.add('c|@Skitty|!learn skitty, roleplay');
@@ -1297,40 +1303,40 @@ exports.Formats = [
 			}
 			if (name === 'spydreigon') {
 				sentences = ['lolhax', 'crit mattered', 'bruh cum @ meh', '>thinking Pokemon takes any skill'];
-				this.add('c|@Spydreigon|' + sentences[this.random(4)]);
+				this.add('c|@Spydreigon|' + this.sample(sentences));
 			}
 			if (name === 'steamroll') {
 				if (!pokemon.killedSome) {
 					sentence = 'Goddamn I feel useless.';
 				} else {
 					sentences = ['...And I saw, as it were... Spaghetti.', "Agh, shouldn't of been that easy.", 'Hope that was enough.'];
-					sentence = sentences[this.random(3)];
+					sentence = this.sample(sentences);
 				}
 				this.add('c|@Steamroll|' + sentence);
 			}
 			if (name === 'steeledges') {
-				this.add('c|@SteelEdges|' + ['You know, I never really cared for Hot Pockets.', 'Suck it, Trebek. Suck it long, and suck it hard.'][this.random(2)]);
+				this.add('c|@SteelEdges|' + this.sample(['You know, I never really cared for Hot Pockets.', 'Suck it, Trebek. Suck it long, and suck it hard.']));
 			}
 			if (name === 'temporaryanonymous') {
 				sentences = [';_;7', 'This kills the tempo', 'I\'m kill. rip.', 'S-senpai! Y-you\'re being too rough! >.<;;;;;;;;;;;;;;;;;', 'A-at least you checked my dubs right?', 'B-but that\'s impossible! This can\'t be! AAAAAAAAAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHGH'];
-				this.add('c|@Temporaryanonymous|' + sentences[this.random(6)]);
+				this.add('c|@Temporaryanonymous|' + this.sample(sentences));
 			}
 			if (name === 'test2017') {
 				sentences = ['DUCK YOU!', 'GO DUCK YOURSELF!', 'SUCK MY DUCK!'];
-				this.add('c|@Test2017|' + sentences[this.random(3)]);
+				this.add('c|@Test2017|' + this.sample(sentences));
 			}
 			if (name === 'tfc') {
-				this.add('c|@TFC|' + ['brb gotta piss', 'oh thats bs'][this.random(2)]);
+				this.add('c|@TFC|' + this.sample(sentences));
 			}
 			if (name === 'tgmd') {
 				this.add('c|@TGMD|rip in pepsi');
 			}
 			if (name === 'timbuktu') {
-				this.add('c|@Timbuktu|' + ['</3', 'broken'][this.random(2)]);
+				this.add('c|@Timbuktu|' + this.sample(sentences));
 			}
 			if (name === 'trickster') {
 				sentences = ['RIP in pepperoni cappuccino pistachio.', 'El psy congroo.', 'W-wow! Hacker!', '“This guy\'s team is CRAZY!” ☑ “My team can\'t win against a team like that” ☑ "He NEEDED precisely those two crits to win" ☑ “He led with the only Pokemon that could beat me” ☑ "He got the perfect hax" ☑ “There was nothing I could do” ☑ “I played that perfectly”', '(⊙﹏⊙✿)'];
-				this.add('c|@Trickster|' + sentences[this.random(5)]);
+				this.add('c|@Trickster|' + this.sample(sentences));
 			}
 			if (name === 'trinitrotoluene') {
 				this.add('c|@trinitrotoluene|why hax @_@');
@@ -1366,19 +1372,19 @@ exports.Formats = [
 			// Drivers.
 			if (name === 'aelita') {
 				sentences = ['Oh no, the Scyphozoa\'s here!', 'Devirtualized...', 'Stones. Aelita Stones. Like the rock group. I\'m Odd\'s cousin from Canada.'];
-				this.add('c|%Aelita|' + sentences[this.random(3)]);
+				this.add('c|%Aelita|' + this.sample(sentences));
 			}
 			if (name === 'arcticblast') {
 				sentences = ['totally had it but choked, gg', 'I would have won if it weren\'t for HAX', 'oh', 'Double battles are stil superior to single battles.', 'newfag'];
-				this.add('c|%Arcticblast|' + sentences[this.random(5)]);
+				this.add('c|%Arcticblast|' + this.sample(sentences));
 			}
 			if (name === 'articuno') {
 				sentences = ['This is why you don\'t get any girls.', 'fite me irl', 'Actually, I don\'t have a gender...'];
-				this.add('c|%Articuno|' + sentences[this.random(3)]);
+				this.add('c|%Articuno|' + this.sample(sentences));
 			}
 			if (name === 'astara') {
 				sentences = ['/me twerks into oblivion', 'good night ♥', 'Astara Vista Baby'];
-				this.add('c|%Ast☆arA|' + sentences[this.random(3)]);
+				this.add('c|%Ast☆arA|' + this.sample(sentences));
 			}
 			if (name === 'asty') {
 				this.add('c|%Asty|:^( Bottom kek');
@@ -1396,10 +1402,10 @@ exports.Formats = [
 				this.add('c|%Crestfall|Vayne [All Chat]: Outplayed me gg no re');
 			}
 			if (name === 'feliburn') {
-				this.add('c|%Feliburn|' + ['BHUWUUU!', 'I like shorts! They\'re comfy and easy to wear!'][this.random(2)]);
+				this.add('c|%Feliburn|' + this.sample(['BHUWUUU!', 'I like shorts! They\'re comfy and easy to wear!']));
 			}
 			if (name === 'galbia') {
-				this.add('c|%galbia|' + ['azz e mo', 'rip luck :('][this.random(2)]);
+				this.add('c|%galbia|' + this.sample(['azz e mo', 'rip luck :(']));
 			}
 			if (name === 'jellicent') {
 				this.add('c|%Jellicent|X_X');
@@ -1421,7 +1427,7 @@ exports.Formats = [
 			}
 			if (name === 'uselesstrainer') {
 				sentences = ['MATTERED', 'CAIO', 'ima repr0t', 'one day i\'ll turn into a beautiful butterfly'];
-				this.add('c|%useless trainer|' + sentences[this.random(4)]);
+				this.add('c|%useless trainer|' + this.sample(sentences));
 			}
 			if (name === 'vacate') {
 				this.add('c|%Vacate|dam it');
@@ -1463,8 +1469,8 @@ exports.Formats = [
 			// Shaymin forme change.
 			if (toId(pokemon.name) === 'shaymin' && !pokemon.illusion) {
 				if (pokemon.template.species === 'Shaymin') {
-					let template = this.getTemplate('Shaymin-Sky');
-					pokemon.formeChange('Shaymin-Sky');
+					pokemon.formeChange(this.getTemplate('Shaymin-Sky'));
+					let template = pokemon.template;
 					pokemon.baseTemplate = template;
 					pokemon.setAbility(template.abilities['0']);
 					pokemon.baseAbility = template.ability;
@@ -1492,24 +1498,23 @@ exports.Formats = [
 				this.damage(source.maxhp / 10, source, source, this.getItem('lifeorb'));
 			}
 		},
-		onModifyPokemon: function (pokemon) {
+		onDisableMove: function (pokemon) {
 			let name = toId(pokemon.name);
 			// Enforce choice item locking on custom moves.
 			// qtrx only has one move anyway. This isn't implemented for Cathy since her moves are all custom. Don't trick her a Scarf!
 			if (name !== 'qtrx' && name !== 'Cathy') {
-				let moves = pokemon.moveset;
-				if (pokemon.getItem().isChoice && pokemon.lastMove === moves[3].id) {
+				let moves = pokemon.moveSlots;
+				if (pokemon.getItem().isChoice && pokemon.lastMove && pokemon.lastMove.id === moves[3].id) {
 					for (let i = 0; i < 3; i++) {
 						if (!moves[i].disabled) {
 							pokemon.disableMove(moves[i].id, false);
-							moves[i].disabled = true;
 						}
 					}
 				}
 			}
 			// Enforce taunt disabling custom moves.
 			if (pokemon.volatiles['taunt']) {
-				let moves = pokemon.moveset;
+				let moves = pokemon.moveSlots;
 				for (let i = 0; i < moves.length; i++) {
 					if (this.getMove(moves[i].id).category === 'Status' && !moves[i].disabled) {
 						pokemon.disableMove(moves[i].id, false);
@@ -1547,7 +1552,7 @@ exports.Formats = [
 					}
 					if (pokemon.volatiles['unownaura'] && !pokemon.fainted && !pokemon.illusion) {
 						this.add('-message', "Your keyboard is reacting to " + pokemon.name + "'s Unown aura!");
-						if (this.random(2) === 1) {
+						if (this.randomChance(1, 2)) {
 							this.useMove('trickroom', pokemon);
 						} else {
 							this.useMove('wonderroom', pokemon);
@@ -1574,7 +1579,7 @@ exports.Formats = [
 							'this is just the internet -- nothing matters!',
 							'let\'s have fun ALL NIGHT LONG!!!!!!!!!!!!!!!!!!!!!!',
 						];
-						this.add('c|HappyFunTimes|' + messages[this.random(15)]);
+						this.add('c|HappyFunTimes|' + this.sample(messages));
 					}
 					if (pokemon.volatiles['parry']) {
 						// Dell hasn't been attacked.
@@ -1675,9 +1680,9 @@ exports.Formats = [
 						this.heal(pokemon.maxhp);
 						this.add('-status', pokemon, 'slp', '[from] move: Rest');
 					}
-					let moves = pokemon.moveset.map(moveData => moveData.id).filter(moveId => moveId !== 'sleeptalk');
+					let moves = pokemon.moveSlots.map(moveData => moveData.id).filter(moveId => moveId !== 'sleeptalk');
 					let move = '';
-					if (moves.length) move = moves[this.random(moves.length)];
+					if (moves.length) move = this.sample(moves);
 					if (!move) return false;
 					this.useMove(move, pokemon);
 					let activate = false;
@@ -1798,7 +1803,7 @@ exports.Formats = [
 					}
 				};
 				move.onHit = function (target, source) {
-					let lastMove = source.illusion.moveset[source.illusion.moves.length - 1];
+					let lastMove = source.illusion.moveSlots[source.illusion.moves.length - 1];
 					this.useMove(lastMove.id, source);
 				};
 			}
@@ -1818,7 +1823,7 @@ exports.Formats = [
 					this.add('-anim', source, "Super Fang", target);
 				};
 				move.onHit = function (pokemon) {
-					if (this.random(100) < 95) {
+					if (this.randomChance(95, 100)) {
 						pokemon.trySetStatus('par');
 					} else {
 						pokemon.addVolatile('confusion');
@@ -1836,7 +1841,7 @@ exports.Formats = [
 				};
 				move.onHit = function (pokemon) {
 					this.add('c|&verbatim|DEFENESTRATION!');
-					if (this.random(20) === 1) pokemon.switchFlag = true;
+					if (this.randomChance(1, 20)) pokemon.switchFlag = true;
 				};
 				move.onMoveFail = function (target, source, move) {
 					this.damage(source.maxhp / 2, source, source, 'glasscannon');
@@ -1850,7 +1855,7 @@ exports.Formats = [
 					let oldAbility = pokemon.setAbility('slowstart');
 					if (oldAbility) {
 						this.add('-ability', pokemon, 'Slow Start', '[from] move: Procrastination');
-						if (this.random(100) < 10) source.faint();
+						if (this.randomChance(1, 10)) source.faint();
 						return;
 					}
 					return false;
@@ -1908,7 +1913,7 @@ exports.Formats = [
 				// Otherwise, all of onTryHit must be rewritten here to add the drop chance.
 				move.onHit = function (pokemon) {
 					this.add('-message', 'I get it now!');
-					if (this.random(100) < 70) {
+					if (this.randomChance(7, 10)) {
 						this.boost({spa:-1, spd:-1}, pokemon, pokemon, move.sourceEffect);
 					}
 				};
@@ -1925,7 +1930,7 @@ exports.Formats = [
 					if (foe.ability !== 'soundproof') {
 						this.add('-message', 'The Audioshield is making a deafening noise!');
 						this.damage(foe.maxhp / 12, foe, pokemon);
-						if (this.random(2) === 1) this.boost({atk:-1, spa:-1}, foe, foe, 'noise damage');
+						if (this.randomChance(1, 2)) this.boost({atk:-1, spa:-1}, foe, foe, 'noise damage');
 					}
 					pokemon.addVolatile('stall');
 				};
@@ -2054,7 +2059,7 @@ exports.Formats = [
 						if (!possibleTypes.length) {
 							return false;
 						}
-						let targetType = possibleTypes[this.random(possibleTypes.length)];
+						let targetType = this.sample(possibleTypes);
 						if (!target.setType(targetType)) {
 							return false;
 						}
@@ -2139,8 +2144,7 @@ exports.Formats = [
 				delete move.secondaries;
 				move.onHit = function (pokemon, source) {
 					let boosts = {};
-					let stats = Object.keys(pokemon.stats).slice(1);
-					boosts[stats[this.random(4)]] = -1;
+					boosts[this.sample(['atk', 'def', 'spa', 'spd'])] = -1;
 					this.boost(boosts, pokemon, source);
 				};
 			}
@@ -2168,7 +2172,7 @@ exports.Formats = [
 					source.removeVolatile('confusion');
 					source.removeVolatile('curse');
 					source.removeVolatile('attract');
-					if (this.random(7) === 1) {
+					if (this.randomChance(1, 7)) {
 						pokemon.side.foe.active[0].addVolatile('attract');
 					}
 				};
@@ -2185,7 +2189,7 @@ exports.Formats = [
 					if (!template.abilities || (pokemon && pokemon.transformed) || (user && user.transformed)) {
 						return false;
 					}
-					if (!user.formeChange(template, true)) {
+					if (!user.formeChange(template, user)) {
 						return false;
 					}
 					user.transformed = true;
@@ -2194,16 +2198,15 @@ exports.Formats = [
 					for (let statName in user.stats) {
 						user.stats[statName] = pokemon.stats[statName];
 					}
-					user.moveset = [];
-					user.moves = [];
-					for (let i = 0; i < pokemon.moveset.length; i++) {
+					user.moveSlots = [];
+					for (let i = 0; i < pokemon.moveSlots.length; i++) {
 						let move = this.getMove(user.set.moves[i]);
-						let moveData = pokemon.moveset[i];
+						let moveData = pokemon.moveSlots[i];
 						let moveName = moveData.move;
 						if (moveData.id === 'hiddenpower') {
 							moveName = 'Hidden Power ' + user.hpType;
 						}
-						user.moveset.push({
+						user.moveSlots.push({
 							move: moveName,
 							id: moveData.id,
 							pp: move.noPPBoosts ? moveData.maxpp : 5,
@@ -2211,7 +2214,6 @@ exports.Formats = [
 							target: moveData.target,
 							disabled: false,
 						});
-						user.moves.push(toId(moveName));
 					}
 					for (let j in pokemon.boosts) {
 						user.boosts[j] = pokemon.boosts[j];
@@ -2238,7 +2240,7 @@ exports.Formats = [
 					return eff; // Shadow moves are SE against all non-Shadow mons.
 				};
 				move.onHit = function (target, source) {
-					if (target.volatiles['partiallytrapped'] && (this.random(100) < 35)) {
+					if (target.volatiles['partiallytrapped'] && (this.randomChance(35, 100))) {
 						target.addVolatile('confusion');
 					}
 				};
@@ -2326,8 +2328,7 @@ exports.Formats = [
 				move.secondaries = [{
 					chance:100,
 					onHit: function (target, source) {
-						let result = this.random(2);
-						if (result < 1) {
+						if (this.randomChance(1, 2)) {
 							target.trySetStatus('brn', source);
 						} else {
 							target.trySetStatus('par', source);
@@ -2353,7 +2354,7 @@ exports.Formats = [
 				move.name = 'KEYBOARD SMASH';
 				move.target = 'normal';
 				move.boosts = null;
-				move.hitcount = [3, 4, 4, 4, 4, 5, 5, 5, 6, 6, 7][this.random(11)];
+				move.hitcount = this.sample([3, 4, 4, 4, 4, 5, 5, 5, 6, 6, 7]);
 				move.onPrepareHit = function (target, source, move) {
 					this.attrLastMove('[still]');
 					this.add('-anim', source, "Fairy Lock", target);
@@ -2371,7 +2372,7 @@ exports.Formats = [
 							gibberish = '';
 							for (let j = 0; j < len; j++) gibberish += String.fromCharCode(48 + this.random(79));
 							this.add('-message', gibberish);
-							this.useMove(hps[this.random(16)], source, target);
+							this.useMove(this.sample(hps), source, target);
 							hits++;
 						}
 					}
@@ -2526,7 +2527,7 @@ exports.Formats = [
 					this.add('-anim', source, "Nasty Plot", target);
 				};
 				move.onHit = function (target, source) {
-					if (this.random(2)) {
+					if (this.randomChance(1, 2)) {
 						this.add('-message', '@SteelEdges failed misserably!');
 						this.boost({spa: -2}, source, source);
 					} else {
@@ -2652,19 +2653,19 @@ exports.Formats = [
 				move.ignoreAbility = true;
 			}
 			if (move.id === 'metronome' && name === 'xfix') {
-				if (pokemon.moveset[3] && pokemon.moveset[3].pp) {
-					pokemon.moveset[3].pp = Math.round(pokemon.moveset[3].pp * 10 + 6) / 10;
+				if (pokemon.moveSlots[3] && pokemon.moveSlots[3].pp) {
+					pokemon.moveSlots[3].pp = Math.round(pokemon.moveSlots[3].pp * 10 + 6) / 10;
 				}
 				move.name = '(Super Glitch)';
 				move.multihit = [2, 5];
 				move.onTryHit = function (target, source) {
 					if (!source.isActive) return null;
-					if (this.random(777) !== 42) return;
+					if (this.randomChance(776, 777)) return;
 					let opponent = pokemon.side.foe.active[0];
 					opponent.setStatus('brn');
 					let possibleStatuses = ['confusion', 'flinch', 'attract', 'focusenergy', 'foresight', 'healblock'];
 					for (let i = 0; i < possibleStatuses.length; i++) {
-						if (this.random(3) === 1) {
+						if (this.randomChance(1, 3)) {
 							opponent.addVolatile(possibleStatuses[i]);
 						}
 					}
@@ -2673,7 +2674,7 @@ exports.Formats = [
 						let noise = '';
 						let random = this.random(40, 81);
 						for (let i = 0; i < random; i++) {
-							if (this.random(4) !== 0) {
+							if (this.randomChance(3, 4)) {
 								// Non-breaking space
 								noise += '\u00A0';
 							} else {
@@ -2758,17 +2759,17 @@ exports.Formats = [
 			}
 			if (move.id === 'psywave' && name === 'astara') {
 				move.name = 'Star Bolt Desperation';
-				move.type = ['???', 'Bug', 'Dark', 'Dragon', 'Electric', 'Fairy', 'Fighting', 'Fire', 'Flying', 'Ghost', 'Grass', 'Ground', 'Ice', 'Normal', 'Poison', 'Psychic', 'Rock', 'Steel', 'Water'][this.random(19)];
+				move.type = this.sample(['???', 'Bug', 'Dark', 'Dragon', 'Electric', 'Fairy', 'Fighting', 'Fire', 'Flying', 'Ghost', 'Grass', 'Ground', 'Ice', 'Normal', 'Poison', 'Psychic', 'Rock', 'Steel', 'Water']);
 				move.damageCallback = function (pokemon) {
 					return pokemon.hp * 7 / 8;
 				};
 				move.onHit = function (target, source) {
-					if (this.random(2) === 1) target.addVolatile('confusion');
-					let status = ['par', 'brn', 'frz', 'psn', 'tox', 'slp'][this.random(6)];
-					if (this.random(2) === 1) target.trySetStatus(status);
+					if (this.randomChance(1, 2)) target.addVolatile('confusion');
+					let status = this.sample(['par', 'brn', 'frz', 'psn', 'tox', 'slp']);
+					if (this.randomChance(1, 2)) target.trySetStatus(status);
 					let boosts = {};
-					let increase = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy'][this.random(6)];
-					let decrease = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy'][this.random(6)];
+					let increase = this.sample(['atk', 'def', 'spa', 'spd', 'spe', 'accuracy']);
+					let decrease = this.sample(['atk', 'def', 'spa', 'spd', 'spe', 'accuracy']);
 					boosts[increase] = 1;
 					boosts[decrease] = -1;
 					this.boost(boosts, source, source);
@@ -2814,7 +2815,7 @@ exports.Formats = [
 					this.add('-anim', pokemon, "Dark Pulse", pokemon);
 				};
 				move.onHit = function () {
-					this.add('c|%Crestfall|' + ['The die is cast...', 'Time for reckoning.'][this.random(2)]);
+					this.add('c|%Crestfall|' + this.sample(['The die is cast...', 'Time for reckoning.']));
 				};
 				move.self = {boosts: {spe:2, evasion:1, def:-2, spd:-2}};
 			}
@@ -2854,10 +2855,10 @@ exports.Formats = [
 				move.accuracy = 100;
 				delete move.onMoveFail;
 				move.onHit = function (target, source) {
-					let result = this.random(100);
 					let chance = source.hasAbility('serenegrace') ? 60 : 30;
-					// If the result is less than 60 or 30, then Kibitz will flinch the target.
-					if (this.willMove(target) && result < chance) {
+					// 30% or 60% chance for Kibits causing the target to flinch.
+					if (this.willMove(target) && this.randomChance(chance, 100)) {
+						// Kibitz will flinch the target.
 						target.addVolatile('flinch');
 					} else if (target.hp !== 0 && !target.newlySwitched) {
 						this.damage(source.maxhp / 3, source, source, 'Kibitz');
@@ -3177,7 +3178,7 @@ exports.Formats = [
 		name: "[Seasonal] You are (not) prepared",
 
 		team: 'randomSeasonalMay2015',
-		mod: 'seasonal',
+		mod: 'you-are-not-prepared',
 		gameType: 'triples',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
 		onBegin: function () {
@@ -3230,6 +3231,7 @@ exports.Formats = [
 	{
 		name: "[Seasonal] Rainbow Road",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a>"],
+		mod: 'gen6',
 
 		team: "randomRainbow",
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
@@ -3239,25 +3241,22 @@ exports.Formats = [
 			this.add('-message', "Using a color move on a Pok\u00e9mon in the same color group is a neutral hit.");
 			this.add('-message', "Use /details [POKEMON] to check its Pok\u00e9dex color.");
 
-			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
-			let physicalnames = {
+			let physicalNames = {
 				'Red': 'Crimson Crash', 'Pink': 'Rose Rush', 'Yellow': 'Saffron Strike', 'Green': 'Viridian Slash',
 				'Blue': 'Blue Bombardment', 'Purple': 'Indigo Impact',
 			};
-			let specialnames = {
+			let specialNames = {
 				'Red': 'Scarlet Shine', 'Pink': 'Coral Catapult', 'Yellow': 'Golden Gleam', 'Green': 'Emerald Flash',
 				'Blue': 'Cerulean Surge', 'Purple': 'Violet Radiance',
 			};
-			for (let i = 0; i < allPokemon.length; i++) {
-				let pokemon = allPokemon[i];
+			for (const pokemon of this.p1.pokemon.concat(this.p2.pokemon)) {
 				let color = pokemon.template.color;
 				let category = (pokemon.stats.atk > pokemon.stats.spa ? 'Physical' : 'Special');
 				let last = pokemon.moves.length - 1;
-				let move = (category === 'Physical' ? physicalnames[color] : specialnames[color]);
+				let move = (category === 'Physical' ? physicalNames[color] : specialNames[color]);
 				if (pokemon.moves[last]) {
-					pokemon.moves[last] = toId(move);
-					pokemon.moveset[last].move = move;
-					pokemon.baseMoveset[last].move = move;
+					pokemon.moveSlots[last].move = move;
+					pokemon.baseMoveSlots[last].move = move;
 				}
 			}
 		},
@@ -3267,7 +3266,7 @@ exports.Formats = [
 
 			let decisions = [];
 			let decision, i;
-			if (side.hadItem || this.random(4) === 0) { // Can never get 2 consecutive turns of items
+			if (side.hadItem || this.randomChance(1, 4)) { // Can never get 2 consecutive turns of items
 				side.hadItem = false;
 				return;
 			}
@@ -3366,7 +3365,7 @@ exports.Formats = [
 			// Enforce Choice Item locking on color moves
 			// Technically this glitches with Klutz, but Lopunny is Brown and will never appear :D
 			if (!pokemon.ignoringItem() && pokemon.getItem().isChoice && pokemon.lastMove === 'swift') {
-				let moves = pokemon.moveset;
+				let moves = pokemon.moveSlots;
 				for (let i = 0; i < moves.length; i++) {
 					if (moves[i].id !== 'swift') {
 						pokemon.disableMove(moves[i].id, false);
@@ -3477,6 +3476,7 @@ exports.Formats = [
 	{
 		name: "[Seasonal] Spoopy Party",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a>"],
+		mod: 'gen6',
 
 		team: 'randomSpoopy',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
@@ -3593,6 +3593,7 @@ exports.Formats = [
 	{
 		name: "[Seasonal] Super Squad Smackdown",
 		desc: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3491902/\">Seasonal Ladder</a>"],
+		mod: 'gen6',
 
 		team: 'randomSeasonalHero',
 		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],

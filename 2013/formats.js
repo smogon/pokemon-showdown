@@ -12,44 +12,46 @@ exports.Formats = [
 	// Valentine Venture, February 2013
 	{
 		name: "[Seasonal] Valentine Venture",
+		mod: 'gen5',
 
 		team: 'randomSeasonalVV',
 		gameType: 'doubles',
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause'],
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'Cancel Mod'],
 	},
 	// Spring Forward, March 2013
 	{
 		name: "[Seasonal] Spring Forward",
+		mod: 'gen5',
 
 		team: 'randomSeasonalSF',
 		teamLength: {
 			battle: 3,
 		},
-		greenPokemon: {
-			bulbasaur:1, ivysaur:1, venusaur:1, caterpie:1, metapod:1, bellsprout:1, weepinbell:1, victreebel:1, scyther:1,
-			chikorita:1, bayleef:1, meganium:1, spinarak:1, natu:1, xatu:1, bellossom:1, politoed:1, skiploom:1, lavitar:1,
-			tyranitar:1, celebi:1, treecko:1, grovyle:1, sceptile:1, dustox:1, lotad:1, lombre:1, ludicolo:1, breloom:1,
-			electrike:1, roselia:1, gulpin:1, vibrava:1, flygon:1, cacnea:1, cacturne:1, cradily:1, keckleon:1, tropius:1,
-			rayquaza:1, turtwig:1, grotle:1, torterra:1, budew:1, roserade:1, carnivine:1, yanmega:1, leafeon:1, shaymin:1,
-			shayminsky:1, snivy:1, servine:1, serperior:1, pansage:1, simisage:1, swadloon:1, cottonee:1, whimsicott:1,
-			petilil:1, lilligant:1, basculin:1, maractus:1, trubbish:1, garbodor:1, solosis:1, duosion:1, reuniclus:1,
-			axew:1, fraxure:1, golett:1, golurk:1, virizion:1, tornadus:1, tornadustherian:1, burmy:1,
-			kakuna:1, beedrill:1, sandshrew:1, nidoqueen:1, zubat:1, golbat:1, oddish:1, gloom:1, mankey:1, poliwrath:1,
-			machoke:1, machamp:1, doduo:1, dodrio:1, grimer:1, muk:1, kingler:1, cubone:1, marowak:1, hitmonlee:1, tangela:1,
-			mrmime:1, tauros:1, kabuto:1, dragonite:1, mewtwo:1, marill:1, hoppip:1, espeon:1, teddiursa:1, ursaring:1,
-			cascoon:1, taillow:1, swellow:1, pelipper:1, masquerain:1, azurill:1, minun:1, carvanha:1, huntail:1, bagon:1,
-			shelgon:1, salamence:1, latios:1, tangrowth:1, seismitoad:1, jellicent:1, elektross:1, druddigon:1,
-			bronzor:1, bronzong:1, gallade:1,
-		},
+		greenPokemon: new Set([
+			'bulbasaur', 'ivysaur', 'venusaur', 'caterpie', 'metapod', 'bellsprout', 'weepinbell', 'victreebel',
+			'scyther', 'chikorita', 'bayleef', 'meganium', 'spinarak', 'natu', 'xatu', 'bellossom', 'politoed',
+			'skiploom', 'lavitar', 'tyranitar', 'celebi', 'treecko', 'grovyle', 'sceptile', 'dustox',
+			'lotad', 'lombre', 'ludicolo', 'breloom', 'electrike', 'roselia', 'gulpin', 'vibrava', 'flygon',
+			'cacnea', 'cacturne', 'cradily', 'keckleon', 'tropius', 'rayquaza', 'turtwig', 'grotle', 'torterra',
+			'budew', 'roserade', 'carnivine', 'yanmega', 'leafeon', 'shaymin', 'shayminsky', 'snivy', 'servine', 'serperior',
+			'pansage', 'simisage', 'swadloon', 'cottonee', 'whimsicott', 'petilil', 'lilligant', 'basculin', 'maractus',
+			'trubbish', 'garbodor', 'solosis', 'duosion', 'reuniclus', 'axew', 'fraxure', 'golett', 'golurk', 'virizion',
+			'tornadus', 'tornadustherian', 'burmy', 'kakuna', 'beedrill', 'sandshrew', 'nidoqueen', 'zubat', 'golbat',
+			'oddish', 'gloom', 'mankey', 'poliwrath', 'machoke', 'machamp', 'doduo', 'dodrio', 'grimer', 'muk', 'kingler',
+			'cubone', 'marowak', 'hitmonlee', 'tangela', 'mrmime', 'tauros', 'kabuto', 'dragonite', 'mewtwo', 'marill',
+			'hoppip', 'espeon', 'teddiursa', 'ursaring', 'cascoon', 'taillow', 'swellow', 'pelipper', 'masquerain', 'azurill',
+			'minun', 'carvanha', 'huntail', 'bagon', 'shelgon', 'salamence', 'latios', 'tangrowth', 'seismitoad', 'jellicent',
+			'elektross', 'druddigon', 'bronzor', 'bronzong', 'gallade',
+		]),
 		onBegin: function () {
-			if (this.random(100) < 75) {
+			if (this.randomChance(3, 4)) {
 				this.add('-message', "March and April showers bring May flowers...");
 				this.setWeather('Rain Dance');
 				delete this.weatherData.duration;
 			}
 		},
 		onSwitchIn: function (pokemon) {
-			if (pokemon.template.speciesid in this.getFormat().greenPokemon) {
+			if (this.getFormat().greenPokemon.has(pokemon.template.speciesid)) {
 				this.add('-message', pokemon.name + " drank way too much!");
 				pokemon.addVolatile('confusion');
 				pokemon.statusData.time = 0;
@@ -93,11 +95,12 @@ exports.Formats = [
 				move.critRatio = 2;
 			}
 		},
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause'],
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'Cancel Mod'],
 	},
 	// Fools Festival, April 2013
 	{
 		name: "[Seasonal] Fools Festival",
+		mod: 'gen5',
 
 		team: 'randomSeasonalFF',
 		onBegin: function () {
@@ -115,15 +118,14 @@ exports.Formats = [
 			delete this.weatherData.duration;
 		},
 		onSwitchIn: function (pokemon) {
-			let name = (pokemon.ability === 'illusion' && pokemon.illusion) ? pokemon.illusion.toString().substr(4, pokemon.illusion.toString().length) : pokemon.name;
+			let name = (pokemon.ability === 'illusion' && pokemon.illusion) ? pokemon.illusion.name : pokemon.name;
 			let stonedPokemon = {Koffing:1, Weezing:1, Slowpoke:1, Slowbro:1, Slowking:1, Psyduck:1, Spinda:1};
 			let stonerQuotes = ['your face is green!', 'I just realised that Arceus fainted for our sins', 'I can, you know, feel the colors',
 				"you're my bro", "I'm imaginining a new color!", "I'm smelling the things I see!", 'hehe, hehe, funny', "I'm hungry!", 'we are pokemanz',
 				'Did you know that Eevee backwards is eevee?! AMAZING', 'aaaam gonna be the verrrry best like no one evar wasss',
 				"I feel like someone is watching us through a screen!", "come at me bro"];
 			if (name in stonedPokemon) {
-				let random = this.random(stonerQuotes.length);
-				this.add('-message', name + ": Duuuuuude, " + stonerQuotes[random]);
+				this.add('-message', name + ": Duuuuuude, " + this.sample(stonerQuotes));
 				this.boost({spe:-1, def:1, spd:1}, pokemon, pokemon, {fullname:'high'});
 			}
 			// Pokemon switch in messages
@@ -138,7 +140,7 @@ exports.Formats = [
 			case 'Slowpoke': case 'Slowbro':
 				let didYouHear = ['Black & White are coming out soon!', 'Genesect has been banned to Ubers!',
 					'Smogon is moving to Pokemon Showdown!', "We're having a new thing called Seasonal Ladder!", 'Deoxys is getting Nasty Plot!'];
-				msg = 'Did you hear? ' + this.sampleNoReplace(didYouHear);
+				msg = 'Did you hear? ' + this.sample(didYouHear);
 				break;
 			case 'Spinda':
 				msg = "LOOK AT ME I'M USING SPINDA";
@@ -227,53 +229,45 @@ exports.Formats = [
 			// Additional changes
 			if (move.id === 'bulkup') {
 				move.onHit = function (target, source, move) {
-					let name = (target.ability === 'illusion' && target.illusion) ? target.illusion.toString().substr(4, target.illusion.toString().length) : target.name;
+					let name = (target.ability === 'illusion' && target.illusion) ? target.illusion.name : target.name;
 					this.add('-message', name + ': Do you even lift, bro?!');
 				};
 			} else if (move.id === 'charm' || move.id === 'sweetkiss' || move.id === 'attract') {
-				let malePickUpLines = [
-					'have you been to Fukushima recently? Because you are glowing tonight!',
-					'did it hurt when you fell to the earth? Because you must be an angel!', 'can I buy you a drink?',
-					'roses are red / lemons are sour / spread your legs / and give me an hour',
-					"roses are red / violets are red / I'm not good with colors", "Let's go watch cherry bossoms together (´･ω･`)",
-					"Will you be my Denko? (´･ω･`)",
-				];
-				let femalePickUpLines = [
-					'Do you go to the gym? You are buff!', "Guy, you make me hotter than July.",
-					"While I stare at you I feel like I just peed myself", "Let's go to my apartment to have midnight coffee",
-					"Marry me, I wanna have 10 kids of you!", "Go out with me or I'll twist your neck!", "Man, you have some nice abs, can I touch them?",
-				];
+				let pickUpLines = {
+					M: [
+						'have you been to Fukushima recently? Because you are glowing tonight!',
+						'did it hurt when you fell to the earth? Because you must be an angel!', 'can I buy you a drink?',
+						'roses are red / lemons are sour / spread your legs / and give me an hour',
+						"roses are red / violets are red / I'm not good with colors", "Let's go watch cherry bossoms together (´･ω･`)",
+						"Will you be my Denko? (´･ω･`)",
+					],
+					F: [
+						'Do you go to the gym? You are buff!', "Guy, you make me hotter than July.",
+						"While I stare at you I feel like I just peed myself", "Let's go to my apartment to have midnight coffee",
+						"Marry me, I wanna have 10 kids of you!", "Go out with me or I'll twist your neck!", "Man, you have some nice abs, can I touch them?",
+					],
+				};
+				let rejectLines = {
+					F: [
+						'Uuuh... how about no', "gtfo I'm taken", 'I have to water the plants. On Easter Island. For a year. Bye',
+						'GO AWAY CREEP', 'Do you smell like rotten eggs?', "I wouldn't date you even if you were the last Pokemon on earth.",
+					],
+					M: [
+						"I'd rather get it on with a dirty daycare Ditto", "I'm not realy sure you're clean",
+						"Ew, you're disgusting!", "It's not me, it's you. Go away, ugly duckling.", "Not really interested *cough*weirdo*cough*",
+					],
+				};
 				move.onTryHit = function (target, source, move) {
-					let pickUpLine = '';
-					if (source.gender === 'M') {
-						pickUpLine = this.sampleNoReplace(malePickUpLines);
-					} else if (source.gender === 'F') {
-						pickUpLine = this.sampleNoReplace(femalePickUpLines);
-					} else {
-						return;
-					}
+					if (!(source.gender in pickUpLines)) return;
+					let pickUpLine = this.sampleNoReplace(pickUpLines[source.gender]);
 					let name = (source.ability === 'illusion' && source.illusion) ? source.illusion.name : source.name;
 					let targetName = (target.ability === 'illusion' && target.illusion) ? target.illusion.name : target.name;
 					this.add('-message', name + ': Hey, ' + targetName + ', ' + pickUpLine);
 				};
 				move.onMoveFail = function (target, source, move) {
 					// Returns false so move calls onHit and onMoveFail
-					let femaleRejectLines = [
-						'Uuuh... how about no', "gtfo I'm taken", 'I have to water the plants. On Easter Island. For a year. Bye',
-						'GO AWAY CREEP', 'Do you smell like rotten eggs?', "I wouldn't date you even if you were the last Pokemon on earth.",
-					];
-					let maleRejectLines = [
-						"I'd rather get it on with a dirty daycare Ditto", "I'm not realy sure you're clean",
-						"Ew, you're disgusting!", "It's not me, it's you. Go away, ugly duckling.", "Not really interested *cough*weirdo*cough*",
-					];
-					let answer = '';
-					if (target.gender === 'M') {
-						answer = this.sampleNoReplace(maleRejectLines);
-					} else if (target.gender === 'F') {
-						answer = this.sampleNoReplace(femaleRejectLines);
-					} else {
-						return;
-					}
+					if (!(target.gender in rejectLines)) return;
+					let answer = this.sampleNoReplace(rejectLines[target.gender]);
 					let targetName = (target.ability === 'illusion' && target.illusion) ? target.illusion.name : target.name;
 					if (!target.volatiles['attract']) {
 						this.add('-message', targetName + ': ' + answer);
@@ -306,10 +300,11 @@ exports.Formats = [
 			];
 			this.add('-message', this.sampleNoReplace(haikus));
 		},
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause'],
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'Cancel Mod'],
 	},
 	{
 		name: "[Seasonal] May Mayhem",
+		mod: 'gen5',
 
 		team: 'randomSeasonalMM',
 		onBegin: function () {
@@ -331,11 +326,15 @@ exports.Formats = [
 	},
 	{
 		name: "[Seasonal] June Jubilee",
+		mod: 'gen5',
 
 		team: 'randomSeasonalJJ',
-		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
 		onBegin: function () {
-			this.add('-message', "Greetings, trainer! Delibird needs your help! It's lost in the US and it needs to find its way back to the arctic before summer starts! Help your Delibird while travelling north, but you must defeat the opponent before he reaches there first!");
+			this.add(
+				'-message', "Greetings, trainer! Delibird needs your help! It's lost in the US and it needs to find its way back to the arctic " +
+				"before summer starts! Help your Delibird while travelling north, but you must defeat the opponent before he reaches there first!"
+			);
 			this.setWeather('Sunny Day');
 			delete this.weatherData.duration;
 
@@ -384,17 +383,26 @@ exports.Formats = [
 		onFaint: function (pokemon) {
 			if (pokemon.template.id === 'delibird') {
 				let name = pokemon.side.name;
-				let winner = pokemon.side.id === 'p1' ? 'p2' : 'p1';
-				this.add('-message', "No!! You let Delibird down. He trusted you. You lost the battle, " + name + ". But you lost something else: your Pokémon's trust.");
+				let winner = '';
+				if (pokemon.side.id === 'p1') {
+					winner = 'p2';
+				} else {
+					winner = 'p1';
+				}
+				this.add(
+					'-message', "No!! You let Delibird down. He trusted you. You lost the battle, " + name +
+					". But you lost something else: your Pokémon's trust."
+				);
 				pokemon.battle.win(winner);
 			}
 		},
 	},
 	{
 		name: "[Seasonal] Jolly July",
+		mod: 'gen5',
 
 		team: 'randomSeasonalJuly',
-		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
 		onBegin: function () {
 			this.add('-message', "You and your faithful favourite Pokémon are travelling around the world, and you will fight this trainer in many places until either win or finish the travel!");
 			// ~learn international independence days with PS~
@@ -446,12 +454,12 @@ exports.Formats = [
 			this.indexes = {'N':0, 'S':0};
 
 			// We choose a hemisphere and city to be in at the beginning
-			if (this.random(100) < 50) this.currentPlace.hemisphere = 'S';
+			if (this.randomChance(1, 2)) this.currentPlace.hemisphere = 'S';
 			this.currentPlace.city = this.cities[this.currentPlace.hemisphere][0];
 			this.indexes[this.currentPlace.hemisphere]++;
 		},
 		onBeforeMove: function (pokemon) {
-			if (this.random(100) > 75) {
+			if (this.randomChance(1, 4)) {
 				// Snarky comments from one trainer to another
 				let comments = [
 					"I've heard your mom is also travelling around the world catchin' em all, if you get what I mean, %s.",
@@ -470,7 +478,7 @@ exports.Formats = [
 				let nextChange = this.random(2, 4);
 				if (this.lastMoveTurn === 0 || this.lastMoveTurn + nextChange <= this.turn) {
 					this.lastMoveTurn = this.turn;
-					if (this.random(100) < 50) {
+					if (this.randomChance(1, 2)) {
 						if (this.currentPlace.hemisphere === 'N') {
 							this.currentPlace.hemisphere = 'S';
 							this.add('-fieldstart', 'move: Wonder Room', '[of] Seasonal');
@@ -501,10 +509,11 @@ exports.Formats = [
 	},
 	{
 		name: "[Seasonal] Average August",
+		mod: 'gen5',
 
 		team: 'randomSeasonalAA',
 		gameType: 'doubles',
-		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
 		shipNames: [
 			'Zarelrules', 'Joimawesome', 'Treeckonoob', 'MJailBait', 'mikelpuns', 'TTTtttttt', 'Frazzle Dazzle',
 			'TIbot', 'CDXCIV', 'Srs Bsns Trts', 'Leemz', 'Eggymad', 'Snoffles', 'bmelted', 'Poopes', 'Hugonedugen',
@@ -553,16 +562,17 @@ exports.Formats = [
 	},
 	{
 		name: "[Seasonal] School Schemes",
+		mod: 'gen5',
 
 		team: 'randomSeasonalSS',
-		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
 	},
 	{
 		name: "[Seasonal] Octoberfest",
 
 		mod: 'gen5',
 		team: 'randomSeasonalOF',
-		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
 
 		onModifyMove: function (move) {
 			if (move.id === 'trick') {
@@ -689,7 +699,7 @@ exports.Formats = [
 					move.heal = [1, 2];
 					break;
 				}
-			} else if (move.id === 'present' && this.random(10) < 3) {
+			} else if (move.id === 'present' && this.randomChance(3, 10)) {
 				move.accuracy = 55;
 				move.basePower = 0;
 				move.category = 'Status';
@@ -709,25 +719,24 @@ exports.Formats = [
 				move.onTryHit = function () {
 					this.add('-message', "Oh, why, thank you! This beer is delicious!");
 				};
-				if (move.id === 'present' && this.random(10) < 3) {
-					return 'Sing';
-				}
 			}
 		},
 	},
 	// Thankless Thanksgiving, November 2013
 	{
 		name: "[Seasonal] Thankless Thanksgiving",
+		mod: 'gen6',
 
 		team: 'randomSeasonalTT',
-		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
 	},
 	// Christmas Charade, December 2013
 	{
 		name: "[Seasonal] Christmas Charade",
+		mod: 'gen6',
 
 		team: 'randomSeasonalCC',
-		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod'],
+		ruleset: ['HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
 		onBegin: function () {
 			this.setWeather('Hail');
 			delete this.weatherData.duration;

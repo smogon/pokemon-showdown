@@ -15,9 +15,9 @@ exports.BattleMovedex = {
 		boosts: {atk: -1, spa: -1},
 		secondary: false,
 		onHit: function (target, source) {
-			target.trySetStatus('tox', source);  // Doesn't use the status property to prevent the move
+			target.trySetStatus('tox', source); // Doesn't use the status property to prevent the move
 			target.addVolatile('taunt', source); // from failing before executing all actions.
-			if (source.name === 'Eevee General') this.add("c|~Eevee General|Sorry but I have to go! Please submit your request in <<adminrequests>> and we'll look at it soon.");
+			if (source.name === 'Eevee General') source.say(`Sorry but I have to go! Please submit your request in <<adminrequests>> and we'll look at it soon.`);
 		},
 		target: "normal",
 		type: "Normal",
@@ -239,7 +239,7 @@ exports.BattleMovedex = {
 					stats.push(statPlus);
 				}
 			}
-			let randomStat = stats.length ? stats[this.random(stats.length)] : "";
+			let randomStat = stats.length ? this.sample(stats) : "";
 			if (randomStat) boost[randomStat] = 1;
 
 			stats = [];
@@ -248,7 +248,7 @@ exports.BattleMovedex = {
 					stats.push(statMinus);
 				}
 			}
-			randomStat = stats.length ? stats[this.random(stats.length)] : "";
+			randomStat = stats.length ? this.sample(stats) : "";
 			if (randomStat) boost[randomStat] = -2;
 
 			this.boost(boost, source, source);
@@ -341,7 +341,7 @@ exports.BattleMovedex = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onPrepareHit: function (target, source) {
 			if (source.name === 'Ace') {
-				this.add('c|@Ace|AAAUAUUUGOGOOHOOHOHOHOHOHOHOHOOHOH');
+				source.say(`AAAUAUUUGOGOOHOOHOHOHOHOHOHOHOOHOH`);
 			}
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Dragon Rush", target);
@@ -502,7 +502,7 @@ exports.BattleMovedex = {
 		priority: 0,
 		flags: {mirror: 1, snatch: 1},
 		onHit: function (target, source) {
-			if (this.random(100) < 20) {
+			if (this.randomChance(20, 100)) {
 				this.add('-message', "Broken Wand backfired!");
 				this.damage(source.maxhp * 0.75, source, source, 'brokenwand');
 				return false;
@@ -535,7 +535,7 @@ exports.BattleMovedex = {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Oblivion Wing", target);
 			if (toId(source.name) === 'raven') {
-				this.add('c|&Raven|*hic* Ah\'ve had mah tonic wine and ah\'m ready tae batter yeh like a Mars bar ye wee Sassenach.');
+				source.say(`*hic* Ah\'ve had mah tonic wine and ah\'m ready tae batter yeh like a Mars bar ye wee Sassenach.`);
 			}
 		},
 		onAfterMoveSecondarySelf: function (source) {
@@ -717,7 +717,7 @@ exports.BattleMovedex = {
 				}
 			}
 			if (stats.length) {
-				let randomStat = stats[this.random(stats.length)];
+				let randomStat = this.sample(stats);
 				let boost = {};
 				boost[randomStat] = 2;
 				this.boost(boost);
@@ -872,7 +872,7 @@ exports.BattleMovedex = {
 		secondary: {
 			chance: 80,
 			onHit: function (target, source) {
-				if (this.random(2) === 1) {
+				if (this.randomChance(1, 2)) {
 					target.trySetStatus('par', source);
 				} else {
 					target.addVolatile('confusion', source);
@@ -962,8 +962,8 @@ exports.BattleMovedex = {
 		onHit: function (pokemon) {
 			for (let j = 0; j < 2; j++) {
 				let moves = [];
-				for (let i = 0; i < pokemon.moveset.length; i++) {
-					let move = pokemon.moveset[i].id;
+				for (let i = 0; i < pokemon.moveSlots.length; i++) {
+					let move = pokemon.moveSlots[i].id;
 					let noSleepTalk = {
 						assist:1, belch:1, bide:1, chatter:1, copycat:1, focuspunch:1, mefirst:1, metronome:1, mimic:1, mirrormove:1, naturepower:1, sketch:1, sleeptalk:1, uproar:1, doesntthisjustwin:1,
 					};
@@ -972,7 +972,7 @@ exports.BattleMovedex = {
 					}
 				}
 				let randomMove = '';
-				if (moves.length) randomMove = moves[this.random(moves.length)];
+				if (moves.length) randomMove = this.sample(moves);
 				if (!randomMove) {
 					return false;
 				}
@@ -1248,7 +1248,7 @@ exports.BattleMovedex = {
 		},
 		onHit: function (target, source) {
 			if (toId(source.name) === 'dirpz') {
-				this.add('c|+Dirpz|https://www.youtube.com/watch?v=9fGCVb6eS6A');
+				source.say(`https://www.youtube.com/watch?v=9fGCVb6eS6A`);
 			}
 		},
 		secondary: {
@@ -1272,14 +1272,14 @@ exports.BattleMovedex = {
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
 		onPrepareHit: function (target, source) {
 			if (toId(source.name) === 'feliburn') {
-				this.add('c|@Feliburn|FAALCOOOOOOON');
+				source.say(`FAALCOOOOOOON`);
 			}
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Dynamic Punch", target);
 		},
 		onHit: function (target, source) {
 			if (toId(source.name) === 'feliburn') {
-				this.add('c|@Feliburn|PUUUUUNCH!!');
+				source.say(`PUUUUUNCH!!`);
 			}
 		},
 		self: {
@@ -1310,7 +1310,7 @@ exports.BattleMovedex = {
 			this.attrLastMove('[still]');
 		},
 		onHit: function (target, source) {
-			this.useMove(['Guillotine', 'Fissure', 'Sheer Cold', 'Horn Drill'][this.random(4)], source);
+			this.useMove(this.sample(['Guillotine', 'Fissure', 'Sheer Cold', 'Horn Drill']), source);
 		},
 		secondary: false,
 		target: "normal",
@@ -1467,9 +1467,9 @@ exports.BattleMovedex = {
 		},
 		onHit: function (target, source) {
 			if (source.name === 'bumbadadabum') {
-				this.add('c|@bumbadadabum|I\'d just like to interject for a moment. What you\'re referring to as Linux, is in fact, GNU/Linux, or as I\'ve recently taken to calling it, GNU plus Linux. Linux is not an operating system unto itself, but rather another free component of a fully functioning GNU system made useful by the GNU corelibs, shell utilities and vital system components comprising a full OS as defined by POSIX.');
-				this.add('c|@bumbadadabum|Many computer users run a modified version of the GNU system every day, without realizing it. Through a peculiar turn of events, the version of GNU which is widely used today is often called Linux, and many of its users are not aware that it is basically the GNU system, developed by the GNU Project.');
-				this.add('c|@bumbadadabum|There really is a Linux, and these people are using it, but it is just a part of the system they use. Linux is the kernel: the program in the system that allocates the machine\'s resources to the other programs that you run. The kernel is an essential part of an operating system, but useless by itself; it can only function in the context of a complete operating system. Linux is normally used in combination with the GNU operating system: the whole system is basically GNU with Linux added, or GNU/Linux. All the so-called Linux distributions are really distributions of GNU/Linux!');
+				source.say(`I\'d just like to interject for a moment. What you\'re referring to as Linux, is in fact, GNU/Linux, or as I\'ve recently taken to calling it, GNU plus Linux. Linux is not an operating system unto itself, but rather another free component of a fully functioning GNU system made useful by the GNU corelibs, shell utilities and vital system components comprising a full OS as defined by POSIX.`);
+				source.say(`Many computer users run a modified version of the GNU system every day, without realizing it. Through a peculiar turn of events, the version of GNU which is widely used today is often called Linux, and many of its users are not aware that it is basically the GNU system, developed by the GNU Project.`);
+				source.say(`There really is a Linux, and these people are using it, but it is just a part of the system they use. Linux is the kernel: the program in the system that allocates the machine\'s resources to the other programs that you run. The kernel is an essential part of an operating system, but useless by itself; it can only function in the context of a complete operating system. Linux is normally used in combination with the GNU operating system: the whole system is basically GNU with Linux added, or GNU/Linux. All the so-called Linux distributions are really distributions of GNU/Linux!`);
 			}
 		},
 		target: "normal",
@@ -1566,7 +1566,7 @@ exports.BattleMovedex = {
 		ignoreImmunity: {'Psychic': true},
 		onPrepareHit: function (target, source) {
 			if (toId(source.name) === 'sigilyph') {
-				this.add('c|@Sigilyph|**SOOOOGOOOOLOOOOPH**');
+				source.say(`**SOOOOGOOOOLOOOOPH**`);
 			}
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Cosmic Power", source);
@@ -1615,7 +1615,7 @@ exports.BattleMovedex = {
 			if (target.hp > 0) {
 				source.addVolatile('mustrecharge');
 			} else {
-				this.add("c|~Joim|You are wearing the expression of someone who's fainted a few times. Let's make it one more.");
+				source.say(`You are wearing the expression of someone who's fainted a few times. Let's make it one more.`);
 			}
 		},
 		secondary: false,
@@ -1662,7 +1662,7 @@ exports.BattleMovedex = {
 				ppData.pp = Math.round(ppData.pp * 10 + this.random(3) + 5) / 10;
 			}
 			const moves = Object.keys(exports.BattleMovedex);
-			this.useMove(moves[this.random(moves.length)], target);
+			this.useMove(this.sample(moves), target);
 		},
 		onTryHit: function (target, source, effect) {
 			if (!source.isActive) return null;
@@ -1670,7 +1670,7 @@ exports.BattleMovedex = {
 			// The values here are meaningful, but I will provide the exercise in
 			// figuring them out to whoever reads the code. Don't want to spoil
 			// the fun in that.
-			if (this.random(722) === 66) {
+			if (this.randomChance(1, 722)) {
 				this.addPseudoWeather('glitchdimension', source, effect, '[of] ' + source);
 			}
 		},
@@ -2038,8 +2038,8 @@ exports.BattleMovedex = {
 				let gibberish = '';
 				let hits = 0;
 				let hps = ['hiddenpowerbug', 'hiddenpowerdark', 'hiddenpowerdragon', 'hiddenpowerelectric', 'hiddenpowerfighting', 'hiddenpowerfire', 'hiddenpowerflying', 'hiddenpowerghost', 'hiddenpowergrass', 'hiddenpowerground', 'hiddenpowerice', 'hiddenpowerpoison', 'hiddenpowerpsychic', 'hiddenpowerrock', 'hiddenpowersteel', 'hiddenpowerwater'];
-				let hitcount = [3, 4, 4, 4, 4, 5, 5, 6, 6][this.random(9)];
-				if (source.name === 'qtrx') this.add('c|@qtrx|/me slams face into keyboard!');
+				let hitcount = this.sample([3, 4, 4, 4, 4, 5, 5, 6, 6]);
+				if (source.name === 'qtrx') source.say(`/me slams face into keyboard!`);
 				source.isDuringAttack = true; // Prevents the user from being kicked out in the middle of using Hidden Powers.
 				for (let i = 0; i < hitcount; i++) {
 					if (target.hp !== 0) {
@@ -2047,7 +2047,7 @@ exports.BattleMovedex = {
 						gibberish = '';
 						for (let j = 0; j < len; j++) gibberish += String.fromCharCode(48 + this.random(79));
 						this.add('-message', gibberish);
-						this.useMove(hps[this.random(16)], source, target);
+						this.useMove(this.sample(hps), source, target);
 						hits++;
 					}
 				}
@@ -2501,9 +2501,9 @@ exports.BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		onTry: function (pokemon) {
 			if (pokemon.activeTurns > 1) {
-				this.add('c|+Omega-Xis|good shit go౦ԁ sHit thats ✔ some goodshit rightthere right✔there ✔✔if i do ƽaү so my self i say so thats what im talking about right there right there (chorus: ʳᶦᵍʰᵗ ᵗʰᵉʳᵉ) mMMMMᎷМ НO0ОଠOOOOOОଠଠOoooᵒᵒᵒᵒᵒᵒᵒᵒᵒ Good shit');
+				pokemon.say(`good shit go౦ԁ sHit thats ✔ some goodshit rightthere right✔there ✔✔if i do ƽaү so my self i say so thats what im talking about right there right there (chorus: ʳᶦᵍʰᵗ ᵗʰᵉʳᵉ) mMMMMᎷМ НO0ОଠOOOOOОଠଠOoooᵒᵒᵒᵒᵒᵒᵒᵒᵒ Good shit`);
 			} else {
-				this.add('c|+Omega-Xis|Jet fuel can’t melt steel beams.');
+				pokemon.say(`Jet fuel can’t melt steel beams.`);
 			}
 		},
 		onTryHit: function (target, source) {
@@ -2716,8 +2716,8 @@ exports.BattleMovedex = {
 		},
 		onHit: function (target, source) {
 			source.side.addSideCondition('reflect', source);
-			if (this.random(2) === 1) source.side.addSideCondition('lightscreen', source);
-			if (this.random(2) === 1) source.side.addSideCondition('safeguard', source);
+			if (this.randomChance(1, 2)) source.side.addSideCondition('lightscreen', source);
+			if (this.randomChance(1, 2)) source.side.addSideCondition('safeguard', source);
 		},
 		secondary: false,
 		target: "self",
@@ -2801,8 +2801,8 @@ exports.BattleMovedex = {
 		secondary: {
 			chance: 100,
 			onHit: function (target, source) {
-				if (this.random(10) < 7) target.trySetStatus('par');
-				if (this.random(10) < 4) target.addVolatile('flinch', source);
+				if (this.randomChance(7, 10)) target.trySetStatus('par');
+				if (this.randomChance(4, 10)) target.addVolatile('flinch', source);
 			},
 		},
 		target: "normal",
@@ -3270,7 +3270,7 @@ exports.BattleMovedex = {
 					this.add('-anim', source, "Explosion", target);
 					this.damage(source.maxhp, source, source);
 					if (toId(source.name) === 'pikachuun') {
-						this.add('c|+Pikachuun|i\'ve been outskilled');
+						source.say(`chi\'ve been outskilled`);
 					}
 					return true;
 				};
@@ -3480,7 +3480,7 @@ exports.BattleMovedex = {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Boomburst", target);
 			if (source.name === 'macle') {
-				this.add("c|+macle|Follow the Frog Blog - https://gonefroggin.wordpress.com/");
+				source.say(`Follow the Frog Blog - https://gonefroggin.wordpress.com/`);
 			}
 		},
 		secondary: {
@@ -3696,8 +3696,8 @@ exports.BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		onTryHit: function (target, pokemon) {
-			const moveSet = pokemon.moveset.map(x => x.id).filter(x => x !== 'shakethatbrass');
-			const move = moveSet[this.random(moveSet.length)];
+			const moveSet = pokemon.moveSlots.map(x => x.id).filter(x => x !== 'shakethatbrass');
+			const move = this.sample(moveSet);
 			pokemon.addVolatile('shakethatbrass');
 			this.useMove(move, pokemon, target);
 			return null;
@@ -3822,16 +3822,16 @@ exports.BattleMovedex = {
 				this.add('-status', pokemon, 'slp', '[from] move: Rest');
 			}
 			let moves = [];
-			for (let i = 0; i < pokemon.moveset.length; i++) {
-				let move = pokemon.moveset[i].id;
+			for (let i = 0; i < pokemon.moveSlots.length; i++) {
+				let move = pokemon.moveSlots[i].id;
 				if (move && move !== 'sleepwalk') moves.push(move);
 			}
 			let move = '';
-			if (moves.length) move = moves[this.random(moves.length)];
+			if (moves.length) move = this.sample(moves);
 			if (!move) return false;
 			this.useMove(move, pokemon);
 			if (!pokemon.informed && source.name === 'The Immortal') {
-				this.add('c|~The Immortal|I don\'t really sleep walk...');
+				source.say(`I don\'t really sleep walk...`);
 				pokemon.informed = true;
 			}
 		},
@@ -3861,7 +3861,7 @@ exports.BattleMovedex = {
 		},
 		onAfterMoveSecondarySelf: function (source, target, move) {
 			if (move.hits && move.hits === 3 && toId(source.name) === 'scythernoswiping') {
-				this.add('c|%Scyther NO Swiping|Oh baby a triple!!!');
+				source.say(`Oh baby a triple!!!`);
 			}
 		},
 		onEffectiveness: function (typeMod) {
@@ -3958,7 +3958,7 @@ exports.BattleMovedex = {
 			move.types = move.typechart.slice();
 			Tools.shuffle(move.types);
 			move.types.splice(3);
-			this.add("c|@Ascriptmaster|Go! " + move.types.join(', ') + "! Spectrum Triplet Beam!!!");
+			source.say(`Go! ${move.types.join(', ')}! Spectrum Triplet Beam!!!`);
 			move.hitcount = 0;
 		},
 		onTryHit: function (target, source, move) {
@@ -4110,7 +4110,7 @@ exports.BattleMovedex = {
 			this.add('-anim', source, "Spikes", target);
 		},
 		onHit: function (target, source, move) {
-			target.side.addSideCondition(['spikes', 'toxicspikes'][this.random(2)], source, move);
+			target.side.addSideCondition(this.sample(['spikes', 'toxicspikes']), source, move);
 		},
 		onAfterMove: function (source, target) {
 			target.addVolatile('splinters', source);
@@ -4155,14 +4155,14 @@ exports.BattleMovedex = {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Night Shade", target);
 		},
-		onHit: function (pokemon) {
-			if (pokemon.hp <= 0 || pokemon.fainted) {
-				this.add('c|@Temporaryanonymous|YOU ARE ALREADY DEAD *unsheathes glorious cursed nippon steel katana and cuts you in half with it* heh......nothing personnel.........kid......................');
+		onHit: function (target, source) {
+			if (target.hp <= 0 || target.fainted) {
+				source.say(`YOU ARE ALREADY DEAD *unsheathes glorious cursed nippon steel katana and cuts you in half with it* heh......nothing personnel.........kid......................`);
 			}
 		},
 		onMoveFail: function (target, source, move) {
 			this.add('-message', '*@Temporaryanonymous teleports behind you*');
-			this.add('c|@Temporaryanonymous|YOU ARE ALREADY DEAD *misses* Tch......not bad.........kid......................');
+			source.say(`YOU ARE ALREADY DEAD *misses* Tch......not bad.........kid......................`);
 		},
 		secondary: false,
 		self: {boosts: {accuracy: -2}},
@@ -4188,7 +4188,7 @@ exports.BattleMovedex = {
 			chance: 100,
 			onHit: function (target, source) {
 				if (target.lastDamage > 0 && source.lastAttackedBy && source.lastAttackedBy.thisTurn && source.lastAttackedBy.pokemon === target) {
-					if (this.random(100) < 30) {
+					if (this.randomChance(30, 100)) {
 						target.addVolatile('confusion');
 					}
 				} else {
@@ -4227,20 +4227,20 @@ exports.BattleMovedex = {
 		onHit: function (target, source) {
 			const boosts = {};
 			const stats = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy'];
-			const increase = stats[this.random(6)];
-			const decrease = stats[this.random(6)];
+			const increase = this.sample(stats);
+			const decrease = this.sample(stats);
 			boosts[increase] = 1;
 			boosts[decrease] = -1;
 			this.boost(boosts, source, source);
 		},
 		onModifyMove: function (move) {
-			move.type = move.typechart[this.random(18)];
+			move.type = this.sample(move.typechart);
 		},
 		secondary: {
 			chance: 100,
 			onHit: function (target) {
-				if (this.random(2) === 1) {
-					const status = ['par', 'brn', 'frz', 'psn', 'tox', 'slp'][this.random(6)];
+				if (this.randomChance(1, 2)) {
+					const status = this.sample(['par', 'brn', 'frz', 'psn', 'tox', 'slp']);
 					if (status === 'frz') {
 						let freeze = true;
 						for (let i = 0; i < target.side.pokemon.length; i++) {
@@ -4252,7 +4252,7 @@ exports.BattleMovedex = {
 						target.trySetStatus(status);
 					}
 				}
-				if (this.random(2) === 1) target.addVolatile('confusion');
+				if (this.randomChance(1, 2)) target.addVolatile('confusion');
 			},
 		},
 		target: "normal",
@@ -4594,7 +4594,7 @@ exports.BattleMovedex = {
 				'bravebird', 'earthquake', 'stoneedge', 'extremespeed', 'stealthrock', 'spikes', 'toxicspikes', 'stickyweb',
 				'quiverdance', 'shellsmash', 'dragondance', 'recover', 'toxic', 'willowisp', 'leechseed',
 			];
-			for (let i = 0; i < pokemon.moveset.length; i++) {
+			for (let i = 0; i < pokemon.moveSlots.length; i++) {
 				let moveData = Tools.getMove(this.sampleNoReplace(newMoves));
 				let moveBuffer = {
 					move: moveData.name,
@@ -4605,9 +4605,8 @@ exports.BattleMovedex = {
 					disabled: false,
 					used: false,
 				};
-				pokemon.moveset[i] = moveBuffer;
-				pokemon.baseMoveset[i] = moveBuffer;
-				pokemon.moves[i] = toId(moveData.name);
+				pokemon.moveSlots[i] = moveBuffer;
+				pokemon.baseMoveSlots[i] = moveBuffer;
 			}
 		},
 		secondary: false,
@@ -4634,15 +4633,15 @@ exports.BattleMovedex = {
 		},
 		onHit: function (target, source, move) {
 			if (move.crit) {
-				this.add('c|+xJoelituh|That didn\'t mattered, I had everything calc\'d');
-				this.add('c|+xJoelituh|!calc');
-				this.add('raw|<div class="infobox">Pokémon Showdown! damage calculator. (Courtesy of Honko) <br> - <a href="https://pokemonshowdown.com/damagecalc/">Damage Calculator</a></br></div>');
+				source.say(`That didn\'t mattered, I had everything calc\'d`);
+				source.say(`!calc`);
+				this.add('raw|<div class="games light">Pokémon Showdown! damage calculator. (Courtesy of Honko) <br> - <a href="https://pokemonshowdown.com/damagecalc/">Damage Calculator</a></br></div>');
 			}
 		},
 		secondary: {
 			chance: 5,
 			onHit: function (target, source) {
-				const status = ['par', 'brn', 'frz', 'psn', 'tox', 'slp'][this.random(6)];
+				const status = this.sample(['par', 'brn', 'frz', 'psn', 'tox', 'slp']);
 				let prompt = false;
 				if (status === 'frz') {
 					let freeze = true;
@@ -4657,9 +4656,9 @@ exports.BattleMovedex = {
 					prompt = true;
 				}
 				if (prompt) {
-					this.add('c|+xJoelituh|That didn\'t mattered, I had everything calc\'d');
-					this.add('c|+xJoelituh|!calc');
-					this.add('raw|<div class="infobox">Pokémon Showdown! damage calculator. (Courtesy of Honko) <br> - <a href="https://pokemonshowdown.com/damagecalc/">Damage Calculator</a></br></div>');
+					source.say(`That didn\'t mattered, I had everything calc\'d`);
+					source.say(`!calc`);
+					this.add('raw|<div class="games light">Pokémon Showdown! damage calculator. (Courtesy of Honko) <br> - <a href="https://pokemonshowdown.com/damagecalc/">Damage Calculator</a></br></div>');
 				}
 			},
 		},

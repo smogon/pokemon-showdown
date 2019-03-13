@@ -9,19 +9,21 @@
 'use strict';
 
 exports.Formats = [
-	// Seasoning Greetings, November 2012
+	// Seasoning's Greetings, November 2012
 	{
 		section: "OM of the Month",
 	},
 	{
 		name: "[Seasonal] Seasoning's Greetings",
+		mod: 'gen5',
 
 		team: 'randomSeasonal',
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause'],
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'Cancel Mod'],
 	},
 	// Winter Wonderland, December 2012 and January 2013
 	{
 		name: "[Seasonal] Winter Wonderland",
+		mod: 'gen5',
 
 		team: 'randomSeasonalWW',
 		onBegin: function () {
@@ -137,6 +139,6 @@ exports.Formats = [
 				}
 			}
 		},
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause'],
+		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'Cancel Mod'],
 	},
 ];
