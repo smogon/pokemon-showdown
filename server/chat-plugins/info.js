@@ -2406,7 +2406,6 @@ const pages = {
 			if (user.can('ban')) buf += `<th style="border: 1px solid black;">IP</th>`;
 			buf += `</tr>`;
 			for (const entry of Punishments.getPunishmentsOfRoom(this.room)) {
-				Array.prototype.sort.call(entry, function(a, b) {return a.expiresIn - b.expiresIn;});
 				buf += `<tr>`;
 				if (!entry.alts) entry.alts = [];
 				if (!entry.ip) entry.ip = [];
