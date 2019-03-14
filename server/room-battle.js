@@ -941,8 +941,16 @@ class RoomBattle {
 		this.room.auth[user.userid] = Users.PLAYER_SYMBOL;
 		if (user.inRooms.has(this.id)) this.onConnect(user);
 		if (this.playerCount >= this.playerCap) {
+			if (this.gameType === 'multi') {
+				// @ts-ignore
+				this.room.title = `Team ${this.p1.name} vs. Team ${this.p2.name}`;
+			} else if (this.gameType === 'free-for-all') {
+				// p1 vs. p2 vs. p3 vs. p4 is too long of a title
+				this.room.title = "An all-out brawl!";
+			} else {
 				// @ts-ignore
 				this.room.title = `${this.p1.name} vs. ${this.p2.name}`;
+			}
 			this.room.send(`|title|${this.room.title}`);
 		}
 		if (!initializing) {
