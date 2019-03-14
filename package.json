@@ -15,7 +15,7 @@
     "node-static": "^0.7.10",
     "nodemailer": "^4.6.8",
     "permessage-deflate": "^0.1.6",
-		"trakr": "file:../../github.com/scheibo/trakr"
+    "trakr": "file:../../github.com/scheibo/trakr"
   },
   "engines": {
     "node": ">=7.7.0"

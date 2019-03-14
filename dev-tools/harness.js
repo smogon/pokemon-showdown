@@ -27,8 +27,8 @@ const FORMATS = [
 
 class Runner {
 	constructor(options) {
-		this.prng = ((options.prng && !Array.isArray(options.prng))
-			? options.prng : new PRNG(options.prng))
+		this.prng = (options.prng && !Array.isArray(options.prng)) ?
+			options.prng : new PRNG(options.prng);
 		this.format = options.format;
 		this.totalGames = options.totalGames;
 		this.all = !!options.all;
@@ -39,6 +39,7 @@ class Runner {
 		this.silent = !!options.silent;
 		this.logs = !this.silent && !!options.logs;
 		this.verbose = !this.silent && !!options.verbose;
+		this.timer = options.timer;
 
 		this.formatIndex = 0;
 		this.numGames = 0;
@@ -46,20 +47,26 @@ class Runner {
 
 	async run() {
 		let games = [];
+		let timers = [];
 		let format, lastFormat;
 		while ((format = this.getNextFormat())) {
 			if (this.all && lastFormat && format !== lastFormat) {
 				await Promise.all(games);
 				games = [];
+				timers = [];
 			}
 
-			let seed = this.prng.seed;
+			const seed = this.prng.seed;
+			const timer = this.timer();
+
 			let battleStream;
 			try {
+				timer.start();
 				battleStream = new BattleStreams.BattleStream();
-				const game = this.runGame(format, battleStream);
+				const game = this.runGame(format, timer, battleStream).finally(() => timer.stop());
 				if (!this.async) await game;
 				games.push(game);
+				timers.push(timer);
 			} catch (e) {
 				if (battleStream && battleStream.battle && this.logs) {
 					console.error(`${battleStream.battle.inputLog.join('\n')}\n\n`);
@@ -74,24 +81,26 @@ class Runner {
 		return this.totalGames - (await Promise.all(games)).length;
 	}
 
-	async runGame(format, battleStream) {
+	async runGame(format, timer, battleStream) {
+		const t = timer.time('prepare');
 		const streams = BattleStreams.getPlayerStreams(battleStream || new BattleStreams.BattleStream());
 		// The seed used is the intial seed to begin with (its important that nothing
-		// advances the PRNG before the initial `runGame` call for repro purposes), but 
+		// advances the PRNG before the initial `runGame` call for repro purposes), but
 		// later is advanced by the four `newSeed()` calls, so each iteration should be
 		// 16 frames off the previous.
 		const spec = {formatid: format, seed: this.prng.seed};
-		const p1spec = {name: "Bot 1", team: this.generateTeam(format)};
-		const p2spec = {name: "Bot 2", team: this.generateTeam(format)};
+		const p1spec = {name: "Bot 1", team: this.generateTeam(format, timer)};
+		const p2spec = {name: "Bot 2", team: this.generateTeam(format, timer)};
 
-		// Set up the random players - no need to save them in a variable because they
-		// start asynchronously listening in their constructors.
-		new RandomPlayerAI(streams.p1, Object.assign({seed: this.newSeed()}, this.p1options));
-	  new RandomPlayerAI(streams.p2, Object.assign({seed: this.newSeed()}, this.p2options));
+		// eslint-disable
+		const p1 = new RandomPlayerAI( // eslint-disable-line no-unused-vars
+			streams.p1, Object.assign({seed: this.newSeed()}, this.p1options));
+	  const p2 = new RandomPlayerAI( // eslint-disable-line no-unused-vars
+			streams.p2, Object.assign({seed: this.newSeed()}, this.p2options));
 
-		streams.omniscient.write(`>start ${JSON.stringify(spec)}\n` +
+		t(streams.omniscient.write(`>start ${JSON.stringify(spec)}\n` +
 			`>player p1 ${JSON.stringify(p1spec)}\n` +
-			`>player p2 ${JSON.stringify(p2spec)}`);
+			`>player p2 ${JSON.stringify(p2spec)}`));
 
 		let chunk;
 		while ((chunk = await streams.omniscient.read())) {
@@ -110,8 +119,8 @@ class Runner {
 		];
 	}
 
-	generateTeam(format) {
-		return Dex.packTeam(Dex.generateTeam(format, this.newSeed()));
+	generateTeam(format, timer) {
+		return timer.time('generateTeam')(Dex.packTeam(Dex.generateTeam(format, this.newSeed())));
 	}
 
 	getNextFormat() {
@@ -171,7 +180,7 @@ if (require.main === module) {
 		if (missing('minimist')) shell('npm install minimist');
 		const argv = require('minimist')(process.argv.slice(2));
 
-		if (!!argv.benchmark) {
+		if (argv.benchmark) {
 			options.seed = BENCHMARK_SEED;
 
 			let deps = '';
