@@ -1641,7 +1641,7 @@ let Rooms = Object.assign(getRoom, {
 			let mismatch = `"${p1Special}"`;
 			for (const p of players) {
 				// @ts-ignore
-				if (p.specialNextBattle !== p1Special) {
+				if (p && p.specialNextBattle !== p1Special) {
 					// @ts-ignore
 					mismatch += ` vs. "${p.specialNextBattle}"`;
 					break;
