@@ -1598,15 +1598,17 @@ export class Pokemon {
 
 	runEffectiveness(moveOrType: ActiveMove | string) {
 		let totalTypeMod = 0;
-		const move = (typeof moveOrType !== 'string' ? moveOrType : null);
+		let move;
+		if (typeof moveOrType === 'string') {
+			move = this.battle.getActiveMove('Judgment');
+			move.type = moveOrType;
+		} else {
+			move = moveOrType;
+		}
 		for (const type of this.getTypes()) {
 			let typeMod = this.battle.getEffectiveness(moveOrType, type);
-			if (move) {
-				typeMod = this.battle.singleEvent('Effectiveness', move, null, this, type, move, typeMod);
-				totalTypeMod += this.battle.runEvent('Effectiveness', this, type, move, typeMod);
-			} else {
-				totalTypeMod += typeMod;
-			}
+			typeMod = this.battle.singleEvent('Effectiveness', move, null, this, type, move, typeMod);
+			totalTypeMod += this.battle.runEvent('Effectiveness', this, type, move, typeMod);
 		}
 		return totalTypeMod;
 	}
