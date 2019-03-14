@@ -1639,6 +1639,7 @@ let Rooms = Object.assign(getRoom, {
 			return;
 		}
 
+		// @ts-ignore
 		if (players.every(p => p) && players.some(p => p.specialNextBattle)) {
 			// @ts-ignore
 			const p1Special = players[0].specialNextBattle;
