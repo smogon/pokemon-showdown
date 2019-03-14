@@ -185,11 +185,6 @@ export class Battle extends Dex.ModdedDex {
 		}
 	}
 
-	static logReplay(data: string, splitSide: boolean | Side) {
-		if (splitSide === true) return data;
-		return '';
-	}
-
 	toString() {
 		return 'Battle: ' + this.format;
 	}
@@ -3147,9 +3142,6 @@ export class Battle extends Dex.ModdedDex {
 		if (!didSomething) return;
 		this.inputLog.push(`>player ${slot} ` + JSON.stringify(options));
 		this.add('player', side.id, side.name, side.avatar);
-		if (options.seed) {
-			this.add('seed', (splitSide: Side) => Battle.logReplay(options.seed!.join(','), splitSide));
-		}
 		this.start();
 	}
 
