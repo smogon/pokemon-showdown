@@ -46,7 +46,7 @@ class Roomlog {
 
 		/**
 		 * Battle rooms are multichannel, which means their logs are split
-		 * into six channels, public, p1, p2, p3, p4, full.
+		 * into four channels, public, p1, p2, full.
 		 */
 		this.isMultichannel = !!options.isMultichannel;
 		/**
