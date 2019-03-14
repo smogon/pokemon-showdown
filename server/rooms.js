@@ -1639,13 +1639,13 @@ let Rooms = Object.assign(getRoom, {
 			return;
 		}
 
-		if (!players.includes(null)) {
+		if (players.every(p => p) && players.some(p => p.specialNextBattle)) {
 			// @ts-ignore
 			const p1Special = players[0].specialNextBattle;
 			let mismatch = `"${p1Special}"`;
 			for (const p of players) {
 				// @ts-ignore
-				if (p && p.specialNextBattle !== p1Special) {
+				if (p.specialNextBattle !== p1Special) {
 					// @ts-ignore
 					mismatch += ` vs. "${p.specialNextBattle}"`;
 					break;
