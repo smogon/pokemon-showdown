@@ -250,7 +250,10 @@ class ModdedDex {
 		if (name.length > 18) name = name.substr(0, 18).trim();
 
 		// remove zalgo
-		name = name.replace(/[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
+		name = name.replace(
+			/[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g,
+			''
+		);
 		name = name.replace(/[\u239b-\u23b9]/g, '');
 
 		return name;
@@ -888,8 +891,7 @@ class ModdedDex {
 			}
 		}
 		if (matches.length > 1) {
-			throw new Error(
-				`More than one thing matches "${rule}"; please use something like "-item:metronome" to disambiguate`);
+			throw new Error(`More than one thing matches "${rule}"; please use something like "-item:metronome" to disambiguate`);
 		}
 		if (matches.length < 1) {
 			throw new Error(`Nothing matches "${rule}"`);
