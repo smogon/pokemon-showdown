@@ -22,13 +22,13 @@ let BattleStatuses = {
 	'2xthetap': { // No single quotes causes issues
 		noCopy: true,
 		onStart() {
-			this.add(`c|%2xTheTap|Time for a heckin' battle.`);
+			this.add(`c|+2xTheTap|Time for a heckin' battle.`);
 		},
 		onSwitchOut() {
-			this.add(`c|%2xTheTap|Doin' me a heckin' concern.`);
+			this.add(`c|+2xTheTap|Doin' me a heckin' concern.`);
 		},
 		onFaint() {
-			this.add(`c|%2xTheTap|Doin' me the final bamboozle.`);
+			this.add(`c|+2xTheTap|Doin' me the final bamboozle.`);
 		},
 	},
 	'5gen': {
@@ -291,13 +291,13 @@ let BattleStatuses = {
 	cc: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%cc|Yo guys! :]`);
+			this.add(`c|+cc|Yo guys! :]`);
 		},
 		onSwitchOut() {
-			this.add(`c|%cc|Gotta go brb`);
+			this.add(`c|+cc|Gotta go brb`);
 		},
 		onFaint() {
-			this.add(`c|%cc|Unfort`);
+			this.add(`c|+cc|Unfort`);
 		},
 	},
 	cerberax: {
@@ -501,6 +501,35 @@ let BattleStatuses = {
 		},
 		onFaint() {
 			this.add(`c|%FOMG|Rock in peace...`);
+		},
+	},
+	forrce: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c|+Forrce|It's either I win or you lose, 'cause I won't accept defeat.`);
+			if (pokemon.illusion) return;
+			let i = 0;
+			for (const moveSlot of pokemon.moveSlots) {
+				let move = this.getMove(moveSlot.id);
+				// @ts-ignore hacky way to reduce purple pill's PP
+				moveSlot.pp = Math.floor(((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5) * (pokemon.ppPercentages ? pokemon.ppPercentages[i] : 1));
+				i++;
+			}
+		},
+		onBeforeSwitchOut(pokemon) {
+			if (pokemon.illusion) return;
+			// @ts-ignore track percentages to keep purple pills from resetting pp
+			pokemon.ppPercentages = pokemon.moveSlots.slice().map(m => {
+				return m.pp / m.maxpp;
+			});
+		},
+		onSwitchOut() {
+			this.add(`c|+Forrce|What I gotta do to get it through to you? I'm superhuman.`);
+		},
+		onFaint() {
+			this.add(`c|+Forrce|How can I find you?`);
+			this.add(`c|+Forrce|Who do you turn to?`);
+			this.add(`c|+Forrce|How do I bind you?`);
 		},
 	},
 	kalalokki: {
@@ -765,35 +794,6 @@ let BattleStatuses = {
 		},
 		onFaint() {
 			this.add(`c|+Lost Seso|└[ ─ ಎ ─ ]┘ 0% Battery, feed me ramen please`);
-		},
-	},
-	lycaniumz: {
-		noCopy: true,
-		onStart(pokemon) {
-			this.add(`c|+Lycanium Z|It's either I win or you lose, 'cause I won't accept defeat.`);
-			if (pokemon.illusion) return;
-			let i = 0;
-			for (const moveSlot of pokemon.moveSlots) {
-				let move = this.getMove(moveSlot.id);
-				// @ts-ignore hacky way to reduce purple pill's PP
-				moveSlot.pp = Math.floor(((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5) * (pokemon.ppPercentages ? pokemon.ppPercentages[i] : 1));
-				i++;
-			}
-		},
-		onBeforeSwitchOut(pokemon) {
-			if (pokemon.illusion) return;
-			// @ts-ignore track percentages to keep purple pills from resetting pp
-			pokemon.ppPercentages = pokemon.moveSlots.slice().map(m => {
-				return m.pp / m.maxpp;
-			});
-		},
-		onSwitchOut() {
-			this.add(`c|+Lycanium Z|What I gotta do to get it through to you? I'm superhuman.`);
-		},
-		onFaint() {
-			this.add(`c|+Lycanium Z|How can I find you?`);
-			this.add(`c|+Lycanium Z|Who do you turn to?`);
-			this.add(`c|+Lycanium Z|How do I bind you?`);
 		},
 	},
 	macchaeger: {

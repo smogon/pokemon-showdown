@@ -774,10 +774,8 @@ let BattleMovedex = {
 			this.add('-anim', source, 'Swords Dance', source);
 			this.add('-anim', source, 'Bloom Doom', target);
 		},
-		onHit() {
-			this.setTerrain('grassyterrain');
-		},
 		onAfterMove(pokemon) {
+			this.setTerrain('grassyterrain');
 			if (pokemon.template.baseSpecies !== 'Aegislash' || pokemon.transformed) return;
 			if (pokemon.template.species !== 'Aegislash') pokemon.formeChange('Aegislash');
 		},
@@ -1346,6 +1344,142 @@ let BattleMovedex = {
 		isZ: "astleyiumz",
 		target: "normal",
 		type: "Rock",
+	},
+	// Forrce
+	purplepills: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "The user gains a random typing and 3 moves based on that typing (2 special moves and 1 status move). The user's attacks deal damage based off the user's Special Defense. If used again, returns the user to its original moveset and typing. This move fails if the user is not Forrce.",
+		shortDesc: "Forrce: Gains 3 random moves and typing.",
+		id: "purplepills",
+		name: "Purple Pills",
+		isNonstandard: true,
+		pp: 15,
+		priority: 0,
+		flags: {},
+		onTryMovePriority: 100,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Swallow", source);
+		},
+		onTryHit(target, source) {
+			if (source.name !== 'Forrce') {
+				this.add('-fail', source);
+				this.hint("Only Forrce can use Purple Pills.");
+				return null;
+			}
+		},
+		volatileStatus: 'purplepills',
+		effect: {
+			noCopy: true,
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Purple Pills', '[silent]');
+				this.add('-message', `${pokemon.name} swallowed some pills!`);
+				const allTypes = ['Normal', 'Fire', 'Fighting', 'Water', 'Flying', 'Grass', 'Poison', 'Electric', 'Ground', 'Psychic', 'Rock', 'Ice', 'Bug', 'Dragon', 'Ghost', 'Dark', 'Steel', 'Fairy'];
+				const type1 = allTypes[this.random(18)];
+				const type2 = allTypes[this.random(18)];
+				if (type1 === type2) {
+					pokemon.types = [type1];
+					this.add('-start', pokemon, 'typechange', `${type1}`);
+				} else {
+					pokemon.types = [type1, type2];
+					this.add('-start', pokemon, 'typechange', `${type1}/${type2}`);
+				}
+				// @ts-ignore track percentages to keep purple pills from resetting pp
+				pokemon.ppPercentages = pokemon.moveSlots.map(m =>
+					m.pp / m.maxpp
+				);
+				// Get all possible moves sorted for convience in coding
+				let newMovep = [];
+				let statMove = [], offMove1 = [], offMove2 = [];
+				for (const id in this.data.Movedex) {
+					const move = this.data.Movedex[id];
+					if (id !== move.id) continue;
+					if (move.isZ || move.isNonstandard || !move.isViable || move.id === 'batonpass') continue;
+					if (move.type && !pokemon.types.includes(move.type)) continue;
+					// Time to sort!
+					if (move.category === 'Status') statMove.push(move.id);
+					if (move.category === 'Special') {
+						if (type1 === type2) {
+							offMove1.push(move.id);
+							offMove2.push(move.id);
+						} else {
+							if (move.type === type1) {
+								offMove1.push(move.id);
+							} else if (move.type === type2) {
+								offMove2.push(move.id);
+							}
+						}
+					}
+				}
+				const move1 = offMove1[this.random(offMove1.length)];
+				offMove2 = offMove2.filter(move => move !== move1);
+				if (!offMove2.length) offMove2 = ['revelationdance'];
+				const move2 = offMove2[this.random(offMove2.length)];
+				newMovep.push(move1);
+				newMovep.push(move2);
+				newMovep.push(!statMove.length ? 'moonlight' : statMove[this.random(statMove.length)]);
+				newMovep.push('purplepills');
+				// Replace Moveset
+				pokemon.moveSlots = [];
+				for (const [i, moveid] of newMovep.entries()) {
+					const move = this.getMove(moveid);
+					if (!move.id) continue;
+					pokemon.moveSlots.push({
+						move: move.name,
+						id: move.id,
+						// @ts-ignore hacky way to reduce purple pill's PP
+						pp: Math.floor(((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5) * (pokemon.ppPercentages ? pokemon.ppPercentages[i] : 1)),
+						maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
+						target: move.target,
+						disabled: false,
+						used: false,
+						virtual: true,
+					});
+					pokemon.moves.push(move.id);
+				}
+			},
+			onModifySpAPriority: 1,
+			onModifySpA(spa, pokemon) {
+				return pokemon.getStat('spd');
+			},
+			onRestart(pokemon) {
+				this.add('-message', `${pokemon.name} feels better!`);
+				delete pokemon.volatiles['purplepills'];
+				this.add('-end', pokemon, 'Purple Pills', '[silent]');
+				pokemon.types = ['Psychic'];
+				this.add('-start', pokemon, 'typechange', 'Psychic');
+				// @ts-ignore track percentages to keep purple pills from resetting pp
+				pokemon.ppPercentages = pokemon.moveSlots.slice().map(m => {
+					return m.pp / m.maxpp;
+				});
+				// Update movepool
+				let newMovep = ['moonlight', 'heartswap', 'batonpass', 'purplepills'];
+				pokemon.moveSlots = [];
+				for (const [i, moveid] of newMovep.entries()) {
+					let move = this.getMove(moveid);
+					if (!move.id) continue;
+					pokemon.moveSlots.push({
+						move: move.name,
+						id: move.id,
+						// @ts-ignore hacky way to reduce purple pill's PP
+						pp: Math.floor(((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5) * (pokemon.ppPercentages ? pokemon.ppPercentages[i] : 1)),
+						maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
+						target: move.target,
+						disabled: false,
+						used: false,
+						virtual: true,
+					});
+					pokemon.moves.push(move.id);
+				}
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Poison",
 	},
 	// grimAuxiliatrix
 	paintrain: {
@@ -2083,142 +2217,6 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fire",
 		zMovePower: 160,
-	},
-	// Lycanium Z
-	purplepills: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "The user gains a random typing and 3 moves based on that typing (2 special moves and 1 status move). The user's attacks deal damage based off the user's Special Defense. If used again, returns the user to its original moveset and typing. This move fails if the user is not Lycanium Z.",
-		shortDesc: "Lycanium Z: Gains 3 random moves and typing.",
-		id: "purplepills",
-		name: "Purple Pills",
-		isNonstandard: true,
-		pp: 15,
-		priority: 0,
-		flags: {},
-		onTryMovePriority: 100,
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, "Swallow", source);
-		},
-		onTryHit(target, source) {
-			if (source.name !== 'Lycanium Z') {
-				this.add('-fail', source);
-				this.hint("Only Lycanium Z can use Purple Pills.");
-				return null;
-			}
-		},
-		volatileStatus: 'purplepills',
-		effect: {
-			noCopy: true,
-			onStart(pokemon) {
-				this.add('-start', pokemon, 'Purple Pills', '[silent]');
-				this.add('-message', `${pokemon.name} swallowed some pills!`);
-				const allTypes = ['Normal', 'Fire', 'Fighting', 'Water', 'Flying', 'Grass', 'Poison', 'Electric', 'Ground', 'Psychic', 'Rock', 'Ice', 'Bug', 'Dragon', 'Ghost', 'Dark', 'Steel', 'Fairy'];
-				const type1 = allTypes[this.random(18)];
-				const type2 = allTypes[this.random(18)];
-				if (type1 === type2) {
-					pokemon.types = [type1];
-					this.add('-start', pokemon, 'typechange', `${type1}`);
-				} else {
-					pokemon.types = [type1, type2];
-					this.add('-start', pokemon, 'typechange', `${type1}/${type2}`);
-				}
-				// @ts-ignore track percentages to keep purple pills from resetting pp
-				pokemon.ppPercentages = pokemon.moveSlots.map(m =>
-					m.pp / m.maxpp
-				);
-				// Get all possible moves sorted for convience in coding
-				let newMovep = [];
-				let statMove = [], offMove1 = [], offMove2 = [];
-				for (const id in this.data.Movedex) {
-					const move = this.data.Movedex[id];
-					if (id !== move.id) continue;
-					if (move.isZ || move.isNonstandard || !move.isViable || move.id === 'batonpass') continue;
-					if (move.type && !pokemon.types.includes(move.type)) continue;
-					// Time to sort!
-					if (move.category === 'Status') statMove.push(move.id);
-					if (move.category === 'Special') {
-						if (type1 === type2) {
-							offMove1.push(move.id);
-							offMove2.push(move.id);
-						} else {
-							if (move.type === type1) {
-								offMove1.push(move.id);
-							} else if (move.type === type2) {
-								offMove2.push(move.id);
-							}
-						}
-					}
-				}
-				const move1 = offMove1[this.random(offMove1.length)];
-				offMove2 = offMove2.filter(move => move !== move1);
-				if (!offMove2.length) offMove2 = ['revelationdance'];
-				const move2 = offMove2[this.random(offMove2.length)];
-				newMovep.push(move1);
-				newMovep.push(move2);
-				newMovep.push(!statMove.length ? 'moonlight' : statMove[this.random(statMove.length)]);
-				newMovep.push('purplepills');
-				// Replace Moveset
-				pokemon.moveSlots = [];
-				for (const [i, moveid] of newMovep.entries()) {
-					const move = this.getMove(moveid);
-					if (!move.id) continue;
-					pokemon.moveSlots.push({
-						move: move.name,
-						id: move.id,
-						// @ts-ignore hacky way to reduce purple pill's PP
-						pp: Math.floor(((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5) * (pokemon.ppPercentages ? pokemon.ppPercentages[i] : 1)),
-						maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
-						target: move.target,
-						disabled: false,
-						used: false,
-						virtual: true,
-					});
-					pokemon.moves.push(move.id);
-				}
-			},
-			onModifySpAPriority: 1,
-			onModifySpA(spa, pokemon) {
-				return pokemon.getStat('spd');
-			},
-			onRestart(pokemon) {
-				this.add('-message', `${pokemon.name} feels better!`);
-				delete pokemon.volatiles['purplepills'];
-				this.add('-end', pokemon, 'Purple Pills', '[silent]');
-				pokemon.types = ['Psychic'];
-				this.add('-start', pokemon, 'typechange', 'Psychic');
-				// @ts-ignore track percentages to keep purple pills from resetting pp
-				pokemon.ppPercentages = pokemon.moveSlots.slice().map(m => {
-					return m.pp / m.maxpp;
-				});
-				// Update movepool
-				let newMovep = ['moonlight', 'heartswap', 'batonpass', 'purplepills'];
-				pokemon.moveSlots = [];
-				for (const [i, moveid] of newMovep.entries()) {
-					let move = this.getMove(moveid);
-					if (!move.id) continue;
-					pokemon.moveSlots.push({
-						move: move.name,
-						id: move.id,
-						// @ts-ignore hacky way to reduce purple pill's PP
-						pp: Math.floor(((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5) * (pokemon.ppPercentages ? pokemon.ppPercentages[i] : 1)),
-						maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
-						target: move.target,
-						disabled: false,
-						used: false,
-						virtual: true,
-					});
-					pokemon.moves.push(move.id);
-				}
-			},
-		},
-		secondary: null,
-		target: "self",
-		type: "Poison",
 	},
 	// MacChaeger
 	naptime: {
@@ -3312,6 +3310,8 @@ let BattleMovedex = {
 			move.basePower = move.baseMove ? move.baseMove.basePower : move.basePower;
 			// @ts-ignore Hack for Snaquaza's Z move
 			move.category = move.baseMove ? move.baseMove.category : move.category;
+			// @ts-ignore Hack for Snaquaza's Z move
+			this.claimMove = move.baseMove;
 		},
 		onTryMovePriority: 100,
 		onTryMove() {
@@ -3333,7 +3333,7 @@ let BattleMovedex = {
 				icebeam: ['Abomasnow', 'Absol', 'Aggron', 'Alomomola', 'Altaria', 'Araquanid', 'Articuno', 'Audino', 'Aurorus', 'Avalugg', 'Azumarill', 'Barbaracle', 'Basculin', 'Bastiodon', 'Beartic', 'Bibarel', 'Blastoise', 'Blissey', 'Bruxish', 'Carracosta', 'Castform', 'Chansey', 'Clawitzer', 'Claydol', 'Clefable', 'Clefairy', 'Cloyster', 'Corsola', 'Crabominable', 'Crawdaunt', 'Cresselia', 'Cryogonal', 'Delcatty', 'Delibird', 'Dewgong', 'Dragonite', 'Drampa', 'Dunsparce', 'Dusknoir', 'Empoleon', 'Exploud', 'Feraligatr', 'Floatzel', 'Froslass', 'Furret', 'Gastrodon', 'Glaceon', 'Glalie', 'Golduck', 'Golisopod', 'Golurk', 'Goodra', 'Gorebyss', 'Greninja', 'Gyarados', 'Huntail', 'Jellicent', 'Jynx', 'Kabutops', 'Kangaskhan', 'Kecleon', 'Kingdra', 'Kingler', 'Kyurem', 'Lanturn', 'Lapras', 'Latias', 'Latios', 'Lickilicky', 'Linoone', 'Lopunny', 'Ludicolo', 'Lumineon', 'Lunatone', 'Luvdisc', 'Magearna', 'Mamoswine', 'Manaphy', 'Mantine', 'Marowak', 'Masquerain', 'Mawile', 'Mesprit', 'Mew', 'Milotic', 'Miltank', 'Nidoking', 'Nidoqueen', 'Ninetales-Alola', 'Octillery', 'Omastar', 'Pelipper', 'Phione', 'Piloswine', 'Politoed', 'Poliwrath', 'Porygon-Z', 'Porygon2', 'Primarina', 'Quagsire', 'Qwilfish', 'Rampardos', 'Raticate', 'Regice', 'Relicanth', 'Rhydon', 'Rhyperior', 'Samurott', 'Seaking', 'Sharpedo', 'Sigilyph', 'Silvally', 'Simipour', 'Slaking', 'Slowbro', 'Slowking', 'Smeargle', 'Sneasel', 'Snorlax', 'Starmie', 'Suicune', 'Swalot', 'Swampert', 'Swanna', 'Tapu Fini', 'Tauros', 'Tentacruel', 'Toxapex', 'Tyranitar', 'Vanilluxe', 'Vaporeon', 'Wailord', 'Walrein', 'Weavile', 'Whiscash', 'Wigglytuff', 'Wishiwashi', 'Zangoose'],
 			};
 			// @ts-ignore Hack for Snaquaza's Z move
-			const baseMove = move.baseMove ? move.baseMove.id : 'bravebird';
+			const baseMove = this.claimMove ? this.claimMove.id : 'bravebird';
 			const pool = claims[baseMove];
 			if (!pool) throw new Error(`SSB: Unable to find fake claim movepool for the move: "${baseMove}".`); // Should never happen
 			const claim = claims[baseMove][this.random(pool.length)];
