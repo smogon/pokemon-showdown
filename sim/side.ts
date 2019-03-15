@@ -159,7 +159,15 @@ export class Side {
 			id: this.id,
 			pokemon: [] as AnyObject[],
 		};
-		for (const pokemon of this.pokemon) {
+		let team = this.pokemon;
+		if (this.battle.gameType === 'multi' && this.currentRequest !== 'teampreview') {
+			const teamN = this.n % 2;
+			for (const side of this.battle.sides) {
+				if (side.n % 2 !== teamN || side === this) continue;
+				team = team.concat(side.pokemon); // this side's Pokemon must be first
+			}
+		}
+		for (const pokemon of team) {
 			const entry: AnyObject = {
 				ident: pokemon.fullname,
 				details: pokemon.details,
@@ -183,6 +191,7 @@ export class Side {
 				pokeball: pokemon.pokeball,
 			};
 			if (this.battle.gen > 6) entry.ability = pokemon.ability;
+			if (this !== pokemon.side) entry.notMine = true;
 			data.pokemon.push(entry);
 		}
 		return data;
