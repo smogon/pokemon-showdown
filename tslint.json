@@ -19,7 +19,7 @@
             "severity": "warning",
             "options": {
                 "limit": 120,
-                "ignore-pattern": "\\.replace\\(('\\[|/)|^\\s*(// \\s*)?(return |(let |const )?[a-zA-Z0-9$.]+ \\+?= (\\$\\()?|[a-zA-Z0-9$.]+\\()?['\"`]"
+                "ignore-pattern": "^\\s*(// \\s*)?((let |const )?[a-zA-Z0-9$.]+ \\+?= (\\$\\()?|(return |throw )?(new )?([a-zA-Z0-9$.]+\\()?)?['\"`/]"
             }
         },
         "interface-name": false,
