@@ -528,7 +528,7 @@ export class Pokemon {
 		return null;
 	}
 
-	allies(): Pokemon[] {
+	allies(adjacentOnly?: boolean, forTargeting?: boolean): Pokemon[] {
 		let allies = this.side.active;
 		if (this.battle.gameType === 'multi') {
 			const team = this.side.n % 2;
@@ -537,27 +537,21 @@ export class Pokemon {
 				side.n % 2 === team ? side.active : []
 			);
 		}
-		return allies.filter(ally => ally && !ally.fainted);
+		if (adjacentOnly) allies = allies.filter(ally => this.battle.isAdjacent(this, ally));
+		return forTargeting ? allies : allies.filter(ally => ally && !ally.fainted);
 	}
 
-	nearbyAllies(): Pokemon[] {
-		return this.allies().filter(ally => this.battle.isAdjacent(this, ally));
-	}
-
-	foes(): Pokemon[] {
+	foes(adjacentOnly?: boolean, forTargeting?: boolean): Pokemon[] {
 		let foes = this.side.foe.active;
 		if (this.battle.gameType === 'multi') {
-			const team = this.side.foe.n % 2;
+			const team = +!(this.side.n % 2);
 			// @ts-ignore
 			foes = this.battle.sides.flatMap(side =>
 				side.n % 2 === team ? side.active : []
 			);
 		}
-		return foes.filter(foe => foe && !foe.fainted);
-	}
-
-	nearbyFoes(): Pokemon[] {
-		return this.foes().filter(foe => this.battle.isAdjacent(this, foe));
+		if (adjacentOnly) foes = foes.filter(foe => this.battle.isAdjacent(this, foe));
+		return forTargeting ? foes : foes.filter(foe => foe && !foe.fainted);
 	}
 
 	getMoveTargets(move: Move, target: Pokemon): Pokemon[] {
@@ -578,10 +572,10 @@ export class Pokemon {
 			}
 			break;
 		case 'allAdjacent':
-			targets.push(...this.nearbyAllies());
+			targets.push(...this.allies(true));
 			// falls through
 		case 'allAdjacentFoes':
-			targets.push(...this.nearbyFoes());
+			targets.push(...this.foes(true));
 			if (targets.length && !targets.includes(target)) {
 				this.battle.retargetLastMove(targets[targets.length - 1]);
 			}

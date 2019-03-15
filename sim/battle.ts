@@ -2134,10 +2134,10 @@ export class Battle extends Dex.ModdedDex {
 	 */
 	validTargetLoc(targetLoc: number, source: Pokemon, targetType: string) {
 		if (targetLoc === 0) return true;
-		const numSlots = source.side.active.length;
-		if (Math.abs(targetLoc) > numSlots) return false;
+		const numSlots = source.side.active.length * this.sides.length / 2;
+		if (!Math.abs(targetLoc) && Math.abs(targetLoc) > numSlots) return false;
 
-		const sourceLoc = -(source.position + 1);
+		const sourceLoc = -(source.position + 1 + Math.floor(source.side.n / 2) * source.side.active.length);
 		const isFoe = (targetLoc > 0);
 		const acrossFromTargetLoc = -(numSlots + 1 - targetLoc);
 		const isAdjacent = (isFoe ?
@@ -2163,7 +2163,7 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	getTargetLoc(target: Pokemon, source: Pokemon) {
-		const position = target.position + 1;
+		const position = target.position + 1 + Math.floor(target.side.n / 2) * target.side.active.length;
 		return (target.side === source.side) ? -position : position;
 	}
 
@@ -2181,9 +2181,9 @@ export class Battle extends Dex.ModdedDex {
 		}
 		if (move.target !== 'randomNormal' && this.validTargetLoc(targetLoc, pokemon, move.target)) {
 			if (targetLoc > 0) {
-				target = pokemon.side.foe.active[targetLoc - 1];
+				target = pokemon.foes(false, true)[targetLoc - 1];
 			} else {
-				target = pokemon.side.active[-targetLoc - 1];
+				target = pokemon.allies(false, true)[-targetLoc - 1];
 			}
 			if (target) {
 				if (!target.fainted) {
@@ -2212,9 +2212,7 @@ export class Battle extends Dex.ModdedDex {
 
 		move = this.getMove(move);
 		if (move.target === 'adjacentAlly') {
-			const allyActives = pokemon.side.active;
-			let adjacentAllies = [allyActives[pokemon.position - 1], allyActives[pokemon.position + 1]];
-			adjacentAllies = adjacentAllies.filter(active => active && !active.fainted);
+			const adjacentAllies = pokemon.allies(true);
 			return adjacentAllies.length ? this.sample(adjacentAllies) : null;
 		}
 		if (move.target === 'self' || move.target === 'all' || move.target === 'allySide' ||
@@ -2224,11 +2222,8 @@ export class Battle extends Dex.ModdedDex {
 		if (pokemon.side.active.length > 2) {
 			if (move.target === 'adjacentFoe' || move.target === 'normal' || move.target === 'randomNormal') {
 				// even if a move can target an ally, auto-resolution will never make it target an ally
-				// i.e. if both your opponents faint before you use Flamethrower, it will fail instead of targeting your all
-				const foeActives = pokemon.side.foe.active;
-				const frontPosition = foeActives.length - 1 - pokemon.position;
-				let adjacentFoes = foeActives.slice(frontPosition < 1 ? 0 : frontPosition - 1, frontPosition + 2);
-				adjacentFoes = adjacentFoes.filter(active => active && !active.fainted);
+				// i.e. if both your opponents faint before you use Flamethrower, it will fail instead of targeting your ally
+				const adjacentFoes = pokemon.foes(true);
 				if (adjacentFoes.length) return this.sample(adjacentFoes);
 				// no valid target at all, return a foe for any possible redirection
 			}
