@@ -494,7 +494,6 @@ export class Validator {
 			(format.requirePlus || format.requirePentagon)) {
 			problems.push(`${name} has Secret Sword, which is only compatible with Keldeo-Ordinary obtained from Gen 5.`);
 		}
-		if (!lsetData.sources && lsetData.sourcesBefore <= 3 &&
 		const hasGen3moves = !lsetData.sources && lsetData.sourcesBefore <= 3;
 		if (hasGen3moves && dex.getAbility(set.ability).gen === 4 && !template.prevo && dex.gen <= 5) {
 			problems.push(`${name} has a gen 4 ability and isn't evolved - it can't use moves from gen 3.`);
