@@ -23,7 +23,8 @@ let transport: any;
  * to receive them.
  */
 export = function crashlogger(
-	error: Error | string, description: string, data: AnyObject | null = null): string | null {
+	error: Error | string, description: string, data: AnyObject | null = null
+): string | null {
 	const datenow = Date.now();
 
 	let stack = typeof error === 'string' ? error : error.stack;
