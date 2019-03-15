@@ -2236,7 +2236,7 @@ export class Battle extends Dex.ModdedDex {
 	validTargetLoc(targetLoc: number, source: Pokemon, targetType: string) {
 		if (targetLoc === 0) return true;
 		let numSlots = source.side.active.length;
-		if (!Math.abs(targetLoc) && Math.abs(targetLoc) > numSlots) return false;
+		if (Math.abs(targetLoc) > numSlots) return false;
 
 		let sourceLoc = -(source.position + 1);
 		let isFoe = (targetLoc > 0);
