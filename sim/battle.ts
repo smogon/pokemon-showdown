@@ -353,8 +353,8 @@ export class Battle extends Dex.ModdedDex {
 	addPseudoWeather(
 		status: string | PureEffect,
 		source: Pokemon | 'debug' | null = null,
-		sourceEffect: Effect | null = null): boolean {
-
+		sourceEffect: Effect | null = null
+	): boolean {
 		if (!source && this.event && this.event.target) source = this.event.target;
 		if (source === 'debug') source = this.p1.active[0];
 		status = this.getEffect(status);
@@ -440,15 +440,6 @@ export class Battle extends Dex.ModdedDex {
 		for (const active of actives) {
 			if (active) active.updateSpeed();
 		}
-	}
-
-	/**
-	 * Truncate a number into an unsigned 32-bit integer, for
-	 * compatibility with the cartridge games' math systems.
-	 */
-	trunc(num: number, bits: number = 0) {
-		if (bits) return (num >>> 0) % (2 ** bits);
-		return num >>> 0;
 	}
 
 	comparePriority(a: AnyObject, b: AnyObject) {
@@ -1852,15 +1843,16 @@ export class Battle extends Dex.ModdedDex {
 
 		if (damage) {
 			if (this.gen <= 1 && effect.recoil && source) {
-				this.damage(
-					this.clampIntRange(Math.floor(damage * effect.recoil[0] / effect.recoil[1]), 1), source, target, 'recoil');
+				const amount = this.clampIntRange(Math.floor(damage * effect.recoil[0] / effect.recoil[1]), 1);
+				this.damage(amount, source, target, 'recoil');
 			}
 			if (this.gen <= 4 && effect.drain && source) {
-				this.heal(
-					this.clampIntRange(Math.floor(damage * effect.drain[0] / effect.drain[1]), 1), source, target, 'drain');
+				const amount = this.clampIntRange(Math.floor(damage * effect.drain[0] / effect.drain[1]), 1);
+				this.heal(amount, source, target, 'drain');
 			}
 			if (this.gen > 4 && effect.drain && source) {
-				this.heal(Math.round(damage * effect.drain[0] / effect.drain[1]), source, target, 'drain');
+				const amount = Math.round(damage * effect.drain[0] / effect.drain[1]);
+				this.heal(amount, source, target, 'drain');
 			}
 		}
 
@@ -2173,8 +2165,8 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	modifyDamage(
-		baseDamage: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove, suppressMessages: boolean = false) {
-
+		baseDamage: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove, suppressMessages: boolean = false
+	) {
 		const tr = this.trunc;
 		if (!move.type) move.type = '???';
 		const type = move.type;
@@ -2267,8 +2259,10 @@ export class Battle extends Dex.ModdedDex {
 
 		const sourceLoc = -(source.position + 1);
 		const isFoe = (targetLoc > 0);
-		const isAdjacent =
-			(isFoe ? Math.abs(-(numSlots + 1 - targetLoc) - sourceLoc) <= 1 : Math.abs(targetLoc - sourceLoc) === 1);
+		const acrossFromTargetLoc = -(numSlots + 1 - targetLoc);
+		const isAdjacent = (isFoe ?
+			Math.abs(acrossFromTargetLoc - sourceLoc) <= 1 :
+			Math.abs(targetLoc - sourceLoc) === 1);
 		const isSelf = (sourceLoc === targetLoc);
 
 		switch (targetType) {
@@ -2857,8 +2851,9 @@ export class Battle extends Dex.ModdedDex {
 		} else if (action.choice === 'megaEvo' && this.gen >= 7) {
 			this.eachEvent('Update');
 			// In Gen 7, the action order is recalculated for a Pokémon that mega evolves.
-			const moveIndex = this.queue.findIndex(
-				queuedAction => queuedAction.pokemon === action.pokemon && queuedAction.choice === 'move');
+			const moveIndex = this.queue.findIndex(queuedAction =>
+				queuedAction.pokemon === action.pokemon && queuedAction.choice === 'move'
+			);
 			if (moveIndex >= 0) {
 				const moveAction = this.queue.splice(moveIndex, 1)[0] as Actions["MoveAction"];
 				moveAction.mega = 'done';
@@ -3214,13 +3209,15 @@ export class Battle extends Dex.ModdedDex {
 
 	runMove(
 		move: string | Move, target: Pokemon, targetLoc?: number,
-		sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean) {
+		sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean
+	) {
 		throw new Error(`The runMove function needs to be implemented in scripts.js or the battle format.`);
 	}
 
 	useMove(
 		move: string | Move, pokemon: Pokemon, target?: Pokemon | null,
-		sourceEffect?: Effect | null, zMove?: string): boolean {
+		sourceEffect?: Effect | null, zMove?: string
+	): boolean {
 		throw new Error(`The useMove function needs to be implemented in scripts.js or the battle format.`);
 	}
 
@@ -3230,7 +3227,8 @@ export class Battle extends Dex.ModdedDex {
 	 */
 	useMoveInner(
 		move: string | Move, pokemon: Pokemon, target?: Pokemon | null,
-		sourceEffect?: Effect | null, zMove?: string): boolean {
+		sourceEffect?: Effect | null, zMove?: string
+	): boolean {
 		throw new Error(`The useMoveInner function needs to be implemented in scripts.js or the battle format.`);
 	}
 
@@ -3241,7 +3239,8 @@ export class Battle extends Dex.ModdedDex {
 	moveHit(
 		target: Pokemon | null, pokemon: Pokemon, move: string | Move,
 		moveData?: ActiveMove | SelfEffect | SecondaryEffect,
-		isSecondary?: boolean, isSelf?: boolean): number | undefined | false {
+		isSecondary?: boolean, isSelf?: boolean
+	): number | undefined | false {
 		throw new Error(`The tryMoveHit function needs to be implemented in scripts.js or the battle format.`);
 	}
 
