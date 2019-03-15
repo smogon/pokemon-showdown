@@ -482,7 +482,7 @@ export class ObjectReadStream {
 		if (this.buf.length >= count) return;
 		this.readSize = Math.max(count, this.readSize);
 		while (!this.atEOF && this.buf.length < this.readSize) {
-			let readResult = this._read();
+			const readResult = this._read();
 			// @ts-ignore
 			if (readResult && readResult.then) {
 				await readResult;
@@ -514,14 +514,14 @@ export class ObjectReadStream {
 	}
 
 	async readArray(count: number | null = null) {
-		let out = await this.peekArray(count);
+		const out = await this.peekArray(count);
 		this.buf = this.buf.slice(out.length);
 		return out;
 	}
 
 	async readAll() {
 		await this.loadIntoBuffer(Infinity);
-		let out = this.buf;
+		const out = this.buf;
 		this.buf = [];
 		return out;
 	}
