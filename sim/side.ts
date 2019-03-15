@@ -191,7 +191,8 @@ export class Side {
 	}
 
 	addSideCondition(
-		status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null): boolean {
+		status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null
+	): boolean {
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.active[0];
 		if (!source) throw new Error(`setting sidecond without a source`);
@@ -604,7 +605,8 @@ export class Side {
 	choose(input: string) {
 		if (!this.currentRequest) {
 			return this.emitChoiceError(
-				this.battle.ended ? `Can't do anything: The game is over` : `Can't do anything: It's not your turn`);
+				this.battle.ended ? `Can't do anything: The game is over` : `Can't do anything: It's not your turn`
+			);
 		}
 
 		if (this.choice.cantUndo) {

@@ -86,7 +86,7 @@ export class Validator {
 			}
 		}
 
-		for (const [rule] of ruleTable) {
+		for (const rule of ruleTable.keys()) {
 			const subformat = dex.getFormat(rule);
 			if (subformat.onValidateTeam && ruleTable.has(subformat.id)) {
 				problems = problems.concat(subformat.onValidateTeam.call(dex, team, format, teamHas) || []);
@@ -445,7 +445,8 @@ export class Validator {
 					problems.push(`${name} has an event-exclusive move that it doesn't qualify for (only one of several ways to get the move will be listed):`);
 				}
 				const eventProblems = this.validateSource(
-					set, lsetData.sources[0], template, ` because it has a move only available`);
+					set, lsetData.sources[0], template, ` because it has a move only available`
+				);
 				// @ts-ignore validateEvent must have returned an array because it was passed a because param
 				if (eventProblems) problems.push(...eventProblems);
 			}
@@ -494,7 +495,8 @@ export class Validator {
 			problems.push(`${name} has Secret Sword, which is only compatible with Keldeo-Ordinary obtained from Gen 5.`);
 		}
 		if (!lsetData.sources && lsetData.sourcesBefore <= 3 &&
-			dex.getAbility(set.ability).gen === 4 && !template.prevo && dex.gen <= 5) {
+		const hasGen3moves = !lsetData.sources && lsetData.sourcesBefore <= 3;
+		if (hasGen3moves && dex.getAbility(set.ability).gen === 4 && !template.prevo && dex.gen <= 5) {
 			problems.push(`${name} has a gen 4 ability and isn't evolved - it can't use moves from gen 3.`);
 		}
 		if (!lsetData.sources && lsetData.sourcesBefore < 6 && lsetData.sourcesBefore >= 3 &&
