@@ -66,7 +66,7 @@ class Runner {
 				const game = this.runGame(format, timer, battleStream).finally(() => timer.stop());
 				if (!this.async) {
 					await game;
-					if (this.verbose) display(timer);
+					if (this.verbose && timer.display) console.log(timer.display());
 				}
 				games.push(game);
 				timers.push(timer);
@@ -92,10 +92,9 @@ class Runner {
 		// later is advanced by the four `newSeed()` calls, so each iteration should be
 		// 16 frames off the previous.
 		const spec = {formatid: format, seed: this.prng.seed};
-		const p1spec = {name: "Bot 1", team: this.generateTeam(format, timer)};
-		const p2spec = {name: "Bot 2", team: this.generateTeam(format, timer)};
+		const p1spec = {name: "Bot 1", seed: this.newSeed()};
+		const p2spec = {name: "Bot 2", seed: this.newSeed()};
 
-		// eslint-disable
 		const p1 = new RandomPlayerAI( // eslint-disable-line no-unused-vars
 			streams.p1, Object.assign({seed: this.newSeed()}, this.p1options));
 		const p2 = new RandomPlayerAI( // eslint-disable-line no-unused-vars
@@ -120,10 +119,6 @@ class Runner {
 			Math.floor(this.prng.next() * 0x10000),
 			Math.floor(this.prng.next() * 0x10000),
 		];
-	}
-
-	generateTeam(format, timer) {
-		return timer.time('generateTeam')(Dex.packTeam(Dex.generateTeam(format, this.newSeed())));
 	}
 
 	getNextFormat() {
@@ -155,66 +150,6 @@ const NOOP_TIMER = new class {
 	stats() { return STATS; }
 }();
 
-
-const micros = t => `${Math.round(t * 1000).toLocaleString()}\u03BCs`;
-const percent = (n, d) => `${(n * 100 / d).toFixed(2)}%`;
-const sheader = ['name', 'count', 'p50', 'p90', 'p95', 'p99', 'min', 'max', 'avg', 'std'];
-const cheader = ['name', 'count'];
-
-const sconfig = {columns: sheader.map((col, i) => {
-	const all = {wrapWord: true};
-	if (i >= 2) all.width = 10;
-	return all;
-})};
-
-let table;
-let style = {bold: ID, underline: ID};
-function display(timers) {
-	if (!table) return;
-
-	if (Array.isArray(timers)) {
-		// TODO
-	} else {
-		const timer = timers;
-		const {stats, total} = timer.stats();
-		if (total) console.log(`\n${style.bold(style.underline('Time'))} (${micros(total)})`);
-		if (stats.size) {
-			const data = [];
-			for (const [name, s] of stats.entries()) {
-				const d = [name, s.cnt];
-				for (let i = 2; i < sheader.length; i++) {
-					const val = s[sheader[i]];
-					let out = micros(val);
-					if (total) out += ` (${percent(val, total)})`;
-					d.push(out);
-				}
-				data.push(d);
-			}
-			// TODO sort!
-			console.log(table([sheader.map(h => style.bold(h)), ...data], sconfig));
-		}
-
-		if (timer.counters.size) {
-			if (!stats.size) console.log('\n');
-			console.log(style.bold(style.underline('Counters')));
-
-			const groups = new Map();
-			for (const [name, count] of timer.counters.entries()) {
-				const [prefix, suffix] = name.split(':');
-				let group = groups.get(prefix);
-				if (!group) groups.set(prefix, (group = []));
-				group.push([name, count]);
-			}
-
-			for (const [group, data] of groups.entries()) {
-				data.sort((a, b) => (b[1] - a[1]));
-				console.log(table([cheader.map(h => style.bold(h)), ...data]));
-			}
-		}
-	}
-}
-
-
 module.exports = Runner;
 
 // Kick off the Runner if we're being called from the command line.
@@ -244,23 +179,13 @@ if (require.main === module) {
 		const argv = require('minimist')(process.argv.slice(2));
 
 		if (argv.benchmark) {
-			options.seed = BENCHMARK_SEED;
+			options.prng = BENCHMARK_SEED;
 
-			let deps = '';
-			if (missing('trakr')) deps += 'trakr';
-			if (missing('table')) deps += 'table';
-			if (deps) shell(`npm install ${deps}`);
-
-			const trakr = require('trakr');
-			options.timer = () => new trakr.Timer();
-			// Require 'table' so that the display function actually works.
-			table = require('table').table;
-			if (!missing('colors')) {
-				const colors = require('colors/safe');
-				style = {bold: colors.bold, underline: colors.underline};
-			}
+		  if (missing('minimist')) shell('npm install trakkr');
+			const trakkr = require('trakkr');
+			options.timer = () => new trakkr.Timer();
 		}
-		if (argv.seed) options.seed = argv.seed.split(',').map(s => Number(s));
+		if (argv.seed) options.prng = argv.prng.split(',').map(s => Number(s));
 		options.totalGames = Number(argv._[0] || argv.num) || options.totalGames;
 		options.verbose = argv.verbose;
 		options.silent = argv.silent;
