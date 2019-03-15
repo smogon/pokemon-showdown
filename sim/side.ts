@@ -540,8 +540,7 @@ export class Side {
 			}
 			if (this.choice.switchIns.has(pos)) {
 				if (autoFill) continue;
-				return this.emitChoiceError(
-					`Can't choose for Team Preview: The Pokémon in slot ${pos + 1} can only switch in once`);
+				return this.emitChoiceError(`Can't choose for Team Preview: The Pokémon in slot ${pos + 1} can only switch in once`);
 			}
 
 			this.choice.switchIns.add(pos);

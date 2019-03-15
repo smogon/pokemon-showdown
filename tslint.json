@@ -13,7 +13,10 @@
         "no-string-literal": false,
         "interface-over-type-literal": false,
         "prefer-const": {
-            "severity": "warning"
+            "severity": "warning",
+            "options": {
+                "destructuring": "all"
+            }
         },
         "max-line-length": {
             "severity": "warning",

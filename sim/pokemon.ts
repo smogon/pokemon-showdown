@@ -1510,12 +1510,11 @@ export class Pokemon {
 	removeLinkedVolatiles(linkedStatus: string | Effect, linkedPokemon: Pokemon[]) {
 		linkedStatus = linkedStatus.toString();
 		for (const linkedPoke of linkedPokemon) {
-			if (linkedPoke.volatiles[linkedStatus]) {
-				linkedPoke.volatiles[linkedStatus].linkedPokemon.splice(
-					linkedPoke.volatiles[linkedStatus].linkedPokemon.indexOf(this), 1);
-				if (linkedPoke.volatiles[linkedStatus].linkedPokemon.length === 0) {
-					linkedPoke.removeVolatile(linkedStatus);
-				}
+			const volatileData = linkedPoke.volatiles[linkedStatus];
+			if (!volatileData) continue;
+			volatileData.linkedPokemon.splice(volatileData.linkedPokemon.indexOf(this), 1);
+			if (volatileData.linkedPokemon.length === 0) {
+				linkedPoke.removeVolatile(linkedStatus);
 			}
 		}
 	}

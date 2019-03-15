@@ -81,7 +81,6 @@ export class BattleStream extends Streams.ObjectReadWriteStream {
 	}
 
 	_writeLine(line: string) {
-		// tslint:disable-next-line:prefer-const
 		let [type, message] = splitFirst(line, ' ');
 		switch (type) {
 		case 'start':

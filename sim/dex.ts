@@ -691,16 +691,17 @@ class ModdedDex {
 			'Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel',
 			'Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Ice', 'Dragon', 'Dark',
 		];
+		const tr = this.trunc;
 		const stats = {hp: 31, atk: 31, def: 31, spe: 31, spa: 31, spd: 31};
 		if (this.gen <= 2) {
 			// Gen 2 specific Hidden Power check. IVs are still treated 0-31 so we get them 0-15
-			const atkDV = Math.floor(ivs.atk / 2);
-			const defDV = Math.floor(ivs.def / 2);
-			const speDV = Math.floor(ivs.spe / 2);
-			const spcDV = Math.floor(ivs.spa / 2);
+			const atkDV = tr(ivs.atk / 2);
+			const defDV = tr(ivs.def / 2);
+			const speDV = tr(ivs.spe / 2);
+			const spcDV = tr(ivs.spa / 2);
 			return {
 				type: hpTypes[4 * (atkDV % 4) + (defDV % 4)],
-				power: Math.floor(
+				power: tr(
 					(5 * ((spcDV >> 3) + (2 * (speDV >> 3)) + (4 * (defDV >> 3)) + (8 * (atkDV >> 3))) + (spcDV % 4)) / 2 + 31),
 			};
 		} else {
@@ -710,13 +711,13 @@ class ModdedDex {
 			let i = 1;
 			for (const s in stats) {
 				hpTypeX += i * (ivs[s] % 2);
-				hpPowerX += i * (Math.floor(ivs[s] / 2) % 2);
+				hpPowerX += i * (tr(ivs[s] / 2) % 2);
 				i *= 2;
 			}
 			return {
-				type: hpTypes[Math.floor(hpTypeX * 15 / 63)],
+				type: hpTypes[tr(hpTypeX * 15 / 63)],
 				// After Gen 6, Hidden Power is always 60 base power
-				power: (this.gen && this.gen < 6) ? Math.floor(hpPowerX * 40 / 63) + 30 : 60,
+				power: (this.gen && this.gen < 6) ? tr(hpPowerX * 40 / 63) + 30 : 60,
 			};
 		}
 	}
@@ -1182,9 +1183,9 @@ class ModdedDex {
 			if (j < 0) return null;
 			const ability = buf.substring(i, j);
 			const template = dexes['base'].getTemplate(set.species);
-			set.ability = (template.abilities && ['', '0', '1', 'H'].includes(ability)
-				// @ts-ignore
-				? template.abilities[ability || '0'] : ability);
+			set.ability = ['', '0', '1', 'H', 'S'].includes(ability) ?
+				template.abilities[ability as '0' || '0'] || (ability === '' ? '' : '!!!ERROR!!!') :
+				ability;
 			i = j + 1;
 
 			// moves
@@ -1288,8 +1289,7 @@ class ModdedDex {
 				return new TypeError(`${filePath}, if it exists, must export a non-null object`);
 			}
 			if (!dataObject[key] || typeof dataObject[key] !== 'object') {
-				return new TypeError(
-					`${filePath}, if it exists, must export an object whose '${key}' property is a non-null object`);
+				return new TypeError(`${filePath}, if it exists, must export an object whose '${key}' property is a non-null object`);
 			}
 			return dataObject[key];
 		} catch (e) {
