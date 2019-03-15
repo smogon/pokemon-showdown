@@ -105,21 +105,24 @@ class TestTools {
 		}
 		if (!options) options = {};
 		const format = this.getFormat(options);
-		const battle = new Sim.Battle({
+
+		const battleOptions = {
 			formatid: format.id,
 			// If a seed for the pseudo-random number generator is not provided,
 			// a default seed (guaranteed to be the same across test executions)
 			// will be used.
 			seed: options.seed || DEFAULT_SEED,
-		});
-		if (teams) {
-			for (let i = 0; i < teams.length; i++) {
-				assert(Array.isArray(teams[i]), "Team provided is not an array");
-				const slotNum = i + 1;
-				battle.join('p' + slotNum, 'Guest ' + slotNum, 1, teams[i]);
-			}
+		};
+
+		if (!teams) return new Sim.Battle(battleOptions);
+
+		for (let i = 0; i < teams.length; i++) {
+			assert(Array.isArray(teams[i]), `Team provided is not an array`);
+			const playerSlot = `p${i + 1}`;
+			battleOptions[playerSlot] = {team: teams[i]};
 		}
-		return battle;
+
+		return new Sim.Battle(battleOptions);
 	}
 }
 

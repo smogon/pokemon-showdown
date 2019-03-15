@@ -131,7 +131,7 @@ export class Side {
 			case 'move':
 				let details = ``;
 				if (action.targetLoc && this.active.length > 1) details += ` ${action.targetLoc}`;
-				if (action.mega) details += ` mega`;
+				if (action.mega) details += (action.pokemon!.item === 'ultranecroziumz' ? ` ultra` : ` mega`);
 				if (action.zmove) details += ` zmove`;
 				return `move ${action.moveid}${details}`;
 			case 'switch':
@@ -616,7 +616,9 @@ export class Side {
 		const choiceStrings = (input.startsWith('team ') ? [input] : input.split(','));
 
 		if (choiceStrings.length > this.active.length) {
-			this.emitChoiceError(`Can't make choices: You sent choices for ${choiceStrings.length} Pokémon, but this is a ${this.battle.gameType} game!`);
+			return this.emitChoiceError(
+				`Can't make choices: You sent choices for ${choiceStrings.length} Pokémon, but this is a ${this.battle.gameType} game!`
+			);
 		}
 
 		for (let choiceString of choiceStrings) {

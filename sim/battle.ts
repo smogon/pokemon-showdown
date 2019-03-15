@@ -18,12 +18,6 @@ interface FaintedPokemon {
 	effect: Effect | null;
 }
 
-interface PlayerOptions {
-	name?: string;
-	avatar?: string;
-	team?: PokemonSet[] | string | null;
-}
-
 interface BattleOptions {
 	formatid: string; // Format ID
 	send?: (type: string, data: string | string[]) => void; // Output callback
@@ -84,7 +78,11 @@ export class Battle extends Dex.ModdedDex {
 	events: AnyObject | null;
 	lastDamage: number;
 	abilityOrder: number;
-	NOT_FAILURE: '';
+
+	NOT_FAIL: '';
+	FAIL: false;
+	SILENT_FAIL: null;
+
 	prng: PRNG;
 	prngSeed: PRNGSeed;
 	teamGenerator: ReturnType<typeof Dex.getTeamGenerator> | null;
@@ -151,7 +149,9 @@ export class Battle extends Dex.ModdedDex {
 		this.events = null;
 		this.lastDamage = 0;
 		this.abilityOrder = 0;
-		this.NOT_FAILURE = '';
+		this.NOT_FAIL = '';
+		this.FAIL = false;
+		this.SILENT_FAIL = null;
 		this.prng = options.prng || new PRNG(options.seed || undefined);
 		this.prngSeed = this.prng.startingSeed.slice() as PRNGSeed;
 		this.teamGenerator = null;
@@ -185,11 +185,6 @@ export class Battle extends Dex.ModdedDex {
 		if (options.p2) {
 			this.setPlayer('p2', options.p2);
 		}
-	}
-
-	static logReplay(data: string, isReplay: boolean | Side) {
-		if (isReplay === true) return data;
-		return '';
 	}
 
 	toString() {
@@ -1705,7 +1700,6 @@ export class Battle extends Dex.ModdedDex {
 			if (this.rated === 'Rated battle') this.rated = true;
 			this.add('rated', typeof this.rated === 'string' ? this.rated : '');
 		}
-		this.add('seed', (side: Side) => Battle.logReplay(this.prngSeed.join(','), side));
 
 		if (format.onBegin) {
 			format.onBegin.call(this);
@@ -2269,7 +2263,7 @@ export class Battle extends Dex.ModdedDex {
 	validTargetLoc(targetLoc: number, source: Pokemon, targetType: string) {
 		if (targetLoc === 0) return true;
 		const numSlots = source.side.active.length;
-		if (!Math.abs(targetLoc) && Math.abs(targetLoc) > numSlots) return false;
+		if (Math.abs(targetLoc) > numSlots) return false;
 
 		const sourceLoc = -(source.position + 1);
 		const isFoe = (targetLoc > 0);
@@ -3128,17 +3122,25 @@ export class Battle extends Dex.ModdedDex {
 
 	// players
 
-	getTeam(team: PokemonSet[] | string | null): PokemonSet[] {
+	getTeam(options: PlayerOptions): PokemonSet[] {
 		const format = this.getFormat();
+		let team = options.team;
 		if (typeof team === 'string') team = Dex.fastUnpackTeam(team);
 		if (!format.team && team) {
 			return team;
 		}
 
-		if (!this.teamGenerator) {
-			this.teamGenerator = this.getTeamGenerator(format, this.prng);
+		if (!options.seed) {
+			options.seed = PRNG.generateSeed();
 		}
-		team = this.teamGenerator.generateTeam();
+
+		if (!this.teamGenerator) {
+			this.teamGenerator = this.getTeamGenerator(format, options.seed);
+		} else {
+			this.teamGenerator.setSeed(options.seed);
+		}
+
+		team = this.teamGenerator.getTeam(options);
 
 		return team as PokemonSet[];
 	}
@@ -3149,7 +3151,7 @@ export class Battle extends Dex.ModdedDex {
 		if (!this[slot]) {
 			// create player
 			const slotNum = (slot === 'p2' ? 1 : 0);
-			const team = this.getTeam(options.team || null);
+			const team = this.getTeam(options);
 			side = new Side(options.name || `Player ${slotNum + 1}`, this, slotNum, team);
 			if (options.avatar) side.avatar = '' + options.avatar;
 			this[slot] = side;

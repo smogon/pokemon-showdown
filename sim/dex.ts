@@ -968,8 +968,8 @@ class ModdedDex {
 		return new TeamGenerator(format, seed);
 	}
 
-	generateTeam(format: Format | string, seed: PRNG | PRNGSeed | null = null) {
-		return this.getTeamGenerator(format, seed).generateTeam();
+	generateTeam(format: Format | string, options: PlayerOptions | null = null): PokemonSet[] {
+		return this.getTeamGenerator(format, options && options.seed).getTeam(options);
 	}
 
 	dataSearch(target: string, searchIn?: DataType[] | null, isInexact?: boolean): AnyObject[] | false {

@@ -719,13 +719,13 @@ let BattleMovedex = {
 				}
 			}
 			// Generate a new team
-			let generator = new RandomStaffBrosTeams(this.format, this.prng);
-			let team = generator.generateTeam();
+			let team = this.teamGenerator.getTeam({name: source.side.name});
 			// Overwrite un-fainted pokemon other than the user
 			for (let i = 0; i < currentTeam.length; i++) {
 				if (currentTeam[i].fainted || !currentTeam[i].hp || currentTeam[i].position === source.position) continue;
 				let set = team.shift();
 				let oldSet = carryOver[i];
+				// @ts-ignore
 				if (set.name === 'bumbadadabum') {
 					// No way am I allowing 2 of this mon on one team
 					set = team.shift();
@@ -734,6 +734,7 @@ let BattleMovedex = {
 				// Bit of a hack so client doesn't crash when formeChange is called for the new pokemon
 				let effect = this.effect;
 				this.effect = /** @type {Effect} */ ({id: ''});
+				// @ts-ignore
 				let pokemon = new Pokemon(set, source.side);
 				this.effect = effect;
 

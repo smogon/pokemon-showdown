@@ -80,9 +80,6 @@ let Formats = [
 		ruleset: ['[Gen 7] UU'],
 		banlist: ['UU', 'RUBL', 'Aurora Veil'],
 		unbanlist: ['Drought'],
-		onBegin() {
-			if (this.rated && this.format === 'gen7ru') this.add('html', `<div class="broadcast-green"><strong>RU is currently suspecting Zygarde-10%! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3647724/">suspect thread</a>.</strong></div>`);
-		},
 	},
 	{
 		name: "[Gen 7] NU",
@@ -178,10 +175,13 @@ let Formats = [
 		ruleset: ['Pokemon', 'Species Clause', 'Nickname Clause', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Accuracy Moves Clause', 'Swagger Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 		banlist: [
 			'Illegal', 'Unreleased', 'Arceus', 'Darkrai', 'Deoxys-Base', 'Deoxys-Attack', 'Deoxys-Defense', 'Dialga', 'Giratina',
-			'Groudon', 'Ho-Oh', 'Jirachi', 'Kangaskhan-Mega', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Marshadow', 'Mewtwo',
+			'Groudon', 'Ho-Oh', 'Kangaskhan-Mega', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Marshadow', 'Mewtwo',
 			'Mimikyu', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Rayquaza', 'Reshiram', 'Salamence-Mega', 'Shaymin-Sky',
 			'Snorlax', 'Solgaleo', 'Tapu Koko', 'Xerneas', 'Yveltal', 'Zekrom', 'Focus Sash', 'Perish Song', 'Detect + Fightinium Z',
 		],
+		onBegin() {
+			if (this.rated && this.format === 'gen71v1') this.add('html', `<div class="broadcast-red"><strong>1v1 is currently suspecting Jirachi! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3648161/">suspect thread</a>.</strong></div>`);
+		},
 	},
 	{
 		name: "[Gen 7] ZU",
@@ -501,22 +501,23 @@ let Formats = [
 
 		mod: 'gen7',
 		gameType: 'doubles',
-		allowMultisearch: true,
+		searchShow: false,
 		teamLength: {
 			validate: [2, 2],
 			battle: 2,
 		},
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 		banlist: [
-			'Aegislash', 'Doublade', 'Honedge', 'Kitsunoh', 'Magearna', 'Pokestar Spirit', 'Battle Bond', 'Cheek Pouch', 'Cursed Body', 'Desolate Land',
-			'Dry Skin', 'Fluffy', 'Fur Coat', 'Grassy Surge', 'Huge Power', 'Ice Body', 'Iron Barbs', 'Moody', 'Parental Bond', 'Poison Heal', 'Power Construct',
-			'Pressure', 'Primordial Sea', 'Protean', 'Pure Power', 'Rain Dish', 'Rough Skin', 'Sand Stream', 'Schooling', 'Snow Warning', 'Stamina',
-			'Volt Absorb', 'Water Absorb', 'Wonder Guard', 'Abomasite', 'Aguav Berry', 'Assault Vest', 'Berry', 'Berry Juice', 'Berserk Gene', 'Black Sludge',
-			'Enigma Berry', 'Figy Berry', 'Gold Berry', 'Iapapa Berry', 'Kangaskhanite', 'Leftovers', 'Mago Berry', 'Mawilite', 'Medichamite', 'Normalium Z',
-			'Oran Berry', 'Rocky Helmet', 'Shell Bell', 'Sitrus Berry', 'Wiki Berry', 'Harvest + Rowap Berry', 'Harvest + Jaboca Berry', 'Shedinja + Sturdy',
+			'Pokestar Spirit', 'Battle Bond', 'Cheek Pouch', 'Cursed Body', 'Desolate Land', 'Dry Skin', 'Fluffy', 'Fur Coat', 'Grassy Surge',
+			'Huge Power', 'Ice Body', 'Iron Barbs', 'Moody', 'Parental Bond', 'Poison Heal', 'Power Construct', 'Pressure', 'Primordial Sea', 'Protean',
+			'Pure Power', 'Rain Dish', 'Rough Skin', 'Sand Stream', 'Schooling', 'Snow Warning', 'Stamina', 'Volt Absorb', 'Water Absorb', 'Wonder Guard',
+			'Abomasite', 'Aguav Berry', 'Assault Vest', 'Berry', 'Berry Juice', 'Berserk Gene', 'Black Sludge', 'Enigma Berry', 'Figy Berry', 'Gold Berry',
+			'Iapapa Berry', 'Kangaskhanite', 'Leftovers', 'Mago Berry', 'Medichamite', 'Normalium Z', 'Oran Berry', 'Rocky Helmet', 'Shell Bell',
+			'Sitrus Berry', 'Wiki Berry', 'Harvest + Rowap Berry', 'Harvest + Jaboca Berry', 'Shedinja + Sturdy',
 		],
 		onValidateSet(set) {
 			let template = this.getTemplate(set.species);
+			if (template.types.includes('Steel')) return [`${template.species} is a Steel-type, which is banned from Metronome Battle.`];
 			let bst = 0;
 			for (let stat in template.baseStats) {
 				// @ts-ignore
@@ -1540,7 +1541,7 @@ let Formats = [
 		},
 		ruleset: ['Pokemon', 'Species Clause', 'Nickname Clause', 'Moody Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Accuracy Moves Clause', 'Swagger Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
 		banlist: [
-			'Illegal', 'Unreleased', 'Arceus', 'Blaziken', 'Darkrai', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense',
+			'Illegal', 'Unreleased', 'Arceus', 'Blaziken', 'Darkrai', 'Deoxys-Base', 'Deoxys-Attack', 'Deoxys-Defense',
 			'Dialga', 'Giratina', 'Groudon', 'Ho-Oh', 'Kangaskhan-Mega', 'Kyogre', 'Kyurem-White', 'Lugia', 'Mewtwo',
 			'Palkia', 'Rayquaza', 'Reshiram', 'Salamence-Mega', 'Shaymin-Sky', 'Xerneas', 'Yveltal', 'Zekrom',
 			'Focus Sash', 'Soul Dew', 'Perish Song',
