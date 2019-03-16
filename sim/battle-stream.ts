@@ -57,16 +57,16 @@ export class BattleStream extends Streams.ObjectReadWriteStream {
 				if (line.charAt(0) === '>') this._writeLine(line.slice(1));
 			}
 		} catch (err) {
+			const battle = this.battle;
 			if (typeof Monitor === 'undefined') {
 				this.pushError(err);
-				return;
+			} else {
+				Monitor.crashlog(err, 'A battle', {
+					message,
+					inputLog: battle ? '\n' + battle.inputLog.join('\n') : '',
+					log: battle ? '\n' + battle.getDebugLog() : '',
+				});
 			}
-			const battle = this.battle;
-			Monitor.crashlog(err, 'A battle', {
-				message,
-				inputLog: battle ? '\n' + battle.inputLog.join('\n') : '',
-				log: battle ? '\n' + battle.getDebugLog() : '',
-			});
 
 			this.push(`update\n|html|<div class="broadcast-red"><b>The battle crashed</b><br />Don't worry, we're working on fixing it.</div>`);
 			if (battle && battle.p1 && battle.p1.currentRequest) {
@@ -190,7 +190,6 @@ export function getPlayerStreams(stream: BattleStream) {
 			stream.write(data.replace(/(^|\n)/g, `$1>p2 `));
 		},
 	});
-	// tslint:disable-next-line:no-floating-promises FIXME
 	(async () => {
 		let chunk;
 		// tslint:disable-next-line:no-conditional-assignment
@@ -220,7 +219,12 @@ export function getPlayerStreams(stream: BattleStream) {
 		spectator.push(null);
 		p1.push(null);
 		p2.push(null);
-	})();
+	})().catch(err => {
+		omniscient.pushError(err);
+		spectator.pushError(err);
+		p1.pushError(err);
+		p2.pushError(err);
+	});
 	return {omniscient, spectator, p1, p2};
 }
 
