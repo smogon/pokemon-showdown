@@ -6,7 +6,7 @@ let BattleAbilities = {
 		inherit: true,
 		shortDesc: "On switch-in, this Pokemon identifies a random foe's held item.",
 		onStart(pokemon) {
-			let target = pokemon.side.foe.randomActive();
+			let target = this.sample(pokemon.foes());
 			if (target && target.item) {
 				this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon);
 			}

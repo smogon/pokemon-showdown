@@ -414,7 +414,7 @@ let BattleAbilities = {
 		inherit: true,
 		onUpdate(pokemon) {
 			if (!pokemon.isStarted) return;
-			let target = pokemon.side.foe.randomActive();
+			let target = this.sample(pokemon.foes());
 			if (!target || target.fainted) return;
 			let ability = this.getAbility(target.ability);
 			let bannedAbilities = ['forecast', 'multitype', 'trace'];
