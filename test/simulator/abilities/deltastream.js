@@ -41,6 +41,18 @@ describe('Delta Stream', function () {
 		assert.false.holdsItem(pokemon);
 	});
 
+	it('should not reduce damage from Stealth Rock', function () {
+		battle = common.createBattle();
+		battle.join('p1', 'Guest 1', 1, [
+			{species: "Rayquaza", ability: 'pressure', moves: ['roost']},
+			{species: "Ho-Oh", ability: 'pressure', moves: ['roost']},
+		]);
+		battle.join('p2', 'Guest 2', 1, [{species: "Lugia", ability: 'deltastream', moves: ['stealthrock']}]);
+		battle.makeChoices('move roost', 'move stealthrock');
+		const pokemon = battle.p1.pokemon[1];
+		assert.hurtsBy(pokemon, Math.floor(pokemon.maxhp / 2), () => battle.makeChoices('switch 2', 'move stealthrock'));
+	});
+
 	it('should prevent moves and abilities from setting the weather to Sunny Day, Rain Dance, Sandstorm, or Hail', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Rayquaza", ability: 'deltastream', moves: ['helpinghand']}]);
