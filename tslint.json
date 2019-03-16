@@ -12,14 +12,17 @@
         "no-empty": [true, "allow-empty-catch", "allow-empty-functions"],
         "no-string-literal": false,
         "interface-over-type-literal": false,
-        // TODO: turn on
-        "prefer-const": false,
-        // I do want to bring this down to 120 at some point but maybe later
+        "prefer-const": {
+            "severity": "warning",
+            "options": {
+                "destructuring": "all"
+            }
+        },
         "max-line-length": {
             "severity": "warning",
             "options": {
-                "limit": 140,
-                "ignore-pattern": "\\.replace\\(('\\[|/)|^\\s*(// \\s*)?(return |(let |const )?[a-zA-Z0-9$.]+ \\+?= (\\$\\()?|[a-zA-Z0-9$.]+\\()?['\"`]"
+                "limit": 120,
+                "ignore-pattern": "^\\s*(// \\s*)?((let |const )?[a-zA-Z0-9$.]+ \\+?= (\\$\\()?|(return |throw )?(new )?([a-zA-Z0-9$.]+\\()?)?['\"`/]"
             }
         },
         "interface-name": false,
