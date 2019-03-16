@@ -106,7 +106,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream {
 				this.battle!.undoChoice(type);
 			} else {
 				this.battle!.choose(type, message);
- 			}
+			}
 			break;
 		case 'forcewin':
 		case 'forcetie':
