@@ -424,6 +424,12 @@ const roles = {
 		id: `desperado`,
 		memo: [`Desperado: At Night, you can PM the host the name of another player. You will kill this player if they're not aligned with the TOWN, but you will die if they are.`],
 	},
+	wild_discard: {
+		name: `Wild disCard`,
+		id: `wilddiscard`,
+		alignment: `solo`,
+		memo: [`Wild disCard: You may choose a different role from the game's discards.`],
+	},
 	discard: {
 		name: `Discard`,
 		id: `discard`,
@@ -524,6 +530,7 @@ const roles = {
 		id: `governor`,
 		memo: [`Governor: At the end of each day, the Governor can decide whether the person who would be lynched will die or not.`],
 	},
+	grey_goo: `gray_goo`,
 	gray_goo: {
 		name: `Gray Goo`,
 		id: `graygoo`,
@@ -1067,12 +1074,6 @@ const roles = {
 		id: `wildcardgi`,
 		alignment: `solo`,
 		memo: [`Wild Card: You get a different randomised role.`],
-	},
-	wild_discard: {
-		name: `Wild disCard`,
-		id: `wilddiscard`,
-		alignment: `solo`,
-		memo: [`Wild disCard: You may choose a different role from the game's discards.`],
 	},
 	yogi_bear: {
 		name: `Yogi Bear`,
@@ -1719,10 +1720,10 @@ const themes = {
 		6: `Solo Assassin, Guard, Guard, Guard, Guard, King`,
 		7: `Solo Assassin, Guard, Guard, Guard, Guard, Guard, King`,
 	},
-	tms: `baby_too_much_scum`,
-	btms: `baby_too_much_scum`,
-	too_much_scum: `baby_too_much_scum`,
-	baby_too_much_scum: {
+	tms: `too_much_scum`,
+	btms: `too_much_scum`,
+	baby_too_much_scum: `too_much_scum`,
+	too_much_scum: {
 		name: `Too Much Scum`,
 		desc: `Too Much Scum: Find the many scum, reminiscent of the Jungle Republic setup.`,
 		8: `Mafia Goon, Mafia Goon, Solo Serial Killer, FBI Agent, Vanilla Townie, Vanilla Townie, Vanilla Townie, Vanilla Townie`,
@@ -2927,7 +2928,7 @@ const IDEAs = {
 	snaqs_idea: {
 		name: `Snaq's Idea`,
 		roles: [
-			`Vanilla Townie`,
+			`Vanilla Townie (Must Pick)`,
 			`Discard`,
 			`Hater`,
 			`Hater`,
