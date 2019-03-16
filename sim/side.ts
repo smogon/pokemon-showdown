@@ -131,7 +131,7 @@ export class Side {
 			case 'move':
 				let details = ``;
 				if (action.targetLoc && this.active.length > 1) details += ` ${action.targetLoc}`;
-				if (action.mega) details += ` mega`;
+				if (action.mega) details += (action.pokemon!.item === 'ultranecroziumz' ? ` ultra` : ` mega`);
 				if (action.zmove) details += ` zmove`;
 				return `move ${action.moveid}${details}`;
 			case 'switch':
@@ -190,7 +190,9 @@ export class Side {
 		return this.battle.sample(actives);
 	}
 
-	addSideCondition(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null): boolean {
+	addSideCondition(
+		status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null
+	): boolean {
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.active[0];
 		if (!source) throw new Error(`setting sidecond without a source`);
@@ -208,7 +210,8 @@ export class Side {
 			duration: status.duration,
 		};
 		if (status.durationCallback) {
-			this.sideConditions[status.id].duration = status.durationCallback.call(this.battle, this.active[0], source, sourceEffect);
+			this.sideConditions[status.id].duration =
+				status.durationCallback.call(this.battle, this.active[0], source, sourceEffect);
 		}
 		if (!this.battle.singleEvent('Start', status, this.sideConditions[status.id], this, source, sourceEffect)) {
 			delete this.sideConditions[status.id];
@@ -600,7 +603,9 @@ export class Side {
 
 	choose(input: string) {
 		if (!this.currentRequest) {
-			return this.emitChoiceError(this.battle.ended ? `Can't do anything: The game is over` : `Can't do anything: It's not your turn`);
+			return this.emitChoiceError(
+				this.battle.ended ? `Can't do anything: The game is over` : `Can't do anything: It's not your turn`
+			);
 		}
 
 		if (this.choice.cantUndo) {
@@ -612,7 +617,9 @@ export class Side {
 		const choiceStrings = (input.startsWith('team ') ? [input] : input.split(','));
 
 		if (choiceStrings.length > this.active.length) {
-			this.emitChoiceError(`Can't make choices: You sent choices for ${choiceStrings.length} Pokémon, but this is a ${this.battle.gameType} game!`);
+			return this.emitChoiceError(
+				`Can't make choices: You sent choices for ${choiceStrings.length} Pokémon, but this is a ${this.battle.gameType} game!`
+			);
 		}
 
 		for (let choiceString of choiceStrings) {

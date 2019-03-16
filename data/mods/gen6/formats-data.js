@@ -463,7 +463,7 @@ let BattleFormatsData = {
 	},
 	poliwrath: {
 		inherit: true,
-		randomBattleMoves: ["hydropump", "focusblast", "icebeam", "rest", "sleeptalk", "scald", "circlethrow", "raindance"],
+		randomBattleMoves: ["hydropump", "focusblast", "icepunch", "rest", "sleeptalk", "scald", "circlethrow", "raindance"],
 		randomDoubleBattleMoves: ["bellydrum", "encore", "waterfall", "protect", "icepunch", "earthquake", "brickbreak", "rockslide"],
 		tier: "NU",
 		doublesTier: "(DUU)",
@@ -1785,7 +1785,7 @@ let BattleFormatsData = {
 	},
 	lugia: {
 		inherit: true,
-		randomBattleMoves: ["toxic", "roost", "substitute", "whirlwind", "thunderwave", "dragontail", "aeroblast"],
+		randomBattleMoves: ["toxic", "roost", "substitute", "whirlwind", "thunderwave", "aeroblast"],
 		randomDoubleBattleMoves: ["aeroblast", "roost", "substitute", "tailwind", "icebeam", "psychic", "calmmind", "skydrop", "protect"],
 		tier: "Uber",
 		doublesTier: "DUber",
@@ -2479,6 +2479,7 @@ let BattleFormatsData = {
 		battleOnly: true,
 	},
 	castformsnowy: {
+		randomBattleMoves: ["hail", "blizzard", "thunderbolt", "fireblast"],
 		battleOnly: true,
 	},
 	kecleon: {
@@ -3058,8 +3059,8 @@ let BattleFormatsData = {
 	},
 	spiritomb: {
 		inherit: true,
-		randomBattleMoves: ["shadowsneak", "suckerpunch", "pursuit", "willowisp", "darkpulse", "rest", "sleeptalk", "foulplay", "painsplit", "calmmind"],
-		randomDoubleBattleMoves: ["shadowsneak", "suckerpunch", "icywind", "willowisp", "snarl", "darkpulse", "protect", "foulplay", "painsplit"],
+		randomBattleMoves: ["shadowsneak", "pursuit", "willowisp", "darkpulse", "rest", "sleeptalk", "foulplay", "calmmind"],
+		randomDoubleBattleMoves: ["shadowsneak", "icywind", "willowisp", "snarl", "darkpulse", "protect", "foulplay", "painsplit"],
 		tier: "RU",
 		doublesTier: "(DUU)",
 	},
@@ -4762,7 +4763,7 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	hoopaunbound: {
-		randomBattleMoves: ["nastyplot", "substitute", "psyshock", "psychic", "darkpulse", "focusblast", "hyperspacefury", "zenheadbutt", "icepunch", "drainpunch", "gunkshot", "knockoff", "trick"],
+		randomBattleMoves: ["nastyplot", "substitute", "psychic", "darkpulse", "focusblast", "hyperspacefury", "zenheadbutt", "icepunch", "drainpunch", "gunkshot", "knockoff", "trick"],
 		randomDoubleBattleMoves: ["psychic", "darkpulse", "focusblast", "protect", "hyperspacefury", "zenheadbutt", "icepunch", "drainpunch", "gunkshot"],
 		eventOnly: true,
 		tier: "Uber",

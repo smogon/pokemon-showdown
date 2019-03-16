@@ -2431,7 +2431,7 @@ const pages = {
 			let punishDesc = "";
 			if (reason) punishDesc += ` Reason: ${reason}.`;
 			if (alts.length) punishDesc += ` Alts: ${alts.join(", ")}.`;
-			if (user.can('ban', null, this.room) && ip.length) {
+			if (user.can('ban') && ip.length) {
 				punishDesc += ` IPs: ${ip.join(", ")}.`;
 			}
 			buf += `<p>- ${possessive(id)} ${punishType.toLowerCase()} expires in ${expireString}.${punishDesc}</p>`;

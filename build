@@ -48,10 +48,6 @@ function replace(file, replacements) {
 	});
 }
 
-function rewrite(src, out, dist) {
-	replace(new RegExp(`(require\\\(.*?)(${src})(.*?\\\))`), `$1${out}$3`, path.join(__dirname, dist));
-}
-
 try {
 	require.resolve('sucrase');
 } catch (e) {

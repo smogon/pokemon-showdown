@@ -4205,6 +4205,7 @@ const commands = {
 				userid: targetUser.userid,
 				avatar: targetUser.avatar,
 				group: targetUser.group,
+				autoconfirmed: !!targetUser.autoconfirmed,
 				rooms: roomList,
 			};
 			connection.send('|queryresponse|userdetails|' + JSON.stringify(userdetails));
@@ -4234,7 +4235,7 @@ const commands = {
 
 			let visibility;
 			if (targetRoom.isPrivate) {
-				visibility = (targetRoom.isPrivate === 'hidden') ? 'hidden' : 'private';
+				visibility = (targetRoom.isPrivate === 'hidden') ? 'hidden' : 'secret';
 			} else {
 				visibility = 'public';
 			}
