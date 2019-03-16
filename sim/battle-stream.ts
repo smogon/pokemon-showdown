@@ -57,16 +57,13 @@ export class BattleStream extends Streams.ObjectReadWriteStream {
 				if (line.charAt(0) === '>') this._writeLine(line.slice(1));
 			}
 		} catch (err) {
+			if (typeof Monitor === 'undefined') throw err;
 			const battle = this.battle;
-			if (typeof Monitor === 'undefined') {
-				this.pushError(err);
-			} else {
-				Monitor.crashlog(err, 'A battle', {
-					message,
-					inputLog: battle ? '\n' + battle.inputLog.join('\n') : '',
-					log: battle ? '\n' + battle.getDebugLog() : '',
-				});
-			}
+			Monitor.crashlog(err, 'A battle', {
+				message,
+				inputLog: battle ? '\n' + battle.inputLog.join('\n') : '',
+				log: battle ? '\n' + battle.getDebugLog() : '',
+			});
 
 			this.push(`update\n|html|<div class="broadcast-red"><b>The battle crashed</b><br />Don't worry, we're working on fixing it.</div>`);
 			if (battle && battle.p1 && battle.p1.currentRequest) {
