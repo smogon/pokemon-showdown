@@ -762,6 +762,7 @@ interface ModdedBattleSide {
 }
 
 interface ModdedBattlePokemon {
+	inherit?: boolean
 	boostBy?: (this: Pokemon, boost: SparseBoostsTable) => boolean
 	calculateStat?: (this: Pokemon, statName: StatNameExceptHP, boost: number, modifier?: number) => number
 	getActionSpeed?: (this: Pokemon) => number
@@ -818,6 +819,13 @@ interface TypeInfo extends Readonly<TypeData> {
 	readonly id: string
 	readonly name: string
 	readonly toString: () => string
+}
+
+interface PlayerOptions {
+	name?: string;
+	avatar?: string;
+	team?: PokemonSet[] | string | null;
+	seed?: PRNGSeed;
 }
 
 interface Actions {

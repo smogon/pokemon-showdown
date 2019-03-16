@@ -131,7 +131,7 @@ export class Side {
 			case 'move':
 				let details = ``;
 				if (action.targetLoc && this.active.length > 1) details += ` ${action.targetLoc}`;
-				if (action.mega) details += ` mega`;
+				if (action.mega) details += (action.pokemon!.item === 'ultranecroziumz' ? ` ultra` : ` mega`);
 				if (action.zmove) details += ` zmove`;
 				return `move ${action.moveid}${details}`;
 			case 'switch':
@@ -190,7 +190,9 @@ export class Side {
 		return this.battle.sample(actives);
 	}
 
-	addSideCondition(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null): boolean {
+	addSideCondition(
+		status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null
+	): boolean {
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.active[0];
 		if (!source) throw new Error(`setting sidecond without a source`);
@@ -208,7 +210,8 @@ export class Side {
 			duration: status.duration,
 		};
 		if (status.durationCallback) {
-			this.sideConditions[status.id].duration = status.durationCallback.call(this.battle, this.active[0], source, sourceEffect);
+			this.sideConditions[status.id].duration =
+				status.durationCallback.call(this.battle, this.active[0], source, sourceEffect);
 		}
 		if (!this.battle.singleEvent('Start', status, this.sideConditions[status.id], this, source, sourceEffect)) {
 			delete this.sideConditions[status.id];
@@ -600,7 +603,9 @@ export class Side {
 
 	choose(input: string) {
 		if (!this.currentRequest) {
-			return this.emitChoiceError(this.battle.ended ? `Can't do anything: The game is over` : `Can't do anything: It's not your turn`);
+			return this.emitChoiceError(
+				this.battle.ended ? `Can't do anything: The game is over` : `Can't do anything: It's not your turn`
+			);
 		}
 
 		if (this.choice.cantUndo) {
@@ -612,7 +617,9 @@ export class Side {
 		const choiceStrings = (input.startsWith('team ') ? [input] : input.split(','));
 
 		if (choiceStrings.length > this.active.length) {
-			this.emitChoiceError(`Can't make choices: You sent choices for ${choiceStrings.length} Pokémon, but this is a ${this.battle.gameType} game!`);
+			return this.emitChoiceError(
+				`Can't make choices: You sent choices for ${choiceStrings.length} Pokémon, but this is a ${this.battle.gameType} game!`
+			);
 		}
 
 		for (let choiceString of choiceStrings) {
@@ -629,19 +636,29 @@ export class Side {
 
 			switch (choiceType) {
 			case 'move':
-				let targetLoc = 0;
+				const original = data;
+				const error = () => this.emitChoiceError(`Conflicting arguments for "move": ${original}`);
+				let targetLoc: number | undefined;
 				let megaOrZ = '';
 				while (true) {
-					if (/\s-?[1-3]$/.test(data)) {
+					// If data ends with a number, treat it as a target location.
+					// We need to special case 'Conversion 2' so it doesn't get
+					// confused with 'Conversion' erroneously sent with the target
+					// '2' (since Conversion targets 'self', targetLoc can't be 2).
+					if (/\s(?:-|\+)?[1-3]$/.test(data) && toId(data) !== 'conversion2') {
+						if (targetLoc !== undefined) return error();
 						targetLoc = parseInt(data.slice(-2), 10);
 						data = data.slice(0, -2).trim();
 					} else if (data.endsWith(' mega')) {
+						if (megaOrZ) return error();
 						megaOrZ = 'mega';
 						data = data.slice(0, -5);
 					} else if (data.endsWith(' zmove')) {
+						if (megaOrZ) return error();
 						megaOrZ = 'zmove';
 						data = data.slice(0, -6);
 					} else if (data.endsWith(' ultra')) {
+						if (megaOrZ) return error();
 						megaOrZ = 'ultra';
 						data = data.slice(0, -6);
 					} else {
@@ -665,6 +682,7 @@ export class Side {
 				if (data) return this.emitChoiceError(`Unrecognized data after "pass": ${data}`);
 				this.choosePass();
 				break;
+			case 'auto':
 			case 'default':
 				this.autoChoose();
 				break;
