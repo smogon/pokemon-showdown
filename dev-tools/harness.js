@@ -16,7 +16,6 @@ const shell = cmd => child_process.execSync(cmd, {stdio: 'inherit', cwd: __dirna
 if (require.main === module) shell('node ../build');
 
 const BattleStreams = require('../.sim-dist/battle-stream');
-const Dex = require('../.sim-dist/dex');
 const PRNG = require('../.sim-dist/prng').PRNG;
 const RandomPlayerAI = require('../.sim-dist/examples/random-player-ai').RandomPlayerAI;
 
@@ -40,6 +39,7 @@ class Runner {
 		this.logs = !this.silent && !!options.logs;
 		this.verbose = !this.silent && !!options.verbose;
 		this.timer = options.timer;
+		this.formatter = options.formatter;
 
 		this.formatIndex = 0;
 		this.numGames = 0;
@@ -66,7 +66,7 @@ class Runner {
 				const game = this.runGame(format, timer, battleStream).finally(() => timer.stop());
 				if (!this.async) {
 					await game;
-					if (this.verbose && timer.display) console.log(timer.display());
+					if (this.verbose && timer.display) console.log(this.formatter.display(timer));
 				}
 				games.push(game);
 				timers.push(timer);
@@ -184,6 +184,8 @@ if (require.main === module) {
 		  if (missing('minimist')) shell('npm install trakkr');
 			const trakkr = require('trakkr');
 			options.timer = () => new trakkr.Timer();
+			options.formatter = new trakkr.Formatter(!!argv.full, trakkr.SORT,
+				argv.csv ? trakkr.CSV : (argv.tsv ? trakkr.TSV : trakkr.TABLE));
 		}
 		if (argv.seed) options.prng = argv.prng.split(',').map(s => Number(s));
 		options.totalGames = Number(argv._[0] || argv.num) || options.totalGames;
