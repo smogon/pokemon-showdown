@@ -1542,8 +1542,6 @@ export class Battle extends Dex.ModdedDex {
 		if (this.started) return;
 
 		this.started = true;
-		this.sides[1].foe = this.sides[0];
-		this.sides[0].foe = this.sides[1];
 
 		for (const side of this.sides) {
 			this.add('teamsize', side.id, side.pokemon.length);

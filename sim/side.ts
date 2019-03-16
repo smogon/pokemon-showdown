@@ -41,7 +41,6 @@ export class Side {
 	name: string;
 	avatar: string;
 	maxTeamSize: number;
-	foe: Side;
 	team: PokemonSet[];
 	pokemon: Pokemon[];
 	active: Pokemon[];
@@ -76,7 +75,6 @@ export class Side {
 		this.name = name;
 		this.avatar = '';
 		this.maxTeamSize = 6;
-		this.foe = sideNum ? this.battle.sides[0] : this.battle.sides[1];
 
 		this.team = team;
 		this.pokemon = [];
@@ -124,6 +122,10 @@ export class Side {
 
 		// old-gens
 		this.lastMove = null;
+	}
+
+	get foe() {
+		return this.battle.sides[+!(this.n % 2)];
 	}
 
 	getChoice() {
@@ -861,6 +863,5 @@ export class Side {
 		this.active = [];
 		// @ts-ignore - readonly
 		this.battle = null!;
-		this.foe = null!;
 	}
 }
