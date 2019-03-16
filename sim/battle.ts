@@ -95,7 +95,6 @@ export class Battle extends Dex.ModdedDex {
 	constructor(options: BattleOptions) {
 		const format = Dex.getFormat(options.formatid, true);
 		super(format.mod);
-		this.timer = options.timer;
 		this.zMoveTable = {};
 		Object.assign(this, this.data.Scripts);
 		this.id = '';
@@ -713,7 +712,6 @@ export class Battle extends Dex.ModdedDex {
 	runEvent(
 		eventid: string, target?: Pokemon | Side | Battle | null, source?: string | Pokemon | false | null,
 		effect?: Effect | null, relayVar?: any, onEffect?: boolean, fastExit?: boolean) {
-		const t = this.timer.time('runEvent');
 		// if (Battle.eventCounter) {
 		// 	if (!Battle.eventCounter[eventid]) Battle.eventCounter[eventid] = 0;
 		// 	Battle.eventCounter[eventid]++;
@@ -730,7 +728,6 @@ export class Battle extends Dex.ModdedDex {
 		let effectSource = null;
 		if (source instanceof Pokemon) effectSource = source;
 		const handlers = this.findEventHandlers(target, eventid, effectSource);
-		const t2 = this.timer.time('postFindHandlers');
 		if (fastExit) {
 			handlers.sort(Battle.compareRedirectOrder);
 		} else {
@@ -759,13 +756,11 @@ export class Battle extends Dex.ModdedDex {
 			}
 		}
 		for (const handler of handlers) {
-			const t3 = this.timer.time('executeHandler');
 			const status = handler.status;
 			const thing = handler.thing;
 			// this.debug('match ' + eventid + ': ' + status.id + ' ' + status.effectType);
 			if (status.effectType === 'Status' && thing.status !== status.id) {
 				// it's changed; call it off
-				t3();
 				continue;
 			}
 			if (status.effectType === 'Ability' && !status.isUnbreakable &&
@@ -794,11 +789,9 @@ export class Battle extends Dex.ModdedDex {
 				};
 				if (eventid in AttackingEvents) {
 					this.debug(eventid + ' handler suppressed by Mold Breaker');
-					t3();
 					continue;
 				} else if (eventid === 'Damage' && effect && effect.effectType === 'Move') {
 					this.debug(eventid + ' handler suppressed by Mold Breaker');
-					t3();
 					continue;
 				}
 			}
@@ -807,20 +800,17 @@ export class Battle extends Dex.ModdedDex {
 				if (eventid !== 'Update') {
 					this.debug(eventid + ' handler suppressed by Embargo, Klutz or Magic Room');
 				}
-				t3();
 				continue;
 			} else if (eventid !== 'End' && status.effectType === 'Ability' &&
 					(thing instanceof Pokemon) && thing.ignoringAbility()) {
 				if (eventid !== 'Update') {
 					this.debug(eventid + ' handler suppressed by Gastro Acid');
 				}
-				t3();
 				continue;
 			}
 			if ((status.effectType === 'Weather' || eventid === 'Weather') &&
 				eventid !== 'Residual' && eventid !== 'End' && this.suppressingWeather()) {
 				this.debug(eventid + ' handler suppressed by Air Lock');
-				t3();
 				continue;
 			}
 			let returnVal;
@@ -846,7 +836,6 @@ export class Battle extends Dex.ModdedDex {
 					args[0] = relayVar;
 				}
 			}
-			t3();
 		}
 
 		this.eventDepth--;
@@ -857,7 +846,7 @@ export class Battle extends Dex.ModdedDex {
 		}
 		this.event = parentEvent;
 
-		return t(t2(relayVar));
+		return relayVar;
 	}
 
 	/**
@@ -879,8 +868,6 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	findEventHandlers(thing: Pokemon | Side | Battle, eventName: string, sourceThing?: Pokemon | null) {
-		const t = this.timer.time('findEventHandlers');
-    this.timer.count(`on:${eventName}`);
 		let handlers: AnyObject[] = [];
 		if (thing instanceof Pokemon && thing.isActive) {
 			handlers = this.findPokemonEventHandlers(thing, `on${eventName}`);
@@ -906,7 +893,7 @@ export class Battle extends Dex.ModdedDex {
 			handlers.push(...this.findSideEventHandlers(thing.foe, `onAny${eventName}`));
 		}
 		handlers.push(...this.findBattleEventHandlers(`on${eventName}`));
-		return t(handlers);
+		return handlers;
 	}
 
 	findPokemonEventHandlers(pokemon: Pokemon, callbackName: string, getKey?: 'duration') {
@@ -916,7 +903,6 @@ export class Battle extends Dex.ModdedDex {
 		// @ts-ignore
 		let callback = status[callbackName];
 		if (callback !== undefined || (getKey && pokemon.statusData[getKey])) {
-			this.timer.count('find:status');
 			handlers.push({
 				status, callback, statusData: pokemon.statusData, end: pokemon.clearStatus, thing: pokemon,
 			});
@@ -928,7 +914,6 @@ export class Battle extends Dex.ModdedDex {
 			// @ts-ignore
 			callback = volatile[callbackName];
 			if (callback !== undefined || (getKey && volatileData[getKey])) {
-				this.timer.count('find:volatile');
 				handlers.push({
 					status: volatile, callback, statusData: volatileData, end: pokemon.removeVolatile, thing: pokemon,
 				});
@@ -939,7 +924,6 @@ export class Battle extends Dex.ModdedDex {
 		// @ts-ignore
 		callback = ability[callbackName];
 		if (callback !== undefined || (getKey && pokemon.abilityData[getKey])) {
-			this.timer.count('find:ability');
 			handlers.push({
 				status: ability, callback, statusData: pokemon.abilityData, end: pokemon.clearAbility, thing: pokemon,
 			});
@@ -949,7 +933,6 @@ export class Battle extends Dex.ModdedDex {
 		// @ts-ignore
 		callback = item[callbackName];
 		if (callback !== undefined || (getKey && pokemon.itemData[getKey])) {
-			this.timer.count('find:item');
 			handlers.push({
 				status: item, callback, statusData: pokemon.itemData, end: pokemon.clearItem, thing: pokemon,
 			});
@@ -959,7 +942,6 @@ export class Battle extends Dex.ModdedDex {
 		// @ts-ignore
 		callback = species[callbackName];
 		if (callback !== undefined) {
-			this.timer.count('find:species');
 			handlers.push({
 				status: species, callback, statusData: pokemon.speciesData, end() {}, thing: pokemon,
 			});
@@ -980,7 +962,6 @@ export class Battle extends Dex.ModdedDex {
 			// @ts-ignore
 			callback = pseudoWeather[callbackName];
 			if (callback !== undefined || (getKey && pseudoWeatherData[getKey])) {
-				this.timer.count('find:pseudoWeather');
 				handlers.push({
 					status: pseudoWeather, callback, statusData: pseudoWeatherData, end: this.removePseudoWeather, thing: this,
 				});
@@ -991,7 +972,6 @@ export class Battle extends Dex.ModdedDex {
 		// @ts-ignore
 		callback = weather[callbackName];
 		if (callback !== undefined || (getKey && this.weatherData[getKey])) {
-			this.timer.count('find:weather');
 			handlers.push({
 				status: weather, callback, statusData: this.weatherData, end: this.clearWeather, thing: this,
 				// @ts-ignore
@@ -1002,7 +982,6 @@ export class Battle extends Dex.ModdedDex {
 		// @ts-ignore
 		callback = terrain[callbackName];
 		if (callback !== undefined || (getKey && this.terrainData[getKey])) {
-			this.timer.count('find:terrain');
 			handlers.push({
 				status: terrain, callback, statusData: this.terrainData, end: this.clearTerrain, thing: this,
 				// @ts-ignore
@@ -1014,7 +993,6 @@ export class Battle extends Dex.ModdedDex {
 		callback = format[callbackName];
 		// @ts-ignore
 		if (callback !== undefined || (getKey && this.formatData[getKey])) {
-			this.timer.count('find:format');
 			handlers.push({
 				status: format, callback, statusData: this.formatData, end() {}, thing: this,
 				// @ts-ignore
@@ -1024,7 +1002,6 @@ export class Battle extends Dex.ModdedDex {
 		// tslint:disable-next-line:no-conditional-assignment
 		if (this.events && (callback = this.events[callbackName]) !== undefined) {
 			for (const handler of callback) {
-				this.timer.count('find:callback');
 				const statusData = (handler.target.effectType === 'Format') ? this.formatData : undefined;
 				handlers.push({
 					status: handler.target, callback: handler.callback, statusData, end() {},
@@ -1043,7 +1020,6 @@ export class Battle extends Dex.ModdedDex {
 			// @ts-ignore
 			const callback = sideCondition[callbackName];
 			if (callback !== undefined || (getKey && sideConditionData[getKey])) {
-				this.timer.count('find:sideCondition');
 				handlers.push({
 					status: sideCondition, callback, statusData: sideConditionData, end: side.removeSideCondition, thing: side,
 				});
@@ -1122,7 +1098,6 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	makeRequest(type?: string) {
-		const t = this.timer.time('makeRequest');
 		if (type) {
 			this.currentRequest = type;
 			this.p1.clearChoice();
@@ -1200,8 +1175,6 @@ export class Battle extends Dex.ModdedDex {
 		if (this.p1.isChoiceDone() && this.p2.isChoiceDone()) {
 			throw new Error(`Choices are done immediately after a request`);
 		}
-
-    t();
 	}
 
 	tiebreak() {
@@ -1448,7 +1421,6 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	nextTurn() {
-		const t = this.timer.time('nextTurn');
 		this.turn++;
 		let allStale = true;
 		let oneStale: Pokemon | null = null;
@@ -1686,7 +1658,7 @@ export class Battle extends Dex.ModdedDex {
 
 		this.add('turn', this.turn);
 
-		t(this.makeRequest('move'));
+		this.makeRequest('move');
 	}
 
 	start() {
@@ -2468,7 +2440,6 @@ export class Battle extends Dex.ModdedDex {
 	 * Action object.
 	 */
 	resolveAction(action: AnyObject, midTurn: boolean = false): Actions["Action"] {
-		const t = this.timer.time('resolveAction');
 		if (!action) throw new Error(`Action not passed to resolveAction`);
 
 		if (!action.side && action.pokemon) action.side = action.pokemon.side;
@@ -2554,7 +2525,7 @@ export class Battle extends Dex.ModdedDex {
 				action.speed = action.pokemon.getActionSpeed();
 			}
 		}
-		return t(action) as any;
+		return action as any;
 	}
 
 	/**
@@ -2668,10 +2639,6 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	runAction(action: Actions["Action"]) {
-		return this.timer.time('runAction')(this.runActionInner(action));
-	}
-
-	runActionInner(action: Actions["Action"]) {
 		// returns whether or not we ended in a callback
 		switch (action.choice) {
 		case 'start': {
