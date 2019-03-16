@@ -52,6 +52,8 @@ class Runner {
 		while ((format = this.getNextFormat())) {
 			if (this.all && lastFormat && format !== lastFormat) {
 				await Promise.all(games);
+				// TODO: trakkr still needs to support aggregated statistics...
+				// if (!this.silent) console.log(this.formatter.display(timers));
 				games = [];
 				timers = [];
 			}
@@ -71,6 +73,7 @@ class Runner {
 				games.push(game);
 				timers.push(timer);
 			} catch (e) {
+				// TODO(#5297): danging promises still need to be fixed for this to work.
 				if (battleStream && battleStream.battle && this.logs) {
 					console.error(`${battleStream.battle.inputLog.join('\n')}\n\n`);
 				}
@@ -154,11 +157,6 @@ module.exports = Runner;
 
 // Kick off the Runner if we're being called from the command line.
 if (require.main === module) {
-	// *Seed scientifically chosen after incredibly detailed and thoughtful analysis.*
-	// The default seed used when running the harness for benchmarking purposes - all we
-	// really care about is consistency between runs, we don't have any specific concerns
-	// about the randomness provided it results in pseudo-realistic game playouts.
-	const BENCHMARK_SEED = [0x01234, 0x05678, 0x09123, 0x04567];
 	// 'move' 70% of the time (ie. 'switch' 30%) and ' mega' 60% of the time that its an option.
 	const AI_OPTIONS = {move: 0.7, mega: 0.6};
 
@@ -179,11 +177,17 @@ if (require.main === module) {
 		const argv = require('minimist')(process.argv.slice(2));
 
 		if (argv.benchmark) {
-			options.prng = BENCHMARK_SEED;
+			// *Seed scientifically chosen after incredibly detailed and thoughtful analysis.*
+			// The default seed used when running the harness for benchmarking purposes - all we
+			// really care about is consistency between runs, we don't have any specific concerns
+			// about the randomness provided it results in pseudo-realistic game playouts.
+			options.prng = [0x01234, 0x05678, 0x09123, 0x04567];
 
 		  if (missing('minimist')) shell('npm install trakkr');
 			const trakkr = require('trakkr');
 			options.timer = () => new trakkr.Timer();
+			// Choose which formatter to use - we don't need to tweak the sort or write a custom
+			// formatter because its almost as though the defaults were written for our usecase...
 			options.formatter = new trakkr.Formatter(!!argv.full, trakkr.SORT,
 				argv.csv ? trakkr.CSV : (argv.tsv ? trakkr.TSV : trakkr.TABLE));
 		}
