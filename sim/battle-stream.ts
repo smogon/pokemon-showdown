@@ -48,6 +48,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream {
 		this.debug = !!options.debug;
 		this.keepAlive = !!options.keepAlive;
 		this.battle = null;
+		this.timer = options.timer;
 	}
 
 	_write(message: string) {
@@ -94,6 +95,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream {
 				}
 			};
 			if (this.debug) options.debug = true;
+			if (this.timer) options.timer = this.timer;
 			this.battle = new Battle(options);
 			break;
 		case 'player':
