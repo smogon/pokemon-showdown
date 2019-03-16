@@ -18,7 +18,7 @@ const ROOT_DIR = path.resolve(__dirname, '..');
 export const processManagers: ProcessManager[] = [];
 export const disabled = false;
 
-class SubprocessStream extends Streams.ObjectReadWriteStream {
+class SubprocessStream extends Streams.ObjectReadWriteStream<string> {
 	constructor(public process: ChildProcess, public taskId: number) {
 		super();
 		this.process = process;
@@ -344,11 +344,11 @@ export class QueryProcessManager extends ProcessManager {
 
 export class StreamProcessManager extends ProcessManager {
 	/* taskid: stream used only in child process */
-	activeStreams: Map<string, Streams.ObjectReadWriteStream>;
+	activeStreams: Map<string, Streams.ObjectReadWriteStream<string>>;
 	// tslint:disable-next-line:variable-name
-	_createStream: () => Streams.ObjectReadWriteStream;
+	_createStream: () => Streams.ObjectReadWriteStream<string>;
 
-	constructor(module: NodeJS.Module, createStream: () => Streams.ObjectReadWriteStream) {
+	constructor(module: NodeJS.Module, createStream: () => Streams.ObjectReadWriteStream<string>) {
 		super(module);
 		this.activeStreams = new Map();
 		this._createStream = createStream;
@@ -363,7 +363,7 @@ export class StreamProcessManager extends ProcessManager {
 	createProcess() {
 		return new StreamProcessWrapper(this.filename);
 	}
-	async pipeStream(taskId: string, stream: Streams.ObjectReadStream) {
+	async pipeStream(taskId: string, stream: Streams.ObjectReadStream<string>) {
 		/* tslint:disable */
 		let value, done;
 		while (({value, done} = await stream.next(), !done)) {
