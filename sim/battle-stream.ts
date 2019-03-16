@@ -165,7 +165,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream {
  * Splits a BattleStream into omniscient, spectator, p1, and p2
  * streams, for ease of consumption.
  */
-export function getPlayerStreams(stream: BattleStream, errorHandler?: (e: any) => void) {
+export function getPlayerStreams(stream: BattleStream) {
 	const omniscient = new Streams.ObjectReadWriteStream({
 		write(data: string) {
 			stream.write(data);
@@ -187,6 +187,7 @@ export function getPlayerStreams(stream: BattleStream, errorHandler?: (e: any) =
 			stream.write(data.replace(/(^|\n)/g, `$1>p2 `));
 		},
 	});
+	// tslint:disable-next-line:no-floating-promises FIXME
 	(async () => {
 		let chunk;
 		// tslint:disable-next-line:no-conditional-assignment
@@ -216,7 +217,7 @@ export function getPlayerStreams(stream: BattleStream, errorHandler?: (e: any) =
 		spectator.push(null);
 		p1.push(null);
 		p2.push(null);
-	})().catch(errorHandler || ((e: any) => { throw e; }));
+	})();
 	return {omniscient, spectator, p1, p2};
 }
 
@@ -225,12 +226,12 @@ export class BattlePlayer {
 	readonly log: string[];
 	readonly debug: boolean;
 
-	constructor(
-		playerStream: Streams.ObjectReadWriteStream, debug: boolean = false, errorHandler?: (e: any) => void) {
+	constructor(playerStream: Streams.ObjectReadWriteStream, debug: boolean = false) {
 		this.stream = playerStream;
 		this.log = [];
 		this.debug = debug;
-		this.listen().catch(errorHandler || ((e: any) => { throw e; }));
+		// tslint:disable-next-line:no-floating-promises FIXME
+		this.listen();
 	}
 	async listen() {
 		let chunk;
@@ -272,11 +273,12 @@ export class BattleTextStream extends Streams.ReadWriteStream {
 	readonly battleStream: BattleStream;
 	currentMessage: string;
 
-	constructor(options: {debug?: boolean, errorHandler?: (e: any) => void}) {
+	constructor(options: {debug?: boolean}) {
 		super();
 		this.battleStream = new BattleStream(options);
 		this.currentMessage = '';
-		this._listen().catch(options.errorHandler || ((e: any) => { throw e; }));
+		// tslint:disable-next-line:no-floating-promises FIXME
+		this._listen();
 	}
 
 	_write(message: string | Buffer) {
