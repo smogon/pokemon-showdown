@@ -1677,7 +1677,7 @@ let Rooms = Object.assign(getRoom, {
 			roomTitle = `Team ${p1name} vs. Team ${p2name}`;
 		} else if (gameType === 'free-for-all') {
 			// p1 vs. p2 vs. p3 vs. p4 is too long of a title
-			roomTitle = "An all-out brawl!";
+			roomTitle = `${p1name} and friends`;
 		} else {
 			roomTitle = `${p1name} vs. ${p2name}`;
 		}

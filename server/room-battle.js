@@ -946,7 +946,8 @@ class RoomBattle {
 				this.room.title = `Team ${this.p1.name} vs. Team ${this.p2.name}`;
 			} else if (this.gameType === 'free-for-all') {
 				// p1 vs. p2 vs. p3 vs. p4 is too long of a title
-				this.room.title = "An all-out brawl!";
+				// @ts-ignore
+				this.room.title = `${this.p1.name} and friends`;
 			} else {
 				// @ts-ignore
 				this.room.title = `${this.p1.name} vs. ${this.p2.name}`;
