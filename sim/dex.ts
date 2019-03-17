@@ -250,7 +250,10 @@ class ModdedDex {
 		if (name.length > 18) name = name.substr(0, 18).trim();
 
 		// remove zalgo
-		name = name.replace(/[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g, '');
+		name = name.replace(
+			/[\u0300-\u036f\u0483-\u0489\u0610-\u0615\u064B-\u065F\u0670\u06D6-\u06DC\u06DF-\u06ED\u0E31\u0E34-\u0E3A\u0E47-\u0E4E]{3,}/g,
+			''
+		);
 		name = name.replace(/[\u239b-\u23b9]/g, '');
 
 		return name;
@@ -260,7 +263,10 @@ class ModdedDex {
 	 * Returns false if the target is immune; true otherwise.
 	 * Also checks immunity to some statuses.
 	 */
-	getImmunity(source: {type: string} | string, target: {getTypes: () => string[]} | {types: string[]} | string[] | string): boolean {
+	getImmunity(
+		source: {type: string} | string,
+		target: {getTypes: () => string[]} | {types: string[]} | string[] | string
+	): boolean {
 		const sourceType: string = typeof source !== 'string' ? source.type : source;
 		// @ts-ignore
 		const targetTyping: string[] | string = target.getTypes && target.getTypes() || target.types || target;
@@ -275,7 +281,10 @@ class ModdedDex {
 		return true;
 	}
 
-	getEffectiveness(source: {type: string} | string, target: {getTypes: () => string[]} | {types: string[]} | string[] | string): number {
+	getEffectiveness(
+		source: {type: string} | string,
+		target: {getTypes: () => string[]} | {types: string[]} | string[] | string
+	): number {
 		const sourceType: string = typeof source !== 'string' ? source.type : source;
 		// @ts-ignore
 		const targetTyping: string[] | string = target.getTypes && target.getTypes() || target.types || target;
@@ -326,7 +335,7 @@ class ModdedDex {
 		if (this.data.Aliases.hasOwnProperty(id)) {
 			if (this.data.FormatsData.hasOwnProperty(id)) {
 				// special event ID, like Rockruff-Dusk
-				let baseId = toId(this.data.Aliases[id]);
+				const baseId = toId(this.data.Aliases[id]);
 				template = new Data.Template({name}, this.data.Pokedex[baseId], this.data.FormatsData[id], this.data.Learnsets[id]);
 				template.name = id;
 				template.species = id;
@@ -650,14 +659,15 @@ class ModdedDex {
 	/** Given a table of base stats and a pokemon set, return the actual stats. */
 	spreadModify(baseStats: StatsTable, set: PokemonSet): StatsTable {
 		const modStats: SparseStatsTable = {atk: 10, def: 10, spa: 10, spd: 10, spe: 10};
+		const tr = this.trunc;
 		let statName: keyof StatsTable;
 		for (statName in modStats) {
 			const stat = baseStats[statName];
-			modStats[statName] = Math.floor(Math.floor(2 * stat + set.ivs[statName] + Math.floor(set.evs[statName] / 4)) * set.level / 100 + 5);
+			modStats[statName] = tr(tr(2 * stat + set.ivs[statName] + tr(set.evs[statName] / 4)) * set.level / 100 + 5);
 		}
 		if ('hp' in baseStats) {
 			const stat = baseStats['hp'];
-			modStats['hp'] = Math.floor(Math.floor(2 * stat + set.ivs['hp'] + Math.floor(set.evs['hp'] / 4) + 100) * set.level / 100 + 10);
+			modStats['hp'] = tr(tr(2 * stat + set.ivs['hp'] + tr(set.evs['hp'] / 4) + 100) * set.level / 100 + 10);
 		}
 		return this.natureModify(modStats as StatsTable, set);
 	}
@@ -681,16 +691,18 @@ class ModdedDex {
 			'Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel',
 			'Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Ice', 'Dragon', 'Dark',
 		];
+		const tr = this.trunc;
 		const stats = {hp: 31, atk: 31, def: 31, spe: 31, spa: 31, spd: 31};
 		if (this.gen <= 2) {
 			// Gen 2 specific Hidden Power check. IVs are still treated 0-31 so we get them 0-15
-			const atkDV = Math.floor(ivs.atk / 2);
-			const defDV = Math.floor(ivs.def / 2);
-			const speDV = Math.floor(ivs.spe / 2);
-			const spcDV = Math.floor(ivs.spa / 2);
+			const atkDV = tr(ivs.atk / 2);
+			const defDV = tr(ivs.def / 2);
+			const speDV = tr(ivs.spe / 2);
+			const spcDV = tr(ivs.spa / 2);
 			return {
 				type: hpTypes[4 * (atkDV % 4) + (defDV % 4)],
-				power: Math.floor((5 * ((spcDV >> 3) + (2 * (speDV >> 3)) + (4 * (defDV >> 3)) + (8 * (atkDV >> 3))) + (spcDV % 4)) / 2 + 31),
+				power: tr(
+					(5 * ((spcDV >> 3) + (2 * (speDV >> 3)) + (4 * (defDV >> 3)) + (8 * (atkDV >> 3))) + (spcDV % 4)) / 2 + 31),
 			};
 		} else {
 			// Hidden Power check for Gen 3 onwards
@@ -699,13 +711,13 @@ class ModdedDex {
 			let i = 1;
 			for (const s in stats) {
 				hpTypeX += i * (ivs[s] % 2);
-				hpPowerX += i * (Math.floor(ivs[s] / 2) % 2);
+				hpPowerX += i * (tr(ivs[s] / 2) % 2);
 				i *= 2;
 			}
 			return {
-				type: hpTypes[Math.floor(hpTypeX * 15 / 63)],
+				type: hpTypes[tr(hpTypeX * 15 / 63)],
 				// After Gen 6, Hidden Power is always 60 base power
-				power: (this.gen && this.gen < 6) ? Math.floor(hpPowerX * 40 / 63) + 30 : 60,
+				power: (this.gen && this.gen < 6) ? tr(hpPowerX * 40 / 63) + 30 : 60,
 			};
 		}
 	}
@@ -953,6 +965,15 @@ class ModdedDex {
 		return num;
 	}
 
+	/**
+	 * Truncate a number into an unsigned 32-bit integer, for
+	 * compatibility with the cartridge games' math systems.
+	 */
+	trunc(num: number, bits: number = 0) {
+		if (bits) return (num >>> 0) % (2 ** bits);
+		return num >>> 0;
+	}
+
 	getTeamGenerator(format: Format | string, seed: PRNG | PRNGSeed | null = null) {
 		const TeamGenerator = require(dexes['base'].forFormat(format).dataDir + '/random-teams');
 		return new TeamGenerator(format, seed);
@@ -967,14 +988,16 @@ class ModdedDex {
 
 		searchIn = searchIn || ['Pokedex', 'Movedex', 'Abilities', 'Items', 'Natures'];
 
-		const searchFunctions = {Pokedex: 'getTemplate', Movedex: 'getMove', Abilities: 'getAbility', Items: 'getItem', Natures: 'getNature'};
+		const searchFunctions = {
+			Pokedex: 'getTemplate', Movedex: 'getMove', Abilities: 'getAbility', Items: 'getItem', Natures: 'getNature',
+		};
 		const searchTypes: {[k in DataType]?: string} = {
 			Pokedex: 'pokemon', Movedex: 'move', Abilities: 'ability', Items: 'item', Natures: 'nature',
 		};
 		let searchResults: AnyObject[] | false = [];
 		for (const table of searchIn) {
 			// @ts-ignore
-			let res: AnyObject = this[searchFunctions[table]](target);
+			const res: AnyObject = this[searchFunctions[table]](target);
 			if (res.exists && res.gen <= this.gen) {
 				searchResults.push({
 					isInexact,
@@ -1160,8 +1183,9 @@ class ModdedDex {
 			if (j < 0) return null;
 			const ability = buf.substring(i, j);
 			const template = dexes['base'].getTemplate(set.species);
-			// @ts-ignore
-			set.ability = (template.abilities && ['', '0', '1', 'H'].includes(ability) ? template.abilities[ability || '0'] : ability);
+			set.ability = ['', '0', '1', 'H', 'S'].includes(ability) ?
+				template.abilities[ability as '0' || '0'] || (ability === '' ? '' : '!!!ERROR!!!') :
+				ability;
 			i = j + 1;
 
 			// moves
@@ -1325,7 +1349,7 @@ class ModdedDex {
 				dataCache[dataType] = BattleNatures;
 				continue;
 			}
-			let BattleData = this.loadDataFile(basePath, dataType);
+			const BattleData = this.loadDataFile(basePath, dataType);
 			if (!BattleData || typeof BattleData !== 'object') {
 				throw new TypeError(
 					"Exported property `Battle" + dataType + "`from `" + './data/' +
@@ -1398,8 +1422,9 @@ class ModdedDex {
 				throw e;
 			}
 		}
-		if (!Array.isArray(Formats)) throw new TypeError(`Exported property 'Formats' from "./config/formats.js" must be an array`);
-
+		if (!Array.isArray(Formats)) {
+			throw new TypeError(`Exported property 'Formats' from "./config/formats.js" must be an array`);
+		}
 		let section = '';
 		let column = 1;
 		for (const [i, format] of Formats.entries()) {
@@ -1407,7 +1432,9 @@ class ModdedDex {
 			if (format.section) section = format.section;
 			if (format.column) column = format.column;
 			if (!format.name && format.section) continue;
-			if (!id) throw new RangeError(`Format #${i + 1} must have a name with alphanumeric characters, not '${format.name}'`);
+			if (!id) {
+				throw new RangeError(`Format #${i + 1} must have a name with alphanumeric characters, not '${format.name}'`);
+			}
 			if (!format.section) format.section = section;
 			if (!format.column) format.column = column;
 			if (this.formatsCache[id]) throw new Error(`Format #${i + 1} has a duplicate ID: '${id}'`);

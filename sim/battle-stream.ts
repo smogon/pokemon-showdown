@@ -38,7 +38,7 @@ function splitFirst(str: string, delimiter: string, limit: number = 1) {
 	return splitStr;
 }
 
-export class BattleStream extends Streams.ObjectReadWriteStream {
+export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 	readonly debug: boolean;
 	readonly keepAlive: boolean;
 	battle: Battle | null;
@@ -57,7 +57,10 @@ export class BattleStream extends Streams.ObjectReadWriteStream {
 				if (line.charAt(0) === '>') this._writeLine(line.slice(1));
 			}
 		} catch (err) {
-			if (typeof Monitor === 'undefined') throw err;
+			if (typeof Monitor === 'undefined') {
+				this.pushError(err);
+				return;
+			}
 			const battle = this.battle;
 			Monitor.crashlog(err, 'A battle', {
 				message,
@@ -221,11 +224,11 @@ export function getPlayerStreams(stream: BattleStream) {
 }
 
 export class BattlePlayer {
-	readonly stream: Streams.ObjectReadWriteStream;
+	readonly stream: Streams.ObjectReadWriteStream<string>;
 	readonly log: string[];
 	readonly debug: boolean;
 
-	constructor(playerStream: Streams.ObjectReadWriteStream, debug: boolean = false) {
+	constructor(playerStream: Streams.ObjectReadWriteStream<string>, debug: boolean = false) {
 		this.stream = playerStream;
 		this.log = [];
 		this.debug = debug;
