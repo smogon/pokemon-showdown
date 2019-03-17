@@ -70,7 +70,10 @@ let BattleScripts = {
 				// @ts-ignore
 				delta = boost[i];
 				// @ts-ignore
-				if (delta > 0 && this.getStat(i, false, true, true) === 999) return 0;
+				if (delta > 0 && this.getStat(i, false, true, true) === 999) {
+					delta = 0;
+					continue;
+				}
 				// @ts-ignore
 				this.boosts[i] += delta;
 				// @ts-ignore
