@@ -1900,16 +1900,17 @@ export class Battle extends Dex.ModdedDex {
 
 			if (targetDamage) {
 				if (this.gen <= 1 && effect.recoil && source) {
-					const amount = this.clampIntRange(Math.floor(damage * effect.recoil[0] / effect.recoil[1]), 1);
+					const amount = this.clampIntRange(Math.floor(targetDamage * effect.recoil[0] / effect.recoil[1]), 1);
 					this.damage(amount, source, target, 'recoil');
 				}
 				if (this.gen <= 4 && effect.drain && source) {
-		  		const amount = this.clampIntRange(Math.floor(damage * effect.drain[0] / effect.drain[1]), 1);
-	  			this.heal(amount, source, target, 'drain');
-		  	}
-		  	if (this.gen > 4 && effect.drain && source) {
-		  		const amount = Math.round(damage * effect.drain[0] / effect.drain[1]);
-	  			this.heal(amount, source, target, 'drain');
+					const amount = this.clampIntRange(Math.floor(targetDamage * effect.drain[0] / effect.drain[1]), 1);
+					this.heal(amount, source, target, 'drain');
+				}
+				if (this.gen > 4 && effect.drain && source) {
+					const amount = Math.round(targetDamage * effect.drain[0] / effect.drain[1]);
+					this.heal(amount, source, target, 'drain');
+				}
 			}
 		}
 
