@@ -23,8 +23,8 @@ export class Pokemon {
 	readonly battle: Battle;
 
 	/** "pre-bound" functions for nicer syntax allows them to be passed directly to Battle#add. */
-	readonly getHealth: (side: Side) => string;
-	readonly getDetails: (side: Side) => string;
+	readonly getHealth: (side: number) => string;
+	readonly getDetails: (side: number) => string;
 
 	readonly set: PokemonSet;
 	readonly name: string;
@@ -223,8 +223,8 @@ export class Pokemon {
 		const pokemonScripts = this.battle.data.Scripts.pokemon;
 		if (pokemonScripts) Object.assign(this, pokemonScripts);
 
-		this.getHealth = (s: Side) => this.getHealthInner(s);
-		this.getDetails = (s: Side) => this.getDetailsInner(s);
+		this.getHealth = (s: number) => this.getHealthInner(s);
+		this.getDetails = (s: number) => this.getDetailsInner(s);
 
 		if (typeof set === 'string') set = {name: set};
 		this.set = set as PokemonSet;
@@ -406,7 +406,7 @@ export class Pokemon {
 		return this.isActive ? fullname.substr(0, 2) + position + fullname.substr(2) : fullname;
 	}
 
-	getDetailsInner(side: Side) {
+	getDetailsInner(side: number) {
 		if (this.illusion) {
 			const illusionDetails = this.illusion.template.species + (this.level === 100 ? '' : ', L' + this.level) +
 				(this.illusion.gender === '' ? '' : ', ' + this.illusion.gender) + (this.illusion.set.shiny ? ', shiny' : '');
@@ -1524,11 +1524,11 @@ export class Pokemon {
 		}
 	}
 
-	getHealthInner(side: Side | boolean) {
+	getHealthInner(side: number | boolean) {
 		if (!this.hp) return '0 fnt';
 		let hpstring;
 		// side === true in replays
-		if (side === true || side && side.n === this.side.n % 2) {
+		if (side === true || side === this.side.n % 2) {
 			hpstring = `${this.hp}/${this.maxhp}`;
 		} else {
 			const ratio = this.hp / this.maxhp;
