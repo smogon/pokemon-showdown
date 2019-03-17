@@ -201,17 +201,19 @@ let BattleMovedex = {
 			duration: 1,
 			noCopy: true,
 			onStart(target, source, source2, move) {
+				this.effectData.side = null;
 				this.effectData.position = null;
 				this.effectData.damage = 0;
 			},
 			onRedirectTargetPriority: -1,
 			onRedirectTarget(target, source, source2) {
 				if (source !== this.effectData.target) return;
-				return source.side.foe.active[this.effectData.position];
+				return this.effectData.side.active[this.effectData.position];
 			},
 			onDamagePriority: -101,
 			onDamage(damage, target, source, effect) {
 				if (effect && effect.effectType === 'Move' && source.side !== target.side && this.getCategory(effect.id) === 'Physical') {
+					this.effectData.side = source.side;
 					this.effectData.position = source.position;
 					this.effectData.damage = 2 * damage;
 				}
@@ -575,17 +577,19 @@ let BattleMovedex = {
 			duration: 1,
 			noCopy: true,
 			onStart(target, source, source2, move) {
+				this.effectData.side = null;
 				this.effectData.position = null;
 				this.effectData.damage = 0;
 			},
 			onRedirectTargetPriority: -1,
 			onRedirectTarget(target, source, source2) {
 				if (source !== this.effectData.target) return;
-				return source.side.foe.active[this.effectData.position];
+				return this.effectData.side.active[this.effectData.position];
 			},
 			onDamagePriority: -101,
 			onDamage(damage, target, source, effect) {
 				if (effect && effect.effectType === 'Move' && source.side !== target.side && this.getCategory(effect.id) === 'Special') {
+					this.effectData.side = source.side;
 					this.effectData.position = source.position;
 					this.effectData.damage = 2 * damage;
 				}

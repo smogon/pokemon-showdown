@@ -108,8 +108,7 @@ let BattleAbilities = {
 			/**@type {Move[]} */
 			let warnMoves = [];
 			let warnBp = 1;
-			for (const target of pokemon.side.foe.active) {
-				if (target.fainted) continue;
+			for (const target of pokemon.foes()) {
 				for (const moveSlot of target.moveSlots) {
 					let move = this.getMove(moveSlot.move);
 					let bp = move.basePower;
@@ -136,15 +135,7 @@ let BattleAbilities = {
 	"intimidate": {
 		inherit: true,
 		onStart(pokemon) {
-			let activated = false;
-			for (const target of pokemon.side.foe.active) {
-				if (target && this.isAdjacent(target, pokemon) &&
-					!(target.volatiles['substitute'] ||
-						target.volatiles['substitutebroken'] && target.volatiles['substitutebroken'].move === 'uturn')) {
-					activated = true;
-					break;
-				}
-			}
+			let activated = pokemon.foes(true).some(foe => !(foe.volatiles['substitute'] || foe.volatiles['substitutebroken'] && foe.volatiles['substitutebroken'].move === 'uturn'));
 
 			if (!activated) {
 				this.hint("In Gen 4, Intimidate does not activate if every target has a Substitute (or the Substitute was just broken by U-turn).", false, pokemon.side);
@@ -152,9 +143,7 @@ let BattleAbilities = {
 			}
 			this.add('-ability', pokemon, 'Intimidate', 'boost');
 
-			for (const target of pokemon.side.foe.active) {
-				if (!target || !this.isAdjacent(target, pokemon)) continue;
-
+			for (const target of pokemon.foes(true)) {
 				if (target.volatiles['substitute']) {
 					this.add('-immune', target);
 				} else if (target.volatiles['substitutebroken'] && target.volatiles['substitutebroken'].move === 'uturn') {
@@ -206,12 +195,12 @@ let BattleAbilities = {
 		desc: "If an active ally has the Plus Ability, this Pokemon's Special Attack is multiplied by 1.5.",
 		shortDesc: "If an active ally has the Plus Ability, this Pokemon's Sp. Atk is 1.5x.",
 		onModifySpA(spa, pokemon) {
-			let allyActive = pokemon.side.active;
+			let allyActive = pokemon.allies();
 			if (allyActive.length === 1) {
 				return;
 			}
 			for (const ally of allyActive) {
-				if (ally && ally.position !== pokemon.position && !ally.fainted && ally.ability === 'plus') {
+				if (ally.position !== pokemon.position && ally.ability === 'plus') {
 					return spa * 1.5;
 				}
 			}
@@ -269,12 +258,12 @@ let BattleAbilities = {
 		desc: "If an active ally has the Minus Ability, this Pokemon's Special Attack is multiplied by 1.5.",
 		shortDesc: "If an active ally has the Minus Ability, this Pokemon's Sp. Atk is 1.5x.",
 		onModifySpA(spa, pokemon) {
-			let allyActive = pokemon.side.active;
+			let allyActive = pokemon.allies();
 			if (allyActive.length === 1) {
 				return;
 			}
 			for (const ally of allyActive) {
-				if (ally && ally.position !== pokemon.position && !ally.fainted && ally.ability === 'minus') {
+				if (ally.position !== pokemon.position && ally.ability === 'minus') {
 					return spa * 1.5;
 				}
 			}

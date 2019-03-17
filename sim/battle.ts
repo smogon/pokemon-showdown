@@ -1162,7 +1162,7 @@ export class Battle extends Dex.ModdedDex {
 				newMove = oldActive.lastMove;
 			}
 			if (this.cancelMove(oldActive)) {
-				for (const foeActive of side.foe.active) {
+				for (const foeActive of oldActive.foes()) {
 					if (foeActive.isStale >= 2) {
 						oldActive.isStaleCon++;
 						oldActive.isStaleSource = 'drag';
@@ -1247,7 +1247,7 @@ export class Battle extends Dex.ModdedDex {
 			side.pokemon[pokemon.position] = pokemon;
 			side.pokemon[oldActive.position] = oldActive;
 			if (this.cancelMove(oldActive)) {
-				for (const foeActive of side.foe.active) {
+				for (const foeActive of pokemon.foes()) {
 					if (foeActive.isStale >= 2) {
 						oldActive.isStaleCon++;
 						oldActive.isStaleSource = 'drag';
@@ -1358,7 +1358,7 @@ export class Battle extends Dex.ModdedDex {
 				// canceling switches would leak information
 				// if a foe might have a trapping ability
 				if (this.gen > 2) {
-					for (const source of pokemon.side.foe.active) {
+					for (const source of pokemon.foes()) {
 						if (!source || source.fainted) continue;
 						const template = (source.illusion || source).template;
 						if (!template.abilities) continue;
@@ -1590,7 +1590,7 @@ export class Battle extends Dex.ModdedDex {
 		}
 		if (!target || !target.hp) return 0;
 		if (!target.isActive) return false;
-		if (this.gen > 5 && !target.side.foe.pokemonLeft) return false;
+		if (this.gen > 5 && !target.foes(false, true).some(poke => poke && !!poke.side.pokemonLeft)) return false;
 		boost = this.runEvent('Boost', target, source, effect, Object.assign({}, boost));
 		let success = null;
 		let boosted = false;
@@ -2133,7 +2133,7 @@ export class Battle extends Dex.ModdedDex {
 	validTargetLoc(targetLoc: number, source: Pokemon, targetType: string) {
 		if (targetLoc === 0) return true;
 		const numSlots = source.side.active.length * this.sides.length / 2;
-		if (!Math.abs(targetLoc) && Math.abs(targetLoc) > numSlots) return false;
+		if (Math.abs(targetLoc) > numSlots) return false;
 
 		const sourceLoc = -(source.position + 1 + Math.floor(source.side.n / 2) * source.side.active.length);
 		const isFoe = (targetLoc > 0);
@@ -2217,7 +2217,7 @@ export class Battle extends Dex.ModdedDex {
 				move.target === 'allyTeam' || move.target === 'adjacentAllyOrSelf') {
 			return pokemon;
 		}
-		if (pokemon.side.active.length > 2) {
+		if (pokemon.allies(false, true).length > 2) {
 			if (move.target === 'adjacentFoe' || move.target === 'normal' || move.target === 'randomNormal') {
 				// even if a move can target an ally, auto-resolution will never make it target an ally
 				// i.e. if both your opponents faint before you use Flamethrower, it will fail instead of targeting your ally
@@ -2226,7 +2226,8 @@ export class Battle extends Dex.ModdedDex {
 				// no valid target at all, return a foe for any possible redirection
 			}
 		}
-		return this.sample(pokemon.foes()) || pokemon.foes(false, true)[0];
+		const allFoes = pokemon.foes();
+		return allFoes.length && this.sample(allFoes) || pokemon.foes(false, true)[0];
 	}
 
 	checkFainted() {
@@ -2620,7 +2621,7 @@ export class Battle extends Dex.ModdedDex {
 				break;
 			}
 			if (action.choice === 'switch' && action.pokemon.activeTurns === 1) {
-				for (const foeActive of action.pokemon.side.foe.active) {
+				for (const foeActive of action.pokemon.foes()) {
 					if (foeActive.isStale >= 2) {
 						action.pokemon.isStaleCon++;
 						action.pokemon.isStaleSource = 'switch';
@@ -2647,7 +2648,7 @@ export class Battle extends Dex.ModdedDex {
 				this.singleEvent('Start', action.pokemon.getItem(), action.pokemon.itemData, action.pokemon);
 			}
 			if (this.gen === 4) {
-				for (const foeActive of action.pokemon.side.foe.active) {
+				for (const foeActive of action.pokemon.foes()) {
 					foeActive.removeVolatile('substitutebroken');
 				}
 			}
@@ -2663,7 +2664,7 @@ export class Battle extends Dex.ModdedDex {
 			if (action.pokemon.fainted) return false;
 			action.pokemon.activeTurns--;
 			this.swapPosition(action.pokemon, 1);
-			for (const foeActive of action.pokemon.side.foe.active) {
+			for (const foeActive of action.pokemon.foes()) {
 				if (foeActive.isStale >= 2) {
 					action.pokemon.isStaleCon++;
 					action.pokemon.isStaleSource = 'switch';

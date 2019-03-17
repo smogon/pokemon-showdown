@@ -588,7 +588,7 @@ export class Pokemon {
 				if (!possibleTarget) return [];
 				target = possibleTarget;
 			}
-			if (target.side.active.length > 1) {
+			if (target.allies(false, true).length > 1) {
 				if (!move.flags['charge'] || this.volatiles['twoturnmove'] ||
 						(move.id.startsWith('solarb') && this.battle.field.isWeather(['sunnyday', 'desolateland'])) ||
 						(this.hasItem('powerherb') && move.id !== 'skydrop')) {
@@ -640,7 +640,7 @@ export class Pokemon {
 			ppData.pp = 0;
 		}
 		if (ppData.virtual) {
-			for (const foeActive of this.side.foe.active) {
+			for (const foeActive of this.foes()) {
 				if (foeActive.isStale >= 2) {
 					if (move.selfSwitch) this.isStalePPTurns++;
 					return amount;
@@ -1599,7 +1599,7 @@ export class Pokemon {
 
 	isSkyDropped() {
 		if (this.volatiles['skydrop']) return true;
-		for (const foeActive of this.side.foe.active) {
+		for (const foeActive of this.foes()) {
 			if (foeActive.volatiles['skydrop'] && foeActive.volatiles['skydrop'].source === this) {
 				return true;
 			}

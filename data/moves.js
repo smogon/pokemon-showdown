@@ -285,7 +285,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {authentic: 1, mystery: 1},
 		onHit(target) {
-			if (target.side.active.length < 2) return false; // fails in singles
+			if (this.gameType === 'singles') return false;
 			let action = this.willMove(target);
 			if (action) {
 				this.cancelMove(target);
@@ -387,7 +387,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user swaps positions with its ally. Fails if the user is the only Pokemon on its side.",
+		desc: "The user swaps positions with its ally. Fails in multi battles or if the user is the only Pokemon on its side.",
 		shortDesc: "The user swaps positions with its ally.",
 		id: "allyswitch",
 		name: "Ally Switch",
@@ -854,7 +854,7 @@ let BattleMovedex = {
 					}
 					if (!move.crit && !move.infiltrates) {
 						this.debug('Aurora Veil weaken');
-						if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+						if (target.side.active.length > 1 || this.gameType === 'multi') return this.chainModify([0xAAC, 0x1000]);
 						return this.chainModify(0.5);
 					}
 				}
@@ -2816,16 +2816,18 @@ let BattleMovedex = {
 			duration: 1,
 			noCopy: true,
 			onStart(target, source, source2, move) {
+				this.effectData.side = null;
 				this.effectData.position = null;
 				this.effectData.damage = 0;
 			},
 			onRedirectTargetPriority: -1,
 			onRedirectTarget(target, source, source2) {
 				if (source !== this.effectData.target) return;
-				return source.side.foe.active[this.effectData.position];
+				return this.effectData.side.active[this.effectData.position];
 			},
 			onAfterDamage(damage, target, source, effect) {
 				if (effect && effect.effectType === 'Move' && source.side !== target.side && this.getCategory(effect) === 'Physical') {
+					this.effectData.side = source.side;
 					this.effectData.position = source.position;
 					this.effectData.damage = 2 * damage;
 				}
@@ -5315,20 +5317,16 @@ let BattleMovedex = {
 			if (target.side.active.length === 1) {
 				return;
 			}
-			for (const ally of target.side.active) {
-				if (ally && this.isAdjacent(target, ally)) {
-					this.damage(ally.maxhp / 16, ally, source, this.getEffect('Flame Burst'));
-				}
+			for (const ally of target.allies(true)) {
+				this.damage(ally.maxhp / 16, ally, source, this.getEffect('Flame Burst'));
 			}
 		},
 		onAfterSubDamage(damage, target, source, move) {
 			if (target.side.active.length === 1) {
 				return;
 			}
-			for (const ally of target.side.active) {
-				if (ally && this.isAdjacent(target, ally)) {
-					this.damage(ally.maxhp / 16, ally, source, this.getEffect('Flame Burst'));
-				}
+			for (const ally of target.allies(true)) {
+				this.damage(ally.maxhp / 16, ally, source, this.getEffect('Flame Burst'));
 			}
 		},
 		secondary: null,
@@ -5828,7 +5826,7 @@ let BattleMovedex = {
 		flags: {},
 		volatileStatus: 'followme',
 		onTryHit(target) {
-			if (target.side.active.length < 2) return false;
+			if (this.gameType === 'singles') return false;
 		},
 		effect: {
 			duration: 1,
@@ -6191,7 +6189,7 @@ let BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		onBasePowerPriority: 4,
 		onBasePower(basePower, pokemon) {
-			for (const active of pokemon.side.active) {
+			for (const active of pokemon.allies(false, true).concat(pokemon.foes(false, true))) {
 				if (active && active.moveThisTurn === 'fusionflare') {
 					this.debug('double power');
 					return this.chainModify(2);
@@ -6219,7 +6217,7 @@ let BattleMovedex = {
 		flags: {protect: 1, mirror: 1, defrost: 1},
 		onBasePowerPriority: 4,
 		onBasePower(basePower, pokemon) {
-			for (const active of pokemon.side.active) {
+			for (const active of pokemon.allies(false, true).concat(pokemon.foes(false, true))) {
 				if (active && active.moveThisTurn === 'fusionbolt') {
 					this.debug('double power');
 					return this.chainModify(2);
@@ -9402,7 +9400,7 @@ let BattleMovedex = {
 				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Special') {
 					if (!move.crit && !move.infiltrates) {
 						this.debug('Light Screen weaken');
-						if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+						if (target.side.active.length > 1 || this.gameType === 'multi') return this.chainModify([0xAAC, 0x1000]);
 						return this.chainModify(0.5);
 					}
 				}
@@ -10279,16 +10277,18 @@ let BattleMovedex = {
 			duration: 1,
 			noCopy: true,
 			onStart(target, source, source2, move) {
+				this.effectData.side = null;
 				this.effectData.position = null;
 				this.effectData.damage = 0;
 			},
 			onRedirectTargetPriority: -1,
 			onRedirectTarget(target, source, source2) {
 				if (source !== this.effectData.target) return;
-				return source.side.foe.active[this.effectData.position];
+				return this.effectData.side.active[this.effectData.position];
 			},
 			onAfterDamage(damage, target, source, effect) {
 				if (effect && effect.effectType === 'Move' && source.side !== target.side) {
+					this.effectData.side = source.side;
 					this.effectData.position = source.position;
 					this.effectData.damage = 1.5 * damage;
 				}
@@ -10616,16 +10616,18 @@ let BattleMovedex = {
 			duration: 1,
 			noCopy: true,
 			onStart(target, source, source2, move) {
+				this.effectData.side = null;
 				this.effectData.position = null;
 				this.effectData.damage = 0;
 			},
 			onRedirectTargetPriority: -1,
 			onRedirectTarget(target, source, source2) {
 				if (source !== this.effectData.target) return;
-				return source.side.foe.active[this.effectData.position];
+				return this.effectData.side.active[this.effectData.position];
 			},
 			onAfterDamage(damage, target, source, effect) {
 				if (effect && effect.effectType === 'Move' && source.side !== target.side && this.getCategory(effect) === 'Special') {
+					this.effectData.side = source.side;
 					this.effectData.position = source.position;
 					this.effectData.damage = 2 * damage;
 				}
@@ -12932,7 +12934,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onHit(target) {
-			if (target.side.active.length < 2) return false; // fails in singles
+			if (this.gameType === 'singles') return false;
 			let action = this.willMove(target);
 			if (action) {
 				action.priority = -7.1;
@@ -13097,7 +13099,7 @@ let BattleMovedex = {
 		flags: {powder: 1},
 		volatileStatus: 'ragepowder',
 		onTryHit(target) {
-			if (target.side.active.length < 2) return false;
+			if (this.gameType === 'singles') return false;
 		},
 		effect: {
 			duration: 1,
@@ -13315,7 +13317,7 @@ let BattleMovedex = {
 				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Physical') {
 					if (!move.crit && !move.infiltrates) {
 						this.debug('Reflect weaken');
-						if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+						if (target.side.active.length > 1 || this.gameType === 'multi') return this.chainModify([0xAAC, 0x1000]);
 						return this.chainModify(0.5);
 					}
 				}
@@ -16253,7 +16255,7 @@ let BattleMovedex = {
 		flags: {protect: 1, reflectable: 1, mystery: 1},
 		volatileStatus: 'spotlight',
 		onTryHit(target) {
-			if (target.side.active.length < 2) return false;
+			if (this.gameType === 'singles') return false;
 		},
 		effect: {
 			duration: 1,
@@ -18155,7 +18157,7 @@ let BattleMovedex = {
 			if (!target.addType('Ghost')) return false;
 			this.add('-start', target, 'typeadd', 'Ghost', '[from] move: Trick-or-Treat');
 
-			if (target.side.active.length === 2 && target.position === 1) {
+			if (target.side.active.length === 2 && target.position === 1 || this.sides.length === 4 && target.side.n / 2 >= 1) {
 				// Curse Glitch
 				const action = this.willMove(target);
 				if (action && action.move.id === 'curse') {
@@ -18388,9 +18390,10 @@ let BattleMovedex = {
 			volatileStatus: 'uproar',
 		},
 		onTryHit(target) {
-			for (const [i, allyActive] of target.side.active.entries()) {
+			const foes = target.foes(false, true);
+			for (const [i, allyActive] of target.allies(false, true).entries()) {
 				if (allyActive && allyActive.status === 'slp') allyActive.cureStatus();
-				let foeActive = target.side.foe.active[i];
+				let foeActive = foes[i];
 				if (foeActive && foeActive.status === 'slp') foeActive.cureStatus();
 			}
 		},

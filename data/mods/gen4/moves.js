@@ -855,8 +855,7 @@ let BattleMovedex = {
 		desc: "The user prevents all opposing Pokemon from using any moves that the user also knows as long as the user remains active. Fails if no opposing Pokemon know any of the user's moves.",
 		flags: {authentic: 1},
 		onTryHit(pokemon) {
-			for (const target of pokemon.side.foe.active) {
-				if (!target || target.fainted) continue;
+			for (const target of pokemon.foes()) {
 				for (const move of pokemon.moves) {
 					if (target.moves.includes(move)) return;
 				}
@@ -909,7 +908,7 @@ let BattleMovedex = {
 				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Special') {
 					if (!move.crit && !move.infiltrates) {
 						this.debug('Light Screen weaken');
-						if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+						if (target.side.active.length > 1 || this.gameType === 'multi') return this.chainModify([0xAAC, 0x1000]);
 						return this.chainModify(0.5);
 					}
 				}
@@ -1269,7 +1268,7 @@ let BattleMovedex = {
 				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Physical') {
 					if (!move.crit && !move.infiltrates) {
 						this.debug('Reflect weaken');
-						if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
+						if (target.side.active.length > 1 || this.gameType === 'multi') return this.chainModify([0xAAC, 0x1000]);
 						return this.chainModify(0.5);
 					}
 				}

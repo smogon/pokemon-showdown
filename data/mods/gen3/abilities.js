@@ -63,13 +63,7 @@ let BattleAbilities = {
 	"intimidate": {
 		inherit: true,
 		onStart(pokemon) {
-			let activated = false;
-			for (const target of pokemon.side.foe.active) {
-				if (target && this.isAdjacent(target, pokemon) && !target.volatiles['substitute']) {
-					activated = true;
-					break;
-				}
-			}
+			let activated = pokemon.foes().some(foe => !foe.volatiles['substitute']);
 
 			if (!activated) {
 				this.hint("In Gen 3, Intimidate does not activate if every target has a Substitute.", false, pokemon.side);
@@ -77,9 +71,7 @@ let BattleAbilities = {
 			}
 			this.add('-ability', pokemon, 'Intimidate', 'boost');
 
-			for (const target of pokemon.side.foe.active) {
-				if (!target || !this.isAdjacent(target, pokemon)) continue;
-
+			for (const target of pokemon.foes()) {
 				if (target.volatiles['substitute']) {
 					this.add('-immune', target);
 				} else {

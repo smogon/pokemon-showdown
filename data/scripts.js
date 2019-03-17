@@ -1145,7 +1145,7 @@ let BattleScripts = {
 		const side = pokemon.side;
 
 		// Pokémon affected by Sky Drop cannot mega evolve. Enforce it here for now.
-		for (const foeActive of side.foe.active) {
+		for (const foeActive of pokemon.foes()) {
 			if (foeActive.volatiles['skydrop'] && foeActive.volatiles['skydrop'].source === pokemon) {
 				return false;
 			}

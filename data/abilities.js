@@ -145,8 +145,7 @@ let BattleAbilities = {
 		desc: "On switch-in, this Pokemon is alerted if any opposing Pokemon has an attack that is super effective on this Pokemon, or an OHKO move. Counter, Metal Burst, and Mirror Coat count as attacking moves of their respective types, while Hidden Power, Judgment, Natural Gift, Techno Blast, and Weather Ball are considered Normal-type moves.",
 		shortDesc: "On switch-in, this Pokemon shudders if any foe has a supereffective or OHKO move.",
 		onStart(pokemon) {
-			for (const target of pokemon.side.foe.active) {
-				if (!target || target.fainted) continue;
+			for (const target of pokemon.foes()) {
 				for (const moveSlot of target.moveSlots) {
 					let move = this.getMove(moveSlot.move);
 					if (move.category !== 'Status' && (this.getImmunity(move.type, pokemon) && this.getEffectiveness(move.type, pokemon) > 0 || move.ohko)) {
@@ -220,8 +219,7 @@ let BattleAbilities = {
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
 			if (!pokemon.hp) return;
-			for (const target of pokemon.side.foe.active) {
-				if (!target || !target.hp) continue;
+			for (const target of pokemon.foes()) {
 				if (target.status === 'slp' || target.hasAbility('comatose')) {
 					this.damage(target.maxhp / 8, target, pokemon);
 				}
@@ -258,7 +256,8 @@ let BattleAbilities = {
 		desc: "If this Pokemon is a Greninja, it transforms into Ash-Greninja after knocking out a Pokemon. As Ash-Greninja, its Water Shuriken has 20 base power and always hits 3 times.",
 		shortDesc: "After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken: 20 power, hits 3x.",
 		onSourceFaint(target, source, effect) {
-			if (effect && effect.effectType === 'Move' && source.template.speciesid === 'greninja' && source.hp && !source.transformed && source.side.foe.pokemonLeft) {
+			const remainingFoes = this.sides.reduce((total, side) => total + (+(side.n % 2 !== source.side.n % 2) && side.pokemonLeft), 0);
+			if (effect && effect.effectType === 'Move' && source.template.speciesid === 'greninja' && source.hp && !source.transformed && remainingFoes) {
 				this.add('-activate', source, 'ability: Battle Bond');
 				source.formeChange('Greninja-Ash', this.effect, true);
 			}
@@ -425,7 +424,7 @@ let BattleAbilities = {
 				if (!target.setType(type)) return false;
 				this.add('-start', target, 'typechange', type, '[from] ability: Color Change');
 
-				if (target.side.active.length === 2 && target.position === 1) {
+				if (target.side.active.length === 2 && target.position === 1 || this.gameType === 'multi' && target.side.n > 1) {
 					// Curse Glitch
 					const action = this.willMove(target);
 					if (action && action.move.id === 'curse') {
@@ -734,8 +733,7 @@ let BattleAbilities = {
 		onStart(pokemon) {
 			let totaldef = 0;
 			let totalspd = 0;
-			for (const target of pokemon.side.foe.active) {
-				if (!target || target.fainted) continue;
+			for (const target of pokemon.foes()) {
 				totaldef += target.getStat('def', false, true);
 				totalspd += target.getStat('spd', false, true);
 			}
@@ -1099,8 +1097,7 @@ let BattleAbilities = {
 			/**@type {(Move|Pokemon)[][]} */
 			let warnMoves = [];
 			let warnBp = 1;
-			for (const target of pokemon.side.foe.active) {
-				if (target.fainted) continue;
+			for (const target of pokemon.foes()) {
 				for (const moveSlot of target.moveSlots) {
 					let move = this.getMove(moveSlot.move);
 					let bp = move.basePower;
@@ -1141,8 +1138,7 @@ let BattleAbilities = {
 	"frisk": {
 		shortDesc: "On switch-in, this Pokemon identifies the held items of all opposing Pokemon.",
 		onStart(pokemon) {
-			for (const target of pokemon.side.foe.active) {
-				if (!target || target.fainted) continue;
+			for (const target of pokemon.foes()) {
 				if (target.item) {
 					this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon, '[identify]');
 				}
@@ -1297,11 +1293,8 @@ let BattleAbilities = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
-			if (pokemon.side.active.length === 1) {
-				return;
-			}
-			for (const allyActive of pokemon.side.active) {
-				if (allyActive && allyActive.hp && this.isAdjacent(pokemon, allyActive) && allyActive.status && this.randomChance(3, 10)) {
+			for (const allyActive of pokemon.allies(true)) {
+				if (allyActive.hp && allyActive.status && this.randomChance(3, 10)) {
 					this.add('-activate', pokemon, 'ability: Healer');
 					allyActive.cureStatus();
 				}
@@ -1491,7 +1484,8 @@ let BattleAbilities = {
 		shortDesc: "On switch-in, this Pokemon Transforms into the opposing Pokemon that is facing it.",
 		onStart(pokemon) {
 			if (this.activeMove && this.activeMove.id === 'skillswap') return;
-			let target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
+			const possibleTargets = pokemon.foes(false, true);
+			const target = possibleTargets[possibleTargets.length - 1 - pokemon.position];
 			if (target) {
 				pokemon.transformInto(target, this.getAbility('imposter'));
 			}
@@ -1558,8 +1552,7 @@ let BattleAbilities = {
 		shortDesc: "On switch-in, this Pokemon lowers the Attack of adjacent opponents by 1 stage.",
 		onStart(pokemon) {
 			let activated = false;
-			for (const target of pokemon.side.foe.active) {
-				if (!target || !this.isAdjacent(target, pokemon)) continue;
+			for (const target of pokemon.foes(true)) {
 				if (!activated) {
 					this.add('-ability', pokemon, 'Intimidate', 'boost');
 					activated = true;
@@ -1911,10 +1904,11 @@ let BattleAbilities = {
 		shortDesc: "If an active ally has this Ability or the Plus Ability, this Pokemon's Sp. Atk is 1.5x.",
 		onModifySpAPriority: 5,
 		onModifySpA(spa, pokemon) {
-			if (pokemon.side.active.length === 1) {
+			const allies = pokemon.allies();
+			if (allies.length === 1) {
 				return;
 			}
-			for (const allyActive of pokemon.side.active) {
+			for (const allyActive of allies) {
 				if (allyActive && allyActive.position !== pokemon.position && !allyActive.fainted && allyActive.hasAbility(['minus', 'plus'])) {
 					return this.chainModify(1.5);
 				}
@@ -2368,10 +2362,11 @@ let BattleAbilities = {
 		shortDesc: "If an active ally has this Ability or the Minus Ability, this Pokemon's Sp. Atk is 1.5x.",
 		onModifySpAPriority: 5,
 		onModifySpA(spa, pokemon) {
-			if (pokemon.side.active.length === 1) {
+			const allies = pokemon.allies();
+			if (allies.length === 1) {
 				return;
 			}
-			for (const allyActive of pokemon.side.active) {
+			for (const allyActive of allies) {
 				if (allyActive && allyActive.position !== pokemon.position && !allyActive.fainted && allyActive.hasAbility(['minus', 'plus'])) {
 					return this.chainModify(1.5);
 				}
@@ -3705,13 +3700,13 @@ let BattleAbilities = {
 		desc: "On switch-in, or when this Pokemon acquires this ability, this Pokemon copies a random adjacent opposing Pokemon's Ability. However, if one or more adjacent Pokemon has the Ability \"No Ability\", Trace won't copy anything even if there is another valid Ability it could normally copy. Otherwise, if there is no Ability that can be copied at that time, this Ability will activate as soon as an Ability can be copied. Abilities that cannot be copied are the previously mentioned \"No Ability\", as well as Comatose, Disguise, Flower Gift, Forecast, Illusion, Imposter, Multitype, Schooling, Stance Change, Trace, and Zen Mode.",
 		shortDesc: "On switch-in, or when it can, this Pokemon copies a random adjacent foe's Ability.",
 		onStart(pokemon) {
-			if (pokemon.side.foe.active.some(foeActive => foeActive && this.isAdjacent(pokemon, foeActive) && foeActive.ability === 'noability')) {
+			if (pokemon.foes(true).some(foeActive => foeActive.ability === 'noability')) {
 				this.effectData.gaveUp = true;
 			}
 		},
 		onUpdate(pokemon) {
 			if (!pokemon.isStarted || this.effectData.gaveUp) return;
-			let possibleTargets = pokemon.side.foe.active.filter(foeActive => foeActive && this.isAdjacent(pokemon, foeActive));
+			let possibleTargets = pokemon.foes(true);
 			while (possibleTargets.length) {
 				let rand = 0;
 				if (possibleTargets.length > 1) rand = this.random(possibleTargets.length);
