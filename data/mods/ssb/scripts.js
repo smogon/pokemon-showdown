@@ -264,7 +264,7 @@ let BattleScripts = {
 		status = this.getEffect(status);
 		if (!sourceEffect && this.effect) sourceEffect = this.effect;
 		if (!source && this.event && this.event.target) source = this.event.target;
-		if (source === 'debug') source = this.p1.active[0];
+		if (source === 'debug') source = this.sides[0].active[0];
 		if (!source) throw new Error(`setting terrain without a source`);
 
 		if (this.terrain === status.id) return false;

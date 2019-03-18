@@ -37,7 +37,7 @@ class RoomBattlePlayer {
 	/**
 	 * @param {User} user
 	 * @param {RoomBattle} game
-	 * @param {PlayerSlot} slot
+	 * @param {SideID} slot
 	 */
 	constructor(user, game, slot) {
 		this.userid = user.userid;
@@ -49,6 +49,7 @@ class RoomBattlePlayer {
 		this.slot = slot;
 		this.slotNum = Number(slot.charAt(1)) - 1;
 		this.active = true;
+		this.eliminated = false;
 
 		for (const connection of user.connections) {
 			if (connection.inRooms.has(game.id)) {
@@ -70,11 +71,11 @@ class RoomBattlePlayer {
 	updateChannel(/** @type {User | Connection} */ user) {
 		if (user instanceof Users.Connection) {
 			// "user" is actually a connection
-			Sockets.channelMove(user.worker, this.game.id, this.slotNum + 1, user.socketid);
+			Sockets.channelMove(user.worker, this.game.id, this.slotNum % 2 + 1, user.socketid);
 			return;
 		}
 		for (const connection of user.connections) {
-			Sockets.channelMove(connection.worker, this.game.id, this.slotNum + 1, connection.socketid);
+			Sockets.channelMove(connection.worker, this.game.id, this.slotNum % 2 + 1, connection.socketid);
 		}
 	}
 
@@ -182,7 +183,7 @@ class RoomBattleTimer {
 		}, timerSettings);
 		if (this.settings.maxPerTurn <= 0) this.settings.maxPerTurn = Infinity;
 
-		for (let slotNum = 0; slotNum < 2; slotNum++) {
+		for (let slotNum = 0; slotNum < this.battle.playerCap; slotNum++) {
 			this.secondsLeft.push(this.settings.starting + this.settings.grace);
 			this.turnSecondsLeft.push(-1);
 			this.dcSecondsLeft.push(this.settings.dcTimerBank ? DISCONNECTION_BANK_TIME : DISCONNECTION_TIME);
@@ -229,7 +230,7 @@ class RoomBattleTimer {
 		this.battle.room.add(`|inactiveoff|Battle timer is now OFF.`).update();
 		return true;
 	}
-	waitingForChoice(/** @type {PlayerSlot} */ slot) {
+	waitingForChoice(/** @type {SideID} */ slot) {
 		return !this.battle.requests[slot].isWait;
 	}
 	nextRequest(isFirst = false) {
@@ -252,7 +253,7 @@ class RoomBattleTimer {
 
 		const room = this.battle.room;
 		for (const slotNum of this.secondsLeft.keys()) {
-			const slot = /** @type {PlayerSlot} */ ('p' + (slotNum + 1));
+			const slot = /** @type {SideID} */ ('p' + (slotNum + 1));
 			const player = this.battle[slot];
 			const playerName = this.battle.playerNames[slotNum];
 
@@ -281,7 +282,7 @@ class RoomBattleTimer {
 		if (this.battle.ended) return;
 		const room = this.battle.room;
 		for (const slotNum of this.secondsLeft.keys()) {
-			const slot = /** @type {PlayerSlot} */ ('p' + (slotNum + 1));
+			const slot = /** @type {SideID} */ ('p' + (slotNum + 1));
 			const connected = this.connected[slotNum];
 
 			if (!this.waitingForChoice(slot)) continue;
@@ -324,7 +325,7 @@ class RoomBattleTimer {
 	}
 	checkActivity() {
 		for (const slotNum of this.secondsLeft.keys()) {
-			const slot = /** @type {PlayerSlot} */ ('p' + (slotNum + 1));
+			const slot = /** @type {SideID} */ ('p' + (slotNum + 1));
 			const player = this.battle[slot];
 			const isConnected = !!(player && player.active);
 
@@ -420,6 +421,7 @@ class RoomBattle {
 		this.allowRenames = options.allowRenames !== undefined ? !!options.allowRenames : (!options.rated && !options.tour);
 
 		this.format = formatid;
+		this.gameType = format.gameType;
 		/**
 		 * The lower player's rating, for searching purposes.
 		 * 0 for unrated battles. 1 for unknown ratings.
@@ -433,11 +435,15 @@ class RoomBattle {
 		/** @type {{[userid: string]: RoomBattlePlayer}} */
 		this.players = Object.create(null);
 		this.playerCount = 0;
-		this.playerCap = 2;
+		this.playerCap = this.gameType === 'multi' || this.gameType === 'free-for-all' ? 4 : 2;
 		/** @type {RoomBattlePlayer?} */
 		this.p1 = null;
 		/** @type {RoomBattlePlayer?} */
 		this.p2 = null;
+		/** @type {RoomBattlePlayer?} */
+		this.p3 = null;
+		/** @type {RoomBattlePlayer?} */
+		this.p4 = null;
 
 		/**
 		 * p1 and p2 may be null in unrated games, but playerNames retains
@@ -445,12 +451,12 @@ class RoomBattle {
 		 * functions that need names for the slots.
 		 */
 		this.playerNames = ["Player 1", "Player 2"];
-		/**
-		 * @type {{p1: BattleRequestTracker, p2: BattleRequestTracker}}
-		 */
+		if (this.playerCap > 2) this.playerNames.push("Player 3", "Player 4");
 		this.requests = {
 			p1: /** @type {BattleRequestTracker} */ ({rqid: 0, request: '', isWait: 'cantUndo', choice: ''}),
 			p2: /** @type {BattleRequestTracker} */ ({rqid: 0, request: '', isWait: 'cantUndo', choice: ''}),
+			p3: /** @type {BattleRequestTracker} */ ({rqid: 0, request: '', isWait: 'cantUndo', choice: ''}),
+			p4: /** @type {BattleRequestTracker} */ ({rqid: 0, request: '', isWait: 'cantUndo', choice: ''}),
 		};
 		this.timer = new RoomBattleTimer(this);
 
@@ -502,6 +508,8 @@ class RoomBattle {
 
 		if (options.p1) this.addPlayer(options.p1, 'p1', options.p1team, true);
 		if (options.p2) this.addPlayer(options.p2, 'p2', options.p2team, true);
+		if (options.p3) this.addPlayer(options.p3, 'p3', options.p3team, true);
+		if (options.p4) this.addPlayer(options.p4, 'p4', options.p4team, true);
 	}
 
 	checkActive() {
@@ -512,6 +520,12 @@ class RoomBattle {
 			active = false;
 		} else if (!this.p2 || !this.p2.active) {
 			active = false;
+		} else if (this.playerCap > 2) {
+			if (!this.p3 || !this.p3.active) {
+				active = false;
+			} else if (!this.p4 || !this.p4.active) {
+				active = false;
+			}
 		}
 		Rooms.global.battleCount += (active ? 1 : 0) - (this.active ? 1 : 0);
 		this.room.active = active;
@@ -531,7 +545,8 @@ class RoomBattle {
 			player.sendRoom(`|error|[Invalid choice] There's nothing to choose`);
 			return;
 		}
-		if ((this.requests.p1.isWait && this.requests.p2.isWait) || // too late
+		const allPlayersWait = (this.requests.p1.isWait && this.requests.p2.isWait) && (this.playerCap === 2 || this.requests.p3.isWait && this.requests.p4.isWait);
+		if (allPlayersWait || // too late
 			(rqid && rqid !== '' + request.rqid)) { // WAY too late
 			player.sendRoom(`|error|[Invalid choice] Sorry, too late to make a different move; the next turn has already started`);
 			return;
@@ -555,7 +570,8 @@ class RoomBattle {
 			player.sendRoom(`|error|[Invalid choice] There's nothing to cancel`);
 			return;
 		}
-		if ((this.requests.p1.isWait && this.requests.p2.isWait) || // too late
+		const allPlayersWait = (this.requests.p1.isWait && this.requests.p2.isWait) && (this.playerCap === 2 || this.requests.p3.isWait && this.requests.p4.isWait);
+		if (allPlayersWait || // too late
 			(rqid && rqid !== '' + request.rqid)) { // WAY too late
 			player.sendRoom(`|error|[Invalid choice] Sorry, too late to cancel; the next turn has already started`);
 			return;
@@ -627,7 +643,7 @@ class RoomBattle {
 			break;
 
 		case 'sideupdate': {
-			let slot = /** @type {PlayerSlot} */ (lines[1]);
+			let slot = /** @type {SideID} */ (lines[1]);
 			let player = this[slot];
 			if (lines[2].startsWith(`|error|[Invalid choice] Can't do anything`)) {
 				// ... should not happen
@@ -722,8 +738,10 @@ class RoomBattle {
 	 * @param {number} p1score
 	 * @param {AnyObject?} p1rating
 	 * @param {AnyObject?} p2rating
+	 * @param {AnyObject?} p3rating
+	 * @param {AnyObject?} p4rating
 	 */
-	async logBattle(p1score, p1rating = null, p2rating = null) {
+	async logBattle(p1score, p1rating = null, p2rating = null, p3rating = null, p4rating = null) {
 		if (Dex.getFormat(this.format, true).noLog) return;
 		let logData = this.logData;
 		if (!logData) return;
@@ -731,21 +749,21 @@ class RoomBattle {
 		logData.log = this.room.getLog(3).split('\n'); // replay log (exact damage)
 
 		// delete some redundant data
-		if (p1rating) {
-			delete p1rating.formatid;
-			delete p1rating.username;
-			delete p1rating.rpsigma;
-			delete p1rating.sigma;
-		}
-		if (p2rating) {
-			delete p2rating.formatid;
-			delete p2rating.username;
-			delete p2rating.rpsigma;
-			delete p2rating.sigma;
+		for (const rating of [p1rating, p2rating, p3rating, p4rating]) {
+			if (rating) {
+				delete rating.formatid;
+				delete rating.username;
+				delete rating.rpsigma;
+				delete rating.sigma;
+			}
 		}
 
 		logData.p1rating = p1rating;
 		logData.p2rating = p2rating;
+		if (this.playerCap > 2) {
+			logData.p3rating = p3rating;
+			logData.p4rating = p4rating;
+		}
 		logData.endType = this.endType;
 		if (!p1rating) logData.ladderError = true;
 		const date = new Date();
@@ -910,7 +928,7 @@ class RoomBattle {
 
 	/**
 	 * @param {User} user
-	 * @param {PlayerSlot?} slot
+	 * @param {SideID?} slot
 	 * @param {string} team
 	 */
 	addPlayer(user, slot = null, team = '', initializing = false) {
@@ -922,9 +940,18 @@ class RoomBattle {
 		this.playerCount++;
 		this.room.auth[user.userid] = Users.PLAYER_SYMBOL;
 		if (user.inRooms.has(this.id)) this.onConnect(user);
-		if (this.playerCount >= 2) {
-			// @ts-ignore
-			this.room.title = `${this.p1.name} vs. ${this.p2.name}`;
+		if (this.playerCount >= this.playerCap) {
+			if (this.gameType === 'multi') {
+				// @ts-ignore
+				this.room.title = `Team ${this.p1.name} vs. Team ${this.p2.name}`;
+			} else if (this.gameType === 'free-for-all') {
+				// p1 vs. p2 vs. p3 vs. p4 is too long of a title
+				// @ts-ignore
+				this.room.title = `${this.p1.name} and friends`;
+			} else {
+				// @ts-ignore
+				this.room.title = `${this.p1.name} vs. ${this.p2.name}`;
+			}
 			this.room.send(`|title|${this.room.title}`);
 		}
 		if (!initializing) {
@@ -935,14 +962,14 @@ class RoomBattle {
 
 	/**
 	 * @param {User} user
-	 * @param {PlayerSlot?} slot
+	 * @param {SideID?} slot
 	 * @param {string} team
 	 */
 	makePlayer(user, slot = null, team = '') {
 		if (!slot) {
 			let slotNum = 0;
-			while (this[/** @type {PlayerSlot} */ ('p' + (slotNum + 1))]) slotNum++;
-			slot = /** @type {PlayerSlot} */ ('p' + (slotNum + 1));
+			while (this[/** @type {SideID} */ ('p' + (slotNum + 1))]) slotNum++;
+			slot = /** @type {SideID} */ ('p' + (slotNum + 1));
 		}
 		// console.log('joining: ' + user.name + ' ' + slot);
 
@@ -962,13 +989,15 @@ class RoomBattle {
 		}
 		this.stream.write(`>player ${slot} ` + JSON.stringify(options));
 		if (this.started) this.onUpdateConnection(user);
-		if (this.p1 && this.p2) {
+		if (this.p1 && this.p2 && (this.playerCap <= 2 || this.p3 && this.p4)) {
 			this.started = true;
-			const user1 = Users(this.p1.userid);
-			const user2 = Users(this.p2.userid);
-			if (!user1) throw new Error(`User ${this.p1.userid} not found on ${this.id} battle creation`);
-			if (!user2) throw new Error(`User ${this.p2.userid} not found on ${this.id} battle creation`);
-			Rooms.global.onCreateBattleRoom(user1, user2, this.room, {rated: this.rated});
+			const users = [];
+			for (const userid in this.players) {
+				const user = Users(userid);
+				if (!user) throw new Error(`User ${userid} not found on ${this.id} battle creation`);
+				users.push(user);
+			}
+			Rooms.global.onCreateBattleRoom(users, this.room, {rated: this.rated});
 		}
 		return player;
 	}

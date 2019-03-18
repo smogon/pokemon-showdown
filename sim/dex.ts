@@ -28,6 +28,15 @@
  * @license MIT license
  */
 
+// @ts-ignore
+Array.prototype.flatMap = function (callback, thisArg) {
+	const newArray = [];
+	for (let i = 0; i < this.length; i++) {
+		newArray.push(...callback.call(thisArg, this[i], i, this));
+	}
+	return newArray;
+ };
+
 import * as fs from 'fs';
 import * as path from 'path';
 

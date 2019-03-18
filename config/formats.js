@@ -871,7 +871,7 @@ let Formats = [
 			if (uberPokemon.includes(template.name) || set.ability === 'Power Construct' || uberStones.includes(item.name)) return ["" + template.species + " is not allowed to hold " + item.name + "."];
 		},
 		onBegin() {
-			for (const pokemon of this.p1.pokemon.concat(this.p2.pokemon)) {
+			for (const pokemon of this.sides[0].pokemon.concat(this.sides[1].pokemon)) {
 				pokemon.originalSpecies = pokemon.baseTemplate.species;
 			}
 			if (this.rated) this.add('html', `<div class="broadcast-blue"><strong>Mix and Mega is currently suspecting Landorus-Therian! For more information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3647835/">suspect thread</a>.</strong></div>`);
@@ -1025,8 +1025,8 @@ let Formats = [
 		],
 		onSwitchInPriority: 2,
 		onSwitchIn(pokemon) {
-			if (this.p1.active.every(ally => ally && !ally.fainted)) {
-				let p1a = this.p1.active[0], p1b = this.p1.active[1];
+			if (this.sides[0].active.every(ally => ally && !ally.fainted)) {
+				let p1a = this.sides[0].active[0], p1b = this.sides[0].active[1];
 				if (p1a.ability !== p1b.ability) {
 					let p1aInnate = 'ability' + p1b.ability;
 					p1a.volatiles[p1aInnate] = {id: p1aInnate, target: p1a};
@@ -1034,8 +1034,8 @@ let Formats = [
 					p1b.volatiles[p1bInnate] = {id: p1bInnate, target: p1b};
 				}
 			}
-			if (this.p2.active.every(ally => ally && !ally.fainted)) {
-				let p2a = this.p2.active[0], p2b = this.p2.active[1];
+			if (this.sides[1].active.every(ally => ally && !ally.fainted)) {
+				let p2a = this.sides[1].active[0], p2b = this.sides[1].active[1];
 				if (p2a.ability !== p2b.ability) {
 					let p2a_innate = 'ability' + p2b.ability;
 					p2a.volatiles[p2a_innate] = {id: p2a_innate, target: p2a};
