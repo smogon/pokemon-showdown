@@ -647,7 +647,8 @@ interface Template extends Readonly<BasicEffect & TemplateData & TemplateFormats
 	readonly learnset?: {[k: string]: MoveSource[]}
 }
 
-type GameType = 'singles' | 'doubles' | 'triples' | 'rotation'
+type GameType = 'singles' | 'doubles' | 'triples' | 'rotation' | 'multi' | 'free-for-all'
+type SideID = 'p1' | 'p2' | 'p3' | 'p4'
 
 interface GameTimerSettings {
 	dcTimer: boolean;

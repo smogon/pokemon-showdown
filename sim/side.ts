@@ -35,7 +35,7 @@ interface Choice {
 
 export class Side {
 	readonly battle: Battle;
-	readonly id: 'p1' | 'p2';
+	readonly id: SideID;
 	readonly n: number;
 
 	name: string;
@@ -69,7 +69,7 @@ export class Side {
 		if (sideScripts) Object.assign(this, sideScripts);
 
 		this.battle = battle;
-		this.id = sideNum ? 'p2' : 'p1';
+		this.id = ['p1', 'p2', 'p3', 'p4'][sideNum] as SideID;
 		this.n = sideNum;
 
 		this.name = name;
@@ -159,7 +159,7 @@ export class Side {
 			const entry: AnyObject = {
 				ident: pokemon.fullname,
 				details: pokemon.details,
-				condition: pokemon.getHealth(pokemon.side),
+				condition: pokemon.getHealth(true),
 				active: (pokemon.position < pokemon.side.active.length),
 				stats: {
 					atk: pokemon.baseStoredStats['atk'],
