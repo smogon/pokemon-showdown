@@ -22,10 +22,6 @@ export class Pokemon {
 	readonly side: Side;
 	readonly battle: Battle;
 
-	/** "pre-bound" functions for nicer syntax allows them to be passed directly to Battle#add. */
-	readonly getHealth: (side: number) => string;
-	readonly getDetails: (side: number) => string;
-
 	readonly set: PokemonSet;
 	readonly name: string;
 	readonly fullname: string;
@@ -223,9 +219,6 @@ export class Pokemon {
 		const pokemonScripts = this.battle.data.Scripts.pokemon;
 		if (pokemonScripts) Object.assign(this, pokemonScripts);
 
-		this.getHealth = (s: number) => this.getHealthInner(s);
-		this.getDetails = (s: number) => this.getDetailsInner(s);
-
 		if (typeof set === 'string') set = {name: set};
 		this.set = set as PokemonSet;
 
@@ -406,14 +399,14 @@ export class Pokemon {
 		return this.isActive ? fullname.substr(0, 2) + position + fullname.substr(2) : fullname;
 	}
 
-	getDetailsInner(side: number) {
+	getDetails = (side: 0 | 1 | boolean) => {
 		if (this.illusion) {
 			const illusionDetails = this.illusion.template.species + (this.level === 100 ? '' : ', L' + this.level) +
 				(this.illusion.gender === '' ? '' : ', ' + this.illusion.gender) + (this.illusion.set.shiny ? ', shiny' : '');
-			return illusionDetails + '|' + this.getHealthInner(side);
+			return illusionDetails + '|' + this.getHealth(side);
 		}
-		return this.details + '|' + this.getHealthInner(side);
-	}
+		return this.details + '|' + this.getHealth(side);
+	};
 
 	updateSpeed() {
 		this.speed = this.getActionSpeed();
@@ -1524,7 +1517,7 @@ export class Pokemon {
 		}
 	}
 
-	getHealthInner(side: number | boolean) {
+	getHealth = (side: 0 | 1 | boolean) => {
 		if (!this.hp) return '0 fnt';
 		let hpstring;
 		// side === true in replays
@@ -1552,7 +1545,7 @@ export class Pokemon {
 		}
 		if (this.status) hpstring += ' ' + this.status;
 		return hpstring;
-	}
+	};
 
 	/**
 	 * Sets a type (except on Arceus, who resists type changes)
