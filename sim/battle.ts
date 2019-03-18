@@ -940,9 +940,9 @@ export class Battle extends Dex.ModdedDex {
 			handlers.push(...this.findPokemonEventHandlers(sourceThing, `onSource${eventName}`));
 		}
 		if (thing instanceof Side) {
-			const team = thing.n % 2;
+				const team = this.gameType === 'multi' ? thing.n % 2 : null;
 			for (const side of this.sides) {
-				if (side === thing || this.gameType === 'multi' && side.n % 2 === team) {
+				if (team === null ? side === thing : side.n % 2 === team) {
 					handlers.push(...this.findSideEventHandlers(side, `on${eventName}`));
 				} else {
 					handlers.push(...this.findSideEventHandlers(side, `onFoe${eventName}`));
