@@ -3117,28 +3117,24 @@ export class Battle extends Dex.ModdedDex {
 		if (once) this.hints.add(hint);
 	}
 
-	add(...parts: (string | number | boolean | ((side: Side | boolean) => string) | AnyObject | null | undefined)[]) {
+	add(...parts: (string | number | boolean | ((side: 0 | 1 | boolean) => string) | AnyObject | null | undefined)[]) {
 		if (!parts.some(part => typeof part === 'function')) {
 			this.log.push(`|${parts.join('|')}`);
 			return;
 		}
 		if (this.reportExactHP) {
-			parts = parts.map(part => {
-				if (typeof part !== 'function') return part;
-				// @ts-ignore
-				return part(true);
-			});
+			parts = parts.map(part =>
+				typeof part !== 'function' ? part : part(true)
+			);
 			this.log.push(`|${parts.join('|')}`);
 			return;
 		}
 		this.log.push('|split');
-		const sides: (number | boolean)[] = [false, 0, 1, true];
+		const sides: (0 | 1 | boolean)[] = [false, 0, 1, true];
 		for (const side of sides) {
-			const sideUpdate = '|' + parts.map(part => {
-				if (typeof part !== 'function') return part;
-				// @ts-ignore
-				return part(side);
-			}).join('|');
+			const sideUpdate = '|' + parts.map(part =>
+				typeof part !== 'function' ? part : part(side)
+			).join('|');
 			this.log.push(sideUpdate);
 		}
 	}
