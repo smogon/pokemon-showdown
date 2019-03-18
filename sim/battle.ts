@@ -1162,7 +1162,7 @@ export class Battle extends Dex.ModdedDex {
 		}
 
 		// default to no request
-		let requests: any[] = Array(this.sides.length).fill(null);
+		const requests: any[] = Array(this.sides.length).fill(null);
 		for (const side of this.sides) {
 			side.currentRequest = '';
 		}
@@ -1170,8 +1170,8 @@ export class Battle extends Dex.ModdedDex {
 		switch (type) {
 		case 'switch': {
 			for (let i = 0; i < this.sides.length; i++) {
-				let side = this.sides[i];
-				let switchTable = [];
+				const side = this.sides[i];
+				const switchTable = [];
 				for (const pokemon of side.active) {
 					switchTable.push(!!(pokemon && pokemon.switchFlag));
 				}
@@ -1189,7 +1189,7 @@ export class Battle extends Dex.ModdedDex {
 			this.add('teampreview' + (maxTeamSize ? '|' + maxTeamSize : ''));
 			if (!maxTeamSize) maxTeamSize = 6;
 			for (let i = 0; i < this.sides.length; i++) {
-				let side = this.sides[i];
+				const side = this.sides[i];
 				side.maxTeamSize = maxTeamSize;
 				side.currentRequest = 'teampreview';
 				requests[i] = {teamPreview: true, maxTeamSize, side: side.getRequestData()};
@@ -1198,9 +1198,9 @@ export class Battle extends Dex.ModdedDex {
 
 		default: {
 			for (let i = 0; i < this.sides.length; i++) {
-				let side = this.sides[i];
+				const side = this.sides[i];
 				side.currentRequest = 'move';
-				let activeData = side.active.map(pokemon => pokemon && pokemon.getRequestData());
+				const activeData = side.active.map(pokemon => pokemon && pokemon.getRequestData());
 				requests[i] = {active: activeData, side: side.getRequestData()};
 			}
 			break;
@@ -1212,8 +1212,8 @@ export class Battle extends Dex.ModdedDex {
 			if (!request) allRequestsMade = false;
 		}
 		for (let i = 0; i < this.sides.length; i++) {
-			let side = this.sides[i];
-			let request = requests[i];
+			const side = this.sides[i];
+			const request = requests[i];
 			if (request) {
 				if (!this.supportCancel || allRequestsMade) request.noCancel = true;
 				side.emitRequest(request);
@@ -2490,8 +2490,8 @@ export class Battle extends Dex.ModdedDex {
 
 		let team1PokemonLeft = this.sides[0].pokemonLeft;
 		let team2PokemonLeft = this.sides[1].pokemonLeft;
-		let team3PokemonLeft = this.gameType === 'free-for-all' && this.sides[2].pokemonLeft;
-		let team4PokemonLeft = this.gameType === 'free-for-all' && this.sides[3].pokemonLeft;
+		const team3PokemonLeft = this.gameType === 'free-for-all' && this.sides[2].pokemonLeft;
+		const team4PokemonLeft = this.gameType === 'free-for-all' && this.sides[3].pokemonLeft;
 		if (this.gameType === 'multi') {
 			team1PokemonLeft = this.sides.reduce((total, side) => total + (side.n % 2 === 0 ? side.pokemonLeft : 0), 0);
 			team2PokemonLeft = this.sides.reduce((total, side) => total + (side.n % 2 === 1 ? side.pokemonLeft : 0), 0);
@@ -2943,7 +2943,7 @@ export class Battle extends Dex.ModdedDex {
 			return false;
 		}
 
-		let switches = this.sides.map(side =>
+		const switches = this.sides.map(side =>
 			side.active.some(pokemon => pokemon && !!pokemon.switchFlag)
 		);
 
@@ -3019,7 +3019,7 @@ export class Battle extends Dex.ModdedDex {
 	 * turn if all required choices have been made.
 	 */
 	choose(sideid: SideID, input: string) {
-		let side = this.getSide(sideid);
+		const side = this.getSide(sideid);
 
 		if (!side.choose(input)) return false;
 
@@ -3069,7 +3069,7 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	undoChoice(sideid: SideID) {
-		let side = this.getSide(sideid);
+		const side = this.getSide(sideid);
 		if (!side.currentRequest) return;
 
 		if (side.choice.cantUndo) {
