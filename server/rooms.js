@@ -1615,17 +1615,12 @@ let Rooms = Object.assign(getRoom, {
 		const gameType = Dex.getFormat(formatid).gameType;
 		if (gameType !== 'multi' && gameType !== 'free-for-all') {
 			if (players[2] || players[3]) {
-				throw new Error(`Four players were provided, but the format is a 2 player format.`);
-			} else {
-				delete players[2];
-				delete players[3];
+				throw new Error(`Four players were provided, but the format is a two-player format.`);
 			}
+			players.splice(2);
 		}
-		for (const [i, p1] of players.entries()) {
-			if (!p1) continue;
-			for (const p2 of players.slice(i + 1)) {
-				if (p1 === p2) throw new Error(`Players can't battle themselves`);
-			}
+		if (new Set(players).size < players.length) {
+			throw new Error(`Players can't battle themselves`);
 		}
 
 		for (const p of players) {
