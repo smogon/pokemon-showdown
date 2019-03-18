@@ -71,6 +71,7 @@ class RandomPlayerAI extends BattleStreams.BattlePlayer {
 /*********************************************************************
  * Run AI
  *********************************************************************/
+// tslint:disable:no-floating-promises
 
 const streams = BattleStreams.getPlayerStreams(new BattleStreams.BattleStream());
 
@@ -92,13 +93,16 @@ const p2 = new RandomPlayerAI(streams.p2);
 console.log("p1 is " + p1.constructor.name);
 console.log("p2 is " + p2.constructor.name);
 
+p1.start();
+p2.start();
+
 (async () => {
 	let chunk;
 	// tslint:disable-next-line no-conditional-assignment
 	while ((chunk = await streams.omniscient.read())) {
 		console.log(chunk);
 	}
-})().catch(err => console.error(err));
+})();
 
 streams.omniscient.write(`>start ${JSON.stringify(spec)}
 >player p1 ${JSON.stringify(p1spec)}

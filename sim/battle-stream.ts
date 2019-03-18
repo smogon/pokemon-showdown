@@ -255,10 +255,9 @@ export class BattlePlayer {
 		this.stream = playerStream;
 		this.log = [];
 		this.debug = debug;
-		// tslint:disable-next-line:no-floating-promises FIXME
-		this.listen();
 	}
-	async listen() {
+
+	async start() {
 		let chunk;
 		// tslint:disable-next-line:no-conditional-assignment
 		while ((chunk = await this.stream.read())) {
@@ -302,8 +301,16 @@ export class BattleTextStream extends Streams.ReadWriteStream {
 		super();
 		this.battleStream = new BattleStream(options);
 		this.currentMessage = '';
-		// tslint:disable-next-line:no-floating-promises FIXME
-		this._listen();
+	}
+
+	async start() {
+		let message;
+		// tslint:disable-next-line:no-conditional-assignment
+		while ((message = await this.battleStream.read())) {
+			if (!message.endsWith('\n')) message += '\n';
+			this.push(message + '\n');
+		}
+		this.push(null);
 	}
 
 	_write(message: string | Buffer) {
@@ -314,16 +321,8 @@ export class BattleTextStream extends Streams.ReadWriteStream {
 			this.currentMessage = this.currentMessage.slice(index + 1);
 		}
 	}
+
 	_end() {
 		return this.battleStream.end();
-	}
-	async _listen() {
-		let message;
-		// tslint:disable-next-line:no-conditional-assignment
-		while ((message = await this.battleStream.read())) {
-			if (!message.endsWith('\n')) message += '\n';
-			this.push(message + '\n');
-		}
-		this.push(null);
 	}
 }
