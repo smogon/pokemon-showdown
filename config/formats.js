@@ -104,9 +104,6 @@ let Formats = [
 		mod: 'gen7',
 		ruleset: ['[Gen 7] NU'],
 		banlist: ['NU', 'PUBL'],
-		onBegin() {
-			if (this.rated && this.format === 'gen7pu') this.add('html', `<div class="broadcast-red"><strong>PU is currently suspecting Houndoom! For information on how to participate check out the <a href="https://www.smogon.com/forums/posts/8058442/">suspect thread</a>.</strong></div>`);
-		},
 	},
 	{
 		name: "[Gen 7] LC",
@@ -874,7 +871,6 @@ let Formats = [
 			for (const pokemon of this.sides[0].pokemon.concat(this.sides[1].pokemon)) {
 				pokemon.originalSpecies = pokemon.baseTemplate.species;
 			}
-			if (this.rated) this.add('html', `<div class="broadcast-blue"><strong>Mix and Mega is currently suspecting Landorus-Therian! For more information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3647835/">suspect thread</a>.</strong></div>`);
 		},
 		onSwitchIn(pokemon) {
 			// @ts-ignore
