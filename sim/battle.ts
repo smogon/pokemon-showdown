@@ -3322,11 +3322,159 @@ export class Battle extends Dex.ModdedDex {
 		return this.sides[parseInt(sideid[1], 10) - 1];
 	}
 
+	afterMoveSecondaryEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): undefined {
+		throw new Error(`The afterMoveSecondaryEvent function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	calcRecoilDamage(damageDealt: number, move: Move): number {
+		throw new Error(`The calcRecoilDamage function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	canMegaEvo(pokemon: Pokemon): string | null | undefined {
+		throw new Error(`The canMegaEvo function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	canUltraBurst(pokemon: Pokemon): string | null {
+		throw new Error(`The canUltraBurst function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	canZMove(pokemon: Pokemon): (AnyObject | null)[] | void {
+		throw new Error(`The canZMove function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	forceSwitch(
+		damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove,
+		moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean):
+		SpreadMoveDamage {
+		throw new Error(`The forceSwitch function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	getActiveZMove(move: Move, pokemon: Pokemon): ActiveMove {
+		throw new Error(`The getActiveZMove function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	getSpreadDamage(
+		damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove,
+		moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean):
+		SpreadMoveDamage {
+		throw new Error(`The getSpreadDamage function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	getZMove(move: Move, pokemon: Pokemon, skipChecks?: boolean): string | undefined {
+		throw new Error(`The getZMove function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	hitStepAccuracy(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
+		throw new Error(`The hitStepAccuracy function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	hitStepBreakProtect(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): undefined {
+		throw new Error(`The hitStepBreakProtect function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	hitStepMoveHitLoop(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): SpreadMoveDamage {
+		throw new Error(`The hitStepMoveHitLoop function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	hitStepPowderImmunity(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
+		throw new Error(`The hitStepPowderImmunity function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	hitStepPranksterImmunity(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
+		throw new Error(`The hitStepPranksterImmunity function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	hitStepStealBoosts(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): undefined {
+		throw new Error(`The hitStepStealBoosts function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	hitStepTryHitEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): (boolean | '')[] {
+		throw new Error(`The hitStepTryHitEvent function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	hitStepTryImmunityEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
+		throw new Error(`The hitStepTryImmunityEvent function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	hitStepTypeImmunity(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
+		throw new Error(`The hitStepTypeImmunity function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	isAdjacent(pokemon1: Pokemon, pokemon2: Pokemon): boolean {
+		throw new Error(`The isAdjacent function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	moveHit(
+		target: Pokemon | null, pokemon: Pokemon, move: ActiveMove,
+		moveData?: ActiveMove | SelfEffect | SecondaryEffect,
+		isSecondary?: boolean, isSelf?: boolean
+	): number | undefined | false {
+		throw new Error(`The moveHit function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	/**
+	 * This function is also used for Ultra Bursting.
+	 * Takes the Pokemon that will Mega Evolve or Ultra Burst as a parameter.
+	 * Returns false if the Pokemon cannot Mega Evolve or Ultra Burst, otherwise returns true.
+	 */
+	runMegaEvo(pokemon: Pokemon): boolean {
+		throw new Error(`The runMegaEvo function needs to be implemented in scripts.js or the battle format.`);
+	}
+
 	runMove(
 		moveOrMoveName: Move | string, pokemon: Pokemon, targetLoc: number,
 		sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean
 	) {
 		throw new Error(`The runMove function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	runMoveEffects(
+		damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove,
+		moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean):
+		SpreadMoveDamage {
+		throw new Error(`The runMoveEffects function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	runZPower(move: ActiveMove, pokemon: Pokemon) {
+		throw new Error(`The runZPower function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	secondaries(
+		targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove,
+		isSecondary?: boolean): SpreadMoveDamage {
+		throw new Error(`The secondaries function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	selfDrops(
+		targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove,
+		isSecondary?: boolean): SpreadMoveDamage {
+		throw new Error(`The selfDrops function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	spreadMoveHit(
+		targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove, moveData?: ActiveMove,
+		isSecondary?: boolean, isSelf?: boolean
+	): [SpreadMoveDamage, SpreadMoveTargets] {
+		throw new Error(`The spreadMoveHit function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	targetTypeChoices(targetType: string): boolean {
+		throw new Error(`The targetTypeChoices function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	tryMoveHit(target: Pokemon, pokemon: Pokemon, move: ActiveMove): number | undefined | false | '' {
+		throw new Error(`The tryMoveHit function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	tryPrimaryHitEvent(
+		damage: SpreadMoveDamage, targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove,
+		moveData: ActiveMove, isSecondary?: boolean
+	): SpreadMoveDamage {
+		throw new Error(`The tryPrimaryHitEvent function needs to be implemented in scripts.js or the battle format.`);
+	}
+
+	trySpreadMoveHit(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean {
+		throw new Error(`The trySpreadMoveHit function needs to be implemented in scripts.js or the battle format.`);
 	}
 
 	useMove(
@@ -3345,154 +3493,6 @@ export class Battle extends Dex.ModdedDex {
 		sourceEffect?: Effect | null, zMove?: string
 	): boolean {
 		throw new Error(`The useMoveInner function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	tryMoveHit(target: Pokemon, pokemon: Pokemon, move: ActiveMove): number | undefined | false | '' {
-		throw new Error(`The tryMoveHit function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	trySpreadMoveHit(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean {
-		throw new Error(`The trySpreadMoveHit function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	hitStepTryImmunityEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
-		throw new Error(`The hitStepTryImmunityEvent function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	hitStepTryHitEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): (boolean | '')[] {
-		throw new Error(`The hitStepTryHitEvent function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	hitStepTypeImmunity(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
-		throw new Error(`The hitStepTypeImmunity function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	hitStepPowderImmunity(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
-		throw new Error(`The hitStepPowderImmunity function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	hitStepPranksterImmunity(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
-		throw new Error(`The hitStepPranksterImmunity function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	hitStepAccuracy(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
-		throw new Error(`The hitStepAccuracy function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	hitStepBreakProtect(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): undefined {
-		throw new Error(`The hitStepBreakProtect function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	hitStepStealBoosts(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): undefined {
-		throw new Error(`The hitStepStealBoosts function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	afterMoveSecondaryEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): undefined {
-		throw new Error(`The afterMoveSecondaryEvent function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	hitStepMoveHitLoop(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): SpreadMoveDamage {
-		throw new Error(`The hitStepMoveHitLoop function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	spreadMoveHit(
-		targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove, moveData?: ActiveMove,
-		isSecondary?: boolean, isSelf?: boolean
-	): [SpreadMoveDamage, SpreadMoveTargets] {
-		throw new Error(`The spreadMoveHit function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	tryPrimaryHitEvent(
-		damage: SpreadMoveDamage, targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove,
-		moveData: ActiveMove, isSecondary?: boolean
-	): SpreadMoveDamage {
-		throw new Error(`The tryPrimaryHitEvent function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	getSpreadDamage(
-		damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove,
-		moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean):
-		SpreadMoveDamage {
-		throw new Error(`The getSpreadDamage function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	runMoveEffects(
-		damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove,
-		moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean):
-		SpreadMoveDamage {
-		throw new Error(`The runMoveEffects function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	selfDrops(
-		targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove,
-		isSecondary?: boolean): SpreadMoveDamage {
-		throw new Error(`The selfDrops function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	secondaries(
-		targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove,
-		isSecondary?: boolean): SpreadMoveDamage {
-		throw new Error(`The secondaries function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	forceSwitch(
-		damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove,
-		moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean):
-		SpreadMoveDamage {
-		throw new Error(`The forceSwitch function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	moveHit(
-		target: Pokemon | null, pokemon: Pokemon, move: ActiveMove,
-		moveData?: ActiveMove | SelfEffect | SecondaryEffect,
-		isSecondary?: boolean, isSelf?: boolean
-	): number | undefined | false {
-		throw new Error(`The moveHit function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	calcRecoilDamage(damageDealt: number, move: Move): number {
-		throw new Error(`The calcRecoilDamage function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	canZMove(pokemon: Pokemon): (AnyObject | null)[] | void {
-		throw new Error(`The canZMove function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	canUltraBurst(pokemon: Pokemon): string | null {
-		throw new Error(`The canUltraBurst function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	canMegaEvo(pokemon: Pokemon): string | null | undefined {
-		throw new Error(`The canMegaEvo function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	/**
-	 * This function is also used for Ultra Bursting.
-	 * Takes the Pokemon that will Mega Evolve or Ultra Burst as a parameter.
-	 * Returns false if the Pokemon cannot Mega Evolve or Ultra Burst, otherwise returns true.
-	 */
-	runMegaEvo(pokemon: Pokemon): boolean {
-		throw new Error(`The runMegaEvo function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	getZMove(move: Move, pokemon: Pokemon, skipChecks?: boolean): string | undefined {
-		throw new Error(`The getZMove function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	getActiveZMove(move: Move, pokemon: Pokemon): ActiveMove {
-		throw new Error(`The getActiveZMove function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	runZPower(move: ActiveMove, pokemon: Pokemon) {
-		throw new Error(`The runZPower function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	isAdjacent(pokemon1: Pokemon, pokemon2: Pokemon): boolean {
-		throw new Error(`The isAdjacent function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	targetTypeChoices(targetType: string): boolean {
-		throw new Error(`The targetTypeChoices function needs to be implemented in scripts.js or the battle format.`);
 	}
 
 	destroy() {
