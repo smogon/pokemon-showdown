@@ -839,63 +839,92 @@ let BattleScripts = {
 		// @ts-ignore
 		let didAnything = damage.reduce(this.combineResults, undefined);
 		for (const [i, target] of targets.entries()) {
-			if (!target) continue;
+			if (target === false) continue;
 			let hitResult;
 			/**@type {?boolean | number | undefined} */
 			let didSomething = damage[i];
-			if (moveData.boosts && !target.fainted) {
-				hitResult = this.boost(moveData.boosts, target, pokemon, move, isSecondary, isSelf);
-				didSomething = this.combineResults(didSomething, hitResult);
-			}
-			if (moveData.heal && !target.fainted) {
-				let d = target.heal((this.gen < 5 ? Math.floor : Math.round)(target.maxhp * moveData.heal[0] / moveData.heal[1]));
-				if (!d && d !== 0) {
-					this.add('-fail', pokemon);
-					this.attrLastMove('[still]');
-					this.debug('heal interrupted');
-					damage[i] = this.combineResults(damage[i], false);
-					didAnything = this.combineResults(didAnything, null);
-					continue;
+
+			if (target) {
+				if (moveData.boosts && !target.fainted) {
+					hitResult = this.boost(moveData.boosts, target, pokemon, move, isSecondary, isSelf);
+					didSomething = this.combineResults(didSomething, hitResult);
 				}
-				this.add('-heal', target, target.getHealth);
-				didSomething = true;
-			}
-			if (moveData.status) {
-				hitResult = target.trySetStatus(moveData.status, pokemon, moveData.ability ? moveData.ability : move);
-				if (!hitResult && move.status) {
-					damage[i] = this.combineResults(damage[i], false);
-					didAnything = this.combineResults(didAnything, null);
-					continue;
+				if (moveData.heal && !target.fainted) {
+					let d = target.heal((this.gen < 5 ? Math.floor : Math.round)(target.maxhp * moveData.heal[0] / moveData.heal[1]));
+					if (!d && d !== 0) {
+						this.add('-fail', pokemon);
+						this.attrLastMove('[still]');
+						this.debug('heal interrupted');
+						damage[i] = this.combineResults(damage[i], false);
+						didAnything = this.combineResults(didAnything, null);
+						continue;
+					}
+					this.add('-heal', target, target.getHealth);
+					didSomething = true;
 				}
-				didSomething = this.combineResults(didSomething, hitResult);
-			}
-			if (moveData.forceStatus) {
-				hitResult = target.setStatus(moveData.forceStatus, pokemon, move);
-				didSomething = this.combineResults(didSomething, hitResult);
-			}
-			if (moveData.volatileStatus) {
-				hitResult = target.addVolatile(moveData.volatileStatus, pokemon, move);
-				didSomething = this.combineResults(didSomething, hitResult);
-			}
-			if (moveData.sideCondition) {
-				hitResult = target.side.addSideCondition(moveData.sideCondition, pokemon, move);
-				didSomething = this.combineResults(didSomething, hitResult);
-			}
-			if (moveData.weather) {
-				hitResult = this.setWeather(moveData.weather, pokemon, move);
-				didSomething = this.combineResults(didSomething, hitResult);
-			}
-			if (moveData.terrain) {
-				hitResult = this.setTerrain(moveData.terrain, pokemon, move);
-				didSomething = this.combineResults(didSomething, hitResult);
-			}
-			if (moveData.pseudoWeather) {
-				hitResult = this.addPseudoWeather(moveData.pseudoWeather, pokemon, move);
-				didSomething = this.combineResults(didSomething, hitResult);
-			}
-			if (moveData.forceSwitch) {
-				hitResult = !!this.canSwitch(target.side);
-				didSomething = this.combineResults(didSomething, hitResult);
+				if (moveData.status) {
+					hitResult = target.trySetStatus(moveData.status, pokemon, moveData.ability ? moveData.ability : move);
+					if (!hitResult && move.status) {
+						damage[i] = this.combineResults(damage[i], false);
+						didAnything = this.combineResults(didAnything, null);
+						continue;
+					}
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
+				if (moveData.forceStatus) {
+					hitResult = target.setStatus(moveData.forceStatus, pokemon, move);
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
+				if (moveData.volatileStatus) {
+					hitResult = target.addVolatile(moveData.volatileStatus, pokemon, move);
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
+				if (moveData.sideCondition) {
+					hitResult = target.side.addSideCondition(moveData.sideCondition, pokemon, move);
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
+				if (moveData.weather) {
+					hitResult = this.setWeather(moveData.weather, pokemon, move);
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
+				if (moveData.terrain) {
+					hitResult = this.setTerrain(moveData.terrain, pokemon, move);
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
+				if (moveData.pseudoWeather) {
+					hitResult = this.addPseudoWeather(moveData.pseudoWeather, pokemon, move);
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
+				if (moveData.forceSwitch) {
+					hitResult = !!this.canSwitch(target.side);
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
+				// Hit events
+				//   These are like the TryHit events, except we don't need a FieldHit event.
+				//   Scroll up for the TryHit event documentation, and just ignore the "Try" part. ;)
+				if (move.target === 'all' && !isSelf) {
+					if (moveData.onHitField) {
+						hitResult = this.singleEvent('HitField', moveData, {}, target, pokemon, move);
+						didSomething = this.combineResults(didSomething, hitResult);
+					}
+				} else if ((move.target === 'foeSide' || move.target === 'allySide') && !isSelf) {
+					if (moveData.onHitSide) {
+						hitResult = this.singleEvent('HitSide', moveData, {}, target.side, pokemon, move);
+						didSomething = this.combineResults(didSomething, hitResult);
+					}
+				} else {
+					if (moveData.onHit) {
+						hitResult = this.singleEvent('Hit', moveData, {}, target, pokemon, move);
+						didSomething = this.combineResults(didSomething, hitResult);
+					}
+					if (!isSelf && !isSecondary) {
+						this.runEvent('Hit', target, pokemon, move);
+					}
+					if (moveData.onAfterHit) {
+						hitResult = this.singleEvent('AfterHit', moveData, {}, target, pokemon, move);
+						didSomething = this.combineResults(didSomething, hitResult);
+					}
+				}
 			}
 			if (moveData.selfSwitch) {
 				// If the move is Parting Shot and it fails to change the target's stats in gen 7, didSomething will be null instead of undefined.
@@ -904,32 +933,6 @@ let BattleScripts = {
 					didSomething = true;
 				} else {
 					didSomething = this.combineResults(didSomething, false);
-				}
-			}
-			// Hit events
-			//   These are like the TryHit events, except we don't need a FieldHit event.
-			//   Scroll up for the TryHit event documentation, and just ignore the "Try" part. ;)
-			if (move.target === 'all' && !isSelf) {
-				if (moveData.onHitField) {
-					hitResult = this.singleEvent('HitField', moveData, {}, target, pokemon, move);
-					didSomething = this.combineResults(didSomething, hitResult);
-				}
-			} else if ((move.target === 'foeSide' || move.target === 'allySide') && !isSelf) {
-				if (moveData.onHitSide) {
-					hitResult = this.singleEvent('HitSide', moveData, {}, target.side, pokemon, move);
-					didSomething = this.combineResults(didSomething, hitResult);
-				}
-			} else {
-				if (moveData.onHit) {
-					hitResult = this.singleEvent('Hit', moveData, {}, target, pokemon, move);
-					didSomething = this.combineResults(didSomething, hitResult);
-				}
-				if (!isSelf && !isSecondary) {
-					this.runEvent('Hit', target, pokemon, move);
-				}
-				if (moveData.onAfterHit) {
-					hitResult = this.singleEvent('AfterHit', moveData, {}, target, pokemon, move);
-					didSomething = this.combineResults(didSomething, hitResult);
 				}
 			}
 			// Move didn't fail because it didn't try to do anything
@@ -943,7 +946,7 @@ let BattleScripts = {
 		}
 
 
-		if (!didAnything && !moveData.self && !moveData.selfdestruct) {
+		if (!didAnything && didAnything !== 0 && !moveData.self && !moveData.selfdestruct) {
 			if (!isSelf && !isSecondary) {
 				if (didAnything === false) {
 					this.add('-fail', pokemon);
