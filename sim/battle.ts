@@ -2247,7 +2247,7 @@ export class Battle extends Dex.ModdedDex {
 
 		// multi-target modifier (doubles only)
 		if (move.spreadHit) {
-			const spreadModifier = move.spreadModifier || this.gameType === 'free-for-all' ? 0.5 : 0.75;
+			const spreadModifier = move.spreadModifier || (this.gameType === 'free-for-all' ? 0.5 : 0.75);
 			this.debug('Spread modifier: ' + spreadModifier);
 			baseDamage = this.modify(baseDamage, spreadModifier);
 		}
