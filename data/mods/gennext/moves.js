@@ -678,6 +678,7 @@ let BattleMovedex = {
 					let moveData = /** @type {ActiveMove} */ ({
 						damage: this.effectData.totalDamage * 2,
 					});
+					// @ts-ignore FIXME
 					this.moveHit(target, pokemon, 'bide', moveData);
 					return false;
 				}
