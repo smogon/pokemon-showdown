@@ -364,7 +364,6 @@ export class Battle extends Dex.ModdedDex {
 		return this.getEffect(this.terrain);
 	}
 
-	// @ts-ignore
 	getFormat(format?: string) {
 		if (!format) return this.cachedFormat;
 		return super.getFormat(format, true);
@@ -583,8 +582,7 @@ export class Battle extends Dex.ModdedDex {
 			hasRelayVar = false;
 		}
 
-		// @ts-ignore
-		if (effect.effectType === 'Status' && target.status !== effect.id) {
+		if (effect.effectType === 'Status' && (target instanceof Pokemon) && target.status !== effect.id) {
 			// it's changed; call it off
 			return relayVar;
 		}
@@ -603,8 +601,8 @@ export class Battle extends Dex.ModdedDex {
 			return relayVar;
 		}
 
-		// @ts-ignore
-		const callback = effect['on' + eventid];
+		// @ts-ignore - dynamic lookup
+		const callback = effect[`on${eventid}`];
 
 		if (callback === undefined) return relayVar;
 		const parentEffect = this.effect;
@@ -776,7 +774,7 @@ export class Battle extends Dex.ModdedDex {
 
 		if (onEffect) {
 			if (!effect) throw new Error("onEffect passed without an effect");
-			// @ts-ignore
+			// @ts-ignore - dynamic lookup
 			const callback = effect[`on${eventid}`];
 			if (callback !== undefined) {
 				handlers.unshift({status: effect, callback, statusData: {}, end: null, thing: target});
@@ -968,7 +966,7 @@ export class Battle extends Dex.ModdedDex {
 		const handlers: AnyObject[] = [];
 
 		const status = pokemon.getStatus();
-		// @ts-ignore
+		// @ts-ignore - dynamic lookup
 		let callback = status[callbackName];
 		if (callback !== undefined || (getKey && pokemon.statusData[getKey])) {
 			handlers.push({
@@ -979,7 +977,7 @@ export class Battle extends Dex.ModdedDex {
 		for (const i in pokemon.volatiles) {
 			const volatileData = pokemon.volatiles[i];
 			const volatile = pokemon.getVolatile(i);
-			// @ts-ignore
+			// @ts-ignore - dynamic lookup
 			callback = volatile[callbackName];
 			if (callback !== undefined || (getKey && volatileData[getKey])) {
 				handlers.push({
@@ -989,7 +987,7 @@ export class Battle extends Dex.ModdedDex {
 			}
 		}
 		const ability = pokemon.getAbility();
-		// @ts-ignore
+		// @ts-ignore - dynamic lookup
 		callback = ability[callbackName];
 		if (callback !== undefined || (getKey && pokemon.abilityData[getKey])) {
 			handlers.push({
@@ -998,7 +996,7 @@ export class Battle extends Dex.ModdedDex {
 			this.resolveLastPriority(handlers, callbackName);
 		}
 		const item = pokemon.getItem();
-		// @ts-ignore
+		// @ts-ignore - dynamic lookup
 		callback = item[callbackName];
 		if (callback !== undefined || (getKey && pokemon.itemData[getKey])) {
 			handlers.push({
@@ -1007,7 +1005,7 @@ export class Battle extends Dex.ModdedDex {
 			this.resolveLastPriority(handlers, callbackName);
 		}
 		const species = pokemon.baseTemplate;
-		// @ts-ignore
+		// @ts-ignore - dynamic lookup
 		callback = species[callbackName];
 		if (callback !== undefined) {
 			handlers.push({
@@ -1027,7 +1025,7 @@ export class Battle extends Dex.ModdedDex {
 		for (const i in this.pseudoWeather) {
 			const pseudoWeatherData = this.pseudoWeather[i];
 			const pseudoWeather = this.getPseudoWeather(i);
-			// @ts-ignore
+			// @ts-ignore - dynamic lookup
 			callback = pseudoWeather[callbackName];
 			if (callback !== undefined || (getKey && pseudoWeatherData[getKey])) {
 				handlers.push({
@@ -1037,33 +1035,33 @@ export class Battle extends Dex.ModdedDex {
 			}
 		}
 		const weather = this.getWeather();
-		// @ts-ignore
+		// @ts-ignore - dynamic lookup
 		callback = weather[callbackName];
 		if (callback !== undefined || (getKey && this.weatherData[getKey])) {
 			handlers.push({
 				status: weather, callback, statusData: this.weatherData, end: this.clearWeather, thing: this,
-				// @ts-ignore
+				// @ts-ignore - dynamic lookup
 				priority: weather[callbackNamePriority] || 0});
 			this.resolveLastPriority(handlers, callbackName);
 		}
 		const terrain = this.getTerrain();
-		// @ts-ignore
+		// @ts-ignore - dynamic lookup
 		callback = terrain[callbackName];
 		if (callback !== undefined || (getKey && this.terrainData[getKey])) {
 			handlers.push({
 				status: terrain, callback, statusData: this.terrainData, end: this.clearTerrain, thing: this,
-				// @ts-ignore
+				// @ts-ignore - dynamic lookup
 				priority: terrain[callbackNamePriority] || 0});
 			this.resolveLastPriority(handlers, callbackName);
 		}
 		const format = this.getFormat();
-		// @ts-ignore
+		// @ts-ignore - dynamic lookup
 		callback = format[callbackName];
-		// @ts-ignore
+		// @ts-ignore - dynamic lookup
 		if (callback !== undefined || (getKey && this.formatData[getKey])) {
 			handlers.push({
 				status: format, callback, statusData: this.formatData, end() {}, thing: this,
-				// @ts-ignore
+				// @ts-ignore - dynamic lookup
 				priority: format[callbackNamePriority] || 0});
 			this.resolveLastPriority(handlers, callbackName);
 		}
@@ -1085,7 +1083,7 @@ export class Battle extends Dex.ModdedDex {
 		for (const i in side.sideConditions) {
 			const sideConditionData = side.sideConditions[i];
 			const sideCondition = side.getSideCondition(i);
-			// @ts-ignore
+			// @ts-ignore - dynamic lookup
 			const callback = sideCondition[callbackName];
 			if (callback !== undefined || (getKey && sideConditionData[getKey])) {
 				handlers.push({
@@ -1543,8 +1541,7 @@ export class Battle extends Dex.ModdedDex {
 						const template = (source.illusion || source).template;
 						if (!template.abilities) continue;
 						for (const abilitySlot in template.abilities) {
-							// @ts-ignore
-							const abilityName = template.abilities[abilitySlot];
+							const abilityName = template.abilities[abilitySlot as keyof TemplateAbility];
 							if (abilityName === source.ability) {
 								// pokemon event was already run above so we don't need
 								// to run it again.
@@ -1784,14 +1781,13 @@ export class Battle extends Dex.ModdedDex {
 		boost = this.runEvent('Boost', target, source, effect, Object.assign({}, boost));
 		let success = null;
 		let boosted = false;
-		for (const i in boost) {
+		let boostName: BoostName;
+		for (boostName in boost) {
 			const currentBoost: SparseBoostsTable = {};
-			// @ts-ignore
-			currentBoost[i] = boost[i];
+			currentBoost[boostName] = boost[boostName];
 			let boostBy = target.boostBy(currentBoost);
 			let msg = '-boost';
-			// @ts-ignore
-			if (boost[i] < 0) {
+			if (boost[boostName]! < 0) {
 				msg = '-unboost';
 				boostBy = -boostBy;
 			}
@@ -1802,33 +1798,33 @@ export class Battle extends Dex.ModdedDex {
 					this.add('-setboost', target, 'atk', target.boosts['atk'], '[from] move: Belly Drum');
 					break;
 				case 'bellydrum2':
-					this.add(msg, target, i, boostBy, '[silent]');
+					this.add(msg, target, boostName, boostBy, '[silent]');
 					this.hint("In Gen 2, Belly Drum boosts by 2 when it fails.");
 					break;
 				case 'intimidate': case 'gooey': case 'tanglinghair':
-					this.add(msg, target, i, boostBy);
+					this.add(msg, target, boostName, boostBy);
 					break;
 				case 'zpower':
-					this.add(msg, target, i, boostBy, '[zeffect]');
+					this.add(msg, target, boostName, boostBy, '[zeffect]');
 					break;
 				default:
 					if (!effect) break;
 					if (effect.effectType === 'Move') {
-						this.add(msg, target, i, boostBy);
+						this.add(msg, target, boostName, boostBy);
 					} else {
 						if (effect.effectType === 'Ability' && !boosted) {
 							this.add('-ability', target, effect.name, 'boost');
 							boosted = true;
 						}
-						this.add(msg, target, i, boostBy);
+						this.add(msg, target, boostName, boostBy);
 					}
 					break;
 				}
 				this.runEvent('AfterEachBoost', target, source, effect, currentBoost);
 			} else if (effect && effect.effectType === 'Ability') {
-				if (isSecondary) this.add(msg, target, i, boostBy);
+				if (isSecondary) this.add(msg, target, boostName, boostBy);
 			} else if (!isSecondary && !isSelf) {
-				this.add(msg, target, i, boostBy);
+				this.add(msg, target, boostName, boostBy);
 			}
 		}
 		this.runEvent('AfterBoost', target, source, effect, boost);
@@ -1922,7 +1918,7 @@ export class Battle extends Dex.ModdedDex {
 			}
 		}
 
-		// @ts-ignore TODO: AfterDamage passes an Effect, not an ActiveMove
+		// @ts-ignore - FIXME AfterDamage passes an Effect, not an ActiveMove
 		if (!effect.flags) effect.flags = {};
 		if (instafaint) {
 			for (const [i, target] of targetArray.entries()) {
@@ -2111,7 +2107,6 @@ export class Battle extends Dex.ModdedDex {
 
 		if (typeof move === 'number') {
 			const basePower = move;
-			// @ts-ignore
 			move = (new Data.Move({
 				basePower,
 				type: '???',
@@ -2193,9 +2188,7 @@ export class Battle extends Dex.ModdedDex {
 		let attack;
 		let defense;
 
-		// @ts-ignore
 		let atkBoosts = move.useTargetOffensive ? defender.boosts[attackStat] : attacker.boosts[attackStat];
-		// @ts-ignore
 		let defBoosts = move.useSourceDefensive ? attacker.boosts[defenseStat] : defender.boosts[defenseStat];
 
 		let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
@@ -2230,9 +2223,7 @@ export class Battle extends Dex.ModdedDex {
 		}
 
 		// Apply Stat Modifiers
-		// @ts-ignore
 		attack = this.runEvent('Modify' + statTable[attackStat], attacker, defender, move, attack);
-		// @ts-ignore
 		defense = this.runEvent('Modify' + statTable[defenseStat], defender, attacker, move, defense);
 
 		const tr = this.trunc;
@@ -2552,7 +2543,7 @@ export class Battle extends Dex.ModdedDex {
 				start: 101,
 			};
 			if (action.choice in priorities) {
-				// @ts-ignore
+				// @ts-ignore - Typescript being dumb about index signatures
 				action.priority = priorities[action.choice];
 			}
 		}
@@ -2785,7 +2776,7 @@ export class Battle extends Dex.ModdedDex {
 		}
 
 		case 'event':
-			// @ts-ignore Easier than defining a custom event attribute tbh
+			// @ts-ignore - easier than defining a custom event attribute TBH
 			this.runEvent(action.event, action.pokemon);
 			break;
 		case 'team': {
@@ -2805,8 +2796,7 @@ export class Battle extends Dex.ModdedDex {
 			if (action.pokemon.hp) {
 				action.pokemon.beingCalledBack = true;
 				const sourceEffect = action.sourceEffect;
-				// @ts-ignore
-				if (sourceEffect && sourceEffect.selfSwitch === 'copyvolatile') {
+				if (sourceEffect && (sourceEffect as Move).selfSwitch === 'copyvolatile') {
 					action.pokemon.switchCopyFlag = true;
 				}
 				if (!action.pokemon.switchCopyFlag) {
@@ -3311,7 +3301,7 @@ export class Battle extends Dex.ModdedDex {
 		} else if (left && !right && right !== 0) {
 			return left;
 		} else if (typeof left === 'number' && typeof right === 'number') {
-			// @ts-ignore
+			// @ts-ignore - Typescript doesn't realize T and U both are numbers
 			return left + right;
 		} else {
 			return right;
