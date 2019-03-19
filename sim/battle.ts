@@ -32,129 +32,158 @@ interface BattleOptions {
 }
 
 export class Battle extends Dex.ModdedDex {
-	id: string;
-	zMoveTable: {[k: string]: string};
-	log: string[];
-	inputLog: string[];
+	readonly id: '';
+	readonly debugMode: boolean;
+	readonly format: string;
+	readonly formatData: AnyObject;
+	readonly cachedFormat: Format;
+	readonly gameType: GameType;
+	readonly sides: [Side, Side] | [Side, Side, Side, Side];
+	readonly prngSeed: PRNGSeed;
+	prng: PRNG;
+	rated: boolean | string;
+	reportExactHP: boolean;
+	reportPercentages: boolean;
+	supportCancel: boolean;
+
+	queue: Actions["Action"][];
+	readonly faintQueue: FaintedPokemon[];
+
+	readonly log: string[];
+	readonly inputLog: string[];
+	readonly messageLog: string[];
 	sentLogPos: number;
 	sentEnd: boolean;
-	sides: Side[];
-	rated: boolean | string;
+
+	currentRequest: string;
+	turn: number;
+	midTurn: boolean;
+	started: boolean;
+	ended: boolean;
+	winner?: string;
+
+	weather: string;
 	weatherData: AnyObject;
+	terrain: string;
 	terrainData: AnyObject;
 	pseudoWeather: AnyObject;
-	format: string;
-	formatid: string;
-	cachedFormat: Format;
-	debugMode: boolean;
-	formatData: AnyObject;
+
 	effect: Effect;
 	effectData: AnyObject;
+
 	event: AnyObject;
-	itemData: AnyObject;
-	gameType: GameType;
-	reportExactHP: boolean;
-	queue: Actions["Action"][];
-	faintQueue: FaintedPokemon[];
-	messageLog: string[];
-	send: (type: string, data: string | string[]) => void;
-	turn: number;
-	lastUpdate: number;
-	weather: string;
-	terrain: string;
-	ended: boolean;
-	started: boolean;
-	active: boolean;
+	events: AnyObject | null;
 	eventDepth: number;
-	lastMove: Move | null;
+
 	activeMove: ActiveMove | null;
 	activePokemon: Pokemon | null;
 	activeTarget: Pokemon | null;
-	midTurn: boolean;
-	currentRequest: string;
+
+	lastMove: Move | null;
 	lastMoveLine: number;
-	reportPercentages: boolean;
-	supportCancel: boolean;
-	events: AnyObject | null;
 	lastDamage: number;
 	abilityOrder: number;
 
-	NOT_FAIL: '';
-	FAIL: false;
-	SILENT_FAIL: null;
-
-	prng: PRNG;
-	prngSeed: PRNGSeed;
 	teamGenerator: ReturnType<typeof Dex.getTeamGenerator> | null;
-	winner?: string;
+
 	firstStaleWarned?: boolean;
 	staleWarned?: boolean;
+
+	readonly hints: Set<string>;
+
+	readonly zMoveTable: {[k: string]: string};
+
+	readonly NOT_FAIL: '';
+	readonly FAIL: false;
+	readonly SILENT_FAIL: null;
+
+	readonly send: (type: string, data: string | string[]) => void;
+
+	// TODO
+	active: boolean;
 	activeTurns?: number;
-	hints: Set<string>;
+	itemData: AnyObject;
+	lastUpdate: number;
 
 	constructor(options: BattleOptions) {
 		const format = Dex.getFormat(options.formatid, true);
 		super(format.mod);
+
 		this.zMoveTable = {};
 		Object.assign(this, this.data.Scripts);
+
 		this.id = '';
-		this.log = [];
-		this.inputLog = [];
-		this.sentLogPos = 0;
-		this.sentEnd = false;
+		this.debugMode = format.debug || !!options.debug;
+		this.format = format.id;
+		this.formatData = {id: format.id};
+		this.cachedFormat = format;
 		this.gameType = (format.gameType || 'singles');
 		const isFourPlayer = this.gameType === 'multi' || this.gameType === 'free-for-all';
-		this.sides = Array(isFourPlayer ? 4 : 2).fill(null!);
 		// @ts-ignore
-		this.rated = options.rated;
+		this.sides = Array(isFourPlayer ? 4 : 2).fill(null!);
+		this.prng = options.prng || new PRNG(options.seed || undefined);
+		this.prngSeed = this.prng.startingSeed.slice() as PRNGSeed;
+		this.rated = options.rated || !!options.rated;
+		this.reportExactHP = !!format.debug;
+		this.reportPercentages = false;
+		this.supportCancel = false;
+
+		this.queue = [];
+		this.faintQueue = [];
+
+		this.log = [];
+		this.inputLog = [];
+		this.messageLog = [];
+		this.sentLogPos = 0;
+		this.sentEnd = false;
+
+		this.currentRequest = '';
+		this.turn = 0;
+		this.midTurn = false;
+		this.started = false;
+		this.ended = false;
+
+		this.weather = '';
 		this.weatherData = {id: ''};
+		this.terrain = '';
 		this.terrainData = {id: ''};
 		this.pseudoWeather = {};
-		this.format = format.id;
-		this.formatid = options.formatid;
-		this.cachedFormat = format;
-		this.debugMode = format.debug || !!options.debug;
-		this.formatData = {id: format.id};
+
 		// tslint:disable-next-line:no-object-literal-type-assertion
 		this.effect = {id: ''} as Effect;
 		this.effectData = {id: ''};
+
 		this.event = {id: ''};
-		this.itemData = {id: ''};
-		this.reportExactHP = !!format.debug;
-		this.queue = [];
-		this.faintQueue = [];
-		this.messageLog = [];
-		this.send = options.send || (() => {});
-		this.turn = 0;
-		this.lastUpdate = 0;
-		this.weather = '';
-		this.terrain = '';
-		this.ended = false;
-		this.started = false;
-		this.active = false;
+		this.events = null;
 		this.eventDepth = 0;
-		this.lastMove = null;
+
 		this.activeMove = null;
 		this.activePokemon = null;
 		this.activeTarget = null;
-		this.midTurn = false;
-		this.currentRequest = '';
+
+		this.lastMove = null;
 		this.lastMoveLine = -1;
-		this.reportPercentages = false;
-		this.supportCancel = false;
-		this.events = null;
 		this.lastDamage = 0;
 		this.abilityOrder = 0;
+
+		this.teamGenerator = null;
+
+		this.hints = new Set();
+
 		this.NOT_FAIL = '';
 		this.FAIL = false;
 		this.SILENT_FAIL = null;
-		this.prng = options.prng || new PRNG(options.seed || undefined);
-		this.prngSeed = this.prng.startingSeed.slice() as PRNGSeed;
-		this.teamGenerator = null;
+
+		this.send = options.send || (() => {});
+
+		// TODO
+		this.active = false;
+		this.itemData = {id: ''};
+		this.lastUpdate = 0;
+
 		// bound function for faster speedSort
 		// (so speedSort doesn't need to bind before use)
 		this.comparePriority = this.comparePriority.bind(this);
-		this.hints = new Set();
 
 		const inputOptions: {formatid: string, seed: PRNGSeed, rated?: string | true} = {
 			formatid: options.formatid, seed: this.prng.seed,
@@ -175,18 +204,10 @@ export class Battle extends Dex.ModdedDex {
 				if (hasEventHandler) this.addPseudoWeather(rule);
 			}
 		}
-		if (options.p1) {
-			this.setPlayer('p1', options.p1);
-		}
-		if (options.p2) {
-			this.setPlayer('p2', options.p2);
-		}
-		if (options.p3) {
-			this.setPlayer('p3', options.p3);
-		}
-		if (options.p4) {
-			this.setPlayer('p4', options.p4);
-		}
+		if (options.p1) this.setPlayer('p1', options.p1);
+		if (options.p2) this.setPlayer('p2', options.p2);
+		if (options.p3) this.setPlayer('p3', options.p3);
+		if (options.p4) this.setPlayer('p4', options.p4);
 	}
 
 	get p1() {
@@ -2493,8 +2514,8 @@ export class Battle extends Dex.ModdedDex {
 
 		let team1PokemonLeft = this.sides[0].pokemonLeft;
 		let team2PokemonLeft = this.sides[1].pokemonLeft;
-		const team3PokemonLeft = this.gameType === 'free-for-all' && this.sides[2].pokemonLeft;
-		const team4PokemonLeft = this.gameType === 'free-for-all' && this.sides[3].pokemonLeft;
+		const team3PokemonLeft = this.gameType === 'free-for-all' && this.sides[2]!.pokemonLeft;
+		const team4PokemonLeft = this.gameType === 'free-for-all' && this.sides[3]!.pokemonLeft;
 		if (this.gameType === 'multi') {
 			team1PokemonLeft = this.sides.reduce((total, side) => total + (side.n % 2 === 0 ? side.pokemonLeft : 0), 0);
 			team2PokemonLeft = this.sides.reduce((total, side) => total + (side.n % 2 === 1 ? side.pokemonLeft : 0), 0);
@@ -3494,19 +3515,19 @@ export class Battle extends Dex.ModdedDex {
 		// deallocate ourself
 
 		// deallocate children and get rid of references to them
-		for (const side of this.sides) {
-			if (side) side.destroy();
+		for (let i = 0; i < this.sides.length; i++) {
+			if (this.sides[i]) {
+				this.sides[i].destroy();
+				this.sides[i] = null!;
+			}
 		}
-		// @ts-ignore - prevent type | null
-		this.sides[0] = null;
-		// @ts-ignore - prevent type | null
-		this.sides[1] = null;
 		for (const action of this.queue) {
 			delete action.pokemon;
 		}
+		// @ts-ignore - readonly
 		this.queue = [];
-
 		// in case the garbage collector really sucks, at least deallocate the log
+		// @ts-ignore - readonly
 		this.log = [];
 	}
 }
