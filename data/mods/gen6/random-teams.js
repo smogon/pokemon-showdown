@@ -223,7 +223,8 @@ class RandomGen6Teams extends RandomTeams {
 					if (hasMove['rest'] || hasMove['lightscreen'] && hasMove['reflect']) rejected = true;
 					break;
 				case 'pursuit':
-					if (counter.setupType || hasMove['nightslash'] || (hasMove['knockoff'] && !hasType['Dark']) || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
+					if (counter.setupType || counter.Status > 1 || counter['Dark'] > 2 || hasMove['knockoff'] && !hasType['Dark']) rejected = true;
+					if (hasMove['nightslash']) rejected = true;
 					break;
 				case 'rapidspin':
 					if (counter.setupType || teamDetails.hazardClear) rejected = true;
@@ -248,6 +249,7 @@ class RandomGen6Teams extends RandomTeams {
 					break;
 				case 'voltswitch':
 					if (counter.setupType || !!counter['speedsetup'] || hasMove['magnetrise'] || hasMove['uturn']) rejected = true;
+					if (movePool.includes('volttackle')) rejected = true;
 					break;
 
 				// Bit redundant to have both
@@ -486,14 +488,6 @@ class RandomGen6Teams extends RandomTeams {
 					rejected = true;
 				}
 
-				// Certain Pokemon should always have a recovery move
-				if (!counter.recovery && template.baseStats.hp >= 165 && movePool.includes('wish')) {
-					if (move.category === 'Status' || !hasType[move.type] && !move.damage) rejected = true;
-				}
-				if (template.nfe && !isSetup && !counter.recovery && !!counter['Status'] && (movePool.includes('recover') || movePool.includes('roost'))) {
-					if (move.category === 'Status' || !hasType[move.type]) rejected = true;
-				}
-
 				// This move doesn't satisfy our setup requirements:
 				if ((move.category === 'Physical' && counter.setupType === 'Special') || (move.category === 'Special' && counter.setupType === 'Physical')) {
 					// Reject STABs last in case the setup type changes later on
@@ -527,7 +521,7 @@ class RandomGen6Teams extends RandomTeams {
 					(hasType['Grass'] && !hasType['Fairy'] && !hasType['Poison'] && !hasType['Steel'] && !counter['Grass']) ||
 					(hasType['Ground'] && !counter['Ground'] && !hasMove['rest'] && !hasMove['sleeptalk']) ||
 					(hasType['Ice'] && !counter['Ice'] && !hasAbility['Refrigerate']) ||
-					(hasType['Psychic'] && !!counter['Psychic'] && !hasType['Flying'] && !hasAbility['Pixilate'] && template.types.length > 1 && counter.stab < 2) ||
+					(hasType['Psychic'] && !!counter['Psychic'] && !hasType['Flying'] && !hasAbility['Pixilate'] && counter.stab < template.types.length) ||
 					(hasType['Rock'] && !counter['Rock'] && counter.setupType === 'Physical') ||
 					(hasType['Steel'] && hasAbility['Technician'] && !counter['Steel']) ||
 					(hasType['Water'] && (!counter['Water'] || !counter.stab) && !hasAbility['Protean']) ||
@@ -540,9 +534,10 @@ class RandomGen6Teams extends RandomTeams {
 					(hasAbility['Guts'] && hasType['Normal'] && movePool.includes('facade')) ||
 					(hasAbility['Slow Start'] && movePool.includes('substitute')) ||
 					(hasAbility['Stance Change'] && !counter.setupType && movePool.includes('kingsshield')) ||
+					(!counter.recovery && (movePool.includes('softboiled') || template.nfe && !!counter['Status'] && (movePool.includes('recover') || movePool.includes('roost')))) ||
 					(template.requiredMove && movePool.includes(toId(template.requiredMove)))))) {
 					// Reject Status or non-STAB
-					if (!isSetup && !move.weather && moveid !== 'judgment' && moveid !== 'rest' && moveid !== 'sleeptalk') {
+					if (!isSetup && !move.weather && !move.damage && moveid !== 'judgment' && moveid !== 'rest' && moveid !== 'sleeptalk') {
 						if (move.category === 'Status' || !hasType[move.type] || move.selfSwitch || move.basePower && move.basePower < 40 && !move.multihit) rejected = true;
 					}
 				}
@@ -640,7 +635,7 @@ class RandomGen6Teams extends RandomTeams {
 				} else if (ability === 'Prankster') {
 					rejectAbility = !counter['Status'];
 				} else if (ability === 'Pressure' || ability === 'Synchronize') {
-					rejectAbility = counter.Status < 2;
+					rejectAbility = counter.Status < 2 || !!counter['recoil'];
 				} else if (ability === 'Reckless' || ability === 'Rock Head') {
 					rejectAbility = !counter['recoil'];
 				} else if (ability === 'Regenerator') {
@@ -853,6 +848,7 @@ class RandomGen6Teams extends RandomTeams {
 
 		/** @type {{[tier: string]: number}} */
 		let levelScale = {
+			'(PU)': 84,
 			PU: 83,
 			PUBL: 82,
 			NU: 81,
@@ -877,7 +873,7 @@ class RandomGen6Teams extends RandomTeams {
 			// Holistic judgement
 			'Castform-Rainy': 100, 'Castform-Snowy': 100, 'Castform-Sunny': 100, Unown: 100,
 		};
-		let level = levelScale[template.tier] || 84;
+		let level = levelScale[template.tier] || 85;
 		if (customScale[template.name]) level = customScale[template.name];
 
 		if (template.name === 'Slurpuff' && !counter.setupType) level = 81;
