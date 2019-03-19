@@ -48,7 +48,7 @@ class Tournament extends Rooms.RoomGame {
 		this.allowRenames = false;
 		this.players = Object.create(null);
 		this.playerCount = 0;
-		this.playerCap = Number(playerCap) || Config.tourdefaultplayercap || 0;
+		this.playerCap = playerCap ? parseInt(playerCap) : Config.tourdefaultplayercap || 0;
 
 		this.format = formatId;
 		this.originalFormat = formatId;
