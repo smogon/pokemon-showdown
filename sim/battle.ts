@@ -926,13 +926,11 @@ export class Battle extends Dex.ModdedDex {
 		}
 		if (thing instanceof Pokemon && thing.isActive) {
 			handlers = this.findPokemonEventHandlers(thing, `on${eventName}`);
-			for (const allyActive of thing.side.active) {
-				if (!allyActive || allyActive.fainted) continue;
+			for (const allyActive of thing.allies()) {
 				handlers.push(...this.findPokemonEventHandlers(allyActive, `onAlly${eventName}`));
 				handlers.push(...this.findPokemonEventHandlers(allyActive, `onAny${eventName}`));
 			}
-			for (const foeActive of thing.side.foe.active) {
-				if (!foeActive || foeActive.fainted) continue;
+			for (const foeActive of thing.foes()) {
 				handlers.push(...this.findPokemonEventHandlers(foeActive, `onFoe${eventName}`));
 				handlers.push(...this.findPokemonEventHandlers(foeActive, `onAny${eventName}`));
 			}
@@ -942,10 +940,15 @@ export class Battle extends Dex.ModdedDex {
 			handlers.push(...this.findPokemonEventHandlers(sourceThing, `onSource${eventName}`));
 		}
 		if (thing instanceof Side) {
-			handlers.push(...this.findSideEventHandlers(thing, `on${eventName}`));
-			handlers.push(...this.findSideEventHandlers(thing, `onAny${eventName}`));
-			handlers.push(...this.findSideEventHandlers(thing.foe, `onFoe${eventName}`));
-			handlers.push(...this.findSideEventHandlers(thing.foe, `onAny${eventName}`));
+			const team = this.gameType === 'multi' ? thing.n % 2 : null;
+			for (const side of this.sides) {
+				if (team === null ? side === thing : side.n % 2 === team) {
+					handlers.push(...this.findSideEventHandlers(side, `on${eventName}`));
+				} else {
+					handlers.push(...this.findSideEventHandlers(side, `onFoe${eventName}`));
+				}
+				handlers.push(...this.findSideEventHandlers(side, `onAny${eventName}`));
+			}
 		}
 		handlers.push(...this.findBattleEventHandlers(`on${eventName}`));
 		return handlers;
