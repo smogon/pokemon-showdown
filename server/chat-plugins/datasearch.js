@@ -778,7 +778,7 @@ function runDexsearch(target, cmd, canAll, message) {
 			let sort = order[order.length - 1];
 			results.sort((a, b) => {
 				let mon1 = mod.getTemplate(sort === '+' ? a : b), mon2 = mod.getTemplate(sort === '+' ? b : a);
-				let monStat1, monStat2;
+				let monStat1 = 0, monStat2 = 0;
 				if (stat === 'bst') {
 					for (let monStats in mon1.baseStats) {
 						monStat1 += mon1.baseStats[monStats];
