@@ -8,8 +8,8 @@
  * @author Guangcong Luo <guangcongluo@gmail.com>
  */
 
-import * as BattleStreams from './battle-stream';
-import Dex = require('./dex');
+import * as BattleStreams from '../battle-stream';
+import Dex = require('../dex');
 
 /*********************************************************************
  * Helper functions
