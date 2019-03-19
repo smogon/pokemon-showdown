@@ -1536,91 +1536,109 @@ export class Battle extends Dex.ModdedDex {
 				}
 
 				if (pokemon.fainted) continue;
-				if (pokemon.isStale < 2) {
-					if (pokemon.isStaleCon >= 2) {
-						if (pokemon.hp >= pokemon.isStaleHP - pokemon.maxhp / 100) {
-							pokemon.isStale++;
-							if (this.firstStaleWarned && pokemon.isStale < 2) {
-								switch (pokemon.isStaleSource) {
-								case 'struggle':
-									this.add('bigerror', `${pokemon.name} isn't losing HP from Struggle. If this continues, it will be classified as being in an endless loop`);
-									break;
-								case 'drag':
-									this.add('bigerror', `${pokemon.name} isn't losing PP or HP from being forced to switch. If this continues, it will be classified as being in an endless loop`);
-									break;
-								case 'switch':
-									this.add('bigerror', `${pokemon.name} isn't losing PP or HP from repeatedly switching. If this continues, it will be classified as being in an endless loop`);
-									break;
-								}
-							}
-						}
-						pokemon.isStaleCon = 0;
-						pokemon.isStalePPTurns = 0;
-						pokemon.isStaleHP = pokemon.hp;
-					}
-					if (pokemon.isStalePPTurns >= 5) {
-						if (pokemon.hp >= pokemon.isStaleHP - pokemon.maxhp / 100) {
-							pokemon.isStale++;
-							pokemon.isStaleSource = 'ppstall';
-							if (this.firstStaleWarned && pokemon.isStale < 2) {
-								this.add('bigerror', `${pokemon.name} isn't losing PP or HP. If it keeps on not losing PP or HP, it will be classified as being in an endless loop.`);
-							}
-						}
-						pokemon.isStaleCon = 0;
-						pokemon.isStalePPTurns = 0;
-						pokemon.isStaleHP = pokemon.hp;
-					}
-				}
-				if (pokemon.getMoves().length === 0) {
-					pokemon.isStaleCon++;
-					pokemon.isStaleSource = 'struggle';
-				}
-				if (pokemon.isStale < 2) {
-					allStale = false;
-				} else if (pokemon.isStale && !pokemon.staleWarned) {
-					oneStale = pokemon;
-				}
-				if (!pokemon.isStalePPTurns) {
-					pokemon.isStaleHP = pokemon.hp;
-					if (pokemon.activeTurns) pokemon.isStaleCon = 0;
-				}
-				if (pokemon.activeTurns) {
-					pokemon.isStalePPTurns++;
-				}
-				pokemon.activeTurns++;
+				[allStale, oneStale] = this.updateStaleness(pokemon);
 			}
 			side.faintedLastTurn = side.faintedThisTurn;
 			side.faintedThisTurn = false;
 		}
+
+		this.maybeIssueStalenessWarning(allStale, oneStale);
+
+		if (this.gameType === 'triples' && !this.sides.filter(side => side.pokemonLeft > 1).length) {
+			// If both sides have one Pokemon left in triples and they are not adjacent, they are both moved to the center.
+			const actives = [];
+			for (const side of this.sides) {
+				for (const pokemon of side.active) {
+					if (!pokemon || pokemon.fainted) continue;
+					actives.push(pokemon);
+				}
+			}
+			if (actives.length > 1 && !this.isAdjacent(actives[0], actives[1])) {
+				this.swapPosition(actives[0], 1, '[silent]');
+				this.swapPosition(actives[1], 1, '[silent]');
+				this.add('-center');
+			}
+		}
+
+		this.add('turn', this.turn);
+
+		this.makeRequest('move');
+	}
+
+	private updateStaleness(pokemon: Pokemon): [boolean, Pokemon | null] {
+		let allStale = true;
+		let oneStale: Pokemon | null = null;
+		if (pokemon.isStale < 2) {
+			if (pokemon.isStaleCon >= 2) {
+				if (pokemon.hp >= pokemon.isStaleHP - pokemon.maxhp / 100) {
+					pokemon.isStale++;
+					if (this.firstStaleWarned && pokemon.isStale < 2) {
+						switch (pokemon.isStaleSource) {
+							case 'struggle':
+								this.add('bigerror', `${pokemon.name} isn't losing HP from Struggle. If this continues, it will be classified as being in an endless loop`);
+								break;
+							case 'drag':
+								this.add('bigerror', `${pokemon.name} isn't losing PP or HP from being forced to switch. If this continues, it will be classified as being in an endless loop`);
+								break;
+							case 'switch':
+								this.add('bigerror', `${pokemon.name} isn't losing PP or HP from repeatedly switching. If this continues, it will be classified as being in an endless loop`);
+								break;
+						}
+					}
+				}
+				pokemon.isStaleCon = 0;
+				pokemon.isStalePPTurns = 0;
+				pokemon.isStaleHP = pokemon.hp;
+			}
+			if (pokemon.isStalePPTurns >= 5) {
+				if (pokemon.hp >= pokemon.isStaleHP - pokemon.maxhp / 100) {
+					pokemon.isStale++;
+					pokemon.isStaleSource = 'ppstall';
+					if (this.firstStaleWarned && pokemon.isStale < 2) {
+						this.add('bigerror', `${pokemon.name} isn't losing PP or HP. If it keeps on not losing PP or HP, it will be classified as being in an endless loop.`);
+					}
+				}
+				pokemon.isStaleCon = 0;
+				pokemon.isStalePPTurns = 0;
+				pokemon.isStaleHP = pokemon.hp;
+			}
+		}
+		if (pokemon.getMoves().length === 0) {
+			pokemon.isStaleCon++;
+			pokemon.isStaleSource = 'struggle';
+		}
+		if (pokemon.isStale < 2) {
+			allStale = false;
+		} else if (pokemon.isStale && !pokemon.staleWarned) {
+			oneStale = pokemon;
+		}
+		if (!pokemon.isStalePPTurns) {
+			pokemon.isStaleHP = pokemon.hp;
+			if (pokemon.activeTurns) pokemon.isStaleCon = 0;
+		}
+		if (pokemon.activeTurns) {
+			pokemon.isStalePPTurns++;
+		}
+		pokemon.activeTurns++;
+		return [allStale, oneStale];
+	}
+
+	private maybeIssueStalenessWarning(allStale: boolean, oneStale: Pokemon | null) {
 		const ruleTable = this.getRuleTable(this.getFormat());
 		if (ruleTable.has('endlessbattleclause')) {
 			if (oneStale) {
 				let activationWarning = ` - If all active Pok\u00e9mon go in an endless loop, Endless Battle Clause will activate.`;
 				if (allStale) activationWarning = ``;
-				let loopReason = ``;
-				switch (oneStale.isStaleSource) {
-				case 'struggle':
-					loopReason = `: it isn't losing HP from Struggle`;
-					break;
-				case 'drag':
-					loopReason = `: it isn't losing PP or HP from being forced to switch`;
-					break;
-				case 'switch':
-					loopReason = `: it isn't losing PP or HP from repeatedly switching`;
-					break;
-				case 'getleppa':
-					loopReason = `: it got a Leppa Berry it didn't start with`;
-					break;
-				case 'useleppa':
-					loopReason = `: it used a Leppa Berry it didn't start with`;
-					break;
-				case 'ppstall':
-					loopReason = `: it isn't losing PP or HP`;
-					break;
-				case 'ppoverflow':
-					loopReason = `: its PP overflowed`;
-					break;
-				}
+				// @ts-ignore - index signature
+				const loopReason = (oneStale.isStaleSource && {
+					struggle: `: it isn't losing HP from Struggle`,
+					drag: `: it isn't losing PP or HP from being forced to switch`,
+					switch: `: it isn't losing PP or HP from repeatedly switching`,
+					getleppa: `: it got a Leppa Berry it didn't start with`,
+					useleppa: `: it used a Leppa Berry it didn't start with`,
+					ppstall: `: it isn't losing PP or HP`,
+					ppoverflow: `: its PP overflowed`,
+				}[oneStale.isStaleSource]) || ``;
 				this.add('bigerror', `${oneStale.name} is in an endless loop${loopReason}.${activationWarning}`);
 				oneStale.staleWarned = true;
 				this.firstStaleWarned = true;
@@ -1670,26 +1688,6 @@ export class Battle extends Dex.ModdedDex {
 				oneStale.staleWarned = true;
 			}
 		}
-
-		if (this.gameType === 'triples' && !this.sides.filter(side => side.pokemonLeft > 1).length) {
-			// If both sides have one Pokemon left in triples and they are not adjacent, they are both moved to the center.
-			const actives = [];
-			for (const side of this.sides) {
-				for (const pokemon of side.active) {
-					if (!pokemon || pokemon.fainted) continue;
-					actives.push(pokemon);
-				}
-			}
-			if (actives.length > 1 && !this.isAdjacent(actives[0], actives[1])) {
-				this.swapPosition(actives[0], 1, '[silent]');
-				this.swapPosition(actives[1], 1, '[silent]');
-				this.add('-center');
-			}
-		}
-
-		this.add('turn', this.turn);
-
-		this.makeRequest('move');
 	}
 
 	start() {
