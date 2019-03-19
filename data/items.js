@@ -152,6 +152,7 @@ let BattleItems = {
 			if (effect.effectType === 'Move' && effect.id !== 'confused') {
 				this.add('-enditem', target, 'Air Balloon');
 				target.item = '';
+				target.itemData = {id: '', target};
 				this.runEvent('AfterUseItem', target, null, null, 'airballoon');
 			}
 		},
@@ -160,6 +161,7 @@ let BattleItems = {
 			if (effect.effectType === 'Move' && effect.id !== 'confused') {
 				this.add('-enditem', target, 'Air Balloon');
 				target.item = '';
+				target.itemData = {id: '', target};
 				this.runEvent('AfterUseItem', target, null, null, 'airballoon');
 			}
 		},

@@ -9,7 +9,7 @@ global.toId = Dex.getId;
 import * as Data from './dex-data';
 import {Pokemon} from './pokemon';
 import {PRNG, PRNGSeed} from './prng';
-import {Side} from './side';
+import {Side, SIDE_IDS} from './side';
 
 /** A Pokemon that has fainted. */
 interface FaintedPokemon {
@@ -193,10 +193,11 @@ export class Battle extends Dex.ModdedDex {
 				if (hasEventHandler) this.addPseudoWeather(rule);
 			}
 		}
-		if (options.p1) this.setPlayer('p1', options.p1);
-		if (options.p2) this.setPlayer('p2', options.p2);
-		if (options.p3) this.setPlayer('p3', options.p3);
-		if (options.p4) this.setPlayer('p4', options.p4);
+		for (const side of SIDE_IDS) {
+			if (options[side]) {
+				this.setPlayer(side, options[side]!);
+			}
+		}
 	}
 
 	get p1() {
@@ -288,7 +289,8 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	effectiveWeather() {
-		return this.suppressingWeather() ? '' : this.weather;
+		if (this.suppressingWeather()) return '';
+		return this.weather;
 	}
 
 	isWeather(weather: string | string[]) {
@@ -3430,7 +3432,6 @@ export class Battle extends Dex.ModdedDex {
 		for (const action of this.queue) {
 			delete action.pokemon;
 		}
-		// @ts-ignore - readonly
 		this.queue = [];
 		// in case the garbage collector really sucks, at least deallocate the log
 		// @ts-ignore - readonly
