@@ -99,12 +99,6 @@ export class Battle extends Dex.ModdedDex {
 
 	readonly send: (type: string, data: string | string[]) => void;
 
-	// TODO
-	active: boolean;
-	activeTurns?: number;
-	itemData: AnyObject;
-	lastUpdate: number;
-
 	constructor(options: BattleOptions) {
 		const format = Dex.getFormat(options.formatid, true);
 		super(format.mod);
@@ -175,11 +169,6 @@ export class Battle extends Dex.ModdedDex {
 		this.SILENT_FAIL = null;
 
 		this.send = options.send || (() => {});
-
-		// TODO
-		this.active = false;
-		this.itemData = {id: ''};
-		this.lastUpdate = 0;
 
 		// bound function for faster speedSort
 		// (so speedSort doesn't need to bind before use)
@@ -1327,7 +1316,6 @@ export class Battle extends Dex.ModdedDex {
 			this.add('tie');
 		}
 		this.ended = true;
-		this.active = false;
 		this.currentRequest = '';
 		for (const s of this.sides) {
 			s.currentRequest = '';
@@ -1736,15 +1724,11 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	start() {
-		if (this.active) return;
-
 		// need all players to start
 		if (!this.sides.every(side => !!side)) return;
 
-		if (this.started) {
-			return;
-		}
-		this.activeTurns = 0;
+		if (this.started) return;
+
 		this.started = true;
 		this.sides[1].foe = this.sides[0];
 		this.sides[0].foe = this.sides[1];
