@@ -27,7 +27,7 @@ let BattleScripts = {
 
 		// Double battle multi-hit
 		if (move.spreadHit) {
-			let spreadModifier = move.spreadModifier || 0.75;
+			let spreadModifier = move.spreadModifier || (this.gameType === 'free-for-all' ? 0.5 : 0.75);
 			this.debug('Spread modifier: ' + spreadModifier);
 			baseDamage = this.modify(baseDamage, spreadModifier);
 		}

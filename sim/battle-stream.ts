@@ -172,7 +172,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 }
 
 /**
- * Splits a BattleStream into omniscient, spectator, p1, and p2
+ * Splits a BattleStream into omniscient, spectator, p1, p2, p3 and p4
  * streams, for ease of consumption.
  */
 export function getPlayerStreams(stream: BattleStream) {
@@ -220,6 +220,9 @@ export function getPlayerStreams(stream: BattleStream) {
 				streams.p1.push(p1Update);
 				const p2Update = data.replace(/\n\|split\n[^\n]*\n[^\n]*\n([^\n]*)\n[^\n]*/g, '\n$1').replace(/\n\n/g, '\n');
 				streams.p2.push(p2Update);
+				// p3 and p4 share update information with p1 and p2 respectively.
+				streams.p3.push(p1Update);
+				streams.p4.push(p2Update);
 				const specUpdate = data.replace(/\n\|split\n([^\n]*)\n[^\n]*\n[^\n]*\n[^\n]*/g, '\n$1').replace(/\n\n/g, '\n');
 				streams.spectator.push(specUpdate);
 				const omniUpdate = data.replace(/\n\|split\n[^\n]*\n[^\n]*\n[^\n]*/g, '');
