@@ -446,6 +446,8 @@ if (cluster.isMaster) {
 		}
 	}, 10 * MINUTES);
 
+	const SPLIT_REGEX = /\n\|split\|p(\d)\n([^\n]*)\n([^\n]*)/g;
+
 	process.on('message', data => {
 		// console.log('worker received: ' + data);
 		/** @type {import('sockjs').Connection | undefined?} */
@@ -567,31 +569,15 @@ if (cluster.isMaster) {
 			room = rooms.get(roomid);
 			if (!room) return;
 
-			/** @type {[string?, string?, string?]} */
-			let messages = [null, null, null];
-			message = data.substr(nlLoc + 1);
+			const split = SPLIT_REGEX.exec(data.substr(nlLoc + 1));
+			if (!split) return;
+			channelid = split[0];
+			const secret = `\n${split[1]}`;
+			const shared = `\n${split[2]}`;
+
 			roomChannel = roomChannels.get(roomid);
 			for (const [socketid, socket] of room) {
-				switch (roomChannel ? roomChannel.get(socketid) : '0') {
-				case '1':
-					if (!messages[1]) {
-						messages[1] = message.replace(/\n\|split\n[^\n]*\n([^\n]*)\n[^\n]*\n[^\n]*/g, '\n$1').replace(/\n\n/g, '\n');
-					}
-					socket.write(messages[1]);
-					break;
-				case '2':
-					if (!messages[2]) {
-						messages[2] = message.replace(/\n\|split\n[^\n]*\n[^\n]*\n([^\n]*)\n[^\n]*/g, '\n$1').replace(/\n\n/g, '\n');
-					}
-					socket.write(messages[2]);
-					break;
-				default:
-					if (!messages[0]) {
-						messages[0] = message.replace(/\n\|split\n([^\n]*)\n[^\n]*\n[^\n]*\n[^\n]*/g, '\n$1').replace(/\n\n/g, '\n');
-					}
-					socket.write(messages[0]);
-					break;
-				}
+				socket.write((roomChannel && roomChannel.get(socketid) === channelid) ? secret : shared);
 			}
 			break;
 		}

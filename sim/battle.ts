@@ -31,6 +31,8 @@ interface BattleOptions {
 	debug?: boolean; // show debug mode option
 }
 
+type Part = string | number | boolean | AnyObject | null | undefined;
+
 export class Battle extends Dex.ModdedDex {
 	id: string;
 	zMoveTable: {[k: string]: string};
@@ -3105,14 +3107,7 @@ export class Battle extends Dex.ModdedDex {
 		if (this.hints.has(hint)) return;
 
 		if (side) {
-			this.add('split');
-			for (const line of [false, 0, 1, true]) {
-				if (line === true || line === side.n % 2) {
-					this.add('-hint', hint);
-				} else {
-					this.log.push('');
-				}
-			}
+			this.addSplit(side.id, ['-hint', hint]);
 		} else {
 			this.add('-hint', hint);
 		}
@@ -3120,26 +3115,39 @@ export class Battle extends Dex.ModdedDex {
 		if (once) this.hints.add(hint);
 	}
 
-	add(...parts: (string | number | boolean | ((side: 0 | 1 | boolean) => string) | AnyObject | null | undefined)[]) {
+	addSplit(side: SideID, secret: Part[], shared?: Part[]) {
+		this.log.push(`|split|${side}`);
+		this.add(secret);
+		if (shared) {
+			this.add(shared);
+		} else {
+			this.log.push('');
+		}
+	}
+
+	// FIXME: Using a function to distinguish from AnyObject
+	add(...parts: (Part | (() => {side: SideID, secret: string, shared: string}))[]) {
 		if (!parts.some(part => typeof part === 'function')) {
 			this.log.push(`|${parts.join('|')}`);
 			return;
 		}
-		if (this.reportExactHP) {
-			parts = parts.map(part =>
-				typeof part !== 'function' ? part : part(true)
-			);
-			this.log.push(`|${parts.join('|')}`);
-			return;
+		let side: SideID | null = null;
+		const secret = [];
+		const shared = [];
+		for (const part of parts) {
+			if (typeof part === 'function') {
+				const split = part();
+				// FIXME: Can only handle a single side
+				if (side && side !== split.side) throw new Error("Multiple sides passed to add");
+				side = split.side;
+				secret.push(split.secret);
+				shared.push(split.shared);
+			} else {
+				secret.push(part);
+				shared.push(part);
+			}
 		}
-		this.log.push('|split');
-		const sides: (0 | 1 | boolean)[] = [false, 0, 1, true];
-		for (const side of sides) {
-			const sideUpdate = '|' + parts.map(part =>
-				typeof part !== 'function' ? part : part(side)
-			).join('|');
-			this.log.push(sideUpdate);
-		}
+		this.addSplit(side!, secret, shared);
 	}
 
 	// tslint:disable-next-line:ban-types
@@ -3180,7 +3188,7 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	getDebugLog() {
-		return this.log.join('\n').replace(/\|split\n.*\n.*\n.*\n/g, '');
+		return this.log.join('\n').replace(/\|split|.*\n.*\n.*\n/g, '');
 	}
 
 	debugError(activity: string) {

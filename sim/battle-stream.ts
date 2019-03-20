@@ -209,32 +209,31 @@ export function getPlayerStreams(stream: BattleStream) {
 			},
 		}),
 	};
+	const SPLIT_REGEX =  /\n\|split\|([^\n]*)\n([^\n]*)\n([^\n]*)/g;
 	(async () => {
 		let chunk;
 		// tslint:disable-next-line:no-conditional-assignment
 		while ((chunk = await stream.read())) {
 			const [type, data] = splitFirst(chunk, `\n`);
 			switch (type) {
-			case 'update':
-				const p1Update = data.replace(/\n\|split\n[^\n]*\n([^\n]*)\n[^\n]*\n[^\n]*/g, '\n$1').replace(/\n\n/g, '\n');
-				streams.p1.push(p1Update);
-				const p2Update = data.replace(/\n\|split\n[^\n]*\n[^\n]*\n([^\n]*)\n[^\n]*/g, '\n$1').replace(/\n\n/g, '\n');
-				streams.p2.push(p2Update);
-				// p3 and p4 share update information with p1 and p2 respectively.
-				streams.p3.push(p1Update);
-				streams.p4.push(p2Update);
-				const specUpdate = data.replace(/\n\|split\n([^\n]*)\n[^\n]*\n[^\n]*\n[^\n]*/g, '\n$1').replace(/\n\n/g, '\n');
-				streams.spectator.push(specUpdate);
-				const omniUpdate = data.replace(/\n\|split\n[^\n]*\n[^\n]*\n[^\n]*/g, '');
-				streams.omniscient.push(omniUpdate);
+			case 'update': {
+				const split = SPLIT_REGEX.exec(data);
+				for (const name in streams) {
+					// @ts-ignore - index signature
+					const s = streams[name];
+					s.push(split ? (name === split[0] || name === 'omniscient' ? split[1] : split[2]) : data);
+				}
 				break;
-			case 'sideupdate':
+			}
+			case 'sideupdate': {
 				const [side, sideData] = splitFirst(data, `\n`);
 				streams[side as SideID].push(sideData);
 				break;
-			case 'end':
+			}
+			case 'end': {
 				// ignore
 				break;
+			}
 			}
 		}
 		for (const s of Object.values(streams)) {
