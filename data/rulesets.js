@@ -408,10 +408,11 @@ let BattleFormats = {
 		desc: "Only allows Pok&eacute;mon that can evolve and don't have any prior evolutions",
 		onValidateSet(set) {
 			let template = this.getTemplate(set.species || set.name);
-			if (template.prevo) {
+			if (template.prevo && this.getTemplate(template.prevo).gen <= this.gen) {
 				return [set.species + " isn't the first in its evolution family."];
 			}
-			if (!template.nfe) {
+			let futureGenEvo = template.evos && this.getTemplate(template.evos[0]).gen > this.gen;
+			if (!template.nfe || futureGenEvo) {
 				return [set.species + " doesn't have an evolution family."];
 			}
 		},
