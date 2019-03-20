@@ -9,7 +9,7 @@ global.toId = Dex.getId;
 import * as Data from './dex-data';
 import {Pokemon} from './pokemon';
 import {PRNG, PRNGSeed} from './prng';
-import {Side, SIDE_IDS} from './side';
+import {Side} from './side';
 
 /** A Pokemon that has fainted. */
 interface FaintedPokemon {
@@ -193,7 +193,7 @@ export class Battle extends Dex.ModdedDex {
 				if (hasEventHandler) this.addPseudoWeather(rule);
 			}
 		}
-		for (const side of SIDE_IDS) {
+		for (const side of Side.IDS) {
 			if (options[side]) {
 				this.setPlayer(side, options[side]!);
 			}
@@ -2780,7 +2780,7 @@ export class Battle extends Dex.ModdedDex {
 					break;
 				}
 				// in gen 5+, the switch is cancelled
-				this.debug("A Pokemon can't switch between when it runs out of HP and when it faints");
+				this.hint("A Pokemon can't switch between when it runs out of HP and when it faints");
 				break;
 			}
 			if (action.target.isActive) {
@@ -3236,8 +3236,7 @@ export class Battle extends Dex.ModdedDex {
 		} else if (left && !right && right !== 0) {
 			return left;
 		} else if (typeof left === 'number' && typeof right === 'number') {
-			// @ts-ignore - Typescript doesn't realize T and U both are numbers
-			return left + right;
+			return (left + right) as T;
 		} else {
 			return right;
 		}
@@ -3248,85 +3247,85 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	afterMoveSecondaryEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): undefined {
-		throw newUnimplementedError('afterMoveSecondary');
+		throw new UnimplementedError('afterMoveSecondary');
 	}
 
 	calcRecoilDamage(damageDealt: number, move: Move): number {
-		throw newUnimplementedError('calcRecoilDamage');
+		throw new UnimplementedError('calcRecoilDamage');
 	}
 
 	canMegaEvo(pokemon: Pokemon): string | null | undefined {
-		throw newUnimplementedError('canMegaEvo');
+		throw new UnimplementedError('canMegaEvo');
 	}
 
 	canUltraBurst(pokemon: Pokemon): string | null {
-		throw newUnimplementedError('canUltraBurst');
+		throw new UnimplementedError('canUltraBurst');
 	}
 
 	canZMove(pokemon: Pokemon): (AnyObject | null)[] | void {
-		throw newUnimplementedError('canZMove');
+		throw new UnimplementedError('canZMove');
 	}
 
 	forceSwitch(
 		damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove,
 		moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean
 	): SpreadMoveDamage {
-		throw newUnimplementedError('forceSwitch');
+		throw new UnimplementedError('forceSwitch');
 	}
 
 	getActiveZMove(move: Move, pokemon: Pokemon): ActiveMove {
-		throw newUnimplementedError('getActiveZMove');
+		throw new UnimplementedError('getActiveZMove');
 	}
 
 	getSpreadDamage(
 		damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove,
 		moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean
 	): SpreadMoveDamage {
-		throw newUnimplementedError('getSpreadDamage');
+		throw new UnimplementedError('getSpreadDamage');
 	}
 
 	getZMove(move: Move, pokemon: Pokemon, skipChecks?: boolean): string | undefined {
-		throw newUnimplementedError('getZMove');
+		throw new UnimplementedError('getZMove');
 	}
 
 	hitStepAccuracy(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
-		throw newUnimplementedError('hitStepAccuracy');
+		throw new UnimplementedError('hitStepAccuracy');
 	}
 
 	hitStepBreakProtect(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): undefined {
-		throw newUnimplementedError('hitStepBreakProtect');
+		throw new UnimplementedError('hitStepBreakProtect');
 	}
 
 	hitStepMoveHitLoop(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): SpreadMoveDamage {
-		throw newUnimplementedError('hitStepMoveHitLoop');
+		throw new UnimplementedError('hitStepMoveHitLoop');
 	}
 
 	hitStepPowderImmunity(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
-		throw newUnimplementedError('hitStepPowderImmunity');
+		throw new UnimplementedError('hitStepPowderImmunity');
 	}
 
 	hitStepPranksterImmunity(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
-		throw newUnimplementedError('hitStepPranksterImmunity');
+		throw new UnimplementedError('hitStepPranksterImmunity');
 	}
 
 	hitStepStealBoosts(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): undefined {
-		throw newUnimplementedError('hitStepStealBoosts');
+		throw new UnimplementedError('hitStepStealBoosts');
 	}
 
 	hitStepTryHitEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): (boolean | '')[] {
-		throw newUnimplementedError('hitStepTryHitEvent');
+		throw new UnimplementedError('hitStepTryHitEvent');
 	}
 
 	hitStepTryImmunityEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
-		throw newUnimplementedError('hitStepTryImmunityEvent ');
+		throw new UnimplementedError('hitStepTryImmunityEvent ');
 	}
 
 	hitStepTypeImmunity(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
-		throw newUnimplementedError('hitStepTypeImmunity');
+		throw new UnimplementedError('hitStepTypeImmunity');
 	}
 
 	isAdjacent(pokemon1: Pokemon, pokemon2: Pokemon): boolean {
-		throw newUnimplementedError('isAdjacent');
+		throw new UnimplementedError('isAdjacent');
 	}
 
 	moveHit(
@@ -3334,7 +3333,7 @@ export class Battle extends Dex.ModdedDex {
 		moveData?: ActiveMove | SelfEffect | SecondaryEffect,
 		isSecondary?: boolean, isSelf?: boolean
 	): number | undefined | false {
-		throw newUnimplementedError('moveHit');
+		throw new UnimplementedError('moveHit');
 	}
 
 	/**
@@ -3343,72 +3342,72 @@ export class Battle extends Dex.ModdedDex {
 	 * Returns false if the Pokemon cannot Mega Evolve or Ultra Burst, otherwise returns true.
 	 */
 	runMegaEvo(pokemon: Pokemon): boolean {
-		throw newUnimplementedError('runMegaEvo');
+		throw new UnimplementedError('runMegaEvo');
 	}
 
 	runMove(
 		moveOrMoveName: Move | string, pokemon: Pokemon, targetLoc: number,
 		sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean
 	) {
-		throw newUnimplementedError('runMove');
+		throw new UnimplementedError('runMove');
 	}
 
 	runMoveEffects(
 		damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove,
 		moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean
 	): SpreadMoveDamage {
-		throw newUnimplementedError('runMoveEffects');
+		throw new UnimplementedError('runMoveEffects');
 	}
 
 	runZPower(move: ActiveMove, pokemon: Pokemon) {
-		throw newUnimplementedError('runZPower');
+		throw new UnimplementedError('runZPower');
 	}
 
 	secondaries(
 		targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove,
 		isSecondary?: boolean
 	): SpreadMoveDamage {
-		throw newUnimplementedError('secondaries');
+		throw new UnimplementedError('secondaries');
 	}
 
 	selfDrops(
 		targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove,
 		isSecondary?: boolean
 	): SpreadMoveDamage {
-		throw newUnimplementedError('selfDrops');
+		throw new UnimplementedError('selfDrops');
 	}
 
 	spreadMoveHit(
 		targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove, moveData?: ActiveMove,
 		isSecondary?: boolean, isSelf?: boolean
 	): [SpreadMoveDamage, SpreadMoveTargets] {
-		throw newUnimplementedError('spreadMoveHit');
+		throw new UnimplementedError('spreadMoveHit');
 	}
 
 	targetTypeChoices(targetType: string): boolean {
-		throw newUnimplementedError('targetTypeChoices');
+		throw new UnimplementedError('targetTypeChoices');
 	}
 
 	tryMoveHit(target: Pokemon, pokemon: Pokemon, move: ActiveMove): number | undefined | false | '' {
-		throw newUnimplementedError('tryMoveHit');
+		throw new UnimplementedError('tryMoveHit');
 	}
 
 	tryPrimaryHitEvent(
 		damage: SpreadMoveDamage, targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove,
 		moveData: ActiveMove, isSecondary?: boolean
 	): SpreadMoveDamage {
-		throw newUnimplementedError('tryPrimaryHitEvent');
+		throw new UnimplementedError('tryPrimaryHitEvent');
 	}
 
 	trySpreadMoveHit(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean {
-		throw newUnimplementedError('trySpreadMoveHit');
+		throw new UnimplementedError('trySpreadMoveHit');
 	}
 
 	useMove(
 		move: string | Move, pokemon: Pokemon, target?: Pokemon | null,
 		sourceEffect?: Effect | null, zMove?: string
 	): boolean {
-		throw newUnimplementedError('useMove');
+		throw new UnimplementedError('useMove');
 	}
 
 	/**
@@ -3419,7 +3418,7 @@ export class Battle extends Dex.ModdedDex {
 		move: string | Move, pokemon: Pokemon, target?: Pokemon | null,
 		sourceEffect?: Effect | null, zMove?: string
 	): boolean {
-		throw newUnimplementedError('useMoveInner');
+		throw new UnimplementedError('useMoveInner');
 	}
 
 	destroy() {
@@ -3442,6 +3441,9 @@ export class Battle extends Dex.ModdedDex {
 	}
 }
 
-function newUnimplementedError(name: string) {
-	return new Error(`The ${name} function needs to be implemented in scripts.js or the battle format.`);
+class UnimplementedError extends Error {
+	constructor(name: string) {
+		super(`The ${name} function needs to be implemented in scripts.js or the battle format.`);
+		this.name = 'UnimplementedError';
+	}
 }

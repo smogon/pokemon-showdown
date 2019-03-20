@@ -33,9 +33,9 @@ interface Choice {
 	ultra: boolean; // true if an ultra burst has already been selected
 }
 
-export const SIDE_IDS: SideID[] = ['p1', 'p2', 'p3', 'p4'];
-
 export class Side {
+	static readonly IDS: SideID[] = ['p1', 'p2', 'p3', 'p4'];
+
 	readonly battle: Battle;
 	readonly id: SideID;
 	readonly n: number;
@@ -71,7 +71,7 @@ export class Side {
 		if (sideScripts) Object.assign(this, sideScripts);
 
 		this.battle = battle;
-		this.id = SIDE_IDS[sideNum];
+		this.id = Side.IDS[sideNum];
 		this.n = sideNum;
 
 		this.name = name;
