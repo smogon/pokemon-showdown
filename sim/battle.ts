@@ -3446,8 +3446,5 @@ class UnimplementedError extends Error {
 	constructor(name: string) {
 		super(`The ${name} function needs to be implemented in scripts.js or the battle format.`);
 		this.name = 'UnimplementedError';
-		if (Error.captureStackTrace) {
-			Error.captureStackTrace(this, UnimplementedError);
-		}
 	}
 }
