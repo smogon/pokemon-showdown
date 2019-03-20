@@ -80,7 +80,7 @@ describe(`Emergency Exit`, function () {
 	});
 
 	it(`should not prevent Eject Button's activation`, function () {
-		battle = common.createBattle({strictChoices: false}, [
+		battle = common.createBattle([
 			[{species: "Golisopod", ability: 'emergencyexit', item: 'ejectbutton', moves: ['sleeptalk'], ivs: EMPTY_IVS}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
 			[{species: "Raticate", ability: 'guts', moves: ['superfang']}, {species: "Clefable", ability: 'Unaware', moves: ['metronome']}],
 		]);
@@ -91,7 +91,7 @@ describe(`Emergency Exit`, function () {
 		assert.false.holdsItem(eePokemon);
 		assert.strictEqual(battle.currentRequest, 'switch');
 
-		battle.makeChoices('auto', 'auto');
+		battle.makeChoices('auto', '');
 		assert.species(battle.p1.active[0], 'Clefable');
 	});
 

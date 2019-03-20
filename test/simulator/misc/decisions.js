@@ -248,7 +248,7 @@ describe('Choices', function () {
 		});
 
 		it('should allow shifting the Pokémon on the right to the center', function () {
-			battle = common.createBattle({gameType: 'triples', strictChoices: false});
+			battle = common.createBattle({gameType: 'triples'});
 			battle.join('p1', 'Guest 1', 1, [
 				{species: "Pineco", ability: 'sturdy', moves: ['harden']},
 				{species: "Geodude", ability: 'sturdy', moves: ['defensecurl']},
@@ -259,7 +259,7 @@ describe('Choices', function () {
 				{species: "Aggron", ability: 'sturdy', moves: ['irondefense']},
 				{species: "Golem", ability: 'sturdy', moves: ['defensecurl']},
 			]);
-			battle.makeChoices('shift, move harden, move defensecurl', 'shift, move roost, move irondefense');
+			battle.makeChoices('shift, default, default', 'shift, default, default');
 
 			for (const [index, species] of ['Geodude', 'Pineco', 'Gastly'].entries()) {
 				assert.species(battle.p1.active[index], species);
@@ -750,7 +750,7 @@ describe('Choice extensions', function () {
 			});
 
 			it(`should disallow to ${mode} move decisions for maybe-disabled Pokémon`, function () {
-				battle = common.createBattle({cancel: true, strictChoices: false});
+				battle = common.createBattle({cancel: true});
 				battle.join('p1', 'Guest 1', 1, [{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle', 'growl', 'synthesis']}]);
 				battle.join('p2', 'Guest 2', 1, [{species: "Charmander", ability: 'blaze', moves: ['scratch']}]);
 
@@ -759,20 +759,22 @@ describe('Choice extensions', function () {
 				battle.makeRequest();
 
 				battle.choose('p1', 'move tackle');
-				if (mode === 'revoke') battle.undoChoice('p1');
-				battle.makeChoices('move growl', 'move scratch');
+				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
+				assert.cantUndo(() => battle.choose('p1', 'move growl'));
+				battle.choose('p2', 'move scratch');
 
 				assert.strictEqual(target.lastMove.id, 'tackle');
 			});
 
 			it(`should disallow to ${mode} move decisions by default`, function () {
-				battle = common.createBattle({strictChoices: false});
+				battle = common.createBattle();
 				battle.join('p1', 'Guest 1', 1, [{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle', 'growl']}]);
 				battle.join('p2', 'Guest 2', 1, [{species: "Charmander", ability: 'blaze', moves: ['tackle', 'growl']}]);
 
 				battle.choose('p1', 'move tackle');
-				if (mode === 'revoke') battle.undoChoice('p1');
-				battle.makeChoices('move growl', 'move growl');
+				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
+				assert.cantUndo(() => battle.choose('p1', 'move growl'));
+				battle.choose('p2', 'move growl');
 
 				assert.strictEqual(battle.turn, 2);
 				assert.strictEqual(battle.p1.active[0].lastMove.id, 'tackle');
@@ -817,20 +819,21 @@ describe('Choice extensions', function () {
 				], [
 					{species: 'Charmander', ability: 'blaze', moves: ['scratch']},
 				]];
-				battle = common.createBattle({cancel: true, strictChoices: false}, TEAMS);
+				battle = common.createBattle({cancel: true}, TEAMS);
 
 				battle.p1.active[0].maybeTrapped = true;
 				battle.makeRequest();
 
 				battle.choose('p1', 'switch 2');
-				if (mode === 'revoke') battle.undoChoice('p1');
-				battle.makeChoices('move synthesis', 'move scratch');
+				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
+				assert.cantUndo(() => battle.choose('p1', 'move synthesis'));
+				battle.choose('p2', 'move scratch');
 
 				assert.species(battle.p1.active[0], 'Ivysaur');
 			});
 
 			it(`should disallow to ${mode} switch decisions on move requests for unconfirmed trapping-immune Pokémon that would otherwise be trapped`, function () {
-				battle = common.createBattle({cancel: true, pokemon: true, legality: true, strictChoices: false}, [
+				battle = common.createBattle({cancel: true, pokemon: true, legality: true}, [
 					[
 						{species: 'Starmie', ability: 'naturalcure', moves: ['reflecttype', 'recover']},
 						{species: 'Mandibuzz', ability: 'overcoat', moves: ['knockoff']},
@@ -855,8 +858,9 @@ describe('Choice extensions', function () {
 				assert(target.maybeTrapped, `${target} should be flagged as maybe trapped`);
 
 				battle.choose('p1', 'switch 2');
-				if (mode === 'revoke') battle.undoChoice('p1');
-				battle.makeChoices('move recover', 'move 1');
+				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
+				assert.cantUndo(() => battle.choose('p1', 'move recover'));
+				battle.choose('p2', 'move 1');
 
 				assert.species(battle.p1.active[0], 'Mandibuzz');
 			});
@@ -869,22 +873,24 @@ describe('Choice extensions', function () {
 				], [
 					{species: 'Charmander', ability: 'blaze', moves: ['scratch']},
 				]];
-				battle = common.createBattle({strictChoices: false}, TEAMS);
+				battle = common.createBattle(TEAMS);
 
 				battle.choose('p1', 'switch 2');
-				if (mode === 'revoke') battle.undoChoice('p1');
-				battle.makeChoices('move synthesis', 'move scratch');
+				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
+				assert.cantUndo(() => battle.choose('p1', 'move synthesis'));
+				battle.choose('p2', 'move scratch');
 
 				for (const [index, species] of ['Ivysaur', 'Bulbasaur', 'Venusaur'].entries()) {
 					assert.species(battle.p1.pokemon[index], species);
 				}
 
 				battle.destroy();
-				battle = common.createBattle({strictChoices: false}, TEAMS);
+				battle = common.createBattle(TEAMS);
 
 				battle.choose('p1', 'switch 2');
-				if (mode === 'revoke') battle.undoChoice('p1');
-				battle.makeChoices('switch 3', 'move scratch');
+				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
+				assert.cantUndo(() => battle.choose('p1', 'switch 3'));
+				battle.choose('p2', 'move scratch');
 
 				for (const [index, species] of ['Ivysaur', 'Bulbasaur', 'Venusaur'].entries()) {
 					assert.species(battle.p1.pokemon[index], species);
@@ -935,11 +941,12 @@ describe('Choice extensions', function () {
 					{species: 'Aggron', ability: 'sturdy', moves: ['irondefense']},
 					{species: 'Aggron', ability: 'sturdy', moves: ['irondefense']},
 				]];
-				battle = common.createBattle({gameType: 'triples', strictChoices: false}, TEAMS);
+				battle = common.createBattle({gameType: 'triples'}, TEAMS);
 
 				battle.choose('p1', 'shift, move 1, move 1');
-				if (mode === 'revoke') battle.undoChoice('p1');
-				battle.makeChoices('move 1, move 1, move 1', 'move 1, move 1, move 1');
+				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
+				assert.cantUndo(() => battle.choose('p1', 'move 1, move 1, move 1'));
+				battle.choose('p2', 'move 1, move 1, move 1');
 
 				for (const [index, species] of ['Ivysaur', 'Bulbasaur', 'Venusaur'].entries()) {
 					assert.species(battle.p1.active[index], species);
@@ -947,11 +954,12 @@ describe('Choice extensions', function () {
 				assert.strictEqual(battle.p1.active[0].lastMove.id, 'growth');
 
 				battle.destroy();
-				battle = common.createBattle({gameType: 'triples', strictChoices: false}, TEAMS);
+				battle = common.createBattle({gameType: 'triples'}, TEAMS);
 
 				battle.choose('p1', 'move 1, move 1, shift');
-				if (mode === 'revoke') battle.undoChoice('p1');
-				battle.makeChoices('move 1, move 1, move 1', 'move 1, move 1, move 1');
+				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
+				assert.cantUndo(() => battle.choose('p1', 'move 1, move 1, move 1'));
+				battle.choose('p2', 'move 1, move 1, move 1');
 
 				for (const [index, species] of ['Bulbasaur', 'Venusaur', 'Ivysaur'].entries()) {
 					assert.species(battle.p1.active[index], species);
@@ -1018,12 +1026,13 @@ describe('Choice extensions', function () {
 					{species: 'Charizard', ability: 'blaze', moves: ['scratch']},
 				]];
 
-				battle = common.createBattle({gameType: 'doubles', cancel: true, strictChoices: false}, TEAMS);
+				battle = common.createBattle({gameType: 'doubles', cancel: true}, TEAMS);
 				battle.makeChoices('move lunardance, move healingwish', 'move scratch 1, move scratch 1');
 
 				battle.choose('p1', 'switch 3, switch 4');
 				if (mode === 'revoke') battle.undoChoice('p1');
-				battle.makeChoices('switch 4, switch 3', 'pass');
+				assert.throws(() => battle.makeChoices('switch 4, switch 3', 'pass'), Error,
+					"[Invalid choice] Can't switch: You can't switch to a fainted Pokémon");
 
 				for (const [index, species] of ['Ivysaur', 'Venusaur'].entries()) {
 					assert.species(battle.p1.active[index], species);
@@ -1041,12 +1050,13 @@ describe('Choice extensions', function () {
 					{species: 'Charizard', ability: 'blaze', moves: ['scratch']},
 				]];
 
-				battle = common.createBattle({gameType: 'doubles', strictChoices: false}, TEAMS);
+				battle = common.createBattle({gameType: 'doubles'}, TEAMS);
 				battle.makeChoices('move lunardance, move healingwish', 'move scratch 1, move scratch 1');
 
 				battle.choose('p1', 'pass, switch 3');
 				if (mode === 'revoke') battle.undoChoice('p1');
-				battle.makeChoices('switch 3, pass', 'pass');
+				assert.throws(() => battle.makeChoices('switch 3, pass', 'pass'), Error,
+					"[Invalid choice] Can't switch: You can't switch to a fainted Pokémon");
 
 				for (const [index, species] of ['Latias', 'Venusaur'].entries()) {
 					assert.species(battle.p1.active[index], species);
@@ -1054,7 +1064,7 @@ describe('Choice extensions', function () {
 			});
 
 			it(`should disallow to ${mode} switch decisions on double switch requests by default`, function () {
-				battle = common.createBattle({strictChoices: false});
+				battle = common.createBattle();
 				battle.join('p1', 'Guest 1', 1, [
 					{species: "Deoxys-Attack", ability: 'pressure', moves: ['explosion']},
 					{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle']},
@@ -1068,15 +1078,16 @@ describe('Choice extensions', function () {
 				battle.makeChoices('move explosion', 'move tackle');
 
 				battle.choose('p1', 'switch 2');
-				if (mode === 'revoke') battle.undoChoice('p1');
-				battle.makeChoices('switch 3', 'switch 2');
+				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
+				assert.cantUndo(() => battle.choose('p1', 'switch 3'));
+				battle.choose('p2', 'switch 2');
 
 				assert.species(battle.p1.active[0], 'Bulbasaur');
 				assert.species(battle.p2.active[0], 'Charmander');
 			});
 
 			it(`should disallow to ${mode} pass decisions on double switch requests by default`, function () {
-				battle = common.createBattle({gameType: 'doubles', strictChoices: false});
+				battle = common.createBattle({gameType: 'doubles'});
 				battle.join('p1', 'Guest 1', 1, [
 					{species: "Deoxys-Attack", ability: 'pressure', moves: ['explosion']},
 					{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle']},
@@ -1091,8 +1102,9 @@ describe('Choice extensions', function () {
 				battle.makeChoices('move explosion, move tackle 1', 'move tackle 1, move tackle 1');
 
 				battle.choose('p1', 'pass, switch 3');
-				if (mode === 'revoke') battle.undoChoice('p1');
-				battle.makeChoices('switch 3, pass', 'pass, switch 3');
+				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
+				assert.cantUndo(() => battle.choose('p1', 'switch 3, pass'));
+				battle.choose('p2', 'pass, switch 3');
 
 				for (const [index, species] of ['Deoxys-Attack', 'Chikorita'].entries()) {
 					assert.species(battle.p1.active[index], species);
@@ -1129,14 +1141,15 @@ describe('Choice extensions', function () {
 			});
 
 			it(`should disallow to ${mode} team order action on team preview requests by default`, function () {
-				battle = common.createBattle({preview: true, strictChoices: false}, [
+				battle = common.createBattle({preview: true}, [
 					[{species: 'Bulbasaur', ability: 'overgrow', moves: ['tackle']}, {species: 'Ivysaur', ability: 'overgrow', moves: ['tackle']}],
 					[{species: 'Charmander', ability: 'blaze', moves: ['scratch']}, {species: 'Charmeleon', ability: 'blaze', moves: ['scratch']}],
 				]);
 
 				battle.choose('p1', 'team 12');
-				if (mode === 'revoke') battle.undoChoice('p1');
-				battle.makeChoices('team 21', 'team 12');
+				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
+				assert.cantUndo(() => battle.choose('p1', 'team 21'));
+				battle.choose('p2', 'team 12');
 
 				for (const [index, species] of ['Bulbasaur', 'Ivysaur'].entries()) {
 					assert.species(battle.p1.pokemon[index], species);
@@ -1222,7 +1235,7 @@ describe('Choice internals', function () {
 		assert.throws(() => p2.choose('switch 3'), Error,
 			"[Invalid choice] Can't switch: You do not have a Pokémon in slot 3 to switch to");
 		p2.choose('move recover, move recover');
-		battle.checkActions();
+		battle.commitDecisions();
 
 		assert.strictEqual(battle.turn, 2);
 		assert.strictEqual(p1.active[0].name, 'Mew');
@@ -1232,7 +1245,7 @@ describe('Choice internals', function () {
 		assert.throws(() => p2.choose('switch 3'), Error,
 			"[Invalid choice] Can't switch: You do not have a Pokémon in slot 3 to switch to");
 		p2.choose('move recover, move recover');
-		battle.checkActions();
+		battle.commitDecisions();
 
 		assert.strictEqual(battle.turn, 3);
 		assert.strictEqual(p1.active[0].name, 'Bulbasaur');

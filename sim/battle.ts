@@ -3033,7 +3033,7 @@ export class Battle extends Dex.ModdedDex {
 			side.emitChoiceError(`Incomplete choice: ${input} - missing other pokemon`);
 			return false;
 		}
-		this.checkActions();
+		if (this.allChoicesDone()) this.commitDecisions();
 		return true;
 	}
 
@@ -3041,8 +3041,14 @@ export class Battle extends Dex.ModdedDex {
 	 * Convenience method for easily making choices.
 	 */
 	makeChoices(...inputs: string[]) {
-		for (const [i, input] of inputs.entries()) {
-			if (input) this.sides[i].choose(input);
+		if (inputs.length) {
+			for (const [i, input] of inputs.entries()) {
+				if (input) this.sides[i].choose(input);
+			}
+		} else {
+			for (const side of this.sides) {
+				side.autoChoose();
+			}
 		}
 		this.commitDecisions();
 	}
@@ -3052,9 +3058,8 @@ export class Battle extends Dex.ModdedDex {
 
 		const oldQueue = this.queue;
 		this.queue = [];
-		for (const side of this.sides) {
-			side.autoChoose();
-		}
+		if (!this.allChoicesDone()) throw new Error("Not all choices done");
+
 		for (const side of this.sides) {
 			const choice = side.getChoice();
 			if (choice) this.inputLog.push(`>${side.id} ${choice}`);
@@ -3089,7 +3094,7 @@ export class Battle extends Dex.ModdedDex {
 	/**
 	 * returns true if both decisions are complete
 	 */
-	checkActions() {
+	allChoicesDone() {
 		let totalActions = 0;
 		for (const side of this.sides) {
 			if (side.isChoiceDone()) {
@@ -3097,11 +3102,7 @@ export class Battle extends Dex.ModdedDex {
 				totalActions++;
 			}
 		}
-		if (totalActions >= this.sides.length) {
-			this.commitDecisions();
-			return true;
-		}
-		return false;
+		return totalActions >= this.sides.length;
 	}
 
 	hint(hint: string, once?: boolean, side?: Side) {

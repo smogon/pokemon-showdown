@@ -23,10 +23,10 @@ describe('Imprison', function () {
 		battle.makeChoices('move imprison', 'move calmmind');
 		assert.strictEqual(battle.p2.active[0].boosts['spa'], 0);
 		assert.strictEqual(battle.p2.active[0].boosts['spd'], 0);
-		assert.cantMove(() => battle.makeChoices('move imprison', 'move calmmind'), 'Abra', 'Calm Mind');
+		assert.cantMove(() => battle.choose('p2', 'move calmmind'), 'Abra', 'Calm Mind');
 
 		// Imprison doesn't end when the foe switches
-		battle.makeChoices('move calmmind', 'switch 2');
+		battle.makeChoices('default', 'switch 2');
 		battle.makeChoices('move calmmind', 'move calmmind');
 		assert.strictEqual(battle.p2.active[0].boosts['spa'], 0);
 
