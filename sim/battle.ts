@@ -1805,7 +1805,8 @@ export class Battle extends Dex.ModdedDex {
 
 	spreadDamage(
 		damage: SpreadMoveDamage, targetArray: (false | Pokemon | null)[] | null = null,
-		source: Pokemon | null = null, effect: 'drain' | 'recoil' | Effect | null = null, instafaint: boolean = false) {
+		source: Pokemon | null = null, effect: 'drain' | 'recoil' | Effect | null = null, instafaint: boolean = false
+	) {
 		if (!targetArray) return [0];
 		let retVals: (number | false | undefined)[] = [];
 		if (typeof effect === 'string' || !effect) effect = this.getEffect(effect);
@@ -3268,8 +3269,8 @@ export class Battle extends Dex.ModdedDex {
 
 	forceSwitch(
 		damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove,
-		moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean):
-		SpreadMoveDamage {
+		moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean
+	): SpreadMoveDamage {
 		throw newUnimplementedError('forceSwitch');
 	}
 
@@ -3279,8 +3280,8 @@ export class Battle extends Dex.ModdedDex {
 
 	getSpreadDamage(
 		damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove,
-		moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean):
-		SpreadMoveDamage {
+		moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean
+	): SpreadMoveDamage {
 		throw newUnimplementedError('getSpreadDamage');
 	}
 
@@ -3354,8 +3355,8 @@ export class Battle extends Dex.ModdedDex {
 
 	runMoveEffects(
 		damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove,
-		moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean):
-		SpreadMoveDamage {
+		moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean
+	): SpreadMoveDamage {
 		throw newUnimplementedError('runMoveEffects');
 	}
 
@@ -3365,13 +3366,15 @@ export class Battle extends Dex.ModdedDex {
 
 	secondaries(
 		targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove,
-		isSecondary?: boolean): SpreadMoveDamage {
+		isSecondary?: boolean
+	): SpreadMoveDamage {
 		throw newUnimplementedError('secondaries');
 	}
 
 	selfDrops(
 		targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove,
-		isSecondary?: boolean): SpreadMoveDamage {
+		isSecondary?: boolean
+	): SpreadMoveDamage {
 		throw newUnimplementedError('selfDrops');
 	}
 
