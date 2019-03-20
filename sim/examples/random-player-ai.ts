@@ -28,7 +28,11 @@ export class RandomPlayerAI extends BattlePlayer {
 
 	receiveError(error: Error) {
 		if (!error.message.startsWith('[Invalid choice]')) throw error;
-		// Somehow we had a choice error - just let the simulator autochoose for us.
+		// If we made an invalid choice we just let the simulator auto-choose for us. This can happen
+		// if we were disabled (Imprison) or trapped (Arena Trap / Magnet Pull / Shadow Tag) and it
+		// wasn't revealed to us until we made our choice. We could add extra logic to redo the decision,
+		// removing the invalid choice from our set of options, but given how niche this edge case is
+		// its not worth dramatically complicating the code to handle it.
 		this.choose(`default`);
 	}
 
