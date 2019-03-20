@@ -123,7 +123,7 @@ let Formats = [
 			'Eevium Z', 'Baton Pass', 'Dragon Rage', 'Sonic Boom',
 		],
 		onBegin() {
-			if (this.rated && this.format === 'gen7lc') this.add('-html', `<div class="broadcast-red"><strong>LC is currently suspecting Trapinch! For information on how to participate check out the <a href="https://www.smogon.com/forums/posts/3648309/">suspect thread</a>.</strong></div>`);
+			if (this.rated && this.format === 'gen7lc') this.add('-html', `<div class="broadcast-red"><strong>LC is currently suspecting Trapinch! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3648309/">suspect thread</a>.</strong></div>`);
 		},
 	},
 	{
