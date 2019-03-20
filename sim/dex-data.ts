@@ -103,11 +103,11 @@ export class BasicEffect implements EffectData {
 	/** The full description for this effect. */
 	desc: string;
 	/**
-	 * Is this item/move/ability/pokemon nonstandard? True for effects
+	 * Is this item/move/ability/pokemon nonstandard? Specified for effects
 	 * that have no use in standard formats: made-up pokemon (CAP),
-	 * glitches (Missingno etc), and Pokestar pokemon.
+	 * glitches (Missingno etc), Pokestar pokemon, etc.
 	 */
-	isNonstandard: boolean;
+	isNonstandard: Nonstandard | false;
 	/** The duration of the effect.  */
 	duration?: number;
 	/** Whether or not the effect is ignored by Baton Pass. */
