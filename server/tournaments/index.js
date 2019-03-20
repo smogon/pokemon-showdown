@@ -1157,7 +1157,7 @@ const commands = {
 		j: 'join',
 		in: 'join',
 		join(tournament, user) {
-			tournament.addUser(user, true, this);
+			tournament.addUser(user, false, this);
 		},
 		l: 'leave',
 		out: 'leave',
