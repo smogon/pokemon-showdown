@@ -34,8 +34,6 @@ interface Choice {
 }
 
 export class Side {
-	static readonly IDS: SideID[] = ['p1', 'p2', 'p3', 'p4'];
-
 	readonly battle: Battle;
 	readonly id: SideID;
 	readonly n: number;
@@ -71,7 +69,7 @@ export class Side {
 		if (sideScripts) Object.assign(this, sideScripts);
 
 		this.battle = battle;
-		this.id = Side.IDS[sideNum];
+		this.id = ['p1', 'p2', 'p3', 'p4'][sideNum] as SideID;
 		this.n = sideNum;
 
 		this.name = name;

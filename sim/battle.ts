@@ -193,7 +193,8 @@ export class Battle extends Dex.ModdedDex {
 				if (hasEventHandler) this.addPseudoWeather(rule);
 			}
 		}
-		for (const side of Side.IDS) {
+		const sides: SideID[] = ['p1', 'p2', 'p3', 'p4'];
+		for (const side of sides) {
 			if (options[side]) {
 				this.setPlayer(side, options[side]!);
 			}
@@ -3445,5 +3446,8 @@ class UnimplementedError extends Error {
 	constructor(name: string) {
 		super(`The ${name} function needs to be implemented in scripts.js or the battle format.`);
 		this.name = 'UnimplementedError';
+		if (Error.captureStackTrace) {
+			Error.captureStackTrace(this, UnimplementedError);
+		}
 	}
 }
