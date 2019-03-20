@@ -194,7 +194,7 @@ class Tournament extends Rooms.RoomGame {
 
 	/**
 	 * @param {User} targetUser
-	 * @param {Connection | User | null} connection
+	 * @param {Connection | User} [connection]
 	 */
 	updateFor(targetUser, connection) {
 		if (!connection) connection = targetUser;
@@ -289,7 +289,7 @@ class Tournament extends Rooms.RoomGame {
 		if (this.isTournamentStarted) {
 			if (!this.disqualifiedUsers) throw new Error("Unexpected null in tours");
 			if (!this.disqualifiedUsers.get(this.players[userid])) {
-				this.disqualifyUser(userid, null, null);
+				this.disqualifyUser(userid);
 			}
 		} else {
 			this.removeUser(userid);
@@ -567,9 +567,9 @@ class Tournament extends Rooms.RoomGame {
 	 * @param {string} userid
 	 * @param {CommandContext?} output
 	 * @param {string?} reason
-	 * @param {boolean} [isSelfDQ]
+	 * @param {boolean} isSelfDQ
 	 */
-	disqualifyUser(userid, output, reason, isSelfDQ) {
+	disqualifyUser(userid, output = null, reason = null, isSelfDQ = false) {
 		const user = Users.get(userid);
 		/** @type {(msg: string) => void} */
 		let sendReply;
@@ -651,7 +651,7 @@ class Tournament extends Rooms.RoomGame {
 		}
 		if (user) {
 			user.sendTo(this.room, '|tournament|update|{"isJoined":false}');
-			if (reason !== null) user.popup(`|modal|You have been disqualified from the tournament in ${this.room.title + (reason ? ':\n\n' + reason : '.')}`);
+			if (reason) user.popup(`|modal|You have been disqualified from the tournament in ${this.room.title + (reason ? ':\n\n' + reason : '.')}`);
 		}
 		this.isBracketInvalidated = true;
 		this.isAvailableMatchesInvalidated = true;
@@ -747,7 +747,7 @@ class Tournament extends Rooms.RoomGame {
 				} else {
 					reason = "You failed to challenge your opponent in time.";
 				}
-				this.disqualifyUser(player.userid, output || null, reason);
+				this.disqualifyUser(player.userid, output, reason);
 				this.room.update();
 			} else if (now > time + this.autoDisqualifyTimeout - AUTO_DISQUALIFY_WARNING_TIMEOUT) {
 				if (this.autoDisqualifyWarnings.has(player)) continue;
@@ -951,7 +951,7 @@ class Tournament extends Rooms.RoomGame {
 			}
 		}
 
-		this.updateFor(user, null);
+		this.updateFor(user);
 	}
 	/**
 	 * @param {GameRoom} room
@@ -1046,7 +1046,7 @@ class Tournament extends Rooms.RoomGame {
 		this.isEnded = true;
 		if (this.autoDisqualifyTimer) clearTimeout(this.autoDisqualifyTimer);
 		delete exports.tournaments[this.room.id];
-		delete this.room.game;
+		this.room.game = null;
 		for (const i in this.players) {
 			this.players[i].destroy();
 		}
@@ -1077,8 +1077,7 @@ function createTournamentGenerator(generator, args, output) {
 		output.errorReply(`Valid types: ${generators}`);
 		return;
 	}
-	args.unshift(null);
-	return new (Generator.bind.apply(Generator, args))();
+	return new Generator(...args);
 }
 /**
  *
@@ -1158,7 +1157,7 @@ const commands = {
 		j: 'join',
 		in: 'join',
 		join(tournament, user) {
-			tournament.addUser(user, false, this);
+			tournament.addUser(user, true, this);
 		},
 		l: 'leave',
 		out: 'leave',
@@ -1179,7 +1178,7 @@ const commands = {
 			this.sendReplyBox(`<strong>${users.length} users remain in this tournament:</strong><br />${Chat.escapeHTML(users.join(', '))}`);
 		},
 		getupdate(tournament, user) {
-			tournament.updateFor(user, null);
+			tournament.updateFor(user);
 			this.sendReply("Your tournament bracket has been updated.");
 		},
 		challenge(tournament, user, params, cmd) {
