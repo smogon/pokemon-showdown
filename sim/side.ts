@@ -35,7 +35,7 @@ interface Choice {
 
 export class Side {
 	readonly battle: Battle;
-	readonly id: 'p1' | 'p2';
+	readonly id: SideID;
 	readonly n: number;
 
 	name: string;
@@ -69,7 +69,7 @@ export class Side {
 		if (sideScripts) Object.assign(this, sideScripts);
 
 		this.battle = battle;
-		this.id = sideNum ? 'p2' : 'p1';
+		this.id = ['p1', 'p2', 'p3', 'p4'][sideNum] as SideID;
 		this.n = sideNum;
 
 		this.name = name;
@@ -159,7 +159,7 @@ export class Side {
 			const entry: AnyObject = {
 				ident: pokemon.fullname,
 				details: pokemon.details,
-				condition: pokemon.getHealth(pokemon.side),
+				condition: pokemon.getHealth(true),
 				active: (pokemon.position < pokemon.side.active.length),
 				stats: {
 					atk: pokemon.baseStoredStats['atk'],
@@ -190,7 +190,9 @@ export class Side {
 		return this.battle.sample(actives);
 	}
 
-	addSideCondition(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null): boolean {
+	addSideCondition(
+		status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null
+	): boolean {
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.active[0];
 		if (!source) throw new Error(`setting sidecond without a source`);
@@ -208,7 +210,8 @@ export class Side {
 			duration: status.duration,
 		};
 		if (status.durationCallback) {
-			this.sideConditions[status.id].duration = status.durationCallback.call(this.battle, this.active[0], source, sourceEffect);
+			this.sideConditions[status.id].duration =
+				status.durationCallback.call(this.battle, this.active[0], source, sourceEffect);
 		}
 		if (!this.battle.singleEvent('Start', status, this.sideConditions[status.id], this, source, sourceEffect)) {
 			delete this.sideConditions[status.id];
@@ -601,7 +604,9 @@ export class Side {
 
 	choose(input: string) {
 		if (!this.currentRequest) {
-			return this.emitChoiceError(this.battle.ended ? `Can't do anything: The game is over` : `Can't do anything: It's not your turn`);
+			return this.emitChoiceError(
+				this.battle.ended ? `Can't do anything: The game is over` : `Can't do anything: It's not your turn`
+			);
 		}
 
 		if (this.choice.cantUndo) {

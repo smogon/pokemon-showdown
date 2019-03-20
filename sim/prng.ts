@@ -166,8 +166,8 @@ export class PRNG {
 	 * ````
 	 *
 	 * Notice how the `a[]` word starts at `b-1`, and decrements every time it appears again on the line;
-	 * `x_n[]` starts at `b-<line#>-1` and increments to b-1 at the end of the line per line, limiting the length of the line;
-	 * `c[]` is at `b-<line#>-1` for each line and the left shift is `16 * <line#>`)
+	 * `x_n[]` starts at `b-<line#>-1` and increments to b-1 at the end of the line per line, limiting the
+	 * length of the line; `c[]` is at `b-<line#>-1` for each line and the left shift is `16 * <line#>`)
 	 *
 	 * This is all ignoring overflow/carry because that cannot be shown in a pseudo-mathematical equation.
 	 * The below code implements a optimised version of that equation while also checking for overflow/carry.
