@@ -4228,7 +4228,7 @@ const commands = {
 			if (!trustable) return false;
 
 			let targetRoom = Rooms.get(target);
-			if (!targetRoom) return false;
+			if (!targetRoom || targetRoom === Rooms.global) return false;
 			if (targetRoom.isPrivate && !user.inRooms.has(targetRoom.id) && !user.games.has(targetRoom.id)) {
 				return false;
 			}
