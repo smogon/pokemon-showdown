@@ -940,7 +940,7 @@ class RandomTeams extends Dex.ModdedDex {
 					if (hasMove['firepunch'] || hasMove['fireblast'] && (counter.setupType || !!counter['speedsetup'])) rejected = true;
 					break;
 				case 'mindblown':
-					if (hasMove['fireblast'] && counter.setupType && !!teamDetails.zMove) rejected = true;
+					if (hasMove['fireblast'] && counter.setupType && teamDetails.zMove) rejected = true;
 					break;
 				case 'overheat':
 					if (hasMove['fireblast'] || hasMove['lavaplume'] || counter.setupType === 'Special') rejected = true;
