@@ -141,7 +141,10 @@ class Tournament extends Rooms.RoomGame {
 		}
 
 		const customRules = Dex.getFormat(this.teambuilderFormat, true).customRules;
-		if (!customRules || !Array.isArray(customRules)) throw new Error(`Setting invalid custom rules in tour: ${customRules}`);
+		if (!customRules) {
+			output.errorReply(`Invalid rules.`);
+			return false;
+		}
 		this.customRules = customRules;
 		return true;
 	}
@@ -1564,6 +1567,7 @@ const chatCommands = {
 		cmd = toId(cmd);
 
 		let params = target.split(',').map(param => param.trim());
+		if (!params[0]) params = [];
 
 		if (cmd === '') {
 			if (!this.runBroadcast()) return;
@@ -1580,7 +1584,7 @@ const chatCommands = {
 		} else if (this.meansYes(cmd)) {
 			if (!this.can('gamemanagement', null, room)) return;
 			let rank = params[0];
-			if (rank && rank === '@') {
+			if (rank === '@') {
 				if (room.toursEnabled === true) return this.errorReply("Tournaments are already enabled for @ and above in this room.");
 				room.toursEnabled = true;
 				if (room.chatRoomData) {
@@ -1588,7 +1592,7 @@ const chatCommands = {
 					Rooms.global.writeChatRoomData();
 				}
 				return this.sendReply("Tournaments are now enabled for @ and up.");
-			} else if (rank && rank === '%') {
+			} else if (rank === '%') {
 				if (room.toursEnabled === rank) return this.errorReply("Tournaments are already enabled for % and above in this room.");
 				room.toursEnabled = rank;
 				if (room.chatRoomData) {
