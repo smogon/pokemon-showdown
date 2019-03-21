@@ -164,6 +164,7 @@ class FSPath {
 			return;
 		}
 
+		// tslint:disable-next-line:no-floating-promises
 		this.writeUpdateNow(dataFetcher, options);
 	}
 
@@ -178,6 +179,7 @@ class FSPath {
 			throttleTimer: null,
 		};
 		pendingUpdates.set(this.path, update);
+		// tslint:disable-next-line:no-floating-promises
 		this.safeWrite(dataFetcher(), options).then(() => this.finishUpdate());
 	}
 	checkNextUpdate() {
@@ -192,6 +194,7 @@ class FSPath {
 			return;
 		}
 
+		// tslint:disable-next-line:no-floating-promises
 		this.writeUpdateNow(dataFetcher, options);
 	}
 	finishUpdate() {
@@ -396,7 +399,7 @@ class FileReadStream extends ReadStream {
 		return new Promise((resolve, reject) => {
 			if (this.atEOF) return resolve(false);
 			this.ensureCapacity(size);
-			this.fd.then(fd => {
+			return this.fd.then(fd => {
 				fs.read(fd, this.buf, this.bufEnd, size, null, (err, bytesRead, buf) => {
 					if (err) return reject(err);
 					if (!bytesRead) {
@@ -415,7 +418,7 @@ class FileReadStream extends ReadStream {
 
 	_destroy() {
 		return new Promise(resolve => {
-			this.fd.then(fd => {
+			return this.fd.then(fd => {
 				fs.close(fd, () => resolve());
 			});
 		});
