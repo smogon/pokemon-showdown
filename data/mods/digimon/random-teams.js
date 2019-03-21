@@ -11,7 +11,7 @@
  * @property {string=} signatureMove
  */
 
-const RandomTeams = require('../../data/random-teams');
+const RandomTeams = require('../../random-teams');
 
 class RandomDigimonTeams extends RandomTeams {
 	randomDigimonTeam() {
