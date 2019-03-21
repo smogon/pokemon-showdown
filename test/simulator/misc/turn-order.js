@@ -54,7 +54,7 @@ describe('Mega Evolution', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Necrozma-Dusk-Mane', ability: 'swarm', item: 'ultranecroziumz', moves: ['xscissor']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Hoopa-Unbound', ability: 'magician', moves: ['darkpulse']}]);
 		const fastBase = battle.p2.active[0];
-		battle.makeChoices('move xscissor ultra', 'move darkpluse');
+		battle.makeChoices('move xscissor ultra', 'move darkpulse');
 		assert.strictEqual(fastBase.hp, 0);
 	});
 });

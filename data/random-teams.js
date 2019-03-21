@@ -933,11 +933,14 @@ class RandomTeams extends Dex.ModdedDex {
 					break;
 				case 'fireblast': case 'magmastorm':
 					if (hasMove['lavaplume'] && !counter.setupType && !counter['speedsetup']) rejected = true;
-					if (hasMove['mindblown'] && counter.setupType) rejected = true;
+					if (hasMove['mindblown'] && counter.setupType && !teamDetails.zMove) rejected = true;
 					if (hasMove['flareblitz'] && hasAbility['Reckless']) rejected = true;
 					break;
 				case 'lavaplume':
 					if (hasMove['firepunch'] || hasMove['fireblast'] && (counter.setupType || !!counter['speedsetup'])) rejected = true;
+					break;
+				case 'mindblown':
+					if (hasMove['fireblast'] && counter.setupType && teamDetails.zMove) rejected = true;
 					break;
 				case 'overheat':
 					if (hasMove['fireblast'] || hasMove['lavaplume'] || counter.setupType === 'Special') rejected = true;

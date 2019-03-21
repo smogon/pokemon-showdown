@@ -56,7 +56,7 @@ describe('Stomping Tantrum', function () {
 		});
 
 		battle.makeChoices('move sunnyday, move precipiceblades', 'move protect, move recover');
-		battle.makeChoices('move sunnyday, move stompingtantrum', 'move calmmind, move recover');
+		battle.makeChoices('move sunnyday, move stompingtantrum 1', 'move calmmind, move recover');
 	});
 
 	it('should not double its Base Power if the last move used on the previous turn was a successful Celebrate', function () {
