@@ -35,6 +35,7 @@ type SparseStatsTable = Partial<StatsTable>;
 type BoostName = StatNameExceptHP | 'accuracy' | 'evasion';
 type BoostsTable = {[boost in BoostName]: number };
 type SparseBoostsTable = Partial<BoostsTable>;
+type Nonstandard = 'Glitch' | 'Past' | 'Future' | 'CAP' | 'LGPE' | 'Pokestar' | 'Custom';
 type PokemonSet = {
 	name: string,
 	species: string,
@@ -312,7 +313,7 @@ interface EffectData extends EventMethods {
 	effect?: Partial<EffectData>
 	effectType?: string
 	infiltrates?: boolean
-	isNonstandard?: boolean | string
+	isNonstandard?: Nonstandard | null
 	isUnreleased?: boolean
 	/**
 	 * `true` for generic Z-moves like Gigavolt Havoc.
@@ -603,7 +604,7 @@ interface TemplateFormatsData {
 	eventPokemon?: EventInfo[]
 	exclusiveMoves?: string[]
 	gen?: number
-	isNonstandard?: boolean | string
+	isNonstandard?: Nonstandard | null
 	isUnreleased?: boolean
 	maleOnlyHidden?: boolean
 	randomBattleMoves?: string[]

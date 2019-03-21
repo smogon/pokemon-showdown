@@ -6164,7 +6164,7 @@ let BattleItems = {
 		},
 		num: 0,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) On switch-in, raises holder's Attack by 2 and confuses it. Single use.",
 	},
 	"berry": {
@@ -6190,7 +6190,7 @@ let BattleItems = {
 		},
 		num: 155,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Restores 10 HP when at 1/2 max HP or less. Single use.",
 	},
 	"bitterberry": {
@@ -6212,7 +6212,7 @@ let BattleItems = {
 		},
 		num: 156,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder is cured if it is confused. Single use.",
 	},
 	"burntberry": {
@@ -6236,7 +6236,7 @@ let BattleItems = {
 		},
 		num: 153,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder is cured if it is frozen. Single use.",
 	},
 	"goldberry": {
@@ -6262,7 +6262,7 @@ let BattleItems = {
 		},
 		num: 158,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Restores 30 HP when at 1/2 max HP or less. Single use.",
 	},
 	"iceberry": {
@@ -6286,7 +6286,7 @@ let BattleItems = {
 		},
 		num: 152,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder is cured if it is burned. Single use.",
 	},
 	"mintberry": {
@@ -6310,7 +6310,7 @@ let BattleItems = {
 		},
 		num: 150,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder wakes up if it is asleep. Single use.",
 	},
 	"miracleberry": {
@@ -6333,7 +6333,7 @@ let BattleItems = {
 		},
 		num: 157,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder cures itself if it is confused or has a status condition. Single use.",
 	},
 	"mysteryberry": {
@@ -6378,7 +6378,7 @@ let BattleItems = {
 		},
 		num: 154,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Restores 5 PP to the first of the holder's moves to reach 0 PP. Single use.",
 	},
 	"pinkbow": {
@@ -6392,7 +6392,7 @@ let BattleItems = {
 		},
 		num: 251,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder's Normal-type attacks have 1.1x power.",
 	},
 	"polkadotbow": {
@@ -6406,7 +6406,7 @@ let BattleItems = {
 		},
 		num: 251,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder's Normal-type attacks have 1.1x power.",
 	},
 	"przcureberry": {
@@ -6430,7 +6430,7 @@ let BattleItems = {
 		},
 		num: 149,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder cures itself if it is paralyzed. Single use.",
 	},
 	"psncureberry": {
@@ -6454,7 +6454,7 @@ let BattleItems = {
 		},
 		num: 151,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder is cured if it is poisoned. Single use.",
 	},
 
@@ -6472,7 +6472,7 @@ let BattleItems = {
 		},
 		num: -1,
 		gen: 6,
-		isNonstandard: true,
+		isNonstandard: "CAP",
 		desc: "If held by a Crucibelle, this item allows it to Mega Evolve in battle.",
 	},
 };
