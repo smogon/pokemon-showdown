@@ -104,7 +104,7 @@ let BattleMovedex = {
 						}
 						target = possibleTarget;
 					}
-					/**@type {Move} */
+					/** @type {ActiveMove} */
 					// @ts-ignore
 					let moveData = {
 						id: 'bide',

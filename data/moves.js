@@ -8785,7 +8785,7 @@ let BattleMovedex = {
 			// Instructed Fake Out etc. should fail
 			target.activeTurns++;
 			this.add('-singleturn', target, 'move: Instruct', '[of] ' + source);
-			this.runMove(target.lastMove.id, target, target.lastMoveTargetLoc);
+			this.runMove(target.lastMove.id, target, /** @type {number} */(target.lastMoveTargetLoc));
 		},
 		secondary: null,
 		target: "normal",
