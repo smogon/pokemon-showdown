@@ -115,8 +115,8 @@ describe('Transform', function () {
 		]);
 		battle.makeChoices('move transform', 'move splash');
 		assert.strictEqual(battle.p1.active[0].template, battle.p2.active[0].template);
-		battle.makeChoices('move transform', 'switch 2');
-		battle.makeChoices('move transform', 'move transform');
+		battle.makeChoices('move splash', 'switch 2');
+		battle.makeChoices('move splash', 'move transform');
 		assert.notStrictEqual(battle.p1.active[0].template, battle.p2.active[0].template);
 	});
 
@@ -191,7 +191,7 @@ describe('Transform [Gen 4]', function () {
 			[{species: "Ditto", ability: 'limber', moves: ['transform']}],
 			[{species: "Mewtwo", ability: 'pressure', moves: ['substitute']}],
 		]);
-		battle.makeChoices('move transform', 'move rest');
+		battle.makeChoices('move transform', 'move substitute');
 		assert.strictEqual(battle.p1.active[0].template, battle.p2.active[0].template);
 	});
 });

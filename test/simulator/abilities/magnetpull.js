@@ -17,12 +17,15 @@ describe('Magnet Pull', function () {
 			{species: "Heatran", ability: 'flashfire', moves: ['curse']},
 			{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 		]);
-		battle.makeChoices('move soak', 'switch 2');
+
+		assert.trapped(() => battle.makeChoices('', 'switch 2'));
+		battle.makeChoices('auto', 'auto');
 		assert.species(battle.p2.active[0], 'Heatran');
-		battle.makeChoices('move soak', 'switch 2');
+		battle.makeChoices('auto', 'switch 2');
 		assert.species(battle.p2.active[0], 'Starmie');
 		battle.makeChoices('move charge', 'move reflecttype'); // Reflect Type makes Starmie part Steel
-		battle.makeChoices('move soak', 'switch 2');
+		assert.trapped(() => battle.makeChoices('', 'switch 2'));
+		battle.makeChoices('auto', 'auto');
 		assert.species(battle.p2.active[0], 'Starmie');
 	});
 
@@ -34,7 +37,7 @@ describe('Magnet Pull', function () {
 			{species: "Tentacruel", ability: 'clearbody', moves: ['rapidspin']},
 		]);
 		battle.makeChoices('move toxic', 'move batonpass');
-		battle.makeChoices('move toxic', 'switch 2');
+		battle.makeChoices('', 'switch 2');
 		assert.species(battle.p2.active[0], 'Tentacruel');
 	});
 

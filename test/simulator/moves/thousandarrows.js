@@ -101,7 +101,7 @@ describe('Thousand Arrows', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Zygarde", ability: 'aurabreak', item: 'laggingtail', moves: ['thousandarrows', 'earthquake']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Stunfisk", ability: 'limber', moves: ['electrify']}]);
-		battle.makeChoices('move thousdandarrows', 'move electrify');
+		battle.makeChoices('move thousandarrows', 'move electrify');
 		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
@@ -109,7 +109,7 @@ describe('Thousand Arrows', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Zygarde", ability: 'normalize', item: 'laggingtail', moves: ['thousandarrows', 'earthquake']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Dusknoir", ability: 'pressure', moves: ['haze']}]);
-		battle.makeChoices('move thousandarrows', 'move earthquake');
+		battle.makeChoices('move thousandarrows', 'move haze');
 		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 });

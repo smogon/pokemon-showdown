@@ -14,7 +14,6 @@ describe('Inverse Battle', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Hariyama", ability: 'guts', moves: ['vitalthrow']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Scyther", ability: 'swarm', moves: ['roost']}]);
 		battle.makeChoices('move vitalthrow', 'move roost');
-		battle.makeChoices('move vitalthrow', 'move roost');
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 	});
 

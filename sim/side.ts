@@ -254,6 +254,7 @@ export class Side {
 	emitChoiceError(message: string) {
 		this.choice.error = message;
 		this.battle.send('sideupdate', `${this.id}\n|error|[Invalid choice] ${message}`);
+		if (this.battle.strictChoices) throw new Error(`[Invalid choice] ${message}`);
 		return false;
 	}
 

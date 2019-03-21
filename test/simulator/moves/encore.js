@@ -49,7 +49,7 @@ describe('Encore', function () {
 			],
 		]);
 
-		battle.makeChoices('move focuspunch 1, move knockoff', 'move splash, move extremespeed 2');
+		battle.makeChoices('move focuspunch 1, move knockoff 1', 'move splash, move extremespeed 2');
 		let hp = battle.p2.active[0].hp;
 		assert.notStrictEqual(hp, battle.p2.active[0].maxhp);
 

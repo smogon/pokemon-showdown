@@ -30,7 +30,7 @@ describe('Grassy Terrain', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Shaymin", ability: 'naturalcure', moves: ['grassyterrain']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Shaymin-Sky", ability: 'serenegrace', moves: ['leechseed']}]);
-		battle.makeChoices('move grassyterrain', 'move leechseeed');
+		battle.makeChoices('move grassyterrain', 'move leechseed');
 		assert.strictEqual(battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], Dex.getMove('earthquake'), 100, true), 50);
 		assert.strictEqual(battle.runEvent('BasePower', battle.p1.active[0], battle.p2.active[0], Dex.getMove('earthquake'), 100, true), 50);
 		assert.strictEqual(battle.runEvent('BasePower', battle.p2.active[0], battle.p1.active[0], Dex.getMove('bulldoze'), 60, true), 30);

@@ -22,7 +22,7 @@ describe('Endless Battle Clause', () => {
 			} else {
 				move = 'slackoff';
 			}
-			battle.makeChoices('move tackle', `move ${move}`);
+			battle.makeChoices('default', `move ${move}`);
 		}
 		assert.fail("The battle did not end despite Endless Battle Clause");
 	});
@@ -65,7 +65,7 @@ describe('Endless Battle Clause', () => {
 		battle.join('p2', 'Guest 2', 1, [{species: 'Gastly', moves: ['megakick']}]);
 		for (let i = 0; i < 15; i++) {
 			if (battle.ended) return;
-			battle.makeChoices('move megakick', 'move megakick');
+			battle.makeChoices('default', 'default');
 		}
 		assert.fail("The battle did not end despite Endless Battle Clause");
 	});
@@ -86,7 +86,7 @@ describe('Endless Battle Clause', () => {
 		battle.join('p2', 'Guest 2', 1, [{species: "Smeargle", item: 'leppaberry', moves: ['recycle']}]);
 		for (let i = 0; i < 20; i++) {
 			if (battle.ended) return;
-			battle.makeChoices('move recycle', 'recycle');
+			battle.makeChoices('move recycle', 'move  recycle');
 		}
 		assert.fail("The battle did not end despite Endless Battle Clause");
 	});
