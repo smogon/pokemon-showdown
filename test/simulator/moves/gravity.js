@@ -32,7 +32,6 @@ describe('Gravity', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: 'Aerodactyl', ability: 'pressure', moves: ['fly']}]);
 		battle.makeChoices('move gravity', 'move fly');
 		assert.ok(!battle.p2.active[0].volatiles['twoturnmove']);
-		battle.makeChoices('move gravity', 'move fly');
-		assert.strictEqual(battle.p2.active[0].lastMove.id, 'struggle');
+		assert.cantMove(() => battle.makeChoices('move gravity', 'move fly'), 'Aerodactyl', 'Fly');
 	});
 });

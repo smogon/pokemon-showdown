@@ -29,6 +29,7 @@ interface BattleOptions {
 	p3?: PlayerOptions; // Player 3 data
 	p4?: PlayerOptions; // Player 4 data
 	debug?: boolean; // show debug mode option
+	strictChoices?: boolean; // whether invalid choices should throw
 }
 
 export class Battle extends Dex.ModdedDex {
@@ -47,6 +48,7 @@ export class Battle extends Dex.ModdedDex {
 	formatid: string;
 	cachedFormat: Format;
 	debugMode: boolean;
+	strictChoices: boolean;
 	formatData: AnyObject;
 	effect: Effect;
 	effectData: AnyObject;
@@ -114,6 +116,7 @@ export class Battle extends Dex.ModdedDex {
 		this.formatid = options.formatid;
 		this.cachedFormat = format;
 		this.debugMode = format.debug || !!options.debug;
+		this.strictChoices = !!options.strictChoices;
 		this.formatData = {id: format.id};
 		// tslint:disable-next-line:no-object-literal-type-assertion
 		this.effect = {id: ''} as Effect;
@@ -3030,7 +3033,7 @@ export class Battle extends Dex.ModdedDex {
 			side.emitChoiceError(`Incomplete choice: ${input} - missing other pokemon`);
 			return false;
 		}
-		this.checkActions();
+		if (this.allChoicesDone()) this.commitDecisions();
 		return true;
 	}
 
@@ -3038,8 +3041,14 @@ export class Battle extends Dex.ModdedDex {
 	 * Convenience method for easily making choices.
 	 */
 	makeChoices(...inputs: string[]) {
-		for (const [i, input] of inputs.entries()) {
-			this.sides[i].choose(input);
+		if (inputs.length) {
+			for (const [i, input] of inputs.entries()) {
+				if (input) this.sides[i].choose(input);
+			}
+		} else {
+			for (const side of this.sides) {
+				side.autoChoose();
+			}
 		}
 		this.commitDecisions();
 	}
@@ -3049,9 +3058,8 @@ export class Battle extends Dex.ModdedDex {
 
 		const oldQueue = this.queue;
 		this.queue = [];
-		for (const side of this.sides) {
-			side.autoChoose();
-		}
+		if (!this.allChoicesDone()) throw new Error("Not all choices done");
+
 		for (const side of this.sides) {
 			const choice = side.getChoice();
 			if (choice) this.inputLog.push(`>${side.id} ${choice}`);
@@ -3086,7 +3094,7 @@ export class Battle extends Dex.ModdedDex {
 	/**
 	 * returns true if both decisions are complete
 	 */
-	checkActions() {
+	allChoicesDone() {
 		let totalActions = 0;
 		for (const side of this.sides) {
 			if (side.isChoiceDone()) {
@@ -3094,11 +3102,7 @@ export class Battle extends Dex.ModdedDex {
 				totalActions++;
 			}
 		}
-		if (totalActions >= this.sides.length) {
-			this.commitDecisions();
-			return true;
-		}
-		return false;
+		return totalActions >= this.sides.length;
 	}
 
 	hint(hint: string, once?: boolean, side?: Side) {

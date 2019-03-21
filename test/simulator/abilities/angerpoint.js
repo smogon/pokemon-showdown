@@ -24,8 +24,8 @@ describe('Anger Point', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Haxorus", ability: 'moldbreaker', item: 'scopelens', moves: ['focusenergy', 'falseswipe']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: "Primeape", ability: 'angerpoint', moves: ['defensecurl']}]);
 
-		battle.makeChoices('move focusenergy', 'defensecurl');
-		battle.makeChoices('move falseswipe', 'defensecurl');
+		battle.makeChoices('move focusenergy', 'move defensecurl');
+		battle.makeChoices('move falseswipe', 'move defensecurl');
 		assert.statStage(p2.active[0], 'atk', 6);
 	});
 

@@ -31,8 +31,9 @@ describe('Embargo', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Lopunny", ability: 'limber', item: 'assaultvest', moves: ['protect']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Golem", ability: 'noguard', moves: ['embargo']}]);
-		battle.makeChoices('move protect', 'move embargo');
-		battle.makeChoices('move protect', 'move embargo');
+		battle.makeChoices('default', 'move embargo');
+		assert.strictEqual(battle.p1.active[0].lastMove.id, 'struggle');
+		battle.makeChoices('default', 'move embargo');
 		assert.strictEqual(battle.p1.active[0].lastMove.id, 'protect');
 	});
 

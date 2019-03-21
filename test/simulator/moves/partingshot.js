@@ -21,7 +21,7 @@ describe(`Parting Shot`, function () {
 		]);
 		const p1 = battle.p1;
 		const p2 = battle.p2;
-		battle.makeChoices('move partingshot', 'move return');
+		battle.makeChoices('move partingshot', 'move splash');
 		assert.strictEqual(battle.currentRequest, 'move');
 		battle.makeChoices('move partingshot', 'switch 2'); // Solgaleo
 		assert.strictEqual(battle.currentRequest, 'move');
@@ -35,7 +35,7 @@ describe(`Parting Shot`, function () {
 		assert.strictEqual(battle.currentRequest, 'move');
 		battle.makeChoices('move splash', 'switch 6'); // Spinda
 		p2.active[0].boostBy({atk: 6, spa: 6});
-		battle.makeChoices('move partingshort', 'move splash');
+		battle.makeChoices('move partingshot', 'move splash');
 		assert.strictEqual(battle.currentRequest, 'move');
 		p1.active[0].boostBy({atk: -6, spa: -6});
 		battle.makeChoices('move splash', 'move partingshot'); // Parting Shot against Silvally this time

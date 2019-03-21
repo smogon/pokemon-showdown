@@ -23,7 +23,7 @@ describe('Leftovers [Gen 2]', function () {
 		assert.strictEqual(p1.active[0].hp, 590);
 
 		battle.makeChoices('switch 2', 'move seismictoss');
-		battle.makeChoices('switch 2', 'move seismictoss');
+		battle.makeChoices('switch 2', '');
 		assert.strictEqual(p1.active[0].hp, 630);
 	});
 });

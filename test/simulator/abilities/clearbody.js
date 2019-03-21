@@ -69,7 +69,7 @@ describe('Clear Body', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: 'Haxorus', ability: 'moldbreaker', moves: ['roar', 'stickyweb']}]);
 		battle.makeChoices('move Sleeptalk', 'move Stickyweb');
 		battle.makeChoices('move Sleeptalk', 'move Roar');
-		battle.makeChoices('switch Metagross', '');
+		battle.makeChoices('switch 2', 'default');
 		assert.statStage(battle.p1.active[0], 'spe', -1);
 	});
 });

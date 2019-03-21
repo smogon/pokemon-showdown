@@ -53,9 +53,9 @@ describe('Pickup', function () {
 			{species: 'Clefable', ability: 'unaware', item: 'ejectbutton', moves: ['followme']},
 			{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
 		]);
-		battle.makeChoices('move shadowsneak, move rest', 'move uturn, move followme');
-		battle.makeChoices('move shadowsneak, move rest', 'switch 3'); // Eject Button activated
-		battle.makeChoices('move shadowsneak, move rest', 'switch 3');
+		battle.makeChoices('move shadowsneak 1, move rest', 'move uturn 1, move followme');
+		battle.makeChoices('', 'switch 3'); // Eject Button activated
+		battle.makeChoices('', 'switch 3');
 		assert.false.holdsItem(battle.p1.active[0], "Pick Up should not retrieve Eject Button of returned Clefable");
 	});
 
@@ -67,10 +67,10 @@ describe('Pickup', function () {
 			{species: 'Dusknoir', ability: 'pressure', item: 'ejectbutton', moves: ['painsplit']},
 		]);
 		battle.makeChoices('move synthesis', 'move uturn');
-		battle.makeChoices('move shadowsneak', 'switch 2');
+		battle.makeChoices('', 'switch 2');
 		assert.false.holdsItem(battle.p1.active[0]);
-		battle.makeChoices('move shadowsneak', 'move painsplit');
-		battle.makeChoices('move shadowsneak', 'switch 2');
+		battle.makeChoices('move synthesis', 'move painsplit');
+		battle.makeChoices('move synthesis', 'switch 2');
 		assert.false.holdsItem(battle.p1.active[0]);
 	});
 
@@ -87,7 +87,7 @@ describe('Pickup', function () {
 			[{species: 'Ambipom', ability: 'pickup', moves: ['protect']}, {species: 'Aron', level: 1, ability: 'sturdy', item: 'berryjuice', moves: ['followme']}],
 			[{species: 'Ambipom', ability: 'technician', moves: ['return']}, {species: 'Arcanine', ability: 'flashfire', moves: ['protect']}],
 		]);
-		battle.makeChoices('move protect, move followme', 'move return, move protect');
+		battle.makeChoices('move protect, move followme', 'move return 1, move protect');
 		assert.holdsItem(battle.p1.active[0]);
 	});
 
@@ -103,7 +103,7 @@ describe('Pickup', function () {
 			{species: 'Aggron', ability: 'sturdy', moves: ['rest']},
 			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
 		]);
-		battle.makeChoices('move protect, move curse, move extremespeed', 'move flamecharge, move rest, move splash');
+		battle.makeChoices('move protect, move curse, move extremespeed 2', 'move flamecharge 2, move rest, move splash');
 		assert.false.holdsItem(battle.p1.active[0]);
 	});
 });

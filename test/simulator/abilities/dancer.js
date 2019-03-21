@@ -74,13 +74,13 @@ describe('Dancer', function () {
 		assert.statStage(p2.active[0], 'atk', -6);
 		assert.statStage(p2.active[0], 'spe', 0);
 		// Next turn
-		battle.makeChoices('move dragondance, move featherdance', 'move protect');
+		battle.makeChoices('move dragondance, move featherdance 1', 'move protect');
 		assert.statStage(p1.active[0], 'atk', 6);
 		assert.statStage(p1.active[1], 'atk', 0);
 		// Next turn: Teeter Dance should be copied as long as it hits one thing
-		battle.makeChoices('move protect, move featherdance', 'move teeterdance');
+		battle.makeChoices('move protect, move featherdance 1', 'move teeterdance');
 		// Next turn: Teeter Dance should NOT be copied if everything it hits is already confused
-		assert.constant(() => p1.active[0].volatiles['confusion'], () => battle.makeChoices('move teeterdance, move featherdance', 'move fierydance'));
+		assert.constant(() => p1.active[0].volatiles['confusion'], () => battle.makeChoices('move teeterdance, move featherdance 1', 'move fierydance 1'));
 	});
 
 	it('should not copy a move that missed', function () {

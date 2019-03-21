@@ -23,18 +23,17 @@ describe('Imprison', function () {
 		battle.makeChoices('move imprison', 'move calmmind');
 		assert.strictEqual(battle.p2.active[0].boosts['spa'], 0);
 		assert.strictEqual(battle.p2.active[0].boosts['spd'], 0);
-		battle.makeChoices('move imprison', 'move calmmind');
-		assert.strictEqual(battle.p2.active[0].lastMove.id, 'gravity');
+		assert.cantMove(() => battle.choose('p2', 'move calmmind'), 'Abra', 'Calm Mind');
 
 		// Imprison doesn't end when the foe switches
-		battle.makeChoices('move calmmind', 'switch 2');
+		battle.makeChoices('default', 'switch 2');
 		battle.makeChoices('move calmmind', 'move calmmind');
 		assert.strictEqual(battle.p2.active[0].boosts['spa'], 0);
 
 		// Imprison is not passed by Baton Pass
 		battle.makeChoices('move batonpass', 'move calmmind');
 		assert.strictEqual(battle.p2.active[0].boosts['spa'], 0);
-		battle.makeChoices('switch 2', 'pass');
+		battle.makeChoices('switch 2', '');
 		assert.strictEqual(battle.p2.active[0].boosts['spa'], 0);
 		battle.makeChoices('move calmmind', 'move calmmind');
 		assert.strictEqual(battle.p2.active[0].boosts['spa'], 1);

@@ -17,8 +17,7 @@ describe('Taunt', function () {
 		battle.makeChoices('move taunt', 'move calmmind');
 		assert.strictEqual(battle.p2.active[0].boosts['spa'], 0);
 		assert.strictEqual(battle.p2.active[0].boosts['spd'], 0);
-		battle.makeChoices('move taunt', 'move calmmind');
-		assert.strictEqual(battle.p2.active[0].lastMove.id, 'struggle');
+		battle.makeChoices('move taunt', 'move struggle');
 	});
 
 	it('should not prevent the target from using Z-Powered Status moves', function () {

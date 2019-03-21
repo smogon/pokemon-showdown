@@ -32,8 +32,7 @@ describe('Heal Block', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: 'Spiritomb', ability: 'pressure', moves: ['healblock']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Cresselia', ability: 'levitate', moves: ['recover']}]);
 		battle.makeChoices('move healblock', 'move recover');
-		battle.makeChoices('move healblock', 'move recover');
-		assert.strictEqual(battle.p2.active[0].lastMove.id, 'struggle');
+		assert.cantMove(() => battle.makeChoices('move healblock', 'move recover'), 'Cresselia', 'Recover');
 	});
 
 	it('should prevent Pokemon from using draining moves', function () {
@@ -107,8 +106,7 @@ describe('Heal Block [Gen 5]', function () {
 			[{species: 'Cresselia', ability: 'levitate', moves: ['recover']}],
 		]);
 		battle.makeChoices('move healblock', 'move recover');
-		battle.makeChoices('move healblock', 'move recover');
-		assert.strictEqual(battle.p2.active[0].lastMove.id, 'struggle');
+		assert.cantMove(() => battle.makeChoices('move healblock', 'move recover'), 'Cresselia', 'Recover');
 	});
 
 	it('should prevent abilities from recovering HP', function () {
@@ -157,8 +155,7 @@ describe('Heal Block [Gen 4]', function () {
 			[{species: 'Cresselia', ability: 'levitate', moves: ['recover']}],
 		]);
 		battle.makeChoices('move healblock', 'move recover');
-		battle.makeChoices('move healblock', 'move recover');
-		assert.strictEqual(battle.p2.active[0].lastMove.id, 'struggle');
+		assert.cantMove(() => battle.makeChoices('move healblock', 'move recover'), 'Cresselia', 'Recover');
 	});
 
 	it('should block the effect of Wish', function () {
@@ -167,8 +164,7 @@ describe('Heal Block [Gen 4]', function () {
 			[{species: 'Deoxys', ability: 'pressure', moves: ['wish']}],
 		]);
 		battle.makeChoices('move healblock', 'move wish');
-		battle.makeChoices('move healblock', 'move wish');
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.cantMove(() => battle.makeChoices('move healblock', 'move wish'), 'Deoxys', 'Wish');
 	});
 
 	it('should prevent draining moves from healing HP', function () {

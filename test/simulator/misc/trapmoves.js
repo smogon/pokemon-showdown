@@ -21,7 +21,7 @@ describe('Trapping Moves', function () {
 				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 			]);
 			battle.makeChoices('move ' + toId(move), 'move swordsdance');
-			battle.makeChoices('move ' + toId(move), 'switch 2');
+			assert.trapped(() => battle.makeChoices('move ' + toId(move), 'switch 2'));
 			assert.strictEqual(battle.p2.active[0].template.speciesid, 'tangrowth');
 		});
 
@@ -33,7 +33,7 @@ describe('Trapping Moves', function () {
 				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 			]);
 			battle.makeChoices('move ' + toId(move), 'move batonpass');
-			battle.makeChoices('move ' + toId(move), 'switch 2');
+			battle.makeChoices('', 'switch 2');
 			assert.strictEqual(battle.p2.active[0].template.speciesid, 'starmie');
 		});
 
@@ -60,7 +60,7 @@ describe('Trapping Moves', function () {
 				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 			]);
 			battle.makeChoices('move ' + toId(move), 'move roar');
-			battle.makeChoices('move ' + toId(move), 'switch 2');
+			battle.makeChoices('move rest', 'switch 2');
 			assert.strictEqual(battle.p2.active[0].template.speciesid, 'starmie');
 		});
 
@@ -82,7 +82,7 @@ describe('Trapping Moves', function () {
 			} else {
 				battle.makeChoices('move ' + toId(move) + ', move closecombat -1', 'move synthesis, move recover');
 			}
-			battle.makeChoices('move ' + toId(move) + ', move swordsdance', 'switch 3, switch 4');
+			battle.makeChoices('move swordsdance', 'switch 3, switch 4');
 			assert.strictEqual(battle.p2.active[0].template.speciesid, 'cradily');
 			assert.strictEqual(battle.p2.active[1].template.speciesid, 'hippowdon');
 		});
@@ -101,10 +101,10 @@ describe('Trapping Moves', function () {
 				]);
 				battle.makeChoices('move ' + toId(move), 'move synthesis');
 				battle.makeChoices('move batonpass', 'move synthesis');
-				battle.makeChoices('switch 2', 'switch 2');
+				battle.makeChoices('switch 2', '');
 				assert.strictEqual(battle.p2.active[0].template.speciesid, 'tangrowth');
 				battle.makeChoices('move rest', 'move roar');
-				battle.makeChoices('move rest', 'switch 2');
+				battle.makeChoices('move batonpass', 'switch 2');
 				assert.strictEqual(battle.p2.active[0].template.speciesid, 'starmie');
 			});
 		}
@@ -130,13 +130,13 @@ describe('Partial Trapping Moves', function () {
 
 		it('should prevent Pokemon from switching out normally', function () {
 			battle = common.createBattle();
-			battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'noguard', moves: [toId(move)]}]);
+			battle.join('p1', 'Guest 1', 1, [{species: 'Smeargle', ability: 'noguard', moves: [toId(move)]}]);
 			battle.join('p2', 'Guest 2', 1, [
 				{species: "Blissey", ability: 'naturalcure', moves: ['healbell']},
 				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 			]);
 			battle.makeChoices('move ' + toId(move), 'move healbell');
-			battle.makeChoices('move ' + toId(move), 'switch 2');
+			assert.trapped(() => battle.makeChoices('move ' + toId(move), 'switch 2'));
 			assert.strictEqual(battle.p2.active[0].template.speciesid, 'blissey');
 		});
 
@@ -148,7 +148,7 @@ describe('Partial Trapping Moves', function () {
 				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 			]);
 			battle.makeChoices('move ' + toId(move), 'move batonpass');
-			battle.makeChoices('move ' + toId(move), 'switch 2');
+			battle.makeChoices('', 'switch 2');
 			assert.strictEqual(battle.p2.active[0].template.speciesid, 'starmie');
 		});
 
@@ -174,8 +174,8 @@ describe('Partial Trapping Moves', function () {
 				{species: "Blissey", ability: 'naturalcure', moves: ['roar']},
 				{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 			]);
-			battle.makeChoices('move ' + toId(move), 'move healbell');
-			battle.makeChoices('move ' + toId(move), 'switch 2');
+			battle.makeChoices('move ' + toId(move), 'move roar');
+			battle.makeChoices('move rest', 'switch 2');
 			assert.strictEqual(battle.p2.active[0].template.speciesid, 'starmie');
 		});
 

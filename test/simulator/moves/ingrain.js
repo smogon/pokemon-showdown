@@ -24,12 +24,12 @@ describe('Ingrain', function () {
 
 		// should be passed by Baton Pass
 		battle.makeChoices('move batonpass', 'move seismictoss');
-		battle.makeChoices('switch 2', 'pass');
+		battle.makeChoices('switch 2', '');
 		assert.strictEqual(battle.p1.active[0].hp, Math.floor(battle.p1.active[0].maxhp * 17 / 16) - 100);
 
 		// should not be passed by U-turn
 		battle.makeChoices('move uturn', 'move seismictoss');
-		battle.makeChoices('switch 2', 'pass');
+		battle.makeChoices('switch 2', '');
 		assert.strictEqual(battle.p1.active[0].hp, Math.floor(battle.p1.active[0].maxhp * 17 / 16) - 100);
 
 		// should be gone after switching out and back in
@@ -46,7 +46,7 @@ describe('Ingrain', function () {
 		battle.join('p2', 'Guest 2', 1, [{species: 'Arcanine', ability: 'flashfire', moves: ['sleeptalk', 'roar']}]);
 		battle.makeChoices('move ingrain', 'move roar');
 		assert.strictEqual(battle.p1.active[0].speciesid, 'cradily');
-		battle.makeChoices('switch pikachu', 'move sleeptalk');
+		assert.trapped(() => battle.makeChoices('switch pikachu', 'move sleeptalk'));
 		assert.strictEqual(battle.p1.active[0].speciesid, 'cradily');
 	});
 

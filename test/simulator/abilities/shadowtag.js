@@ -17,7 +17,7 @@ describe('Shadow Tag', function () {
 			{species: "Tornadus", ability: 'defiant', moves: ['tailwind']},
 			{species: "Heatran", ability: 'flashfire', moves: ['roar']},
 		]);
-		assert.false(battle.makeChoices('move counter', 'switch 2'));
+		assert.trapped(() => battle.makeChoices('move counter', 'switch 2'));
 		assert.species(p2.active[0], 'Tornadus');
 	});
 
@@ -29,7 +29,7 @@ describe('Shadow Tag', function () {
 			{species: "Heatran", ability: 'flashfire', moves: ['roar']},
 		]);
 		battle.makeChoices('move counter', 'move uturn');
-		battle.makeChoices('move counter', 'switch 2');
+		battle.makeChoices('', 'switch 2');
 		assert.species(p2.active[0], 'Heatran');
 	});
 

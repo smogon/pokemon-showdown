@@ -20,7 +20,7 @@ describe('Drives', function () {
 				battle = common.createBattle();
 				battle.join('p1', 'Guest 1', 1, [{species: 'Genesect', ability: 'frisk', item: id, moves: ['recover']}]);
 				battle.join('p2', 'Guest 2', 1, [
-					{species: 'Fennekin', ability: 'magician', moves: ['mysticalfire']},
+					{species: 'Fennekin', ability: 'magician', moves: ['thief', 'mysticalfire']},
 					{species: 'Abra', ability: 'synchronize', moves: ['thief', 'trick', 'knockoff']},
 				]);
 				const holder = battle.p1.active[0];

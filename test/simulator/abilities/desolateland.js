@@ -109,7 +109,7 @@ describe('Desolate Land', function () {
 			{species: "Ho-Oh", ability: 'pressure', moves: ['roost']},
 		]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Groudon", ability: 'desolateland', moves: ['bulkup']}]);
-		assert.constant(() => battle.isWeather('desolateland'), () => battle.makeChoices('move helpinghand', 'switch 2'));
+		assert.constant(() => battle.isWeather('desolateland'), () => battle.makeChoices('switch 2', 'move bulkup'));
 	});
 
 	it('should cause the Desolate Land weather to fade if its ability is suppressed and no other Desolate Land Pokemon are active', function () {

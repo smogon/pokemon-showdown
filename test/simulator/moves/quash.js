@@ -22,7 +22,7 @@ describe('Quash', function () {
 			{species: "Rotom", ability: 'levitate', moves: ['thunderbolt']},
 		]);
 		battle.makeChoices('move quash 2, move earthquake', 'move voltswitch 2, move swift');
-		battle.makeChoices('move quash, move earthquake', 'switch 3, pass'); // Volt Switch
+		battle.makeChoices('', 'switch 3, pass'); // Volt Switch
 		assert.strictEqual(battle.log[battle.lastMoveLine].split('|')[3], 'Swift');
 	});
 
@@ -38,7 +38,7 @@ describe('Quash', function () {
 			{species: "Rotom", ability: 'levitate', moves: ['thunderbolt']},
 		]);
 		battle.makeChoices('move quash 2, move earthquake', 'move voltswitch 2, move extremespeed 1');
-		battle.makeChoices('move quash, move earthquake', 'switch 3, pass'); // Volt Switch
+		battle.makeChoices('', 'switch 3, pass'); // Volt Switch
 		assert.notStrictEqual(battle.log[battle.lastMoveLine].split('|')[3], 'Extremespeed');
 	});
 });

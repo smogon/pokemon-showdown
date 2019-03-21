@@ -31,7 +31,7 @@ describe('Ring Target', function () {
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 		assert.false.fullHP(battle.p2.active[0]);
 
-		battle.makeChoices('move psychich', 'switch 4'); // Absol
+		battle.makeChoices('move psychic', 'switch 4'); // Absol
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 

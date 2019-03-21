@@ -29,7 +29,7 @@ describe('Iron Ball', function () {
 		// Earthquake neutral on Aerodactyl
 		assert.ok(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
-		battle.makeChoices('move earthquake', 'switch leechseed');
+		battle.makeChoices('move earthquake', 'switch 2');
 		// Earthquake neutral on Tropius
 		assert.ok(!battle.log[battle.lastMoveLine + 1].startsWith('|-resisted|'));
 		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);

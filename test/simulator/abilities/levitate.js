@@ -76,7 +76,7 @@ describe('Levitate [Gen 4]', function () {
 			[{species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk']}, {species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk']}],
 			[{species: 'Rampardos', ability: 'moldbreaker', moves: ['roar', 'spikes']}],
 		]);
-		battle.makeChoices('move sleeptalk', 'move spike');
+		battle.makeChoices('move sleeptalk', 'move spikes');
 		assert.false.hurts(battle.p1.pokemon[1], () => battle.makeChoices('move sleeptalk', 'move roar'));
 	});
 });
