@@ -15,7 +15,7 @@ describe('Cloud Nine', function () {
 		const p1 = battle.join('p1', 'Guest 1', 1, [{species: 'Golduck', ability: 'cloudnine', moves: ['sunnyday']}]);
 		const p2 = battle.join('p2', 'Guest 2', 1, [{species: 'Cherrim', ability: 'flowergift', item: 'laggingtail', moves: ['solarbeam']}]);
 		assert.false.hurts(p1.active[0], () => battle.makeChoices('move sunnyday', 'move solarbeam')); // Solar Beam must charge
-		assert.ok(battle.isWeather('', p2.active[0]));
+		assert.ok(battle.field.isWeather('', p2.active[0]));
 		assert.species(p2.active[0], 'Cherrim');
 	});
 

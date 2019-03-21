@@ -356,8 +356,8 @@ let BattleStatuses = {
 				let weather = move.weather;
 				move.weather = '';
 				move.onHit = function (target, source) {
-					this.setWeather(weather, source, this.getAbility('snowwarning'));
-					this.weatherData.duration = 0;
+					this.field.setWeather(weather, source, this.getAbility('snowwarning'));
+					this.field.weatherData.duration = 0;
 				};
 				move.target = 'self';
 			}
@@ -381,8 +381,8 @@ let BattleStatuses = {
 				let weather = move.weather;
 				move.weather = '';
 				move.onHit = function (target, source) {
-					this.setWeather(weather, source, this.getAbility('sandstream'));
-					this.weatherData.duration = 0;
+					this.field.setWeather(weather, source, this.getAbility('sandstream'));
+					this.field.weatherData.duration = 0;
 				};
 				move.target = 'self';
 			}
@@ -397,8 +397,8 @@ let BattleStatuses = {
 				let weather = move.weather;
 				move.weather = '';
 				move.onHit = function (target, source) {
-					this.setWeather(weather, source, this.getAbility('drizzle'));
-					this.weatherData.duration = 0;
+					this.field.setWeather(weather, source, this.getAbility('drizzle'));
+					this.field.weatherData.duration = 0;
 				};
 				move.target = 'self';
 			}

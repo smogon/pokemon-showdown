@@ -1,4 +1,5 @@
 type Battle = import('./../sim/battle').Battle
+type Field = import('./../sim/field').Field
 type ModdedDex = typeof import('./../sim/dex')
 type Pokemon = import('./../sim/pokemon').Pokemon
 type Side = import('./../sim/side').Side
@@ -233,7 +234,7 @@ interface EventMethods {
 	onFoeTrapPokemon?: (this: Battle, pokemon: Pokemon) => void
 	onFoeTryMove?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => void
 	onHit?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => void
-	onHitField?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => boolean | void
+	onHitField?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => boolean | void // TODO Field?
 	onHitSide?: (this: Battle, side: Side, source: Pokemon, move: ActiveMove) => void
 	onImmunity?: (this: Battle, type: string, pokemon: Pokemon) => void
 	onLockMove?: string | ((this: Battle, pokemon: Pokemon) => void)
@@ -286,7 +287,7 @@ interface EventMethods {
 	onTryEatItem?: (this: Battle, item: Item, pokemon: Pokemon) => void
 	onTryHeal?: ((this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect) => void) | boolean
 	onTryHit?: ((this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => void) | boolean
-	onTryHitField?: (this: Battle, target: Pokemon, source: Pokemon) => boolean | void
+	onTryHitField?: (this: Battle, target: Pokemon, source: Pokemon) => boolean | void // TODO Field?
 	onTryHitSide?: (this: Battle, side: Side, source: Pokemon) => void
 	onTryMove?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => void
 	onTryPrimaryHit?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => void

@@ -267,22 +267,22 @@ let BattleScripts = {
 		if (source === 'debug') source = this.sides[0].active[0];
 		if (!source) throw new Error(`setting terrain without a source`);
 
-		if (this.terrain === status.id) return false;
-		let prevTerrain = this.terrain;
-		let prevTerrainData = this.terrainData;
-		this.terrain = status.id;
-		this.terrainData = {
+		if (this.field.terrain === status.id) return false;
+		let prevTerrain = this.field.terrain;
+		let prevTerrainData = this.field.terrainData;
+		this.field.terrain = status.id;
+		this.field.terrainData = {
 			id: status.id,
 			source,
 			sourcePosition: source.position,
 			duration: status.duration,
 		};
 		if (status.durationCallback) {
-			this.terrainData.duration = status.durationCallback.call(this, source, source, sourceEffect);
+			this.field.terrainData.duration = status.durationCallback.call(this, source, source, sourceEffect);
 		}
-		if (!this.singleEvent('Start', status, this.terrainData, this, source, sourceEffect)) {
-			this.terrain = prevTerrain;
-			this.terrainData = prevTerrainData;
+		if (!this.singleEvent('Start', status, this.field.terrainData, this, source, sourceEffect)) {
+			this.field.terrain = prevTerrain;
+			this.field.terrainData = prevTerrainData;
 			return false;
 		}
 		// Always run a terrain end event to prevent a visual glitch with custom terrains
@@ -294,13 +294,13 @@ let BattleScripts = {
 		getActionSpeed() {
 			let speed = this.getStat('spe', false, false);
 			if (speed > 10000) speed = 10000;
-			if (this.battle.getPseudoWeather('trickroom') || this.battle.getPseudoWeather('triviaroom') || this.battle.getPseudoWeather('alienwave')) {
+			if (this.battle.field.getPseudoWeather('trickroom') || this.battle.field.getPseudoWeather('triviaroom') || this.battle.field.getPseudoWeather('alienwave')) {
 				speed = 0x2710 - speed;
 			}
 			return speed & 0x1FFF;
 		},
 		isGrounded(negateImmunity = false) {
-			if ('gravity' in this.battle.pseudoWeather) return true;
+			if ('gravity' in this.battle.field.pseudoWeather) return true;
 			if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;
 			if ('smackdown' in this.volatiles) return true;
 			let item = (this.ignoringItem() ? '' : this.item);
@@ -310,7 +310,7 @@ let BattleScripts = {
 			if (this.hasAbility('levitate') && !this.battle.suppressingAttackEvents()) return null;
 			if ('magnetrise' in this.volatiles) return false;
 			if ('telekinesis' in this.volatiles) return false;
-			if ('triviaroom' in this.battle.pseudoWeather && this.name === 'Bimp' && !this.illusion) return false;
+			if ('triviaroom' in this.battle.field.pseudoWeather && this.name === 'Bimp' && !this.illusion) return false;
 			return item !== 'airballoon';
 		},
 	},

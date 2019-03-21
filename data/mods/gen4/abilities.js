@@ -92,12 +92,12 @@ let BattleAbilities = {
 		desc: "If Sunny Day is active, the Attack and Special Defense of this Pokemon and its allies are multiplied by 1.5.",
 		shortDesc: "If Sunny Day is active, Attack and Sp. Def of this Pokemon and its allies are 1.5x.",
 		onAllyModifyAtk(atk) {
-			if (this.isWeather('sunnyday')) {
+			if (this.field.isWeather('sunnyday')) {
 				return this.chainModify(1.5);
 			}
 		},
 		onAllyModifySpD(spd) {
-			if (this.isWeather('sunnyday')) {
+			if (this.field.isWeather('sunnyday')) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -172,7 +172,7 @@ let BattleAbilities = {
 		onSetStatus(status, target, source, effect) {
 			if (effect && effect.id === 'rest') {
 				return;
-			} else if (this.isWeather('sunnyday')) {
+			} else if (this.field.isWeather('sunnyday')) {
 				return false;
 			}
 		},

@@ -15,15 +15,15 @@ describe('Electric Terrain', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Florges", ability: 'symbiosis', moves: ['mist', 'electricterrain']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Florges", ability: 'symbiosis', moves: ['mist']}]);
 		battle.makeChoices('move electricterrain', 'move mist');
-		assert.ok(battle.isTerrain('electricterrain'));
+		assert.ok(battle.field.isTerrain('electricterrain'));
 		battle.makeChoices('move electricterrain', 'move mist');
-		assert.ok(battle.isTerrain('electricterrain'));
+		assert.ok(battle.field.isTerrain('electricterrain'));
 		battle.makeChoices('move electricterrain', 'move mist');
-		assert.ok(battle.isTerrain('electricterrain'));
+		assert.ok(battle.field.isTerrain('electricterrain'));
 		battle.makeChoices('move electricterrain', 'move mist');
-		assert.ok(battle.isTerrain('electricterrain'));
+		assert.ok(battle.field.isTerrain('electricterrain'));
 		battle.makeChoices('move electricterrain', 'move mist');
-		assert.ok(battle.isTerrain(''));
+		assert.ok(battle.field.isTerrain(''));
 	});
 
 	it('should increase the base power of Electric-type attacks used by grounded Pokemon', function () {

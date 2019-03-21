@@ -15,15 +15,15 @@ describe('Misty Terrain', function () {
 		battle.join('p1', 'Guest 1', 1, [{species: "Florges", ability: 'symbiosis', moves: ['mist', 'mistyterrain']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Florges", ability: 'symbiosis', moves: ['mist']}]);
 		battle.makeChoices('move mistyterrain', 'move mist');
-		assert.ok(battle.isTerrain('mistyterrain'));
+		assert.ok(battle.field.isTerrain('mistyterrain'));
 		battle.makeChoices('move mist', 'move mist');
-		assert.ok(battle.isTerrain('mistyterrain'));
+		assert.ok(battle.field.isTerrain('mistyterrain'));
 		battle.makeChoices('move mist', 'move mist');
-		assert.ok(battle.isTerrain('mistyterrain'));
+		assert.ok(battle.field.isTerrain('mistyterrain'));
 		battle.makeChoices('move mist', 'move mist');
-		assert.ok(battle.isTerrain('mistyterrain'));
+		assert.ok(battle.field.isTerrain('mistyterrain'));
 		battle.makeChoices('move mist', 'move mist');
-		assert.ok(battle.isTerrain(''));
+		assert.ok(battle.field.isTerrain(''));
 	});
 
 	it('should halve the base power of Dragon-type attacks on grounded Pokemon', function () {
