@@ -1,10 +1,24 @@
 'use strict';
 
+/** @typedef {{[name: string]: DigimonSet}} DigimonSets */
+/**
+ * @typedef {Object} DigimonSet
+ * @property {string=} name
+ * @property {string} species
+ * @property {string | string[]} ability
+ * @property {(string | string[])[]} moves
+ * @property {string=} baseSignatureMove
+ * @property {string=} signatureMove
+ */
+
 const RandomTeams = require('../../data/random-teams');
 
 class RandomDigimonTeams extends RandomTeams {
 	randomDigimonTeam() {
+		/** @type {PokemonSet[]} */
 		let team = [];
+
+		/** @type {DigimonSets} */
 		let sets = {
 			//Fresh//
 			"Botamon": {
@@ -1192,13 +1206,14 @@ class RandomDigimonTeams extends RandomTeams {
 				signatureMove: "Terra Force",
 			},
 		};
-		//Generate the team randomly.
+
+		// Generate the team randomly.
 		let pool = Object.keys(sets);
 		let weakmonclause = false;
 		for (let i = 0; i < 6; i++) {
 			let name = this.sampleNoReplace(pool);
-			let set = sets[name];
-			if (set.moves.includes('acidbubble')) {
+			let digiSet = sets[name];
+			if (digiSet.moves.includes('acidbubble')) {
 				if (weakmonclause === true) {
 					// Skip this digimon
 					i--;
@@ -1207,7 +1222,25 @@ class RandomDigimonTeams extends RandomTeams {
 					weakmonclause = true;
 				}
 			}
-			if (!set.name) set.name = name;
+
+			/** @type {PokemonSet} */
+			let set = {
+				name: digiSet.name || name,
+				species: digiSet.species,
+				item: '',
+				ability: Array.isArray(digiSet.ability) ? this.sampleNoReplace(digiSet.ability) : digiSet.ability,
+				moves: [this.sampleNoReplace(digiSet.moves), this.sampleNoReplace(digiSet.moves), this.sampleNoReplace(digiSet.moves), 'Protect'],
+				nature: this.sampleNoReplace(['Bashful', 'Docile', 'Hardy', 'Quirky', 'Serious']),
+				gender: 'N',
+				evs: {hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85},
+				ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31},
+				level: 0,
+				shiny: false,
+			};
+
+			if (digiSet.signatureMove) {
+				set.moves.push(digiSet.signatureMove);
+			}
 
 			// Inherit how pokemon does it with Kuramon instead of sunkern
 			let mbstmin = 1381;
@@ -1235,15 +1268,14 @@ class RandomDigimonTeams extends RandomTeams {
 				if (mbst >= mbstmin) break;
 				level++;
 			}
-			level = level + 20; //Add 20. It lessens the level gap
+			level = level + 20; // Add 20. It lessens the level gap
 			if (level > 100) {
 				level = 100;
 			} else {
 				level = (level % 5) >= 2.5 ? (level / 5) * 5 + 5 : (level / 5) * 5; //Rounds to the Nearest 5 for simplicity
 			}
 			set.level = level;
-			set.nature = "Serious";
-			set.moves = [this.sampleNoReplace(set.moves), this.sampleNoReplace(set.moves), this.sampleNoReplace(set.moves), 'Protect', set.signatureMove];
+
 			team.push(set);
 		}
 		return team;

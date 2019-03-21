@@ -2589,9 +2589,12 @@ let BattleMovedex = {
 		pp: 5,
 		noPPBoosts: true,
 		basePowerCallback: function (pokemon, target, move) {
-			//copied from Revenge
-			if (target.lastDamage > 0 && pokemon.lastAttackedBy && pokemon.lastAttackedBy.thisTurn && pokemon.lastAttackedBy.pokemon === target) {
-				this.debug('Boosted for getting hit by ' + pokemon.lastAttackedBy.move);
+			// Revenge clone
+			let damagedByTarget = pokemon.attackedBy.some(p =>
+				p.source === target && p.damage > 0 && p.thisTurn
+			);
+			if (damagedByTarget) {
+				this.debug('Boosted for getting hit by ' + target);
 				return move.basePower * 2;
 			}
 			return move.basePower;
@@ -3630,7 +3633,8 @@ let BattleMovedex = {
 			this.boost({atk: 2}, pokemon, pokemon, move);
 		},
 	},
-	//Generic attacks start here
+
+	// Generic attacks start here
 	"burningheart": {
 		name: "Burning Heart",
 		id: "burningheart",
@@ -5158,7 +5162,8 @@ let BattleMovedex = {
 			},
 		],
 	},
-	//Status Attacks
+
+	// Status Moves
 	"panicattack": {
 		accuracy: true,
 		basePower: 40,
@@ -5303,23 +5308,24 @@ let BattleMovedex = {
 		onHitField: function (target, source) {
 			let targets = [];
 			let anyAirborne = false;
-			for (let sideSlot = 0; sideSlot < this.sides.length; sideSlot++) {
-				let sideActive = this.sides[sideSlot].active;
-				for (let activeSlot = 0; activeSlot < sideActive.length; activeSlot++) {
-					if (!sideActive[activeSlot] || !sideActive[activeSlot].isActive) continue;
-					if (!sideActive[activeSlot].runImmunity('Ground')) {
-						this.add('-immune', sideActive[activeSlot], '[msg]');
+			for (const side of this.sides) {
+				for (const pokemon of side.active) {
+					if (!pokemon || !pokemon.isActive) continue;
+					if (!pokemon.runImmunity('Ground')) {
+						this.add('-immune', pokemon);
 						anyAirborne = true;
 						continue;
 					}
-					if (sideActive[activeSlot].hasType('Grass') || sideActive[activeSlot].hasType('Nature')) {
+					if (pokemon.hasType('Grass') || pokemon.hasType('Nature')) {
 						// This move affects every grounded Grass-type Pokemon in play.
-						targets.push(sideActive[activeSlot]);
+						targets.push(pokemon);
 					}
 				}
 			}
 			if (!targets.length && !anyAirborne) return false; // Fails when there are no grounded Grass types or airborne Pokemon
-			for (let i = 0; i < targets.length; i++) this.boost({atk: 1, spa: 1}, targets[i], source);
+			for (const pokemon of targets) {
+				this.boost({atk: 1, spa: 1}, pokemon, source);
+			}
 		},
 	},
 	"grassyterrain": {
@@ -5364,7 +5370,7 @@ let BattleMovedex = {
 				}
 			},
 			onEnd: function () {
-				this.eachEvent('Terrain');
+				if (!this.effectData.duration) this.eachEvent('Terrain');
 				this.add('-fieldend', 'move: Grassy Terrain');
 			},
 		},
@@ -5373,25 +5379,25 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "Raises the Defense of all Grass-type and Nature-type Pokemon on the field by 1 stage.",
 		shortDesc: "Raises Defense by 1 of all active Grass and Nature types.",
-		onHitField: function (target, source) {
+		onHitField: function (target, source, move) {
 			let targets = [];
-			for (let sideSlot = 0; sideSlot < this.sides.length; sideSlot++) {
-				let sideActive = this.sides[sideSlot].active;
-				for (let activeSlot = 0; activeSlot < sideActive.length; activeSlot++) {
-					if (sideActive[activeSlot] && sideActive[activeSlot].isActive && (sideActive[activeSlot].hasType('Grass') || sideActive[activeSlot].hasType('Nature'))) {
+			for (const side of this.sides) {
+				for (const pokemon of side.active) {
+					if (pokemon && pokemon.isActive && (pokemon.hasType('Grass') || pokemon.hasType('Nature'))) {
 						// This move affects every Grass-type Pokemon in play.
-						targets.push(sideActive[activeSlot]);
+						targets.push(pokemon);
 					}
 				}
 			}
 			let success = false;
 			for (const target of targets) {
-				success = this.boost({def: 1}, target, source, this.getMove('Flower Shield')) || success;
+				success = this.boost({def: 1}, target, source, move) || success;
 			}
 			return success;
 		},
 	},
-	//Move description changes
+
+	// Move description changes
 	"raindance": {
 		inherit: true,
 		desc: "For 5 turns, the weather becomes Rain Dance. The damage of Water- and Aqua-type attacks is multiplied by 1.5 and the damage of Fire- and Flame-type attacks is multiplied by 0.5 during the effect. Lasts for 8 turns if the user is holding Damp Rock. Fails if the current weather is Rain Dance.",
