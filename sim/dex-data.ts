@@ -137,7 +137,7 @@ export class BasicEffect implements EffectData {
 		this.isUnreleased = data.isUnreleased || false;
 		this.shortDesc = data.shortDesc || '';
 		this.desc = data.desc || '';
-		this.isNonstandard = data.isNonstandard || false;
+		this.isNonstandard = data.isNonstandard || null;
 		this.duration = data.duration;
 		this.noCopy = !!data.noCopy;
 		this.affectsFainted = !!data.affectsFainted;
