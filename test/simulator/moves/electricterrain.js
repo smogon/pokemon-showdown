@@ -43,7 +43,7 @@ describe('Electric Terrain', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: "Jolteon", ability: 'voltabsorb', moves: ['electricterrain', 'spore']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: "Abra", ability: 'magicguard', moves: ['telekinesis', 'spore']}]);
-		battle.makeChoices('move electricterrain', 'move thunderwave');
+		battle.makeChoices('move electricterrain', 'move telekinesis');
 		battle.makeChoices('move spore', 'move spore');
 		assert.strictEqual(battle.p1.active[0].status, 'slp');
 		assert.strictEqual(battle.p2.active[0].status, '');

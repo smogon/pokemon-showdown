@@ -130,7 +130,7 @@ describe('Toxic Poison', function () {
 			[{species: 'Crobat', ability: 'infiltrator', moves: ['toxic', 'whirlwind']}],
 		]);
 		for (let i = 0; i < 4; i++) {
-			battle.makeChoices('move curse', 'move toxic');
+			battle.makeChoices('move counter', 'move toxic');
 		}
 		let pokemon = battle.p1.active[0];
 		pokemon.hp = pokemon.maxhp;
@@ -251,7 +251,7 @@ describe('Toxic Poison [Gen 2]', function () {
 		battle.makeChoices('move splash', 'move splash');
 		battle.makeChoices('move splash', 'move splash');
 		battle.makeChoices('move splash', 'move batonpass');
-		battle.makeChoices('pass', 'switch 2');
+		battle.makeChoices('', 'switch 2');
 		let hp = pokemon.hp;
 		battle.makeChoices('move splash', 'move splash');
 		assert.strictEqual(hp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 4);

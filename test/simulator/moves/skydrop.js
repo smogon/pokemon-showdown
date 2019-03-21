@@ -28,7 +28,7 @@ describe('Sky Drop', function () {
 			{species: "Aggron", ability: 'sturdy', moves: ['bulkup']},
 		]);
 		battle.makeChoices('move skydrop', 'move bulkup');
-		battle.makeChoices('move skydrop', 'switch aggron');
+		assert.trapped(() => battle.makeChoices('move skydrop', 'switch aggron'));
 		assert.strictEqual(battle.p2.active[0].template.speciesid, 'lairon');
 	});
 
@@ -140,7 +140,7 @@ describe('Sky Drop', function () {
 			[{species: "Lairon", ability: 'sturdy', moves: ['bulkup']}, {species: "Aggron", ability: 'sturdy', moves: ['bulkup', 'allyswitch']}],
 		]);
 		battle.makeChoices('move skydrop 1, move splash', 'move bulkup, move bulkup');
-		battle.makeChoices('move skydrop, move splash', 'move bulkup, move allyswitch');
+		battle.makeChoices('move skydrop 1, move splash', 'move bulkup, move allyswitch');
 		assert.strictEqual(battle.p2.active[1].template.speciesid, 'lairon');
 		assert.notStrictEqual(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
 	});
@@ -150,8 +150,8 @@ describe('Sky Drop', function () {
 			[{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}, {species: "Smeargle", ability: 'owntempo', moves: ['splash']}],
 			[{species: "Lairon", ability: 'sturdy', moves: ['bulkup']}, {species: "Aggron", ability: 'sturdy', moves: ['bulkup', 'followme']}],
 		]);
-		battle.makeChoices('move skydrop 1, move splash', 'move bulkup move bulkup');
-		battle.makeChoices('move skydrop, move splash', 'move bulkup, move followme');
+		battle.makeChoices('move skydrop 1, move splash', 'move bulkup, move bulkup');
+		battle.makeChoices('move skydrop 1, move splash', 'move bulkup, move followme');
 		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		assert.strictEqual(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
 	});

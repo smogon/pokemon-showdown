@@ -40,7 +40,7 @@ describe('Shield Dust', function () {
 				}
 			}
 		});
-		battle.makeChoices('teampreview', 'teampreview'); // Team Preview
+		battle.makeChoices('default', 'default'); // Team Preview
 		battle.makeChoices('move flamecharge', 'move cottonguard');
 		assert.statStage(battle.p1.active[0], 'spe', 1);
 		assert.statStage(battle.p2.active[0], 'def', 3); // Clefable did not flinch
@@ -58,7 +58,7 @@ describe('Shield Dust', function () {
 		battle = common.createBattle();
 		battle.join('p1', 'Guest 1', 1, [{species: 'Ledian', ability: 'shielddust', moves: ['poweruppunch', 'strugglebug']}]);
 		battle.join('p2', 'Guest 2', 1, [{species: 'Clefable', ability: 'unaware', moves: ['softboiled']}]);
-		battle.makeChoices('move powerpunch', 'move softboiled');
+		battle.makeChoices('move poweruppunch', 'move softboiled');
 		assert.statStage(battle.p1.active[0], 'atk', 1);
 		battle.makeChoices('move strugglebug', 'move softboiled');
 		assert.statStage(battle.p2.active[0], 'spa', -1);

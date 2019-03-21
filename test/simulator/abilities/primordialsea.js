@@ -56,9 +56,9 @@ describe('Primordial Sea', function () {
 			{species: "Abomasnow", ability: 'snowwarning', moves: ['hail']},
 		]);
 		for (let i = 2; i <= 5; i++) {
-			battle.makeChoices('move helpinghand', 'move ' + i);
+			battle.makeChoices('move helpinghand', 'switch ' + i);
 			assert.ok(battle.isWeather('primordialsea'));
-			battle.makeChoices('move helpinghand', 'move 1');
+			battle.makeChoices('auto', 'auto');
 			assert.ok(battle.isWeather('primordialsea'));
 		}
 	});

@@ -31,7 +31,7 @@ describe('Chatter [Gen 5]', function () {
 			[{species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest']}],
 		]);
 		battle.makeChoices('move splash', 'move substitute');
-		battle.makeChoices('move boomburst', 'move rest');
+		battle.makeChoices('move chatter', 'move rest');
 		assert.strictEqual(battle.p2.active[0].item, 'focussash');
 	});
 });
