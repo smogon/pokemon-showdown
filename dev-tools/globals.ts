@@ -313,7 +313,7 @@ interface EffectData extends EventMethods {
 	effect?: Partial<EffectData>
 	effectType?: string
 	infiltrates?: boolean
-	isNonstandard?: Nonstandard | false
+	isNonstandard?: Nonstandard | null
 	isUnreleased?: boolean
 	/**
 	 * `true` for generic Z-moves like Gigavolt Havoc.
@@ -604,7 +604,7 @@ interface TemplateFormatsData {
 	eventPokemon?: EventInfo[]
 	exclusiveMoves?: string[]
 	gen?: number
-	isNonstandard?: Nonstandard | false
+	isNonstandard?: Nonstandard | null
 	isUnreleased?: boolean
 	maleOnlyHidden?: boolean
 	randomBattleMoves?: string[]

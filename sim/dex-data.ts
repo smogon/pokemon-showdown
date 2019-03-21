@@ -107,7 +107,7 @@ export class BasicEffect implements EffectData {
 	 * that have no use in standard formats: made-up pokemon (CAP),
 	 * glitches (Missingno etc), Pokestar pokemon, etc.
 	 */
-	isNonstandard: Nonstandard | false;
+	isNonstandard: Nonstandard | null;
 	/** The duration of the effect.  */
 	duration?: number;
 	/** Whether or not the effect is ignored by Baton Pass. */
