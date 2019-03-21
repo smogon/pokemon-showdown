@@ -169,8 +169,8 @@ let BattleFormats = {
 			}
 
 			if (item.isNonstandard) {
-				if (item.isNonstandard === 'gen2') {
-					problems.push(item.name + ' does not exist outside of gen 2.');
+				if (item.isNonstandard === 'Past' || item.isNonstandard === 'Future') {
+					problems.push(item.name + ' does not exist in this generation.');
 				} else if (!allowCAP) {
 					problems.push(item.name + ' does not exist.');
 				}

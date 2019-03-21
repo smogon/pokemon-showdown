@@ -43,7 +43,7 @@ let BattleAbilities = {
 	"noability": {
 		shortDesc: "Does nothing.",
 		id: "noability",
-		isNonstandard: "gen2",
+		isNonstandard: "Past",
 		name: "No Ability",
 		rating: 0.1,
 		num: 0,
@@ -4117,7 +4117,7 @@ let BattleAbilities = {
 			}
 		},
 		id: "mountaineer",
-		isNonstandard: true,
+		isNonstandard: "CAP",
 		name: "Mountaineer",
 		rating: 3.5,
 		num: -2,
@@ -4126,7 +4126,7 @@ let BattleAbilities = {
 		desc: "On switch-in, this Pokemon blocks certain status moves and instead uses the move against the original user.",
 		shortDesc: "On switch-in, blocks certain status moves and bounces them back to the user.",
 		id: "rebound",
-		isNonstandard: true,
+		isNonstandard: "CAP",
 		name: "Rebound",
 		onTryHitPriority: 1,
 		onTryHit(target, source, move) {
@@ -4161,7 +4161,7 @@ let BattleAbilities = {
 		desc: "The duration of Gravity, Heal Block, Magic Room, Safeguard, Tailwind, Trick Room, and Wonder Room is increased by 2 turns if the effect is started by this Pokemon.",
 		shortDesc: "When used, Gravity/Heal Block/Safeguard/Tailwind/Room effects last 2 more turns.",
 		id: "persistent",
-		isNonstandard: true,
+		isNonstandard: "CAP",
 		name: "Persistent",
 		// implemented in the corresponding move
 		rating: 3.5,
