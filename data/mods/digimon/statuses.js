@@ -7,15 +7,15 @@ let BattleStatuses = {
 		id: 'panic',
 		num: 0,
 		// this is a volatile status
-		onStart: function (target, source, sourceEffect) {
+		onStart(target, source, sourceEffect) {
 			this.add('-start', target, 'panic');
 			this.effectData.time = 3;
 		},
-		onEnd: function (target) {
+		onEnd(target) {
 			this.add('-end', target, 'panic');
 		},
 		onBeforeMovePriority: 4,
-		onBeforeMove: function (pokemon) {
+		onBeforeMove(pokemon) {
 			pokemon.volatiles.panic.time--;
 			if (!pokemon.volatiles.panic.time) {
 				pokemon.removeVolatile('panic');
@@ -32,15 +32,15 @@ let BattleStatuses = {
 		id: 'dot',
 		num: 0,
 		// this is a volatile status
-		onStart: function (target, source, sourceEffect) {
+		onStart(target, source, sourceEffect) {
 			this.add('-start', target, 'dot');
 			this.effectData.time = 3;
 		},
-		onEnd: function (target) {
+		onEnd(target) {
 			this.add('-end', target, 'dot');
 		},
 		onBeforeMovePriority: 4,
-		onBeforeMove: function (pokemon) {
+		onBeforeMove(pokemon) {
 			pokemon.volatiles.dot.time--;
 			if (!pokemon.volatiles.dot.time) {
 				pokemon.removeVolatile('dot');
@@ -56,15 +56,15 @@ let BattleStatuses = {
 		id: 'bug',
 		num: 0,
 		// this is a volatile status
-		onStart: function (target, source, sourceEffect) {
+		onStart(target, source, sourceEffect) {
 			this.add('-start', target, 'bug');
 			this.effectData.time = 3;
 		},
-		onEnd: function (target) {
+		onEnd(target) {
 			this.add('-end', target, 'bug');
 		},
 		onBeforeMovePriority: 4,
-		onBeforeMove: function (pokemon) {
+		onBeforeMove(pokemon) {
 			pokemon.volatiles.bug.time--;
 			if (!pokemon.volatiles.bug.time) {
 				pokemon.removeVolatile('bug');
@@ -75,7 +75,7 @@ let BattleStatuses = {
 	},
 	stall: {
 	   inherit: true,
-	   onStart: function (target) {
+	   onStart(target) {
 			if (target.side.sideConditions['sidestall']) {
 				this.effectData.counter = target.side.sideConditions['sidestall'].counter * 3;
 			} else {
@@ -87,7 +87,7 @@ let BattleStatuses = {
 		//this is a side condition
 		duration: 2,
 		counterMax: 729,
-		onStart: function (side) {
+		onStart(side) {
 			let counter = 3;
 			// @ts-ignore
 			for (const pokemon of side.active) {
@@ -97,12 +97,12 @@ let BattleStatuses = {
 			}
 			this.effectData.counter = counter;
 		},
-		onStallMove: function (target) {
+		onStallMove(target) {
 			let counter = this.effectData.counter || 1;
 			this.debug("Success chance: " + Math.round(100 / counter) + "%");
 			return this.randomChance(1, counter);
 		},
-		onRestart: function () {
+		onRestart() {
 			// @ts-ignore
 			if (this.effectData.counter < this.effect.counterMax) {
 				this.effectData.counter *= 3;
@@ -113,7 +113,7 @@ let BattleStatuses = {
 
 	raindance: {
 		inherit: true,
-		onWeatherModifyDamage: function (damage, attacker, defender, move) {
+		onWeatherModifyDamage(damage, attacker, defender, move) {
 			if (move.type === 'Water' || move.type === 'Aqua') {
 				this.debug('rain water boost');
 				return this.chainModify(1.5);
@@ -126,14 +126,14 @@ let BattleStatuses = {
 	},
 	primordialsea: {
 		inherit: true,
-		onTryMove: function (target, source, effect) {
+		onTryMove(target, source, effect) {
 			if ((effect.type === 'Fire' || effect.type === 'Flame') && effect.category !== 'Status') {
 				this.debug('Primordial Sea fire suppress');
 				this.add('-fail', source, effect, '[from] Primordial Sea');
 				return null;
 			}
 		},
-		onWeatherModifyDamage: function (damage, attacker, defender, move) {
+		onWeatherModifyDamage(damage, attacker, defender, move) {
 			if (move.type === 'Water' || move.type === 'Aqua') {
 				this.debug('Rain water boost');
 				return this.chainModify(1.5);
@@ -142,7 +142,7 @@ let BattleStatuses = {
 	},
 	sunnyday: {
 		inherit: true,
-		onWeatherModifyDamage: function (damage, attacker, defender, move) {
+		onWeatherModifyDamage(damage, attacker, defender, move) {
 			if (move.type === 'Fire' || move.type === 'Flame') {
 				this.debug('Sunny Day fire boost');
 				return this.chainModify(1.5);
@@ -155,14 +155,14 @@ let BattleStatuses = {
 	},
 	desolateland: {
 		inherit: true,
-		onTryMove: function (target, source, effect) {
+		onTryMove(target, source, effect) {
 			if ((effect.type === 'Water' || effect.type === 'Aqua') && effect.category !== 'Status') {
 				this.debug('Desolate Land water suppress');
 				this.add('-fail', source, effect, '[from] Desolate Land');
 				return null;
 			}
 		},
-		onWeatherModifyDamage: function (damage, attacker, defender, move) {
+		onWeatherModifyDamage(damage, attacker, defender, move) {
 			if (move.type === 'Fire' || move.type === 'Flame') {
 				this.debug('Sunny Day fire boost');
 				return this.chainModify(1.5);
@@ -171,7 +171,7 @@ let BattleStatuses = {
 	},
 	deltastream: {
 		inherit: true,
-		onEffectiveness: function (typeMod, target, type, move) {
+		onEffectiveness(typeMod, target, type, move) {
 			if (move && move.effectType === 'Move' && (type === 'Flying' || type === 'Air') && typeMod > 0) {
 				this.add('-activate', '', 'deltastream');
 				return 0;

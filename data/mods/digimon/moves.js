@@ -13,7 +13,7 @@ let BattleMovedex = {
 		pp: 45,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "bubble", target);
 		},
@@ -36,7 +36,7 @@ let BattleMovedex = {
 		pp: 5,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "ember", target);
 		},
@@ -56,7 +56,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "hornleech", target);
 		},
@@ -77,7 +77,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "chargebeam", target);
 		},
@@ -100,7 +100,7 @@ let BattleMovedex = {
 		pp: 5,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "firespin", target);
 		},
@@ -125,7 +125,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "ember", target);
 		},
@@ -148,7 +148,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "spikecannon", target);
 			this.add('-anim', source, "mefirst", target);
@@ -170,7 +170,7 @@ let BattleMovedex = {
 		pp: 5,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "toxic", target);
 		},
@@ -190,7 +190,7 @@ let BattleMovedex = {
 		pp: 2,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "fling", target);
 		},
@@ -215,7 +215,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "chargebeam", target);
 		},
@@ -235,7 +235,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "willowisp", target);
 		},
@@ -258,7 +258,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "brickbreak", target);
 		},
@@ -281,7 +281,7 @@ let BattleMovedex = {
 		pp: 5,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "razorshell", target);
 		},
@@ -301,7 +301,7 @@ let BattleMovedex = {
 		pp: 5,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "smackdown", target);
 		},
@@ -326,7 +326,7 @@ let BattleMovedex = {
 		pp: 5,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "electroweb", target);
 		},
@@ -346,14 +346,14 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "watergun", target);
 		},
 		flags: {protect: 1, mirror: 1},
 		secondary: {
 			chance: 75,
-			onHit: function (target, source, move) {
+			onHit(target, source, move) {
 				move.forceSwitch = true;
 			},
 		},
@@ -371,7 +371,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "hornattack", target);
 		},
@@ -391,7 +391,7 @@ let BattleMovedex = {
 		pp: 5,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "growl", target);
 			this.add('-anim', source, "bubble", target);
@@ -415,7 +415,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "poisonjab", target);
 		},
@@ -438,7 +438,7 @@ let BattleMovedex = {
 		pp: 5,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "present", target);
 		},
@@ -463,7 +463,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "doubleslap", target);
 		},
@@ -483,7 +483,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "psybeam", target);
 		},
@@ -506,7 +506,7 @@ let BattleMovedex = {
 		pp: 2,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "tailwind", target);
 		},
@@ -531,7 +531,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "boneclub", target);
 		},
@@ -554,7 +554,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "iceball", target);
 		},
@@ -573,7 +573,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "iceball", target);
 		},
@@ -596,7 +596,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "shockwave", target);
 		},
@@ -615,7 +615,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "dragonbreath", target);
 		},
@@ -638,7 +638,7 @@ let BattleMovedex = {
 		pp: 5,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "spite", target);
 		},
@@ -663,13 +663,13 @@ let BattleMovedex = {
 		pp: 5,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "aeroblast", target);
 		},
 		flags: {protect: 1, mirror: 1},
 		secondary: null,
-		onAfterMoveSecondarySelf: function (pokemon, target, move) {
+		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (this.random(100) < 50) this.boost({spe: 2}, pokemon, pokemon, move);
 		},
 		target: "allAdjacentFoes",
@@ -686,13 +686,13 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "glare", target);
 		},
 		flags: {protect: 1, mirror: 1, reflectable: 1, authentic: 1},
 		volatileStatus: 'flinch',
-		onTryHit: function (target, source, move) {
+		onTryHit(target, source, move) {
 			//this is implemented solely to have a failure message. since flinch doesn't already have one
 			if (!this.willMove(target)) return false;
 			this.add('-message', target.name + ' is disrupted!');
@@ -711,7 +711,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "lusterpurge", target);
 		},
@@ -728,7 +728,7 @@ let BattleMovedex = {
 	"evilcharm": {
 		accuracy: 90,
 		basePower: 0,
-		damageCallback: function (pokemon, target) {
+		damageCallback(pokemon, target) {
 			return this.clampIntRange(Math.floor(target.hp / 2), 1);
 		},
 		category: "Special",
@@ -739,7 +739,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "nightshade", target);
 		},
@@ -759,13 +759,13 @@ let BattleMovedex = {
 		pp: 5,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "flameburst", target);
 		},
 		flags: {protect: 1, mirror: 1},
 		secondary: null,
-		onAfterMoveSecondarySelf: function (pokemon, target, move) {
+		onAfterMoveSecondarySelf(pokemon, target, move) {
 			this.boost({spd: 1}, pokemon, pokemon, move);
 		},
 		target: "allAdjacentFoes",
@@ -783,7 +783,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 1,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "lowkick", target);
 		},
@@ -806,7 +806,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "dragonpulse", target);
 		},
@@ -826,7 +826,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "spikecannon", target);
 			this.add('-anim', source, "spikecannon", target);
@@ -850,7 +850,7 @@ let BattleMovedex = {
 		pp: 5,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "blastburn", target);
 		},
@@ -873,7 +873,7 @@ let BattleMovedex = {
 		pp: 2,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "nightslash", target);
 			this.add('-anim', source, "mefirst", target);
@@ -895,7 +895,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "supersonic", target);
 		},
@@ -918,7 +918,7 @@ let BattleMovedex = {
 		pp: 2,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "powergem", target);
 		},
@@ -943,7 +943,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "geargrind", target);
 		},
@@ -965,7 +965,7 @@ let BattleMovedex = {
 		pp: 5,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "blueflare", target);
 		},
@@ -988,7 +988,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "icepunch", target);
 		},
@@ -1011,7 +1011,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "roost", source);
 			this.add('-anim', source, "megapunch", target);
@@ -1032,7 +1032,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "sacredfire", target);
 		},
@@ -1058,7 +1058,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 1,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "playrough", target);
 		},
@@ -1081,7 +1081,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "uproar", target);
 		},
@@ -1104,7 +1104,7 @@ let BattleMovedex = {
 		pp: 5,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "nastyplot", source);
 			this.add('-anim', source, "smog", target);
@@ -1112,7 +1112,7 @@ let BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		secondary: {
 			chance: 30,
-			onHit: function (target, source) {
+			onHit(target, source) {
 				if (this.random(2) === 0) {
 					target.addVolatile('confusion', source);
 				} else {
@@ -1134,7 +1134,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "fireblast", target);
 		},
@@ -1154,7 +1154,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "gearup", source);
 			this.add('-anim', source, "twineedle", target);
@@ -1175,7 +1175,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "dazzlinggleam", target);
 		},
@@ -1200,7 +1200,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "icepunch", target);
 		},
@@ -1220,7 +1220,7 @@ let BattleMovedex = {
 		pp: 2,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "hail", target);
 			this.add('-anim', source, "cut", target);
@@ -1243,7 +1243,7 @@ let BattleMovedex = {
 		pp: 5,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "iciclecrash", target);
 		},
@@ -1268,7 +1268,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "shellsmash", source);
 			this.add('-anim', source, "pinmissile", target);
@@ -1289,7 +1289,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "shadowbone", target);
 		},
@@ -1310,7 +1310,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "electroball", target);
 		},
@@ -1330,7 +1330,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "revelationdance", target);
 		},
@@ -1351,7 +1351,7 @@ let BattleMovedex = {
 		pp: 2,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "crunch", target);
 		},
@@ -1373,7 +1373,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "megapunch", target);
 		},
@@ -1398,7 +1398,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "furyswipes", target);
 		},
@@ -1419,7 +1419,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "firepunch", target);
 		},
@@ -1445,7 +1445,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 1,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "cut", target);
 		},
@@ -1468,7 +1468,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "bonemerang", target);
 		},
@@ -1489,7 +1489,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "lavaplume", target);
 		},
@@ -1509,7 +1509,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "clearsmog", target);
 			this.add('-anim', source, "poisongas", target);
@@ -1533,7 +1533,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "magnitude", target);
 		},
@@ -1556,7 +1556,7 @@ let BattleMovedex = {
 		pp: 5,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "acidarmor", source);
 			this.add('-anim', source, "bodyslam", target);
@@ -1580,7 +1580,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "leaftornado", target);
 		},
@@ -1603,7 +1603,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "geargrind", target);
 		},
@@ -1625,7 +1625,7 @@ let BattleMovedex = {
 		pp: 5,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "sludgebomb", target);
 		},
@@ -1650,7 +1650,7 @@ let BattleMovedex = {
 		id: "pummelwhack",
 		flags: {protect: 1, mirror: 1},
 		secondary: null,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "shadowpunch", target);
 		},
@@ -1667,7 +1667,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "50% chance of raising the user's Attack and Special Attack  by 2.",
 		shortDesc: "50% chance of raising the user's Atk and Sp.Atk by 2",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "roost", source);
 			this.add('-anim', source, "flameburst", target);
@@ -1693,7 +1693,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "Forces the target to switch to a random ally.",
 		shortDesc: "Forces the target to switch to a random ally.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "rockpolish", source);
 			this.add('-anim', source, "acid", target);
@@ -1715,7 +1715,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "50% chance to lower the foe(s) accuracy by 2. Hits all adjacent foes.",
 		shortDesc: "50% chance to lower the foe(s) accuracy by 2.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "smog", target);
 		},
@@ -1738,7 +1738,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "Dots the Target.",
 		shortDesc: "Dots the Target.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "anchorshot", target);
 		},
@@ -1759,7 +1759,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "Raises the user’s Speed by 1. Hits adjacent foes.",
 		shortDesc: "Raises the user’s Speed by 1.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "ominouswind", target);
 		},
@@ -1768,7 +1768,7 @@ let BattleMovedex = {
 		pp: 5,
 		noPPBoosts: true,
 		secondary: null,
-		onAfterMoveSecondarySelf: function (pokemon, target, move) {
+		onAfterMoveSecondarySelf(pokemon, target, move) {
 			this.boost({spe: 1}, pokemon, pokemon, move);
 		},
 	},
@@ -1782,7 +1782,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "30% chance to flinch the target.",
 		shortDesc: "30% chance to flinch the target.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "bugbuzz", target);
 		},
@@ -1805,7 +1805,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "100% chance to lower the target’s Speed by 1.",
 		shortDesc: "Lowers the target’s Speed by 1.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "watershuriken", target);
 		},
@@ -1828,13 +1828,13 @@ let BattleMovedex = {
 		target: "allAdjacent",
 		desc: "20% chance to force the foe(s) to randomly switch. Hits all adjacent foes.",
 		shortDesc: "20% chance to force the foe(s) to randomly switch.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "hydropump", target);
 		},
 		secondary: {
 			chance: 20,
-			onHit: function (target, source, move) {
+			onHit(target, source, move) {
 				move.forceSwitch = true;
 			},
 		},
@@ -1853,7 +1853,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "Priority +1, does not check accuracy.",
 		shortDesc: "Priority +1, does not check accuracy.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "moonblast", target);
 		},
@@ -1873,7 +1873,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "OHKOs the target. Fails if user is a lower level.",
 		shortDesc: "OHKOs the target. Fails if user is a lower level.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "hex", target);
 		},
@@ -1894,7 +1894,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "100% chance to lower the target’s Speed by 2.",
 		shortDesc: "Lowers the target’s Speed by 2.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "acid", target);
 		},
@@ -1917,7 +1917,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "User cannot move next turn.",
 		shortDesc: "User cannot move next turn.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "dragonpulse", target);
 		},
@@ -1940,7 +1940,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "30% chance to paralyze the foe(s). Hits all adjacent foes.",
 		shortDesc: "30% chance to paralyze the foe(s).",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "seedflare", target);
 		},
@@ -1963,7 +1963,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "High critical hit ratio.",
 		shortDesc: "High critical hit ratio.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "fireblast", target);
 		},
@@ -1984,7 +1984,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "Priority +1, high critical hit ratio.",
 		shortDesc: "Priority +1, high critical hit ratio.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "moonblast", target);
 		},
@@ -2005,7 +2005,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "100% chance to lower the foe(s) evasion by 2. Hits all adjacent foes.",
 		shortDesc: "Lowers the foe(s) evasion by 2.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "smog", target);
 		},
@@ -2028,7 +2028,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "50% chance to lower the target’s Speed and accuracy by 2.",
 		shortDesc: "50% chance to lower the target’s Speed and accuracy by 2.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "grasspledge", target);
 		},
@@ -2051,7 +2051,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "30% chance to paralyze the target.",
 		shortDesc: "30% chance to paralyze the target.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "thunderbolt", target);
 		},
@@ -2074,7 +2074,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "High critical hit ratio.",
 		shortDesc: "High critical hit ratio.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "charge", source);
 			this.add('-anim', source, "secretsword", target);
@@ -2096,7 +2096,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "Ignores target’s stat changes. This move does not check accuracy.",
 		shortDesc: "Ignores target’s stat changes. This move does not check accuracy.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "extremeevoboost", source);
 			this.add('-anim', source, "spikecannon", target);
@@ -2119,7 +2119,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "User gains 50% HP dealt. 50% chance to confuse. 1.3 HP if Big Root is held by the user.",
 		shortDesc: "User gains 50% HP dealt. 50% chance to confuse.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "bite", target);
 			this.add('-anim', source, "drainingkiss", target);
@@ -2144,7 +2144,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "100% chance to raise the user’s Speed by 2.",
 		shortDesc: "Raises the user’s Speed by 2.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "cosmicpower", source);
 			this.add('-anim', source, "highjumpkick", target);
@@ -2170,7 +2170,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "100% chance to raise the user’s Attack by 2.",
 		shortDesc: "Raises the user’s Atk by 2.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "hail", target);
 			this.add('-anim', source, "firepunch", target);
@@ -2191,7 +2191,7 @@ let BattleMovedex = {
 		id: "nightmaresyndrome",
 		priority: 0,
 		basePower: 0,
-		damageCallback: function (pokemon, target) {
+		damageCallback(pokemon, target) {
 			return this.clampIntRange(Math.floor(target.hp / 2), 1);
 		},
 		category: "Physical",
@@ -2199,7 +2199,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "Halves target’s HP. 50% chance to sleep target.",
 		shortDesc: "Halves target’s HP. 50% chance to sleep target.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "topsyturvy", target);
 			this.add('-anim', source, "darkvoid", target);
@@ -2223,7 +2223,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "No additional effect.",
 		shortDesc: "No additional effect.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "corkscrewcrash", target);
 		},
@@ -2243,7 +2243,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "Ignores foe(s) stat changes. 30% paralyze chance. Hits all adjacent foes.",
 		shortDesc: "Ignores foe(s) stat changes. 30% paralyze chance.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "spotlight", target);
 			this.add('-anim', source, "snarl", target);
@@ -2269,7 +2269,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "100% chance of raising the user’s Speed by 1. Hits all adjacent foes.",
 		shortDesc: "Raises user’s Speed by 1.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "sunsteelstrike", target);
 		},
@@ -2278,7 +2278,7 @@ let BattleMovedex = {
 		pp: 5,
 		noPPBoosts: true,
 		secondary: null,
-		onAfterMoveSecondarySelf: function (pokemon, target, move) {
+		onAfterMoveSecondarySelf(pokemon, target, move) {
 			this.boost({spe: 1}, pokemon, pokemon, move);
 		},
 	},
@@ -2292,7 +2292,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "Causes the foe(s) to be buggy. Hits all adjacent foes.",
 		shortDesc: "Causes the foe(s) to be buggy.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "clangingscales", target);
 		},
@@ -2315,7 +2315,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "Hits all adjacent foes. The user faints.",
 		shortDesc: "Hits all adjacent foes. The user faints.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "explosion", target);
 		},
@@ -2336,7 +2336,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "80% chance to flinch the target.",
 		shortDesc: "80% chance to flinch the target.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "hail", target);
 			this.add('-anim', source, "icepunch", target);
@@ -2360,7 +2360,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "Priority +1.",
 		shortDesc: "Priority +1",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "petalblizzard", target);
 		},
@@ -2380,7 +2380,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "25% chance to OHKO. Fails if user is lower level.",
 		shortDesc: "25% chance to OHKO. Fails if user is lower level.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "swordsdance", source);
 			this.add('-anim', source, "spacialrend", target);
@@ -2391,7 +2391,7 @@ let BattleMovedex = {
 		noPPBoosts: true,
 		secondary: {
 			chance: 25,
-			onHit: function (target, source, move) {
+			onHit(target, source, move) {
 				//Preliminary implementation; probably won't interact perfectly with all mechanics
 				if (target.level > source.level) return;
 				this.add('-ohko');
@@ -2411,7 +2411,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "octazooka", target);
 			this.add('-anim', source, "ominouswind", target);
@@ -2430,7 +2430,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "Does not check accuracy.",
 		shortDesc: "Does not check accuracy.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "dynamicpunch", target);
 		},
@@ -2450,7 +2450,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "High critical hit ratio.",
 		shortDesc: "High critical hit ratio.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "darkpulse", target);
 			this.add('-anim', source, "foulplay", target);
@@ -2472,7 +2472,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "Ignores target's stat changes.",
 		shortDesc: "Ignores target's stat changes.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "paraboliccharge", target);
 			this.add('-anim', source, "voltswitch", target);
@@ -2495,7 +2495,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "No additional effect.",
 		shortDesc: "No additional effect.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "thunder", target);
 		},
@@ -2515,7 +2515,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "80% chance to paralyze the target.",
 		shortDesc: "80% chance to paralyze the target.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "crosschop", target);
 		},
@@ -2538,7 +2538,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "Hits 2-4 times in one turn.",
 		shortDesc: "Hits 2-4 times in one turn.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "smartstrike", target);
 		},
@@ -2559,7 +2559,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "No additional effect.",
 		shortDesc: "No additional effect.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "infernooverdrive", target);
 		},
@@ -2579,7 +2579,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "Power doubles if user is damaged by the target.",
 		shortDesc: "Power doubles if user is damaged by the target.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "moongeistbeam", target);
 		},
@@ -2588,7 +2588,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		pp: 5,
 		noPPBoosts: true,
-		basePowerCallback: function (pokemon, target, move) {
+		basePowerCallback(pokemon, target, move) {
 			// Revenge clone
 			let damagedByTarget = pokemon.attackedBy.some(p =>
 				p.source === target && p.damage > 0 && p.thisTurn
@@ -2610,7 +2610,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "Does not check accuracy.",
 		shortDesc: "Does not check accuracy.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "magnetbomb", target);
 		},
@@ -2630,7 +2630,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "50% chance to raise Defense by 2. Hits all adjacent foes.",
 		shortDesc: "50% chance to raise Defense by 2.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "dragonascent", target);
 		},
@@ -2639,7 +2639,7 @@ let BattleMovedex = {
 		pp: 5,
 		noPPBoosts: true,
 		secondary: null,
-		onAfterMoveSecondarySelf: function (pokemon, target, move) {
+		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (this.random(100) < 50) this.boost({def: 2}, pokemon, pokemon, move);
 		},
 	},
@@ -2653,7 +2653,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "Ignores target’s stat changes. 50% confuse chance.",
 		shortDesc: "Ignores target’s stat changes. 50% confuse chance.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "charm", target);
 			this.add('-anim', source, "miracleeye", target);
@@ -2679,7 +2679,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "User recovers 50% of the damage dealt to foes. Hits all adjacent foes. 1.3 HP if Big Root is held by the user.",
 		shortDesc: "User recovers 50% of the damage dealt to foes.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "octazooka", target);
 			this.add('-anim', source, "drainingkiss", target);
@@ -2701,7 +2701,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "Priority +1.",
 		shortDesc: "Priority +1.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "psychoboost", target);
 		},
@@ -2721,7 +2721,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "30% chance to lower foe(s) Attack, Special Attack and Special Defense by 2. 10% chance of sleep. Hits all adjacent foes and is a sound move.",
 		shortDesc: "30% chance to lower foe(s) Atk, Sp.Atk, Sp.Def by 2. 10% chance of sleep.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "boomburst", target);
 		},
@@ -2755,7 +2755,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "100% chance to lower the target’s Defense by 2.",
 		shortDesc: "Lowers the target’s Defense by 2.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "clangoroussoulblaze", target);
 		},
@@ -2778,7 +2778,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "Hits adjacent foes. The user faints. Hits all adjacent foes.",
 		shortDesc: "Hits adjacent foes. The user faints.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "imprison", source);
 			this.add('-anim', source, "explosion", target);
@@ -2800,7 +2800,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "50% chance to dot the target.",
 		shortDesc: "50% chance to dot the target.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "lovelykiss", target);
 			this.add('-anim', source, "dracometeor", target);
@@ -2824,7 +2824,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "No additional effect. Hits all adjacent foes.",
 		shortDesc: "No additional effect.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "eruption", target);
 		},
@@ -2844,7 +2844,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "Ignores target’s stat changes. 50% confuse chance.",
 		shortDesc: "Ignores target’s stat changes. 50% confuse chance.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "lovelykiss", target);
 			this.add('-anim', source, "darkvoid", target);
@@ -2870,7 +2870,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "No additional effect.",
 		shortDesc: "No additional effect.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "grudge", source);
 			this.add('-anim', source, "icebeam", target);
@@ -2891,7 +2891,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "100% chance to raise the user’s Speed by 2.",
 		shortDesc: "Raises the user’s Speed by 2.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "cosmicpower", source);
 			this.add('-anim', source, "block", target);
@@ -2917,7 +2917,7 @@ let BattleMovedex = {
 		target: "allAdjacent",
 		desc: "No additional effect. Hits adjacent monsters.",
 		shortDesc: "No additional effect.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "waterspout", target);
 		},
@@ -2937,7 +2937,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "Ignores the target’s stat stage changes.",
 		shortDesc: "Ignores the target’s stat stage changes.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "plasmafists", target);
 		},
@@ -2959,7 +2959,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "Hits 2-5 times in one turn.",
 		shortDesc: "Hits 2-5 times in one turn.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "swordsdance", source);
 			this.add('-anim', source, "sacredsword", target);
@@ -2981,7 +2981,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "Does not check accuracy.",
 		shortDesc: "Does not check accuracy.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "gearup", source);
 			this.add('-anim', source, "mistball", target);
@@ -3002,7 +3002,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "Ignores the target’s stat stage changes.",
 		shortDesc: "Ignores the target’s stat stage changes.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "tailwhip", target);
 			this.add('-anim', source, "photongeyser", target);
@@ -3025,7 +3025,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "30% chance to confuse the target.",
 		shortDesc: "30% chance to confuse the target.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "tailwhip", target);
 			this.add('-anim', source, "secretsword", target);
@@ -3049,7 +3049,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "Ignores target’s stat changes. High critical hit ratio.",
 		shortDesc: "Ignores target’s stat changes. High critical hit ratio.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "10000000voltthunderbolt", target);
 		},
@@ -3072,7 +3072,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "High critical hit ratio. Hits all adjacent foes.",
 		shortDesc: "High critical hit ratio.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "gigavolthavoc", target);
 		},
@@ -3093,7 +3093,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "50% chance to put the target to sleep.",
 		shortDesc: "50% chance to put the target to sleep.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "sludgewave", target);
 			this.add('-anim', source, "darkvoid", target);
@@ -3117,7 +3117,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "No additional effect.",
 		shortDesc: "No additional effect.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "spectralthief", target);
 		},
@@ -3137,7 +3137,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "50% chance to confuse the target.",
 		shortDesc: "50% chance to confuse the target.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "prismaticlaser", target);
 		},
@@ -3160,7 +3160,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "Does not check accuracy",
 		shortDesc: "Does not check accuracy",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "zapcannon", target);
 		},
@@ -3180,7 +3180,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "80% chance to flinch the target.",
 		shortDesc: "80% chance to flinch the target.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "gearup", source);
 			this.add('-anim', source, "zapcannon", target);
@@ -3204,7 +3204,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "Ignores stat changes. User gains 50% HP dealt. 1.3 HP if Big Root is held by the user.",
 		shortDesc: "Ignores stat changes. User gains 50% HP dealt.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "refresh", source);
 			this.add('-anim', source, "neverendingnightmare", target);
@@ -3228,7 +3228,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "Hits adjacent foe(s) 1-2 times in one turn. Hits all adjacent foes.",
 		shortDesc: "Hits adjacent foe(s) 1-2 times in one turn.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "coreenforcer", target);
 		},
@@ -3249,7 +3249,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "No additional effect. Hits all adjacent foes.",
 		shortDesc: "No additional effect.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "skillswap", target);
 			this.add('-anim', source, "firespin", target);
@@ -3270,7 +3270,7 @@ let BattleMovedex = {
 		target: "allySide",
 		desc: "Cures allies status. Heals allies by 50% max HP.",
 		shortDesc: "Cures allies status. Heals allies by 50% max HP.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "aquaring", source);
 			this.add('-anim', source, "attract", target);
@@ -3280,7 +3280,7 @@ let BattleMovedex = {
 		pp: 5,
 		noPPBoosts: true,
 		secondary: null,
-		onHitSide: function (side) {
+		onHitSide(side) {
 			let didSomething = false;
 			for (let pokemon of side.active) {
 				if (pokemon && this.heal(pokemon.maxhp / 2, pokemon)) didSomething = true;
@@ -3299,7 +3299,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "100% chance to flinch the target, is a sound move.",
 		shortDesc: "Flinches the target.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "spotlight", target);
 			this.add('-anim', source, "roaroftime", target);
@@ -3323,7 +3323,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "80% chance to flinch the foe(s). Hits 2 times. Hits all adjacent foes.",
 		shortDesc: "80% chance to flinch the foe(s). Hits 2 times.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "blizzard", target);
 			this.add('-anim', source, "sheercold", target);
@@ -3348,7 +3348,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "100% chance to lower the target's Special Defense by 2.",
 		shortDesc: "Lowers the target's Sp.Def by 2.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "originpulse", target);
 		},
@@ -3371,7 +3371,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "100% chance to raise the user's Special Attack by 2.",
 		shortDesc: "Raises the user's Sp.Atk by 2.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "lightofruin", target);
 		},
@@ -3396,7 +3396,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "Hits adjacent foes. Heals allies by 50% max HP. Hits all adjacent foes, 1.3 HP if Big Root is held by the user.",
 		shortDesc: "Hits adjacent foes. Heals allies by 50% max HP.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "doomdesire", target);
 			this.add('-anim', source, "moonlight", source);
@@ -3406,7 +3406,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		secondary: null,
-		onAfterMoveSecondarySelf: function (source, target, move) {
+		onAfterMoveSecondarySelf(source, target, move) {
 			for (const allyActive of source.side.active) {
 				if (allyActive) this.heal(allyActive.maxhp / 2, allyActive);
 			}
@@ -3422,7 +3422,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "Forces the target to switch to a random ally.",
 		shortDesc: "Forces the target to switch to a random ally.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "pulverizingpancake", target);
 		},
@@ -3443,7 +3443,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "Hits foe(s) 3 times. Lowers foe(s) Defense by 1. Hits all adjacent foes.",
 		shortDesc: "Hits foe(s) 3 times. Lowers foe(s) Defense by 1.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "sinisterarrowraid", target);
 		},
@@ -3453,7 +3453,7 @@ let BattleMovedex = {
 		noPPBoosts: true,
 		multihit: 3,
 		secondary: null,
-		onAfterMoveSecondary: function (target, source, move) {
+		onAfterMoveSecondary(target, source, move) {
 			this.boost({def: -1});
 		},
 	},
@@ -3467,7 +3467,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "20% chance to paralyze or sleep or panic the target.",
 		shortDesc: "20% chance to paralyze or sleep or panic target.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "moonlight", source);
 			this.add('-anim', source, "hyperbeam", target);
@@ -3478,7 +3478,7 @@ let BattleMovedex = {
 		noPPBoosts: true,
 		secondary: {
 			chance: 20,
-			onHit: function (target) {
+			onHit(target) {
 				switch (this.random(3)) {
 				case 0:
 					target.trySetStatus('par');
@@ -3502,7 +3502,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "Priority +1, User gains 50% HP dealt. 50% chance to paralyze. 1.3 HP if Big Root is held by the user.",
 		shortDesc: "Priority +1, User gains 50% HP dealt. 50% chance to paralyze.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "crosspoison", target);
 			this.add('-anim', source, "paraboliccharge", target);
@@ -3527,7 +3527,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "Hits 2 times in one turn. High critical hit ratio, is a sound move.",
 		shortDesc: "Hits 2 times in one turn. High critical hit ratio.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "honeclaws", source);
 			this.add('-anim', source, "crushclaw", target);
@@ -3550,7 +3550,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "Hits adjacent foe(s) 7 times in one turn. Hits all adjacent foes.",
 		shortDesc: "Hits adjacent foe(s) 7 times in one turn.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "hiddenpower", target);
 			this.add('-anim', source, "judgment", target);
@@ -3572,7 +3572,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "User gains 50% HP dealt. 100% chance to poison, 1.3 HP if Big Root is held by the user.",
 		shortDesc: "User gains 50% HP dealt, poisons the target.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "grudge", source);
 			this.add('-anim', source, "thousandwaves", target);
@@ -3597,7 +3597,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "100% chance to flinch the target.",
 		shortDesc: "Flinches the target.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "icehammer", target);
 		},
@@ -3620,7 +3620,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "100% chance to raise Attack by 2. Hits all adjacent foes.",
 		shortDesc: "100% chance to raise Atk by 2.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "fusionflare", target);
 		},
@@ -3629,7 +3629,7 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		secondary: null,
-		onAfterMoveSecondarySelf: function (pokemon, target, move) {
+		onAfterMoveSecondarySelf(pokemon, target, move) {
 			this.boost({atk: 2}, pokemon, pokemon, move);
 		},
 	},
@@ -3645,7 +3645,7 @@ let BattleMovedex = {
 		target: "self",
 		desc: "Raises the user’s attack by 2.",
 		shortDesc: "Raises the user’s attack by 2.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "tailglow", target);
 		},
@@ -3665,7 +3665,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "Priority +1.",
 		shortDesc: "Priority +1",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "heatwave", target);
 		},
@@ -3684,7 +3684,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "Ignores target's stat changes.",
 		shortDesc: "Ignores target's stat changes.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "flamecharge", target);
 		},
@@ -3705,7 +3705,7 @@ let BattleMovedex = {
 		target: "self",
 		desc: "Priority +4. Protects user from moves. Contact: loses 1/8 max hp unless Fire/Flame type.",
 		shortDesc: "Protects user from moves. Contact: loses 1/8 max hp unless Fire/Flame type.",
-		onPrepareHit: function (pokemon, source, move) {
+		onPrepareHit(pokemon, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "firespin", source);
 			this.add('-anim', source, "protect", source);
@@ -3717,18 +3717,18 @@ let BattleMovedex = {
 		secondary: null,
 		stallingMove: true,
 		volatileStatus: 'firewall',
-		onHit: function (pokemon) {
+		onHit(pokemon) {
 			pokemon.addVolatile('stall');
 			this.add('-message', pokemon.name + ' is hidden behind a firewall!');
 		},
 		effect: {
 			duration: 1,
 			//this is a side condition
-			onStart: function (target, source) {
+			onStart(target, source) {
 				this.add('-singleturn', source, 'move: Firewall');
 			},
 			onTryHitPriority: 3,
-			onTryHit: function (target, source, move) {
+			onTryHit(target, source, move) {
 				if (!move.flags['protect']) {
 					if (move.isZ) move.zBrokeProtect = true;
 					return;
@@ -3758,7 +3758,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "20% chance to panic the target.",
 		shortDesc: "20% chance to panic the target.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "burnup", target);
 		},
@@ -3780,7 +3780,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "No additional effect.",
 		shortDesc: "No additional effect.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "vcreate", target);
 		},
@@ -3799,7 +3799,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "No additional effect.",
 		shortDesc: "No additional effect.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "solarbeam", target);
 		},
@@ -3818,7 +3818,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "Priority +1, 20% chance to flinch the target.",
 		shortDesc: "Priority +1, 20% chance to flinch the target.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "iceshard", target);
 		},
@@ -3840,7 +3840,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "100% chance to raise Speed by 2. Hits all adjacent foes.",
 		shortDesc: "Raises Speed by 2.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "dive", target);
 		},
@@ -3848,7 +3848,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		pp: 20,
 		secondary: null,
-		onAfterMoveSecondarySelf: function (pokemon, target, move) {
+		onAfterMoveSecondarySelf(pokemon, target, move) {
 			this.boost({spe: 1}, pokemon, pokemon, move);
 		},
 	},
@@ -3862,7 +3862,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "15% chance to flinch the foe(s). Hits all adjacent foes.",
 		shortDesc: "15% chance to flinch the foe(s).",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "hail", target);
 			this.add('-anim', source, "avalanche", target);
@@ -3886,7 +3886,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "20% chance to dot the target.",
 		shortDesc: "20% chance to dot the target.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "freezedry", target);
 		},
@@ -3907,7 +3907,7 @@ let BattleMovedex = {
 		target: "allAdjacent",
 		desc: "25% chance to lower adjacent monsters Speed by 1. Hits all adjacent monsters.",
 		shortDesc: "25% chance to lower adjacent monsters Speed by 1.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "surf", target);
 		},
@@ -3929,7 +3929,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "35% chance to flinch the target.",
 		shortDesc: "35% chance to flinch the target.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "sheercold", target);
 		},
@@ -3951,13 +3951,13 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "15% chance to dot the foe(s). Must recharge, hits all adjacent foes.",
 		shortDesc: "15% chance to dot the foe(s). Must recharge.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "iceburn", target);
 		},
 		flags: {protect: 1, mirror: 1, recharge: 1},
 		accuracy: 95,
-		onAfterMoveSecondarySelf: function (pokemon, target, move) {
+		onAfterMoveSecondarySelf(pokemon, target, move) {
 			pokemon.addVolatile('mustrecharge');
 		},
 		pp: 10,
@@ -3976,7 +3976,7 @@ let BattleMovedex = {
 		target: "allySide",
 		desc: "Raises user's and allies speed by 1.",
 		shortDesc: "Raises user's and allies speed by 1.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "magnetrise", target);
 		},
@@ -3984,7 +3984,7 @@ let BattleMovedex = {
 		flags: {},
 		pp: 15,
 		accuracy: true,
-		onHitSide: function (side) {
+		onHitSide(side) {
 			for (let pokemon of side.active) {
 				if (pokemon) this.boost({spe: 1}, pokemon);
 			}
@@ -4001,7 +4001,7 @@ let BattleMovedex = {
 		desc: "Priority +1. 10% chance to flinch the target.",
 		shortDesc: "Priority +1. 10% chance to flinch the target.",
 		pp: 30,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "spark", target);
 		},
@@ -4023,7 +4023,7 @@ let BattleMovedex = {
 		desc: "No additional effect.",
 		shortDesc: "No additional effect.",
 		pp: 35,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "airslash", target);
 		},
@@ -4041,7 +4041,7 @@ let BattleMovedex = {
 		target: "allAdjacent",
 		desc: "10% chance to confuse adjacent monsters.",
 		shortDesc: "10% chance to confuse adjacent monsters.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "featherdance", target);
 			this.add('-anim', source, "megapunch", target);
@@ -4065,7 +4065,7 @@ let BattleMovedex = {
 		desc: "Priority -1. 25% chance to lower target’s Speed by 1.",
 		shortDesc: "Priority -1, 25% chance to lower target’s Speed by 1.",
 		pp: 15,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "discharge", target);
 		},
@@ -4086,7 +4086,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "10% chance to flinch the target.",
 		shortDesc: "10% chance to flinch the target.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "boltstrike", target);
 		},
@@ -4109,7 +4109,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "Does not check accuracy.",
 		shortDesc: "Does not check accuracy.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "stokedsparksurfer", target);
 		},
@@ -4127,7 +4127,7 @@ let BattleMovedex = {
 		target: "allySide",
 		desc: "Cures user and allies status. Raises user and allies Special Defense by 1.",
 		shortDesc: "Cures user and allies status. Raises user and allies Sp.Def by 1.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "mudsport", target);
 		},
@@ -4135,7 +4135,7 @@ let BattleMovedex = {
 		accuracy: true,
 		pp: 10,
 		secondary: null,
-		onHitSide: function (side) {
+		onHitSide(side) {
 			for (let pokemon of side.active) {
 				if (pokemon) {
 					this.boost({spd: 1}, pokemon);
@@ -4155,7 +4155,7 @@ let BattleMovedex = {
 		target: "self",
 		desc: "Raises the user’s Defense by 2 and Attack by 1.",
 		shortDesc: "Raises the user’s Def by 2 and Atk by 1.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "coil", target);
 		},
@@ -4172,7 +4172,7 @@ let BattleMovedex = {
 		id: "charmperfume",
 		flags: {protect: 1, mirror: 1},
 		basePower: 45,
-		basePowerCallback: function (pokemon, target, move) {
+		basePowerCallback(pokemon, target, move) {
 			if (target.status === 'psn' || target.status === 'tox') {
 				return move.basePower * 2;
 			}
@@ -4185,7 +4185,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "2x Power if target is poisoned. 30% poison chance. Hits all adjacent foes.",
 		shortDesc: "Power doubles if target is poisoned. 30% poison chance.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "grasswhistle", target);
 		},
@@ -4206,7 +4206,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "25% chance to lower target’s Speed. Traps target.",
 		shortDesc: "25% chance to lower target’s Speed. Traps target.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "grassknot", target);
 		},
@@ -4215,7 +4215,7 @@ let BattleMovedex = {
 		secondaries: [
 			{
 				chance: 100,
-				onHit: function (target, source, move) {
+				onHit(target, source, move) {
 					if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
 				},
 			},
@@ -4236,7 +4236,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "Causes the target to be buggy.",
 		shortDesc: "Causes the target to be buggy.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "leechseed", target);
 			this.add('-anim', source, "forestscurse", target);
@@ -4257,7 +4257,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "No additional effect.",
 		shortDesc: "No additional effect.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "rockslide", target);
 		},
@@ -4276,7 +4276,7 @@ let BattleMovedex = {
 		target: "allAdjacent",
 		desc: "20% chance to poison adjacent monsters.",
 		shortDesc: "20% chance to poison adjacent monsters.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "aciddownpour", target);
 		},
@@ -4298,7 +4298,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "Does not check accuracy.",
 		shortDesc: "Does not check accuracy.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "spiritshackle", target);
 		},
@@ -4316,7 +4316,7 @@ let BattleMovedex = {
 		target: "allAdjacent",
 		desc: "25% chance to lower adjacent monsters accuracy by 1. Hits all adjacent monsters.",
 		shortDesc: "25% chance to lower adjacent monsters accuracy by 1.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "brutalswing", target);
 		},
@@ -4338,7 +4338,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "25% chance to lower the target’s Defense and Special Defense by 1.",
 		shortDesc: "25% chance to lower the target’s Def and Sp.Def by 1.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "embargo", target);
 		},
@@ -4364,7 +4364,7 @@ let BattleMovedex = {
 		target: "allAdjacent",
 		desc: "Priority -1, 10% chance to panic adjacent monsters. Hits all adjacent monsters.",
 		shortDesc: "Priority -1, 10% chance to panic adjacent monsters.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "trickortreat", target);
 		},
@@ -4386,7 +4386,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "Breaks protection",
 		shortDesc: "Breaks protection",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "powertrip", target);
 		},
@@ -4406,7 +4406,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "10% chance to dot the target.",
 		shortDesc: "10% chance to dot the target.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "darkvoid", target);
 		},
@@ -4428,7 +4428,7 @@ let BattleMovedex = {
 		target: "allAdjacent",
 		desc: "25% chance to lower adjacent monsters Speed by 1. Hits all adjacent monsters.",
 		shortDesc: "25% chance to lower adjacent monsters Speed by 1.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "blackholeeclipse", target);
 		},
@@ -4450,14 +4450,14 @@ let BattleMovedex = {
 		target: "allySide",
 		desc: "Heals 40% of allies max HP.",
 		shortDesc: "Heals 40% of allies max HP.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "geomancy", target);
 		},
 		flags: {heal: 1},
 		accuracy: true,
 		secondary: null,
-		onHitSide: function (side) {
+		onHitSide(side) {
 			let didSomething = false;
 			for (let pokemon of side.active) {
 				if (pokemon && this.heal(pokemon.maxhp * 4 / 10, pokemon)) didSomething = true;
@@ -4477,7 +4477,7 @@ let BattleMovedex = {
 		secondary: null,
 		desc: "Raises the user’s Special Defense and Speed by 1.",
 		shortDesc: "Raises the user’s Sp.Def and Speed by 1.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "morningsun", target);
 		},
@@ -4504,24 +4504,24 @@ let BattleMovedex = {
 		secondary: null,
 		stallingMove: true,
 		sideCondition: 'saintshield',
-		onPrepareHit: function (pokemon, source, move) {
+		onPrepareHit(pokemon, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "moonlight", source);
 			this.add('-anim', source, "protect", source);
 			return !!this.willAct() && this.runEvent('StallMove', pokemon);
 		},
-		onHitSide: function (side, source) {
+		onHitSide(side, source) {
 			side.addSideCondition('sidestall');
 			this.add('-message', source.name + ' has protected their side with a Saint Shield!');
 		},
 		effect: {
 			duration: 1,
 			//this is a side condition
-			onStart: function (target, source) {
+			onStart(target, source) {
 				this.add('-singleturn', source, 'Saint Shield');
 			},
 			onTryHitPriority: 4,
-			onTryHit: function (target, source, move) {
+			onTryHit(target, source, move) {
 				if (!move.flags['protect']) {
 					if (move.isZ) move.zBrokeProtect = true;
 					return;
@@ -4550,14 +4550,14 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "Priority +1. 15% chance to raise Special Attack by 1. Hits all adjacent foes.",
 		shortDesc: "15% chance to raise Sp.Atk by 1.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "fairylock", target);
 		},
 		flags: {protect: 1, mirror: 1, authentic: 1},
 		accuracy: 90,
 		secondary: null,
-		onAfterMoveSecondarySelf: function (pokemon, target, move) {
+		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (this.random(100) < 70) this.boost({spe: 1}, pokemon, pokemon, move);
 		},
 	},
@@ -4572,7 +4572,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "Does not check accuracy.",
 		shortDesc: "Does not check accuracy.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "naturesmadness", target);
 		},
@@ -4591,14 +4591,14 @@ let BattleMovedex = {
 		target: "any",
 		desc: "User is hurt by 25% of its max HP if it misses.",
 		shortDesc: "User is hurt by 25% of its max HP if it misses.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "supersonicskystrike", target);
 		},
 		flags: {protect: 1, mirror: 1},
 		accuracy: 85,
 		hasCustomRecoil: true,
-		onMoveFail: function (target, source, move) {
+		onMoveFail(target, source, move) {
 			this.damage(source.maxhp / 4, source, source, move);
 		},
 		secondary: {
@@ -4619,7 +4619,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "75% chance to flinch the foe(s). Must recharge. Hits all adjacent foes.",
 		shortDesc: "75% chance to flinch the foe(s). Must recharge.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "happyhour", source);
 			this.add('-anim', source, "fleurcannon", target);
@@ -4627,7 +4627,7 @@ let BattleMovedex = {
 		flags: {protect: 1, mirror: 1, authentic: 1, recharge: 1},
 		accuracy: 100,
 		secondary: null,
-		onAfterMoveSecondarySelf: function (pokemon, target, move) {
+		onAfterMoveSecondarySelf(pokemon, target, move) {
 			this.boost({def: 1}, pokemon, pokemon, move);
 			pokemon.addVolatile('mustrecharge');
 		},
@@ -4642,7 +4642,7 @@ let BattleMovedex = {
 		target: "self",
 		desc: "Raises the user’s Attack and Speed by 1.",
 		shortDesc: "Raises the user’s Atk and Speed by 1.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "growth", target);
 		},
@@ -4666,7 +4666,7 @@ let BattleMovedex = {
 		target: "self",
 		desc: "Lowers user’s Defense, Special Defense by 2; raises Attack, Special Attack by 2.",
 		shortDesc: "Lowers user’s Def, SpD by 2; raises Atk, SpA by 2.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "nobleroar", target);
 			this.add('-anim', source, "encore", target);
@@ -4692,7 +4692,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "Priority +1.",
 		shortDesc: "priority +1.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "machpunch", target);
 		},
@@ -4711,7 +4711,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "10% chance to raise Attack by 1. Hits all adjacent foes.",
 		shortDesc: "10% chance to raise Attack by 1.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "focusblast", target);
 		},
@@ -4735,16 +4735,16 @@ let BattleMovedex = {
 		target: "scripted",
 		desc: "If hit by a physical or special attack aim for the attacker. 20% chance to confuse the target.",
 		shortDesc: "Returns damage dealt. 20% confuse chance.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "frustration", target);
 		},
 		flags: {protect: 1, mirror: 1, contact: 1},
 		accuracy: 100,
-		beforeTurnCallback: function (pokemon) {
+		beforeTurnCallback(pokemon) {
 			pokemon.addVolatile('reboundstrike');
 		},
-		onTryHit: function (target, source, move) {
+		onTryHit(target, source, move) {
 			if (!source.volatiles['reboundstrike']) return false;
 			if (source.volatiles['reboundstrike'].position === null) return false;
 		},
@@ -4755,16 +4755,16 @@ let BattleMovedex = {
 		effect: {
 			duration: 1,
 			noCopy: true,
-			onStart: function () {
+			onStart() {
 				this.effectData.position = null;
 			},
 			onRedirectTargetPriority: -1,
-			onRedirectTarget: function (target, source) {
+			onRedirectTarget(target, source) {
 				if (source !== this.effectData.target) return;
 				return source.side.foe.active[this.effectData.position];
 			},
 			onDamagePriority: -101,
-			onDamage: function (damage, target, source, effect) {
+			onDamage(damage, target, source, effect) {
 				if (effect && effect.effectType === 'Move' && source.side !== target.side) {
 					this.effectData.position = source.position;
 				}
@@ -4782,13 +4782,13 @@ let BattleMovedex = {
 		target: "any",
 		desc: "Charges turn 1. Hits turn 2. 75% chance of flinch.",
 		shortDesc: "Charges turn 1. Hits turn 2. 75% chance of flinch.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "happyhour", source);
 		},
 		flags: {protect: 1, mirror: 1, charge: 1},
 		accuracy: 95,
-		onTry: function (attacker, defender, move) {
+		onTry(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
 				this.attrLastMove('[still]');
 				this.add('-anim', attacker, "takedown", defender);
@@ -4820,7 +4820,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "15% chance to flinch the target.",
 		shortDesc: "15% chance to flinch the target.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "focuspunch", target);
 		},
@@ -4842,7 +4842,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "Hits 2-5 times in one turn.",
 		shortDesc: "Hits 2-5 times in one turn.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "gearup", source);
 			this.add('-anim', source, "cut", target);
@@ -4863,7 +4863,7 @@ let BattleMovedex = {
 		target: "self",
 		desc: "Priority -1. Raises user’s Attack, Defense, Special Attack and Speed by 1.",
 		shortDesc: "Priority -1. Raises user’s Atk, Def, SpA and Spe by 1.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "gearup", target);
 			this.add('-anim', source, "conversion", target);
@@ -4889,7 +4889,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "Causes adjacent foes to be buggy. Hits all adjacent foes.",
 		shortDesc: "Causes adjacent foes to be buggy.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "gravity", target);
 		},
@@ -4909,14 +4909,14 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "Raises allies Defense by 1. Hits all adjacent foes.",
 		shortDesc: "Raises allies Defense by 1.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "storedpower", target);
 		},
 		flags: {protect: 1, mirror: 1},
 		accuracy: 100,
 		secondary: null,
-		onAfterMoveSecondarySelf: function (source, target, move) {
+		onAfterMoveSecondarySelf(source, target, move) {
 			for (let pokemon of source.side.active) {
 				if (pokemon) this.boost({def: 1}, pokemon, source);
 			}
@@ -4933,7 +4933,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "Priority +1, must recharge.",
 		shortDesc: "priority +1, must recharge.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "mirrorshot", target);
 		},
@@ -4955,7 +4955,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "15% chance to dot the target.",
 		shortDesc: "15% chance to dot the target.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "endeavor", target);
 		},
@@ -4977,7 +4977,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "Priority -1. 10% chance to dot the foe(s). Hits all adjacent foes.",
 		shortDesc: "Priority-1. 10% chance to dot.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "searingsunrazesmash", target);
 		},
@@ -4999,7 +4999,7 @@ let BattleMovedex = {
 		target: "normal",
 		desc: "10% chance to poison the target. Hits 2-5 times.",
 		shortDesc: "10% chance to poison the target. Hits 2-5 times.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "firstimpression", target);
 		},
@@ -5022,7 +5022,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "10% chance to flinch the foe(s). Hits all adjacent foes.",
 		shortDesc: "10% chance to flinch the foe(s).",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "acidarmor", source);
 			this.add('-anim', source, "smog", target);
@@ -5044,7 +5044,7 @@ let BattleMovedex = {
 		name: "Poop Toss",
 		priority: 0,
 		pp: 15,
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "nastyplot", source);
 			this.add('-anim', source, "toxic", target);
@@ -5068,13 +5068,13 @@ let BattleMovedex = {
 		target: "allAdjacent",
 		desc: "Raises Def by 1. 15% chance of poisoning adjacent monsters. Hits all adjacent monsters.",
 		shortDesc: "Raises Def by 1. 15% chance of poisoning adjacent monsters.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "gunkshot", target);
 		},
 		flags: {protect: 1, mirror: 1},
 		accuracy: 80,
-		onAfterMoveSecondarySelf: function (pokemon, target, move) {
+		onAfterMoveSecondarySelf(pokemon, target, move) {
 			this.boost({def: 1}, pokemon, pokemon, move);
 		},
 		secondary: {
@@ -5093,7 +5093,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "5% chance to confuse the target. Hits 2-5 times.",
 		shortDesc: "5% chance to confuse the target. Hits 2-5 times.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "nastyplot", source);
 			this.add('-anim', source, "sludgebomb", target);
@@ -5102,7 +5102,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		multihit: [2, 5],
 		secondary: null,
-		onAfterMoveSecondary: function (target, source, move) {
+		onAfterMoveSecondary(target, source, move) {
 			if (this.random(100) < 5) target.addVolatile('confusion', source);
 		},
 	},
@@ -5117,7 +5117,7 @@ let BattleMovedex = {
 		target: "any",
 		desc: "30% chance to lower the target’s Speed by 2.",
 		shortDesc: "30% chance to lower the target’s Speed by 2.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "banefulbunker", source);
 			this.add('-anim', source, "sludgebomb", target);
@@ -5140,7 +5140,7 @@ let BattleMovedex = {
 		target: "allAdjacentFoes",
 		desc: "20% lower foe(s) Speed by 1. 5% chance of flinch. 10% chance of poison. Hits all adjacent foes.",
 		shortDesc: "20% chance -1 spe. 5% flinch. 10% psn.",
-		onPrepareHit: function (target, source, move) {
+		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "nastyplot", source);
 			this.add('-anim', source, "aciddownpour", target);
@@ -5171,10 +5171,10 @@ let BattleMovedex = {
 		desc: "No additional effects.",
 		shortDesc: "No additional effects.",
 		secondary: null,
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			move.type = '???';
 		},
-		onPrepareHit: function (target, source) {
+		onPrepareHit(target, source) {
 			this.attrLastMove('[still]');
 			this.add('-message', source.name + ' is in a panic!');
 			this.add('-anim', source, "Tackle", target);
@@ -5194,11 +5194,11 @@ let BattleMovedex = {
 		desc: "No additional effects.",
 		shortDesc: "No additional effects.",
 		secondary: null,
-		onPrepareHit: function (target, source) {
+		onPrepareHit(target, source) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "signalbeam", target);
 		},
-		onModifyMove: function (move) {
+		onModifyMove(move) {
 			move.type = '???';
 		},
 		id: "dotbeam",
@@ -5216,18 +5216,18 @@ let BattleMovedex = {
 		shortDesc: "For 5 turns, Fire-type and Flame-type attacks have 1/3 power.",
 		effect: {
 			duration: 5,
-			onStart: function (side, source) {
+			onStart(side, source) {
 				this.add('-fieldstart', 'move: Water Sport', '[of] ' + source);
 			},
 			onBasePowerPriority: 1,
-			onBasePower: function (basePower, attacker, defender, move) {
+			onBasePower(basePower, attacker, defender, move) {
 				if (move.type === 'Fire' || move.type === 'Flame') {
 					this.debug('water sport weaken');
 					return this.chainModify([0x548, 0x1000]);
 				}
 			},
 			onResidualOrder: 21,
-			onEnd: function () {
+			onEnd() {
 				this.add('-fieldend', 'move: Water Sport');
 			},
 		},
@@ -5238,18 +5238,18 @@ let BattleMovedex = {
 		shortDesc: "For 5 turns, Electric-type znd Air-type attacks have 1/3 power.",
 		effect: {
 			duration: 5,
-			onStart: function (side, source) {
+			onStart(side, source) {
 				this.add('-fieldstart', 'move: Mud Sport', '[of] ' + source);
 			},
 			onBasePowerPriority: 1,
-			onBasePower: function (basePower, attacker, defender, move) {
+			onBasePower(basePower, attacker, defender, move) {
 				if (move.type === 'Electric' || move.type === 'Air') {
 					this.debug('mud sport weaken');
 					return this.chainModify([0x548, 0x1000]);
 				}
 			},
 			onResidualOrder: 21,
-			onEnd: function () {
+			onEnd() {
 				this.add('-fieldend', 'move: Mud Sport');
 			},
 		},
@@ -5260,13 +5260,13 @@ let BattleMovedex = {
 		shortDesc: "5 turns. Grounded: +Electric power, +Air power, can't sleep.",
 		effect: {
 			duration: 5,
-			durationCallback: function (source, effect) {
+			durationCallback(source, effect) {
 				if (source && source.hasItem('terrainextender')) {
 					return 8;
 				}
 				return 5;
 			},
-			onSetStatus: function (status, target, source, effect) {
+			onSetStatus(status, target, source, effect) {
 				if (status.id === 'slp' && target.isGrounded() && !target.isSemiInvulnerable()) {
 					if (effect.effectType === 'Move' && !effect.secondaries) {
 						this.add('-activate', target, 'move: Electric Terrain');
@@ -5274,20 +5274,20 @@ let BattleMovedex = {
 					return false;
 				}
 			},
-			onTryAddVolatile: function (status, target) {
+			onTryAddVolatile(status, target) {
 				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
 				if (status.id === 'yawn') {
 					this.add('-activate', target, 'move: Electric Terrain');
 					return null;
 				}
 			},
-			onBasePower: function (basePower, attacker, defender, move) {
+			onBasePower(basePower, attacker, defender, move) {
 				if ((move.type === 'Electric' || move.type === 'Air') && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
 					this.debug('electric terrain boost');
 					return this.chainModify(1.5);
 				}
 			},
-			onStart: function (battle, source, effect) {
+			onStart(battle, source, effect) {
 				if (effect && effect.effectType === 'Ability') {
 					this.add('-fieldstart', 'move: Electric Terrain', '[from] ability: ' + effect, '[of] ' + source);
 				} else {
@@ -5296,7 +5296,7 @@ let BattleMovedex = {
 			},
 			onResidualOrder: 21,
 			onResidualSubOrder: 2,
-			onEnd: function () {
+			onEnd() {
 				this.add('-fieldend', 'move: Electric Terrain');
 			},
 		},
@@ -5305,7 +5305,7 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "Raises the Attack and Special Attack of all grounded Grass-type and Nature-type Pokemon on the field by 1 stage.",
 		shortDesc: "Raises Atk, Sp. Atk of grounded Grass and Nature types by 1.",
-		onHitField: function (target, source) {
+		onHitField(target, source) {
 			let targets = [];
 			let anyAirborne = false;
 			for (const side of this.sides) {
@@ -5334,13 +5334,13 @@ let BattleMovedex = {
 		shortDesc: "5 turns. Grounded: +Grass power,+Nature Power,+1/16 max HP.",
 		effect: {
 			duration: 5,
-			durationCallback: function (source, effect) {
+			durationCallback(source, effect) {
 				if (source && source.hasItem('terrainextender')) {
 					return 8;
 				}
 				return 5;
 			},
-			onBasePower: function (basePower, attacker, defender, move) {
+			onBasePower(basePower, attacker, defender, move) {
 				let weakenedMoves = ['earthquake', 'bulldoze', 'magnitude'];
 				if (weakenedMoves.includes(move.id)) {
 					this.debug('move weakened by grassy terrain');
@@ -5351,7 +5351,7 @@ let BattleMovedex = {
 					return this.chainModify(1.5);
 				}
 			},
-			onStart: function (battle, source, effect) {
+			onStart(battle, source, effect) {
 				if (effect && effect.effectType === 'Ability') {
 					this.add('-fieldstart', 'move: Grassy Terrain', '[from] ability: ' + effect, '[of] ' + source);
 				} else {
@@ -5360,16 +5360,16 @@ let BattleMovedex = {
 			},
 			onResidualOrder: 5,
 			onResidualSubOrder: 3,
-			onResidual: function () {
+			onResidual() {
 				this.eachEvent('Terrain');
 			},
-			onTerrain: function (pokemon) {
+			onTerrain(pokemon) {
 				if (pokemon.isGrounded() && !pokemon.isSemiInvulnerable()) {
 					this.debug('Pokemon is grounded, healing through Grassy Terrain.');
 					this.heal(pokemon.maxhp / 16, pokemon, pokemon);
 				}
 			},
-			onEnd: function () {
+			onEnd() {
 				if (!this.effectData.duration) this.eachEvent('Terrain');
 				this.add('-fieldend', 'move: Grassy Terrain');
 			},
@@ -5379,7 +5379,7 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "Raises the Defense of all Grass-type and Nature-type Pokemon on the field by 1 stage.",
 		shortDesc: "Raises Defense by 1 of all active Grass and Nature types.",
-		onHitField: function (target, source, move) {
+		onHitField(target, source, move) {
 			let targets = [];
 			for (const side of this.sides) {
 				for (const pokemon of side.active) {
