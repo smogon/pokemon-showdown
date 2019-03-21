@@ -132,6 +132,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 			var battleStream = new BattleTextStream({
 				debug: process.argv[3] === '--debug'
 			});
+      battleStream.start();
 			stdin.pipeTo(battleStream);
 			battleStream.pipeTo(stdout);
 		}

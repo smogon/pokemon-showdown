@@ -158,8 +158,9 @@ export class StreamProcessWrapper {
 			message = message.slice(nlLoc + 1);
 
 			if (messageType === 'END') {
-				stream.end();
+				const end = stream.end();
 				this.deleteStream(taskId);
+				return end;
 			} else if (messageType === 'PUSH') {
 				stream.push(message);
 			} else if (messageType === 'THROW') {
@@ -211,8 +212,9 @@ export class StreamProcessWrapper {
 			return;
 		}
 		this.process.disconnect();
+		const destroyed = [];
 		for (const stream of this.activeStreams.values()) {
-			stream.destroy();
+			destroyed.push(stream.destroy());
 		}
 		this.activeStreams.clear();
 		if (this.resolveRelease) {
@@ -221,6 +223,7 @@ export class StreamProcessWrapper {
 		} else if (!this.pendingRelease) {
 			this.pendingRelease = Promise.resolve();
 		}
+		return Promise.all(destroyed);
 	}
 }
 
@@ -261,16 +264,18 @@ export class ProcessManager {
 		return lowestLoad;
 	}
 	unspawn() {
+		const released = [];
 		for (const process of this.processes) {
-			process.release().then(() => {
+			released.push(process.release().then(() => {
 				const index = this.releasingProcesses.indexOf(process);
 				if (index >= 0) {
 					this.releasingProcesses.splice(index, 1);
 				}
-			});
+			}));
 		}
 		this.releasingProcesses = this.releasingProcesses.concat(this.processes);
 		this.processes = [];
+		return Promise.all(released);
 	}
 	spawn(count = 1) {
 		if (!this.isParentProcess) return;
@@ -281,8 +286,9 @@ export class ProcessManager {
 	}
 	respawn(count: number | null = null) {
 		if (count === null) count = this.processes.length;
-		this.unspawn();
+		const unspawned = this.unspawn();
 		this.spawn(count);
+		return unspawned;
 	}
 	createProcess(): ProcessWrapper {
 		throw new Error(`implemented by subclass`);
@@ -293,7 +299,7 @@ export class ProcessManager {
 	destroy() {
 		const index = processManagers.indexOf(this);
 		if (index) processManagers.splice(index, 1);
-		this.unspawn();
+		return this.unspawn();
 	}
 }
 
@@ -404,11 +410,12 @@ export class StreamProcessManager extends ProcessManager {
 				if (stream) throw new Error(`NEW: taskId ${taskId} already exists`);
 				const newStream = this._createStream();
 				this.activeStreams.set(taskId, newStream);
-				this.pipeStream(taskId, newStream);
+				return this.pipeStream(taskId, newStream);
 			} else if (messageType === 'DESTROY') {
 				if (!stream) throw new Error(`DESTROY: Invalid taskId ${taskId}`);
-				stream.destroy();
+				const destroyed = stream.destroy();
 				this.activeStreams.delete(taskId);
+				return destroyed;
 			} else if (messageType === 'WRITE') {
 				if (!stream) throw new Error(`WRITE: Invalid taskId ${taskId}`);
 				stream.write(message);

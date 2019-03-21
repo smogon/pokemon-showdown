@@ -182,7 +182,7 @@ export function getPlayerStreams(stream: BattleStream) {
 				stream.write(data);
 			},
 			end() {
-				stream.end();
+				return stream.end();
 			},
 		}),
 		spectator: new Streams.ObjectReadStream({
@@ -240,7 +240,11 @@ export function getPlayerStreams(stream: BattleStream) {
 		for (const s of Object.values(streams)) {
 			s.push(null);
 		}
-	})();
+	})().catch(err => {
+		for (const s of Object.values(streams)) {
+			s.pushError(err);
+		}
+	});
 	return streams;
 }
 
@@ -253,9 +257,9 @@ export class BattlePlayer {
 		this.stream = playerStream;
 		this.log = [];
 		this.debug = debug;
-		this.listen();
 	}
-	async listen() {
+
+	async start() {
 		let chunk;
 		// tslint:disable-next-line:no-conditional-assignment
 		while ((chunk = await this.stream.read())) {
@@ -299,7 +303,16 @@ export class BattleTextStream extends Streams.ReadWriteStream {
 		super();
 		this.battleStream = new BattleStream(options);
 		this.currentMessage = '';
-		this._listen();
+	}
+
+	async start() {
+		let message;
+		// tslint:disable-next-line:no-conditional-assignment
+		while ((message = await this.battleStream.read())) {
+			if (!message.endsWith('\n')) message += '\n';
+			this.push(message + '\n');
+		}
+		this.push(null);
 	}
 
 	_write(message: string | Buffer) {
@@ -310,16 +323,8 @@ export class BattleTextStream extends Streams.ReadWriteStream {
 			this.currentMessage = this.currentMessage.slice(index + 1);
 		}
 	}
+
 	_end() {
-		this.battleStream.end();
-	}
-	async _listen() {
-		let message;
-		// tslint:disable-next-line:no-conditional-assignment
-		while ((message = await this.battleStream.read())) {
-			if (!message.endsWith('\n')) message += '\n';
-			this.push(message + '\n');
-		}
-		this.push(null);
+		return this.battleStream.end();
 	}
 }

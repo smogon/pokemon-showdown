@@ -25,6 +25,7 @@
                 "ignore-pattern": "^\\s*(// \\s*)?((let |const )?[a-zA-Z0-9$.]+ \\+?= (\\$\\()?|(return |throw )?(new )?([a-zA-Z0-9$.]+\\()?)?['\"`/]"
             }
         },
+        "no-floating-promises": true,
         "interface-name": false,
         "forin": false,
         // maybe one day
