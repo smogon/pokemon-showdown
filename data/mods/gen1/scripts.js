@@ -144,7 +144,7 @@ let BattleScripts = {
 			target.side.removeSideCondition('reflect');
 			target.side.removeSideCondition('lightscreen');
 			pokemon.removeVolatile('twoturnmove');
-		} else {
+		} else if (pokemon.hp) {
 			this.runEvent('AfterMoveSelf', pokemon, target, move);
 		}
 
