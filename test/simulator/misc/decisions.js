@@ -448,12 +448,16 @@ describe('Choices', function () {
 			}
 
 			assert.constant(() => battle.turn, () => {
-				assert.throws(() => battle.p1.choosePass(), Error,
-					"[Invalid choice] Can't pass: You need to switch in a Pokémon to replace Latias");
+				assert.throws(() => battle.p1.choosePass(),
+					/\[Invalid choice\] Can't pass: You need to switch in a Pokémon to replace Latias/,
+					`Expected choosePass() to fail`
+				);
 				battle.p1.chooseSwitch(3);
 				battle.p2.chooseSwitch(3);
-				assert.throws(() => battle.p2.choosePass(), Error,
-					"[Invalid choice] Can't pass: You need to switch in a Pokémon to replace Charmander");
+				assert.throws(() => battle.p2.choosePass(),
+					/\[Invalid choice\] Can't pass: You need to switch in a Pokémon to replace Charmander/,
+					`Expected choosePass() to fail`
+				);
 			});
 
 			for (const side of battle.sides) {
@@ -1032,8 +1036,10 @@ describe('Choice extensions', function () {
 
 				battle.choose('p1', 'switch 3, switch 4');
 				if (mode === 'revoke') battle.undoChoice('p1');
-				assert.throws(() => battle.makeChoices('switch 4, switch 3', 'pass'), Error,
-					"[Invalid choice] Can't switch: You can't switch to a fainted Pokémon");
+				assert.throws(() => battle.makeChoices('switch 4, switch 3', 'pass'),
+					/\[Invalid choice\] Can't switch: You can't switch to a fainted Pokémon/,
+					`Expected switch to fail`
+				);
 
 				for (const [index, species] of ['Ivysaur', 'Venusaur'].entries()) {
 					assert.species(battle.p1.active[index], species);
@@ -1056,8 +1062,10 @@ describe('Choice extensions', function () {
 
 				battle.choose('p1', 'pass, switch 3');
 				if (mode === 'revoke') battle.undoChoice('p1');
-				assert.throws(() => battle.makeChoices('switch 3, pass', 'pass'), Error,
-					"[Invalid choice] Can't switch: You can't switch to a fainted Pokémon");
+				assert.throws(() => battle.makeChoices('switch 3, pass', 'pass'),
+					/\[Invalid choice\] Can't switch: You can't switch to a fainted Pokémon/,
+					`Expected switch to fail`
+				);
 
 				for (const [index, species] of ['Latias', 'Venusaur'].entries()) {
 					assert.species(battle.p1.active[index], species);
@@ -1254,8 +1262,10 @@ describe('Choice internals', function () {
 
 		assert.strictEqual(battle.turn, 1);
 		p1.choose('move recover, switch 4');
-		assert.throws(() => p2.choose('switch 3'), Error,
-			"[Invalid choice] Can't switch: You do not have a Pokémon in slot 3 to switch to");
+		assert.throws(() => p2.choose('switch 3'),
+			/\[Invalid choice\] Can't switch: You do not have a Pokémon in slot 3 to switch to/,
+			`Expected switch to fail`
+		);
 		p2.choose('move recover, move recover');
 		battle.commitDecisions();
 
@@ -1264,8 +1274,10 @@ describe('Choice internals', function () {
 		assert.strictEqual(p1.active[1].name, 'Ekans');
 
 		p1.choose('switch 4, move leer');
-		assert.throws(() => p2.choose('switch 3'), Error,
-			"[Invalid choice] Can't switch: You do not have a Pokémon in slot 3 to switch to");
+		assert.throws(() => p2.choose('switch 3'),
+			/\[Invalid choice\] Can't switch: You do not have a Pokémon in slot 3 to switch to/,
+			`Expected switch to fail`
+		);
 		p2.choose('move recover, move recover');
 		battle.commitDecisions();
 
