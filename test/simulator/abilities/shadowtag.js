@@ -12,46 +12,42 @@ describe('Shadow Tag', function () {
 
 	it('should prevent most Pokemon from switching out normally', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Wobbuffet", ability: 'shadowtag', moves: ['counter']}]);
-		const p2 = battle.join('p2', 'Guest 2', 1, [
+		battle.setPlayer('p1', {team: [{species: "Wobbuffet", ability: 'shadowtag', moves: ['counter']}]});
+		battle.setPlayer('p2', {team: [
 			{species: "Tornadus", ability: 'defiant', moves: ['tailwind']},
 			{species: "Heatran", ability: 'flashfire', moves: ['roar']},
-		]);
-		assert.false(battle.makeChoices('move counter', 'switch 2'));
-		assert.species(p2.active[0], 'Tornadus');
+		]});
+		assert.trapped(() => battle.makeChoices('move counter', 'switch 2'));
 	});
 
 	it('should not prevent Pokemon from switching out using moves', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Wobbuffet", ability: 'shadowtag', moves: ['counter']}]);
-		const p2 = battle.join('p2', 'Guest 2', 1, [
+		battle.setPlayer('p1', {team: [{species: "Wobbuffet", ability: 'shadowtag', moves: ['counter']}]});
+		battle.setPlayer('p2', {team: [
 			{species: "Tornadus", ability: 'defiant', moves: ['uturn']},
 			{species: "Heatran", ability: 'flashfire', moves: ['roar']},
-		]);
+		]});
 		battle.makeChoices('move counter', 'move uturn');
-		battle.makeChoices('move counter', 'switch 2');
-		assert.species(p2.active[0], 'Heatran');
+		assert.doesNotThrow(() => battle.makeChoices('', 'switch 2'));
 	});
 
 	it('should not prevent other Pokemon with Shadow Tag from switching out', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Wobbuffet", ability: 'shadowtag', moves: ['counter']}]);
-		const p2 = battle.join('p2', 'Guest 2', 1, [
+		battle.setPlayer('p1', {team: [{species: "Wobbuffet", ability: 'shadowtag', moves: ['counter']}]});
+		battle.setPlayer('p2', {team: [
 			{species: "Gothitelle", ability: 'shadowtag', moves: ['psychic']},
 			{species: "Heatran", ability: 'flashfire', moves: ['roar']},
-		]);
-		battle.makeChoices('move counter', 'switch 2');
-		assert.species(p2.active[0], 'Heatran');
+		]});
+		assert.doesNotThrow(() => battle.makeChoices('move counter', 'switch 2'));
 	});
 
 	it('should not prevent Pokemon immune to trapping from switching out', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Wobbuffet", ability: 'shadowtag', moves: ['counter']}]);
-		const p2 = battle.join('p2', 'Guest 2', 1, [
+		battle.setPlayer('p1', {team: [{species: "Wobbuffet", ability: 'shadowtag', moves: ['counter']}]});
+		battle.setPlayer('p2', {team: [
 			{species: "Gengar", ability: 'levitate', moves: ['curse']},
 			{species: "Heatran", ability: 'flashfire', moves: ['roar']},
-		]);
-		battle.makeChoices('move counter', 'switch 2');
-		assert.species(p2.active[0], 'Heatran');
+		]});
+		assert.doesNotThrow(() => battle.makeChoices('move counter', 'switch 2'));
 	});
 });

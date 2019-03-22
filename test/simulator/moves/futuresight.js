@@ -12,8 +12,8 @@ describe('Future Sight', function () {
 
 	it('should damage in two turns, ignoring Protect, affected by Dark immunities', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Sneasel", ability: 'innerfocus', moves: ['odorsleuth', 'futuresight', 'protect']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Girafarig", ability: 'innerfocus', moves: ['odorsleuth', 'futuresight', 'protect']}]);
+		battle.setPlayer('p1', {team: [{species: "Sneasel", ability: 'innerfocus', moves: ['odorsleuth', 'futuresight', 'protect']}]});
+		battle.setPlayer('p2', {team: [{species: "Girafarig", ability: 'innerfocus', moves: ['odorsleuth', 'futuresight', 'protect']}]});
 		battle.makeChoices('move Future Sight', 'move Future Sight');
 		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		battle.makeChoices('auto', 'auto');
@@ -25,8 +25,8 @@ describe('Future Sight', function () {
 
 	it('[Gen 2] should damage in two turns, ignoring Protect', function () {
 		battle = common.gen(2).createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Sneasel", moves: ['odorsleuth', 'futuresight', 'protect', 'sweetscent']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Girafarig", moves: ['odorsleuth', 'futuresight', 'protect', 'sweetscent']}]);
+		battle.setPlayer('p1', {team: [{species: "Sneasel", moves: ['odorsleuth', 'futuresight', 'protect', 'sweetscent']}]});
+		battle.setPlayer('p2', {team: [{species: "Girafarig", moves: ['odorsleuth', 'futuresight', 'protect', 'sweetscent']}]});
 		battle.makeChoices('move Sweet Scent', 'move Sweet Scent'); // counteract imperfect accuracy
 		battle.makeChoices('move Future Sight', 'move Future Sight');
 		assert.strictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);

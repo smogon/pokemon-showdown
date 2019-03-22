@@ -12,14 +12,14 @@ describe('Healing Wish', function () {
 
 	it('should heal a switch-in for full before hazards at end of turn', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [
+		battle.setPlayer('p1', {team: [
 			{species: 'Caterpie', ability: 'shielddust', moves: ['stringshot']},
 			{species: 'Jirachi', ability: 'serenegrace', moves: ['healingwish', 'protect']},
-		]);
-		battle.join('p2', 'Guest 2', 1, [
+		]});
+		battle.setPlayer('p2', {team: [
 			{species: 'Shedinja', ability: 'wonderguard', moves: ['endeavor']},
 			{species: 'Tyranitar', ability: 'sandstream', moves: ['seismictoss', 'stealthrock']},
-		]);
+		]});
 
 		battle.makeChoices('move String Shot', 'move Endeavor'); // set Caterpie to 1hp
 
@@ -37,15 +37,15 @@ describe('Healing Wish', function () {
 
 	it('[Gen 4] should heal a switch-in for full after hazards mid-turn', function () {
 		battle = common.gen(4).createBattle();
-		battle.join('p1', 'Guest 1', 1, [
+		battle.setPlayer('p1', {team: [
 			{species: 'Caterpie', ability: 'shielddust', moves: ['stringshot']},
 			{species: 'Raichu', ability: 'lightningrod', moves: ['growl']},
 			{species: 'Jirachi', ability: 'serenegrace', moves: ['healingwish']},
-		]);
-		battle.join('p2', 'Guest 2', 1, [
+		]});
+		battle.setPlayer('p2', {team: [
 			{species: 'Shedinja', ability: 'wonderguard', moves: ['endeavor']},
 			{species: 'Tyranitar', ability: 'sandstream', moves: ['seismictoss', 'stealthrock']},
-		]);
+		]});
 
 		battle.makeChoices('move String Shot', 'move Endeavor'); // set Caterpie to 1hp
 

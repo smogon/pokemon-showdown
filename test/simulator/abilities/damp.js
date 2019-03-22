@@ -12,27 +12,30 @@ describe('Damp', function () {
 
 	it('should prevent self-destruction moves from activating', function () {
 		battle = common.createBattle();
-		const p1 = battle.join('p1', 'Guest 1', 1, [{species: 'Politoed', ability: 'damp', moves: ['calmmind']}]);
-		const p2 = battle.join('p2', 'Guest 2', 1, [{species: 'Electrode', ability: 'static', moves: ['explosion']}]);
+		battle.setPlayer('p1', {team: [{species: 'Politoed', ability: 'damp', moves: ['calmmind']}]});
+		battle.setPlayer('p2', {team: [{species: 'Electrode', ability: 'static', moves: ['explosion']}]});
+		const [dampMon, selfKOMon] = [battle.p1.active[0], battle.p2.active[0]];
 		battle.makeChoices('move calmmind', 'move explosion');
-		assert.fullHP(p1.active[0]);
-		assert.fullHP(p2.active[0]);
+		assert.fullHP(dampMon);
+		assert.fullHP(selfKOMon);
 	});
 
 	it('should prevent Aftermath from activating', function () {
 		battle = common.createBattle();
-		const p1 = battle.join('p1', 'Guest 1', 1, [{species: 'Poliwrath', ability: 'damp', moves: ['closecombat']}]);
-		const p2 = battle.join('p2', 'Guest 2', 1, [{species: 'Aron', ability: 'aftermath', moves: ['leer']}]);
+		battle.setPlayer('p1', {team: [{species: 'Poliwrath', ability: 'damp', moves: ['closecombat']}]});
+		battle.setPlayer('p2', {team: [{species: 'Aron', ability: 'aftermath', moves: ['leer']}]});
+		const [dampMon, afterMathMon] = [battle.p1.active[0], battle.p2.active[0]];
 		battle.makeChoices('move closecombat', 'move leer');
-		assert.fullHP(p1.active[0]);
-		assert.fainted(p2.active[0]);
+		assert.fullHP(dampMon);
+		assert.fainted(afterMathMon);
 	});
 
 	it('should be suppressed by Mold Breaker', function () {
 		battle = common.createBattle();
-		const p1 = battle.join('p1', 'Guest 1', 1, [{species: 'Politoed', ability: 'damp', moves: ['calmmind']}]);
-		const p2 = battle.join('p2', 'Guest 2', 1, [{species: 'Electrode', ability: 'moldbreaker', moves: ['explosion']}]);
-		assert.hurts(p1.active[0], () => battle.makeChoices('move calmmind', 'move explosion'));
-		assert.fainted(p2.active[0]);
+		battle.setPlayer('p1', {team: [{species: 'Politoed', ability: 'damp', moves: ['calmmind']}]});
+		battle.setPlayer('p2', {team: [{species: 'Electrode', ability: 'moldbreaker', moves: ['explosion']}]});
+		const [dampMon, mbSelfKOMon] = [battle.p1.active[0], battle.p2.active[0]];
+		assert.hurts(dampMon, () => battle.makeChoices('move calmmind', 'move explosion'));
+		assert.fainted(mbSelfKOMon);
 	});
 });
