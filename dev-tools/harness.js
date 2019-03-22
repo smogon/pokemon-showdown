@@ -43,6 +43,7 @@ class Runner {
 		this.verbose = !this.silent && !!options.verbose;
 		this.timer = options.timer;
 		this.formatter = options.formatter;
+		this.warmup = options.warmup;
 
 		this.formatIndex = 0;
 		this.numGames = 0;
@@ -97,6 +98,7 @@ class Runner {
 	}
 
 	display(format, timers) {
+		if (this.warmup) timers = timers.slice(this.warmup);
 		const formatStats = new Map();
 		formatStats.set(format, trakkr.Stats.compute(timers.map(t => t.duration)));
 		console.log(this.formatter.displayStats(formatStats));
@@ -213,6 +215,11 @@ if (require.main === module) {
 					(argv.output === 'tsv' || argv.tsv) ? trakkr.TSV :
 					/** argv.output === 'table' */ trakkr.TABLE);
 			options.formatter = formatter;
+
+			if (argv.warmup) {
+				options.warmup = parseInt(argv.warmup) || Math.ceil(0.1 * options.totalGames);
+				options.totalGames += options.warmup;
+			}
 		}
 	} else if (process.argv.length === 3) {
 		// If we have one arg, treat it as the total number of games to play.
