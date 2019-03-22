@@ -5,6 +5,7 @@ import * as BattleStreamType from './../sim/battle-stream';
 import * as DataType from './../sim/dex-data';
 import DexType = require('./../sim/dex');
 import SimType = require('./../sim/index');
+import {Field as FieldType} from './../sim/field';
 import {Pokemon as PokemonType} from './../sim/pokemon';
 import {PRNG as PRNGType, PRNGSeed as PRNGSeedType} from './../sim/prng';
 import {Side as SideType} from './../sim/side';
@@ -39,6 +40,7 @@ declare global {
 	// sim
 	type PRNGSeed = PRNGSeedType
 	const Battle: BattleType
+	const Field: FieldType
 	const ModdedDex: typeof DexType
 	const Pokemon: PokemonType
 	const PRNG: PRNGType

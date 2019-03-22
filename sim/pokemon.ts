@@ -421,7 +421,7 @@ export class Pokemon {
 		let stat = this.storedStats[statName];
 
 		// Wonder Room swaps defenses before calculating anything else
-		if ('wonderroom' in this.battle.pseudoWeather) {
+		if ('wonderroom' in this.battle.field.pseudoWeather) {
 			if (statName === 'def') {
 				stat = this.storedStats['spd'];
 			} else if (statName === 'spd') {
@@ -458,7 +458,7 @@ export class Pokemon {
 
 		// Download ignores Wonder Room's effect, but this results in
 		// stat stages being calculated on the opposite defensive stat
-		if (unmodified && 'wonderroom' in this.battle.pseudoWeather) {
+		if (unmodified && 'wonderroom' in this.battle.field.pseudoWeather) {
 			if (statName === 'def') {
 				statName = 'spd';
 			} else if (statName === 'spd') {
@@ -492,7 +492,7 @@ export class Pokemon {
 
 	getActionSpeed() {
 		let speed = this.getStat('spe', false, false);
-		if (this.battle.getPseudoWeather('trickroom')) {
+		if (this.battle.field.getPseudoWeather('trickroom')) {
 			speed = 0x2710 - speed;
 		}
 		return this.battle.trunc(speed, 13);
@@ -590,7 +590,7 @@ export class Pokemon {
 			}
 			if (target.side.active.length > 1) {
 				if (!move.flags['charge'] || this.volatiles['twoturnmove'] ||
-						(move.id.startsWith('solarb') && this.battle.isWeather(['sunnyday', 'desolateland'])) ||
+						(move.id.startsWith('solarb') && this.battle.field.isWeather(['sunnyday', 'desolateland'])) ||
 						(this.hasItem('powerherb') && move.id !== 'skydrop')) {
 					target = this.battle.priorityEvent('RedirectTarget', this, this, this.battle.getActiveMove(move), target);
 				}
@@ -622,7 +622,7 @@ export class Pokemon {
 	ignoringItem() {
 		return !!((this.battle.gen >= 5 && !this.isActive) ||
 			(this.hasAbility('klutz') && !this.getItem().ignoreKlutz) ||
-			this.volatiles['embargo'] || this.battle.pseudoWeather['magicroom']);
+			this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom']);
 	}
 
 	deductPP(move: string | Move, amount?: number | null, target?: Pokemon | null | false) {
@@ -1579,7 +1579,7 @@ export class Pokemon {
 	}
 
 	isGrounded(negateImmunity: boolean = false) {
-		if ('gravity' in this.battle.pseudoWeather) return true;
+		if ('gravity' in this.battle.field.pseudoWeather) return true;
 		if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;
 		if ('smackdown' in this.volatiles) return true;
 		const item = (this.ignoringItem() ? '' : this.item);

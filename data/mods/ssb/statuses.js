@@ -539,7 +539,7 @@ let BattleStatuses = {
 			this.add(`c|@Kalalokki|( •_•)>⌐■-■`);
 			this.add(`c|@Kalalokki|(⌐■_■)`);
 			if (target.illusion) return;
-			this.setWeather('raindance');
+			this.field.setWeather('raindance');
 		},
 		onFaint() {
 			this.add(`c|@Kalalokki|(⌐■_■)`);
@@ -1236,12 +1236,12 @@ let BattleStatuses = {
 					if (pokemon && pokemon.isActive) pokemon.clearBoosts();
 				}
 			}
-			for (const clear in this.pseudoWeather) {
+			for (const clear in this.field.pseudoWeather) {
 				if (clear.endsWith('mod') || clear.endsWith('clause')) continue;
-				this.removePseudoWeather(clear);
+				this.field.removePseudoWeather(clear);
 			}
-			this.clearWeather();
-			this.clearTerrain();
+			this.field.clearWeather();
+			this.field.clearTerrain();
 		},
 		onFaint() {
 			this.add(`c|%Teremiare|(>'o')>`);

@@ -387,11 +387,11 @@ let BattleScripts = {
 				didSomething = didSomething || hitResult;
 			}
 			if (moveData.weather) {
-				hitResult = this.setWeather(moveData.weather, pokemon, move);
+				hitResult = this.field.setWeather(moveData.weather, pokemon, move);
 				didSomething = didSomething || hitResult;
 			}
 			if (moveData.pseudoWeather) {
-				hitResult = this.addPseudoWeather(moveData.pseudoWeather, pokemon, move);
+				hitResult = this.field.addPseudoWeather(moveData.pseudoWeather, pokemon, move);
 				didSomething = didSomething || hitResult;
 			}
 			if (moveData.forceSwitch) {
@@ -665,9 +665,9 @@ let BattleScripts = {
 		damage += 2;
 
 		// Weather modifiers
-		if ((this.isWeather('raindance') && type === 'Water') || (this.isWeather('sunnyday') && type === 'Fire')) {
+		if ((this.field.isWeather('raindance') && type === 'Water') || (this.field.isWeather('sunnyday') && type === 'Fire')) {
 			damage = Math.floor(damage * 1.5);
-		} else if ((this.isWeather('raindance') && (type === 'Fire' || move.id === 'solarbeam')) || (this.isWeather('sunnyday') && type === 'Water')) {
+		} else if ((this.field.isWeather('raindance') && (type === 'Fire' || move.id === 'solarbeam')) || (this.field.isWeather('sunnyday') && type === 'Water')) {
 			damage = Math.floor(damage / 2);
 		}
 
