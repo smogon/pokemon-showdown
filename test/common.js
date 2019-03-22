@@ -114,8 +114,8 @@ class TestTools {
 			seed: options.seed || DEFAULT_SEED,
 			strictChoices: options.strictChoices !== false,
 			timer: {
-				time() { throw new Error(`Profiling timer call encountered`) },
-				count() { throw new Error(`Profiling timer call encounterd``) },
+				time() { throw new Error(`Profiling timer call encountered`); },
+				count() { throw new Error(`Profiling timer call encounterd`); },
 			},
 		};
 

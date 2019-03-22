@@ -8,6 +8,7 @@
 
 'use strict';
 
+const trakkr = require('trakkr'); // TODO
 const child_process = require('child_process');
 const shell = cmd => child_process.execSync(cmd, {stdio: 'inherit', cwd: __dirname});
 
@@ -15,6 +16,8 @@ const shell = cmd => child_process.execSync(cmd, {stdio: 'inherit', cwd: __dirna
 // NOTE: `require('../build')` is not safe because `replace` is async.
 if (require.main === module) shell('node ../build');
 
+// Preload Dex to avoid skewing benchmarks.
+require('../.sim-dist/dex').includeModData();
 const BattleStreams = require('../.sim-dist/battle-stream');
 const PRNG = require('../.sim-dist/prng').PRNG;
 const RandomPlayerAI = require('../.sim-dist/examples/random-player-ai').RandomPlayerAI;
@@ -54,6 +57,10 @@ class Runner {
 				await Promise.all(games);
 				// TODO: trakkr still needs to support aggregated statistics...
 				// if (!this.silent) console.log(this.formatter.display(timers));
+				const formatStats = new Map();
+				formatStats.set(lastFormat, trakkr.Stats.compute(timers.map(t => t.duration)));
+				console.log(this.formatter.displayStats(formatStats));
+				console.log(this.formatter.displayStats(trakkr.aggregateStats(timers)));
 				games = [];
 				timers = [];
 			}
@@ -68,7 +75,7 @@ class Runner {
 				const game = this.runGame(format, timer, battleStream).finally(() => timer.stop());
 				if (!this.async) {
 					await game;
-					if (this.verbose && this.formatter) console.log(this.formatter(timer));
+					if (this.verbose && this.formatter) console.log(this.formatter.display(timer));
 				}
 				games.push(game);
 				timers.push(timer);
@@ -87,7 +94,6 @@ class Runner {
 	}
 
 	async runGame(format, timer, battleStream) {
-		const t = timer.time('prepare');
 		const streams = BattleStreams.getPlayerStreams(battleStream || new BattleStreams.BattleStream());
 		// The seed used is the intial seed to begin with (its important that nothing
 		// advances the PRNG before the initial `runGame` call for repro purposes), but
@@ -102,9 +108,10 @@ class Runner {
 		const p2 = new RandomPlayerAI(
 			streams.p2, Object.assign({seed: this.newSeed()}, this.p2options)).start();
 
-		t(streams.omniscient.write(`>start ${JSON.stringify(spec)}\n` +
+		timer.start();
+		streams.omniscient.write(`>start ${JSON.stringify(spec)}\n` +
 			`>player p1 ${JSON.stringify(p1spec)}\n` +
-			`>player p2 ${JSON.stringify(p2spec)}`));
+			`>player p2 ${JSON.stringify(p2spec)}`);
 
 		let chunk;
 		while ((chunk = await Promise.race([streams.omniscient.read(), p1, p2]))) {
@@ -185,17 +192,17 @@ if (require.main === module) {
 			// about the randomness provided it results in pseudo-realistic game playouts.
 			options.prng = [0x01234, 0x05678, 0x09123, 0x04567];
 
-			if (missing('trakkr')) shell('npm install trakkr');
-			const trakkr = require('trakkr');
+			//if (missing('trakkr')) shell('npm install trakkr');
+			//const trakkr = require('trakkr');
 			const buf = argv.fixed && {buf: Buffer.allocUnsafe(options.totalGames * (parseInt(argv.fixed) || 0x100000))};
 			options.timer = () => trakkr.Timer.create(buf);
 			// Choose which formatter to use - we don't need to tweak the sort or write a custom
 			// formatter because its almost as though the defaults were written for our usecase...
 			const formatter = new trakkr.Formatter(!!argv.full, trakkr.SORT,
 				(argv.output === 'csv' || argv.csv) ? trakkr.CSV :
-				(argv.output === 'tsv' || argv.tsv) ? trakkr.TSV :
-				/** argv.output === 'table' */  trakkr.TABLE);
-			options.formatter = t => formatter.display(t);
+					(argv.output === 'tsv' || argv.tsv) ? trakkr.TSV :
+					/** argv.output === 'table' */ trakkr.TABLE);
+			options.formatter = formatter;
 		}
 	} else if (process.argv.length === 3) {
 		// If we have one arg, treat it as the total number of games to play.
