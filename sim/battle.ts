@@ -517,7 +517,7 @@ export class Battle extends Dex.ModdedDex {
 	 *   the data store associated with the above Effect. This is a plain Object
 	 *   and you can use it to store data for later event handlers.
 	 * this.effectData.target:
-	 *   the Pokemon, Side, Field, or Battle that the event handler's effect was
+	 *   the Pokemon, Side, or Battle that the event handler's effect was
 	 *   attached to.
 	 * this.event.id:
 	 *   the event ID
