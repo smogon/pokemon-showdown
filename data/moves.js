@@ -16458,7 +16458,13 @@ let BattleMovedex = {
 				if (curSpD !== target.boosts.spd) this.effectData.spd--;
 			},
 			onEnd(target) {
-				this.boost({def: this.effectData.def, spd: this.effectData.spd}, target, target);
+				if (this.effectData.def || this.effectData.spd) {
+					/** @type {SparseBoostsTable} */
+					let boosts = {};
+					if (this.effectData.def) boosts.def = this.effectData.def;
+					if (this.effectData.spd) boosts.spd = this.effectData.spd;
+					this.boost(boosts, target, target);
+				}
 				this.add('-end', target, 'Stockpile');
 				if (this.effectData.def !== this.effectData.layers * -1 || this.effectData.spd !== this.effectData.layers * -1) {
 					this.hint("In Gen 7, Stockpile keeps track of how many times it successfully altered each stat individually.");
