@@ -42,14 +42,14 @@ describe('Stomping Tantrum', function () {
 
 	it('should double its Base Power if the last move used was a spread move that partially hit protect and otherwise failed', function () {
 		battle = common.createBattle({gameType: 'doubles'});
-		battle.join('p1', 'Guest 1', 1, [
+		battle.setPlayer('p1', {team: [
 			{species: 'Cresselia', ability: 'levitate', moves: ['sunnyday']},
 			{species: 'Groudon', ability: 'drought', moves: ['stompingtantrum', 'precipiceblades']},
-		]);
-		battle.join('p2', 'Guest 2', 1, [
+		]});
+		battle.setPlayer('p2', {team: [
 			{species: 'Tapu lele', ability: 'psychicsurge', moves: ['protect', 'calmmind']},
 			{species: 'Ho-Oh', ability: 'pressure', moves: ['recover']},
-		]);
+		]});
 
 		battle.onEvent('BasePower', battle.getFormat(), function (basePower, attacker, defender, move) {
 			if (move.id === 'stompingtantrum') assert.strictEqual(basePower, 150);

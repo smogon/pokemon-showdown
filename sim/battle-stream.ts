@@ -281,13 +281,17 @@ export class BattlePlayer {
 			return this.receiveRequest(JSON.parse(rest));
 		}
 		if (cmd === 'error') {
-			throw new Error(rest);
+			return this.receiveError(new Error(rest));
 		}
 		this.log.push(line);
 	}
 
 	receiveRequest(request: AnyObject) {
 		throw new Error(`must be implemented by subclass`);
+	}
+
+	receiveError(error: Error) {
+		throw error;
 	}
 
 	choose(choice: string) {

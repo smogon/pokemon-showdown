@@ -206,7 +206,7 @@ class RandomGen6Teams extends RandomTeams {
 				case 'haze': case 'spikes': case 'waterspout':
 					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
 					break;
-				case 'healbell':
+				case 'healbell': case 'technoblast':
 					if (counter['speedsetup']) rejected = true;
 					break;
 				case 'healingwish': case 'memento':
@@ -448,10 +448,11 @@ class RandomGen6Teams extends RandomTeams {
 				// Status:
 				case 'stunspore': case 'thunderwave':
 					if (counter.setupType || !!counter['speedsetup'] || (hasMove['rest'] && hasMove['sleeptalk'])) rejected = true;
-					if (hasMove['discharge'] || hasMove['gyroball'] || hasMove['spore'] || hasMove['toxic'] || hasMove['trickroom'] || hasMove['yawn']) rejected = true;
+					if (hasMove['discharge'] || hasMove['spore'] || hasMove['toxic'] || hasMove['trickroom'] || hasMove['yawn']) rejected = true;
 					break;
 				case 'toxic':
-					if (counter.setupType || hasMove['flamecharge'] || hasMove['hypnosis'] || hasMove['sleeppowder'] || hasMove['willowisp'] || hasMove['yawn']) rejected = true;
+					if (hasMove['hypnosis'] || hasMove['sleeppowder'] || hasMove['willowisp'] || hasMove['yawn']) rejected = true;
+					if (counter.setupType || hasMove['flamecharge'] || hasMove['raindance']) rejected = true;
 					break;
 				case 'willowisp':
 					if (hasMove['scald']) rejected = true;
@@ -472,7 +473,7 @@ class RandomGen6Teams extends RandomTeams {
 						}
 					}
 					break;
-				case 'milkdrink': case 'moonlight': case 'painsplit': case 'recover': case 'roost': case 'softboiled': case 'synthesis':
+				case 'milkdrink': case 'moonlight': case 'painsplit': case 'recover': case 'roost': case 'synthesis':
 					if (hasMove['leechseed'] || hasMove['rest'] || hasMove['wish']) rejected = true;
 					break;
 				case 'safeguard':
@@ -609,15 +610,17 @@ class RandomGen6Teams extends RandomTeams {
 				} else if (ability === 'Blaze') {
 					rejectAbility = !counter['Fire'];
 				} else if (ability === 'Chlorophyll') {
-					rejectAbility = !hasMove['sunnyday'] && !teamDetails['sun'];
+					rejectAbility = abilities.includes('Harvest') || (!hasMove['sunnyday'] && !teamDetails['sun']);
 				} else if (ability === 'Competitive') {
 					rejectAbility = !counter['Special'] || (hasMove['rest'] && hasMove['sleeptalk']);
 				} else if (ability === 'Compound Eyes' || ability === 'No Guard') {
 					rejectAbility = !counter['inaccurate'];
 				} else if (ability === 'Defiant' || ability === 'Moxie') {
-					rejectAbility = !counter['Physical'];
+					rejectAbility = !counter['Physical'] || hasMove['dragontail'];
 				} else if (ability === 'Flare Boost' || ability === 'Gluttony' || ability === 'Moody') {
 					rejectAbility = true;
+				} else if (ability === 'Harvest') {
+					rejectAbility = abilities.includes('Frisk');
 				} else if (ability === 'Hydration' || ability === 'Rain Dish' || ability === 'Swift Swim') {
 					rejectAbility = !hasMove['raindance'] && !teamDetails['rain'];
 				} else if (ability === 'Ice Body' || ability === 'Snow Cloak') {
@@ -741,6 +744,8 @@ class RandomGen6Teams extends RandomTeams {
 			item = 'Choice Specs';
 		} else if (template.species === 'Wobbuffet') {
 			item = hasMove['destinybond'] ? 'Custap Berry' : this.sample(['Leftovers', 'Sitrus Berry']);
+		} else if (ability === 'Harvest') {
+			item = 'Sitrus Berry';
 		} else if (ability === 'Imposter') {
 			item = 'Choice Scarf';
 		} else if (ability === 'Klutz' && hasMove['switcheroo']) {
@@ -752,32 +757,20 @@ class RandomGen6Teams extends RandomTeams {
 			} else {
 				item = (counter.Physical > counter.Special) ? 'Choice Band' : 'Choice Specs';
 			}
-		} else if (hasMove['geomancy'] || hasMove['solarbeam'] && !hasAbility['Drought'] && !hasMove['sunnyday'] && !teamDetails['sun']) {
-			item = 'Power Herb';
 		} else if (template.evos.length) {
 			item = (ability === 'Technician' && counter.Physical >= 4) ? 'Choice Band' : 'Eviolite';
 		} else if (hasMove['bellydrum']) {
 			item = 'Sitrus Berry';
+		} else if (hasMove['geomancy'] || hasMove['solarbeam'] && ability !== 'Drought' && !hasMove['sunnyday'] && !teamDetails['sun']) {
+			item = 'Power Herb';
 		} else if (hasMove['shellsmash']) {
 			item = (ability === 'Solid Rock' && counter['priority']) ? 'Weakness Policy' : 'White Herb';
-		} else if (ability === 'Harvest') {
-			item = hasMove['rest'] ? 'Lum Berry' : 'Sitrus Berry';
 		} else if ((ability === 'Magic Guard' || ability === 'Sheer Force') && counter.damagingMoves.length > 1) {
 			item = 'Life Orb';
 		} else if (ability === 'Poison Heal' || ability === 'Toxic Boost') {
 			item = 'Toxic Orb';
-		} else if (hasMove['rest'] && !hasMove['sleeptalk'] && ability !== 'Natural Cure' && ability !== 'Shed Skin') {
-			item = (hasMove['raindance'] && ability === 'Hydration') ? 'Damp Rock' : 'Chesto Berry';
-		} else if (hasMove['raindance']) {
-			item = (ability === 'Swift Swim' && counter.Status < 2) ? 'Life Orb' : 'Damp Rock';
-		} else if (hasMove['sunnyday']) {
-			item = (ability === 'Chlorophyll' && counter.Status < 2) ? 'Life Orb' : 'Heat Rock';
-		} else if (hasMove['lightscreen'] && hasMove['reflect']) {
-			item = 'Light Clay';
 		} else if (hasMove['acrobatics']) {
 			item = 'Flying Gem';
-		} else if (hasMove['psychoshift'] || (ability === 'Guts' || hasMove['facade']) && !hasMove['sleeptalk']) {
-			item = hasMove['drainpunch'] ? 'Flame Orb' : 'Toxic Orb';
 		} else if (ability === 'Unburden') {
 			if (hasMove['fakeout']) {
 				item = 'Normal Gem';
@@ -795,6 +788,16 @@ class RandomGen6Teams extends RandomTeams {
 					}
 				}
 			}
+		} else if (hasMove['rest'] && !hasMove['sleeptalk'] && ability !== 'Natural Cure' && ability !== 'Shed Skin') {
+			item = (hasMove['raindance'] && ability === 'Hydration') ? 'Damp Rock' : 'Chesto Berry';
+		} else if (hasMove['raindance']) {
+			item = (ability === 'Forecast' || hasMove['rest']) ? 'Damp Rock' : 'Life Orb';
+		} else if (hasMove['sunnyday']) {
+			item = (ability !== 'Chlorophyll' || counter.Status > 1) ? 'Heat Rock' : 'Life Orb';
+		} else if ((ability === 'Guts' || hasMove['facade'] || hasMove['psychoshift']) && !hasMove['sleeptalk']) {
+			item = hasMove['drainpunch'] ? 'Flame Orb' : 'Toxic Orb';
+		} else if (hasMove['lightscreen'] && hasMove['reflect']) {
+			item = 'Light Clay';
 
 		// Medium priority
 		} else if (((ability === 'Speed Boost' && !hasMove['substitute']) || (ability === 'Stance Change')) && counter.Physical + counter.Special > 2) {

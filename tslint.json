@@ -58,6 +58,6 @@
     },
     "rulesDirectory": [],
     "linterOptions": {
-      "exclude": ["node_modules/**/*", "**/*.js", "dev-tools/*", ".*-dist/*"]
+      "exclude": ["node_modules/**/*", "**/*.js", "dev-tools/*", ".*-dist/**/*"]
      }
 }

@@ -12,8 +12,8 @@ describe('Focus Sash', function () {
 
 	it('should be consumed and allow its user to survive an attack from full HP', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Paras', ability: 'dryskin', item: 'focussash', moves: ['sleeptalk']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Delphox', ability: 'magician', moves: ['incinerate']}]);
+		battle.setPlayer('p1', {team: [{species: 'Paras', ability: 'dryskin', item: 'focussash', moves: ['sleeptalk']}]});
+		battle.setPlayer('p2', {team: [{species: 'Delphox', ability: 'magician', moves: ['incinerate']}]});
 		const holder = battle.p1.active[0];
 		battle.makeChoices('move sleeptalk', 'move incinerate');
 		assert.false.holdsItem(holder);
@@ -23,8 +23,8 @@ describe('Focus Sash', function () {
 
 	it('should be consumed and allow its user to survive a confusion damage hit from full HP', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Shedinja', ability: 'wonderguard', item: 'focussash', moves: ['absorb']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Klefki', ability: 'prankster', moves: ['confuseray']}]);
+		battle.setPlayer('p1', {team: [{species: 'Shedinja', ability: 'wonderguard', item: 'focussash', moves: ['absorb']}]});
+		battle.setPlayer('p2', {team: [{species: 'Klefki', ability: 'prankster', moves: ['confuseray']}]});
 		const holder = battle.p1.active[0];
 		battle.makeChoices('move absorb', 'move confuseray');
 		assert.false.holdsItem(holder);
@@ -34,8 +34,8 @@ describe('Focus Sash', function () {
 
 	it('should not trigger on recoil damage', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Shedinja', ability: 'wonderguard', item: 'focussash', moves: ['doubleedge']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Klefki', ability: 'prankster', moves: ['reflect']}]);
+		battle.setPlayer('p1', {team: [{species: 'Shedinja', ability: 'wonderguard', item: 'focussash', moves: ['doubleedge']}]});
+		battle.setPlayer('p2', {team: [{species: 'Klefki', ability: 'prankster', moves: ['reflect']}]});
 		const holder = battle.p1.active[0];
 		battle.makeChoices('move doubleedge', 'move reflect');
 		assert.holdsItem(holder);
@@ -44,8 +44,8 @@ describe('Focus Sash', function () {
 
 	it('should not trigger on residual damage', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Shedinja', ability: 'wonderguard', item: 'focussash', moves: ['sleeptalk']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Crobat', ability: 'infiltrator', moves: ['toxic']}]);
+		battle.setPlayer('p1', {team: [{species: 'Shedinja', ability: 'wonderguard', item: 'focussash', moves: ['sleeptalk']}]});
+		battle.setPlayer('p2', {team: [{species: 'Crobat', ability: 'infiltrator', moves: ['toxic']}]});
 		const holder = battle.p1.active[0];
 		battle.makeChoices('move sleeptalk', 'move toxic');
 		assert.holdsItem(holder);

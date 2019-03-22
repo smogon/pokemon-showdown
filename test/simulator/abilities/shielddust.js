@@ -22,8 +22,8 @@ describe('Shield Dust', function () {
 
 	it('should not block secondary effects that affect the user of the move', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Ledian', ability: 'ironfist', moves: ['poweruppunch']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Dustox', ability: 'shielddust', moves: ['roost']}]);
+		battle.setPlayer('p1', {team: [{species: 'Ledian', ability: 'ironfist', moves: ['poweruppunch']}]});
+		battle.setPlayer('p2', {team: [{species: 'Dustox', ability: 'shielddust', moves: ['roost']}]});
 		battle.makeChoices('move poweruppunch', 'move roost');
 		assert.statStage(battle.p1.active[0], 'atk', 1);
 	});
@@ -48,16 +48,16 @@ describe('Shield Dust', function () {
 
 	it('should block added effects from Fling', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Ledian', ability: 'ironfist', item: 'petayaberry', moves: ['fling']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Dustox', ability: 'shielddust', moves: ['roost']}]);
+		battle.setPlayer('p1', {team: [{species: 'Ledian', ability: 'ironfist', item: 'petayaberry', moves: ['fling']}]});
+		battle.setPlayer('p2', {team: [{species: 'Dustox', ability: 'shielddust', moves: ['roost']}]});
 		battle.makeChoices('move fling', 'move roost');
 		assert.statStage(battle.p2.active[0], 'spa', 1);
 	});
 
 	it('should not block secondary effects on attacks used by the Pokemon with the ability', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Ledian', ability: 'shielddust', moves: ['poweruppunch', 'strugglebug']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Clefable', ability: 'unaware', moves: ['softboiled']}]);
+		battle.setPlayer('p1', {team: [{species: 'Ledian', ability: 'shielddust', moves: ['poweruppunch', 'strugglebug']}]});
+		battle.setPlayer('p2', {team: [{species: 'Clefable', ability: 'unaware', moves: ['softboiled']}]});
 		battle.makeChoices('move poweruppunch', 'move softboiled');
 		assert.statStage(battle.p1.active[0], 'atk', 1);
 		battle.makeChoices('move strugglebug', 'move softboiled');
@@ -66,8 +66,8 @@ describe('Shield Dust', function () {
 
 	it('should be negated by Mold Breaker', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Pinsir', ability: 'moldbreaker', moves: ['strugglebug']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Dustox', ability: 'shielddust', moves: ['roost']}]);
+		battle.setPlayer('p1', {team: [{species: 'Pinsir', ability: 'moldbreaker', moves: ['strugglebug']}]});
+		battle.setPlayer('p2', {team: [{species: 'Dustox', ability: 'shielddust', moves: ['roost']}]});
 		battle.makeChoices('move strugglebug', 'move roost');
 		assert.statStage(battle.p2.active[0], 'spa', -1);
 	});

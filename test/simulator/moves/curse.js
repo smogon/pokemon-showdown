@@ -12,15 +12,15 @@ describe('Curse', function () {
 
 	it('should request the Ghost target if the user is a known Ghost', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Gengar", ability: 'levitate', item: '', moves: ['curse']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]);
+		battle.setPlayer('p1', {team: [{species: "Gengar", ability: 'levitate', item: '', moves: ['curse']}]});
+		battle.setPlayer('p2', {team: [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]});
 		assert.strictEqual(battle.p1.active[0].getRequestData().moves[0].target, 'normal');
 	});
 
 	it('should request the Ghost target after the user becomes Ghost', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Rapidash", ability: 'levitate', item: '', moves: ['curse']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Trevenant", ability: 'shedskin', item: 'laggingtail', moves: ['trickortreat']}]);
+		battle.setPlayer('p1', {team: [{species: "Rapidash", ability: 'levitate', item: '', moves: ['curse']}]});
+		battle.setPlayer('p2', {team: [{species: "Trevenant", ability: 'shedskin', item: 'laggingtail', moves: ['trickortreat']}]});
 
 		assert.strictEqual(battle.p1.active[0].getRequestData().moves[0].target, 'self');
 		battle.makeChoices('auto', 'auto');
@@ -29,8 +29,8 @@ describe('Curse', function () {
 
 	it('should not request a target after the user stops being Ghost', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Gengar", ability: 'levitate', item: '', moves: ['curse']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Jellicent", ability: 'waterabsorb', item: '', moves: ['soak']}]);
+		battle.setPlayer('p1', {team: [{species: "Gengar", ability: 'levitate', item: '', moves: ['curse']}]});
+		battle.setPlayer('p2', {team: [{species: "Jellicent", ability: 'waterabsorb', item: '', moves: ['soak']}]});
 
 		assert.strictEqual(battle.p1.active[0].getRequestData().moves[0].target, 'normal');
 		battle.makeChoices('auto', 'auto');
@@ -39,18 +39,18 @@ describe('Curse', function () {
 
 	it('should not request a target if the user is a known non-Ghost', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Blastoise", ability: 'torrent', item: '', moves: ['curse']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]);
+		battle.setPlayer('p1', {team: [{species: "Blastoise", ability: 'torrent', item: '', moves: ['curse']}]});
+		battle.setPlayer('p2', {team: [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]});
 		assert.strictEqual(battle.p1.active[0].getRequestData().moves[0].target, 'self');
 	});
 
 	it('should not request a target if the user is an unknown non-Ghost', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Blastoise", ability: 'torrent', item: '', moves: ['curse', 'reflecttype']}]);
-		battle.join('p2', 'Guest 2', 1, [
+		battle.setPlayer('p1', {team: [{species: "Blastoise", ability: 'torrent', item: '', moves: ['curse', 'reflecttype']}]});
+		battle.setPlayer('p2', {team: [
 			{species: "Zoroark", ability: 'illusion', item: '', moves: ['nastyplot']},
 			{species: "Gengar", ability: 'levitate', item: '', moves: ['spite']},
-		]);
+		]});
 		battle.makeChoices('move reflecttype', 'auto'); // Reflect Type!
 
 		assert.deepEqual(battle.p1.active[0].getTypes(), ["Dark"]); // Copied Zoroark's type instead of Gengar's
@@ -59,8 +59,8 @@ describe('Curse', function () {
 
 	it('should curse a non-Ghost user with Protean', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Greninja", ability: 'protean', item: '', moves: ['curse', 'spite']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]);
+		battle.setPlayer('p1', {team: [{species: "Greninja", ability: 'protean', item: '', moves: ['curse', 'spite']}]});
+		battle.setPlayer('p2', {team: [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]});
 
 		battle.makeChoices('auto', 'auto');
 		let hps = [battle.p1.active[0].hp, battle.p2.active[0].hp];
@@ -74,8 +74,8 @@ describe('Curse', function () {
 
 	it('should curse the target if a Ghost user has Protean', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Gengar", ability: 'protean', item: '', moves: ['curse', 'spite']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]);
+		battle.setPlayer('p1', {team: [{species: "Gengar", ability: 'protean', item: '', moves: ['curse', 'spite']}]});
+		battle.setPlayer('p2', {team: [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]});
 
 		battle.makeChoices('auto', 'auto');
 		let hps = [battle.p1.active[0].hp, battle.p2.active[0].hp];
