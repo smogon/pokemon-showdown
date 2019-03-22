@@ -3068,7 +3068,6 @@ export class Battle extends Dex.ModdedDex {
 		}
 	}
 
-	// FIXME: Using a function to distinguish from AnyObject
 	add(...parts: (Part | (() => {side: SideID, secret: string, shared: string}))[]) {
 		if (!parts.some(part => typeof part === 'function')) {
 			this.log.push(`|${parts.join('|')}`);
@@ -3080,7 +3079,6 @@ export class Battle extends Dex.ModdedDex {
 		for (const part of parts) {
 			if (typeof part === 'function') {
 				const split = part();
-				// FIXME: Can only handle a single side
 				if (side && side !== split.side) throw new Error("Multiple sides passed to add");
 				side = split.side;
 				secret.push(split.secret);

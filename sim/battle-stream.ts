@@ -216,24 +216,25 @@ export function getPlayerStreams(stream: BattleStream) {
 		while ((chunk = await stream.read())) {
 			const [type, data] = splitFirst(chunk, `\n`);
 			switch (type) {
-			case 'update': {
+			case 'update':
 				const split = SPLIT_REGEX.exec(data);
 				for (const name in streams) {
 					// @ts-ignore - index signature
 					const s = streams[name];
-					s.push(split ? (name === split[0] || name === 'omniscient' ? split[1] : split[2]) : data);
+					if (split) {
+						s.push((name === split[0] || name === 'omniscient' ? split[1] : split[2]));
+					} else {
+						s.push(data);
+					}
 				}
 				break;
-			}
-			case 'sideupdate': {
+			case 'sideupdate':
 				const [side, sideData] = splitFirst(data, `\n`);
 				streams[side as SideID].push(sideData);
 				break;
-			}
-			case 'end': {
+			case 'end':
 				// ignore
 				break;
-			}
 			}
 		}
 		for (const s of Object.values(streams)) {

@@ -12,6 +12,9 @@
 /** @type {typeof import('../lib/fs').FS} */
 const FS = require(/** @type {any} */('../.lib-dist/fs')).FS;
 
+const SPECTATOR_CHANNEL = 5;
+const OMNISCIENT_CHANNEL = 5;
+
 /**
  * Most rooms have three logs:
  * - scrollback
@@ -92,7 +95,8 @@ class Roomlog {
 			const line = this.log[i];
 			const split = /\|split\|p(\d)/g.exec(line);
 			if (split) {
-				const ownLine = this.log[i + (Number(split[0]) === channel ? 1 : 2)];
+				const offset = (channel === OMNISCIENT_CHANNEL || Number(split[0]) === channel) ? 1 : 2;
+				const ownLine = this.log[i + offset];
 				if (ownLine) log.push(ownLine);
 				i += 2;
 			} else {
@@ -100,7 +104,7 @@ class Roomlog {
 			}
 		}
 		let textLog = log.join('\n') + '\n';
-		if (channel === 0) {
+		if (channel === SPECTATOR_CHANNEL) {
 			return textLog.replace(/\n\|choice\|\|\n/g, '\n').replace(/\n\|seed\|\n/g, '\n');
 		}
 		return textLog;

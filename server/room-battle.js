@@ -71,11 +71,11 @@ class RoomBattlePlayer {
 	updateChannel(/** @type {User | Connection} */ user) {
 		if (user instanceof Users.Connection) {
 			// "user" is actually a connection
-			Sockets.channelMove(user.worker, this.game.id, this.slotNum % 2 + 1, user.socketid);
+			Sockets.channelMove(user.worker, this.game.id, this.slotNum + 1, user.socketid);
 			return;
 		}
 		for (const connection of user.connections) {
-			Sockets.channelMove(connection.worker, this.game.id, this.slotNum % 2 + 1, connection.socketid);
+			Sockets.channelMove(connection.worker, this.game.id, this.slotNum + 1, connection.socketid);
 		}
 	}
 
