@@ -73,7 +73,6 @@ class Runner {
 				games.push(game);
 				timers.push(timer);
 			} catch (e) {
-				// TODO(#5297): danging promises still need to be fixed for this to work.
 				if (battleStream && battleStream.battle && this.logs) {
 					console.error(`${battleStream.battle.inputLog.join('\n')}\n\n`);
 				}
@@ -98,17 +97,17 @@ class Runner {
 		const p1spec = {name: "Bot 1", seed: this.newSeed()};
 		const p2spec = {name: "Bot 2", seed: this.newSeed()};
 
-		const p1 = new RandomPlayerAI( // eslint-disable-line no-unused-vars
-			streams.p1, Object.assign({seed: this.newSeed()}, this.p1options));
-		const p2 = new RandomPlayerAI( // eslint-disable-line no-unused-vars
-			streams.p2, Object.assign({seed: this.newSeed()}, this.p2options));
+		const p1 = new RandomPlayerAI(
+			streams.p1, Object.assign({seed: this.newSeed()}, this.p1options)).start();
+		const p2 = new RandomPlayerAI(
+			streams.p2, Object.assign({seed: this.newSeed()}, this.p2options)).start();
 
 		t(streams.omniscient.write(`>start ${JSON.stringify(spec)}\n` +
 			`>player p1 ${JSON.stringify(p1spec)}\n` +
 			`>player p2 ${JSON.stringify(p2spec)}`));
 
 		let chunk;
-		while ((chunk = await streams.omniscient.read())) {
+		while ((chunk = await Promise.race([streams.omniscient.read(), p1, p2]))) {
 			if (this.verbose) console.log(chunk);
 		}
 	}
@@ -162,7 +161,7 @@ if (require.main === module) {
 
 	const options = {totalGames: 100, p1options: AI_OPTIONS, p2options: AI_OPTIONS, timer: () => NOOP_TIMER};
 	// If we have more than one arg, or the arg looks like a flag, we need minimist to understand it.
-	if (process.argv.length > 2 || process.argv.length === 2 && process.argv[2].startsWith('-')) {
+	if (process.argv.length > 2 || process.argv.length === 2 && process.argv[1].startsWith('-')) {
 		const missing = dep => {
 			try {
 				require.resolve(dep);
@@ -191,7 +190,7 @@ if (require.main === module) {
 			options.formatter = new trakkr.Formatter(!!argv.full, trakkr.SORT,
 				argv.csv ? trakkr.CSV : (argv.tsv ? trakkr.TSV : trakkr.TABLE));
 		}
-		if (argv.seed) options.prng = argv.prng.split(',').map(s => Number(s));
+		if (argv.seed) options.prng = argv.seed.split(',').map(s => Number(s));
 		options.totalGames = Number(argv._[0] || argv.num) || options.totalGames;
 		options.verbose = argv.verbose;
 		options.silent = argv.silent;
