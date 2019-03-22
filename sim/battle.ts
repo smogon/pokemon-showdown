@@ -31,11 +31,13 @@ interface BattleOptions {
 	p4?: PlayerOptions; // Player 4 data
 	debug?: boolean; // show debug mode option
 	strictChoices?: boolean; // whether invalid choices should throw
+	timer?: null; // timer used for profiling through dev-tools/harness.js
 }
 
 export class Battle extends Dex.ModdedDex {
 	readonly id: '';
 	readonly debugMode: boolean;
+	readonly timer: null;
 	readonly strictChoices: boolean;
 	readonly format: string;
 	readonly formatData: AnyObject;
@@ -106,6 +108,7 @@ export class Battle extends Dex.ModdedDex {
 
 		this.id = '';
 		this.debugMode = format.debug || !!options.debug;
+		this.timer = options.timer || null;
 		this.strictChoices = !!options.strictChoices;
 		this.format = format.id;
 		this.formatData = {id: format.id};

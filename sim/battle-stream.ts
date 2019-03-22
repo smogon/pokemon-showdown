@@ -41,12 +41,14 @@ function splitFirst(str: string, delimiter: string, limit: number = 1) {
 export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 	readonly debug: boolean;
 	readonly keepAlive: boolean;
+	readonly timer?: null;
 	battle: Battle | null;
 
-	constructor(options: {debug?: boolean, keepAlive?: boolean} = {}) {
+	constructor(options: {debug?: boolean, keepAlive?: boolean, timer?: null} = {}) {
 		super();
 		this.debug = !!options.debug;
 		this.keepAlive = !!options.keepAlive;
+		this.timer = options.timer;
 		this.battle = null;
 	}
 
@@ -98,6 +100,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 				}
 			};
 			if (this.debug) options.debug = true;
+			if (this.timer!) options.timer = this.timer;
 			this.battle = new Battle(options);
 			break;
 		case 'player':
