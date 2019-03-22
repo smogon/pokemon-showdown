@@ -4,8 +4,6 @@
  *
  * @license MIT
  */
-import * as Data from './dex-data';
-
 export class Field {
 	readonly battle: Battle;
 
