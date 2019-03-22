@@ -6338,16 +6338,13 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1, authentic: 1},
 		onHitSide(side, source, move) {
-			let targets = [];
-			for (let p in side.active) {
-				if (side.active[p].hasAbility(['plus', 'minus'])) {
-					targets.push(side.active[p]);
-				}
-			}
-			if (!targets.length) return false;
+			const targets = source.allies().filter(ally => ally.hasAbility(['plus', 'minus']));
+			/** @type {boolean | 0 | null} */
+			let didSomething = false;
 			for (const target of targets) {
-				this.boost({atk: 1, spa: 1}, target, source, move);
+				didSomething = this.combineResults(didSomething, this.boost({atk: 1, spa: 1}, target, source, move));
 			}
+			return didSomething;
 		},
 		secondary: null,
 		target: "allySide",
@@ -9891,16 +9888,13 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1, distance: 1, authentic: 1},
 		onHitSide(side, source, move) {
-			let targets = [];
-			for (let p in side.active) {
-				if (side.active[p].hasAbility(['plus', 'minus'])) {
-					targets.push(side.active[p]);
-				}
-			}
-			if (!targets.length) return false;
+			const targets = source.allies().filter(ally => ally.hasAbility(['plus', 'minus']));
+			/** @type {boolean | 0 | null} */
+			let didSomething = false;
 			for (const target of targets) {
-				this.boost({def: 1, spd: 1}, target, source, move);
+				didSomething = this.combineResults(didSomething, this.boost({def: 1, spd: 1}, target, source, move));
 			}
+			return didSomething;
 		},
 		secondary: null,
 		target: "allySide",
