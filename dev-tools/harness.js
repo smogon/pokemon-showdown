@@ -55,12 +55,10 @@ class Runner {
 		while ((format = this.getNextFormat())) {
 			if (this.all && lastFormat && format !== lastFormat) {
 				await Promise.all(games);
-				// TODO: trakkr still needs to support aggregated statistics...
-				// if (!this.silent) console.log(this.formatter.display(timers));
-				const formatStats = new Map();
-				formatStats.set(lastFormat, trakkr.Stats.compute(timers.map(t => t.duration)));
-				console.log(this.formatter.displayStats(formatStats));
-				console.log(this.formatter.displayStats(trakkr.aggregateStats(timers)));
+
+				// TODO: WIP trakkr still needs to support aggregated statistics...
+				if (this.formatter) this.display(lastFormat, timers);
+
 				games = [];
 				timers = [];
 			}
@@ -89,8 +87,20 @@ class Runner {
 			lastFormat = format;
 		}
 
+		if (this.all && this.formatter) {
+			this.display(lastFormat, timers);
+			// TODO: spit out summary if benchmarking?
+		}
+
 		// Calculate how many games failed (failures weren't added to `games`).
 		return this.totalGames - (await Promise.all(games)).length;
+	}
+
+	display(format, timers) {
+		const formatStats = new Map();
+		formatStats.set(format, trakkr.Stats.compute(timers.map(t => t.duration)));
+		console.log(this.formatter.displayStats(formatStats));
+		console.log(this.formatter.displayStats(trakkr.aggregateStats(timers)));
 	}
 
 	async runGame(format, timer, battleStream) {
