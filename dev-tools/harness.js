@@ -68,7 +68,7 @@ class Runner {
 				const game = this.runGame(format, timer, battleStream).finally(() => timer.stop());
 				if (!this.async) {
 					await game;
-					if (this.verbose && this.formatter.display) console.log(this.formatter.display(timer));
+					if (this.verbose && this.formatter) console.log(this.formatter(timer));
 				}
 				games.push(game);
 				timers.push(timer);
@@ -161,7 +161,7 @@ if (require.main === module) {
 
 	const options = {totalGames: 100, p1options: AI_OPTIONS, p2options: AI_OPTIONS, timer: () => NOOP_TIMER};
 	// If we have more than one arg, or the arg looks like a flag, we need minimist to understand it.
-	if (process.argv.length > 2 || process.argv.length === 2 && process.argv[1].startsWith('-')) {
+	if (process.argv.length > 3 || process.argv.length === 3 && process.argv[2].startsWith('-')) {
 		const missing = dep => {
 			try {
 				require.resolve(dep);
@@ -174,7 +174,10 @@ if (require.main === module) {
 
 		if (missing('minimist')) shell('npm install minimist');
 		const argv = require('minimist')(process.argv.slice(2));
+		Object.assign(options, argv);
 
+		options.totalGames = Number(argv._[0] || argv.num) || options.totalGames;
+		if (argv.seed) options.prng = argv.seed.split(',').map(s => Number(s));
 		if (argv.benchmark) {
 			// *Seed scientifically chosen after incredibly detailed and thoughtful analysis.*
 			// The default seed used when running the harness for benchmarking purposes - all we
@@ -182,23 +185,19 @@ if (require.main === module) {
 			// about the randomness provided it results in pseudo-realistic game playouts.
 			options.prng = [0x01234, 0x05678, 0x09123, 0x04567];
 
-		  if (missing('minimist')) shell('npm install trakkr');
+			if (missing('trakkr')) shell('npm install trakkr');
 			const trakkr = require('trakkr');
-			options.timer = () => trakkr.Timer.create(); // TODO: Buffer.allocUnsafe(numGames * BUFFER);
+			const buf = argv.fixed && {buf: Buffer.allocUnsafe(options.totalGames * (parseInt(argv.fixed) || 0x100000))};
+			options.timer = () => trakkr.Timer.create(buf);
 			// Choose which formatter to use - we don't need to tweak the sort or write a custom
 			// formatter because its almost as though the defaults were written for our usecase...
-			options.formatter = new trakkr.Formatter(!!argv.full, trakkr.SORT,
-				argv.csv ? trakkr.CSV : (argv.tsv ? trakkr.TSV : trakkr.TABLE));
+			const formatter = new trakkr.Formatter(!!argv.full, trakkr.SORT,
+				(argv.output === 'csv' || argv.csv) ? trakkr.CSV :
+				(argv.output === 'tsv' || argv.tsv) ? trakkr.TSV :
+				/** argv.output === 'table' */  trakkr.TABLE);
+			options.formatter = t => formatter.display(t);
 		}
-		if (argv.seed) options.prng = argv.seed.split(',').map(s => Number(s));
-		options.totalGames = Number(argv._[0] || argv.num) || options.totalGames;
-		options.verbose = argv.verbose;
-		options.silent = argv.silent;
-		options.logs = argv.logs;
-		options.all = argv.all;
-		options.async = argv.async;
-		options.format = argv.format;
-	} else if (process.argv.length === 2) {
+	} else if (process.argv.length === 3) {
 		// If we have one arg, treat it as the total number of games to play.
 		options.totalGames = Number(process.argv[2]) || options.totalGames;
 	}
