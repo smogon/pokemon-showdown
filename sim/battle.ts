@@ -527,7 +527,7 @@ export class Battle extends Dex.ModdedDex {
 	 *   they're useful for functions called by the event handler.
 	 */
 	runEvent(
-		eventid: string, target?: Pokemon | Pokemon[] | Side | Field | Battle | null, source?: string | Pokemon | false | null,
+		eventid: string, target?: Pokemon | Pokemon[] | Side | Battle | null, source?: string | Pokemon | false | null,
 		effect?: Effect | null, relayVar?: any, onEffect?: boolean, fastExit?: boolean) {
 		// if (Battle.eventCounter) {
 		// 	if (!Battle.eventCounter[eventid]) Battle.eventCounter[eventid] = 0;
@@ -699,7 +699,7 @@ export class Battle extends Dex.ModdedDex {
 	 * on the first non-undefined value instead of only on null/false.
 	 */
 	priorityEvent(
-		eventid: string, target: Pokemon | Side | Field | Battle, source?: Pokemon | null,
+		eventid: string, target: Pokemon | Side | Battle, source?: Pokemon | null,
 		effect?: Effect, relayVar?: any, onEffect?: boolean): any {
 		return this.runEvent(eventid, target, source, effect, relayVar, onEffect, true);
 	}
@@ -712,7 +712,7 @@ export class Battle extends Dex.ModdedDex {
 		if (handler.thing && handler.thing.getStat) handler.speed = handler.thing.speed;
 	}
 
-	findEventHandlers(thing: Pokemon | Pokemon[] | Side | Field | Battle, eventName: string, sourceThing?: Pokemon | null) {
+	findEventHandlers(thing: Pokemon | Pokemon[] | Side | Battle, eventName: string, sourceThing?: Pokemon | null) {
 		let handlers: AnyObject[] = [];
 		if (Array.isArray(thing)) {
 			for (const [i, pokemon] of thing.entries()) {
@@ -741,9 +741,7 @@ export class Battle extends Dex.ModdedDex {
 		if (sourceThing) {
 			handlers.push(...this.findPokemonEventHandlers(sourceThing, `onSource${eventName}`));
 		}
-		if (thing instanceof Field) {
-			handlers.push(...this.findFieldEventHandlers(thing, `on${eventName}`));
-		} else if (thing instanceof Side) {
+		if (thing instanceof Side) {
 			const team = this.gameType === 'multi' ? thing.n % 2 : null;
 			for (const side of this.sides) {
 				if (team === null ? side === thing : side.n % 2 === team) {
@@ -754,6 +752,7 @@ export class Battle extends Dex.ModdedDex {
 				handlers.push(...this.findSideEventHandlers(side, `onAny${eventName}`));
 			}
 		}
+		handlers.push(...this.findFieldEventHandlers(this.field, `on${eventName}`));
 		handlers.push(...this.findBattleEventHandlers(`on${eventName}`));
 		return handlers;
 	}

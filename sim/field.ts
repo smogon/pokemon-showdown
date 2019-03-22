@@ -68,7 +68,7 @@ export class Field {
 			if (!source) throw new Error(`setting weather without a source`);
 			this.weatherData.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
 		}
-		if (!this.battle.singleEvent('Start', status, this.weatherData, this /* TODO */, source, sourceEffect)) {
+		if (!this.battle.singleEvent('Start', status, this.weatherData, this, source, sourceEffect)) {
 			this.weather = prevWeather;
 			this.weatherData = prevWeatherData;
 			return false;
@@ -79,7 +79,7 @@ export class Field {
 	clearWeather() {
 		if (!this.weather) return false;
 		const prevWeather = this.getWeather();
-		this.battle.singleEvent('End', prevWeather, this.weatherData, this /* TODO */);
+		this.battle.singleEvent('End', prevWeather, this.weatherData, this);
 		this.weather = '';
 		this.weatherData = {id: ''};
 		return true;
@@ -133,7 +133,7 @@ export class Field {
 		if (status.durationCallback) {
 			this.terrainData.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
 		}
-		if (!this.battle.singleEvent('Start', status, this.terrainData, this /* TODO */, source, sourceEffect)) {
+		if (!this.battle.singleEvent('Start', status, this.terrainData, this, source, sourceEffect)) {
 			this.terrain = prevTerrain;
 			this.terrainData = prevTerrainData;
 			return false;
@@ -145,7 +145,7 @@ export class Field {
 	clearTerrain() {
 		if (!this.terrain) return false;
 		const prevTerrain = this.getTerrain();
-		this.battle.singleEvent('End', prevTerrain, this.terrainData, this /* TODO */);
+		this.battle.singleEvent('End', prevTerrain, this.terrainData, this);
 		this.terrain = '';
 		this.terrainData = {id: ''};
 		return true;
@@ -180,7 +180,7 @@ export class Field {
 		let effectData = this.pseudoWeather[status.id];
 		if (effectData) {
 			if (!status.onRestart) return false;
-			return this.battle.singleEvent('Restart', status, effectData, this /* TODO */, source, sourceEffect);
+			return this.battle.singleEvent('Restart', status, effectData, this, source, sourceEffect);
 		}
 		effectData = this.pseudoWeather[status.id] = {
 			id: status.id,
@@ -192,7 +192,7 @@ export class Field {
 			if (!source) throw new Error(`setting fieldcond without a source`);
 			effectData.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
 		}
-		if (!this.battle.singleEvent('Start', status, effectData, this /* TODO */, source, sourceEffect)) {
+		if (!this.battle.singleEvent('Start', status, effectData, this, source, sourceEffect)) {
 			delete this.pseudoWeather[status.id];
 			return false;
 		}
@@ -208,7 +208,7 @@ export class Field {
 		status = this.battle.getEffect(status);
 		const effectData = this.pseudoWeather[status.id];
 		if (!effectData) return false;
-		this.battle.singleEvent('End', status, effectData, this /* TODO */);
+		this.battle.singleEvent('End', status, effectData, this);
 		delete this.pseudoWeather[status.id];
 		return true;
 	}

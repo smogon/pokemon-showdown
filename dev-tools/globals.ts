@@ -220,7 +220,7 @@ interface EventMethods {
 	onEat?: ((this: Battle, pokemon: Pokemon) => void) | false
 	onEatItem?: (this: Battle, item: Item, pokemon: Pokemon) => void
 	onEffectiveness?: (this: Battle, typeMod: number, target: Pokemon | null, type: string, move: ActiveMove) => void
-	onEnd?: (this: Battle, pokemon: Pokemon & Side) => void
+	onEnd?: (this: Battle, target: Pokemon & Side & Field) => void
 	onFaint?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect) => void
 	onFlinch?: ((this: Battle, pokemon: Pokemon) => void) | boolean
 	onFoeAfterDamage?: (this: Battle, damage: number, target: Pokemon) => void
@@ -234,7 +234,7 @@ interface EventMethods {
 	onFoeTrapPokemon?: (this: Battle, pokemon: Pokemon) => void
 	onFoeTryMove?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => void
 	onHit?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => void
-	onHitField?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => boolean | void // TODO Field?
+	onHitField?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => boolean | void
 	onHitSide?: (this: Battle, side: Side, source: Pokemon, move: ActiveMove) => void
 	onImmunity?: (this: Battle, type: string, pokemon: Pokemon) => void
 	onLockMove?: string | ((this: Battle, pokemon: Pokemon) => void)
@@ -261,7 +261,7 @@ interface EventMethods {
 	onPrimal?: (this: Battle, pokemon: Pokemon) => void
 	onRedirectTarget?: (this: Battle, target: Pokemon, source: Pokemon, source2: Effect) => void
 	onResidual?: (this: Battle, target: Pokemon & Side, source: Pokemon, effect: Effect) => void
-	onRestart?: (this: Battle, pokemon: Pokemon, source: Pokemon) => void
+	onRestart?: (this: Battle, target: Pokemon & Field, source: Pokemon) => void
 	onSetAbility?: (this: Battle, ability: string, target: Pokemon, source: Pokemon, effect: Effect) => void
 	onSetStatus?: (this: Battle, status: PureEffect, target: Pokemon, source: Pokemon, effect: Effect) => void
 	onSourceAccuracy?: (this: Battle, accuracy: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void
@@ -276,7 +276,7 @@ interface EventMethods {
 	onSourceTryHeal?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect) => void
 	onSourceTryPrimaryHit?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => void
 	onStallMove?: (this: Battle, pokemon: Pokemon) => void
-	onStart?: (this: Battle, target: Pokemon & Side, source: Pokemon, effect: Effect, move: ActiveMove) => void
+	onStart?: (this: Battle, target: Pokemon & Side & Field, source: Pokemon, effect: Effect, move: ActiveMove) => void
 	onSwitchIn?: (this: Battle, pokemon: Pokemon) => void
 	onSwitchOut?: (this: Battle, pokemon: Pokemon) => void
 	onTakeItem?: ((this: Battle, item: Item, pokemon: Pokemon, source: Pokemon) => void) | false
@@ -287,7 +287,7 @@ interface EventMethods {
 	onTryEatItem?: (this: Battle, item: Item, pokemon: Pokemon) => void
 	onTryHeal?: ((this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect) => void) | boolean
 	onTryHit?: ((this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => void) | boolean
-	onTryHitField?: (this: Battle, target: Pokemon, source: Pokemon) => boolean | void // TODO Field?
+	onTryHitField?: (this: Battle, target: Pokemon, source: Pokemon) => boolean | void
 	onTryHitSide?: (this: Battle, side: Side, source: Pokemon) => void
 	onTryMove?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => void
 	onTryPrimaryHit?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => void
