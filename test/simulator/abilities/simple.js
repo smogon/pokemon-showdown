@@ -12,8 +12,8 @@ describe('Simple', function () {
 
 	it('should double all stat boosts', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Bibarel", ability: 'simple', moves: ['curse']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Gyarados", ability: 'moxie', moves: ['splash']}]);
+		battle.setPlayer('p1', {team: [{species: "Bibarel", ability: 'simple', moves: ['curse']}]});
+		battle.setPlayer('p2', {team: [{species: "Gyarados", ability: 'moxie', moves: ['splash']}]});
 		battle.makeChoices('move curse', 'move splash');
 		const target = battle.p1.active[0];
 		assert.statStage(target, 'atk', 2);

@@ -46,8 +46,8 @@ describe('Paralysis', function () {
 
 	it('should reduce speed to 50% of its original value', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave']}]);
+		battle.setPlayer('p1', {team: [{species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring']}]});
+		battle.setPlayer('p2', {team: [{species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave']}]});
 		let speed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move aquaring', 'move thunderwave');
 		assert.strictEqual(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.5));
@@ -55,8 +55,8 @@ describe('Paralysis', function () {
 
 	it('should reduce speed to 25% of its original value in Gen 6', function () {
 		battle = common.gen(6).createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave']}]);
+		battle.setPlayer('p1', {team: [{species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring']}]});
+		battle.setPlayer('p2', {team: [{species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave']}]});
 		let speed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move aquaring', 'move thunderwave');
 		assert.strictEqual(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
@@ -64,8 +64,8 @@ describe('Paralysis', function () {
 
 	it('should reduce speed to 25% of its original value in Gen 2', function () {
 		battle = common.gen(2).createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave']}]);
+		battle.setPlayer('p1', {team: [{species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring']}]});
+		battle.setPlayer('p2', {team: [{species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave']}]});
 		let speed = battle.p1.active[0].getStat('spe');
 		battle.makeChoices('move aquaring', 'move thunderwave');
 		assert.strictEqual(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));

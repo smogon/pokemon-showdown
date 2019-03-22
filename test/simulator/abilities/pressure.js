@@ -34,8 +34,8 @@ describe('Pressure', function () {
 
 	it('should deduct PP even if the move fails or misses', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Giratina", ability: 'pressure', item: 'laggingtail', moves: ['mistyterrain', 'shadowforce']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Smeargle", ability: 'desolateland', moves: ['doubleedge', 'spore', 'moonblast', 'surf']}]);
+		battle.setPlayer('p1', {team: [{species: "Giratina", ability: 'pressure', item: 'laggingtail', moves: ['mistyterrain', 'shadowforce']}]});
+		battle.setPlayer('p2', {team: [{species: "Smeargle", ability: 'desolateland', moves: ['doubleedge', 'spore', 'moonblast', 'surf']}]});
 		battle.makeChoices('auto', 'auto');
 		assert.strictEqual(battle.p2.active[0].getMoveData(Dex.getMove('doubleedge')).pp, 22);
 		battle.makeChoices('move shadowforce', 'move spore');
@@ -49,16 +49,16 @@ describe('Pressure', function () {
 	it('should deduct PP for each Pressure Pokemon targetted', function () {
 		this.timeout(3000);
 		battle = common.createBattle({gameType: 'triples'});
-		battle.join('p1', 'Guest 1', 1, [
+		battle.setPlayer('p1', {team: [
 			{species: "Giratina", ability: 'pressure', moves: ['rest']},
 			{species: "Palkia", ability: 'pressure', moves: ['rest']},
 			{species: "Dialga", ability: 'pressure', moves: ['rest']},
-		]);
-		battle.join('p2', 'Guest 2', 1, [
+		]});
+		battle.setPlayer('p2', {team: [
 			{species: "Kyurem", ability: 'pressure', moves: ['hail']},
 			{species: "Zekrom", ability: 'teravolt', moves: ['spikes']},
 			{species: "Reshiram", ability: 'turboblaze', moves: ['rockslide']},
-		]);
+		]});
 		battle.makeChoices('move rest, move rest, move rest', 'move hail, move spikes, move rockslide');
 		assert.strictEqual(battle.p2.active[0].getMoveData(Dex.getMove('hail')).pp, 12);
 		assert.strictEqual(battle.p2.active[1].getMoveData(Dex.getMove('spikes')).pp, 28);
@@ -68,16 +68,16 @@ describe('Pressure', function () {
 	it('should deduct PP for each opposing Pressure Pokemon when Snatch of Imprison are used', function () {
 		this.timeout(3000);
 		battle = common.createBattle({gameType: 'triples'});
-		battle.join('p1', 'Guest 1', 1, [
+		battle.setPlayer('p1', {team: [
 			{species: "Giratina", ability: 'pressure', moves: ['rest']},
 			{species: "Palkia", ability: 'pressure', moves: ['rest']},
 			{species: "Dialga", ability: 'pressure', moves: ['rest']},
-		]);
-		battle.join('p2', 'Guest 2', 1, [
+		]});
+		battle.setPlayer('p2', {team: [
 			{species: "Kyurem", ability: 'pressure', moves: ['snatch']},
 			{species: "Zekrom", ability: 'teravolt', moves: ['imprison']},
 			{species: "Reshiram", ability: 'turboblaze', moves: ['rest']},
-		]);
+		]});
 		battle.makeChoices('move rest, move rest, move rest', 'move snatch, move imprison, move rest');
 		assert.strictEqual(battle.p2.active[0].getMoveData(Dex.getMove('snatch')).pp, 12);
 		assert.strictEqual(battle.p2.active[1].getMoveData(Dex.getMove('imprison')).pp, 12);

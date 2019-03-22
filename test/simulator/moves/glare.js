@@ -12,16 +12,16 @@ describe('Glare', function () {
 
 	it('should inflict paralysis on its target', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Arbok", ability: 'noguard', moves: ['glare']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Ekans", ability: 'sturdy', moves: ['bulkup']}]);
+		battle.setPlayer('p1', {team: [{species: "Arbok", ability: 'noguard', moves: ['glare']}]});
+		battle.setPlayer('p2', {team: [{species: "Ekans", ability: 'sturdy', moves: ['bulkup']}]});
 		battle.makeChoices('move glare', 'move bulkup');
 		assert.strictEqual(battle.p2.active[0].status, 'par');
 	});
 
 	it('should ignore natural type immunities', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Arbok", ability: 'noguard', moves: ['glare']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Gengar", ability: 'blaze', moves: ['bulkup']}]);
+		battle.setPlayer('p1', {team: [{species: "Arbok", ability: 'noguard', moves: ['glare']}]});
+		battle.setPlayer('p2', {team: [{species: "Gengar", ability: 'blaze', moves: ['bulkup']}]});
 		battle.makeChoices('move glare', 'move bulkup');
 		assert.strictEqual(battle.p2.active[0].status, 'par');
 	});

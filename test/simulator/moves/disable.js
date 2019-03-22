@@ -12,8 +12,8 @@ describe('Disable', function () {
 
 	it('should prevent the use of the target\'s last move', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Abra', ability: 'synchronize', item: 'laggingtail', moves: ['disable']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Abra', ability: 'synchronize', moves: ['teleport']}]);
+		battle.setPlayer('p1', {team: [{species: 'Abra', ability: 'synchronize', item: 'laggingtail', moves: ['disable']}]});
+		battle.setPlayer('p2', {team: [{species: 'Abra', ability: 'synchronize', moves: ['teleport']}]});
 		battle.makeChoices('move disable', 'move teleport');
 		assert.cantMove(() => battle.makeChoices('move disable', 'move teleport'), 'Abra', 'Teleport');
 	});

@@ -12,8 +12,8 @@ describe('Lansat Berry', function () {
 
 	it('should apply a Focus Energy effect when consumed', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Aggron', ability: 'sturdy', item: 'lansatberry', moves: ['sleeptalk']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Lucario', ability: 'adaptability', moves: ['aurasphere']}]);
+		battle.setPlayer('p1', {team: [{species: 'Aggron', ability: 'sturdy', item: 'lansatberry', moves: ['sleeptalk']}]});
+		battle.setPlayer('p2', {team: [{species: 'Lucario', ability: 'adaptability', moves: ['aurasphere']}]});
 		const holder = battle.p1.active[0];
 		battle.makeChoices('move sleeptalk', 'move aurasphere');
 		assert.false.holdsItem(holder);
