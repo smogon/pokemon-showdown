@@ -13,8 +13,8 @@ describe('Thick Fat', function () {
 	it('should halve damage from Fire- or Ice-type attacks', function () {
 		// calls to resetRNG are to avoid crits
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Hariyama", ability: 'thickfat', moves: ['splash']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Nidoking", ability: 'sheerforce', moves: ['incinerate', 'icebeam']}]);
+		battle.setPlayer('p1', {team: [{species: "Hariyama", ability: 'thickfat', moves: ['splash']}]});
+		battle.setPlayer('p2', {team: [{species: "Nidoking", ability: 'sheerforce', moves: ['incinerate', 'icebeam']}]});
 		const target = battle.p1.active[0];
 		// should not crit
 		battle.makeChoices('move splash', 'move incinerate');
@@ -29,8 +29,8 @@ describe('Thick Fat', function () {
 	it('should be suppressed by Mold Breaker', function () {
 		// calls to resetRNG are to avoid crits
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Hariyama", ability: 'thickfat', moves: ['splash']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Nidoking", ability: 'moldbreaker', moves: ['incinerate', 'icebeam']}]);
+		battle.setPlayer('p1', {team: [{species: "Hariyama", ability: 'thickfat', moves: ['splash']}]});
+		battle.setPlayer('p2', {team: [{species: "Nidoking", ability: 'moldbreaker', moves: ['incinerate', 'icebeam']}]});
 		const target = battle.p1.active[0];
 		// should not crit
 		battle.makeChoices('move splash', 'move incinerate');

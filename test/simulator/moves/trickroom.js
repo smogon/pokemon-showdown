@@ -34,14 +34,14 @@ describe('Trick Room', function () {
 
 	it('should also affect the activation order for abilities and other non-move actions', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [
+		battle.setPlayer('p1', {team: [
 			{species: 'Bronzong', ability: 'heatproof', moves: ['trickroom', 'explosion']},
 			{species: 'Hippowdon', ability: 'sandstream', moves: ['protect']},
-		]);
-		battle.join('p2', 'Guest 2', 1, [
+		]});
+		battle.setPlayer('p2', {team: [
 			{species: 'Ninjask', ability: 'speedboost', moves: ['shellsmash']},
 			{species: 'Ninetales', ability: 'drought', moves: ['protect']},
-		]);
+		]});
 		battle.makeChoices('move trickroom', 'move shellsmash');
 		battle.makeChoices('move explosion', 'move shellsmash');
 		battle.makeChoices('switch hippowdon', 'switch ninetales');
