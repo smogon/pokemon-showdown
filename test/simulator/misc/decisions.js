@@ -1179,17 +1179,29 @@ describe('Choice internals', function () {
 
 		assert.strictEqual(battle.turn, 1);
 
-		battle.makeChoices('move 1, move 1', 'move 1, move 1');
+		p1.chooseMove(1);
+		p1.chooseMove(1);
+		p2.chooseMove(1);
+		p2.chooseMove(1);
+		battle.commitDecisions();
 
 		assert.strictEqual(battle.turn, 2);
 		assert.statStage(p2.active[0], 'atk', -1);
 
-		battle.makeChoices('move recover, move synthesis', 'move surf, move calmmind');
+		p1.chooseMove('recover');
+		p1.chooseMove('synthesis');
+		p2.chooseMove('surf');
+		p2.chooseMove('calmmind');
+		battle.commitDecisions();
 
 		assert.strictEqual(battle.turn, 3);
 		assert.fullHP(p1.active[1]);
 
-		battle.makeChoices('move recover, move 2', 'move 1, move calmmind');
+		p1.chooseMove('recover');
+		p1.chooseMove('2');
+		p2.chooseMove('1');
+		p2.chooseMove('calmmind');
+		battle.commitDecisions();
 
 		assert.strictEqual(battle.turn, 4);
 		assert.fullHP(p1.active[1]);
@@ -1207,14 +1219,20 @@ describe('Choice internals', function () {
 			{species: "Deoxys-Defense", ability: 'pressure', moves: ['recover']},
 			{species: "Arceus", ability: 'multitype', moves: ['recover']},
 		]});
-		const p1 = battle.p1;
+		const [p1, p2] = battle.sides;
 
 		assert.strictEqual(battle.turn, 1);
-		battle.makeChoices('move selfdestruct, move selfdestruct', 'move recover, move recover');
+		p1.chooseMove('selfdestruct');
+		p1.chooseMove('selfdestruct');
+		p2.chooseMove('recover');
+		p2.chooseMove('recover');
+		battle.commitDecisions();
 
 		assert.fainted(p1.active[0]);
 		assert.fainted(p1.active[1]);
-		battle.makeChoices('switch 4, switch 3', '');
+		p1.chooseSwitch(4);
+		p1.chooseSwitch(3);
+		battle.commitDecisions();
 		assert.strictEqual(battle.turn, 2);
 		assert.strictEqual(p1.active[0].name, 'Ekans');
 		assert.strictEqual(p1.active[1].name, 'Koffing');
