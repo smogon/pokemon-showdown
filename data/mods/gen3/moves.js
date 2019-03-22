@@ -938,7 +938,7 @@ let BattleMovedex = {
 		desc: "Damage doubles if a weather condition is active, and this move's type changes to match. Ice type during Hail, Water type during Rain Dance, Rock type during Sandstorm, and Fire type during Sunny Day.",
 		shortDesc: "Damage doubles and type varies during weather.",
 		onModifyMove(move) {
-			switch (this.effectiveWeather()) {
+			switch (this.field.effectiveWeather()) {
 			case 'sunnyday':
 				move.type = 'Fire';
 				move.category = 'Special';

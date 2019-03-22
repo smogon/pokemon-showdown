@@ -58,7 +58,7 @@ describe('Thousand Arrows', function () {
 		battle.setPlayer('p2', {team: [{species: "Ho-Oh", ability: 'shellarmor', moves: ['recover', 'gravity']}]});
 		battle.makeChoices('move sleeptalk', 'move gravity');
 		// During Gravity, Thousand Arrows can be super effective but once it ends has to be neutral for one hit
-		while (battle.getPseudoWeather('gravity')) {
+		while (battle.field.getPseudoWeather('gravity')) {
 			battle.makeChoices('move thousandarrows', 'move recover');
 			assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 		}

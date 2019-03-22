@@ -5,7 +5,7 @@ let BattleAbilities = {
 	"swiftswim": {
 		inherit: true,
 		onModifySpe(spe, pokemon) {
-			if (this.isWeather(['raindance', 'primordialsea'])) {
+			if (this.field.isWeather(['raindance', 'primordialsea'])) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -14,7 +14,7 @@ let BattleAbilities = {
 	"chlorophyll": {
 		inherit: true,
 		onModifySpe(spe) {
-			if (this.isWeather(['sunnyday', 'desolateland'])) {
+			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -23,7 +23,7 @@ let BattleAbilities = {
 	"sandrush": {
 		inherit: true,
 		onModifySpe(spe, pokemon) {
-			if (this.isWeather('sandstorm')) {
+			if (this.field.isWeather('sandstorm')) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -32,7 +32,7 @@ let BattleAbilities = {
 	"slushrush": {
 		inherit: true,
 		onModifySpe(spe, pokemon) {
-			if (this.isWeather('hail')) {
+			if (this.field.isWeather('hail')) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -45,8 +45,8 @@ let BattleAbilities = {
 				let weather = move.weather;
 				move.weather = '';
 				move.onHit = function (target, source) {
-					this.setWeather(weather, source, this.getAbility('forecast'));
-					this.weatherData.duration = 0;
+					this.field.setWeather(weather, source, this.getAbility('forecast'));
+					this.field.weatherData.duration = 0;
 				};
 				move.target = 'self';
 			}
@@ -85,7 +85,7 @@ let BattleAbilities = {
 	"snowcloak": {
 		inherit: true,
 		onSourceBasePower(basePower) {
-			if (this.isWeather('hail')) {
+			if (this.field.isWeather('hail')) {
 				return basePower * 3 / 4;
 			}
 			return basePower * 7 / 8;
@@ -99,7 +99,7 @@ let BattleAbilities = {
 		desc: "If Sandstorm is active, attacks against this Pokemon do 25% less than normal. If Sandstorm is not active, attacks against this Pokemon do 12.5% less than normal. This Pokemon takes no damage from Sandstorm.",
 		shortDesc: "If Sandstorm is active, attacks against this Pokemon do 25% less; immunity to Sandstorm.",
 		onSourceBasePower(basePower) {
-			if (this.isWeather('sandstorm')) {
+			if (this.field.isWeather('sandstorm')) {
 				return basePower * 4 / 5;
 			}
 		},
@@ -108,7 +108,7 @@ let BattleAbilities = {
 	"waterveil": {
 		inherit: true,
 		onSourceBasePower(basePower) {
-			if (this.isWeather(['raindance', 'primordialsea'])) {
+			if (this.field.isWeather(['raindance', 'primordialsea'])) {
 				return basePower * 3 / 4;
 			}
 			return basePower * 7 / 8;
@@ -124,7 +124,7 @@ let BattleAbilities = {
 			this.heal(target.maxhp / 16);
 		},
 		onAfterDamage(damage, target, source, move) {
-			if (move && move.flags['contact'] && this.isWeather('hail')) {
+			if (move && move.flags['contact'] && this.field.isWeather('hail')) {
 				if (this.randomChance(3, 10)) {
 					source.trySetStatus('frz', target);
 				}
@@ -176,15 +176,15 @@ let BattleAbilities = {
 				let weather = move.weather;
 				move.weather = '';
 				move.onHit = function (target, source) {
-					this.setWeather(weather, source, this.getAbility('flowergift'));
-					this.weatherData.duration = 0;
+					this.field.setWeather(weather, source, this.getAbility('flowergift'));
+					this.field.weatherData.duration = 0;
 				};
 				move.target = 'self';
 				move.sideCondition = 'flowergift';
 			}
 		},
 		onUpdate(pokemon) {
-			if (this.isWeather(['sunnyday', 'desolateland'])) {
+			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
 				if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme !== 'Sunshine') {
 					this.effectData.forme = 'Sunshine';
 					this.add('-formechange', pokemon, 'Cherrim-Sunshine', '[msg]');

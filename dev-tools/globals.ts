@@ -1,4 +1,5 @@
 type Battle = import('./../sim/battle').Battle
+type Field = import('./../sim/field').Field
 type ModdedDex = typeof import('./../sim/dex')
 type Pokemon = import('./../sim/pokemon').Pokemon
 type Side = import('./../sim/side').Side
@@ -219,7 +220,7 @@ interface EventMethods {
 	onEat?: ((this: Battle, pokemon: Pokemon) => void) | false
 	onEatItem?: (this: Battle, item: Item, pokemon: Pokemon) => void
 	onEffectiveness?: (this: Battle, typeMod: number, target: Pokemon | null, type: string, move: ActiveMove) => void
-	onEnd?: (this: Battle, pokemon: Pokemon & Side) => void
+	onEnd?: (this: Battle, target: Pokemon & Side & Field) => void
 	onFaint?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect) => void
 	onFlinch?: ((this: Battle, pokemon: Pokemon) => void) | boolean
 	onFoeAfterDamage?: (this: Battle, damage: number, target: Pokemon) => void
@@ -260,7 +261,7 @@ interface EventMethods {
 	onPrimal?: (this: Battle, pokemon: Pokemon) => void
 	onRedirectTarget?: (this: Battle, target: Pokemon, source: Pokemon, source2: Effect) => void
 	onResidual?: (this: Battle, target: Pokemon & Side, source: Pokemon, effect: Effect) => void
-	onRestart?: (this: Battle, pokemon: Pokemon, source: Pokemon) => void
+	onRestart?: (this: Battle, target: Pokemon & Field, source: Pokemon) => void
 	onSetAbility?: (this: Battle, ability: string, target: Pokemon, source: Pokemon, effect: Effect) => void
 	onSetStatus?: (this: Battle, status: PureEffect, target: Pokemon, source: Pokemon, effect: Effect) => void
 	onSourceAccuracy?: (this: Battle, accuracy: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void
@@ -275,7 +276,7 @@ interface EventMethods {
 	onSourceTryHeal?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect) => void
 	onSourceTryPrimaryHit?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => void
 	onStallMove?: (this: Battle, pokemon: Pokemon) => void
-	onStart?: (this: Battle, target: Pokemon & Side, source: Pokemon, effect: Effect, move: ActiveMove) => void
+	onStart?: (this: Battle, target: Pokemon & Side & Field, source: Pokemon, effect: Effect, move: ActiveMove) => void
 	onSwitchIn?: (this: Battle, pokemon: Pokemon) => void
 	onSwitchOut?: (this: Battle, pokemon: Pokemon) => void
 	onTakeItem?: ((this: Battle, item: Item, pokemon: Pokemon, source: Pokemon) => void) | false
