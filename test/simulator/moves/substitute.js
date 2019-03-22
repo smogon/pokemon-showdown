@@ -12,8 +12,8 @@ describe('Substitute', function () {
 
 	it('should deduct 25% of max HP, rounded down', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Mewtwo', ability: 'pressure', moves: ['substitute']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Mewtwo', ability: 'pressure', moves: ['recover']}]);
+		battle.setPlayer('p1', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['substitute']}]});
+		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['recover']}]});
 		battle.makeChoices('move substitute', 'move recover');
 		let pokemon = battle.p1.active[0];
 		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
@@ -21,8 +21,8 @@ describe('Substitute', function () {
 
 	it('should not block the user\'s own moves from targetting itself', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Mewtwo', ability: 'pressure', moves: ['substitute', 'calmmind']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Mewtwo', ability: 'pressure', moves: ['recover']}]);
+		battle.setPlayer('p1', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['substitute', 'calmmind']}]});
+		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['recover']}]});
 		battle.makeChoices('move substitute', 'move recover');
 		battle.makeChoices('move calmmind', 'move recover');
 		assert.strictEqual(battle.p1.active[0].boosts['spa'], 1);
@@ -31,8 +31,8 @@ describe('Substitute', function () {
 
 	it('should block damage from most moves', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Mewtwo', ability: 'pressure', moves: ['substitute']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Mewtwo', ability: 'pressure', item: 'laggingtail', moves: ['psystrike']}]);
+		battle.setPlayer('p1', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['substitute']}]});
+		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'pressure', item: 'laggingtail', moves: ['psystrike']}]});
 		battle.makeChoices('move substitute', 'move psystrike');
 		let pokemon = battle.p1.active[0];
 		assert.strictEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
@@ -40,8 +40,8 @@ describe('Substitute', function () {
 
 	it('should not block recoil damage', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Mewtwo', ability: 'pressure', moves: ['substitute', 'doubleedge']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Mewtwo', ability: 'pressure', moves: ['nastyplot']}]);
+		battle.setPlayer('p1', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['substitute', 'doubleedge']}]});
+		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['nastyplot']}]});
 		battle.makeChoices('move substitute', 'move nastyplot');
 		battle.makeChoices('move doubleedge', 'move nastyplot');
 		let pokemon = battle.p1.active[0];
@@ -50,8 +50,8 @@ describe('Substitute', function () {
 
 	it('should take specific recoil damage in Gen 1', function () {
 		battle = common.gen(1).createBattle({seed: [0, 1, 0, 1]});
-		battle.join('p1', 'Guest 1', 1, [{species: 'Hitmonlee', moves: ['substitute', 'highjumpkick']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Hitmonchan', moves: ['substitute', 'agility']}]);
+		battle.setPlayer('p1', {team: [{species: 'Hitmonlee', moves: ['substitute', 'highjumpkick']}]});
+		battle.setPlayer('p2', {team: [{species: 'Hitmonchan', moves: ['substitute', 'agility']}]});
 		battle.makeChoices('move substitute', 'move substitute');
 
 		let subhp = battle.p1.active[0].volatiles['substitute'].hp;
@@ -83,8 +83,8 @@ describe('Substitute', function () {
 
 	it('should cause recoil damage from an opponent\'s moves to be based on damage dealt to the substitute', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Mewtwo', ability: 'pressure', moves: ['substitute']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Mewtwo', ability: 'noguard', moves: ['nastyplot', 'lightofruin']}]);
+		battle.setPlayer('p1', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['substitute']}]});
+		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'noguard', moves: ['nastyplot', 'lightofruin']}]});
 		battle.makeChoices('move substitute', 'move nastyplot');
 		battle.makeChoices('move substitute', 'move lightofruin');
 		let pokemon = battle.p2.active[0];
@@ -93,8 +93,8 @@ describe('Substitute', function () {
 
 	it('should cause recovery from an opponent\'s draining moves to be based on damage dealt to the substitute', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Zangoose', ability: 'pressure', moves: ['substitute']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Zangoose', ability: 'noguard', moves: ['bellydrum', 'drainpunch']}]);
+		battle.setPlayer('p1', {team: [{species: 'Zangoose', ability: 'pressure', moves: ['substitute']}]});
+		battle.setPlayer('p2', {team: [{species: 'Zangoose', ability: 'noguard', moves: ['bellydrum', 'drainpunch']}]});
 		battle.makeChoices('move substitute', 'move bellydrum');
 		let hp = battle.p2.active[0].hp;
 		battle.makeChoices('move substitute', 'move drainpunch');
@@ -103,8 +103,8 @@ describe('Substitute', function () {
 
 	it('should block most status moves targetting the user', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Mewtwo', ability: 'noguard', moves: ['substitute']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Mewtwo', ability: 'pressure', item: 'laggingtail', moves: ['hypnosis', 'toxic', 'poisongas', 'thunderwave', 'willowisp']}]);
+		battle.setPlayer('p1', {team: [{species: 'Mewtwo', ability: 'noguard', moves: ['substitute']}]});
+		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'pressure', item: 'laggingtail', moves: ['hypnosis', 'toxic', 'poisongas', 'thunderwave', 'willowisp']}]});
 		for (let i = 1; i <= 5; i++) {
 			battle.makeChoices('move substitute', 'move ' + i);
 			assert.strictEqual(battle.p1.active[0].status, '');
@@ -113,8 +113,8 @@ describe('Substitute', function () {
 
 	it('should allow multi-hit moves to continue after the substitute fades', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Dragonite', ability: 'noguard', item: 'focussash', moves: ['substitute', 'roost']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Dragonite', ability: 'hugepower', item: 'laggingtail', moves: ['roost', 'dualchop']}]);
+		battle.setPlayer('p1', {team: [{species: 'Dragonite', ability: 'noguard', item: 'focussash', moves: ['substitute', 'roost']}]});
+		battle.setPlayer('p2', {team: [{species: 'Dragonite', ability: 'hugepower', item: 'laggingtail', moves: ['roost', 'dualchop']}]});
 		battle.makeChoices('move substitute', 'move roost');
 		battle.makeChoices('move roost', 'move dualchop');
 		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);

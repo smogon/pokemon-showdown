@@ -12,16 +12,16 @@ describe('Heal Block', function () {
 
 	it('should prevent Pokemon from gaining HP from residual recovery items', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Hippowdon', ability: 'sandstream', moves: ['healblock']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Spiritomb', ability: 'pressure', item: 'leftovers', moves: ['calmmind']}]);
+		battle.setPlayer('p1', {team: [{species: 'Hippowdon', ability: 'sandstream', moves: ['healblock']}]});
+		battle.setPlayer('p2', {team: [{species: 'Spiritomb', ability: 'pressure', item: 'leftovers', moves: ['calmmind']}]});
 		battle.makeChoices('move healblock', 'move calmmind');
 		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
 	it('should prevent Pokemon from consuming HP recovery items', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Sableye', ability: 'prankster', moves: ['healblock']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Pansage', ability: 'gluttony', item: 'berryjuice', moves: ['bellydrum']}]);
+		battle.setPlayer('p1', {team: [{species: 'Sableye', ability: 'prankster', moves: ['healblock']}]});
+		battle.setPlayer('p2', {team: [{species: 'Pansage', ability: 'gluttony', item: 'berryjuice', moves: ['bellydrum']}]});
 		battle.makeChoices('move healblock', 'move bellydrum');
 		assert.strictEqual(battle.p2.active[0].item, 'berryjuice');
 		assert.strictEqual(battle.p2.active[0].hp, Math.ceil(battle.p2.active[0].maxhp / 2));
@@ -29,25 +29,24 @@ describe('Heal Block', function () {
 
 	it('should disable the use of healing moves', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Spiritomb', ability: 'pressure', moves: ['healblock']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Cresselia', ability: 'levitate', moves: ['recover']}]);
+		battle.setPlayer('p1', {team: [{species: 'Spiritomb', ability: 'pressure', moves: ['healblock']}]});
+		battle.setPlayer('p2', {team: [{species: 'Cresselia', ability: 'levitate', moves: ['recover']}]});
 		battle.makeChoices('move healblock', 'move recover');
-		battle.makeChoices('move healblock', 'move recover');
-		assert.strictEqual(battle.p2.active[0].lastMove.id, 'struggle');
+		assert.cantMove(() => battle.makeChoices('move healblock', 'move recover'), 'Cresselia', 'Recover');
 	});
 
 	it('should prevent Pokemon from using draining moves', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Sableye', ability: 'prankster', moves: ['healblock']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Venusaur', ability: 'overgrow', moves: ['gigadrain']}]);
+		battle.setPlayer('p1', {team: [{species: 'Sableye', ability: 'prankster', moves: ['healblock']}]});
+		battle.setPlayer('p2', {team: [{species: 'Venusaur', ability: 'overgrow', moves: ['gigadrain']}]});
 		battle.makeChoices('move healblock', 'move gigadrain');
 		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
 	it('should prevent abilities from recovering HP', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Sableye', ability: 'prankster', moves: ['healblock', 'surf']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Quagsire', ability: 'waterabsorb', moves: ['bellydrum', 'calmmind']}]);
+		battle.setPlayer('p1', {team: [{species: 'Sableye', ability: 'prankster', moves: ['healblock', 'surf']}]});
+		battle.setPlayer('p2', {team: [{species: 'Quagsire', ability: 'waterabsorb', moves: ['bellydrum', 'calmmind']}]});
 		battle.makeChoices('move healblock', 'move bellydrum');
 		let hp = battle.p2.active[0].hp;
 		battle.makeChoices('move surf', 'move calmmind');
@@ -56,8 +55,8 @@ describe('Heal Block', function () {
 
 	it('should prevent Leech Seed from healing HP', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Starmie', ability: 'noguard', moves: ['healblock']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Venusaur', ability: 'overgrow', moves: ['substitute', 'leechseed']}]);
+		battle.setPlayer('p1', {team: [{species: 'Starmie', ability: 'noguard', moves: ['healblock']}]});
+		battle.setPlayer('p2', {team: [{species: 'Venusaur', ability: 'overgrow', moves: ['substitute', 'leechseed']}]});
 		battle.makeChoices('move healblock', 'move substitute');
 		let hp = battle.p2.active[0].hp;
 		battle.makeChoices('move healblock', 'move leechseed');
@@ -67,8 +66,8 @@ describe('Heal Block', function () {
 
 	it('should not prevent the target from using Z-Powered healing status moves or healing from Z Power', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Beheeyem', ability: 'telepathy', item: 'normaliumz', moves: ['psychic', 'healblock', 'recover']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: 'Elgyem', ability: 'telepathy', item: 'psychiumz', moves: ['psychic', 'healblock', 'teleport']}]);
+		battle.setPlayer('p1', {team: [{species: 'Beheeyem', ability: 'telepathy', item: 'normaliumz', moves: ['psychic', 'healblock', 'recover']}]});
+		battle.setPlayer('p2', {team: [{species: 'Elgyem', ability: 'telepathy', item: 'psychiumz', moves: ['psychic', 'healblock', 'teleport']}]});
 		battle.makeChoices('move psychic', 'move psychic');
 		battle.makeChoices('move healblock', 'move healblock');
 		battle.makeChoices('move recover zmove', 'move teleport zmove');
@@ -107,8 +106,7 @@ describe('Heal Block [Gen 5]', function () {
 			[{species: 'Cresselia', ability: 'levitate', moves: ['recover']}],
 		]);
 		battle.makeChoices('move healblock', 'move recover');
-		battle.makeChoices('move healblock', 'move recover');
-		assert.strictEqual(battle.p2.active[0].lastMove.id, 'struggle');
+		assert.cantMove(() => battle.makeChoices('move healblock', 'move recover'), 'Cresselia', 'Recover');
 	});
 
 	it('should prevent abilities from recovering HP', function () {
@@ -157,8 +155,7 @@ describe('Heal Block [Gen 4]', function () {
 			[{species: 'Cresselia', ability: 'levitate', moves: ['recover']}],
 		]);
 		battle.makeChoices('move healblock', 'move recover');
-		battle.makeChoices('move healblock', 'move recover');
-		assert.strictEqual(battle.p2.active[0].lastMove.id, 'struggle');
+		assert.cantMove(() => battle.makeChoices('move healblock', 'move recover'), 'Cresselia', 'Recover');
 	});
 
 	it('should block the effect of Wish', function () {
@@ -167,8 +164,7 @@ describe('Heal Block [Gen 4]', function () {
 			[{species: 'Deoxys', ability: 'pressure', moves: ['wish']}],
 		]);
 		battle.makeChoices('move healblock', 'move wish');
-		battle.makeChoices('move healblock', 'move wish');
-		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
+		assert.cantMove(() => battle.makeChoices('move healblock', 'move wish'), 'Deoxys', 'Wish');
 	});
 
 	it('should prevent draining moves from healing HP', function () {

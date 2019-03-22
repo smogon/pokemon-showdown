@@ -34,20 +34,20 @@ describe('Trick Room', function () {
 
 	it('should also affect the activation order for abilities and other non-move actions', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [
+		battle.setPlayer('p1', {team: [
 			{species: 'Bronzong', ability: 'heatproof', moves: ['trickroom', 'explosion']},
 			{species: 'Hippowdon', ability: 'sandstream', moves: ['protect']},
-		]);
-		battle.join('p2', 'Guest 2', 1, [
+		]});
+		battle.setPlayer('p2', {team: [
 			{species: 'Ninjask', ability: 'speedboost', moves: ['shellsmash']},
 			{species: 'Ninetales', ability: 'drought', moves: ['protect']},
-		]);
+		]});
 		battle.makeChoices('move trickroom', 'move shellsmash');
 		battle.makeChoices('move explosion', 'move shellsmash');
 		battle.makeChoices('switch hippowdon', 'switch ninetales');
 		assert.strictEqual(battle.p1.active[0].speciesid, 'hippowdon');
 		assert.strictEqual(battle.p2.active[0].speciesid, 'ninetales');
-		assert.strictEqual(battle.effectiveWeather(), 'sunnyday');
+		assert.strictEqual(battle.field.effectiveWeather(), 'sunnyday');
 	});
 
 	// The following two tests involve the Trick Room glitch, where turn order changes when a Pokemon goes to 1809 speed.

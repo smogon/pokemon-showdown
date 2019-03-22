@@ -1,4 +1,5 @@
 type Battle = import('./../sim/battle').Battle
+type Field = import('./../sim/field').Field
 type ModdedDex = typeof import('./../sim/dex')
 type Pokemon = import('./../sim/pokemon').Pokemon
 type Side = import('./../sim/side').Side
@@ -35,6 +36,7 @@ type SparseStatsTable = Partial<StatsTable>;
 type BoostName = StatNameExceptHP | 'accuracy' | 'evasion';
 type BoostsTable = {[boost in BoostName]: number };
 type SparseBoostsTable = Partial<BoostsTable>;
+type Nonstandard = 'Glitch' | 'Past' | 'Future' | 'CAP' | 'LGPE' | 'Pokestar' | 'Custom';
 type PokemonSet = {
 	name: string,
 	species: string,
@@ -218,7 +220,7 @@ interface EventMethods {
 	onEat?: ((this: Battle, pokemon: Pokemon) => void) | false
 	onEatItem?: (this: Battle, item: Item, pokemon: Pokemon) => void
 	onEffectiveness?: (this: Battle, typeMod: number, target: Pokemon | null, type: string, move: ActiveMove) => void
-	onEnd?: (this: Battle, pokemon: Pokemon & Side) => void
+	onEnd?: (this: Battle, target: Pokemon & Side & Field) => void
 	onFaint?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect) => void
 	onFlinch?: ((this: Battle, pokemon: Pokemon) => void) | boolean
 	onFoeAfterDamage?: (this: Battle, damage: number, target: Pokemon) => void
@@ -259,7 +261,7 @@ interface EventMethods {
 	onPrimal?: (this: Battle, pokemon: Pokemon) => void
 	onRedirectTarget?: (this: Battle, target: Pokemon, source: Pokemon, source2: Effect) => void
 	onResidual?: (this: Battle, target: Pokemon & Side, source: Pokemon, effect: Effect) => void
-	onRestart?: (this: Battle, pokemon: Pokemon, source: Pokemon) => void
+	onRestart?: (this: Battle, target: Pokemon & Field, source: Pokemon) => void
 	onSetAbility?: (this: Battle, ability: string, target: Pokemon, source: Pokemon, effect: Effect) => void
 	onSetStatus?: (this: Battle, status: PureEffect, target: Pokemon, source: Pokemon, effect: Effect) => void
 	onSourceAccuracy?: (this: Battle, accuracy: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void
@@ -274,7 +276,7 @@ interface EventMethods {
 	onSourceTryHeal?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect) => void
 	onSourceTryPrimaryHit?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => void
 	onStallMove?: (this: Battle, pokemon: Pokemon) => void
-	onStart?: (this: Battle, target: Pokemon & Side, source: Pokemon, effect: Effect, move: ActiveMove) => void
+	onStart?: (this: Battle, target: Pokemon & Side & Field, source: Pokemon, effect: Effect, move: ActiveMove) => void
 	onSwitchIn?: (this: Battle, pokemon: Pokemon) => void
 	onSwitchOut?: (this: Battle, pokemon: Pokemon) => void
 	onTakeItem?: ((this: Battle, item: Item, pokemon: Pokemon, source: Pokemon) => void) | false
@@ -312,7 +314,7 @@ interface EffectData extends EventMethods {
 	effect?: Partial<EffectData>
 	effectType?: string
 	infiltrates?: boolean
-	isNonstandard?: boolean | string
+	isNonstandard?: Nonstandard | null
 	isUnreleased?: boolean
 	/**
 	 * `true` for generic Z-moves like Gigavolt Havoc.
@@ -603,7 +605,7 @@ interface TemplateFormatsData {
 	eventPokemon?: EventInfo[]
 	exclusiveMoves?: string[]
 	gen?: number
-	isNonstandard?: boolean | string
+	isNonstandard?: Nonstandard | null
 	isUnreleased?: boolean
 	maleOnlyHidden?: boolean
 	randomBattleMoves?: string[]
@@ -747,10 +749,10 @@ interface BattleScriptsData {
 	canMegaEvo?: (this: Battle, pokemon: Pokemon) => string | undefined | null
 	canUltraBurst?: (this: Battle, pokemon: Pokemon) => string | null
 	canZMove?: (this: Battle, pokemon: Pokemon) => (AnyObject | null)[] | void
-	forceSwitch?: (this: Battle, damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary: boolean | undefined, isSelf: boolean | undefined) => SpreadMoveDamage
-	getZMove?: (this: Battle, move: Move, pokemon: Pokemon, skipChecks?: boolean) => string | undefined
+	forceSwitch?: (this: Battle, damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean) => SpreadMoveDamage
 	getActiveZMove?: (this: Battle, move: Move, pokemon: Pokemon) => ActiveMove
-	getSpreadDamage?: (this: Battle, damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary: boolean | undefined, isSelf: boolean | undefined) => SpreadMoveDamage
+	getSpreadDamage?: (this: Battle, damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean) => SpreadMoveDamage
+	getZMove?: (this: Battle, move: Move, pokemon: Pokemon, skipChecks?: boolean) => string | undefined
 	hitStepAccuracy?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean[]
 	hitStepBreakProtect?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => undefined
 	hitStepMoveHitLoop?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => SpreadMoveDamage
@@ -762,21 +764,21 @@ interface BattleScriptsData {
 	hitStepTypeImmunity?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean[]
 	isAdjacent?: (this: Battle, pokemon1: Pokemon, pokemon2: Pokemon) => boolean
 	moveHit?: (this: Battle, target: Pokemon | null, pokemon: Pokemon, move: ActiveMove, moveData?: ActiveMove, isSecondary?: boolean, isSelf?: boolean) => number | undefined | false
-	spreadMoveHit?: (this: Battle, targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove, moveData?: ActiveMove, isSecondary?: boolean, isSelf?: boolean) => [SpreadMoveDamage, SpreadMoveTargets]
 	resolveAction?: (this: Battle, action: AnyObject, midTurn?: boolean) => Actions["Action"]
 	runAction?: (this: Battle, action: Actions["Action"]) => void
 	runMegaEvo?: (this: Battle, pokemon: Pokemon) => boolean
-	runMove?: (this: Battle, move: Move, pokemon: Pokemon, targetLoc: number, sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean) => void
-	runMoveEffects?: (this: Battle, damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary: boolean | undefined, isSelf: boolean | undefined) => SpreadMoveDamage
+	runMove?: (this: Battle, moveOrMoveName: Move | string, pokemon: Pokemon, targetLoc: number, sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean) => void
+	runMoveEffects?: (this: Battle, damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean) => SpreadMoveDamage
 	runZPower?: (this: Battle, move: ActiveMove, pokemon: Pokemon) => void
-	secondaries?: (this: Battle, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary: boolean | undefined) => void
-	selfDrops?: (this: Battle, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary: boolean | undefined) => void
+	secondaries?: (this: Battle, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean) => void
+	selfDrops?: (this: Battle, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean) => void
+	spreadMoveHit?: (this: Battle, targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove, moveData?: ActiveMove, isSecondary?: boolean, isSelf?: boolean) => [SpreadMoveDamage, SpreadMoveTargets]
 	targetTypeChoices?: (this: Battle, targetType: string) => boolean
 	tryMoveHit?: (this: Battle, target: Pokemon, pokemon: Pokemon, move: ActiveMove) => number | undefined | false | ''
+	tryPrimaryHitEvent?: (this: Battle, damage: SpreadMoveDamage, targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean) => SpreadMoveDamage
 	trySpreadMoveHit?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean
-	tryPrimaryHitEvent?: (this: Battle, damage: SpreadMoveDamage, targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary: boolean | undefined) => SpreadMoveDamage
-	useMove?: (this: Battle, move: Move, pokemon: Pokemon, target?: Pokemon | null | undefined, sourceEffect?: Effect | null, zMove?: string) => boolean
-	useMoveInner?: (this: Battle, move: Move, pokemon: Pokemon, target?: Pokemon | null | undefined, sourceEffect?: Effect | null, zMove?: string) => boolean
+	useMove?: (this: Battle, move: Move, pokemon: Pokemon, target?: Pokemon | null, sourceEffect?: Effect | null, zMove?: string) => boolean
+	useMoveInner?: (this: Battle, move: Move, pokemon: Pokemon, target?: Pokemon | null, sourceEffect?: Effect | null, zMove?: string) => boolean
 }
 
 interface ModdedBattleSide {

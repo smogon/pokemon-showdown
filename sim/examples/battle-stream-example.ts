@@ -16,6 +16,7 @@ import {RandomPlayerAI} from './random-player-ai';
 /*********************************************************************
  * Run AI
  *********************************************************************/
+// tslint:disable:no-floating-promises
 
 const streams = getPlayerStreams(new BattleStream());
 
@@ -36,6 +37,9 @@ const p2 = new RandomPlayerAI(streams.p2);
 
 console.log("p1 is " + p1.constructor.name);
 console.log("p2 is " + p2.constructor.name);
+
+p1.start();
+p2.start();
 
 (async () => {
 	let chunk;

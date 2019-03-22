@@ -144,7 +144,7 @@ let BattleScripts = {
 			target.side.removeSideCondition('reflect');
 			target.side.removeSideCondition('lightscreen');
 			pokemon.removeVolatile('twoturnmove');
-		} else {
+		} else if (pokemon.hp) {
 			this.runEvent('AfterMoveSelf', pokemon, target, move);
 		}
 
@@ -571,7 +571,7 @@ let BattleScripts = {
 				}
 			}
 			if (moveData.pseudoWeather) {
-				if (this.addPseudoWeather(moveData.pseudoWeather, pokemon, move)) {
+				if (this.field.addPseudoWeather(moveData.pseudoWeather, pokemon, move)) {
 					didSomething = true;
 				}
 			}

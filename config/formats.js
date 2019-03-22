@@ -123,7 +123,7 @@ let Formats = [
 			'Eevium Z', 'Baton Pass', 'Dragon Rage', 'Sonic Boom',
 		],
 		onBegin() {
-			if (this.rated && this.format === 'gen7lc') this.add('-html', `<div class="broadcast-red"><strong>LC is currently suspecting Trapinch! For information on how to participate check out the <a href="https://www.smogon.com/forums/posts/3648309/">suspect thread</a>.</strong></div>`);
+			if (this.rated && this.format === 'gen7lc') this.add('-html', `<div class="broadcast-red"><strong>LC is currently suspecting Trapinch! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3648309/">suspect thread</a>.</strong></div>`);
 		},
 	},
 	{
@@ -631,8 +631,8 @@ let Formats = [
 			}
 
 			if (item.isNonstandard) {
-				if (item.isNonstandard === 'gen2') {
-					problems.push(item.name + ' does not exist outside of gen 2.');
+				if (item.isNonstandard === 'Past' || item.isNonstandard === 'Future') {
+					problems.push(item.name + ' does not exist in this generation.');
 				} else if (!allowCAP) {
 					problems.push(item.name + ' does not exist.');
 				}
@@ -846,8 +846,8 @@ let Formats = [
 		banlist: ['Shadow Tag', 'Gengarite', 'Baton Pass', 'Electrify'],
 		restrictedStones: ['Beedrillite', 'Blazikenite', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Pidgeotite', 'Ultranecrozium Z'],
 		cannotMega: [
-			'Arceus', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Speed', 'Dialga', 'Dragonite', 'Giratina', 'Groudon', 'Ho-Oh', 'Kyogre',
-			'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Marshadow', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane',
+			'Arceus', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Speed', 'Dialga', 'Dragonite', 'Giratina', 'Groudon', 'Ho-Oh', 'Kyogre', 'Kyurem-Black',
+			'Kyurem-White', 'Landorus-Therian', 'Lugia', 'Lunala', 'Marshadow', 'Mewtwo', 'Naganadel', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane',
 			'Palkia', 'Pheromosa', 'Rayquaza', 'Regigigas', 'Reshiram', 'Slaking', 'Solgaleo', 'Xerneas', 'Yveltal', 'Zekrom',
 		],
 		onValidateTeam(team) {

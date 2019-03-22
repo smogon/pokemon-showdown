@@ -169,8 +169,8 @@ let BattleFormats = {
 			}
 
 			if (item.isNonstandard) {
-				if (item.isNonstandard === 'gen2') {
-					problems.push(item.name + ' does not exist outside of gen 2.');
+				if (item.isNonstandard === 'Past' || item.isNonstandard === 'Future') {
+					problems.push(item.name + ' does not exist in this generation.');
 				} else if (!allowCAP) {
 					problems.push(item.name + ' does not exist.');
 				}
@@ -408,10 +408,11 @@ let BattleFormats = {
 		desc: "Only allows Pok&eacute;mon that can evolve and don't have any prior evolutions",
 		onValidateSet(set) {
 			let template = this.getTemplate(set.species || set.name);
-			if (template.prevo) {
+			if (template.prevo && this.getTemplate(template.prevo).gen <= this.gen) {
 				return [set.species + " isn't the first in its evolution family."];
 			}
-			if (!template.nfe) {
+			let futureGenEvo = template.evos && this.getTemplate(template.evos[0]).gen > this.gen;
+			if (!template.nfe || futureGenEvo) {
 				return [set.species + " doesn't have an evolution family."];
 			}
 		},
