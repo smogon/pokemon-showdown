@@ -2292,7 +2292,7 @@ const commands = {
 		if (!target) return this.parse('/help htmlbox');
 		target = this.canHTML(target);
 		if (!target) return;
-
+		target = target.replace(/\n/g, '');
 		if (!this.canBroadcast(true, '!htmlbox')) return;
 		if (this.broadcastMessage && !this.can('declare', null, room)) return false;
 
@@ -2310,6 +2310,7 @@ const commands = {
 		target = this.canHTML(target);
 		if (!target) return;
 		if (!this.can('addhtml', null, room)) return;
+		target = target.replace(/\n/g, '');
 
 		if (!user.can('addhtml')) {
 			target += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
@@ -2328,6 +2329,7 @@ const commands = {
 		html = this.canHTML(html);
 		if (!html) return;
 		if (!this.can('addhtml', null, room)) return;
+		target = target.replace(/\n/g, '');
 
 		if (!user.can('addhtml')) {
 			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
@@ -2348,6 +2350,7 @@ const commands = {
 		html = this.canHTML(html);
 		if (!html) return;
 		if (!this.can('addhtml', null, room)) return;
+		target = target.replace(/\n/g, '');
 
 		if (!user.can('addhtml')) {
 			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
@@ -2374,6 +2377,7 @@ const commands = {
 		html = this.canHTML(html);
 		if (!html) return;
 		if (!this.can('addhtml', null, room)) return;
+		target = target.replace(/\n/g, '');
 
 		if (!user.can('addhtml')) {
 			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
@@ -2455,4 +2459,7 @@ exports.commands = commands;
 
 process.nextTick(() => {
 	Dex.includeData();
+	Chat.multiLinePattern.register(
+		'/htmlbox', '!htmlbox', '/addhtmlbox', '/addrankhtmlbox', '/adduthml', '/changeuhtml', '/addrankuhtmlbox', '/changerankuhtmlbox'
+	);
 });
