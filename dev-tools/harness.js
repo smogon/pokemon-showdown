@@ -68,7 +68,7 @@ class Runner {
 				const game = this.runGame(format, timer, battleStream).finally(() => timer.stop());
 				if (!this.async) {
 					await game;
-					if (this.verbose && timer.display) console.log(this.formatter.display(timer));
+					if (this.verbose && this.formatter.display) console.log(this.formatter.display(timer));
 				}
 				games.push(game);
 				timers.push(timer);
@@ -184,7 +184,7 @@ if (require.main === module) {
 
 		  if (missing('minimist')) shell('npm install trakkr');
 			const trakkr = require('trakkr');
-			options.timer = () => new trakkr.Timer();
+			options.timer = () => trakkr.Timer.create(); // TODO: Buffer.allocUnsafe(numGames * BUFFER);
 			// Choose which formatter to use - we don't need to tweak the sort or write a custom
 			// formatter because its almost as though the defaults were written for our usecase...
 			options.formatter = new trakkr.Formatter(!!argv.full, trakkr.SORT,
