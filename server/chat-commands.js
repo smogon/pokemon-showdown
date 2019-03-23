@@ -3663,7 +3663,7 @@ const commands = {
 			break;
 		case 'fieldcondition': case 'pseudoweather':
 		case 'fc':
-			room.battle.stream.write(`>eval battle.addPseudoWeather('${toId(targets[0])}', 'debug')`);
+			room.battle.stream.write(`>eval battle.addFieldCondition('${toId(targets[0])}', 'debug')`);
 			break;
 		case 'weather':
 		case 'w':

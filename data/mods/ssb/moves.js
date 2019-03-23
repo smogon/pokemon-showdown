@@ -217,9 +217,9 @@ let BattleMovedex = {
 		isNonstandard: "Custom",
 		pp: 5,
 		priority: -6,
-		onModifyMove(move) {
-			if (!this.field.pseudoWeather.trickroom) {
-				move.pseudoWeather = 'trickroom';
+		onModifyMove(move, pokemon) {
+			if (!this.field.getFieldCondition('trickroom', pokemon)) {
+				move.fieldCondition = 'trickroom';
 			}
 		},
 		flags: {snatch: 1, mirror: 1},
@@ -563,7 +563,7 @@ let BattleMovedex = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, "Trick Room", source);
 		},
-		pseudoWeather: 'triviaroom',
+		fieldCondition: 'triviaroom',
 		effect: {
 			duration: 5,
 			durationCallback(source, effect) {
@@ -578,7 +578,7 @@ let BattleMovedex = {
 				this.add('-message', `${source.name} is levitating due to its big trivia brain!`);
 			},
 			onRestart(target, source) {
-				this.field.removePseudoWeather('triviaroom');
+				this.field.removeFieldCondition('triviaroom');
 			},
 			// Speed modification is changed in Pokemon.getActionSpeed() in mods/seasonal/scripts.js
 			// Levitation is handled in Pokemon.isGrounded in mods/seasonal/scripts.js
@@ -1041,9 +1041,9 @@ let BattleMovedex = {
 			this.add('-anim', source, 'Wood Hammer', source);
 		},
 		onHit(pokemon, move) {
-			if (this.field.pseudoWeather.gravity) return false;
+			if (this.field.getFieldCondition('gravity')) return false;
 			this.boost({atk: 2}, pokemon, pokemon, this.getActiveMove('EarthsBlessing'));
-			this.field.addPseudoWeather('gravity');
+			this.field.addFieldCondition('gravity');
 			if (['', 'slp', 'frz'].includes(pokemon.status)) return;
 			pokemon.cureStatus();
 		},
@@ -2243,7 +2243,7 @@ let BattleMovedex = {
 			this.add('-anim', source, "Aromatic Mist", target);
 		},
 		onHit(target, source, move) {
-			let napWeather = this.field.pseudoWeather['naptime'];
+			let napWeather = this.field.getFieldCondition('naptime');
 			// Trigger sleep clause if not the original user
 			// @ts-ignore
 			if (!target.setStatus('slp', napWeather.source, move)) return false;
@@ -2263,9 +2263,9 @@ let BattleMovedex = {
 					}
 				}
 			}
-			this.field.removePseudoWeather('naptime');
+			this.field.removeFieldCondition('naptime');
 		},
-		pseudoWeather: 'naptime',
+		fieldCondition: 'naptime',
 		effect: {
 			duration: 1,
 		},
@@ -2598,8 +2598,8 @@ let BattleMovedex = {
 		pp: 5,
 		priority: -6,
 		onModifyMove(move) {
-			if (!this.field.pseudoWeather.trickroom) {
-				move.pseudoWeather = 'trickroom';
+			if (!this.field.getFieldCondition('trickroom')) {
+				move.fieldCondition = 'trickroom';
 			}
 		},
 		flags: {snatch: 1, mirror: 1},
@@ -3020,7 +3020,7 @@ let BattleMovedex = {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Genesis Supernova", source);
 		},
-		pseudoWeather: 'literallycheating',
+		fieldCondition: 'literallycheating',
 		effect: {
 			duration: 7,
 			onBoost(boost, target, source, effect) {
@@ -3269,7 +3269,7 @@ let BattleMovedex = {
 			this.add('-anim', source, "Telekinesis", source);
 			this.add('-anim', source, "Trick Room", source);
 		},
-		pseudoWeather: 'alienwave',
+		fieldCondition: 'alienwave',
 		effect: {
 			duration: 5,
 			onStart(target, source) {
@@ -3581,8 +3581,8 @@ let BattleMovedex = {
 			this.add('-anim', source, "Gyro Ball", target);
 		},
 		onAfterMoveSecondarySelf(pokemon) {
-			if (!this.field.pseudoWeather.trickroom) {
-				this.field.addPseudoWeather('trickroom', pokemon);
+			if (!this.field.getFieldCondition('trickroom')) {
+				this.field.addFieldCondition('trickroom', pokemon);
 			}
 			this.add('-fieldactivate', 'move: Pay Day'); // Coins are scattered on the ground
 		},

@@ -570,8 +570,8 @@ let BattleScripts = {
 					didSomething = true;
 				}
 			}
-			if (moveData.pseudoWeather) {
-				if (this.field.addPseudoWeather(moveData.pseudoWeather, pokemon, move)) {
+			if (moveData.fieldCondition) {
+				if (this.field.addFieldCondition(moveData.fieldCondition, pokemon, move)) {
 					didSomething = true;
 				}
 			}

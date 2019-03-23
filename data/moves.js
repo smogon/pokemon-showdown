@@ -4189,8 +4189,8 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 40,
 		basePowerCallback() {
-			if (this.field.pseudoWeather.echoedvoice) {
-				return 40 * this.field.pseudoWeather.echoedvoice.multiplier;
+			if (this.field.fieldConditionGrid[0][0].echoedvoice) {
+				return 40 * this.field.fieldConditionGrid[0][0].echoedvoice.multiplier;
 			}
 			return 40;
 		},
@@ -4203,7 +4203,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
 		onTry() {
-			this.field.addPseudoWeather('echoedvoice');
+			this.field.addFieldCondition('echoedvoice');
 		},
 		effect: {
 			duration: 2,
@@ -4818,7 +4818,7 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {mirror: 1, authentic: 1},
-		pseudoWeather: 'fairylock',
+		fieldCondition: 'fairylock',
 		effect: {
 			duration: 2,
 			onStart(target) {
@@ -6756,7 +6756,7 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {nonsky: 1},
-		pseudoWeather: 'gravity',
+		fieldCondition: 'gravity',
 		effect: {
 			duration: 5,
 			durationCallback(source, effect) {
@@ -8805,7 +8805,7 @@ let BattleMovedex = {
 		pp: 25,
 		priority: 1,
 		flags: {},
-		pseudoWeather: 'iondeluge',
+		fieldCondition: 'iondeluge',
 		effect: {
 			duration: 1,
 			onStart(target) {
@@ -9829,7 +9829,7 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {mirror: 1},
-		pseudoWeather: 'magicroom',
+		fieldCondition: 'magicroom',
 		effect: {
 			duration: 5,
 			durationCallback(source, effect) {
@@ -9843,7 +9843,7 @@ let BattleMovedex = {
 				this.add('-fieldstart', 'move: Magic Room', '[of] ' + source);
 			},
 			onRestart(target, source) {
-				this.field.removePseudoWeather('magicroom');
+				this.field.removeFieldCondition('magicroom');
 			},
 			// Item suppression implemented in Pokemon.ignoringItem() within sim/pokemon.js
 			onResidualOrder: 25,
@@ -11024,7 +11024,7 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {nonsky: 1},
-		pseudoWeather: 'mudsport',
+		fieldCondition: 'mudsport',
 		effect: {
 			duration: 5,
 			onStart(side, source) {
@@ -11931,7 +11931,7 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, punch: 1},
-		pseudoWeather: 'iondeluge',
+		fieldCondition: 'iondeluge',
 		secondary: null,
 		target: "normal",
 		type: "Electric",
@@ -15474,7 +15474,7 @@ let BattleMovedex = {
 			onStart(pokemon) {
 				let applies = false;
 				if (pokemon.hasType('Flying') || pokemon.hasAbility('levitate')) applies = true;
-				if (pokemon.hasItem('ironball') || pokemon.volatiles['ingrain'] || this.field.getPseudoWeather('gravity')) applies = false;
+				if (pokemon.hasItem('ironball') || pokemon.volatiles['ingrain'] || this.field.getFieldCondition('gravity')) applies = false;
 				if (pokemon.removeVolatile('fly') || pokemon.removeVolatile('bounce')) {
 					applies = true;
 					this.cancelMove(pokemon);
@@ -18218,7 +18218,7 @@ let BattleMovedex = {
 		pp: 5,
 		priority: -7,
 		flags: {mirror: 1},
-		pseudoWeather: 'trickroom',
+		fieldCondition: 'trickroom',
 		effect: {
 			duration: 5,
 			durationCallback(source, effect) {
@@ -18232,7 +18232,7 @@ let BattleMovedex = {
 				this.add('-fieldstart', 'move: Trick Room', '[of] ' + source);
 			},
 			onRestart(target, source) {
-				this.field.removePseudoWeather('trickroom');
+				this.field.removeFieldCondition('trickroom');
 			},
 			// Speed modification is changed in Pokemon.getActionSpeed() in sim/pokemon.js
 			onResidualOrder: 23,
@@ -18822,7 +18822,7 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {nonsky: 1},
-		pseudoWeather: 'watersport',
+		fieldCondition: 'watersport',
 		effect: {
 			duration: 5,
 			onStart(side, source) {
@@ -19195,7 +19195,7 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {mirror: 1},
-		pseudoWeather: 'wonderroom',
+		fieldCondition: 'wonderroom',
 		effect: {
 			duration: 5,
 			durationCallback(source, effect) {
@@ -19209,7 +19209,7 @@ let BattleMovedex = {
 				this.add('-fieldstart', 'move: Wonder Room', '[of] ' + source);
 			},
 			onRestart(target, source) {
-				this.field.removePseudoWeather('wonderroom');
+				this.field.removeFieldCondition('wonderroom');
 			},
 			// Swapping defenses implemented in sim/pokemon.js:Pokemon#calculateStat and Pokemon#getStat
 			onResidualOrder: 24,

@@ -4,23 +4,51 @@
  *
  * @license MIT
  */
+import {Pokemon} from './pokemon';
+import {Side} from './side';
+
 export class Field {
 	readonly battle: Battle;
+	readonly width: number;
+	readonly length: number;
 
 	weather: string;
 	weatherData: AnyObject;
 	terrain: string;
 	terrainData: AnyObject;
 	pseudoWeather: AnyObject;
+	fieldConditions: AnyObject[];
+	fieldConditionGrid: AnyObject[][];
 
 	constructor(battle: Battle) {
 		this.battle = battle;
+		this.width = 2;
+		switch (battle.gameType) {
+		case 'doubles': case 'multi':
+			this.length = 2;
+			break;
+		case 'triples': case 'rotation':
+			this.length = 3;
+			break;
+		case 'free-for-all':
+			this.width = 4;
+			// falls through
+		default:
+			this.length = 1;
+			break;
+		}
 
 		this.weather = '';
 		this.weatherData = {id: ''};
 		this.terrain = '';
 		this.terrainData = {id: ''};
 		this.pseudoWeather = {};
+		this.fieldConditions = [];
+
+		this.fieldConditionGrid = [];
+		for (let i = 0; i < this.width; i++) {
+			this.fieldConditionGrid.push(new Array(this.length).fill({}));
+		}
 	}
 
 	setWeather(status: string | PureEffect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
@@ -166,21 +194,29 @@ export class Field {
 		return this.battle.getEffect(this.terrain);
 	}
 
-	addPseudoWeather(
+	getCoordinatesInField(position: Pokemon | Side | Battle): [number, number] {
+		let x = 0;
+		let y = 0;
+		if (position instanceof Side) {
+			x = position.n % this.width;
+			y = 0;
+		} else if (position instanceof Pokemon) {
+			x = position.side.n % this.width;
+			y = position.position + this.battle.gameType === 'multi' ? x : 0;
+		}
+		return [x, y];
+	}
+
+	addFieldCondition(
 		status: string | PureEffect,
 		source: Pokemon | 'debug' | null = null,
-		sourceEffect: Effect | null = null
+		sourceEffect: Effect | null = null,
+		target: Pokemon | null = null
 	): boolean {
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.battle.sides[0].active[0];
 		status = this.battle.getEffect(status);
-
-		let effectData = this.pseudoWeather[status.id];
-		if (effectData) {
-			if (!status.onRestart) return false;
-			return this.battle.singleEvent('Restart', status, effectData, this, source, sourceEffect);
-		}
-		effectData = this.pseudoWeather[status.id] = {
+		const effectData = {
 			id: status.id,
 			source,
 			sourcePosition: source && source.position,
@@ -190,24 +226,75 @@ export class Field {
 			if (!source) throw new Error(`setting fieldcond without a source`);
 			effectData.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
 		}
-		if (!this.battle.singleEvent('Start', status, effectData, this, source, sourceEffect)) {
-			delete this.pseudoWeather[status.id];
-			return false;
+
+		const moveTarget = sourceEffect && (sourceEffect as Move).target || 'all';
+		/** @type {(AnyObject | undefined)[][]} */
+		let targets = new Array(this.width);
+		if (moveTarget === 'all') {
+			targets.fill(new Array(this.length).fill(effectData));
+		} else if (target) {
+			const [targetx, targety] = this.getCoordinatesInField(target);
+			if (moveTarget === 'foeSide') {
+				targets[targetx] = new Array(this.length).fill(effectData);
+			} else {
+				targets[targetx][targety] = effectData;
+			}
+		} else if (source) {
+			const [sourcex, sourcey] = this.getCoordinatesInField(source);
+			switch (moveTarget) {
+			case 'foeSide':
+			// case 'allAdjacentFoes': // Not supported
+				targets = targets.map((side, i) => new Array(this.length).fill(i === sourcex ? undefined : effectData));
+				break;
+			case 'allySide':
+			case 'allyTeam':
+			// case 'allAdjacent': // Not supported
+				targets[sourcex] = new Array(this.length).fill(effectData);
+				break;
+			case 'self':
+				targets[sourcex][sourcey] = effectData;
+				break;
+			}
 		}
-		return true;
+
+		let didSomething = false;
+		for (const [x, side] of this.fieldConditionGrid.entries()) {
+			if (!this.battle.singleEvent('Start', status, effectData, this, source, sourceEffect)) continue;
+
+			for (const [y, slot] of side.entries()) {
+				if (!targets[x][y]) continue;
+				if (slot[effectData.id]) {
+					// already active for this position
+					if (!status.onRestart) continue;
+					didSomething = this.battle.singleEvent(
+						'Restart', status, slot[effectData.id], this, source, sourceEffect
+					) || didSomething;
+				} else {
+					slot[effectData.id] = targets[x][y];
+					didSomething = true;
+				}
+			}
+		}
+		return didSomething;
 	}
 
-	getPseudoWeather(status: string | Effect) {
+	getFieldCondition(status: string | Effect, position?: Pokemon | Side | Battle) {
 		status = this.battle.getEffect(status);
-		return this.pseudoWeather[status.id] ? status : null;
+		const [x, y] = position ? this.getCoordinatesInField(position) : [0, 0];
+		return this.fieldConditionGrid[x][y][status.id] ? status : null;
 	}
 
-	removePseudoWeather(status: string | Effect) {
+	removeFieldCondition(status: string | Effect, position?: Pokemon | Side | Battle) {
 		status = this.battle.getEffect(status);
-		const effectData = this.pseudoWeather[status.id];
+		const [x, y] = position ? this.getCoordinatesInField(position) : [0, 0];
+		const effectData = this.fieldConditionGrid[x][y][status.id];
 		if (!effectData) return false;
 		this.battle.singleEvent('End', status, effectData, this);
-		delete this.pseudoWeather[status.id];
+		for (const [i, side] of this.fieldConditionGrid.entries()) {
+			for (const [j] of side.entries()) {
+				if (this.fieldConditionGrid[i][j][status.id] === effectData) delete this.fieldConditionGrid[i][j][status.id];
+			}
+		}
 		return true;
 	}
 

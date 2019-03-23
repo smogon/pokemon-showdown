@@ -537,7 +537,7 @@ let BattleAbilities = {
 		name: "Interdimensional",
 		isNonstandard: "Custom",
 		onStart(target, source) {
-			this.field.addPseudoWeather('gravity', source);
+			this.field.addFieldCondition('gravity', source);
 		},
 	},
 	// urkerab

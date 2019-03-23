@@ -111,10 +111,10 @@ export class Battle extends Dex.ModdedDex {
 		this.formatData = {id: format.id};
 		this.cachedFormat = format;
 		this.gameType = (format.gameType || 'singles');
-		this.field = new Field(this);
 		const isFourPlayer = this.gameType === 'multi' || this.gameType === 'free-for-all';
 		// @ts-ignore
 		this.sides = Array(isFourPlayer ? 4 : 2).fill(null!);
+		this.field = new Field(this);
 		this.prng = options.prng || new PRNG(options.seed || undefined);
 		this.prngSeed = this.prng.startingSeed.slice() as PRNGSeed;
 		this.rated = options.rated || !!options.rated;
@@ -184,7 +184,7 @@ export class Battle extends Dex.ModdedDex {
 				const hasEventHandler = Object.keys(subFormat).some(val =>
 					val.startsWith('on') && !['onBegin', 'onValidateTeam', 'onChangeSet', 'onValidateSet'].includes(val)
 				);
-				if (hasEventHandler) this.field.addPseudoWeather(rule);
+				if (hasEventHandler) this.field.addFieldCondition(rule);
 			}
 		}
 		const sides: SideID[] = ['p1', 'p2', 'p3', 'p4'];
@@ -325,7 +325,7 @@ export class Battle extends Dex.ModdedDex {
 	residualEvent(eventid: string, relayVar?: any) {
 		const callbackName = `on${eventid}`;
 		let handlers = this.findBattleEventHandlers(callbackName, 'duration');
-		handlers = handlers.concat(this.findFieldEventHandlers(this.field, callbackName, 'duration'));
+		handlers = handlers.concat(this.findFieldEventHandlers(this, callbackName, 'duration'));
 		for (const side of this.sides) {
 			handlers = handlers.concat(this.findSideEventHandlers(side, callbackName, 'duration'));
 			for (const active of side.active) {
@@ -726,8 +726,9 @@ export class Battle extends Dex.ModdedDex {
 			}
 			return handlers;
 		}
+		handlers.push(...this.findFieldEventHandlers(thing, `on${eventName}`));
 		if (thing instanceof Pokemon && thing.isActive) {
-			handlers = this.findPokemonEventHandlers(thing, `on${eventName}`);
+			handlers.push(...this.findPokemonEventHandlers(thing, `on${eventName}`));
 			for (const allyActive of thing.allies()) {
 				handlers.push(...this.findPokemonEventHandlers(allyActive, `onAlly${eventName}`));
 				handlers.push(...this.findPokemonEventHandlers(allyActive, `onAny${eventName}`));
@@ -752,7 +753,6 @@ export class Battle extends Dex.ModdedDex {
 				handlers.push(...this.findSideEventHandlers(side, `onAny${eventName}`));
 			}
 		}
-		handlers.push(...this.findFieldEventHandlers(this.field, `on${eventName}`));
 		handlers.push(...this.findBattleEventHandlers(`on${eventName}`));
 		return handlers;
 	}
@@ -840,19 +840,22 @@ export class Battle extends Dex.ModdedDex {
 		return handlers;
 	}
 
-	findFieldEventHandlers(field: Field, callbackName: string, getKey?: 'duration') {
+	findFieldEventHandlers(thing: Pokemon | Side | Battle, callbackName: string, getKey?: 'duration') {
 		const callbackNamePriority = `${callbackName}Priority`;
 		const handlers: AnyObject[] = [];
+		const field = this.field;
 
+		const [x, y] = field.getCoordinatesInField(thing);
 		let callback;
-		for (const i in field.pseudoWeather) {
-			const pseudoWeatherData = field.pseudoWeather[i];
-			const pseudoWeather = field.getPseudoWeather(i);
+		for (const i in field.fieldConditionGrid[x][y]) {
+			const fieldConditionData = field.fieldConditionGrid[x][y][i];
+			const fieldCondition = field.getFieldCondition(i, thing);
+			if (!fieldCondition) console.log(i);
 			// @ts-ignore - dynamic lookup
-			callback = pseudoWeather[callbackName];
-			if (callback !== undefined || (getKey && pseudoWeatherData[getKey])) {
+			callback = fieldCondition[callbackName];
+			if (callback !== undefined || (getKey && fieldConditionData[getKey])) {
 				handlers.push({
-					status: pseudoWeather, callback, statusData: pseudoWeatherData, end: field.removePseudoWeather, thing: field,
+					status: fieldCondition, callback, statusData: fieldConditionData, end: field.removeFieldCondition, thing: field,
 				});
 				this.resolveLastPriority(handlers, callbackName);
 			}
@@ -860,9 +863,9 @@ export class Battle extends Dex.ModdedDex {
 		const weather = field.getWeather();
 		// @ts-ignore - dynamic lookup
 		callback = weather[callbackName];
-		if (callback !== undefined || (getKey && this.field.weatherData[getKey])) {
+		if (callback !== undefined || (getKey && field.weatherData[getKey])) {
 			handlers.push({
-				status: weather, callback, statusData: this.field.weatherData, end: field.clearWeather, thing: field,
+				status: weather, callback, statusData: field.weatherData, end: field.clearWeather, thing: field,
 				// @ts-ignore - dynamic lookup
 				priority: weather[callbackNamePriority] || 0});
 			this.resolveLastPriority(handlers, callbackName);

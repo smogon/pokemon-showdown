@@ -421,7 +421,7 @@ export class Pokemon {
 		let stat = this.storedStats[statName];
 
 		// Wonder Room swaps defenses before calculating anything else
-		if ('wonderroom' in this.battle.field.pseudoWeather) {
+		if ('wonderroom' in this.battle.field.fieldConditionGrid) {
 			if (statName === 'def') {
 				stat = this.storedStats['spd'];
 			} else if (statName === 'spd') {
@@ -458,7 +458,7 @@ export class Pokemon {
 
 		// Download ignores Wonder Room's effect, but this results in
 		// stat stages being calculated on the opposite defensive stat
-		if (unmodified && 'wonderroom' in this.battle.field.pseudoWeather) {
+		if (unmodified && 'wonderroom' in this.battle.field.fieldConditionGrid) {
 			if (statName === 'def') {
 				statName = 'spd';
 			} else if (statName === 'spd') {
@@ -492,7 +492,7 @@ export class Pokemon {
 
 	getActionSpeed() {
 		let speed = this.getStat('spe', false, false);
-		if (this.battle.field.getPseudoWeather('trickroom')) {
+		if (this.battle.field.getFieldCondition('trickroom')) {
 			speed = 0x2710 - speed;
 		}
 		return this.battle.trunc(speed, 13);
@@ -622,7 +622,7 @@ export class Pokemon {
 	ignoringItem() {
 		return !!((this.battle.gen >= 5 && !this.isActive) ||
 			(this.hasAbility('klutz') && !this.getItem().ignoreKlutz) ||
-			this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom']);
+			this.volatiles['embargo'] || this.battle.field.getFieldCondition('magicroom', this));
 	}
 
 	deductPP(move: string | Move, amount?: number | null, target?: Pokemon | null | false) {
@@ -1579,7 +1579,7 @@ export class Pokemon {
 	}
 
 	isGrounded(negateImmunity: boolean = false) {
-		if ('gravity' in this.battle.field.pseudoWeather) return true;
+		if (this.battle.field.getFieldCondition('gravity', this)) return true;
 		if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;
 		if ('smackdown' in this.volatiles) return true;
 		const item = (this.ignoringItem() ? '' : this.item);

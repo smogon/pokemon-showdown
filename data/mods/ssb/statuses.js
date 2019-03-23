@@ -1236,9 +1236,9 @@ let BattleStatuses = {
 					if (pokemon && pokemon.isActive) pokemon.clearBoosts();
 				}
 			}
-			for (const clear in this.field.pseudoWeather) {
+			for (const clear in this.field.fieldConditionGrid) {
 				if (clear.endsWith('mod') || clear.endsWith('clause')) continue;
-				this.field.removePseudoWeather(clear);
+				this.field.removeFieldCondition(clear);
 			}
 			this.field.clearWeather();
 			this.field.clearTerrain();

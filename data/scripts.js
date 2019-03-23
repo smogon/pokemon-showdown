@@ -891,8 +891,8 @@ let BattleScripts = {
 					hitResult = this.field.setTerrain(moveData.terrain, pokemon, move);
 					didSomething = this.combineResults(didSomething, hitResult);
 				}
-				if (moveData.pseudoWeather) {
-					hitResult = this.field.addPseudoWeather(moveData.pseudoWeather, pokemon, move);
+				if (moveData.fieldCondition) {
+					hitResult = this.field.addFieldCondition(moveData.fieldCondition, pokemon, move);
 					didSomething = this.combineResults(didSomething, hitResult);
 				}
 				if (moveData.forceSwitch) {

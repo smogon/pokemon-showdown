@@ -487,7 +487,7 @@ interface MoveData extends EffectData {
 	noSketch?: boolean
 	ohko?: boolean | string
 	pressureTarget?: string
-	pseudoWeather?: string
+	fieldCondition?: string
 	selfBoost?: {boosts?: SparseBoostsTable}
 	selfdestruct?: string | boolean
 	selfSwitch?: string | boolean
