@@ -189,7 +189,10 @@ export class ReadStream {
 	loadIntoBuffer(byteCount: number | null | true = null, readError?: boolean) {
 		this[readError ? 'readError' : 'peekError']();
 		if (byteCount === 0) return;
-		this.readSize = Math.max(byteCount === true ? this.bufSize + 1 : byteCount || 0, this.readSize);
+		this.readSize = Math.max(
+			byteCount === true ? this.bufSize + 1 : byteCount === null ? 1 : byteCount,
+			this.readSize
+		);
 		if (!this.errorBuf && !this.atEOF && this.bufSize < this.readSize) {
 			let bytes: number | null = this.readSize - this.bufSize;
 			if (bytes === Infinity || byteCount === null) bytes = null;
