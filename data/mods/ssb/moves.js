@@ -191,7 +191,7 @@ let BattleMovedex = {
 			let side = source.side;
 			if (side.faintedLastTurn) {
 				this.add('-anim', source, "Wish", target);
-				side.addSideCondition('wish', source);
+				side.addSlotCondition(source, 'wish', source);
 				this.add('-message', `${source.name} made a wish!`);
 				didSomething = true;
 			}
@@ -2700,7 +2700,7 @@ let BattleMovedex = {
 			this.add('-anim', source, "Mist", target);
 		},
 		onTryHit(target, source, move) {
-			target.side.addSideCondition('pyramidingsong');
+			target.side.addSlotCondition(target, 'pyramidingsong');
 		},
 		onHit(target, source, move) {
 			if (this.runEvent('DragOut', source, target, move)) {

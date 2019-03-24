@@ -52,6 +52,7 @@ export class Side {
 	zMoveUsed: boolean;
 
 	sideConditions: AnyObject;
+	slotConditions: AnyObject[];
 
 	/**
 	 * 'move' - Move request, at the beginning of every turn
@@ -104,6 +105,9 @@ export class Side {
 		this.zMoveUsed = false;
 
 		this.sideConditions = {};
+		this.slotConditions = [];
+		// Array#fill doesn't work for this
+		for (let i = 0; i < this.active.length; i++) this.slotConditions[i] = {};
 
 		this.currentRequest = '';
 		this.choice = {
@@ -231,6 +235,54 @@ export class Side {
 		if (!this.sideConditions[status.id]) return false;
 		this.battle.singleEvent('End', status, this.sideConditions[status.id], this);
 		delete this.sideConditions[status.id];
+		return true;
+	}
+
+	addSlotCondition(
+		target: Pokemon | number, status: string | Effect, source: Pokemon | 'debug' | null = null,
+		sourceEffect: Effect | null = null
+	) {
+		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
+		if (source === 'debug') source = this.active[0];
+		if (target instanceof Pokemon) target = target.position;
+		if (!source) throw new Error(`setting sidecond without a source`);
+
+		status = this.battle.getEffect(status) as Effect;
+		if (this.slotConditions[target][status.id]) {
+			if (!status.onRestart) return false;
+			return this.battle.singleEvent('Restart', status, this.slotConditions[target][status.id], this, source, sourceEffect);
+		}
+		const slotConditionData = this.slotConditions[target][status.id] = {
+			id: status.id,
+			target: this,
+			source,
+			sourcePosition: source.position,
+			duration: status.duration,
+		};
+		if (status.durationCallback) {
+			slotConditionData.duration =
+				status.durationCallback.call(this.battle, this.active[0], source, sourceEffect);
+		}
+		if (!this.battle.singleEvent('Start', status, slotConditionData, this.active[target], source, sourceEffect)) {
+			delete this.slotConditions[target][status.id];
+			return false;
+		}
+		return true;
+	}
+
+	getSlotCondition(target: Pokemon | number, status: string | Effect) {
+		if (target instanceof Pokemon) target = target.position;
+		status = this.battle.getEffect(status) as Effect;
+		if (!this.slotConditions[target][status.id]) return null;
+		return status;
+	}
+
+	removeSlotCondition(target: Pokemon | number, status: string | Effect) {
+		if (target instanceof Pokemon) target = target.position;
+		status = this.battle.getEffect(status) as Effect;
+		if (!this.slotConditions[target][status.id]) return false;
+		this.battle.singleEvent('End', status, this.slotConditions[target][status.id], this.active[target]);
+		delete this.slotConditions[target][status.id];
 		return true;
 	}
 
