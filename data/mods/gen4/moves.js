@@ -431,9 +431,6 @@ let BattleMovedex = {
 		desc: "Deals typeless damage that cannot be a critical hit two turns after this move is used. Damage is calculated against the target on use, and at the end of the final turn that damage is dealt to the Pokemon at the position the original target had at the time. Fails if this move or Future Sight is already in effect for the target's position.",
 		onTry(source, target) {
 			target.side.addSideCondition('futuremove');
-			if (target.side.sideConditions['futuremove'].positions[target.position]) {
-				return false;
-			}
 			let moveData = /** @type {ActiveMove} */ ({
 				name: "Doom Desire",
 				basePower: 120,
