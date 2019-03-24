@@ -848,8 +848,8 @@ let BattleMovedex = {
 			},
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target !== source && target.side === this.effectData.target) {
-					if ((target.side.sideConditions['reflect'] && this.getCategory(move) === 'Physical') ||
-							(target.side.sideConditions['lightscreen'] && this.getCategory(move) === 'Special')) {
+					if ((target.side.getSideCondition('reflect') && this.getCategory(move) === 'Physical') ||
+							(target.side.getSideCondition('lightscreen') && this.getCategory(move) === 'Special')) {
 						return;
 					}
 					if (!move.crit && !move.infiltrates) {
@@ -6971,7 +6971,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		damageCallback(pokemon, target) {
-			if (target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] || target.side.sideConditions['matblock'] || target.volatiles['protect'] || target.volatiles['spikyshield']) {
+			if (target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] || target.side.getSideCondition('matblock') || target.volatiles['protect'] || target.volatiles['spikyshield']) {
 				this.add('-zbroken', target);
 				return this.clampIntRange(Math.ceil(Math.floor(target.hp * 3 / 4) / 4 - 0.5), 1);
 			}
@@ -12884,10 +12884,11 @@ let BattleMovedex = {
 			for (const side of this.sides) {
 				if (side === pokemon.side) continue;
 				side.addSideCondition('pursuit', pokemon);
-				if (!side.sideConditions['pursuit'].sources) {
-					side.sideConditions['pursuit'].sources = [];
+				const data = side.getSideConditionData('pursuit');
+				if (!data.sources) {
+					data.sources = [];
 				}
-				side.sideConditions['pursuit'].sources.push(pokemon);
+				data.sources.push(pokemon);
 			}
 		},
 		onModifyMove(move, source, target) {
