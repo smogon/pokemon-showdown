@@ -15,7 +15,7 @@ describe('Stealth Rock', function () {
 		battle.setPlayer('p1', {team: [{species: "Smeargle", moves: ['stealthrock']}]});
 		battle.setPlayer('p2', {team: [{species: "Ninjask", moves: ['substitute']}]});
 		battle.makeChoices('move stealthrock', 'move substitute');
-		assert(battle.p2.sideConditions['stealthrock']);
+		assert(battle.field.getFieldCondition('stealthrock', battle.p2));
 	});
 
 	it('should deal damage to Pokemon switching in based on their type effectiveness against Rock-type', function () {

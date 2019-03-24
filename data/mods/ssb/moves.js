@@ -67,13 +67,13 @@ let BattleMovedex = {
 			let removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
 			let removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
 			for (const targetCondition of removeTarget) {
-				if (target.side.removeSideCondition(targetCondition)) {
+				if (this.field.removeFieldCondition(targetCondition, target)) {
 					if (!removeAll.includes(targetCondition)) continue;
 					this.add('-sideend', target.side, this.getEffect(targetCondition).name, '[from] move: Noble Howl', '[of] ' + target);
 				}
 			}
 			for (const sideCondition of removeAll) {
-				if (source.side.removeSideCondition(sideCondition)) {
+				if (this.field.removeFieldCondition(sideCondition, target)) {
 					this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Noble Howl', '[of] ' + source);
 				}
 			}
@@ -186,12 +186,12 @@ let BattleMovedex = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, "Ingrain", target);
 		},
-		onHit(target, source) {
+		onHit(target, source, move) {
 			let didSomething = false;
 			let side = source.side;
 			if (side.faintedLastTurn) {
 				this.add('-anim', source, "Wish", target);
-				side.addSideCondition('wish', source);
+				this.field.addFieldCondition('wish', source, move, source);
 				this.add('-message', `${source.name} made a wish!`);
 				didSomething = true;
 			}
@@ -658,10 +658,10 @@ let BattleMovedex = {
 			let removeAll = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
 			let silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 			for (const sideCondition of removeAll) {
-				if (target.side.removeSideCondition(sideCondition)) {
+				if (this.field.removeFieldCondition(sideCondition, target)) {
 					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', target.side, this.getEffect(sideCondition).name, '[from] move: Blustery Winds', '[of] ' + source);
 				}
-				if (source.side.removeSideCondition(sideCondition)) {
+				if (this.field.removeFieldCondition(sideCondition, source)) {
 					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Blustery Winds', '[of] ' + source);
 				}
 			}
@@ -827,7 +827,7 @@ let BattleMovedex = {
 		},
 		onHit(target, source, move) {
 			this.add('-anim', source, "Spikes", target);
-			target.side.addSideCondition('spikes');
+			this.field.addFieldCondition('spikes', source, move, target);
 			let stats = [];
 			for (let stat in source.boosts) {
 				// @ts-ignore
@@ -944,14 +944,14 @@ let BattleMovedex = {
 			this.add('-anim', source, 'Geomancy', source);
 			this.add('-anim', source, 'Memento', target);
 		},
-		onHit(target, source) {
-			source.side.addSideCondition('lightscreen', source);
-			source.side.addSideCondition('reflect', source);
-			source.side.addSideCondition('safeguard', source);
+		onHit(target, source, move) {
+			this.field.addFieldCondition('lightscreen', source, move);
+			this.field.addFieldCondition('reflect', source, move);
+			this.field.addFieldCondition('safeguard', source, move);
 		},
 		selfdestruct: "ifHit",
 		secondary: null,
-		target: "self",
+		target: "allySide",
 		type: "Dark",
 	},
 	// Cleo
@@ -1076,9 +1076,9 @@ let BattleMovedex = {
 		},
 		onTryHit(pokemon) {
 			if (pokemon.runImmunity('Normal')) {
-				pokemon.side.removeSideCondition('reflect');
-				pokemon.side.removeSideCondition('lightscreen');
-				pokemon.side.removeSideCondition('auroraveil');
+				this.field.removeFieldCondition('reflect', pokemon);
+				this.field.removeFieldCondition('lightscreen', pokemon);
+				this.field.removeFieldCondition('auroraveil', pokemon);
 			}
 		},
 		secondary: null,
@@ -1542,16 +1542,16 @@ let BattleMovedex = {
 			/** @type {{[key: string]: number}} */
 			let hazards = {stealthrock: 1, spikes: 3, toxicspikes: 2, stickyweb: 1};
 			// Check how many layers of each hazard can still be added to the foe's side
-			if (target.getSideCondition('stealthrock')) delete hazards.stealthrock;
-			if (target.getSideCondition('spikes')) {
-				hazards.spikes -= target.sideConditions['spikes'].layers;
+			if (this.field.getFieldCondition('stealthrock', target)) delete hazards.stealthrock;
+			if (this.field.getFieldCondition('spikes', target)) {
+				hazards.spikes -= this.field.getFieldConditionData('spikes', target).layers;
 				if (!hazards.spikes) delete hazards.spikes;
 			}
-			if (target.getSideCondition('toxicspikes')) {
-				hazards.toxicspikes -= target.sideConditions['toxicspikes'].layers;
+			if (this.field.getFieldCondition('toxicspikes', target)) {
+				hazards.toxicspikes -= this.field.getFieldConditionData('toxicspikes', target).layers;
 				if (!hazards.toxicspikes) delete hazards.toxicspikes;
 			}
-			if (target.getSideCondition('stickyweb')) delete hazards.stickyweb;
+			if (this.field.getFieldCondition('stickyweb', target)) delete hazards.stickyweb;
 			// Create a list of hazards not yet at their maximum layer count
 			let hazardTypes = Object.keys(hazards);
 			// If there are no possible hazards, don't do anything
@@ -1560,7 +1560,7 @@ let BattleMovedex = {
 			let hazard1 = this.sample(hazardTypes);
 			// Theoretically, this should always work
 			this.add('-anim', source, this.getMove(hazard1).name, target);
-			target.addSideCondition(hazard1, source, this.effect);
+			this.field.addFieldCondition(hazard1, source, this.effect);
 			// If that was the last possible layer of that hazard, remove it from our list of possible hazards
 			if (hazards[hazard1] === 1) {
 				hazardTypes.splice(hazardTypes.indexOf(hazard1), 1);
@@ -1570,7 +1570,7 @@ let BattleMovedex = {
 			// Set the last hazard and animate the switch
 			let hazard2 = this.sample(hazardTypes);
 			this.add('-anim', source, this.getMove(hazard2).name, target);
-			target.addSideCondition(hazard2, source, this.effect);
+			this.field.addFieldCondition(hazard2, source, this.effect);
 			this.add('-anim', source, "Baton Pass", target);
 		},
 		selfSwitch: true,
@@ -1811,8 +1811,8 @@ let BattleMovedex = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Gunk Shot', target);
 		},
-		onHit(target) {
-			target.side.addSideCondition('toxicspikes');
+		onHit(target, source, move) {
+			this.field.addFieldCondition('toxicspikes', source, move, target.side);
 		},
 		secondary: null,
 		target: "normal",
@@ -2280,7 +2280,7 @@ let BattleMovedex = {
 		damageCallback(pokemon, target) {
 			let damage = pokemon.hp;
 			pokemon.faint();
-			if (target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] || target.side.sideConditions['matblock'] || target.volatiles['protect'] || target.volatiles['spikyshield'] || target.volatiles['lilypadshield']) {
+			if (target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] || this.field.getFieldCondition('matblock', target) || target.volatiles['protect'] || target.volatiles['spikyshield'] || target.volatiles['lilypadshield']) {
 				this.add('-zbroken', target);
 				return Math.floor(damage / 4);
 			}
@@ -2499,7 +2499,7 @@ let BattleMovedex = {
 				}
 				let sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
 				for (const condition of sideConditions) {
-					if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
+					if (pokemon.hp && this.field.removeFieldCondition(condition, pokemon)) {
 						this.add('-sideend', pokemon.side, this.getEffect(condition).name, '[from] move: Cyclone Spin', '[of] ' + pokemon);
 					}
 				}
@@ -2661,10 +2661,10 @@ let BattleMovedex = {
 				let removeAll = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
 				let silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 				for (const sideCondition of removeAll) {
-					if (source.side.foe.removeSideCondition(sideCondition)) {
+					if (this.field.removeFieldCondition(sideCondition, source.side.foe)) {
 						if (!(silentRemove.includes(sideCondition))) this.add('-sideend', source.side.foe, this.getEffect(sideCondition).name, '[from] move: Prismatic Terrain', '[of] ' + source);
 					}
-					if (source.side.removeSideCondition(sideCondition)) {
+					if (this.field.removeFieldCondition(sideCondition, source)) {
 						if (!(silentRemove.includes(sideCondition))) this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Prismatic Terrain', '[of] ' + source);
 					}
 				}
@@ -2700,7 +2700,7 @@ let BattleMovedex = {
 			this.add('-anim', source, "Mist", target);
 		},
 		onTryHit(target, source, move) {
-			target.side.addSideCondition('pyramidingsong');
+			this.field.addFieldCondition('pyramidingsong', source, move, target);
 		},
 		onHit(target, source, move) {
 			if (this.runEvent('DragOut', source, target, move)) {
@@ -3120,12 +3120,12 @@ let BattleMovedex = {
 		},
 		secondary: {
 			chance: 10,
-			onHit(target, source) {
+			onHit(target, source, move) {
 				let result = this.random(2);
 				if (result === 0) {
-					source.side.addSideCondition('reflect', source);
+					this.field.addFieldCondition('reflect', source, move, target.side);
 				} else {
-					source.side.addSideCondition('lightscreen', source);
+					this.field.addFieldCondition('lightscreen', source, move, target.side);
 				}
 			},
 		},
@@ -3182,9 +3182,9 @@ let BattleMovedex = {
 			this.add('-anim', source, "Extreme Evoboost", source);
 			this.add('-anim', source, "Blizzard", source);
 		},
-		onHit(target, source) {
+		onHit(target, source, move) {
 			this.field.setWeather('hail');
-			if (this.field.isWeather('hail')) source.side.addSideCondition('auroraveil', source);
+			if (this.field.isWeather('hail')) this.field.addFieldCondition('auroraveil', source, move, target.side);
 			this.add('-message', source.name + ' became extra thicc!');
 		},
 		boosts: {
@@ -3504,7 +3504,7 @@ let BattleMovedex = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, "Celebrate", target);
 		},
-		sideCondition: "rotate",
+		fieldCondition: "rotate",
 		effect: {
 			duration: 2,
 			onStart(source) {
@@ -3661,9 +3661,9 @@ let BattleMovedex = {
 				break;
 			case 3:
 				if (option) {
-					target.side.addSideCondition('stealthrock');
+					this.field.addFieldCondition('stealthrock', source, move, target.side);
 				} else {
-					target.side.addSideCondition('spikes');
+					this.field.addFieldCondition('spikes', source, move, target.side);
 				}
 				break;
 			case 4:
@@ -3709,20 +3709,21 @@ let BattleMovedex = {
 			this.add('-anim', source, "Smokescreen", target);
 			this.add('-anim', source, "Parting Shot", target);
 		},
-		onHit(target, source) {
+		onHit(target, source, move) {
 			const sideConditions = {'spikes': 1, 'toxicspikes': 1, 'stealthrock': 1, 'stickyweb': 1};
 			for (let i in sideConditions) {
-				let layers = source.side.sideConditions[i] ? (source.side.sideConditions[i].layers || 1) : 1;
-				if (source.side.removeSideCondition(i)) {
+				let conditionData = this.field.getFieldConditionData(i, source);
+				let layers = conditionData ? (conditionData.layers || 1) : 1;
+				if (this.field.removeFieldCondition(i, source)) {
 					this.add('-sideend', source.side, this.getEffect(i).name, '[from] move: Smoke Bomb', '[of] ' + source);
-					for (layers; layers > 0; layers--) target.side.addSideCondition(i, source);
+					for (layers; layers > 0; layers--) this.field.addFieldCondition(i, source, move);
 				}
 			}
-			target.side.addSideCondition('stealthrock');
+			this.field.addFieldCondition('stealthrock', source, move);
 		},
 		selfSwitch: true,
 		secondary: null,
-		target: "normal",
+		target: "foeSide",
 		type: "Fire",
 	},
 	// Trickster

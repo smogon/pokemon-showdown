@@ -1281,12 +1281,9 @@ let BattleMovedex = {
 		},
 		isViable: true,
 		ignoreImmunity: true,
-		onHit(target, source) {
-			target.side.addSideCondition('futuremove');
-			if (target.side.sideConditions['futuremove'].positions[target.position]) {
-				return false;
-			}
-			target.side.sideConditions['futuremove'].positions[target.position] = {
+		onHit(target, source, move) {
+			this.field.addFieldCondition('futuremove', source, move, target);
+			Object.assign(this.field.getFieldConditionData('futuremove', target), {
 				duration: 3,
 				move: 'echoedvoice',
 				source: source,
@@ -1303,7 +1300,7 @@ let BattleMovedex = {
 					isFutureMove: true,
 					type: 'Normal',
 				},
-			};
+			});
 			this.add('-start', source, 'move: Echoed Voice');
 			return null;
 		},
@@ -1332,7 +1329,7 @@ let BattleMovedex = {
 			}
 			let sideConditions = ['spikes', 'toxicspikes', 'stealthrock'];
 			for (let condition in sideConditions) {
-				if (user.side.removeSideCondition(condition)) {
+				if (this.field.removeFieldCondition(condition, user)) {
 					this.add('-sideend', user.side, this.getEffect(condition).name, '[from] move: Rapid Spin', '[of] ' + user);
 					doubled = true;
 				}
@@ -1351,7 +1348,7 @@ let BattleMovedex = {
 		inherit: true,
 		accuracy: 100,
 		onBasePower(power, user) {
-			if (user.side.removeSideCondition('stealthrock')) {
+			if (this.field.removeFieldCondition('stealthrock', user)) {
 				this.add('-sideend', user.side, "Stealth Rock", '[from] move: Rapid Spin', '[of] ' + user);
 				return power * 2;
 			}

@@ -50,7 +50,7 @@ let BattleScripts = {
 
 			// Screens
 			if (!unboosted) {
-				if ((this.side.sideConditions['reflect'] && statName === 'def') || (this.side.sideConditions['lightscreen'] && statName === 'spd')) {
+				if ((this.battle.field.getFieldCondition('reflect', this) && statName === 'def') || (this.battle.field.getFieldCondition('lightscreen') && statName === 'spd')) {
 					stat *= 2;
 				}
 			}
@@ -380,10 +380,6 @@ let BattleScripts = {
 			}
 			if (moveData.volatileStatus) {
 				hitResult = target.addVolatile(moveData.volatileStatus, pokemon, move);
-				didSomething = didSomething || hitResult;
-			}
-			if (moveData.sideCondition) {
-				hitResult = target.side.addSideCondition(moveData.sideCondition, pokemon, move);
 				didSomething = didSomething || hitResult;
 			}
 			if (moveData.weather) {

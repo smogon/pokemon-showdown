@@ -17,7 +17,6 @@ export class Field {
 	terrain: string;
 	terrainData: AnyObject;
 	pseudoWeather: AnyObject;
-	fieldConditions: AnyObject[];
 	fieldConditionGrid: AnyObject[][];
 
 	constructor(battle: Battle) {
@@ -43,7 +42,6 @@ export class Field {
 		this.terrain = '';
 		this.terrainData = {id: ''};
 		this.pseudoWeather = {};
-		this.fieldConditions = [];
 
 		this.fieldConditionGrid = [];
 		for (let i = 0; i < this.width; i++) {
@@ -177,12 +175,12 @@ export class Field {
 		return true;
 	}
 
-	effectiveTerrain(target?: Pokemon | Side | Battle) {
+	effectiveTerrain(target?: Pokemon | Battle) {
 		if (this.battle.event && !target) target = this.battle.event.target;
 		return this.battle.runEvent('TryTerrain', target) ? this.terrain : '';
 	}
 
-	isTerrain(terrain: string | string[], target?: Pokemon | Side | Battle) {
+	isTerrain(terrain: string | string[], target?: Pokemon | Battle) {
 		const ourTerrain = this.effectiveTerrain(target);
 		if (!Array.isArray(terrain)) {
 			return ourTerrain === toId(terrain);
@@ -211,7 +209,7 @@ export class Field {
 		status: string | PureEffect,
 		source: Pokemon | 'debug' | null = null,
 		sourceEffect: Effect | null = null,
-		target: Pokemon | null = null
+		target: Pokemon | Side | null = null
 	): boolean {
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.battle.sides[0].active[0];
@@ -228,23 +226,23 @@ export class Field {
 		}
 
 		const moveTarget = sourceEffect && (sourceEffect as Move).target || 'all';
-		/** @type {(AnyObject | undefined)[][]} */
-		let targets = new Array(this.width);
-		if (moveTarget === 'all') {
-			targets.fill(new Array(this.length).fill(effectData));
-		} else if (target) {
+		let targets: (AnyObject | undefined)[][] = new Array(this.width);
+		for (let i = 0; i < targets.length; i++) targets[i] = new Array(this.length);
+		if (target) {
 			const [targetx, targety] = this.getCoordinatesInField(target);
-			if (moveTarget === 'foeSide') {
+			if (moveTarget === 'foeSide' || target instanceof Side) {
 				targets[targetx] = new Array(this.length).fill(effectData);
 			} else {
 				targets[targetx][targety] = effectData;
 			}
+		} else if (moveTarget === 'all') {
+			targets.fill(new Array(this.length).fill(effectData));
 		} else if (source) {
 			const [sourcex, sourcey] = this.getCoordinatesInField(source);
 			switch (moveTarget) {
 			case 'foeSide':
 			// case 'allAdjacentFoes': // Not supported
-				targets = targets.map((side, i) => new Array(this.length).fill(i === sourcex ? undefined : effectData));
+				targets = targets.fill([]).map((side, i) => new Array(this.length).fill(i === sourcex ? undefined : effectData));
 				break;
 			case 'allySide':
 			case 'allyTeam':
@@ -262,7 +260,7 @@ export class Field {
 			if (!this.battle.singleEvent('Start', status, effectData, this, source, sourceEffect)) continue;
 
 			for (const [y, slot] of side.entries()) {
-				if (!targets[x][y]) continue;
+				if (!targets[x] || !targets[x][y]) continue;
 				if (slot[effectData.id]) {
 					// already active for this position
 					if (!status.onRestart) continue;
@@ -278,18 +276,24 @@ export class Field {
 		return didSomething;
 	}
 
-	getFieldCondition(status: string | Effect, position?: Pokemon | Side | Battle) {
+	getFieldCondition(status: string | Effect, position: Pokemon | Side | Battle = this.battle) {
 		status = this.battle.getEffect(status);
-		const [x, y] = position ? this.getCoordinatesInField(position) : [0, 0];
+		const [x, y] = this.getCoordinatesInField(position);
 		return this.fieldConditionGrid[x][y][status.id] ? status : null;
 	}
 
-	removeFieldCondition(status: string | Effect, position?: Pokemon | Side | Battle) {
+	getFieldConditionData(status: string | Effect, position: Pokemon | Side | Battle = this.battle) {
 		status = this.battle.getEffect(status);
-		const [x, y] = position ? this.getCoordinatesInField(position) : [0, 0];
+		const [x, y] = this.getCoordinatesInField(position);
+		return this.fieldConditionGrid[x][y][status.id];
+	}
+
+	removeFieldCondition(status: string | Effect, position: Pokemon | Side | Battle = this.battle) {
+		status = this.battle.getEffect(status);
+		const [x, y] = this.getCoordinatesInField(position);
 		const effectData = this.fieldConditionGrid[x][y][status.id];
 		if (!effectData) return false;
-		this.battle.singleEvent('End', status, effectData, this);
+		this.battle.singleEvent('End', status, effectData, position);
 		for (const [i, side] of this.fieldConditionGrid.entries()) {
 			for (const [j] of side.entries()) {
 				if (this.fieldConditionGrid[i][j][status.id] === effectData) delete this.fieldConditionGrid[i][j][status.id];

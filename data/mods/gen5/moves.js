@@ -188,7 +188,7 @@ let BattleMovedex = {
 			if (!pokemon.volatiles['substitute']) this.boost({evasion: -1});
 			let sideConditions = ['reflect', 'lightscreen', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock'];
 			for (const condition of sideConditions) {
-				if (pokemon.side.removeSideCondition(condition)) {
+				if (this.field.removeFieldCondition(condition, pokemon)) {
 					this.add('-sideend', pokemon.side, this.getEffect(condition).name, '[from] move: Defog', '[of] ' + pokemon);
 				}
 			}
@@ -309,12 +309,9 @@ let BattleMovedex = {
 	futuresight: {
 		inherit: true,
 		basePower: 100,
-		onTry(source, target) {
-			target.side.addSideCondition('futuremove');
-			if (target.side.sideConditions['futuremove'].positions[target.position]) {
-				return false;
-			}
-			target.side.sideConditions['futuremove'].positions[target.position] = {
+		onTry(source, target, move) {
+			this.field.addFieldCondition('futuremove', source, move, target);
+			Object.assign(this.field.getFieldConditionData('futuremove', target), {
 				duration: 3,
 				move: 'futuresight',
 				source: source,
@@ -331,7 +328,7 @@ let BattleMovedex = {
 					isFutureMove: true,
 					type: 'Psychic',
 				},
-			};
+			});
 			this.add('-start', source, 'move: Future Sight');
 			return null;
 		},

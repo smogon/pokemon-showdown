@@ -140,7 +140,7 @@ type Effect = Ability | Item | ActiveMove | Template | PureEffect | Format
 interface SelfEffect {
 	boosts?: SparseBoostsTable
 	chance?: number
-	sideCondition?: string
+	fieldCondition?: string
 	volatileStatus?: string
 	onHit?: EffectData["onHit"]
 }
@@ -491,7 +491,6 @@ interface MoveData extends EffectData {
 	selfBoost?: {boosts?: SparseBoostsTable}
 	selfdestruct?: string | boolean
 	selfSwitch?: string | boolean
-	sideCondition?: string
 	sleepUsable?: boolean
 	spreadModifier?: number
 	stallingMove?: boolean

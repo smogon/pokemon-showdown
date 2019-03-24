@@ -325,12 +325,11 @@ export class Battle extends Dex.ModdedDex {
 	residualEvent(eventid: string, relayVar?: any) {
 		const callbackName = `on${eventid}`;
 		let handlers = this.findBattleEventHandlers(callbackName, 'duration');
-		handlers = handlers.concat(this.findFieldEventHandlers(this, callbackName, 'duration'));
 		for (const side of this.sides) {
-			handlers = handlers.concat(this.findSideEventHandlers(side, callbackName, 'duration'));
 			for (const active of side.active) {
 				if (!active) continue;
 				handlers = handlers.concat(this.findPokemonEventHandlers(active, callbackName, 'duration'));
+				handlers = handlers.concat(this.findFieldEventHandlers(active, callbackName, 'duration'));
 			}
 		}
 		this.speedSort(handlers);
@@ -342,7 +341,7 @@ export class Battle extends Dex.ModdedDex {
 			if (handler.statusData && handler.statusData.duration) {
 				handler.statusData.duration--;
 				if (!handler.statusData.duration) {
-					handler.end.call(handler.thing, status.id);
+					handler.end.call(handler.thing, status.id, handler.position);
 					continue;
 				}
 			}
@@ -527,7 +526,7 @@ export class Battle extends Dex.ModdedDex {
 	 *   they're useful for functions called by the event handler.
 	 */
 	runEvent(
-		eventid: string, target?: Pokemon | Pokemon[] | Side | Battle | null, source?: string | Pokemon | false | null,
+		eventid: string, target?: Pokemon | Pokemon[] | Battle | null, source?: string | Pokemon | false | null,
 		effect?: Effect | null, relayVar?: any, onEffect?: boolean, fastExit?: boolean) {
 		// if (Battle.eventCounter) {
 		// 	if (!Battle.eventCounter[eventid]) Battle.eventCounter[eventid] = 0;
@@ -699,7 +698,7 @@ export class Battle extends Dex.ModdedDex {
 	 * on the first non-undefined value instead of only on null/false.
 	 */
 	priorityEvent(
-		eventid: string, target: Pokemon | Side | Battle, source?: Pokemon | null,
+		eventid: string, target: Pokemon | Battle, source?: Pokemon | null,
 		effect?: Effect, relayVar?: any, onEffect?: boolean): any {
 		return this.runEvent(eventid, target, source, effect, relayVar, onEffect, true);
 	}
@@ -712,7 +711,7 @@ export class Battle extends Dex.ModdedDex {
 		if (handler.thing && handler.thing.getStat) handler.speed = handler.thing.speed;
 	}
 
-	findEventHandlers(thing: Pokemon | Pokemon[] | Side | Battle, eventName: string, sourceThing?: Pokemon | null) {
+	findEventHandlers(thing: Pokemon | Pokemon[] | Battle, eventName: string, sourceThing?: Pokemon | null) {
 		let handlers: AnyObject[] = [];
 		if (Array.isArray(thing)) {
 			for (const [i, pokemon] of thing.entries()) {
@@ -737,21 +736,9 @@ export class Battle extends Dex.ModdedDex {
 				handlers.push(...this.findPokemonEventHandlers(foeActive, `onFoe${eventName}`));
 				handlers.push(...this.findPokemonEventHandlers(foeActive, `onAny${eventName}`));
 			}
-			thing = thing.side;
 		}
 		if (sourceThing) {
 			handlers.push(...this.findPokemonEventHandlers(sourceThing, `onSource${eventName}`));
-		}
-		if (thing instanceof Side) {
-			const team = this.gameType === 'multi' ? thing.n % 2 : null;
-			for (const side of this.sides) {
-				if (team === null ? side === thing : side.n % 2 === team) {
-					handlers.push(...this.findSideEventHandlers(side, `on${eventName}`));
-				} else {
-					handlers.push(...this.findSideEventHandlers(side, `onFoe${eventName}`));
-				}
-				handlers.push(...this.findSideEventHandlers(side, `onAny${eventName}`));
-			}
 		}
 		handlers.push(...this.findBattleEventHandlers(`on${eventName}`));
 		return handlers;
@@ -855,7 +842,12 @@ export class Battle extends Dex.ModdedDex {
 			callback = fieldCondition[callbackName];
 			if (callback !== undefined || (getKey && fieldConditionData[getKey])) {
 				handlers.push({
-					status: fieldCondition, callback, statusData: fieldConditionData, end: field.removeFieldCondition, thing: field,
+					status: fieldCondition,
+					callback,
+					statusData: fieldConditionData,
+					end: field.removeFieldCondition,
+					thing: field,
+					position: thing,
 				});
 				this.resolveLastPriority(handlers, callbackName);
 			}
@@ -881,24 +873,6 @@ export class Battle extends Dex.ModdedDex {
 			this.resolveLastPriority(handlers, callbackName);
 		}
 
-		return handlers;
-	}
-
-	findSideEventHandlers(side: Side, callbackName: string, getKey?: 'duration') {
-		const handlers: AnyObject[] = [];
-
-		for (const i in side.sideConditions) {
-			const sideConditionData = side.sideConditions[i];
-			const sideCondition = side.getSideCondition(i);
-			// @ts-ignore - dynamic lookup
-			const callback = sideCondition[callbackName];
-			if (callback !== undefined || (getKey && sideConditionData[getKey])) {
-				handlers.push({
-					status: sideCondition, callback, statusData: sideConditionData, end: side.removeSideCondition, thing: side,
-				});
-				this.resolveLastPriority(handlers, callbackName);
-			}
-		}
 		return handlers;
 	}
 

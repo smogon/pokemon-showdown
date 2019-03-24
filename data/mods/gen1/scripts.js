@@ -141,8 +141,8 @@ let BattleScripts = {
 			if (pokemon.volatiles['mustrecharge']) pokemon.removeVolatile('mustrecharge');
 			delete pokemon.volatiles['partialtrappinglock'];
 			// We remove screens
-			target.side.removeSideCondition('reflect');
-			target.side.removeSideCondition('lightscreen');
+			this.field.removeFieldCondition('reflect', target);
+			this.field.removeFieldCondition('lightscreen', target);
 			pokemon.removeVolatile('twoturnmove');
 		} else if (pokemon.hp) {
 			this.runEvent('AfterMoveSelf', pokemon, target, move);
@@ -201,8 +201,8 @@ let BattleScripts = {
 		let attrs = '';
 		if (pokemon.fainted) {
 			// Removing screens upon faint.
-			pokemon.side.removeSideCondition('reflect');
-			pokemon.side.removeSideCondition('lightscreen');
+			this.field.removeFieldCondition('reflect', pokemon);
+			this.field.removeFieldCondition('lightscreen', pokemon);
 			return false;
 		}
 
@@ -562,11 +562,6 @@ let BattleScripts = {
 			}
 			if (moveData.volatileStatus) {
 				if (target.addVolatile(moveData.volatileStatus, pokemon, move)) {
-					didSomething = true;
-				}
-			}
-			if (moveData.sideCondition) {
-				if (target.side.addSideCondition(moveData.sideCondition, pokemon, move)) {
 					didSomething = true;
 				}
 			}

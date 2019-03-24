@@ -227,11 +227,11 @@ let BattleScripts = {
 				this.heal(pokemon.maxhp / 2, pokemon, pokemon, zPower);
 				break;
 			case 'healreplacement':
-				move.self = {sideCondition: 'healreplacement'};
+				move.self = {fieldCondition: 'healreplacement'};
 				break;
 			case 'boostreplacement':
 				// For nui
-				move.self = {sideCondition: 'boostreplacement'};
+				move.self = {fieldCondition: 'boostreplacement'};
 				break;
 			case 'clearnegativeboost':
 				/** @type {{[k: string]: number}} */

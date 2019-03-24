@@ -220,8 +220,8 @@ let BattleMovedex = {
 		desc: "If this attack does not miss and whether or not the target is immune, the effects of Reflect and Light Screen end for the target's side of the field before damage is calculated.",
 		shortDesc: "Destroys screens, even if the target is immune.",
 		onTryHit(pokemon) {
-			pokemon.side.removeSideCondition('reflect');
-			pokemon.side.removeSideCondition('lightscreen');
+			this.field.removeFieldCondition('reflect', pokemon);
+			this.field.removeFieldCondition('lightscreen', pokemon);
 		},
 	},
 	bugbite: {
@@ -429,11 +429,8 @@ let BattleMovedex = {
 		accuracy: 85,
 		basePower: 120,
 		desc: "Deals typeless damage that cannot be a critical hit two turns after this move is used. Damage is calculated against the target on use, and at the end of the final turn that damage is dealt to the Pokemon at the position the original target had at the time. Fails if this move or Future Sight is already in effect for the target's position.",
-		onTry(source, target) {
-			target.side.addSideCondition('futuremove');
-			if (target.side.sideConditions['futuremove'].positions[target.position]) {
-				return false;
-			}
+		onTry(source, target, move) {
+			this.field.addFieldCondition('futuremove', source, move, target);
 			let moveData = /** @type {ActiveMove} */ ({
 				name: "Doom Desire",
 				basePower: 120,
@@ -443,7 +440,7 @@ let BattleMovedex = {
 				type: '???',
 			});
 			let damage = this.getDamage(source, target, moveData, true);
-			target.side.sideConditions['futuremove'].positions[target.position] = {
+			Object.assign(this.field.getFieldConditionData('futuremove', target), {
 				duration: 3,
 				move: 'doomdesire',
 				source: source,
@@ -459,7 +456,7 @@ let BattleMovedex = {
 					isFutureMove: true,
 					type: '???',
 				},
-			};
+			});
 			this.add('-start', source, 'Doom Desire');
 			return null;
 		},
@@ -691,10 +688,7 @@ let BattleMovedex = {
 		desc: "Deals typeless damage that cannot be a critical hit two turns after this move is used. Damage is calculated against the target on use, and at the end of the final turn that damage is dealt to the Pokemon at the position the original target had at the time. Fails if this move or Doom Desire is already in effect for the target's position.",
 		pp: 15,
 		onTry(source, target) {
-			target.side.addSideCondition('futuremove');
-			if (target.side.sideConditions['futuremove'].positions[target.position]) {
-				return false;
-			}
+			this.field.addFieldCondition('futuremove');
 			let moveData = /** @type {ActiveMove} */ ({
 				name: "Future Sight",
 				basePower: 80,
@@ -704,7 +698,7 @@ let BattleMovedex = {
 				type: '???',
 			});
 			let damage = this.getDamage(source, target, moveData, true);
-			target.side.sideConditions['futuremove'].positions[target.position] = {
+			Object.assign(this.field.getFieldConditionData('futuremove', target), {
 				duration: 3,
 				move: 'futuresight',
 				source: source,
@@ -720,7 +714,7 @@ let BattleMovedex = {
 					isFutureMove: true,
 					type: '???',
 				},
-			};
+			});
 			this.add('-start', source, 'Future Sight');
 			return null;
 		},
@@ -832,7 +826,7 @@ let BattleMovedex = {
 					target.heal(target.maxhp);
 					target.setStatus('');
 					this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');
-					target.side.removeSideCondition('healingwish');
+					this.field.removeFieldCondition('healingwish', target);
 					target.lastMove = this.lastMove;
 				} else {
 					target.switchFlag = true;
@@ -967,7 +961,7 @@ let BattleMovedex = {
 						moveSlot.pp = moveSlot.maxpp;
 					}
 					this.add('-heal', target, target.getHealth, '[from] move: Lunar Dance');
-					target.side.removeSideCondition('lunardance');
+					this.field.removeFieldCondition('lunardance', target);
 					target.lastMove = this.lastMove;
 				} else {
 					target.switchFlag = true;
@@ -1679,7 +1673,7 @@ let BattleMovedex = {
 				if (!pokemon.runImmunity('Poison')) return;
 				if (pokemon.hasType('Poison')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
-					pokemon.side.removeSideCondition('toxicspikes');
+					this.field.removeFieldCondition('toxicspikes', pokemon);
 				}
 				if (pokemon.volatiles['substitute']) {
 					return;
@@ -1768,7 +1762,7 @@ let BattleMovedex = {
 		desc: "At the end of the next turn, the Pokemon at the user's position has 1/2 of its maximum HP restored to it, rounded down. Fails if this move is already in effect for the user's position.",
 		shortDesc: "Next turn, heals 50% of the recipient's max HP.",
 		flags: {heal: 1},
-		sideCondition: 'Wish',
+		fieldCondition: 'Wish',
 		effect: {
 			duration: 2,
 			onResidualOrder: 0.5,

@@ -180,7 +180,7 @@ let BattleAbilities = {
 					this.field.weatherData.duration = 0;
 				};
 				move.target = 'self';
-				move.sideCondition = 'flowergift';
+				move.fieldCondition = 'flowergift';
 			}
 		},
 		onUpdate(pokemon) {
@@ -201,7 +201,7 @@ let BattleAbilities = {
 				if (!target.fainted) {
 					this.boost({spd: 1}, target, target, this.getAbility('flowergift'));
 				}
-				target.side.removeSideCondition('flowergift');
+				this.field.removeFieldCondition('flowergift', target);
 			},
 		},
 		desc: "If this Pokemon is a Cherrim and Sunny Day is active, it changes to Sunshine Form and the Special Defense of it is multiplied by 1.5. The next Pokemon that switches in gets its Special Defense also multiplied by 1.5.",

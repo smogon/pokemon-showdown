@@ -492,7 +492,7 @@ let BattleScripts = {
 				}
 				if (this.gen >= 6 || target.side !== pokemon.side) {
 					for (const effectid of ['craftyshield', 'matblock', 'quickguard', 'wideguard']) {
-						if (target.side.removeSideCondition(effectid)) broke = true;
+						if (this.field.removeFieldCondition(effectid, target)) broke = true;
 					}
 				}
 				if (broke) {
@@ -879,10 +879,6 @@ let BattleScripts = {
 					hitResult = target.addVolatile(moveData.volatileStatus, pokemon, move);
 					didSomething = this.combineResults(didSomething, hitResult);
 				}
-				if (moveData.sideCondition) {
-					hitResult = target.side.addSideCondition(moveData.sideCondition, pokemon, move);
-					didSomething = this.combineResults(didSomething, hitResult);
-				}
 				if (moveData.weather) {
 					hitResult = this.field.setWeather(moveData.weather, pokemon, move);
 					didSomething = this.combineResults(didSomething, hitResult);
@@ -1172,7 +1168,7 @@ let BattleScripts = {
 				this.heal(pokemon.maxhp, pokemon, pokemon, zPower);
 				break;
 			case 'healreplacement':
-				move.self = {sideCondition: 'healreplacement'};
+				move.self = {fieldCondition: 'healreplacement'};
 				break;
 			case 'clearnegativeboost':
 				/** @type {{[k: string]: number}} */

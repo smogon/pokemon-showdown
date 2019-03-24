@@ -114,8 +114,8 @@ let BattleScripts = {
 		// If rival fainted
 		if (target && target.hp <= 0) {
 			// We remove screens
-			target.side.removeSideCondition('reflect');
-			target.side.removeSideCondition('lightscreen');
+			this.field.removeFieldCondition('reflect', target);
+			this.field.removeFieldCondition('lightscreen', target);
 		} else {
 			this.runEvent('AfterMoveSelf', pokemon, target, move);
 		}
@@ -366,11 +366,6 @@ let BattleScripts = {
 			}
 			if (moveData.volatileStatus) {
 				if (target.addVolatile(moveData.volatileStatus, pokemon, move)) {
-					didSomething = true;
-				}
-			}
-			if (moveData.sideCondition) {
-				if (target.side.addSideCondition(moveData.sideCondition, pokemon, move)) {
 					didSomething = true;
 				}
 			}

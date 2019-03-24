@@ -1223,10 +1223,10 @@ let BattleStatuses = {
 			let removeAll = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
 			let silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 			for (const sideCondition of removeAll) {
-				if (target.side.removeSideCondition(sideCondition)) {
+				if (this.field.removeFieldCondition(sideCondition, target)) {
 					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', target.side, this.getEffect(sideCondition).name, '[from] move: No Fun Zone', '[of] ' + source);
 				}
-				if (source.side.removeSideCondition(sideCondition)) {
+				if (this.field.removeFieldCondition(sideCondition, target)) {
 					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: No Fun Zone', '[of] ' + source);
 				}
 			}
@@ -1459,14 +1459,11 @@ let BattleStatuses = {
 		// this is a side condition
 		name: 'boostreplacement',
 		id: 'boostreplacement',
-		onStart(side, source) {
-			this.effectData.position = source.position;
-		},
 		onSwitchInPriority: 1,
 		onSwitchIn(target) {
-			if (!target.fainted && target.position === this.effectData.position) {
+			if (!target.fainted) {
 				this.boost({def: 1, spd: 1});
-				target.side.removeSideCondition('boostreplacement');
+				this.field.removeFieldCondition('boostreplacement', target);
 			}
 		},
 	},

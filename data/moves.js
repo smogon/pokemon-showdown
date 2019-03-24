@@ -834,7 +834,7 @@ let BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1},
-		sideCondition: 'auroraveil',
+		fieldCondition: 'auroraveil',
 		onTryHitSide() {
 			if (!this.field.isWeather('hail')) return false;
 		},
@@ -848,8 +848,8 @@ let BattleMovedex = {
 			},
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target !== source && target.side === this.effectData.target) {
-					if ((target.side.sideConditions['reflect'] && this.getCategory(move) === 'Physical') ||
-							(target.side.sideConditions['lightscreen'] && this.getCategory(move) === 'Special')) {
+					if ((this.field.getFieldCondition('reflect', target) && this.getCategory(move) === 'Physical') ||
+							(this.field.getFieldCondition('lightscreen', target) && this.getCategory(move) === 'Special')) {
 						return;
 					}
 					if (!move.crit && !move.infiltrates) {
@@ -992,7 +992,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1},
 		self: {
-			sideCondition: 'reflect',
+			fieldCondition: 'reflect',
 		},
 		secondary: null,
 		target: "normal",
@@ -1771,9 +1771,9 @@ let BattleMovedex = {
 		onTryHit(pokemon) {
 			// will shatter screens through sub, before you hit
 			if (pokemon.runImmunity('Fighting')) {
-				pokemon.side.removeSideCondition('reflect');
-				pokemon.side.removeSideCondition('lightscreen');
-				pokemon.side.removeSideCondition('auroraveil');
+				this.field.removeFieldCondition('reflect', pokemon);
+				this.field.removeFieldCondition('lightscreen', pokemon);
+				this.field.removeFieldCondition('auroraveil', pokemon);
 			}
 		},
 		secondary: null,
@@ -2901,7 +2901,7 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 3,
 		flags: {},
-		sideCondition: 'craftyshield',
+		fieldCondition: 'craftyshield',
 		onTryHitSide(side, source) {
 			return !!this.willAct();
 		},
@@ -3255,14 +3255,14 @@ let BattleMovedex = {
 			let removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
 			let removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
 			for (const targetCondition of removeTarget) {
-				if (target.side.removeSideCondition(targetCondition)) {
+				if (this.field.removeFieldCondition(targetCondition, target)) {
 					if (!removeAll.includes(targetCondition)) continue;
 					this.add('-sideend', target.side, this.getEffect(targetCondition).name, '[from] move: Defog', '[of] ' + source);
 					success = true;
 				}
 			}
 			for (const sideCondition of removeAll) {
-				if (source.side.removeSideCondition(sideCondition)) {
+				if (this.field.removeFieldCondition(sideCondition, target)) {
 					this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Defog', '[of] ' + source);
 					success = true;
 				}
@@ -3641,12 +3641,9 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		isFutureMove: true,
-		onTry(source, target) {
-			target.side.addSideCondition('futuremove');
-			if (target.side.sideConditions['futuremove'].positions[target.position]) {
-				return false;
-			}
-			target.side.sideConditions['futuremove'].positions[target.position] = {
+		onTry(source, target, move) {
+			if (!this.field.addFieldCondition('futuremove', source, move, target)) return false;
+			Object.assign(this.field.getFieldConditionData('futuremove', target), {
 				duration: 3,
 				move: 'doomdesire',
 				source: source,
@@ -3662,7 +3659,7 @@ let BattleMovedex = {
 					isFutureMove: true,
 					type: 'Steel',
 				},
-			};
+			});
 			this.add('-start', source, 'Doom Desire');
 			return null;
 		},
@@ -5151,10 +5148,10 @@ let BattleMovedex = {
 		},
 		onHit(target, source, move) {
 			if (move.sourceEffect === 'grasspledge') {
-				target.side.addSideCondition('firepledge');
+				this.field.addFieldCondition('firepledge', source, move, target.side);
 			}
 			if (move.sourceEffect === 'waterpledge') {
-				source.side.addSideCondition('waterpledge');
+				this.field.addFieldCondition('waterpledge', source, move, source.side);
 			}
 		},
 		effect: {
@@ -6254,12 +6251,9 @@ let BattleMovedex = {
 		flags: {},
 		ignoreImmunity: true,
 		isFutureMove: true,
-		onTry(source, target) {
-			target.side.addSideCondition('futuremove');
-			if (target.side.sideConditions['futuremove'].positions[target.position]) {
-				return false;
-			}
-			target.side.sideConditions['futuremove'].positions[target.position] = {
+		onTry(source, target, move) {
+			this.field.addFieldCondition('futuremove', source, move, target);
+			Object.assign(this.field.getFieldConditionData('futuremove', target), {
 				duration: 3,
 				move: 'futuresight',
 				source: source,
@@ -6276,7 +6270,7 @@ let BattleMovedex = {
 					isFutureMove: true,
 					type: 'Psychic',
 				},
-			};
+			});
 			this.add('-start', source, 'move: Future Sight');
 			return null;
 		},
@@ -6546,7 +6540,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1},
 		self: {
-			sideCondition: 'lightscreen',
+			fieldCondition: 'lightscreen',
 		},
 		secondary: null,
 		target: "normal",
@@ -6641,10 +6635,10 @@ let BattleMovedex = {
 		},
 		onHit(target, source, move) {
 			if (move.sourceEffect === 'waterpledge') {
-				target.side.addSideCondition('grasspledge');
+				this.field.addFieldCondition('grasspledge', source, move, target.side);
 			}
 			if (move.sourceEffect === 'firepledge') {
-				target.side.addSideCondition('firepledge');
+				this.field.addFieldCondition('firepledge', source, move, target.side);
 			}
 		},
 		effect: {
@@ -6978,7 +6972,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		damageCallback(pokemon, target) {
-			if (target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] || target.side.sideConditions['matblock'] || target.volatiles['protect'] || target.volatiles['spikyshield']) {
+			if (target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] || this.field.getFieldCondition('matblock', target) || target.volatiles['protect'] || target.volatiles['spikyshield']) {
 				this.add('-zbroken', target);
 				return this.clampIntRange(Math.ceil(Math.floor(target.hp * 3 / 4) / 4 - 0.5), 1);
 			}
@@ -7401,34 +7395,19 @@ let BattleMovedex = {
 			}
 		},
 		selfdestruct: "ifHit",
-		sideCondition: 'healingwish',
+		fieldCondition: 'healingwish',
 		effect: {
 			duration: 2,
 			onStart(side, source) {
 				this.debug('Healing Wish started on ' + side.name);
-				this.effectData.positions = [];
-				for (let i = 0; i < side.active.length; i++) {
-					this.effectData.positions[i] = false;
-				}
-				this.effectData.positions[source.position] = true;
-			},
-			onRestart(side, source) {
-				this.effectData.positions[source.position] = true;
 			},
 			onSwitchInPriority: 1,
 			onSwitchIn(target) {
-				const positions = /**@type {boolean[]} */ (this.effectData.positions);
-				if (!positions[target.position]) {
-					return;
-				}
 				if (!target.fainted) {
 					target.heal(target.maxhp);
 					target.setStatus('');
 					this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');
-					positions[target.position] = false;
-				}
-				if (!positions.some(affected => affected === true)) {
-					target.side.removeSideCondition('healingwish');
+					this.field.removeFieldCondition('healingwish', target);
 				}
 			},
 		},
@@ -9420,7 +9399,7 @@ let BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		flags: {snatch: 1},
-		sideCondition: 'lightscreen',
+		fieldCondition: 'lightscreen',
 		effect: {
 			duration: 5,
 			durationCallback(target, source, effect) {
@@ -9623,7 +9602,7 @@ let BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		flags: {snatch: 1},
-		sideCondition: 'luckychant',
+		fieldCondition: 'luckychant',
 		effect: {
 			duration: 5,
 			onStart(side) {
@@ -9662,7 +9641,7 @@ let BattleMovedex = {
 			}
 		},
 		selfdestruct: "ifHit",
-		sideCondition: 'lunardance',
+		fieldCondition: 'lunardance',
 		effect: {
 			duration: 2,
 			onStart(side, source) {
@@ -9692,7 +9671,7 @@ let BattleMovedex = {
 					positions[target.position] = false;
 				}
 				if (!positions.some(affected => affected === true)) {
-					target.side.removeSideCondition('lunardance');
+					this.field.removeFieldCondition('lunardance', target);
 				}
 			},
 		},
@@ -10051,7 +10030,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1, nonsky: 1},
 		stallingMove: true,
-		sideCondition: 'matblock',
+		fieldCondition: 'matblock',
 		onTryHitSide(side, source) {
 			if (source.activeTurns > 1) {
 				this.hint("Mat Block only works on your first turn out.");
@@ -10728,7 +10707,7 @@ let BattleMovedex = {
 		pp: 30,
 		priority: 0,
 		flags: {snatch: 1},
-		sideCondition: 'mist',
+		fieldCondition: 'mist',
 		effect: {
 			duration: 5,
 			onBoost(boost, target, source, effect) {
@@ -12624,9 +12603,9 @@ let BattleMovedex = {
 		onTryHit(pokemon) {
 			// will shatter screens through sub, before you hit
 			if (pokemon.runImmunity('Psychic')) {
-				pokemon.side.removeSideCondition('reflect');
-				pokemon.side.removeSideCondition('lightscreen');
-				pokemon.side.removeSideCondition('auroraveil');
+				this.field.removeFieldCondition('reflect', pokemon);
+				this.field.removeFieldCondition('lightscreen', pokemon);
+				this.field.removeFieldCondition('auroraveil', pokemon);
 			}
 		},
 		secondary: null,
@@ -12908,18 +12887,19 @@ let BattleMovedex = {
 		beforeTurnCallback(pokemon) {
 			for (const side of this.sides) {
 				if (side === pokemon.side) continue;
-				side.addSideCondition('pursuit', pokemon);
-				if (!side.sideConditions['pursuit'].sources) {
-					side.sideConditions['pursuit'].sources = [];
+				this.field.addFieldCondition('pursuit', pokemon, this.activeMove, side);
+				const data = this.field.getFieldConditionData('pursuit', side);
+				if (!data.sources) {
+					data.sources = [];
 				}
-				side.sideConditions['pursuit'].sources.push(pokemon);
+				data.sources.push(pokemon);
 			}
 		},
 		onModifyMove(move, source, target) {
 			if (target && target.beingCalledBack) move.accuracy = true;
 		},
 		onTryHit(target, pokemon) {
-			target.side.removeSideCondition('pursuit');
+			this.field.removeFieldCondition('pursuit', target);
 		},
 		effect: {
 			duration: 1,
@@ -13019,7 +12999,7 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 3,
 		flags: {snatch: 1},
-		sideCondition: 'quickguard',
+		fieldCondition: 'quickguard',
 		onTryHitSide(side, source) {
 			return this.willAct();
 		},
@@ -13191,7 +13171,7 @@ let BattleMovedex = {
 				}
 				let sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
 				for (const condition of sideConditions) {
-					if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
+					if (pokemon.hp && this.field.removeFieldCondition(condition, pokemon)) {
 						this.add('-sideend', pokemon.side, this.getEffect(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
 					}
 				}
@@ -13336,7 +13316,7 @@ let BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {snatch: 1},
-		sideCondition: 'reflect',
+		fieldCondition: 'reflect',
 		effect: {
 			duration: 5,
 			durationCallback(target, source, effect) {
@@ -14102,7 +14082,7 @@ let BattleMovedex = {
 		pp: 25,
 		priority: 0,
 		flags: {snatch: 1},
-		sideCondition: 'safeguard',
+		fieldCondition: 'safeguard',
 		effect: {
 			duration: 5,
 			durationCallback(target, source, effect) {
@@ -16111,7 +16091,7 @@ let BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {reflectable: 1, nonsky: 1},
-		sideCondition: 'spikes',
+		fieldCondition: 'spikes',
 		effect: {
 			// this is a side condition
 			onStart(side) {
@@ -16324,7 +16304,7 @@ let BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {reflectable: 1},
-		sideCondition: 'stealthrock',
+		fieldCondition: 'stealthrock',
 		effect: {
 			// this is a side condition
 			onStart(side) {
@@ -16402,7 +16382,7 @@ let BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {reflectable: 1},
-		sideCondition: 'stickyweb',
+		fieldCondition: 'stickyweb',
 		effect: {
 			onStart(side) {
 				this.add('-sidestart', side, 'move: Sticky Web');
@@ -17361,7 +17341,7 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {snatch: 1},
-		sideCondition: 'tailwind',
+		fieldCondition: 'tailwind',
 		effect: {
 			duration: 4,
 			durationCallback(target, source, effect) {
@@ -18015,7 +17995,7 @@ let BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {reflectable: 1, nonsky: 1},
-		sideCondition: 'toxicspikes',
+		fieldCondition: 'toxicspikes',
 		effect: {
 			// this is a side condition
 			onStart(side) {
@@ -18032,7 +18012,7 @@ let BattleMovedex = {
 				if (!pokemon.runImmunity('Poison')) return;
 				if (pokemon.hasType('Poison')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
-					pokemon.side.removeSideCondition('toxicspikes');
+					this.field.removeFieldCondition('toxicspikes', pokemon);
 				} else if (this.effectData.layers >= 2) {
 					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
 				} else {
@@ -18760,10 +18740,10 @@ let BattleMovedex = {
 		},
 		onHit(target, source, move) {
 			if (move.sourceEffect === 'firepledge') {
-				source.side.addSideCondition('waterpledge');
+				this.field.addFieldCondition('waterpledge', source, move, source.side);
 			}
 			if (move.sourceEffect === 'grasspledge') {
-				target.side.addSideCondition('grasspledge');
+				this.field.addFieldCondition('grasspledge', source, move, target.side);
 			}
 		},
 		effect: {
@@ -19007,7 +18987,7 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 3,
 		flags: {snatch: 1},
-		sideCondition: 'wideguard',
+		fieldCondition: 'wideguard',
 		onTryHitSide(side, source) {
 			return this.willAct();
 		},
@@ -19116,43 +19096,17 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		sideCondition: 'Wish',
+		fieldCondition: 'Wish',
 		effect: {
-			onStart(side, source) {
-				this.effectData.positions = [];
-				for (let i = 0; i < side.active.length; i++) {
-					this.effectData.positions[i] = null;
-				}
-				this.effectData.positions[source.position] = {
-					source,
-					position: source.position,
-					hp: source.maxhp / 2,
-					duration: 2,
-				};
-				this.effectData.wishes = 1;
-			},
-			onRestart(side, source) {
-				if (this.effectData.positions[source.position]) return false;
-				this.effectData.positions[source.position] = {
-					source,
-					position: source.position,
-					hp: source.maxhp / 2,
-					duration: 2,
-				};
-				this.effectData.wishes++;
+			duration: 2,
+			onStart(field, source) {
+				this.effectData.hp = source.maxhp / 2;
 			},
 			onResidualOrder: 4,
-			onResidual(side) {
-				for (const wish of this.effectData.positions) {
-					if (wish && --wish.duration === 0) {
-						let target = side.active[wish.position];
-						if (target && !target.fainted) {
-							let damage = this.heal(wish.hp, target, target);
-							if (damage) this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + wish.source.name);
-						}
-						this.effectData.positions[wish.position] = null;
-						if (--this.effectData.wishes === 0) return side.removeSideCondition('wish');
-					}
+			onEnd(target) {
+				if (target && !target.fainted) {
+					let damage = this.heal(this.effectData.hp, target, target);
+					if (damage) this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + this.effectData.source.name);
 				}
 			},
 		},
