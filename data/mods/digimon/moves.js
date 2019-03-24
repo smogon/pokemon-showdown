@@ -4797,7 +4797,7 @@ let BattleMovedex = {
 			this.add('-prepare', attacker, move.name, defender);
 			this.add('-message', attacker.name + ' is charging up for an attack!');
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
-				this.add('-anim', attacker, move.name, defender);
+				this.add('-anim', attacker, "takedown", defender);
 				attacker.removeVolatile(move.id);
 				return;
 			}
