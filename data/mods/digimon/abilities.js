@@ -356,7 +356,7 @@ let BattleAbilities = {
 		desc: "If Sandstorm is active, this Pokemon's Ground-, Rock-, Steel-, and Mech-type attacks have their power multiplied by 1.3. This Pokemon takes no damage from Sandstorm.",
 		shortDesc: "Its Ground/Rock/Steel/Mech attacks do 1.3x in Sandstorm; Sandstorm immunity.",
 		onBasePower(basePower, attacker, defender, move) {
-			if (this.isWeather('sandstorm')) {
+			if (this.field.isWeather('sandstorm')) {
 				if (move.type === 'Rock' || move.type === 'Ground' || move.type === 'Steel' || move.type === 'Mech') {
 					this.debug('Sand Force boost');
 					return this.chainModify([0x14CD, 0x1000]);
