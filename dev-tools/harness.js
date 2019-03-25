@@ -1,7 +1,7 @@
 /**
  * Random Simulation harness for testing and benchmarking purposes.
  *
- * See `HARNESS.md` for detailed usage instructions.
+ * Refer to `HARNESS.md` for detailed usage instructions.
  *
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
@@ -10,7 +10,6 @@
 
 'use strict';
 
-const trakkr = require('trakkr'); // TODO
 const child_process = require('child_process');
 const shell = cmd => child_process.execSync(cmd, {stdio: 'inherit', cwd: __dirname});
 
@@ -60,8 +59,9 @@ class Runner {
 			if (this.all && lastFormat && format !== lastFormat) {
 				await Promise.all(games);
 
-				// TODO: WIP trakkr still needs to support aggregated statistics...
-				if (this.formatter) this.display(lastFormat, timers);
+				if (!this.silent) {
+					// TODO: display aggregated timers for format using trakkr
+				}
 
 				games = [];
 				timers = [];
@@ -77,7 +77,9 @@ class Runner {
 				const game = this.runGame(format, timer, battleStream).finally(() => timer.stop());
 				if (!this.async) {
 					await game;
-					if (this.verbose && this.formatter) console.log(this.formatter.display(timer));
+					if (this.verbose) {
+						// TODO: display timing information using trakkr
+					}
 				}
 				games.push(game);
 				timers.push(timer);
@@ -92,21 +94,12 @@ class Runner {
 			lastFormat = format;
 		}
 
-		if (this.formatter) {
-			this.display(lastFormat, timers);
-			// TODO: spit out summary if benchmarking?
+		if (!this.silent) {
+			// TODO: display aggregated timers using trakkr (plus additional summary?)
 		}
 
 		// Calculate how many games failed (failures weren't added to `games`).
 		return this.totalGames - (await Promise.all(games)).length;
-	}
-
-	display(format, timers) {
-		if (this.warmup) timers = timers.slice(this.warmup);
-		const formatStats = new Map();
-		formatStats.set('total', trakkr.Stats.compute(timers.map(t => t.duration)));
-		console.log(this.formatter.displayStats(formatStats));
-		console.log(this.formatter.displayStats(trakkr.aggregateStats(timers)));
 	}
 
 	async runGame(format, timer, battleStream) {
@@ -211,7 +204,8 @@ if (require.main === module) {
 			options.async = false;
 
 			if (missing('trakkr')) shell('npm install trakkr');
-			//const trakkr = require('trakkr');
+			const trakkr = require('trakkr');
+
 			options.timer = () => {
 				const opts = {trace: argv.trace};
 				if (argv.fixed) opts.buf: Buffer.allocUnsafe((parseInt(argv.fixed) || 0x100000);
