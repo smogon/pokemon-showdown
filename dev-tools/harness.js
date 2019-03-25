@@ -208,7 +208,7 @@ if (require.main === module) {
 
 			options.timer = () => {
 				const opts = {trace: argv.trace};
-				if (argv.fixed) opts.buf: Buffer.allocUnsafe((parseInt(argv.fixed) || 0x100000);
+				if (argv.fixed) opts.buf = Buffer.allocUnsafe(parseInt(argv.fixed) || 0x100000);
 				return trakkr.Timer.create(opts);
 			};
 			// Choose which formatter to use - we don't need to tweak the sort or write a custom
