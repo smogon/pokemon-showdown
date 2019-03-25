@@ -4,6 +4,7 @@
  *
  * @license MIT license
  */
+import {RequestState} from './battle';
 import {Pokemon} from './pokemon';
 
 /** A single action that can be chosen. */
@@ -53,13 +54,7 @@ export class Side {
 
 	sideConditions: AnyObject;
 
-	/**
-	 * 'move' - Move request, at the beginning of every turn
-	 * 'switch' - Switch request, at the end of every turn with fainted Pokémon, or mid-turn for U-turn etc
-	 * 'teampreview' - Team Preview, at the beginning of a battle
-	 * '' - No request (waiting for other player's switch request)
-	 */
-	currentRequest: 'move' | 'switch' | 'teampreview' | '';
+	requestState: RequestState;
 	choice: Choice;
 
 	lastMove: Move | null;
@@ -105,7 +100,7 @@ export class Side {
 
 		this.sideConditions = {};
 
-		this.currentRequest = '';
+		this.requestState = '';
 		this.choice = {
 			cantUndo: false,
 			error: ``,
@@ -259,10 +254,10 @@ export class Side {
 	}
 
 	isChoiceDone() {
-		if (!this.currentRequest) return true;
+		if (!this.requestState) return true;
 		if (this.choice.forcedSwitchesLeft) return false;
 
-		if (this.currentRequest === 'teampreview') {
+		if (this.requestState === 'teampreview') {
 			return this.choice.actions.length >= Math.min(this.maxTeamSize, this.pokemon.length);
 		}
 
@@ -272,8 +267,8 @@ export class Side {
 	}
 
 	chooseMove(moveText?: string | number, targetLoc?: number, megaOrZ?: boolean | string) {
-		if (this.currentRequest !== 'move') {
-			return this.emitChoiceError(`Can't move: You need a ${this.currentRequest} response`);
+		if (this.requestState !== 'move') {
+			return this.emitChoiceError(`Can't move: You need a ${this.requestState} response`);
 		}
 		const index = this.getChoiceIndex();
 		if (index >= this.active.length) {
@@ -436,12 +431,12 @@ export class Side {
 	}
 
 	chooseSwitch(slotText?: string) {
-		if (this.currentRequest !== 'move' && this.currentRequest !== 'switch') {
-			return this.emitChoiceError(`Can't switch: You need a ${this.currentRequest} response`);
+		if (this.requestState !== 'move' && this.requestState !== 'switch') {
+			return this.emitChoiceError(`Can't switch: You need a ${this.requestState} response`);
 		}
 		const index = this.getChoiceIndex();
 		if (index >= this.active.length) {
-			if (this.currentRequest === 'switch') {
+			if (this.requestState === 'switch') {
 				return this.emitChoiceError(`Can't switch: You sent more switches than Pokémon that need to switch`);
 			}
 			return this.emitChoiceError(`Can't switch: You sent more choices than unfainted Pokémon`);
@@ -450,7 +445,7 @@ export class Side {
 		const autoChoose = !slotText;
 		let slot;
 		if (autoChoose) {
-			if (this.currentRequest !== 'switch') {
+			if (this.requestState !== 'switch') {
 				return this.emitChoiceError(`Can't switch: You need to select a Pokémon to switch in`);
 			}
 			if (!this.choice.forcedSwitchesLeft) return this.choosePass();
@@ -485,14 +480,14 @@ export class Side {
 			return this.emitChoiceError(`Can't switch: You can't switch to a fainted Pokémon`);
 		}
 
-		if (this.currentRequest === 'move') {
+		if (this.requestState === 'move') {
 			if (pokemon.trapped) {
 				this.emitCallback('trapped', pokemon.position);
 				return this.emitChoiceError(`Can't switch: The active Pokémon is trapped`);
 			} else if (pokemon.maybeTrapped) {
 				this.choice.cantUndo = this.choice.cantUndo || pokemon.isLastActive();
 			}
-		} else if (this.currentRequest === 'switch') {
+		} else if (this.requestState === 'switch') {
 			if (!this.choice.forcedSwitchesLeft) {
 				throw new Error(`Player somehow switched too many Pokemon`);
 			}
@@ -503,7 +498,7 @@ export class Side {
 
 		// tslint:disable-next-line:no-object-literal-type-assertion
 		this.choice.actions.push({
-			choice: (this.currentRequest === 'switch' ? 'instaswitch' : 'switch'),
+			choice: (this.requestState === 'switch' ? 'instaswitch' : 'switch'),
 			pokemon,
 			target: targetPokemon,
 		} as ChosenAction);
@@ -520,7 +515,7 @@ export class Side {
 			.map(datum => parseInt(datum, 10) - 1));
 
 		if (autoFill && this.choice.actions.length >= this.maxTeamSize) return true;
-		if (this.currentRequest !== 'teampreview') {
+		if (this.requestState !== 'teampreview') {
 			return this.emitChoiceError(`Can't choose for Team Preview: You're not in a Team Preview phase`);
 		}
 
@@ -562,7 +557,7 @@ export class Side {
 		const index = this.getChoiceIndex();
 		if (index >= this.active.length) {
 			return this.emitChoiceError(`Can't shift: You do not have a Pokémon in slot ${index + 1}`);
-		} else if (this.currentRequest !== 'move') {
+		} else if (this.requestState !== 'move') {
 			return this.emitChoiceError(`Can't shift: You can only shift during a move phase`);
 		} else if (this.battle.gameType !== 'triples') {
 			return this.emitChoiceError(`Can't shift: You can only shift to the center in triples`);
@@ -583,7 +578,7 @@ export class Side {
 	clearChoice() {
 		let forcedSwitches = 0;
 		let forcedPasses = 0;
-		if (this.battle.currentRequest === 'switch') {
+		if (this.battle.requestState === 'switch') {
 			const canSwitchOut = this.active.filter(pokemon => pokemon && pokemon.switchFlag).length;
 			const canSwitchIn = this.pokemon.slice(this.active.length).filter(pokemon => pokemon && !pokemon.fainted).length;
 			forcedSwitches = Math.min(canSwitchOut, canSwitchIn);
@@ -603,7 +598,7 @@ export class Side {
 	}
 
 	choose(input: string) {
-		if (!this.currentRequest) {
+		if (!this.requestState) {
 			return this.emitChoiceError(
 				this.battle.ended ? `Can't do anything: The game is over` : `Can't do anything: It's not your turn`
 			);
@@ -700,7 +695,7 @@ export class Side {
 		let index = this.choice.actions.length;
 
 		if (!isPass) {
-			switch (this.currentRequest) {
+			switch (this.requestState) {
 			case 'move':
 				// auto-pass
 				while (index < this.active.length && this.active[index].fainted) {
@@ -725,7 +720,7 @@ export class Side {
 		if (index >= this.active.length) return false;
 		const pokemon: Pokemon = this.active[index];
 
-		switch (this.currentRequest) {
+		switch (this.requestState) {
 		case 'switch':
 			if (pokemon.switchFlag) { // This condition will always happen if called by Battle#choose()
 				if (!this.choice.forcedPassesLeft) {
@@ -752,11 +747,11 @@ export class Side {
 
 	/** Automatically finish a choice if not currently complete. */
 	autoChoose() {
-		if (this.currentRequest === 'teampreview') {
+		if (this.requestState === 'teampreview') {
 			if (!this.isChoiceDone()) this.chooseTeam();
-		} else if (this.currentRequest === 'switch') {
+		} else if (this.requestState === 'switch') {
 			while (!this.isChoiceDone()) this.chooseSwitch();
-		} else if (this.currentRequest === 'move') {
+		} else if (this.requestState === 'move') {
 			while (!this.isChoiceDone()) this.chooseMove();
 		}
 		return true;
