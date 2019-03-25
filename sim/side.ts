@@ -199,7 +199,7 @@ export class Side {
 		return data;
 	}
 
-	/** Deprecated */
+	/** @deprecated */
 	randomActive() {
 		const actives = this.active.filter(active => active && !active.fainted);
 		if (!actives.length) return null;
