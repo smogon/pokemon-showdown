@@ -197,7 +197,7 @@ export class Side {
 	addSideCondition(
 		status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null
 	): boolean {
-		if (this.n > 1 && this.battle.gameType === 'multi') {
+		if (this.n >= 2 && this.battle.gameType === 'multi') {
 			return this.battle.sides[this.n % 2].addSideCondition(status, source, sourceEffect);
 		}
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
@@ -228,7 +228,7 @@ export class Side {
 	}
 
 	getSideCondition(status: string | Effect): Effect | null {
-		if (this.n > 1 && this.battle.gameType === 'multi') {
+		if (this.n >= 2 && this.battle.gameType === 'multi') {
 			return this.battle.sides[this.n % 2].getSideCondition(status);
 		}
 		status = this.battle.getEffect(status) as Effect;
@@ -237,7 +237,7 @@ export class Side {
 	}
 
 	getSideConditionData(status: string | Effect): AnyObject {
-		if (this.n > 1 && this.battle.gameType === 'multi') {
+		if (this.n >= 2 && this.battle.gameType === 'multi') {
 			return this.battle.sides[this.n % 2].getSideConditionData(status);
 		}
 		status = this.battle.getEffect(status) as Effect;
@@ -245,7 +245,7 @@ export class Side {
 	}
 
 	removeSideCondition(status: string | Effect): boolean {
-		if (this.n > 1 && this.battle.gameType === 'multi') {
+		if (this.n >= 2 && this.battle.gameType === 'multi') {
 			return this.battle.sides[this.n % 2].removeSideCondition(status);
 		}
 		status = this.battle.getEffect(status) as Effect;
