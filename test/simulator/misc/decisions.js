@@ -726,17 +726,17 @@ describe('Choice extensions', function () {
 	describe('Undo', function () {
 		const MODES = ['revoke', 'override'];
 		for (const mode of MODES) {
-			// FIXME
-			it.skip(`should disallow to ${mode} decisions after every player has sent an unrevoked action`, function () {
+			it(`should disallow to ${mode} decisions after every player has sent an unrevoked action`, function () {
 				battle = common.createBattle({cancel: true});
 				battle.setPlayer('p1', {team: [{species: "Bulbasaur", ability: 'overgrow', moves: ['tackle', 'growl']}]});
 				battle.setPlayer('p2', {team: [{species: "Charmander", ability: 'blaze', moves: ['tackle', 'growl']}]});
 
 				battle.choose('p1', 'move tackle');
 				battle.choose('p2', 'move growl');
-				assert(battle.p1.lastRequest.noCancel);
-				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
-				assert.cantUndo(() => battle.choose('p1', 'move growl'));
+				// NOTE: the next turn has already started at this point, so undoChoice is a noop
+				// and the subsequent battle chocie is a choice for turn 2, not an override.
+				if (mode === 'revoke') battle.undoChoice('p1');
+				battle.choose('p1', 'move growl');
 
 				assert.strictEqual(battle.turn, 2);
 				assert.strictEqual(battle.p1.active[0].lastMove.id, 'tackle');
@@ -767,7 +767,8 @@ describe('Choice extensions', function () {
 				battle.makeRequest();
 
 				battle.choose('p1', 'move tackle');
-				// FIXME assert(battle.p1.lastRequest.noCancel);
+				// NOTE: noCancel is global so it still true even though the Pokemon can't undo.
+				assert(!battle.p1.lastRequest.noCancel);
 				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
 				assert.cantUndo(() => battle.choose('p1', 'move growl'));
 				battle.choose('p2', 'move scratch');
@@ -837,7 +838,8 @@ describe('Choice extensions', function () {
 				battle.makeRequest();
 
 				battle.choose('p1', 'switch 2');
-				// FIXME assert(battle.p1.lastRequest.noCancel);
+				// NOTE: noCancel is global so it still true even though the Pokemon can't undo.
+				assert(!battle.p1.lastRequest.noCancel);
 				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
 				assert.cantUndo(() => battle.choose('p1', 'move synthesis'));
 				battle.choose('p2', 'move scratch');
@@ -871,7 +873,8 @@ describe('Choice extensions', function () {
 				assert(target.maybeTrapped, `${target} should be flagged as maybe trapped`);
 
 				battle.choose('p1', 'switch 2');
-				// FIXME assert(battle.p1.lastRequest.noCancel);
+				// NOTE: noCancel is global so it still true even though the Pokemon can't undo.
+				assert(!battle.p1.lastRequest.noCancel);
 				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
 				assert.cantUndo(() => battle.choose('p1', 'move recover'));
 				battle.choose('p2', 'move 1');
