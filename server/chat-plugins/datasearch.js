@@ -749,7 +749,7 @@ function runDexsearch(target, cmd, canAll, message) {
 		results.sort();
 		if (sort) {
 			let stat = sort.slice(0, -1);
-			let direction = sort[sort.length - 1];
+			let direction = sort.slice(-1);
 			results.sort((a, b) => {
 				let mon1 = mod.getTemplate(direction === '+' ? a : b), mon2 = mod.getTemplate(direction === '+' ? b : a);
 				let monStat1 = 0, monStat2 = 0;
@@ -1257,7 +1257,7 @@ function runMovesearch(target, cmd, canAll, message) {
 		results.sort();
 		if (sort) {
 			let prop = sort.slice(0, -1);
-			let direction = sort[sort.length - 1];
+			let direction = sort.slice(-1);
 			results.sort((a, b) => {
 				let move1 = dex[toId(direction === '+' ? a : b)], move2 = dex[toId(direction === '+' ? b : a)];
 				if (move1[prop] === true) {
