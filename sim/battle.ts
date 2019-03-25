@@ -1359,7 +1359,7 @@ export class Battle extends Dex.ModdedDex {
 			side.faintedThisTurn = false;
 		}
 
-		this.maybeIssueStalenessWarning(allStale, oneStale);
+		if (this.maybeIssueStalenessWarning(allStale, oneStale)) return;
 
 		if (this.gameType === 'triples' && !this.sides.filter(side => side.pokemonLeft > 1).length) {
 			// If both sides have one Pokemon left in triples and they are not adjacent, they are both moved to the center.
@@ -1479,10 +1479,10 @@ export class Battle extends Dex.ModdedDex {
 				if (leppaPokemon) {
 					this.add('-message', `${leppaPokemon.side.name}'s ${leppaPokemon.name} started with a Leppa Berry and loses.`);
 					this.win(leppaPokemon.side.foe);
-					return;
+					return true;
 				}
 				this.win();
-				return;
+				return true;
 			}
 			if ((this.turn >= 500 && this.turn % 100 === 0) ||
 				(this.turn >= 900 && this.turn % 10 === 0) ||
@@ -1491,7 +1491,7 @@ export class Battle extends Dex.ModdedDex {
 				if (turnsLeft < 0) {
 					this.add('message', `It is turn 1000. Endless Battle Clause activated!`);
 					this.tie();
-					return;
+					return true;
 				}
 				const turnsLeftText = (turnsLeft === 1 ? `1 turn` : `${turnsLeft} turns`);
 				this.add('bigerror', `You will auto-tie if the battle doesn't end in ${turnsLeftText} (on turn 1000).`);
@@ -1505,6 +1505,7 @@ export class Battle extends Dex.ModdedDex {
 				oneStale.staleWarned = true;
 			}
 		}
+		return false;
 	}
 
 	start() {
