@@ -3182,7 +3182,7 @@
 				"moves": [["Plasma Fists"], ["Close Combat"], ["Bulk Up"], ["Knock Off"]]
 			}, {
 				"species": "Zeraora",
-				"item": ["Normalium Z Z"],
+				"item": ["Normalium Z"],
 				"ability": ["Volt Absorb"],
 				"evs": {"atk": 252, "def": 4, "spe": 252},
 				"nature": "Jolly",
