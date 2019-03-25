@@ -284,7 +284,7 @@ function runDexsearch(target, cmd, canAll, message) {
 	let allStats = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'bst', 'weight', 'height', 'gen'];
 	let allStatAliases = {'attack': 'atk', 'defense': 'def', 'specialattack': 'spa', 'spc': 'spa', 'special': 'spa', 'spatk': 'spa', 'specialdefense': 'spd', 'spdef': 'spd', 'speed': 'spe', 'wt': 'weight', 'ht': 'height', 'generation': 'gen'};
 	let showAll = false;
-	let order = null;
+	let sort = null;
 	let megaSearch = null;
 	let capSearch = null;
 	let randomOutput = 0;
@@ -427,7 +427,7 @@ function runDexsearch(target, cmd, canAll, message) {
 				if (parameters.length > 1) return {reply: `The parameter '${target.split(' ')[1]}' cannot have alternative parameters`};
 				let stat = allStatAliases[toId(target.split(' ')[0])] || toId(target.split(' ')[0]);
 				if (!allStats.includes(stat)) return {reply: `'${escapeHTML(target)}' did not contain a valid stat.`};
-				order = `${stat}${target.endsWith(' asc') ? '+' : '-'}`;
+				sort = `${stat}${target.endsWith(' asc') ? '+' : '-'}`;
 				orGroup.skip = true;
 				break;
 			}
@@ -747,11 +747,11 @@ function runDexsearch(target, cmd, canAll, message) {
 	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${escapeHTML(message)}:</span><br />`);
 	if (results.length > 1) {
 		results.sort();
-		if (order) {
-			let stat = order.substr(0, order.length - 1);
-			let sort = order[order.length - 1];
+		if (sort) {
+			let stat = sort.slice(0, -1);
+			let direction = sort[sort.length - 1];
 			results.sort((a, b) => {
-				let mon1 = mod.getTemplate(sort === '+' ? a : b), mon2 = mod.getTemplate(sort === '+' ? b : a);
+				let mon1 = mod.getTemplate(direction === '+' ? a : b), mon2 = mod.getTemplate(direction === '+' ? b : a);
 				let monStat1 = 0, monStat2 = 0;
 				if (stat === 'bst') {
 					for (let monStats in mon1.baseStats) {
@@ -805,7 +805,7 @@ function runMovesearch(target, cmd, canAll, message) {
 		allTypes[toId(i)] = i;
 	}
 	let showAll = false;
-	let order = null;
+	let sort = null;
 	let lsetData = {};
 	let targetMon = '';
 	let randomOutput = 0;
@@ -884,7 +884,7 @@ function runMovesearch(target, cmd, canAll, message) {
 				case 'acc': prop = 'accuracy'; break;
 				}
 				if (!allProperties.includes(prop)) return {reply: `'${escapeHTML(target)}' did not contain a valid property.`};
-				order = `${prop}${target.endsWith(' asc') ? '+' : '-'}`;
+				sort = `${prop}${target.endsWith(' asc') ? '+' : '-'}`;
 				orGroup.skip = true;
 				break;
 			}
@@ -1255,11 +1255,11 @@ function runMovesearch(target, cmd, canAll, message) {
 	}
 	if (results.length > 1) {
 		results.sort();
-		if (order) {
-			let prop = order.substr(0, order.length - 1);
-			let sort = order[order.length - 1];
+		if (sort) {
+			let prop = sort.slice(0, -1);
+			let direction = sort[sort.length - 1];
 			results.sort((a, b) => {
-				let move1 = dex[toId(sort === '+' ? a : b)], move2 = dex[toId(sort === '+' ? b : a)];
+				let move1 = dex[toId(direction === '+' ? a : b)], move2 = dex[toId(direction === '+' ? b : a)];
 				if (move1[prop] === true) {
 					if (move2[prop] === true) {
 						return 0;
@@ -1282,7 +1282,7 @@ function runMovesearch(target, cmd, canAll, message) {
 			notShown = results.length - RESULTS_MAX_LENGTH;
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
-		resultsStr += results.map(result => `<a href="//dex.pokemonshowdown.com/moves/${toId(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>${order ? ' (' + (dex[toId(result)][order.substr(0, order.length - 1)] === true ? '-' : dex[toId(result)][order.substr(0, order.length - 1)]) + ')' : ''}`).join(", ");
+		resultsStr += results.map(result => `<a href="//dex.pokemonshowdown.com/moves/${toId(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>${sort ? ' (' + (dex[toId(result)][sort.slice(0, -1)] === true ? '-' : dex[toId(result)][sort.slice(0, -1)]) + ')' : ''}`).join(", ");
 		if (notShown) {
 			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
 		}
