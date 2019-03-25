@@ -212,9 +212,11 @@ if (require.main === module) {
 
 			if (missing('trakkr')) shell('npm install trakkr');
 			//const trakkr = require('trakkr');
-			options.timer = () => trakkr.Timer.create(argv.fixed && {
-				buf: Buffer.allocUnsafe((parseInt(argv.fixed) || 0x100000))
-			});
+			options.timer = () => {
+				const opts = {trace: argv.trace};
+				if (argv.fixed) opts.buf: Buffer.allocUnsafe((parseInt(argv.fixed) || 0x100000);
+				return trakkr.Timer.create(opts);
+			};
 			// Choose which formatter to use - we don't need to tweak the sort or write a custom
 			// formatter because its almost as though the defaults were written for our usecase...
 			const formatter = new trakkr.Formatter(!!argv.full, trakkr.SORT,
