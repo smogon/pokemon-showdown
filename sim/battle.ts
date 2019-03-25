@@ -1022,15 +1022,12 @@ export class Battle extends Dex.ModdedDex {
 		}
 		}
 
-		let allRequestsMade = true;
-		for (const request of requests) {
-			if (!request) allRequestsMade = false;
-		}
+		let allRequestsMade = requests.every(request => request);
 		for (let i = 0; i < this.sides.length; i++) {
 			const side = this.sides[i];
 			const request = requests[i];
 			if (request) {
-				if (!this.supportCancel || allRequestsMade) request.noCancel = true;
+				if (!this.supportCancel || !allRequestsMade) request.noCancel = true;
 				side.emitRequest(request);
 			} else {
 				side.emitRequest({wait: true, side: side.getRequestData()});
