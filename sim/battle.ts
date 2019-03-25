@@ -3182,7 +3182,7 @@ export class Battle extends Dex.ModdedDex {
 
 	secondaries(
 		targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove,
-		isSecondary?: boolean
+		isSelf?: boolean
 	): SpreadMoveDamage {
 		throw new UnimplementedError('secondaries');
 	}
