@@ -11,7 +11,7 @@ describe('Rough Skin', function () {
 	});
 
 	// Yes, we really need a test for this
-	it("should not activate twice on moves with seconary effects", function () {
+	it("should not activate twice on moves with secondary effects", function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Shedinja', ability: 'roughskin', moves: ['sleeptalk']}]});
 		battle.setPlayer('p2', {team: [{species: 'Pachirisu', ability: 'voltabsorb', moves: ['nuzzle']}]});
