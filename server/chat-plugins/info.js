@@ -2299,9 +2299,9 @@ const commands = {
 				OpenTags = OpenTags + (line.match(/<[^/].*>/g) || []).length;
 				CloseTags = CloseTags + (line.match(/<\/.*>/g) || []).length;
 				if (OpenTags > CloseTags) {
-					target = target.replace('\n', ' ')
+					target = target.replace('\n', ' ');
 				} else if (OpenTags === CloseTags) {
-					target = target.replace('\n', '&#10;')
+					target = target.replace('\n', '&#10;');
 				}
 			}
 		}
@@ -2329,9 +2329,9 @@ const commands = {
 				OpenTags = OpenTags + (line.match(/<[^/].*>/g) || []).length;
 				CloseTags = CloseTags + (line.match(/<\/.*>/g) || []).length;
 				if (OpenTags > CloseTags) {
-					target = target.replace('\n', ' ')
+					target = target.replace('\n', ' ');
 				} else if (OpenTags === CloseTags) {
-					target = target.replace('\n', '&#10;')
+					target = target.replace('\n', '&#10;');
 				}
 			}
 		}
@@ -2360,9 +2360,9 @@ const commands = {
 				OpenTags = OpenTags + (line.match(/<[^/].*>/g) || []).length;
 				CloseTags = CloseTags + (line.match(/<\/.*>/g) || []).length;
 				if (OpenTags > CloseTags) {
-					html = html.replace('\n', ' ')
+					html = html.replace('\n', ' ');
 				} else if (OpenTags === CloseTags) {
-					html = html.replace('\n', '&#10;')
+					html = html.replace('\n', '&#10;');
 				}
 			}
 		}
@@ -2392,9 +2392,9 @@ const commands = {
 				OpenTags = OpenTags + (line.match(/<[^/].*>/g) || []).length;
 				CloseTags = CloseTags + (line.match(/<\/.*>/g) || []).length;
 				if (OpenTags > CloseTags) {
-					html = html.replace('\n', ' ')
+					html = html.replace('\n', ' ');
 				} else if (OpenTags === CloseTags) {
-					html = html.replace('\n', '&#10;')
+					html = html.replace('\n', '&#10;');
 				}
 			}
 		}
@@ -2430,9 +2430,9 @@ const commands = {
 				OpenTags = OpenTags + (line.match(/<[^/].*>/g) || []).length;
 				CloseTags = CloseTags + (line.match(/<\/.*>/g) || []).length;
 				if (OpenTags > CloseTags) {
-					html = html.replace('\n', ' ')
+					html = html.replace('\n', ' ');
 				} else if (OpenTags === CloseTags) {
-					html = html.replace('\n', '&#10;')
+					html = html.replace('\n', '&#10;');
 				}
 			}
 		}
