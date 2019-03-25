@@ -105,7 +105,7 @@ class Runner {
 		const formatStats = new Map();
 		formatStats.set('total', trakkr.Stats.compute(timers.map(t => t.duration)));
 		console.log(this.formatter.displayStats(formatStats));
-		//console.log(this.formatter.displayStats(trakkr.aggregateStats(timers)));
+		console.log(this.formatter.displayStats(trakkr.aggregateStats(timers)));
 	}
 
 	async runGame(format, timer, battleStream) {
@@ -209,8 +209,9 @@ if (require.main === module) {
 
 			if (missing('trakkr')) shell('npm install trakkr');
 			//const trakkr = require('trakkr');
-			const buf = argv.fixed && {buf: Buffer.allocUnsafe(options.totalGames * (parseInt(argv.fixed) || 0x100000))};
-			options.timer = () => trakkr.Timer.create(buf);
+			options.timer = () => trakkr.Timer.create(argv.fixed && {
+				buf: Buffer.allocUnsafe((parseInt(argv.fixed) || 0x100000))
+			});
 			// Choose which formatter to use - we don't need to tweak the sort or write a custom
 			// formatter because its almost as though the defaults were written for our usecase...
 			const formatter = new trakkr.Formatter(!!argv.full, trakkr.SORT,
