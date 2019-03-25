@@ -771,7 +771,7 @@ let BattleScripts = {
 		if (moveData.self && !move.selfDropped) this.selfDrops(targets, pokemon, move, moveData, isSecondary);
 
 		// 5. secondary effects
-		if (moveData.secondaries) this.secondaries(targets, pokemon, move, moveData, isSecondary);
+		if (moveData.secondaries) this.secondaries(targets, pokemon, move, moveData, isSelf);
 
 		// 6. force switch
 		if (moveData.forceSwitch) damage = this.forceSwitch(damage, targets, pokemon, move, moveData, isSecondary, isSelf);
