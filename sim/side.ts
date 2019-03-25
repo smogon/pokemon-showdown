@@ -55,6 +55,7 @@ export class Side {
 	sideConditions: AnyObject;
 
 	requestState: RequestState;
+	lastRequest: AnyObject;
 	choice: Choice;
 
 	lastMove: Move | null;
@@ -101,6 +102,7 @@ export class Side {
 		this.sideConditions = {};
 
 		this.requestState = '';
+		this.lastRequest = {};
 		this.choice = {
 			cantUndo: false,
 			error: ``,
@@ -244,6 +246,7 @@ export class Side {
 
 	emitRequest(update: AnyObject) {
 		this.battle.send('sideupdate', `${this.id}\n|request|${JSON.stringify(update)}`);
+		this.lastRequest = update;
 	}
 
 	emitChoiceError(message: string) {
