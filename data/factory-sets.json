@@ -1697,7 +1697,7 @@
 				"ability": ["Soul-Heart"],
 				"evs": {"spa": 252, "spd": 4, "spe": 252},
 				"nature": "Timid",
-				"moves": [["Shift Gear"], ["Flast Cannon"], ["Thunderbolt"], ["Focus Blast"]]
+				"moves": [["Shift Gear"], ["Flash Cannon"], ["Thunderbolt"], ["Focus Blast"]]
 			}]
 		},
 		"magnezone": {
