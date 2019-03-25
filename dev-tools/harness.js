@@ -1,6 +1,8 @@
 /**
  * Random Simulation harness for testing and benchmarking purposes.
  *
+ * See `HARNESS.md` for detailed usage instructions.
+ *
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
  * @license MIT
@@ -18,6 +20,7 @@ if (require.main === module) shell('node ../build');
 
 // Preload Dex to avoid skewing benchmarks.
 require('../.sim-dist/dex').includeModData();
+
 const BattleStreams = require('../.sim-dist/battle-stream');
 const PRNG = require('../.sim-dist/prng').PRNG;
 const RandomPlayerAI = require('../.sim-dist/examples/random-player-ai').RandomPlayerAI;
@@ -88,7 +91,7 @@ class Runner {
 			lastFormat = format;
 		}
 
-		if (this.all && this.formatter) {
+		if (this.formatter) {
 			this.display(lastFormat, timers);
 			// TODO: spit out summary if benchmarking?
 		}
@@ -100,9 +103,9 @@ class Runner {
 	display(format, timers) {
 		if (this.warmup) timers = timers.slice(this.warmup);
 		const formatStats = new Map();
-		formatStats.set(format, trakkr.Stats.compute(timers.map(t => t.duration)));
+		formatStats.set('total', trakkr.Stats.compute(timers.map(t => t.duration)));
 		console.log(this.formatter.displayStats(formatStats));
-		console.log(this.formatter.displayStats(trakkr.aggregateStats(timers)));
+		//console.log(this.formatter.displayStats(trakkr.aggregateStats(timers)));
 	}
 
 	async runGame(format, timer, battleStream) {
@@ -204,7 +207,7 @@ if (require.main === module) {
 			// about the randomness provided it results in pseudo-realistic game playouts.
 			options.prng = [0x01234, 0x05678, 0x09123, 0x04567];
 
-			//if (missing('trakkr')) shell('npm install trakkr');
+			if (missing('trakkr')) shell('npm install trakkr');
 			//const trakkr = require('trakkr');
 			const buf = argv.fixed && {buf: Buffer.allocUnsafe(options.totalGames * (parseInt(argv.fixed) || 0x100000))};
 			options.timer = () => trakkr.Timer.create(buf);
