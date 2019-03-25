@@ -85,8 +85,9 @@ class Runner {
 				if (battleStream && battleStream.battle && this.logs) {
 					console.error(`${battleStream.battle.inputLog.join('\n')}\n\n`);
 				}
-				console.error(`Run \`node dev-tools/harness 1 --format=` +
-					`${format} --seed=${seed.join(',')} --verbose\` to debug:\n`, e);
+				console.error(
+					`Run \`node dev-tools/harness 1 --format=${format} --seed=${seed.join()}\` ` +
+					`to debug (optionally with \`--verbose\` or \`--logs\` for more info):\n`, e);
 			}
 			lastFormat = format;
 		}
@@ -206,6 +207,8 @@ if (require.main === module) {
 			// really care about is consistency between runs, we don't have any specific concerns
 			// about the randomness provided it results in pseudo-realistic game playouts.
 			options.prng = [0x01234, 0x05678, 0x09123, 0x04567];
+			// Async makes things less repeatable and makes GCs more random.
+			options.async = false;
 
 			if (missing('trakkr')) shell('npm install trakkr');
 			//const trakkr = require('trakkr');
