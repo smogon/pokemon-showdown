@@ -189,7 +189,10 @@ export class ReadStream {
 	loadIntoBuffer(byteCount: number | null | true = null, readError?: boolean) {
 		this[readError ? 'readError' : 'peekError']();
 		if (byteCount === 0) return;
-		this.readSize = Math.max(byteCount === true ? this.bufSize + 1 : byteCount || 0, this.readSize);
+		this.readSize = Math.max(
+			byteCount === true ? this.bufSize + 1 : byteCount === null ? 1 : byteCount,
+			this.readSize
+		);
 		if (!this.errorBuf && !this.atEOF && this.bufSize < this.readSize) {
 			let bytes: number | null = this.readSize - this.bufSize;
 			if (bytes === Infinity || byteCount === null) bytes = null;
@@ -216,9 +219,9 @@ export class ReadStream {
 		const maybeLoad = this.loadIntoBuffer(byteCount);
 		if (maybeLoad) return maybeLoad.then(() => this.peek(byteCount as number, encoding));
 
+		if (!this.bufSize && byteCount !== 0) return null;
 		if (byteCount === null) return this.buf.toString(encoding, this.bufStart, this.bufEnd);
 		if (byteCount > this.bufSize) byteCount = this.bufSize;
-		if (!this.bufSize) return null;
 		return this.buf.toString(encoding, this.bufStart, this.bufStart + byteCount);
 	}
 
@@ -226,9 +229,9 @@ export class ReadStream {
 		const maybeLoad = this.loadIntoBuffer(byteCount);
 		if (maybeLoad) return maybeLoad.then(() => this.peekBuffer(byteCount));
 
+		if (!this.bufSize && byteCount !== 0) return null;
 		if (byteCount === null) return this.buf.slice(this.bufStart, this.bufEnd);
 		if (byteCount > this.bufSize) byteCount = this.bufSize;
-		if (!this.bufSize) return null;
 		return this.buf.slice(this.bufStart, this.bufStart + byteCount);
 	}
 

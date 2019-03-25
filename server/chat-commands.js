@@ -4241,6 +4241,7 @@ const commands = {
 			}
 
 			let roominfo = {
+				id: targetRoom.id,
 				title: targetRoom.title,
 				type: targetRoom.type,
 				visibility: visibility,

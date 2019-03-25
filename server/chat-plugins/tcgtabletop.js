@@ -7,55 +7,50 @@
 'use strict';
 
 const https = require('https');
+const querystring = require('querystring');
 
-function apiRequest(url, onEnd, onError) {
-	https.get(url, res => {
-		let buffer = '';
-		res.setEncoding('utf8');
-		res.on('data', data => {
-			buffer += data;
-		});
-		res.on('end', () => {
-			onEnd(buffer);
-		});
-	}).on('error', err => {
-		onEnd(err);
+const SEARCH_PATH = '/api/v1/Search/List/';
+const DETAILS_PATH = '/api/v1/Articles/Details/';
+
+async function getFandom(site, pathName, search) {
+	const reqOpts = {
+		hostname: `${site}.fandom.com`,
+		method: 'GET',
+		path: `${pathName}?${querystring.stringify(search)}`,
+		headers: {
+			'Content-Type': 'application/json',
+		},
+	};
+
+	const body = await new Promise((resolve, reject) => {
+		https.request(reqOpts, res => {
+			if (!(res.statusCode >= 200 && res.statusCode < 300)) return reject(new Error(`Not found.`));
+			const body = [];
+			res.setEncoding('utf8');
+			res.on('data', chunk => body.push(chunk));
+			res.on('end', () => resolve(body.join('')));
+		}).on('error', reject).setTimeout(5000).end();
 	});
+
+	const json = JSON.parse(body);
+	if (!json) throw new Error(`Malformed data`);
+	if (json.exception) throw new Error(Dex.getString(json.exception.message) || `Not found`);
+	return json;
 }
 
-function wikiaSearch(subdomain, query) {
-	return new Promise(function (resolve, reject) {
-		apiRequest(`https://${subdomain}.fandom.com/api/v1/Search/List/?query=${encodeURIComponent(query)}&limit=1`, res => {
-			let result;
-			try {
-				result = JSON.parse(res);
-			} catch (e) {
-				return reject(e);
-			}
-			if (!result) return reject(new Error("Malformed data"));
-			if (result.exception) return reject(new Error(Dex.getString(result.exception.message) || "Not found"));
-			if (!Array.isArray(result.items) || !result.items[0] || typeof result.items[0] !== 'object') return reject(new Error("Malformed data"));
-
-			return resolve(result.items[0]);
-		}, reject);
-	});
+async function searchFandom(site, query) {
+	const result = await getFandom(site, SEARCH_PATH, {query, limit: 1});
+	if (!Array.isArray(result.items) || !result.items.length) throw new Error(`Malformed data`);
+	if (!result.items[0] || typeof result.items[0] !== 'object') throw new Error(`Malformed data`);
+	return result.items[0];
 }
-function getCardDetails(subdomain, id) {
-	return new Promise(function (resolve, reject) {
-		apiRequest(`https://${subdomain}.fandom.com/api/v1/Articles/Details?ids=${encodeURIComponent(id)}&abstract=0&width=80&height=115`, res => {
-			let result;
-			try {
-				result = JSON.parse(res);
-			} catch (e) {
-				return reject(e);
-			}
-			if (!result) return reject(new Error("Malformed data"));
-			if (result.exception) return reject(new Error(Dex.getString(result.exception.message) || "Not found"));
-			if (typeof result.items !== 'object' || !result.items[id] || typeof result.items[id] !== 'object') return reject(new Error("Malformed data"));
 
-			return resolve(result.items[id]);
-		}, reject);
-	});
+async function getCardDetails(site, id) {
+	const result = await getFandom(site, DETAILS_PATH, {ids: id, abstract: 0, width: 80, height: 115});
+	if (typeof result.items !== 'object' || !result.items[id] || typeof result.items[id] !== 'object') {
+		throw new Error(`Malformed data`);
+	}
+	return result.items[id];
 }
 
 exports.commands = {
@@ -67,12 +62,12 @@ exports.commands = {
 		let query = target.trim();
 		if (!query) return this.parse('/help yugioh');
 
-		wikiaSearch(subdomain, query).then(data => {
+		return searchFandom(subdomain, query).then(data => {
 			if (!this.runBroadcast()) return;
 			let entryUrl = Dex.getString(data.url);
 			let entryTitle = Dex.getString(data.title);
 			let id = Dex.getString(data.id);
-			let htmlReply = `<strong>Best result for ${Chat.escapeHTML(query)}:</strong><br /><a href="${Chat.escapeHTML(entryUrl)}">${Chat.escapeHTML(entryTitle)}</a>`;
+			let htmlReply = Chat.html`<strong>Best result for ${query}:</strong><br /><a href="${entryUrl}">${entryTitle}</a>`;
 			if (id) {
 				getCardDetails(subdomain, id).then(card => {
 					let thumb = Dex.getString(card.thumbnail);

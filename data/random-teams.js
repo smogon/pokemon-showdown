@@ -1078,7 +1078,7 @@ class RandomTeams extends Dex.ModdedDex {
 					if (hasMove['discharge'] || hasMove['spore'] || hasMove['toxic'] || hasMove['trickroom'] || hasMove['yawn']) rejected = true;
 					break;
 				case 'toxic':
-					if (hasMove['hypnosis'] || hasMove['hypnosis'] || hasMove['sleeppowder'] || hasMove['willowisp'] || hasMove['yawn']) rejected = true;
+					if (hasMove['hypnosis'] || hasMove['sleeppowder'] || hasMove['willowisp'] || hasMove['yawn']) rejected = true;
 					if (counter.setupType || hasMove['flamecharge'] || hasMove['raindance']) rejected = true;
 					break;
 				case 'willowisp':
@@ -1623,6 +1623,8 @@ class RandomTeams extends Dex.ModdedDex {
 			}
 			if (item === 'Eviolite') {
 				bst += 0.5 * (baseStats.def + baseStats.spd);
+			} else if (item === 'Light Ball') {
+				bst += baseStats.atk + baseStats.spa;
 			}
 			level = 70 + Math.floor(((600 - this.clampIntRange(bst, 300, 600)) / 10.34));
 		}
