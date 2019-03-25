@@ -1492,19 +1492,20 @@ const commands = {
 			return `${Config.groups[r] ? `${Config.groups[r].name}s (${r})` : r}:\n${roomRankList.join(", ")}`;
 		});
 
-		if (!buffer.length) {
-			connection.popup(`The room '${targetRoom.title}' has no auth. ${userLookup}`);
-			return;
-		}
 		let curRoom = targetRoom;
 		while (curRoom.parent) {
 			const modjoinSetting = curRoom.modjoin === true ? curRoom.modchat : curRoom.modjoin;
 			const roomType = (modjoinSetting ? `modjoin ${modjoinSetting} ` : '');
 			const inheritedUserType = (modjoinSetting ? ` of rank ${modjoinSetting} and above` : '');
 			if (curRoom.parent) {
-				buffer.push(`${curRoom.title} is a ${roomType}subroom of ${curRoom.parent.title}, so ${curRoom.parent.title} users${inheritedUserType} also have authority in this room.`);
+				const also = buffer.length === 0 ? `` : ` also`;
+				buffer.push(`${curRoom.title} is a ${roomType}subroom of ${curRoom.parent.title}, so ${curRoom.parent.title} users${inheritedUserType}${also} have authority in this room.`);
 			}
 			curRoom = curRoom.parent;
+		}
+		if (!buffer.length) {
+			connection.popup(`The room '${targetRoom.title}' has no auth. ${userLookup}`);
+			return;
 		}
 		if (!curRoom.isPrivate) {
 			buffer.push(`${curRoom.title} is a public room, so global auth with no relevant roomauth will have authority in this room.`);
