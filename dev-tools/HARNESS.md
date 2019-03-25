@@ -44,9 +44,9 @@ games asynchronously.
     previous game to complete before starting the next. Note that since battles
     should not be blocking to begin with, this mode is not expected to have
     performance benefits over the default sequential mode, requires extra memory
-    (run with `node --max-old-space-size=<SIZE>` if you encounter issues) and
-    should not be used with `--benchmark` as it makes the results less
-    repeatable.
+    (run with `node --max-old-space-size=<SIZE> --stack-size=<SIZE>` if you
+    encounter issues) and should not be used with `--benchmark` as it makes the
+    results less repeatable.
 
 **TODO**: Add support for running battles in `--parallel` on muliple cores with
 [`worker_threads`](https://nodejs.org/api/worker_threads.html).
