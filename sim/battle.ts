@@ -1022,7 +1022,7 @@ export class Battle extends Dex.ModdedDex {
 		}
 		}
 
-		let allRequestsMade = requests.every(request => request);
+		const allRequestsMade = requests.every(request => request);
 		for (let i = 0; i < this.sides.length; i++) {
 			const side = this.sides[i];
 			const request = requests[i];

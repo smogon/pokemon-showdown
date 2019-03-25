@@ -756,7 +756,7 @@ class GlobalRoom extends BasicRoom {
 			}
 		}
 		if (Config.logladderip && options.rated) {
-			const ladderIpLogString = players.map(p => `${p.userid}: ${p.latestIp}\n`).join();
+			const ladderIpLogString = players.map(p => `${p.userid}: ${p.latestIp}\n`).join('');
 			this.ladderIpLog.write(ladderIpLogString);
 		}
 	}

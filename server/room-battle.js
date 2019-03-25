@@ -450,8 +450,7 @@ class RoomBattle {
 		 * the most recent usernames in those slots, for use by various
 		 * functions that need names for the slots.
 		 */
-		this.playerNames = ["Player 1", "Player 2"];
-		if (this.playerCap > 2) this.playerNames.push("Player 3", "Player 4");
+		this.playerNames = ["Player 1", "Player 2", "Player 3", "Player 4"].slice(0, this.playerCap);
 		this.requests = {
 			p1: /** @type {BattleRequestTracker} */ ({rqid: 0, request: '', isWait: 'cantUndo', choice: ''}),
 			p2: /** @type {BattleRequestTracker} */ ({rqid: 0, request: '', isWait: 'cantUndo', choice: ''}),
@@ -991,12 +990,11 @@ class RoomBattle {
 		if (this.started) this.onUpdateConnection(user);
 		if (this.p1 && this.p2 && (this.playerCap <= 2 || this.p3 && this.p4)) {
 			this.started = true;
-			const users = [];
-			for (const userid in this.players) {
-				const user = Users(userid);
-				if (!user) throw new Error(`User ${userid} not found on ${this.id} battle creation`);
-				users.push(user);
-			}
+			const users = this.playerNames.map(name => {
+				const user = Users(name);
+				if (!user) throw new Error(`User ${name} not found on ${this.id} battle creation`);
+				return user;
+			});
 			Rooms.global.onCreateBattleRoom(users, this.room, {rated: this.rated});
 		}
 		return player;
