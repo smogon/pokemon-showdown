@@ -1651,7 +1651,7 @@
 				"ability": ["Limber"],
 				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": "Jolly",
-				"moves": [["Return"], ["High Jump Kick"], ["Ice Punch", "Quick Attack", "Encore"], ["Power-Up  Punch"]]
+				"moves": [["Return"], ["High Jump Kick"], ["Ice Punch", "Quick Attack", "Encore"], ["Power-Up Punch"]]
 			}]
 		},
 		"magearna": {
