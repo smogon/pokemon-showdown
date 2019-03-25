@@ -310,7 +310,7 @@ let BattleMovedex = {
 		inherit: true,
 		basePower: 100,
 		onTry(source, target) {
-			target.side.addSlotCondition(target, 'futuremove');
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				duration: 3,
 				move: 'futuresight',

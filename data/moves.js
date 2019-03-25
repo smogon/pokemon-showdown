@@ -3642,7 +3642,7 @@ let BattleMovedex = {
 		flags: {},
 		isFutureMove: true,
 		onTry(source, target) {
-			target.side.addSlotCondition(target, 'futuremove');
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				move: 'doomdesire',
 				source: source,
@@ -6251,7 +6251,7 @@ let BattleMovedex = {
 		ignoreImmunity: true,
 		isFutureMove: true,
 		onTry(source, target) {
-			target.side.addSlotCondition(target, 'futuremove');
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				duration: 3,
 				move: 'futuresight',

@@ -301,7 +301,7 @@ let BattleMovedex = {
 	doomdesire: {
 		inherit: true,
 		onTry(source, target) {
-			target.side.addSlotCondition(target, 'futuremove');
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 			let moveData = /** @type {ActiveMove} */ ({
 				name: "Doom Desire",
 				basePower: 120,

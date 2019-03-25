@@ -325,7 +325,12 @@ let BattleScripts = {
 		}
 		this.runEvent('PrepareHit', pokemon, targets[0], move);
 
-		if (!this.singleEvent('Try', move, null, pokemon, targets[0], move)) {
+		hitResult = this.singleEvent('Try', move, null, pokemon, targets[0], move);
+		if (!hitResult) {
+			if (hitResult === false) {
+				this.add('-fail', pokemon);
+				this.attrLastMove('[still]');
+			}
 			return false;
 		}
 

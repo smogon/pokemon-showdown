@@ -1282,7 +1282,7 @@ let BattleMovedex = {
 		isViable: true,
 		ignoreImmunity: true,
 		onHit(target, source) {
-			target.side.addSlotCondition(target, 'futuremove');
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				duration: 3,
 				move: 'echoedvoice',
