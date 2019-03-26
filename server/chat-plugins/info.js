@@ -2399,22 +2399,25 @@ const pages = {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		if (!this.room.chatRoomData) return;
 		if (!this.can('mute', null, this.room)) return;
-
-		if (Punishments.getPunishmentsOfRoom(this.room).length) {
+		const sortedPunishments = Punishments.getPunishmentsOfRoom(this.room).sort((a, b) => {
+			// Ascending order
+			return a.expiresIn - b.expiresIn;
+		});
+		if (sortedPunishments.length) {
 			buf += `<div class="pad"><h2>List of active punishments:</h2>`;
 			buf += `<table style="border: 1px solid black; border-collapse:collapse; width:100%;"><tr><th style="border: 1px solid black;">Username</th><th style="border: 1px solid black;">Punishment type</th><th style="border: 1px solid black;">Expire time</th><th style="border: 1px solid black;">Reason</th><th style="border: 1px solid black;">Alts</th>`;
 			if (user.can('ban')) buf += `<th style="border: 1px solid black;">IP</th>`;
 			buf += `</tr>`;
-			for (const entry of Punishments.getPunishmentsOfRoom(this.room)) {
+			for (const punishment of sortedPunishments) {
 				buf += `<tr>`;
-				if (!entry.alts) entry.alts = [];
-				if (!entry.ip) entry.ip = [];
-				let expireString = Chat.toDurationString(entry.expiresIn, {precision: 1});
+				if (!punishment.alts) punishment.alts = [];
+				if (!punishment.ip) punishment.ip = [];
+				let expireString = Chat.toDurationString(punishment.expiresIn, {precision: 1});
 				let punishDesc = "";
-				punishDesc += (entry.reason) ? `<td style="border: 1px solid black;">${entry.reason}</td>` : `<td style="border: 1px solid black;"> - </td>`;
-				punishDesc += (entry.alts.length) ? `<td style="border: 1px solid black;">${entry.alts.filter(user => user !== entry.id).join(", ")}</td>` : `<td style="border: 1px solid black;"> - </td>`;
-				punishDesc += (user.can('ban') && entry.ip.length) ? `<td style="border: 1px solid black;">${entry.ip.join(", ")}</td>` : (user.can('ban') && !entry.ip.length) ? `<td style="border: 1px solid black;"> - </td>` : ``;
-				buf += `<td style="border: 1px solid black;">${entry.id}</td> <td style="border: 1px solid black;">${entry.punishType.toLowerCase()}</td> <td style="border: 1px solid black;">${expireString}</td> ${punishDesc}</tr>`;
+				punishDesc += (punishment.reason) ? `<td style="border: 1px solid black;">${punishment.reason}</td>` : `<td style="border: 1px solid black;"> - </td>`;
+				punishDesc += (punishment.alts.length) ? `<td style="border: 1px solid black;">${punishment.alts.filter(user => user !== punishment.id).join(", ")}</td>` : `<td style="border: 1px solid black;"> - </td>`;
+				punishDesc += (user.can('ban') && punishment.ip.length) ? `<td style="border: 1px solid black;">${punishment.ip.join(", ")}</td>` : (user.can('ban') && !punishment.ip.length) ? `<td style="border: 1px solid black;"> - </td>` : ``;
+				buf += `<td style="border: 1px solid black;">${punishment.id}</td> <td style="border: 1px solid black;">${punishment.punishType.toLowerCase()}</td> <td style="border: 1px solid black;">${expireString}</td> ${punishDesc}</tr>`;
 			}
 		} else {
 			buf += `<h2>No user in ${this.room} is currently punished.</h2>`;

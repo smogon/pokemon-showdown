@@ -1595,9 +1595,7 @@ Punishments.getPunishmentsOfRoom = function (room) {
 			output.push({"punishType": 'MUTE', "id": entry.userid, "expiresIn": expiresIn});
 		}
 	}
-	return output.sort((a, b) => {
-		return a.expiresIn - b.expiresIn;
-	});
+	return output;
 };
 /**
  * Notifies staff if a user has three or more room punishments.
