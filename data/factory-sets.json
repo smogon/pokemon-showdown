@@ -5738,7 +5738,7 @@
 			"flags": {},
 			"sets": [{
 				"species": "Druddigon",
-				"item": ["Letovers"],
+				"item": ["Leftovers"],
 				"ability": ["Mold Breaker"],
 				"evs": {"hp": 252, "def": 252, "spd": 4},
 				"nature": "Impish",
