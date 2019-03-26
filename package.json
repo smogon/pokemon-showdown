@@ -9,6 +9,7 @@
     "sucrase": "^3.9.5"
   },
   "optionalDependencies": {
+    "benchmark": "^2.1.4",
     "cloud-env": "^0.2.2",
     "minimist": "^1.2.0",
     "node-oom-heapdump": "^1.0.10",

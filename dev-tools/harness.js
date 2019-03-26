@@ -29,6 +29,21 @@ const FORMATS = [
 	'gen5randombattle', 'gen4randombattle', 'gen3randombattle', 'gen2randombattle', 'gen1randombattle',
 ];
 
+// 'move' 70% of the time (ie. 'switch' 30%) and ' mega' 60% of the time that its an option.
+const AI_OPTIONS = {move: 0.7, mega: 0.6};
+
+// 'Timer' used when we're not benchmarking and don't need it to be operational.
+const ID = a => a;
+const STATS = {stats: new Map()};
+const NOOP_TIMER = new class {
+	count() {}
+	add() {}
+	start() {}
+	stop() {}
+	time() { return ID; }
+	stats() { return STATS; }
+}();
+
 class Runner {
 	constructor(options) {
 		this.prng = (options.prng && !Array.isArray(options.prng)) ?
@@ -37,13 +52,13 @@ class Runner {
 		this.totalGames = options.totalGames;
 		this.all = !!options.all;
 		this.async = !!options.async;
-		this.p1options = options.p1options;
-		this.p2options = options.p2options;
+		this.p1options = Object.assign({}, AI_OPTIONS, options.p1options);
+		this.p2options = Object.assign({}, AI_OPTIONS, options.p2options);
 		// silence is golden (trumps noisy options)
 		this.silent = !!options.silent;
 		this.logs = !this.silent && !!options.logs;
 		this.verbose = !this.silent && !!options.verbose;
-		this.timer = options.timer;
+		this.timer = options.timer || (() => NOOP_TIMER);
 		this.formatter = options.formatter;
 		this.warmup = options.warmup;
 
@@ -107,7 +122,8 @@ class Runner {
 		// The seed used is the intial seed to begin with (its important that nothing
 		// advances the PRNG before the initial `runGame` call for repro purposes), but
 		// later is advanced by the four `newSeed()` calls, so each iteration should be
-		// 16 frames off the previous.
+		// 16 frames off the previous (17 if running in the default random format mode,
+		// as `getNextFormat` calls `PRNG.sample` which also advances the PRNG).
 		const spec = {formatid: format, seed: this.prng.seed};
 		const p1spec = {name: "Bot 1", seed: this.newSeed()};
 		const p2spec = {name: "Bot 2", seed: this.newSeed()};
@@ -139,6 +155,7 @@ class Runner {
 		];
 	}
 
+	// TODO add sequential format mode
 	getNextFormat() {
 		if (this.format) {
 			return (this.numGames++ < this.totalGames) && this.format;
@@ -156,26 +173,18 @@ class Runner {
 	}
 }
 
-// 'Timer' used when we're not benchmarking and don't need it to be operational.
-const ID = a => a;
-const STATS = {stats: new Map()};
-const NOOP_TIMER = new class {
-	count() {}
-	add() {}
-	start() {}
-	stop() {}
-	time() { return ID; }
-	stats() { return STATS; }
-}();
-
 module.exports = Runner;
+
+// *Seed scientifically chosen after incredibly detailed and thoughtful analysis.*
+// The default seed used when running the harness for benchmarking purposes - all we
+// really care about is consistency between runs, we don't have any specific concerns
+// about the randomness provided it results in pseudo-realistic game playouts.
+const BENCHMARK_SEED = [0x01234, 0x05678, 0x09123, 0x04567];
 
 // Kick off the Runner if we're being called from the command line.
 if (require.main === module) {
-	// 'move' 70% of the time (ie. 'switch' 30%) and ' mega' 60% of the time that its an option.
-	const AI_OPTIONS = {move: 0.7, mega: 0.6};
-
-	const options = {totalGames: 100, p1options: AI_OPTIONS, p2options: AI_OPTIONS, timer: () => NOOP_TIMER};
+	let benchmark;
+	const options = {totalGames: 100};
 	// If we have more than one arg, or the arg looks like a flag, we need minimist to understand it.
 	if (process.argv.length > 3 || process.argv.length === 3 && process.argv[2].startsWith('-')) {
 		const missing = dep => {
@@ -190,39 +199,71 @@ if (require.main === module) {
 
 		if (missing('minimist')) shell('npm install minimist');
 		const argv = require('minimist')(process.argv.slice(2));
-		Object.assign(options, argv);
 
-		options.totalGames = Number(argv._[0] || argv.num) || options.totalGames;
-		if (argv.seed) options.prng = argv.seed.split(',').map(s => Number(s));
-		if (argv.benchmark || argv.trace) {
-			// *Seed scientifically chosen after incredibly detailed and thoughtful analysis.*
-			// The default seed used when running the harness for benchmarking purposes - all we
-			// really care about is consistency between runs, we don't have any specific concerns
-			// about the randomness provided it results in pseudo-realistic game playouts.
-			options.prng = [0x01234, 0x05678, 0x09123, 0x04567];
-			// Async makes things less repeatable and makes GCs more random.
-			options.async = false;
-
-			if (missing('trakkr')) shell('npm install trakkr');
-			const trakkr = require('trakkr');
-			// No need to disable since we exit immediately after anyway.
-			if (argv.trace) trakkr.TRACING.enable();
-			options.timer = () => {
-				const opts = {trace: argv.trace};
-				if (argv.fixed) opts.buf = Buffer.allocUnsafe(parseInt(argv.fixed) || 0x100000);
-				return trakkr.Timer.create(opts);
-			};
+		const formatter = trakkr => {
 			// Choose which formatter to use - we don't need to tweak the sort or write a custom
 			// formatter because its almost as though the defaults were written for our usecase...
-			const formatter = new trakkr.Formatter(!!argv.full, trakkr.SORT,
+			return new trakkr.Formatter(!!argv.full, trakkr.SORT,
 				(argv.output === 'csv' || argv.csv) ? trakkr.CSV :
 					(argv.output === 'tsv' || argv.tsv) ? trakkr.TSV :
 					/** argv.output === 'table' */ trakkr.TABLE);
-			options.formatter = formatter;
+		};
 
-			if (argv.warmup) {
-				options.warmup = parseInt(argv.warmup) || Math.ceil(0.1 * options.totalGames);
-				options.totalGames += options.warmup;
+		if (argv.benchmark) {
+			const deps = [];
+			if (missing('benchmark')) deps.push('benchmark');
+			if (missing('trakkr')) deps.push('trakkr');
+			if (deps.length) shell(`npm install ${deps.join(' ')}`);
+
+			const Benchmark = require('benchmark');
+			const trakkr = require('trakkr');
+
+			// In benchmark mode the options are fixed for repeatability.
+			options.prng = BENCHMARK_SEED;
+			// 50 games forms a single benchmark 'unit' where these same 50 games
+			// get run multiple times to minimize variance.
+			options.totalGames = 50;
+			options.formatter = formatter(trakkr);
+			// TODO sequential format
+			benchmark = new Benchmark({
+				async: true,
+				defer: true,
+				//initCount: 5,
+				maxTime: 60,
+				fn: deferred => new Runner(options).run().finally(() => deferred.resolve()),
+				onError: () => process.exit(1),
+				onComplete: e => {
+					// TODO output stats with formatter
+					console.log(e.target);
+					// TODO dump stats.json
+				},
+			});
+		} else {
+			Object.assign(options, argv);
+			options.totalGames = Number(argv._[0] || argv.num) || options.totalGames;
+			if (argv.seed) options.prng = argv.seed.split(',').map(s => Number(s));
+
+			if (argv.profile || argv.trace) {
+				if (missing('trakkr')) shell('npm install trakkr');
+				const trakkr = require('trakkr');
+
+				options.async = false;
+				options.prng = BENCHMARK_SEED;
+				options.formatter = formatter(trakkr);
+
+				// No need to disable since we exit immediately after anyway.
+				if (argv.trace) trakkr.TRACING.enable();
+
+				options.timer = () => {
+					const opts = {trace: argv.trace};
+					if (argv.fixed) opts.buf = Buffer.allocUnsafe(parseInt(argv.fixed) || 0x100000);
+					return trakkr.Timer.create(opts);
+				};
+
+				if (argv.warmup) {
+					options.warmup = parseInt(argv.warmup) || Math.ceil(0.1 * options.totalGames);
+					options.totalGames += options.warmup;
+				}
 			}
 		}
 	} else if (process.argv.length === 3) {
@@ -258,6 +299,10 @@ if (require.main === module) {
 	process.on('rejectionHandled', p => RejectionTracker.onRejectionHandled(p));
 	process.on('exit', c => RejectionTracker.onExit(c));
 
-	// Run options.totalGames, exiting with the number of games with errors.
-	(async () => process.exit(await new Runner(options).run()))();
+	if (benchmark) {
+		benchmark.run();
+	} else {
+		// Run options.totalGames, exiting with the number of games with errors.
+		(async () => process.exit(await new Runner(options).run()))();
+	}
 }
