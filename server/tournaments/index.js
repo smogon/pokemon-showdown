@@ -781,9 +781,10 @@ class Tournament {
 
 		// Prevent battles between offline users from starting
 		const from = Users.get(challenge.from.userid);
-		if (!from || !from.connected || !user.connected) {
+		if (!from || !user.connected) return;
+		if (!from.connected) {
 			// Prevent an exploit
-			if (from && !from.connected) this.cancelChallenge(from);
+			this.cancelChallenge(from);
 			return;
 		}
 
