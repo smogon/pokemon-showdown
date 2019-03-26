@@ -125,7 +125,7 @@ export class Side {
 	}
 
 	get foe() {
-		return this.battle.sides[+!(this.n % 2)];
+		return this.battle.sides[1 - this.n % 2];
 	}
 
 	getChoice() {

@@ -544,7 +544,7 @@ export class Pokemon {
 	foes(adjacentOnly?: boolean, forTargeting?: boolean): Pokemon[] {
 		let foes = this.side.foe.active;
 		if (this.battle.gameType === 'multi') {
-			const team = +!(this.side.n % 2);
+			const team = 1 - this.side.n % 2;
 			// @ts-ignore
 			foes = this.battle.sides.flatMap(side =>
 				side.n % 2 === team ? side.active : []
