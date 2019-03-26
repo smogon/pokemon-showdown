@@ -4794,7 +4794,7 @@ let BattleMovedex = {
 				this.add('-anim', attacker, "takedown", defender);
 				return;
 			}
-			this.add('-prepare', attacker, move.name, defender);
+			this.add('-prepare', attacker, "Skull Bash", defender);
 			this.add('-message', attacker.name + ' is charging up for an attack!');
 			if (!this.runEvent('ChargeMove', attacker, defender, move)) {
 				this.add('-anim', attacker, "takedown", defender);
