@@ -1592,7 +1592,7 @@ Punishments.getPunishmentsOfRoom = function (room) {
 		for (const entry of room.muteQueue) {
 			let expiresIn = new Date(entry.time).getTime() - Date.now();
 			if (expiresIn < 0) continue;
-			output.push({"punishType": 'MUTE', "id": entry.userid, "expiresIn": expiresIn});
+			output.push({"punishType": 'MUTE', "id": entry.userid, "expiresIn": expiresIn, "reason": '', "alts": [], "ip": []});
 		}
 	}
 	return output;

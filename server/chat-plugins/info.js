@@ -2415,8 +2415,6 @@ const pages = {
 			if (user.can('ban')) buf += `<th style="border: 1px solid black;">IP</th>`;
 			buf += `</tr>`;
 			for (const punishment of sortedPunishments) {
-				if (!punishment.alts) punishment.alts = [];
-				if (!punishment.ip) punishment.ip = [];
 				let expireString = Chat.toDurationString(punishment.expiresIn, {precision: 1});
 				let punishDesc = "";
 				punishDesc += (punishment.reason) ? `<td style="border: 1px solid black;">${punishment.reason}</td>` : `<td style="border: 1px solid black;"> - </td>`;
