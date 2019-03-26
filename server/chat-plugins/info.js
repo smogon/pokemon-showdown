@@ -2429,6 +2429,7 @@ const pages = {
 		} else {
 			buf += `<h2>No user in ${this.room} is currently punished.</h2>`;
 		}
+		buf += `</div>`;
 		return buf;
 	},
 };
