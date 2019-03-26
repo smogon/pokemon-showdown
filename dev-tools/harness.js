@@ -194,7 +194,7 @@ if (require.main === module) {
 
 		options.totalGames = Number(argv._[0] || argv.num) || options.totalGames;
 		if (argv.seed) options.prng = argv.seed.split(',').map(s => Number(s));
-		if (argv.benchmark) {
+		if (argv.benchmark || argv.trace) {
 			// *Seed scientifically chosen after incredibly detailed and thoughtful analysis.*
 			// The default seed used when running the harness for benchmarking purposes - all we
 			// really care about is consistency between runs, we don't have any specific concerns
@@ -205,7 +205,8 @@ if (require.main === module) {
 
 			if (missing('trakkr')) shell('npm install trakkr');
 			const trakkr = require('trakkr');
-
+			// No need to disable since we exit immediately after anyway.
+			if (argv.trace) trakkr.TRACING.enable();
 			options.timer = () => {
 				const opts = {trace: argv.trace};
 				if (argv.fixed) opts.buf = Buffer.allocUnsafe(parseInt(argv.fixed) || 0x100000);
@@ -228,6 +229,34 @@ if (require.main === module) {
 		// If we have one arg, treat it as the total number of games to play.
 		options.totalGames = Number(process.argv[2]) || options.totalGames;
 	}
+
+	// Tracks whether some promises threw errors that weren't caught so we can log
+	// and exit with a non-zero status to fail any tests.
+	const RejectionTracker = new class {
+		constructor() {
+			this.unhandled = [];
+		}
+		onUnhandledRejection(reason, promise) {
+			this.unhandled.push({reason, promise});
+		}
+		onRejectionHandled(promise) {
+			this.unhandled.splice(this.unhandled.findIndex(u => u.promise === promise), 1);
+		}
+		onExit(code) {
+			let i = 0;
+			for (const u of this.unhandled) {
+				const error = (u.reason instanceof Error) ? u.reason :
+					new Error(`Promise rejected with value: ${u.reason}`);
+				console.error(error.stack);
+				i++;
+			}
+			process.exit(code + i);
+		}
+	}();
+
+	process.on('unhandledRejection', (r, p) => RejectionTracker.onUnhandledRejection(r, p));
+	process.on('rejectionHandled', p => RejectionTracker.onRejectionHandled(p));
+	process.on('exit', c => RejectionTracker.onExit(c));
 
 	// Run options.totalGames, exiting with the number of games with errors.
 	(async () => process.exit(await new Runner(options).run()))();
