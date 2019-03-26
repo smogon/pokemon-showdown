@@ -2405,7 +2405,7 @@ const pages = {
 		});
 		if (sortedPunishments.length) {
 			buf += `<div class="pad"><h2>List of active punishments:</h2>`;
-			buf += `<table style="border: 1px solid black; border-collapse:collapse; width:100%;">`
+			buf += `<table style="border: 1px solid black; border-collapse:collapse; width:100%;">`;
 			buf += `<tr>`;
 			buf += `<th style="border: 1px solid black;">Username</th>`;
 			buf += `<th style="border: 1px solid black;">Punishment type</th>`;
