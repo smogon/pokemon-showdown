@@ -2292,19 +2292,7 @@ const commands = {
 		if (!target) return this.parse('/help htmlbox');
 		target = this.canHTML(target);
 		if (!target) return;
-		if (target.includes('\n')) {
-			let OpenTags = 0;
-			let CloseTags = 0;
-			for (let line of target.split('\n')) {
-				OpenTags = OpenTags + (line.match(/<[^/].*>/g) || []).length;
-				CloseTags = CloseTags + (line.match(/<\/.*>/g) || []).length;
-				if (OpenTags > CloseTags) {
-					target = target.replace('\n', ' ');
-				} else if (OpenTags === CloseTags) {
-					target = target.replace('\n', '&#10;');
-				}
-			}
-		}
+		if (target.includes('\n')) target = Chat.removeLineBreaksInHTML(target);
 		if (!this.canBroadcast(true, '!htmlbox')) return;
 		if (this.broadcastMessage && !this.can('declare', null, room)) return false;
 
@@ -2322,20 +2310,7 @@ const commands = {
 		target = this.canHTML(target);
 		if (!target) return;
 		if (!this.can('addhtml', null, room)) return;
-		if (target.includes('\n')) {
-			let OpenTags = 0;
-			let CloseTags = 0;
-			for (let line of target.split('\n')) {
-				OpenTags = OpenTags + (line.match(/<[^/].*>/g) || []).length;
-				CloseTags = CloseTags + (line.match(/<\/.*>/g) || []).length;
-				if (OpenTags > CloseTags) {
-					target = target.replace('\n', ' ');
-				} else if (OpenTags === CloseTags) {
-					target = target.replace('\n', '&#10;');
-				}
-			}
-		}
-
+		if (target.includes('\n')) target = Chat.removeLineBreaksInHTML(target);
 		if (!user.can('addhtml')) {
 			target += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
@@ -2353,19 +2328,7 @@ const commands = {
 		html = this.canHTML(html);
 		if (!html) return;
 		if (!this.can('addhtml', null, room)) return;
-		if (html.includes('\n')) {
-			let OpenTags = 0;
-			let CloseTags = 0;
-			for (let line of html.split('\n')) {
-				OpenTags = OpenTags + (line.match(/<[^/].*>/g) || []).length;
-				CloseTags = CloseTags + (line.match(/<\/.*>/g) || []).length;
-				if (OpenTags > CloseTags) {
-					html = html.replace('\n', ' ');
-				} else if (OpenTags === CloseTags) {
-					html = html.replace('\n', '&#10;');
-				}
-			}
-		}
+		if (html.includes('\n')) html = Chat.removeLineBreaksInHTML(html)
 		if (!user.can('addhtml')) {
 			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
@@ -2385,19 +2348,7 @@ const commands = {
 		html = this.canHTML(html);
 		if (!html) return;
 		if (!this.can('addhtml', null, room)) return;
-		if (html.includes('\n')) {
-			let OpenTags = 0;
-			let CloseTags = 0;
-			for (let line of html.split('\n')) {
-				OpenTags = OpenTags + (line.match(/<[^/].*>/g) || []).length;
-				CloseTags = CloseTags + (line.match(/<\/.*>/g) || []).length;
-				if (OpenTags > CloseTags) {
-					html = html.replace('\n', ' ');
-				} else if (OpenTags === CloseTags) {
-					html = html.replace('\n', '&#10;');
-				}
-			}
-		}
+		if (html.includes('\n')) html = Chat.removeLineBreaksInHTML(html);
 		if (!user.can('addhtml')) {
 			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
@@ -2423,19 +2374,7 @@ const commands = {
 		html = this.canHTML(html);
 		if (!html) return;
 		if (!this.can('addhtml', null, room)) return;
-		if (html.includes('\n')) {
-			let OpenTags = 0;
-			let CloseTags = 0;
-			for (let line of html.split('\n')) {
-				OpenTags = OpenTags + (line.match(/<[^/].*>/g) || []).length;
-				CloseTags = CloseTags + (line.match(/<\/.*>/g) || []).length;
-				if (OpenTags > CloseTags) {
-					html = html.replace('\n', ' ');
-				} else if (OpenTags === CloseTags) {
-					html = html.replace('\n', '&#10;');
-				}
-			}
-		}
+		if (html.includes('\n')) html = Chat.removeLineBreaksInHTML(html);
 		if (!user.can('addhtml')) {
 			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
