@@ -1739,13 +1739,16 @@ class RandomTeams extends Dex.ModdedDex {
 			case 'Arceus': case 'Silvally':
 				if (this.randomChance(17, 18)) continue;
 				break;
-			case 'Castform': case 'Gourgeist': case 'Oricorio':
+			case 'Rotom':
+				if (this.randomChance(5, 6)) continue;
+				break;
+			case 'Deoxys': case 'Gourgeist': case 'Oricorio':
 				if (this.randomChance(3, 4)) continue;
 				break;
-			case 'Necrozma':
+			case 'Castform': case 'Kyurem': case 'Lycanroc': case 'Necrozma': case 'Wormadam':
 				if (this.randomChance(2, 3)) continue;
 				break;
-			case 'Basculin': case 'Cherrim': case 'Greninja': case 'Hoopa': case 'Meloetta': case 'Meowstic':
+			case 'Basculin': case 'Cherrim': case 'Giratina': case 'Greninja': case 'Hoopa': case 'Landorus': case 'Meloetta': case 'Meowstic': case 'Shaymin': case 'Thundurus': case 'Tornadus': case 'Zygarde':
 				if (this.randomChance(1, 2)) continue;
 				break;
 			}
