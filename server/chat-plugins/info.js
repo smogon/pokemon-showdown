@@ -2405,7 +2405,13 @@ const pages = {
 		});
 		if (sortedPunishments.length) {
 			buf += `<div class="pad"><h2>List of active punishments:</h2>`;
-			buf += `<table style="border: 1px solid black; border-collapse:collapse; width:100%;"><tr><th style="border: 1px solid black;">Username</th><th style="border: 1px solid black;">Punishment type</th><th style="border: 1px solid black;">Expire time</th><th style="border: 1px solid black;">Reason</th><th style="border: 1px solid black;">Alts</th>`;
+			buf += `<table style="border: 1px solid black; border-collapse:collapse; width:100%;">`
+			buf += `<tr>`;
+			buf += `<th style="border: 1px solid black;">Username</th>`;
+			buf += `<th style="border: 1px solid black;">Punishment type</th>`;
+			buf += `<th style="border: 1px solid black;">Expire time</th>`;
+			buf += `<th style="border: 1px solid black;">Reason</th>`;
+			buf += `<th style="border: 1px solid black;">Alts</th>`;
 			if (user.can('ban')) buf += `<th style="border: 1px solid black;">IP</th>`;
 			buf += `</tr>`;
 			for (const punishment of sortedPunishments) {
