@@ -2420,7 +2420,7 @@ const pages = {
 				let expireString = Chat.toDurationString(punishment.expiresIn, {precision: 1});
 				let punishDesc = "";
 				punishDesc += (punishment.reason) ? `<td style="border: 1px solid black;">${punishment.reason}</td>` : `<td style="border: 1px solid black;"> - </td>`;
-				punishDesc += (punishment.alts.length) ? `<td style="border: 1px solid black;">${punishment.alts.filter(user => user !== punishment.id).join(", ")}</td>` : `<td style="border: 1px solid black;"> - </td>`;
+				punishDesc += (punishment.alts.length) ? `<td style="border: 1px solid black;">${punishment.alts.join(", ")}</td>` : `<td style="border: 1px solid black;"> - </td>`;
 				punishDesc += (user.can('ban') && punishment.ip.length) ? `<td style="border: 1px solid black;">${punishment.ip.join(", ")}</td>` : (user.can('ban') && !punishment.ip.length) ? `<td style="border: 1px solid black;"> - </td>` : ``;
 				buf += `<tr>`;
 				buf += `<td style="border: 1px solid black;">${punishment.id}</td>`;
