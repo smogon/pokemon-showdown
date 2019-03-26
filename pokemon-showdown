@@ -1,71 +1,44 @@
-#!/bin/sh
+#!/usr/bin/env node
 
-true /*
-# Shell script will interpret above as a command and execute everything after
-# it, while JavaScript will interpret this as beginning of a comment and skip
-# shell script contents.
-#
-# As shell script parses lines only when they are needed, nothing after exit 1
-# can possibly cause a syntax error.
-
-if nodepath="$(command -v node || command -v nodejs)"; then
-	exec "$nodepath" "--trace-warnings" "$0" "$@"
-fi
-echo "We require Node.js version 8 or later; Node.js not found"
-exit 1
-*/;
-
-var child_process = require('child_process');
-var fs = require('fs');
-var path = require('path');
-
-// # Make sure we're Node 8+
-
-try {
-	eval('{ let a = async () => {}; }');
-} catch (e) {
-	console.log("We require Node.js version 8 or later; you're using " + process.version);
-	process.exit(1);
+// Before running, ensure that the Typescript files have been compiled.
+//
+// Simply doing `require('../build')` here doesn't work because the `replace`
+// step of the build is asynchronous and we can't wait for it to finish easily
+// unless we shell out and use `execSync`. However, the heuristic of simply
+// checking for the presence of  './.sim-dist/dex' to determine whether a build
+// is required is somewhat risky as it only is valid from a clean repository -
+// if you make edits or have previous build artifacts lying arround, this
+// script could potentially be missing additional sources or the compiled output
+// may be out of date.
+//
+// We're OK with risking being stale here unless we're starting the server
+// because we want to keep this script as fast as possible to be usable as a way
+// of interfacing with the simulator from non-JS languages. Otherwise we error
+// on the side of caution and run `node build` to ensure we're always running
+// with the latest code.
+var built = false;
+function build() {
+	require('child_process').execSync('node build', {stdio: 'inherit', cwd: __dirname});
+	built = true;
 }
 
-// # Make sure our dependencies are available, and install them if they
-// # aren't
-
 try {
-	require.resolve('sockjs');
-} catch (e) {
-	console.log('Installing dependencies...');
-	child_process.execSync('npm install --production', {stdio: 'inherit'});
-}
-
-// # Make sure config.js exists. If not, copy it over synchronously from
-// # config-example.js, since it's needed before we can start the server
-
-try {
-	require.resolve('./config/config');
+	require.resolve('./.sim-dist/dex');
 } catch (err) {
 	if (err.code !== 'MODULE_NOT_FOUND') throw err; // should never happen
-
-	console.log('config.js does not exist. Creating one with default settings...');
-	fs.writeFileSync(
-		path.resolve(__dirname, 'config/config.js'),
-		fs.readFileSync(path.resolve(__dirname, 'config/config-example.js'))
-	);
+	build();
 }
 
 if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
-	// Start the server. We manually load app.js so it can be configured to run as
-	// the main module, rather than this file being considered the main module.
-	// This ensures any dependencies that were just installed can be found when
-	// running on Windows and avoids any other potential side effects of the main
-	// module not being app.js like it is assumed to be.
+	// Start the server.
 	//
 	// The port the server should host on can be passed using the second argument
 	// when launching with this file the same way app.js normally allows, e.g. to
 	// host on port 9000:
 	// $ ./pokemon-showdown 9000
 
-	require('module')._load('./app', module, true);
+	if (!built) build();
+	require('module')._load('./server', module, true);
 } else switch (process.argv[2]) {
 	case 'help':
 	case 'h':
@@ -73,7 +46,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 	case '-h':
 	case '--help':
 	case '-?':
-		console.log('pokemon-showdown [PORT]');
+		console.log('pokemon-showdown start [PORT]');
 		console.log('');
 		console.log('  Starts a PS server on the specified port');
 		console.log('  (Defaults to the port setting in config/config.js)');
@@ -93,7 +66,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		console.log('pokemon-showdown simulate-battle');
 		console.log('');
 		console.log('  Simulates a battle, taking input to stdin and writing output to stdout');
-		console.log('  Protocol is documented in ./sim/README.md');
+		console.log('  Protocol is documented in ./.sim-dist/README.md');
 		console.log('');
 		console.log('pokemon-showdown unpack-team');
 		console.log('');
@@ -110,20 +83,27 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		console.log('');
 		console.log('  Displays this reference');
 		break;
+	case 'start':
+		{
+			process.argv[2] = process.argv[3];
+			if (!built) build();
+			require('module')._load('./server', module, true);
+			break;
+		}
 	case 'generate-team':
 		{
-			var Dex = require('./sim/dex');
+			var Dex = require('./.sim-dist/dex');
 			global.toId = Dex.getId;
 			var seed = process.argv[4] ? process.argv[4].split(',').map(Number) : undefined;
-			console.log(Dex.packTeam(Dex.generateTeam(process.argv[3], seed)));
+			console.log(Dex.packTeam(Dex.generateTeam(process.argv[3], {seed})));
 		}
 		break;
 	case 'validate-team':
 		{
-			var Dex = require('./sim/dex');
-			var TeamValidator = require('./sim/team-validator');
+			var Dex = require('./.sim-dist/dex');
+			var TeamValidator = require('./.sim-dist/team-validator');
 			var validator = TeamValidator(process.argv[3]);
-			var Streams = require('./lib/streams');
+			var Streams = require('./.lib-dist/streams');
 			var stdin = new Streams.ReadStream(process.stdin);
 
 			stdin.readLine().then(function (textTeam) {
@@ -144,20 +124,23 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		break;
 	case 'simulate-battle':
 		{
-			var BattleTextStream = require('./sim/battle-stream').BattleTextStream;
-			var Streams = require('./lib/streams');
+			var BattleTextStream = require('./.sim-dist/battle-stream').BattleTextStream;
+			var Streams = require('./.lib-dist/streams');
 			var stdin = new Streams.ReadStream(process.stdin);
 			var stdout = new Streams.WriteStream(process.stdout);
 
-			var battleStream = new BattleTextStream();
+			var battleStream = new BattleTextStream({
+				debug: process.argv[3] === '--debug'
+			});
+			battleStream.start();
 			stdin.pipeTo(battleStream);
 			battleStream.pipeTo(stdout);
 		}
 		break;
 	case 'unpack-team':
 		{
-			var Dex = require('./sim/dex');
-			var Streams = require('./lib/streams');
+			var Dex = require('./.sim-dist/dex');
+			var Streams = require('./.lib-dist/streams');
 			var stdin = new Streams.ReadStream(process.stdin);
 
 			stdin.readLine().then(function (packedTeam) {
@@ -174,8 +157,8 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		break;
 	case 'pack-team':
 		{
-			var Dex = require('./sim/dex');
-			var Streams = require('./lib/streams');
+			var Dex = require('./.sim-dist/dex');
+			var Streams = require('./.lib-dist/streams');
 			var stdin = new Streams.ReadStream(process.stdin);
 
 			stdin.readLine().then(function (unpackedTeam) {

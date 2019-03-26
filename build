@@ -1,0 +1,77 @@
+#!/usr/bin/env node
+
+try {
+	RegExp("\\p{Emoji}", "u");
+} catch (e) {
+	console.log("We require Node.js version 10 or later; you're using " + process.version);
+	process.exit(1);
+}
+
+var child_process = require('child_process');
+var fs = require('fs');
+var path = require('path');
+
+function shell(cmd) {
+	child_process.execSync(cmd, {stdio: 'inherit', cwd: __dirname});
+}
+
+function sucrase(src, out) {
+	shell(`npx sucrase -q ${src} -d ${out} --transforms typescript,imports --enable-legacy-typescript-module-interop`);
+}
+
+function replace(file, replacements) {
+	fs.lstat(file, function (err, stats) {
+		if (err) throw err;
+		if (stats.isSymbolicLink()) return;
+		if (stats.isFile()) {
+			if (!file.endsWith('.js')) return;
+			fs.readFile(file, "utf-8", function (err, text) {
+					if (err) throw err;
+					var anyMatch = false;
+					for (var i = 0; i < replacements.length; i++) {
+						anyMatch = anyMatch || text.match(replacements[i].regex);
+						if (anyMatch) text = text.replace(replacements[i].regex, replacements[i].replace);
+					}
+					if (!anyMatch) return;
+					fs.writeFile(file, text, function (err) {
+						if (err) throw err;
+					});
+				});
+		} else if (stats.isDirectory()) {
+			fs.readdir(file, function (err, files) {
+				if (err) throw err;
+				for (var i = 0; i < files.length; i++) {
+					replace(path.join(file, files[i]), replacements);
+				}
+			});
+		}
+	});
+}
+
+try {
+	require.resolve('sucrase');
+} catch (e) {
+	console.log('Installing dependencies...');
+	shell('npm install --production');
+}
+
+sucrase('./sim', './.sim-dist');
+sucrase('./lib', './.lib-dist');
+// NOTE: replace is asynchronous - add additional replacements for the same path in one call instead of making multiple calls.
+replace(path.join(__dirname, '.sim-dist'), [
+	{regex: new RegExp(`(require\\\(.*?)(lib)(.*?\\\))`), replace: `$1.lib-dist$3`},
+]);
+
+// Make sure config.js exists. If not, copy it over synchronously from
+// config-example.js, since it's needed before we can start the server
+try {
+	require.resolve('./config/config');
+} catch (err) {
+	if (err.code !== 'MODULE_NOT_FOUND') throw err; // should never happen
+
+	console.log('config.js does not exist. Creating one with default settings...');
+	fs.writeFileSync(
+		path.resolve(__dirname, 'config/config.js'),
+		fs.readFileSync(path.resolve(__dirname, 'config/config-example.js'))
+	);
+}

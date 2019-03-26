@@ -22,7 +22,7 @@ describe('Flower Gift', function () {
 		let baseSpd = battle.p1.active[1].getStat('spd');
 
 		// Set the weather to sun and re-check
-		battle.setWeather('sunnyday');
+		battle.field.setWeather('sunnyday', 'debug');
 		assert.strictEqual(battle.p1.active[0].getStat('atk'), battle.modify(cherAtk, 1.5));
 		assert.strictEqual(battle.p1.active[0].getStat('spd'), battle.modify(cherSpd, 1.5));
 		assert.strictEqual(battle.p1.active[1].getStat('atk'), battle.modify(baseAtk, 1.5));
@@ -35,14 +35,14 @@ describe('Flower Gift', function () {
 			[{species: "Blissey", ability: 'flowergift', moves: ['healbell']}, {species: "Blissey", ability: 'flowergift', moves: ['healbell']}],
 		]);
 
-		battle.makeChoices('move transform 1, move healbell 1', 'move healbell, move healbell');
+		battle.makeChoices('move transform 1, move healbell', 'move healbell, move healbell');
 		let cherAtk = battle.p1.active[0].getStat('atk');
 		let cherSpd = battle.p1.active[0].getStat('spd');
 		let baseAtk = battle.p1.active[1].getStat('atk');
 		let baseSpd = battle.p1.active[1].getStat('spd');
 
 		// Set the weather to sun and re-check
-		battle.setWeather('sunnyday');
+		battle.field.setWeather('sunnyday', 'debug');
 		assert.strictEqual(battle.p1.active[0].getStat('atk'), battle.modify(cherAtk, 1.5));
 		assert.strictEqual(battle.p1.active[0].getStat('spd'), battle.modify(cherSpd, 1.5));
 		assert.strictEqual(battle.p1.active[1].getStat('atk'), battle.modify(baseAtk, 1.5));

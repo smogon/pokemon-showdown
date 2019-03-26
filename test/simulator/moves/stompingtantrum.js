@@ -29,7 +29,7 @@ describe('Stomping Tantrum', function () {
 	it('should not double its Base Power if the last move used on the previous turn hit protect', function () {
 		battle = common.createBattle([
 			[{species: 'Marowak', ability: 'rockhead', moves: ['stompingtantrum']}],
-			[{species: 'Manaphy', ability: 'hydration', moves: ['protect']}],
+			[{species: 'Manaphy', ability: 'hydration', moves: ['protect', 'tailglow']}],
 		]);
 
 		battle.onEvent('BasePower', battle.getFormat(), function (basePower) {
@@ -37,7 +37,26 @@ describe('Stomping Tantrum', function () {
 		});
 
 		battle.makeChoices('move stompingtantrum', 'move protect');
-		battle.makeChoices('move stompingtantrum', 'move protect');
+		battle.makeChoices('move stompingtantrum', 'move tailglow');
+	});
+
+	it('should double its Base Power if the last move used was a spread move that partially hit protect and otherwise failed', function () {
+		battle = common.createBattle({gameType: 'doubles'});
+		battle.setPlayer('p1', {team: [
+			{species: 'Cresselia', ability: 'levitate', moves: ['sunnyday']},
+			{species: 'Groudon', ability: 'drought', moves: ['stompingtantrum', 'precipiceblades']},
+		]});
+		battle.setPlayer('p2', {team: [
+			{species: 'Tapu lele', ability: 'psychicsurge', moves: ['protect', 'calmmind']},
+			{species: 'Ho-Oh', ability: 'pressure', moves: ['recover']},
+		]});
+
+		battle.onEvent('BasePower', battle.getFormat(), function (basePower, attacker, defender, move) {
+			if (move.id === 'stompingtantrum') assert.strictEqual(basePower, 150);
+		});
+
+		battle.makeChoices('move sunnyday, move precipiceblades', 'move protect, move recover');
+		battle.makeChoices('move sunnyday, move stompingtantrum 1', 'move calmmind, move recover');
 	});
 
 	it('should not double its Base Power if the last move used on the previous turn was a successful Celebrate', function () {

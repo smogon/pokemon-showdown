@@ -8,8 +8,8 @@ class Worker extends EventEmitter {
 		this.id = id;
 		this.process = {connected: true};
 		this.sockets = new Set();
-		this.channels = new Map();
-		this.subchannels = new Map();
+		this.rooms = new Map();
+		this.roomChannels = new Map();
 		Sockets.workers.set(this.id, this);
 	}
 
@@ -24,15 +24,15 @@ class Worker extends EventEmitter {
 		case '>':
 			return this.sendToSocket(...params);
 		case '#':
-			return this.sendToChannel(...params);
+			return this.sendToRoom(...params);
 		case '+':
-			return this.addToChannel(...params);
+			return this.addToRoom(...params);
 		case '-':
-			return this.removeFromChannel(...params);
+			return this.removeFromRoom(...params);
 		case '.':
-			return this.moveToSubchannel(...params);
+			return this.moveToChannel(...params);
 		case ':':
-			return this.broadcastToSubchannels(params[0]);
+			return this.broadcastToChannels(params[0]);
 		}
 	}
 
@@ -46,9 +46,9 @@ class Worker extends EventEmitter {
 			throw new Error(`Attempted to disconnect nonexistent socket ${socketid}`);
 		}
 		this.sockets.delete(socketid);
-		this.channels.forEach((channel, channelid) => {
-			channel.delete(socketid);
-		});
+		for (const room of this.rooms.values()) {
+			room.delete(socketid);
+		}
 	}
 
 	sendToSocket(socketid, msg) {
@@ -58,75 +58,75 @@ class Worker extends EventEmitter {
 		}
 	}
 
-	sendToChannel(channelid, msg) {
-		if (!this.channels.has(channelid)) {
-			throw new Error(`Attempted to send ${msg} to nonexistent channel ${channelid}`);
+	sendToRoom(roomid, msg) {
+		if (!this.rooms.has(roomid)) {
+			throw new Error(`Attempted to send ${msg} to nonexistent room ${roomid}`);
 		}
 	}
 
-	addToChannel(channelid, socketid) {
+	addToRoom(roomid, socketid) {
 		socketid = +socketid;
-		if (!this.channels.has(channelid)) {
-			this.channels.set(channelid, new Set([socketid]));
+		if (!this.rooms.has(roomid)) {
+			this.rooms.set(roomid, new Set([socketid]));
 			return;
 		}
 
-		let channel = this.channels.get(channelid);
-		if (channel.has(socketid)) {
-			throw new Error(`Attempted to redundantly add socket ${socketid} to channel ${channelid}`);
+		let room = this.rooms.get(roomid);
+		if (room.has(socketid)) {
+			throw new Error(`Attempted to redundantly add socket ${socketid} to room ${roomid}`);
 		}
-		channel.add(socketid);
+		room.add(socketid);
 	}
 
-	removeFromChannel(channelid, socketid) {
+	removeFromRoom(roomid, socketid) {
 		socketid = +socketid;
-		if (!this.channels.has(channelid)) {
-			throw new Error(`Attempted to remove socket ${socketid} from nonexistent channel ${channelid}`);
+		if (!this.rooms.has(roomid)) {
+			throw new Error(`Attempted to remove socket ${socketid} from nonexistent room ${roomid}`);
 		}
 
-		let channel = this.channels.get(channelid);
+		let room = this.rooms.get(roomid);
+		if (!room.has(socketid)) {
+			throw new Error(`Attempted to remove nonexistent socket ${socketid} from room ${roomid}`);
+		}
+
+		room.delete(socketid);
+		if (!room.size) {
+			this.rooms.delete(roomid);
+			this.roomChannels.delete(roomid);
+		}
+	}
+
+	moveToChannel(roomid, channelid, socketid) {
+		socketid = +socketid;
+		if (!this.rooms.has(roomid)) {
+			throw new Error(`Attempted to move socket ${socketid} to channel ${channelid} of nonexistent room ${roomid}`);
+		}
+
+		if (!this.roomChannels.has(roomid)) {
+			if (channelid === '0') return;
+			this.roomChannels.set(roomid, new Map([[socketid, channelid]]));
+			return;
+		}
+
+		let channel = this.roomChannels.get(roomid);
 		if (!channel.has(socketid)) {
-			throw new Error(`Attempted to remove nonexistent socket ${socketid} from channel ${channelid}`);
-		}
-
-		channel.delete(socketid);
-		if (!channel.size) {
-			this.channels.delete(channelid);
-			this.subchannels.delete(channelid);
-		}
-	}
-
-	moveToSubchannel(channelid, subchannelid, socketid) {
-		socketid = +socketid;
-		if (!this.channels.has(channelid)) {
-			throw new Error(`Attempted to move socket ${socketid} to subchannel ${subchannelid} of nonexistent channel ${channelid}`);
-		}
-
-		if (!this.subchannels.has(channelid)) {
-			if (subchannelid === '0') return;
-			this.subchannels.set(channelid, new Map([[socketid, subchannelid]]));
+			if (channelid !== '0') channel.set(socketid, channelid);
 			return;
 		}
 
-		let subchannel = this.subchannels.get(channelid);
-		if (!subchannel.has(socketid)) {
-			if (subchannelid !== '0') subchannel.set(socketid, subchannelid);
-			return;
-		}
-
-		if (subchannelid === '0') {
-			subchannel.delete(socketid);
+		if (channelid === '0') {
+			channel.delete(socketid);
 		} else {
-			subchannel.set(socketid, subchannelid);
+			channel.set(socketid, channelid);
 		}
 	}
 
-	broadcastToSubchannels(channelid) {
-		if (!this.channels.has(channelid)) {
-			throw new Error(`Attempted to broadcast to subchannels of nonexistent channel ${channelid}`);
+	broadcastToChannels(roomid) {
+		if (!this.rooms.has(roomid)) {
+			throw new Error(`Attempted to broadcast to roomChannels of nonexistent room ${roomid}`);
 		}
-		if (!this.subchannels.has(channelid)) {
-			throw new Error(`Attempted to broadcast to nonexistent subchannels of channel ${channelid}`);
+		if (!this.roomChannels.has(roomid)) {
+			throw new Error(`Attempted to broadcast to nonexistent roomChannels of room ${roomid}`);
 		}
 	}
 }

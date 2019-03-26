@@ -18,10 +18,10 @@ describe.skip('Sockets', function () {
 	});
 
 	afterEach(function () {
-		Sockets.workers.forEach((worker, workerid) => {
+		for (const [workerid, worker] of Sockets.workers) {
 			worker.kill();
 			Sockets.workers.delete(workerid);
-		});
+		}
 	});
 
 	describe('master', function () {
@@ -125,88 +125,88 @@ describe.skip('Sockets', function () {
 			}, mockReceive));
 		});
 
-		it('should create a channel for the first socket to get added to it', function () {
+		it('should create a room for the first socket to get added to it', function () {
 			let queryChannel;
 			return spawnSocket(worker => data => {
 				let sid = data.substr(1, data.indexOf('\n'));
 				let cid = 'global';
 				queryChannel = `$
-					let channel = channels.get(${cid});
-					process.send(channel && channel.has(${sid}));`;
-				Sockets.channelAdd(worker, cid, sid);
+					let room = rooms.get(${cid});
+					process.send(room && room.has(${sid}));`;
+				Sockets.roomAdd(worker, cid, sid);
 			}).then(chain(worker => data => {
 				assert.ok(data);
 			}, queryChannel));
 		});
 
-		it('should remove a channel if the last socket gets removed from it', function () {
+		it('should remove a room if the last socket gets removed from it', function () {
 			let queryChannel;
 			return spawnSocket(worker => data => {
 				let sid = data.substr(1, data.indexOf('\n'));
 				let cid = 'global';
 				queryChannel = `$
-					process.send(!sockets.has(${sid}) && !channels.has(${cid}));`;
-				Sockets.channelAdd(worker, cid, sid);
-				Sockets.channelRemove(worker, cid, sid);
+					process.send(!sockets.has(${sid}) && !rooms.has(${cid}));`;
+				Sockets.roomAdd(worker, cid, sid);
+				Sockets.roomRemove(worker, cid, sid);
 			}).then(chain(worker => data => {
 				assert.ok(data);
 			}, queryChannel));
 		});
 
-		it('should send to all sockets in a channel', function () {
+		it('should send to all sockets in a room', function () {
 			let msg = 'ayy lmao';
 			let cid = 'global';
-			let channelSend = `#${cid}\n${msg}`;
+			let roomSend = `#${cid}\n${msg}`;
 			return spawnSocket(worker => data => {
 				let sid = data.substr(1, data.indexOf('\n'));
-				Sockets.channelAdd(worker, cid, sid);
+				Sockets.roomAdd(worker, cid, sid);
 			}).then(chain(worker => data => {
 				assert.strictEqual(data, msg);
-			}, channelSend));
+			}, roomSend));
 		});
 
-		it('should create a subchannel when moving a socket to it', function () {
-			let querySubchannel;
+		it('should create a channel when moving a socket to it', function () {
+			let queryChannel;
 			return spawnSocket(worker => data => {
 				let sid = data.substr(1, data.indexOf('\n'));
 				let cid = 'battle-ou-1';
 				let scid = '1';
-				querySubchannel = `$
-					let subchannel = subchannels[${cid}];
-					process.send(!!subchannel && (subchannel.get(${sid}) === ${scid}));`;
-				Sockets.subchannelMove(worker, cid, scid, sid);
+				queryChannel = `$
+					let channel = roomChannels[${cid}];
+					process.send(!!channel && (channel.get(${sid}) === ${scid}));`;
+				Sockets.channelMove(worker, cid, scid, sid);
 			}).then(chain(worker => data => {
 				assert.ok(data);
-			}, querySubchannel));
+			}, queryChannel));
 		});
 
-		it('should remove a subchannel when removing its last socket', function () {
-			let querySubchannel;
+		it('should remove a channel when removing its last socket', function () {
+			let queryChannel;
 			return spawnSocket(worker => data => {
 				let sid = data.substr(1, data.indexOf('\n'));
 				let cid = 'battle-ou-1';
 				let scid = '1';
-				querySubchannel = `$
-					let subchannel = subchannels.get(${cid});
-					process.send(!!subchannel && (subchannel.get(${sid}) === ${scid}));`;
-				Sockets.subchannelMove(worker, cid, scid, sid);
-				Sockets.channelRemove(worker, cid, sid);
+				queryChannel = `$
+					let channel = roomChannels.get(${cid});
+					process.send(!!channel && (channel.get(${sid}) === ${scid}));`;
+				Sockets.channelMove(worker, cid, scid, sid);
+				Sockets.roomRemove(worker, cid, sid);
 			}).then(chain(worker => data => {
 				assert.ok(data);
-			}, querySubchannel));
+			}, queryChannel));
 		});
 
-		it('should send to sockets in a subchannel', function () {
+		it('should send to sockets in a channel', function () {
 			let cid = 'battle-ou-1';
 			let msg = 'ayy lmao';
-			let subchannelSend = `.${cid}\n\n|split\n\n${msg}\n\n`;
+			let buf = `.${cid}\n\n|split\n\n${msg}\n\n`;
 			return spawnSocket(worker => data => {
 				let sid = data.substr(1, data.indexOf('\n'));
 				let scid = '1';
-				Sockets.subchannelMove(worker, cid, scid, sid);
+				Sockets.channelMove(worker, cid, scid, sid);
 			}).then(chain(worker => data => {
 				assert.strictEqual(data, msg);
-			}, subchannelSend));
+			}, buf));
 		});
 	});
 });

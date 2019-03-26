@@ -12,16 +12,16 @@ describe('Transform', function () {
 
 	it('should copy the Pokemon\'s template', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Hoopa-Unbound", ability: 'magician', moves: ['rest']}]);
+		battle.setPlayer('p1', {team: [{species: "Ditto", ability: 'limber', moves: ['transform']}]});
+		battle.setPlayer('p2', {team: [{species: "Hoopa-Unbound", ability: 'magician', moves: ['rest']}]});
 		battle.makeChoices('move transform', 'move rest');
 		assert.strictEqual(battle.p1.active[0].template, battle.p2.active[0].template);
 	});
 
 	it('should copy all stats except HP', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Mewtwo", ability: 'pressure', moves: ['rest']}]);
+		battle.setPlayer('p1', {team: [{species: "Ditto", ability: 'limber', moves: ['transform']}]});
+		battle.setPlayer('p2', {team: [{species: "Mewtwo", ability: 'pressure', moves: ['rest']}]});
 		battle.makeChoices('move transform', 'move rest');
 		let p1poke = battle.p1.active[0];
 		let p2poke = battle.p2.active[0];
@@ -34,8 +34,8 @@ describe('Transform', function () {
 
 	it('should copy all stat changes', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Mew", ability: 'synchronize', item: 'laggingtail', moves: ['calmmind', 'agility', 'transform']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Scolipede", ability: 'swarm', moves: ['honeclaws', 'irondefense', 'doubleteam']}]);
+		battle.setPlayer('p1', {team: [{species: "Mew", ability: 'synchronize', item: 'laggingtail', moves: ['calmmind', 'agility', 'transform']}]});
+		battle.setPlayer('p2', {team: [{species: "Scolipede", ability: 'swarm', moves: ['honeclaws', 'irondefense', 'doubleteam']}]});
 		for (let i = 1; i <= 3; i++) {
 			battle.makeChoices('move ' + i, 'move ' + i);
 		}
@@ -48,16 +48,16 @@ describe('Transform', function () {
 
 	it("should copy the target's focus energy status", function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Sawk", ability: 'sturdy', moves: ['focusenergy']}]);
+		battle.setPlayer('p1', {team: [{species: "Ditto", ability: 'limber', moves: ['transform']}]});
+		battle.setPlayer('p2', {team: [{species: "Sawk", ability: 'sturdy', moves: ['focusenergy']}]});
 		battle.makeChoices('move transform', 'move focusenergy');
 		assert.ok(battle.p1.active[0].volatiles['focusenergy']);
 	});
 
 	it('should copy the target\'s moves with 5 PP each', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Mew", ability: 'synchronize', moves: ['rest', 'psychic', 'energyball', 'hyperbeam']}]);
+		battle.setPlayer('p1', {team: [{species: "Ditto", ability: 'limber', moves: ['transform']}]});
+		battle.setPlayer('p2', {team: [{species: "Mew", ability: 'synchronize', moves: ['rest', 'psychic', 'energyball', 'hyperbeam']}]});
 		let p1poke = battle.p1.active[0];
 		let p2poke = battle.p2.active[0];
 		battle.makeChoices('move transform', 'move rest');
@@ -73,50 +73,50 @@ describe('Transform', function () {
 
 	it('should copy and activate the target\'s ability', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Arcanine", ability: 'intimidate', moves: ['rest']}]);
+		battle.setPlayer('p1', {team: [{species: "Ditto", ability: 'limber', moves: ['transform']}]});
+		battle.setPlayer('p2', {team: [{species: "Arcanine", ability: 'intimidate', moves: ['rest']}]});
 		battle.makeChoices('move transform', 'move rest');
 		assert.strictEqual(battle.p2.active[0].boosts['atk'], -1);
 	});
 
 	it('should not copy speed boosts from Unburden', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Hitmonlee", ability: 'unburden', item: 'normalgem', moves: ['feint']}]);
+		battle.setPlayer('p1', {team: [{species: "Ditto", ability: 'limber', moves: ['transform']}]});
+		battle.setPlayer('p2', {team: [{species: "Hitmonlee", ability: 'unburden', item: 'normalgem', moves: ['feint']}]});
 		battle.makeChoices('move transform', 'move feint');
 		assert.notStrictEqual(battle.p1.active[0].getStat('spe'), battle.p2.active[0].getStat('spe'));
 	});
 
 	it('should fail against Pokemon with a Substitute', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Mewtwo", ability: 'pressure', moves: ['substitute']}]);
+		battle.setPlayer('p1', {team: [{species: "Ditto", ability: 'limber', moves: ['transform']}]});
+		battle.setPlayer('p2', {team: [{species: "Mewtwo", ability: 'pressure', moves: ['substitute']}]});
 		battle.makeChoices('move transform', 'move substitute');
 		assert.notStrictEqual(battle.p1.active[0].template, battle.p2.active[0].template);
 	});
 
 	it('should fail against Pokemon with Illusion active', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
-		battle.join('p2', 'Guest 2', 1, [
+		battle.setPlayer('p1', {team: [{species: "Ditto", ability: 'limber', moves: ['transform']}]});
+		battle.setPlayer('p2', {team: [
 			{species: "Zoroark", ability: 'illusion', moves: ['rest']},
 			{species: "Mewtwo", ability: 'pressure', moves: ['rest']},
-		]);
+		]});
 		battle.makeChoices('move transform', 'move rest');
 		assert.notStrictEqual(battle.p1.active[0].template, battle.p2.active[0].template);
 	});
 
 	it('should fail against tranformed Pokemon', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
-		battle.join('p2', 'Guest 2', 1, [
+		battle.setPlayer('p1', {team: [{species: "Ditto", ability: 'limber', moves: ['transform']}]});
+		battle.setPlayer('p2', {team: [
 			{species: "Magikarp", ability: 'rattled', moves: ['splash']},
 			{species: "Mew", ability: 'synchronize', moves: ['transform']},
-		]);
+		]});
 		battle.makeChoices('move transform', 'move splash');
 		assert.strictEqual(battle.p1.active[0].template, battle.p2.active[0].template);
-		battle.makeChoices('move transform', 'switch 2');
-		battle.makeChoices('move transform', 'move transform');
+		battle.makeChoices('move splash', 'switch 2');
+		battle.makeChoices('move splash', 'move transform');
 		assert.notStrictEqual(battle.p1.active[0].template, battle.p2.active[0].template);
 	});
 
@@ -147,8 +147,8 @@ describe('Transform [Gen 5]', function () {
 
 	it("should not copy the target's focus energy status", function () {
 		battle = common.gen(5).createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Ditto", ability: 'limber', moves: ['transform']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Sawk", ability: 'sturdy', moves: ['focusenergy']}]);
+		battle.setPlayer('p1', {team: [{species: "Ditto", ability: 'limber', moves: ['transform']}]});
+		battle.setPlayer('p2', {team: [{species: "Sawk", ability: 'sturdy', moves: ['focusenergy']}]});
 		assert.constant(() => battle.p1.active[0].volatiles['focusenergy'], () => battle.makeChoices('move transform', 'move focusenergy'));
 	});
 });
@@ -191,7 +191,7 @@ describe('Transform [Gen 4]', function () {
 			[{species: "Ditto", ability: 'limber', moves: ['transform']}],
 			[{species: "Mewtwo", ability: 'pressure', moves: ['substitute']}],
 		]);
-		battle.makeChoices('move transform', 'move rest');
+		battle.makeChoices('move transform', 'move substitute');
 		assert.strictEqual(battle.p1.active[0].template, battle.p2.active[0].template);
 	});
 });

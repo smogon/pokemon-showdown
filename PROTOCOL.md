@@ -19,6 +19,8 @@ Client implementations you might want to look at for reference include:
     https://github.com/TalkTakesTime/Pokemon-Showdown-Bot
 - Nixola's chat bot (Lua) -
     https://github.com/Nixola/NixPSbot
+- Morfent's chat bot (Perl 6) -
+    https://github.com/Kaiepi/p6-PSBot
 - the official client (HTML5 + JavaScript) -
     https://github.com/Zarel/Pokemon-Showdown-Client
 
@@ -373,419 +375,152 @@ represented by a space), and the rest of the string being their username.
 > You have `TIME` seconds to make or accept a challenge, or else you will be
 > disqualified for inactivity.
 
-Battle messages
----------------
 
-In addition to room messages, battles have their own messages.
+Battles
+-------
 
-### Battle initialization
+### Playing battles
 
-`|player|PLAYER|USERNAME|AVATAR`
+Battle rooms will have a mix of room messages and battle messages. [Battle
+messages are documented in `SIM-PROTOCOL.md`][sim-protocol].
 
-> Appears when you join a battle room. `PLAYER` denotes which player it is
-> (`p1` or `p2`) and `USERNAME` is the username. `AVATAR` is the player's
-> avatar identifier (usually a number, but other values can be used for
-> custom avatars).
+  [sim-protocol]: https://github.com/Zarel/Pokemon-Showdown/blob/master/sim/SIM-PROTOCOL.md
 
-    |gametype|GAMETYPE
-    |gen|GENNUM
-    |tier|TIERNAME
-    |rated
-    |rule|RULE: DESCRIPTION
+To make decisions in battle, players should use the `/choose` command,
+[also documented in `SIM-PROTOCOL.md`][sending-decisions].
 
-> Additional details when you join a battle room. `GAMETYPE` is one of
-> `singles`, `doubles`, or `triples`; `GENNUM` denotes the generation of
-> Pokémon being played; `tier` is the format; and `rule` appears multiple
-> times, once for each clause in effect. `rated` only appears if the battle
-> is rated.
+  [sending-decisions]: https://github.com/Zarel/Pokemon-Showdown/blob/master/sim/SIM-PROTOCOL.md#sending-decisions
 
-    |clearpoke
-    |poke|PLAYER|DETAILS|ITEM
-    |poke|PLAYER|DETAILS|ITEM
-    ...
-    |teampreview
+### Starting battles through challenges
 
-> These messages appear if you're playing a format that uses team previews.
-> `PLAYER` is the player ID (see `|player|`) and `DETAILS` describes the
-> pokemon. `|teampreview` commonly appears after `|rule` tags instead of
-> immediately after the pokemon list.
->
-> The format for `DETAILS` is described in `|switch|`, although not
-> everything may be revealed. In particular, forme is sometimes not
-> specified (so Arceus would appear as `Arceus-*` since it's impossible
-> to identify Arceus forme in Team Preview).
+`|updatechallenges|JSON`
 
-`|start`
+> `JSON` is a JSON object representing the current state of who the user
+> is challenging and who is challenging the user. You'll get this whenever
+> challenges update (when you challenge someone, when you receive a challenge,
+> when you or someone you challenged accepts/rejects/cancels a challenge).
 
-> Indicates that the game has started.
+`JSON.challengesFrom` will be a `{userid: format}` table of received
+challenges.
 
-### Battle progress
+`JSON.challengeTo` will be a challenge if you're challenging someone, or `null`
+if you haven't.
 
-`|request|REQUEST`
+If you are challenging someone, `challengeTo` will be in the format:
+`{"to":"player1","format":"gen7randombattle"}`.
 
-> Gives a JSON object containing a request for a choice (to move or
-> switch). To assist in your decision, `REQUEST.active` has information
-> about your active Pokémon, and `REQUEST.side` has information about your
-> your team as a whole.
-
-`|inactive|MESSAGE` or `|inactiveoff|MESSAGE`
-
-> A message related to the battle timer has been sent. The official client
-> displays these messages in red.
->
-> `inactive` means that the timer is on at the time the message was sent,
-> while `inactiveoff` means that the timer is off.
-
-`|turn|NUMBER`
-
-> It is now turn `NUMBER`.
-
-`|win|USER`
-
-> `USER` has won the battle.
-
-`|tie`
-
-> The battle has ended in a tie.
-
-### Identifying Pokémon
-
-Pokémon can be identified either by a Pokémon ID (generally labeled
-`POKEMON` in this document), or a details string (generally labeled
-`DETAILS`).
-
-A Pokémon ID is in the form `POSITION: NAME`. `POSITION` is the spot that
-the Pokémon is in: it consists of the `PLAYER` of the player (see
-`|player|`), followed by a letter indicating the given Pokémon's position,
-counting from `a`.
-
-An inactive Pokémon will not have a position letter.
-
-In doubles and triples battles, `a` will refer to the leftmost Pokémon
-on one team and the rightmost Pokémon on the other (so `p1a` faces `p2c`,
-etc). `NAME` is the nickname of the Pokémon performing the action.
-
-For example: `p1a: Sparky` could be a Charizard named Sparky.
-`p1: Dragonite` could be an inactive Dragonite being healed by Heal Bell.
-
-`DETAILS` is a comma-separated list of all information about a pokemon
-visible on the battle screen: species, shininess, gender, and level. So it
-starts with `SPECIES`, adding `, shiny` if it's shiny, `, M` if it's male,
-`, F` if it's female, `, L##` if it's not level 100.
+To challenge someone, send:
 
-So, for instance, `Deoxys-Speed` is a level 100 non-shiny genderless
-Deoxys (Speed forme). `Sawsbuck, shiny, F, L50` is a level 50 shiny female
-Sawsbuck (Spring form).
-
-In Team Preview, `DETAILS` will not include information not available in
-Team Preview (in particular, level and shininess will be left off), and
-for Pokémon whose forme isn't revealed in Team Preview, it will be given as
-`-*`. So, for instance, an Arceus in Team Preview would have the details
-string `Arceus-*`.
-
-For most commands, you can just use the position information in the
-Pokémon ID to identify the Pokémon. Only a few commands actually change the
-Pokémon in that position (`|switch|` switching, `|replace|` illusion dropping,
-`|drag|` phazing, and `|detailschange|` permanent forme changes), and these
-all specify `DETAILS` for you to perform updates with.
-
-### Major actions
-
-In battle, most Pokémon actions come in the form `|ACTION|POKEMON|DETAILS`
-followed by a few messages detailing what happens after the action occurs.
-
-Battle actions (especially minor actions) often come with tags such as
-`|[from] EFFECT|[of] SOURCE`. `EFFECT` will be an effect (move, ability,
-item, status, etc), and `SOURCE` will be a Pokémon. These can affect the
-message or animation displayed, but do not affect anything else. Other 
-tags include `|[still]` (suppress animation) and `|[silent]` (suppress
-message).
-
-`|move|POKEMON|MOVE|TARGET`
-
-> The specified Pokémon has used move `MOVE` at `TARGET`. If a move has
-> multiple targets or no target, `TARGET` should be ignored. If a move
-> targets a side, `TARGET` will be a (possibly fainted) Pokémon on that
-> side.
->
-> If `|[miss]` is present, the move missed.
->
-> `|[anim] MOVE2` tells the client to use the animation of `MOVE2` instead
-> of `MOVE` when displaying to the client.
+    /utm TEAM
+    /challenge USERNAME, FORMAT
 
-`|switch|POKEMON|DETAILS|HP STATUS` or `|drag|POKEMON|DETAILS|HP STATUS`
-
-> A Pokémon identified by `POKEMON` has switched in (if there was an old
-> Pokémon in that position, it is switched out).
->
-> For the DETAILS format, see "Identifying Pokémon" above.
->
-> `POKEMON|DETAILS` represents all the information that can be used to tell
-> Pokémon apart. If two pokemon have the same `POKEMON|DETAILS` (which will
-> never happen in any format with Species Clause), you usually won't be able
-> to tell if the same pokemon switched in or a different pokemon switched
-> in.
->
-> The switched Pokémon has HP `HP`, and status `STATUS`. `HP` is specified as
-> a fraction; if it is your own Pokémon then it will be `CURRENT/MAX`, if not,
-> it will be `/100` if HP Percentage Mod is in effect and `/48` otherwise.
-> `STATUS` can be left blank, or it can be `slp`, `par`, etc.
->
-> `switch` means it was intentional, while `drag` means it was unintentional
-> (forced by Whirlwind, Roar, etc).
+To cancel a challenge you made to someone, send:
 
-`|detailschange|POKEMON|DETAILS|HP STATUS` or 
-`|-formechange|POKEMON|SPECIES|HP STATUS`
+    /cancelchallenge USERNAME
 
-> The specified Pokémon has changed formes (via Mega Evolution, ability, etc.) 
-> to `SPECIES`. If the forme change is permanent (Mega Evolution or a 
-> Shaymin-Sky that is frozen), then `detailschange` will appear; otherwise, 
-> the client will send `-formechange`.
->
-> Syntax is the same as `|switch|` above.
+To reject a challenge you received from someone, send:
 
-`|replace|POKEMON|DETAILS|HP STATUS`
+    /reject USERNAME
 
-> Illusion has ended for the specified Pokémon. Syntax is the same as `|switch|`
-> above, but remember that everything you thought you knew about the previous
-> Pokémon is now wrong.
->
-> `POKEMON` will be the NEW Pokémon ID - i.e. it will have the nickname of the
-> Zoroark (or other Illusion user).
+To accept a challenge you received from someone, send:
 
-`|swap|POKEMON|POSITION`
+    /utm TEAM
+    /accept USERNAME
 
-> Moves already active `POKEMON` to active field `POSITION` where the
-> leftmost position is 0 and each position to the right counts up by 1.
+Teams are in packed format (see "Team format" below). `TEAM` can also be
+`null`, if the format doesn't require user-built teams, such as Random Battle.
 
-`|cant|POKEMON|REASON` or `|cant|POKEMON|REASON|MOVE`
+Invalid teams will send a `|popup|` with validation errors, and the `/accept`
+or `/challenge` command won't take effect.
 
-> The Pokémon `POKEMON` could not perform a move because of the indicated
-> `REASON` (such as paralysis, Disable, etc). Sometimes, the move it was
-> trying to use is given.
+If the challenge is accepted, you will receive a room initialization message.
 
-`|faint|POKEMON`
+### Starting battles through laddering
 
-> The Pokémon `POKEMON` has fainted.
+`|updatesearch|JSON`
 
-### Minor actions
+> `JSON` is a JSON object representing the current state of what battles the
+> user is currently searching for. You'll get this whenever searches update
+> (when you search, cancel a search, or you start or end a battle)
 
-Minor actions are less important than major actions. In the official client,
-they're usually displayed in small font if they have a message. Pretty much
-anything that happens in a battle other than a switch or the fact that a move
-was used is a minor action. So yes, the effects of a move such as damage or
-stat boosts are minor actions.
+`JSON.searching` will be an array of format IDs you're currently searching for
+games in.
 
-`|-fail|POKEMON|ACTION`
+`JSON.games` will be a `{roomid: title}` table of games you're currently in.
+Note that this includes ALL games, so `|updatesearch|` will be sent when you
+start/end challenge battles, and even non-Pokémon games like Mafia.
 
-> The specified `ACTION` has failed against the `POKEMON` targetted. The `ACTION`
->  in question can be a move that fails, or a stat drop blocked by an ability
-> like Hyper Cutter, in which case `ACTION` will be `unboost|STAT`, where `STAT`
-> indicates where the ability prevents stat drops. (For abilities that block all
-> stat drops, like Clear Body, `|STAT` does not appear.) 
+To search for a battle against a random opponent, send:
 
-`|-damage|POKEMON|HP STATUS`
+    /utm TEAM
+    /search FORMAT
 
-> The specified Pokémon `POKEMON` has taken damage, and is now at
-> `HP STATUS` (see `|switch|` for details).
->
-> If `HP` is 0, `STATUS` should be ignored. The current behavior is for
-> `STATUS` to be `fnt`, but this may change and should not be relied upon.
+Teams are in packed format (see "Team format" below). `TEAM` can also be
+`null`, if the format doesn't require user-built teams, such as Random Battle.
 
-`|-heal|POKEMON|HP STATUS`
+To cancel searching, send:
 
-> Same as `-damage`, but the Pokémon has healed damage instead.
+    /cancelsearch
 
-`|-status|POKEMON|STATUS`
+### Team format
 
-> The Pokémon `POKEMON` has been inflicted with `STATUS`.
+Pokémon Showdown's main way of representing teams is in packed format. This
+format is implemented in `Dex.packTeam` and `Dex.fastUnpackTeam` in
+`sim/dex.js`.
 
-`|-curestatus|POKEMON|STATUS`
+If you're not using JavaScript and don't want to reimplement these conversions,
+Pokémon Showdown's command-line client can convert between packed teams and
+JSON using standard IO. Run `./pokemon-showdown --help` for details.
 
-> The Pokémon `POKEMON` has recovered from `STATUS`.
+If you really want to write your own converter, the format looks something like
+this:
 
-`|-cureteam|POKEMON`
+```
+Lumineon||focussash|1|defog,scald,icebeam,uturn||85,85,85,85,85,85||||83|]
+Glaceon||lifeorb||toxic,hiddenpowerground,shadowball,icebeam||81,,85,85,85,85||,0,,,,||83|]
+Crabominable||choiceband|1|closecombat,earthquake,stoneedge,icehammer||85,85,85,85,85,85||||83|]
+Toxicroak||lifeorb|1|drainpunch,suckerpunch,gunkshot,substitute||85,85,85,85,85,85||||79|]
+Bouffalant||choiceband||earthquake,megahorn,headcharge,superpower||85,85,85,85,85,85||||83|]
+Qwilfish||blacksludge|H|thunderwave,destinybond,liquidation,painsplit||85,85,85,85,85,85||||83|
+```
 
-> The Pokémon `POKEMON` has used a move that cures its team of status effects, 
-> like Heal Bell.
+(Line breaks added for readability - this is all one line normally.)
 
-`|-boost|POKEMON|STAT|AMOUNT`
+The format is a list of pokemon delimited by `]`, where every Pokémon is:
 
-> The specified Pokémon `POKEMON` has gained `AMOUNT` in `STAT`, using the
-> standard rules for Pokémon stat changes in-battle. `STAT` is a standard
-> three-letter abbreviation fot the stat in question, so Speed will be `spe`,
-> Special Defense will be `spd`, etc.
+```
+NICKNAME|SPECIES|ITEM|ABILITY|MOVES|NATURE|EVS|GENDER|IVS|SHINY|LEVEL|HAPPINESS,POKEBALL,HIDDENPOWERTYPE
+```
 
-`|-unboost|POKEMON|STAT|AMOUNT`
+- `SPECIES` is left blank if it's identical to `NICKNAME`
 
-> Same as `-boost`, but for negative stat changes instead.
+- `ABILITY` is `0`, `1`, or `H` if it's the ability from the corresponding slot
+  for the Pokémon. It can also be an ability string, for Hackmons etc.
 
-`|-weather|WEATHER`
+- `MOVES` is a comma-separated list of move IDs.
 
-> Indicates the weather that is currently in effect. If `|[upkeep]` is present,
-> it means that `WEATHER` was active previously and is still in effect that
-> turn. Otherwise, it means that the weather has changed due to a move or ability,
-> or has expired, in which case `WEATHER` will be `none`.
+- `EVS` and `IVS` are comma-separated in standard order:
+  HP, Atk, Def, SpA, SpD, Spe. EVs left blank are 0, IVs left blank are 31.
+  If all EVs or IVs are blank, the commas can all be left off.
 
-`|-fieldstart|CONDITION`
+- `EVS` represent AVs in Pokémon Let's Go.
 
-> The field condition `CONDITION` has started. Field conditions are all effects that
-> affect the entire field and aren't a weather. (For example: Trick Room, Grassy
-> Terrain)
+- `IVS` represent DVs in Gen 1-2. The IV will be divided by 2 and rounded down,
+  to become DVs (so the default of 31 IVs is converted to 15 DVs).
 
-`|-fieldend|CONDITION`
+- `IVS` is post-hyper-training: pre-hyper-training IVs are represented in
+  `HIDDENPOWERTYPE`
 
-> Indicates that the field condition `CONDITION` has ended.
+- `SHINY` is `S` for shiny, and blank for non-shiny.
 
-`|-sidestart|SIDE|CONDITION`
+- `LEVEL` is left blank for level 100.
 
-> A side condition `CONDITION` has started on `SIDE`. Side conditions are all effects
-> that affect one side of the field. (For example: Tailwind, Stealth Rock, Reflect)
+- `HAPPINESS` is left blank for 255.
 
-`|-sideend|SIDE|CONDITION`
+- `POKEBALL` is left blank if it's a regular Poké Ball.
 
-> Indicates that the side condition `CONDITION` ended for the given `SIDE`.
+- `HIDDENPOWERTYPE` is left blank if the Pokémon is not Hyper Trained, or if
+  Hyper Training doesn't affect IVs.
 
-`|-crit|POKEMON`
-
-> A move has dealt a critical hit against the `POKEMON`.
-
-`|-supereffective|POKEMON`
-
-> A move was super effective against the `POKEMON`.
-
-`|-resisted|POKEMON`
-
-> A move was not very effective against the `POKEMON`.
-
-`|-immune|POKEMON`
-
-> The `POKEMON` was immune to a move.
-
-`|-item|POKEMON|ITEM`
-
-> The `ITEM` held by the `POKEMON` has been changed or revealed due to a move or 
-> ability. In addition, Air Balloon reveals itself when the Pokémon holding it 
-> switches in, so it will also cause this message to appear.
-
-`|-enditem|POKEMON|ITEM`
-
-> The `ITEM` held by `POKEMON` has been destroyed, and it now holds no item. This can 
-> be because of an item's own effects (consumed Berries, Air Balloon), or by a move or 
-> ability, like Knock Off. If a berry is consumed, it also has an additional modifier 
-> `|[eat]` to indicate that it was consumed. This message does not appear if the item's 
-> ownership was changed (with a move or ability like Thief or Trick), even if the move 
-> or ability would result in a Pokémon without an item.
-
-`|-ability|POKEMON|ABILITY`
-
-> The `ABILITY` of the `POKEMON` has been changed due to a move/ability, or it has
-> activated in a way that could not be better described by one of the other minor
-> messages. For example, Clear Body sends `-fail` when it blocks stat drops, while
-> Mold Breaker sends this message to reveal itself upon switch-in.
->
-> Note that Skill Swap does not send this message despite it changing abilities,
-> because it does not reveal abilities when used between allies in a Double or
-> Triple Battle.
-
-`|-endability|POKEMON`
-
-> The `POKEMON` has had its ability surpressed, either by a move like Gastro Acid, or 
-> by the effects of Mummy.
-
-`|-transform|POKEMON|SPECIES`
-
-> The Pokémon `POKEMON` has transformed into `SPECIES` by the effect of Transform 
-> or the ability Imposter.
-
-`|-mega|POKEMON|MEGASTONE`
-
-> The Pokémon `POKEMON` used `MEGASTONE` to Mega Evolve.
-
-`|-activate|EFFECT`
-
-> A miscellaneous effect has activated. This is triggered whenever an effect could 
-> not be better described by one of the other minor messages: for example, healing 
-> abilities like Water Absorb simply use `-heal`, and items that are consumed upon 
-> use have the `-enditem` message instead.
-
-`|-hint|MESSAGE`
-
-> Displays a message in parentheses to the client. Hint messages appear to explain and 
-> clarify why certain actions, such as Fake Out and Mat Block failing, have occurred,  
-> when there would normally be no in-game messages.
-
-`|-center`
-
-> Appears in Triple Battles when only one Pokémon remains on each side, to indicate
-> that the Pokémon have been automatically centered.
-
-`|-message|MESSAGE`
-
-> Displays a miscellaneous message to the client. These messages are primarily used 
-> for messages from game mods that aren't supported by the client, like rule clauses 
-> such as Sleep Clause, or other metagames with custom messages for specific scenarios. 
-
-I'll document all the message types eventually, but for now this should be
-enough to get you started. You can watch the data sent and received from
-the server on a regular connection, or look at the client source code
-for a full list of message types.
-
-### Action requests
-
-These are how the client sends the player's decisions to the server. All
-requests except `/undo` can be sent with `|RQID` at the end. `RQID` is
-`REQUEST.rqid` from `|request|`. Each `RQID` is a unique number used to
-identify which action the request was intended for and is used to protect
-against race conditions involving `/undo` (the cancel button).
-
-If an invalid request is sent, the game will replace the missing or
-erroneous request with a valid choice, which is usually the first usable
-move. 
-
-`|/team ORDER`
-
-> Chooses the team order. Numbers not listed are displaced to the back by swapping
-> them with the number that took their place. For example `/team 25` sets the team
-> order from default to 253416.
-
-`|/move NUMBER TARGET`
-
-> Uses your active Pokémon's `NUMBER`th move on `TARGET` Pokémon. `NUMBER` is usually
-> a number ranging from 1 to 4 (although it can range up to 24 in Custom Games where
-> Pokémon can have that many moves).
->
-> `TARGET` is optional and only needs to be specified for single target moves in
-> doubles/triples formats. Moves with `TARGET` specify which position they are trying
-> to use the move on as a number wherein the opposing Pokémon are positive integers
-> counting up from `1` starting on the right. Ally Pokémon targets are negative
-> integers counting down from `-1` starting on the left. 
->
-> If `mega` is added as a final parameter, the Pokémon will Mega Evolve if possible.
-
-`|/switch NUMBER`
-
-> Switches the active Pokémon with the `NUMBER`th Pokémon on the team. In cases where
-> a Pokémon is KOed, their replacement is also chosen with `/switch`. This should
-> correspond to a non-active, non-fainted Pokémon, which means `NUMBER` should be
-> between 2 and 6.
-
-`|/choose ACTION,ACTION,ACTION`
-
-> For doubles/triples formats, decisions are sent for all team positions in the same
-> line separated by commas. `ACTION` can be any of the following: `move`, `switch`,
-> `shift`, `pass`.
->
-> `move` and `switch` use the same syntax as their respective commands explained above
-> except without the `/`. In triples, `/choose shift` requests to `|swap|` the current
-> outside Pokémon to the middle team position. pass is used to indicate that the Pokémon
-> in that slot is not performing an action, for instance, because the Pokémon is fainted
-> and you have no non-fainted Pokémon to replace it with, or because the Pokémon is not
-> fainted while you are switching in replacements for fainted Pokémon. For example,
-> `/choose move 1 2,move 4 -1,pass` will have the leftmost Pokémon attack the opponent's
-> middle Pokémon with its first move, the middle Pokémon will attack its ally to the 
-> left with its fourth move, and the third team slot is empty.
-
-`|/undo`
-
-> Attempts to cancel the last request so a new one can be made.
+- If `POKEBALL` and `HIDDENPOWERTYPE` are both blank, the commas will be left
+  off.
