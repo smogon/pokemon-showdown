@@ -2328,7 +2328,7 @@ const commands = {
 		html = this.canHTML(html);
 		if (!html) return;
 		if (!this.can('addhtml', null, room)) return;
-		if (html.includes('\n')) html = Chat.removeLineBreaksInHTML(html)
+		if (html.includes('\n')) html = Chat.removeLineBreaksInHTML(html);
 		if (!user.can('addhtml')) {
 			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}

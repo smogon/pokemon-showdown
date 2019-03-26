@@ -1720,7 +1720,7 @@ Chat.removeLineBreaksInHTML = function (html) {
 	html = html.replace(/<[^>]*>/g, tag => tag.replace(/\n/g, ' '));
 	html = html.replace(/\n/g, '&#10;');
 	return html;
-}
+};
 
 /**
  * @param {Template} template
