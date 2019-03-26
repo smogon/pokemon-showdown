@@ -2416,15 +2416,13 @@ const pages = {
 			buf += `</tr>`;
 			for (const punishment of sortedPunishments) {
 				let expireString = Chat.toDurationString(punishment.expiresIn, {precision: 1});
-				let punishDesc = "";
-				punishDesc += (punishment.reason) ? `<td style="border: 1px solid black;">${punishment.reason}</td>` : `<td style="border: 1px solid black;"> - </td>`;
-				punishDesc += (punishment.alts.length) ? `<td style="border: 1px solid black;">${punishment.alts.join(", ")}</td>` : `<td style="border: 1px solid black;"> - </td>`;
-				punishDesc += (user.can('ban') && punishment.ip.length) ? `<td style="border: 1px solid black;">${punishment.ip.join(", ")}</td>` : (user.can('ban') && !punishment.ip.length) ? `<td style="border: 1px solid black;"> - </td>` : ``;
 				buf += `<tr>`;
 				buf += `<td style="border: 1px solid black;">${punishment.id}</td>`;
 				buf += `<td style="border: 1px solid black;">${punishment.punishType.toLowerCase()}</td>`;
 				buf += `<td style="border: 1px solid black;">${expireString}</td>`;
-				buf += `${punishDesc}`;
+				buf += (punishment.reason) ? `<td style="border: 1px solid black;">${punishment.reason}</td>` : `<td style="border: 1px solid black;"> - </td>`;
+				buf += (punishment.alts.length) ? `<td style="border: 1px solid black;">${punishment.alts.join(", ")}</td>` : `<td style="border: 1px solid black;"> - </td>`;
+				buf += (user.can('ban') && punishment.ip.length) ? `<td style="border: 1px solid black;">${punishment.ip.join(", ")}</td>` : (user.can('ban') && !punishment.ip.length) ? `<td style="border: 1px solid black;"> - </td>` : ``;
 				buf += `</tr>`;
 			}
 			buf += `</table>`;
