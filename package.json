@@ -5,7 +5,7 @@
   "version": "0.11.2",
   "dependencies": {
     "probe-image-size": "^4.0.0",
-    "sockjs": "0.3.18",
+    "sockjs": "0.3.19",
     "sucrase": "^3.9.5"
   },
   "optionalDependencies": {
@@ -57,14 +57,14 @@
   "license": "MIT",
   "devDependencies": {
     "@types/cloud-env": "^0.2.0",
-    "@types/node": "^8.10.36",
+    "@types/node": "^8.10.45",
     "@types/node-static": "^0.7.2",
-    "@types/nodemailer": "^4.6.5",
+    "@types/nodemailer": "^4.6.7",
     "@types/sockjs": "^0.3.31",
-    "eslint": "^5.13.0",
+    "eslint": "^5.15.3",
     "husky": "^1.1.2",
     "mocha": "^5.2.0",
     "tslint": "^5.13.0",
-    "typescript": "~3.3.3333"
+    "typescript": "^3.3.4000"
   }
 }
