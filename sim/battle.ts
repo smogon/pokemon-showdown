@@ -1629,16 +1629,16 @@ export class Battle extends Dex.ModdedDex {
 		for (const [i, curDamage] of damage.entries()) {
 			const target = targetArray[i];
 			let targetDamage = curDamage;
+			if (!(targetDamage || targetDamage === 0)) {
+				retVals[i] = targetDamage;
+				continue;
+			}
 			if (!target || !target.hp) {
 				retVals[i] = 0;
 				continue;
 			}
 			if (!target.isActive) {
 				retVals[i] = false;
-				continue;
-			}
-			if (!(targetDamage || targetDamage === 0)) {
-				retVals[i] = targetDamage;
 				continue;
 			}
 			if (targetDamage !== 0) targetDamage = this.clampIntRange(targetDamage, 1);
@@ -3182,7 +3182,7 @@ export class Battle extends Dex.ModdedDex {
 
 	secondaries(
 		targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove,
-		isSecondary?: boolean
+		isSelf?: boolean
 	): SpreadMoveDamage {
 		throw new UnimplementedError('secondaries');
 	}
