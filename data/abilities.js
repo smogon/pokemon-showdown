@@ -1484,7 +1484,7 @@ let BattleAbilities = {
 		shortDesc: "On switch-in, this Pokemon Transforms into the opposing Pokemon that is facing it.",
 		onStart(pokemon) {
 			if (this.activeMove && this.activeMove.id === 'skillswap') return;
-			const possibleTargets = pokemon.foes(false, true);
+			const possibleTargets = pokemon.foes(true);
 			const target = possibleTargets[possibleTargets.length - 1 - pokemon.position];
 			if (target) {
 				pokemon.transformInto(target, this.getAbility('imposter'));
@@ -1552,7 +1552,7 @@ let BattleAbilities = {
 		shortDesc: "On switch-in, this Pokemon lowers the Attack of adjacent opponents by 1 stage.",
 		onStart(pokemon) {
 			let activated = false;
-			for (const target of pokemon.foes(true)) {
+			for (const target of pokemon.adjacentFoes()) {
 				if (!activated) {
 					this.add('-ability', pokemon, 'Intimidate', 'boost');
 					activated = true;
@@ -3700,13 +3700,13 @@ let BattleAbilities = {
 		desc: "On switch-in, or when this Pokemon acquires this ability, this Pokemon copies a random adjacent opposing Pokemon's Ability. However, if one or more adjacent Pokemon has the Ability \"No Ability\", Trace won't copy anything even if there is another valid Ability it could normally copy. Otherwise, if there is no Ability that can be copied at that time, this Ability will activate as soon as an Ability can be copied. Abilities that cannot be copied are the previously mentioned \"No Ability\", as well as Comatose, Disguise, Flower Gift, Forecast, Illusion, Imposter, Multitype, Schooling, Stance Change, Trace, and Zen Mode.",
 		shortDesc: "On switch-in, or when it can, this Pokemon copies a random adjacent foe's Ability.",
 		onStart(pokemon) {
-			if (pokemon.foes(true).some(foeActive => foeActive.ability === 'noability')) {
+			if (pokemon.adjacentFoes().some(foeActive => foeActive.ability === 'noability')) {
 				this.effectData.gaveUp = true;
 			}
 		},
 		onUpdate(pokemon) {
 			if (!pokemon.isStarted || this.effectData.gaveUp) return;
-			let possibleTargets = pokemon.foes(true);
+			let possibleTargets = pokemon.adjacentFoes();
 			while (possibleTargets.length) {
 				let rand = 0;
 				if (possibleTargets.length > 1) rand = this.random(possibleTargets.length);

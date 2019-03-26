@@ -6189,7 +6189,7 @@ let BattleMovedex = {
 		flags: {protect: 1, mirror: 1},
 		onBasePowerPriority: 4,
 		onBasePower(basePower, pokemon) {
-			for (const active of pokemon.allies(false, true).concat(pokemon.foes(false, true))) {
+			for (const active of pokemon.allies(true).concat(pokemon.foes(true))) {
 				if (active && active.moveThisTurn === 'fusionflare') {
 					this.debug('double power');
 					return this.chainModify(2);
@@ -6217,7 +6217,7 @@ let BattleMovedex = {
 		flags: {protect: 1, mirror: 1, defrost: 1},
 		onBasePowerPriority: 4,
 		onBasePower(basePower, pokemon) {
-			for (const active of pokemon.allies(false, true).concat(pokemon.foes(false, true))) {
+			for (const active of pokemon.allies(true).concat(pokemon.foes(true))) {
 				if (active && active.moveThisTurn === 'fusionbolt') {
 					this.debug('double power');
 					return this.chainModify(2);
@@ -18384,8 +18384,8 @@ let BattleMovedex = {
 			volatileStatus: 'uproar',
 		},
 		onTryHit(target) {
-			const foes = target.foes(false, true);
-			for (const [i, allyActive] of target.allies(false, true).entries()) {
+			const foes = target.foes(true);
+			for (const [i, allyActive] of target.allies(true).entries()) {
 				if (allyActive && allyActive.status === 'slp') allyActive.cureStatus();
 				let foeActive = foes[i];
 				if (foeActive && foeActive.status === 'slp') foeActive.cureStatus();

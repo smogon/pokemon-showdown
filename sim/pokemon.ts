@@ -528,7 +528,7 @@ export class Pokemon {
 		return null;
 	}
 
-	allies(adjacentOnly?: boolean, forTargeting?: boolean): Pokemon[] {
+	allies(forTargeting?: boolean): Pokemon[] {
 		let allies = this.side.active;
 		if (this.battle.gameType === 'multi') {
 			const team = this.side.n % 2;
@@ -537,11 +537,14 @@ export class Pokemon {
 				side.n % 2 === team ? side.active : []
 			);
 		}
-		if (adjacentOnly) allies = allies.filter(ally => this.battle.isAdjacent(this, ally));
 		return forTargeting ? allies : allies.filter(ally => ally && !ally.fainted);
 	}
 
-	foes(adjacentOnly?: boolean, forTargeting?: boolean): Pokemon[] {
+	adjacentAllies() {
+		return this.allies().filter(foe => this.battle.isAdjacent(this, foe));
+	}
+
+	foes(forTargeting?: boolean): Pokemon[] {
 		let foes = this.side.foe.active;
 		if (this.battle.gameType === 'multi') {
 			const team = 1 - this.side.n % 2;
@@ -550,8 +553,11 @@ export class Pokemon {
 				side.n % 2 === team ? side.active : []
 			);
 		}
-		if (adjacentOnly) foes = foes.filter(foe => this.battle.isAdjacent(this, foe));
 		return forTargeting ? foes : foes.filter(foe => foe && !foe.fainted);
+	}
+
+	adjacentFoes() {
+		return this.foes().filter(foe => this.battle.isAdjacent(this, foe));
 	}
 
 	getMoveTargets(move: Move, target: Pokemon): Pokemon[] {
@@ -572,10 +578,10 @@ export class Pokemon {
 			}
 			break;
 		case 'allAdjacent':
-			targets.push(...this.allies(true));
+			targets.push(...this.adjacentAllies());
 			// falls through
 		case 'allAdjacentFoes':
-			targets.push(...this.foes(true));
+			targets.push(...this.adjacentFoes());
 			if (targets.length && !targets.includes(target)) {
 				this.battle.retargetLastMove(targets[targets.length - 1]);
 			}
@@ -588,7 +594,7 @@ export class Pokemon {
 				if (!possibleTarget) return [];
 				target = possibleTarget;
 			}
-			if (target.allies(false, true).length > 1) {
+			if (target.allies(true).length > 1) {
 				if (!move.flags['charge'] || this.volatiles['twoturnmove'] ||
 						(move.id.startsWith('solarb') && this.battle.field.isWeather(['sunnyday', 'desolateland'])) ||
 						(this.hasItem('powerherb') && move.id !== 'skydrop')) {

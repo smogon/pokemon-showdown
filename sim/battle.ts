@@ -1590,7 +1590,7 @@ export class Battle extends Dex.ModdedDex {
 		}
 		if (!target || !target.hp) return 0;
 		if (!target.isActive) return false;
-		if (this.gen > 5 && !target.foes(false, true).some(poke => poke && !!poke.side.pokemonLeft)) return false;
+		if (this.gen > 5 && !target.foes(true).some(poke => poke && !!poke.side.pokemonLeft)) return false;
 		boost = this.runEvent('Boost', target, source, effect, Object.assign({}, boost));
 		let success = null;
 		let boosted = false;
@@ -2179,9 +2179,9 @@ export class Battle extends Dex.ModdedDex {
 		}
 		if (move.target !== 'randomNormal' && this.validTargetLoc(targetLoc, pokemon, move.target)) {
 			if (targetLoc > 0) {
-				target = pokemon.foes(false, true)[targetLoc - 1];
+				target = pokemon.foes(true)[targetLoc - 1];
 			} else {
-				target = pokemon.allies(false, true)[-targetLoc - 1];
+				target = pokemon.allies(true)[-targetLoc - 1];
 			}
 			if (target) {
 				if (!target.fainted) {
@@ -2210,24 +2210,24 @@ export class Battle extends Dex.ModdedDex {
 
 		move = this.getMove(move);
 		if (move.target === 'adjacentAlly') {
-			const adjacentAllies = pokemon.allies(true);
+			const adjacentAllies = pokemon.adjacentAllies();
 			return adjacentAllies.length ? this.sample(adjacentAllies) : null;
 		}
 		if (move.target === 'self' || move.target === 'all' || move.target === 'allySide' ||
 				move.target === 'allyTeam' || move.target === 'adjacentAllyOrSelf') {
 			return pokemon;
 		}
-		if (pokemon.allies(false, true).length > 2) {
+		if (pokemon.allies(true).length > 2) {
 			if (move.target === 'adjacentFoe' || move.target === 'normal' || move.target === 'randomNormal') {
 				// even if a move can target an ally, auto-resolution will never make it target an ally
 				// i.e. if both your opponents faint before you use Flamethrower, it will fail instead of targeting your ally
-				const adjacentFoes = pokemon.foes(true);
+				const adjacentFoes = pokemon.adjacentFoes();
 				if (adjacentFoes.length) return this.sample(adjacentFoes);
 				// no valid target at all, return a foe for any possible redirection
 			}
 		}
 		const allFoes = pokemon.foes();
-		return allFoes.length && this.sample(allFoes) || pokemon.foes(false, true)[0];
+		return allFoes.length && this.sample(allFoes) || pokemon.foes(true)[0];
 	}
 
 	checkFainted() {
