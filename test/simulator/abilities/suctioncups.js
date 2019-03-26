@@ -12,27 +12,28 @@ describe('Suction Cups', function () {
 
 	it('should prevent the user from being forced out', function () {
 		battle = common.createBattle();
-		const p1 = battle.join('p1', 'Guest 1', 1, [
+		battle.setPlayer('p1', {team: [
 			{species: 'Shuckle', ability: 'suctioncups', moves: ['rapidspin']},
 			{species: 'Forretress', ability: 'sturdy', moves: ['rapidspin']},
-		]);
-		const p2 = battle.join('p2', 'Guest 2', 1, [{species: 'Smeargle', ability: 'noguard', item: 'redcard', moves: ['healpulse', 'dragontail', 'circlethrow', 'roar']}]);
+		]});
+		battle.setPlayer('p2', {team: [{species: 'Smeargle', ability: 'noguard', item: 'redcard', moves: ['healpulse', 'dragontail', 'circlethrow', 'roar']}]});
+		const [cupsMon, redCardHolder] = [battle.p1.active[0], battle.p2.active[0]];
 		battle.makeChoices('move rapidspin', 'move healpulse');
-		assert.false.holdsItem(p2.active[0], "Red Card should activate");
-		assert.species(p1.active[0], 'Shuckle');
+		assert.false.holdsItem(redCardHolder, "Red Card should activate");
+		assert.strictEqual(cupsMon, battle.p1.active[0]);
 		for (let i = 2; i <= 4; i++) {
 			battle.makeChoices('move rapidspin', 'move ' + i);
-			assert.species(p1.active[0], 'Shuckle');
+			assert.strictEqual(cupsMon, battle.p1.active[0]);
 		}
 	});
 
 	it('should be suppressed by Mold Breaker', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: 'Pangoro', ability: 'moldbreaker', moves: ['circlethrow']}]);
-		battle.join('p2', 'Guest 2', 1, [
+		battle.setPlayer('p1', {team: [{species: 'Pangoro', ability: 'moldbreaker', moves: ['circlethrow']}]});
+		battle.setPlayer('p2', {team: [
 			{species: 'Shuckle', ability: 'suctioncups', item: 'ironball', moves: ['rest']},
 			{species: 'Forretress', ability: 'sturdy', moves: ['rapidspin']},
-		]);
+		]});
 		battle.makeChoices('move circlethrow', 'move rest');
 		assert.species(battle.p2.active[0], 'Forretress');
 	});

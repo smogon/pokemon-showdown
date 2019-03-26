@@ -12,8 +12,8 @@ describe('Sky Drop', function () {
 
 	it('should prevent its target from moving when it is caught by the effect', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Lairon", ability: 'sturdy', moves: ['tackle']}]);
+		battle.setPlayer('p1', {team: [{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}]});
+		battle.setPlayer('p2', {team: [{species: "Lairon", ability: 'sturdy', moves: ['tackle']}]});
 		battle.makeChoices('move skydrop', 'move tackle');
 		assert.strictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 		battle.makeChoices('move skydrop', 'move tackle');
@@ -22,28 +22,28 @@ describe('Sky Drop', function () {
 
 	it('should prevent its target from switching out when it is caught by the effect', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}]);
-		battle.join('p2', 'Guest 2', 1, [
+		battle.setPlayer('p1', {team: [{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}]});
+		battle.setPlayer('p2', {team: [
 			{species: "Lairon", ability: 'sturdy', moves: ['bulkup']},
 			{species: "Aggron", ability: 'sturdy', moves: ['bulkup']},
-		]);
+		]});
 		battle.makeChoices('move skydrop', 'move bulkup');
-		battle.makeChoices('move skydrop', 'switch aggron');
+		assert.trapped(() => battle.makeChoices('move skydrop', 'switch aggron'));
 		assert.strictEqual(battle.p2.active[0].template.speciesid, 'lairon');
 	});
 
 	it('should prevent both the user and the target from being forced out when caught by the effect', function () {
 		battle = common.createBattle({gameType: 'doubles'});
-		battle.join('p1', 'Guest 1', 1, [
+		battle.setPlayer('p1', {team: [
 			{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']},
 			{species: "Machamp", ability: 'noguard', moves: ['circlethrow']},
 			{species: "Kabutops", ability: 'swiftswim', moves: ['shellsmash']},
-		]);
-		battle.join('p2', 'Guest 2', 1, [
+		]});
+		battle.setPlayer('p2', {team: [
 			{species: "Armaldo", ability: 'battlearmor', moves: ['bulkup']},
 			{species: "Aggron", ability: 'noguard', moves: ['dragontail']},
 			{species: "Omastar", ability: 'swiftswim', moves: ['shellsmash']},
-		]);
+		]});
 		battle.makeChoices('move skydrop 1, move circlethrow 1', 'move bulkup, move dragontail 1');
 		assert.strictEqual(battle.p1.active[0].template.speciesid, 'aerodactyl');
 		assert.strictEqual(battle.p2.active[0].template.speciesid, 'armaldo');
@@ -61,8 +61,8 @@ describe('Sky Drop', function () {
 
 	it('should prevent its target from activating Stance Change when it is caught by the effect', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Aegislash", ability: 'stancechange', moves: ['tackle', 'kingsshield']}]);
+		battle.setPlayer('p1', {team: [{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}]});
+		battle.setPlayer('p2', {team: [{species: "Aegislash", ability: 'stancechange', moves: ['tackle', 'kingsshield']}]});
 		battle.makeChoices('move skydrop', 'move tackle');
 		assert.strictEqual(battle.p2.active[0].template.speciesid, 'aegislash');
 		battle.makeChoices('move skydrop', 'move tackle');
@@ -110,8 +110,8 @@ describe('Sky Drop', function () {
 
 	it('should fail if the target has a Substitute', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Aerodactyl", ability: 'unnerve', moves: ['honeclaws', 'skydrop']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Lairon", ability: 'sturdy', moves: ['substitute', 'tackle']}]);
+		battle.setPlayer('p1', {team: [{species: "Aerodactyl", ability: 'unnerve', moves: ['honeclaws', 'skydrop']}]});
+		battle.setPlayer('p2', {team: [{species: "Lairon", ability: 'sturdy', moves: ['substitute', 'tackle']}]});
 		battle.makeChoices('move honeclaws', 'move substitute');
 		battle.makeChoices('move skydrop', 'move tackle');
 		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
@@ -119,8 +119,8 @@ describe('Sky Drop', function () {
 
 	it('should fail if the target is heavier than 200kg', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Aggron", ability: 'sturdy', moves: ['tackle']}]);
+		battle.setPlayer('p1', {team: [{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}]});
+		battle.setPlayer('p2', {team: [{species: "Aggron", ability: 'sturdy', moves: ['tackle']}]});
 		battle.makeChoices('move skydrop', 'move tackle');
 		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
@@ -140,7 +140,7 @@ describe('Sky Drop', function () {
 			[{species: "Lairon", ability: 'sturdy', moves: ['bulkup']}, {species: "Aggron", ability: 'sturdy', moves: ['bulkup', 'allyswitch']}],
 		]);
 		battle.makeChoices('move skydrop 1, move splash', 'move bulkup, move bulkup');
-		battle.makeChoices('move skydrop, move splash', 'move bulkup, move allyswitch');
+		battle.makeChoices('move skydrop 1, move splash', 'move bulkup, move allyswitch');
 		assert.strictEqual(battle.p2.active[1].template.speciesid, 'lairon');
 		assert.notStrictEqual(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
 	});
@@ -150,8 +150,8 @@ describe('Sky Drop', function () {
 			[{species: "Aerodactyl", ability: 'unnerve', moves: ['skydrop']}, {species: "Smeargle", ability: 'owntempo', moves: ['splash']}],
 			[{species: "Lairon", ability: 'sturdy', moves: ['bulkup']}, {species: "Aggron", ability: 'sturdy', moves: ['bulkup', 'followme']}],
 		]);
-		battle.makeChoices('move skydrop 1, move splash', 'move bulkup move bulkup');
-		battle.makeChoices('move skydrop, move splash', 'move bulkup, move followme');
+		battle.makeChoices('move skydrop 1, move splash', 'move bulkup, move bulkup');
+		battle.makeChoices('move skydrop 1, move splash', 'move bulkup, move followme');
 		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 		assert.strictEqual(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
 	});
@@ -200,16 +200,16 @@ describe('Sky Drop [Gen 5]', function () {
 	describe.skip('Sky Drop Glitch', function () {
 		beforeEach(function () {
 			battle = common.gen(5).createBattle({gameType: 'doubles'});
-			battle.join('p1', 'Guest 1', 1, [
+			battle.setPlayer('p1', {team: [
 				{species: "Aerodactyl", ability: 'unnerve', moves: ['rockpolish', 'skydrop', 'dig']},
 				{species: "Arceus", ability: 'multitype', moves: ['recover', 'gravity']},
 				{species: "Aggron", ability: 'sturdy', moves: ['rest']},
-			]);
-			battle.join('p2', 'Guest 2', 1, [
+			]});
+			battle.setPlayer('p2', {team: [
 				{species: "Magikarp", ability: 'owntempo', moves: ['sleeptalk', 'tackle']},
 				{species: "Deoxys-Attack", ability: 'sturdy', moves: ['nastyplot', 'thunderbolt', 'roar']},
 				{species: "Azurill", ability: 'thickfat', moves: ['watersport']},
-			]);
+			]});
 			console.log('-------------------------------');
 			battle.makeChoices('move skydrop 1, move gravity', 'move sleeptalk, move nastyplot');
 			// Magikarp should now be stuck because of the Sky Drop glitch.

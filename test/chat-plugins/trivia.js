@@ -6,7 +6,6 @@ const userUtils = require('../../dev-tools/users-utils');
 const User = userUtils.User;
 const Connection = userUtils.Connection;
 
-let SCORE_CAPS;
 let Trivia;
 let FirstModeTrivia;
 let TimerModeTrivia;
@@ -35,8 +34,7 @@ describe('Trivia', function () {
 		// it makes reference to global.Config in the modules outermost scope,
 		// which makes the module fail to be loaded. Within the scope of thess
 		// unit test blocks however, Config is defined.
-		const trivia = require('../../chat-plugins/trivia');
-		SCORE_CAPS = trivia.SCORE_CAPS;
+		const trivia = require('../../server/chat-plugins/trivia');
 		Trivia = trivia.Trivia;
 		FirstModeTrivia = trivia.FirstModeTrivia;
 		TimerModeTrivia = trivia.TimerModeTrivia;
@@ -68,12 +66,6 @@ describe('Trivia', function () {
 		this.tarUser = null;
 		this.room.destroy();
 		this.room = null;
-	});
-
-	it('should have each of its score caps divisible by 5', function () {
-		for (let i in SCORE_CAPS) {
-			assert.strictEqual(SCORE_CAPS[i] % 5, 0);
-		}
 	});
 
 	it('should add new players', function () {

@@ -26,7 +26,7 @@ before('initialization', function () {
 	} finally {
 		config = require('../config/config');
 	}
-	require('./../lib/process-manager').disabled = true;
+	require('./../.lib-dist/process-manager').disabled = true;
 
 	Object.assign(config, require('../config/config-example'));
 	// Actually crash if we crash
@@ -35,12 +35,14 @@ before('initialization', function () {
 	config.watchconfig = false;
 	// Don't try to write to file system
 	config.nofswriting = true;
+	// Test a normal ladder
+	config.fakeladder = false;
 
 	// Don't create a REPL
-	require('../lib/repl').start = noop;
+	require('../.lib-dist/repl').Repl.start = noop;
 
 	// Start the server.
-	require('../app');
+	require('../server');
 
 	LoginServer.disabled = true;
 

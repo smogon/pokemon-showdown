@@ -12,14 +12,14 @@ describe('Most status moves', function () {
 
 	it('should ignore natural type immunities', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'prankster', item: 'leftovers', moves: ['gastroacid', 'glare', 'confuseray', 'sandattack']}]);
-		battle.join('p2', 'Guest 2', 1, [
+		battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'prankster', item: 'leftovers', moves: ['gastroacid', 'glare', 'confuseray', 'sandattack']}]});
+		battle.setPlayer('p2', {team: [
 			{species: "Klefki", ability: 'magician', happiness: 0, moves: ['return']},
 			{species: "Dusknoir", ability: 'frisk', moves: ['shadowpunch']},
 			{species: "Slaking", ability: 'truant', moves: ['shadowclaw']},
 			{species: "Tornadus", ability: 'prankster', moves: ['tailwind']},
 			{species: "Unown", ability: 'levitate', moves: ['hiddenpower']},
-		]);
+		]});
 		battle.makeChoices('move gastroacid', 'move return');
 		assert.false.holdsItem(battle.p2.active[0]); // Klefki's Magician suppressed by Gastro Acid.
 		battle.makeChoices('move glare', 'switch 2'); // Dusknoir
@@ -36,13 +36,13 @@ describe('Most status moves', function () {
 		this.timeout(0);
 
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'noguard', item: 'laggingtail', moves: ['thunderwave', 'willowisp', 'poisongas', 'toxic']}]);
-		battle.join('p2', 'Guest 2', 1, [
+		battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'noguard', item: 'laggingtail', moves: ['thunderwave', 'willowisp', 'poisongas', 'toxic']}]});
+		battle.setPlayer('p2', {team: [
 			{species: "Zapdos", ability: 'pressure', moves: ['charge']},
 			{species: "Emboar", ability: 'blaze', moves: ['sleeptalk']},
 			{species: "Muk", ability: 'stench', moves: ['shadowsneak']},
 			{species: "Aron", ability: 'sturdy', moves: ['magnetrise']},
-		]);
+		]});
 
 		battle.makeChoices('move thunderwave', 'move charge');
 		assert.strictEqual(battle.p2.active[0].status, '');
@@ -86,8 +86,8 @@ describe('Poison-inflicting status moves [Gen 2]', function () {
 		battle.onEvent('Accuracy', battle.getFormat(), true);
 
 		const target = battle.p2.active[0];
-		POISON_STATUS_MOVES.forEach(move => {
+		for (const move of POISON_STATUS_MOVES) {
 			assert.constant(() => target.status, () => battle.makeChoices('move ' + move, 'move sleeptalk'));
-		});
+		}
 	});
 });

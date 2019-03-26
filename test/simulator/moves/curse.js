@@ -12,46 +12,46 @@ describe('Curse', function () {
 
 	it('should request the Ghost target if the user is a known Ghost', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Gengar", ability: 'levitate', item: '', moves: ['curse']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]);
+		battle.setPlayer('p1', {team: [{species: "Gengar", ability: 'levitate', item: '', moves: ['curse']}]});
+		battle.setPlayer('p2', {team: [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]});
 		assert.strictEqual(battle.p1.active[0].getRequestData().moves[0].target, 'normal');
 	});
 
 	it('should request the Ghost target after the user becomes Ghost', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Rapidash", ability: 'levitate', item: '', moves: ['curse']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Trevenant", ability: 'shedskin', item: 'laggingtail', moves: ['trickortreat']}]);
+		battle.setPlayer('p1', {team: [{species: "Rapidash", ability: 'levitate', item: '', moves: ['curse']}]});
+		battle.setPlayer('p2', {team: [{species: "Trevenant", ability: 'shedskin', item: 'laggingtail', moves: ['trickortreat']}]});
 
 		assert.strictEqual(battle.p1.active[0].getRequestData().moves[0].target, 'self');
-		battle.makeChoices('move curse', 'move trickortreat');
+		battle.makeChoices('auto', 'auto');
 		assert.strictEqual(battle.p1.active[0].getRequestData().moves[0].target, 'normal');
 	});
 
 	it('should not request a target after the user stops being Ghost', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Gengar", ability: 'levitate', item: '', moves: ['curse']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Jellicent", ability: 'waterabsorb', item: '', moves: ['soak']}]);
+		battle.setPlayer('p1', {team: [{species: "Gengar", ability: 'levitate', item: '', moves: ['curse']}]});
+		battle.setPlayer('p2', {team: [{species: "Jellicent", ability: 'waterabsorb', item: '', moves: ['soak']}]});
 
 		assert.strictEqual(battle.p1.active[0].getRequestData().moves[0].target, 'normal');
-		battle.makeChoices('move curse', 'move soak');
+		battle.makeChoices('auto', 'auto');
 		assert.strictEqual(battle.p1.active[0].getRequestData().moves[0].target, 'self');
 	});
 
 	it('should not request a target if the user is a known non-Ghost', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Blastoise", ability: 'torrent', item: '', moves: ['curse']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]);
+		battle.setPlayer('p1', {team: [{species: "Blastoise", ability: 'torrent', item: '', moves: ['curse']}]});
+		battle.setPlayer('p2', {team: [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]});
 		assert.strictEqual(battle.p1.active[0].getRequestData().moves[0].target, 'self');
 	});
 
 	it('should not request a target if the user is an unknown non-Ghost', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Blastoise", ability: 'torrent', item: '', moves: ['curse', 'reflecttype']}]);
-		battle.join('p2', 'Guest 2', 1, [
+		battle.setPlayer('p1', {team: [{species: "Blastoise", ability: 'torrent', item: '', moves: ['curse', 'reflecttype']}]});
+		battle.setPlayer('p2', {team: [
 			{species: "Zoroark", ability: 'illusion', item: '', moves: ['nastyplot']},
 			{species: "Gengar", ability: 'levitate', item: '', moves: ['spite']},
-		]);
-		battle.makeChoices('move reflecttype', 'move nastyplot');
+		]});
+		battle.makeChoices('move reflecttype', 'auto'); // Reflect Type!
 
 		assert.deepEqual(battle.p1.active[0].getTypes(), ["Dark"]); // Copied Zoroark's type instead of Gengar's
 		assert.strictEqual(battle.p1.active[0].getRequestData().moves[0].target, 'self');
@@ -59,30 +59,31 @@ describe('Curse', function () {
 
 	it('should curse a non-Ghost user with Protean', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Greninja", ability: 'protean', item: '', moves: ['curse', 'spite']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]);
+		battle.setPlayer('p1', {team: [{species: "Greninja", ability: 'protean', item: '', moves: ['curse', 'spite']}]});
+		battle.setPlayer('p2', {team: [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]});
 
-		battle.makeChoices('move curse', 'move stringshot');
+		battle.makeChoices('auto', 'auto');
 		let hps = [battle.p1.active[0].hp, battle.p2.active[0].hp];
 		assert.notStrictEqual(hps[0], battle.p1.active[0].maxhp); // Curse user cut its HP down + residual damage
 		assert.strictEqual(hps[1], battle.p2.active[0].maxhp); // Foe unaffected
 
-		battle.makeChoices('move spite', 'move stringshot');
+		battle.makeChoices('move spite', 'auto');
 		assert.notStrictEqual(hps[0], battle.p1.active[0].hp); // Curse user is hurt by residual damage
 		assert.strictEqual(hps[1], battle.p2.active[0].hp); // Foe unaffected
 	});
 
 	it('should curse the target if a Ghost user has Protean', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Gengar", ability: 'protean', item: '', moves: ['curse', 'spite']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]);
+		battle.setPlayer('p1', {team: [{species: "Gengar", ability: 'protean', item: '', moves: ['curse', 'spite']}]});
+		battle.setPlayer('p2', {team: [{species: "Caterpie", ability: 'shedskin', item: '', moves: ['stringshot']}]});
 
-		battle.makeChoices('move curse', 'move stringshot');
+		battle.makeChoices('auto', 'auto');
 		let hps = [battle.p1.active[0].hp, battle.p2.active[0].hp];
 		assert.notStrictEqual(hps[0], battle.p1.active[0].maxhp); // Curse user cut its HP down
 		assert.notStrictEqual(hps[1], battle.p2.active[0].maxhp); // Curse residual damage
 
-		battle.makeChoices('move spite', 'move stringshot'); // Check residual damage
+		battle.makeChoices('move spite', 'auto');
+		// Check residual damage
 		assert.strictEqual(hps[0], battle.p1.active[0].hp); // Curse user unaffected
 		assert.notStrictEqual(hps[1], battle.p2.active[0].hp); // Curse residual damage
 	});
@@ -110,15 +111,20 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 		let p2active = battle.p2.active;
 		let cursePartner = curseUser.side.active[1 - curseUser.position];
 
-		// p1: Kecleon uses Curse last in the turn.
-		// p2: Fighting attack on Kecleon, then Ghost.
-		battle.makeChoices('move curse, move lightscreen', 'move aurasphere ' + (curseUser.position + 1) + ', move lick ' + (curseUser.position + 1));
+		battle.makeChoices(
+			// p1: Kecleon uses Curse last in the turn.
+			// p2: Fighting attack on Kecleon, then Ghost.
+			`move 1, move 1`,
+			`move aurasphere ${curseUser.position + 1}, move lick ${curseUser.position + 1}`
+		);
 
 		assert.ok(curseUser.hasType('Ghost')); // Curse user must be Ghost
 		assert.ok(curseUser.hp < curseUser.maxhp / 2); // Curse user cut its HP down
 
 		let foeHP = [p2active[0].hp, p2active[1].hp];
-		battle.makeChoices('move curse, move lightscreen', 'move calmmind, move calmmind');
+		battle.makeChoices(
+			`move 2, move 2`,
+			`move 2, move 2`);
 
 		assert.notStrictEqual(curseUser.hp, curseUser.maxhp); // Curse user cut its HP down
 		if (curseUser.position === 0) {
@@ -136,9 +142,12 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 		let p1active = battle.p1.active;
 		let p2active = battle.p2.active;
 
-		// p1: Kecleon uses Curse last in the turn.
-		// p2: Electric attack on Kecleon, then Ghost.
-		battle.makeChoices('move curse, move lightscree, move harden', 'move aurasphere ' + (curseUser.position + 1) + ', move lick ' + (curseUser.position + 1) + ', move harden');
+		battle.makeChoices(
+			// p1: Kecleon uses Curse last in the turn.
+			// p2: Electric attack on Kecleon, then Ghost.
+			`move 1, move 1, move 1`,
+			`move aurasphere ${curseUser.position + 1}, move lick ${curseUser.position + 1}, move harden`
+		);
 
 		assert.ok(curseUser.hasType('Ghost')); // Curse user must be Ghost
 		assert.ok(curseUser.hp < curseUser.maxhp / 2); // Curse user cut its HP down

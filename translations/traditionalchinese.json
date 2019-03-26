@@ -1,0 +1,25 @@
+{
+	"name": "Traditional Chinese",
+
+	"strings": {
+		"Please follow the rules:": "請遵守規則:",
+		"[TN: Link to the PS rules for your language]https://pokemonshowdown.com/rules": "https://pokemonshowdown.com/pages/rules-tw",
+		"Global Rules": "全站規則",
+		"${room} room rules": "${room}房間規則",
+
+		"<strong>Global ranks</strong>": "<strong>全服權限</strong>",
+		"+ <strong>Global Voice</strong> - They can use ! commands like !groups": "+ <strong>全服信任用戶</strong> -可以使用!廣播指令，比如!groups，並可以在限制發言期間發言",
+		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "% <strong>全服見習管理</strong> - 同上，並可以鎖定用戶或查看他們的小號",
+		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>全服管理員</strong> - 同上，並可以將用戶從服務器封禁",
+		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>全服機器人</strong> - 跟全服管理員一樣，隻不過是機器",
+		"&amp; <strong>Global Leader</strong> - The above, and they can promote to global moderator and force ties": "&amp; <strong>全服領袖</strong> - 同上，並可以提拔用戶至全服管理員、強制對戰平局",
+		"~ <strong>Global Administrator</strong> -  They can do anything, like change what this message says": "~ <strong>全服總管</strong> - 可以在服務器做任何事，例如修改你現在看到的這條信息",
+
+		"<strong>Room ranks</strong>": "<strong>房權限</strong>",
+		"+ <strong>Voice</strong> - They can use ! commands like !groups": "+ <strong>信任用戶</strong> - 可以使用!廣播指令，比如!groups，並可以在限制發言期間發言",
+		"% <strong>Driver</strong> - The above, and they can mute and warn": "% <strong>見習管理</strong> - 同上，並可以禁止用戶發言或警告用",
+		"@ <strong>Moderator</strong> - The above, and they can room ban users": "@ <strong>管理員</strong> - 同上，並可以將用戶從房間封禁",
+		"* <strong>Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>機器人</strong> - 跟管理員一樣，隻不過是機器",
+		"# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it": "# <strong>房主</strong> - 房中的領導，幾乎擁有房間的全部管理權力"
+	}
+}

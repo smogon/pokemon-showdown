@@ -12,24 +12,24 @@ describe('Misty Terrain', function () {
 
 	it('should change the current terrain to Misty Terrain for five turns', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Florges", ability: 'symbiosis', moves: ['mist', 'mistyterrain']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Florges", ability: 'symbiosis', moves: ['mist']}]);
+		battle.setPlayer('p1', {team: [{species: "Florges", ability: 'symbiosis', moves: ['mist', 'mistyterrain']}]});
+		battle.setPlayer('p2', {team: [{species: "Florges", ability: 'symbiosis', moves: ['mist']}]});
 		battle.makeChoices('move mistyterrain', 'move mist');
-		assert.ok(battle.isTerrain('mistyterrain'));
+		assert.ok(battle.field.isTerrain('mistyterrain'));
 		battle.makeChoices('move mist', 'move mist');
-		assert.ok(battle.isTerrain('mistyterrain'));
+		assert.ok(battle.field.isTerrain('mistyterrain'));
 		battle.makeChoices('move mist', 'move mist');
-		assert.ok(battle.isTerrain('mistyterrain'));
+		assert.ok(battle.field.isTerrain('mistyterrain'));
 		battle.makeChoices('move mist', 'move mist');
-		assert.ok(battle.isTerrain('mistyterrain'));
+		assert.ok(battle.field.isTerrain('mistyterrain'));
 		battle.makeChoices('move mist', 'move mist');
-		assert.ok(battle.isTerrain(''));
+		assert.ok(battle.field.isTerrain(''));
 	});
 
 	it('should halve the base power of Dragon-type attacks on grounded Pokemon', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Shaymin", ability: 'naturalcure', moves: ['mistyterrain']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Shaymin-Sky", ability: 'serenegrace', moves: ['leechseed']}]);
+		battle.setPlayer('p1', {team: [{species: "Shaymin", ability: 'naturalcure', moves: ['mistyterrain']}]});
+		battle.setPlayer('p2', {team: [{species: "Shaymin-Sky", ability: 'serenegrace', moves: ['leechseed']}]});
 		battle.makeChoices('move mistyterrain', 'move leechseed');
 		let basePower;
 		let move = Dex.getMove('dragonpulse');
@@ -41,8 +41,8 @@ describe('Misty Terrain', function () {
 
 	it('should prevent moves from setting non-volatile status on grounded Pokemon', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Florges", ability: 'symbiosis', moves: ['mistyterrain', 'toxic']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Machamp", ability: 'noguard', item: 'airballoon', moves: ['bulkup', 'toxic']}]);
+		battle.setPlayer('p1', {team: [{species: "Florges", ability: 'symbiosis', moves: ['mistyterrain', 'toxic']}]});
+		battle.setPlayer('p2', {team: [{species: "Machamp", ability: 'noguard', item: 'airballoon', moves: ['bulkup', 'toxic']}]});
 		battle.makeChoices('move mistyterrain', 'move bulkup');
 		battle.makeChoices('move toxic', 'move toxic');
 		assert.strictEqual(battle.p1.active[0].status, '');
@@ -51,16 +51,16 @@ describe('Misty Terrain', function () {
 
 	it('should not remove active non-volatile statuses from grounded Pokemon', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Florges", ability: 'symbiosis', moves: ['mistyterrain']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Crobat", ability: 'infiltrator', moves: ['toxic']}]);
+		battle.setPlayer('p1', {team: [{species: "Florges", ability: 'symbiosis', moves: ['mistyterrain']}]});
+		battle.setPlayer('p2', {team: [{species: "Crobat", ability: 'infiltrator', moves: ['toxic']}]});
 		battle.makeChoices('move mistyterrain', 'move toxic');
 		assert.strictEqual(battle.p1.active[0].status, 'tox');
 	});
 
 	it('should prevent Yawn from putting grounded Pokemon to sleep, but not cause Yawn to fail', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Florges", ability: 'symbiosis', moves: ['mistyterrain', 'yawn']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Sableye", ability: 'prankster', moves: ['yawn']}]);
+		battle.setPlayer('p1', {team: [{species: "Florges", ability: 'symbiosis', moves: ['mistyterrain', 'yawn']}]});
+		battle.setPlayer('p2', {team: [{species: "Sableye", ability: 'prankster', moves: ['yawn']}]});
 		battle.makeChoices('move mistyterrain', 'move yawn');
 		battle.makeChoices('move yawn', 'move yawn');
 		assert.strictEqual(battle.p1.active[0].status, '');
@@ -71,8 +71,8 @@ describe('Misty Terrain', function () {
 
 	it('should cause Rest to fail on grounded Pokemon', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Florges", ability: 'symbiosis', moves: ['mistyterrain', 'rest']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Pidgeot", ability: 'keeneye', moves: ['doubleedge', 'rest']}]);
+		battle.setPlayer('p1', {team: [{species: "Florges", ability: 'symbiosis', moves: ['mistyterrain', 'rest']}]});
+		battle.setPlayer('p2', {team: [{species: "Pidgeot", ability: 'keeneye', moves: ['doubleedge', 'rest']}]});
 		battle.makeChoices('move mistyterrain', 'move doubleedge');
 		battle.makeChoices('move rest', 'move rest');
 		assert.notStrictEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
@@ -81,8 +81,8 @@ describe('Misty Terrain', function () {
 
 	it('should not affect Pokemon in a semi-invulnerable state', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Smeargle", ability: 'owntempo', moves: ['yawn', 'skydrop']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Sableye", ability: 'prankster', moves: ['yawn', 'mistyterrain']}]);
+		battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'owntempo', moves: ['yawn', 'skydrop']}]});
+		battle.setPlayer('p2', {team: [{species: "Sableye", ability: 'prankster', moves: ['yawn', 'mistyterrain']}]});
 		battle.makeChoices('move yawn', 'move yawn');
 		battle.makeChoices('move skydrop', 'move mistyterrain');
 		assert.strictEqual(battle.p1.active[0].status, 'slp');
@@ -91,8 +91,8 @@ describe('Misty Terrain', function () {
 
 	it('should cause Nature Power to become Moonblast', function () {
 		battle = common.createBattle();
-		battle.join('p1', 'Guest 1', 1, [{species: "Whimsicott", ability: 'prankster', moves: ['mistyterrain']}]);
-		battle.join('p2', 'Guest 2', 1, [{species: "Shuckle", ability: 'sturdy', moves: ['naturepower']}]);
+		battle.setPlayer('p1', {team: [{species: "Whimsicott", ability: 'prankster', moves: ['mistyterrain']}]});
+		battle.setPlayer('p2', {team: [{species: "Shuckle", ability: 'sturdy', moves: ['naturepower']}]});
 		battle.makeChoices('move mistyterrain', 'move naturepower');
 		let resultMove = toId(battle.log[battle.lastMoveLine].split('|')[3]);
 		assert.strictEqual(resultMove, 'moonblast');

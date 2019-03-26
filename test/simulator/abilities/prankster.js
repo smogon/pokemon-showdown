@@ -37,16 +37,17 @@ describe('Prankster', function () {
 
 	it('should not cause bounced Status moves to fail against Dark Pokémon if it is removed', function () {
 		battle = common.createBattle({gameType: 'doubles'});
-		battle.join('p1', 'Guest 1', 1, [
+		battle.setPlayer('p1', {team: [
 			{species: "Alakazam", ability: 'synchronize', moves: ['skillswap']},
 			{species: "Sableye", ability: 'prankster', moves: ['magiccoat']},
-		]);
-		const p2 = battle.join('p2', 'Guest 2', 1, [
+		]});
+		battle.setPlayer('p2', {team: [
 			{species: "Pyukumuku", ability: 'unaware', moves: ['curse']},
 			{species: "Houndoom", ability: 'flashfire', moves: ['confide']},
-		]);
+		]});
+		const darkPokemon = battle.p2.active[1];
 		battle.makeChoices('move skillswap -2, move magiccoat', 'move curse, move confide 2');
-		assert.statStage(p2.active[1], 'spa', -1);
+		assert.statStage(darkPokemon, 'spa', -1);
 	});
 
 	it('should not cause Status moves forced by Encore to fail against Dark Pokémon', function () {
@@ -65,8 +66,9 @@ describe('Prankster', function () {
 			[{species: "Liepard", ability: 'prankster', moves: ['encore', 'nastyplot']}, {species: "Tapu Fini", ability: 'mistysurge', moves: ['calmmind']}],
 			[{species: "Meowstic", ability: 'prankster', moves: ['frustration', 'leer']}, {species: "Lopunny", ability: 'limber', moves: ['agility']}],
 		]);
-		battle.p1.chooseMove('encore', 1).chooseMove('calmmind').foe.chooseMove('frustration', 2).chooseMove('agility');
-		battle.p1.chooseMove('encore', 1).chooseMove('calmmind').foe.chooseMove('leer').chooseMove('agility');
+
+		battle.makeChoices('move encore 1, move calmmind', 'move frustration 2, move agility');
+		battle.makeChoices('move encore 1, move calmmind', 'move leer, move agility');
 		assert(battle.p2.active[0].volatiles.encore, `Meowstic should be encored`);
 		assert.fullHP(battle.p1.active[0]);
 	});

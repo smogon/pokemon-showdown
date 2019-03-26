@@ -75,7 +75,14 @@ Looking at your surrounding text is also a way to get a good idea of our coding 
 
 The codebase currently uses a mix of `"` and `'` and `` ` `` for strings.
 
-Our current convention is to use `'` for IDs; `"` for names (i.e. usernames, move names, etc), English text in object literals such as in `data/`, and help entries of chat commands; and `` ` `` for code (i.e. protocol code and HTML) and English text outside of object literals (yes, including strings that don't need interpolation). As far as I know, we don't use strings for anything else, but if you need to use strings in a way that doesn't conform the the above three, ask Zarel in the Development chatroom to decide (and default to `` ` `` in lieu of a decision).
+Our current quote convention is to use:
+
+- `` ` `` as in `` `move-${move.id}` `` for any string that needs interpolation, otherwise:
+- `` ` `` as in `` `<strong>Fire Blast</strong>` `` for code meant to be fed to an interpreter/tokenizer before being displayed to the user; i.e. protocol code and HTML
+- `'` as in `'fireblast'` for any string not meant to be displayed to the user; i.e. IDs
+- `"` as in `"Fire Blast"` for any string meant to be displayed verbatim to the user; i.e. names (i.e. usernames, move names, etc), most English text, and help entries of chat commands
+
+As far as I know, we don't use strings for anything else, but if you need to use strings in a way that doesn't conform to the above three, ask Zarel in the Development chatroom to decide (and default to `` ` `` in lieu of a decision).
 
 Unfortunately, since this is not a convention the linter can test for (and also because our older string standards predate PS), a lot of existing code is wrong on this, so you can't look at surrounding code to get an idea of what the convention should be. Refer to the above paragraph as the definitive rule.
 
@@ -89,7 +96,7 @@ Some even older code returns `T | false`. This is a very old PHP convention that
 
 ### `false | null | undefined`
 
-The simulator (code in `sim/`, `data/`, and `mods/`) will often have functions with return signatures of the form `T | false | null | undefined`, especially in event handlers. These aren't optionals, they're different sentinel values.
+The simulator (code in `sim/` and `data/`) will often have functions with return signatures of the form `T | false | null | undefined`, especially in event handlers. These aren't optionals, they're different sentinel values.
 
 Specifically:
 
