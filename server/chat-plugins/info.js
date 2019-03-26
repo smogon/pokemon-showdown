@@ -2415,7 +2415,6 @@ const pages = {
 			if (user.can('ban')) buf += `<th style="border: 1px solid black;">IP</th>`;
 			buf += `</tr>`;
 			for (const punishment of sortedPunishments) {
-				buf += `<tr>`;
 				if (!punishment.alts) punishment.alts = [];
 				if (!punishment.ip) punishment.ip = [];
 				let expireString = Chat.toDurationString(punishment.expiresIn, {precision: 1});
@@ -2423,12 +2422,17 @@ const pages = {
 				punishDesc += (punishment.reason) ? `<td style="border: 1px solid black;">${punishment.reason}</td>` : `<td style="border: 1px solid black;"> - </td>`;
 				punishDesc += (punishment.alts.length) ? `<td style="border: 1px solid black;">${punishment.alts.filter(user => user !== punishment.id).join(", ")}</td>` : `<td style="border: 1px solid black;"> - </td>`;
 				punishDesc += (user.can('ban') && punishment.ip.length) ? `<td style="border: 1px solid black;">${punishment.ip.join(", ")}</td>` : (user.can('ban') && !punishment.ip.length) ? `<td style="border: 1px solid black;"> - </td>` : ``;
-				buf += `<td style="border: 1px solid black;">${punishment.id}</td> <td style="border: 1px solid black;">${punishment.punishType.toLowerCase()}</td> <td style="border: 1px solid black;">${expireString}</td> ${punishDesc}</tr>`;
+				buf += `<tr>`;
+				buf += `<td style="border: 1px solid black;">${punishment.id}</td>`;
+				buf += `<td style="border: 1px solid black;">${punishment.punishType.toLowerCase()}</td>`;
+				buf += `<td style="border: 1px solid black;">${expireString}</td>`;
+				buf += `${punishDesc}`;
+				buf += `</tr>`;
 			}
+			buf += `</table>`;
 		} else {
 			buf += `<h2>No user in ${this.room} is currently punished.</h2>`;
 		}
-		buf += `</table>`;
 		return buf;
 	},
 };
