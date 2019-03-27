@@ -1716,7 +1716,7 @@ Chat.toListString = function (array) {
 };
 
 /** @param {String} html */
-Chat.removeLineBreaksInHTML = function (html) {
+Chat.collapseLineBreaksHTML = function (html) {
 	html = html.replace(/<[^>]*>/g, tag => tag.replace(/\n/g, ' '));
 	html = html.replace(/\n/g, '&#10;');
 	return html;
