@@ -169,7 +169,7 @@ class Runner {
 			} else if (this.all) {
 				return FORMATS[this.formatIndex];
 			} else if (this.sequential) {
-				const format = FORMATS[this.formatIndex]
+				const format = FORMATS[this.formatIndex];
 				this.formatIndex = (this.formatIndex + 1) % FORMATS.length;
 				return format;
 			} else {
@@ -243,9 +243,8 @@ if (require.main === module) {
 				onError: () => process.exit(1),
 				onComplete: e => {
 					// TODO output stats with formatter
-					console.log(e.target);
-					console.log(String(e.target));
-					// TODO dump stats.json
+					console.log(e.target.stats.sample);
+					// TODO dump stats.json for comparison
 				},
 			});
 		} else {
