@@ -301,10 +301,7 @@ let BattleMovedex = {
 	doomdesire: {
 		inherit: true,
 		onTry(source, target) {
-			target.side.addSideCondition('futuremove');
-			if (target.side.sideConditions['futuremove'].positions[target.position]) {
-				return false;
-			}
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 			let moveData = /** @type {ActiveMove} */ ({
 				name: "Doom Desire",
 				basePower: 120,
@@ -314,7 +311,7 @@ let BattleMovedex = {
 				type: '???',
 			});
 			let damage = this.getDamage(source, target, moveData, true);
-			target.side.sideConditions['futuremove'].positions[target.position] = {
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				duration: 3,
 				move: 'doomdesire',
 				source: source,
@@ -330,7 +327,7 @@ let BattleMovedex = {
 					isFutureMove: true,
 					type: '???',
 				},
-			};
+			});
 			this.add('-start', source, 'Doom Desire');
 			return null;
 		},

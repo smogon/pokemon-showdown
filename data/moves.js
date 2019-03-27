@@ -848,8 +848,8 @@ let BattleMovedex = {
 			},
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target !== source && target.side === this.effectData.target) {
-					if ((target.side.sideConditions['reflect'] && this.getCategory(move) === 'Physical') ||
-							(target.side.sideConditions['lightscreen'] && this.getCategory(move) === 'Special')) {
+					if ((target.side.getSideCondition('reflect') && this.getCategory(move) === 'Physical') ||
+							(target.side.getSideCondition('lightscreen') && this.getCategory(move) === 'Special')) {
 						return;
 					}
 					if (!move.crit && !move.infiltrates) {
@@ -3642,12 +3642,8 @@ let BattleMovedex = {
 		flags: {},
 		isFutureMove: true,
 		onTry(source, target) {
-			target.side.addSideCondition('futuremove');
-			if (target.side.sideConditions['futuremove'].positions[target.position]) {
-				return false;
-			}
-			target.side.sideConditions['futuremove'].positions[target.position] = {
-				duration: 3,
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				move: 'doomdesire',
 				source: source,
 				moveData: {
@@ -3662,7 +3658,7 @@ let BattleMovedex = {
 					isFutureMove: true,
 					type: 'Steel',
 				},
-			};
+			});
 			this.add('-start', source, 'Doom Desire');
 			return null;
 		},
@@ -6255,11 +6251,8 @@ let BattleMovedex = {
 		ignoreImmunity: true,
 		isFutureMove: true,
 		onTry(source, target) {
-			target.side.addSideCondition('futuremove');
-			if (target.side.sideConditions['futuremove'].positions[target.position]) {
-				return false;
-			}
-			target.side.sideConditions['futuremove'].positions[target.position] = {
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				duration: 3,
 				move: 'futuresight',
 				source: source,
@@ -6276,7 +6269,7 @@ let BattleMovedex = {
 					isFutureMove: true,
 					type: 'Psychic',
 				},
-			};
+			});
 			this.add('-start', source, 'move: Future Sight');
 			return null;
 		},
@@ -6978,7 +6971,7 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		damageCallback(pokemon, target) {
-			if (target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] || target.side.sideConditions['matblock'] || target.volatiles['protect'] || target.volatiles['spikyshield']) {
+			if (target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] || target.side.getSideCondition('matblock') || target.volatiles['protect'] || target.volatiles['spikyshield']) {
 				this.add('-zbroken', target);
 				return this.clampIntRange(Math.ceil(Math.floor(target.hp * 3 / 4) / 4 - 0.5), 1);
 			}
@@ -7401,34 +7394,16 @@ let BattleMovedex = {
 			}
 		},
 		selfdestruct: "ifHit",
-		sideCondition: 'healingwish',
+		slotCondition: 'healingwish',
 		effect: {
 			duration: 2,
-			onStart(side, source) {
-				this.debug('Healing Wish started on ' + side.name);
-				this.effectData.positions = [];
-				for (let i = 0; i < side.active.length; i++) {
-					this.effectData.positions[i] = false;
-				}
-				this.effectData.positions[source.position] = true;
-			},
-			onRestart(side, source) {
-				this.effectData.positions[source.position] = true;
-			},
 			onSwitchInPriority: 1,
 			onSwitchIn(target) {
-				const positions = /**@type {boolean[]} */ (this.effectData.positions);
-				if (!positions[target.position]) {
-					return;
-				}
 				if (!target.fainted) {
 					target.heal(target.maxhp);
 					target.setStatus('');
 					this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');
-					positions[target.position] = false;
-				}
-				if (!positions.some(affected => affected === true)) {
-					target.side.removeSideCondition('healingwish');
+					target.side.removeSlotCondition(target, 'healingwish');
 				}
 			},
 		},
@@ -12909,10 +12884,11 @@ let BattleMovedex = {
 			for (const side of this.sides) {
 				if (side === pokemon.side) continue;
 				side.addSideCondition('pursuit', pokemon);
-				if (!side.sideConditions['pursuit'].sources) {
-					side.sideConditions['pursuit'].sources = [];
+				const data = side.getSideConditionData('pursuit');
+				if (!data.sources) {
+					data.sources = [];
 				}
-				side.sideConditions['pursuit'].sources.push(pokemon);
+				data.sources.push(pokemon);
 			}
 		},
 		onModifyMove(move, source, target) {
@@ -19116,43 +19092,17 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		sideCondition: 'Wish',
+		slotCondition: 'Wish',
 		effect: {
-			onStart(side, source) {
-				this.effectData.positions = [];
-				for (let i = 0; i < side.active.length; i++) {
-					this.effectData.positions[i] = null;
-				}
-				this.effectData.positions[source.position] = {
-					source,
-					position: source.position,
-					hp: source.maxhp / 2,
-					duration: 2,
-				};
-				this.effectData.wishes = 1;
-			},
-			onRestart(side, source) {
-				if (this.effectData.positions[source.position]) return false;
-				this.effectData.positions[source.position] = {
-					source,
-					position: source.position,
-					hp: source.maxhp / 2,
-					duration: 2,
-				};
-				this.effectData.wishes++;
+			duration: 2,
+			onStart(pokemon, source) {
+				this.effectData.hp = source.maxhp / 2;
 			},
 			onResidualOrder: 4,
-			onResidual(side) {
-				for (const wish of this.effectData.positions) {
-					if (wish && --wish.duration === 0) {
-						let target = side.active[wish.position];
-						if (target && !target.fainted) {
-							let damage = this.heal(wish.hp, target, target);
-							if (damage) this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + wish.source.name);
-						}
-						this.effectData.positions[wish.position] = null;
-						if (--this.effectData.wishes === 0) return side.removeSideCondition('wish');
-					}
+			onEnd(target) {
+				if (target && !target.fainted) {
+					let damage = this.heal(this.effectData.hp, target, target);
+					if (damage) this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + this.effectData.source.name);
 				}
 			},
 		},

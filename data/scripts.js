@@ -325,7 +325,12 @@ let BattleScripts = {
 		}
 		this.runEvent('PrepareHit', pokemon, targets[0], move);
 
-		if (!this.singleEvent('Try', move, null, pokemon, targets[0], move)) {
+		hitResult = this.singleEvent('Try', move, null, pokemon, targets[0], move);
+		if (!hitResult) {
+			if (hitResult === false) {
+				this.add('-fail', pokemon);
+				this.attrLastMove('[still]');
+			}
 			return false;
 		}
 
@@ -883,6 +888,10 @@ let BattleScripts = {
 					hitResult = target.side.addSideCondition(moveData.sideCondition, pokemon, move);
 					didSomething = this.combineResults(didSomething, hitResult);
 				}
+				if (moveData.slotCondition) {
+					hitResult = target.side.addSlotCondition(target, moveData.slotCondition, pokemon, move);
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
 				if (moveData.weather) {
 					hitResult = this.field.setWeather(moveData.weather, pokemon, move);
 					didSomething = this.combineResults(didSomething, hitResult);
@@ -1172,7 +1181,7 @@ let BattleScripts = {
 				this.heal(pokemon.maxhp, pokemon, pokemon, zPower);
 				break;
 			case 'healreplacement':
-				move.self = {sideCondition: 'healreplacement'};
+				move.self = {slotCondition: 'healreplacement'};
 				break;
 			case 'clearnegativeboost':
 				/** @type {{[k: string]: number}} */
