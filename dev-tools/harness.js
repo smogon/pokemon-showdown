@@ -46,18 +46,23 @@ const NOOP_TIMER = new class {
 
 class Runner {
 	constructor(options) {
+		this.totalGames = options.totalGames;
 		this.prng = (options.prng && !Array.isArray(options.prng)) ?
 			options.prng : new PRNG(options.prng);
-		this.format = options.format;
-		this.totalGames = options.totalGames;
-		this.all = !!options.all;
-		this.async = !!options.async;
 		this.p1options = Object.assign({}, AI_OPTIONS, options.p1options);
 		this.p2options = Object.assign({}, AI_OPTIONS, options.p2options);
+
+		this.format = options.format;
+		this.all = !!options.all;
+		this.sequential = !!options.sequential;
+
+		this.async = !!options.async;
+
 		// silence is golden (trumps noisy options)
 		this.silent = !!options.silent;
 		this.logs = !this.silent && !!options.logs;
 		this.verbose = !this.silent && !!options.verbose;
+
 		this.timer = options.timer || (() => NOOP_TIMER);
 		this.formatter = options.formatter;
 		this.warmup = options.warmup;
@@ -155,21 +160,28 @@ class Runner {
 		];
 	}
 
-	// TODO add sequential format mode
 	getNextFormat() {
-		if (this.format) {
-			return (this.numGames++ < this.totalGames) && this.format;
-		} else if (this.formatIndex > FORMATS.length) {
-			return false;
-		} else if (this.numGames++ < this.totalGames) {
-			return this.all ? FORMATS[this.formatIndex] : this.prng.sample(FORMATS);
-		} else if (!this.all) {
-			return false;
-		} else {
+		if (this.formatIndex > FORMATS.length) return false;
+
+		if (this.numGames++ < this.totalGames) {
+			if (this.format) {
+				return this.format;
+			} else if (this.all) {
+				return FORMATS[this.formatIndex];
+			} else if (this.sequential) {
+				const format = FORMATS[this.formatIndex]
+				this.formatIndex = (this.formatIndex + 1) % FORMATS.length;
+				return format;
+			} else {
+				return this.prng.sample(FORMATS);
+			}
+		} else if (this.all) {
 			this.numGames = 1;
 			this.formatIndex++;
 			return FORMATS[this.formatIndex];
 		}
+
+		return false;
 	}
 }
 
@@ -223,18 +235,19 @@ if (require.main === module) {
 			// 50 games forms a single benchmark 'unit' where these same 50 games
 			// get run multiple times to minimize variance.
 			options.totalGames = 50;
+			options.sequential = true;
 			options.formatter = formatter(trakkr);
-			// TODO sequential format
 			benchmark = new Benchmark({
 				async: true,
 				defer: true,
-				//initCount: 5,
+				initCount: 2, // warmup rounds
 				maxTime: 60,
 				fn: deferred => new Runner(options).run().finally(() => deferred.resolve()),
 				onError: () => process.exit(1),
 				onComplete: e => {
 					// TODO output stats with formatter
 					console.log(e.target);
+					console.log(String(e.target));
 					// TODO dump stats.json
 				},
 			});
