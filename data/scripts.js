@@ -657,16 +657,17 @@ let BattleScripts = {
 			}
 			nullDamage = false;
 
-			for (let i = 0; i < damage.length; i++) {
+			for (let j = 0; j < damage.length; j++) {
 				// Damage from each hit is individually counted for the
 				// purposes of Counter, Metal Burst, and Mirror Coat.
-				damage[i] = moveDamage[i] === true || !moveDamage[i] ? 0 : moveDamage[i];
+				damage[j] = moveDamage[j] === true || !moveDamage[j] ? 0 : moveDamage[j];
 				// Total damage dealt is accumulated for the purposes of recoil (Parental Bond).
 				// @ts-ignore
-				move.totalDamage += damage[i];
+				move.totalDamage += damage[j];
 			}
-			if (move.mindBlownRecoil && i === 0) {
+			if (move.mindBlownRecoil) {
 				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.getEffect('Mind Blown'), true);
+				move.mindBlownRecoil = false;
 			}
 			this.eachEvent('Update');
 			if (!pokemon.hp) break;
@@ -841,13 +842,12 @@ let BattleScripts = {
 	},
 	runMoveEffects(damage, targets, pokemon, move, moveData, isSecondary, isSelf) {
 		/**@type {?boolean | number | null | undefined} */
-		// @ts-ignore
-		let didAnything = damage.reduce(this.combineResults, undefined);
+		let didAnything = undefined;
 		for (const [i, target] of targets.entries()) {
 			if (target === false) continue;
 			let hitResult;
 			/**@type {?boolean | number | undefined} */
-			let didSomething = damage[i];
+			let didSomething = undefined;
 
 			if (target) {
 				if (moveData.boosts && !target.fainted) {
