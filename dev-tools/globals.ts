@@ -141,6 +141,7 @@ interface SelfEffect {
 	boosts?: SparseBoostsTable
 	chance?: number
 	sideCondition?: string
+	slotCondition?: string
 	volatileStatus?: string
 	onHit?: EffectData["onHit"]
 }
@@ -493,6 +494,7 @@ interface MoveData extends EffectData {
 	selfSwitch?: string | boolean
 	sideCondition?: string
 	sleepUsable?: boolean
+	slotCondition?: string
 	spreadModifier?: number
 	stallingMove?: boolean
 	stealsBoosts?: boolean

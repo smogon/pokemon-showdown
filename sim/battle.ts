@@ -341,7 +341,8 @@ export class Battle extends Dex.ModdedDex {
 			if (handler.statusData && handler.statusData.duration) {
 				handler.statusData.duration--;
 				if (!handler.statusData.duration) {
-					handler.end.call(handler.thing, status.id);
+					const endCallArgs = handler.endCallArgs || [handler.thing, status.id];
+					handler.end.call(...endCallArgs);
 					continue;
 				}
 			}
@@ -893,6 +894,26 @@ export class Battle extends Dex.ModdedDex {
 					status: sideCondition, callback, statusData: sideConditionData, end: side.removeSideCondition, thing: side,
 				});
 				this.resolveLastPriority(handlers, callbackName);
+			}
+		}
+		for (const [i, slot] of side.slotConditions.entries()) {
+			for (const j in slot) {
+				const slotConditionData = slot[j];
+				const inSlot = side.active[i];
+				const slotCondition = side.getSlotCondition(inSlot, j);
+				// @ts-ignore - dynamic lookup
+				const callback = slotCondition[callbackName];
+				if (callback !== undefined || (getKey && slotConditionData[getKey])) {
+					handlers.push({
+						status: slotCondition,
+						callback,
+						statusData: slotConditionData,
+						end: side.removeSlotCondition,
+						endCallArgs: [side, inSlot, slotCondition!.id],
+						thing: inSlot,
+					});
+					this.resolveLastPriority(handlers, callbackName);
+				}
 			}
 		}
 		return handlers;

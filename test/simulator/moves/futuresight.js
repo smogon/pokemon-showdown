@@ -23,6 +23,15 @@ describe('Future Sight', function () {
 		assert.notStrictEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
+	it(`should fail when already active for the target's position`, function () {
+		battle = common.createBattle();
+		battle.setPlayer('p1', {team: [{species: "Sneasel", ability: 'innerfocus', moves: ['odorsleuth']}]});
+		battle.setPlayer('p2', {team: [{species: "Girafarig", ability: 'innerfocus', moves: ['futuresight']}]});
+		battle.makeChoices('auto', 'move futuresight');
+		battle.makeChoices('auto', 'move futuresight');
+		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-fail|'));
+	});
+
 	it('[Gen 2] should damage in two turns, ignoring Protect', function () {
 		battle = common.gen(2).createBattle();
 		battle.setPlayer('p1', {team: [{species: "Sneasel", moves: ['odorsleuth', 'futuresight', 'protect', 'sweetscent']}]});
