@@ -232,16 +232,13 @@ if (require.main === module) {
 
 			// In benchmark mode the options are fixed for repeatability.
 			options.prng = BENCHMARK_SEED;
-			// 50 games forms a single benchmark 'unit' where these same 50 games
-			// get run multiple times to minimize variance.
-			options.totalGames = 50;
 			options.sequential = true;
 			options.formatter = formatter(trakkr);
 			benchmark = new Benchmark({
 				async: true,
 				defer: true,
-				initCount: 2, // warmup rounds
-				maxTime: 60,
+				minSamples: argv.minSamples || 20,
+				maxTime: argv.maxTime || 300,
 				fn: deferred => new Runner(options).run().finally(() => deferred.resolve()),
 				onError: () => process.exit(1),
 				onComplete: e => {
