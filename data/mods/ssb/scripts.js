@@ -87,12 +87,10 @@ let BattleScripts = {
 		// Dancer's activation order is completely different from any other event, so it's handled separately
 		if (move.flags['dance'] && moveDidSomething && !move.isExternal) {
 			let dancers = [];
-			for (const side of this.sides) {
-				for (const currentPoke of side.active) {
-					if (!currentPoke || !currentPoke.hp || pokemon === currentPoke) continue;
-					if (currentPoke.hasAbility('dancer') && !currentPoke.isSemiInvulnerable()) {
-						dancers.push(currentPoke);
-					}
+			for (const currentPoke of this.getAllActive()) {
+				if (pokemon === currentPoke) continue;
+				if (currentPoke.hasAbility('dancer') && !currentPoke.isSemiInvulnerable()) {
+					dancers.push(currentPoke);
 				}
 			}
 			// Dancer activates in order of lowest speed stat to highest
