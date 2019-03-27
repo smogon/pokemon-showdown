@@ -607,8 +607,10 @@ let BattleScripts = {
 		/** @type {(Pokemon | false | null)[]} */
 		let targetsCopy = targets.slice(0);
 		let i;
-		for (i = 0; i < hits && !damage.includes(false); i++) {
+		for (i = 0; i < hits; i++) {
+			if (damage.includes(false)) break;
 			if (pokemon.status === 'slp' && !isSleepUsable) break;
+			if (targets.some(target => target && !target.hp)) break;
 			move.hit = i + 1;
 			targetsCopy = targets.slice(0);
 			let target = targetsCopy[0]; // some relevant-to-single-target-moves-only things are hardcoded
@@ -650,9 +652,7 @@ let BattleScripts = {
 			// Modifies targetsCopy (which is why it's a copy)
 			[moveDamage, targetsCopy] = this.spreadMoveHit(targetsCopy, pokemon, move, moveData);
 
-			if (!moveDamage.some(val => val !== false)) {
-				break;
-			}
+			if (!moveDamage.some(val => val !== false)) break;
 			nullDamage = false;
 
 			for (let j = 0; j < damage.length; j++) {
@@ -668,7 +668,10 @@ let BattleScripts = {
 				move.mindBlownRecoil = false;
 			}
 			this.eachEvent('Update');
-			if (!pokemon.hp) break;
+			if (!pokemon.hp) {
+				i++; // report the correct number of hits for multihit moves
+				break;
+			}
 		}
 		if (i === 0) return damage.fill(false);
 		if (nullDamage) damage.fill(false);
