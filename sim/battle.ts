@@ -2185,16 +2185,13 @@ export class Battle extends Dex.ModdedDex {
 			} else {
 				target = pokemon.side.active[-targetLoc - 1];
 			}
-			if (target) {
-				if (!target.fainted) {
-					// target exists and is not fainted
-					return target;
-				} else if (target.side === pokemon.side) {
-					// fainted allied targets don't retarget
-					return null;
-				}
+			if (target && !(target.fainted && target.side !== pokemon.side)) {
+				// We aren't targetting a fainted foe.
+				return target;
 			}
-			// chosen target not valid, retarget randomly with resolveTarget
+
+			// Chosen target not valid,
+			// retarget randomly with resolveTarget
 		}
 		return this.resolveTarget(pokemon, move);
 	}

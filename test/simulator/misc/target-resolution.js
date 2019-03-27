@@ -39,7 +39,7 @@ describe('Target Resolution', function () {
 			const newHps = activePokemonList.map(pokemon => pokemon.hp);
 
 			assert.deepStrictEqual(prevHps, newHps);
-			assert(battle.log.includes('|move|p1a: Wailord|Water Pulse|null|[notarget]'));
+			assert(battle.log.includes('|move|p1a: Wailord|Water Pulse|p1: Latias|[notarget]'));
 			assert(battle.log.includes('|-fail|p1a: Wailord'));
 		});
 
@@ -136,9 +136,9 @@ describe('Target Resolution', function () {
 			const newHps = attackers.map(pokemon => pokemon.hp);
 
 			assert.deepStrictEqual(prevHps, newHps);
-			assert(battle.log.includes('|move|p1a: Wailord|Water Pulse|null|[notarget]'));
+			assert(battle.log.includes('|move|p1a: Wailord|Water Pulse|p1: Shedinja|[notarget]'));
 			assert(battle.log.includes('|-fail|p1a: Wailord'));
-			assert(battle.log.includes('|move|p2a: Wailord|Water Pulse|null|[notarget]'));
+			assert(battle.log.includes('|move|p2a: Wailord|Water Pulse|p2: Shedinja|[notarget]'));
 			assert(battle.log.includes('|-fail|p2a: Wailord'));
 		});
 

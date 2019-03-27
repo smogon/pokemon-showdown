@@ -601,6 +601,9 @@ export class Pokemon {
 					target = this.battle.priorityEvent('RedirectTarget', this, this, this.battle.getActiveMove(move), target);
 				}
 			}
+			if (target.fainted) {
+				return [];
+			}
 			if (selectedTarget !== target) {
 				this.battle.retargetLastMove(target);
 			}
