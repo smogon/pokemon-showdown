@@ -2253,13 +2253,11 @@ let BattleMovedex = {
 			this.add('-status', target, 'slp', '[from] move: Rest');
 			// @ts-ignore
 			if (napWeather.source === target) {
-				for (const side of this.sides) {
-					for (const curMon of side.active) {
-						if (curMon === source) continue;
-						if (curMon && curMon.hp && curMon.status !== 'slp' && curMon.status !== 'frz' && !curMon.hasAbility('comatose')) {
-							this.add('-anim', source, "Yawn", curMon);
-							this.useMove(move, curMon, curMon, move);
-						}
+				for (const curMon of this.getAllActive()) {
+					if (curMon === source) continue;
+					if (curMon.status !== 'slp' && curMon.status !== 'frz' && !curMon.hasAbility('comatose')) {
+						this.add('-anim', source, "Yawn", curMon);
+						this.useMove(move, curMon, curMon, move);
 					}
 				}
 			}

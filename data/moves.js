@@ -5629,12 +5629,10 @@ let BattleMovedex = {
 		flags: {distance: 1},
 		onHitField(target, source, move) {
 			let targets = [];
-			for (const side of this.sides) {
-				for (const pokemon of side.active) {
-					if (pokemon && pokemon.isActive && pokemon.hasType('Grass')) {
-						// This move affects every Grass-type Pokemon in play.
-						targets.push(pokemon);
-					}
+			for (const pokemon of this.getAllActive()) {
+				if (pokemon.hasType('Grass')) {
+					// This move affects every Grass-type Pokemon in play.
+					targets.push(pokemon);
 				}
 			}
 			let success = false;
@@ -6029,10 +6027,8 @@ let BattleMovedex = {
 		flags: {protect: 1},
 		onHit() {
 			this.add('-clearallboost');
-			for (const side of this.sides) {
-				for (const pokemon of side.active) {
-					if (pokemon && pokemon.isActive) pokemon.clearBoosts();
-				}
+			for (const pokemon of this.getAllActive()) {
+				pokemon.clearBoosts();
 			}
 		},
 		secondary: null,
@@ -6761,7 +6757,7 @@ let BattleMovedex = {
 			},
 			onStart() {
 				this.add('-fieldstart', 'move: Gravity');
-				for (const pokemon of this.sides[0].active.concat(this.sides[1].active)) {
+				for (const pokemon of this.getAllActive()) {
 					let applies = false;
 					if (pokemon.removeVolatile('bounce') || pokemon.removeVolatile('fly')) {
 						applies = true;
@@ -7174,10 +7170,8 @@ let BattleMovedex = {
 		flags: {authentic: 1},
 		onHitField() {
 			this.add('-clearallboost');
-			for (const side of this.sides) {
-				for (const pokemon of side.active) {
-					if (pokemon && pokemon.isActive) pokemon.clearBoosts();
-				}
+			for (const pokemon of this.getAllActive()) {
+				pokemon.clearBoosts();
 			}
 		},
 		secondary: null,
@@ -11702,21 +11696,17 @@ let BattleMovedex = {
 		onHitField(target, source, move) {
 			let result = false;
 			let message = false;
-			for (const side of this.sides) {
-				for (const pokemon of side.active) {
-					if (pokemon && pokemon.isActive) {
-						if (!this.runEvent('Accuracy', pokemon, source, move, true)) {
-							this.add('-miss', source, pokemon);
-							result = true;
-						} else if (this.runEvent('TryHit', pokemon, source, move) === null) {
-							result = true;
-						} else if (!pokemon.volatiles['perishsong']) {
-							pokemon.addVolatile('perishsong');
-							this.add('-start', pokemon, 'perish3', '[silent]');
-							result = true;
-							message = true;
-						}
-					}
+			for (const pokemon of this.getAllActive()) {
+				if (!this.runEvent('Accuracy', pokemon, source, move, true)) {
+					this.add('-miss', source, pokemon);
+					result = true;
+				} else if (this.runEvent('TryHit', pokemon, source, move) === null) {
+					result = true;
+				} else if (!pokemon.volatiles['perishsong']) {
+					pokemon.addVolatile('perishsong');
+					this.add('-start', pokemon, 'perish3', '[silent]');
+					result = true;
+					message = true;
 				}
 			}
 			if (!result) return false;
@@ -13962,18 +13952,15 @@ let BattleMovedex = {
 		onHitField(target, source) {
 			let targets = [];
 			let anyAirborne = false;
-			for (const side of this.sides) {
-				for (const pokemon of side.active) {
-					if (!pokemon || !pokemon.isActive) continue;
-					if (!pokemon.runImmunity('Ground')) {
-						this.add('-immune', pokemon);
-						anyAirborne = true;
-						continue;
-					}
-					if (pokemon.hasType('Grass')) {
-						// This move affects every grounded Grass-type Pokemon in play.
-						targets.push(pokemon);
-					}
+			for (const pokemon of this.getAllActive()) {
+				if (!pokemon.runImmunity('Ground')) {
+					this.add('-immune', pokemon);
+					anyAirborne = true;
+					continue;
+				}
+				if (pokemon.hasType('Grass')) {
+					// This move affects every grounded Grass-type Pokemon in play.
+					targets.push(pokemon);
 				}
 			}
 			if (!targets.length && !anyAirborne) return false; // Fails when there are no grounded Grass types or airborne Pokemon

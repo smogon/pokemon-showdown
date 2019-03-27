@@ -871,7 +871,7 @@ let Formats = [
 			if (uberPokemon.includes(template.name) || set.ability === 'Power Construct' || uberStones.includes(item.name)) return ["" + template.species + " is not allowed to hold " + item.name + "."];
 		},
 		onBegin() {
-			for (const pokemon of this.sides[0].pokemon.concat(this.sides[1].pokemon)) {
+			for (const pokemon of this.getAllPokemon()) {
 				pokemon.originalSpecies = pokemon.baseTemplate.species;
 			}
 		},

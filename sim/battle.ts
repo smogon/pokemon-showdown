@@ -247,10 +247,8 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	updateSpeed() {
-		for (const side of this.sides) {
-			for (const pokemon of side.active) {
-				if (pokemon) pokemon.updateSpeed();
-			}
+		for (const pokemon of this.getAllActive()) {
+			pokemon.updateSpeed();
 		}
 	}
 
@@ -305,13 +303,8 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	eachEvent(eventid: string, effect?: Effect, relayVar?: boolean) {
-		const actives = [];
+		const actives = this.getAllActive();
 		if (!effect && this.effect) effect = this.effect;
-		for (const side of this.sides) {
-			for (const pokemon of side.active) {
-				if (pokemon) actives.push(pokemon);
-			}
-		}
 		this.speedSort(actives, (a, b) => b.speed - a.speed);
 		for (const pokemon of actives) {
 			this.runEvent(eventid, pokemon, null, effect, relayVar);
@@ -1403,13 +1396,7 @@ export class Battle extends Dex.ModdedDex {
 
 		if (this.gameType === 'triples' && !this.sides.filter(side => side.pokemonLeft > 1).length) {
 			// If both sides have one Pokemon left in triples and they are not adjacent, they are both moved to the center.
-			const actives = [];
-			for (const side of this.sides) {
-				for (const pokemon of side.active) {
-					if (!pokemon || pokemon.fainted) continue;
-					actives.push(pokemon);
-				}
-			}
+			const actives = this.getAllActive();
 			if (actives.length > 1 && !this.isAdjacent(actives[0], actives[1])) {
 				this.swapPosition(actives[0], 1, '[silent]');
 				this.swapPosition(actives[1], 1, '[silent]');
@@ -2291,15 +2278,13 @@ export class Battle extends Dex.ModdedDex {
 			this.queue = [];
 		} else if (this.gen <= 3 && this.gameType === 'singles') {
 			// in gen 3 or earlier, fainting in singles skips to residuals
-			for (const side of this.sides) {
-				for (const pokemon of side.active) {
-					if (this.gen <= 2) {
-						// in gen 2, fainting skips moves only
-						this.cancelMove(pokemon);
-					} else {
-						// in gen 3, fainting skips all moves and switches
-						this.cancelAction(pokemon);
-					}
+			for (const pokemon of this.getAllActive()) {
+				if (this.gen <= 2) {
+					// in gen 2, fainting skips moves only
+					this.cancelMove(pokemon);
+				} else {
+					// in gen 3, fainting skips all moves and switches
+					this.cancelAction(pokemon);
 				}
 			}
 		}
@@ -2557,10 +2542,8 @@ export class Battle extends Dex.ModdedDex {
 					this.switchIn(side.pokemon[pos], pos);
 				}
 			}
-			for (const side of this.sides) {
-				for (const pokemon of side.pokemon) {
-					this.singleEvent('Start', this.getEffect(pokemon.species), pokemon.speciesData, pokemon);
-				}
+			for (const pokemon of this.getAllPokemon()) {
+				this.singleEvent('Start', this.getEffect(pokemon.species), pokemon.speciesData, pokemon);
 			}
 			this.midTurn = true;
 			break;
