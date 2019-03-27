@@ -986,6 +986,26 @@ export class Battle extends Dex.ModdedDex {
 		return null;
 	}
 
+	getAllPokemon() {
+		const pokemonList: Pokemon[] = [];
+		for (const side of this.sides) {
+			pokemonList.push(...side.pokemon);
+		}
+		return pokemonList;
+	}
+
+	getAllActive() {
+		const pokemonList: Pokemon[] = [];
+		for (const side of this.sides) {
+			for (const pokemon of side.active) {
+				if (pokemon && !pokemon.fainted) {
+					pokemonList.push(pokemon);
+				}
+			}
+		}
+		return pokemonList;
+	}
+
 	makeRequest(type?: string) {
 		if (type) {
 			this.currentRequest = type;
