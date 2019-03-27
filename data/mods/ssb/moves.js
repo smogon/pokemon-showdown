@@ -191,7 +191,7 @@ let BattleMovedex = {
 			let side = source.side;
 			if (side.faintedLastTurn) {
 				this.add('-anim', source, "Wish", target);
-				side.addSideCondition('wish', source);
+				side.addSlotCondition(source, 'wish', source);
 				this.add('-message', `${source.name} made a wish!`);
 				didSomething = true;
 			}
@@ -2253,13 +2253,11 @@ let BattleMovedex = {
 			this.add('-status', target, 'slp', '[from] move: Rest');
 			// @ts-ignore
 			if (napWeather.source === target) {
-				for (const side of this.sides) {
-					for (const curMon of side.active) {
-						if (curMon === source) continue;
-						if (curMon && curMon.hp && curMon.status !== 'slp' && curMon.status !== 'frz' && !curMon.hasAbility('comatose')) {
-							this.add('-anim', source, "Yawn", curMon);
-							this.useMove(move, curMon, curMon, move);
-						}
+				for (const curMon of this.getAllActive()) {
+					if (curMon === source) continue;
+					if (curMon.status !== 'slp' && curMon.status !== 'frz' && !curMon.hasAbility('comatose')) {
+						this.add('-anim', source, "Yawn", curMon);
+						this.useMove(move, curMon, curMon, move);
 					}
 				}
 			}
@@ -2700,7 +2698,7 @@ let BattleMovedex = {
 			this.add('-anim', source, "Mist", target);
 		},
 		onTryHit(target, source, move) {
-			target.side.addSideCondition('pyramidingsong');
+			target.side.addSlotCondition(target, 'pyramidingsong');
 		},
 		onHit(target, source, move) {
 			if (this.runEvent('DragOut', source, target, move)) {

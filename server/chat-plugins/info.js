@@ -1939,23 +1939,21 @@ const commands = {
 			const supportedLanguages = {
 				spanish: 'es',
 				french: 'fr',
-				italian: 'ita',
-				german: 'ger',
-				portuguese: 'por',
+				italian: 'it',
+				german: 'de',
+				portuguese: 'pt',
 			};
 			let speciesid = pokemon.speciesid;
 			// Special case for Meowstic-M
 			if (speciesid === 'meowstic') speciesid = 'meowsticm';
-			if (formatId === 'ou' && generation === 'sm' && room && room.language in supportedLanguages) {
+			if (['ou', 'uu'].includes(formatId) && generation === 'sm' && room && room.language in supportedLanguages) {
 				// Limited support for translated analysis
 				// Translated analysis do not support automatic redirects from a speciesid to the proper page
-				let pageid = pokemon.name.toLowerCase().replace(' ', '_');
-				this.sendReplyBox(`<a href="https://www.smogon.com/translations/${supportedLanguages[room.language]}/analyses/ou/${pageid}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
-			} else if (formatId === 'ou' && generation === 'sm') {
-				let pageid = pokemon.name.toLowerCase().replace(' ', '_');
-				this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/ou">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a><br />` +
-					`Other languages: <a href="https://www.smogon.com/translations/es/analyses/ou/${pageid}">Español</a>, <a href="https://www.smogon.com/translations/fr/analyses/ou/${pageid}">Français</a>, <a href="https://www.smogon.com/translations/ita/analyses/ou/${pageid}">Italiano</a>, ` +
-					`<a href="https://www.smogon.com/translations/ger/analyses/ou/${pageid}">Deutsch</a>, <a href="https://www.smogon.com/translations/por/analyses/ou/${pageid}">Português</a>`
+				this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=${supportedLanguages[room.language]}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
+			} else if (['ou', 'uu'].includes(formatId) && generation === 'sm') {
+				this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a><br />` +
+					`Other languages: <a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=es">Español</a>, <a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=fr">Français</a>, <a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=it">Italiano</a>, ` +
+					`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=de">Deutsch</a>, <a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}/${formatId}/?lang=pt">Português</a>`
 				);
 			} else {
 				this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/pokemon/${speciesid}${(formatId ? '/' + formatId : '')}">${generation.toUpperCase()} ${Chat.escapeHTML(formatName)} ${pokemon.name} analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
@@ -2292,7 +2290,7 @@ const commands = {
 		if (!target) return this.parse('/help htmlbox');
 		target = this.canHTML(target);
 		if (!target) return;
-
+		target = Chat.collapseLineBreaksHTML(target);
 		if (!this.canBroadcast(true, '!htmlbox')) return;
 		if (this.broadcastMessage && !this.can('declare', null, room)) return false;
 
@@ -2310,7 +2308,7 @@ const commands = {
 		target = this.canHTML(target);
 		if (!target) return;
 		if (!this.can('addhtml', null, room)) return;
-
+		target = Chat.collapseLineBreaksHTML(target);
 		if (!user.can('addhtml')) {
 			target += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
@@ -2328,7 +2326,7 @@ const commands = {
 		html = this.canHTML(html);
 		if (!html) return;
 		if (!this.can('addhtml', null, room)) return;
-
+		html = Chat.collapseLineBreaksHTML(html);
 		if (!user.can('addhtml')) {
 			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
@@ -2348,7 +2346,7 @@ const commands = {
 		html = this.canHTML(html);
 		if (!html) return;
 		if (!this.can('addhtml', null, room)) return;
-
+		html = Chat.collapseLineBreaksHTML(html);
 		if (!user.can('addhtml')) {
 			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
@@ -2374,7 +2372,7 @@ const commands = {
 		html = this.canHTML(html);
 		if (!html) return;
 		if (!this.can('addhtml', null, room)) return;
-
+		html = Chat.collapseLineBreaksHTML(html);
 		if (!user.can('addhtml')) {
 			html += Chat.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
@@ -2455,4 +2453,7 @@ exports.commands = commands;
 
 process.nextTick(() => {
 	Dex.includeData();
+	Chat.multiLinePattern.register(
+		'/htmlbox', '!htmlbox', '/addhtmlbox', '/addrankhtmlbox', '/adduthml', '/changeuhtml', '/addrankuhtmlbox', '/changerankuhtmlbox'
+	);
 });

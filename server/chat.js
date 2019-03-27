@@ -1714,6 +1714,14 @@ Chat.toListString = function (array) {
 	if (array.length === 1) return array[0];
 	return `${array.slice(0, -1).join(", ")} and ${array.slice(-1)}`;
 };
+
+/** @param {String} html */
+Chat.collapseLineBreaksHTML = function (html) {
+	html = html.replace(/<[^>]*>/g, tag => tag.replace(/\n/g, ' '));
+	html = html.replace(/\n/g, '&#10;');
+	return html;
+};
+
 /**
  * @param {Template} template
  * @param {number} gen

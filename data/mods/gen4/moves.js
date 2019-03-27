@@ -430,10 +430,7 @@ let BattleMovedex = {
 		basePower: 120,
 		desc: "Deals typeless damage that cannot be a critical hit two turns after this move is used. Damage is calculated against the target on use, and at the end of the final turn that damage is dealt to the Pokemon at the position the original target had at the time. Fails if this move or Future Sight is already in effect for the target's position.",
 		onTry(source, target) {
-			target.side.addSideCondition('futuremove');
-			if (target.side.sideConditions['futuremove'].positions[target.position]) {
-				return false;
-			}
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 			let moveData = /** @type {ActiveMove} */ ({
 				name: "Doom Desire",
 				basePower: 120,
@@ -443,7 +440,7 @@ let BattleMovedex = {
 				type: '???',
 			});
 			let damage = this.getDamage(source, target, moveData, true);
-			target.side.sideConditions['futuremove'].positions[target.position] = {
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				duration: 3,
 				move: 'doomdesire',
 				source: source,
@@ -459,7 +456,7 @@ let BattleMovedex = {
 					isFutureMove: true,
 					type: '???',
 				},
-			};
+			});
 			this.add('-start', source, 'Doom Desire');
 			return null;
 		},
@@ -691,10 +688,7 @@ let BattleMovedex = {
 		desc: "Deals typeless damage that cannot be a critical hit two turns after this move is used. Damage is calculated against the target on use, and at the end of the final turn that damage is dealt to the Pokemon at the position the original target had at the time. Fails if this move or Doom Desire is already in effect for the target's position.",
 		pp: 15,
 		onTry(source, target) {
-			target.side.addSideCondition('futuremove');
-			if (target.side.sideConditions['futuremove'].positions[target.position]) {
-				return false;
-			}
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 			let moveData = /** @type {ActiveMove} */ ({
 				name: "Future Sight",
 				basePower: 80,
@@ -704,7 +698,7 @@ let BattleMovedex = {
 				type: '???',
 			});
 			let damage = this.getDamage(source, target, moveData, true);
-			target.side.sideConditions['futuremove'].positions[target.position] = {
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				duration: 3,
 				move: 'futuresight',
 				source: source,
@@ -720,7 +714,7 @@ let BattleMovedex = {
 					isFutureMove: true,
 					type: '???',
 				},
-			};
+			});
 			this.add('-start', source, 'Future Sight');
 			return null;
 		},
@@ -820,14 +814,8 @@ let BattleMovedex = {
 		},
 		effect: {
 			duration: 1,
-			onStart(side) {
-				this.debug('Healing Wish started on ' + side.name);
-			},
 			onSwitchInPriority: -1,
 			onSwitchIn(target) {
-				if (target.position !== this.effectData.sourcePosition) {
-					return;
-				}
 				if (target.hp > 0) {
 					target.heal(target.maxhp);
 					target.setStatus('');
@@ -1768,12 +1756,11 @@ let BattleMovedex = {
 		desc: "At the end of the next turn, the Pokemon at the user's position has 1/2 of its maximum HP restored to it, rounded down. Fails if this move is already in effect for the user's position.",
 		shortDesc: "Next turn, heals 50% of the recipient's max HP.",
 		flags: {heal: 1},
-		sideCondition: 'Wish',
+		slotCondition: 'Wish',
 		effect: {
 			duration: 2,
 			onResidualOrder: 0.5,
-			onEnd(side) {
-				let target = side.active[this.effectData.sourcePosition];
+			onEnd(target) {
 				if (!target.fainted) {
 					let source = this.effectData.source;
 					let damage = this.heal(target.maxhp / 2, target, target);

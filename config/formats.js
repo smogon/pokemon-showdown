@@ -179,9 +179,6 @@ let Formats = [
 			'Mimikyu', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Rayquaza', 'Reshiram', 'Salamence-Mega', 'Shaymin-Sky',
 			'Snorlax', 'Solgaleo', 'Tapu Koko', 'Xerneas', 'Yveltal', 'Zekrom', 'Focus Sash', 'Perish Song', 'Detect + Fightinium Z',
 		],
-		onBegin() {
-			if (this.rated && this.format === 'gen71v1') this.add('html', `<div class="broadcast-red"><strong>1v1 is currently suspecting Jirachi! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3648161/">suspect thread</a>.</strong></div>`);
-		},
 	},
 	{
 		name: "[Gen 7] ZU",
@@ -239,20 +236,24 @@ let Formats = [
 		requirePentagon: true,
 	},
 	{
-		name: "[Gen 7] Battle Spot Special 14",
-		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3645397/">Battle Spot Special 14</a>`],
+		name: "[Gen 7] Battle Spot Special 15",
+		threads: [`&bullet; <a href="https://www.smogon.com/forums/threads/3648618/">Battle Spot Special 15</a>`],
 
 		mod: 'gen7',
 		forcedLevel: 50,
 		teamLength: {
-			validate: [3, 6],
-			battle: 3,
+			validate: [1, 6],
+			battle: 1,
 		},
-		ruleset: ['Pokemon', 'Standard GBU'],
+		ruleset: ['Pokemon', 'Species Clause', 'Nickname Clause', 'Item Clause', 'Team Preview', 'Cancel Mod'],
+		banlist: ['Unreleased', 'Illegal', 'Mewtwo', 'Dusclops', 'Dusknoir'],
 		onValidateSet(set, format) {
+			if (set.moves.length !== 1 || this.getMove(set.moves[0]).id !== 'metronome') {
+				return [`${set.name || set.species} has illegal moves.`, `(${format.name} only allows the move Metronome)`];
+			}
 			if (set.item) {
-				let item = this.getItem(set.item);
-				if (!item.isBerry) return [`${set.name || set.species} has ${item.name}, which is banned in ${format.name}.`];
+				const item = this.getItem(set.item);
+				if (item.megaStone) return [`${set.name || set.species} has ${item.name}, which is banned in ${format.name}.`];
 			}
 		},
 	},
@@ -867,7 +868,7 @@ let Formats = [
 			if (uberPokemon.includes(template.name) || set.ability === 'Power Construct' || uberStones.includes(item.name)) return ["" + template.species + " is not allowed to hold " + item.name + "."];
 		},
 		onBegin() {
-			for (const pokemon of this.sides[0].pokemon.concat(this.sides[1].pokemon)) {
+			for (const pokemon of this.getAllPokemon()) {
 				pokemon.originalSpecies = pokemon.baseTemplate.species;
 			}
 		},

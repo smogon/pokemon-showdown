@@ -98,12 +98,10 @@ let BattleScripts = {
 		// Dancer's activation order is completely different from any other event, so it's handled separately
 		if (move.flags['dance'] && moveDidSomething && !move.isExternal) {
 			let dancers = [];
-			for (const side of this.sides) {
-				for (const currentPoke of side.active) {
-					if (!currentPoke || !currentPoke.hp || pokemon === currentPoke) continue;
-					if (currentPoke.hasAbility('dancer') && !currentPoke.isSemiInvulnerable()) {
-						dancers.push(currentPoke);
-					}
+			for (const currentPoke of this.getAllActive()) {
+				if (pokemon === currentPoke) continue;
+				if (currentPoke.hasAbility('dancer') && !currentPoke.isSemiInvulnerable()) {
+					dancers.push(currentPoke);
 				}
 			}
 			// Dancer activates in order of lowest speed stat to highest
@@ -325,7 +323,12 @@ let BattleScripts = {
 		}
 		this.runEvent('PrepareHit', pokemon, targets[0], move);
 
-		if (!this.singleEvent('Try', move, null, pokemon, targets[0], move)) {
+		hitResult = this.singleEvent('Try', move, null, pokemon, targets[0], move);
+		if (!hitResult) {
+			if (hitResult === false) {
+				this.add('-fail', pokemon);
+				this.attrLastMove('[still]');
+			}
 			return false;
 		}
 
@@ -652,16 +655,17 @@ let BattleScripts = {
 			}
 			nullDamage = false;
 
-			for (let i = 0; i < damage.length; i++) {
+			for (let j = 0; j < damage.length; j++) {
 				// Damage from each hit is individually counted for the
 				// purposes of Counter, Metal Burst, and Mirror Coat.
-				damage[i] = moveDamage[i] === true || !moveDamage[i] ? 0 : moveDamage[i];
+				damage[j] = moveDamage[j] === true || !moveDamage[j] ? 0 : moveDamage[j];
 				// Total damage dealt is accumulated for the purposes of recoil (Parental Bond).
 				// @ts-ignore
-				move.totalDamage += damage[i];
+				move.totalDamage += damage[j];
 			}
-			if (move.mindBlownRecoil && i === 0) {
+			if (move.mindBlownRecoil) {
 				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.getEffect('Mind Blown'), true);
+				move.mindBlownRecoil = false;
 			}
 			this.eachEvent('Update');
 			if (!pokemon.hp) break;
@@ -771,7 +775,7 @@ let BattleScripts = {
 		if (moveData.self && !move.selfDropped) this.selfDrops(targets, pokemon, move, moveData, isSecondary);
 
 		// 5. secondary effects
-		if (moveData.secondaries) this.secondaries(targets, pokemon, move, moveData, isSecondary);
+		if (moveData.secondaries) this.secondaries(targets, pokemon, move, moveData, isSelf);
 
 		// 6. force switch
 		if (moveData.forceSwitch) damage = this.forceSwitch(damage, targets, pokemon, move, moveData, isSecondary, isSelf);
@@ -836,13 +840,12 @@ let BattleScripts = {
 	},
 	runMoveEffects(damage, targets, pokemon, move, moveData, isSecondary, isSelf) {
 		/**@type {?boolean | number | null | undefined} */
-		// @ts-ignore
-		let didAnything = damage.reduce(this.combineResults, undefined);
+		let didAnything = undefined;
 		for (const [i, target] of targets.entries()) {
 			if (target === false) continue;
 			let hitResult;
 			/**@type {?boolean | number | undefined} */
-			let didSomething = damage[i];
+			let didSomething = undefined;
 
 			if (target) {
 				if (moveData.boosts && !target.fainted) {
@@ -881,6 +884,10 @@ let BattleScripts = {
 				}
 				if (moveData.sideCondition) {
 					hitResult = target.side.addSideCondition(moveData.sideCondition, pokemon, move);
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
+				if (moveData.slotCondition) {
+					hitResult = target.side.addSlotCondition(target, moveData.slotCondition, pokemon, move);
 					didSomething = this.combineResults(didSomething, hitResult);
 				}
 				if (moveData.weather) {
@@ -1172,7 +1179,7 @@ let BattleScripts = {
 				this.heal(pokemon.maxhp, pokemon, pokemon, zPower);
 				break;
 			case 'healreplacement':
-				move.self = {sideCondition: 'healreplacement'};
+				move.self = {slotCondition: 'healreplacement'};
 				break;
 			case 'clearnegativeboost':
 				/** @type {{[k: string]: number}} */
