@@ -488,24 +488,22 @@ let BattleMovedex = {
 		shortDesc: "Resets all stat changes. Removes foe's status.",
 		onHit(target, source) {
 			this.add('-clearallboost');
-			for (const side of this.sides) {
-				for (const pokemon of side.active) {
-					pokemon.clearBoosts();
+			for (const pokemon of this.getAllActive()) {
+				pokemon.clearBoosts();
 
-					if (pokemon !== source) {
-						// Clears the status from the opponent
-						pokemon.setStatus('');
-					}
-					if (pokemon.status === 'tox') {
-						pokemon.setStatus('psn');
-					}
-					for (const id of Object.keys(pokemon.volatiles)) {
-						if (id === 'residualdmg') {
-							pokemon.volatiles[id].counter = 0;
-						} else {
-							pokemon.removeVolatile(id);
-							this.add('-end', pokemon, id);
-						}
+				if (pokemon !== source) {
+					// Clears the status from the opponent
+					pokemon.setStatus('');
+				}
+				if (pokemon.status === 'tox') {
+					pokemon.setStatus('psn');
+				}
+				for (const id of Object.keys(pokemon.volatiles)) {
+					if (id === 'residualdmg') {
+						pokemon.volatiles[id].counter = 0;
+					} else {
+						pokemon.removeVolatile(id);
+						this.add('-end', pokemon, id);
 					}
 				}
 			}

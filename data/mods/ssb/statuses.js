@@ -1231,10 +1231,8 @@ let BattleStatuses = {
 				}
 			}
 			this.add('-clearallboost');
-			for (const side of this.sides) {
-				for (const pokemon of side.active) {
-					if (pokemon && pokemon.isActive) pokemon.clearBoosts();
-				}
+			for (const pokemon of this.getAllActive()) {
+				pokemon.clearBoosts();
 			}
 			for (const clear in this.field.pseudoWeather) {
 				if (clear.endsWith('mod') || clear.endsWith('clause')) continue;
