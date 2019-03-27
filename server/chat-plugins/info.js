@@ -2412,7 +2412,7 @@ const pages = {
 			buf += `<th style="border: 1px solid black;">Expire time</th>`;
 			buf += `<th style="border: 1px solid black;">Reason</th>`;
 			buf += `<th style="border: 1px solid black;">Alts</th>`;
-			if (user.can('ban')) buf += `<th style="border: 1px solid black;">IP</th>`;
+			if (user.can('ban')) buf += `<th style="border: 1px solid black;">IPs</th>`;
 			buf += `</tr>`;
 			for (const punishment of sortedPunishments) {
 				let expireString = Chat.toDurationString(punishment.expiresIn, {precision: 1});
@@ -2422,7 +2422,7 @@ const pages = {
 				buf += `<td style="border: 1px solid black;">${expireString}</td>`;
 				buf += (punishment.reason) ? `<td style="border: 1px solid black;">${punishment.reason}</td>` : `<td style="border: 1px solid black;"> - </td>`;
 				buf += (punishment.alts.length) ? `<td style="border: 1px solid black;">${punishment.alts.join(", ")}</td>` : `<td style="border: 1px solid black;"> - </td>`;
-				buf += (user.can('ban') && punishment.ip.length) ? `<td style="border: 1px solid black;">${punishment.ip.join(", ")}</td>` : (user.can('ban') && !punishment.ip.length) ? `<td style="border: 1px solid black;"> - </td>` : ``;
+				buf += (user.can('ban') && punishment.ips.length) ? `<td style="border: 1px solid black;">${punishment.ips.join(", ")}</td>` : (user.can('ban') && !punishment.ips.length) ? `<td style="border: 1px solid black;"> - </td>` : ``;
 				buf += `</tr>`;
 			}
 			buf += `</table>`;
