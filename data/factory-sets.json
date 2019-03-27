@@ -5522,18 +5522,6 @@
 				"moves": [["Stone Edge"], ["Earthquake"], ["Pursuit"], ["Ice Fang"]]
 			}]
 		},
-		"ambipom": {
-			"flags": {},
-			"sets": [{
-				"species": "Ambipom",
-				"item": ["Life Orb"],
-				"ability": ["Technician"],
-				"happiness": 0,
-				"evs": {"atk": 252, "def": 4, "spe": 252},
-				"nature": "Jolly",
-				"moves": [["Fake Out"], ["Frustration"], ["Low Kick"], ["U-turn"]]
-			}]
-		},
 		"audino": {
 			"flags": {
 				"megaOnly": 1
@@ -5595,35 +5583,6 @@
 				"ivs": {"atk": 0},
 				"nature": "Timid",
 				"moves": [["Hold Hands"], ["Fire Blast"], ["Hidden Power Grass"], ["Focus Blast"]]
-			}]
-		},
-		"cinccino": {
-			"flags": {},
-			"sets": [{
-				"species": "Cinccino",
-				"item": ["Choice Band"],
-				"ability": ["Skill Link"],
-				"evs": {"atk": 252, "spd": 4, "spe": 252},
-				"nature": "Jolly",
-				"moves": [["Tail Slap"], ["Bullet Seed"], ["Knock Off"], ["Rock Blast"]]
-			}]
-		},
-		"clawitzer": {
-			"flags": {},
-			"sets": [{
-				"species": "Clawitzer",
-				"item": ["Choice Specs"],
-				"ability": ["Mega Launcher"],
-				"evs": {"def": 4, "spa": 252, "spe": 252},
-				"nature": "Modest",
-				"moves": [["Water Pulse"], ["Dark Pulse"], ["Ice Beam"], ["Aura Sphere"]]
-			}, {
-				"species": "Clawitzer",
-				"item": ["Leftovers"],
-				"ability": ["Mega Launcher"],
-				"evs": {"hp": 84, "spa": 240, "spe": 184},
-				"nature": "Modest",
-				"moves": [["Water Pulse"], ["Dark Pulse"], ["Toxic"], ["Substitute"]]
 			}]
 		},
 		"comfey": {
@@ -5890,17 +5849,6 @@
 				"moves": [["Volt Switch"], ["Thunderbolt"], ["Hyper Voice"], ["Surf"]]
 			}]
 		},
-		"hitmonlee": {
-			"flags": {},
-			"sets": [{
-				"species": "Hitmonlee",
-				"item": ["White Herb"],
-				"ability": ["Unburden"],
-				"evs": {"atk": 252, "spd": 4, "spe": 252},
-				"nature": "Adamant",
-				"moves": [["Curse"], ["Close Combat"], ["Stone Edge"], ["Knock Off"]]
-			}]
-		},
 		"houndoom": {
 			"flags": {},
 			"sets": [{
@@ -5935,17 +5883,6 @@
 				"evs": {"atk": 252, "def": 4, "spe": 252},
 				"nature": "Jolly",
 				"moves": [["Flare Blitz"], ["Knock Off"], ["Earthquake"], ["Swords Dance"]]
-			}]
-		},
-		"kingler": {
-			"flags": {},
-			"sets": [{
-				"species": "Kingler",
-				"item": ["Life Orb"],
-				"ability": ["Sheer Force"],
-				"evs": {"atk": 252, "spd": 4, "spe": 252},
-				"nature": "Jolly",
-				"moves": [["Swords Dance"], ["Liquidation"], ["Knock Off"], ["Agility"]]
 			}]
 		},
 		"klinklang": {
@@ -5997,17 +5934,6 @@
 				"evs": {"atk": 252, "spd": 4, "spe": 252},
 				"nature": "Jolly",
 				"moves": [["Thunder Punch"], ["Trick"], ["Zen Headbutt"], ["High Jump Kick"]]
-			}]
-		},
-		"miltank": {
-			"flags": {},
-			"sets": [{
-				"species": "Miltank",
-				"item": ["Leftovers"],
-				"ability": ["Thick Fat"],
-				"evs": {"hp": 252, "spd": 236, "spe": 20},
-				"nature": "Calm",
-				"moves": [["Toxic"], ["Milk Drink"], ["Stealth Rock"], ["Seismic Toss"]]
 			}]
 		},
 		"mismagius": {
