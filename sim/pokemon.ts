@@ -207,10 +207,7 @@ export class Pokemon {
 	modifyStat?: (this: Pokemon, statName: StatNameExceptHP, modifier: number) => void;
 
 	// OMs
-	innate?: string;
-	innates?: string[];
-	originalSpecies?: string;
-	gluttonyFlag: boolean | null;
+	m: AnyObject;
 
 	constructor(set: string | AnyObject, side: Side) {
 		this.side = side;
@@ -379,10 +376,10 @@ export class Pokemon {
 		this.isStalePPTurns = 0;
 		this.staleWarned = false;
 
-		this.innate = undefined;
-		this.innates = undefined;
-		this.originalSpecies = undefined;
-		this.gluttonyFlag = null;
+		/**
+		 * An Object that can store miscelaneous data. Mostly for OMs.
+		 */
+		this.m = {};
 	}
 
 	get moves() {
