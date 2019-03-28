@@ -629,6 +629,8 @@ class RandomGen6Teams extends RandomTeams {
 					rejectAbility = template.types.includes('Ground');
 				} else if (ability === 'Limber') {
 					rejectAbility = template.types.includes('Electric');
+				} else if (ability === 'Magnet Pull') {
+					rejectAbility = !hasType['Electric'] && !hasMove['earthpower'];
 				} else if (ability === 'Overcoat') {
 					rejectAbility = abilities.includes('Sturdy');
 				} else if (ability === 'Overgrow') {
