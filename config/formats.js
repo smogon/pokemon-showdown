@@ -1332,8 +1332,8 @@ let Formats = [
 
 		mod: 'gen4',
 		// searchShow: false,
-		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber', 'OU', 'UUBL'],
+		ruleset: ['[Gen 4] OU'],
+		banlist: ['OU', 'UUBL'],
 	},
 	{
 		name: "[Gen 2] Inverse OU",
@@ -1387,8 +1387,8 @@ let Formats = [
 		],
 
 		mod: 'gen4',
-		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause'],
-		banlist: ['Uber', 'Soul Dew'],
+		ruleset: ['Pokemon', 'Standard', 'Baton Pass Clause'],
+		banlist: ['Uber', 'Sand Veil', 'Soul Dew'],
 	},
 	{
 		name: "[Gen 3] OU",
