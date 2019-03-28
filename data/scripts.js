@@ -584,20 +584,20 @@ let BattleScripts = {
 		for (let i = 0; i < targets.length; i++) damage[i] = 0;
 		move.totalDamage = 0;
 		pokemon.lastDamage = 0;
-		let hits = move.multihit || 1;
-		if (Array.isArray(hits)) {
+		let targetHits = move.multihit || 1;
+		if (Array.isArray(targetHits)) {
 			// yes, it's hardcoded... meh
-			if (hits[0] === 2 && hits[1] === 5) {
+			if (targetHits[0] === 2 && targetHits[1] === 5) {
 				if (this.gen >= 5) {
-					hits = this.sample([2, 2, 3, 3, 4, 5]);
+					targetHits = this.sample([2, 2, 3, 3, 4, 5]);
 				} else {
-					hits = this.sample([2, 2, 2, 3, 3, 3, 4, 5]);
+					targetHits = this.sample([2, 2, 2, 3, 3, 3, 4, 5]);
 				}
 			} else {
-				hits = this.random(hits[0], hits[1] + 1);
+				targetHits = this.random(targetHits[0], targetHits[1] + 1);
 			}
 		}
-		hits = Math.floor(hits);
+		targetHits = Math.floor(targetHits);
 		let nullDamage = true;
 		/** @type {(number | boolean | undefined)[]} */
 		let moveDamage;
@@ -606,15 +606,17 @@ let BattleScripts = {
 
 		/** @type {(Pokemon | false | null)[]} */
 		let targetsCopy = targets.slice(0);
-		let i;
-		for (i = 0; i < hits && !damage.includes(false); i++) {
+		let hit;
+		for (hit = 1; hit <= targetHits; hit++) {
+			if (damage.includes(false)) break;
 			if (pokemon.status === 'slp' && !isSleepUsable) break;
-			move.hit = i + 1;
+			if (targets.some(target => target && !target.hp)) break;
+			move.hit = hit;
 			targetsCopy = targets.slice(0);
 			let target = targetsCopy[0]; // some relevant-to-single-target-moves-only things are hardcoded
 
 			// like this (Triple Kick)
-			if (target && move.multiaccuracy && i > 0) {
+			if (target && move.multiaccuracy && hit > 1) {
 				let accuracy = move.accuracy;
 				const boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
 				if (accuracy !== true) {
@@ -650,29 +652,31 @@ let BattleScripts = {
 			// Modifies targetsCopy (which is why it's a copy)
 			[moveDamage, targetsCopy] = this.spreadMoveHit(targetsCopy, pokemon, move, moveData);
 
-			if (!moveDamage.some(val => val !== false)) {
-				break;
-			}
+			if (!moveDamage.some(val => val !== false)) break;
 			nullDamage = false;
 
-			for (let j = 0; j < damage.length; j++) {
+			for (const [i, md] of moveDamage.entries()) {
 				// Damage from each hit is individually counted for the
 				// purposes of Counter, Metal Burst, and Mirror Coat.
-				damage[j] = moveDamage[j] === true || !moveDamage[j] ? 0 : moveDamage[j];
+				damage[i] = md === true || !md ? 0 : md;
 				// Total damage dealt is accumulated for the purposes of recoil (Parental Bond).
 				// @ts-ignore
-				move.totalDamage += damage[j];
+				move.totalDamage += damage[i];
 			}
 			if (move.mindBlownRecoil) {
 				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.getEffect('Mind Blown'), true);
 				move.mindBlownRecoil = false;
 			}
 			this.eachEvent('Update');
-			if (!pokemon.hp) break;
+			if (!pokemon.hp) {
+				hit++; // report the correct number of hits for multihit moves
+				break;
+			}
 		}
-		if (i === 0) return damage.fill(false);
+		// hit is 1 higher than the actual hit count
+		if (hit === 1) return damage.fill(false);
 		if (nullDamage) damage.fill(false);
-		if (move.multihit) this.add('-hitcount', targets[0], i);
+		if (move.multihit) this.add('-hitcount', targets[0], hit - 1);
 
 		if (move.recoil && move.totalDamage) {
 			this.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, pokemon, 'recoil');
