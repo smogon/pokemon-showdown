@@ -454,8 +454,7 @@ let BattleStatuses = {
 				target.moveSlots.push({
 					move: move.name,
 					id: move.id,
-					// @ts-ignore hacky change for EV's set
-					pp: Math.floor(((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5) * (target.ppPercentages ? target.ppPercentages[i] : 1)),
+					pp: Math.floor(((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5) * (target.m.ppPercentages ? target.m.ppPercentages[i] : 1)),
 					maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
 					target: move.target,
 					disabled: false,
@@ -467,8 +466,7 @@ let BattleStatuses = {
 		},
 		onBeforeSwitchOut(pokemon) {
 			if (pokemon.illusion) return;
-			// @ts-ignore hacky change for EV's set
-			pokemon.ppPercentages = pokemon.moveSlots.slice().map(m => {
+			pokemon.m.ppPercentages = pokemon.moveSlots.slice().map(m => {
 				return m.pp / m.maxpp;
 			});
 		},
@@ -511,15 +509,14 @@ let BattleStatuses = {
 			let i = 0;
 			for (const moveSlot of pokemon.moveSlots) {
 				let move = this.getMove(moveSlot.id);
-				// @ts-ignore hacky way to reduce purple pill's PP
-				moveSlot.pp = Math.floor(((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5) * (pokemon.ppPercentages ? pokemon.ppPercentages[i] : 1));
+				moveSlot.pp = Math.floor(((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5) * (pokemon.m.ppPercentages ? pokemon.m.ppPercentages[i] : 1));
 				i++;
 			}
 		},
 		onBeforeSwitchOut(pokemon) {
 			if (pokemon.illusion) return;
-			// @ts-ignore track percentages to keep purple pills from resetting pp
-			pokemon.ppPercentages = pokemon.moveSlots.slice().map(m => {
+			// track percentages to keep purple pills from resetting pp
+			pokemon.m.ppPercentages = pokemon.moveSlots.slice().map(m => {
 				return m.pp / m.maxpp;
 			});
 		},
@@ -1136,29 +1133,26 @@ let BattleStatuses = {
 		},
 		onSwitchOut(pokemon) {
 			this.add(`c|%Snaquaza|Lynch Hoeen while I'm away...`);
-			// @ts-ignore Hack for Snaquaza's Z move
-			if (pokemon.claimHP) delete pokemon.claimHP;
+			if (pokemon.m.claimHP) pokemon.m.claimHP = null;
 		},
 		onFaint() {
 			this.add(`c|%Snaquaza|How did you know I was scum?`);
 		},
 		onDamage(damage, pokemon) {
-			// @ts-ignore Hack for Snaquaza's Z move
-			if (!pokemon.claimHP) return;
+			// Hack for Snaquaza's Z move
+			if (!pokemon.m.claimHP) return;
 			// Prevent Snaquaza from fainting while using a fake claim to prevent visual bug
 			if (pokemon.hp - damage <= 0) return (pokemon.hp - 1);
 		},
 		onAfterDamage(damage, pokemon) {
-			// @ts-ignore Hack for Snaquaza's Z move
-			if (!pokemon.claimHP || pokemon.hp > 1) return;
+			// Hack for Snaquaza's Z move
+			if (!pokemon.m.claimHP || pokemon.hp > 1) return;
 			// Now we handle the fake claim "fainting"
-			// @ts-ignore Hack for Snaquaza's Z move
-			pokemon.hp = pokemon.claimHP;
+			pokemon.hp = pokemon.m.claimHP;
 			pokemon.formeChange(pokemon.baseTemplate.id);
 			pokemon.moveSlots = pokemon.moveSlots.slice(0, 4);
 			this.add('message', `${pokemon.name}'s fake claim was uncovered!`);
-			// @ts-ignore Hack for Snaquaza's Z move
-			delete pokemon.claimHP;
+			pokemon.m.claimHP = null;
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
 	},
