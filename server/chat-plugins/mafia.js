@@ -61,7 +61,7 @@ let hostBans = Object.create(null);
 /** @type {string[]} */
 let hostQueue = [];
 
-const IDEA_TIMER = 120 * 1000;
+const IDEA_TIMER = 90 * 1000;
 
 /**
  * @param {string} name
