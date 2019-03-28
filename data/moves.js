@@ -6342,7 +6342,8 @@ let BattleMovedex = {
 			/** @type {boolean | 0 | null} */
 			let didSomething = false;
 			for (const target of targets) {
-				didSomething = this.combineResults(didSomething, this.boost({atk: 1, spa: 1}, target, source, move));
+        // isSelf is true so that boost will not report a failure to boost
+				didSomething = this.combineResults(didSomething, this.boost({atk: 1, spa: 1}, target, source, move, false, true));
 			}
 			return didSomething;
 		},
@@ -9892,7 +9893,8 @@ let BattleMovedex = {
 			/** @type {boolean | 0 | null} */
 			let didSomething = false;
 			for (const target of targets) {
-				didSomething = this.combineResults(didSomething, this.boost({def: 1, spd: 1}, target, source, move));
+        // isSelf is true so that boost will not report a failure to boost
+				didSomething = this.combineResults(didSomething, this.boost({def: 1, spd: 1}, target, source, move, false, true));
 			}
 			return didSomething;
 		},
