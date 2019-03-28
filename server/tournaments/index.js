@@ -736,12 +736,12 @@ class Tournament {
 		this.update();
 	}
 	cancelChallenge(user, output) {
-		if (!this.isTournamentStarted) {
+		if (!this.isTournamentStarted && output) {
 			output.sendReply('|tournament|error|NotStarted');
 			return;
 		}
 
-		if (!(user.userid in this.players)) {
+		if (!(user.userid in this.players) && output) {
 			output.sendReply('|tournament|error|UserNotAdded');
 			return;
 		}
@@ -781,12 +781,7 @@ class Tournament {
 
 		// Prevent battles between offline users from starting
 		const from = Users.get(challenge.from.userid);
-		if (!from || !user.connected) return;
-		if (!from.connected) {
-			// Prevent an exploit
-			this.cancelChallenge(from);
-			return;
-		}
+		if (!from || !from.connected || !user.connected) return;
 
 		// Prevent double accepts and users that have been disqualified while between these two functions
 		if (!this.pendingChallenges.get(challenge.from)) return;
