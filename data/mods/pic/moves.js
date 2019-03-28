@@ -13,13 +13,13 @@ exports.BattleMovedex = {
 				this.add('-activate', source, 'move: Skill Swap', targetAbility, sourceAbility, '[of] ' + target);
 			}
 			this.singleEvent('End', sourceAbility, source.abilityData, source);
-			let sourceAlly = source.allies(true)[0];
+			let sourceAlly = source.adjacentAllies()[0];
 			if (sourceAlly && sourceAlly.m.innate) {
 				sourceAlly.removeVolatile(sourceAlly.m.innate);
 				delete sourceAlly.m.innate;
 			}
 			this.singleEvent('End', targetAbility, target.abilityData, target);
-			let targetAlly = target.allies(true)[0];
+			let targetAlly = target.adjacentAllies()[0];
 			if (targetAlly && targetAlly.m.innate) {
 				targetAlly.removeVolatile(targetAlly.m.innate);
 				delete targetAlly.m.innate;

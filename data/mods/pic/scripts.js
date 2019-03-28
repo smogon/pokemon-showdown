@@ -20,7 +20,7 @@ exports.BattleScripts = {
 				if (['battlebond', 'comatose', 'disguise', 'multitype', 'powerconstruct', 'rkssystem', 'schooling', 'shieldsdown', 'stancechange'].includes(oldAbility)) return false;
 			}
 			this.battle.singleEvent('End', this.battle.getAbility(oldAbility), this.abilityData, this, source);
-			let ally = this.allies(true)[0];
+			let ally = this.adjacentAllies()[0];
 			if (ally && ally.m.innate) {
 				ally.removeVolatile(ally.m.innate);
 				delete ally.m.innate;
@@ -43,13 +43,13 @@ exports.BattleScripts = {
 					return true;
 				}
 			}
-			let ally = this.allies(true)[0];
+			let ally = this.adjacentAllies()[0];
 			if (!ally || ally.ignoringAbility()) return false;
 			if (Array.isArray(ability)) return ability.map(toId).includes(ally.ability);
 			return toId(ability) === ally.ability;
 		},
 		getRequestData() {
-			let ally = this.allies(true)[0];
+			let ally = this.adjacentAllies()[0];
 			this.moveSlots = this.baseMoveSlots.concat(ally ? ally.baseMoveSlots : []);
 			for (const moveSlot of this.moveSlots) {
 				moveSlot.disabled = false;
