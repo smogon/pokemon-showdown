@@ -27,7 +27,7 @@ let BattleScripts = {
 		const isUltraBurst = !pokemon.canMegaEvo;
 		/**@type {Template} */
 		// @ts-ignore
-		const template = this.getMixedTemplate(pokemon.originalSpecies, pokemon.canMegaEvo || pokemon.canUltraBurst);
+		const template = this.getMixedTemplate(pokemon.m.originalSpecies, pokemon.canMegaEvo || pokemon.canUltraBurst);
 		const side = pokemon.side;
 
 		// Pokémon affected by Sky Drop cannot Mega Evolve. Enforce it here for now.
@@ -38,11 +38,11 @@ let BattleScripts = {
 		}
 
 		// Do we have a proper sprite for it?
-		// @ts-ignore
-		if (this.getTemplate(pokemon.canMegaEvo).baseSpecies === pokemon.originalSpecies || isUltraBurst) {
+		// @ts-ignore assert non-null pokemon.canMegaEvo
+		if (isUltraBurst || this.getTemplate(pokemon.canMegaEvo).baseSpecies === pokemon.m.originalSpecies) {
 			pokemon.formeChange(template, pokemon.getItem(), true);
 		} else {
-			let oTemplate = this.getTemplate(pokemon.originalSpecies);
+			let oTemplate = this.getTemplate(pokemon.m.originalSpecies);
 			// @ts-ignore
 			let oMegaTemplate = this.getTemplate(template.originalMega);
 			pokemon.formeChange(template, pokemon.getItem(), true);

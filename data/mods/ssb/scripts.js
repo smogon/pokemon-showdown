@@ -76,8 +76,7 @@ let BattleScripts = {
 				this.singleEvent('End', this.getAbility('Illusion'), pokemon.abilityData, pokemon);
 			}
 			this.add('-zpower', pokemon);
-			// @ts-ignore pokemon.zMoveUsed only exists in this mod
-			pokemon.zMoveUsed = true;
+			pokemon.m.zMoveUsed = true;
 		}
 		let moveDidSomething = this.useMove(baseMove, pokemon, target, sourceEffect, zMove);
 		if (this.activeMove) move = this.activeMove;
@@ -183,8 +182,7 @@ let BattleScripts = {
 	},
 	// Modded to allow each Pokemon on a team to use a Z move once per battle
 	canZMove(pokemon) {
-		// @ts-ignore pokemon.zMoveUsed only exists in this mod
-		if (pokemon.zMoveUsed || (pokemon.transformed && (pokemon.template.isMega || pokemon.template.isPrimal || pokemon.template.forme === "Ultra"))) return;
+		if (pokemon.m.zMoveUsed || (pokemon.transformed && (pokemon.template.isMega || pokemon.template.isPrimal || pokemon.template.forme === "Ultra"))) return;
 		let item = pokemon.getItem();
 		if (!item.zMove) return;
 		if (item.zMoveUser && !item.zMoveUser.includes(pokemon.template.species)) return;

@@ -1388,8 +1388,8 @@ let BattleMovedex = {
 					pokemon.types = [type1, type2];
 					this.add('-start', pokemon, 'typechange', `${type1}/${type2}`);
 				}
-				// @ts-ignore track percentages to keep purple pills from resetting pp
-				pokemon.ppPercentages = pokemon.moveSlots.map(m =>
+				// track percentages to keep purple pills from resetting pp
+				pokemon.m.ppPercentages = pokemon.moveSlots.map(m =>
 					m.pp / m.maxpp
 				);
 				// Get all possible moves sorted for convience in coding
@@ -1431,8 +1431,8 @@ let BattleMovedex = {
 					pokemon.moveSlots.push({
 						move: move.name,
 						id: move.id,
-						// @ts-ignore hacky way to reduce purple pill's PP
-						pp: Math.floor(((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5) * (pokemon.ppPercentages ? pokemon.ppPercentages[i] : 1)),
+						// hacky way to reduce purple pill's PP
+						pp: Math.floor(((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5) * (pokemon.m.ppPercentages ? pokemon.m.ppPercentages[i] : 1)),
 						maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
 						target: move.target,
 						disabled: false,
@@ -1452,8 +1452,8 @@ let BattleMovedex = {
 				this.add('-end', pokemon, 'Purple Pills', '[silent]');
 				pokemon.types = ['Psychic'];
 				this.add('-start', pokemon, 'typechange', 'Psychic');
-				// @ts-ignore track percentages to keep purple pills from resetting pp
-				pokemon.ppPercentages = pokemon.moveSlots.slice().map(m => {
+				// track percentages to keep purple pills from resetting pp
+				pokemon.m.ppPercentages = pokemon.moveSlots.slice().map(m => {
 					return m.pp / m.maxpp;
 				});
 				// Update movepool
@@ -1465,8 +1465,8 @@ let BattleMovedex = {
 					pokemon.moveSlots.push({
 						move: move.name,
 						id: move.id,
-						// @ts-ignore hacky way to reduce purple pill's PP
-						pp: Math.floor(((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5) * (pokemon.ppPercentages ? pokemon.ppPercentages[i] : 1)),
+						// hacky way to reduce purple pill's PP
+						pp: Math.floor(((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5) * (pokemon.m.ppPercentages ? pokemon.m.ppPercentages[i] : 1)),
 						maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
 						target: move.target,
 						disabled: false,
@@ -2245,13 +2245,11 @@ let BattleMovedex = {
 		onHit(target, source, move) {
 			let napWeather = this.field.pseudoWeather['naptime'];
 			// Trigger sleep clause if not the original user
-			// @ts-ignore
 			if (!target.setStatus('slp', napWeather.source, move)) return false;
 			target.statusData.time = 2;
 			target.statusData.startTime = 2;
 			this.heal(target.maxhp / 2); // Aesthetic only as the healing happens after you fall asleep in-game
 			this.add('-status', target, 'slp', '[from] move: Rest');
-			// @ts-ignore
 			if (napWeather.source === target) {
 				for (const curMon of this.getAllActive()) {
 					if (curMon === source) continue;
@@ -3358,7 +3356,7 @@ let BattleMovedex = {
 			}
 			// Update HP
 			// @ts-ignore Hack for Snaquaza's Z Move
-			pokemon.claimHP = pokemon.hp;
+			pokemon.m.claimHP = pokemon.hp;
 			pokemon.heal(pokemon.maxhp - pokemon.hp, pokemon);
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 			this.add('message', `${pokemon.name} claims to be a ${set.species}!`);

@@ -869,16 +869,16 @@ let Formats = [
 		},
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
-				pokemon.originalSpecies = pokemon.baseTemplate.species;
+				pokemon.m.originalSpecies = pokemon.baseTemplate.species;
 			}
 		},
 		onSwitchIn(pokemon) {
 			// @ts-ignore
 			let oMegaTemplate = this.getTemplate(pokemon.template.originalMega);
-			if (oMegaTemplate.exists && pokemon.originalSpecies !== oMegaTemplate.baseSpecies) {
+			if (oMegaTemplate.exists && pokemon.m.originalSpecies !== oMegaTemplate.baseSpecies) {
 				// Place volatiles on the Pokémon to show its mega-evolved condition and details
 				this.add('-start', pokemon, oMegaTemplate.requiredItem || oMegaTemplate.requiredMove, '[silent]');
-				let oTemplate = this.getTemplate(pokemon.originalSpecies);
+				let oTemplate = this.getTemplate(pokemon.m.originalSpecies);
 				if (oTemplate.types.length !== pokemon.template.types.length || oTemplate.types[1] !== pokemon.template.types[1]) {
 					this.add('-start', pokemon, 'typechange', pokemon.template.types.join('/'), '[silent]');
 				}
@@ -887,7 +887,7 @@ let Formats = [
 		onSwitchOut(pokemon) {
 			// @ts-ignore
 			let oMegaTemplate = this.getTemplate(pokemon.template.originalMega);
-			if (oMegaTemplate.exists && pokemon.originalSpecies !== oMegaTemplate.baseSpecies) {
+			if (oMegaTemplate.exists && pokemon.m.originalSpecies !== oMegaTemplate.baseSpecies) {
 				this.add('-end', pokemon, oMegaTemplate.requiredItem || oMegaTemplate.requiredMove, '[silent]');
 			}
 		},
@@ -1041,38 +1041,38 @@ let Formats = [
 			}
 			let ally = pokemon.side.active.find(ally => ally && ally !== pokemon && !ally.fainted);
 			if (ally && ally.ability !== pokemon.ability) {
-				if (!pokemon.innate) {
-					pokemon.innate = 'ability' + ally.ability;
-					delete pokemon.volatiles[pokemon.innate];
-					pokemon.addVolatile(pokemon.innate);
+				if (!pokemon.m.innate) {
+					pokemon.m.innate = 'ability' + ally.ability;
+					delete pokemon.volatiles[pokemon.m.innate];
+					pokemon.addVolatile(pokemon.m.innate);
 				}
-				if (!ally.innate) {
-					ally.innate = 'ability' + pokemon.ability;
-					delete ally.volatiles[ally.innate];
-					ally.addVolatile(ally.innate);
+				if (!ally.m.innate) {
+					ally.m.innate = 'ability' + pokemon.ability;
+					delete ally.volatiles[ally.m.innate];
+					ally.addVolatile(ally.m.innate);
 				}
 			}
 		},
 		onSwitchOut(pokemon) {
-			if (pokemon.innate) {
-				pokemon.removeVolatile(pokemon.innate);
-				delete pokemon.innate;
+			if (pokemon.m.innate) {
+				pokemon.removeVolatile(pokemon.m.innate);
+				delete pokemon.m.innate;
 			}
 			let ally = pokemon.side.active.find(ally => ally && ally !== pokemon && !ally.fainted);
-			if (ally && ally.innate) {
-				ally.removeVolatile(ally.innate);
-				delete ally.innate;
+			if (ally && ally.m.innate) {
+				ally.removeVolatile(ally.m.innate);
+				delete ally.m.innate;
 			}
 		},
 		onFaint(pokemon) {
-			if (pokemon.innate) {
-				pokemon.removeVolatile(pokemon.innate);
-				delete pokemon.innate;
+			if (pokemon.m.innate) {
+				pokemon.removeVolatile(pokemon.m.innate);
+				delete pokemon.m.innate;
 			}
 			let ally = pokemon.side.active.find(ally => ally && ally !== pokemon && !ally.fainted);
-			if (ally && ally.innate) {
-				ally.removeVolatile(ally.innate);
-				delete ally.innate;
+			if (ally && ally.m.innate) {
+				ally.removeVolatile(ally.m.innate);
+				delete ally.m.innate;
 			}
 		},
 	},

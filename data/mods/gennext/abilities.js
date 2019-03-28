@@ -508,8 +508,8 @@ let BattleAbilities = {
 		onResidualOrder: 26,
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
-			if (!pokemon.gluttonyFlag && !pokemon.item && this.getItem(pokemon.lastItem).isBerry) {
-				pokemon.gluttonyFlag = true;
+			if (!pokemon.m.gluttonyFlag && !pokemon.item && this.getItem(pokemon.lastItem).isBerry) {
+				pokemon.m.gluttonyFlag = true;
 				pokemon.setItem(pokemon.lastItem);
 				pokemon.lastItem = '';
 				this.add("-item", pokemon, pokemon.item, '[from] ability: Gluttony');
