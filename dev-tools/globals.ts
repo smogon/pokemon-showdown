@@ -1006,3 +1006,10 @@ interface RandomTeamsTypes {
 		fillerMoves4?: string[]
 	}
 }
+
+interface PokemonModData {
+	gluttonyFlag?: boolean; // Gen-NEXT
+	innate?: string; // Partners in Crime
+	originalSpecies?: string; // Mix and Mega
+	[key: string]: any;
+}
