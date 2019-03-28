@@ -322,7 +322,7 @@ export class Battle extends Dex.ModdedDex {
 		for (const side of this.sides) {
 			handlers = handlers.concat(this.findSideEventHandlers(side, callbackName, 'duration'));
 			for (const active of side.active) {
-				if (!active || active.fainted) continue;
+				if (!active) continue;
 				handlers = handlers.concat(this.findPokemonEventHandlers(active, callbackName, 'duration'));
 			}
 		}
@@ -331,6 +331,7 @@ export class Battle extends Dex.ModdedDex {
 			const handler = handlers[0];
 			handlers.shift();
 			const status = handler.status;
+			if (handler.thing.fainted) continue;
 			if (handler.statusData && handler.statusData.duration) {
 				handler.statusData.duration--;
 				if (!handler.statusData.duration) {
