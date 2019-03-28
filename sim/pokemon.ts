@@ -560,8 +560,10 @@ export class Pokemon {
 		return this.foes().filter(foe => this.battle.isAdjacent(this, foe));
 	}
 
-	getMoveTargets(move: Move, target: Pokemon): Pokemon[] {
+	getMoveTargets(move: Move, target: Pokemon): {targets: Pokemon[], pressureTargets: Pokemon[]} {
 		const targets = [];
+		let pressureTargets;
+
 		switch (move.target) {
 		case 'all':
 		case 'foeSide':
@@ -591,7 +593,7 @@ export class Pokemon {
 			if (!target || (target.fainted && target.side !== this.side)) {
 				// If a targeted foe faints, the move is retargeted
 				const possibleTarget = this.battle.resolveTarget(this, move);
-				if (!possibleTarget) return [];
+				if (!possibleTarget) return {targets: [], pressureTargets: []};
 				target = possibleTarget;
 			}
 			if (target.side.active.length > 1) {
@@ -602,7 +604,7 @@ export class Pokemon {
 				}
 			}
 			if (target.fainted) {
-				return [];
+				return {targets: [], pressureTargets: []};
 			}
 			if (selectedTarget !== target) {
 				this.battle.retargetLastMove(target);
@@ -613,11 +615,12 @@ export class Pokemon {
 			if (move.pressureTarget) {
 				// At the moment, this is the only supported target.
 				if (move.pressureTarget === 'foeSide') {
-					targets.push(...this.foes());
+					pressureTargets = this.foes();
 				}
 			}
 		}
-		return targets;
+
+		return {targets, pressureTargets: pressureTargets || targets};
 	}
 
 	ignoringAbility() {
