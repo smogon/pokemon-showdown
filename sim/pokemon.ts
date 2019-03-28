@@ -5,6 +5,8 @@
  * @license MIT license
  */
 
+import {MoveEffectiveness} from './constants';
+
  /** A Pokemon's move slot. */
 interface MoveSlot {
 	id: string;
@@ -27,6 +29,7 @@ interface RequestMoveSlot {
 	target?: string;
 	disabled?: string | boolean;
 	disabledSource?: string;
+	effectiveness?: MoveEffectiveness[];
 }
 
 export interface RequestPokemonData {
@@ -42,6 +45,7 @@ export interface RequestPokemonData {
 export interface RequestSubMoveSlot {
 	move: string;
 	target: string;
+	effectiveness?: MoveEffectiveness[];
 }
 
 export class Pokemon {
@@ -736,6 +740,7 @@ export class Pokemon {
 		let hasValidMove = false;
 		for (const moveSlot of this.moveSlots) {
 			let moveName = moveSlot.move;
+			const move = this.battle.getMove(moveName);
 			if (moveSlot.id === 'hiddenpower') {
 				moveName = 'Hidden Power ' + this.hpType;
 				if (this.battle.gen < 6) moveName += ' ' + this.hpPower;
@@ -766,6 +771,11 @@ export class Pokemon {
 			}
 			const disabledSource = disabled && !restrictData ? moveSlot.disabledSource : undefined;
 
+			let effectiveness: MoveEffectiveness[] | undefined;
+			if (this.battle.gen >= 7) {
+				effectiveness = this.battle.getEffectivenessHints(this, move, target!);
+			}
+
 			moves.push({
 				move: moveName,
 				id: moveSlot.id,
@@ -774,6 +784,7 @@ export class Pokemon {
 				disabled,
 				disabledSource,
 				target,
+				effectiveness,
 			});
 		}
 		return hasValidMove ? moves : [];
@@ -1635,6 +1646,25 @@ export class Pokemon {
 			}
 		}
 		return false;
+	}
+
+	getEffectivenessCode(move: Move): MoveEffectiveness {
+		if (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) {
+			if (!this.battle.getImmunity(move, this)) {
+				return MoveEffectiveness.IMMUNE;
+			}
+		}
+		if (move.category === 'Status' || move.ohko || move.damageCallback || move.damage) {
+			return MoveEffectiveness.NEUTRAL;
+		}
+		const baseMod = this.battle.getEffectiveness(move, this);
+		const moveMod = move.onEffectiveness && move.onEffectiveness.call(
+			this.battle, baseMod, null, move.type, move as ActiveMove
+		);
+		const finalTypeMod = typeof moveMod === 'number' ? moveMod : baseMod;
+		if (finalTypeMod > 0) return MoveEffectiveness.WEAK;
+		if (finalTypeMod < 0) return MoveEffectiveness.RESIST;
+		return MoveEffectiveness.NEUTRAL;
 	}
 
 	runEffectiveness(move: ActiveMove) {

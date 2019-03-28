@@ -6,6 +6,7 @@
  */
 import Dex = require('./dex');
 global.toId = Dex.getId;
+import {MoveEffectiveness} from './constants';
 import * as Data from './dex-data';
 import {Field} from './field';
 import {Pokemon} from './pokemon';
@@ -2897,6 +2898,23 @@ export class Battle extends Dex.ModdedDex {
 		}
 
 		if (once) this.hints.add(hint);
+	}
+
+	getEffectivenessHints(source: Pokemon, move: Move, targetType: string) {
+		const effectiveness: MoveEffectiveness[] = [];
+		for (const target of source.allies(true).concat(source.foes(true))) { // Order matters
+			if (!target || target === source || target.fainted) {
+				effectiveness.push(MoveEffectiveness.INVALID);
+				continue;
+			}
+
+			if (!this.validTarget(target, source, targetType)) {
+				effectiveness.push(MoveEffectiveness.INVALID);
+			} else {
+				effectiveness.push(target.getEffectivenessCode(move));
+			}
+		}
+		return effectiveness;
 	}
 
 	add(...parts: (string | number | boolean | ((side: 0 | 1 | boolean) => string) | AnyObject | null | undefined)[]) {

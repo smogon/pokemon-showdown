@@ -199,7 +199,11 @@ let BattleScripts = {
 			if (zMoveName) {
 				let zMove = this.getMove(zMoveName);
 				if (!zMove.isZ && zMove.category === 'Status') zMoveName = "Z-" + zMoveName;
-				zMoves.push({move: zMoveName, target: zMove.target});
+				zMoves.push({
+					move: zMoveName,
+					target: zMove.target,
+					effectiveness: this.getEffectivenessHints(pokemon, zMove, zMove.target),
+				});
 			} else {
 				zMoves.push(null);
 			}
