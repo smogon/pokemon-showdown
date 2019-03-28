@@ -135,7 +135,9 @@ let BattleAbilities = {
 	"intimidate": {
 		inherit: true,
 		onStart(pokemon) {
-			let activated = pokemon.adjacentFoes().some(foe => !(foe.volatiles['substitute'] || foe.volatiles['substitutebroken'] && foe.volatiles['substitutebroken'].move === 'uturn'));
+			let activated = pokemon.adjacentFoes().some(foe => !(
+				foe.volatiles['substitute'] || foe.volatiles['substitutebroken'] && foe.volatiles['substitutebroken'].move === 'uturn'
+			));
 
 			if (!activated) {
 				this.hint("In Gen 4, Intimidate does not activate if every target has a Substitute (or the Substitute was just broken by U-turn).", false, pokemon.side);
