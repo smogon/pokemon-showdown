@@ -606,7 +606,7 @@ let BattleAbilities = {
 		},
 		id: "dazzling",
 		name: "Dazzling",
-		rating: 3,
+		rating: 2.5,
 		num: 219,
 	},
 	"defeatist": {
@@ -1008,7 +1008,7 @@ let BattleAbilities = {
 		},
 		id: "flowergift",
 		name: "Flower Gift",
-		rating: 2.5,
+		rating: 2,
 		num: 122,
 	},
 	"flowerveil": {
@@ -2444,7 +2444,7 @@ let BattleAbilities = {
 		},
 		id: "powerconstruct",
 		name: "Power Construct",
-		rating: 4,
+		rating: 5,
 		num: 211,
 	},
 	"powerofalchemy": {
@@ -3240,7 +3240,7 @@ let BattleAbilities = {
 		},
 		id: "stakeout",
 		name: "Stakeout",
-		rating: 2.5,
+		rating: 3,
 		num: 198,
 	},
 	"stall": {
