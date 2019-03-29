@@ -27,4 +27,19 @@ describe('Wish', function () {
 		assert.fullHP(battle.p1.active[0]);
 		assert.strictEqual(battle.p1.active[1].hp, 321);
 	});
+
+	it('should progress its duration whether or not the Pokemon in its slot is fainted', function () {
+		battle = common.createBattle();
+		battle.setPlayer('p1', {team: [
+			{species: "Pichu", ability: 'prankster', moves: ['wish']},
+			{species: "Parasect", ability: 'effectspore', moves: ['sleeptalk']},
+		]});
+		battle.setPlayer('p2', {team: [
+			{species: "Zygarde", ability: 'aurabreak', moves: ['thousandarrows']},
+		]});
+		battle.makeChoices('move wish', 'move thousandarrows');
+		battle.makeChoices('switch 2');
+		battle.makeChoices('auto', 'move thousandarrows');
+		assert.fullHP(battle.p1.active[0]);
+	});
 });
