@@ -948,11 +948,7 @@ let BattleScripts = {
 			}
 			// Move didn't fail because it didn't try to do anything
 			if (didSomething === undefined) didSomething = true;
-			if (!didSomething && didSomething !== 0 && !moveData.self && !moveData.selfdestruct) {
-				damage[i] = false;
-			} else {
-				damage[i] = this.combineResults(damage[i], didSomething === null ? false : didSomething);
-			}
+			damage[i] = this.combineResults(damage[i], didSomething === null ? false : didSomething);
 			didAnything = this.combineResults(didAnything, didSomething);
 		}
 
