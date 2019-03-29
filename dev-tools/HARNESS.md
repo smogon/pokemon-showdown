@@ -19,6 +19,7 @@ be installed if it has not been already.
 -   **`--output`**: makes the harness display the _output_ logs of each battle
     it runs.
 -   **`--input`**: dump the battle _input_ logs of each battle it runs.
+-   **`--error`**: dump the battle _input_ logs of each battle which errors.
 
 ### Format
 
