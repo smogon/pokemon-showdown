@@ -27,6 +27,7 @@
         },
         "no-floating-promises": true,
         "interface-name": false,
+        "no-for-in-array": true,
         "forin": false,
         // maybe one day
         "member-ordering": false,
