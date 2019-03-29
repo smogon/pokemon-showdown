@@ -153,7 +153,7 @@ let BattleItems = {
 				this.add('-enditem', target, 'Air Balloon');
 				target.item = '';
 				target.itemData = {id: '', target};
-				this.runEvent('AfterUseItem', target, null, null, 'airballoon');
+				this.runEvent('AfterUseItem', target, null, null, this.getItem('airballoon'));
 			}
 		},
 		onAfterSubDamage(damage, target, source, effect) {
@@ -162,7 +162,7 @@ let BattleItems = {
 				this.add('-enditem', target, 'Air Balloon');
 				target.item = '';
 				target.itemData = {id: '', target};
-				this.runEvent('AfterUseItem', target, null, null, 'airballoon');
+				this.runEvent('AfterUseItem', target, null, null, this.getItem('airballoon'));
 			}
 		},
 		num: 541,
@@ -4356,7 +4356,7 @@ let BattleItems = {
 			basePower: 30,
 		},
 		onAttractPriority: -1,
-		onAttract(target, source, effect) {
+		onAttract(target, source) {
 			if (target !== source && target === this.activePokemon && this.activeMove && this.activeMove.flags['contact']) return false;
 		},
 		onBoostPriority: -1,
