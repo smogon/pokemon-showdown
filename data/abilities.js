@@ -256,10 +256,7 @@ let BattleAbilities = {
 		desc: "If this Pokemon is a Greninja, it transforms into Ash-Greninja after knocking out a Pokemon. As Ash-Greninja, its Water Shuriken has 20 base power and always hits 3 times.",
 		shortDesc: "After KOing a Pokemon: becomes Ash-Greninja, Water Shuriken: 20 power, hits 3x.",
 		onSourceFaint(target, source, effect) {
-			let remainingFoes = 0;
-			for (const side of this.sides) {
-				remainingFoes += side.n % 2 !== source.side.n % 2 ? side.pokemonLeft : 0;
-			}
+			const remainingFoes = this.sides.some(side => side.n % 2 === target.side.n % 2 && !!side.pokemonLeft);
 			if (effect && effect.effectType === 'Move' && source.template.speciesid === 'greninja' && source.hp && !source.transformed && remainingFoes) {
 				this.add('-activate', source, 'ability: Battle Bond');
 				source.formeChange('Greninja-Ash', this.effect, true);
