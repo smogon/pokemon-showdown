@@ -622,60 +622,6 @@ if (cluster.isMaster) {
 	// this is global so it can be hotpatched if necessary
 	let isTrustedProxyIp = Dnsbl.checker(Config.proxyip);
 	let socketCounter = 0;
-
-	/**
-	 * socket:id
-	 * @type {WeakMap<import('sockjs').Connection, string>}
-	 */
-	let socketIds = new WeakMap();
-
-	/**
-	 * @this {import('sockjs').Connection}
-	 * @param {string | Buffer} message
-	 */
-	const wsOnData = function (message) {
-		// drop empty messages (DDoS?)
-		if (!message) return;
-		// drop messages over 100KB
-		if (message.length > (100 * 1024)) {
-			console.log(`Dropping client message ${message.length / 1024} KB...`);
-			console.log(message.slice(0, 160));
-			return;
-		}
-		// drop legacy JSON messages
-		if (typeof message !== 'string' || message.startsWith('{')) return;
-		// drop blank messages (DDoS?)
-		let pipeIndex = message.indexOf('|');
-		if (pipeIndex < 0 || pipeIndex === message.length - 1) return;
-
-		const socketId = socketIds.get(this);
-		if (socketId === undefined) return; // should never happen
-
-		// @ts-ignore
-		process.send(`<${socketId}\n${message}`);
-	};
-
-	/**
-	 * @this {import('sockjs').Connection}
-	 */
-	const wsOnClose = function () {
-		const socketId = socketIds.get(this);
-		if (socketId === undefined) return; // should never happen
-
-		// @ts-ignore
-		process.send(`!${socketId}`);
-		sockets.delete(socketId);
-		for (const room of rooms.values()) room.delete(socketId);
-	};
-
-	/**
-	 * @param {import('sockjs').Connection} socket
-	 */
-	const wsOnTimeout = function (socket) {
-		// @ts-ignore
-		if (socket._session.recv) socket._session.recv.didClose();
-	};
-
 	server.on('connection', socket => {
 		// For reasons that are not entirely clear, SockJS sometimes triggers
 		// this event with a null `socket` argument.
@@ -692,7 +638,6 @@ if (cluster.isMaster) {
 
 		let socketid = '' + (++socketCounter);
 		sockets.set(socketid, socket);
-		socketIds.set(socket, socketid);
 
 		let socketip = socket.remoteAddress;
 		if (isTrustedProxyIp(socketip)) {
@@ -718,16 +663,41 @@ if (cluster.isMaster) {
 			socket._session.recv.thingy.setTimeout(
 				// @ts-ignore
 				socket._session.recv.options.heartbeat_delay + 1000,
-				wsOnTimeout,
-				socket
+				() => {
+					// @ts-ignore
+					if (socket._session.recv) socket._session.recv.didClose();
+				}
 			);
 		}
 
 		// @ts-ignore
 		process.send(`*${socketid}\n${socketip}\n${socket.protocol}`);
 
-		socket.on('data', wsOnData);
-		socket.once('close', wsOnClose);
+		socket.on('data', message => {
+			// drop empty messages (DDoS?)
+			if (!message) return;
+			// drop messages over 100KB
+			if (message.length > (100 * 1024)) {
+				console.log(`Dropping client message ${message.length / 1024} KB...`);
+				console.log(message.slice(0, 160));
+				return;
+			}
+			// drop legacy JSON messages
+			if (typeof message !== 'string' || message.startsWith('{')) return;
+			// drop blank messages (DDoS?)
+			let pipeIndex = message.indexOf('|');
+			if (pipeIndex < 0 || pipeIndex === message.length - 1) return;
+
+			// @ts-ignore
+			process.send(`<${socketid}\n${message}`);
+		});
+
+		socket.once('close', () => {
+			// @ts-ignore
+			process.send(`!${socketid}`);
+			sockets.delete(socketid);
+			for (const room of rooms.values()) room.delete(socketid);
+		});
 	});
 	server.installHandlers(app, {});
 	app.listen(Config.port, Config.bindaddress);
