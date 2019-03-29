@@ -18,6 +18,32 @@ interface MoveSlot {
 	virtual?: boolean;
 }
 
+ /** A Pokemon's move slot as sent to the client. */
+interface RequestMoveSlot {
+	id: string;
+	move: string;
+	pp?: number;
+	maxpp?: number;
+	target?: string;
+	disabled?: string | boolean;
+	disabledSource?: string;
+}
+
+export interface RequestPokemonData {
+	moves: RequestMoveSlot[];
+	maybeDisabled?: boolean;
+	trapped?: boolean;
+	maybeTrapped?: boolean;
+	canMegaEvo?: boolean;
+	canUltraBurst?: boolean;
+	canZMove?: ({move: string, target: string} | null)[];
+}
+
+export interface RequestSubMoveSlot {
+	move: string;
+	target: string;
+}
+
 export class Pokemon {
 	readonly side: Side;
 	readonly battle: Battle;
@@ -525,7 +551,7 @@ export class Pokemon {
 		return null;
 	}
 
-	allies(): Pokemon[] {
+	allies(includeFainted?: boolean): Pokemon[] {
 		let allies = this.side.active;
 		if (this.battle.gameType === 'multi') {
 			const team = this.side.n % 2;
@@ -534,6 +560,7 @@ export class Pokemon {
 				side.n % 2 === team ? side.active : []
 			);
 		}
+		if (includeFainted) return allies;
 		return allies.filter(ally => ally && !ally.fainted);
 	}
 
@@ -541,7 +568,7 @@ export class Pokemon {
 		return this.allies().filter(ally => this.battle.isAdjacent(this, ally));
 	}
 
-	foes(): Pokemon[] {
+	foes(includeFainted?: boolean): Pokemon[] {
 		let foes = this.side.foe.active;
 		if (this.battle.gameType === 'multi') {
 			const team = this.side.foe.n % 2;
@@ -550,6 +577,7 @@ export class Pokemon {
 				side.n % 2 === team ? side.active : []
 			);
 		}
+		if (includeFainted) return foes;
 		return foes.filter(foe => foe && !foe.fainted);
 	}
 
@@ -681,9 +709,7 @@ export class Pokemon {
 		return (lockedMove === true) ? null : lockedMove;
 	}
 
-	getMoves(lockedMove?: string | null, restrictData?: boolean):
-	{move: string, id: string, disabled?: string | boolean,
-		disabledSource?: string, target?: string, pp?: number, maxpp?: number}[] {
+	getMoveRequest(lockedMove?: string | null, restrictData?: boolean): RequestMoveSlot[] {
 		if (lockedMove) {
 			lockedMove = toId(lockedMove);
 			this.trapped = true;
@@ -720,12 +746,14 @@ export class Pokemon {
 				// @ts-ignore - Frustration's basePowerCallback only takes one parameter
 				moveName = 'Frustration ' + this.battle.getMove('frustration')!.basePowerCallback(this);
 			}
+
 			let target = moveSlot.target;
 			if (moveSlot.id === 'curse') {
 				if (!this.hasType('Ghost')) {
 					target = this.battle.getMove('curse').nonGhostTarget || moveSlot.target;
 				}
 			}
+
 			let disabled = moveSlot.disabled;
 			if ((moveSlot.pp <= 0 && !this.volatiles['partialtrappinglock']) || disabled &&
 				this.side.active.length >= 2 && this.battle.targetTypeChoices(target!)) {
@@ -736,13 +764,16 @@ export class Pokemon {
 			if (!disabled) {
 				hasValidMove = true;
 			}
+			const disabledSource = disabled && !restrictData ? moveSlot.disabledSource : undefined;
+
 			moves.push({
 				move: moveName,
 				id: moveSlot.id,
 				pp: moveSlot.pp,
 				maxpp: moveSlot.maxpp,
-				target,
 				disabled,
+				disabledSource,
+				target,
 			});
 		}
 		return hasValidMove ? moves : [];
@@ -754,16 +785,12 @@ export class Pokemon {
 		// Information should be restricted for the last active Pokémon
 		const isLastActive = this.isLastActive();
 		const canSwitchIn = this.battle.canSwitch(this.side) > 0;
-		const moves = this.getMoves(lockedMove, isLastActive);
-		const data: {
-			moves: {move: string, id: string, target?: string, disabled?: string | boolean}[],
-			maybeDisabled?: boolean,
-			trapped?: boolean,
-			maybeTrapped?: boolean,
-			canMegaEvo?: boolean,
-			canUltraBurst?: boolean,
-			canZMove?: AnyObject | null,
-		} = {moves: moves.length ? moves : [{move: 'Struggle', id: 'struggle', target: 'randomNormal', disabled: false}]};
+		const moves = this.getMoveRequest(lockedMove, isLastActive);
+		const data: RequestPokemonData = {moves: (
+			moves.length ?
+			moves :
+			[{move: 'Struggle', id: 'struggle', target: 'randomNormal', disabled: false}]
+		)};
 
 		if (isLastActive) {
 			if (this.maybeDisabled) {

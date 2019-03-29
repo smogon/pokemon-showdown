@@ -1448,7 +1448,7 @@ export class Battle extends Dex.ModdedDex {
 				pokemon.isStaleHP = pokemon.hp;
 			}
 		}
-		if (pokemon.getMoves().length === 0) {
+		if (pokemon.getMoveRequest().length === 0) {
 			pokemon.isStaleCon++;
 			pokemon.isStaleSource = 'struggle';
 		}
@@ -3103,7 +3103,7 @@ export class Battle extends Dex.ModdedDex {
 		throw new UnimplementedError('canUltraBurst');
 	}
 
-	canZMove(pokemon: Pokemon): (AnyObject | null)[] | void {
+	canZMove(pokemon: Pokemon): (RequestSubMoveSlot | null)[] | void {
 		throw new UnimplementedError('canZMove');
 	}
 
