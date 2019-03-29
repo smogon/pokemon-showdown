@@ -7395,7 +7395,7 @@ let BattleMovedex = {
 			duration: 2,
 			onSwitchInPriority: 1,
 			onSwitchIn(target) {
-				if (!target.fainted && target.position === this.effectData.targetPosition) {
+				if (!target.fainted) {
 					target.heal(target.maxhp);
 					target.setStatus('');
 					this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');

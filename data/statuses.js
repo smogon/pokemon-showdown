@@ -412,7 +412,7 @@ let BattleStatuses = {
 		},
 		onSwitchInPriority: 1,
 		onSwitchIn(target) {
-			if (!target.fainted && target.position === this.effectData.targetPosition) {
+			if (!target.fainted) {
 				target.heal(target.maxhp);
 				this.add('-heal', target, target.getHealth, '[from] move: ' + this.effectData.sourceEffect, '[zeffect]');
 				target.side.removeSlotCondition(target, 'healreplacement');
