@@ -1191,8 +1191,8 @@ export class Battle extends Dex.ModdedDex {
 		}
 		side.active[pos] = pokemon;
 		pokemon.activeTurns = 0;
-		for (const m in pokemon.moveSlots) {
-			pokemon.moveSlots[m].used = false;
+		for (const moveSlot of pokemon.moveSlots) {
+			moveSlot.used = false;
 		}
 		this.add('switch', pokemon, pokemon.getDetails);
 		if (sourceEffect) this.log[this.log.length - 1] += `|[from]${sourceEffect.fullname}`;
@@ -1259,8 +1259,8 @@ export class Battle extends Dex.ModdedDex {
 		side.active[pos] = pokemon;
 		pokemon.activeTurns = 0;
 		if (this.gen === 2) pokemon.draggedIn = this.turn;
-		for (const m in pokemon.moveSlots) {
-			pokemon.moveSlots[m].used = false;
+		for (const moveSlot of pokemon.moveSlots) {
+			moveSlot.used = false;
 		}
 		this.add('drag', pokemon, pokemon.getDetails);
 		if (this.gen >= 5) {
