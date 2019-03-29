@@ -894,7 +894,7 @@ export class Battle extends Dex.ModdedDex {
 			for (const j in slot) {
 				const slotConditionData = slot[j];
 				const inSlot = side.active[i];
-				const slotCondition = side.getSlotCondition(inSlot, j);
+				const slotCondition = side.getSlotCondition(i, j);
 				// @ts-ignore - dynamic lookup
 				const callback = slotCondition[callbackName];
 				if (callback !== undefined || (getKey && slotConditionData[getKey])) {
@@ -904,7 +904,7 @@ export class Battle extends Dex.ModdedDex {
 						statusData: slotConditionData,
 						end: side.removeSlotCondition,
 						endCallArgs: [side, inSlot, slotCondition!.id],
-						thing: inSlot,
+						thing: side,
 					});
 					this.resolveLastPriority(handlers, callbackName);
 				}
