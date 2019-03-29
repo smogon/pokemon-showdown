@@ -803,9 +803,9 @@ export class Battle extends Dex.ModdedDex {
 			this.resolveLastPriority(handlers, callbackName);
 		}
 		const side = pokemon.side;
-		for (const j in side.slotConditions[pokemon.position]) {
-			const slotConditionData = side.slotConditions[pokemon.position][j];
-			const slotCondition = side.getSlotCondition(pokemon, j);
+		for (const conditionid in side.slotConditions[pokemon.position]) {
+			const slotConditionData = side.slotConditions[pokemon.position][conditionid];
+			const slotCondition = side.getSlotCondition(pokemon, conditionid);
 			// @ts-ignore - dynamic lookup
 			callback = slotCondition[callbackName];
 			if (callback !== undefined || (getKey && slotConditionData[getKey])) {

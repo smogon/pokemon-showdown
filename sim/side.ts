@@ -272,7 +272,6 @@ export class Side {
 		const slotConditionData = this.slotConditions[target][status.id] = {
 			id: status.id,
 			target: this,
-			targetPosition: target,
 			source,
 			sourcePosition: source.position,
 			duration: status.duration,
