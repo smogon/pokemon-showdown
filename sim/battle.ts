@@ -1680,7 +1680,7 @@ export class Battle extends Dex.ModdedDex {
 				targetDamage = this.runEvent('Damage', target, source, effect, targetDamage);
 				if (!(targetDamage || targetDamage === 0)) {
 					this.debug('damage event failed');
-					retVals[i] = curDamage === true ? undefined : curDamage;
+					retVals[i] = curDamage === true ? undefined : targetDamage;
 					continue;
 				}
 			}
