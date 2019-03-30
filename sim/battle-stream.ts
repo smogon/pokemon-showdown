@@ -39,16 +39,14 @@ function splitFirst(str: string, delimiter: string, limit: number = 1) {
 }
 
 export class BattleStream extends Streams.ObjectReadWriteStream<string> {
-	readonly debug: boolean;
-	readonly keepAlive: boolean;
-	readonly retainBattle: boolean;
+	debug: boolean;
+	keepAlive: boolean;
 	battle: Battle | null;
 
-	constructor(options: {debug?: boolean, keepAlive?: boolean, retainBattle?: boolean} = {}) {
+	constructor(options: {debug?: boolean, keepAlive?: boolean} = {}) {
 		super();
 		this.debug = !!options.debug;
 		this.keepAlive = !!options.keepAlive;
-		this.retainBattle = !!options.retainBattle;
 		this.battle = null;
 	}
 
@@ -169,7 +167,6 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 		if (this.battle) {
 			this.battle.destroy();
 		}
-		if (!this.retainBattle) this.battle = null;
 	}
 }
 

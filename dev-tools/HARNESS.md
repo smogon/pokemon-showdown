@@ -42,8 +42,10 @@ games asynchronously.
 
 -   **`--async`**: runs each game concurrently instead of waiting for the
     previous game to complete before starting the next. Note that since battles
-    should not be blocking to begin with, this mode is not expected to have
-    performance benefits over the default sequential mode and may require
+    run through the harness should not be blocking to begin with (battles
+    naturally wait for players to make their decisions, but the AI's should be
+    making decisions pretty much immediately), this mode is not expected to have
+    large performance benefits over the default sequential mode and may require
     additional memory (run with `node --max-old-space-size=<SIZE>
     --stack-size=<SIZE>` if you encounter issues).
 

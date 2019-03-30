@@ -38,7 +38,7 @@ class Runner {
 	}
 
 	async run() {
-		const battleStream = new BattleStreams.BattleStream({retainBattle: this.input});
+		const battleStream = new BattleStreams.BattleStream();
 		const game = this.runGame(this.format, battleStream);
 		const log = () => battleStream.battle && console.error(`\n${battleStream.battle.inputLog.join('\n')}\n`);
 		if (this.input) return game.finally(log);
