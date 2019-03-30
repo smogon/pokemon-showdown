@@ -592,7 +592,7 @@ let BattleAbilities = {
 			pokemon.maybeDisabled = true;
 		},
 		onFoeBeforeMove(attacker, defender, move) {
-			if (move.id !== 'struggle' && this.effectData.target.hasMove(move.id)) {
+			if (move.id !== 'struggle' && this.effectData.target.hasMove(move.id) && !move.isZ) {
 				this.add('cant', attacker, 'move: Imprison', move);
 				return false;
 			}
