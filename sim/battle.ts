@@ -802,6 +802,24 @@ export class Battle extends Dex.ModdedDex {
 			});
 			this.resolveLastPriority(handlers, callbackName);
 		}
+		const side = pokemon.side;
+		for (const conditionid in side.slotConditions[pokemon.position]) {
+			const slotConditionData = side.slotConditions[pokemon.position][conditionid];
+			const slotCondition = side.getSlotCondition(pokemon, conditionid);
+			// @ts-ignore - dynamic lookup
+			callback = slotCondition[callbackName];
+			if (callback !== undefined || (getKey && slotConditionData[getKey])) {
+				handlers.push({
+					status: slotCondition,
+					callback,
+					statusData: slotConditionData,
+					end: side.removeSlotCondition,
+					endCallArgs: [side, pokemon, slotCondition!.id],
+					thing: side,
+				});
+				this.resolveLastPriority(handlers, callbackName);
+			}
+		}
 
 		return handlers;
 	}
@@ -888,26 +906,6 @@ export class Battle extends Dex.ModdedDex {
 					status: sideCondition, callback, statusData: sideConditionData, end: side.removeSideCondition, thing: side,
 				});
 				this.resolveLastPriority(handlers, callbackName);
-			}
-		}
-		for (const [i, slot] of side.slotConditions.entries()) {
-			for (const j in slot) {
-				const slotConditionData = slot[j];
-				const inSlot = side.active[i];
-				const slotCondition = side.getSlotCondition(inSlot, j);
-				// @ts-ignore - dynamic lookup
-				const callback = slotCondition[callbackName];
-				if (callback !== undefined || (getKey && slotConditionData[getKey])) {
-					handlers.push({
-						status: slotCondition,
-						callback,
-						statusData: slotConditionData,
-						end: side.removeSlotCondition,
-						endCallArgs: [side, inSlot, slotCondition!.id],
-						thing: inSlot,
-					});
-					this.resolveLastPriority(handlers, callbackName);
-				}
 			}
 		}
 		return handlers;
@@ -1193,8 +1191,8 @@ export class Battle extends Dex.ModdedDex {
 		}
 		side.active[pos] = pokemon;
 		pokemon.activeTurns = 0;
-		for (const m in pokemon.moveSlots) {
-			pokemon.moveSlots[m].used = false;
+		for (const moveSlot of pokemon.moveSlots) {
+			moveSlot.used = false;
 		}
 		this.add('switch', pokemon, pokemon.getDetails);
 		if (sourceEffect) this.log[this.log.length - 1] += `|[from]${sourceEffect.fullname}`;
@@ -1261,8 +1259,8 @@ export class Battle extends Dex.ModdedDex {
 		side.active[pos] = pokemon;
 		pokemon.activeTurns = 0;
 		if (this.gen === 2) pokemon.draggedIn = this.turn;
-		for (const m in pokemon.moveSlots) {
-			pokemon.moveSlots[m].used = false;
+		for (const moveSlot of pokemon.moveSlots) {
+			moveSlot.used = false;
 		}
 		this.add('drag', pokemon, pokemon.getDetails);
 		if (this.gen >= 5) {
@@ -1680,7 +1678,7 @@ export class Battle extends Dex.ModdedDex {
 				targetDamage = this.runEvent('Damage', target, source, effect, targetDamage);
 				if (!(targetDamage || targetDamage === 0)) {
 					this.debug('damage event failed');
-					retVals[i] = curDamage === true ? undefined : curDamage;
+					retVals[i] = curDamage === true ? undefined : targetDamage;
 					continue;
 				}
 			}
