@@ -98,19 +98,25 @@ export class RandomPlayerAI extends BattlePlayer {
 				}
 
 				// Filter out adjacentAlly moves if we have no allies left.
-				canMove = canMove.filter(
-					m => m.target !== `adjacentAlly` ||
-					!pokemon[i ^ 1].condition.endsWith(` fnt`));
+				const hasAlly = !pokemon[i ^ 1].condition.endsWith(` fnt`);
+				canMove = canMove.filter(m => m.target !== `adjacentAlly` || hasAlly);
 
 				const moves = canMove.map(m => {
 					let move = `move ${m.slot}`;
 					// NOTE: We don't generate all possible targeting combinations.
 					if (request.active.length > 1) {
-						if ([`normal`, `any`].includes(m.target)) {
+						if ([`normal`, `any`, `adjacentFoe`].includes(m.target)) {
 							move += ` ${1 + Math.floor(this.prng.next() * 2)}`;
 						}
 						if (m.target === `adjacentAlly`) {
 							move += ` -${(i ^ 1) + 1}`;
+						}
+						if (m.target === `adjacentAllyOrSelf`) {
+							if (hasAlly) {
+								move += ` -${1 + Math.floor(this.prng.next() * 2)}`;
+							} else {
+								move += ` -${i + 1}`;
+							}
 						}
 					}
 					if (m.zMove) move += ` zmove`;
