@@ -141,6 +141,7 @@ interface SelfEffect {
 	boosts?: SparseBoostsTable
 	chance?: number
 	sideCondition?: string
+	slotCondition?: string
 	volatileStatus?: string
 	onHit?: EffectData["onHit"]
 }
@@ -493,6 +494,7 @@ interface MoveData extends EffectData {
 	selfSwitch?: string | boolean
 	sideCondition?: string
 	sleepUsable?: boolean
+	slotCondition?: string
 	spreadModifier?: number
 	stallingMove?: boolean
 	stealsBoosts?: boolean
@@ -771,7 +773,7 @@ interface BattleScriptsData {
 	runMove?: (this: Battle, moveOrMoveName: Move | string, pokemon: Pokemon, targetLoc: number, sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean) => void
 	runMoveEffects?: (this: Battle, damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean) => SpreadMoveDamage
 	runZPower?: (this: Battle, move: ActiveMove, pokemon: Pokemon) => void
-	secondaries?: (this: Battle, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean) => void
+	secondaries?: (this: Battle, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSelf?: boolean) => void
 	selfDrops?: (this: Battle, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean) => void
 	spreadMoveHit?: (this: Battle, targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove, moveData?: ActiveMove, isSecondary?: boolean, isSelf?: boolean) => [SpreadMoveDamage, SpreadMoveTargets]
 	targetTypeChoices?: (this: Battle, targetType: string) => boolean
@@ -1004,4 +1006,11 @@ interface RandomTeamsTypes {
 		fillerMoves3?: string[]
 		fillerMoves4?: string[]
 	}
+}
+
+interface PokemonModData {
+	gluttonyFlag?: boolean; // Gen-NEXT
+	innate?: string; // Partners in Crime
+	originalSpecies?: string; // Mix and Mega
+	[key: string]: any;
 }

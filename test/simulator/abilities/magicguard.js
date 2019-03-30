@@ -27,6 +27,19 @@ describe('Magic Guard', function () {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
+	it(`should prevent Leech Seed's healing effect`, function () {
+		battle = common.createBattle();
+		battle.setPlayer('p1', {team: [
+			{species: 'Clefable', ability: 'magicguard', moves: ['moonblast']},
+		]});
+		battle.setPlayer('p2', {team: [
+			{species: 'Ferrothorn', ability: 'noguard', moves: ['leechseed']},
+		]});
+		battle.makeChoices('move moonblast', 'move leechseed');
+		assert.fullHP(battle.p1.active[0]);
+		assert.false.fullHP(battle.p2.active[0]);
+	});
+
 	it('should not be suppressed by Mold Breaker', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [

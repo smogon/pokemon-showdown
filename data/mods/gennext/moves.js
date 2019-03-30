@@ -1282,11 +1282,8 @@ let BattleMovedex = {
 		isViable: true,
 		ignoreImmunity: true,
 		onHit(target, source) {
-			target.side.addSideCondition('futuremove');
-			if (target.side.sideConditions['futuremove'].positions[target.position]) {
-				return false;
-			}
-			target.side.sideConditions['futuremove'].positions[target.position] = {
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				duration: 3,
 				move: 'echoedvoice',
 				source: source,
@@ -1303,7 +1300,7 @@ let BattleMovedex = {
 					isFutureMove: true,
 					type: 'Normal',
 				},
-			};
+			});
 			this.add('-start', source, 'move: Echoed Voice');
 			return null;
 		},

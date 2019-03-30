@@ -207,10 +207,7 @@ export class Pokemon {
 	modifyStat?: (this: Pokemon, statName: StatNameExceptHP, modifier: number) => void;
 
 	// OMs
-	innate?: string;
-	innates?: string[];
-	originalSpecies?: string;
-	gluttonyFlag: boolean | null;
+	m: PokemonModData;
 
 	constructor(set: string | AnyObject, side: Side) {
 		this.side = side;
@@ -379,10 +376,10 @@ export class Pokemon {
 		this.isStalePPTurns = 0;
 		this.staleWarned = false;
 
-		this.innate = undefined;
-		this.innates = undefined;
-		this.originalSpecies = undefined;
-		this.gluttonyFlag = null;
+		/**
+		 * An object for storing untyped data, for mods to use.
+		 */
+		this.m = {};
 	}
 
 	get moves() {
@@ -528,7 +525,7 @@ export class Pokemon {
 		return null;
 	}
 
-	allies(adjacentOnly?: boolean): Pokemon[] {
+	allies(): Pokemon[] {
 		let allies = this.side.active;
 		if (this.battle.gameType === 'multi') {
 			const team = this.side.n % 2;
@@ -537,11 +534,14 @@ export class Pokemon {
 				side.n % 2 === team ? side.active : []
 			);
 		}
-		if (adjacentOnly) allies = allies.filter(ally => this.battle.isAdjacent(this, ally));
 		return allies.filter(ally => ally && !ally.fainted);
 	}
 
-	foes(adjacentOnly?: boolean): Pokemon[] {
+	nearbyAllies(): Pokemon[] {
+		return this.allies().filter(ally => this.battle.isAdjacent(this, ally));
+	}
+
+	foes(): Pokemon[] {
 		let foes = this.side.foe.active;
 		if (this.battle.gameType === 'multi') {
 			const team = this.side.foe.n % 2;
@@ -550,8 +550,11 @@ export class Pokemon {
 				side.n % 2 === team ? side.active : []
 			);
 		}
-		if (adjacentOnly) foes = foes.filter(foe => this.battle.isAdjacent(this, foe));
 		return foes.filter(foe => foe && !foe.fainted);
+	}
+
+	nearbyFoes(): Pokemon[] {
+		return this.foes().filter(foe => this.battle.isAdjacent(this, foe));
 	}
 
 	getMoveTargets(move: Move, target: Pokemon): Pokemon[] {
@@ -572,10 +575,10 @@ export class Pokemon {
 			}
 			break;
 		case 'allAdjacent':
-			targets.push(...this.allies(true));
+			targets.push(...this.nearbyAllies());
 			// falls through
 		case 'allAdjacentFoes':
-			targets.push(...this.foes(true));
+			targets.push(...this.nearbyFoes());
 			if (targets.length && !targets.includes(target)) {
 				this.battle.retargetLastMove(targets[targets.length - 1]);
 			}
