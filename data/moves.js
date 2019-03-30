@@ -6796,7 +6796,7 @@ let BattleMovedex = {
 			// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
 			onBeforeMovePriority: 6,
 			onBeforeMove(pokemon, target, move) {
-				if (move.flags['gravity'] && !move.isZ) {
+				if (move.flags['gravity']) {
 					this.add('cant', pokemon, 'move: Gravity', move);
 					return false;
 				}
