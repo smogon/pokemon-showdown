@@ -5902,7 +5902,7 @@
 				"species": "Magmortar",
 				"item": ["Fightinium Z"],
 				"ability": ["Vital Spirit"],
-				"evs": {"hp": 5, "spa": 252, "spe": 252},
+				"evs": {"hp": 4, "spa": 252, "spe": 252},
 				"nature": "Modest",
 				"moves": [["Fire Blast"], ["Thunderbolt"], ["Focus Blast"], ["Taunt"]]
 			}]
