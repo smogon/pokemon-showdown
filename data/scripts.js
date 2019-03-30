@@ -1103,7 +1103,7 @@ let BattleScripts = {
 		/**@type {AnyObject?[]} */
 		let zMoves = [];
 		for (const moveSlot of pokemon.moveSlots) {
-			if (moveSlot.pp <= 0) {
+			if (moveSlot.pp <= 0 || moveSlot.disabled) {
 				zMoves.push(null);
 				continue;
 			}
