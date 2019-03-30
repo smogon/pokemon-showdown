@@ -120,10 +120,7 @@ class MultiRunner {
 		let failures = 0;
 		while ((format = this.getNextFormat())) {
 			if (this.all && lastFormat && format !== lastFormat) {
-				// If we ran async, we need to now wait for each game and determine its status.
-				// NOTE: Promise.all doesn't help us here because it will resolve when the first
-				// rejection occurs, we need to wait for *all* the rejections.
-				if (this.async) for (const game of games) await game;
+				if (this.async) await Promise.all(games);
 				games = [];
 			}
 
@@ -140,8 +137,7 @@ class MultiRunner {
 			lastFormat = format;
 		}
 
-		// See comment above regarding Promise.all.
-		if (this.async) for (const game of games) await game;
+		if (this.async) await Promise.all(games);
 		return failures;
 	}
 
