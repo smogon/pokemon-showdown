@@ -1100,12 +1100,16 @@ let BattleScripts = {
 		if (!item.zMove) return;
 		if (item.zMoveUser && !item.zMoveUser.includes(pokemon.template.species)) return;
 		let atLeastOne = false;
+		let mustStruggle = true;
 		/**@type {AnyObject?[]} */
 		let zMoves = [];
 		for (const moveSlot of pokemon.moveSlots) {
-			if (moveSlot.pp <= 0 || moveSlot.disabled) {
+			if (moveSlot.pp <= 0) {
 				zMoves.push(null);
 				continue;
+			}
+			if (!moveSlot.disabled) {
+				mustStruggle = false;
 			}
 			let move = this.getMove(moveSlot.move);
 			let zMoveName = this.getZMove(move, pokemon, true) || '';
@@ -1118,7 +1122,7 @@ let BattleScripts = {
 			}
 			if (zMoveName) atLeastOne = true;
 		}
-		if (atLeastOne) return zMoves;
+		if (atLeastOne && !mustStruggle) return zMoves;
 	},
 
 	canMegaEvo(pokemon) {
