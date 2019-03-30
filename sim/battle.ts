@@ -2186,7 +2186,8 @@ export class Battle extends Dex.ModdedDex {
 				target = pokemon.side.active[-targetLoc - 1];
 			}
 			if (target && !(target.fainted && target.side !== pokemon.side)) {
-				// We aren't targetting a fainted foe.
+				// Target is unfainted: no need to retarget
+				// Or target is a fainted ally: attack shouldn't retarget
 				return target;
 			}
 
