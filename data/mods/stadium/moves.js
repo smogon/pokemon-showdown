@@ -4,15 +4,15 @@
 let BattleMovedex = {
 	bind: {
 		inherit: true,
-		onBeforeMove() {},
+		// FIXME: onBeforeMove() {},
 	},
 	clamp: {
 		inherit: true,
-		onBeforeMove() {},
+		// FIXME: onBeforeMove() {},
 	},
 	firespin: {
 		inherit: true,
-		onBeforeMove() {},
+		// FIXME: onBeforeMove() {},
 	},
 	highjumpkick: {
 		inherit: true,
@@ -74,7 +74,6 @@ let BattleMovedex = {
 					this.boost({atk: 1});
 				}
 			},
-			onMoveFail() {},
 		},
 	},
 	recover: {
@@ -178,7 +177,7 @@ let BattleMovedex = {
 	},
 	wrap: {
 		inherit: true,
-		onBeforeMove() {},
+		// FIXME: onBeforeMove() {},
 	},
 };
 

@@ -134,10 +134,7 @@ let BattleMovedex = {
 		self: {
 			volatileStatus: 'partialtrappinglock',
 		},
-		onBeforeMove(pokemon, target, move) {
-			// Removes must recharge volatile even if it misses
-			target.removeVolatile('mustrecharge');
-		},
+		// FIXME: onBeforeMove(pokemon, target) {target.removeVolatile('mustrecharge')}
 		onHit(target, source) {
 			/**
 			 * The duration of the partially trapped must be always renewed to 2
@@ -204,10 +201,7 @@ let BattleMovedex = {
 		self: {
 			volatileStatus: 'partialtrappinglock',
 		},
-		onBeforeMove(pokemon, target, move) {
-			// Removes must recharge volatile even if it misses
-			target.removeVolatile('mustrecharge');
-		},
+		// FIXME: onBeforeMove(pokemon, target) {target.removeVolatile('mustrecharge')}
 		onHit(target, source) {
 			/**
 			 * The duration of the partially trapped must be always renewed to 2
@@ -393,10 +387,7 @@ let BattleMovedex = {
 		self: {
 			volatileStatus: 'partialtrappinglock',
 		},
-		onBeforeMove(pokemon, target, move) {
-			// Removes must recharge volatile even if it misses
-			target.removeVolatile('mustrecharge');
-		},
+		// FIXME: onBeforeMove(pokemon, target) {target.removeVolatile('mustrecharge')}
 		onHit(target, source) {
 			/**
 			 * The duration of the partially trapped must be always renewed to 2
@@ -1072,10 +1063,7 @@ let BattleMovedex = {
 		self: {
 			volatileStatus: 'partialtrappinglock',
 		},
-		onBeforeMove(pokemon, target, move) {
-			// Removes must recharge volatile even if it misses
-			target.removeVolatile('mustrecharge');
-		},
+		// FIXME: onBeforeMove(pokemon, target) {target.removeVolatile('mustrecharge')}
 		onHit(target, source) {
 			/**
 			 * The duration of the partially trapped must be always renewed to 2

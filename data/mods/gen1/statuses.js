@@ -10,7 +10,7 @@
 
 'use strict';
 
-/**@type {{[k: string]: ModdedEffectData}} */
+/**@type {{[k: string]: ModdedPureEffectData}} */
 let BattleStatuses = {
 	brn: {
 		name: 'brn',

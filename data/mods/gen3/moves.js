@@ -200,7 +200,7 @@ let BattleMovedex = {
 		effect: {
 			duration: 1,
 			noCopy: true,
-			onStart(target, source, source2, move) {
+			onStart(target, source, move) {
 				this.effectData.position = null;
 				this.effectData.damage = 0;
 			},
@@ -574,7 +574,7 @@ let BattleMovedex = {
 		effect: {
 			duration: 1,
 			noCopy: true,
-			onStart(target, source, source2, move) {
+			onStart(target, source, move) {
 				this.effectData.position = null;
 				this.effectData.damage = 0;
 			},

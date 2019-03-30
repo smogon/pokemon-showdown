@@ -1143,9 +1143,7 @@ let BattleMovedex = {
 				}
 			},
 		},
-		onMoveAborted(pokemon) {
-			pokemon.removeVolatile('beakblast');
-		},
+		// FIXME: onMoveAborted(pokemon) {pokemon.removeVolatile('beakblast')},
 		onAfterMove(pokemon) {
 			pokemon.removeVolatile('beakblast');
 		},
@@ -1794,7 +1792,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onBasePowerPriority: 4,
 		onBasePower(basePower, pokemon, target) {
 			if (target.hp * 2 <= target.maxhp) {
 				return this.chainModify(2);
@@ -2815,7 +2812,7 @@ let BattleMovedex = {
 		effect: {
 			duration: 1,
 			noCopy: true,
-			onStart(target, source, source2, move) {
+			onStart(target, source, move) {
 				this.effectData.position = null;
 				this.effectData.damage = 0;
 			},
@@ -3249,9 +3246,8 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, authentic: 1},
 		onHit(target, source, move) {
-			/**@type {?boolean | number} */
 			let success = false;
-			if (!target.volatiles['substitute'] || move.infiltrates) success = this.boost({evasion: -1});
+			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({evasion: -1});
 			let removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
 			let removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
 			for (const targetCondition of removeTarget) {
@@ -4773,7 +4769,6 @@ let BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onBasePowerPriority: 4,
 		onBasePower(basePower, pokemon) {
 			if (pokemon.status && pokemon.status !== 'slp') {
 				return this.chainModify(2);
@@ -5603,11 +5598,13 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, heal: 1, mystery: 1},
 		onHit(target) {
+			let success = false;
 			if (this.field.isTerrain('grassyterrain')) {
-				return this.heal(this.modify(target.maxhp, 0.667)); // TODO: find out the real value
+				success = !!this.heal(this.modify(target.maxhp, 0.667)); // TODO: find out the real value
 			} else {
-				return this.heal(Math.ceil(target.maxhp * 0.5));
+				success = !!this.heal(Math.ceil(target.maxhp * 0.5));
 			}
+			return success;
 		},
 		secondary: null,
 		target: "normal",
@@ -6189,7 +6186,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onBasePowerPriority: 4,
 		onBasePower(basePower, pokemon) {
 			for (const active of pokemon.side.active) {
 				if (active && active.moveThisTurn === 'fusionflare') {
@@ -6217,7 +6213,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, defrost: 1},
-		onBasePowerPriority: 4,
 		onBasePower(basePower, pokemon) {
 			for (const active of pokemon.side.active) {
 				if (active && active.moveThisTurn === 'fusionbolt') {
@@ -7358,11 +7353,13 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, pulse: 1, reflectable: 1, distance: 1, heal: 1, mystery: 1},
 		onHit(target, source) {
+			let success = false;
 			if (source.hasAbility('megalauncher')) {
-				return this.heal(this.modify(target.maxhp, 0.75));
+				success = !!this.heal(this.modify(target.maxhp, 0.75));
 			} else {
-				return this.heal(Math.ceil(target.maxhp * 0.5));
+				success = !!this.heal(Math.ceil(target.maxhp * 0.5));
 			}
+			return success;
 		},
 		secondary: null,
 		target: "any",
@@ -9020,7 +9017,6 @@ let BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onBasePowerPriority: 4,
 		onBasePower(basePower, source, target, move) {
 			let item = target.getItem();
 			if (!this.singleEvent('TakeItem', item, target.itemData, target, source, move, item)) return;
@@ -10282,7 +10278,7 @@ let BattleMovedex = {
 		effect: {
 			duration: 1,
 			noCopy: true,
-			onStart(target, source, source2, move) {
+			onStart(target, source, move) {
 				this.effectData.position = null;
 				this.effectData.damage = 0;
 			},
@@ -10619,7 +10615,7 @@ let BattleMovedex = {
 		effect: {
 			duration: 1,
 			noCopy: true,
-			onStart(target, source, source2, move) {
+			onStart(target, source, move) {
 				this.effectData.position = null;
 				this.effectData.damage = 0;
 			},
@@ -10874,13 +10870,13 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
 		onHit(pokemon) {
+			let factor = 0.5;
 			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
-				return this.heal(this.modify(pokemon.maxhp, 0.667));
+				factor = 0.667;
 			} else if (this.field.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
-				return this.heal(this.modify(pokemon.maxhp, 0.25));
-			} else {
-				return this.heal(this.modify(pokemon.maxhp, 0.5));
+				factor = 0.25;
 			}
+			return !!this.heal(this.modify(pokemon.maxhp, factor));
 		},
 		secondary: null,
 		target: "self",
@@ -10902,13 +10898,13 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
 		onHit(pokemon) {
+			let factor = 0.5;
 			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
-				return this.heal(this.modify(pokemon.maxhp, 0.667));
+				factor = 0.667;
 			} else if (this.field.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
-				return this.heal(this.modify(pokemon.maxhp, 0.25));
-			} else {
-				return this.heal(this.modify(pokemon.maxhp, 0.5));
+				factor = 0.25;
 			}
+			return !!this.heal(this.modify(pokemon.maxhp, factor));
 		},
 		secondary: null,
 		target: "self",
@@ -12991,7 +12987,7 @@ let BattleMovedex = {
 		flags: {snatch: 1},
 		sideCondition: 'quickguard',
 		onTryHitSide(side, source) {
-			return this.willAct();
+			return !!this.willAct();
 		},
 		onHitSide(side, source) {
 			source.addVolatile('stall');
@@ -13469,7 +13465,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onBasePowerPriority: 4,
 		onBasePower(basePower, pokemon) {
 			if (pokemon.side.faintedLastTurn) {
 				this.debug('Boosted for a faint last turn');
@@ -14810,11 +14805,11 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
 		onHit(pokemon) {
+			let factor = 0.5;
 			if (this.field.isWeather('sandstorm')) {
-				return this.heal(this.modify(pokemon.maxhp, 0.667));
-			} else {
-				return this.heal(this.modify(pokemon.maxhp, 0.5));
+				factor = 0.667;
 			}
+			return !!this.heal(this.modify(pokemon.maxhp, factor));
 		},
 		secondary: null,
 		target: "self",
@@ -15839,7 +15834,6 @@ let BattleMovedex = {
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
-		onBasePowerPriority: 4,
 		onBasePower(basePower, pokemon, target) {
 			if (this.field.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
 				this.debug('weakened by weather');
@@ -15880,7 +15874,6 @@ let BattleMovedex = {
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
-		onBasePowerPriority: 4,
 		onBasePower(basePower, pokemon, target) {
 			if (this.field.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
 				this.debug('weakened by weather');
@@ -16624,7 +16617,7 @@ let BattleMovedex = {
 			if (target.boosts.atk === -6) return false;
 			let atk = target.getStat('atk', false, true);
 			let success = this.boost({atk: -1}, target, source, null, false, true);
-			return this.heal(atk, source, target) || success;
+			return !!(this.heal(atk, source, target) || success);
 		},
 		secondary: null,
 		target: "normal",
@@ -17044,7 +17037,7 @@ let BattleMovedex = {
 			let healAmount = [0.25, 0.5, 1];
 			let healedBy = this.heal(this.modify(pokemon.maxhp, healAmount[(pokemon.volatiles['stockpile'].layers - 1)]));
 			pokemon.removeVolatile('stockpile');
-			return healedBy;
+			return !!healedBy;
 		},
 		secondary: null,
 		target: "self",
@@ -17221,13 +17214,13 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
 		onHit(pokemon) {
+			let factor = 0.5;
 			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
-				return this.heal(this.modify(pokemon.maxhp, 0.667));
+				factor = 0.667;
 			} else if (this.field.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
-				return this.heal(this.modify(pokemon.maxhp, 0.25));
-			} else {
-				return this.heal(this.modify(pokemon.maxhp, 0.5));
+				factor = 0.25;
 			}
+			return !!this.heal(this.modify(pokemon.maxhp, factor));
 		},
 		secondary: null,
 		target: "self",
@@ -18512,7 +18505,7 @@ let BattleMovedex = {
 		flags: {protect: 1, reflectable: 1, mirror: 1},
 		onHit(target, source, move) {
 			if (target.status === 'psn' || target.status === 'tox') {
-				return this.boost({atk: -1, spa: -1, spe: -1}, target, source, move);
+				return !!this.boost({atk: -1, spa: -1, spe: -1}, target, source, move);
 			}
 			return false;
 		},
@@ -18534,7 +18527,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onBasePowerPriority: 4,
 		onBasePower(basePower, pokemon, target) {
 			if (target.status === 'psn' || target.status === 'tox') {
 				return this.chainModify(2);
@@ -18976,7 +18968,7 @@ let BattleMovedex = {
 		flags: {snatch: 1},
 		sideCondition: 'wideguard',
 		onTryHitSide(side, source) {
-			return this.willAct();
+			return !!this.willAct();
 		},
 		onHitSide(side, source) {
 			source.addVolatile('stall');

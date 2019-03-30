@@ -1,6 +1,6 @@
 'use strict';
 
-/**@type {{[k: string]: EffectData}} */
+/**@type {{[k: string]: PureEffectData}} */
 let BattleStatuses = {
 	brn: {
 		name: 'brn',
