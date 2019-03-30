@@ -3494,7 +3494,7 @@ let BattleMovedex = {
 			},
 			onBeforeMovePriority: 7,
 			onBeforeMove(attacker, defender, move) {
-				if (move.id === this.effectData.move) {
+				if (!move.isZ && move.id === this.effectData.move) {
 					this.add('cant', attacker, 'Disable', move);
 					return false;
 				}
@@ -6796,7 +6796,7 @@ let BattleMovedex = {
 			// groundedness implemented in battle.engine.js:BattlePokemon#isGrounded
 			onBeforeMovePriority: 6,
 			onBeforeMove(pokemon, target, move) {
-				if (move.flags['gravity']) {
+				if (move.flags['gravity'] && !move.isZ) {
 					this.add('cant', pokemon, 'move: Gravity', move);
 					return false;
 				}
