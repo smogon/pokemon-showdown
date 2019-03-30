@@ -843,8 +843,8 @@ let BattleScripts = {
 		return damage;
 	},
 	runMoveEffects(damage, targets, pokemon, move, moveData, isSecondary, isSelf) {
-		/**@type {?boolean | number | null | undefined} */
-		let didAnything = undefined;
+		/**@type {?boolean | number | undefined} */
+		let didAnything = damage.reduce(this.combineResults);
 		for (const [i, target] of targets.entries()) {
 			if (target === false) continue;
 			let hitResult;
