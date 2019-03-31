@@ -301,10 +301,11 @@ let BattleAbilities = {
 				Pokemon.tryTrap(true);
 			}
 		},
-		onFoeMaybeTrapPokemon(Pokemon, source) {
+		onFoeMaybeTrapPokemon(pokemon, source) {
 			if (!source) source = this.effectData.target;
-			if ((!Pokemon.knownType || Pokemon.hasType('Steel') || Pokemon.hasType('Mech')) && this.isAdjacent(Pokemon, source)) {
-				Pokemon.maybeTrapped = true;
+			if (!source || !this.isAdjacent(pokemon, source)) return;
+			if (!pokemon.knownType || pokemon.hasType('Steel') || pokemon.hasType('Mech')) {
+				pokemon.maybeTrapped = true;
 			}
 		},
 	},
