@@ -207,11 +207,11 @@ let BattleScripts = {
 			return false;
 		}
 
-		let targets = pokemon.getMoveTargets(move, target);
+		const {targets, pressureTargets} = pokemon.getMoveTargets(move, target);
 
 		if (!sourceEffect || sourceEffect.id === 'pursuit') {
 			let extraPP = 0;
-			for (const source of targets) {
+			for (const source of pressureTargets) {
 				let ppDrop = this.runEvent('DeductPP', source, pokemon, move);
 				if (ppDrop !== true) {
 					extraPP += ppDrop || 0;
@@ -843,8 +843,8 @@ let BattleScripts = {
 		return damage;
 	},
 	runMoveEffects(damage, targets, pokemon, move, moveData, isSecondary, isSelf) {
-		/**@type {?boolean | number | null | undefined} */
-		let didAnything = undefined;
+		/**@type {?boolean | number | undefined} */
+		let didAnything = damage.reduce(this.combineResults);
 		for (const [i, target] of targets.entries()) {
 			if (target === false) continue;
 			let hitResult;
@@ -1100,12 +1100,16 @@ let BattleScripts = {
 		if (!item.zMove) return;
 		if (item.zMoveUser && !item.zMoveUser.includes(pokemon.template.species)) return;
 		let atLeastOne = false;
+		let mustStruggle = true;
 		/**@type {AnyObject?[]} */
 		let zMoves = [];
 		for (const moveSlot of pokemon.moveSlots) {
 			if (moveSlot.pp <= 0) {
 				zMoves.push(null);
 				continue;
+			}
+			if (!moveSlot.disabled) {
+				mustStruggle = false;
 			}
 			let move = this.getMove(moveSlot.move);
 			let zMoveName = this.getZMove(move, pokemon, true) || '';
@@ -1118,7 +1122,7 @@ let BattleScripts = {
 			}
 			if (zMoveName) atLeastOne = true;
 		}
-		if (atLeastOne) return zMoves;
+		if (atLeastOne && !mustStruggle) return zMoves;
 	},
 
 	canMegaEvo(pokemon) {

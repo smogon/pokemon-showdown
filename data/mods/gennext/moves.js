@@ -296,7 +296,6 @@ let BattleMovedex = {
 		},
 		willCrit: true,
 		accuracy: true,
-		onTryHitPriority: 10,
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},
@@ -317,7 +316,6 @@ let BattleMovedex = {
 		basePower: 60,
 		willCrit: true,
 		accuracy: true,
-		onTryHitPriority: 10,
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},
@@ -335,7 +333,6 @@ let BattleMovedex = {
 		basePower: 70,
 		willCrit: true,
 		accuracy: true,
-		onTryHitPriority: 10,
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},
@@ -361,7 +358,6 @@ let BattleMovedex = {
 		basePower: 95,
 		willCrit: true,
 		accuracy: true,
-		onTryHitPriority: 10,
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},
@@ -381,7 +377,6 @@ let BattleMovedex = {
 		basePower: 95,
 		willCrit: true,
 		accuracy: true,
-		onTryHitPriority: 10,
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},
@@ -399,7 +394,6 @@ let BattleMovedex = {
 		basePower: 95,
 		willCrit: true,
 		accuracy: true,
-		onTryHitPriority: 10,
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},
@@ -417,7 +411,6 @@ let BattleMovedex = {
 		basePower: 60,
 		willCrit: true,
 		accuracy: true,
-		onTryHitPriority: 10,
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},
@@ -431,7 +424,6 @@ let BattleMovedex = {
 		basePower: 60,
 		willCrit: true,
 		accuracy: true,
-		onTryHitPriority: 10,
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},
@@ -451,7 +443,6 @@ let BattleMovedex = {
 		basePower: 60,
 		willCrit: true,
 		accuracy: true,
-		onTryHitPriority: 10,
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},
@@ -471,7 +462,6 @@ let BattleMovedex = {
 		basePower: 60,
 		willCrit: true,
 		accuracy: true,
-		onTryHitPriority: 10,
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},
@@ -491,7 +481,6 @@ let BattleMovedex = {
 		basePower: 60,
 		willCrit: true,
 		accuracy: true,
-		onTryHitPriority: 10,
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},
@@ -509,7 +498,6 @@ let BattleMovedex = {
 		basePower: 40,
 		willCrit: true,
 		accuracy: true,
-		onTryHitPriority: 10,
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},

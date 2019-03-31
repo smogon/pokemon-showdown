@@ -592,7 +592,7 @@ let BattleAbilities = {
 			pokemon.maybeDisabled = true;
 		},
 		onFoeBeforeMove(attacker, defender, move) {
-			if (move.id !== 'struggle' && this.effectData.target.hasMove(move.id)) {
+			if (move.id !== 'struggle' && this.effectData.target.hasMove(move.id) && !move.isZ) {
 				this.add('cant', attacker, 'move: Imprison', move);
 				return false;
 			}
@@ -680,6 +680,7 @@ let BattleAbilities = {
 		},
 		onFoeMaybeTrapPokemon(pokemon, source) {
 			if (!source) source = this.effectData.target;
+			if (!source || !this.isAdjacent(pokemon, source)) return;
 			if (pokemon.ability !== 'shadowtag' && !source.volatiles.shadowtag) {
 				pokemon.maybeTrapped = true;
 			}

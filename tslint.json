@@ -11,7 +11,16 @@
         "member-access": [true, "no-public"],
         "no-empty": [true, "allow-empty-catch", "allow-empty-functions"],
         "no-string-literal": false,
-        "interface-over-type-literal": false,
+        "interface-over-type-literal": true,
+        "arrow-return-shorthand": true,
+        "no-angle-bracket-type-assertion": true,
+        "no-redundant-jsdoc": true,
+        "no-unsafe-finally": true,
+        "object-literal-shorthand": true,
+        "prefer-for-of": true,
+        "static-this": true,
+        "triple-equals": true,
+        "unnecessary-bind": true,
         "prefer-const": {
             "severity": "warning",
             "options": {
