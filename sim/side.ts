@@ -606,7 +606,7 @@ export class Side {
 				// if (autoFill) break;
 				// return this.emitChoiceError(`Can't choose for Team Preview: You are limited to ${this.maxTeamSize} Pokémon`);
 			}
-			if (isNaN(pos) || pos >= this.pokemon.length) {
+			if (isNaN(pos) || pos < 0 || pos >= this.pokemon.length) {
 				return this.emitChoiceError(`Can't choose for Team Preview: You do not have a Pokémon in slot ${pos + 1}`);
 			}
 			if (this.choice.switchIns.has(pos)) {
