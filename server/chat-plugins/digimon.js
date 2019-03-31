@@ -1,6 +1,6 @@
 /**
  * Digimon Plugin for Digimon Showdown
- * Programmed by AlfaStorm & Ashely the Pikachu
+ * Programmed by AlfaStorm & Ashley the Pikachu
  * With contributions from mathfreak231, fliegenfuerst & Slayer95
  **/
 
