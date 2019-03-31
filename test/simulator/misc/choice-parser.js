@@ -38,6 +38,21 @@ describe('Choice parser', function () {
 				assert.throws(() => battle.choose(side.id, 'team first'));
 			}
 		});
+
+		it('should reject zero-based choice details', function () {
+			battle = common.createBattle({preview: true}, [
+				[{species: "Mew", ability: 'synchronize', moves: ['recover']}],
+				[{species: "Rhydon", ability: 'prankster', moves: ['splash']}],
+			]);
+
+			for (const side of battle.sides) {
+				assert.throws(
+					() => battle.choose(side.id, 'team 0'),
+					new RegExp(`\\[Invalid choice\\] Can't choose for Team Preview:`, 'i'),
+					`Input should have been rejected`
+				);
+			}
+		});
 	});
 
 	describe('Switch requests', function () {
