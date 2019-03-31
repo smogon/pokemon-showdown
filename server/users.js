@@ -1212,12 +1212,12 @@ class User extends Chat.MessageContext {
 			}
 		}
 		if (!this.connections.length) {
-			// cleanup
 			for (const roomid of this.inRooms) {
 				// should never happen.
 				Monitor.debug(`!! room miscount: ${roomid} not left`);
 				Rooms(roomid).onLeave(this);
 			}
+			// cleanup
 			this.inRooms.clear();
 			if (!this.named && !Object.keys(this.prevNames).length) {
 				// user never chose a name (and therefore never talked/battled)
@@ -1387,6 +1387,13 @@ class User extends Chat.MessageContext {
 		const challengesCancelled = Ladders.clearChallenges(this.userid);
 		if (searchesCancelled || challengesCancelled) {
 			this.popup(`Your searches and challenges have been cancelled because you changed your username.`);
+		}
+		// cancel tour challenges
+		// no need for a popup because users can't change their name while in a tournament anyway
+		for (const roomid of this.games) {
+			const room = Rooms.get(roomid);
+			// @ts-ignore Tournaments aren't TS'd yet
+			if (room.game && room.game.cancelChallenge) room.game.cancelChallenge(this);
 		}
 	}
 	/**
