@@ -65,19 +65,25 @@ class Tournament extends Rooms.RoomGame {
 			Monitor.log(`[TourMonitor] Room ${room.id} starting a tour over default cap (${this.playerCap})`);
 		}
 
+		this.isTournamentStarted = false;
+
+		this.availableMatches = new Map();
+		this.inProgressMatches = new Map();
+		this.pendingChallenges = new Map();
+		this.disqualifiedUsers = new Map();
+		this.autoDisqualifyWarnings = new Map();
+		this.lastActionTimes = new Map();
+
+		this.isBracketInvalidated = true;
+
 		this.isBracketInvalidated = true;
 		this.lastBracketUpdate = 0;
 		this.bracketUpdateTimer = null;
 		this.bracketCache = null;
 
-		this.isTournamentStarted = false;
-		this.availableMatches = null;
-		this.inProgressMatches = null;
-
 		this.isAvailableMatchesInvalidated = true;
-		this.availableMatchesCache = null;
+		this.availableMatchesCache = {challenges: new Map(), challengeBys: new Map()};
 
-		this.pendingChallenges = null;
 		this.autoDisqualifyTimeout = Infinity;
 		this.autoDisqualifyTimer = null;
 		this.autoStartTimeout = Infinity;
@@ -177,7 +183,6 @@ class Tournament extends Rooms.RoomGame {
 	forceEnd() {
 		if (this.isTournamentStarted) {
 			if (this.autoDisqualifyTimer) clearTimeout(this.autoDisqualifyTimer);
-			if (!this.inProgressMatches) throw new Error(`Unexpected null in tours`);
 			for (const match of this.inProgressMatches.values()) {
 				if (match) {
 					match.room.tour = null;
@@ -224,8 +229,6 @@ class Tournament extends Rooms.RoomGame {
 		if (this.format !== this.originalFormat) update.teambuilderFormat = this.originalFormat;
 		connection.sendTo(this.room, `|tournament|update|${JSON.stringify(update)}`);
 		if (this.isTournamentStarted && isJoined) {
-			if (!this.availableMatchesCache) throw new Error(`Unexpected null in tours`);
-			if (!this.pendingChallenges) throw new Error(`Unexpected null in tours`);
 			const update2 = {
 				challenges: usersToNames(this.availableMatchesCache.challenges.get(this.players[targetUser.userid])),
 				challengeBys: usersToNames(this.availableMatchesCache.challengeBys.get(this.players[targetUser.userid])),
@@ -290,7 +293,6 @@ class Tournament extends Rooms.RoomGame {
 		userid = toId(userid);
 		if (!(userid in this.players)) return;
 		if (this.isTournamentStarted) {
-			if (!this.disqualifiedUsers) throw new Error("Unexpected null in tours");
 			if (!this.disqualifiedUsers.get(this.players[userid])) {
 				this.disqualifyUser(userid);
 			}
@@ -426,8 +428,6 @@ class Tournament extends Rooms.RoomGame {
 				data.users = usersToNames(this.generator.getUsers().sort());
 				return data;
 			}
-			if (!this.pendingChallenges) throw new Error("Unexpected null in tours");
-			if (!this.inProgressMatches) throw new Error("Unexpected null in tours");
 			let queue = [data.rootNode];
 			while (queue.length > 0) {
 				let node = queue.shift();
@@ -453,8 +453,6 @@ class Tournament extends Rooms.RoomGame {
 			}
 		} else if (data.type === 'table') {
 			if (this.isTournamentStarted) {
-				if (!this.pendingChallenges) throw new Error("Unexpected null in tours");
-				if (!this.inProgressMatches) throw new Error("Unexpected null in tours");
 				for (const [r, row] of data.tableContents.entries()) {
 					let pendingChallenge = this.pendingChallenges.get(data.tableHeaders.rows[r]);
 					let inProgressMatch = this.inProgressMatches.get(data.tableHeaders.rows[r]);
@@ -525,8 +523,6 @@ class Tournament extends Rooms.RoomGame {
 	getAvailableMatches() {
 		const matches = this.generator.getAvailableMatches();
 		if (typeof matches === 'string') throw new Error(`Error from getAvailableMatches(): ${matches}`);
-		if (!this.availableMatches) throw new Error("Unexpected null in tours");
-		if (!this.lastActionTimes) throw new Error("Unexpected null in tours");
 
 		const users = this.generator.getUsers();
 		const challenges = new Map();
@@ -592,9 +588,6 @@ class Tournament extends Rooms.RoomGame {
 			sendReply(`|tournament|error|UserNotAdded|${userid}`);
 			return false;
 		}
-		if (!this.disqualifiedUsers) throw new Error("Unexpected null in tours");
-		if (!this.pendingChallenges) throw new Error("Unexpected null in tours");
-		if (!this.inProgressMatches) throw new Error("Unexpected null in tours");
 
 		const player = this.players[userid];
 		if (this.disqualifiedUsers.get(player)) {
@@ -726,10 +719,6 @@ class Tournament extends Rooms.RoomGame {
 			return false;
 		}
 		if (this.autoDisqualifyTimer) clearTimeout(this.autoDisqualifyTimer);
-		if (!this.lastActionTimes) throw new Error("Unexpected null in tours");
-		if (!this.availableMatches) throw new Error("Unexpected null in tours");
-		if (!this.autoDisqualifyWarnings) throw new Error("Unexpected null in tours");
-		if (!this.pendingChallenges) throw new Error("Unexpected null in tours");
 
 		const now = Date.now();
 		for (const [player, time] of this.lastActionTimes) {
@@ -789,9 +778,6 @@ class Tournament extends Rooms.RoomGame {
 			output.sendReply('|tournament|error|InvalidMatch');
 			return;
 		}
-		if (!this.availableMatches) throw new Error("Unexpected null in tours");
-		if (!this.lastActionTimes) throw new Error("Unexpected null in tours");
-		if (!this.pendingChallenges) throw new Error("Unexpected null in tours");
 
 		const from = this.players[user.userid];
 		const to = this.players[targetUserid];
@@ -845,7 +831,6 @@ class Tournament extends Rooms.RoomGame {
 			output.sendReply('|tournament|error|UserNotAdded');
 			return;
 		}
-		if (!this.pendingChallenges) throw new Error("Unexpected null in tours");
 
 		const player = this.players[user.userid];
 		const challenge = this.pendingChallenges.get(player);
@@ -876,8 +861,6 @@ class Tournament extends Rooms.RoomGame {
 			output.sendReply('|tournament|error|UserNotAdded');
 			return;
 		}
-		if (!this.pendingChallenges) throw new Error("Unexpected null in tours");
-		if (!this.inProgressMatches) throw new Error("Unexpected null in tours");
 
 		const player = this.players[user.userid];
 		const challenge = this.pendingChallenges.get(player);
@@ -978,8 +961,6 @@ class Tournament extends Rooms.RoomGame {
 		room.tour = null;
 		room.parent = null;
 		if (!room.battle) throw new Error("onBattleWin called without a battle");
-		if (!this.inProgressMatches) throw new Error("Unexpected null in tours");
-		if (!this.disqualifiedUsers) throw new Error("Unexpected null in tours");
 
 		const from = this.players[room.p1.userid];
 		const to = this.players[room.p2.userid];
