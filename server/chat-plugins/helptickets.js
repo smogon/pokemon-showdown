@@ -1033,8 +1033,8 @@ let commands = {
 				this.privateModAction(displayMessage);
 			}
 
-			for (let i in affected) {
-				let userid = (typeof affected[i] !== 'string' ? affected[i].getLastId() : toId(affected[i]));
+			for (let user of affected) {
+				let userid = (typeof user !== 'string' ? user.getLastId() : toId(user));
 				let targetTicket = tickets[userid];
 				if (targetTicket && targetTicket.open) targetTicket.open = false;
 				if (Rooms(`help-${userid}`)) Rooms(`help-${userid}`).destroy();
