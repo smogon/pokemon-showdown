@@ -143,7 +143,7 @@ interface SelfEffect {
 	sideCondition?: string
 	slotCondition?: string
 	volatileStatus?: string
-	onHit?: EffectData["onHit"]
+	onHit?: MoveEventMethods['onHit']
 }
 
 interface SecondaryEffect {
@@ -155,176 +155,490 @@ interface SecondaryEffect {
 	self?: SelfEffect
 	status?: string
 	volatileStatus?: string
-	onAfterHit?: EffectData["onAfterHit"]
-	onHit?: EffectData["onHit"]
+	onAfterHit?: MoveEventMethods['onAfterHit']
+	onHit?: MoveEventMethods['onHit']
 }
 
-interface EventMethods {
+interface CommonHandlers {
+	ModifierEffect: (this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | void;
+	ModifierMove: (this: Battle, relayVar: number, target: Pokemon, source: Pokemon, move: ActiveMove) => number | void;
+	ResultMove: boolean | ((this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => boolean | null | "" | void);
+	ExtResultMove: boolean | ((this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => boolean | null | number | "" | void);
+	VoidEffect: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect) => void;
+	VoidMove: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
+	ModifierSourceEffect: (this: Battle, relayVar: number, source: Pokemon, target: Pokemon, effect: Effect) => number | void;
+	ModifierSourceMove: (this: Battle, relayVar: number, source: Pokemon, target: Pokemon, move: ActiveMove) => number | void;
+	ResultSourceMove: boolean | ((this: Battle, source: Pokemon, target: Pokemon, move: ActiveMove) => boolean | null | "" | void);
+	ExtResultSourceMove: boolean | ((this: Battle, source: Pokemon, target: Pokemon, move: ActiveMove) => boolean | null | number | "" | void);
+	VoidSourceEffect: (this: Battle, source: Pokemon, target: Pokemon, effect: Effect) => void;
+	VoidSourceMove: (this: Battle, source: Pokemon, target: Pokemon, move: ActiveMove) => void;
+}
+
+interface AbilityEventMethods {
+	onCheckShow?: (this: Battle, pokemon: Pokemon) => void
+	onEnd?: (this: Battle, target: Pokemon & Side & Field) => void
+	onPreStart?: (this: Battle, pokemon: Pokemon) => void
+	onStart?: (this: Battle, target: Pokemon) => void
+}
+
+interface ItemEventMethods {
+	onEat?: ((this: Battle, pokemon: Pokemon) => void) | false
+	onPrimal?: (this: Battle, pokemon: Pokemon) => void
+	onStart?: (this: Battle, target: Pokemon) => void
+	onTakeItem?: ((this: Battle, item: Item, pokemon: Pokemon, source: Pokemon, move?: ActiveMove) => boolean | void) | boolean
+}
+
+interface MoveEventMethods {
 	/** Return true to stop the move from being used */
 	beforeMoveCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon | null, move: ActiveMove) => boolean | void
 	beforeTurnCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon) => void
 	damageCallback?: (this: Battle, pokemon: Pokemon, target: Pokemon) => number | false
+
+	onAfterHit?: CommonHandlers['VoidSourceMove']
+	onAfterSubDamage?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void
+	onAfterMoveSecondarySelf?: CommonHandlers['VoidSourceMove']
+	onAfterMoveSecondary?: CommonHandlers['VoidMove']
+	onAfterMove?: CommonHandlers['VoidSourceMove']
+
+	/* Invoked by the global BasePower event (onEffect = true) */
+	onBasePower?: CommonHandlers['ModifierSourceMove']
+
+	onEffectiveness?: (this: Battle, typeMod: number, target: Pokemon | null, type: string, move: ActiveMove) => number | void
+	onHit?: CommonHandlers['ResultMove']
+	onHitField?: CommonHandlers['ResultMove']
+	onHitSide?: (this: Battle, side: Side, source: Pokemon, move: ActiveMove) => boolean | null | "" | void
+	onModifyMove?: (this: Battle, move: ActiveMove, pokemon: Pokemon, target: Pokemon) => void
+	onMoveFail?: CommonHandlers['VoidMove']
+	onPrepareHit?: CommonHandlers['ResultMove']
+	onTry?: CommonHandlers['ResultSourceMove']
+	onTryHit?: CommonHandlers['ExtResultSourceMove']
+	onTryHitField?: CommonHandlers['ResultMove']
+	onTryHitSide?: (this: Battle, side: Side, source: Pokemon, move: ActiveMove) => boolean | null | "" | void
+	onTryMove?: CommonHandlers['ResultSourceMove']
+	onUseMoveMessage?: CommonHandlers['VoidSourceMove']
+}
+
+interface PureEffectEventMethods {
 	durationCallback?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect | null) => number
-	onAfterDamage?: (this: Battle, damage: number, target: Pokemon, soruce: Pokemon, move: ActiveMove) => void
+	onCopy?: (this: Battle, pokemon: Pokemon) => void
+	onEnd?: (this: Battle, target: Pokemon & Side & Field) => void
+	onRestart?: (this: Battle, target: Pokemon & Side & Field, source: Pokemon) => void
+	onStart?: (this: Battle, target: Pokemon & Side & Field, source: Pokemon, sourceEffect: Effect) => void
+}
+
+interface EventMethods {
+	onAfterDamage?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void
 	onAfterEachBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon) => void
-	onAfterHit?: (this: Battle, source: Pokemon, target: Pokemon, move: ActiveMove) => void
+	onAfterHit?: MoveEventMethods['onAfterHit']
 	onAfterSetStatus?: (this: Battle, status: PureEffect, target: Pokemon, source: Pokemon, effect: Effect) => void
-	onAfterSubDamage?: (this: Battle, damage: any, target: Pokemon, source: Pokemon, move: ActiveMove) => void
+	onAfterSubDamage?: MoveEventMethods['onAfterSubDamage']
 	onAfterSwitchInSelf?: (this: Battle, pokemon: Pokemon) => void
 	onAfterUseItem?: (this: Battle, item: Item, pokemon: Pokemon) => void
 	onAfterBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void
-	onAfterMoveSecondarySelf?: (this: Battle, source: Pokemon, target: Pokemon, move: ActiveMove) => void
-	onAfterMoveSecondary?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => void
-	onAfterMove?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => void
-	onAfterMoveSelf?: (this: Battle, pokemon: Pokemon) => void
-	onAllyTryAddVolatile?: (this: Battle, status: PureEffect, target: Pokemon, source: Pokemon, effect: Effect) => void
-	onAllyBasePower?: (this: Battle, basePower: number, attacker: Pokemon, defender: Pokemon, move: ActiveMove) => void
-	onAllyModifyAtk?: (this: Battle, atk: number) => void
-	onAllyModifySpD?: (this: Battle, spd: number) => void
-	onAllyBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void
-	onAllySetStatus?: (this: Battle, status: PureEffect, target: Pokemon, source: Pokemon, effect: Effect) => void
-	onAllyTryHitSide?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => void
-	onAllyFaint?: (this: Battle, target: Pokemon) => void
-	onAllyAfterUseItem?: (this: Battle, item: Item, pokemon: Pokemon) => void
-	onAllyModifyMove?: (this: Battle, move: ActiveMove) => void
-	onAnyTryPrimaryHit?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => void
-	onAnyTryMove?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => void
-	onAnyDamage?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect) => void
-	onAnyBasePower?: (this: Battle, basePower: number, source: Pokemon, target: Pokemon, move: ActiveMove) => void
-	onAnySetWeather?: (this: Battle, target: Pokemon, source: Pokemon, weather: PureEffect) => void
-	onAnyTerrainStart?: (this: Battle) => void
-	onAnyModifyDamage?: (this: Battle, damage: number, source: Pokemon, target: Pokemon, move: ActiveMove) => void
-	onAnyRedirectTarget?: (this: Battle, target: Pokemon, source: Pokemon, source2: Pokemon, move: ActiveMove) => void
-	onAnyAccuracy?: (this: Battle, accuracy: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void
-	onAnyTryImmunity?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => void
-	onAnyFaint?: (this: Battle) => void
-	onAnyModifyBoost?: (this: Battle, boosts: SparseBoostsTable, target: Pokemon) => void
-	onAnyDragOut?: (this: Battle, pokemon: Pokemon) => void
-	onAnySetStatus?: (this: Battle, status: PureEffect, pokemon: Pokemon) => void
-	onAttract?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect) => void
+	onAfterMoveSecondarySelf?: MoveEventMethods['onAfterMoveSecondarySelf']
+	onAfterMoveSecondary?: MoveEventMethods['onAfterMoveSecondary']
+	onAfterMove?: MoveEventMethods['onAfterMove']
+	onAfterMoveSelf?: CommonHandlers['VoidSourceMove']
+	onAttract?: (this: Battle, target: Pokemon, source: Pokemon) => void
 	onAccuracy?: (this: Battle, accuracy: number, target: Pokemon, source: Pokemon, move: ActiveMove) => number | boolean | null | void
-	onBasePower?: (this: Battle, basePower: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => void
-	onTryImmunity?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => void
-	onBeforeFaint?: (this: Battle, pokemon: Pokemon) => void
-	onBeforeMove?: (this: Battle, attacker: Pokemon, defender: Pokemon, move: ActiveMove) => void
+	onBasePower?: CommonHandlers['ModifierSourceMove']
+	onBeforeFaint?: (this: Battle, pokemon: Pokemon, effect: Effect) => void
+	onBeforeMove?: CommonHandlers['VoidSourceMove']
 	onBeforeSwitchIn?: (this: Battle, pokemon: Pokemon) => void
 	onBeforeSwitchOut?: (this: Battle, pokemon: Pokemon) => void
 	onBeforeTurn?: (this: Battle, pokemon: Pokemon) => void
 	onBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void
-	onChargeMove?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => void
-	onCheckShow?: (this: Battle, pokemon: Pokemon) => void
-	onCopy?: (this: Battle, pokemon: Pokemon) => void
-	onDamage?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect) => void
+	onChargeMove?: CommonHandlers['VoidSourceMove']
+	onDamage?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | null | void
 	onDeductPP?: (this: Battle, target: Pokemon, source: Pokemon) => number | void
 	onDisableMove?: (this: Battle, pokemon: Pokemon) => void
-	onDragOut?: (this: Battle, pokemon: Pokemon) => void
-	onEat?: ((this: Battle, pokemon: Pokemon) => void) | false
+	onDragOut?: (this: Battle, pokemon: Pokemon, source?: Pokemon, move?: ActiveMove) => void
 	onEatItem?: (this: Battle, item: Item, pokemon: Pokemon) => void
-	onEffectiveness?: (this: Battle, typeMod: number, target: Pokemon | null, type: string, move: ActiveMove) => void
-	onEnd?: (this: Battle, target: Pokemon & Side & Field) => void
-	onFaint?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect) => void
-	onFlinch?: ((this: Battle, pokemon: Pokemon) => void) | boolean
-	onFoeAfterDamage?: (this: Battle, damage: number, target: Pokemon) => void
-	onFoeBasePower?: (this: Battle, basePower: number, attacker: Pokemon, defender: Pokemon, move: ActiveMove) => void
-	onFoeBeforeMove?: (this: Battle, attacker: Pokemon, defender: Pokemon, move: ActiveMove) => void
-	onFoeDisableMove?: (this: Battle, pokemon: Pokemon) => void
-	onFoeMaybeTrapPokemon?: (this: Battle, pokemon: Pokemon, source: Pokemon) => void
-	onFoeModifyDef?: (this: Battle, def: number, pokemon: Pokemon) => number
-	onFoeRedirectTarget?: (this: Battle, target: Pokemon, source: Pokemon, source2: Effect, move: ActiveMove) => void
-	onFoeSwitchOut?: (this: Battle, pokemon: Pokemon) => void
-	onFoeTrapPokemon?: (this: Battle, pokemon: Pokemon) => void
-	onFoeTryMove?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => void
-	onHit?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => void
-	onHitField?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => boolean | void
-	onHitSide?: (this: Battle, side: Side, source: Pokemon, move: ActiveMove) => void
+	onEffectiveness?: MoveEventMethods['onEffectiveness']
+	onFaint?: CommonHandlers['VoidEffect']
+	onFlinch?: ((this: Battle, pokemon: Pokemon) => boolean | void) | boolean
+	onHit?: MoveEventMethods['onHit']
 	onImmunity?: (this: Battle, type: string, pokemon: Pokemon) => void
-	onLockMove?: string | ((this: Battle, pokemon: Pokemon) => void)
-	onLockMoveTarget?: (this: Battle) => number
-	onModifyAccuracy?: (this: Battle, accuracy: number, target: Pokemon, source: Pokemon, move: ActiveMove) => number | void
-	onModifyAtk?: (this: Battle, atk: number, attacker: Pokemon, defender: Pokemon, move: ActiveMove) => number | void
-	onModifyBoost?: (this: Battle, boosts: SparseBoostsTable) => void
-	onModifyCritRatio?: (this: Battle, critRatio: number, source: Pokemon, target: Pokemon) => number | void
-	onModifyDamage?: (this: Battle, damage: number, source: Pokemon, target: Pokemon, move: ActiveMove) => number | void
-	onModifyDef?: (this: Battle, def: number, pokemon: Pokemon) => number | void
-	onModifyMove?: (this: Battle, move: ActiveMove, pokemon: Pokemon, target: Pokemon) => void
-	onModifyPriority?: (this: Battle, priority: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => number | void
+	onLockMove?: string | ((this: Battle, pokemon: Pokemon) => void | string)
+	onMaybeTrapPokemon?: (this: Battle, pokemon: Pokemon) => void
+	onModifyAccuracy?: CommonHandlers['ModifierMove']
+	onModifyAtk?: CommonHandlers['ModifierSourceMove']
+	onModifyBoost?: (this: Battle, boosts: SparseBoostsTable, pokemon: Pokemon) => SparseBoostsTable | void
+	onModifyCritRatio?: CommonHandlers['ModifierSourceMove']
+	onModifyDamage?: CommonHandlers['ModifierSourceMove']
+	onModifyDef?: CommonHandlers['ModifierMove']
+	onModifyMove?: MoveEventMethods['onModifyMove']
+	onModifyPriority?: CommonHandlers['ModifierSourceMove']
 	onModifySecondaries?: (this: Battle, secondaries: SecondaryEffect[], target: Pokemon, source: Pokemon, move: ActiveMove) => void
-	onModifySpA?: (this: Battle, atk: number, attacker: Pokemon, defender: Pokemon, move: ActiveMove) => number | void
-	onModifySpD?: (this: Battle, spd: number, pokemon: Pokemon) => number | void
+	onModifySpA?: CommonHandlers['ModifierSourceMove']
+	onModifySpD?: CommonHandlers['ModifierMove']
 	onModifySpe?: (this: Battle, spe: number, pokemon: Pokemon) => number | void
 	onModifyWeight?: (this: Battle, weight: number, pokemon: Pokemon) => number | void
-	onMoveAborted?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => void
-	onMoveFail?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => void
-	onNegateImmunity?: ((this: Battle, pokemon: Pokemon, type: string) => void) | boolean
-	onOverrideAction?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => void
-	onPrepareHit?: (this: Battle, source: Pokemon, target: Pokemon, move: ActiveMove) => void
-	onPreStart?: (this: Battle, pokemon: Pokemon) => void
-	onPrimal?: (this: Battle, pokemon: Pokemon) => void
-	onRedirectTarget?: (this: Battle, target: Pokemon, source: Pokemon, source2: Effect) => void
+	onMoveAborted?: CommonHandlers['VoidMove']
+	onNegateImmunity?: ((this: Battle, pokemon: Pokemon, type: string) => boolean | void) | boolean
+	onOverrideAction?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => string | void
+	onPrepareHit?: CommonHandlers['ResultSourceMove']
+	onRedirectTarget?: (this: Battle, target: Pokemon, source: Pokemon, source2: Effect, move: ActiveMove) => Pokemon | void
 	onResidual?: (this: Battle, target: Pokemon & Side, source: Pokemon, effect: Effect) => void
-	onRestart?: (this: Battle, target: Pokemon & Field, source: Pokemon) => void
-	onSetAbility?: (this: Battle, ability: string, target: Pokemon, source: Pokemon, effect: Effect) => void
-	onSetStatus?: (this: Battle, status: PureEffect, target: Pokemon, source: Pokemon, effect: Effect) => void
-	onSourceAccuracy?: (this: Battle, accuracy: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void
-	onSourceBasePower?: (this: Battle, basePower: number, attacker: Pokemon, defender: Pokemon, move: ActiveMove) => void
-	onSourceFaint?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect) => void
-	onSourceHit?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => void
-	onSourceModifyAccuracy?: (this: Battle, accuracy: number, target: Pokemon, source: Pokemon) => number | void
-	onSourceModifyAtk?: (this: Battle, atk: number, attacker: Pokemon, defender: Pokemon, move: ActiveMove) => number | void
-	onSourceModifyDamage?: (this: Battle, damage: number, source: Pokemon, target: Pokemon, move: ActiveMove) => number | void
-	onSourceModifySecondaries?: (this: Battle, secondaries: SecondaryEffect[], target: Pokemon, source: Pokemon, move: ActiveMove) => void
-	onSourceModifySpA?: (this: Battle, atk: number, attacker: Pokemon, defender: Pokemon, move: ActiveMove) => number | void
-	onSourceTryHeal?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect) => void
-	onSourceTryPrimaryHit?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => void
-	onStallMove?: (this: Battle, pokemon: Pokemon) => void
-	onStart?: (this: Battle, target: Pokemon & Side & Field, source: Pokemon, effect: Effect, move: ActiveMove) => void
+	onSetAbility?: (this: Battle, ability: string, target: Pokemon, source: Pokemon, effect: Effect) => boolean | void
+	onSetStatus?: (this: Battle, status: PureEffect, target: Pokemon, source: Pokemon, effect: Effect) => boolean | null | void
+	onSetWeather?: (this: Battle, target: Pokemon, source: Pokemon, weather: PureEffect) => boolean | void
+	onStallMove?: (this: Battle, pokemon: Pokemon) => boolean | void
 	onSwitchIn?: (this: Battle, pokemon: Pokemon) => void
 	onSwitchOut?: (this: Battle, pokemon: Pokemon) => void
-	onTakeItem?: ((this: Battle, item: Item, pokemon: Pokemon, source: Pokemon) => void) | false
+	onTakeItem?: ((this: Battle, item: Item, pokemon: Pokemon, source: Pokemon, move?: ActiveMove) => boolean | void) | boolean
 	onTerrain?: (this: Battle, pokemon: Pokemon) => void
+	onTerrainStart?: (this: Battle, target: Pokemon, source: Pokemon, terrain: PureEffect) => void
 	onTrapPokemon?: (this: Battle, pokemon: Pokemon) => void
-	onTry?: (this: Battle, attacker: Pokemon, defender: Pokemon, move: ActiveMove) => void
-	onTryAddVolatile?: (this: Battle, status: PureEffect, target: Pokemon, source: Pokemon, effect: Effect) => void
-	onTryEatItem?: (this: Battle, item: Item, pokemon: Pokemon) => void
-	onTryHeal?: ((this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect) => void) | boolean
-	onTryHit?: ((this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => void) | boolean
-	onTryHitField?: (this: Battle, target: Pokemon, source: Pokemon) => boolean | void
-	onTryHitSide?: (this: Battle, side: Side, source: Pokemon) => void
-	onTryMove?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => void
-	onTryPrimaryHit?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => void
-	onType?: (this: Battle, types: string[], pokemon: Pokemon) => void
+	onTryAddVolatile?: (this: Battle, status: PureEffect, target: Pokemon, source: Pokemon, sourceEffect: Effect) => boolean | null | void
+	onTryEatItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void)
+	/* FIXME: onTryHeal() is run with two different sets of arguments */
+	onTryHeal?: (
+		((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | void) |
+		((this: Battle, pokemon: Pokemon) => boolean | void) | boolean
+	);
+	onTryHit?: MoveEventMethods['onTryHit']
+	onTryHitField?: MoveEventMethods['onTryHitField']
+	onTryHitSide?: CommonHandlers['ResultMove']
+	onTryImmunity?: CommonHandlers['ResultMove']
+	onTryMove?: MoveEventMethods['onTryMove']
+	onTryPrimaryHit?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => boolean | null | number | void
+	onType?: (this: Battle, types: string[], pokemon: Pokemon) => string[] | void
 	onUpdate?: (this: Battle, pokemon: Pokemon) => void
-	onUseMoveMessage?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => void
-	onWeather?: (this: Battle, target: Pokemon, source: Pokemon, effect: PureEffect) => void
-	onWeatherModifyDamage?: (this: Battle, damage: number, attacker: Pokemon, defender: Pokemon, move: ActiveMove) => number | void
-	onAnyModifyDamagePhase1?: (this: Battle, damage: number, source: Pokemon, target: Pokemon, move: ActiveMove) => number | void
-	onAnyModifyDamagePhase2?: EventMethods["onAnyModifyDamagePhase1"]
-	onModifyDamagePhase1?: EventMethods["onAnyModifyDamagePhase1"]
-	onModifyDamagePhase2?: EventMethods["onAnyModifyDamagePhase1"]
-}
+	onWeather?: (this: Battle, target: Pokemon, source: null, effect: PureEffect) => void
+	onWeatherModifyDamage?: CommonHandlers['ModifierSourceMove']
+	onModifyDamagePhase1?: CommonHandlers['ModifierSourceMove']
+	onModifyDamagePhase2?: CommonHandlers['ModifierSourceMove']
+	onAllyAfterDamage?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void
+	onAllyAfterEachBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon) => void
+	onAllyAfterHit?: MoveEventMethods['onAfterHit']
+	onAllyAfterSetStatus?: (this: Battle, status: PureEffect, target: Pokemon, source: Pokemon, effect: Effect) => void
+	onAllyAfterSubDamage?: MoveEventMethods['onAfterSubDamage']
+	onAllyAfterSwitchInSelf?: (this: Battle, pokemon: Pokemon) => void
+	onAllyAfterUseItem?: (this: Battle, item: Item, pokemon: Pokemon) => void
+	onAllyAfterBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void
+	onAllyAfterMoveSecondarySelf?: MoveEventMethods['onAfterMoveSecondarySelf']
+	onAllyAfterMoveSecondary?: MoveEventMethods['onAfterMoveSecondary']
+	onAllyAfterMove?: MoveEventMethods['onAfterMove']
+	onAllyAfterMoveSelf?: CommonHandlers['VoidSourceMove']
+	onAllyAttract?: (this: Battle, target: Pokemon, source: Pokemon) => void
+	onAllyAccuracy?: (this: Battle, accuracy: number, target: Pokemon, source: Pokemon, move: ActiveMove) => number | boolean | null | void
+	onAllyBasePower?: CommonHandlers['ModifierSourceMove']
+	onAllyBeforeFaint?: (this: Battle, pokemon: Pokemon, effect: Effect) => void
+	onAllyBeforeMove?: CommonHandlers['VoidSourceMove']
+	onAllyBeforeSwitchIn?: (this: Battle, pokemon: Pokemon) => void
+	onAllyBeforeSwitchOut?: (this: Battle, pokemon: Pokemon) => void
+	onAllyBeforeTurn?: (this: Battle, pokemon: Pokemon) => void
+	onAllyBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void
+	onAllyChargeMove?: CommonHandlers['VoidSourceMove']
+	onAllyDamage?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | null | void
+	onAllyDeductPP?: (this: Battle, target: Pokemon, source: Pokemon) => number | void
+	onAllyDisableMove?: (this: Battle, pokemon: Pokemon) => void
+	onAllyDragOut?: (this: Battle, pokemon: Pokemon, source?: Pokemon, move?: ActiveMove) => void
+	onAllyEatItem?: (this: Battle, item: Item, pokemon: Pokemon) => void
+	onAllyEffectiveness?: MoveEventMethods['onEffectiveness']
+	onAllyFaint?: CommonHandlers['VoidEffect']
+	onAllyFlinch?: ((this: Battle, pokemon: Pokemon) => boolean | void) | boolean
+	onAllyHit?: MoveEventMethods['onHit']
+	onAllyImmunity?: (this: Battle, type: string, pokemon: Pokemon) => void
+	onAllyLockMove?: string | ((this: Battle, pokemon: Pokemon) => void | string)
+	onAllyMaybeTrapPokemon?: (this: Battle, pokemon: Pokemon) => void
+	onAllyModifyAccuracy?: CommonHandlers['ModifierMove']
+	onAllyModifyAtk?: CommonHandlers['ModifierSourceMove']
+	onAllyModifyBoost?: (this: Battle, boosts: SparseBoostsTable, pokemon: Pokemon) => SparseBoostsTable | void
+	onAllyModifyCritRatio?: CommonHandlers['ModifierSourceMove']
+	onAllyModifyDamage?: CommonHandlers['ModifierSourceMove']
+	onAllyModifyDef?: CommonHandlers['ModifierMove']
+	onAllyModifyMove?: MoveEventMethods['onModifyMove']
+	onAllyModifyPriority?: CommonHandlers['ModifierSourceMove']
+	onAllyModifySecondaries?: (this: Battle, secondaries: SecondaryEffect[], target: Pokemon, source: Pokemon, move: ActiveMove) => void
+	onAllyModifySpA?: CommonHandlers['ModifierSourceMove']
+	onAllyModifySpD?: CommonHandlers['ModifierMove']
+	onAllyModifySpe?: (this: Battle, spe: number, pokemon: Pokemon) => number | void
+	onAllyModifyWeight?: (this: Battle, weight: number, pokemon: Pokemon) => number | void
+	onAllyMoveAborted?: CommonHandlers['VoidMove']
+	onAllyNegateImmunity?: ((this: Battle, pokemon: Pokemon, type: string) => boolean | void) | boolean
+	onAllyOverrideAction?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => string | void
+	onAllyPrepareHit?: CommonHandlers['ResultSourceMove']
+	onAllyRedirectTarget?: (this: Battle, target: Pokemon, source: Pokemon, source2: Effect, move: ActiveMove) => Pokemon | void
+	onAllyResidual?: (this: Battle, target: Pokemon & Side, source: Pokemon, effect: Effect) => void
+	onAllySetAbility?: (this: Battle, ability: string, target: Pokemon, source: Pokemon, effect: Effect) => boolean | void
+	onAllySetStatus?: (this: Battle, status: PureEffect, target: Pokemon, source: Pokemon, effect: Effect) => boolean | null | void
+	onAllySetWeather?: (this: Battle, target: Pokemon, source: Pokemon, weather: PureEffect) => boolean | void
+	onAllyStallMove?: (this: Battle, pokemon: Pokemon) => boolean | void
+	onAllySwitchIn?: (this: Battle, pokemon: Pokemon) => void
+	onAllySwitchOut?: (this: Battle, pokemon: Pokemon) => void
+	onAllyTakeItem?: ((this: Battle, item: Item, pokemon: Pokemon, source: Pokemon, move?: ActiveMove) => boolean | void) | boolean
+	onAllyTerrain?: (this: Battle, pokemon: Pokemon) => void
+	onAllyTerrainStart?: (this: Battle, target: Pokemon, source: Pokemon, terrain: PureEffect) => void
+	onAllyTrapPokemon?: (this: Battle, pokemon: Pokemon) => void
+	onAllyTryAddVolatile?: (this: Battle, status: PureEffect, target: Pokemon, source: Pokemon, sourceEffect: Effect) => boolean | null | void
+	onAllyTryEatItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void)
+	/* FIXME: onAllyTryHeal() is run with two different sets of arguments */
+	onAllyTryHeal?: (
+		((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | void) |
+		((this: Battle, pokemon: Pokemon) => boolean | void) | boolean
+	);
+	onAllyTryHit?: MoveEventMethods['onTryHit']
+	onAllyTryHitField?: MoveEventMethods['onTryHitField']
+	onAllyTryHitSide?: CommonHandlers['ResultMove']
+	onAllyTryImmunity?: CommonHandlers['ResultMove']
+	onAllyTryMove?: MoveEventMethods['onTryMove']
+	onAllyTryPrimaryHit?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => boolean | null | number | void
+	onAllyType?: (this: Battle, types: string[], pokemon: Pokemon) => string[] | void
+	onAllyUpdate?: (this: Battle, pokemon: Pokemon) => void
+	onAllyWeather?: (this: Battle, target: Pokemon, source: null, effect: PureEffect) => void
+	onAllyWeatherModifyDamage?: CommonHandlers['ModifierSourceMove']
+	onAllyModifyDamagePhase1?: CommonHandlers['ModifierSourceMove']
+	onAllyModifyDamagePhase2?: CommonHandlers['ModifierSourceMove']
+	onFoeAfterDamage?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void
+	onFoeAfterEachBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon) => void
+	onFoeAfterHit?: MoveEventMethods['onAfterHit']
+	onFoeAfterSetStatus?: (this: Battle, status: PureEffect, target: Pokemon, source: Pokemon, effect: Effect) => void
+	onFoeAfterSubDamage?: MoveEventMethods['onAfterSubDamage']
+	onFoeAfterSwitchInSelf?: (this: Battle, pokemon: Pokemon) => void
+	onFoeAfterUseItem?: (this: Battle, item: Item, pokemon: Pokemon) => void
+	onFoeAfterBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void
+	onFoeAfterMoveSecondarySelf?: MoveEventMethods['onAfterMoveSecondarySelf']
+	onFoeAfterMoveSecondary?: MoveEventMethods['onAfterMoveSecondary']
+	onFoeAfterMove?: MoveEventMethods['onAfterMove']
+	onFoeAfterMoveSelf?: CommonHandlers['VoidSourceMove']
+	onFoeAttract?: (this: Battle, target: Pokemon, source: Pokemon) => void
+	onFoeAccuracy?: (this: Battle, accuracy: number, target: Pokemon, source: Pokemon, move: ActiveMove) => number | boolean | null | void
+	onFoeBasePower?: CommonHandlers['ModifierSourceMove']
+	onFoeBeforeFaint?: (this: Battle, pokemon: Pokemon, effect: Effect) => void
+	onFoeBeforeMove?: CommonHandlers['VoidSourceMove']
+	onFoeBeforeSwitchIn?: (this: Battle, pokemon: Pokemon) => void
+	onFoeBeforeSwitchOut?: (this: Battle, pokemon: Pokemon) => void
+	onFoeBeforeTurn?: (this: Battle, pokemon: Pokemon) => void
+	onFoeBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void
+	onFoeChargeMove?: CommonHandlers['VoidSourceMove']
+	onFoeDamage?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | null | void
+	onFoeDeductPP?: (this: Battle, target: Pokemon, source: Pokemon) => number | void
+	onFoeDisableMove?: (this: Battle, pokemon: Pokemon) => void
+	onFoeDragOut?: (this: Battle, pokemon: Pokemon, source?: Pokemon, move?: ActiveMove) => void
+	onFoeEatItem?: (this: Battle, item: Item, pokemon: Pokemon) => void
+	onFoeEffectiveness?: MoveEventMethods['onEffectiveness']
+	onFoeFaint?: CommonHandlers['VoidEffect']
+	onFoeFlinch?: ((this: Battle, pokemon: Pokemon) => boolean | void) | boolean
+	onFoeHit?: MoveEventMethods['onHit']
+	onFoeImmunity?: (this: Battle, type: string, pokemon: Pokemon) => void
+	onFoeLockMove?: string | ((this: Battle, pokemon: Pokemon) => void | string)
+	onFoeMaybeTrapPokemon?: (this: Battle, pokemon: Pokemon, source?: Pokemon) => void
+	onFoeModifyAccuracy?: CommonHandlers['ModifierMove']
+	onFoeModifyAtk?: CommonHandlers['ModifierSourceMove']
+	onFoeModifyBoost?: (this: Battle, boosts: SparseBoostsTable, pokemon: Pokemon) => SparseBoostsTable | void
+	onFoeModifyCritRatio?: CommonHandlers['ModifierSourceMove']
+	onFoeModifyDamage?: CommonHandlers['ModifierSourceMove']
+	onFoeModifyDef?: CommonHandlers['ModifierMove']
+	onFoeModifyMove?: MoveEventMethods['onModifyMove']
+	onFoeModifyPriority?: CommonHandlers['ModifierSourceMove']
+	onFoeModifySecondaries?: (this: Battle, secondaries: SecondaryEffect[], target: Pokemon, source: Pokemon, move: ActiveMove) => void
+	onFoeModifySpA?: CommonHandlers['ModifierSourceMove']
+	onFoeModifySpD?: CommonHandlers['ModifierMove']
+	onFoeModifySpe?: (this: Battle, spe: number, pokemon: Pokemon) => number | void
+	onFoeModifyWeight?: (this: Battle, weight: number, pokemon: Pokemon) => number | void
+	onFoeMoveAborted?: CommonHandlers['VoidMove']
+	onFoeNegateImmunity?: ((this: Battle, pokemon: Pokemon, type: string) => boolean | void) | boolean
+	onFoeOverrideAction?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => string | void
+	onFoePrepareHit?: CommonHandlers['ResultSourceMove']
+	onFoeRedirectTarget?: (this: Battle, target: Pokemon, source: Pokemon, source2: Effect, move: ActiveMove) => Pokemon | void
+	onFoeResidual?: (this: Battle, target: Pokemon & Side, source: Pokemon, effect: Effect) => void
+	onFoeSetAbility?: (this: Battle, ability: string, target: Pokemon, source: Pokemon, effect: Effect) => boolean | void
+	onFoeSetStatus?: (this: Battle, status: PureEffect, target: Pokemon, source: Pokemon, effect: Effect) => boolean | null | void
+	onFoeSetWeather?: (this: Battle, target: Pokemon, source: Pokemon, weather: PureEffect) => boolean | void
+	onFoeStallMove?: (this: Battle, pokemon: Pokemon) => boolean | void
+	onFoeSwitchIn?: (this: Battle, pokemon: Pokemon) => void
+	onFoeSwitchOut?: (this: Battle, pokemon: Pokemon) => void
+	onFoeTakeItem?: ((this: Battle, item: Item, pokemon: Pokemon, source: Pokemon, move?: ActiveMove) => boolean | void) | boolean
+	onFoeTerrain?: (this: Battle, pokemon: Pokemon) => void
+	onFoeTerrainStart?: (this: Battle, target: Pokemon, source: Pokemon, terrain: PureEffect) => void
+	onFoeTrapPokemon?: (this: Battle, pokemon: Pokemon) => void
+	onFoeTryAddVolatile?: (this: Battle, status: PureEffect, target: Pokemon, source: Pokemon, sourceEffect: Effect) => boolean | null | void
+	onFoeTryEatItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void)
+	/* FIXME: onFoeTryHeal() is run with two different sets of arguments */
+	onFoeTryHeal?: (
+		((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | void) |
+		((this: Battle, pokemon: Pokemon) => boolean | void) | boolean
+	);
+	onFoeTryHit?: MoveEventMethods['onTryHit']
+	onFoeTryHitField?: MoveEventMethods['onTryHitField']
+	onFoeTryHitSide?: CommonHandlers['ResultMove']
+	onFoeTryImmunity?: CommonHandlers['ResultMove']
+	onFoeTryMove?: MoveEventMethods['onTryMove']
+	onFoeTryPrimaryHit?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => boolean | null | number | void
+	onFoeType?: (this: Battle, types: string[], pokemon: Pokemon) => string[] | void
+	onFoeUpdate?: (this: Battle, pokemon: Pokemon) => void
+	onFoeWeather?: (this: Battle, target: Pokemon, source: null, effect: PureEffect) => void
+	onFoeWeatherModifyDamage?: CommonHandlers['ModifierSourceMove']
+	onFoeModifyDamagePhase1?: CommonHandlers['ModifierSourceMove']
+	onFoeModifyDamagePhase2?: CommonHandlers['ModifierSourceMove']
+	onSourceAfterDamage?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void
+	onSourceAfterEachBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon) => void
+	onSourceAfterHit?: MoveEventMethods['onAfterHit']
+	onSourceAfterSetStatus?: (this: Battle, status: PureEffect, target: Pokemon, source: Pokemon, effect: Effect) => void
+	onSourceAfterSubDamage?: MoveEventMethods['onAfterSubDamage']
+	onSourceAfterSwitchInSelf?: (this: Battle, pokemon: Pokemon) => void
+	onSourceAfterUseItem?: (this: Battle, item: Item, pokemon: Pokemon) => void
+	onSourceAfterBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void
+	onSourceAfterMoveSecondarySelf?: MoveEventMethods['onAfterMoveSecondarySelf']
+	onSourceAfterMoveSecondary?: MoveEventMethods['onAfterMoveSecondary']
+	onSourceAfterMove?: MoveEventMethods['onAfterMove']
+	onSourceAfterMoveSelf?: CommonHandlers['VoidSourceMove']
+	onSourceAttract?: (this: Battle, target: Pokemon, source: Pokemon) => void
+	onSourceAccuracy?: (this: Battle, accuracy: number, target: Pokemon, source: Pokemon, move: ActiveMove) => number | boolean | null | void
+	onSourceBasePower?: CommonHandlers['ModifierSourceMove']
+	onSourceBeforeFaint?: (this: Battle, pokemon: Pokemon, effect: Effect) => void
+	onSourceBeforeMove?: CommonHandlers['VoidSourceMove']
+	onSourceBeforeSwitchIn?: (this: Battle, pokemon: Pokemon) => void
+	onSourceBeforeSwitchOut?: (this: Battle, pokemon: Pokemon) => void
+	onSourceBeforeTurn?: (this: Battle, pokemon: Pokemon) => void
+	onSourceBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void
+	onSourceChargeMove?: CommonHandlers['VoidSourceMove']
+	onSourceDamage?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | null | void
+	onSourceDeductPP?: (this: Battle, target: Pokemon, source: Pokemon) => number | void
+	onSourceDisableMove?: (this: Battle, pokemon: Pokemon) => void
+	onSourceDragOut?: (this: Battle, pokemon: Pokemon, source?: Pokemon, move?: ActiveMove) => void
+	onSourceEatItem?: (this: Battle, item: Item, pokemon: Pokemon) => void
+	onSourceEffectiveness?: MoveEventMethods['onEffectiveness']
+	onSourceFaint?: CommonHandlers['VoidEffect']
+	onSourceFlinch?: ((this: Battle, pokemon: Pokemon) => boolean | void) | boolean
+	onSourceHit?: MoveEventMethods['onHit']
+	onSourceImmunity?: (this: Battle, type: string, pokemon: Pokemon) => void
+	onSourceLockMove?: string | ((this: Battle, pokemon: Pokemon) => void | string)
+	onSourceMaybeTrapPokemon?: (this: Battle, pokemon: Pokemon) => void
+	onSourceModifyAccuracy?: CommonHandlers['ModifierMove']
+	onSourceModifyAtk?: CommonHandlers['ModifierSourceMove']
+	onSourceModifyBoost?: (this: Battle, boosts: SparseBoostsTable, pokemon: Pokemon) => SparseBoostsTable | void
+	onSourceModifyCritRatio?: CommonHandlers['ModifierSourceMove']
+	onSourceModifyDamage?: CommonHandlers['ModifierSourceMove']
+	onSourceModifyDef?: CommonHandlers['ModifierMove']
+	onSourceModifyMove?: MoveEventMethods['onModifyMove']
+	onSourceModifyPriority?: CommonHandlers['ModifierSourceMove']
+	onSourceModifySecondaries?: (this: Battle, secondaries: SecondaryEffect[], target: Pokemon, source: Pokemon, move: ActiveMove) => void
+	onSourceModifySpA?: CommonHandlers['ModifierSourceMove']
+	onSourceModifySpD?: CommonHandlers['ModifierMove']
+	onSourceModifySpe?: (this: Battle, spe: number, pokemon: Pokemon) => number | void
+	onSourceModifyWeight?: (this: Battle, weight: number, pokemon: Pokemon) => number | void
+	onSourceMoveAborted?: CommonHandlers['VoidMove']
+	onSourceNegateImmunity?: ((this: Battle, pokemon: Pokemon, type: string) => boolean | void) | boolean
+	onSourceOverrideAction?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => string | void
+	onSourcePrepareHit?: CommonHandlers['ResultSourceMove']
+	onSourceRedirectTarget?: (this: Battle, target: Pokemon, source: Pokemon, source2: Effect, move: ActiveMove) => Pokemon | void
+	onSourceResidual?: (this: Battle, target: Pokemon & Side, source: Pokemon, effect: Effect) => void
+	onSourceSetAbility?: (this: Battle, ability: string, target: Pokemon, source: Pokemon, effect: Effect) => boolean | void
+	onSourceSetStatus?: (this: Battle, status: PureEffect, target: Pokemon, source: Pokemon, effect: Effect) => boolean | null | void
+	onSourceSetWeather?: (this: Battle, target: Pokemon, source: Pokemon, weather: PureEffect) => boolean | void
+	onSourceStallMove?: (this: Battle, pokemon: Pokemon) => boolean | void
+	onSourceSwitchIn?: (this: Battle, pokemon: Pokemon) => void
+	onSourceSwitchOut?: (this: Battle, pokemon: Pokemon) => void
+	onSourceTakeItem?: ((this: Battle, item: Item, pokemon: Pokemon, source: Pokemon, move?: ActiveMove) => boolean | void) | boolean
+	onSourceTerrain?: (this: Battle, pokemon: Pokemon) => void
+	onSourceTerrainStart?: (this: Battle, target: Pokemon, source: Pokemon, terrain: PureEffect) => void
+	onSourceTrapPokemon?: (this: Battle, pokemon: Pokemon) => void
+	onSourceTryAddVolatile?: (this: Battle, status: PureEffect, target: Pokemon, source: Pokemon, sourceEffect: Effect) => boolean | null | void
+	onSourceTryEatItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void)
+	/* FIXME: onSourceTryHeal() is run with two different sets of arguments */
+	onSourceTryHeal?: (
+		((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | void) |
+		((this: Battle, pokemon: Pokemon) => boolean | void) | boolean
+	);
+	onSourceTryHit?: MoveEventMethods['onTryHit']
+	onSourceTryHitField?: MoveEventMethods['onTryHitField']
+	onSourceTryHitSide?: CommonHandlers['ResultMove']
+	onSourceTryImmunity?: CommonHandlers['ResultMove']
+	onSourceTryMove?: MoveEventMethods['onTryMove']
+	onSourceTryPrimaryHit?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => boolean | null | number | void
+	onSourceType?: (this: Battle, types: string[], pokemon: Pokemon) => string[] | void
+	onSourceUpdate?: (this: Battle, pokemon: Pokemon) => void
+	onSourceWeather?: (this: Battle, target: Pokemon, source: null, effect: PureEffect) => void
+	onSourceWeatherModifyDamage?: CommonHandlers['ModifierSourceMove']
+	onSourceModifyDamagePhase1?: CommonHandlers['ModifierSourceMove']
+	onSourceModifyDamagePhase2?: CommonHandlers['ModifierSourceMove']
+	onAnyAfterDamage?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void
+	onAnyAfterEachBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon) => void
+	onAnyAfterHit?: MoveEventMethods['onAfterHit']
+	onAnyAfterSetStatus?: (this: Battle, status: PureEffect, target: Pokemon, source: Pokemon, effect: Effect) => void
+	onAnyAfterSubDamage?: MoveEventMethods['onAfterSubDamage']
+	onAnyAfterSwitchInSelf?: (this: Battle, pokemon: Pokemon) => void
+	onAnyAfterUseItem?: (this: Battle, item: Item, pokemon: Pokemon) => void
+	onAnyAfterBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void
+	onAnyAfterMoveSecondarySelf?: MoveEventMethods['onAfterMoveSecondarySelf']
+	onAnyAfterMoveSecondary?: MoveEventMethods['onAfterMoveSecondary']
+	onAnyAfterMove?: MoveEventMethods['onAfterMove']
+	onAnyAfterMoveSelf?: CommonHandlers['VoidSourceMove']
+	onAnyAttract?: (this: Battle, target: Pokemon, source: Pokemon) => void
+	onAnyAccuracy?: (this: Battle, accuracy: number, target: Pokemon, source: Pokemon, move: ActiveMove) => number | boolean | null | void
+	onAnyBasePower?: CommonHandlers['ModifierSourceMove']
+	onAnyBeforeFaint?: (this: Battle, pokemon: Pokemon, effect: Effect) => void
+	onAnyBeforeMove?: CommonHandlers['VoidSourceMove']
+	onAnyBeforeSwitchIn?: (this: Battle, pokemon: Pokemon) => void
+	onAnyBeforeSwitchOut?: (this: Battle, pokemon: Pokemon) => void
+	onAnyBeforeTurn?: (this: Battle, pokemon: Pokemon) => void
+	onAnyBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void
+	onAnyChargeMove?: CommonHandlers['VoidSourceMove']
+	onAnyDamage?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | null | void
+	onAnyDeductPP?: (this: Battle, target: Pokemon, source: Pokemon) => number | void
+	onAnyDisableMove?: (this: Battle, pokemon: Pokemon) => void
+	onAnyDragOut?: (this: Battle, pokemon: Pokemon, source?: Pokemon, move?: ActiveMove) => void
+	onAnyEatItem?: (this: Battle, item: Item, pokemon: Pokemon) => void
+	onAnyEffectiveness?: MoveEventMethods['onEffectiveness']
+	onAnyFaint?: CommonHandlers['VoidEffect']
+	onAnyFlinch?: ((this: Battle, pokemon: Pokemon) => boolean | void) | boolean
+	onAnyHit?: MoveEventMethods['onHit']
+	onAnyImmunity?: (this: Battle, type: string, pokemon: Pokemon) => void
+	onAnyLockMove?: string | ((this: Battle, pokemon: Pokemon) => void | string)
+	onAnyMaybeTrapPokemon?: (this: Battle, pokemon: Pokemon) => void
+	onAnyModifyAccuracy?: CommonHandlers['ModifierMove']
+	onAnyModifyAtk?: CommonHandlers['ModifierSourceMove']
+	onAnyModifyBoost?: (this: Battle, boosts: SparseBoostsTable, pokemon: Pokemon) => SparseBoostsTable | void
+	onAnyModifyCritRatio?: CommonHandlers['ModifierSourceMove']
+	onAnyModifyDamage?: CommonHandlers['ModifierSourceMove']
+	onAnyModifyDef?: CommonHandlers['ModifierMove']
+	onAnyModifyMove?: MoveEventMethods['onModifyMove']
+	onAnyModifyPriority?: CommonHandlers['ModifierSourceMove']
+	onAnyModifySecondaries?: (this: Battle, secondaries: SecondaryEffect[], target: Pokemon, source: Pokemon, move: ActiveMove) => void
+	onAnyModifySpA?: CommonHandlers['ModifierSourceMove']
+	onAnyModifySpD?: CommonHandlers['ModifierMove']
+	onAnyModifySpe?: (this: Battle, spe: number, pokemon: Pokemon) => number | void
+	onAnyModifyWeight?: (this: Battle, weight: number, pokemon: Pokemon) => number | void
+	onAnyMoveAborted?: CommonHandlers['VoidMove']
+	onAnyNegateImmunity?: ((this: Battle, pokemon: Pokemon, type: string) => boolean | void) | boolean
+	onAnyOverrideAction?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => string | void
+	onAnyPrepareHit?: CommonHandlers['ResultSourceMove']
+	onAnyRedirectTarget?: (this: Battle, target: Pokemon, source: Pokemon, source2: Effect, move: ActiveMove) => Pokemon | void
+	onAnyResidual?: (this: Battle, target: Pokemon & Side, source: Pokemon, effect: Effect) => void
+	onAnySetAbility?: (this: Battle, ability: string, target: Pokemon, source: Pokemon, effect: Effect) => boolean | void
+	onAnySetStatus?: (this: Battle, status: PureEffect, target: Pokemon, source: Pokemon, effect: Effect) => boolean | null | void
+	onAnySetWeather?: (this: Battle, target: Pokemon, source: Pokemon, weather: PureEffect) => boolean | void
+	onAnyStallMove?: (this: Battle, pokemon: Pokemon) => boolean | void
+	onAnySwitchIn?: (this: Battle, pokemon: Pokemon) => void
+	onAnySwitchOut?: (this: Battle, pokemon: Pokemon) => void
+	onAnyTakeItem?: ((this: Battle, item: Item, pokemon: Pokemon, source: Pokemon, move?: ActiveMove) => boolean | void) | boolean
+	onAnyTerrain?: (this: Battle, pokemon: Pokemon) => void
+	onAnyTerrainStart?: (this: Battle, target: Pokemon, source: Pokemon, terrain: PureEffect) => void
+	onAnyTrapPokemon?: (this: Battle, pokemon: Pokemon) => void
+	onAnyTryAddVolatile?: (this: Battle, status: PureEffect, target: Pokemon, source: Pokemon, sourceEffect: Effect) => boolean | null | void
+	onAnyTryEatItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void)
+	/* FIXME: onAnyTryHeal() is run with two different sets of arguments */
+	onAnyTryHeal?: (
+		((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | void) |
+		((this: Battle, pokemon: Pokemon) => boolean | void) | boolean
+	);
+	onAnyTryHit?: MoveEventMethods['onTryHit']
+	onAnyTryHitField?: MoveEventMethods['onTryHitField']
+	onAnyTryHitSide?: CommonHandlers['ResultMove']
+	onAnyTryImmunity?: CommonHandlers['ResultMove']
+	onAnyTryMove?: MoveEventMethods['onTryMove']
+	onAnyTryPrimaryHit?: (this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove) => boolean | null | number | void
+	onAnyType?: (this: Battle, types: string[], pokemon: Pokemon) => string[] | void
+	onAnyUpdate?: (this: Battle, pokemon: Pokemon) => void
+	onAnyWeather?: (this: Battle, target: Pokemon, source: null, effect: PureEffect) => void
+	onAnyWeatherModifyDamage?: CommonHandlers['ModifierSourceMove']
+	onAnyModifyDamagePhase1?: CommonHandlers['ModifierSourceMove']
+	onAnyModifyDamagePhase2?: CommonHandlers['ModifierSourceMove']
 
-interface EffectData extends EventMethods {
-	id: string
-	name: string
-	num: number
-	affectsFainted?: boolean
-	counterMax?: number
-	desc?: string
-	drain?: [number, number]
-	duration?: number
-	effect?: Partial<EffectData>
-	effectType?: string
-	infiltrates?: boolean
-	isNonstandard?: Nonstandard | null
-	isUnreleased?: boolean
-	/**
-	 * `true` for generic Z-moves like Gigavolt Havoc.
-	 * Also `true` for Z-powered status moves like Z-Encore.
-	 * Move ID of the base move, for specific Z-moves like Stoked
-	 * Sparksurfer.
-	 */
-	isZ?: boolean | string
-	noCopy?: boolean
+	// Priorities
 	onAccuracyPriority?: number
 	onAfterDamageOrder?: number
 	onAfterMoveSecondaryPriority?: number
@@ -343,7 +657,6 @@ interface EffectData extends EventMethods {
 	onFoeModifyDefPriority?: number
 	onFoeRedirectTargetPriority?: number
 	onFoeTrapPokemonPriority?: number
-	onFoeTryEatItem?: boolean
 	onHitPriority?: number
 	onModifyAccuracyPriority?: number
 	onModifyAtkPriority?: number
@@ -365,6 +678,31 @@ interface EffectData extends EventMethods {
 	onTryMovePriority?: number
 	onTryPrimaryHitPriority?: number
 	onTypePriority?: number
+}
+
+interface EffectData {
+	id: string
+	name: string
+	num: number
+	affectsFainted?: boolean
+	counterMax?: number
+	desc?: string
+	drain?: [number, number]
+	duration?: number
+	durationCallback?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect | null) => number
+	effect?: Partial<PureEffect>
+	effectType?: string
+	infiltrates?: boolean
+	isNonstandard?: Nonstandard | null
+	isUnreleased?: boolean
+	/**
+	 * `true` for generic Z-moves like Gigavolt Havoc.
+	 * Also `true` for Z-powered status moves like Z-Encore.
+	 * Move ID of the base move, for specific Z-moves like Stoked
+	 * Sparksurfer.
+	 */
+	isZ?: boolean | string
+	noCopy?: boolean
 	recoil?: [number, number]
 	secondary?: SecondaryEffect | null
 	secondaries?: SecondaryEffect[] | null
@@ -372,6 +710,8 @@ interface EffectData extends EventMethods {
 	shortDesc?: string
 	status?: string
 	weather?: string
+
+	onRestart?: (this: Battle, target: Pokemon & Side & Field, source: Pokemon) => void
 }
 
 interface ModdedEffectData extends Partial<EffectData> {
@@ -390,11 +730,16 @@ interface BasicEffect extends EffectData {
 	toString: () => string
 }
 
-interface PureEffect extends Readonly<BasicEffect> {
+interface PureEffectData extends EffectData, PureEffectEventMethods, EventMethods, EffectData {
+}
+
+interface ModdedPureEffectData extends Partial<PureEffectData>, ModdedEffectData {}
+
+interface PureEffect extends Readonly<BasicEffect & PureEffectData> {
 	readonly effectType: 'Status' | 'Effect' | 'Weather'
 }
 
-interface AbilityData extends EffectData {
+interface AbilityData extends EffectData, AbilityEventMethods, EventMethods {
 	rating: number
 	isUnbreakable?: boolean
 	suppressWeather?: boolean
@@ -410,10 +755,10 @@ interface FlingData {
 	basePower: number
 	status?: string
 	volatileStatus?: string
-	effect?: EventMethods["onHit"]
+	effect?: MoveEventMethods['onHit']
 }
 
-interface ItemData extends EffectData {
+interface ItemData extends EffectData, ItemEventMethods, EventMethods {
 	gen: number
 	fling?: FlingData
 	forcedForme?: string
@@ -442,7 +787,7 @@ interface Item extends Readonly<BasicEffect & ItemData> {
 	readonly effectType: 'Item'
 }
 
-interface MoveData extends EffectData {
+interface MoveData extends EffectData, MoveEventMethods {
 	accuracy: true | number
 	basePower: number
 	category: 'Physical' | 'Special' | 'Status'
@@ -622,11 +967,11 @@ interface TemplateFormatsData {
 
 interface ModdedTemplateFormatsData extends Partial<TemplateFormatsData> {
 	inherit?: true,
-	randomSet1?: RandomTeamsTypes["TemplateRandomSet"]
-	randomSet2?: RandomTeamsTypes["TemplateRandomSet"]
-	randomSet3?: RandomTeamsTypes["TemplateRandomSet"]
-	randomSet4?: RandomTeamsTypes["TemplateRandomSet"]
-	randomSet5?: RandomTeamsTypes["TemplateRandomSet"]
+	randomSet1?: RandomTeamsTypes['TemplateRandomSet']
+	randomSet2?: RandomTeamsTypes['TemplateRandomSet']
+	randomSet3?: RandomTeamsTypes['TemplateRandomSet']
+	randomSet4?: RandomTeamsTypes['TemplateRandomSet']
+	randomSet5?: RandomTeamsTypes['TemplateRandomSet']
 }
 
 interface Template extends Readonly<BasicEffect & TemplateData & TemplateFormatsData> {
@@ -766,8 +1111,8 @@ interface BattleScriptsData {
 	hitStepTypeImmunity?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean[]
 	isAdjacent?: (this: Battle, pokemon1: Pokemon, pokemon2: Pokemon) => boolean
 	moveHit?: (this: Battle, target: Pokemon | null, pokemon: Pokemon, move: ActiveMove, moveData?: ActiveMove, isSecondary?: boolean, isSelf?: boolean) => number | undefined | false
-	resolveAction?: (this: Battle, action: AnyObject, midTurn?: boolean) => Actions["Action"]
-	runAction?: (this: Battle, action: Actions["Action"]) => void
+	resolveAction?: (this: Battle, action: AnyObject, midTurn?: boolean) => Actions['Action']
+	runAction?: (this: Battle, action: Actions['Action']) => void
 	runMegaEvo?: (this: Battle, pokemon: Pokemon) => boolean
 	runMove?: (this: Battle, moveOrMoveName: Move | string, pokemon: Pokemon, targetLoc: number, sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean) => void
 	runMoveEffects?: (this: Battle, damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean) => SpreadMoveDamage
@@ -933,7 +1278,7 @@ interface Actions {
 		pokemon: Pokemon
 	}
 
-	Action: Actions["MoveAction"] | Actions["SwitchAction"] | Actions["TeamAction"] | Actions["FieldAction"] | Actions["PokemonAction"]
+	Action: Actions['MoveAction'] | Actions['SwitchAction'] | Actions['TeamAction'] | Actions['FieldAction'] | Actions['PokemonAction']
 }
 
 interface RandomTeamsTypes {
@@ -976,7 +1321,7 @@ interface RandomTeamsTypes {
 		shiny: boolean
 		nature?: string
 		happiness?: number
-		moveset?: RandomTeamsTypes["RandomSet"]
+		moveset?: RandomTeamsTypes['RandomSet']
 		other?: {discard: boolean, restrictMoves: {[k: string]: number}}
 	}
 	RandomFactorySet: {

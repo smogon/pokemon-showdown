@@ -331,7 +331,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 	}
 }
 
-export class PureEffect extends BasicEffect implements Readonly<BasicEffect> {
+export class PureEffect extends BasicEffect implements Readonly<BasicEffect & PureEffectData> {
 	readonly effectType: 'Effect' | 'Weather' | 'Status';
 
 	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {

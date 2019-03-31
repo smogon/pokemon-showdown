@@ -71,11 +71,11 @@ let BattleScripts = {
 			return false;
 		}
 
-		const targets = pokemon.getMoveTargets(move, target);
+		const {targets, pressureTargets} = pokemon.getMoveTargets(move, target);
 
 		if (!sourceEffect || sourceEffect.id === 'pursuit') {
 			let extraPP = 0;
-			for (const source of targets) {
+			for (const source of pressureTargets) {
 				const ppDrop = this.runEvent('DeductPP', source, pokemon, move);
 				if (ppDrop !== true) {
 					extraPP += ppDrop || 0;
