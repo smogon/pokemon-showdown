@@ -866,14 +866,12 @@ interface Move extends Readonly<BasicEffect & MoveData> {
 
 interface ActiveMove extends BasicEffect, MoveData {
 	readonly effectType: 'Move'
-	typeMod: number
 	hit: number
 	ability?: Ability
 	aerilateBoosted?: boolean
 	allies?: Pokemon[]
 	auraBooster?: Pokemon
 	causedCrashDamage?: boolean
-	crit?: boolean
 	forceStatus?: string
 	galvanizeBoosted?: boolean
 	hasAuraBreak?: boolean
