@@ -38,13 +38,11 @@ class Runner {
 	}
 
 	async run() {
-		const battleStream = new BattleStreams.BattleStream();
+		const battleStream = new RawBattleStream(this.input);
 		const game = this.runGame(this.format, battleStream);
-		const log = () => battleStream.battle && console.error(`\n${battleStream.battle.inputLog.join('\n')}\n`);
-		if (this.input) return game.finally(log);
 		if (!this.error) return game;
 		return game.catch(err => {
-			log();
+			console.log(`\n${battleStream.rawInputLog.join('\n')}\n`);
 			throw err;
 		});
 	}
@@ -84,6 +82,20 @@ class Runner {
 	getPlayerSpec(name, options) {
 		if (options.team) return {name, team: options.team};
 		return {name, seed: this.newSeed()};
+	}
+}
+
+class RawBattleStream extends BattleStreams.BattleStream {
+	constructor(input) {
+		super();
+		this.input = !!input;
+		this.rawInputLog = [];
+	}
+
+	_write(message) {
+		if (this.input) console.log(message);
+		this.rawInputLog.push(message);
+		super._write(message);
 	}
 }
 
