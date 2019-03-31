@@ -1259,22 +1259,8 @@ function runMovesearch(target, cmd, canAll, message) {
 			let prop = sort.slice(0, -1);
 			let direction = sort.slice(-1);
 			results.sort((a, b) => {
-				let move1 = dex[toId(direction === '+' ? a : b)], move2 = dex[toId(direction === '+' ? b : a)];
-				if (move1[prop] === true) {
-					if (move2[prop] === true) {
-						return 0;
-					} else {
-						return 1;
-					}
-				} else if (move2[prop] === true) {
-					if (move1[prop] === true) {
-						return 0;
-					} else {
-						return -1;
-					}
-				} else {
-					return move1[prop] - move2[prop];
-				}
+				let move1prop = dex[toId(direction === '+' ? a : b)][prop], move2prop = dex[toId(direction === '+' ? b : a)][prop];
+				return ~~move1prop - ~~move2prop; // Incase they are boolean valuess, they are converted to 0 or 1
 			});
 		}
 		let notShown = 0;
@@ -1282,7 +1268,9 @@ function runMovesearch(target, cmd, canAll, message) {
 			notShown = results.length - RESULTS_MAX_LENGTH;
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
-		resultsStr += results.map(result => `<a href="//dex.pokemonshowdown.com/moves/${toId(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>${sort ? ' (' + (dex[toId(result)][sort.slice(0, -1)] === true ? '-' : dex[toId(result)][sort.slice(0, -1)]) + ')' : ''}`).join(", ");
+		resultsStr += results.map(result =>
+			`<a href="//dex.pokemonshowdown.com/moves/${toId(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>${sort ? ' (' + (dex[toId(result)][sort.slice(0, -1)] === true ? '-' : dex[toId(result)][sort.slice(0, -1)]) + ')' : ''}`
+		).join(", ");
 		if (notShown) {
 			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
 		}
