@@ -24,6 +24,11 @@ const RandomPlayerAI = require('../.sim-dist/examples/random-player-ai').RandomP
 // 'move' 70% of the time (ie. 'switch' 30%) and ' mega' 60% of the time that its an option.
 const AI_OPTIONS = {move: 0.7, mega: 0.6};
 
+const FORMATS = [
+	'gen7randombattle', 'gen7randomdoublesbattle', 'gen7battlefactory', 'gen6randombattle', 'gen6battlefactory',
+	'gen5randombattle', 'gen4randombattle', 'gen3randombattle', 'gen2randombattle', 'gen1randombattle',
+];
+
 class Runner {
 	constructor(options) {
 		this.prng = (options.prng && !Array.isArray(options.prng)) ?
@@ -102,13 +107,6 @@ class RawBattleStream extends BattleStreams.BattleStream {
 	}
 }
 
-module.exports = Runner;
-
-const FORMATS = [
-	'gen7randombattle', 'gen7randomdoublesbattle', 'gen7battlefactory', 'gen6randombattle', 'gen6battlefactory',
-	'gen5randombattle', 'gen4randombattle', 'gen3randombattle', 'gen2randombattle', 'gen1randombattle',
-];
-
 class MultiRunner {
 	constructor(options) {
 		this.options = Object.assign({}, options);
@@ -180,6 +178,8 @@ class MultiRunner {
 		return false;
 	}
 }
+
+module.exports = {Runner, MultiRunner};
 
 // Kick off the MultiRunner if we're being called from the command line.
 if (require.main === module) {
