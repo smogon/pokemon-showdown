@@ -3063,7 +3063,7 @@ let BattleAbilities = {
 		},
 		id: "skilllink",
 		name: "Skill Link",
-		rating: 4,
+		rating: 3.5,
 		num: 92,
 	},
 	"slowstart": {
