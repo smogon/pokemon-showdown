@@ -737,12 +737,12 @@ class Tournament {
 	}
 	cancelChallenge(user, output) {
 		if (!this.isTournamentStarted) {
-			output.sendReply('|tournament|error|NotStarted');
+			if (output) output.sendReply('|tournament|error|NotStarted');
 			return;
 		}
 
 		if (!(user.userid in this.players)) {
-			output.sendReply('|tournament|error|UserNotAdded');
+			if (output) output.sendReply('|tournament|error|UserNotAdded');
 			return;
 		}
 
