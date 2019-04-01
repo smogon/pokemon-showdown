@@ -575,7 +575,7 @@ let Formats = [
 		ruleset: ['[Gen 7] Ubers'],
 		banlist: ['Uber > 1', 'Uber ++ Arena Trap', 'Uber ++ Power Construct', 'Blissey', 'Chansey', 'Deoxys-Attack', 'Gengar-Mega', 'Mawile-Mega', 'Medicham-Mega', 'Sableye-Mega', 'Toxapex', 'Huge Power', 'Pure Power', 'Shadow Tag', 'Baton Pass'],
 		onModifyTemplate(template, target, source, effect) {
-			if (source || !target.side) return;
+			if (source || !target || !target.side) return;
 			let uber = target.side.team.find(set => {
 				let item = this.getItem(set.item);
 				return set.ability === 'Arena Trap' || set.ability === 'Power Construct' || this.getTemplate(item.megaEvolves === set.species ? item.megaStone : set.species).tier === 'Uber';
