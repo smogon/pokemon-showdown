@@ -1156,29 +1156,38 @@ let Formats = [
 		column: 3,
 	},
 	{
-		name: "[Gen 4] UU",
+		name: "[Gen 5] UU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3532624/">DPP UU Metagame Discussion</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3503638/">DPP UU Viability Ranking</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3474024/">BW2 UU Viability Ranking</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/posts/6431094/">BW2 Sample Teams</a>`,
+		],
+
+		mod: 'gen5',
+		// searchShow: false,
+		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
+		banlist: ['Uber', 'OU', 'UUBL', 'Arena Trap', 'Drought', 'Sand Stream', 'Snow Warning'],
+	},
+	{
+		name: "[Gen 3] NU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3503540/">ADV NU Viability Rankings</a>`,
+		],
+
+		mod: 'gen3',
+		// searchShow: false,
+		ruleset: ['[Gen 3] UU'],
+		banlist: ['UU'],
+	},
+	{
+		name: "[Gen 4] Monotype",
+		desc: `All the Pok&eacute;mon on a team must share a type.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/7421335/">DPP Monotype</a>`,
 		],
 
 		mod: 'gen4',
-		// searchShow: false,
-		ruleset: ['[Gen 4] OU'],
-		banlist: ['OU', 'UUBL'],
-	},
-	{
-		name: "[Gen 2] Inverse OU",
-
-		mod: 'gen2',
-		ruleset: ['[Gen 2] OU', 'Inverse Mod'],
-	},
-	{
-		name: "[Gen 3] OU (no Spikes)",
-
-		mod: 'gen3',
-		ruleset: ['[Gen 3] OU'],
-		banlist: ['Spikes'],
+		ruleset: ['[Gen 4] OU', 'Same Type Clause'],
+		banlist: [],
 	},
 
 	// Past Gens OU
@@ -1337,7 +1346,10 @@ let Formats = [
 	},
 	{
 		name: "[Gen 6] Monotype",
-		threads: [`&bullet; <a href="https://www.smogon.com/forums/posts/7421332/">ORAS Monotype</a>`],
+		desc: `All the Pok&eacute;mon on a team must share a type.`,
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/posts/7421332/">ORAS Monotype</a>`,
+		],
 
 		mod: 'gen6',
 		searchShow: false,
@@ -1555,18 +1567,6 @@ let Formats = [
 		ruleset: ['Pokemon', 'Team Preview', 'Standard Ubers'],
 	},
 	{
-		name: "[Gen 5] UU",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3474024/">BW2 UU Viability Ranking</a>`,
-			`&bullet; <a href="https://www.smogon.com/forums/posts/6431094/">BW2 Sample Teams</a>`,
-		],
-
-		mod: 'gen5',
-		searchShow: false,
-		ruleset: ['Pokemon', 'Standard', 'Evasion Abilities Clause', 'Baton Pass Clause', 'Swagger Clause', 'Team Preview'],
-		banlist: ['Uber', 'OU', 'UUBL', 'Arena Trap', 'Drought', 'Sand Stream', 'Snow Warning'],
-	},
-	{
 		name: "[Gen 5] RU",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3473124/">BW2 RU Viability Ranking</a>`,
@@ -1605,6 +1605,7 @@ let Formats = [
 	},
 	{
 		name: "[Gen 5] Monotype",
+		desc: `All the Pok&eacute;mon on a team must share a type.`,
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/posts/7421333/">BW Monotype</a>`,
 		],
@@ -1707,6 +1708,18 @@ let Formats = [
 		searchShow: false,
 		ruleset: ['Pokemon', 'Standard'],
 		banlist: ['Arceus'],
+	},
+	{
+		name: "[Gen 4] UU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3532624/">DPP UU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3503638/">DPP UU Viability Ranking</a>`,
+		],
+
+		mod: 'gen4',
+		searchShow: false,
+		ruleset: ['[Gen 4] OU'],
+		banlist: ['OU', 'UUBL'],
 	},
 	{
 		name: "[Gen 4] NU",
@@ -1818,17 +1831,6 @@ let Formats = [
 		searchShow: false,
 		ruleset: ['[Gen 3] OU'],
 		banlist: ['OU', 'UUBL'],
-	},
-	{
-		name: "[Gen 3] NU",
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3503540/">ADV NU Viability Rankings</a>`,
-		],
-
-		mod: 'gen3',
-		searchShow: false,
-		ruleset: ['[Gen 3] UU'],
-		banlist: ['UU'],
 	},
 	{
 		name: "[Gen 3] Custom Game",
