@@ -53,6 +53,9 @@ class Runner {
 		const p1spec = this.getPlayerSpec("Bot 1", this.p1options);
 		const p2spec = this.getPlayerSpec("Bot 2", this.p2options);
 
+		// TODO: Use `await Promise.race([streams.omniscient.read(), p1, p2])` to avoid
+		// leaving these promises dangling once it no longer causes memory leaks (v8#9069).
+		/* eslint-disable no-unused-vars */
 		const p1 = new RandomPlayerAI(
 			streams.p1, Object.assign({seed: this.newSeed()}, this.p1options)).start();
 		const p2 = new RandomPlayerAI(
@@ -63,7 +66,7 @@ class Runner {
 			`>player p2 ${JSON.stringify(p2spec)}`);
 
 		let chunk;
-		while ((chunk = await Promise.race([streams.omniscient.read(), p1, p2]))) {
+		while ((chunk = await streams.omniscient.read())) {
 			if (this.output) console.log(chunk);
 		}
 	}
