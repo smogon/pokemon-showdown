@@ -595,6 +595,7 @@ let Formats = [
 		],
 
 		mod: 'mixandmega',
+		maxLevel: 5,
 		ruleset: ['Pokemon', 'Standard', 'Team Preview', 'Little Cup'],
 		banlist: ['Eevium Z', 'Baton Pass', 'Dragon Rage', 'Electrify', 'Sonic Boom'],
 		restrictedStones: ['Beedrillite', 'Blazikenite', 'Gengarite', 'Kangaskhanite', 'Mawilite', 'Medichamite', 'Pidgeotite', 'Ultranecrozium Z'],
