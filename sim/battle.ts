@@ -19,11 +19,6 @@ interface FaintedPokemon {
 	effect: Effect | null;
 }
 
-interface MoveHitData {
-	crit: {[key: string]: boolean};
-	typeMod: {[key: string]: number};
-}
-
 interface BattleOptions {
 	formatid: string; // Format ID
 	send?: (type: string, data: string | string[]) => void; // Output callback
@@ -81,7 +76,6 @@ export class Battle extends Dex.ModdedDex {
 	activeMove: ActiveMove | null;
 	activePokemon: Pokemon | null;
 	activeTarget: Pokemon | null;
-	moveHitData: MoveHitData;
 
 	lastMove: Move | null;
 	lastMoveLine: number;
@@ -154,7 +148,6 @@ export class Battle extends Dex.ModdedDex {
 		this.activeMove = null;
 		this.activePokemon = null;
 		this.activeTarget = null;
-		this.moveHitData = {crit: {}, typeMod: {}};
 
 		this.lastMove = null;
 		this.lastMoveLine = -1;
@@ -250,7 +243,6 @@ export class Battle extends Dex.ModdedDex {
 			this.activeMove = null;
 			this.activePokemon = null;
 			this.activeTarget = null;
-			this.moveHitData = {crit: {}, typeMod: {}};
 		}
 	}
 
@@ -1917,21 +1909,6 @@ export class Battle extends Dex.ModdedDex {
 		return this.getMove(move).category || 'Physical';
 	}
 
-	getHitData(target: Pokemon): {crit: boolean | undefined, typeMod: number} {
-		return {
-			crit: this.moveHitData.crit[target.toString().slice(3)],
-			typeMod: this.moveHitData.typeMod[target.toString().slice(3)],
-		};
-	}
-
-	crit(target: Pokemon) {
-		this.moveHitData.crit[target.toString().slice(3)] = true;
-	}
-
-	setTypeModFor(target: Pokemon, typeMod: number) {
-		this.moveHitData.typeMod[target.toString().slice(3)] = typeMod;
-	}
-
 	/**
 	 * 0 is a success dealing 0 damage, such as from False Swipe at 1 HP.
 	 *
@@ -1945,12 +1922,12 @@ export class Battle extends Dex.ModdedDex {
 
 		if (typeof move === 'number') {
 			const basePower = move;
-			move = (new Data.Move({
+			move = new Data.ActiveMove({
 				basePower,
 				type: '???',
 				category: 'Physical',
 				willCrit: false,
-			}) as unknown) as ActiveMove;
+			});
 			move.hit = 0;
 		}
 
@@ -1996,7 +1973,7 @@ export class Battle extends Dex.ModdedDex {
 		if (move.willCrit || move.willCrit === undefined && critRatio && this.randomChance(1, critMult[critRatio])) {
 			if (this.runEvent('CriticalHit', target, null, move)) {
 				isCrit = true;
-				this.crit(target);
+				move.crit(target);
 			}
 		}
 
@@ -2083,7 +2060,7 @@ export class Battle extends Dex.ModdedDex {
 		baseDamage = this.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
 
 		// crit - not a modifier
-		const isCrit = this.getHitData(target).crit;
+		const isCrit = move.getHitData(target).crit;
 		if (isCrit) {
 			baseDamage = tr(baseDamage * (move.critModifier || (this.gen >= 6 ? 1.5 : 2)));
 		}
@@ -2102,7 +2079,7 @@ export class Battle extends Dex.ModdedDex {
 		// types
 		let typeMod = target.runEffectiveness(move);
 		typeMod = this.clampIntRange(typeMod, -6, 6);
-		this.setTypeModFor(target, typeMod);
+		move.setTypeModFor(target, typeMod);
 		if (typeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
 
@@ -2132,7 +2109,7 @@ export class Battle extends Dex.ModdedDex {
 		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 		baseDamage = this.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
 
-		if (move.isZPowered && move.zBrokeProtect) {
+		if (move.isZPowered && move.getHitData(target).zBrokeProtect) {
 			baseDamage = this.modify(baseDamage, 0.25);
 			this.add('-zbroken', target);
 		}

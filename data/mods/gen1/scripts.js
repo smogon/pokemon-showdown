@@ -784,7 +784,7 @@ let BattleScripts = {
 				isCrit = this.randomChance(critChance, 256);
 			}
 		}
-		if (isCrit) this.crit(target);
+		if (isCrit) move.crit(target);
 
 		// Happens after crit calculation.
 		if (basePower) {

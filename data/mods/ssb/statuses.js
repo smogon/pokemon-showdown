@@ -91,8 +91,8 @@ let BattleStatuses = {
 		onFaint() {
 			this.add(`c|%Akir|too sleepy, c ya`);
 		},
-		onSourceModifyDamage(damage, source, target) {
-			if (this.getHitData(target).typeMod > 0 && !target.illusion) {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.getHitData(target).typeMod > 0 && !target.illusion) {
 				this.debug('Solid Rock neutralize');
 				return this.chainModify(0.75);
 			}
@@ -949,8 +949,8 @@ let BattleStatuses = {
 		onFaint() {
 			this.add(`c|+Osiris|I'm getting too old for this x_x`);
 		},
-		onSourceModifyDamage(damage, source, target) {
-			if (this.getHitData(target).typeMod > 0 && !target.illusion) {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.getHitData(target).typeMod > 0 && !target.illusion) {
 				this.debug('Solid Rock neutralize');
 				return this.chainModify(0.75);
 			}

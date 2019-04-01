@@ -532,7 +532,7 @@ let BattleScripts = {
 		}
 		// There is a critical hit.
 		if (isCrit && this.runEvent('CriticalHit', target, null, move)) {
-			this.crit(target);
+			move.crit(target);
 		}
 
 		// Happens after crit calculation.
