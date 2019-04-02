@@ -1259,14 +1259,17 @@ function runMovesearch(target, cmd, canAll, message) {
 			let prop = sort.slice(0, -1);
 			let direction = sort.slice(-1);
 			results.sort((a, b) => {
-				let move1prop = dex[toId(direction === '+' ? a : b)][prop], move2prop = dex[toId(direction === '+' ? b : a)][prop];
-				if (typeof move1prop === 'boolean') {
+				let move1prop = dex[toId(a)][prop];
+				let move2prop = dex[toId(b)][prop];
+				// convert booleans to 0 or 1
+				if (typeof move1prop === 'boolean') move1prop = move1prop ? 1 : 0;
+				if (typeof move2prop === 'boolean') move2prop = move2prop ? 1 : 0;
 					move1prop = ~~move1prop;
 				}
 				if (typeof move2prop === 'boolean') {
 					move2prop = ~~move2prop;
 				}
-				return move1prop - move2prop; // Incase they are boolean valuess, they are converted to 0 or 1
+				return (move1prop - move2prop) * (direction === '+' ? 1 : -1);
 			});
 		}
 		let notShown = 0;
