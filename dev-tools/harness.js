@@ -22,7 +22,7 @@ const PRNG = require('../.sim-dist/prng').PRNG;
 const RandomPlayerAI = require('../.sim-dist/examples/random-player-ai').RandomPlayerAI;
 
 // 'move' 70% of the time (ie. 'switch' 30%) and ' mega' 60% of the time that its an option.
-const AI_OPTIONS = {move: 0.7, mega: 0.6};
+const AI_OPTIONS = {move: 0.7, mega: 0.6, createAI: (s, o) => new RandomPlayerAI(s, o)};
 
 const FORMATS = [
 	'gen7randombattle', 'gen7randomdoublesbattle', 'gen7battlefactory', 'gen6randombattle', 'gen6battlefactory',
@@ -61,9 +61,9 @@ class Runner {
 		// TODO: Use `await Promise.race([streams.omniscient.read(), p1, p2])` to avoid
 		// leaving these promises dangling once it no longer causes memory leaks (v8#9069).
 		/* eslint-disable no-unused-vars */
-		const p1 = new RandomPlayerAI(
+		const p1 = this.p1options.createAI(
 			streams.p1, Object.assign({seed: this.newSeed()}, this.p1options)).start();
-		const p2 = new RandomPlayerAI(
+		const p2 = this.p2options.createAI(
 			streams.p2, Object.assign({seed: this.newSeed()}, this.p2options)).start();
 
 		streams.omniscient.write(`>start ${JSON.stringify(spec)}\n` +
@@ -179,7 +179,41 @@ class MultiRunner {
 	}
 }
 
-module.exports = {Runner, MultiRunner};
+// Tracks whether some promises threw errors that weren't caught so we can log
+// and exit with a non-zero status to fail any tests. This "shouldn't happen"
+// because we're "great at propagating promises (TM)", but better safe than sorry.
+const RejectionTracker = new class {
+	constructor() {
+		this.unhandled = [];
+	}
+
+	onUnhandledRejection(reason, promise) {
+		this.unhandled.push({reason, promise});
+	}
+
+	onRejectionHandled(promise) {
+		this.unhandled.splice(this.unhandled.findIndex(u => u.promise === promise), 1);
+	}
+
+	onExit(code) {
+		let i = 0;
+		for (const u of this.unhandled) {
+			const error = (u.reason instanceof Error) ? u.reason :
+				new Error(`Promise rejected with value: ${u.reason}`);
+			console.error(error.stack);
+			i++;
+		}
+		process.exit(code + i);
+	}
+
+	register() {
+		process.on('unhandledRejection', (r, p) => RejectionTracker.onUnhandledRejection(r, p));
+		process.on('rejectionHandled', p => RejectionTracker.onRejectionHandled(p));
+		process.on('exit', c => RejectionTracker.onExit(c));
+	}
+}();
+
+module.exports = {Runner, MultiRunner, RejectionTracker};
 
 // Kick off the MultiRunner if we're being called from the command line.
 if (require.main === module) {
@@ -206,34 +240,7 @@ if (require.main === module) {
 		options.totalGames = Number(process.argv[2]) || options.totalGames;
 	}
 
-	// Tracks whether some promises threw errors that weren't caught so we can log
-	// and exit with a non-zero status to fail any tests. This "shouldn't happen"
-	// because we're "great at propagating promises (TM)", but better safe than sorry.
-	const RejectionTracker = new class {
-		constructor() {
-			this.unhandled = [];
-		}
-		onUnhandledRejection(reason, promise) {
-			this.unhandled.push({reason, promise});
-		}
-		onRejectionHandled(promise) {
-			this.unhandled.splice(this.unhandled.findIndex(u => u.promise === promise), 1);
-		}
-		onExit(code) {
-			let i = 0;
-			for (const u of this.unhandled) {
-				const error = (u.reason instanceof Error) ? u.reason :
-					new Error(`Promise rejected with value: ${u.reason}`);
-				console.error(error.stack);
-				i++;
-			}
-			process.exit(code + i);
-		}
-	}();
-
-	process.on('unhandledRejection', (r, p) => RejectionTracker.onUnhandledRejection(r, p));
-	process.on('rejectionHandled', p => RejectionTracker.onRejectionHandled(p));
-	process.on('exit', c => RejectionTracker.onExit(c));
+	RejectionTracker.register();
 
 	// Run options.totalGames, exiting with the number of games with errors.
 	(async () => process.exit(await new MultiRunner(options).run()))();
