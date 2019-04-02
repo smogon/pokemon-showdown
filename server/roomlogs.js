@@ -12,9 +12,6 @@
 /** @type {typeof import('../lib/fs').FS} */
 const FS = require(/** @type {any} */('../.lib-dist/fs')).FS;
 
-const SPECTATOR_CHANNEL = 5;
-const OMNISCIENT_CHANNEL = 5;
-
 /**
  * Most rooms have three logs:
  * - scrollback
@@ -95,19 +92,15 @@ class Roomlog {
 			const line = this.log[i];
 			const split = /\|split\|p(\d)/g.exec(line);
 			if (split) {
-				const offset = (channel === OMNISCIENT_CHANNEL || Number(split[0]) === channel) ? 1 : 2;
-				const ownLine = this.log[i + offset];
+				const canSeePrivileged = (channel === Number(split[0]) || channel === -1);
+				const ownLine = this.log[i + (canSeePrivileged ? 1 : 2)];
 				if (ownLine) log.push(ownLine);
 				i += 2;
 			} else {
 				log.push(line);
 			}
 		}
-		let textLog = log.join('\n') + '\n';
-		if (channel === SPECTATOR_CHANNEL) {
-			return textLog.replace(/\n\|choice\|\|\n/g, '\n').replace(/\n\|seed\|\n/g, '\n');
-		}
-		return textLog;
+		return log.join('\n') + '\n';
 	}
 	setupModlogStream() {
 		if (this.modlogStream !== undefined) return;
