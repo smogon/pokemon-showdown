@@ -2892,9 +2892,9 @@ export class Battle extends Dex.ModdedDex {
 
 	addSplit(side: SideID, secret: Part[], shared?: Part[]) {
 		this.log.push(`|split|${side}`);
-		this.add(secret);
+		this.add(...secret);
 		if (shared) {
-			this.add(shared);
+			this.add(...shared);
 		} else {
 			this.log.push('');
 		}
@@ -2905,22 +2905,28 @@ export class Battle extends Dex.ModdedDex {
 			this.log.push(`|${parts.join('|')}`);
 			return;
 		}
-		let side: SideID | null = null;
-		const secret = [];
-		const shared = [];
+
+		const secrets: Map<SideID, Part[]> = new Map();
+		const shared: Part[] = [];
 		for (const part of parts) {
 			if (typeof part === 'function') {
 				const split = part();
-				if (side && side !== split.side) throw new Error("Multiple sides passed to add");
-				side = split.side;
-				secret.push(split.secret);
+				if (!secrets.has(split.side)) secrets.set(split.side, shared.slice());
+				for (const [side, secret] of secrets.entries()) {
+					secret.push(side === split.side ? split.secret : split.shared);
+				}
 				shared.push(split.shared);
 			} else {
-				secret.push(part);
+				for (const secret of secrets.values()) {
+					secret.push(part);
+				}
 				shared.push(part);
 			}
 		}
-		this.addSplit(side!, secret, shared);
+
+		for (const [side, secret] of secrets.entries()) {
+			this.addSplit(side, secret, shared);
+		}
 	}
 
 	// tslint:disable-next-line:ban-types
@@ -2961,7 +2967,7 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	getDebugLog() {
-		return this.log.join('\n').replace(/\|split|.*\n.*\n.*\n/g, '');
+		return this.log.join('\n').replace(/\|split\|.*\n.*\n.*\n/g, '');
 	}
 
 	debugError(activity: string) {
