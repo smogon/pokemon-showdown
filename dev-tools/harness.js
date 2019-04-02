@@ -182,19 +182,14 @@ class MultiRunner {
 // Tracks whether some promises threw errors that weren't caught so we can log
 // and exit with a non-zero status to fail any tests. This "shouldn't happen"
 // because we're "great at propagating promises (TM)", but better safe than sorry.
-const RejectionTracker = new class {
-	constructor() {
-		this.unhandled = [];
-	}
-
+const RejectionTracker = {
+	unhandled: [],
 	onUnhandledRejection(reason, promise) {
 		this.unhandled.push({reason, promise});
-	}
-
+	},
 	onRejectionHandled(promise) {
 		this.unhandled.splice(this.unhandled.findIndex(u => u.promise === promise), 1);
-	}
-
+	},
 	onExit(code) {
 		let i = 0;
 		for (const u of this.unhandled) {
@@ -204,14 +199,13 @@ const RejectionTracker = new class {
 			i++;
 		}
 		process.exit(code + i);
-	}
-
+	},
 	register() {
-		process.on('unhandledRejection', (r, p) => RejectionTracker.onUnhandledRejection(r, p));
-		process.on('rejectionHandled', p => RejectionTracker.onRejectionHandled(p));
-		process.on('exit', c => RejectionTracker.onExit(c));
-	}
-}();
+		process.on('unhandledRejection', (r, p) => this.onUnhandledRejection(r, p));
+		process.on('rejectionHandled', p => this.onRejectionHandled(p));
+		process.on('exit', c => this.onExit(c));
+	},
+};
 
 module.exports = {Runner, MultiRunner, RejectionTracker};
 
