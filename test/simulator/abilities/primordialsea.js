@@ -14,7 +14,7 @@ describe('Primordial Sea', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']}]});
 		battle.setPlayer('p2', {team: [{species: "Abra", ability: 'magicguard', moves: ['teleport']}]});
-		assert.ok(battle.isWeather('primordialsea'));
+		assert.ok(battle.field.isWeather('primordialsea'));
 	});
 
 	it('should increase the damage (not the basePower) of Water-type attacks', function () {
@@ -57,9 +57,9 @@ describe('Primordial Sea', function () {
 		]});
 		for (let i = 2; i <= 5; i++) {
 			battle.makeChoices('move helpinghand', 'switch ' + i);
-			assert.ok(battle.isWeather('primordialsea'));
+			assert.ok(battle.field.isWeather('primordialsea'));
 			battle.makeChoices('auto', 'auto');
-			assert.ok(battle.isWeather('primordialsea'));
+			assert.ok(battle.field.isWeather('primordialsea'));
 		}
 	});
 
@@ -99,7 +99,7 @@ describe('Primordial Sea', function () {
 			{species: "Ho-Oh", ability: 'pressure', moves: ['roost']},
 		]});
 		battle.setPlayer('p2', {team: [{species: "Lugia", ability: 'pressure', moves: ['roost']}]});
-		assert.sets(() => battle.isWeather('primordialsea'), false, () => battle.makeChoices('switch 2', 'move roost'));
+		assert.sets(() => battle.field.isWeather('primordialsea'), false, () => battle.makeChoices('switch 2', 'move roost'));
 	});
 
 	it('should not cause the Primordial Sea weather to fade if it switches out and another Primordial Sea Pokemon is active', function () {
@@ -109,27 +109,27 @@ describe('Primordial Sea', function () {
 			{species: "Ho-Oh", ability: 'pressure', moves: ['roost']},
 		]});
 		battle.setPlayer('p2', {team: [{species: "Kyogre", ability: 'primordialsea', moves: ['bulkup']}]});
-		assert.constant(() => battle.isWeather('primordialsea'), () => battle.makeChoices('switch 2', 'move bulkup'));
+		assert.constant(() => battle.field.isWeather('primordialsea'), () => battle.makeChoices('switch 2', 'move bulkup'));
 	});
 
 	it('should cause the Primordial Sea weather to fade if its ability is suppressed and no other Primordial Sea Pokemon are active', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']}]});
 		battle.setPlayer('p2', {team: [{species: "Lugia", ability: 'pressure', moves: ['gastroacid']}]});
-		assert.sets(() => battle.isWeather('primordialsea'), false, () => battle.makeChoices('move helpinghand', 'move gastroacid'));
+		assert.sets(() => battle.field.isWeather('primordialsea'), false, () => battle.makeChoices('move helpinghand', 'move gastroacid'));
 	});
 
 	it('should not cause the Primordial Sea weather to fade if its ability is suppressed and another Primordial Sea Pokemon is active', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']}]});
 		battle.setPlayer('p2', {team: [{species: "Kyogre", ability: 'primordialsea', moves: ['gastroacid']}]});
-		assert.constant(() => battle.isWeather('primordialsea'), () => battle.makeChoices('move helpinghand', 'move gastroacid'));
+		assert.constant(() => battle.field.isWeather('primordialsea'), () => battle.makeChoices('move helpinghand', 'move gastroacid'));
 	});
 
 	it('should cause the Primordial Sea weather to fade if its ability is changed and no other Primordial Sea Pokemon are active', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']}]});
 		battle.setPlayer('p2', {team: [{species: "Lugia", ability: 'pressure', moves: ['entrainment']}]});
-		assert.sets(() => battle.isWeather('primordialsea'), false, () => battle.makeChoices('move helpinghand', 'move entrainment'));
+		assert.sets(() => battle.field.isWeather('primordialsea'), false, () => battle.makeChoices('move helpinghand', 'move entrainment'));
 	});
 });

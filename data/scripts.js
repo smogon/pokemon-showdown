@@ -98,12 +98,10 @@ let BattleScripts = {
 		// Dancer's activation order is completely different from any other event, so it's handled separately
 		if (move.flags['dance'] && moveDidSomething && !move.isExternal) {
 			let dancers = [];
-			for (const side of this.sides) {
-				for (const currentPoke of side.active) {
-					if (!currentPoke || !currentPoke.hp || pokemon === currentPoke) continue;
-					if (currentPoke.hasAbility('dancer') && !currentPoke.isSemiInvulnerable()) {
-						dancers.push(currentPoke);
-					}
+			for (const currentPoke of this.getAllActive()) {
+				if (pokemon === currentPoke) continue;
+				if (currentPoke.hasAbility('dancer') && !currentPoke.isSemiInvulnerable()) {
+					dancers.push(currentPoke);
 				}
 			}
 			// Dancer activates in order of lowest speed stat to highest
@@ -209,11 +207,11 @@ let BattleScripts = {
 			return false;
 		}
 
-		let targets = pokemon.getMoveTargets(move, target);
+		const {targets, pressureTargets} = pokemon.getMoveTargets(move, target);
 
 		if (!sourceEffect || sourceEffect.id === 'pursuit') {
 			let extraPP = 0;
-			for (const source of targets) {
+			for (const source of pressureTargets) {
 				let ppDrop = this.runEvent('DeductPP', source, pokemon, move);
 				if (ppDrop !== true) {
 					extraPP += ppDrop || 0;
@@ -325,7 +323,12 @@ let BattleScripts = {
 		}
 		this.runEvent('PrepareHit', pokemon, targets[0], move);
 
-		if (!this.singleEvent('Try', move, null, pokemon, targets[0], move)) {
+		hitResult = this.singleEvent('Try', move, null, pokemon, targets[0], move);
+		if (!hitResult) {
+			if (hitResult === false) {
+				this.add('-fail', pokemon);
+				this.attrLastMove('[still]');
+			}
 			return false;
 		}
 
@@ -581,20 +584,20 @@ let BattleScripts = {
 		for (let i = 0; i < targets.length; i++) damage[i] = 0;
 		move.totalDamage = 0;
 		pokemon.lastDamage = 0;
-		let hits = move.multihit || 1;
-		if (Array.isArray(hits)) {
+		let targetHits = move.multihit || 1;
+		if (Array.isArray(targetHits)) {
 			// yes, it's hardcoded... meh
-			if (hits[0] === 2 && hits[1] === 5) {
+			if (targetHits[0] === 2 && targetHits[1] === 5) {
 				if (this.gen >= 5) {
-					hits = this.sample([2, 2, 3, 3, 4, 5]);
+					targetHits = this.sample([2, 2, 3, 3, 4, 5]);
 				} else {
-					hits = this.sample([2, 2, 2, 3, 3, 3, 4, 5]);
+					targetHits = this.sample([2, 2, 2, 3, 3, 3, 4, 5]);
 				}
 			} else {
-				hits = this.random(hits[0], hits[1] + 1);
+				targetHits = this.random(targetHits[0], targetHits[1] + 1);
 			}
 		}
-		hits = Math.floor(hits);
+		targetHits = Math.floor(targetHits);
 		let nullDamage = true;
 		/** @type {(number | boolean | undefined)[]} */
 		let moveDamage;
@@ -603,15 +606,17 @@ let BattleScripts = {
 
 		/** @type {(Pokemon | false | null)[]} */
 		let targetsCopy = targets.slice(0);
-		let i;
-		for (i = 0; i < hits && !damage.includes(false); i++) {
+		let hit;
+		for (hit = 1; hit <= targetHits; hit++) {
+			if (damage.includes(false)) break;
 			if (pokemon.status === 'slp' && !isSleepUsable) break;
-			move.hit = i + 1;
+			if (targets.some(target => target && !target.hp)) break;
+			move.hit = hit;
 			targetsCopy = targets.slice(0);
 			let target = targetsCopy[0]; // some relevant-to-single-target-moves-only things are hardcoded
 
 			// like this (Triple Kick)
-			if (target && move.multiaccuracy && i > 0) {
+			if (target && move.multiaccuracy && hit > 1) {
 				let accuracy = move.accuracy;
 				const boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
 				if (accuracy !== true) {
@@ -647,28 +652,31 @@ let BattleScripts = {
 			// Modifies targetsCopy (which is why it's a copy)
 			[moveDamage, targetsCopy] = this.spreadMoveHit(targetsCopy, pokemon, move, moveData);
 
-			if (!moveDamage.some(val => val !== false)) {
-				break;
-			}
+			if (!moveDamage.some(val => val !== false)) break;
 			nullDamage = false;
 
-			for (let i = 0; i < damage.length; i++) {
+			for (const [i, md] of moveDamage.entries()) {
 				// Damage from each hit is individually counted for the
 				// purposes of Counter, Metal Burst, and Mirror Coat.
-				damage[i] = moveDamage[i] === true || !moveDamage[i] ? 0 : moveDamage[i];
+				damage[i] = md === true || !md ? 0 : md;
 				// Total damage dealt is accumulated for the purposes of recoil (Parental Bond).
 				// @ts-ignore
 				move.totalDamage += damage[i];
 			}
-			if (move.mindBlownRecoil && i === 0) {
+			if (move.mindBlownRecoil) {
 				this.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.getEffect('Mind Blown'), true);
+				move.mindBlownRecoil = false;
 			}
 			this.eachEvent('Update');
-			if (!pokemon.hp) break;
+			if (!pokemon.hp) {
+				hit++; // report the correct number of hits for multihit moves
+				break;
+			}
 		}
-		if (i === 0) return damage.fill(false);
+		// hit is 1 higher than the actual hit count
+		if (hit === 1) return damage.fill(false);
 		if (nullDamage) damage.fill(false);
-		if (move.multihit) this.add('-hitcount', targets[0], i);
+		if (move.multihit) this.add('-hitcount', targets[0], hit - 1);
 
 		if (move.recoil && move.totalDamage) {
 			this.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, pokemon, 'recoil');
@@ -771,7 +779,7 @@ let BattleScripts = {
 		if (moveData.self && !move.selfDropped) this.selfDrops(targets, pokemon, move, moveData, isSecondary);
 
 		// 5. secondary effects
-		if (moveData.secondaries) this.secondaries(targets, pokemon, move, moveData, isSecondary);
+		if (moveData.secondaries) this.secondaries(targets, pokemon, move, moveData, isSelf);
 
 		// 6. force switch
 		if (moveData.forceSwitch) damage = this.forceSwitch(damage, targets, pokemon, move, moveData, isSecondary, isSelf);
@@ -835,14 +843,13 @@ let BattleScripts = {
 		return damage;
 	},
 	runMoveEffects(damage, targets, pokemon, move, moveData, isSecondary, isSelf) {
-		/**@type {?boolean | number | null | undefined} */
-		// @ts-ignore
-		let didAnything = damage.reduce(this.combineResults, undefined);
+		/**@type {?boolean | number | undefined} */
+		let didAnything = damage.reduce(this.combineResults);
 		for (const [i, target] of targets.entries()) {
 			if (target === false) continue;
 			let hitResult;
 			/**@type {?boolean | number | undefined} */
-			let didSomething = damage[i];
+			let didSomething = undefined;
 
 			if (target) {
 				if (moveData.boosts && !target.fainted) {
@@ -883,16 +890,20 @@ let BattleScripts = {
 					hitResult = target.side.addSideCondition(moveData.sideCondition, pokemon, move);
 					didSomething = this.combineResults(didSomething, hitResult);
 				}
+				if (moveData.slotCondition) {
+					hitResult = target.side.addSlotCondition(target, moveData.slotCondition, pokemon, move);
+					didSomething = this.combineResults(didSomething, hitResult);
+				}
 				if (moveData.weather) {
-					hitResult = this.setWeather(moveData.weather, pokemon, move);
+					hitResult = this.field.setWeather(moveData.weather, pokemon, move);
 					didSomething = this.combineResults(didSomething, hitResult);
 				}
 				if (moveData.terrain) {
-					hitResult = this.setTerrain(moveData.terrain, pokemon, move);
+					hitResult = this.field.setTerrain(moveData.terrain, pokemon, move);
 					didSomething = this.combineResults(didSomething, hitResult);
 				}
 				if (moveData.pseudoWeather) {
-					hitResult = this.addPseudoWeather(moveData.pseudoWeather, pokemon, move);
+					hitResult = this.field.addPseudoWeather(moveData.pseudoWeather, pokemon, move);
 					didSomething = this.combineResults(didSomething, hitResult);
 				}
 				if (moveData.forceSwitch) {
@@ -937,11 +948,7 @@ let BattleScripts = {
 			}
 			// Move didn't fail because it didn't try to do anything
 			if (didSomething === undefined) didSomething = true;
-			if (!didSomething && didSomething !== 0 && !moveData.self && !moveData.selfdestruct) {
-				damage[i] = false;
-			} else {
-				damage[i] = this.combineResults(damage[i], didSomething === null ? false : didSomething);
-			}
+			damage[i] = this.combineResults(damage[i], didSomething === null ? false : didSomething);
 			didAnything = this.combineResults(didAnything, didSomething);
 		}
 
@@ -1093,12 +1100,16 @@ let BattleScripts = {
 		if (!item.zMove) return;
 		if (item.zMoveUser && !item.zMoveUser.includes(pokemon.template.species)) return;
 		let atLeastOne = false;
+		let mustStruggle = true;
 		/**@type {AnyObject?[]} */
 		let zMoves = [];
 		for (const moveSlot of pokemon.moveSlots) {
 			if (moveSlot.pp <= 0) {
 				zMoves.push(null);
 				continue;
+			}
+			if (!moveSlot.disabled) {
+				mustStruggle = false;
 			}
 			let move = this.getMove(moveSlot.move);
 			let zMoveName = this.getZMove(move, pokemon, true) || '';
@@ -1111,7 +1122,7 @@ let BattleScripts = {
 			}
 			if (zMoveName) atLeastOne = true;
 		}
-		if (atLeastOne) return zMoves;
+		if (atLeastOne && !mustStruggle) return zMoves;
 	},
 
 	canMegaEvo(pokemon) {
@@ -1172,7 +1183,7 @@ let BattleScripts = {
 				this.heal(pokemon.maxhp, pokemon, pokemon, zPower);
 				break;
 			case 'healreplacement':
-				move.self = {sideCondition: 'healreplacement'};
+				move.self = {slotCondition: 'healreplacement'};
 				break;
 			case 'clearnegativeboost':
 				/** @type {{[k: string]: number}} */

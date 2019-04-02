@@ -28,14 +28,19 @@
  * @license MIT license
  */
 
+// TODO: Fix all usages of for-in on arrays to use for-of instead.
 // @ts-ignore
-Array.prototype.flatMap = function (callback, thisArg) {
-	const newArray = [];
-	for (let i = 0; i < this.length; i++) {
-		newArray.push(...callback.call(thisArg, this[i], i, this));
-	}
-	return newArray;
- };
+Object.defineProperty(Array.prototype, 'flatMap', {
+	value(callback: any, thisArg: any) {
+		const newArray = [];
+		for (let i = 0; i < this.length; i++) {
+			newArray.push(...callback.call(thisArg, this[i], i, this));
+		}
+		return newArray;
+	},
+	configurable: true,
+	writable: true,
+});
 
 import * as fs from 'fs';
 import * as path from 'path';

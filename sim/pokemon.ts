@@ -207,10 +207,7 @@ export class Pokemon {
 	modifyStat?: (this: Pokemon, statName: StatNameExceptHP, modifier: number) => void;
 
 	// OMs
-	innate?: string;
-	innates?: string[];
-	originalSpecies?: string;
-	gluttonyFlag: boolean | null;
+	m: PokemonModData;
 
 	constructor(set: string | AnyObject, side: Side) {
 		this.side = side;
@@ -379,10 +376,10 @@ export class Pokemon {
 		this.isStalePPTurns = 0;
 		this.staleWarned = false;
 
-		this.innate = undefined;
-		this.innates = undefined;
-		this.originalSpecies = undefined;
-		this.gluttonyFlag = null;
+		/**
+		 * An object for storing untyped data, for mods to use.
+		 */
+		this.m = {};
 	}
 
 	get moves() {
@@ -423,7 +420,7 @@ export class Pokemon {
 		let stat = this.storedStats[statName];
 
 		// Wonder Room swaps defenses before calculating anything else
-		if ('wonderroom' in this.battle.pseudoWeather) {
+		if ('wonderroom' in this.battle.field.pseudoWeather) {
 			if (statName === 'def') {
 				stat = this.storedStats['spd'];
 			} else if (statName === 'spd') {
@@ -460,7 +457,7 @@ export class Pokemon {
 
 		// Download ignores Wonder Room's effect, but this results in
 		// stat stages being calculated on the opposite defensive stat
-		if (unmodified && 'wonderroom' in this.battle.pseudoWeather) {
+		if (unmodified && 'wonderroom' in this.battle.field.pseudoWeather) {
 			if (statName === 'def') {
 				statName = 'spd';
 			} else if (statName === 'spd') {
@@ -494,7 +491,7 @@ export class Pokemon {
 
 	getActionSpeed() {
 		let speed = this.getStat('spe', false, false);
-		if (this.battle.getPseudoWeather('trickroom')) {
+		if (this.battle.field.getPseudoWeather('trickroom')) {
 			speed = 0x2710 - speed;
 		}
 		return this.battle.trunc(speed, 13);
@@ -530,7 +527,7 @@ export class Pokemon {
 		return null;
 	}
 
-	allies(adjacentOnly?: boolean): Pokemon[] {
+	allies(): Pokemon[] {
 		let allies = this.side.active;
 		if (this.battle.gameType === 'multi') {
 			const team = this.side.n % 2;
@@ -539,11 +536,14 @@ export class Pokemon {
 				side.n % 2 === team ? side.active : []
 			);
 		}
-		if (adjacentOnly) allies = allies.filter(ally => this.battle.isAdjacent(this, ally));
 		return allies.filter(ally => ally && !ally.fainted);
 	}
 
-	foes(adjacentOnly?: boolean): Pokemon[] {
+	nearbyAllies(): Pokemon[] {
+		return this.allies().filter(ally => this.battle.isAdjacent(this, ally));
+	}
+
+	foes(): Pokemon[] {
 		let foes = this.side.foe.active;
 		if (this.battle.gameType === 'multi') {
 			const team = this.side.foe.n % 2;
@@ -552,12 +552,17 @@ export class Pokemon {
 				side.n % 2 === team ? side.active : []
 			);
 		}
-		if (adjacentOnly) foes = foes.filter(foe => this.battle.isAdjacent(this, foe));
 		return foes.filter(foe => foe && !foe.fainted);
 	}
 
-	getMoveTargets(move: Move, target: Pokemon): Pokemon[] {
+	nearbyFoes(): Pokemon[] {
+		return this.foes().filter(foe => this.battle.isAdjacent(this, foe));
+	}
+
+	getMoveTargets(move: Move, target: Pokemon): {targets: Pokemon[], pressureTargets: Pokemon[]} {
 		const targets = [];
+		let pressureTargets;
+
 		switch (move.target) {
 		case 'all':
 		case 'foeSide':
@@ -574,10 +579,10 @@ export class Pokemon {
 			}
 			break;
 		case 'allAdjacent':
-			targets.push(...this.allies(true));
+			targets.push(...this.nearbyAllies());
 			// falls through
 		case 'allAdjacentFoes':
-			targets.push(...this.foes(true));
+			targets.push(...this.nearbyFoes());
 			if (targets.length && !targets.includes(target)) {
 				this.battle.retargetLastMove(targets[targets.length - 1]);
 			}
@@ -587,15 +592,18 @@ export class Pokemon {
 			if (!target || (target.fainted && target.side !== this.side)) {
 				// If a targeted foe faints, the move is retargeted
 				const possibleTarget = this.battle.resolveTarget(this, move);
-				if (!possibleTarget) return [];
+				if (!possibleTarget) return {targets: [], pressureTargets: []};
 				target = possibleTarget;
 			}
 			if (target.side.active.length > 1) {
 				if (!move.flags['charge'] || this.volatiles['twoturnmove'] ||
-						(move.id.startsWith('solarb') && this.battle.isWeather(['sunnyday', 'desolateland'])) ||
+						(move.id.startsWith('solarb') && this.battle.field.isWeather(['sunnyday', 'desolateland'])) ||
 						(this.hasItem('powerherb') && move.id !== 'skydrop')) {
 					target = this.battle.priorityEvent('RedirectTarget', this, this, this.battle.getActiveMove(move), target);
 				}
+			}
+			if (target.fainted) {
+				return {targets: [], pressureTargets: []};
 			}
 			if (selectedTarget !== target) {
 				this.battle.retargetLastMove(target);
@@ -606,11 +614,12 @@ export class Pokemon {
 			if (move.pressureTarget) {
 				// At the moment, this is the only supported target.
 				if (move.pressureTarget === 'foeSide') {
-					targets.push(...this.foes());
+					pressureTargets = this.foes();
 				}
 			}
 		}
-		return targets;
+
+		return {targets, pressureTargets: pressureTargets || targets};
 	}
 
 	ignoringAbility() {
@@ -624,7 +633,7 @@ export class Pokemon {
 	ignoringItem() {
 		return !!((this.battle.gen >= 5 && !this.isActive) ||
 			(this.hasAbility('klutz') && !this.getItem().ignoreKlutz) ||
-			this.volatiles['embargo'] || this.battle.pseudoWeather['magicroom']);
+			this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom']);
 	}
 
 	deductPP(move: string | Move, amount?: number | null, target?: Pokemon | null | false) {
@@ -1582,7 +1591,7 @@ export class Pokemon {
 	}
 
 	isGrounded(negateImmunity: boolean = false) {
-		if ('gravity' in this.battle.pseudoWeather) return true;
+		if ('gravity' in this.battle.field.pseudoWeather) return true;
 		if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;
 		if ('smackdown' in this.volatiles) return true;
 		const item = (this.ignoringItem() ? '' : this.item);

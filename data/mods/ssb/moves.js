@@ -51,7 +51,6 @@ let BattleMovedex = {
 		pp: 3,
 		noPPBoosts: true,
 		priority: 0,
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -101,7 +100,6 @@ let BattleMovedex = {
 		isNonstandard: "Custom",
 		pp: 10,
 		priority: 0,
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -125,7 +123,6 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {snatch: 1, mirror: 1, dance: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -150,7 +147,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -172,14 +168,13 @@ let BattleMovedex = {
 		accuracy: true,
 		category: "Status",
 		desc: "The user recovers half their HP. If any of the user's allies fainted the previous turn, this move heals the active Pokemon by 50% of the user's HP on the following turn. Cures the user's party of all status conditions.",
-		shortDesc: "Heal 50%; cures party; If ally fained last turn: wish.",
+		shortDesc: "Heal 50%; cures party; If ally fainted last turn: wish.",
 		id: "compost",
 		name: "Compost",
 		isNonstandard: "Custom",
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -191,7 +186,7 @@ let BattleMovedex = {
 			let side = source.side;
 			if (side.faintedLastTurn) {
 				this.add('-anim', source, "Wish", target);
-				side.addSideCondition('wish', source);
+				side.addSlotCondition(source, 'wish', source);
 				this.add('-message', `${source.name} made a wish!`);
 				didSomething = true;
 			}
@@ -218,12 +213,11 @@ let BattleMovedex = {
 		pp: 5,
 		priority: -6,
 		onModifyMove(move) {
-			if (!this.pseudoWeather.trickroom) {
+			if (!this.field.pseudoWeather.trickroom) {
 				move.pseudoWeather = 'trickroom';
 			}
 		},
 		flags: {snatch: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -251,7 +245,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 1,
 		flags: {protect: 1, mirror: 1, contact: 1, authentic: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -301,7 +294,6 @@ let BattleMovedex = {
 		isNonstandard: "Custom",
 		pp: 5,
 		flags: {protect: 1, mirror: 1, contact: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -333,7 +325,6 @@ let BattleMovedex = {
 		pp: 20,
 		priority: -3,
 		flags: {contact: 1, protect: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -400,7 +391,6 @@ let BattleMovedex = {
 		isNonstandard: "Custom",
 		pp: 10,
 		flags: {protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -424,7 +414,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -437,7 +426,6 @@ let BattleMovedex = {
 				move.basePower = move.basePower * 1.5;
 			}
 		},
-		onModifyMovePriority: 2,
 		onModifyMove(move, pokemon) {
 			const item = pokemon.getItem();
 			if (item.id && item.onPlate && !item.zMove) {
@@ -462,7 +450,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -489,7 +476,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {mirror: 1, protect: 1, contact: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -497,7 +483,7 @@ let BattleMovedex = {
 			this.add('-anim', source, 'Meteor Mash', target);
 		},
 		onAfterMoveSecondarySelf() {
-			this.setWeather('raindance');
+			this.field.setWeather('raindance');
 		},
 		secondary: {
 			chance: 100,
@@ -523,7 +509,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: -6,
 		flags: {protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -549,7 +534,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: -7,
 		flags: {},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -578,7 +562,7 @@ let BattleMovedex = {
 				this.add('-message', `${source.name} is levitating due to its big trivia brain!`);
 			},
 			onRestart(target, source) {
-				this.removePseudoWeather('triviaroom');
+				this.field.removePseudoWeather('triviaroom');
 			},
 			// Speed modification is changed in Pokemon.getActionSpeed() in mods/seasonal/scripts.js
 			// Levitation is handled in Pokemon.isGrounded in mods/seasonal/scripts.js
@@ -605,7 +589,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -647,7 +630,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, authentic: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -665,8 +647,8 @@ let BattleMovedex = {
 					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Blustery Winds', '[of] ' + source);
 				}
 			}
-			this.clearWeather();
-			this.clearTerrain();
+			this.field.clearWeather();
+			this.field.clearTerrain();
 		},
 		secondary: null,
 		target: "normal",
@@ -685,7 +667,6 @@ let BattleMovedex = {
 		noPPBoosts: true,
 		priority: 0,
 		flags: {},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -765,7 +746,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -774,8 +754,10 @@ let BattleMovedex = {
 			this.add('-anim', source, 'Swords Dance', source);
 			this.add('-anim', source, 'Bloom Doom', target);
 		},
+		onAfterMoveSecondarySelf() {
+			this.field.setTerrain('grassyterrain');
+		},
 		onAfterMove(pokemon) {
-			this.setTerrain('grassyterrain');
 			if (pokemon.template.baseSpecies !== 'Aegislash' || pokemon.transformed) return;
 			if (pokemon.template.species !== 'Aegislash') pokemon.formeChange('Aegislash');
 		},
@@ -794,7 +776,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {mirror: 1, snatch: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -818,7 +799,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {reflectable: 1, mirror: 1, snatch: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -853,10 +833,6 @@ let BattleMovedex = {
 	// Cerberax
 	blimpcrash: {
 		accuracy: true,
-		onModifyAccuracy(accuracy, target, source) {
-			if (target.isGrounded()) return 80;
-			return accuracy;
-		},
 		basePower: 165,
 		category: "Physical",
 		desc: "80% Accuracy if target is grounded. The user and the target will be grounded, and the user will take 1/2 of the damage inflicted as recoil.",
@@ -867,9 +843,13 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {mirror: 1, protect: 1, contact: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
+		},
+		onModifyMove(move, source, target) {
+			if (target.isGrounded()) {
+				move.accuracy = 80;
+			}
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Head Smash', target);
@@ -897,7 +877,6 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -936,7 +915,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {mirror: 1, snatch: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -967,7 +945,6 @@ let BattleMovedex = {
 		pp: 25,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, contact: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -995,7 +972,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {mirror: 1, snatch: 1, reflectable: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1032,7 +1008,6 @@ let BattleMovedex = {
 		isNonstandard: "Custom",
 		pp: 5,
 		priority: 0,
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1041,9 +1016,9 @@ let BattleMovedex = {
 			this.add('-anim', source, 'Wood Hammer', source);
 		},
 		onHit(pokemon, move) {
-			if (this.pseudoWeather.gravity) return false;
+			if (this.field.pseudoWeather.gravity) return false;
 			this.boost({atk: 2}, pokemon, pokemon, this.getActiveMove('EarthsBlessing'));
-			this.addPseudoWeather('gravity');
+			this.field.addPseudoWeather('gravity');
 			if (['', 'slp', 'frz'].includes(pokemon.status)) return;
 			pokemon.cureStatus();
 		},
@@ -1066,7 +1041,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 1,
 		flags: {mirror: 1, protect: 1, contact: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1099,7 +1073,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {mirror: 1, protect: 1, bite: 1},
-		onTryMovePriority: 100,
 		onTryMove(pokemon, target, move) {
 			this.attrLastMove('[still]');
 			if (!pokemon.hasType('Fire') || target.hasType('Fire')) {
@@ -1133,7 +1106,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {mirror: 1, protect: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1142,7 +1114,7 @@ let BattleMovedex = {
 			this.add('-anim', source, 'Sunny Day', source);
 		},
 		onAfterMoveSecondarySelf() {
-			this.setWeather('sunnyday');
+			this.field.setWeather('sunnyday');
 		},
 		secondary: null,
 		target: "normal",
@@ -1160,7 +1132,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1197,7 +1168,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {mirror: 1, snatch: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1227,7 +1197,6 @@ let BattleMovedex = {
 			move.type = pokemon.types[0];
 			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
 		},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1285,7 +1254,6 @@ let BattleMovedex = {
 		noPPBoosts: true,
 		priority: 0,
 		flags: {protect: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1315,7 +1283,6 @@ let BattleMovedex = {
 		pp: 1,
 		priority: 0,
 		flags: {},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1358,7 +1325,6 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1388,8 +1354,8 @@ let BattleMovedex = {
 					pokemon.types = [type1, type2];
 					this.add('-start', pokemon, 'typechange', `${type1}/${type2}`);
 				}
-				// @ts-ignore track percentages to keep purple pills from resetting pp
-				pokemon.ppPercentages = pokemon.moveSlots.map(m =>
+				// track percentages to keep purple pills from resetting pp
+				pokemon.m.ppPercentages = pokemon.moveSlots.map(m =>
 					m.pp / m.maxpp
 				);
 				// Get all possible moves sorted for convience in coding
@@ -1431,8 +1397,8 @@ let BattleMovedex = {
 					pokemon.moveSlots.push({
 						move: move.name,
 						id: move.id,
-						// @ts-ignore hacky way to reduce purple pill's PP
-						pp: Math.floor(((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5) * (pokemon.ppPercentages ? pokemon.ppPercentages[i] : 1)),
+						// hacky way to reduce purple pill's PP
+						pp: Math.floor(((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5) * (pokemon.m.ppPercentages ? pokemon.m.ppPercentages[i] : 1)),
 						maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
 						target: move.target,
 						disabled: false,
@@ -1452,8 +1418,8 @@ let BattleMovedex = {
 				this.add('-end', pokemon, 'Purple Pills', '[silent]');
 				pokemon.types = ['Psychic'];
 				this.add('-start', pokemon, 'typechange', 'Psychic');
-				// @ts-ignore track percentages to keep purple pills from resetting pp
-				pokemon.ppPercentages = pokemon.moveSlots.slice().map(m => {
+				// track percentages to keep purple pills from resetting pp
+				pokemon.m.ppPercentages = pokemon.moveSlots.slice().map(m => {
 					return m.pp / m.maxpp;
 				});
 				// Update movepool
@@ -1465,8 +1431,8 @@ let BattleMovedex = {
 					pokemon.moveSlots.push({
 						move: move.name,
 						id: move.id,
-						// @ts-ignore hacky way to reduce purple pill's PP
-						pp: Math.floor(((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5) * (pokemon.ppPercentages ? pokemon.ppPercentages[i] : 1)),
+						// hacky way to reduce purple pill's PP
+						pp: Math.floor(((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5) * (pokemon.m.ppPercentages ? pokemon.m.ppPercentages[i] : 1)),
 						maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
 						target: move.target,
 						disabled: false,
@@ -1510,7 +1476,6 @@ let BattleMovedex = {
 		isNonstandard: "Custom",
 		pp: 10,
 		flags: {contact: 1, protect: 1, mirror: 1, heal: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1533,7 +1498,6 @@ let BattleMovedex = {
 		name: "Hazard Pass",
 		isNonstandard: "Custom",
 		flags: {reflectable: 1, mirror: 1, authentic: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1592,7 +1556,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1619,7 +1582,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {nonsky: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1723,7 +1685,6 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {},
 		noMetronome: ['afteryou', 'assist', 'banefulbunker', 'beakblast', 'belch', 'bestow', 'celebrate', 'chatter', 'copycat', 'counter', 'covet', 'craftyshield', 'destinybond', 'detect', 'diamondstorm', 'dragonascent', 'endure', 'feint', 'fleurcannon', 'focuspunch', 'followme', 'freezeshock', 'helpinghand', 'holdhands', 'hyperspacefury', 'hyperspacehole', 'iceburn', 'instruct', 'kingsshield', 'lightofruin', 'matblock', 'mefirst', 'metronome', 'mimic', 'mindblown', 'mirrorcoat', 'mirrormove', 'naturepower', 'originpulse', 'photongeyser', 'plasmafists', 'precipiceblades', 'protect', 'quash', 'quickguard', 'ragepowder', 'relicsong', 'secretsword', 'shelltrap', 'sketch', 'sleeptalk', 'snarl', 'snatch', 'snore', 'spectralthief', 'spikyshield', 'spotlight', 'steameruption', 'struggle', 'switcheroo', 'technoblast', 'thief', 'thousandarrows', 'thousandwaves', 'transform', 'trick', 'trumpcard', 'vcreate', 'wideguard'],
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1769,7 +1730,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1804,15 +1764,14 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Gunk Shot', target);
 		},
-		onHit(target) {
-			target.side.addSideCondition('toxicspikes');
+		onAfterMoveSecondarySelf(pokemon) {
+			pokemon.side.foe.addSideCondition('toxicspikes');
 		},
 		secondary: null,
 		target: "normal",
@@ -1831,7 +1790,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {authentic: 1, snatch: 1, reflectable: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1864,7 +1822,6 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1887,7 +1844,6 @@ let BattleMovedex = {
 		isNonstandard: "Custom",
 		pp: 5,
 		flags: {mirror: 1, snatch: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1920,7 +1876,6 @@ let BattleMovedex = {
 		pp: 15,
 		priority: -6,
 		flags: {protect: 1, mirror: 1, sound: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1944,7 +1899,6 @@ let BattleMovedex = {
 		id: "bestialstrike",
 		name: "Bestial Strike",
 		isNonstandard: "Custom",
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1972,7 +1926,6 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		volatileStatus: 'maelstrm',
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2025,7 +1978,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2056,7 +2008,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, punch: 1, contact: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2085,7 +2036,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2127,7 +2077,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 3,
 		flags: {protect: 1, mirror: 1, contact: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2161,7 +2110,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2182,7 +2130,7 @@ let BattleMovedex = {
 			},
 		],
 		onAfterMoveSecondarySelf() {
-			this.setWeather('hail');
+			this.field.setWeather('hail');
 		},
 		target: "normal",
 		type: "Ice",
@@ -2200,7 +2148,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, dance: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2230,7 +2177,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1, heal: 1},
-		onTryMovePriority: 100,
 		onTryMove(pokemon) {
 			this.attrLastMove('[still]');
 			if (pokemon.hp < pokemon.maxhp && pokemon.status !== 'slp' && !pokemon.hasAbility('comatose')) return;
@@ -2243,27 +2189,23 @@ let BattleMovedex = {
 			this.add('-anim', source, "Aromatic Mist", target);
 		},
 		onHit(target, source, move) {
-			let napWeather = this.pseudoWeather['naptime'];
+			let napWeather = this.field.pseudoWeather['naptime'];
 			// Trigger sleep clause if not the original user
-			// @ts-ignore
 			if (!target.setStatus('slp', napWeather.source, move)) return false;
 			target.statusData.time = 2;
 			target.statusData.startTime = 2;
 			this.heal(target.maxhp / 2); // Aesthetic only as the healing happens after you fall asleep in-game
 			this.add('-status', target, 'slp', '[from] move: Rest');
-			// @ts-ignore
 			if (napWeather.source === target) {
-				for (const side of this.sides) {
-					for (const curMon of side.active) {
-						if (curMon === source) continue;
-						if (curMon && curMon.hp && curMon.status !== 'slp' && curMon.status !== 'frz' && !curMon.hasAbility('comatose')) {
-							this.add('-anim', source, "Yawn", curMon);
-							this.useMove(move, curMon, curMon, move);
-						}
+				for (const curMon of this.getAllActive()) {
+					if (curMon === source) continue;
+					if (curMon.status !== 'slp' && curMon.status !== 'frz' && !curMon.hasAbility('comatose')) {
+						this.add('-anim', source, "Yawn", curMon);
+						this.useMove(move, curMon, curMon, move);
 					}
 				}
 			}
-			this.removePseudoWeather('naptime');
+			this.field.removePseudoWeather('naptime');
 		},
 		pseudoWeather: 'naptime',
 		effect: {
@@ -2295,7 +2237,6 @@ let BattleMovedex = {
 		pp: 1,
 		priority: 0,
 		flags: {},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2323,7 +2264,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2353,7 +2293,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {authentic: 1, protect: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2405,7 +2344,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {mirror: 1, protect: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2452,7 +2390,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, contact: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2485,7 +2422,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {mirror: 1, protect: 1, contact: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2525,7 +2461,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2556,7 +2491,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2598,12 +2532,11 @@ let BattleMovedex = {
 		pp: 5,
 		priority: -6,
 		onModifyMove(move) {
-			if (!this.pseudoWeather.trickroom) {
+			if (!this.field.pseudoWeather.trickroom) {
 				move.pseudoWeather = 'trickroom';
 			}
 		},
 		flags: {snatch: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2691,7 +2624,6 @@ let BattleMovedex = {
 		pp: 20,
 		priority: -6,
 		flags: {mirror: 1, protect: 1, authentic: 1, sound: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2700,7 +2632,7 @@ let BattleMovedex = {
 			this.add('-anim', source, "Mist", target);
 		},
 		onTryHit(target, source, move) {
-			target.side.addSideCondition('pyramidingsong');
+			target.side.addSlotCondition(target, 'pyramidingsong');
 		},
 		onHit(target, source, move) {
 			if (this.runEvent('DragOut', source, target, move)) {
@@ -2732,7 +2664,6 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {mirror: 1, protect: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2776,7 +2707,6 @@ let BattleMovedex = {
 		isNonstandard: "Custom",
 		pp: 5,
 		flags: {protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2802,7 +2732,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, heal: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2827,7 +2756,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2857,7 +2785,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2924,7 +2851,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 4,
 		flags: {heal: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -2987,7 +2913,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3067,7 +2992,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {mirror: 1, protect: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3106,7 +3030,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3145,7 +3068,6 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {snatch: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3173,7 +3095,6 @@ let BattleMovedex = {
 		pp: 1,
 		priority: 0,
 		flags: {},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3183,8 +3104,8 @@ let BattleMovedex = {
 			this.add('-anim', source, "Blizzard", source);
 		},
 		onHit(target, source) {
-			this.setWeather('hail');
-			if (this.isWeather('hail')) source.side.addSideCondition('auroraveil', source);
+			this.field.setWeather('hail');
+			if (this.field.isWeather('hail')) source.side.addSideCondition('auroraveil', source);
 			this.add('-message', source.name + ' became extra thicc!');
 		},
 		boosts: {
@@ -3209,7 +3130,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3233,7 +3153,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {snatch: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3261,7 +3180,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: -7,
 		flags: {},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3313,7 +3231,6 @@ let BattleMovedex = {
 			// @ts-ignore Hack for Snaquaza's Z move
 			this.claimMove = move.baseMove;
 		},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3360,7 +3277,7 @@ let BattleMovedex = {
 			}
 			// Update HP
 			// @ts-ignore Hack for Snaquaza's Z Move
-			pokemon.claimHP = pokemon.hp;
+			pokemon.m.claimHP = pokemon.hp;
 			pokemon.heal(pokemon.maxhp - pokemon.hp, pokemon);
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 			this.add('message', `${pokemon.name} claims to be a ${set.species}!`);
@@ -3383,7 +3300,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: -1,
 		flags: {snatch: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3413,7 +3329,6 @@ let BattleMovedex = {
 		pp: 1,
 		priority: 0,
 		flags: {},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3441,7 +3356,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3469,7 +3383,6 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3497,7 +3410,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3535,7 +3447,6 @@ let BattleMovedex = {
 		pp: 1,
 		priority: 0,
 		flags: {},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3573,7 +3484,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {bullet: 1, contact: 1, protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3581,8 +3491,8 @@ let BattleMovedex = {
 			this.add('-anim', source, "Gyro Ball", target);
 		},
 		onAfterMoveSecondarySelf(pokemon) {
-			if (!this.pseudoWeather.trickroom) {
-				this.addPseudoWeather('trickroom', pokemon);
+			if (!this.field.pseudoWeather.trickroom) {
+				this.field.addPseudoWeather('trickroom', pokemon);
 			}
 			this.add('-fieldactivate', 'move: Pay Day'); // Coins are scattered on the ground
 		},
@@ -3605,7 +3515,6 @@ let BattleMovedex = {
 		pp: 1,
 		priority: 0,
 		flags: {},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3668,9 +3577,9 @@ let BattleMovedex = {
 				break;
 			case 4:
 				if (option) {
-					this.setTerrain('grassyterrain', source);
+					this.field.setTerrain('grassyterrain', source);
 				} else {
-					this.setTerrain('mistyterrain', source);
+					this.field.setTerrain('mistyterrain', source);
 				}
 				break;
 			case 5:
@@ -3701,7 +3610,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, mirror: 1, reflectable: 1, authentic: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3764,7 +3672,6 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		volatileStatus: "minisingularity",
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3775,8 +3682,8 @@ let BattleMovedex = {
 		onAfterHit(target, source) {
 			if (source.hp) {
 				let item = target.takeItem();
-				if (item) {
-					this.add('-enditem', target, item.name, '[from] move: Mini Singularity', '[of] ' + source);
+				if (!target.item) {
+					if (item) this.add('-enditem', target, item.name, '[from] move: Mini Singularity', '[of] ' + source);
 					target.setItem('ironball');
 					this.add('-message', target.name + ' obtained an Iron Ball.');
 				}
@@ -3785,7 +3692,7 @@ let BattleMovedex = {
 		effect: {
 			noCopy: true,
 			onStart(pokemon) {
-				this.add('-message', pokemon.name + ' weight has doubled.');
+				this.add('-message', pokemon.name + '\'s weight has doubled.');
 			},
 			onModifyWeight(weight) {
 				return weight * 2;
@@ -3808,7 +3715,6 @@ let BattleMovedex = {
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3836,7 +3742,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {snatch: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3866,7 +3771,6 @@ let BattleMovedex = {
 		pp: 1,
 		priority: 0,
 		flags: {},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3893,7 +3797,6 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, heal: 1},
 		drain: [1, 2],
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3918,7 +3821,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, dance: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -3957,7 +3859,6 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4003,7 +3904,6 @@ let BattleMovedex = {
 				return true;
 			}
 		},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4044,7 +3944,6 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, authentic: 1},
 		ignoreImmunity: true,
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -4099,7 +3998,6 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		onTryMovePriority: 100,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},

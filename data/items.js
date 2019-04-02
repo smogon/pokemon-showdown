@@ -142,7 +142,7 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onStart(target) {
-			if (!target.ignoringItem() && !this.getPseudoWeather('gravity')) {
+			if (!target.ignoringItem() && !this.field.getPseudoWeather('gravity')) {
 				this.add('-item', target, 'Air Balloon');
 			}
 		},
@@ -153,7 +153,7 @@ let BattleItems = {
 				this.add('-enditem', target, 'Air Balloon');
 				target.item = '';
 				target.itemData = {id: '', target};
-				this.runEvent('AfterUseItem', target, null, null, 'airballoon');
+				this.runEvent('AfterUseItem', target, null, null, this.getItem('airballoon'));
 			}
 		},
 		onAfterSubDamage(damage, target, source, effect) {
@@ -162,7 +162,7 @@ let BattleItems = {
 				this.add('-enditem', target, 'Air Balloon');
 				target.item = '';
 				target.itemData = {id: '', target};
-				this.runEvent('AfterUseItem', target, null, null, 'airballoon');
+				this.runEvent('AfterUseItem', target, null, null, this.getItem('airballoon'));
 			}
 		},
 		num: 541,
@@ -464,7 +464,7 @@ let BattleItems = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
-			if (this.isTerrain('grassyterrain')) return;
+			if (this.field.isTerrain('grassyterrain')) return;
 			if (pokemon.hasType('Poison')) {
 				this.heal(pokemon.maxhp / 16);
 			} else {
@@ -472,7 +472,7 @@ let BattleItems = {
 			}
 		},
 		onTerrain(pokemon) {
-			if (!this.isTerrain('grassyterrain')) return;
+			if (!this.field.isTerrain('grassyterrain')) return;
 			if (pokemon.hasType('Poison')) {
 				this.heal(pokemon.maxhp / 16);
 			} else {
@@ -1516,12 +1516,12 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && this.isTerrain('electricterrain') && pokemon.useItem()) {
+			if (!pokemon.ignoringItem() && this.field.isTerrain('electricterrain') && pokemon.useItem()) {
 				this.boost({def: 1});
 			}
 		},
 		onAnyTerrainStart() {
-			if (this.isTerrain('electricterrain') && this.effectData.target.useItem()) {
+			if (this.field.isTerrain('electricterrain') && this.effectData.target.useItem()) {
 				this.boost({def: 1}, this.effectData.target);
 			}
 		},
@@ -2193,12 +2193,12 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && this.isTerrain('grassyterrain') && pokemon.useItem()) {
+			if (!pokemon.ignoringItem() && this.field.isTerrain('grassyterrain') && pokemon.useItem()) {
 				this.boost({def: 1});
 			}
 		},
 		onAnyTerrainStart() {
-			if (this.isTerrain('grassyterrain') && this.effectData.target.useItem()) {
+			if (this.field.isTerrain('grassyterrain') && this.effectData.target.useItem()) {
 				this.boost({def: 1}, this.effectData.target);
 			}
 		},
@@ -2609,7 +2609,7 @@ let BattleItems = {
 		},
 		onEffectiveness(typeMod, target, type, move) {
 			if (!target) return;
-			if (target.volatiles['ingrain'] || target.volatiles['smackdown'] || this.getPseudoWeather('gravity')) return;
+			if (target.volatiles['ingrain'] || target.volatiles['smackdown'] || this.field.getPseudoWeather('gravity')) return;
 			if (move.type === 'Ground' && target.hasType('Flying')) return 0;
 		},
 		// airborneness negation implemented in sim/pokemon.js:Pokemon#isGrounded
@@ -2908,11 +2908,11 @@ let BattleItems = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
-			if (this.isTerrain('grassyterrain')) return;
+			if (this.field.isTerrain('grassyterrain')) return;
 			this.heal(pokemon.maxhp / 16);
 		},
 		onTerrain(pokemon) {
-			if (!this.isTerrain('grassyterrain')) return;
+			if (!this.field.isTerrain('grassyterrain')) return;
 			this.heal(pokemon.maxhp / 16);
 		},
 		num: 234,
@@ -3642,12 +3642,12 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && this.isTerrain('mistyterrain') && pokemon.useItem()) {
+			if (!pokemon.ignoringItem() && this.field.isTerrain('mistyterrain') && pokemon.useItem()) {
 				this.boost({spd: 1});
 			}
 		},
 		onAnyTerrainStart() {
-			if (this.isTerrain('mistyterrain') && this.effectData.target.useItem()) {
+			if (this.field.isTerrain('mistyterrain') && this.effectData.target.useItem()) {
 				this.boost({spd: 1}, this.effectData.target);
 			}
 		},
@@ -4356,7 +4356,7 @@ let BattleItems = {
 			basePower: 30,
 		},
 		onAttractPriority: -1,
-		onAttract(target, source, effect) {
+		onAttract(target, source) {
 			if (target !== source && target === this.activePokemon && this.activeMove && this.activeMove.flags['contact']) return false;
 		},
 		onBoostPriority: -1,
@@ -4449,12 +4449,12 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && this.isTerrain('psychicterrain') && pokemon.useItem()) {
+			if (!pokemon.ignoringItem() && this.field.isTerrain('psychicterrain') && pokemon.useItem()) {
 				this.boost({spd: 1});
 			}
 		},
 		onAnyTerrainStart() {
-			if (this.isTerrain('psychicterrain') && this.effectData.target.useItem()) {
+			if (this.field.isTerrain('psychicterrain') && this.effectData.target.useItem()) {
 				this.boost({spd: 1}, this.effectData.target);
 			}
 		},

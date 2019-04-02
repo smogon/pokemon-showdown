@@ -491,7 +491,7 @@ class RandomTeams extends Dex.ModdedDex {
 		];
 		// Moves that shouldn't be the only STAB moves:
 		let NoStab = [
-			'aquajet', 'bounce', 'explosion', 'fakeout', 'firstimpression', 'flamecharge', 'fly', 'iceshard', 'pursuit', 'quickattack', 'selfdestruct', 'skyattack', 'suckerpunch',
+			'aquajet', 'bounce', 'explosion', 'fakeout', 'firstimpression', 'flamecharge', 'fly', 'iceshard', 'pursuit', 'quickattack', 'selfdestruct', 'skyattack', 'suckerpunch', 'watershuriken',
 			'chargebeam', 'clearsmog', 'eruption', 'vacuumwave', 'waterspout',
 		];
 
@@ -830,7 +830,7 @@ class RandomTeams extends Dex.ModdedDex {
 					break;
 				case 'switcheroo': case 'trick':
 					if (counter.Physical + counter.Special < 3 || counter.setupType || !!counter['speedsetup']) rejected = true;
-					if (hasMove['acrobatics'] || hasMove['lightscreen'] || hasMove['reflect'] || hasMove['suckerpunch'] || hasMove['trickroom']) rejected = true;
+					if (hasMove['lightscreen'] || hasMove['reflect'] || hasMove['suckerpunch'] || hasMove['trickroom']) rejected = true;
 					break;
 				case 'toxicspikes':
 					if (counter.setupType || teamDetails.toxicSpikes) rejected = true;
@@ -987,7 +987,7 @@ class RandomTeams extends Dex.ModdedDex {
 				case 'icebeam':
 					if (hasMove['blizzard'] || hasMove['freezedry']) rejected = true;
 					break;
-				case 'iceshard':
+				case 'iceshard': case 'icywind':
 					if (hasMove['freezedry']) rejected = true;
 					break;
 				case 'bodyslam':
@@ -1078,7 +1078,7 @@ class RandomTeams extends Dex.ModdedDex {
 					if (hasMove['discharge'] || hasMove['spore'] || hasMove['toxic'] || hasMove['trickroom'] || hasMove['yawn']) rejected = true;
 					break;
 				case 'toxic':
-					if (hasMove['hypnosis'] || hasMove['hypnosis'] || hasMove['sleeppowder'] || hasMove['willowisp'] || hasMove['yawn']) rejected = true;
+					if (hasMove['hypnosis'] || hasMove['sleeppowder'] || hasMove['willowisp'] || hasMove['yawn']) rejected = true;
 					if (counter.setupType || hasMove['flamecharge'] || hasMove['raindance']) rejected = true;
 					break;
 				case 'willowisp':
@@ -1171,7 +1171,7 @@ class RandomTeams extends Dex.ModdedDex {
 					(!counter.recovery && (movePool.includes('softboiled') || template.nfe && !!counter['Status'] && (movePool.includes('recover') || movePool.includes('roost')))) ||
 					(template.requiredMove && movePool.includes(toId(template.requiredMove)))))) {
 					// Reject Status or non-STAB
-					if (!isSetup && !move.weather && !move.damage && moveid !== 'judgment' && moveid !== 'rest' && moveid !== 'sleeptalk') {
+					if (!isSetup && !move.weather && !move.damage && !move.heal && moveid !== 'judgment' && moveid !== 'rest' && moveid !== 'sleeptalk') {
 						if (move.category === 'Status' || !hasType[move.type] || move.selfSwitch || move.basePower && move.basePower < 40 && !move.multihit) rejected = true;
 					}
 				}
@@ -1258,6 +1258,8 @@ class RandomTeams extends Dex.ModdedDex {
 					rejectAbility = template.types.includes('Electric');
 				} else if (ability === 'Liquid Voice') {
 					rejectAbility = !hasMove['hypervoice'];
+				} else if (ability === 'Magnet Pull') {
+					rejectAbility = !hasType['Electric'] && !hasMove['earthpower'];
 				} else if (ability === 'Overcoat') {
 					rejectAbility = abilities.includes('Sturdy');
 				} else if (ability === 'Overgrow') {
@@ -1297,7 +1299,7 @@ class RandomTeams extends Dex.ModdedDex {
 				} else if (ability === 'Swarm') {
 					rejectAbility = !counter['Bug'];
 				} else if (ability === 'Technician') {
-					rejectAbility = !counter['technician'] || (abilities.includes('Skill Link') && counter['skilllink'] >= counter['technician']);
+					rejectAbility = !counter['technician'] || hasMove['tailslap'];
 				} else if (ability === 'Tinted Lens') {
 					rejectAbility = counter['damage'] >= counter.damagingMoves.length || (counter.Status > 2 && !counter.setupType);
 				} else if (ability === 'Torrent') {
@@ -1408,8 +1410,9 @@ class RandomTeams extends Dex.ModdedDex {
 				}
 			}
 		} else if (template.species === 'Pikachu') {
-			item = 'Light Ball';
 			species = 'Pikachu' + this.sample(['', '-Original', '-Hoenn', '-Sinnoh', '-Unova', '-Kalos', '-Alola', '-Partner']);
+			if (species !== 'Pikachu') ability = 'Static';
+			item = 'Light Ball';
 		} else if (template.species === 'Porygon-Z' && hasMove['nastyplot'] && !hasMove['trick'] && !['nastyplot', 'icebeam', 'triattack'].includes(moves[0]) && !teamDetails.zMove) {
 			moves[moves.indexOf('nastyplot')] = 'conversion';
 			moves[moves.indexOf('triattack')] = 'recover';
@@ -1469,25 +1472,27 @@ class RandomTeams extends Dex.ModdedDex {
 			item = 'Electrium Z';
 		} else if (hasMove['happyhour']) {
 			item = 'Normalium Z';
+		} else if (hasMove['hydropump'] && ability === 'Battle Bond' && hasMove['uturn'] && !teamDetails.zMove) {
+			item = 'Waterium Z';
 		} else if (hasMove['fleurcannon'] && !!counter['speedsetup'] && !teamDetails.zMove) {
 			item = 'Fairium Z';
 		} else if ((hasMove['magmastorm'] || hasMove['mindblown'] && !!counter['Status']) && !teamDetails.zMove) {
 			item = 'Firium Z';
-		} else if (!teamDetails.zMove && (hasMove['fly'] || (hasMove['hurricane'] && template.baseStats.spa >= 125) || ((hasMove['bounce'] || (ability !== 'Gale Wings' && hasMove['bravebird'])) && counter.setupType))) {
+		} else if (!teamDetails.zMove && (hasMove['fly'] || (hasMove['hurricane'] && template.baseStats.spa >= 125) || ((hasMove['bounce'] || hasMove['bravebird']) && counter.setupType))) {
 			item = 'Flyinium Z';
 		} else if (hasMove['solarbeam'] && ability !== 'Drought' && !hasMove['sunnyday'] && !teamDetails['sun']) {
 			item = !teamDetails.zMove ? 'Grassium Z' : 'Power Herb';
 		} else if ((ability === 'Magic Guard' || ability === 'Sheer Force') && counter.damagingMoves.length > 1) {
 			item = 'Life Orb';
-		} else if (hasMove['rest'] && !hasMove['sleeptalk'] && ability !== 'Natural Cure' && ability !== 'Shed Skin') {
-			item = (hasMove['raindance'] && ability === 'Hydration') ? 'Damp Rock' : 'Chesto Berry';
+		} else if (hasMove['rest'] && !hasMove['sleeptalk'] && ability !== 'Hydration' && ability !== 'Natural Cure' && ability !== 'Shed Skin') {
+			item = 'Chesto Berry';
 		} else if (hasMove['hail'] && !teamDetails.zMove) {
 			item = 'Icium Z';
 		} else if (hasMove['raindance']) {
 			if (template.baseSpecies === 'Castform' && !teamDetails.zMove) {
 				item = 'Waterium Z';
 			} else {
-				item = (ability === 'Forecast' || hasMove['rest']) ? 'Damp Rock' : 'Life Orb';
+				item = (ability === 'Forecast' || hasMove['rest'] || hasMove['uturn']) ? 'Damp Rock' : 'Life Orb';
 			}
 		} else if (hasMove['sunnyday']) {
 			if (template.baseSpecies === 'Castform' && !teamDetails.zMove) {
@@ -1547,12 +1552,12 @@ class RandomTeams extends Dex.ModdedDex {
 			item = 'Lustrous Orb';
 		} else if (counter.damagingMoves.length >= 3 && !!counter['speedsetup'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd >= 300) {
 			item = 'Weakness Policy';
-		} else if (slot === 0 && ability !== 'Regenerator' && ability !== 'Sturdy' && !counter['recoil'] && !counter['recovery'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 275) {
+		} else if (slot === 0 && ability !== 'Regenerator' && ability !== 'Sturdy' && !counter['recoil'] && !counter['recovery'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd <= 275) {
 			item = 'Focus Sash';
 
 		// This is the "REALLY can't think of a good item" cutoff
 		} else if (counter.damagingMoves.length >= 3 && ability !== 'Sturdy' && !hasMove['acidspray'] && !hasMove['dragontail'] && !hasMove['foulplay'] && !hasMove['rapidspin'] && !hasMove['superfang']) {
-			item = (template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 275 || !!counter['speedsetup'] || hasMove['trickroom']) ? 'Life Orb' : 'Leftovers';
+			item = (template.baseStats.hp + template.baseStats.def + template.baseStats.spd <= 275 || !!counter['speedsetup'] || hasMove['trickroom']) ? 'Life Orb' : 'Leftovers';
 		} else if (ability === 'Sturdy' && hasMove['explosion'] && !counter['speedsetup']) {
 			item = 'Custap Berry';
 		} else if (ability === 'Super Luck') {
@@ -1569,34 +1574,33 @@ class RandomTeams extends Dex.ModdedDex {
 		if (!isDoubles) {
 			/** @type {{[tier: string]: number}} */
 			let levelScale = {
-				'(PU)': 84,
-				PU: 83,
-				PUBL: 82,
-				NU: 81,
-				NUBL: 80,
-				RU: 79,
-				RUBL: 78,
-				UU: 77,
-				UUBL: 76,
-				'(OU)': 75,
-				OU: 75,
-				Unreleased: 75,
-				Uber: 73,
+				'(PU)': 89,
+				PU: 88,
+				PUBL: 87,
+				NU: 86,
+				NUBL: 85,
+				RU: 84,
+				RUBL: 83,
+				UU: 82,
+				UUBL: 81,
+				'(OU)': 80,
+				OU: 80,
+				Unreleased: 80,
+				Uber: 78,
 			};
 			/** @type {{[species: string]: number}} */
 			let customScale = {
 				// Banned Ability
-				Dugtrio: 77, Gothitelle: 77, Pelipper: 79, Politoed: 79, Wobbuffet: 77,
+				Dugtrio: 82, Gothitelle: 82, Pelipper: 84, Politoed: 84, Wobbuffet: 82,
 
 				// Holistic judgement
-				'Castform-Rainy': 100, 'Castform-Snowy': 100, 'Castform-Sunny': 100, Unown: 100,
+				'Castform-Rainy': 100, 'Castform-Snowy': 100, 'Castform-Sunny': 100, Delibird: 100, Unown: 100,
 			};
-			level = levelScale[template.tier] || 85;
+			level = levelScale[template.tier] || 90;
 			if (customScale[template.name]) level = customScale[template.name];
 
 			// Custom level based on moveset
-			if (ability === 'Power Construct') level = 73;
-			if (item === 'Kommonium Z') level = 77;
+			if (template.species === 'Zygarde-10%' && ability === 'Power Construct') level = 80;
 		} else {
 			// We choose level based on BST. Min level is 70, max level is 99. 600+ BST is 70, less than 300 is 99. Calculate with those values.
 			// Every 10.34 BST adds a level from 70 up to 99. Results are floored. Uses the Mega's stats if holding a Mega Stone
@@ -1623,6 +1627,8 @@ class RandomTeams extends Dex.ModdedDex {
 			}
 			if (item === 'Eviolite') {
 				bst += 0.5 * (baseStats.def + baseStats.spd);
+			} else if (item === 'Light Ball') {
+				bst += baseStats.atk + baseStats.spa;
 			}
 			level = 70 + Math.floor(((600 - this.clampIntRange(bst, 300, 600)) / 10.34));
 		}
@@ -1688,7 +1694,7 @@ class RandomTeams extends Dex.ModdedDex {
 	randomTeam() {
 		let pokemon = [];
 
-		const allowedNFE = ['Chansey', 'Doublade', 'Gligar', 'Pikachu', 'Porygon2', 'Scyther', 'Togetic', 'Type: Null'];
+		const allowedNFE = ['Chansey', 'Doublade', 'Gligar', 'Pikachu', 'Porygon2', 'Scyther', 'Type: Null'];
 
 		// For Monotype
 		let isMonotype = this.format.id === 'gen7monotyperandombattle';
@@ -1737,13 +1743,16 @@ class RandomTeams extends Dex.ModdedDex {
 			case 'Arceus': case 'Silvally':
 				if (this.randomChance(17, 18)) continue;
 				break;
-			case 'Castform': case 'Gourgeist': case 'Oricorio':
+			case 'Rotom':
+				if (this.randomChance(5, 6)) continue;
+				break;
+			case 'Deoxys': case 'Gourgeist': case 'Oricorio':
 				if (this.randomChance(3, 4)) continue;
 				break;
-			case 'Necrozma':
+			case 'Castform': case 'Kyurem': case 'Lycanroc': case 'Necrozma': case 'Wormadam':
 				if (this.randomChance(2, 3)) continue;
 				break;
-			case 'Basculin': case 'Cherrim': case 'Greninja': case 'Hoopa': case 'Meloetta': case 'Meowstic':
+			case 'Basculin': case 'Cherrim': case 'Floette': case 'Giratina': case 'Greninja': case 'Hoopa': case 'Landorus': case 'Meloetta': case 'Meowstic': case 'Shaymin': case 'Thundurus': case 'Tornadus': case 'Zygarde':
 				if (this.randomChance(1, 2)) continue;
 				break;
 			}

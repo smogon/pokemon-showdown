@@ -94,7 +94,7 @@ let BattleFormatsData = {
 	},
 	butterfree: {
 		inherit: true,
-		randomBattleMoves: ["sleeppowder", "quiverdance", "bugbuzz", "airslash", "gigadrain", "substitute"],
+		randomBattleMoves: ["sleeppowder", "quiverdance", "bugbuzz", "psychic", "gigadrain", "substitute"],
 		randomDoubleBattleMoves: ["quiverdance", "bugbuzz", "substitute", "sleeppowder", "psychic", "shadowball", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
@@ -590,7 +590,7 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	slowbromega: {
-		randomBattleMoves: ["calmmind", "scald", "psyshock", "slackoff", "fireblast", "psychic", "icebeam"],
+		randomBattleMoves: ["calmmind", "scald", "psyshock", "slackoff", "fireblast", "icebeam"],
 		randomDoubleBattleMoves: ["scald", "fireblast", "icebeam", "psychic", "grassknot", "thunderwave", "slackoff", "trickroom", "protect", "psyshock"],
 		requiredItem: "Slowbronite",
 		tier: "(OU)",
@@ -945,7 +945,7 @@ let BattleFormatsData = {
 	},
 	mrmime: {
 		inherit: true,
-		randomBattleMoves: ["nastyplot", "psychic", "psyshock", "dazzlinggleam", "shadowball", "focusblast", "healingwish", "encore"],
+		randomBattleMoves: ["nastyplot", "psyshock", "dazzlinggleam", "shadowball", "focusblast", "healingwish", "encore"],
 		randomDoubleBattleMoves: ["fakeout", "thunderwave", "hiddenpowerfighting", "teeterdance", "thunderbolt", "encore", "icywind", "protect", "wideguard", "dazzlinggleam"],
 		tier: "PU",
 		doublesTier: "(DUU)",
@@ -1447,7 +1447,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	ambipom: {
-		randomBattleMoves: ["fakeout", "return", "knockoff", "uturn", "switcheroo", "seedbomb", "lowkick", "acrobatics"],
+		randomBattleMoves: ["fakeout", "return", "knockoff", "uturn", "switcheroo", "seedbomb", "lowkick"],
 		randomDoubleBattleMoves: ["fakeout", "return", "knockoff", "uturn", "doublehit", "icepunch", "lowkick", "protect"],
 		tier: "RU",
 		doublesTier: "DUU",
@@ -1551,7 +1551,7 @@ let BattleFormatsData = {
 		doublesTier: "LC Uber",
 	},
 	gliscor: {
-		randomBattleMoves: ["roost", "substitute", "taunt", "earthquake", "protect", "toxic", "stealthrock", "knockoff"],
+		randomBattleMoves: ["roost", "taunt", "earthquake", "protect", "toxic", "stealthrock", "knockoff", "uturn"],
 		randomDoubleBattleMoves: ["tailwind", "substitute", "taunt", "earthquake", "protect", "stoneedge", "knockoff"],
 		tier: "OU",
 		doublesTier: "(DUU)",
@@ -1667,7 +1667,7 @@ let BattleFormatsData = {
 	},
 	delibird: {
 		inherit: true,
-		randomBattleMoves: ["rapidspin", "iceshard", "icepunch", "aerialace", "spikes", "destinybond"],
+		randomBattleMoves: ["spikes", "rapidspin", "icywind", "freezedry", "destinybond"],
 		randomDoubleBattleMoves: ["fakeout", "iceshard", "icepunch", "aerialace", "brickbreak", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
@@ -1839,7 +1839,7 @@ let BattleFormatsData = {
 	},
 	blaziken: {
 		inherit: true,
-		randomBattleMoves: ["blazekick", "highjumpkick", "protect", "swordsdance", "stoneedge", "knockoff"],
+		randomBattleMoves: ["fireblast", "highjumpkick", "protect", "knockoff", "hiddenpowerice"],
 		tier: "Uber",
 		doublesTier: "(DUU)",
 	},
@@ -2174,7 +2174,7 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	medichammega: {
-		randomBattleMoves: ["highjumpkick", "drainpunch", "icepunch", "fakeout", "zenheadbutt"],
+		randomBattleMoves: ["highjumpkick", "zenheadbutt", "thunderpunch", "icepunch", "fakeout"],
 		randomDoubleBattleMoves: ["highjumpkick", "drainpunch", "zenheadbutt", "icepunch", "bulletpunch", "protect", "fakeout"],
 		requiredItem: "Medichamite",
 		tier: "OU",
@@ -3848,7 +3848,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	cinccino: {
-		randomBattleMoves: ["tailslap", "aquatail", "uturn", "knockoff", "bulletseed", "rockblast"],
+		randomBattleMoves: ["tailslap", "bulletseed", "rockblast", "knockoff", "uturn"],
 		randomDoubleBattleMoves: ["tailslap", "aquatail", "uturn", "knockoff", "bulletseed", "rockblast", "protect"],
 		tier: "RU",
 		doublesTier: "(DUU)",
