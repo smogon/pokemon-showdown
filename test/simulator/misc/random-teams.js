@@ -1,6 +1,7 @@
 'use strict';
 
 const assert = require('./../../assert');
+const TeamValidator = require('./../../../.sim-dist/team-validator').TeamValidator;
 
 const TOTAL_TEAMS = 10;
 const ALL_GENS = [1, 2, 3, 4, 5, 6, 7];
@@ -23,6 +24,14 @@ function isValidSet(gen, set) {
 	} else if (gen >= 3) {
 		return false;
 	}
+	return true;
+}
+
+function validLearnset(move, set, tier) {
+	const validator = TeamValidator(`gen7${tier}`);
+	const template = validator.dex.getTemplate(set.species || set.name);
+	let lsetProblem = validator.checkLearnset(move, template);
+	if (lsetProblem) return false;
 	return true;
 }
 
@@ -103,6 +112,7 @@ describe(`Factory sets`, function () {
 
 			for (const type in setsJSON) {
 				const typeTable = filename === 'bss-factory-sets' ? setsJSON : setsJSON[type];
+				const vType = filename === 'bss-factory-sets' ? 'battlespotsingles' : type === 'Mono' ? 'monotype' : type.toLowerCase();
 				for (const species in typeTable) {
 					const speciesData = typeTable[species];
 					for (const set of speciesData.sets) {
@@ -128,13 +138,27 @@ describe(`Factory sets`, function () {
 							assert(ability.name === abilityName, `miscapitalized ability "${abilityName}" of ${species}`);
 						}
 
+						for (const natureName of [].concat(set.nature)) {
+							const nature = Dex.getNature(natureName);
+							assert(nature.exists, `invalid nature "${natureName}" of ${species}`);
+							assert(nature.name === natureName, `miscapitalized nature "${natureName}" of ${species}`);
+						}
+
 						for (const moveSpec of set.moves) {
 							for (const moveName of [].concat(moveSpec)) {
 								const move = Dex.getMove(moveName);
 								assert(move.exists, `invalid move "${moveName}" of ${species}`);
 								assert(move.name === moveName, `miscapitalized move "${moveName}" of ${species}`);
+								assert(validLearnset(move, set, vType), `illegal move "${moveName}" of ${species}`);
 							}
 						}
+
+						let totalEVs = 0;
+						for (const ev in set.evs) {
+							totalEVs += set.evs[ev];
+							assert((set.evs[ev] / 4) === Math.floor(set.evs[ev] / 4), `EVs of ${ev} not divisible by 4 on ${species}`);
+						}
+						assert(totalEVs <= 510, `more than 510 EVs on set of ${species}`);
 					}
 				}
 			}
