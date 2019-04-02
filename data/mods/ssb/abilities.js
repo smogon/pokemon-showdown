@@ -173,8 +173,8 @@ let BattleAbilities = {
 		id: "starkmountain",
 		name: "Stark Mountain",
 		isNonstandard: "Custom",
-		onStart(target, source) {
-			this.field.setWeather('sunnyday', source);
+		onStart(pokemon) {
+			this.field.setWeather('sunnyday', pokemon);
 		},
 		onSourceBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Water') {
@@ -536,8 +536,8 @@ let BattleAbilities = {
 		id: "interdimensional",
 		name: "Interdimensional",
 		isNonstandard: "Custom",
-		onStart(target, source) {
-			this.field.addPseudoWeather('gravity', source);
+		onStart(pokemon) {
+			this.field.addPseudoWeather('gravity', pokemon);
 		},
 	},
 	// urkerab

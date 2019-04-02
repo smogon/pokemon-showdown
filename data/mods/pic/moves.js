@@ -14,15 +14,15 @@ exports.BattleMovedex = {
 			}
 			this.singleEvent('End', sourceAbility, source.abilityData, source);
 			let sourceAlly = source.side.active.find(ally => ally && ally !== source && !ally.fainted);
-			if (sourceAlly && sourceAlly.innate) {
-				sourceAlly.removeVolatile(sourceAlly.innate);
-				delete sourceAlly.innate;
+			if (sourceAlly && sourceAlly.m.innate) {
+				sourceAlly.removeVolatile(sourceAlly.m.innate);
+				delete sourceAlly.m.innate;
 			}
 			this.singleEvent('End', targetAbility, target.abilityData, target);
 			let targetAlly = target.side.active.find(ally => ally && ally !== target && !ally.fainted);
-			if (targetAlly && targetAlly.innate) {
-				targetAlly.removeVolatile(targetAlly.innate);
-				delete targetAlly.innate;
+			if (targetAlly && targetAlly.m.innate) {
+				targetAlly.removeVolatile(targetAlly.m.innate);
+				delete targetAlly.m.innate;
 			}
 			if (targetAbility.id !== sourceAbility.id) {
 				source.ability = targetAbility.id;
@@ -31,13 +31,13 @@ exports.BattleMovedex = {
 				target.abilityData = {id: target.ability, target: target};
 			}
 			if (sourceAlly && sourceAlly.ability !== source.ability) {
-				let volatile = sourceAlly.innate = 'ability' + source.ability;
+				let volatile = sourceAlly.m.innate = 'ability' + source.ability;
 				sourceAlly.volatiles[volatile] = {id: volatile};
 				sourceAlly.volatiles[volatile].target = sourceAlly;
 				sourceAlly.volatiles[volatile].source = source;
 				sourceAlly.volatiles[volatile].sourcePosition = source.position;
-				if (!source.innate) {
-					volatile = source.innate = 'ability' + sourceAlly.ability;
+				if (!source.m.innate) {
+					volatile = source.m.innate = 'ability' + sourceAlly.ability;
 					source.volatiles[volatile] = {id: volatile};
 					source.volatiles[volatile].target = source;
 					source.volatiles[volatile].source = sourceAlly;
@@ -45,13 +45,13 @@ exports.BattleMovedex = {
 				}
 			}
 			if (targetAlly && targetAlly.ability !== target.ability) {
-				let volatile = targetAlly.innate = 'ability' + target.ability;
+				let volatile = targetAlly.m.innate = 'ability' + target.ability;
 				targetAlly.volatiles[volatile] = {id: volatile};
 				targetAlly.volatiles[volatile].target = targetAlly;
 				targetAlly.volatiles[volatile].source = target;
 				targetAlly.volatiles[volatile].sourcePosition = target.position;
-				if (!target.innate) {
-					volatile = target.innate = 'ability' + targetAlly.ability;
+				if (!target.m.innate) {
+					volatile = target.m.innate = 'ability' + targetAlly.ability;
 					target.volatiles[volatile] = {id: volatile};
 					target.volatiles[volatile].target = target;
 					target.volatiles[volatile].source = targetAlly;
@@ -59,9 +59,9 @@ exports.BattleMovedex = {
 				}
 			}
 			this.singleEvent('Start', targetAbility, source.abilityData, source);
-			if (sourceAlly && sourceAlly.innate) this.singleEvent('Start', targetAbility, sourceAlly.volatiles[sourceAlly.innate], sourceAlly);
+			if (sourceAlly && sourceAlly.m.innate) this.singleEvent('Start', targetAbility, sourceAlly.volatiles[sourceAlly.m.innate], sourceAlly);
 			this.singleEvent('Start', sourceAbility, target.abilityData, target);
-			if (targetAlly && targetAlly.innate) this.singleEvent('Start', sourceAbility, targetAlly.volatiles[targetAlly.innate], targetAlly);
+			if (targetAlly && targetAlly.m.innate) this.singleEvent('Start', sourceAbility, targetAlly.volatiles[targetAlly.m.innate], targetAlly);
 		},
 	},
 };

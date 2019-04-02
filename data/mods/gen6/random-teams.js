@@ -234,7 +234,7 @@ class RandomGen6Teams extends RandomTeams {
 					break;
 				case 'switcheroo': case 'trick':
 					if (counter.Physical + counter.Special < 3 || counter.setupType || !!counter['speedsetup']) rejected = true;
-					if (hasMove['acrobatics'] || hasMove['lightscreen'] || hasMove['reflect'] || hasMove['suckerpunch'] || hasMove['trickroom']) rejected = true;
+					if (hasMove['lightscreen'] || hasMove['reflect'] || hasMove['suckerpunch'] || hasMove['trickroom']) rejected = true;
 					break;
 				case 'toxicspikes':
 					if (counter.setupType || teamDetails.toxicSpikes) rejected = true;
@@ -365,7 +365,7 @@ class RandomGen6Teams extends RandomTeams {
 				case 'icebeam':
 					if (hasMove['blizzard'] || hasMove['freezedry']) rejected = true;
 					break;
-				case 'iceshard':
+				case 'iceshard': case 'icywind':
 					if (hasMove['freezedry']) rejected = true;
 					break;
 				case 'bodyslam':
@@ -538,7 +538,7 @@ class RandomGen6Teams extends RandomTeams {
 					(!counter.recovery && (movePool.includes('softboiled') || template.nfe && !!counter['Status'] && (movePool.includes('recover') || movePool.includes('roost')))) ||
 					(template.requiredMove && movePool.includes(toId(template.requiredMove)))))) {
 					// Reject Status or non-STAB
-					if (!isSetup && !move.weather && !move.damage && moveid !== 'judgment' && moveid !== 'rest' && moveid !== 'sleeptalk') {
+					if (!isSetup && !move.weather && !move.damage && !move.heal && moveid !== 'judgment' && moveid !== 'rest' && moveid !== 'sleeptalk') {
 						if (move.category === 'Status' || !hasType[move.type] || move.selfSwitch || move.basePower && move.basePower < 40 && !move.multihit) rejected = true;
 					}
 				}
@@ -629,6 +629,8 @@ class RandomGen6Teams extends RandomTeams {
 					rejectAbility = template.types.includes('Ground');
 				} else if (ability === 'Limber') {
 					rejectAbility = template.types.includes('Electric');
+				} else if (ability === 'Magnet Pull') {
+					rejectAbility = !hasType['Electric'] && !hasMove['earthpower'];
 				} else if (ability === 'Overcoat') {
 					rejectAbility = abilities.includes('Sturdy');
 				} else if (ability === 'Overgrow') {
@@ -664,7 +666,7 @@ class RandomGen6Teams extends RandomTeams {
 				} else if (ability === 'Swarm') {
 					rejectAbility = !counter['Bug'];
 				} else if (ability === 'Technician') {
-					rejectAbility = !counter['technician'] || (abilities.includes('Skill Link') && counter['skilllink'] >= counter['technician']);
+					rejectAbility = !counter['technician'] || hasMove['tailslap'];
 				} else if (ability === 'Tinted Lens') {
 					rejectAbility = counter['damage'] >= counter.damagingMoves.length || (counter.Status > 2 && !counter.setupType);
 				} else if (ability === 'Torrent') {
@@ -788,10 +790,10 @@ class RandomGen6Teams extends RandomTeams {
 					}
 				}
 			}
-		} else if (hasMove['rest'] && !hasMove['sleeptalk'] && ability !== 'Natural Cure' && ability !== 'Shed Skin') {
-			item = (hasMove['raindance'] && ability === 'Hydration') ? 'Damp Rock' : 'Chesto Berry';
+		} else if (hasMove['rest'] && !hasMove['sleeptalk'] && ability !== 'Hydration' && ability !== 'Natural Cure' && ability !== 'Shed Skin') {
+			item = 'Chesto Berry';
 		} else if (hasMove['raindance']) {
-			item = (ability === 'Forecast' || hasMove['rest']) ? 'Damp Rock' : 'Life Orb';
+			item = (ability === 'Forecast' || hasMove['rest'] || hasMove['uturn']) ? 'Damp Rock' : 'Life Orb';
 		} else if (hasMove['sunnyday']) {
 			item = (ability !== 'Chlorophyll' || counter.Status > 1) ? 'Heat Rock' : 'Life Orb';
 		} else if ((ability === 'Guts' || hasMove['facade'] || hasMove['psychoshift']) && !hasMove['sleeptalk']) {
@@ -830,12 +832,12 @@ class RandomGen6Teams extends RandomTeams {
 			item = 'Lustrous Orb';
 		} else if (counter.damagingMoves.length >= 3 && !!counter['speedsetup'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd >= 300) {
 			item = 'Weakness Policy';
-		} else if (slot === 0 && ability !== 'Regenerator' && ability !== 'Sturdy' && !counter['recoil'] && !counter['recovery'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 275) {
+		} else if (slot === 0 && ability !== 'Regenerator' && ability !== 'Sturdy' && !counter['recoil'] && !counter['recovery'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd <= 275) {
 			item = 'Focus Sash';
 
 		// This is the "REALLY can't think of a good item" cutoff
 		} else if (counter.damagingMoves.length >= 3 && ability !== 'Sturdy' && !hasMove['acidspray'] && !hasMove['dragontail'] && !hasMove['foulplay'] && !hasMove['rapidspin'] && !hasMove['superfang']) {
-			item = (template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 275 || !!counter['speedsetup'] || hasMove['trickroom']) ? 'Life Orb' : 'Leftovers';
+			item = (template.baseStats.hp + template.baseStats.def + template.baseStats.spd <= 275 || !!counter['speedsetup'] || hasMove['trickroom']) ? 'Life Orb' : 'Leftovers';
 		} else if (ability === 'Gale Wings' && hasMove['bravebird']) {
 			item = 'Sharp Beak';
 		} else if (ability === 'Sturdy' && hasMove['explosion'] && !counter['speedsetup']) {
@@ -851,36 +853,30 @@ class RandomGen6Teams extends RandomTeams {
 
 		/** @type {{[tier: string]: number}} */
 		let levelScale = {
-			'(PU)': 84,
-			PU: 83,
-			PUBL: 82,
-			NU: 81,
-			NUBL: 80,
-			RU: 79,
-			RUBL: 78,
-			UU: 77,
-			UUBL: 76,
-			'(OU)': 75,
-			OU: 75,
-			Unreleased: 75,
-			Uber: 73,
+			'(PU)': 89,
+			PU: 88,
+			PUBL: 87,
+			NU: 86,
+			NUBL: 85,
+			RU: 84,
+			RUBL: 83,
+			UU: 82,
+			UUBL: 81,
+			'(OU)': 80,
+			OU: 80,
+			Unreleased: 80,
+			Uber: 78,
 		};
 		/** @type {{[species: string]: number}} */
 		let customScale = {
-			// Between OU and Uber
-			Aegislash: 74, Blaziken: 74, 'Blaziken-Mega': 74, Genesect: 74, Greninja: 74, 'Lucario-Mega': 74, 'Mawile-Mega': 74,
-
 			// Banned Ability
-			Dugtrio: 74, Gothitelle: 74, Ninetales: 77, Politoed: 77, Wobbuffet: 74,
+			Dugtrio: 82, Gothitelle: 82, Ninetales: 84, Politoed: 84, Wobbuffet: 82,
 
 			// Holistic judgement
-			'Castform-Rainy': 100, 'Castform-Snowy': 100, 'Castform-Sunny': 100, Unown: 100,
+			'Castform-Rainy': 100, 'Castform-Snowy': 100, 'Castform-Sunny': 100, Delibird: 100, Unown: 100,
 		};
-		let level = levelScale[template.tier] || 85;
+		let level = levelScale[template.tier] || 90;
 		if (customScale[template.name]) level = customScale[template.name];
-
-		if (template.name === 'Slurpuff' && !counter.setupType) level = 81;
-		if (template.name === 'Xerneas' && hasMove['geomancy']) level = 71;
 
 		// Prepare optimal HP
 		let srWeakness = this.getEffectiveness('Rock', template);

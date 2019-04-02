@@ -391,11 +391,9 @@ let BattleFormats = {
 		desc: "Allows each player to see the Pok&eacute;mon on their opponent's team before they choose their lead Pok&eacute;mon",
 		onBegin() {
 			this.add('clearpoke');
-			for (const side of this.sides) {
-				for (const pokemon of side.pokemon) {
-					let details = pokemon.details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo|Silvally)(-[a-zA-Z?]+)?/g, '$1-*').replace(', shiny', '');
-					this.add('poke', pokemon.side.id, details, pokemon.item ? 'item' : '');
-				}
+			for (const pokemon of this.getAllPokemon()) {
+				let details = pokemon.details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo|Silvally)(-[a-zA-Z?]+)?/g, '$1-*').replace(', shiny', '');
+				this.add('poke', pokemon.side.id, details, pokemon.item ? 'item' : '');
 			}
 		},
 		onTeamPreview() {
@@ -807,10 +805,8 @@ let BattleFormats = {
 		desc: "Prevents Rayquaza from mega evolving",
 		onBegin() {
 			this.add('rule', 'Mega Rayquaza Clause: You cannot mega evolve Rayquaza');
-			for (const side of this.sides) {
-				for (const pokemon of side.pokemon) {
-					if (pokemon.speciesid === 'rayquaza') pokemon.canMegaEvo = null;
-				}
+			for (const pokemon of this.getAllPokemon()) {
+				if (pokemon.speciesid === 'rayquaza') pokemon.canMegaEvo = null;
 			}
 		},
 	},

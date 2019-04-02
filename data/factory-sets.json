@@ -166,7 +166,14 @@
 				"ability": ["Technician"],
 				"evs": {"atk": 252, "spa": 4, "spe": 252},
 				"nature": "Naive",
-				"moves": [["Spectral Thief"], ["Close Combat"], ["Rock Tomb", "Hidden Power Ice"], ["Shadow Sneak"]]
+				"moves": [["Spectral Thief"], ["Close Combat"], ["Hidden Power Ice"], ["Shadow Sneak"]]
+			}, {
+				"species": "Marshadow",
+				"item": ["Life Orb"],
+				"ability": ["Technician"],
+				"evs": {"atk": 252, "spa": 4, "spe": 252},
+				"nature": "Jolly",
+				"moves": [["Spectral Thief"], ["Close Combat"], ["Rock Tomb"], ["Shadow Sneak"]]
 			}]
 		},
 		"hooh": {

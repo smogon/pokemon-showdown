@@ -109,8 +109,7 @@ let BattleAbilities = {
 		onBasePowerPriority: 8,
 		onBasePower(basePower, pokemon) {
 			let boosted = true;
-			let allActives = pokemon.side.active.concat(pokemon.side.foe.active);
-			for (const target of allActives) {
+			for (const target of this.getAllActive()) {
 				if (target === pokemon) continue;
 				if (this.willMove(target)) {
 					boosted = false;
@@ -173,7 +172,7 @@ let BattleAbilities = {
 		},
 		onFoeMaybeTrapPokemon(pokemon, source) {
 			if (!source) source = this.effectData.target;
-			if (!this.isAdjacent(pokemon, source)) return;
+			if (!source || !this.isAdjacent(pokemon, source)) return;
 			if (pokemon.isGrounded(!pokemon.knownType)) { // Negate immunity if the type is unknown
 				pokemon.maybeTrapped = true;
 			}
@@ -605,7 +604,7 @@ let BattleAbilities = {
 		},
 		id: "dazzling",
 		name: "Dazzling",
-		rating: 3,
+		rating: 2.5,
 		num: 219,
 	},
 	"defeatist": {
@@ -662,13 +661,11 @@ let BattleAbilities = {
 		},
 		onEnd(pokemon) {
 			if (this.field.weatherData.source !== pokemon) return;
-			for (const side of this.sides) {
-				for (const target of side.active) {
-					if (target === pokemon) continue;
-					if (target && target.hp && target.hasAbility('deltastream')) {
-						this.field.weatherData.source = target;
-						return;
-					}
+			for (const target of this.getAllActive()) {
+				if (target === pokemon) continue;
+				if (target.hasAbility('deltastream')) {
+					this.field.weatherData.source = target;
+					return;
 				}
 			}
 			this.field.clearWeather();
@@ -689,13 +686,11 @@ let BattleAbilities = {
 		},
 		onEnd(pokemon) {
 			if (this.field.weatherData.source !== pokemon) return;
-			for (const side of this.sides) {
-				for (const target of side.active) {
-					if (target === pokemon) continue;
-					if (target && target.hp && target.hasAbility('desolateland')) {
-						this.field.weatherData.source = target;
-						return;
-					}
+			for (const target of this.getAllActive()) {
+				if (target === pokemon) continue;
+				if (target.hasAbility('desolateland')) {
+					this.field.weatherData.source = target;
+					return;
 				}
 			}
 			this.field.clearWeather();
@@ -1012,7 +1007,7 @@ let BattleAbilities = {
 		},
 		id: "flowergift",
 		name: "Flower Gift",
-		rating: 2.5,
+		rating: 2,
 		num: 122,
 	},
 	"flowerveil": {
@@ -1864,7 +1859,8 @@ let BattleAbilities = {
 		},
 		onFoeMaybeTrapPokemon(pokemon, source) {
 			if (!source) source = this.effectData.target;
-			if ((!pokemon.knownType || pokemon.hasType('Steel')) && this.isAdjacent(pokemon, source)) {
+			if (!source || !this.isAdjacent(pokemon, source)) return;
+			if (!pokemon.knownType || pokemon.hasType('Steel')) {
 				pokemon.maybeTrapped = true;
 			}
 		},
@@ -2307,7 +2303,7 @@ let BattleAbilities = {
 		onResidual(pokemon) {
 			if (pokemon.item) return;
 			let pickupTargets = [];
-			for (const target of pokemon.side.active.concat(pokemon.side.foe.active)) {
+			for (const target of this.getAllActive()) {
 				if (target.lastItem && target.usedItemThisTurn && this.isAdjacent(pokemon, target)) {
 					pickupTargets.push(target);
 				}
@@ -2451,7 +2447,7 @@ let BattleAbilities = {
 		},
 		id: "powerconstruct",
 		name: "Power Construct",
-		rating: 4,
+		rating: 5,
 		num: 211,
 	},
 	"powerofalchemy": {
@@ -2509,13 +2505,11 @@ let BattleAbilities = {
 		},
 		onEnd(pokemon) {
 			if (this.field.weatherData.source !== pokemon) return;
-			for (const side of this.sides) {
-				for (const target of side.active) {
-					if (target === pokemon) continue;
-					if (target && target.hp && target.hasAbility('primordialsea')) {
-						this.field.weatherData.source = target;
-						return;
-					}
+			for (const target of this.getAllActive()) {
+				if (target === pokemon) continue;
+				if (target.hasAbility('primordialsea')) {
+					this.field.weatherData.source = target;
+					return;
 				}
 			}
 			this.field.clearWeather();
@@ -2930,7 +2924,8 @@ let BattleAbilities = {
 		},
 		onFoeMaybeTrapPokemon(pokemon, source) {
 			if (!source) source = this.effectData.target;
-			if (!pokemon.hasAbility('shadowtag') && this.isAdjacent(pokemon, source)) {
+			if (!source || !this.isAdjacent(pokemon, source)) return;
+			if (!pokemon.hasAbility('shadowtag')) {
 				pokemon.maybeTrapped = true;
 			}
 		},
@@ -3068,7 +3063,7 @@ let BattleAbilities = {
 		},
 		id: "skilllink",
 		name: "Skill Link",
-		rating: 4,
+		rating: 3.5,
 		num: 92,
 	},
 	"slowstart": {
@@ -3249,7 +3244,7 @@ let BattleAbilities = {
 		},
 		id: "stakeout",
 		name: "Stakeout",
-		rating: 2.5,
+		rating: 3,
 		num: 198,
 	},
 	"stall": {

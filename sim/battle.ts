@@ -258,10 +258,8 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	updateSpeed() {
-		for (const side of this.sides) {
-			for (const pokemon of side.active) {
-				if (pokemon) pokemon.updateSpeed();
-			}
+		for (const pokemon of this.getAllActive()) {
+			pokemon.updateSpeed();
 		}
 	}
 
@@ -316,13 +314,8 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	eachEvent(eventid: string, effect?: Effect, relayVar?: boolean) {
-		const actives = [];
+		const actives = this.getAllActive();
 		if (!effect && this.effect) effect = this.effect;
-		for (const side of this.sides) {
-			for (const pokemon of side.active) {
-				if (pokemon) actives.push(pokemon);
-			}
-		}
 		this.speedSort(actives, (a, b) => b.speed - a.speed);
 		for (const pokemon of actives) {
 			this.runEvent(eventid, pokemon, null, effect, relayVar);
@@ -353,7 +346,8 @@ export class Battle extends Dex.ModdedDex {
 			if (handler.statusData && handler.statusData.duration) {
 				handler.statusData.duration--;
 				if (!handler.statusData.duration) {
-					handler.end.call(handler.thing, status.id);
+					const endCallArgs = handler.endCallArgs || [handler.thing, status.id];
+					handler.end.call(...endCallArgs);
 					continue;
 				}
 			}
@@ -819,6 +813,24 @@ export class Battle extends Dex.ModdedDex {
 			});
 			this.resolveLastPriority(handlers, callbackName);
 		}
+		const side = pokemon.side;
+		for (const conditionid in side.slotConditions[pokemon.position]) {
+			const slotConditionData = side.slotConditions[pokemon.position][conditionid];
+			const slotCondition = side.getSlotCondition(pokemon, conditionid);
+			// @ts-ignore - dynamic lookup
+			callback = slotCondition[callbackName];
+			if (callback !== undefined || (getKey && slotConditionData[getKey])) {
+				handlers.push({
+					status: slotCondition,
+					callback,
+					statusData: slotConditionData,
+					end: side.removeSlotCondition,
+					endCallArgs: [side, pokemon, slotCondition!.id],
+					thing: side,
+				});
+				this.resolveLastPriority(handlers, callbackName);
+			}
+		}
 
 		return handlers;
 	}
@@ -975,6 +987,26 @@ export class Battle extends Dex.ModdedDex {
 			}
 		}
 		return null;
+	}
+
+	getAllPokemon() {
+		const pokemonList: Pokemon[] = [];
+		for (const side of this.sides) {
+			pokemonList.push(...side.pokemon);
+		}
+		return pokemonList;
+	}
+
+	getAllActive() {
+		const pokemonList: Pokemon[] = [];
+		for (const side of this.sides) {
+			for (const pokemon of side.active) {
+				if (pokemon && !pokemon.fainted) {
+					pokemonList.push(pokemon);
+				}
+			}
+		}
+		return pokemonList;
 	}
 
 	makeRequest(type?: string) {
@@ -1170,8 +1202,8 @@ export class Battle extends Dex.ModdedDex {
 		}
 		side.active[pos] = pokemon;
 		pokemon.activeTurns = 0;
-		for (const m in pokemon.moveSlots) {
-			pokemon.moveSlots[m].used = false;
+		for (const moveSlot of pokemon.moveSlots) {
+			moveSlot.used = false;
 		}
 		this.add('switch', pokemon, pokemon.getDetails);
 		if (sourceEffect) this.log[this.log.length - 1] += `|[from]${sourceEffect.fullname}`;
@@ -1238,8 +1270,8 @@ export class Battle extends Dex.ModdedDex {
 		side.active[pos] = pokemon;
 		pokemon.activeTurns = 0;
 		if (this.gen === 2) pokemon.draggedIn = this.turn;
-		for (const m in pokemon.moveSlots) {
-			pokemon.moveSlots[m].used = false;
+		for (const moveSlot of pokemon.moveSlots) {
+			moveSlot.used = false;
 		}
 		this.add('drag', pokemon, pokemon.getDetails);
 		if (this.gen >= 5) {
@@ -1370,17 +1402,11 @@ export class Battle extends Dex.ModdedDex {
 			side.faintedThisTurn = false;
 		}
 
-		this.maybeIssueStalenessWarning(allStale, oneStale);
+		if (this.maybeIssueStalenessWarning(allStale, oneStale)) return;
 
 		if (this.gameType === 'triples' && !this.sides.filter(side => side.pokemonLeft > 1).length) {
 			// If both sides have one Pokemon left in triples and they are not adjacent, they are both moved to the center.
-			const actives = [];
-			for (const side of this.sides) {
-				for (const pokemon of side.active) {
-					if (!pokemon || pokemon.fainted) continue;
-					actives.push(pokemon);
-				}
-			}
+			const actives = this.getAllActive();
 			if (actives.length > 1 && !this.isAdjacent(actives[0], actives[1])) {
 				this.swapPosition(actives[0], 1, '[silent]');
 				this.swapPosition(actives[1], 1, '[silent]');
@@ -1490,10 +1516,10 @@ export class Battle extends Dex.ModdedDex {
 				if (leppaPokemon) {
 					this.add('-message', `${leppaPokemon.side.name}'s ${leppaPokemon.name} started with a Leppa Berry and loses.`);
 					this.win(leppaPokemon.side.foe);
-					return;
+					return true;
 				}
 				this.win();
-				return;
+				return true;
 			}
 			if ((this.turn >= 500 && this.turn % 100 === 0) ||
 				(this.turn >= 900 && this.turn % 10 === 0) ||
@@ -1502,7 +1528,7 @@ export class Battle extends Dex.ModdedDex {
 				if (turnsLeft < 0) {
 					this.add('message', `It is turn 1000. Endless Battle Clause activated!`);
 					this.tie();
-					return;
+					return true;
 				}
 				const turnsLeftText = (turnsLeft === 1 ? `1 turn` : `${turnsLeft} turns`);
 				this.add('bigerror', `You will auto-tie if the battle doesn't end in ${turnsLeftText} (on turn 1000).`);
@@ -1516,6 +1542,7 @@ export class Battle extends Dex.ModdedDex {
 				oneStale.staleWarned = true;
 			}
 		}
+		return false;
 	}
 
 	start() {
@@ -1639,16 +1666,16 @@ export class Battle extends Dex.ModdedDex {
 		for (const [i, curDamage] of damage.entries()) {
 			const target = targetArray[i];
 			let targetDamage = curDamage;
+			if (!(targetDamage || targetDamage === 0)) {
+				retVals[i] = targetDamage;
+				continue;
+			}
 			if (!target || !target.hp) {
 				retVals[i] = 0;
 				continue;
 			}
 			if (!target.isActive) {
 				retVals[i] = false;
-				continue;
-			}
-			if (!(targetDamage || targetDamage === 0)) {
-				retVals[i] = targetDamage;
 				continue;
 			}
 			if (targetDamage !== 0) targetDamage = this.clampIntRange(targetDamage, 1);
@@ -1662,7 +1689,7 @@ export class Battle extends Dex.ModdedDex {
 				targetDamage = this.runEvent('Damage', target, source, effect, targetDamage);
 				if (!(targetDamage || targetDamage === 0)) {
 					this.debug('damage event failed');
-					retVals[i] = curDamage === true ? undefined : curDamage;
+					retVals[i] = curDamage === true ? undefined : targetDamage;
 					continue;
 				}
 			}
@@ -2168,16 +2195,14 @@ export class Battle extends Dex.ModdedDex {
 			} else {
 				target = pokemon.side.active[-targetLoc - 1];
 			}
-			if (target) {
-				if (!target.fainted) {
-					// target exists and is not fainted
-					return target;
-				} else if (target.side === pokemon.side) {
-					// fainted allied targets don't retarget
-					return null;
-				}
+			if (target && !(target.fainted && target.side !== pokemon.side)) {
+				// Target is unfainted: no need to retarget
+				// Or target is a fainted ally: attack shouldn't retarget
+				return target;
 			}
-			// chosen target not valid, retarget randomly with resolveTarget
+
+			// Chosen target not valid,
+			// retarget randomly with resolveTarget
 		}
 		return this.resolveTarget(pokemon, move);
 	}
@@ -2261,15 +2286,13 @@ export class Battle extends Dex.ModdedDex {
 			this.queue = [];
 		} else if (this.gen <= 3 && this.gameType === 'singles') {
 			// in gen 3 or earlier, fainting in singles skips to residuals
-			for (const side of this.sides) {
-				for (const pokemon of side.active) {
-					if (this.gen <= 2) {
-						// in gen 2, fainting skips moves only
-						this.cancelMove(pokemon);
-					} else {
-						// in gen 3, fainting skips all moves and switches
-						this.cancelAction(pokemon);
-					}
+			for (const pokemon of this.getAllActive()) {
+				if (this.gen <= 2) {
+					// in gen 2, fainting skips moves only
+					this.cancelMove(pokemon);
+				} else {
+					// in gen 3, fainting skips all moves and switches
+					this.cancelAction(pokemon);
 				}
 			}
 		}
@@ -2527,10 +2550,8 @@ export class Battle extends Dex.ModdedDex {
 					this.switchIn(side.pokemon[pos], pos);
 				}
 			}
-			for (const side of this.sides) {
-				for (const pokemon of side.pokemon) {
-					this.singleEvent('Start', this.getEffect(pokemon.species), pokemon.speciesData, pokemon);
-				}
+			for (const pokemon of this.getAllPokemon()) {
+				this.singleEvent('Start', this.getEffect(pokemon.species), pokemon.speciesData, pokemon);
 			}
 			this.midTurn = true;
 			break;
@@ -3192,7 +3213,7 @@ export class Battle extends Dex.ModdedDex {
 
 	secondaries(
 		targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove,
-		isSecondary?: boolean
+		isSelf?: boolean
 	): SpreadMoveDamage {
 		throw new UnimplementedError('secondaries');
 	}

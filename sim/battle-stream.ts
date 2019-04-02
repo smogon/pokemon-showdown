@@ -39,8 +39,8 @@ function splitFirst(str: string, delimiter: string, limit: number = 1) {
 }
 
 export class BattleStream extends Streams.ObjectReadWriteStream<string> {
-	readonly debug: boolean;
-	readonly keepAlive: boolean;
+	debug: boolean;
+	keepAlive: boolean;
 	battle: Battle | null;
 
 	constructor(options: {debug?: boolean, keepAlive?: boolean} = {}) {
@@ -92,10 +92,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			options.send = (t: string, data: any) => {
 				if (Array.isArray(data)) data = data.join("\n");
 				this.push(`${t}\n${data}`);
-				if (t === 'end' && !this.keepAlive) {
-					this.push(null);
-					this._destroy();
-				}
+				if (t === 'end' && !this.keepAlive) this.push(null);
 			};
 			if (this.debug) options.debug = true;
 			this.battle = new Battle(options);
@@ -164,10 +161,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 		this._destroy();
 	}
 	_destroy() {
-		if (this.battle) {
-			this.battle.destroy();
-		}
-		this.battle = null;
+		if (this.battle) this.battle.destroy();
 	}
 }
 

@@ -403,8 +403,8 @@ exports.pages = {
 		let buf = `<div class="pad ladder"><h2>Battle Search</h2><p>Userid: ${userid}</p><p>Maximum Turns: ${turnLimit}</p>`;
 
 		const months = (await FS('logs/').readdir()).filter(f => f.length === 7 && f.includes('-')).sort((aKey, bKey) => {
-			const a = aKey.split('-').map(parseInt);
-			const b = bKey.split('-').map(parseInt);
+			const a = aKey.split('-').map(n => parseInt(n));
+			const b = bKey.split('-').map(n => parseInt(n));
 			if (a[0] !== b[0]) return b[0] - a[0];
 			return b[1] - a[1];
 		});
@@ -460,8 +460,8 @@ exports.pages = {
 
 		let date = args.shift();
 		const days = (await FS(`logs/${month}/${tierid}/`).readdir()).sort((a, b) => {
-			a = a.split('-').map(parseInt);
-			b = b.split('-').map(parseInt);
+			a = a.split('-').map(n => parseInt(n));
+			b = b.split('-').map(n => parseInt(n));
 			if (a[0] !== b[0]) return b[0] - a[0];
 			if (a[1] !== b[1]) return b[1] - a[1];
 			return b[2] - a[2];

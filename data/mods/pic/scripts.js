@@ -21,17 +21,17 @@ exports.BattleScripts = {
 			}
 			this.battle.singleEvent('End', this.battle.getAbility(oldAbility), this.abilityData, this, source);
 			let ally = this.side.active.find(ally => ally && ally !== this && !ally.fainted);
-			if (ally && ally.innate) {
-				ally.removeVolatile(ally.innate);
-				delete ally.innate;
+			if (ally && ally.m.innate) {
+				ally.removeVolatile(ally.m.innate);
+				delete ally.m.innate;
 			}
 			this.ability = ability.id;
 			this.abilityData = {id: ability.id, target: this};
 			if (ability.id) {
 				this.battle.singleEvent('Start', ability, this.abilityData, this, source);
 				if (ally && ally.ability !== this.ability) {
-					ally.innate = 'ability' + ability.id;
-					ally.addVolatile(ally.innate);
+					ally.m.innate = 'ability' + ability.id;
+					ally.addVolatile(ally.m.innate);
 				}
 			}
 			this.abilityOrder = this.battle.abilityOrder++;

@@ -508,8 +508,8 @@ let BattleAbilities = {
 		onResidualOrder: 26,
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
-			if (!pokemon.gluttonyFlag && !pokemon.item && this.getItem(pokemon.lastItem).isBerry) {
-				pokemon.gluttonyFlag = true;
+			if (!pokemon.m.gluttonyFlag && !pokemon.item && this.getItem(pokemon.lastItem).isBerry) {
+				pokemon.m.gluttonyFlag = true;
 				pokemon.setItem(pokemon.lastItem);
 				pokemon.lastItem = '';
 				this.add("-item", pokemon, pokemon.item, '[from] ability: Gluttony');
@@ -592,7 +592,7 @@ let BattleAbilities = {
 			pokemon.maybeDisabled = true;
 		},
 		onFoeBeforeMove(attacker, defender, move) {
-			if (move.id !== 'struggle' && this.effectData.target.hasMove(move.id)) {
+			if (move.id !== 'struggle' && this.effectData.target.hasMove(move.id) && !move.isZ) {
 				this.add('cant', attacker, 'move: Imprison', move);
 				return false;
 			}
@@ -680,6 +680,7 @@ let BattleAbilities = {
 		},
 		onFoeMaybeTrapPokemon(pokemon, source) {
 			if (!source) source = this.effectData.target;
+			if (!source || !this.isAdjacent(pokemon, source)) return;
 			if (pokemon.ability !== 'shadowtag' && !source.volatiles.shadowtag) {
 				pokemon.maybeTrapped = true;
 			}

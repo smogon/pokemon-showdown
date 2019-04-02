@@ -76,8 +76,7 @@ let BattleScripts = {
 				this.singleEvent('End', this.getAbility('Illusion'), pokemon.abilityData, pokemon);
 			}
 			this.add('-zpower', pokemon);
-			// @ts-ignore pokemon.zMoveUsed only exists in this mod
-			pokemon.zMoveUsed = true;
+			pokemon.m.zMoveUsed = true;
 		}
 		let moveDidSomething = this.useMove(baseMove, pokemon, target, sourceEffect, zMove);
 		if (this.activeMove) move = this.activeMove;
@@ -87,12 +86,10 @@ let BattleScripts = {
 		// Dancer's activation order is completely different from any other event, so it's handled separately
 		if (move.flags['dance'] && moveDidSomething && !move.isExternal) {
 			let dancers = [];
-			for (const side of this.sides) {
-				for (const currentPoke of side.active) {
-					if (!currentPoke || !currentPoke.hp || pokemon === currentPoke) continue;
-					if (currentPoke.hasAbility('dancer') && !currentPoke.isSemiInvulnerable()) {
-						dancers.push(currentPoke);
-					}
+			for (const currentPoke of this.getAllActive()) {
+				if (pokemon === currentPoke) continue;
+				if (currentPoke.hasAbility('dancer') && !currentPoke.isSemiInvulnerable()) {
+					dancers.push(currentPoke);
 				}
 			}
 			// Dancer activates in order of lowest speed stat to highest
@@ -185,8 +182,7 @@ let BattleScripts = {
 	},
 	// Modded to allow each Pokemon on a team to use a Z move once per battle
 	canZMove(pokemon) {
-		// @ts-ignore pokemon.zMoveUsed only exists in this mod
-		if (pokemon.zMoveUsed || (pokemon.transformed && (pokemon.template.isMega || pokemon.template.isPrimal || pokemon.template.forme === "Ultra"))) return;
+		if (pokemon.m.zMoveUsed || (pokemon.transformed && (pokemon.template.isMega || pokemon.template.isPrimal || pokemon.template.forme === "Ultra"))) return;
 		let item = pokemon.getItem();
 		if (!item.zMove) return;
 		if (item.zMoveUser && !item.zMoveUser.includes(pokemon.template.species)) return;

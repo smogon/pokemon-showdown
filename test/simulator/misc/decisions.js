@@ -382,11 +382,7 @@ describe('Choices', function () {
 			]]);
 
 			battle.makeChoices('move lunardance, move lunardance', 'move lunardance, move lunardance');
-			for (const side of battle.sides) {
-				for (const pokemon of side.active) {
-					assert.fainted(pokemon);
-				}
-			}
+			assert.strictEqual(battle.getAllActive().length, 0, `All active Pok\u00E9mon should have fainted`);
 
 			battle.makeChoices('pass, switch 3', 'switch 3, pass');
 
@@ -441,11 +437,7 @@ describe('Choices', function () {
 			]]);
 
 			battle.makeChoices('move lunardance, move lunardance', 'move lunardance, move lunardance');
-			for (const side of battle.sides) {
-				for (const pokemon of side.active) {
-					assert.fainted(pokemon);
-				}
-			}
+			assert.strictEqual(battle.getAllActive().length, 0, `All active Pok\u00E9mon should have fainted`);
 
 			assert.constant(() => battle.turn, () => {
 				assert.throws(() => battle.p1.choosePass(),
@@ -460,11 +452,7 @@ describe('Choices', function () {
 				);
 			});
 
-			for (const side of battle.sides) {
-				for (const pokemon of side.active) {
-					assert.fainted(pokemon);
-				}
-			}
+			assert.strictEqual(battle.getAllActive().length, 0, `All active Pok\u00E9mon should have fainted`);
 		});
 	});
 
