@@ -751,7 +751,7 @@ function runDexsearch(target, cmd, canAll, message) {
 			let stat = sort.slice(0, -1);
 			let direction = sort.slice(-1);
 			results.sort((a, b) => {
-				let mon1 = mod.getTemplate(direction === '+' ? a : b), mon2 = mod.getTemplate(direction === '+' ? b : a);
+				let mon1 = mod.getTemplate(a), mon2 = mod.getTemplate(b);
 				let monStat1 = 0, monStat2 = 0;
 				if (stat === 'bst') {
 					for (let monStats in mon1.baseStats) {
@@ -771,7 +771,7 @@ function runDexsearch(target, cmd, canAll, message) {
 					monStat1 = mon1.baseStats[stat];
 					monStat2 = mon2.baseStats[stat];
 				}
-				return monStat1 - monStat2;
+				return (monStat1 - monStat2) * (direction === '+' ? 1 : -1);
 			});
 		}
 		let notShown = 0;
