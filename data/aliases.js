@@ -513,6 +513,7 @@ let BattleAliases = {
 
 	// abilities
 	"ph": "Poison Heal",
+	"regen": "Regenerator",
 	"stag": "Shadow Tag",
 
 	// items
