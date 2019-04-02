@@ -55,8 +55,7 @@ export class Side {
 	sideConditions: AnyObject;
 	slotConditions: AnyObject[];
 
-	requestState: RequestState;
-	lastRequest: AnyObject;
+	activeRequest: AnyObject | null;
 	choice: Choice;
 
 	lastMove: Move | null;
@@ -105,8 +104,7 @@ export class Side {
 		// Array#fill doesn't work for this
 		for (let i = 0; i < this.active.length; i++) this.slotConditions[i] = {};
 
-		this.requestState = '';
-		this.lastRequest = {};
+		this.activeRequest = null;
 		this.choice = {
 			cantUndo: false,
 			error: ``,
@@ -121,6 +119,13 @@ export class Side {
 
 		// old-gens
 		this.lastMove = null;
+	}
+
+	get requestState(): RequestState {
+		if (!this.activeRequest || this.activeRequest.wait) return '';
+		if (this.activeRequest.teamPreview) return 'teampreview';
+		if (this.activeRequest.forceSwitch) return 'switch';
+		return 'move';
 	}
 
 	getChoice() {
@@ -315,7 +320,7 @@ export class Side {
 
 	emitRequest(update: AnyObject) {
 		this.battle.send('sideupdate', `${this.id}\n|request|${JSON.stringify(update)}`);
-		this.lastRequest = update;
+		this.activeRequest = update;
 	}
 
 	emitChoiceError(message: string) {

@@ -40,8 +40,7 @@ interface BattleOptions {
 //   - 'switch': end of turn if fainted (or mid turn with switching effects)
 //   - '': no request. Used between turns, or when the battle is over.
 //
-// An individual Side's request state can also be in the '' state when it is waiting
-// for an opposing side in the 'switch' state.
+// An individual Side's request state is encapsulated in its `activeRequest` field.
 export type RequestState = 'teampreview' | 'move' | 'switch' | '';
 
 export class Battle extends Dex.ModdedDex {
@@ -70,7 +69,7 @@ export class Battle extends Dex.ModdedDex {
 	sentLogPos: number;
 	sentEnd: boolean;
 
-	requestState: string;
+	requestState: RequestState;
 	turn: number;
 	midTurn: boolean;
 	started: boolean;
@@ -1009,7 +1008,7 @@ export class Battle extends Dex.ModdedDex {
 		return pokemonList;
 	}
 
-	makeRequest(type?: string) {
+	makeRequest(type?: RequestState) {
 		if (type) {
 			this.requestState = type;
 			for (const side of this.sides) {
@@ -1022,7 +1021,7 @@ export class Battle extends Dex.ModdedDex {
 		// default to no request
 		const requests: any[] = Array(this.sides.length).fill(null);
 		for (const side of this.sides) {
-			side.requestState = '';
+			side.activeRequest = null;
 		}
 
 		switch (type) {
@@ -1034,7 +1033,6 @@ export class Battle extends Dex.ModdedDex {
 					switchTable.push(!!(pokemon && pokemon.switchFlag));
 				}
 				if (switchTable.some(flag => flag === true)) {
-					side.requestState = 'switch';
 					requests[i] = {forceSwitch: switchTable, side: side.getRequestData()};
 				}
 			}
@@ -1049,7 +1047,6 @@ export class Battle extends Dex.ModdedDex {
 			for (let i = 0; i < this.sides.length; i++) {
 				const side = this.sides[i];
 				side.maxTeamSize = maxTeamSize;
-				side.requestState = 'teampreview';
 				requests[i] = {teamPreview: true, maxTeamSize, side: side.getRequestData()};
 			}
 			break;
@@ -1057,7 +1054,6 @@ export class Battle extends Dex.ModdedDex {
 		default: {
 			for (let i = 0; i < this.sides.length; i++) {
 				const side = this.sides[i];
-				side.requestState = 'move';
 				const activeData = side.active.map(pokemon => pokemon && pokemon.getRequestData());
 				requests[i] = {active: activeData, side: side.getRequestData()};
 			}
@@ -1153,7 +1149,7 @@ export class Battle extends Dex.ModdedDex {
 		this.ended = true;
 		this.requestState = '';
 		for (const s of this.sides) {
-			s.requestState = '';
+			s.activeRequest = null;
 		}
 		return true;
 	}
@@ -2855,7 +2851,7 @@ export class Battle extends Dex.ModdedDex {
 
 		this.requestState = '';
 		for (const side of this.sides) {
-			side.requestState = '';
+			side.activeRequest = null;
 		}
 
 		this.go();

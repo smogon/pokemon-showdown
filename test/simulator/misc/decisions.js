@@ -737,7 +737,7 @@ describe('Choice extensions', function () {
 				battle.setPlayer('p2', {team: [{species: "Charmander", ability: 'blaze', moves: ['tackle', 'growl']}]});
 
 				battle.choose('p1', 'move tackle');
-				assert(!battle.p1.lastRequest.noCancel);
+				assert(!battle.p1.activeRequest.noCancel);
 				if (mode === 'revoke') battle.undoChoice('p1');
 				battle.makeChoices('move growl', 'move growl');
 
@@ -756,7 +756,7 @@ describe('Choice extensions', function () {
 
 				battle.choose('p1', 'move tackle');
 				// NOTE: noCancel is global so it still true even though the Pokemon can't undo.
-				assert(!battle.p1.lastRequest.noCancel);
+				assert(!battle.p1.activeRequest.noCancel);
 				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
 				assert.cantUndo(() => battle.choose('p1', 'move growl'));
 				battle.choose('p2', 'move scratch');
@@ -770,7 +770,7 @@ describe('Choice extensions', function () {
 				battle.setPlayer('p2', {team: [{species: "Charmander", ability: 'blaze', moves: ['tackle', 'growl']}]});
 
 				battle.choose('p1', 'move tackle');
-				assert(battle.p1.lastRequest.noCancel);
+				assert(battle.p1.activeRequest.noCancel);
 				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
 				assert.cantUndo(() => battle.choose('p1', 'move growl'));
 				battle.choose('p2', 'move growl');
@@ -791,7 +791,7 @@ describe('Choice extensions', function () {
 				battle = common.createBattle({cancel: true}, TEAMS);
 
 				battle.choose('p1', 'switch 2');
-				assert(!battle.p1.lastRequest.noCancel);
+				assert(!battle.p1.activeRequest.noCancel);
 				if (mode === 'revoke') battle.undoChoice('p1');
 				battle.makeChoices('move 1', 'move 1');
 
@@ -804,7 +804,7 @@ describe('Choice extensions', function () {
 				battle = common.createBattle({cancel: true}, TEAMS);
 
 				battle.choose('p1', 'switch 2');
-				assert(!battle.p1.lastRequest.noCancel);
+				assert(!battle.p1.activeRequest.noCancel);
 				if (mode === 'revoke') battle.undoChoice('p1');
 				battle.makeChoices('switch 3', 'move 1');
 
@@ -827,7 +827,7 @@ describe('Choice extensions', function () {
 
 				battle.choose('p1', 'switch 2');
 				// NOTE: noCancel is global so it still true even though the Pokemon can't undo.
-				assert(!battle.p1.lastRequest.noCancel);
+				assert(!battle.p1.activeRequest.noCancel);
 				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
 				assert.cantUndo(() => battle.choose('p1', 'move synthesis'));
 				battle.choose('p2', 'move scratch');
@@ -862,7 +862,7 @@ describe('Choice extensions', function () {
 
 				battle.choose('p1', 'switch 2');
 				// NOTE: noCancel is global so it still true even though the Pokemon can't undo.
-				assert(!battle.p1.lastRequest.noCancel);
+				assert(!battle.p1.activeRequest.noCancel);
 				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
 				assert.cantUndo(() => battle.choose('p1', 'move recover'));
 				battle.choose('p2', 'move 1');
@@ -881,7 +881,7 @@ describe('Choice extensions', function () {
 				battle = common.createBattle(TEAMS);
 
 				battle.choose('p1', 'switch 2');
-				assert(battle.p1.lastRequest.noCancel);
+				assert(battle.p1.activeRequest.noCancel);
 				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
 				assert.cantUndo(() => battle.choose('p1', 'move synthesis'));
 				battle.choose('p2', 'move scratch');
@@ -894,7 +894,7 @@ describe('Choice extensions', function () {
 				battle = common.createBattle(TEAMS);
 
 				battle.choose('p1', 'switch 2');
-				assert(battle.p1.lastRequest.noCancel);
+				assert(battle.p1.activeRequest.noCancel);
 				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
 				assert.cantUndo(() => battle.choose('p1', 'switch 3'));
 				battle.choose('p2', 'move scratch');
@@ -917,7 +917,7 @@ describe('Choice extensions', function () {
 				battle = common.createBattle({gameType: 'triples', cancel: true}, TEAMS);
 
 				battle.choose('p1', 'shift, move 1, move 1');
-				assert(!battle.p1.lastRequest.noCancel);
+				assert(!battle.p1.activeRequest.noCancel);
 				if (mode === 'revoke') battle.undoChoice('p1');
 				battle.makeChoices('move 1, move 1, move 1', 'move 1, move 1, move 1');
 
@@ -930,7 +930,7 @@ describe('Choice extensions', function () {
 				battle = common.createBattle({gameType: 'triples', cancel: true}, TEAMS);
 
 				battle.choose('p1', 'move 1, move 1, shift');
-				assert(!battle.p1.lastRequest.noCancel);
+				assert(!battle.p1.activeRequest.noCancel);
 				if (mode === 'revoke') battle.undoChoice('p1');
 				battle.makeChoices('move 1, move 1, move 1', 'move 1, move 1, move 1');
 
@@ -953,7 +953,7 @@ describe('Choice extensions', function () {
 				battle = common.createBattle({gameType: 'triples'}, TEAMS);
 
 				battle.choose('p1', 'shift, move 1, move 1');
-				assert(battle.p1.lastRequest.noCancel);
+				assert(battle.p1.activeRequest.noCancel);
 				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
 				assert.cantUndo(() => battle.choose('p1', 'move 1, move 1, move 1'));
 				battle.choose('p2', 'move 1, move 1, move 1');
@@ -967,7 +967,7 @@ describe('Choice extensions', function () {
 				battle = common.createBattle({gameType: 'triples'}, TEAMS);
 
 				battle.choose('p1', 'move 1, move 1, shift');
-				assert(battle.p1.lastRequest.noCancel);
+				assert(battle.p1.activeRequest.noCancel);
 				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
 				assert.cantUndo(() => battle.choose('p1', 'move 1, move 1, move 1'));
 				battle.choose('p2', 'move 1, move 1, move 1');
@@ -993,7 +993,7 @@ describe('Choice extensions', function () {
 				battle.makeChoices('move explosion', 'move tackle');
 
 				battle.choose('p1', 'switch 2');
-				assert(!battle.p1.lastRequest.noCancel);
+				assert(!battle.p1.activeRequest.noCancel);
 				if (mode === 'revoke') battle.undoChoice('p1');
 				battle.makeChoices('switch 3', 'switch 2');
 
@@ -1018,7 +1018,7 @@ describe('Choice extensions', function () {
 				battle.makeChoices('move explosion, move tackle 1', 'move tackle 1, move tackle 1');
 
 				battle.choose('p1', 'pass, switch 3');
-				assert(!battle.p1.lastRequest.noCancel);
+				assert(!battle.p1.activeRequest.noCancel);
 				if (mode === 'revoke') battle.undoChoice('p1');
 				battle.makeChoices('switch 3, pass', 'pass, switch 3');
 
@@ -1043,7 +1043,7 @@ describe('Choice extensions', function () {
 				battle.makeChoices('move lunardance, move healingwish', 'move scratch 1, move scratch 1');
 
 				battle.choose('p1', 'switch 3, switch 4');
-				assert(!battle.p1.lastRequest.noCancel);
+				assert(!battle.p1.activeRequest.noCancel);
 				if (mode === 'revoke') battle.undoChoice('p1');
 				assert.throws(() => battle.makeChoices('switch 4, switch 3', 'pass'),
 					/\[Invalid choice\] Can't switch: You can't switch to a fainted Pokémon/,
@@ -1070,7 +1070,7 @@ describe('Choice extensions', function () {
 				battle.makeChoices('move lunardance, move healingwish', 'move scratch 1, move scratch 1');
 
 				battle.choose('p1', 'pass, switch 3');
-				assert(battle.p1.lastRequest.noCancel);
+				assert(battle.p1.activeRequest.noCancel);
 				if (mode === 'revoke') battle.undoChoice('p1');
 				assert.throws(() => battle.makeChoices('switch 3, pass', 'pass'),
 					/\[Invalid choice\] Can't switch: You can't switch to a fainted Pokémon/,
@@ -1097,7 +1097,7 @@ describe('Choice extensions', function () {
 				battle.makeChoices('move explosion', 'move tackle');
 
 				battle.choose('p1', 'switch 2');
-				assert(battle.p1.lastRequest.noCancel);
+				assert(battle.p1.activeRequest.noCancel);
 				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
 				assert.cantUndo(() => battle.choose('p1', 'switch 3'));
 				battle.choose('p2', 'switch 2');
@@ -1122,7 +1122,7 @@ describe('Choice extensions', function () {
 				battle.makeChoices('move explosion, move tackle 1', 'move tackle 1, move tackle 1');
 
 				battle.choose('p1', 'pass, switch 3');
-				assert(battle.p1.lastRequest.noCancel);
+				assert(battle.p1.activeRequest.noCancel);
 				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
 				assert.cantUndo(() => battle.choose('p1', 'switch 3, pass'));
 				battle.choose('p2', 'pass, switch 3');
@@ -1139,7 +1139,7 @@ describe('Choice extensions', function () {
 				]);
 
 				battle.choose('p1', 'team 12');
-				assert(!battle.p1.lastRequest.noCancel);
+				assert(!battle.p1.activeRequest.noCancel);
 				if (mode === 'revoke') battle.undoChoice('p1');
 				battle.makeChoices('team 21', 'team 12');
 
@@ -1154,7 +1154,7 @@ describe('Choice extensions', function () {
 				]);
 
 				battle.choose('p1', 'team 21');
-				assert(!battle.p1.lastRequest.noCancel);
+				assert(!battle.p1.activeRequest.noCancel);
 				if (mode === 'revoke') battle.undoChoice('p1');
 				battle.makeChoices('team 12', 'team 12');
 
@@ -1170,7 +1170,7 @@ describe('Choice extensions', function () {
 				]);
 
 				battle.choose('p1', 'team 12');
-				assert(battle.p1.lastRequest.noCancel);
+				assert(battle.p1.activeRequest.noCancel);
 				if (mode === 'revoke') assert.cantUndo(() => battle.undoChoice('p1'));
 				assert.cantUndo(() => battle.choose('p1', 'team 21'));
 				battle.choose('p2', 'team 12');
