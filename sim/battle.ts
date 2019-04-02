@@ -2966,8 +2966,28 @@ export class Battle extends Dex.ModdedDex {
 		}
 	}
 
+	// omniscient = -1, spectator = 0
+	static updateForSide(data: string, side: -1 | 0 | 1 | 2 | 3 | 4 = 0) {
+		if (side === -1) {
+			// Grab all secret data
+			return data.replace(/\n\|split\|p[1234]\n([^\n]*)\n(?:[^\n]*)/g, '\n$1');
+		}
+
+		// Grab secret data side has access to
+		switch (side) {
+		case 1: data = data.replace(/\n\|split\|p1\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
+		case 2: data = data.replace(/\n\|split\|p2\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
+		case 3: data = data.replace(/\n\|split\|p3\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
+		case 4: data = data.replace(/\n\|split\|p4\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
+		}
+
+		// Discard remaining secret data
+		// Note: the last \n? is for secret data that are empty when shared
+		return data.replace(/\n\|split\|(?:[^\n]*)\n(?:[^\n]*)\n\n?/g, '\n');
+	}
+
 	getDebugLog() {
-		return this.log.join('\n').replace(/\|split\|.*\n.*\n.*\n/g, '');
+		return Battle.updateForSide(this.log.join('\n'), -1);
 	}
 
 	debugError(activity: string) {
