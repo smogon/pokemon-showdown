@@ -1264,11 +1264,6 @@ function runMovesearch(target, cmd, canAll, message) {
 				// convert booleans to 0 or 1
 				if (typeof move1prop === 'boolean') move1prop = move1prop ? 1 : 0;
 				if (typeof move2prop === 'boolean') move2prop = move2prop ? 1 : 0;
-					move1prop = ~~move1prop;
-				}
-				if (typeof move2prop === 'boolean') {
-					move2prop = ~~move2prop;
-				}
 				return (move1prop - move2prop) * (direction === '+' ? 1 : -1);
 			});
 		}
