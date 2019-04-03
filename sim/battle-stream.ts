@@ -242,7 +242,7 @@ export function getPlayerStreams(stream: BattleStream) {
 	return streams;
 }
 
-export class BattlePlayer {
+export abstract class BattlePlayer {
 	readonly stream: Streams.ObjectReadWriteStream<string>;
 	readonly log: string[];
 	readonly debug: boolean;
@@ -274,15 +274,17 @@ export class BattlePlayer {
 		if (cmd === 'request') {
 			return this.receiveRequest(JSON.parse(rest));
 		}
+		if (cmd === 'callback') {
+			return this.receiveCallback(rest.split('|'));
+		}
 		if (cmd === 'error') {
 			return this.receiveError(new Error(rest));
 		}
 		this.log.push(line);
 	}
 
-	receiveRequest(request: AnyObject) {
-		throw new Error(`must be implemented by subclass`);
-	}
+	abstract receiveRequest(request: AnyObject): void;
+	abstract receiveCallback(callback: string[]): void;
 
 	receiveError(error: Error) {
 		throw error;
