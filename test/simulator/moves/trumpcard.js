@@ -16,7 +16,7 @@ describe('Trump Card', function () {
 			[{species: 'Lugia', ability: 'multiscale', moves: ['recover']}],
 		]);
 
-		let basePowers = [];
+		const basePowers = [];
 		battle.onEvent('BasePower', battle.getFormat(), function (bp, attacker, defender, move) {
 			if (move.id === 'trumpcard') {
 				basePowers.push(bp);
@@ -36,7 +36,7 @@ describe('Trump Card', function () {
 			[{species: 'Lugia', ability: 'multiscale', moves: ['recover']}],
 		]);
 
-		let basePowers = [];
+		const basePowers = [];
 		battle.onEvent('BasePower', battle.getFormat(), function (bp, attacker, defender, move) {
 			if (move.id === 'trumpcard') {
 				basePowers.push(bp);
@@ -50,5 +50,24 @@ describe('Trump Card', function () {
 		}
 
 		assert.deepStrictEqual(basePowers, [80, 200]);
+	});
+
+	it('should work if called via Custap Berry in Gen 4', function () {
+		battle = common.gen(4).createBattle([
+			[{species: 'Eevee', level: 1, ability: 'runaway', item: 'custapberry', moves: ['trumpcard']}],
+			[{species: 'Scizor', ability: 'technician', moves: ['falseswipe']}],
+		]);
+
+		const basePowers = [];
+		battle.onEvent('BasePower', battle.getFormat(), function (bp, attacker, defender, move) {
+			if (move.id === 'trumpcard') {
+				basePowers.push(bp);
+			}
+		});
+
+		battle.makeChoices();
+		battle.makeChoices();
+
+		assert.deepStrictEqual(basePowers, [40, 50]);
 	});
 });

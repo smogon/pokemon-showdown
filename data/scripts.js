@@ -141,7 +141,7 @@ let BattleScripts = {
 	},
 	useMoveInner(moveOrMoveName, pokemon, target, sourceEffect, zMove) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
-		if (sourceEffect && sourceEffect.id === 'instruct') sourceEffect = null;
+		if (sourceEffect && ['instruct', 'custapberry'].includes(sourceEffect.id)) sourceEffect = null;
 
 		let move = this.getActiveMove(moveOrMoveName);
 		if (move.id === 'weatherball' && zMove) {
