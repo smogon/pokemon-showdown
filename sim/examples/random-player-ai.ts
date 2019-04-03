@@ -15,6 +15,11 @@ export class RandomPlayerAI extends BattlePlayer {
 	readonly mega: number;
 	readonly prng: PRNG;
 
+	trapped: Set<number>;
+	disabled: Map<number, Set<string>>;
+	lastRequest?: AnyObject;
+	retry: boolean;
+
 	constructor(
 		playerStream: ObjectReadWriteStream<string>,
 		options: {move?: number, mega?: number, seed?: PRNG | PRNGSeed | null } = {},
@@ -24,19 +29,53 @@ export class RandomPlayerAI extends BattlePlayer {
 		this.move = options.move || 1.0;
 		this.mega = options.mega || 0;
 		this.prng = options.seed && !Array.isArray(options.seed) ? options.seed : new PRNG(options.seed);
+
+		this.disabled = new Map();
+		this.trapped = new Set();
+		this.retry = false;
 	}
 
 	receiveError(error: Error) {
-		if (!error.message.startsWith('[Invalid choice]')) throw error;
-		// If we made an invalid choice we just let the simulator auto-choose for us. This can happen
-		// if we were disabled (Imprison) or trapped (Arena Trap / Magnet Pull / Shadow Tag) and it
-		// wasn't revealed to us until we made our choice. We could add extra logic to redo the decision,
-		// removing the invalid choice from our set of options, but given how niche this edge case is
-		// its not worth dramatically complicating the code to handle it.
-		this.choose(`default`);
+		if (error.message.startsWith(`[Invalid choice]`) && this.retry) {
+			this.retry = false;
+			// If we get a choice error, we retry the choice using the last request provided
+			// we've got a '|callback' updating our state regarding what Pokemon are trapped
+			// or disabled.
+			this.makeChoice(this.lastRequest!);
+		} else {
+			throw error;
+		}
 	}
 
 	receiveRequest(request: AnyObject) {
+		this.disabled = new Map();
+		this.trapped = new Set();
+		this.retry = false;
+
+		this.lastRequest = request;
+		this.makeChoice(request);
+	}
+
+	receiveCallback(callback: string[]) {
+		const [type, ...args] = callback;
+		if (type === 'cant') {
+			this.retry = true;
+			const [pokemon, _, move] = args;
+			const position = pokemon[2].indexOf(`abcdef`);
+			let moves = this.disabled.get(position);
+			if (!moves) {
+				moves = new Set();
+				this.disabled.set(position, moves);
+			}
+			moves.add(move);
+		} else if (type === 'trapped') {
+			this.retry = true;
+			const position = Number(args);
+			this.trapped.add(position);
+		}
+	}
+
+	makeChoice(request: AnyObject) {
 		if (request.wait) {
 			// wait request
 			// do nothing
@@ -75,11 +114,14 @@ export class RandomPlayerAI extends BattlePlayer {
 				canUltraBurst = canUltraBurst && active.canUltraBurst;
 				canZMove = canZMove && !!active.canZMove;
 
+				const disabled = this.disabled.get(i);
 				let canMove = [1, 2, 3, 4].slice(0, active.moves.length).filter(j => (
 					// not disabled
 					!active.moves[j - 1].disabled &&
-					// has pp
-					active.moves[j - 1].pp !== 0
+					(!disabled || !disabled.has(toId(active.moves[j - 1].move)))
+					// NOTE: we don't actually check for whether we have PP or not because the
+					// simulator will mark the move as disabled if there is zero PP and there are
+					// situations where we actually need to use a move with 0 PP (Gen 1 Wrap).
 				)).map(j => ({
 					slot: j,
 					move: active.moves[j - 1].move,
@@ -97,9 +139,11 @@ export class RandomPlayerAI extends BattlePlayer {
 						})));
 				}
 
-				// Filter out adjacentAlly moves if we have no allies left.
+				// Filter out adjacentAlly moves if we have no allies left, unless they're our
+				// only possible move options.
 				const hasAlly = !pokemon[i ^ 1].condition.endsWith(` fnt`);
-				canMove = canMove.filter(m => m.target !== `adjacentAlly` || hasAlly);
+				const filtered = canMove.filter(m => m.target !== `adjacentAlly` || hasAlly);
+				canMove = filtered.length ? filtered : canMove;
 
 				const moves = canMove.map(m => {
 					let move = `move ${m.slot}`;
@@ -131,7 +175,8 @@ export class RandomPlayerAI extends BattlePlayer {
 					// not fainted
 					!pokemon[j - 1].condition.endsWith(` fnt`)
 				));
-				const switches = (active.trapped || active.maybeTrapped) ? [] : canSwitch;
+				const trapped = active.trapped || (this.trapped && this.trapped.has(i));
+				const switches = trapped ? [] : canSwitch;
 
 				if (switches.length && (!moves.length || this.prng.next() > this.move)) {
 					const target = this.prng.sample(switches);
@@ -154,8 +199,8 @@ export class RandomPlayerAI extends BattlePlayer {
 						return move;
 					}
 				} else {
-					// Just give up if we couldn't come up with any moves or switches.
-					return `default`;
+					throw new Error(`${this.constructor.name} unable to make choice ${i}. request='${request}',` +
+						` chosen='${chosen}', (mega=${canMegaEvo}, ultra=${canUltraBurst}, zmove=${canZMove})`);
 				}
 			});
 			this.choose(choices.join(`, `));
