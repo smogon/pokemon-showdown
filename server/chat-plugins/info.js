@@ -2399,10 +2399,10 @@ const pages = {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		if (!this.room.chatRoomData) return;
 		if (!this.can('mute', null, this.room)) return;
-		const sortedPunishments = Punishments.getPunishmentsOfRoom(this.room).sort((a, b) => {
+		const sortedPunishments = Punishments.getPunishmentsOfRoom(this.room).sort((a, b) =>
 			// Ascending order
-			return a.expiresIn - b.expiresIn;
-		});
+			a.expiresIn - b.expiresIn
+		);
 		if (sortedPunishments.length) {
 			buf += `<div class="pad"><h2>List of active punishments:</h2>`;
 			buf += `<table style="border: 1px solid black; border-collapse:collapse; width:100%;">`;
