@@ -2966,19 +2966,18 @@ export class Battle extends Dex.ModdedDex {
 		}
 	}
 
-	// omniscient = -1, spectator = 0
-	static updateForSide(data: string, side: -1 | 0 | 1 | 2 | 3 | 4 = 0) {
-		if (side === -1) {
+	static extractUpdateForSide(data: string, side: SideID | 'spectator' | 'omniscient' = 'spectator') {
+		if (side === 'omniscient') {
 			// Grab all secret data
 			return data.replace(/\n\|split\|p[1234]\n([^\n]*)\n(?:[^\n]*)/g, '\n$1');
 		}
 
 		// Grab secret data side has access to
 		switch (side) {
-		case 1: data = data.replace(/\n\|split\|p1\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
-		case 2: data = data.replace(/\n\|split\|p2\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
-		case 3: data = data.replace(/\n\|split\|p3\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
-		case 4: data = data.replace(/\n\|split\|p4\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
+		case 'p1': data = data.replace(/\n\|split\|p1\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
+		case 'p2': data = data.replace(/\n\|split\|p2\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
+		case 'p3': data = data.replace(/\n\|split\|p3\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
+		case 'p4': data = data.replace(/\n\|split\|p4\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
 		}
 
 		// Discard remaining secret data
@@ -2987,7 +2986,7 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	getDebugLog() {
-		return Battle.updateForSide(this.log.join('\n'), -1);
+		return Battle.extractUpdateForSide(this.log.join('\n'), 'omniscient');
 	}
 
 	debugError(activity: string) {

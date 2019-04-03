@@ -210,12 +210,12 @@ export function getPlayerStreams(stream: BattleStream) {
 			const [type, data] = splitFirst(chunk, `\n`);
 			switch (type) {
 			case 'update':
-				streams.omniscient.push(Battle.updateForSide(data, -1));
-				streams.spectator.push(Battle.updateForSide(data, 0));
-				streams.p1.push(Battle.updateForSide(data, 1));
-				streams.p2.push(Battle.updateForSide(data, 2));
-				streams.p3.push(Battle.updateForSide(data, 3));
-				streams.p4.push(Battle.updateForSide(data, 4));
+				streams.omniscient.push(Battle.extractUpdateForSide(data, 'omniscient'));
+				streams.spectator.push(Battle.extractUpdateForSide(data, 'spectator'));
+				streams.p1.push(Battle.extractUpdateForSide(data, 'p1'));
+				streams.p2.push(Battle.extractUpdateForSide(data, 'p2'));
+				streams.p3.push(Battle.extractUpdateForSide(data, 'p3'));
+				streams.p4.push(Battle.extractUpdateForSide(data, 'p4'));
 				break;
 			case 'sideupdate':
 				const [side, sideData] = splitFirst(data, `\n`);
