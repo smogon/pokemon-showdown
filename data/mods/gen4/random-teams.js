@@ -550,8 +550,6 @@ class RandomGen4Teams extends RandomGen5Teams {
 			} else if (abilities.includes('Technician') && hasMove['machpunch'] && hasType['Fighting'] && counter.stab < 2) {
 				ability = 'Technician';
 			}
-		} else {
-			ability = ability0.name;
 		}
 
 		if (template.requiredItems) {
