@@ -61,9 +61,9 @@ class Runner {
 		// TODO: Use `await Promise.race([streams.omniscient.read(), p1, p2])` to avoid
 		// leaving these promises dangling once it no longer causes memory leaks (v8#9069).
 		/* eslint-disable no-unused-vars */
-		const p1 = this.p1options.createAI( // lgtm [js/unused-local-variable]
+		const p1 = this.p1options.createAI( // lgtm[js/unused-local-variable]
 			streams.p1, Object.assign({seed: this.newSeed()}, this.p1options)).start();
-		const p2 = this.p2options.createAI( // lgtm [js/unused-local-variable]
+		const p2 = this.p2options.createAI( // lgtm[js/unused-local-variable]
 			streams.p2, Object.assign({seed: this.newSeed()}, this.p2options)).start();
 
 		streams.omniscient.write(`>start ${JSON.stringify(spec)}\n` +
