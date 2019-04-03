@@ -738,22 +738,24 @@ export class Side {
 						break;
 					}
 				}
-				this.chooseMove(data, targetLoc, megaOrZ);
+				if (!this.chooseMove(data, targetLoc, megaOrZ)) return false;
 				break;
 			case 'switch':
 				this.chooseSwitch(data);
 				break;
 			case 'shift':
 				if (data) return this.emitChoiceError(`Unrecognized data after "shift": ${data}`);
-				this.chooseShift();
+				if (!this.chooseShift()) return false;
 				break;
 			case 'team':
-				if (this.chooseTeam(data)) this.chooseTeam();
+				if (!this.chooseTeam(data)) return false;
+				// Auto-complete
+				this.chooseTeam();
 				break;
 			case 'pass':
 			case 'skip':
 				if (data) return this.emitChoiceError(`Unrecognized data after "pass": ${data}`);
-				this.choosePass();
+				if (!this.choosePass()) return false;
 				break;
 			case 'auto':
 			case 'default':
