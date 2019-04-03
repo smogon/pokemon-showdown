@@ -167,6 +167,7 @@ Major Contributors
 
 - Andrew Werner [HoeenHero] - Development
 - Kevin Lau [Ascriptmaster] - Development, Art (battle animations)
+- Kirk Scheibelhut [pre, scheibo] - Development
 - Konrad Borowski [xfix] - Development
 - Neil Rashbrook [urkerab] - Development
 - Quinton Lee [sirDonovan] - Development
@@ -178,7 +179,7 @@ Contributors
 
 - Alexander B. [mathfreak231] - Development
 - Andrew Goodsell [Zracknel] - Art (battle weather backdrops)
-- Austin Couturier [Austin] - Development
+- Austin Couturier [Austin] - Development (damage calculator)
 - Avery Zimmer [Lyren, SolarisFox] - Development
 - Ben Davies [Morfent] - Development
 - Ben Frengley [TalkTakesTime] - Development
