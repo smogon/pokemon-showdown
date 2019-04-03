@@ -3,6 +3,8 @@
  *
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
+ * Run using `node dev-tools/harness.js` (or `node dev-tools/harness.js CYCLES`).
+ *
  * @license MIT
  */
 
