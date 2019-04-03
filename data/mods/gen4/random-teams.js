@@ -475,66 +475,74 @@ class RandomGen4Teams extends RandomGen5Teams {
 		let ability1 = this.getAbility(abilities[1]);
 		ability = ability0.name;
 		if (abilities[1]) {
-			if (ability0.rating <= ability1.rating) {
-				if (this.randomChance(1, 2)) ability = ability1.name;
-			} else if (ability0.rating - 0.6 <= ability1.rating) {
-				if (this.randomChance(1, 3)) ability = ability1.name;
+			if (ability0.rating <= ability1.rating && this.randomChance(1, 2)) {
+				[ability0, ability1] = [ability1, ability0];
+			} else if (ability0.rating - 0.6 <= ability1.rating && this.randomChance(2, 3)) {
+				[ability0, ability1] = [ability1, ability0];
 			}
+			ability = ability0.name;
 
-			let rejectAbility = false;
-			if (counterAbilities.includes(ability)) {
-				// Adaptability, Hustle, Iron Fist, Skill Link
-				// @ts-ignore
-				rejectAbility = !counter[toId(ability)];
-			} else if (ability === 'Blaze') {
-				rejectAbility = !counter['Fire'];
-			} else if (ability === 'Chlorophyll') {
-				rejectAbility = !hasMove['sunnyday'] && !teamDetails['sun'];
-			} else if (ability === 'Compound Eyes' || ability === 'No Guard') {
-				rejectAbility = !counter['inaccurate'];
-			} else if (ability === 'Early Bird') {
-				rejectAbility = !hasMove['rest'];
-			} else if (ability === 'Gluttony') {
-				rejectAbility = !hasMove['bellydrum'];
-			} else if (ability === 'Mold Breaker') {
-				rejectAbility = !hasMove['earthquake'];
-			} else if (ability === 'Overgrow') {
-				rejectAbility = !counter['Grass'];
-			} else if (ability === 'Reckless' || ability === 'Rock Head') {
-				rejectAbility = !counter['recoil'];
-			} else if (ability === 'Sand Veil') {
-				rejectAbility = !teamDetails['sand'];
-			} else if (ability === 'Serene Grace') {
-				rejectAbility = !counter['serenegrace'] || template.id === 'chansey' || template.id === 'blissey';
-			} else if (ability === 'Simple') {
-				rejectAbility = !counter.setupType && !hasMove['cosmicpower'];
-			} else if (ability === 'Snow Cloak') {
-				rejectAbility = !teamDetails['hail'];
-			} else if (ability === 'Solar Power') {
-				rejectAbility = !counter['Special'] || !hasMove['sunnyday'] && !teamDetails['sun'];
-			} else if (ability === 'Speed Boost') {
-				rejectAbility = hasMove['uturn'];
-			} else if (ability === 'Swift Swim') {
-				rejectAbility = !hasMove['raindance'] && !teamDetails['rain'];
-			} else if (ability === 'Swarm') {
-				rejectAbility = !counter['Bug'];
-			} else if (ability === 'Synchronize') {
-				rejectAbility = counter.Status < 2;
-			} else if (ability === 'Technician') {
-				rejectAbility = !counter['technician'] || hasMove['toxic'];
-			} else if (ability === 'Tinted Lens') {
-				rejectAbility = counter['damage'] >= counter.damagingMoves.length;
-			} else if (ability === 'Torrent') {
-				rejectAbility = !counter['Water'];
-			}
-
-			if (rejectAbility) {
-				if (ability === ability1.name) { // or not
-					ability = ability0.name;
-				} else if (ability1.rating > 1) { // only switch if the alternative doesn't suck
-					ability = ability1.name;
+			let rejectAbility;
+			do {
+				rejectAbility = false;
+				if (counterAbilities.includes(ability)) {
+					// Adaptability, Hustle, Iron Fist, Skill Link
+					// @ts-ignore
+					rejectAbility = !counter[toId(ability)];
+				} else if (ability === 'Blaze') {
+					rejectAbility = !counter['Fire'];
+				} else if (ability === 'Chlorophyll') {
+					rejectAbility = !hasMove['sunnyday'] && !teamDetails['sun'];
+				} else if (ability === 'Compound Eyes' || ability === 'No Guard') {
+					rejectAbility = !counter['inaccurate'];
+				} else if (ability === 'Early Bird') {
+					rejectAbility = !hasMove['rest'];
+				} else if (ability === 'Gluttony') {
+					rejectAbility = !hasMove['bellydrum'];
+				} else if (ability === 'Mold Breaker') {
+					rejectAbility = !hasMove['earthquake'];
+				} else if (ability === 'Overgrow') {
+					rejectAbility = !counter['Grass'];
+				} else if (ability === 'Reckless' || ability === 'Rock Head') {
+					rejectAbility = !counter['recoil'];
+				} else if (ability === 'Sand Veil') {
+					rejectAbility = !teamDetails['sand'];
+				} else if (ability === 'Serene Grace') {
+					rejectAbility = !counter['serenegrace'] || template.id === 'chansey' || template.id === 'blissey';
+				} else if (ability === 'Simple') {
+					rejectAbility = !counter.setupType && !hasMove['cosmicpower'];
+				} else if (ability === 'Snow Cloak') {
+					rejectAbility = !teamDetails['hail'];
+				} else if (ability === 'Solar Power') {
+					rejectAbility = !counter['Special'] || !hasMove['sunnyday'] && !teamDetails['sun'];
+				} else if (ability === 'Speed Boost') {
+					rejectAbility = hasMove['uturn'];
+				} else if (ability === 'Swift Swim') {
+					rejectAbility = !hasMove['raindance'] && !teamDetails['rain'];
+				} else if (ability === 'Swarm') {
+					rejectAbility = !counter['Bug'];
+				} else if (ability === 'Synchronize') {
+					rejectAbility = counter.Status < 2;
+				} else if (ability === 'Technician') {
+					rejectAbility = !counter['technician'] || hasMove['toxic'];
+				} else if (ability === 'Tinted Lens') {
+					rejectAbility = counter['damage'] >= counter.damagingMoves.length;
+				} else if (ability === 'Torrent') {
+					rejectAbility = !counter['Water'];
 				}
-			}
+
+				if (rejectAbility) {
+					if (ability === ability0.name && ability1.rating > 1) {
+						ability = ability1.name;
+					} else {
+						// Default to the highest rated ability if all are rejected
+						// @ts-ignore
+						ability = abilities[0];
+						rejectAbility = false;
+					}
+				}
+			} while (rejectAbility);
+
 			if (abilities.includes('Hydration') && hasMove['raindance'] && hasMove['rest']) {
 				ability = 'Hydration';
 			} else if (abilities.includes('Swift Swim') && hasMove['raindance']) {
@@ -542,6 +550,8 @@ class RandomGen4Teams extends RandomGen5Teams {
 			} else if (abilities.includes('Technician') && hasMove['machpunch'] && hasType['Fighting'] && counter.stab < 2) {
 				ability = 'Technician';
 			}
+		} else {
+			ability = ability0.name;
 		}
 
 		if (template.requiredItems) {

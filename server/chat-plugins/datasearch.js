@@ -62,6 +62,7 @@ exports.commands = {
 		`Types can be searched for by either having the type precede 'type' or just using the type itself as a parameter, e.g., both 'fire type' and 'fire' show all Fire types; however, using 'psychic' as a parameter will show all Pok\u00e9mon that learn the move Psychic and not Psychic types.`,
 		`'resists' followed by a type will show Pok\u00e9mon that resist that typing, e.g., 'resists normal'.`,
 		`'weak' followed by a type will show Pok\u00e9mon that are weak to that typing, e.g., 'weak fire'.`,
+		`'asc' or 'desc' following a stat will show the Pok\u00e9mon in ascending or descending order of that stat respectively, e.g., 'speed asc'.`,
 		`Inequality ranges use the characters '>=' for '≥' and '<=' for '≤', e.g., 'hp <= 95' searches all Pok\u00e9mon with HP less than or equal to 95.`,
 		`Parameters can be excluded through the use of '!', e.g., '!water type' excludes all water types.`,
 		`The parameter 'mega' can be added to search for Mega Evolutions only, and the parameter 'NFE' can be added to search not-fully evolved Pok\u00e9mon only.`,
@@ -193,6 +194,7 @@ exports.commands = {
 		`Moves that have a Z-Effect of fully restoring the user's health can be searched for with 'zrecovery'.`,
 		`Inequality ranges use the characters '>' and '<' though they behave as '≥' and '≤', e.g., 'bp > 100' searches for all moves equal to and greater than 100 base power.`,
 		`Parameters can be excluded through the use of '!', e.g., !water type' excludes all Water-type moves.`,
+		`'asc' or 'desc' following a move property will arrange the names in ascending or descending order of that property respectively, e.g., basepower asc will arrange moves in ascending order of their basepowers.`,
 		`Valid flags are: authentic (bypasses substitute), bite, bullet, contact, defrost, powder, protect, pulse, punch, secondary, snatch, and sound.`,
 		`A search that includes '!protect' will show all moves that bypass protection.`,
 		`Parameters separated with '|' will be searched as alternatives for each other, e.g., 'fire | water' searches for all moves that are either Fire type or Water type.`,
@@ -280,7 +282,9 @@ function runDexsearch(target, cmd, canAll, message) {
 	let allColors = ['green', 'red', 'blue', 'white', 'brown', 'yellow', 'purple', 'pink', 'gray', 'black'];
 	let allEggGroups = {'amorphous': 'Amorphous', 'bug': 'Bug', 'ditto': 'Ditto', 'dragon': 'Dragon', 'fairy': 'Fairy', 'field': 'Field', 'flying': 'Flying', 'grass': 'Grass', 'humanlike': 'Human-Like', 'mineral': 'Mineral', 'monster': 'Monster', 'undiscovered': 'Undiscovered', 'water1': 'Water 1', 'water2': 'Water 2', 'water3': 'Water 3', __proto__: null};
 	let allStats = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'bst', 'weight', 'height', 'gen'];
+	let allStatAliases = {'attack': 'atk', 'defense': 'def', 'specialattack': 'spa', 'spc': 'spa', 'special': 'spa', 'spatk': 'spa', 'specialdefense': 'spd', 'spdef': 'spd', 'speed': 'spe', 'wt': 'weight', 'ht': 'height', 'generation': 'gen'};
 	let showAll = false;
+	let sort = null;
 	let megaSearch = null;
 	let capSearch = null;
 	let randomOutput = 0;
@@ -419,6 +423,15 @@ function runDexsearch(target, cmd, canAll, message) {
 				continue;
 			}
 
+			if (target.endsWith(' asc') || target.endsWith(' desc')) {
+				if (parameters.length > 1) return {reply: `The parameter '${target.split(' ')[1]}' cannot have alternative parameters`};
+				let stat = allStatAliases[toId(target.split(' ')[0])] || toId(target.split(' ')[0]);
+				if (!allStats.includes(stat)) return {reply: `'${escapeHTML(target)}' did not contain a valid stat.`};
+				sort = `${stat}${target.endsWith(' asc') ? '+' : '-'}`;
+				orGroup.skip = true;
+				break;
+			}
+
 			if (target === 'all') {
 				if (!canAll) return {reply: "A search with the parameter 'all' cannot be broadcast."};
 				if (parameters.length > 1) return {reply: "The parameter 'all' cannot have alternative parameters"};
@@ -550,20 +563,7 @@ function runDexsearch(target, cmd, canAll, message) {
 					return {reply: `No value given to compare with '${escapeHTML(target)}'.`};
 				}
 				if (inequality.slice(-1) === '=') directions.push('equal');
-				switch (toId(stat)) {
-				case 'attack': stat = 'atk'; break;
-				case 'defense': stat = 'def'; break;
-				case 'specialattack': stat = 'spa'; break;
-				case 'spc': stat = 'spa'; break;
-				case 'special': stat = 'spa'; break;
-				case 'spatk': stat = 'spa'; break;
-				case 'specialdefense': stat = 'spd'; break;
-				case 'spdef': stat = 'spd'; break;
-				case 'speed': stat = 'spe'; break;
-				case 'wt': stat = 'weight'; break;
-				case 'ht': stat = 'height'; break;
-				case 'generation': stat = 'gen'; break;
-				}
+				if (stat in allStatAliases) stat = allStatAliases[stat];
 				if (!allStats.includes(stat)) return {reply: `'${escapeHTML(target)}' did not contain a valid stat.`};
 				if (!orGroup.stats[stat]) orGroup.stats[stat] = {};
 				for (const direction of directions) {
@@ -747,6 +747,33 @@ function runDexsearch(target, cmd, canAll, message) {
 	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${escapeHTML(message)}:</span><br />`);
 	if (results.length > 1) {
 		results.sort();
+		if (sort) {
+			let stat = sort.slice(0, -1);
+			let direction = sort.slice(-1);
+			results.sort((a, b) => {
+				let mon1 = mod.getTemplate(a), mon2 = mod.getTemplate(b);
+				let monStat1 = 0, monStat2 = 0;
+				if (stat === 'bst') {
+					for (let monStats in mon1.baseStats) {
+						monStat1 += mon1.baseStats[monStats];
+						monStat2 += mon2.baseStats[monStats];
+					}
+				} else if (stat === 'weight') {
+					monStat1 = mon1.weightkg;
+					monStat2 = mon2.weightkg;
+				} else if (stat === 'height') {
+					monStat1 = mon1.heightm;
+					monStat2 = mon2.heightm;
+				} else if (stat === 'gen') {
+					monStat1 = mon1.gen;
+					monStat2 = mon2.gen;
+				} else {
+					monStat1 = mon1.baseStats[stat];
+					monStat2 = mon2.baseStats[stat];
+				}
+				return (monStat1 - monStat2) * (direction === '+' ? 1 : -1);
+			});
+		}
 		let notShown = 0;
 		if (!showAll && results.length > RESULTS_MAX_LENGTH + 5) {
 			notShown = results.length - RESULTS_MAX_LENGTH;
@@ -778,6 +805,7 @@ function runMovesearch(target, cmd, canAll, message) {
 		allTypes[toId(i)] = i;
 	}
 	let showAll = false;
+	let sort = null;
 	let lsetData = {};
 	let targetMon = '';
 	let randomOutput = 0;
@@ -844,6 +872,21 @@ function runMovesearch(target, cmd, canAll, message) {
 				showAll = true;
 				orGroup.skip = true;
 				continue;
+			}
+
+			if (target.endsWith(' asc') || target.endsWith(' desc')) {
+				if (parameters.length > 1) return {reply: `The parameter '${target.split(' ')[1]}' cannot have alternative parameters`};
+				let prop = target.split(' ')[0];
+				switch (toId(prop)) {
+				case 'basepower': prop = 'basePower'; break;
+				case 'bp': prop = 'basePower'; break;
+				case 'power': prop = 'basePower'; break;
+				case 'acc': prop = 'accuracy'; break;
+				}
+				if (!allProperties.includes(prop)) return {reply: `'${escapeHTML(target)}' did not contain a valid property.`};
+				sort = `${prop}${target.endsWith(' asc') ? '+' : '-'}`;
+				orGroup.skip = true;
+				break;
 			}
 
 			if (target === 'recovery') {
@@ -1212,12 +1255,27 @@ function runMovesearch(target, cmd, canAll, message) {
 	}
 	if (results.length > 1) {
 		results.sort();
+		if (sort) {
+			let prop = sort.slice(0, -1);
+			let direction = sort.slice(-1);
+			results.sort((a, b) => {
+				let move1prop = dex[toId(a)][prop];
+				let move2prop = dex[toId(b)][prop];
+				// convert booleans to 0 or 1
+				if (typeof move1prop === 'boolean') move1prop = move1prop ? 1 : 0;
+				if (typeof move2prop === 'boolean') move2prop = move2prop ? 1 : 0;
+				return (move1prop - move2prop) * (direction === '+' ? 1 : -1);
+			});
+		}
 		let notShown = 0;
 		if (!showAll && results.length > RESULTS_MAX_LENGTH + 5) {
 			notShown = results.length - RESULTS_MAX_LENGTH;
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
-		resultsStr += results.map(result => `<a href="//dex.pokemonshowdown.com/moves/${toId(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>`).join(", ");
+		resultsStr += results.map(result =>
+			`<a href="//dex.pokemonshowdown.com/moves/${toId(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>` +
+			(sort ? ' (' + (dex[toId(result)][sort.slice(0, -1)] === true ? '-' : dex[toId(result)][sort.slice(0, -1)]) + ')' : '')
+		).join(", ");
 		if (notShown) {
 			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
 		}

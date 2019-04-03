@@ -119,12 +119,9 @@ let Formats = [
 		ruleset: ['Pokemon', 'Standard', 'Swagger Clause', 'Team Preview', 'Little Cup'],
 		banlist: [
 			'Aipom', 'Cutiefly', 'Drifloon', 'Gligar', 'Gothita', 'Meditite', 'Misdreavus', 'Murkrow', 'Porygon',
-			'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Vulpix-Base', 'Wingull', 'Yanma',
+			'Scyther', 'Sneasel', 'Swirlix', 'Tangela', 'Trapinch', 'Vulpix-Base', 'Wingull', 'Yanma',
 			'Eevium Z', 'Baton Pass', 'Dragon Rage', 'Sonic Boom',
 		],
-		onBegin() {
-			if (this.rated && this.format === 'gen7lc') this.add('-html', `<div class="broadcast-red"><strong>LC is currently suspecting Trapinch! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3648309/">suspect thread</a>.</strong></div>`);
-		},
 	},
 	{
 		name: "[Gen 7] Monotype",

@@ -71,7 +71,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			this.push(`update\n|html|<div class="broadcast-red"><b>The battle crashed</b><br />Don't worry, we're working on fixing it.</div>`);
 			if (battle) {
 				for (const side of battle.sides) {
-					if (side && side.currentRequest) {
+					if (side && side.requestState) {
 						this.push(`sideupdate\n${side.id}\n|error|[Invalid choice] The battle crashed`);
 					}
 				}
@@ -237,7 +237,7 @@ export function getPlayerStreams(stream: BattleStream) {
 	return streams;
 }
 
-export class BattlePlayer {
+export abstract class BattlePlayer {
 	readonly stream: Streams.ObjectReadWriteStream<string>;
 	readonly log: string[];
 	readonly debug: boolean;
@@ -269,15 +269,17 @@ export class BattlePlayer {
 		if (cmd === 'request') {
 			return this.receiveRequest(JSON.parse(rest));
 		}
+		if (cmd === 'callback') {
+			return this.receiveCallback(rest.split('|'));
+		}
 		if (cmd === 'error') {
 			return this.receiveError(new Error(rest));
 		}
 		this.log.push(line);
 	}
 
-	receiveRequest(request: AnyObject) {
-		throw new Error(`must be implemented by subclass`);
-	}
+	abstract receiveRequest(request: AnyObject): void;
+	abstract receiveCallback(callback: string[]): void;
 
 	receiveError(error: Error) {
 		throw error;
