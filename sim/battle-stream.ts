@@ -71,7 +71,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			this.push(`update\n|html|<div class="broadcast-red"><b>The battle crashed</b><br />Don't worry, we're working on fixing it.</div>`);
 			if (battle) {
 				for (const side of battle.sides) {
-					if (side && side.currentRequest) {
+					if (side && side.requestState) {
 						this.push(`sideupdate\n${side.id}\n|error|[Invalid choice] The battle crashed`);
 					}
 				}
