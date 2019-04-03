@@ -33,6 +33,16 @@ interface BattleOptions {
 	strictChoices?: boolean; // whether invalid choices should throw
 }
 
+// The current request state of the Battle:
+//
+//   - 'teampreview': beginning of BW/XY/SM battle (Team Preview)
+//   - 'move': beginning of each turn
+//   - 'switch': end of turn if fainted (or mid turn with switching effects)
+//   - '': no request. Used between turns, or when the battle is over.
+//
+// An individual Side's request state is encapsulated in its `activeRequest` field.
+export type RequestState = 'teampreview' | 'move' | 'switch' | '';
+
 export class Battle extends Dex.ModdedDex {
 	readonly id: '';
 	readonly debugMode: boolean;
@@ -59,7 +69,7 @@ export class Battle extends Dex.ModdedDex {
 	sentLogPos: number;
 	sentEnd: boolean;
 
-	currentRequest: string;
+	requestState: RequestState;
 	turn: number;
 	midTurn: boolean;
 	started: boolean;
@@ -131,7 +141,7 @@ export class Battle extends Dex.ModdedDex {
 		this.sentLogPos = 0;
 		this.sentEnd = false;
 
-		this.currentRequest = '';
+		this.requestState = '';
 		this.turn = 0;
 		this.midTurn = false;
 		this.started = false;
@@ -998,20 +1008,20 @@ export class Battle extends Dex.ModdedDex {
 		return pokemonList;
 	}
 
-	makeRequest(type?: string) {
+	makeRequest(type?: RequestState) {
 		if (type) {
-			this.currentRequest = type;
+			this.requestState = type;
 			for (const side of this.sides) {
 				side.clearChoice();
 			}
 		} else {
-			type = this.currentRequest;
+			type = this.requestState;
 		}
 
 		// default to no request
 		const requests: any[] = Array(this.sides.length).fill(null);
 		for (const side of this.sides) {
-			side.currentRequest = '';
+			side.activeRequest = null;
 		}
 
 		switch (type) {
@@ -1023,7 +1033,6 @@ export class Battle extends Dex.ModdedDex {
 					switchTable.push(!!(pokemon && pokemon.switchFlag));
 				}
 				if (switchTable.some(flag => flag === true)) {
-					side.currentRequest = 'switch';
 					requests[i] = {forceSwitch: switchTable, side: side.getRequestData()};
 				}
 			}
@@ -1038,7 +1047,6 @@ export class Battle extends Dex.ModdedDex {
 			for (let i = 0; i < this.sides.length; i++) {
 				const side = this.sides[i];
 				side.maxTeamSize = maxTeamSize;
-				side.currentRequest = 'teampreview';
 				requests[i] = {teamPreview: true, maxTeamSize, side: side.getRequestData()};
 			}
 			break;
@@ -1046,7 +1054,6 @@ export class Battle extends Dex.ModdedDex {
 		default: {
 			for (let i = 0; i < this.sides.length; i++) {
 				const side = this.sides[i];
-				side.currentRequest = 'move';
 				const activeData = side.active.map(pokemon => pokemon && pokemon.getRequestData());
 				requests[i] = {active: activeData, side: side.getRequestData()};
 			}
@@ -1140,9 +1147,9 @@ export class Battle extends Dex.ModdedDex {
 			this.add('tie');
 		}
 		this.ended = true;
-		this.currentRequest = '';
+		this.requestState = '';
 		for (const s of this.sides) {
-			s.currentRequest = '';
+			s.activeRequest = null;
 		}
 		return true;
 	}
@@ -1578,7 +1585,7 @@ export class Battle extends Dex.ModdedDex {
 
 		this.addToQueue({choice: 'start'});
 		this.midTurn = true;
-		if (!this.currentRequest) this.go();
+		if (!this.requestState) this.go();
 	}
 
 	boost(
@@ -2758,7 +2765,7 @@ export class Battle extends Dex.ModdedDex {
 
 	go() {
 		this.add('');
-		if (this.currentRequest) this.currentRequest = '';
+		if (this.requestState) this.requestState = '';
 
 		if (!this.midTurn) {
 			this.queue.push(this.resolveAction({choice: 'residual'}));
@@ -2770,7 +2777,7 @@ export class Battle extends Dex.ModdedDex {
 			const action = this.queue[0];
 			this.queue.shift();
 			this.runAction(action);
-			if (this.currentRequest || this.ended) return;
+			if (this.requestState || this.ended) return;
 		}
 
 		this.nextTurn();
@@ -2842,9 +2849,9 @@ export class Battle extends Dex.ModdedDex {
 		this.sortQueue();
 		this.queue.push(...oldQueue);
 
-		this.currentRequest = '';
+		this.requestState = '';
 		for (const side of this.sides) {
-			side.currentRequest = '';
+			side.activeRequest = null;
 		}
 
 		this.go();
@@ -2852,7 +2859,7 @@ export class Battle extends Dex.ModdedDex {
 
 	undoChoice(sideid: SideID) {
 		const side = this.getSide(sideid);
-		if (!side.currentRequest) return;
+		if (!side.requestState) return;
 
 		if (side.choice.cantUndo) {
 			side.emitChoiceError(`Can't undo: A trapping/disabling effect would cause undo to leak information`);
