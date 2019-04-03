@@ -193,6 +193,7 @@ Contributors
 - Luke Harmon-Vellotti [moo, CheeseMuffin] - Development
 - Robin Vandenbrande [Quinella] - Development
 - Russell Jones [SadisticMystic] - Research (game mechanics)
+- Spandan Punwatkar - Development
 
 Special thanks
 
