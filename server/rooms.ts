@@ -1039,6 +1039,7 @@ export class BasicChatRoom extends BasicRoom {
 		this.log = Roomlogs.create(this, options);
 
 		this.poll = null;
+		this.announcement = null;
 
 		// room settings
 		this.desc = '';
@@ -1238,6 +1239,7 @@ export class BasicChatRoom extends BasicRoom {
 			connection,
 			'|init|chat\n|title|' + this.title + '\n' + userList + '\n' + this.log.getScrollback() + this.getIntroMessage(user)
 		);
+		if (this.announcement) this.announcement.onConnect(user, connection);
 		if (this.poll) this.poll.onConnect(user, connection);
 		if (this.game && this.game.onConnect) this.game.onConnect(user, connection);
 	}
@@ -1252,6 +1254,7 @@ export class BasicChatRoom extends BasicRoom {
 		this.users[user.userid] = user;
 		this.userCount++;
 
+		if (this.announcement) this.announcement.onConnect(user, connection);
 		if (this.poll) this.poll.onConnect(user, connection);
 		if (this.game && this.game.onJoin) this.game.onJoin(user, connection);
 		return true;

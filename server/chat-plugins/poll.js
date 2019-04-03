@@ -248,6 +248,7 @@ const commands = {
 			if (supportHTML && !this.can('declare', null, room)) return false;
 			if (!this.canTalk()) return;
 			if (room.poll) return this.errorReply("There is already a poll in progress in this room.");
+			if (room.announcement) return this.errorReply("There is an announcement in progress in this room.");
 			if (params.length < 3) return this.errorReply("Not enough arguments for /poll new.");
 
 			// @ts-ignore In the case that any of these are null, the function is terminated, and the result never used.
