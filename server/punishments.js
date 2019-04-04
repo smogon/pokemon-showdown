@@ -1578,15 +1578,13 @@ Punishments.getPunishmentsOfRoom = function (room) {
 		}
 	}
 
-	if (store) {
-		for (const [punishment, data] of store) {
-			let [punishType, id, expireTime, reason] = punishment;
-			let expiresIn = new Date(expireTime).getTime() - Date.now();
-			if (expiresIn < 1000) continue;
-			let alts = [...data[0]].filter(user => user !== id);
-			let ips = [...data[1]];
-			output.push({"punishType": punishType, "id": id, "expiresIn": expiresIn, "reason": reason, "alts": alts, "ips": ips});
-		}
+	for (const [punishment, data] of store) {
+		let [punishType, id, expireTime, reason] = punishment;
+		let expiresIn = new Date(expireTime).getTime() - Date.now();
+		if (expiresIn < 1000) continue;
+		let alts = [...data[0]].filter(user => user !== id);
+		let ips = [...data[1]];
+		output.push({"punishType": punishType, "id": id, "expiresIn": expiresIn, "reason": reason, "alts": alts, "ips": ips});
 	}
 
 	if (room.muteQueue) {
