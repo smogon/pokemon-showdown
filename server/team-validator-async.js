@@ -86,7 +86,9 @@ if (!PM.isParentProcess) {
 			Monitor.crashlog(err, `A team validator process`);
 		});
 		process.on('unhandledRejection', err => {
-			Monitor.crashlog(err, 'A team validator process Promise');
+			if (err instanceof Error) {
+				Monitor.crashlog(err, 'A team validator process Promise');
+			}
 		});
 	}
 
