@@ -311,7 +311,6 @@ let BattleScripts = {
 		}
 
 		this.setActiveMove(move, pokemon, targets[0]);
-		move.zBrokeProtect = false;
 
 		let hitResult = this.singleEvent('PrepareHit', move, {}, targets[0], pokemon, move);
 		if (!hitResult) {
@@ -548,7 +547,6 @@ let BattleScripts = {
 	},
 	tryMoveHit(target, pokemon, move) {
 		this.setActiveMove(move, pokemon, target);
-		move.zBrokeProtect = false;
 
 		let hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move);
 		if (!hitResult) {

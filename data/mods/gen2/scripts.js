@@ -538,15 +538,15 @@ let BattleScripts = {
 		let critRatio = this.runEvent('ModifyCritRatio', pokemon, target, move, move.critRatio || 0);
 		critRatio = this.clampIntRange(critRatio, 0, 5);
 		let critMult = [0, 16, 8, 4, 3, 2];
-		move.crit = move.willCrit || false;
+		let isCrit = move.willCrit || false;
 		if (typeof move.willCrit === 'undefined') {
 			if (critRatio) {
-				move.crit = this.randomChance(1, critMult[critRatio]);
+				isCrit = this.randomChance(1, critMult[critRatio]);
 			}
 		}
 
-		if (move.crit) {
-			move.crit = this.runEvent('CriticalHit', target, null, move);
+		if (isCrit && this.runEvent('CriticalHit', target, null, move)) {
+			move.crit(target);
 		}
 
 		// Happens after crit calculation
@@ -588,7 +588,7 @@ let BattleScripts = {
 		let noburndrop = false;
 
 		// The move is a critical hit. Several things happen here.
-		if (move.crit) {
+		if (isCrit) {
 			// Level is doubled for damage calculation.
 			level *= 2;
 			if (!suppressMessages) this.add('-crit', target);
@@ -632,7 +632,7 @@ let BattleScripts = {
 
 			defense = typeIndexes[attackerLastType] || 1;
 			level = typeIndexes[defenderLastType] || 1;
-			if (move.crit) {
+			if (isCrit) {
 				level *= 2;
 			}
 			this.hint("Gen 2 Present has a glitched damage calculation using the secondary types of the Pokemon for the Attacker's Level and Defender's Defense.", true);

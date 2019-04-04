@@ -753,8 +753,8 @@ let BattleScripts = {
 		basePower = this.clampIntRange(basePower, 1);
 
 		// Checking for the move's Critical Hit possibility. We check if it's a 100% crit move, otherwise we calculate the chance.
-		move.crit = move.willCrit || false;
-		if (!move.crit) {
+		let isCrit = move.willCrit || false;
+		if (!isCrit) {
 			// In gen 1, the critical chance is based on speed.
 			// First, we get the base speed, divide it by 2 and floor it. This is our current crit chance.
 			let critChance = Math.floor(pokemon.template.baseStats['spe'] / 2);
@@ -781,9 +781,10 @@ let BattleScripts = {
 			// We compare our critical hit chance against a random number between 0 and 255.
 			// If the random number is lower, we get a critical hit. This means there is always a 1/255 chance of not hitting critically.
 			if (critChance > 0) {
-				move.crit = this.randomChance(critChance, 256);
+				isCrit = this.randomChance(critChance, 256);
 			}
 		}
+		if (isCrit) move.crit(target);
 
 		// Happens after crit calculation.
 		if (basePower) {
@@ -817,7 +818,7 @@ let BattleScripts = {
 		// In the event of a critical hit, the offense and defense changes are ignored.
 		// This includes both boosts and screens.
 		// Also, level is doubled in damage calculation.
-		if (move.crit) {
+		if (isCrit) {
 			move.ignoreOffensive = true;
 			move.ignoreDefensive = true;
 			level *= 2;
