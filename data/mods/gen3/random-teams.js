@@ -435,68 +435,77 @@ class RandomGen3Teams extends RandomGen4Teams {
 			ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
 		}
 
-		let abilities = Object.values(baseTemplate.abilities);
+		let abilities = Object.values(baseTemplate.abilities).filter(a => this.getAbility(a).gen === 3);
 		abilities.sort((a, b) => this.getAbility(b).rating - this.getAbility(a).rating);
 		let ability0 = this.getAbility(abilities[0]);
 		let ability1 = this.getAbility(abilities[1]);
-		ability = ability0.name;
-		if (ability0.gen !== 3) ability = ability1.name;
-		if (ability0.gen === 3 && ability1.gen === 3) {
-			if (ability0.rating <= ability1.rating) {
-				if (this.randomChance(1, 2)) ability = ability1.name;
-			} else if (ability0.rating - 0.6 <= ability1.rating) {
-				if (this.randomChance(1, 3)) ability = ability1.name;
+		if (abilities[1]) {
+			if (ability0.rating <= ability1.rating && this.randomChance(1, 2)) {
+				[ability0, ability1] = [ability1, ability0];
+			} else if (ability0.rating - 0.6 <= ability1.rating && this.randomChance(2, 3)) {
+				[ability0, ability1] = [ability1, ability0];
 			}
+			ability = ability0.name;
 
-			let rejectAbility = false;
-			if (ability === 'Hustle') {
-				// Counter ability (hustle)
-				rejectAbility = !counter['hustle'];
-			} else if (ability === 'Blaze') {
-				rejectAbility = !counter['Fire'];
-			} else if (ability === 'Chlorophyll') {
-				rejectAbility = !hasMove['sunnyday'];
-			} else if (ability === 'Compound Eyes') {
-				rejectAbility = !counter['inaccurate'];
-			} else if (ability === 'Lightning Rod') {
-				rejectAbility = template.types.includes('Ground');
-			} else if (ability === 'Limber') {
-				rejectAbility = template.types.includes('Electric');
-			} else if (ability === 'Overgrow') {
-				rejectAbility = !counter['Grass'];
-			} else if (ability === 'Rock Head') {
-				rejectAbility = !counter['recoil'];
-			} else if (ability === 'Sand Veil') {
-				rejectAbility = !teamDetails['sand'];
-			} else if (ability === 'Serene Grace') {
-				rejectAbility = !counter['serenegrace'] || template.id === 'blissey';
-			} else if (ability === 'Sturdy') {
-				rejectAbility = true; // Strudy only blocks OHKO moves in gen3, which arent in our movepools.
-			} else if (ability === 'Swift Swim') {
-				rejectAbility = !hasMove['raindance'] && !teamDetails['rain'];
-			} else if (ability === 'Swarm') {
-				rejectAbility = !counter['Bug'];
-			} else if (ability === 'Synchronize') {
-				rejectAbility = counter.Status < 2;
-			} else if (ability === 'Torrent') {
-				rejectAbility = !counter['Water'];
-			} else if (ability === 'Insomnia') {
-				rejectAbility = hasMove['rest'];
-			}
+			let rejectAbility;
+			do {
+				rejectAbility = false;
 
-			if (rejectAbility) {
-				if (ability === ability1.name) { // or not
-					ability = ability0.name;
-				} else if (ability1.rating > 1) { // only switch if the alternative doesn't suck
-					ability = ability1.name;
+				if (ability === 'Hustle') {
+					// Counter ability (hustle)
+					rejectAbility = !counter['hustle'];
+				} else if (ability === 'Blaze') {
+					rejectAbility = !counter['Fire'];
+				} else if (ability === 'Chlorophyll') {
+					rejectAbility = !hasMove['sunnyday'];
+				} else if (ability === 'Compound Eyes') {
+					rejectAbility = !counter['inaccurate'];
+				} else if (ability === 'Lightning Rod') {
+					rejectAbility = template.types.includes('Ground');
+				} else if (ability === 'Limber') {
+					rejectAbility = template.types.includes('Electric');
+				} else if (ability === 'Overgrow') {
+					rejectAbility = !counter['Grass'];
+				} else if (ability === 'Rock Head') {
+					rejectAbility = !counter['recoil'];
+				} else if (ability === 'Sand Veil') {
+					rejectAbility = !teamDetails['sand'];
+				} else if (ability === 'Serene Grace') {
+					rejectAbility = !counter['serenegrace'] || template.id === 'blissey';
+				} else if (ability === 'Sturdy') {
+					rejectAbility = true; // Strudy only blocks OHKO moves in gen3, which arent in our movepools.
+				} else if (ability === 'Swift Swim') {
+					rejectAbility = !hasMove['raindance'] && !teamDetails['rain'];
+				} else if (ability === 'Swarm') {
+					rejectAbility = !counter['Bug'];
+				} else if (ability === 'Synchronize') {
+					rejectAbility = counter.Status < 2;
+				} else if (ability === 'Torrent') {
+					rejectAbility = !counter['Water'];
+				} else if (ability === 'Insomnia') {
+					rejectAbility = hasMove['rest'];
 				}
-			}
+
+				if (rejectAbility) {
+					if (ability === ability0.name && ability1.rating > 1) {
+						ability = ability1.name;
+					} else {
+						// Default to the highest rated ability if all are rejected
+						// @ts-ignore
+						ability = abilities[0];
+						rejectAbility = false;
+					}
+				}
+			} while (rejectAbility);
+
 			if (abilities.includes('Swift Swim') && hasMove['raindance']) {
 				ability = 'Swift Swim';
 			}
 			if (abilities.includes('Chlorophyll') && hasMove['sunnyday']) {
 				ability = 'Chlorophyll';
 			}
+		} else {
+			ability = ability0.name;
 		}
 
 		if (template.requiredItems) {
