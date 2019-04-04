@@ -41,7 +41,8 @@ let BattleScripts = {
 
 		baseDamage += 2;
 
-		if (move.crit) {
+		const isCrit = move.getHitData(target).crit;
+		if (isCrit) {
 			baseDamage = this.modify(baseDamage, move.critModifier || 2);
 		}
 
@@ -60,25 +61,25 @@ let BattleScripts = {
 			baseDamage = this.modify(baseDamage, move.stab || 1.5);
 		}
 		// types
-		move.typeMod = target.runEffectiveness(move);
-
-		move.typeMod = this.clampIntRange(move.typeMod, -6, 6);
-		if (move.typeMod > 0) {
+		let typeMod = target.runEffectiveness(move);
+		typeMod = this.clampIntRange(typeMod, -6, 6);
+		move.setTypeModFor(target, typeMod);
+		if (typeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
 
-			for (let i = 0; i < move.typeMod; i++) {
+			for (let i = 0; i < typeMod; i++) {
 				baseDamage *= 2;
 			}
 		}
-		if (move.typeMod < 0) {
+		if (typeMod < 0) {
 			if (!suppressMessages) this.add('-resisted', target);
 
-			for (let i = 0; i > move.typeMod; i--) {
+			for (let i = 0; i > typeMod; i--) {
 				baseDamage = Math.floor(baseDamage / 2);
 			}
 		}
 
-		if (move.crit && !suppressMessages) this.add('-crit', target);
+		if (isCrit && !suppressMessages) this.add('-crit', target);
 
 		// Final modifier.
 		baseDamage = this.runEvent('ModifyDamage', pokemon, target, move, baseDamage);

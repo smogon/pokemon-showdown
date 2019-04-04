@@ -864,16 +864,27 @@ interface Move extends Readonly<BasicEffect & MoveData> {
 	readonly effectType: 'Move'
 }
 
+interface MoveHitData {
+	/** Whether or not this move is a crit against each defender */
+	crit: {[slotid: string]: boolean};
+	/** The type effectiveness of this move against each defender */
+	typeMod: {[slotid: string]: number};
+	/**
+	 * Whether or not this move is a Z-Move that broke protect for each defender
+	 * (affects damage calculation).
+	 */
+	zBrokeProtect: {[slotid: string]: boolean}
+}
+
 interface ActiveMove extends BasicEffect, MoveData {
 	readonly effectType: 'Move'
-	typeMod: number
 	hit: number
+	moveHitData: MoveHitData
 	ability?: Ability
 	aerilateBoosted?: boolean
 	allies?: Pokemon[]
 	auraBooster?: Pokemon
 	causedCrashDamage?: boolean
-	crit?: boolean
 	forceStatus?: string
 	galvanizeBoosted?: boolean
 	hasAuraBreak?: boolean
@@ -894,17 +905,16 @@ interface ActiveMove extends BasicEffect, MoveData {
 	totalDamage?: number | false
 	willChangeForme?: boolean
 	/**
-	 * Whether or not this move is a Z-Move that broke protect
-	 * (affects damage calculation).
-	 * @type {boolean}
-	 */
-	zBrokeProtect?: boolean
-	/**
 	 * Has this move been boosted by a Z-crystal? Usually the same as
 	 * `isZ`, but hacked moves will have this be `false` and `isZ` be
 	 * truthy.
 	 */
 	isZPowered?: boolean
+	
+	getHitData(target: Pokemon): {crit: boolean, typeMod: number, zBrokeProtect: boolean}
+	crit(target: Pokemon): void
+	setTypeModFor(target: Pokemon, typeMod: number): void
+	zBreakProtect(target: Pokemon): void
 }
 
 type TemplateAbility = {0: string, 1?: string, H?: string, S?: string}
