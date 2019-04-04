@@ -301,7 +301,7 @@ const commands = {
 
 	sp: 'showpunishments',
 	showpunishments(target, room, user) {
-		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+		if (!room.chatRoomData || room.id.includes('-')) return this.errorReply("This command is unavailable in temporary rooms.");
 		return this.parse(`/join view-punishments-${room}`);
 	},
 	showpunishmentshelp: [`/showpunishments - Shows the current punishments in the room. Requires: % @ # & ~`],
@@ -2395,55 +2395,39 @@ const pages = {
 		let buf = "";
 		this.extractRoom();
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
-		buf += `<div class="pad"><h2>List of active punishments:</h2>`;
+		if (!this.room.chatRoomData) return;
 		if (!this.can('mute', null, this.room)) return;
-		if (!this.room.chatRoomData) {
-			return buf + `<div class="notice message-error">This page is unavailable in temporary rooms / non-existent rooms.</div>`;
-		}
-		const store = new Map();
-		const possessive = (word) => {
-			const suffix = word.endsWith('s') ? `'` : `'s`;
-			return `${word}${suffix}`;
-		};
-
-		if (Punishments.roomUserids.get(this.room.id)) {
-			for (let [key, value] of Punishments.roomUserids.get(this.room.id)) {
-				if (!store.has(value)) store.set(value, [new Set([value.id]), new Set()]);
-				store.get(value)[0].add(key);
+		const sortedPunishments = Punishments.getPunishmentsOfRoom(this.room).sort((a, b) =>
+			// Ascending order
+			a.expiresIn - b.expiresIn
+		);
+		if (sortedPunishments.length) {
+			buf += `<div class="pad"><h2>List of active punishments:</h2>`;
+			buf += `<table style="border: 1px solid black; border-collapse:collapse; width:100%;">`;
+			buf += `<tr>`;
+			buf += `<th style="border: 1px solid black;">Username</th>`;
+			buf += `<th style="border: 1px solid black;">Punishment type</th>`;
+			buf += `<th style="border: 1px solid black;">Expire time</th>`;
+			buf += `<th style="border: 1px solid black;">Reason</th>`;
+			buf += `<th style="border: 1px solid black;">Alts</th>`;
+			if (user.can('ban')) buf += `<th style="border: 1px solid black;">IPs</th>`;
+			buf += `</tr>`;
+			for (const punishment of sortedPunishments) {
+				let expireString = Chat.toDurationString(punishment.expiresIn, {precision: 1});
+				buf += `<tr>`;
+				buf += `<td style="border: 1px solid black;">${punishment.id}</td>`;
+				buf += `<td style="border: 1px solid black;">${punishment.punishType.toLowerCase()}</td>`;
+				buf += `<td style="border: 1px solid black;">${expireString}</td>`;
+				buf += (punishment.reason) ? `<td style="border: 1px solid black;">${punishment.reason}</td>` : `<td style="border: 1px solid black;"> - </td>`;
+				buf += (punishment.alts.length) ? `<td style="border: 1px solid black;">${punishment.alts.join(", ")}</td>` : `<td style="border: 1px solid black;"> - </td>`;
+				buf += (user.can('ban') && punishment.ips.length) ? `<td style="border: 1px solid black;">${punishment.ips.join(", ")}</td>` : (user.can('ban') && !punishment.ips.length) ? `<td style="border: 1px solid black;"> - </td>` : ``;
+				buf += `</tr>`;
 			}
+			buf += `</table>`;
+			buf += `</div>`;
+		} else {
+			buf += `<h2>No user in ${this.room} is currently punished.</h2>`;
 		}
-
-		if (Punishments.roomIps.get(this.room.id)) {
-			for (let [key, value] of Punishments.roomIps.get(this.room.id)) {
-				if (!store.has(value)) store.set(value, [new Set([value.id]), new Set()]);
-				store.get(value)[1].add(key);
-			}
-		}
-
-		for (const [punishment, data] of store) {
-			let [punishType, id, expireTime, reason] = punishment;
-			let alts = [...data[0]].filter(user => user !== id);
-			let ip = [...data[1]];
-			let expiresIn = new Date(expireTime).getTime() - Date.now();
-			let expireString = Chat.toDurationString(expiresIn, {precision: 1});
-			let punishDesc = "";
-			if (reason) punishDesc += ` Reason: ${reason}.`;
-			if (alts.length) punishDesc += ` Alts: ${alts.join(", ")}.`;
-			if (user.can('ban') && ip.length) {
-				punishDesc += ` IPs: ${ip.join(", ")}.`;
-			}
-			buf += `<p>- ${possessive(id)} ${punishType.toLowerCase()} expires in ${expireString}.${punishDesc}</p>`;
-		}
-
-		if (this.room.muteQueue) {
-			for (const entry of this.room.muteQueue) {
-				let expiresIn = new Date(entry.time).getTime() - Date.now();
-				if (expiresIn < 0) continue;
-				let expireString = Chat.toDurationString(expiresIn, {precision: 1});
-				buf += `<p>- ${possessive(entry.userid)} mute expires in ${expireString}.</p>`;
-			}
-		}
-		buf += `</div>`;
 		return buf;
 	},
 };
