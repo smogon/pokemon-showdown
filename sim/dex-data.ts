@@ -714,8 +714,6 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 	readonly critRatio: number;
 	/** Will this move always or never be a critical hit? */
 	readonly willCrit?: boolean;
-	/** Is this move a critical hit? */
-	readonly crit?: boolean;
 	/** Can this move OHKO foes? */
 	readonly ohko?: boolean | string;
 	/**
@@ -791,8 +789,6 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 	readonly spreadModifier?: number;
 	/**  Modifier that affects damage when this move is a critical hit. */
 	readonly critModifier?: number;
-	/** Damage modifier based on the user's types. */
-	readonly typeMod: number;
 	/** Forces the move to get STAB even if the type doesn't match. */
 	readonly forceSTAB: boolean;
 	/** True if it can't be copied with Sketch. */
@@ -834,7 +830,6 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 		this.ignoreAbility = data.ignoreAbility || false;
 		this.damage = data.damage!;
 		this.spreadHit = data.spreadHit || false;
-		this.typeMod = data.typeMod || 0;
 		this.forceSTAB = !!data.forceSTAB;
 		this.noSketch = !!data.noSketch;
 		this.stab = data.stab || undefined;
@@ -856,6 +851,73 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 				this.gen = 1;
 			}
 		}
+	}
+}
+
+export class ActiveMove extends Move {
+	readonly effectType: 'Move' = 'Move';
+	hit: number;
+	moveHitData: MoveHitData;
+	ability?: Ability;
+	aerilateBoosted?: boolean;
+	allies?: Pokemon[];
+	auraBooster?: Pokemon;
+	causedCrashDamage?: boolean;
+	forceStatus?: string;
+	galvanizeBoosted?: boolean;
+	hasAuraBreak?: boolean;
+	hasBounced?: boolean;
+	hasSheerForce?: boolean;
+	isExternal?: boolean;
+	lastHit?: boolean;
+	magnitude?: number;
+	negateSecondary?: boolean;
+	normalizeBoosted?: boolean;
+	pixilateBoosted?: boolean;
+	pranksterBoosted?: boolean;
+	refrigerateBoosted?: boolean;
+	selfDropped?: boolean;
+	stab?: number;
+	statusRoll?: string;
+	totalDamage?: number | false;
+	willChangeForme?: boolean;
+	/**
+	 * Whether or not this move is a Z-Move that broke protect
+	 * (affects damage calculation).
+	 */
+	zBrokeProtect?: boolean;
+	/**
+	 * Has this move been boosted by a Z-crystal? Usually the same as
+	 * `isZ`, but hacked moves will have this be `false` and `isZ` be
+	 * truthy.
+	 */
+	isZPowered?: boolean;
+
+	constructor(data: AnyObject, ...moreData: AnyObject[]) {
+		super(data, ...moreData);
+
+		this.hit = 0;
+		this.moveHitData = {crit: {}, typeMod: {}, zBrokeProtect: {}};
+	}
+
+	getHitData(target: Pokemon) {
+		return {
+			crit: this.moveHitData.crit[target.toString().slice(0, 3)] || false,
+			typeMod: this.moveHitData.typeMod[target.toString().slice(0, 3)] || 0,
+			zBrokeProtect: this.moveHitData.zBrokeProtect[target.toString().slice(0, 3)] || false,
+		};
+	}
+
+	crit(target: Pokemon) {
+		this.moveHitData.crit[target.toString().slice(0, 3)] = true;
+	}
+
+	setTypeModFor(target: Pokemon, typeMod: number) {
+		this.moveHitData.typeMod[target.toString().slice(0, 3)] = typeMod;
+	}
+
+	zBreakProtect(target: Pokemon) {
+
 	}
 }
 
