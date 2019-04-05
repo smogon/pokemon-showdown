@@ -482,6 +482,7 @@ exports.grouplist = [
 		roomdriver: true,
 		editroom: true,
 		declare: true,
+		addhtml: true,
 		modchatall: true,
 		roomonly: true,
 		gamemanagement: true,
