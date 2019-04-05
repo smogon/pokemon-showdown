@@ -854,7 +854,7 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 	}
 }
 
-export class ActiveMove extends Move {
+export class ActiveMove extends Move implements BasicEffect, MoveData {
 	readonly effectType: 'Move' = 'Move';
 	hit: number;
 	moveHitData: MoveHitData;
@@ -881,11 +881,6 @@ export class ActiveMove extends Move {
 	statusRoll?: string;
 	totalDamage?: number | false;
 	willChangeForme?: boolean;
-	/**
-	 * Whether or not this move is a Z-Move that broke protect
-	 * (affects damage calculation).
-	 */
-	zBrokeProtect?: boolean;
 	/**
 	 * Has this move been boosted by a Z-crystal? Usually the same as
 	 * `isZ`, but hacked moves will have this be `false` and `isZ` be
@@ -917,7 +912,7 @@ export class ActiveMove extends Move {
 	}
 
 	zBreakProtect(target: Pokemon) {
-
+		this.moveHitData.zBrokeProtect[target.toString().slice(0, 3)] = true;
 	}
 }
 
