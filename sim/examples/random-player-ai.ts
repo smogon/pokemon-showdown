@@ -87,6 +87,7 @@ export class RandomPlayerAI extends BattlePlayer {
 				if (!mustSwitch) return `pass`;
 
 				const canSwitch = [1, 2, 3, 4, 5, 6].filter(i => (
+					pokemon[i - 1] &&
 					// not active
 					i > request.forceSwitch.length &&
 					// not chosen for a simultaneous switch
@@ -168,6 +169,7 @@ export class RandomPlayerAI extends BattlePlayer {
 				});
 
 				const canSwitch = [1, 2, 3, 4, 5, 6].filter(j => (
+					pokemon[j - 1] &&
 					// not active
 					!pokemon[j - 1].active &&
 					// not chosen for a simultaneous switch
