@@ -1528,6 +1528,7 @@ const commands = {
 	randbatscalc: 'calc',
 	rcalc: 'calc',
 	calc(target, room, user, connection, cmd) {
+		if (cmd === 'calc' && target) return this.parse(`/math ${target}`);
 		if (!this.runBroadcast()) return;
 		let isRandomBattle = (room && room.battle && room.battle.format === 'gen7randombattle');
 		if (['randomscalc', 'randbatscalc', 'rcalc'].includes(cmd) || isRandomBattle) {
@@ -2304,11 +2305,17 @@ const commands = {
 		if (target.includes(separator) || target.length > 150) {
 			const params = target.split(separator);
 			let output = [];
+			let cutoff = 3;
 			for (const param of params) {
+				if (output.length < 2 && param.length > 80) cutoff = 2;
 				output.push(Chat.escapeHTML(param));
 			}
-			let code = `<div class="chat"><code style="white-space: pre-wrap; display: table; tab-size: 3">${output.join('<br />')}</code></div>`;
-			if (output.length > 3) code = `<details><summary>See code...</summary>${code}</details>`;
+			let code;
+			if (output.length > cutoff) {
+				code = `<div class="chat"><details class="readmore code" style="white-space: pre-wrap; display: table; tab-size: 3"><summary>${output.slice(0, cutoff).join('<br />')}</summary>${output.slice(cutoff).join('<br />')}</details></div>`;
+			} else {
+				code = `<div class="chat"><code style="white-space: pre-wrap; display: table; tab-size: 3">${output.join('<br />')}</code></div>`;
+			}
 
 			if (!this.canBroadcast(true, '!code')) return;
 			if (this.broadcastMessage && !this.can('broadcast', null, room)) return false;
