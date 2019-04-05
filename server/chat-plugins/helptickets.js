@@ -213,7 +213,7 @@ class HelpTicket extends Rooms.RoomGame {
 			let user = entry.shift();
 			let message = entry.join('|');
 			hoverText.push(message.startsWith('/log ') ? message.slice(5) : `${user}: ${message}`);
-			if (hoverText.length >= 2) break;
+			if (hoverText.length >= 3) break;
 		}
 		if (!hoverText.length) return `title="The ticket creator has not spoken yet."`;
 		return `title="${hoverText.reverse().join(`&#10;`)}"`;
@@ -907,7 +907,6 @@ let commands = {
 			}
 			if (contexts[ticket.type]) {
 				helpRoom.add(`|c|~Staff|${contexts[ticket.type]}`);
-				helpRoom.add(`|c|~Staff|A Global Staff member will come to help you once you tell us what we need to know to help you.`);
 				helpRoom.update();
 			} else {
 				ticket.active = true;
