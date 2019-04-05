@@ -1,5 +1,3 @@
-import { Writable } from "stream";
-
 /**
  * Simulator Battle
  * Pokemon Showdown - http://pokemonshowdown.com/
