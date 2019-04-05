@@ -427,45 +427,6 @@ const commands = {
 		return this.parse(`/search ${target}`);
 	},
 
-	'!pi': true,
-	pi(target, room, user) {
-		return this.sendReplyBox(
-			'Did you mean: 1. 3.1415926535897932384626... (Decimal)<br />' +
-			'2. 3.184809493B91866... (Duodecimal)<br />' +
-			'3. 3.243F6A8885A308D... (Hexadecimal)<br /><br />' +
-			'How many digits of pi do YOU know? Test it out <a href="http://guangcongluo.com/mempi/">here</a>!');
-	},
-
-	code(target, room, user) {
-		if (!target) return this.parse('/help code');
-		if (!this.canTalk()) return;
-		if (target.startsWith('\n')) target = target.slice(1);
-		if (target.length >= 8192) return this.errorReply("Your code must be under 8192 characters long!");
-		const separator = '\n';
-		if (target.includes(separator) || target.length > 150) {
-			const params = target.split(separator);
-			let output = [];
-			for (const param of params) {
-				output.push(Chat.escapeHTML(param));
-			}
-			let code = `<div class="chat"><code style="white-space: pre-wrap; display: table; tab-size: 3">${output.join('<br />')}</code></div>`;
-			if (output.length > 3) code = `<details><summary>See code...</summary>${code}</details>`;
-
-			if (!this.canBroadcast(true, '!code')) return;
-			if (this.broadcastMessage && !this.can('broadcast', null, room)) return false;
-
-			if (!this.runBroadcast(true, '!code')) return;
-
-			this.sendReplyBox(code);
-		} else {
-			return this.errorReply("You can simply use ``[code]`` for code messages that are only one line.");
-		}
-	},
-	codehelp: [
-		`!code [code] - Broadcasts code to a room. Accepts multi-line arguments. Requires: + % @ & # ~`,
-		`/code [code] - Shows you code. Accepts multi-line arguments.`,
-	],
-
 	'!avatar': true,
 	avatar(target, room, user) {
 		if (!target) return this.parse(`${this.cmdToken}avatars`);
