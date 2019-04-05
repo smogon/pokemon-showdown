@@ -1,9 +1,25 @@
 /**
  * Battle Simulator smoke testing tooling.
- *
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * Run using `node dev-tools/harness.js` (or `node dev-tools/harness.js CYCLES`).
+ * 'Smoke tests' are a form of sanity testing/build verification which can be
+ * used to expose obvious critical issues with the application. The tooling
+ * in this file works by playing out a number of battles across various
+ * generations and game types, attempting to use as many different effects to
+ * smoke out any crashes. Making it through a successful cycle of smoke tests
+ * does *not* mean the application is without bugs, or even that it is crash
+ * free - it simply provides some confidence that the application is less
+ * likely to catch fire.
+ *
+ * USAGE: `node dev-tools/harness.js` will run through a single 'cycle' of
+ * battles, where each 'cycle' involves exhausting all possible
+ * Pokemon/Abilities/Items/Moves at least once. Additional cycles can be run
+ * by passing the desired number to run as the first argument to the script
+ * (which is important to force different combinations/scenarios to play out).
+ * If the number of cycles is negative, the smoke tests will loop continuously,
+ * running each format a number of times specified by the cycle ad infinitum.
+ *
+ * In all cases, the program will abort if MAX_FAILURES have been encountered.
  *
  * @license MIT
  */
