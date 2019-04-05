@@ -6119,7 +6119,7 @@ let BattleMovedex = {
 		accuracy: 95,
 		basePower: 40,
 		basePowerCallback(pokemon, target, move) {
-			if (!pokemon.volatiles.furycutter) {
+			if (!pokemon.volatiles.furycutter || move.hit === 1) {
 				pokemon.addVolatile('furycutter');
 			}
 			return this.clampIntRange(move.basePower * pokemon.volatiles.furycutter.multiplier, 1, 160);
@@ -6132,10 +6132,6 @@ let BattleMovedex = {
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1},
-		onHit(target, source, move) {
-			if (move.hit === 1) return;
-			source.addVolatile('furycutter');
-		},
 		effect: {
 			duration: 2,
 			onStart() {
