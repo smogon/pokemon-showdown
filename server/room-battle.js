@@ -462,6 +462,9 @@ class RoomBattle extends RoomGames.RoomGame {
 		 */
 		this.allowExtraction = null;
 
+		/** @type {string[]?} */
+		this.allowTie = null;
+
 		this.logData = null;
 		this.endType = 'normal';
 		/**
@@ -653,6 +656,8 @@ class RoomBattle extends RoomGames.RoomGame {
 		}
 	}
 	receive(/** @type {string[]} */ lines) {
+		this.allowTie = null;
+
 		switch (lines[0]) {
 		case 'update':
 			for (const line of lines.slice(1)) {

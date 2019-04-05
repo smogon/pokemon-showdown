@@ -3796,6 +3796,40 @@ const commands = {
 	},
 	importinputloghelp: [`/importinputlog [inputlog] - Starts a battle with a given inputlog. Requires: + % @ & ~`],
 
+	acceptdraw: 'acceptdraw',
+	offerdraw(target, room, user, connection, cmd) {
+		const battle = room.battle;
+		if (!battle) return this.errorReply("Must be in a battle room.");
+		if (!Config.allowrequestingties) return this.errorReply("This server does not allow the offering/accpeting of draws");
+		if (!this.can('roomvoice', null, room)) return;
+		if (cmd === 'acceptdraw' && !battle.allowTie) return this.errorReply("No draw offer available. It might have been automatically withdrawn as the current turn started.");
+		const playerIds = Object.keys(battle.playerTable);
+		if (!battle.allowTie) {
+			battle.allowTie = [];
+			for (const player of playerIds) {
+				if (player === user.userid) {
+					battle.allowTie.push(player);
+					continue;
+				}
+				Users(player).sendTo(
+					room,
+					Chat.html`|html|${user.name} is offering a draw, do you <button class="button" name="send" value="/acceptdraw">accept</button>?`
+				);
+			}
+			this.add(`${user.name} is offering a draw`);
+		} else {
+			if (!playerIds.includes(user.userid)) return this.errorReply("Must be a player to accept draws");
+			if (battle.allowTie.includes(user.userid)) return this.errorReply("You have already accepted to draw this battle.");
+			battle.allowTie.push(user.userid);
+			this.add(`${user.userid} accepts to draw this battle`);
+			if (playerIds.length === battle.allowTie.length) {
+				this.add(`All the players in this battle (${Chat.toListString(playerIds)}) accept to draw this battle.`);
+				room.battle.tie();
+			}
+		}
+	},
+	offerdrawhelp: [`/offerdraw - Offers a draw to all others players in a battle, if all accept it is then tied.`],
+
 	inputlog() {
 		this.parse(`/help exportinputlog`);
 		this.parse(`/help importinputlog`);

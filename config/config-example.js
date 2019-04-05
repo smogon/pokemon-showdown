@@ -171,6 +171,12 @@ exports.crashguardemail = null;
  */
 exports.disablebasicnamefilter = false;
 
+
+/**
+ * allowrequestingties - disables the use of `/offerdraw` and `/acceptdraw`
+ */
+exports.allowrequestingties = false;
+
 /**
  * report joins and leaves - shows messages like "<USERNAME> joined"
  *   Join and leave messages are small and consolidated, so there will never
