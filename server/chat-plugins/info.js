@@ -2296,6 +2296,7 @@ const commands = {
 			'How many digits of pi do YOU know? Test it out <a href="http://guangcongluo.com/mempi/">here</a>!');
 	},
 
+	'!code': true,
 	code(target, room, user) {
 		if (!target) return this.parse('/help code');
 		if (!this.canTalk()) return;
@@ -2329,6 +2330,7 @@ const commands = {
 	},
 	codehelp: [
 		`!code [code] - Broadcasts code to a room. Accepts multi-line arguments. Requires: + % @ & # ~`,
+		`In order to use !code in private messages you must be a global voice or higher`,
 		`/code [code] - Shows you code. Accepts multi-line arguments.`,
 	],
 
