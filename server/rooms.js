@@ -1611,13 +1611,12 @@ let Rooms = Object.assign(getRoom, {
 	 */
 	createBattle(formatid, options) {
 		/** @type {User?[]} */
-		const players = [options.p1, options.p2, options.p3, options.p4];
+		const players = [options.p1, options.p2, options.p3, options.p4].filter(player => player);
 		const gameType = Dex.getFormat(formatid).gameType;
 		if (gameType !== 'multi' && gameType !== 'free-for-all') {
 			if (players[2] || players[3]) {
 				throw new Error(`Four players were provided, but the format is a two-player format.`);
 			}
-			players.splice(2);
 		}
 		if (new Set(players).size < players.length) {
 			throw new Error(`Players can't battle themselves`);
