@@ -20,6 +20,8 @@ const fs = require('fs');
 /** @type {typeof import('../lib/fs').FS} */
 const FS = require(/** @type {any} */('../.lib-dist/fs')).FS;
 
+/** @typedef {0 | 1 | 2 | 3 | 4} ChannelID */
+
 const Monitor = {
 	crashlog: require(/** @type {any} */('../.lib-dist/crashlogger')),
 };
@@ -233,11 +235,11 @@ if (cluster.isMaster) {
 	/**
 	 * @param {cluster.Worker} worker
 	 * @param {string} roomid
-	 * @param {number} channelIndex
+	 * @param {ChannelID} channelid
 	 * @param {string} socketid
 	 */
-	exports.channelMove = function (worker, roomid, channelIndex, socketid) {
-		worker.send(`.${roomid}\n${channelIndex}\n${socketid}`);
+	exports.channelMove = function (worker, roomid, channelid, socketid) {
+		worker.send(`.${roomid}\n${channelid}\n${socketid}`);
 	};
 
 	/**
@@ -425,8 +427,8 @@ if (cluster.isMaster) {
 	 */
 	const rooms = new Map();
 	/**
-	 * roomid:socketid:channelIndex
-	 * @type {Map<string, Map<string, string>>}
+	 * roomid:socketid:channelid
+	 * @type {Map<string, Map<string, ChannelID>>}
 	 */
 	const roomChannels = new Map();
 
@@ -448,7 +450,7 @@ if (cluster.isMaster) {
 
 	/**
 	 * @param {string} message
-	 * @param {number} channelid
+	 * @param {-1 | ChannelID} channelid
 	 */
 	const extractChannel = (message, channelid) => {
 		if (channelid === -1) {
@@ -477,9 +479,10 @@ if (cluster.isMaster) {
 		/** @type {Map<string, import('sockjs').Connection> | undefined?} */
 		let room = null;
 		let roomid = '';
-		/** @type {Map<string, string> | undefined?} */
+		/** @type {Map<string, ChannelID> | undefined?} */
 		let roomChannel = null;
-		let channelid = '';
+		/** @type {ChannelID} */
+		let channelid = 0;
 		let nlLoc = -1;
 		let message = '';
 
@@ -567,7 +570,7 @@ if (cluster.isMaster) {
 			nlLoc = data.indexOf('\n');
 			roomid = data.slice(1, nlLoc);
 			let nlLoc2 = data.indexOf('\n', nlLoc + 1);
-			channelid = data.slice(nlLoc + 1, nlLoc2);
+			channelid = /** @type {ChannelID} */(Number(data.slice(nlLoc + 1, nlLoc2)));
 			socketid = data.slice(nlLoc2 + 1);
 
 			roomChannel = roomChannels.get(roomid);
@@ -575,7 +578,7 @@ if (cluster.isMaster) {
 				roomChannel = new Map();
 				roomChannels.set(roomid, roomChannel);
 			}
-			if (channelid === '0') {
+			if (channelid === 0) {
 				roomChannel.delete(socketid);
 			} else {
 				roomChannel.set(socketid, channelid);
@@ -595,7 +598,7 @@ if (cluster.isMaster) {
 			message = data.substr(nlLoc + 1);
 			roomChannel = roomChannels.get(roomid);
 			for (const [socketid, socket] of room) {
-				const channelid = roomChannel ? Number(roomChannel.get(socketid)) : 0;
+				channelid = (roomChannel && roomChannel.get(socketid)) || 0;
 				if (!messages[channelid]) messages[channelid] = extractChannel(message, channelid);
 				socket.write(/** @type {string} */(messages[channelid]));
 			}

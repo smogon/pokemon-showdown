@@ -49,7 +49,8 @@ class RoomBattlePlayer {
 		this.slot = slot;
 		const channelIndex = Number(slot.charAt(1));
 		this.slotNum = channelIndex - 1;
-		this.channelIndex = (game.gameType === 'multi') ? channelIndex % 2 : channelIndex;
+		this.channelIndex = /** @type {0 | 1 | 2 | 3 | 4} */
+			(game.gameType === 'multi' ? channelIndex % 2 + 1 : channelIndex);
 		this.active = true;
 		this.eliminated = false;
 
