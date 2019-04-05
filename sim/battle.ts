@@ -2911,27 +2911,22 @@ export class Battle extends Dex.ModdedDex {
 			return;
 		}
 
-		const secrets: Map<SideID, Part[]> = new Map();
-		const shared: Part[] = [];
+		let side: SideID | null = null;
+		const secret = [];
+		const shared = [];
 		for (const part of parts) {
 			if (typeof part === 'function') {
 				const split = part();
-				if (!secrets.has(split.side)) secrets.set(split.side, shared.slice());
-				for (const [side, secret] of secrets.entries()) {
-					secret.push(side === split.side ? split.secret : split.shared);
-				}
+				if (side && side !== split.side) throw new Error("Multiple sides passed to add");
+				side = split.side;
+				secret.push(split.secret);
 				shared.push(split.shared);
 			} else {
-				for (const secret of secrets.values()) {
-					secret.push(part);
-				}
+				secret.push(part);
 				shared.push(part);
 			}
 		}
-
-		for (const [side, secret] of secrets.entries()) {
-			this.addSplit(side, secret, shared);
-		}
+		this.addSplit(side!, secret, shared);
 	}
 
 	// tslint:disable-next-line:ban-types
