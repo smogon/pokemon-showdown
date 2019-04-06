@@ -258,7 +258,7 @@ let BattleAbilities = {
 		inherit: true,
 		shortDesc: "This Pokemon receives 1/2 damage from supereffective attacks.",
 		onSourceModifyDamage(damage, attacker, defender, move) {
-			if (move.getHitData(defender).typeMod > 0) {
+			if (defender.getMoveHitData(move).typeMod > 0) {
 				this.add('-message', "The attack was weakened by Solid Rock!");
 				return this.chainModify(0.5);
 			}
@@ -268,7 +268,7 @@ let BattleAbilities = {
 		inherit: true,
 		shortDesc: "This Pokemon receives 1/2 damage from supereffective attacks.",
 		onSourceModifyDamage(damage, attacker, defender, move) {
-			if (move.getHitData(defender).typeMod > 0) {
+			if (defender.getMoveHitData(move).typeMod > 0) {
 				this.add('-message', "The attack was weakened by Filter!");
 				return this.chainModify(0.5);
 			}

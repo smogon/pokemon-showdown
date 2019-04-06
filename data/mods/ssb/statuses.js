@@ -92,7 +92,7 @@ let BattleStatuses = {
 			this.add(`c|%Akir|too sleepy, c ya`);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.getHitData(target).typeMod > 0 && !target.illusion) {
+			if (target.getMoveHitData(move).typeMod > 0 && !target.illusion) {
 				this.debug('Solid Rock neutralize');
 				return this.chainModify(0.75);
 			}
@@ -950,7 +950,7 @@ let BattleStatuses = {
 			this.add(`c|+Osiris|I'm getting too old for this x_x`);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.getHitData(target).typeMod > 0 && !target.illusion) {
+			if (target.getMoveHitData(move).typeMod > 0 && !target.illusion) {
 				this.debug('Solid Rock neutralize');
 				return this.chainModify(0.75);
 			}

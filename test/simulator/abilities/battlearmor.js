@@ -19,7 +19,7 @@ describe('Battle Armor', function () {
 		battle.onEvent('ModifyDamage', battle.getFormat(), function (damage, attacker, defender, move) {
 			if (move.id === 'frostbreath') {
 				successfulEvent = true;
-				assert.ok(!move.getHitData(defender).crit);
+				assert.ok(!defender.getMoveHitData(move).crit);
 			}
 		});
 		battle.makeChoices('move quickattack', 'move frostbreath');
@@ -36,7 +36,7 @@ describe('Battle Armor', function () {
 		battle.onEvent('ModifyDamage', battle.getFormat(), function (damage, attacker, defender, move) {
 			if (move.id === 'frostbreath') {
 				successfulEvent = true;
-				assert.ok(move.getHitData(defender).crit);
+				assert.ok(defender.getMoveHitData(move).crit);
 			}
 		});
 		battle.makeChoices('move quickattack', 'move frostbreath');

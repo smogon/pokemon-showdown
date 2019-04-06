@@ -910,11 +910,6 @@ interface ActiveMove extends BasicEffect, MoveData {
 	 * truthy.
 	 */
 	isZPowered?: boolean
-	
-	getHitData(target: Pokemon): {crit: boolean, typeMod: number, zBrokeProtect: boolean}
-	crit(target: Pokemon): void
-	setTypeModFor(target: Pokemon, typeMod: number): void
-	zBreakProtect(target: Pokemon): void
 }
 
 type TemplateAbility = {0: string, 1?: string, H?: string, S?: string}

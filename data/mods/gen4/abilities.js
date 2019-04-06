@@ -8,7 +8,7 @@ let BattleAbilities = {
 		shortDesc: "If this Pokemon or its substitute takes a critical hit, its Attack is raised 12 stages.",
 		onAfterSubDamage(damage, target, source, move) {
 			if (!target.hp) return;
-			if (move && move.effectType === 'Move' && move.getHitData(target).crit) {
+			if (move && move.effectType === 'Move' && target.getMoveHitData(move).crit) {
 				target.setBoost({atk: 6});
 				this.add('-setboost', target, 'atk', 12, '[from] ability: Anger Point');
 			}
