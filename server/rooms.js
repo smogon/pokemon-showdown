@@ -1613,11 +1613,11 @@ let Rooms = Object.assign(getRoom, {
 	 * @param {AnyObject} options
 	 */
 	createBattle(formatid, options) {
-		/** @type {User?[]} */
-		const players = [options.p1, options.p2, options.p3, options.p4].filter(player => player);
+		/** @type {(User & {specialNextBattle: boolean})[]} */
+		const players = [options.p1, options.p2, options.p3, options.p4].filter(user => user);
 		const gameType = Dex.getFormat(formatid).gameType;
 		if (gameType !== 'multi' && gameType !== 'free-for-all') {
-			if (players[2] || players[3]) {
+			if (players.length > 2) {
 				throw new Error(`Four players were provided, but the format is a two-player format.`);
 			}
 		}
@@ -1625,34 +1625,29 @@ let Rooms = Object.assign(getRoom, {
 			throw new Error(`Players can't battle themselves`);
 		}
 
-		for (const p of players) {
-			if (p) Ladders.cancelSearches(p);
+		for (const user of players) {
+			Ladders.cancelSearches(user);
 		}
 
 		if (Rooms.global.lockdown === true) {
-			for (const p of players) {
-				if (p) p.popup("The server is restarting. Battles will be available again in a few minutes.");
+			for (const user of players) {
+				user.popup("The server is restarting. Battles will be available again in a few minutes.");
 			}
 			return;
 		}
 
-		// @ts-ignore
-		if (players.every(p => p) && players.some(p => p.specialNextBattle)) {
-			// @ts-ignore
+		if (players.some(user => user.specialNextBattle)) {
 			const p1Special = players[0].specialNextBattle;
 			let mismatch = `"${p1Special}"`;
-			for (const p of players) {
-				// @ts-ignore
-				if (p.specialNextBattle !== p1Special) {
-					// @ts-ignore
-					mismatch += ` vs. "${p.specialNextBattle}"`;
+			for (const user of players) {
+				if (user.specialNextBattle !== p1Special) {
+					mismatch += ` vs. "${user.specialNextBattle}"`;
 					break;
 				}
 			}
 			if (mismatch !== `"${p1Special}"`) {
-				for (const p of players) {
-					// @ts-ignore p is not null
-					p.popup(`Your special battle settings don't match: ${mismatch}`);
+				for (const user of players) {
+					user.popup(`Your special battle settings don't match: ${mismatch}`);
 				}
 				return;
 			}
@@ -1683,10 +1678,10 @@ let Rooms = Object.assign(getRoom, {
 		room.game = new Rooms.RoomBattle(room, formatid, options);
 
 		let inviteOnly = (options.inviteOnly || []);
-		for (const p of players) {
-			if (p && p.inviteOnlyNextBattle) {
-				inviteOnly.push(p.userid);
-				p.inviteOnlyNextBattle = false;
+		for (const user of players) {
+			if (user.inviteOnlyNextBattle) {
+				inviteOnly.push(user.userid);
+				user.inviteOnlyNextBattle = false;
 			}
 		}
 		if (options.tour && !room.tour.modjoin) inviteOnly = [];
