@@ -1980,7 +1980,7 @@ export class Battle extends Dex.ModdedDex {
 		if (move.willCrit || move.willCrit === undefined && critRatio && this.randomChance(1, critMult[critRatio])) {
 			if (this.runEvent('CriticalHit', target, null, move)) {
 				isCrit = true;
-				move.crit(target);
+				target.setMoveCrit(move);
 			}
 		}
 
@@ -2067,7 +2067,7 @@ export class Battle extends Dex.ModdedDex {
 		baseDamage = this.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
 
 		// crit - not a modifier
-		const isCrit = move.getHitData(target).crit;
+		const isCrit = target.getMoveHitData(move).crit;
 		if (isCrit) {
 			baseDamage = tr(baseDamage * (move.critModifier || (this.gen >= 6 ? 1.5 : 2)));
 		}
@@ -2086,7 +2086,7 @@ export class Battle extends Dex.ModdedDex {
 		// types
 		let typeMod = target.runEffectiveness(move);
 		typeMod = this.clampIntRange(typeMod, -6, 6);
-		move.setTypeModFor(target, typeMod);
+		target.setMoveTypeModFor(move, typeMod);
 		if (typeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
 
@@ -2116,7 +2116,7 @@ export class Battle extends Dex.ModdedDex {
 		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 		baseDamage = this.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
 
-		if (move.isZPowered && move.getHitData(target).zBrokeProtect) {
+		if (move.isZPowered && target.getMoveHitData(move).zBrokeProtect) {
 			baseDamage = this.modify(baseDamage, 0.25);
 			this.add('-zbroken', target);
 		}
