@@ -854,48 +854,6 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 	}
 }
 
-export class ActiveMove extends Move implements BasicEffect, MoveData {
-	readonly effectType: 'Move' = 'Move';
-	hit: number;
-	moveHitData: MoveHitData;
-	ability?: Ability;
-	aerilateBoosted?: boolean;
-	allies?: Pokemon[];
-	auraBooster?: Pokemon;
-	causedCrashDamage?: boolean;
-	forceStatus?: string;
-	galvanizeBoosted?: boolean;
-	hasAuraBreak?: boolean;
-	hasBounced?: boolean;
-	hasSheerForce?: boolean;
-	isExternal?: boolean;
-	lastHit?: boolean;
-	magnitude?: number;
-	negateSecondary?: boolean;
-	normalizeBoosted?: boolean;
-	pixilateBoosted?: boolean;
-	pranksterBoosted?: boolean;
-	refrigerateBoosted?: boolean;
-	selfDropped?: boolean;
-	stab?: number;
-	statusRoll?: string;
-	totalDamage?: number | false;
-	willChangeForme?: boolean;
-	/**
-	 * Has this move been boosted by a Z-crystal? Usually the same as
-	 * `isZ`, but hacked moves will have this be `false` and `isZ` be
-	 * truthy.
-	 */
-	isZPowered?: boolean;
-
-	constructor(data: AnyObject, ...moreData: AnyObject[]) {
-		super(data, ...moreData);
-
-		this.hit = 0;
-		this.moveHitData = {crit: {}, typeMod: {}, zBrokeProtect: {}};
-	}
-}
-
 type TypeInfoEffectType = 'Type' | 'EffectType';
 
 export class TypeInfo implements Readonly<TypeData> {

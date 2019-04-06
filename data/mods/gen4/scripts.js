@@ -63,7 +63,7 @@ let BattleScripts = {
 		// types
 		let typeMod = target.runEffectiveness(move);
 		typeMod = this.clampIntRange(typeMod, -6, 6);
-		target.setMoveTypeModFor(move, typeMod);
+		target.getMoveHitData(move).typeMod = typeMod;
 		if (typeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
 

@@ -1924,17 +1924,18 @@ export class Battle extends Dex.ModdedDex {
 	 */
 	getDamage(
 		pokemon: Pokemon, target: Pokemon, move: string | number | ActiveMove,
-		suppressMessages: boolean = false): number | undefined | null | false {
+		suppressMessages: boolean = false
+	): number | undefined | null | false {
 		if (typeof move === 'string') move = this.getActiveMove(move);
 
 		if (typeof move === 'number') {
 			const basePower = move;
-			move = new Data.ActiveMove({
+			move = new Data.Move({
 				basePower,
 				type: '???',
 				category: 'Physical',
 				willCrit: false,
-			});
+			}) as ActiveMove;
 			move.hit = 0;
 		}
 
@@ -1976,11 +1977,10 @@ export class Battle extends Dex.ModdedDex {
 			}
 		}
 
-		let isCrit = false;
+		const moveHit = target.getMoveHitData(move);
 		if (move.willCrit || move.willCrit === undefined && critRatio && this.randomChance(1, critMult[critRatio])) {
 			if (this.runEvent('CriticalHit', target, null, move)) {
-				isCrit = true;
-				target.setMoveCrit(move);
+				moveHit.crit = true;
 			}
 		}
 
@@ -2006,7 +2006,7 @@ export class Battle extends Dex.ModdedDex {
 		let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
 		let ignorePositiveDefensive = !!move.ignorePositiveDefensive;
 
-		if (isCrit) {
+		if (moveHit.crit) {
 			ignoreNegativeOffensive = true;
 			ignorePositiveDefensive = true;
 		}
@@ -2086,7 +2086,7 @@ export class Battle extends Dex.ModdedDex {
 		// types
 		let typeMod = target.runEffectiveness(move);
 		typeMod = this.clampIntRange(typeMod, -6, 6);
-		target.setMoveTypeModFor(move, typeMod);
+		target.getMoveHitData(move).typeMod = typeMod;
 		if (typeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
 
