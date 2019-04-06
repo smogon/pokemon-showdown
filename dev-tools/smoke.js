@@ -430,6 +430,7 @@ if (require.main === module) {
 	// dedicate some computer resources to finding PS! edge case crashes instead of mining crypto,
 	// folding proteins, or searching for extraterrestrials/large primes.
 	const cycles = Number(process.argv[2]) || DEFAULT_CYCLES;
+	const forever = cycles < 0;
 	const format = process.argv[3];
 	const formats = format ? [format] : FORMATS;
 	const maxFailures = format ? 1 : MAX_FAILURES;
@@ -445,7 +446,7 @@ if (require.main === module) {
 				process.stdout.write('\n');
 				if (failures >= maxFailures) break;
 			}
-		} while (cycles < 0); // eslint-disable-line no-unmodified-loop-condition
+		} while (forever); // eslint-disable-line no-unmodified-loop-condition
 		process.exit(failures);
 	})();
 }
