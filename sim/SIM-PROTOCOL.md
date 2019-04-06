@@ -338,6 +338,10 @@ stat boosts are minor actions.
 
 > Same as `-damage`, but the Pokémon has healed damage instead.
 
+`|-sethp|POKEMON|HP`
+
+> The specified Pokémon `POKEMON` now has `HP` hit points.
+
 `|-status|POKEMON|STATUS`
 
 > The Pokémon `POKEMON` has been inflicted with `STATUS`.
