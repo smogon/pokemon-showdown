@@ -525,6 +525,34 @@ export class Pokemon {
 		return null;
 	}
 
+	getMoveHitData(move: ActiveMove) {
+		move = Pokemon.ensureActiveMove(move);
+		return {
+			crit: move.moveHitData.crit[this.toString().slice(0, 3)] || false,
+			typeMod: move.moveHitData.typeMod[this.toString().slice(0, 3)] || 0,
+			zBrokeProtect: move.moveHitData.zBrokeProtect[this.toString().slice(0, 3)] || false,
+		};
+	}
+
+	setMoveCrit(move: ActiveMove) {
+		Pokemon.ensureActiveMove(move).moveHitData.crit[this.toString().slice(0, 3)] = true;
+	}
+
+	setMoveTypeModFor(move: ActiveMove, typeMod: number) {
+		Pokemon.ensureActiveMove(move).moveHitData.typeMod[this.toString().slice(0, 3)] = typeMod;
+	}
+
+	setMoveZBreakProtect(move: ActiveMove) {
+		Pokemon.ensureActiveMove(move).moveHitData.zBrokeProtect[this.toString().slice(0, 3)] = true;
+	}
+
+	// TODO(#5415): Revamp ActiveMove to fix this.
+	private static ensureActiveMove(obj: any): any {
+		obj.hit = obj.hit || 0;
+		obj.moveHitData = obj.moveHitData || {crit: {}, typeMod: {}, zBrokeProtect: {}};
+		return obj;
+	}
+
 	allies(): Pokemon[] {
 		let allies = this.side.active;
 		if (this.battle.gameType === 'multi') {

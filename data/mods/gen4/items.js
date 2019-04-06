@@ -36,7 +36,7 @@ let BattleItems = {
 		inherit: true,
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.causedCrashDamage) return damage;
-			if (move.type === 'Fighting' && move.getHitData(target).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'])) {
+			if (move.type === 'Fighting' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'])) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');

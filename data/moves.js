@@ -852,7 +852,7 @@ let BattleMovedex = {
 							(target.side.getSideCondition('lightscreen') && this.getCategory(move) === 'Special')) {
 						return;
 					}
-					if (!move.getHitData(target).crit && !move.infiltrates) {
+					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Aurora Veil weaken');
 						if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
 						return this.chainModify(0.5);
@@ -1028,7 +1028,7 @@ let BattleMovedex = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect']) {
-					if (move.isZ) move.zBreakProtect(target);
+					if (move.isZ) target.setMoveZBreakProtect(move);
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
@@ -8972,7 +8972,7 @@ let BattleMovedex = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect'] || move.category === 'Status') {
-					if (move.isZ) move.zBreakProtect(target);
+					if (move.isZ) target.setMoveZBreakProtect(move);
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
@@ -9394,7 +9394,7 @@ let BattleMovedex = {
 			},
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Special') {
-					if (!move.getHitData(target).crit && !move.infiltrates) {
+					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Light Screen weaken');
 						if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
 						return this.chainModify(0.5);
@@ -10031,7 +10031,7 @@ let BattleMovedex = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect']) {
-					if (move.isZ) move.zBreakProtect(target);
+					if (move.isZ) target.setMoveZBreakProtect(move);
 					return;
 				}
 				if (move && (move.target === 'self' || move.category === 'Status')) return;
@@ -12477,7 +12477,7 @@ let BattleMovedex = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect']) {
-					if (move.isZ) move.zBreakProtect(target);
+					if (move.isZ) target.setMoveZBreakProtect(move);
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
@@ -12999,7 +12999,7 @@ let BattleMovedex = {
 				// (e.g. it blocks 0 priority moves boosted by Prankster or Gale Wings; Quick Claw/Custap Berry do not count)
 				if (move.priority <= 0.1) return;
 				if (!move.flags['protect']) {
-					if (move.isZ) move.zBreakProtect(target);
+					if (move.isZ) target.setMoveZBreakProtect(move);
 					return;
 				}
 				this.add('-activate', target, 'move: Quick Guard');
@@ -13309,7 +13309,7 @@ let BattleMovedex = {
 			},
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Physical') {
-					if (!move.getHitData(target).crit && !move.infiltrates) {
+					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Reflect weaken');
 						if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
 						return this.chainModify(0.5);
@@ -15705,7 +15705,7 @@ let BattleMovedex = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				if (!move.flags['protect']) {
-					if (move.isZ) move.zBreakProtect(target);
+					if (move.isZ) target.setMoveZBreakProtect(move);
 					return;
 				}
 				this.add('-activate', target, 'move: Protect');
@@ -18981,7 +18981,7 @@ let BattleMovedex = {
 					return;
 				}
 				if (move.isZ) {
-					move.zBreakProtect(target);
+					target.setMoveZBreakProtect(move);
 					return;
 				}
 				this.add('-activate', target, 'move: Wide Guard');

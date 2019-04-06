@@ -83,7 +83,7 @@ describe('Disguise', function () {
 		battle.onEvent('Damage', battle.getFormat(), function (damage, attacker, defender, move) {
 			if (move.id === 'frostbreath') {
 				successfulEvent = true;
-				assert.ok(!move.getHitData(defender).crit);
+				assert.ok(!defender.getMoveHitData(move).crit);
 			}
 		});
 		battle.makeChoices();

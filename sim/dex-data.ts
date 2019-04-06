@@ -894,26 +894,6 @@ export class ActiveMove extends Move implements BasicEffect, MoveData {
 		this.hit = 0;
 		this.moveHitData = {crit: {}, typeMod: {}, zBrokeProtect: {}};
 	}
-
-	getHitData(target: Pokemon) {
-		return {
-			crit: this.moveHitData.crit[target.toString().slice(0, 3)] || false,
-			typeMod: this.moveHitData.typeMod[target.toString().slice(0, 3)] || 0,
-			zBrokeProtect: this.moveHitData.zBrokeProtect[target.toString().slice(0, 3)] || false,
-		};
-	}
-
-	crit(target: Pokemon) {
-		this.moveHitData.crit[target.toString().slice(0, 3)] = true;
-	}
-
-	setTypeModFor(target: Pokemon, typeMod: number) {
-		this.moveHitData.typeMod[target.toString().slice(0, 3)] = typeMod;
-	}
-
-	zBreakProtect(target: Pokemon) {
-		this.moveHitData.zBrokeProtect[target.toString().slice(0, 3)] = true;
-	}
 }
 
 type TypeInfoEffectType = 'Type' | 'EffectType';
