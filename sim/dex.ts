@@ -457,7 +457,7 @@ class ModdedDex {
 	getActiveMove(move: Move | string): ActiveMove {
 		if (move && typeof (move as ActiveMove).hit === 'number') return move as ActiveMove;
 		move = this.getMove(move);
-		const moveCopy: ActiveMove = new Data.ActiveMove(this.deepClone(move));
+		const moveCopy: ActiveMove = this.deepClone(move);
 		moveCopy.hit = 0;
 		return moveCopy;
 	}

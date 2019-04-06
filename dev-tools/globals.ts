@@ -864,22 +864,22 @@ interface Move extends Readonly<BasicEffect & MoveData> {
 	readonly effectType: 'Move'
 }
 
-interface MoveHitData {
-	/** Whether or not this move is a crit against each defender */
-	crit: {[slotid: string]: boolean};
-	/** The type effectiveness of this move against each defender */
-	typeMod: {[slotid: string]: number};
+type MoveHitData = {[targetSlotid: string]: {
+	/** Did this move crit against the target? */
+	crit: boolean;
+	/** The type effectiveness of this move against the target */
+	typeMod: number;
 	/**
-	 * Whether or not this move is a Z-Move that broke protect for each defender
-	 * (affects damage calculation).
+	 * Is this move a Z-Move that broke the target's protection?
+	 * (does 0.25x regular damage)
 	 */
-	zBrokeProtect: {[slotid: string]: boolean}
-}
+	zBrokeProtect: boolean;
+}}
 
 interface ActiveMove extends BasicEffect, MoveData {
 	readonly effectType: 'Move'
 	hit: number
-	moveHitData: MoveHitData
+	moveHitData?: MoveHitData
 	ability?: Ability
 	aerilateBoosted?: boolean
 	allies?: Pokemon[]
