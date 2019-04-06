@@ -1080,7 +1080,7 @@ if (!PM.isParentProcess) {
 	global.__version = '';
 	try {
 		const execSync = require('child_process').execSync;
-		const out = execSync('git merge-base master HEAD', {
+		const out = execSync('git merge-base origin/master HEAD', {
 			stdio: ['ignore', 'pipe', 'ignore'],
 		});
 		global.__version = ('' + out).trim();
