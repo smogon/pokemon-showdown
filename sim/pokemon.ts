@@ -527,10 +527,11 @@ export class Pokemon {
 
 	getMoveHitData(move: ActiveMove) {
 		move = Pokemon.ensureActiveMove(move);
+		const slotid = this.toString().slice(0, 3);
 		return {
-			crit: move.moveHitData.crit[this.toString().slice(0, 3)] || false,
-			typeMod: move.moveHitData.typeMod[this.toString().slice(0, 3)] || 0,
-			zBrokeProtect: move.moveHitData.zBrokeProtect[this.toString().slice(0, 3)] || false,
+			crit: move.moveHitData.crit[slotid] || false,
+			typeMod: move.moveHitData.typeMod[slotid] || 0,
+			zBrokeProtect: move.moveHitData.zBrokeProtect[slotid] || false,
 		};
 	}
 
