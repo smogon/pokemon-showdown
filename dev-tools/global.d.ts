@@ -56,7 +56,6 @@ declare global {
 	const Format: DataType.Format
 	const Item: DataType.Item
 	const Move: DataType.Move
-	const ActiveMove: DataType.ActiveMove
 	const TypeInfo: DataType.TypeInfo
 	const PureEffect: DataType.PureEffect
 	const RuleTable: DataType.RuleTable

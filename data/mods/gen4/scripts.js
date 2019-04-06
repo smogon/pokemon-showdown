@@ -41,7 +41,7 @@ let BattleScripts = {
 
 		baseDamage += 2;
 
-		const isCrit = move.getHitData(target).crit;
+		const isCrit = target.getMoveHitData(move).crit;
 		if (isCrit) {
 			baseDamage = this.modify(baseDamage, move.critModifier || 2);
 		}
@@ -63,7 +63,7 @@ let BattleScripts = {
 		// types
 		let typeMod = target.runEffectiveness(move);
 		typeMod = this.clampIntRange(typeMod, -6, 6);
-		move.setTypeModFor(target, typeMod);
+		target.getMoveHitData(move).typeMod = typeMod;
 		if (typeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
 
