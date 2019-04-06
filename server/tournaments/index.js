@@ -74,7 +74,6 @@ class Tournament extends Rooms.RoomGame {
 		this.autoDisqualifyWarnings = new Map();
 		this.lastActionTimes = new Map();
 
-
 		this.isBracketInvalidated = true;
 		this.lastBracketUpdate = 0;
 		this.bracketUpdateTimer = null;
