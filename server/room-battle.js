@@ -47,10 +47,9 @@ class RoomBattlePlayer {
 		user.updateSearch();
 
 		this.slot = slot;
-		const channelIndex = Number(slot.charAt(1));
-		this.slotNum = channelIndex - 1;
+		this.slotNum = Number(slot.charAt(1)) - 1;
 		this.channelIndex = /** @type {0 | 1 | 2 | 3 | 4} */
-			(game.gameType === 'multi' ? channelIndex % 2 + 1 : channelIndex);
+			((game.gameType === 'multi' ? this.slotNum % 2 : this.slotNum) + 1);
 		this.active = true;
 		this.eliminated = false;
 
