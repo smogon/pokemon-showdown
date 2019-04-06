@@ -390,10 +390,15 @@ export class Pokemon {
 		return this.baseMoveSlots.map(moveSlot => moveSlot.id);
 	}
 
+	getSlot() {
+		const positionOffset = Math.floor(this.side.n / 2) * this.side.active.length;
+		const positionLetter = 'abcdef'.charAt(this.position + positionOffset);
+		return this.side.id + positionLetter;
+	}
+
 	toString() {
 		const fullname = (this.illusion) ? this.illusion.fullname : this.fullname;
-		const position = 'abcdef'[this.position + Math.floor(this.side.n / 2) * this.side.active.length];
-		return this.isActive ? fullname.substr(0, 2) + position + fullname.substr(2) : fullname;
+		return this.isActive ? this.getSlot() + fullname.slice(2) : fullname;
 	}
 
 	getDetails = (side: 0 | 1 | boolean) => {
@@ -523,6 +528,16 @@ export class Pokemon {
 			}
 		}
 		return null;
+	}
+
+	getMoveHitData(move: ActiveMove) {
+		if (!move.moveHitData) move.moveHitData = {};
+		const slot = this.getSlot();
+		return move.moveHitData[slot] || (move.moveHitData[slot] = {
+			crit: false,
+			typeMod: 0,
+			zBrokeProtect: false,
+		});
 	}
 
 	allies(): Pokemon[] {
