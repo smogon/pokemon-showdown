@@ -284,7 +284,6 @@ export abstract class BattlePlayer {
 	}
 
 	abstract receiveRequest(request: AnyObject): void;
-	abstract receiveCallback(callback: string[]): void;
 
 	receiveError(error: Error) {
 		throw error;
