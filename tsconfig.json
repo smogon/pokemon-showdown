@@ -35,6 +35,7 @@
         "./server/chat-plugins/thing-of-the-day.js",
         "./server/chat-plugins/uno.js",
         "./server/chat-plugins/wifi.js",
+        "./server/tournaments/index.js",
         "./server/tournaments/generator-round-robin.js",
         "./sim/**/*"
     ]

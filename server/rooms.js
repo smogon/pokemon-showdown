@@ -113,6 +113,9 @@ class BasicRoom {
 		this.filterCaps = false;
 		this.mafiaEnabled = false;
 		this.unoDisabled = false;
+		/** @type {'%' | boolean} */
+		this.toursEnabled = false;
+		this.tourAnnouncements = false;
 		/** @type {Set<string>?} */
 		this.privacySetter = null;
 		/** @type {Map<string, ChatRoom>?} */
