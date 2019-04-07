@@ -75,6 +75,7 @@ class Runner {
 		while ((chunk = await streams.omniscient.read())) {
 			if (this.output) console.log(chunk);
 		}
+		streams.omniscient.end();
 	}
 
 	// Same as PRNG#generatedSeed, only deterministic.
