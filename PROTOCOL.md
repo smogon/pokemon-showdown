@@ -227,7 +227,7 @@ represented by a space), and the rest of the string being their username.
 > Finish logging in (or renaming) by sending: `/trn USERNAME,0,ASSERTION`
 > where `USERNAME` is your desired username and `ASSERTION` is `data.assertion`.
 
-`|updateuser|USERNAME|NAMED|AVATAR|BLOCKPMS|SETTINGS`
+`|updateuser|USERNAME|NAMED|AVATAR|SETTINGS`
 
 > Your name, avatar or blocking status was successfully changed. Your username is
 > now `USERNAME`. `NAMED` will be `0` if you are a guest or `1` otherwise. Your
