@@ -26,12 +26,10 @@ export class RandomPlayerAI extends BattlePlayer {
 		this.prng = options.seed && !Array.isArray(options.seed) ? options.seed : new PRNG(options.seed);
 	}
 
-	receiveError(error: Error, request?: AnyObject) {
-		if (request) {
-			this.receiveRequest(request);
-		} else {
-			throw error;
-		}
+	receiveError(error: Error) {
+		// If we made an unavailable choice we will receive a followup request to
+		// allow us the opportunity to correct our decision.
+		if (!error.message.startsWith('[Unavailable choice]')) throw error;
 	}
 
 	receiveRequest(request: AnyObject) {

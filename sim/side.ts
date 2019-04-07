@@ -319,12 +319,11 @@ export class Side {
 		this.activeRequest = update;
 	}
 
-	emitChoiceError(message: string, includeRequest?: boolean) {
+	emitChoiceError(message: string, unavailable?: boolean) {
 		this.choice.error = message;
-		let sideupdate = `${this.id}\n|error|[Invalid choice] ${message}`;
-		if (includeRequest) sideupdate += `|${JSON.stringify(this.activeRequest)}`;
-		this.battle.send('sideupdate', sideupdate);
-		if (this.battle.strictChoices) throw new Error(`[Invalid choice] ${message}`);
+		const type = `[${unavailable ? 'Unavailable' : 'Invalid'} choice]`;
+		this.battle.send('sideupdate', `${this.id}\n|error|${type} ${message}`);
+		if (this.battle.strictChoices) throw new Error(`${type} ${message}`);
 		return false;
 	}
 
@@ -471,7 +470,9 @@ export class Side {
 					}
 					return updated;
 				});
-				return this.emitChoiceError(`Can't move: ${pokemon.name}'s ${move.name} is disabled`, includeRequest);
+				const status = this.emitChoiceError(`Can't move: ${pokemon.name}'s ${move.name} is disabled`, includeRequest);
+				if (includeRequest) this.emitRequest(this.activeRequest!);
+				return status;
 			}
 			// The chosen move is valid yay
 		}
@@ -586,7 +587,9 @@ export class Side {
 					}
 					return updated;
 				});
-				return this.emitChoiceError(`Can't switch: The active Pokémon is trapped`, includeRequest);
+				const status = this.emitChoiceError(`Can't switch: The active Pokémon is trapped`, includeRequest);
+				if (includeRequest) this.emitRequest(this.activeRequest!);
+				return status;
 			} else if (pokemon.maybeTrapped) {
 				this.choice.cantUndo = this.choice.cantUndo || pokemon.isLastActive();
 			}

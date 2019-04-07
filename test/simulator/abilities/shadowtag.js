@@ -17,7 +17,7 @@ describe('Shadow Tag', function () {
 			{species: "Tornadus", ability: 'defiant', moves: ['tailwind']},
 			{species: "Heatran", ability: 'flashfire', moves: ['roar']},
 		]});
-		assert.trapped(() => battle.makeChoices('move counter', 'switch 2'));
+		assert.trapped(() => battle.makeChoices('move counter', 'switch 2'), true);
 	});
 
 	it('should not prevent Pokemon from switching out using moves', function () {

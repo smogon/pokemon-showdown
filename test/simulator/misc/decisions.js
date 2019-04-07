@@ -304,7 +304,7 @@ describe('Choices', function () {
 			const failingAttacker = battle.p1.active[0];
 			battle.p2.chooseMove(2);
 
-			assert.cantMove(() => battle.p1.chooseMove(1), 'Mew', 'Recover');
+			assert.cantMove(() => battle.p1.chooseMove(1), 'Mew', 'Recover', true);
 			assert.strictEqual(battle.turn, 1);
 			assert.notStrictEqual(failingAttacker.lastMove && failingAttacker.lastMove.id, 'struggle');
 
@@ -324,7 +324,7 @@ describe('Choices', function () {
 			battle.send = (type, data) => {
 				if (type === 'sideupdate') buffer.push(Array.isArray(data) ? data.join('\n') : data);
 			};
-			assert.cantMove(() => battle.makeChoices('move 1', 'default'), 'Skarmory', 'Spikes');
+			assert.cantMove(() => battle.makeChoices('move 1', 'default'), 'Skarmory', 'Spikes', true);
 			assert(buffer.length >= 1);
 			assert(buffer.some(message => {
 				return message.startsWith('p1\n') && /\bcant\b/.test(message) && (/\|0\b/.test(message) || /\|p1a\b/.test(message));
@@ -343,7 +343,7 @@ describe('Choices', function () {
 			battle.send = (type, data) => {
 				if (type === 'sideupdate') buffer.push(Array.isArray(data) ? data.join('\n') : data);
 			};
-			assert.trapped(() => battle.makeChoices('switch 2', 'default'));
+			assert.trapped(() => battle.makeChoices('switch 2', 'default'), true);
 			assert(buffer.length >= 1);
 			assert(buffer.some(message => {
 				return message.startsWith('p1\n') && /\btrapped\b/.test(message) && (/\|0\b/.test(message) || /\|p1a\b/.test(message));

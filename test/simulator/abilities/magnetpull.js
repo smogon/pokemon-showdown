@@ -18,13 +18,13 @@ describe('Magnet Pull', function () {
 			{species: "Starmie", ability: 'illuminate', moves: ['reflecttype']},
 		]});
 
-		assert.trapped(() => battle.makeChoices('', 'switch 2'));
+		assert.trapped(() => battle.makeChoices('', 'switch 2'), true);
 		battle.makeChoices('auto', 'auto');
 		assert.species(battle.p2.active[0], 'Heatran');
 		battle.makeChoices('auto', 'switch 2');
 		assert.species(battle.p2.active[0], 'Starmie');
 		battle.makeChoices('move charge', 'move reflecttype'); // Reflect Type makes Starmie part Steel
-		assert.trapped(() => battle.makeChoices('', 'switch 2'));
+		assert.trapped(() => battle.makeChoices('', 'switch 2'), true);
 		battle.makeChoices('auto', 'auto');
 		assert.species(battle.p2.active[0], 'Starmie');
 	});
