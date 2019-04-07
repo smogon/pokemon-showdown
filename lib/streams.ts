@@ -366,11 +366,14 @@ export class WriteStream {
 					this.drainListeners.push(resolve);
 				});
 			};
-			options.end = function () {
-				return new Promise(resolve => {
-					this.nodeWritableStream!.end(() => resolve());
-				});
-			};
+			// Prior to Node v10.12.0, attempting to close STDOUT or STDERR will throw
+			if (nodeStream !== process.stdout && nodeStream !== process.stderr) {
+				options.end = function () {
+					return new Promise(resolve => {
+						this.nodeWritableStream!.end(() => resolve());
+					});
+				};
+			}
 		}
 
 		if (options.write) this._write = options.write;
@@ -671,11 +674,14 @@ export class ObjectWriteStream<T> {
 				}
 			};
 
-			options.end = function () {
-				return new Promise(resolve => {
-					this.nodeWritableStream!.end(() => resolve());
-				});
-			};
+			// Prior to Node v10.12.0, attempting to close STDOUT or STDERR will throw
+			if (nodeStream !== process.stdout && nodeStream !== process.stderr) {
+				options.end = function () {
+					return new Promise(resolve => {
+						this.nodeWritableStream!.end(() => resolve());
+					});
+				};
+			}
 		}
 
 		if (options.write) this._write = options.write;
