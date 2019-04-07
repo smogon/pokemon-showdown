@@ -124,8 +124,10 @@ The beginning of a battle will look something like this:
 > Gives a JSON object containing a request for a choice (to move or
 > switch). To assist in your decision, `REQUEST.active` has information
 > about your active Pokémon, and `REQUEST.side` has information about your
-> your team as a whole. `REQUEST.rqid` is an optional request ID (see
-> "Sending decisions" for details).
+> your team as a whole. If a switch is required, `REQUEST.forcedSwitch` will
+> contain your options. If a Team Preview decision is required,
+> `REQUEST.teamPreview` will be true. If no decision is expected,
+> `REQUEST.wait` will be set.
 
 `|inactive|MESSAGE` or `|inactiveoff|MESSAGE`
 
@@ -670,10 +672,11 @@ To be exact, `CHOICE` is one of:
 Once a choice has been set for all players who need to make a choice, the
 battle will continue.
 
-All decisions except `/undo` can be sent with `|RQID` at the end. `RQID` is
-`REQUEST.rqid` from `|request|`. Each `RQID` is a unique number used to
-identify which action the request was intended for and is used to protect
-against race conditions involving `/undo` (the cancel button).
+All decisions except `/undo` can be sent with `|RQID` at the end, where `RQID`
+can be computed from the number of `|request|`'s received (eg. the fifth
+`|request|` is `RQID` 5). The `RQID` is used to identify which action the
+request was intended for and is used to protect against race conditions
+involving `/undo` (the cancel button).
 
 If an invalid decision is sent (trying to switch when you're trapped by
 Mean Look or something), you will receive a message starting with:
@@ -692,8 +695,10 @@ is:
 > Gives a JSON object containing a request for a choice (to move or
 > switch). To assist in your decision, `REQUEST.active` has information
 > about your active Pokémon, and `REQUEST.side` has information about your
-> your team as a whole. `REQUEST.rqid` is an optional request ID (see
-> "Sending decisions" for details).
+> your team as a whole. If a switch is required, `REQUEST.forcedSwitch` will
+> contain your options. If a Team Preview decision is required,
+> `REQUEST.teamPreview` will be true. If no decision is expected,
+> `REQUEST.wait` will be set.
 
 Example request object:
 
@@ -881,6 +886,5 @@ Example request object:
       }
     ]
   },
-  "rqid": 3
 }
 ```
