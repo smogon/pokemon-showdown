@@ -860,8 +860,7 @@ class GlobalRoom extends BasicRoom {
 	 * @param {Connection} connection
 	 */
 	onConnect(user, connection) {
-		let initdata = '|updateuser|' + user.name + '|' + (user.named ? '1' : '0') + '|' + user.avatar + '\n';
-		connection.send(initdata + this.configRankList + this.formatListText);
+		connection.send(user.getUpdateuserText() + '\n' + this.configRankList + this.formatListText);
 	}
 	/**
 	 * @param {User} user
