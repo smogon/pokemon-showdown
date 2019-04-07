@@ -1870,17 +1870,6 @@ const commands = {
 			affected = Punishments.lock(null, duration, userid, userReason);
 		}
 
-		let acAccount = (targetUser && targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
-		let displayMessage = '';
-		if (affected.length > 1) {
-			displayMessage = `(${name}'s ${(acAccount ? ` ac account: ${acAccount}, ` : "")} locked alts: ${affected.slice(1).map(user => user.getLastName()).join(", ")})`;
-			this.privateModAction(displayMessage);
-		} else if (acAccount) {
-			displayMessage = `(${name}'s ac account: ${acAccount})`;
-			this.privateModAction(displayMessage);
-		}
-		room.hideText([userid, toId(this.inputUsername)]);
-
 		const globalReason = (target ? `: ${userReason} ${proof}` : '');
 		this.globalModlog((week ? "WEEKLOCK" : "LOCK"), targetUser || userid, ` by ${user.userid}${globalReason}`);
 
@@ -1890,6 +1879,17 @@ const commands = {
 		// Notify staff room when a user is locked outside of it.
 		if (room.id !== 'staff' && Rooms('staff')) {
 			Rooms('staff').addByUser(user, `<<${room.id}>> ${lockMessage}`);
+		}
+
+		room.hideText([userid, toId(this.inputUsername)]);
+		let acAccount = (targetUser && targetUser.autoconfirmed !== userid && targetUser.autoconfirmed);
+		let displayMessage = '';
+		if (affected.length > 1) {
+			displayMessage = `(${name}'s ${(acAccount ? ` ac account: ${acAccount}, ` : "")} locked alts: ${affected.slice(1).map(user => user.getLastName()).join(", ")})`;
+			this.privateModAction(displayMessage);
+		} else if (acAccount) {
+			displayMessage = `(${name}'s ac account: ${acAccount})`;
+			this.privateModAction(displayMessage);
 		}
 
 		if (targetUser) {
