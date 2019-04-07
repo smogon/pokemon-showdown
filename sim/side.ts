@@ -319,9 +319,11 @@ export class Side {
 		this.activeRequest = update;
 	}
 
-	emitChoiceError(message: string) {
+	emitChoiceError(message: string, includeRequest?: boolean) {
 		this.choice.error = message;
-		this.battle.send('sideupdate', `${this.id}\n|error|[Invalid choice] ${message}`);
+		let sideupdate = `${this.id}\n|error|[Invalid choice] ${message}`;
+		if (includeRequest) sideupdate += `|${JSON.stringify(this.activeRequest)}`;
+		this.battle.send('sideupdate', sideupdate);
 		if (this.battle.strictChoices) throw new Error(`[Invalid choice] ${message}`);
 		return false;
 	}
@@ -457,7 +459,7 @@ export class Side {
 			if (!isEnabled) {
 				// Request a different choice
 				if (autoChoose) throw new Error(`autoChoose chose a disabled move`);
-				this.updateRequestForPokemon(pokemon, req => {
+				const includeRequest = this.updateRequestForPokemon(pokemon, req => {
 					let updated = false;
 					for (const m of req.moves) {
 						if (m.id === moveid) {
@@ -469,7 +471,7 @@ export class Side {
 					}
 					return updated;
 				});
-				return this.emitChoiceError(`Can't move: ${pokemon.name}'s ${move.name} is disabled`);
+				return this.emitChoiceError(`Can't move: ${pokemon.name}'s ${move.name} is disabled`, includeRequest);
 			}
 			// The chosen move is valid yay
 		}
@@ -517,12 +519,7 @@ export class Side {
 		}
 		const req = this.activeRequest.active[pokemon.position];
 		if (!req) throw new Error(`Pokemon not found in request's active field`);
-		// Emit the request if we actually updated its state.
-		if (update(req)) {
-			this.activeRequest.updated = true;
-			// FIXME: Include as part of |error| instead!
-			this.emitRequest(this.activeRequest);
-		}
+		return update(req);
 	}
 
 	chooseSwitch(slotText?: string) {
@@ -577,7 +574,7 @@ export class Side {
 
 		if (this.requestState === 'move') {
 			if (pokemon.trapped) {
-				this.updateRequestForPokemon(pokemon, req => {
+				const includeRequest = this.updateRequestForPokemon(pokemon, req => {
 					let updated = false;
 					if (req.maybeTrapped) {
 						delete req.maybeTrapped;
@@ -589,7 +586,7 @@ export class Side {
 					}
 					return updated;
 				});
-				return this.emitChoiceError(`Can't switch: The active Pokémon is trapped`);
+				return this.emitChoiceError(`Can't switch: The active Pokémon is trapped`, includeRequest);
 			} else if (pokemon.maybeTrapped) {
 				this.choice.cantUndo = this.choice.cantUndo || pokemon.isLastActive();
 			}

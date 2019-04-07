@@ -274,18 +274,16 @@ export abstract class BattlePlayer {
 		if (cmd === 'request') {
 			return this.receiveRequest(JSON.parse(rest));
 		}
-		if (cmd === 'callback') {
-			return this.receiveCallback(rest.split('|'));
-		}
 		if (cmd === 'error') {
-			return this.receiveError(new Error(rest));
+			const [err, request] = splitFirst(rest, '|');
+			return this.receiveError(new Error(err), request && JSON.parse(request));
 		}
 		this.log.push(line);
 	}
 
 	abstract receiveRequest(request: AnyObject): void;
 
-	receiveError(error: Error) {
+	receiveError(error: Error, request?: AnyObject) {
 		throw error;
 	}
 

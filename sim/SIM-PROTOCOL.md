@@ -680,7 +680,12 @@ Mean Look or something), you will receive a message starting with:
 
 `|error|[Invalid choice]`
 
-This will tell you to send a different decision.
+This will tell you to send a different decision. If your previous choice
+revealed additional information, the error will contain an updated `REQUEST`
+object (in the same format as `|request|`) to base your decisions off of:
+
+`|error|[Invalid choice] MESSAGE|REQUEST`
+
 
 ### Choice requests
 

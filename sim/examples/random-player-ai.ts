@@ -26,6 +26,14 @@ export class RandomPlayerAI extends BattlePlayer {
 		this.prng = options.seed && !Array.isArray(options.seed) ? options.seed : new PRNG(options.seed);
 	}
 
+	receiveError(error: Error, request?: AnyObject) {
+		if (request) {
+			this.receiveRequest(request);
+		} else {
+			throw error;
+		}
+	}
+
 	receiveRequest(request: AnyObject) {
 		if (request.wait) {
 			// wait request
