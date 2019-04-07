@@ -11,9 +11,9 @@ import {BattlePlayer} from '../battle-stream';
 import {PRNG, PRNGSeed} from '../prng';
 
 export class RandomPlayerAI extends BattlePlayer {
-	readonly move: number;
-	readonly mega: number;
-	readonly prng: PRNG;
+	protected readonly move: number;
+	protected readonly mega: number;
+	protected readonly prng: PRNG;
 
 	constructor(
 		playerStream: ObjectReadWriteStream<string>,
@@ -56,7 +56,8 @@ export class RandomPlayerAI extends BattlePlayer {
 				));
 
 				if (!canSwitch.length) return `pass`;
-				const target = this.prng.sample(canSwitch);
+				const target = this.chooseSwitch(
+					canSwitch.map(slot => ({slot, pokemon: pokemon[slot - 1]})));
 				chosen.push(target);
 				return `switch ${target}`;
 			});
@@ -122,7 +123,7 @@ export class RandomPlayerAI extends BattlePlayer {
 						}
 					}
 					if (m.zMove) move += ` zmove`;
-					return move;
+					return {choice: move, move: m};
 				});
 
 				const canSwitch = [1, 2, 3, 4, 5, 6].filter(j => (
@@ -137,11 +138,12 @@ export class RandomPlayerAI extends BattlePlayer {
 				const switches = active.trapped ? [] : canSwitch;
 
 				if (switches.length && (!moves.length || this.prng.next() > this.move)) {
-					const target = this.prng.sample(switches);
+					const target = this.chooseSwitch(
+						canSwitch.map(slot => ({slot, pokemon: pokemon[slot - 1]})));
 					chosen.push(target);
 					return `switch ${target}`;
 				} else if (moves.length) {
-					const move = this.prng.sample(moves);
+					const move = this.chooseMove(moves);
 					if (move.endsWith(` zmove`)) {
 						canZMove = false;
 						return move;
@@ -164,7 +166,19 @@ export class RandomPlayerAI extends BattlePlayer {
 			this.choose(choices.join(`, `));
 		} else {
 			// team preview?
-			this.choose(`default`);
+			this.choose(this.chooseTeamPreview(request.side.pokemon));
 		}
+	}
+
+	protected chooseTeamPreview(team: AnyObject[]): string {
+		return `default`;
+	}
+
+	protected chooseMove(moves: {choice: string, move: AnyObject}[]): string {
+		return this.prng.sample(moves).choice;
+	}
+
+	protected chooseSwitch(switches: {slot: number, pokemon: AnyObject}[]): number {
+		return this.prng.sample(switches).slot;
 	}
 }
