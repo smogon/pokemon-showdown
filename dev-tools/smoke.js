@@ -341,7 +341,7 @@ class SmokeRunner {
 			}
 		} while ((!this.maxGames || this.games < this.maxGames) &&
 					(!this.maxFailures || this.failures < this.maxFailures) &&
-					generator.exhausted < Math.abs(this.cycles));
+					generator.exhausted < this.cycles);
 
 		return this.failures;
 	}
@@ -422,20 +422,25 @@ if (require.main === module) {
 		'gen2customgame',
 		'gen1customgame'];
 
-	// Because of our handwavy accounting of 'usage', as well as to account for ordering effects and
-	// the interplay of various combinations, we should actually run multiple cycles and exhaust our
-	// pools multiple times to provide more confidence that we're actually smoking out issues.
-	//
-	// If cycles is negative the smoke test will instead run indefinitely in case you wish to
-	// dedicate some computer resources to finding PS! edge case crashes instead of mining crypto,
-	// folding proteins, or searching for extraterrestrials/large primes.
-	const cycles = Number(process.argv[2]) || DEFAULT_CYCLES;
-	const forever = cycles < 0;
 	const format = process.argv[3];
 	const formats = format ? [format] : FORMATS;
 	const maxFailures = format ? 1 : MAX_FAILURES;
 	const seed = process.argv[4] && process.argv[4].split(',').map(s => Number(s));
 	const prng = new PRNG(seed);
+
+	// Because of our handwavy accounting of 'usage', as well as to account for ordering effects and
+	// the interplay of various combinations, we should actually run multiple cycles and exhaust our
+	// pools multiple times to provide more confidence that we're actually smoking out issues.
+	let cycles = Number(process.argv[2]) || DEFAULT_CYCLES;
+	// If cycles is negative the smoke test will instead run indefinitely in case you wish to
+	// dedicate some computer resources to finding PS! edge case crashes instead of mining crypto,
+	// folding proteins, or searching for extraterrestrials/large primes.
+	let forever = false;
+	if (cycles < 0) {
+		cycles = -cycles;
+		forever = true;
+	}
+
 	(async () => {
 		let failures = 0;
 		do {
