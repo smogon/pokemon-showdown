@@ -988,9 +988,11 @@ class User extends Chat.MessageContext {
 	}
 	getUpdateuserText() {
 		const named = this.named ? 1 : 0;
-		const blockPMs = this.ignorePMs ? 1 : 0;
-		const blockChallenges = this.blockChallenges ? 1 : 0;
-		return `|updateuser|${this.name}|${named}|${this.avatar}|${blockPMs}|${blockChallenges}`;
+		const settings = {blockPMs: this.ignorePMs, blockChallenges: this.blockChallenges};
+		return `|updateuser|${this.name}|${named}|${this.avatar}|${JSON.stringify(settings)}`;
+	}
+	update() {
+		this.send(this.getUpdateuserText());
 	}
 	/**
 	 * @param {User} oldUser

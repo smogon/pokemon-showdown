@@ -593,14 +593,15 @@ const commands = {
 	blockpm: 'ignorepms',
 	blockpms: 'ignorepms',
 	ignorepm: 'ignorepms',
-	ignorepms(target, room, user, connection) {
+	ignorepms(target, room, user) {
 		if (user.ignorePMs === (target || true)) return this.errorReply("You are already blocking private messages! To unblock, use /unblockpms");
 		user.ignorePMs = true;
 		if (target in Config.groups) {
 			user.ignorePMs = target;
+			user.update();
 			return this.sendReply(`You are now blocking private messages, except from staff and ${target}.`);
 		}
-		connection.send(user.getUpdateuserText());
+		user.update();
 		return this.sendReply("You are now blocking private messages, except from staff.");
 	},
 	ignorepmshelp: [`/blockpms - Blocks private messages. Unblock them with /unignorepms.`],
@@ -609,10 +610,10 @@ const commands = {
 	unblockpm: 'unignorepms',
 	unblockpms: 'unignorepms',
 	unignorepm: 'unignorepms',
-	unignorepms(target, room, user, connection) {
+	unignorepms(target, room, user) {
 		if (!user.ignorePMs) return this.errorReply("You are not blocking private messages! To block, use /blockpms");
 		user.ignorePMs = false;
-		connection.send(user.getUpdateuserText());
+		user.update();
 		return this.sendReply("You are no longer blocking private messages.");
 	},
 	unignorepmshelp: [`/unblockpms - Unblocks private messages. Block them with /blockpms.`],
@@ -4048,10 +4049,10 @@ const commands = {
 	bch: 'blockchallenges',
 	blockchall: 'blockchallenges',
 	blockchalls: 'blockchallenges',
-	blockchallenges(target, room, user, connection) {
+	blockchallenges(target, room, user) {
 		if (user.blockChallenges) return this.errorReply("You are already blocking challenges!");
 		user.blockChallenges = true;
-		connection.send(user.getUpdateuserText());
+		user.update();
 		this.sendReply("You are now blocking all incoming challenge requests.");
 	},
 	blockchallengeshelp: [`/blockchallenges - Blocks challenges so no one can challenge you. Unblock them with /unblockchallenges.`],
@@ -4061,10 +4062,10 @@ const commands = {
 	unblockchall: 'allowchallenges',
 	unblockchalls: 'allowchallenges',
 	unblockchallenges: 'allowchallenges',
-	allowchallenges(target, room, user, connection) {
+	allowchallenges(target, room, user) {
 		if (!user.blockChallenges) return this.errorReply("You are already available for challenges!");
 		user.blockChallenges = false;
-		connection.send(user.getUpdateuserText());
+		user.update();
 		this.sendReply("You are available for challenges from now on.");
 	},
 	allowchallengeshelp: [`/unblockchallenges - Unblocks challenges so you can be challenged again. Block them with /blockchallenges.`],
