@@ -262,7 +262,18 @@ export abstract class BattlePlayer {
 	}
 
 	receive(chunk: string) {
-		for (const line of chunk.split('\n')) {
+		const lines = chunk.split('\n');
+		if (lines.length >= 2 &&
+			lines[0].startsWith('|error|[Invalid Choice]') &&
+			lines[1].startsWith('|request|')) {
+			const err = lines[0].slice(7);
+			const request = lines[1].slice(9);
+			this.receiveError(new Error(err), JSON.parse(request));
+			const removed = lines.splice(0, 2);
+			if (this.debug) console.log(removed);
+		}
+
+		for (const line of lines) {
 			this.receiveLine(line);
 		}
 	}
@@ -271,13 +282,8 @@ export abstract class BattlePlayer {
 		if (this.debug) console.log(line);
 		if (line.charAt(0) !== '|') return;
 		const [cmd, rest] = splitFirst(line.slice(1), '|');
-		if (cmd === 'request') {
-			return this.receiveRequest(JSON.parse(rest));
-		}
-		if (cmd === 'error') {
-			const [err, request] = splitFirst(rest, '|');
-			return this.receiveError(new Error(err), request && JSON.parse(request));
-		}
+		if (cmd === 'request') return this.receiveRequest(JSON.parse(rest));
+		if (cmd === 'error') return this.receiveError(new Error(rest));
 		this.log.push(line);
 	}
 

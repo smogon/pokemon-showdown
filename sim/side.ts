@@ -321,9 +321,8 @@ export class Side {
 
 	emitChoiceError(message: string, includeRequest?: boolean) {
 		this.choice.error = message;
-		let sideupdate = `${this.id}\n|error|[Invalid choice] ${message}`;
-		if (includeRequest) sideupdate += `|${JSON.stringify(this.activeRequest)}`;
-		this.battle.send('sideupdate', sideupdate);
+		this.battle.send('sideupdate', `${this.id}\n|error|[Invalid choice] ${message}`);
+		if (includeRequest) this.emitRequest(this.activeRequest!);
 		if (this.battle.strictChoices) throw new Error(`[Invalid choice] ${message}`);
 		return false;
 	}
