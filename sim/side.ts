@@ -404,14 +404,6 @@ export class Side {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't use ${move.name} as a Z-move`);
 		}
 		if (zMove && this.choice.zMove) {
-			this.updateRequestForPokemon(pokemon, req => {
-				let updated = false;
-				if (req.canZMove) {
-					req.canZMove = false;
-					updated = true;
-				}
-				return updated;
-			});
 			return this.emitChoiceError(`Can't move: You can't Z-move more than once per battle`);
 		}
 
@@ -489,14 +481,6 @@ export class Side {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't mega evolve`);
 		}
 		if (mega && this.choice.mega) {
-			this.updateRequestForPokemon(pokemon, req => {
-				let updated = false;
-				if (req.canMegaEvo) {
-					req.canMegaEvo = false;
-					updated = true;
-				}
-				return updated;
-			});
 			return this.emitChoiceError(`Can't move: You can only mega-evolve once per battle`);
 		}
 		const ultra = (megaOrZ === 'ultra');
@@ -504,14 +488,6 @@ export class Side {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't mega evolve`);
 		}
 		if (ultra && this.choice.ultra) {
-			this.updateRequestForPokemon(pokemon, req => {
-				let updated = false;
-				if (req.canUltraBurst) {
-					req.canUltraBurst = false;
-					updated = true;
-				}
-				return updated;
-			});
 			return this.emitChoiceError(`Can't move: You can only ultra burst once per battle`);
 		}
 
