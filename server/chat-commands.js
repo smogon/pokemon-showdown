@@ -550,7 +550,7 @@ const commands = {
 
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User ${this.targetUsername} is not currently online.`);
 		if (!(targetUser in room.users) && !user.can('addhtml')) return this.errorReply("You do not have permission to use this command to users who are not in this room.");
-		if (targetUser.ignorePMs && targetUser.ignorePMs !== user.group && !user.can('lock')) return this.errorReply("This user is currently ignoring PMs.");
+		if (targetUser.blockPMs && targetUser.blockPMs !== user.group && !user.can('lock')) return this.errorReply("This user is currently blocking PMs.");
 		if (targetUser.locked && !user.can('lock')) return this.errorReply("This user is currently locked, so you cannot send them a pminfobox.");
 
 		// Apply the infobox to the message
@@ -576,7 +576,7 @@ const commands = {
 
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User ${this.targetUsername} is not currently online.`);
 		if (!(targetUser in room.users) && !user.can('addhtml')) return this.errorReply("You do not have permission to use this command to users who are not in this room.");
-		if (targetUser.ignorePMs && targetUser.ignorePMs !== user.group && !user.can('lock')) return this.errorReply("This user is currently ignoring PMs.");
+		if (targetUser.blockPMs && targetUser.blockPMs !== user.group && !user.can('lock')) return this.errorReply("This user is currently blocking PMs.");
 		if (targetUser.locked && !user.can('lock')) return this.errorReply("This user is currently locked, so you cannot send them UHTML.");
 
 		let message = `|pm|${user.getIdentity()}|${targetUser.getIdentity()}|/uhtml${(cmd === 'pmuhtmlchange' ? 'change' : '')} ${target}`;
@@ -589,31 +589,34 @@ const commands = {
 	pmuhtmlhelp: [`/pmuhtml [user], [name], [html] - PMs [html] that can change to [user]. Requires * ~`],
 	pmuhtmlchangehelp: [`/pmuhtmlchange [user], [name], [html] - Changes html that was previously PMed to [user] to [html]. Requires * ~`],
 
-	'!ignorepms': true,
-	blockpm: 'ignorepms',
-	blockpms: 'ignorepms',
-	ignorepm: 'ignorepms',
-	ignorepms(target, room, user) {
-		if (user.ignorePMs === (target || true)) return this.errorReply("You are already blocking private messages! To unblock, use /unblockpms");
-		user.ignorePMs = true;
+	'!blockpms': true,
+	blockpm: 'blockpms',
+	ignorepms: 'blockpms',
+	ignorepm: 'blockpms',
+	blockpms(target, room, user) {
+		if (user.blockPMs === (target || true)) return this.errorReply("You are already blocking private messages! To unblock, use /unblockpms");
+		user.blockPMs = true;
 		if (target in Config.groups) {
-			user.ignorePMs = target;
+			user.blockPMs = target;
+			user.update();
 			return this.sendReply(`You are now blocking private messages, except from staff and ${target}.`);
 		}
+		user.update();
 		return this.sendReply("You are now blocking private messages, except from staff.");
 	},
-	ignorepmshelp: [`/blockpms - Blocks private messages. Unblock them with /unignorepms.`],
+	blockpmshelp: [`/blockpms - Blocks private messages. Unblock them with /unblockpms.`],
 
-	'!unignorepms': true,
-	unblockpm: 'unignorepms',
-	unblockpms: 'unignorepms',
-	unignorepm: 'unignorepms',
-	unignorepms(target, room, user) {
-		if (!user.ignorePMs) return this.errorReply("You are not blocking private messages! To block, use /blockpms");
-		user.ignorePMs = false;
+	'!unblockpms': true,
+	unblockpm: 'unblockpms',
+	unignorepms: 'unblockpms',
+	unignorepm: 'unblockpms',
+	unblockpms(target, room, user) {
+		if (!user.blockPMs) return this.errorReply("You are not blocking private messages! To block, use /blockpms");
+		user.blockPMs = false;
+		user.update();
 		return this.sendReply("You are no longer blocking private messages.");
 	},
-	unignorepmshelp: [`/unblockpms - Unblocks private messages. Block them with /blockpms.`],
+	unblockpmshelp: [`/unblockpms - Unblocks private messages. Block them with /blockpms.`],
 
 	'!away': true,
 	idle: 'away',
@@ -4049,6 +4052,7 @@ const commands = {
 	blockchallenges(target, room, user) {
 		if (user.blockChallenges) return this.errorReply("You are already blocking challenges!");
 		user.blockChallenges = true;
+		user.update();
 		this.sendReply("You are now blocking all incoming challenge requests.");
 	},
 	blockchallengeshelp: [`/blockchallenges - Blocks challenges so no one can challenge you. Unblock them with /unblockchallenges.`],
@@ -4061,6 +4065,7 @@ const commands = {
 	allowchallenges(target, room, user) {
 		if (!user.blockChallenges) return this.errorReply("You are already available for challenges!");
 		user.blockChallenges = false;
+		user.update();
 		this.sendReply("You are available for challenges from now on.");
 	},
 	allowchallengeshelp: [`/unblockchallenges - Unblocks challenges so you can be challenged again. Block them with /blockchallenges.`],
