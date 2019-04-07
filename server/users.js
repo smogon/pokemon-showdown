@@ -494,7 +494,7 @@ class User extends Chat.MessageContext {
 		this.isSysop = false;
 		this.isStaff = false;
 		this.blockChallenges = false;
-		this.ignorePMs = false;
+		this.blockPMs = false;
 		this.ignoreTickets = false;
 		this.lastConnected = 0;
 		this.inviteOnlyNextBattle = false;
@@ -988,7 +988,7 @@ class User extends Chat.MessageContext {
 	}
 	getUpdateuserText() {
 		const named = this.named ? 1 : 0;
-		const settings = {blockPMs: this.ignorePMs, blockChallenges: this.blockChallenges};
+		const settings = {blockPMs: this.blockPMs, blockChallenges: this.blockChallenges};
 		return `|updateuser|${this.name}|${named}|${this.avatar}|${JSON.stringify(settings)}`;
 	}
 	update() {
@@ -1136,7 +1136,7 @@ class User extends Chat.MessageContext {
 				this.semilocked = '#dnsbl.';
 			}
 		}
-		if (this.ignorePMs && this.can('lock') && !this.can('bypassall')) this.ignorePMs = false;
+		if (this.blockPMs && this.can('lock') && !this.can('bypassall')) this.blockPMs = false;
 	}
 	/**
 	 * Set a user's group. Pass (' ', true) to force trusted
