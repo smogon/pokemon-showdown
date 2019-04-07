@@ -1978,10 +1978,15 @@ export class Battle extends Dex.ModdedDex {
 		}
 
 		const moveHit = target.getMoveHitData(move);
-		if (move.willCrit || move.willCrit === undefined && critRatio && this.randomChance(1, critMult[critRatio])) {
-			if (this.runEvent('CriticalHit', target, null, move)) {
-				moveHit.crit = true;
+		moveHit.crit = move.willCrit || false;
+		if (move.willCrit === undefined) {
+			if (critRatio) {
+				moveHit.crit = this.randomChance(1, critMult[critRatio]);
 			}
+		}
+
+		if (moveHit.crit) {
+			moveHit.crit = this.runEvent('CriticalHit', target, null, move);
 		}
 
 		// happens after crit calculation
