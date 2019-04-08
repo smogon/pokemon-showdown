@@ -936,6 +936,7 @@ let BattleMovedex = {
 	},
 	soak: {
 		inherit: true,
+		desc: "Causes the target to become a Water type. Fails if the target is an Arceus.",
 		onHit(target) {
 			if (!target.setType('Water')) {
 				this.add('-fail', target);
