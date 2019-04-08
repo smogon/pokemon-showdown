@@ -1653,8 +1653,9 @@ function socketReceive(worker, workerid, socketid, message) {
 
 	const room = Rooms(roomId);
 	if (!room) return;
-	if (Chat.multiLinePattern.test(message)) {
-		user.chat(message, room, connection);
+	const multilineMessage = Chat.multiLinePattern.test(message);
+	if (multilineMessage) {
+		user.chat(multilineMessage, room, connection);
 		return;
 	}
 
