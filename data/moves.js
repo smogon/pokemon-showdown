@@ -2104,7 +2104,7 @@ let BattleMovedex = {
 				newType = 'Psychic';
 			}
 
-			if (!target.setType(newType)) return false;
+			if (target.getTypes().join() === newType || !target.setType(newType)) return false;
 			this.add('-start', target, 'typechange', newType);
 		},
 		secondary: null,
@@ -15770,7 +15770,7 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
 		onHit(target) {
-			if (!target.setType('Water')) {
+			if (target.getTypes().join() === 'Water' || !target.setType('Water')) {
 				this.add('-fail', target);
 				return null;
 			}

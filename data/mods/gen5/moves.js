@@ -934,6 +934,16 @@ let BattleMovedex = {
 		basePower: 40,
 		flags: {protect: 1, mirror: 1, sound: 1},
 	},
+	soak: {
+		inherit: true,
+		onHit(target) {
+			if (!target.setType('Water')) {
+				this.add('-fail', target);
+				return null;
+			}
+			this.add('-start', target, 'typechange', 'Water');
+		},
+	},
 	solarbeam: {
 		inherit: true,
 		desc: "This attack charges on the first turn and executes on the second. Power is halved if the weather is Hail, Rain Dance, or Sandstorm. If the user is holding a Power Herb or the weather is Sunny Day, the move completes in one turn.",
