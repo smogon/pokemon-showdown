@@ -96,7 +96,7 @@ assert.cantUndo = function (fn, message) {
 };
 
 assert.cantTarget = function (fn, move, message) {
-	assert.cantMove(fn, 'target', move, message || `Expected not to be able to choose a target for ${move}.`);
+	assert.cantMove(fn, 'target', move, false, message || `Expected not to be able to choose a target for ${move}.`);
 };
 
 assert.statStage = function (pokemon, statName, stage, message) {

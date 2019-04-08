@@ -676,7 +676,7 @@ Mean Look or something), you will receive a message starting with:
 `|error|[Invalid choice] MESSAGE`
 
 This will tell you to send a different decision. If your previous choice
-revealed additional information (For examplse: a move disabled by Imprison
+revealed additional information (For example: a move disabled by Imprison
 or a trapping effect), the error will be followed with a `|request|` command
 to base your decision off of:
 

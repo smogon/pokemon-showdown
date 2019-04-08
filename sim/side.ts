@@ -462,9 +462,14 @@ export class Side {
 					let updated = false;
 					for (const m of req.moves) {
 						if (m.id === moveid) {
-							m.disabled = true;
-							if (disabledSource) m.disabledSource = disabledSource;
-							updated = true;
+							if (!m.disabled) {
+								m.disabled = true;
+								updated = true;
+							}
+							if (m.disabledSource !== disabledSource) {
+								m.disabledSource = disabledSource;
+								updated = true;
+							}
 							break;
 						}
 					}
