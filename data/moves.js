@@ -15762,7 +15762,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "Causes the target to become a Water type. Fails if the target is an Arceus or a Silvally.",
+		desc: "Causes the target to become a Water type. Fails if the target is an Arceus or a Silvally, or if the target is already purely Water type.",
 		shortDesc: "Changes the target's type to Water.",
 		id: "soak",
 		name: "Soak",
