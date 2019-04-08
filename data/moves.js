@@ -3459,11 +3459,12 @@ let BattleMovedex = {
 			}
 		},
 		effect: {
-			duration: 4,
+			duration: 5,
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(pokemon, source, effect) {
-				if (!this.willMove(pokemon)) {
-					this.effectData.duration++;
+				// The target hasn't taken its turn, or Cursed Body activated and the move was not used through Dancer or Instruct
+				if (this.willMove(pokemon) || (pokemon === this.activePokemon && this.activeMove && !this.activeMove.isExternal)) {
+					this.effectData.duration--;
 				}
 				if (!pokemon.lastMove) {
 					this.debug('pokemon hasn\'t moved yet');
