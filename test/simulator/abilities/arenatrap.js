@@ -31,7 +31,7 @@ describe('Arena Trap', function () {
 		assert.species(p2active[0], 'Dusknoir');
 		battle.makeChoices('move snore', 'switch 5');
 		assert.species(p2active[0], 'Magnezone');
-		assert.trapped(() => battle.makeChoices('', 'switch 6'));
+		assert.trapped(() => battle.makeChoices('', 'switch 6'), true);
 
 		assert.species(p2active[0], 'Magnezone'); // Magnezone is trapped
 
@@ -41,7 +41,7 @@ describe('Arena Trap', function () {
 		battle.makeChoices('move snore', 'switch 6');
 		assert.species(p2active[0], 'Vaporeon');
 
-		assert.trapped(() => battle.makeChoices('default', 'switch 2')); // Vaporeon is trapped
+		assert.trapped(() => battle.makeChoices('default', 'switch 2'), true); // Vaporeon is trapped
 		assert.species(p2active[0], 'Vaporeon');
 
 		battle.makeChoices('move telekinesis', 'default'); // Telekinesis
@@ -51,7 +51,7 @@ describe('Arena Trap', function () {
 
 		battle.makeChoices('move gravity', 'default'); // Gravity
 
-		assert.trapped(() => battle.makeChoices('', 'switch 4')); // Tornadus is trapped
+		assert.trapped(() => battle.makeChoices('', 'switch 4'), true); // Tornadus is trapped
 		assert.species(p2active[0], 'Tornadus');
 	});
 });

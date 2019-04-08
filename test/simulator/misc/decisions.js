@@ -300,11 +300,11 @@ describe('Choices', function () {
 		it('should not force Struggle usage on move attempt when choosing a disabled move', function () {
 			battle = common.createBattle();
 			battle.setPlayer('p1', {team: [{species: "Mew", item: 'assaultvest', ability: 'synchronize', moves: ['recover', 'icebeam']}]});
-			battle.setPlayer('p2', {team: [{species: "Rhydon", item: '', ability: 'prankster', moves: ['struggle', 'surf']}]});
+			battle.setPlayer('p2', {team: [{species: "Rhydon", item: '', ability: 'prankster', moves: ['surf']}]});
 			const failingAttacker = battle.p1.active[0];
-			battle.p2.chooseMove(2);
+			battle.p2.chooseMove(1);
 
-			assert.cantMove(() => battle.p1.chooseMove(1), 'Mew', 'Recover');
+			assert.cantMove(() => battle.p1.chooseMove(1), 'Mew', 'Recover', true);
 			assert.strictEqual(battle.turn, 1);
 			assert.notStrictEqual(failingAttacker.lastMove && failingAttacker.lastMove.id, 'struggle');
 
@@ -314,7 +314,7 @@ describe('Choices', function () {
 		});
 
 		it('should send meaningful feedback to players if they try to use a disabled move', function () {
-			battle = common.createBattle();
+			battle = common.createBattle({strictChoices: false});
 			battle.setPlayer('p1', {team: [{species: "Skarmory", ability: 'sturdy', moves: ['spikes', 'roost']}]});
 			battle.setPlayer('p2', {team: [{species: "Smeargle", ability: 'owntempo', moves: ['imprison', 'spikes']}]});
 
@@ -324,15 +324,14 @@ describe('Choices', function () {
 			battle.send = (type, data) => {
 				if (type === 'sideupdate') buffer.push(Array.isArray(data) ? data.join('\n') : data);
 			};
-			assert.cantMove(() => battle.makeChoices('move 1', 'default'), 'Skarmory', 'Spikes');
-			assert(buffer.length >= 1);
-			assert(buffer.some(message => {
-				return message.startsWith('p1\n') && /\bcant\b/.test(message) && (/\|0\b/.test(message) || /\|p1a\b/.test(message));
-			}));
+			battle.p1.chooseMove(1);
+			assert(buffer.length >= 2);
+			assert(buffer.some(message => message.startsWith('p1\n|error|[Unavailable choice]')));
+			assert(buffer.some(message => message.startsWith('p1\n|request|') && JSON.parse(message.slice(12)).active[0].moves[0].disabled));
 		});
 
 		it('should send meaningful feedback to players if they try to switch a trapped Pokémon out', function () {
-			battle = common.createBattle();
+			battle = common.createBattle({strictChoices: false});
 			battle.setPlayer('p1', {team: [
 				{species: "Scizor", ability: 'swarm', moves: ['bulletpunch']},
 				{species: "Azumarill", ability: 'sapsipper', moves: ['aquajet']},
@@ -343,11 +342,10 @@ describe('Choices', function () {
 			battle.send = (type, data) => {
 				if (type === 'sideupdate') buffer.push(Array.isArray(data) ? data.join('\n') : data);
 			};
-			assert.trapped(() => battle.makeChoices('switch 2', 'default'));
-			assert(buffer.length >= 1);
-			assert(buffer.some(message => {
-				return message.startsWith('p1\n') && /\btrapped\b/.test(message) && (/\|0\b/.test(message) || /\|p1a\b/.test(message));
-			}));
+			battle.p1.chooseSwitch(2);
+			assert(buffer.length >= 2);
+			assert(buffer.some(message => message.startsWith('p1\n|error|[Unavailable choice]')));
+			assert(buffer.some(message => message.startsWith('p1\n|request|') && JSON.parse(message.slice(12)).active[0].trapped));
 		});
 	});
 
