@@ -20,7 +20,7 @@ Ratings and how they work:
 
  2: Situationally useful
 	  An ability that can be useful in certain situations.
-	ex. Blaze, Insomnia
+	ex. Clear Body, Static
 
  3: Useful
 	  An ability that is generally useful.
@@ -344,7 +344,7 @@ let BattleAbilities = {
 		},
 		id: "blaze",
 		name: "Blaze",
-		rating: 2,
+		rating: 2.5,
 		num: 66,
 	},
 	"bulletproof": {
@@ -1373,7 +1373,7 @@ let BattleAbilities = {
 		},
 		id: "hustle",
 		name: "Hustle",
-		rating: 3,
+		rating: 3.5,
 		num: 55,
 	},
 	"hydration": {
@@ -2051,7 +2051,7 @@ let BattleAbilities = {
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.multihitType === 'parentalbond' && move.hit > 1) return this.chainModify(0.25);
 		},
-		rating: 2,
+		rating: 2.5,
 		num: 152,
 	},
 	"naturalcure": {
@@ -2247,7 +2247,7 @@ let BattleAbilities = {
 		},
 		id: "overgrow",
 		name: "Overgrow",
-		rating: 2,
+		rating: 2.5,
 		num: 65,
 	},
 	"owntempo": {
@@ -2342,7 +2342,7 @@ let BattleAbilities = {
 		},
 		id: "pickpocket",
 		name: "Pickpocket",
-		rating: 1,
+		rating: 1.5,
 		num: 124,
 	},
 	"pixilate": {
@@ -2491,7 +2491,7 @@ let BattleAbilities = {
 		},
 		id: "pressure",
 		name: "Pressure",
-		rating: 2,
+		rating: 2.5,
 		num: 46,
 	},
 	"primordialsea": {
@@ -3478,7 +3478,7 @@ let BattleAbilities = {
 		},
 		id: "swarm",
 		name: "Swarm",
-		rating: 2,
+		rating: 2.5,
 		num: 68,
 	},
 	"sweetveil": {
@@ -3673,7 +3673,7 @@ let BattleAbilities = {
 		},
 		id: "torrent",
 		name: "Torrent",
-		rating: 2,
+		rating: 2.5,
 		num: 67,
 	},
 	"toxicboost": {
@@ -4029,7 +4029,7 @@ let BattleAbilities = {
 		},
 		id: "wimpout",
 		name: "Wimp Out",
-		rating: 2,
+		rating: 1.5,
 		num: 193,
 	},
 	"wonderguard": {
