@@ -234,7 +234,7 @@ let BattleScripts = {
 			move.ignoreImmunity = (move.category === 'Status');
 		}
 
-		if (move.selfdestruct === 'always') {
+		if (this.gen !== 4 && move.selfdestruct === 'always') {
 			this.faint(pokemon, pokemon, move);
 		}
 
@@ -249,6 +249,9 @@ let BattleScripts = {
 				this.attrLastMove('[notarget]');
 				this.add(this.gen >= 5 ? '-fail' : '-notarget', pokemon);
 				return false;
+			}
+			if (this.gen === 4 && move.selfdestruct === 'always') {
+				this.faint(pokemon, pokemon, move);
 			}
 			moveResult = this.trySpreadMoveHit(targets, pokemon, move);
 		}
