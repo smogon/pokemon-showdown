@@ -1033,7 +1033,7 @@ let BattleFormatsData = {
 	},
 	tauros: {
 		inherit: true,
-		randomBattleMoves: ["rockclimb", "earthquake", "zenheadbutt", "rockslide", "doubleedge"],
+		randomBattleMoves: ["bodyslam", "earthquake", "zenheadbutt", "rockslide", "doubleedge"],
 		randomDoubleBattleMoves: ["return", "earthquake", "zenheadbutt", "rockslide", "stoneedge", "protect", "doubleedge"],
 		tier: "NU",
 		doublesTier: "(DUU)",
@@ -2819,8 +2819,8 @@ let BattleFormatsData = {
 	},
 	infernape: {
 		inherit: true,
-		randomBattleMoves: ["stealthrock", "uturn", "earthquake", "closecombat", "flareblitz", "stoneedge", "machpunch", "nastyplot", "fireblast", "vacuumwave", "grassknot", "hiddenpowerice"],
-		randomDoubleBattleMoves: ["fakeout", "heatwave", "closecombat", "uturn", "grassknot", "stoneedge", "machpunch", "feint", "taunt", "flareblitz", "hiddenpowerice", "thunderpunch", "protect"],
+		randomBattleMoves: ["stealthrock", "uturn", "earthquake", "closecombat", "flareblitz", "stoneedge", "machpunch", "nastyplot", "fireblast", "vacuumwave", "grassknot"],
+		randomDoubleBattleMoves: ["fakeout", "heatwave", "closecombat", "uturn", "grassknot", "stoneedge", "machpunch", "feint", "taunt", "flareblitz", "thunderpunch", "protect"],
 		tier: "UU",
 		doublesTier: "DUU",
 	},
@@ -2946,7 +2946,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	vespiquen: {
-		randomBattleMoves: ["substitute", "healorder", "toxic", "attackorder", "defendorder", "infestation"],
+		randomBattleMoves: ["substitute", "toxic", "roost", "attackorder", "destinybond", "tailwind"],
 		randomDoubleBattleMoves: ["tailwind", "healorder", "stringshot", "attackorder", "strugglebug", "protect"],
 		tier: "(PU)",
 		doublesTier: "(DUU)",
