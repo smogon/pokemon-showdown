@@ -680,7 +680,7 @@ revealed additional information (For example: a move disabled by Imprison
 or a trapping effect), the error will be followed with a `|request|` command
 to base your decision off of:
 
-`|error|[Unavailable choice] MESSAGE`
+`|error|[Unavailable choice] MESSAGE`  
 `|request|REQUEST`
 
 ### Choice requests
