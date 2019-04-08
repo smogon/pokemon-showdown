@@ -394,7 +394,7 @@ let BattleMovedex = {
 	},
 	soak: {
 		inherit: true,
-		desc: "Causes the target to become a Water type. Fails if the target is an Arceus.",
+		desc: "Causes the target to become a Water type. Fails if the target is an Arceus, or if the target is already purely Water type.",
 	},
 	spikyshield: {
 		inherit: true,
