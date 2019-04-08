@@ -939,6 +939,8 @@ let BattleMovedex = {
 		desc: "Causes the target to become a Water type. Fails if the target is an Arceus.",
 		onHit(target) {
 			if (!target.setType('Water')) {
+				// Soak should animate even when it fails.
+				// Returning false would suppress the animation.
 				this.add('-fail', target);
 				return null;
 			}

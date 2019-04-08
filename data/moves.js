@@ -15771,6 +15771,8 @@ let BattleMovedex = {
 		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
 		onHit(target) {
 			if (target.getTypes().join() === 'Water' || !target.setType('Water')) {
+				// Soak should animate even when it fails.
+				// Returning false would suppress the animation.
 				this.add('-fail', target);
 				return null;
 			}
