@@ -24,7 +24,7 @@ describe('Imprison', function () {
 		battle.makeChoices('move imprison', 'move calmmind');
 		assert.statStage(battle.p2.active[0], 'spa', 0);
 		assert.statStage(battle.p2.active[0], 'spd', 0);
-		assert.cantMove(() => battle.choose('p2', 'move calmmind'), 'Abra', 'Calm Mind');
+		assert.cantMove(() => battle.choose('p2', 'move calmmind'), 'Abra', 'Calm Mind', true);
 
 		// Imprison doesn't end when the foe switches
 		battle.makeChoices('default', 'switch 2');

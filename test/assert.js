@@ -74,17 +74,17 @@ assert.holdsItem = function (pokemon, message) {
 	});
 };
 
-assert.trapped = function (fn, message) {
+assert.trapped = function (fn, unavailable, message) {
 	assert.throws(
-		fn, /\[Invalid choice\] Can't switch: The active Pokémon is trapped/,
+		fn, new RegExp(`\\[${unavailable ? 'Unavailable' : 'Invalid'} choice\\] Can't switch: The active Pokémon is trapped`),
 		message || 'Expected active Pokemon to be trapped.');
 };
 
-assert.cantMove = function (fn, pokemon, move, message) {
+assert.cantMove = function (fn, pokemon, move, unavailable, message) {
 	message = message || `Expected ${pokemon} to not be able to use ${move}.`;
 	if (pokemon && move) {
 		assert.throws(
-			fn, new RegExp(`\\[Invalid choice\\] Can't move:.*${pokemon}.*${move}`, 'i'), message);
+			fn, new RegExp(`\\[${unavailable ? 'Unavailable' : 'Invalid'} choice\\] Can't move:.*${pokemon}.*${move}`, 'i'), message);
 	} else {
 		assert.throws(fn, /\[Invalid choice\] Can't move:/, message);
 	}
@@ -96,7 +96,7 @@ assert.cantUndo = function (fn, message) {
 };
 
 assert.cantTarget = function (fn, move, message) {
-	assert.cantMove(fn, 'target', move, message || `Expected not to be able to choose a target for ${move}.`);
+	assert.cantMove(fn, 'target', move, false, message || `Expected not to be able to choose a target for ${move}.`);
 };
 
 assert.statStage = function (pokemon, statName, stage, message) {

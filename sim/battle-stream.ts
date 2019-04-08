@@ -271,20 +271,12 @@ export abstract class BattlePlayer {
 		if (this.debug) console.log(line);
 		if (line.charAt(0) !== '|') return;
 		const [cmd, rest] = splitFirst(line.slice(1), '|');
-		if (cmd === 'request') {
-			return this.receiveRequest(JSON.parse(rest));
-		}
-		if (cmd === 'callback') {
-			return this.receiveCallback(rest.split('|'));
-		}
-		if (cmd === 'error') {
-			return this.receiveError(new Error(rest));
-		}
+		if (cmd === 'request') return this.receiveRequest(JSON.parse(rest));
+		if (cmd === 'error') return this.receiveError(new Error(rest));
 		this.log.push(line);
 	}
 
 	abstract receiveRequest(request: AnyObject): void;
-	abstract receiveCallback(callback: string[]): void;
 
 	receiveError(error: Error) {
 		throw error;

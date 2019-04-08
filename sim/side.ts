@@ -314,19 +314,16 @@ export class Side {
 		this.battle.send('sideupdate', `${this.id}\n${sideUpdate}`);
 	}
 
-	emitCallback(...args: (string | number | AnyObject)[]) {
-		this.battle.send('sideupdate', `${this.id}\n|callback|${args.join('|')}`);
-	}
-
 	emitRequest(update: AnyObject) {
 		this.battle.send('sideupdate', `${this.id}\n|request|${JSON.stringify(update)}`);
 		this.activeRequest = update;
 	}
 
-	emitChoiceError(message: string) {
+	emitChoiceError(message: string, unavailable?: boolean) {
 		this.choice.error = message;
-		this.battle.send('sideupdate', `${this.id}\n|error|[Invalid choice] ${message}`);
-		if (this.battle.strictChoices) throw new Error(`[Invalid choice] ${message}`);
+		const type = `[${unavailable ? 'Unavailable' : 'Invalid'} choice]`;
+		this.battle.send('sideupdate', `${this.id}\n|error|${type} ${message}`);
+		if (this.battle.strictChoices) throw new Error(`${type} ${message}`);
 		return false;
 	}
 
@@ -408,7 +405,6 @@ export class Side {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't use ${move.name} as a Z-move`);
 		}
 		if (zMove && this.choice.zMove) {
-			this.emitCallback('cantz', pokemon);
 			return this.emitChoiceError(`Can't move: You can't Z-move more than once per battle`);
 		}
 
@@ -462,8 +458,26 @@ export class Side {
 			if (!isEnabled) {
 				// Request a different choice
 				if (autoChoose) throw new Error(`autoChoose chose a disabled move`);
-				this.emitCallback('cant', pokemon, disabledSource, moveid);
-				return this.emitChoiceError(`Can't move: ${pokemon.name}'s ${move.name} is disabled`);
+				const includeRequest = this.updateRequestForPokemon(pokemon, req => {
+					let updated = false;
+					for (const m of req.moves) {
+						if (m.id === moveid) {
+							if (!m.disabled) {
+								m.disabled = true;
+								updated = true;
+							}
+							if (m.disabledSource !== disabledSource) {
+								m.disabledSource = disabledSource;
+								updated = true;
+							}
+							break;
+						}
+					}
+					return updated;
+				});
+				const status = this.emitChoiceError(`Can't move: ${pokemon.name}'s ${move.name} is disabled`, includeRequest);
+				if (includeRequest) this.emitRequest(this.activeRequest!);
+				return status;
 			}
 			// The chosen move is valid yay
 		}
@@ -475,7 +489,6 @@ export class Side {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't mega evolve`);
 		}
 		if (mega && this.choice.mega) {
-			this.emitCallback('cantmega', pokemon);
 			return this.emitChoiceError(`Can't move: You can only mega-evolve once per battle`);
 		}
 		const ultra = (megaOrZ === 'ultra');
@@ -483,7 +496,6 @@ export class Side {
 			return this.emitChoiceError(`Can't move: ${pokemon.name} can't mega evolve`);
 		}
 		if (ultra && this.choice.ultra) {
-			this.emitCallback('cantmega', pokemon);
 			return this.emitChoiceError(`Can't move: You can only ultra burst once per battle`);
 		}
 
@@ -505,6 +517,15 @@ export class Side {
 		if (zMove) this.choice.zMove = true;
 
 		return true;
+	}
+
+	updateRequestForPokemon(pokemon: Pokemon, update: (req: AnyObject) => boolean) {
+		if (!this.activeRequest || !this.activeRequest.active) {
+			throw new Error(`Can't update a request without active Pokemon`);
+		}
+		const req = this.activeRequest.active[pokemon.position];
+		if (!req) throw new Error(`Pokemon not found in request's active field`);
+		return update(req);
 	}
 
 	chooseSwitch(slotText?: string) {
@@ -559,8 +580,21 @@ export class Side {
 
 		if (this.requestState === 'move') {
 			if (pokemon.trapped) {
-				this.emitCallback('trapped', pokemon.position);
-				return this.emitChoiceError(`Can't switch: The active Pokémon is trapped`);
+				const includeRequest = this.updateRequestForPokemon(pokemon, req => {
+					let updated = false;
+					if (req.maybeTrapped) {
+						delete req.maybeTrapped;
+						updated = true;
+					}
+					if (!req.trapped) {
+						req.trapped = true;
+						updated = true;
+					}
+					return updated;
+				});
+				const status = this.emitChoiceError(`Can't switch: The active Pokémon is trapped`, includeRequest);
+				if (includeRequest) this.emitRequest(this.activeRequest!);
+				return status;
 			} else if (pokemon.maybeTrapped) {
 				this.choice.cantUndo = this.choice.cantUndo || pokemon.isLastActive();
 			}
