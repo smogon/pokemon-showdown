@@ -29,7 +29,8 @@ export class RandomPlayerAI extends BattlePlayer {
 	receiveError(error: Error) {
 		// If we made an unavailable choice we will receive a followup request to
 		// allow us the opportunity to correct our decision.
-		if (!error.message.startsWith('[Unavailable choice]')) throw error;
+		if (error.message.startsWith('[Unavailable choice]')) return;
+		throw error;
 	}
 
 	receiveRequest(request: AnyObject) {
