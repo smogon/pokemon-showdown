@@ -2104,7 +2104,7 @@ let BattleMovedex = {
 				newType = 'Psychic';
 			}
 
-			if (!target.setType(newType)) return false;
+			if (target.getTypes().join() === newType || !target.setType(newType)) return false;
 			this.add('-start', target, 'typechange', newType);
 		},
 		secondary: null,
@@ -15763,7 +15763,7 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		desc: "Causes the target to become a Water type. Fails if the target is an Arceus or a Silvally.",
+		desc: "Causes the target to become a Water type. Fails if the target is an Arceus or a Silvally, or if the target is already purely Water type.",
 		shortDesc: "Changes the target's type to Water.",
 		id: "soak",
 		name: "Soak",
@@ -15771,7 +15771,9 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, mystery: 1},
 		onHit(target) {
-			if (!target.setType('Water')) {
+			if (target.getTypes().join() === 'Water' || !target.setType('Water')) {
+				// Soak should animate even when it fails.
+				// Returning false would suppress the animation.
 				this.add('-fail', target);
 				return null;
 			}
