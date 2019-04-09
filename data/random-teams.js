@@ -153,7 +153,7 @@ class RandomTeams extends Dex.ModdedDex {
 	// 	return !!firstForme.isMega;
 	// }
 	/**
-	 * @return {RandomTeamsTypes["RandomSet"][]}
+	 * @return {RandomTeamsTypes.RandomSet[]}
 	 */
 	randomCCTeam() {
 		let team = [];
@@ -603,9 +603,9 @@ class RandomTeams extends Dex.ModdedDex {
 	/**
 	 * @param {string | Template} template
 	 * @param {number} [slot]
-	 * @param {RandomTeamsTypes["TeamDetails"]} [teamDetails]
+	 * @param {RandomTeamsTypes.TeamDetails} [teamDetails]
 	 * @param {boolean} [isDoubles]
-	 * @return {RandomTeamsTypes["RandomSet"]}
+	 * @return {RandomTeamsTypes.RandomSet}
 	 */
 	randomSet(template, slot = 1, teamDetails = {}, isDoubles = false) {
 		template = this.getTemplate(template);
@@ -1730,7 +1730,7 @@ class RandomTeams extends Dex.ModdedDex {
 		let typeCount = {};
 		/**@type {{[k: string]: number}} */
 		let typeComboCount = {};
-		/**@type {RandomTeamsTypes["TeamDetails"]} */
+		/**@type {RandomTeamsTypes.TeamDetails} */
 		let teamDetails = {};
 
 		while (pokemonPool.length && pokemon.length < 6) {
@@ -1864,9 +1864,9 @@ class RandomTeams extends Dex.ModdedDex {
 	/**
 	 * @param {Template} template
 	 * @param {number} slot
-	 * @param {RandomTeamsTypes["FactoryTeamDetails"]} teamData
+	 * @param {RandomTeamsTypes.FactoryTeamDetails} teamData
 	 * @param {string} tier
-	 * @return {RandomTeamsTypes["RandomFactorySet"] | false}
+	 * @return {RandomTeamsTypes.RandomFactorySet | false}
 	 */
 	randomFactorySet(template, slot, teamData, tier) {
 		let speciesId = toId(template.species);
@@ -1960,7 +1960,7 @@ class RandomTeams extends Dex.ModdedDex {
 	/**
 	 * @param {PlayerOptions} [side]
 	 * @param {number} [depth]
-	 * @return {RandomTeamsTypes["RandomFactorySet"][]}
+	 * @return {RandomTeamsTypes.RandomFactorySet[]}
 	 */
 	randomFactoryTeam(side, depth = 0) {
 		let forceResult = (depth >= 4);
@@ -2140,8 +2140,8 @@ class RandomTeams extends Dex.ModdedDex {
 	/**
 	 * @param {Template} template
 	 * @param {number} slot
-	 * @param {RandomTeamsTypes["FactoryTeamDetails"]} teamData
-	 * @return {RandomTeamsTypes["RandomFactorySet"] | false}
+	 * @param {RandomTeamsTypes.FactoryTeamDetails} teamData
+	 * @return {RandomTeamsTypes.RandomFactorySet | false}
 	 */
 	randomBSSFactorySet(template, slot, teamData) {
 		let speciesId = toId(template.species);
@@ -2229,7 +2229,7 @@ class RandomTeams extends Dex.ModdedDex {
 	/**
 	 * @param {PlayerOptions} [side]
 	 * @param {number} [depth]
-	 * @return {RandomTeamsTypes["RandomFactorySet"][]}
+	 * @return {RandomTeamsTypes.RandomFactorySet[]}
 	 */
 	randomBSSFactoryTeam(side, depth = 0) {
 		let forceResult = (depth >= 4);

@@ -972,11 +972,11 @@ interface TemplateFormatsData {
 
 interface ModdedTemplateFormatsData extends Partial<TemplateFormatsData> {
 	inherit?: true,
-	randomSet1?: RandomTeamsTypes['TemplateRandomSet']
-	randomSet2?: RandomTeamsTypes['TemplateRandomSet']
-	randomSet3?: RandomTeamsTypes['TemplateRandomSet']
-	randomSet4?: RandomTeamsTypes['TemplateRandomSet']
-	randomSet5?: RandomTeamsTypes['TemplateRandomSet']
+	randomSet1?: RandomTeamsTypes.TemplateRandomSet
+	randomSet2?: RandomTeamsTypes.TemplateRandomSet
+	randomSet3?: RandomTeamsTypes.TemplateRandomSet
+	randomSet4?: RandomTeamsTypes.TemplateRandomSet
+	randomSet5?: RandomTeamsTypes.TemplateRandomSet
 }
 
 interface Template extends Readonly<BasicEffect & TemplateData & TemplateFormatsData> {
@@ -1116,8 +1116,8 @@ interface BattleScriptsData {
 	hitStepTypeImmunity?: (this: Battle, targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => boolean[]
 	isAdjacent?: (this: Battle, pokemon1: Pokemon, pokemon2: Pokemon) => boolean
 	moveHit?: (this: Battle, target: Pokemon | null, pokemon: Pokemon, move: ActiveMove, moveData?: ActiveMove, isSecondary?: boolean, isSelf?: boolean) => number | undefined | false
-	resolveAction?: (this: Battle, action: AnyObject, midTurn?: boolean) => Actions['Action']
-	runAction?: (this: Battle, action: Actions['Action']) => void
+	resolveAction?: (this: Battle, action: AnyObject, midTurn?: boolean) => Actions.Action
+	runAction?: (this: Battle, action: Actions.Action) => void
 	runMegaEvo?: (this: Battle, pokemon: Pokemon) => boolean
 	runMove?: (this: Battle, moveOrMoveName: Move | string, pokemon: Pokemon, targetLoc: number, sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean) => void
 	runMoveEffects?: (this: Battle, damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean) => SpreadMoveDamage
@@ -1204,156 +1204,156 @@ interface PlayerOptions {
 	seed?: PRNGSeed;
 }
 
-interface Actions {
+namespace Actions {
 	/** A move action */
-	MoveAction: {
+	export interface MoveAction {
 		/** action type */
-		choice: 'move' | 'beforeTurnMove'
+		choice: 'move' | 'beforeTurnMove';
 		/** priority of the action (lower first) */
-		priority: number
+		priority: number;
 		/** speed of pokemon using move (higher first if priority tie) */
-		speed: number
+		speed: number;
 		/** the pokemon doing the move */
-		pokemon: Pokemon
+		pokemon: Pokemon;
 		/** location of the target, relative to pokemon's side */
-		targetLoc: number
+		targetLoc: number;
 		/** a move to use (move action only) */
-		moveid: string
+		moveid: string;
 		/** a move to use (move action only) */
-		move: Move
+		move: Move;
 		/** true if megaing or ultra bursting */
-		mega: boolean | 'done'
+		mega: boolean | 'done';
 		/** if zmoving, the name of the zmove */
-		zmove?: string
+		zmove?: string;
 		/** effect that called the move (eg Instruct) if any */
-		sourceEffect?: Effect | null
+		sourceEffect?: Effect | null;
 	}
 
 	/** A switch action */
-	SwitchAction: {
+	export interface SwitchAction {
 		/** action type */
-		choice: 'switch' | 'instaswitch'
+		choice: 'switch' | 'instaswitch';
 		/** priority of the action (lower first) */
-		priority: number
+		priority: number;
 		/** speed of pokemon switching (higher first if priority tie) */
-		speed: number
+		speed: number;
 		/** the pokemon doing the switch */
-		pokemon: Pokemon
+		pokemon: Pokemon;
 		/** pokemon to switch to */
-		target: Pokemon
+		target: Pokemon;
 		/** effect that called the switch (eg U */
-		sourceEffect: Effect | null
+		sourceEffect: Effect | null;
 	}
 
 	/** A Team Preview choice action */
-	TeamAction: {
+	export interface TeamAction {
 		/** action type */
-		choice: 'team'
+		choice: 'team';
 		/** priority of the action (lower first) */
-		priority: number
+		priority: number;
 		/** unused for this action type */
-		speed: 1
+		speed: 1;
 		/** the pokemon switching */
-		pokemon: Pokemon
+		pokemon: Pokemon;
 		/** new index */
-		index: number
+		index: number;
 	}
 
 	/** A generic action not done by a pokemon */
-	FieldAction: {
+	export interface FieldAction {
 		/** action type */
-		choice: 'start' | 'residual' | 'pass' | 'beforeTurn'
+		choice: 'start' | 'residual' | 'pass' | 'beforeTurn';
 		/** priority of the action (lower first) */
-		priority: number
+		priority: number;
 		/** unused for this action type */
-		speed: 1
+		speed: 1;
 		/** unused for this action type */
-		pokemon: null
+		pokemon: null;
 	}
 
 	/** A generic action done by a single pokemon */
-	PokemonAction: {
+	export interface PokemonAction {
 		/** action type */
-		choice: 'megaEvo' | 'shift' | 'runPrimal' | 'runSwitch' | 'event' | 'runUnnerve'
+		choice: 'megaEvo' | 'shift' | 'runPrimal' | 'runSwitch' | 'event' | 'runUnnerve';
 		/** priority of the action (lower first) */
-		priority: number
+		priority: number;
 		/** speed of pokemon doing action (higher first if priority tie) */
-		speed: number
+		speed: number;
 		/** the pokemon doing action */
-		pokemon: Pokemon
+		pokemon: Pokemon;
 	}
 
-	Action: Actions['MoveAction'] | Actions['SwitchAction'] | Actions['TeamAction'] | Actions['FieldAction'] | Actions['PokemonAction']
+	export type Action = MoveAction | SwitchAction | TeamAction | FieldAction | PokemonAction;
 }
 
-interface RandomTeamsTypes {
-	TeamDetails: {
-		megaStone?: number
-		zMove?: number
-		hail?: number
-		rain?: number
-		sand?: number
-		sun?: number
-		stealthRock?: number
-		spikes?: number
-		toxicSpikes?: number
-		hazardClear?: number
-		rapidSpin?: number
-		illusion?: number
+namespace RandomTeamsTypes {
+	export interface TeamDetails {
+		megaStone?: number;
+		zMove?: number;
+		hail?: number;
+		rain?: number;
+		sand?: number;
+		sun?: number;
+		stealthRock?: number;
+		spikes?: number;
+		toxicSpikes?: number;
+		hazardClear?: number;
+		rapidSpin?: number;
+		illusion?: number;
 	}
-	FactoryTeamDetails: {
-		megaCount: number
-		zCount?: number
-		forceResult: boolean
-		weather?: string
-		typeCount: {[k: string]: number}
-		typeComboCount: {[k: string]: number}
-		baseFormes: {[k: string]: number}
-		has: {[k: string]: number}
-		weaknesses: {[k: string]: number}
-		resistances: {[k: string]: number}
+	export interface FactoryTeamDetails {
+		megaCount: number;
+		zCount?: number;
+		forceResult: boolean;
+		weather?: string;
+		typeCount: {[k: string]: number};
+		typeComboCount: {[k: string]: number};
+		baseFormes: {[k: string]: number};
+		has: {[k: string]: number};
+		weaknesses: {[k: string]: number};
+		resistances: {[k: string]: number};
 	}
-	RandomSet: {
-		name: string
-		species: string
-		gender: string | boolean
-		moves: string[]
-		ability: string
-		evs: SparseStatsTable
-		ivs: SparseStatsTable
-		item: string
-		level: number
-		shiny: boolean
-		nature?: string
-		happiness?: number
-		moveset?: RandomTeamsTypes['RandomSet']
-		other?: {discard: boolean, restrictMoves: {[k: string]: number}}
+	export interface RandomSet {
+		name: string;
+		species: string;
+		gender: string | boolean;
+		moves: string[];
+		ability: string;
+		evs: SparseStatsTable;
+		ivs: SparseStatsTable;
+		item: string;
+		level: number;
+		shiny: boolean;
+		nature?: string;
+		happiness?: number;
+		moveset?: RandomTeamsTypes.RandomSet;
+		other?: {discard: boolean, restrictMoves: {[k: string]: number}};
 	}
-	RandomFactorySet: {
-		name: string
-		species: string
-		gender: string
-		item: string
-		ability: string
-		shiny: boolean
-		level: number
-		happiness: number
-		evs: SparseStatsTable
-		ivs: SparseStatsTable
-		nature: string
-		moves: string[]
+	export interface RandomFactorySet {
+		name: string;
+		species: string;
+		gender: string;
+		item: string;
+		ability: string;
+		shiny: boolean;
+		level: number;
+		happiness: number;
+		evs: SparseStatsTable;
+		ivs: SparseStatsTable;
+		nature: string;
+		moves: string[];
 	}
-	TemplateRandomSet: {
-		chance: number
-		item: string[]
-		baseMove1?: string
-		baseMove2?: string
-		baseMove3?: string
-		baseMove4?: string
-		fillerMoves1?: string[]
-		fillerMoves2?: string[]
-		fillerMoves3?: string[]
-		fillerMoves4?: string[]
+	export interface TemplateRandomSet {
+		chance: number;
+		item: string[];
+		baseMove1?: string;
+		baseMove2?: string;
+		baseMove3?: string;
+		baseMove4?: string;
+		fillerMoves1?: string[];
+		fillerMoves2?: string[];
+		fillerMoves3?: string[];
+		fillerMoves4?: string[];
 	}
 }
 

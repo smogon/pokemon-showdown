@@ -6,8 +6,8 @@ class RandomGen4Teams extends RandomGen5Teams {
 	/**
 	 * @param {string | Template} template
 	 * @param {number} [slot]
-	 * @param {RandomTeamsTypes["TeamDetails"]} [teamDetails]
-	 * @return {RandomTeamsTypes["RandomSet"]}
+	 * @param {RandomTeamsTypes.TeamDetails} [teamDetails]
+	 * @return {RandomTeamsTypes.RandomSet}
 	 */
 	randomSet(template, slot, teamDetails = {}) {
 		if (slot === undefined) slot = 1;

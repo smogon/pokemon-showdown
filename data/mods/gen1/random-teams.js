@@ -239,7 +239,7 @@ class RandomGen1Teams extends RandomGen2Teams {
 	 * Random set generation for Gen 1 Random Battles.
 	 * @param {string | Template} template
 	 * @param {number} [slot]
-	 * @return {RandomTeamsTypes["RandomSet"]}
+	 * @return {RandomTeamsTypes.RandomSet}
 	 */
 	randomSet(template, slot) {
 		template = this.getTemplate(template);

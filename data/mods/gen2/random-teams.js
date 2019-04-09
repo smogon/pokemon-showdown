@@ -142,7 +142,7 @@ class RandomGen2Teams extends RandomGen3Teams {
 	 * @param {string | Template} template
 	 * @param {number} [slot]
 	 * @param {{[k: string]: number}} restrictMoves
-	 * @return {RandomTeamsTypes["RandomSet"]}
+	 * @return {RandomTeamsTypes.RandomSet}
 	 */
 	randomSet(template, slot, restrictMoves) {
 		if (slot === undefined) slot = 1;
@@ -150,7 +150,7 @@ class RandomGen2Teams extends RandomGen3Teams {
 		if (!template.exists) template = this.getTemplate('unown');
 
 		let randomSetNumber = 0;
-		/**@type {RandomTeamsTypes["RandomSet"]} */
+		/**@type {RandomTeamsTypes.RandomSet} */
 		// @ts-ignore
 		let set = template.randomSet1;
 		/**@type {string[]} */

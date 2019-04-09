@@ -6,8 +6,8 @@ class RandomGen3Teams extends RandomGen4Teams {
 	/**
 	 * @param {string | Template} template
 	 * @param {number} [slot]
-	 * @param {RandomTeamsTypes["TeamDetails"]} [teamDetails]
-	 * @return {RandomTeamsTypes["RandomSet"]}
+	 * @param {RandomTeamsTypes.TeamDetails} [teamDetails]
+	 * @return {RandomTeamsTypes.RandomSet}
 	 */
 	randomSet(template, slot, teamDetails = {}) {
 		let baseTemplate = (template = this.getTemplate(template));
@@ -632,7 +632,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 		let baseFormes = {};
 		let uberCount = 0;
 		let nuCount = 0;
-		/**@type {RandomTeamsTypes["TeamDetails"]} */
+		/**@type {RandomTeamsTypes.TeamDetails} */
 		let teamDetails = {};
 
 		while (pokemonPool.length && pokemon.length < 6) {
