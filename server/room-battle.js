@@ -13,6 +13,8 @@
 
 'use strict';
 
+/** @type {typeof import('../sim/battle-stream').BattleStream} */
+const BattleStream = require(/** @type {any} */ ('../.sim-dist/battle-stream')).BattleStream;
 /** @type {typeof import('../lib/fs').FS} */
 const FS = require(/** @type {any} */('../.lib-dist/fs')).FS;
 
@@ -1042,9 +1044,93 @@ class RoomBattle {
 	}
 }
 
+class RoomBattleStream extends BattleStream {
+	constructor() {
+		super({keepAlive: true});
+		/** @type {Battle} */
+		// @ts-ignore
+		this.battle = null;
+	}
+
+	/** @param {string} chunk */
+	_write(chunk) {
+		const startTime = Date.now();
+		try {
+			this._writeLines(chunk);
+		} catch (err) {
+			const battle = this.battle;
+			Monitor.crashlog(err, 'A battle', {
+				chunk,
+				inputLog: battle ? '\n' + battle.inputLog.join('\n') : '',
+				log: battle ? '\n' + battle.getDebugLog() : '',
+			});
+
+			this.push(`update\n|html|<div class="broadcast-red"><b>The battle crashed</b><br />Don't worry, we're working on fixing it.</div>`);
+			if (battle) {
+				for (const side of battle.sides) {
+					if (side && side.requestState) {
+						this.push(`sideupdate\n${side.id}\n|error|[Invalid choice] The battle crashed`);
+					}
+				}
+			}
+		}
+		if (this.battle) this.battle.sendUpdates();
+		const deltaTime = Date.now() - startTime;
+		if (deltaTime > 1000) {
+			console.log(`[slow battle] ${deltaTime}ms - ${chunk}`);
+		}
+	}
+
+	/**
+	 * @param {string} type
+	 * @param {string} message
+	 */
+	_writeLine(type, message) {
+		switch (type) {
+		case 'eval':
+			/* eslint-disable no-eval, no-unused-vars */
+			const battle = this.battle;
+			const p1 = battle && battle.sides[0];
+			const p2 = battle && battle.sides[1];
+			const p3 = battle && battle.sides[2];
+			const p4 = battle && battle.sides[3];
+			const p1active = p1 && p1.active[0];
+			const p2active = p2 && p2.active[0];
+			const p3active = p3 && p3.active[0];
+			const p4active = p4 && p4.active[0];
+			battle.inputLog.push(`${type} ${message}`);
+			message = message.replace(/\f/g, '\n');
+			battle.add('', '>>> ' + message.replace(/\n/g, '\n||'));
+			try {
+				let result = eval(message);
+				if (result && result.then) {
+					result.then((/** @type {any} */ unwrappedResult) => {
+						unwrappedResult = Chat.stringify(unwrappedResult);
+						battle.add('', 'Promise -> ' + unwrappedResult);
+						battle.sendUpdates();
+					}, (/** @type {Error} */ error) => {
+						battle.add('', '<<< error: ' + error.message);
+						battle.sendUpdates();
+					});
+				} else {
+					result = Chat.stringify(result);
+					result = result.replace(/\n/g, '\n||');
+					battle.add('', '<<< ' + result);
+				}
+			} catch (e) {
+				battle.add('', '<<< error: ' + e.message);
+			}
+			/* eslint-enable no-eval, no-unused-vars */
+			break;
+		default: super._writeLine(type, message);
+		}
+	}
+}
+
 exports.RoomBattlePlayer = RoomBattlePlayer;
 exports.RoomBattleTimer = RoomBattleTimer;
 exports.RoomBattle = RoomBattle;
+exports.RoomBattleStream = RoomBattleStream;
 
 /*********************************************************
  * Process manager
@@ -1054,9 +1140,7 @@ exports.RoomBattle = RoomBattle;
 const StreamProcessManager = require(/** @type {any} */('../.lib-dist/process-manager')).StreamProcessManager;
 
 const PM = new StreamProcessManager(module, () => {
-	/** @type {typeof import('../sim/battle-stream').BattleStream} */
-	const BattleStream = require(/** @type {any} */ ('../.sim-dist/battle-stream')).BattleStream;
-	return new BattleStream({keepAlive: true});
+	return new RoomBattleStream();
 });
 
 if (!PM.isParentProcess) {
