@@ -24,7 +24,6 @@
  */
 
 'use strict';
-/** @typedef {GlobalRoom | GameRoom | ChatRoom} Room */
 
 const PLAYER_SYMBOL = '\u2606';
 const HOST_SYMBOL = '\u2605';
@@ -411,7 +410,7 @@ class Connection {
 	}
 
 	/**
-	 * @param {GlobalRoom | GameRoom | ChatRoom} room
+	 * @param {Room} room
 	 */
 	joinRoom(room) {
 		if (this.inRooms.has(room.id)) return;
@@ -419,7 +418,7 @@ class Connection {
 		Sockets.roomAdd(this.worker, room.id, this.socketid);
 	}
 	/**
-	 * @param {GlobalRoom | GameRoom | ChatRoom} room
+	 * @param {Room} room
 	 */
 	leaveRoom(room) {
 		if (this.inRooms.has(room.id)) {
@@ -1280,7 +1279,7 @@ class User extends Chat.MessageContext {
 		return (prevNames.length ? prevNames[prevNames.length - 1] : this.userid);
 	}
 	/**
-	 * @param {string | GlobalRoom | GameRoom | ChatRoom} roomid
+	 * @param {string | Room} roomid
 	 * @param {Connection} connection
 	 */
 	async tryJoinRoom(roomid, connection) {
@@ -1353,7 +1352,7 @@ class User extends Chat.MessageContext {
 		}
 	}
 	/**
-	 * @param {GlobalRoom | GameRoom | ChatRoom | string} room
+	 * @param {Room | string} room
 	 * @param {Connection?} connection
 	 * @param {boolean} force
 	 */

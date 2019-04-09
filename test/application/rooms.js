@@ -10,10 +10,6 @@ describe('Rooms features', function () {
 			it('should be a function', function () {
 				assert.strictEqual(typeof Rooms.get, 'function');
 			});
-
-			it('should be equal to `Rooms`', function () {
-				assert.strictEqual(Rooms.get, Rooms);
-			});
 		});
 		describe('Rooms.rooms', function () {
 			it('should be a Map', function () {

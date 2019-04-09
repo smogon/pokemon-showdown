@@ -19,7 +19,20 @@ declare let Monitor: typeof import("../server/monitor");
 
 declare let LoginServer: typeof import('../server/loginserver');
 
-// type RoomBattle = AnyObject;
+let __RoomsType__: typeof import("../server/rooms")
+type RoomsType = Proxy<__RoomsType__>
+type GlobalRoom = typeof RoomsType.GlobalRoom
+type ChatRoom = typeof RoomsType.ChatRoomTypeForTS
+type GameRoom = typeof RoomsType.GameRoom
+type BasicRoom = typeof RoomsType.BasicRoom
+type BasicChatRoom = typeof RoomsType.ChatRoom
+type RoomGame = typeof RoomsType.RoomGame
+type RoomGamePlayer = typeof RoomsType.RoomGamePlayer
+type RoomBattle = typeof RoomsType.RoomBattle
+type Rooms = typeof RoomsType
+type Roomlogs = typeof RoomlogsType
+type Roomlog = typeof RoomlogsType.Roomlog
+type Room = GlobalRoom | GameRoom | ChatRoom;
 
 declare let Verifier: typeof import('../server/verifier');
 declare let Dnsbl: typeof import('../server/dnsbl');

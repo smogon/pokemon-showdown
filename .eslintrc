@@ -85,7 +85,7 @@
 		"init-declarations": "off",
 		"no-shadow": "off",
 		"no-label-var": "error",
-		"no-restricted-globals": ["error", "Proxy", "Reflect", "Symbol", "WeakSet"],
+		"no-restricted-globals": ["error", "Reflect", "Symbol", "WeakSet"],
 		"no-shadow-restricted-names": "error",
 		"no-undef": ["error", {"typeof": true}],
 		"no-undefined": "off",

@@ -1,5 +1,3 @@
-'use strict';
-/** @typedef {GlobalRoom | GameRoom | ChatRoom} Room */
 /**
  * Punishments
  * Pokemon Showdown - http://pokemonshowdown.com/
@@ -12,6 +10,8 @@
  *
  * @license MIT license
  */
+
+'use strict';
 
 let Punishments = module.exports;
 

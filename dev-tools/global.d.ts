@@ -11,7 +11,8 @@ import {PRNG as PRNGType, PRNGSeed as PRNGSeedType} from './../sim/prng';
 import {Side as SideType} from './../sim/side';
 import {TeamValidator as TeamValidatorType} from'./../sim/team-validator';
 
-import RoomsType = require('./../server/rooms');
+import __RoomsType__ = require('./../server/rooms');
+type RoomsType = Proxy<__RoomsType__>
 import RoomlogsType = require('./../server/roomlogs');
 import LadderStoreType = require('./../server/ladders-remote');
 import LaddersType = require('./../server/ladders');
@@ -70,10 +71,12 @@ declare global {
 	const BasicRoom: typeof RoomsType.BasicRoom
 	const BasicChatRoom: typeof RoomsType.ChatRoom
 	const RoomGame: typeof RoomsType.RoomGame
+	const RoomGamePlayer: typeof RoomsType.RoomGamePlayer
 	const RoomBattle: typeof RoomsType.RoomBattle
 	const Rooms: typeof RoomsType
 	const Roomlogs: typeof RoomlogsType
 	const Roomlog: typeof RoomlogsType.Roomlog
+	type Room = GlobalRoom | ChatRoom | GameRoom
 
 	// users
 	const Users: typeof UsersType
