@@ -790,14 +790,14 @@ Punishments.unlock = function (name) {
 		user.namelocked = false;
 		user.updateIdentity();
 		success.push(user.getLastName());
-		if (id.charAt(0) !== '#') {
-			for (const curUser of Users.users.values()) {
-				if (curUser.locked === id) {
-					curUser.locked = false;
-					curUser.namelocked = false;
-					curUser.updateIdentity();
-					success.push(curUser.getLastName());
-				}
+	}
+	if (id.charAt(0) !== '#') {
+		for (const curUser of Users.users.values()) {
+			if (curUser.locked === id) {
+				curUser.locked = false;
+				curUser.namelocked = false;
+				curUser.updateIdentity();
+				success.push(curUser.getLastName());
 			}
 		}
 	}
@@ -1315,7 +1315,6 @@ Punishments.checkName = function (user, userid, registered) {
 			user.send(`|popup||html|You are locked${bannedUnder}. ${user.permalocked ? `This lock is permanent.` : `Your lock will expire in a few days.`}${reason}${appeal}`);
 		}
 		user.lockNotified = true;
-		if (user.userid === punishUserid) Punishments.punish(user, punishment);
 		user.locked = punishUserid;
 		user.updateIdentity();
 	}
