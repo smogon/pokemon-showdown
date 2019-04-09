@@ -60,7 +60,7 @@ export class Battle extends Dex.ModdedDex {
 	reportPercentages: boolean;
 	supportCancel: boolean;
 
-	queue: Actions["Action"][];
+	queue: Actions.Action[];
 	readonly faintQueue: FaintedPokemon[];
 
 	readonly log: string[];
@@ -2331,7 +2331,7 @@ export class Battle extends Dex.ModdedDex {
 	 * Takes an object describing an action, and fills it out into a full
 	 * Action object.
 	 */
-	resolveAction(action: AnyObject, midTurn: boolean = false): Actions["Action"] {
+	resolveAction(action: AnyObject, midTurn: boolean = false): Actions.Action {
 		if (!action) throw new Error(`Action not passed to resolveAction`);
 
 		if (!action.side && action.pokemon) action.side = action.pokemon.side;
@@ -2466,7 +2466,7 @@ export class Battle extends Dex.ModdedDex {
 	/**
 	 * Makes the passed action happen next (skipping speed order).
 	 */
-	prioritizeAction(action: Actions["MoveAction"] | Actions["SwitchAction"], source?: Pokemon, sourceEffect?: Effect) {
+	prioritizeAction(action: Actions.MoveAction | Actions.SwitchAction, source?: Pokemon, sourceEffect?: Effect) {
 		if (this.event && !sourceEffect) sourceEffect = this.effect;
 		for (const [i, curAction] of this.queue.entries()) {
 			if (curAction === action) {
@@ -2523,7 +2523,7 @@ export class Battle extends Dex.ModdedDex {
 		return false;
 	}
 
-	runAction(action: Actions["Action"]) {
+	runAction(action: Actions.Action) {
 		// returns whether or not we ended in a callback
 		switch (action.choice) {
 		case 'start': {
@@ -2729,7 +2729,7 @@ export class Battle extends Dex.ModdedDex {
 				queuedAction.pokemon === action.pokemon && queuedAction.choice === 'move'
 			);
 			if (moveIndex >= 0) {
-				const moveAction = this.queue.splice(moveIndex, 1)[0] as Actions["MoveAction"];
+				const moveAction = this.queue.splice(moveIndex, 1)[0] as Actions.MoveAction;
 				moveAction.mega = 'done';
 				this.insertQueue(moveAction, true);
 			}
