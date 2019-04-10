@@ -461,7 +461,6 @@ let BattleStatuses = {
 					used: false,
 					virtual: true,
 				});
-				target.moves.push(move.id);
 			}
 		},
 		onBeforeSwitchOut(pokemon) {
