@@ -26,6 +26,13 @@ class TeamValidatorAsync {
 		if (this.format.customRules) formatid += '@@@' + this.format.customRules.join(',');
 		return PM.query({formatid, removeNicknames, team});
 	}
+
+	/**
+	 * @param {string} format
+	 */
+	static create(format) {
+		return new TeamValidatorAsync(format);
+	}
 }
 
 /*********************************************************
@@ -107,4 +114,4 @@ if (!PM.isParentProcess) {
  * Exports
  *********************************************************/
 
-module.exports = {TeamValidatorAsync, PM};
+module.exports = {create: TeamValidatorAsync.create, TeamValidatorAsync, PM};
