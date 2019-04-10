@@ -9,7 +9,7 @@
 
 'use strict';
 
-class ValidatorAsync {
+class TeamValidatorAsync {
 	/**
 	 * @param {string} format
 	 */
@@ -43,7 +43,7 @@ const PM = new QueryProcessManager(module, async message => {
 
 	let problems;
 	try {
-		problems = TeamValidator(formatid).validateTeam(parsedTeam, removeNicknames);
+		problems = new TeamValidator(formatid).validateTeam(parsedTeam, removeNicknames);
 	} catch (err) {
 		require(/** @type {any} */('../.lib-dist/crashlogger'))(err, 'A team validation', {
 			formatid: formatid,
@@ -107,13 +107,4 @@ if (!PM.isParentProcess) {
  * Exports
  *********************************************************/
 
-function getAsyncValidator(/** @type {string} */ format) {
-	return new ValidatorAsync(format);
-}
-
-let TeamValidatorAsync = Object.assign(getAsyncValidator, {
-	ValidatorAsync,
-	PM,
-});
-
-module.exports = TeamValidatorAsync;
+module.exports = {TeamValidatorAsync, PM};

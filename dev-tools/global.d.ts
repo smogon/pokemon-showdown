@@ -47,7 +47,6 @@ declare global {
 	const Side: SideType
 	const Sim: typeof SimType
 	const TeamValidator: typeof TeamValidatorType
-	const Validator: typeof TeamValidatorType.Validator
 	const BattleStream: BattleStreamType.BattleStream
 
 	// dex data

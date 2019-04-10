@@ -3,7 +3,7 @@ type Field = import('./../sim/field').Field
 type ModdedDex = typeof import('./../sim/dex')
 type Pokemon = import('./../sim/pokemon').Pokemon
 type Side = import('./../sim/side').Side
-type Validator = import('./../sim/team-validator').Validator
+type Validator = import('./../sim/team-validator').TeamValidator
 
 type PageTable = import('./../server/chat').PageTable
 type ChatCommands = import('./../server/chat').ChatCommands
