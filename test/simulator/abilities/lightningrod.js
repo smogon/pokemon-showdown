@@ -37,7 +37,6 @@ describe('Lightning Rod', function () {
 	});
 
 	it('should redirect single-target Electric-type attacks to the user if it is a valid target', function () {
-		this.timeout(3000);
 		battle = common.createBattle({gameType: 'triples'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Manectric', ability: 'lightningrod', moves: ['sleeptalk']},
@@ -53,7 +52,7 @@ describe('Lightning Rod', function () {
 		assert.statStage(battle.p1.active[0], 'spa', 3);
 		assert.false.fullHP(battle.p1.active[2]);
 		assert.false.fullHP(battle.p2.active[0]);
-	});
+	}, 3000);
 
 	it('should redirect to the fastest Pokemon with the ability', function () {
 		battle = common.createBattle({gameType: 'doubles'});

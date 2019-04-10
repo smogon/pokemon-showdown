@@ -29,7 +29,6 @@ function isValidSet(gen, set) {
 describe(`Random Team generator`, function () {
 	for (const gen of ALL_GENS) {
 		it(`should successfully create valid Gen ${gen} teams`, function () {
-			this.timeout(0);
 			const generator = Dex.getTeamGenerator(`gen${gen}randombattle`);
 			if (generator.gen !== gen) return; // format doesn't exist for this gen
 
@@ -45,14 +44,13 @@ describe(`Random Team generator`, function () {
 					throw err;
 				}
 			}
-		});
+		}, 0);
 	}
 });
 
 describe(`Challenge Cup Team generator`, function () {
 	for (const gen of ALL_GENS) {
 		it(`should successfully create valid Gen ${gen} teams`, function () {
-			this.timeout(0);
 			const generator = Dex.getTeamGenerator(`gen${gen}challengecup`);
 			if (generator.gen !== gen) return; // format doesn't exist for this gen
 
@@ -68,14 +66,13 @@ describe(`Challenge Cup Team generator`, function () {
 					throw err;
 				}
 			}
-		});
+		}, 0);
 	}
 });
 
 describe(`Hackmons Cup Team generator`, function () {
 	for (const gen of ALL_GENS) {
 		it(`should successfully create valid Gen ${gen} teams`, function () {
-			this.timeout(0);
 			const generator = Dex.getTeamGenerator(`gen${gen}hackmonscup`);
 			if (generator.gen !== gen) return; // format doesn't exist for this gen
 
@@ -91,14 +88,13 @@ describe(`Hackmons Cup Team generator`, function () {
 					throw err;
 				}
 			}
-		});
+		}, 5000);
 	}
 });
 
 describe(`Factory sets`, function () {
 	for (const filename of ['bss-factory-sets', 'factory-sets']) {
 		it(`should have valid sets in ${filename}.json`, function () {
-			this.timeout(5000);
 			const setsJSON = require(`../../../data/${filename}.json`);
 
 			for (const type in setsJSON) {

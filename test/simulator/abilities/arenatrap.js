@@ -11,7 +11,6 @@ describe('Arena Trap', function () {
 	});
 
 	it('should prevent grounded Pokemon that are not immune to trapping from switching out normally', function () {
-		this.timeout(0);
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Dugtrio", ability: 'arenatrap', moves: ['snore', 'telekinesis', 'gravity']}]});
 		battle.setPlayer('p2', {team: [
@@ -53,5 +52,5 @@ describe('Arena Trap', function () {
 
 		assert.trapped(() => battle.makeChoices('', 'switch 4'), true); // Tornadus is trapped
 		assert.species(p2active[0], 'Tornadus');
-	});
+	}, 0);
 });

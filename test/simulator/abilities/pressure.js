@@ -47,7 +47,6 @@ describe('Pressure', function () {
 	});
 
 	it('should deduct PP for each Pressure Pokemon targetted', function () {
-		this.timeout(3000);
 		battle = common.createBattle({gameType: 'triples'});
 		battle.setPlayer('p1', {team: [
 			{species: "Giratina", ability: 'pressure', moves: ['rest']},
@@ -63,10 +62,9 @@ describe('Pressure', function () {
 		assert.strictEqual(battle.p2.active[0].getMoveData(Dex.getMove('hail')).pp, 12);
 		assert.strictEqual(battle.p2.active[1].getMoveData(Dex.getMove('spikes')).pp, 28);
 		assert.strictEqual(battle.p2.active[2].getMoveData(Dex.getMove('rockslide')).pp, 13);
-	});
+	}, 3000);
 
 	it('should deduct PP for each opposing Pressure Pokemon when Snatch of Imprison are used', function () {
-		this.timeout(3000);
 		battle = common.createBattle({gameType: 'triples'});
 		battle.setPlayer('p1', {team: [
 			{species: "Giratina", ability: 'pressure', moves: ['rest']},
@@ -81,7 +79,7 @@ describe('Pressure', function () {
 		battle.makeChoices('move rest, move rest, move rest', 'move snatch, move imprison, move rest');
 		assert.strictEqual(battle.p2.active[0].getMoveData(Dex.getMove('snatch')).pp, 12);
 		assert.strictEqual(battle.p2.active[1].getMoveData(Dex.getMove('imprison')).pp, 12);
-	});
+	}, 3000);
 });
 
 describe('Pressure [Gen 4]', function () {

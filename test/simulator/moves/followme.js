@@ -11,8 +11,6 @@ describe('Follow Me', function () {
 	});
 
 	it('should redirect single-target moves towards it if it is a valid target', function () {
-		this.timeout(5000);
-
 		battle = common.createBattle({gameType: 'triples'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Clefable', ability: 'unaware', moves: ['followme']},
@@ -32,7 +30,7 @@ describe('Follow Me', function () {
 		});
 		battle.makeChoices('move followme, move calmmind, move calmmind', 'move lowkick 2, move lowkick 2, move lowkick 2');
 		assert.strictEqual(hitCount, 2);
-	});
+	}, 5000);
 
 	it('should not redirect self-targetting moves', function () {
 		battle = common.createBattle({gameType: 'doubles'});

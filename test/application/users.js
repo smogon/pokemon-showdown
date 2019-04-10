@@ -6,6 +6,8 @@ let userUtils = require('./../../dev-tools/users-utils');
 let Connection = userUtils.Connection;
 let User = userUtils.User;
 
+let connection;
+
 describe('Users features', function () {
 	describe('Users', function () {
 		describe('get', function () {
@@ -30,17 +32,17 @@ describe('Users features', function () {
 		describe('Connection', function () {
 			describe('#onDisconnect', function () {
 				beforeEach(function () {
-					this.connection = new Connection('127.0.0.1');
+					connection = new Connection('127.0.0.1');
 				});
 
 				it('should remove the connection from Users.connections', function () {
-					let connectionid = this.connection.id;
-					this.connection.destroy();
+					let connectionid = connection.id;
+					connection.destroy();
 					assert.strictEqual(Users.connections.has(connectionid), false);
 				});
 
 				it('should destroy any user on the connection as well', function () {
-					let user = new User(this.connection);
+					let user = new User(connection);
 					let {userid} = user;
 					user.disconnectAll();
 					user.destroy();
@@ -50,25 +52,25 @@ describe('Users features', function () {
 
 			describe('#joinRoom', function () {
 				beforeEach(function () {
-					this.connection = new Connection('127.0.0.1');
+					connection = new Connection('127.0.0.1');
 				});
 
 				afterEach(function () {
-					this.connection.destroy();
+					connection.destroy();
 				});
 
 				it('should join a room if not already present', function () {
-					this.connection.joinRoom(Rooms.lobby);
-					assert.ok(this.connection.inRooms.has('lobby'));
+					connection.joinRoom(Rooms.lobby);
+					assert.ok(connection.inRooms.has('lobby'));
 				});
 			});
 
 			describe('#leaveRoom', function () {
 				it('should leave a room that is present', function () {
-					this.connection = new Connection('127.0.0.1');
-					this.connection.joinRoom(Rooms.lobby);
-					this.connection.leaveRoom(Rooms.lobby);
-					assert.ok(!this.connection.inRooms.has('lobby'));
+					connection = new Connection('127.0.0.1');
+					connection.joinRoom(Rooms.lobby);
+					connection.leaveRoom(Rooms.lobby);
+					assert.ok(!connection.inRooms.has('lobby'));
 				});
 			});
 		});

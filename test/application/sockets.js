@@ -12,7 +12,7 @@ describe.skip('Sockets', function () {
 		})
 	);
 
-	before(function () {
+	beforeAll(function () {
 		cluster.settings.silent = true;
 		cluster.removeAllListeners('disconnect');
 	});

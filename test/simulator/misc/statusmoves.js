@@ -33,8 +33,6 @@ describe('Most status moves', function () {
 	});
 
 	it('should fail when the opposing Pokemon is immune to the status effect it sets', function () {
-		this.timeout(0);
-
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'noguard', item: 'laggingtail', moves: ['thunderwave', 'willowisp', 'poisongas', 'toxic']}]});
 		battle.setPlayer('p2', {team: [
@@ -67,7 +65,7 @@ describe('Most status moves', function () {
 		battle.makeChoices('move toxic', 'move magnetrise');
 		assert.strictEqual(battle.p2.active[0].status, '');
 		assert.ok(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
-	});
+	}, 0);
 });
 
 describe('Poison-inflicting status moves [Gen 2]', function () {

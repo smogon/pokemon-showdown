@@ -11,7 +11,6 @@ describe('Contrary', function () {
 	});
 
 	it('should invert relative stat changes', function () {
-		this.timeout(0);
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Spinda", ability: 'contrary', moves: ['superpower']}]});
 		battle.setPlayer('p2', {team: [{species: "Dragonite", ability: 'multiscale', moves: ['dragondance']}]});
@@ -19,7 +18,7 @@ describe('Contrary', function () {
 		battle.makeChoices('move superpower', 'move dragondance');
 		assert.statStage(contraryMon, 'atk', 1);
 		assert.statStage(contraryMon, 'def', 1);
-	});
+	}, 0);
 
 	it('should not invert absolute stat changes', function () {
 		battle = common.createBattle();

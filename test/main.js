@@ -5,8 +5,7 @@ const fs = require('fs');
 
 const noop = () => {};
 
-before('initialization', function () {
-	this.timeout(0); // Remove timeout limitation
+beforeAll(function () {
 	process.on('unhandledRejection', err => {
 		// I'd throw the err, but we have a heisenbug on our hands and I'd
 		// rather not have it screw with Travis in the interim
@@ -48,4 +47,4 @@ before('initialization', function () {
 	LoginServer.disabled = true;
 
 	Ladders.disabled = true;
-});
+}, 0);
