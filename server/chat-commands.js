@@ -670,7 +670,7 @@ const commands = {
 		user.setBack(); // Placebo but covers weird bugs
 		this.sendReply("You are no longer marked as away.");
 	},
-	backhelp: [`/back - Unblocks challenges and/or private messages, if either are blocked.`],
+	backhelp: [`/back - Marks you as back if you are away.`],
 
 	'!rank': true,
 	rank(target, room, user) {
