@@ -165,9 +165,14 @@ class PlayerLadder extends Ladder {
 	}
 }
 
-let Leaderboard = new Ladder(DATA_FILE);
-let HostLeaderboard = new PlayerLadder(HOST_DATA_FILE);
-let PlayerLeaderboard = new PlayerLadder(PLAYER_DATA_FILE);
+let Leaderboard = (scavsRoom && scavsRoom.scavsLeaderboard) || new Ladder(DATA_FILE);
+let HostLeaderboard = (scavsRoom && scavsRoom.scavsHostLeaderboard) || new PlayerLadder(HOST_DATA_FILE);
+let PlayerLeaderboard = (scavsRoom && scavsRoom.scavsPlayerLeaderboard) || new PlayerLadder(PLAYER_DATA_FILE);
+if (scavsRoom) {
+	scavsRoom.scavsLeaderboard = Leaderboard;
+	scavsRoom.scavsHostLeaderboard = HostLeaderboard;
+	scavsRoom.scavsPlayerLeaderboard = PlayerLeaderboard;
+}
 
 function formatQueue(queue = [], viewer, room, broadcasting) {
 	const showStaff = viewer.can('mute', null, room) && !broadcasting;
@@ -396,6 +401,14 @@ class ScavengerHunt extends Rooms.RoomGame {
 		if (!endedBy && (this.preCompleted ? this.preCompleted.length : this.completed.length) === 0) {
 			reset = true;
 		}
+		let sliceIndex = this.gameType === 'official' ? 5 : 3;
+
+		this.announce(
+			`The ${this.gameType ? `${this.gameType} ` : ""}scavenger hunt was ended ${(endedBy ? "by " + Chat.escapeHTML(endedBy.name) : "automatically")}.<br />` +
+			`${this.completed.slice(0, sliceIndex).map((p, i) => `${formatOrder(i + 1)} place: <em>${Chat.escapeHTML(p.name)}</em> <span style="color: lightgreen;">[${p.time}]</span>.<br />`).join("")}${this.completed.length > sliceIndex ? `Consolation Prize: ${this.completed.slice(sliceIndex).map(e => `<em>${Chat.escapeHTML(e.name)}</em> <span style="color: lightgreen;">[${e.time}]</span>`).join(', ')}<br />` : ''}<br />` +
+			`<details style="cursor: pointer;"><summary>Solution: </summary><br />${this.questions.map((q, i) => `${i + 1}) ${Chat.formatText(q.hint)} <span style="color: lightgreen">[<em>${Chat.escapeHTML(q.answer.join(' / '))}</em>]</span>`).join("<br />")}</details>`
+		);
+
 		if (!reset) {
 			// give points for winning and blitzes in official games
 
@@ -427,14 +440,6 @@ class ScavengerHunt extends Rooms.RoomGame {
 				}
 			}
 			if (didSomething) Leaderboard.write();
-
-			let sliceIndex = this.gameType === 'official' ? 5 : 3;
-
-			this.announce(
-				`The ${this.gameType ? `${this.gameType} ` : ""}scavenger hunt was ended ${(endedBy ? "by " + Chat.escapeHTML(endedBy.name) : "automatically")}.<br />` +
-				`${this.completed.slice(0, sliceIndex).map((p, i) => `${formatOrder(i + 1)} place: <em>${Chat.escapeHTML(p.name)}</em> <span style="color: lightgreen;">[${p.time}]</span>.<br />`).join("")}${this.completed.length > sliceIndex ? `Consolation Prize: ${this.completed.slice(sliceIndex).map(e => `<em>${Chat.escapeHTML(e.name)}</em> <span style="color: lightgreen;">[${e.time}]</span>`).join(', ')}<br />` : ''}<br />` +
-				`<details style="cursor: pointer;"><summary>Solution: </summary><br />${this.questions.map((q, i) => `${i + 1}) ${Chat.formatText(q.hint)} <span style="color: lightgreen">[<em>${Chat.escapeHTML(q.answer.join(' / '))}</em>]</span>`).join("<br />")}</details>`
-			);
 
 			if (this.parentGame) this.parentGame.onEndEvent();
 
