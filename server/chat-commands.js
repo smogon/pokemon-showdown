@@ -659,9 +659,18 @@ const commands = {
 	afk: 'away',
 	away(target, room, user) {
 		user.setAway();
-		this.sendReply("You are now marked as away.");
+		this.sendReply("You are now marked as away. Send a message or use /back to indicate you are back.");
 	},
-	awayhelp: [`/away - Marks you as away. Any message sent while away will mark you as back.`],
+	awayhelp: [`/away - Marks you as away. Send a message or use /back to indicate you are back.`],
+
+	'!back': true,
+	unaway: 'back',
+	unafk: 'back',
+	back(target, room, user) {
+		user.setBack(); // Placebo but covers weird bugs
+		this.sendReply("You are no longer marked as away.");
+	},
+	backhelp: [`/back - Unblocks challenges and/or private messages, if either are blocked.`],
 
 	'!rank': true,
 	rank(target, room, user) {
