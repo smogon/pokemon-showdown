@@ -126,7 +126,7 @@ represented by a space), and the rest of the string being their username.
 `|users|USERLIST`
 
 > `USERLIST` is a comma-separated list of `USER`s, sent from chat rooms when
-> they're joined.
+> they're joined. Users that are marked as away are indicated with a @ at the end of their username.
 
 ### Room messages
 
@@ -157,9 +157,9 @@ represented by a space), and the rest of the string being their username.
 
 > `USER` left the room.
 
-`|name|USER|OLDID` or `|n|USER|OLDID`
+`|name|USER|OLDID|AWAY` or `|n|USER|OLDID|AWAY`
 
-> A user changed name to `USER`, and their previous userid was `OLDID`.
+> A user changed name to `USER`, and their previous userid was `OLDID`. If a user is marked as away, the away state is appended at the end of the message. This is not present for users without an away state.
 
 `|chat|USER|MESSAGE` or `|c|USER|MESSAGE`
 

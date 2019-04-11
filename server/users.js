@@ -536,6 +536,8 @@ class User extends Chat.MessageContext {
 		// Used in punishments
 		/** @type {string} */
 		this.trackRename = '';
+		/** @type {boolean} */
+		this.isAway = false;
 		// initialize
 		Users.add(this);
 	}
@@ -1546,6 +1548,14 @@ class User extends Chat.MessageContext {
 			this.chatQueue = null;
 		}
 	}
+	setAway() {
+		this.isAway = true;
+		this.updateIdentity();
+	}
+	setBack() {
+		this.isAway = false;
+		this.updateIdentity();
+	}
 	destroy() {
 		// deallocate user
 		for (const roomid of this.games) {
@@ -1586,8 +1596,8 @@ function pruneInactive(threshold) {
 		let afkTimer = AFK_TIMER;
 		if (user.can('lock') && !user.can('bypassall')) afkTimer = STAFF_AFK_TIMER;
 		if (user.group !== '*' && !user.connections.some(connection => now - connection.lastActiveTime < afkTimer)) {
-			user.popup(`You have been inactive for over ${afkTimer / MINUTES} minutes, and have been logged out of your account as a result.`);
-			user.resetName(false);
+			user.popup(`You have been inactive for over ${afkTimer / MINUTES} minutes, and have been marked as away as a result.`);
+			user.setAway();
 		}
 		if (user.connected) continue;
 		if ((now - user.lastConnected) > threshold) {
