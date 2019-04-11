@@ -3,7 +3,7 @@ type Field = import('./../sim/field').Field
 type ModdedDex = typeof import('./../sim/dex')
 type Pokemon = import('./../sim/pokemon').Pokemon
 type Side = import('./../sim/side').Side
-type Validator = import('./../sim/team-validator').TeamValidator
+type TeamValidator = import('./../sim/team-validator').TeamValidator
 
 type PageTable = import('./../server/chat').PageTable
 type ChatCommands = import('./../server/chat').ChatCommands
@@ -24,7 +24,7 @@ declare let LoginServer: typeof import('../server/loginserver');
 declare let Verifier: typeof import('../server/verifier');
 declare let Dnsbl: typeof import('../server/dnsbl');
 declare let Sockets: typeof import('../server/sockets');
-// let TeamValidator: typeof import('../sim/team-validator');
+// let TeamValidator: typeof import('../sim/team-validator').TeamValidator;
 declare let TeamValidatorAsync: typeof import('../server/team-validator-async');
 
 type GenderName = 'M' | 'F' | 'N' | '';
@@ -1051,7 +1051,7 @@ interface FormatsData extends EventMethods {
 	timer?: Partial<GameTimerSettings>
 	tournamentShow?: boolean
 	unbanlist?: string[]
-	checkLearnset?: (this: Validator, move: Move, template: Template, lsetData: PokemonSources, set: PokemonSet) => {type: string, [any: string]: any} | null
+	checkLearnset?: (this: TeamValidator, move: Move, template: Template, lsetData: PokemonSources, set: PokemonSet) => {type: string, [any: string]: any} | null
 	onAfterMega?: (this: Battle, pokemon: Pokemon) => void
 	onBegin?: (this: Battle) => void
 	onChangeSet?: (this: ModdedDex, set: PokemonSet, format: Format, setHas?: AnyObject, teamHas?: AnyObject) => string[] | void
@@ -1059,8 +1059,8 @@ interface FormatsData extends EventMethods {
 	onTeamPreview?: (this: Battle) => void
 	onValidateSet?: (this: ModdedDex, set: PokemonSet, format: Format, setHas: AnyObject, teamHas: AnyObject) => string[] | void
 	onValidateTeam?: (this: ModdedDex, team: PokemonSet[], format: Format, teamHas: AnyObject) => string[] | void
-	validateSet?: (this: Validator, set: PokemonSet, teamHas: AnyObject) => string[] | void
-	validateTeam?: (this: Validator, team: PokemonSet[], removeNicknames: boolean) => string[] | void,
+	validateSet?: (this: TeamValidator, set: PokemonSet, teamHas: AnyObject) => string[] | void
+	validateTeam?: (this: TeamValidator, team: PokemonSet[], removeNicknames: boolean) => string[] | void,
 	section?: string,
 	column?: number
 }

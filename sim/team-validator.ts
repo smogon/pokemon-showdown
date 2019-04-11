@@ -1296,4 +1296,8 @@ export class TeamValidator {
 		}
 		return filledStats;
 	}
+
+	static get(format: string | Format) {
+		return new TeamValidator(format);
+	}
 }

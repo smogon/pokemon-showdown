@@ -30,7 +30,7 @@ class TeamValidatorAsync {
 	/**
 	 * @param {string} format
 	 */
-	static create(format) {
+	static get(format) {
 		return new TeamValidatorAsync(format);
 	}
 }
@@ -50,7 +50,7 @@ const PM = new QueryProcessManager(module, async message => {
 
 	let problems;
 	try {
-		problems = new TeamValidator(formatid).validateTeam(parsedTeam, removeNicknames);
+		problems = TeamValidator.get(formatid).validateTeam(parsedTeam, removeNicknames);
 	} catch (err) {
 		require(/** @type {any} */('../.lib-dist/crashlogger'))(err, 'A team validation', {
 			formatid: formatid,
@@ -114,4 +114,4 @@ if (!PM.isParentProcess) {
  * Exports
  *********************************************************/
 
-module.exports = {create: TeamValidatorAsync.create, TeamValidatorAsync, PM};
+module.exports = {get: TeamValidatorAsync.get, TeamValidatorAsync, PM};
