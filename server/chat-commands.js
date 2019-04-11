@@ -658,19 +658,10 @@ const commands = {
 	idle: 'away',
 	afk: 'away',
 	away(target, room, user) {
-		this.parse('/blockchallenges');
-		this.parse(`/blockpms ${target}`);
+		user.setAway();
+		this.sendReply("You are now marked as away.");
 	},
-	awayhelp: [`/away - Blocks challenges and private messages. Unblock them with /back.`],
-
-	'!back': true,
-	unaway: 'back',
-	unafk: 'back',
-	back() {
-		this.parse('/unblockpms');
-		this.parse('/unblockchallenges');
-	},
-	backhelp: [`/back - Unblocks challenges and/or private messages, if either are blocked.`],
+	awayhelp: [`/away - Marks you as away. Any message sent while away will mark you as back.`],
 
 	'!rank': true,
 	rank(target, room, user) {

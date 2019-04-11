@@ -1324,9 +1324,9 @@ class BasicChatRoom extends BasicRoom {
 	onUpdateIdentity(user) {
 		if (user && user.connected) {
 			if (!this.users[user.userid]) return false;
-			const awayText = user.isAway ? '|away' : '';
+			const awayText = user.isAway ? '@' : '';
 			if (user.named) {
-				this.reportJoin('n', user.getIdentity(this.id) + '|' + user.userid + awayText);
+				this.reportJoin('n', user.getIdentity(this.id) + awayText + '|' + user.userid + awayText);
 			} else {
 				this.reportJoin('l', user.userid);
 			}

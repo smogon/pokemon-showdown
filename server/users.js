@@ -1007,6 +1007,7 @@ class User extends Chat.MessageContext {
 	 * @param {string[]} updated the settings which have been updated or none for all settings.
 	 */
 	getUpdateuserText(...updated) {
+		const away = this.isAway ? '@' : '';
 		const named = this.named ? 1 : 0;
 		const diff = {};
 		const settings = updated.length ? updated : SETTINGS;
@@ -1014,7 +1015,7 @@ class User extends Chat.MessageContext {
 			// @ts-ignore - dynamic lookup
 			diff[setting] = this[setting];
 		}
-		return `|updateuser|${this.name}|${named}|${this.avatar}|${JSON.stringify(diff)}`;
+		return `|updateuser|${this.name}${away}|${named}|${this.avatar}|${JSON.stringify(diff)}`;
 	}
 	/**
 	 * @param {string[]} updated the settings which have been updated or none for all settings.
@@ -1692,6 +1693,8 @@ function socketReceive(worker, workerid, socketid, message) {
 
 	const user = connection.user;
 	if (!user) return;
+
+	if (user.isAway) user.setBack();
 
 	// The client obviates the room id when sending messages to Lobby by default
 	const roomId = message.substr(0, pipeIndex) || (Rooms.lobby || Rooms.global).id;

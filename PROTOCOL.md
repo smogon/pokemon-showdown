@@ -157,9 +157,9 @@ represented by a space), and the rest of the string being their username.
 
 > `USER` left the room.
 
-`|name|USER|OLDID|AWAY` or `|n|USER|OLDID|AWAY`
+`|name|USER|OLDID` or `|n|USER|OLDID`
 
-> A user changed name to `USER`, and their previous userid was `OLDID`. If a user is marked as away, the away state is appended at the end of the message. This is not present for users without an away state.
+> A user changed name to `USER`, and their previous userid was `OLDID`. A @ at the end of the new username indicates the user is marked as away.
 
 `|chat|USER|MESSAGE` or `|c|USER|MESSAGE`
 
