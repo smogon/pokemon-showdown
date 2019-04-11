@@ -1556,7 +1556,7 @@ class User extends Chat.MessageContext {
 		this.updateIdentity();
 	}
 	setBack() {
-		if (!user.isAway) return;
+		if (!this.isAway) return;
 		this.isAway = false;
 		this.updateIdentity();
 	}
