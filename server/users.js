@@ -1457,6 +1457,8 @@ class User extends Chat.MessageContext {
 	chat(message, room, connection) {
 		let now = Date.now();
 
+		if (!message.startsWith('/cmd')) this.setBack();
+
 		if (message.startsWith('/cmd userdetails') || message.startsWith('>> ') || this.isSysop) {
 			// certain commands are exempt from the queue
 			Monitor.activeIp = connection.ip;
@@ -1554,6 +1556,7 @@ class User extends Chat.MessageContext {
 		this.updateIdentity();
 	}
 	setBack() {
+		if (!user.isAway) return;
 		this.isAway = false;
 		this.updateIdentity();
 	}
@@ -1692,8 +1695,6 @@ function socketReceive(worker, workerid, socketid, message) {
 
 	const user = connection.user;
 	if (!user) return;
-
-	if (user.isAway) user.setBack();
 
 	// The client obviates the room id when sending messages to Lobby by default
 	const roomId = message.substr(0, pipeIndex) || (Rooms.lobby || Rooms.global).id;

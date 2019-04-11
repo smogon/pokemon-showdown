@@ -667,7 +667,7 @@ const commands = {
 	unaway: 'back',
 	unafk: 'back',
 	back(target, room, user) {
-		if (user.isAway) user.setBack(); // Placebo but covers weird bugs
+		user.setBack(); // Placebo but covers weird bugs
 		this.sendReply("You are no longer marked as away.");
 	},
 	backhelp: [`/back - Marks you as back if you are away.`],
