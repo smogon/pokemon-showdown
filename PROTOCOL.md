@@ -230,7 +230,7 @@ represented by a space), and the rest of the string being their username.
 `|updateuser|USERNAME|NAMED|AVATAR|SETTINGS`
 
 > Your name, avatar or settings were successfully changed. Your username is
-> now `USERNAME`. `NAMED` will be `0` if you are a guest or `1` otherwise. Your
+> now `USERNAME`. @ is appended to the end of `USERNAME` if you are marked as away. `NAMED` will be `0` if you are a guest or `1` otherwise. Your
 > avatar is now `AVATAR`. `SETTINGS` is a JSON object representing the current
 > state of various user settings.
 
