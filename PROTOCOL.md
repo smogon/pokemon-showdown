@@ -159,7 +159,7 @@ represented by a space), and the rest of the string being their username.
 
 `|name|USER|OLDID` or `|n|USER|OLDID`
 
-> A user changed name to `USER`, and their previous userid was `OLDID`. A @ at the end of the new username indicates the user is marked as away.
+> A user changed name to `USER`, and their previous userid was `OLDID`. A @ at the end of the new `USER` name indicates the user is marked as away.
 
 `|chat|USER|MESSAGE` or `|c|USER|MESSAGE`
 
