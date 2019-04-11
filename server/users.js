@@ -1599,7 +1599,7 @@ function pruneInactive(threshold) {
 	for (const user of users.values()) {
 		const afkTimer = (user.can('lock') && !user.can('bypassall')) ? STAFF_AFK_TIMER : AFK_TIMER;
 		if (user.group !== '*' && !user.connections.some(connection => now - connection.lastActiveTime < afkTimer)) {
-			user.popup(`You have been inactive for over ${afkTimer / MINUTES} minutes, and have been marked as away as a result.`);
+			user.popup(`You have been inactive for over ${afkTimer / MINUTES} minutes, and have been marked as away as a result. To mark yourself as back, send a message in chat, or use the /back command.`);
 			user.setAway();
 		}
 		if (user.connected) continue;
