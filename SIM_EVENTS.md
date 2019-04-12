@@ -4,6 +4,11 @@
 1. [Introduction](#introduction)
 	- [Effects](#effects)
 	- [Events](#events)
+		- [Event propagation](#event-propagation)
+		- [Event output](#event-output)
+		- [Event cancellation](#event-cancellation)
+		- [Relay variables](#relay-variables)
+		- [The `chainModify` pattern](#the-chainmodify-pattern)
 2. [Single events](#single-events)
 	- [Abilities and Items](#abilities-and-items)
 	- [Statuses](#statuses-pureeffect)
@@ -17,23 +22,24 @@
 
 ### Effects
 
-In Pokémon Showdown, as well as in [Pokémon Lab](https://pokemonlab.com/),
-everything in Pokémon is an effect.
+In [Pokémon Showdown](https://play.pokemonshowdown.com), as well as in its predecessor
+[Pokémon Lab](https://pokemonlab.com/), everything in Pokémon is an *effect*.
 
-There are 10 types of effects:
+There are 11 types of effects:
 
 Effect type | Target | Examples
 ------------|--------|---------
-Move | Pokémon | Grass Knot, Magnitude
-Status | Pokémon | Sleep, Poison
-Volatile | Pokémon | Protect, Substitute
-Ability | Pokémon | Intimidate, Technician
-Item | Pokémon | Leftovers, Choice Scarf
-Slot condition | Slot | Wish, Healing Wish
-Side condition | Side | Reflect, Tailwind
-Terrain | Field | Grassy Terrain, Misty Terrain
-Weather | Field | Rain Dance, Sunny Day
-Pseudoweather | Field | Trick Room
+Species | Pokémon | [Arceus](https://dex.pokemonshowdown.com/pokemon/arceus), [Silvally](https://dex.pokemonshowdown.com/pokemon/silvally)
+Move | Pokémon | [Grass Knot](https://dex.pokemonshowdown.com/moves/grassknot), [Magnitude](https://dex.pokemonshowdown.com/moves/magnitude)
+Ability | Pokémon | [Intimidate](https://dex.pokemonshowdown.com/abilities/intimidate), [Technician](https://dex.pokemonshowdown.com/abilities/technician)
+Item | Pokémon | [Leftovers](https://dex.pokemonshowdown.com/items/leftovers), [Choice Scarf](https://dex.pokemonshowdown.com/items/choicescarf)
+Status (non-volatile) | Pokémon | Sleep, Poison
+Volatile status | Pokémon | [Protect](https://dex.pokemonshowdown.com/moves/protect), [Substitute](https://dex.pokemonshowdown.com/moves/substitute)
+Slot condition | Slot | [Healing Wish](https://dex.pokemonshowdown.com/moves/healingwish), [Wish](https://dex.pokemonshowdown.com/moves/wish)
+Side condition | Side | [Reflect](https://dex.pokemonshowdown.com/moves/reflect), [Tailwind](https://dex.pokemonshowdown.com/moves/tailwind)
+Terrain | Field | [Grassy Terrain](https://dex.pokemonshowdown.com/moves/grassyterrain), [Misty Terrain](https://dex.pokemonshowdown.com/moves/mistyterrain)
+Weather | Field | [Rain Dance](https://dex.pokemonshowdown.com/moves/raindance), [Sunny Day](https://dex.pokemonshowdown.com/moves/sunnyday)
+Pseudoweather | Field | [Gravity](https://dex.pokemonshowdown.com/moves/gravity), [Trick Room](https://dex.pokemonshowdown.com/moves/trickroom)
 
 Effects which target a side also target every Pokémon on a side,
 and effects targetting the field also target every Pokémon in it.
@@ -46,17 +52,61 @@ and trapping).
 ### Events
 
 Nearly every effect has some sort of event listener, and each action in the battle
-fires an event.
+fires an event. There are two main types of events: [single events](#single-events)
+and [global events](#global-events). The key difference between them is that global
+events propagate, while single events don't.
 
-Since events that target a side also target every Pokémon on it, any event that
+#### Event propagation
+
+Since effects that target a side also target every Pokémon on it, [global event](#global-events) that
 fires on a Pokémon will also fire on that Pokémon's side. So, for instance, the
 global event `TryHit`, which is run on the target of a move, is also intercepted
-by the `onTryHit` handler of **Mat Block**, a side condition on the target's side.
+by the `onTryHit` handler of [Mat Block](https://dex.pokemonshowdown.com/moves/matblock),
+a side condition on the target's side.
 
 Similarly, any event that fires on a side will also fire on the field. So, for instance,
-the global `Effectiveness` event can be captured by **Delta Stream**, a weather condition.
+the global `Effectiveness` event can be captured by
+[Delta Stream](https://dex.pokemonshowdown.com/abilities/deltastream), a weather condition.
 
-For instance, here is the **Technician** ability:
+Events which target a Pokémon also propagate from it to other active Pokémon on the field:
+
+Propagates to | Event handler pattern | Event handler examples
+--------------|-----------------------|----------------------------------
+Event source | `onSourceEvent` | `onSourceModifyDamage`, `onSourceTryHeal`
+Foe Pokémon | `onFoeEvent` | `onFoeBasePower`, `onFoeTryMove`
+Allied Pokémon | `onAllyEvent` | `onAllyBoost`, `onAllyTryHitSide`
+Any Pokémon | `onAnyEvent` | `onAnyBasePower`, `onAnySetWeather`
+
+**NOTE** [Single events](#single-events) don't propagate, and are only fired on their direct target.
+
+**NOTE** Event propagation can be [cancelled](#event-cancellation).
+
+#### Event output
+
+According to how their return value is consumed, there are 3 types of events in Pokémon Showdown.
+
+Consumed | Description| Examples
+---------|------------|-------------------------------------------------------------------
+None | The event is run for its side effects. | `onAfterBoost`, `onFaint`, `onSwitchIn`, `onUpdate`
+Cancellation | If the event is cancelled, the ongoing battle action is cancelled as well. | `onDragOut`, `onTryAddVolatile`, `onTryHit`
+Output | The return value of the event is passed to other functions. The event is very likely to support a [relay variable](#relay-variables)
+
+#### Event cancellation
+
+An event can be cancelled by any event handlers, which entails the following:
+- The execution of any pending event handlers will be aborted.
+- The global return value of the event will be set to the raised cancellation flag.
+
+Cancellation is triggered from any event handler by returning any of the cancellation flags:
+`this.FAIL`, or `this.SILENT_FAIL` (where `this` is the active `Battle`).
+
+#### Relay variables
+
+4-ary events support a relay variable, which is passed to the event handlers as the first parameter.
+
+#### The `chainModify` pattern
+
+For instance, here is the [Technician](https://dex.pokemonshowdown.com/abilities/technician) ability:
 
 ```js
 "technician": {
@@ -113,7 +163,7 @@ First, the `basePowerCallback` handler on the move is fired:
 Helioptile, which weighs 6 kg.
 
 Next, the battle fires the BasePower event, which is intercepted by the following handlers:
-- `onBasePower(user, target) [on move]
+- `onBasePower(user, target)` [on move]
 - `onBasePower(user, target, basePower, move)` [on user]
 - `onAllyBasePower(user, target, basePower, move)` [on allies]
 - `onFoeBasePower(user, target, basePower, move)` [on foe Pokémon]
