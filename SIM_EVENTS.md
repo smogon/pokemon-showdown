@@ -48,6 +48,9 @@ induces it. The only exceptions are effects with many moves associated with them
 such as statuses, and certain volatile statuses (flinch, confusion, locked moves,
 and trapping).
 
+**NOTE**: The target of an effect can be accessed as ``this.effectData.target``.
+However, *slot conditions* don't support this feature yet.
+
 ## Events
 
 Nearly every effect has some sort of event listener, and each action in the battle
@@ -100,6 +103,8 @@ An event can be cancelled by any event handlers, which entails the following:
 Cancellation is triggered from any event handler by returning any of the cancellation flags:
 `this.FAIL`, or `this.SILENT_FAIL` (where `this` is the active `Battle`).
 
+**NOTE**: In legacy code, the cancellation flags are hardcoded as `false` and `null`.
+
 ### Relay variables
 
 The first parameter passed to 4-ary event handlers is given the name of "*relay variable*".
@@ -113,18 +118,10 @@ some factor each, the overall effect is the product of these factors. For instan
 
 ```js
 "brightpowder": {
-	id: "brightpowder",
-	name: "Bright Powder",
-	spritenum: 51,
-	fling: {
-		basePower: 10,
-	},
 	onModifyAccuracy(accuracy) {
 		if (typeof accuracy !== 'number') return;
 		return accuracy * 0.9;
 	},
-	num: 213,
-	gen: 2,
 	desc: "The accuracy of attacks against the holder is 0.9x.",
 }
 ```
@@ -138,10 +135,6 @@ some factor each, the overall effect is the product of these factors. For instan
 			return accuracy * 0.5;
 		}
 	},
-	id: "tangledfeet",
-	name: "Tangled Feet",
-	rating: 1,
-	num: 77,
 }
 ```
 
@@ -157,8 +150,6 @@ For instance, here is the [Technician](https://dex.pokemonshowdown.com/abilities
 
 ```js
 "technician": {
-	desc: "This Pokemon's moves of 60 power or less have their power multiplied\
-		by 1.5. Does affect Struggle.",
 	shortDesc: "This Pokemon's moves of 60 power or less have 1.5x power. Includes\
 		Struggle.",
 	onBasePowerPriority: 8,
@@ -167,10 +158,6 @@ For instance, here is the [Technician](https://dex.pokemonshowdown.com/abilities
 			return this.chainModify(1.5);
 		}
 	},
-	id: 'technician',
-	name: "Technician",
- 	rating: 4,
-	num: 101,
 }
 ```
 
@@ -222,20 +209,22 @@ Next, the battle fires the BasePower event, which is intercepted by the followin
 
 As mentioned above, events fired on a Pokémon also fire on the side and the field.
 Therefore, the events found are the following:
-- Roserade's **Technician** (`onBasePower` handler of the user, priority 8)
-- Field's **Grassy Terrain** (`onBasePower` handler of the field, priority 0)
-- Charjabug's **Battery** (`onAllyBasePower` handler of an allied, priority 8)
-- Helioptile's **Dry Skin** (`onFoeBasePower` handler of a foe, priority 7)
+- Roserade's [Technician](https://dex.pokemonshowdown.com/abilities/technician) (User's `onBasePower`, priority `8`)
+- Field's [Grassy Terrain](https://dex.pokemonshowdown.com/moves/grassyterrain) (Field's `onBasePower`, priority `0`)
+- Charjabug's [Battery](https://dex.pokemonshowdown.com/abilities/battery) (Ally's `onAllyBasePower`, priority `8`)
+- Helioptile's [Dry Skin](https://dex.pokemonshowdown.com/abilities/dryskin) (Foe's `onFoeBasePower`, priority `7`)
 
 These handlers are sorted by their listed priority.
 
-1. **Technician**'s callback goes first, so it updates the base power modifier
-from its initial value of 1 to 1.5.
-2. **Battery**'s handler is called so the base power modifier is updated to ~1.95.
-3. **Dry Skin**'s handler is called. Since **Grass Knot** is *not* a Fire-type move,
-this step doesn't affect its base power.
-4. **Grassy Terrain**'s handler is called. Since **Grass Knot** *is* a Grass-type move,
-and **Roserade** is grounded, the base power modifier is updated to ~3.80.
+1. [Technician](https://dex.pokemonshowdown.com/abilities/technician)'s callback goes first,
+so it updates the base power modifier from its initial value of `1` to `1.5`.
+2. [Battery](https://dex.pokemonshowdown.com/abilities/battery)'s handler is called so the
+base power modifier is updated to `~1.95`.
+3. [Dry Skin](https://dex.pokemonshowdown.com/abilities/dryskin)'s handler is called.
+Since **Grass Knot** is *not* a Fire-type move, this step doesn't affect its base power.
+4. [Grassy Terrain](https://dex.pokemonshowdown.com/moves/grassyterrain)'s handler is called.
+Since **Grass Knot** *is* a Grass-type move, and Roserade is **grounded**, the base power modifier
+is updated to `~3.80`.
 5. After the `BasePower` event is run, we get a rounded final base power of `76`.
 
 **NOTE**: Since `chainModify()` is a void function, the relay variable isn't updated
@@ -248,8 +237,7 @@ during steps 1-4 above.
 **NOTE**: This list is incomplete.
 Refer to [dev-tools/globals.ts](https://github.com/Zarel/Pokemon-Showdown/blob/master/dev-tools/globals.ts) for a full list,
 including function signatures, of the single events available on abilities, moves, items or statuses, corresponding to the
-`AbilityEventMethods`, `MoveEventMethods`, `ItemEventMethods` and `PureEffectEventMethods`
-interfaces.
+`AbilityEventMethods`, `MoveEventMethods`, `ItemEventMethods` and `PureEffectEventMethods` interfaces.
 
 Single events run on moves are passed copies of the move objects. These are called
 "Active Moves", and can be safely modified.
