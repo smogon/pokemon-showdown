@@ -7,20 +7,23 @@
 In Pokémon Showdown, as well as in [Pokémon Lab](https://pokemonlab.com/),
 everything in Pokémon is an effect.
 
-There are 10 types of effects
-- move, associated with a pokemon (Grass Knot, Magnitude...)
-- status, associated with a pokemon (Sleep, Poison...)
-- volatile, associated with a pokemon (Protect, Substitute...)
-- ability, associated with a pokemon (Intimidate, Technician...)
-- item, associated with a pokemon (Leftovers, Choice Scarf...)
-- slot condition, associated with a position (Wish, Healing Wish)
-- side condition, associated with a side (Reflect, Tailwind...)
-- terrain, associated with the field (Grassy Terrain, Misty Terrain...)
-- weather, associated with the field (Rain Dance, Sunny Day...)
-- pseudoweather, asociated with the field (Trick Room...)
+There are 10 types of effects:
 
-Effects associated with a side are also associated with every pokemon on a side,
-and effects associated with the field are associated with every pokemon.
+Effect type | Target | Examples
+------------|--------|---------
+Move | Pokémon | Grass Knot, Magnitude
+Status | Pokémon | Sleep, Poison
+Volatile | Pokémon | Protect, Substitute
+Ability | Pokémon | Intimidate, Technician
+Item | Pokémon | Leftovers, Choice Scarf
+Slot condition | Slot | Wish, Healing Wish
+Side condition | Side | Reflect, Tailwind
+Terrain | Field | Grassy Terrain, Misty Terrain
+Weather | Field | Rain Dance, Sunny Day
+Pseudoweather | Field | Trick Room
+
+Effects which target a side also target every Pokémon on a side,
+and effects targetting the field also target every Pokémon in it.
 
 For convenience, most effects have the same ID as the move, ability, or item that
 induces it. The only exceptions are effects with many moves associated with them,
@@ -29,17 +32,18 @@ and trapping).
 
 ### Events
 
-Nearly every effect has some sort of event listener, and each action fires an
-event.
+Nearly every effect has some sort of event listener, and each action in the battle
+fires an event.
 
-Any event that fires on a pokemon also fires on that pokemon's side. So, for instance,
-the global event TryHit, which is run on the target of a move, is also intercepted
-by the onTryHit handler of Mat Block, a side condition on the target's side.
+Since events that target a side also target every Pokémon on it, any event that
+fires on a Pokémon will also fire on that Pokémon's side. So, for instance, the
+global event `TryHit`, which is run on the target of a move, is also intercepted
+by the `onTryHit` handler of **Mat Block**, a side condition on the target's side.
 
-Any event that fires on a side also fires on the global field. So, for instance,
-the global Effectiveness event can be captured by Delta Stream, a weather condition.
+Similarly, any event that fires on a side will also fire on the field. So, for instance,
+the global `Effectiveness` event can be captured by **Delta Stream**, a weather condition.
 
-For instance, here is the Technician ability:
+For instance, here is the **Technician** ability:
 
 ```js
 "technician": {
@@ -60,12 +64,12 @@ For instance, here is the Technician ability:
 }
 ```
 
-Now, let's work through an example:
+Now, let's work through an example of how this ability acts:
 
-> In a Doubles Battle with Grassy Terrain active, and with an allied Battery Charjabug
-on the field, a Technician Roserade uses Grass Knot against a Dry Skin Helioptile.
+> In a Doubles Battle with **Grassy Terrain** active, and with an allied **Battery** Charjabug
+on the field, a **Technician** Roserade uses **Grass Knot** against a **Dry Skin** Helioptile.
 
-To calculate the damage inflicted, the method Battle#getDamage() is invoked:
+To calculate the damage inflicted, the method `Battle#getDamage()` is invoked:
 
 ```js
 // Excerpt
@@ -76,7 +80,7 @@ if (move.basePowerCallback) {
 basePower = this.runEvent('BasePower', pokemon, target, move, basePower, true);
 ```
 
-First, the basePowerCallback handler on the move is fired:
+First, the `basePowerCallback` handler on the move is fired:
 
 ```js
 "grassknot": {
@@ -92,41 +96,41 @@ First, the basePowerCallback handler on the move is fired:
 }
 ```
 
-Grass Knot's basePowerCallback function returns 20 as its base power against
-Helioptile, which weights 6 kg.
+**Grass Knot**'s `basePowerCallback` function returns `20` as its base power against
+Helioptile, which weighs 6 kg.
 
 Next, the battle fires the BasePower event, which is intercepted by the following handlers:
-- onBasePower(user, target) [on move]
-- onBasePower(user, target, basePower, move) [on user]
-- onAllyBasePower(user, target, basePower, move) [on allies]
-- onFoeBasePower(user, target, basePower, move) [on foe Pokémon]
-- onSourceBasePower(user, target, basePower, move) [on target]
-- onAnyBasePower(user, target, basePower, move) [on every Pokémon]
+- `onBasePower(user, target) [on move]
+- `onBasePower(user, target, basePower, move)` [on user]
+- `onAllyBasePower(user, target, basePower, move)` [on allies]
+- `onFoeBasePower(user, target, basePower, move)` [on foe Pokémon]
+- `onSourceBasePower(user, target, basePower, move)` [on target]
+- `onAnyBasePower(user, target, basePower, move)` [on every Pokémon]
 
 As mentioned above, events fired on a Pokémon also fire on the side and the field.
 Therefore, the events found are the following:
-- Roserade's Technician (onBasePower handler of the user, priority 8)
-- Field's Grassy Terrain (onBasePower handler of the field, priority 0)
-- Charjabug's Battery (onAllyBasePower handler of an allied, priority 8)
-- Helioptile's Dry Skin (onFoeBasePower handler of a foe, priority 7)
+- Roserade's **Technician** (`onBasePower` handler of the user, priority 8)
+- Field's **Grassy Terrain** (`onBasePower` handler of the field, priority 0)
+- Charjabug's **Battery** (`onAllyBasePower` handler of an allied, priority 8)
+- Helioptile's **Dry Skin** (`onFoeBasePower` handler of a foe, priority 7)
 
 These handlers are sorted by their listed priority.
 
-1. Technician's callback goes first, so it updates the base power modifier
+1. **Technician**'s callback goes first, so it updates the base power modifier
 from its initial value of 1 to 1.5.
-2. Battery's handler is called so the base power modifier is updated to ~1.95.
-3. Dry Skin's handler is called. Since Grass Knot is not a Fire-type move,
+2. **Battery**'s handler is called so the base power modifier is updated to ~1.95.
+3. **Dry Skin**'s handler is called. Since **Grass Knot** is *not* a Fire-type move,
 this step doesn't affect its base power.
-4. Grassy Terrain's handler is called. Since Grass Knot is a Grass-type move,
-and Roserade is grounded, the base power modifier is updated to ~3.80.
-5. After the BasePower event is run, we get a rounded final base power of 76.
+4. **Grassy Terrain**'s handler is called. Since **Grass Knot** *is* a Grass-type move,
+and **Roserade** is grounded, the base power modifier is updated to ~3.80.
+5. After the `BasePower` event is run, we get a rounded final base power of `76`.
 
 ## Single events
 
 **NOTE**: This list is incomplete.
-Consult [dev-tools/globals.ts](https://github.com/Zarel/Pokemon-Showdown/blob/master/dev-tools/globals.ts) for a full list, including function signatures, of the
+Refer to [dev-tools/globals.ts](https://github.com/Zarel/Pokemon-Showdown/blob/master/dev-tools/globals.ts) for a full list, including function signatures, of the
 single events available on abilities, moves, items or statuses, corresponding to the
-AbilityEventMethods, MoveEventMethods, ItemEventMethods and PureEffectEventMethods
+`AbilityEventMethods`, `MoveEventMethods`, `ItemEventMethods` and `PureEffectEventMethods`
 interfaces.
 
 Single events run on moves are passed copies of the move objects. These are called
@@ -263,7 +267,7 @@ onEnd(field, source, sourceEffect) [on weather, on terrain, on pseudoweather]
 
 ### Moves (hit steps)
 
-**NOTE**: For an schematic breakdown, consult [simulator-doc.txt](https://github.com/Zarel/Pokemon-Showdown/blob/master/simulator-doc.txt)
+**NOTE**: For an schematic breakdown, refer to [simulator-doc.txt](https://github.com/Zarel/Pokemon-Showdown/blob/master/simulator-doc.txt)
 
 onHit(target, user, move) [on move]
 	Fired when a move hits (doesn't miss). Return false to prevent the move's
@@ -277,8 +281,8 @@ onHit(target, user, move) [on move]
 ## Global events
 
 **NOTE**: This list is incomplete.
-Consult [dev-tools/globals.ts](https://github.com/Zarel/Pokemon-Showdown/blob/master/dev-tools/globals.ts) for a full list, including function signatures, of the
-global events available, corresponding to the EventMethods interface.
+Refer to [dev-tools/globals.ts](https://github.com/Zarel/Pokemon-Showdown/blob/master/dev-tools/globals.ts) for a full list, including function signatures, of the
+global events available, corresponding to the `EventMethods` interface.
 
 onBeforeMove(user, target, move) [on user]
 	Fired before a pokemon uses a move it chose. Return false to prevent
@@ -385,7 +389,7 @@ onResidual(field) [on weather, on pseudoweather]
 
 ### Hit step events
 
-**NOTE**: For an schematic breakdown, consult [simulator-doc.txt](https://github.com/Zarel/Pokemon-Showdown/blob/master/simulator-doc.txt)
+**NOTE**: For an schematic breakdown, refer to [simulator-doc.txt](https://github.com/Zarel/Pokemon-Showdown/blob/master/simulator-doc.txt)
 
 onHit(target, source, move) [on target]
 onSourceHit(target, source, move) [on source]
