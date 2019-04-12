@@ -54,12 +54,23 @@ and trapping).
 Nearly every effect has some sort of event listener, and each action in the battle
 fires an event. There are two main types of events: [single events](#single-events)
 and [global events](#global-events). The key difference between them is that global
-events propagate, while single events don't.
+events propagate, while single events don't. [Event propagation](#event-propagation)
+shall be described later.
+
+#### Event output
+
+There are 3 different ways in which Pokémon Showdown may consume the return value of an event.
+
+Consumed | Description| Examples
+---------|------------|-------------------------------------------------------------------
+None | The event is run for its side effects. | `onAfterBoost`, `onFaint`, `onSwitchIn`, `onUpdate`
+[Cancellation](#event-cancellation) | If the event is cancelled, the ongoing battle action is cancelled as well. | `onDragOut`, `onTryAddVolatile`, `onTryHit`, `onTryImmunity`
+Output | The return value of the event is passed to other functions. The event is very likely to support a [relay variable](#relay-variables). | `onBasePower`, `onDamage`, `onModifyAtk`, `onModifyCritRatio`
 
 #### Event propagation
 
-Since effects that target a side also target every Pokémon on it, [global event](#global-events) that
-fires on a Pokémon will also fire on that Pokémon's side. So, for instance, the
+Since effects that target a side also target every Pokémon on it, a [global event](#global-events)
+that fires on a Pokémon will also fire on that Pokémon's side. So, for instance, the
 global event `TryHit`, which is run on the target of a move, is also intercepted
 by the `onTryHit` handler of [Mat Block](https://dex.pokemonshowdown.com/moves/matblock),
 a side condition on the target's side.
@@ -77,19 +88,9 @@ Foe Pokémon | `onFoeEvent` | `onFoeBasePower`, `onFoeTryMove`
 Allied Pokémon | `onAllyEvent` | `onAllyBoost`, `onAllyTryHitSide`
 Any Pokémon | `onAnyEvent` | `onAnyBasePower`, `onAnySetWeather`
 
-**NOTE** [Single events](#single-events) don't propagate, and are only fired on their direct target.
+**NOTE**: [Single events](#single-events) don't propagate, and are only fired on their direct target.
 
-**NOTE** Event propagation can be [cancelled](#event-cancellation).
-
-#### Event output
-
-According to how their return value is consumed, there are 3 types of events in Pokémon Showdown.
-
-Consumed | Description| Examples
----------|------------|-------------------------------------------------------------------
-None | The event is run for its side effects. | `onAfterBoost`, `onFaint`, `onSwitchIn`, `onUpdate`
-Cancellation | If the event is cancelled, the ongoing battle action is cancelled as well. | `onDragOut`, `onTryAddVolatile`, `onTryHit`
-Output | The return value of the event is passed to other functions. The event is very likely to support a [relay variable](#relay-variables)
+**NOTE**: Event propagation can be [cancelled](#event-cancellation).
 
 #### Event cancellation
 
@@ -102,9 +103,20 @@ Cancellation is triggered from any event handler by returning any of the cancell
 
 #### Relay variables
 
-4-ary events support a relay variable, which is passed to the event handlers as the first parameter.
+The first parameter passed to 4-ary event handlers is given the name of "*relay variable*".
+It's important for events whose output is consumed by the simulator, because the *return value of
+the event handlers updates the relay variable*, so long as it's not void (i.e. `undefined`).
+
+This means that if an event includes several handlers which multiply the relay variable by
+some factor each, the overall effect is the product of these factors.
+
+For correctness, however, because of the way the console games handle truncation, it's better to use
+the [chainModify pattern], which automatically handles truncation.
 
 #### The `chainModify` pattern
+
+`Battle#chainModify()` is a void function which registers multipliers for the relay variable
+of an ongoing event.
 
 For instance, here is the [Technician](https://dex.pokemonshowdown.com/abilities/technician) ability:
 
@@ -187,6 +199,9 @@ this step doesn't affect its base power.
 4. **Grassy Terrain**'s handler is called. Since **Grass Knot** *is* a Grass-type move,
 and **Roserade** is grounded, the base power modifier is updated to ~3.80.
 5. After the `BasePower` event is run, we get a rounded final base power of `76`.
+
+**NOTE**: Since `chainModify()` is a void function, the relay variable isn't updated
+during steps 1-4 above.
 
 ## Single events
 
