@@ -1007,7 +1007,8 @@ class User extends Chat.MessageContext {
 	 * @param {string[]} updated the settings which have been updated or none for all settings.
 	 */
 	getUpdateuserText(...updated) {
-		const away = this.isAway ? '@' : '';
+		const away = this.isAway ? '@!away' : '';
+
 		const named = this.named ? 1 : 0;
 		const diff = {};
 		const settings = updated.length ? updated : SETTINGS;
