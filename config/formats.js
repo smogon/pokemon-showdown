@@ -79,7 +79,7 @@ let Formats = [
 		mod: 'gen7',
 		ruleset: ['[Gen 7] UU'],
 		banlist: ['UU', 'RUBL', 'Aurora Veil'],
-		unbanlist: ['Drought'],
+		unbanlist: ['Sceptile-Mega', 'Drought'],
 	},
 	{
 		name: "[Gen 7] NU",
@@ -91,7 +91,7 @@ let Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] RU'],
-		banlist: ['RU', 'NUBL', 'Drought'],
+		banlist: ['RU', 'NUBL', 'Sceptile-Mega', 'Drought'],
 	},
 	{
 		name: "[Gen 7] PU",
