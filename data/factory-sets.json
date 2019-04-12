@@ -4926,7 +4926,7 @@
 				"species": "Escavalier",
 				"item": ["Leftovers"],
 				"ability": ["Overcoat"],
-				"evs": {"hp": 252, "atk": 42, "spd": 204},
+				"evs": {"hp": 252, "atk": 52, "spd": 204},
 				"nature": "Adamant",
 				"moves": [["Megahorn"], ["Iron Head"], ["Protect"], ["Pursuit"]]
 			}]
@@ -7325,18 +7325,6 @@
 				"evs": {"hp": 248, "def": 252, "spd": 8},
 				"nature": "Impish",
 				"moves": [["Will-O-Wisp"], ["Taunt"], ["Recover"], ["Foul Play", "Knock Off"]]
-			}]
-		},
-		"exeggutoralola": {
-			"flags": {},
-			"sets": [{
-				"species": "Exeggutor-Alola",
-				"item": ["Choice Specs"],
-				"ability": ["Frisk"],
-				"evs": {"hp": 212, "spa": 252, "spe": 252},
-				"ivs": {"atk": 0},
-				"nature": "Modest",
-				"moves": [["Leaf Storm"], ["Draco Meteor"], ["Flamethrower"], ["Sludge Bomb", "Giga Drain"]]
 			}]
 		},
 		"golurk": {
@@ -11840,7 +11828,7 @@
 				"species": "Golem-Alola",
 				"item": ["Leftovers"],
 				"ability": ["Galvanize"],
-				"evs": {"hp": 252, "spd": 54, "spe": 204},
+				"evs": {"hp": 252, "spd": 52, "spe": 204},
 				"nature": "Careful",
 				"moves": [["Stealth Rock"], ["Return"], ["Stone Edge"], ["Earthquake"]]
 			}, {
