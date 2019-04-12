@@ -1,11 +1,106 @@
 # Sim events
 
+## Introduction
+
+### Effects
+
+In Pokémon Showdown, as well as in [Pokémon Lab](https://pokemonlab.com/),
+everything in Pokémon is an effect.
+
+There are 10 types of effects
+- move, associated with a pokemon (Grass Knot, Magnitude...)
+- status, associated with a pokemon (Sleep, Poison...)
+- volatile, associated with a pokemon (Protect, Substitute...)
+- ability, associated with a pokemon (Intimidate, Technician...)
+- item, associated with a pokemon (Leftovers, Choice Scarf...)
+- slot condition, associated with a position (Wish, Healing Wish)
+- side condition, associated with a side (Reflect, Tailwind...)
+- terrain, associated with the field (Grassy Terrain, Misty Terrain...)
+- weather, associated with the field (Rain Dance, Sunny Day...)
+- pseudoweather, asociated with the field (Trick Room...)
+
+Effects associated with a side are also associated with every pokemon on a side,
+and effects associated with the field are associated with every pokemon.
+
+For convenience, most effects have the same ID as the move, ability, or item that
+induces it. The only exceptions are effects with many moves associated with them,
+such as statuses, and certain volatile statuses (flinch, confusion, locked moves,
+and trapping).
+
+### Events
+
+Nearly every effect has some sort of event listener, and each action fires an
+event.
+
 Any event that fires on a pokemon also fires on that pokemon's side. So, for instance,
 the global event TryHit, which is run on the target of a move, is also intercepted
 by the onTryHit handler of Mat Block, a side condition on the target's side.
 
 Any event that fires on a side also fires on the global field. So, for instance,
 the global Effectiveness event can be captured by Delta Stream, a weather condition.
+
+For instance, here is the Technician ability:
+
+```js
+"technician": {
+	desc: "This Pokemon's moves of 60 power or less have their power multiplied
+		by 1.5. Does affect Struggle.",
+	shortDesc: "This Pokemon's moves of 60 power or less have 1.5x power. Includes
+		Struggle.",
+	onBasePowerPriority: 8,
+	onBasePowerPriority(basePower, attacker, defender, move) {
+		if (basePower <= 60) {
+			this.debug('Technician boost');
+			return this.chainModify(1.5);
+		}
+	},
+	id: 'technician',
+	name: "Technician",
+ 	rating: 4,
+	num: 101,
+}
+```
+
+Now, let's work through an example:
+
+> In a Doubles Battle with Grassy Terrain active, and with an allied Battery Charjabug
+on the field, a Technician Roserade uses Grass Knot against a Dry Skin Helioptile.
+
+This fires the BasePower event:
+
+onBasePower(user, target) [on move]
+onBasePower(user, target, basePower, move) [on user]
+onAllyBasePower(user, target, basePower, move) [on allies]
+onFoeBasePower(user, target, basePower, move) [on foe Pokémon]
+onSourceBasePower(user, target, basePower, move) [on target]
+onAnyBasePower(user, target, basePower, move) [on every Pokémon]
+
+First, the basePowerCallback handler on the move is fired.
+
+Grass Knot's basePowerCallback function returns 60 as its Base Power against
+Helioptile.
+
+Next, all BasePower handlers associated with Roserade targetting Helioptile are fired.
+This includes the following:
+- onBasePower handlers of Roserade's effects (its Technician ability)
+- onBasePower handlers of Roserade's teams's effects (there are none)
+- onBasePower handlers of the battle effects (Grassy Terrain).
+- onAllyBasePower handlers of the allied Charjabug (its Battery ability)
+- onFoeBasePower handlers of both active opponents (Helioptile's Dry Skin ability),
+- onSourceBasePower handlers of the targetted Helioptile
+- onAnyBasePower handlers of every active Pokémon
+
+These handlers are sorted by their listed priority.
+
+1. Technician's callback goes first, since it has a priority of 8.
+so it updates the base power modifier from its initial value of 1 to 1.5.
+2. Battery's handler is called, since it also has a priority of 8,
+so the base power modifier is updated to ~1.95.
+3. Dry Skin's handler is called (priority 7). Since Grass Knot is not a
+Fire move, this step doesn't affect its base power.
+4. Grassy Terrain's handler is called. Since Grass Knot is a Grass move,
+and Roserade is grounded, the base power modifier is updated to ~3.80.
+5. After the BasePower event is run, we get a rounded final base power of 228.
 
 ## Single events
 
@@ -269,7 +364,7 @@ onResidual(field) [on weather, on pseudoweather]
 
 	examples: [volatile] Ghost-type Curse, [weather] Sandstorm
 
-==== Hit step events ====
+### Hit step events
 
 **NOTE**: For an schematic breakdown, consult simulator-doc.txt
 
@@ -278,94 +373,3 @@ onSourceHit(target, source, move) [on source]
 	Fired when a move hits (doesn't miss).
 
 	examples: [ability] Anger Point, [ability] Magician, [item] Enigma Berry
-
-=== DETAILED USAGE NOTES ===
-
-In Pokémon Showdown, as well as in [Pokémon Lab](https://pokemonlab.com/),
-everything in Pokémon is an effect.
-
-There are 10 types of effects
-- move, associated with a pokemon (Grass Knot, Magnitude...)
-- status, associated with a pokemon (Sleep, Poison...)
-- volatile, associated with a pokemon (Protect, Substitute...)
-- ability, associated with a pokemon (Intimidate, Technician...)
-- item, associated with a pokemon (Leftovers, Choice Scarf...)
-- slot condition, associated with a position (Wish, Healing Wish)
-- side condition, associated with a side (Reflect, Tailwind...)
-- terrain, associated with the field (Grassy Terrain, Misty Terrain...)
-- weather, associated with the field (Rain Dance, Sunny Day...)
-- pseudoweather, asociated with the field (Trick Room...)
-
-Effects associated with a side are also associated with every pokemon on a side,
-and effects associated with the field are associated with every pokemon.
-
-For convenience, most effects have the same ID as the move, ability, or item that
-induces it. The only exceptions are effects with many moves associated with them,
-such as statuses, and certain volatile statuses (flinch, confusion, locked moves,
-and trapping).
-
-Nearly every effect has some sort of event listener, and each action fires an
-event.
-
-For instance, here is the Technician ability:
-
-```js
-"technician": {
-	desc: "This Pokemon's moves of 60 power or less have their power multiplied
-		by 1.5. Does affect Struggle.",
-	shortDesc: "This Pokemon's moves of 60 power or less have 1.5x power. Includes
-		Struggle.",
-	onBasePowerPriority: 8,
-	onBasePowerPriority(basePower, attacker, defender, move) {
-		if (basePower <= 60) {
-			this.debug('Technician boost');
-			return this.chainModify(1.5);
-		}
-	},
-	id: 'technician',
-	name: "Technician",
- 	rating: 4,
-	num: 101,
-}
-```
-
-Now, let's work through an example:
-
-> In a Doubles Battle with Grassy Terrain active, and with an allied Battery Charjabug
-on the field, a Technician Roserade uses Grass Knot against a Dry Skin Helioptile.
-
-This fires the BasePower event:
-
-onBasePower(user, target) [on move]
-onBasePower(user, target, basePower, move) [on user]
-onAllyBasePower(user, target, basePower, move) [on allies]
-onFoeBasePower(user, target, basePower, move) [on foe Pokémon]
-onSourceBasePower(user, target, basePower, move) [on target]
-onAnyBasePower(user, target, basePower, move) [on every Pokémon]
-
-First, the basePowerCallback handler on the move is fired.
-
-Grass Knot's basePowerCallback function returns 60 as its Base Power against
-Helioptile.
-
-Next, all BasePower handlers associated with Roserade targetting Helioptile are fired.
-This includes the following:
-- onBasePower handlers of Roserade's effects (its Technician ability)
-- onBasePower handlers of Roserade's teams's effects (there are none)
-- onBasePower handlers of the battle effects (Grassy Terrain).
-- onAllyBasePower handlers of the allied Charjabug (its Battery ability)
-- onFoeBasePower handlers of both active opponents (Helioptile's Dry Skin ability),
-- onSourceBasePower handlers of the targetted Helioptile
-- onAnyBasePower handlers of every active Pokémon
-
-These handlers are sorted by their listed priority.
-
-1. Technician's callback goes first, since it has a priority of 8.
-so it updates the base power modifier from its initial value of 1 to 1.5.
-2. Battery's handler is called, since it also has a priority of 8,
-so the base power modifier is updated to ~1.95.
-3. Dry Skin's handler is called (priority 7). Since Grass Knot is not a
-Fire move, this step doesn't affect its base power.
-4. Grassy Terrain's handler is called. Since Grass Knot is a Grass move,
-and Roserade is grounded, the base power modifier is updated to ~3.80.
-5. After the BasePower event is run, we get a rounded final base power of 228.
