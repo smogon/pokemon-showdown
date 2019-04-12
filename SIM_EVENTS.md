@@ -151,16 +151,18 @@ Single events run on moves are passed copies of the move objects. These are call
 
 ### Abilities and items
 
+```js
 onStart(pokemon) [on ability]
 onStart(pokemon) [on item]
-	Fired after a pokemon switches in, following the onSwitchIn event.
+```
+Fired after a pokemon switches in, following the onSwitchIn event.
 
-	If two pokemon switch in at once (first turn, or after two pokemon
-	faint simultaneously), both onStart events will fire after both pokemon
-	have switched in, and the faster pokemon's onStart event will fire
-	first.
+If two pokemon switch in at once (first turn, or after two pokemon
+faint simultaneously), both onStart events will fire after both pokemon
+have switched in, and the faster pokemon's onStart event will fire
+first.
 
-	examples: [ability] Drizzle, [ability] Intimidate, [item] Air Balloon
+examples: [ability] Drizzle, [ability] Intimidate, [item] Air Balloon
 
 ### Statuses (PureEffect)
 
@@ -171,31 +173,31 @@ durationCallback(side, source, sourceEffect) [on side condition]
 durationCallback(field, source, sourceEffect) [on weather, on terrain, on pseudoweather]
 ```
 
-	Fired while calculating an effect's duration. Returns the duration in
-	turns, including the current one.
+Fired while calculating an effect's duration. Returns the duration in
+turns, including the current one.
 
-	source is the pokemon that inflicted the new effect, or null if no such
-	pokemon did.
+source is the pokemon that inflicted the new effect, or null if no such
+pokemon did.
 
-	sourceEffect is the move or effect that started the new effect.
+sourceEffect is the move or effect that started the new effect.
 
-	For instance, if Pikachu uses Toxic, source is Pikachu,
-	and sourceEffect is Toxic as a move, but if you are poisoned by Toxic Spikes,
-	source is null, and sourceEffect is Toxic Spikes as a side condition.
+For instance, if Pikachu uses Toxic, source is Pikachu,
+and sourceEffect is Toxic as a move, but if you are poisoned by Toxic Spikes,
+source is null, and sourceEffect is Toxic Spikes as a side condition.
 
-	For instance, Rain Dance has a duration of 5 turns, but it increases to 8 turns
-	if the user has Damp Rock as its item. Return 0 to have it never expire in BW.
-	
-	NOTE: If the duration is constant, prefer using the `duration` property.
+For instance, Rain Dance has a duration of 5 turns, but it increases to 8 turns
+if the user has Damp Rock as its item. Return 0 to have it never expire in BW.
 
-	The effect's residual event is not fired when it expires - instead, its
-	end event is fired when its residual event would otherwise have fired.
+NOTE: If the duration is constant, prefer using the `duration` property.
 
-	Do not use this for effects that don't expire during a residual. For
-	instance, sleep expires through a sleep counter that decrements every
-	beforeMove event, not every residual event.
+The effect's residual event is not fired when it expires - instead, its
+end event is fired when its residual event would otherwise have fired.
 
-	examples: [weather] Rain Dance, [side condition] Reflect
+Do not use this for effects that don't expire during a residual. For
+instance, sleep expires through a sleep counter that decrements every
+beforeMove event, not every residual event.
+
+examples: [weather] Rain Dance, [side condition] Reflect
 
 ```js
 onStart(pokemon, source, sourceEffect) [on status, on volatile]
@@ -204,14 +206,14 @@ onStart(side, source, sourceEffect) [on side condition]
 onStart(field, source, sourceEffect) [on weather, on terrain, on pseudoweather]
 ```
 
-	Fired when an effect starts, with the same function signature as durationCallback.
+Fired when an effect starts, with the same function signature as durationCallback.
 
-	Useful for cancelling an effect that fails (e.g. Encore against a newly
-	switched-in foe), for giving messages that an effect has started, and
-	for initializing effect data (e.g. Substitute, Wish).
+Useful for cancelling an effect that fails (e.g. Encore against a newly
+switched-in foe), for giving messages that an effect has started, and
+for initializing effect data (e.g. Substitute, Wish).
 
-	examples: [volatile] Encore, [side condition] Reflect,
-	          [volatile] Substitute
+examples: [volatile] Encore, [side condition] Reflect,
+          [volatile] Substitute
 
 ```js
 onRestart(pokemon, source, sourceEffect) [on status, on volatile]
@@ -220,13 +222,13 @@ onRestart(side, source, sourceEffect) [on side condition]
 onRestart(field, source, sourceEffect) [on weather, on terrain, on pseudoweather]
 ```
 
-	Fired when trying to induce an effect that's already active,
-	with the same function signature as durationCallback.
+Fired when trying to induce an effect that's already active,
+with the same function signature as durationCallback.
 
-	Useful for effects that can have multiple "layers".
+Useful for effects that can have multiple "layers".
 
-	examples: [side condition] Toxic Spikes, [side condition] Pursuit,
-	          [volatile] Stockpile
+examples: [side condition] Toxic Spikes, [side condition] Pursuit,
+          [volatile] Stockpile
 
 ```js
 onEnd(pokemon, source, sourceEffect) [on status, on volatile]
@@ -235,21 +237,21 @@ onEnd(side, source, sourceEffect) [on side condition]
 onEnd(field, source, sourceEffect) [on weather, on terrain, on pseudoweather]
 ```
 
-	Fired when an effect ends naturally, usually because its duration ends.
+Fired when an effect ends naturally, usually because its duration ends.
 
-	Most ways an effect can end are "natural". The biggest exception is
-	when a pokemon swiches out. In general, if you would receive a message
-	when the effect ends, the end event would be fired.
+Most ways an effect can end are "natural". The biggest exception is
+when a pokemon swiches out. In general, if you would receive a message
+when the effect ends, the end event would be fired.
 
-	NOTE: NOT fired when a pokemon switches out (see the global event onSwitchOut).
+NOTE: NOT fired when a pokemon switches out (see the global event onSwitchOut).
 
-	NOTE: Setting the duration counter of the effect won't prevent the effect
-	      from ending.
+NOTE: Setting the duration counter of the effect won't prevent the effect
+      from ending.
 
-	Useful for giving messages that an effect has ended.
+Useful for giving messages that an effect has ended.
 
-	examples: [volatile] Encore, [side condition] Reflect,
-	          [volatile] Substitute
+examples: [volatile] Encore, [side condition] Reflect,
+          [volatile] Substitute
 
 ### Moves
 
@@ -259,64 +261,64 @@ onEnd(field, source, sourceEffect) [on weather, on terrain, on pseudoweather]
 beforeMoveCallback(user, target, move) [on move]
 ```
 
-	Fired before a pokemon uses a move it chose, but after the global
-	BeforeMove event. Return true to prevent the move.
+Fired before a pokemon uses a move it chose, but after the global
+BeforeMove event. Return true to prevent the move.
 
-	Moves not called directly (e.g. moves called by Assist, Metronome, or Sleep Talk)
-	do not fire this event.
+Moves not called directly (e.g. moves called by Assist, Metronome, or Sleep Talk)
+do not fire this event.
 
-	examples: [move] Focus Punch
+examples: [move] Focus Punch
 
 ```js
 beforeTurnCallback(user) [on move]
 ```
 
-	Fired before a turn starts on every pokemon which will move.
+Fired before a turn starts on every pokemon which will move.
 
-	Used for Focus Punch (for the "focusing" message) and Pursuit
-	(to activate the side condition that listens for the foeSwitchOut
-	event).
+Used for Focus Punch (for the "focusing" message) and Pursuit
+(to activate the side condition that listens for the foeSwitchOut
+event).
 
-	examples: [move] Focus Punch, [move] Pursuit
+examples: [move] Focus Punch, [move] Pursuit
 
 ```js
 onModifyMove(move, user, target) [on move]
 ```
 
-	Fired before a pokemon uses a move.
+Fired before a pokemon uses a move.
 
-	It is also fired for moves that bypass beforeMoveCallback
-	(moves called by Assist, Metronome, or Sleep Talk).
+It is also fired for moves that bypass beforeMoveCallback
+(moves called by Assist, Metronome, or Sleep Talk).
 
-	NOTE: Base Power modifications should be handled in onBasePower, not in
-	onModifyMove. This is because many moves have variable base power.
+NOTE: Base Power modifications should be handled in onBasePower, not in
+onModifyMove. This is because many moves have variable base power.
 
-	NOTE: Priority modifications should be handled in the global event onModifyPriority.
-	By the time the move can be modified through onModifyMove, its position in the
-	decision queue is already fixed.
+NOTE: Priority modifications should be handled in the global event onModifyPriority.
+By the time the move can be modified through onModifyMove, its position in the
+decision queue is already fixed.
 
-	examples: [move] Secret Power, [move] Technoblast, [move] Weather Ball
+examples: [move] Secret Power, [move] Technoblast, [move] Weather Ball
 
 ```js
 onBasePower(basePower, attacker, defender, move) [on move]
 ```
 
-	Fired while calculating a move's base power. Return the modified
-	base power.
+Fired while calculating a move's base power. Return the modified
+base power.
 
-	examples: [move] Facade, [move] Knock Off
+examples: [move] Facade, [move] Knock Off
 
 ```js
 onHit(target, user, move) [on move]
 ```
 
-	Fired when a move hits (doesn't miss). Return false to prevent the move's
-	effects.
+Fired when a move hits (doesn't miss). Return false to prevent the move's
+effects.
 
-	Also used for moves whose effects are too complicated to be represented
-	in any other way.
+Also used for moves whose effects are too complicated to be represented
+in any other way.
 
-	examples: [foe volatile] Protect, [move] Belly Drum, etc
+examples: [foe volatile] Protect, [move] Belly Drum, etc
 
 ## Global events
 
@@ -330,56 +332,56 @@ global events available, corresponding to the `EventMethods` interface.
 onBeforeTurn(pokemon) [on pokemon]
 ```
 
-	Fired before a turn starts on every active pokemon.
+Fired before a turn starts on every active pokemon.
 
-	Used for Gen 4 Custap Berry and the Gen 2 Locked Move volatile,
-	to dynamically update the decision queue.
+Used for Gen 4 Custap Berry and the Gen 2 Locked Move volatile,
+to dynamically update the decision queue.
 
-	examples: [item] Custap Berry (Gen 4), [volatile] Locked Move (Gen 2)
+examples: [item] Custap Berry (Gen 4), [volatile] Locked Move (Gen 2)
 
 ```js
 onSwitchIn(pokemon) [on pokemon]
 ```
 
-	Fired after a pokemon switches in.
+Fired after a pokemon switches in.
 
-	If two pokemon switch in at once (first turn, or after two pokemon
-	faint simultaneously), both onSwitchIn events will fire after both pokemon
-	have switched in, and the faster pokemon's onSwitchIn event will fire
-	first.
+If two pokemon switch in at once (first turn, or after two pokemon
+faint simultaneously), both onSwitchIn events will fire after both pokemon
+have switched in, and the faster pokemon's onSwitchIn event will fire
+first.
 
-	examples: [side condition] Stealth Rock, [slot condition] Healing Wish
+examples: [side condition] Stealth Rock, [slot condition] Healing Wish
 
 ```js
 onBeforeSwitchOut(pokemon) [on pokemon]
 ```
 
-	Fired before a pokemon switches out.
+Fired before a pokemon switches out.
 
-	examples: [side condition] Pursuit
+examples: [side condition] Pursuit
 
 ```js
 onSwitchOut(pokemon) [on pokemon]
 ```
 
-	Fired before a pokemon switches out, after the onBeforeSwitchOut event.
-	Return true to interrupt and prevent the pokemon from switching out.
+Fired before a pokemon switches out, after the onBeforeSwitchOut event.
+Return true to interrupt and prevent the pokemon from switching out.
 
-	NOTE: DO NOT use it to implement trapping: set the trapping flag in
-	the onFoeTrapPokemon event instead.
+NOTE: DO NOT use it to implement trapping: set the trapping flag in
+the onFoeTrapPokemon event instead.
 
-	NOTE: NOTHING in USUM or earlier prevents a pokemon from switching out
-	at this stage, so you most likely DO NOT want to ever return true.
+NOTE: NOTHING in USUM or earlier prevents a pokemon from switching out
+at this stage, so you most likely DO NOT want to ever return true.
 
-	examples: [ability] Natural Cure, [ability] Regenerator
+examples: [ability] Natural Cure, [ability] Regenerator
 
 ```js
 onModifyPriority(priority, user, target, move) [on user]
 ```
 
-	Fired when determining a move's priority. Return the move's priority.
+Fired when determining a move's priority. Return the move's priority.
 
-	examples: [ability] Prankster
+examples: [ability] Prankster
 
 ```js
 onResidual(pokemon) [on status, on volatile, on ability, on item]
@@ -387,14 +389,14 @@ onResidual(side) [on side condition]
 onResidual(field) [on weather, on pseudoweather]
 ```
 
-	Fired at the end of each turn, but before fainted pokemon are switched in.
+Fired at the end of each turn, but before fainted pokemon are switched in.
 
-	Useful for whatever end-of-turn effects this may have.
+Useful for whatever end-of-turn effects this may have.
 
-	The duration counter of each effect is decremented automatically before
-	this event is fired (see duration for details).
+The duration counter of each effect is decremented automatically before
+this event is fired (see duration for details).
 
-	examples: [volatile] Ghost-type Curse, [weather] Sandstorm
+examples: [volatile] Ghost-type Curse, [weather] Sandstorm
 
 ### Helper events
 
@@ -402,28 +404,28 @@ onResidual(field) [on weather, on pseudoweather]
 onType(pokemon) [on pokemon]
 ```
 
-	Fired when calculating the type of a Pokémon to override the default typing mechanics.
-	Only used for Roost, Arceus, and Silvally.
+Fired when calculating the type of a Pokémon to override the default typing mechanics.
+Only used for Roost, Arceus, and Silvally.
 
-	examples: [volatile] Roost, [pokemon] Arceus, [pokemon] Silvally
+examples: [volatile] Roost, [pokemon] Arceus, [pokemon] Silvally
 
 ```js
 onImmunity(type, target) [on target]
 ```
 
-	Fired when determining whether or not a pokemon is immune to a move.
-	Return false if it is immune.
+Fired when determining whether or not a pokemon is immune to a move.
+Return false if it is immune.
 
-	examples: [volatile] Magnet Rise
+examples: [volatile] Magnet Rise
 
 ```js
 onImmunity(effectid, target) [on target]
 ```
 
-	Fired when determining whether or not a pokemon is immune to a non-move effect.
-	Return false if it is immune.
+Fired when determining whether or not a pokemon is immune to a non-move effect.
+Return false if it is immune.
 
-	examples: [ability] Magma Armor, [ability] Overcoat, [item] Safety Goggles
+examples: [ability] Magma Armor, [ability] Overcoat, [item] Safety Goggles
 
 ### Hit steps
 
@@ -433,16 +435,16 @@ onImmunity(effectid, target) [on target]
 onBeforeMove(user, target, move) [on user]
 ```
 
-	Fired before a pokemon uses a move it chose. Return false to prevent
-	the move.
+Fired before a pokemon uses a move it chose. Return false to prevent
+the move.
 
-	Mostly effects that prevent a user from moving, such as paralysis.
+Mostly effects that prevent a user from moving, such as paralysis.
 
-	Moves not called directly (e.g. moves called by Metronome, Sleep Talk,
-	or Pursuit) do not fire this event.
+Moves not called directly (e.g. moves called by Metronome, Sleep Talk,
+or Pursuit) do not fire this event.
 
-	examples: [volatile] Flinching, [status] fully paralyzed,
-	          [move] Focus Punch
+examples: [volatile] Flinching, [status] fully paralyzed,
+          [move] Focus Punch
 
 ```js
 onBasePower(basePower, attacker, defender, move) [on user]
@@ -450,35 +452,35 @@ onFoeBasePower(basePower, attacker, defender, move) [on foe Pokémon]
 onAnyBasePower(basePower, attacker, defender, move) [on any Pokémon]
 ```
 
-	Fired while calculating a move's base power. Return the modified
-	base power.
+Fired while calculating a move's base power. Return the modified
+base power.
 
-	examples: [ability] Dark Aura, [ability] Dry Skin, [ability] Technician
+examples: [ability] Dark Aura, [ability] Dry Skin, [ability] Technician
 
 ```js
 onModifyMove(user, target, move) [on user]
 onFoeModifyMove(user, target, move) [on foe Pokémon]
 ```
 
-	Fired before a pokemon uses a move.
+Fired before a pokemon uses a move.
 
-	examples: [ability] Adaptability, [ability] Infiltrator, [ability] Pixilate
+examples: [ability] Adaptability, [ability] Infiltrator, [ability] Pixilate
 
 ```js
 onHit(target, source, move) [on target]
 onSourceHit(target, source, move) [on source]
 ```
 
-	Fired when a move hits (doesn't miss).
+Fired when a move hits (doesn't miss).
 
-	examples: [ability] Anger Point, [ability] Magician, [item] Enigma Berry
+examples: [ability] Anger Point, [ability] Magician, [item] Enigma Berry
 
 ```js
 onDamage(damage, target, source, effect) [on target]
 ```
 
-	Fired while calculating damage, either from a move or from a condition.
-	Return a damage value directly in HP. Bypasses weaknesses and resistances,
-	but not immunities.
+Fired while calculating damage, either from a move or from a condition.
+Return a damage value directly in HP. Bypasses weaknesses and resistances,
+but not immunities.
 
-	examples: [ability] Magic Guard, [volatile] Endure
+examples: [ability] Magic Guard, [volatile] Endure
