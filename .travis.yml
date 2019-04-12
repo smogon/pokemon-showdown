@@ -9,5 +9,6 @@ cache:
 notifications:
   webhooks: https://www.travisbuddy.com/
   on_success: change
+script: npm run fulltest
 travisBuddy:
   insertMode: update
