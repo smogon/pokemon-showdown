@@ -174,10 +174,13 @@ For instance, here is the [Technician](https://dex.pokemonshowdown.com/abilities
 }
 ```
 
-Now, let's work through an example of how this ability acts:
+Now, let's work through an example of how `chainModify()` works:
 
-> In a Doubles Battle with **Grassy Terrain** active, and with an allied **Battery** Charjabug
-on the field, a **Technician** Roserade uses **Grass Knot** against a **Dry Skin** Helioptile.
+> In a Doubles Battle with [Grassy Terrain](https://dex.pokemonshowdown.com/moves/grassyterrain) active,
+and with an allied [Battery](https://dex.pokemonshowdown.com/abilities/battery) Charjabug on the field,
+a [Technician](https://dex.pokemonshowdown.com/abilities/technician) Roserade uses
+[Grass Knot](https://dex.pokemonshowdown.com/moves/grassknot) against a
+[Dry Skin](https://dex.pokemonshowdown.com/abilities/dryskin) Helioptile.
 
 To calculate the damage inflicted, the method `Battle#getDamage()` is invoked:
 
@@ -243,8 +246,8 @@ during steps 1-4 above.
 ### Single events
 
 **NOTE**: This list is incomplete.
-Refer to [dev-tools/globals.ts](https://github.com/Zarel/Pokemon-Showdown/blob/master/dev-tools/globals.ts) for a full list, including function signatures, of the
-single events available on abilities, moves, items or statuses, corresponding to the
+Refer to [dev-tools/globals.ts](https://github.com/Zarel/Pokemon-Showdown/blob/master/dev-tools/globals.ts) for a full list,
+including function signatures, of the single events available on abilities, moves, items or statuses, corresponding to the
 `AbilityEventMethods`, `MoveEventMethods`, `ItemEventMethods` and `PureEffectEventMethods`
 interfaces.
 
@@ -357,7 +360,8 @@ Useful for giving messages that an effect has ended.
 
 #### Moves
 
-**NOTE**: For an schematic breakdown of the hit steps, refer to [simulator-doc.txt](https://github.com/Zarel/Pokemon-Showdown/blob/master/simulator-doc.txt)
+**NOTE**: For an schematic breakdown of the hit steps, refer to
+[simulator-doc.txt](https://github.com/Zarel/Pokemon-Showdown/blob/master/simulator-doc.txt)
 
 ```js
 beforeMoveCallback(user, target, move) [on move]
@@ -425,8 +429,8 @@ in any other way.
 ### Global events
 
 **NOTE**: This list is incomplete.
-Refer to [dev-tools/globals.ts](https://github.com/Zarel/Pokemon-Showdown/blob/master/dev-tools/globals.ts) for a full list, including function signatures, of the
-global events available, corresponding to the `EventMethods` interface.
+Refer to [dev-tools/globals.ts](https://github.com/Zarel/Pokemon-Showdown/blob/master/dev-tools/globals.ts) for a full list,
+including function signatures, of the global events available, corresponding to the `EventMethods` interface.
 
 #### Main loop events
 
@@ -531,7 +535,8 @@ Return false if it is immune.
 
 #### Hit steps
 
-**NOTE**: For an schematic breakdown, refer to [simulator-doc.txt](https://github.com/Zarel/Pokemon-Showdown/blob/master/simulator-doc.txt)
+**NOTE**: For an schematic breakdown, refer to
+[simulator-doc.txt](https://github.com/Zarel/Pokemon-Showdown/blob/master/simulator-doc.txt)
 
 ```js
 onBeforeMove(user, target, move) [on user]
