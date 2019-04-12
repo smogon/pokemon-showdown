@@ -1,26 +1,25 @@
 # Sim events
 
 ## Table of contents
-1. [Introduction](#introduction)
-	- [Effects](#effects)
-	- [Events](#events)
-		- [Event propagation](#event-propagation)
-		- [Event output](#event-output)
-		- [Event cancellation](#event-cancellation)
-		- [Relay variables](#relay-variables)
-		- [The `chainModify` pattern](#the-chainmodify-pattern)
-2. [Single events](#single-events)
-	- [Abilities and Items](#abilities-and-items)
-	- [Statuses](#statuses-pureeffect)
-	- [Moves](#moves)
-3. [Global events](#global-events)
-	- [Main loop](#main-loop-events)
-	- [Helper events](#helper-events)
-	- [Hit steps](#hit-steps)
 
-## Introduction
+1. [Effects](#effects)
+2. [Events](#events)
+	- [Event output](#event-output)
+	- [Event propagation](#event-propagation)
+	- [Event cancellation](#event-cancellation)
+	- [Relay variables](#relay-variables)
+	- [The `chainModify` pattern](#the-chainmodify-pattern)
+3. [List of events](#list-of-events)
+	- [Single events](#single-events)
+		- [Abilities and Items](#abilities-and-items)
+		- [Statuses](#statuses-pureeffect)
+		- [Moves](#moves)
+	- [Global events](#global-events)
+		- [Main loop](#main-loop-events)
+		- [Isolated events](#isolated-events)
+		- [Hit steps](#hit-steps)
 
-### Effects
+## Effects
 
 In [Pokémon Showdown](https://play.pokemonshowdown.com), as well as in its predecessor
 [Pokémon Lab](https://pokemonlab.com/), everything in Pokémon is an *effect*.
@@ -49,7 +48,7 @@ induces it. The only exceptions are effects with many moves associated with them
 such as statuses, and certain volatile statuses (flinch, confusion, locked moves,
 and trapping).
 
-### Events
+## Events
 
 Nearly every effect has some sort of event listener, and each action in the battle
 fires an event. There are two main types of events: [single events](#single-events)
@@ -57,7 +56,7 @@ and [global events](#global-events). The key difference between them is that glo
 events propagate, while single events don't. [Event propagation](#event-propagation)
 shall be described later.
 
-#### Event output
+### Event output
 
 There are 3 different ways in which Pokémon Showdown may consume the return value of an event.
 
@@ -67,7 +66,7 @@ None | The event is run for its side effects. | `onAfterBoost`, `onFaint`, `onSw
 [Cancellation](#event-cancellation) | If the event is cancelled, the ongoing battle action is cancelled as well. | `onDragOut`, `onTryAddVolatile`, `onTryHit`, `onTryImmunity`
 Output | The return value of the event is passed to other functions. The event is very likely to support a [relay variable](#relay-variables). | `onBasePower`, `onDamage`, `onModifyAtk`, `onModifyCritRatio`
 
-#### Event propagation
+### Event propagation
 
 Since effects that target a side also target every Pokémon on it, a [global event](#global-events)
 that fires on a Pokémon will also fire on that Pokémon's side. So, for instance, the
@@ -92,7 +91,7 @@ Any Pokémon | `onAnyEvent` | `onAnyBasePower`, `onAnySetWeather`
 
 **NOTE**: Event propagation can be [cancelled](#event-cancellation).
 
-#### Event cancellation
+### Event cancellation
 
 An event can be cancelled by any event handlers, which entails the following:
 - The execution of any pending event handlers will be aborted.
@@ -101,19 +100,55 @@ An event can be cancelled by any event handlers, which entails the following:
 Cancellation is triggered from any event handler by returning any of the cancellation flags:
 `this.FAIL`, or `this.SILENT_FAIL` (where `this` is the active `Battle`).
 
-#### Relay variables
+### Relay variables
 
 The first parameter passed to 4-ary event handlers is given the name of "*relay variable*".
 It's important for events whose output is consumed by the simulator, because the *return value of
 the event handlers updates the relay variable*, so long as it's not void (i.e. `undefined`).
 
 This means that if an event includes several handlers which multiply the relay variable by
-some factor each, the overall effect is the product of these factors.
+some factor each, the overall effect is the product of these factors. For instance, the effects of
+[Bright Powder](https://dex.pokemonshowdown.com/items/brightpowder) and
+[Tangled Feet](https://dex.pokemonshowdown.com/abilities/tangledfeet) are accumulated.
 
-For correctness, however, because of the way the console games handle truncation, it's better to use
-the [chainModify pattern], which automatically handles truncation.
+```js
+"brightpowder": {
+	id: "brightpowder",
+	name: "Bright Powder",
+	spritenum: 51,
+	fling: {
+		basePower: 10,
+	},
+	onModifyAccuracy(accuracy) {
+		if (typeof accuracy !== 'number') return;
+		return accuracy * 0.9;
+	},
+	num: 213,
+	gen: 2,
+	desc: "The accuracy of attacks against the holder is 0.9x.",
+}
+```
 
-#### The `chainModify` pattern
+```js
+"tangledfeet": {
+	shortDesc: "This Pokemon's evasiveness is doubled as long as it is confused.",
+	onModifyAccuracy(accuracy, target) {
+		if (typeof accuracy !== 'number') return;
+		if (target && target.volatiles['confusion']) {
+			return accuracy * 0.5;
+		}
+	},
+	id: "tangledfeet",
+	name: "Tangled Feet",
+	rating: 1,
+	num: 77,
+}
+```
+
+For correctness, however, because of the way the console games handle truncation, it's often
+better to use the `chainModify` pattern, which automatically handles truncation.
+
+### The `chainModify` pattern
 
 `Battle#chainModify()` is a void function which registers multipliers for the relay variable
 of an ongoing event.
@@ -203,7 +238,9 @@ and **Roserade** is grounded, the base power modifier is updated to ~3.80.
 **NOTE**: Since `chainModify()` is a void function, the relay variable isn't updated
 during steps 1-4 above.
 
-## Single events
+## List of events
+
+### Single events
 
 **NOTE**: This list is incomplete.
 Refer to [dev-tools/globals.ts](https://github.com/Zarel/Pokemon-Showdown/blob/master/dev-tools/globals.ts) for a full list, including function signatures, of the
@@ -214,7 +251,7 @@ interfaces.
 Single events run on moves are passed copies of the move objects. These are called
 "Active Moves", and can be safely modified.
 
-### Abilities and items
+#### Abilities and items
 
 ```js
 onStart(pokemon) [on ability]
@@ -229,7 +266,7 @@ first.
 
 *Examples*: [ability] Drizzle, [ability] Intimidate, [item] Air Balloon
 
-### Statuses (PureEffect)
+#### Statuses (PureEffect)
 
 ```js
 durationCallback(pokemon, source, sourceEffect) [on status, on volatile]
@@ -318,7 +355,7 @@ Useful for giving messages that an effect has ended.
 *Examples*: [volatile] Encore, [side condition] Reflect,
           [volatile] Substitute
 
-### Moves
+#### Moves
 
 **NOTE**: For an schematic breakdown of the hit steps, refer to [simulator-doc.txt](https://github.com/Zarel/Pokemon-Showdown/blob/master/simulator-doc.txt)
 
@@ -385,13 +422,13 @@ in any other way.
 
 *Examples*: [foe volatile] Protect, [move] Belly Drum, etc
 
-## Global events
+### Global events
 
 **NOTE**: This list is incomplete.
 Refer to [dev-tools/globals.ts](https://github.com/Zarel/Pokemon-Showdown/blob/master/dev-tools/globals.ts) for a full list, including function signatures, of the
 global events available, corresponding to the `EventMethods` interface.
 
-### Main loop events
+#### Main loop events
 
 ```js
 onBeforeTurn(pokemon) [on pokemon]
@@ -463,7 +500,7 @@ this event is fired (see duration for details).
 
 *Examples*: [volatile] Ghost-type Curse, [weather] Sandstorm
 
-### Helper events
+#### Isolated events
 
 ```js
 onType(pokemon) [on pokemon]
@@ -492,7 +529,7 @@ Return false if it is immune.
 
 *Examples*: [ability] Magma Armor, [ability] Overcoat, [item] Safety Goggles
 
-### Hit steps
+#### Hit steps
 
 **NOTE**: For an schematic breakdown, refer to [simulator-doc.txt](https://github.com/Zarel/Pokemon-Showdown/blob/master/simulator-doc.txt)
 
