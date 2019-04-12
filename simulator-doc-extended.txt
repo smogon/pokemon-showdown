@@ -51,6 +51,14 @@ onModifyMove(move, user, target) [on move]
 
 	examples: [move] Secret Power, [move] Technoblast, [move] Weather Ball
 
+onBasePower(basePower, attacker, defender, move) [on move]
+	Fired while calculating a move's base power. Return the modified
+	base power.
+
+	examples: [move] Facade, [move] Knock Off
+
+==== Single events of abilities or items ====
+
 onStart(pokemon) [on ability]
 onStart(pokemon) [on item]
 	Fired after a pokemon switches in, following the onSwitchIn event.
@@ -61,6 +69,96 @@ onStart(pokemon) [on item]
 	first.
 
 	examples: [ability] Drizzle, [ability] Intimidate, [item] Air Balloon
+
+===== Single events of statuses / PureEffects ====
+
+durationCallback(pokemon, source, sourceEffect) [on status, on volatile]
+durationCallback(pokemon, source, sourceEffect) [on slot condition]
+durationCallback(side, source, sourceEffect) [on side condition]
+durationCallback(field, source, sourceEffect) [on weather, on terrain, on pseudoweather]
+	Fired while calculating an effect's duration. Returns the duration in
+	turns, including the current one.
+
+	source is the pokemon that inflicted the new effect, or null if no such
+	pokemon did.
+
+	sourceEffect is the move or effect that started the new effect.
+
+	For instance, if Pikachu uses Toxic, source is Pikachu,
+	and sourceEffect is Toxic as a move, but if you are poisoned by Toxic Spikes,
+	source is null, and sourceEffect is Toxic Spikes as a side condition.
+
+	For instance, Rain Dance has a duration of 5 turns, but it increases to 8 turns
+	if the user has Damp Rock as its item. Return 0 to have it never expire in BW.
+	
+	NOTE: If the duration is constant, prefer using the `duration` property.
+
+	The effect's residual event is not fired when it expires - instead, its
+	end event is fired when its residual event would otherwise have fired.
+
+	Do not use this for effects that don't expire during a residual. For
+	instance, sleep expires through a sleep counter that decrements every
+	beforeMove event, not every residual event.
+
+	examples: [weather] Rain Dance, [side condition] Reflect
+
+onStart(pokemon, source, sourceEffect) [on status, on volatile]
+onStart(pokemon, source, sourceEffect) [on slot condition]
+onStart(side, source, sourceEffect) [on side condition]
+onStart(field, source, sourceEffect) [on weather, on terrain, on pseudoweather]
+	Fired when an effect starts, with the same function signature as durationCallback.
+
+	Useful for cancelling an effect that fails (e.g. Encore against a newly
+	switched-in foe), for giving messages that an effect has started, and
+	for initializing effect data (e.g. Substitute, Wish).
+
+	examples: [volatile] Encore, [side condition] Reflect,
+	          [volatile] Substitute
+
+onRestart(pokemon, source, sourceEffect) [on status, on volatile]
+onRestart(pokemon, source, sourceEffect) [on slot condition]
+onRestart(side, source, sourceEffect) [on side condition]
+onRestart(field, source, sourceEffect) [on weather, on terrain, on pseudoweather]
+	Fired when trying to induce an effect that's already active,
+	with the same function signature as durationCallback.
+
+	Useful for effects that can have multiple "layers".
+
+	examples: [side condition] Toxic Spikes, [side condition] Pursuit,
+	          [volatile] Stockpile
+
+onEnd(pokemon, source, sourceEffect) [on status, on volatile]
+onEnd(pokemon, source, sourceEffect) [on slot condition]
+onEnd(side, source, sourceEffect) [on side condition]
+onEnd(field, source, sourceEffect) [on weather, on terrain, on pseudoweather]
+	Fired when an effect ends naturally, usually because its duration ends.
+
+	Most ways an effect can end are "natural". The biggest exception is
+	when a pokemon swiches out. In general, if you would receive a message
+	when the effect ends, the end event would be fired.
+
+	NOTE: NOT fired when a pokemon switches out (see the global event onSwitchOut).
+
+	NOTE: Setting the duration counter of the effect won't prevent the effect
+	      from ending.
+
+	Useful for giving messages that an effect has ended.
+
+	examples: [volatile] Encore, [side condition] Reflect,
+	          [volatile] Substitute
+
+==== Hit step single events ====
+
+**NOTE**: For an schematic breakdown, consult simulator-doc.txt
+
+onHit(target, user, move) [on move]
+	Fired when a move hits (doesn't miss). Return false to prevent the move's
+	effects.
+
+	Also used for moves whose effects are too complicated to be represented
+	in any other way.
+
+	examples: [foe volatile] Protect, [move] Belly Drum, etc
 
 === LIST OF GLOBAL EVENTS ===
 
@@ -80,14 +178,13 @@ onBeforeMove(user, target, move) [on user]
 	examples: [volatile] Flinching, [status] fully paralyzed,
 	          [move] Focus Punch
 
-onBasePower(basePower, attacker) [on move]
 onBasePower(basePower, attacker, defender, move) [on user]
-onFoeBasePower(basePower, attacker, defender, move) [on target]
+onFoeBasePower(basePower, attacker, defender, move) [on foe Pokémon]
+onAnyBasePower(basePower, attacker, defender, move) [on any Pokémon]
 	Fired while calculating a move's base power. Return the modified
 	base power.
 
-	examples: [ability] Technician, [foe side condition] Reflect,
-	          [move] Gyro Ball
+	examples: [ability] Dark Aura, [ability] Dry Skin, [ability] Technician
 
 onBeforeTurn(pokemon) [on pokemon]
 	Fired before a turn starts on every active pokemon.
@@ -97,7 +194,7 @@ onBeforeTurn(pokemon) [on pokemon]
 
 	examples: [item] Custap Berry (Gen 4), [volatile] Locked Move (Gen 2)
 
-onDamage(user, target) [on target]
+onDamage(damage, target, source, effect) [on target]
 	Fired while calculating damage, either from a move or from a condition.
 	Return a damage value directly in HP. Bypasses weaknesses and resistances,
 	but not immunities.
@@ -105,7 +202,7 @@ onDamage(user, target) [on target]
 	examples: [ability] Magic Guard, [volatile] Endure
 
 onModifyMove(user, target, move) [on user]
-onFoeModifyMove(user, target, move) [on target]
+onFoeModifyMove(user, target, move) [on foe Pokémon]
 	Fired before a pokemon uses a move.
 
 	examples: [ability] Adaptability, [ability] Infiltrator, [ability] Pixilate
@@ -155,100 +252,14 @@ onImmunity(effectid, target) [on target]
 
 	examples: [ability] Magma Armor, [ability] Overcoat, [item] Safety Goggles
 
-================================ WIP line =================================
-getHit(target, source, move) [on target]
-foeGetHit(target, source, move) [on source]
-hit(target, source) [on move]
-	Fired when a move hits (doesn't miss). Return true to prevent the move's
-	effects.
-
-	Also used for moves whose effects are too complicated to be represented
-	in any other way.
-
-	examples: [foe volatile] Protect, [move] Belly Drum, etc
-
-movePriority(priority, user, target, move) [on user]
-foeMovePriority(priority, user, target, move) [on target]
+onModifyPriority(priority, user, target, move) [on user]
 	Fired when determining a move's priority. Return the move's priority.
 
 	examples: [ability] Prankster
 
-start(pokemon, source) [on status, on volatile]
-start(side, source) [on side condition]
-start(placeholder, source) [on weather, on field effect]
-	Fired when an effect starts.
-
-	source is the pokemon that inflicted the effect, or null if no such
-	pokemon did. For instance, if Pikachu uses Toxic, source is Pikachu,
-	but if you are poisoned by Toxic Spikes, source is null.
-
-	Useful for cancelling an effect that fails (e.g. Encore against a newly
-	switched-in foe), for giving messages that an effect has started, and
-	for initializing effect data (e.g. Substitute, Wish).
-
-	NOTE: Not fired for abilities and items. For abilities and items, see
-	the switchIn event.
-
-	examples: [volatile] Encore, [side condition] Reflect,
-	          [volatile] Substitute
-
-restart(pokemon) [on status, on volatile]
-restart(side) [on side condition]
-restart() [on weather, on field effect]
-	Fired when trying to induce an effect that's already active.
-
-	Useful for effects that can have multiple "layers".
-
-	examples: [side condition] Toxic Spikes, [side condition] Pursuit,
-	          [volatile] Stockpile
-
-end(pokemon) [on status, on volatile, on item, on ability]
-end(side) [on side condition]
-end() [on weather, on field effect]
-	Fired when an effect ends naturally, usually because its duration ends.
-	Return true to stop an effect from ending.
-
-	Most ways an effect can end are "natural". The biggest exception is
-	when a pokemon swiches out. In general, if you would receive a message
-	when the effect ends, the end event would be fired.
-
-	NOTE: NOT fired when a pokemon switches out (see switchOut).
-
-	NOTE: If you return true when an event expires from its duration counter
-	      reaching 0, it will never expire unless you reset its duration. To
-	      extend an effect by one turn, simply set its duration counter to 1
-	      before returning true.
-
-	Useful for giving messages that an effect has ended.
-
-	examples: [volatile] Encore, [side condition] Reflect,
-	          [volatile] Substitute
-
-duration(pokemon, source) [on status, on volatile]
-duration(side) [on side condition]
-duration() [on weather, on field effect]
-	Fired while calculating an effect's duration. Returns the duration in
-	turns, including the current one.
-
-	source is the pokemon that inflicted the effect, or null if no such
-	pokemon did. For instance, if Pikachu uses Toxic, source is Pikachu,
-	but if you are poisoned by Toxic Spikes, source is null.
-
-	For instance, Protect has a duration of 1 turn, and Wish has a duration
-	of 2 turns. Return 0 to have it never expire.
-
-	The effect's residual event is not fired when it expires - instead, its
-	end event is fired when its residual event would otherwise have fired.
-
-	Do not use this for effects that don't expire during a residual. For
-	instance, sleep expires through a sleep counter that decrements every
-	beforeMove event, not every residual event.
-
-	examples: [weather] Rain Dance, [side condition] Reflect
-
-residual(pokemon) [on status, on volatile, on ability, on item]
-residual(side) [on side condition]
-residual() [on weather, on field effect]
+onResidual(pokemon) [on status, on volatile, on ability, on item]
+onResidual(side) [on side condition]
+onResidual(field) [on weather, on pseudoweather]
 	Fired at the end of each turn, but before fainted pokemon are switched in.
 
 	Useful for whatever end-of-turn effects this may have.
@@ -258,11 +269,20 @@ residual() [on weather, on field effect]
 
 	examples: [volatile] Ghost-type Curse, [weather] Sandstorm
 
+==== Hit step events ====
+
+**NOTE**: For an schematic breakdown, consult simulator-doc.txt
+
+onHit(target, source, move) [on target]
+onSourceHit(target, source, move) [on source]
+	Fired when a move hits (doesn't miss).
+
+	examples: [ability] Anger Point, [ability] Magician, [item] Enigma Berry
 
 === DETAILED USAGE NOTES ===
 
-In Pokémon Showdown, as well as in Pokémon Lab (https://pokemonlab.com/) and
-DougJustDoug's framework, everything in Pokémon is an effect.
+In Pokémon Showdown, as well as in [Pokémon Lab](https://pokemonlab.com/),
+everything in Pokémon is an effect.
 
 There are 10 types of effects
 - move, associated with a pokemon (Grass Knot, Magnitude...)
@@ -289,7 +309,7 @@ event.
 
 For instance, here is the Technician ability:
 
-"Technician": {
+"technician": {
 	desc: "This Pokemon's moves of 60 power or less have their power multiplied
 		by 1.5. Does affect Struggle.",
 	shortDesc: "This Pokemon's moves of 60 power or less have 1.5x power. Includes
@@ -301,7 +321,7 @@ For instance, here is the Technician ability:
 			return this.chainModify(1.5);
 		}
 	},
-	id: "Technician",
+	id: "technician",
 	name: "Technician",
  	rating: 4,
 	num: "101"
@@ -317,7 +337,7 @@ This fires the BasePower event:
 onBasePower(user, target) [on move]
 onBasePower(user, target, basePower, move) [on user]
 onAllyBasePower(user, target, basePower, move) [on allies]
-onFoeBasePower(user, target, basePower, move) [on foes]
+onFoeBasePower(user, target, basePower, move) [on foe Pokémon]
 onSourceBasePower(user, target, basePower, move) [on target]
 onAnyBasePower(user, target, basePower, move) [on every Pokémon]
 
