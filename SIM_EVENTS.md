@@ -43,14 +43,13 @@ For instance, here is the Technician ability:
 
 ```js
 "technician": {
-	desc: "This Pokemon's moves of 60 power or less have their power multiplied
+	desc: "This Pokemon's moves of 60 power or less have their power multiplied\
 		by 1.5. Does affect Struggle.",
-	shortDesc: "This Pokemon's moves of 60 power or less have 1.5x power. Includes
+	shortDesc: "This Pokemon's moves of 60 power or less have 1.5x power. Includes\
 		Struggle.",
 	onBasePowerPriority: 8,
 	onBasePowerPriority(basePower, attacker, defender, move) {
 		if (basePower <= 60) {
-			this.debug('Technician boost');
 			return this.chainModify(1.5);
 		}
 	},
@@ -66,46 +65,66 @@ Now, let's work through an example:
 > In a Doubles Battle with Grassy Terrain active, and with an allied Battery Charjabug
 on the field, a Technician Roserade uses Grass Knot against a Dry Skin Helioptile.
 
-This fires the BasePower event:
+To calculate the damage inflicted, the method Battle#getDamage() is invoked:
 
-onBasePower(user, target) [on move]
-onBasePower(user, target, basePower, move) [on user]
-onAllyBasePower(user, target, basePower, move) [on allies]
-onFoeBasePower(user, target, basePower, move) [on foe Pokémon]
-onSourceBasePower(user, target, basePower, move) [on target]
-onAnyBasePower(user, target, basePower, move) [on every Pokémon]
+```js
+// Excerpt
+let basePower = move.basePower;
+if (move.basePowerCallback) {
+	basePower = move.basePowerCallback.call(this, pokemon, target, move);
+}
+basePower = this.runEvent('BasePower', pokemon, target, move, basePower, true);
+```
 
-First, the basePowerCallback handler on the move is fired.
+First, the basePowerCallback handler on the move is fired:
 
-Grass Knot's basePowerCallback function returns 60 as its Base Power against
-Helioptile.
+```js
+"grassknot": {
+	basePowerCallback(pokemon, target) {
+		let targetWeight = target.getWeight();
+		if (targetWeight >= 200) return 120;
+		if (targetWeight >= 100) return 100;
+		if (targetWeight >= 50) return 80;
+		if (targetWeight >= 25) return 60;
+		if (targetWeight >= 10) return 40;
+		return 20;
+	},
+}
+```
 
-Next, all BasePower handlers associated with Roserade targetting Helioptile are fired.
-This includes the following:
-- onBasePower handlers of Roserade's effects (its Technician ability)
-- onBasePower handlers of Roserade's teams's effects (there are none)
-- onBasePower handlers of the battle effects (Grassy Terrain).
-- onAllyBasePower handlers of the allied Charjabug (its Battery ability)
-- onFoeBasePower handlers of both active opponents (Helioptile's Dry Skin ability),
-- onSourceBasePower handlers of the targetted Helioptile
-- onAnyBasePower handlers of every active Pokémon
+Grass Knot's basePowerCallback function returns 20 as its base power against
+Helioptile, which weights 6 kg.
+
+Next, the battle fires the BasePower event, which is intercepted by the following handlers:
+- onBasePower(user, target) [on move]
+- onBasePower(user, target, basePower, move) [on user]
+- onAllyBasePower(user, target, basePower, move) [on allies]
+- onFoeBasePower(user, target, basePower, move) [on foe Pokémon]
+- onSourceBasePower(user, target, basePower, move) [on target]
+- onAnyBasePower(user, target, basePower, move) [on every Pokémon]
+
+As mentioned above, events fired on a Pokémon also fire on the side and the field.
+Therefore, the events found are the following:
+- Roserade's Technician (onBasePower handler of the user, priority 8)
+- Field's Grassy Terrain (onBasePower handler of the field, priority 0)
+- Charjabug's Battery (onAllyBasePower handler of an allied, priority 8)
+- Helioptile's Dry Skin (onFoeBasePower handler of a foe, priority 7)
 
 These handlers are sorted by their listed priority.
 
-1. Technician's callback goes first, since it has a priority of 8.
-so it updates the base power modifier from its initial value of 1 to 1.5.
-2. Battery's handler is called, since it also has a priority of 8,
-so the base power modifier is updated to ~1.95.
-3. Dry Skin's handler is called (priority 7). Since Grass Knot is not a
-Fire move, this step doesn't affect its base power.
-4. Grassy Terrain's handler is called. Since Grass Knot is a Grass move,
+1. Technician's callback goes first, so it updates the base power modifier
+from its initial value of 1 to 1.5.
+2. Battery's handler is called so the base power modifier is updated to ~1.95.
+3. Dry Skin's handler is called. Since Grass Knot is not a Fire-type move,
+this step doesn't affect its base power.
+4. Grassy Terrain's handler is called. Since Grass Knot is a Grass-type move,
 and Roserade is grounded, the base power modifier is updated to ~3.80.
-5. After the BasePower event is run, we get a rounded final base power of 228.
+5. After the BasePower event is run, we get a rounded final base power of 76.
 
 ## Single events
 
 **NOTE**: This list is incomplete.
-Consult dev-tools/globals.ts for a full list, including function signatures, of the
+Consult [dev-tools/globals.ts](https://github.com/Zarel/Pokemon-Showdown/blob/master/dev-tools/globals.ts) for a full list, including function signatures, of the
 single events available on abilities, moves, items or statuses, corresponding to the
 AbilityEventMethods, MoveEventMethods, ItemEventMethods and PureEffectEventMethods
 interfaces.
@@ -244,7 +263,7 @@ onEnd(field, source, sourceEffect) [on weather, on terrain, on pseudoweather]
 
 ### Moves (hit steps)
 
-**NOTE**: For an schematic breakdown, consult simulator-doc.txt
+**NOTE**: For an schematic breakdown, consult [simulator-doc.txt](https://github.com/Zarel/Pokemon-Showdown/blob/master/simulator-doc.txt)
 
 onHit(target, user, move) [on move]
 	Fired when a move hits (doesn't miss). Return false to prevent the move's
@@ -258,7 +277,7 @@ onHit(target, user, move) [on move]
 ## Global events
 
 **NOTE**: This list is incomplete.
-Consult dev-tools/globals.ts for a full list, including function signatures, of the
+Consult [dev-tools/globals.ts](https://github.com/Zarel/Pokemon-Showdown/blob/master/dev-tools/globals.ts) for a full list, including function signatures, of the
 global events available, corresponding to the EventMethods interface.
 
 onBeforeMove(user, target, move) [on user]
@@ -366,7 +385,7 @@ onResidual(field) [on weather, on pseudoweather]
 
 ### Hit step events
 
-**NOTE**: For an schematic breakdown, consult simulator-doc.txt
+**NOTE**: For an schematic breakdown, consult [simulator-doc.txt](https://github.com/Zarel/Pokemon-Showdown/blob/master/simulator-doc.txt)
 
 onHit(target, source, move) [on target]
 onSourceHit(target, source, move) [on source]
