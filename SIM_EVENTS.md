@@ -164,10 +164,13 @@ onStart(pokemon) [on item]
 
 ### Statuses (PureEffect)
 
+```js
 durationCallback(pokemon, source, sourceEffect) [on status, on volatile]
 durationCallback(pokemon, source, sourceEffect) [on slot condition]
 durationCallback(side, source, sourceEffect) [on side condition]
 durationCallback(field, source, sourceEffect) [on weather, on terrain, on pseudoweather]
+```
+
 	Fired while calculating an effect's duration. Returns the duration in
 	turns, including the current one.
 
@@ -194,10 +197,13 @@ durationCallback(field, source, sourceEffect) [on weather, on terrain, on pseudo
 
 	examples: [weather] Rain Dance, [side condition] Reflect
 
+```js
 onStart(pokemon, source, sourceEffect) [on status, on volatile]
 onStart(pokemon, source, sourceEffect) [on slot condition]
 onStart(side, source, sourceEffect) [on side condition]
 onStart(field, source, sourceEffect) [on weather, on terrain, on pseudoweather]
+```
+
 	Fired when an effect starts, with the same function signature as durationCallback.
 
 	Useful for cancelling an effect that fails (e.g. Encore against a newly
@@ -207,10 +213,13 @@ onStart(field, source, sourceEffect) [on weather, on terrain, on pseudoweather]
 	examples: [volatile] Encore, [side condition] Reflect,
 	          [volatile] Substitute
 
+```js
 onRestart(pokemon, source, sourceEffect) [on status, on volatile]
 onRestart(pokemon, source, sourceEffect) [on slot condition]
 onRestart(side, source, sourceEffect) [on side condition]
 onRestart(field, source, sourceEffect) [on weather, on terrain, on pseudoweather]
+```
+
 	Fired when trying to induce an effect that's already active,
 	with the same function signature as durationCallback.
 
@@ -219,10 +228,13 @@ onRestart(field, source, sourceEffect) [on weather, on terrain, on pseudoweather
 	examples: [side condition] Toxic Spikes, [side condition] Pursuit,
 	          [volatile] Stockpile
 
+```js
 onEnd(pokemon, source, sourceEffect) [on status, on volatile]
 onEnd(pokemon, source, sourceEffect) [on slot condition]
 onEnd(side, source, sourceEffect) [on side condition]
 onEnd(field, source, sourceEffect) [on weather, on terrain, on pseudoweather]
+```
+
 	Fired when an effect ends naturally, usually because its duration ends.
 
 	Most ways an effect can end are "natural". The biggest exception is
@@ -243,7 +255,10 @@ onEnd(field, source, sourceEffect) [on weather, on terrain, on pseudoweather]
 
 **NOTE**: For an schematic breakdown of the hit steps, refer to [simulator-doc.txt](https://github.com/Zarel/Pokemon-Showdown/blob/master/simulator-doc.txt)
 
+```js
 beforeMoveCallback(user, target, move) [on move]
+```
+
 	Fired before a pokemon uses a move it chose, but after the global
 	BeforeMove event. Return true to prevent the move.
 
@@ -252,7 +267,10 @@ beforeMoveCallback(user, target, move) [on move]
 
 	examples: [move] Focus Punch
 
+```js
 beforeTurnCallback(user) [on move]
+```
+
 	Fired before a turn starts on every pokemon which will move.
 
 	Used for Focus Punch (for the "focusing" message) and Pursuit
@@ -261,7 +279,10 @@ beforeTurnCallback(user) [on move]
 
 	examples: [move] Focus Punch, [move] Pursuit
 
+```js
 onModifyMove(move, user, target) [on move]
+```
+
 	Fired before a pokemon uses a move.
 
 	It is also fired for moves that bypass beforeMoveCallback
@@ -276,13 +297,19 @@ onModifyMove(move, user, target) [on move]
 
 	examples: [move] Secret Power, [move] Technoblast, [move] Weather Ball
 
+```js
 onBasePower(basePower, attacker, defender, move) [on move]
+```
+
 	Fired while calculating a move's base power. Return the modified
 	base power.
 
 	examples: [move] Facade, [move] Knock Off
 
+```js
 onHit(target, user, move) [on move]
+```
+
 	Fired when a move hits (doesn't miss). Return false to prevent the move's
 	effects.
 
@@ -299,7 +326,10 @@ global events available, corresponding to the `EventMethods` interface.
 
 ### Main loop events
 
+```js
 onBeforeTurn(pokemon) [on pokemon]
+```
+
 	Fired before a turn starts on every active pokemon.
 
 	Used for Gen 4 Custap Berry and the Gen 2 Locked Move volatile,
@@ -307,7 +337,10 @@ onBeforeTurn(pokemon) [on pokemon]
 
 	examples: [item] Custap Berry (Gen 4), [volatile] Locked Move (Gen 2)
 
+```js
 onSwitchIn(pokemon) [on pokemon]
+```
+
 	Fired after a pokemon switches in.
 
 	If two pokemon switch in at once (first turn, or after two pokemon
@@ -317,12 +350,18 @@ onSwitchIn(pokemon) [on pokemon]
 
 	examples: [side condition] Stealth Rock, [slot condition] Healing Wish
 
+```js
 onBeforeSwitchOut(pokemon) [on pokemon]
+```
+
 	Fired before a pokemon switches out.
 
 	examples: [side condition] Pursuit
 
+```js
 onSwitchOut(pokemon) [on pokemon]
+```
+
 	Fired before a pokemon switches out, after the onBeforeSwitchOut event.
 	Return true to interrupt and prevent the pokemon from switching out.
 
@@ -334,14 +373,20 @@ onSwitchOut(pokemon) [on pokemon]
 
 	examples: [ability] Natural Cure, [ability] Regenerator
 
+```js
 onModifyPriority(priority, user, target, move) [on user]
+```
+
 	Fired when determining a move's priority. Return the move's priority.
 
 	examples: [ability] Prankster
 
+```js
 onResidual(pokemon) [on status, on volatile, on ability, on item]
 onResidual(side) [on side condition]
 onResidual(field) [on weather, on pseudoweather]
+```
+
 	Fired at the end of each turn, but before fainted pokemon are switched in.
 
 	Useful for whatever end-of-turn effects this may have.
@@ -353,19 +398,28 @@ onResidual(field) [on weather, on pseudoweather]
 
 ### Helper events
 
+```js
 onType(pokemon) [on pokemon]
+```
+
 	Fired when calculating the type of a Pokémon to override the default typing mechanics.
 	Only used for Roost, Arceus, and Silvally.
 
 	examples: [volatile] Roost, [pokemon] Arceus, [pokemon] Silvally
 
+```js
 onImmunity(type, target) [on target]
+```
+
 	Fired when determining whether or not a pokemon is immune to a move.
 	Return false if it is immune.
 
 	examples: [volatile] Magnet Rise
 
+```js
 onImmunity(effectid, target) [on target]
+```
+
 	Fired when determining whether or not a pokemon is immune to a non-move effect.
 	Return false if it is immune.
 
@@ -375,7 +429,10 @@ onImmunity(effectid, target) [on target]
 
 **NOTE**: For an schematic breakdown, refer to [simulator-doc.txt](https://github.com/Zarel/Pokemon-Showdown/blob/master/simulator-doc.txt)
 
+```js
 onBeforeMove(user, target, move) [on user]
+```
+
 	Fired before a pokemon uses a move it chose. Return false to prevent
 	the move.
 
@@ -387,29 +444,39 @@ onBeforeMove(user, target, move) [on user]
 	examples: [volatile] Flinching, [status] fully paralyzed,
 	          [move] Focus Punch
 
+```js
 onBasePower(basePower, attacker, defender, move) [on user]
 onFoeBasePower(basePower, attacker, defender, move) [on foe Pokémon]
 onAnyBasePower(basePower, attacker, defender, move) [on any Pokémon]
+```
+
 	Fired while calculating a move's base power. Return the modified
 	base power.
 
 	examples: [ability] Dark Aura, [ability] Dry Skin, [ability] Technician
 
-
+```js
 onModifyMove(user, target, move) [on user]
 onFoeModifyMove(user, target, move) [on foe Pokémon]
+```
+
 	Fired before a pokemon uses a move.
 
 	examples: [ability] Adaptability, [ability] Infiltrator, [ability] Pixilate
 
-
+```js
 onHit(target, source, move) [on target]
 onSourceHit(target, source, move) [on source]
+```
+
 	Fired when a move hits (doesn't miss).
 
 	examples: [ability] Anger Point, [ability] Magician, [item] Enigma Berry
 
+```js
 onDamage(damage, target, source, effect) [on target]
+```
+
 	Fired while calculating damage, either from a move or from a condition.
 	Return a damage value directly in HP. Bypasses weaknesses and resistances,
 	but not immunities.
