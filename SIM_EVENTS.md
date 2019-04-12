@@ -1,5 +1,18 @@
 # Sim events
 
+## Table of contents
+1. [Introduction](#introduction)
+	- [Effects](#effects)
+	- [Events](#events)
+2. [Single events](#single-events)
+	- [Abilities and Items](#abilities-and-items)
+	- [Statuses](#statuses-pureeffect)
+	- [Moves](#moves)
+3. [Global events](#global-events)
+	- [Main loop](#main-loop-events)
+	- [Helper events](#helper-events)
+	- [Hit steps](#hit-steps)
+
 ## Introduction
 
 ### Effects
@@ -136,45 +149,6 @@ interfaces.
 Single events run on moves are passed copies of the move objects. These are called
 "Active Moves", and can be safely modified.
 
-beforeMoveCallback(user, target, move) [on move]
-	Fired before a pokemon uses a move it chose, but after the global
-	BeforeMove event. Return true to prevent the move.
-
-	Moves not called directly (e.g. moves called by Assist, Metronome, or Sleep Talk)
-	do not fire this event.
-
-	examples: [move] Focus Punch
-
-beforeTurnCallback(user) [on move]
-	Fired before a turn starts on every pokemon which will move.
-
-	Used for Focus Punch (for the "focusing" message) and Pursuit
-	(to activate the side condition that listens for the foeSwitchOut
-	event).
-
-	examples: [move] Focus Punch, [move] Pursuit
-
-onModifyMove(move, user, target) [on move]
-	Fired before a pokemon uses a move.
-
-	It is also fired for moves that bypass beforeMoveCallback
-	(moves called by Assist, Metronome, or Sleep Talk).
-
-	NOTE: Base Power modifications should be handled in onBasePower, not in
-	onModifyMove. This is because many moves have variable base power.
-
-	NOTE: Priority modifications should be handled in the global event onModifyPriority.
-	By the time the move can be modified through onModifyMove, its position in the
-	decision queue is already fixed.
-
-	examples: [move] Secret Power, [move] Technoblast, [move] Weather Ball
-
-onBasePower(basePower, attacker, defender, move) [on move]
-	Fired while calculating a move's base power. Return the modified
-	base power.
-
-	examples: [move] Facade, [move] Knock Off
-
 ### Abilities and items
 
 onStart(pokemon) [on ability]
@@ -265,9 +239,48 @@ onEnd(field, source, sourceEffect) [on weather, on terrain, on pseudoweather]
 	examples: [volatile] Encore, [side condition] Reflect,
 	          [volatile] Substitute
 
-### Moves (hit steps)
+### Moves
 
-**NOTE**: For an schematic breakdown, refer to [simulator-doc.txt](https://github.com/Zarel/Pokemon-Showdown/blob/master/simulator-doc.txt)
+**NOTE**: For an schematic breakdown of the hit steps, refer to [simulator-doc.txt](https://github.com/Zarel/Pokemon-Showdown/blob/master/simulator-doc.txt)
+
+beforeMoveCallback(user, target, move) [on move]
+	Fired before a pokemon uses a move it chose, but after the global
+	BeforeMove event. Return true to prevent the move.
+
+	Moves not called directly (e.g. moves called by Assist, Metronome, or Sleep Talk)
+	do not fire this event.
+
+	examples: [move] Focus Punch
+
+beforeTurnCallback(user) [on move]
+	Fired before a turn starts on every pokemon which will move.
+
+	Used for Focus Punch (for the "focusing" message) and Pursuit
+	(to activate the side condition that listens for the foeSwitchOut
+	event).
+
+	examples: [move] Focus Punch, [move] Pursuit
+
+onModifyMove(move, user, target) [on move]
+	Fired before a pokemon uses a move.
+
+	It is also fired for moves that bypass beforeMoveCallback
+	(moves called by Assist, Metronome, or Sleep Talk).
+
+	NOTE: Base Power modifications should be handled in onBasePower, not in
+	onModifyMove. This is because many moves have variable base power.
+
+	NOTE: Priority modifications should be handled in the global event onModifyPriority.
+	By the time the move can be modified through onModifyMove, its position in the
+	decision queue is already fixed.
+
+	examples: [move] Secret Power, [move] Technoblast, [move] Weather Ball
+
+onBasePower(basePower, attacker, defender, move) [on move]
+	Fired while calculating a move's base power. Return the modified
+	base power.
+
+	examples: [move] Facade, [move] Knock Off
 
 onHit(target, user, move) [on move]
 	Fired when a move hits (doesn't miss). Return false to prevent the move's
@@ -284,25 +297,7 @@ onHit(target, user, move) [on move]
 Refer to [dev-tools/globals.ts](https://github.com/Zarel/Pokemon-Showdown/blob/master/dev-tools/globals.ts) for a full list, including function signatures, of the
 global events available, corresponding to the `EventMethods` interface.
 
-onBeforeMove(user, target, move) [on user]
-	Fired before a pokemon uses a move it chose. Return false to prevent
-	the move.
-
-	Mostly effects that prevent a user from moving, such as paralysis.
-
-	Moves not called directly (e.g. moves called by Metronome, Sleep Talk,
-	or Pursuit) do not fire this event.
-
-	examples: [volatile] Flinching, [status] fully paralyzed,
-	          [move] Focus Punch
-
-onBasePower(basePower, attacker, defender, move) [on user]
-onFoeBasePower(basePower, attacker, defender, move) [on foe Pokémon]
-onAnyBasePower(basePower, attacker, defender, move) [on any Pokémon]
-	Fired while calculating a move's base power. Return the modified
-	base power.
-
-	examples: [ability] Dark Aura, [ability] Dry Skin, [ability] Technician
+### Main loop events
 
 onBeforeTurn(pokemon) [on pokemon]
 	Fired before a turn starts on every active pokemon.
@@ -311,25 +306,6 @@ onBeforeTurn(pokemon) [on pokemon]
 	to dynamically update the decision queue.
 
 	examples: [item] Custap Berry (Gen 4), [volatile] Locked Move (Gen 2)
-
-onDamage(damage, target, source, effect) [on target]
-	Fired while calculating damage, either from a move or from a condition.
-	Return a damage value directly in HP. Bypasses weaknesses and resistances,
-	but not immunities.
-
-	examples: [ability] Magic Guard, [volatile] Endure
-
-onModifyMove(user, target, move) [on user]
-onFoeModifyMove(user, target, move) [on foe Pokémon]
-	Fired before a pokemon uses a move.
-
-	examples: [ability] Adaptability, [ability] Infiltrator, [ability] Pixilate
-
-onType(pokemon) [on pokemon]
-	Fired when calculating the type of a Pokémon to override the default typing mechanics.
-	Only used for Roost, Arceus, and Silvally.
-
-	examples: [volatile] Roost, [pokemon] Arceus, [pokemon] Silvally
 
 onSwitchIn(pokemon) [on pokemon]
 	Fired after a pokemon switches in.
@@ -358,18 +334,6 @@ onSwitchOut(pokemon) [on pokemon]
 
 	examples: [ability] Natural Cure, [ability] Regenerator
 
-onImmunity(type, target) [on target]
-	Fired when determining whether or not a pokemon is immune to a move.
-	Return false if it is immune.
-
-	examples: [volatile] Magnet Rise
-
-onImmunity(effectid, target) [on target]
-	Fired when determining whether or not a pokemon is immune to a non-move effect.
-	Return false if it is immune.
-
-	examples: [ability] Magma Armor, [ability] Overcoat, [item] Safety Goggles
-
 onModifyPriority(priority, user, target, move) [on user]
 	Fired when determining a move's priority. Return the move's priority.
 
@@ -387,12 +351,67 @@ onResidual(field) [on weather, on pseudoweather]
 
 	examples: [volatile] Ghost-type Curse, [weather] Sandstorm
 
-### Hit step events
+### Helper events
+
+onType(pokemon) [on pokemon]
+	Fired when calculating the type of a Pokémon to override the default typing mechanics.
+	Only used for Roost, Arceus, and Silvally.
+
+	examples: [volatile] Roost, [pokemon] Arceus, [pokemon] Silvally
+
+onImmunity(type, target) [on target]
+	Fired when determining whether or not a pokemon is immune to a move.
+	Return false if it is immune.
+
+	examples: [volatile] Magnet Rise
+
+onImmunity(effectid, target) [on target]
+	Fired when determining whether or not a pokemon is immune to a non-move effect.
+	Return false if it is immune.
+
+	examples: [ability] Magma Armor, [ability] Overcoat, [item] Safety Goggles
+
+### Hit steps
 
 **NOTE**: For an schematic breakdown, refer to [simulator-doc.txt](https://github.com/Zarel/Pokemon-Showdown/blob/master/simulator-doc.txt)
+
+onBeforeMove(user, target, move) [on user]
+	Fired before a pokemon uses a move it chose. Return false to prevent
+	the move.
+
+	Mostly effects that prevent a user from moving, such as paralysis.
+
+	Moves not called directly (e.g. moves called by Metronome, Sleep Talk,
+	or Pursuit) do not fire this event.
+
+	examples: [volatile] Flinching, [status] fully paralyzed,
+	          [move] Focus Punch
+
+onBasePower(basePower, attacker, defender, move) [on user]
+onFoeBasePower(basePower, attacker, defender, move) [on foe Pokémon]
+onAnyBasePower(basePower, attacker, defender, move) [on any Pokémon]
+	Fired while calculating a move's base power. Return the modified
+	base power.
+
+	examples: [ability] Dark Aura, [ability] Dry Skin, [ability] Technician
+
+
+onModifyMove(user, target, move) [on user]
+onFoeModifyMove(user, target, move) [on foe Pokémon]
+	Fired before a pokemon uses a move.
+
+	examples: [ability] Adaptability, [ability] Infiltrator, [ability] Pixilate
+
 
 onHit(target, source, move) [on target]
 onSourceHit(target, source, move) [on source]
 	Fired when a move hits (doesn't miss).
 
 	examples: [ability] Anger Point, [ability] Magician, [item] Enigma Berry
+
+onDamage(damage, target, source, effect) [on target]
+	Fired while calculating damage, either from a move or from a condition.
+	Return a damage value directly in HP. Bypasses weaknesses and resistances,
+	but not immunities.
+
+	examples: [ability] Magic Guard, [volatile] Endure
