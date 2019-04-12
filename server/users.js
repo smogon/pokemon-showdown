@@ -536,8 +536,8 @@ class User extends Chat.MessageContext {
 		// Used in punishments
 		/** @type {string} */
 		this.trackRename = '';
-		/** @type {boolean} */
-		this.isAway = false;
+		/** @type {string} */
+		this.isAway = '';
 		// initialize
 		Users.add(this);
 	}
@@ -1007,8 +1007,7 @@ class User extends Chat.MessageContext {
 	 * @param {string[]} updated the settings which have been updated or none for all settings.
 	 */
 	getUpdateuserText(...updated) {
-		const away = this.isAway ? '@!away' : '';
-
+		const away = this.isAway ? `@!${this.isAway}` : '';
 		const named = this.named ? 1 : 0;
 		const diff = {};
 		const settings = updated.length ? updated : SETTINGS;
@@ -1552,13 +1551,16 @@ class User extends Chat.MessageContext {
 			this.chatQueue = null;
 		}
 	}
-	setAway() {
-		this.isAway = true;
+	/**
+	 * @param {string} message
+	 */
+	setAway(message) {
+		this.isAway = message;
 		this.updateIdentity();
 	}
 	setBack() {
 		if (!this.isAway) return;
-		this.isAway = false;
+		this.isAway = '';
 		this.updateIdentity();
 	}
 	destroy() {
@@ -1601,7 +1603,7 @@ function pruneInactive(threshold) {
 		const afkTimer = (user.can('lock') && !user.can('bypassall')) ? STAFF_AFK_TIMER : AFK_TIMER;
 		if (user.group !== '*' && !user.connections.some(connection => now - connection.lastActiveTime < afkTimer)) {
 			user.popup(`You have been inactive for over ${afkTimer / MINUTES} minutes, and have been marked as away as a result. To mark yourself as back, send a message in chat, or use the /back command.`);
-			user.setAway();
+			user.setAway('afk');
 		}
 		if (user.connected) continue;
 		if ((now - user.lastConnected) > threshold) {

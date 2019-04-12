@@ -229,7 +229,7 @@ class BasicRoom {
 			}
 			counter++;
 			buffer += ',' + this.users[i].getIdentity(this.id);
-			if (this.users[i].isAway) buffer += '@!away';
+			if (this.users[i].isAway) buffer += `@!${this.users[i].isAway}`;
 		}
 		let msg = '|users|' + counter + buffer;
 		return msg;
@@ -1324,7 +1324,7 @@ class BasicChatRoom extends BasicRoom {
 	onUpdateIdentity(user) {
 		if (user && user.connected) {
 			if (!this.users[user.userid]) return false;
-			const awayText = user.isAway ? '@!away' : '';
+			const awayText = user.isAway ? `@!${user.isAway}` : '';
 			if (user.named) {
 				this.reportJoin('n', user.getIdentity(this.id) + awayText + '|' + user.userid);
 			} else {

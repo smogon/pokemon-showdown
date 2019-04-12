@@ -657,8 +657,9 @@ const commands = {
 	'!away': true,
 	idle: 'away',
 	afk: 'away',
-	away(target, room, user) {
-		user.setAway();
+	brb: 'away',
+	away(target, room, user, connection, cmd) {
+		user.setAway(toId(cmd));
 		this.sendReply("You are now marked as away. Send a message or use /back to indicate you are back.");
 	},
 	awayhelp: [`/away - Marks you as away. Send a message or use /back to indicate you are back.`],

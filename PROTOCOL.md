@@ -150,12 +150,12 @@ represented by a space), and the rest of the string being their username.
 
 > Changes the HTML display of the `|uhtml|` message named (NAME).
 
-`|join|USER@STATUS` or `|j|USER@STATU`
+`|join|USER@STATUS` or `|j|USER@STATUS`
 
 > `USER` joined the room. Optionally, `USER` can end in `@` followed by a user status message.
 > A `STATUS` starting in `!` indicates the user is away.
 
-`|leave|USER@STATU` or `|l|USER@STATU`
+`|leave|USER@STATUS` or `|l|USER@STATUS`
 
 > `USER` left the room. Optionally, `USER` can end in `@` followed by a user status message.
 > A `STATUS` starting in `!` indicates the user is away.
