@@ -66,7 +66,7 @@ There are 3 different ways in which Pokémon Showdown may consume the return val
 Consumed | Description| Examples
 ---------|------------|-------------------------------------------------------------------
 None | The event is run for its side effects. | `onAfterBoost`, `onFaint`, `onSwitchIn`, `onUpdate`
-[Cancellation](#event-cancellation) | If the event is cancelled, the ongoing battle action is cancelled as well. | `onDragOut`, `onTryAddVolatile`, `onTryHit`, `onTryImmunity`
+[Cancellation token](#event-cancellation) | If the event is cancelled, the ongoing battle action is cancelled as well. | `onDragOut`, `onTryAddVolatile`, `onTryHit`, `onTryImmunity`
 Output | The return value of the event is passed to other functions. The event is very likely to support a [relay variable](#relay-variables). | `onBasePower`, `onDamage`, `onModifyAtk`, `onModifyCritRatio`
 
 ### Event propagation
