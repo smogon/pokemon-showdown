@@ -98,12 +98,12 @@ Any Pokémon | `onAnyEvent` | `onAnyBasePower`, `onAnySetWeather`
 
 An event can be cancelled by any event handlers, which entails the following:
 - The execution of any pending event handlers will be aborted.
-- The global return value of the event will be set to the raised cancellation flag.
+- The global return value of the event will be set to the raised cancellation token.
 
-Cancellation is triggered from any event handler by returning any of the cancellation flags:
+Cancellation is triggered from any event handler by returning any of the cancellation tokens:
 `this.FAIL`, or `this.SILENT_FAIL` (where `this` is the active `Battle`).
 
-**NOTE**: In legacy code, the cancellation flags are hardcoded as `false` and `null`.
+**NOTE**: In legacy code, the cancellation tokens are hardcoded as `false` and `null`.
 
 ### Relay variables
 
