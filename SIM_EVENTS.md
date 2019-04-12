@@ -1,4 +1,4 @@
-Sim events:
+# Sim events
 
 Any event that fires on a pokemon also fires on that pokemon's side. So, for instance,
 the global event TryHit, which is run on the target of a move, is also intercepted
@@ -7,9 +7,9 @@ by the onTryHit handler of Mat Block, a side condition on the target's side.
 Any event that fires on a side also fires on the global field. So, for instance,
 the global Effectiveness event can be captured by Delta Stream, a weather condition.
 
-=== LIST OF SINGLE EVENTS ===
+## Single events
 
-**Note**: This list is incomplete.
+**NOTE**: This list is incomplete.
 Consult dev-tools/globals.ts for a full list, including function signatures, of the
 single events available on abilities, moves, items or statuses, corresponding to the
 AbilityEventMethods, MoveEventMethods, ItemEventMethods and PureEffectEventMethods
@@ -57,7 +57,7 @@ onBasePower(basePower, attacker, defender, move) [on move]
 
 	examples: [move] Facade, [move] Knock Off
 
-==== Single events of abilities or items ====
+### Abilities and items
 
 onStart(pokemon) [on ability]
 onStart(pokemon) [on item]
@@ -70,7 +70,7 @@ onStart(pokemon) [on item]
 
 	examples: [ability] Drizzle, [ability] Intimidate, [item] Air Balloon
 
-===== Single events of statuses / PureEffects ====
+### Statuses (PureEffect)
 
 durationCallback(pokemon, source, sourceEffect) [on status, on volatile]
 durationCallback(pokemon, source, sourceEffect) [on slot condition]
@@ -147,7 +147,7 @@ onEnd(field, source, sourceEffect) [on weather, on terrain, on pseudoweather]
 	examples: [volatile] Encore, [side condition] Reflect,
 	          [volatile] Substitute
 
-==== Hit step single events ====
+### Moves (hit steps)
 
 **NOTE**: For an schematic breakdown, consult simulator-doc.txt
 
@@ -160,9 +160,9 @@ onHit(target, user, move) [on move]
 
 	examples: [foe volatile] Protect, [move] Belly Drum, etc
 
-=== LIST OF GLOBAL EVENTS ===
+## Global events
 
-**Note**: This list is incomplete.
+**NOTE**: This list is incomplete.
 Consult dev-tools/globals.ts for a full list, including function signatures, of the
 global events available, corresponding to the EventMethods interface.
 
@@ -309,6 +309,7 @@ event.
 
 For instance, here is the Technician ability:
 
+```js
 "technician": {
 	desc: "This Pokemon's moves of 60 power or less have their power multiplied
 		by 1.5. Does affect Struggle.",
@@ -321,11 +322,12 @@ For instance, here is the Technician ability:
 			return this.chainModify(1.5);
 		}
 	},
-	id: "technician",
+	id: 'technician',
 	name: "Technician",
  	rating: 4,
-	num: "101"
+	num: 101,
 }
+```
 
 Now, let's work through an example:
 
@@ -358,16 +360,12 @@ This includes the following:
 
 These handlers are sorted by their listed priority.
 
-The Technician callback goes first, since it has a priority of 8.
+1. Technician's callback goes first, since it has a priority of 8.
 so it updates the base power modifier from its initial value of 1 to 1.5.
-
-Next, the Battery handler is called, since it also has a priority of 8,
+2. Battery's handler is called, since it also has a priority of 8,
 so the base power modifier is updated to ~1.95.
-
-Then, the Dry Skin handler is called (priority 7). Since Grass Knot is not a
+3. Dry Skin's handler is called (priority 7). Since Grass Knot is not a
 Fire move, this step doesn't affect its base power.
-
-Finally, the Grassy Terrain's handler is called. Since Grass Knot is a Grass move,
+4. Grassy Terrain's handler is called. Since Grass Knot is a Grass move,
 and Roserade is grounded, the base power modifier is updated to ~3.80.
-
-After the BasePower event is run, we get a rounded final base power of 228.
+5. After the BasePower event is run, we get a rounded final base power of 228.
