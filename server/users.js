@@ -434,6 +434,8 @@ class Connection {
 
 /** @typedef {[string, string, Connection]} ChatQueueEntry */
 
+const SETTINGS = ['isSysop', 'isStaff', 'blockChallenges', 'blockPMs', 'ignoreTickets', 'lastConnected', 'inviteOnlyNextBattle'];
+
 // User
 class User extends Chat.MessageContext {
 	/**
@@ -986,13 +988,24 @@ class User extends Chat.MessageContext {
 		if (isForceRenamed) this.trackRename = oldname;
 		return true;
 	}
-	getUpdateuserText() {
+	/**
+	 * @param {string[]} updated the settings which have been updated or none for all settings.
+	 */
+	getUpdateuserText(...updated) {
 		const named = this.named ? 1 : 0;
-		const settings = {blockPMs: this.blockPMs, blockChallenges: this.blockChallenges};
-		return `|updateuser|${this.name}|${named}|${this.avatar}|${JSON.stringify(settings)}`;
+		const diff = {};
+		const settings = updated.length ? updated : SETTINGS;
+		for (const setting of settings) {
+			// @ts-ignore - dynamic lookup
+			diff[setting] = this[setting];
+		}
+		return `|updateuser|${this.name}|${named}|${this.avatar}|${JSON.stringify(diff)}`;
 	}
-	update() {
-		this.send(this.getUpdateuserText());
+	/**
+	 * @param {string[]} updated the settings which have been updated or none for all settings.
+	 */
+	update(...updated) {
+		this.send(this.getUpdateuserText(...updated));
 	}
 	/**
 	 * @param {User} oldUser
@@ -1147,11 +1160,13 @@ class User extends Chat.MessageContext {
 	setGroup(group, forceTrusted = false) {
 		if (!group) throw new Error(`Falsy value passed to setGroup`);
 		this.group = group.charAt(0);
+		const wasStaff = this.isStaff;
 		this.isStaff = Config.groups[this.group] && (Config.groups[this.group].lock || Config.groups[this.group].root);
 		if (!this.isStaff) {
 			let staffRoom = Rooms('staff');
 			this.isStaff = (staffRoom && staffRoom.auth && staffRoom.auth[this.userid]);
 		}
+		if (wasStaff !== this.isStaff) this.update('isStaff');
 		Rooms.global.checkAutojoin(this);
 		if (this.registered) {
 			if (forceTrusted || this.group !== Config.groupsranking[0]) {
@@ -1198,6 +1213,7 @@ class User extends Chat.MessageContext {
 			// We're not resetting .trusted/.autoconfirmed so those accounts
 			// can still be locked after logout.
 		}
+		// NOTE: can't do a this.update(...) at this point because we're no longer connected.
 	}
 	/**
 	 * @param {Connection} connection

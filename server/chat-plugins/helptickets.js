@@ -1082,6 +1082,7 @@ let commands = {
 			if (!this.can('lock')) return;
 			if (user.ignoreTickets) return this.errorReply(`You are already ignoring help ticket notifications. Use /helpticket unignore to receive notifications again.`);
 			user.ignoreTickets = true;
+			user.update('ignoreTickets');
 			this.sendReply(`You are now ignoring help ticket notifications.`);
 		},
 		ignorehelp: [`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ & ~`],
@@ -1090,6 +1091,7 @@ let commands = {
 			if (!this.can('lock')) return;
 			if (!user.ignoreTickets) return this.errorReply(`You are not ignoring help ticket notifications. Use /helpticket ignore to stop receiving notifications.`);
 			user.ignoreTickets = false;
+			user.update('ignoreTickets');
 			this.sendReply(`You will now receive help ticket notifications.`);
 		},
 		unignorehelp: [`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ & ~`],
