@@ -105,6 +105,11 @@ Output | The return value of the event is passed to other functions. The event i
 
 ### Event propagation
 
+Event propagation is the mechanism by which multiple effects have their event handlers
+called when a global event is run. The propagation may be vertical, horizontal, or of
+the *sourceEffect* type. While the event is being propagated, it can be stopped by the
+[cancellation mechanism](#event-cancellation).
+
 #### Vertical propagation
 
 Since effects that target a side also target every Pokémon on it, a [global event](#global-events)
@@ -131,10 +136,6 @@ Event source | `onSourceEvent` | `onSourceModifyDamage`, `onSourceTryHeal`
 Foe Pokémon | `onFoeEvent` | `onFoeBasePower`, `onFoeTryMove`
 Allied Pokémon | `onAllyEvent` | `onAllyBoost`, `onAllyTryHitSide`
 Any Pokémon | `onAnyEvent` | `onAnyBasePower`, `onAnySetWeather`
-
-**NOTE**: [Single events](#single-events) don't propagate, and are only fired on their direct target.
-
-**NOTE**: Event propagation can be [cancelled](#event-cancellation).
 
 #### `sourceEffect` propagation
 
