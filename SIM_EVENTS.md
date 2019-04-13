@@ -4,6 +4,7 @@
 
 1. [Effects](#effects)
 2. [Events](#events)
+	- [Event input](#event-input)
 	- [Event output](#event-output)
 	- [Event propagation](#event-propagation)
 		- [Vertical propagation](#vertical-propagation)
