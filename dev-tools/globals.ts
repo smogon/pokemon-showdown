@@ -677,6 +677,7 @@ interface EventMethods {
 	onResidualSubOrder?: number
 	onSourceBasePowerPriority?: number
 	onSourceModifyAtkPriority?: number
+	onSourceModifySpAPriority?: number
 	onSwitchInPriority?: number
 	onTrapPokemonPriority?: number
 	onTryHealPriority?: number
