@@ -26,27 +26,27 @@
 
 ## Effects
 
-In [Pokémon Showdown](https://play.pokemonshowdown.com), as well as in its predecessor
-[Pokémon Lab](https://pokemonlab.com/), everything in Pokémon is an *effect*.
+In [Pok&‌eacute;mon Showdown](https://play.pokemonshowdown.com), as well as in its predecessor
+[Pok&‌eacute;mon Lab](https://pokemonlab.com/), everything in Pok&‌eacute;mon is an *effect*.
 
 There are 11 types of effects:
 
 Effect type | Target | Examples
 ------------|--------|---------
-Species | Pokémon | [Arceus](https://dex.pokemonshowdown.com/pokemon/arceus), [Silvally](https://dex.pokemonshowdown.com/pokemon/silvally)
-Move | Pokémon | [Grass Knot](https://dex.pokemonshowdown.com/moves/grassknot), [Magnitude](https://dex.pokemonshowdown.com/moves/magnitude)
-Ability | Pokémon | [Intimidate](https://dex.pokemonshowdown.com/abilities/intimidate), [Technician](https://dex.pokemonshowdown.com/abilities/technician)
-Item | Pokémon | [Leftovers](https://dex.pokemonshowdown.com/items/leftovers), [Choice Scarf](https://dex.pokemonshowdown.com/items/choicescarf)
-Status (non-volatile) | Pokémon | Sleep, Poison
-Volatile status | Pokémon | [Protect](https://dex.pokemonshowdown.com/moves/protect), [Substitute](https://dex.pokemonshowdown.com/moves/substitute)
+Species | Pok&‌eacute;mon | [Arceus](https://dex.pokemonshowdown.com/pokemon/arceus), [Silvally](https://dex.pokemonshowdown.com/pokemon/silvally)
+Move | Pok&‌eacute;mon | [Grass Knot](https://dex.pokemonshowdown.com/moves/grassknot), [Magnitude](https://dex.pokemonshowdown.com/moves/magnitude)
+Ability | Pok&‌eacute;mon | [Intimidate](https://dex.pokemonshowdown.com/abilities/intimidate), [Technician](https://dex.pokemonshowdown.com/abilities/technician)
+Item | Pok&‌eacute;mon | [Leftovers](https://dex.pokemonshowdown.com/items/leftovers), [Choice Scarf](https://dex.pokemonshowdown.com/items/choicescarf)
+Status (non-volatile) | Pok&‌eacute;mon | Sleep, Poison
+Volatile status | Pok&‌eacute;mon | [Protect](https://dex.pokemonshowdown.com/moves/protect), [Substitute](https://dex.pokemonshowdown.com/moves/substitute)
 Slot condition | Slot | [Healing Wish](https://dex.pokemonshowdown.com/moves/healingwish), [Wish](https://dex.pokemonshowdown.com/moves/wish)
 Side condition | Side | [Reflect](https://dex.pokemonshowdown.com/moves/reflect), [Tailwind](https://dex.pokemonshowdown.com/moves/tailwind)
 Terrain | Field | [Grassy Terrain](https://dex.pokemonshowdown.com/moves/grassyterrain), [Misty Terrain](https://dex.pokemonshowdown.com/moves/mistyterrain)
 Weather | Field | [Rain Dance](https://dex.pokemonshowdown.com/moves/raindance), [Sunny Day](https://dex.pokemonshowdown.com/moves/sunnyday)
 Pseudoweather | Field | [Gravity](https://dex.pokemonshowdown.com/moves/gravity), [Trick Room](https://dex.pokemonshowdown.com/moves/trickroom)
 
-Effects which target a side also target every Pokémon on a side,
-and effects targetting the field also target every Pokémon in it.
+Effects which target a side also target every Pok&‌eacute;mon on a side,
+and effects targetting the field also target every Pok&‌eacute;mon in it.
 
 For convenience, most effects have the same ID as the move, ability, or item that
 induces it. The only exceptions are effects with many moves associated with them,
@@ -64,14 +64,14 @@ and [global events](#global-events). The key difference between them is that *gl
 events propagate, while single events don't*.
 
 The typical usage of an event is through `onEvent` handlers on effects which target the
-so-called *event target*. For example, the *Item single event* `Primal` is run on a Pokémon,
+so-called *event target*. For example, the *Item single event* `Primal` is run on a Pok&‌eacute;mon,
 and will invoke the `onPrimal` event handler of the held item —if there is one. As for
-global events run on a Pokémon, they will call the associated event handlers according to
+global events run on a Pok&‌eacute;mon, they will call the associated event handlers according to
 the [event propagation](#event-propagation) mechanism, which shall be described later.
 
 ### Event input
 
-Pokémon Showdown event handlers have widely different event signatures. However, for the
+Pok&‌eacute;mon Showdown event handlers have widely different event signatures. However, for the
 event system there are only two major differing signatures, which are the following.
 
 ```js
@@ -95,7 +95,7 @@ These are called "Active Moves", and can be safely modified.
 
 ### Event output
 
-There are 3 different ways in which Pokémon Showdown may consume the return value of an event.
+There are 3 different ways in which Pok&‌eacute;mon Showdown may consume the return value of an event.
 
 Consumed | Description| Examples
 ---------|------------|-------------------------------------------------------------------
@@ -108,7 +108,7 @@ Output | The return value of the event is passed to other functions. The event i
 Event propagation is the mechanism by which multiple effects have their event handlers
 called when a global event is run. They are called in order, from higher to lower priority,
 as per their listed Priority values. The priority should be specified with the key
-`&#96;${handlerName}Priority&#96;`, where `handlerName` is the full name of the associated event handler.
+`` `${handlerName}Priority` ``, where `handlerName` is the full name of the associated event handler.
 
 While the event is being run, its propagation can be stopped by the
 [cancellation mechanism](#event-cancellation).
@@ -117,8 +117,8 @@ Propagation may be vertical, horizontal, or of the *sourceEffect* type.
 
 #### Vertical propagation
 
-Since effects that target a side also target every Pokémon on it, a [global event](#global-events)
-that fires on a Pokémon will also fire on that Pokémon's side. So, for instance, the
+Since effects that target a side also target every Pok&‌eacute;mon on it, a [global event](#global-events)
+that fires on a Pok&‌eacute;mon will also fire on that Pok&‌eacute;mon's side. So, for instance, the
 global event `TryHit`, which is run on the target of a move, is also intercepted
 by the `onTryHit` handler of [Mat Block](https://dex.pokemonshowdown.com/moves/matblock),
 a side condition on the target's side. This phenomenon is *event propagation* in action.
@@ -129,18 +129,18 @@ the global `Effectiveness` event can be captured by
 
 Overall, this mechanism follows the direction:
 
-> Pokémon → Slot → Side → Field
+> Pok&‌eacute;mon → Slot → Side → Field
 
 #### Horizontal propagation
 
-Events which target a Pokémon also propagate from it to other active Pokémon on the field:
+Events which target a Pok&‌eacute;mon also propagate from it to other active Pok&‌eacute;mon on the field:
 
 Propagates to | Event handler pattern | Event handler examples
 --------------|-----------------------|----------------------------------
 Event source | `onSourceEvent` | `onSourceModifyDamage`, `onSourceTryHeal`
-Foe Pokémon | `onFoeEvent` | `onFoeBasePower`, `onFoeTryMove`
-Allied Pokémon | `onAllyEvent` | `onAllyBoost`, `onAllyTryHitSide`
-Any Pokémon | `onAnyEvent` | `onAnyBasePower`, `onAnySetWeather`
+Foe Pok&‌eacute;mon | `onFoeEvent` | `onFoeBasePower`, `onFoeTryMove`
+Allied Pok&‌eacute;mon | `onAllyEvent` | `onAllyBoost`, `onAllyTryHitSide`
+Any Pok&‌eacute;mon | `onAnyEvent` | `onAnyBasePower`, `onAnySetWeather`
 
 #### `sourceEffect` propagation
 
@@ -263,11 +263,11 @@ Next, the battle fires the BasePower event, which is intercepted by the followin
 - `onBasePower(user, target)` [on move]
 - `onBasePower(user, target, basePower, move)` [on user]
 - `onAllyBasePower(user, target, basePower, move)` [on allies]
-- `onFoeBasePower(user, target, basePower, move)` [on foe Pokémon]
+- `onFoeBasePower(user, target, basePower, move)` [on foe Pok&‌eacute;mon]
 - `onSourceBasePower(user, target, basePower, move)` [on target]
-- `onAnyBasePower(user, target, basePower, move)` [on every Pokémon]
+- `onAnyBasePower(user, target, basePower, move)` [on every Pok&‌eacute;mon]
 
-As mentioned above, events fired on a Pokémon also fire on the side and the field.
+As mentioned above, events fired on a Pok&‌eacute;mon also fire on the side and the field.
 Therefore, the events found are the following:
 - Roserade's [Technician](https://dex.pokemonshowdown.com/abilities/technician) (User's `onBasePower`, priority `8`)
 - Field's [Grassy Terrain](https://dex.pokemonshowdown.com/moves/grassyterrain) (Field's `onBasePower`, priority `0`)
@@ -555,7 +555,7 @@ this event is fired (see duration for details).
 onType(pokemon) [on pokemon]
 ```
 
-Fired when calculating the type of a Pokémon to override the default typing mechanics.
+Fired when calculating the type of a Pok&‌eacute;mon to override the default typing mechanics.
 Only used for Roost, Arceus, and Silvally.
 
 *Examples*: [volatile] Roost, [pokemon] Arceus, [pokemon] Silvally
@@ -600,8 +600,8 @@ or Pursuit) do not fire this event.
 
 ```js
 onBasePower(basePower, attacker, defender, move) [on user]
-onFoeBasePower(basePower, attacker, defender, move) [on foe Pokémon]
-onAnyBasePower(basePower, attacker, defender, move) [on any Pokémon]
+onFoeBasePower(basePower, attacker, defender, move) [on foe Pok&‌eacute;mon]
+onAnyBasePower(basePower, attacker, defender, move) [on any Pok&‌eacute;mon]
 ```
 
 Fired while calculating a move's base power. Return the modified
@@ -611,7 +611,7 @@ base power.
 
 ```js
 onModifyMove(user, target, move) [on user]
-onFoeModifyMove(user, target, move) [on foe Pokémon]
+onFoeModifyMove(user, target, move) [on foe Pok&‌eacute;mon]
 ```
 
 Fired before a pokemon uses a move.
