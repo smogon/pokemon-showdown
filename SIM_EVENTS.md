@@ -106,9 +106,13 @@ Output | The return value of the event is passed to other functions. The event i
 ### Event propagation
 
 Event propagation is the mechanism by which multiple effects have their event handlers
-called when a global event is run. The propagation may be vertical, horizontal, or of
-the *sourceEffect* type. While the event is being propagated, it can be stopped by the
+called when a global event is run. They are called in order, from higher to lower priority,
+as per their listed `onEventPriority` values.
+
+While the event is being run, its propagation can be stopped by the
 [cancellation mechanism](#event-cancellation).
+
+Propagation may be vertical, horizontal, or of the *sourceEffect* type.
 
 #### Vertical propagation
 
