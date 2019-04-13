@@ -645,13 +645,13 @@ let BattleFormatsData = {
 	},
 	chansey: {
 		inherit: true,
-		randomBattleMoves: ["wish", "softboiled", "protect", "toxic", "aromatherapy", "seismictoss", "counter", "thunderwave", "stealthrock"],
+		randomBattleMoves: ["wish", "softboiled", "toxic", "aromatherapy", "seismictoss", "counter", "thunderwave", "stealthrock"],
 		tier: "UUBL",
 		doublesTier: "NFE",
 	},
 	blissey: {
 		inherit: true,
-		randomBattleMoves: ["wish", "softboiled", "protect", "toxic", "aromatherapy", "seismictoss", "counter", "thunderwave", "stealthrock", "flamethrower"],
+		randomBattleMoves: ["wish", "softboiled", "protect", "toxic", "aromatherapy", "seismictoss", "thunderwave", "stealthrock", "flamethrower"],
 		tier: "OU",
 		doublesTier: "DUU",
 	},
@@ -1964,7 +1964,7 @@ let BattleFormatsData = {
 		battleOnly: true,
 	},
 	castformrainy: {
-		randomBattleMoves: ["raindance", "weatherball", "thunder", "hurricane"],
+		randomBattleMoves: ["raindance", "weatherball", "thunder", "icebeam"],
 		battleOnly: true,
 	},
 	castformsnowy: {
