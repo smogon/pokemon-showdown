@@ -427,14 +427,14 @@ let BattleAbilities = {
 		id: "thiccerfat",
 		name: "Thiccer Fat",
 		isNonstandard: "Custom",
-		onModifyAtkPriority: 6,
+		onSourceModifyAtkPriority: 6,
 		onSourceModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire') {
 				this.debug('Thiccer Fat weaken');
 				return this.chainModify(0.5);
 			}
 		},
-		onModifySpAPriority: 5,
+		onSourceModifySpAPriority: 5,
 		onSourceModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire') {
 				this.debug('Thiccer Fat weaken');
