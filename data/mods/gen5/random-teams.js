@@ -9,8 +9,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 	 * @param {RandomTeamsTypes.TeamDetails} [teamDetails]
 	 * @return {RandomTeamsTypes.RandomSet}
 	 */
-	randomSet(template, slot, teamDetails = {}) {
-		if (slot === undefined) slot = 1;
+	randomSet(template, slot = 1, teamDetails = {}) {
 		let baseTemplate = (template = this.getTemplate(template));
 		let species = template.species;
 
@@ -316,11 +315,6 @@ class RandomGen5Teams extends RandomGen6Teams {
 					rejected = true;
 				}
 
-				// Certain Pokemon should always have a recovery move
-				if (!counter.recovery && template.baseStats.hp >= 165 && movePool.includes('wish')) {
-					if (move.category === 'Status' || !hasType[move.type] && !move.damage) rejected = true;
-				}
-
 				// This move doesn't satisfy our setup requirements:
 				if ((move.category === 'Physical' && counter.setupType === 'Special') || (move.category === 'Special' && counter.setupType === 'Physical')) {
 					// Reject STABs last in case the setup type changes later on
@@ -351,6 +345,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 					(hasType['Ghost'] && !hasType['Dark'] && !counter['Ghost']) ||
 					(hasType['Ground'] && !counter['Ground'] && !hasMove['rest'] && !hasMove['sleeptalk']) ||
 					(hasType['Ice'] && !counter['Ice']) ||
+					(hasType['Rock'] && !counter['Rock'] && counter.setupType === 'Physical') ||
 					(hasType['Steel'] && hasAbility['Technician'] && !counter['Steel']) ||
 					(hasType['Water'] && (!counter['Water'] || !counter.stab)) ||
 					// @ts-ignore
@@ -359,9 +354,10 @@ class RandomGen5Teams extends RandomGen6Teams {
 					(hasAbility['Contrary'] && !counter['contrary'] && template.species !== 'Shuckle') ||
 					(hasAbility['Guts'] && hasType['Normal'] && movePool.includes('facade')) ||
 					(hasAbility['Slow Start'] && movePool.includes('substitute')) ||
-					(movePool.includes('technoblast') || template.requiredMove && movePool.includes(toId(template.requiredMove)))))) {
+					(!counter.recovery && (movePool.includes('softboiled') || template.nfe && !!counter['Status'] && (movePool.includes('recover') || movePool.includes('roost')))) ||
+					(template.requiredMove && movePool.includes(toId(template.requiredMove)))))) {
 					// Reject Status or non-STAB
-					if (!isSetup && !move.weather && moveid !== 'judgment' && moveid !== 'rest' && moveid !== 'sleeptalk' && moveid !== 'technoblast') {
+					if (!isSetup && !move.weather && !move.damage && !move.heal && moveid !== 'judgment' && moveid !== 'rest' && moveid !== 'sleeptalk') {
 						if (move.category === 'Status' || !hasType[move.type] || move.selfSwitch || move.basePower && move.basePower < 40 && !move.multihit) rejected = true;
 					}
 				}
@@ -590,13 +586,13 @@ class RandomGen5Teams extends RandomGen6Teams {
 			item = 'Rocky Helmet';
 		} else if (template.species === 'Palkia' && (hasMove['dracometeor'] || hasMove['spacialrend']) && hasMove['hydropump']) {
 			item = 'Lustrous Orb';
-		} else if (template.baseStats.hp + template.baseStats.def + template.baseStats.spd >= 285) {
+		} else if (template.baseStats.hp + template.baseStats.def + template.baseStats.spd > 275) {
 			item = 'Leftovers';
 		} else if (counter.Physical + counter.Special >= 3 && counter.setupType) {
 			item = hasMove['outrage'] ? 'Lum Berry' : 'Life Orb';
 		} else if (counter.Physical + counter.Special >= 4) {
 			item = counter['Normal'] ? 'Life Orb' : 'Expert Belt';
-		} else if (slot === 0 && ability !== 'Regenerator' && ability !== 'Sturdy' && !counter['recoil'] && !counter['recovery'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd < 285) {
+		} else if (slot === 0 && ability !== 'Regenerator' && ability !== 'Sturdy' && !counter['recoil'] && !counter['recovery'] && template.baseStats.hp + template.baseStats.def + template.baseStats.spd <= 275) {
 			item = 'Focus Sash';
 
 		// This is the "REALLY can't think of a good item" cutoff
@@ -604,8 +600,6 @@ class RandomGen5Teams extends RandomGen6Teams {
 			item = 'Black Sludge';
 		} else if (this.getEffectiveness('Rock', template) >= 1 || hasMove['dragontail']) {
 			item = 'Leftovers';
-		} else if (this.getImmunity('Ground', template) && this.getEffectiveness('Ground', template) >= 1 && ability !== 'Levitate' && !hasMove['magnetrise']) {
-			item = 'Air Balloon';
 		} else if (counter.Status <= 1 && ability !== 'Sturdy' && !hasMove['rapidspin']) {
 			item = 'Life Orb';
 		}
@@ -616,20 +610,20 @@ class RandomGen5Teams extends RandomGen6Teams {
 		}
 
 		let levelScale = {
-			Uber: 73,
-			OU: 75,
-			UUBL: 76,
-			UU: 77,
-			RUBL: 78,
-			RU: 79,
-			NUBL: 80,
-			NU: 81,
+			Uber: 78,
+			OU: 80,
+			UUBL: 81,
+			UU: 82,
+			RUBL: 83,
+			RU: 84,
+			NUBL: 85,
+			NU: 86,
 		};
 		let customScale = {
-			Blaziken: 74, 'Deoxys-Defense': 74, Landorus: 74, Manaphy: 74, Thundurus: 74, 'Tornadus-Therian': 74, Unown: 85,
+			Blaziken: 79, 'Deoxys-Defense': 79, Landorus: 79, Manaphy: 79, Thundurus: 79, 'Tornadus-Therian': 79, Unown: 100,
 		};
 		// @ts-ignore
-		let level = levelScale[template.tier] || 75;
+		let level = levelScale[template.tier] || 80;
 		// @ts-ignore
 		if (customScale[template.name]) level = customScale[template.name];
 
@@ -666,18 +660,19 @@ class RandomGen5Teams extends RandomGen6Teams {
 		let pokemonPool = [];
 		for (let id in this.data.FormatsData) {
 			let template = this.getTemplate(id);
-			if (template.gen > this.gen || template.isNonstandard || !template.randomBattleMoves || template.nfe && !allowedNFE.includes(template.species)) continue;
-			pokemonPool.push(id);
+			if (template.gen <= this.gen && (!template.nfe || allowedNFE.includes(template.species)) && !template.isNonstandard && !template.randomBattleMoves) {
+				pokemonPool.push(id);
+			}
 		}
 
+		/**@type {{[k: string]: number}} */
+		let baseFormes = {};
+		/**@type {{[k: string]: number}} */
+		let tierCount = {};
 		/**@type {{[k: string]: number}} */
 		let typeCount = {};
 		/**@type {{[k: string]: number}} */
 		let typeComboCount = {};
-		/**@type {{[k: string]: number}} */
-		let baseFormes = {};
-		let uberCount = 0;
-		let nuCount = 0;
 		/**@type {RandomTeamsTypes.TeamDetails} */
 		let teamDetails = {};
 
@@ -688,17 +683,6 @@ class RandomGen5Teams extends RandomGen6Teams {
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[template.baseSpecies]) continue;
 
-			let tier = template.tier;
-			switch (tier) {
-			case 'Uber':
-				// Ubers are limited to 2 but have a 20% chance of being added anyway.
-				if (uberCount > 1 && this.randomChance(4, 5)) continue;
-				break;
-			case 'NU':
-				// NUs are limited to 2 but have a 20% chance of being added anyway.
-				if (nuCount > 1 && this.randomChance(4, 5)) continue;
-			}
-
 			// Adjust rate for species with multiple formes
 			switch (template.baseSpecies) {
 			case 'Arceus':
@@ -707,15 +691,24 @@ class RandomGen5Teams extends RandomGen6Teams {
 			case 'Rotom':
 				if (this.randomChance(5, 6)) continue;
 				break;
-			case 'Genesect':
-				if (this.randomChance(4, 5)) continue;
-				break;
-			case 'Castform':
+			case 'Deoxys':
 				if (this.randomChance(3, 4)) continue;
 				break;
-			case 'Basculin': case 'Cherrim': case 'Meloetta':
+			case 'Castform': case 'Kyurem': case 'Wormadam':
+				if (this.randomChance(2, 3)) continue;
+				break;
+			case 'Basculin': case 'Cherrim': case 'Giratina': case 'Landorus': case 'Meloetta': case 'Shaymin': case 'Thundurus': case 'Tornadus':
 				if (this.randomChance(1, 2)) continue;
 				break;
+			}
+
+			let tier = template.tier;
+
+			// Limit two Pokemon per tier
+			if (!tierCount[tier]) {
+				tierCount[tier] = 1;
+			} else if (tierCount[tier] > 1) {
+				continue;
 			}
 
 			let types = template.types;
@@ -757,6 +750,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 
 			// Now that our Pokemon has passed all checks, we can increment our counters
 			baseFormes[template.baseSpecies] = 1;
+			tierCount[tier]++;
 
 			// Increment type counters
 			for (const type of types) {
@@ -772,15 +766,8 @@ class RandomGen5Teams extends RandomGen6Teams {
 				typeComboCount[typeCombo] = 1;
 			}
 
-			// Increment Uber/NU counters
-			if (tier === 'Uber') {
-				uberCount++;
-			} else if (tier === 'NU') {
-				nuCount++;
-			}
-
 			// Team details
-			if (set.ability === 'Snow Warning') teamDetails['hail'] = 1;
+			if (set.ability === 'Snow Warning' || set.moves.includes('hail')) teamDetails['hail'] = 1;
 			if (set.ability === 'Drizzle' || set.moves.includes('raindance')) teamDetails['rain'] = 1;
 			if (set.ability === 'Sand Stream') teamDetails['sand'] = 1;
 			if (set.moves.includes('stealthrock')) teamDetails['stealthRock'] = 1;
