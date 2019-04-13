@@ -108,7 +108,7 @@ Output | The return value of the event is passed to other functions. The event i
 Event propagation is the mechanism by which multiple effects have their event handlers
 called when a global event is run. They are called in order, from higher to lower priority,
 as per their listed Priority values. The priority should be specified with the key
-`&#96;${handlerName}Priority&#96;`, where `handlerName` is the full name of the associated event handler.
+`` `${handlerName}Priority` ``, where `handlerName` is the full name of the associated event handler.
 
 While the event is being run, its propagation can be stopped by the
 [cancellation mechanism](#event-cancellation).
