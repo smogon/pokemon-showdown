@@ -110,7 +110,9 @@ Cancellation is triggered from any event handler by returning any of the cancell
 ### Priority events
 
 Priority events are an special type of global events. These will treat any value other than `undefined`
-as a cancellation token. The only priority event currently defined is `RedirectTarget`.
+as a cancellation token. Therefore, only the first non-void event handler will be executed.
+
+The only priority event currently defined is `RedirectTarget`.
 
 ### Relay variables
 
