@@ -7,6 +7,7 @@
 	- [Event output](#event-output)
 	- [Event propagation](#event-propagation)
 	- [Event cancellation](#event-cancellation)
+	- [Priority events](#priority-events)
 	- [Relay variables](#relay-variables)
 	- [The `chainModify` pattern](#the-chainmodify-pattern)
 3. [List of events](#list-of-events)
@@ -65,9 +66,9 @@ There are 3 different ways in which Pokémon Showdown may consume the return val
 
 Consumed | Description| Examples
 ---------|------------|-------------------------------------------------------------------
-None | The event is run for its side effects. | `onAfterBoost`, `onFaint`, `onSwitchIn`, `onUpdate`
-[Cancellation token](#event-cancellation) | If the event is cancelled, the ongoing battle action is cancelled as well. | `onDragOut`, `onTryAddVolatile`, `onTryHit`, `onTryImmunity`
-Output | The return value of the event is passed to other functions. The event is very likely to support a [relay variable](#relay-variables). | `onBasePower`, `onDamage`, `onModifyAtk`, `onModifyCritRatio`
+None | The event is run for its side effects. | `AfterBoost`, `Faint`, `SwitchIn`, `Update`
+[Cancellation token](#event-cancellation) | If the event is cancelled, the ongoing battle action is cancelled as well. | `DragOut`, `TryAddVolatile`, `TryHit`, `TryImmunity`
+Output | The return value of the event is passed to other functions. The event is very likely to support a [relay variable](#relay-variables). | `BasePower`, `Damage`, `ModifyAtk`, `ModifyCritRatio`
 
 ### Event propagation
 
@@ -85,6 +86,7 @@ Events which target a Pokémon also propagate from it to other active Pokémon o
 
 Propagates to | Event handler pattern | Event handler examples
 --------------|-----------------------|----------------------------------
+Original target | `onEvent` | `onSetStatus`, `onUpdate`
 Event source | `onSourceEvent` | `onSourceModifyDamage`, `onSourceTryHeal`
 Foe Pokémon | `onFoeEvent` | `onFoeBasePower`, `onFoeTryMove`
 Allied Pokémon | `onAllyEvent` | `onAllyBoost`, `onAllyTryHitSide`
@@ -104,6 +106,11 @@ Cancellation is triggered from any event handler by returning any of the cancell
 `this.FAIL`, or `this.SILENT_FAIL` (where `this` is the active `Battle`).
 
 **NOTE**: In legacy code, the cancellation tokens are hardcoded as `false` and `null`.
+
+### Priority events
+
+Priority events are an special type of global events. These will treat any value other than `undefined`
+as a cancellation token. The only priority event currently defined is `RedirectTarget`.
 
 ### Relay variables
 
