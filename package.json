@@ -21,10 +21,12 @@
   "scripts": {
     "start": "node pokemon-showdown start",
     "build": "node build",
-    "test": "eslint --cache . && tslint --project . && node build && mocha -i -g \"\\(slow\\)\" && tsc",
-    "fulltest": "eslint --cache . && tslint --project . && node build && mocha && tsc",
     "tsc": "tsc",
-    "lint": "eslint --cache ."
+    "lint": "eslint --cache . && tslint --project .",
+    "pretest": "npm run lint && npm run build",
+    "test": "mocha",
+    "posttest": "npm run tsc",
+    "fulltest": "npm run pretest && mocha -g '$^' && npm run posttest"
   },
   "husky": {
     "hooks": {
