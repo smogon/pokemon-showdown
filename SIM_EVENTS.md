@@ -6,6 +6,9 @@
 2. [Events](#events)
 	- [Event output](#event-output)
 	- [Event propagation](#event-propagation)
+		- [Vertical propagation](#vertical-propagation)
+		- [Horizontal propagation](#horizontal-propagation)
+		- [sourceEffect propagation](#sourceeffect-propagation)
 	- [Event cancellation](#event-cancellation)
 	- [Priority events](#priority-events)
 	- [Relay variables](#relay-variables)
@@ -56,9 +59,38 @@ However, *slot conditions* don't support this feature yet.
 
 Nearly every effect has some sort of event listener, and each action in the battle
 fires an event. There are two main types of events: [single events](#single-events)
-and [global events](#global-events). The key difference between them is that global
-events propagate, while single events don't. [Event propagation](#event-propagation)
-shall be described later.
+and [global events](#global-events). The key difference between them is that *global
+events propagate, while single events don't*.
+
+The typical usage of an event is through `onEvent` handlers on effects which target the
+so-called *event target*. For example, the *Item single event* `Primal` is run on a Pokémon,
+and will invoke the `onPrimal` event handler of the held item —if there is one. As for
+global events run on a Pokémon, they will call the associated event handlers according to
+the [event propagation](#event-propagation) mechanism, which shall be described later.
+
+### Event input
+
+Pokémon Showdown event handlers have widely different event signatures. However, for the
+event system there are only two major differing signatures, which are the following.
+
+```js
+onEvent(target, source, sourceEffect) {}
+onEvent(relayVar, target, source, sourceEffect) {}
+```
+
+In these definitions, `target` and `source` correspond to the *event target* and *event source*
+respectively, and are *not* to be confused with target and source of a move or other actions.
+For instance, the events `ModifyMove` and `TryHit` work as follows:
+
+Event name   | Event target | Event source | Source effect
+-------------|--------------|--------------|--------------
+`ModifyMove` | Move user    | Move target  | Active move
+`TryHit`     | Move target  | Move user    | Active move
+
+The `relayVar` parameter is described in the [Relay variables](#relay-variables) section.
+
+**NOTE**: Moves passed to events (e.g. as `sourceEffect`) are always copies.
+These are called "Active Moves", and can be safely modified.
 
 ### Event output
 
@@ -72,21 +104,28 @@ Output | The return value of the event is passed to other functions. The event i
 
 ### Event propagation
 
+#### Vertical propagation
+
 Since effects that target a side also target every Pokémon on it, a [global event](#global-events)
 that fires on a Pokémon will also fire on that Pokémon's side. So, for instance, the
 global event `TryHit`, which is run on the target of a move, is also intercepted
 by the `onTryHit` handler of [Mat Block](https://dex.pokemonshowdown.com/moves/matblock),
-a side condition on the target's side.
+a side condition on the target's side. This phenomenon is *event propagation* in action.
 
 Similarly, any event that fires on a side will also fire on the field. So, for instance,
 the global `Effectiveness` event can be captured by
 [Delta Stream](https://dex.pokemonshowdown.com/abilities/deltastream), a weather condition.
 
+Overall, this mechanism follows the direction:
+
+> Pokémon → Slot → Side → Field
+
+#### Horizontal propagation
+
 Events which target a Pokémon also propagate from it to other active Pokémon on the field:
 
 Propagates to | Event handler pattern | Event handler examples
 --------------|-----------------------|----------------------------------
-Original target | `onEvent` | `onSetStatus`, `onUpdate`
 Event source | `onSourceEvent` | `onSourceModifyDamage`, `onSourceTryHeal`
 Foe Pokémon | `onFoeEvent` | `onFoeBasePower`, `onFoeTryMove`
 Allied Pokémon | `onAllyEvent` | `onAllyBoost`, `onAllyTryHitSide`
@@ -95,6 +134,11 @@ Any Pokémon | `onAnyEvent` | `onAnyBasePower`, `onAnySetWeather`
 **NOTE**: [Single events](#single-events) don't propagate, and are only fired on their direct target.
 
 **NOTE**: Event propagation can be [cancelled](#event-cancellation).
+
+#### `sourceEffect` propagation
+
+This is an **exceptional** mechanism. The `BasePower` event also propagates to the
+`sourceEffect` of the event, i.e. the active move, and its event handler has maximum priority.
 
 ### Event cancellation
 
@@ -247,9 +291,6 @@ during steps 1-4 above.
 Refer to [dev-tools/globals.ts](https://github.com/Zarel/Pokemon-Showdown/blob/master/dev-tools/globals.ts) for a full list,
 including function signatures, of the single events available on abilities, moves, items or statuses, corresponding to the
 `AbilityEventMethods`, `MoveEventMethods`, `ItemEventMethods` and `PureEffectEventMethods` interfaces.
-
-Single events run on moves are passed copies of the move objects. These are called
-"Active Moves", and can be safely modified.
 
 #### Abilities and items
 
