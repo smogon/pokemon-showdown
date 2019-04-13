@@ -98,7 +98,7 @@ Any Pokémon | `onAnyEvent` | `onAnyBasePower`, `onAnySetWeather`
 
 ### Event cancellation
 
-An event can be cancelled by any event handlers, which entails the following:
+A global event can be cancelled by any event handlers, which entails the following:
 - The execution of any pending event handlers will be aborted.
 - The global return value of the event will be set to the raised cancellation token.
 
