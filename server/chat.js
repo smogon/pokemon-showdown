@@ -596,11 +596,10 @@ class CommandContext extends MessageContext {
 				Chat.sendPM(message, this.user, this.pmTarget);
 			} else {
 				this.room.add(`|c|${this.user.getIdentity(this.room.id)}|${message}`);
+				if (this.room && this.room.game && this.room.game.onLogMessage) {
+					this.room.game.onLogMessage(message, this.user);
+				}
 			}
-		}
-
-		if (this.room && this.room.game && this.room.game.onLogMessage) {
-			this.room.game.onLogMessage(message, this.user);
 		}
 
 		this.update();
