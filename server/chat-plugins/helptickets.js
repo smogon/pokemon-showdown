@@ -222,7 +222,8 @@ class HelpTicket extends Rooms.RoomGame {
 			entry.shift();
 			let user = entry.shift();
 			let message = entry.join('|');
-			hoverText.push(message.startsWith('/log ') ? message.slice(5) : `${user}: ${message}`);
+			message = message.startsWith('/log ') ? message.slice(5) : `${user}: ${message}`;
+			hoverText.push(Chat.html`${message}`);
 			if (hoverText.length >= 3) break;
 		}
 		if (!hoverText.length) return `title="The ticket creator has not spoken yet."`;
