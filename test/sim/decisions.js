@@ -1,7 +1,7 @@
 'use strict';
 
-const assert = require('./../../assert');
-const common = require('./../../common');
+const assert = require('./../assert');
+const common = require('./../common');
 
 const BASE_TEAM_ORDER = [1, 2, 3, 4, 5, 6];
 

@@ -1,6 +1,6 @@
 'use strict';
 
-const assert = require('./../../assert');
+const assert = require('./../assert');
 
 describe('Mod loader', function () {
 	it.skip('should work fine in any order', function () {
