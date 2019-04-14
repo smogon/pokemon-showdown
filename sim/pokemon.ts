@@ -382,7 +382,7 @@ export class Pokemon {
 		this.m = {};
 	}
 
-	get moves() {
+	get moves(): readonly string[] {
 		return this.moveSlots.map(moveSlot => moveSlot.id);
 	}
 
@@ -923,7 +923,6 @@ export class Pokemon {
 				used: false,
 				virtual: true,
 			});
-			this.moves.push(toId(moveName));
 		}
 		let boostName: BoostName;
 		for (boostName in pokemon.boosts) {

@@ -1405,7 +1405,6 @@ let BattleMovedex = {
 						used: false,
 						virtual: true,
 					});
-					pokemon.moves.push(move.id);
 				}
 			},
 			onModifySpAPriority: 1,
@@ -1439,7 +1438,6 @@ let BattleMovedex = {
 						used: false,
 						virtual: true,
 					});
-					pokemon.moves.push(move.id);
 				}
 			},
 		},
@@ -1660,7 +1658,6 @@ let BattleMovedex = {
 							used: false,
 							virtual: true,
 						});
-						pokemon.moves.push(move.id);
 					}
 				}
 			},
