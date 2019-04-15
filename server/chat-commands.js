@@ -659,7 +659,15 @@ const commands = {
 	afk: 'away',
 	brb: 'away',
 	away(target, room, user, connection, cmd) {
-		user.setAway(toId(cmd));
+		let awayMessage = toId(cmd);
+		if (target) {
+			awayMessage = Chat.namefilter(target, user);
+			if (!awayMessage) return;
+		} else {
+			if (awayMessage === 'afk' || awayMessage === 'brb') awayMessage = awayMessage.toUpperCase();
+			awayMessage = `${awayMessage[0].toUpperCase()}${awayMessage.slice(1)}`;
+		}
+		user.setAway(awayMessage);
 		this.sendReply("You are now marked as away. Send a message or use /back to indicate you are back.");
 	},
 	awayhelp: [`/away - Marks you as away. Send a message or use /back to indicate you are back.`],
@@ -4300,7 +4308,7 @@ const commands = {
 				avatar: targetUser.avatar,
 				group: targetUser.group,
 				autoconfirmed: !!targetUser.autoconfirmed,
-				away: targetUser.isAway,
+				status: targetUser.getStatus(),
 				rooms: roomList,
 			};
 			if (targetUser.userid !== target) userdetails.name = targetUser.name;

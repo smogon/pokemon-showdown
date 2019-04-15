@@ -561,6 +561,8 @@ class CommandContext extends MessageContext {
 
 		let commandHandler = this.splitCommand(message);
 
+		if (this.user.isAway && toId(this.user.status) === 'idle') this.user.setBack();
+
 		if (typeof commandHandler === 'function') {
 			message = this.run(commandHandler);
 		} else {
@@ -597,6 +599,7 @@ class CommandContext extends MessageContext {
 			if (this.pmTarget) {
 				Chat.sendPM(message, this.user, this.pmTarget);
 			} else {
+				this.user.setBack();
 				this.room.add(`|c|${this.user.getIdentity(this.room.id)}|${message}`);
 				if (this.room && this.room.game && this.room.game.onLogMessage) {
 					this.room.game.onLogMessage(message, this.user);

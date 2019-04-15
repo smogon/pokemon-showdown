@@ -536,8 +536,10 @@ class User extends Chat.MessageContext {
 		// Used in punishments
 		/** @type {string} */
 		this.trackRename = '';
+		/** @type {boolean} */
+		this.isAway = false;
 		/** @type {string} */
-		this.isAway = '';
+		this.status = '';
 		// initialize
 		Users.add(this);
 	}
@@ -1007,7 +1009,7 @@ class User extends Chat.MessageContext {
 	 * @param {string[]} updated the settings which have been updated or none for all settings.
 	 */
 	getUpdateuserText(...updated) {
-		const away = this.isAway ? `@!${this.isAway}` : '';
+		const status = this.getStatus() ? `@${this.getStatus()}` : '';
 		const named = this.named ? 1 : 0;
 		const diff = {};
 		const settings = updated.length ? updated : SETTINGS;
@@ -1015,7 +1017,7 @@ class User extends Chat.MessageContext {
 			// @ts-ignore - dynamic lookup
 			diff[setting] = this[setting];
 		}
-		return `|updateuser|${this.name}${away}|${named}|${this.avatar}|${JSON.stringify(diff)}`;
+		return `|updateuser|${this.name}${status}|${named}|${this.avatar}|${JSON.stringify(diff)}`;
 	}
 	/**
 	 * @param {string[]} updated the settings which have been updated or none for all settings.
@@ -1457,8 +1459,6 @@ class User extends Chat.MessageContext {
 	chat(message, room, connection) {
 		let now = Date.now();
 
-		if (!message.startsWith('/cmd')) this.setBack();
-
 		if (message.startsWith('/cmd userdetails') || message.startsWith('>> ') || this.isSysop) {
 			// certain commands are exempt from the queue
 			Monitor.activeIp = connection.ip;
@@ -1555,13 +1555,18 @@ class User extends Chat.MessageContext {
 	 * @param {string} message
 	 */
 	setAway(message) {
-		this.isAway = message;
+		this.isAway = true;
+		this.status = message;
 		this.updateIdentity();
 	}
 	setBack() {
 		if (!this.isAway) return;
-		this.isAway = '';
+		this.isAway = false;
 		this.updateIdentity();
+	}
+	getStatus() {
+		if (!this.status) return;
+		return (this.isAway ? '!' : '') + this.status;
 	}
 	destroy() {
 		// deallocate user
@@ -1603,7 +1608,7 @@ function pruneInactive(threshold) {
 		const afkTimer = (user.can('lock') && !user.can('bypassall')) ? STAFF_AFK_TIMER : AFK_TIMER;
 		if (user.group !== '*' && !user.connections.some(connection => now - connection.lastActiveTime < afkTimer)) {
 			user.popup(`You have been inactive for over ${afkTimer / MINUTES} minutes, and have been marked as away as a result. To mark yourself as back, send a message in chat, or use the /back command.`);
-			user.setAway('afk');
+			user.setAway('Idle');
 		}
 		if (user.connected) continue;
 		if ((now - user.lastConnected) > threshold) {
