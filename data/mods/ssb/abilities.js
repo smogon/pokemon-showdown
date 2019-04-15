@@ -90,17 +90,6 @@ let BattleAbilities = {
 			}
 		},
 	},
-	// Bimp
-	learnsomethingnew: {
-		desc: "This Pokemon's Attack is raised by one stage when another Pokemon faints.",
-		shortDesc: "This Pokemon's Attack is raised by 1 stage when another Pokemon faints.",
-		id: "learnsomethingnew",
-		name: "Learn Something New!",
-		isNonstandard: "Custom",
-		onAnyFaint() {
-			this.boost({atk: 1}, this.effectData.target);
-		},
-	},
 	// Brandon
 	gracideamastery: {
 		desc: "If this Pokemon is a Shaymin, it will transform into Shaymin-S before using a physical or special attack. After using the attack, if this Pokemon was originally in its base forme, it will transform back into Shaymin.",

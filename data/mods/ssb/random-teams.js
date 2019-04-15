@@ -126,12 +126,6 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Food Rush',
 				evs: {hp: 4, atk: 252, spd: 252}, nature: 'Adamant',
 			},
-			'Bimp': {
-				species: 'Stakataka', ability: 'Learn Something New!', item: 'Rockium Z', gender: 'M',
-				moves: ['Gyro Ball', 'Stone Edge', 'Earthquake'],
-				signatureMove: 'Trivia Room',
-				evs: {hp: 252, atk: 252, spd: 4}, ivs: {spe: 0}, nature: 'Brave',
-			},
 			'bobochan': {
 				species: 'Emolga', ability: 'Huge Power', item: 'Choice Band', gender: 'M',
 				moves: ['Brave Bird', ['Knock Off', 'Encore'], 'U-turn'],
