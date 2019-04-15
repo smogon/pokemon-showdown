@@ -1865,7 +1865,7 @@
 				"species": "Pelipper",
 				"item": ["Damp Rock"],
 				"ability": ["Drizzle"],
-				"evs": {"hp": 248, "def": 36, "spd": 284},
+				"evs": {"hp": 248, "def": 36, "spd": 224},
 				"nature": "Bold",
 				"moves": [["Scald"], ["U-turn"], ["Roost"], ["Hurricane", "Defog"]]
 			}]
