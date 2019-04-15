@@ -483,7 +483,7 @@ class RandomTeams extends Dex.ModdedDex {
 		];
 		// Moves which boost Attack AND Special Attack:
 		let MixedSetup = [
-			'growth', 'happyhour', 'shellsmash', 'workup',
+			'growth', 'happyhour', 'holdhands', 'shellsmash', 'workup',
 		];
 		// Moves which boost Speed:
 		let SpeedSetup = [
@@ -718,7 +718,7 @@ class RandomTeams extends Dex.ModdedDex {
 
 				switch (moveid) {
 				// Not very useful without their supporting moves
-				case 'clangingscales': case 'electricterrain': case 'happyhour':
+				case 'clangingscales': case 'electricterrain': case 'happyhour': case 'holdhands':
 					if (teamDetails.zMove || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
 					break;
 				case 'cottonguard': case 'defendorder':
@@ -893,10 +893,7 @@ class RandomTeams extends Dex.ModdedDex {
 					if (hasAbility['Galvanize'] && !!counter['Normal']) rejected = true;
 					break;
 				case 'dazzlinggleam':
-					if (hasMove['playrough'] && counter.setupType !== 'Special') rejected = true;
-					break;
-				case 'drainingkiss':
-					if (hasMove['dazzlinggleam'] || counter.setupType !== 'Special' && !hasAbility['Triage']) rejected = true;
+					if (hasMove['drainingkiss'] || hasMove['playrough'] && counter.setupType !== 'Special') rejected = true;
 					break;
 				case 'moonblast':
 					if (isDoubles && hasMove['dazzlinggleam']) rejected = true;
@@ -1010,7 +1007,7 @@ class RandomTeams extends Dex.ModdedDex {
 					if (hasMove['rest'] || !counter.stab && counter.damagingMoves.length < 2) rejected = true;
 					break;
 				case 'hypervoice':
-					if (hasMove['blizzard'] || hasMove['naturepower'] || hasMove['return']) rejected = true;
+					if (hasMove['blizzard'] || hasMove['return']) rejected = true;
 					break;
 				case 'judgment':
 					if (counter.setupType !== 'Special' && counter.stab > 1) rejected = true;
@@ -1250,6 +1247,8 @@ class RandomTeams extends Dex.ModdedDex {
 					rejectAbility = !hasMove['raindance'] && !teamDetails['rain'];
 				} else if (ability === 'Ice Body' || ability === 'Slush Rush' || ability === 'Snow Cloak') {
 					rejectAbility = !teamDetails['hail'];
+				} else if (ability === 'Intimidate') {
+					rejectAbility = hasMove['bodyslam'] || abilities.includes('Reckless') && counter['recoil'] > 1;
 				} else if (ability === 'Lightning Rod') {
 					rejectAbility = template.types.includes('Ground');
 				} else if (ability === 'Limber') {
@@ -1281,9 +1280,9 @@ class RandomTeams extends Dex.ModdedDex {
 				} else if (ability === 'Scrappy') {
 					rejectAbility = !template.types.includes('Normal');
 				} else if (ability === 'Serene Grace') {
-					rejectAbility = !counter['serenegrace'] || template.species === 'Blissey' || template.species === 'Togetic';
+					rejectAbility = !counter['serenegrace'] || template.species === 'Blissey';
 				} else if (ability === 'Sheer Force') {
-					rejectAbility = !counter['sheerforce'] || template.isMega || (abilities.includes('Iron Fist') && counter['ironfist'] > counter['sheerforce']);
+					rejectAbility = !counter['sheerforce'] || hasMove['doubleedge'] || template.isMega || (abilities.includes('Iron Fist') && counter['ironfist'] > counter['sheerforce']);
 				} else if (ability === 'Simple') {
 					rejectAbility = !counter.setupType && !hasMove['cosmicpower'] && !hasMove['flamecharge'];
 				} else if (ability === 'Snow Warning') {
@@ -1470,7 +1469,7 @@ class RandomTeams extends Dex.ModdedDex {
 			item = 'Groundium Z';
 		} else if (hasMove['electricterrain']) {
 			item = 'Electrium Z';
-		} else if (hasMove['happyhour']) {
+		} else if (hasMove['happyhour'] || hasMove['holdhands']) {
 			item = 'Normalium Z';
 		} else if (hasMove['hydropump'] && ability === 'Battle Bond' && hasMove['uturn'] && !teamDetails.zMove) {
 			item = 'Waterium Z';
@@ -1484,7 +1483,7 @@ class RandomTeams extends Dex.ModdedDex {
 			item = 'Flyinium Z';
 		} else if (hasMove['solarbeam'] && ability !== 'Drought' && !hasMove['sunnyday'] && !teamDetails['sun']) {
 			item = !teamDetails.zMove ? 'Grassium Z' : 'Power Herb';
-		} else if ((ability === 'Magic Guard' || ability === 'Sheer Force') && counter.damagingMoves.length > 1) {
+		} else if ((ability === 'Magic Guard' && counter.damagingMoves.length > 1) || (ability === 'Sheer Force' && !!counter['sheerforce'])) {
 			item = 'Life Orb';
 		} else if (hasMove['rest'] && !hasMove['sleeptalk'] && ability !== 'Hydration' && ability !== 'Natural Cure' && ability !== 'Shed Skin') {
 			item = 'Chesto Berry';

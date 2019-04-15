@@ -263,6 +263,9 @@ class RandomGen5Teams extends RandomGen6Teams {
 				case 'endeavor':
 					if (slot > 0) rejected = true;
 					break;
+				case 'judgment':
+					if (counter.setupType !== 'Special' && counter.stab > 1) rejected = true;
+					break;
 				case 'return':
 					if (hasMove['bodyslam'] || hasMove['facade'] || hasMove['doubleedge'] || hasMove['tailslap']) rejected = true;
 					break;

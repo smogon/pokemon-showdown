@@ -287,10 +287,7 @@ class RandomGen6Teams extends RandomTeams {
 					if (hasMove['discharge'] || (hasMove['raindance'] && hasMove['thunder']) || (hasMove['voltswitch'] && hasMove['wildcharge'])) rejected = true;
 					break;
 				case 'dazzlinggleam':
-					if (hasMove['playrough'] && counter.setupType !== 'Special') rejected = true;
-					break;
-				case 'drainingkiss':
-					if (hasMove['dazzlinggleam'] || counter.setupType !== 'Special') rejected = true;
+					if (hasMove['drainingkiss'] || hasMove['playrough'] && counter.setupType !== 'Special') rejected = true;
 					break;
 				case 'aurasphere': case 'focusblast':
 					if ((hasMove['closecombat'] || hasMove['superpower']) && counter.setupType !== 'Special') rejected = true;
@@ -388,7 +385,7 @@ class RandomGen6Teams extends RandomTeams {
 					if (hasMove['rest'] || !counter.stab && counter.damagingMoves.length < 2) rejected = true;
 					break;
 				case 'hypervoice':
-					if (hasMove['blizzard'] || hasMove['naturepower'] || hasMove['return']) rejected = true;
+					if (hasMove['blizzard'] || hasMove['return']) rejected = true;
 					break;
 				case 'judgment':
 					if (counter.setupType !== 'Special' && counter.stab > 1) rejected = true;
@@ -623,6 +620,8 @@ class RandomGen6Teams extends RandomTeams {
 					rejectAbility = !hasMove['raindance'] && !teamDetails['rain'];
 				} else if (ability === 'Ice Body' || ability === 'Snow Cloak') {
 					rejectAbility = !teamDetails['hail'];
+				} else if (ability === 'Intimidate') {
+					rejectAbility = hasMove['bodyslam'] || abilities.includes('Reckless') && counter['recoil'] > 1;
 				} else if (ability === 'Lightning Rod') {
 					rejectAbility = template.types.includes('Ground');
 				} else if (ability === 'Limber') {
@@ -648,9 +647,9 @@ class RandomGen6Teams extends RandomTeams {
 				} else if (ability === 'Scrappy') {
 					rejectAbility = !template.types.includes('Normal');
 				} else if (ability === 'Serene Grace') {
-					rejectAbility = !counter['serenegrace'] || template.species === 'Blissey' || template.species === 'Togetic';
+					rejectAbility = !counter['serenegrace'] || template.species === 'Blissey';
 				} else if (ability === 'Sheer Force') {
-					rejectAbility = !counter['sheerforce'] || template.isMega || (abilities.includes('Iron Fist') && counter['ironfist'] > counter['sheerforce']);
+					rejectAbility = !counter['sheerforce'] || hasMove['doubleedge'] || template.isMega || (abilities.includes('Iron Fist') && counter['ironfist'] > counter['sheerforce']);
 				} else if (ability === 'Simple') {
 					rejectAbility = !counter.setupType && !hasMove['cosmicpower'] && !hasMove['flamecharge'];
 				} else if (ability === 'Snow Warning') {
@@ -767,7 +766,7 @@ class RandomGen6Teams extends RandomTeams {
 			item = 'Power Herb';
 		} else if (hasMove['shellsmash']) {
 			item = (ability === 'Solid Rock' && counter['priority']) ? 'Weakness Policy' : 'White Herb';
-		} else if ((ability === 'Magic Guard' || ability === 'Sheer Force') && counter.damagingMoves.length > 1) {
+		} else if ((ability === 'Magic Guard' && counter.damagingMoves.length > 1) || (ability === 'Sheer Force' && !!counter['sheerforce'])) {
 			item = 'Life Orb';
 		} else if (ability === 'Poison Heal' || ability === 'Toxic Boost') {
 			item = 'Toxic Orb';

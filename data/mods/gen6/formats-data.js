@@ -40,7 +40,7 @@ let BattleFormatsData = {
 	},
 	charizard: {
 		inherit: true,
-		randomBattleMoves: ["fireblast", "airslash", "focusblast", "roost", "swordsdance", "flareblitz", "acrobatics", "earthquake", "willowisp"],
+		randomBattleMoves: ["fireblast", "airslash", "roost", "swordsdance", "flareblitz", "acrobatics", "earthquake", "willowisp"],
 		randomDoubleBattleMoves: ["heatwave", "fireblast", "airslash", "overheat", "dragonpulse", "roost", "tailwind", "protect"],
 		tier: "NU",
 		doublesTier: "(DUU)",
@@ -3223,8 +3223,8 @@ let BattleFormatsData = {
 	},
 	azelf: {
 		inherit: true,
-		randomBattleMoves: ["nastyplot", "psyshock", "fireblast", "dazzlinggleam", "stealthrock", "knockoff", "taunt", "explosion", "uturn"],
-		randomDoubleBattleMoves: ["nastyplot", "psychic", "fireblast", "thunderbolt", "icepunch", "knockoff", "zenheadbutt", "uturn", "trick", "taunt", "protect", "dazzlinggleam"],
+		randomBattleMoves: ["nastyplot", "psyshock", "fireblast", "dazzlinggleam", "stealthrock", "knockoff", "taunt", "explosion"],
+		randomDoubleBattleMoves: ["nastyplot", "psychic", "fireblast", "thunderbolt", "icepunch", "knockoff", "zenheadbutt", "uturn", "taunt", "protect", "dazzlinggleam"],
 		tier: "OU",
 		doublesTier: "(DUU)",
 	},
@@ -4578,7 +4578,7 @@ let BattleFormatsData = {
 	},
 	heliolisk: {
 		randomBattleMoves: ["raindance", "thunder", "hypervoice", "surf", "darkpulse", "hiddenpowerice", "voltswitch", "thunderbolt"],
-		randomDoubleBattleMoves: ["surf", "voltswitch", "hiddenpowerice", "raindance", "thunder", "darkpulse", "thunderbolt", "electricterrain", "protect"],
+		randomDoubleBattleMoves: ["surf", "voltswitch", "hiddenpowerice", "raindance", "thunder", "darkpulse", "thunderbolt", "protect"],
 		tier: "UU",
 		doublesTier: "(DUU)",
 	},
@@ -4595,7 +4595,7 @@ let BattleFormatsData = {
 	},
 	amaura: {
 		inherit: true,
-		randomBattleMoves: ["naturepower", "hypervoice", "ancientpower", "thunderbolt", "darkpulse", "thunderwave", "dragontail", "flashcannon"],
+		randomBattleMoves: ["hypervoice", "ancientpower", "thunderbolt", "darkpulse", "thunderwave", "dragontail", "flashcannon"],
 		tier: "LC",
 	},
 	aurorus: {
