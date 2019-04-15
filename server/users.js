@@ -1606,9 +1606,9 @@ class User extends Chat.MessageContext {
 function pruneInactive(threshold) {
 	let now = Date.now();
 	for (const user of users.values()) {
-		const afkTimer = (user.can('lock') && !user.can('bypassall')) ? STAFF_IDLE_TIMER : IDLE_TIMER;
-		if (user.group !== '*' && !user.connections.some(connection => now - connection.lastActiveTime < afkTimer)) {
-			user.popup(`You have been inactive for over ${afkTimer / MINUTES} minutes, and have been marked as idle as a result. To mark yourself as back, send a message in chat, or use the /back command.`);
+		const awayTimer = (user.can('lock') && !user.can('bypassall')) ? STAFF_IDLE_TIMER : IDLE_TIMER;
+		if (user.group !== '*' && !user.connections.some(connection => now - connection.lastActiveTime < awayTimer)) {
+			user.popup(`You have been inactive for over ${awayTimer / MINUTES} minutes, and have been marked as idle as a result. To mark yourself as back, send a message in chat, or use the /back command.`);
 			user.setAway('Idle');
 		}
 		if (user.connected) continue;
