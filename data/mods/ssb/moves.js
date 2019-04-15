@@ -521,61 +521,6 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Normal",
 	},
-	// Bimp
-	triviaroom: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "For 5 turns, the user is immune to Ground-type moves and the effects of Arena Trap, and the Speed of every Pokemon is recalculated for the purposes of determining turn order: every Pokemon's Speed is considered to be 10000 - its normal Speed, and if this value is greater than 8191, 8192 is subtracted from it. The effects of Ingrain, Smack Down, and Thousand Arrows do not cause this move to fail, but they still ground the user, as does Iron Ball. This move does not fail if the user is under the effect of Magnet Rise or this move, but it does not extend the duration. This move fails if the user is not Bimp.",
-		shortDesc: "Bimp: 5 turns: slower Pokemon move first, user levitates.",
-		id: "triviaroom",
-		name: "Trivia Room",
-		isNonstandard: "Custom",
-		pp: 5,
-		priority: -7,
-		flags: {},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onTryHit(target, source) {
-			if (source.name !== 'Bimp') {
-				this.add('-fail', source);
-				this.hint("Only Bimp can use Trivia Room.");
-				return null;
-			}
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, "Trick Room", source);
-		},
-		pseudoWeather: 'triviaroom',
-		effect: {
-			duration: 5,
-			durationCallback(source, effect) {
-				if (source && source.hasAbility('persistent')) {
-					this.add('-activate', source, 'ability: Persistent', effect);
-					return 7;
-				}
-				return 5;
-			},
-			onStart(target, source) {
-				this.add('-fieldstart', 'move: Trivia Room', '[of] ' + source);
-				this.add('-message', `${source.name} is levitating due to its big trivia brain!`);
-			},
-			onRestart(target, source) {
-				this.field.removePseudoWeather('triviaroom');
-			},
-			// Speed modification is changed in Pokemon.getActionSpeed() in mods/seasonal/scripts.js
-			// Levitation is handled in Pokemon.isGrounded in mods/seasonal/scripts.js
-			onResidualOrder: 23,
-			onEnd() {
-				this.add('-fieldend', 'move: Trivia Room');
-				this.add('-message', `Certain Pokemon are no longer levitating.`);
-			},
-		},
-		secondary: null,
-		target: "self",
-		type: "Psychic",
-	},
 	// bobochan
 	thousandcircuitoverload: {
 		accuracy: 100,

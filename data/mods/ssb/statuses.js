@@ -228,18 +228,6 @@ let BattleStatuses = {
 			this.add(`c|@biggie|It was all a dream`);
 		},
 	},
-	bimp: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|+Bimp|Ew it's Bimp -_-`);
-		},
-		onSwitchOut() {
-			this.add(`c|+Bimp|Brb getting Chick-Fil-A.`);
-		},
-		onFaint() {
-			this.add(`c|+Bimp|Well that was uneventful -_-`);
-		},
-	},
 	bobochan: {
 		noCopy: true,
 		onStart() {
