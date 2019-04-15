@@ -283,9 +283,11 @@ exports.commands = {
 		if (!(groupConfig && groupConfig.editprivacy)) return this.errorReply(`/ionext - Access denied.`);
 		if (this.meansNo(target)) {
 			user.inviteOnlyNextBattle = false;
+			user.update('inviteOnlyNextBattle');
 			this.sendReply("Your next battle will be publicly visible.");
 		} else {
 			user.inviteOnlyNextBattle = true;
+			user.update('inviteOnlyNextBattle');
 			this.sendReply("Your next battle will be invite-only.");
 		}
 	},
