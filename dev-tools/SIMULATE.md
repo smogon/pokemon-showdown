@@ -1,15 +1,16 @@
-# Harness
+# Simulate
 
-`harness.js` allows for running multiple random simulations of Pokemon battles
-for testing or benchmarking purposes. Without any arguments, `harness.js` will
-run 100 random battles and report any errors that occurred. The number of
-battles run can be configured through by passing the number as the sole argument
-to `harness.js`, or through the `--num` flag (see below).
-
-## Flags
+`simulate.js` allows for running multiple random simulations of Pokemon battles
+for testing or benchmarking purposes. Without any arguments, `simulate.js` will
+run 100 random battles and report any errors that occur.
 
 Using any flag will trigger [minimist](https://github.com/substack/minimist) to
 be installed if it has not been already.
+
+## multi
+
+The `multi` subcommand (alias: `random`) allows for configuring the amount of
+battles played, which formats are used, how they are run, and what to output.
 
 ### General
 
@@ -46,8 +47,31 @@ games asynchronously.
     naturally wait for players to make their decisions, but the AI's should be
     making decisions pretty much immediately), this mode is not expected to have
     large performance benefits over the default sequential mode and may require
-    additional memory (run with `node --max-old-space-size=<SIZE>
-    --stack-size=<SIZE>` if you encounter issues).
+    additional memory.
 
 **TODO**: Add support for running battles in `--parallel` on muliple cores with
 [`worker_threads`](https://nodejs.org/api/worker_threads.html).
+
+## exhaustive
+
+The `exhaustive` subcommand cycles through all generations and game types,
+attempting to use as many different effects as possible in the battles it
+randomly simulates. This can be useful as a form of
+['smoke testing'](https://en.wikipedia.org/wiki/Smoke_testing_\(software\)), a
+form of sanity testing/build verification which can be used to expose obvious
+critical issues with the application. Making it through a successful cycle of
+smoke tests does *not* mean the application is without bugs, or even that it is
+crash free - it simply provides some confidence that the application is less
+likely to catch fire.
+
+### Flags
+
+-   **`--format`** / **`--formats`**: play the specified format(s) instead of
+    iterating through all possible formats. If multiple formats are specified,
+    separate each format with a comma (eg. `format1,format2`).
+-   **`--cycles`**: exhaust the pools of effects `--cycles` times instead of
+    just once. If `--cycles` is negative, `--forever` is implied.
+-   **`--forever`**: continue iterating through formats infinitely, exhausting
+    each `--cycles` times.
+-   **`--seed`**: PRNG seed to use (eg. `'1234,5678,9012,3456'`).
+-   **`--maxFailures`**: exit early if this many failures have occured.
