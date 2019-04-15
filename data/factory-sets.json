@@ -5668,7 +5668,7 @@
 				"species": "Dhelmise",
 				"item": ["Colbur Berry"],
 				"ability": ["Steelworker"],
-				"evs": {"hp": 146, "atk": 252, "spe": 100},
+				"evs": {"hp": 156, "atk": 252, "spe": 100},
 				"nature": "Adamant",
 				"moves": [["Power Whip"], ["Earthquake"], ["Rapid Spin"], ["Synthesis"]]
 			}]
