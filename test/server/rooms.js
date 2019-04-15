@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 
-const {User} = require('../../dev-tools/users-utils');
+const {User} = require('../users-utils');
 
 describe('Rooms features', function () {
 	describe('Rooms', function () {
