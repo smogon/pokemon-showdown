@@ -5959,6 +5959,24 @@
 				"moves": [["Stealth Rock"], ["Earth Power"], ["Shadow Ball"], ["Shore Up"]]
 			}]
 		},
+		"pangoro": {
+			"flags": {},
+			"sets": [{
+				"species": "Pangoro",
+				"item": ["Choice Band"],
+				"ability": ["Iron Fist"],
+				"evs": {"atk": 252, "spd": 4, "spe": 252},
+				"nature": "Adamant",
+				"moves": [["Knock Off"], ["Hammer Arm"], ["Drain Punch"], ["Bullet Punch", "Gunk Shot"]]
+			}, {
+				"species": "Pangoro",
+				"item": ["Life Orb"],
+				"ability": ["Iron Fist"],
+				"evs": {"atk": 252, "spd": 4, "spe": 252},
+				"nature": "Adamant",
+				"moves": [["Knock Off"], ["Swords Dance"], ["Drain Punch"], ["Bullet Punch"]]
+			}]
+		},
 		"passimian": {
 			"flags": {},
 			"sets": [{
@@ -9188,17 +9206,6 @@
 				"evs": {"hp": 36, "spa": 236, "spe": 236},
 				"nature": "Timid",
 				"moves": [["Flame Charge"], ["Fire Blast"], ["Earth Power"], ["Ancient Power", "Growth"]]
-			}]
-		},
-		"trapinch": {
-			"flags": {},
-			"sets": [{
-				"species": "Trapinch",
-				"item": ["Eviolite"],
-				"ability": ["Arena Trap"],
-				"evs": {"hp": 156, "atk": 36, "def": 76, "spd": 236},
-				"nature": "Adamant",
-				"moves": [["Earthquake"], ["Rock Slide"], ["Feint"], ["Toxic"]]
 			}]
 		},
 		"trubbish": {
