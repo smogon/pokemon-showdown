@@ -1198,6 +1198,7 @@ export class Battle extends Dex.ModdedDex {
 		}
 		side.active[pos] = pokemon;
 		pokemon.activeTurns = 0;
+		if (this.gen === 3) pokemon.truantTurn = true;
 		for (const moveSlot of pokemon.moveSlots) {
 			moveSlot.used = false;
 		}
@@ -1266,6 +1267,7 @@ export class Battle extends Dex.ModdedDex {
 		side.active[pos] = pokemon;
 		pokemon.activeTurns = 0;
 		if (this.gen === 2) pokemon.draggedIn = this.turn;
+		if (this.gen === 3) pokemon.truantTurn = true;
 		for (const moveSlot of pokemon.moveSlots) {
 			moveSlot.used = false;
 		}

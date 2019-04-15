@@ -195,6 +195,20 @@ let BattleAbilities = {
 			}
 		},
 	},
+	"truant": {
+		inherit: true,
+		onStart() {},
+		onBeforeMove(pokemon) {
+			if (pokemon.truantTurn) {
+				this.add('cant', pokemon, 'ability: Truant');
+				return false;
+			}
+		},
+		onResidualOrder: 27,
+		onResidual(pokemon) {
+			pokemon.truantTurn = !pokemon.truantTurn;
+		},
+	},
 	"voltabsorb": {
 		inherit: true,
 		desc: "This Pokemon is immune to damaging Electric-type moves and restores 1/4 of its maximum HP, rounded down, when hit by one.",

@@ -185,6 +185,7 @@ export class Pokemon {
 
 	isActive: boolean;
 	activeTurns: number;
+	truantTurn: boolean;
 	/** Have this pokemon's Start events run yet? */
 	isStarted: boolean;
 	duringMove: boolean;
@@ -353,6 +354,7 @@ export class Pokemon {
 
 		this.isActive = false;
 		this.activeTurns = 0;
+		this.truantTurn = true;
 		this.isStarted = false;
 		this.duringMove = false;
 
