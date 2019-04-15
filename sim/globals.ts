@@ -1,31 +1,13 @@
-type Battle = import('./../sim/battle').Battle
-type Field = import('./../sim/field').Field
-type ModdedDex = typeof import('./../sim/dex')
-type Pokemon = import('./../sim/pokemon').Pokemon
-type Side = import('./../sim/side').Side
-type Validator = import('./../sim/team-validator').Validator
-
-type PageTable = import('./../server/chat').PageTable
-type ChatCommands = import('./../server/chat').ChatCommands
-type ChatFilter = import('./../server/chat').ChatFilter
-type NameFilter = import('./../server/chat').NameFilter
+type Battle = import('./battle').Battle
+type Field = import('./field').Field
+type ModdedDex = typeof import('./dex')
+type Pokemon = import('./pokemon').Pokemon
+type PRNGSeed = import('./prng').PRNGSeed;
+type Side = import('./side').Side
+type Validator = import('./team-validator').Validator
 
 interface AnyObject {[k: string]: any}
 type DexTable<T> = {[key: string]: T}
-
-declare let Config: {[k: string]: any};
-
-declare let Monitor: typeof import("../server/monitor");
-
-declare let LoginServer: typeof import('../server/loginserver');
-
-// type RoomBattle = AnyObject;
-
-declare let Verifier: typeof import('../server/verifier');
-declare let Dnsbl: typeof import('../server/dnsbl');
-declare let Sockets: typeof import('../server/sockets');
-// let TeamValidator: typeof import('../sim/team-validator');
-declare let TeamValidatorAsync: typeof import('../server/team-validator-async');
 
 type GenderName = 'M' | 'F' | 'N' | '';
 type StatNameExceptHP = 'atk' | 'def' | 'spa' | 'spd' | 'spe';
