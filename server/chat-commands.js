@@ -659,13 +659,17 @@ const commands = {
 	afk: 'away',
 	brb: 'away',
 	away(target, room, user, connection, cmd) {
-		let awayMessage = toId(cmd);
+		let awayMessage;
 		if (target) {
 			awayMessage = Chat.namefilter(target, user);
 			if (!awayMessage) return;
 		} else {
-			if (awayMessage === 'afk' || awayMessage === 'brb') awayMessage = awayMessage.toUpperCase();
-			awayMessage = `${awayMessage[0].toUpperCase()}${awayMessage.slice(1)}`;
+			awayMessage = toId(cmd);
+			if (awayMessage === 'afk' || awayMessage === 'brb') {
+				awayMessage = awayMessage.toUpperCase();
+			} else {
+				awayMessage = `${awayMessage[0].toUpperCase()}${awayMessage.slice(1)}`;
+			}
 		}
 		user.setAway(awayMessage);
 		this.sendReply("You are now marked as away. Send a message or use /back to indicate you are back.");
@@ -676,7 +680,7 @@ const commands = {
 	unaway: 'back',
 	unafk: 'back',
 	back(target, room, user) {
-		user.setBack(); // Placebo but covers weird bugs
+		user.setBack();
 		this.sendReply("You are no longer marked as away.");
 	},
 	backhelp: [`/back - Marks you as back if you are away.`],

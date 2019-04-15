@@ -42,8 +42,8 @@ const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
 const FS = require(/** @type {any} */('../.lib-dist/fs')).FS;
 
 const MINUTES = 60 * 1000;
-const AFK_TIMER = 180 * MINUTES;
-const STAFF_AFK_TIMER = 60 * MINUTES;
+const IDLE_TIMER = 180 * MINUTES;
+const STAFF_IDLE_TIMER = 60 * MINUTES;
 
 /*********************************************************
  * Utility functions
@@ -1562,11 +1562,12 @@ class User extends Chat.MessageContext {
 	setBack() {
 		if (!this.isAway) return;
 		this.isAway = false;
+		this.status = '';
 		this.updateIdentity();
 	}
 	getStatus() {
 		if (!this.status) return;
-		return (this.isAway ? '!' : '') + this.status;
+		return `${this.isAway ? '!' : ''}${this.status}`;
 	}
 	destroy() {
 		// deallocate user
@@ -1605,9 +1606,9 @@ class User extends Chat.MessageContext {
 function pruneInactive(threshold) {
 	let now = Date.now();
 	for (const user of users.values()) {
-		const afkTimer = (user.can('lock') && !user.can('bypassall')) ? STAFF_AFK_TIMER : AFK_TIMER;
+		const afkTimer = (user.can('lock') && !user.can('bypassall')) ? STAFF_IDLE_TIMER : IDLE_TIMER;
 		if (user.group !== '*' && !user.connections.some(connection => now - connection.lastActiveTime < afkTimer)) {
-			user.popup(`You have been inactive for over ${afkTimer / MINUTES} minutes, and have been marked as away as a result. To mark yourself as back, send a message in chat, or use the /back command.`);
+			user.popup(`You have been inactive for over ${afkTimer / MINUTES} minutes, and have been marked as idle as a result. To mark yourself as back, send a message in chat, or use the /back command.`);
 			user.setAway('Idle');
 		}
 		if (user.connected) continue;
