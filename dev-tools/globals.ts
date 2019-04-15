@@ -649,7 +649,10 @@ interface EventMethods {
 	onAfterMoveSecondaryPriority?: number
 	onAfterMoveSecondarySelfPriority?: number
 	onAfterMoveSelfPriority?: number
+	onAnyBasePowerPriority?: number
 	onAnyFaintPriority?: number
+	onAllyBasePowerPriority?: number
+	onAllyModifyAtkPriority?: number
 	onAttractPriority?: number
 	onBasePowerPriority?: number
 	onBeforeMovePriority?: number
@@ -657,6 +660,7 @@ interface EventMethods {
 	onBoostPriority?: number
 	onDamagePriority?: number
 	onDragOutPriority?: number
+	onFoeBasePowerPriority?: number
 	onFoeBeforeMovePriority?: number
 	onFoeModifyDefPriority?: number
 	onFoeRedirectTargetPriority?: number
@@ -675,6 +679,9 @@ interface EventMethods {
 	onResidualOrder?: number
 	onResidualPriority?: number
 	onResidualSubOrder?: number
+	onSourceBasePowerPriority?: number
+	onSourceModifyAtkPriority?: number
+	onSourceModifySpAPriority?: number
 	onSwitchInPriority?: number
 	onTrapPokemonPriority?: number
 	onTryHealPriority?: number
