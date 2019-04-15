@@ -1058,7 +1058,7 @@ class User extends Chat.MessageContext {
 		this.latestIp = oldUser.latestIp;
 		this.latestHost = oldUser.latestHost;
 
-		oldUser.markInactive();
+		oldUser.markDisconnected();
 	}
 	/**
 	 * @param {Connection} connection
@@ -1200,7 +1200,7 @@ class User extends Chat.MessageContext {
 		this.setGroup(Config.groupsranking[0]);
 		return removed;
 	}
-	markInactive() {
+	markDisconnected() {
 		this.connected = false;
 		this.lastConnected = Date.now();
 		if (!this.registered) {
@@ -1223,7 +1223,7 @@ class User extends Chat.MessageContext {
 			if (connected === connection) {
 				// console.log('DISCONNECT: ' + this.userid);
 				if (this.connections.length <= 1) {
-					this.markInactive();
+					this.markDisconnected();
 				}
 				for (const roomid of connection.inRooms) {
 					this.leaveRoom(Rooms(roomid), connection, true);
@@ -1255,7 +1255,7 @@ class User extends Chat.MessageContext {
 		// Disconnects a user from the server
 		this.clearChatQueue();
 		let connection = null;
-		this.markInactive();
+		this.markDisconnected();
 		for (let i = this.connections.length - 1; i >= 0; i--) {
 			// console.log('DESTROY: ' + this.userid);
 			connection = this.connections[i];
