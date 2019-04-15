@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 
-const {User} = require('./../../dev-tools/users-utils');
+const {User} = require('../users-utils');
 
 describe('Simulator abstraction layer features', function () {
 	describe('Battle', function () {
