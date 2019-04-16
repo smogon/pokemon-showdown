@@ -885,7 +885,7 @@ function runMovesearch(target, cmd, canAll, message) {
 				if (targetMons.includes(template.name)) return {reply: "A search cannot include the same Pok\u00e9mon twice."};
 				if (parameters.length > 1) return {reply: "A Pok\u00e9mon learnset cannot have alternative parameters."};
 				if (!template.learnset) template = Dex.getTemplate(template.baseSpecies);
-				lsetData[template.name] = template.learnset;
+				lsetData[template.name] = Object.assign({}, template.learnset);
 				targetMons.push(template.name);
 
 				let originalTemplateName = template.name;
