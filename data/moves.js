@@ -19314,6 +19314,7 @@ let BattleMovedex = {
 			onStart(target, source) {
 				this.add('-start', target, 'move: Yawn', '[of] ' + source);
 			},
+			onResidualOrder: 19,
 			onEnd(target) {
 				this.add('-end', target, 'move: Yawn', '[silent]');
 				target.trySetStatus('slp', this.effectData.source);
