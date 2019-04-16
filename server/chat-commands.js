@@ -4312,7 +4312,8 @@ const commands = {
 				avatar: targetUser.avatar,
 				group: targetUser.group,
 				autoconfirmed: !!targetUser.autoconfirmed,
-				status: targetUser.getStatus(),
+				status: targetUser.status,
+				away: targetUser.away,
 				rooms: roomList,
 			};
 			if (targetUser.userid !== target) userdetails.name = targetUser.name;
