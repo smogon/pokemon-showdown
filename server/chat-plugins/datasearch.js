@@ -807,7 +807,7 @@ function runMovesearch(target, cmd, canAll, message) {
 	let showAll = false;
 	let sort = null;
 	let lsetData = {};
-	let targetMon = '';
+	let targetMons = [];
 	let randomOutput = 0;
 	for (const arg of target.split(',')) {
 		let orGroup = {types: {}, categories: {}, contestTypes: {}, flags: {}, gens: {}, recovery: {}, mon: {}, property: {}, boost: {}, lower: {}, zboost: {}, status: {}, volatileStatus: {}, skip: false};
@@ -925,15 +925,17 @@ function runMovesearch(target, cmd, canAll, message) {
 
 			let template = Dex.getTemplate(target);
 			if (template.exists) {
-				if (Object.keys(lsetData).length) return {reply: "A search can only include one Pok\u00e9mon learnset."};
+				if (targetMons.includes(template.name)) return {reply: "A search cannot include the same Pok\u00e9mon twice."};
 				if (parameters.length > 1) return {reply: "A Pok\u00e9mon learnset cannot have alternative parameters."};
 				if (!template.learnset) template = Dex.getTemplate(template.baseSpecies);
-				lsetData = Object.assign({}, template.learnset);
-				targetMon = template.name;
+				lsetData[template.name] = Object.assign({}, template.learnset);
+				targetMons.push(template.name);
+
+				let originalTemplateName = template.name;
 				while (template.prevo) {
 					template = Dex.getTemplate(template.prevo);
 					for (let move in template.learnset) {
-						if (!lsetData[move]) lsetData[move] = template.learnset[move];
+						if (!lsetData[originalTemplateName][move]) lsetData[originalTemplateName][move] = template.learnset[move];
 					}
 				}
 				orGroup.skip = true;
@@ -1085,13 +1087,29 @@ function runMovesearch(target, cmd, canAll, message) {
 			searches.push(orGroup);
 		}
 	}
-	if (showAll && !searches.length && !targetMon) {
+	if (showAll && !searches.length && !targetMons.length) {
 		return {reply: "No search parameters other than 'all' were found. Try '/help movesearch' for more information on this command."};
 	}
 
 	let dex = {};
-	if (targetMon) {
-		for (let move in lsetData) {
+	if (targetMons.length) {
+		let intersectionOfLearnsets = [];
+		for (let mon in lsetData) {
+			if (intersectionOfLearnsets.length) {
+				intersectionOfLearnsets = intersectionOfLearnsets.filter(move => {
+					return lsetData[mon][move] !== undefined;
+				});
+			} else {
+				intersectionOfLearnsets = Object.keys(lsetData[mon]);
+			}
+		}
+
+		let finalizedLearnset = {};
+		for (let move of intersectionOfLearnsets) {
+			finalizedLearnset[move] = Object.values(lsetData)[0][move];
+		}
+
+		for (let move in finalizedLearnset) {
 			dex[move] = Dex.getMove(move);
 		}
 	} else {
@@ -1245,8 +1263,8 @@ function runMovesearch(target, cmd, canAll, message) {
 	}
 
 	let resultsStr = "";
-	if (targetMon) {
-		resultsStr += `<span style="color:#999999;">Matching moves found in learnset for</span> ${targetMon}:<br />`;
+	if (targetMons.length) {
+		resultsStr += `<span style="color:#999999;">Matching moves found in learnset(s) for</span> ${targetMons.join(', ')}:<br />`;
 	} else {
 		resultsStr += (message === "" ? message : `<span style="color:#999999;">${escapeHTML(message)}:</span><br />`);
 	}
