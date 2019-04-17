@@ -68,6 +68,6 @@
     "rulesDirectory": [],
     "linterOptions": {
       // TODO: why is tslint looking at .js files anyway?
-      "exclude": ["node_modules/", "**/*.js", "dev-tools/global*"]
+      "exclude": ["node_modules/", "**/*.js", "*/globals.ts"]
      }
 }
