@@ -198,6 +198,9 @@ let BattleAbilities = {
 	"truant": {
 		inherit: true,
 		onStart() {},
+		onSwitchIn(pokemon) {
+			pokemon.truantTurn = this.turn !== 0;
+		},
 		onBeforeMove(pokemon) {
 			if (pokemon.truantTurn) {
 				this.add('cant', pokemon, 'ability: Truant');
