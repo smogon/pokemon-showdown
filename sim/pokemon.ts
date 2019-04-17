@@ -354,7 +354,7 @@ export class Pokemon {
 
 		this.isActive = false;
 		this.activeTurns = 0;
-		this.truantTurn = true;
+		this.truantTurn = false;
 		this.isStarted = false;
 		this.duringMove = false;
 
