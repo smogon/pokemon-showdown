@@ -7,10 +7,8 @@
 
 import {ObjectReadWriteStream} from '../../lib/streams';
 import * as BattleStreams from '../battle-stream';
-import Dex = require('../dex');
 import {PRNG, PRNGSeed} from '../prng';
 import {RandomPlayerAI} from './random-player-ai';
-const toId = Dex.getId;
 
 export interface AIOptions {
 	createAI: (stream: ObjectReadWriteStream<string>, options: AIOptions) => RandomPlayerAI;
