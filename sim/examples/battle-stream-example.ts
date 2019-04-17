@@ -11,7 +11,7 @@
 
 import {BattleStream, getPlayerStreams} from '../battle-stream';
 import Dex = require('../dex');
-import {RandomPlayerAI} from './random-player-ai';
+import {RandomPlayerAI} from '../tools/random-player-ai';
 
 /*********************************************************************
  * Run AI

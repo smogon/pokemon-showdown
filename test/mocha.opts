@@ -1,4 +1,4 @@
-test/main.js test/dev-tools/**/*.js test/server/**/*.js test/sim/**/*.js
+test/main.js test/server/**/*.js test/sim/**/*.js
 -i -g "\(slow\)"
 -R dot
 -u bdd
