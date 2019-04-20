@@ -2598,7 +2598,7 @@ const commands = {
 		if (!targetUser && !room.log.hasUsername(target)) return this.errorReply(`User ${target} not found or has no roomlogs.`);
 		if (!targetUser && !user.can('lock')) return this.errorReply(`User ${name} not found.`);
 		let userid = toId(this.inputUsername);
-		if (!this.can('mute', targetUser, room)) return;
+		if (!this.can('mute', null, room)) return;
 
 		if (targetUser && (cmd === 'hidealtstext' || cmd === 'hidetextalts' || cmd === 'hidealttext')) {
 			room.sendByUser(user, `${name}'s alts messages were cleared from ${room.title} by ${user.name}.`);
