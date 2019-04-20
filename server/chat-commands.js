@@ -3003,10 +3003,6 @@ const commands = {
 				if (lock['validator']) return this.errorReply(`Hot-patching the validator has been disabled by ${lock['validator'].by} (${lock['validator'].reason})`);
 
 				// uncache the .sim-dist/dex.js dependency tree
-				this.sendReply('Rebuilding...');
-				await new Promise(resolve => {
-					require('child_process').exec('../build', {cwd: __dirname}, resolve);
-				});
 				Chat.uncacheDir('./.sim-dist');
 				Chat.uncacheDir('./data');
 				Chat.uncache('./config/formats');
@@ -3425,7 +3421,9 @@ const commands = {
 		function exec(/** @type {string} */ command) {
 			logRoom.roomlog(`$ ${command}`);
 			return new Promise((resolve, reject) => {
-				require('child_process').exec(command, (error, stdout, stderr) => {
+				require('child_process').exec(command, {
+					cwd: __dirname,
+				}, (error, stdout, stderr) => {
 					let log = `[o] ${stdout}[e] ${stderr}`;
 					if (error) log = `[c] ${error.code}\n${log}`;
 					logRoom.roomlog(log);
@@ -3441,7 +3439,13 @@ const commands = {
 		if (code) throw new Error(`updateserver: Crash while fetching - make sure this is a Git repository`);
 		if (!stdout && !stderr) {
 			Chat.updateServerLock = false;
-			return this.sendReply(`There were no updates.`);
+			this.sendReply(`There were no updates.`);
+			[code, stdout, stderr] = await exec('../build');
+			if (stderr) {
+				return this.errorReply(`Crash while rebuilding: ${stderr}`);
+			}
+			this.sendReply(`Rebuilt.`);
+			return;
 		}
 
 		[code, stdout, stderr] = await exec(`git rev-parse HEAD`);
@@ -3487,6 +3491,11 @@ const commands = {
 			await exec(`git stash pop`);
 			this.sendReply(`FAILED, old changes restored.`);
 		}
+		[code, stdout, stderr] = await exec('../build');
+		if (stderr) {
+			return this.errorReply(`Crash while rebuilding: ${stderr}`);
+		}
+		this.sendReply(`Rebuilt.`);
 		Chat.updateServerLock = false;
 	},
 
