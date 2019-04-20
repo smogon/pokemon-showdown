@@ -466,7 +466,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	p2: RoomBattlePlayer;
 	p3: RoomBattlePlayer;
 	p4: RoomBattlePlayer;
-	allowExtraction: [ID, ID] | null;
+	allowExtraction: {[k: string]: Set<ID>};
 	logData: AnyObject | null;
 	endType: string;
 	score: number[] | null;
@@ -514,8 +514,9 @@ export class RoomBattle extends RoomGames.RoomGame {
 		/**
 		 * Has this player consented to input log export? If so, set this
 		 * to the userid allowed to export.
+		 * User that offered the extraction -> players that accepted the extraction
 		 */
-		this.allowExtraction = null;
+		this.allowExtraction = {};
 
 		this.logData = null;
 		this.endType = 'normal';
