@@ -1508,7 +1508,7 @@ const commands = {
 			/** @type {[string, string, number, string]} */
 			const punishment = ['TOURBAN', targetUserid, Date.now() + TOURBAN_DURATION, reason];
 			if (online) {
-				Punishments.roomPunish(this.room, /** @type {User} */(targetUser), punishment, null);
+				Punishments.roomPunish(this.room, /** @type {User} */(targetUser), punishment);
 			} else {
 				Punishments.roomPunishName(this.room, /** @type {string} */(targetUser), punishment);
 			}
