@@ -150,6 +150,7 @@ let BattleStatuses = {
 				isSelfHit: true,
 				noDamageVariance: true,
 				flags: {},
+				selfdestruct: move.selfdestruct,
 			});
 			let damage = this.getDamage(pokemon, pokemon, move);
 			if (typeof damage !== 'number') throw new Error("Confusion damage not dealt");
