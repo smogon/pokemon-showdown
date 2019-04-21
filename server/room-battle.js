@@ -50,12 +50,14 @@ class RoomBattlePlayer {
 
 		this.slot = slot;
 		this.slotNum = Number(slot.charAt(1)) - 1;
+		this.channelIndex = /** @type {0 | 1 | 2 | 3 | 4} */
+			((game.gameType === 'multi' ? this.slotNum % 2 : this.slotNum) + 1);
 		this.active = true;
 		this.eliminated = false;
 
 		for (const connection of user.connections) {
 			if (connection.inRooms.has(game.id)) {
-				Sockets.channelMove(connection.worker, this.game.id, this.slotNum + 1, connection.socketid);
+				Sockets.channelMove(connection.worker, this.game.id, this.channelIndex, connection.socketid);
 			}
 		}
 	}
@@ -73,11 +75,11 @@ class RoomBattlePlayer {
 	updateChannel(/** @type {User | Connection} */ user) {
 		if (user instanceof Users.Connection) {
 			// "user" is actually a connection
-			Sockets.channelMove(user.worker, this.game.id, this.slotNum % 2 + 1, user.socketid);
+			Sockets.channelMove(user.worker, this.game.id, this.channelIndex, user.socketid);
 			return;
 		}
 		for (const connection of user.connections) {
-			Sockets.channelMove(connection.worker, this.game.id, this.slotNum % 2 + 1, connection.socketid);
+			Sockets.channelMove(connection.worker, this.game.id, this.channelIndex, connection.socketid);
 		}
 	}
 

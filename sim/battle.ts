@@ -33,6 +33,8 @@ interface BattleOptions {
 	strictChoices?: boolean; // whether invalid choices should throw
 }
 
+type Part = string | number | boolean | AnyObject | null | undefined;
+
 // The current request state of the Battle:
 //
 //   - 'teampreview': beginning of BW/XY/SM battle (Team Preview)
@@ -2890,14 +2892,7 @@ export class Battle extends Dex.ModdedDex {
 		if (this.hints.has(hint)) return;
 
 		if (side) {
-			this.add('split');
-			for (const line of [false, 0, 1, true]) {
-				if (line === true || line === side.n % 2) {
-					this.add('-hint', hint);
-				} else {
-					this.log.push('');
-				}
-			}
+			this.addSplit(side.id, ['-hint', hint]);
 		} else {
 			this.add('-hint', hint);
 		}
@@ -2905,26 +2900,38 @@ export class Battle extends Dex.ModdedDex {
 		if (once) this.hints.add(hint);
 	}
 
-	add(...parts: (string | number | boolean | ((side: 0 | 1 | boolean) => string) | AnyObject | null | undefined)[]) {
+	addSplit(side: SideID, secret: Part[], shared?: Part[]) {
+		this.log.push(`|split|${side}`);
+		this.add(...secret);
+		if (shared) {
+			this.add(...shared);
+		} else {
+			this.log.push('');
+		}
+	}
+
+	add(...parts: (Part | (() => {side: SideID, secret: string, shared: string}))[]) {
 		if (!parts.some(part => typeof part === 'function')) {
 			this.log.push(`|${parts.join('|')}`);
 			return;
 		}
-		if (this.reportExactHP) {
-			parts = parts.map(part =>
-				typeof part !== 'function' ? part : part(true)
-			);
-			this.log.push(`|${parts.join('|')}`);
-			return;
+
+		let side: SideID | null = null;
+		const secret = [];
+		const shared = [];
+		for (const part of parts) {
+			if (typeof part === 'function') {
+				const split = part();
+				if (side && side !== split.side) throw new Error("Multiple sides passed to add");
+				side = split.side;
+				secret.push(split.secret);
+				shared.push(split.shared);
+			} else {
+				secret.push(part);
+				shared.push(part);
+			}
 		}
-		this.log.push('|split');
-		const sides: (0 | 1 | boolean)[] = [false, 0, 1, true];
-		for (const side of sides) {
-			const sideUpdate = '|' + parts.map(part =>
-				typeof part !== 'function' ? part : part(side)
-			).join('|');
-			this.log.push(sideUpdate);
-		}
+		this.addSplit(side!, secret, shared);
 	}
 
 	// tslint:disable-next-line:ban-types
@@ -2964,8 +2971,27 @@ export class Battle extends Dex.ModdedDex {
 		}
 	}
 
+	static extractUpdateForSide(data: string, side: SideID | 'spectator' | 'omniscient' = 'spectator') {
+		if (side === 'omniscient') {
+			// Grab all secret data
+			return data.replace(/\n\|split\|p[1234]\n([^\n]*)\n(?:[^\n]*)/g, '\n$1');
+		}
+
+		// Grab secret data side has access to
+		switch (side) {
+		case 'p1': data = data.replace(/\n\|split\|p1\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
+		case 'p2': data = data.replace(/\n\|split\|p2\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
+		case 'p3': data = data.replace(/\n\|split\|p3\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
+		case 'p4': data = data.replace(/\n\|split\|p4\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
+		}
+
+		// Discard remaining secret data
+		// Note: the last \n? is for secret data that are empty when shared
+		return data.replace(/\n\|split\|(?:[^\n]*)\n(?:[^\n]*)\n\n?/g, '\n');
+	}
+
 	getDebugLog() {
-		return this.log.join('\n').replace(/\|split\n.*\n.*\n.*\n/g, '');
+		return Battle.extractUpdateForSide(this.log.join('\n'), 'omniscient');
 	}
 
 	debugError(activity: string) {

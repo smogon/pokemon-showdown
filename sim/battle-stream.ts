@@ -161,17 +161,12 @@ export function getPlayerStreams(stream: BattleStream) {
 			const [type, data] = splitFirst(chunk, `\n`);
 			switch (type) {
 			case 'update':
-				const p1Update = data.replace(/\n\|split\n[^\n]*\n([^\n]*)\n[^\n]*\n[^\n]*/g, '\n$1').replace(/\n\n/g, '\n');
-				streams.p1.push(p1Update);
-				const p2Update = data.replace(/\n\|split\n[^\n]*\n[^\n]*\n([^\n]*)\n[^\n]*/g, '\n$1').replace(/\n\n/g, '\n');
-				streams.p2.push(p2Update);
-				// p3 and p4 share update information with p1 and p2 respectively.
-				streams.p3.push(p1Update);
-				streams.p4.push(p2Update);
-				const specUpdate = data.replace(/\n\|split\n([^\n]*)\n[^\n]*\n[^\n]*\n[^\n]*/g, '\n$1').replace(/\n\n/g, '\n');
-				streams.spectator.push(specUpdate);
-				const omniUpdate = data.replace(/\n\|split\n[^\n]*\n[^\n]*\n[^\n]*/g, '');
-				streams.omniscient.push(omniUpdate);
+				streams.omniscient.push(Battle.extractUpdateForSide(data, 'omniscient'));
+				streams.spectator.push(Battle.extractUpdateForSide(data, 'spectator'));
+				streams.p1.push(Battle.extractUpdateForSide(data, 'p1'));
+				streams.p2.push(Battle.extractUpdateForSide(data, 'p2'));
+				streams.p3.push(Battle.extractUpdateForSide(data, 'p3'));
+				streams.p4.push(Battle.extractUpdateForSide(data, 'p4'));
 				break;
 			case 'sideupdate':
 				const [side, sideData] = splitFirst(data, `\n`);

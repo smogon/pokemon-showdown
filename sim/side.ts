@@ -165,7 +165,7 @@ export class Side {
 			const entry: AnyObject = {
 				ident: pokemon.fullname,
 				details: pokemon.details,
-				condition: pokemon.getHealth(true),
+				condition: pokemon.getHealth().secret,
 				active: (pokemon.position < pokemon.side.active.length),
 				stats: {
 					atk: pokemon.baseStoredStats['atk'],
