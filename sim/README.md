@@ -122,7 +122,15 @@ An update which should be sent to all players and spectators.
 
   [sim-protocol]: https://github.com/Zarel/Pokemon-Showdown/blob/master/sim/SIM-PROTOCOL.md
 
-One message type that only appears here is `|split`. This splits the next six lines into `spectator`, `p1`, `p2`, `p3`, `p4`, and `omniscient` messages. The `p1`, `p2`, `p3`, and `p4` logs will have exact HP values only for the corresponding player, while the `spectator` log will not have exact HP values for either player, and the `omniscient` logs will have exact HP values for both.
+One message type that only appears here is `|split|PLAYERID`:
+
+    |split|PLAYERID
+    SECRET
+    PUBLIC
+
+- `PLAYERID` - one of `p1`, `p2`, `p3`, or `p4`.
+- `SECRET` - messages for the specific player or an omniscient observer (details which may contain information about exact details of the player's set, like exact HP)
+- `PUBLIC` - message with public details suitable for display to opponents / teammates / spectators. Note that this may be empty.
 
     sideupdate
     PLAYERID

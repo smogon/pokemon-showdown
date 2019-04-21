@@ -140,14 +140,7 @@ let BattleAbilities = {
 	"pressure": {
 		inherit: true,
 		onStart(pokemon) {
-			this.add('split');
-			for (const line of [false, 0, 1, true]) {
-				if (line === true || line === pokemon.side.n % 2) {
-					this.add('-ability', pokemon, 'Pressure', '[silent]');
-				} else {
-					this.log.push('');
-				}
-			}
+			this.addSplit(pokemon.side.id, ['-ability', pokemon, 'Pressure', '[silent]']);
 		},
 	},
 	"roughskin": {
