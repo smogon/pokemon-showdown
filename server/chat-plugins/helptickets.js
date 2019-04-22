@@ -979,7 +979,9 @@ let commands = {
 
 			let ticket = tickets[toId(this.targetUsername)];
 			let ticketBan = ticketBans[toId(this.targetUsername)];
-			if (!targetUser && !Punishments.search(toId(this.targetUsername))[0].length && !ticket && !ticketBan) return this.errorReply(`User '${this.targetUsername}' not found.`);
+			if (!targetUser && !Punishments.search(toId(this.targetUsername)).length && !ticket && !ticketBan) {
+				return this.errorReply(`User '${this.targetUsername}' not found.`);
+			}
 			if (target.length > 300) {
 				return this.errorReply(`The reason is too long. It cannot exceed 300 characters.`);
 			}
@@ -1019,7 +1021,7 @@ let commands = {
 				affected.push(targetUser);
 				affected.concat(targetUser.getAltUsers(false, true));
 			} else {
-				let foundKeys = Punishments.search(userid)[0].map(key => key.split(':')[0]);
+				let foundKeys = Punishments.search(userid).map(([key]) => key);
 				let userids = new Set([userid]);
 				let ips = new Set();
 				for (let key of foundKeys) {
