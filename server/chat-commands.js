@@ -1820,7 +1820,9 @@ const commands = {
 
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
-		if (!targetUser && !Punishments.search(toId(this.targetUsername))[0].length) return this.errorReply(`User '${this.targetUsername}' not found.`);
+		if (!targetUser && !Punishments.search(toId(this.targetUsername)).length) {
+			return this.errorReply(`User '${this.targetUsername}' not found.`);
+		}
 		if (target.length > MAX_REASON_LENGTH) {
 			return this.errorReply(`The reason is too long. It cannot exceed ${MAX_REASON_LENGTH} characters.`);
 		}

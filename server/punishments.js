@@ -36,7 +36,7 @@ const PUNISHMENT_POINT_VALUES = {MUTE: 2, BLACKLIST: 3, BATTLEBAN: 4, ROOMBAN: 4
 const AUTOLOCK_POINT_THRESHOLD = 8;
 
 /**
- * a punishment is an array: [punishType, userid, expireTime, reason]
+ * A punishment is an array: [punishType, userid, expireTime, reason]
  * @typedef {[string, string, number, string]} Punishment
  */
 
@@ -517,7 +517,7 @@ const Punishments = new (class {
 	 * @param {Punishment} punishment
 	 */
 	punishName(userid, punishment) {
-		let foundKeys = Punishments.search(userid)[0].map((/** @type {string} */ key) => key.split(':')[0]);
+		let foundKeys = Punishments.search(userid).map(([key]) => key);
 		let userids = new Set([userid]);
 		/** @type {Set<string>} */
 		let ips = new Set();
@@ -640,7 +640,7 @@ const Punishments = new (class {
 	 * @param {Punishment} punishment
 	 */
 	roomPunishName(room, userid, punishment) {
-		let foundKeys = Punishments.search(userid)[0].map(key => key.split(':')[0]);
+		let foundKeys = Punishments.search(userid).map(([key]) => key);
 		let userids = new Set([userid]);
 		/** @type {Set<string>} */
 		let ips = new Set();
@@ -1145,47 +1145,44 @@ const Punishments = new (class {
 	 *********************************************************/
 
 	/**
-	 * @param {string} searchId
-	 * @return {[string[], [number, string][]?]}
+	 * Returns an array of [key, roomid, punishment] pairs.
+	 *
+	 * @param {string} searchId userid or IP
+	 * @return {[string, string, Punishment][]}
 	 */
 	search(searchId) {
-		/** @type {string[]} */
-		let foundKeys = [];
-		let foundRest = null;
+		/** @type {[string, string, Punishment][]} */
+		let results = [];
 		Punishments.ips.forEach((punishment, ip) => {
-			const [, id, ...rest] = punishment;
+			const [, id] = punishment;
 
 			if (searchId === id || searchId === ip) {
-				foundKeys.push(ip);
-				foundRest = rest;
+				results.push([ip, '', punishment]);
 			}
 		});
 		Punishments.userids.forEach((punishment, userid) => {
-			const [, id, ...rest] = punishment;
+			const [, id] = punishment;
 
 			if (searchId === id || searchId === userid) {
-				foundKeys.push(userid);
-				foundRest = rest;
+				results.push([userid, '', punishment]);
 			}
 		});
 		Punishments.roomIps.nestedForEach((punishment, roomid, ip) => {
-			const [, punishUserid, ...rest] = punishment;
+			const [, punishUserid] = punishment;
 
 			if (searchId === punishUserid || searchId === ip) {
-				foundKeys.push(ip + ':' + roomid);
-				foundRest = rest;
+				results.push([ip, roomid, punishment]);
 			}
 		});
 		Punishments.roomUserids.nestedForEach((punishment, roomid, userid) => {
-			const [, punishUserid, ...rest] = punishment;
+			const [, punishUserid] = punishment;
 
 			if (searchId === punishUserid || searchId === userid) {
-				foundKeys.push(userid + ':' + roomid);
-				foundRest = rest;
+				results.push([userid, roomid, punishment]);
 			}
 		});
 
-		return [foundKeys, foundRest];
+		return results;
 	}
 
 	/**
