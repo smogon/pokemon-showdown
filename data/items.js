@@ -1453,7 +1453,7 @@ let BattleItems = {
 			if (source && source !== target && target.hp && move && move.category !== 'Status') {
 				if (!this.canSwitch(target.side) || target.forceSwitchFlag) return;
 				for (const pokemon of this.getAllActive()) {
-					if (pokemon.switchFlag) return;
+					if (pokemon.switchFlag === true) return;
 				}
 				if (target.useItem()) {
 					target.switchFlag = true;
