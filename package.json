@@ -24,9 +24,9 @@
     "tsc": "tsc",
     "lint": "eslint --cache . && tslint --project .",
     "pretest": "npm run lint && npm run build",
-    "test": "mocha",
+    "test": "mocha -i -g '\\(slow\\)'",
     "posttest": "npm run tsc",
-    "fulltest": "npm run pretest && mocha -g '$^' && npm run posttest"
+    "fulltest": "npm run pretest && mocha && npm run posttest"
   },
   "husky": {
     "hooks": {
