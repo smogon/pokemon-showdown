@@ -710,7 +710,7 @@ class RandomGen5Teams extends RandomGen6Teams {
 			// Limit two Pokemon per tier
 			if (!tierCount[tier]) {
 				tierCount[tier] = 1;
-			} else if (tierCount[tier] > 1) {
+			} else if (tierCount[tier] > 1 && this.gen === 5) {
 				continue;
 			}
 

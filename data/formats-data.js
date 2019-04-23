@@ -679,7 +679,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	ninetales: {
-		randomBattleMoves: ["fireblast", "willowisp", "solarbeam", "nastyplot", "substitute", "hiddenpowerice"],
+		randomBattleMoves: ["fireblast", "willowisp", "solarbeam", "nastyplot", "substitute", "psyshock"],
 		randomDoubleBattleMoves: ["heatwave", "fireblast", "willowisp", "solarbeam", "substitute", "protect"],
 		eventPokemon: [
 			{"generation": 5, "level": 50, "gender": "M", "nature": "Bold", "ivs": {"def": 31}, "isHidden": true, "moves": ["heatwave", "solarbeam", "psyshock", "willowisp"], "pokeball": "cherishball"},
@@ -6552,7 +6552,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	mandibuzz: {
-		randomBattleMoves: ["foulplay", "bravebird", "roost", "taunt", "whirlwind", "toxic", "uturn", "defog"],
+		randomBattleMoves: ["foulplay", "bravebird", "roost", "taunt", "toxic", "uturn", "defog"],
 		randomDoubleBattleMoves: ["knockoff", "roost", "taunt", "tailwind", "snarl", "uturn", "bravebird", "protect"],
 		eventPokemon: [
 			{"generation": 5, "level": 25, "gender": "F", "isHidden": true, "moves": ["pluck", "nastyplot", "flatter", "feintattack"]},
@@ -8002,7 +8002,7 @@ let BattleFormatsData = {
 	},
 	bruxish: {
 		randomBattleMoves: ["psychicfangs", "crunch", "liquidation", "icefang", "aquajet", "swordsdance"],
-		randomDoubleBattleMoves: ["trickroom", "psychicfangs", "crunch", "liquidation", "protect", "swordsdance"],
+		randomDoubleBattleMoves: ["psychicfangs", "crunch", "liquidation", "aquajet", "protect", "swordsdance"],
 		tier: "NUBL",
 		doublesTier: "DUU",
 	},
@@ -8281,8 +8281,8 @@ let BattleFormatsData = {
 		doublesTier: "DOU",
 	},
 	blacephalon: {
-		randomBattleMoves: ["mindblown", "fireblast", "shadowball", "hiddenpowerice", "trick", "willowisp", "calmmind"],
-		randomDoubleBattleMoves: ["mindblown", "fireblast", "shadowball", "hiddenpowerice", "heatwave", "protect"],
+		randomBattleMoves: ["mindblown", "fireblast", "shadowball", "hiddenpowerice", "trick", "explosion", "calmmind"],
+		randomDoubleBattleMoves: ["willowisp", "fireblast", "shadowball", "hiddenpowerice", "heatwave", "protect"],
 		eventPokemon: [
 			{"generation": 7, "level": 60, "shiny": 1, "moves": ["fireblast", "shadowball", "trick", "mindblown"]},
 		],
