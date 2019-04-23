@@ -153,7 +153,7 @@ class HelpTicket extends Rooms.RoomGame {
 			'hi', 'hello', 'hullo', 'hey', 'yo',
 			'hesrude', 'shesrude', 'hesinappropriate', 'shesinappropriate', 'heswore', 'sheswore',
 		];
-		if (blockedMessages.includes(toId(message))) {
+		if (!user.isStaff && blockedMessages.includes(toId(message))) {
 			this.room.add(`|c|~Staff|Hello! The global staff team would be happy to help you, but you need to explain what's going on first.`);
 			this.room.add(`|c|~Staff|Please post the information I requested above so a global staff member can come to help.`);
 			this.room.update();
