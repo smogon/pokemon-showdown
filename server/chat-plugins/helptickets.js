@@ -149,6 +149,7 @@ class HelpTicket extends Rooms.RoomGame {
 	 * @param {User} user
 	 */
 	onLogMessage(message, user) {
+		if (this.ticket.active) return;
 		const blockedMessages = [
 			'hi', 'hello', 'hullo', 'hey', 'yo',
 			'hesrude', 'shesrude', 'hesinappropriate', 'shesinappropriate', 'heswore', 'sheswore',
