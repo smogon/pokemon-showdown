@@ -554,6 +554,7 @@
 64.40.96.0,64.40.127.255,NetNation,http://www.netnation.com/
 64.40.144.0,64.40.159.255,Alentus Corporation,http://alentus.com/
 64.41.64.0,64.41.127.255,Hostway,http://www.hostway.com/
+64.42.176.0,64.42.183.255,US Dedicated,https://usdedicated.com/
 64.45.0.0,64.45.63.255,PEER 1,http://www.peer1.com/
 64.46.32.0,64.46.63.255,RackForce,http://www.rockforce.com/
 64.49.192.0,64.49.255.255,Rackspace,http://www.rackspace.com/
@@ -597,6 +598,7 @@
 64.179.224.0,64.179.239.255,LightEdge,http://www.lightedge.com
 64.182.0.0,64.182.255.255,C I Host,http://www.cihost.com/
 64.187.96.0,64.187.127.255,AccelerateBiz Inc.,http://www.acceleratebiz.com/
+64.190.114.0,64.190.117.255,CloudRoute,http://www.cloudroute.com/
 64.202.96.0,64.202.127.255,ServerCentral,http://www.servercentral.net/
 64.202.160.0,64.202.191.255,GoDaddy.com Inc,http://www.godaddy.com/
 64.203.96.0,64.203.111.255,Airnet Group,http://smartechcorp.net/
@@ -890,6 +892,7 @@
 70.40.192.0,70.40.223.255,Bluehost.com,http://www.bluehost.com/
 70.84.0.0,70.87.255.255,SoftLayer,http://www.softlayer.com/
 71.6.128.0,71.6.255.255,cari.net,http://cari.net/
+71.19.240.0,71.19.255.255,eSecureData,https://www.esecuredata.com/
 72.1.96.0,72.1.127.255,latisys,http://www.latisys.com/
 72.1.240.0,72.1.255.255,ndchost.com,http://www.ndchost.com/
 72.3.128.0,72.3.255.255,Rackspace,http://www.rackspace.com/
@@ -1852,6 +1855,7 @@
 158.255.0.0,158.255.7.255,HostKey,http://www.hostkey.com/
 158.255.40.0,158.255.47.255,eukhost.com,http://eukhost.com/
 158.255.208.0,158.255.215.255,EDIS,http://www.edis.at/
+159.89.0.0,159.89.255.255,DigitalOcean USA,https://www.digitalocean.com/
 159.122.252.0,159.122.255.255,SoftLayer US,http://www.softlayer.com/
 159.203.0.0,159.203.255.255,DigitalOcean USA,https://www.digitalocean.com/
 159.253.24.0,159.253.31.255,GleSys,http://glesys.se/
@@ -2256,6 +2260,7 @@
 185.140.114.0,185.140.114.255,OneProvider,http://oneprovider.com/
 185.153.179.0,185.153.179.255,Nord VPN,https://nordvpn.com/
 185.156.173.32,185.156.173.63,Cyberghost,http://www.cyberghostvpn.com/
+185.159.157.0,185.159.157.255,ProtonVPN,https://protonvpn.com/
 185.186.76.0,185.186.79.255,OneProvider,http://oneprovider.com/
 185.212.168.0,185.212.171.255,M247 Dedicated Servers,https://m247.com/
 185.236.200.0,185.236.200.255,M247 Dedicated Servers,https://m247.com/
@@ -2785,6 +2790,8 @@
 199.241.144.0,199.241.147.255,hugeserver,http://www.hugeserver.com/
 199.244.112.0,199.244.119.255,hugeserver,http://www.hugeserver.com/
 199.245.56.0,199.245.63.255,Zenlayer,http://www.zenlayer.com/
+199.249.223.0,199.249.224.255,Quintex,https://www.quintex.com/
+199.249.230.0,199.249.230.255,Quintex,https://www.quintex.com/
 200.35.144.0,200.35.151.255,ServerPronto,http://www.serverpronto.com/
 200.50.224.0,200.50.231.255,abdicar.com,http://abdicar.com/
 200.63.40.0,200.63.47.255,panamaserver.com,http://panamaserver.com/
