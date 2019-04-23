@@ -1678,7 +1678,14 @@ const commands = {
 
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
-		if (!targetUser || !targetUser.connected) return this.errorReply(`User '${this.targetUsername}' not found.`);
+		if (!targetUser.connected) {
+			if (!targetUser || !global) return this.errorReply(`User '${this.targetUsername}' not found.`);
+
+			this.addModAction(`${targetUser.name} would be warned by ${user.name} but is offline.${(target ? ` (${target})` : ``)}`);
+			this.modlog('WARN', targetUser, target, {noalts: 1});
+			this.globalModlog('WARN', targetUser, ` by ${user.userid}${(target ? `: ${target}` : ``)}`);
+			return;
+		}
 		if (!(targetUser in room.users) && !global) {
 			return this.errorReply(`User ${this.targetUsername} is not in the room ${room.id}.`);
 		}
