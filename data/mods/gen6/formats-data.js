@@ -4149,7 +4149,7 @@ let BattleFormatsData = {
 	},
 	mandibuzz: {
 		inherit: true,
-		randomBattleMoves: ["foulplay", "bravebird", "roost", "taunt", "whirlwind", "toxic", "uturn", "defog"],
+		randomBattleMoves: ["foulplay", "bravebird", "roost", "taunt", "toxic", "uturn", "defog"],
 		randomDoubleBattleMoves: ["knockoff", "roost", "taunt", "tailwind", "snarl", "uturn", "bravebird", "protect"],
 		tier: "UU",
 		doublesTier: "(DUU)",
