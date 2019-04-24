@@ -1678,7 +1678,7 @@ const commands = {
 
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
-		if (!targetUser.connected) {
+		if (!targetUser || !targetUser.connected) {
 			if (!targetUser || !global) return this.errorReply(`User '${this.targetUsername}' not found.`);
 
 			this.addModAction(`${targetUser.name} would be warned by ${user.name} but is offline.${(target ? ` (${target})` : ``)}`);
