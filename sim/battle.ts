@@ -1032,11 +1032,33 @@ export class Battle extends Dex.ModdedDex {
 			type = this.requestState;
 		}
 
-		// default to no request
-		const requests: any[] = Array(this.sides.length).fill(null);
 		for (const side of this.sides) {
 			side.activeRequest = null;
 		}
+
+		const maxTeamSize = this.getMaxTeamSize();
+		if (type === 'teampreview') {
+			this.add('teampreview' + (maxTeamSize !== 6 ? '|' + maxTeamSize : ''));
+		}
+
+		const requests = this.getRequests(type, maxTeamSize);
+		for (let i = 0; i < this.sides.length; i++) {
+			this.sides[i].emitRequest(requests[i]);
+		}
+
+		if (this.sides.every(side => side.isChoiceDone())) {
+			throw new Error(`Choices are done immediately after a request`);
+		}
+	}
+
+	getMaxTeamSize() {
+		const teamLengthData = this.getFormat().teamLength;
+		return (teamLengthData && teamLengthData.battle) || 6;
+	}
+
+	getRequests(type: RequestState, maxTeamSize: number) {
+		// default to no request
+		const requests: any[] = Array(this.sides.length).fill(null);
 
 		switch (type) {
 		case 'switch': {
@@ -1054,10 +1076,6 @@ export class Battle extends Dex.ModdedDex {
 		}
 
 		case 'teampreview':
-			const teamLengthData = this.getFormat().teamLength;
-			let maxTeamSize = teamLengthData && teamLengthData.battle;
-			this.add('teampreview' + (maxTeamSize ? '|' + maxTeamSize : ''));
-			if (!maxTeamSize) maxTeamSize = 6;
 			for (let i = 0; i < this.sides.length; i++) {
 				const side = this.sides[i];
 				side.maxTeamSize = maxTeamSize;
@@ -1077,19 +1095,14 @@ export class Battle extends Dex.ModdedDex {
 
 		const allRequestsMade = requests.every(request => request);
 		for (let i = 0; i < this.sides.length; i++) {
-			const side = this.sides[i];
-			const request = requests[i];
-			if (request) {
-				if (!this.supportCancel || !allRequestsMade) request.noCancel = true;
-				side.emitRequest(request);
+			if (requests[i]) {
+				if (!this.supportCancel || !allRequestsMade) requests[i].noCancel = true;
 			} else {
-				side.emitRequest({wait: true, side: side.getRequestData()});
+				requests[i] = {wait: true, side: this.sides[i].getRequestData()};
 			}
 		}
 
-		if (this.sides.every(side => side.isChoiceDone())) {
-			throw new Error(`Choices are done immediately after a request`);
-		}
+		return requests;
 	}
 
 	tiebreak() {
@@ -1608,11 +1621,7 @@ export class Battle extends Dex.ModdedDex {
 		if (!this.deserialized) throw new Error('Attempt to restart a battle which has not been deserialized');
 		// @ts-ignore - readonly
 		this.send = send;
-		if (!this.started) {
-			this.start();
-			return;
-		}
-		if (!this.requestState) this.go();
+		if (!this.started) this.start();
 	}
 
 	boost(

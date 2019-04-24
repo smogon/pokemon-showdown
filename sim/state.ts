@@ -36,11 +36,11 @@ type Referable = Battle | Field | Side | Pokemon | PureEffect | Ability | Item |
 // Battle inherits from Dex, but all of Dex's fields are redundant - we can
 // just recreate the Dex from the format.
 const BATTLE = new Set([
-	...Object.keys(Dex), 'inherit', 'cachedFormat', 'zMoveTable', 'teamGenerator',
+	...Object.keys(Dex), 'id', 'inherit', 'cachedFormat', 'zMoveTable', 'teamGenerator',
 	'NOT_FAIL', 'FAIL', 'SILENT_FAIL', 'field', 'sides', 'prng', 'hints', 'deserialized',
 ]);
 const FIELD = new Set(['id', 'battle']);
-const SIDE = new Set(['battle', 'team', 'pokemon', 'choice']);
+const SIDE = new Set(['battle', 'team', 'pokemon', 'choice', 'activeRequest']);
 const POKEMON = new Set([
 	'side', 'battle', 'set', 'name', 'fullname', 'id', 'species', 'speciesid', 'happiness',
 	'level', 'pokeball', 'baseTemplate', 'baseHpType', 'baseHpPower', 'baseMoveSlots',
@@ -111,10 +111,30 @@ export const State = new class {
 		// down through the fields and repopulate all of the objects with the
 		// correct state.
 		const battle = new Battle(options);
+		// Calling `new Battle(...)` means side.pokemon is ordered to match what it
+		// was at the start of the battle (state.team), but we need to order the Pokemon
+		// back in their correct order based on how the battle has progressed. We need
+		// do to this before making any deserialization calls so that `fromRef` will
+		// be correct.
+		for (const [i, s] of state.sides.entries()) {
+			const side = battle.sides[i];
+			const ordered = new Array(side.pokemon.length);
+			const team = s.team.split(s.team.length > 9 ? ',' : '');
+			for (const [j, pos] of team.entries()) {
+				ordered[Number(pos) - 1] = side.pokemon[j];
+			}
+			side.pokemon = ordered;
+		}
 		this.deserialize(state, battle, BATTLE, battle);
 		this.deserializeField(state.field, battle.field);
 		for (const [i, side] of state.sides.entries()) {
 			this.deserializeSide(side, battle.sides[i]);
+		}
+		// Since battle.getRequests depends on the state of each side we can't combine
+		// this loop with the one above which deserializes the sides.
+		const requests = battle.getRequests(battle.requestState, battle.getMaxTeamSize());
+		for (const [i, side] of state.sides.entries()) {
+			battle.sides[i].activeRequest = side.activeRequest === null ? null : requests[i];
 		}
 		battle.prng = new PRNG(state.prng);
 		// @ts-ignore - readonly
@@ -147,21 +167,15 @@ export const State = new class {
 		// amount of complexity to the encoding/decoding process to accommodate this.
 		state.team = team.join(team.length > 9 ? ',' : '');
 		state.choice = this.serializeChoice(side.choice, side.battle);
+		// If activeRequest is null we encode it as a tombstone indicator to ensure
+		// that during serialization when we recompute the activeRequest we don't turn
+		// `activeRequest = null` into  `activeRequest = { wait: true, ... }`.
+		if (side.activeRequest === null) state.activeRequest = null;
 		return state;
 	}
 
 	private deserializeSide(state: /* Side */ AnyObject, side: Side) {
 		this.deserialize(state, side, SIDE, side.battle);
-		const ordered = new Array(side.pokemon.length);
-		// deserializeBattle calls `new Battle(...)` with the Pokemon ordered
-		// as they were at the start of the battle (state.team), but we need
-		// to order the Pokemon back in their correct order based on how the
-		// battle has progressed.
-		const team = state.team.split(state.team.length > 9 ? ',' : '');
-		for (const [i, pos] of team.entries()) {
-			ordered[Number(pos) - 1] = side.pokemon[i];
-		}
-		side.pokemon = ordered;
 		for (const [i, pokemon] of state.pokemon.entries()) {
 			this.deserializePokemon(pokemon, side.pokemon[i]);
 		}
@@ -171,6 +185,11 @@ export const State = new class {
 	serializePokemon(pokemon: Pokemon): /* Pokemon */ AnyObject {
 		const state: /* Pokemon */ AnyObject = this.serialize(pokemon, POKEMON, pokemon.battle);
 		state.set = pokemon.set;
+		// Only serialize the baseMoveSlots if they differ from moveSlots
+		if (pokemon.baseMoveSlots.length !== pokemon.moveSlots.length ||
+			!pokemon.baseMoveSlots.every((ms, i) => ms === pokemon.moveSlots[i])) {
+			state.baseMoveSlots = this.serializeWithRefs(pokemon.baseMoveSlots, pokemon.battle);
+		}
 		return state;
 	}
 
@@ -178,6 +197,12 @@ export const State = new class {
 		this.deserialize(state, pokemon, POKEMON, pokemon.battle);
 		// @ts-ignore - readonly
 		pokemon.set = state.set;
+		// TODO: is there a case where *some* move slots overlap and we need them to be
+		// shared with pokemon.moveSlots?
+		// @ts-ignore - readonly
+		pokemon.baseMoveSlots = state.baseMoveSlots ?
+			this.deserializeWithRefs(state.baseMoveSlots, pokemon.battle) :
+			pokemon.moveSlots.slice();
 	}
 
 	private serializeChoice(choice: Choice, battle: Battle): /* Choice */ AnyObject {
@@ -304,7 +329,7 @@ export const State = new class {
 	}
 
 	private toRef(obj: Referable): string {
-		// Pokemon's 'id' is not only more verbose than a postion, it also isn't guaranteed
+		// Pokemon's 'id' is not only more verbose than a position, it also isn't guaranteed
 		// to be uniquely identifying in custom games without Nickname/Species Clause.
 		const id = obj instanceof Pokemon ? `${obj.side.id}${POSITIONS[obj.position]}` : `${obj.id}`;
 		return `[${obj.constructor.name}${id ? ':' : ''}${id}]`;
@@ -352,5 +377,42 @@ export const State = new class {
 			// @ts-ignore - index signature
 			obj[key] = this.deserializeWithRefs(value, battle);
 		}
+	}
+
+	// A super pared down implementation of deepStrictEqual for serialized state objects (NOT GENERAL PURPOSE).
+	// This is required for testing purposes because `JSON.stringify(a) === JSON.stringify(b)` will have
+	// ordering issues (deserializing the Battle will cause fields to have been set in a different order,
+	// changing the field ordering in the resulting string) and assert.deepStrictEqual will complain about keys
+	// being absent vs. undefined, which we don't care about.
+	equal(a: AnyObject, b: AnyObject) {
+		if (a === b) return true;
+		if ((a === null || typeof a !== 'object') && (b === null || typeof b !== 'object')) return a === b;
+		if (a === null || a === undefined || b === null || b === undefined) return false;
+		const isPrimitive = (arg: any) => arg === null || typeof arg !== 'object' && typeof arg !== 'function';
+		if (isPrimitive(a) || isPrimitive(b)) return a === b;
+		if (Object.getPrototypeOf(a) !== Object.getPrototypeOf(b)) return false;
+
+		// We don't care to distinguish between keys which are absent vs. undefined (because once
+		// stringified the distinction is lost anyway), so we filter them out here.
+		const hasOwnProperty = Object.prototype.hasOwnProperty;
+		const definedKeys = (obj: AnyObject) => {
+			const keys = [];
+			for (const key in obj) {
+				if (hasOwnProperty.call(obj, key) && typeof obj[key] !== 'undefined') keys.push(key);
+			}
+			return keys;
+		};
+
+		const ka = definedKeys(a);
+		const kb = definedKeys(b);
+		if (ka.length !== kb.length) return false;
+
+		ka.sort();
+		kb.sort();
+
+		for (const key of ka) {
+			if (!State.equal(a[key], b[key])) return false;
+		}
+		return true;
 	}
 };
