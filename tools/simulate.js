@@ -68,7 +68,7 @@ const RejectionTracker = new class {
 		for (const u of this.unhandled) {
 			const error = (u.reason instanceof Error) ? u.reason :
 				new Error(`Promise rejected with value: ${u.reason}`);
-			console.error(error.stack);
+			console.error(`UNHANDLED PROMISE REJECTION:\n${error.stack}`);
 			i++;
 		}
 		process.exit(code + i);

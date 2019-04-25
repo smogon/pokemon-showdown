@@ -81,15 +81,9 @@ export class Runner {
 		const p2spec = this.getPlayerSpec("Bot 2", this.p2options);
 
 		const p1 = this.p1options.createAI(
-			streams.p1, Object.assign({seed: this.newSeed()}, this.p1options));
+			streams.p1, Object.assign({seed: this.newSeed()}, this.p1options)).start();
 		const p2 = this.p2options.createAI(
-			streams.p2, Object.assign({seed: this.newSeed()}, this.p2options));
-		// TODO: Use `await Promise.race([streams.omniscient.read(), p1, p2])` to avoid
-		// leaving these promises dangling once it no longer causes memory leaks (v8#9069).
-		/* tslint:disable:no-floating-promises */
-		p1.start();
-		p2.start();
-		/* tslint:enable:no-floating-promises */
+			streams.p2, Object.assign({seed: this.newSeed()}, this.p2options)).start();
 
 		streams.omniscient.write(`>start ${JSON.stringify(spec)}\n` +
 			`>player p1 ${JSON.stringify(p1spec)}\n` +
@@ -97,7 +91,7 @@ export class Runner {
 
 		let chunk;
 		// tslint:disable-next-line no-conditional-assignment
-		while ((chunk = await streams.omniscient.read())) {
+		while ((chunk = await Promise.race([streams.omniscient.read(), p1, p2]))) {
 			if (this.output) console.log(chunk);
 		}
 		return streams.omniscient.end();
