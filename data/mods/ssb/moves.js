@@ -232,56 +232,6 @@ let BattleMovedex = {
 		target: "self",
 		type: "Water",
 	},
-	// Andy
-	pilfer: {
-		accuracy: 100,
-		basePower: 70,
-		category: "Physical",
-		desc: "If the target uses certain non-damaging moves this turn, the user steals the move to use itself. This move fails if no move is stolen or if the user is under the effect of Sky Drop.",
-		shortDesc: "Steals foe's move. Fails if target attacks. Priority.",
-		id: "pilfer",
-		name: "Pilfer",
-		isNonstandard: "Custom",
-		pp: 5,
-		priority: 1,
-		flags: {protect: 1, mirror: 1, contact: 1, authentic: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onTryHit(target, source) {
-			let decision = this.willMove(target);
-			if (decision) {
-				let move = this.getActiveMove(decision.move.id);
-				if (move.category === 'Status' && move.id !== 'mefirst' && move.target) {
-					if (['all', 'adjacentAllyOrSelf', 'allySide', 'allyTeam', 'self'].includes(move.target)) {
-						 this.useMove(move, source, source);
-					} else {
-						 this.useMove(move, source, target);
-					}
-					this.add('-anim', source, "Sucker Punch", target);
-					this.add('-anim', source, "Night Slash", target);
-					return;
-				}
-			}
-			return false;
-		},
-		volatileStatus: 'pilfer',
-		effect: {
-			// Simulate the snatch effect while being able to use the pilfered move 1st
-			duration: 1,
-			onStart() {
-			},
-			onBeforeMovePriority: 3,
-			onBeforeMove(pokemon, target, move) {
-				if (move.category === 'Status') {
-					this.add('-message', move.name + ' was pilfered and unable to be used.');
-					return false;
-				}
-			},
-		},
-		target: "normal",
-		type: "Dark",
-	},
 	// ant
 	truant: {
 		accuracy: 100,
@@ -709,29 +659,6 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Steel",
 	},
-	// cc
-	restartingrouter: {
-		accuracy: true,
-		category: "Status",
-		desc: "Raises the user's Special Attack by 2 stages and its Speed by 1 stage.",
-		shortDesc: "Raises the user's Sp. Atk by 2 and Speed by 1.",
-		id: "restartingrouter",
-		name: "Restarting Router",
-		isNonstandard: "Custom",
-		pp: 10,
-		priority: 0,
-		flags: {mirror: 1, snatch: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Charge', source);
-		},
-		boosts: {spa: 2, spe: 1},
-		secondary: null,
-		target: "self",
-		type: "Electric",
-	},
 	// Ceteris
 	bringerofdarkness: {
 		accuracy: true,
@@ -774,40 +701,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Dark",
-	},
-	// Cerberax
-	blimpcrash: {
-		accuracy: true,
-		basePower: 165,
-		category: "Physical",
-		desc: "80% Accuracy if target is grounded. The user and the target will be grounded, and the user will take 1/2 of the damage inflicted as recoil.",
-		shortDesc: "80 Acc vs grounded, grounds both sides, 1/2 recoil.",
-		id: "blimpcrash",
-		name: "Blimp Crash",
-		isNonstandard: "Custom",
-		pp: 5,
-		priority: 0,
-		flags: {mirror: 1, protect: 1, contact: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onModifyMove(move, source, target) {
-			if (target.isGrounded()) {
-				move.accuracy = 80;
-			}
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Head Smash', target);
-			this.add('-anim', source, 'Earthquake', target);
-		},
-		onHit(target, source) {
-			target.addVolatile('smackdown');
-			source.addVolatile('smackdown');
-		},
-		secondary: null,
-		recoil: [1, 2],
-		target: "normal",
-		type: "Flying",
 	},
 	// chaos
 	forcewin: {
@@ -973,37 +866,6 @@ let BattleMovedex = {
 		type: "Ground",
 		zMoveEffect: 'healhalf',
 	},
-	// duck
-	holyduck: {
-		accuracy: 95,
-		basePower: 90,
-		category: "Physical",
-		desc: "If this attack hits, the effects of Reflect, Light Screen, and Aurora Veil end on the target's side of the field before damage is calculated.",
-		shortDesc: "Destroys screens, unless the target is immune.",
-		id: "holyduck",
-		name: "Holy Duck!",
-		isNonstandard: "Custom",
-		pp: 5,
-		priority: 1,
-		flags: {mirror: 1, protect: 1, contact: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Extreme Speed', target);
-			this.add('-anim', source, 'Feather Dance', target);
-		},
-		onTryHit(pokemon) {
-			if (pokemon.runImmunity('Normal')) {
-				pokemon.side.removeSideCondition('reflect');
-				pokemon.side.removeSideCondition('lightscreen');
-				pokemon.side.removeSideCondition('auroraveil');
-			}
-		},
-		secondary: null,
-		target: "normal",
-		type: "Normal",
-	},
 	// E4 Flint
 	fangofthefireking: {
 		accuracy: 90,
@@ -1033,33 +895,6 @@ let BattleMovedex = {
 			target.setStatus('brn', source, null, true);
 			// Cringy message
 			if (this.random(5) === 1) this.add(`c|@E4 Flint|here's a __taste__ of my __firepower__ XD`);
-		},
-		secondary: null,
-		target: "normal",
-		type: "Fire",
-	},
-	// explodingdaisies
-	doom: {
-		basePower: 100,
-		accuracy: 100,
-		category: "Special",
-		desc: "Summons Sunny Day after doing damage.",
-		shortDesc: "Summons Sunny Day after doing damage.",
-		id: "doom",
-		name: "DOOM!",
-		isNonstandard: "Custom",
-		pp: 5,
-		priority: 0,
-		flags: {mirror: 1, protect: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Eruption', target);
-			this.add('-anim', source, 'Sunny Day', source);
-		},
-		onAfterMoveSecondarySelf() {
-			this.field.setWeather('sunnyday');
 		},
 		secondary: null,
 		target: "normal",
@@ -1125,65 +960,32 @@ let BattleMovedex = {
 		target: "self",
 		type: "Flying",
 	},
-	// EV
-	evoblast: {
+	// explodingdaisies
+	doom: {
+		basePower: 100,
 		accuracy: 100,
-		basePower: 80,
 		category: "Special",
-		desc: "This move's type changes to match the user's primary type. This move is a physical attack if the user's Attack stat is greater than its Special Attack stat; otherwise, it is a special attack.",
-		shortDesc: "Shares user's type. Physical if user's Atk > Sp. Atk.",
-		id: "evoblast",
-		name: "Evoblast",
+		desc: "Summons Sunny Day after doing damage.",
+		shortDesc: "Summons Sunny Day after doing damage.",
+		id: "doom",
+		name: "DOOM!",
 		isNonstandard: "Custom",
-		pp: 10,
+		pp: 5,
 		priority: 0,
 		flags: {mirror: 1, protect: 1},
-		onModifyMove(move, pokemon, target) {
-			move.type = pokemon.types[0];
-			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
-		},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
-		onPrepareHit(target, source, move) {
-			this.add('-anim', source, 'Extreme Evoboost', source);
-			switch (move.type) {
-			case 'Fire':
-				this.add('-anim', source, 'Flamethrower', target);
-				break;
-			case 'Electric':
-				this.add('-anim', source, 'Thunderbolt', target);
-				break;
-			case 'Water':
-				this.add('-anim', source, 'Bubblebeam', target);
-				break;
-			case 'Psychic':
-				this.add('-anim', source, 'Psybeam', target);
-				break;
-			case 'Dark':
-				this.add('-anim', source, 'Dark Pulse', target);
-				break;
-			case 'Grass':
-				this.add('-anim', source, 'Solar Beam', target);
-				break;
-			case 'Ice':
-				this.add('-anim', source, 'Ice Beam', target);
-				break;
-			case 'Fairy':
-				this.add('-anim', source, 'Dazzling Gleam', target);
-				break;
-			}
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Eruption', target);
+			this.add('-anim', source, 'Sunny Day', source);
 		},
-		onAfterMoveSecondarySelf(pokemon) {
-			let stat = ['atk', 'def', 'spa', 'spd', 'spe', 'accuracy'][this.random(6)];
-			/** @type {{[stat: string]: number}} */
-			let boost = {};
-			boost[stat] = 1;
-			this.boost(boost, pokemon);
+		onAfterMoveSecondarySelf() {
+			this.field.setWeather('sunnyday');
 		},
 		secondary: null,
 		target: "normal",
-		type: "Normal",
+		type: "Fire",
 	},
 	// False
 	frck: {
@@ -1486,33 +1288,6 @@ let BattleMovedex = {
 		type: "Normal",
 		zMoveBoost: {def: 1},
 	},
-	// Hipster Sigilyph
-	mainstreamshock: {
-		accuracy: 100,
-		basePower: 100,
-		category: "Special",
-		desc: "This move's type effectiveness against Dark is changed to be super effective no matter what this move's type is.",
-		shortDesc: "Super effective on Dark.",
-		id: "mainstreamshock",
-		name: "Mainstream Shock",
-		isNonstandard: "Custom",
-		pp: 5,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, "Psystrike", target);
-		},
-		ignoreImmunity: {'Psychic': true},
-		onEffectiveness(typeMod, target, type) {
-			if (type === 'Dark') return 1;
-		},
-		secondary: null,
-		target: "normal",
-		type: "Psychic",
-	},
 	// HoeenHero
 	scriptedterrain: {
 		accuracy: 100,
@@ -1719,62 +1494,6 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Poison",
 	},
-	// imagi
-	delayedpromise: {
-		accuracy: 100,
-		basePower: 0,
-		category: "Status",
-		desc: "This move bypasses Baneful Bunker, Crafty Shield, Detect, King's Shield, Mat Block, Protect, Quick Guard, Substitute, Spiky Shield, and Wide Guard. The target's stat stages are set to 0, and the target's Speed is lowered by 1 after stats are reset. 75% chance to put the target to sleep.",
-		shortDesc: "Foe: Resets stats; -1 Speed; 75% chance to sleep.",
-		id: "delayedpromise",
-		name: "Delayed Promise",
-		isNonstandard: "Custom",
-		pp: 10,
-		priority: 0,
-		flags: {authentic: 1, snatch: 1, reflectable: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Wish', source);
-			this.add('-anim', source, 'Spite', target);
-		},
-		onHit(target, source) {
-			target.clearBoosts();
-			this.add('-clearboost', target);
-			this.boost({spe: -1}, target, source);
-		},
-		secondary: {
-			status: 'slp',
-			chance: 75,
-		},
-		target: "normal",
-		type: "Psychic",
-	},
-	// imas
-	boi: {
-		accuracy: 100,
-		basePower: 120,
-		category: "Physical",
-		desc: "The user takes recoil damage equal to 33% the HP lost by the target, rounded half up, but not less than 1 HP.",
-		shortDesc: "Has 33% recoil.",
-		id: "boi",
-		name: "B O I",
-		isNonstandard: "Custom",
-		pp: 15,
-		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Supersonic Skystrike', target);
-		},
-		recoil: [33, 100],
-		secondary: null,
-		target: "normal",
-		type: "Flying",
-	},
 	// Iyarito
 	vbora: {
 		accuracy: true,
@@ -1804,29 +1523,6 @@ let BattleMovedex = {
 		secondary: null,
 		target: "allyTeam",
 		type: "Poison",
-	},
-	// jdarden
-	wyvernswail: {
-		accuracy: 100,
-		basePower: 60,
-		category: "Special",
-		desc: "If both the user and the target have not fainted, the target is forced to switch out and be replaced with a random unfainted ally. This effect fails if the target used Ingrain previously, has the Suction Cups Ability, or this move hit a substitute.",
-		shortDesc: "Forces the target to switch to a random ally.",
-		id: "wyvernswail",
-		name: "Wyvern's Wail",
-		isNonstandard: "Custom",
-		pp: 15,
-		priority: -6,
-		flags: {protect: 1, mirror: 1, sound: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Whirlwind', target);
-		},
-		forceSwitch: true,
-		target: "normal",
-		type: "Flying",
 	},
 	// Kaiju Bunny
 	bestialstrike: {
@@ -2421,47 +2117,6 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Grass",
 	},
-	// moo
-	proteinshake: {
-		accuracy: true,
-		category: "Status",
-		desc: "The user's Attack, Defense, and Speed are boosted by 1 stage. The user also gains 100kg of weight.",
-		shortDesc: "+1 Atk, Def, and Spe. User gains 100kg.",
-		id: "proteinshake",
-		name: "Protein Shake",
-		isNonstandard: "Custom",
-		pp: 10,
-		priority: 0,
-		flags: {snatch: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, "Milk Drink", source);
-		},
-		volatileStatus: 'proteinshake',
-		effect: {
-			onStart(pokemon) {
-				this.effectData.multiplier = 1;
-				this.add('-start', pokemon, 'Protein Shake', '[silent]');
-			},
-			onRestart(pokemon) {
-				this.effectData.multiplier++;
-				this.add('-start', pokemon, 'Protein Shake', '[silent]');
-			},
-			onModifyWeightPriority: 1,
-			onModifyWeight(weight, pokemon) {
-				if (this.effectData.multiplier) {
-					weight += this.effectData.multiplier * 100;
-					return weight;
-				}
-			},
-		},
-		boosts: {atk: 1, def: 1, spe: 1},
-		secondary: null,
-		target: "self",
-		type: "Normal",
-	},
 	// Morfent
 	e: {
 		accuracy: true,
@@ -2626,40 +2281,6 @@ let BattleMovedex = {
 		},
 		target: "normal",
 		type: "Fire",
-	},
-	// Osiris
-	nightmarch: {
-		basePower: 60,
-		basePowerCallback(pokemon, target, move) {
-			let faintedmons = 0;
-			for (const ally of pokemon.side.pokemon) {
-				if (ally.fainted || !ally.hp) faintedmons += 20;
-			}
-			for (const foes of target.side.pokemon) {
-				if (foes.fainted || !foes.hp) faintedmons += 20;
-			}
-			return move.basePower + faintedmons;
-		},
-		accuracy: 100,
-		category: "Physical",
-		desc: "Power is equal to 60+(20*X), where X is the total number of fainted Pokemon on both the user's team and on the opponent's team.",
-		shortDesc: "+20 power for each fainted ally or foe.",
-		id: "nightmarch",
-		name: "Night March",
-		isNonstandard: "Custom",
-		pp: 5,
-		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, "Nightmare", target);
-			this.add('-anim', source, "Moongeist Beam", target);
-			this.add('-anim', source, "Stomping Tantrum", target);
-		},
-		secondary: null,
-		target: "normal",
-		type: "Ghost",
 	},
 	// Overneat
 	totalleech: {
@@ -3670,60 +3291,6 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Electric",
 	},
-	// urkerab
-	holyorders: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "Summons two of Attack Order, Defense Order, and Heal Order at random to combine for some assortment of the following effects: has a Base Power of 90 and a higher chance for a critical hit, raises the user's Defense and Special Defense by 1 stage, and heals the user by half of its maximum HP, rounded half up.",
-		shortDesc: "Summons two of Attack, Defense, and Heal Order.",
-		id: "holyorders",
-		name: "Holy Orders",
-		isNonstandard: "Custom",
-		pp: 10,
-		priority: 0,
-		flags: {snatch: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onHit(target, source) {
-			let orders = ["healorder", "defendorder", "attackorder"];
-			this.shuffle(orders);
-			for (const [i, order] of orders.entries()) {
-				if (i > 1) return;
-				let target = order === "attackorder" ? source.side.foe.active[0] : source;
-				this.useMove(order, source, target);
-			}
-		},
-		secondary: null,
-		target: "self",
-		type: "Bug",
-	},
-	// Uselesscrab
-	revampedsuspectphilosophy: {
-		basePower: 160,
-		accuracy: true,
-		category: "Physical",
-		desc: "No additional effect.",
-		shortDesc: "No additional effect.",
-		id: "revampedsuspectphilosophy",
-		name: "Revamped Suspect Philosophy",
-		isNonstandard: "Custom",
-		pp: 1,
-		priority: 0,
-		flags: {},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, "Subzero Slammer", target);
-			this.add('-anim', source, "Tectonic Rage", target);
-		},
-		secondary: null,
-		isZ: "nichiumz",
-		target: "normal",
-		type: "Ground",
-	},
 	// Volco
 	explosivedrain: {
 		basePower: 90,
@@ -3822,54 +3389,6 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fire",
 	},
-	// Yuki
-	cutieescape: {
-		accuracy: true,
-		category: "Status",
-		desc: "The user is replaced with another Pokemon in its party. The opponent is confused, trapped, and infatuated regardless of the replacement's gender. This move fails unless the user already took damage this turn.",
-		shortDesc: "If hit; switches out + confuses, traps, infatuates.",
-		id: "cutieescape",
-		name: "Cutie Escape",
-		isNonstandard: "Custom",
-		pp: 10,
-		priority: -6,
-		flags: {mirror: 1},
-		beforeTurnCallback(pokemon) {
-			pokemon.addVolatile('cutieescape');
-			this.add('-message', `${pokemon.name} is preparing to flee!`);
-		},
-		beforeMoveCallback(pokemon) {
-			if (!pokemon.volatiles['cutieescape'] || !pokemon.volatiles['cutieescape'].tookDamage) {
-				this.add('-fail', pokemon, 'move: Cutie Escape');
-				this.hint("Cutie Escape only works when Yuki is hit in the same turn the move is used.");
-				return true;
-			}
-		},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, "Baton Pass", source);
-		},
-		onHit(target, source) {
-			target.addVolatile('confusion');
-			target.addVolatile('cutietrap');
-		},
-		effect: {
-			duration: 1,
-			onStart(pokemon) {
-				this.add('-singleturn', pokemon, 'move: Cutie Escape');
-			},
-			onHit(pokemon, source, move) {
-				if (move.category !== 'Status') {
-					pokemon.volatiles['cutieescape'].tookDamage = true;
-				}
-			},
-		},
-		selfSwitch: true,
-		target: "normal",
-		type: "Fairy",
-	},
 	// Zarel
 	relicsongdance: {
 		accuracy: 100,
@@ -3926,34 +3445,6 @@ let BattleMovedex = {
 		},
 		target: "allAdjacentFoes",
 		type: "Psychic",
-	},
-	// Zyg
-	mylife: {
-		accuracy: true,
-		category: "Status",
-		desc: "Badly poisons all Pokemon on the field.",
-		shortDesc: "Badly poisons all Pokemon on the field.",
-		id: "mylife",
-		name: "My Life",
-		isNonstandard: "Custom",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, "Toxic", target);
-		},
-		onHit(target, source) {
-			let success = false;
-			if (target.trySetStatus('tox', source)) success = true;
-			if (source.trySetStatus('tox', source)) success = true;
-			return success;
-		},
-		secondary: null,
-		target: "normal",
-		type: "Poison",
 	},
 	// Modified Moves \\
 	// Purple Pills is immune to taunt

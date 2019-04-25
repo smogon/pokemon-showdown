@@ -109,19 +109,6 @@ let BattleAbilities = {
 			pokemon.formeChange('Shaymin', this.effect);
 		},
 	},
-	// cc
-	lurking: {
-		desc: "This Pokemon's moves have their accuracy multiplied by 1.3.",
-		shortDesc: "This Pokemon's moves have their accuracy multiplied by 1.3.",
-		id: "lurking",
-		name: "Lurking",
-		isNonstandard: "Custom",
-		onModifyMove(move) {
-			if (typeof move.accuracy === 'number') {
-				move.accuracy *= 1.3;
-			}
-		},
-	},
 	// Cleo
 	adrenalinerush: {
 		desc: "As this Pokemon switches in, its Special Attack and Speed are doubled for 5 turns. After five turns have passed, these effects are removed.",
@@ -285,48 +272,6 @@ let BattleAbilities = {
 			this.field.setTerrain('prismaticterrain');
 		},
 	},
-	// Osiris
-	sacredshadow: {
-		desc: "This Pokemon's attacking stats are doubled while using a Ghost-type attack. If a Pokemon uses a Fire-type or Flying-type attack against this Pokemon, that Pokemon's attacking stat is halved when calculating the damage to this Pokemon. This Pokemon cannot be burned. Gaining this Ability while burned cures it.",
-		shortDesc: "This Pokemon's Ghost power is 2x; can't be burned; Fire/Flying power against it is halved.",
-		id: "sacredshadow",
-		name: "Sacred Shadow",
-		isNonstandard: "Custom",
-		onModifyAtkPriority: 5,
-		onSourceModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Fire' || move.type === 'Flying') {
-				return this.chainModify(0.5);
-			}
-		},
-		onModifySpAPriority: 5,
-		onSourceModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Fire' || move.type === 'Flying') {
-				return this.chainModify(0.5);
-			}
-		},
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Ghost') {
-				return this.chainModify(2);
-			}
-		},
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Ghost') {
-				return this.chainModify(2);
-			}
-		},
-		onUpdate(pokemon) {
-			if (pokemon.status === 'brn') {
-				this.add('-activate', pokemon, 'ability: Sacred Shadow');
-				pokemon.cureStatus();
-			}
-		},
-		onSetStatus(status, target, source, effect) {
-			if (status.id !== 'brn') return;
-			if (!effect || !effect.status) return false;
-			this.add('-immune', target, '[from] ability: Sacred Shadow');
-			return false;
-		},
-	},
 	// Pablo
 	shellshocker: {
 		desc: "This Pokemon's Normal-type moves become Electric-type and have 1.2x power. In addition, this Pokemon is immune to Electric-type moves and heals 1/4 of its maximum HP, rounded down, when hit by an Electric-type move.",
@@ -443,7 +388,7 @@ let BattleAbilities = {
 			return false;
 		},
 	},
-	// Shiba and imas
+	// Shiba
 	galewingsv1: {
 		desc: "This Pokemon's Flying-type moves have their priority increased by 1.",
 		shortDesc: "This Pokemon's Flying-type moves have their priority increased by 1.",
@@ -527,30 +472,6 @@ let BattleAbilities = {
 		isNonstandard: "Custom",
 		onStart(pokemon) {
 			this.field.addPseudoWeather('gravity', pokemon);
-		},
-	},
-	// urkerab
-	focusenergy: {
-		desc: "This Pokemon gains the Focus Energy effect when it switches in.",
-		shortDesc: "This Pokemon gains the Focus Energy effect when it switches in.",
-		id: "focusenergy",
-		name: "Focus Energy",
-		isNonstandard: "Custom",
-		onStart(pokemon) {
-			pokemon.addVolatile('focusenergy');
-		},
-	},
-	// Yuki
-	snowstorm: {
-		desc: "As it switches in, this Pokemon summons hail that remains in effect until replaced by another weather or suppressed by the effects of Cloud Nine, Air Lock, or Delta Stream.",
-		shortDesc: "On switch-in, this Pokemon summons hail which remains active until replaced.",
-		id: "snowstorm",
-		name: "Snow Storm",
-		isNonstandard: "Custom",
-		onStart() {
-			let snowStorm = this.deepClone(this.getEffect('hail'));
-			snowStorm.duration = -1;
-			this.field.setWeather(snowStorm);
 		},
 	},
 	// Modified Illusion to support SSB volatiles

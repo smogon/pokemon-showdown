@@ -99,18 +99,6 @@ let BattleItems = {
 		gen: 7,
 		desc: "If held by a Cradily with Rock Slide, it can use Devolution Wave.",
 	},
-	// Uselesscrab
-	nichiumz: {
-		id: "nichiumz",
-		name: "Nichium Z",
-		isNonstandard: "Custom",
-		onTakeItem: false,
-		zMove: "Revamped Suspect Philosophy",
-		zMoveFrom: "Icicle Crash",
-		zMoveUser: ["Kyurem-Black"],
-		gen: 7,
-		desc: "If held by a Kyurem-Black with Icicle Crash, it can use Revamped Suspect Philosophy.",
-	},
 };
 
 exports.BattleItems = BattleItems;
