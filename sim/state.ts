@@ -195,7 +195,8 @@ export const State = new class {
 	serializePokemon(pokemon: Pokemon): /* Pokemon */ AnyObject {
 		const state: /* Pokemon */ AnyObject = this.serialize(pokemon, POKEMON, pokemon.battle);
 		state.set = pokemon.set;
-		// Only serialize the baseMoveSlots if they differ from moveSlots
+		// Only serialize the baseMoveSlots if they differ from moveSlots. Getting fancy and
+		// only serializing the diff and its index is considered overkill here.
 		if (pokemon.baseMoveSlots.length !== pokemon.moveSlots.length ||
 			!pokemon.baseMoveSlots.every((ms, i) => ms === pokemon.moveSlots[i])) {
 			state.baseMoveSlots = this.serializeWithRefs(pokemon.baseMoveSlots, pokemon.battle);
@@ -207,12 +208,20 @@ export const State = new class {
 		this.deserialize(state, pokemon, POKEMON, pokemon.battle);
 		// @ts-ignore - readonly
 		pokemon.set = state.set;
-		// TODO: is there a case where *some* move slots overlap and we need them to be
-		// shared with pokemon.moveSlots?
+		// baseMoveSlots and moveSlots need to point to the same objects (ie. identity, not equality).
+		// If we serialized the baseMoveSlots, replace any that match moveSlots to preserve the
+		// identity relationship requirement.
+		let baseMoveSlots;
+		if (state.baseMoveSlots) {
+			baseMoveSlots = this.deserializeWithRefs(state.baseMoveSlots, pokemon.battle);
+			for (const [i, baseMoveSlot] of baseMoveSlots.entries()) {
+				if (pokemon.moveSlots[i].id === baseMoveSlot.id) baseMoveSlots[i] = pokemon.moveSlots[i];
+			}
+		} else {
+			baseMoveSlots = pokemon.moveSlots.slice();
+		}
 		// @ts-ignore - readonly
-		pokemon.baseMoveSlots = state.baseMoveSlots ?
-			this.deserializeWithRefs(state.baseMoveSlots, pokemon.battle) :
-			pokemon.moveSlots.slice();
+		pokemon.baseMoveSlots = baseMoveSlots;
 		if (state.showCure === undefined) pokemon.showCure = undefined;
 	}
 
