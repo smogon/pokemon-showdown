@@ -253,6 +253,9 @@ let rangeCathednet = Dnsbl.cidrToPattern('180.95.40.0/21');
 let rangeTelefonica = Dnsbl.cidrToPattern('181.64.0.0/14');
 let rangeStarhub = Dnsbl.cidrToPattern(['27.125.128.0/18', '58.96.192.0/18', '101.127.0.0/17', '116.88.0.0/17', '122.11.192.0/18', '182.19.128.0/17', '182.55.0.0/16', '183.90.0.0/17', '203.116.122.0/23']);
 let rangeTelstra = Dnsbl.cidrToPattern('101.160.0.0/11');
+let rangePsci = Dnsbl.cidrToPattern(['96.31.192.0/20', '209.239.96.0/20', '216.49.96.0/19']);
+let rangeOcde = Dnsbl.cidrToPattern(['104.249.64.0/18', '209.232.144.0/20', '216.100.88.0/21']);
+let rangeIhet = Dnsbl.cidrToPattern('199.8.0.0/16');
 
 let rangeOVHres = Dnsbl.rangeToPattern(['109.190.0.0 - 109.190.63.255', '109.190.64.0 - 109.190.127.255', '109.190.128.0 - 109.190.191.255', '109.190.192.0 - 109.190.255.255', '151.80.228.0 - 151.80.228.255', '178.32.37.0 - 178.32.37.255', '178.33.101.0 - 178.33.101.255', '185.15.68.0 - 185.15.69.255', '185.15.70.0 - 185.15.71.255']);
 
@@ -335,6 +338,18 @@ Dnsbl.reverse = function reverseDns(ip) {
 		}
 		if (ip.startsWith('189.204.')) {
 			resolve('bestel.com.mx.res-nohost');
+			return;
+		}
+		if (Dnsbl.checkPattern(rangePsci, ipNumber)) {
+			resolve('psci.net.res-nohost');
+			return;
+		}
+		if (Dnsbl.checkPattern(rangeOcde, ipNumber)) {
+			resolve('ocde.us.res-nohost');
+			return;
+		}
+		if (Dnsbl.checkPattern(rangeIhet, ipNumber)) {
+			resolve('iu.edu.res-nohost');
 			return;
 		}
 		if (ip.startsWith('121.54.')) {
