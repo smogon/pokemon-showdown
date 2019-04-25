@@ -143,6 +143,7 @@ export const State = new class {
 		battle.prng = new PRNG(state.prng);
 		// @ts-ignore - readonly
 		battle.hints = new Set(battle.hints);
+		// @ts-ignore - readonly
 		battle.log = state.log;
 		return battle;
 	}
@@ -208,6 +209,7 @@ export const State = new class {
 		pokemon.baseMoveSlots = state.baseMoveSlots ?
 			this.deserializeWithRefs(state.baseMoveSlots, pokemon.battle) :
 			pokemon.moveSlots.slice();
+		if (state.showCure === undefined) pokemon.showCure = undefined;
 	}
 
 	private serializeChoice(choice: Choice, battle: Battle): /* Choice */ AnyObject {

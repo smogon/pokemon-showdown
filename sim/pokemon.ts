@@ -56,7 +56,7 @@ export class Pokemon {
 	status: string;
 	statusData: AnyObject;
 	volatiles: AnyObject;
-	showCure: boolean;
+	showCure?: boolean;
 
 	/**
 	 * These are the basic stats that appear on the in-game stats screen:
