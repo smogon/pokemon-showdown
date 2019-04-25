@@ -50,7 +50,7 @@ const CHOICE = new Set(['switchIns']);
 // ActiveMove (theoretically) includes all of the fields of Move, but we need
 // to dynamically create that skip set as Moves have different fields depending
 // on their data.
-const ACTIVE_MOVE = new Set(['move']);
+const ACTIVE_MOVE = new Set(['move', 'type']);
 
 export const State = new class {
 	// REFERABLE is used to determine which objects are of the Referable type by
@@ -253,8 +253,10 @@ export const State = new class {
 	// a bug in the simulator if it ever happened, but if not, the isActiveMove check can
 	// be extended.
 	private serializeActiveMove(move: ActiveMove, battle: Battle): /* ActiveMove */ AnyObject {
-		const skip = new Set([...Object.keys(battle.getMove(move.id)), ...ACTIVE_MOVE]);
+		const base = battle.getMove(move.id);
+		const skip = new Set([...Object.keys(base), ...ACTIVE_MOVE]);
 		const state: /* ActiveMove */ AnyObject = this.serialize(move, skip, battle);
+		if (base.type !== move.type) state.type = move.type;
 		state.move = `[Move:${move.id}]`;
 		return state;
 	}
@@ -262,6 +264,7 @@ export const State = new class {
 	private deserializeActiveMove(state: /* ActiveMove */ AnyObject, battle: Battle): ActiveMove {
 		const move = battle.getActiveMove(this.fromRef(state.move, battle)! as Move);
 		this.deserialize(state, move, ACTIVE_MOVE, battle);
+		if (state.type) move.type = state.type;
 		return move;
 	}
 
