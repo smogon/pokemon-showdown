@@ -36,14 +36,15 @@ type Referable = Battle | Field | Side | Pokemon | PureEffect | Ability | Item |
 // Battle inherits from Dex, but all of Dex's fields are redundant - we can
 // just recreate the Dex from the format.
 const BATTLE = new Set([
-	...Object.keys(Dex), 'id', 'log', 'inherit', 'cachedFormat', 'zMoveTable', 'teamGenerator',
-	'NOT_FAIL', 'FAIL', 'SILENT_FAIL', 'field', 'sides', 'prng', 'hints', 'deserialized',
+	...Object.keys(Dex), 'id', 'log', 'inherit', 'cachedFormat',
+	'zMoveTable', 'teamGenerator', 'NOT_FAIL', 'FAIL', 'SILENT_FAIL',
+	'field', 'sides', 'prng', 'hints', 'deserialized',
 ]);
 const FIELD = new Set(['id', 'battle']);
 const SIDE = new Set(['battle', 'team', 'pokemon', 'choice', 'activeRequest']);
 const POKEMON = new Set([
-	'side', 'battle', 'set', 'name', 'fullname', 'id', 'species', 'speciesid',
-	'happiness', 'level', 'pokeball', 'baseHpType', 'baseHpPower', 'baseMoveSlots',
+	'side', 'battle', 'set', 'name', 'fullname', 'id', 'species',
+	'species id', 'happiness', 'level', 'pokeball', 'baseMoveSlots',
 ]);
 const CHOICE = new Set(['switchIns']);
 // ActiveMove (theoretically) includes all of the fields of Move, but we need
