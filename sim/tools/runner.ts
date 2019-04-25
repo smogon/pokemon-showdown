@@ -165,17 +165,6 @@ class DualStream {
 	write(message: string) {
 		this.control._write(message);
 		this.test._write(message);
-		this.compare();
-	}
-
-	async end() {
-		// We need to compare first because _end() destroys the battle object.
-		this.compare(true);
-		await this.control._end();
-		await this.test._end();
-	}
-
-	compare(end?: boolean) {
 		if (!this.control.battle || !this.test.battle) return;
 
 		const control = this.control.battle.toJSON();
@@ -190,9 +179,18 @@ class DualStream {
 			throw new Error(err.message);
 		}
 
-		if (end) return;
 		const send = this.test.battle.send;
 		this.test.battle = Battle.fromJSON(test);
 		this.test.battle.restart(send);
+	}
+
+	async end() {
+		// We need to compare first because _end() destroys the battle object.
+		const control = this.control.battle.log;
+		const test = this.test.battle.log;
+		assert.deepStrictEqual(test, control);
+
+		await this.control._end();
+		await this.test._end();
 	}
 }
