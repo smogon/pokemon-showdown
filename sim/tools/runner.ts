@@ -9,8 +9,9 @@ import {ObjectReadWriteStream} from '../../lib/streams';
 import {Battle} from '../battle';
 import * as BattleStreams from '../battle-stream';
 import {PRNG, PRNGSeed} from '../prng';
-import {State} from '../state';
 import {RandomPlayerAI} from './random-player-ai';
+
+import assert = require('assert');
 
 export interface AIOptions {
 	createAI: (stream: ObjectReadWriteStream<string>, options: AIOptions) => RandomPlayerAI;
@@ -138,13 +139,10 @@ class RawBattleStream extends BattleStreams.BattleStream {
 }
 
 class DualStream {
-	private readonly mutex: Mutex;
-
 	private readonly control: RawBattleStream;
 	private test: RawBattleStream;
 
 	constructor(input: boolean) {
-		this.mutex = new Mutex();
 		// The input to both streams should be the same, so to satisfy the
 		// input flag we only need to track the raw input of one stream.
 		this.control = new RawBattleStream(input);
@@ -154,26 +152,21 @@ class DualStream {
 	get rawInputLog() {
 		const control = this.control.rawInputLog;
 		const test = this.test.rawInputLog;
-		this.verify(control.join('\n'), test.join('\n'));
+		assert.deepStrictEqual(test, control);
 		return control;
 	}
 
 	async read() {
 		const control = await this.control.read();
 		const test = await this.test.read();
-		this.verify(control, test);
+		assert.strictEqual(test, control);
 		return control;
 	}
 
-	async write(message: string) {
-		 const release = await this.mutex.acquire();
-		 try {
-			await this.control._write(message);
-			await this.test._write(message);
-			this.compare();
-		 } finally {
-			 release();
-		 }
+	write(message: string) {
+		this.control._write(message);
+		this.test._write(message);
+		this.compare();
 	}
 
 	async end() {
@@ -188,46 +181,11 @@ class DualStream {
 
 		const control = this.control.battle.toJSON();
 		const test = this.test.battle.toJSON();
-		if (!State.equal(control, test)) {
-			this.verify(JSON.stringify(control, null, 2), JSON.stringify(test, null, 2));
-		}
+		assert.deepStrictEqual(test, control);
 
 		if (end) return;
 		const send = this.test.battle.send;
 		this.test.battle = Battle.fromJSON(test);
 		this.test.battle.restart(send);
-	}
-
-	verify(control?: string | null, test?: string | null) {
-		if (test !== control) {
-			console.log(control);
-			console.error(test);
-			process.exit(1);
-		}
-	}
-}
-
-class Mutex {
-	private readonly queue: ((release: () => void) => void)[];
-	private pending: boolean;
-
-	constructor() {
-		this.queue = [];
-		this.pending = false;
-	}
-
-	acquire(): Promise<() => void> {
-		const ticket = new Promise<(() => void)>(resolve => this.queue.push(resolve));
-		if (!this.pending) this.dispatchNext();
-		return ticket;
-	}
-
-	private dispatchNext(): void {
-		if (this.queue.length > 0) {
-			this.pending = true;
-			this.queue.shift()!(this.dispatchNext.bind(this));
-		} else {
-			this.pending = false;
-		}
 	}
 }

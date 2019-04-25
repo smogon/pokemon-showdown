@@ -366,7 +366,8 @@ export const State = new class {
 		const state: AnyObject = {};
 		for (const [key, value] of Object.entries(obj)) {
 			if (skip.has(key)) continue;
-			state[key] = this.serializeWithRefs(value, battle);
+			const val = this.serializeWithRefs(value, battle);
+			if (typeof val !== 'undefined') state[key] = val;
 		}
 		return state;
 	}
@@ -377,42 +378,5 @@ export const State = new class {
 			// @ts-ignore - index signature
 			obj[key] = this.deserializeWithRefs(value, battle);
 		}
-	}
-
-	// A super pared down implementation of deepStrictEqual for serialized state objects (NOT GENERAL PURPOSE).
-	// This is required for testing purposes because `JSON.stringify(a) === JSON.stringify(b)` will have
-	// ordering issues (deserializing the Battle will cause fields to have been set in a different order,
-	// changing the field ordering in the resulting string) and assert.deepStrictEqual will complain about keys
-	// being absent vs. undefined, which we don't care about.
-	equal(a: AnyObject, b: AnyObject) {
-		if (a === b) return true;
-		if ((a === null || typeof a !== 'object') && (b === null || typeof b !== 'object')) return a === b;
-		if (a === null || a === undefined || b === null || b === undefined) return false;
-		const isPrimitive = (arg: any) => arg === null || typeof arg !== 'object' && typeof arg !== 'function';
-		if (isPrimitive(a) || isPrimitive(b)) return a === b;
-		if (Object.getPrototypeOf(a) !== Object.getPrototypeOf(b)) return false;
-
-		// We don't care to distinguish between keys which are absent vs. undefined (because once
-		// stringified the distinction is lost anyway), so we filter them out here.
-		const hasOwnProperty = Object.prototype.hasOwnProperty;
-		const definedKeys = (obj: AnyObject) => {
-			const keys = [];
-			for (const key in obj) {
-				if (hasOwnProperty.call(obj, key) && typeof obj[key] !== 'undefined') keys.push(key);
-			}
-			return keys;
-		};
-
-		const ka = definedKeys(a);
-		const kb = definedKeys(b);
-		if (ka.length !== kb.length) return false;
-
-		ka.sort();
-		kb.sort();
-
-		for (const key of ka) {
-			if (!State.equal(a[key], b[key])) return false;
-		}
-		return true;
 	}
 };

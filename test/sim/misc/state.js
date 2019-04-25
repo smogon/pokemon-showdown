@@ -3,7 +3,6 @@
 const assert = require('./../../assert');
 const common = require('./../../common');
 const Battle = require('./../../../.sim-dist/battle').Battle;
-const State = require('./../../../.sim-dist/state').State;
 
 const TEAMS = [[
 	{species: 'Mew', ability: 'synchronize', item: 'assaultvest', moves: ['psychic']},
@@ -31,9 +30,7 @@ describe('State', function () {
 				control.makeChoices();
 				test.makeChoices();
 
-				const actual = test.toJSON();
-				const expected = control.toJSON();
-				if (!State.equal(actual, expected)) assert.deepStrictEqual(actual, expected);
+				assert.deepStrictEqual(test.toJSON(), control.toJSON());
 
 				// Roundtrip the test battle to confirm it still works.
 				const send = test.send;
