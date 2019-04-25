@@ -26,7 +26,7 @@ export interface ExhaustiveRunnerOptions {
 	log?: boolean;
 	maxGames?: number;
 	maxFailures?: number;
-	dual?: boolean;
+	dual?: boolean | 'debug';
 }
 
 export class ExhaustiveRunner {
@@ -50,7 +50,7 @@ export class ExhaustiveRunner {
 	private readonly log: boolean;
 	private readonly maxGames?: number;
 	private readonly maxFailures?: number;
-	private readonly dual: boolean;
+	private readonly dual: boolean | 'debug';
 
 	private failures: number;
 	private games: number;
@@ -63,7 +63,7 @@ export class ExhaustiveRunner {
 		this.log = !!options.log;
 		this.maxGames = options.maxGames;
 		this.maxFailures = options.maxFailures || ExhaustiveRunner.MAX_FAILURES;
-		this.dual = !!options.dual;
+		this.dual = options.dual || false;
 
 		this.failures = 0;
 		this.games = 0;
@@ -96,7 +96,7 @@ export class ExhaustiveRunner {
 				this.failures++;
 				console.error(
 					`\n\nRun \`node tools/simulate exhaustive --cycles=${this.cycles} ` +
-					`--format=${this.format} --seed${seed.join()}\`:\n`, err);
+					`--format=${this.format} --seed=${seed.join()}\`:\n`, err);
 			}
 		} while ((!this.maxGames || this.games < this.maxGames) &&
 					(!this.maxFailures || this.failures < this.maxFailures) &&

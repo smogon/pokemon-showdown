@@ -136,7 +136,7 @@ case 'exhaustive':
 			do {
 				for (let format of formats) {
 					failures += await new ExhaustiveRunner({
-						format, cycles, prng, maxFailures, log: true,
+						format, cycles, prng, maxFailures, log: true, dual: argv.dual,
 					}).run();
 					process.stdout.write('\n');
 					if (failures >= maxFailures) break;
