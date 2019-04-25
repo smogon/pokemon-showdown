@@ -5,7 +5,6 @@
  * @license MIT license
  */
 
-import {Battle} from './battle';
 import {State} from './state';
 
  /** A Pokemon's move slot. */

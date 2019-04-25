@@ -5,7 +5,6 @@
  * @license MIT
  */
 
-import {Battle} from './battle';
 import {State} from './state';
 
 export class Field {

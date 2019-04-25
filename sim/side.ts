@@ -4,7 +4,7 @@
  *
  * @license MIT license
  */
-import {Battle, RequestState} from './battle';
+import {RequestState} from './battle';
 import {Pokemon} from './pokemon';
 import {State} from './state';
 
