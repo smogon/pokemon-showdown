@@ -150,14 +150,14 @@ class DualStream {
 
 	get rawInputLog() {
 		const control = this.control.rawInputLog;
-		const test = this.test.rawInputLog;
+		const test = this.test.rawInputLog; // tslint-disable-line
 		// assert.deepStrictEqual(test, control);
 		return control;
 	}
 
 	async read() {
 		const control = await this.control.read();
-		const test = await this.test.read();
+		const test = await this.test.read(); // tslint:disable-line
 		// assert.strictEqual(test, control);
 		return control;
 	}
