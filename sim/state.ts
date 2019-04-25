@@ -36,7 +36,7 @@ type Referable = Battle | Field | Side | Pokemon | PureEffect | Ability | Item |
 // Battle inherits from Dex, but all of Dex's fields are redundant - we can
 // just recreate the Dex from the format.
 const BATTLE = new Set([
-	...Object.keys(Dex), 'id', 'inherit', 'cachedFormat', 'zMoveTable', 'teamGenerator',
+	...Object.keys(Dex), 'id', 'log', 'inherit', 'cachedFormat', 'zMoveTable', 'teamGenerator',
 	'NOT_FAIL', 'FAIL', 'SILENT_FAIL', 'field', 'sides', 'prng', 'hints', 'deserialized',
 ]);
 const FIELD = new Set(['id', 'battle']);
@@ -69,6 +69,9 @@ export const State = new class {
 		}
 		state.prng = battle.prng.seed;
 		state.hints = Array.from(battle.hints);
+		// We treat log specially because we only set it back on Battle after everything
+		// else has been deserialized to avoid anything accidentally `add`-ing to it.
+		state.log = battle.log;
 		return state;
 	}
 
@@ -139,6 +142,7 @@ export const State = new class {
 		battle.prng = new PRNG(state.prng);
 		// @ts-ignore - readonly
 		battle.hints = new Set(battle.hints);
+		battle.log = state.log;
 		return battle;
 	}
 
