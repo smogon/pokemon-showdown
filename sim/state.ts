@@ -146,7 +146,7 @@ export const State = new class {
 		}
 		battle.prng = new PRNG(state.prng);
 		// @ts-ignore - readonly
-		battle.hints = new Set(battle.hints);
+		battle.hints = new Set(state.hints);
 		// @ts-ignore - readonly
 		battle.log = state.log;
 		return battle;
