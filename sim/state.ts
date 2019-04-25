@@ -30,7 +30,7 @@ type Referable = Battle | Field | Side | Pokemon | PureEffect | Ability | Item |
 
 // Certain fields are either redundant (transient caches, constants, duplicate
 // information) or require special treatment. These sets contain the specific
-// keys which we skip during default (de)serialization (and the keys which)
+// keys which we skip during default (de)serialization and (the keys which)
 // need special treatment from these sets are then handled manually.
 
 // Battle inherits from Dex, but all of Dex's fields are redundant - we can
@@ -49,13 +49,14 @@ const POKEMON = new Set([
 const CHOICE = new Set(['switchIns']);
 // ActiveMove (theoretically) includes all of the fields of Move, but we need
 // to dynamically create that skip set as Moves have different fields depending
-// on their data.
-const ACTIVE_MOVE = new Set(['move', 'type']);
+// on their data. ActiveMove also sometimes *overwrites* fields from Move (like
+// Normalize overriding type), so we need to handle that as well.
+const ACTIVE_MOVE = new Set(['move', 'type', 'target']);
 
 export const State = new class {
 	// REFERABLE is used to determine which objects are of the Referable type by
-	// comparing their constructors. Unfortunately, due to circular module
-	// dependencies on Battle and Field we need to set this dynamically instead
+	// comparing their constructors. Unfortunately, we need to set this dynamically
+	// due to circular module dependencies on Battle and Field instead
 	// of simply initializing it as a const. See isReferable for where this
 	// gets lazily created on demand.
 	// tslint:disable-next-line: ban-types
@@ -80,7 +81,7 @@ export const State = new class {
 	// the leaf nodes like Side or Pokemon contain backreferences to Battle
 	// but don't contain the information to fill it in because the cycles in
 	// the graph have been serialized as references. Once deserialzized, the
-	// Battle can than be restarted (and provided with a `send` function for
+	// Battle can then be restarted (and provided with a `send` function for
 	// receiving updates).
 	deserializeBattle(serialized: string | /* Battle */ AnyObject): Battle {
 		const state: /* Battle */ AnyObject =
@@ -90,7 +91,7 @@ export const State = new class {
 			seed: state.prngSeed,
 			rated: state.rated,
 			debug: state.debugMode,
-			// We need to tell that Battle we're creating that it's been
+			// We need to tell the Battle that we're creating that it's been
 			// deserialized so that it allows us to populate it correctly and
 			// doesn't attempt to start playing out until we're ready.
 			deserialized: true,
@@ -99,9 +100,9 @@ export const State = new class {
 		for (const side of state.sides) {
 			// When we instantiate the Battle again we need the pokemon to be in
 			// the correct order they were in at the start of the Battle which was
-			// serialized. See serializeSide below for an explanation of the about
-			// the encoding format used deserializeSide for where we reorder the
-			// Side's pokemon to match their ordering at the point of serialization.
+			// serialized. See serializeSide below for an explanation about the
+			// encoding format used deserializeSide for where we reorder the Side's
+			// pokemon to match their ordering at the point of serialization.
 			const team = side.team.split(side.team.length > 9 ? ',' : '');
 			// @ts-ignore - index signature
 			options[side.id] = {
@@ -113,7 +114,7 @@ export const State = new class {
 		// We create the Battle, allowing it to instantiate the Field/Side/Pokemon
 		// objects for us. The objects it creates will be incorrect, but we descend
 		// down through the fields and repopulate all of the objects with the
-		// correct state.
+		// correct state afterwards.
 		const battle = new Battle(options);
 		// Calling `new Battle(...)` means side.pokemon is ordered to match what it
 		// was at the start of the battle (state.team), but we need to order the Pokemon
@@ -137,7 +138,10 @@ export const State = new class {
 			activeRequests = activeRequests || side.activeRequest === undefined;
 		}
 		// Since battle.getRequests depends on the state of each side we can't combine
-		// this loop with the one above which deserializes the sides.
+		// this loop with the one above which deserializes the sides. We also only do this
+		// if there are any active requests, not only to avoid have to recompute request
+		// states we wouldnt be using, but also because battle.getRequests will mutate
+		// state on occasion (eg. `pokemon.getMoves` sets `pokemon.trapped = true` if locked).
 		if (activeRequests) {
 			const requests = battle.getRequests(battle.requestState, battle.getMaxTeamSize());
 			for (const [i, side] of state.sides.entries()) {
@@ -195,8 +199,8 @@ export const State = new class {
 	serializePokemon(pokemon: Pokemon): /* Pokemon */ AnyObject {
 		const state: /* Pokemon */ AnyObject = this.serialize(pokemon, POKEMON, pokemon.battle);
 		state.set = pokemon.set;
-		// Only serialize the baseMoveSlots if they differ from moveSlots. Getting fancy and
-		// only serializing the diff and its index is considered overkill here.
+		// Only serialize the baseMoveSlots if they differ from moveSlots. We could get fancy and
+		// only serialize the diff and its index but thats overkill for a pretty niche case anyway.
 		if (pokemon.baseMoveSlots.length !== pokemon.moveSlots.length ||
 			!pokemon.baseMoveSlots.every((ms, i) => ms === pokemon.moveSlots[i])) {
 			state.baseMoveSlots = this.serializeWithRefs(pokemon.baseMoveSlots, pokemon.battle);
@@ -256,7 +260,9 @@ export const State = new class {
 		const base = battle.getMove(move.id);
 		const skip = new Set([...Object.keys(base), ...ACTIVE_MOVE]);
 		const state: /* ActiveMove */ AnyObject = this.serialize(move, skip, battle);
-		if (base.type !== move.type) state.type = move.type;
+		// Turns out ActiveMove does in fact need to modify fields which on Move are readonly...
+		if (move.type !== base.type) state.type = move.type;
+		if (move.target !== base.target) state.target = move.target;
 		state.move = `[Move:${move.id}]`;
 		return state;
 	}
@@ -265,6 +271,7 @@ export const State = new class {
 		const move = battle.getActiveMove(this.fromRef(state.move, battle)! as Move);
 		this.deserialize(state, move, ACTIVE_MOVE, battle);
 		if (state.type) move.type = state.type;
+		if (state.target) move.target = state.target;
 		return move;
 	}
 
@@ -341,7 +348,7 @@ export const State = new class {
 	}
 
 	private isReferable(obj: object): obj is Referable {
-		// NOTE: see declaration above for why this must be defined lazily.
+		// NOTE: see explanation on the declaration above for why this must be defined lazily.
 		if (!this.REFERABLE) {
 			this.REFERABLE = new Set([
 				Battle, Field, Side, Pokemon, Data.PureEffect,
@@ -390,6 +397,8 @@ export const State = new class {
 		for (const [key, value] of Object.entries(obj)) {
 			if (skip.has(key)) continue;
 			const val = this.serializeWithRefs(value, battle);
+			// JSON.stringify will get rid of keys with undefined values anyway, but
+			// we also do it here so that assert.deepStrictEqual works on battle.toJSON().
 			if (typeof val !== 'undefined') state[key] = val;
 		}
 		return state;
