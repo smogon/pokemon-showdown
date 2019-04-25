@@ -41,5 +41,10 @@ describe('State', function () {
 			control.destroy();
 			test.destroy();
 		});
+		it('should require special treatment for complex objects', function () {
+			const battle = common.createBattle(TEAMS);
+			battle.foo = new Map();
+			assert.throws(() => battle.toJSON(), /Unsupported type Map/);
+		});
 	});
 });
