@@ -42,8 +42,8 @@ const BATTLE = new Set([
 const FIELD = new Set(['id', 'battle']);
 const SIDE = new Set(['battle', 'team', 'pokemon', 'choice', 'activeRequest']);
 const POKEMON = new Set([
-	'side', 'battle', 'set', 'name', 'fullname', 'id', 'species', 'speciesid', 'happiness',
-	'level', 'pokeball', 'baseTemplate', 'baseHpType', 'baseHpPower', 'baseMoveSlots',
+	'side', 'battle', 'set', 'name', 'fullname', 'id', 'species', 'speciesid',
+	'happiness', 'level', 'pokeball', 'baseHpType', 'baseHpPower', 'baseMoveSlots',
 ]);
 const CHOICE = new Set(['switchIns']);
 // ActiveMove (theoretically) includes all of the fields of Move, but we need
