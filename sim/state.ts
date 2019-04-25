@@ -131,14 +131,18 @@ export const State = new class {
 		}
 		this.deserialize(state, battle, BATTLE, battle);
 		this.deserializeField(state.field, battle.field);
+		let activeRequests = false;
 		for (const [i, side] of state.sides.entries()) {
 			this.deserializeSide(side, battle.sides[i]);
+			activeRequests = activeRequests || side.activeRequest === undefined;
 		}
 		// Since battle.getRequests depends on the state of each side we can't combine
 		// this loop with the one above which deserializes the sides.
-		const requests = battle.getRequests(battle.requestState, battle.getMaxTeamSize());
-		for (const [i, side] of state.sides.entries()) {
-			battle.sides[i].activeRequest = side.activeRequest === null ? null : requests[i];
+		if (activeRequests) {
+			const requests = battle.getRequests(battle.requestState, battle.getMaxTeamSize());
+			for (const [i, side] of state.sides.entries()) {
+				battle.sides[i].activeRequest = side.activeRequest === null ? null : requests[i];
+			}
 		}
 		battle.prng = new PRNG(state.prng);
 		// @ts-ignore - readonly
