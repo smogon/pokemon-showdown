@@ -5,13 +5,14 @@
  * @license MIT
  */
 
+import assert = require('assert');
+import fs = require('fs');
+
 import {ObjectReadWriteStream} from '../../lib/streams';
 import {Battle} from '../battle';
 import * as BattleStreams from '../battle-stream';
 import {PRNG, PRNGSeed} from '../prng';
 import {RandomPlayerAI} from './random-player-ai';
-
-import assert = require('assert');
 
 export interface AIOptions {
 	createAI: (stream: ObjectReadWriteStream<string>, options: AIOptions) => RandomPlayerAI;
@@ -133,8 +134,6 @@ class RawBattleStream extends BattleStreams.BattleStream {
 	}
 }
 
-import fs = require('fs');
-
 class DualStream {
 	private debug: boolean;
 	private readonly control: RawBattleStream;
@@ -184,6 +183,7 @@ class DualStream {
 			assert.deepStrictEqual(test, control);
 		} catch (err) {
 			if (this.debug) {
+				// NOTE: diffing these directly won't work because the key ordering isn't stable.
 				fs.writeFileSync('logs/control.json', JSON.stringify(control, null, 2));
 				fs.writeFileSync('logs/test.json', JSON.stringify(test, null, 2));
 			}
