@@ -83,9 +83,15 @@ export class Runner {
 		const p2spec = this.getPlayerSpec("Bot 2", this.p2options);
 
 		const p1 = this.p1options.createAI(
-			streams.p1, Object.assign({seed: this.newSeed()}, this.p1options)).start();
+			streams.p1, Object.assign({seed: this.newSeed()}, this.p1options));
 		const p2 = this.p2options.createAI(
-			streams.p2, Object.assign({seed: this.newSeed()}, this.p2options)).start();
+			streams.p2, Object.assign({seed: this.newSeed()}, this.p2options));
+		// TODO: Use `await Promise.race([streams.omniscient.read(), p1, p2])` to avoid
+		// leaving these promises dangling once it no longer causes memory leaks (v8#9069).
+		/* tslint:disable:no-floating-promises */
+		p1.start();
+		p2.start();
+		/* tslint:enable:no-floating-promises */
 
 		streams.omniscient.write(`>start ${JSON.stringify(spec)}\n` +
 			`>player p1 ${JSON.stringify(p1spec)}\n` +
@@ -93,7 +99,7 @@ export class Runner {
 
 		let chunk;
 		// tslint:disable-next-line no-conditional-assignment
-		while ((chunk = await Promise.race([streams.omniscient.read(), p1, p2]))) {
+		while ((chunk = await streams.omniscient.read())) {
 			if (this.output) console.log(chunk);
 		}
 		return streams.omniscient.end();
@@ -149,15 +155,17 @@ class DualStream {
 
 	get rawInputLog() {
 		const control = this.control.rawInputLog;
-		const test = this.test.rawInputLog; // tslint-disable-line
-		// assert.deepStrictEqual(test, control);
+		const test = this.test.rawInputLog;
+		assert.deepStrictEqual(test, control);
 		return control;
 	}
 
 	async read() {
 		const control = await this.control.read();
-		const test = await this.test.read(); // tslint:disable-line
-		// assert.strictEqual(test, control);
+		const test = await this.test.read();
+		// In debug mode, wait to catch this as a difference in the inputLog
+		// and error there so we get the full battle state dumped instead.
+		if (!this.debug) assert.strictEqual(test, control);
 		return control;
 	}
 
@@ -192,7 +200,11 @@ class DualStream {
 
 		if (end) return;
 		const send = this.test.battle.send;
+		// NOTE: retaining trunc as part of the round trip is only required for certain custom
+		// game formats which override it in the format onBegin logic to have non-standard behavior.
+		const trunc = this.test.battle.trunc;
 		this.test.battle = Battle.fromJSON(test);
+		this.test.battle.trunc = trunc;
 		this.test.battle.restart(send);
 	}
 }
