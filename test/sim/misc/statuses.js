@@ -266,6 +266,23 @@ describe('Toxic Poison [Gen 2]', function () {
 		assert.strictEqual(hp - pokemon.hp, Math.floor(pokemon.maxhp / 8));
 	});
 
+	it('should revert to regular poison on switch in, even for Poison types', function () {
+		battle = common.gen(2).createBattle([
+			[{species: 'Smeargle', moves: ['toxic', 'splash']}],
+			[
+				{species: 'Qwilfish', moves: ['transform', 'splash']},
+				{species: 'Gengar', moves: ['nightshade']},
+			],
+		]);
+		battle.makeChoices('move toxic', 'move transform');
+		battle.makeChoices('move splash', 'switch 2');
+		battle.makeChoices('move splash', 'switch 2');
+		// We could check 'psn' at this point, but the following line caused crashes
+		// before #5463 was fixed so its useful to execute for regression testing purposes.
+		battle.makeChoices('move splash', 'move splash');
+		assert.strictEqual(battle.p2.active[0].status, 'psn');
+	});
+
 	it('should not have its damage counter affected by Heal Bell', function () {
 		battle = common.gen(2).createBattle([
 			[{species: 'Smeargle', moves: ['toxic', 'sacredfire', 'splash']}],
