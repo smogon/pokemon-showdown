@@ -870,6 +870,7 @@ let BattleFormats = {
 			}
 			return this.checkLearnset(move, template, lsetData, set);
 		},
+		unbanlist: ['Shiftry + Leaf Blade + Sucker Punch'],
 	},
 	allowcap: {
 		effectType: 'ValidatorRule',
