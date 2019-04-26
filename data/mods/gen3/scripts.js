@@ -132,7 +132,7 @@ let BattleScripts = {
 			if (move.spreadHit) this.attrLastMove('[spread] ' + hitTargets.join(','));
 		} else {
 			target = targets[0];
-			let lacksTarget = target.fainted;
+			let lacksTarget = !target || target.fainted;
 			if (!lacksTarget) {
 				if (move.target === 'adjacentFoe' || move.target === 'adjacentAlly' || move.target === 'normal' || move.target === 'randomNormal') {
 					lacksTarget = !this.isAdjacent(target, pokemon);
