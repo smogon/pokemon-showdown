@@ -111,7 +111,7 @@ let BattleStatuses = {
 		},
 		onSwitchIn(pokemon) {
 			// Regular poison status and damage after a switchout -> switchin.
-			pokemon.setStatus('psn');
+			pokemon.status = 'psn';
 		},
 		onAfterSwitchInSelf(pokemon) {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
