@@ -219,7 +219,10 @@ export const State = new class {
 		if (state.baseMoveSlots) {
 			baseMoveSlots = this.deserializeWithRefs(state.baseMoveSlots, pokemon.battle);
 			for (const [i, baseMoveSlot] of baseMoveSlots.entries()) {
-				if (pokemon.moveSlots[i].id === baseMoveSlot.id) baseMoveSlots[i] = pokemon.moveSlots[i];
+				const moveSlot = pokemon.moveSlots[i];
+				if (moveSlot.id === baseMoveSlot.id && !moveSlot.virtual) {
+					baseMoveSlots[i] = moveSlot;
+				}
 			}
 		} else {
 			baseMoveSlots = pokemon.moveSlots.slice();
