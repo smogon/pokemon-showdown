@@ -46,6 +46,7 @@
 5.199.171.224,5.199.171.239,OneProvider,http://oneprovider.com/
 5.199.173.240,5.199.173.247,OneProvider,http://oneprovider.com/
 5.199.174.104,5.199.174.111,OneProvider,http://oneprovider.com/
+5.252.68.0,5.252.69.255,Host1Plus UK,https://www.host1plus.com/
 5.254.64.0,5.254.127.255,Voxility,https://www.voxility.com/
 8.4.9.128,8.4.9.255,co-location.com,http://co-location.com/
 8.4.34.0,8.4.35.255,Peak Web Hosting,http://www.peakwebhosting.com/
@@ -377,11 +378,13 @@
 45.124.67.0,45.124.67.255,Host US,http://hostus.us/
 45.127.92.0,45.127.95.255,Host US,http://hostus.us/
 45.127.94.0,45.127.95.255,Host US,http://hostus.us/
+45.162.228.0,45.162.231.255,Qnax Data Center,https://qnax.com.br/
 46.4.0.0,46.4.255.255,Hetzner Online AG,http://www.hetzner.de/
 46.16.184.0,46.16.191.255,SoftLayer,http://www.softlayer.com/
 46.17.0.0,46.17.7.255,Flexwebhosting.nl,http://www.flexwebhosting.nl/
 46.17.96.0,46.17.103.255,HostKey,http://www.hostkey.com/
 46.19.32.0,46.19.39.255,tilaa,http://www.tilaa.nl/
+46.19.136.0,46.19.143.255,Private Layer INC,https://www.privatelayer.com/
 46.20.10.0,46.20.10.255,Turkiye Telekom Datacenter,http://ttnetdc.com/
 46.20.12.1,46.20.12.128,Turkiye Telekom Datacenter,http://ttnetdc.com/
 46.20.112.0,46.20.127.255,PEER 1,http://www.peer1.com/
@@ -1548,6 +1551,7 @@
 103.22.128.0,103.22.131.254,Voxel,http://www.voxel.net/
 103.23.20.0,103.23.23.255,Infinys,http://isi.co.id/
 103.23.152.0,103.23.155.255,ozhosting.com,http://ozhosting.com/
+103.25.56.0,103.25.59.255,Ransom IT,https://www.ransomit.com.au/
 103.27.76.0,103.27.79.255,Host US,http://hostus.us/
 103.27.78.0,103.27.79.255,Host US,http://hostus.us/
 103.28.148.0,103.28.149.255,Argon Data Communication,http://easyway.co.id
@@ -2250,6 +2254,7 @@
 185.101.69.0,185.101.69.255,depo40,http://depo40.ru/
 185.101.107.0,185.101.107.255,ZET servers Romania,https://zetservers.com/
 185.102.27.0,185.102.27.255,Cloudzilla Netherlands,http://cloudzilla.nl/
+185.103.96.128,185.103.96.159,UK Dedicated Servers,https://www.ukservers.com/
 185.104.184.0,185.104.184.255,M247,http://www.m247.com/
 185.108.84.0,185.108.85.255,Ardis Russia,https://ardis.ru/
 185.108.129.0,185.108.129.255,OneProvider,http://oneprovider.com/
@@ -2259,9 +2264,13 @@
 185.137.16.0,185.137.19.255,Surfeasy,https://www.surfeasy.com/
 185.140.114.0,185.140.114.255,OneProvider,http://oneprovider.com/
 185.153.179.0,185.153.179.255,Nord VPN,https://nordvpn.com/
-185.156.173.32,185.156.173.63,Cyberghost,http://www.cyberghostvpn.com/
+185.156.172.0,185.156.172.255,M247,https://m247.com/
+185.156.173.0,185.156.173.255,M247,https://m247.com/
+185.156.174.0,185.156.174.255,M247,https://m247.com/
+185.156.175.0,185.156.175.255,M247,https://m247.com/
 185.159.157.0,185.159.157.255,ProtonVPN,https://protonvpn.com/
 185.186.76.0,185.186.79.255,OneProvider,http://oneprovider.com/
+185.200.116.0,185.200.116.255,M247,https://m247.com/
 185.212.168.0,185.212.171.255,M247 Dedicated Servers,https://m247.com/
 185.236.200.0,185.236.200.255,M247 Dedicated Servers,https://m247.com/
 186.227.162.128,186.227.162.191,Server Green,http://servergreen.com.br/
@@ -2386,6 +2395,7 @@
 191.239.208.0,191.239.224.127,Microsoft Azure,http://www.windowsazure.com/en-us/
 191.239.240.0,191.239.255.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 192.3.0.0,192.3.255.255,ColoCrossing,http://www.colocrossing.com/
+192.30.88.0,192.30.89.255,Tech Futures,https://www.techfutures.xyz/
 192.30.136.0,192.30.139.255,Input Output Flood LLC,http://ioflood.com/
 192.34.56.0,192.34.63.255,DigitalOcean USA,https://www.digitalocean.com/
 192.34.108.0,192.34.111.255,WoW Technologies,http://wowrack.com/
@@ -2611,6 +2621,7 @@
 195.245.124.0,195.245.127.255,Akamai,http://akamai.com/
 195.248.78.0,195.248.78.255,availo.no,http://www.availo.no/
 196.52.0.0,196.55.255.255,Leaseweb,https://www.leaseweb.com/
+196.196.240.0,196.196.247.255,Green Bei LImited,http://greenbei.com/
 198.7.56.0,198.7.63.255,Leaseweb,http://www.leaseweb.com/
 198.8.80.0,198.8.95.255,colo@,http://coloat.com/
 198.12.12.0,198.12.15.255,awknet,http://awknet.com/
