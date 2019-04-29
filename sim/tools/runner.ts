@@ -200,11 +200,7 @@ class DualStream {
 
 		if (end) return;
 		const send = this.test.battle.send;
-		// NOTE: retaining trunc as part of the round trip is only required for certain custom
-		// game formats which override it in the format onBegin logic to have non-standard behavior.
-		const trunc = this.test.battle.trunc;
 		this.test.battle = Battle.fromJSON(test);
-		this.test.battle.trunc = trunc;
 		this.test.battle.restart(send);
 	}
 }
