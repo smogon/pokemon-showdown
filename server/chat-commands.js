@@ -473,14 +473,15 @@ const commands = {
 	w: 'msg',
 	msg(target, room, user, connection) {
 		if (!target) return this.parse('/help msg');
+		if (!target.includes(',')) {
+			this.errorReply("You forgot the comma.");
+			return this.parse('/help msg');
+		}
 		target = this.splitTarget(target);
 		let targetUser = this.targetUser;
 		if (this.targetUsername === '~') {
 			this.room = Rooms.global;
 			this.pmTarget = null;
-		} else if (!target) {
-			this.errorReply("You forgot the comma.");
-			return this.parse('/help msg');
 		} else if (!targetUser) {
 			let error = `User ${this.targetUsername} not found. Did you misspell their name?`;
 			error = `|pm|${this.user.getIdentity()}| ${this.targetUsername}|/error ${error}`;
