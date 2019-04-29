@@ -47,11 +47,7 @@ const POKEMON = new Set([
 	'speciesid', 'happiness', 'level', 'pokeball', 'baseMoveSlots',
 ]);
 const CHOICE = new Set(['switchIns']);
-// ActiveMove (theoretically) includes all of the fields of Move, but we need
-// to dynamically create that skip set as Moves have different fields depending
-// on their data. ActiveMove also sometimes *overwrites* fields from Move (like
-// Normalize overriding type), so we need to handle that as well.
-const ACTIVE_MOVE = new Set(['move', 'type', 'target']);
+const ACTIVE_MOVE = new Set(['move']);
 
 export const State = new class {
 	// REFERABLE is used to determine which objects are of the Referable type by
@@ -261,11 +257,14 @@ export const State = new class {
 	// be extended.
 	private serializeActiveMove(move: ActiveMove, battle: Battle): /* ActiveMove */ AnyObject {
 		const base = battle.getMove(move.id);
-		const skip = new Set([...Object.keys(base), ...ACTIVE_MOVE]);
+		const skip = new Set([...ACTIVE_MOVE]);
+		for (const [key, value] of Object.entries(base)) {
+			// This should really be a deepEquals check to see if anything on ActiveMove was
+			// modified from the base Move, but that ends up being expensive and mostly unnecessary
+			// as ActiveMove currently only mutates its simple fields (eg. `type`, `target`) anyway.
+			if (typeof value === 'object' || move[key] === value) skip.add(key);
+		}
 		const state: /* ActiveMove */ AnyObject = this.serialize(move, skip, battle);
-		// Turns out ActiveMove does in fact need to modify fields which on Move are readonly...
-		if (move.type !== base.type) state.type = move.type;
-		if (move.target !== base.target) state.target = move.target;
 		state.move = `[Move:${move.id}]`;
 		return state;
 	}
@@ -273,8 +272,6 @@ export const State = new class {
 	private deserializeActiveMove(state: /* ActiveMove */ AnyObject, battle: Battle): ActiveMove {
 		const move = battle.getActiveMove(this.fromRef(state.move, battle)! as Move);
 		this.deserialize(state, move, ACTIVE_MOVE, battle);
-		if (state.type) move.type = state.type;
-		if (state.target) move.target = state.target;
 		return move;
 	}
 

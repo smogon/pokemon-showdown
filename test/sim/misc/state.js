@@ -8,7 +8,7 @@ const TEAMS = [[
 	{species: 'Mew', ability: 'synchronize', item: 'assaultvest', moves: ['psychic']},
 	{species: 'Ditto', ability: 'imposter', item: 'choicescarf', moves: ['transform']},
 	{species: 'Amoonguss', ability: 'effectspore', item: 'blacksludge', moves: ['toxic']},
-	{species: 'Gliscor', ability: 'poisonheal', item: 'toxicorb', moves: ['earthquake']},
+	{species: 'Gliscor', ability: 'poisonheal', item: 'toxicorb', moves: ['curse']},
 	{species: 'Zoroark', ability: 'illusion', item: 'leftovers', moves: ['knockoff']},
 	{species: 'Gengar', ability: 'cursedbody', item: 'brightpowder', moves: ['disable']},
 ], [
