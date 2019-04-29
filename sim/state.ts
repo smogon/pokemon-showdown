@@ -262,6 +262,7 @@ export const State = new class {
 			// This should really be a deepEquals check to see if anything on ActiveMove was
 			// modified from the base Move, but that ends up being expensive and mostly unnecessary
 			// as ActiveMove currently only mutates its simple fields (eg. `type`, `target`) anyway.
+			// @ts-ignore - index signature
 			if (typeof value === 'object' || move[key] === value) skip.add(key);
 		}
 		const state: /* ActiveMove */ AnyObject = this.serialize(move, skip, battle);
