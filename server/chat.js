@@ -386,7 +386,7 @@ class MessageContext {
 		if (commaIndex < 0) {
 			return [target.trim(), ''];
 		}
-		return [target.substr(0, commaIndex).trim(), target.substr(commaIndex + 1).trim()];
+		return [target.slice(0, commaIndex).trim(), target.slice(commaIndex + 1).trim()];
 	}
 	/**
 	 * @param {string} text
