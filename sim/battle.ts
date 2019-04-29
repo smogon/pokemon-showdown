@@ -1595,9 +1595,8 @@ export class Battle extends Dex.ModdedDex {
 			this.add('rated', typeof this.rated === 'string' ? this.rated : '');
 		}
 
-		if (format.onBegin) {
-			format.onBegin.call(this);
-		}
+		if (format.onBegin) format.onBegin.call(this);
+		if (format.trunc) this.trunc = format.trunc;
 		for (const rule of this.getRuleTable(format).keys()) {
 			if (rule.startsWith('+') || rule.startsWith('-') || rule.startsWith('!')) continue;
 			const subFormat = this.getFormat(rule);
@@ -1619,6 +1618,10 @@ export class Battle extends Dex.ModdedDex {
 
 	restart(send?: (type: string, data: string | string[]) => void) {
 		if (!this.deserialized) throw new Error('Attempt to restart a battle which has not been deserialized');
+
+		const format = this.getFormat();
+		if (format.trunc) this.trunc = format.trunc;
+
 		// @ts-ignore - readonly
 		this.send = send;
 	}
