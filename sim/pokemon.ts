@@ -198,12 +198,8 @@ export class Pokemon {
 	canMegaEvo: string | null | undefined;
 	canUltraBurst: string | null | undefined;
 
-	isStale: number;
-	isStaleCon: number;
-	isStaleHP: number;
-	isStalePPTurns: number;
-	isStaleSource?: string;
-	staleWarned: boolean;
+	staleness?: 'internal' | 'external';
+	pendingStaleness?: 'internal' | 'external';
 
 	// Gen 1 only
 	modifiedStats?: StatsExceptHPTable;
@@ -373,12 +369,6 @@ export class Pokemon {
 		this.clearVolatile();
 		this.maxhp = this.template.maxHP || this.baseStoredStats.hp;
 		this.hp = this.maxhp;
-
-		this.isStale = 0;
-		this.isStaleCon = 0;
-		this.isStaleHP = this.maxhp;
-		this.isStalePPTurns = 0;
-		this.staleWarned = false;
 
 		/**
 		 * An object for storing untyped data, for mods to use.
@@ -673,15 +663,6 @@ export class Pokemon {
 			amount += ppData.pp;
 			ppData.pp = 0;
 		}
-		if (ppData.virtual) {
-			for (const foeActive of this.side.foe.active) {
-				if (foeActive.isStale >= 2) {
-					if (move.selfSwitch) this.isStalePPTurns++;
-					return amount;
-				}
-			}
-		}
-		this.isStalePPTurns = 0;
 		return amount;
 	}
 
@@ -1324,6 +1305,22 @@ export class Pokemon {
 			this.battle.singleEvent('Eat', item, this.itemData, this, source, sourceEffect);
 			this.battle.runEvent('EatItem', this, null, null, item);
 
+			if (item.id === 'leppaberry') {
+				if (sourceEffect && ['fling', 'pluck', 'bugbite'].includes(sourceEffect.id)) {
+					this.staleness = 'external';
+				} else {
+					switch (this.pendingStaleness) {
+					case 'internal':
+							if (this.staleness !== 'external') this.staleness = 'internal';
+							break;
+					case 'external':
+							this.staleness = 'external';
+							break;
+					}
+				}
+				this.pendingStaleness = undefined;
+			}
+
 			this.lastItem = this.item;
 			this.item = '';
 			this.itemData = {id: '', target: this};
@@ -1378,6 +1375,7 @@ export class Pokemon {
 		if (this.battle.runEvent('TakeItem', this, source, null, item)) {
 			this.item = '';
 			this.itemData = {id: '', target: this};
+			this.pendingStaleness = undefined;
 			return item;
 		}
 		return false;
@@ -1388,9 +1386,12 @@ export class Pokemon {
 		if (typeof item === 'string') item = this.battle.getItem(item) as Item;
 
 		const effectid = this.battle.effect ? this.battle.effect.id : '';
-		if (item.id === 'leppaberry' && effectid !== 'trick' && effectid !== 'switcheroo') {
-			this.isStale = 2;
-			this.isStaleSource = 'getleppa';
+		if (item.id === 'leppaberry') {
+			const inflicted = ['trick', 'switcheroo'].includes(effectid);
+			const external = inflicted && source && source.side.id !== this.side.id;
+			this.pendingStaleness = external ? 'external' : 'internal';
+		} else {
+			this.pendingStaleness = undefined;
 		}
 		this.item = item.id;
 		this.itemData = {id: item.id, target: this};
