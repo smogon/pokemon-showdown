@@ -451,6 +451,21 @@ export class Item extends BasicEffect implements Readonly<BasicEffect & ItemData
 	}
 }
 
+interface AbilityEventMethods {
+	onCheckShow?: (this: Battle, pokemon: Pokemon) => void
+	onEnd?: (this: Battle, target: Pokemon & Side & Field) => void
+	onPreStart?: (this: Battle, pokemon: Pokemon) => void
+	onStart?: (this: Battle, target: Pokemon) => void
+}
+
+export interface AbilityData extends EffectData, AbilityEventMethods, EventMethods {
+	rating: number
+	isUnbreakable?: boolean
+	suppressWeather?: boolean
+}
+
+export interface ModdedAbilityData extends Partial<AbilityData>, ModdedEffectData {}
+
 export class Ability extends BasicEffect implements Readonly<BasicEffect & AbilityData> {
 	readonly effectType: 'Ability';
 	/** Represents how useful or detrimental this ability is. */

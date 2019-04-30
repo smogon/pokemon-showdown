@@ -6,6 +6,10 @@ type PRNGSeed = import('./prng').PRNGSeed;
 type Side = import('./side').Side
 type Validator = import('./team-validator').Validator
 
+type Ability = import('./dex-data').Ability
+type AbilityData = import('./dex-data').AbilityData
+type ModdedAbilityData = import('./dex-data').ModdedAbilityData
+
 interface AnyObject {[k: string]: any}
 type DexTable<T> = {[key: string]: T}
 
@@ -154,13 +158,6 @@ interface CommonHandlers {
 	ExtResultSourceMove: boolean | ((this: Battle, source: Pokemon, target: Pokemon, move: ActiveMove) => boolean | null | number | "" | void);
 	VoidSourceEffect: (this: Battle, source: Pokemon, target: Pokemon, effect: Effect) => void;
 	VoidSourceMove: (this: Battle, source: Pokemon, target: Pokemon, move: ActiveMove) => void;
-}
-
-interface AbilityEventMethods {
-	onCheckShow?: (this: Battle, pokemon: Pokemon) => void
-	onEnd?: (this: Battle, target: Pokemon & Side & Field) => void
-	onPreStart?: (this: Battle, pokemon: Pokemon) => void
-	onStart?: (this: Battle, target: Pokemon) => void
 }
 
 interface ItemEventMethods {
@@ -730,18 +727,6 @@ interface ModdedPureEffectData extends Partial<PureEffectData>, ModdedEffectData
 
 interface PureEffect extends Readonly<BasicEffect & PureEffectData> {
 	readonly effectType: 'Status' | 'Effect' | 'Weather'
-}
-
-interface AbilityData extends EffectData, AbilityEventMethods, EventMethods {
-	rating: number
-	isUnbreakable?: boolean
-	suppressWeather?: boolean
-}
-
-interface ModdedAbilityData extends Partial<AbilityData>, ModdedEffectData {}
-
-interface Ability extends Readonly<BasicEffect & AbilityData> {
-	readonly effectType: 'Ability'
 }
 
 interface FlingData {
