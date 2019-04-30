@@ -228,6 +228,10 @@ class Ladder extends LadderStore {
 		}
 		if (targetUser.blockChallenges && !user.can('bypassblocks', targetUser)) {
 			connection.popup(`The user '${targetUser.name}' is not accepting challenges right now.`);
+			if (!targetUser.blockChallengesNotified) {
+				targetUser.send(`The user '${user.name}' attempted to challenge you to a battle but was blocked. To enable challenges, use /unblockchallenges.`);
+				targetUser.blockChallengesNotified = true;
+			}
 			return false;
 		}
 		if (Date.now() < user.lastChallenge + 10 * SECONDS) {

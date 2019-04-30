@@ -1144,6 +1144,10 @@ class CommandContext extends MessageContext {
 					return this.errorReply(`On this server, you must be of rank ${groupName} or higher to PM users.`);
 				}
 				if (targetUser.blockPMs && targetUser.blockPMs !== user.group && !user.can('lock')) {
+					if (!targetUser.blockPMsNotified) {
+						targetUser.send(`The user '${user.name}' attempted to PM you but was blocked. To enable PMs, use /unblockpms.`);
+						targetUser.blockPMsNotified = true;
+					}
 					if (!targetUser.can('lock')) {
 						return this.errorReply(`This user is blocking private messages right now.`);
 					} else {

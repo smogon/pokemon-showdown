@@ -551,7 +551,13 @@ const commands = {
 
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User ${this.targetUsername} is not currently online.`);
 		if (!(targetUser in room.users) && !user.can('addhtml')) return this.errorReply("You do not have permission to use this command to users who are not in this room.");
-		if (targetUser.blockPMs && targetUser.blockPMs !== user.group && !user.can('lock')) return this.errorReply("This user is currently blocking PMs.");
+		if (targetUser.blockPMs && targetUser.blockPMs !== user.group && !user.can('lock')) {
+			if (!targetUser.blockPMsNotified) {
+				targetUser.send(`The user '${user.name}' attempted to PM you but was blocked. To enable PMs, use /unblockpms.`);
+				targetUser.blockPMsNotified = true;
+			}
+			return this.errorReply("This user is currently blocking PMs.");
+		}
 		if (targetUser.locked && !user.can('lock')) return this.errorReply("This user is currently locked, so you cannot send them a pminfobox.");
 
 		// Apply the infobox to the message
@@ -577,7 +583,13 @@ const commands = {
 
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User ${this.targetUsername} is not currently online.`);
 		if (!(targetUser in room.users) && !user.can('addhtml')) return this.errorReply("You do not have permission to use this command to users who are not in this room.");
-		if (targetUser.blockPMs && targetUser.blockPMs !== user.group && !user.can('lock')) return this.errorReply("This user is currently blocking PMs.");
+		if (targetUser.blockPMs && targetUser.blockPMs !== user.group && !user.can('lock')) {
+			if (!targetUser.blockPMsNotified) {
+				targetUser.send(`The user '${user.name}' attempted to PM you but was blocked. To enable PMs, use /unblockpms.`);
+				targetUser.blockPMsNotified = true;
+			}
+			return this.errorReply("This user is currently blocking PMs.");
+		}
 		if (targetUser.locked && !user.can('lock')) return this.errorReply("This user is currently locked, so you cannot send them UHTML.");
 
 		let message = `|pm|${user.getIdentity()}|${targetUser.getIdentity()}|/uhtml${(cmd === 'pmuhtmlchange' ? 'change' : '')} ${target}`;

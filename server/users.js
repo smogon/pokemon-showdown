@@ -520,6 +520,8 @@ class User extends Chat.MessageContext {
 		/**@type {string} */
 		this.s3 = '';
 
+		this.blockChallengesNotified = false;
+		this.blockPMsNotified = false;
 		/** @type {boolean} */
 		this.punishmentNotified = false;
 		/** @type {boolean} */
