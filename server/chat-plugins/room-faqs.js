@@ -94,6 +94,7 @@ const commands = {
 	rfaq: 'roomfaq',
 	roomfaq(target, room, user) {
 		if (!roomFaqs[room.id]) return this.errorReply("This room has no FAQ topics.");
+		/** @type {string} */
 		let topic = toId(target);
 		if (topic === 'constructor') return false;
 		if (!topic) return this.sendReplyBox(`List of topics in this room: ${Object.keys(roomFaqs[room.id]).filter(val => !getAlias(room.id, val)).sort((a, b) => a.localeCompare(b)).join(', ')}`);

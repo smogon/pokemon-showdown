@@ -1235,7 +1235,7 @@ class MafiaTracker extends Rooms.RoomGame {
 		// ['alignment', 'alien']
 		// ['selection', ''] deselects
 		if (selection[1]) {
-			const roleIndex = player.IDEA.choices.map(toId).indexOf(selection[1]);
+			const roleIndex = player.IDEA.choices.map(toId).indexOf(/** @type {ID} */(selection[1]));
 			if (roleIndex === -1) return user.sendTo(this.room, `|error|${selection[1]} is not an available role, perhaps it is already selected?`);
 			selection[1] = player.IDEA.choices.splice(roleIndex, 1)[0];
 		} else {

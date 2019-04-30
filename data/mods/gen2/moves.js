@@ -107,7 +107,7 @@ let BattleMovedex = {
 					/** @type {ActiveMove} */
 					// @ts-ignore
 					let moveData = {
-						id: 'bide',
+						id: /** @type {ID} */('bide'),
 						name: "Bide",
 						accuracy: 100,
 						damage: this.effectData.totalDamage * 2,
