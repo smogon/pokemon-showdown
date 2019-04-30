@@ -1144,10 +1144,7 @@ class CommandContext extends MessageContext {
 					return this.errorReply(`On this server, you must be of rank ${groupName} or higher to PM users.`);
 				}
 				if (targetUser.blockPMs && targetUser.blockPMs !== user.group && !user.can('lock')) {
-					if (!targetUser.blockPMsNotified) {
-						targetUser.send(`The user '${user.name}' attempted to PM you but was blocked. To enable PMs, use /unblockpms.`);
-						targetUser.blockPMsNotified = true;
-					}
+					Chat.maybeNotifyBlocked('pm', targetUser, user);
 					if (!targetUser.can('lock')) {
 						return this.errorReply(`This user is blocking private messages right now.`);
 					} else {
@@ -1935,6 +1932,27 @@ Chat.fitImage = async function (url, maxHeight = 300, maxWidth = 300) {
 	}
 
 	return [Math.round(width * ratio), Math.round(height * ratio)];
+};
+
+/**
+ * Notifies a targetUser that a user was blocked from reaching them due to a setting they have enabled.
+ * @param {'pm'|'challenge'} blocked
+ * @param {User} targetUser
+ * @param {User} user
+ */
+Chat.maybeNotifyBlocked = function (blocked, targetUser, user) {
+	const options = 'or change it in the <button name="openOptions" class="subtle">Options</button> menu in the upper right.';
+	if (blocked === 'pm') {
+		if (!targetUser.blockPMsNotified) {
+			targetUser.send(`|html|The user '${user.name}' attempted to PM you but was blocked. To enable PMs, use /unblockpms ${options}`);
+			targetUser.blockPMsNotified = true;
+		}
+	} else if (blocked === 'challenge') {
+		if (!targetUser.blockChallengesNotified) {
+			targetUser.send(`|html|The user '${user.name}' attempted to challenge you to a battle but was blocked. To enable challenges, use /unblockchallenges ${options}`);
+			targetUser.blockChallengesNotified = true;
+		}
+	}
 };
 
 /**
