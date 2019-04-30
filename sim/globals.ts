@@ -1054,6 +1054,7 @@ interface FormatsData extends EventMethods {
 	onValidateTeam?: (this: ModdedDex, team: PokemonSet[], format: Format, teamHas: AnyObject) => string[] | void
 	validateSet?: (this: Validator, set: PokemonSet, teamHas: AnyObject) => string[] | void
 	validateTeam?: (this: Validator, team: PokemonSet[], removeNicknames: boolean) => string[] | void,
+	trunc?: (n: number) => number;
 	section?: string,
 	column?: number
 }

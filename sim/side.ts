@@ -6,6 +6,7 @@
  */
 import {RequestState} from './battle';
 import {Pokemon} from './pokemon';
+import {State} from './state';
 
 /** A single action that can be chosen. */
 interface ChosenAction {
@@ -13,6 +14,7 @@ interface ChosenAction {
 	pokemon?: Pokemon; // the pokemon doing the action
 	targetLoc?: number; // relative location of the target to pokemon (move action only)
 	moveid: string; // a move to use (move action only)
+	move?: ActiveMove; // the active move corresponding to moveid (move action only)
 	target?: Pokemon; // the target of the action
 	index?: number; // the chosen index in Team Preview
 	side?: Side; // the action's side
@@ -22,7 +24,7 @@ interface ChosenAction {
 }
 
 /** What the player has chosen to happen. */
-interface Choice {
+export interface Choice {
 	cantUndo: boolean; // true if the choice can't be cancelled because of the maybeTrapped issue
 	error: string; // contains error text in the case of a choice error
 	actions: ChosenAction[]; // array of chosen actions
@@ -119,6 +121,10 @@ export class Side {
 
 		// old-gens
 		this.lastMove = null;
+	}
+
+	toJSON(): AnyObject {
+		return State.serializeSide(this);
 	}
 
 	get requestState(): RequestState {
