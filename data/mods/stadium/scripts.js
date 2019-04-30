@@ -81,7 +81,7 @@ let BattleScripts = {
 	runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect) {
 		let move = this.getActiveMove(moveOrMoveName);
 		let target = this.getTarget(pokemon, move, targetLoc);
-		if (target && target.subFainted) delete target.subFainted;
+		if (target && target.subFainted) target.subFainted = null;
 
 		this.setActiveMove(move, pokemon, target);
 

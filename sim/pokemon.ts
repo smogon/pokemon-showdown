@@ -5,6 +5,8 @@
  * @license MIT license
  */
 
+import {State} from './state';
+
  /** A Pokemon's move slot. */
 interface MoveSlot {
 	id: string;
@@ -53,7 +55,7 @@ export class Pokemon {
 	status: string;
 	statusData: AnyObject;
 	volatiles: AnyObject;
-	showCure: boolean;
+	showCure?: boolean;
 
 	/**
 	 * These are the basic stats that appear on the in-game stats screen:
@@ -382,6 +384,10 @@ export class Pokemon {
 		 * An object for storing untyped data, for mods to use.
 		 */
 		this.m = {};
+	}
+
+	toJSON(): AnyObject {
+		return State.serializePokemon(this);
 	}
 
 	get moves(): readonly string[] {
