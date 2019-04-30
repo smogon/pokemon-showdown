@@ -1003,6 +1003,18 @@ let BattleStatuses = {
 			this.add(`c|+ptoad⚬|Wow. Way to rain on my parade.`);
 		},
 	},
+	pre: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|%pre|let's go, in and out, 20 minute adventure`);
+		},
+		onSwitchOut() {
+			this.add(`c|%pre|sometimes science is more art than science`);
+		},
+		onFaint() {
+			this.add(`c|%pre|LAMBS TO THE COSMIC SLAUGHTER!!`);
+		},
+	},
 	psynergy: {
 		noCopy: true,
 		onStart() {

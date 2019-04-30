@@ -2841,6 +2841,60 @@ let BattleMovedex = {
 		target: "self",
 		type: "Grass",
 	},
+	// pre
+	"refactor": {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "The user swaps all its stat stage changes with the target and takes 1/4 of its maximum HP, rounded down, and puts it into a substitute to take its place in battle.",
+		shortDesc: "Swaps all stat changes with target and takes 1/4 of the user's max HP to put in a substitute.",
+		id: "refactor",
+		name: "Refactor",
+		isNonstandard: "Custom",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, authentic: 1, mystery: 1, snatch: 1, nonsky: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Skill Swap', target);
+		},
+		onTryHit(target, source) {
+			if (source.volatiles['substitute']) {
+				this.add('-fail', source, 'move: Refactor');
+				return null;
+			}
+			if (source.hp <= source.maxhp / 4) {
+				this.add('-fail', source, 'move: Refactor', '[weak]');
+				return null;
+			}
+		},
+		onHit(target, source) {
+			let targetBoosts = {};
+			let sourceBoosts = {};
+
+			for (let i in target.boosts) {
+				// @ts-ignore
+				targetBoosts[i] = target.boosts[i];
+				// @ts-ignore
+				sourceBoosts[i] = source.boosts[i];
+			}
+
+			target.setBoost(sourceBoosts);
+			source.setBoost(targetBoosts);
+
+			this.add('-swapboost', source, target, '[from] move: Refactor');
+			this.directDamage(source.maxhp / 4, source);
+		},
+		self: {
+			volatileStatus: 'substitute',
+		},
+		secondary: null,
+		target: "normal",
+		type: "Psychic",
+	},
+
 	// Psynergy
 	resolve: {
 		accuracy: true,

@@ -374,6 +374,50 @@ let BattleAbilities = {
 			}
 		},
 	},
+	// pre
+	optimize: {
+		desc: "This Pokemon changes forme and sets depending on which attack it uses, before the attack takes place. If this Pokemon uses Psycho Boost, it first changes to Deoxys-Attack. If this Pokemon uses Recover, it first changes to Deoxys-Defense. If this Pokemon uses Extreme Speed, it first changes to Deoxys-Speed. If this Pokemon uses Refactor, it first changes to Deoxys.",
+		shortDesc: "This Pokemon changes forme and set depending on which attack it uses.",
+		id: "optimize",
+		name: "Optimize",
+		isNonstandard: "Custom",
+		onBeforeMove(pokemon, target, move) {
+			switch (move.id) {
+			case 'psychoboost':
+				if (pokemon.template.species === 'Deoxys-Attack') return;
+				pokemon.set.nature = 'Modest';
+				pokemon.set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+				pokemon.set.evs = {hp: 4, atk: 0, def: 0, spa: 252, spd: 0, spe: 252};
+				pokemon.setItem('Life Orb');
+				pokemon.formeChange('Deoxys-Attack', this.effect);
+				break;
+			case 'recover':
+				if (pokemon.template.species === 'Deoxys-Defense') return;
+				pokemon.set.nature = 'Bold';
+				pokemon.set.ivs = {hp: 31, atk: 0, def: 31, spa: 31, spd: 31, spe: 31};
+				pokemon.set.evs = {hp: 252, atk: 0, def: 128, spa: 0, spd: 128, spe: 0};
+				pokemon.setItem('Leftovers');
+				pokemon.formeChange('Deoxys-Defense', this.effect);
+				break;
+			case 'extremespeed':
+				if (pokemon.template.species === 'Deoxys-Speed') return;
+				pokemon.set.nature = 'Adamant';
+				pokemon.set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+				pokemon.set.evs = {hp: 4, atk: 252, def: 0, spa: 0, spd: 0, spe: 252};
+				pokemon.setItem('Focus Sash');
+				pokemon.formeChange('Deoxys-Speed', this.effect);
+				break;
+			case 'refactor':
+				if (pokemon.template.species === 'Deoxys') return;
+				pokemon.set.nature = 'Bold';
+				pokemon.set.ivs = {hp: 31, atk: 0, def: 31, spa: 31, spd: 31, spe: 31};
+				pokemon.set.evs = {hp: 252, atk: 0, def: 4, spa: 0, spd: 0, spe: 252};
+				pokemon.setItem('Rocky Helmet');
+				pokemon.formeChange('Deoxys', this.effect);
+				break;
+			}
+		},
+	},
 	// Psynergy
 	wrath: {
 		desc: "This Pokemon has its critical hit ratio raised by 1 stage, and its moves have their accuracy multiplied by 1.1.",

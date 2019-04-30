@@ -76,6 +76,23 @@ let BattlePokedex = {
 		inherit: true,
 		abilities: {0: 'Comatose'},
 	},
+	// pre
+	deoxys: {
+		inherit: true,
+		abilities: {0: 'Optimize'},
+	},
+	deoxysattack: {
+		inherit: true,
+		abilities: {0: 'Optimize'},
+	},
+	deoxysdefense: {
+		inherit: true,
+		abilities: {0: 'Optimize'},
+	},
+	deoxysspeed: {
+		inherit: true,
+		abilities: {0: 'Optimize'},
+	},
 	// Psynergy
 	blazikenmega: {
 		inherit: true,
