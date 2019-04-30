@@ -90,17 +90,6 @@ let BattleAbilities = {
 			}
 		},
 	},
-	// Bimp
-	learnsomethingnew: {
-		desc: "This Pokemon's Attack is raised by one stage when another Pokemon faints.",
-		shortDesc: "This Pokemon's Attack is raised by 1 stage when another Pokemon faints.",
-		id: "learnsomethingnew",
-		name: "Learn Something New!",
-		isNonstandard: "Custom",
-		onAnyFaint() {
-			this.boost({atk: 1}, this.effectData.target);
-		},
-	},
 	// Brandon
 	gracideamastery: {
 		desc: "If this Pokemon is a Shaymin, it will transform into Shaymin-S before using a physical or special attack. After using the attack, if this Pokemon was originally in its base forme, it will transform back into Shaymin.",
@@ -427,14 +416,14 @@ let BattleAbilities = {
 		id: "thiccerfat",
 		name: "Thiccer Fat",
 		isNonstandard: "Custom",
-		onModifyAtkPriority: 6,
+		onSourceModifyAtkPriority: 6,
 		onSourceModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire') {
 				this.debug('Thiccer Fat weaken');
 				return this.chainModify(0.5);
 			}
 		},
-		onModifySpAPriority: 5,
+		onSourceModifySpAPriority: 5,
 		onSourceModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire') {
 				this.debug('Thiccer Fat weaken');

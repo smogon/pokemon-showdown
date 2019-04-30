@@ -92,7 +92,7 @@ let BattleStatuses = {
 			this.add(`c|%Akir|too sleepy, c ya`);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.typeMod > 0 && !target.illusion) {
+			if (target.getMoveHitData(move).typeMod > 0 && !target.illusion) {
 				this.debug('Solid Rock neutralize');
 				return this.chainModify(0.75);
 			}
@@ -226,18 +226,6 @@ let BattleStatuses = {
 		},
 		onFaint() {
 			this.add(`c|@biggie|It was all a dream`);
-		},
-	},
-	bimp: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|+Bimp|Ew it's Bimp -_-`);
-		},
-		onSwitchOut() {
-			this.add(`c|+Bimp|Brb getting Chick-Fil-A.`);
-		},
-		onFaint() {
-			this.add(`c|+Bimp|Well that was uneventful -_-`);
 		},
 	},
 	bobochan: {
@@ -461,7 +449,6 @@ let BattleStatuses = {
 					used: false,
 					virtual: true,
 				});
-				target.moves.push(move.id);
 			}
 		},
 		onBeforeSwitchOut(pokemon) {
@@ -657,10 +644,10 @@ let BattleStatuses = {
 	jdarden: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%jdarden|I've cultivated some mass during my hibernation`);
+			this.add(`c|+jdarden|I've cultivated some mass during my hibernation`);
 		},
 		onFaint() {
-			this.add(`c|%jdarden|Back to my natural state`);
+			this.add(`c|+jdarden|Back to my natural state`);
 		},
 	},
 	kaijubunny: {
@@ -817,10 +804,10 @@ let BattleStatuses = {
 	martha: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%martha|in to lose r1`);
+			this.add(`c|@martha|in to lose r1`);
 		},
 		onSwitchOut() {
-			this.add(`c|%martha|bad`);
+			this.add(`c|@martha|bad`);
 		},
 	},
 	marty: {
@@ -950,7 +937,7 @@ let BattleStatuses = {
 			this.add(`c|+Osiris|I'm getting too old for this x_x`);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.typeMod > 0 && !target.illusion) {
+			if (target.getMoveHitData(move).typeMod > 0 && !target.illusion) {
 				this.debug('Solid Rock neutralize');
 				return this.chainModify(0.75);
 			}
@@ -1129,14 +1116,14 @@ let BattleStatuses = {
 	snaquaza: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%Snaquaza|Snaq is baq... with a vengeance!`);
+			this.add(`c|@Snaquaza|Snaq is baq... with a vengeance!`);
 		},
 		onSwitchOut(pokemon) {
-			this.add(`c|%Snaquaza|Lynch Hoeen while I'm away...`);
+			this.add(`c|@Snaquaza|Lynch Hoeen while I'm away...`);
 			if (pokemon.m.claimHP) pokemon.m.claimHP = null;
 		},
 		onFaint() {
-			this.add(`c|%Snaquaza|How did you know I was scum?`);
+			this.add(`c|@Snaquaza|How did you know I was scum?`);
 		},
 		onDamage(damage, pokemon) {
 			// Hack for Snaquaza's Z move
@@ -1186,13 +1173,13 @@ let BattleStatuses = {
 	teclis: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%Teclis|Sometimes you have to fight to get your point across.`);
+			this.add(`c|@Teclis|Sometimes you have to fight to get your point across.`);
 		},
 		onSwitchOut() {
-			this.add(`c|%Teclis|You deserve a break.`);
+			this.add(`c|@Teclis|You deserve a break.`);
 		},
 		onFaint() {
-			this.add(`c|%Teclis|I'm convinced !`);
+			this.add(`c|@Teclis|I'm convinced !`);
 		},
 	},
 	tennisace: {

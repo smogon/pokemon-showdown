@@ -106,13 +106,30 @@ class PatternTester {
 	/**
 	 * @param {string} text
 	 */
-	test(text) {
+	testCommand(text) {
 		const spaceIndex = text.indexOf(' ');
 		if (this.fastElements.has(spaceIndex >= 0 ? text.slice(0, spaceIndex) : text)) {
 			return true;
 		}
 		if (!this.regexp) return false;
 		return this.regexp.test(text);
+	}
+	/**
+	 * @param {string} text
+	 */
+	test(text) {
+		if (!text.includes('\n')) return null;
+		if (this.testCommand(text)) return text;
+		// The PM matching is a huge mess, and really needs to be replaced with
+		// the new multiline command system soon.
+		const pmMatches = /^(\/(?:pm|w|whisper|msg) [^,]*, ?)(.*)/i.exec(text);
+		if (pmMatches && this.testCommand(pmMatches[2])) {
+			if (text.split('\n').every(line => line.startsWith(pmMatches[1]))) {
+				return text.replace(/\n\/(?:pm|w|whisper|msg) [^,]*, ?/g, '\n');
+			}
+			return text;
+		}
+		return null;
 	}
 }
 
@@ -182,7 +199,7 @@ Chat.namefilter = function (name, user) {
 		// \u2E80-\u32FF              CJK symbols
 		// \u3400-\u9FFF              CJK
 		// \uF900-\uFAFF\uFE00-\uFE6F CJK extended
-		name = name.replace(/[^a-zA-Z0-9 /\\.~()<>^*%&=+$@#_'?!"\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F-]+/g, '');
+		name = name.replace(/[^a-zA-Z0-9 /\\.~()<>^*%&=+$#_'?!"\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F-]+/g, '');
 
 		// blacklist
 		// \u00a1 upside-down exclamation mark (i)
@@ -369,7 +386,7 @@ class MessageContext {
 		if (commaIndex < 0) {
 			return [target.trim(), ''];
 		}
-		return [target.substr(0, commaIndex).trim(), target.substr(commaIndex + 1).trim()];
+		return [target.slice(0, commaIndex).trim(), target.slice(commaIndex + 1).trim()];
 	}
 	/**
 	 * @param {string} text
@@ -579,11 +596,10 @@ class CommandContext extends MessageContext {
 				Chat.sendPM(message, this.user, this.pmTarget);
 			} else {
 				this.room.add(`|c|${this.user.getIdentity(this.room.id)}|${message}`);
+				if (this.room && this.room.game && this.room.game.onLogMessage) {
+					this.room.game.onLogMessage(message, this.user);
+				}
 			}
-		}
-
-		if (this.room && this.room.game && this.room.game.onLogMessage) {
-			this.room.game.onLogMessage(message, this.user);
 		}
 
 		this.update();
@@ -1127,7 +1143,7 @@ class CommandContext extends MessageContext {
 					let groupName = Config.groups[Config.pmmodchat] && Config.groups[Config.pmmodchat].name || Config.pmmodchat;
 					return this.errorReply(`On this server, you must be of rank ${groupName} or higher to PM users.`);
 				}
-				if (targetUser.ignorePMs && targetUser.ignorePMs !== user.group && !user.can('lock')) {
+				if (targetUser.blockPMs && targetUser.blockPMs !== user.group && !user.can('lock')) {
 					if (!targetUser.can('lock')) {
 						return this.errorReply(`This user is blocking private messages right now.`);
 					} else {
@@ -1135,7 +1151,7 @@ class CommandContext extends MessageContext {
 						return this.sendReply(`|html|If you need help, try opening a <a href="view-help-request" class="button">help ticket</a>`);
 					}
 				}
-				if (user.ignorePMs && user.ignorePMs !== targetUser.group && !targetUser.can('lock')) {
+				if (user.blockPMs && user.blockPMs !== targetUser.group && !targetUser.can('lock')) {
 					return this.errorReply(`You are blocking private messages right now.`);
 				}
 			}

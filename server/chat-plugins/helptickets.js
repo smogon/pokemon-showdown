@@ -149,6 +149,17 @@ class HelpTicket extends Rooms.RoomGame {
 	 * @param {User} user
 	 */
 	onLogMessage(message, user) {
+		if (this.ticket.active) return;
+		const blockedMessages = [
+			'hi', 'hello', 'hullo', 'hey', 'yo',
+			'hesrude', 'shesrude', 'hesinappropriate', 'shesinappropriate', 'heswore', 'sheswore',
+		];
+		if (!user.isStaff && blockedMessages.includes(toId(message))) {
+			this.room.add(`|c|~Staff|Hello! The global staff team would be happy to help you, but you need to explain what's going on first.`);
+			this.room.add(`|c|~Staff|Please post the information I requested above so a global staff member can come to help.`);
+			this.room.update();
+			return false;
+		}
 		if ((!user.isStaff || this.ticket.userid === user.userid) && !this.ticket.active) {
 			this.ticket.active = true;
 			notifyStaff(this.ticket.escalated);
@@ -212,8 +223,9 @@ class HelpTicket extends Rooms.RoomGame {
 			entry.shift();
 			let user = entry.shift();
 			let message = entry.join('|');
-			hoverText.push(message.startsWith('/log ') ? message.slice(5) : `${user}: ${message}`);
-			if (hoverText.length >= 2) break;
+			message = message.startsWith('/log ') ? message.slice(5) : `${user}: ${message}`;
+			hoverText.push(Chat.html`${message}`);
+			if (hoverText.length >= 3) break;
 		}
 		if (!hoverText.length) return `title="The ticket creator has not spoken yet."`;
 		return `title="${hoverText.reverse().join(`&#10;`)}"`;
@@ -485,7 +497,7 @@ const pages = {
 			const pages = {
 				report: `I want to report someone`,
 				harassment: `Someone is harassing me`,
-				inap: `Someone is being inappropriate`,
+				inap: `Someone is using an offensive username or pokemon nickname`,
 				staff: `I want to report a staff member`,
 
 				appeal: `I want to appeal a punishment`,
@@ -642,7 +654,7 @@ const pages = {
 					break;
 				case 'password':
 					buf += `<p>If you lost your password, click the button below to make a post in Admin Requests. We will need to clarify a few pieces of information before resetting the account. Please note that password resets are low priority and may take a while; we recommend using a new account while waiting.</p>`;
-					buf += `<p><a class="button" href="https://www.smogon.com/forums/forums/other-admin-requests.346/">Request a password reset</a></p>`;
+					buf += `<p><a class="button" href="https://www.smogon.com/forums/password-reset-form/">Request a password reset</a></p>`;
 					break;
 				case 'roomhelp':
 					buf += `<p>If you are a room driver or up in a public room, and you need help watching the chat, one or more global staff members would be happy to assist you! Click the button below to call a Global Staff member.</p>`;
@@ -866,7 +878,7 @@ let commands = {
 				'IP-Appeal': `<p><strong>${user.name}'s IP Addresses</strong>: ${Object.keys(user.ips).map(ip => `<a href="https://whatismyipaddress.com/ip/${ip}" target="_blank">${ip}</a>`).join(', ')}</p>`,
 			};
 			const introMessage = Chat.html`<h2 style="margin-top:0">Help Ticket - ${user.name}</h2><p><b>Issue</b>: ${ticket.type}<br />${upper ? `An Upper` : `A Global`} Staff member will be with you shortly.</p>`;
-			const staffMessage = `${upper ? `<p><h3>Do not post sensitive information in this room.</h3>Drivers and moderators can access this room's logs via the log viewer; please PM the user instead.</p>` : ``}<p><button class="button" name="send" value="/helpticket close ${user.userid}">Close Ticket</button> <button class="button" name="send" value="/helpticket escalate ${user.userid}">Escalate</button> ${upper ? `` : `<button class="button" name="send" value="/helpticket escalate ${user.userid}, upperstaff">Escalate to Upper Staff</button>`} <button class="button" name="send" value="/helpticket ban ${user.userid}"><small>Ticketban</small></button></p>`;
+			const staffMessage = `${upper ? `<p><h3>Do not post sensitive information in this room.</h3>Drivers and moderators can access this room's logs via the log viewer; please PM the user instead.</p>` : ``}<p><button class="button" name="send" value="/helpticket close ${user.userid}">Close Ticket</button> <details><summary class="button">More Options</summary><button class="button" name="send" value="/helpticket escalate ${user.userid}">Escalate</button> ${upper ? `` : `<button class="button" name="send" value="/helpticket escalate ${user.userid}, upperstaff">Escalate to Upper Staff</button>`} <button class="button" name="send" value="/helpticket ban ${user.userid}"><small>Ticketban</small></button></details></p>`;
 			const staffHint = staffContexts[target] || '';
 			let helpRoom = /** @type {ChatRoom?} */ (Rooms(`help-${user.userid}`));
 			if (!helpRoom) {
@@ -907,7 +919,6 @@ let commands = {
 			}
 			if (contexts[ticket.type]) {
 				helpRoom.add(`|c|~Staff|${contexts[ticket.type]}`);
-				helpRoom.add(`|c|~Staff|A Global Staff member will come to help you once you tell us what we need to know to help you.`);
 				helpRoom.update();
 			} else {
 				ticket.active = true;
@@ -969,7 +980,9 @@ let commands = {
 
 			let ticket = tickets[toId(this.targetUsername)];
 			let ticketBan = ticketBans[toId(this.targetUsername)];
-			if (!targetUser && !Punishments.search(toId(this.targetUsername))[0].length && !ticket && !ticketBan) return this.errorReply(`User '${this.targetUsername}' not found.`);
+			if (!targetUser && !Punishments.search(toId(this.targetUsername)).length && !ticket && !ticketBan) {
+				return this.errorReply(`User '${this.targetUsername}' not found.`);
+			}
 			if (target.length > 300) {
 				return this.errorReply(`The reason is too long. It cannot exceed 300 characters.`);
 			}
@@ -1009,7 +1022,7 @@ let commands = {
 				affected.push(targetUser);
 				affected.concat(targetUser.getAltUsers(false, true));
 			} else {
-				let foundKeys = Punishments.search(userid)[0].map(key => key.split(':')[0]);
+				let foundKeys = Punishments.search(userid).map(([key]) => key);
 				let userids = new Set([userid]);
 				let ips = new Set();
 				for (let key of foundKeys) {
@@ -1083,6 +1096,7 @@ let commands = {
 			if (!this.can('lock')) return;
 			if (user.ignoreTickets) return this.errorReply(`You are already ignoring help ticket notifications. Use /helpticket unignore to receive notifications again.`);
 			user.ignoreTickets = true;
+			user.update('ignoreTickets');
 			this.sendReply(`You are now ignoring help ticket notifications.`);
 		},
 		ignorehelp: [`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ & ~`],
@@ -1091,6 +1105,7 @@ let commands = {
 			if (!this.can('lock')) return;
 			if (!user.ignoreTickets) return this.errorReply(`You are not ignoring help ticket notifications. Use /helpticket ignore to stop receiving notifications.`);
 			user.ignoreTickets = false;
+			user.update('ignoreTickets');
 			this.sendReply(`You will now receive help ticket notifications.`);
 		},
 		unignorehelp: [`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ & ~`],

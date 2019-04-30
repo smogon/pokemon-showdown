@@ -90,19 +90,17 @@ class Roomlog {
 		log = [];
 		for (let i = 0; i < this.log.length; ++i) {
 			const line = this.log[i];
-			if (line === '|split') {
-				const ownLine = this.log[i + channel + 1];
+			const split = /\|split\|p(\d)/g.exec(line);
+			if (split) {
+				const canSeePrivileged = (channel === Number(split[0]) || channel === -1);
+				const ownLine = this.log[i + (canSeePrivileged ? 1 : 2)];
 				if (ownLine) log.push(ownLine);
-				i += 4;
+				i += 2;
 			} else {
 				log.push(line);
 			}
 		}
-		let textLog = log.join('\n') + '\n';
-		if (channel === 0) {
-			return textLog.replace(/\n\|choice\|\|\n/g, '\n').replace(/\n\|seed\|\n/g, '\n');
-		}
-		return textLog;
+		return log.join('\n') + '\n';
 	}
 	setupModlogStream() {
 		if (this.modlogStream !== undefined) return;

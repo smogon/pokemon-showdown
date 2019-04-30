@@ -111,7 +111,7 @@ let BattleStatuses = {
 		},
 		onSwitchIn(pokemon) {
 			// Regular poison status and damage after a switchout -> switchin.
-			pokemon.setStatus('psn');
+			pokemon.status = 'psn';
 		},
 		onAfterSwitchInSelf(pokemon) {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
@@ -150,6 +150,7 @@ let BattleStatuses = {
 				isSelfHit: true,
 				noDamageVariance: true,
 				flags: {},
+				selfdestruct: move.selfdestruct,
 			});
 			let damage = this.getDamage(pokemon, pokemon, move);
 			if (typeof damage !== 'number') throw new Error("Confusion damage not dealt");

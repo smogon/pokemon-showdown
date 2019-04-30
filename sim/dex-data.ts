@@ -714,8 +714,6 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 	readonly critRatio: number;
 	/** Will this move always or never be a critical hit? */
 	readonly willCrit?: boolean;
-	/** Is this move a critical hit? */
-	readonly crit?: boolean;
 	/** Can this move OHKO foes? */
 	readonly ohko?: boolean | string;
 	/**
@@ -791,8 +789,6 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 	readonly spreadModifier?: number;
 	/**  Modifier that affects damage when this move is a critical hit. */
 	readonly critModifier?: number;
-	/** Damage modifier based on the user's types. */
-	readonly typeMod: number;
 	/** Forces the move to get STAB even if the type doesn't match. */
 	readonly forceSTAB: boolean;
 	/** True if it can't be copied with Sketch. */
@@ -834,7 +830,6 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 		this.ignoreAbility = data.ignoreAbility || false;
 		this.damage = data.damage!;
 		this.spreadHit = data.spreadHit || false;
-		this.typeMod = data.typeMod || 0;
 		this.forceSTAB = !!data.forceSTAB;
 		this.noSketch = !!data.noSketch;
 		this.stab = data.stab || undefined;

@@ -907,7 +907,7 @@ let BattleMovedex = {
 			},
 			onAnyModifyDamagePhase1(damage, source, target, move) {
 				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Special') {
-					if (!move.crit && !move.infiltrates) {
+					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Light Screen weaken');
 						if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
 						return this.chainModify(0.5);
@@ -1267,7 +1267,7 @@ let BattleMovedex = {
 			},
 			onAnyModifyDamagePhase1(damage, source, target, move) {
 				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Physical') {
-					if (!move.crit && !move.infiltrates) {
+					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Reflect weaken');
 						if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
 						return this.chainModify(0.5);
@@ -1663,13 +1663,11 @@ let BattleMovedex = {
 				this.effectData.layers++;
 			},
 			onSwitchIn(pokemon) {
-				if (!pokemon.runImmunity('Ground')) return;
-				if (!pokemon.runImmunity('Poison')) return;
+				if (!pokemon.isGrounded()) return;
 				if (pokemon.hasType('Poison')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
 					pokemon.side.removeSideCondition('toxicspikes');
-				}
-				if (pokemon.volatiles['substitute']) {
+				} else if (pokemon.volatiles['substitute'] || pokemon.hasType('Steel')) {
 					return;
 				} else if (this.effectData.layers >= 2) {
 					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);

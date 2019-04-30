@@ -141,7 +141,7 @@ let BattleScripts = {
 	},
 	useMoveInner(moveOrMoveName, pokemon, target, sourceEffect, zMove) {
 		if (!sourceEffect && this.effect.id) sourceEffect = this.effect;
-		if (sourceEffect && sourceEffect.id === 'instruct') sourceEffect = null;
+		if (sourceEffect && ['instruct', 'custapberry'].includes(sourceEffect.id)) sourceEffect = null;
 
 		let move = this.getActiveMove(moveOrMoveName);
 		if (move.id === 'weatherball' && zMove) {
@@ -234,7 +234,7 @@ let BattleScripts = {
 			move.ignoreImmunity = (move.category === 'Status');
 		}
 
-		if (move.selfdestruct === 'always') {
+		if (this.gen !== 4 && move.selfdestruct === 'always') {
 			this.faint(pokemon, pokemon, move);
 		}
 
@@ -245,6 +245,14 @@ let BattleScripts = {
 			if (damage === this.NOT_FAIL) pokemon.moveThisTurnResult = null;
 			if (damage || damage === 0 || damage === undefined) moveResult = true;
 		} else {
+			if (!targets.length) {
+				this.attrLastMove('[notarget]');
+				this.add(this.gen >= 5 ? '-fail' : '-notarget', pokemon);
+				return false;
+			}
+			if (this.gen === 4 && move.selfdestruct === 'always') {
+				this.faint(pokemon, pokemon, move);
+			}
 			moveResult = this.trySpreadMoveHit(targets, pokemon, move);
 		}
 		if (move.selfBoost && moveResult) this.moveHit(pokemon, pokemon, move, move.selfBoost, false, true);
@@ -265,11 +273,6 @@ let BattleScripts = {
 		return true;
 	},
 	trySpreadMoveHit(targets, pokemon, move) {
-		if (!targets.length) {
-			this.attrLastMove('[notarget]');
-			this.add(this.gen >= 5 ? '-fail' : '-notarget', pokemon);
-			return false;
-		}
 		if (targets.length > 1) move.spreadHit = true;
 
 		/** @type {((targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) => (number | boolean | "" | undefined)[] | undefined)[]} */
@@ -311,7 +314,6 @@ let BattleScripts = {
 		}
 
 		this.setActiveMove(move, pokemon, targets[0]);
-		move.zBrokeProtect = false;
 
 		let hitResult = this.singleEvent('PrepareHit', move, {}, targets[0], pokemon, move);
 		if (!hitResult) {
@@ -548,7 +550,6 @@ let BattleScripts = {
 	},
 	tryMoveHit(target, pokemon, move) {
 		this.setActiveMove(move, pokemon, target);
-		move.zBrokeProtect = false;
 
 		let hitResult = this.singleEvent('PrepareHit', move, {}, target, pokemon, move);
 		if (!hitResult) {

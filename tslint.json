@@ -1,7 +1,6 @@
 {
     "extends": "tslint:latest",
     "defaultSeverity": "error",
-    "jsRules": {},
     "rules": {
         "array-type": [true, "array"],
         "arrow-parens": [true, "ban-single-arg-parens"],
@@ -68,6 +67,7 @@
     },
     "rulesDirectory": [],
     "linterOptions": {
-      "exclude": ["node_modules/**/*", "**/*.js", "dev-tools/*", ".*-dist/**/*"]
+      // TODO: why is tslint looking at .js files anyway?
+      "exclude": ["node_modules/", "**/*.js", "*/globals.ts"]
      }
 }

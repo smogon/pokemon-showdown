@@ -338,6 +338,10 @@ stat boosts are minor actions.
 
 > Same as `-damage`, but the Pokémon has healed damage instead.
 
+`|-sethp|POKEMON|HP`
+
+> The specified Pokémon `POKEMON` now has `HP` hit points.
+
 `|-status|POKEMON|STATUS`
 
 > The Pokémon `POKEMON` has been inflicted with `STATUS`.
@@ -666,17 +670,18 @@ To be exact, `CHOICE` is one of:
 Once a choice has been set for all players who need to make a choice, the
 battle will continue.
 
-All decisions except `/undo` can be sent with `|RQID` at the end. `RQID` is
-`REQUEST.rqid` from `|request|`. Each `RQID` is a unique number used to
-identify which action the request was intended for and is used to protect
-against race conditions involving `/undo` (the cancel button).
-
 If an invalid decision is sent (trying to switch when you're trapped by
 Mean Look or something), you will receive a message starting with:
 
-`|error|[Invalid choice]`
+`|error|[Invalid choice] MESSAGE`
 
-This will tell you to send a different decision.
+This will tell you to send a different decision. If your previous choice
+revealed additional information (For example: a move disabled by Imprison
+or a trapping effect), the error will be followed with a `|request|` command
+to base your decision off of:
+
+`|error|[Unavailable choice] MESSAGE`  
+`|request|REQUEST`
 
 ### Choice requests
 
@@ -688,8 +693,17 @@ is:
 > Gives a JSON object containing a request for a choice (to move or
 > switch). To assist in your decision, `REQUEST.active` has information
 > about your active Pokémon, and `REQUEST.side` has information about your
-> your team as a whole. `REQUEST.rqid` is an optional request ID (see
-> "Sending decisions" for details).
+> your team as a whole.
+>
+> If you're using the simulator through a Pokémon Showdown server,
+> `REQUEST.rqid` is an optional request ID. It will not exist if you're
+> using the simulator directly through `import sim` or
+> `./pokemon-showdown simulate-battle`.
+>
+> When sending decisions to a Pokémon Showdown server with `/choose`, you
+> can add `|RQID` at the end. `RQID` is `REQUEST.rqid`, and it identifies
+> which request the decision was intended for, making sure "Undo" doesn't
+> cause the next decision to be sent for the wrong turn.
 
 Example request object:
 

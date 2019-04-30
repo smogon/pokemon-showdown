@@ -6,8 +6,8 @@ class RandomLetsGoTeams extends RandomTeams {
 	/**
 	 * @param {string | Template} template
 	 * @param {number} [slot]
-	 * @param {RandomTeamsTypes["TeamDetails"]} [teamDetails]
-	 * @return {RandomTeamsTypes["RandomSet"]}
+	 * @param {RandomTeamsTypes.TeamDetails} [teamDetails]
+	 * @return {RandomTeamsTypes.RandomSet}
 	 */
 	randomSet(template, slot = 1, teamDetails = {}) {
 		template = this.getTemplate(template);
@@ -234,7 +234,7 @@ class RandomLetsGoTeams extends RandomTeams {
 		let typeComboCount = {};
 		/**@type {{[k: string]: number}} */
 		let baseFormes = {};
-		/**@type {RandomTeamsTypes["TeamDetails"]} */
+		/**@type {RandomTeamsTypes.TeamDetails} */
 		let teamDetails = {};
 
 		while (pokemonPool.length && pokemon.length < 6) {
