@@ -50,10 +50,10 @@ export class Pokemon {
 
 	baseTemplate: Template;
 	template: Template;
-	speciesData: AnyObjectWithID;
+	speciesData: AnyObject;
 
 	status: ID;
-	statusData: AnyObjectWithID;
+	statusData: AnyObject;
 	volatiles: AnyObject;
 	showCure?: boolean;
 
@@ -84,10 +84,10 @@ export class Pokemon {
 
 	baseAbility: ID;
 	ability: ID;
-	abilityData: {[k: string]: string | Pokemon | ID};
+	abilityData: {[k: string]: string | Pokemon};
 
 	item: ID;
-	itemData: {[k: string]: string | Pokemon | ID};
+	itemData: {[k: string]: string | Pokemon};
 	lastItem: ID;
 	usedItemThisTurn: boolean;
 	ateBerry: boolean;

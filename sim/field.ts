@@ -12,9 +12,9 @@ export class Field {
 	readonly id: ID;
 
 	weather: ID;
-	weatherData: AnyObjectWithID;
+	weatherData: AnyObject;
 	terrain: ID;
-	terrainData: AnyObjectWithID;
+	terrainData: AnyObject;
 	pseudoWeather: AnyObject;
 
 	constructor(battle: Battle) {

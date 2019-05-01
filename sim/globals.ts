@@ -8,7 +8,6 @@ type Validator = import('./team-validator').Validator
 
 type ID = '' | string & {__isID: true};
 interface AnyObject {[k: string]: any}
-interface AnyObjectWithID {id?: ID, [k: string]: any}
 type DexTable<T> = {[key: string]: T}
 
 type GenderName = 'M' | 'F' | 'N' | '';

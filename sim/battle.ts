@@ -82,7 +82,7 @@ export class Battle extends Dex.ModdedDex {
 	winner?: string;
 
 	effect: Effect;
-	effectData: AnyObjectWithID;
+	effectData: AnyObject;
 
 	event: AnyObject;
 	events: AnyObject | null;
@@ -372,7 +372,7 @@ export class Battle extends Dex.ModdedDex {
 
 	/** The entire event system revolves around this function and runEvent. */
 	singleEvent(
-		eventid: string, effect: Effect, effectData: AnyObjectWithID | null,
+		eventid: string, effect: Effect, effectData: AnyObject | null,
 		target: string | Pokemon | Side | Field | Battle | null, source?: string | Pokemon | Effect | false | null,
 		sourceEffect?: Effect | string | null, relayVar?: any) {
 		if (this.eventDepth >= 8) {

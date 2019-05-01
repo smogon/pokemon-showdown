@@ -128,7 +128,7 @@ export class BasicEffect implements EffectData {
 		data = combine(this, data, ...moreData);
 
 		this.name = Tools.getString(data.name).trim();
-		this.id = toId(data.id || this.name); // Hidden Power hack
+		this.id = data.id as ID || toId(this.name); // Hidden Power hack
 		this.fullname = Tools.getString(data.fullname) || this.name;
 		this.effectType = Tools.getString(data.effectType) as EffectType || 'Effect';
 		this.exists = !!(this.exists && this.id);
@@ -141,8 +141,8 @@ export class BasicEffect implements EffectData {
 		this.duration = data.duration;
 		this.noCopy = !!data.noCopy;
 		this.affectsFainted = !!data.affectsFainted;
-		this.status = toId(data.status) || undefined;
-		this.weather = toId(data.weather) || undefined;
+		this.status = data.status as ID || undefined;
+		this.weather = data.weather as ID || undefined;
 		this.drain = data.drain || undefined;
 		this.flags = data.flags || {};
 		this.sourceEffect = data.sourceEffect || '';
@@ -609,7 +609,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 
 		this.fullname = `pokemon: ${data.name}`;
 		this.effectType = 'Pokemon';
-		this.speciesid = toId(data.speciesid) || this.id;
+		this.speciesid = data.speciesid as ID || this.id;
 		this.species = data.species || data.name;
 		this.name = data.species;
 		this.baseSpecies = data.baseSpecies || this.name;
