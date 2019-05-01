@@ -1012,6 +1012,7 @@ interface GameTimerSettings {
 interface FormatsData extends EventMethods {
 	name: string
 	banlist?: string[]
+	battle?: ModdedBattleScriptsData
 	cannotMega?: string[]
 	canUseRandomTeam?: boolean
 	challengeShow?: boolean
@@ -1049,10 +1050,11 @@ interface FormatsData extends EventMethods {
 	onBegin?: (this: Battle) => void
 	onChangeSet?: (this: ModdedDex, set: PokemonSet, format: Format, setHas?: AnyObject, teamHas?: AnyObject) => string[] | void
 	onModifyTemplate?: (this: Battle, template: Template, target: Pokemon, source: Pokemon, effect: Effect) => Template | void
+	onStart?: (this: Battle) => void
 	onTeamPreview?: (this: Battle) => void
 	onValidateSet?: (this: ModdedDex, set: PokemonSet, format: Format, setHas: AnyObject, teamHas: AnyObject) => string[] | void
 	onValidateTeam?: (this: ModdedDex, team: PokemonSet[], format: Format, teamHas: AnyObject) => string[] | void
-	validateSet?: (this: Validator, set: PokemonSet, teamHas: AnyObject) => string[] | void
+	validateSet?: (this: Validator, set: PokemonSet, teamHas: AnyObject) => string[] | null
 	validateTeam?: (this: Validator, team: PokemonSet[], removeNicknames: boolean) => string[] | void,
 	trunc?: (n: number) => number;
 	section?: string,
@@ -1168,6 +1170,10 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	doGetMixedTemplate?: (this: Battle, template: Template, deltas: AnyObject) => Template
 	getMegaDeltas?: (this: Battle, megaSpecies: Template) => AnyObject
 	getMixedTemplate?: (this: Battle, originalSpecies: string, megaSpecies: string) => Template
+	getAbility?: (this: Battle, name: string | Ability ) => Ability
+	getZMove?: (this: Battle, move: Move, pokemon: Pokemon, skipChecks?: boolean) => string | undefined
+	getActiveZMove?: (this: Battle, move: Move, pokemon: Pokemon) => ActiveMove
+	canZMove?: (this: Battle, pokemon: Pokemon) => (AnyObject | null)[] | void
 }
 
 interface TypeData {

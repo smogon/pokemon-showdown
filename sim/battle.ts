@@ -118,6 +118,7 @@ export class Battle extends Dex.ModdedDex {
 
 		this.zMoveTable = {};
 		Object.assign(this, this.data.Scripts);
+		if (format.battle) Object.assign(this, format.battle);
 
 		this.id = '';
 		this.debugMode = format.debug || !!options.debug;
