@@ -632,6 +632,17 @@ let Formats = [
 		mod: 'ultimatez',
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Kyurem-Black', 'Celebrate', 'Conversion', 'Happy Hour', 'Hold Hands'],
+		onValidateSet(set) {
+			let problems = [];
+			if (this.getItem(set.item).zMove && set.moves) {
+				for (const moveId of set.moves) {
+					let move = this.getMove(moveId);
+					if (!move.zMoveBoost) continue;
+					if (move.zMoveBoost.evasion) problems.push(move.name + ' is banned in combination with a Z-Crystal.');
+				}
+			}
+			return problems;
+		},
 	},
 	{
 		section: "Other Metagames",
