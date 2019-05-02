@@ -91,7 +91,7 @@ let Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] RU'],
-		banlist: ['RU', 'NUBL', 'Sceptile-Mega', 'Drought'],
+		banlist: ['RU', 'NUBL', 'Drought'],
 		unbanlist: ['Camerupt-Mega'],
 	},
 	{
