@@ -80,9 +80,6 @@ let Formats = [
 		ruleset: ['[Gen 7] UU'],
 		banlist: ['UU', 'RUBL', 'Aurora Veil'],
 		unbanlist: ['Sceptile-Mega', 'Drought'],
-		onBegin() {
-			if (this.rated && this.format === 'gen7ru') this.add('html', `<div class="broadcast-green"><strong>RU is currently suspecting Mega Sceptile! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3649475/">suspect thread</a>.</strong></div>`);
-		},
 	},
 	{
 		name: "[Gen 7] NU",
@@ -762,6 +759,9 @@ let Formats = [
 		// searchShow: false,
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Kartana', 'Kyurem-Black', 'Shedinja'],
+		onBegin() {
+			if (this.rated && this.format === 'gen7camomons') this.add('html', `<div class="broadcast-green"><strong>Camomons is currently suspecting Dragonite! For information on how to participate check out the <a href="https://www.smogon.com/forums/posts/8117759/">suspect post</a>.</strong></div>`);
+		},
 		onModifyTemplate(template, target, source, effect) {
 			if (!target) return; // Chat command
 			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
