@@ -876,7 +876,7 @@ export class Pokemon {
 		this.clearVolatile();
 		this.boosts = pokemon.boosts;
 		for (const i in pokemon.volatiles) {
-			if (this.battle.getEffect(i).noCopy) continue;
+			if (this.battle.getEffectByID(i as ID).noCopy) continue;
 			// shallow clones
 			this.volatiles[i] = Object.assign({}, pokemon.volatiles[i]);
 			if (this.volatiles[i].linkedPokemon) {
@@ -1306,7 +1306,7 @@ export class Pokemon {
 	}
 
 	getStatus() {
-		return this.battle.getEffect(this.status);
+		return this.battle.getEffectByID(this.status);
 	}
 
 	eatItem(source?: Pokemon, sourceEffect?: Effect) {
