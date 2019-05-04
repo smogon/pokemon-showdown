@@ -21,7 +21,7 @@ interface FaintedPokemon {
 }
 
 interface BattleOptions {
-	formatid: string; // Format ID
+	formatid: ID; // Format ID
 	send?: (type: string, data: string | string[]) => void; // Output callback
 	prng?: PRNG; // PRNG override (you usually don't need this, just pass a seed)
 	seed?: PRNGSeed; // PRNG seed
@@ -48,7 +48,7 @@ type Part = string | number | boolean | AnyObject | null | undefined;
 export type RequestState = 'teampreview' | 'move' | 'switch' | '';
 
 export class Battle extends Dex.ModdedDex {
-	readonly id: '';
+	readonly id: ID;
 	readonly debugMode: boolean;
 	readonly deserialized: boolean;
 	readonly strictChoices: boolean;
@@ -185,7 +185,7 @@ export class Battle extends Dex.ModdedDex {
 		// (so speedSort doesn't need to bind before use)
 		this.comparePriority = this.comparePriority.bind(this);
 
-		const inputOptions: {formatid: string, seed: PRNGSeed, rated?: string | true} = {
+		const inputOptions: {formatid: ID, seed: PRNGSeed, rated?: string | true} = {
 			formatid: options.formatid, seed: this.prng.seed,
 		};
 		if (this.rated) inputOptions.rated = this.rated;
@@ -2286,7 +2286,7 @@ export class Battle extends Dex.ModdedDex {
 		for (const side of this.sides) {
 			for (const pokemon of side.active) {
 				if (pokemon.fainted) {
-					pokemon.status = 'fnt';
+					pokemon.status = 'fnt' as ID;
 					pokemon.switchFlag = true;
 				}
 			}

@@ -6,6 +6,7 @@ type PRNGSeed = import('./prng').PRNGSeed;
 type Side = import('./side').Side
 type Validator = import('./team-validator').Validator
 
+type ID = '' | string & {__isID: true};
 interface AnyObject {[k: string]: any}
 type DexTable<T> = {[key: string]: T}
 
@@ -714,6 +715,9 @@ interface ModdedEffectData extends Partial<EffectData> {
 type EffectType = 'Effect' | 'Pokemon' | 'Move' | 'Item' | 'Ability' | 'Format' | 'Ruleset' | 'Weather' | 'Status' | 'Rule' | 'ValidatorRule'
 
 interface BasicEffect extends EffectData {
+	id: ID
+	weather?: ID
+	status?: ID
 	effectType: EffectType
 	exists: boolean
 	flags: AnyObject
@@ -871,6 +875,9 @@ type MoveHitData = {[targetSlotid: string]: {
 
 interface ActiveMove extends BasicEffect, MoveData {
 	readonly effectType: 'Move'
+	id: ID
+	weather?: ID
+	status?: ID
 	hit: number
 	moveHitData?: MoveHitData
 	ability?: Ability
@@ -985,7 +992,7 @@ interface Template extends Readonly<BasicEffect & TemplateData & TemplateFormats
 	readonly maleOnlyHidden: boolean
 	readonly nfe: boolean
 	readonly prevo: string
-	readonly speciesid: string
+	readonly speciesid: ID
 	readonly spriteid: string
 	readonly tier: string
 	readonly addedType?: string
@@ -1138,7 +1145,7 @@ interface ModdedBattlePokemon {
 	boostBy?: (this: Pokemon, boost: SparseBoostsTable) => boolean | number
 	calculateStat?: (this: Pokemon, statName: StatNameExceptHP, boost: number, modifier?: number) => number
 	getActionSpeed?: (this: Pokemon) => number
-	getRequestData?: (this: Pokemon) => {moves: {move: string, id: string, target?: string, disabled?: boolean}[], maybeDisabled?: boolean, trapped?: boolean, maybeTrapped?: boolean, canMegaEvo?: boolean, canUltraBurst?: boolean, canZMove?: AnyObject | null}
+	getRequestData?: (this: Pokemon) => {moves: {move: string, id: ID, target?: string, disabled?: boolean}[], maybeDisabled?: boolean, trapped?: boolean, maybeTrapped?: boolean, canMegaEvo?: boolean, canUltraBurst?: boolean, canZMove?: AnyObject | null}
 	getStat?: (this: Pokemon, statName: StatNameExceptHP, unboosted?: boolean, unmodified?: boolean, fastReturn?: boolean) => number
 	getWeight?: (this: Pokemon) => number
 	hasAbility?: (this: Pokemon, ability: string | string[]) => boolean
@@ -1192,7 +1199,7 @@ interface TypeInfo extends Readonly<TypeData> {
 	readonly gen: number
 	readonly HPdvs: SparseStatsTable
 	readonly HPivs: SparseStatsTable
-	readonly id: string
+	readonly id: ID
 	readonly name: string
 	readonly toString: () => string
 }
@@ -1218,7 +1225,7 @@ namespace Actions {
 		/** location of the target, relative to pokemon's side */
 		targetLoc: number;
 		/** a move to use (move action only) */
-		moveid: string;
+		moveid: ID
 		/** a move to use (move action only) */
 		move: Move;
 		/** true if megaing or ultra bursting */
