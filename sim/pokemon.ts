@@ -9,7 +9,7 @@ import {State} from './state';
 
  /** A Pokemon's move slot. */
 interface MoveSlot {
-	id: string;
+	id: ID;
 	move: string;
 	pp: number;
 	maxpp: number;
@@ -29,7 +29,7 @@ export class Pokemon {
 	readonly fullname: string;
 	readonly id: string; // shouldn't really be used anywhere
 	readonly species: string;
-	readonly speciesid: string;
+	readonly speciesid: ID;
 	readonly level: number;
 	readonly gender: GenderName;
 	readonly happiness: number;
@@ -52,7 +52,7 @@ export class Pokemon {
 	template: Template;
 	speciesData: AnyObject;
 
-	status: string;
+	status: ID;
 	statusData: AnyObject;
 	volatiles: AnyObject;
 	showCure?: boolean;
@@ -82,13 +82,13 @@ export class Pokemon {
 	storedStats: StatsExceptHPTable;
 	boosts: BoostsTable;
 
-	baseAbility: string;
-	ability: string;
+	baseAbility: ID;
+	ability: ID;
 	abilityData: {[k: string]: string | Pokemon};
 
-	item: string;
+	item: ID;
 	itemData: {[k: string]: string | Pokemon};
-	lastItem: string;
+	lastItem: ID;
 	usedItemThisTurn: boolean;
 	ateBerry: boolean;
 
@@ -183,7 +183,7 @@ export class Pokemon {
 	/** used for Assurance check */
 	hurtThisTurn: boolean;
 	lastDamage: number;
-	attackedBy: {source: Pokemon, damage: number, thisTurn: boolean, move?: string}[];
+	attackedBy: {source: Pokemon, damage: number, thisTurn: boolean, move?: ID}[];
 
 	isActive: boolean;
 	activeTurns: number;
@@ -1074,8 +1074,8 @@ export class Pokemon {
 			evasion: 0,
 		};
 
-		if (this.battle.gen === 1 && this.baseMoves.includes('mimic') && !this.transformed) {
-			const moveslot = this.baseMoves.indexOf('mimic');
+		if (this.battle.gen === 1 && this.baseMoves.includes('mimic' as ID) && !this.transformed) {
+			const moveslot = this.baseMoves.indexOf('mimic' as ID);
 			const mimicPP = this.moveSlots[moveslot] ? this.moveSlots[moveslot].pp : 16;
 			this.moveSlots = this.baseMoveSlots.slice();
 			this.moveSlots[moveslot].pp = mimicPP;

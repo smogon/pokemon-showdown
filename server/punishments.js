@@ -807,7 +807,7 @@ const Punishments = new (class {
 	 */
 	unlock(name) {
 		let user = Users(name);
-		let id = toId(name);
+		let id = /** @type {string} */(toId(name));
 		/** @type {string[]} */
 		let success = [];
 		if (user && user.locked && !user.namelocked) {
@@ -864,7 +864,7 @@ const Punishments = new (class {
 	 */
 	unnamelock(name) {
 		let user = Users(name);
-		let id = toId(name);
+		let id = /** @type {string} */(toId(name));
 		/** @type {string[]} */
 		let success = [];
 		// @ts-ignore

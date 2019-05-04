@@ -136,8 +136,8 @@ let BattleStatuses = {
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
-				pokemon.ability = 'shadowtag';
-				pokemon.baseAbility = 'shadowtag';
+				pokemon.ability = /** @type {ID} */('shadowtag');
+				pokemon.baseAbility = /** @type {ID} */('shadowtag');
 			}
 			if (pokemon.transformed) return;
 			pokemon.setType(pokemon.hpType || 'Dark');
@@ -150,8 +150,8 @@ let BattleStatuses = {
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
-				pokemon.ability = 'heatproof';
-				pokemon.baseAbility = 'heatproof';
+				pokemon.ability = /** @type {ID} */('heatproof');
+				pokemon.baseAbility = /** @type {ID} */('heatproof');
 			}
 		},
 	},
@@ -162,8 +162,8 @@ let BattleStatuses = {
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
-				pokemon.ability = 'aftermath';
-				pokemon.baseAbility = 'aftermath';
+				pokemon.ability = /** @type {ID} */('aftermath');
+				pokemon.baseAbility = /** @type {ID} */('aftermath');
 			}
 		},
 	},
@@ -174,8 +174,8 @@ let BattleStatuses = {
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
-				pokemon.ability = 'compoundeyes';
-				pokemon.baseAbility = 'compoundeyes';
+				pokemon.ability = /** @type {ID} */('compoundeyes');
+				pokemon.baseAbility = /** @type {ID} */('compoundeyes');
 			}
 		},
 	},
@@ -186,8 +186,8 @@ let BattleStatuses = {
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
-				pokemon.ability = 'poisonheal';
-				pokemon.baseAbility = 'poisonheal';
+				pokemon.ability = /** @type {ID} */('poisonheal');
+				pokemon.baseAbility = /** @type {ID} */('poisonheal');
 			}
 		},
 	},
@@ -198,8 +198,8 @@ let BattleStatuses = {
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
-				pokemon.ability = 'filter';
-				pokemon.baseAbility = 'filter';
+				pokemon.ability = /** @type {ID} */('filter');
+				pokemon.baseAbility = /** @type {ID} */('filter');
 			}
 		},
 	},
@@ -210,8 +210,8 @@ let BattleStatuses = {
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
-				pokemon.ability = 'cursedbody';
-				pokemon.baseAbility = 'cursedbody';
+				pokemon.ability = /** @type {ID} */('cursedbody');
+				pokemon.baseAbility = /** @type {ID} */('cursedbody');
 			}
 		},
 	},
@@ -222,8 +222,8 @@ let BattleStatuses = {
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
-				pokemon.ability = 'cursedbody';
-				pokemon.baseAbility = 'cursedbody';
+				pokemon.ability = /** @type {ID} */('cursedbody');
+				pokemon.baseAbility = /** @type {ID} */('cursedbody');
 			}
 		},
 	},
@@ -234,8 +234,8 @@ let BattleStatuses = {
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
-				pokemon.ability = 'serenegrace';
-				pokemon.baseAbility = 'serenegrace';
+				pokemon.ability = /** @type {ID} */('serenegrace');
+				pokemon.baseAbility = /** @type {ID} */('serenegrace');
 			}
 		},
 	},
@@ -246,8 +246,8 @@ let BattleStatuses = {
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
-				pokemon.ability = 'synchronize';
-				pokemon.baseAbility = 'synchronize';
+				pokemon.ability = /** @type {ID} */('synchronize');
+				pokemon.baseAbility = /** @type {ID} */('synchronize');
 			}
 		},
 	},
@@ -258,8 +258,8 @@ let BattleStatuses = {
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
-				pokemon.ability = 'steadfast';
-				pokemon.baseAbility = 'steadfast';
+				pokemon.ability = /** @type {ID} */('steadfast');
+				pokemon.baseAbility = /** @type {ID} */('steadfast');
 			}
 		},
 	},
@@ -270,8 +270,8 @@ let BattleStatuses = {
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
-				pokemon.ability = 'sheerforce';
-				pokemon.baseAbility = 'sheerforce';
+				pokemon.ability = /** @type {ID} */('sheerforce');
+				pokemon.baseAbility = /** @type {ID} */('sheerforce');
 			}
 		},
 	},
@@ -282,8 +282,8 @@ let BattleStatuses = {
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
-				pokemon.ability = 'trace';
-				pokemon.baseAbility = 'trace';
+				pokemon.ability = /** @type {ID} */('trace');
+				pokemon.baseAbility = /** @type {ID} */('trace');
 			}
 		},
 	},
@@ -294,8 +294,8 @@ let BattleStatuses = {
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
-				pokemon.ability = 'trace';
-				pokemon.baseAbility = 'trace';
+				pokemon.ability = /** @type {ID} */('trace');
+				pokemon.baseAbility = /** @type {ID} */('trace');
 			}
 		},
 	},
@@ -306,8 +306,8 @@ let BattleStatuses = {
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
-				pokemon.ability = 'trace';
-				pokemon.baseAbility = 'trace';
+				pokemon.ability = /** @type {ID} */('trace');
+				pokemon.baseAbility = /** @type {ID} */('trace');
 			}
 		},
 	},
@@ -318,8 +318,8 @@ let BattleStatuses = {
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
-				pokemon.ability = 'trace';
-				pokemon.baseAbility = 'trace';
+				pokemon.ability = /** @type {ID} */('trace');
+				pokemon.baseAbility = /** @type {ID} */('trace');
 			}
 		},
 	},
@@ -330,8 +330,8 @@ let BattleStatuses = {
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
-				pokemon.ability = 'trace';
-				pokemon.baseAbility = 'trace';
+				pokemon.ability = /** @type {ID} */('trace');
+				pokemon.baseAbility = /** @type {ID} */('trace');
 			}
 		},
 	},
@@ -342,8 +342,8 @@ let BattleStatuses = {
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
-				pokemon.ability = 'trace';
-				pokemon.baseAbility = 'trace';
+				pokemon.ability = /** @type {ID} */('trace');
+				pokemon.baseAbility = /** @type {ID} */('trace');
 			}
 		},
 	},
@@ -367,8 +367,8 @@ let BattleStatuses = {
 		},
 		onStart(pokemon) {
 			if (pokemon.ability === 'levitate') {
-				pokemon.ability = 'icebody';
-				pokemon.baseAbility = 'icebody';
+				pokemon.ability = /** @type {ID} */('icebody');
+				pokemon.baseAbility = /** @type {ID} */('icebody');
 			}
 		},
 	},

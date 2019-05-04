@@ -15,7 +15,7 @@ let BattleScripts = {
 		if (item.megaStone) {
 			if (item.megaStone === pokemon.species) return null;
 			return item.megaStone;
-		} else if (pokemon.baseMoves.includes('dragonascent')) {
+		} else if (pokemon.baseMoves.includes(/** @type {ID} */('dragonascent'))) {
 			return 'Rayquaza-Mega';
 		} else {
 			return null;

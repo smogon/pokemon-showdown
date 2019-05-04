@@ -9,11 +9,11 @@ import {State} from './state';
 
 export class Field {
 	readonly battle: Battle;
-	readonly id: '';
+	readonly id: ID;
 
-	weather: string;
+	weather: ID;
 	weatherData: AnyObject;
-	terrain: string;
+	terrain: ID;
 	terrainData: AnyObject;
 	pseudoWeather: AnyObject;
 

@@ -127,7 +127,7 @@ class HelpTicket extends Rooms.RoomGame {
 			tickets[this.ticket.userid] = this.ticket;
 			writeTickets();
 		} else {
-			let index = this.claimQueue.map(toId).indexOf(user.userid);
+			let index = this.claimQueue.map(toId).indexOf(/** @type {ID} */(user.userid));
 			if (index > -1) this.claimQueue.splice(index, 1);
 		}
 	}

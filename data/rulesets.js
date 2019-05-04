@@ -504,7 +504,7 @@ let BattleFormats = {
 			for (const set of team) {
 				let ability = toId(set.ability);
 				if (!ability) continue;
-				if (ability in base) ability = base[ability];
+				if (ability in base) ability = /** @type {ID} */(base[ability]);
 				if (ability in abilityTable) {
 					if (abilityTable[ability] >= 2) {
 						return ["You are limited to two of each ability by the Ability Clause.", `(You have more than two ${this.getAbility(ability).name} variants)`];
