@@ -1183,7 +1183,7 @@ let Formats = [
 			battle: 1,
 		},
 		ruleset: ['[Gen 5] OU'],
-		banlist: ['Focus Sash'],
+		banlist: ['Focus Sash', 'Perish Song'],
 		unbanlist: ['Genesect', 'Landorus', 'Manaphy', 'Thundurus', 'Tornadus-Therian'],
 	},
 	{
