@@ -1075,6 +1075,7 @@ class User extends Chat.MessageContext {
 		oldUser.ips = {};
 		this.latestIp = oldUser.latestIp;
 		this.latestHost = oldUser.latestHost;
+		this.setBack();
 
 		oldUser.markDisconnected();
 	}
