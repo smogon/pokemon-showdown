@@ -256,8 +256,10 @@ let rangeTelstra = Dnsbl.cidrToPattern('101.160.0.0/11');
 let rangePsci = Dnsbl.cidrToPattern(['96.31.192.0/20', '209.239.96.0/20', '216.49.96.0/19']);
 let rangeOcde = Dnsbl.cidrToPattern(['104.249.64.0/18', '209.232.144.0/20', '216.100.88.0/21']);
 let rangeIhet = Dnsbl.cidrToPattern('199.8.0.0/16');
+let rangeTimcelular = Dnsbl.cidrToPattern('191.128.0.0/12');
 
 let rangeOVHres = Dnsbl.rangeToPattern(['109.190.0.0 - 109.190.63.255', '109.190.64.0 - 109.190.127.255', '109.190.128.0 - 109.190.191.255', '109.190.192.0 - 109.190.255.255', '151.80.228.0 - 151.80.228.255', '178.32.37.0 - 178.32.37.255', '178.33.101.0 - 178.33.101.255', '185.15.68.0 - 185.15.69.255', '185.15.70.0 - 185.15.71.255']);
+let rangeWindres = Dnsbl.rangeToPattern(['151.3.0.0 - 151.79.255.255', '151.81.0.0 - 151.84.255.255', '151.93.0.0 - 151.93.255.255', '151.95.0.0 - 151.95.255.255', '176.206.0.0 - 176.207.255.255']);
 
 /**
  * Will not reject; IPs with no RDNS entry will resolve to
@@ -276,6 +278,10 @@ Dnsbl.reverse = function reverseDns(ip) {
 		let ipNumber = Dnsbl.ipToNumber(ip);
 		if (Dnsbl.checkPattern(rangeOVHres, ipNumber)) {
 			resolve('ovh.fr.res-nohost');
+			return;
+		}
+		if (Dnsbl.checkPattern(rangeWindres, ipNumber)) {
+			resolve('wind.it.res-nohost');
 			return;
 		}
 		for (const row of Dnsbl.datacenters) {
@@ -350,6 +356,10 @@ Dnsbl.reverse = function reverseDns(ip) {
 		}
 		if (Dnsbl.checkPattern(rangeIhet, ipNumber)) {
 			resolve('iu.edu.res-nohost');
+			return;
+		}
+		if (Dnsbl.checkPattern(rangeTimcelular, ipNumber)) {
+			resolve('tim.com.br.mobile-nohost');
 			return;
 		}
 		if (ip.startsWith('121.54.')) {
