@@ -1866,7 +1866,7 @@ export class Battle extends Dex.ModdedDex {
 			if (!source) source = this.event.source;
 			if (!effect) effect = this.effect;
 		}
-		if (effect === 'drain') effect = this.getEffect(effect);
+		if (effect === 'drain') effect = this.getEffectByID(effect as ID);
 		if (damage && damage <= 1) damage = 1;
 		damage = this.trunc(damage);
 		// for things like Liquid Ooze, the Heal event still happens when nothing is healed.
@@ -2589,7 +2589,7 @@ export class Battle extends Dex.ModdedDex {
 				}
 			}
 			for (const pokemon of this.getAllPokemon()) {
-				this.singleEvent('Start', this.getEffect(pokemon.species), pokemon.speciesData, pokemon);
+				this.singleEvent('Start', this.getEffectByID(pokemon.speciesid), pokemon.speciesData, pokemon);
 			}
 			this.midTurn = true;
 			break;
