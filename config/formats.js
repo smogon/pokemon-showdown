@@ -109,9 +109,6 @@ let Formats = [
 		mod: 'gen7',
 		ruleset: ['[Gen 7] NU'],
 		banlist: ['NU', 'PUBL', 'Camerupt-Mega'],
-		onBegin() {
-			if (this.rated && this.format === 'gen7pu') this.add('html', `<div class="broadcast-green"><strong>PU is currently suspecting Lilligant! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3649494/">suspect thread</a>.</strong></div>`);
-		},
 	},
 	{
 		name: "[Gen 7] LC",
