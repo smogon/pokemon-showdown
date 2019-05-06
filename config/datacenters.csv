@@ -513,6 +513,7 @@
 62.41.56.128,62.41.56.255,Akamai,http://akamai.com/
 62.41.58.0,62.41.58.255,Akamai,http://akamai.com/
 62.75.128.0,62.75.255.255,plusserver.de,http://plusserver.de/
+62.102.148.128,62.102.148.191,AirVPN,https://airvpn.org/
 62.109.0.0,62.109.15.255,ISPserver,http://ispserver.com/
 62.109.28.0,62.109.31.255,The First,http://firstvds.ru/
 62.113.192.0,62.113.255.255,23Media,http://www.23media.eu/
@@ -1284,11 +1285,7 @@
 89.221.39.128,89.221.39.255,Akamai,http://akamai.com/
 89.221.240.0,89.221.255.255,FSdata,http://fsdata.se/
 89.234.0.0,89.234.63.255,Rackspace,http://www.rackspace.com/
-89.238.143.64,89.238.143.79,Cyberghost,http://www.cyberghostvpn.com/
-89.238.146.24,89.238.146.31,Cyberghost,http://www.cyberghostvpn.com/
-89.238.161.0,89.238.161.255,M247,http://www.m247.com/
-89.238.166.128,89.238.166.143,Cyberghost,http://www.cyberghostvpn.com/
-89.238.186.0,89.238.186.255,M247,http://www.m247.com/
+89.238.128.0,89.238.191.255,M247,https://m247.com/
 89.248.160.0,89.248.160.127,Ecatel,http://ecatel.net/
 89.248.166.0,89.248.166.127,Ecatel,http://ecatel.net/
 89.248.168.0,89.248.168.255,Ecatel,http://ecatel.net/
@@ -1591,6 +1588,7 @@
 104.130.64.0,104.130.223.255,Rackspace,http://www.rackspace.com/
 104.131.0.0,104.131.255.255,DigitalOcean USA,https://www.digitalocean.com/
 104.143.0.0,104.143.15.255,VersaWeb,https://www.versaweb.com/
+104.143.92.0,104.143.92.255,VPN Consumer Network,http://www.vpnconsumer.com/
 104.143.192.0,104.143.223.255,Telentia,https://www.telentia.com/
 104.156.224.0,104.156.255.255,Choopa,https://www.choopa.com/
 104.164.0.0,104.165.255.255,EGIHosting.com,http://www.egihosting.com/
@@ -1792,6 +1790,7 @@
 142.44.128.0,142.44.255.255,OVH CA,https://www.ovh.com/ca/en/
 142.54.160.0,142.54.191.255,Data Shack,https://www.datashack.net/
 142.91.0.0,142.91.255.255,Ubiquity Server Solutions,http://www.ubiquityservers.com/
+142.93.0.0,142.93.255.255,DigitalOcean USA,https://www.digitalocean.com/
 142.111.0.0,142.111.255.255,EGIHosting.com,http://www.egihosting.com/
 142.234.0.0,142.234.255.255,Ubiquity Server Solutions,http://www.ubiquityservers.com/
 142.252.0.0,142.252.255.255,EGIHosting.com,http://www.egihosting.com/
@@ -1859,6 +1858,7 @@
 158.255.0.0,158.255.7.255,HostKey,http://www.hostkey.com/
 158.255.40.0,158.255.47.255,eukhost.com,http://eukhost.com/
 158.255.208.0,158.255.215.255,EDIS,http://www.edis.at/
+159.65.0.0,159.65.255.255,DigitalOcean USA,https://www.digitalocean.com/
 159.89.0.0,159.89.255.255,DigitalOcean USA,https://www.digitalocean.com/
 159.122.252.0,159.122.255.255,SoftLayer US,http://www.softlayer.com/
 159.203.0.0,159.203.255.255,DigitalOcean USA,https://www.digitalocean.com/
@@ -1914,6 +1914,7 @@
 166.78.0.0,166.78.255.255,Rackspace,http://www.rackspace.com/
 166.88.0.0,166.88.255.255,EGIHosting.com,http://www.egihosting.com/
 167.88.32.0,167.88.47.255,KW Datacenter CA,http://www.kwdatacentre.com/
+167.99.0.0,167.99.255.255,DigitalOcean USA,https://www.digitalocean.com/
 167.114.0.0,167.114.255.255,OVH,http://www.ovh.co.uk/
 167.160.32.0,167.160.63.255,Web2Objects,https://web2objects.com/
 168.1.112.64,168.1.112.127,SoftLayer,http://www.softlayer.com/
@@ -2220,6 +2221,7 @@
 185.17.43.56,185.17.43.59,OneProvider,http://oneprovider.com/
 185.17.184.0,185.17.187.255,Leaseweb,http://www.leaseweb.com/
 185.19.218.152,185.19.218.159,Velia,http://www.velia.net/
+185.22.172.0,185.22.172.255,Veesp Dedicated Servers,https://veesp.com/
 185.26.180.0,185.26.181.255,Opera Mini Proxy,https://www.opera.com/
 185.27.236.0,185.27.236.255,3W Infra,https://ccc.3winfra.com/
 185.28.193.0,185.28.193.255,Regtons CZ,https://regtons.com/en/
@@ -2893,6 +2895,7 @@
 206.123.64.0,206.123.127.255,colo4dallas.com,http://colo4dallas.com/
 206.125.40.0,206.125.47.255,calPOP,http://calpop.com/
 206.130.96.0,206.130.127.255,westhost,http://www.westhost.com/
+206.174.180.0,206.174.180.255,VPS-Hosting,http://www.vps-hosting.ca/
 206.183.104.0,206.183.111.255,Web Werks,http://www.web-werks.com/
 206.188.0.0,206.188.31.255,Datapipe,http://www.datapipe.com/
 206.189.0.0,206.189.255.255,DigitalOcean USA,https://www.digitalocean.com/
