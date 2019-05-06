@@ -1854,7 +1854,11 @@ let Formats = [
 
 		mod: 'gen3',
 		searchShow: false,
+		canUseRandomTeam: true,
 		debug: true,
+		maxLevel: 9999,
+		trunc(n) { return Math.trunc(n); },
+		defaultLevel: 100,
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
@@ -1900,7 +1904,11 @@ let Formats = [
 
 		mod: 'gen2',
 		searchShow: false,
+		canUseRandomTeam: true,
 		debug: true,
+		maxLevel: 9999,
+		trunc(n) { return Math.trunc(n); },
+		defaultLevel: 100,
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 	},
 	{
@@ -1957,7 +1965,11 @@ let Formats = [
 
 		mod: 'gen1',
 		searchShow: false,
+		canUseRandomTeam: true,
 		debug: true,
+		maxLevel: 9999,
+		trunc(n) { return Math.trunc(n); },
+		defaultLevel: 100,
 		ruleset: ['HP Percentage Mod', 'Cancel Mod'],
 	},
 ];
