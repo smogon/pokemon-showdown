@@ -117,7 +117,7 @@ export class Field {
 	}
 
 	getWeather() {
-		return this.battle.getEffect(this.weather);
+		return this.battle.getEffectByID(this.weather);
 	}
 
 	setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
@@ -172,7 +172,7 @@ export class Field {
 	}
 
 	getTerrain() {
-		return this.battle.getEffect(this.terrain);
+		return this.battle.getEffectByID(this.terrain);
 	}
 
 	addPseudoWeather(
