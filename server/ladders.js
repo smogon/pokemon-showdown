@@ -497,7 +497,7 @@ class Ladder extends LadderStore {
 				continue;
 			}
 			const player = battle.players[user.userid];
-			if (!battle.requests[player.slot].isWait) return roomid;
+			if (!player.request.isWait) return roomid;
 			out = null;
 		}
 		return out;

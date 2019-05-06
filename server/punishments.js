@@ -374,6 +374,44 @@ const Punishments = new (class {
 	}
 
 	/**
+	 * @param {string} entryId
+	 */
+	getEntry(entryId) {
+		/** @type {PunishmentEntry | null} */
+		let entry = null;
+		Punishments.ips.forEach((punishment, ip) => {
+			const [punishType, id, ...rest] = punishment;
+			if (id !== entryId) return;
+			if (entry) {
+				entry.keys.push(ip);
+				return;
+			}
+
+			entry = {
+				keys: [ip],
+				punishType: punishType,
+				rest: rest,
+			};
+		});
+		Punishments.userids.forEach((punishment, userid) => {
+			const [punishType, id, ...rest] = punishment;
+			if (id !== entryId) return;
+
+			if (!entry) {
+				entry = {
+					keys: [],
+					punishType: punishType,
+					rest: rest,
+				};
+			}
+
+			if (userid !== id) entry.keys.push(userid);
+		});
+
+		return entry;
+	}
+
+	/**
 	 * @param {PunishmentEntry} entry
 	 * @param {string} id
 	 * @param {string} filename
