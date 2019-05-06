@@ -18260,7 +18260,7 @@ let BattleMovedex = {
 		basePowerCallback(source, target, move) {
 			const callerMoveId = move.sourceEffect || move.id;
 			const moveSlot = callerMoveId === 'instruct' ? source.getMoveData(move.id) : source.getMoveData(callerMoveId);
-			// @ts-ignore
+			if (!moveSlot) return 40;
 			switch (moveSlot.pp) {
 			case 0:
 				return 200;
