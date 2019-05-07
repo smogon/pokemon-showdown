@@ -74,7 +74,7 @@ class LoginServerInstance {
 		`'${encodeURIComponent(Config.servertoken)}&nocache=${new Date().getTime() + dataString}`);
 		return new Promise((resolve, reject) => {
 
-			const req = http.get(urlObject, (res: AnyObject | NodeJS.ReadableStream) => {
+			const req = http.get(urlObject, (res: any) => {
 				Streams.readAll(res).then((buffer: string) => {
 					const result = parseJSON(buffer).json || null;
 					resolve([result, res.statusCode || 0, null]);
@@ -156,7 +156,7 @@ class LoginServerInstance {
 
 		let response: AnyObject | null =  null;
 
-		const req = http.request(requestOptions, (res: AnyObject | NodeJS.ReadableStream) => {
+		const req = http.request(requestOptions, (res: any) => {
 			response = res;
 			Streams.readAll(res).then((buffer: string) => {
 				// console.log('RESPONSE: ' + buffer);
