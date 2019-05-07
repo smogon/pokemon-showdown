@@ -41,7 +41,7 @@ type LoginServerResponse = [AnyObject | null, number, Error | null];
 class LoginServerInstance {
 	uri: string;
 	requestQueue: [AnyObject, (val: LoginServerResponse) => void][];
-	requestTimer: number | null;
+	requestTimer: NodeJS.Timer | null;
 	requestLog: string;
 	lastRequest: number;
 	openRequests: number;
