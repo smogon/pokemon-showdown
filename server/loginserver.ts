@@ -37,7 +37,7 @@ function parseJSON(json: string) {
 }
 
 type LoginServerResponse = [AnyObject | null, number, Error | null];
-type response = NodeJS.ReadableStream | {statusCode: string};
+type IncomingMessage = NodeJS.ReadableStream | {statusCode: string};
 
 class LoginServerInstance {
 	uri: string;
@@ -75,7 +75,7 @@ class LoginServerInstance {
 		`'${encodeURIComponent(Config.servertoken)}&nocache=${new Date().getTime() + dataString}`);
 		return new Promise((resolve, reject) => {
 
-			const req = http.get(urlObject, (res: response) => {
+			const req = http.get(urlObject, (res: IncomingMessage) => {
 				Streams.readAll(res).then((buffer: string) => {
 					const result = parseJSON(buffer).json || null;
 					resolve([result, res.statusCode || 0, null]);
@@ -157,7 +157,7 @@ class LoginServerInstance {
 
 		let response: AnyObject | null =  null;
 
-		const req = http.request(requestOptions, (res: response) => {
+		const req = http.request(requestOptions, (res: IncomingMessage) => {
 			response = res;
 			Streams.readAll(res).then((buffer: string) => {
 				// console.log('RESPONSE: ' + buffer);
