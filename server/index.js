@@ -103,7 +103,7 @@ global.Punishments = require('./punishments');
 
 global.Rooms = require('./rooms');
 
-global.Verifier = require('./verifier');
+global.Verifier = require('../.server-dist/verifier');
 Verifier.PM.spawn();
 
 global.Tournaments = require('./tournaments');
