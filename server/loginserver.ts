@@ -153,7 +153,7 @@ class LoginServerInstance {
 		const req = http.request(requestOptions, (res: AnyObject) => {
 			response = res;
 			Streams.readAll(res).then(buffer => {
-				//console.log('RESPONSE: ' + buffer);
+				// console.log('RESPONSE: ' + buffer);
 				const data = parseJSON(buffer).json;
 				if (buffer.startsWith(`[{"actionsuccess":true,`)) {
 					buffer = 'stream interrupt';
