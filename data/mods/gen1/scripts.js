@@ -127,8 +127,6 @@ let BattleScripts = {
 			const moveSlot = pokemon.moveSlots.find(moveSlot => moveSlot.id === move.id);
 			if (moveSlot && moveSlot.pp < 0) {
 				moveSlot.pp = 63;
-				pokemon.isStale = 2;
-				pokemon.isStaleSource = 'ppoverflow';
 				this.hint("In Gen 1, if a player is forced to use a move with 0 PP, the move will underflow to have 63 PP.");
 			}
 		}

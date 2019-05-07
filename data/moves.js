@@ -5598,12 +5598,15 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, heal: 1, mystery: 1},
-		onHit(target) {
+		onHit(target, source) {
 			let success = false;
 			if (this.field.isTerrain('grassyterrain')) {
 				success = !!this.heal(this.modify(target.maxhp, 0.667)); // TODO: find out the real value
 			} else {
 				success = !!this.heal(Math.ceil(target.maxhp * 0.5));
+			}
+			if (success && target.side.id !== source.side.id) {
+				target.staleness = 'external';
 			}
 			return success;
 		},
@@ -7355,6 +7358,9 @@ let BattleMovedex = {
 				success = !!this.heal(this.modify(target.maxhp, 0.75));
 			} else {
 				success = !!this.heal(Math.ceil(target.maxhp * 0.5));
+			}
+			if (success && target.side.id !== source.side.id) {
+				target.staleness = 'external';
 			}
 			return success;
 		},
