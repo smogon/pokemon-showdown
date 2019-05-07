@@ -18,6 +18,7 @@ import * as url from 'url';
 
 import {FS} from '../lib/fs';
 import * as Streams from '../lib/streams';
+import { consoleips } from '../config/config';
 
 /**
  * A custom error type used when requests to the login server take too long.
@@ -80,7 +81,8 @@ class LoginServerInstance {
 					resolve([result, res.statusCode || 0, null]);
 					this.openRequests--;
 				}).catch((err: string) => {
-					throw new Error(err);
+					console.err(err);
+					return err;
 				});
 			});
 
@@ -170,7 +172,8 @@ class LoginServerInstance {
 				}
 				this.requestEnd();
 			}).catch((err: string) => {
-				throw new Error(err);
+				console.err(err);
+				return err;
 			});
 		});
 
@@ -223,13 +226,15 @@ const LoginServer = Object.assign(new LoginServerInstance(), {
 });
 
 FS('./config/custom.css').onModify(() => {
-	LoginServer.request('invalidatecss').catch(err => {
-		throw new Error(err);
+	LoginServer.request('invalidatecss').catch((err: string) => {
+		console.err(err);
+		return err;
 	});
 });
 if (!Config.nofswriting) {
-	LoginServer.request('invalidatecss').catch(err => {
-		throw new Error(err);
+	LoginServer.request('invalidatecss').catch((err: string) => {
+		console.err(err);
+		return err;
 	});
 }
 
