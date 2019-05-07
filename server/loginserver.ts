@@ -18,7 +18,6 @@ import * as url from 'url';
 
 import {FS} from '../lib/fs';
 import * as Streams from '../lib/streams';
-import { consoleips } from '../config/config';
 
 /**
  * A custom error type used when requests to the login server take too long.
