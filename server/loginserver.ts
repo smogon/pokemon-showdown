@@ -41,7 +41,7 @@ type LoginServerResponse = [AnyObject | null, number, Error | null];
 class LoginServerInstance {
 	uri: string;
 	requestQueue: [AnyObject, (val: LoginServerResponse) => void][];
-	requestTimer: Timeout | null;
+	requestTimer: number | null;
 	requestLog: string;
 	lastRequest: number;
 	openRequests: number;
@@ -123,7 +123,7 @@ class LoginServerInstance {
 		// if we already have it going or the request queue is empty no need to do anything
 		if (this.openRequests || this.requestTimer || !this.requestQueue.length) return;
 
-		this.requestTimer = setTimeout(() => this.makeRequests(), LOGIN_SERVER_BATCH_TIME);
+		this.requestTimer = window.setTimeout(() => this.makeRequests(), LOGIN_SERVER_BATCH_TIME);
 	}
 	makeRequests() {
 		this.requestTimer = null;
