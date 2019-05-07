@@ -72,7 +72,7 @@ class LoginServerInstance {
 		const urlObject = url.parse(this.uri + 'action.php?act=' + action + '&serverid=' + Config.serverid + '&servertoken=' + encodeURIComponent(Config.servertoken) + '&nocache=' + new Date().getTime() + dataString);
 		return new Promise((resolve, reject) => {
 
-			let req = http.get(urlObject, (res: any) => {
+			let req = http.get(urlObject, (res: AnyObject) => {
 				Streams.readAll(res).then(buffer => {
 					let data = parseJSON(buffer).json || null;
 					resolve([data, res.statusCode || 0, null]);
@@ -147,8 +147,8 @@ class LoginServerInstance {
 		};
 
 		let response = <null | string | object> null;
-		// @ts-ignore
-		let req = http.request(requestOptions, res => {
+
+		let req = http.request(requestOptions, (res: AnyObject) => {
 			response = res;
 			Streams.readAll(res).then(buffer => {
 				//console.log('RESPONSE: ' + buffer);
