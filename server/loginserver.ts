@@ -38,7 +38,7 @@ function parseJSON(json: string) {
 
 type LoginServerResponse = [AnyObject | null, number, Error | null];
 interface IncomingMessage extends NodeJS.ReadableStream {
-	statusCode: string
+	statusCode: number;
 };
 
 class LoginServerInstance {
