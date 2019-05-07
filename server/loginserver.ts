@@ -26,7 +26,7 @@ TimeoutError.prototype.name = TimeoutError.name;
 
 function parseJSON(json: string) {
 	if (json.startsWith(']')) json = json.substr(1);
-	let data = {error: null, json: null};
+	const data = {error: null, json: null};
 	try {
 		data.json = JSON.parse(json);
 	} catch (err) {
@@ -65,16 +65,16 @@ class LoginServerInstance {
 		this.openRequests++;
 		let dataString = '';
 		if (data) {
-			for (let i in data) {
+			for (const i in data) {
 				dataString += '&' + i + '=' + encodeURIComponent('' + data[i]);
 			}
 		}
 		const urlObject = url.parse(this.uri + 'action.php?act=' + action + '&serverid=' + Config.serverid + '&servertoken=' + encodeURIComponent(Config.servertoken) + '&nocache=' + new Date().getTime() + dataString);
 		return new Promise((resolve, reject) => {
 
-			let req = http.get(urlObject, (res: AnyObject) => {
+			const req = http.get(urlObject, (res: AnyObject) => {
 				Streams.readAll(res).then(buffer => {
-					let data = parseJSON(buffer).json || null;
+					const data = parseJSON(buffer).json || null;
 					resolve([data, res.statusCode || 0, null]);
 					this.openRequests--;
 				});
@@ -104,7 +104,7 @@ class LoginServerInstance {
 			return this[action + 'Server'].request(action, data);
 		}
 
-		let actionData = data || {};
+		const actionData = data || {};
 		actionData.act = action;
 		return new Promise(resolve => {
 			this.requestQueue.push([actionData, resolve]);
@@ -122,24 +122,24 @@ class LoginServerInstance {
 	}
 	makeRequests() {
 		this.requestTimer = null;
-		let requests = this.requestQueue;
+		const requests = this.requestQueue;
 		this.requestQueue = [];
 
 		if (!requests.length) return;
 
-		let resolvers = <((val: LoginServerResponse) => void)[]> [];
-		let dataList = [];
+		const resolvers = <((val: LoginServerResponse) => void)[]> [];
+		const dataList = [];
 		for (const [data, resolve] of requests) {
 			resolvers.push(resolve);
 			dataList.push(data);
 		}
 
 		this.requestStart(requests.length);
-		let postData = 'serverid=' + Config.serverid +
+		const postData = 'serverid=' + Config.serverid +
 			'&servertoken=' + encodeURIComponent(Config.servertoken) +
 			'&nocache=' + new Date().getTime() +
 			'&json=' + encodeURIComponent(JSON.stringify(dataList)) + '\n';
-		let requestOptions = url.parse(this.uri + 'action.php');
+		const requestOptions = url.parse(this.uri + 'action.php');
 		requestOptions.method = 'post';
 		requestOptions.headers = {
 			'Content-Type': 'application/x-www-form-urlencoded',
@@ -148,11 +148,11 @@ class LoginServerInstance {
 
 		let response = <null | string | object> null;
 
-		let req = http.request(requestOptions, (res: AnyObject) => {
+		const req = http.request(requestOptions, (res: AnyObject) => {
 			response = res;
 			Streams.readAll(res).then(buffer => {
 				//console.log('RESPONSE: ' + buffer);
-				let data = parseJSON(buffer).json;
+				const data = parseJSON(buffer).json;
 				if (buffer.startsWith(`[{"actionsuccess":true,`)) {
 					buffer = 'stream interrupt';
 				}
@@ -208,7 +208,7 @@ class LoginServerInstance {
 	}
 }
 
-let LoginServer = Object.assign(new LoginServerInstance(), {
+const LoginServer = Object.assign(new LoginServerInstance(), {
 	TimeoutError,
 
 	ladderupdateServer: new LoginServerInstance(),
