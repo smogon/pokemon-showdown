@@ -76,8 +76,8 @@ class LoginServerInstance {
 
 			const req = http.get(urlObject, (res: AnyObject) => {
 				Streams.readAll(res).then(buffer => {
-					const data = parseJSON(buffer).json || null;
-					resolve([data, res.statusCode || 0, null]);
+					const result = parseJSON(buffer).json || null;
+					resolve([result, res.statusCode || 0, null]);
 					this.openRequests--;
 				});
 			});
