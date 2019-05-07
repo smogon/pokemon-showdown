@@ -1941,15 +1941,16 @@ Chat.fitImage = async function (url, maxHeight = 300, maxWidth = 300) {
  * @param {User} user
  */
 Chat.maybeNotifyBlocked = function (blocked, targetUser, user) {
+	const prefix = `|pm|~|${targetUser.getIdentity()}|/nonotify `;
 	const options = 'or change it in the <button name="openOptions" class="subtle">Options</button> menu in the upper right.';
 	if (blocked === 'pm') {
 		if (!targetUser.blockPMsNotified) {
-			targetUser.send(`|html|The user '${user.name}' attempted to PM you but was blocked. To enable PMs, use /unblockpms ${options}`);
+			targetUser.send(`${prefix}The user '${user.name}' attempted to PM you but was blocked. To enable PMs, use /unblockpms ${options}`);
 			targetUser.blockPMsNotified = true;
 		}
 	} else if (blocked === 'challenge') {
 		if (!targetUser.blockChallengesNotified) {
-			targetUser.send(`|html|The user '${user.name}' attempted to challenge you to a battle but was blocked. To enable challenges, use /unblockchallenges ${options}`);
+			targetUser.send(`${prefix}The user '${user.name}' attempted to challenge you to a battle but was blocked. To enable challenges, use /unblockchallenges ${options}`);
 			targetUser.blockChallengesNotified = true;
 		}
 	}
