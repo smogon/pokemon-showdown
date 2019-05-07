@@ -41,7 +41,7 @@ type LoginServerResponse = [AnyObject | null, number, Error | null];
 class LoginServerInstance {
 	uri: string;
 	requestQueue: [AnyObject, (val: LoginServerResponse) => void][];
-	requestTimer: null;
+	requestTimer: Timeout | null;
 	requestLog: string;
 	lastRequest: number;
 	openRequests: number;
