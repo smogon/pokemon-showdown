@@ -45,7 +45,7 @@ class LoginServerInstance {
 	lastRequest: number;
 	openRequests: number;
 	disabled: false;
-	
+
 	constructor() {
 		this.uri = Config.loginserver;
 		this.requestQueue = [];
