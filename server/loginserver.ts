@@ -81,7 +81,7 @@ class LoginServerInstance {
 					this.openRequests--;
 				}).catch(err => {
 					throw new Error(err);
-				});;
+				});
 			});
 
 			req.on('error', (error: Error) => {
