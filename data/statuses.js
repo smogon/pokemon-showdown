@@ -362,10 +362,10 @@ let BattleStatuses = {
 			pokemon.removeVolatile('truant');
 			return null;
 		},
-		onLockMove(pokemon) {
+		onStart(pokemon) {
 			this.add('-mustrecharge', pokemon);
-			return 'recharge';
 		},
+		onLockMove: 'recharge',
 	},
 	futuremove: {
 		// this is a slot condition
