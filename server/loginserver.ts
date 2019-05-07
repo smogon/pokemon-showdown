@@ -128,7 +128,7 @@ class LoginServerInstance {
 
 		if (!requests.length) return;
 
-		const resolvers = <((val: LoginServerResponse) => void)[]> [];
+		const resolvers: ((val: LoginServerResponse) => void)[] = [];
 		const dataList = [];
 		for (const [data, resolve] of requests) {
 			resolvers.push(resolve);
@@ -147,7 +147,7 @@ class LoginServerInstance {
 			'Content-Length': postData.length,
 		};
 
-		let response = <null | string | object> null;
+		let response: AnyObject | null =  null;
 
 		const req = http.request(requestOptions, (res: AnyObject) => {
 			response = res;
