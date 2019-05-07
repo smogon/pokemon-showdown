@@ -79,13 +79,11 @@ class LoginServerInstance {
 		return new Promise((resolve, reject) => {
 
 			const req = http.get(urlObject, (res: IncomingMessage) => {
+				// tslint:disable-no-floating-promises
 				Streams.readAll(res).then((buffer: string) => {
 					const result = parseJSON(buffer).json || null;
 					resolve([result, res.statusCode || 0, null]);
 					this.openRequests--;
-				}).catch((err: string) => {
-					console.error(err);
-					return err;
 				});
 			});
 
@@ -162,6 +160,7 @@ class LoginServerInstance {
 
 		const req = http.request(requestOptions, (res: IncomingMessage) => {
 			response = res;
+			// tslint:disable-no-floating-promises
 			Streams.readAll(res).then((buffer: string) => {
 				// console.log('RESPONSE: ' + buffer);
 				const data = parseJSON(buffer).json;
@@ -177,9 +176,6 @@ class LoginServerInstance {
 					}
 				}
 				this.requestEnd();
-			}).catch((err: string) => {
-				console.error(err);
-				return err;
 			});
 		});
 
@@ -232,16 +228,12 @@ const LoginServer = Object.assign(new LoginServerInstance(), {
 });
 
 FS('./config/custom.css').onModify(() => {
-	LoginServer.request('invalidatecss').catch((err: string) => {
-		console.error(err);
-		return err;
-	});
+	// tslint:disable-no-floating-promises
+	LoginServer.request('invalidatecss');
 });
 if (!Config.nofswriting) {
-	LoginServer.request('invalidatecss').catch((err: string) => {
-		console.error(err);
-		return err;
-	});
+	// tslint:disable-no-floating-promises
+	LoginServer.request('invalidatecss');
 }
 
 export = LoginServer;
