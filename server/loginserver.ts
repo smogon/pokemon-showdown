@@ -223,10 +223,14 @@ const LoginServer = Object.assign(new LoginServerInstance(), {
 });
 
 FS('./config/custom.css').onModify(() => {
-	LoginServer.request('invalidatecss');
+	LoginServer.request('invalidatecss').catch(err => {
+		throw new Error(err);
+	});
 });
 if (!Config.nofswriting) {
-	LoginServer.request('invalidatecss');
+	LoginServer.request('invalidatecss').catch(err => {
+		throw new Error(err);
+	});
 }
 
 export = LoginServer;
