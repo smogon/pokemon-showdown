@@ -79,7 +79,9 @@ class LoginServerInstance {
 					const result = parseJSON(buffer).json || null;
 					resolve([result, res.statusCode || 0, null]);
 					this.openRequests--;
-				});
+				}).catch(err => {
+					throw new Error(err);
+				});;
 			});
 
 			req.on('error', (error: Error) => {
@@ -167,6 +169,8 @@ class LoginServerInstance {
 					}
 				}
 				this.requestEnd();
+			}).catch(err => {
+				throw new Error(err);
 			});
 		});
 
