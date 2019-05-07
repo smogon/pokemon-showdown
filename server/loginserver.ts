@@ -74,7 +74,7 @@ class LoginServerInstance {
 		`'${encodeURIComponent(Config.servertoken)}&nocache=${new Date().getTime() + dataString}`);
 		return new Promise((resolve, reject) => {
 
-			const req = http.get(urlObject, (res: AnyObject) => {
+			const req = http.get(urlObject, (res: AnyObject | NodeJS.ReadableStream) => {
 				Streams.readAll(res).then((buffer: string) => {
 					const result = parseJSON(buffer).json || null;
 					resolve([result, res.statusCode || 0, null]);
@@ -144,16 +144,19 @@ class LoginServerInstance {
 			'&servertoken=' + encodeURIComponent(Config.servertoken) +
 			'&nocache=' + new Date().getTime() +
 			'&json=' + encodeURIComponent(JSON.stringify(dataList)) + '\n';
-		const requestOptions = url.parse(this.uri + 'action.php');
-		requestOptions.method = 'post';
-		requestOptions.headers = {
-			'Content-Type': 'application/x-www-form-urlencoded',
-			'Content-Length': postData.length,
+
+		const requestOptions = {
+			url: url.parse(this.uri + 'action.php'),
+			method: 'post',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+				'Content-Length': postData.length,
+			},
 		};
 
 		let response: AnyObject | null =  null;
 
-		const req = http.request(requestOptions, (res: AnyObject) => {
+		const req = http.request(requestOptions, (res: AnyObject | NodeJS.ReadableStream) => {
 			response = res;
 			Streams.readAll(res).then((buffer: string) => {
 				// console.log('RESPONSE: ' + buffer);
