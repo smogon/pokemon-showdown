@@ -591,37 +591,62 @@ class GlobalRoom extends BasicRoom {
 		}
 		return this.formatList;
 	}
-	get configRankList() {
-		if (Config.nocustomgrouplist) return '';
-
-		// putting the resultant object in Config would enable this to be run again should config.js be reloaded.
-		if (Config.rankList) {
-			return Config.rankList;
+	/**
+	 * @param {AnyObject} group
+	 */
+	getGroupWithType(group) {
+		let {symbol, id, name} = group;
+		let type;
+		if (group.editroom || group.makeroom || group.root) {
+			type = 'leadership';
+		} else if (!group.declare && (group.mute || group.ban)) {
+			type = 'staff';
+		} else if (group.punishgroup) {
+			type = 'punishment';
+		} else if (!group.broadcast) {
+			type = 'default';
+		} else {
+			type = 'normal';
 		}
-		let rankList = [];
+		return {symbol, id, name, type};
+	}
+	get configGroupList() {
+		// Putting the resultant object in Config would enable this to be run again should config.js be reloaded.
+		if (Config.rankList) return Config.rankList;
 
-		for (let rank in Config.groups) {
-			if (!Config.groups[rank] || !rank) continue;
+		const typeOrder = ['punishment', 'default', 'normal', 'staff', 'leadership'];
+		let rankList;
 
-			let tarGroup = Config.groups[rank];
-			let groupType = tarGroup.addhtml || (!tarGroup.mute && !tarGroup.root) ? 'normal' : (tarGroup.root || tarGroup.declare) ? 'leadership' : 'staff';
+		if (Config.grouplist) {
+			// a and b are implicitly any
+			// @ts-ignore
+			rankList = Config.grouplist.map(this.getGroupWithType).sort((a, b) => {
+				let ret = typeOrder.indexOf(b.type) - typeOrder.indexOf(a.type);
+				if (ret) return ret;
 
-			rankList.push({symbol: rank, name: (Config.groups[rank].name || null), type: groupType}); // send the first character in the rank, incase they put a string several characters long
+				// g is implicitly any
+				// @ts-ignore
+				ret = Config.grouplist.findIndex(g => g.id === a.id) - Config.grouplist.findIndex(g => g.id === b.id);
+				return ret;
+			});
+		} else {
+			const groups = Object.values(Config.groups);
+			const punishGroups = Object.values(Config.punishgroups);
+			rankList = [...groups, ...punishGroups]
+				.map(this.getGroupWithType)
+				.sort((a, b) => {
+					let ret = typeOrder.indexOf(b.type) - typeOrder.indexOf(a.type);
+					if (ret) return ret;
+
+					const groupList = (b.type === 'punishment') ? punishGroups : groups;
+					ret = groupList.findIndex(g => g.id === a.id) - groupList.findIndex(g => g.id === b.id);
+					return ret;
+				});
 		}
 
-		const typeOrder = ['punishment', 'normal', 'staff', 'leadership'];
-
-		rankList = rankList.sort((a, b) => typeOrder.indexOf(b.type) - typeOrder.indexOf(a.type));
-
-		// add the punishment types at the very end.
-		for (let rank in Config.punishgroups) {
-			rankList.push({symbol: Config.punishgroups[rank].symbol, name: Config.punishgroups[rank].name, type: 'punishment'});
-		}
-
-		Config.rankList = '|customgroups|' + JSON.stringify(rankList) + '\n';
+		Config.rankList = `|groups|${JSON.stringify(rankList)}`;
 		return Config.rankList;
 	}
-
 	/**
 	 * @param {string} filter "formatfilter, elofilter"
 	 */
@@ -860,7 +885,7 @@ class GlobalRoom extends BasicRoom {
 	 * @param {Connection} connection
 	 */
 	onConnect(user, connection) {
-		connection.send(user.getUpdateuserText() + '\n' + this.configRankList + this.formatListText);
+		connection.send(`${user.getUpdateuserText()}\n${this.configGroupList}\n${this.formatListText}`);
 	}
 	/**
 	 * @param {User} user
