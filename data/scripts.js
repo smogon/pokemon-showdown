@@ -203,7 +203,6 @@ let BattleScripts = {
 		if (!target) {
 			this.attrLastMove('[notarget]');
 			this.add(this.gen >= 5 ? '-fail' : '-notarget', pokemon);
-			if (move.target === 'normal') pokemon.isStaleCon = 0;
 			return false;
 		}
 

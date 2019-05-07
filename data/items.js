@@ -2944,10 +2944,6 @@ let BattleItems = {
 			moveSlot.pp += 10;
 			if (moveSlot.pp > moveSlot.maxpp) moveSlot.pp = moveSlot.maxpp;
 			this.add('-activate', pokemon, 'item: Leppa Berry', moveSlot.move, '[consumed]');
-			if (pokemon.item !== 'leppaberry') {
-				pokemon.isStale = 2;
-				pokemon.isStaleSource = 'useleppa';
-			}
 		},
 		num: 154,
 		gen: 3,
@@ -6374,10 +6370,6 @@ let BattleItems = {
 			moveSlot.pp += 5;
 			if (moveSlot.pp > moveSlot.maxpp) moveSlot.pp = moveSlot.maxpp;
 			this.add('-activate', pokemon, 'item: Mystery Berry', moveSlot.move);
-			if (pokemon.item !== 'leppaberry') {
-				pokemon.isStale = 2;
-				pokemon.isStaleSource = 'useleppa';
-			}
 		},
 		num: 154,
 		gen: 2,
