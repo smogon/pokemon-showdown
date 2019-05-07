@@ -13,12 +13,10 @@ const LOGIN_SERVER_TIMEOUT = 30000;
 const LOGIN_SERVER_BATCH_TIME = 1000;
 
 const http = Config.loginserver.startsWith('http:') ? require("http") : require("https");
-const url = require('url');
+import * as url from 'url';
 
-/** @type {typeof import('../lib/fs').FS} */
-const FS = require(/** @type {any} */('../.lib-dist/fs')).FS;
-/** @type {typeof import('../lib/streams')} */
-const Streams = require(/** @type {any} */('../.lib-dist/streams'));
+import {FS} from '../lib/fs';
+import * as Streams from '../lib/streams';
 
 /**
  * A custom error type used when requests to the login server take too long.
@@ -26,10 +24,9 @@ const Streams = require(/** @type {any} */('../.lib-dist/streams'));
 class TimeoutError extends Error {}
 TimeoutError.prototype.name = TimeoutError.name;
 
-function parseJSON(/** @type {string} */ json) {
+function parseJSON(json: string) {
 	if (json.startsWith(']')) json = json.substr(1);
-	/**@type {{error: Error | null, json?: any}} */
-	let data = {error: null};
+	let data = {error: null, json: null};
 	try {
 		data.json = JSON.parse(json);
 	} catch (err) {
@@ -38,32 +35,30 @@ function parseJSON(/** @type {string} */ json) {
 	return data;
 }
 
-/** @typedef {[AnyObject?, number, Error?]} LoginServerResponse */
+type LoginServerResponse = [AnyObject | null, number, Error | null];
 
 class LoginServerInstance {
+	uri: string;
+	requestQueue: [AnyObject, (val: LoginServerResponse) => void][];
+	requestTimer: null;
+	requestLog: string;
+	lastRequest: number;
+	openRequests: number;
+	disabled: false;
+	
 	constructor() {
 		this.uri = Config.loginserver;
-		/**
-		 * @type {[AnyObject, (val: LoginServerResponse) => void][]}
-		 */
 		this.requestQueue = [];
-
 		this.requestTimer = null;
-		/** @type {string} */
 		this.requestLog = '';
 		this.lastRequest = 0;
 		this.openRequests = 0;
 		this.disabled = false;
 	}
 
-	/**
-	 * @param {string} action
-	 * @param {AnyObject?} data
-	 * @return {Promise<LoginServerResponse>}
-	 */
-	instantRequest(action, data = null) {
+	instantRequest(action: string, data: AnyObject | null = null): Promise<LoginServerResponse> {
 		if (this.openRequests > 5) {
-			return Promise.resolve(/** @type {LoginServerResponse} */ (
+			return Promise.resolve((
 				[null, 0, new RangeError("Request overflow")]
 			));
 		}
@@ -76,8 +71,8 @@ class LoginServerInstance {
 		}
 		const urlObject = url.parse(this.uri + 'action.php?act=' + action + '&serverid=' + Config.serverid + '&servertoken=' + encodeURIComponent(Config.servertoken) + '&nocache=' + new Date().getTime() + dataString);
 		return new Promise((resolve, reject) => {
-			// @ts-ignore TypeScript bug: http.get signature
-			let req = http.get(urlObject, res => {
+
+			let req = http.get(urlObject, (res: any) => {
 				Streams.readAll(res).then(buffer => {
 					let data = parseJSON(buffer).json || null;
 					resolve([data, res.statusCode || 0, null]);
@@ -85,7 +80,7 @@ class LoginServerInstance {
 				});
 			});
 
-			req.on('error', (/** @type {Error} */ error) => {
+			req.on('error', (error: Error) => {
 				resolve([null, 0, error]);
 				this.openRequests--;
 			});
@@ -93,14 +88,10 @@ class LoginServerInstance {
 			req.end();
 		});
 	}
-	/**
-	 * @param {string} action
-	 * @param {AnyObject?} data
-	 * @return {Promise<LoginServerResponse>}
-	 */
-	request(action, data = null) {
+
+	request(action: string, data: AnyObject | null = null): Promise<LoginServerResponse> {
 		if (this.disabled) {
-			return Promise.resolve(/** @type {LoginServerResponse} */ (
+			return Promise.resolve((
 				[null, 0, new Error(`Login server connection disabled.`)]
 			));
 		}
@@ -136,8 +127,7 @@ class LoginServerInstance {
 
 		if (!requests.length) return;
 
-		/** @type {((val: LoginServerResponse) => void)[]} */
-		let resolvers = [];
+		let resolvers = <((val: LoginServerResponse) => void)[]> [];
 		let dataList = [];
 		for (const [data, resolve] of requests) {
 			resolvers.push(resolve);
@@ -149,7 +139,6 @@ class LoginServerInstance {
 			'&servertoken=' + encodeURIComponent(Config.servertoken) +
 			'&nocache=' + new Date().getTime() +
 			'&json=' + encodeURIComponent(JSON.stringify(dataList)) + '\n';
-		/** @type {any} */
 		let requestOptions = url.parse(this.uri + 'action.php');
 		requestOptions.method = 'post';
 		requestOptions.headers = {
@@ -157,8 +146,7 @@ class LoginServerInstance {
 			'Content-Length': postData.length,
 		};
 
-		/** @type {any} */
-		let response = null;
+		let response = <null | string | object> null;
 		// @ts-ignore
 		let req = http.request(requestOptions, res => {
 			response = res;
@@ -189,7 +177,7 @@ class LoginServerInstance {
 			this.requestEnd(error);
 		});
 
-		req.on('error', (/** @type {Error} */ error) => {
+		req.on('error', (error: Error) => {
 			// ignore; will be handled by the 'close' handler
 		});
 
@@ -200,12 +188,12 @@ class LoginServerInstance {
 		req.write(postData);
 		req.end();
 	}
-	requestStart(/** @type {number} */ size) {
+	requestStart(size: number) {
 		this.lastRequest = Date.now();
 		this.requestLog += ' | ' + size + ' rqs: ';
 		this.openRequests++;
 	}
-	requestEnd(/** @type {Error?} */ error) {
+	requestEnd(error?: Error) {
 		this.openRequests = 0;
 		if (error && error instanceof TimeoutError) {
 			this.requestLog += 'TIMEOUT';
@@ -234,4 +222,4 @@ if (!Config.nofswriting) {
 	LoginServer.request('invalidatecss');
 }
 
-module.exports = LoginServer;
+export = LoginServer;
