@@ -9,8 +9,6 @@ declare let Monitor: typeof import('./monitor');
 
 declare let LoginServer: typeof import('./loginserver');
 
-declare function setTimeout(this: void, handler: (...args: any[]) => void, timeout: number): number;
-
 // type RoomBattle = AnyObject;
 
 declare let Verifier: typeof import('./verifier');

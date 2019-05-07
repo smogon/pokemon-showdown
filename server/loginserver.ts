@@ -144,7 +144,7 @@ class LoginServerInstance {
 			'&servertoken=' + encodeURIComponent(Config.servertoken) +
 			'&nocache=' + new Date().getTime() +
 			'&json=' + encodeURIComponent(JSON.stringify(dataList)) + '\n';
-		const requestOptions = url.parse(this.uri + 'action.php');
+		const requestOptions =  url.parse(this.uri + 'action.php');
 		requestOptions.method = 'post';
 		requestOptions.headers = {
 			'Content-Type': 'application/x-www-form-urlencoded',
