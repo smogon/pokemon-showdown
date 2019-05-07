@@ -75,11 +75,11 @@ class LoginServerInstance {
 		return new Promise((resolve, reject) => {
 
 			const req = http.get(urlObject, (res: AnyObject) => {
-				Streams.readAll(res).then(buffer => {
+				Streams.readAll(res).then((buffer: string) => {
 					const result = parseJSON(buffer).json || null;
 					resolve([result, res.statusCode || 0, null]);
 					this.openRequests--;
-				}).catch(err => {
+				}).catch((err: string) => {
 					throw new Error(err);
 				});
 			});
@@ -154,7 +154,7 @@ class LoginServerInstance {
 
 		const req = http.request(requestOptions, (res: AnyObject) => {
 			response = res;
-			Streams.readAll(res).then(buffer => {
+			Streams.readAll(res).then((buffer: string) => {
 				// console.log('RESPONSE: ' + buffer);
 				const data = parseJSON(buffer).json;
 				if (buffer.startsWith(`[{"actionsuccess":true,`)) {
@@ -169,7 +169,7 @@ class LoginServerInstance {
 					}
 				}
 				this.requestEnd();
-			}).catch(err => {
+			}).catch((err: string) => {
 				throw new Error(err);
 			});
 		});
