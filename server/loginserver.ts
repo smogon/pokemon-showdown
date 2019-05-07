@@ -123,7 +123,7 @@ class LoginServerInstance {
 		// if we already have it going or the request queue is empty no need to do anything
 		if (this.openRequests || this.requestTimer || !this.requestQueue.length) return;
 
-		this.requestTimer = window.setTimeout(() => this.makeRequests(), LOGIN_SERVER_BATCH_TIME);
+		this.requestTimer = setTimeout(() => this.makeRequests(), LOGIN_SERVER_BATCH_TIME);
 	}
 	makeRequests() {
 		this.requestTimer = null;
