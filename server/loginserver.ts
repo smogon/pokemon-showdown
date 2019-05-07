@@ -70,7 +70,8 @@ class LoginServerInstance {
 				dataString += '&' + i + '=' + encodeURIComponent('' + data[i]);
 			}
 		}
-		const urlObject = url.parse(this.uri + 'action.php?act=' + action + '&serverid=' + Config.serverid + '&servertoken=' + encodeURIComponent(Config.servertoken) + '&nocache=' + new Date().getTime() + dataString);
+		const urlObject = url.parse(`${this.uri}action.php?act=action&serverid='${Config.serverid}&servertoken=` + 
+		`'${encodeURIComponent(Config.servertoken)}&nocache=${new Date().getTime() + dataString}`);
 		return new Promise((resolve, reject) => {
 
 			const req = http.get(urlObject, (res: AnyObject) => {
@@ -205,7 +206,8 @@ class LoginServerInstance {
 		this.requestTimerPoke();
 	}
 	getLog() {
-		return this.requestLog + (this.lastRequest ? ' (' + Chat.toDurationString(Date.now() - this.lastRequest) + ' since last request)' : '');
+		return `${this.requestLog}` + 
+		`${this.lastRequest ? ` (${Chat.toDurationString(Date.now() - this.lastRequest)} since last request)` : ''}`;
 	}
 }
 
