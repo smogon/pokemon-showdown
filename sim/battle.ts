@@ -1472,7 +1472,7 @@ export class Battle extends Dex.ModdedDex {
 			for (const pokemon of side.pokemon) {
 				if (toId(pokemon.set.item) === 'leppaberry') leppa = true;
 				if (['harvest', 'pickup'].includes(toId(pokemon.set.ability)) ||
-					pokemon.set.moves.map(toId).includes(/** @type {ID} */ ('recycle'))) {
+					pokemon.set.moves.map(toId).includes('recycle' as ID)) {
 					cycle = true;
 				}
 				if (leppa && cycle) break;
