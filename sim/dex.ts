@@ -636,7 +636,7 @@ class ModdedDex {
 		let type = this.typeCache.get(typeName);
 		if (type) return type;
 		if (typeName && this.data.TypeChart.hasOwnProperty(typeName)) {
-			type = new Data.TypeInfo({id}, this.data.TypeChart[typeName]);
+			type = new Data.TypeInfo({id, name: typeName}, this.data.TypeChart[typeName]);
 		} else {
 			type = new Data.TypeInfo({id, name, exists: false, effectType: 'EffectType'});
 		}
