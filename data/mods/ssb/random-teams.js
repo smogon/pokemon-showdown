@@ -77,12 +77,6 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Turismo Splash',
 				evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0, spe: 0}, nature: 'Quiet',
 			},
-			'ant': {
-				species: 'Durant', ability: 'Flash Fire', item: 'Leftovers', gender: 'F',
-				moves: ['King\'s Shield', 'U-turn', 'Pursuit'],
-				signatureMove: 'TRU ANT',
-				evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
-			},
 			'A Quag to The Past': {
 				species: 'Quagsire', ability: 'Unaware', item: 'Leftovers', gender: 'M',
 				moves: ['Recover', 'Toxic', 'Scald'],

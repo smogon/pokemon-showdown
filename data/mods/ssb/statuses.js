@@ -110,18 +110,6 @@ let BattleStatuses = {
 			this.add(`c|+Amaluna|Don't talk to me unless you're famous`);
 		},
 	},
-	ant: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|@ant|the superior ant is here`);
-		},
-		onSwitchOut() {
-			this.add(`c|@ant|hasta la vista baby`);
-		},
-		onFaint() {
-			this.add(`c|@ant|I'M NOT ANTEMORTEM`);
-		},
-	},
 	aquagtothepast: {
 		noCopy: true,
 		onStart() {

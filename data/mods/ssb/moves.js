@@ -234,36 +234,6 @@ let BattleMovedex = {
 		target: "self",
 		type: "Water",
 	},
-	// ant
-	truant: {
-		accuracy: 100,
-		basePower: 100,
-		category: "Physical",
-		desc: "The target's ability is changed to Truant if this move hits.",
-		shortDesc: "Changes the target's ability to Truant.",
-		id: "truant",
-		name: "TRU ANT",
-		isNonstandard: "Custom",
-		pp: 5,
-		flags: {protect: 1, mirror: 1, contact: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Sunsteel Strike', target);
-		},
-		onHit(pokemon) {
-			if (pokemon.ability === 'truant') return;
-			let oldAbility = pokemon.setAbility('truant');
-			if (oldAbility) {
-				this.add('-ability', pokemon, 'Truant', '[from] move: TRU ANT');
-				return;
-			}
-			return false;
-		},
-		target: "normal",
-		type: "Steel",
-	},
 	// A Quag to The Past
 	murkyambush: {
 		accuracy: true,
