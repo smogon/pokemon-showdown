@@ -100,29 +100,29 @@ class TextFormatter {
 	}
 	// debugAt(i=0, j=i+1) { console.log(this.slice(0, i) + '[' + this.slice(i, j) + ']' + this.slice(j, this.str.length)); }
 
-	slice(start: number, end: number): string {
+	slice(start: number, end: number) {
 		return this.str.slice(start, end);
 	}
 
-	at(start: number): string {
+	at(start: number) {
 		return this.str.charAt(start);
 	}
 
-	pushSpan(spanType: SpanType, start: number, end: number): void {
+	pushSpan(spanType: SpanType, start: number, end: number) {
 		this.pushSlice(start);
 		this.stack.push([spanType, this.buffers.length]);
 		this.buffers.push(this.slice(start, end));
 		this.offset = end;
 	}
 
-	pushSlice(end: number): void {
+	pushSlice(end: number) {
 		if (end !== this.offset) {
 			this.buffers.push(this.slice(this.offset, end));
 			this.offset = end;
 		}
 	}
 
-	closeParenSpan(start: number): boolean {
+	closeParenSpan(start: number) {
 		let stackPosition = -1;
 		for (let i = this.stack.length - 1; i >= 0; i--) {
 			const span = this.stack[i];
@@ -140,7 +140,7 @@ class TextFormatter {
 		return true;
 	}
 
-	closeSpan(spanType: SpanType, start: number, end: number): boolean | undefined {
+	closeSpan(spanType: SpanType, start: number, end: number) {
 		// loop backwards
 		let stackPosition = -1;
 		for (let i = this.stack.length - 1; i >= 0; i--) {
@@ -178,7 +178,7 @@ class TextFormatter {
 	 * they don't take effect, but certain spans like spoiler tags don't
 	 * require ending symbols.
 	 */
-	popSpan(end: number): boolean {
+	popSpan(end: number) {
 		const span = this.stack.pop();
 		if (!span) return false;
 		this.pushSlice(end);
@@ -198,12 +198,12 @@ class TextFormatter {
 		return true;
 	}
 
-	popAllSpans(end: number): void {
+	popAllSpans(end: number) {
 		while (this.stack.length) this.popSpan(end);
 		this.pushSlice(end);
 	}
 
-	toUriComponent(html: string): string {
+	toUriComponent(html: string) {
 		const component = html.replace(/&lt;/g, '<')
 		.replace(/&gt;/g, '>')
 		.replace(/&quot;/g, '"')
@@ -212,7 +212,7 @@ class TextFormatter {
 		return encodeURIComponent(component);
 	}
 
-	runLookahead(spanType: SpanType, start: number): boolean {
+	runLookahead(spanType: SpanType, start: number) {
 		switch (spanType) {
 		case '`':
 			{
@@ -342,7 +342,7 @@ class TextFormatter {
 		return false;
 	}
 
-	get(): string {
+	get() {
 		let beginningOfLine = this.offset;
 		// main loop! i tracks our position
 		for (let i = beginningOfLine; i < this.str.length; i++) {
@@ -440,7 +440,7 @@ class TextFormatter {
 /**
  * Takes a string and converts it to HTML by replacing standard chat formatting with the appropriate HTML tags.
  */
-function formatText(str: string, isTrusted: boolean = false): string {
+function formatText(str: string, isTrusted: boolean = false) {
 	return new TextFormatter(str, isTrusted).get();
 }
 
