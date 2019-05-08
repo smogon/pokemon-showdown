@@ -16,7 +16,7 @@
 
 class LadderStore {
 	formatid: string;
-	static formatsListPrefix: string = '';
+	static formatsListPrefix = '';
 
 	constructor(formatid: string) {
 		this.formatid = formatid;
@@ -34,7 +34,7 @@ class LadderStore {
 	/**
 	 * Returns a Promise for the Elo rating of a user
 	 */
-	async getRating(userid: string): Promise<number> {
+	async getRating(userid: string) {
 		const formatid = this.formatid;
 		const user = Users.getExact(userid);
 		if (user && user.mmrCache[formatid]) {
@@ -60,8 +60,7 @@ class LadderStore {
 	 * Update the Elo rating for two players after a battle, and display
 	 * the results in the passed room.
 	 */
-	async updateRating(p1name: string, p2name: string, p1score: number, room: AnyObject):
-	Promise<[number, AnyObject | null, AnyObject | null]> {
+	async updateRating(p1name: string, p2name: string, p1score: number, room: AnyObject) {
 		if (Ladders.disabled) {
 			room.addRaw(`Ratings not updated. The ladders are currently disabled.`).update();
 			return [p1score, null, null];
@@ -139,7 +138,7 @@ class LadderStore {
 	/**
 	 * Returns a Promise for an array of strings of <tr>s for ladder ratings of the user
 	 */
-	static async visualizeAll(username: string): Promise<string[]> {
+	static async visualizeAll(username: string) {
 		return [`<tr><td><strong>Please use the official client at play.pokemonshowdown.com</strong></td></tr>`];
 	}
 }

@@ -33,8 +33,8 @@ class LadderStore {
 	ladder: LadderRow[] | null;
 	ladderPromise: Promise<LadderRow[]> | null;
 	saving: boolean;
-	static formatsListPrefix: string = '|,LL';
-	static ladderCaches: LadderCache = ladderCaches;
+	static formatsListPrefix = '|,LL';
+	static ladderCaches = ladderCaches;
 
 	constructor(formatid: string) {
 		this.formatid = formatid;
@@ -43,12 +43,12 @@ class LadderStore {
 		this.saving = false;
 	}
 
-	getLadder(): Promise<LadderRow[]> {
+	getLadder() {
 		if (!this.ladderPromise) this.ladderPromise = this.load();
 		return this.ladderPromise;
 	}
 
-	async load(): Promise<LadderRow[]> {
+	async load() {
 		// ladderCaches[formatid]
 		const cachedLadder = ladderCaches.get(this.formatid);
 		if (cachedLadder) {
@@ -85,7 +85,7 @@ class LadderStore {
 	 * Called automatically by updateRating, so you don't need to manually
 	 * call this.
 	 */
-	async save(): Promise<void> {
+	async save() {
 		if (this.saving) return;
 		this.saving = true;
 		const ladder = await this.getLadder();
@@ -110,7 +110,7 @@ class LadderStore {
 	 * If createIfNeeded is true, the user will be created and added to
 	 * the ladder array if it doesn't already exist.
 	 */
-	indexOfUser(username: string, createIfNeeded = false): number {
+	indexOfUser(username: string, createIfNeeded = false) {
 		if (!this.ladder) throw new Error(`Must be called with ladder loaded`);
 		const userid = toId(username);
 		for (const [i, user] of this.ladder.entries()) {
@@ -129,7 +129,7 @@ class LadderStore {
 	 * ladder toplist, to be displayed directly in the ladder tab of the
 	 * client.
 	 */
-	async getTop(): Promise<[string, string] | undefined> {
+	async getTop() {
 		const formatid = this.formatid;
 		const name = Dex.getFormat(formatid).name;
 		const ladder = await this.getLadder();
@@ -148,7 +148,7 @@ class LadderStore {
 	/**
 	 * Returns a Promise for the Elo rating of a user
 	 */
-	async getRating(userid: string): Promise<number | undefined> {
+	async getRating(userid: string) {
 		const formatid = this.formatid;
 		const user = Users.getExact(userid);
 		if (user && user.mmrCache[formatid]) {
@@ -170,7 +170,7 @@ class LadderStore {
 	/**
 	 * Internal method. Update the Elo rating of a user.
 	 */
-	updateRow(row: LadderRow, score: number, foeElo: number): void {
+	updateRow(row: LadderRow, score: number, foeElo: number) {
 		let elo = row[1];
 
 		// The K factor determines how much your Elo changes when you win or
@@ -213,8 +213,7 @@ class LadderStore {
 	 * Update the Elo rating for two players after a battle, and display
 	 * the results in the passed room.
 	 */
-	async updateRating(p1name: string, p2name: string, p1score: number, room: AnyObject):
-	Promise<[number, number | undefined, number | undefined] | [number, null, null] | undefined> {
+	async updateRating(p1name: string, p2name: string, p1score: number, room: AnyObject) {
 		if (Ladders.disabled) {
 			room.addRaw(`Ratings not updated. The ladders are currently disabled.`).update();
 			return [p1score, null, null];
@@ -315,7 +314,7 @@ class LadderStore {
 	/**
 	 * Returns a promise for a <tr> with all ratings for the current format.
 	 */
-	async visualize(username: string): Promise<string | undefined> {
+	async visualize(username: string) {
 		const ladder = await this.getLadder();
 		if (!ladder) return;
 
@@ -332,7 +331,7 @@ class LadderStore {
 	/**
 	 * Returns a Promise for an array of strings of <tr>s for ladder ratings of the user
 	 */
-	static visualizeAll(username: string): Promise<(string | undefined)[]> {
+	static visualizeAll(username: string) {
 		const ratings = [];
 		for (const i in Dex.formats) {
 			if (Dex.formats[i].searchShow) {
