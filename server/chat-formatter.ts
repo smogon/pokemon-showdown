@@ -47,20 +47,25 @@ const linkRegex = new RegExp(
 // compiled from above
 // const linkRegex = /(?:(?:(?:https?:\/\/|\bwww[.])[a-z0-9-]+(?:[.][a-z0-9-]+)*|\b[a-z0-9-]+(?:[.][a-z0-9-]+)*[.](?:com?|org|net|edu|info|us|jp|[a-z]{2,3}(?=[:/])))(?:[:][0-9]+)?\b(?:\/(?:(?:[^\s()&<>]|&amp;|&quot;|[(](?:[^\s()<>&]|&amp;)*[)])*(?:[^\s`()[\]{}'".,!?;:&<>*`^~\\]|[(](?:[^\s()<>&]|&amp;)*[)]))?)?|[a-z0-9.]+\b@[a-z0-9-]+(?:[.][a-z0-9-]+)*[.][a-z]{2,})(?![^ ]*&gt;)/ig;
 
-/**
- * @typedef {'_' | '*' | '~' | '^' | '\\' | '<' | '[' | '`' | 'a' | 'spoiler' | '>' | '('} SpanType
- */
-/**
- * @typedef {[SpanType, number]} FormatSpan [spanType, buffersIndex]
- */
+type SpanType = '_' | '*' | '~' | '^' | '\\' | '<' | '[' | '`' | 'a' | 'spoiler' | '>' | '(';
+
+type FormatSpan = [SpanType, number];
 
 class TextFormatter {
-	/**
-	 * @param {string} str
-	 */
-	constructor(str, isTrusted = false) {
+	str: string;
+	buffers: string[];
+	stack: FormatSpan[];
+	isTrusted: boolean;
+	offset: number;
+
+	constructor(str: string, isTrusted: boolean = false) {
 		// escapeHTML, without escaping /
-		str = ('' + str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&apos;');
+		str = ('' + str)
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;')
+		.replace(/"/g, '&quot;')
+		.replace(/'/g, '&apos;');
 
 		// filter links first
 		str = str.replace(linkRegex, uri => {
@@ -75,7 +80,10 @@ class TextFormatter {
 					if (uri.substr(-6) === '#gid=0') uri = uri.slice(0, -6);
 					let slashIndex = uri.lastIndexOf('/');
 					if (uri.length - slashIndex > 18) slashIndex = uri.length;
-					if (slashIndex - 4 > 19 + 3) uri = uri.slice(0, 19) + '<small class="message-overflow">' + uri.slice(19, slashIndex - 4) + '</small>' + uri.slice(slashIndex - 4);
+					if (slashIndex - 4 > 19 + 3) {
+						uri = uri.slice(0, 19) +
+						'<small class="message-overflow">' + uri.slice(19, slashIndex - 4) + '</small>' + uri.slice(slashIndex - 4);
+					}
 				}
 			}
 			return `<a href="${fulluri}" rel="noopener" target="_blank">${uri}</a>`;
@@ -83,53 +91,38 @@ class TextFormatter {
 		// (links don't have any specific syntax, they're just a pattern, so we detect them in a separate pass)
 
 		this.str = str;
-		this.buffers = /** @type {string[]} */ ([]);
-		this.stack = /** @type {FormatSpan[]} */ ([]);
+		this.buffers = ([]);
+		this.stack = ([]);
 		this.isTrusted = isTrusted;
 		/** offset of str that's been parsed so far */
 		// TypeScript bug: [js] 'offset' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
-		/** @type {number} */
 		this.offset = 0;
 	}
 	// debugAt(i=0, j=i+1) { console.log(this.slice(0, i) + '[' + this.slice(i, j) + ']' + this.slice(j, this.str.length)); }
-	/**
-	 * @param {number} start
-	 * @param {number} end
-	 */
-	slice(start, end) {
+
+	slice(start: number, end: number): string {
 		return this.str.slice(start, end);
 	}
-	/**
-	 * @param {number} start
-	 */
-	at(start) {
+
+	at(start: number): string {
 		return this.str.charAt(start);
 	}
-	/**
-	 * @param {SpanType} spanType
-	 * @param {number} start
-	 * @param {number} end
-	 */
-	pushSpan(spanType, start, end) {
+
+	pushSpan(spanType: SpanType, start: number, end: number): void {
 		this.pushSlice(start);
 		this.stack.push([spanType, this.buffers.length]);
 		this.buffers.push(this.slice(start, end));
 		this.offset = end;
 	}
-	/**
-	 * @param {number} end
-	 */
-	pushSlice(end) {
+
+	pushSlice(end: number): void {
 		if (end !== this.offset) {
 			this.buffers.push(this.slice(this.offset, end));
 			this.offset = end;
 		}
 	}
-	/**
-	 * @param {number} start
-	 * @return {boolean} success
-	 */
-	closeParenSpan(start) {
+
+	closeParenSpan(start: number): boolean {
 		let stackPosition = -1;
 		for (let i = this.stack.length - 1; i >= 0; i--) {
 			const span = this.stack[i];
@@ -146,14 +139,8 @@ class TextFormatter {
 		this.offset = start;
 		return true;
 	}
-	/**
-	 * Attempt to close a span.
-	 * @param {SpanType} spanType
-	 * @param {number} start
-	 * @param {number} end
-	 * @return {boolean} success
-	 */
-	closeSpan(spanType, start, end) {
+
+	closeSpan(spanType: SpanType, start: number, end: number): boolean | undefined {
 		// loop backwards
 		let stackPosition = -1;
 		for (let i = this.stack.length - 1; i >= 0; i--) {
@@ -167,7 +154,8 @@ class TextFormatter {
 
 		this.pushSlice(start);
 		while (this.stack.length > stackPosition + 1) this.popSpan(start);
-		const span = /** @type {FormatSpan} */ (this.stack.pop());
+		const span: FormatSpan | undefined = (this.stack.pop());
+		if (!span) return;
 		const startIndex = span[1];
 		let tagName = '';
 		switch (spanType) {
@@ -184,15 +172,13 @@ class TextFormatter {
 		}
 		return true;
 	}
+
 	/**
 	 * Ends a span without an ending symbol. For most spans, this means
 	 * they don't take effect, but certain spans like spoiler tags don't
 	 * require ending symbols.
-	 *
-	 * @param {number} end
-	 * @return {boolean} success
 	 */
-	popSpan(end) {
+	popSpan(end: number): boolean {
 		const span = this.stack.pop();
 		if (!span) return false;
 		this.pushSlice(end);
@@ -211,26 +197,22 @@ class TextFormatter {
 		}
 		return true;
 	}
-	/**
-	 * @param {number} end
-	 */
-	popAllSpans(end) {
+
+	popAllSpans(end: number): void {
 		while (this.stack.length) this.popSpan(end);
 		this.pushSlice(end);
 	}
-	/**
-	 * @param {string} html
-	 */
-	toUriComponent(html) {
-		let component = html.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&apos;/g, '\'').replace(/&amp;/g, '&');
+
+	toUriComponent(html: string): string {
+		const component = html.replace(/&lt;/g, '<')
+		.replace(/&gt;/g, '>')
+		.replace(/&quot;/g, '"')
+		.replace(/&apos;/g, '\'')
+		.replace(/&amp;/g, '&');
 		return encodeURIComponent(component);
 	}
-	/**
-	 * @param {SpanType} spanType
-	 * @param {number} start
-	 * @return {boolean} success
-	 */
-	runLookahead(spanType, start) {
+
+	runLookahead(spanType: SpanType, start: number): boolean {
 		switch (spanType) {
 		case '`':
 			{
@@ -297,7 +279,7 @@ class TextFormatter {
 				}
 				let term = this.slice(start + 2, termEnd).replace(/<\/?a(?: [^>]+)?>/g, '');
 				if (uri && !this.isTrusted) {
-					let shortUri = uri.replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/$/, '');
+					const shortUri = uri.replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/$/, '');
 					term += `<small> &lt;${shortUri}&gt;</small>`;
 					uri += '" rel="noopener';
 				}
@@ -359,10 +341,8 @@ class TextFormatter {
 		}
 		return false;
 	}
-	/**
-	 * @return {string}
-	 */
-	get() {
+
+	get(): string {
 		let beginningOfLine = this.offset;
 		// main loop! i tracks our position
 		for (let i = beginningOfLine; i < this.str.length; i++) {
@@ -412,7 +392,8 @@ class TextFormatter {
 				break;
 			case ':':
 				if (i < 7) break;
-				if (this.slice(i - 7, i + 1).toLowerCase() === 'spoiler:' || this.slice(i - 8, i + 1).toLowerCase() === 'spoilers:') {
+				if (this.slice(i - 7, i + 1).toLowerCase() === 'spoiler:' ||
+				this.slice(i - 8, i + 1).toLowerCase() === 'spoilers:') {
 					if (this.at(i + 1) === ' ') i++;
 					this.pushSpan('spoiler', i + 1, i + 1);
 				}
@@ -458,11 +439,9 @@ class TextFormatter {
 
 /**
  * Takes a string and converts it to HTML by replacing standard chat formatting with the appropriate HTML tags.
- *
- * @param {string} str
  */
-function formatText(str, isTrusted = false) {
+function formatText(str: string, isTrusted: boolean = false): string {
 	return new TextFormatter(str, isTrusted).get();
 }
 
-module.exports = {formatText, linkRegex};
+export = {formatText, linkRegex};
