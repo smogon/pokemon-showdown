@@ -152,7 +152,7 @@ class LoginServerInstance {
 			'&json=' + encodeURIComponent(JSON.stringify(dataList)) + '\n';
 
 		const requestOptions = {
-			url: url.parse(this.uri + 'action.php'),
+			url: url.parse(`${this.uri}action.php`),
 			method: 'post',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded',
