@@ -75,14 +75,14 @@ class LoginServerInstance {
 			}
 		}
 
-		const urlObject = url.parse(this.uri + 'action.php' +
+		const actionUrl = url.parse(this.uri + 'action.php' +
 			'?act=action&serverid=' + Config.serverid +
 			'&servertoken=' + `'${encodeURIComponent(Config.servertoken)}'` +
 			'&nocache=' + new Date().getTime() + dataString);
 
 		return new Promise((resolve, reject) => {
 
-			const req = http.get(urlObject, (res: IncomingMessage) => {
+			const req = http.get(actionUrl, (res: IncomingMessage) => {
 				// tslint:disable-next-line no-floating-promises
 				Streams.readAll(res).then((buffer: string) => {
 					const result = parseJSON(buffer).json || null;
