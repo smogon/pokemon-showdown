@@ -77,7 +77,7 @@ class LoginServerInstance {
 
 		const actionUrl = url.parse(this.uri + 'action.php' +
 			'?act=action&serverid=' + Config.serverid +
-			'&servertoken=' + `'${encodeURIComponent(Config.servertoken)}'` +
+			'&servertoken=' + encodeURIComponent(Config.servertoken) +
 			'&nocache=' + new Date().getTime() + dataString);
 
 		return new Promise((resolve, reject) => {
@@ -220,7 +220,7 @@ class LoginServerInstance {
 	}
 	getLog() {
 		if (!this.lastRequest) return this.requestLog;
-		return `${this.requestLog}  (${Chat.toDurationString(Date.now() - this.lastRequest)} since last request)`;
+		return `${this.requestLog} (${Chat.toDurationString(Date.now() - this.lastRequest)} since last request)`;
 	}
 }
 
