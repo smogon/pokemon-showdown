@@ -580,8 +580,11 @@ let Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
-		banlist: ['Slaking', 'Regigigas'],
+		banlist: ['Hoopa-Unbound', 'Slaking', 'Regigigas'],
 		restrictedMoves: ['Assist', 'Baneful Bunker', 'Block', 'Copycat', 'Destiny Bond', 'Detect', 'Ingrain', 'Mat Block', 'Mean Look', 'Nature Power', 'Parting Shot', 'Protect', 'Roar', 'Skill Swap', 'Spider Web', 'Spiky Shield', 'Whirlwind'],
+		onBegin() {
+			if (this.rated && this.format === 'gen7trademarked') this.add('html', `<div class="broadcast-green"><strong>Trademarked is currently suspecting Hoopa-Unbound! For information on how to participate check out the <a href="https://www.smogon.com/forums/posts/8123652/">suspect post</a>.</strong></div>`);
+		},
 		onValidateTeam(team, format, teamHas) {
 			for (let trademark in teamHas.trademarks) {
 				if (teamHas.trademarks[trademark] > 1) return [`You are limited to 1 of each Trademark. (You have ${teamHas.trademarks[trademark]} of ${trademark}).`];
