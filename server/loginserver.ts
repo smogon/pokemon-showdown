@@ -12,13 +12,12 @@
 const LOGIN_SERVER_TIMEOUT = 30000;
 const LOGIN_SERVER_BATCH_TIME = 1000;
 
-const http = Config.loginserver.startsWith('http:') ? require("http") : require("https");
-const url = require('url');
+// tslint:disable-next-line no-var-requires
+const http = Config.loginserver.startsWith('http:') ? require('http') : require('https');
+import * as url from 'url';
 
-/** @type {typeof import('../lib/fs').FS} */
-const FS = require(/** @type {any} */('../.lib-dist/fs')).FS;
-/** @type {typeof import('../lib/streams')} */
-const Streams = require(/** @type {any} */('../.lib-dist/streams'));
+import {FS} from '../lib/fs';
+import * as Streams from '../lib/streams';
 
 /**
  * A custom error type used when requests to the login server take too long.
@@ -26,10 +25,9 @@ const Streams = require(/** @type {any} */('../.lib-dist/streams'));
 class TimeoutError extends Error {}
 TimeoutError.prototype.name = TimeoutError.name;
 
-function parseJSON(/** @type {string} */ json) {
+function parseJSON(json: string) {
 	if (json.startsWith(']')) json = json.substr(1);
-	/**@type {{error: Error | null, json?: any}} */
-	let data = {error: null};
+	const data = {error: null, json: null};
 	try {
 		data.json = JSON.parse(json);
 	} catch (err) {
@@ -38,54 +36,62 @@ function parseJSON(/** @type {string} */ json) {
 	return data;
 }
 
-/** @typedef {[AnyObject?, number, Error?]} LoginServerResponse */
+type LoginServerResponse = [AnyObject | null, number, Error | null];
+
+interface IncomingMessage extends NodeJS.ReadableStream {
+	statusCode: number;
+}
 
 class LoginServerInstance {
+	uri: string;
+	requestQueue: [AnyObject, (val: LoginServerResponse) => void][];
+	requestTimer: NodeJS.Timer | null;
+	requestLog: string;
+	lastRequest: number;
+	openRequests: number;
+	disabled: false;
+
 	constructor() {
 		this.uri = Config.loginserver;
-		/**
-		 * @type {[AnyObject, (val: LoginServerResponse) => void][]}
-		 */
 		this.requestQueue = [];
-
 		this.requestTimer = null;
-		/** @type {string} */
 		this.requestLog = '';
 		this.lastRequest = 0;
 		this.openRequests = 0;
 		this.disabled = false;
 	}
 
-	/**
-	 * @param {string} action
-	 * @param {AnyObject?} data
-	 * @return {Promise<LoginServerResponse>}
-	 */
-	instantRequest(action, data = null) {
+	instantRequest(action: string, data: AnyObject | null = null): Promise<LoginServerResponse> {
 		if (this.openRequests > 5) {
-			return Promise.resolve(/** @type {LoginServerResponse} */ (
+			return Promise.resolve(
 				[null, 0, new RangeError("Request overflow")]
-			));
+			);
 		}
 		this.openRequests++;
 		let dataString = '';
 		if (data) {
-			for (let i in data) {
+			for (const i in data) {
 				dataString += '&' + i + '=' + encodeURIComponent('' + data[i]);
 			}
 		}
-		const urlObject = url.parse(this.uri + 'action.php?act=' + action + '&serverid=' + Config.serverid + '&servertoken=' + encodeURIComponent(Config.servertoken) + '&nocache=' + new Date().getTime() + dataString);
+
+		const actionUrl = url.parse(this.uri + 'action.php' +
+			'?act=action&serverid=' + Config.serverid +
+			'&servertoken=' + encodeURIComponent(Config.servertoken) +
+			'&nocache=' + new Date().getTime() + dataString);
+
 		return new Promise((resolve, reject) => {
-			// @ts-ignore TypeScript bug: http.get signature
-			let req = http.get(urlObject, res => {
-				Streams.readAll(res).then(buffer => {
-					let data = parseJSON(buffer).json || null;
-					resolve([data, res.statusCode || 0, null]);
+
+			const req = http.get(actionUrl, (res: IncomingMessage) => {
+				// tslint:disable-next-line no-floating-promises
+				Streams.readAll(res).then((buffer: string) => {
+					const result = parseJSON(buffer).json || null;
+					resolve([result, res.statusCode || 0, null]);
 					this.openRequests--;
 				});
 			});
 
-			req.on('error', (/** @type {Error} */ error) => {
+			req.on('error', (error: Error) => {
 				resolve([null, 0, error]);
 				this.openRequests--;
 			});
@@ -93,16 +99,12 @@ class LoginServerInstance {
 			req.end();
 		});
 	}
-	/**
-	 * @param {string} action
-	 * @param {AnyObject?} data
-	 * @return {Promise<LoginServerResponse>}
-	 */
-	request(action, data = null) {
+
+	request(action: string, data: AnyObject | null = null): Promise<LoginServerResponse> {
 		if (this.disabled) {
-			return Promise.resolve(/** @type {LoginServerResponse} */ (
+			return Promise.resolve(
 				[null, 0, new Error(`Login server connection disabled.`)]
-			));
+			);
 		}
 
 		// ladderupdate and mmr are the most common actions
@@ -113,7 +115,7 @@ class LoginServerInstance {
 			return this[action + 'Server'].request(action, data);
 		}
 
-		let actionData = data || {};
+		const actionData = data || {};
 		actionData.act = action;
 		return new Promise(resolve => {
 			this.requestQueue.push([actionData, resolve]);
@@ -131,40 +133,41 @@ class LoginServerInstance {
 	}
 	makeRequests() {
 		this.requestTimer = null;
-		let requests = this.requestQueue;
+		const requests = this.requestQueue;
 		this.requestQueue = [];
 
 		if (!requests.length) return;
 
-		/** @type {((val: LoginServerResponse) => void)[]} */
-		let resolvers = [];
-		let dataList = [];
+		const resolvers: ((val: LoginServerResponse) => void)[] = [];
+		const dataList = [];
 		for (const [data, resolve] of requests) {
 			resolvers.push(resolve);
 			dataList.push(data);
 		}
 
 		this.requestStart(requests.length);
-		let postData = 'serverid=' + Config.serverid +
+		const postData = 'serverid=' + Config.serverid +
 			'&servertoken=' + encodeURIComponent(Config.servertoken) +
 			'&nocache=' + new Date().getTime() +
 			'&json=' + encodeURIComponent(JSON.stringify(dataList)) + '\n';
-		/** @type {any} */
-		let requestOptions = url.parse(this.uri + 'action.php');
-		requestOptions.method = 'post';
-		requestOptions.headers = {
-			'Content-Type': 'application/x-www-form-urlencoded',
-			'Content-Length': postData.length,
+
+		const requestOptions = {
+			url: url.parse(`${this.uri}action.php`),
+			method: 'post',
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded',
+				'Content-Length': postData.length,
+			},
 		};
 
-		/** @type {any} */
-		let response = null;
-		// @ts-ignore
-		let req = http.request(requestOptions, res => {
+		let response: AnyObject | null =  null;
+
+		const req = http.request(requestOptions, (res: IncomingMessage) => {
 			response = res;
-			Streams.readAll(res).then(buffer => {
-				//console.log('RESPONSE: ' + buffer);
-				let data = parseJSON(buffer).json;
+			// tslint:disable-next-line no-floating-promises
+			Streams.readAll(res).then((buffer: string) => {
+				// console.log('RESPONSE: ' + buffer);
+				const data = parseJSON(buffer).json;
 				if (buffer.startsWith(`[{"actionsuccess":true,`)) {
 					buffer = 'stream interrupt';
 				}
@@ -189,7 +192,7 @@ class LoginServerInstance {
 			this.requestEnd(error);
 		});
 
-		req.on('error', (/** @type {Error} */ error) => {
+		req.on('error', (error: Error) => {
 			// ignore; will be handled by the 'close' handler
 		});
 
@@ -200,12 +203,12 @@ class LoginServerInstance {
 		req.write(postData);
 		req.end();
 	}
-	requestStart(/** @type {number} */ size) {
+	requestStart(size: number) {
 		this.lastRequest = Date.now();
 		this.requestLog += ' | ' + size + ' rqs: ';
 		this.openRequests++;
 	}
-	requestEnd(/** @type {Error?} */ error) {
+	requestEnd(error?: Error) {
 		this.openRequests = 0;
 		if (error && error instanceof TimeoutError) {
 			this.requestLog += 'TIMEOUT';
@@ -216,11 +219,12 @@ class LoginServerInstance {
 		this.requestTimerPoke();
 	}
 	getLog() {
-		return this.requestLog + (this.lastRequest ? ' (' + Chat.toDurationString(Date.now() - this.lastRequest) + ' since last request)' : '');
+		if (!this.lastRequest) return this.requestLog;
+		return `${this.requestLog} (${Chat.toDurationString(Date.now() - this.lastRequest)} since last request)`;
 	}
 }
 
-let LoginServer = Object.assign(new LoginServerInstance(), {
+const LoginServer = Object.assign(new LoginServerInstance(), {
 	TimeoutError,
 
 	ladderupdateServer: new LoginServerInstance(),
@@ -228,10 +232,12 @@ let LoginServer = Object.assign(new LoginServerInstance(), {
 });
 
 FS('./config/custom.css').onModify(() => {
+	// tslint:disable-next-line no-floating-promises
 	LoginServer.request('invalidatecss');
 });
 if (!Config.nofswriting) {
+	// tslint:disable-next-line no-floating-promises
 	LoginServer.request('invalidatecss');
 }
 
-module.exports = LoginServer;
+export = LoginServer;
