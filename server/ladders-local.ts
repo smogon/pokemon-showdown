@@ -23,9 +23,9 @@ import {FS} from '../lib/fs';
 //   with userid in front
 /** [userid, elo, username, w, l, t, lastUpdate */
 type LadderRow = [string, number, string, number, number, number, string];
-type Cache = Map<string, LadderRow[] | Promise<LadderRow[]>>;
+type LadderCache = Map<string, LadderRow[] | Promise<LadderRow[]>>;
 
-const ladderCaches: Cache = new Map();
+const ladderCaches: LadderCache = new Map();
 
 class LadderStore {
 	formatid: string;
@@ -33,7 +33,7 @@ class LadderStore {
 	ladderPromise: Promise<LadderRow[]> | null;
 	saving: boolean;
 	static formatsListPrefix: string;
-	static ladderCaches: Cache;
+	static ladderCaches: LadderCache;
 
 	constructor(formatid: string) {
 		this.formatid = formatid;
