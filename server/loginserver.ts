@@ -75,10 +75,10 @@ class LoginServerInstance {
 			}
 		}
 
-		const urlString = this.uri + 'action.php?' +
-		'?act=action&serverid=' + Config.serverid +
-		'&servertoken=' + `'${encodeURIComponent(Config.servertoken)}'` + 
-		'&nocache=' + new Date().getTime() + dataString;
+		const urlString = this.uri + 'action.php' +
+			'?act=action&serverid=' + Config.serverid +
+			'&servertoken=' + `'${encodeURIComponent(Config.servertoken)}'` + 
+		'	&nocache=' + new Date().getTime() + dataString;
 		const urlObject = url.parse(urlString);
 
 		return new Promise((resolve, reject) => {
