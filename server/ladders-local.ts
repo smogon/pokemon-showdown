@@ -61,7 +61,7 @@ class LadderStore {
 		}
 		try {
 			const data = await FS('config/ladders/' + this.formatid + '.tsv').readIfExists();
-			const ladder: LadderRow[] = ([]);
+			const ladder: LadderRow[] = [];
 			for (const dataLine of data.split('\n')) {
 				const line = dataLine.trim();
 				if (!line) continue;
