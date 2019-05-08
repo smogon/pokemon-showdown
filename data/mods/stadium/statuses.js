@@ -47,8 +47,12 @@ let BattleStatuses = {
 		id: 'slp',
 		num: 0,
 		effectType: 'Status',
-		onStart(target) {
-			this.add('-status', target, 'slp');
+		onStart(target, source, sourceEffect) {
+			if (sourceEffect && sourceEffect.effectType === 'Move') {
+				this.add('-status', target, 'slp', '[from] move: ' + sourceEffect.name);
+			} else {
+				this.add('-status', target, 'slp');
+			}
 			// 1-3 turns
 			this.effectData.startTime = this.random(1, 4);
 			this.effectData.time = this.effectData.startTime;

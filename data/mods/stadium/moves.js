@@ -88,15 +88,14 @@ let BattleMovedex = {
 	},
 	rest: {
 		inherit: true,
-		onHit(target) {
+		onHit(target, source, move) {
 			// Fails if the difference between
 			// max HP and current HP is 0, 255, or 511
 			if (target.hp >= target.maxhp) return false;
-			if (!target.setStatus('slp')) return false;
+			if (!target.setStatus('slp', source, move)) return false;
 			target.statusData.time = 2;
 			target.statusData.startTime = 2;
-			this.heal(target.maxhp); // Aeshetic only as the healing happens after you fall asleep in-game
-			this.add('-status', target, 'slp', '[from] move: Rest');
+			this.heal(target.maxhp); // Aesthetic only as the healing happens after you fall asleep in-game
 		},
 	},
 	softboiled: {

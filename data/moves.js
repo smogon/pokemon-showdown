@@ -13444,12 +13444,11 @@ let BattleMovedex = {
 			this.add('-fail', pokemon);
 			return null;
 		},
-		onHit(target) {
-			if (!target.setStatus('slp')) return false;
+		onHit(target, source, move) {
+			if (!target.setStatus('slp', source, move)) return false;
 			target.statusData.time = 3;
 			target.statusData.startTime = 3;
-			this.heal(target.maxhp); //Aeshetic only as the healing happens after you fall asleep in-game
-			this.add('-status', target, 'slp', '[from] move: Rest');
+			this.heal(target.maxhp); // Aesthetic only as the healing happens after you fall asleep in-game
 		},
 		secondary: null,
 		target: "self",

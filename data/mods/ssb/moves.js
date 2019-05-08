@@ -2137,7 +2137,6 @@ let BattleMovedex = {
 			target.statusData.time = 2;
 			target.statusData.startTime = 2;
 			this.heal(target.maxhp / 2); // Aesthetic only as the healing happens after you fall asleep in-game
-			this.add('-status', target, 'slp', '[from] move: Rest');
 			if (napWeather.source === target) {
 				for (const curMon of this.getAllActive()) {
 					if (curMon === source) continue;
