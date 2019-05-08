@@ -79,7 +79,7 @@ class LoginServerInstance {
 		return new Promise((resolve, reject) => {
 
 			const req = http.get(urlObject, (res: IncomingMessage) => {
-				// tslint:disable-no-floating-promises
+				// tslint:disable-next-line no-floating-promises
 				Streams.readAll(res).then((buffer: string) => {
 					const result = parseJSON(buffer).json || null;
 					resolve([result, res.statusCode || 0, null]);
@@ -160,7 +160,7 @@ class LoginServerInstance {
 
 		const req = http.request(requestOptions, (res: IncomingMessage) => {
 			response = res;
-			// tslint:disable-no-floating-promises
+			// tslint:disable-next-line no-floating-promises
 			Streams.readAll(res).then((buffer: string) => {
 				// console.log('RESPONSE: ' + buffer);
 				const data = parseJSON(buffer).json;
@@ -228,11 +228,11 @@ const LoginServer = Object.assign(new LoginServerInstance(), {
 });
 
 FS('./config/custom.css').onModify(() => {
-	// tslint:disable-no-floating-promises
+	// tslint:disable-next-line no-floating-promises
 	LoginServer.request('invalidatecss');
 });
 if (!Config.nofswriting) {
-	// tslint:disable-no-floating-promises
+	// tslint:disable-next-line no-floating-promises
 	LoginServer.request('invalidatecss');
 }
 
