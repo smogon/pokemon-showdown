@@ -114,6 +114,7 @@ let BattleMovedex = {
 	// ACakeWearingAHat
 	sparcedance: {
 		accuracy: true,
+		basePower: 0,
 		category: "Status",
 		desc: "Boosts the user's Attack, Defense, and Speed by one stage.",
 		shortDesc: "+1 atk, def, and spe.",
@@ -166,6 +167,7 @@ let BattleMovedex = {
 	// Akir
 	compost: {
 		accuracy: true,
+		basePower: 0,
 		category: "Status",
 		desc: "The user recovers half their HP. If any of the user's allies fainted the previous turn, this move heals the active Pokemon by 50% of the user's HP on the following turn. Cures the user's party of all status conditions.",
 		shortDesc: "Heal 50%; cures party; If ally fainted last turn: wish.",
@@ -552,6 +554,7 @@ let BattleMovedex = {
 	// bumbadadabum
 	wondertrade: {
 		accuracy: true,
+		basePower: 0,
 		category: "Status",
 		desc: "Replaces every non-fainted member of the user's team with a Super Staff Bros. Brawl set that is randomly selected from all sets, except those with the move Wonder Trade. Remaining HP and PP percentages, as well as status conditions, are transferred onto the replacement sets This move fails if it's used by a Pokemon that does not originally know this move. This move fails if the user is not bumbadadabum.",
 		shortDesc: "Replaces user's team with random StaffBros. sets.",
@@ -662,6 +665,7 @@ let BattleMovedex = {
 	// Ceteris
 	bringerofdarkness: {
 		accuracy: true,
+		basePower: 0,
 		category: "Status",
 		desc: "Has a 50% chance to cause the target to fall asleep. Sets one layer of Spikes on the opponent's side of the field and boosts a random stat of the user by one stage, excluding accuracy and evasion, that is not already at maximum.",
 		shortDesc: "50% chance to sleep. Sets 1 Spike. Boosts a stat.",
@@ -744,6 +748,7 @@ let BattleMovedex = {
 	// Chloe
 	beskyttelsesnet: {
 		accuracy: true,
+		basePower: 0,
 		category: "Status",
 		desc: "The user faints and sets Reflect, Light Screen, and Safeguard.",
 		shortDesc: "User faints; sets screens/Safeguard for 5 turns.",
@@ -801,6 +806,7 @@ let BattleMovedex = {
 	// deg
 	luciddreams: {
 		accuracy: 75,
+		basePower: 0,
 		category: "Status",
 		desc: "The foe falls asleep and is inflicted with the effects of Nightmare and Leech Seed. The user loses 1/2 of their maximum HP unless this move had no effect.",
 		shortDesc: "Loses 1/2 HP. Foe: sleep, Nightmare, Leech Seed.",
@@ -903,6 +909,7 @@ let BattleMovedex = {
 	// Eien
 	ancestralpower: {
 		accuracy: true,
+		basePower: 0,
 		category: "Status",
 		desc: "The user's Attack and Special Attack are raised by one, it transforms into a different Pokemon, and it uses a move dependent on the Pokemon; Celebi (Future Sight), Jirachi (Doom Desire), Manaphy (Tail Glow), Shaymin (Seed Flare), or Victini (V-Create). Reverts to Mew and loses the initial raises of 1 stage to Attack and Special Attack at the end of the turn.",
 		shortDesc: " For turn: transforms, boosts, uses linked move.",
@@ -939,6 +946,7 @@ let BattleMovedex = {
 	// eternally
 	quack: {
 		accuracy: true,
+		basePower: 0,
 		category: "Status",
 		desc: "Boosts the user's Defense, Special Defense, and Speed by 1 stage.",
 		shortDesc: "Raises the user's Def, Sp. Def, and Spe by 1.",
@@ -1235,6 +1243,7 @@ let BattleMovedex = {
 	// Hippopotas
 	hazardpass: {
 		accuracy: 100,
+		basePower: 0,
 		category: "Status",
 		pp: 20,
 		desc: "The user sets 2 of Stealth Rock, Spikes (1 layer), Toxic Spikes (1 layer), and Sticky Web on the foe's side of the field and then switches out.",
@@ -1291,6 +1300,7 @@ let BattleMovedex = {
 	// HoeenHero
 	scriptedterrain: {
 		accuracy: 100,
+		basePower: 0,
 		category: "Status",
 		desc: "Sets Scripted Terrain for 5 turns. The power of Bug type moves is boosted by 1.5, and there is a 5% chance for every move used to become Glitch Out instead. At the end of a turn, every Pokemon has a 5% chance to transform into a Missingno. with 3 random moves and Glitch Out. Switching out will restore the Pokemon to its normal state. This terrain affects floating Pokemon.",
 		shortDesc: "5 turns: +Bug power, glitchy effects.",
@@ -1392,6 +1402,7 @@ let BattleMovedex = {
 	// Used by HoeenHero's terrain
 	glitchout: {
 		accuracy: true,
+		basePower: 0,
 		category: "Status",
 		desc: "A random move is selected for use, other than After You, Assist, Baneful Bunker, Beak Blast, Belch, Bestow, Celebrate, Chatter, Copycat, Counter, Covet, Crafty Shield, Destiny Bond, Detect, Diamond Storm, Endure, Feint, Fleur Cannon, Focus Punch, Follow Me, Freeze Shock, Helping Hand, Hold Hands, Hyperspace Hole, Ice Burn, Instruct, King's Shield, Light of Ruin, Mat Block, Me First, Metronome, Mimic, Mind Blown, Mirror Coat, Mirror Move, Nature Power, Photon Geyser, Plasma Fists, Protect, Quash, Quick Guard, Rage Powder, Relic Song, Secret Sword, Shell Trap, Sketch, Sleep Talk, Snarl, Snatch, Snore, Spectral Thief, Spiky Shield, Spotlight, Steam Eruption, Struggle, Switcheroo, Techno Blast, Thief, Thousand Arrows, Thousand Waves, Transform, Trick, Trump Card, V-create, or Wide Guard. The selected move's Base Power is increased by 20.",
 		shortDesc: "Uses a random move with Base Power +20.",
@@ -1497,6 +1508,7 @@ let BattleMovedex = {
 	// Iyarito
 	vbora: {
 		accuracy: true,
+		basePower: 0,
 		category: "Status",
 		desc: "Cures the user's party of all status conditions, then poisons the user.",
 		shortDesc: "Cures party's statuses, then poisons self.",
@@ -1665,6 +1677,7 @@ let BattleMovedex = {
 	// Level 51
 	nextlevelstrats: {
 		accuracy: true,
+		basePower: 0,
 		category: "Status",
 		desc: "The user gains 5 levels when using this move, which persist upon switching out.",
 		shortDesc: "User gains 5 levels.",
@@ -1806,6 +1819,7 @@ let BattleMovedex = {
 	// MacChaeger
 	naptime: {
 		accuracy: true,
+		basePower: 0,
 		category: "Status",
 		desc: "The user falls asleep for the next turn, restoring 50% of its HP and curing itself of any major status condition. If the user falls asleep in this way, all other active Pokemon that are not asleep or frozen also try to use Nap Time. Fails if the user has full HP, if the user is already asleep, or if another effect is preventing sleep.",
 		shortDesc: "Active Pokemon sleep 1 turn, restoring HP/status.",
@@ -1922,6 +1936,7 @@ let BattleMovedex = {
 	// Marty
 	typeanalysis: {
 		accuracy: true,
+		basePower: 0,
 		category: "Status",
 		desc: "If the user is a Silvally, its item becomes a random Memory whose type matches one of the target's weaknesses, it changes forme, and it uses Multi-Attack. This move and its effects ignore the Abilities of other Pokemon. Fails if the target has no weaknesses or if the user's species is not Silvally.",
 		shortDesc: "Changes user/move type to a weakness of target.",
@@ -2120,6 +2135,7 @@ let BattleMovedex = {
 	// Morfent
 	e: {
 		accuracy: true,
+		basePower: 0,
 		category: "Status",
 		desc: "Sets Trick Room for 5 turns and raises the user's Attack by 1 stage.",
 		shortDesc: "User Attack +1; sets Trick Room.",
@@ -2151,6 +2167,7 @@ let BattleMovedex = {
 	// Used for nui's ability
 	prismaticterrain: {
 		accuracy: true,
+		basePower: 0,
 		category: "Status",
 		desc: "For 5 turns, the terrain becomes Prismatic Terrain. During the effect, the power of Ice-type attacks is multiplied by 0.5, even if the user is not grounded. Hazards are removed and cannot be set while Prismatic Terrain is active. Fails if the current terrain is Prismatic Terrain.",
 		shortDesc: "5 turns. No hazards,-Ice power even if floating.",
@@ -2212,6 +2229,7 @@ let BattleMovedex = {
 	// nui
 	pyramidingsong: {
 		accuracy: 100,
+		basePower: 0,
 		category: "Status",
 		desc: "If the target has not fainted, both the user and the target are forced to switch out and be replaced with a chosen unfainted ally. The target's replacement has its Speed lowered by 1 stage. Fails if either Pokemon is under the effect of Ingrain or Suction Cups.",
 		shortDesc: "Both Pokemon switch. Opp. replacement: Spe -1.",
@@ -2339,6 +2357,7 @@ let BattleMovedex = {
 	// Paradise
 	corrosivetoxic: {
 		accuracy: true,
+		basePower: 0,
 		category: "Status",
 		desc: "Badly poisons the target, even if they are Poison-type or Steel-type. This move does not check accuracy.",
 		shortDesc: "Badly poisons the target, regardless of type.",
@@ -2494,6 +2513,7 @@ let BattleMovedex = {
 	// Quite Quiet
 	literallycheating: {
 		accuracy: true,
+		basePower: 0,
 		category: "Status",
 		desc: "For seven turns, any Pokemon that has one of their stats boosted through any manner loses all PP on the last move they used.",
 		shortDesc: "7 turns: boosting stat: lose all PP from last move.",
@@ -2963,6 +2983,7 @@ let BattleMovedex = {
 	// Teremiare
 	rotate: {
 		accuracy: 100,
+		basePower: 0,
 		category: "Status",
 		desc: "The user's replacement will switch out after using their move on the next turn if the replacement's move is successful.",
 		shortDesc: "User's replacement will switch after using its move.",
@@ -3163,6 +3184,7 @@ let BattleMovedex = {
 	// torkool
 	smokebomb: {
 		accuracy: true,
+		basePower: 0,
 		category: "Status",
 		desc: "Moves all hazards that are on the user's side of the field to the foe's side of the field. Sets Stealth Rock on the foe's side, after which the user switches out.",
 		shortDesc: "Hazards -> foe side. Set SR. User switches out.",

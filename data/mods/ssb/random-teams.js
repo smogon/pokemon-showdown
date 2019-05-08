@@ -550,8 +550,16 @@ class RandomStaffBrosTeams extends RandomTeams {
 		let pool = Object.keys(sets);
 		/** @type {{[type: string]: number}} */
 		let typePool = {};
+		let debug = false;
 		while (pool.length && team.length < 6) {
-			let name = this.sampleNoReplace(pool);
+			let name = '';
+			if (debug && team.length === 1) {
+				// DEBUG CODE, remove before commiting to the main server
+				name = 'nui'; // Change name to force a set to appear
+				pool.splice(pool.indexOf(name), 1);
+			} else {
+				name = this.sampleNoReplace(pool);
+			}
 			let ssbSet = sets[name];
 			// Enforce typing limits
 			let types = this.getTemplate(ssbSet.species).types;
