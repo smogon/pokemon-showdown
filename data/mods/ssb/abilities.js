@@ -228,8 +228,8 @@ let BattleAbilities = {
 	},
 	// Megazard
 	standuptall: {
-		desc: "This Pokemon's Defense or Special Defense is raised by 1 stage at the end of each full turn it is on the field.",
-		shortDesc: "Raises Defense or Special Defense by 1, at random, after each full turn on the field.",
+		desc: "This Pokemon's Attack, Defense, and Special Defense is raised by 1 stage at the end of each full turn it is on the field.",
+		shortDesc: "Raises Atk, Def, and Spd by 1, after each full turn on the field.",
 		id: "standuptall",
 		name: "Stand Up Tall",
 		isNonstandard: "Custom",
@@ -237,11 +237,7 @@ let BattleAbilities = {
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
 			if (pokemon.activeTurns) {
-				if (this.randomChance(1, 2)) {
-					this.boost({def: 1});
-				} else {
-					this.boost({spd: 1});
-				}
+				this.boost({atk: 1, spa: 1, spd: 1});
 			}
 		},
 	},

@@ -519,13 +519,13 @@ let BattleStatuses = {
 	kaijubunny: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%Kaiju Bunny|Hey there! Good luck!`);
+			this.add(`c|%Kaiju Bunny|￣( ÒㅅÓ)￣ Thump Thump Motherfucker`);
 		},
 		onSwitchOut() {
-			this.add(`c|%Kaiju Bunny|Don't keep her from battling for too long!`);
+			this.add(`c|%Kaiju Bunny|￣( >ㅅ>)￣ Holding me back, I see how it is`);
 		},
 		onFaint() {
-			this.add(`c|%Kaiju Bunny|She tried her best... ;;`);
+			this.add(`c|%Kaiju Bunny|￣( ‘xㅅx)￣Time to take a 10 hour power nap`);
 		},
 		// Kaiju Rage Innate
 		// onUpdate so toxic orb can activate after. Code mainly copied from Power Construct.
@@ -1221,6 +1221,16 @@ let BattleStatuses = {
 				}
 			}
 			return [type];
+		},
+	},
+	// weight doubling volatile for trickster
+	minisingularity: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add('-message', pokemon.name + '\'s weight has doubled.');
+		},
+		onModifyWeight(weight) {
+			return weight * 2;
 		},
 	},
 };

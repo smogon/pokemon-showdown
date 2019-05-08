@@ -908,8 +908,8 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user's Attack and Special Attack are raised by one, it transforms into a different Pokemon, and it uses a move dependent on the Pokemon; Celebi (Future Sight), Jirachi (Doom Desire), Manaphy (Tail Glow), Shaymin (Seed Flare), or Victini (V-Create). Reverts to Mew and loses the initial raises of 1 stage to Attack and Special Attack at the end of the turn.",
-		shortDesc: " For turn: transforms, boosts, uses linked move.",
+		desc: "The user's Attack and Special Attack are raised by one, it transforms into a different Pokemon, and it uses two moves dependent on the Pokemon; Celebi (Future Sight and Recover), Jirachi (Doom Desire and Wish), Manaphy (Tail Glow and Surf), Shaymin (Seed Flare and Leech Seed), or Victini (V-Create and Blue Flare). Reverts to Mew and loses the initial raises of 1 stage to Attack and Special Attack at the end of the turn.",
+		shortDesc: " For turn: transforms, boosts, uses linked moves.",
 		id: "ancestralpower",
 		name: "Ancestral Power",
 		isNonstandard: "Custom",
@@ -921,18 +921,19 @@ let BattleMovedex = {
 		},
 		onHit(target, source, move) {
 			let baseForme = source.template.id;
-			/** @type {{[forme: string]: string}} */
+			/** @type {{[forme: string]: string[]}} */
 			let formes = {
-				celebi: 'Future Sight',
-				jirachi: 'Doom Desire',
-				manaphy: 'Tail Glow',
-				shaymin: 'Seed Flare',
-				victini: 'V-create',
+				celebi: ['Future Sight', 'Recover'],
+				jirachi: ['Doom Desire', 'Wish'],
+				manaphy: ['Tail Glow', 'Surf'],
+				shaymin: ['Seed Flare', 'Leech Seed'],
+				victini: ['V-create', 'Blue Flare'],
 			};
 			let forme = Object.keys(formes)[this.random(5)];
 			source.formeChange(forme, this.getAbility('psychicsurge'), true);
 			this.boost({atk: 1, spa: 1}, source, source, move);
-			this.useMove(formes[forme], source, target);
+			this.useMove(formes[forme][0], source, target);
+			this.useMove(formes[forme][1], source, target);
 			this.boost({atk: -1, spa: -1}, source, source, move);
 			source.formeChange(baseForme, this.getAbility('psychicsurge'), true);
 		},
@@ -3244,7 +3245,7 @@ let BattleMovedex = {
 			return 20;
 		},
 		category: "Special",
-		desc: "This move's Base Power is 20 if the target weighs less than 10 kg, 40 if its weight is less than 25 kg, 60 if its weight is less than 50 kg, 80 if its weight is less than 100 kg, 100 if its weight is less than 200 kg, and 120 if its weight is greater than or equal to 200 kg. After doing damage, the target's item is replaced with an Iron Ball, and the target's weight is doubled.",
+		desc: "This move's Base Power is 20 if the target weighs less than 10 kg, 40 if its weight is less than 25 kg, 60 if its weight is less than 50 kg, 80 if its weight is less than 100 kg, 100 if its weight is less than 200 kg, and 120 if its weight is greater than or equal to 200 kg. Before doing damage, the target's item is replaced with an Iron Ball, and the target's weight is doubled.",
 		shortDesc: "BP:weight; increases foe weight; foe item=Iron Ball.",
 		id: "minisingularity",
 		name: "Mini Singularity",
@@ -3252,16 +3253,16 @@ let BattleMovedex = {
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
-		volatileStatus: "minisingularity",
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, "Spacial Rend", target);
 			this.add('-anim', source, "Flash", target);
-		},
-		onAfterHit(target, source) {
-			if (source.hp) {
+
+			// Really feel like this could be done better (blocked by protect and alike moves.)
+			if (target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] || target.side.sideConditions['matblock'] || target.volatiles['protect'] || target.volatiles['spikyshield'] || target.volatiles['lilypadshield']) {
+				target.addVolatile('minisignularity', source);
 				let item = target.takeItem();
 				if (!target.item) {
 					if (item) this.add('-enditem', target, item.name, '[from] move: Mini Singularity', '[of] ' + source);
@@ -3269,15 +3270,6 @@ let BattleMovedex = {
 					this.add('-message', target.name + ' obtained an Iron Ball.');
 				}
 			}
-		},
-		effect: {
-			noCopy: true,
-			onStart(pokemon) {
-				this.add('-message', pokemon.name + '\'s weight has doubled.');
-			},
-			onModifyWeight(weight) {
-				return weight * 2;
-			},
 		},
 		secondary: null,
 		target: "normal",

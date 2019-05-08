@@ -194,7 +194,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'Eien': {
 				species: 'Mew', ability: 'Psychic Surge', item: 'Terrain Extender', gender: 'N',
-				moves: ['Calm Mind', 'Psychic', 'Psyshock'],
+				moves: ['Calm Mind', 'Psychic', 'Roost'],
 				signatureMove: 'Ancestral Power',
 				evs: {hp: 252, spd: 4, spe: 252}, nature: 'Timid',
 			},
@@ -555,7 +555,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let name = '';
 			if (debug && team.length === 1) {
 				// DEBUG CODE, remove before commiting to the main server
-				name = 'AlphaWittem'; // Change name to force a set to appear
+				name = ''; // Change name to force a set to appear
 				pool.splice(pool.indexOf(name), 1);
 			} else {
 				name = this.sampleNoReplace(pool);
