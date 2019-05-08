@@ -16,11 +16,10 @@
 
 class LadderStore {
 	formatid: string;
-	formatsListPrefix: string;
+	static formatsListPrefix: string;
 
 	constructor(formatid: string) {
 		this.formatid = formatid;
-		this.formatsListPrefix = '';
 	}
 
 	/**
@@ -144,5 +143,7 @@ class LadderStore {
 		return [`<tr><td><strong>Please use the official client at play.pokemonshowdown.com</strong></td></tr>`];
 	}
 }
+
+LadderStore.formatsListPrefix = '';
 
 export = LadderStore;

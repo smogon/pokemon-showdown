@@ -32,16 +32,14 @@ class LadderStore {
 	ladder: LadderRow[] | null;
 	ladderPromise: Promise<LadderRow[]> | null;
 	saving: boolean;
-	formatsListPrefix: string;
-	ladderCaches: Cache;
+	static formatsListPrefix: string;
+	static ladderCaches: Cache;
 
 	constructor(formatid: string) {
 		this.formatid = formatid;
 		this.ladder = null;
 		this.ladderPromise = null;
 		this.saving = false;
-		this.formatsListPrefix = '|,LL';
-		this.ladderCaches = ladderCaches;
 	}
 
 	getLadder(): Promise<LadderRow[]> {
@@ -339,5 +337,8 @@ class LadderStore {
 		return Promise.all(ratings);
 	}
 }
+
+LadderStore.formatsListPrefix = '|,LL';
+LadderStore.ladderCaches = ladderCaches;
 
 export = LadderStore;
