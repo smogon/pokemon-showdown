@@ -46,6 +46,19 @@ let BattleAbilities = {
 			pokemon.heal(pokemon.maxhp / 4);
 		},
 	},
+	// AlphaWittem
+	osolemio: {
+		desc: "If Sun is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn.",
+		shortDesc: "If Sun is active, this Pokemon heals 1/16 of its max HP each turn.",
+		id: "osolemio",
+		name: "O SOLE MIO",
+		isNonstandard: "Custom",
+		onWeather(target, source, effect) {
+			if (effect.id === 'sunnyday') {
+				this.heal(target.maxhp / 16);
+			}
+		},
+	},
 	// Arsenal
 	logia: {
 		desc: "If this Pokemon is an Arceus, its type changes to match its held Plate or Z-Crystal, and it is immune to Normal and same-type moves.",

@@ -202,6 +202,33 @@ let BattleMovedex = {
 		target: "self",
 		type: "Ghost",
 	},
+	// AlphaWittem
+	nekoveil: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "The user sets up Light Screen, Reflect, and changes the weather to Sunny for 5 turns. The affects of Light Screen and reflect are extended to 8 turns if the user is holding Light Clay, and Sunny Weather remains for 8 turns if the user is holding a Heat Rock.",
+		shortDesc: "Sets Light Screen, Reflect, and Sunny Day for 5 Turns.",
+		id: "nekoveil",
+		name: "Neko Veil",
+		isNonstandard: "Custom",
+		pp: 5,
+		flags: {snatch: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Geomancy", source);
+		},
+		onHit(target, source) {
+			source.side.addSideCondition('lightscreen', source);
+			source.side.addSideCondition('reflect', source);
+		},
+		weather: 'sunnyday',
+		secondary: null,
+		target: "self",
+		type: "Psychic",
+	},
 	// Amaluna
 	turismosplash: {
 		accuracy: true,

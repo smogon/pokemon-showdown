@@ -71,6 +71,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Compost',
 				evs: {hp: 248, atk: 8, spd: 252}, nature: 'Careful',
 			},
+			'AlphaWittem': {
+				species: 'Espeon', ability: 'O SOLE MIO', item: 'Light Clay', gender: 'M',
+				moves: ['Psychic', 'Focus Blast', 'Morning Sun'],
+				signatureMove: 'Neko Veil',
+				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+			},
 			'Amaluna': {
 				species: 'Octillery', ability: 'Neuroforce', item: 'Expert Belt', gender: 'F',
 				moves: ['Surf', 'Fire Blast', 'Freeze-Dry'],
@@ -549,7 +555,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let name = '';
 			if (debug && team.length === 1) {
 				// DEBUG CODE, remove before commiting to the main server
-				name = 'nui'; // Change name to force a set to appear
+				name = 'AlphaWittem'; // Change name to force a set to appear
 				pool.splice(pool.indexOf(name), 1);
 			} else {
 				name = this.sampleNoReplace(pool);

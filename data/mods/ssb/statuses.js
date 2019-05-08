@@ -98,6 +98,18 @@ let BattleStatuses = {
 			}
 		},
 	},
+	alphawittem: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|@AlphaWittem|MAMMA MIA! It's me, ALPHA!`);
+		},
+		onSwitchOut() {
+			this.add(`c|@AlphaWittem|brb gonna eat some pizza`);
+		},
+		onFaint() {
+			this.add(`c|@AlphaWittem|PER LA PATRIA!`);
+		},
+	},
 	amaluna: {
 		noCopy: true,
 		onStart() {
