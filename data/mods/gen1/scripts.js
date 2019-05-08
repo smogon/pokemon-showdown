@@ -147,6 +147,7 @@ let BattleScripts = {
 		} else if (pokemon.hp) {
 			this.runEvent('AfterMoveSelf', pokemon, target, move);
 		}
+		if (pokemon.volatiles['mustrecharge']) this.add('-mustrecharge', pokemon);
 
 		// For partial trapping moves, we are saving the target
 		if (move.volatileStatus === 'partiallytrapped' && target && target.hp > 0) {
