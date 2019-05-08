@@ -21,8 +21,8 @@ import {FS} from '../lib/fs';
 // Use Ladders(formatid).ladder to guarantee a Promise(ladder).
 // ladder is basically a 2D array representing the corresponding ladder.tsv
 //   with userid in front
-type LadderRow = /** [userid, elo, username, w, l, t, lastUpdate */
-[string, number, string, number, number, number, string];
+/** [userid, elo, username, w, l, t, lastUpdate */
+type LadderRow = [string, number, string, number, number, number, string];
 type Cache = Map<string, LadderRow[] | Promise<LadderRow[]>>;
 
 const ladderCaches: Cache = new Map();
