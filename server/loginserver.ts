@@ -63,9 +63,9 @@ class LoginServerInstance {
 
 	instantRequest(action: string, data: AnyObject | null = null): Promise<LoginServerResponse> {
 		if (this.openRequests > 5) {
-			return Promise.resolve((
+			return Promise.resolve(
 				[null, 0, new RangeError("Request overflow")]
-			));
+			);
 		}
 		this.openRequests++;
 		let dataString = '';
@@ -102,9 +102,9 @@ class LoginServerInstance {
 
 	request(action: string, data: AnyObject | null = null): Promise<LoginServerResponse> {
 		if (this.disabled) {
-			return Promise.resolve((
+			return Promise.resolve(
 				[null, 0, new Error(`Login server connection disabled.`)]
-			));
+			);
 		}
 
 		// ladderupdate and mmr are the most common actions
