@@ -33,8 +33,8 @@ class LadderStore {
 	ladder: LadderRow[] | null;
 	ladderPromise: Promise<LadderRow[]> | null;
 	saving: boolean;
-	static formatsListPrefix: string;
-	static ladderCaches: LadderCache;
+	static formatsListPrefix: string = '|,LL';
+	static ladderCaches: LadderCache = ladderCaches;
 
 	constructor(formatid: string) {
 		this.formatid = formatid;
@@ -338,8 +338,5 @@ class LadderStore {
 		return Promise.all(ratings);
 	}
 }
-
-LadderStore.formatsListPrefix = '|,LL';
-LadderStore.ladderCaches = ladderCaches;
 
 export = LadderStore;
