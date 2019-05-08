@@ -219,9 +219,8 @@ class LoginServerInstance {
 		this.requestTimerPoke();
 	}
 	getLog() {
-		const lastRequestString = this.lastRequest ?
-		` ${Chat.toDurationString(Date.now() - this.lastRequest)} since last request)` : '';
-		return this.requestLog + lastRequestString;
+		if (!this.lastRequest) return this.requestLog;
+		return `${this.requestLog}  (${Chat.toDurationString(Date.now() - this.lastRequest)} since last request)`;
 	}
 }
 
