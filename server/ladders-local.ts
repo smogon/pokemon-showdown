@@ -23,6 +23,7 @@ import {FS} from '../lib/fs';
 //   with userid in front
 /** [userid, elo, username, w, l, t, lastUpdate */
 type LadderRow = [string, number, string, number, number, number, string];
+/** formatid: ladder */
 type LadderCache = Map<string, LadderRow[] | Promise<LadderRow[]>>;
 
 const ladderCaches: LadderCache = new Map();
