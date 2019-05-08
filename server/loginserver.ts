@@ -77,7 +77,7 @@ class LoginServerInstance {
 
 		const urlObject = url.parse(this.uri + 'action.php' +
 			'?act=action&serverid=' + Config.serverid +
-			'&servertoken=' + `'${encodeURIComponent(Config.servertoken)}'` + 
+			'&servertoken=' + `'${encodeURIComponent(Config.servertoken)}'` +
 			'&nocache=' + new Date().getTime() + dataString);
 
 		return new Promise((resolve, reject) => {
