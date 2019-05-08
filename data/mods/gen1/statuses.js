@@ -239,6 +239,10 @@ let BattleStatuses = {
 			}
 		},
 	},
+	mustrecharge: {
+		inherit: true,
+		onStart() {},
+	},
 	lockedmove: {
 		// Outrage, Thrash, Petal Dance...
 		inherit: true,
