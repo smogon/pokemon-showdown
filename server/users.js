@@ -315,7 +315,7 @@ function setOfflineGroup(name, group, forceTrusted) {
  */
 function isUsernameKnown(name) {
 	let userid = toId(name);
-	if (Users(userid)) return true;
+	if (Users.get(userid)) return true;
 	if (userid in usergroups) return true;
 	for (const room of Rooms.global.chatRooms) {
 		if (!room.auth) continue;
@@ -897,7 +897,7 @@ class User extends Chat.MessageContext {
 		}
 
 		let user = users.get(userid);
-		let possibleUser = Users(userid);
+		let possibleUser = Users.get(userid);
 		if (possibleUser && possibleUser.namelocked) {
 			// allows namelocked users to be merged
 			user = possibleUser;

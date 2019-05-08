@@ -339,6 +339,13 @@ class Trivia extends Rooms.RoomGame {
 		this.init();
 	}
 
+	setPhaseTimeout(callback, timeout) {
+		if (this.phaseTimeout) {
+			clearTimeout(this.phaseTimeout);
+		}
+		this.phaseTimeout = setTimeout(callback, timeout);
+	}
+
 	getCap() {
 		return LENGTHS[this.length].cap;
 	}
@@ -383,9 +390,7 @@ class Trivia extends Rooms.RoomGame {
 			}
 		}
 		if (this.phase !== SIGNUP_PHASE && !this.canLateJoin) return "This game does not allow latejoins.";
-		let player = this.makePlayer(user);
-		this.players[user.userid] = player;
-		this.playerCount++;
+		super.addPlayer(user);
 	}
 
 	/**
@@ -397,6 +402,8 @@ class Trivia extends Rooms.RoomGame {
 	}
 
 	destroy() {
+		if (this.phaseTimeout) clearTimeout(this.phaseTimeout);
+		this.phaseTimeout = null;
 		this.kickedUsers.clear();
 		super.destroy();
 	}
@@ -565,7 +572,7 @@ class Trivia extends Rooms.RoomGame {
 
 		this.broadcast(`The game will begin in ${START_TIMEOUT / 1000} seconds...`);
 		this.phase = INTERMISSION_PHASE;
-		this.phaseTimeout = setTimeout(() => this.askQuestion(), START_TIMEOUT);
+		this.setPhaseTimeout(() => this.askQuestion(), START_TIMEOUT);
 	}
 
 	/**
@@ -593,7 +600,7 @@ class Trivia extends Rooms.RoomGame {
 		this.curAnswers = question.answers;
 		this.sendQuestion(question);
 
-		this.phaseTimeout = setTimeout(() => this.tallyAnswers(), this.getRoundLength());
+		this.setPhaseTimeout(() => this.tallyAnswers(), this.getRoundLength());
 	}
 
 	/**
@@ -767,8 +774,6 @@ class Trivia extends Rooms.RoomGame {
 	 * @param {User} user
 	 */
 	end(user) {
-		clearTimeout(this.phaseTimeout);
-		this.phaseTimeout = null;
 		this.broadcast(Chat.html`The game was forcibly ended by ${user.name}.`);
 		this.destroy();
 	}
@@ -820,7 +825,7 @@ class FirstModeTrivia extends Trivia {
 		}
 
 		this.broadcast('The answering period has ended!', buffer);
-		this.phaseTimeout = setTimeout(() => this.askQuestion(), INTERMISSION_INTERVAL);
+		this.setPhaseTimeout(() => this.askQuestion(), INTERMISSION_INTERVAL);
 	}
 
 	/**
@@ -846,7 +851,7 @@ class FirstModeTrivia extends Trivia {
 			`The top 5 players are: ${this.formatPlayerList({max: 5})}`
 		);
 
-		this.phaseTimeout = setTimeout(() => this.askQuestion(), INTERMISSION_INTERVAL);
+		this.setPhaseTimeout(() => this.askQuestion(), INTERMISSION_INTERVAL);
 	}
 }
 
@@ -953,7 +958,7 @@ class TimerModeTrivia extends Trivia {
 
 		buffer += `<br />The top 5 players are: ${this.formatPlayerList({max: 5})}`;
 		this.broadcast('The answering period has ended!', buffer);
-		this.phaseTimeout = setTimeout(() => this.askQuestion(), INTERMISSION_INTERVAL);
+		this.setPhaseTimeout(() => this.askQuestion(), INTERMISSION_INTERVAL);
 	}
 }
 
@@ -1033,7 +1038,7 @@ class NumberModeTrivia extends Trivia {
 
 		buffer += `<br />The top 5 players are: ${this.formatPlayerList({max: 5})}.`;
 		this.broadcast('The answering period has ended!', buffer);
-		this.phaseTimeout = setTimeout(() => this.askQuestion(), INTERMISSION_INTERVAL);
+		this.setPhaseTimeout(() => this.askQuestion(), INTERMISSION_INTERVAL);
 	}
 }
 
@@ -1143,7 +1148,7 @@ class WeakestLink extends Trivia {
 			`Players: ${Object.keys(this.players).map(p => (this.curPlayer.userid === p ? "<em>" + this.players[p].name + "</em>" : this.players[p].name) + (this.finals ? "(" + this.players[p].correctAnswers + ")" : "")).join(", ")}`,
 			`Bank: ${this.bank}<br />Amount to bank: ${this.amountToBank}`
 		);
-		this.phaseTimeout = setTimeout(() => this.askQuestion(), 5 * 1000);
+		this.setPhaseTimeout(() => this.askQuestion(), 5 * 1000);
 	}
 
 	tallyAnswers() {
@@ -1168,7 +1173,7 @@ class WeakestLink extends Trivia {
 		if (targPlayer.userid === player.userid) return "You cannot vote to eliminate yourself.";
 		player.vote = targPlayer;
 		if (this.checkVotes()) {
-			this.phaseTimeout = setTimeout(() => this.tallyVotes(), 5 * 1000);
+			this.setPhaseTimeout(() => this.tallyVotes(), 5 * 1000);
 		}
 		return `You have voted for ${targPlayer.name} to be eliminated.`;
 	}

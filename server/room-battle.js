@@ -17,6 +17,8 @@
 const BattleStream = require(/** @type {any} */ ('../.sim-dist/battle-stream')).BattleStream;
 /** @type {typeof import('../lib/fs').FS} */
 const FS = require(/** @type {any} */('../.lib-dist/fs')).FS;
+/** @type {typeof import('./room-game')} */
+const RoomGames = require(/** @type {any} */ ('./room-game'));
 
 /** 5 seconds */
 const TICK_TIME = 5;
@@ -35,37 +37,19 @@ const DISCONNECTION_BANK_TIME = 300;
 // time after a player disabling the timer before they can re-enable it
 const TIMER_COOLDOWN = 20 * SECONDS;
 
-class RoomBattlePlayer {
+class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 	/**
 	 * @param {User | string | null} user
 	 * @param {RoomBattle} game
-	 * @param {SideID} slot
+	 * @param {number} num
 	 */
-	constructor(user, game, slot) {
-		this.num = slot.slice(1);
-		if (!user) user = `Player ${this.num}`;
-		/**
-		 * Will be the username of the user playing, but with some exceptions:
-		 *
-		 * - Creating a game with no users will initialize player names to
-		 *   "Player 1", "Player 2", etc.
-		 * - Players will retain the name of the last active user, even if that
-		 *   user abandons the game.
-		 */
-		this.name = typeof user === 'string' ? user : user.name;
-
+	constructor(user, game, num) {
+		super(user, game, num);
 		if (typeof user === 'string') user = null;
 
-		/**
-		 * This will be '' if there's no user associated with the player.
-		 */
-		this.userid = user ? user.userid : '';
-		this.game = game;
-
-		this.slot = slot;
-		this.slotNum = Number(slot.charAt(1)) - 1;
+		this.slot = /** @type {SideID} */ (`p${num}`);
 		this.channelIndex = /** @type {0 | 1 | 2 | 3 | 4} */
-			((game.gameType === 'multi' ? this.slotNum % 2 : this.slotNum) + 1);
+			(game.gameType === 'multi' && num > 2 ? num - 2 : num);
 
 		/** @type {BattleRequestTracker} */
 		this.request = {rqid: 0, request: '', isWait: 'cantUndo', choice: ''};
@@ -424,16 +408,16 @@ class RoomBattleTimer {
  * @property {string} choice
  */
 
-class RoomBattle {
+class RoomBattle extends RoomGames.RoomGame {
 	/**
 	 * @param {GameRoom} room
 	 * @param {string} formatid
 	 * @param {AnyObject} options
 	 */
 	constructor(room, formatid, options) {
+		super(room);
 		let format = Dex.getFormat(formatid, true);
 		this.gameid = 'battle';
-		this.id = room.id;
 		/** @type {GameRoom} */
 		this.room = room;
 		this.title = format.name;
@@ -452,10 +436,13 @@ class RoomBattle {
 		this.ended = false;
 		this.active = false;
 
+		// TypeScript bug: no `T extends RoomGamePlayer`
 		/** @type {{[userid: string]: RoomBattlePlayer}} */
 		this.players = Object.create(null);
+		// TypeScript bug: no `T extends RoomGamePlayer`
 		/** @type {RoomBattlePlayer[]} */
 		this.playerList = [];
+
 		this.playerCap = this.gameType === 'multi' || this.gameType === 'free-for-all' ? 4 : 2;
 		/** @type {RoomBattlePlayer} */
 		this.p1 = /** @type {any} */ (null);
@@ -476,6 +463,11 @@ class RoomBattle {
 
 		this.logData = null;
 		this.endType = 'normal';
+		/**
+		 * If the battle is ended: an array of the number of Pokemon left for each side.
+		 *
+		 * @type {number[] | null}
+		 */
 		this.score = null;
 		this.inputLog = null;
 
@@ -493,8 +485,6 @@ class RoomBattle {
 			ratedMessage = 'Tournament battle';
 		}
 
-		// @ts-ignore
-		this.room.game = this;
 		this.room.battle = this;
 
 		let battleOptions = {
@@ -512,11 +502,11 @@ class RoomBattle {
 
 		this.listen();
 
-		this.createPlayer('p1', options.p1, options.p1team || '');
-		this.createPlayer('p2', options.p2, options.p2team || '');
+		this.addPlayer(options.p1, options.p1team || '');
+		this.addPlayer(options.p2, options.p2team || '');
 		if (this.playerCap > 2) {
-			this.createPlayer('p3', options.p3, options.p3team || '');
-			this.createPlayer('p4', options.p4, options.p4team || '');
+			this.addPlayer(options.p3, options.p3team || '');
+			this.addPlayer(options.p4, options.p4team || '');
 		}
 		this.timer = new RoomBattleTimer(this);
 		this.start();
@@ -623,7 +613,7 @@ class RoomBattle {
 
 		if (!slot) slot = validSlots[0];
 
-		this.changePlayer(slot, user);
+		this.updatePlayer(this[slot], user);
 		this.room.update();
 		return true;
 	}
@@ -642,7 +632,7 @@ class RoomBattle {
 			return false;
 		}
 
-		this.changePlayer(player.slot, null);
+		this.updatePlayer(player, null);
 		this.room.auth[user.userid] = '+';
 		this.room.update();
 		return true;
@@ -870,7 +860,7 @@ class RoomBattle {
 		if (user.userid in this.players) return;
 		let player = this.players[oldUserid];
 		if (player) {
-			this.changePlayer(player.slot, user);
+			this.updatePlayer(player, user);
 		}
 		const options = {
 			name: user.name,
@@ -922,12 +912,15 @@ class RoomBattle {
 		this.stream.write(`>tiebreak`);
 	}
 	/**
-	 * @param {User} user
+	 * @param {User | string} user
 	 * @param {string} message
 	 */
 	forfeit(user, message = '') {
-		if (user.userid in this.players) return false;
-		return this.forfeitPlayer(this.players[user.userid], message);
+		if (typeof user !== 'string') user = user.userid;
+		else user = toId(user);
+
+		if (!(user in this.players)) return false;
+		return this.forfeitPlayer(this.players[user], message);
 	}
 
 	/**
@@ -941,7 +934,7 @@ class RoomBattle {
 		this.room.add(`|-message|${player.name}${message}`);
 		this.endType = 'forfeit';
 		const otherids = ['p2', 'p1'];
-		this.stream.write(`>forcewin ${otherids[player.slotNum]}`);
+		this.stream.write(`>forcewin ${otherids[player.num - 1]}`);
 		return true;
 	}
 
@@ -949,16 +942,15 @@ class RoomBattle {
 	 * Team should be '' for random teams. `null` should be used only if importing
 	 * an inputlog (so the player isn't recreated)
 	 *
-	 * @param {SideID} slot
-	 * @param {User?} user
+	 * @param {User | null} user
 	 * @param {string?} team
 	 */
-	createPlayer(slot, user, team) {
-		if (this[slot]) throw new Error(`Player already exists in ${slot} in ${this.id}`);
-		let player = new RoomBattlePlayer(user, this, slot);
+	addPlayer(user, team) {
+		// TypeScript bug: no `T extends RoomGamePlayer`
+		const player = /** @type {RoomBattlePlayer} */ (super.addPlayer(user));
+		if (!player) return null;
+		const slot = player.slot;
 		this[slot] = player;
-		const index = parseInt(slot.slice(1)) - 1;
-		this.playerList[index] = player;
 
 		if (team !== null) {
 			const options = {
@@ -969,46 +961,38 @@ class RoomBattle {
 			this.stream.write(`>player ${slot} ` + JSON.stringify(options));
 		}
 
-		if (player.userid) {
-			this.players[player.userid] = player;
-			this.room.auth[player.userid] = Users.PLAYER_SYMBOL;
-		}
 		if (user && user.inRooms.has(this.id)) this.onConnect(user);
+		return player;
+	}
+
+	makePlayer(/** @type {User} */ user) {
+		const num = this.playerList.length + 1;
+		return new RoomBattlePlayer(user, this, num);
 	}
 
 	/**
-	 * @param {SideID} slot
+	 * @param {RoomBattlePlayer} player
 	 * @param {User?} user
 	 */
-	changePlayer(slot, user) {
-		const player = this[slot];
-		if (!player) throw new Error(`Player in ${slot} doesn't exist in battle ${this.id}`);
+	updatePlayer(player, user) {
+		super.updatePlayer(player, user);
 
-		if (player.userid) {
-			delete this.players[player.userid];
-		}
+		const slot = player.slot;
 		if (user) {
-			player.userid = user.userid;
-			player.name = user.name;
-			this.players[player.userid] = player;
-			this.room.auth[player.userid] = Users.PLAYER_SYMBOL;
-
 			const options = {
 				name: player.name,
 				avatar: user.avatar,
 			};
 			this.stream.write(`>player ${slot} ` + JSON.stringify(options));
 
-			this.room.add(`|player|${player.slot}|${player.name}|${user.avatar}`);
+			this.room.add(`|player|${slot}|${player.name}|${user.avatar}`);
 		} else {
-			player.userid = '';
-
 			const options = {
 				name: '',
 			};
 			this.stream.write(`>player ${slot} ` + JSON.stringify(options));
 
-			this.room.add(`|player|${player.slot}|`);
+			this.room.add(`|player|${slot}|`);
 		}
 	}
 

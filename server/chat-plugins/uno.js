@@ -97,6 +97,13 @@ class UnoGame extends Rooms.RoomGame {
 	constructor(room, cap, suppressMessages) {
 		super(room);
 
+		// TypeScript bug: no `T extends RoomGamePlayer`
+		/** @type {{[userid: string]: UnoGamePlayer}} */
+		this.players = Object.create(null);
+		// TypeScript bug: no `T extends RoomGamePlayer`
+		/** @type {UnoGamePlayer[]} */
+		this.playerList = [];
+
 		if (room.gameNumber) {
 			room.gameNumber++;
 		} else {

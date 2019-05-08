@@ -133,18 +133,6 @@ class HelpTicket extends Rooms.RoomGame {
 	}
 
 	/**
-	 * @param {User} user
-	 */
-	addPlayer(user) {
-		if (user.userid in this.players) return false;
-		let player = this.makePlayer(user);
-		if (!player) return false;
-		this.players[user.userid] = player;
-		this.playerCount++;
-		return true;
-	}
-
-	/**
 	 * @param {string} message
 	 * @param {User} user
 	 */

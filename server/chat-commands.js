@@ -3785,7 +3785,9 @@ const commands = {
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
 		if (!room.game.choose) return this.errorReply("This game doesn't support /choose");
 
-		room.game.choose(user, target);
+		if (room.game.choose(user, target) === false) {
+			return this.errorReply("This game doesn't support /choose");
+		}
 	},
 
 	mv: 'move',
