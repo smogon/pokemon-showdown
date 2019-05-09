@@ -6187,10 +6187,12 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onBasePower(basePower, pokemon) {
-			for (const active of pokemon.side.active) {
-				if (active && active.moveThisTurn === 'fusionflare') {
-					this.debug('double power');
-					return this.chainModify(2);
+			for (const side of this.sides) {
+				for (const active of side.active) {
+					if (active && active.moveThisTurn === 'fusionflare') {
+						this.debug('double power');
+						return this.chainModify(2);
+					}
 				}
 			}
 		},
@@ -6214,10 +6216,12 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, defrost: 1},
 		onBasePower(basePower, pokemon) {
-			for (const active of pokemon.side.active) {
-				if (active && active.moveThisTurn === 'fusionbolt') {
-					this.debug('double power');
-					return this.chainModify(2);
+			for (const side of this.sides) {
+				for (const active of side.active) {
+					if (active && active.moveThisTurn === 'fusionbolt') {
+						this.debug('double power');
+						return this.chainModify(2);
+					}
 				}
 			}
 		},
