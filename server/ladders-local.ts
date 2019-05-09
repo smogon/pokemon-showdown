@@ -15,39 +15,41 @@
 
 'use strict';
 
-/** @type {typeof import('../lib/fs').FS} */
-const FS = require(/** @type {any} */('../.lib-dist/fs')).FS;
+import {FS} from '../lib/fs';
 
 // ladderCaches = {formatid: ladder OR Promise(ladder)}
 // Use Ladders(formatid).ladder to guarantee a Promise(ladder).
 // ladder is basically a 2D array representing the corresponding ladder.tsv
 //   with userid in front
-/** @typedef {[string, number, string, number, number, number, string]} LadderRow [userid, elo, username, w, l, t, lastUpdate] */
-/** @type {Map<string, LadderRow[] | Promise<LadderRow[]>>} formatid: ladder */
-let ladderCaches = new Map();
+/** [userid, elo, username, w, l, t, lastUpdate */
+type LadderRow = [string, number, string, number, number, number, string];
+/** formatid: ladder */
+type LadderCache = Map<string, LadderRow[] | Promise<LadderRow[]>>;
+
+const ladderCaches: LadderCache = new Map();
 
 class LadderStore {
-	/**
-	 * @param {string} formatid
-	 */
-	constructor(formatid) {
+	formatid: string;
+	ladder: LadderRow[] | null;
+	ladderPromise: Promise<LadderRow[]> | null;
+	saving: boolean;
+	static formatsListPrefix = '|,LL';
+	static ladderCaches = ladderCaches;
+
+	constructor(formatid: string) {
 		this.formatid = formatid;
-		/** @type {LadderRow[]?} */
 		this.ladder = null;
-		/** @type {Promise<LadderRow[]>?} */
 		this.ladderPromise = null;
+		this.saving = false;
 	}
 
-	/**
-	 * @return {Promise<LadderRow[]>}
-	 */
 	getLadder() {
 		if (!this.ladderPromise) this.ladderPromise = this.load();
 		return this.ladderPromise;
 	}
+
 	/**
 	 * Internal function, returns a Promise for a ladder
-	 * @return {Promise<LadderRow[]>}
 	 */
 	async load() {
 		// ladderCaches[formatid]
@@ -55,7 +57,7 @@ class LadderStore {
 		if (cachedLadder) {
 			// @ts-ignore
 			if (cachedLadder.then) {
-				let ladder = await cachedLadder;
+				const ladder = await cachedLadder;
 				return (this.ladder = ladder);
 			}
 			// @ts-ignore
@@ -63,11 +65,11 @@ class LadderStore {
 		}
 		try {
 			const data = await FS('config/ladders/' + this.formatid + '.tsv').readIfExists();
-			let ladder = /** @type {LadderRow[]} */ ([]);
+			const ladder: LadderRow[] = [];
 			for (const dataLine of data.split('\n')) {
-				let line = dataLine.trim();
+				const line = dataLine.trim();
 				if (!line) continue;
-				let row = line.split('\t');
+				const row = line.split('\t');
 				ladder.push([toId(row[1]), Number(row[0]), row[1], Number(row[2]), Number(row[3]), Number(row[4]), row[5]]);
 			}
 			// console.log('Ladders(' + this.formatid + ') loaded tsv: ' + JSON.stringify(this.ladder));
@@ -94,11 +96,12 @@ class LadderStore {
 			this.saving = false;
 			return;
 		}
-		let stream = FS(`config/ladders/${this.formatid}.tsv`).createWriteStream();
+		const stream = FS(`config/ladders/${this.formatid}.tsv`).createWriteStream();
 		stream.write('Elo\tUsername\tW\tL\tT\tLast update\r\n');
 		for (const row of ladder) {
 			stream.write(row.slice(1).join('\t') + '\r\n');
 		}
+		// tslint:disable-next-line no-floating-promises
 		stream.end();
 		this.saving = false;
 	}
@@ -108,16 +111,15 @@ class LadderStore {
 	 *
 	 * If createIfNeeded is true, the user will be created and added to
 	 * the ladder array if it doesn't already exist.
-	 * @param {string} username
 	 */
-	indexOfUser(username, createIfNeeded = false) {
+	indexOfUser(username: string, createIfNeeded = false) {
 		if (!this.ladder) throw new Error(`Must be called with ladder loaded`);
-		let userid = toId(username);
+		const userid = toId(username);
 		for (const [i, user] of this.ladder.entries()) {
 			if (user[0] === userid) return i;
 		}
 		if (createIfNeeded) {
-			let index = this.ladder.length;
+			const index = this.ladder.length;
 			this.ladder.push([userid, 1000, username, 0, 0, 0, '']);
 			return index;
 		}
@@ -128,11 +130,10 @@ class LadderStore {
 	 * Returns [formatid, html], where html is an the HTML source of a
 	 * ladder toplist, to be displayed directly in the ladder tab of the
 	 * client.
-	 * @return {Promise<[string, string]?>}
 	 */
 	async getTop() {
-		let formatid = this.formatid;
-		let name = Dex.getFormat(formatid).name;
+		const formatid = this.formatid;
+		const name = Dex.getFormat(formatid).name;
 		const ladder = await this.getLadder();
 		let buf = `<h3>${name} Top 100</h3>`;
 		buf += `<table>`;
@@ -147,17 +148,15 @@ class LadderStore {
 
 	/**
 	 * Returns a Promise for the Elo rating of a user
-	 * @param {string} userid
-	 * @return {Promise<number>}
 	 */
-	async getRating(userid) {
-		let formatid = this.formatid;
-		let user = Users.getExact(userid);
+	async getRating(userid: string) {
+		const formatid = this.formatid;
+		const user = Users.getExact(userid);
 		if (user && user.mmrCache[formatid]) {
 			return user.mmrCache[formatid];
 		}
 		const ladder = await this.getLadder();
-		let index = this.indexOfUser(userid);
+		const index = this.indexOfUser(userid);
 		let rating = 1000;
 		if (index >= 0) {
 			rating = ladder[index][1];
@@ -170,11 +169,8 @@ class LadderStore {
 
 	/**
 	 * Internal method. Update the Elo rating of a user.
-	 * @param {LadderRow} row
-	 * @param {number} score
-	 * @param {number} foeElo
 	 */
-	updateRow(row, score, foeElo) {
+	updateRow(row: LadderRow, score: number, foeElo: number) {
 		let elo = row[1];
 
 		// The K factor determines how much your Elo changes when you win or
@@ -197,7 +193,7 @@ class LadderStore {
 		}
 
 		// main Elo formula
-		let E = 1 / (1 + Math.pow(10, (foeElo - elo) / 400));
+		const E = 1 / (1 + Math.pow(10, (foeElo - elo) / 400));
 		elo += K * (score - E);
 
 		if (elo < 1000) elo = 1000;
@@ -216,31 +212,29 @@ class LadderStore {
 	/**
 	 * Update the Elo rating for two players after a battle, and display
 	 * the results in the passed room.
-	 * @param {string} p1name
-	 * @param {string} p2name
-	 * @param {number} p1score
-	 * @param {GameRoom} room
 	 */
-	async updateRating(p1name, p2name, p1score, room) {
+	async updateRating(p1name: string, p2name: string, p1score: number, room: AnyObject) {
 		if (Ladders.disabled) {
 			room.addRaw(`Ratings not updated. The ladders are currently disabled.`).update();
 			return [p1score, null, null];
 		}
 
-		let formatid = this.formatid;
+		const formatid = this.formatid;
 		let p2score = 1 - p1score;
 		if (p1score < 0) {
 			p1score = 0;
 			p2score = 0;
 		}
 		const ladder = await this.getLadder();
-		let p1newElo, p2newElo;
+
+		let p1newElo;
+		let p2newElo;
 		try {
-			let p1index = this.indexOfUser(p1name, true);
-			let p1elo = ladder[p1index][1];
+			const p1index = this.indexOfUser(p1name, true);
+			const p1elo = ladder[p1index][1];
 
 			let p2index = this.indexOfUser(p2name, true);
-			let p2elo = ladder[p2index][1];
+			const p2elo = ladder[p2index][1];
 
 			this.updateRow(ladder[p1index], p1score, p2elo);
 			this.updateRow(ladder[p2index], p2score, p1elo);
@@ -256,7 +250,7 @@ class LadderStore {
 			while (newIndex === p1index || (ladder[newIndex] && ladder[newIndex][1] > p1newElo)) newIndex++;
 			// console.log('ni='+newIndex+', p1i='+p1index);
 			if (newIndex !== p1index && newIndex !== p1index + 1) {
-				let row = ladder.splice(p1index, 1)[0];
+				const row = ladder.splice(p1index, 1)[0];
 				// adjust for removed row
 				if (newIndex > p1index) newIndex--;
 				if (p2index > p1index) p2index--;
@@ -272,17 +266,18 @@ class LadderStore {
 			while (newIndex === p2index || (ladder[newIndex] && ladder[newIndex][1] > p2newElo)) newIndex++;
 			// console.log('ni='+newIndex+', p2i='+p2index);
 			if (newIndex !== p2index && newIndex !== p2index + 1) {
-				let row = ladder.splice(p2index, 1)[0];
+				const row = ladder.splice(p2index, 1)[0];
 				// adjust for removed row
 				if (newIndex > p2index) newIndex--;
 
 				ladder.splice(newIndex, 0, row);
 			}
 
-			let p1 = Users.getExact(p1name);
+			const p1 = Users.getExact(p1name);
 			if (p1) p1.mmrCache[formatid] = +p1newElo;
-			let p2 = Users.getExact(p2name);
+			const p2 = Users.getExact(p2name);
 			if (p2) p2.mmrCache[formatid] = +p2newElo;
+			// tslint:disable-next-line no-floating-promises
 			this.save();
 
 			if (!room.battle) {
@@ -292,11 +287,15 @@ class LadderStore {
 
 			let reasons = '' + (Math.round(p1newElo) - Math.round(p1elo)) + ' for ' + (p1score > 0.9 ? 'winning' : (p1score < 0.1 ? 'losing' : 'tying'));
 			if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
-			room.addRaw(Chat.html`${p1name}'s rating: ${Math.round(p1elo)} &rarr; <strong>${Math.round(p1newElo)}</strong><br />(${reasons})`);
+			room.addRaw(
+				Chat.html`${p1name}'s rating: ${Math.round(p1elo)} &rarr; <strong>${Math.round(p1newElo)}</strong><br />(${reasons})`
+			);
 
 			reasons = '' + (Math.round(p2newElo) - Math.round(p2elo)) + ' for ' + (p2score > 0.9 ? 'winning' : (p2score < 0.1 ? 'losing' : 'tying'));
 			if (reasons.charAt(0) !== '-') reasons = '+' + reasons;
-			room.addRaw(Chat.html`${p2name}'s rating: ${Math.round(p2elo)} &rarr; <strong>${Math.round(p2newElo)}</strong><br />(${reasons})`);
+			room.addRaw(
+				Chat.html`${p2name}'s rating: ${Math.round(p2elo)} &rarr; <strong>${Math.round(p2newElo)}</strong><br />(${reasons})`
+			);
 
 			room.update();
 		} catch (e) {
@@ -311,28 +310,26 @@ class LadderStore {
 
 	/**
 	 * Returns a promise for a <tr> with all ratings for the current format.
-	 * @param {string} username
 	 */
-	async visualize(username) {
+	async visualize(username: string) {
 		const ladder = await this.getLadder();
-		let index = this.indexOfUser(username, false);
+
+		const index = this.indexOfUser(username, false);
 
 		if (index < 0) return '';
 
-		let ratings = ladder[index];
+		const ratings = ladder[index];
 
-		let output = `<tr><td>${this.formatid}</td><td><strong>${Math.round(ratings[1])}</strong></td>`;
+		const output = `<tr><td>${this.formatid}</td><td><strong>${Math.round(ratings[1])}</strong></td>`;
 		return `${output}<td>${ratings[3]}</td><td>${ratings[4]}</td><td>${ratings[3] + ratings[4]}</td></tr>`;
 	}
 
 	/**
 	 * Returns a Promise for an array of strings of <tr>s for ladder ratings of the user
-	 * @param {string} username
-	 * @return {Promise<string[]>}
 	 */
-	static visualizeAll(username) {
-		let ratings = [];
-		for (let i in Dex.formats) {
+	static visualizeAll(username: string) {
+		const ratings = [];
+		for (const i in Dex.formats) {
 			if (Dex.formats[i].searchShow) {
 				ratings.push(new LadderStore(i).visualize(username));
 			}
@@ -341,7 +338,4 @@ class LadderStore {
 	}
 }
 
-LadderStore.formatsListPrefix = '|,LL';
-LadderStore.ladderCaches = ladderCaches;
-
-module.exports = LadderStore;
+export = LadderStore;

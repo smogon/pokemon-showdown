@@ -15,10 +15,10 @@
 'use strict';
 
 class LadderStore {
-	/**
-	 * @param {string} formatid
-	 */
-	constructor(formatid) {
+	formatid: string;
+	static formatsListPrefix = '';
+
+	constructor(formatid: string) {
 		this.formatid = formatid;
 	}
 
@@ -26,20 +26,17 @@ class LadderStore {
 	 * Returns [formatid, html], where html is an the HTML source of a
 	 * ladder toplist, to be displayed directly in the ladder tab of the
 	 * client.
-	 * @return {Promise<[string, string]?>}
 	 */
-	async getTop() {
+	async getTop(): Promise<[string, string] | null> {
 		return null;
 	}
 
 	/**
 	 * Returns a Promise for the Elo rating of a user
-	 * @param {string} userid
-	 * @return {Promise<number>}
 	 */
-	async getRating(userid) {
-		let formatid = this.formatid;
-		let user = Users.getExact(userid);
+	async getRating(userid: string) {
+		const formatid = this.formatid;
+		const user = Users.getExact(userid);
 		if (user && user.mmrCache[formatid]) {
 			return user.mmrCache[formatid];
 		}
@@ -62,22 +59,17 @@ class LadderStore {
 	/**
 	 * Update the Elo rating for two players after a battle, and display
 	 * the results in the passed room.
-	 * @param {string} p1name
-	 * @param {string} p2name
-	 * @param {number} p1score
-	 * @param {GameRoom} room
-	 * @return {Promise<[number, AnyObject?, AnyObject?]>}
 	 */
-	async updateRating(p1name, p2name, p1score, room) {
+	async updateRating(p1name: string, p2name: string, p1score: number, room: AnyObject) {
 		if (Ladders.disabled) {
 			room.addRaw(`Ratings not updated. The ladders are currently disabled.`).update();
 			return [p1score, null, null];
 		}
 
-		let formatid = this.formatid;
+		const formatid = this.formatid;
 		room.update();
 		room.send(`||Ladder updating...`);
-		let [data, , error] = await LoginServer.request('ladderupdate', {
+		const [data, , error] = await LoginServer.request('ladderupdate', {
 			p1: p1name,
 			p2: p2name,
 			score: p1score,
@@ -107,7 +99,8 @@ class LadderStore {
 			return [p1score, null, null];
 		}
 
-		let p1rating, p2rating;
+		let p1rating;
+		let p2rating;
 		try {
 			p1rating = data.p1rating;
 			p2rating = data.p2rating;
@@ -129,9 +122,9 @@ class LadderStore {
 			if (elo < minElo) minElo = elo;
 			room.rated = minElo;
 
-			let p1 = Users.getExact(p1name);
+			const p1 = Users.getExact(p1name);
 			if (p1) p1.mmrCache[formatid] = +p1rating.elo;
-			let p2 = Users.getExact(p2name);
+			const p2 = Users.getExact(p2name);
 			if (p2) p2.mmrCache[formatid] = +p2rating.elo;
 			room.update();
 		} catch (e) {
@@ -144,14 +137,10 @@ class LadderStore {
 
 	/**
 	 * Returns a Promise for an array of strings of <tr>s for ladder ratings of the user
-	 * @param {string} username
-	 * @return {Promise<string[]>}
 	 */
-	static async visualizeAll(username) {
+	static async visualizeAll(username: string) {
 		return [`<tr><td><strong>Please use the official client at play.pokemonshowdown.com</strong></td></tr>`];
 	}
 }
 
-LadderStore.formatsListPrefix = '';
-
-module.exports = LadderStore;
+export = LadderStore;
