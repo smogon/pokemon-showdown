@@ -205,10 +205,6 @@ let BattleScripts = {
 			return false;
 		}
 
-		if (move.flags['charge'] && !pokemon.volatiles[move.id]) {
-			attrs = '|[still]'; // Suppress the default move animation
-		}
-
 		if (sourceEffect) attrs += '|[from]' + this.getEffect(sourceEffect);
 		this.addMove('move', pokemon, move.name, target + attrs);
 
