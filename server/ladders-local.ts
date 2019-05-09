@@ -48,6 +48,9 @@ class LadderStore {
 		return this.ladderPromise;
 	}
 
+	/**
+	 * Internal function, returns a Promise for a ladder
+	 */
 	async load() {
 		// ladderCaches[formatid]
 		const cachedLadder = ladderCaches.get(this.formatid);
@@ -89,7 +92,6 @@ class LadderStore {
 		if (this.saving) return;
 		this.saving = true;
 		const ladder = await this.getLadder();
-		if (!ladder) return;
 		if (!ladder.length) {
 			this.saving = false;
 			return;
@@ -133,7 +135,6 @@ class LadderStore {
 		const formatid = this.formatid;
 		const name = Dex.getFormat(formatid).name;
 		const ladder = await this.getLadder();
-		if (!ladder) return;
 		let buf = `<h3>${name} Top 100</h3>`;
 		buf += `<table>`;
 		buf += `<tr><th>` + ['', 'Username', '<abbr title="Elo rating">Elo</abbr>', 'W', 'L', 'T'].join(`</th><th>`) + `</th></tr>`;
@@ -155,7 +156,6 @@ class LadderStore {
 			return user.mmrCache[formatid];
 		}
 		const ladder = await this.getLadder();
-		if (!ladder) return;
 		const index = this.indexOfUser(userid);
 		let rating = 1000;
 		if (index >= 0) {
