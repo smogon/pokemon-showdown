@@ -226,7 +226,6 @@ class LadderStore {
 			p2score = 0;
 		}
 		const ladder = await this.getLadder();
-		if (!ladder) return;
 
 		let p1newElo;
 		let p2newElo;
@@ -314,7 +313,6 @@ class LadderStore {
 	 */
 	async visualize(username: string) {
 		const ladder = await this.getLadder();
-		if (!ladder) return;
 
 		const index = this.indexOfUser(username, false);
 
