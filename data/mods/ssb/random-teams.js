@@ -17,9 +17,9 @@
  */
 
 const RandomTeams = require('../../random-teams');
-
 class RandomStaffBrosTeams extends RandomTeams {
 	randomStaffBrosTeam() {
+		const whatMega = this.random(2);
 		/** @type {PokemonSet[]} */
 		let team = [];
 		/** @type {SSBSets} */
@@ -64,6 +64,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				moves: [['Boomburst', 'Moonblast'], 'Blue Flare', 'Chatter'],
 				signatureMove: 'Energy Field',
 				evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
+			},
+			'Aethernum': {
+				species: 'Regigigas', ability: 'Awakening', item: 'Leftovers', gender: 'N',
+				moves: ['Knock Off', 'Confuse Ray', 'Drain Punch'],
+				signatureMove: 'Cataclysm',
+				evs: {hp: 252, atk: 252, spe: 4}, ivs: {spa: 0}, nature: 'Adamant',
 			},
 			'Akir': {
 				species: 'Parasect', ability: 'Regrowth', item: 'Leftovers', gender: 'M',
@@ -168,6 +174,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Loving Embrace',
 				evs: {hp: 4, spa: 252, spe: 252}, nature: 'Modest', shiny: true,
 			},
+			'DaWoblefet': {
+				species: 'Wobbuffet', ability: 'Shadow Artifice', item: 'Iapapa Berry', gender: 'M',
+				moves: ['Counter', 'Mirror Coat', 'Encore'],
+				signatureMove: 'Super Ego Inflation',
+				evs: {hp: 252, def: 252, spd: 4}, ivs: {spe: 0}, nature: 'Relaxed',
+			},
 			'deg': {
 				species: 'Gengar', ability: 'Bad Dreams', item: 'Gengarite', gender: 'M',
 				moves: [['Hex', 'Shadow Ball'], 'Sludge Wave', 'Focus Blast'],
@@ -217,10 +229,10 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 			},
 			'Forrce': {
-				species: 'Cresselia', ability: 'Wonder Skin', item: 'Leftovers', gender: 'N',
-				moves: ['Moonlight', 'Heart Swap', 'Baton Pass'],
-				signatureMove: 'Purple Pills',
-				evs: {hp: 176, def: 80, spd: 252}, ivs: {atk: 0}, nature: 'Calm',
+				species: 'Charizard', ability: 'Magic Guard', item: ['Charizardite Y', 'Charizardite X'][whatMega], gender: '',
+				moves: [['Aeroblast', 'Dragon Hammer'][whatMega], 'Agility', 'Slack Off'],
+				signatureMove: 'G-14',
+				evs: [{def: 4, spa: 252, spe: 252}, {atk: 252, spd: 4, spe: 252}][whatMega], nature: ['Timid', 'Jolly'][whatMega], shiny: true,
 			},
 			'grimAuxiliatrix': {
 				species: 'Aggron', ability: 'Sturdy', item: 'Aggronite', gender: '',
@@ -414,9 +426,15 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Literally Cheating',
 				evs: {hp: 252, def: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
+			'Rach': {
+				species: 'Pikachu-Libre', ability: 'Huge Power', item: 'Fightinium Z', gender: 'F',
+				moves: ['Flying Press', 'Icicle Crash', 'Thousand Arrows'],
+				signatureMove: 'Stunner',
+				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
+			},
 			'Rory Mercury': {
 				species: 'Charjabug', ability: 'Recharge', item: 'Eviolite', gender: 'M',
-				moves: ['Spikes', 'Leech Life', ['Poison Fang', 'Nuzzle']],
+				moves: ['First Impression', 'Leech Life', 'Bolt Strike'],
 				signatureMove: 'Switch Off',
 				evs: {hp: 252, atk: 252, def: 4}, ivs: {spe: 0}, nature: 'Brave',
 			},
@@ -461,6 +479,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				moves: ['Ingrain', 'Substitute', 'Baton Pass'],
 				signatureMove: 'Army of Mushrooms',
 				evs: {hp: 252, def: 128, spd: 128}, ivs: {atk: 0, spe: 0}, nature: 'Sassy',
+			},
+			'SparksBlade': {
+				species: 'Blacephalon', ability: 'Magic Guard', item: 'Life Orb', gender: 'N',
+				moves: ['Mind Blown', 'Shadow Ball', 'Explosion'],
+				signatureMove: 'Kratosmana',
+				evs: {hp: 4, spa: 252, spe: 252}, nature: 'Naive', shiny: true,
 			},
 			'SunGodVolcarona': {
 				species: 'Volcarona', ability: 'Solar Flare', item: 'Volcaronium Z', gender: 'M',
@@ -565,6 +589,8 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let types = this.getTemplate(ssbSet.species).types;
 			if (name === 'E4 Flint') types = ["Steel", "Ground", "Fire"];
 			if (name === 'OM') types = ["Fire", "Fairy"];
+			if (name === 'Rach') types = ["Electric", "Fighting"];
+			if (name === 'ACakeWearingAHat') types = ["Normal", "Ghost"];
 			let rejected = false;
 			for (let type of types) {
 				if (typePool[type] === undefined) typePool[type] = 0;

@@ -9,6 +9,11 @@ let BattlePokedex = {
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100}, // the base stats for the pokemon
 	},
 	*/
+	// ACakeWearingAHat
+	dunsparce: {
+		inherit: true,
+		types: ['Normal', 'Ghost'],
+	},
 	// Arrested
 	blastoisemega: {
 		inherit: true,
@@ -35,6 +40,15 @@ let BattlePokedex = {
 		inherit: true,
 		// Doubled spa and spe
 		baseStats: {hp: 62, atk: 44, def: 50, spa: 88, spd: 50, spe: 110},
+	},
+	// Forrce
+	charizardmegax: {
+		inherit: true,
+		abilities: {0: 'Moxie'},
+	},
+	charizardmegay: {
+		inherit: true,
+		abilities: {0: 'Soul Heart'},
 	},
 	// grimAuxiliatrix
 	aggronmega: {
@@ -71,10 +85,20 @@ let BattlePokedex = {
 		inherit: true,
 		abilities: {0: 'Comatose'},
 	},
+	// OM
+	flareon: {
+		inherit: true,
+		types: ['Fire', 'Fairy'],
+	},
 	// Psynergy
 	blazikenmega: {
 		inherit: true,
 		abilities: {0: 'Wrath'},
+	},
+	// Rach
+	pikachulibre: {
+		inherit: true,
+		types: ['Electric', 'Fighting'],
 	},
 	// Saburo
 	metagrossmega: {
