@@ -96,8 +96,10 @@ let BattleStatuses = {
 	},
 	akir: {
 		noCopy: true,
-		onStart() {
+		onStart(source) {
 			this.add(`c|%Akir|hey whats up`);
+			if (source.illusion) return;
+			this.boost({def: 1, spd: 1}, source);
 		},
 		onSwitchOut() {
 			this.add(`c|%Akir|sorry need to build more`);

@@ -19,7 +19,6 @@
 const RandomTeams = require('../../random-teams');
 class RandomStaffBrosTeams extends RandomTeams {
 	randomStaffBrosTeam() {
-		const whatMega = this.random(2);
 		/** @type {PokemonSet[]} */
 		let team = [];
 		/** @type {SSBSets} */
@@ -73,7 +72,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'Akir': {
 				species: 'Parasect', ability: 'Regrowth', item: 'Leftovers', gender: 'M',
-				moves: ['Spore', 'Leech Life', ['Toxic', 'Healing Wish', 'Parting Shot']],
+				moves: ['Spore', ['Leech Life', 'Horn Leech'], 'Healing Wish'],
 				signatureMove: 'Compost',
 				evs: {hp: 248, atk: 8, spd: 252}, nature: 'Careful',
 			},

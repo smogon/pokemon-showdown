@@ -50,8 +50,8 @@ let BattleAbilities = {
 	},
 	// Akir
 	regrowth: {
-		desc: "This Pokemon's healing moves have their priority increased by one stage. When switching out, this Pokemon restores 1/4 of its maximum HP, rounded down.",
-		shortDesc: "Healing moves have priority increased by 1. Heals 1/4 max HP when switching out.",
+		desc: "This Pokemon's healing moves have their priority increased by one stage. When switching out, this Pokemon restores 1/3 of its maximum HP, rounded down.",
+		shortDesc: "Healing moves have priority increased by 1. Heals 1/3 max HP when switching out.",
 		id: "regrowth",
 		name: "Regrowth",
 		isNonstandard: "Custom",
@@ -59,7 +59,7 @@ let BattleAbilities = {
 			if (move && move.flags['heal']) return priority + 1;
 		},
 		onSwitchOut(pokemon) {
-			pokemon.heal(pokemon.maxhp / 4);
+			pokemon.heal(pokemon.maxhp / 3);
 		},
 	},
 	// AlphaWittem

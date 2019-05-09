@@ -199,8 +199,8 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "The user recovers half their HP. If any of the user's allies fainted the previous turn, this move heals the active Pokemon by 50% of the user's HP on the following turn. Cures the user's party of all status conditions.",
-		shortDesc: "Heal 50%; cures party; If ally fainted last turn: wish.",
+		desc: "The user recovers half their HP. If any of the user's allies fainted the previous turn, this move heals the active Pokemon by 50% of the user's HP on the following turn. Cures the user's party of all status conditions. The terrain becomes Grassy Terrain.",
+		shortDesc: "Heal 50%; grassy terrain; cures party; ally fainted?: wish.",
 		id: "compost",
 		name: "Compost",
 		isNonstandard: "Custom",
@@ -226,6 +226,7 @@ let BattleMovedex = {
 				if (ally.cureStatus()) didSomething = true;
 			}
 			if (this.heal(source.maxhp / 2, source)) didSomething = true;
+			if (this.field.setTerrain('grassyterrain', source)) didSomething = true;
 			return didSomething;
 		},
 		secondary: null,
