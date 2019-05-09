@@ -853,6 +853,18 @@ let BattleStatuses = {
 			this.add(`c|@pluviometer|${["Follow SmogonU on Facebook! https://www.facebook.com/SmogonU", "Follow SmogonU on Twitter! https://twitter.com/SmogonU"][this.random(2)]}`);
 		},
 	},
+	pre: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|%pre|let's go, in and out, 20 minute adventure`);
+		},
+		onSwitchOut() {
+			this.add(`c|%pre|sometimes science is more art than science`);
+		},
+		onFaint() {
+			this.add(`c|%pre|LAMBS TO THE COSMIC SLAUGHTER!!`);
+		},
+	},
 	ptoad: {
 		noCopy: true,
 		onStart() {

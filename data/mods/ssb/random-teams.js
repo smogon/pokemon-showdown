@@ -13,7 +13,7 @@
  * @property {{hp?: number, atk?: number, def?: number, spa?: number, spd?: number, spe?: number}=} ivs
  * @property {string | string[]} nature
  * @property {number=} level
- * @property {boolean=} shiny
+ * @property {(number|boolean)=} shiny
  */
 
 const RandomTeams = require('../../random-teams');
@@ -408,6 +408,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Grammar Hammer',
 				evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
+			'pre': {
+				species: 'Deoxys', ability: 'Optimize', item: 'Rocky Helmet', gender: 'N',
+				moves: ['Psycho Boost', 'Recover', 'Extreme Speed'],
+				signatureMove: 'Refactor',
+				evs: {hp: 252, def: 4, spd: 252}, ivs: {atk: 0}, nature: 'Bold', shiny: 64,
+			},
 			'ptoad': {
 				species: 'Politoed', ability: 'Fat Rain', item: 'Damp Rock', gender: 'M',
 				moves: ['Scald', 'Toxic', 'Ice Beam'],
@@ -617,7 +623,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0},
 				ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31},
 				level: ssbSet.level || 100,
-				shiny: ssbSet.shiny,
+				shiny: typeof ssbSet.shiny === 'number' ? this.randomChance(1, ssbSet.shiny) : ssbSet.shiny,
 			};
 			if (ssbSet.ivs) {
 				for (let iv in ssbSet.ivs) {
