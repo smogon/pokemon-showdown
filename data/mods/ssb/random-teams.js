@@ -229,10 +229,17 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 			},
 			'Forrce': {
-				species: 'Charizard', ability: 'Magic Guard', item: ['Charizardite Y', 'Charizardite X'][whatMega], gender: '',
-				moves: [['Aeroblast', 'Dragon Hammer'][whatMega], 'Agility', 'Slack Off'],
+				species: 'Charizard', ability: 'Magic Guard', item: 'Charizardite Y', gender: '',
+				moves: ['Aeroblast', 'Agility', 'Slack Off'],
 				signatureMove: 'G-14',
-				evs: [{def: 4, spa: 252, spe: 252}, {atk: 252, spd: 4, spe: 252}][whatMega], nature: ['Timid', 'Jolly'][whatMega], shiny: true,
+				evs: {def: 4, spa: 252, spe: 252}, nature: 'Timid', shiny: true,
+			},
+			// Alternate set for Forrce
+			'Forrce Alt': {
+				species: 'Charizard', ability: 'Magic Guard', item: 'Charizardite X', gender: '',
+				moves: ['Dragon Hammer', 'Agility', 'Slack Off'],
+				signatureMove: 'G-14',
+				evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', shiny: true,
 			},
 			'grimAuxiliatrix': {
 				species: 'Aggron', ability: 'Sturdy', item: 'Aggronite', gender: '',
@@ -578,6 +585,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 		};
 		let pool = Object.keys(sets);
+		pool.splice(pool.indexOf('Forrce Alt'), 1);
 		/** @type {{[type: string]: number}} */
 		let typePool = {};
 		let debug = false;
@@ -591,6 +599,10 @@ class RandomStaffBrosTeams extends RandomTeams {
 				name = this.sampleNoReplace(pool);
 			}
 			let ssbSet = sets[name];
+			if (name === 'Forrce' && this.random()) {
+				// Swap to the alternate set, use the same name
+				ssbSet = sets['Forrce Alt'];
+			}
 			// Enforce typing limits
 			let types = this.getTemplate(ssbSet.species).types;
 			if (name === 'E4 Flint') types = ["Steel", "Ground", "Fire"];
