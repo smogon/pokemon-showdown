@@ -294,6 +294,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Inkzooka',
 				evs: {hp: 252, atk: 144, spe: 112}, nature: 'Adamant',
 			},
+			'Kie': {
+				species: 'Totodile', ability: 'Maelstrom', item: 'Eviolite', gender: 'M',
+				moves: ['Aqua Jet', 'Icicle Crash', 'Horn Leech'],
+				signatureMove: 'Chaotic',
+				evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', shiny: true,
+			},
 			'KingSwordYT': {
 				species: 'Pangoro', ability: 'Kung Fu Panda', item: 'Life Orb', gender: 'M',
 				moves: ['Ice Punch', 'Bullet Punch', 'Knock Off'],

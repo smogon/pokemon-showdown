@@ -456,21 +456,6 @@ let BattleStatuses = {
 			}
 		},
 	},
-	kalalokki: {
-		noCopy: true,
-		onStart(target) {
-			this.add(`c|@Kalalokki|(•_•)`);
-			this.add(`c|@Kalalokki|( •_•)>⌐■-■`);
-			this.add(`c|@Kalalokki|(⌐■_■)`);
-			if (target.illusion) return;
-			this.field.setWeather('raindance');
-		},
-		onFaint() {
-			this.add(`c|@Kalalokki|(⌐■_■)`);
-			this.add(`c|@Kalalokki|( •_•)>⌐■-■`);
-			this.add(`c|@Kalalokki|(x_x)`);
-		},
-	},
 	grimauxiliatrix: {
 		noCopy: true,
 		onStart() {
@@ -574,6 +559,21 @@ let BattleStatuses = {
 			this.boost({atk: 2, spe: 1}, pokemon);
 		},
 	},
+	kalalokki: {
+		noCopy: true,
+		onStart(target) {
+			this.add(`c|@Kalalokki|(•_•)`);
+			this.add(`c|@Kalalokki|( •_•)>⌐■-■`);
+			this.add(`c|@Kalalokki|(⌐■_■)`);
+			if (target.illusion) return;
+			this.field.setWeather('raindance');
+		},
+		onFaint() {
+			this.add(`c|@Kalalokki|(⌐■_■)`);
+			this.add(`c|@Kalalokki|( •_•)>⌐■-■`);
+			this.add(`c|@Kalalokki|(x_x)`);
+		},
+	},
 	kay: {
 		noCopy: true,
 		onStart() {
@@ -593,6 +593,18 @@ let BattleStatuses = {
 				// @ts-ignore
 				boost[i] *= 2;
 			}
+		},
+	},
+	kie: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|%Kie|Wherever there is hope, there is most definitely despair.`);
+		},
+		onSwitchOut() {
+			this.add(`c|%Kie|Still better than Aeonic, btw.`);
+		},
+		onFaint() {
+			this.add(`c|%Kie|https://www.youtube.com/watch?v=Hyw6kKMjp5A`);
 		},
 	},
 	kingswordyt: {

@@ -1609,6 +1609,41 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Psychic",
 	},
+	// Kie
+	chaotic: {
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		desc: "Before attacking, the user's attack is increased by 1 stage. After attacking, one of the user's stats other than accuracy and evasion is boosted by 1 stage.",
+		shortDesc: "Before attack: +1 atk, after attack: +1 random stat.",
+		id: "chaotic",
+		name: "Chaotic",
+		isNonstandard: "Custom",
+		pp: 10,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.boost({atk: 1}, source);
+			this.add('-anim', source, "Dragon Dance", source);
+			this.add('-anim', source, "Liquidation", target);
+		},
+
+		onAfterHit(target, source) {
+			let boost = {};
+			let stat = ['atk', 'def', 'spa', 'spd', 'spe'][this.random(5)];
+			// @ts-ignore
+			boost[stat] = 1;
+			this.boost(boost, source);
+		},
+		secondary: {
+			chance: 50,
+			volatileStatus: "confusion",
+		},
+		target: "normal",
+		type: "Water",
+	},
 	// KingSwordYT
 	dragonwarriortouch: {
 		accuracy: 100,

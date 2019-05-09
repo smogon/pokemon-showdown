@@ -231,6 +231,36 @@ let BattleAbilities = {
 			}
 		},
 	},
+	// Kie
+	maelstrom: {
+		desc: "On switch-in, the weather becomes heavy rain that prevents damaging Fire-type moves from executing, in addition to all the effects of Rain Dance. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by Delta Stream or Desolate Land. If Rain Dance is active, this Pokemon's Speed is doubled.",
+		shortDesc: "Summons heavy rain, doubled speed in rain.",
+		id: "maelstrom",
+		name: "Maelstrom",
+		isNonstandard: "Custom",
+		onModifySpe(spe, pokemon) {
+			if (this.field.isWeather(['raindance', 'primordialsea'])) {
+				return this.chainModify(2);
+			}
+		},
+		onStart(source) {
+			this.field.setWeather('primordialsea');
+		},
+		onAnySetWeather(target, source, weather) {
+			if (this.field.getWeather().id === 'primordialsea' && !['desolateland', 'primordialsea', 'deltastream'].includes(weather.id)) return false;
+		},
+		onEnd(pokemon) {
+			if (this.field.weatherData.source !== pokemon) return;
+			for (const target of this.getAllActive()) {
+				if (target === pokemon) continue;
+				if (target.hasAbility('primordialsea') || target.hasAbility('maelstrom')) {
+					this.field.weatherData.source = target;
+					return;
+				}
+			}
+			this.field.clearWeather();
+		},
+	},
 	// KingSwordYT
 	kungfupanda: {
 		desc: "This Pokemon's punch-based attacks have their power multiplied by 1.2, and this Pokemon's Speed is raised by 1 stage after it is damaged by a contact move.",
@@ -601,6 +631,21 @@ let BattleAbilities = {
 				move.pranksterBoosted = true;
 				return priority + 1;
 			}
+		},
+	},
+	// Modified Primordial Sea to not end if a pokemon with Maelstrom is out
+	primordialsea: {
+		inherit: true,
+		onEnd(pokemon) {
+			if (this.field.weatherData.source !== pokemon) return;
+			for (const target of this.getAllActive()) {
+				if (target === pokemon) continue;
+				if (target.hasAbility('primordialsea') || target.hasAbility('maelstrom')) {
+					this.field.weatherData.source = target;
+					return;
+				}
+			}
+			this.field.clearWeather();
 		},
 	},
 };
