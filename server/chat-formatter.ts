@@ -441,6 +441,6 @@ class TextFormatter {
 /**
  * Takes a string and converts it to HTML by replacing standard chat formatting with the appropriate HTML tags.
  */
-export function formatText(str: string, isTrusted: boolean = false) {
+export function formatText(str: string, isTrusted = false) {
 	return new TextFormatter(str, isTrusted).get();
 }
