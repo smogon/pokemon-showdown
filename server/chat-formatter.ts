@@ -204,10 +204,10 @@ class TextFormatter {
 
 	toUriComponent(html: string) {
 		const component = html.replace(/&lt;/g, '<')
-		.replace(/&gt;/g, '>')
-		.replace(/&quot;/g, '"')
-		.replace(/&apos;/g, '\'')
-		.replace(/&amp;/g, '&');
+			.replace(/&gt;/g, '>')
+			.replace(/&quot;/g, '"')
+			.replace(/&apos;/g, '\'')
+			.replace(/&amp;/g, '&');
 		return encodeURIComponent(component);
 	}
 
