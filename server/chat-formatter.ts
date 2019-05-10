@@ -156,8 +156,7 @@ class TextFormatter {
 
 		this.pushSlice(start);
 		while (this.stack.length > stackPosition + 1) this.popSpan(start);
-		const span = this.stack.pop();
-		if (!span) return false;
+		const span = this.stack.pop()!;
 		const startIndex = span[1];
 		let tagName = '';
 		switch (spanType) {
