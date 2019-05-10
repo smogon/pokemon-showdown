@@ -663,12 +663,13 @@ const commands = {
 		if (target) {
 			awayMessage = Chat.namefilter(target, user);
 			if (!awayMessage) return;
+			awayMessage = `(Away) ${awayMessage}`;
 		} else {
 			awayMessage = toId(cmd);
 			if (awayMessage === 'afk' || awayMessage === 'brb') {
-				awayMessage = awayMessage.toUpperCase();
+				awayMessage = `(${awayMessage.toUpperCase()})`;
 			} else {
-				awayMessage = `${awayMessage[0].toUpperCase()}${awayMessage.slice(1)}`;
+				awayMessage = `(${awayMessage[0].toUpperCase()}${awayMessage.slice(1)})`;
 			}
 		}
 		user.setAway(awayMessage);
