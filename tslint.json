@@ -30,7 +30,7 @@
             "severity": "warning",
             "options": {
                 "limit": 120,
-                "ignore-pattern": "^\\s*(// \\s*)?((let |const )?[a-zA-Z0-9$.]+ \\+?= (\\$\\()?|(return |throw )?(new )?([a-zA-Z0-9$.]+\\()?)?['\"`/]"
+                "ignore-pattern": "^\\s*(// \\s*)?((let |const )?[a-zA-Z0-9$.]+ \\+?= (\\$\\()?|(return |throw )?(new )?([a-zA-Z0-9$.]+\\()?|Chat.html)?['\"`/]"
             }
         },
         "no-floating-promises": true,
