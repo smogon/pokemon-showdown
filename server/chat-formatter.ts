@@ -12,7 +12,7 @@
 // Regex copied from the client
 const domainRegex = '[a-z0-9-]+(?:[.][a-z0-9-]+)*';
 const parenthesisRegex = '[(](?:[^\\s()<>&]|&amp;)*[)]';
-const linkRegex = new RegExp(
+export const linkRegex = new RegExp(
 	'(?:' +
 		'(?:' +
 			// When using www. or http://, allow any-length TLD (like .museum)
@@ -442,8 +442,6 @@ class TextFormatter {
 /**
  * Takes a string and converts it to HTML by replacing standard chat formatting with the appropriate HTML tags.
  */
-function formatText(str: string, isTrusted: boolean = false) {
+export function formatText(str: string, isTrusted: boolean = false) {
 	return new TextFormatter(str, isTrusted).get();
 }
-
-export = {formatText, linkRegex};
