@@ -2611,17 +2611,17 @@ const commands = {
 		if (!this.can('mute', null, room)) return;
 
 		if (targetUser && (cmd === 'hidealtstext' || cmd === 'hidetextalts' || cmd === 'hidealttext')) {
+			room.send(`|c|~|${name}'s alts messages were cleared from ${room.title} by ${user.name}.`);
 			this.modlog('HIDEALTSTEXT', targetUser, null, {noip: 1});
 			room.hideText([
 				userid,
 				...Object.keys(targetUser.prevNames),
 				...targetUser.getAltUsers(true).map(user => user.getLastId()),
 			]);
-			room.sendByUser(user, `${name}'s alts messages were cleared from ${room.title} by ${user.name}.`);
 		} else {
+			room.send(`|c|~|${name}'s messages were cleared from ${room.title} by ${user.name}.`);
 			this.modlog('HIDETEXT', targetUser || userid, null, {noip: 1, noalts: 1});
 			room.hideText([userid]);
-			room.sendByUser(user, `${name}'s messages were cleared from ${room.title} by ${user.name}.`);
 		}
 	},
 	hidetexthelp: [
