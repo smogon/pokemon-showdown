@@ -395,7 +395,7 @@ class TextFormatter {
 			case ':':
 				if (i < 7) break;
 				if (this.slice(i - 7, i + 1).toLowerCase() === 'spoiler:' ||
-				this.slice(i - 8, i + 1).toLowerCase() === 'spoilers:') {
+					this.slice(i - 8, i + 1).toLowerCase() === 'spoilers:') {
 					if (this.at(i + 1) === ' ') i++;
 					this.pushSpan('spoiler', i + 1, i + 1);
 				}
