@@ -1069,6 +1069,7 @@ class CommandContext extends MessageContext {
 		if (this.pmTarget) {
 			this.sendReply('|c~|' + (suppressMessage || this.message));
 		} else {
+			this.user.setBack();
 			this.sendReply('|c|' + this.user.getIdentity(this.room.id) + '|' + (suppressMessage || this.message));
 		}
 		if (!ignoreCooldown && !this.pmTarget) {
