@@ -139,6 +139,9 @@ class TextFormatter {
 		return true;
 	}
 
+	/**
+	 * Attempt to close a span.
+	 */
 	closeSpan(spanType: SpanType, start: number, end: number) {
 		// loop backwards
 		let stackPosition = -1;
