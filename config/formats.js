@@ -83,7 +83,7 @@ let Formats = [
 		mod: 'gen7',
 		ruleset: ['[Gen 7] UU'],
 		banlist: ['UU', 'RUBL', 'Sableye-Mega', 'Aurora Veil'],
-		unbanlist: ['Drought'],
+		unbanlist: ['Reuniclus', 'Drought'],
 	},
 	{
 		name: "[Gen 7] NU",
@@ -95,7 +95,7 @@ let Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] RU'],
-		banlist: ['RU', 'NUBL', 'Drought'],
+		banlist: ['RU', 'NUBL', 'Reuniclus', 'Drought'],
 		unbanlist: ['Camerupt-Mega'],
 		onBegin() {
 			if (this.rated && this.format === 'gen7nu') this.add('html', `<div class="broadcast-red"><strong>NU is currently suspecting Mega Camerupt! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3650028/">suspect thread</a>.</strong></div>`);
