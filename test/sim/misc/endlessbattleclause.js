@@ -5,7 +5,7 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Endless Battle Clause', () => {
+describe('Endless Battle Clause (slow)', () => {
 	afterEach(() => battle.destroy());
 
 	it('should trigger on an infinite loop', () => {

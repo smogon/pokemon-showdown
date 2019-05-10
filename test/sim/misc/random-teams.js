@@ -33,7 +33,7 @@ function validLearnset(move, set, tier) {
 	return !validator.checkLearnset(move, template);
 }
 
-describe(`Random Team generator`, function () {
+describe(`Random Team generator (slow)`, function () {
 	for (const gen of ALL_GENS) {
 		it(`should successfully create valid Gen ${gen} teams`, function () {
 			this.timeout(0);
