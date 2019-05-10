@@ -724,6 +724,18 @@ let BattleStatuses = {
 			this.add(`c|@MajorBowman|THEY GOT ME, GAL`);
 		},
 	},
+	marshmallon: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|@Marshmallon|What a wonderful day at the beach!`);
+		},
+		onSwitchOut() {
+			this.add(`c|@Marshmallon|__C..c...cooold >w<__`);
+		},
+		onFaint() {
+			this.add(`c|@Marshmallon|I got hit by a thunderbolt!`);
+		},
+	},
 	martha: {
 		noCopy: true,
 		onStart() {

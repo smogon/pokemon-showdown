@@ -342,6 +342,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'V-create',
 				evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
 			},
+			'Marshmallon': {
+				species: 'Castform', ability: 'Sightseeing', item: 'Shell Bell', gender: 'M',
+				moves: ['Rain Dance', 'Sunny Day', 'Hail'],
+				signatureMove: 'Weather Forecast',
+				evs: {spa: 252, spd: 4, spe: 252}, nature: 'Modest',
+			},
 			'martha': {
 				species: 'Diancie', ability: 'Pixilate', item: 'Diancite', gender: 'F',
 				moves: ['Hyper Voice', ['Fire Blast', 'Earth Power'], 'Photon Geyser'],
@@ -593,12 +599,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 		pool.splice(pool.indexOf('Forrce Alt'), 1);
 		/** @type {{[type: string]: number}} */
 		let typePool = {};
-		let debug = true;
+		let debug = false;
 		while (pool.length && team.length < 6) {
 			let name = '';
 			if (debug && team.length === 1) {
 				// DEBUG CODE, remove before commiting to the main server
-				name = 'Hurl'; // Change name to force a set to appear
+				name = ''; // Change name to force a set to appear
 				pool.splice(pool.indexOf(name), 1);
 			} else {
 				name = this.sampleNoReplace(pool);

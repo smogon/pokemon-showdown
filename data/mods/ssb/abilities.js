@@ -297,6 +297,88 @@ let BattleAbilities = {
 			if (type === 'hail') return false;
 		},
 	},
+	// Marshmallon
+	sightseeing: {
+		desc: "If this Pokemon is a Castform, its type changes to the current weather condition's type, except Sandstorm.",
+		shortDesc: "Castform's type changes to the current weather condition's type, except Sandstorm.",
+		id: "sightseeing",
+		name: "Sightseeing",
+		isNonstandard: "Custom",
+		onModifyDef(def) {
+			if (!this.field.isWeather('')) {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpA(spa) {
+			if (!this.field.isWeather('')) {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpD(spd) {
+			if (!this.field.isWeather('')) {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpe(spe) {
+			if (!this.field.isWeather('')) {
+				return this.chainModify(1.5);
+			}
+		},
+		onUpdate(pokemon) {
+			if (pokemon.baseTemplate.baseSpecies !== 'Castform' || pokemon.transformed) return;
+			let forme = null;
+			switch (this.field.effectiveWeather()) {
+			case 'sunnyday':
+			case 'desolateland':
+				if (pokemon.template.speciesid !== 'castformsunny') forme = 'Castform-Sunny';
+				break;
+			case 'raindance':
+			case 'primordialsea':
+				if (pokemon.template.speciesid !== 'castformrainy') forme = 'Castform-Rainy';
+				break;
+			case 'hail':
+				if (pokemon.template.speciesid !== 'castformsnowy') forme = 'Castform-Snowy';
+				break;
+			default:
+				if (pokemon.template.speciesid !== 'castform') forme = 'Castform';
+				break;
+			}
+			if (pokemon.isActive && forme) {
+				pokemon.formeChange(forme, this.effect, false, '[msg]');
+				const sets = {
+					'Castform-Sunny': ['Fire Blast', 'Solar Beam', 'Synthesis', 'Weather Forecast'],
+					'Castform-Rainy': ['Hydro Pump', 'Hurricane', 'Thunder', 'Weather Forecast'],
+					'Castform-Snowy': ['Blizzard', 'Thunder', 'Quiver Dance', 'Weather Forecast'],
+					'Castform': ['Rain Dance', 'Sunny Day', 'Hail', 'Weather Forecast'],
+				};
+				// Store percentage of PP left for each moveSlot
+				const carryOver = pokemon.moveSlots.slice().map(m => {
+					return m.pp / m.maxpp;
+				});
+				// Incase theres ever less than 4 moves
+				while (carryOver.length < 4) {
+					carryOver.push(1);
+				}
+				// @ts-ignore
+				let set = sets[forme];
+				pokemon.moveSlots = [];
+				for (let i = 0; i < set.length; i++) {
+					let newMove = set[i];
+					let moveTemplate = this.getMove(newMove);
+					pokemon.moveSlots.push({
+						move: moveTemplate.name,
+						id: moveTemplate.id,
+						pp: ((moveTemplate.noPPBoosts || moveTemplate.isZ) ? Math.floor(moveTemplate.pp * carryOver[i]) : Math.floor((moveTemplate.pp * 8 / 5) * carryOver[i])),
+						maxpp: ((moveTemplate.noPPBoosts || moveTemplate.isZ) ? moveTemplate.pp : moveTemplate.pp * 8 / 5),
+						target: moveTemplate.target,
+						disabled: false,
+						disabledSource: '',
+						used: false,
+					});
+				}
+			}
+		},
+	},
 	// Megazard
 	standuptall: {
 		desc: "This Pokemon's Attack, Defense, and Special Defense is raised by 1 stage at the end of each full turn it is on the field.",
