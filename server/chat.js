@@ -1895,8 +1895,10 @@ Chat.stringify = function (value, depth = 0) {
 	return `${constructor}{${buf}}`;
 };
 
-Chat.formatText = require('./chat-formatter').formatText;
-Chat.linkRegex = require('./chat-formatter').linkRegex;
+/** @type {typeof import('./chat-formatter').formatText} */
+Chat.formatText = require(/** @type {any} */('../.server-dist/chat-formatter')).formatText;
+/** @type {typeof import('./chat-formatter').linkRegex} */
+Chat.linkRegex = require(/** @type {any} */('../.server-dist/chat-formatter')).linkRegex;
 Chat.updateServerLock = false;
 
 /**
