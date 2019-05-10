@@ -33,8 +33,10 @@ let BattleStatuses = {
 	},
 	'5gen': {
 		noCopy: true,
-		onStart() {
+		onStart(source) {
 			this.add(`c|+5gen|Someone asked for extra sauce?`);
+			if (!source.illusion) return;
+			this.field.setWeather('sunnyday', source);
 		},
 		onSwitchOut() {
 			this.add(`c|+5gen|Need to get some from the back.`);
@@ -391,6 +393,15 @@ let BattleStatuses = {
 		onFaint() {
 			this.add(`c|@eternally|quack`);
 		},
+		onTryHit(target, source, move) {
+			if (target.illusion) return;
+			if (target !== source && move.type === 'Water') {
+				if (!this.heal(target.maxhp / 4)) {
+					this.add('-immune', target, '[from] ability: Water Absorb');
+				}
+				return null;
+			}
+		},
 	},
 	explodingdaisies: {
 		noCopy: true,
@@ -508,13 +519,19 @@ let BattleStatuses = {
 	hurl: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%Hurl|underoos`);
+			this.add(`c|%Hurl|prepare to be disappointed`);
 		},
 		onSwitchOut() {
 			this.add(`c|%Hurl|/me hurls out`);
 		},
 		onFaint() {
 			this.add(`c|%Hurl|i disappoint people a lot`);
+		},
+		onDamage(damage, target, source, effect) {
+			if (target.illusion) return;
+			if (effect.effectType !== 'Move') {
+				return false;
+			}
 		},
 	},
 	iyarito: {

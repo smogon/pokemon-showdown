@@ -1004,8 +1004,8 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Boosts the user's Defense, Special Defense, and Speed by 1 stage.",
-		shortDesc: "Raises the user's Def, Sp. Def, and Spe by 1.",
+		desc: "Boosts the user's Special Attack and Accuracy by 1 stage.",
+		shortDesc: "Raises the user's Spa and Accuracy by 1.",
 		id: "quack",
 		name: "Quack",
 		isNonstandard: "Custom",
@@ -1019,7 +1019,7 @@ let BattleMovedex = {
 			this.add('-anim', source, 'Feather Dance', source);
 			this.add('-anim', source, 'Aqua Ring', source);
 		},
-		boosts: {def: 1, spd: 1, spe: 1},
+		boosts: {spa: 1, accuracy: 1},
 		secondary: null,
 		target: "self",
 		type: "Flying",
@@ -1444,14 +1444,14 @@ let BattleMovedex = {
 		type: "Grass",
 	},
 	// Hurl
-	hurl: {
+	draconicmeme: {
 		accuracy: 100,
-		basePower: 90,
+		basePower: 100,
 		category: "Physical",
-		desc: "Sets a layer of Toxic Spikes.",
-		shortDesc: "Sets a layer of Toxic Spikes.",
-		id: "hurl",
-		name: "Hurl",
+		desc: "This move does neutral damage if it would be not very effective or have no effect.",
+		shortDesc: "Always does neutral damage or better.",
+		id: "draconicmeme",
+		name: "Draconic Meme",
 		isNonstandard: "Custom",
 		pp: 10,
 		priority: 0,
@@ -1460,14 +1460,18 @@ let BattleMovedex = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Gunk Shot', target);
+			this.add('-anim', source, 'Dragon Claw', target);
 		},
-		onAfterMoveSecondarySelf(pokemon) {
-			pokemon.side.foe.addSideCondition('toxicspikes');
+		onEffectiveness(typeMod, target, type) {
+			if (typeMod < 0) {
+				return 0;
+			}
+			return typeMod;
 		},
+		ignoreImmunity: {'Dragon': true},
 		secondary: null,
 		target: "normal",
-		type: "Poison",
+		type: "Dragon",
 	},
 	// Iyarito
 	vbora: {
@@ -1719,24 +1723,30 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 10,
 		category: "Physical",
-		desc: "Raises both the user's and the target's Attack by 3 stages, lowers the Defense of both by 3 stages, confuses both Pokemon, and has a 100% chance to cause the target to flinch.",
-		shortDesc: "+3 Atk, -3 Def, confusion to user & target. Priority.",
+		desc: "Raises both the user's and the target's Attack by 3 stages, lowers the Defense of both by 3 stages, confuses both Pokemon, and has a 100% chance to cause the target to flinch. Only works on your first turn out.",
+		shortDesc: "First turn: +3 Atk, -3 Def, confusion to both.",
 		id: "barfight",
 		name: "Bar Fight",
 		isNonstandard: "Custom",
 		pp: 10,
 		priority: 3,
 		flags: {protect: 1, mirror: 1, contact: 1},
+		onTry(pokemon, target) {
+			if (pokemon.activeTurns > 1) {
+				this.attrLastMove('[still]');
+				this.add('-fail', pokemon);
+				this.hint("Bar Fight only works on your first turn out.");
+				return null;
+			}
+		},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, "Fake Out", target);
 			this.add('-anim', source, "Feather Dance", target);
-			return this.runEvent('StallMove', source);
 		},
 		onHit(target, source) {
-			source.addVolatile('stall');
 			this.boost({atk: 3, def: -3}, target);
 			this.boost({atk: 3, def: -3}, source);
 			target.addVolatile('confusion');

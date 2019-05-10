@@ -48,7 +48,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'5gen': {
 				species: 'Sawsbuck', ability: 'Season\'s Gift', item: 'Heat Rock', gender: 'M',
-				moves: ['Sunny Day', 'Return', 'High Jump Kick'],
+				moves: ['Double Edge', 'Knock Off', 'High Jump Kick'],
 				signatureMove: 'Too Much Saws',
 				evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 			},
@@ -127,7 +127,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'bobochan': {
 				species: 'Emolga', ability: 'Huge Power', item: 'Choice Band', gender: 'M',
-				moves: ['Brave Bird', ['Knock Off', 'Encore'], 'U-turn'],
+				moves: ['Brave Bird', 'Knock Off', 'U-turn'],
 				signatureMove: 'Thousand Circuit Overload',
 				evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 			},
@@ -265,10 +265,10 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
 			'Hurl': {
-				species: 'Grimer-Alola', ability: 'Poison Touch', item: 'Eviolite', gender: 'M',
-				moves: ['Knock Off', 'Earthquake', 'Recover'],
-				signatureMove: 'Hurl',
-				evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
+				species: 'Flygon', ability: 'Adaptability', item: 'Life Orb', gender: 'M',
+				moves: ['Earthquake', 'U-Turn', 'Dragon Dance'],
+				signatureMove: 'Draconic Meme',
+				evs: {hp: 252, atk: 252, spd: 4}, nature: 'Jolly',
 			},
 			'Iyarito': {
 				species: 'Vaporeon', ability: 'Poison Heal', item: 'Leftovers', gender: 'F',
@@ -518,7 +518,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'tennisace': {
 				species: 'Raikou', ability: 'Levitate', item: 'Life Orb', gender: 'M',
-				moves: ['Volt Switch', 'Shadow Ball', 'Aura Sphere'],
+				moves: ['Volt Switch', 'Ice Beam', ['Aura Sphere', 'Shadow Ball']],
 				signatureMove: 'Ground Surge',
 				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
@@ -593,12 +593,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 		pool.splice(pool.indexOf('Forrce Alt'), 1);
 		/** @type {{[type: string]: number}} */
 		let typePool = {};
-		let debug = false;
+		let debug = true;
 		while (pool.length && team.length < 6) {
 			let name = '';
 			if (debug && team.length === 1) {
 				// DEBUG CODE, remove before commiting to the main server
-				name = ''; // Change name to force a set to appear
+				name = 'Hurl'; // Change name to force a set to appear
 				pool.splice(pool.indexOf(name), 1);
 			} else {
 				name = this.sampleNoReplace(pool);

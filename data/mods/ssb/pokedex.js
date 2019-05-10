@@ -38,8 +38,8 @@ let BattlePokedex = {
 	// eternally
 	ducklett: {
 		inherit: true,
-		// Doubled spa and spe
-		baseStats: {hp: 62, atk: 44, def: 50, spa: 88, spd: 50, spe: 110},
+		// Doubled def, spa, spd and spe
+		baseStats: {hp: 62, atk: 44, def: 100, spa: 88, spd: 100, spe: 110},
 	},
 	// Forrce
 	charizardmegax: {
