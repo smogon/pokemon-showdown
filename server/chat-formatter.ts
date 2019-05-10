@@ -60,7 +60,7 @@ class TextFormatter {
 
 	constructor(str: string, isTrusted: boolean = false) {
 		// escapeHTML, without escaping /
-		str = ('' + str)
+		str = `${str}`
 		.replace(/&/g, '&amp;')
 		.replace(/</g, '&lt;')
 		.replace(/>/g, '&gt;')
@@ -91,11 +91,10 @@ class TextFormatter {
 		// (links don't have any specific syntax, they're just a pattern, so we detect them in a separate pass)
 
 		this.str = str;
-		this.buffers = ([]);
-		this.stack = ([]);
+		this.buffers = [];
+		this.stack = [];
 		this.isTrusted = isTrusted;
 		/** offset of str that's been parsed so far */
-		// TypeScript bug: [js] 'offset' implicitly has type 'any' because it does not have a type annotation and is referenced directly or indirectly in its own initializer.
 		this.offset = 0;
 	}
 	// debugAt(i=0, j=i+1) { console.log(this.slice(0, i) + '[' + this.slice(i, j) + ']' + this.slice(j, this.str.length)); }
@@ -154,7 +153,7 @@ class TextFormatter {
 
 		this.pushSlice(start);
 		while (this.stack.length > stackPosition + 1) this.popSpan(start);
-		const span: FormatSpan | undefined = (this.stack.pop());
+		const span = this.stack.pop();
 		if (!span) return;
 		const startIndex = span[1];
 		let tagName = '';
