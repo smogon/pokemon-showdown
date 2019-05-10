@@ -61,11 +61,11 @@ class TextFormatter {
 	constructor(str: string, isTrusted: boolean = false) {
 		// escapeHTML, without escaping /
 		str = `${str}`
-		.replace(/&/g, '&amp;')
-		.replace(/</g, '&lt;')
-		.replace(/>/g, '&gt;')
-		.replace(/"/g, '&quot;')
-		.replace(/'/g, '&apos;');
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			.replace(/"/g, '&quot;')
+			.replace(/'/g, '&apos;');
 
 		// filter links first
 		str = str.replace(linkRegex, uri => {
