@@ -261,6 +261,16 @@ let BattleAbilities = {
 			this.field.clearWeather();
 		},
 	},
+	// kaori
+	flowershield: {
+		shortDesc: "This Pokemon's Special Defense is doubled.",
+		onModifySpDPriority: 6,
+		onModifySpD(spd) {
+			return this.chainModify(2);
+		},
+		id: "flowershield",
+		name: "Flower Shield",
+	},
 	// KingSwordYT
 	kungfupanda: {
 		desc: "This Pokemon's punch-based attacks have their power multiplied by 1.2, and this Pokemon's Speed is raised by 1 stage after it is damaged by a contact move.",

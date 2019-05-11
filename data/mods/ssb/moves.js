@@ -1583,6 +1583,35 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Water",
 	},
+	// kaori
+	w: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Raises the user's Special Attack, Special Defense, and Speed by 1 stage. Summons Sunny Day.",
+		shortDesc: "Raises user's SpA, SpD, Spe by 1. Sets Sunny Day.",
+		id: "w",
+		name: ">w<",
+		isNonstandard: "Custom",
+		pp: 5,
+		priority: 0,
+		flags: {snatch: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Petal Dance', source);
+		},
+		boosts: {
+			spa: 1,
+			spd: 1,
+			spe: 1,
+		},
+		weather: 'sunnyday',
+		secondary: null,
+		target: "self",
+		type: "Grass",
+	},
 	// Kay
 	inkzooka: {
 		accuracy: 100,

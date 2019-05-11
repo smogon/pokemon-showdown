@@ -288,6 +288,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Maelström',
 				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 			},
+			'kaori': {
+				species: 'Bellossom', ability: 'Flower Shield', item: 'Heat Rock', gender: 'F',
+				moves: ['Solarbeam', 'Fusion Flare', 'Moonlight'],
+				signatureMove: '>w<',
+				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Modest', shiny: true,
+			},
 			'kay': {
 				species: 'Inkay', ability: 'Contrary', item: 'Eviolite', gender: 'M',
 				moves: ['Power Trip', 'Rest', 'Sleep Talk'],

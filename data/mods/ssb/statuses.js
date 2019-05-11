@@ -591,6 +591,20 @@ let BattleStatuses = {
 			this.add(`c|@Kalalokki|(x_x)`);
 		},
 	},
+	kaori: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c|%kaori|(~￣³￣)~`);
+			if (pokemon.illusion) return;
+			this.boost({spd: 2}, pokemon);
+		},
+		onSwitchOut() {
+			this.add(`c|%kaori|ಠ_ಠ`);
+		},
+		onFaint() {
+			this.add(`c|%kaori|(◕ ᥥ ◕✿)`);
+		},
+	},
 	kay: {
 		noCopy: true,
 		onStart() {
