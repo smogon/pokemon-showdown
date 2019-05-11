@@ -3609,6 +3609,33 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Flying",
 	},
+	// xJoelituh
+	lavabone: {
+		accuracy: 100,
+		basePower: 130,
+		category: "Physical",
+		desc: "Has a 35% chance to burn the target.",
+		shortDesc: "35% chance to burn the target.",
+		id: "lavabone",
+		name: "Lava Bone",
+		isNonstandard: "Custom",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Shadow Bone", target);
+			this.add('-anim', target, "Fire Blast", target);
+		},
+		secondary: {
+			chance: 35,
+			status: 'brn',
+		},
+		target: "normal",
+		type: "Fire",
+	},
 	// XpRienzo ☑◡☑
 	blehflame: {
 		accuracy: 100,
@@ -3690,39 +3717,6 @@ let BattleMovedex = {
 		},
 		target: "allAdjacentFoes",
 		type: "Psychic",
-	},
-	// Modified Moves \\
-	// Purple Pills is immune to taunt
-	"taunt": {
-		inherit: true,
-		volatileStatus: 'taunt',
-		effect: {
-			duration: 3,
-			onStart(target) {
-				if (target.activeTurns && !this.willMove(target)) {
-					this.effectData.duration++;
-				}
-				this.add('-start', target, 'move: Taunt');
-			},
-			onResidualOrder: 12,
-			onEnd(target) {
-				this.add('-end', target, 'move: Taunt');
-			},
-			onDisableMove(pokemon) {
-				for (const moveSlot of pokemon.moveSlots) {
-					if (this.getMove(moveSlot.id).category === 'Status' && this.getMove(moveSlot.id).id !== 'purplepills') {
-						pokemon.disableMove(moveSlot.id);
-					}
-				}
-			},
-			onBeforeMovePriority: 5,
-			onBeforeMove(attacker, defender, move) {
-				if (!move.isZ && move.category === 'Status' && move.id !== 'purplepills') {
-					this.add('cant', attacker, 'move: Taunt', move);
-					return false;
-				}
-			},
-		},
 	},
 };
 

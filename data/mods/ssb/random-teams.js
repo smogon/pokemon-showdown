@@ -594,6 +594,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Stunning Dance',
 				evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
 			},
+			'xJoelituh': {
+				species: 'Marowak-Alola', ability: 'Club Expertise', item: 'Thick Club', gender: 'M',
+				moves: ['Shadow Bone', 'Bonemerang', 'Drain Punch'],
+				signatureMove: 'Lava Bone',
+				evs: {atk: 252, def: 4, spe: 252}, ivs: {spa: 0}, nature: 'Jolly', shiny: true,
+			},
 			'XpRienzo ☑◡☑': {
 				species: 'Reshiram', ability: 'Turboblaze', item: 'Charcoal', gender: 'M',
 				moves: ['Core Enforcer', 'Volt Switch', 'Psystrike'],
@@ -616,7 +622,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let name = '';
 			if (debug && team.length === 1) {
 				// DEBUG CODE, remove before commiting to the main server
-				name = 'Overneat'; // Change name to force a set to appear
+				name = ''; // Change name to force a set to appear
 				pool.splice(pool.indexOf(name), 1);
 			} else {
 				name = this.sampleNoReplace(pool);

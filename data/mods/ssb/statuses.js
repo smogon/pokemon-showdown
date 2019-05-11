@@ -1293,6 +1293,25 @@ let BattleStatuses = {
 			this.add(`c|+Xayah|All out of second dances...`);
 		},
 	},
+	xjoelituh: {
+		noCopy: true,
+		onStart(source) {
+			this.add(`c|@xJoelituh|h-hi, im joel, not joe, tyvm`);
+			// Terrifying Demeanor Innate
+			if (source.illusion) return;
+			let target = source.side.foe.active[0];
+			if (target.getStat('spe', true, true) > source.getStat('spe', true, true)) this.boost({spe: -1}, target, source);
+		},
+		onSwitchOut() {
+			this.add(`c|@xJoelituh|if that's what you want, s-sure`);
+		},
+		onFaint() {
+			// Random Gibberish Generator
+			let gibberish = '';
+			for (let j = 0; j < 10; j++) gibberish += String.fromCharCode(48 + this.random(79));
+			this.add(`c|@xJoelituh|${gibberish}`);
+		},
+	},
 	xprienzo: {
 		noCopy: true,
 		onStart() {

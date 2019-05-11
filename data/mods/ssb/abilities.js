@@ -706,6 +706,19 @@ let BattleAbilities = {
 			this.field.addPseudoWeather('gravity', pokemon);
 		},
 	},
+	// xJoelituh
+	clubexpertise: {
+		shortDesc: "This Pokemon's bone moves have their power multiplied by 1.3.",
+		id: "clubexpertise",
+		name: "Club Expertise",
+		isNonstandard: "Custom",
+		onBasePowerPriority: 8,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.id.includes('bone')) {
+				return this.chainModify([0x14CD, 0x1000]);
+			}
+		},
+	},
 	// Modified Illusion to support SSB volatiles
 	illusion: {
 		inherit: true,
