@@ -824,8 +824,8 @@ let BattleMovedex = {
 			this.add('-anim', source, "Surf", target);
 		},
 		secondary: {
-			chance: 50,
-			volatileStatus: 'attract',
+			chance: 30,
+			volatileStatus: 'fullattract',
 		},
 		target: "normal",
 		type: "Water",

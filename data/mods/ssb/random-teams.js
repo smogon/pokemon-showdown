@@ -169,7 +169,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'Cleo': {
 				species: 'Sealeo', ability: 'Adrenaline Rush', item: 'Leftovers', gender: 'M',
-				moves: ['Icy Wind', 'Ice Beam', 'Wrap'],
+				moves: ['Icy Wind', 'Ice Beam', 'Draining Kiss'],
 				signatureMove: 'Loving Embrace',
 				evs: {hp: 4, spa: 252, spe: 252}, nature: 'Modest', shiny: true,
 			},
@@ -325,7 +325,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 236, def: 220, spd: 48, spe: 4}, ivs: {atk: 0}, nature: 'Calm',
 			},
 			'LifeisDANK': {
-				species: 'Delibird', ability: 'Mountaineer', item: 'Focus Sash', gender: 'F',
+				species: 'Delibird', ability: 'Aerilate', item: 'Focus Sash', gender: 'F',
 				moves: ['Ice Shard', 'Return', 'Explosion'],
 				signatureMove: 'Bar Fight',
 				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
