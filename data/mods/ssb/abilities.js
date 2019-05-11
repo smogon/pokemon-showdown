@@ -324,6 +324,11 @@ let BattleAbilities = {
 				return this.chainModify(1.5);
 			}
 		},
+		onModifyAccuracy(accuracy) {
+			if (!this.field.isWeather('')) {
+				return this.chainModify(1.5);
+			}
+		},
 		onUpdate(pokemon) {
 			if (pokemon.baseTemplate.baseSpecies !== 'Castform' || pokemon.transformed) return;
 			let forme = null;
