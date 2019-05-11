@@ -875,14 +875,16 @@ let BattleStatuses = {
 	},
 	overneat: {
 		noCopy: true,
-		onStart() {
+		onStart(source) {
 			this.add(`c|+Overneat|[muffled eurobeat playing in the distance]`);
+			if (source.template.speciesid !== 'absolmega' || source.illusion) return;
+			this.add('-start', source, 'typeadd', 'Fairy');
 		},
 		onSwitchOut() {
-			this.add(`c|+Overneat|Time to take a rest`);
+			this.add(`c|+Overneat|Time to take a siesta.`);
 		},
 		onFaint() {
-			this.add(`c|+Overneat|It’s over for me?`);
+			this.add(`c|+Overneat|I gotta go, but friendly reminder to drink water after this battle.`);
 		},
 	},
 	pablo: {

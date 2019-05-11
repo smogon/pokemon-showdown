@@ -109,7 +109,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'Beowulf': {
 				species: 'Beedrill', ability: ['Download', 'Speed Boost'], item: 'Beedrillite', gender: 'M',
-				moves: ['Spiky Shield', 'Gunk Shot', ['Bolt Strike', 'Diamond Storm', 'Sacred Fire']],
+				moves: ['Spiky Shield', 'Gunk Shot', ['Bolt Strike', 'Diamond Storm', 'Thousand Arrows']],
 				signatureMove: 'Buzzing of the Swarm',
 				evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 			},
@@ -415,16 +415,16 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {atk: 252, def: 4, spe: 252}, nature: 'Adamant',
 			},
 			'Overneat': {
-				species: 'Sylveon', ability: 'Fairy Aura', item: 'Life Orb', gender: 'F',
-				moves: ['Nasty Plot', 'Psyshock', 'Earth Power'],
-				signatureMove: 'Total Leech',
-				evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+				species: 'Absol', ability: 'Intimidate', item: 'Absolite', gender: 'M',
+				moves: ['Play Rough', 'Close Combat', 'Extreme Speed'],
+				signatureMove: 'Ultimate Slash',
+				evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 			},
 			'Pablo': {
 				species: 'Blastoise', ability: 'Torrent', item: 'Blastoisinite', gender: 'M',
 				moves: ['Muddy Water', 'Ice Beam', 'Slack Off'],
 				signatureMove: 'Jail Shell',
-				evs: {hp: 252, def: 4, spa: 252}, nature: 'Modest',
+				evs: {hp: 252, def: 4, spa: 252}, nature: 'Modest', shiny: true,
 			},
 			'Paradise': {
 				species: 'Muk', ability: 'Unaware', item: 'Black Sludge', gender: '',
@@ -616,7 +616,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			let name = '';
 			if (debug && team.length === 1) {
 				// DEBUG CODE, remove before commiting to the main server
-				name = ''; // Change name to force a set to appear
+				name = 'Overneat'; // Change name to force a set to appear
 				pool.splice(pool.indexOf(name), 1);
 			} else {
 				name = this.sampleNoReplace(pool);
@@ -629,9 +629,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			// Enforce typing limits
 			let types = this.getTemplate(ssbSet.species).types;
 			if (name === 'E4 Flint') types = ["Steel", "Ground", "Fire"];
-			if (name === 'OM') types = ["Fire", "Fairy"];
-			if (name === 'Rach') types = ["Electric", "Fighting"];
-			if (name === 'ACakeWearingAHat') types = ["Normal", "Ghost"];
+			if (name === 'Overneat') types = ["Dark", "Fairy"];
 			let rejected = false;
 			for (let type of types) {
 				if (typePool[type] === undefined) typePool[type] = 0;

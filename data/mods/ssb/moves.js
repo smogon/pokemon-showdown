@@ -695,14 +695,14 @@ let BattleMovedex = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Has a 50% chance to cause the target to fall asleep. Sets one layer of Spikes on the opponent's side of the field and boosts a random stat of the user by one stage, excluding accuracy and evasion, that is not already at maximum.",
-		shortDesc: "50% chance to sleep. Sets 1 Spike. Boosts a stat.",
+		desc: "Has a 50% chance to cause the target to fall asleep. Sets one layer of Spikes on the opponent's side of the field and randomly boosts the user's Speed or Special Attack by one stage.",
+		shortDesc: "50% chance to sleep. Sets Spike. Boosts Spe or SpA.",
 		id: "bringerofdarkness",
 		name: "Bringer of Darkness",
 		isNonstandard: "Custom",
 		pp: 5,
 		priority: 0,
-		flags: {reflectable: 1, mirror: 1, snatch: 1},
+		flags: {reflectable: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -712,19 +712,10 @@ let BattleMovedex = {
 		onHit(target, source, move) {
 			this.add('-anim', source, "Spikes", target);
 			target.side.addSideCondition('spikes');
-			let stats = [];
-			for (let stat in source.boosts) {
-				// @ts-ignore
-				if (stat !== 'accuracy' && stat !== 'evasion' && source.boosts[stat] < 6) {
-					stats.push(stat);
-				}
-			}
-			if (stats.length) {
-				let randomStat = this.sample(stats);
-				/** @type {{[stat: string]: number}} */
-				let boost = {};
-				boost[randomStat] = 1;
-				this.boost(boost, source);
+			if (this.random(2) === 0) {
+				this.boost({spa: 1}, source, source);
+			} else {
+				this.boost({spe: 1}, source, source);
 			}
 			if (this.random(2) === 0) target.trySetStatus('slp', source);
 		},
@@ -2413,28 +2404,43 @@ let BattleMovedex = {
 		type: "Fire",
 	},
 	// Overneat
-	totalleech: {
+	ultimateslash: {
 		accuracy: 100,
-		basePower: 70,
-		category: "Special",
-		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
-		shortDesc: "User recovers 50% of the damage dealt.",
-		id: "totalleech",
-		name: "Total Leech",
+		basePower: 80,
+		category: "Physical",
+		desc: "If this attack does not miss, the effects of Reflect, Light Screen, and Aurora Veil end for the target's side of the field before damage is calculated. If the user has not fainted, the target loses its held item.",
+		shortDesc: "Destroys screens. Removes foe's item.",
+		id: "ultimateslash",
+		name: "Ultimate Slash",
 		isNonstandard: "Custom",
 		pp: 5,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, heal: 1},
+		flags: {contact: 1, protect: 1, mirror: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, "Leech Life", target);
+			this.add('-anim', source, "Night Slash", target);
 		},
-		drain: [1, 2],
+		onTryHit(pokemon) {
+			// will shatter screens through sub, before you hit
+			if (pokemon.runImmunity('Dark')) {
+				pokemon.side.removeSideCondition('reflect');
+				pokemon.side.removeSideCondition('lightscreen');
+				pokemon.side.removeSideCondition('auroraveil');
+			}
+		},
+		onAfterHit(target, source) {
+			if (source.hp) {
+				let item = target.takeItem();
+				if (item) {
+					this.add('-enditem', target, item.name, '[from] move: Ultimate Slash', '[of] ' + source);
+				}
+			}
+		},
 		secondary: null,
 		target: "normal",
-		type: "Fairy",
+		type: "Dark",
 	},
 	// Pablo
 	jailshell: {

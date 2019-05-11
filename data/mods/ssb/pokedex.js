@@ -90,6 +90,12 @@ let BattlePokedex = {
 		inherit: true,
 		types: ['Fire', 'Fairy'],
 	},
+	// Overneat
+	absolmega: {
+		inherit: true,
+		abilities: {0: 'Tough Claws'},
+		types: ['Dark', 'Fairy'],
+	},
 	// pre
 	deoxys: {
 		inherit: true,

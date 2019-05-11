@@ -129,6 +129,8 @@ let BattleScripts = {
 
 		// E4 flint gains fire type when mega evolving
 		if (pokemon.name === 'E4 Flint' && !pokemon.illusion) this.add('-start', pokemon, 'typeadd', 'Fire');
+		// Overneat gains the fairy type when mega evolving
+		if (pokemon.name === 'Overneat' && !pokemon.illusion) this.add('-start', pokemon, 'typeadd', 'Fairy');
 
 		return true;
 	},
