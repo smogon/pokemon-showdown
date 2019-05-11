@@ -179,6 +179,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Super Ego Inflation',
 				evs: {hp: 252, def: 252, spd: 4}, ivs: {spe: 0}, nature: 'Relaxed',
 			},
+			'Decem': {
+				species: 'Goodra', ability: 'Miracle Scale', item: 'Choice Scarf', gender: '',
+				moves: ['Draco Meteor', 'Fire Blast', 'Sludge Wave'],
+				signatureMove: 'Hit and Run',
+				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+			},
 			'deg': {
 				species: 'Gengar', ability: 'Bad Dreams', item: 'Gengarite', gender: 'M',
 				moves: [['Hex', 'Shadow Ball'], 'Sludge Wave', 'Focus Blast'],

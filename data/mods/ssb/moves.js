@@ -859,6 +859,33 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Normal",
 	},
+	// Decem
+	hitandrun: {
+		accuracy: 100,
+		basePower: 70,
+		category: "Special",
+		desc: "If this move hits, the pokemon that was hit is affected with Gooey. Gooey causes the affected pokemon to lose 25% of its health until it switches out.",
+		shortDesc: "If hit: hit pokemon loses 25% of HP per turn.",
+		id: "hitandrun",
+		name: "Hit and Run",
+		isNonstandard: "Custom",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Outrage', target);
+		},
+		onHit(target, source, move) {
+			target.addVolatile('Gooey', source, move);
+		},
+		selfSwitch: true,
+		secondary: null,
+		target: "normal",
+		type: "Dragon",
+	},
 	// deg
 	luciddreams: {
 		accuracy: 75,

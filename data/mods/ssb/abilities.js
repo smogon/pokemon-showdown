@@ -196,6 +196,17 @@ let BattleAbilities = {
 			}
 		},
 	},
+	// Decem
+	miraclescale: {
+		desc: "This Pokemon's Dragon type moves have their priority increased by 1.",
+		shortDesc: "+1 Priority to Dragon type moves.",
+		id: "miraclescale",
+		name: "Miracle Scale",
+		isNonstandard: "Custom",
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move && move.type === 'Dragon') return priority + 1;
+		},
+	},
 	// E4 Flint
 	starkmountain: {
 		desc: "The user summons Sunny Day when it switches in. In addition, Water-type attacks do halved damage against this Pokemon.",

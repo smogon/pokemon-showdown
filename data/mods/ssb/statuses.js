@@ -334,6 +334,18 @@ let BattleStatuses = {
 			this.add(`c|@DaWoblefet|mished`);
 		},
 	},
+	decem: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|+Decem|:D`);
+		},
+		onSwitchOut() {
+			this.add(`c|+Decem|bye`);
+		},
+		onFaint() {
+			this.add(`c|+Decem|>:(`);
+		},
+	},
 	deg: {
 		noCopy: true,
 		onStart() {
@@ -1353,6 +1365,16 @@ let BattleStatuses = {
 		},
 		onModifyWeight(weight) {
 			return weight * 2;
+		},
+	},
+	// Gooey volatile for Decem's move
+	gooey: {
+		onStart(pokemon, source) {
+			this.add('-start', pokemon, 'Gooey', '[of] ' + source);
+		},
+		onResidualOrder: 10,
+		onResidual(pokemon) {
+			this.damage(pokemon.maxhp / 4);
 		},
 	},
 };
