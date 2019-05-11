@@ -591,8 +591,8 @@ class RandomStaffBrosTeams extends RandomTeams {
 			'XpRienzo ☑◡☑': {
 				species: 'Reshiram', ability: 'Turboblaze', item: 'Charcoal', gender: 'M',
 				moves: ['Core Enforcer', 'Volt Switch', 'Psystrike'],
-				signatureMove: 'Bleh Flame',
-				evs: {spa: 252, spd: 4, spe: 252}, ivs: {hp: 24, def: 25, spd: 20}, nature: 'Timid',
+				signatureMove: 'Blue Flare',
+				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
 			'Zarel': {
 				species: 'Meloetta', ability: 'Serene Grace', item: '', gender: 'M',

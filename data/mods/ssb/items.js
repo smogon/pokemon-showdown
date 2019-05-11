@@ -99,6 +99,14 @@ let BattleItems = {
 		gen: 7,
 		desc: "If held by a Cradily with Rock Slide, it can use Devolution Wave.",
 	},
+	// XpRienzo
+	"charcoal": {
+		inherit: true,
+		zMove: "Bleh Flame",
+		zMoveFrom: "Blue Flare",
+		zMoveUser: ["Reshiram"],
+		desc: "Holder's Fire-type attacks have 1.2x power. If held by a Reshiram with Blue Flare, it can use Bleh Flame.",
+	},
 };
 
 exports.BattleItems = BattleItems;
