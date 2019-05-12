@@ -363,19 +363,19 @@ class Trivia extends Rooms.RoomGame {
 	 * @return {string | undefined}
 	 */
 	addPlayer(user) {
-		if (this.players[user.userid]) return 'You have already signed up for this game.';
+		if (this.playerTable[user.userid]) return 'You have already signed up for this game.';
 		for (let id in user.prevNames) {
-			if (this.players[id]) return 'You have already signed up for this game.';
+			if (this.playerTable[id]) return 'You have already signed up for this game.';
 		}
 		if (this.kickedUsers.has(user.userid)) {
 			return 'You were kicked from the game and thus cannot join it again.';
 		}
 		for (let id in user.prevNames) {
-			if (this.players[id]) return 'You have already signed up for this game.';
+			if (this.playerTable[id]) return 'You have already signed up for this game.';
 			if (this.kickedUsers.has(id)) return 'You were kicked from the game and cannot join until the next game.';
 		}
 
-		for (let id in this.players) {
+		for (let id in this.playerTable) {
 			let tarUser = Users.get(id);
 			if (tarUser) {
 				if (tarUser.prevNames[user.userid]) return 'You have already signed up for this game.';
@@ -413,7 +413,7 @@ class Trivia extends Rooms.RoomGame {
 	 * @return {boolean}
 	 */
 	onConnect(user) {
-		let player = this.players[user.userid];
+		let player = this.playerTable[user.userid];
 		if (!player || !player.isAbsent) return false;
 
 		player.toggleAbsence();
@@ -423,8 +423,8 @@ class Trivia extends Rooms.RoomGame {
 		// At least let the game start first!!
 		if (this.phase === SIGNUP_PHASE) return false;
 
-		for (let i in this.players) {
-			this.players[i].clearAnswer();
+		for (let i in this.playerTable) {
+			this.playerTable[i].clearAnswer();
 		}
 
 		this.broadcast(
@@ -442,7 +442,7 @@ class Trivia extends Rooms.RoomGame {
 	onLeave(user) {
 		// The user cannot participate, but their score should be kept
 		// regardless in cases of disconnects.
-		let player = this.players[user.userid];
+		let player = this.playerTable[user.userid];
 		if (!player || player.isAbsent) return false;
 
 		player.toggleAbsence();
@@ -514,7 +514,7 @@ class Trivia extends Rooms.RoomGame {
 	 * @return {string}
 	 */
 	kick(tarUser, user) {
-		if (!this.players[tarUser.userid]) {
+		if (!this.playerTable[tarUser.userid]) {
 			if (this.kickedUsers.has(tarUser.userid)) return `User ${tarUser.name} has already been kicked from the game.`;
 
 			for (let id in tarUser.prevNames) {
@@ -554,7 +554,7 @@ class Trivia extends Rooms.RoomGame {
 	 * @return {string | undefined}
 	 */
 	leave(user) {
-		if (!this.players[user.userid]) {
+		if (!this.playerTable[user.userid]) {
 			return 'You are not a player in the current game.';
 		}
 		super.removePlayer(user);
@@ -674,8 +674,8 @@ class Trivia extends Rooms.RoomGame {
 		buffer += '<br />' + this.getWinningMessage(winners);
 		this.broadcast('The answering period has ended!', buffer);
 
-		for (const userid in this.players) {
-			let player = this.players[userid];
+		for (const userid in this.playerTable) {
+			let player = this.playerTable[userid];
 			if (!player.points) continue;
 
 			for (const leaderboard of [triviaData.leaderboard, triviaData.altLeaderboard]) {
@@ -697,8 +697,8 @@ class Trivia extends Rooms.RoomGame {
 		cachedLadder.invalidateCache();
 		cachedAltLadder.invalidateCache();
 
-		for (let i in this.players) {
-			let player = this.players[i];
+		for (let i in this.playerTable) {
+			let player = this.playerTable[i];
 			let user = Users.get(player.userid);
 			if (!user) continue;
 			user.sendTo(
@@ -724,9 +724,9 @@ class Trivia extends Rooms.RoomGame {
 
 	getTopPlayers({max = null, requirePoints = true}) {
 		const ranks = [];
-		for (const userid in this.players) {
+		for (const userid in this.playerTable) {
 			const user = Users.get(userid);
-			const player = this.players[userid];
+			const player = this.playerTable[userid];
 			if ((requirePoints && !player.points) || !user) continue;
 			ranks.push({userid, player, name: user.name});
 		}
@@ -798,7 +798,7 @@ class FirstModeTrivia extends Trivia {
 	 * @return {string | undefined}
 	 */
 	answerQuestion(answer, user) {
-		let player = this.players[user.userid];
+		let player = this.playerTable[user.userid];
 		if (!player) return 'You are not a player in the current trivia game.';
 		if (this.phase !== QUESTION_PHASE) return 'There is no question to answer.';
 		if (player.answer) return 'You have already attempted to answer the current question.';
@@ -820,8 +820,8 @@ class FirstModeTrivia extends Trivia {
 			return;
 		}
 
-		for (let i in this.players) {
-			this.players[i].clearAnswer();
+		for (let i in this.playerTable) {
+			this.playerTable[i].clearAnswer();
 		}
 
 		this.broadcast('The answering period has ended!', buffer);
@@ -838,8 +838,8 @@ class FirstModeTrivia extends Trivia {
 	tallyAnswers() {
 		this.phase = INTERMISSION_PHASE;
 
-		for (let i in this.players) {
-			let player = this.players[i];
+		for (let i in this.playerTable) {
+			let player = this.playerTable[i];
 			player.clearAnswer();
 		}
 
@@ -866,7 +866,7 @@ class TimerModeTrivia extends Trivia {
 	 * @return {string | undefined}
 	 */
 	answerQuestion(answer, user) {
-		let player = this.players[user.userid];
+		let player = this.playerTable[user.userid];
 		if (!player) return 'You are not a player in the current trivia game.';
 		if (this.phase !== QUESTION_PHASE) return 'There is no question to answer.';
 
@@ -905,8 +905,8 @@ class TimerModeTrivia extends Trivia {
 		let now = hrtimeToNanoseconds(process.hrtime());
 		let askedAt = hrtimeToNanoseconds(this.askedAt);
 		let totalDiff = now - askedAt;
-		for (let i in this.players) {
-			let player = this.players[i];
+		for (let i in this.playerTable) {
+			let player = this.playerTable[i];
 			if (!player.isCorrect) {
 				player.clearAnswer();
 				continue;
@@ -974,7 +974,7 @@ class NumberModeTrivia extends Trivia {
 	 * @return {string | undefined}
 	 */
 	answerQuestion(answer, user) {
-		let player = this.players[user.userid];
+		let player = this.playerTable[user.userid];
 		if (!player) return 'You are not a player in the current trivia game.';
 		if (this.phase !== QUESTION_PHASE) return 'There is no question to answer.';
 
@@ -998,10 +998,10 @@ class NumberModeTrivia extends Trivia {
 		this.phase = INTERMISSION_PHASE;
 
 		let buffer;
-		let innerBuffer = Object.keys(this.players)
-			.filter(id => this.players[id].isCorrect)
+		let innerBuffer = Object.keys(this.playerTable)
+			.filter(id => this.playerTable[id].isCorrect)
 			.map(id => {
-				let player = this.players[id];
+				let player = this.playerTable[id];
 				return [Chat.escapeHTML(player.name), hrtimeToNanoseconds(player.currentAnsweredAt)];
 			})
 			.sort((a, b) => a[1] - b[1]);
@@ -1009,8 +1009,8 @@ class NumberModeTrivia extends Trivia {
 		let points = this.calculatePoints(innerBuffer.length);
 		if (points) {
 			let winner = false;
-			for (let i in this.players) {
-				let player = this.players[i];
+			for (let i in this.playerTable) {
+				let player = this.playerTable[i];
 				if (player.isCorrect) player.incrementPoints(points, this.questionNumber);
 
 				if (player.points >= this.getCap()) {
@@ -1026,8 +1026,8 @@ class NumberModeTrivia extends Trivia {
 
 			if (winner) return this.win(buffer);
 		} else {
-			for (let i in this.players) {
-				let player = this.players[i];
+			for (let i in this.playerTable) {
+				let player = this.playerTable[i];
 				player.clearAnswer();
 			}
 
@@ -1062,7 +1062,7 @@ class WeakestLink extends Trivia {
 
 	start() {
 		super.start();
-		this.curPlayer = this.players[Object.keys(this.players)[0]];
+		this.curPlayer = this.playerTable[Object.keys(this.playerTable)[0]];
 	}
 
 	sendQuestion(question) {
@@ -1077,7 +1077,7 @@ class WeakestLink extends Trivia {
 	}
 
 	onBank(user) {
-		let player = this.players[user.userid];
+		let player = this.playerTable[user.userid];
 		if (!player) return 'You are not a participant in the current game';
 		if (this.phase !== 'banking') return 'You cannot bank at this time.';
 		if (this.curPlayer.userid !== player.userid) return 'It is not your turn to bank.';
@@ -1090,7 +1090,7 @@ class WeakestLink extends Trivia {
 	}
 
 	answerQuestion(answer, user) {
-		let player = this.players[user.userid];
+		let player = this.playerTable[user.userid];
 		if (!player) return 'You are not a player in the current trivia game.';
 		if (this.phase !== QUESTION_PHASE) return 'There is no question to answer.';
 		clearTimeout(this.phaseTimeout);
@@ -1114,14 +1114,14 @@ class WeakestLink extends Trivia {
 			`${this.curPlayer.name} ${answer.length === 0 ? "did not answer" : "answered " + ((isCorrect ? "correctly" : "incorrectly") + " with " + answer)}`
 		);
 		this.playerindex++;
-		if (this.playerindex === Object.keys(this.players).length) {
+		if (this.playerindex === Object.keys(this.playerTable).length) {
 			this.playerindex = 0;
 			if (this.finals) {
 				this.numFinals++;
 				if (this.numFinals >= NUM_FINALS_QUESTIONS) {
 					let oplayer;
-					for (let userID in this.players) {
-						let player = this.players[userID];
+					for (let userID in this.playerTable) {
+						let player = this.playerTable[userID];
 						if (player !== this.curPlayer) {
 							oplayer = player;
 							break;
@@ -1142,10 +1142,10 @@ class WeakestLink extends Trivia {
 				}
 			}
 		}
-		this.curPlayer = this.players[Object.keys(this.players)[this.playerindex]];
+		this.curPlayer = this.playerTable[Object.keys(this.playerTable)[this.playerindex]];
 		this.phase = 'banking';
 		this.broadcast(
-			`Players: ${Object.keys(this.players).map(p => (this.curPlayer.userid === p ? "<em>" + this.players[p].name + "</em>" : this.players[p].name) + (this.finals ? "(" + this.players[p].correctAnswers + ")" : "")).join(", ")}`,
+			`Players: ${Object.keys(this.playerTable).map(p => (this.curPlayer.userid === p ? "<em>" + this.playerTable[p].name + "</em>" : this.playerTable[p].name) + (this.finals ? "(" + this.playerTable[p].correctAnswers + ")" : "")).join(", ")}`,
 			`Bank: ${this.bank}<br />Amount to bank: ${this.amountToBank}`
 		);
 		this.setPhaseTimeout(() => this.askQuestion(), 5 * 1000);
@@ -1159,16 +1159,16 @@ class WeakestLink extends Trivia {
 		clearTimeout(this.phaseTimeout);
 		this.phase = "voting";
 		this.broadcast(
-			`Players: ${Object.keys(this.players).map(p => this.players[p].name).join(", ")}`,
+			`Players: ${Object.keys(this.playerTable).map(p => this.playerTable[p].name).join(", ")}`,
 			`Bank: ${this.bank}<br />Vote for who you would like to eliminate with /trivia vote [user]`
 		);
 	}
 
 	vote(target, user) {
-		let player = this.players[user.userid];
+		let player = this.playerTable[user.userid];
 		if (!player) return 'You are not a participant in the current game.';
 		if (this.phase !== "voting") return "You cannot vote at this time.";
-		let targPlayer = this.players[toId(target)];
+		let targPlayer = this.playerTable[toId(target)];
 		if (!targPlayer) return `No player named '${target}' is currently in the game.`;
 		if (targPlayer.userid === player.userid) return "You cannot vote to eliminate yourself.";
 		player.vote = targPlayer;
@@ -1180,15 +1180,15 @@ class WeakestLink extends Trivia {
 
 	tallyVotes() {
 		let votes = {};
-		for (let userID in this.players) {
-			let id = this.players[userID].vote.userid;
+		for (let userID in this.playerTable) {
+			let id = this.playerTable[userID].vote.userid;
 			if (!(id in votes)) votes[id] = 0;
 			votes[id]++;
 		}
 		let maxNum = 0;
 		let maxVotes = [];
-		for (let userID in this.players) {
-			let curPlayer = this.players[userID];
+		for (let userID in this.playerTable) {
+			let curPlayer = this.playerTable[userID];
 			let numVotes = votes[userID] || 0;
 			if (numVotes > maxNum) {
 				maxNum = numVotes;
@@ -1211,24 +1211,24 @@ class WeakestLink extends Trivia {
 
 	startRound() {
 		this.phase = INTERMISSION_PHASE;
-		if (Object.keys(this.players).length === 2) {
+		if (Object.keys(this.playerTable).length === 2) {
 			this.finals = true;
 			this.numFinals = 0;
 		}
 		this.roundstarted = false;
 		if (this.finals) {
-			this.curPlayer = this.players[Object.keys(this.players)[0]];
+			this.curPlayer = this.playerTable[Object.keys(this.playerTable)[0]];
 		} else {
 			this.curPlayer = this.strongestPlayer();
 		}
-		for (let userID in this.players) {
-			let player = this.players[userID];
+		for (let userID in this.playerTable) {
+			let player = this.playerTable[userID];
 			player.points = 0;
 			player.correctAnswers = 0;
 		}
-		this.playerindex = Object.keys(this.players).indexOf(this.curPlayer.userid);
+		this.playerindex = Object.keys(this.playerTable).indexOf(this.curPlayer.userid);
 		this.broadcast(
-			`Players: ${Object.keys(this.players).map(p => this.players[p].name).join(", ")}`,
+			`Players: ${Object.keys(this.playerTable).map(p => this.playerTable[p].name).join(", ")}`,
 			`Bank: ${this.bank}<br />The ${this.finals ? "next" : "final"} round will begin in 30 seconds, and it will be ${this.curPlayer.name}'s turn to answer.`
 		);
 		this.timeout = setTimeout(() => this.askQuestion(), 30 * 1000);
@@ -1241,8 +1241,8 @@ class WeakestLink extends Trivia {
 	strongestPlayer() {
 		let maxAnswers = 0;
 		let maxPlayer = [];
-		for (let userID in this.players) {
-			let player = this.players[userID];
+		for (let userID in this.playerTable) {
+			let player = this.playerTable[userID];
 			if (player.correctAnswers > maxAnswers) {
 				maxPlayer = [player];
 				maxAnswers = player.correctAnswers;
@@ -1269,19 +1269,19 @@ class WeakestLink extends Trivia {
 	}
 
 	checkVotes() {
-		for (let userID in this.players) {
-			let player = this.players[userID];
+		for (let userID in this.playerTable) {
+			let player = this.playerTable[userID];
 			if (!player.vote) return false;
 		}
 		return true;
 	}
 
 	decide(target, user) {
-		let player = this.players[user.userid];
+		let player = this.playerTable[user.userid];
 		if (!player) return 'You are not participating in the current game.';
 		if (this.phase !== 'deciding') return 'You cannot decide who to eliminate at this time.';
 		if (this.curPlayer !== player) return 'It is not your turn to decide who to eliminate';
-		let targPlayer = this.players[toId(target)];
+		let targPlayer = this.playerTable[toId(target)];
 		if (!targPlayer) return 'That player is not in the game.';
 		if (this.potentialElims.indexOf(targPlayer) === -1) return 'That player cannot be eliminated.';
 		this.sendToRoom(`${this.curPlayer.name} has decided to eliminate ${targPlayer.name}!`);
@@ -1471,7 +1471,7 @@ const commands = {
 		let buffer = `There is a trivia game in progress, and it is in its ${game.phase} phase.<br />` +
 			`Mode: ${game.mode} | Category: ${game.category} | Score cap: ${game.getCap()}`;
 
-		let player = game.players[tarUser.userid];
+		let player = game.playerTable[tarUser.userid];
 		if (player) {
 			if (!this.broadcasting) {
 				buffer += `<br />Current score: ${player.points} | Correct Answers: ${player.correctAnswers}`;
@@ -1910,7 +1910,7 @@ const commands = {
 		if (!this.can('broadcast', null, room)) return;
 		if (!this.runBroadcast()) return;
 		if (room.game.phase !== 'voting') return this.sendReplyBox("The game is not currently in the voting phase");
-		return this.sendReplyBox(`The following players have yet to vote: ${Object.values(room.game.players).filter(pl => !pl.vote).map(pl => pl.name).join(", ")}`);
+		return this.sendReplyBox(`The following players have yet to vote: ${Object.values(room.game.playerTable).filter(pl => !pl.vote).map(pl => pl.name).join(", ")}`);
 	},
 	checkvoteshelp: [`/trivia checkvotes - Check which players have not yet voted.`],
 

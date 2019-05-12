@@ -117,7 +117,7 @@ class Elimination {
 		this.isDrawingSupported = false;
 		this.isBracketFrozen = false;
 		/** @type {TournamentPlayer[]} */
-		this.playerList = [];
+		this.players = [];
 
 		maxSubtrees = maxSubtrees || 1;
 		if (typeof maxSubtrees === 'string' && maxSubtrees.toLowerCase() === 'infinity') {
@@ -162,7 +162,7 @@ class Elimination {
 	freezeBracket(players) {
 		if (!players.length) throw new Error(`No players in tournament`);
 
-		this.playerList = players;
+		this.players = players;
 		this.isBracketFrozen = true;
 
 		/** @typedef {{root: ElimNode, currentLayerLeafNodes: ElimNode[], nextLayerLeafNodes: ElimNode[]}} ElimTree */
@@ -358,7 +358,7 @@ class Elimination {
 
 		if (!['win', 'loss'].includes(result)) return 'InvalidMatchResult';
 
-		if (!this.playerList.includes(p1) || !this.playerList.includes(p2)) return 'UserNotAdded';
+		if (!this.players.includes(p1) || !this.players.includes(p2)) return 'UserNotAdded';
 
 		let targetNode = this.treeRoot.find(node => {
 			if (node.state === 'available' && (
@@ -454,7 +454,7 @@ class Elimination {
 			if (!currentNode) break;
 		}
 
-		if (this.playerList.length - 1 === this.maxSubtrees && currentNode) {
+		if (this.players.length - 1 === this.maxSubtrees && currentNode) {
 			results.push([currentNode.user]);
 		}
 

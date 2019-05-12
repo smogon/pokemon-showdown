@@ -3609,7 +3609,7 @@ const commands = {
 		if (cmd.charAt(cmd.length - 1) === ',') cmd = cmd.slice(0, -1);
 		let targets = target.split(',');
 		function getPlayer(input) {
-			let player = room.battle.players[toId(input)];
+			let player = room.battle.playerTable[toId(input)];
 			if (player) return player.slot;
 			if (input.includes('1')) return 'p1';
 			if (input.includes('2')) return 'p2';
@@ -3954,7 +3954,7 @@ const commands = {
 			return this.sendReply(`The game timer is ON (requested by ${[...timer.timerRequesters].join(', ')})`);
 		}
 		const force = user.can('timer', null, room);
-		if (!force && !room.game.players[user]) {
+		if (!force && !room.game.playerTable[user]) {
 			return this.errorReply(`Access denied.`);
 		}
 		if (this.meansNo(target) || target === 'stop') {

@@ -1485,9 +1485,9 @@ class GameRoom extends BasicChatRoom {
 	 * @param {User} user
 	 */
 	getLogForUser(user) {
-		if (!(user.userid in this.game.players)) return this.getLog();
+		if (!(user.userid in this.game.playerTable)) return this.getLog();
 		// @ts-ignore
-		return this.getLog(this.game.players[user.userid].num);
+		return this.getLog(this.game.playerTable[user.userid].num);
 	}
 	/**
 	 * @param {User?} excludeUser

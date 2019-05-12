@@ -197,7 +197,7 @@ class RoomBattleTimer {
 		}, timerSettings);
 		if (this.settings.maxPerTurn <= 0) this.settings.maxPerTurn = Infinity;
 
-		for (const player of this.battle.playerList) {
+		for (const player of this.battle.players) {
 			player.secondsLeft = this.settings.starting + this.settings.grace;
 			player.turnSecondsLeft = -1;
 			player.dcSecondsLeft = this.settings.dcTimerBank ? DISCONNECTION_BANK_TIME : DISCONNECTION_TIME;
@@ -211,10 +211,10 @@ class RoomBattleTimer {
 			this.timerRequesters.add(userid);
 			return false;
 		}
-		if (requester && this.battle.players[requester.userid] && this.lastDisabledByUser === requester.userid) {
+		if (requester && this.battle.playerTable[requester.userid] && this.lastDisabledByUser === requester.userid) {
 			const remainingCooldownMs = (this.lastDisabledTime || 0) + TIMER_COOLDOWN - Date.now();
 			if (remainingCooldownMs > 0) {
-				this.battle.players[requester.userid].sendRoom(`|inactiveoff|The timer can't be re-enabled so soon after disabling it (${Math.ceil(remainingCooldownMs / SECONDS)} seconds remaining).`);
+				this.battle.playerTable[requester.userid].sendRoom(`|inactiveoff|The timer can't be re-enabled so soon after disabling it (${Math.ceil(remainingCooldownMs / SECONDS)} seconds remaining).`);
 				return false;
 			}
 		}
@@ -249,7 +249,7 @@ class RoomBattleTimer {
 	nextRequest(isFirst = false) {
 		if (this.timer) clearTimeout(this.timer);
 		if (!this.timerRequesters.size) return;
-		const players = this.battle.playerList;
+		const players = this.battle.players;
 		if (players.some(player => player.secondsLeft <= 0)) return;
 		const maxTurnTime = (isFirst ? this.settings.maxFirstTurn : 0) || this.settings.maxPerTurn;
 
@@ -291,7 +291,7 @@ class RoomBattleTimer {
 		if (this.timer) clearTimeout(this.timer);
 		if (this.battle.ended) return;
 		const room = this.battle.room;
-		for (const player of this.battle.playerList) {
+		for (const player of this.battle.players) {
 			if (player.request.isWait) continue;
 			if (player.connected) {
 				player.secondsLeft -= TICK_TIME;
@@ -330,7 +330,7 @@ class RoomBattleTimer {
 		}
 	}
 	checkActivity() {
-		for (const player of this.battle.playerList) {
+		for (const player of this.battle.players) {
 			const isConnected = !!(player && player.active);
 
 			if (isConnected === player.connected) continue;
@@ -377,7 +377,7 @@ class RoomBattleTimer {
 		}
 	}
 	checkTimeout() {
-		const players = this.battle.playerList;
+		const players = this.battle.players;
 		if (players.every(player => player.turnSecondsLeft <= 0)) {
 			if (!this.settings.timeoutAutoChoose || players.every(player => player.secondsLeft <= 0)) {
 				this.battle.room.add(`|-message|All players are inactive.`).update();
@@ -438,10 +438,10 @@ class RoomBattle extends RoomGames.RoomGame {
 
 		// TypeScript bug: no `T extends RoomGamePlayer`
 		/** @type {{[userid: string]: RoomBattlePlayer}} */
-		this.players = Object.create(null);
+		this.playerTable = Object.create(null);
 		// TypeScript bug: no `T extends RoomGamePlayer`
 		/** @type {RoomBattlePlayer[]} */
-		this.playerList = [];
+		this.players = [];
 
 		this.playerCap = this.gameType === 'multi' || this.gameType === 'free-for-all' ? 4 : 2;
 		/** @type {RoomBattlePlayer} */
@@ -537,7 +537,7 @@ class RoomBattle extends RoomGames.RoomGame {
 	 * @param {string} data
 	 */
 	choose(user, data) {
-		const player = this.players[user.userid];
+		const player = this.playerTable[user.userid];
 		const [choice, rqid] = data.split('|', 2);
 		if (!player) return;
 		let request = player.request;
@@ -545,7 +545,7 @@ class RoomBattle extends RoomGames.RoomGame {
 			player.sendRoom(`|error|[Invalid choice] There's nothing to choose`);
 			return;
 		}
-		const allPlayersWait = this.playerList.every(player => !!player.request.isWait);
+		const allPlayersWait = this.players.every(player => !!player.request.isWait);
 		if (allPlayersWait || // too late
 			(rqid && rqid !== '' + request.rqid)) { // WAY too late
 			player.sendRoom(`|error|[Invalid choice] Sorry, too late to make a different move; the next turn has already started`);
@@ -562,7 +562,7 @@ class RoomBattle extends RoomGames.RoomGame {
 	 * @param {string} data
 	 */
 	undo(user, data) {
-		const player = this.players[user.userid];
+		const player = this.playerTable[user.userid];
 		const [, rqid] = data.split('|', 2);
 		if (!player) return;
 		let request = player.request;
@@ -570,7 +570,7 @@ class RoomBattle extends RoomGames.RoomGame {
 			player.sendRoom(`|error|[Invalid choice] There's nothing to cancel`);
 			return;
 		}
-		const allPlayersWait = this.playerList.every(player => !!player.request.isWait);
+		const allPlayersWait = this.players.every(player => !!player.request.isWait);
 		if (allPlayersWait || // too late
 			(rqid && rqid !== '' + request.rqid)) { // WAY too late
 			player.sendRoom(`|error|[Invalid choice] Sorry, too late to cancel; the next turn has already started`);
@@ -592,7 +592,7 @@ class RoomBattle extends RoomGames.RoomGame {
 
 		/** @type {SideID[]} */
 		let validSlots = [];
-		for (const player of this.playerList) {
+		for (const player of this.players) {
 			if (!player.userid) validSlots.push(player.slot);
 		}
 
@@ -626,7 +626,7 @@ class RoomBattle extends RoomGames.RoomGame {
 			user.popup(`Players can't be swapped out in a ${this.room.tour ? "tournament" : "rated"} battle.`);
 			return false;
 		}
-		const player = this.players[user.userid];
+		const player = this.playerTable[user.userid];
 		if (!player) {
 			user.popup(`Failed to leave battle - you're not a player.`);
 			return false;
@@ -807,7 +807,7 @@ class RoomBattle extends RoomGames.RoomGame {
 		// this handles joining a battle in which a user is a participant,
 		// where the user has already identified before attempting to join
 		// the battle
-		const player = this.players[user.userid];
+		const player = this.playerTable[user.userid];
 		if (!player) return;
 		player.updateChannel(connection || user);
 		const request = player.request;
@@ -833,13 +833,13 @@ class RoomBattle extends RoomGames.RoomGame {
 	 */
 	onRename(user, oldUserid, isJoining, isForceRenamed) {
 		if (user.userid === oldUserid) return;
-		if (!this.players) {
+		if (!this.playerTable) {
 			// !! should never happen but somehow still does
 			user.games.delete(this.id);
 			return;
 		}
-		if (!(oldUserid in this.players)) {
-			if (user.userid in this.players) {
+		if (!(oldUserid in this.playerTable)) {
+			if (user.userid in this.playerTable) {
 				// this handles a user renaming themselves into a user in the
 				// battle (e.g. by using /nick)
 				this.onConnect(user);
@@ -847,18 +847,18 @@ class RoomBattle extends RoomGames.RoomGame {
 			return;
 		}
 		if (!this.allowRenames) {
-			let player = this.players[oldUserid];
+			let player = this.playerTable[oldUserid];
 			if (player) {
 				const message = isForceRenamed ? " lost by having an inappropriate name." : " forfeited by changing their name.";
 				this.forfeitPlayer(player, message);
 			}
-			if (!(user.userid in this.players)) {
+			if (!(user.userid in this.playerTable)) {
 				user.games.delete(this.id);
 			}
 			return;
 		}
-		if (user.userid in this.players) return;
-		let player = this.players[oldUserid];
+		if (user.userid in this.playerTable) return;
+		let player = this.playerTable[oldUserid];
 		if (player) {
 			this.updatePlayer(player, user);
 		}
@@ -872,7 +872,7 @@ class RoomBattle extends RoomGames.RoomGame {
 	 * @param {User} user
 	 */
 	onJoin(user) {
-		let player = this.players[user.userid];
+		let player = this.playerTable[user.userid];
 		if (player && !player.active) {
 			player.active = true;
 			this.timer.checkActivity();
@@ -884,7 +884,7 @@ class RoomBattle extends RoomGames.RoomGame {
 	 * @param {User} user
 	 */
 	onLeave(user) {
-		let player = this.players[user.userid];
+		let player = this.playerTable[user.userid];
 		if (player && player.active) {
 			player.sendRoom(`|request|null`);
 			player.active = false;
@@ -901,7 +901,7 @@ class RoomBattle extends RoomGames.RoomGame {
 			this.tie();
 			return true;
 		}
-		let player = this.players[user.userid];
+		let player = this.playerTable[user.userid];
 		if (!player) return false;
 		this.stream.write(`>forcewin ${player.slot}`);
 	}
@@ -919,8 +919,8 @@ class RoomBattle extends RoomGames.RoomGame {
 		if (typeof user !== 'string') user = user.userid;
 		else user = toId(user);
 
-		if (!(user in this.players)) return false;
-		return this.forfeitPlayer(this.players[user], message);
+		if (!(user in this.playerTable)) return false;
+		return this.forfeitPlayer(this.playerTable[user], message);
 	}
 
 	/**
@@ -966,7 +966,7 @@ class RoomBattle extends RoomGames.RoomGame {
 	}
 
 	makePlayer(/** @type {User} */ user) {
-		const num = this.playerList.length + 1;
+		const num = this.players.length + 1;
 		return new RoomBattlePlayer(user, this, num);
 	}
 
@@ -999,7 +999,7 @@ class RoomBattle extends RoomGames.RoomGame {
 	start() {
 		// on start
 		this.started = true;
-		const users = this.playerList.map(player => {
+		const users = this.players.map(player => {
 			const user = player.getUser();
 			if (!user) throw new Error(`User ${player.name} not found on ${this.id} battle creation`);
 			return user;
@@ -1021,11 +1021,11 @@ class RoomBattle extends RoomGames.RoomGame {
 	}
 
 	clearPlayers() {
-		for (const player of this.playerList) {
+		for (const player of this.players) {
 			player.destroy();
 		}
-		this.players = {};
-		this.playerList = [];
+		this.playerTable = {};
+		this.players = [];
 		// @ts-ignore
 		this.p1 = null;
 		// @ts-ignore

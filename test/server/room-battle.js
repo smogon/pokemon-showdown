@@ -28,8 +28,8 @@ describe('Simulator abstraction layer features', function () {
 				p1.forceRename("Missingno."); // Don't do this at home
 				room = Rooms.createBattle('', {p1, p2, p1team: packedTeam, p2team: packedTeam, allowRenames: false});
 				p1.resetName();
-				for (const player of room.battle.playerList) {
-					assert.strictEqual(player, room.battle.players[toId(player.name)]);
+				for (const player of room.battle.players) {
+					assert.strictEqual(player, room.battle.playerTable[toId(player.name)]);
 				}
 			});
 		});

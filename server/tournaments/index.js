@@ -70,10 +70,10 @@ class Tournament extends Rooms.RoomGame {
 
 		// TypeScript bug: no `T extends RoomGamePlayer`
 		/** @type {{[userid: string]: TournamentPlayer}} */
-		this.players = Object.create(null);
+		this.playerTable = Object.create(null);
 		// TypeScript bug: no `T extends RoomGamePlayer`
 		/** @type {TournamentPlayer[]} */
-		this.playerList = [];
+		this.players = [];
 
 		this.id = room.id;
 		this.room = room;
@@ -132,7 +132,7 @@ class Tournament extends Rooms.RoomGame {
 	}
 
 	getRemainingPlayers() {
-		return this.playerList.filter(player => !player.isDisqualified && !player.isEliminated);
+		return this.players.filter(player => !player.isDisqualified && !player.isEliminated);
 	}
 
 	/**
@@ -201,7 +201,7 @@ class Tournament extends Rooms.RoomGame {
 	forceEnd() {
 		if (this.isTournamentStarted) {
 			if (this.autoDisqualifyTimer) clearTimeout(this.autoDisqualifyTimer);
-			for (const player of this.playerList) {
+			for (const player of this.players) {
 				const match = player.inProgressMatch;
 				if (match) {
 					match.room.tour = null;
@@ -212,7 +212,7 @@ class Tournament extends Rooms.RoomGame {
 		} else if (this.autoStartTimer) {
 			clearTimeout(this.autoStartTimer);
 		}
-		for (const player of this.playerList) {
+		for (const player of this.players) {
 			player.unlinkUser();
 		}
 		this.room.add('|tournament|forceend');
@@ -236,7 +236,7 @@ class Tournament extends Rooms.RoomGame {
 			);
 			return;
 		}
-		const isJoined = targetUser.userid in this.players;
+		const isJoined = targetUser.userid in this.playerTable;
 		/** @type {{format: string, generator: string, isStarted: boolean, isJoined: boolean, bracketData: string, teambuilderFormat?: string}} */
 		const update = {
 			format: this.format,
@@ -249,12 +249,12 @@ class Tournament extends Rooms.RoomGame {
 		connection.sendTo(this.room, `|tournament|update|${JSON.stringify(update)}`);
 		if (this.isTournamentStarted && isJoined) {
 			const update2 = {
-				challenges: usersToNames(this.availableMatchesCache.challenges.get(this.players[targetUser.userid])),
-				challengeBys: usersToNames(this.availableMatchesCache.challengeBys.get(this.players[targetUser.userid])),
+				challenges: usersToNames(this.availableMatchesCache.challenges.get(this.playerTable[targetUser.userid])),
+				challengeBys: usersToNames(this.availableMatchesCache.challengeBys.get(this.playerTable[targetUser.userid])),
 			};
 			connection.sendTo(this.room, `|tournament|update|${JSON.stringify(update2)}`);
 
-			const pendingChallenge = this.players[targetUser.userid].pendingChallenge;
+			const pendingChallenge = this.playerTable[targetUser.userid].pendingChallenge;
 			if (pendingChallenge) {
 				if (pendingChallenge.to) {
 					connection.sendTo(this.room, `|tournament|update|${JSON.stringify({challenging: pendingChallenge.to.name})}`);
@@ -310,9 +310,9 @@ class Tournament extends Rooms.RoomGame {
 	 */
 	removeBannedUser(userid) {
 		userid = toId(userid);
-		if (!(userid in this.players)) return;
+		if (!(userid in this.playerTable)) return;
 		if (this.isTournamentStarted) {
-			const player = this.players[userid];
+			const player = this.playerTable[userid];
 			if (!player.isDisqualified) {
 				this.disqualifyUser(userid);
 			}
@@ -333,7 +333,7 @@ class Tournament extends Rooms.RoomGame {
 			return;
 		}
 
-		if (user.userid in this.players) {
+		if (user.userid in this.playerTable) {
 			output.sendReply('|tournament|error|UserAlreadyAdded');
 			return;
 		}
@@ -355,7 +355,7 @@ class Tournament extends Rooms.RoomGame {
 		}
 
 		if (!isAllowAlts) {
-			for (let otherPlayer of this.playerList) {
+			for (let otherPlayer of this.players) {
 				if (!otherPlayer) continue;
 				const otherUser = Users(otherPlayer.userid);
 				if (otherUser && otherUser.latestIp === user.latestIp) {
@@ -373,7 +373,7 @@ class Tournament extends Rooms.RoomGame {
 		let player = /** @type {TournamentPlayer} */ (this.addPlayer(user));
 		if (!player) throw new Error("Failed to add player.");
 
-		this.players[user.userid] = player;
+		this.playerTable[user.userid] = player;
 		this.playerCount++;
 		this.room.add(`|tournament|join|${user.name}`);
 		user.sendTo(this.room, '|tournament|update|{"isJoined":true}');
@@ -392,7 +392,7 @@ class Tournament extends Rooms.RoomGame {
 	 * @param {User | string | null} user
 	 */
 	makePlayer(user) {
-		const num = this.playerList.length ? this.playerList[this.playerList.length - 1].num : 1;
+		const num = this.players.length ? this.players[this.players.length - 1].num : 1;
 		return new TournamentPlayer(user, this, num);
 	}
 
@@ -401,18 +401,18 @@ class Tournament extends Rooms.RoomGame {
 	 * @param {CommandContext} [output]
 	 */
 	removeUser(userid, output) {
-		if (!(userid in this.players)) {
+		if (!(userid in this.playerTable)) {
 			if (output) output.sendReply('|tournament|error|UserNotAdded');
 			return;
 		}
 
-		const error = this.generator.removeUser(this.players[userid]);
+		const error = this.generator.removeUser(this.playerTable[userid]);
 		if (typeof error === 'string') {
 			if (output) output.sendReply(`|tournament|error|${error}`);
 			return;
 		}
-		this.players[userid].destroy();
-		delete this.players[userid];
+		this.playerTable[userid].destroy();
+		delete this.playerTable[userid];
 		this.playerCount--;
 		const user = Users(userid);
 		this.room.add(`|tournament|leave|${user ? user.name : userid}`);
@@ -426,12 +426,12 @@ class Tournament extends Rooms.RoomGame {
 	 * @param {CommandContext} output
 	 */
 	replaceUser(user, replacementUser, output) {
-		if (!(user.userid in this.players)) {
+		if (!(user.userid in this.playerTable)) {
 			output.sendReply('|tournament|error|UserNotAdded');
 			return;
 		}
 
-		if (replacementUser.userid in this.players) {
+		if (replacementUser.userid in this.playerTable) {
 			output.sendReply('|tournament|error|UserAlreadyAdded');
 			return;
 		}
@@ -448,13 +448,13 @@ class Tournament extends Rooms.RoomGame {
 	getBracketData() {
 		let data;
 		if (!this.isTournamentStarted) {
-			data = this.generator.getPendingBracketData(this.playerList);
+			data = this.generator.getPendingBracketData(this.players);
 		} else {
 			data = this.generator.getBracketData();
 		}
 		if (data.type === 'tree') {
 			if (!data.rootNode) {
-				data.users = usersToNames(this.playerList);
+				data.users = usersToNames(this.players);
 				return data;
 			}
 			let queue = [data.rootNode];
@@ -520,15 +520,15 @@ class Tournament extends Rooms.RoomGame {
 			return false;
 		}
 
-		if (this.playerList.length < 2) {
+		if (this.players.length < 2) {
 			output.sendReply('|tournament|error|NotEnoughUsers');
 			return false;
 		}
 
-		this.generator.freezeBracket(this.playerList);
+		this.generator.freezeBracket(this.players);
 
 		const now = Date.now();
-		for (const user of this.playerList) {
+		for (const user of this.players) {
 			user.lastActionTime = now;
 		}
 
@@ -555,7 +555,7 @@ class Tournament extends Rooms.RoomGame {
 		/** @type {Map<TournamentPlayer, boolean>} */
 		const oldAvailableMatches = new Map();
 
-		for (const user of this.playerList) {
+		for (const user of this.players) {
 			challenges.set(user, []);
 			challengeBys.set(user, []);
 
@@ -578,7 +578,7 @@ class Tournament extends Rooms.RoomGame {
 		}
 
 		const now = Date.now();
-		for (const player of this.playerList) {
+		for (const player of this.players) {
 			if (oldAvailableMatches.get(player)) continue;
 
 			if (player.availableMatches.size) player.lastActionTime = now;
@@ -612,12 +612,12 @@ class Tournament extends Rooms.RoomGame {
 			return false;
 		}
 
-		if (!(userid in this.players)) {
+		if (!(userid in this.playerTable)) {
 			sendReply(`|tournament|error|UserNotAdded|${userid}`);
 			return false;
 		}
 
-		const player = this.players[userid];
+		const player = this.playerTable[userid];
 		if (player.isDisqualified) {
 			sendReply(`|tournament|error|AlreadyDisqualified|${userid}`);
 			return false;
@@ -656,7 +656,7 @@ class Tournament extends Rooms.RoomGame {
 		}
 
 		let matchTo = null;
-		for (const playerFrom of this.playerList) {
+		for (const playerFrom of this.players) {
 			const match = playerFrom.inProgressMatch;
 			if (match && match.to === player) matchTo = playerFrom;
 		}
@@ -732,7 +732,7 @@ class Tournament extends Rooms.RoomGame {
 		if (this.autoDisqualifyTimeout === Infinity) {
 			this.room.add('|tournament|autodq|off');
 			if (this.autoDisqualifyTimer) clearTimeout(this.autoDisqualifyTimer);
-			for (const player of this.playerList) player.autoDisqualifyWarned = false;
+			for (const player of this.players) player.autoDisqualifyWarned = false;
 		} else {
 			this.room.add(`|tournament|autodq|on|${this.autoDisqualifyTimeout}`);
 			if (this.isTournamentStarted) this.runAutoDisqualify();
@@ -751,7 +751,7 @@ class Tournament extends Rooms.RoomGame {
 		if (this.autoDisqualifyTimer) clearTimeout(this.autoDisqualifyTimer);
 
 		const now = Date.now();
-		for (const player of this.playerList) {
+		for (const player of this.players) {
 			const time = player.lastActionTime;
 			let availableMatches = false;
 			if (player.availableMatches.size) availableMatches = true;
@@ -800,18 +800,18 @@ class Tournament extends Rooms.RoomGame {
 			return;
 		}
 
-		if (!(user.userid in this.players)) {
+		if (!(user.userid in this.playerTable)) {
 			output.sendReply('|tournament|error|UserNotAdded');
 			return;
 		}
 
-		if (!(targetUserid in this.players)) {
+		if (!(targetUserid in this.playerTable)) {
 			output.sendReply('|tournament|error|InvalidMatch');
 			return;
 		}
 
-		const from = this.players[user.userid];
-		const to = this.players[targetUserid];
+		const from = this.playerTable[user.userid];
+		const to = this.playerTable[targetUserid];
 		const availableMatches = from.availableMatches;
 		if (!availableMatches || !availableMatches.has(to)) {
 			output.sendReply('|tournament|error|InvalidMatch');
@@ -858,12 +858,12 @@ class Tournament extends Rooms.RoomGame {
 			return;
 		}
 
-		if (!(user.userid in this.players)) {
+		if (!(user.userid in this.playerTable)) {
 			if (output) output.sendReply('|tournament|error|UserNotAdded');
 			return;
 		}
 
-		const player = this.players[user.userid];
+		const player = this.playerTable[user.userid];
 		const challenge = player.pendingChallenge;
 		if (!challenge || !challenge.to) return;
 
@@ -888,12 +888,12 @@ class Tournament extends Rooms.RoomGame {
 			return;
 		}
 
-		if (!(user.userid in this.players)) {
+		if (!(user.userid in this.playerTable)) {
 			output.sendReply('|tournament|error|UserNotAdded');
 			return;
 		}
 
-		const player = this.players[user.userid];
+		const player = this.playerTable[user.userid];
 		const challenge = player.pendingChallenge;
 		if (!challenge || !challenge.from) return;
 
@@ -957,14 +957,14 @@ class Tournament extends Rooms.RoomGame {
 	 * @param {string} oldUserid
 	 */
 	onRename(user, oldUserid) {
-		if (oldUserid in this.players) {
+		if (oldUserid in this.playerTable) {
 			if (user.userid === oldUserid) {
-				this.players[user.userid].name = user.name;
+				this.playerTable[user.userid].name = user.name;
 			} else {
-				this.players[user.userid] = this.players[oldUserid];
-				this.players[user.userid].userid = user.userid;
-				this.players[user.userid].name = user.name;
-				delete this.players[oldUserid];
+				this.playerTable[user.userid] = this.playerTable[oldUserid];
+				this.playerTable[user.userid].userid = user.userid;
+				this.playerTable[user.userid].name = user.name;
+				delete this.playerTable[oldUserid];
 			}
 		}
 
@@ -993,9 +993,9 @@ class Tournament extends Rooms.RoomGame {
 		room.parent = null;
 		if (!room.battle) throw new Error("onBattleWin called without a battle");
 
-		const p1 = this.players[room.p1.userid];
-		const p2 = this.players[room.p2.userid];
-		const winner = this.players[winnerid];
+		const p1 = this.playerTable[room.p1.userid];
+		const p2 = this.playerTable[room.p2.userid];
+		const winner = this.playerTable[winnerid];
 		const score = room.battle.score || [0, 0];
 
 		let result = 'draw';
@@ -1067,7 +1067,7 @@ class Tournament extends Rooms.RoomGame {
 		if (this.autoDisqualifyTimer) clearTimeout(this.autoDisqualifyTimer);
 		delete exports.tournaments[this.room.id];
 		this.room.game = null;
-		for (const player of this.playerList) {
+		for (const player of this.players) {
 			player.unlinkUser();
 		}
 	}

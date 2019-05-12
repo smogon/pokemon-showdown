@@ -14,7 +14,7 @@ class RoundRobin {
 		this.isDrawingSupported = true;
 		this.isBracketFrozen = false;
 		/** @type {TournamentPlayer[]} */
-		this.playerList = [];
+		this.players = [];
 
 		this.isDoubles = !!isDoubles;
 		/** @type {Match?[][]} */
@@ -49,7 +49,7 @@ class RoundRobin {
 		};
 	}
 	getBracketData() {
-		const players = this.playerList;
+		const players = this.players;
 		return {
 			type: 'table',
 			tableHeaders: {
@@ -81,7 +81,7 @@ class RoundRobin {
 	 * @param {TournamentPlayer[]} players
 	 */
 	freezeBracket(players) {
-		this.playerList = players;
+		this.players = players;
 		this.isBracketFrozen = true;
 
 		this.matches = players.map((p1, row) =>
@@ -108,11 +108,11 @@ class RoundRobin {
 	disqualifyUser(user) {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
-		let playerIndex = this.playerList.indexOf(user);
+		let playerIndex = this.players.indexOf(user);
 
 		for (const [col, match] of this.matches[playerIndex].entries()) {
 			if (!match || match.state !== 'available') continue;
-			const p2 = this.playerList[col];
+			const p2 = this.players[col];
 			match.state = 'finished';
 			match.result = 'loss';
 			match.score = [0, 1];
@@ -124,7 +124,7 @@ class RoundRobin {
 		for (const [row, challenges] of this.matches.entries()) {
 			let match = challenges[playerIndex];
 			if (!match || match.state !== 'available') continue;
-			const p1 = this.playerList[row];
+			const p1 = this.players[row];
 			match.state = 'finished';
 			match.result = 'win';
 			match.score = [1, 0];
@@ -142,9 +142,9 @@ class RoundRobin {
 		/** @type {[TournamentPlayer, TournamentPlayer][]} */
 		let matches = [];
 		for (const [row, challenges] of this.matches.entries()) {
-			const p1 = this.playerList[row];
+			const p1 = this.players[row];
 			for (const [col, match] of challenges.entries()) {
-				const p2 = this.playerList[col];
+				const p2 = this.players[col];
 				if (!match) continue;
 				if (match.state === 'available' && !p1.isBusy && !p2.isBusy) {
 					matches.push([p1, p2]);
@@ -163,8 +163,8 @@ class RoundRobin {
 
 		if (!['win', 'loss', 'draw'].includes(result)) return 'InvalidMatchResult';
 
-		let row = this.playerList.indexOf(p1);
-		let col = this.playerList.indexOf(p2);
+		let row = this.players.indexOf(p1);
+		let col = this.players.indexOf(p2);
 		if (row < 0 || col < 0) return 'UserNotAdded';
 
 		let match = this.matches[row][col];
@@ -183,7 +183,7 @@ class RoundRobin {
 	getResults() {
 		if (!this.isTournamentEnded()) return 'TournamentNotEnded';
 
-		let sortedScores = this.playerList.sort(
+		let sortedScores = this.players.sort(
 			(p1, p2) => p1.score - p2.score
 		);
 
