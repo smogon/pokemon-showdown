@@ -154,7 +154,7 @@ describe('Trivia', function () {
 
 	it('should make players leave the game', function () {
 		this.game.leave(this.user);
-		assert.strictEqual(this.game.players[this.user.userid], undefined);
+		assert.strictEqual(this.game.playerTable[this.user.userid], undefined);
 	});
 
 	it('should not make users who are not players leave the game', function () {
@@ -196,7 +196,7 @@ describe('Trivia', function () {
 			game.phaseTimeout = null;
 
 			this.game = this.room.game = game;
-			this.player = this.room.game.players[this.user.userid];
+			this.player = this.room.game.playerTable[this.user.userid];
 		});
 
 		afterEach(function () {
@@ -242,7 +242,7 @@ describe('Trivia', function () {
 			game.askQuestion();
 
 			this.game = this.room.game = game;
-			this.player = game.players[this.user.userid];
+			this.player = game.playerTable[this.user.userid];
 		});
 
 		afterEach(function () {
@@ -306,7 +306,7 @@ describe('Trivia', function () {
 			game.askQuestion();
 
 			this.game = this.room.game = game;
-			this.player = game.players[this.user.userid];
+			this.player = game.playerTable[this.user.userid];
 		});
 
 		afterEach(function () {
@@ -351,7 +351,7 @@ describe('Trivia', function () {
 
 				const hrtimeToNanoseconds = hrtime => hrtime[0] * 1e9 + hrtime[1];
 				let playerNs = hrtimeToNanoseconds(this.player.answeredAt);
-				let player2Ns = hrtimeToNanoseconds(this.game.players[this.user2.userid].answeredAt);
+				let player2Ns = hrtimeToNanoseconds(this.game.playerTable[this.user2.userid].answeredAt);
 				assert.ok(playerNs <= player2Ns);
 
 				done();
@@ -381,7 +381,7 @@ describe('Trivia', function () {
 			game.askQuestion();
 
 			this.game = this.room.game = game;
-			this.player = game.players[this.user.userid];
+			this.player = game.playerTable[this.user.userid];
 		});
 
 		afterEach(function () {

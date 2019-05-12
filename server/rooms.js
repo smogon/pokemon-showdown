@@ -1473,10 +1473,10 @@ class GameRoom extends BasicChatRoom {
 		this.game = null;
 	}
 	/**
-	 * - logNum = 0    : spectator log (no exact HP)
-	 * - logNum = 1, 2 : player log (exact HP for that player)
-	 * - logNum = 3    : debug log (exact HP for all players)
-	 * @param {0 | 1 | 2 | 3} channel
+	 * - logNum = 0          : spectator log (no exact HP)
+	 * - logNum = 1, 2, 3, 4 : player log (exact HP for that player)
+	 * - logNum = -1         : debug log (exact HP for all players)
+	 * @param {-1 | 0 | 1 | 2 | 3 | 4} channel
 	 */
 	getLog(channel = 0) {
 		return this.log.getScrollback(channel);
@@ -1485,8 +1485,9 @@ class GameRoom extends BasicChatRoom {
 	 * @param {User} user
 	 */
 	getLogForUser(user) {
-		if (!(user.userid in this.game.players)) return this.getLog();
-		return this.getLog(this.game.players[user.userid].slotNum + 1);
+		if (!(user.userid in this.game.playerTable)) return this.getLog();
+		// @ts-ignore
+		return this.getLog(this.game.playerTable[user.userid].num);
 	}
 	/**
 	 * @param {User?} excludeUser

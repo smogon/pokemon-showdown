@@ -263,7 +263,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 	}
 
 	leaveGame(user) {
-		let player = this.players[user.userid];
+		let player = this.playerTable[user.userid];
 
 		if (!player) return user.sendTo(this.room, "You have not joined the scavenger hunt.");
 		if (player.completed) return user.sendTo(this.room, "You have already completed this scavenger hunt.");
@@ -306,8 +306,8 @@ class ScavengerHunt extends Rooms.RoomGame {
 		this.questions[number][question_answer] = value;
 		this.announce(`The ${question_answer} for question ${number + 1} has been edited.`);
 		if (question_answer === 'hint') {
-			for (let p in this.players) {
-				this.players[p].onNotifyChange(number);
+			for (let p in this.playerTable) {
+				this.playerTable[p].onNotifyChange(number);
 			}
 		}
 		return true;
@@ -331,13 +331,13 @@ class ScavengerHunt extends Rooms.RoomGame {
 	}
 
 	onSubmit(user, value) {
-		if (!(user.userid in this.players)) {
+		if (!(user.userid in this.playerTable)) {
 			if (!this.parentGame && !this.joinGame(user)) return false;
 			if (this.parentGame && !this.parentGame.joinGame(user)) return false;
 		}
 		value = toId(value);
 
-		let player = this.players[user.userid];
+		let player = this.playerTable[user.userid];
 		if (player.completed) return false;
 
 		this.validatePlayer(player);
@@ -356,9 +356,9 @@ class ScavengerHunt extends Rooms.RoomGame {
 	}
 
 	onSendQuestion(user) {
-		if (!(user.userid in this.players) || this.hosts.some(h => h.userid === user.userid)) return false;
+		if (!(user.userid in this.playerTable) || this.hosts.some(h => h.userid === user.userid)) return false;
 
-		let player = this.players[user.userid];
+		let player = this.playerTable[user.userid];
 		if (player.completed) return false;
 
 		let current = player.getCurrentQuestion();
@@ -371,8 +371,8 @@ class ScavengerHunt extends Rooms.RoomGame {
 		let qLimit = 0;
 		if (this.hosts.some(h => h.userid === user.userid) || user.userid === this.staffHostId)	{
 			qLimit = this.questions.length;
-		} else if (user.userid in this.players) {
-			let player = this.players[user.userid];
+		} else if (user.userid in this.playerTable) {
+			let player = this.playerTable[user.userid];
 			qLimit = player.currentQuestion;
 		}
 
@@ -460,13 +460,13 @@ class ScavengerHunt extends Rooms.RoomGame {
 
 	onTallyLeaderboard() {
 		// update player leaderboard with the statistics
-		for (let p in this.players) {
-			let player = this.players[p];
+		for (let p in this.playerTable) {
+			let player = this.playerTable[p];
 			PlayerLeaderboard.addPoints(player.name, 'join', 1);
 			if (player.completed) PlayerLeaderboard.addPoints(player.name, 'finish', 1);
 		}
 		for (let id in this.leftHunt) {
-			if (id in this.players) continue; // this should never happen, but just in case;
+			if (id in this.playerTable) continue; // this should never happen, but just in case;
 
 			PlayerLeaderboard.addPoints(id, 'join', 1, true);
 		}
@@ -507,8 +507,8 @@ class ScavengerHunt extends Rooms.RoomGame {
 		if (this.timer) {
 			clearTimeout(this.timer);
 		}
-		for (let i in this.players) {
-			this.players[i].destroy();
+		for (let i in this.playerTable) {
+			this.playerTable[i].destroy();
 		}
 		// destroy this game
 		if (this.parentGame) {
@@ -559,13 +559,13 @@ class ScavengerHunt extends Rooms.RoomGame {
 	}
 
 	eliminate(userid) {
-		if (!(userid in this.players)) return false;
-		let player = this.players[userid];
+		if (!(userid in this.playerTable)) return false;
+		let player = this.playerTable[userid];
 
 		if (player.completed) return true; // do not remove players that have completed - they should still get to see the answers
 
 		player.destroy();
-		delete this.players[userid];
+		delete this.playerTable[userid];
 		return true;
 	}
 
@@ -590,7 +590,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 	}
 
 	hasFinished(user) {
-		return this.players[user.userid] && this.players[user.userid].completed;
+		return this.playerTable[user.userid] && this.playerTable[user.userid].completed;
 	}
 
 	getUniqueConnections(user) {
@@ -899,7 +899,7 @@ let commands = {
 			let str = `<div class="ladder" style="overflow-y: scroll; max-height: 300px;"><table style="width: 100%"><th><b>Question</b></th><th><b>Users on this Question</b></th>`;
 			for (let i = 0; i < game.questions.length; i++) {
 				let questionNum = i + 1;
-				let players = Object.values(game.players).filter(player => player.currentQuestion === i && !player.completed);
+				let players = Object.values(game.playerTable).filter(player => player.currentQuestion === i && !player.completed);
 				if (!players.length) {
 					str += `<tr><td>${questionNum}</td><td>None</td>`;
 				} else {

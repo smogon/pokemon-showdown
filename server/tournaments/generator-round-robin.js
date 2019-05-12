@@ -1,6 +1,9 @@
 'use strict';
 
+/** @typedef {import('./index').TournamentPlayer} TournamentPlayer */
+
 /** @typedef {{state: string, score?: number[], result?: string}} Match */
+
 class RoundRobin {
 	/**
 	 * @param {string} isDoubles
@@ -9,204 +12,168 @@ class RoundRobin {
 		/** @type {string} */
 		this.name = "Round Robin";
 		this.isDrawingSupported = true;
+		this.isBracketFrozen = false;
+		/** @type {TournamentPlayer[]} */
+		this.players = [];
 
 		this.isDoubles = !!isDoubles;
-		this.isBracketFrozen = false;
-		/** @type {User[]} */
-		this.users = [];
-		/** @type {boolean[]} */
-		this.isUsersBusy = [];
-		/** @type {(?Match)[][]} */
+		/** @type {Match?[][]} */
 		this.matches = [];
-		/** @type {number[]} */
-		this.userScores = [];
-		this.pendingMatches = new Map();
-		this.totalPendingMatches = 0;
+		this.totalPendingMatches = -1;
+		this.perPlayerPendingMatches = -1;
 
 		if (isDoubles) this.name = "Double " + this.name;
 	}
-	/**
-	 * @param {User} user
-	 */
-	addUser(user) {
-		if (this.isBracketFrozen) return 'BracketFrozen';
-		this.users.push(user);
-		this.pendingMatches.set(user, 0);
-	}
-	/**
-	 * @param {User} user
-	 */
-	removeUser(user) {
-		if (this.isBracketFrozen) return 'BracketFrozen';
-		this.users.splice(this.users.indexOf(user), 1);
-		this.pendingMatches.delete(user);
-	}
-	/**
-	 * @param {User} user
-	 * @param {User} replacementUser
-	 */
-	replaceUser(user, replacementUser) {
-		this.users[this.users.indexOf(user)] = replacementUser;
-		let pendingMatches = this.pendingMatches.get(user);
-		this.pendingMatches.set(replacementUser, pendingMatches);
-		this.pendingMatches.delete(user);
-	}
-	getUsers() {
-		return this.users.slice(0);
-	}
 
-	getBracketData() {
-		let data = {};
-		data.type = 'table';
-		data.tableHeaders = {
-			cols: this.users.slice(0),
-			rows: this.users.slice(0),
+	/**
+	 * @param {TournamentPlayer[]} players
+	 */
+	getPendingBracketData(players) {
+		return {
+			type: 'table',
+			tableHeaders: {
+				cols: players.slice(0),
+				rows: players.slice(0),
+			},
+			tableContents: players.map((p1, row) =>
+				players.map((p2, col) => {
+					if (!this.isDoubles && col >= row) return null;
+					if (p1 === p2) return null;
+
+					return {
+						state: 'unavailable',
+					};
+				})
+			),
+			scores: players.map(player => 0),
 		};
-		data.tableContents = this.users.map((userA, row) =>
-			this.users.map((userB, col) => {
-				if (!this.isDoubles && col >= row) return null;
-				if (userA === userB) return null;
-
-				let cell = {};
-				if (!this.isBracketFrozen) {
-					cell.state = 'unavailable';
-				} else {
+	}
+	getBracketData() {
+		const players = this.players;
+		return {
+			type: 'table',
+			tableHeaders: {
+				cols: players.slice(0),
+				rows: players.slice(0),
+			},
+			tableContents: players.map((p1, row) =>
+				players.map((p2, col) => {
+					if (!this.isDoubles && col >= row) return null;
+					if (p1 === p2) return null;
 					let match = this.matches[row][col];
 					if (!match) return null;
-					cell.state = match.state;
+
+					/** @type {any} */
+					let cell = {
+						state: match.state,
+					};
 					if (match.state === 'finished' && match.score) {
 						cell.result = match.result;
 						cell.score = match.score.slice(0);
 					}
-				}
-				return cell;
-			})
-		);
-		data.scores = this.users.map((user, u) =>
-			this.isBracketFrozen ? this.userScores[u] : 0
-		);
-		return data;
+					return cell;
+				})
+			),
+			scores: players.map(player => player.score),
+		};
 	}
-	freezeBracket() {
+	/**
+	 * @param {TournamentPlayer[]} players
+	 */
+	freezeBracket(players) {
+		this.players = players;
 		this.isBracketFrozen = true;
-		this.isUsersBusy = this.users.map(() => false);
-		this.matches = this.users.map((userA, row) =>
-			this.users.map((userB, col) => {
+
+		this.matches = players.map((p1, row) =>
+			players.map((p2, col) => {
 				if (!this.isDoubles && col >= row) return null;
-				if (userA === userB) return null;
-				let pendingMatchesA = this.pendingMatches.get(userA);
-				this.pendingMatches.set(userA, ++pendingMatchesA);
-				let pendingMatchesB = this.pendingMatches.get(userB);
-				this.pendingMatches.set(userB, ++pendingMatchesB);
-				++this.totalPendingMatches;
+				if (p1 === p2) return null;
+
 				return {state: 'available'};
 			})
 		);
-		this.userScores = this.users.map(() => 0);
+		this.matchesPerPlayer = players.length - 1;
+		// total matches = total players * matches per player / players per match
+		// alternatively: the (playercount)th triangular number
+		this.totalPendingMatches = players.length * this.matchesPerPlayer / 2;
+		if (this.isDoubles) {
+			this.totalPendingMatches *= 2;
+			this.matchesPerPlayer *= 2;
+		}
 	}
 
 	/**
-	 * @param {User} user
+	 * @param {TournamentPlayer} user
 	 */
 	disqualifyUser(user) {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
-		let userIndex = this.users.indexOf(user);
+		let playerIndex = this.players.indexOf(user);
 
-		for (const [col, match] of this.matches[userIndex].entries()) {
+		for (const [col, match] of this.matches[playerIndex].entries()) {
 			if (!match || match.state !== 'available') continue;
+			const p2 = this.players[col];
 			match.state = 'finished';
 			match.result = 'loss';
 			match.score = [0, 1];
-			++this.userScores[col];
-			--this.totalPendingMatches;
+			p2.score += 1;
+			p2.games += 1;
+			this.totalPendingMatches--;
 		}
 
 		for (const [row, challenges] of this.matches.entries()) {
-			let match = challenges[userIndex];
+			let match = challenges[playerIndex];
 			if (!match || match.state !== 'available') continue;
+			const p1 = this.players[row];
 			match.state = 'finished';
 			match.result = 'win';
 			match.score = [1, 0];
-			++this.userScores[row];
-			--this.totalPendingMatches;
+			p1.score += 1;
+			p1.games += 1;
+			this.totalPendingMatches--;
 		}
 
-		user.destroy();
-	}
-	/**
-	 * @param {User} user
-	 */
-	getUserBusy(user) {
-		if (!this.isBracketFrozen) return 'BracketNotFrozen';
-		return this.isUsersBusy[this.users.indexOf(user)];
-	}
-	/**
-	 * @param {User} user
-	 * @param {boolean} isBusy
-	 */
-	setUserBusy(user, isBusy) {
-		if (!this.isBracketFrozen) return 'BracketNotFrozen';
-		this.isUsersBusy[this.users.indexOf(user)] = isBusy;
+		user.unlinkUser();
 	}
 
 	getAvailableMatches() {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
-		/** @type {[User, User][]} */
+		/** @type {[TournamentPlayer, TournamentPlayer][]} */
 		let matches = [];
 		for (const [row, challenges] of this.matches.entries()) {
+			const p1 = this.players[row];
 			for (const [col, match] of challenges.entries()) {
+				const p2 = this.players[col];
 				if (!match) continue;
-				if (match.state === 'available' && !this.isUsersBusy[row] && !this.isUsersBusy[col]) {
-					matches.push([this.users[row], this.users[col]]);
+				if (match.state === 'available' && !p1.isBusy && !p2.isBusy) {
+					matches.push([p1, p2]);
 				}
 			}
 		}
 		return matches;
 	}
 	/**
-	 * @param {[User, User]} matchResult
+	 * @param {[TournamentPlayer, TournamentPlayer]} players
 	 * @param {string} result
 	 * @param {number[]} score
 	 */
-	setMatchResult(matchResult, result, score) {
+	setMatchResult([p1, p2], result, score) {
 		if (!this.isBracketFrozen) return 'BracketNotFrozen';
 
 		if (!['win', 'loss', 'draw'].includes(result)) return 'InvalidMatchResult';
 
-		let userA = matchResult[0];
-		let userB = matchResult[1];
-		let userIndexA = this.users.indexOf(userA);
-		let userIndexB = this.users.indexOf(userB);
-		if (userIndexA < 0 || userIndexB < 0) return 'UserNotAdded';
+		let row = this.players.indexOf(p1);
+		let col = this.players.indexOf(p2);
+		if (row < 0 || col < 0) return 'UserNotAdded';
 
-		let match = this.matches[userIndexA][userIndexB];
+		let match = this.matches[row][col];
 		if (!match || match.state !== 'available') return 'InvalidMatch';
-
-		let virtualScore;
-		if (result === 'win') {
-			virtualScore = [1, 0];
-		} else if (result === 'loss') {
-			virtualScore = [0, 1];
-		} else {
-			virtualScore = [0.5, 0.5];
-		}
-		if (!score) score = virtualScore;
 
 		match.state = 'finished';
 		match.result = result;
 		match.score = score.slice(0);
-		this.userScores[userIndexA] += virtualScore[0];
-		this.userScores[userIndexB] += virtualScore[1];
-		--this.totalPendingMatches;
-
-		let pendingMatchesA = this.pendingMatches.get(userA);
-		if (--pendingMatchesA === 0) userA.destroy();
-		this.pendingMatches.set(userA, pendingMatchesA);
-		let pendingMatchesB = this.pendingMatches.get(userB);
-		if (--pendingMatchesB === 0) userB.destroy();
-		this.pendingMatches.set(userB, pendingMatchesB);
+		this.totalPendingMatches--;
 	}
 
 	isTournamentEnded() {
@@ -216,23 +183,23 @@ class RoundRobin {
 	getResults() {
 		if (!this.isTournamentEnded()) return 'TournamentNotEnded';
 
-		let sortedScores = this.userScores.map((score, userIndex) =>
-			({userIndex: userIndex, score: score})
-		).sort((a, b) => b.score - a.score);
+		let sortedScores = this.players.sort(
+			(p1, p2) => p1.score - p2.score
+		);
 
-		/** @type {User[][]} */
+		/** @type {TournamentPlayer[][]} */
 		let results = [];
 		let currentScore = sortedScores[0].score;
-		/** @type {User[]} */
+		/** @type {TournamentPlayer[]} */
 		let currentRank = [];
 		results.push(currentRank);
-		for (const score of sortedScores.values()) {
-			if (score.score < currentScore) {
-				currentScore = score.score;
+		for (const player of sortedScores) {
+			if (player.score < currentScore) {
+				currentScore = player.score;
 				currentRank = [];
 				results.push(currentRank);
 			}
-			currentRank.push(this.users[score.userIndex]);
+			currentRank.push(player);
 		}
 		return results;
 	}

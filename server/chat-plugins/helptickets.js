@@ -110,7 +110,7 @@ class HelpTicket extends Rooms.RoomGame {
 	 * @param {User} user
 	 */
 	onLeave(user) {
-		if (user.userid in this.players) {
+		if (user.userid in this.playerTable) {
 			this.removePlayer(user);
 			return;
 		}
@@ -130,18 +130,6 @@ class HelpTicket extends Rooms.RoomGame {
 			let index = this.claimQueue.map(toId).indexOf(/** @type {ID} */(user.userid));
 			if (index > -1) this.claimQueue.splice(index, 1);
 		}
-	}
-
-	/**
-	 * @param {User} user
-	 */
-	addPlayer(user) {
-		if (user.userid in this.players) return false;
-		let player = this.makePlayer(user);
-		if (!player) return false;
-		this.players[user.userid] = player;
-		this.playerCount++;
-		return true;
 	}
 
 	/**
@@ -170,7 +158,7 @@ class HelpTicket extends Rooms.RoomGame {
 	 * @param {User} user
 	 */
 	forfeit(user) {
-		if (!(user.userid in this.players)) return;
+		if (!(user.userid in this.playerTable)) return;
 		this.removePlayer(user);
 		if (!this.ticket.open) return;
 		this.modnote(user, `${user.name} is no longer interested in this ticket.`);
@@ -242,7 +230,7 @@ class HelpTicket extends Rooms.RoomGame {
 		this.modnote(staff, `${staff.name} closed this ticket.`);
 		notifyStaff(this.ticket.escalated);
 		this.room.pokeExpireTimer();
-		for (const ticketGameUser of Object.values(this.players)) {
+		for (const ticketGameUser of Object.values(this.playerTable)) {
 			this.removePlayer(ticketGameUser);
 			const user = Users(ticketGameUser.userid);
 			if (user) user.updateSearch();
@@ -913,7 +901,7 @@ let commands = {
 			const ticketGame = /** @type {HelpTicket} */ (helpRoom.game);
 			ticketGame.modnote(user, `${user.name} opened a new ticket. Issue: ${ticket.type}`);
 			this.parse(`/join help-${user.userid}`);
-			if (!(user.userid in ticketGame.players)) {
+			if (!(user.userid in ticketGame.playerTable)) {
 				// User was already in the room, manually add them to the "game" so they get a popup if they try to leave
 				ticketGame.addPlayer(user);
 			}
