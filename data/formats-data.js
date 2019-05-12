@@ -5518,8 +5518,8 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	shayminsky: {
-		randomBattleMoves: ["seedflare", "earthpower", "airslash", "hiddenpowerfire", "substitute", "leechseed", "healingwish"],
-		randomDoubleBattleMoves: ["seedflare", "earthpower", "airslash", "hiddenpowerfire", "rest", "substitute", "leechseed", "tailwind", "protect", "hiddenpowerice"],
+		randomBattleMoves: ["seedflare", "earthpower", "airslash", "hiddenpowerice", "substitute", "leechseed", "healingwish"],
+		randomDoubleBattleMoves: ["seedflare", "earthpower", "airslash", "rest", "substitute", "leechseed", "tailwind", "protect", "hiddenpowerice"],
 		eventOnly: true,
 		tier: "Uber",
 		doublesTier: "DUU",
@@ -6631,7 +6631,7 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	terrakion: {
-		randomBattleMoves: ["stoneedge", "closecombat", "swordsdance", "substitute", "stealthrock", "earthquake"],
+		randomBattleMoves: ["swordsdance", "closecombat", "stoneedge", "earthquake", "stealthrock"],
 		randomDoubleBattleMoves: ["stoneedge", "closecombat", "substitute", "rockslide", "earthquake", "taunt", "protect"],
 		eventPokemon: [
 			{"generation": 5, "level": 42, "shiny": 1, "moves": ["helpinghand", "retaliate", "rockslide", "sacredsword"]},
@@ -7109,7 +7109,7 @@ let BattleFormatsData = {
 		tier: "LC Uber",
 	},
 	slurpuff: {
-		randomBattleMoves: ["substitute", "bellydrum", "playrough", "return", "drainpunch", "calmmind", "drainingkiss", "dazzlinggleam", "flamethrower", "surf"],
+		randomBattleMoves: ["bellydrum", "playrough", "return", "drainpunch"],
 		randomDoubleBattleMoves: ["substitute", "bellydrum", "playrough", "return", "drainpunch", "dazzlinggleam", "surf", "psychic", "flamethrower", "protect"],
 		tier: "NUBL",
 		doublesTier: "(DUU)",
@@ -8043,7 +8043,7 @@ let BattleFormatsData = {
 		eventOnly: true,
 	},
 	tapukoko: {
-		randomBattleMoves: ["wildcharge", "voltswitch", "naturesmadness", "bravebird", "uturn", "dazzlinggleam"],
+		randomBattleMoves: ["thunderbolt", "dazzlinggleam", "naturesmadness", "bravebird", "uturn", "defog"],
 		randomDoubleBattleMoves: ["wildcharge", "voltswitch", "dazzlinggleam", "bravebird", "protect", "thunderbolt", "hiddenpowerice", "taunt", "skydrop", "naturesmadness", "uturn"],
 		eventPokemon: [
 			{"generation": 7, "level": 60, "isHidden": false, "moves": ["naturesmadness", "discharge", "agility", "electroball"]},
