@@ -3608,7 +3608,7 @@ const commands = {
 		if (cmd.charAt(cmd.length - 1) === ',') cmd = cmd.slice(0, -1);
 		let targets = target.split(',');
 		function getPlayer(input) {
-			let player = room.battle.players[toId(input)];
+			let player = room.battle.playerTable[toId(input)];
 			if (player) return player.slot;
 			if (input.includes('1')) return 'p1';
 			if (input.includes('2')) return 'p2';
@@ -3681,9 +3681,9 @@ const commands = {
 		if (!battle.allowExtraction) return this.errorReply(`Someone must have requested extraction.`);
 		const targetUser = Users.getExact(target);
 
-		if (toId(battle.playerNames[0]) === user.userid) {
+		if (toId(battle.p1.name) === user.userid) {
 			battle.allowExtraction[0] = targetUser.userid;
-		} else if (toId(battle.playerNames[1]) === user.userid) {
+		} else if (toId(battle.p2.name) === user.userid) {
 			battle.allowExtraction[1] = targetUser.userid;
 		} else {
 			return this.errorReply(`Must be a player in the battle.`);
@@ -3710,11 +3710,11 @@ const commands = {
 			battle.allowExtraction = ['', ''];
 		}
 		if (battle.allowExtraction[0] !== user.userid) {
-			const p1 = Users(battle.playerNames[0]);
+			const p1 = Users(battle.p1.name);
 			if (p1) p1.sendTo(room, Chat.html`|html|${user.name} wants to extract the battle input log. <button name="send" value="/allowexportinputlog ${user.userid}">Share your team and choices with "${user.name}"</button>`);
 		}
 		if (battle.allowExtraction[1] !== user.userid) {
-			const p2 = Users(battle.playerNames[1]);
+			const p2 = Users(battle.p2.name);
 			if (p2) p2.sendTo(room, Chat.html`|html|${user.name} wants to extract the battle input log. <button name="send" value="/allowexportinputlog ${user.userid}">Share your team and choices with "${user.name}"</button>`);
 		}
 
@@ -3747,13 +3747,13 @@ const commands = {
 		const nameIndex2 = target.indexOf(`"name":"`, nameNextQuoteIndex1 + 1);
 		const nameNextQuoteIndex2 = target.indexOf(`"`, nameIndex2 + 8);
 		if (nameIndex1 >= 0 && nameNextQuoteIndex1 >= 0 && nameIndex2 >= 0 && nameNextQuoteIndex2 >= 0) {
-			const name1 = target.slice(nameIndex1 + 8, nameNextQuoteIndex1);
-			const name2 = target.slice(nameIndex2 + 8, nameNextQuoteIndex2);
-			battleRoom.battle.playerNames = [name1, name2];
+			const battle = battleRoom.battle;
+			battle.p1.name = target.slice(nameIndex1 + 8, nameNextQuoteIndex1);
+			battle.p2.name = target.slice(nameIndex2 + 8, nameNextQuoteIndex2);
 		}
 
-		this.parse(`/join ${battleRoom.id}`);
 		battleRoom.auth[user.userid] = Users.HOST_SYMBOL;
+		this.parse(`/join ${battleRoom.id}`);
 		setTimeout(() => {
 			// timer to make sure this goes under the battle
 			battleRoom.add(`|html|<div class="broadcast broadcast-blue"><strong>This is an imported replay</strong><br />Players will need to be manually added with <code>/addplayer</code> or <code>/restoreplayers</code></div>`);
@@ -3784,7 +3784,9 @@ const commands = {
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
 		if (!room.game.choose) return this.errorReply("This game doesn't support /choose");
 
-		room.game.choose(user, target);
+		if (room.game.choose(user, target) === false) {
+			return this.errorReply("This game doesn't support /choose");
+		}
 	},
 
 	mv: 'move',
@@ -3812,24 +3814,24 @@ const commands = {
 	uploadreplay: 'savereplay',
 	async savereplay(target, room, user, connection) {
 		if (!room || !room.battle) return;
+		const battle = room.battle;
 		// retrieve spectator log (0) if there are privacy concerns
 		const format = Dex.getFormat(room.format, true);
 		let hideDetails = !format.id.includes('customgame');
-		if (format.team && room.battle.ended) hideDetails = false;
+		if (format.team && battle.ended) hideDetails = false;
 		const data = room.getLog(hideDetails ? 0 : 3);
 		const datahash = crypto.createHash('md5').update(data.replace(/[^(\x20-\x7F)]+/g, '')).digest('hex');
-		let players = room.battle.playerNames;
 		let rating = 0;
-		if (room.battle.ended && room.rated) rating = room.rated;
+		if (battle.ended && room.rated) rating = room.rated;
 		const [success] = await LoginServer.request('prepreplay', {
 			id: room.id.substr(7),
 			loghash: datahash,
-			p1: players[0],
-			p2: players[1],
+			p1: battle.p1.name,
+			p2: battle.p2.name,
 			format: format.id,
 			rating: rating,
 			hidden: room.isPrivate || room.hideReplay ? '1' : '',
-			inputlog: room.battle.inputLog ? room.battle.inputLog.join('\n') : null,
+			inputlog: battle.inputLog ? battle.inputLog.join('\n') : null,
 		});
 		if (success && success.errorip) {
 			connection.popup(`This server's request IP ${success.errorip} is not a registered server.`);
@@ -3878,12 +3880,12 @@ const commands = {
 		if (room.rated) return this.errorReply("You can only add a Player to unrated battles.");
 
 		let didSomething = false;
-		if (!room.battle.p1 && room.battle.playerNames[0] !== 'Player 1') {
-			this.parse(`/addplayer ${room.battle.playerNames[0]}, p1`);
+		if (!room.battle.p1.userid && room.battle.p1.name !== 'Player 1') {
+			this.parse(`/addplayer ${room.battle.p1.name}, p1`);
 			didSomething = true;
 		}
-		if (!room.battle.p2 && room.battle.playerNames[1] !== 'Player 2') {
-			this.parse(`/addplayer ${room.battle.playerNames[1]}, p2`);
+		if (!room.battle.p2.userid && room.battle.p2.name !== 'Player 2') {
+			this.parse(`/addplayer ${room.battle.p2.name}, p2`);
 			didSomething = true;
 		}
 
@@ -3898,7 +3900,7 @@ const commands = {
 		if (!room.game) return this.errorReply("This room doesn't have an active game.");
 		if (!room.game.joinGame) return this.errorReply("This game doesn't support /joingame");
 
-		room.game.joinGame(user);
+		room.game.joinGame(user, target);
 	},
 
 	leavebattle: 'leavegame',
@@ -3951,7 +3953,7 @@ const commands = {
 			return this.sendReply(`The game timer is ON (requested by ${[...timer.timerRequesters].join(', ')})`);
 		}
 		const force = user.can('timer', null, room);
-		if (!force && !room.game.players[user]) {
+		if (!force && !room.game.playerTable[user]) {
 			return this.errorReply(`Access denied.`);
 		}
 		if (this.meansNo(target) || target === 'stop') {
