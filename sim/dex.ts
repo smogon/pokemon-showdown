@@ -28,10 +28,8 @@
  * @license MIT license
  */
 
-// TODO: Fix all usages of for-in on arrays to use for-of instead.
-// @ts-ignore
 Object.defineProperty(Array.prototype, 'flatMap', {
-	value(callback: any, thisArg: any) {
+	value<T, U, W>(this: T[], callback: (this: W, item: T, index: number, array: T[]) => U[], thisArg: W): U[] {
 		const newArray = [];
 		for (let i = 0; i < this.length; i++) {
 			newArray.push(...callback.call(thisArg, this[i], i, this));
