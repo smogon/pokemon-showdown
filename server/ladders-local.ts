@@ -70,7 +70,7 @@ class LadderStore {
 				const line = dataLine.trim();
 				if (!line) continue;
 				const row = line.split('\t');
-				ladder.push([toId(row[1]), Number(row[0]), row[1], Number(row[2]), Number(row[3]), Number(row[4]), row[5]]);
+				ladder.push([toID(row[1]), Number(row[0]), row[1], Number(row[2]), Number(row[3]), Number(row[4]), row[5]]);
 			}
 			// console.log('Ladders(' + this.formatid + ') loaded tsv: ' + JSON.stringify(this.ladder));
 			ladderCaches.set(this.formatid, (this.ladder = ladder));
@@ -114,7 +114,7 @@ class LadderStore {
 	 */
 	indexOfUser(username: string, createIfNeeded = false) {
 		if (!this.ladder) throw new Error(`Must be called with ladder loaded`);
-		const userid = toId(username);
+		const userid = toID(username);
 		for (const [i, user] of this.ladder.entries()) {
 			if (user[0] === userid) return i;
 		}

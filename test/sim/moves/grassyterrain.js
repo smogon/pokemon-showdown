@@ -75,7 +75,7 @@ describe('Grassy Terrain', function () {
 		battle.setPlayer('p1', {team: [{species: "Whimsicott", ability: 'prankster', moves: ['grassyterrain']}]});
 		battle.setPlayer('p2', {team: [{species: "Shuckle", ability: 'sturdy', moves: ['naturepower']}]});
 		battle.makeChoices('move grassyterrain', 'move naturepower');
-		let resultMove = toId(battle.log[battle.lastMoveLine].split('|')[3]);
+		let resultMove = toID(battle.log[battle.lastMoveLine].split('|')[3]);
 		assert.strictEqual(resultMove, 'energyball');
 	});
 });

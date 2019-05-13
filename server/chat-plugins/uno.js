@@ -788,7 +788,7 @@ const commands = {
 			if (!this.can('minigame', null, room)) return;
 			const game = /** @type {UnoGame} */ (room.game);
 			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
-			if (toId(target) === 'off') {
+			if (toID(target) === 'off') {
 				if (!game.autostartTimer) return this.errorReply("There is no autostart timer running on.");
 				this.addModAction(`${user.name} has turned off the UNO autostart timer.`);
 				clearTimeout(game.autostartTimer);
@@ -810,10 +810,10 @@ const commands = {
 			const game = /** @type {UnoGame} */ (room.game);
 			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
 
-			let disqualified = game.eliminate(toId(target));
+			let disqualified = game.eliminate(toID(target));
 			if (disqualified === false) return this.errorReply(`Unable to disqualify ${target}.`);
 			this.privateModAction(`(${user.name} has disqualified ${disqualified} from the UNO game.)`);
-			this.modlog('UNO DQ', toId(target));
+			this.modlog('UNO DQ', toID(target));
 			room.add(`${target} has been disqualified from the UNO game.`).update();
 		},
 
@@ -925,7 +925,7 @@ const commands = {
 			if (!game || game.gameid !== 'uno') return this.errorReply("There is no UNO game going on in this room right now.");
 			if (!this.can('minigame', null, room)) return;
 
-			target = toId(target);
+			target = toID(target);
 			let state = target === 'on' ? true : target === 'off' ? false : undefined;
 
 			if (state === undefined) return this.sendReply(`Suppression of UNO game messages is currently ${(game.suppressMessages ? 'on' : 'off')}.`);

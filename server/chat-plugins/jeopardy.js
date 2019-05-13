@@ -271,7 +271,7 @@ class Jeopardy extends Rooms.RoomGame {
 		if (this.state !== "wagering" && (!this.finals || this.curPlayer.id !== user.userid)) return "You cannot wager at this time.";
 		let player = this.playerTable[user.userid];
 		if (!player) return "You are not in the game of Jeopardy.";
-		amount = toId(amount);
+		amount = toID(amount);
 		let wager = (amount === 'all' ? player.points : parseInt(amount));
 		if (!wager) return "Your wager must be a number, or 'all'";
 		if (wager < 0) return "You cannot wager a negative amount";
@@ -607,7 +607,7 @@ exports.commands = {
 			let params = target.split(",");
 			let dataStart = 0;
 			let catStart, questionStart;
-			if (toId(params[0]) === 'final') {
+			if (toID(params[0]) === 'final') {
 				catStart = 'finals';
 				params.splice(0, 1);
 			} else {

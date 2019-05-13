@@ -710,13 +710,13 @@ class RoomBattle extends RoomGames.RoomGame {
 	async onEnd(winner) {
 		// Declare variables here in case we need them for non-rated battles logging.
 		let p1score = 0.5;
-		const winnerid = toId(winner);
+		const winnerid = toID(winner);
 
 		// Check if the battle was rated to update the ladder, return its response, and log the battle.
 		let p1name = this.p1.name;
 		let p2name = this.p2.name;
-		let p1id = toId(p1name);
-		let p2id = toId(p2name);
+		let p1id = toID(p1name);
+		let p2id = toID(p2name);
 		if (this.room.rated) {
 			this.room.rated = 0;
 
@@ -917,7 +917,7 @@ class RoomBattle extends RoomGames.RoomGame {
 	 */
 	forfeit(user, message = '') {
 		if (typeof user !== 'string') user = user.userid;
-		else user = toId(user);
+		else user = toID(user);
 
 		if (!(user in this.playerTable)) return false;
 		return this.forfeitPlayer(this.playerTable[user], message);

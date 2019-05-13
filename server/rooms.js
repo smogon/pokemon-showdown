@@ -466,7 +466,7 @@ class GlobalRoom extends BasicRoom {
 				Monitor.warn(`ERROR: Room number ${i} has no data and could not be loaded.`);
 				continue;
 			}
-			let id = toId(chatRoomData.title);
+			let id = toID(chatRoomData.title);
 			Monitor.notice("NEW CHATROOM: " + id);
 			let room = Rooms.createChatRoom(id, chatRoomData.title, chatRoomData);
 			if (room.aliases) {
@@ -712,7 +712,7 @@ class GlobalRoom extends BasicRoom {
 	 * @param {string} title
 	 */
 	addChatRoom(title) {
-		let id = toId(title);
+		let id = toID(title);
 		if (id === 'battles' || id === 'rooms' || id === 'ladder' || id === 'teambuilder' || id === 'home' || id === 'all' || id === 'public') return false;
 		if (Rooms.rooms.has(id)) return false;
 
@@ -731,7 +731,7 @@ class GlobalRoom extends BasicRoom {
 	 */
 	prepBattleRoom(format) {
 		//console.log('BATTLE START BETWEEN: ' + p1.userid + ' ' + p2.userid);
-		let roomPrefix = `battle-${toId(Dex.getFormat(format).name)}-`;
+		let roomPrefix = `battle-${toID(Dex.getFormat(format).name)}-`;
 		let battleNum = this.lastBattle;
 		let roomid;
 		do {
@@ -768,7 +768,7 @@ class GlobalRoom extends BasicRoom {
 	 * @param {string} id
 	 */
 	deregisterChatRoom(id) {
-		id = toId(id);
+		id = toID(id);
 		let room = Rooms(id);
 		if (!room) return false; // room doesn't exist
 		if (!room.chatRoomData) return false; // room isn't registered
@@ -777,7 +777,7 @@ class GlobalRoom extends BasicRoom {
 		// assumption is that more recently added rooms are more likely to
 		// be deleted
 		for (let i = this.chatRoomDataList.length - 1; i >= 0; i--) {
-			if (id === toId(this.chatRoomDataList[i].title)) {
+			if (id === toID(this.chatRoomDataList[i].title)) {
 				this.chatRoomDataList.splice(i, 1);
 				this.writeChatRoomData();
 				break;
@@ -790,7 +790,7 @@ class GlobalRoom extends BasicRoom {
 	 * @param {string} id
 	 */
 	delistChatRoom(id) {
-		id = toId(id);
+		id = toID(id);
 		if (!Rooms.rooms.has(id)) return false; // room doesn't exist
 		for (let i = this.chatRooms.length - 1; i >= 0; i--) {
 			if (id === this.chatRooms[i].id) {
@@ -803,7 +803,7 @@ class GlobalRoom extends BasicRoom {
 	 * @param {string} id
 	 */
 	removeChatRoom(id) {
-		id = toId(id);
+		id = toID(id);
 		let room = Rooms(id);
 		if (!room) return false; // room doesn't exist
 		room.destroy();
@@ -1582,7 +1582,7 @@ let Rooms = Object.assign(getRoom, {
 	 * @return {Room | undefined}
 	 */
 	search(name) {
-		return getRoom(name) || getRoom(toId(name)) || getRoom(Rooms.aliases.get(toId(name)));
+		return getRoom(name) || getRoom(toID(name)) || getRoom(Rooms.aliases.get(toID(name)));
 	},
 
 	/**

@@ -5,7 +5,7 @@
  * @license MIT
  */
 import Dex = require('./dex');
-global.toId = Dex.getId;
+global.toID = Dex.getId;
 import * as Data from './dex-data';
 import {Field} from './field';
 import {Pokemon} from './pokemon';
@@ -1470,9 +1470,9 @@ export class Battle extends Dex.ModdedDex {
 			let leppa = false; // Leppa Berry
 			let cycle = false; // Harvest or Recycle
 			for (const pokemon of side.pokemon) {
-				if (toId(pokemon.set.item) === 'leppaberry') leppa = true;
-				if (['harvest', 'pickup'].includes(toId(pokemon.set.ability)) ||
-					pokemon.set.moves.map(toId).includes('recycle' as ID)) {
+				if (toID(pokemon.set.item) === 'leppaberry') leppa = true;
+				if (['harvest', 'pickup'].includes(toID(pokemon.set.ability)) ||
+					pokemon.set.moves.map(toID).includes('recycle' as ID)) {
 					cycle = true;
 				}
 				if (leppa && cycle) break;

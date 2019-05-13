@@ -127,7 +127,7 @@ const commands = {
 		// @ts-ignore
 		if (user.foodfight && user.foodfight.timestamp + FOODFIGHT_COOLDOWN > Date.now()) return this.errorReply("Please wait a few minutes before using this command again.");
 
-		target = toId(target);
+		target = toID(target);
 
 		let team, importable;
 		const [dish, ingredients] = generateDish();
@@ -163,7 +163,7 @@ const commands = {
 		let [dish, ...ingredients] = target.split(',');
 		dish = dish.trim();
 		if (!dish || !ingredients.length) return this.parse('/help foodfight');
-		const id = toId(dish);
+		const id = toID(dish);
 		if (id === 'constructor') return this.errorReply("Invalid dish name.");
 		ingredients = ingredients.map(ingredient => ingredient.trim());
 
@@ -192,7 +192,7 @@ const commands = {
 		if (room !== thecafe) return this.errorReply("This command is only available in The Café.");
 		if (!this.can('mute', null, room)) return false;
 
-		const id = toId(target);
+		const id = toID(target);
 		if (id === 'constructor') return this.errorReply("Invalid dish.");
 		if (!dishes[id]) return this.errorReply(`Dish '${target}' not found.`);
 

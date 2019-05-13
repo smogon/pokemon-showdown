@@ -322,7 +322,7 @@ FS(TRANSLATION_DIRECTORY).readdir().then(files => {
  */
 Chat.tr = function (language, strings, ...keys) {
 	if (!language) language = 'english';
-	language = toId(language);
+	language = toID(language);
 	if (!Chat.translations.has(language)) throw new Error(`Trying to translate to a nonexistent language: ${language}`);
 	if (!strings.length) {
 		// @ts-ignore no this isn't any type
@@ -962,7 +962,7 @@ class CommandContext extends MessageContext {
 		let buf = `(${this.room.id}) ${action}: `;
 		if (user) {
 			if (typeof user === 'string') {
-				buf += `[${toId(user)}]`;
+				buf += `[${toID(user)}]`;
 			} else {
 				let userid = user.getLastId();
 				buf += `[${userid}]`;
@@ -1232,7 +1232,7 @@ class CommandContext extends MessageContext {
 			user.lastMessageTime = Date.now();
 		}
 
-		if (room && room.highTraffic && toId(message).replace(/[^a-z]+/, '').length < 2 && !user.can('broadcast', null, room)) {
+		if (room && room.highTraffic && toID(message).replace(/[^a-z]+/, '').length < 2 && !user.can('broadcast', null, room)) {
 			this.errorReply('Due to this room being a high traffic room, your message must contain at least two letters.');
 			return false;
 		}

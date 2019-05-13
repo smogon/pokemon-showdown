@@ -129,7 +129,7 @@ const BattleNatures: {[k: string]: Nature} = {
 	timid: {name: "Timid", plus: 'spe', minus: 'atk'},
 };
 
-const toId = Data.Tools.getId;
+const toID = Data.Tools.getId;
 
 class ModdedDex {
 	readonly Data: typeof Data;
@@ -325,7 +325,7 @@ class ModdedDex {
 	 * Dex.getTemplate(id).species).
 	 */
 	getSpecies(species: string | Template): string {
-		const id = toId(species || '');
+		const id = toID(species || '');
 		const template = this.getTemplate(id);
 		if (template.otherForms && template.otherForms.indexOf(id) >= 0) {
 			const form = id.slice(template.species.length);
@@ -338,7 +338,7 @@ class ModdedDex {
 		if (name && typeof name !== 'string') return name;
 
 		name = (name || '').trim();
-		let id = toId(name);
+		let id = toID(name);
 		if (id === 'nidoran' && name.slice(-1) === '♀') {
 			id = 'nidoranf' as ID;
 		} else if (id === 'nidoran' && name.slice(-1) === '♂') {
@@ -349,7 +349,7 @@ class ModdedDex {
 		if (this.data.Aliases.hasOwnProperty(id)) {
 			if (this.data.FormatsData.hasOwnProperty(id)) {
 				// special event ID, like Rockruff-Dusk
-				const baseId = toId(this.data.Aliases[id]);
+				const baseId = toID(this.data.Aliases[id]);
 				template = new Data.Template({name}, this.data.Pokedex[baseId], this.data.FormatsData[id], this.data.Learnsets[id]);
 				template.name = id;
 				template.species = id;
@@ -385,7 +385,7 @@ class ModdedDex {
 		if (id && this.data.Pokedex.hasOwnProperty(id)) {
 			template = new Data.Template({name}, this.data.Pokedex[id], this.data.FormatsData[id], this.data.Learnsets[id]);
 			// Inherit any statuses from the base species (Arceus, Silvally).
-			const baseSpeciesStatuses = this.data.Statuses[toId(template.baseSpecies)];
+			const baseSpeciesStatuses = this.data.Statuses[toID(template.baseSpecies)];
 			if (baseSpeciesStatuses !== undefined) {
 				let key: keyof EffectData;
 				for (key in baseSpeciesStatuses) {
@@ -394,14 +394,14 @@ class ModdedDex {
 			}
 			if (!template.tier && !template.doublesTier && template.baseSpecies !== template.species) {
 				if (template.baseSpecies === 'Mimikyu') {
-					template.tier = this.data.FormatsData[toId(template.baseSpecies)].tier || 'Illegal';
-					template.doublesTier = this.data.FormatsData[toId(template.baseSpecies)].doublesTier || 'Illegal';
+					template.tier = this.data.FormatsData[toID(template.baseSpecies)].tier || 'Illegal';
+					template.doublesTier = this.data.FormatsData[toID(template.baseSpecies)].doublesTier || 'Illegal';
 				} else if (template.speciesid.endsWith('totem')) {
 					template.tier = this.data.FormatsData[template.speciesid.slice(0, -5)].tier || 'Illegal';
 					template.doublesTier = this.data.FormatsData[template.speciesid.slice(0, -5)].doublesTier || 'Illegal';
 				} else {
-					template.tier = this.data.FormatsData[toId(template.baseSpecies)].tier || 'Illegal';
-					template.doublesTier = this.data.FormatsData[toId(template.baseSpecies)].doublesTier || 'Illegal';
+					template.tier = this.data.FormatsData[toID(template.baseSpecies)].tier || 'Illegal';
+					template.doublesTier = this.data.FormatsData[toID(template.baseSpecies)].doublesTier || 'Illegal';
 				}
 			}
 			if (!template.tier) template.tier = 'Illegal';
@@ -414,7 +414,7 @@ class ModdedDex {
 	}
 
 	getLearnset(template: string | AnyObject): AnyObject | null {
-		const id = toId(template);
+		const id = toID(template);
 		if (!this.data.Learnsets[id]) return null;
 		return this.data.Learnsets[id].learnset;
 	}
@@ -423,7 +423,7 @@ class ModdedDex {
 		if (name && typeof name !== 'string') return name;
 
 		name = (name || '').trim();
-		let id = toId(name);
+		let id = toID(name);
 		let move = this.moveCache.get(id);
 		if (move) return move;
 		if (this.data.Aliases.hasOwnProperty(id)) {
@@ -470,7 +470,7 @@ class ModdedDex {
 		if (!name) return nullEffect;
 		if (typeof name !== 'string') return name as PureEffect;
 
-		const id = toId(name);
+		const id = toID(name);
 		let effect = this.effectCache.get(id);
 		if (effect) return effect as PureEffect;
 
@@ -541,10 +541,10 @@ class ModdedDex {
 		if (name && typeof name !== 'string') return name;
 
 		name = (name || '').trim();
-		let id = toId(name);
+		let id = toID(name);
 		if (this.data.Aliases.hasOwnProperty(id)) {
 			name = this.data.Aliases[id];
-			id = toId(name);
+			id = toID(name);
 		}
 		if (this.data.Formats.hasOwnProperty('gen7' + id)) {
 			id = ('gen7' + id) as ID;
@@ -559,7 +559,7 @@ class ModdedDex {
 			}
 			const [newName, customRulesString] = name.split('@@@', 2);
 			name = newName;
-			id = toId(name);
+			id = toID(name);
 			if (isTrusted && customRulesString) {
 				supplementaryAttributes = {
 					customRules: customRulesString.split(','),
@@ -580,7 +580,7 @@ class ModdedDex {
 		if (name && typeof name !== 'string') return name;
 
 		name = (name || '').trim();
-		const id = toId(name);
+		const id = toID(name);
 		let item = this.itemCache.get(id);
 		if (item) return item;
 		if (this.data.Aliases.hasOwnProperty(id)) {
@@ -608,7 +608,7 @@ class ModdedDex {
 	getAbility(name: string | Ability = ''): Ability {
 		if (name && typeof name !== 'string') return name;
 
-		const id = toId(name);
+		const id = toID(name);
 		let ability = this.abilityCache.get(id);
 		if (ability) return ability;
 		if (this.data.Aliases.hasOwnProperty(id)) {
@@ -631,7 +631,7 @@ class ModdedDex {
 	getType(name: string | TypeInfo): TypeInfo {
 		if (name && typeof name !== 'string') return name;
 
-		const id = toId(name);
+		const id = toID(name);
 		const typeName = id.charAt(0).toUpperCase() + id.substr(1);
 		let type = this.typeCache.get(typeName);
 		if (type) return type;
@@ -649,7 +649,7 @@ class ModdedDex {
 		if (name && typeof name !== 'string') return name;
 
 		name = (name || '').trim();
-		const id = toId(name);
+		const id = toID(name);
 		// tslint:disable-next-line:no-object-literal-type-assertion
 		let nature: Nature = {} as Nature;
 		if (id && id !== 'constructor' && this.data.Natures[id]) {
@@ -668,7 +668,7 @@ class ModdedDex {
 	}
 
 	getAwakeningValues(set: PokemonSet, statName?: string) {
-		if (typeof statName === 'string') statName = toId(statName);
+		if (typeof statName === 'string') statName = toID(statName);
 		const avs: StatsTable = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
 		let ev: keyof StatsTable;
 		for (ev in set.evs) {
@@ -851,7 +851,7 @@ class ModdedDex {
 			}
 			return rule.charAt(0) + this.validateBanRule(rule.slice(1));
 		default:
-			const id = toId(rule);
+			const id = toID(rule);
 			if (!this.data.Formats.hasOwnProperty(id)) {
 				throw new Error(`Unrecognized rule "${rule}"`);
 			}
@@ -861,7 +861,7 @@ class ModdedDex {
 	}
 
 	validateBanRule(rule: string) {
-		let id = toId(rule);
+		let id = toID(rule);
 		if (id === 'unreleased') return 'unreleased';
 		if (id === 'illegal') return 'illegal';
 		const matches = [];
@@ -874,7 +874,7 @@ class ModdedDex {
 			}
 		}
 		const ruleid = id;
-		if (this.data.Aliases.hasOwnProperty(id)) id = toId(this.data.Aliases[id]);
+		if (this.data.Aliases.hasOwnProperty(id)) id = toID(this.data.Aliases[id]);
 		for (const matchType of matchTypes) {
 			let table;
 			switch (matchType) {
@@ -1031,7 +1031,7 @@ class ModdedDex {
 		if (searchResults.length) return searchResults;
 		if (isInexact) return false; // prevent infinite loop
 
-		const cmpTarget = toId(target);
+		const cmpTarget = toID(target);
 		let maxLd = 3;
 		if (cmpTarget.length <= 1) {
 			return false;
@@ -1072,22 +1072,22 @@ class ModdedDex {
 			buf += (set.name || set.species);
 
 			// species
-			let id = toId(set.species || set.name);
-			buf += '|' + (toId(set.name || set.species) === id ? '' : id);
+			let id = toID(set.species || set.name);
+			buf += '|' + (toID(set.name || set.species) === id ? '' : id);
 
 			// item
-			buf += '|' + toId(set.item);
+			buf += '|' + toID(set.item);
 
 			// ability
 			const template = dexes['base'].getTemplate(set.species || set.name);
 			const abilities = template.abilities;
-			id = toId(set.ability);
+			id = toID(set.ability);
 			if (abilities) {
-				if (id === toId(abilities['0'])) {
+				if (id === toID(abilities['0'])) {
 					buf += '|';
-				} else if (id === toId(abilities['1'])) {
+				} else if (id === toID(abilities['1'])) {
 					buf += '|1';
-				} else if (id === toId(abilities['H'])) {
+				} else if (id === toID(abilities['H'])) {
 					buf += '|H';
 				} else {
 					buf += '|' + id;
@@ -1097,7 +1097,7 @@ class ModdedDex {
 			}
 
 			// moves
-			buf += '|' + set.moves.map(toId).join(',');
+			buf += '|' + set.moves.map(toID).join(',');
 
 			// nature
 			buf += '|' + (set.nature || '');
@@ -1158,7 +1158,7 @@ class ModdedDex {
 
 			if (set.pokeball || set.hpType) {
 				buf += ',' + set.hpType;
-				buf += ',' + toId(set.pokeball);
+				buf += ',' + toID(set.pokeball);
 			}
 		}
 
@@ -1450,7 +1450,7 @@ class ModdedDex {
 		let section = '';
 		let column = 1;
 		for (const [i, format] of Formats.entries()) {
-			const id = toId(format.name);
+			const id = toID(format.name);
 			if (format.section) section = format.section;
 			if (format.column) column = format.column;
 			if (!format.name && format.section) continue;

@@ -16,7 +16,7 @@ class Leaderboard {
 	}
 
 	addPoints(name, aspect, points, noUpdate) {
-		let userid = toId(name);
+		let userid = toID(name);
 
 		if (!userid || userid === 'constructor' || !points) return this;
 		if (!this.data[userid]) this.data[userid] = {name: name};
@@ -50,7 +50,7 @@ class Leaderboard {
 					);
 				}); // identify ties
 			if (userid) {
-				let rank = ladder.find(entry => toId(entry.name) === userid);
+				let rank = ladder.find(entry => toID(entry.name) === userid);
 				resolve(rank);
 			} else {
 				resolve(ladder);
@@ -76,7 +76,7 @@ class ScavGame extends Rooms.RoomGame {
 		super(room);
 
 		this.title = gameType;
-		this.gameid = toId(gameType);
+		this.gameid = toID(gameType);
 
 		this.childGame = null;
 		this.playerCap = Infinity;
@@ -237,7 +237,7 @@ class KOGame extends ScavGame {
 	}
 
 	onEndEvent() {
-		let completed = this.childGame.completed.map(u => toId(u.name)); // list of userids
+		let completed = this.childGame.completed.map(u => toID(u.name)); // list of userids
 		if (!completed.length) {
 			this.announce(`No one has completed the hunt! This round has been void!`);
 			this.round--;
@@ -300,7 +300,7 @@ class ScavengerGames extends ScavGame {
 	}
 
 	onEndEvent() {
-		let completed = this.childGame.completed.map(u => toId(u.name)); // list of userids
+		let completed = this.childGame.completed.map(u => toID(u.name)); // list of userids
 		if (!completed.length) {
 			this.announce(`No one has completed the hunt! This round has been voided!`);
 			this.round--;
@@ -436,7 +436,7 @@ class JumpStart extends ScavGame {
 	}
 
 	onEndEvent() {
-		let completed = this.childGame.completed.map(u => toId(u.name)); // list of userids
+		let completed = this.childGame.completed.map(u => toID(u.name)); // list of userids
 		if (!completed.length) {
 			this.announce(`No one has completed the hunt! Better luck next time!`);
 
@@ -523,7 +523,7 @@ class Incognito extends ScavGame {
 			if (user.userid in this.childGame.playerTable && this.childGame.playerTable[user.userid].currentQuestion + 1 >= this.childGame.questions.length) {
 				let hunt = this.childGame;
 
-				value = toId(value);
+				value = toID(value);
 
 				let player = hunt.playerTable[user.userid];
 				if (player.completed) {
@@ -551,7 +551,7 @@ class Incognito extends ScavGame {
 	markComplete(player) {
 		if (player.completed) return false;
 
-		if (this.childGame.preCompleted.find(p => toId(p.name) === player.userid)) return false;
+		if (this.childGame.preCompleted.find(p => toID(p.name) === player.userid)) return false;
 
 		let now = Date.now();
 		let time = Chat.toDurationString(now - this.childGame.startTime, {hhmmss: true});

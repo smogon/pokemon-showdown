@@ -174,7 +174,7 @@ class RandomLetsGoTeams extends RandomTeams {
 					(hasType['Ground'] && !counter['Ground']) ||
 					(hasType['Ice'] && !counter['Ice']) ||
 					(hasType['Water'] && (!counter['Water'] || !counter.stab)) ||
-					(template.requiredMove && movePool.includes(toId(template.requiredMove))))) {
+					(template.requiredMove && movePool.includes(toID(template.requiredMove))))) {
 					// Reject Status or non-STAB
 					if (!isSetup && !move.weather) {
 						if (move.category === 'Status' || !hasType[move.type] || move.selfSwitch || move.basePower && move.basePower < 40 && !move.multihit) rejected = true;

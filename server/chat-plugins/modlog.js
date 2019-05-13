@@ -124,7 +124,7 @@ async function runModlog(roomidList, searchString, exactSearch, maxLines) {
 	} else if (exactSearch) {
 		regexString = searchString.replace(/[\\.+*?()|[\]{}^$]/g, '\\$&');
 	} else {
-		searchString = toId(searchString);
+		searchString = toID(searchString);
 		regexString = `[^a-zA-Z0-9]${searchString.split('').join('[^a-zA-Z0-9]*')}([^a-zA-Z0-9]|\\z)`;
 	}
 
@@ -330,14 +330,14 @@ async function runBattleSearch(userid, turnLimit, month, tierid, date) {
 			let data = JSON.parse(file);
 			if (data.turns > turnLimit) continue;
 			results.totalBattles++;
-			if (toId(data.winner) === userid) {
+			if (toID(data.winner) === userid) {
 				results.totalWins++;
 			} else if (data.winner) {
 				results.totalLosses++;
 			} else {
 				results.totalTies++;
 			}
-			const foe = toId(data.p1) === userid ? toId(data.p2) : toId(data.p1);
+			const foe = toID(data.p1) === userid ? toID(data.p2) : toID(data.p1);
 			if (!results[foe]) results[foe] = 0;
 			results[foe]++;
 		}
@@ -346,17 +346,17 @@ async function runBattleSearch(userid, turnLimit, month, tierid, date) {
 	for (const file of files) {
 		const json = await FS(`${path}/${file}`).readIfExists();
 		const data = JSON.parse(json);
-		if (toId(data.p1) !== userid && toId(data.p2) !== userid) continue;
+		if (toID(data.p1) !== userid && toID(data.p2) !== userid) continue;
 		if (data.turns > turnLimit) continue;
 		results.totalBattles++;
-		if (toId(data.winner) === userid) {
+		if (toID(data.winner) === userid) {
 			results.totalWins++;
 		} else if (data.winner) {
 			results.totalLosses++;
 		} else {
 			results.totalTies++;
 		}
-		const foe = toId(data.p1) === userid ? toId(data.p2) : toId(data.p1);
+		const foe = toID(data.p1) === userid ? toID(data.p2) : toID(data.p1);
 		if (!results[foe]) results[foe] = 0;
 		results[foe]++;
 	}
@@ -396,7 +396,7 @@ exports.pages = {
 	async battlesearch(args, user, connection) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		if (!this.can('forcewin')) return;
-		let userid = toId(args.shift());
+		let userid = toID(args.shift());
 		let turnLimit = parseInt(args.shift());
 		if (!userid || !turnLimit || turnLimit < 1) return user.popup(`Some arguments are missing or invalid for battlesearch. Use /battlesearch to start over.`);
 		this.title = `[Battle Search][${userid}]`;
@@ -421,7 +421,7 @@ exports.pages = {
 			buf += `<p><a href="/view-battlesearch-${userid}-${turnLimit}" target="replace"><button class="button">Back</button></a> <button class="button disabled">${month}</button></p>`;
 		}
 
-		let tierid = toId(args.shift());
+		let tierid = toID(args.shift());
 		const tiers = (await FS(`logs/${month}/`).readdir()).sort((a, b) => {
 			// First sort by gen with the latest being first
 			let aGen = 6;
@@ -448,11 +448,11 @@ exports.pages = {
 		if (!tierid) {
 			buf += `<p>Please select the tier to search:</p><ul style="list-style: none; display: block; padding: 0">`;
 			for (const tier of tiers) {
-				buf += `<li style="display: inline; list-style: none"><a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${toId(tier)}" target="replace"><button class="button">${tier}</button></a></li>`;
+				buf += `<li style="display: inline; list-style: none"><a href="/view-battlesearch-${userid}-${turnLimit}-${month}-${toID(tier)}" target="replace"><button class="button">${tier}</button></a></li>`;
 			}
 			return buf + `</ul></div>`;
 		} else {
-			let tierids = tiers.map(toId);
+			let tierids = tiers.map(toID);
 			if (!tierids.includes(tierid)) return buf + `Invalid tier selected. <a href="/view-battlesearch-${userid}-${turnLimit}-${month}" target="replace"><button class="button">Back to tier selection</button></a></div>`;
 			this.title += `[${tierid}]`;
 			buf += `<p><a href="/view-battlesearch-${userid}-${turnLimit}-${month}" target="replace"><button class="button">Back</button></a> <button class="button disabled">${tierid}</button></p>`;
@@ -502,7 +502,7 @@ exports.commands = {
 		if (target.includes(',')) {
 			let targets = target.split(',');
 			target = targets[1].trim();
-			roomid = toId(targets[0]) || room.id;
+			roomid = toID(targets[0]) || room.id;
 		}
 
 		let targetRoom = Rooms.search(roomid);
@@ -540,7 +540,7 @@ exports.commands = {
 		if (!target.trim()) return this.parse('/help battlesearch');
 		if (!this.can('forcewin')) return;
 
-		let [userid, turnLimit] = target.split(',').map(toId);
+		let [userid, turnLimit] = target.split(',').map(toID);
 		if (!userid) return this.parse('/help battlesearch');
 		if (!turnLimit) {
 			turnLimit = 1;
@@ -616,7 +616,7 @@ if (!PM.isParentProcess) {
 		}
 	});
 	global.Dex = require('../../.sim-dist/dex');
-	global.toId = Dex.getId;
+	global.toID = Dex.getId;
 
 	require('../../.lib-dist/repl').Repl.start('modlog', cmd => eval(cmd));
 } else {

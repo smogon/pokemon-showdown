@@ -307,7 +307,7 @@ class TextFormatter {
 						let dir = key;
 						if (key === 'item') dir += 's';
 
-						uri = `//dex.pokemonshowdown.com/${dir}/${toId(term)}`;
+						uri = `//dex.pokemonshowdown.com/${dir}/${toID(term)}`;
 						term = display;
 					}
 				}

@@ -89,7 +89,7 @@ if (Config.watchconfig) {
  *********************************************************/
 
 global.Dex = require('../.sim-dist/dex');
-global.toId = Dex.getId;
+global.toID = Dex.getId;
 
 global.LoginServer = require('../.server-dist/loginserver');
 

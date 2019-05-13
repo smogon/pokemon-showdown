@@ -180,7 +180,7 @@ class Ladder extends LadderStore {
 	 * @param {User} targetUsername
 	 */
 	static rejectChallenge(user, targetUsername) {
-		const targetUserid = toId(targetUsername);
+		const targetUserid = toID(targetUsername);
 		const chall = Ladder.getChallenging(targetUserid);
 		if (chall && chall.to === user.userid) {
 			Ladder.removeChallenge(chall);
@@ -192,7 +192,7 @@ class Ladder extends LadderStore {
 	 * @param {string} username
 	 */
 	static clearChallenges(username) {
-		const userid = toId(username);
+		const userid = toID(username);
 		const userChalls = Ladders.challenges.get(userid);
 		if (userChalls) {
 			for (const chall of userChalls.slice()) {
@@ -344,7 +344,7 @@ class Ladder extends LadderStore {
 	 * @return {boolean}
 	 */
 	cancelSearch(user) {
-		const formatid = toId(this.formatid);
+		const formatid = toID(this.formatid);
 
 		const formatTable = Ladders.searches.get(formatid);
 		if (!formatTable) return false;
@@ -377,7 +377,7 @@ class Ladder extends LadderStore {
 	 * @param {BattleReady} search
 	 */
 	getSearcher(search) {
-		const formatid = toId(this.formatid);
+		const formatid = toID(this.formatid);
 		const user = Users.get(search.userid);
 		if (!user || !user.connected || user.userid !== search.userid) {
 			const formatTable = Ladders.searches.get(formatid);
@@ -435,7 +435,7 @@ class Ladder extends LadderStore {
 	 * @param {User} user
 	 */
 	hasSearch(user) {
-		const formatid = toId(this.formatid);
+		const formatid = toID(this.formatid);
 		const formatTable = Ladders.searches.get(formatid);
 		if (!formatTable) return false;
 		return formatTable.has(user.userid);
@@ -512,7 +512,7 @@ class Ladder extends LadderStore {
 	 * @return {boolean}
 	 */
 	matchmakingOK(search1, search2, user1, user2) {
-		const formatid = toId(this.formatid);
+		const formatid = toID(this.formatid);
 		if (!user1 || !user2) {
 			// This should never happen.
 			Monitor.crashlog(new Error(`Matched user ${user1 ? search2.userid : search1.userid} not found`), "The matchmaker");

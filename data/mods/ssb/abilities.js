@@ -559,7 +559,7 @@ let BattleAbilities = {
 		onEnd(pokemon) {
 			if (pokemon.illusion) {
 				this.debug('illusion cleared');
-				let disguisedAs = toId(pokemon.illusion.name);
+				let disguisedAs = toID(pokemon.illusion.name);
 				pokemon.illusion = null;
 				let details = pokemon.template.species + (pokemon.level === 100 ? '' : ', L' + pokemon.level) + (pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 				this.add('replace', pokemon, details);
@@ -569,10 +569,10 @@ let BattleAbilities = {
 				if (pokemon.volatiles[disguisedAs]) {
 					pokemon.removeVolatile(disguisedAs);
 				}
-				if (!pokemon.volatiles[toId(pokemon.name)]) {
-					let status = this.getEffect(toId(pokemon.name));
+				if (!pokemon.volatiles[toID(pokemon.name)]) {
+					let status = this.getEffect(toID(pokemon.name));
 					if (status && status.exists) {
-						pokemon.addVolatile(toId(pokemon.name), pokemon);
+						pokemon.addVolatile(toID(pokemon.name), pokemon);
 					}
 				}
 			}

@@ -34,7 +34,7 @@ export class Tools {
 	 * If an object with an ID is passed, its ID will be returned.
 	 * Otherwise, an empty string will be returned.
 	 *
-	 * Dex.getId is generally assigned to the global toId, because of how
+	 * Dex.getId is generally assigned to the global toID, because of how
 	 * commonly it's used.
 	 */
 	static getId(text: any): ID {
@@ -47,7 +47,7 @@ export class Tools {
 		return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '') as ID;
 	}
 }
-const toId = Tools.getId;
+const toID = Tools.getId;
 
 export class BasicEffect implements EffectData {
 	/**
@@ -128,7 +128,7 @@ export class BasicEffect implements EffectData {
 		data = combine(this, data, ...moreData);
 
 		this.name = Tools.getString(data.name).trim();
-		this.id = data.id as ID || toId(this.name); // Hidden Power hack
+		this.id = data.id as ID || toID(this.name); // Hidden Power hack
 		this.fullname = Tools.getString(data.fullname) || this.name;
 		this.effectType = Tools.getString(data.effectType) as EffectType || 'Effect';
 		this.exists = !!(this.exists && this.id);
@@ -189,10 +189,10 @@ export class RuleTable extends Map {
 	}
 
 	getComplexBanIndex(complexBans: ComplexBan[], rule: string): number {
-		const ruleId = toId(rule);
+		const ruleId = toID(rule);
 		let complexBanIndex = -1;
 		for (let i = 0; i < complexBans.length; i++) {
-			if (toId(complexBans[i][0]) === ruleId) {
+			if (toID(complexBans[i][0]) === ruleId) {
 				complexBanIndex = i;
 				break;
 			}
@@ -488,7 +488,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	/**
 	 * Species ID. Identical to ID. Note that this is the full ID, e.g.
 	 * 'basculinbluestriped'. To get the base species ID, you need to
-	 * manually read toId(template.baseSpecies).
+	 * manually read toID(template.baseSpecies).
 	 */
 	readonly speciesid: ID;
 	/**
@@ -618,7 +618,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 		this.otherFormes = data.otherFormes || undefined;
 		this.formeLetter = data.formeLetter || '';
 		this.spriteid = data.spriteid ||
-			(toId(this.baseSpecies) + (this.baseSpecies !== this.name ? `-${toId(this.forme)}` : ''));
+			(toID(this.baseSpecies) + (this.baseSpecies !== this.name ? `-${toID(this.forme)}` : ''));
 		this.abilities = data.abilities || {0: ""};
 		this.types = data.types!;
 		this.addedType = data.addedType || undefined;
