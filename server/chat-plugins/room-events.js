@@ -46,7 +46,7 @@ exports.commands = {
 			if (date.length > 150) return this.errorReply("Event dates should not exceed 150 characters.");
 			if (desc.length > 1000) return this.errorReply("Event descriptions should not exceed 1000 characters.");
 
-			const eventId = toId(eventName);
+			const eventId = toID(eventName);
 			if (!eventId) return this.errorReply("Event names must contain at least one alphanumerical character.");
 
 			this.privateModAction(`(${user.name} ${room.events[eventId] ? "edited the" : "added a"} roomevent titled "${eventName}".)`);
@@ -68,7 +68,7 @@ exports.commands = {
 				return this.errorReply("There are currently no planned upcoming events for this room to remove.");
 			}
 			if (!target) return this.errorReply("Usage: /roomevents remove [event name]");
-			target = toId(target);
+			target = toID(target);
 			if (!room.events[target]) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
 			delete room.events[target];
 			this.privateModAction(`(${user.name} removed a roomevent titled "${target}".)`);
@@ -84,7 +84,7 @@ exports.commands = {
 			}
 
 			if (!target) return this.errorReply("Usage: /roomevents view [event name]");
-			target = toId(target);
+			target = toID(target);
 			if (!room.events[target]) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
 
 			if (!this.runBroadcast()) return;
@@ -114,25 +114,25 @@ exports.commands = {
 			} else {
 				let order = "";
 				[columnName, order] = delimited;
-				order = toId(order);
+				order = toID(order);
 				multiplier = (order === 'desc') ? -1 : 1;
 			}
 
 			// sort the array by the appropriate column name
-			columnName = toId(columnName);
+			columnName = toID(columnName);
 			switch (columnName) {
 			case "date":
 			case "eventdate":
-				sortable.sort((a, b) => { return (toId(a.date) < toId(b.date)) ? -1 * multiplier : (toId(b.date) < toId(a.date)) ? 1 * multiplier : 0; });
+				sortable.sort((a, b) => { return (toID(a.date) < toID(b.date)) ? -1 * multiplier : (toID(b.date) < toID(a.date)) ? 1 * multiplier : 0; });
 				break;
 			case "desc":
 			case "description":
 			case "eventdescription":
-				sortable.sort((a, b) => { return (toId(a.desc) < toId(b.desc)) ? -1 * multiplier : (toId(b.desc) < toId(a.desc)) ? 1 * multiplier : 0; });
+				sortable.sort((a, b) => { return (toID(a.desc) < toID(b.desc)) ? -1 * multiplier : (toID(b.desc) < toID(a.desc)) ? 1 * multiplier : 0; });
 				break;
 			case "eventname":
 			case "name":
-				sortable.sort((a, b) => { return (toId(a.eventName) < toId(b.eventName)) ? -1 * multiplier : (toId(b.eventName) < toId(a.eventName)) ? 1 * multiplier : 0; });
+				sortable.sort((a, b) => { return (toID(a.eventName) < toID(b.eventName)) ? -1 * multiplier : (toID(b.eventName) < toID(a.eventName)) ? 1 * multiplier : 0; });
 				break;
 			default:
 				return this.errorReply("No or invalid column name specified. Please use one of: date, eventdate, desc, description, eventdescription, eventname, name.");
@@ -141,7 +141,7 @@ exports.commands = {
 			// rebuild the room.events object
 			room.events = {};
 			for (const sortedObj of sortable) {
-				const eventId = toId(sortedObj.eventName);
+				const eventId = toID(sortedObj.eventName);
 				room.events[eventId] = sortedObj;
 			}
 			room.chatRoomData.events = room.events;

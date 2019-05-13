@@ -51,12 +51,12 @@ class Hangman extends Rooms.RoomGame {
 		if (user.userid === this.creator) return user.sendTo(this.room, "You can't guess in your own hangman game.");
 
 		let sanitized = word.replace(/[^A-Za-z ]/g, '');
-		let normalized = toId(sanitized);
+		let normalized = toID(sanitized);
 		if (normalized.length < 1) return user.sendTo(this.room, "Guess too short.");
 		if (sanitized.length > 30) return user.sendTo(this.room, "Guess too long.");
 
 		for (const guessid of this.guesses) {
-			if (normalized === toId(guessid)) return user.sendTo(this.room, "Your guess has already been guessed.");
+			if (normalized === toID(guessid)) return user.sendTo(this.room, "Your guess has already been guessed.");
 		}
 
 		if (sanitized.length > 1) {
@@ -111,8 +111,8 @@ class Hangman extends Rooms.RoomGame {
 	 * @param {string} guesser
 	 */
 	guessWord(word, guesser) {
-		let ourWord = toId(this.word);
-		let guessedWord = toId(word);
+		let ourWord = toID(this.word);
+		let guessedWord = toID(word);
 		if (ourWord === guessedWord) {
 			for (let [i, letter] of this.wordSoFar.entries()) {
 				if (letter === '_') {

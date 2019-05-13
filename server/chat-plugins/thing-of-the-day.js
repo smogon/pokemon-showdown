@@ -37,7 +37,7 @@ function savePrenoms() {
 /**
  * @param {string} nomination
  *
- * toId would return '' for foreign/sadistic nominations
+ * toID would return '' for foreign/sadistic nominations
  */
 function toNominationId(nomination) {
 	return nomination.toLowerCase().replace(/\s/g, '').replace(/\b&\b/g, '');
@@ -118,18 +118,18 @@ class OtdHandler {
 		if (this.winners.slice(this.room === rooms.jubilifetvfilms ? -15 : -30).some(entry => toNominationId(entry[this.keys[0]]) === id)) return user.sendTo(this.room, `This ${this.name.toLowerCase()} has already been ${this.id} in the past month.`);
 
 		for (const value of this.removedNominations.values()) {
-			if (toId(user) in value.userids || user.latestIp in value.ips) return user.sendTo(this.room, `Since your nomination has been removed by staff, you cannot submit another ${this.name.toLowerCase()} until the next round.`);
+			if (toID(user) in value.userids || user.latestIp in value.ips) return user.sendTo(this.room, `Since your nomination has been removed by staff, you cannot submit another ${this.name.toLowerCase()} until the next round.`);
 		}
 
 		const prevNom = this.nominations.get(id);
 		if (prevNom) {
-			if (!(toId(user) in prevNom.userids || user.latestIp in prevNom.ips)) {
+			if (!(toID(user) in prevNom.userids || user.latestIp in prevNom.ips)) {
 				return user.sendTo(this.room, `This ${this.name.toLowerCase()} has already been nominated.`);
 			}
 		}
 
 		for (const [key, value] of this.nominations) {
-			if (toId(user) in value.userids || user.latestIp in value.ips) {
+			if (toID(user) in value.userids || user.latestIp in value.ips) {
 				user.sendTo(this.room, `Your previous vote for ${value.nomination} will be removed.`);
 				this.nominations.delete(key);
 				if (prenoms[this.id]) {
@@ -226,7 +226,7 @@ class OtdHandler {
 	 * @param {string} name
 	 */
 	removeNomination(name) {
-		name = toId(name);
+		name = toID(name);
 
 		let success = false;
 		for (const [key, value] of this.nominations) {
@@ -397,7 +397,7 @@ const motw = new OtdHandler('motw', 'Match', rooms.prowrestling, MOTWS_FILE, ['m
  * @param {string} message
  */
 function selectHandler(message) {
-	let id = toId(message.substring(1, 5));
+	let id = toID(message.substring(1, 5));
 	switch (id) {
 	case 'aotd':
 		return aotd;
@@ -496,7 +496,7 @@ let commands = {
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 		if (!this.can('mute', null, room)) return false;
 
-		let userid = toId(target);
+		let userid = toID(target);
 		if (!userid) return this.errorReply(`'${target}' is not a valid username.`);
 
 		if (handler.removeNomination(userid)) {

@@ -172,13 +172,13 @@ class Roomlog {
 	 * @param {string} username
 	 */
 	hasUsername(username) {
-		const userid = toId(username);
+		const userid = toID(username);
 		for (const line of this.log) {
 			if (line.startsWith('|c:|')) {
-				const curUserid = toId(line.split('|', 4)[3]);
+				const curUserid = toID(line.split('|', 4)[3]);
 				if (curUserid === userid) return true;
 			} else if (line.startsWith('|c|')) {
-				const curUserid = toId(line.split('|', 3)[2]);
+				const curUserid = toID(line.split('|', 3)[2]);
 				if (curUserid === userid) return true;
 			}
 		}
@@ -195,7 +195,7 @@ class Roomlog {
 		this.log = this.log.filter(line => {
 			if (line.startsWith(messageStart)) {
 				const parts = Chat.splitFirst(line, '|', section);
-				const userid = toId(parts[section - 1]);
+				const userid = toID(parts[section - 1]);
 				if (userids.includes(userid)) {
 					if (!cleared.includes(userid)) cleared.push(userid);
 					if (this.id.startsWith('battle-')) return true; // Don't remove messages in battle rooms to preserve evidence

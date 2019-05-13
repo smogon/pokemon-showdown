@@ -66,7 +66,7 @@ class Tournament extends Rooms.RoomGame {
 	 */
 	constructor(room, format, generator, playerCap, isRated) {
 		super(room);
-		const formatId = toId(format);
+		const formatId = toID(format);
 
 		// TypeScript bug: no `T extends RoomGamePlayer`
 		/** @type {{[userid: string]: TournamentPlayer}} */
@@ -302,14 +302,14 @@ class Tournament extends Rooms.RoomGame {
 	 * @param {User | string} user
 	 */
 	checkBanned(user) {
-		return Punishments.getRoomPunishType(this.room, toId(user)) === 'TOURBAN';
+		return Punishments.getRoomPunishType(this.room, toID(user)) === 'TOURBAN';
 	}
 
 	/**
 	 * @param {string | User} userid
 	 */
 	removeBannedUser(userid) {
-		userid = toId(userid);
+		userid = toID(userid);
 		if (!(userid in this.playerTable)) return;
 		if (this.isTournamentStarted) {
 			const player = this.playerTable[userid];
@@ -1077,7 +1077,7 @@ class Tournament extends Rooms.RoomGame {
  * @param {string | undefined} generator
  */
 function getGenerator(generator) {
-	generator = toId(generator);
+	generator = toID(generator);
 	switch (generator) {
 	case 'elim': generator = 'elimination'; break;
 	case 'rr': generator = 'roundrobin'; break;
@@ -1205,7 +1205,7 @@ const commands = {
 			if (params.length < 1) {
 				return this.sendReply(`Usage: ${cmd} <user>`);
 			}
-			tournament.challenge(user, toId(params[0]), this);
+			tournament.challenge(user, toID(params[0]), this);
 		},
 		cancelchallenge(tournament, user) {
 			tournament.cancelChallenge(user, this);
@@ -1386,7 +1386,7 @@ const commands = {
 				return this.sendReply(`Usage: ${cmd} <user>`);
 			}
 			const targetUser = Users.get(params[0]);
-			const targetUserid = toId(targetUser);
+			const targetUserid = toID(targetUser);
 			let reason = '';
 			if (params[1]) {
 				reason = params[1].trim();
@@ -1534,7 +1534,7 @@ const commands = {
 			if (!online) targetUser = params[0];
 			if (!targetUser) return false;
 
-			const targetUserid = toId(targetUser);
+			const targetUserid = toID(targetUser);
 			let reason = '';
 			if (params[1]) {
 				reason = params[1].trim();
@@ -1560,7 +1560,7 @@ const commands = {
 				return this.sendReply(`Usage: ${cmd} <user>`);
 			}
 			let targetUser = Users.get(params[0]) || params[0];
-			const targetUserid = toId(targetUser);
+			const targetUserid = toID(targetUser);
 
 			if (!tournament.checkBanned(targetUserid)) return this.errorReply("This user isn't banned from tournaments.");
 
@@ -1581,7 +1581,7 @@ const chatCommands = {
 	tournament(target, room, user, connection) {
 		let cmd;
 		[cmd, target] = Chat.splitFirst(target, ' ');
-		cmd = toId(cmd);
+		cmd = toID(cmd);
 
 		let params = target.split(',').map(param => param.trim());
 		if (!params[0]) params = [];

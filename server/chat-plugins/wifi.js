@@ -127,7 +127,7 @@ class Giveaway {
 	 * @param {User} user
 	 */
 	checkExcluded(user) {
-		if (user === this.giver || user.latestIp in this.giver.ips || toId(user) in this.giver.prevNames) return true;
+		if (user === this.giver || user.latestIp in this.giver.ips || toID(user) in this.giver.prevNames) return true;
 		return false;
 	}
 
@@ -136,7 +136,7 @@ class Giveaway {
 	 * @param {User} user
 	 */
 	static checkBanned(room, user) {
-		return Punishments.getRoomPunishType(room, toId(user)) === 'GIVEAWAYBAN';
+		return Punishments.getRoomPunishType(room, toID(user)) === 'GIVEAWAYBAN';
 	}
 
 	/**
@@ -145,7 +145,7 @@ class Giveaway {
 	 * @param {string} reason
 	 */
 	static ban(room, user, reason) {
-		Punishments.roomPunish(room, user, ['GIVEAWAYBAN', toId(user), Date.now() + BAN_DURATION, reason]);
+		Punishments.roomPunish(room, user, ['GIVEAWAYBAN', toID(user), Date.now() + BAN_DURATION, reason]);
 	}
 
 	/**
@@ -153,7 +153,7 @@ class Giveaway {
 	 * @param {User} user
 	 */
 	static unban(room, user) {
-		Punishments.roomUnpunish(room, toId(user), 'GIVEAWAYBAN', false);
+		Punishments.roomUnpunish(room, toID(user), 'GIVEAWAYBAN', false);
 	}
 
 	/**
@@ -184,7 +184,7 @@ class Giveaway {
 		if (/\bnidoran\W{0,1}f(emale){0,1}\b/.test(text)) {
 			mons.set('Nidoran-F', Dex.getTemplate('nidoranf'));
 		}
-		text = toId(text);
+		text = toID(text);
 		if (mons.size) {
 			for (const [key, value] of mons) {
 				let spriteid = value.spriteid;
@@ -299,10 +299,10 @@ class QuestionGiveaway extends Giveaway {
 		if (!this.answered[user.userid]) this.answered[user.userid] = 0;
 		if (this.answered[user.userid] >= 3) return user.sendTo(this.room, "You have already guessed three times. You cannot guess anymore in this giveaway.");
 
-		let sanitized = toId(guess);
+		let sanitized = toID(guess);
 
 		for (let i = 0; i < this.answers.length; i++) {
-			if (toId(this.answers[i]) === sanitized) {
+			if (toID(this.answers[i]) === sanitized) {
 				this.winner = user;
 				this.clearTimer();
 				return this.end(false);
@@ -379,14 +379,14 @@ class QuestionGiveaway extends Giveaway {
 	 * @param {string[]} answers
 	 */
 	static sanitizeAnswers(answers) {
-		return answers.map(val => QuestionGiveaway.sanitize(val)).filter((val, index, array) => toId(val).length && array.indexOf(val) === index);
+		return answers.map(val => QuestionGiveaway.sanitize(val)).filter((val, index, array) => toID(val).length && array.indexOf(val) === index);
 	}
 
 	/**
 	 * @param {User} user
 	 */
 	checkExcluded(user) {
-		if (user === this.host || user.latestIp in this.host.ips || toId(user) in this.host.prevNames) return true;
+		if (user === this.host || user.latestIp in this.host.ips || toID(user) in this.host.prevNames) return true;
 		return super.checkExcluded(user);
 	}
 }
@@ -420,7 +420,7 @@ class LotteryGiveaway extends Giveaway {
 
 	generateReminder(joined = false) {
 		let cmd = (joined ? 'Leave' : 'Join');
-		let button = `<button style="margin:4px;" name="send" value="/giveaway ${toId(cmd)}lottery"><font size=1><b>${cmd}</b></font></button>`;
+		let button = `<button style="margin:4px;" name="send" value="/giveaway ${toID(cmd)}lottery"><font size=1><b>${cmd}</b></font></button>`;
 		return this.generateWindow(`The lottery drawing will occur in 2 minutes, and with ${Chat.count(this.maxwinners, "winners")}!<br />${button}</p>`);
 	}
 
@@ -660,9 +660,9 @@ let commands = {
 
 		let [giver, ot, tid, fc, prize, question, ...answers] = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
 		if (!(giver && ot && tid && fc && prize && question && answers.length)) return this.errorReply("Invalid arguments specified - /question giver | ot | tid | fc | prize | question | answer(s)");
-		tid = toId(tid);
+		tid = toID(tid);
 		if (isNaN(parseInt(tid)) || tid.length < 5 || tid.length > 6) return this.errorReply("Invalid TID");
-		fc = toId(fc);
+		fc = toID(fc);
 		if (!parseInt(fc) || fc.length !== 12) return this.errorReply("Invalid FC");
 		let targetUser = Users(giver);
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User '${giver}' is not online.`);
@@ -723,9 +723,9 @@ let commands = {
 
 		let [giver, ot, tid, fc, prize, winners] = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
 		if (!(giver && ot && tid && fc && prize)) return this.errorReply("Invalid arguments specified - /lottery giver | ot | tid | fc | prize | winners");
-		tid = toId(tid);
+		tid = toID(tid);
 		if (isNaN(parseInt(tid)) || tid.length < 5 || tid.length > 6) return this.errorReply("Invalid TID");
-		fc = toId(fc);
+		fc = toID(fc);
 		if (!parseInt(fc) || fc.length !== 12) return this.errorReply("Invalid FC");
 		let targetUser = Users(giver);
 		if (!targetUser || !targetUser.connected) return this.errorReply(`User '${giver}' is not online.`);

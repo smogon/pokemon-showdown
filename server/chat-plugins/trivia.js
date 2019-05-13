@@ -1168,7 +1168,7 @@ class WeakestLink extends Trivia {
 		let player = this.playerTable[user.userid];
 		if (!player) return 'You are not a participant in the current game.';
 		if (this.phase !== "voting") return "You cannot vote at this time.";
-		let targPlayer = this.playerTable[toId(target)];
+		let targPlayer = this.playerTable[toID(target)];
 		if (!targPlayer) return `No player named '${target}' is currently in the game.`;
 		if (targPlayer.userid === player.userid) return "You cannot vote to eliminate yourself.";
 		player.vote = targPlayer;
@@ -1281,7 +1281,7 @@ class WeakestLink extends Trivia {
 		if (!player) return 'You are not participating in the current game.';
 		if (this.phase !== 'deciding') return 'You cannot decide who to eliminate at this time.';
 		if (this.curPlayer !== player) return 'It is not your turn to decide who to eliminate';
-		let targPlayer = this.playerTable[toId(target)];
+		let targPlayer = this.playerTable[toID(target)];
 		if (!targPlayer) return 'That player is not in the game.';
 		if (this.potentialElims.indexOf(targPlayer) === -1) return 'That player cannot be eliminated.';
 		this.sendToRoom(`${this.curPlayer.name} has decided to eliminate ${targPlayer.name}!`);
@@ -1306,10 +1306,10 @@ const commands = {
 		let tars = target.split(',');
 		if (tars.length < 2) return this.errorReply("Invalid arguments specified.");
 
-		let mode = toId(tars[0]);
+		let mode = toID(tars[0]);
 		if (!MODES[mode]) return this.errorReply(`"${mode}" is an invalid mode.`);
 
-		let category = toId(tars[1]);
+		let category = toID(tars[1]);
 		let isRandom = (category === 'random');
 		let isAll = (category === 'all');
 		let questions;
@@ -1333,7 +1333,7 @@ const commands = {
 		if (MODES[mode] === 'Weakest Link') {
 			questions = questions.filter(q => q.type === 'weakestlink');
 		} else {
-			length = toId(tars[2]);
+			length = toID(tars[2]);
 			if (!LENGTHS[length]) return this.errorReply(`"${length}" is an invalid game length.`);
 
 			questions = questions.filter(q => q.type === 'trivia');
@@ -1426,7 +1426,7 @@ const commands = {
 			return this.errorReply(`There is already a game of ${room.game.title} in progress.`);
 		}
 
-		let answer = toId(target);
+		let answer = toID(target);
 		if (!answer) return this.errorReply("No valid answer was entered.");
 
 		let res = room.game.answerQuestion(answer, user);
@@ -1502,7 +1502,7 @@ const commands = {
 				continue;
 			}
 
-			let category = toId(param[0]);
+			let category = toID(param[0]);
 			if (!ALL_CATEGORIES[category]) {
 				this.errorReply(`'${param[0].trim()}' is not a valid category. View /trivia help for more information.`);
 				continue;
@@ -1532,7 +1532,7 @@ const commands = {
 
 			let cache = new Set();
 			let answers = param[2].split(',')
-				.map(toId)
+				.map(toID)
 				.filter(answer => !cache.has(answer) && !!cache.add(answer));
 			if (!answers.length) {
 				this.errorReply(`No valid answers were specified for question '${param[1].trim()}'.`);
@@ -1605,7 +1605,7 @@ const commands = {
 		let questions = triviaData.questions;
 		let submissions = triviaData.submissions;
 
-		if (toId(target) === 'all') {
+		if (toID(target) === 'all') {
 			if (isAccepting) {
 				for (const submission of submissions) {
 					questions.splice(findEndOfCategory(submission.category, false), 0, submission);
@@ -1689,9 +1689,9 @@ const commands = {
 		if (!question) return this.errorReply(`'${target}' is not a valid argument. View /trivia help questions for more information.`);
 
 		let questions = triviaData.questions;
-		let questionID = toId(question);
+		let questionID = toID(question);
 		for (const [i, question] of questions.entries()) {
-			if (toId(question.question) === questionID) {
+			if (toID(question.question) === questionID) {
 				questions.splice(i, 1);
 				writeTriviaData();
 				this.modlog('TRIVIAQUESTION', null, `removed '${target}'`);
@@ -1735,7 +1735,7 @@ const commands = {
 
 		if (!this.can('mute', null, room)) return false;
 
-		let category = toId(target);
+		let category = toID(target);
 		if (category === 'random') return false;
 		if (!ALL_CATEGORIES[category]) return this.errorReply(`'${target}' is not a valid category. View /help trivia for more information.`);
 
@@ -1778,7 +1778,7 @@ const commands = {
 		if (!target.includes(',')) return this.errorReply("No valid search arguments entered.");
 
 		let [type, ...query] = target.split(',');
-		type = toId(type);
+		type = toID(type);
 		if (/^q(?:uestion)?s?$/.test(type)) {
 			type = 'questions';
 		} else if (/^sub(?:mission)?s?$/.test(type)) {
@@ -1815,7 +1815,7 @@ const commands = {
 		} else {
 			this.splitTarget(target, true);
 			name = Chat.escapeHTML(this.targetUsername);
-			userid = toId(name);
+			userid = toID(name);
 		}
 
 		let allTimeScore = triviaData.leaderboard[userid];
@@ -1869,7 +1869,7 @@ const commands = {
 	clearqs(target, room, user) {
 		if (room.id !== 'questionworkshop') return this.errorReply("This command can only be used in Question Workshop");
 		if (!this.can('declare', null, room)) return false;
-		const category = toId(target);
+		const category = toID(target);
 		if (ALL_CATEGORIES[category]) {
 			if (SPECIAL_CATEGORIES[category]) {
 				triviaData.questions = triviaData.questions.filter(q => q.category !== category);

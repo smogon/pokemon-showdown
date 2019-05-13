@@ -406,7 +406,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 					(hasAbility['Slow Start'] && movePool.includes('substitute')) ||
 					// @ts-ignore
 					(counter['defensesetup'] && !counter.recovery && !hasMove['rest']) ||
-					(template.requiredMove && movePool.includes(toId(template.requiredMove)))) &&
+					(template.requiredMove && movePool.includes(toID(template.requiredMove)))) &&
 					// @ts-ignore
 					(counter['physicalsetup'] + counter['specialsetup'] < 2 && (!counter.setupType || (move.category !== counter.setupType && move.category !== 'Status') || counter[counter.setupType] + counter.Status > 3))) {
 					// Reject Status or non-STAB
@@ -487,7 +487,7 @@ class RandomGen4Teams extends RandomGen5Teams {
 				if (counterAbilities.includes(ability)) {
 					// Adaptability, Hustle, Iron Fist, Skill Link
 					// @ts-ignore
-					rejectAbility = !counter[toId(ability)];
+					rejectAbility = !counter[toID(ability)];
 				} else if (ability === 'Blaze') {
 					rejectAbility = !counter['Fire'];
 				} else if (ability === 'Chlorophyll') {

@@ -518,7 +518,7 @@ const Punishments = new (class {
 	 * @param {Set<string>} keys
 	 */
 	punishInner(user, punishment, keys) {
-		let existingPunishment = Punishments.userids.get(toId(user.name));
+		let existingPunishment = Punishments.userids.get(toID(user.name));
 		if (existingPunishment) {
 			// don't reduce the duration of an existing punishment
 			if (existingPunishment[2] > punishment[2]) {
@@ -589,7 +589,7 @@ const Punishments = new (class {
 	 * @param {string} punishType
 	 */
 	unpunish(id, punishType) {
-		id = toId(id);
+		id = toID(id);
 		let punishment = Punishments.userids.get(id);
 		if (punishment) {
 			id = punishment[1];
@@ -715,8 +715,8 @@ const Punishments = new (class {
 	 * @param {boolean} [ignoreWrite] skip persistent storage
 	 */
 	roomUnpunish(room, id, punishType, ignoreWrite) {
-		let roomid = typeof room === 'string' ? toId(room) : room.id;
-		id = toId(id);
+		let roomid = typeof room === 'string' ? toID(room) : room.id;
+		id = toID(id);
 		let punishment = Punishments.roomUserids.nestedGet(roomid, id);
 		if (punishment) {
 			id = punishment[1];
@@ -789,7 +789,7 @@ const Punishments = new (class {
 	 */
 	lock(userOrUsername, expireTime, id, ...reason) {
 		let user = (typeof userOrUsername === 'string' ? Users(userOrUsername) : userOrUsername);
-		if (!id) id = user ? user.getLastId() : toId(userOrUsername);
+		if (!id) id = user ? user.getLastId() : toID(userOrUsername);
 
 		if (!expireTime) expireTime = Date.now() + LOCK_DURATION;
 		let punishment = /** @type {Punishment} */ (['LOCK', id, expireTime, ...reason]);
@@ -828,24 +828,24 @@ const Punishments = new (class {
 			punishment = `WEEKLOCKED`;
 		}
 
-		const userid = toId(user);
+		const userid = toID(user);
 		const name = typeof user === 'string' ? user : user.name;
 		if (namelock) {
 			punishment = `NAMELOCKED`;
-			Punishments.namelock(user, expires, toId(namelock), `Autonamelock: ${name}: ${reason}`);
+			Punishments.namelock(user, expires, toID(namelock), `Autonamelock: ${name}: ${reason}`);
 		} else {
-			Punishments.lock(user, expires, toId(user), `Autolock: ${name}: ${reason}`);
+			Punishments.lock(user, expires, toID(user), `Autolock: ${name}: ${reason}`);
 		}
 		Monitor.log(`[${source}] ${punishment}: ${message}`);
 		const ipStr = typeof user !== 'string' ? ` [${user.latestIp}]` : '';
-		Rooms.global.modlog(`(${toId(room)}) AUTO${namelock ? `NAME` : ''}LOCK: [${userid}]${ipStr}: ${reason}`);
+		Rooms.global.modlog(`(${toID(room)}) AUTO${namelock ? `NAME` : ''}LOCK: [${userid}]${ipStr}: ${reason}`);
 	}
 	/**
 	 * @param {string} name
 	 */
 	unlock(name) {
 		let user = Users(name);
-		let id = /** @type {string} */(toId(name));
+		let id = /** @type {string} */(toID(name));
 		/** @type {string[]} */
 		let success = [];
 		if (user && user.locked && !user.namelocked) {
@@ -869,7 +869,7 @@ const Punishments = new (class {
 			if (!success.length) success.push(name);
 		}
 		if (!success.length) return undefined;
-		if (!success.some(v => toId(v) === id)) {
+		if (!success.some(v => toID(v) === id)) {
 			success.push(id);
 		}
 		return success;
@@ -882,7 +882,7 @@ const Punishments = new (class {
 	 * @return {User[]}
 	 */
 	namelock(user, expireTime, id, ...reason) {
-		if (!id) id = typeof user === 'string' ? toId(user) : user.getLastId();
+		if (!id) id = typeof user === 'string' ? toID(user) : user.getLastId();
 
 		if (!expireTime) expireTime = Date.now() + LOCK_DURATION;
 		let punishment = /** @type {Punishment} */ (['NAMELOCK', id, expireTime, ...reason]);
@@ -902,7 +902,7 @@ const Punishments = new (class {
 	 */
 	unnamelock(name) {
 		let user = Users(name);
-		let id = /** @type {string} */(toId(name));
+		let id = /** @type {string} */(toID(name));
 		/** @type {string[]} */
 		let success = [];
 		// @ts-ignore
@@ -928,7 +928,7 @@ const Punishments = new (class {
 		}
 		if (unpunished && !success.length) success.push(name);
 		if (!success.length) return false;
-		if (!success.some(v => toId(v) === id)) {
+		if (!success.some(v => toID(v) === id)) {
 			success.push(id);
 		}
 		return success;
@@ -1227,7 +1227,7 @@ const Punishments = new (class {
 	 * @param {string} name
 	 */
 	getPunishType(name) {
-		let punishment = Punishments.userids.get(toId(name));
+		let punishment = Punishments.userids.get(toID(name));
 		if (punishment) return punishment[0];
 		let user = Users.get(name);
 		if (!user) return;
@@ -1241,7 +1241,7 @@ const Punishments = new (class {
 	 * @param {string} name
 	 */
 	getRoomPunishType(room, name) {
-		let punishment = Punishments.roomUserids.nestedGet(room.id, toId(name));
+		let punishment = Punishments.roomUserids.nestedGet(room.id, toID(name));
 		if (punishment) return punishment[0];
 		let user = Users.get(name);
 		if (!user) return;
@@ -1582,7 +1582,7 @@ const Punishments = new (class {
 	 */
 	getRoomPunishments(user, options) {
 		if (!user) return [];
-		let userid = toId(user);
+		let userid = toID(user);
 		let checkMutes = typeof user !== 'string';
 
 		let punishments = [];
@@ -1669,7 +1669,7 @@ const Punishments = new (class {
 	monitorRoomPunishments(user) {
 		// @ts-ignore
 		if (user.locked) return;
-		const userid = toId(user);
+		const userid = toID(user);
 
 		const minPunishments = (typeof Config.monitorminpunishments === 'number' ? Config.monitorminpunishments : 3); // Default to 3 if the Config option is not defined or valid
 		if (!minPunishments) return;

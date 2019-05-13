@@ -93,7 +93,7 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 	case 'generate-team':
 		{
 			var Dex = require('./.sim-dist/dex');
-			global.toId = Dex.getId;
+			global.toID = Dex.getId;
 			var seed = process.argv[4] ? process.argv[4].split(',').map(Number) : undefined;
 			console.log(Dex.packTeam(Dex.generateTeam(process.argv[3], {seed})));
 		}

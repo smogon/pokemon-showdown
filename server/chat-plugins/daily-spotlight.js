@@ -85,7 +85,7 @@ const commands = {
 	async removedaily(target, room, user) {
 		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
 		let [key, rest] = target.split(',');
-		key = toId(key);
+		key = toID(key);
 		if (!key) return this.parse('/help daily');
 		if (!spotlights[room.id][key]) return this.errorReply(`Cannot find a daily spotlight with name '${key}'`);
 
@@ -115,7 +115,7 @@ const commands = {
 	async setdaily(target, room, user, connection, cmd) {
 		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
 		let [key, ...rest] = target.split(',');
-		key = toId(key);
+		key = toID(key);
 		if (!key) return this.parse('/help daily');
 		if (key.length > 20) return this.errorReply("Spotlight names can be a maximum of 20 characters long.");
 		if (key === 'constructor') return false;
@@ -150,7 +150,7 @@ const commands = {
 	},
 	async daily(target, room, user) {
 		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
-		let key = toId(target);
+		let key = toID(target);
 		if (!key) return this.parse('/help daily');
 
 		if (!spotlights[room.id] || !spotlights[room.id][key]) {

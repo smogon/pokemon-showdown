@@ -377,7 +377,7 @@ exports.commands = {
 		if (!target) return this.sendReply(`This room's primary language is ${Chat.languages.get(room.language) || 'English'}`);
 		if (!this.can('editroom', null, room)) return false;
 
-		let targetLanguage = toId(target);
+		let targetLanguage = toID(target);
 		if (!Chat.languages.has(targetLanguage)) return this.errorReply(`"${target}" is not a supported language.`);
 
 		room.language = targetLanguage === 'english' ? false : targetLanguage;

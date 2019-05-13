@@ -531,7 +531,7 @@ class RandomGen6Teams extends RandomTeams {
 					(hasAbility['Slow Start'] && movePool.includes('substitute')) ||
 					(hasAbility['Stance Change'] && !counter.setupType && movePool.includes('kingsshield')) ||
 					(!counter.recovery && (movePool.includes('softboiled') || template.nfe && !!counter['Status'] && (movePool.includes('recover') || movePool.includes('roost')))) ||
-					(template.requiredMove && movePool.includes(toId(template.requiredMove)))))) {
+					(template.requiredMove && movePool.includes(toID(template.requiredMove)))))) {
 					// Reject Status or non-STAB
 					if (!isSetup && !move.weather && !move.damage && !move.heal && moveid !== 'judgment' && moveid !== 'rest' && moveid !== 'sleeptalk') {
 						if (move.category === 'Status' || !hasType[move.type] || move.selfSwitch || move.basePower && move.basePower < 40 && !move.multihit) rejected = true;
@@ -599,7 +599,7 @@ class RandomGen6Teams extends RandomTeams {
 				if (counterAbilities.includes(ability)) {
 					// Adaptability, Contrary, Hustle, Iron Fist, Skill Link
 					// @ts-ignore
-					rejectAbility = !counter[toId(ability)];
+					rejectAbility = !counter[toID(ability)];
 				} else if (ateAbilities.includes(ability)) {
 					rejectAbility = !counter['Normal'];
 				} else if (ability === 'Blaze') {
@@ -931,7 +931,7 @@ class RandomGen6Teams extends RandomTeams {
 	 * @return {RandomTeamsTypes.RandomFactorySet | false}
 	 */
 	randomFactorySet(template, slot, teamData, tier) {
-		let speciesId = toId(template.species);
+		let speciesId = toID(template.species);
 		// let flags = this.randomFactorySets[tier][speciesId].flags;
 		let setList = this.randomFactorySets[tier][speciesId].sets;
 
@@ -969,7 +969,7 @@ class RandomGen6Teams extends RandomTeams {
 			let curSetVariants = [];
 			for (const move of curSet.moves) {
 				let variantIndex = this.random(move.length);
-				let moveId = toId(move[variantIndex]);
+				let moveId = toID(move[variantIndex]);
 				if (movesMax[moveId] && teamData.has[moveId] >= movesMax[moveId]) {
 					reject = true;
 					break;
@@ -1111,7 +1111,7 @@ class RandomGen6Teams extends RandomTeams {
 			}
 
 			for (const move of set.moves) {
-				let moveId = toId(move);
+				let moveId = toID(move);
 				if (moveId in teamData.has) {
 					teamData.has[moveId]++;
 				} else {

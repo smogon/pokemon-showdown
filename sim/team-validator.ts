@@ -204,19 +204,19 @@ export class Validator {
 		if (set.happiness !== undefined && isNaN(set.happiness)) {
 			problems.push(`${name} has an invalid happiness.`);
 		}
-		if (set.hpType && (!dex.getType(set.hpType).exists || ['normal', 'fairy'].includes(toId(set.hpType)))) {
+		if (set.hpType && (!dex.getType(set.hpType).exists || ['normal', 'fairy'].includes(toID(set.hpType)))) {
 			problems.push(`${name}'s Hidden Power type (${set.hpType}) is invalid.`);
 		}
 
 		let banReason = ruleTable.check('pokemon:' + template.id, setHas);
 		let templateOverride = ruleTable.has('+pokemon:' + template.id);
 		if (!templateOverride) {
-			banReason = banReason || ruleTable.check('basepokemon:' + toId(template.baseSpecies), setHas);
+			banReason = banReason || ruleTable.check('basepokemon:' + toID(template.baseSpecies), setHas);
 		}
 		if (banReason) {
 			return [`${set.species} is ${banReason}.`];
 		}
-		templateOverride = templateOverride || ruleTable.has('+basepokemon:' + toId(template.baseSpecies));
+		templateOverride = templateOverride || ruleTable.has('+basepokemon:' + toID(template.baseSpecies));
 		let postMegaTemplate = template;
 		if (item.megaEvolves === template.species) {
 			if (!item.megaStone) throw new Error(`Item ${item.name} has no base form for mega evolution`);
@@ -237,12 +237,12 @@ export class Validator {
 				problems.push(`${name} (${postMegaTemplate.species}) is unreleased.`);
 			} else if (postMegaTemplate.tier) {
 				let tag = postMegaTemplate.tier === '(PU)' ? 'ZU' : postMegaTemplate.tier;
-				banReason = ruleTable.check('pokemontag:' + toId(tag), setHas);
+				banReason = ruleTable.check('pokemontag:' + toID(tag), setHas);
 				if (banReason) {
 					problems.push(`${postMegaTemplate.species} is in ${tag}, which is ${banReason}.`);
 				} else if (postMegaTemplate.doublesTier) {
 					tag = postMegaTemplate.doublesTier === '(DUU)' ? 'DNU' : postMegaTemplate.doublesTier;
-					banReason = ruleTable.check('pokemontag:' + toId(tag), setHas);
+					banReason = ruleTable.check('pokemontag:' + toID(tag), setHas);
 					if (banReason) {
 						problems.push(`${postMegaTemplate.species} is in ${tag}, which is ${banReason}.`);
 					}
@@ -250,11 +250,11 @@ export class Validator {
 			}
 		}
 
-		banReason = ruleTable.check('ability:' + toId(set.ability), setHas);
+		banReason = ruleTable.check('ability:' + toID(set.ability), setHas);
 		if (banReason) {
 			problems.push(`${name}'s ability ${set.ability} is ${banReason}.`);
 		}
-		banReason = ruleTable.check('item:' + toId(set.item), setHas);
+		banReason = ruleTable.check('item:' + toID(set.item), setHas);
 		if (banReason) {
 			problems.push(`${name}'s item ${set.item} is ${banReason}.`);
 		}
@@ -263,7 +263,7 @@ export class Validator {
 		}
 
 		if (!set.ability) set.ability = 'No Ability';
-		setHas[toId(set.ability)] = true;
+		setHas[toID(set.ability)] = true;
 		if (ruleTable.has('-illegal')) {
 			// Don't check abilities for metagames with All Abilities
 			if (dex.gen <= 2) {
@@ -723,7 +723,7 @@ export class Validator {
 					if (ability1.gen && eventData.generation >= ability1.gen) {
 						// pokemon had 2 available abilities in the gen the event happened
 						// ability is restricted to a single ability slot
-						const requiredAbilitySlot = (toId(eventData.abilities[0]) === ability1.id ? 1 : 0);
+						const requiredAbilitySlot = (toID(eventData.abilities[0]) === ability1.id ? 1 : 0);
 						const requiredAbility = dex.getAbility(template.abilities[requiredAbilitySlot] || template.abilities['0']).name;
 						if (set.ability !== requiredAbility) {
 							const originalAbility = dex.getAbility(eventData.abilities[0]).name;
@@ -916,7 +916,7 @@ export class Validator {
 	): {type: string, [key: string]: any} | null {
 		const dex = this.dex;
 
-		const moveid = toId(move);
+		const moveid = toID(move);
 		if (moveid === 'constructor') return {type: 'invalid'};
 		move = dex.getMove(moveid);
 		let template: Template | null = dex.getTemplate(species);

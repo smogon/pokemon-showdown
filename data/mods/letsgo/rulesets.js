@@ -129,11 +129,11 @@ let BattleFormats = {
 			let battleForme = template.battleOnly && template.species;
 			if (battleForme) {
 				if (template.isMega) set.species = template.baseSpecies;
-				if (template.requiredMove && !set.moves.includes(toId(template.requiredMove))) {
+				if (template.requiredMove && !set.moves.includes(toID(template.requiredMove))) {
 					problems.push(`${template.species} transforms in-battle with ${template.requiredMove}.`); // Meloetta-Pirouette, Rayquaza-Mega
 				}
 			} else {
-				if (template.requiredMove && !set.moves.includes(toId(template.requiredMove))) {
+				if (template.requiredMove && !set.moves.includes(toID(template.requiredMove))) {
 					problems.push(`${(set.name || set.species)} needs to have the move ${template.requiredMove}.`); // Keldeo-Resolute
 				}
 			}

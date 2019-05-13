@@ -93,7 +93,7 @@ if (!PM.isParentProcess) {
 	}
 
 	global.Dex = require(/** @type {any} */ ('../.sim-dist/dex')).includeData();
-	global.toId = Dex.getId;
+	global.toID = Dex.getId;
 	global.Chat = require('./chat');
 
 	/** @type {typeof import('../lib/repl').Repl} */

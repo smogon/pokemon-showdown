@@ -28,7 +28,7 @@ let BattleScripts = {
 	// BattlePokemon scripts.
 	pokemon: {
 		getStat(statName, unmodified) {
-			statName = /** @type {StatNameExceptHP} */(toId(statName));
+			statName = /** @type {StatNameExceptHP} */(toID(statName));
 			// @ts-ignore - type checking prevents 'hp' from being passed, but we're paranoid
 			if (statName === 'hp') throw new Error("Please read `maxhp` directly");
 			if (unmodified) return this.storedStats[statName];

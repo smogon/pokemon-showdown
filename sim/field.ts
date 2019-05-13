@@ -111,9 +111,9 @@ export class Field {
 	isWeather(weather: string | string[]) {
 		const ourWeather = this.effectiveWeather();
 		if (!Array.isArray(weather)) {
-			return ourWeather === toId(weather);
+			return ourWeather === toID(weather);
 		}
-		return weather.map(toId).includes(ourWeather);
+		return weather.map(toID).includes(ourWeather);
 	}
 
 	getWeather() {
@@ -166,9 +166,9 @@ export class Field {
 	isTerrain(terrain: string | string[], target?: Pokemon | Side | Battle) {
 		const ourTerrain = this.effectiveTerrain(target);
 		if (!Array.isArray(terrain)) {
-			return ourTerrain === toId(terrain);
+			return ourTerrain === toID(terrain);
 		}
-		return terrain.map(toId).includes(ourTerrain);
+		return terrain.map(toID).includes(ourTerrain);
 	}
 
 	getTerrain() {

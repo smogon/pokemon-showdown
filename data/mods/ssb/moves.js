@@ -3518,8 +3518,8 @@ let BattleMovedex = {
 					if (targetAbility.id !== sourceAbility.id) {
 						source.ability = targetAbility.id;
 						target.ability = sourceAbility.id;
-						source.abilityData = {id: toId(source.ability), target: source};
-						target.abilityData = {id: toId(target.ability), target: target};
+						source.abilityData = {id: toID(source.ability), target: source};
+						target.abilityData = {id: toID(target.ability), target: target};
 					}
 					this.singleEvent('Start', targetAbility, source.abilityData, source);
 					this.singleEvent('Start', sourceAbility, target.abilityData, target);
