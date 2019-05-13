@@ -565,7 +565,7 @@ let BattleFormats = {
 		effectType: 'Rule',
 		name: 'Endless Battle Clause',
 		desc: "Prevents players from forcing a battle which their opponent cannot end except by forfeit",
-		// implemented in sim/battle.js, see https://pokemonshowdown.com/pages/ebc for the specification.
+		// implemented in sim/battle.js, see https://dex.pokemonshowdown.com/articles/battlerules#endlessbattleclause for the specification.
 		onBegin() {
 			this.add('rule', 'Endless Battle Clause: Forcing endless battles is banned');
 		},
