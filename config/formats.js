@@ -67,10 +67,6 @@ let Formats = [
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['OU', 'UUBL', 'Drizzle', 'Drought', 'Kommonium Z', 'Mewnium Z'],
-		unbanlist: ['Sableye-Mega'],
-		onBegin() {
-			if (this.rated && this.format === 'gen7uu') this.add('html', `<div class="broadcast-red"><strong>UU is currently suspecting Mega Sableye! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3649890/">suspect thread</a>.</strong></div>`);
-		},
 	},
 	{
 		name: "[Gen 7] RU",
@@ -82,7 +78,7 @@ let Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] UU'],
-		banlist: ['UU', 'RUBL', 'Sableye-Mega', 'Aurora Veil'],
+		banlist: ['UU', 'RUBL', 'Aurora Veil'],
 		unbanlist: ['Reuniclus', 'Drought'],
 	},
 	{
