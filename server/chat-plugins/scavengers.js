@@ -1024,7 +1024,7 @@ let commands = {
 	 * Hunt queuing
 	 */
 	queueunrated: 'queue',
-	queueregular: 'queue',
+	queuerated: 'queue',
 	queue(target, room, user) {
 		if (room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return this.errorReply("This command can only be used in the scavengers room.");
 		if (!target) {
@@ -1556,7 +1556,7 @@ exports.commands = {
 			"- /scav resetladder - resets the monthly scavenger leaderboard. (Requires: # & ~)",
 			"- /scav setpoints [1st place], [2nd place], [3rd place], [4th place], [5th place], ... - sets the point values for the wins. Use `/scav setpoints` to view what the current point values are. (Requires: # & ~)",
 			"- /scav setblitz [value] ... - sets the blitz award to `value`. Use `/scav setblitz` to view what the current blitz value is. (Requires: # & ~)",
-			"- /scav queue(unrated) <em>[host] | [hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em> - queues a scavenger hunt to be started after the current hunt is finished. (Requires: % @ * # & ~)",
+			"- /scav queue(rated/unrated) <em>[host] | [hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em> - queues a scavenger hunt to be started after the current hunt is finished. (Requires: % @ * # & ~)",
 			"- /scav viewqueue - shows the list of queued scavenger hunts to be automatically started, as well as the option to remove hunts from the queue. (Requires: % @ * # & ~)",
 			"- /scav defaulttimer [value] - sets the default timer applied to automatically started hunts from the queue.",
 			"- /nexthunt - starts the next hunt in the queue.",
