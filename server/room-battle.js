@@ -962,6 +962,7 @@ class RoomBattle extends RoomGames.RoomGame {
 			this.stream.write(`>player ${slot} ` + JSON.stringify(options));
 		}
 
+		if (user) this.room.auth[user.userid] = Users.PLAYER_SYMBOL;
 		if (user && user.inRooms.has(this.id)) this.onConnect(user);
 		return player;
 	}
