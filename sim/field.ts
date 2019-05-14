@@ -5,7 +5,7 @@
  * @license MIT
  */
 
-import {State} from './state';
+import State from './state';
 
 export class Field {
 	readonly battle: Battle;
@@ -228,3 +228,5 @@ export class Field {
 		this.battle = null!;
 	}
 }
+
+export default Field;

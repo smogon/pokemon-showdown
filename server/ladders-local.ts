@@ -15,7 +15,7 @@
 
 'use strict';
 
-import {FS} from '../lib/fs';
+import FS from '../lib/fs';
 
 // ladderCaches = {formatid: ladder OR Promise(ladder)}
 // Use Ladders(formatid).ladder to guarantee a Promise(ladder).
@@ -28,7 +28,7 @@ type LadderCache = Map<string, LadderRow[] | Promise<LadderRow[]>>;
 
 const ladderCaches: LadderCache = new Map();
 
-class LadderStore {
+export class LadderStore {
 	formatid: string;
 	ladder: LadderRow[] | null;
 	ladderPromise: Promise<LadderRow[]> | null;
@@ -338,4 +338,4 @@ class LadderStore {
 	}
 }
 
-export = LadderStore;
+export default LadderStore;

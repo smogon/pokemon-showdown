@@ -1,8 +1,8 @@
 import {Battle as BattleType} from './battle';
 import * as BattleStreamType from './battle-stream';
 import * as DataType from './dex-data';
-import DexType = require('./dex');
-import SimType = require('./index');
+import DexType from './dex';
+import SimType from './index';
 import {Field as FieldType} from './field';
 import {Pokemon as PokemonType} from './pokemon';
 import {PRNG as PRNGType} from './prng';
@@ -22,7 +22,7 @@ declare global {
 	const BattleStream: BattleStreamType.BattleStream
 	const Dex: typeof DexType
 	const Field: FieldType
-	const ModdedDex: typeof DexType
+	const ModdedDex: typeof DexType.ModdedDex
 	const PRNG: PRNGType
 	const Pokemon: PokemonType
 	const Side: SideType

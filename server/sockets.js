@@ -23,7 +23,7 @@ const FS = require(/** @type {any} */('../.lib-dist/fs')).FS;
 /** @typedef {0 | 1 | 2 | 3 | 4} ChannelID */
 
 const Monitor = {
-	crashlog: require(/** @type {any} */('../.lib-dist/crashlogger')),
+	crashlog: require(/** @type {any} */('../.lib-dist/crashlogger')).crashlogger,
 };
 
 if (cluster.isMaster) {

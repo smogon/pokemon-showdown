@@ -2,7 +2,7 @@ import child_process = require('child_process');
 
 import RoomsType = require('./rooms');
 import RoomlogsType = require('./roomlogs');
-import LadderStoreType = require('./ladders-remote');
+import LadderStoreType from './ladders-remote';
 import LaddersType = require('./ladders');
 import UsersType = require('./users');
 import PunishmentsType = require('./punishments');

@@ -5,8 +5,8 @@
  * @license MIT license
  */
 import {RequestState} from './battle';
-import {Pokemon} from './pokemon';
-import {State} from './state';
+import Pokemon from './pokemon';
+import State from './state';
 
 /** A single action that can be chosen. */
 interface ChosenAction {
@@ -899,3 +899,5 @@ export class Side {
 		this.foe = null!;
 	}
 }
+
+export default Side;

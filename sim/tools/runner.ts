@@ -9,10 +9,10 @@ import assert = require('assert');
 import fs = require('fs');
 
 import {ObjectReadWriteStream} from '../../lib/streams';
-import {Battle} from '../battle';
+import Battle from '../battle';
 import * as BattleStreams from '../battle-stream';
 import {PRNG, PRNGSeed} from '../prng';
-import {RandomPlayerAI} from './random-player-ai';
+import RandomPlayerAI from './random-player-ai';
 
 export interface AIOptions {
 	createAI: (stream: ObjectReadWriteStream<string>, options: AIOptions) => RandomPlayerAI;
@@ -204,3 +204,5 @@ class DualStream {
 		this.test.battle.restart(send);
 	}
 }
+
+export default Runner;

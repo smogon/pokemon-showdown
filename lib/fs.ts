@@ -432,3 +432,5 @@ function getFs(path: string) {
 export const FS = Object.assign(getFs, {
 	FileReadStream,
 });
+
+export default FS;

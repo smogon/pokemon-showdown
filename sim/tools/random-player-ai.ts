@@ -181,3 +181,5 @@ export class RandomPlayerAI extends BattlePlayer {
 		return this.prng.sample(switches).slot;
 	}
 }
+
+export default RandomPlayerAI;

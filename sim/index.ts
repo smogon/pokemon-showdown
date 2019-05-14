@@ -9,13 +9,13 @@
  *
  * @license MIT license
  */
-import {Battle} from './battle';
-import {BattleStream} from './battle-stream';
-import Dex = require('./dex');
-import {Pokemon} from './pokemon';
-import {PRNG} from './prng';
-import {Side} from './side';
-import {TeamValidator} from './team-validator';
+import Battle from './battle';
+import BattleStream from './battle-stream';
+import Dex from './dex';
+import Pokemon from './pokemon';
+import PRNG from './prng';
+import Side from './side';
+import TeamValidator from './team-validator';
 
 export {
 	Pokemon,
@@ -27,3 +27,16 @@ export {
 
 	BattleStream,
 };
+
+export const Sim = {
+	Pokemon,
+	Side,
+	Battle,
+	PRNG,
+	Dex,
+	TeamValidator,
+
+	BattleStream,
+};
+
+export default Sim;

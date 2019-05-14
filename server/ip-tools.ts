@@ -19,7 +19,7 @@
 const BLOCKLISTS = ['sbl.spamhaus.org', 'rbl.efnetrbl.org'];
 
 import * as dns from 'dns';
-import {FS} from '../lib/fs';
+import FS from '../lib/fs';
 
 export const IPTools = new class {
 	dnsblCache = new Map<string, string | null>([

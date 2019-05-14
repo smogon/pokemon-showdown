@@ -6,9 +6,9 @@
  */
 
 import {ObjectReadWriteStream} from '../../lib/streams';
-import Dex = require('../dex');
+import Dex from '../dex';
 import {PRNG, PRNGSeed} from '../prng';
-import {RandomPlayerAI} from './random-player-ai';
+import RandomPlayerAI from './random-player-ai';
 import {AIOptions, Runner} from './runner';
 const toID = Dex.getId;
 
@@ -447,3 +447,5 @@ class CoordinatedPlayerAI extends RandomPlayerAI {
 		return id;
 	}
 }
+
+export default ExhaustiveRunner;

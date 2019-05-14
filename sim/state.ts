@@ -5,12 +5,12 @@
  * @license MIT
  */
 
-import {Battle} from './battle';
-import Dex = require('./dex');
+import Battle from './battle';
+import Dex from './dex';
 import * as Data from './dex-data';
-import {Field} from './field';
-import {Pokemon} from './pokemon';
-import {PRNG} from './prng';
+import Field from './field';
+import Pokemon from './pokemon';
+import PRNG from './prng';
 import {Choice, Side} from './side';
 
 // The simulator supports up to 24 different Pokemon on a team. Serialization
@@ -413,3 +413,5 @@ export const State = new class {
 		}
 	}
 };
+
+export default State;

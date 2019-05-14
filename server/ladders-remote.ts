@@ -14,7 +14,7 @@
 
 'use strict';
 
-class LadderStore {
+export class LadderStore {
 	formatid: string;
 	static formatsListPrefix = '';
 
@@ -143,4 +143,4 @@ class LadderStore {
 	}
 }
 
-export = LadderStore;
+export default LadderStore;

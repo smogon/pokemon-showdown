@@ -314,3 +314,9 @@ export function vizStream(codeBuf: string, translate: boolean = true) {
 	}
 	return spacedStream;
 }
+
+export default {
+	encode,
+	decode,
+	vizStream,
+};

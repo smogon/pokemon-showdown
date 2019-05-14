@@ -108,3 +108,5 @@ export class MultiRandomRunner {
 		return false;
 	}
 }
+
+export default MultiRandomRunner;

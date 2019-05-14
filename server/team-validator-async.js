@@ -45,7 +45,7 @@ const PM = new QueryProcessManager(module, async message => {
 	try {
 		problems = TeamValidator(formatid).validateTeam(parsedTeam, removeNicknames);
 	} catch (err) {
-		require(/** @type {any} */('../.lib-dist/crashlogger'))(err, 'A team validation', {
+		require(/** @type {any} */('../.lib-dist/crashlogger')).crashlogger(err, 'A team validation', {
 			formatid: formatid,
 			team: team,
 		});
@@ -92,7 +92,7 @@ if (!PM.isParentProcess) {
 		});
 	}
 
-	global.Dex = require(/** @type {any} */ ('../.sim-dist/dex')).includeData();
+	global.Dex = require(/** @type {any} */ ('../.sim-dist/dex')).Dex.includeData();
 	global.toID = Dex.getId;
 	global.Chat = require('./chat');
 

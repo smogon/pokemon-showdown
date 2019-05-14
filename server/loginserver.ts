@@ -16,8 +16,8 @@ const LOGIN_SERVER_BATCH_TIME = 1000;
 const http = Config.loginserver.startsWith('http:') ? require('http') : require('https');
 import * as url from 'url';
 
-import {FS} from '../lib/fs';
-import * as Streams from '../lib/streams';
+import FS from '../lib/fs';
+import Streams from '../lib/streams';
 
 /**
  * A custom error type used when requests to the login server take too long.
@@ -224,7 +224,7 @@ class LoginServerInstance {
 	}
 }
 
-const LoginServer = Object.assign(new LoginServerInstance(), {
+export const LoginServer = Object.assign(new LoginServerInstance(), {
 	TimeoutError,
 
 	ladderupdateServer: new LoginServerInstance(),
@@ -240,4 +240,4 @@ if (!Config.nofswriting) {
 	LoginServer.request('invalidatecss');
 }
 
-export = LoginServer;
+export default LoginServer;

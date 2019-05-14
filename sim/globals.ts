@@ -1,6 +1,6 @@
 type Battle = import('./battle').Battle
 type Field = import('./field').Field
-type ModdedDex = typeof import('./dex')
+type ModdedDex = import('./dex').ModdedDex
 type Pokemon = import('./pokemon').Pokemon
 type PRNGSeed = import('./prng').PRNGSeed;
 type Side = import('./side').Side

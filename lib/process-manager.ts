@@ -18,7 +18,7 @@ const ROOT_DIR = path.resolve(__dirname, '..');
 export const processManagers: ProcessManager[] = [];
 export const disabled = false;
 
-class SubprocessStream extends Streams.ObjectReadWriteStream<string> {
+export class SubprocessStream extends Streams.ObjectReadWriteStream<string> {
 	constructor(public process: ChildProcess, public taskId: number) {
 		super();
 		this.process = process;

@@ -227,3 +227,5 @@ random(m: number, n: number) {
 	return (m ? (n ? (result % (n - m)) + m : result % m) : result / 0x10000)
 }
 */
+
+export default PRNG;

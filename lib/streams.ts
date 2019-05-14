@@ -751,3 +751,15 @@ export class ObjectReadWriteStream<T> extends ObjectReadStream<T> implements Obj
 export function readAll(nodeStream: NodeJS.ReadableStream, encoding?: any) {
 	return new ReadStream(nodeStream).readAll(encoding);
 }
+
+export const Streams = {
+	ReadStream,
+	WriteStream,
+	ReadWriteStream,
+	ObjectReadStream,
+	ObjectWriteStream,
+	ObjectReadWriteStream,
+	readAll,
+};
+
+export default Streams;

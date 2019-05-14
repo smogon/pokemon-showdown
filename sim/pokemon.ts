@@ -5,7 +5,7 @@
  * @license MIT license
  */
 
-import {State} from './state';
+import State from './state';
 
  /** A Pokemon's move slot. */
 interface MoveSlot {
@@ -1712,3 +1712,5 @@ export class Pokemon {
 		this.side = null!;
 	}
 }
+
+export default Pokemon;

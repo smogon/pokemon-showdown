@@ -444,3 +444,5 @@ class TextFormatter {
 export function formatText(str: string, isTrusted = false) {
 	return new TextFormatter(str, isTrusted).get();
 }
+
+export default formatText;

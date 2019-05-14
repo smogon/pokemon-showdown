@@ -3016,7 +3016,7 @@ const commands = {
 				Chat.uncacheDir('./data');
 				Chat.uncache('./config/formats');
 				// reload .sim-dist/dex.js
-				global.Dex = require('../.sim-dist/dex');
+				global.Dex = require('../.sim-dist/dex').Dex;
 				// rebuild the formats list
 				delete Rooms.global.formatList;
 				// respawn validator processes
@@ -3030,7 +3030,7 @@ const commands = {
 			} else if (target === 'loginserver') {
 				FS('config/custom.css').unwatch();
 				Chat.uncache('./server/loginserver');
-				global.LoginServer = require('./loginserver');
+				global.LoginServer = require('./loginserver').LoginServer;
 				this.sendReply("The login server has been hot-patched. New login server requests will use the new code.");
 			} else if (target === 'learnsets' || target === 'validator') {
 				if (lock['validator']) return this.errorReply(`Hot-patching the validator has been disabled by ${lock['validator'].by} (${lock['validator'].reason})`);

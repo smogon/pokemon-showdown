@@ -266,3 +266,5 @@ export class BattleTextStream extends Streams.ReadWriteStream {
 		return this.battleStream.end();
 	}
 }
+
+export default BattleStream;

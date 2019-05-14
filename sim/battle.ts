@@ -4,14 +4,14 @@
  *
  * @license MIT
  */
-import Dex = require('./dex');
+import Dex from './dex';
 global.toID = Dex.getId;
 import * as Data from './dex-data';
-import {Field} from './field';
-import {Pokemon} from './pokemon';
+import Field from './field';
+import Pokemon from './pokemon';
 import {PRNG, PRNGSeed} from './prng';
-import {Side} from './side';
-import {State} from './state';
+import Side from './side';
+import State from './state';
 
 /** A Pokemon that has fainted. */
 interface FaintedPokemon {
@@ -3268,3 +3268,5 @@ class UnimplementedError extends Error {
 		this.name = 'UnimplementedError';
 	}
 }
+
+export default Battle;
