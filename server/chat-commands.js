@@ -3045,8 +3045,8 @@ const commands = {
 				global.Punishments = require('./punishments');
 				this.sendReply("Punishments have been hot-patched.");
 			} else if (target === 'dnsbl' || target === 'datacenters') {
-				Dnsbl.loadDatacenters();
-				this.sendReply("Dnsbl has been hot-patched.");
+				IPTools.loadDatacenters();
+				this.sendReply("IPTools has been hot-patched.");
 			} else if (target.startsWith('disable')) {
 				this.sendReply("Disabling hot-patch has been moved to its own command:");
 				return this.parse('/help nohotpatch');
@@ -3066,7 +3066,7 @@ const commands = {
 		`/hotpatch chat - reload chat-commands.js and the chat-plugins`,
 		`/hotpatch validator - spawn new team validator processes`,
 		`/hotpatch formats - reload the .sim-dist/dex.js tree, rebuild and rebroad the formats list, and spawn new simulator and team validator processes`,
-		`/hotpatch dnsbl - reloads Dnsbl datacenters`,
+		`/hotpatch dnsbl - reloads IPTools datacenters`,
 		`/hotpatch punishments - reloads new punishments code`,
 		`/hotpatch tournaments - reloads new tournaments code`,
 		`/hotpatch all - hot-patches chat, tournaments, formats, login server, punishments, and dnsbl`,
@@ -3130,9 +3130,9 @@ const commands = {
 				if (!row) continue;
 				const rowSplit = row.split(',');
 				const rowData = [
-					Dnsbl.ipToNumber(rowSplit[0]),
-					Dnsbl.ipToNumber(rowSplit[1]),
-					Dnsbl.urlToHost(rowSplit[3]),
+					IPTools.ipToNumber(rowSplit[0]),
+					IPTools.ipToNumber(rowSplit[1]),
+					IPTools.urlToHost(rowSplit[3]),
 					row,
 				];
 				datacenters.push(rowData);
@@ -3146,9 +3146,9 @@ const commands = {
 				if (!row) continue;
 				let rowSplit = row.split(',');
 				let rowData = [
-					Dnsbl.ipToNumber(rowSplit[0]),
-					Dnsbl.ipToNumber(rowSplit[1]),
-					Dnsbl.urlToHost(rowSplit[3]),
+					IPTools.ipToNumber(rowSplit[0]),
+					IPTools.ipToNumber(rowSplit[1]),
+					IPTools.urlToHost(rowSplit[3]),
 					row,
 				];
 				if (rowData[1] < rowData[0]) {

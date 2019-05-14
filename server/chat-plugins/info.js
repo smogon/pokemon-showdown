@@ -312,7 +312,7 @@ const commands = {
 		if (!this.can('rangeban')) return;
 		target = target.trim();
 		if (!/^[0-9.]+$/.test(target)) return this.errorReply('You must pass a valid IPv4 IP to /host.');
-		Dnsbl.reverse(target).then(host => {
+		IPTools.getHost(target).then(host => {
 			this.sendReply('IP ' + target + ': ' + (host || "ERROR"));
 		});
 	},

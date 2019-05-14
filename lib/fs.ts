@@ -37,7 +37,7 @@ interface PendingUpdate {
 	throttleTimer: NodeJS.Timer | null;
 }
 
-const pendingUpdates: Map<string, PendingUpdate> = new Map();
+const pendingUpdates = new Map<string, PendingUpdate>();
 
 class FSPath {
 	path: string;

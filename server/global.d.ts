@@ -13,7 +13,7 @@ import * as StreamsType from './../lib/streams';
 declare global {
 	namespace NodeJS {
 		interface Global {
-			Dnsbl: any
+			IPTools: any
 			Config: any
 			Chat: any
 			__version: string

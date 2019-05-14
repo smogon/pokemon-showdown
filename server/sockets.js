@@ -283,7 +283,8 @@ if (cluster.isMaster) {
 
 	// It's optional if you don't need these features.
 
-	global.Dnsbl = require('./dnsbl');
+	/** @type {typeof import('./ip-tools').IPTools} */
+	global.IPTools = require(/** @type {any} */('../.server-dist/ip-tools')).IPTools;
 
 	if (Config.crashguard) {
 		// graceful crash
@@ -629,7 +630,7 @@ if (cluster.isMaster) {
 	});
 
 	// this is global so it can be hotpatched if necessary
-	let isTrustedProxyIp = Dnsbl.checker(Config.proxyip);
+	let isTrustedProxyIp = IPTools.checker(Config.proxyip);
 	let socketCounter = 0;
 	server.on('connection', socket => {
 		// For reasons that are not entirely clear, SockJS sometimes triggers
