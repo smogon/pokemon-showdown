@@ -263,13 +263,11 @@ export class Battle extends Dex.ModdedDex {
 
 	clearActiveMove(failed?: boolean) {
 		if (this.activeMove) {
+			this.lastMoveThisTurn = null;
 			if (!failed) {
 				this.lastMove = this.activeMove;
 				this.lastMoveThisTurn = this.activeMove;
-			} else {
-				this.lastMoveThisTurn = null;
 			}
-
 			this.activeMove = null;
 			this.activePokemon = null;
 			this.activeTarget = null;
