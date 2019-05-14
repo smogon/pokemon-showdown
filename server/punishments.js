@@ -445,7 +445,7 @@ const Punishments = new (class {
 				Punishments.ips.set(ip, ['BAN', '#ipban', Infinity, '']);
 			}
 		}
-		Punishments.checkRangeBanned = Dnsbl.checker(rangebans);
+		Punishments.checkRangeBanned = IPTools.checker(rangebans);
 	}
 
 	// sharedips.tsv is in the format:
@@ -1400,26 +1400,25 @@ const Punishments = new (class {
 			}
 		}
 
-		Dnsbl.reverse(ip).catch((/** @type {Error} */ e) => {
+		IPTools.getHost(ip).catch(err => {
 			// If connection.user is reassigned before async tasks can run, user
 			// may no longer be equal to it.
 			user = connection.user || user;
-			// @ts-ignore
-			if (e.code === 'EINVAL') {
+			if (err.code === 'EINVAL') {
 				if (!user.locked && !user.autoconfirmed) {
 					user.semilocked = '#dnsbl';
 				}
 				return null;
 			}
-			throw e;
-		}).then((/** @type {string | null} */ host) => {
+			throw err;
+		}).then(host => {
 			user = connection.user || user;
 			if (host) user.latestHost = host;
 			Chat.hostfilter(host || '', user, connection);
 		});
 
 		if (Config.dnsbl) {
-			Dnsbl.query(connection.ip).then((/** @type {string | null} */ isBlocked) => {
+			IPTools.queryDnsbl(connection.ip).then(isBlocked => {
 				user = connection.user || user;
 				if (isBlocked) {
 					if (!user.locked && !user.autoconfirmed) {

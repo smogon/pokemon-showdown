@@ -108,8 +108,8 @@ Verifier.PM.spawn();
 
 global.Tournaments = require('./tournaments');
 
-global.Dnsbl = require('./dnsbl');
-Dnsbl.loadDatacenters();
+global.IPTools = require('../.server-dist/ip-tools').IPTools;
+IPTools.loadDatacenters();
 
 if (Config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting

@@ -144,7 +144,7 @@ const Monitor = module.exports = {
 		this.battlePreps.clear();
 		this.battles.clear();
 		this.connections.clear();
-		Dnsbl.cache.clear();
+		IPTools.dnsblCache.clear();
 	},
 
 	connections: new TimedCounter(),
