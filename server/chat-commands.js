@@ -2535,12 +2535,23 @@ const commands = {
 		this.privateModAction(`(${targetUser.name} was forced to choose a new name by ${user.name}${(reason ? `: ${reason}` : ``)})`);
 		this.globalModlog('FORCERENAME', targetUser, ` by ${user.name}${(reason ? `: ${reason}` : ``)}`);
 		this.modlog('FORCERENAME', targetUser, reason, {noip: 1, noalts: 1});
+		Chat.forceRenames.set(targetUser.userid, user.userid);
 		Ladders.cancelSearches(targetUser);
 		targetUser.resetName(true);
 		targetUser.send(`|nametaken||${user.name} considers your name inappropriate${(reason ? `: ${reason}` : ".")}`);
 		return true;
 	},
-	forcerenamehelp: [`/forcerename OR /fr [username], [reason] - Forcibly change a user's name and shows them the [reason]. Requires: % @ & ~`],
+	forcerenamehelp: [
+		`/forcerename OR /fr [username], [reason] - Forcibly change a user's name and shows them the [reason]. Requires: % @ & ~`,
+		`/nameok [username] - Unmarks a forcerenamed username, stopping staff from being notified when it is used. Requires % @ & ~`,
+	],
+
+	nameok(target) {
+		if (!target) return this.parse('/help forcerename');
+		if (!this.can('forcerename')) return false;
+		if (!Chat.forceRenames.delete(toID(target))) return this.errorReply(`${target} has not been forcerenamed recently.`);
+		this.sendReply(`${target} will no longer notify staff on login.`);
+	},
 
 	nl: 'namelock',
 	namelock(target, room, user) {

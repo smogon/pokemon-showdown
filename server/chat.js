@@ -1948,6 +1948,8 @@ Chat.filterWords = {};
 Chat.monitors = {};
 /** @type {Map<string, string>} */
 Chat.namefilterwhitelist = new Map();
+/** @type {Map<string, string>} */
+Chat.forceRenames = new Map();
 
 /**
  * @param {string} id
