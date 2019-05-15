@@ -819,8 +819,8 @@ const commands = {
 					source = foundData;
 					atkName = foundData.name;
 				} else {
-					source = foundData.id;
-					atkName = foundData.id;
+					source = foundData.name;
+					atkName = foundData.name;
 				}
 				searchMethods = targetMethods;
 			} else if (!defender && targetMethods.includes(method)) {
@@ -828,8 +828,8 @@ const commands = {
 					defender = foundData;
 					defName = foundData.species + " (not counting abilities)";
 				} else {
-					defender = {types: [foundData.id]};
-					defName = foundData.id;
+					defender = {types: [foundData.name]};
+					defName = foundData.name;
 				}
 				searchMethods = sourceMethods;
 			}
