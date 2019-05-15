@@ -151,7 +151,7 @@ class LoginServerInstance {
 			'&nocache=' + new Date().getTime() +
 			'&json=' + encodeURIComponent(JSON.stringify(dataList)) + '\n';
 
-		const requestOptions: AnyObject = url.parse(this.uri + 'action.php');
+		const requestOptions: any = url.parse(`${this.uri}action.php`);
 		requestOptions.method = 'post';
 		requestOptions.headers = {
 				'Content-Type': 'application/x-www-form-urlencoded',
