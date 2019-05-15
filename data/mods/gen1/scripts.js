@@ -28,7 +28,7 @@ let BattleScripts = {
 	// BattlePokemon scripts.
 	pokemon: {
 		getStat(statName, unmodified) {
-			statName = /** @type {StatNameExceptHP} */(toId(statName));
+			statName = /** @type {StatNameExceptHP} */(toID(statName));
 			// @ts-ignore - type checking prevents 'hp' from being passed, but we're paranoid
 			if (statName === 'hp') throw new Error("Please read `maxhp` directly");
 			if (unmodified) return this.storedStats[statName];
@@ -92,7 +92,7 @@ let BattleScripts = {
 	runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect) {
 		let target = this.getTarget(pokemon, moveOrMoveName, targetLoc);
 		let move = this.getActiveMove(moveOrMoveName);
-		if (target && target.subFainted) delete target.subFainted;
+		if (target && target.subFainted) target.subFainted = null;
 
 		this.setActiveMove(move, pokemon, target);
 
@@ -127,8 +127,6 @@ let BattleScripts = {
 			const moveSlot = pokemon.moveSlots.find(moveSlot => moveSlot.id === move.id);
 			if (moveSlot && moveSlot.pp < 0) {
 				moveSlot.pp = 63;
-				pokemon.isStale = 2;
-				pokemon.isStaleSource = 'ppoverflow';
 				this.hint("In Gen 1, if a player is forced to use a move with 0 PP, the move will underflow to have 63 PP.");
 			}
 		}
@@ -147,6 +145,7 @@ let BattleScripts = {
 		} else if (pokemon.hp) {
 			this.runEvent('AfterMoveSelf', pokemon, target, move);
 		}
+		if (pokemon.volatiles['mustrecharge']) this.add('-mustrecharge', pokemon);
 
 		// For partial trapping moves, we are saving the target
 		if (move.volatileStatus === 'partiallytrapped' && target && target.hp > 0) {
@@ -204,10 +203,6 @@ let BattleScripts = {
 			pokemon.side.removeSideCondition('reflect');
 			pokemon.side.removeSideCondition('lightscreen');
 			return false;
-		}
-
-		if (move.flags['charge'] && !pokemon.volatiles[move.id]) {
-			attrs = '|[still]'; // Suppress the default move animation
 		}
 
 		if (sourceEffect) attrs += '|[from]' + this.getEffect(sourceEffect);

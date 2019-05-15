@@ -6,6 +6,7 @@
  */
 import {RequestState} from './battle';
 import {Pokemon} from './pokemon';
+import {State} from './state';
 
 /** A single action that can be chosen. */
 interface ChosenAction {
@@ -13,6 +14,7 @@ interface ChosenAction {
 	pokemon?: Pokemon; // the pokemon doing the action
 	targetLoc?: number; // relative location of the target to pokemon (move action only)
 	moveid: string; // a move to use (move action only)
+	move?: ActiveMove; // the active move corresponding to moveid (move action only)
 	target?: Pokemon; // the target of the action
 	index?: number; // the chosen index in Team Preview
 	side?: Side; // the action's side
@@ -22,7 +24,7 @@ interface ChosenAction {
 }
 
 /** What the player has chosen to happen. */
-interface Choice {
+export interface Choice {
 	cantUndo: boolean; // true if the choice can't be cancelled because of the maybeTrapped issue
 	error: string; // contains error text in the case of a choice error
 	actions: ChosenAction[]; // array of chosen actions
@@ -121,6 +123,10 @@ export class Side {
 		this.lastMove = null;
 	}
 
+	toJSON(): AnyObject {
+		return State.serializeSide(this);
+	}
+
 	get requestState(): RequestState {
 		if (!this.activeRequest || this.activeRequest.wait) return '';
 		if (this.activeRequest.teamPreview) return 'teampreview';
@@ -176,7 +182,7 @@ export class Side {
 				},
 				moves: pokemon.moves.map(move => {
 					if (move === 'hiddenpower') {
-						return move + toId(pokemon.hpType) + (pokemon.hpPower === 70 ? '' : pokemon.hpPower);
+						return move + toID(pokemon.hpType) + (pokemon.hpPower === 70 ? '' : pokemon.hpPower);
 					}
 					return move;
 				}),
@@ -372,7 +378,7 @@ export class Side {
 		} else {
 			// Parse a move ID.
 			// Move names are also allowed, but may cause ambiguity (see client issue #167).
-			moveid = toId(moveText);
+			moveid = toID(moveText);
 			if (moveid.startsWith('hiddenpower')) {
 				moveid = 'hiddenpower';
 			}
@@ -434,7 +440,7 @@ export class Side {
 				choice: 'move',
 				pokemon,
 				targetLoc: lockedMoveTarget || 0,
-				moveid: toId(lockedMove),
+				moveid: toID(lockedMove),
 			});
 			return true;
 		} else if (!moves.length && !zMove) {
@@ -556,7 +562,7 @@ export class Side {
 			// maybe it's a name/species id!
 			slot = -1;
 			for (const [i, mon] of this.pokemon.entries()) {
-				if (slotText!.toLowerCase() === mon.name.toLowerCase() || toId(slotText) === mon.speciesid) {
+				if (slotText!.toLowerCase() === mon.name.toLowerCase() || toID(slotText) === mon.speciesid) {
 					slot = i;
 					break;
 				}
@@ -752,7 +758,7 @@ export class Side {
 					// We need to special case 'Conversion 2' so it doesn't get
 					// confused with 'Conversion' erroneously sent with the target
 					// '2' (since Conversion targets 'self', targetLoc can't be 2).
-					if (/\s(?:-|\+)?[1-3]$/.test(data) && toId(data) !== 'conversion2') {
+					if (/\s(?:-|\+)?[1-3]$/.test(data) && toID(data) !== 'conversion2') {
 						if (targetLoc !== undefined) return error();
 						targetLoc = parseInt(data.slice(-2), 10);
 						data = data.slice(0, -2).trim();

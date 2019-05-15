@@ -10,7 +10,7 @@ import Dex = require('../dex');
 import {PRNG, PRNGSeed} from '../prng';
 import {RandomPlayerAI} from './random-player-ai';
 import {AIOptions, Runner} from './runner';
-const toId = Dex.getId;
+const toID = Dex.getId;
 
 interface Pools {
 	pokemon: Pool;
@@ -26,6 +26,7 @@ export interface ExhaustiveRunnerOptions {
 	log?: boolean;
 	maxGames?: number;
 	maxFailures?: number;
+	dual?: boolean | 'debug';
 }
 
 export class ExhaustiveRunner {
@@ -49,6 +50,7 @@ export class ExhaustiveRunner {
 	private readonly log: boolean;
 	private readonly maxGames?: number;
 	private readonly maxFailures?: number;
+	private readonly dual: boolean | 'debug';
 
 	private failures: number;
 	private games: number;
@@ -61,6 +63,7 @@ export class ExhaustiveRunner {
 		this.log = !!options.log;
 		this.maxGames = options.maxGames;
 		this.maxFailures = options.maxFailures || ExhaustiveRunner.MAX_FAILURES;
+		this.dual = options.dual || false;
 
 		this.failures = 0;
 		this.games = 0;
@@ -84,6 +87,7 @@ export class ExhaustiveRunner {
 					p1options: {team: generator.generate(), createAI},
 					p2options: {team: generator.generate(), createAI},
 					format: this.format,
+					dual: this.dual,
 					error: true,
 				}).run();
 
@@ -92,7 +96,7 @@ export class ExhaustiveRunner {
 				this.failures++;
 				console.error(
 					`\n\nRun \`node tools/simulate exhaustive --cycles=${this.cycles} ` +
-					`--format=${this.format} --seed${seed.join()}\`:\n`, err);
+					`--format=${this.format} --seed=${seed.join()}\`:\n`, err);
 			}
 		} while ((!this.maxGames || this.games < this.maxGames) &&
 					(!this.maxFailures || this.failures < this.maxFailures) &&
@@ -126,7 +130,7 @@ export class ExhaustiveRunner {
 		for (const id of pools.items.possible) {
 			const item = dex.data.Items[id];
 			if (item.megaEvolves) {
-				const pokemon = toId(item.megaEvolves);
+				const pokemon = toID(item.megaEvolves);
 				const combo = {item: id};
 				let combos = signatures.get(pokemon);
 				if (!combos) {
@@ -136,9 +140,9 @@ export class ExhaustiveRunner {
 				combos.push(combo);
 			} else if (item.zMoveUser) {
 				for (const user of item.zMoveUser) {
-					const pokemon = toId(user);
+					const pokemon = toID(user);
 					const combo: {item: string, move?: string} = {item: id};
-					if (item.zMoveFrom) combo.move = toId(item.zMoveFrom);
+					if (item.zMoveFrom) combo.move = toID(item.zMoveFrom);
 					let combos = signatures.get(pokemon);
 					if (!combos) {
 						combos = [];
@@ -420,7 +424,7 @@ class CoordinatedPlayerAI extends RandomPlayerAI {
 	private choosePokemon(choices: {slot: number, pokemon: AnyObject}[]) {
 		// Prefer to choose a Pokemon that has a species/ability/item/move we haven't seen yet.
 		for (const {slot, pokemon} of choices) {
-			const species = toId(pokemon.details.split(',')[0]);
+			const species = toID(pokemon.details.split(',')[0]);
 			if (!this.pools.pokemon.wasUsed(species) ||
 					!this.pools.abilities.wasUsed(pokemon.baseAbility) ||
 					!this.pools.items.wasUsed(pokemon.item) ||
@@ -436,7 +440,7 @@ class CoordinatedPlayerAI extends RandomPlayerAI {
 	// The move options provided by the simulator have been converted from the name
 	// which we're tracking, so we need to convert them back;
 	private fixMove(m: AnyObject) {
-		const id = toId(m.move);
+		const id = toID(m.move);
 		if (id.startsWith('return')) return 'return';
 		if (id.startsWith('frustration')) return 'frustration';
 		if (id.startsWith('hiddenpower')) return 'hiddenpower';

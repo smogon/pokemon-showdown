@@ -16,7 +16,7 @@
         "./server/chat-commands.js"
     ],
     "include": [
-        "*.ts",
+        "./server/tournaments/lib/treenode.d.ts",
         "./config/formats.js",
         "./data/*",
         "./data/mods/*/*",
@@ -36,8 +36,7 @@
         "./server/chat-plugins/thing-of-the-day.js",
         "./server/chat-plugins/uno.js",
         "./server/chat-plugins/wifi.js",
-        "./server/tournaments/index.js",
-        "./server/tournaments/generator-round-robin.js",
+        "./server/tournaments/*.js",
         "./sim/**/*"
     ]
 }

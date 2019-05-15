@@ -2132,7 +2132,7 @@ let BattleAbilities = {
 
 			// only reset .showCure if it's false
 			// (once you know a Pokemon has Natural Cure, its cures are always known)
-			if (!pokemon.showCure) delete pokemon.showCure;
+			if (!pokemon.showCure) pokemon.showCure = undefined;
 		},
 		id: "naturalcure",
 		name: "Natural Cure",

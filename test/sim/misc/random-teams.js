@@ -33,7 +33,7 @@ function validLearnset(move, set, tier) {
 	return !validator.checkLearnset(move, template);
 }
 
-describe(`Random Team generator`, function () {
+describe(`Random Team generator (slow)`, function () {
 	for (const gen of ALL_GENS) {
 		it(`should successfully create valid Gen ${gen} teams`, function () {
 			this.timeout(0);
@@ -119,7 +119,7 @@ describe(`Factory sets`, function () {
 						assert(template.name === set.species, `miscapitalized species "${set.species}" of ${species}`);
 
 						// currently failing due to a Piloswine labeled as a Mamoswine set
-						// assert(species.startsWith(toId(template.baseSpecies)), `non-matching species "${set.species}" of ${species}`);
+						// assert(species.startsWith(toID(template.baseSpecies)), `non-matching species "${set.species}" of ${species}`);
 
 						assert(!template.battleOnly, `invalid battle-only forme "${set.species}" of ${species}`);
 

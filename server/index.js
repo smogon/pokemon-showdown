@@ -89,9 +89,9 @@ if (Config.watchconfig) {
  *********************************************************/
 
 global.Dex = require('../.sim-dist/dex');
-global.toId = Dex.getId;
+global.toID = Dex.getId;
 
-global.LoginServer = require('./loginserver');
+global.LoginServer = require('../.server-dist/loginserver');
 
 global.Ladders = require('./ladders');
 
@@ -103,13 +103,13 @@ global.Punishments = require('./punishments');
 
 global.Rooms = require('./rooms');
 
-global.Verifier = require('./verifier');
+global.Verifier = require('../.server-dist/verifier');
 Verifier.PM.spawn();
 
 global.Tournaments = require('./tournaments');
 
-global.Dnsbl = require('./dnsbl');
-Dnsbl.loadDatacenters();
+global.IPTools = require('../.server-dist/ip-tools').IPTools;
+IPTools.loadDatacenters();
 
 if (Config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting

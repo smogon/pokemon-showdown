@@ -30,7 +30,7 @@
             "severity": "warning",
             "options": {
                 "limit": 120,
-                "ignore-pattern": "^\\s*(// \\s*)?((let |const )?[a-zA-Z0-9$.]+ \\+?= (\\$\\()?|(return |throw )?(new )?([a-zA-Z0-9$.]+\\()?)?['\"`/]"
+                "ignore-pattern": "^\\s*(// \\s*)?((let |const )?[a-zA-Z0-9$.]+ \\+?= (\\$\\()?|(return |throw )?(new )?([a-zA-Z0-9$.]+\\()?|Chat.html)?['\"`/]"
             }
         },
         "no-floating-promises": true,
@@ -47,6 +47,8 @@
         "prefer-conditional-expression": false,
         "prefer-object-spread": false,
         "no-shadowed-variable": [true, {"temporalDeadZone": false}],
+        // I don't understand why people care about this considering how aggressively they drop support for old IE versions
+        "radix": false,
         "object-literal-sort-keys": false,
         "object-literal-key-quotes": [true, "as-needed"],
         "trailing-comma": [
@@ -65,6 +67,7 @@
         "semicolon": [true, "always", "strict-bound-class-methods"],
         "space-before-function-paren": [true, {"anonymous": "always", "named": "never", "asyncArrow": "always"}]
     },
+    "jsEnable": false,
     "rulesDirectory": [],
     "linterOptions": {
       // TODO: why is tslint looking at .js files anyway?

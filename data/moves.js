@@ -5598,12 +5598,15 @@ let BattleMovedex = {
 		pp: 10,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, heal: 1, mystery: 1},
-		onHit(target) {
+		onHit(target, source) {
 			let success = false;
 			if (this.field.isTerrain('grassyterrain')) {
 				success = !!this.heal(this.modify(target.maxhp, 0.667)); // TODO: find out the real value
 			} else {
 				success = !!this.heal(Math.ceil(target.maxhp * 0.5));
+			}
+			if (success && target.side.id !== source.side.id) {
+				target.staleness = 'external';
 			}
 			return success;
 		},
@@ -6184,11 +6187,9 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1},
 		onBasePower(basePower, pokemon) {
-			for (const active of pokemon.side.active) {
-				if (active && active.moveThisTurn === 'fusionflare') {
-					this.debug('double power');
-					return this.chainModify(2);
-				}
+			if (this.lastMoveThisTurn && this.lastMoveThisTurn.id === 'fusionflare') {
+				this.debug('double power');
+				return this.chainModify(2);
 			}
 		},
 		secondary: null,
@@ -6211,11 +6212,9 @@ let BattleMovedex = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, defrost: 1},
 		onBasePower(basePower, pokemon) {
-			for (const active of pokemon.side.active) {
-				if (active && active.moveThisTurn === 'fusionbolt') {
-					this.debug('double power');
-					return this.chainModify(2);
-				}
+			if (this.lastMoveThisTurn && this.lastMoveThisTurn.id === 'fusionbolt') {
+				this.debug('double power');
+				return this.chainModify(2);
 			}
 		},
 		secondary: null,
@@ -7355,6 +7354,9 @@ let BattleMovedex = {
 				success = !!this.heal(this.modify(target.maxhp, 0.75));
 			} else {
 				success = !!this.heal(Math.ceil(target.maxhp * 0.5));
+			}
+			if (success && target.side.id !== source.side.id) {
+				target.staleness = 'external';
 			}
 			return success;
 		},
@@ -13438,12 +13440,11 @@ let BattleMovedex = {
 			this.add('-fail', pokemon);
 			return null;
 		},
-		onHit(target) {
-			if (!target.setStatus('slp')) return false;
+		onHit(target, source, move) {
+			if (!target.setStatus('slp', source, move)) return false;
 			target.statusData.time = 3;
 			target.statusData.startTime = 3;
-			this.heal(target.maxhp); //Aeshetic only as the healing happens after you fall asleep in-game
-			this.add('-status', target, 'slp', '[from] move: Rest');
+			this.heal(target.maxhp); // Aesthetic only as the healing happens after you fall asleep in-game
 		},
 		secondary: null,
 		target: "self",
@@ -15025,8 +15026,8 @@ let BattleMovedex = {
 			if (targetAbility.id !== sourceAbility.id) {
 				source.ability = targetAbility.id;
 				target.ability = sourceAbility.id;
-				source.abilityData = {id: toId(source.ability), target: source};
-				target.abilityData = {id: toId(target.ability), target: target};
+				source.abilityData = {id: toID(source.ability), target: source};
+				target.abilityData = {id: toID(target.ability), target: target};
 			}
 			this.singleEvent('Start', targetAbility, source.abilityData, source);
 			this.singleEvent('Start', sourceAbility, target.abilityData, target);
@@ -17989,10 +17990,11 @@ let BattleMovedex = {
 			},
 			onSwitchIn(pokemon) {
 				if (!pokemon.isGrounded()) return;
-				if (!pokemon.runImmunity('Poison')) return;
 				if (pokemon.hasType('Poison')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
 					pokemon.side.removeSideCondition('toxicspikes');
+				} else if (pokemon.hasType('Steel')) {
+					return;
 				} else if (this.effectData.layers >= 2) {
 					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
 				} else {
@@ -18259,7 +18261,7 @@ let BattleMovedex = {
 		basePowerCallback(source, target, move) {
 			const callerMoveId = move.sourceEffect || move.id;
 			const moveSlot = callerMoveId === 'instruct' ? source.getMoveData(move.id) : source.getMoveData(callerMoveId);
-			// @ts-ignore
+			if (!moveSlot) return 40;
 			switch (moveSlot.pp) {
 			case 0:
 				return 200;

@@ -5,12 +5,13 @@
  * @license MIT
  */
 import Dex = require('./dex');
-global.toId = Dex.getId;
+global.toID = Dex.getId;
 import * as Data from './dex-data';
 import {Field} from './field';
 import {Pokemon} from './pokemon';
 import {PRNG, PRNGSeed} from './prng';
 import {Side} from './side';
+import {State} from './state';
 
 /** A Pokemon that has fainted. */
 interface FaintedPokemon {
@@ -20,7 +21,7 @@ interface FaintedPokemon {
 }
 
 interface BattleOptions {
-	formatid: string; // Format ID
+	formatid: ID; // Format ID
 	send?: (type: string, data: string | string[]) => void; // Output callback
 	prng?: PRNG; // PRNG override (you usually don't need this, just pass a seed)
 	seed?: PRNGSeed; // PRNG seed
@@ -30,6 +31,7 @@ interface BattleOptions {
 	p3?: PlayerOptions; // Player 3 data
 	p4?: PlayerOptions; // Player 4 data
 	debug?: boolean; // show debug mode option
+	deserialized?: boolean;
 	strictChoices?: boolean; // whether invalid choices should throw
 }
 
@@ -46,8 +48,9 @@ type Part = string | number | boolean | AnyObject | null | undefined;
 export type RequestState = 'teampreview' | 'move' | 'switch' | '';
 
 export class Battle extends Dex.ModdedDex {
-	readonly id: '';
+	readonly id: ID;
 	readonly debugMode: boolean;
+	readonly deserialized: boolean;
 	readonly strictChoices: boolean;
 	readonly format: string;
 	readonly formatData: AnyObject;
@@ -90,14 +93,12 @@ export class Battle extends Dex.ModdedDex {
 	activeTarget: Pokemon | null;
 
 	lastMove: Move | null;
+	lastMoveThisTurn: Move | null;
 	lastMoveLine: number;
 	lastDamage: number;
 	abilityOrder: number;
 
 	teamGenerator: ReturnType<typeof Dex.getTeamGenerator> | null;
-
-	firstStaleWarned?: boolean;
-	staleWarned?: boolean;
 
 	readonly hints: Set<string>;
 
@@ -115,9 +116,11 @@ export class Battle extends Dex.ModdedDex {
 
 		this.zMoveTable = {};
 		Object.assign(this, this.data.Scripts);
+		if (format.battle) Object.assign(this, format.battle);
 
 		this.id = '';
 		this.debugMode = format.debug || !!options.debug;
+		this.deserialized = !!options.deserialized;
 		this.strictChoices = !!options.strictChoices;
 		this.format = format.id;
 		this.formatData = {id: format.id};
@@ -163,6 +166,7 @@ export class Battle extends Dex.ModdedDex {
 
 		this.lastMove = null;
 		this.lastMoveLine = -1;
+		this.lastMoveThisTurn = null;
 		this.lastDamage = 0;
 		this.abilityOrder = 0;
 
@@ -180,7 +184,7 @@ export class Battle extends Dex.ModdedDex {
 		// (so speedSort doesn't need to bind before use)
 		this.comparePriority = this.comparePriority.bind(this);
 
-		const inputOptions: {formatid: string, seed: PRNGSeed, rated?: string | true} = {
+		const inputOptions: {formatid: ID, seed: PRNGSeed, rated?: string | true} = {
 			formatid: options.formatid, seed: this.prng.seed,
 		};
 		if (this.rated) inputOptions.rated = this.rated;
@@ -205,6 +209,14 @@ export class Battle extends Dex.ModdedDex {
 				this.setPlayer(side, options[side]!);
 			}
 		}
+	}
+
+	toJSON(): AnyObject {
+		return State.serializeBattle(this);
+	}
+
+	static fromJSON(serialized: string | AnyObject): Battle {
+		return State.deserializeBattle(serialized);
 	}
 
 	get p1() {
@@ -251,7 +263,11 @@ export class Battle extends Dex.ModdedDex {
 
 	clearActiveMove(failed?: boolean) {
 		if (this.activeMove) {
-			if (!failed) this.lastMove = this.activeMove;
+			this.lastMoveThisTurn = null;
+			if (!failed) {
+				this.lastMove = this.activeMove;
+				this.lastMoveThisTurn = this.activeMove;
+			}
 			this.activeMove = null;
 			this.activePokemon = null;
 			this.activeTarget = null;
@@ -1020,11 +1036,33 @@ export class Battle extends Dex.ModdedDex {
 			type = this.requestState;
 		}
 
-		// default to no request
-		const requests: any[] = Array(this.sides.length).fill(null);
 		for (const side of this.sides) {
 			side.activeRequest = null;
 		}
+
+		const maxTeamSize = this.getMaxTeamSize();
+		if (type === 'teampreview') {
+			this.add('teampreview' + (maxTeamSize !== 6 ? '|' + maxTeamSize : ''));
+		}
+
+		const requests = this.getRequests(type, maxTeamSize);
+		for (let i = 0; i < this.sides.length; i++) {
+			this.sides[i].emitRequest(requests[i]);
+		}
+
+		if (this.sides.every(side => side.isChoiceDone())) {
+			throw new Error(`Choices are done immediately after a request`);
+		}
+	}
+
+	getMaxTeamSize() {
+		const teamLengthData = this.getFormat().teamLength;
+		return (teamLengthData && teamLengthData.battle) || 6;
+	}
+
+	getRequests(type: RequestState, maxTeamSize: number) {
+		// default to no request
+		const requests: any[] = Array(this.sides.length).fill(null);
 
 		switch (type) {
 		case 'switch': {
@@ -1042,10 +1080,6 @@ export class Battle extends Dex.ModdedDex {
 		}
 
 		case 'teampreview':
-			const teamLengthData = this.getFormat().teamLength;
-			let maxTeamSize = teamLengthData && teamLengthData.battle;
-			this.add('teampreview' + (maxTeamSize ? '|' + maxTeamSize : ''));
-			if (!maxTeamSize) maxTeamSize = 6;
 			for (let i = 0; i < this.sides.length; i++) {
 				const side = this.sides[i];
 				side.maxTeamSize = maxTeamSize;
@@ -1065,19 +1099,14 @@ export class Battle extends Dex.ModdedDex {
 
 		const allRequestsMade = requests.every(request => request);
 		for (let i = 0; i < this.sides.length; i++) {
-			const side = this.sides[i];
-			const request = requests[i];
-			if (request) {
-				if (!this.supportCancel || !allRequestsMade) request.noCancel = true;
-				side.emitRequest(request);
+			if (requests[i]) {
+				if (!this.supportCancel || !allRequestsMade) requests[i].noCancel = true;
 			} else {
-				side.emitRequest({wait: true, side: side.getRequestData()});
+				requests[i] = {wait: true, side: this.sides[i].getRequestData()};
 			}
 		}
 
-		if (this.sides.every(side => side.isChoiceDone())) {
-			throw new Error(`Choices are done immediately after a request`);
-		}
+		return requests;
 	}
 
 	tiebreak() {
@@ -1169,15 +1198,7 @@ export class Battle extends Dex.ModdedDex {
 			if (this.gen === 4 && sourceEffect) {
 				newMove = oldActive.lastMove;
 			}
-			if (this.cancelMove(oldActive)) {
-				for (const foeActive of side.foe.active) {
-					if (foeActive.isStale >= 2) {
-						oldActive.isStaleCon++;
-						oldActive.isStaleSource = 'drag';
-						break;
-					}
-				}
-			}
+			this.cancelMove(oldActive);
 			if (oldActive.switchCopyFlag) {
 				oldActive.switchCopyFlag = false;
 				pokemon.copyVolatileFrom(oldActive);
@@ -1254,15 +1275,7 @@ export class Battle extends Dex.ModdedDex {
 			pokemon.position = pos;
 			side.pokemon[pokemon.position] = pokemon;
 			side.pokemon[oldActive.position] = oldActive;
-			if (this.cancelMove(oldActive)) {
-				for (const foeActive of side.foe.active) {
-					if (foeActive.isStale >= 2) {
-						oldActive.isStaleCon++;
-						oldActive.isStaleSource = 'drag';
-						break;
-					}
-				}
-			}
+			this.cancelMove(oldActive);
 			oldActive.clearVolatile();
 		}
 		side.active[pos] = pokemon;
@@ -1312,9 +1325,12 @@ export class Battle extends Dex.ModdedDex {
 
 	nextTurn() {
 		this.turn++;
-		let allStale = true;
-		let oneStale: Pokemon | null = null;
+		this.lastMoveThisTurn = null;
+		const trappedBySide: boolean[] = [];
+		const stalenessBySide: ('internal' | 'external' | undefined)[] = [];
 		for (const side of this.sides) {
+			let sideTrapped = true;
+			let sideStaleness: 'internal' | 'external' | undefined;
 			for (const pokemon of side.active) {
 				if (!pokemon) continue;
 				pokemon.moveThisTurn = '';
@@ -1394,13 +1410,20 @@ export class Battle extends Dex.ModdedDex {
 				}
 
 				if (pokemon.fainted) continue;
-				[allStale, oneStale] = this.updateStaleness(pokemon);
+
+				sideTrapped = sideTrapped && pokemon.trapped;
+				if (pokemon.staleness) {
+					sideStaleness = sideStaleness === 'external' ? sideStaleness : pokemon.staleness;
+				}
+				pokemon.activeTurns++;
 			}
+			trappedBySide.push(sideTrapped);
+			stalenessBySide.push(sideStaleness);
 			side.faintedLastTurn = side.faintedThisTurn;
 			side.faintedThisTurn = false;
 		}
 
-		if (this.maybeIssueStalenessWarning(allStale, oneStale)) return;
+		if (this.maybeTriggerEndlessBattleClause(trappedBySide, stalenessBySide)) return;
 
 		if (this.gameType === 'triples' && !this.sides.filter(side => side.pokemonLeft > 1).length) {
 			// If both sides have one Pokemon left in triples and they are not adjacent, they are both moved to the center.
@@ -1417,133 +1440,68 @@ export class Battle extends Dex.ModdedDex {
 		this.makeRequest('move');
 	}
 
-	private updateStaleness(pokemon: Pokemon): [boolean, Pokemon | null] {
-		let allStale = true;
-		let oneStale: Pokemon | null = null;
-		if (pokemon.isStale < 2) {
-			if (pokemon.isStaleCon >= 2) {
-				if (pokemon.hp >= pokemon.isStaleHP - pokemon.maxhp / 100) {
-					pokemon.isStale++;
-					if (this.firstStaleWarned && pokemon.isStale < 2) {
-						switch (pokemon.isStaleSource) {
-							case 'struggle':
-								this.add('bigerror', `${pokemon.name} isn't losing HP from Struggle. If this continues, it will be classified as being in an endless loop`);
-								break;
-							case 'drag':
-								this.add('bigerror', `${pokemon.name} isn't losing PP or HP from being forced to switch. If this continues, it will be classified as being in an endless loop`);
-								break;
-							case 'switch':
-								this.add('bigerror', `${pokemon.name} isn't losing PP or HP from repeatedly switching. If this continues, it will be classified as being in an endless loop`);
-								break;
-						}
-					}
-				}
-				pokemon.isStaleCon = 0;
-				pokemon.isStalePPTurns = 0;
-				pokemon.isStaleHP = pokemon.hp;
-			}
-			if (pokemon.isStalePPTurns >= 5) {
-				if (pokemon.hp >= pokemon.isStaleHP - pokemon.maxhp / 100) {
-					pokemon.isStale++;
-					pokemon.isStaleSource = 'ppstall';
-					if (this.firstStaleWarned && pokemon.isStale < 2) {
-						this.add('bigerror', `${pokemon.name} isn't losing PP or HP. If it keeps on not losing PP or HP, it will be classified as being in an endless loop.`);
-					}
-				}
-				pokemon.isStaleCon = 0;
-				pokemon.isStalePPTurns = 0;
-				pokemon.isStaleHP = pokemon.hp;
-			}
-		}
-		if (pokemon.getMoves().length === 0) {
-			pokemon.isStaleCon++;
-			pokemon.isStaleSource = 'struggle';
-		}
-		if (pokemon.isStale < 2) {
-			allStale = false;
-		} else if (pokemon.isStale && !pokemon.staleWarned) {
-			oneStale = pokemon;
-		}
-		if (!pokemon.isStalePPTurns) {
-			pokemon.isStaleHP = pokemon.hp;
-			if (pokemon.activeTurns) pokemon.isStaleCon = 0;
-		}
-		if (pokemon.activeTurns) {
-			pokemon.isStalePPTurns++;
-		}
-		pokemon.activeTurns++;
-		return [allStale, oneStale];
-	}
+	private maybeTriggerEndlessBattleClause(
+		trappedBySide: boolean[], stalenessBySide: ('internal' | 'external' | undefined)[]
+	) {
+		if (!this.getRuleTable(this.getFormat()).has('endlessbattleclause')) return;
 
-	private maybeIssueStalenessWarning(allStale: boolean, oneStale: Pokemon | null) {
-		const ruleTable = this.getRuleTable(this.getFormat());
-		if (ruleTable.has('endlessbattleclause')) {
-			if (oneStale) {
-				let activationWarning = ` - If all active Pok\u00e9mon go in an endless loop, Endless Battle Clause will activate.`;
-				if (allStale) activationWarning = ``;
-				// @ts-ignore - index signature
-				const loopReason = (oneStale.isStaleSource && {
-					struggle: `: it isn't losing HP from Struggle`,
-					drag: `: it isn't losing PP or HP from being forced to switch`,
-					switch: `: it isn't losing PP or HP from repeatedly switching`,
-					getleppa: `: it got a Leppa Berry it didn't start with`,
-					useleppa: `: it used a Leppa Berry it didn't start with`,
-					ppstall: `: it isn't losing PP or HP`,
-					ppoverflow: `: its PP overflowed`,
-				}[oneStale.isStaleSource]) || ``;
-				this.add('bigerror', `${oneStale.name} is in an endless loop${loopReason}.${activationWarning}`);
-				oneStale.staleWarned = true;
-				this.firstStaleWarned = true;
-			}
-			if (allStale) {
-				this.add('message', `All active Pok\u00e9mon are in an endless loop. Endless Battle Clause activated!`);
-				let leppaPokemon = null;
-				for (const side of this.sides) {
-					for (const pokemon of side.pokemon) {
-						if (toId(pokemon.set.item) === 'leppaberry') {
-							if (leppaPokemon) {
-								leppaPokemon = null; // both sides have Leppa
-								this.add('-message', `Both sides started with a Leppa Berry.`);
-							} else {
-								leppaPokemon = pokemon;
-							}
-							break;
-						}
-					}
-				}
-				if (leppaPokemon) {
-					this.add('-message', `${leppaPokemon.side.name}'s ${leppaPokemon.name} started with a Leppa Berry and loses.`);
-					this.win(leppaPokemon.side.foe);
-					return true;
-				}
-				this.win();
+		if ((this.turn >= 500 && this.turn % 100 === 0) ||
+			(this.turn >= 900 && this.turn % 10 === 0) ||
+			(this.turn >= 990)) {
+			const turnsLeft = 1000 - this.turn;
+			if (turnsLeft < 0) {
+				this.add('message', `It is turn 1000. Endless Battle Clause activated!`);
+				this.tie();
 				return true;
 			}
-			if ((this.turn >= 500 && this.turn % 100 === 0) ||
-				(this.turn >= 900 && this.turn % 10 === 0) ||
-				(this.turn >= 990)) {
-				const turnsLeft = 1000 - this.turn;
-				if (turnsLeft < 0) {
-					this.add('message', `It is turn 1000. Endless Battle Clause activated!`);
-					this.tie();
-					return true;
-				}
-				const turnsLeftText = (turnsLeft === 1 ? `1 turn` : `${turnsLeft} turns`);
-				this.add('bigerror', `You will auto-tie if the battle doesn't end in ${turnsLeftText} (on turn 1000).`);
-			}
-		} else {
-			if (allStale && !this.staleWarned) {
-				this.staleWarned = true;
-				this.add('bigerror', `If this format had Endless Battle Clause, it would have activated.`);
-			} else if (oneStale) {
-				this.add('bigerror', `${oneStale.name} is in an endless loop.`);
-				oneStale.staleWarned = true;
+			const turnsLeftText = (turnsLeft === 1 ? `1 turn` : `${turnsLeft} turns`);
+			this.add('bigerror', `You will auto-tie if the battle doesn't end in ${turnsLeftText} turns (on turn 1000).`);
+		}
+
+		// Are all Pokemon on every side stale, with at least one side containing an externally stale Pokemon?
+		if (!stalenessBySide.every(s => !!s) || !stalenessBySide.some(s => s === 'external')) return;
+
+		// Can any of the sides switch to a non-stale Pokemon?
+		for (const [i, trapped] of trappedBySide.entries()) {
+			if (trapped) break; // If all of a side's Pokemon are trapped we know they can't switch.
+			const side = this.sides[i];
+			for (const pokemon of side.pokemon) {
+				// Found a Pokemon that one side can switch to, no need to end the game.
+				if (!pokemon.fainted && !pokemon.staleness) return;
 			}
 		}
-		return false;
+
+		// Endless Battle Clause activates - we determine the winner by looking at each side's sets.
+		const losers: Side[] = [];
+		for (const side of this.sides) {
+			let leppa = false; // Leppa Berry
+			let cycle = false; // Harvest or Recycle
+			for (const pokemon of side.pokemon) {
+				if (toID(pokemon.set.item) === 'leppaberry') leppa = true;
+				if (['harvest', 'pickup'].includes(toID(pokemon.set.ability)) ||
+					pokemon.set.moves.map(toID).includes('recycle' as ID)) {
+					cycle = true;
+				}
+				if (leppa && cycle) break;
+			}
+			if (leppa && cycle) losers.push(side);
+		}
+
+		if (losers.length === 1) {
+			const loser = losers[0];
+			this.add('-message', `${loser.name}'s team started with the rudimentary means to perform Leppa Berry cycling and thus loses.`);
+			return this.win(loser.foe);
+		}
+		if (losers.length === this.sides.length) {
+			this.add('-message', `Each side's team started with the rudimentary means to perform Leppa Berry cycling.`);
+		}
+
+		return this.tie();
 	}
 
 	start() {
+		// deserialized should use restart instead
+		if (this.deserialized) return;
 		// need all players to start
 		if (!this.sides.every(side => !!side)) return;
 
@@ -1568,9 +1526,8 @@ export class Battle extends Dex.ModdedDex {
 			this.add('rated', typeof this.rated === 'string' ? this.rated : '');
 		}
 
-		if (format.onBegin) {
-			format.onBegin.call(this);
-		}
+		if (format.onBegin) format.onBegin.call(this);
+		if (format.trunc) this.trunc = format.trunc;
 		for (const rule of this.getRuleTable(format).keys()) {
 			if (rule.startsWith('+') || rule.startsWith('-') || rule.startsWith('!')) continue;
 			const subFormat = this.getFormat(rule);
@@ -1588,6 +1545,16 @@ export class Battle extends Dex.ModdedDex {
 		this.addToQueue({choice: 'start'});
 		this.midTurn = true;
 		if (!this.requestState) this.go();
+	}
+
+	restart(send?: (type: string, data: string | string[]) => void) {
+		if (!this.deserialized) throw new Error('Attempt to restart a battle which has not been deserialized');
+
+		const format = this.getFormat();
+		if (format.trunc) this.trunc = format.trunc;
+
+		// @ts-ignore - readonly
+		this.send = send;
 	}
 
 	boost(
@@ -1829,7 +1796,7 @@ export class Battle extends Dex.ModdedDex {
 			if (!source) source = this.event.source;
 			if (!effect) effect = this.effect;
 		}
-		if (effect === 'drain') effect = this.getEffect(effect);
+		if (effect === 'drain') effect = this.getEffectByID(effect as ID);
 		if (damage && damage <= 1) damage = 1;
 		damage = this.trunc(damage);
 		// for things like Liquid Ooze, the Heal event still happens when nothing is healed.
@@ -2249,7 +2216,7 @@ export class Battle extends Dex.ModdedDex {
 		for (const side of this.sides) {
 			for (const pokemon of side.active) {
 				if (pokemon.fainted) {
-					pokemon.status = 'fnt';
+					pokemon.status = 'fnt' as ID;
 					pokemon.switchFlag = true;
 				}
 			}
@@ -2552,7 +2519,7 @@ export class Battle extends Dex.ModdedDex {
 				}
 			}
 			for (const pokemon of this.getAllPokemon()) {
-				this.singleEvent('Start', this.getEffect(pokemon.species), pokemon.speciesData, pokemon);
+				this.singleEvent('Start', this.getEffectByID(pokemon.speciesid), pokemon.speciesData, pokemon);
 			}
 			this.midTurn = true;
 			break;
@@ -2635,16 +2602,6 @@ export class Battle extends Dex.ModdedDex {
 				this.hint("A switch failed because the Pokémon trying to switch in is already in.");
 				break;
 			}
-			if (action.choice === 'switch' && action.pokemon.activeTurns === 1) {
-				for (const foeActive of action.pokemon.side.foe.active) {
-					if (foeActive.isStale >= 2) {
-						action.pokemon.isStaleCon++;
-						action.pokemon.isStaleSource = 'switch';
-						break;
-					}
-				}
-			}
-
 			this.switchIn(action.target, action.pokemon.position, action.sourceEffect);
 			break;
 		case 'runUnnerve':
@@ -2667,7 +2624,7 @@ export class Battle extends Dex.ModdedDex {
 					foeActive.removeVolatile('substitutebroken');
 				}
 			}
-			delete action.pokemon.draggedIn;
+			action.pokemon.draggedIn = null;
 			break;
 		case 'runPrimal':
 			if (!action.pokemon.transformed) {
@@ -2679,13 +2636,6 @@ export class Battle extends Dex.ModdedDex {
 			if (action.pokemon.fainted) return false;
 			action.pokemon.activeTurns--;
 			this.swapPosition(action.pokemon, 1);
-			for (const foeActive of action.pokemon.side.foe.active) {
-				if (foeActive.isStale >= 2) {
-					action.pokemon.isStaleCon++;
-					action.pokemon.isStaleSource = 'switch';
-					break;
-				}
-			}
 			break;
 		}
 
@@ -3004,7 +2954,7 @@ export class Battle extends Dex.ModdedDex {
 		const format = this.getFormat();
 		let team = options.team;
 		if (typeof team === 'string') team = Dex.fastUnpackTeam(team);
-		if (!format.team && team) return team;
+		if ((!format.team || this.deserialized) && team) return team;
 
 		if (!options.seed) {
 			options.seed = PRNG.generateSeed();

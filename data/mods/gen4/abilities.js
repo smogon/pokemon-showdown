@@ -378,7 +378,7 @@ let BattleAbilities = {
 			if (effect && effect.id === 'toxicspikes') return;
 			let id = status.id;
 			if (id === 'slp' || id === 'frz') return;
-			if (id === 'tox') id = 'psn';
+			if (id === 'tox') id = /** @type {ID} */('psn');
 			source.trySetStatus(id, target);
 		},
 	},

@@ -277,7 +277,7 @@ function runDexsearch(target, cmd, canAll, message) {
 	let allDoublesTiers = {'doublesubers': 'DUber', 'doublesuber': 'DUber', 'duber': 'DUber', 'dubers': 'DUber', 'doublesou': 'DOU', 'dou': 'DOU', 'doublesbl': 'DBL', 'dbl': 'DBL', 'doublesuu': 'DUU', 'duu': 'DUU', 'doublesnu': '(DUU)', 'dnu': '(DUU)', __proto__: null};
 	let allTypes = Object.create(null);
 	for (let i in Dex.data.TypeChart) {
-		allTypes[toId(i)] = i;
+		allTypes[toID(i)] = i;
 	}
 	let allColors = ['green', 'red', 'blue', 'white', 'brown', 'yellow', 'purple', 'pink', 'gray', 'black'];
 	let allEggGroups = {'amorphous': 'Amorphous', 'bug': 'Bug', 'ditto': 'Ditto', 'dragon': 'Dragon', 'fairy': 'Fairy', 'field': 'Field', 'flying': 'Flying', 'grass': 'Grass', 'humanlike': 'Human-Like', 'mineral': 'Mineral', 'monster': 'Monster', 'undiscovered': 'Undiscovered', 'water1': 'Water 1', 'water2': 'Water 2', 'water3': 'Water 3', __proto__: null};
@@ -330,8 +330,8 @@ function runDexsearch(target, cmd, canAll, message) {
 				continue;
 			}
 
-			if (toId(target) in allTiers) {
-				target = allTiers[toId(target)];
+			if (toID(target) in allTiers) {
+				target = allTiers[toID(target)];
 				if (target.startsWith("CAP")) {
 					if (capSearch === isNotSearch) return {reply: "A search cannot both include and exclude CAP tiers."};
 					capSearch = !isNotSearch;
@@ -342,8 +342,8 @@ function runDexsearch(target, cmd, canAll, message) {
 				continue;
 			}
 
-			if (toId(target) in allDoublesTiers) {
-				target = allDoublesTiers[toId(target)];
+			if (toID(target) in allDoublesTiers) {
+				target = allDoublesTiers[toID(target)];
 				let invalid = validParameter("doubles tiers", target, isNotSearch, target);
 				if (invalid) return {reply: invalid};
 				orGroup.doublesTiers[target] = !isNotSearch;
@@ -368,9 +368,9 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			let targetType;
 			if (target.endsWith('type')) {
-				targetType = toId(target.substring(0, target.indexOf('type')));
+				targetType = toID(target.substring(0, target.indexOf('type')));
 			} else {
-				targetType = toId(target);
+				targetType = toID(target);
 			}
 			if (targetType in allTypes) {
 				target = allTypes[targetType];
@@ -390,10 +390,10 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			let groupIndex = target.indexOf('group');
 			if (groupIndex === -1) groupIndex = target.length;
-			if (groupIndex !== target.length || toId(target) in allEggGroups) {
-				target = toId(target.substring(0, groupIndex));
+			if (groupIndex !== target.length || toID(target) in allEggGroups) {
+				target = toID(target.substring(0, groupIndex));
 				if (target in allEggGroups) {
-					target = allEggGroups[toId(target)];
+					target = allEggGroups[toID(target)];
 					let invalid = validParameter("egg groups", target, isNotSearch, target);
 					if (invalid) return {reply: invalid};
 					orGroup['egg groups'][target] = !isNotSearch;
@@ -402,8 +402,8 @@ function runDexsearch(target, cmd, canAll, message) {
 					return {reply: `'${target}' is not a recognized egg group.`};
 				}
 			}
-			if (toId(target) in allEggGroups) {
-				target = allEggGroups[toId(target)];
+			if (toID(target) in allEggGroups) {
+				target = allEggGroups[toID(target)];
 				let invalid = validParameter("egg groups", target, isNotSearch, target);
 				if (invalid) return {reply: invalid};
 				orGroup['egg groups'][target] = !isNotSearch;
@@ -425,7 +425,7 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			if (target.endsWith(' asc') || target.endsWith(' desc')) {
 				if (parameters.length > 1) return {reply: `The parameter '${target.split(' ')[1]}' cannot have alternative parameters`};
-				let stat = allStatAliases[toId(target.split(' ')[0])] || toId(target.split(' ')[0]);
+				let stat = allStatAliases[toID(target.split(' ')[0])] || toID(target.split(' ')[0]);
 				if (!allStats.includes(stat)) return {reply: `'${escapeHTML(target)}' did not contain a valid stat.`};
 				sort = `${stat}${target.endsWith(' asc') ? '+' : '-'}`;
 				orGroup.skip = true;
@@ -779,7 +779,7 @@ function runDexsearch(target, cmd, canAll, message) {
 			notShown = results.length - RESULTS_MAX_LENGTH;
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
-		resultsStr += results.map(result => `<a href="//dex.pokemonshowdown.com/pokemon/${toId(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result}" style="vertical-align:-7px;margin:-2px" />${result}</a>`).join(", ");
+		resultsStr += results.map(result => `<a href="//dex.pokemonshowdown.com/pokemon/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result}" style="vertical-align:-7px;margin:-2px" />${result}</a>`).join(", ");
 		if (notShown) {
 			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
 		}
@@ -802,7 +802,7 @@ function runMovesearch(target, cmd, canAll, message) {
 	let allBoosts = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'];
 	let allTypes = {};
 	for (let i in Dex.data.TypeChart) {
-		allTypes[toId(i)] = i;
+		allTypes[toID(i)] = i;
 	}
 	let showAll = false;
 	let sort = null;
@@ -822,9 +822,9 @@ function runMovesearch(target, cmd, canAll, message) {
 			}
 			let targetType;
 			if (target.endsWith('type')) {
-				targetType = toId(target.substring(0, target.indexOf('type')));
+				targetType = toID(target.substring(0, target.indexOf('type')));
 			} else {
-				targetType = toId(target);
+				targetType = toID(target);
 			}
 			if (allTypes[targetType]) {
 				target = allTypes[targetType];
@@ -877,7 +877,7 @@ function runMovesearch(target, cmd, canAll, message) {
 			if (target.endsWith(' asc') || target.endsWith(' desc')) {
 				if (parameters.length > 1) return {reply: `The parameter '${target.split(' ')[1]}' cannot have alternative parameters`};
 				let prop = target.split(' ')[0];
-				switch (toId(prop)) {
+				switch (toID(prop)) {
 				case 'basepower': prop = 'basePower'; break;
 				case 'bp': prop = 'basePower'; break;
 				case 'power': prop = 'basePower'; break;
@@ -968,7 +968,7 @@ function runMovesearch(target, cmd, canAll, message) {
 					return {reply: `No value given to compare with '${escapeHTML(target)}'.`};
 				}
 				let prop = targetParts[propSide];
-				switch (toId(targetParts[propSide])) {
+				switch (toID(targetParts[propSide])) {
 				case 'basepower': prop = 'basePower'; break;
 				case 'bp': prop = 'basePower'; break;
 				case 'power': prop = 'basePower'; break;
@@ -1277,8 +1277,8 @@ function runMovesearch(target, cmd, canAll, message) {
 			let prop = sort.slice(0, -1);
 			let direction = sort.slice(-1);
 			results.sort((a, b) => {
-				let move1prop = dex[toId(a)][prop];
-				let move2prop = dex[toId(b)][prop];
+				let move1prop = dex[toID(a)][prop];
+				let move2prop = dex[toID(b)][prop];
 				// convert booleans to 0 or 1
 				if (typeof move1prop === 'boolean') move1prop = move1prop ? 1 : 0;
 				if (typeof move2prop === 'boolean') move2prop = move2prop ? 1 : 0;
@@ -1291,8 +1291,8 @@ function runMovesearch(target, cmd, canAll, message) {
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
 		resultsStr += results.map(result =>
-			`<a href="//dex.pokemonshowdown.com/moves/${toId(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>` +
-			(sort ? ' (' + (dex[toId(result)][sort.slice(0, -1)] === true ? '-' : dex[toId(result)][sort.slice(0, -1)]) + ')' : '')
+			`<a href="//dex.pokemonshowdown.com/moves/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>` +
+			(sort ? ' (' + (dex[toID(result)][sort.slice(0, -1)] === true ? '-' : dex[toID(result)][sort.slice(0, -1)]) + ')' : '')
 		).join(", ");
 		if (notShown) {
 			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
@@ -1472,7 +1472,7 @@ function runItemsearch(target, cmd, canAll, message) {
 		for (let n in Dex.data.Items) {
 			let item = Dex.getItem(n);
 			let matched = 0;
-			// splits words in the description into a toId()-esk format except retaining / and . in numbers
+			// splits words in the description into a toID()-esk format except retaining / and . in numbers
 			let descWords = item.desc;
 			// add more general quantifier words to descriptions
 			if (/[1-9.]+x/.test(descWords)) descWords += ' increases';
@@ -1503,7 +1503,7 @@ function runItemsearch(target, cmd, canAll, message) {
 			notShown = foundItems.length - RESULTS_MAX_LENGTH;
 			foundItems = foundItems.slice(0, RESULTS_MAX_LENGTH);
 		}
-		resultsStr += foundItems.map(result => `<a href="//dex.pokemonshowdown.com/items/${toId(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon item="${result}" style="vertical-align:-7px" />${result}</a>`).join(", ");
+		resultsStr += foundItems.map(result => `<a href="//dex.pokemonshowdown.com/items/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon item="${result}" style="vertical-align:-7px" />${result}</a>`).join(", ");
 		if (notShown) {
 			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
 		}
@@ -1521,7 +1521,7 @@ function runLearn(target, cmd) {
 	let formatName;
 
 	while (targets.length) {
-		let targetid = toId(targets[0]);
+		let targetid = toID(targets[0]);
 		if (Dex.getFormat(targetid).exists) {
 			if (format.requirePentagon) {
 				return {error: "'pentagon' can't be used with formats."};
@@ -1575,7 +1575,7 @@ function runLearn(target, cmd) {
 
 	let lsetProblem;
 	for (const arg of targets) {
-		if (['ha', 'hidden', 'hiddenability'].includes(toId(arg))) {
+		if (['ha', 'hidden', 'hiddenability'].includes(toID(arg))) {
 			lsetData.isHidden = true;
 			continue;
 		}
@@ -1703,7 +1703,7 @@ if (!PM.isParentProcess) {
 	}
 
 	global.Dex = require('../../.sim-dist/dex');
-	global.toId = Dex.getId;
+	global.toID = Dex.getId;
 	Dex.includeData();
 	global.TeamValidator = require('../../.sim-dist/team-validator').TeamValidator;
 

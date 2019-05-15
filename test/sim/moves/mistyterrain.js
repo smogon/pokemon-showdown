@@ -66,7 +66,7 @@ describe('Misty Terrain', function () {
 		assert.strictEqual(battle.p1.active[0].status, '');
 		let dataLine = battle.log[battle.lastMoveLine + 1].split('|');
 		assert.strictEqual(dataLine[1], '-start');
-		assert.ok(toId(dataLine[3]).endsWith('yawn'));
+		assert.ok(toID(dataLine[3]).endsWith('yawn'));
 	});
 
 	it('should cause Rest to fail on grounded Pokemon', function () {
@@ -94,7 +94,7 @@ describe('Misty Terrain', function () {
 		battle.setPlayer('p1', {team: [{species: "Whimsicott", ability: 'prankster', moves: ['mistyterrain']}]});
 		battle.setPlayer('p2', {team: [{species: "Shuckle", ability: 'sturdy', moves: ['naturepower']}]});
 		battle.makeChoices('move mistyterrain', 'move naturepower');
-		let resultMove = toId(battle.log[battle.lastMoveLine].split('|')[3]);
+		let resultMove = toID(battle.log[battle.lastMoveLine].split('|')[3]);
 		assert.strictEqual(resultMove, 'moonblast');
 	});
 });

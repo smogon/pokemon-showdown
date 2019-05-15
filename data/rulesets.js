@@ -45,7 +45,7 @@ let BattleFormats = {
 			'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma', 'Magearna', 'Marshadow', 'Zeraora',
 		],
 		onValidateSet(set, format) {
-			if (this.gen < 7 && toId(set.item) === 'souldew') {
+			if (this.gen < 7 && toID(set.item) === 'souldew') {
 				return [`${set.name || set.species} has Soul Dew, which is banned in ${format.name}.`];
 			}
 		},
@@ -65,7 +65,7 @@ let BattleFormats = {
 			'Magearna', 'Marshadow', 'Zeraora',
 		],
 		onValidateSet(set, format) {
-			if (this.gen < 7 && toId(set.item) === 'souldew') {
+			if (this.gen < 7 && toID(set.item) === 'souldew') {
 				return [`${set.name || set.species} has Soul Dew, which is banned in ${format.name}.`];
 			}
 		},
@@ -258,7 +258,7 @@ let BattleFormats = {
 						problems.push(`${template.species} transforms in-battle with ${Chat.plural(template.requiredItems.length, "either ") + template.requiredItems.join(" or ")}.`); // Mega or Primal
 					}
 				}
-				if (template.requiredMove && set.moves.indexOf(toId(template.requiredMove)) < 0) {
+				if (template.requiredMove && set.moves.indexOf(toID(template.requiredMove)) < 0) {
 					problems.push(`${template.species} transforms in-battle with ${template.requiredMove}.`); // Meloetta-Pirouette, Rayquaza-Mega
 				}
 				if (!format.noChangeForme) set.species = template.baseSpecies; // Fix battle-only forme
@@ -269,7 +269,7 @@ let BattleFormats = {
 				if (template.requiredItems && !template.requiredItems.includes(item.name)) {
 					problems.push(`${(set.name || set.species)} needs to hold ${Chat.plural(template.requiredItems.length, "either ") + template.requiredItems.join(" or ")}.`); // Memory/Drive/Griseous Orb/Plate/Z-Crystal - Forme mismatch
 				}
-				if (template.requiredMove && set.moves.indexOf(toId(template.requiredMove)) < 0) {
+				if (template.requiredMove && set.moves.indexOf(toID(template.requiredMove)) < 0) {
 					problems.push(`${(set.name || set.species)} needs to have the move ${template.requiredMove}.`); // Keldeo-Resolute
 				}
 
@@ -466,7 +466,7 @@ let BattleFormats = {
 			/**@type {{[k: string]: true}} */
 			let itemTable = {};
 			for (const set of team) {
-				let item = toId(set.item);
+				let item = toID(set.item);
 				if (!item) continue;
 				if (itemTable[item]) {
 					return ["You are limited to one of each item by Item Clause.", "(You have more than one " + this.getItem(item).name + ")"];
@@ -502,9 +502,9 @@ let BattleFormats = {
 				turboblaze: 'moldbreaker',
 			};
 			for (const set of team) {
-				let ability = toId(set.ability);
+				let ability = toID(set.ability);
 				if (!ability) continue;
-				if (ability in base) ability = base[ability];
+				if (ability in base) ability = /** @type {ID} */(base[ability]);
 				if (ability in abilityTable) {
 					if (abilityTable[ability] >= 2) {
 						return ["You are limited to two of each ability by the Ability Clause.", `(You have more than two ${this.getAbility(ability).name} variants)`];
@@ -565,30 +565,7 @@ let BattleFormats = {
 		effectType: 'Rule',
 		name: 'Endless Battle Clause',
 		desc: "Prevents players from forcing a battle which their opponent cannot end except by forfeit",
-		// implemented in sim/battle.js
-
-		// A Pokémon has a confinement counter, which starts at 0:
-		// +1 confinement whenever:
-		// - it has no available moves other than Struggle
-		// - it was forced to switch by a stale opponent before it could do its
-		//   action for the turn
-		// - it intentionally switched out the turn after it switched in against
-		//   a stale Pokémon
-		// - it shifts in Triples against a stale Pokémon
-		// - it has gone 5 turns without losing PP (mimiced/transformed moves
-		//   count only if no foe is stale)
-		// confinement reset to 0 whenever:
-		// - it uses PP while not Transformed/Impostered
-		// - if it has at least 2 confinement, and begins a turn without losing
-		//   at least 1% of its max HP from the last time its confinement counter
-		//   was 0 - user also becomes half-stale if not already half-stale, or
-		//   stale if already half-stale
-
-		// A Pokémon is also considered stale if:
-		// - it has gained a Leppa berry through any means besides starting
-		//   with one
-		// - OR it has eaten a Leppa berry it isn't holding
-
+		// implemented in sim/battle.js, see https://dex.pokemonshowdown.com/articles/battlerules#endlessbattleclause for the specification.
 		onBegin() {
 			this.add('rule', 'Endless Battle Clause: Forcing endless battles is banned');
 		},
@@ -623,7 +600,7 @@ let BattleFormats = {
 			if (!('move:batonpass' in setHas)) return;
 
 			let item = this.getItem(set.item);
-			let ability = toId(set.ability);
+			let ability = toID(set.ability);
 			/**@type {boolean | string} */
 			let speedBoosted = false;
 			/**@type {boolean | string} */
@@ -870,6 +847,7 @@ let BattleFormats = {
 			}
 			return this.checkLearnset(move, template, lsetData, set);
 		},
+		unbanlist: ['Shiftry + Leaf Blade + Sucker Punch'],
 	},
 	allowcap: {
 		effectType: 'ValidatorRule',

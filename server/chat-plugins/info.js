@@ -188,7 +188,7 @@ const commands = {
 		let gameRooms = [];
 		for (const room of Rooms.rooms.values()) {
 			if (!room.game) continue;
-			if ((targetUser.userid in room.game.players && !targetUser.inRooms.has(room.id)) ||
+			if ((targetUser.userid in room.game.playerTable && !targetUser.inRooms.has(room.id)) ||
 				room.auth[targetUser.userid] === Users.PLAYER_SYMBOL) {
 				if (room.isPrivate && !canViewAlts) {
 					continue;
@@ -236,7 +236,7 @@ const commands = {
 		if (!user.trusted) {
 			return this.errorReply("/offlinewhois - Access denied.");
 		}
-		let userid = toId(target);
+		let userid = toID(target);
 		if (!userid) return this.errorReply("Please enter a valid username.");
 		let targetUser = Users(userid);
 		let buf = Chat.html`<strong class="username">${target}</strong>`;
@@ -312,7 +312,7 @@ const commands = {
 		if (!this.can('rangeban')) return;
 		target = target.trim();
 		if (!/^[0-9.]+$/.test(target)) return this.errorReply('You must pass a valid IPv4 IP to /host.');
-		Dnsbl.reverse(target).then(host => {
+		IPTools.getHost(target).then(host => {
 			this.sendReply('IP ' + target + ': ' + (host || "ERROR"));
 		});
 	},
@@ -439,7 +439,7 @@ const commands = {
 		let sep = target.split(',');
 		if (sep.length !== 2) sep = [target];
 		target = sep[0].trim();
-		let targetId = toId(target);
+		let targetId = toID(target);
 		if (!targetId) return this.parse('/help data');
 		let targetNum = parseInt(target);
 		if (!isNaN(targetNum) && '' + targetNum === target) {
@@ -454,8 +454,8 @@ const commands = {
 		let mod = Dex;
 		/** @type {Format?} */
 		let format = null;
-		if (sep[1] && toId(sep[1]) in Dex.dexes) {
-			mod = Dex.mod(toId(sep[1]));
+		if (sep[1] && toID(sep[1]) in Dex.dexes) {
+			mod = Dex.mod(toID(sep[1]));
 		} else if (sep[1]) {
 			format = Dex.getFormat(sep[1]);
 			if (!format.exists) {
@@ -714,8 +714,8 @@ const commands = {
 		let mod = Dex;
 		/** @type {Format?} */
 		let format = null;
-		if (modName[modName.length - 1] && toId(modName[modName.length - 1]) in Dex.dexes) {
-			mod = Dex.mod(toId(modName[modName.length - 1]));
+		if (modName[modName.length - 1] && toID(modName[modName.length - 1]) in Dex.dexes) {
+			mod = Dex.mod(toID(modName[modName.length - 1]));
 		} else if (room && room.battle) {
 			format = Dex.getFormat(room.battle.format);
 			mod = Dex.mod(format.mod);
@@ -732,12 +732,12 @@ const commands = {
 		} else {
 			let types = [];
 			if (type1.exists) {
-				types.push(type1.id);
+				types.push(type1.name);
 				if (type2.exists && type2 !== type1) {
-					types.push(type2.id);
+					types.push(type2.name);
 				}
 				if (type3.exists && type3 !== type1 && type3 !== type2) {
-					types.push(type3.id);
+					types.push(type3.name);
 				}
 			}
 
@@ -819,8 +819,8 @@ const commands = {
 					source = foundData;
 					atkName = foundData.name;
 				} else {
-					source = foundData.id;
-					atkName = foundData.id;
+					source = foundData.name;
+					atkName = foundData.name;
 				}
 				searchMethods = targetMethods;
 			} else if (!defender && targetMethods.includes(method)) {
@@ -828,8 +828,8 @@ const commands = {
 					defender = foundData;
 					defName = foundData.species + " (not counting abilities)";
 				} else {
-					defender = {types: [foundData.id]};
-					defName = foundData.id;
+					defender = {types: [foundData.name]};
+					defName = foundData.name;
 				}
 				searchMethods = sourceMethods;
 			}
@@ -873,8 +873,8 @@ const commands = {
 			let format = Dex.getFormat(room.battle.format);
 			mod = Dex.mod(format.mod);
 		}
-		if (targets[targets.length - 1] && toId(targets[targets.length - 1]) in Dex.dexes) {
-			mod = Dex.mod(toId(targets[targets.length - 1]));
+		if (targets[targets.length - 1] && toID(targets[targets.length - 1]) in Dex.dexes) {
+			mod = Dex.mod(toID(targets[targets.length - 1]));
 		}
 		let dispTable = false;
 		let bestCoverage = {};
@@ -886,7 +886,7 @@ const commands = {
 		}
 
 		for (let arg of targets) {
-			arg = toId(arg);
+			arg = toID(arg);
 
 			// arg is the gen?
 			if (arg === mod.currentMod) continue;
@@ -1598,7 +1598,7 @@ const commands = {
 
 		const isOMSearch = (cmd === 'om' || cmd === 'othermetas');
 
-		let targetId = toId(target);
+		let targetId = toID(target);
 		if (targetId === 'ladder') targetId = 'search';
 		if (targetId === 'all') targetId = '';
 
@@ -1615,7 +1615,7 @@ const commands = {
 		let totalMatches = 0;
 		for (const mode of formatList) {
 			let format = Dex.getFormat(mode);
-			let sectionId = toId(format.section);
+			let sectionId = toID(format.section);
 			let formatId = format.id;
 			if (!/^gen\d+/.test(targetId)) formatId = formatId.replace(/^gen\d+/, ''); // skip generation prefix if it wasn't provided
 			if (targetId && !format[targetId + 'Show'] && sectionId !== targetId && format.id === mode && !formatId.startsWith(targetId)) continue;
@@ -1914,7 +1914,7 @@ const commands = {
 			let formatId = extraFormat.id;
 			if (formatName.startsWith('[Gen ')) {
 				formatName = formatName.replace('[Gen ' + formatName[formatName.indexOf('[') + 5] + '] ', '');
-				formatId = toId(formatName);
+				formatId = toID(formatName);
 			}
 			if (formatId === 'battlespotdoubles') {
 				formatId = 'battle_spot_doubles';
@@ -1976,7 +1976,7 @@ const commands = {
 		// Move
 		if (move.exists && move.gen <= genNumber) {
 			atLeastOne = true;
-			this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/moves/${toId(move.name)}">${generation.toUpperCase()} ${move.name} move analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
+			this.sendReplyBox(`<a href="https://www.smogon.com/dex/${generation}/moves/${toID(move.name)}">${generation.toUpperCase()} ${move.name} move analysis</a>, brought to you by <a href="https://www.smogon.com">Smogon University</a>`);
 		}
 
 		// Format
@@ -2116,7 +2116,7 @@ const commands = {
 
 		Config.potd = target;
 		// TODO: support eval in new PM
-		Rooms.PM.eval('Config.potd = \'' + toId(target) + '\'');
+		Rooms.PM.eval('Config.potd = \'' + toID(target) + '\'');
 		if (target) {
 			if (Rooms.lobby) Rooms.lobby.addRaw(`<div class="broadcast-blue"><b>The Pok&eacute;mon of the Day is now ${target}!</b><br />This Pokemon will be guaranteed to show up in random battles.</div>`);
 			this.modlog('POTD', null, target);
@@ -2390,7 +2390,7 @@ const commands = {
 		if (!this.canTalk()) return;
 
 		let [name, html] = this.splitOne(target);
-		name = toId(name);
+		name = toID(name);
 		html = this.canHTML(html);
 		if (!html) return;
 		if (!this.can('addhtml', null, room)) return;
@@ -2416,7 +2416,7 @@ const commands = {
 		let [rank, uhtml] = this.splitOne(target);
 		if (!(rank in Config.groups)) return this.errorReply(`Group '${rank}' does not exist.`);
 		let [name, html] = this.splitOne(uhtml);
-		name = toId(name);
+		name = toID(name);
 		html = this.canHTML(html);
 		if (!html) return;
 		if (!this.can('addhtml', null, room)) return;

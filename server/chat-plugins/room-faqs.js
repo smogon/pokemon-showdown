@@ -44,7 +44,7 @@ const commands = {
 		if (target !== input) return this.errorReply("You are not allowed to use fitered words in roomfaq entries.");
 		let [topic, ...rest] = input.split(',');
 
-		topic = toId(topic);
+		topic = toID(topic);
 		if (!(topic && rest.length)) return this.parse('/help roomfaq');
 		let text = rest.join(',').trim();
 		let filteredText = text.replace(/\[\[(?:([^<]+)\s<[^>]+>|([^\]]+))\]\]/g, (match, $1, $2) => $1 || $2);
@@ -64,7 +64,7 @@ const commands = {
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 		if (!this.can('declare', null, room)) return false;
 		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
-		let topic = toId(target);
+		let topic = toID(target);
 		if (!topic) return this.parse('/help roomfaq');
 
 		if (!(roomFaqs[room.id] && roomFaqs[room.id][topic])) return this.errorReply("Invalid topic.");
@@ -79,7 +79,7 @@ const commands = {
 		if (!this.canTalk()) return this.errorReply("You cannot do this while unable to talk.");
 		if (!this.can('declare', null, room)) return false;
 		if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
-		let [alias, topic] = target.split(',').map(val => toId(val));
+		let [alias, topic] = target.split(',').map(val => toID(val));
 
 		if (!(alias && topic)) return this.parse('/help roomfaq');
 		if (alias.length > 25) return this.errorReply("FAQ topics should not exceed 25 characters.");
@@ -94,7 +94,8 @@ const commands = {
 	rfaq: 'roomfaq',
 	roomfaq(target, room, user) {
 		if (!roomFaqs[room.id]) return this.errorReply("This room has no FAQ topics.");
-		let topic = toId(target);
+		/** @type {string} */
+		let topic = toID(target);
 		if (topic === 'constructor') return false;
 		if (!topic) return this.sendReplyBox(`List of topics in this room: ${Object.keys(roomFaqs[room.id]).filter(val => !getAlias(room.id, val)).sort((a, b) => a.localeCompare(b)).join(', ')}`);
 		if (!roomFaqs[room.id][topic]) return this.errorReply("Invalid topic.");

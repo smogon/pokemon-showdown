@@ -885,6 +885,12 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "The target's held item is lost for the rest of the battle, unless the item is a Griseous Orb or the target has the Multitype or Sticky Hold Abilities. During the effect, the target cannot obtain a new item by any means.",
 		shortDesc: "Target's item is lost and it cannot obtain another.",
+		onAfterHit(target, source) {
+			let item = target.takeItem();
+			if (item) {
+				this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] ' + source);
+			}
+		},
 	},
 	lastresort: {
 		inherit: true,
@@ -1240,6 +1246,22 @@ let BattleMovedex = {
 	rapidspin: {
 		inherit: true,
 		desc: "If this move is successful, the effects of Leech Seed and binding moves end against the user, and all hazards are removed from the user's side of the field.",
+		self: {
+			onHit(pokemon) {
+				if (pokemon.removeVolatile('leechseed')) {
+					this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', '[of] ' + pokemon);
+				}
+				let sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+				for (const condition of sideConditions) {
+					if (pokemon.side.removeSideCondition(condition)) {
+						this.add('-sideend', pokemon.side, this.getEffect(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
+					}
+				}
+				if (pokemon.volatiles['partiallytrapped']) {
+					pokemon.removeVolatile('partiallytrapped');
+				}
+			},
+		},
 	},
 	razorwind: {
 		inherit: true,
@@ -1663,13 +1685,11 @@ let BattleMovedex = {
 				this.effectData.layers++;
 			},
 			onSwitchIn(pokemon) {
-				if (!pokemon.runImmunity('Ground')) return;
-				if (!pokemon.runImmunity('Poison')) return;
+				if (!pokemon.isGrounded()) return;
 				if (pokemon.hasType('Poison')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
 					pokemon.side.removeSideCondition('toxicspikes');
-				}
-				if (pokemon.volatiles['substitute']) {
+				} else if (pokemon.volatiles['substitute'] || pokemon.hasType('Steel')) {
 					return;
 				} else if (this.effectData.layers >= 2) {
 					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);

@@ -2726,7 +2726,7 @@ let BattleFormatsData = {
 		doublesTier: "DUber",
 	},
 	kyogreprimal: {
-		randomBattleMoves: ["calmmind", "waterspout", "originpulse", "scald", "thunder", "icebeam", "rest", "sleeptalk"],
+		randomBattleMoves: ["calmmind", "originpulse", "scald", "thunder", "icebeam", "toxic", "rest", "sleeptalk"],
 		randomDoubleBattleMoves: ["waterspout", "originpulse", "muddywater", "thunder", "icebeam", "calmmind", "rest", "sleeptalk", "protect"],
 		requiredItem: "Blue Orb",
 	},
@@ -3307,8 +3307,8 @@ let BattleFormatsData = {
 		doublesTier: "(DUU)",
 	},
 	shayminsky: {
-		randomBattleMoves: ["seedflare", "earthpower", "airslash", "hiddenpowerfire", "substitute", "leechseed", "healingwish"],
-		randomDoubleBattleMoves: ["seedflare", "earthpower", "airslash", "hiddenpowerfire", "rest", "substitute", "leechseed", "tailwind", "protect", "hiddenpowerice"],
+		randomBattleMoves: ["seedflare", "earthpower", "airslash", "hiddenpowerice", "substitute", "leechseed", "healingwish"],
+		randomDoubleBattleMoves: ["seedflare", "earthpower", "airslash", "rest", "substitute", "leechseed", "tailwind", "protect", "hiddenpowerice"],
 		eventOnly: true,
 		tier: "Uber",
 		doublesTier: "DUber",
@@ -4202,7 +4202,7 @@ let BattleFormatsData = {
 	},
 	terrakion: {
 		inherit: true,
-		randomBattleMoves: ["stoneedge", "closecombat", "swordsdance", "substitute", "stealthrock", "earthquake"],
+		randomBattleMoves: ["swordsdance", "closecombat", "stoneedge", "earthquake", "substitute"],
 		randomDoubleBattleMoves: ["stoneedge", "closecombat", "substitute", "rockslide", "earthquake", "protect"],
 		tier: "UUBL",
 		doublesTier: "DOU",
@@ -4525,7 +4525,7 @@ let BattleFormatsData = {
 		tier: "LC Uber",
 	},
 	slurpuff: {
-		randomBattleMoves: ["substitute", "bellydrum", "playrough", "return", "drainpunch", "calmmind", "drainingkiss", "dazzlinggleam", "flamethrower", "surf"],
+		randomBattleMoves: ["substitute", "bellydrum", "playrough", "return", "drainpunch", "calmmind", "dazzlinggleam", "flamethrower", "surf"],
 		randomDoubleBattleMoves: ["substitute", "bellydrum", "playrough", "return", "drainpunch", "dazzlinggleam", "surf", "psychic", "flamethrower", "protect"],
 		tier: "RUBL",
 		doublesTier: "(DUU)",

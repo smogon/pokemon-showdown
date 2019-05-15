@@ -13,7 +13,7 @@ declare global {
 	namespace NodeJS {
 		interface Global {
 			Dex: any
-			toId(input: any): string
+			toID(input: any): string
 			TeamValidator: any
 			__version: string
 		}
@@ -40,5 +40,5 @@ declare global {
 	const Template: DataType.Template
 	const Tools: DataType.Tools
 	const TypeInfo: DataType.TypeInfo
-	const toId: typeof DataType.Tools.getId
+	const toID: typeof DataType.Tools.getId
 }

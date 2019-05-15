@@ -68,8 +68,12 @@ let BattleStatuses = {
 		id: 'slp',
 		num: 0,
 		effectType: 'Status',
-		onStart(target) {
-			this.add('-status', target, 'slp');
+		onStart(target, source, sourceEffect) {
+			if (sourceEffect && sourceEffect.effectType === 'Move') {
+				this.add('-status', target, 'slp', '[from] move: ' + sourceEffect.name);
+			} else {
+				this.add('-status', target, 'slp');
+			}
 			// 1-7 turns
 			this.effectData.startTime = this.random(1, 8);
 			this.effectData.time = this.effectData.startTime;
@@ -234,6 +238,10 @@ let BattleStatuses = {
 				}
 			}
 		},
+	},
+	mustrecharge: {
+		inherit: true,
+		onStart() {},
 	},
 	lockedmove: {
 		// Outrage, Thrash, Petal Dance...

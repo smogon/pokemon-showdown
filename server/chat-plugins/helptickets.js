@@ -110,12 +110,12 @@ class HelpTicket extends Rooms.RoomGame {
 	 * @param {User} user
 	 */
 	onLeave(user) {
-		if (user.userid in this.players) {
+		if (user.userid in this.playerTable) {
 			this.removePlayer(user);
 			return;
 		}
 		if (!this.ticket.open) return;
-		if (toId(this.ticket.claimed) === user.userid) {
+		if (toID(this.ticket.claimed) === user.userid) {
 			if (this.claimQueue.length) {
 				this.ticket.claimed = this.claimQueue.shift() || null;
 				this.modnote(user, `This ticket is now claimed by ${this.ticket.claimed}.`);
@@ -127,21 +127,9 @@ class HelpTicket extends Rooms.RoomGame {
 			tickets[this.ticket.userid] = this.ticket;
 			writeTickets();
 		} else {
-			let index = this.claimQueue.map(toId).indexOf(user.userid);
+			let index = this.claimQueue.map(toID).indexOf(/** @type {ID} */(user.userid));
 			if (index > -1) this.claimQueue.splice(index, 1);
 		}
-	}
-
-	/**
-	 * @param {User} user
-	 */
-	addPlayer(user) {
-		if (user.userid in this.players) return false;
-		let player = this.makePlayer(user);
-		if (!player) return false;
-		this.players[user.userid] = player;
-		this.playerCount++;
-		return true;
 	}
 
 	/**
@@ -154,7 +142,7 @@ class HelpTicket extends Rooms.RoomGame {
 			'hi', 'hello', 'hullo', 'hey', 'yo',
 			'hesrude', 'shesrude', 'hesinappropriate', 'shesinappropriate', 'heswore', 'sheswore',
 		];
-		if (!user.isStaff && blockedMessages.includes(toId(message))) {
+		if (!user.isStaff && blockedMessages.includes(toID(message))) {
 			this.room.add(`|c|~Staff|Hello! The global staff team would be happy to help you, but you need to explain what's going on first.`);
 			this.room.add(`|c|~Staff|Please post the information I requested above so a global staff member can come to help.`);
 			this.room.update();
@@ -170,7 +158,7 @@ class HelpTicket extends Rooms.RoomGame {
 	 * @param {User} user
 	 */
 	forfeit(user) {
-		if (!(user.userid in this.players)) return;
+		if (!(user.userid in this.playerTable)) return;
 		this.removePlayer(user);
 		if (!this.ticket.open) return;
 		this.modnote(user, `${user.name} is no longer interested in this ticket.`);
@@ -242,7 +230,7 @@ class HelpTicket extends Rooms.RoomGame {
 		this.modnote(staff, `${staff.name} closed this ticket.`);
 		notifyStaff(this.ticket.escalated);
 		this.room.pokeExpireTimer();
-		for (const ticketGameUser of Object.values(this.players)) {
+		for (const ticketGameUser of Object.values(this.playerTable)) {
 			this.removePlayer(ticketGameUser);
 			const user = Users(ticketGameUser.userid);
 			if (user) user.updateSearch();
@@ -408,7 +396,7 @@ function checkTicketBanned(user) {
 	let ticket = ticketBans[user.userid];
 	if (ticket) {
 		if (ticket.expires > Date.now()) {
-			return `You are banned from creating tickets${toId(ticket.banned) !== user.userid ? `, because you have the same IP as ${ticket.banned}.` : `.`}${ticket.reason ? ` Reason: ${ticket.reason}` : ``}`;
+			return `You are banned from creating tickets${toID(ticket.banned) !== user.userid ? `, because you have the same IP as ${ticket.banned}.` : `.`}${ticket.reason ? ` Reason: ${ticket.reason}` : ``}`;
 		} else {
 			delete tickets[ticket.userid];
 			writeTickets();
@@ -434,7 +422,7 @@ function checkTicketBanned(user) {
 			ticket.by = bannedTicket.by + ' (IP)';
 			ticketBans[user.userid] = ticket;
 			writeTickets();
-			return `You are banned from creating tickets${toId(ticket.banned) !== user.userid ? `, because you have the same IP as ${ticket.banned}.` : `.`}${ticket.reason ? ` Reason: ${ticket.reason}` : ``}`;
+			return `You are banned from creating tickets${toID(ticket.banned) !== user.userid ? `, because you have the same IP as ${ticket.banned}.` : `.`}${ticket.reason ? ` Reason: ${ticket.reason}` : ``}`;
 		} else {
 			delete ticketBans[bannedTicket.userid];
 			writeTickets();
@@ -913,7 +901,7 @@ let commands = {
 			const ticketGame = /** @type {HelpTicket} */ (helpRoom.game);
 			ticketGame.modnote(user, `${user.name} opened a new ticket. Issue: ${ticket.type}`);
 			this.parse(`/join help-${user.userid}`);
-			if (!(user.userid in ticketGame.players)) {
+			if (!(user.userid in ticketGame.playerTable)) {
 				// User was already in the room, manually add them to the "game" so they get a popup if they try to leave
 				ticketGame.addPlayer(user);
 			}
@@ -931,16 +919,16 @@ let commands = {
 
 		escalate(target, room, user, connection) {
 			if (!this.can('lock')) return;
-			target = toId(this.splitTarget(target, true));
+			target = toID(this.splitTarget(target, true));
 			if (!this.targetUsername) return this.parse(`/help helpticket escalate`);
-			let ticket = tickets[toId(this.targetUsername)];
+			let ticket = tickets[toID(this.targetUsername)];
 			if (!ticket || !ticket.open) return this.errorReply(`${this.targetUsername} does not have an open ticket.`);
 			if (ticket.escalated && !user.can('declare')) return this.errorReply(`/helpticket escalate - Access denied for escalating upper staff tickets.`);
 			if (target === 'upperstaff' && ticket.escalated) return this.errorReply(`${ticket.creator}'s ticket is already escalated.`);
 			let helpRoom = Rooms('help-' + ticket.userid);
 			if (!helpRoom) return this.errorReply(`${ticket.creator}'s help room is expired and cannot be escalated.`);
 			const ticketGame = /** @type {HelpTicket} */ (helpRoom.game);
-			ticketGame.escalate((toId(target) === 'upperstaff'), user);
+			ticketGame.escalate((toID(target) === 'upperstaff'), user);
 			return this.sendReply(`${ticket.creator}'s ticket was escalated.`);
 		},
 		escalatehelp: [`/helpticket escalate [user], (upperstaff) - Escalate a ticket. If upperstaff is included, escalate the ticket to upper staff. Requires: % @ & ~`],
@@ -955,7 +943,7 @@ let commands = {
 		'!close': true,
 		close(target, room, user) {
 			if (!target) return this.parse(`/help helpticket close`);
-			let ticket = tickets[toId(target)];
+			let ticket = tickets[toID(target)];
 			if (!ticket || !ticket.open || (ticket.userid !== user.userid && !user.can('lock'))) return this.errorReply(`${target} does not have an open ticket.`);
 			if (ticket.escalated && ticket.userid !== user.userid && !user.can('declare')) return this.errorReply(`/helpticket close - Access denied for closing upper staff tickets.`);
 			const helpRoom = /** @type {ChatRoom?} */ (Rooms(`help-${ticket.userid}`));
@@ -978,9 +966,9 @@ let commands = {
 			let targetUser = this.targetUser;
 			if (!this.can('lock', targetUser)) return;
 
-			let ticket = tickets[toId(this.targetUsername)];
-			let ticketBan = ticketBans[toId(this.targetUsername)];
-			if (!targetUser && !Punishments.search(toId(this.targetUsername)).length && !ticket && !ticketBan) {
+			let ticket = tickets[toID(this.targetUsername)];
+			let ticketBan = ticketBans[toID(this.targetUsername)];
+			if (!targetUser && !Punishments.search(toID(this.targetUsername)).length && !ticket && !ticketBan) {
 				return this.errorReply(`User '${this.targetUsername}' not found.`);
 			}
 			if (target.length > 300) {
@@ -996,7 +984,7 @@ let commands = {
 				if (targetUser.trusted) Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name}${(targetUser.trusted !== targetUser.userid ? ` (${targetUser.trusted})` : ``)} was ticket banned by ${user.name}, and should probably be demoted.`);
 			} else {
 				name = this.targetUsername;
-				userid = toId(this.targetUsername);
+				userid = toID(this.targetUsername);
 				if (ticketBan && ticketBan.expires > Date.now()) return this.privateModAction(`(${name} would be ticket banned by ${user.name} but was already ticket banned.)`);
 			}
 
@@ -1010,7 +998,7 @@ let commands = {
 			let punishment = /** @type {BannedTicketState} */ ({
 				banned: name,
 				name: name,
-				userid: toId(name),
+				userid: toID(name),
 				by: user.name,
 				created: Date.now(),
 				expires: Date.now() + TICKET_BAN_DURATION,
@@ -1047,7 +1035,7 @@ let commands = {
 			}
 
 			for (let user of affected) {
-				let userid = (typeof user !== 'string' ? user.getLastId() : toId(user));
+				let userid = (typeof user !== 'string' ? user.getLastId() : toID(user));
 				let targetTicket = tickets[userid];
 				if (targetTicket && targetTicket.open) targetTicket.open = false;
 				if (Rooms(`help-${userid}`)) Rooms(`help-${userid}`).destroy();
@@ -1067,7 +1055,7 @@ let commands = {
 
 			if (!this.can('lock')) return;
 			let targetUser = Users.get(target, true);
-			let ticket = ticketBans[toId(target)];
+			let ticket = ticketBans[toID(target)];
 			if (!ticket || !ticket.banned) return this.errorReply(`${targetUser ? targetUser.name : target} is not ticket banned.`);
 			if (ticket.expires <= Date.now()) {
 				delete tickets[ticket.userid];
@@ -1077,7 +1065,7 @@ let commands = {
 
 			let affected = [];
 			for (let t in ticketBans) {
-				if (toId(ticketBans[t].banned) === toId(ticket.banned) && ticketBans[t].userid !== ticket.userid) {
+				if (toID(ticketBans[t].banned) === toID(ticket.banned) && ticketBans[t].userid !== ticket.userid) {
 					affected.push(ticketBans[t].name);
 					delete ticketBans[t];
 				}
@@ -1114,7 +1102,7 @@ let commands = {
 			// This is a utility only to be used if something goes wrong
 			if (!this.can('declare')) return;
 			if (!target) return this.parse(`/help helpticket delete`);
-			let ticket = tickets[toId(target)];
+			let ticket = tickets[toID(target)];
 			if (!ticket) return this.errorReply(`${target} does not have a ticket.`);
 			let targetRoom = /** @type {ChatRoom} */ (Rooms(`help-${ticket.userid}`));
 			if (targetRoom) {

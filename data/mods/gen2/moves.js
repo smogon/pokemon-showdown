@@ -107,7 +107,7 @@ let BattleMovedex = {
 					/** @type {ActiveMove} */
 					// @ts-ignore
 					let moveData = {
-						id: 'bide',
+						id: /** @type {ID} */('bide'),
 						name: "Bide",
 						accuracy: 100,
 						damage: this.effectData.totalDamage * 2,
@@ -683,13 +683,12 @@ let BattleMovedex = {
 			this.add('-fail', pokemon);
 			return null;
 		},
-		onHit(target) {
-			if (!target.setStatus('slp') && target.status !== 'slp') return false;
+		onHit(target, source, move) {
+			if (!target.setStatus('slp', source, move) && target.status !== 'slp') return false;
 			target.statusData.time = 3;
 			target.statusData.startTime = 3;
 			target.statusData.source = target;
 			this.heal(target.maxhp);
-			this.add('-status', target, 'slp', '[from] move: Rest');
 		},
 		secondary: null,
 	},
