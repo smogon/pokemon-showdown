@@ -1030,6 +1030,7 @@ let Formats = [
 		],
 
 		mod: 'ssb',
+		debug: true,
 		team: 'randomStaffBros',
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod'],
 		onBegin() {

@@ -1100,6 +1100,49 @@ let BattleMovedex = {
 		target: "normal",
 		type: "???",
 	},
+	// Flare
+	distortionblast: {
+		accuracy: 100,
+		basePower: 100,
+		category: "Special",
+		desc: "Until they switch out, pokemon hit by this move will have all status effects and secondary move effects target themselves.",
+		shortDesc: "Pokemon hit by this have status/secondary move effects self-target.",
+		id: "distortionblast",
+		name: "Distortion Blast",
+		isNonstandard: "Custom",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Night Daze', target);
+			this.add('-anim', source, 'Magic Room', source);
+		},
+		volatileStatus: "distortionblast",
+		effect: {
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Distortion Blast');
+				this.add('-message', `${pokemon.name || pokemon.species} was distorted!`);
+			},
+			onModifyMove(move, pokemon) {
+				if (move.status) {
+					if (!move.secondaries) move.secondaries = [];
+					move.secondaries.push({chance: 100, status: move.status});
+					delete move.status;
+				}
+				if (move.secondaries) {
+					move.secondaries = move.secondaries.map(secondary => {
+						return secondary.self || {self: secondary};
+					});
+				}
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Dark",
+	},
 	// FOMG
 	rickrollout: {
 		accuracy: true,

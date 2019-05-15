@@ -35,7 +35,7 @@ let BattleStatuses = {
 		noCopy: true,
 		onStart(source) {
 			this.add(`c|+5gen|Someone asked for extra sauce?`);
-			if (!source.illusion) return;
+			if (source.illusion) return;
 			this.field.setWeather('sunnyday', source);
 		},
 		onSwitchOut() {
@@ -439,6 +439,18 @@ let BattleStatuses = {
 			this.add(`c|&false|ɢ∞פ⋆ᖙᵒᵝ ٩꒰”̮*ू꒱`);
 		},
 	},
+	flare: {
+		noCopy: true,
+		onStart() {
+			this.add('c|%Flare|(9°^°)9');
+		},
+		onSwitchIn() {
+			this.add('c|%Flare|ᕕ( ᐛ )ᕗ');
+		},
+		onFaint() {
+			this.add('c|%Flare|X_X');
+		},
+	},
 	fomg: {
 		noCopy: true,
 		onStart() {
@@ -714,11 +726,13 @@ let BattleStatuses = {
 	},
 	lostseso: {
 		noCopy: true,
-		onStart() {
+		onStart(pokemon) {
 			this.add(`c|+Lost Seso|<3 ( ͡° ͜ʖ ͡°) DANCE WITH ME ( ͡° ͜ʖ ͡°) <3`);
+			if (pokemon.illusion) return;
 			this.effectData.danceMultiplier = 0;
 		},
 		onAfterMove(pokemon, target, move) {
+			if (pokemon.illusion) return;
 			if (move.flags.dance) this.effectData.danceMultiplier++;
 		},
 		onSwitchOut() {
