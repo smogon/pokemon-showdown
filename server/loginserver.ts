@@ -151,13 +151,11 @@ class LoginServerInstance {
 			'&nocache=' + new Date().getTime() +
 			'&json=' + encodeURIComponent(JSON.stringify(dataList)) + '\n';
 
-		const requestOptions = {
-			url: url.parse(`${this.uri}action.php`),
-			method: 'post',
-			headers: {
+		const requestOptions: AnyObject = url.parse(`${this.uri}action.php`);
+		requestOptions.method = 'post';
+		requestOptions.headers = {
 				'Content-Type': 'application/x-www-form-urlencoded',
 				'Content-Length': postData.length,
-			},
 		};
 
 		let response: AnyObject | null =  null;
