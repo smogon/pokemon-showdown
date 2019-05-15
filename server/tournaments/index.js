@@ -406,10 +406,11 @@ class Tournament extends Rooms.RoomGame {
 			return;
 		}
 
-		const error = this.generator.removeUser(this.playerTable[userid]);
-		if (typeof error === 'string') {
-			if (output) output.sendReply(`|tournament|error|${error}`);
-			return;
+		for (let player of this.players) {
+			if (player.userid === userid) {
+				this.players.splice(this.players.indexOf(player), 1);
+				break;
+			}
 		}
 		this.playerTable[userid].destroy();
 		delete this.playerTable[userid];
