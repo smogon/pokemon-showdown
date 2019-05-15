@@ -9,6 +9,9 @@
 
 'use strict';
 
+/** @type {typeof import('../lib/crashlogger').crashlogger} */
+let crashlogger = require(/** @type {any} */('../.lib-dist/crashlogger')).crashlogger;
+
 class ValidatorAsync {
 	/**
 	 * @param {string} format
@@ -45,7 +48,7 @@ const PM = new QueryProcessManager(module, async message => {
 	try {
 		problems = TeamValidator(formatid).validateTeam(parsedTeam, removeNicknames);
 	} catch (err) {
-		require(/** @type {any} */('../.lib-dist/crashlogger'))(err, 'A team validation', {
+		crashlogger(err, 'A team validation', {
 			formatid: formatid,
 			team: team,
 		});
@@ -92,7 +95,7 @@ if (!PM.isParentProcess) {
 		});
 	}
 
-	global.Dex = require(/** @type {any} */ ('../.sim-dist/dex')).includeData();
+	global.Dex = require(/** @type {any} */ ('../.sim-dist/dex')).Dex.includeData();
 	global.toID = Dex.getId;
 	global.Chat = require('./chat');
 
