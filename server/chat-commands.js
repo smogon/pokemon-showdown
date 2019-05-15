@@ -3068,7 +3068,7 @@ const commands = {
 		`/hotpatch formats - reload the .sim-dist/dex.js tree, rebuild and rebroad the formats list, and spawn new simulator and team validator processes`,
 		`/hotpatch dnsbl - reloads IPTools datacenters`,
 		`/hotpatch punishments - reloads new punishments code`,
-		`/hotpatch loginserver - reload new loginserver code`,
+		`/hotpatch loginserver - reloads new loginserver code`,
 		`/hotpatch tournaments - reloads new tournaments code`,
 		`/hotpatch all - hot-patches chat, tournaments, formats, login server, punishments, and dnsbl`,
 	],
