@@ -7,7 +7,7 @@ declare let Config: {[k: string]: any};
 
 declare let Monitor: typeof import('./monitor');
 
-declare let LoginServer: typeof import('./loginserver');
+declare let LoginServer: typeof import('./loginserver').LoginServer;
 
 // type RoomBattle = AnyObject;
 

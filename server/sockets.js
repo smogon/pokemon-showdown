@@ -8,7 +8,7 @@
  * browsers, the networking processes, and users.js in the
  * main process.
  *
- * @license MIT license
+ * @license MIT
  */
 
 'use strict';
@@ -22,8 +22,11 @@ const FS = require(/** @type {any} */('../.lib-dist/fs')).FS;
 
 /** @typedef {0 | 1 | 2 | 3 | 4} ChannelID */
 
+/** @type {typeof import('../lib/crashlogger').crashlogger} */
+let crashlogger = require(/** @type {any} */('../.lib-dist/crashlogger')).crashlogger;
+
 const Monitor = {
-	crashlog: require(/** @type {any} */('../.lib-dist/crashlogger')),
+	crashlog: crashlogger,
 };
 
 if (cluster.isMaster) {

@@ -88,10 +88,10 @@ if (Config.watchconfig) {
  * Set up most of our globals
  *********************************************************/
 
-global.Dex = require('../.sim-dist/dex');
+global.Dex = require('../.sim-dist/dex').Dex;
 global.toID = Dex.getId;
 
-global.LoginServer = require('../.server-dist/loginserver');
+global.LoginServer = require('../.server-dist/loginserver').LoginServer;
 
 global.Ladders = require('./ladders');
 

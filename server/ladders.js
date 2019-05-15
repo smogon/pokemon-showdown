@@ -11,7 +11,7 @@
 'use strict';
 
 /** @type {typeof LadderStoreT} */
-const LadderStore = require(typeof Config === 'object' && Config.remoteladder ? '../.server-dist/ladders-remote' : '../.server-dist/ladders-local');
+const LadderStore = require(typeof Config === 'object' && Config.remoteladder ? '../.server-dist/ladders-remote' : '../.server-dist/ladders-local').LadderStore;
 
 const SECONDS = 1000;
 const PERIODIC_MATCH_INTERVAL = 60 * SECONDS;

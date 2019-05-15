@@ -22,7 +22,7 @@ let transport: any;
  * Logs when a crash happens to console, then e-mails those who are configured
  * to receive them.
  */
-export = function crashlogger(
+export function crashlogger(
 	error: Error | string, description: string, data: AnyObject | null = null
 ): string | null {
 	const datenow = Date.now();
@@ -88,4 +88,4 @@ export = function crashlogger(
 	}
 
 	return null;
-};
+}

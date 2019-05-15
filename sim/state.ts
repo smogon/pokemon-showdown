@@ -6,7 +6,7 @@
  */
 
 import {Battle} from './battle';
-import Dex = require('./dex');
+import {Dex} from './dex';
 import * as Data from './dex-data';
 import {Field} from './field';
 import {Pokemon} from './pokemon';

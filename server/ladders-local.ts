@@ -28,7 +28,7 @@ type LadderCache = Map<string, LadderRow[] | Promise<LadderRow[]>>;
 
 const ladderCaches: LadderCache = new Map();
 
-class LadderStore {
+export class LadderStore {
 	formatid: string;
 	ladder: LadderRow[] | null;
 	ladderPromise: Promise<LadderRow[]> | null;
@@ -337,5 +337,3 @@ class LadderStore {
 		return Promise.all(ratings);
 	}
 }
-
-export = LadderStore;

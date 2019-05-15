@@ -4,7 +4,7 @@
  *
  * @license MIT
  */
-import Dex = require('./dex');
+import {Dex} from './dex';
 global.toID = Dex.getId;
 import * as Data from './dex-data';
 import {Field} from './field';
