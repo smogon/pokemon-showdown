@@ -579,7 +579,7 @@
 64.79.96.0,64.79.111.255,Continuum Data Centers,http://www.continuumdatacenters.com/
 64.79.128.0,64.79.159.255,SWITCH Communications Group LLC,http://www.switchnap.com/
 64.79.192.0,64.79.223.255,The Endurance International Group Inc,http://www.enduranceinternational.com/
-64.85.0.0,64.85.31.255,Securewebs.com,http://www.securewebs.com/
+64.85.0.0,64.85.27.255,Securewebs.com,http://www.securewebs.com/
 64.87.0.0,64.87.31.255,American Internet Services,http://americanis.net/
 64.87.32.0,64.87.63.255,travailsystems.com,http://travailsystems.com/
 64.90.32.0,64.90.63.255,Dreamhost,http://www.dreamhost.com/
@@ -695,7 +695,8 @@
 66.220.0.0,66.220.31.255,Hurricane Electic,http://www.he.net/
 66.221.0.0,66.221.255.255,C I Host,http://www.cihost.com/
 66.223.0.0,66.223.127.255,PEER 1,http://www.peer1.com/
-66.225.192.0,66.225.255.255,ServerCentral,http://www.servercentral.net/
+66.225.192.0,66.225.250.255,ServerCentral,http://www.servercentral.net/
+66.225.252.0,66.225.255.255,ServerCentral,http://www.servercentral.net/
 66.226.72.0,66.226.79.255,Codero,http://www.codero.com/
 66.228.32.0,66.228.63.255,Linode,http://www.linode.com/
 66.228.112.0,66.228.127.255,SoftLayer,http://www.softlayer.com/
