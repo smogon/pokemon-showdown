@@ -374,7 +374,6 @@ class Tournament extends Rooms.RoomGame {
 		if (!player) throw new Error("Failed to add player.");
 
 		this.playerTable[user.userid] = player;
-		this.playerCount++;
 		this.room.add(`|tournament|join|${user.name}`);
 		user.sendTo(this.room, '|tournament|update|{"isJoined":true}');
 		this.isBracketInvalidated = true;
