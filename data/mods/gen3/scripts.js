@@ -114,12 +114,12 @@ let BattleScripts = {
 				return false;
 			}
 			if (targets.length > 1) move.spreadHit = true;
-			const hitTargets = [];
+			const hitSlots = [];
 			for (const source of targets) {
 				const hitResult = this.tryMoveHit(source, pokemon, move);
 				if (hitResult || hitResult === 0 || hitResult === undefined) {
 					moveResult = true;
-					hitTargets.push(source.toString().substr(0, 3));
+					hitSlots.push(source.toString().substr(0, 3));
 				}
 				if (damage) {
 					damage += hitResult || 0;
@@ -128,7 +128,7 @@ let BattleScripts = {
 				}
 				if (damage === this.NOT_FAIL) pokemon.moveThisTurnResult = null;
 			}
-			if (move.spreadHit) this.attrLastMove('[spread] ' + hitTargets.join(','));
+			if (move.spreadHit) this.attrLastMove('[spread] ' + hitSlots.join(','));
 		} else {
 			target = targets[0];
 			let lacksTarget = !target || target.fainted;
