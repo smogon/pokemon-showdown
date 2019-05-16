@@ -349,7 +349,8 @@ let BattleScripts = {
 
 		const moveResult = !!targets.length;
 		if (!moveResult && !atLeastOneFailure) pokemon.moveThisTurnResult = null;
-		if (move.spreadHit) this.attrLastMove('[spread] ' + targets.join(','));
+		const hitSlot = targets.map(pokemon => `${pokemon}`.slice(0, 3));
+		if (move.spreadHit) this.attrLastMove('[spread] ' + hitSlot.join(','));
 		return moveResult;
 	},
 	hitStepTryImmunityEvent(targets, pokemon, move) {
