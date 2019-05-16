@@ -406,10 +406,11 @@ class Tournament extends Rooms.RoomGame {
 			return;
 		}
 
-		const error = this.generator.removeUser(this.playerTable[userid]);
-		if (typeof error === 'string') {
-			if (output) output.sendReply(`|tournament|error|${error}`);
-			return;
+		for (let player of this.players) {
+			if (player.userid === userid) {
+				this.players.splice(this.players.indexOf(player), 1);
+				break;
+			}
 		}
 		this.playerTable[userid].destroy();
 		delete this.playerTable[userid];
@@ -454,7 +455,7 @@ class Tournament extends Rooms.RoomGame {
 		}
 		if (data.type === 'tree') {
 			if (!data.rootNode) {
-				data.users = usersToNames(this.players);
+				data.users = usersToNames(this.players.sort());
 				return data;
 			}
 			let queue = [data.rootNode];
@@ -623,13 +624,14 @@ class Tournament extends Rooms.RoomGame {
 			return false;
 		}
 
+		player.isDisqualified = true;
+
 		const error = this.generator.disqualifyUser(player);
 		if (error) {
 			sendReply(`|tournament|error|${error}`);
 			return false;
 		}
 
-		player.isDisqualified = true;
 		player.isBusy = false;
 
 		let challenge = player.pendingChallenge;

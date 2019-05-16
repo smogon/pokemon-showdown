@@ -154,8 +154,8 @@ class LoginServerInstance {
 		const requestOptions: AnyObject = url.parse(`${this.uri}action.php`);
 		requestOptions.method = 'post';
 		requestOptions.headers = {
-				'Content-Type': 'application/x-www-form-urlencoded',
-				'Content-Length': postData.length,
+			'Content-Type': 'application/x-www-form-urlencoded',
+			'Content-Length': postData.length,
 		};
 
 		let response: AnyObject | null =  null;
@@ -222,7 +222,7 @@ class LoginServerInstance {
 	}
 }
 
-const LoginServer = Object.assign(new LoginServerInstance(), {
+export const LoginServer = Object.assign(new LoginServerInstance(), {
 	TimeoutError,
 
 	ladderupdateServer: new LoginServerInstance(),
@@ -237,5 +237,3 @@ if (!Config.nofswriting) {
 	// tslint:disable-next-line no-floating-promises
 	LoginServer.request('invalidatecss');
 }
-
-export = LoginServer;

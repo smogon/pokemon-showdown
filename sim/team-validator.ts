@@ -7,7 +7,7 @@
  * @license MIT
  */
 
-import Dex = require('./dex');
+import {Dex} from './dex';
 
 export class Validator {
 	readonly format: Format;

@@ -1702,7 +1702,7 @@ if (!PM.isParentProcess) {
 		});
 	}
 
-	global.Dex = require('../../.sim-dist/dex');
+	global.Dex = require('../../.sim-dist/dex').Dex;
 	global.toID = Dex.getId;
 	Dex.includeData();
 	global.TeamValidator = require('../../.sim-dist/team-validator').TeamValidator;

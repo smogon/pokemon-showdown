@@ -14,7 +14,7 @@
 
 'use strict';
 
-class LadderStore {
+export class LadderStore {
 	formatid: string;
 	static formatsListPrefix = '';
 
@@ -142,5 +142,3 @@ class LadderStore {
 		return [`<tr><td><strong>Please use the official client at play.pokemonshowdown.com</strong></td></tr>`];
 	}
 }
-
-export = LadderStore;

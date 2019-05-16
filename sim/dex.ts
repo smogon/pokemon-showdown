@@ -129,7 +129,7 @@ const BattleNatures: {[k: string]: Nature} = {
 
 const toID = Data.Tools.getId;
 
-class ModdedDex {
+export class ModdedDex {
 	readonly Data: typeof Data;
 	readonly ModdedDex: typeof ModdedDex;
 
@@ -1486,4 +1486,4 @@ dexes['base'] = new ModdedDex(undefined, true);
 // "gen7" is an alias for the current base data
 dexes['gen7'] = dexes['base'];
 
-export = dexes['gen7'];
+export const Dex = dexes['gen7'];

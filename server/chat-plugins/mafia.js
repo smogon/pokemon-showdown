@@ -878,10 +878,10 @@ class MafiaTracker extends Rooms.RoomGame {
 			this.sendRoom(`${player.safeName} was kicked from the game!`, {declare: true});
 			if (this.hostRequestedSub.includes(player.userid)) this.hostRequestedSub.splice(this.hostRequestedSub.indexOf(player.userid), 1);
 			if (this.requestedSub.includes(player.userid)) this.requestedSub.splice(this.requestedSub.indexOf(player.userid), 1);
-			player.destroy();
 			delete this.playerTable[player.userid];
 			this.playerCount--;
 			player.updateHtmlRoom();
+			player.destroy();
 			return;
 		}
 		this.dead[player.userid] = player;
@@ -1067,8 +1067,6 @@ class MafiaTracker extends Rooms.RoomGame {
 			oldPlayer.lynching = '';
 		}
 		this.playerTable[newPlayer.userid] = newPlayer;
-		this.playerTable[oldPlayer.userid].destroy();
-		delete this.playerTable[oldPlayer.userid];
 		// Transfer lynches on the old player to the new one
 		if (this.lynches[oldPlayer.userid]) {
 			this.lynches[newPlayer.userid] = this.lynches[oldPlayer.userid];
@@ -1089,6 +1087,9 @@ class MafiaTracker extends Rooms.RoomGame {
 		if (this.started) this.played.push(newPlayer.userid);
 		this.sendRoom(`${oldPlayer.safeName} has been subbed out. ${newPlayer.safeName} has joined the game.`, {declare: true});
 		this.updatePlayers();
+
+		delete this.playerTable[oldPlayer.userid];
+		oldPlayer.destroy();
 
 		if (this.room.id === 'mafia' && this.started) {
 			const month = new Date().toLocaleString("en-us", {month: "numeric", year: "numeric"});
