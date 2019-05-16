@@ -3029,7 +3029,7 @@ const commands = {
 				this.sendReply("Formats have been hot-patched.");
 			} else if (target === 'loginserver') {
 				FS('config/custom.css').unwatch();
-				Chat.uncacheDir('./.server-dist/loginserver');
+				Chat.uncache('./.server-dist/loginserver');
 				global.LoginServer = require('../.server-dist/loginserver').LoginServer;
 				this.sendReply("The login server has been hot-patched. New login server requests will use the new code.");
 			} else if (target === 'learnsets' || target === 'validator') {
