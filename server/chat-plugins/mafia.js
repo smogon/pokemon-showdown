@@ -878,10 +878,10 @@ class MafiaTracker extends Rooms.RoomGame {
 			this.sendRoom(`${player.safeName} was kicked from the game!`, {declare: true});
 			if (this.hostRequestedSub.includes(player.userid)) this.hostRequestedSub.splice(this.hostRequestedSub.indexOf(player.userid), 1);
 			if (this.requestedSub.includes(player.userid)) this.requestedSub.splice(this.requestedSub.indexOf(player.userid), 1);
-			player.destroy();
 			delete this.playerTable[player.userid];
 			this.playerCount--;
 			player.updateHtmlRoom();
+			player.destroy();
 			return;
 		}
 		this.dead[player.userid] = player;
