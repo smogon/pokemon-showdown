@@ -1291,6 +1291,7 @@
 89.248.166.0,89.248.166.127,Ecatel,http://ecatel.net/
 89.248.168.0,89.248.168.255,Ecatel,http://ecatel.net/
 89.248.172.0,89.248.172.255,Ecatel,http://ecatel.net/
+89.249.73.0,89.249.73.63,M247,https://m247.com/
 89.250.112.0,89.250.127.255,basefarm.com,http://basefarm.com/
 89.255.0.0,89.255.63.255,Hosting Concepts,http://hosting-concepts.nl/
 91.90.24.0,91.90.31.255,PatrikWeb,http://patrikweb.net/
@@ -1299,6 +1300,7 @@
 91.105.232.0,91.105.239.255,H1 Host,https://www.h1host.ru/
 91.109.240.0,91.109.247.255,UK2,https://www.uk2.net/
 91.121.0.0,91.121.255.255,OVH,http://www.ovh.co.uk/
+91.132.0.0,91.132.1.255,Dedipath,https://www.dedipath.com/
 91.134.0.0,91.134.255.255,OVH,http://www.ovh.co.uk/
 91.143.80.0,91.143.95.255,ISPpro Germany,http://isppro.de/
 91.184.0.0,91.184.31.255,hostnet.nl,http://www.hostnet.nl/
@@ -1531,6 +1533,7 @@
 100.42.64.0,100.42.79.255,multacom.com,http://multacom.com/
 100.42.208.0,100.42.223.255,WebNX Internet Services,http://webnx.com/
 101.0.64.0,101.0.127.255,Digital Pacific,http://www.digitalpacific.com.au/
+102.165.48.0,102.165.55.255,VolumeDrive,https://volumedrive.com/
 103.1.112.1,103.1.115.255,CtrlS,http://www.ctrls.in/
 103.1.172.0,103.1.175.255,GoDaddy.com Inc,http://www.godaddy.com/
 103.1.224.0,103.1.227.255,simcentric,http://simcentric.com/
@@ -3312,6 +3315,7 @@
 217.8.1.48,217.8.1.63,iomart,http://www.iomart.com/
 217.8.240.0,217.8.255.255,Webfusion,http://www.webfusion.com/
 217.12.204.0,217.12.204.255,ITL Ukraine,https://itldc.com/
+217.12.210.0,217.12.210.255,ITL Ukraine,https://itldc.com/
 217.16.16.0,217.16.31.255,masterhost.ru,http://masterhost.ru/
 217.16.176.0,217.16.191.255,vshosting.cz,http://vshosting.cz/
 217.18.64.0,217.18.79.255,qweb,http://www.qweb.nl/
