@@ -561,7 +561,7 @@ class CommandContext extends MessageContext {
 
 		let commandHandler = this.splitCommand(message);
 
-		if (this.user.isAway && toId(this.user.status) === 'idle') this.user.setBack();
+		if (this.user.isAway && toID(this.user.status) === 'idle') this.user.setBack();
 
 		if (typeof commandHandler === 'function') {
 			message = this.run(commandHandler);

@@ -665,7 +665,7 @@ const commands = {
 			if (!awayMessage) return;
 			awayMessage = `(Away) ${awayMessage}`;
 		} else {
-			awayMessage = toId(cmd);
+			awayMessage = toID(cmd);
 			if (awayMessage === 'afk' || awayMessage === 'brb') {
 				awayMessage = `(${awayMessage.toUpperCase()})`;
 			} else {
