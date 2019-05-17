@@ -579,7 +579,7 @@ let Formats = [
 		banlist: ['Hoopa-Unbound', 'Slaking', 'Regigigas'],
 		restrictedMoves: ['Assist', 'Baneful Bunker', 'Block', 'Copycat', 'Destiny Bond', 'Detect', 'Ingrain', 'King\'s Shield', 'Mat Block', 'Mean Look', 'Metronome', 'Nature Power', 'Parting Shot', 'Protect', 'Roar', 'Skill Swap', 'Spider Web', 'Spiky Shield', 'Whirlwind'],
 		onBegin() {
-			if (this.rated && this.format === 'gen7trademarked') this.add('html', `<div class="broadcast-green"><strong>Trademarked is currently suspecting Hoopa-Unbound! For information on how to participate check out the <a href="https://www.smogon.com/forums/posts/8123652/">suspect post</a>.</strong></div>`);
+			if (this.rated && this.format === 'gen7trademarked') this.add('html', `<div class="broadcast-green"><strong>Trademarked is currently suspecting Substitute! For information on how to participate check out the <a href="https://www.smogon.com/forums/posts/8130774/">suspect post</a>.</strong></div>`);
 		},
 		onValidateTeam(team, format, teamHas) {
 			for (let trademark in teamHas.trademarks) {
@@ -761,10 +761,7 @@ let Formats = [
 		mod: 'gen7',
 		// searchShow: false,
 		ruleset: ['[Gen 7] OU'],
-		banlist: ['Kartana', 'Kyurem-Black', 'Shedinja'],
-		onBegin() {
-			if (this.rated && this.format === 'gen7camomons') this.add('html', `<div class="broadcast-green"><strong>Camomons is currently suspecting Dragonite! For information on how to participate check out the <a href="https://www.smogon.com/forums/posts/8117759/">suspect post</a>.</strong></div>`);
-		},
+		banlist: ['Dragonite', 'Kartana', 'Kyurem-Black', 'Shedinja'],
 		onModifyTemplate(template, target, source, effect) {
 			if (!target) return; // Chat command
 			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
