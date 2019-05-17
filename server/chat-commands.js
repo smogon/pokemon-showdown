@@ -3029,8 +3029,8 @@ const commands = {
 				this.sendReply("Formats have been hot-patched.");
 			} else if (target === 'loginserver') {
 				FS('config/custom.css').unwatch();
-				Chat.uncache('./server/loginserver');
-				global.LoginServer = require('./loginserver').LoginServer;
+				Chat.uncache('./.server-dist/loginserver');
+				global.LoginServer = require('../.server-dist/loginserver').LoginServer;
 				this.sendReply("The login server has been hot-patched. New login server requests will use the new code.");
 			} else if (target === 'learnsets' || target === 'validator') {
 				if (lock['validator']) return this.errorReply(`Hot-patching the validator has been disabled by ${lock['validator'].by} (${lock['validator'].reason})`);
@@ -3068,6 +3068,7 @@ const commands = {
 		`/hotpatch formats - reload the .sim-dist/dex.js tree, rebuild and rebroad the formats list, and spawn new simulator and team validator processes`,
 		`/hotpatch dnsbl - reloads IPTools datacenters`,
 		`/hotpatch punishments - reloads new punishments code`,
+		`/hotpatch loginserver - reloads new loginserver code`,
 		`/hotpatch tournaments - reloads new tournaments code`,
 		`/hotpatch all - hot-patches chat, tournaments, formats, login server, punishments, and dnsbl`,
 	],
