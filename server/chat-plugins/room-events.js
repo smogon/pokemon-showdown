@@ -74,7 +74,7 @@ exports.commands = {
 				return this.errorReply("There are currently no planned upcoming events for this room to start.");
 			}
 			if (!target) return this.errorReply("Usage: /roomevents start [event name]");
-			target = toId(target);
+			target = toID(target);
 			if (!room.events[target]) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
 			if (room.events[target].started) return this.errorReply(`The event ${room.events[target].eventName} has already started.`);
 			for (const u in room.users) {
