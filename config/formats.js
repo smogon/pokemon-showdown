@@ -128,6 +128,26 @@ let Formats = [
 		],
 	},
 	{
+		name: "[Gen 7] LC UU",
+		threads: [
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3628499/">LC UU</a>`,
+		],
+
+		mod: 'gen7',
+		searchShow: false,
+		maxLevel: 5,
+		ruleset: ['[Gen 7] LC'],
+		banlist: [
+			// LC
+			'Abra', 'Bunnelby', 'Carvanha', 'Chinchou', 'Corphish', 'Croagunk', 'Diglett-Base', 'Doduo', 'Dwebble',
+			'Ferroseed', 'Foongus', 'Gastly', 'Grimer-Alola', 'Magnemite', 'Mareanie', 'Meowth-Base', 'Mienfoo',
+			'Mudbray', 'Onix', 'Pawniard', 'Pikipek', 'Ponyta', 'Scraggy', 'Shellder', 'Snivy', 'Snubbull', 'Spritzee',
+			'Staryu', 'Surskit', 'Timburr', 'Tirtouga', 'Torchic', 'Trapinch', 'Vullaby', 'Vulpix-Alola', 'Zigzagoon',
+			// LCBL
+			'Magby', 'Rufflet', 'Wynaut', 'Deep Sea Tooth',
+		],
+	},
+	{
 		name: "[Gen 7] Monotype",
 		desc: `All the Pok&eacute;mon on a team must share a type.`,
 		threads: [
