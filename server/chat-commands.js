@@ -432,15 +432,44 @@ const commands = {
 		if (!target) return this.parse(`${this.cmdToken}avatars`);
 		let parts = target.split(',');
 		let avatar = parts[0].toLowerCase().replace(/[^a-z0-9-]+/g, '');
+		let avatarIsValid = true;
 		if (!avatarTable.has(avatar)) {
 			let avatarNum = parseInt(avatar);
 			if (!avatarNum || avatarNum > 294 || avatarNum < 1) {
-				if (!parts[1]) {
-					this.errorReply("Invalid avatar.");
-				}
-				return false;
+				avatarIsValid = false;
+			} else {
+				avatar = '' + avatarNum;
 			}
-			avatar = '' + avatarNum;
+		}
+
+		if (!avatarIsValid) {
+			const avatarsAuto = Config.customavatars || {};
+			if (avatarsAuto[user.userid] === avatar) {
+				avatarIsValid = true;
+			}
+			if (avatarsAuto[user.userid] === '#' + avatar) {
+				avatar = '#' + avatar;
+				avatarIsValid = true;
+			}
+			const avatarsManual = Config.allowedavatars || {};
+			if (avatarsManual.hasOwnProperty('#' + avatar)) {
+				avatar = '#' + avatar;
+			}
+			if (avatarsManual.hasOwnProperty(avatar)) {
+				if (avatarsManual[avatar].includes(user.userid)) {
+					avatarIsValid = true;
+				}
+			}
+		}
+
+		if (!avatarIsValid) {
+			if (parts[1]) return false;
+			if (avatar.startsWith('#')) {
+				this.errorReply("Access denied for custom avatar - make sure you're on the right account?");
+			} else {
+				this.errorReply("Invalid avatar.");
+			}
+			return false;
 		}
 
 		user.avatar = avatar;
