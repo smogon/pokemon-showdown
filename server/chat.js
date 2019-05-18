@@ -1948,6 +1948,11 @@ Chat.filterWords = {};
 Chat.monitors = {};
 /** @type {Map<string, string>} */
 Chat.namefilterwhitelist = new Map();
+/**
+ * Inappropriate userid : forcerenaming staff member's userid
+ * @type {Map<string, string>}
+ */
+Chat.forceRenames = new Map();
 
 /**
  * @param {string} id
