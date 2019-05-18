@@ -262,6 +262,8 @@ let namefilter = function (name, user) {
 		Monitor.log(`[NameMonitor] Username used: ${name} (forcerenamed from ${user.trackRename})`);
 		user.trackRename = '';
 	}
+	const forceRenamer = Chat.forceRenames.get(id);
+	if (forceRenamer) Monitor.log(`[NameMonitor] Name being used: ${name} (forcerenamed by ${forceRenamer})`);
 	return name;
 };
 
