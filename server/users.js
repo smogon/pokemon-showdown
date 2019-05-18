@@ -736,13 +736,18 @@ class User extends Chat.MessageContext {
 	 */
 	async rename(name, token, newlyRegistered, connection) {
 		let userid = toID(name);
-		for (const roomid of this.games) {
-			if (userid === this.userid) break;
-			const game = Rooms(roomid).game;
-			if (!game || game.ended) continue; // should never happen
-			if (game.allowRenames || !this.named) continue;
-			this.popup(`You can't change your name right now because you're in ${game.title}, which doesn't allow renaming.`);
-			return false;
+		if (userid !== this.userid) {
+			for (const roomid of this.games) {
+				const room = Rooms(roomid);
+				if (!room || !room.game || room.game.ended) {
+					this.games.delete(roomid);
+					console.log(`desynced roomgame ${roomid} renaming ${this.userid} -> ${userid}`);
+					continue;
+				}
+				if (room.game.allowRenames || !this.named) continue;
+				this.popup(`You can't change your name right now because you're in ${room.game.title}, which doesn't allow renaming.`);
+				return false;
+			}
 		}
 
 		let challenge = '';
