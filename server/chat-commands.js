@@ -3796,16 +3796,16 @@ const commands = {
 	},
 	importinputloghelp: [`/importinputlog [inputlog] - Starts a battle with a given inputlog. Requires: + % @ & ~`],
 
-	acceptdraw: 'offerdraw',
-	offerdraw(target, room, user, connection, cmd) {
+	accepttie: 'offertie',
+	offertie(target, room, user, connection, cmd) {
 		const battle = room.battle;
 		if (!battle) return this.errorReply("Must be in a battle room.");
 		if (!Config.allowrequestingties) {
-			return this.errorReply("This server does not allow offering draws.");
+			return this.errorReply("This server does not allow offering ties.");
 		}
 		if (!this.can('roomvoice', null, room)) return;
-		if (cmd === 'acceptdraw' && !battle.players.some(player => player.wantsTie)) {
-			return this.errorReply("No draw offer available. It might have been automatically withdrawn as the current turn started.");
+		if (cmd === 'accepttie' && !battle.players.some(player => player.wantsTie)) {
+			return this.errorReply("No tie offer available. It might have been automatically withdrawn as the current turn started.");
 		}
 		const playerIds = Object.keys(battle.playerTable);
 		if (!battle.players.some(player => player.wantsTie)) {
@@ -3816,26 +3816,26 @@ const commands = {
 				}
 				Users(player).sendTo(
 					room,
-					Chat.html`|html|${user.name} wants this game to end in a tie; <button class="button" name="send" value="/acceptdraw">accept tie</button>?`
+					Chat.html`|html|${user.name} wants this game to end in a tie; <button class="button" name="send" value="/accepttie">accept tie</button>?`
 				);
 			}
-			this.add(`${user.name} is offering a draw`);
+			this.add(`${user.name} is offering a tie`);
 		} else {
 			if (!playerIds.includes(user.userid)) {
-				return this.errorReply("Must be a player to accept draws");
+				return this.errorReply("Must be a player to accept ties");
 			}
 			if (battle.playerTable[user.userid].wantsTie) {
-				return this.errorReply("You have already accepted to draw this battle.");
+				return this.errorReply("You have already accepted to tie this battle.");
 			}
 			battle.playerTable[user.userid].wantsTie = true;
-			this.add(`${user.userid} accepts to draw this battle.`);
+			this.add(`${user.userid} accepts to tie this battle.`);
 			if (battle.players.every(player => player.wantsTie)) {
-				this.add(`All the players in this battle (${Chat.toListString(playerIds)}) accept to draw this battle.`);
+				this.add(`All the players in this battle (${Chat.toListString(playerIds)}) accept to tie this battle.`);
 				room.battle.tie();
 			}
 		}
 	},
-	offerdrawhelp: [`/offerdraw - Offers a draw to all others players in a battle, if all accept it is then tied. Requires: \u2606 @ # & ~`],
+	offertiehelp: [`/offertie - Offers a tie to all others players in a battle, if all accept it is then tied. Requires: \u2606 @ # & ~`],
 
 	inputlog() {
 		this.parse(`/help exportinputlog`);
