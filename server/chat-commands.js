@@ -3800,7 +3800,9 @@ const commands = {
 	offerdraw(target, room, user, connection, cmd) {
 		const battle = room.battle;
 		if (!battle) return this.errorReply("Must be in a battle room.");
-		if (!Config.allowrequestingties) return this.errorReply("This server does not allow the offering/accpeting of draws");
+		if (!Config.allowrequestingties) {
+			return this.errorReply("This server does not allow offering draws.");
+		}
 		if (!this.can('roomvoice', null, room)) return;
 		if (cmd === 'acceptdraw' && !battle.allowTie) return this.errorReply("No draw offer available. It might have been automatically withdrawn as the current turn started.");
 		const playerIds = Object.keys(battle.playerTable);
@@ -3813,7 +3815,7 @@ const commands = {
 				}
 				Users(player).sendTo(
 					room,
-					Chat.html`|html|${user.name} is offering a draw, do you <button class="button" name="send" value="/acceptdraw">accept</button>?`
+					Chat.html`|html|${user.name} wants this game to be a tie; <button class="button" name="send" value="/acceptdraw">accept tie</button>?`
 				);
 			}
 			this.add(`${user.name} is offering a draw`);

@@ -171,7 +171,6 @@ exports.crashguardemail = null;
  */
 exports.disablebasicnamefilter = false;
 
-
 /**
  * allowrequestingties - disables the use of `/offerdraw` and `/acceptdraw`
  */
