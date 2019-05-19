@@ -659,19 +659,19 @@ const commands = {
 	afk: 'away',
 	brb: 'away',
 	away(target, room, user, connection, cmd) {
-		let awayMessage;
+		let awayType = toID(cmd);
+		let awayMessage = '';
+		if (awayType === 'afk' || awayType === 'brb') {
+			awayType = awayType.toUpperCase();
+		} else {
+			awayType = `${awayType[0].toUpperCase()}${awayType.slice(1)}`;
+		}
 		if (target) {
 			awayMessage = Chat.namefilter(target, user);
 			if (!awayMessage) return;
-			awayMessage = `(Away) ${awayMessage}`;
-		} else {
-			awayMessage = toID(cmd);
-			if (awayMessage === 'afk' || awayMessage === 'brb') {
-				awayMessage = `(${awayMessage.toUpperCase()})`;
-			} else {
-				awayMessage = `(${awayMessage[0].toUpperCase()}${awayMessage.slice(1)})`;
-			}
 		}
+
+		awayMessage = `(${awayType})${awayMessage ? ` ${awayMessage}` : ''}`;
 		user.setAway(awayMessage);
 		this.sendReply("You are now marked as away. Send a message or use /back to indicate you are back.");
 	},
