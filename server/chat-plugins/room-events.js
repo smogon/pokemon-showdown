@@ -22,7 +22,11 @@ exports.commands = {
 			let buff = '<table border="1" cellspacing="0" cellpadding="3">';
 			buff += '<th>Event Name:</th><th>Event Description:</th><th>Event Date:</th>';
 			for (let i in room.events) {
-				buff += `<tr><td>${Chat.escapeHTML(room.events[i].eventName)}</td><td>${Chat.formatText(room.events[i].desc, true)}</td><td><time>${Chat.escapeHTML(room.events[i].date)}</time></td></tr>`;
+				let timeRemaining = new Date(room.events[i].date).getTime() - new Date().getTime();
+				if (!timeRemaining) timeRemaining = "The time remaining for this event is not available";
+				if (timeRemaining < 0) timeRemaining = "This event will start soon";
+				if (room.events[i].started) timeRemaining = "This event has started";
+				buff += `<tr title="${isNaN(timeRemaining) ? timeRemaining : `This event will start in: ${Chat.toDurationString(timeRemaining, {precision: 2})}`}"><td>${Chat.escapeHTML(room.events[i].eventName)}</td><td>${Chat.formatText(room.events[i].desc, true)}</td><td><time>${Chat.escapeHTML(room.events[i].date)}</time></td></tr>`;
 			}
 			buff += '</table>';
 			return this.sendReply(`|raw|<div class="infobox-limited">${buff}</div>`);
@@ -55,11 +59,34 @@ exports.commands = {
 				eventName: eventName,
 				date: date,
 				desc: desc,
+				started: false,
 			};
 
 			room.chatRoomData.events = room.events;
 			Rooms.global.writeChatRoomData();
 		},
+
+		begin: 'start',
+		start(target, room, user) {
+			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!this.can('ban', null, room)) return false;
+			if (!room.events || Object.keys(room.events).length === 0) {
+				return this.errorReply("There are currently no planned upcoming events for this room to start.");
+			}
+			if (!target) return this.errorReply("Usage: /roomevents start [event name]");
+			target = toID(target);
+			if (!room.events[target]) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
+			if (room.events[target].started) return this.errorReply(`The event ${room.events[target].eventName} has already started.`);
+			for (const u in room.users) {
+				if (Users(u).connected) Users(u).sendTo(room, Chat.html`|notify|A new roomevent in ${room.title} has started!|The "${room.events[target].eventName}" roomevent has started!`);
+			}
+			this.add(Chat.html`|raw|<div class="broadcast-blue"><b>The "${room.events[target].eventName}" roomevent has started!</b></div>`);
+			this.modlog('ROOMEVENT', null, `started "${target}"`);
+			room.events[target].started = true;
+			room.chatRoomData.events = room.events;
+			Rooms.global.writeChatRoomData();
+		},
+
 		delete: 'remove',
 		remove(target, room, user) {
 			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
@@ -157,6 +184,7 @@ exports.commands = {
 	roomeventshelp: [
 		`/roomevents - Displays a list of upcoming room-specific events.`,
 		`/roomevents add [event name] | [event date/time] | [event description] - Adds a room event. A timestamp in event date/time field like YYYY-MM-DD HH:MM±hh:mm will be displayed in user's timezone. Requires: @ # & ~`,
+		`/roomevents start [event name] - Declares to the room that the event has started.`,
 		`/roomevents remove [event name] - Deletes an event. Requires: @ # & ~`,
 		`/roomevents view [event name] - Displays information about a specific event.`,
 		`/roomevents sortby [column name] | [asc/desc (optional)] - Sorts events table by column name and an optional argument to ascending or descending order. Ascending order is default`,
