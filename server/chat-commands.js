@@ -3816,7 +3816,7 @@ const commands = {
 				}
 				Users(player).sendTo(
 					room,
-					Chat.html`|html|${user.name} wants this game to be a tie; <button class="button" name="send" value="/acceptdraw">accept tie</button>?`
+					Chat.html`|html|${user.name} wants this game to end in a tie; <button class="button" name="send" value="/acceptdraw">accept tie</button>?`
 				);
 			}
 			this.add(`${user.name} is offering a draw`);
@@ -3835,7 +3835,7 @@ const commands = {
 			}
 		}
 	},
-	offerdrawhelp: [`/offerdraw - Offers a draw to all others players in a battle, if all accept it is then tied.`],
+	offerdrawhelp: [`/offerdraw - Offers a draw to all others players in a battle, if all accept it is then tied. Requires: \u2606 @ # & ~`],
 
 	inputlog() {
 		this.parse(`/help exportinputlog`);
