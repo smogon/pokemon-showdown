@@ -3796,6 +3796,8 @@ const commands = {
 	},
 	importinputloghelp: [`/importinputlog [inputlog] - Starts a battle with a given inputlog. Requires: + % @ & ~`],
 
+	acceptdraw: 'accepttie',
+	offerdraw: 'offertie',
 	accepttie: 'offertie',
 	offertie(target, room, user, connection, cmd) {
 		const battle = room.battle;
