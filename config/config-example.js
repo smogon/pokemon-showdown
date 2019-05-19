@@ -172,9 +172,9 @@ exports.crashguardemail = null;
 exports.disablebasicnamefilter = false;
 
 /**
- * allowrequestingties - disables the use of `/offerdraw` and `/acceptdraw`
+ * allowrequestingties - enables the use of `/offerdraw` and `/acceptdraw`
  */
-exports.allowrequestingties = false;
+exports.allowrequestingties = true;
 
 /**
  * report joins and leaves - shows messages like "<USERNAME> joined"

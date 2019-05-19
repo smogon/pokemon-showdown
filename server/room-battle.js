@@ -53,6 +53,8 @@ class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 
 		/** @type {BattleRequestTracker} */
 		this.request = {rqid: 0, request: '', isWait: 'cantUndo', choice: ''};
+		/** @type {boolean} */
+		this.wantsTie = false;
 		this.active = true;
 		this.eliminated = false;
 
@@ -462,9 +464,6 @@ class RoomBattle extends RoomGames.RoomGame {
 		 */
 		this.allowExtraction = null;
 
-		/** @type {string[]?} */
-		this.allowTie = null;
-
 		this.logData = null;
 		this.endType = 'normal';
 		/**
@@ -656,7 +655,7 @@ class RoomBattle extends RoomGames.RoomGame {
 		}
 	}
 	receive(/** @type {string[]} */ lines) {
-		this.allowTie = null;
+		for (const player of this.players) player.wantsTie = false;
 
 		switch (lines[0]) {
 		case 'update':

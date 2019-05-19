@@ -3796,7 +3796,7 @@ const commands = {
 	},
 	importinputloghelp: [`/importinputlog [inputlog] - Starts a battle with a given inputlog. Requires: + % @ & ~`],
 
-	acceptdraw: 'acceptdraw',
+	acceptdraw: 'offerdraw',
 	offerdraw(target, room, user, connection, cmd) {
 		const battle = room.battle;
 		if (!battle) return this.errorReply("Must be in a battle room.");
@@ -3804,13 +3804,14 @@ const commands = {
 			return this.errorReply("This server does not allow offering draws.");
 		}
 		if (!this.can('roomvoice', null, room)) return;
-		if (cmd === 'acceptdraw' && !battle.allowTie) return this.errorReply("No draw offer available. It might have been automatically withdrawn as the current turn started.");
+		if (cmd === 'acceptdraw' && !battle.players.some(player => player.wantsTie)) {
+			return this.errorReply("No draw offer available. It might have been automatically withdrawn as the current turn started.");
+		}
 		const playerIds = Object.keys(battle.playerTable);
-		if (!battle.allowTie) {
-			battle.allowTie = [];
+		if (!battle.players.some(player => player.wantsTie)) {
 			for (const player of playerIds) {
 				if (player === user.userid) {
-					battle.allowTie.push(player);
+					battle.playerTable[player].wantsTie = true;
 					continue;
 				}
 				Users(player).sendTo(
@@ -3820,11 +3821,15 @@ const commands = {
 			}
 			this.add(`${user.name} is offering a draw`);
 		} else {
-			if (!playerIds.includes(user.userid)) return this.errorReply("Must be a player to accept draws");
-			if (battle.allowTie.includes(user.userid)) return this.errorReply("You have already accepted to draw this battle.");
-			battle.allowTie.push(user.userid);
-			this.add(`${user.userid} accepts to draw this battle`);
-			if (playerIds.length === battle.allowTie.length) {
+			if (!playerIds.includes(user.userid)) {
+				return this.errorReply("Must be a player to accept draws");
+			}
+			if (battle.playerTable[user.userid].wantsTie) {
+				return this.errorReply("You have already accepted to draw this battle.");
+			}
+			battle.playerTable[user.userid].wantsTie = true;
+			this.add(`${user.userid} accepts to draw this battle.`);
+			if (battle.players.every(player => player.wantsTie)) {
 				this.add(`All the players in this battle (${Chat.toListString(playerIds)}) accept to draw this battle.`);
 				room.battle.tie();
 			}
