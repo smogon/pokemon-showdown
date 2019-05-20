@@ -3807,32 +3807,42 @@ const commands = {
 		}
 		if (!this.can('roomvoice', null, room)) return;
 		if (cmd === 'accepttie' && !battle.players.some(player => player.wantsTie)) {
-			return this.errorReply("No tie offer available. It might have been automatically withdrawn as the current turn started.");
+			return this.errorReply("No other player is requesting a tie right now. It was probably canceled.");
 		}
-		const playerIds = Object.keys(battle.playerTable);
+		const player = battle.playerTable[user.userid];
+		if (player) {
+			if (player.wantsTie) {
+				return this.errorReply("You've already agreed to a tie.");
+			}
+			player.wantsTie = true;
+		}
 		if (!battle.players.some(player => player.wantsTie)) {
-			for (const player of playerIds) {
+			for (const otherPlayer of battle.players) {
+				if (otherPlayer !== player) {
+					otherPlayer.sendRoom(Chat.html`|html|${user.name} wants this game to end in a tie; <button class="button" name="send" value="/accepttie">accept tie</button>?`);
+				}
+			}
 				if (player === user.userid) {
 					battle.playerTable[player].wantsTie = true;
 					continue;
 				}
 				Users(player).sendTo(
 					room,
-					Chat.html`|html|${user.name} wants this game to end in a tie; <button class="button" name="send" value="/accepttie">accept tie</button>?`
+					Chat.html`|uhtml|offertie|<button class="button" name="send" value="/accepttie"><strong>accept tie</strong></button> <button class="button" name="send" value="/rejecttie">reject</button>`
 				);
 			}
 			this.add(`${user.name} is offering a tie`);
 		} else {
-			if (!playerIds.includes(user.userid)) {
+			if (!player) {
 				return this.errorReply("Must be a player to accept ties");
 			}
 			if (battle.playerTable[user.userid].wantsTie) {
 				return this.errorReply("You have already accepted to tie this battle.");
 			}
 			battle.playerTable[user.userid].wantsTie = true;
-			this.add(`${user.userid} accepts to tie this battle.`);
+			this.add(`${user.userid} agrees to tie this battle.`);
 			if (battle.players.every(player => player.wantsTie)) {
-				this.add(`All the players in this battle (${Chat.toListString(playerIds)}) accept to tie this battle.`);
+				this.add(`All the players in this battle (${Chat.toListString(battle.players.map(player => player.name))}) agree to tie this battle.`);
 				room.battle.tie();
 			}
 		}

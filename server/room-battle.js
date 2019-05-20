@@ -53,7 +53,6 @@ class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 
 		/** @type {BattleRequestTracker} */
 		this.request = {rqid: 0, request: '', isWait: 'cantUndo', choice: ''};
-		/** @type {boolean} */
 		this.wantsTie = false;
 		this.active = true;
 		this.eliminated = false;
