@@ -16,3 +16,48 @@ declare let IPTools: typeof import('./ip-tools').IPTools;
 declare let Sockets: typeof import('./sockets');
 // let TeamValidator: typeof import('../sim/team-validator');
 declare let TeamValidatorAsync: typeof import('./team-validator-async');
+
+interface Group {
+	symbol: string,
+	id: string,
+	name: string,
+
+	root?: boolean,
+	inherit?: string,
+	jurisdiction?: string,
+	roomonly?: boolean,
+	globalonly?: boolean,
+	console?: boolean,
+	lockdown?: boolean,
+	hotpatch?: boolean,
+	ignorelimits?: boolean,
+	promote?: string | boolean,
+	makeroom?: boolean,
+	editroom?: boolean,
+	editprivacy?: boolean,
+	ban?: string | boolean,
+	mute?: string | boolean,
+	lock?: string | boolean,
+	receivemutedpms?: boolean,
+	forcerename?: boolean,
+	ip?: string | boolean,
+	alts?: string | boolean,
+	modlog?: boolean,
+	broadcast?: boolean,
+	declare?: boolean,
+	announce?: boolean,
+	modchat?: boolean,
+	modchatall?: boolean,
+	potd?: boolean,
+	forcewin?: boolean,
+	battlemessage?: boolean,
+	tournaments?: boolean,
+	gamemoderation?: boolean,
+	gamemanagement?: boolean,
+	minigame?: boolean,
+	game?: boolean,
+
+	// Needed for room<rank> settings and to allow for custom settings on other
+	// servers.
+	[key: string]: string | boolean | undefined
+}
