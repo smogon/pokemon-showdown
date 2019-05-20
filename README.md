@@ -181,7 +181,7 @@ Contributors
 - Andrew Goodsell [Zracknel] - Art (battle weather backdrops)
 - Austin Couturier [Austin] - Development (damage calculator)
 - Avery Zimmer [Lyren, SolarisFox] - Development
-- Ben Davies [Morfent] - Development
+- Ben Davies [Morfent, Kaiepi] - Development
 - Ben Frengley [TalkTakesTime] - Development
 - Cody Thompson [Rising_Dusk] - Development
 - [Honko] - Development
