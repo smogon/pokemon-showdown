@@ -184,7 +184,7 @@ class RoundRobin {
 		if (!this.isTournamentEnded()) return 'TournamentNotEnded';
 
 		let sortedScores = this.players.sort(
-			(p1, p2) => p1.score - p2.score
+			(p1, p2) => p2.score - p1.score
 		);
 
 		/** @type {TournamentPlayer[][]} */
