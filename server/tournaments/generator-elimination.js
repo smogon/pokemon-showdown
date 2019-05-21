@@ -20,7 +20,8 @@ class ElimNode {
 		this.score = options.score || null;
 		/** @type {ElimNode?} */
 		this.losersBracketNode = options.losersBracketNode || null;
-		this.losersBracketIndex = 0;
+		/** @type {number} */
+		this.losersBracketIndex = options.losersBracketIndex || 0;
 		/** @type {ElimNode?} */
 		this.parent = options.parent || null;
 		/**
@@ -237,11 +238,11 @@ class Elimination {
 
 					let oldLeaf = newTree.currentLayerLeafNodes.shift();
 					if (!oldLeaf) throw new Error(`TypeScript bug: no ! in checkJs`);
-					oldLeaf.fromNode = null;
 
 					/** @type {ElimNode} */
 					let newBranch = new ElimNode({losersBracketIndex});
 					oldLeaf.setChildren([new ElimNode({losersBracketIndex, fromNode: oldLeaf.fromNode}), newBranch]);
+					oldLeaf.fromNode = null;
 
 					let newLeftChild = new ElimNode({losersBracketIndex, fromNode: matchesByDepth[m][n]});
 					newTree.nextLayerLeafNodes.push(newLeftChild);
