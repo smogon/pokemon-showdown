@@ -2599,8 +2599,12 @@ const commands = {
 
 		this.globalModlog("NAMELOCK", targetUser, ` by ${user.userid}${reasonText}`);
 		Ladders.cancelSearches(targetUser);
-		Chat.forceRenames.delete(targetUser.userid);
-		Punishments.namelock(targetUser, null, null, reason);
+		const affected = Punishments.namelock(targetUser, null, null, reason);
+		for (const user of affected) {
+			for (const name of Object.keys(user.prevNames)) {
+				Chat.forceRenames.delete(name);
+			}
+		}
 		targetUser.popup(`|modal|${user.name} has locked your name and you can't change names anymore${reasonText}`);
 		return true;
 	},
