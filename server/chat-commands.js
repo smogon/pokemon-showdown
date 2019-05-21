@@ -3836,10 +3836,10 @@ const commands = {
 			if (!player) {
 				return this.errorReply("Must be a player to accept ties");
 			}
-			if (player.wantsTie) {
-				return this.errorReply("You have already agreed to tie this battle.");
-			} else {
+			if (!player.wantsTie) {
 				player.wantsTie = true;
+			} else {
+				return this.errorReply("You have already agreed to tie this battle.");
 			}
 			this.add(`${user.userid} agrees to tie this battle.`);
 			if (battle.players.every(player => player.wantsTie)) {
