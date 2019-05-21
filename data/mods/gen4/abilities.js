@@ -323,6 +323,10 @@ let BattleAbilities = {
 		rating: 4,
 		num: 86,
 	},
+	"soundproof": {
+		inherit: true,
+		shortDesc: "This Pokemon is immune to sound-based moves, including Heal Bell.",
+	},
 	"stench": {
 		desc: "No competitive use.",
 		shortDesc: "No competitive use.",
