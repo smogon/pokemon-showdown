@@ -3547,7 +3547,7 @@ let BattleMovedex = {
 			this.add('-anim', source, "Flash", target);
 
 			// Really feel like this could be done better (blocked by protect and alike moves.)
-			if (target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] || target.side.sideConditions['matblock'] || target.volatiles['protect'] || target.volatiles['spikyshield'] || target.volatiles['lilypadshield']) {
+			if (!(target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] || target.side.sideConditions['matblock'] || target.volatiles['protect'] || target.volatiles['spikyshield'] || target.volatiles['lilypadshield'])) {
 				target.addVolatile('minisignularity', source);
 				let item = target.takeItem();
 				if (!target.item) {
