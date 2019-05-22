@@ -2342,7 +2342,7 @@ export class Battle extends Dex.ModdedDex {
 				}
 			} else if (action.choice === 'switch' || action.choice === 'instaswitch') {
 				if (typeof action.pokemon.switchFlag === 'string') {
-					action.sourceEffect = (this.getMove(action.pokemon.switchFlag as ID) as unknown) as PureEffect;
+					action.sourceEffect = this.getMove(action.pokemon.switchFlag as ID) as any;
 				}
 				action.pokemon.switchFlag = false;
 				if (!action.speed) action.speed = action.pokemon.getActionSpeed();
