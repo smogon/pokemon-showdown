@@ -228,8 +228,7 @@ class BasicRoom {
 				continue;
 			}
 			counter++;
-			buffer += ',' + this.users[i].getIdentity(this.id);
-			if (this.users[i].getStatus()) buffer += `@${this.users[i].getStatus()}`;
+			buffer += ',' + this.users[i].getIdentityWithStatus(this.id);
 		}
 		let msg = '|users|' + counter + buffer;
 		return msg;
@@ -1325,9 +1324,8 @@ class BasicChatRoom extends BasicRoom {
 	onUpdateIdentity(user) {
 		if (user && user.connected) {
 			if (!this.users[user.userid]) return false;
-			const statusText = user.getStatus() ? `@${user.getStatus()}` : '';
 			if (user.named) {
-				this.reportJoin('n', user.getIdentity(this.id) + statusText + '|' + user.userid);
+				this.reportJoin('n', user.getIdentityWithStatus(this.id) + '|' + user.userid);
 			} else {
 				this.reportJoin('l', user.userid);
 			}

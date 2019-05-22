@@ -599,6 +599,14 @@ class User extends Chat.MessageContext {
 		return this.group + this.name;
 	}
 	/**
+	 * @param {string} roomid
+	 */
+	getIdentityWithStatus(roomid = '') {
+		const identity = this.getIdentity(roomid);
+		if (!this.status) return identity;
+		return `${identity}@${this.isAway ? '!' : ''}${this.status}`;
+	}
+	/**
 	 * @param {string} minAuth
 	 * @param {BasicChatRoom?} room
 	 */
@@ -1009,7 +1017,7 @@ class User extends Chat.MessageContext {
 	 * @param {string[]} updated the settings which have been updated or none for all settings.
 	 */
 	getUpdateuserText(...updated) {
-		const status = this.getStatus() ? `@${this.getStatus()}` : '';
+		const status = this.status ? `@${this.status}` : '';
 		const named = this.named ? 1 : 0;
 		const diff = {};
 		const settings = updated.length ? updated : SETTINGS;
@@ -1567,10 +1575,6 @@ class User extends Chat.MessageContext {
 		this.isAway = false;
 		this.status = '';
 		this.updateIdentity();
-	}
-	getStatus() {
-		if (!this.status) return;
-		return `${this.isAway ? '!' : ''}${this.status}`;
 	}
 	destroy() {
 		// deallocate user
