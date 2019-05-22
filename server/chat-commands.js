@@ -3853,8 +3853,8 @@ const commands = {
 			return this.errorReply("No other player is requesting a tie right now. It was probably canceled.");
 		}
 		if (player.wantsTie) player.wantsTie = false;
-		for (const player of battle.players) {
-			player.sendRoom(Chat.html`|uhtmlchange|offertie|`);
+		for (const otherPlayer of battle.players) {
+			otherPlayer.sendRoom(Chat.html`|uhtmlchange|offertie|`);
 		}
 		return this.add(`${user.name} rejected the tie.`);
 	},
