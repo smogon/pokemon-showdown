@@ -3829,6 +3829,7 @@ const commands = {
 			} else {
 				return this.errorReply("You have already agreed to tie this battle.");
 			}
+			player.sendRoom(Chat.html`|uhtmlchange|offertie|`);
 			this.add(`${user.name} agrees to tie this battle.`);
 			if (battle.players.every(player => player.wantsTie)) {
 				if (battle.players.length > 2) {
@@ -3853,9 +3854,9 @@ const commands = {
 		}
 		if (player.wantsTie) player.wantsTie = false;
 		for (const player of battle.players) {
-			player.sendRoom(Chat.html`|uhtmlchange|offertie|(Tie rejected)`);
+			player.sendRoom(Chat.html`|uhtmlchange|offertie|`);
 		}
-		return this.add(`${user.name} rejects to tie this battle`);
+		return this.add(`${user.name} rejected the tie.`);
 	},
 	rejecttiehelp: [`/rejecttie - If a tie exists in a battle, the tie rejected.`],
 
