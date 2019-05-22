@@ -3818,16 +3818,16 @@ const commands = {
 			}
 			if (player.wantsTie) player.wantsTie = false;
 			for (const player of battle.players) {
-				player.sendRoom(Chat.html`|uhtmlchange|offertie|(Tie offer rejected)`);
+				player.sendRoom(Chat.html`|uhtmlchange|offertie|(Tie rejected)`);
 			}
-			return this.add(`${user.userid} rejects to tie this battle`);
+			return this.add(`${user.name} rejects tying this battle`);
 		}
 		if (!battle.players.some(player => player.wantsTie)) {
 			this.add(`${user.name} is offering a tie.`);
 			room.update();
 			for (const otherPlayer of battle.players) {
 				if (otherPlayer !== player) {
-					otherPlayer.sendRoom(Chat.html`|uhtml|offertie|<button class="button" name="send" value="/accepttie"><strong>accept tie</strong></button> <button class="button" name="send" value="/rejecttie">reject</button>`);
+					otherPlayer.sendRoom(Chat.html`|uhtml|offertie|<button class="button" name="send" value="/accepttie"><strong>Accept tie</strong></button> <button class="button" name="send" value="/rejecttie">Reject</button>`);
 				} else {
 					player.wantsTie = true;
 				}
@@ -3841,7 +3841,7 @@ const commands = {
 			} else {
 				return this.errorReply("You have already agreed to tie this battle.");
 			}
-			this.add(`${user.userid} agrees to tie this battle.`);
+			this.add(`${user.name} agrees to a tie.`);
 			if (battle.players.every(player => player.wantsTie)) {
 				this.add(`All the players in this battle (${Chat.toListString(battle.players.map(player => player.name))}) agree to tie this battle.`);
 				room.battle.tie();
