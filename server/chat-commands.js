@@ -3796,8 +3796,6 @@ const commands = {
 	},
 	importinputloghelp: [`/importinputlog [inputlog] - Starts a battle with a given inputlog. Requires: + % @ & ~`],
 
-	rejectdraw: 'offertie',
-	rejecttie: 'offertie',
 	acceptdraw: 'offertie',
 	accepttie: 'offertie',
 	offerdraw: 'offertie',
@@ -3808,20 +3806,10 @@ const commands = {
 			return this.errorReply("This server does not allow offering ties.");
 		}
 		if (!this.can('roomvoice', null, room)) return;
-		if ((cmd === 'accepttie' || cmd === 'rejecttie') && !battle.players.some(player => player.wantsTie)) {
+		if (cmd === 'accepttie' && !battle.players.some(player => player.wantsTie)) {
 			return this.errorReply("No other player is requesting a tie right now. It was probably canceled.");
 		}
 		const player = battle.playerTable[user.userid];
-		if (cmd === 'rejecttie' && battle.players.some(player => player.wantsTie)) {
-			if (!player) {
-				return this.errorReply("Must be a player to reject ties.");
-			}
-			if (player.wantsTie) player.wantsTie = false;
-			for (const player of battle.players) {
-				player.sendRoom(Chat.html`|uhtmlchange|offertie|(Tie rejected)`);
-			}
-			return this.add(`${user.name} rejects tying this battle`);
-		}
 		if (!battle.players.some(player => player.wantsTie)) {
 			this.add(`${user.name} is offering a tie.`);
 			room.update();
@@ -3834,21 +3822,42 @@ const commands = {
 			}
 		} else {
 			if (!player) {
-				return this.errorReply("Must be a player to accept ties");
+				return this.errorReply("Must be a player to accept ties.");
 			}
 			if (!player.wantsTie) {
 				player.wantsTie = true;
 			} else {
 				return this.errorReply("You have already agreed to tie this battle.");
 			}
-			this.add(`${user.name} agrees to a tie.`);
+			this.add(`${user.name} agrees to tie this battle.`);
 			if (battle.players.every(player => player.wantsTie)) {
-				this.add(`All the players in this battle (${Chat.toListString(battle.players.map(player => player.name))}) agree to tie this battle.`);
+				if (battle.players.length > 2) {
+					this.add(`All players have agreed to a tie.`);
+				}
 				room.battle.tie();
 			}
 		}
 	},
 	offertiehelp: [`/offertie - Offers a tie to all others players in a battle, if all accept it is then tied. Requires: \u2606 @ # & ~`],
+
+	rejectdraw: 'rejecttie',
+	rejecttie(target, room, user) {
+		const battle = room.battle;
+		if (!battle) return this.errorReply("Must be in a battle room.");
+		const player = battle.playerTable[user.userid];
+		if (!player) {
+			return this.errorReply("Must be a player to reject ties.");
+		}
+		if (!battle.players.some(player => player.wantsTie)) {
+			return this.errorReply("No other player is requesting a tie right now. It was probably canceled.");
+		}
+		if (player.wantsTie) player.wantsTie = false;
+		for (const player of battle.players) {
+			player.sendRoom(Chat.html`|uhtmlchange|offertie|(Tie rejected)`);
+		}
+		return this.add(`${user.name} rejects to tie this battle`);
+	},
+	rejecttiehelp: [`/rejecttie - If a tie exists in a battle, the tie rejected.`],
 
 	inputlog() {
 		this.parse(`/help exportinputlog`);
