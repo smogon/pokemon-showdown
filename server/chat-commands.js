@@ -3827,19 +3827,19 @@ const commands = {
 			if (!player.wantsTie) {
 				player.wantsTie = true;
 			} else {
-				return this.errorReply("You have already agreed to tie this battle.");
+				return this.errorReply("You have already agreed to a tie.");
 			}
 			player.sendRoom(Chat.html`|uhtmlchange|offertie|`);
-			this.add(`${user.name} agrees to tie this battle.`);
+			this.add(`${user.name} accepted the tie.`);
 			if (battle.players.every(player => player.wantsTie)) {
 				if (battle.players.length > 2) {
-					this.add(`All players have agreed to a tie.`);
+					this.add(`All players have accepted the tie.`);
 				}
 				room.battle.tie();
 			}
 		}
 	},
-	offertiehelp: [`/offertie - Offers a tie to all others players in a battle, if all accept it is then tied. Requires: \u2606 @ # & ~`],
+	offertiehelp: [`/offertie - Offers a tie to all other players in a battle; if all accept, it ends in a tie. Requires: \u2606 @ # & ~`],
 
 	rejectdraw: 'rejecttie',
 	rejecttie(target, room, user) {
@@ -3858,7 +3858,7 @@ const commands = {
 		}
 		return this.add(`${user.name} rejected the tie.`);
 	},
-	rejecttiehelp: [`/rejecttie - If a tie exists in a battle, the tie rejected.`],
+	rejecttiehelp: [`/rejecttie - Rejects a tie offered by another player in a battle.`],
 
 	inputlog() {
 		this.parse(`/help exportinputlog`);
