@@ -53,6 +53,7 @@ class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 
 		/** @type {BattleRequestTracker} */
 		this.request = {rqid: 0, request: '', isWait: 'cantUndo', choice: ''};
+		this.wantsTie = false;
 		this.active = true;
 		this.eliminated = false;
 
@@ -653,6 +654,8 @@ class RoomBattle extends RoomGames.RoomGame {
 		}
 	}
 	receive(/** @type {string[]} */ lines) {
+		for (const player of this.players) player.wantsTie = false;
+
 		switch (lines[0]) {
 		case 'update':
 			for (const line of lines.slice(1)) {
