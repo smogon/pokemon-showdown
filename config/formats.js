@@ -609,8 +609,10 @@ let Formats = [
 			const restrictedMoves = this.format.restrictedMoves || [];
 			let move = this.dex.getMove(set.ability);
 			if (move.category !== 'Status' || move.status === 'slp' || restrictedMoves.includes(move.name) || set.moves.map(toID).includes(move.id)) return this.validateSet(set, teamHas);
+			let customRules = this.format.customRules || [];
+			if (!customRules.includes('ignoreillegalabilities')) customRules.push('ignoreillegalabilities');
 			let TeamValidator = /** @type {new(format: string | Format) => Validator} */ (this.constructor);
-			let validator = new TeamValidator(Dex.getFormat(this.format.id + '@@@ignoreillegalabilities'));
+			let validator = new TeamValidator(Dex.getFormat(this.format.id + '@@@' + customRules.join(',')));
 			let moves = set.moves;
 			set.moves = [set.ability];
 			set.ability = '';
