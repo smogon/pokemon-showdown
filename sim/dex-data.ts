@@ -769,7 +769,7 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 	readonly isZ: boolean | string;
 	readonly flags: MoveFlags;
 	/** Whether or not the user must switch after using this move. */
-	readonly selfSwitch?: string | true;
+	readonly selfSwitch?: ID | boolean;
 	/** Move target only used by Pressure. */
 	readonly pressureTarget: string;
 	/** Move target used if the user is not a Ghost type (for Curse). */
@@ -795,6 +795,8 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 	readonly noSketch: boolean;
 	/** STAB multiplier (can be modified by other effects) (default 1.5). */
 	readonly stab?: number;
+
+	readonly volatileStatus?: ID;
 
 	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
 		super(data, ...moreData);
@@ -824,7 +826,7 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 		this.noPPBoosts = !!data.noPPBoosts;
 		this.isZ = data.isZ || false;
 		this.flags = data.flags || {};
-		this.selfSwitch = data.selfSwitch || undefined;
+		this.selfSwitch = (typeof data.selfSwitch === 'string' ? (data.selfSwitch as ID) : data.selfSwitch) || undefined;
 		this.pressureTarget = data.pressureTarget || '';
 		this.nonGhostTarget = data.nonGhostTarget || '';
 		this.ignoreAbility = data.ignoreAbility || false;
@@ -833,6 +835,7 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 		this.forceSTAB = !!data.forceSTAB;
 		this.noSketch = !!data.noSketch;
 		this.stab = data.stab || undefined;
+		this.volatileStatus = typeof data.volatileStatus === 'string' ? (data.volatileStatus as ID) : undefined;
 
 		if (!this.gen) {
 			if (this.num >= 622) {

@@ -1627,7 +1627,7 @@ export class Battle extends Dex.ModdedDex {
 	) {
 		if (!targetArray) return [0];
 		let retVals: (number | false | undefined)[] = [];
-		if (typeof effect === 'string' || !effect) effect = this.getEffect(effect);
+		if (typeof effect === 'string' || !effect) effect = this.getEffectByID((effect || '') as ID);
 		for (const [i, curDamage] of damage.entries()) {
 			const target = targetArray[i];
 			let targetDamage = curDamage;
@@ -1751,7 +1751,7 @@ export class Battle extends Dex.ModdedDex {
 		if (!damage) return 0;
 		damage = this.clampIntRange(damage, 1);
 
-		if (typeof effect === 'string' || !effect) effect = this.getEffect(effect);
+		if (typeof effect === 'string' || !effect) effect = this.getEffectByID((effect || '') as ID);
 
 		// In Gen 1 BUT NOT STADIUM, Substitute also takes confusion and HJK recoil damage
 		if (this.gen <= 1 && this.currentMod !== 'stadium' &&
@@ -2342,7 +2342,7 @@ export class Battle extends Dex.ModdedDex {
 				}
 			} else if (action.choice === 'switch' || action.choice === 'instaswitch') {
 				if (typeof action.pokemon.switchFlag === 'string') {
-					action.sourceEffect = this.getEffect(action.pokemon.switchFlag);
+					action.sourceEffect = this.getMove(action.pokemon.switchFlag as ID) as any;
 				}
 				action.pokemon.switchFlag = false;
 				if (!action.speed) action.speed = action.pokemon.getActionSpeed();
