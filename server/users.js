@@ -861,7 +861,7 @@ class User extends Chat.MessageContext {
 			if (newlyRegistered && userType !== '1') {
 				if (conflictUser !== this) conflictUser.resetName();
 			} else {
-				this.send(`|nametaken|${name}|Someone is already using the name "${conflictUser.name}.`);
+				this.send(`|nametaken|${name}|Someone is already using the name "${conflictUser.name}".`);
 				return false;
 			}
 		}
