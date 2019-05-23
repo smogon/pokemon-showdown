@@ -113,10 +113,10 @@ export class Pokemon {
 
 	/**
 	 * If the switch is called by an effect with a special switch
-	 * message, like U-turn or Baton Pass, this will be the fullname of
+	 * message, like U-turn or Baton Pass, this will be the ID of
 	 * the calling effect.
 	 */
-	switchFlag: boolean | string;
+	switchFlag: ID | boolean;
 	forceSwitchFlag: boolean;
 	switchCopyFlag: boolean;
 	draggedIn: number | null;

@@ -963,7 +963,7 @@ let BattleScripts = {
 			}
 			this.debug('move failed because it did nothing');
 		} else if (move.selfSwitch && pokemon.hp) {
-			pokemon.switchFlag = move.fullname;
+			pokemon.switchFlag = move.id;
 		}
 
 		return damage;
