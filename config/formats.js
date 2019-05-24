@@ -95,6 +95,7 @@ let Formats = [
 		mod: 'gen7',
 		ruleset: ['[Gen 7] RU'],
 		banlist: ['RU', 'NUBL', 'Slowbro-Mega', 'Drought'],
+		unbanlist: ['Cofagrigus'],
 	},
 	{
 		name: "[Gen 7] PU",
@@ -106,7 +107,7 @@ let Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] NU'],
-		banlist: ['NU', 'PUBL'],
+		banlist: ['NU', 'PUBL', 'Cofagrigus'],
 	},
 	{
 		name: "[Gen 7] LC",
