@@ -500,7 +500,6 @@ class RoomBattle extends RoomGames.RoomGame {
 		} else {
 			this.stream.write(`>start ` + JSON.stringify(battleOptions));
 		}
-		if (Config.forcetimer) this.timer.start();
 
 		this.listen();
 
@@ -511,6 +510,7 @@ class RoomBattle extends RoomGames.RoomGame {
 			this.addPlayer(options.p4, options.p4team || '');
 		}
 		this.timer = new RoomBattleTimer(this);
+		if (Config.forcetimer) this.timer.start();
 		this.start();
 	}
 
