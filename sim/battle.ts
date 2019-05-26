@@ -1455,7 +1455,7 @@ export class Battle extends Dex.ModdedDex {
 				return true;
 			}
 			const turnsLeftText = (turnsLeft === 1 ? `1 turn` : `${turnsLeft} turns`);
-			this.add('bigerror', `You will auto-tie if the battle doesn't end in ${turnsLeftText} turns (on turn 1000).`);
+			this.add('bigerror', `You will auto-tie if the battle doesn't end in ${turnsLeftText} turns (on turn 1000). Consider using '/offertie' to see if your opponent would be willing to accept a tie earlier if you feel this battle is a stalemate.`);
 		}
 
 		// Are all Pokemon on every side stale, with at least one side containing an externally stale Pokemon?
