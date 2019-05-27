@@ -107,6 +107,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Come on you Gunners',
 				evs: {hp: 4, spa: 252, spe: 252}, ivs: {hp: 20, def: 20, spd: 20}, nature: 'Naive',
 			},
+			'Averardo': {
+				species: 'Tyrantrum', ability: 'Rock Head', item: 'Choice Scarf', gender: '', // ask Gender
+				moves: ['Head Smash', 'Flare Blitz', 'Photon Geyser'],
+				signatureMove: 'Dragon Smash',
+				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adament', shiny: true,
+			},
 			'Beowulf': {
 				species: 'Beedrill', ability: ['Download', 'Speed Boost'], item: 'Beedrillite', gender: 'M',
 				moves: ['Spiky Shield', 'Gunk Shot', ['Bolt Strike', 'Diamond Storm', 'Thousand Arrows']],

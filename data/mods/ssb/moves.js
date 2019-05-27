@@ -417,6 +417,30 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Normal",
 	},
+	// Averardo
+	dragonsmash: {
+		accuracy: 100,
+		basePower: 150,
+		category: "Physical",
+		desc: "This pokemon takes 50% of the damage it deals as recoil.",
+		shortDesc: "50% recoil.",
+		id: "dragonsmash",
+		name: "Dragon Smash",
+		isNonstandard: "Custom",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Head Smash', target);
+			this.add('-anim', target, 'Blue Flare', target);
+		},
+		recoil: [1, 2],
+		target: "normal",
+		type: "Dragon",
+	},
 	// Beowulf
 	buzzingoftheswarm: {
 		accuracy: 100,

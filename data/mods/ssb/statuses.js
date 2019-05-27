@@ -198,6 +198,18 @@ let BattleStatuses = {
 			this.add(`c|+Arsenal|Wenger Out`);
 		},
 	},
+	averardo: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|+Averardo|ECCOMI`);
+		},
+		onSwitchIn() {
+			this.add(`c|+Averardo|Scillato (PA)`);
+		},
+		onFaint() {
+			this.add(`c|+Averardo|Non mi sporcare più i MP`);
+		},
+	},
 	beowulf: {
 		noCopy: true,
 		onStart() {
