@@ -1235,18 +1235,6 @@ let BattleStatuses = {
 			this.add(`c|+The Leprechaun|This ain't it chief`);
 		},
 	},
-	tiksi: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|@Tiksi|Hakkaa päälle! For the King of the Woodland!`);
-		},
-		onSwitchOut() {
-			this.add(`c|@Tiksi|TI rigged this ok`);
-		},
-		onFaint(pokemon) {
-			this.add(`c|@Tiksi|You rotten ${pokemon.side.foe.name}! I'll send you to the Tiksi branch!`);
-		},
-	},
 	torkool: {
 		noCopy: true,
 		onStart() {

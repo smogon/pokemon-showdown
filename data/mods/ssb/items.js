@@ -87,18 +87,6 @@ let BattleItems = {
 		gen: 7,
 		desc: "If held by a Buzzwole with Drain Punch, it can use Ultra Succ.",
 	},
-	// Tiksi
-	tiksiumz: {
-		id: "tiksiumz",
-		name: "Tiksium Z",
-		isNonstandard: "Custom",
-		onTakeItem: false,
-		zMove: "Devolution Wave",
-		zMoveFrom: "Rock Slide",
-		zMoveUser: ["Cradily"],
-		gen: 7,
-		desc: "If held by a Cradily with Rock Slide, it can use Devolution Wave.",
-	},
 	// XpRienzo
 	"charcoal": {
 		inherit: true,

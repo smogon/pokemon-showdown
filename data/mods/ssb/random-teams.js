@@ -564,12 +564,6 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Gyro Ballin\'',
 				evs: {hp: 252, atk: 252, def: 4}, ivs: {spe: 0}, nature: 'Brave', shiny: true,
 			},
-			'Tiksi': {
-				species: 'Cradily', ability: 'Sand Stream', item: 'Tiksium Z', gender: 'M',
-				moves: ['Shore Up', 'Horn Leech', 'Curse'],
-				signatureMove: 'Rock Slide', // Base move for custom Z-move
-				evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
-			},
 			'torkool': {
 				species: 'Torkoal', ability: 'Deflective Shell', item: 'Leftovers', gender: 'M',
 				moves: ['Morning Sun', ['Lava Plume', 'Magma Storm'], 'Toxic'],
