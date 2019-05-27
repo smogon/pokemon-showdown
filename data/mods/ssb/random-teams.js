@@ -634,7 +634,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				name = this.sampleNoReplace(pool);
 			}
 			let ssbSet = sets[name];
-			if (name === 'Forrce' && this.random()) {
+			if (name === 'Forrce' && Math.floor(this.random())) {
 				// Swap to the alternate set, use the same name
 				ssbSet = sets['Forrce Alt'];
 			}
