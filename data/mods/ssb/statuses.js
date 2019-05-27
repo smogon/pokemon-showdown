@@ -558,6 +558,15 @@ let BattleStatuses = {
 			}
 		},
 	},
+	irritated: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|+irritated|Glhf`);
+		},
+		onFaint() {
+			this.add(`c|+irritated|wtf hax`);
+		},
+	},
 	iyarito: {
 		noCopy: true,
 		onStart() {

@@ -1535,6 +1535,37 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Dragon",
 	},
+	// irritated
+	pureskill: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		desc: "Has a 30% chance to paralyze the target and a 10% chance to confuse it.",
+		shortDesc: "30% chance to paralyze. 10% chance to confuse.",
+		id: "pureskill",
+		name: "Pure Skill",
+		isNonstandard: "Custom",
+		pp: 10,
+		priority: 0,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Heart Stamp', target);
+		},
+		flags: {protect: 1, mirror: 1},
+		secondaries: [
+			{
+				chance: 30,
+				status: 'par',
+			}, {
+				chance: 10,
+				volatileStatus: 'confusion',
+			},
+		],
+		target: "normal",
+		type: "Psychic",
+	},
 	// Iyarito
 	vbora: {
 		accuracy: true,
