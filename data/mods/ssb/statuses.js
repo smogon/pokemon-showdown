@@ -337,13 +337,13 @@ let BattleStatuses = {
 	decem: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+Decem|:D`);
+			this.add(`c|%Decem|:D`);
 		},
 		onSwitchOut() {
-			this.add(`c|+Decem|bye`);
+			this.add(`c|%Decem|bye`);
 		},
 		onFaint() {
-			this.add(`c|+Decem|>:(`);
+			this.add(`c|%Decem|>:(`);
 		},
 	},
 	deg: {
@@ -1380,7 +1380,7 @@ let BattleStatuses = {
 		},
 	},
 	// weight doubling volatile for trickster
-	minisingularity: {
+	weightdoubler: {
 		noCopy: true,
 		onStart(pokemon) {
 			this.add('-message', pokemon.name + '\'s weight has doubled.');

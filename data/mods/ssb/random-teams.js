@@ -391,8 +391,8 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 252, atk: 252, def: 4}, ivs: {spe: 0}, nature: 'Adamant',
 			},
 			'MicktheSpud': {
-				species: 'Lycanroc-Midnight', ability: 'Fake Crash', item: 'Life Orb', gender: 'M', // Changes to Lycanrock-Dusk when ability is triggered
-				moves: ['Stone Edge', ['Earthquake', 'High Horsepower'], ['Dragon Dance', 'Swords Dance']],
+				species: 'Lycanroc-Midnight', ability: 'Fake Crash', item: 'Life Orb', gender: 'M', // Changes to Lycanroc-Dusk when ability is triggered
+				moves: ['Stone Edge', 'Earthquake', ['Dragon Dance', 'Swords Dance']],
 				signatureMove: 'Cyclone Spin',
 				evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 			},

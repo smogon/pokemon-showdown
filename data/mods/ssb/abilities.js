@@ -370,8 +370,8 @@ let BattleAbilities = {
 	},
 	// Marshmallon
 	sightseeing: {
-		desc: "If this Pokemon is a Castform, its type changes to the current weather condition's type, except Sandstorm.",
-		shortDesc: "Castform's type changes to the current weather condition's type, except Sandstorm.",
+		desc: "If this Pokemon is a Castform, its type and moves changes to the current weather condition's type, except Sandstorm. The user's Defense, Special Attack, Special Defense, Speed, and Accuracy are all boosted 1.5x during weather.",
+		shortDesc: "Castform's type & moves changes to the current weather condition's type, except Sandstorm.",
 		id: "sightseeing",
 		name: "Sightseeing",
 		isNonstandard: "Custom",
@@ -688,6 +688,10 @@ let BattleAbilities = {
 		id: "solarflare",
 		name: "Solar Flare",
 		isNonstandard: "Custom",
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Solar Flare');
+			this.add('-message', `The light of the sun shields ${pokemon.name} from Rock-type moves!`);
+		},
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Rock') {
 				if (!this.heal(target.maxhp / 4)) {

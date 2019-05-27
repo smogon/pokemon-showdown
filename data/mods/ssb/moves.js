@@ -798,8 +798,8 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
-		desc: "This move has a 50% chance to infatuate the target.",
-		shortDesc: "This move has a 50% chance to infatuate the target.",
+		desc: "This move has a 30% chance to infatuate the target regardless of gender.",
+		shortDesc: "This move has a 30% chance to infatuate the target.",
 		id: "lovingembrace",
 		name: "Loving Embrace",
 		isNonstandard: "Custom",
@@ -2416,8 +2416,8 @@ let BattleMovedex = {
 		accuracy: 95,
 		basePower: 110,
 		category: "Physical",
-		desc: "Has a 50% chance to raise the user's Speed by 2 stages.",
-		shortDesc: "Has 50% chance to raise the user's Speed by 2.",
+		desc: "Has a 50% chance to raise the user's Speed by 2 stages or 5% chance to raise the user's Attack by 1 stage.",
+		shortDesc: "50% to raise user's Spe by 2 or 5% to raise Atk by 1",
 		id: "omboom",
 		name: "OM Boom",
 		isNonstandard: "Custom",
@@ -2435,11 +2435,13 @@ let BattleMovedex = {
 			this.add(`c|@OM|Bang Bang`);
 		},
 		secondary: {
-			chance: 50,
-			self: {
-				boosts: {
-					spe: 2,
-				},
+			chance: 100,
+			onHit(target, source) {
+				if (this.random(2) === 0) {
+					this.boost({spe: 2}, source);
+				} else if (this.random(20) === 0) {
+					this.boost({atk: 1}, source);
+				}
 			},
 		},
 		target: "normal",
@@ -3452,7 +3454,7 @@ let BattleMovedex = {
 
 			// Really feel like this could be done better (blocked by protect and alike moves.)
 			if (!(target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] || target.side.sideConditions['matblock'] || target.volatiles['protect'] || target.volatiles['spikyshield'] || target.volatiles['lilypadshield'])) {
-				target.addVolatile('minisignularity', source);
+				target.addVolatile('weightdoubler', source);
 				let item = target.takeItem();
 				if (!target.item) {
 					if (item) this.add('-enditem', target, item.name, '[from] move: Mini Singularity', '[of] ' + source);
