@@ -536,8 +536,6 @@ class User extends Chat.MessageContext {
 		// Used in punishments
 		/** @type {string} */
 		this.trackRename = '';
-		/** @type {boolean} */
-		this.isAway = false;
 		/** @type {string} */
 		this.status = '';
 		// initialize
@@ -604,7 +602,7 @@ class User extends Chat.MessageContext {
 	getIdentityWithStatus(roomid = '') {
 		const identity = this.getIdentity(roomid);
 		if (!this.status) return identity;
-		return `${identity}@${this.isAway ? '!' : ''}${this.status}`;
+		return `${identity}@${this.status}`;
 	}
 	/**
 	 * @param {string} minAuth
@@ -1017,7 +1015,6 @@ class User extends Chat.MessageContext {
 	 * @param {string[]} updated the settings which have been updated or none for all settings.
 	 */
 	getUpdateuserText(...updated) {
-		const status = this.status ? `@${this.status}` : '';
 		const named = this.named ? 1 : 0;
 		const diff = {};
 		const settings = updated.length ? updated : SETTINGS;
@@ -1025,7 +1022,7 @@ class User extends Chat.MessageContext {
 			// @ts-ignore - dynamic lookup
 			diff[setting] = this[setting];
 		}
-		return `|updateuser|${this.name}${status}|${named}|${this.avatar}|${JSON.stringify(diff)}`;
+		return `|updateuser|${this.getIdentityWithStatus()}|${named}|${this.avatar}|${JSON.stringify(diff)}`;
 	}
 	/**
 	 * @param {string[]} updated the settings which have been updated or none for all settings.
@@ -1562,17 +1559,18 @@ class User extends Chat.MessageContext {
 			this.chatQueue = null;
 		}
 	}
+	isAway() {
+		return this.status && this.status.charAt(0) === '!';
+	}
 	/**
 	 * @param {string} message
 	 */
 	setAway(message) {
-		this.isAway = true;
-		this.status = message;
+		this.status = `!${message}`;
 		this.updateIdentity();
 	}
 	setBack() {
 		if (!this.isAway) return;
-		this.isAway = false;
 		this.status = '';
 		this.updateIdentity();
 	}
