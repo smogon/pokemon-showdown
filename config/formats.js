@@ -1034,6 +1034,7 @@ let Formats = [
 			this.add('message', 'GET READY FOR THE NEXT BATTLE!');
 			this.add(`raw|<div class='broadcast-green'><b>Wondering what all these custom moves, abilities, and items do?<br />Check out the <a href="https://www.smogon.com/articles/super-staff-bros-brawl" target="_blank">Super Staff Bros Brawl Guide</a> and find out!</b></div>`);
 		},
+		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
 			let name = toID(pokemon.illusion ? pokemon.illusion.name : pokemon.name);
 			if (this.getTemplate(name).exists) {
