@@ -760,6 +760,50 @@ let BattleAbilities = {
 			this.field.addPseudoWeather('gravity', pokemon);
 		},
 	},
+	// vivalospride
+	trashvivwebs: {
+		desc: "This Pokemon's attacking stat is doubled while using a Water-type attack. If a Pokemon uses a Fire-type attack against this Pokemon, that Pokemon's attacking stat is halved when calculating the damage to this Pokemon. This Pokemon cannot be burned. Gaining this Ability while burned cures it. Sets Sticky Web on switching in.",
+		shortDesc: "User's Water power is 2x; can't be burned; Fire power is halved. Sets web.",
+		onStart(pokemon) {
+			this.useMove("stickyweb", pokemon);
+		},
+		onModifyAtkPriority: 5,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Fire') {
+				return this.chainModify(0.5);
+			}
+		},
+		onModifySpAPriority: 5,
+		onSourceModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Fire') {
+				return this.chainModify(0.5);
+			}
+		},
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Water') {
+				return this.chainModify(2);
+			}
+		},
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Water') {
+				return this.chainModify(2);
+			}
+		},
+		onUpdate(pokemon) {
+			if (pokemon.status === 'brn') {
+				this.add('-activate', pokemon, 'ability: Water Bubble');
+				pokemon.cureStatus();
+			}
+		},
+		onSetStatus(status, target, source, effect) {
+			if (status.id !== 'brn') return;
+			if (!effect || !effect.status) return false;
+			this.add('-immune', target, '[from] ability: Water Bubble');
+			return false;
+		},
+		id: "trashvivwebs",
+		name: "TRASH VIV WEBS",
+	},
 	// xJoelituh
 	clubexpertise: {
 		shortDesc: "This Pokemon's bone moves have their power multiplied by 1.3.",

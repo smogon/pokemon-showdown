@@ -588,6 +588,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Continuous 1v1',
 				evs: {hp: 252, spa: 200, spd: 56}, ivs: {atk: 0}, nature: 'Modest',
 			},
+			'vivalospride': {
+				species: 'Araquanid', ability: 'TRASH VIV WEBS', item: 'Wave Incense', gender: 'M',
+				moves: ['Liquidation', 'U-turn', 'Toxic'],
+				signatureMove: 'CEILINGS ABSENT',
+				evs: {hp: 64, atk: 252, spe: 192}, nature: 'Adamant',
+			},
 			'Volco': {
 				species: 'Volcanion', ability: 'Unaware', item: 'Assault Vest', gender: 'M',
 				moves: ["Steam Eruption", "Giga Drain", ["Ice Beam", "Ice Beam", "Earth Power"]],

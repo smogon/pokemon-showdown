@@ -3525,6 +3525,36 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Electric",
 	},
+	// vivalospride
+	ceilingsabsent: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Before the turn starts, this Pokemon uses taunt against the opponent. When this move hits, heals the user by 50% of its max HP.",
+		shortDesc: "Opponent is taunted; heals 50% of Max HP.",
+		id: "ceilingsabsent",
+		name: "CEILINGS ABSENT",
+		isNonstandard: "Custom",
+		pp: 10,
+		priority: 0,
+		flags: {snatch: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Recover", source);
+		},
+		beforeTurnCallback(pokemon) {
+			if (pokemon.status === 'slp' || pokemon.status === 'frz') return;
+			this.useMove("taunt", pokemon);
+		},
+		onHit(source) {
+			this.heal(source.maxhp / 2, source);
+		},
+		secondary: null,
+		target: "self",
+		type: "Normal",
+	},
 	// Volco
 	explosivedrain: {
 		basePower: 90,

@@ -1280,6 +1280,18 @@ let BattleStatuses = {
 			this.add(`c|%UnleashOurPassion|That's hax! You were supposed to miss`);
 		},
 	},
+	vivalospride: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|+vivalospride|bet`);
+		},
+		onSwitchOut() {
+			this.add(`c|+vivalospride|tuh`);
+		},
+		onFaint() {
+			this.add(`c|+vivalospride|THERE IT IS!!`);
+		},
+	},
 	volco: {
 		noCopy: true,
 		onStart() {
