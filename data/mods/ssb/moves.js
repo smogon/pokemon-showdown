@@ -2195,13 +2195,13 @@ let BattleMovedex = {
 			this.add('-anim', source, "Dragon Hammer", target);
 			this.add('-anim', target, "Earthquake", target);
 		},
-		onHit(target, source, move) {
+		onAfterMoveSecondarySelf(pokemon) {
 			let stockpileLayers = 0;
-			if (source.volatiles['stockpile']) stockpileLayers = source.volatiles['stockpile'].layers;
+			if (pokemon.volatiles['stockpile']) stockpileLayers = pokemon.volatiles['stockpile'].layers;
 			let boosts = {};
-			if (source.boosts.def > stockpileLayers) boosts.def = stockpileLayers - source.boosts.def;
-			if (source.boosts.spd > stockpileLayers) boosts.spd = stockpileLayers - source.boosts.spd;
-			if (boosts.def || boosts.spd) this.boost(boosts, source, source, move);
+			if (pokemon.boosts.def > stockpileLayers) boosts.def = stockpileLayers - pokemon.boosts.def;
+			if (pokemon.boosts.spd > stockpileLayers) boosts.spd = stockpileLayers - pokemon.boosts.spd;
+			if (boosts.def || boosts.spd) this.boost(boosts, pokemon, pokemon);
 		},
 		secondary: null,
 		target: "normal",

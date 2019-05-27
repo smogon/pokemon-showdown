@@ -466,7 +466,7 @@ let BattleAbilities = {
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
 			if (pokemon.activeTurns) {
-				this.boost({atk: 1, spa: 1, spd: 1});
+				this.boost({atk: 1, def: 1, spd: 1});
 			}
 		},
 	},
