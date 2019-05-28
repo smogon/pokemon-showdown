@@ -2,6 +2,18 @@
 
 /**@type {{[k: string]: ModdedItemData}} */
 let BattleItems = {
+	// Aeonic
+	noseiumz: {
+		id: "noseiumz",
+		name: "Noseium Z",
+		isNonstandard: "Custom",
+		onTakeItem: false,
+		zMove: "Shitpost",
+		zMoveFrom: "Fissure",
+		zMoveUser: ["Nosepass"],
+		gen: 7,
+		desc: "If held by a Nosepass with Fissure, it can use Shitpost.",
+	},
 	// E4 Flint
 	magmarizer: {
 		inherit: true,

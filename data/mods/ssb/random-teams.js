@@ -64,6 +64,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Energy Field',
 				evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Modest',
 			},
+			'Aeonic': {
+				species: 'Nosepass', ability: 'Dummy Thicc', item: 'Noseium Z', gender: 'M',
+				moves: ['Stealth Rock', 'Thunder Wave', 'Milk Drink'],
+				signatureMove: 'Fissure',
+				evs: {hp: 248, def: 8, spd: 252}, nature: 'Careful',
+			},
 			'Aethernum': {
 				species: 'Regigigas', ability: 'Awakening', item: 'Leftovers', gender: 'N',
 				moves: ['Knock Off', 'Confuse Ray', 'Drain Punch'],
@@ -111,7 +117,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				species: 'Tyrantrum', ability: 'Rock Head', item: 'Choice Scarf', gender: '', // ask Gender
 				moves: ['Head Smash', 'Flare Blitz', 'Photon Geyser'],
 				signatureMove: 'Dragon Smash',
-				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adament', shiny: true,
+				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant', shiny: true,
 			},
 			'Beowulf': {
 				species: 'Beedrill', ability: ['Download', 'Speed Boost'], item: 'Beedrillite', gender: 'M',
@@ -646,7 +652,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				name = this.sampleNoReplace(pool);
 			}
 			let ssbSet = sets[name];
-			if (name === 'Forrce' && Math.floor(this.random())) {
+			if (name === 'Forrce' && Math.round(this.random())) {
 				// Swap to the alternate set, use the same name
 				ssbSet = sets['Forrce Alt'];
 			}

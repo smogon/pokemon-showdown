@@ -164,6 +164,43 @@ let BattleMovedex = {
 		type: "Electric",
 		zMovePower: 200,
 	},
+	// Aeonic
+	shitpost: {
+		accuracy: true,
+		basePower: 0,
+		category: "Physical",
+		desc: "50% chance to OHKO the user, 50% chance to OHKO the target.",
+		shortDesc: "OHKO's user or self (50% chance each).",
+		id: "shitpost",
+		name: "Shitpost",
+		isNonstandard: "Custom",
+		pp: 1,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Skill Swap", target);
+		},
+		onHit(target, source) {
+			let koed;
+			if (Math.round(this.random())) {
+				koed = target;
+				this.add(`c|+Aeonic|What a buncha jokers`);
+			} else {
+				koed = source;
+				this.add(`c|+Aeonic|haha yeah`);
+			}
+
+			this.add('-anim', koed, "Explosion", koed);
+			koed.faint();
+		},
+		isZ: "noseiumz",
+		secondary: null,
+		target: "normal",
+		type: "???",
+	},
 	// Aethernum
 	cataclysm: {
 		accuracy: 90,
@@ -438,6 +475,7 @@ let BattleMovedex = {
 			this.add('-anim', target, 'Blue Flare', target);
 		},
 		recoil: [1, 2],
+		secondary: null,
 		target: "normal",
 		type: "Dragon",
 	},

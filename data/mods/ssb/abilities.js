@@ -32,6 +32,56 @@ let BattleAbilities = {
 			}
 		},
 	},
+	// Aeonic
+	dummythicc: {
+		desc: "This ability gives the effects of the abilities Fur Coat, Magic Bounce, Infiltrator, and Sturdy.",
+		shortDesc: "Fur Coat + Magic Bounce + Infiltrator + Sturdy",
+		id: "dummythicc",
+		name: "Dummy Thicc",
+		isNonstandard: "Custom",
+		onModifyDefPriority: 6,
+		onModifyDef(def) {
+			return this.chainModify(2);
+		},
+		onModifyMove(move) {
+			move.infiltrates = true;
+		},
+		onTryHitPriority: 1,
+		onTryHit(target, source, move) {
+			if (move.ohko) {
+				this.add('-immune', target, '[from] ability: Sturdy');
+				return null;
+			}
+			if (target === source || move.hasBounced || !move.flags['reflectable']) {
+				return;
+			}
+			let newMove = this.getActiveMove(move.id);
+			newMove.hasBounced = true;
+			newMove.pranksterBoosted = false;
+			this.useMove(newMove, target, source);
+			return null;
+		},
+		onAllyTryHitSide(target, source, move) {
+			if (target.side === source.side || move.hasBounced || !move.flags['reflectable']) {
+				return;
+			}
+			let newMove = this.getActiveMove(move.id);
+			newMove.hasBounced = true;
+			newMove.pranksterBoosted = false;
+			this.useMove(newMove, this.effectData.target, source);
+			return null;
+		},
+		onDamagePriority: -100,
+		onDamage(damage, target, source, effect) {
+			if (target.hp === target.maxhp && damage >= target.hp && effect && effect.effectType === 'Move') {
+				this.add('-ability', target, 'Sturdy');
+				return target.hp - 1;
+			}
+		},
+		effect: {
+			duration: 1,
+		},
+	},
 	// Aethernum
 	awakening: {
 		desc: "On switch in, Atk and Speed are lowered by -3, while Def and Spdef are increased by 3. At the end of each turn, Atk and Spe get +1 while Def and Spdef get -1.",
