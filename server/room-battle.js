@@ -881,7 +881,6 @@ class RoomBattle extends RoomGames.RoomGame {
 			player.active = true;
 			this.timer.checkActivity();
 			this.room.add(`|player|${player.slot}|${user.name}|${user.avatar}`);
-			console.trace(player.userid);
 		}
 	}
 	/**
