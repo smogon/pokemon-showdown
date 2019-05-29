@@ -262,11 +262,14 @@ let namefilter = function (name, user) {
 		Monitor.log(`[NameMonitor] Username used: ${name} (forcerenamed from ${user.trackRename})`);
 		user.trackRename = '';
 	}
-	const forceRenamer = Chat.forceRenames.get(id);
-	if (forceRenamer) Monitor.log(`[NameMonitor] Name being used: ${name} (forcerenamed by ${forceRenamer})`);
 	return name;
 };
-
+/** @type {LoginFilter} */
+let loginfilter = function (user) {
+	if (user.namelocked) return;
+	const forceRenamer = Chat.forceRenames.get(user.userid);
+	if (forceRenamer) Monitor.log(`[NameMonitor] Name being used: ${user.name} (forcerenamed by ${forceRenamer})`);
+};
 /** @type {NameFilter} */
 let nicknamefilter = function (name, user) {
 	let lcName = name.replace(/\u039d/g, 'N').toLowerCase().replace(/[\u200b\u007F\u00AD]/g, '').replace(/\u03bf/g, 'o').replace(/\u043e/g, 'o').replace(/\u0430/g, 'a').replace(/\u0435/g, 'e').replace(/\u039d/g, 'e');
@@ -447,3 +450,4 @@ exports.commands = commands;
 exports.chatfilter = chatfilter;
 exports.namefilter = namefilter;
 exports.nicknamefilter = nicknamefilter;
+exports.loginfilter = loginfilter;
