@@ -228,6 +228,7 @@ class Ladder extends LadderStore {
 		}
 		if (targetUser.blockChallenges && !user.can('bypassblocks', targetUser)) {
 			connection.popup(`The user '${targetUser.name}' is not accepting challenges right now.`);
+			Chat.maybeNotifyBlocked('challenge', targetUser, user);
 			return false;
 		}
 		if (Date.now() < user.lastChallenge + 10 * SECONDS) {
