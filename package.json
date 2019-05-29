@@ -68,6 +68,6 @@
     "husky": "^2.3.0",
     "mocha": "^6.1.4",
     "tslint": "^5.16.0",
-    "typescript": "^3.4.5"
+    "typescript": "^3.5.0"
   }
 }
