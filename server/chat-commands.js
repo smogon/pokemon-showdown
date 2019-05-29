@@ -659,6 +659,7 @@ const commands = {
 	afk: 'away',
 	brb: 'away',
 	away(target, room, user, connection, cmd) {
+		if (!this.canTalk()) return;
 		let awayType = toID(cmd);
 		let awayMessage = '';
 		if (awayType === 'afk' || awayType === 'brb') {
