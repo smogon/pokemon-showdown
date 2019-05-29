@@ -18,7 +18,19 @@
 
 const RandomTeams = require('../../random-teams');
 class RandomStaffBrosTeams extends RandomTeams {
-	randomStaffBrosTeam() {
+	/**
+	 * @param {Format | string} format
+	 * @param {?PRNG | [number, number, number, number]} [prng]
+	 */
+	constructor(format, prng) {
+		super(format, prng);
+		this.allXfix = (this.random(500) === 360);
+	}
+
+	/**
+	 * @param {Object} options
+	 */
+	randomStaffBrosTeam(options = {}) {
 		/** @type {PokemonSet[]} */
 		let team = [];
 		/** @type {SSBSets} */
@@ -618,6 +630,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Stunning Dance',
 				evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid',
 			},
+			'xfix': {
+				species: 'Xatu', ability: 'Magic Bounce', item: 'Focus Sash', gender: 'M',
+				moves: ['Substitute', ['Roost', 'Strength Sap'], 'Thunder Wave'],
+				signatureMove: 'glitzer popping',
+				evs: {hp: 4, def: 252, spd: 252}, nature: 'Calm',
+			},
 			'xJoelituh': {
 				species: 'Marowak-Alola', ability: 'Club Expertise', item: 'Thick Club', gender: 'M',
 				moves: ['Shadow Bone', 'Bonemerang', 'Drain Punch'],
@@ -642,37 +660,41 @@ class RandomStaffBrosTeams extends RandomTeams {
 		/** @type {{[type: string]: number}} */
 		let typePool = {};
 		let debug = false;
+		let depth = 0;
+		if (options.inBattle) this.allXfix = false;
 		while (pool.length && team.length < 6) {
+			if (depth >= 200) throw new Error(`Infinite loop in Super Staff Bros team generation.`);
+			depth++;
 			let name = '';
-			if (debug && team.length === 1) {
+			if (debug && team.length === 1 && !options.inBattle) {
 				// DEBUG CODE, remove before commiting to the main server
 				name = ''; // Change name to force a set to appear
 				pool.splice(pool.indexOf(name), 1);
 			} else {
-				name = this.sampleNoReplace(pool);
+				name = this.allXfix ? 'xfix' : this.sampleNoReplace(pool);
 			}
 			let ssbSet = sets[name];
 			if (name === 'Forrce' && Math.round(this.random())) {
 				// Swap to the alternate set, use the same name
 				ssbSet = sets['Forrce Alt'];
 			}
-			// Enforce typing limits
-			let types = this.getTemplate(ssbSet.species).types;
-			if (name === 'E4 Flint') types = ["Steel", "Ground", "Fire"];
-			if (name === 'Overneat') types = ["Dark", "Fairy"];
-			let rejected = false;
-			for (let type of types) {
-				if (typePool[type] === undefined) typePool[type] = 0;
-				if (typePool[type] >= 2) {
-					// Reject
-					rejected = true;
-					break;
+			if (!this.allXfix) {
+				// Enforce typing limits
+				let types = this.getTemplate(ssbSet.species).types;
+				let rejected = false;
+				for (let type of types) {
+					if (typePool[type] === undefined) typePool[type] = 0;
+					if (typePool[type] >= 2) {
+						// Reject
+						rejected = true;
+						break;
+					}
 				}
-			}
-			if (rejected) continue;
-			// Update type counts
-			for (let type of types) {
-				typePool[type]++;
+				if (rejected) continue;
+				// Update type counts
+				for (let type of types) {
+					typePool[type]++;
+				}
 			}
 			/** @type {PokemonSet} */
 			let set = {

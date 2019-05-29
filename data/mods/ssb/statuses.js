@@ -1328,6 +1328,18 @@ let BattleStatuses = {
 			this.add(`c|+Xayah|All out of second dances...`);
 		},
 	},
+	xfix: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|&xfix|destroy the world!`);
+		},
+		onSwitchOut() {
+			this.add(`c|&xfix|brb i need to rethink my plan`);
+		},
+		onFaint() {
+			this.add(`c|&xfix|but the world refused`);
+		},
+	},
 	xjoelituh: {
 		noCopy: true,
 		onStart(source) {

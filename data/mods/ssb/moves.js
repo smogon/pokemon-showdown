@@ -688,7 +688,7 @@ let BattleMovedex = {
 				}
 			}
 			// Generate a new team
-			let team = this.teamGenerator.getTeam({name: source.side.name});
+			let team = this.teamGenerator.getTeam({name: source.side.name, inBattle: true});
 			// Overwrite un-fainted pokemon other than the user
 			for (let i = 0; i < currentTeam.length; i++) {
 				if (currentTeam[i].fainted || !currentTeam[i].hp || currentTeam[i].position === source.position) continue;
@@ -3679,6 +3679,55 @@ let BattleMovedex = {
 		zMovePower: 175,
 		target: "normal",
 		type: "Flying",
+	},
+	// xfix
+	glitzerpopping: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Uses 2-5 random moves other than Z moves that have 1 base power.",
+		shortDesc: "Uses 2-5 random moves other than 1 BP Z-moves.",
+		id: 'glitzerpopping',
+		name: "glitzer popping",
+		isNonstandard: "Custom",
+		pp: 3.14,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {},
+		onTryMove(pokemon) {
+			this.attrLastMove('[still]');
+			const moveData = pokemon.getMoveData('glitzerpopping');
+			if (!moveData) return;
+			// Lost 1 PP due to move usage, restore 0.9 PP to make it so that only 0.1 PP
+			// would be used.
+			moveData.pp = (Math.round(moveData.pp * 100) + 90) / 100;
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Metronome", source);
+		},
+		onHit(target, source, effect) {
+			const moves = [];
+			for (const i in exports.BattleMovedex) {
+				const move = exports.BattleMovedex[i];
+				if (i !== move.id || move.id === 'glitzerpopping') continue;
+				// Calling 1 BP move is somewhat lame and disappointing. However,
+				// signature Z moves are fine, as they actually have a base power.
+				if (move.isZ && move.basePower === 1) continue;
+				moves.push(move);
+			}
+			let randomMove;
+			if (moves.length) {
+				randomMove = this.sample(moves).id;
+			}
+			if (!randomMove) {
+				return false;
+			}
+			this.useMove(randomMove, target);
+		},
+		multihit: [2, 5],
+		secondary: null,
+		target: "self",
+		type: "???",
 	},
 	// xJoelituh
 	lavabone: {
