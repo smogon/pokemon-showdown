@@ -232,10 +232,10 @@ represented by a space), and the rest of the string being their username.
 > Finish logging in (or renaming) by sending: `/trn USERNAME,0,ASSERTION`
 > where `USERNAME` is your desired username and `ASSERTION` is `data.assertion`.
 
-`|updateuser|USERNAME@STATUS|NAMED|AVATAR|SETTINGS`
+`|updateuser|USER@STATUS|NAMED|AVATAR|SETTINGS`
 
-> Your name, avatar or settings were successfully changed. Your username is
-> now `USERNAME`. Optionally, the username can end in `@` followed by a user status message.
+> Your name, avatar or settings were successfully changed. Your rank and username
+> are now `USER`. Optionally, the username can end in `@` followed by a user status message.
 > A `STATUS` starting in `!` indicates the user is away. `NAMED` will be `0` if you are a guest or `1` otherwise. Your
 > avatar is now `AVATAR`. `SETTINGS` is a JSON object representing the current
 > state of various user settings.
