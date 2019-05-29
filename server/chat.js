@@ -40,6 +40,7 @@ To reload chat commands:
  * @typedef {(this: CommandContext, message: string, user: User, room: ChatRoom | GameRoom?, connection: Connection, targetUser: User?, originalMessage: string) => (string | false | null | undefined)} ChatFilter
  */
 /** @typedef {(name: string, user: User) => (string)} NameFilter */
+/** @typedef {(user: User, oldUser: User?, userType: string) => void} LoginFilter */
 
 const LINK_WHITELIST = ['*.pokemonshowdown.com', 'psim.us', 'smogtours.psim.us', '*.smogon.com', '*.pastebin.com', '*.hastebin.com'];
 
@@ -248,7 +249,7 @@ Chat.hostfilter = function (host, user, connection) {
 		filter(host, user, connection);
 	}
 };
-/**@type {((user: User, oldUser: User | null, usertype: string) => void)[]} */
+/**@type {LoginFilter[]} */
 Chat.loginfilters = [];
 /**
  * @param {User} user
