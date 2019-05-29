@@ -991,6 +991,8 @@ class User extends Chat.MessageContext {
 		let joining = !this.named;
 		this.named = !userid.startsWith('guest') || !!this.namelocked;
 
+		if (isForceRenamed) this.status = '';
+
 		for (const connection of this.connections) {
 			//console.log('' + name + ' renaming: socket ' + i + ' of ' + this.connections.length);
 			connection.send(this.getUpdateuserText());
