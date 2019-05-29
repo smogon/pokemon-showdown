@@ -84,6 +84,18 @@ let BattleStatuses = {
 			this.add(`c|@Aelita|CODE: LYOKO . Tower deactivated... Return to the past, now!`);
 		},
 	},
+	aeonic: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|+Aeonic|Guys the emoji movie wasn't __that__ bad`);
+		},
+		onSwitchOut() {
+			this.add(`c|+Aeonic|Still better than kie btw`);
+		},
+		onFaint() {
+			this.add(`c|+Aeonic|Don't forget me`);
+		},
+	},
 	aethernum: {
 		noCopy: true,
 		onStart() {
