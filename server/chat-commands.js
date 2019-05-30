@@ -660,7 +660,7 @@ const commands = {
 		target = Chat.namefilter(target, user);
 		if (!target) return;
 
-		user.status = target;
+		user.status = `(Status) ${target}`;
 		user.updateIdentity();
 		this.sendReply(`Your status has been set to: ${target}`);
 	},
