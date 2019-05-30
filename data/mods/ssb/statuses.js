@@ -1044,6 +1044,10 @@ let BattleStatuses = {
 			this.add(`c|%Rach|I oversold your move`);
 		},
 	},
+	radix: {
+		noCopy: true,
+		// No messages provided
+	},
 	rorymercury: {
 		noCopy: true,
 		onStart(pokemon) {

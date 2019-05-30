@@ -714,6 +714,23 @@ let BattleAbilities = {
 			}
 		},
 	},
+	// Radix
+	tempest: {
+		desc: "This pokemon's Flying type moves have 1.3x base power and will always hit.",
+		shortDesc: "Flying type moves have 1.3x power and always hit.",
+		id: "tempest",
+		name: "Tempest",
+		isNonstandard: "Custom",
+		onBasePowerPriority: 8,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Flying') {
+				return this.chainModify(1.3);
+			}
+		},
+		onModifyMove(move) {
+			if (move.type === 'Flying') move.accuracy = true;
+		},
+	},
 	// Rory Mercury
 	recharge: {
 		desc: "Upon switching out, this Pokemon has its major status condition cured and restores 1/3 of its maximum HP, rounded down. When this Pokemon switches in, if it uses an Electric-type attack on the next turn, that attack's power will be doubled.",

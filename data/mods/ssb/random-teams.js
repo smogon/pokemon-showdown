@@ -504,6 +504,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Stunner',
 				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 			},
+			'Radix': {
+				species: 'Moltres', ability: 'Tempest', item: 'Life Orb', gender: '',
+				moves: ['Hurricane', 'Roost', 'U-Turn'],
+				signatureMove: 'Firestorm',
+				evs: {def: 4, spa: 252, spe: 252}, nature: 'Timid',
+			},
 			'Rory Mercury': {
 				species: 'Charjabug', ability: 'Recharge', item: 'Eviolite', gender: 'M',
 				moves: ['First Impression', 'Leech Life', 'Bolt Strike'],
