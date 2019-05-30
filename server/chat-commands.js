@@ -654,6 +654,18 @@ const commands = {
 	},
 	unblockpmshelp: [`/unblockpms - Unblocks private messages. Block them with /blockpms.`],
 
+	status(target, room, user, connection, cmd) {
+		if (!this.canTalk()) return;
+		if (!target) return this.parse('/help status');
+		target = Chat.namefilter(target, user);
+		if (!target) return;
+
+		user.status = target;
+		user.updateIdentity();
+		this.sendReply(`Your status has been set to: ${target}`);
+	},
+	statushelp: [`/status [note] - Sets a short note as your status, visible when users click your username.`],
+
 	'!away': true,
 	idle: 'away',
 	afk: 'away',
