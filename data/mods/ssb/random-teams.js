@@ -107,7 +107,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0, spe: 0}, nature: 'Quiet',
 			},
 			'A Quag to The Past': {
-				species: 'Quagsire', ability: 'Unaware', item: 'Leftovers', gender: 'M',
+				species: 'Quagsire', ability: 'Careless', item: 'Leftovers', gender: 'M',
 				moves: ['Recover', 'Toxic', 'Scald'],
 				signatureMove: 'Murky Ambush',
 				evs: {hp: 252, def: 252, spd: 4}, ivs: {spe: 0}, nature: 'Relaxed',

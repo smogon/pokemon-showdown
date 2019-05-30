@@ -155,13 +155,13 @@ let BattleStatuses = {
 	aquagtothepast: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+A Quag to The Past|You mess with one Goon, you mess with them all... And they're all here!`);
+			this.add(`c|+A Quag to The Past|The Goons are all here`);
 		},
 		onSwitchOut() {
-			this.add(`c|+A Quag to The Past|Um, no.`);
+			this.add(`c|+A Quag to The Past|um no`);
 		},
 		onFaint() {
-			this.add(`c|+A Quag to The Past|...Wait, this isn't the groupchat, is it...`);
+			this.add(`c|+A Quag to The Past|Wait, this isn't the groupchat...`);
 		},
 	},
 	arcticblast: {

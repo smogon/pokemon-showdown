@@ -339,7 +339,7 @@ let BattleMovedex = {
 		id: "murkyambush",
 		name: "Murky Ambush",
 		isNonstandard: "Custom",
-		pp: 20,
+		pp: 10,
 		priority: -3,
 		flags: {contact: 1, protect: 1},
 		onTryMove() {
@@ -347,7 +347,7 @@ let BattleMovedex = {
 		},
 		onPrepareHit(target, source) {
 			if (source.volatiles['murkyambush'] && source.volatiles['murkyambush'].gotHit) {
-				this.add('-anim', source, "Crunch", target);
+				this.add('-anim', source, "Dig", target);
 			}
 		},
 		beforeTurnCallback(pokemon) {
@@ -363,6 +363,7 @@ let BattleMovedex = {
 				return true;
 			}
 			this.add('-message', `${pokemon.side.foe.active[0].name} was caught in the ambush!`);
+			this.add(`c|+A Quag to The Past|GOTCHA BITCH`);
 		},
 		effect: {
 			duration: 1,
@@ -375,19 +376,20 @@ let BattleMovedex = {
 				return this.chainModify(0.5);
 			},
 			onFoeTryMove(target, source, move) {
-				if (move.secondaries && move.flags.contact) {
+				if (move.secondaries && move.category !== 'Status') {
 					this.debug('Murky Ambush secondary effects suppression');
 					delete move.secondaries;
 				}
 			},
 			onHit(pokemon, source, move) {
-				if (pokemon.side !== source.side && move.flags.contact) {
+				if (pokemon.side !== source.side && move.category !== 'Status') {
 					pokemon.volatiles['murkyambush'].gotHit = true;
 				}
 			},
 		},
+		ignoreImmunity: {'Ground': true},
 		target: "normal",
-		type: "Dark",
+		type: "Ground",
 	},
 	// Arcticblast
 	trashalanche: {
