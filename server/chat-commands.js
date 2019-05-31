@@ -672,7 +672,7 @@ const commands = {
 	brb: 'away',
 	away(target, room, user, connection, cmd) {
 		if (!this.canTalk()) return;
-		let awayType = toID(cmd);
+		let awayType = cmd;
 		let awayMessage = '';
 		if (awayType === 'afk' || awayType === 'brb') {
 			awayType = awayType.toUpperCase();
