@@ -714,7 +714,7 @@ let BattleAbilities = {
 			}
 		},
 	},
-	// Radix
+	// Raid
 	tempest: {
 		desc: "This pokemon's Flying type moves have 1.3x base power and will always hit.",
 		shortDesc: "Flying type moves have 1.3x power and always hit.",

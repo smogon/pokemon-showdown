@@ -2913,7 +2913,7 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Electric",
 	},
-	// Radix
+	// Raid
 	firestorm: {
 		accuracy: 90,
 		basePower: 100,

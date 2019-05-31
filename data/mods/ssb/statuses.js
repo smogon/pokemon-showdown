@@ -1044,7 +1044,7 @@ let BattleStatuses = {
 			this.add(`c|%Rach|I oversold your move`);
 		},
 	},
-	radix: {
+	raid: {
 		noCopy: true,
 		// No messages provided
 	},
