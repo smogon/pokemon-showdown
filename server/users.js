@@ -42,8 +42,8 @@ const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
 const FS = require(/** @type {any} */('../.lib-dist/fs')).FS;
 
 const MINUTES = 60 * 1000;
-const IDLE_TIMER = 180 * MINUTES;
-const STAFF_IDLE_TIMER = 60 * MINUTES;
+const IDLE_TIMER = 60 * MINUTES;
+const STAFF_IDLE_TIMER = 30 * MINUTES;
 
 /*********************************************************
  * Utility functions
