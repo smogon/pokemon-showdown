@@ -2730,6 +2730,30 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Psychic",
 	},
+	// Pohjis
+	greateqake: {
+		accuracy: true,
+		basePower: 200,
+		category: "Physical",
+		desc: "No additional effects.",
+		shortDesc: "No additional effects.",
+		id: "greateqake",
+		name: "Great Eqake",
+		isNonstandard: "Custom",
+		pp: 1,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Tectonic Rage", target);
+		},
+		isZ: "marowakiumz",
+		secondary: null,
+		target: "normal",
+		type: "Ground",
+	},
 	// ptoad
 	lilypadshield: {
 		accuracy: true,

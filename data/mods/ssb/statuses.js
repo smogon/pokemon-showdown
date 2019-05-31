@@ -982,6 +982,18 @@ let BattleStatuses = {
 			this.add(`c|&pre|LAMBS TO THE COSMIC SLAUGHTER!!`);
 		},
 	},
+	pohjis: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|+Pohjis|thats pohjis`);
+		},
+		onSwitchOut() {
+			this.add(`c|+Pohjis|ÖPÖOLÖL`);
+		},
+		onFaint() {
+			this.add(`c|+Pohjis|rly enjoyed that`);
+		},
+	},
 	ptoad: {
 		noCopy: true,
 		onStart() {

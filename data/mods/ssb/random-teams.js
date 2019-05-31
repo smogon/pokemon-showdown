@@ -474,6 +474,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Grammar Hammer',
 				evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
+			'Pohjis': {
+				species: 'Marowak', ability: 'Huge Power', item: 'Marowakium Z', gender: '',
+				moves: ['Fire Punch', 'Knock Off', 'Trick Room'],
+				signatureMove: 'Earthquake',
+				evs: {hp: 252, atk: 252, spd: 4}, ivs: {spe: 0}, nature: 'Brave',
+			},
 			'pre': {
 				species: 'Deoxys', ability: 'Optimize', item: 'Rocky Helmet', gender: 'N',
 				moves: ['Psycho Boost', 'Recover', 'Extreme Speed'],

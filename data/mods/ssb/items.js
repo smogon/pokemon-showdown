@@ -50,6 +50,18 @@ let BattleItems = {
 		gen: 7,
 		desc: "If held by a Victini with V-create, it can use Blaze of Glory.",
 	},
+	// Pohjis
+	marowakiumz: {
+		id: "marowakiumz",
+		name: "Marowakium Z",
+		isNonstandard: "Custom",
+		onTakeItem: false,
+		zMove: "Great Eqake",
+		zMoveFrom: "Earthquake",
+		zMoveUser: ["Marowak"],
+		gen: 7,
+		desc: "If held by a Marowak with Earthquake, it can use Great Eqake.",
+	},
 	// SamJo
 	thicciniumz: {
 		id: "thicciniumz",
