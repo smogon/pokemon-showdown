@@ -1,20 +1,17 @@
-//Original plugin from https://github.com/CreaturePhil/Showdown-Boilerplate/blob/master/chat-plugins/customavatar.js.
-//Credits to CreaturePhil and the other listed contributors.
-//updated for the main server by Maxalexanderpi, with help from Hoeenhero.
+// Original plugin from https://github.com/CreaturePhil/Showdown-Boilerplate/blob/master/chat-plugins/customavatar.js.
+// Credits to CreaturePhil and the other listed contributors.
+// updated for the main server by Maxalexanderpi and Hoeenhero.
+*/
 'use strict';
 
 /** @type {typeof import('../../lib/fs').FS} */
-const FS = require(/** @type {any} */('../../.lib-dist/fs')).FS;
-
 const path = require('path');
 const fs = require('fs');
+const https = require('https');
 
-/* eslint no-restricted-modules: [0] */
 const AVATAR_PATH = 'config/avatars/';
 
 const VALID_EXTENSIONS = ['.png'];
-
-const https = require('https');
 
 function downloadImage(image_url, name, extension) {
 	let req = https.get(image_url, res => {
@@ -24,7 +21,7 @@ function downloadImage(image_url, name, extension) {
 			 let type = response.headers['content-type'].split('/');
 			 if (type[0] !== 'image') return;
 
-			response.pipe(FS(AVATAR_PATH + name + extension).createWriteStream());
+			response.pipe(fs(AVATAR_PATH + name + extension).createWriteStream());
 		 });
 	});
 	req.on('error', e => {
@@ -44,7 +41,6 @@ function loadCustomAvatars() {
 			});
 	});
 }
-
 loadCustomAvatars();
 
 exports.commands = {
@@ -66,13 +62,13 @@ exports.commands = {
 			Config.customavatars[name] = name + ext;
 
 			downloadImage(avatarUrl, name, ext);
-			this.sendReply("|raw|" + name + "'s avatar was successfully set. Avatar:<br /><img src='" + avatarUrl + "' width='80' height='80'>");
+			this.sendReply(`|raw|${name}${name.endsWith('s') ? "'" : "'s"} avatar was successfully set. Avatar:<br /><img src="${avatarUrl}" width="80" height="80">);
 			Monitor.adminlog(name + "'s avatar was successfully set by " + user.name + ".");
-			if (Users(name)) Users(name).popup("|html|" + (user.name, 'Upper staff') + " have set your custom avatar.<br /><center><img src='" + avatarUrl + "' width='80' height='80'></center><br /> Refresh your page if you don't see it.");
+			if (Users(name)) Users(name).popup("|html|Upper staff have set your custom avatar.<br /><img src='" + avatarUrl + "' width='80' height='80'><br /> Refresh your page if you don't see it.");
 		},
 
 		remove(target, room, user) {
-			if (!this.can('avatar')) return false;
+			if (!this.can('')) return false;
 
 			let userid = toID(target);
 			let image = Config.customavatars[userid];
@@ -82,14 +78,14 @@ exports.commands = {
 			delete Config.customavatars[userid];
 			fs.unlink(AVATAR_PATH + image, err => {
 				if (err && err.code === 'ENOENT') {
-					this.errorReply(target + "'s avatar does not exist.");
+					return this.errorReply(target + "'s avatar does not exist.");
 				} else if (err) {
 					console.error(err);
 				}
 
-				if (Users(userid)) Users(userid).popup("|html|" + (user.name, 'Upper staff') + " have removed your custom avatar.");
+				if (Users(userid)) Users(userid).popup("Upper staff have removed your custom avatar.");
 				this.sendReply(target + "'s avatar has been successfully removed.");
-				Monitor.adminlog(target + "'s avatar has been successfully removed by " + user.name + ".");
+				Monitor.adminlog(target + "'s avatar has been successfully removed.");
 			});
 		},
 
