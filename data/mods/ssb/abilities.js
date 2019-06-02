@@ -320,6 +320,19 @@ let BattleAbilities = {
 			}
 		},
 	},
+	// Elgino
+	giblovepls: {
+		desc: "This Pokemon's Defense is raised 1 stage and heals 20% after it is damaged by a contact move.",
+		shortDesc: "Defense +1 and heal 20% after hit by contact move.",
+		onAfterDamage(damage, target, source, effect) {
+			if (effect && effect.flags['contact']) {
+				this.boost({def: 1}, target);
+				this.heal(target.maxhp / 5, target);
+			}
+		},
+		id: "giblovepls",
+		name: "Gib love pls",
+	},
 	// Flare
 	superillusion: {
 		desc: "When this Pokemon switches in, it appears as the last unfainted Pokemon in its party until it takes supereffective direct damage from another Pokemon's attack. This Pokemon's actual level and HP are displayed instead of those of the mimicked Pokemon.",

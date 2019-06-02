@@ -421,6 +421,18 @@ let BattleStatuses = {
 			this.add(`c|@Eien|This game is Bad Civilization...`);
 		},
 	},
+	elgino: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|+Elgino|I'm about to solve this puzzle.`);
+		},
+		onSwitchOut() {
+			this.add(`c|+Elgino|uh I need some hints for this one, I'll try again later`);
+		},
+		onFaint() {
+			this.add(`c|+Elgino|Frankly, I'm... ashamed.`);
+		},
+	},
 	eternally: {
 		noCopy: true,
 		onStart() {
