@@ -450,7 +450,8 @@ class Elimination {
 		let currentNode = this.treeRoot;
 		for (let n = 0; n < this.maxSubtrees; ++n) {
 			results.push([currentNode.user]);
-			// @ts-ignore
+
+			if (!currentNode.children) break;
 			currentNode = currentNode.children[currentNode.result === 'loss' ? 0 : 1];
 			if (!currentNode) break;
 		}
