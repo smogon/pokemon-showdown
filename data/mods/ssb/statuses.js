@@ -536,6 +536,18 @@ let BattleStatuses = {
 			this.add(`c|@grimAuxiliatrix|**KNOCKOUT!**`);
 		},
 	},
+	guishark: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|+guishark|Let's go hunt doodoodoodoodoodoo!`);
+		},
+		onSwitchOut() {
+			this.add(`c|+guishark|Run away doodoodoodoodoodoo!`);
+		},
+		onFaint() {
+			this.add(`c|+guishark|It's the end doodoodoodoodoodoo!`);
+		},
+	},
 	// Cant use the exact name because its a pokemon's name
 	hippopotasuser: {
 		noCopy: true,

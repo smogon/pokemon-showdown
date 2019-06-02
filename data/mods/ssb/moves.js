@@ -1359,6 +1359,32 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Steel",
 	},
+	// guishark
+	dadjoke: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		desc: "50% chance to confuse the foe.",
+		shortDesc: "50% chance to confuse the foe.",
+		id: "dadjoke",
+		name: "Dad Joke",
+		isNonstandard: "Custom",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Boomburst", target);
+		},
+		secondary: {
+			chance: 50,
+			volatileStatus: "confusion",
+		},
+		target: "normal",
+		type: "Dark",
+	},
 	// Hippopotas
 	hazardpass: {
 		accuracy: 100,

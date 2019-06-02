@@ -383,6 +383,20 @@ let BattleAbilities = {
 			pokemon.illusion = null;
 		},
 	},
+	// guishark
+	gzguishark: {
+		desc: "Boosts Attack by 1 stage upon switch-in/Mega Evolution.",
+		shortDesc: "Boosts Attack by 1 stage upon switch-in/Mega Evolution.",
+		id: "gzguishark",
+		name: "gz guishark",
+		isNonstandard: "Custom",
+		onSwitchIn(pokemon) {
+			this.boost({atk: 1}, pokemon);
+		},
+		onAfterMega(pokemon) {
+			this.boost({atk: 1}, pokemon);
+		},
+	},
 	// HoeenHero
 	scripter: {
 		desc: "If Scripted Terrain is active, this Pokemon's Speed is doubled, and its moves have 1.5x power.",

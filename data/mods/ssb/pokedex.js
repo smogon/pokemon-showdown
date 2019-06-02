@@ -55,6 +55,11 @@ let BattlePokedex = {
 		inherit: true,
 		abilities: {0: 'Intimidate'},
 	},
+	// guishark
+	sharpedomega: {
+		inherit: true,
+		abilities: {0: 'gz guishark'},
+	},
 	// Kaiju Bunny
 	gliscor: {
 		inherit: true,

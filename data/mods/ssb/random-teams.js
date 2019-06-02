@@ -288,6 +288,13 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Pain Train',
 				evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful',
 			},
+			'guishark': {
+				species: 'Sharpedo', ability: 'Speed Boost', item: 'Sharpedonite', gender: 'M',
+				moves: ['Crabhammer', 'Icicle Crash', 'Protect'],
+				signatureMove: 'Dad Joke',
+				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
+
+			},
 			'Hippopotas': {
 				species: 'Hippopotas', ability: 'Regenerator', item: 'Eviolite', gender: 'N',
 				moves: ['Stealth Rock', 'Spikes', 'Toxic Spikes', 'Sticky Web'],

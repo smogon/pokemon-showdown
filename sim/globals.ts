@@ -742,7 +742,9 @@ interface AbilityData extends EffectData, AbilityEventMethods, EventMethods {
 	suppressWeather?: boolean
 }
 
-interface ModdedAbilityData extends Partial<AbilityData>, ModdedEffectData {}
+interface ModdedAbilityData extends Partial<AbilityData>, ModdedEffectData {
+	onAfterMega?: (this: Battle, pokemon: Pokemon) => void
+}
 
 interface Ability extends Readonly<BasicEffect & AbilityData> {
 	readonly effectType: 'Ability'
