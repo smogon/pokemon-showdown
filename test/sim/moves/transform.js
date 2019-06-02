@@ -195,3 +195,18 @@ describe('Transform [Gen 4]', function () {
 		assert.strictEqual(battle.p1.active[0].template, battle.p2.active[0].template);
 	});
 });
+
+describe('Transform [Gen 1]', function () {
+	afterEach(function () {
+		battle.destroy();
+	});
+
+	it("should not send |-endability|", function () {
+		battle = common.gen(1).createBattle();
+		battle.setPlayer('p1', {team: [{species: "Ditto", moves: ['transform']}]});
+		battle.setPlayer('p2', {team: [{species: "Gengar", moves: ['lick']}]});
+		battle.makeChoices('move transform', 'move lick');
+
+		assert.ok(battle.log.every(line => !line.startsWith('|-endability|')));
+	});
+});
