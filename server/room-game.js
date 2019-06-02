@@ -159,7 +159,7 @@ class RoomGame {
 			this.playerTable[player.userid] = player;
 			this.room.auth[player.userid] = Users.PLAYER_SYMBOL;
 		} else {
-			player.userid = '';
+			player.unlinkUser();
 		}
 	}
 
