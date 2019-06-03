@@ -416,6 +416,17 @@ let BattleAbilities = {
 			}
 		},
 	},
+	// inactive
+	souleater: {
+		desc: "Attacking moves heal the user 33% of damage dealt.",
+		shortDesc: "Attacking moves heal the user 33% of damage dealt.",
+		id: "souleater",
+		name: "Soul Eater",
+		isNonstandard: "Custom",
+		onModifyMove(move) {
+			move.drain = [1, 3];
+		},
+	},
 	// Kie
 	maelstrom: {
 		desc: "On switch-in, the weather becomes heavy rain that prevents damaging Fire-type moves from executing, in addition to all the effects of Rain Dance. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by Delta Stream or Desolate Land. If Rain Dance is active, this Pokemon's Speed is doubled.",

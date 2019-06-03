@@ -1654,6 +1654,34 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Dragon",
 	},
+	// inactive
+	petrifyinggaze: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Raises the user's Attack by 2 stages. Traps and paralyzes the opponent",
+		shortDesc: "Raises user's Atk by 2; traps and paralyzes foe.",
+		id: "petrifyinggaze",
+		name: "Petrifying Gaze",
+		isNonstandard: "Custom",
+		pp: 10,
+		priority: 0,
+		flags: {reflectable: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Mean Look", target);
+		},
+		onHit(target, source, move) {
+			this.boost({atk: 2}, source, source);
+			target.trySetStatus('par', source);
+			target.tryTrap();
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+	},
 	// irritated
 	pureskill: {
 		accuracy: 100,

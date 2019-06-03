@@ -606,6 +606,18 @@ let BattleStatuses = {
 			}
 		},
 	},
+	inactive: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|+inactive|I just can't wait to face you.`);
+		},
+		onSwitchOut() {
+			this.add(`c|+inactive|I'll keep an eye out for you next time...`);
+		},
+		onFaint() {
+			this.add(`c|+inactive|/me turns to stone`);
+		},
+	},
 	irritated: {
 		noCopy: true,
 		onStart() {

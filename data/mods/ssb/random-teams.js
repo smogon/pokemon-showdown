@@ -319,6 +319,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Draconic Meme',
 				evs: {hp: 252, atk: 252, spd: 4}, nature: 'Jolly',
 			},
+			'inactive': {
+				species: 'Dusknoir', ability: 'Soul Eater', item: 'Life Orb', gender: '',
+				moves: ['Earthquake', 'Shadow Force', 'Shadow Sneak'],
+				signatureMove: 'Petrifying Gaze',
+				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
+			},
 			'irritated': {
 				species: 'Jirachi', ability: 'Serene Grace', item: 'Leftovers', gender: 'F',
 				moves: ['Double Iron Bash', 'Rock Slide', 'Icicle Crash', 'Zing Zap'],
