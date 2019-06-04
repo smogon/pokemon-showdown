@@ -4577,7 +4577,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	heliolisk: {
-		randomBattleMoves: ["raindance", "thunder", "hypervoice", "surf", "darkpulse", "hiddenpowerice", "voltswitch", "thunderbolt"],
+		randomBattleMoves: ["raindance", "hypervoice", "surf", "darkpulse", "hiddenpowerice", "voltswitch", "thunderbolt"],
 		randomDoubleBattleMoves: ["surf", "voltswitch", "hiddenpowerice", "raindance", "thunder", "darkpulse", "thunderbolt", "protect"],
 		tier: "UU",
 		doublesTier: "(DUU)",
