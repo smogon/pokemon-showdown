@@ -67,9 +67,6 @@ let Formats = [
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['OU', 'UUBL', 'Drizzle', 'Drought', 'Kommonium Z', 'Mewnium Z'],
-		onBegin() {
-			if (this.rated && this.format === 'gen7uu') this.add('html', `<div class="broadcast-red"><strong>UU is currently suspecting Scizor! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3650487/">suspect thread</a>.</strong></div>`);
-		},
 	},
 	{
 		name: "[Gen 7] RU",
