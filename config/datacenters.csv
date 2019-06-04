@@ -140,6 +140,7 @@
 23.102.204.0,23.102.207.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 23.102.224.0,23.102.255.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 23.104.0.0,23.111.255.255,Ubiquity Server Solutions,http://www.ubiquityservers.com/
+23.129.64.0,23.129.64.255,Emerald Onion,https://emeraldonion.org/
 23.192.0.0,23.223.255.255,Akamai,http://akamai.com/
 23.226.64.0,23.226.79.255,Input Output Flood LLC,http://ioflood.com/
 23.228.192.0,23.228.255.255,Psychz Networks,http://psychz.net/
@@ -480,6 +481,7 @@
 50.117.0.0,50.117.127.255,EGIHosting.com,http://www.egihosting.com/
 50.118.128.0,50.118.255.255,EGIHosting.com,http://www.egihosting.com/
 51.15.0.0,51.15.255.255,Online.net,https://www.online.net/
+51.158.128.0,51.158.255.255,Online.net,https://www.online.net/
 51.254.0.0,51.255.255.255,OVH,http://www.ovh.co.uk/
 52.0.0.0,52.13.255.255,Amazon AWS,http://www.amazon.com/aws/
 52.16.0.0,52.43.255.255,Amazon AWS,http://www.amazon.com/aws/
@@ -1625,6 +1627,7 @@
 104.238.128.0,104.238.191.255,Choopa,https://www.choopa.com/
 104.239.192.0,104.239.223.255,Rackspace,http://www.rackspace.com/
 104.245.96.0,104.245.103.255,VolumeDrive,http://volumedrive.com/
+104.248.0.0,104.248.255.255,DigitalOcean USA,https://www.digitalocean.com/
 104.252.0.0,104.253.255.255,EGIHosting.com,http://www.egihosting.com/
 104.254.88.0,104.254.95.255,Amanah Tech Dedicated Servers,https://www.amanah.com/
 104.254.212.0,104.254.215.255,Power Up Hosting,https://poweruphosting.com/
@@ -2115,6 +2118,22 @@
 178.77.64.0,178.77.127.255,Host Europe,http://www.hosteurope.de/
 178.79.128.0,178.79.191.255,Linode,http://www.linode.com/
 178.79.192.0,178.79.255.255,Limelight Networks Inc,http://www.limelight.com/
+178.128.0.0,178.128.15.255,DigitalOcean USA,https://www.digitalocean.com/
+178.128.16.0,178.128.31.255,DigitalOcean Singapore,https://www.digitalocean.com/
+178.128.32.0,178.128.47.255,DigitalOcean UK,https://www.digitalocean.com/
+178.128.48.0,178.128.63.255,DigitalOcean Singapore,https://www.digitalocean.com/
+178.128.64.0,178.128.79.255,DigitalOcean USA,https://www.digitalocean.com/
+178.128.80.0,178.128.127.255,DigitalOcean Singapore,https://www.digitalocean.com/
+178.128.128.0,178.128.139.255,DigitalOcean USA,https://www.digitalocean.com/
+178.128.140.0,178.128.143.255,DigitalOcean Netherlands,https://www.digitalocean.com/
+178.128.144.0,178.128.159.255,DigitalOcean USA,https://www.digitalocean.com/
+178.128.160.0,178.128.175.255,DigitalOcean UK,https://www.digitalocean.com/
+178.128.176.0,178.128.191.255,DigitalOcean USA,https://www.digitalocean.com/
+178.128.192.0,178.128.207.255,DigitalOcean Germany,https://www.digitalocean.com/
+178.128.208.0,178.128.223.255,DigitalOcean Singapore,https://www.digitalocean.com/
+178.128.224.0,178.128.239.255,DigitalOcean Canada,https://www.digitalocean.com/
+178.128.240.0,178.128.255.255,DigitalOcean Netherlands,https://www.digitalocean.com/
+178.128.144.0,178.128.159.255,DigitalOcean USA,https://www.digitalocean.com/
 178.156.0.0,178.156.127.255,ServiHosting Networks S.L.,http://servihosting.es
 178.162.128.0,178.162.255.255,Leaseweb,http://www.leaseweb.com/
 178.174.0.0,178.174.127.255,Unbelievable Machine,http://www.unbelievable-machine.com/
@@ -2218,6 +2237,7 @@
 185.8.104.0,185.8.107.255,Duomenu Centras Lithuania,http://www.duomenucentras.lt/lt/
 185.9.17.80,185.9.17.87,M247,http://www.m247.com/
 185.9.19.0,185.9.19.255,M247,http://www.m247.com/
+185.10.68.0,185.10.68.255,FlokiNET,https://flokinet.is/
 185.12.64.0,185.12.67.255,Hetzner Online AG,http://www.hetzner.de/
 185.14.28.0,185.14.29.255,UA Servers,https://itldc.com/
 185.14.184.0,185.14.187.255,DigitalOcean Europe,https://www.digitalocean.com/
@@ -2278,6 +2298,7 @@
 185.186.76.0,185.186.79.255,OneProvider,http://oneprovider.com/
 185.200.116.0,185.200.116.255,M247,https://m247.com/
 185.212.168.0,185.212.171.255,M247 Dedicated Servers,https://m247.com/
+185.212.226.0,185.212.226.255,SHPV,https://www.shpv.fr/
 185.236.200.0,185.236.200.255,M247 Dedicated Servers,https://m247.com/
 186.227.162.128,186.227.162.191,Server Green,http://servergreen.com.br/
 186.227.192.0,186.227.207.255,HostDime Brazil,https://www.hostdime.com/
@@ -2566,9 +2587,7 @@
 194.187.250.224,194.187.250.239,Cyberghost,http://www.cyberghostvpn.com/
 194.187.250.248,194.187.250.251,M247,http://www.m247.com/
 194.187.250.252,194.187.250.255,M247,http://www.m247.com/
-194.187.251.16,194.187.251.19,M247,http://www.m247.com/
-194.187.251.20,194.187.251.23,M247,http://www.m247.com/
-194.187.251.64,194.187.251.71,Cyberghost,http://www.cyberghostvpn.com/
+194.187.251.0,194.187.251.255,M247,https://m247.com/
 195.2.254.0,195.2.255.255,superhost.pl,http://superhost.pl/
 195.12.48.0,195.12.51.255,OpenHosting UK Internet Solutions,http://openhosting.co.uk/
 195.20.155.0,195.20.155.255,host-it.co.uk,http://www.host-it.co.uk/
@@ -3089,6 +3108,7 @@
 209.85.0.0,209.85.127.255,SoftLayer,http://www.softlayer.com/
 209.95.32.0,209.95.63.255,UK2 Group,http://www.uk2.net/
 209.95.96.0,209.95.127.255,PEER 1,http://www.peer1.com/
+209.97.128.0,209.97.191.255,DigitalOcean USA,https://www.digitalocean.com/
 209.97.192.0,209.97.223.255,RackForce,http://www.rockforce.com/
 209.99.0.0,209.99.127.255,Data Foundry,http://www.datafoundry.com/
 209.103.160.0,209.103.191.255,HopOne,http://www.hopone.net/
@@ -3365,3 +3385,4 @@
 223.25.240.0,223.25.243.255,Gigabit Hosting Sdn Bhd,http://thegigabit.com/
 223.25.245.0,223.25.247.255,Gigabit Hosting Sdn Bhd,http://thegigabit.com/
 223.27.168.0,223.27.175.255,Voxel,http://www.voxel.net/
+223.252.0.0,223.252.63.255,Servers Australia,https://www.serversaustralia.com.au/
