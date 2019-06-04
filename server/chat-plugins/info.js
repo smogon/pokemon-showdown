@@ -1534,7 +1534,7 @@ const commands = {
 		if (['randomscalc', 'randbatscalc', 'rcalc'].includes(cmd) || isRandomBattle) {
 			return this.sendReplyBox(
 				`Random Battles damage calculator. (Courtesy of LegoFigure11 &amp; Smoochyena)<br />` +
-				`- <a href="https://randbatscalc.github.io/">Random Battles Damage Calcuator</a>`
+				`- <a href="https://randbatscalc.github.io/">Random Battles Damage Calculator</a>`
 			);
 		}
 		this.sendReplyBox(
