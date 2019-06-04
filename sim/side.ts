@@ -184,6 +184,12 @@ export class Side {
 					if (move === 'hiddenpower') {
 						return move + toID(pokemon.hpType) + (pokemon.hpPower === 70 ? '' : pokemon.hpPower);
 					}
+					if (move === 'frustration' || move === 'return') {
+						const m = this.battle.getMove(move)!;
+						// @ts-ignore - Frustration and Return only require the source Pokemon
+						const basePower = m.basePowerCallback(pokemon);
+						return `${m.name} ${basePower}`;
+					}
 					return move;
 				}),
 				baseAbility: pokemon.baseAbility,
