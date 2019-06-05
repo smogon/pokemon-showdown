@@ -22,7 +22,9 @@ interface Group {
 	id: string,
 	name: string,
 
+	/** Permission bypass. `true` will give the group every permission, bypassing all other settings. */
 	root?: boolean,
+
 	inherit?: string,
 	jurisdiction?: string,
 	roomonly?: boolean,

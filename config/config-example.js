@@ -407,24 +407,35 @@ exports.disablehotpatchall = false;
  *                       lower in rank than the current group.
  *     - roomonly: forces the group to be a per-room moderation rank only.
  *     - globalonly: forces the group to be a global rank only.
+ *
+ *   Permissions are a string key such as `mute` followed by a boolean. `true` means group
+ *   members have that permission, `false` means they don't, and `undefined` means permission
+ *   is inherited from the `inherit` group.
+ *
+ *   Some permissions, such as mute/ban, have a target (user you're doing the action to).
+ *   These, when set to `true`, will use the jurisdiction list in the `jurisdiction` key to
+ *   determine whether or not you have permission to do it to that user. You can also set them
+ *   to a string to use it as a custom jurisdiction list, replacing the one in the
+ *   `jurisdiction` key.
+ *
  *   All the possible permissions are as follows:
  *     - console: Developer console (>>).
  *     - lockdown: /lockdown and /endlockdown commands.
  *     - hotpatch: /hotpatch, /crashfixed and /savelearnsets commands.
  *     - ignorelimits: Ignore limits such as chat message length.
  *     - promote: Promoting and demoting. Will only work if the target user's current
- *                  group and target group are both in jurisdiction.
+ *                  group and target group are both in jurisdiction. Has a target.
  *     - room<rank>: /roompromote to <rank> (eg. roomvoice)
  *     - makeroom: Create/delete chatrooms, and set modjoin/roomdesc/privacy
  *     - editroom: Editing properties of rooms
  *     - editprivacy: Set modjoin/privacy only for battles
- *     - ban: Banning and unbanning.
- *     - mute: Muting and unmuting.
- *     - lock: locking (ipmute) and unlocking.
+ *     - ban: Banning and unbanning. Target is subject to jurisdiction.
+ *     - mute: Muting and unmuting. Target is subject to jurisdiction.
+ *     - lock: locking (ipmute) and unlocking. Target is subject to jurisdiction.
  *     - receivemutedpms: Receive PMs from muted users.
  *     - forcerename: /fr command.
- *     - ip: IP checking.
- *     - alts: Alt checking.
+ *     - ip: IP checking. Target is subject to jurisdiction.
+ *     - alts: Alt checking. Target is subject to jurisdiction.
  *     - modlog: view the moderator logs.
  *     - broadcast: Broadcast informational commands.
  *     - declare: /declare command.
