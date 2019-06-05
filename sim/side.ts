@@ -182,13 +182,13 @@ export class Side {
 				},
 				moves: pokemon.moves.map(move => {
 					if (move === 'hiddenpower') {
-						return move + toID(pokemon.hpType) + (pokemon.hpPower === 70 ? '' : pokemon.hpPower);
+						return move + toID(pokemon.hpType) + (this.battle.gen < 6 ? '' : pokemon.hpPower);
 					}
 					if (move === 'frustration' || move === 'return') {
 						const m = this.battle.getMove(move)!;
 						// @ts-ignore - Frustration and Return only require the source Pokemon
 						const basePower = m.basePowerCallback(pokemon);
-						return `${m.name} ${basePower}`;
+						return `${move}${basePower}`;
 					}
 					return move;
 				}),
