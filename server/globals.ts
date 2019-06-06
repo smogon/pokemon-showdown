@@ -23,12 +23,17 @@ interface Group {
 	name: string,
 
 	/** Permission bypass. `true` will give the group every permission, bypassing all other settings. */
+	/** Permission bypass. `true` will give the group every permission, bypassing all other settings. */
 	root?: boolean,
 
+	/** Group symbol to inherit undefined permissions from. */
 	inherit?: string,
+	/** List of default allowed targets for targeted permissions like `mute`, `ban`, etc. */
 	jurisdiction?: string,
+	/** `true` to disallow globally promoting users to this group. */
 	roomonly?: boolean,
 	globalonly?: boolean,
+
 	console?: boolean,
 	lockdown?: boolean,
 	hotpatch?: boolean,

@@ -429,7 +429,7 @@ exports.disablehotpatchall = false;
  *     - makeroom: Create/delete chatrooms, and set modjoin/roomdesc/privacy
  *     - editroom: Editing properties of rooms
  *     - editprivacy: Set modjoin/privacy only for battles
- *     - ban: Banning and unbanning. Target is subject to jurisdiction.
+ *     - ban: Banning and unbanning. Has a target.
  *     - mute: Muting and unmuting. Target is subject to jurisdiction.
  *     - lock: locking (ipmute) and unlocking. Target is subject to jurisdiction.
  *     - receivemutedpms: Receive PMs from muted users.
