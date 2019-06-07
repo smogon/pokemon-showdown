@@ -717,7 +717,7 @@ const commands = {
 			user.status = '';
 			user.updateIdentity();
 
-			this.sendReply("You are no longer marked as busy.");	
+			this.sendReply("You are no longer marked as busy.");
 		} else {
 			user.setBack();
 			this.sendReply("You are no longer marked as away.");
