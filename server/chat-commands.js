@@ -666,6 +666,21 @@ const commands = {
 	},
 	statushelp: [`/status [note] - Sets a short note as your status, visible when users click your username.`],
 
+	'!busy': true,
+	busy(target, room, user) {
+		if (!this.canTalk()) return;
+
+		let message = Chat.namefilter(target, user);
+
+		const busyMessage = `(Busy)${message ? ` ${message}` : ''}`;
+		user.status = busyMessage;
+		user.updateIdentity();
+		this.parse('/blockpms');
+		this.parse('/blockchallenges');
+		this.sendReply("You are now marked as busy.");
+	},
+	busyhelp: [`/busy - Marks you as busy, blocking private messages and challenges. Use /back to mark yourself as back.`],
+
 	'!away': true,
 	idle: 'away',
 	afk: 'away',
@@ -694,8 +709,19 @@ const commands = {
 	unaway: 'back',
 	unafk: 'back',
 	back(target, room, user) {
-		user.setBack();
-		this.sendReply("You are no longer marked as away.");
+		// This suffices for now, but will need to be updated
+		// if we ever expand upon the busy status.
+		if (user.status.startsWith('(Busy)')) {
+			this.parse('/unblockpms');
+			this.parse('/unblockchallenges');
+			user.status = '';
+			user.updateIdentity();
+
+			this.sendReply("You are no longer marked as busy.");	
+		} else {
+			user.setBack();
+			this.sendReply("You are no longer marked as away.");
+		}
 	},
 	backhelp: [`/back - Marks you as back if you are away.`],
 
