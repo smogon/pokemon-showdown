@@ -464,7 +464,7 @@ let commands = {
 		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 
-		if (!toNominationId(target).length || target.length > 50) return this.sendReply(`'${target}' is not a valid ${handler.name.toLowerCase()} name.`);
+		if (!toNominationId(target).length || target.length > 75) return this.sendReply(`'${target}' is not a valid ${handler.name.toLowerCase()} name.`);
 
 		handler.addNomination(user, target);
 	},
