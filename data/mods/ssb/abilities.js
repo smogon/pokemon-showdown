@@ -125,7 +125,17 @@ let BattleAbilities = {
 			}
 		},
 	},
-
+	// Andrew
+	volcanictempest: {
+		desc: "On switch-in, this Pokemon summons Lava Terrain.",
+		shortDesc: "On switch-in, this Pokemon summons Lava Terrain.",
+		id: "volcanictempest",
+		name: "Volcanic Tempest",
+		isNonstandard: "Custom",
+		onStart() {
+			this.field.setTerrain('lavaterrain');
+		},
+	},
 	// A Quag To The Past
 	careless: {
 		desc: "This Pokemon blocks certain status moves and instead uses the move against the original user. This Pokemon also ignores other Pokemon's Attack, Special Attack, and accuracy stat stages when taking damage, and ignores other Pokemon's Defense, Special Defense, and evasiveness stat stages when dealing damage.",

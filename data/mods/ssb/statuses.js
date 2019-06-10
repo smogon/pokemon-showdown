@@ -140,6 +140,18 @@ let BattleStatuses = {
 			this.add(`c|@AlphaWittem|PER LA PATRIA!`);
 		},
 	},
+	andrew: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|+Andrew|Hah! You better have BURN HEAL!`);
+		},
+		onSwitchOut() {
+			this.add(`c|+Andrew|brb kuncing`);
+		},
+		onFaint() {
+			this.add(`c|+Andrew|avenge me c.kilgannon!`);
+		},
+	},
 	aquagtothepast: {
 		noCopy: true,
 		onStart() {

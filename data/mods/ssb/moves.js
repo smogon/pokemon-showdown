@@ -297,6 +297,131 @@ let BattleMovedex = {
 		target: "self",
 		type: "Psychic",
 	},
+	// Andrew
+	backoffgrrr: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "The user is protected from most moves made by other Pokemon during this turn, and if attacked, the Pokemon is forced to switch to a random ally. This move has a 1/X chance of being successful, where X starts at 1 and doubles each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, Wide Guard, or this move, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
+		shortDesc: "Protects from moves. Attacked: Force switch foe.",
+		id: "backoffgrrr",
+		name: "Back Off! GRRR!",
+		isNonstandard: "Custom",
+		pp: 15,
+		priority: 4,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Protect", source);
+			this.add('-anim', source, "Defense Curl", source);
+		},
+		stallingMove: true,
+		volatileStatus: 'backoffgrrr',
+		onTryHit(target, source, move) {
+			return !!this.willAct() && this.runEvent('StallMove', target);
+		},
+		onHit(pokemon) {
+			pokemon.addVolatile('stall');
+		},
+		effect: {
+			duration: 1,
+			onStart(target) {
+				this.add('-singleturn', target, 'move: Protect');
+			},
+			onTryHitPriority: 3,
+			onTryHit(target, source, move) {
+				if (!move.flags['protect']) {
+					if (move.isZ) target.getMoveHitData(move).zBrokeProtect = true;
+					return;
+				}
+				this.add('-activate', target, 'move: Protect');
+				let lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
+				this.add('-anim', target, "Scary Face", source);
+				this.add('-anim', target, "Roar", source);
+				source.forceSwitchFlag = true;
+				return null;
+			},
+			onHit(target, source, move) {
+				this.add('-anim', target, "Scary Face", source);
+				this.add('-anim', target, "Roar", source);
+				source.forceSwitchFlag = true;
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Fire",
+	},
+	// Used for Andrew's ability
+	lavaterrain: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "For 5 turns, the terrain becomes Lava Terrain. During the effect, the power of Fire-type attacks made by Pokemon is multiplied by 1.5 and the power of Water-type attacks made by Pokemon is halved. Quilava's defense is doubled under Lava Terrain. Fire-type Pokemon have 1/16 of their maximum HP restored at the end of each turn, all other Pokemon lose 1/16 of their maximum HP at the end of each turn.",
+		shortDesc: "5 turns. Deals damage to non Fire-types. Quilava: 2x Def.",
+		id: "lavaterrain",
+		name: "Lava Terrain",
+		isNonstandard: "Custom",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		terrain: 'lavaterrain',
+		effect: {
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source && source.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onModifyDefPriority: 1,
+			onModifyDef(def, pokemon) {
+				if (pokemon.baseTemplate.baseSpecies === 'Quilava') {
+					return this.chainModify(2);
+				}
+			},
+			onAnyModifyDamage(basePower, attacker, defender, move) {
+				if (move.type === 'Fire') {
+					return this.chainModify(1.5);
+				}
+				if (move.type === 'Water') {
+					return this.chainModify(0.5);
+				}
+			},
+			onStart(battle, source, effect) {
+				if (effect && effect.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Lava Terrain', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Lava Terrain');
+				}
+			},
+			onResidualOrder: 21,
+			onResidualSubOrder: 2,
+			onResidual() {
+				this.eachEvent('Terrain');
+			},
+			onTerrain(pokemon) {
+				if (pokemon.hasType('Fire')) {
+					this.heal(pokemon.maxhp / 16);
+				} else {
+					this.damage(pokemon.maxhp / 16);
+				}
+			},
+			onEnd() {
+				this.add('-fieldend', 'move: Lava Terrain');
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Fire",
+	},
 	// A Quag to The Past
 	murkyambush: {
 		accuracy: true,
@@ -2151,7 +2276,7 @@ let BattleMovedex = {
 		damageCallback(pokemon, target) {
 			let damage = pokemon.hp;
 			pokemon.faint();
-			if (target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] || target.side.sideConditions['matblock'] || target.volatiles['protect'] || target.volatiles['spikyshield'] || target.volatiles['lilypadshield']) {
+			if (target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] || target.side.sideConditions['matblock'] || target.volatiles['protect'] || target.volatiles['spikyshield'] || target.volatiles['lilypadshield'] || target.volatiles['backoffgrrr']) {
 				this.add('-zbroken', target);
 				return Math.floor(damage / 4);
 			}
@@ -3790,7 +3915,7 @@ let BattleMovedex = {
 			this.add('-anim', source, "Flash", target);
 
 			// Really feel like this could be done better (blocked by protect and alike moves.)
-			if (!(target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] || target.side.sideConditions['matblock'] || target.volatiles['protect'] || target.volatiles['spikyshield'] || target.volatiles['lilypadshield'])) {
+			if (!(target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] || target.side.sideConditions['matblock'] || target.volatiles['protect'] || target.volatiles['spikyshield'] || target.volatiles['lilypadshield'] || target.volatiles['backoffgrrr'])) {
 				target.addVolatile('weightdoubler', source);
 				let item = target.takeItem();
 				if (!target.item) {
