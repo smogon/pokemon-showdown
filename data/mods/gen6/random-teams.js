@@ -568,7 +568,6 @@ class RandomGen6Teams extends RandomTeams {
 		if (hasMove['autotomize'] && hasMove['heavyslam']) {
 			moves[moves.indexOf('autotomize')] = 'rockpolish';
 		}
-
 		if (hasMove['raindance'] && hasMove['thunderbolt']) {
 			moves[moves.indexOf('thunderbolt')] = 'thunder';
 		}
