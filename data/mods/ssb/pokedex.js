@@ -35,6 +35,11 @@ let BattlePokedex = {
 		abilities: {0: 'Stark Mountain'},
 		types: ['Steel', 'Ground', 'Fire'],
 	},
+	// Elgino
+	mimikyubusted: {
+		inherit: true,
+		abilities: {0: 'Gib love pls'},
+	},
 	// eternally
 	ducklett: {
 		inherit: true,

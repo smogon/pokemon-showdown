@@ -432,6 +432,26 @@ let BattleStatuses = {
 		onFaint() {
 			this.add(`c|+Elgino|Frankly, I'm... ashamed.`);
 		},
+		onDamagePriority: 1,
+		onDamage(damage, target, source, effect) {
+			if (effect && effect.effectType === 'Move' && ['mimikyu', 'mimikyutotem'].includes(target.template.speciesid) && !target.transformed) {
+				this.add('-activate', target, 'ability: Disguise');
+				this.effectData.busted = true;
+				return 0;
+			}
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			if (!target) return;
+			if (!['mimikyu', 'mimikyutotem'].includes(target.template.speciesid) || target.transformed || (target.volatiles['substitute'] && !(move.flags['authentic'] || move.infiltrates))) return;
+			if (!target.runImmunity(move.type)) return;
+			return 0;
+		},
+		onUpdate(pokemon) {
+			if (['mimikyu', 'mimikyutotem'].includes(pokemon.template.speciesid) && this.effectData.busted) {
+				let templateid = pokemon.template.speciesid === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted';
+				pokemon.formeChange(templateid, this.effect, true);
+			}
+		},
 	},
 	eternally: {
 		noCopy: true,
