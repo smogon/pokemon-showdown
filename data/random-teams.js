@@ -1196,7 +1196,6 @@ class RandomTeams extends Dex.ModdedDex {
 				moves[moves.indexOf('autotomize')] = 'rockpolish';
 			}
 		}
-
 		if (hasMove['raindance'] && hasMove['thunderbolt']) {
 			moves[moves.indexOf('thunderbolt')] = 'thunder';
 		}
