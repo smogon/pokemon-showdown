@@ -258,8 +258,8 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {atk: 252, spe: 252, def: 4}, nature: 'Jolly', shiny: true,
 			},
 			'Flare': {
-				species: 'Zoroark', ability: 'Super Illusion', item: 'Life Orb', gender: 'N',
-				moves: ['Psyshock', 'Nasty Plot', 'Sludge Bomb'],
+				species: 'Zoroark', ability: 'Super Illusion', item: 'Choice Scarf', gender: 'N',
+				moves: ['Fleur Cannon', 'Parting Shot', 'Sludge Bomb'],
 				signatureMove: 'Distortion Blast',
 				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
 			},
