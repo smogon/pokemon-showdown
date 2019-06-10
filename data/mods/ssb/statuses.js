@@ -140,18 +140,6 @@ let BattleStatuses = {
 			this.add(`c|@AlphaWittem|PER LA PATRIA!`);
 		},
 	},
-	amaluna: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|+Amaluna|Please no casual chatting here`);
-		},
-		onSwitchOut() {
-			this.add(`c|+Amaluna|It's not too late, it's never too late`);
-		},
-		onFaint() {
-			this.add(`c|+Amaluna|Don't talk to me unless you're famous`);
-		},
-	},
 	aquagtothepast: {
 		noCopy: true,
 		onStart() {

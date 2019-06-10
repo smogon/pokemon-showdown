@@ -297,38 +297,6 @@ let BattleMovedex = {
 		target: "self",
 		type: "Psychic",
 	},
-	// Amaluna
-	turismosplash: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "Summons Trick Room and raises the user's Special Attack by one stage.",
-		shortDesc: "User's Sp. Atk +1; sets Trick Room.",
-		id: "turismosplash",
-		name: "Turismo Splash",
-		isNonstandard: "Custom",
-		pp: 5,
-		priority: -6,
-		onModifyMove(move) {
-			if (!this.field.pseudoWeather.trickroom) {
-				move.pseudoWeather = 'trickroom';
-			}
-		},
-		flags: {snatch: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, "Coil", source);
-			this.add('-anim', source, "Extreme Evoboost", source);
-		},
-		boosts: {
-			spa: 1,
-		},
-		secondary: null,
-		target: "self",
-		type: "Water",
-	},
 	// A Quag to The Past
 	murkyambush: {
 		accuracy: true,

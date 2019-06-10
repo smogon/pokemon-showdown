@@ -100,12 +100,6 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Neko Veil',
 				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
-			'Amaluna': {
-				species: 'Octillery', ability: 'Neuroforce', item: 'Expert Belt', gender: 'F',
-				moves: ['Surf', 'Fire Blast', 'Freeze-Dry'],
-				signatureMove: 'Turismo Splash',
-				evs: {hp: 252, spa: 252, spd: 4}, ivs: {atk: 0, spe: 0}, nature: 'Quiet',
-			},
 			'A Quag to The Past': {
 				species: 'Quagsire', ability: 'Careless', item: 'Leftovers', gender: 'M',
 				moves: ['Recover', 'Toxic', 'Scald'],
