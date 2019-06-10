@@ -883,11 +883,8 @@ class RandomTeams extends Dex.ModdedDex {
 				case 'chargebeam':
 					if (hasMove['thunderbolt'] && counter.Special < 3) rejected = true;
 					break;
-				case 'thunder':
-					if (hasMove['thunderbolt'] && !hasMove['raindance']) rejected = true;
-					break;
 				case 'thunderbolt':
-					if (hasMove['discharge'] || (hasMove['raindance'] && hasMove['thunder']) || (hasMove['voltswitch'] && hasMove['wildcharge'])) rejected = true;
+					if (hasMove['discharge'] || (hasMove['voltswitch'] && hasMove['wildcharge'])) rejected = true;
 					break;
 				case 'thunderpunch':
 					if (hasAbility['Galvanize'] && !!counter['Normal']) rejected = true;
@@ -1081,7 +1078,7 @@ class RandomTeams extends Dex.ModdedDex {
 					break;
 				case 'raindance':
 					if (counter.Physical + counter.Special < 2 || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
-					if (!hasType['Water'] && !hasMove['thunder']) rejected = true;
+					if (!hasType['Water'] && !counter['Water']) rejected = true;
 					break;
 				case 'sunnyday':
 					if (counter.Physical + counter.Special < 2 || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
@@ -1198,6 +1195,9 @@ class RandomTeams extends Dex.ModdedDex {
 			} else {
 				moves[moves.indexOf('autotomize')] = 'rockpolish';
 			}
+		}
+		if (hasMove['raindance'] && hasMove['thunderbolt']) {
+			moves[moves.indexOf('thunderbolt')] = 'thunder';
 		}
 
 		/**@type {[string, string | undefined, string | undefined]} */
