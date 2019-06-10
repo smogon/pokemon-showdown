@@ -280,11 +280,8 @@ class RandomGen6Teams extends RandomTeams {
 				case 'chargebeam':
 					if (hasMove['thunderbolt'] && counter.Special < 3) rejected = true;
 					break;
-				case 'thunder':
-					if (hasMove['thunderbolt'] && !hasMove['raindance']) rejected = true;
-					break;
 				case 'thunderbolt':
-					if (hasMove['discharge'] || (hasMove['raindance'] && hasMove['thunder']) || (hasMove['voltswitch'] && hasMove['wildcharge'])) rejected = true;
+					if (hasMove['discharge'] || (hasMove['voltswitch'] && hasMove['wildcharge'])) rejected = true;
 					break;
 				case 'dazzlinggleam':
 					if (hasMove['playrough'] && counter.setupType !== 'Special') rejected = true;
@@ -454,7 +451,7 @@ class RandomGen6Teams extends RandomTeams {
 					break;
 				case 'raindance':
 					if (counter.Physical + counter.Special < 2 || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
-					if (!hasType['Water'] && !hasMove['thunder']) rejected = true;
+					if (!hasType['Water'] && !counter['Water']) rejected = true;
 					break;
 				case 'sunnyday':
 					if (counter.Physical + counter.Special < 2 || hasMove['rest'] && hasMove['sleeptalk']) rejected = true;
@@ -570,6 +567,9 @@ class RandomGen6Teams extends RandomTeams {
 		// Moveset modifications
 		if (hasMove['autotomize'] && hasMove['heavyslam']) {
 			moves[moves.indexOf('autotomize')] = 'rockpolish';
+		}
+		if (hasMove['raindance'] && hasMove['thunderbolt']) {
+			moves[moves.indexOf('thunderbolt')] = 'thunder';
 		}
 
 		// If Hidden Power has been removed, reset the IVs
