@@ -259,7 +259,7 @@ let namefilter = function (name, user) {
 	}
 
 	if (user.trackRename) {
-		const automatic = !Chat.forceRenames.has(user.trackRename);
+		const automatic = !Chat.forceRenames.has(toID(user.trackRename));
 		Monitor.log(`[NameMonitor] Username used: ${name} (${automatic ? 'automatically ' : ''}forcerenamed from ${user.trackRename})`);
 		user.trackRename = '';
 	}
