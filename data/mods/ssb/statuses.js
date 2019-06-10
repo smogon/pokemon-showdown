@@ -1236,6 +1236,18 @@ let BattleStatuses = {
 			this.add(`c|+SunGodVolcarona|All Suns have to set at one point.`);
 		},
 	},
+	sunny: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|+Sunny|Now, we are really going to have a bad time. >:)`);
+		},
+		onSwitchOut() {
+			this.add(`c|+Sunny|I'll spare you for now.`);
+		},
+		onFaint() {
+			this.add(`c|+Sunny|..that's it, huh? Don't say I didn't warn you.`);
+		},
+	},
 	teclis: {
 		noCopy: true,
 		onStart() {

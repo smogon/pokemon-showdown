@@ -133,6 +133,11 @@ let BattlePokedex = {
 		inherit: true,
 		abilities: {0: 'Levitate'},
 	},
+	// Sunny
+	sceptilemega: {
+		inherit: true,
+		abilities: {0: 'Contrary'},
+	},
 };
 
 exports.BattlePokedex = BattlePokedex;
