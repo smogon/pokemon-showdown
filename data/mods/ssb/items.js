@@ -111,6 +111,18 @@ let BattleItems = {
 		gen: 7,
 		desc: "If held by a Buzzwole with Drain Punch, it can use Ultra Succ.",
 	},
+	// Teclis
+	darkrainiumz: {
+		id: "darkrainiumz",
+		name: "Darkrainium Z",
+		isNonstandard: "Custom",
+		onTakeItem: false,
+		zMove: "Absolute Configuration",
+		zMoveFrom: "Dark Void",
+		zMoveUser: ["Darkrai"],
+		gen: 7,
+		desc: "If held by a Darkrai with Dark Void, it can use Absolute Configuration.",
+	},
 	// XpRienzo
 	"charcoal": {
 		inherit: true,

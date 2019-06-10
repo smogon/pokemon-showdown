@@ -133,11 +133,6 @@ let BattlePokedex = {
 		inherit: true,
 		abilities: {0: 'Levitate'},
 	},
-	// Teclis
-	gallademega: {
-		inherit: true,
-		abilities: {0: 'Natural Cure'},
-	},
 };
 
 exports.BattlePokedex = BattlePokedex;

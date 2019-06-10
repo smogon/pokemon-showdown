@@ -1239,13 +1239,13 @@ let BattleStatuses = {
 	teclis: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@Teclis|Sometimes you have to fight to get your point across.`);
+			this.add(`c|@Teclis|Only in darkness can you see the stars.`);
 		},
 		onSwitchOut() {
-			this.add(`c|@Teclis|You deserve a break.`);
+			this.add(`c|@Teclis|Hope is the last thing to die.`);
 		},
 		onFaint() {
-			this.add(`c|@Teclis|I'm convinced !`);
+			this.add(`c|@Teclis|There is no end, only new beginnings.`);
 		},
 	},
 	tennisace: {

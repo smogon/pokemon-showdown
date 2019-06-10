@@ -3439,31 +3439,72 @@ let BattleMovedex = {
 		type: "Fire",
 	},
 	// Teclis
-	zekken: {
+	absoluteconfiguration: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Raises the user's Attack by 2 stages and its Speed by 1 stage.",
-		shortDesc: "Raises the user's Attack by 2 and Speed by 1.",
-		id: "zekken",
-		name: "Zekken",
+		desc: "Puts the foe to sleep. Summons a Nightmare Field with the effects of Nightmare for 4 turns.",
+		shortDesc: "Puts foe to sleep. Nightmare for 4 turns.",
+		id: "absoluteconfiguration",
+		name: "Absolute Configuration",
 		isNonstandard: "Custom",
-		pp: 10,
+		pp: 1,
 		priority: 0,
-		flags: {snatch: 1, mirror: 1},
+		flags: {},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, "Swords Dance", source);
+			this.add('-anim', source, 'Dark Pulse', target);
+			this.add('-anim', source, 'Dark Void', target);
 		},
-		boosts: {
-			atk: 2,
-			spe: 1,
+		onHit(source) {
+			this.field.addPseudoWeather('nightmarefield', source);
+		},
+		status: 'slp',
+		isZ: "darkrainiumz",
+		target: "normal",
+		type: "Dark",
+	},
+	// Used for Teclis's z-move
+	nightmarefield: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "For 4 turns, Nightmare Field is active. During the effect, sleeping Pokemon suffer from the effects of Nightmare.",
+		shortDesc: "4 turns. Sleeping Pokemon get Nightmare.",
+		id: "nightmarefield",
+		name: "Nightmare Field",
+		isNonstandard: "Custom",
+		pp: 10,
+		priority: 0,
+		flags: {},
+		pseudoWeather: 'nightmarefield',
+		effect: {
+			duration: 4,
+			onStart(battle, source, effect) {
+				if (effect && effect.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Nightmare Field', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Nightmare Field');
+				}
+			},
+			onResidualOrder: 21,
+			onResidualSubOrder: 2,
+			onResidual() {
+				for (const curMon of this.getAllActive()) {
+					if (curMon.status === 'slp' || curMon.hasAbility('comatose')) {
+						this.damage(curMon.maxhp / 4, curMon);
+					}
+				}
+			},
+			onEnd() {
+				this.add('-fieldend', 'move: Nightmare Field');
+			},
 		},
 		secondary: null,
 		target: "self",
-		type: "Fairy",
+		type: "Dark",
 	},
 	// tennisace
 	groundsurge: {

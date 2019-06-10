@@ -596,10 +596,10 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
 			'Teclis': {
-				species: 'Gallade', ability: 'Intimidate', item: 'Galladite', gender: 'M',
-				moves: ['Sacred Sword', 'Psycho Cut', 'Knock Off'],
-				signatureMove: 'Zekken',
-				evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', shiny: true,
+				species: 'Darkrai', ability: 'Dark Aura', item: 'Darkrainium Z', gender: 'N',
+				moves: ['Dark Pulse', 'Nasty Plot', 'Earth Power'],
+				signatureMove: 'Dark Void',
+				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
 			'tennisace': {
 				species: 'Raikou', ability: 'Levitate', item: 'Life Orb', gender: 'M',
