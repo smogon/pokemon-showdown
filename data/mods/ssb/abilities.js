@@ -410,6 +410,25 @@ let BattleAbilities = {
 			pokemon.illusion = null;
 		},
 	},
+	// Gallant Spear
+	trombe: {
+		desc: "On switch in, this Pokemon summons Light Screen or Reflect and is guaranteed to move first.",
+		shortDesc: "On switch, 1 screen + priority.",
+		id: "trombe",
+		name: "Trombe!",
+		isNonstandard: "Custom",
+		onSwitchIn(pokemon) {
+			this.add('-activate', pokemon, 'ability: Trombe!');
+			if (Math.round(this.random())) {
+				pokemon.side.addSideCondition('lightscreen');
+			} else {
+				pokemon.side.addSideCondition('reflect');
+			}
+		},
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move && pokemon.activeTurns === 1) return priority + 1;
+		},
+	},
 	// guishark
 	gzguishark: {
 		desc: "Boosts Attack by 1 stage upon switch-in/Mega Evolution.",

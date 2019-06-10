@@ -544,6 +544,18 @@ let BattleStatuses = {
 			this.add(`c|%FOMG|Rock in peace...`);
 		},
 	},
+	gallantspear: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|+Gallant Spear|*Trombe! override intensifies*`);
+		},
+		onSwitchOut() {
+			this.add(`c|+Gallant Spear|*neigh* *snort*`);
+		},
+		onFaint() {
+			this.add(`c|+Gallant Spear|UNIVAAAAAAAAAAAAAAASE!!`);
+		},
+	},
 	grimauxiliatrix: {
 		noCopy: true,
 		onStart() {

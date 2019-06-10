@@ -281,6 +281,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Rock Slide',
 				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 			},
+			'Gallant Spear': {
+				species: 'Rapidash', ability: 'Trombe!', item: ['Eject Button', 'Choice Specs'], gender: 'M',
+				moves: [['Magma Storm', 'Fire Blast'], 'U-turn', ['Tri Attack', 'Recover']],
+				signatureMove: 'Storm Assault OGs',
+				evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', shiny: true,
+			},
 			'grimAuxiliatrix': {
 				species: 'Aggron', ability: 'Sturdy', item: 'Aggronite', gender: '',
 				moves: [['Toxic', 'Stealth Rock'], ['Stone Edge', 'Heat Crash'], 'Earthquake'],

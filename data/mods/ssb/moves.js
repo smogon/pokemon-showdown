@@ -1444,6 +1444,41 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Rock",
 	},
+	// Gallant Spear
+	stormassaultogs: {
+		accuracy: 90,
+		basePower: 20,
+		multihit: 3,
+		category: "Special",
+		desc: "Hits three times. Each hit has a 10% chance to drop the target's Special Defense, and a 10% chance to burn. Each hit is always a critical hit.If one of the hits breaks the target's substitute, it will take damage for the remaining hits.",
+		shortDesc: "Hits 3 times in one turn. 10% to lower SpD. 10% to burn. Always crits.",
+		id: "stormassaultogs",
+		isNonstandard: "Custom",
+		name: "Storm Assault OGs",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		willCrit: true,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Bullet Seed', target);
+		},
+		secondaries: [
+			{
+				chance: 10,
+				status: 'brn',
+			}, {
+				chance: 10,
+				boosts: {
+					spd: -1,
+				},
+			},
+		],
+		target: "normal",
+		type: "Fire",
+	},
 	// grimAuxiliatrix
 	paintrain: {
 		accuracy: 100,
