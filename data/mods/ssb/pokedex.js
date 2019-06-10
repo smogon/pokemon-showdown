@@ -46,6 +46,11 @@ let BattlePokedex = {
 		// Doubled def, spa, spd and spe
 		baseStats: {hp: 62, atk: 44, def: 100, spa: 88, spd: 100, spe: 110},
 	},
+	// fart
+	kartana: {
+		inherit: true,
+		types: ['Fairy', 'Steel'],
+	},
 	// grimAuxiliatrix
 	aggronmega: {
 		inherit: true,

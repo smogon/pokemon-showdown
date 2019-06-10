@@ -1197,6 +1197,43 @@ let BattleMovedex = {
 		target: "normal",
 		type: "???",
 	},
+	// fart
+	soupstealing7starstrike: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		desc: "This move is either a Water, Fire, or Grass type move. The selected type is added to the user of this move.",
+		shortDesc: "Changes user/move type to fire, water, or grass.",
+		id: "soupstealing7starstrike",
+		name: "Soup-Stealing 7-Star Strike",
+		isNonstandard: "Custom",
+		pp: 15,
+		priority: 0,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Conversion", source);
+		},
+		onModifyMove(move, pokemon) {
+			let types = ['Fire', 'Water', 'Grass'];
+			let randomType = this.sample(types);
+			move.type = randomType;
+			pokemon.addType(randomType);
+			this.add('-start', pokemon, 'typeadd', randomType);
+		},
+		onHit(target, source) {
+			this.add('-anim', source, 'Spectral Thief', target);
+			if (Math.round(this.random())) {
+				this.add(`c|+fart|I hl on soup`);
+			} else {
+				this.add(`c|+fart|did someone say soup?`);
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+	},
 	// Flare
 	distortionblast: {
 		accuracy: 100,

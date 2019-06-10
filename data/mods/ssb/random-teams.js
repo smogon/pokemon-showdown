@@ -257,6 +257,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'fr*ck',
 				evs: {atk: 252, spe: 252, def: 4}, nature: 'Jolly', shiny: true,
 			},
+			'fart': {
+				species: 'Kartana', ability: 'Rise from the Gases', item: 'Life Orb', gender: 'M',
+				moves: ['Iron Head', 'Play Rough', 'U-turn'],
+				signatureMove: 'Soup-Stealing 7-Star Strike',
+				evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', shiny: true,
+			},
 			'Flare': {
 				species: 'Zoroark', ability: 'Super Illusion', item: 'Choice Scarf', gender: 'N',
 				moves: ['Fleur Cannon', 'Parting Shot', 'Sludge Bomb'],

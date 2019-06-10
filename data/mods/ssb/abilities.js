@@ -333,6 +333,23 @@ let BattleAbilities = {
 		id: "giblovepls",
 		name: "Gib love pls",
 	},
+	// fart
+	risefromthegases: {
+		desc: "The power of Fire- and Ground-type attacks against this Pokemon is halved.",
+		shortDesc: "The power of Fire- and Ground-type attacks is halved.",
+		id: "risefromthegases",
+		name: "Rise from the Gases",
+		isNonstandard: "Custom",
+		onSourceBasePowerPriority: 7,
+		onSourceBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Fire') {
+				return this.chainModify(0.5);
+			}
+			if (move.type === 'Ground') {
+				return this.chainModify(0.5);
+			}
+		},
+	},
 	// Flare
 	superillusion: {
 		desc: "When this Pokemon switches in, it appears as the last unfainted Pokemon in its party until it takes supereffective direct damage from another Pokemon's attack. This Pokemon's actual level and HP are displayed instead of those of the mimicked Pokemon.",
