@@ -216,7 +216,7 @@ let Formats = [
 			'Raticate-Alola-Totem', 'Throh', 'Turtonator', 'Type: Null', 'Ursaring', 'Victreebel', 'Zangoose',
 		],
 		onBegin() {
-			if (this.rated && this.format === 'gen7zu') this.add('html', `<div class="broadcast-green"><strong>ZU is currently suspecting Exeggutor! For information on how to participate check out the <a href="https://www.smogon.com/forums/thread/3651197/">suspect thread</a>.</strong></div>`);
+			if (this.rated && this.format === 'gen7zu') this.add('html', `<div class="broadcast-green"><strong>ZU is currently suspecting Exeggutor! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3651197/">suspect thread</a>.</strong></div>`);
 		},
 	},
 	{
@@ -774,7 +774,7 @@ let Formats = [
 
 		mod: 'gen7',
 		ruleset: ['Pokemon', 'Ability Clause', 'OHKO Clause', 'Evasion Moves Clause', 'CFZ Clause', 'Sleep Clause Mod', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Team Preview'],
-		banlist: ['Groudon-Primal', 'Arena Trap', 'Huge Power', 'Illusion', 'Innards Out', 'Magnet Pull', 'Moody', 'Parental Bond', 'Protean', 'Psychic Surge', 'Pure Power', 'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard', 'Gengarite', 'Chatter', 'Comatose + Sleep Talk'],
+		banlist: ['Groudon-Primal', 'Arena Trap', 'Contrary', 'Huge Power', 'Illusion', 'Innards Out', 'Magnet Pull', 'Moody', 'Parental Bond', 'Protean', 'Psychic Surge', 'Pure Power', 'Shadow Tag', 'Stakeout', 'Water Bubble', 'Wonder Guard', 'Gengarite', 'Chatter', 'Comatose + Sleep Talk'],
 	},
 	{
 		name: "[Gen 7] Mix and Mega",
