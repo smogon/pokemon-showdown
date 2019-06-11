@@ -400,7 +400,7 @@ let BattleStatuses = {
 			}
 			const hitMove = new this.Data.Move(data.moveData);
 
-			this.tryMoveHit(target, data.source, /** @type {ActiveMove} */(/** @type {unknown} */(hitMove)));
+			this.trySpreadMoveHit([target], data.source, /** @type {ActiveMove} */(/** @type {unknown} */(hitMove)));
 		},
 	},
 	healreplacement: {
