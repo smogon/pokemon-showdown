@@ -518,7 +518,7 @@ const Punishments = new (class {
 	 * @param {Set<string>} keys
 	 */
 	punishInner(user, punishment, keys) {
-		let existingPunishment = Punishments.userids.get(toID(user.name));
+		let existingPunishment = Punishments.userids.get(user.locked || toID(user.name));
 		if (existingPunishment) {
 			// don't reduce the duration of an existing punishment
 			if (existingPunishment[2] > punishment[2]) {
@@ -539,6 +539,10 @@ const Punishments = new (class {
 		let lastUserId = user.getLastId();
 		if (!lastUserId.startsWith('guest')) {
 			Punishments.userids.set(lastUserId, punishment);
+		}
+		if (user.locked) {
+			Punishments.userids.set(user.locked, punishment);
+			keys.add(user.locked);
 		}
 		if (user.autoconfirmed) {
 			Punishments.userids.set(user.autoconfirmed, punishment);

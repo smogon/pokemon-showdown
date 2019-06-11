@@ -1913,7 +1913,7 @@ const commands = {
 		let affected = [];
 
 		if (targetUser) {
-			affected = Punishments.lock(targetUser, duration, null, userReason);
+			affected = Punishments.lock(targetUser, duration, targetUser.locked, userReason);
 		} else {
 			affected = Punishments.lock(null, duration, userid, userReason);
 		}
@@ -2588,11 +2588,19 @@ const commands = {
 		let reason = this.splitTarget(target, true);
 		let targetUser = this.targetUser;
 
+		let expiration = Date.now() + 48 * 60 * 60 * 1000;
+
 		if (!targetUser) {
 			return this.errorReply(`User '${this.targetUsername}' not found.`);
 		}
 		if (!this.can('forcerename', targetUser)) return false;
 		if (targetUser.namelocked) return this.errorReply(`User '${targetUser.name}' is already namelocked.`);
+		if (targetUser.locked) {
+			const curPunishment = Punishments.userids.get(targetUser.locked);
+			if (curPunishment) {
+				if (curPunishment[2] > expiration) expiration = curPunishment[2];
+			}
+		}
 
 		const reasonText = reason ? ` (${reason})` : `.`;
 		const lockMessage = `${targetUser.name} was namelocked by ${user.name}${reasonText}`;
@@ -2605,7 +2613,7 @@ const commands = {
 
 		this.globalModlog("NAMELOCK", targetUser, ` by ${user.userid}${reasonText}`);
 		Ladders.cancelSearches(targetUser);
-		Punishments.namelock(targetUser, null, null, reason);
+		Punishments.namelock(targetUser, expiration, null, reason);
 		targetUser.popup(`|modal|${user.name} has locked your name and you can't change names anymore${reasonText}`);
 		return true;
 	},
