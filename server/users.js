@@ -1614,7 +1614,8 @@ function pruneInactive(threshold) {
 	let now = Date.now();
 	for (const user of users.values()) {
 		const awayTimer = (user.can('lock') && !user.can('bypassall')) ? STAFF_IDLE_TIMER : IDLE_TIMER;
-		if (user.group !== '*' && !user.connections.some(connection => now - connection.lastActiveTime < awayTimer)) {
+		let bypass = user.can('bypassafktimer') || Array.from(user.inRooms).some(room => user.can('bypassafktimer', null, room));
+		if (!bypass && !user.connections.some(connection => now - connection.lastActiveTime < awayTimer)) {
 			user.popup(`You have been inactive for over ${awayTimer / MINUTES} minutes, and have been marked as idle as a result. To mark yourself as back, send a message in chat, or use the /back command.`);
 			user.setAway('Idle');
 		}
