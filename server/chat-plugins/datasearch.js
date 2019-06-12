@@ -195,7 +195,7 @@ exports.commands = {
 		`Inequality ranges use the characters '>' and '<' though they behave as '≥' and '≤', e.g., 'bp > 100' searches for all moves equal to and greater than 100 base power.`,
 		`Parameters can be excluded through the use of '!', e.g., !water type' excludes all Water-type moves.`,
 		`'asc' or 'desc' following a move property will arrange the names in ascending or descending order of that property respectively, e.g., basepower asc will arrange moves in ascending order of their basepowers.`,
-		`Valid flags are: authentic (bypasses substitute), bite, bullet, contact, defrost, powder, protect, pulse, punch, secondary, snatch, and sound.`,
+		`Valid flags are: authentic (bypasses substitute), bite, bullet, contact, defrost, powder, protect, pulse, punch, secondary, snatch, sound, and zmove.`,
 		`A search that includes '!protect' will show all moves that bypass protection.`,
 		`Parameters separated with '|' will be searched as alternatives for each other, e.g., 'fire | water' searches for all moves that are either Fire type or Water type.`,
 		`If a Pok\u00e9mon is included as a parameter, moves will be searched from its movepool.`,
@@ -796,7 +796,7 @@ function runMovesearch(target, cmd, canAll, message) {
 	let allCategories = ['physical', 'special', 'status'];
 	let allContestTypes = ['beautiful', 'clever', 'cool', 'cute', 'tough'];
 	let allProperties = ['basePower', 'accuracy', 'priority', 'pp'];
-	let allFlags = ['authentic', 'bite', 'bullet', 'contact', 'dance', 'defrost', 'powder', 'protect', 'pulse', 'punch', 'secondary', 'snatch', 'sound'];
+	let allFlags = ['authentic', 'bite', 'bullet', 'contact', 'dance', 'defrost', 'powder', 'protect', 'pulse', 'punch', 'secondary', 'snatch', 'sound', 'zmove'];
 	let allStatus = ['psn', 'tox', 'brn', 'par', 'frz', 'slp'];
 	let allVolatileStatus = ['flinch', 'confusion', 'partiallytrapped'];
 	let allBoosts = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'];
@@ -848,6 +848,7 @@ function runMovesearch(target, cmd, canAll, message) {
 			}
 
 			if (target === 'bypassessubstitute') target = 'authentic';
+			if (target === 'z') target = 'zmove';
 			if (allFlags.includes(target)) {
 				if ((orGroup.flags[target] && isNotSearch) || (orGroup.flags[target] === false && !isNotSearch)) return {reply: 'A search cannot both exclude and include \'' + target + '\'.'};
 				orGroup.flags[target] = !isNotSearch;
@@ -1138,14 +1139,19 @@ function runMovesearch(target, cmd, canAll, message) {
 			}
 
 			for (let flag in alts.flags) {
-				if (flag !== 'secondary') {
-					if ((flag in dex[move].flags) === alts.flags[flag]) {
-						if (flag === 'protect' && ['all', 'allyTeam', 'allySide', 'foeSide', 'self'].includes(dex[move].target)) continue;
+				if (flag === 'secondary') {
+					if ((!dex[move].secondary && !dex[move].secondaries) === !alts.flags[flag]) {
+						matched = true;
+						break;
+					}
+				} else if (flag === 'zmove') {
+					if (!dex[move].isZ === !alts.flags[flag]) {
 						matched = true;
 						break;
 					}
 				} else {
-					if ((!dex[move].secondary && !dex[move].secondaries) === !alts.flags[flag]) {
+					if ((flag in dex[move].flags) === alts.flags[flag]) {
+						if (flag === 'protect' && ['all', 'allyTeam', 'allySide', 'foeSide', 'self'].includes(dex[move].target)) continue;
 						matched = true;
 						break;
 					}
