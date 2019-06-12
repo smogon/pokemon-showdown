@@ -4359,7 +4359,7 @@ const commands = {
 
 			for (let userid in targetRoom.users) {
 				let user = targetRoom.users[userid];
-				let userinfo = user.getIdentity(room.id);
+				let userinfo = user.getIdentity(targetRoom.id);
 				roominfo.users.push(userinfo);
 			}
 
