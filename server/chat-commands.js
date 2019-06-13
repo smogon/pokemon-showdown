@@ -706,24 +706,29 @@ const commands = {
 	awayhelp: [`/away - Marks you as away. Send a message or use /back to indicate you are back.`],
 
 	'!back': true,
+	clearstatus: 'back',
 	unaway: 'back',
 	unafk: 'back',
 	back(target, room, user) {
-		// This suffices for now, but will need to be updated
-		// if we ever expand upon the busy status.
-		if (user.status.startsWith('(Busy)')) {
+		if (!user.status) return;
+		const statusType = user.isAway() ? 'away' : user.status.startsWith('(Busy)') ? 'busy' : null;
+		user.clearStatus();
+
+		if (statusType === 'busy') {
 			this.parse('/unblockpms');
 			this.parse('/unblockchallenges');
-			user.status = '';
-			user.updateIdentity();
-
-			this.sendReply("You are no longer marked as busy.");
-		} else {
-			user.setBack();
-			this.sendReply("You are no longer marked as away.");
 		}
+
+		if (statusType) {
+			return this.sendReply(`You are no longer marked as ${statusType}.`);
+		}
+
+		return this.sendReply("You have cleared your status message.");
 	},
-	backhelp: [`/back - Marks you as back if you are away.`],
+	backhelp: [
+		`/back - Marks you as back if you are away.`,
+		`/clearstatus - Clears your status message.`
+	],
 
 	'!rank': true,
 	rank(target, room, user) {

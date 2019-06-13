@@ -1567,12 +1567,20 @@ class User extends Chat.MessageContext {
 	/**
 	 * @param {string} message
 	 */
-	setAway(message) {
-		this.status = `!${message}`;
+	setStatus(message) {
+		if (message === this.status) return;
+		this.status = message;
 		this.updateIdentity();
 	}
-	setBack() {
-		if (!this.isAway) return;
+	/**
+	 * @param {string} message
+	 */
+	setAway(message) {
+		this.setStatus(`!${message}`);
+		this.updateIdentity();
+	}
+	clearStatus() {
+		if (!this.status) return;
 		this.status = '';
 		this.updateIdentity();
 	}
