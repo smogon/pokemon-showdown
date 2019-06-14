@@ -727,7 +727,7 @@ const commands = {
 	},
 	backhelp: [
 		`/back - Marks you as back if you are away.`,
-		`/clearstatus - Clears your status message.`
+		`/clearstatus - Clears your status message.`,
 	],
 
 	'!rank': true,
