@@ -1082,7 +1082,7 @@ class User extends Chat.MessageContext {
 		oldUser.ips = {};
 		this.latestIp = oldUser.latestIp;
 		this.latestHost = oldUser.latestHost;
-		this.setBack();
+		this.clearStatus();
 
 		oldUser.markDisconnected();
 	}
@@ -1374,7 +1374,7 @@ class User extends Chat.MessageContext {
 	joinRoom(roomid, connection = null) {
 		const room = Rooms(roomid);
 		if (!room) throw new Error(`Room not found: ${roomid}`);
-		this.setBack();
+		this.clearStatus();
 		if (!connection) {
 			for (const curConnection of this.connections) {
 				// only join full clients, not pop-out single-room
@@ -1410,7 +1410,7 @@ class User extends Chat.MessageContext {
 		if (!this.inRooms.has(room.id)) {
 			return false;
 		}
-		this.setBack();
+		this.clearStatus();
 		for (const curConnection of this.connections) {
 			if (connection && curConnection !== connection) continue;
 			if (curConnection.inRooms.has(room.id)) {
