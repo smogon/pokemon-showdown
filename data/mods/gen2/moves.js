@@ -684,7 +684,11 @@ let BattleMovedex = {
 			return null;
 		},
 		onHit(target, source, move) {
-			if (!target.setStatus('slp', source, move) && target.status !== 'slp') return false;
+			if (target.status !== 'slp') {
+				if (!target.setStatus('slp', source, move)) return;
+			} else {
+				this.add('-status', target, 'slp', '[from] move: Rest');
+			}
 			target.statusData.time = 3;
 			target.statusData.startTime = 3;
 			target.statusData.source = target;
