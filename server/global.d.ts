@@ -16,7 +16,7 @@ declare global {
 			IPTools: any
 			Config: any
 			Chat: any
-			__version: string
+			__version: {head: string, origin?: string}
 		}
 	}
 	// modules
