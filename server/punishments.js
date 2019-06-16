@@ -1484,7 +1484,7 @@ const Punishments = new (class {
 			return true;
 		}
 		if (Rooms(roomid).parent) {
-			return Punishments.checkNameInRoom(user, Rooms(roomid).parent);
+			return Punishments.checkNameInRoom(user, Rooms(roomid).parent.id);
 		}
 		return false;
 	}
@@ -1499,7 +1499,7 @@ const Punishments = new (class {
 		/** @type {Punishment?} */
 		let punishment = Punishments.roomUserids.nestedGet(roomid, userid) || null;
 		if (!punishment && Rooms(roomid).parent) {
-			punishment = Punishments.checkNewNameInRoom(user, userid, Rooms(roomid).parent);
+			punishment = Punishments.checkNewNameInRoom(user, userid, Rooms(roomid).parent.id);
 		}
 		if (punishment) {
 			if (punishment[0] !== 'ROOMBAN' && punishment[0] !== 'BLACKLIST') return null;
