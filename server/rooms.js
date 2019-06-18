@@ -1063,6 +1063,10 @@ class BasicChatRoom extends BasicRoom {
 		/** @type {string[]} */
 		this.banwords = [];
 
+		/** @type {number?} */
+		// Only available in groupchats
+		this.uptime = null;
+
 		this.chatRoomData = (options.isPersonal ? null : options);
 		Object.assign(this, options);
 		if (this.auth) Object.setPrototypeOf(this.auth, null);
