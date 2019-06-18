@@ -790,11 +790,12 @@ const commands = {
 		let targetRoom = Rooms.createChatRoom(roomid, `[G] ${title}`, {
 			isPersonal: true,
 			isPrivate: 'hidden',
+			uptime: parent ? null : Date.now(),
 			modjoin: parent ? null : '+',
 			parentid: parent,
 			auth: {},
 			introMessage: `<div style="text-align: center"><table style="margin:auto;"><tr><td><img src="//play.pokemonshowdown.com/fx/groupchat.png" width=120 height=100></td><td><h2>${titleMsg}</h2><p>Follow the <a href="/rules">Pokémon Showdown Global Rules</a>!<br>Don't be disruptive to the rest of the site.</p></td></tr></table></div>`,
-			staffMessage: `<p>Groupchats are temporary rooms, and will expire if there hasn't been any activity in 40 minutes.</p><p>You can invite new users using <code>/invite</code>. Be careful with who you invite!</p><p>Commands: <button class="button" name="send" value="/roomhelp">Room Management</button> | <button class="button" name="send" value="/tournaments help">Tournaments</button></p><p>As creator of this groupchat, <u>you are entirely responsible for what occurs in this chatroom</u>. Global rules apply at all times.</p><p>If this room is used to break global rules or disrupt other areas of the server, <strong>you as the creator will be held accountable and punished</strong>.</p>`,
+			staffMessage: `<p>Groupchats are temporary rooms, and will expire if there hasn't been any activity in 40 minutes.</p><p>You can invite new users using <code>/invite</code>. Be careful with who you invite!</p><p>Commands: <button class="button" name="send" value="/roomhelp">Room Management</button> | <button class="button" name="send" value="/roomsettings">Room Settings</button> | <button class="button" name="send" value="/tournaments help">Tournaments</button></p><p>As creator of this groupchat, <u>you are entirely responsible for what occurs in this chatroom</u>. Global rules apply at all times.</p><p>If this room is used to break global rules or disrupt other areas of the server, <strong>you as the creator will be held accountable and punished</strong>.</p>`,
 		});
 		if (targetRoom) {
 			// The creator is a Room Owner in subroom groupchats and a Host otherwise..
@@ -811,6 +812,15 @@ const commands = {
 		`/makegroupchat [roomname] - Creates an invite-only group chat named [roomname].`,
 		`/subroomgroupchat [roomname] - Creates a subroom groupchat of the current room. Can only be used in a public room you have staff in.`,
 	],
+
+	'!groupchatuptime': true,
+	groupchatuptime(target, room, user) {
+		if (!this.runBroadcast()) return;
+		if (!room.uptime) return this.errorReply("Can only be used in a groupchat.");
+		const uptime = Chat.toDurationString(Date.now() - room.uptime);
+		this.sendReplyBox(`Groupchat uptime: <b>${uptime}</b>`);
+	},
+	groupchatuptimehelp: [`/groupchatuptime - Displays the uptime if the current room is a groupchat.`],
 
 	deregisterchatroom(target, room, user) {
 		if (!this.can('makeroom')) return;
