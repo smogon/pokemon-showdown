@@ -258,6 +258,10 @@ const commands = {
 				return this.errorReply("Too many options for poll (maximum is 8).");
 			}
 
+			if (new Set(options).size !== options.length) {
+				return this.errorReply("There are duplicate options in the poll.");
+			}
+
 			room.poll = new Poll(room, {source: params[0], supportHTML: supportHTML}, options);
 			room.poll.display();
 
