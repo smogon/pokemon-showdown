@@ -820,7 +820,7 @@ const commands = {
 		const uptime = Chat.toDurationString(Date.now() - room.uptime);
 		this.sendReplyBox(`Groupchat uptime: <b>${uptime}</b>`);
 	},
-	groupchatuptimehelp: [`/groupchatuptime - Displays the uptime if the current room is a a groupchat.`],
+	groupchatuptimehelp: [`/groupchatuptime - Displays the uptime if the current room is a groupchat.`],
 
 	deregisterchatroom(target, room, user) {
 		if (!this.can('makeroom')) return;
