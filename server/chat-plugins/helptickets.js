@@ -3,6 +3,7 @@
 /** @type {typeof import('../../lib/fs').FS} */
 const FS = require(/** @type {any} */('../../.lib-dist/fs')).FS;
 const TICKET_FILE = 'config/tickets.json';
+const TICKET_IGNORERS_FILE = 'config/ticket-ignorers.json';
 const TICKET_CACHE_TIME = 24 * 60 * 60 * 1000; // 24 hours
 const TICKET_BAN_DURATION = 48 * 60 * 60 * 1000; // 48 hours
 
@@ -19,6 +20,7 @@ const TICKET_BAN_DURATION = 48 * 60 * 60 * 1000; // 48 hours
  * @property {string} ip
  * @property {string} [escalator]
  */
+
 /**
  * @typedef {Object} BannedTicketState
  * @property {string} banned
@@ -38,13 +40,18 @@ const TICKET_BAN_DURATION = 48 * 60 * 60 * 1000; // 48 hours
  */
 
 /** @type {{[k: string]: TicketState}} */
-let tickets = {};
+const tickets = Object.create(null);
 /** @type {{[k: string]: BannedTicketState}} */
-let ticketBans = {};
+const ticketBans = Object.create(null);
+/**
+ * @type {Set<string>}
+ * This doesn't use ID because user IDs are of type string, not ID.
+ */
+const ticketIgnorers = new Set();
 
 try {
-	let ticketData = JSON.parse(FS(TICKET_FILE).readSync());
-	for (let t in ticketData) {
+	const ticketData = JSON.parse(FS(TICKET_FILE).readSync());
+	for (const t in ticketData) {
 		const ticket = ticketData[t];
 		if (ticket.banned) {
 			if (ticket.expires <= Date.now()) continue;
@@ -63,9 +70,24 @@ try {
 	if (e.code !== 'ENOENT') throw e;
 }
 
+try {
+	const ticketIgnorersData = JSON.parse(FS(TICKET_IGNORERS_FILE).readSync());
+	for (const ignorer of ticketIgnorersData) {
+		ticketIgnorers.add(ignorer);
+	}
+} catch (e) {
+	if (e.code !== 'ENOENT') throw e;
+}
+
 function writeTickets() {
 	FS(TICKET_FILE).writeUpdate(() => (
-		JSON.stringify(Object.assign({}, tickets, ticketBans))
+		JSON.stringify(Object.assign(Object.create(null), tickets, ticketBans))
+	));
+}
+
+function writeTicketIgnorers() {
+	FS(TICKET_IGNORERS_FILE).writeUpdate(() => (
+		JSON.stringify([...ticketIgnorers])
 	));
 }
 
@@ -770,10 +792,9 @@ const pages = {
 		},
 	},
 };
-exports.pages = pages;
 
 /** @type {ChatCommands} */
-let commands = {
+const commands = {
 	'!report': true,
 	report(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -1085,6 +1106,8 @@ let commands = {
 			if (user.ignoreTickets) return this.errorReply(`You are already ignoring help ticket notifications. Use /helpticket unignore to receive notifications again.`);
 			user.ignoreTickets = true;
 			user.update('ignoreTickets');
+			ticketIgnorers.add(user.userid);
+			writeTicketIgnorers();
 			this.sendReply(`You are now ignoring help ticket notifications.`);
 		},
 		ignorehelp: [`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ & ~`],
@@ -1094,6 +1117,8 @@ let commands = {
 			if (!user.ignoreTickets) return this.errorReply(`You are not ignoring help ticket notifications. Use /helpticket ignore to stop receiving notifications.`);
 			user.ignoreTickets = false;
 			user.update('ignoreTickets');
+			ticketIgnorers.delete(user.userid);
+			writeTicketIgnorers();
 			this.sendReply(`You will now receive help ticket notifications.`);
 		},
 		unignorehelp: [`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ & ~`],
@@ -1130,4 +1155,8 @@ let commands = {
 		`/helpticket delete [user] - Deletes a user's ticket. Requires: & ~`,
 	],
 };
-exports.commands = commands;
+
+module.exports = {
+	pages,
+	commands,
+};

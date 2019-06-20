@@ -41,6 +41,34 @@ const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
 /** @type {typeof import('../lib/fs').FS} */
 const FS = require(/** @type {any} */('../.lib-dist/fs')).FS;
 
+/**
+ * @type {Set<string>}
+ * This doesn't use ID because user IDs are of type string, not ID.
+ */
+const ticketIgnorers = (() => {
+	const TICKET_IGNORERS_FILE = 'config/ticket-ignorers.json';
+
+	/** @type {Set<string>} */
+	const _ticketIgnorers = new Set();
+
+	function readTicketIgnorers() {
+		try {
+			const ticketIgnorersData = JSON.parse(FS(TICKET_IGNORERS_FILE).readSync());
+			_ticketIgnorers.clear();
+			for (const ignorer of ticketIgnorersData) {
+				_ticketIgnorers.add(ignorer);
+			}
+		} catch (e) {
+			if (e.code !== 'ENOENT') throw e;
+		}
+	}
+
+	readTicketIgnorers();
+	FS(TICKET_IGNORERS_FILE).onModify(readTicketIgnorers);
+
+	return _ticketIgnorers;
+})();
+
 /*********************************************************
  * Utility functions
  *********************************************************/
@@ -938,6 +966,7 @@ class User extends Chat.MessageContext {
 		}
 		Rooms.global.checkAutojoin(this);
 		Chat.loginfilter(this, null, userType);
+
 		return true;
 	}
 	/**
@@ -976,6 +1005,8 @@ class User extends Chat.MessageContext {
 		let joining = !this.named;
 		this.named = !userid.startsWith('guest') || !!this.namelocked;
 
+		this.ignoreTickets = ticketIgnorers.has(userid);
+
 		for (const connection of this.connections) {
 			//console.log('' + name + ' renaming: socket ' + i + ' of ' + this.connections.length);
 			connection.send(this.getUpdateuserText());
@@ -994,6 +1025,7 @@ class User extends Chat.MessageContext {
 			Rooms(roomid).onRename(this, oldid, joining);
 		}
 		if (isForceRenamed) this.trackRename = oldname;
+
 		return true;
 	}
 	/**
