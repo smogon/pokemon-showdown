@@ -13771,6 +13771,17 @@ let BattlePokedex = {
 		color: "Blue",
 		eggGroups: ["Water 1", "Fairy"],
 	},
+	equilibra: {
+		num: -28,
+		species: "Equilibra",
+		types: ["Steel", "Ground"],
+		baseStats: {hp: 102, atk: 50, def: 96, spa: 133, spd: 118, spe: 60},
+		abilities: {0: "Levitate", 1: "Bulletproof", H: "Justified"},
+		heightm: 0.8,
+		weightkg: 51.3,
+		color: "Brown",
+		eggGroups: ["Mineral"],
+	},
 	syclar: {
 		num: -101,
 		species: "Syclar",
