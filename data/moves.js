@@ -5605,7 +5605,7 @@ let BattleMovedex = {
 			} else {
 				success = !!this.heal(Math.ceil(target.maxhp * 0.5));
 			}
-			if (success && target.side.id !== source.side.id) {
+			if (target.side.id !== source.side.id) {
 				target.staleness = 'external';
 			}
 			return success;
@@ -7355,7 +7355,7 @@ let BattleMovedex = {
 			} else {
 				success = !!this.heal(Math.ceil(target.maxhp * 0.5));
 			}
-			if (success && target.side.id !== source.side.id) {
+			if (target.side.id !== source.side.id) {
 				target.staleness = 'external';
 			}
 			return success;

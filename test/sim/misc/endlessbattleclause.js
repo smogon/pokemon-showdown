@@ -31,6 +31,28 @@ describe('Endless Battle Clause (slow)', () => {
 		assert.fail("The battle did not end despite Endless Battle Clause");
 	});
 
+	it('should trigger even if Heal Pulse does not heal', () => {
+		battle = common.createBattle({endlessBattleClause: true});
+		battle.setPlayer('p1', {team: [
+			{species: "Slowbro", item: 'leppaberry', moves: ['block', 'healpulse', 'recycle']},
+			{species: "Magikarp", moves: ['splash']},
+		]});
+		battle.setPlayer('p2', {team: [
+			{species: "Slowbro", item: 'leppaberry', moves: ['block', 'healpulse', 'recycle']},
+			{species: "Magikarp", moves: ['splash']},
+		]});
+		battle.makeChoices('move block', 'move block');
+		for (let i = 0; i < 16; i++) {
+			battle.makeChoices('move recycle', 'move recycle');
+		}
+		assert.false(battle.ended);
+		battle.makeChoices('move healpulse', 'move recycle');
+		assert.false(battle.ended);
+		battle.makeChoices('move recycle', 'move healpulse');
+		assert(battle.ended);
+		assert.false(battle.winner);
+	});
+
 	it('should not trigger by both Pokemon eating a Leppa Berry they started with', () => {
 		battle = common.createBattle({endlessBattleClause: true});
 		battle.setPlayer('p1', {team: [{species: "Sunkern", item: 'leppaberry', moves: ['synthesis']}]});
