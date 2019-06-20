@@ -13775,6 +13775,7 @@ let BattlePokedex = {
 		num: -28,
 		species: "Equilibra",
 		types: ["Steel", "Ground"],
+		gender: "N",
 		baseStats: {hp: 102, atk: 50, def: 96, spa: 133, spd: 118, spe: 60},
 		abilities: {0: "Levitate", 1: "Bulletproof", H: "Justified"},
 		heightm: 0.8,
