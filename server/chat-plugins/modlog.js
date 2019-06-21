@@ -31,6 +31,16 @@ const LINES_SEPARATOR = 'lines=';
 const MAX_RESULTS_LENGTH = MORE_BUTTON_INCREMENTS[MORE_BUTTON_INCREMENTS.length - 1];
 const LOG_PATH = 'logs/modlog/';
 
+const PUNISHMENTS = [
+	'ROOMBAN', 'UNROOMBAN', 'WARN', 'MUTE', 'HOURMUTE', 'UNMUTE', 'CRISISDEMOTE',
+	'WEEKLOCK', 'LOCK', 'UNLOCK', 'UNLOCKNAME', 'UNLOCKRANGE', 'UNLOCKIP', 'BAN',
+	'UNBAN', 'UNBANALL', 'DEROOMVOICEALL', 'RANGEBAN', 'UNRANGEBAN', 'RANGELOCK',
+	'TRUSTUSER', 'FORCRERENAME', 'BLACKLIST', 'BATTLEBAN', 'UNBATTLEBAN',
+	'NAMEBLACKLIST', 'UNBLACKLISTALL', 'KICKBATTLE', 'TICKETBAN', 'UNTICKETBAN',
+	'HIDETEXT', 'HIDEALTSTEXT', 'REDIRECT', 'NOTE',
+];
+const PUNISHMENTS_REGEX_STRING = `\\b(${PUNISHMENTS.join('|')}):.*`;
+
 class SortedLimitedLengthList {
 	constructor(maxSize) {
 		this.maxSize = maxSize;
@@ -80,7 +90,7 @@ function checkRipgrepAvailability() {
 	return Config.ripgrepmodlog;
 }
 
-function getMoreButton(roomid, search, useExactSearch, lines, maxLines) {
+function getMoreButton(roomid, search, useExactSearch, lines, maxLines, onlyPunishments) {
 	let newLines = 0;
 	for (let increase of MORE_BUTTON_INCREMENTS) {
 		if (increase > lines) {
@@ -92,11 +102,11 @@ function getMoreButton(roomid, search, useExactSearch, lines, maxLines) {
 		return ''; // don't show a button if no more pre-set increments are valid or if the amount of results is already below the max
 	} else {
 		if (useExactSearch) search = Chat.escapeHTML(`"${search}"`);
-		return `<br /><div style="text-align:center"><button class="button" name="send" value="/modlog ${roomid}, ${search} ${LINES_SEPARATOR}${newLines}" title="View more results">Older results<br />&#x25bc;</button></div>`;
+		return `<br /><div style="text-align:center"><button class="button" name="send" value="/${onlyPunishments ? 'punish' : 'mod'}log ${roomid}, ${search} ${LINES_SEPARATOR}${newLines}" title="View more results">Older results<br />&#x25bc;</button></div>`;
 	}
 }
 
-async function runModlog(roomidList, searchString, exactSearch, maxLines) {
+async function runModlog(roomidList, searchString, exactSearch, maxLines, onlyPunishments) {
 	const useRipgrep = await checkRipgrepAvailability();
 	let fileNameList = [];
 	let checkAllRooms = false;
@@ -127,6 +137,7 @@ async function runModlog(roomidList, searchString, exactSearch, maxLines) {
 		searchString = toID(searchString);
 		regexString = `[^a-zA-Z0-9]${searchString.split('').join('[^a-zA-Z0-9]*')}([^a-zA-Z0-9]|\\z)`;
 	}
+	if (onlyPunishments) regexString = `${PUNISHMENTS_REGEX_STRING}${regexString}`;
 
 	let results = new SortedLimitedLengthList(maxLines);
 	if (useRipgrep) {
@@ -178,7 +189,7 @@ async function runRipgrepModlog(paths, regexString, results, lines) {
 	return results;
 }
 
-function prettifyResults(resultArray, roomid, searchString, exactSearch, addModlogLinks, hideIps, maxLines) {
+function prettifyResults(resultArray, roomid, searchString, exactSearch, addModlogLinks, hideIps, maxLines, onlyPunishments) {
 	if (resultArray === null) {
 		return "|popup|The modlog query has crashed.";
 	}
@@ -193,8 +204,9 @@ function prettifyResults(resultArray, roomid, searchString, exactSearch, addModl
 	default:
 		roomName = `room ${roomid}`;
 	}
+	const scope = onlyPunishments ? 'punishment-related ' : '';
 	if (!resultArray.length) {
-		return `|popup|No moderator actions containing ${searchString} found on ${roomName}.` +
+		return `|popup|No ${scope}moderator actions containing ${searchString} found on ${roomName}.` +
 				(exactSearch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.");
 	}
 	const title = `[${roomid}]` + (searchString ? ` ${searchString}` : ``);
@@ -235,17 +247,17 @@ function prettifyResults(resultArray, roomid, searchString, exactSearch, addModl
 	if (searchString) {
 		const searchStringDescription = (exactSearch ? `containing the string "${searchString}"` : `matching the username "${searchString}"`);
 		preamble = `>view-modlog-${modlogid}\n|init|html\n|title|[Modlog]${title}\n` +
-			`|pagehtml|<div class="pad"><p>The last ${Chat.count(lines, "logged actions")} ${searchStringDescription} on ${roomName}.` +
+			`|pagehtml|<div class="pad"><p>The last ${scope}${Chat.count(lines, "logged actions")} ${searchStringDescription} on ${roomName}.` +
 			(exactSearch ? "" : " Add quotes to the search parameter to search for a phrase, rather than a user.");
 	} else {
 		preamble = `>view-modlog-${modlogid}\n|init|html\n|title|[Modlog]${title}\n` +
-			`|pagehtml|<div class="pad"><p>The last ${Chat.count(lines, "lines")} of the Moderator Log of ${roomName}.`;
+			`|pagehtml|<div class="pad"><p>The last ${Chat.count(lines, `${scope}lines`)} of the Moderator Log of ${roomName}.`;
 	}
-	let moreButton = getMoreButton(roomid, searchString, exactSearch, lines, maxLines);
+	let moreButton = getMoreButton(roomid, searchString, exactSearch, lines, maxLines, onlyPunishments);
 	return `${preamble}${resultString}${moreButton}</div>`;
 }
 
-async function getModlog(connection, roomid = 'global', searchString = '', maxLines = 20, timed = false) {
+async function getModlog(connection, roomid = 'global', searchString = '', maxLines = 20, onlyPunishments = false, timed = false) {
 	const startTime = Date.now();
 	const targetRoom = Rooms.search(roomid);
 	const user = connection.user;
@@ -284,9 +296,9 @@ async function getModlog(connection, roomid = 'global', searchString = '', maxLi
 		roomidList = [roomid];
 	}
 
-	const query = {cmd: 'modlog', roomidList, searchString, exactSearch, maxLines};
+	const query = {cmd: 'modlog', roomidList, searchString, exactSearch, maxLines, onlyPunishments};
 	const response = await PM.query(query);
-	connection.send(prettifyResults(response, roomid, searchString, exactSearch, addModlogLinks, hideIps, maxLines));
+	connection.send(prettifyResults(response, roomid, searchString, exactSearch, addModlogLinks, hideIps, maxLines, onlyPunishments));
 	const duration = Date.now() - startTime;
 	if (timed) connection.popup(`The modlog query took ${duration} ms to complete.`);
 	if (duration > LONG_QUERY_DURATION) console.log(`Long modlog query took ${duration} ms to complete:`, query);
@@ -494,6 +506,7 @@ exports.pages = {
 exports.commands = {
 	'!modlog': true,
 	ml: 'modlog',
+	punishlog: 'modlog',
 	timedmodlog: 'modlog',
 	modlog(target, room, user, connection, cmd) {
 		if (!room) room = Rooms('global');
@@ -528,7 +541,7 @@ exports.commands = {
 		if (!lines) lines = DEFAULT_RESULTS_LENGTH;
 		if (lines > MAX_RESULTS_LENGTH) lines = MAX_RESULTS_LENGTH;
 
-		getModlog(connection, roomid, target, lines, cmd === 'timedmodlog');
+		getModlog(connection, roomid, target, lines, cmd === 'punishlog', cmd === 'timedmodlog');
 	},
 	modloghelp: [
 		`/modlog OR /ml [roomid], [search] - Searches the moderator log - defaults to the current room unless specified otherwise.`,
@@ -564,9 +577,9 @@ const QueryProcessManager = require('../../.lib-dist/process-manager').QueryProc
 const PM = new QueryProcessManager(module, async data => {
 	switch (data.cmd) {
 	case 'modlog':
-		const {roomidList, searchString, exactSearch, maxLines} = data;
+		const {roomidList, searchString, exactSearch, maxLines, onlyPunishments} = data;
 		try {
-			return await runModlog(roomidList, searchString, exactSearch, maxLines);
+			return await runModlog(roomidList, searchString, exactSearch, maxLines, onlyPunishments);
 		} catch (err) {
 			Monitor.crashlog(err, 'A modlog query', {
 				roomidList,
