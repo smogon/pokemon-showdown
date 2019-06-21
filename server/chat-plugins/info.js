@@ -4,7 +4,6 @@
  *
  * These are informational commands. For instance, you can define the command
  * 'whois' here, then use it by typing /whois into Pokemon Showdown.
- *
  * For the API, see chat-plugins/COMMANDS.md
  *
  * @license MIT license
@@ -1448,7 +1447,7 @@ const commands = {
 	'!suggestions': true,
 	suggestions(target, room, user) {
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox(`<a href="https://www.smogon.com/forums/threads/3534365/">Make a suggestion for Pok&eacute;mon Showdown</a>`);
+		this.sendReplyBox(`<a href="https://www.smogon.com/forums/forums/517/">Make a suggestion for Pok&eacute;mon Showdown</a>`);
 	},
 
 	'!bugs': true,
