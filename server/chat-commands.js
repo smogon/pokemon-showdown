@@ -2655,7 +2655,6 @@ const commands = {
 		let targetUser = this.targetUser;
 		let name = this.targetUsername;
 		if (!targetUser && !room.log.hasUsername(target)) return this.errorReply(`User ${target} not found or has no roomlogs.`);
-		if (!targetUser && !user.can('lock')) return this.errorReply(`User ${name} not found.`);
 		let userid = toID(this.inputUsername);
 		if (!this.can('mute', null, room)) return;
 
