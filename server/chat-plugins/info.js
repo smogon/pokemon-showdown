@@ -231,6 +231,7 @@ const commands = {
 
 	'!offlinewhois': true,
 	checkpunishment: 'offlinewhois',
+	cpm: 'offlinewhois',
 	offlinewhois(target, room, user) {
 		if (!user.trusted) {
 			return this.errorReply("/offlinewhois - Access denied.");
