@@ -770,7 +770,7 @@ class RoomBattle extends RoomGames.RoomGame {
 		let logData = this.logData;
 		if (!logData) return;
 		this.logData = null; // deallocate to save space
-		logData.log = this.room.getLog(3).split('\n'); // replay log (exact damage)
+		logData.log = this.room.getLog(-1).split('\n'); // replay log (exact damage)
 
 		// delete some redundant data
 		for (const rating of [p1rating, p2rating, p3rating, p4rating]) {
