@@ -2582,10 +2582,11 @@ const commands = {
 	],
 
 	nl: 'namelock',
-	namelock(target, room, user) {
+	forcenamelock: 'namelock',
+	namelock(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help namelock');
 
-		let reason = this.splitTarget(target, true);
+		let reason = this.splitTarget(target, cmd !== 'forcenamelock');
 		let targetUser = this.targetUser;
 
 		if (!targetUser) {
