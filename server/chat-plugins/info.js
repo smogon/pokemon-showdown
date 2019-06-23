@@ -1520,7 +1520,9 @@ const commands = {
 	},
 
 	'!calc': true,
+	bsscalc: 'calc',
 	calculator: 'calc',
+	cantsaycalc: 'calc',
 	damagecalculator: 'calc',
 	damagecalc: 'calc',
 	randomscalc: 'calc',
@@ -1530,11 +1532,19 @@ const commands = {
 		if (cmd === 'calc' && target) return this.parse(`/math ${target}`);
 		if (!this.runBroadcast()) return;
 		const SUPPORTED_RANDOM_FORMATS = ['gen7randombattle', 'gen7unratedrandombattle'];
+		const SUPPORTED_BATTLESPOT_FORMATS = ['gen5gbusingles', 'gen5gbudoubles', 'gen6battlespotsingles', 'gen6battlespotdoubles', 'gen6battlespottriples', 'gen7battlespotsingles', 'gen7battlespotdoubles', 'gen7bssfactory'];
 		const isRandomBattle = (room && room.battle && SUPPORTED_RANDOM_FORMATS.includes(room.battle.format));
+		const isBattleSpotBattle = (room && room.battle && (SUPPORTED_BATTLESPOT_FORMATS.includes(room.battle.format) || room.battle.format.includes("battlespotspecial")));
 		if (['randomscalc', 'randbatscalc', 'rcalc'].includes(cmd) || isRandomBattle) {
 			return this.sendReplyBox(
 				`Random Battles damage calculator. (Courtesy of LegoFigure11 &amp; Smoochyena)<br />` +
 				`- <a href="https://randbatscalc.github.io/">Random Battles Damage Calculator</a>`
+			);
+		}
+		if (['bsscalc', 'cantsaycalc'].includes(cmd) || isBattleSpotBattle) {
+			return this.sendReplyBox(
+				`Battle Spot damage calculator. (Courtesy of cant say &amp; LegoFigure11)<br />` +
+        `- <a href="https://cantsay.github.io/">Battle Spot Damage Calculator</a>`
 			);
 		}
 		this.sendReplyBox(
