@@ -610,7 +610,7 @@ let BattleScripts = {
 		let hit;
 		for (hit = 1; hit <= targetHits; hit++) {
 			if (damage.includes(false)) break;
-			if (pokemon.status === 'slp' && !isSleepUsable) break;
+			if (hit > 1 && pokemon.status === 'slp' && !isSleepUsable) break;
 			if (targets.some(target => target && !target.hp)) break;
 			move.hit = hit;
 			targetsCopy = targets.slice(0);
