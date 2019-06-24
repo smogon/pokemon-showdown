@@ -810,18 +810,6 @@ let BattleStatuses = {
 			}
 		},
 	},
-	lionyx: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|+Lionyx|Let the storm rage on... for Arendelle!`);
-		},
-		onSwitchOut() {
-			this.add(`c|+Lionyx|/me turns away and slams the door`);
-		},
-		onFaint() {
-			this.add(`c|+Lionyx|Can't hold it back anymore...`);
-		},
-	},
 	lostseso: {
 		noCopy: true,
 		onStart(pokemon) {

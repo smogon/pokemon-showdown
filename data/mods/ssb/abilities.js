@@ -533,22 +533,6 @@ let BattleAbilities = {
 			}
 		},
 	},
-	// Lionyx
-	frozenskin: {
-		desc: "If hail is active, this Pokemon's Speed is doubled. This Pokemon takes no damage from hail.",
-		shortDesc: "If hail is active, this Pokemon's Speed is doubled; immunity to hail.",
-		id: "frozenskin",
-		name: "Frozen Skin",
-		isNonstandard: "Custom",
-		onModifySpe(spe, pokemon) {
-			if (this.field.isWeather('hail')) {
-				return this.chainModify(2);
-			}
-		},
-		onImmunity(type, pokemon) {
-			if (type === 'hail') return false;
-		},
-	},
 	// Marshmallon
 	sightseeing: {
 		desc: "If this Pokemon is a Castform, its type and moves changes to the current weather condition's type, except Sandstorm. The user's Defense, Special Attack, Special Defense, Speed, and Accuracy are all boosted 1.5x during weather.",

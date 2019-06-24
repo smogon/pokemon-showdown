@@ -2186,44 +2186,6 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Flying",
 	},
-	// Lionyx
-	letitgo: {
-		accuracy: 95,
-		basePower: 110,
-		category: "Special",
-		desc: "Summons hail. Has a 15% chance to lower the target's Special Defense, and a 5% chance to freeze it.",
-		shortDesc: "Summons hail; 15% to lower SpD, 5% to freeze.",
-		id: "letitgo",
-		name: "Let it Go",
-		isNonstandard: "Custom",
-		pp: 5,
-		priority: 0,
-		flags: {protect: 1, mirror: 1, sound: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, "Ice Beam", target);
-			this.add('-anim', source, "Subzero Slammer", target);
-			this.add('-anim', source, "Hyper Voice", target);
-		},
-		secondaries: [
-			{
-				chance: 5,
-				status: 'frz',
-			}, {
-				chance: 15,
-				boosts: {
-					spd: -1,
-				},
-			},
-		],
-		onAfterMoveSecondarySelf() {
-			this.field.setWeather('hail');
-		},
-		target: "normal",
-		type: "Ice",
-	},
 	// Lost Seso
 	shuffleramendance: {
 		accuracy: 100,

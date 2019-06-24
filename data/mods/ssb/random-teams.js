@@ -390,12 +390,6 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Bar Fight',
 				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 			},
-			'Lionyx': {
-				species: 'Gardevoir', ability: 'Frozen Skin', item: 'Gardevoirite', gender: 'F',
-				moves: [['Thunder Wave', 'Will-O-Wisp', 'Toxic', 'Sing'], ['Moonblast', 'Psychic'], 'Calm Mind'],
-				signatureMove: 'Let it Go',
-				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
-			},
 			'Lost Seso': {
 				species: 'Typhlosion', ability: 'Dazzling', item: 'Firium Z', gender: 'M',
 				moves: ['Calm Mind', 'Petal Dance', 'Fiery Dance'],

@@ -71,11 +71,6 @@ let BattlePokedex = {
 		inherit: true,
 		abilities: {0: 'Stamina'},
 	},
-	// Lionyx
-	gardevoirmega: {
-		inherit: true,
-		abilities: {0: 'Frozen Skin'},
-	},
 	// MacChaeger
 	mantyke: {
 		inherit: true,
