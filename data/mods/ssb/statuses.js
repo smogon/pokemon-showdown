@@ -128,16 +128,16 @@ let BattleStatuses = {
 			}
 		},
 	},
-	alphawittem: {
+	alpha: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@AlphaWittem|MAMMA MIA! It's me, ALPHA!`);
+			this.add(`c|@Alpha|MAMMA MIA! It's me, ALPHA!`);
 		},
 		onSwitchOut() {
-			this.add(`c|@AlphaWittem|brb gonna eat some pizza`);
+			this.add(`c|@Alpha|brb gonna eat some pizza`);
 		},
 		onFaint() {
-			this.add(`c|@AlphaWittem|PER LA PATRIA!`);
+			this.add(`c|@Alpha|PER LA PATRIA!`);
 		},
 	},
 	andrew: {

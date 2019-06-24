@@ -112,7 +112,7 @@ let BattleAbilities = {
 			pokemon.heal(pokemon.maxhp / 3);
 		},
 	},
-	// AlphaWittem
+	// Alpha
 	osolemio: {
 		desc: "If Sun is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn.",
 		shortDesc: "If Sun is active, this Pokemon heals 1/16 of its max HP each turn.",

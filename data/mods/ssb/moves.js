@@ -270,7 +270,7 @@ let BattleMovedex = {
 		target: "self",
 		type: "Ghost",
 	},
-	// AlphaWittem
+	// Alpha
 	nekoveil: {
 		accuracy: true,
 		basePower: 0,

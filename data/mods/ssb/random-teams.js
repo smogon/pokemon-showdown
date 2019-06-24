@@ -94,7 +94,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Compost',
 				evs: {hp: 248, atk: 8, spd: 252}, nature: 'Careful',
 			},
-			'AlphaWittem': {
+			'Alpha': {
 				species: 'Espeon', ability: 'O SOLE MIO', item: 'Light Clay', gender: 'M',
 				moves: ['Psychic', 'Focus Blast', 'Morning Sun'],
 				signatureMove: 'Neko Veil',
