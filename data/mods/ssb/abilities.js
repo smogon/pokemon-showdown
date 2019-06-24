@@ -98,6 +98,35 @@ let BattleAbilities = {
 			this.boost({atk: 1, def: -1, spd: -1, spe: 1});
 		},
 	},
+	// Akiamara
+	toxicswap: {
+		desc: "On switch-in, this Pokemon swaps all stat changes with the opponent. Ignores abilities.",
+		shortDesc: "On switch-in, swaps all stat changes with opponent. Ignores abilities.",
+		isNonstandard: "Custom",
+		id: "toxicswap",
+		name: "Toxic Swap",
+		onStart(pokemon) {
+			let target = pokemon.side.foe.active[0];
+			if (!target) return;
+			let targetBoosts = {};
+			let pokemonBoosts = {};
+
+			// @ts-ignore
+			for (let i in target.boosts) {
+				// @ts-ignore
+				targetBoosts[i] = target.boosts[i];
+				// @ts-ignore
+				pokemonBoosts[i] = pokemon.boosts[i];
+			}
+			target.setBoost(pokemonBoosts);
+			pokemon.setBoost(targetBoosts);
+
+			this.add('-swapboost', pokemon, target, '[from] ability: Toxic Swap');
+		},
+		onModifyMove(move) {
+			move.ignoreAbility = true;
+		},
+	},
 	// Akir
 	regrowth: {
 		desc: "This Pokemon's healing moves have their priority increased by one stage. When switching out, this Pokemon restores 1/3 of its maximum HP, rounded down.",

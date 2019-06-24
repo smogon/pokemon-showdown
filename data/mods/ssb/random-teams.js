@@ -88,6 +88,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Cataclysm',
 				evs: {hp: 252, atk: 252, spe: 4}, ivs: {spa: 0}, nature: 'Adamant',
 			},
+			'Akiamara': {
+				species: 'Croagunk', ability: 'Toxic Swap', item: ['Life Orb', 'Black Sludge'], gender: '',
+				moves: [['Gunk Shot', 'Sludge Wave'], 'Taunt', 'Photon Geyser'],
+				signatureMove: 'x1',
+				evs: {hp: 252, spa: 4, spe: 252}, nature: 'Serious',
+			},
 			'Akir': {
 				species: 'Parasect', ability: 'Regrowth', item: 'Leftovers', gender: 'M',
 				moves: ['Spore', ['Leech Life', 'Horn Leech'], 'Healing Wish'],

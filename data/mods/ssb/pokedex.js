@@ -14,6 +14,11 @@ let BattlePokedex = {
 		inherit: true,
 		types: ['Normal', 'Ghost'],
 	},
+	// Akiamara
+	croagunk: {
+		inherit: true,
+		baseStats: {hp: 83, atk: 106, def: 65, spa: 86, spd: 65, spe: 85},
+	},
 	// Arrested
 	blastoisemega: {
 		inherit: true,
