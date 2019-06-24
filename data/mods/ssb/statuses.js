@@ -535,13 +535,13 @@ let BattleStatuses = {
 	flare: {
 		noCopy: true,
 		onStart() {
-			this.add('c|%Flare|(9°^°)9');
+			this.add('c|@Flare|(9°^°)9');
 		},
 		onSwitchIn() {
-			this.add('c|%Flare|ᕕ( ᐛ )ᕗ');
+			this.add('c|@Flare|ᕕ( ᐛ )ᕗ');
 		},
 		onFaint() {
-			this.add('c|%Flare|X_X');
+			this.add('c|@Flare|X_X');
 		},
 	},
 	fomg: {
@@ -620,13 +620,13 @@ let BattleStatuses = {
 	hubriz: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+Hubriz|Just a harmless flower...`);
+			this.add(`c|%Hubriz|Just a harmless flower...`);
 		},
 		onSwitchOut() {
-			this.add(`c|+Hubriz|I'll bloom once more soon enough!`);
+			this.add(`c|%Hubriz|I'll bloom once more soon enough!`);
 		},
 		onFaint() {
-			this.add(`c|+Hubriz|I burn, I pine, I perish.`);
+			this.add(`c|%Hubriz|I burn, I pine, I perish.`);
 		},
 	},
 	hurl: {
@@ -683,13 +683,13 @@ let BattleStatuses = {
 	kaijubunny: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%Kaiju Bunny|￣( ÒㅅÓ)￣ Thump Thump Motherfucker`);
+			this.add(`c|@Kaiju Bunny|￣( ÒㅅÓ)￣ Thump Thump Motherfucker`);
 		},
 		onSwitchOut() {
-			this.add(`c|%Kaiju Bunny|￣( >ㅅ>)￣ Holding me back, I see how it is`);
+			this.add(`c|@Kaiju Bunny|￣( >ㅅ>)￣ Holding me back, I see how it is`);
 		},
 		onFaint() {
-			this.add(`c|%Kaiju Bunny|￣( ‘xㅅx)￣Time to take a 10 hour power nap`);
+			this.add(`c|@Kaiju Bunny|￣( ‘xㅅx)￣Time to take a 10 hour power nap`);
 		},
 		// Kaiju Rage Innate
 		// onUpdate so toxic orb can activate after. Code mainly copied from Power Construct.
@@ -787,27 +787,27 @@ let BattleStatuses = {
 	level51: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|@Level 51|Calculating chance of victory!`);
+			this.add(`c|%Level 51|Calculating chance of victory!`);
 		},
 		onSwitchOut() {
-			this.add(`c|@Level 51|chance_victory < 1. Recalibrating...`);
+			this.add(`c|%Level 51|chance_victory < 1. Recalibrating...`);
 		},
 		onFaint() {
-			this.add(`c|@Level 51|**IndexError**: list index out of range`);
+			this.add(`c|%Level 51|**IndexError**: list index out of range`);
 		},
 	},
 	lifeisdank: {
 		noCopy: true,
 		onStart(target) {
-			this.add(`c|~LifeisDANK|!!!ლ(⁰⊖⁰ლ) Peent Peent.`);
+			this.add(`c|@LifeisDANK|!!!ლ(⁰⊖⁰ლ) Peent Peent.`);
 			if (target.illusion) return;
 			this.boost({spe: 2}, target);
 		},
 		onSwitchOut() {
-			this.add(`c|~LifeisDANK|!(•⌔• ) Peent Peent.`);
+			this.add(`c|@LifeisDANK|!(•⌔• ) Peent Peent.`);
 		},
 		onFaint() {
-			this.add(`c|~LifeisDANK|(•⌔•. ) Peent.`);
+			this.add(`c|@LifeisDANK|(•⌔•. ) Peent.`);
 		},
 		// Mountaineer innate
 		onDamage(damage, target, source, effect) {
@@ -925,13 +925,13 @@ let BattleStatuses = {
 	mitsuki: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%Mitsuki|SSSSSSSSSSSSS`);
+			this.add(`c|@Mitsuki|SSSSSSSSSSSSS`);
 		},
 		onSwitchOut() {
-			this.add(`c|%Mitsuki|sssssssssssss`);
+			this.add(`c|@Mitsuki|sssssssssssss`);
 		},
 		onFaint() {
-			this.add(`c|%Mitsuki|sss`);
+			this.add(`c|@Mitsuki|sss`);
 		},
 	},
 	morfent: {
@@ -1388,13 +1388,13 @@ let BattleStatuses = {
 	torkool: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%torkool|:peepodetective:`);
+			this.add(`c|+torkool|:peepodetective:`);
 		},
 		onSwitchOut() {
-			this.add(`c|%torkool|i cba`);
+			this.add(`c|+torkool|i cba`);
 		},
 		onFaint() {
-			this.add(`c|%torkool|I don't deserve this...`);
+			this.add(`c|+torkool|I don't deserve this...`);
 		},
 	},
 	trickster: {
