@@ -507,8 +507,6 @@ const pages = {
 				confirmbattleharassment: `Report harassment in a battle`,
 				confirminapname: `Report an inappropriate username`,
 				confirminappokemon: `Report inappropriate Pok&eacute;mon nicknames`,
-				confirmreportroomowner: `Report a Room Owner`,
-				confirmreportglobal: `Report a Global Staff member`,
 				confirmappeal: `Appeal your lock`,
 				confirmipappeal: `Appeal IP lock`,
 				confirmappealsemi: `Appeal ISP lock`,
@@ -521,8 +519,6 @@ const pages = {
 				battleharassment: `Battle Harassment`,
 				inapname: `Inappropriate Username`,
 				inappokemon: `Inappropriate Pokemon Nicknames`,
-				reportroomowner: `Room Owner Complaint`,
-				reportglobal: `Global Staff Complaint`,
 				appeal: `Appeal`,
 				ipappeal: `IP-Appeal`,
 				appealsemi: `ISP-Appeal`,
@@ -566,12 +562,6 @@ const pages = {
 					buf += `<p>If a user has an inappropriate name, or has inappropriate Pok&eacute;mon nicknames, click the appropriate button below and a global staff member will take a look.</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirminapname</Button> <Button>confirminappokemon</Button></p>`;
-					break;
-				case 'staff':
-					buf += `<p>If you have a complaint against a room staff member, please PM a Room Owner (marked with a #) in the room.</p>`;
-					buf += `<p>If you have a complaint against a global staff member or Room Owner, please click the appropriate button below. Alternatively, make a post in <a href="https://www.smogon.com/forums/threads/names-passwords-rooms-and-servers-contacting-upper-staff.3538721/#post-6300151">Admin Requests</a>.</p>`;
-					if (!isLast) break;
-					buf += `<p><Button>confirmreportroomowner</Button> <Button>confirmreportglobal</Button></p>`;
 					break;
 				case 'appeal':
 					buf += `<p><b>What would you like to appeal?</b></p>`;
@@ -835,9 +825,7 @@ let commands = {
 				}
 			}
 			if (Monitor.countTickets(user.latestIp)) return this.popupReply(`Due to high load, you are limited to creating ${Punishments.sharedIps.has(user.latestIp) ? `50` : `5`} tickets every hour.`);
-			if (!['PM Harassment', 'Battle Harassment', 'Inappropriate Username', 'Inappropriate Pokemon Nicknames', 'Room Owner Complaint', 'Global Staff Complaint', 'Appeal', 'IP-Appeal', 'ISP-Appeal', 'Public Room Assistance Request', 'Other'].includes(target)) return this.parse('/helpticket');
-			let upper = false;
-			if (['Room Owner Complaint', 'Global Staff Complaint'].includes(target)) upper = true;
+			if (!['PM Harassment', 'Battle Harassment', 'Inappropriate Username', 'Inappropriate Pokemon Nicknames', 'Appeal', 'IP-Appeal', 'ISP-Appeal', 'Public Room Assistance Request', 'Other'].includes(target)) return this.parse('/helpticket');
 			ticket = {
 				creator: user.name,
 				userid: user.userid,
@@ -846,7 +834,7 @@ let commands = {
 				type: target,
 				created: Date.now(),
 				claimed: null,
-				escalated: upper,
+				escalated: false,
 				ip: user.latestIp,
 			};
 			/** @type {{[k: string]: string}} */
@@ -855,8 +843,6 @@ let commands = {
 				'Battle Harassment': `Hi! Who was harassing you, and in which battle did it happen? Please post a link to the battle or a replay of the battle.`,
 				'Inappropriate Username': `Hi! Tell us the username that is inappropriate.`,
 				'Inappropriate Pokemon Nicknames': `Hi! Which user has pokemon with inappropriate nicknames, and in which battle? Please post a link to the battle or a replay of the battle.`,
-				'Room Owner Complaint': `Hi! Which Room Owner are you reporting, and why are you reporting them?`,
-				'Global Staff Complaint': `Hi! Which Global Staff member are you reporting, and why are you reporting them?`,
 				'Appeal': `Hi! Can you please explain why you feel your punishment is undeserved?`,
 				'Public Room Assistance Request': `Hi! Which room(s) do you need us to help you watch?`,
 				'Other': `Hi! What seems to be the problem? Tell us about any people involved, and if this happened in a specific place on the site.`,
@@ -865,8 +851,8 @@ let commands = {
 			const staffContexts = {
 				'IP-Appeal': `<p><strong>${user.name}'s IP Addresses</strong>: ${Object.keys(user.ips).map(ip => `<a href="https://whatismyipaddress.com/ip/${ip}" target="_blank">${ip}</a>`).join(', ')}</p>`,
 			};
-			const introMessage = Chat.html`<h2 style="margin-top:0">Help Ticket - ${user.name}</h2><p><b>Issue</b>: ${ticket.type}<br />${upper ? `An Upper` : `A Global`} Staff member will be with you shortly.</p>`;
-			const staffMessage = `${upper ? `<p><h3>Do not post sensitive information in this room.</h3>Drivers and moderators can access this room's logs via the log viewer; please PM the user instead.</p>` : ``}<p><button class="button" name="send" value="/helpticket close ${user.userid}">Close Ticket</button> <details><summary class="button">More Options</summary><button class="button" name="send" value="/helpticket escalate ${user.userid}">Escalate</button> ${upper ? `` : `<button class="button" name="send" value="/helpticket escalate ${user.userid}, upperstaff">Escalate to Upper Staff</button>`} <button class="button" name="send" value="/helpticket ban ${user.userid}"><small>Ticketban</small></button></details></p>`;
+			const introMessage = Chat.html`<h2 style="margin-top:0">Help Ticket - ${user.name}</h2><p><b>Issue</b>: ${ticket.type}<br />A Global Staff member will be with you shortly.</p>`;
+			const staffMessage = `<p><button class="button" name="send" value="/helpticket close ${user.userid}">Close Ticket</button> <details><summary class="button">More Options</summary><button class="button" name="send" value="/helpticket escalate ${user.userid}">Escalate</button> <button class="button" name="send" value="/helpticket escalate ${user.userid}, upperstaff">Escalate to Upper Staff</button> <button class="button" name="send" value="/helpticket ban ${user.userid}"><small>Ticketban</small></button></details></p>`;
 			const staffHint = staffContexts[target] || '';
 			let helpRoom = /** @type {ChatRoom?} */ (Rooms(`help-${user.userid}`));
 			if (!helpRoom) {
@@ -874,7 +860,7 @@ let commands = {
 					isPersonal: true,
 					isHelp: 'open',
 					isPrivate: 'hidden',
-					modjoin: (upper ? '&' : '%'),
+					modjoin: '%',
 					auth: {[user.userid]: '+'},
 					introMessage: introMessage,
 					staffMessage: staffMessage + staffHint,
@@ -883,16 +869,6 @@ let commands = {
 			} else {
 				helpRoom.isHelp = 'open';
 				if (helpRoom.expireTimer) clearTimeout(helpRoom.expireTimer);
-				if (upper && helpRoom.modjoin === '%') {
-					// Kick drivers and moderators out
-					helpRoom.modjoin = '&';
-					for (let u in helpRoom.users) {
-						let targetUser = helpRoom.users[u];
-						if (targetUser.isStaff && ['%', '@'].includes(targetUser.group)) targetUser.leaveRoom(helpRoom);
-					}
-				} else if (!upper && helpRoom.modjoin === '&') {
-					helpRoom.modjoin = '%';
-				}
 				helpRoom.introMessage = introMessage;
 				helpRoom.staffMessage = staffMessage + staffHint;
 				if (helpRoom.game) helpRoom.game.destroy();
@@ -913,7 +889,7 @@ let commands = {
 			}
 			tickets[user.userid] = ticket;
 			writeTickets();
-			notifyStaff(upper);
+			notifyStaff(false);
 			connection.send(`>view-help-request\n|deinit`);
 		},
 
