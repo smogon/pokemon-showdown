@@ -3984,11 +3984,16 @@ const commands = {
 			return this.errorReply(`User ${name} must be in the battle room already.`);
 		}
 		if (!this.can('joinbattle', null, room)) return;
-		if (room.battle[target]) {
+		if (room.battle[target].userid) {
 			return this.errorReply(`This room already has a player in slot ${target}.`);
 		}
 
-		room.battle.addPlayer(targetUser, target);
+		room.auth[targetUser.userid] = Users.PLAYER_SYMBOL;
+		let success = room.battle.joinGame(targetUser, target);
+		if (!success) {
+			delete room.auth[targetUser.userid];
+			return;
+		}
 		this.addModAction(`${name} was added to the battle as Player ${target.slice(1)} by ${user.name}.`);
 		this.modlog('ROOMPLAYER', targetUser.getLastId());
 	},
