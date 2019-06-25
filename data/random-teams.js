@@ -1517,8 +1517,6 @@ class RandomTeams extends Dex.ModdedDex {
 			item = template.baseStats.spa >= 100 && template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && this.randomChance(2, 3) ? 'Choice Scarf' : 'Choice Specs';
 		} else if (((counter.Physical >= 3 && hasMove['defog']) || (counter.Special >= 3 && hasMove['uturn'])) && template.baseStats.spe >= 60 && template.baseStats.spe <= 108 && !counter['priority'] && !hasMove['foulplay'] && this.randomChance(2, 3) && !isDoubles) {
 			item = 'Choice Scarf';
-		} else if (ability === 'Defeatist' || hasMove['eruption'] || hasMove['waterspout']) {
-			item = counter.Status <= 1 ? 'Expert Belt' : 'Leftovers';
 		} else if (hasMove['reversal'] && hasMove['substitute'] && !teamDetails.zMove) {
 			item = 'Fightinium Z';
 		} else if ((hasMove['endeavor'] || hasMove['flail'] || hasMove['reversal']) && ability !== 'Sturdy') {
@@ -1763,11 +1761,12 @@ class RandomTeams extends Dex.ModdedDex {
 
 			let tier = template.tier;
 
-			// Limit two Pokemon per tier
+			// Limit two Pokemon per tier, three for Monotype
 			if (!tierCount[tier]) {
 				tierCount[tier] = 1;
-			} else if (tierCount[tier] > 1) {
-				continue;
+			} else {
+				tierCount[tier]++;
+				if (!isMonotype || tierCount[tier] > 2) continue;
 			}
 
 			let types = template.types;
