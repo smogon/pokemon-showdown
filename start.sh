@@ -1,2 +1,1 @@
-#!/bin/bash
-node ./pokemon-showdown;
+nohup node ./pokemon-showdown 80 &
