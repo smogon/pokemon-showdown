@@ -61710,7 +61710,7 @@ let BattleLearnsets = {
 		psychicterrain: ["7L1"],
 		psychup: ["7M", "5M"],
 		psyshock: ["7M", "5M"],
-		quiverdance: ["7L1", "5L1"],
+		quiverdance: ["5L1"],
 		raindance: ["7M", "5M"],
 		recycle: ["7T", "5T"],
 		reflect: ["7M", "5M"],
