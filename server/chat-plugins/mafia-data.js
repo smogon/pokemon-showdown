@@ -28,7 +28,7 @@ const alignments = {
 		color: `#060`,
 		buttonColor: `#0A0`,
 		memo: [`You are aligned with the <span style="color:#060;font-weight:bold">Town</span>. You win when all threats to the Town are eliminated and at least one Town-aligned player is still alive, or nothing can prevent the same.`],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-villager.png"/>`,
 	},
 	mafia: {
 		name: `Mafia`,
@@ -40,7 +40,7 @@ const alignments = {
 			`Factional Kill: The Mafia may kill one player per night.`,
 			`You are aligned with the <span style="color:#F00;font-weight:bold">Mafia</span>. You win when all players without a Mafia wincon are eliminated and at least one Mafia-aligned player is still alive (or nothing can prevent the same).`,
 		],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-mafia.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-mafia.png"/>`,
 	},
 	werewolf: {
 		name: `Werewolf`,
@@ -52,7 +52,7 @@ const alignments = {
 			`Factional Kill: The Werewolves may kill one player per Night.`,
 			`You are aligned with the <span style="color:#FFA500;font-weight:bold">Werewolves</span>. You win when all players without a Werewolf wincon are eliminated and at least one Werewolf-aligned player is still alive (or nothing can prevent the same).`,
 		],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-werewolf.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-werewolf.png"/>`,
 	},
 	alien: {
 		name: `Alien`,
@@ -65,7 +65,7 @@ const alignments = {
 			`You are aligned with the <span style="color:#F0F;font-weight:bold">Aliens</span>. You win when all players without a Alien wincon are eliminated and at least one Alien-aligned player is still alive (or nothing can prevent the same).`,
 		],
 		// TODO image for alien faction
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-villager.png"/>`,
 	},
 	cult: {
 		name: `Cult`,
@@ -78,7 +78,7 @@ const alignments = {
 			`You are aligned with the <span style="color:#000;font-weight:bold">Cult</span>. You win when all players without a Cult wincon are eliminated and at least one Cult-aligned player is still alive (or nothing can prevent the same).`,
 		],
 		// TODO image for cult faction
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-villager.png"/>`,
 	},
 	cultafia: {
 		name: `Cultafia`,
@@ -91,7 +91,7 @@ const alignments = {
 			`You are aligned with the <span style="color:#600;font-weight:bold">Cultafia</span>. You win when all players without a Cultafia wincon are eliminated and at least one Cultafia-aligned player is still alive (or nothing can prevent the same).`,
 		],
 		// TODO image for cult faction
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-villager.png"/>`,
 	},
 	goo: {
 		name: `Goo`,
@@ -103,7 +103,7 @@ const alignments = {
 			`Factional Concept: Goos have interesting Reflexive abilities to aid them more often than not.`,
 			`You are aligned with the <span style="color:#2FF;font-weight:bold">Goos</span>. You win when all players without a Goo wincon are eliminated and at least one Goo-aligned player is still alive (or nothing can prevent the same).`,
 		],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-villager.png"/>`,
 	},
 	replicant: {
 		name: `Replicant`,
@@ -115,7 +115,7 @@ const alignments = {
 			`Factional Kill: The Replicants may kill one player per night.`,
 			`You are aligned with the <span style="color:#DDD;font-weight:bold">Replicants</span>. You win when all players without a Replicant wincon are eliminated and at least one Replicant-aligned player is still alive (or nothing can prevent the same).`,
 		],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-villager.png"/>`,
 	},
 	mime: {
 		name: `Mime`,
@@ -127,7 +127,7 @@ const alignments = {
 			`Factional Roleblock: The Mimes may roleblock one player per night.`,
 			`You are aligned with the <span style="color:#A6B;font-weight:bold">Mimes</span>. You win when all players with a Mime wincon have been lynched.`,
 		],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-villager.png"/>`,
 	},
 	arsonist: {
 		name: `Arsonist`,
@@ -141,7 +141,7 @@ const alignments = {
 			`Factional Ignite: The Arsonists light all previously primed players on fire, killing them.`,
 			`You are aligned with the <span style="color:#E82;font-weight:bold">Arsonists</span>. You win when all players without an Arsonist wincon are eliminated and at least one Arsonist-aligned player is still alive (or nothing can prevent the same).`,
 		],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-villager.png"/>`,
 	},
 	pygmee: {
 		name: `Pygmee`,
@@ -153,7 +153,7 @@ const alignments = {
 			`Factional Kill: The Pygmees may attempt to kill someone at any moment.`,
 			`You are aligned with the <span style="color:#640;font-weight:bold">Pygmees</span>. You win when all players without a Pygmee wincon are eliminated and at least one Pygmee-aligned player is still alive (or nothing can prevent the same).`,
 		],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-villager.png"/>`,
 	},
 	hypnotist: {
 		name: `Hypnotist`,
@@ -165,14 +165,14 @@ const alignments = {
 			`Factional Hypnotise: The Hypnotists can hypnotise another player every night. For the next day only, this player gains an additional win-condition of lynching another player specified by the Hypnotists.`,
 			`You are aligned with the <span style="color:#A26;font-weight:bold">Hypnotists</span>. You win when all players without a Hypnotist wincon are eliminated and at least one Hypnotist-aligned player is still alive (or nothing can prevent the same).`,
 		],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-villager.png"/>`,
 	},
 	solo: {
 		// Special alignment for all roles that are on their own.
 		name: `Solo`,
 		plural: `Solos`,
 		id: `solo`,
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-goon.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-goon.png"/>`,
 		memo: [],
 	},
 };
@@ -188,7 +188,7 @@ const roles = {
 	villager: {
 		name: `Villager`,
 		id: `villager`,
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-villager.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-villager.png"/>`,
 		memo: [`Vanilla Townie: Town player without any additional abilities.`],
 	},
 	goon: {
@@ -249,7 +249,7 @@ const roles = {
 		name: `Babysitter`,
 		id: `babysitter`,
 		memo: [`Babysitter: During the Night, you may PM the host the name of another player. This player will be protected from all nightkills for that Night, but if the Babysitter dies, its target will die too.`],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-doctor.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-doctor.png"/>`,
 	},
 	bailiff: {
 		name: `Bailiff`,
@@ -288,7 +288,7 @@ const roles = {
 		name: `Bloodhound`,
 		id: `bloodhound`,
 		memo: [`Bloodhound: Each night you can PM the host the name of another player. You will be told if they are TOWN or NOT TOWN, or receive NO RESULT if your investigation failed.`],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-cop.png"/>`,
 	},
 	bloodsucker: {
 		name: `Bloodsucker`,
@@ -300,7 +300,7 @@ const roles = {
 		name: `Bodyguard`,
 		id: `bodyguard`,
 		memo: [`Bodyguard: During the Night, you may PM the host the name of another player. This player will be protected from all nightkills for that Night, but the Bodyguard will be killed instead.`],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-doctor.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-doctor.png"/>`,
 	},
 	bouncer: {
 		name: `Bouncer`,
@@ -347,7 +347,7 @@ const roles = {
 		name: `Conspiracy Theorist`,
 		id: `conspiracytheorist`,
 		memo: [`Conspiracy Theorist: Each night you can PM the host the name of another player. You will be told if they are ALIEN or NOT ALIEN, or receive NO RESULT if your investigation failed. Additionally, you will always be inspected as an ALIEN when possible.`],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-cop.png"/>`,
 	},
 	// Above cop so they get checked first
 	backup_cop: `deputy`,
@@ -360,14 +360,14 @@ const roles = {
 		name: `Role Cop`,
 		id: `rolecop`,
 		memo: [`Role Cop: Each night you can PM the host the name of another player. You will be told their exact role, or NO RESULT if your investigation failed.`],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-cop.png"/>`,
 	},
 	vanilla_cop: `neapolitan`,
 	cop: {
 		name: `Cop`,
 		id: `cop`,
 		memo: [`Cop: Each night you can PM the host the name of another player. You will be told if they are MAFIA or NOT MAFIA, or receive NO RESULT if your investigation failed.`],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-cop.png"/>`,
 	},
 	coat: `cop-of-all-trades`,
 	cop_of_all_trades: `cop-of-all-trades`,
@@ -447,7 +447,7 @@ const roles = {
 		name: `Doctor`,
 		id: `doctor`,
 		memo: [`Doctor: During the Night, you may PM the host the name of another player. This player will be protected from all nightkills for that Night.`],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-doctor.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-doctor.png"/>`,
 	},
 	diyer: `do-it-yourselfer`,
 	do_it_yourselfer: `do-it-yourselfer`,
@@ -480,7 +480,7 @@ const roles = {
 		name: `FBI Agent`,
 		id: `fbiagent`,
 		memo: [`FBI Agent: Each night you can PM the host the name of another player. You will be told if they are SERIAL KILLER or NOT SERIAL KILLER, or receive NO RESULT if your investigation failed.`],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-cop.png"/>`,
 	},
 	firefighter: {
 		name: `Firefighter`,
@@ -498,7 +498,7 @@ const roles = {
 		name: `Follower`,
 		id: `follower`,
 		memo: [`Follower: During the Night, you may PM the host the name of another player. You will get to know what action, if any, this player performed.`],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-cop.png"/>`,
 	},
 	friend_recruiter: {
 		name: `Friend Recruiter`,
@@ -708,7 +708,7 @@ const roles = {
 		name: `Motion Detector`,
 		id: `motiondetector`,
 		memo: [`Motion Detector: During the Night, you may PM the host the name of another player. You will get to know whether any actions were performed on or by this player.`],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-cop.png"/>`,
 	},
 	multiplier: {
 		name: `Multiplier`,
@@ -719,7 +719,7 @@ const roles = {
 		name: `Neapolitan`,
 		id: `neapolitan`,
 		memo: [`Neapolitan: Each night, you can PM the host the name of a player. You will be told if they are VANILLA or NOT VANILLA, or receive NO RESULT if your investigation failed.`],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-cop.png"/>`,
 	},
 	necromancer: {
 		name: `Necromancer`,
@@ -735,7 +735,7 @@ const roles = {
 		name: `Nurse`,
 		id: `nurse`,
 		memo: [`Nurse: When a Doctor dies, you will become a Doctor instead.`],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-doctor.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-doctor.png"/>`,
 	},
 	nymphomaniac: {
 		name: `Nymphomaniac`,
@@ -799,7 +799,7 @@ const roles = {
 		name: `Private Investigator`,
 		id: `privateinvestigator`,
 		memo: [`Private Investigator: Each night you can PM the host the name of another player. You will be told if they are CULT or NOT CULT, or receive NO RESULT if your investigation failed.`],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-cop.png"/>`,
 	},
 	prober: {
 		name: `Prober`,
@@ -876,7 +876,7 @@ const roles = {
 		name: `Rolestopper`,
 		id: `rolestopper`,
 		memo: [`Rolestopper: Each night you can PM the host the name of another player. All other actions on this player will fail, excluding kills.`],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-doctor.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-doctor.png"/>`,
 	},
 	saulus: {
 		name: `Saulus`,
@@ -898,13 +898,13 @@ const roles = {
 		name: `Seer`,
 		id: `seer`,
 		memo: [`Seer: During the Night, you may PM the host the name of another player. You will be told if they are WEREWOLF or NOT WEREWOLF, or receive NO RESULT if your investigation failed.`],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-cop.png"/>`,
 	},
 	seraph_knight: {
 		name: `Seraph Knight`,
 		id: `seraphknight`,
 		memo: [`Seraph Knight: Once a game, you may PM the host the name of another player at night. This player will not be able to be killed at night until you die.`],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-doctor.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-doctor.png"/>`,
 	},
 	sk: `serial_killer`,
 	serial_killer: {
@@ -987,7 +987,7 @@ const roles = {
 		name: `Tracker`,
 		id: `tracker`,
 		memo: [`Tracker: During the Night, you may PM the host the name of another player. You will be told who, if anyone, this player targeted.`],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-cop.png"/>`,
 	},
 	trainwreck: {
 		name: `Trainwreck`,
@@ -1055,13 +1055,13 @@ const roles = {
 		name: `Voyeur`,
 		id: `voyeur`,
 		memo: [`Voyeur: During the Night, you may PM the host the name of another player. You will be told what actions, if any, targeted this player.`],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-cop.png"/>`,
 	},
 	watcher: {
 		name: `Watcher`,
 		id: `watcher`,
 		memo: [`Watcher: During the Night, you may PM the host the name of another player. You will be told who, if anyone, targeted this player.`],
-		image: `<img width="75" height="75" src="//play.pokemonshowdown.com/fx/mafia-cop.png"/>`,
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-cop.png"/>`,
 	},
 	wild_card: {
 		name: `Wild Card`,

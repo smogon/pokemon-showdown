@@ -135,7 +135,7 @@ class Hangman extends Rooms.RoomGame {
 	}
 
 	hangingMan() {
-		return `<img width="120" height="120" src="//play.pokemonshowdown.com/fx/hangman${this.incorrectGuesses === -1 ? 7 : this.incorrectGuesses}.png" />`;
+		return `<img width="120" height="120" src="//${Config.routes.client}/fx/hangman${this.incorrectGuesses === -1 ? 7 : this.incorrectGuesses}.png" />`;
 	}
 
 	generateWindow() {
