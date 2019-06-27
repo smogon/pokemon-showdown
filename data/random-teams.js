@@ -1739,10 +1739,10 @@ class RandomTeams extends Dex.ModdedDex {
 		/**@type {RandomTeamsTypes.TeamDetails} */
 		let teamDetails = {};
 
-		// The maximum number of iterations we're willing to try in order to create a team.
-		const EXHAUSTED = 10;
-
-		for (let i = 0; pokemon.length < 6 && i < EXHAUSTED; i++) {
+		// We make at most two passes through the potential Pokemon pool when creating a team - if the first pass doesn't
+		// result in a team of six Pokemon we perform a second iteration relaxing as many restrictions as possible.
+		for (const restrict of [true, false]) {
+			if (pokemon.length >= 6) break;
 			const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 			while (pokemonPool.length && pokemon.length < 6) {
 				let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
@@ -1751,50 +1751,52 @@ class RandomTeams extends Dex.ModdedDex {
 				// Limit to one of each species (Species Clause)
 				if (baseFormes[template.baseSpecies]) continue;
 
-				// Adjust rate for species with multiple formes
-				switch (template.baseSpecies) {
-				case 'Arceus': case 'Silvally':
-					if (this.randomChance(17, 18)) continue;
-					break;
-				case 'Rotom':
-					if (this.randomChance(5, 6)) continue;
-					break;
-				case 'Deoxys': case 'Gourgeist': case 'Oricorio':
-					if (this.randomChance(3, 4)) continue;
-					break;
-				case 'Castform': case 'Kyurem': case 'Lycanroc': case 'Necrozma': case 'Wormadam':
-					if (this.randomChance(2, 3)) continue;
-					break;
-				case 'Basculin': case 'Cherrim': case 'Floette': case 'Giratina': case 'Hoopa': case 'Landorus': case 'Meloetta': case 'Meowstic': case 'Shaymin': case 'Thundurus': case 'Tornadus':
-					if (this.randomChance(1, 2)) continue;
-					break;
-				case 'Dugtrio': case 'Exeggutor': case 'Golem': case 'Greninja': case 'Marowak': case 'Muk': case 'Ninetales': case 'Persian': case 'Raichu': case 'Sandslash': case 'Zygarde':
-					if (this.gen >= 7 && this.randomChance(1, 2)) continue;
-					break;
-				}
-
 				let tier = template.tier;
-
-				// Limit two Pokemon per tier, three for Monotype, increasing per exhaustion.
-				if (!tierCount[tier]) {
-					tierCount[tier] = 1;
-				} else {
-					tierCount[tier]++;
-					if (!isMonotype || tierCount[tier] > 2 + i) continue;
-				}
-
 				let types = template.types;
+				let typeCombo = types.slice().sort().join();
 
-				if (!isMonotype) {
-					// Limit two of any type
-					let skip = false;
-					for (const type of types) {
-						if (typeCount[type] > 1 && this.randomChance(4, 5)) {
-							skip = true;
-							break;
-						}
+				// Adjust rate for species with multiple formes
+				if (restrict) {
+					switch (template.baseSpecies) {
+					case 'Arceus': case 'Silvally':
+						if (this.randomChance(17, 18)) continue;
+						break;
+					case 'Rotom':
+						if (this.randomChance(5, 6)) continue;
+						break;
+					case 'Deoxys': case 'Gourgeist': case 'Oricorio':
+						if (this.randomChance(3, 4)) continue;
+						break;
+					case 'Castform': case 'Kyurem': case 'Lycanroc': case 'Necrozma': case 'Wormadam':
+						if (this.randomChance(2, 3)) continue;
+						break;
+					case 'Basculin': case 'Cherrim': case 'Floette': case 'Giratina': case 'Hoopa': case 'Landorus': case 'Meloetta': case 'Meowstic': case 'Shaymin': case 'Thundurus': case 'Tornadus':
+						if (this.randomChance(1, 2)) continue;
+						break;
+					case 'Dugtrio': case 'Exeggutor': case 'Golem': case 'Greninja': case 'Marowak': case 'Muk': case 'Ninetales': case 'Persian': case 'Raichu': case 'Sandslash': case 'Zygarde':
+						if (this.gen >= 7 && this.randomChance(1, 2)) continue;
+						break;
 					}
-					if (skip) continue;
+
+					// Limit two Pokemon per tier, three for Monotype
+					if (!tierCount[tier]) {
+						tierCount[tier] = 1;
+					} else {
+						tierCount[tier]++;
+						if (!isMonotype || tierCount[tier] > 2) continue;
+					}
+
+					if (!isMonotype) {
+						// Limit two of any type
+						let skip = false;
+						for (const type of types) {
+							if (typeCount[type] > 1 && this.randomChance(4, 5)) {
+								skip = true;
+								break;
+							}
+						}
+						if (skip) continue;
+					}
 				}
 
 				if (potd && potd.exists) {
@@ -1816,14 +1818,15 @@ class RandomTeams extends Dex.ModdedDex {
 				let intersectMoves = set.moves.filter(move => incompatibleMoves.includes(move));
 				if (intersectMoves.length > 1) continue;
 
-				// Limit 1 of any type combination, 2 in Monotype, increasing per exhaustion.
-				let typeCombo = types.slice().sort().join();
-				if (set.ability === 'Drought' || set.ability === 'Drizzle' || set.ability === 'Sand Stream') {
-					// Drought, Drizzle and Sand Stream don't count towards the type combo limit
-					typeCombo = set.ability;
-					if (typeCombo in typeComboCount) continue;
-				} else {
-					if (typeComboCount[typeCombo] >= (isMonotype ? 2 : 1) + i) continue;
+				// Limit 1 of any type combination, 2 in Monotype
+				if (restrict) {
+					if (set.ability === 'Drought' || set.ability === 'Drizzle' || set.ability === 'Sand Stream') {
+						// Drought, Drizzle and Sand Stream don't count towards the type combo limit
+						typeCombo = set.ability;
+						if (typeCombo in typeComboCount) continue;
+					} else {
+						if (typeComboCount[typeCombo] >= (isMonotype ? 2 : 1)) continue;
+					}
 				}
 
 				let item = this.getItem(set.item);
