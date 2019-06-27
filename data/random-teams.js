@@ -1743,7 +1743,7 @@ class RandomTeams extends Dex.ModdedDex {
 		const EXHAUSTED = 10;
 
 		for (let i = 0; pokemon.length < 6 && i < EXHAUSTED; i++) {
-			const pokemonPool = this.getPokemonPool(type, pokemon);
+			const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 			while (pokemonPool.length && pokemon.length < 6) {
 				let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
 				if (!template.exists) continue;
