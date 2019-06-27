@@ -311,8 +311,9 @@ const commands = {
 		if (!this.can('rangeban')) return;
 		target = target.trim();
 		if (!/^[0-9.]+$/.test(target)) return this.errorReply('You must pass a valid IPv4 IP to /host.');
-		IPTools.getHost(target).then(host => {
-			this.sendReply('IP ' + target + ': ' + (host || "ERROR"));
+		IPTools.lookup(target).then(({dnsbl, host, hostType}) => {
+			const dnsblMessage = dnsbl ? ` [${dnsbl}]` : ``;
+			this.sendReply(`IP ${target}: ${host || "ERROR"} [${hostType}]${dnsblMessage}`);
 		});
 	},
 	hosthelp: [`/host [ip] - Gets the host for a given IP. Requires: & ~`],

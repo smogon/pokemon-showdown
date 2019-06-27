@@ -237,16 +237,17 @@ Chat.namefilter = function (name, user) {
 	}
 	return name;
 };
-/**@type {((host: string, user: User, connection: Connection) => void)[]} */
+/**@type {((host: string, user: User, connection: Connection, hostType: string) => void)[]} */
 Chat.hostfilters = [];
 /**
  * @param {string} host
  * @param {User} user
  * @param {Connection} connection
+ * @param {string} hostType
  */
-Chat.hostfilter = function (host, user, connection) {
+Chat.hostfilter = function (host, user, connection, hostType) {
 	for (const filter of Chat.hostfilters) {
-		filter(host, user, connection);
+		filter(host, user, connection, hostType);
 	}
 };
 /**@type {LoginFilter[]} */
