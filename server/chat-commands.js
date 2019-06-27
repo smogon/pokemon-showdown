@@ -3096,7 +3096,9 @@ const commands = {
 				Chat.uncache('./server/punishments');
 				global.Punishments = require('./punishments');
 				this.sendReply("Punishments have been hot-patched.");
-			} else if (target === 'dnsbl' || target === 'datacenters') {
+			} else if (target === 'dnsbl' || target === 'datacenters' || target === 'iptools') {
+				Chat.uncache('./.server-dist/ip-tools');
+				global.IPTools = require('../.server-dist/ip-tools').IPTools;
 				IPTools.loadDatacenters();
 				this.sendReply("IPTools has been hot-patched.");
 			} else if (target.startsWith('disable')) {

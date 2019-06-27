@@ -26,12 +26,160 @@ export const IPTools = new class {
 		['127.0.0.01', null],
 	]);
 
+	proxyHosts = new Set([
+		'alexhost.md',
+		'amazonaws.com',
+		'anchorfree.com',
+		'aquanetworks.co.uk',
+		'aruba.it',
+		'arubacloud.com',
+		'arubacloud.de',
+		'arubacloud.fr',
+		'as29550.net',
+		'avenueoftor.com',
+		'bitcoinwebhosting.net',
+		'blazingfast.io',
+		'bnewstoday.com',
+		'brightnewfutures.net',
+		'cd-n.net',
+		'choopa.com',
+		'choopa.net',
+		'cloudhosting.lv',
+		'cloudmosa.com',
+		'clues.ro',
+		'colocenter.nl',
+		'colocrossing.com',
+		'contaboserver.net',
+		'cyberghost.ro',
+		'cyberghostvpn.com',
+		'darkweb.love',
+		'dockerapp.io',
+		'edis.at',
+		'elostech.cz',
+		'enahost.com',
+		'ezzi.net',
+		'fantastic-host.net',
+		'forpsi.net',
+		'freedome-vpn.net',
+		'frootvpn.com',
+		'galaxyhostplus.com',
+		'gigenet.com',
+		'hide.me',
+		'hkserverworks.com',
+		'hostnottingham.co.uk',
+		'hostwindsdns.com',
+		'hvvc.us',
+		'hwng.net',
+		'ihc.ru',
+		'ipvanish.com',
+		'linode.com',
+		'ltt.ly',
+		'lunanode.com',
+		'm247.com',
+		'mediateam.fi',
+		'midphase.com',
+		'mivocloud.com',
+		'mixskilled.com',
+		'netdive.xyz',
+		'networktransit.net',
+		'northamericancoax.com',
+		'northghost.com',
+		'novalayer.net',
+		'nu-s.net',
+		'op-net.com',
+		'openvirtuals.com',
+		'opera.com',
+		'pacswitch.com',
+		'poneytelecom.eu',
+		'primegraf.com.br',
+		'privacyfoundation.ch',
+		'protectedgroup.com',
+		'quadranet.com',
+		'ra4wvpn.com',
+		'redstation.co.uk',
+		'redstation.net.uk',
+		'samsnuk.info',
+		'scaleway.com',
+		'serverprofi24.com',
+		'shinyrimsinc.com',
+		'shpv.eu',
+		'sl-reverse.com',
+		'smartwebbrands.com',
+		'softlayer.com',
+		'stephost.md',
+		'terrahost.no',
+		'time4vps.eu',
+		'trance.fm',
+		'tunnelbear.com',
+		'ubiquityservers.com',
+		'uaservers.net',
+		'ukservers.com',
+		'unmetered.zone',
+		'upcloud.host',
+		'vilayer.com',
+		'voxility.com',
+		'voxility.net',
+		'vpnbook.com',
+		'vultr.com',
+		'worldstream.nl',
+		'your-server.de',
+		'zenmate.com',
+	]);
+	residentialHosts = new Set([
+		'bell.ca',
+		'bellmts.net',
+		'bellsouth.net',
+		'cgocable.net',
+		'charter.com',
+		'comcast.net',
+		'comcast.net.res-nohost',
+		'comcastbusiness.net',
+		'cornell.edu',
+		'cox.net',
+		'embarqhsd.net',
+		'frontiernet.net',
+		'hargray.net',
+		'itctel.com',
+		'mlgc.com',
+		'netins.net',
+		'optonline.net',
+		'odu.edu',
+		'osu.edu',
+		'qwest.net',
+		'rogers.com',
+		'rr.com',
+		'sbcglobal.net',
+		'shawcable.net',
+		'sourcecable.net',
+		'unc.edu',
+		'verizon.net',
+		'videotron.ca',
+		'virginmobile.ca',
+		'vt.edu',
+		'wayport.net',
+		'windstream.net',
+	]);
+	mobileHosts = new Set([
+		'myvzw.com',
+		'mycingular.net',
+		'spcsdns.net',
+		'tmodns.net',
+		'tmobile.mobile-nohost',
+		'tele2.se',
+		'ideacellular.mobile-nohost',
+		'as13285.net',
+		'att.net',
+	]);
+	connectionTestCache = new Map<string, boolean>();
+
 	async lookup(ip: string) {
 		const [dnsbl, host] = await Promise.all([
 			IPTools.queryDnsbl(ip),
 			IPTools.getHost(ip),
 		]);
-		return {dnsbl, host};
+		const shortHost = this.shortenHost(host);
+		const hostType = this.getHostType(shortHost, ip);
+		return {dnsbl, host, shortHost, hostType};
 	}
 
 	queryDnsblLoop(ip: string, callback: (val: string | null) => void, reversedIpDot: string, index: number) {
@@ -65,6 +213,7 @@ export const IPTools = new class {
 	 * Return value matches isBlocked when treated as a boolean.
 	 */
 	queryDnsbl(ip: string) {
+		if (!Config.dnsbl) return null;
 		if (IPTools.dnsblCache.has(ip)) {
 			return Promise.resolve<string | null>(IPTools.dnsblCache.get(ip) || null);
 		}
@@ -345,12 +494,129 @@ export const IPTools = new class {
 					} else if (IPTools.checkPattern(rangeTelstra, ipNumber)) {
 						resolve('telstra.net.res-nohost');
 					} else {
-						resolve('' + ip.split('.').slice(0, 2).join('.') + '.unknown-nohost');
+						this.testConnection(ip, result => {
+							if (result) {
+								resolve('' + ip.split('.').slice(0, 2).join('.') + '.proxy-nohost');
+							} else {
+								resolve('' + ip.split('.').slice(0, 2).join('.') + '.unknown-nohost');
+							}
+						});
 					}
 				}
 				resolve(hosts[0]);
 			});
 		});
+	}
+
+	/**
+	 * Does this IP respond to port 80? In theory, proxies are likely to
+	 * respond, while residential connections are likely to reject connections.
+	 *
+	 * Callback is guaranteed to be called exactly once, within a 1000ms
+	 * timeout.
+	 */
+	testConnection(ip: string, callback: (result: boolean) => void) {
+		const cachedValue = this.connectionTestCache.get(ip);
+		if (cachedValue !== undefined) {
+			return cachedValue;
+		}
+
+		// Node.js's documentation does not make this easy to write. I discovered
+		// this behavior by manual testing:
+
+		// A successful connection emits 'connect', which you should react to
+		// with socket.destroy(), which emits 'close'.
+
+		// Some IPs instantly reject connections, emitting 'error' followed
+		// immediately by 'close'.
+
+		// Some IPs just never respond, leaving you to time out. Node will
+		// emit the 'timeout' event, but not actually do anything else, leaving
+		// you to manually use socket.destroy(), which emits 'close'
+
+		let connected = false;
+		const socket = require('net').createConnection({
+			port: 80,
+			host: ip,
+			timeout: 1000,
+		}, () => {
+			connected = true;
+			this.connectionTestCache.set(ip, true);
+			callback(true);
+			socket.destroy();
+		});
+		socket.on('error', () => {});
+		socket.on('timeout', () => socket.destroy());
+		socket.on('close', () => {
+			if (!connected) {
+				this.connectionTestCache.set(ip, false);
+				callback(false);
+			}
+		});
+	}
+
+	shortenHost(host: string) {
+		if (host.slice(-7) === '-nohost') return host;
+		let dotLoc = host.lastIndexOf('.');
+		let tld = host.slice(dotLoc);
+		if (tld === '.uk' || tld === '.au' || tld === '.br') dotLoc = host.lastIndexOf('.', dotLoc - 1);
+		dotLoc = host.lastIndexOf('.', dotLoc - 1);
+		return host.slice(dotLoc + 1);
+	}
+
+	/**
+	 * Host types:
+	 * - 'res' - normal residential ISP
+	 * - 'shared' - like res, but shared among many people: bans will have collateral damage
+	 * - 'mobile' - like res, but unstable IP (IP bans don't work)
+	 * - 'proxy' - datacenters, VPNs, proxy services, other untrustworthy sources
+	 *   (note that bots will usually be hosted on these)
+	 * - 'res?' - likely res, but host not specifically whitelisted
+	 * - 'unknown' - no rdns entry, treat with suspicion
+	 */
+	getHostType(host: string, ip: string) {
+		if (Punishments.sharedIps.has(ip)) {
+			return 'shared';
+		}
+		if (host === 'he.net.proxy-nohost') {
+			// Hurricane Electric has an annoying habit of having residential
+			// internet and datacenters on the same IP ranges - we get a lot of
+			// legitimate users as well as spammers on VPNs from HE.
+
+			// This splits the difference and treats it like any other unknown IP.
+			return 'unknown';
+		}
+		// There were previously special cases for
+		// 'digitalocean.proxy-nohost', 'servihosting.es.proxy-nohost'
+		// DO is commonly used to host bots; I don't know who whitelisted
+		// servihosting but I assume for a similar reason. This isn't actually
+		// tenable; any service that can host bots can and does also host proxies.
+		if (this.proxyHosts.has(host) || host.endsWith('.proxy-nohost')) {
+			return 'proxy';
+		}
+		if (this.residentialHosts.has(host) || host.endsWith('.res-nohost')) {
+			return 'res';
+		}
+		if (this.mobileHosts.has(host) || host.endsWith('.mobile-nohost')) {
+			return 'mobile';
+		}
+		if (/^ip-[0-9]+-[0-9]+-[0-9]+\.net$/.test(host) || /^ip-[0-9]+-[0-9]+-[0-9]+\.eu$/.test(host)) {
+			// OVH
+			return 'proxy';
+		}
+		if ([
+			'114.161.93.156', '121.129.20.202', '122.45.113.125', '128.68.107.201', '150.31.37.122', '176.202.180.98', '184.22.240.178', '185.127.25.192', '185.234.219.117', '199.249.230.69', '39.111.5.170', '58.124.244.202', '59.8.242.27', '61.121.64.114', '78.85.106.214', '89.110.59.95', '38.132.116.198', '38.132.120.92', '113.197.177.61', '38.132.120.92', '126.227.135.176', '171.251.45.151', '111.105.163.211', '119.30.32.155', '176.124.96.196', '93.87.75.118', '87.247.111.222', '244.242.108.51', '72.252.4.161', '78.85.17.243', '80.250.14.236', '83.142.197.99', '89.147.80.2', '91.197.189.62', '103.78.54.180', '106.120.14.39', '109.122.80.234', '115.85.65.146', '118.97.55.65', '185.217.160.184', '200.35.43.89', '202.62.61.119', '203.83.183.11', '84.245.104.164', '158.195.148.169',
+		].includes(ip)) {
+			return 'proxy';
+		}
+
+		if (host.endsWith('.unknown-nohost')) {
+			// rdns entry doesn't exist, and IP doesn't respond to a probe on port 80
+			return 'unknown';
+		}
+
+		// rdns entry exists but is unrecognized
+		return 'res?';
 	}
 };
 
