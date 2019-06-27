@@ -65,8 +65,19 @@ describe(`Random Team generator (slow)`, function () {
 			try {
 				let team = generator.getTeam();
 				if (team.length < 6) throw new Error(`Team with less than 6 Pokemon: ${JSON.stringify(team)}`);
-				let invalidSet = team.find(set => !isValidSet(7, set));
-				if (invalidSet) throw new Error(`Invalid set: ${JSON.stringify(invalidSet)}`);
+
+				let types;
+				for (const set of team) {
+					if (!isValidSet(7, set)) throw new Error(`Invalid set: ${JSON.stringify(set)}`);
+					const template = Dex.getTemplate(set.species || set.name);
+					if (types) {
+						if (!types.filter(t => template.types.includes(t)).length) {
+							throw new Error(`Team is not monotype: ${JSON.stringify(team)}`);
+						}
+					} else {
+						types = template.types;
+					}
+				}
 			} catch (err) {
 				err.message += ` (seed ${seed})`;
 				throw err;
