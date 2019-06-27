@@ -66,7 +66,8 @@ const FS = require('../.lib-dist/fs').FS;
  * Load configuration
  *********************************************************/
 
-global.Config = require('../config/config');
+const ConfigLoader = require('../.server-dist/config-loader');
+global.Config = ConfigLoader.Config;
 
 global.Monitor = require('./monitor');
 
@@ -75,7 +76,7 @@ if (Config.watchconfig) {
 	FS(configPath).onModify(() => {
 		try {
 			delete require.cache[configPath];
-			global.Config = require('../config/config');
+			global.Config = ConfigLoader.load(require('../config/config'));
 			if (global.Users) Users.cacheGroupData();
 			Monitor.notice('Reloaded ../config/config.js');
 		} catch (e) {
