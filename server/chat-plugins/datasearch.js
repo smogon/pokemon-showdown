@@ -806,7 +806,6 @@ function runMovesearch(target, cmd, canAll, message) {
 	}
 	let showAll = false;
 	let sort = null;
-	let lsetData = {};
 	let targetMons = [];
 	let randomOutput = 0;
 	for (const arg of target.split(',')) {
@@ -926,19 +925,10 @@ function runMovesearch(target, cmd, canAll, message) {
 
 			let template = Dex.getTemplate(target);
 			if (template.exists) {
-				if (targetMons.includes(template.name)) return {reply: "A search cannot include the same Pok\u00e9mon twice."};
 				if (parameters.length > 1) return {reply: "A Pok\u00e9mon learnset cannot have alternative parameters."};
-				if (!template.learnset) template = Dex.getTemplate(template.baseSpecies);
-				lsetData[template.name] = Object.assign({}, template.learnset);
-				targetMons.push(template.name);
-
-				let originalTemplateName = template.name;
-				while (template.prevo) {
-					template = Dex.getTemplate(template.prevo);
-					for (let move in template.learnset) {
-						if (!lsetData[originalTemplateName][move]) lsetData[originalTemplateName][move] = template.learnset[move];
-					}
-				}
+				if (targetMons.some(mon => mon.name === template.name && isNotSearch !== mon.shouldBeExcluded)) return {reply: "A search cannot both exclude and include the same Pok\u00e9mon."};
+				if (targetMons.some(mon => mon.name === template.name)) return {reply: "A search should not include a Pok\u00e9mon twice."};
+				targetMons.push({name: template.name, shouldBeExcluded: isNotSearch});
 				orGroup.skip = true;
 				continue;
 			}
@@ -1092,36 +1082,52 @@ function runMovesearch(target, cmd, canAll, message) {
 		return {reply: "No search parameters other than 'all' were found. Try '/help movesearch' for more information on this command."};
 	}
 
-	let dex = {};
-	if (targetMons.length) {
-		let intersectionOfLearnsets = [];
-		for (let mon in lsetData) {
-			if (intersectionOfLearnsets.length) {
-				intersectionOfLearnsets = intersectionOfLearnsets.filter(move => {
-					return lsetData[mon][move] !== undefined;
-				});
-			} else {
-				intersectionOfLearnsets = Object.keys(lsetData[mon]);
+	const getFullLearnsetOfPokemon = (template) => {
+		if (!template.learnset) template = Dex.getTemplate(template.baseSpecies);
+		const lsetData = new Set(Object.keys(template.learnset));
+
+		while (template.prevo) {
+			template = Dex.getTemplate(template.prevo);
+			for (const move in template.learnset) {
+				lsetData.add(move);
 			}
 		}
 
-		let finalizedLearnset = {};
-		for (let move of intersectionOfLearnsets) {
-			finalizedLearnset[move] = Object.values(lsetData)[0][move];
-		}
+		return lsetData;
+	};
 
-		for (let move in finalizedLearnset) {
-			dex[move] = Dex.getMove(move);
+	// Since we assume we have no target mons at first
+	// then the valid moveset we can search is the set of all moves.
+	const validMoves = new Set(Object.keys(Dex.data.Movedex));
+	validMoves.delete('magikarpsrevenge');
+	for (const mon of targetMons) {
+		const template = Dex.getTemplate(mon.name);
+		const lsetData = getFullLearnsetOfPokemon(template);
+		// This pokemon's learnset needs to be excluded, so we perform a difference operation on the valid moveset and this pokemon's moveset.
+		if (mon.shouldBeExcluded) {
+			for (const move of lsetData) {
+				validMoves.delete(move);
+			}
+		} else {
+			// This pokemon's learnset needs to be included, so we perform an intersection operation on the valid moveset and this pokemon's moveset.
+			for (const move of validMoves) {
+				if (!lsetData.has(move)) {
+					validMoves.delete(move);
+				}
+			}
 		}
-	} else {
-		for (let move in Dex.data.Movedex) {
-			dex[move] = Dex.getMove(move);
-		}
-		delete dex.magikarpsrevenge;
 	}
+
+	// At this point, we've trimmed down the valid moveset to be
+	// the moves that are appropriate considering the requested pokemon.
+	let dex = {};
+	for (const move of validMoves) {
+		dex[move] = Dex.getMove(move);
+	}
+
 	for (const alts of searches) {
 		if (alts.skip) continue;
-		for (let move in dex) {
+		for (const move in dex) {
 			let matched = false;
 			if (Object.keys(alts.types).length) {
 				if (alts.types[dex[move].type]) continue;
@@ -1270,7 +1276,7 @@ function runMovesearch(target, cmd, canAll, message) {
 
 	let resultsStr = "";
 	if (targetMons.length) {
-		resultsStr += `<span style="color:#999999;">Matching moves found in learnset(s) for</span> ${targetMons.join(', ')}:<br />`;
+		resultsStr += `<span style="color:#999999;">Matching moves found in learnset(s) for</span> ${targetMons.map(mon => `${mon.shouldBeExcluded ? "!" : ""}${mon.name}`).join(', ')}:<br />`;
 	} else {
 		resultsStr += (message === "" ? message : `<span style="color:#999999;">${escapeHTML(message)}:</span><br />`);
 	}
