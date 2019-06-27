@@ -1084,10 +1084,7 @@ function runMovesearch(target, cmd, canAll, message) {
 
 	const getFullLearnsetOfPokemon = (template) => {
 		if (!template.learnset) template = Dex.getTemplate(template.baseSpecies);
-		let lsetData = new Set();
-		for (const move in template.learnset) {
-			lsetData.add(move);
-		}
+		const lsetData = new Set(Object.keys(template.learnset));
 
 		while (template.prevo) {
 			template = Dex.getTemplate(template.prevo);
@@ -1101,10 +1098,7 @@ function runMovesearch(target, cmd, canAll, message) {
 
 	// Since we assume we have no target mons at first
 	// then the valid moveset we can search is the set of all moves.
-	let validMoves = new Set();
-	for (const move in Dex.data.Movedex) {
-		validMoves.add(move);
-	}
+	const validMoves = new Set(Object.keys(Dex.data.Movedex));
 	validMoves.delete('magikarpsrevenge');
 	for (const mon of targetMons) {
 		const template = Dex.getTemplate(mon.name);
