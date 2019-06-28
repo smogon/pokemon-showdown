@@ -144,8 +144,6 @@ exports.routes = {
 	client: 'play.pokemonshowdown.com',
 	dex: 'dex.pokemonshowdown.com',
 	replays: 'replay.pokemonshowdown.com',
-	app: 'sim.smogon.com',
-	logs: 'logs2.psim.us:8080',
 };
 
 /**
