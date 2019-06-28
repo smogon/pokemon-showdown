@@ -780,7 +780,7 @@ let BattleFormatsData = {
 	vileplume: {
 		randomBattleMoves: ["gigadrain", "sludgebomb", "sleeppowder", "hiddenpowerfire", "aromatherapy", "strengthsap"],
 		randomDoubleBattleMoves: ["gigadrain", "sludgebomb", "sleeppowder", "stunspore", "protect", "hiddenpowerfire", "moonblast"],
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "(DUU)",
 	},
 	bellossom: {
@@ -8410,6 +8410,11 @@ let BattleFormatsData = {
 		eventPokemon: [
 			{"generation": 7, "level": 50, "moves": ["celebrate", "liquidation", "leechlife", "metronome"], "pokeball": "cherishball"},
 		],
+		tier: "CAP",
+	},
+	equilibra: {
+		randomBattleMoves: ["doomdesire", "earthpower", "trickroom", "rapidspin", "flashcannon", "healingwish", "aurasphere"],
+		isNonstandard: "CAP",
 		tier: "CAP",
 	},
 	syclant: {

@@ -4,7 +4,6 @@
  *
  * These are informational commands. For instance, you can define the command
  * 'whois' here, then use it by typing /whois into Pokemon Showdown.
- *
  * For the API, see chat-plugins/COMMANDS.md
  *
  * @license MIT license
@@ -312,8 +311,9 @@ const commands = {
 		if (!this.can('rangeban')) return;
 		target = target.trim();
 		if (!/^[0-9.]+$/.test(target)) return this.errorReply('You must pass a valid IPv4 IP to /host.');
-		IPTools.getHost(target).then(host => {
-			this.sendReply('IP ' + target + ': ' + (host || "ERROR"));
+		IPTools.lookup(target).then(({dnsbl, host, hostType}) => {
+			const dnsblMessage = dnsbl ? ` [${dnsbl}]` : ``;
+			this.sendReply(`IP ${target}: ${host || "ERROR"} [${hostType}]${dnsblMessage}`);
 		});
 	},
 	hosthelp: [`/host [ip] - Gets the host for a given IP. Requires: & ~`],
@@ -1448,7 +1448,7 @@ const commands = {
 	'!suggestions': true,
 	suggestions(target, room, user) {
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox(`<a href="https://www.smogon.com/forums/threads/3534365/">Make a suggestion for Pok&eacute;mon Showdown</a>`);
+		this.sendReplyBox(`<a href="https://www.smogon.com/forums/forums/517/">Make a suggestion for Pok&eacute;mon Showdown</a>`);
 	},
 
 	'!bugs': true,
@@ -1521,31 +1521,47 @@ const commands = {
 	},
 
 	'!calc': true,
+	bsscalc: 'calc',
 	calculator: 'calc',
+	cantsaycalc: 'calc',
 	damagecalculator: 'calc',
 	damagecalc: 'calc',
+	honkalculator: 'calc',
+	honkocalc: 'calc',
 	randomscalc: 'calc',
 	randbatscalc: 'calc',
 	rcalc: 'calc',
 	calc(target, room, user, connection, cmd) {
 		if (cmd === 'calc' && target) return this.parse(`/math ${target}`);
 		if (!this.runBroadcast()) return;
+		const DEFAULT_CALC_COMMANDS = ['honkalculator', 'honkocalc'];
+		const RANDOMS_CALC_COMMANDS = ['randomscalc', 'randbatscalc', 'rcalc'];
+		const BATTLESPOT_CALC_COMMANDS = ['bsscalc', 'cantsaycalc'];
 		const SUPPORTED_RANDOM_FORMATS = ['gen7randombattle', 'gen7unratedrandombattle'];
+		const SUPPORTED_BATTLESPOT_FORMATS = ['gen5gbusingles', 'gen5gbudoubles', 'gen6battlespotsingles', 'gen6battlespotdoubles', 'gen6battlespottriples', 'gen7battlespotsingles', 'gen7battlespotdoubles', 'gen7bssfactory'];
 		const isRandomBattle = (room && room.battle && SUPPORTED_RANDOM_FORMATS.includes(room.battle.format));
-		if (['randomscalc', 'randbatscalc', 'rcalc'].includes(cmd) || isRandomBattle) {
+		const isBattleSpotBattle = (room && room.battle && (SUPPORTED_BATTLESPOT_FORMATS.includes(room.battle.format) || room.battle.format.includes("battlespotspecial")));
+		if (RANDOMS_CALC_COMMANDS.includes(cmd) || (isRandomBattle && !DEFAULT_CALC_COMMANDS.includes(cmd) && !BATTLESPOT_CALC_COMMANDS.includes(cmd))) {
 			return this.sendReplyBox(
-				`Random Battles damage calculator. (Courtesy of LegoFigure11 &amp; Smoochyena)<br />` +
+				`Random Battles damage calculator. (Courtesy of LegoFigure11 &amp; Wiggleetuff)<br />` +
 				`- <a href="https://randbatscalc.github.io/">Random Battles Damage Calculator</a>`
 			);
 		}
+		if (BATTLESPOT_CALC_COMMANDS.includes(cmd) || (isBattleSpotBattle && !DEFAULT_CALC_COMMANDS.includes(cmd))) {
+			return this.sendReplyBox(
+				`Battle Spot damage calculator. (Courtesy of cant say &amp; LegoFigure11)<br />` +
+				`- <a href="https://cantsay.github.io/">Battle Spot Damage Calculator</a>`
+			);
+		}
 		this.sendReplyBox(
-			`Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko)<br />` +
+			`Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko &amp; Austin)<br />` +
 			`- <a href="https://pokemonshowdown.com/damagecalc/">Damage Calculator</a>`
 		);
 	},
 	calchelp: [
 		`/calc - Provides a link to a damage calculator`,
 		`/rcalc - Provides a link to the random battles damage calculator`,
+		`/bsscalc - Provides a link to the Battle Spot damage calculator`,
 		`!calc - Shows everyone a link to a damage calculator. Requires: + % @ # & ~`,
 	],
 

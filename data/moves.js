@@ -9019,7 +9019,7 @@ let BattleMovedex = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onBasePower(basePower, source, target, move) {
 			let item = target.getItem();
-			if (!this.singleEvent('TakeItem', item, target.itemData, target, source, move, item)) return;
+			if (!this.singleEvent('TakeItem', item, target.itemData, target, target, move, item)) return;
 			if (item.id) {
 				return this.chainModify(1.5);
 			}

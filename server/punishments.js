@@ -1277,6 +1277,7 @@ const Punishments = new (class {
 	}
 
 	/**
+	 * @deprecated
 	 * @param {string} host
 	 * @return {string}
 	 */
@@ -1404,33 +1405,21 @@ const Punishments = new (class {
 			}
 		}
 
-		IPTools.getHost(ip).catch(err => {
-			// If connection.user is reassigned before async tasks can run, user
-			// may no longer be equal to it.
+		IPTools.lookup(ip).then(({dnsbl, host, hostType}) => {
 			user = connection.user || user;
-			if (err.code === 'EINVAL') {
-				if (!user.locked && !user.autoconfirmed) {
-					user.semilocked = '#dnsbl';
-				}
-				return null;
-			}
-			throw err;
-		}).then(host => {
-			user = connection.user || user;
-			if (host) user.latestHost = host;
-			Chat.hostfilter(host || '', user, connection);
-		});
+			if (user.locked === '#hostfilter') user.locked = null;
 
-		if (Config.dnsbl) {
-			IPTools.queryDnsbl(connection.ip).then(isBlocked => {
-				user = connection.user || user;
-				if (isBlocked) {
-					if (!user.locked && !user.autoconfirmed) {
-						user.semilocked = '#dnsbl';
-					}
-				}
-			});
-		}
+			if (hostType === 'proxy' && !user.trusted && !user.locked) {
+				user.locked = '#hostfilter';
+			} else if (dnsbl && !user.autoconfirmed) {
+				user.semilocked = '#dnsbl';
+			}
+			if (host) {
+				user.latestHost = host;
+				user.latestHostType = hostType;
+			}
+			Chat.hostfilter(host || '', user, connection, hostType);
+		});
 	}
 
 	/**
@@ -1484,7 +1473,7 @@ const Punishments = new (class {
 			return true;
 		}
 		if (Rooms(roomid).parent) {
-			return Punishments.checkNameInRoom(user, Rooms(roomid).parent);
+			return Punishments.checkNameInRoom(user, Rooms(roomid).parent.id);
 		}
 		return false;
 	}
@@ -1499,7 +1488,7 @@ const Punishments = new (class {
 		/** @type {Punishment?} */
 		let punishment = Punishments.roomUserids.nestedGet(roomid, userid) || null;
 		if (!punishment && Rooms(roomid).parent) {
-			punishment = Punishments.checkNewNameInRoom(user, userid, Rooms(roomid).parent);
+			punishment = Punishments.checkNewNameInRoom(user, userid, Rooms(roomid).parent.id);
 		}
 		if (punishment) {
 			if (punishment[0] !== 'ROOMBAN' && punishment[0] !== 'BLACKLIST') return null;

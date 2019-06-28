@@ -189,7 +189,12 @@ export class Battle extends Dex.ModdedDex {
 		};
 		if (this.rated) inputOptions.rated = this.rated;
 		if (global.__version) {
-			this.inputLog.push(`>version ${global.__version}`);
+			if (global.__version.head) {
+				this.inputLog.push(`>version ${global.__version.head}`);
+			}
+			if (global.__version.origin) {
+				this.inputLog.push(`>version-origin ${global.__version.origin}`);
+			}
 		}
 		this.inputLog.push(`>start ` + JSON.stringify(inputOptions));
 
@@ -1456,7 +1461,7 @@ export class Battle extends Dex.ModdedDex {
 			}
 			const turnsLeftText = (turnsLeft === 1 ? `1 turn` : `${turnsLeft} turns`);
 			this.add('bigerror', `You will auto-tie if the battle doesn't end in ${turnsLeftText} turns (on turn 1000).`);
-			this.hint("If you want to tie earlier, consider using `/offertie`.");
+			if (Config.allowrequestingties) this.hint("If you want to tie earlier, consider using `/offertie`.");
 		}
 
 		// Are all Pokemon on every side stale, with at least one side containing an externally stale Pokemon?

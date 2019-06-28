@@ -15,7 +15,7 @@ declare global {
 			Dex: any
 			toID(input: any): string
 			TeamValidator: any
-			__version: string
+			__version: {head: string, origin?: string}
 		}
 	}
 	const Battle: BattleType

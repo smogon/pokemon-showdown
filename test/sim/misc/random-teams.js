@@ -54,6 +54,36 @@ describe(`Random Team generator (slow)`, function () {
 			}
 		});
 	}
+
+	it(`should successfully create valid gen7monotyperandombattle teams`, function () {
+		this.timeout(0);
+		const generator = Dex.getTeamGenerator('gen7monotyperandombattle', [46, 41716, 23878, 52950]);
+
+		let teamCount = 1000;
+		while (teamCount--) {
+			let seed = generator.prng.seed;
+			try {
+				let team = generator.getTeam();
+				if (team.length < 6) throw new Error(`Team with less than 6 Pokemon: ${JSON.stringify(team)}`);
+
+				let types;
+				for (const set of team) {
+					if (!isValidSet(7, set)) throw new Error(`Invalid set: ${JSON.stringify(set)}`);
+					const template = Dex.getTemplate(set.species || set.name);
+					if (types) {
+						if (!types.filter(t => template.types.includes(t)).length) {
+							throw new Error(`Team is not monotype: ${JSON.stringify(team)}`);
+						}
+					} else {
+						types = template.types;
+					}
+				}
+			} catch (err) {
+				err.message += ` (seed ${seed})`;
+				throw err;
+			}
+		}
+	});
 });
 
 describe(`Challenge Cup Team generator`, function () {

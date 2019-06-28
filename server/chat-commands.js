@@ -848,11 +848,12 @@ const commands = {
 		let targetRoom = Rooms.createChatRoom(roomid, `[G] ${title}`, {
 			isPersonal: true,
 			isPrivate: 'hidden',
+			uptime: parent ? null : Date.now(),
 			modjoin: parent ? null : '+',
 			parentid: parent,
 			auth: {},
 			introMessage: `<div style="text-align: center"><table style="margin:auto;"><tr><td><img src="//play.pokemonshowdown.com/fx/groupchat.png" width=120 height=100></td><td><h2>${titleMsg}</h2><p>Follow the <a href="/rules">Pokémon Showdown Global Rules</a>!<br>Don't be disruptive to the rest of the site.</p></td></tr></table></div>`,
-			staffMessage: `<p>Groupchats are temporary rooms, and will expire if there hasn't been any activity in 40 minutes.</p><p>You can invite new users using <code>/invite</code>. Be careful with who you invite!</p><p>Commands: <button class="button" name="send" value="/roomhelp">Room Management</button> | <button class="button" name="send" value="/tournaments help">Tournaments</button></p><p>As creator of this groupchat, <u>you are entirely responsible for what occurs in this chatroom</u>. Global rules apply at all times.</p><p>If this room is used to break global rules or disrupt other areas of the server, <strong>you as the creator will be held accountable and punished</strong>.</p>`,
+			staffMessage: `<p>Groupchats are temporary rooms, and will expire if there hasn't been any activity in 40 minutes.</p><p>You can invite new users using <code>/invite</code>. Be careful with who you invite!</p><p>Commands: <button class="button" name="send" value="/roomhelp">Room Management</button> | <button class="button" name="send" value="/roomsettings">Room Settings</button> | <button class="button" name="send" value="/tournaments help">Tournaments</button></p><p>As creator of this groupchat, <u>you are entirely responsible for what occurs in this chatroom</u>. Global rules apply at all times.</p><p>If this room is used to break global rules or disrupt other areas of the server, <strong>you as the creator will be held accountable and punished</strong>.</p>`,
 		});
 		if (targetRoom) {
 			// The creator is a Room Owner in subroom groupchats and a Host otherwise..
@@ -869,6 +870,15 @@ const commands = {
 		`/makegroupchat [roomname] - Creates an invite-only group chat named [roomname].`,
 		`/subroomgroupchat [roomname] - Creates a subroom groupchat of the current room. Can only be used in a public room you have staff in.`,
 	],
+
+	'!groupchatuptime': true,
+	groupchatuptime(target, room, user) {
+		if (!this.runBroadcast()) return;
+		if (!room.uptime) return this.errorReply("Can only be used in a groupchat.");
+		const uptime = Chat.toDurationString(Date.now() - room.uptime);
+		this.sendReplyBox(`Groupchat uptime: <b>${uptime}</b>`);
+	},
+	groupchatuptimehelp: [`/groupchatuptime - Displays the uptime if the current room is a groupchat.`],
 
 	deregisterchatroom(target, room, user) {
 		if (!this.can('makeroom')) return;
@@ -2640,14 +2650,18 @@ const commands = {
 	],
 
 	nl: 'namelock',
-	namelock(target, room, user) {
+	forcenamelock: 'namelock',
+	namelock(target, room, user, connection, cmd) {
 		if (!target) return this.parse('/help namelock');
 
-		let reason = this.splitTarget(target, true);
+		let reason = this.splitTarget(target);
 		let targetUser = this.targetUser;
 
 		if (!targetUser) {
 			return this.errorReply(`User '${this.targetUsername}' not found.`);
+		}
+		if (targetUser.userid !== toID(this.inputUsername) && cmd !== 'forcenamelock') {
+			return this.errorReply(`${this.inputUsername} has already changed their name to ${targetUser.name}. To namelock anyway, use /forcenamelock.`);
 		}
 		if (!this.can('forcerename', targetUser)) return false;
 		if (targetUser.namelocked) return this.errorReply(`User '${targetUser.name}' is already namelocked.`);
@@ -2703,7 +2717,6 @@ const commands = {
 		let targetUser = this.targetUser;
 		let name = this.targetUsername;
 		if (!targetUser && !room.log.hasUsername(target)) return this.errorReply(`User ${target} not found or has no roomlogs.`);
-		if (!targetUser && !user.can('lock')) return this.errorReply(`User ${name} not found.`);
 		let userid = toID(this.inputUsername);
 		if (!this.can('mute', null, room)) return;
 
@@ -3141,7 +3154,9 @@ const commands = {
 				Chat.uncache('./server/punishments');
 				global.Punishments = require('./punishments');
 				this.sendReply("Punishments have been hot-patched.");
-			} else if (target === 'dnsbl' || target === 'datacenters') {
+			} else if (target === 'dnsbl' || target === 'datacenters' || target === 'iptools') {
+				Chat.uncache('./.server-dist/ip-tools');
+				global.IPTools = require('../.server-dist/ip-tools').IPTools;
 				IPTools.loadDatacenters();
 				this.sendReply("IPTools has been hot-patched.");
 			} else if (target.startsWith('disable')) {
@@ -3862,11 +3877,15 @@ const commands = {
 	acceptdraw: 'offertie',
 	accepttie: 'offertie',
 	offerdraw: 'offertie',
+	requesttie: 'offertie',
 	offertie(target, room, user, connection, cmd) {
 		const battle = room.battle;
 		if (!battle) return this.errorReply("Must be in a battle room.");
 		if (!Config.allowrequestingties) {
 			return this.errorReply("This server does not allow offering ties.");
+		}
+		if (room.tour) {
+			return this.errorReply("You can't offer ties in tournaments.");
 		}
 		if (!this.can('roomvoice', null, room)) return;
 		if (cmd === 'accepttie' && !battle.players.some(player => player.wantsTie)) {
@@ -3979,8 +3998,13 @@ const commands = {
 		const battle = room.battle;
 		// retrieve spectator log (0) if there are privacy concerns
 		const format = Dex.getFormat(room.format, true);
+
+		// custom games always show full details
+		// random-team battles show full details if the battle is ended
+		// otherwise, don't show full details
 		let hideDetails = !format.id.includes('customgame');
-		if (!format.team && battle.ended) hideDetails = false;
+		if (format.team && battle.ended) hideDetails = false;
+
 		const data = room.getLog(hideDetails ? 0 : -1);
 		const datahash = crypto.createHash('md5').update(data.replace(/[^(\x20-\x7F)]+/g, '')).digest('hex');
 		let rating = 0;
@@ -4024,11 +4048,16 @@ const commands = {
 			return this.errorReply(`User ${name} must be in the battle room already.`);
 		}
 		if (!this.can('joinbattle', null, room)) return;
-		if (room.battle[target]) {
+		if (room.battle[target].userid) {
 			return this.errorReply(`This room already has a player in slot ${target}.`);
 		}
 
-		room.battle.addPlayer(targetUser, target);
+		room.auth[targetUser.userid] = Users.PLAYER_SYMBOL;
+		let success = room.battle.joinGame(targetUser, target);
+		if (!success) {
+			delete room.auth[targetUser.userid];
+			return;
+		}
 		this.addModAction(`${name} was added to the battle as Player ${target.slice(1)} by ${user.name}.`);
 		this.modlog('ROOMPLAYER', targetUser.getLastId());
 	},
@@ -4419,7 +4448,7 @@ const commands = {
 
 			for (let userid in targetRoom.users) {
 				let user = targetRoom.users[userid];
-				let userinfo = user.getIdentity(room.id);
+				let userinfo = user.getIdentity(targetRoom.id);
 				roominfo.users.push(userinfo);
 			}
 

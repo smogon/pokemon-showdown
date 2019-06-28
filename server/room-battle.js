@@ -434,6 +434,8 @@ class RoomBattle extends RoomGames.RoomGame {
 		 * @type {number}
 		 */
 		this.rated = options.rated || 0;
+		// true when onCreateBattleRoom has been called
+		this.missingBattleStartMessage = !!options.inputLog;
 		this.started = false;
 		this.ended = false;
 		this.active = false;
@@ -617,6 +619,16 @@ class RoomBattle extends RoomGames.RoomGame {
 		if (!slot) slot = validSlots[0];
 
 		this.updatePlayer(this[slot], user);
+		if (validSlots.length - 1 < 1 && this.missingBattleStartMessage) {
+			const users = this.players.map(player => {
+				const user = player.getUser();
+				if (!user) throw new Error(`User ${player.name} not found on ${this.id} battle creation`);
+				return user;
+			});
+			Rooms.global.onCreateBattleRoom(users, this.room, {rated: this.rated});
+			this.missingBattleStartMessage = false;
+		}
+		if (user.inRooms.has(this.id)) this.onConnect(user);
 		this.room.update();
 		return true;
 	}
@@ -771,7 +783,7 @@ class RoomBattle extends RoomGames.RoomGame {
 		let logData = this.logData;
 		if (!logData) return;
 		this.logData = null; // deallocate to save space
-		logData.log = this.room.getLog(3).split('\n'); // replay log (exact damage)
+		logData.log = this.room.getLog(-1).split('\n'); // replay log (exact damage)
 
 		// delete some redundant data
 		for (const rating of [p1rating, p2rating, p3rating, p4rating]) {
@@ -1006,20 +1018,20 @@ class RoomBattle extends RoomGames.RoomGame {
 		this.started = true;
 		const users = this.players.map(player => {
 			const user = player.getUser();
-			if (!user) throw new Error(`User ${player.name} not found on ${this.id} battle creation`);
+			if (!user && !this.missingBattleStartMessage) throw new Error(`User ${player.name} not found on ${this.id} battle creation`);
 			return user;
 		});
-		Rooms.global.onCreateBattleRoom(users, this.room, {rated: this.rated});
+		if (!this.missingBattleStartMessage) {
+			// @ts-ignore The above error should throw if null is found, or this should be skipped
+			Rooms.global.onCreateBattleRoom(users, this.room, {rated: this.rated});
+		}
 
 		if (this.gameType === 'multi') {
-			// @ts-ignore
 			this.room.title = `Team ${this.p1.name} vs. Team ${this.p2.name}`;
 		} else if (this.gameType === 'free-for-all') {
 			// p1 vs. p2 vs. p3 vs. p4 is too long of a title
-			// @ts-ignore
 			this.room.title = `${this.p1.name} and friends`;
 		} else {
-			// @ts-ignore
 			this.room.title = `${this.p1.name} vs. ${this.p2.name}`;
 		}
 		this.room.send(`|title|${this.room.title}`);
@@ -1175,13 +1187,18 @@ if (!PM.isParentProcess) {
 			process.send(`THROW\n@!!@${repr}\n${error.stack}`);
 		},
 	};
-	global.__version = '';
+	global.__version = {head: ''};
 	try {
 		const execSync = require('child_process').execSync;
-		const out = execSync('git merge-base master HEAD', {
+		const head = execSync('git rev-parse HEAD', {
 			stdio: ['ignore', 'pipe', 'ignore'],
 		});
-		global.__version = ('' + out).trim();
+		const merge = execSync('git merge-base origin/master HEAD', {
+			stdio: ['ignore', 'pipe', 'ignore'],
+		});
+		global.__version.head = ('' + head).trim();
+		const origin = ('' + merge).trim();
+		if (origin !== global.__version.head) global.__version.origin = origin;
 	} catch (e) {}
 
 	if (Config.crashguard) {
