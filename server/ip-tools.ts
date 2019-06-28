@@ -19,6 +19,8 @@
 const BLOCKLISTS = ['sbl.spamhaus.org', 'rbl.efnetrbl.org'];
 
 import * as dns from 'dns';
+import * as net from 'net';
+import * as util from 'util';
 import {FS} from '../lib/fs';
 
 export const IPTools = new class {
@@ -354,158 +356,128 @@ export const IPTools = new class {
 	 * Will not reject; IPs with no RDNS entry will resolve to
 	 * '[byte1].[byte2].unknown-nohost'.
 	 */
-	getHost(ip: string) {
-		return new Promise<string>(resolve => {
-			if (!ip) {
-				resolve('');
-				return;
-			}
+	async getHost(ip: string) {
+		if (!ip) {
+			return '';
+		}
 
-			const ipNumber = IPTools.ipToNumber(ip);
-			if (IPTools.checkPattern(rangeOVHres, ipNumber)) {
-				resolve('ovh.fr.res-nohost');
-				return;
+		const ipNumber = IPTools.ipToNumber(ip);
+		if (IPTools.checkPattern(rangeOVHres, ipNumber)) {
+			return 'ovh.fr.res-nohost';
+		}
+		if (IPTools.checkPattern(rangeWindres, ipNumber)) {
+			return 'wind.it.res-nohost';
+		}
+		for (const row of IPTools.datacenters) {
+			if (ipNumber >= row[0] && ipNumber <= row[1]) {
+				return row[2] + '.proxy-nohost';
 			}
-			if (IPTools.checkPattern(rangeWindres, ipNumber)) {
-				resolve('wind.it.res-nohost');
-				return;
-			}
-			for (const row of IPTools.datacenters) {
-				if (ipNumber >= row[0] && ipNumber <= row[1]) {
-					resolve(row[2] + '.proxy-nohost');
-					return;
+		}
+		if (
+			ip.startsWith('106.76.') || ip.startsWith('106.77.') || ip.startsWith('106.78.') ||
+			ip.startsWith('106.79.') || ip.startsWith('112.110.') || ip.startsWith('27.97.') ||
+			ip.startsWith('49.15.') || ip.startsWith('49.14.') || ip.startsWith('1.187.')
+		) {
+			return 'ideacellular.mobile-nohost';
+		}
+		if (IPTools.checkPattern(rangeTmobile, ipNumber) || ip.startsWith('149.254.')) {
+			return 'tmobile.mobile-nohost';
+		}
+		if (
+			IPTools.checkPattern(rangeCenet, ipNumber) || IPTools.checkPattern(rangeQlded, ipNumber) ||
+			ip.startsWith('153.107.') || IPTools.checkPattern(rangeCathednet, ipNumber)
+		) {
+			return 'edu.au.res-nohost';
+		}
+		if (ip.startsWith('179.7.')) {
+			return 'claro.com.pe.mobile-nohost';
+		}
+		if (ip.startsWith('190.') || IPTools.checkPattern(rangeTelefonica, ipNumber)) {
+			return 'telefonica.net.pe.mobile-nohost';
+		}
+		if (ip.startsWith('180.191.') || ip.startsWith('112.198.')) {
+			return 'globe.com.ph.mobile-nohost';
+		}
+		if (ip.startsWith('218.188.') || ip.startsWith('218.189.')) {
+			return 'hgc.com.hk.mobile-nohost';
+		}
+		if (ip.startsWith('172.242.') || ip.startsWith('172.243.')) {
+			return 'viasat.com.mobile-nohost';
+		}
+		if (ip.startsWith('201.141.')) {
+			return 'cablevision.net.mx.mobile-nohost';
+		}
+		if (IPTools.checkPattern(rangeStarhub, ipNumber)) {
+			return 'starhub.com.mobile-nohost';
+		}
+		if (ip.startsWith('202.12.94.') || ip.startsWith('202.12.95.')) {
+			return 'nyp.edu.sg.res-nohost';
+		}
+		if (ip.startsWith('64.150.')) {
+			return 'illinois.net.res-nohost';
+		}
+		if (ip.startsWith('147.129.')) {
+			return 'ithaca.edu.res-nohost';
+		}
+		if (ip.startsWith('189.204.')) {
+			return 'bestel.com.mx.res-nohost';
+		}
+		if (IPTools.checkPattern(rangePsci, ipNumber)) {
+			return 'psci.net.res-nohost';
+		}
+		if (IPTools.checkPattern(rangeOcde, ipNumber)) {
+			return 'ocde.us.res-nohost';
+		}
+		if (IPTools.checkPattern(rangeIhet, ipNumber)) {
+			return 'iu.edu.res-nohost';
+		}
+		if (IPTools.checkPattern(rangeTimcelular, ipNumber)) {
+			return 'tim.com.br.mobile-nohost';
+		}
+		if (ip.startsWith('121.54.')) {
+			return 'smart.com.ph.mobile-nohost';
+		}
+		if (ip.startsWith('179.52.') || ip.startsWith('179.53.')) {
+			return 'codetel.net.do.mobile-nohost';
+		}
+		if (ip.startsWith('46.16.36.')) {
+			return 'anchorfree.proxy-nohost';
+		}
+		if (
+			ip.startsWith('198.144.104.') || ip.startsWith('198.47.115.') || ip.startsWith('199.255.215.') ||
+			ip.startsWith('204.14.76.') || ip.startsWith('204.14.77.') || ip.startsWith('204.14.78.') ||
+			ip.startsWith('204.14.79.') || ip.startsWith('205.164.32.') || ip.startsWith('209.73.132.') ||
+			ip.startsWith('209.73.151.') || ip.startsWith('216.172.135.') || ip.startsWith('46.16.34.') ||
+			ip.startsWith('46.16.35.') || ip.startsWith('50.117.45.') || ip.startsWith('63.141.198.') ||
+			ip.startsWith('63.141.199.') || ip.startsWith('74.115.1.') || ip.startsWith('74.115.5.') ||
+			ip.startsWith('85.237.197.') || ip.startsWith('85.237.222.')
+		) {
+			return 'anchorfree.proxy-nohost';
+		}
+		if (ip === '127.0.0.1') {
+			return 'localhost';
+		}
+		let hosts;
+		try {
+			hosts = await util.promisify(dns.reverse)(ip);
+		} catch (err) {
+			return '' + ip.split('.').slice(0, 2).join('.') + '.unknown-nohost';
+		}
+		if (!hosts || !hosts[0]) {
+			if (ip.startsWith('50.')) {
+				return 'comcast.net.res-nohost';
+			} else if (IPTools.checkPattern(rangeTelstra, ipNumber)) {
+				return 'telstra.net.res-nohost';
+			} else {
+				const result = await this.testConnection(ip);
+				if (result) {
+					return '' + ip.split('.').slice(0, 2).join('.') + '.proxy-nohost';
+				} else {
+					return '' + ip.split('.').slice(0, 2).join('.') + '.unknown-nohost';
 				}
 			}
-			if (
-				ip.startsWith('106.76.') || ip.startsWith('106.77.') || ip.startsWith('106.78.') ||
-				ip.startsWith('106.79.') || ip.startsWith('112.110.') || ip.startsWith('27.97.') ||
-				ip.startsWith('49.15.') || ip.startsWith('49.14.') || ip.startsWith('1.187.')
-			) {
-				resolve('ideacellular.mobile-nohost');
-				return;
-			}
-			if (IPTools.checkPattern(rangeTmobile, ipNumber) || ip.startsWith('149.254.')) {
-				resolve('tmobile.mobile-nohost');
-				return;
-			}
-			if (
-				IPTools.checkPattern(rangeCenet, ipNumber) || IPTools.checkPattern(rangeQlded, ipNumber) ||
-				ip.startsWith('153.107.') || IPTools.checkPattern(rangeCathednet, ipNumber)
-			) {
-				resolve('edu.au.res-nohost');
-				return;
-			}
-			if (ip.startsWith('179.7.')) {
-				resolve('claro.com.pe.mobile-nohost');
-				return;
-			}
-			if (ip.startsWith('190.') || IPTools.checkPattern(rangeTelefonica, ipNumber)) {
-				resolve('telefonica.net.pe.mobile-nohost');
-				return;
-			}
-			if (ip.startsWith('180.191.') || ip.startsWith('112.198.')) {
-				resolve('globe.com.ph.mobile-nohost');
-				return;
-			}
-			if (ip.startsWith('218.188.') || ip.startsWith('218.189.')) {
-				resolve('hgc.com.hk.mobile-nohost');
-				return;
-			}
-			if (ip.startsWith('172.242.') || ip.startsWith('172.243.')) {
-				resolve('viasat.com.mobile-nohost');
-				return;
-			}
-			if (ip.startsWith('201.141.')) {
-				resolve('cablevision.net.mx.mobile-nohost');
-				return;
-			}
-			if (IPTools.checkPattern(rangeStarhub, ipNumber)) {
-				resolve('starhub.com.mobile-nohost');
-				return;
-			}
-			if (ip.startsWith('202.12.94.') || ip.startsWith('202.12.95.')) {
-				resolve('nyp.edu.sg.res-nohost');
-				return;
-			}
-			if (ip.startsWith('64.150.')) {
-				resolve('illinois.net.res-nohost');
-				return;
-			}
-			if (ip.startsWith('147.129.')) {
-				resolve('ithaca.edu.res-nohost');
-				return;
-			}
-			if (ip.startsWith('189.204.')) {
-				resolve('bestel.com.mx.res-nohost');
-				return;
-			}
-			if (IPTools.checkPattern(rangePsci, ipNumber)) {
-				resolve('psci.net.res-nohost');
-				return;
-			}
-			if (IPTools.checkPattern(rangeOcde, ipNumber)) {
-				resolve('ocde.us.res-nohost');
-				return;
-			}
-			if (IPTools.checkPattern(rangeIhet, ipNumber)) {
-				resolve('iu.edu.res-nohost');
-				return;
-			}
-			if (IPTools.checkPattern(rangeTimcelular, ipNumber)) {
-				resolve('tim.com.br.mobile-nohost');
-				return;
-			}
-			if (ip.startsWith('121.54.')) {
-				resolve('smart.com.ph.mobile-nohost');
-				return;
-			}
-			if (ip.startsWith('179.52.') || ip.startsWith('179.53.')) {
-				resolve('codetel.net.do.mobile-nohost');
-				return;
-			}
-			if (ip.startsWith('46.16.36.')) {
-				resolve('anchorfree.proxy-nohost');
-				return;
-			}
-			if (
-				ip.startsWith('198.144.104.') || ip.startsWith('198.47.115.') || ip.startsWith('199.255.215.') ||
-				ip.startsWith('204.14.76.') || ip.startsWith('204.14.77.') || ip.startsWith('204.14.78.') ||
-				ip.startsWith('204.14.79.') || ip.startsWith('205.164.32.') || ip.startsWith('209.73.132.') ||
-				ip.startsWith('209.73.151.') || ip.startsWith('216.172.135.') || ip.startsWith('46.16.34.') ||
-				ip.startsWith('46.16.35.') || ip.startsWith('50.117.45.') || ip.startsWith('63.141.198.') ||
-				ip.startsWith('63.141.199.') || ip.startsWith('74.115.1.') || ip.startsWith('74.115.5.') ||
-				ip.startsWith('85.237.197.') || ip.startsWith('85.237.222.')
-			) {
-				resolve('anchorfree.proxy-nohost');
-				return;
-			}
-			if (ip === '127.0.0.1') {
-				resolve('localhost');
-				return;
-			}
-			dns.reverse(ip, (err, hosts) => {
-				if (err) {
-					resolve('' + ip.split('.').slice(0, 2).join('.') + '.unknown-nohost');
-					return;
-				}
-				if (!hosts || !hosts[0]) {
-					if (ip.startsWith('50.')) {
-						resolve('comcast.net.res-nohost');
-					} else if (IPTools.checkPattern(rangeTelstra, ipNumber)) {
-						resolve('telstra.net.res-nohost');
-					} else {
-						this.testConnection(ip, result => {
-							if (result) {
-								resolve('' + ip.split('.').slice(0, 2).join('.') + '.proxy-nohost');
-							} else {
-								resolve('' + ip.split('.').slice(0, 2).join('.') + '.unknown-nohost');
-							}
-						});
-					}
-				}
-				resolve(hosts[0]);
-			});
-		});
+		}
+		return hosts[0];
 	}
 
 	/**
@@ -515,7 +487,7 @@ export const IPTools = new class {
 	 * Callback is guaranteed to be called exactly once, within a 1000ms
 	 * timeout.
 	 */
-	testConnection(ip: string, callback: (result: boolean) => void) {
+	testConnection(ip: string) {
 		const cachedValue = this.connectionTestCache.get(ip);
 		if (cachedValue !== undefined) {
 			return cachedValue;
@@ -534,31 +506,33 @@ export const IPTools = new class {
 		// emit the 'timeout' event, but not actually do anything else, leaving
 		// you to manually use socket.destroy(), which emits 'close'
 
-		let connected = false;
-		const socket = require('net').createConnection({
-			port: 80,
-			host: ip,
-			timeout: 1000,
-		}, () => {
-			connected = true;
-			this.connectionTestCache.set(ip, true);
-			callback(true);
-			socket.destroy();
-		});
-		socket.on('error', () => {});
-		socket.on('timeout', () => socket.destroy());
-		socket.on('close', () => {
-			if (!connected) {
-				this.connectionTestCache.set(ip, false);
-				callback(false);
-			}
+		return new Promise(resolve => {
+			let connected = false;
+			const socket = net.createConnection({
+				port: 80,
+				host: ip,
+				timeout: 1000,
+			}, () => {
+				connected = true;
+				this.connectionTestCache.set(ip, true);
+				resolve(true);
+				socket.destroy();
+			});
+			socket.on('error', () => {});
+			socket.on('timeout', () => socket.destroy());
+			socket.on('close', () => {
+				if (!connected) {
+					this.connectionTestCache.set(ip, false);
+					resolve(false);
+				}
+			});
 		});
 	}
 
 	shortenHost(host: string) {
 		if (host.slice(-7) === '-nohost') return host;
 		let dotLoc = host.lastIndexOf('.');
-		let tld = host.slice(dotLoc);
+		const tld = host.slice(dotLoc);
 		if (tld === '.uk' || tld === '.au' || tld === '.br') dotLoc = host.lastIndexOf('.', dotLoc - 1);
 		dotLoc = host.lastIndexOf('.', dotLoc - 1);
 		return host.slice(dotLoc + 1);
