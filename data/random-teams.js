@@ -1837,7 +1837,8 @@ class RandomTeams extends Dex.ModdedDex {
 				if (pokemon.length === 6) {
 					let illusion = teamDetails['illusion'];
 					if (illusion) {
-						// Swap Zoroark's slot if it is the last Pokemon
+						// Make sure Zoroark isn't in the last slot
+						// (It can't use Illusion if it switches in from the last slot.)
 						if (illusion === 5) {
 							[pokemon[5], pokemon[4]] = [pokemon[4], pokemon[5]];
 							illusion = 4;
