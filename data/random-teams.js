@@ -1810,9 +1810,6 @@ class RandomTeams extends Dex.ModdedDex {
 
 				let set = this.randomSet(template, pokemon.length, teamDetails, this.format.gameType !== 'singles');
 
-				// Illusion shouldn't be the last Pokemon of the team
-				if (set.ability === 'Illusion' && pokemon.length > 4) continue;
-
 				// Pokemon shouldn't have Physical and Special setup on the same set
 				let incompatibleMoves = ['bellydrum', 'swordsdance', 'calmmind', 'nastyplot'];
 				let intersectMoves = set.moves.filter(move => incompatibleMoves.includes(move));
@@ -1838,9 +1835,16 @@ class RandomTeams extends Dex.ModdedDex {
 				pokemon.push(set);
 
 				if (pokemon.length === 6) {
-					// Set Zoroark's level to be the same as the last Pokemon
 					let illusion = teamDetails['illusion'];
-					if (illusion) pokemon[illusion - 1].level = pokemon[5].level;
+					if (illusion) {
+						// Swap Zoroark's slot if it is the last Pokemon
+						if (illusion === 5) {
+							[pokemon[5], pokemon[4]] = [pokemon[4], pokemon[5]];
+							illusion = 4;
+						}
+						// Set Zoroark's level to be the same as the last Pokemon
+						pokemon[illusion - 1].level = pokemon[5].level;
+					}
 					break;
 				}
 
@@ -1873,7 +1877,7 @@ class RandomTeams extends Dex.ModdedDex {
 				if (set.moves.includes('toxicspikes')) teamDetails['toxicSpikes'] = 1;
 				if (set.moves.includes('defog') || set.moves.includes('rapidspin')) teamDetails['hazardClear'] = 1;
 
-				// For setting Zoroark's level
+				// For setting Zoroark's level and slot
 				if (set.ability === 'Illusion') teamDetails['illusion'] = pokemon.length;
 			}
 		}
