@@ -1833,21 +1833,10 @@ class RandomTeams extends Dex.ModdedDex {
 
 				// Okay, the set passes, add it to our team
 				pokemon.push(set);
-
-				if (pokemon.length === 6) {
-					let illusion = teamDetails['illusion'];
-					if (illusion) {
-						// Make sure Zoroark isn't in the last slot
-						// (It can't use Illusion if it switches in from the last slot.)
-						if (illusion === 5) {
-							[pokemon[5], pokemon[4]] = [pokemon[4], pokemon[5]];
-							illusion = 4;
-						}
-						// Set Zoroark's level to be the same as the last Pokemon
-						pokemon[illusion - 1].level = pokemon[5].level;
-					}
-					break;
-				}
+				// For setting Zoroark's level and slot
+				if (set.ability === 'Illusion') teamDetails['illusion'] = pokemon.length;
+				// Don't bother performing accounting/tracking other teamDetails on the last Pokemon.
+				if (pokemon.length === 6) break;
 
 				// Now that our Pokemon has passed all checks, we can increment our counters
 				baseFormes[template.baseSpecies] = 1;
@@ -1877,12 +1866,21 @@ class RandomTeams extends Dex.ModdedDex {
 				if (set.moves.includes('stealthrock')) teamDetails['stealthRock'] = 1;
 				if (set.moves.includes('toxicspikes')) teamDetails['toxicSpikes'] = 1;
 				if (set.moves.includes('defog') || set.moves.includes('rapidspin')) teamDetails['hazardClear'] = 1;
-
-				// For setting Zoroark's level and slot
-				if (set.ability === 'Illusion') teamDetails['illusion'] = pokemon.length;
 			}
 		}
-		if (pokemon.length < 6) throw new Error(`Could not build a random team for ${this.format} (type=${type})`);
+
+		let illusion = teamDetails['illusion'];
+		if (illusion) {
+			// Make sure Zoroark isn't in the last slot
+			// (It can't use Illusion if it switches in from the last slot)
+			if (illusion === 5) {
+				[pokemon[5], pokemon[4]] = [pokemon[4], pokemon[5]];
+				illusion = 4;
+			}
+			// Set Zoroark's level to be the same as the last Pokemon
+			pokemon[illusion - 1].level = pokemon[5].level;
+		}
+
 		return pokemon;
 	}
 
