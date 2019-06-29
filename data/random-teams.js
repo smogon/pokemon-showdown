@@ -1715,6 +1715,7 @@ class RandomTeams extends Dex.ModdedDex {
 	}
 
 	randomTeam() {
+		const seed = this.prng.seed;
 		let pokemon = [];
 
 		// For Monotype
@@ -1739,10 +1740,10 @@ class RandomTeams extends Dex.ModdedDex {
 		/**@type {RandomTeamsTypes.TeamDetails} */
 		let teamDetails = {};
 
-		// The maximum number of iterations we're willing to try in order to create a team.
-		const EXHAUSTED = 10;
-
-		for (let i = 0; pokemon.length < 6 && i < EXHAUSTED; i++) {
+		// We make at most two passes through the potential Pokemon pool when creating a team - if the first pass doesn't
+		// result in a team of six Pokemon we perform a second iteration relaxing as many restrictions as possible.
+		for (const restrict of [true, false]) {
+			if (pokemon.length >= 6) break;
 			const pokemonPool = this.getPokemonPool(type, pokemon, isMonotype);
 			while (pokemonPool.length && pokemon.length < 6) {
 				let template = this.getTemplate(this.sampleNoReplace(pokemonPool));
@@ -1751,50 +1752,52 @@ class RandomTeams extends Dex.ModdedDex {
 				// Limit to one of each species (Species Clause)
 				if (baseFormes[template.baseSpecies]) continue;
 
-				// Adjust rate for species with multiple formes
-				switch (template.baseSpecies) {
-				case 'Arceus': case 'Silvally':
-					if (this.randomChance(17, 18)) continue;
-					break;
-				case 'Rotom':
-					if (this.randomChance(5, 6)) continue;
-					break;
-				case 'Deoxys': case 'Gourgeist': case 'Oricorio':
-					if (this.randomChance(3, 4)) continue;
-					break;
-				case 'Castform': case 'Kyurem': case 'Lycanroc': case 'Necrozma': case 'Wormadam':
-					if (this.randomChance(2, 3)) continue;
-					break;
-				case 'Basculin': case 'Cherrim': case 'Floette': case 'Giratina': case 'Hoopa': case 'Landorus': case 'Meloetta': case 'Meowstic': case 'Shaymin': case 'Thundurus': case 'Tornadus':
-					if (this.randomChance(1, 2)) continue;
-					break;
-				case 'Dugtrio': case 'Exeggutor': case 'Golem': case 'Greninja': case 'Marowak': case 'Muk': case 'Ninetales': case 'Persian': case 'Raichu': case 'Sandslash': case 'Zygarde':
-					if (this.gen >= 7 && this.randomChance(1, 2)) continue;
-					break;
-				}
-
 				let tier = template.tier;
-
-				// Limit two Pokemon per tier, three for Monotype, increasing per exhaustion.
-				if (!tierCount[tier]) {
-					tierCount[tier] = 1;
-				} else {
-					tierCount[tier]++;
-					if (!isMonotype || tierCount[tier] > 2 + i) continue;
-				}
-
 				let types = template.types;
+				let typeCombo = types.slice().sort().join();
 
-				if (!isMonotype) {
-					// Limit two of any type
-					let skip = false;
-					for (const type of types) {
-						if (typeCount[type] > 1 && this.randomChance(4, 5)) {
-							skip = true;
-							break;
-						}
+				// Adjust rate for species with multiple formes
+				if (restrict) {
+					switch (template.baseSpecies) {
+					case 'Arceus': case 'Silvally':
+						if (this.randomChance(17, 18)) continue;
+						break;
+					case 'Rotom':
+						if (this.randomChance(5, 6)) continue;
+						break;
+					case 'Deoxys': case 'Gourgeist': case 'Oricorio':
+						if (this.randomChance(3, 4)) continue;
+						break;
+					case 'Castform': case 'Kyurem': case 'Lycanroc': case 'Necrozma': case 'Wormadam':
+						if (this.randomChance(2, 3)) continue;
+						break;
+					case 'Basculin': case 'Cherrim': case 'Floette': case 'Giratina': case 'Hoopa': case 'Landorus': case 'Meloetta': case 'Meowstic': case 'Shaymin': case 'Thundurus': case 'Tornadus':
+						if (this.randomChance(1, 2)) continue;
+						break;
+					case 'Dugtrio': case 'Exeggutor': case 'Golem': case 'Greninja': case 'Marowak': case 'Muk': case 'Ninetales': case 'Persian': case 'Raichu': case 'Sandslash': case 'Zygarde':
+						if (this.gen >= 7 && this.randomChance(1, 2)) continue;
+						break;
 					}
-					if (skip) continue;
+
+					// Limit two Pokemon per tier, three for Monotype
+					if (!tierCount[tier]) {
+						tierCount[tier] = 1;
+					} else {
+						tierCount[tier]++;
+						if (!isMonotype || tierCount[tier] > 2) continue;
+					}
+
+					if (!isMonotype) {
+						// Limit two of any type
+						let skip = false;
+						for (const type of types) {
+							if (typeCount[type] > 1 && this.randomChance(4, 5)) {
+								skip = true;
+								break;
+							}
+						}
+						if (skip) continue;
+					}
 				}
 
 				if (potd && potd.exists) {
@@ -1808,22 +1811,20 @@ class RandomTeams extends Dex.ModdedDex {
 
 				let set = this.randomSet(template, pokemon.length, teamDetails, this.format.gameType !== 'singles');
 
-				// Illusion shouldn't be the last Pokemon of the team
-				if (set.ability === 'Illusion' && pokemon.length > 4) continue;
-
 				// Pokemon shouldn't have Physical and Special setup on the same set
 				let incompatibleMoves = ['bellydrum', 'swordsdance', 'calmmind', 'nastyplot'];
 				let intersectMoves = set.moves.filter(move => incompatibleMoves.includes(move));
 				if (intersectMoves.length > 1) continue;
 
-				// Limit 1 of any type combination, 2 in Monotype, increasing per exhaustion.
-				let typeCombo = types.slice().sort().join();
-				if (set.ability === 'Drought' || set.ability === 'Drizzle' || set.ability === 'Sand Stream') {
-					// Drought, Drizzle and Sand Stream don't count towards the type combo limit
-					typeCombo = set.ability;
-					if (typeCombo in typeComboCount) continue;
-				} else {
-					if (typeComboCount[typeCombo] >= (isMonotype ? 2 : 1) + i) continue;
+				// Limit 1 of any type combination, 2 in Monotype
+				if (restrict) {
+					if (set.ability === 'Drought' || set.ability === 'Drizzle' || set.ability === 'Sand Stream') {
+						// Drought, Drizzle and Sand Stream don't count towards the type combo limit
+						typeCombo = set.ability;
+						if (typeCombo in typeComboCount) continue;
+					} else {
+						if (typeComboCount[typeCombo] >= (isMonotype ? 2 : 1)) continue;
+					}
 				}
 
 				let item = this.getItem(set.item);
@@ -1833,13 +1834,10 @@ class RandomTeams extends Dex.ModdedDex {
 
 				// Okay, the set passes, add it to our team
 				pokemon.push(set);
-
-				if (pokemon.length === 6) {
-					// Set Zoroark's level to be the same as the last Pokemon
-					let illusion = teamDetails['illusion'];
-					if (illusion) pokemon[illusion - 1].level = pokemon[5].level;
-					break;
-				}
+				// For setting Zoroark's level and slot
+				if (set.ability === 'Illusion') teamDetails['illusion'] = pokemon.length;
+				// Don't bother performing accounting/tracking other teamDetails on the last Pokemon.
+				if (pokemon.length === 6) break;
 
 				// Now that our Pokemon has passed all checks, we can increment our counters
 				baseFormes[template.baseSpecies] = 1;
@@ -1869,12 +1867,22 @@ class RandomTeams extends Dex.ModdedDex {
 				if (set.moves.includes('stealthrock')) teamDetails['stealthRock'] = 1;
 				if (set.moves.includes('toxicspikes')) teamDetails['toxicSpikes'] = 1;
 				if (set.moves.includes('defog') || set.moves.includes('rapidspin')) teamDetails['hazardClear'] = 1;
-
-				// For setting Zoroark's level
-				if (set.ability === 'Illusion') teamDetails['illusion'] = pokemon.length;
 			}
 		}
-		if (pokemon.length < 6) throw new Error(`Could not build a random team for ${this.format} (type=${type})`);
+		if (pokemon.length < 6) throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
+
+		let illusion = teamDetails['illusion'];
+		if (illusion) {
+			// Make sure Zoroark isn't in the last slot
+			// (It can't use Illusion if it switches in from the last slot)
+			if (illusion === 5) {
+				[pokemon[5], pokemon[4]] = [pokemon[4], pokemon[5]];
+				illusion = 4;
+			}
+			// Set Zoroark's level to be the same as the last Pokemon
+			pokemon[illusion - 1].level = pokemon[5].level;
+		}
+
 		return pokemon;
 	}
 
