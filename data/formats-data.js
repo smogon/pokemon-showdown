@@ -3454,7 +3454,7 @@ let BattleFormatsData = {
 			{"generation": 4, "level": 3},
 			{"generation": 6, "level": 17, "maxEggMoves": 1},
 		],
-		tier: "RU",
+		tier: "RUBL",
 		doublesTier: "(DUU)",
 	},
 	wurmple: {
