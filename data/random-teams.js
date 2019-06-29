@@ -1715,6 +1715,7 @@ class RandomTeams extends Dex.ModdedDex {
 	}
 
 	randomTeam() {
+		const seed = this.prng.seed;
 		let pokemon = [];
 
 		// For Monotype
@@ -1868,6 +1869,7 @@ class RandomTeams extends Dex.ModdedDex {
 				if (set.moves.includes('defog') || set.moves.includes('rapidspin')) teamDetails['hazardClear'] = 1;
 			}
 		}
+		if (pokemon.length < 6) throw new Error(`Could not build a random team for ${this.format} (seed=${seed})`);
 
 		let illusion = teamDetails['illusion'];
 		if (illusion) {
