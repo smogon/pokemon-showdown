@@ -558,7 +558,7 @@ export const IPTools = new class {
 	shortenHost(host: string) {
 		if (host.slice(-7) === '-nohost') return host;
 		let dotLoc = host.lastIndexOf('.');
-		let tld = host.slice(dotLoc);
+		const tld = host.slice(dotLoc);
 		if (tld === '.uk' || tld === '.au' || tld === '.br') dotLoc = host.lastIndexOf('.', dotLoc - 1);
 		dotLoc = host.lastIndexOf('.', dotLoc - 1);
 		return host.slice(dotLoc + 1);
