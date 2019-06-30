@@ -228,7 +228,7 @@ class BasicRoom {
 				continue;
 			}
 			counter++;
-			buffer += ',' + this.users[i].getIdentity(this.id);
+			buffer += ',' + this.users[i].getIdentityWithStatus(this.id);
 		}
 		let msg = '|users|' + counter + buffer;
 		return msg;
@@ -749,6 +749,7 @@ class GlobalRoom extends BasicRoom {
 	 * @param {AnyObject} options
 	 */
 	onCreateBattleRoom(players, room, options) {
+		players.forEach(player => player.clearStatus());
 		if (Config.reportbattles) {
 			let reportRoom = Rooms(Config.reportbattles === true ? 'lobby' : Config.reportbattles);
 			if (reportRoom) {
@@ -1328,7 +1329,7 @@ class BasicChatRoom extends BasicRoom {
 		if (user && user.connected) {
 			if (!this.users[user.userid]) return false;
 			if (user.named) {
-				this.reportJoin('n', user.getIdentity(this.id) + '|' + user.userid);
+				this.reportJoin('n', user.getIdentityWithStatus(this.id) + '|' + user.userid);
 			} else {
 				this.reportJoin('l', user.userid);
 			}
