@@ -124,6 +124,7 @@ function solveRPN(rpn) {
 }
 
 exports.commands = {
+	'!calculate': true,
 	math: "calculate",
 	calculate(target, room, user) {
 		if (!target) return this.parse('/help calculate');
