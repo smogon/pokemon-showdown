@@ -32,7 +32,7 @@ foeBasePower(user, target, basePower, move) [on target]
 	examples: [ability] Technician, [foe side condition] Reflect,
 	          [move] Gyro Ball
 
-beforeTurn(Pokémon) [on Pokémon]
+beforeTurn(pokemon) [on pokemon]
 beforeTurn(user) [on move]
 	Fired before a turn starts on every active pokemon.
 
@@ -50,7 +50,7 @@ damage(user, target) [on move]
 
 modifyMove(user, target, move) [on user]
 foeModifyMove(user, target, move) [on target]
-	Fired before a pokemon uses a move. Return true to prevent the move.
+	Fired before a Pokèmon uses a move. Return true to prevent the move.
 
 	The API is very similar to beforeMove, but the usage is different.
 
@@ -68,21 +68,21 @@ foeModifyMove(user, target, move) [on target]
 
 	examples: [ability] Adaptability, [ability, foe ability] No Guard
 
-modifyPokémon(Pokémon) [on Pokémon]
-	Any effect that modifies a Pokémon should be applied here.
+modifyPokémonpokemon
+effect that modifies a Pokémon should be applied here.
 
 	These are the properties of Pokémon you can modify:
-	- Pokémon.stats
-	- Pokémon.weightkg
-	- Pokémon.type
+	- pokemon.stats
+	- pokemon.weightkg
+	- pokemon.type
 
 	Whenever any effect is added or removed, the Pokémon is reset and
-	modifyPokémon is fired.
+	modifypokemon is fired.
 
 	examples: [ability] Light Metal, [volatile] Conversion 2, etc
 
 stats(stats, pokemon) [on Pokémon]
-	A shortcut event for modifyPokémon(Pokémon) : stats = Pokémon.stats.
+	A shortcut event for modifypokemon(pokemon) : stats = pokemon.stats.
 
 	Stats modifiers should be applied here.
 
@@ -98,8 +98,8 @@ type(user, target) [on move]
 
 	examples: [move] Struggle
 
-switchIn(Pokémon) [on Pokémon]
-foeSwitchIn(Pokémon) [on Pokémon's foe's side]
+switchIn(pokemon) [on pokemon]
+foeSwitchIn(pokemon) [on pokemon's foe's side]
 	Fired after a Pokémon switches in.
 
 	If two Pokémon switch in at once (first turn, or after two Pokémon
@@ -109,8 +109,8 @@ foeSwitchIn(Pokémon) [on Pokémon's foe's side]
 
 	examples: [ability] Drizzle, [ability] Intimidate, etc
 
-switchOut(Pokémon) [on Pokémon]
-foeSwitchOut(Pokémon) [on Pokémon's foe's side]
+switchOut(pokemon) [on Pokémon]
+foeSwitchOut(pokemon) [on Pokémon's foe's side]
 	Fired before a Pokémon switches out. Return true to interrupt and
 	prevent the Pokémon from switching out.
 
@@ -205,7 +205,7 @@ end() [on weather, on field effect]
 	examples: [volatile] Encore, [side condition] Reflect,
 	          [volatile] Substitute
 
-duration(Pokémon, source) [on status, on volatile]
+duration(pokemon, source) [on status, on volatile]
 duration(side) [on side condition]
 duration() [on weather, on field effect]
 	Fired while calculating an effect's duration. Returns the duration in
@@ -227,7 +227,7 @@ duration() [on weather, on field effect]
 
 	examples: [weather] Rain Dance, [side condition] Reflect
 
-residual(Pokémon) [on status, on volatile, on ability, on item]
+residual(pokemon) [on status, on volatile, on ability, on item]
 residual(side) [on side condition]
 residual() [on weather, on field effect]
 	Fired at the end of each turn, but before fainted Pokémon are switched in.
