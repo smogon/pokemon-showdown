@@ -126,7 +126,8 @@ represented by a space), and the rest of the string being their username.
 `|users|USERLIST`
 
 > `USERLIST` is a comma-separated list of `USER`s, sent from chat rooms when
-> they're joined.
+> they're joined. Optionally, a `USER` can end in `@` followed by a user status message.
+> A `STATUS` starting in `!` indicates the user is away.
 
 ### Room messages
 
@@ -149,17 +150,21 @@ represented by a space), and the rest of the string being their username.
 
 > Changes the HTML display of the `|uhtml|` message named (NAME).
 
-`|join|USER` or `|j|USER`
+`|join|USER@STATUS` or `|j|USER@STATUS`
 
-> `USER` joined the room.
+> `USER` joined the room. Optionally, `USER` can end in `@` followed by a user status message.
+> A `STATUS` starting in `!` indicates the user is away.
 
-`|leave|USER` or `|l|USER`
+`|leave|USER@STATUS` or `|l|USER@STATUS`
 
-> `USER` left the room.
+> `USER` left the room. Optionally, `USER` can end in `@` followed by a user status message.
+> A `STATUS` starting in `!` indicates the user is away.
 
-`|name|USER|OLDID` or `|n|USER|OLDID`
+`|name|USER@STATUS|OLDID` or `|n|USER@STATUS|OLDID`
 
 > A user changed name to `USER`, and their previous userid was `OLDID`.
+> Optionally, `USER` can end in `@` followed by a user status message.
+> A `STATUS` starting in `!` indicates the user is away.
 
 `|chat|USER|MESSAGE` or `|c|USER|MESSAGE`
 
@@ -227,10 +232,11 @@ represented by a space), and the rest of the string being their username.
 > Finish logging in (or renaming) by sending: `/trn USERNAME,0,ASSERTION`
 > where `USERNAME` is your desired username and `ASSERTION` is `data.assertion`.
 
-`|updateuser|USERNAME|NAMED|AVATAR|SETTINGS`
+`|updateuser|USER@STATUS|NAMED|AVATAR|SETTINGS`
 
-> Your name, avatar or settings were successfully changed. Your username is
-> now `USERNAME`. `NAMED` will be `0` if you are a guest or `1` otherwise. Your
+> Your name, avatar or settings were successfully changed. Your rank and username
+> are now `USER`. Optionally, the username can end in `@` followed by a user status message.
+> A `STATUS` starting in `!` indicates the user is away. `NAMED` will be `0` if you are a guest or `1` otherwise. Your
 > avatar is now `AVATAR`. `SETTINGS` is a JSON object representing the current
 > state of various user settings.
 

@@ -526,6 +526,7 @@ exports.grouplist = [
 		jurisdiction: 'u',
 		declare: true,
 		addhtml: true,
+		bypassafktimer: true,
 	},
 	{
 		symbol: '@',

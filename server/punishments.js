@@ -895,7 +895,7 @@ const Punishments = new (class {
 		for (let curUser of affected) {
 			curUser.locked = id;
 			curUser.namelocked = id;
-			curUser.resetName();
+			curUser.resetName(true);
 			curUser.updateIdentity();
 		}
 
