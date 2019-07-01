@@ -2,3 +2,5 @@ server/chat-plugins/scavenger*.js @xfix
 server/chat-plugins/trivia.js @xfix
 server/chat-plugins/mafia*.js @HoeenCoder @whalemer
 data/mods/ssb/ @HoeenCoder
+data/mods/mafia/ @HoeenCoder
+data/mods/mafia/ @whalemer
