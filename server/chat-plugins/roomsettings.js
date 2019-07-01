@@ -274,7 +274,7 @@ exports.commands = {
 	modchathelp: [`/modchat [off/autoconfirmed/+/%/@/*/player/#/&/~] - Set the level of moderated chat. Requires: * @ \u2606 for off/autoconfirmed/+ options, # & ~ for all the options`],
 
 	ioo(target, room, user) {
-		return this.parse('/modjoin +');
+		return this.parse('/modjoin %');
 	},
 	'!ionext': true,
 	inviteonlynext: 'ionext',
@@ -299,13 +299,13 @@ exports.commands = {
 	inviteonly(target, room, user) {
 		if (!target) return this.parse('/help inviteonly');
 		if (this.meansYes(target)) {
-			return this.parse("/modjoin +");
+			return this.parse("/modjoin %");
 		} else {
 			return this.parse(`/modjoin ${target}`);
 		}
 	},
 	inviteonlyhelp: [
-		`/inviteonly [on|off] - Sets modjoin +. Users can't join unless invited with /invite. Requires: # & ~`,
+		`/inviteonly [on|off] - Sets modjoin %. Users can't join unless invited with /invite. Requires: # & ~`,
 		`/ioo - Shortcut for /inviteonly on`,
 		`/inviteonlynext OR /ionext - Sets your next battle to be invite-only.`,
 		`/ionext off - Sets your next battle to be publicly visible.`,
@@ -349,8 +349,12 @@ exports.commands = {
 			this.addModAction(`${user.name} set modjoin to autoconfirmed.`);
 			this.modlog('MODJOIN', null, 'autoconfirmed');
 		} else if (target in Config.groups || target === 'trusted') {
-			if (room.battle && !user.can('makeroom') && target !== '+') return this.errorReply(`/modjoin - Access denied from setting modjoin past + in battles.`);
-			if (room.isPersonal && !user.can('makeroom') && target !== '+') return this.errorReply(`/modjoin - Access denied from setting modjoin past + in group chats.`);
+			if (room.battle && !user.can('makeroom') && !'+%'.includes(target)) {
+				return this.errorReply(`/modjoin - Access denied from setting modjoin past % in battles.`);
+			}
+			if (room.isPersonal && !user.can('makeroom') && !'+%'.includes(target)) {
+				return this.errorReply(`/modjoin - Access denied from setting modjoin past % in group chats.`);
+			}
 			if (room.modjoin === target) return this.errorReply(`Modjoin is already set to ${target} in this room.`);
 			room.modjoin = target;
 			this.add(`|raw|<div class="broadcast-red"><strong>This room is now invite only!</strong><br />Users must be rank ${target} or invited with <code>/invite</code> to join</div>`);

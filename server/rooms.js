@@ -1691,10 +1691,10 @@ let Rooms = Object.assign(getRoom, {
 		}
 		if (options.tour && !room.tour.modjoin) inviteOnly = [];
 		if (inviteOnly.length) {
-			room.modjoin = '+';
+			room.modjoin = '%';
 			room.isPrivate = 'hidden';
 			room.privacySetter = new Set(inviteOnly);
-			room.add(`|raw|<div class="broadcast-red"><strong>This battle is invite-only!</strong><br />Users must be rank + or invited with <code>/invite</code> to join</div>`);
+			room.add(`|raw|<div class="broadcast-red"><strong>This battle is invite-only!</strong><br />Users must be invited with <code>/invite</code> (or be staff) to join</div>`);
 		}
 
 		for (const p of players) {
