@@ -274,7 +274,7 @@ exports.commands = {
 	modchathelp: [`/modchat [off/autoconfirmed/+/%/@/*/player/#/&/~] - Set the level of moderated chat. Requires: * @ \u2606 for off/autoconfirmed/+ options, # & ~ for all the options`],
 
 	ioo(target, room, user) {
-		return this.parse('/modjoin +');
+		return this.parse('/modjoin %');
 	},
 	'!ionext': true,
 	inviteonlynext: 'ionext',
@@ -299,13 +299,13 @@ exports.commands = {
 	inviteonly(target, room, user) {
 		if (!target) return this.parse('/help inviteonly');
 		if (this.meansYes(target)) {
-			return this.parse("/modjoin +");
+			return this.parse("/modjoin %");
 		} else {
 			return this.parse(`/modjoin ${target}`);
 		}
 	},
 	inviteonlyhelp: [
-		`/inviteonly [on|off] - Sets modjoin +. Users can't join unless invited with /invite. Requires: # & ~`,
+		`/inviteonly [on|off] - Sets modjoin %. Users can't join unless invited with /invite. Requires: # & ~`,
 		`/ioo - Shortcut for /inviteonly on`,
 		`/inviteonlynext OR /ionext - Sets your next battle to be invite-only.`,
 		`/ionext off - Sets your next battle to be publicly visible.`,
