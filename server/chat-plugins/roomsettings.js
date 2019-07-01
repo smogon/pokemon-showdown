@@ -208,9 +208,12 @@ exports.commands = {
 			return this.sendReply(`Moderated chat is currently set to: ${modchatSetting}`);
 		}
 		if (!this.canTalk()) return;
-		if (!this.can('modchat', null, room)) return false;
 
-		if (room.modchat && room.modchat.length <= 1 && Config.groupsranking.indexOf(room.modchat) > 1 && !user.can('modchatall', null, room)) {
+		const canSetAll = user.can('modchatall', null, room) || (room.battle && user.can('lock'));
+
+		if (!this.can('modchat', null, room) && !canSetAll) return false;
+
+		if (room.modchat && room.modchat.length <= 1 && Config.groupsranking.indexOf(room.modchat) > 1 && !canSetAll) {
 			return this.errorReply(`/modchat - Access denied for removing a setting higher than ${Config.groupsranking[1]}.`);
 		}
 		if (room.requestModchat) {
@@ -242,7 +245,7 @@ exports.commands = {
 				this.errorReply(`The rank '${target}' was unrecognized as a modchat level.`);
 				return this.parse('/help modchat');
 			}
-			if (Config.groupsranking.indexOf(target) > 1 && !user.can('modchatall', null, room)) {
+			if (Config.groupsranking.indexOf(target) > 1 && !canSetAll) {
 				return this.errorReply(`/modchat - Access denied for setting higher than ${Config.groupsranking[1]}.`);
 			}
 			let roomGroup = (room.auth && room.isPrivate === true ? ' ' : user.group);

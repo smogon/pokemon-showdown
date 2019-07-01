@@ -1540,7 +1540,7 @@ class GameRoom extends BasicChatRoom {
 		if (user === null) {
 			this.modchatUser = '';
 			return;
-		} else if (user.can('modchat') || !this.modchatUser || this.modchatUser === user.userid) {
+		} else if (user.can('lock') || !this.modchatUser || this.modchatUser === user.userid) {
 			this.modchatUser = user.userid;
 			return;
 		} else {
