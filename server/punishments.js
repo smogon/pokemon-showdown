@@ -540,7 +540,7 @@ const Punishments = new (class {
 		if (!lastUserId.startsWith('guest')) {
 			Punishments.userids.set(lastUserId, punishment);
 		}
-		if (user.locked) {
+		if (user.locked && user.locked.charAt(0) !== '#') {
 			Punishments.userids.set(user.locked, punishment);
 			keys.add(user.locked);
 		}
