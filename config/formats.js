@@ -623,7 +623,7 @@ let Formats = [
 		banlist: ['Regigigas', 'Shedinja', 'Slaking', 'Smeargle', 'Imposter', 'Huge Power', 'Pure Power'],
 		checkLearnset(move, template, lsetData, set) {
 			// @ts-ignore
-			return set.leader ? this.checkLearnset(move, template, lsetData, set) : null;
+			return set.follower ? null : this.checkLearnset(move, template, lsetData, set);
 		},
 		validateSet(set, teamHas) {
 			if (!teamHas.leader) {
@@ -631,12 +631,16 @@ let Formats = [
 				teamHas.leader = set.species;
 				return problems;
 			}
-			let follower = Object.assign({leader: false}, set);
-			follower.ability = this.dex.getTemplate(set.species).abilities['0'];
-			follower.moves = ['snore'];
-			let leader = Object.assign({leader: true}, set);
+			let leader = this.dex.deepClone(set);
 			leader.species = teamHas.leader;
-			return this.validateSet(follower, teamHas) || this.validateSet(leader, teamHas);
+			let problems = this.validateSet(leader, teamHas);
+			if (problems) return problems;
+			set.ability = this.dex.getTemplate(set.species || set.name).abilities['0'];
+			// @ts-ignore
+			set.follower = true;
+			problems = this.validateSet(set, teamHas);
+			set.ability = leader.ability;
+			return problems;
 		},
 	},
 	{
