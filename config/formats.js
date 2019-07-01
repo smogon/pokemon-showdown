@@ -587,173 +587,56 @@ let Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] Inheritance",
-		desc: `Pok&eacute;mon may use the ability and moves of another, as long as they forfeit their own learnset.`,
+		name: "[Gen 7] Nature Swap",
+		desc: `Pok&eacute;mon have their base stats swapped depending on their nature.`,
 		threads: [
-			`&bullet; <a href="http://www.smogon.com/forums/threads/3592844/">Inheritance</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3612727/">Nature Swap</a>`,
 		],
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
-		banlist: [
-			'Blacephalon', 'Cresselia', 'Hoopa-Unbound', 'Kartana', 'Kyurem-Black', 'Regigigas', 'Shedinja', 'Slaking', 'Gyaradosite',
-			'Huge Power', 'Imposter', 'Innards Out', 'Pure Power', 'Speed Boost', 'Water Bubble', 'Assist', 'Chatter', 'Shell Smash',
-		],
-		noChangeForme: true,
-		noChangeAbility: true,
-		// @ts-ignore
-		getEvoFamily(species) {
-			let template = Dex.getTemplate(species);
-			while (template.prevo) {
-				template = Dex.getTemplate(template.prevo);
-			}
-			return template.speciesid;
-		},
-		validateSet(set, teamHas) {
-			// @ts-ignore
-			if (!this.format.abilityMap) {
-				let abilityMap = Object.create(null);
-				for (let speciesid in Dex.data.Pokedex) {
-					let pokemon = Dex.getTemplate(speciesid);
-					if (pokemon.num < 1 || pokemon.species === 'Murkrow' || pokemon.species === 'Smeargle') continue;
-					if (pokemon.requiredItem || pokemon.requiredMove) continue;
-					for (const key of Object.values(pokemon.abilities)) {
-						let abilityId = toID(key);
-						if (abilityMap[abilityId]) {
-							abilityMap[abilityId][pokemon.evos ? 'push' : 'unshift'](speciesid);
-						} else {
-							abilityMap[abilityId] = [speciesid];
-						}
-					}
-				}
-				// @ts-ignore
-				this.format.abilityMap = abilityMap;
-			}
-
-			// @ts-ignore
-			this.format.noChangeForme = false;
-			/** @type {string[]} */
-			let problems = [];
-			let pkmnRule = Dex.getFormat('pokemon');
-			if (pkmnRule.exists && pkmnRule.onChangeSet && pkmnRule.onChangeSet.call(Dex, set, this.format)) {
-				problems = pkmnRule.onChangeSet.call(Dex, set, this.format) || [];
-			}
-			// @ts-ignore
-			this.format.noChangeForme = true;
-
-			if (problems.length) return problems;
-
-			let template = Dex.getTemplate(set.species);
-			if (!template.exists) return [`The Pokemon "${set.species}" does not exist.`];
-			if (template.isUnreleased) return [`${template.species} is unreleased.`];
-			let megaTemplate = Dex.getTemplate(Dex.getItem(set.item).megaStone);
-			if (template.tier === 'Uber' || megaTemplate.tier === 'Uber' || this.format.banlist.includes(template.species)) return [`${megaTemplate.tier === 'Uber' ? megaTemplate.species : template.species} is banned.`];
-
-			let name = set.name;
-
-			let ability = Dex.getAbility(set.ability);
-			if (!ability.exists || ability.isNonstandard || ability.isUnreleased) return [`${name} needs to have a valid ability.`];
-			// @ts-ignore
-			let pokemonWithAbility = this.format.abilityMap[ability.id];
-			if (!pokemonWithAbility) return [`"${set.ability}" is not available on a legal Pok\u00e9mon.`];
-
-			let canonicalSource = ''; // Specific for the basic implementation of Donor Clause (see onValidateTeam).
-			// @ts-ignore
-			let validSources = set.abilitySources = []; // Evolution families
-			for (const donor of pokemonWithAbility) {
-				let donorTemplate = Dex.getTemplate(donor);
-				// @ts-ignore
-				let evoFamily = this.format.getEvoFamily(donorTemplate);
-
-				if (validSources.includes(evoFamily)) continue;
-
-				if (set.name === set.species) delete set.name;
-				set.species = donorTemplate.species;
-				problems = this.validateSet(set, teamHas) || [];
-
-				if (!problems.length) {
-					canonicalSource = donorTemplate.species;
-					validSources.push(evoFamily);
-				}
-				if (validSources.length > 1) {
-					// Specific for the basic implementation of Donor Clause (see onValidateTeam).
-					break;
-				}
-			}
-
-			set.species = template.species;
-			if (!validSources.length) {
-				if (pokemonWithAbility.length > 1) return [`${template.species}'s set is illegal.`];
-				problems.unshift(`${template.species} has an illegal set with an ability from ${Dex.getTemplate(pokemonWithAbility[0]).name}.`);
-				return problems;
-			}
-
-			// Protocol: Include the data of the donor species in the `ability` data slot.
-			// Afterwards, we are going to reset the name to what the user intended. :]
-			set.ability = `${set.ability}0${canonicalSource}`;
-		},
-		onValidateTeam(team, format) {
-			// Donor Clause
-			let evoFamilyLists = [];
-			for (const set of team) {
-				// @ts-ignore
-				if (!set.abilitySources) continue;
-				// @ts-ignore
-				evoFamilyLists.push(set.abilitySources.map(format.getEvoFamily));
-			}
-
-			// Checking actual full incompatibility would require expensive algebra.
-			// Instead, we only check the trivial case of multiple Pokémon only legal for exactly one family. FIXME?
-			let requiredFamilies = Object.create(null);
-			for (const evoFamilies of evoFamilyLists) {
-				if (evoFamilies.length !== 1) continue;
-				let [familyId] = evoFamilies;
-				if (!(familyId in requiredFamilies)) requiredFamilies[familyId] = 1;
-				requiredFamilies[familyId]++;
-				if (requiredFamilies[familyId] > 2) return [`You are limited to up to two inheritances from each evolution family by the Donor Clause.`, `(You inherit more than twice from ${this.getTemplate(familyId).species}).`];
-			}
-		},
-		onBegin() {
-			for (const pokemon of this.p1.pokemon.concat(this.p2.pokemon)) {
-				if (pokemon.baseAbility.includes('0')) {
-					let donor = pokemon.baseAbility.split('0')[1];
+		banlist: ['Blissey', 'Chansey', 'Cloyster', 'Hoopa-Unbound', 'Kyurem-Black', 'Stakataka'],
+		battle: {
+			natureModify(stats, set) {
+				let nature = this.getNature(set.nature);
+				if (nature.plus) {
 					// @ts-ignore
-					pokemon.donor = toID(donor);
+					let stat = stats[nature.minus];
 					// @ts-ignore
-					pokemon.baseAbility = pokemon.baseAbility.split('0')[0];
-					pokemon.ability = pokemon.baseAbility;
+					stats[nature.minus] = stats[nature.plus];
+					// @ts-ignore
+					stats[nature.plus] = Math.floor(stat * 1.1);
 				}
-			}
-		},
-		onSwitchIn(pokemon) {
-			// @ts-ignore
-			if (!pokemon.donor) return;
-			// @ts-ignore
-			let donorTemplate = this.getTemplate(pokemon.donor);
-			if (!donorTemplate.exists) return;
-			// Place volatiles on the Pokémon to show the donor details.
-			this.add('-start', pokemon, donorTemplate.species, '[silent]');
+				return stats;
+			},
 		},
 	},
 	{
-		name: "[Gen 7] NFE",
-		desc: `Only Pok&eacute;mon that can evolve are allowed.`,
+		name: "[Gen 7] Follow the Leader",
+		desc: `The first Pok&eacute;mon provides the moves and abilities for all other Pok&eacute;mon on the team.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3648183/">NFE</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3603860/">Follow the Leader</a>`,
 		],
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
-		banlist: [
-			'Chansey', 'Doublade', 'Gligar', 'Golbat', 'Gurdurr', 'Magneton', 'Piloswine',
-			'Porygon2', 'Rhydon', 'Scyther', 'Sneasel', 'Type: Null', 'Vigoroth',
-			'Drought', 'Aurora Veil',
-		],
-		onValidateSet(set) {
-			let template = this.getTemplate(set.species || set.name);
-			if (!template.nfe) {
-				return [set.species + " cannot evolve."];
+		banlist: ['Regigigas', 'Shedinja', 'Slaking', 'Smeargle', 'Imposter', 'Huge Power', 'Pure Power'],
+		checkLearnset(move, template, lsetData, set) {
+			// @ts-ignore
+			return set.leader ? this.checkLearnset(move, template, lsetData, set) : null;
+		},
+		validateSet(set, teamHas) {
+			if (!teamHas.leader) {
+				let problems = this.validateSet(set, teamHas);
+				teamHas.leader = set.species;
+				return problems;
 			}
+			let follower = Object.assign({leader: false}, set);
+			follower.ability = this.dex.getTemplate(set.species).abilities['0'];
+			follower.moves = ['snore'];
+			let leader = Object.assign({leader: true}, set);
+			leader.species = teamHas.leader;
+			return this.validateSet(follower, teamHas) || this.validateSet(leader, teamHas);
 		},
 	},
 	{
@@ -871,7 +754,7 @@ let Formats = [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3598418/">Camomons</a>`,
 		],
 		mod: 'gen7',
-		searchShow: false,
+		// searchShow: false,
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Dragonite', 'Kartana', 'Kyurem-Black', 'Shedinja'],
 		onModifyTemplate(template, target, source, effect) {
@@ -895,7 +778,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
-		// searchShow: false,
+		searchShow: false,
 		ruleset: ['[Gen 7] OU', 'STABmons Move Legality'],
 		banlist: ['Aerodactyl-Mega', 'Blacephalon', 'Kartana', 'Komala', 'Kyurem-Black', 'Porygon-Z', 'Silvally', 'Tapu Koko', 'Tapu Lele', 'Thundurus-Base', 'King\'s Rock', 'Razor Fang'],
 		restrictedMoves: ['Acupressure', 'Belly Drum', 'Chatter', 'Extreme Speed', 'Geomancy', 'Lovely Kiss', 'Shell Smash', 'Shift Gear', 'Spore', 'Thousand Arrows'],
@@ -908,7 +791,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
-		// searchShow: false,
+		searchShow: false,
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Damp Rock', 'Deep Sea Tooth', 'Eviolite'],
 		onModifyTemplate(template, target, source, effect) {
@@ -956,7 +839,7 @@ let Formats = [
 
 		mod: 'pic',
 		gameType: 'doubles',
-		searchShow: false,
+		// searchShow: false,
 		ruleset: ['[Gen 7] Doubles OU', 'Sleep Clause Mod'],
 		banlist: [
 			'Kangaskhanite', 'Mawilite', 'Medichamite',
