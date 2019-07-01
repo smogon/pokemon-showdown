@@ -1835,7 +1835,7 @@ class RandomTeams extends Dex.ModdedDex {
 				// Okay, the set passes, add it to our team
 				pokemon.push(set);
 				// For setting Zoroark's level and slot
-				if (set.ability === 'Illusion') teamDetails['illusion'] = pokemon.length;
+				if (set.ability === 'Illusion') teamDetails['illusion'] = pokemon.length - 1;
 				// Don't bother performing accounting/tracking other teamDetails on the last Pokemon.
 				if (pokemon.length === 6) break;
 
@@ -1880,7 +1880,7 @@ class RandomTeams extends Dex.ModdedDex {
 				illusion = 4;
 			}
 			// Set Zoroark's level to be the same as the last Pokemon
-			pokemon[illusion - 1].level = pokemon[5].level;
+			pokemon[illusion].level = pokemon[5].level;
 		}
 
 		return pokemon;
