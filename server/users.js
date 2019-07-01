@@ -906,7 +906,8 @@ class User extends Chat.MessageContext {
 				this.permalocked = userid;
 				Punishments.lock(this, Date.now() + PERMALOCK_CACHE_TIME, userid, `Permalocked as ${name}`);
 			} else if (userType === '6') {
-				Punishments.ban(this, Date.now() + PERMALOCK_CACHE_TIME, userid, `Permabanned as ${name}`);
+				Punishments.lock(this, Date.now() + PERMALOCK_CACHE_TIME, userid, `Permabanned as ${name}`);
+				this.disconnectAll();
 			}
 		}
 		if (Users.isTrusted(userid)) {
