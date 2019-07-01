@@ -4505,7 +4505,7 @@ const commands = {
 		} else if (!target) {
 			this.sendReply("COMMANDS: /msg, /reply, /logout, /challenge, /search, /rating, /whois, /user, /report, /join, /leave, /makegroupchat, /userauth, /roomauth");
 			this.sendReply("BATTLE ROOM COMMANDS: /savereplay, /hideroom, /inviteonly, /invite, /timer, /forfeit");
-			this.sendReply("OPTION COMMANDS: /nick, /avatar, /ignore, /away, /back, /timestamps, /highlight, /showjoins, /hidejoins, /blockchallenges, /blockpms");
+			this.sendReply("OPTION COMMANDS: /nick, /avatar, /ignore, /status, /away, /busy, /back, /timestamps, /highlight, /showjoins, /hidejoins, /blockchallenges, /blockpms");
 			this.sendReply("INFORMATIONAL/RESOURCE COMMANDS: /groups, /faq, /rules, /intro, /formatshelp, /othermetas, /analysis, /punishments, /calc, /git, /cap, /roomhelp, /roomfaq (replace / with ! to broadcast. Broadcasting requires: + % @ # & ~)");
 			this.sendReply("DATA COMMANDS: /data, /dexsearch, /movesearch, /itemsearch, /learn, /statcalc, /effectiveness, /weakness, /coverage, /randommove, /randompokemon (replace / with ! to broadcast. Broadcasting requires: + % @ # & ~)");
 			if (user.group !== Config.groupsranking[0]) {
