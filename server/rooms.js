@@ -1693,7 +1693,7 @@ let Rooms = Object.assign(getRoom, {
 			room.modjoin = '%';
 			room.isPrivate = 'hidden';
 			room.privacySetter = new Set(inviteOnly);
-			room.add(`|raw|<div class="broadcast-red"><strong>This battle is invite-only!</strong><br />Users must be rank % or invited with <code>/invite</code> to join</div>`);
+			room.add(`|raw|<div class="broadcast-red"><strong>This battle is invite-only!</strong><br />Users must be invited with <code>/invite</code> (or be staff) to join</div>`);
 		}
 
 		for (const p of players) {
