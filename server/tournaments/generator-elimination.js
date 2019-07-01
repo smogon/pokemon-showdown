@@ -1,16 +1,31 @@
 'use strict';
 
+/**
+ * There are two types of elim nodes, player nodes
+ * and match nodes.
+ *
+ * Player nodes are leaf nodes: .children = none
+ *
+ * Match nodes are non-leaf nodes, and will always have two children.
+ */
 class ElimNode {
 	constructor(/** @type {Partial<ElimNode>} */ options) {
 		/** @type {[ElimNode, ElimNode]?} */
 		this.children = null;
-		/** @type {TournamentPlayer?} */
+		/**
+		 * In a player node, the player (null if it's an unfilled loser's bracket node).
+		 *
+		 * In a match node, the winner if it exists, otherwise null.
+		 * @type {TournamentPlayer?} */
 		this.user = options.user || null;
 		/**
-		 * available = ready for battles - will have two children, both with users
+		 * Only relevant to match nodes. (Player nodes are always '')
 		 *
-		 * finished = battle already over - will have two children, both with users
+		 * 'available' = ready for battles - will have two children, both with users; this.user is null
 		 *
+		 * 'finished' = battle already over - will have two children, both with users; this.user is winner
+		 *
+		 * '' = unavailable
 		 * @type {'available' | 'finished' | ''}
 		 */
 		this.state = options.state || '';
@@ -18,9 +33,21 @@ class ElimNode {
 		this.result = options.result || '';
 		/** @type {number[] | null} */
 		this.score = options.score || null;
-		/** @type {ElimNode?} */
+		/**
+		 * Only relevant to match nodes in double+ elimination.
+		 *
+		 * The loser of this battle will be put in target player node.
+		 * @type {ElimNode?}
+		 */
 		this.losersBracketNode = options.losersBracketNode || null;
-		/** @type {number} */
+		/**
+		 * 0 = winner's bracket
+		 * 1 = loser's bracket
+		 * 2 = second loser's bracket
+		 * etc
+		 * (always 0 in single elimination)
+		 * @type {number}
+		 */
 		this.losersBracketIndex = options.losersBracketIndex || 0;
 		/** @type {ElimNode?} */
 		this.parent = options.parent || null;
@@ -226,10 +253,11 @@ class Elimination {
 			};
 			newTree.currentLayerLeafNodes.push(newTree.root);
 
-			for (let m in matchesByDepth) {
-				if (m === '0') continue;
+			for (let depth in matchesByDepth) {
+				if (depth === '0') continue;
+				const matchesThisDepth = matchesByDepth[depth];
 				let n = 0;
-				for (; n < matchesByDepth[m].length - 1; n += 2) {
+				for (; n < matchesThisDepth.length - 1; n += 2) {
 					// Replace old leaf with:
 					//      old leaf --+
 					//   new leaf --+  +-->
@@ -238,20 +266,21 @@ class Elimination {
 
 					let oldLeaf = newTree.currentLayerLeafNodes.shift();
 					if (!oldLeaf) throw new Error(`TypeScript bug: no ! in checkJs`);
+					const oldLeafFromNode = oldLeaf.fromNode;
+					oldLeaf.fromNode = null;
 
 					/** @type {ElimNode} */
 					let newBranch = new ElimNode({losersBracketIndex});
-					oldLeaf.setChildren([new ElimNode({losersBracketIndex, fromNode: oldLeaf.fromNode}), newBranch]);
-					oldLeaf.fromNode = null;
+					oldLeaf.setChildren([new ElimNode({losersBracketIndex, fromNode: oldLeafFromNode}), newBranch]);
 
-					let newLeftChild = new ElimNode({losersBracketIndex, fromNode: matchesByDepth[m][n]});
+					let newLeftChild = new ElimNode({losersBracketIndex, fromNode: matchesThisDepth[n]});
 					newTree.nextLayerLeafNodes.push(newLeftChild);
 
-					let newRightChild = new ElimNode({losersBracketIndex, fromNode: matchesByDepth[m][n + 1]});
+					let newRightChild = new ElimNode({losersBracketIndex, fromNode: matchesThisDepth[n + 1]});
 					newTree.nextLayerLeafNodes.push(newRightChild);
 					newBranch.setChildren([newLeftChild, newRightChild]);
 				}
-				if (n < matchesByDepth[m].length) {
+				if (n < matchesThisDepth.length) {
 					// Replace old leaf with:
 					//   old leaf --+
 					//              +-->
@@ -259,11 +288,12 @@ class Elimination {
 
 					let oldLeaf = newTree.currentLayerLeafNodes.shift();
 					if (!oldLeaf) throw new Error(`TypeScript bug: no ! in checkJs`);
+					const oldLeafFromNode = oldLeaf.fromNode;
 					oldLeaf.fromNode = null;
 
-					let newLeaf = new ElimNode({fromNode: matchesByDepth[m][n]});
+					let newLeaf = new ElimNode({fromNode: matchesThisDepth[n]});
 					newTree.nextLayerLeafNodes.push(newLeaf);
-					oldLeaf.setChildren([new ElimNode({fromNode: oldLeaf.fromNode}), newLeaf]);
+					oldLeaf.setChildren([new ElimNode({fromNode: oldLeafFromNode}), newLeaf]);
 				}
 
 				newTree.currentLayerLeafNodes = newTree.nextLayerLeafNodes;
