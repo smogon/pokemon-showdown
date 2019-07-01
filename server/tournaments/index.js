@@ -1218,7 +1218,7 @@ const commands = {
 			if (Monitor.countPrepBattle(connection.ip, connection)) {
 				return;
 			}
-			TeamValidatorAsync(tournament.teambuilderFormat).validateTeam(user.team).then(result => {
+			TeamValidatorAsync.get(tournament.teambuilderFormat).validateTeam(user.team).then(result => {
 				if (result.charAt(0) === '1') {
 					connection.popup("Your team is valid for this tournament.");
 				} else {

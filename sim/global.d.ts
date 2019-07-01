@@ -28,7 +28,6 @@ declare global {
 	const Side: SideType
 	const Sim: typeof SimType
 	const TeamValidator: typeof TeamValidatorType
-	const Validator: typeof TeamValidatorType.Validator
 
 	const Ability: DataType.Ability
 	const BasicEffect: DataType.BasicEffect

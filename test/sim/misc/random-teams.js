@@ -28,7 +28,7 @@ function isValidSet(gen, set) {
 }
 
 function validLearnset(move, set, tier) {
-	const validator = TeamValidator(`gen7${tier}`);
+	const validator = TeamValidator.get(`gen7${tier}`);
 	const template = validator.dex.getTemplate(set.species || set.name);
 	return !validator.checkLearnset(move, template);
 }

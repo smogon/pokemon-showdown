@@ -723,7 +723,7 @@ function runDexsearch(target, cmd, canAll, message) {
 
 			for (let move in alts.moves) {
 				if (!lsetData[mon]) lsetData[mon] = {fastCheck: true, sources: [], sourcesBefore: maxGen};
-				if (!TeamValidator(`gen${maxGen}ou`).checkLearnset(move, mon, lsetData[mon]) === alts.moves[move]) {
+				if (!TeamValidator.get(`gen${maxGen}ou`).checkLearnset(move, mon, lsetData[mon]) === alts.moves[move]) {
 					matched = true;
 					break;
 				}
@@ -1567,7 +1567,7 @@ function runLearn(target, cmd) {
 	}
 	let lsetData = {set: {}, sources: [], sourcesBefore: gen};
 
-	const validator = TeamValidator(format);
+	const validator = TeamValidator.get(format);
 	let template = validator.dex.getTemplate(targets.shift());
 	let move = {};
 	let all = (cmd === 'learnall');

@@ -137,7 +137,7 @@ class Ladder extends LadderStore {
 		if (isRated && !Ladders.disabled) {
 			let userid = user.userid;
 			[valResult, rating] = await Promise.all([
-				TeamValidatorAsync(this.formatid).validateTeam(team, !!(user.locked || user.namelocked)),
+				TeamValidatorAsync.get(this.formatid).validateTeam(team, !!(user.locked || user.namelocked)),
 				this.getRating(userid),
 			]);
 			if (userid !== user.userid) {
@@ -150,7 +150,7 @@ class Ladder extends LadderStore {
 				connection.popup(`The ladder is temporarily disabled due to technical difficulties - you will not receive ladder rating for this game.`);
 				rating = 1;
 			}
-			valResult = await TeamValidatorAsync(this.formatid).validateTeam(team, !!(user.locked || user.namelocked));
+			valResult = await TeamValidatorAsync.get(this.formatid).validateTeam(team, !!(user.locked || user.namelocked));
 		}
 
 		if (valResult.charAt(0) !== '1') {
