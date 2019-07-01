@@ -349,7 +349,9 @@ exports.commands = {
 			this.addModAction(`${user.name} set modjoin to autoconfirmed.`);
 			this.modlog('MODJOIN', null, 'autoconfirmed');
 		} else if (target in Config.groups || target === 'trusted') {
-			if (room.battle && !user.can('makeroom') && (target !== '+' || target !== '%')) return this.errorReply(`/modjoin - Access denied from setting modjoin past % in battles.`);
+			if (room.battle && !user.can('makeroom') && !'+%'.includes(target)) {
+				return this.errorReply(`/modjoin - Access denied from setting modjoin past % in battles.`);
+			}
 			if (room.isPersonal && !user.can('makeroom') && target !== '+') return this.errorReply(`/modjoin - Access denied from setting modjoin past + in group chats.`);
 			if (room.modjoin === target) return this.errorReply(`Modjoin is already set to ${target} in this room.`);
 			room.modjoin = target;
