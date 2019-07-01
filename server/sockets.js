@@ -254,8 +254,7 @@ if (cluster.isMaster) {
 	};
 } else {
 	// is worker
-	// @ts-ignore This file doesn't exist on the repository, so Travis checks fail if this isn't ignored
-	global.Config = require('../config/config');
+	global.Config = require(/** @type {any} */('../.server-dist/config-loader')).Config;
 
 	if (process.env.PSPORT) Config.port = +process.env.PSPORT;
 	if (process.env.PSBINDADDR) Config.bindaddress = process.env.PSBINDADDR;
@@ -397,7 +396,7 @@ if (cluster.isMaster) {
 
 	const sockjs = require('sockjs');
 	const options = {
-		sockjs_url: "//play.pokemonshowdown.com/js/lib/sockjs-1.1.1-nwjsfix.min.js",
+		sockjs_url: `//${Config.routes.client}/js/lib/sockjs-1.1.1-nwjsfix.min.js`,
 		prefix: '/showdown',
 		/**
 		 * @param {string} severity

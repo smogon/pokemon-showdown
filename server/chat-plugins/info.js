@@ -657,10 +657,10 @@ const commands = {
 					}[move.target] || "Unknown";
 
 					if (move.id === 'snatch' && mod.gen >= 3) {
-						details['<a href="https://pokemonshowdown.com/dex/moves/snatch">Snatchable Moves</a>'] = '';
+						details['<a href="https://${Config.routes.dex}/moves/snatch">Snatchable Moves</a>'] = '';
 					}
 					if (move.id === 'mirrormove') {
-						details['<a href="https://pokemonshowdown.com/dex/moves/mirrormove">Mirrorable Moves</a>'] = '';
+						details['<a href="https://${Config.routes.dex}/moves/mirrormove">Mirrorable Moves</a>'] = '';
 					}
 					if (move.isUnreleased) {
 						details["Unreleased in Gen " + mod.gen] = "";
@@ -983,7 +983,7 @@ const commands = {
 			let buffer = '<div class="scrollable"><table cellpadding="1" width="100%"><tr><th></th>';
 			let icon = {};
 			for (let type in mod.data.TypeChart) {
-				icon[type] = '<img src="https://play.pokemonshowdown.com/sprites/types/' + type + '.png" width="32" height="14">';
+				icon[type] = `<img src="https://${Config.routes.client}/sprites/types/' + type + '.png" width="32" height="14">`;
 				// row of icons at top
 				buffer += '<th>' + icon[type] + '</th>';
 			}
@@ -1441,7 +1441,7 @@ const commands = {
 			`- We log PMs so you can report them - staff can't look at them without permission unless there's a law enforcement reason.<br />` +
 			`- We log IPs to enforce bans and mutes.<br />` +
 			`- We use cookies to save your login info and teams, and for Google Analytics and AdSense.<br />` +
-			`- For more information, you can read our <a href="https://pokemonshowdown.com/privacy">full privacy policy.</a>`
+			`- For more information, you can read our <a href="https://${Config.routes.root}/privacy">full privacy policy.</a>`
 		);
 	},
 
@@ -1555,7 +1555,7 @@ const commands = {
 		}
 		this.sendReplyBox(
 			`Pok&eacute;mon Showdown! damage calculator. (Courtesy of Honko &amp; Austin)<br />` +
-			`- <a href="https://pokemonshowdown.com/damagecalc/">Damage Calculator</a>`
+			`- <a href="https://${Config.routes.root}/damagecalc/">Damage Calculator</a>`
 		);
 	},
 	calchelp: [
@@ -1796,7 +1796,7 @@ const commands = {
 			this.sendReplyBox(
 				`${room ? this.tr("Please follow the rules:") + '<br />' : ``}` +
 				(room && room.rulesLink ? Chat.html`- <a href="${room.rulesLink}">${this.tr `${room.title} room rules`}</a><br />` : ``) +
-				`- <a href="${this.tr('https://pokemonshowdown.com/rules')}">${this.tr("Global Rules")}</a>`
+				`- <a href="${this.tr('https://${Config.routes.root}/rules')}">${this.tr("Global Rules")}</a>`
 			);
 			return;
 		}
@@ -1853,7 +1853,7 @@ const commands = {
 			buffer.push(`<a href="https://www.smogon.com/forums/threads/3508013/">What is COIL?</a>`);
 		}
 		if (showAll || target === 'ladder' || target === 'ladderhelp' || target === 'decay') {
-			buffer.push(`<a href="https://pokemonshowdown.com/pages/ladderhelp">How the ladder works</a>`);
+			buffer.push(`<a href="https://${Config.routes.root}/pages/ladderhelp">How the ladder works</a>`);
 		}
 		if (showAll || target === 'tiering' || target === 'tiers' || target === 'tier') {
 			buffer.push(`<a href="https://www.smogon.com/ingame/battle/tiering-faq">Tiering FAQ</a>`);
@@ -1862,7 +1862,7 @@ const commands = {
 			buffer.push(`<a href="https://www.smogon.com/badge_faq">Badge FAQ</a>`);
 		}
 		if (showAll || target === 'rng') {
-			buffer.push(`<a href="https://pokemonshowdown.com/pages/rng">How Pokémon Showdown's RNG works</a>`);
+			buffer.push(`<a href="https://${Config.routes.root}/pages/rng">How Pokémon Showdown's RNG works</a>`);
 		}
 		if (showAll || !buffer.length) {
 			buffer.unshift(`<a href="https://www.smogon.com/forums/posts/6774128/">Frequently Asked Questions</a>`);

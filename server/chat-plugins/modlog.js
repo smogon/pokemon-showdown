@@ -609,7 +609,7 @@ const PM = new QueryProcessManager(module, async data => {
 
 if (!PM.isParentProcess) {
 	// This is a child process!
-	global.Config = require('../../config/config');
+	global.Config = require('../../.server-dist/config-loader').Config;
 	// @ts-ignore ???
 	global.Monitor = {
 		/**
