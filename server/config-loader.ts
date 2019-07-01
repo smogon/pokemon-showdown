@@ -5,17 +5,19 @@
  * @license MIT
  */
 
-import * as config from '../config/config';
 import * as defaults from '../config/config-example';
 
-export function load(conf: AnyObject) {
-	conf = Object.assign({}, defaults, conf);
+const CONFIG_PATH = require.resolve('../config/config');
+
+export function load() {
+	delete require.cache[CONFIG_PATH];
+	const config = Object.assign({}, defaults, require('../config/config'));
 	// config.routes is nested - we need to ensure values are set for its keys as well.
-	const routes = conf.routes;
+	const routes = config.routes;
 	for (const [key, value] of Object.entries(defaults.routes)) {
 		if (!(key in routes)) routes[key] = value;
 	}
-	return conf;
+	return config;
 }
 
-export const Config = load(config);
+export const Config = load();

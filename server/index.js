@@ -72,11 +72,9 @@ global.Config = ConfigLoader.Config;
 global.Monitor = require('./monitor');
 
 if (Config.watchconfig) {
-	let configPath = require.resolve('../config/config');
-	FS(configPath).onModify(() => {
+	FS(require.resolve('../config/config')).onModify(() => {
 		try {
-			delete require.cache[configPath];
-			global.Config = ConfigLoader.load(require('../config/config'));
+			global.Config = ConfigLoader.load();
 			if (global.Users) Users.cacheGroupData();
 			Monitor.notice('Reloaded ../config/config.js');
 		} catch (e) {
