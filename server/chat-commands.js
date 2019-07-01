@@ -4321,7 +4321,7 @@ const commands = {
 		let format = originalFormat.effectType === 'Format' ? originalFormat : Dex.getFormat('[Gen 7] Pokebank Anything Goes');
 		if (format.effectType !== 'Format') return this.popupReply("Please provide a valid format.");
 
-		TeamValidatorAsync(format.id).validateTeam(user.team).then(result => {
+		TeamValidatorAsync.get(format.id).validateTeam(user.team).then(result => {
 			let matchMessage = (originalFormat === format ? "" : `The format '${originalFormat.name}' was not found.`);
 			if (result.charAt(0) === '1') {
 				connection.popup(`${(matchMessage ? matchMessage + "\n\n" : "")}Your team is valid for ${format.name}.`);
