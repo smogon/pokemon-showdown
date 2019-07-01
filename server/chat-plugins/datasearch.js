@@ -779,7 +779,7 @@ function runDexsearch(target, cmd, canAll, message) {
 			notShown = results.length - RESULTS_MAX_LENGTH;
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
-		resultsStr += results.map(result => `<a href="//dex.pokemonshowdown.com/pokemon/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result}" style="vertical-align:-7px;margin:-2px" />${result}</a>`).join(", ");
+		resultsStr += results.map(result => `<a href="//${Config.routes.dex}/pokemon/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result}" style="vertical-align:-7px;margin:-2px" />${result}</a>`).join(", ");
 		if (notShown) {
 			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
 		}
@@ -1303,7 +1303,7 @@ function runMovesearch(target, cmd, canAll, message) {
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
 		resultsStr += results.map(result =>
-			`<a href="//dex.pokemonshowdown.com/moves/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>` +
+			`<a href="//${Config.routes.dex}/moves/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>` +
 			(sort ? ' (' + (dex[toID(result)][sort.slice(0, -1)] === true ? '-' : dex[toID(result)][sort.slice(0, -1)]) + ')' : '')
 		).join(", ");
 		if (notShown) {
@@ -1515,7 +1515,7 @@ function runItemsearch(target, cmd, canAll, message) {
 			notShown = foundItems.length - RESULTS_MAX_LENGTH;
 			foundItems = foundItems.slice(0, RESULTS_MAX_LENGTH);
 		}
-		resultsStr += foundItems.map(result => `<a href="//dex.pokemonshowdown.com/items/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon item="${result}" style="vertical-align:-7px" />${result}</a>`).join(", ");
+		resultsStr += foundItems.map(result => `<a href="//${Config.routes.dex}/items/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon item="${result}" style="vertical-align:-7px" />${result}</a>`).join(", ");
 		if (notShown) {
 			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
 		}
@@ -1694,7 +1694,7 @@ const PM = new QueryProcessManager(module, async query => {
 
 if (!PM.isParentProcess) {
 	// This is a child process!
-	global.Config = require('../../config/config');
+	global.Config = require('../../.server-dist/config-loader').Config;
 	// @ts-ignore ???
 	global.Monitor = {
 		/**
