@@ -347,17 +347,16 @@ const commands = {
 		let nature = target.trim().split(' ')[0];
 		let pokemon = target.trim().split(' ')[1];
 		if (!toID(nature) || !toID(pokemon)) return this.parse(`/help natureswap`);
-		let natureObj = Dex.getNature(nature);
-		if (!natureObj.exists) return this.errorReply(`Error: Pokemon ${natureObj} not found.`);
+		let natureObj = /** @type {{name: string, plus?: string | undefined, minus?: string | undefined, exists?: boolean}} */ Dex.getNature(nature);
+		if (!natureObj.exists) return this.errorReply(`Error: Nature ${nature} not found.`);
 		let template = Dex.deepClone(Dex.getTemplate(pokemon));
 		if (!template.exists) return this.errorReply(`Error: Pokemon ${pokemon} not found.`);
-		// @ts-ignore
-		let swap = template.baseStats[natureObj.minus];
-		// @ts-ignore
-		template.baseStats[natureObj.minus] = template.baseStats[natureObj.plus];
-		// @ts-ignore
-		template.baseStats[natureObj.plus] = swap;
-		template.tier = 'NS';
+		if (natureObj.minus && natureObj.plus) {
+			let swap = template.baseStats[natureObj.minus];
+			template.baseStats[natureObj.minus] = template.baseStats[natureObj.plus];
+			template.baseStats[natureObj.plus] = swap;
+			template.tier = 'NS';
+		}
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(template)}`);
 	},
 	natureswapshelp: [`/ns OR /natureswap <pokemon> - Shows the base stats that a Pokemon would have in Nature Swap. Usage: /ns <Nature> <Pokemon>.`],
