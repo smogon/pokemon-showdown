@@ -658,7 +658,7 @@ const commands = {
 		if (!this.canTalk()) return;
 		if (!target) return this.parse('/help status');
 		target = Chat.namefilter(target, user, true);
-		if (!target) return;
+		if (!target) return user.popup("Your status contains a banned word.");
 
 		let statusType = '(Online)';
 		// Should work even if users use /status with a message containing ()
@@ -677,6 +677,7 @@ const commands = {
 		if (!this.canTalk()) return;
 
 		let message = Chat.namefilter(target, user, true);
+		if (!message && target) return user.popup("Your status contains a banned word.");
 
 		const busyMessage = `(Busy)${message ? ` ${message}` : ''}`;
 		user.status = busyMessage;
@@ -702,7 +703,7 @@ const commands = {
 		}
 		if (target) {
 			awayMessage = Chat.namefilter(target, user, true);
-			if (!awayMessage) return;
+			if (!awayMessage) return user.popup("Your status contains a banned word.");
 		}
 
 		awayMessage = `(${awayType})${awayMessage ? ` ${awayMessage}` : ''}`;
