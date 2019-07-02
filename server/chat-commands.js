@@ -3432,15 +3432,24 @@ const commands = {
 		logRoom.roomlog(`${user.name} used /slowlockdown`);
 	},
 
-	endlockdown(target, room, user) {
+	crashfixed: 'endlockdown',
+	endlockdown(target, room, user, connection, cmd) {
 		if (!this.can('lockdown')) return false;
 
 		if (!Rooms.global.lockdown) {
 			return this.errorReply("We're not under lockdown right now.");
 		}
+		if (Rooms.global.lockdown !== true && cmd === 'crashfixed') {
+			return this.errorReply('/crashfixed - There is no active crash.');
+		}
+
+		let message = cmd === 'crashfixed' ? `<div class="broadcast-green"><b>We fixed the crash without restarting the server!</b></div>` : `<div class="broadcast-green"><b>The server restart was canceled.</b></div>`;
 		if (Rooms.global.lockdown === true) {
 			for (const curRoom of Rooms.rooms.values()) {
-				if (curRoom.id !== 'global') curRoom.addRaw(`<div class="broadcast-green"><b>The server restart was canceled.</b></div>`).update();
+				if (curRoom.id !== 'global') curRoom.addRaw(message).update();
+			}
+			for (const user of Users.users.values()) {
+				user.send(`|pm|~|${user.group}${user.name}|/raw ${message}`);
 			}
 		} else {
 			this.sendReply("Preparation for the server shutdown was canceled.");
@@ -3450,6 +3459,10 @@ const commands = {
 		const logRoom = Rooms('staff') || room;
 		logRoom.roomlog(`${user.name} used /endlockdown`);
 	},
+	endlockdownhelp: [
+		`/endlockdown - Cancels the server restart and takes the server out of lockdown state. Requires: ~`,
+		`/crashfixed - Ends the active lockdown caused by a crash without the need of a restart. Requires: ~`,
+	],
 
 	emergency(target, room, user) {
 		if (!this.can('lockdown')) return false;
@@ -3626,22 +3639,6 @@ const commands = {
 		this.sendReply(`Rebuilt.`);
 		Chat.updateServerLock = false;
 	},
-
-	crashfixed(target, room, user) {
-		if (Rooms.global.lockdown !== true) {
-			return this.errorReply('/crashfixed - There is no active crash.');
-		}
-		if (!this.can('hotpatch')) return false;
-
-		Rooms.global.lockdown = false;
-		if (Rooms.lobby) {
-			Rooms.lobby.modchat = false;
-			Rooms.lobby.addRaw(`<div class="broadcast-green"><b>We fixed the crash without restarting the server!</b><br />You may resume talking in the Lobby and starting new battles.</div>`).update();
-		}
-		const logRoom = Rooms('staff') || room;
-		logRoom.roomlog(`${user.name} used /crashfixed`);
-	},
-	crashfixedhelp: [`/crashfixed - Ends the active lockdown caused by a crash without the need of a restart. Requires: ~`],
 
 	memusage: 'memoryusage',
 	memoryusage(target) {
