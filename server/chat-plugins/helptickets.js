@@ -142,7 +142,7 @@ class HelpTicket extends Rooms.RoomGame {
 			'hi', 'hello', 'hullo', 'hey', 'yo',
 			'hesrude', 'shesrude', 'hesinappropriate', 'shesinappropriate', 'heswore', 'sheswore',
 		];
-		if (!user.isStaff && blockedMessages.includes(toID(message))) {
+		if ((!user.isStaff || this.ticket.userid === user.userid) && blockedMessages.includes(toID(message))) {
 			this.room.add(`|c|~Staff|Hello! The global staff team would be happy to help you, but you need to explain what's going on first.`);
 			this.room.add(`|c|~Staff|Please post the information I requested above so a global staff member can come to help.`);
 			this.room.update();
@@ -698,9 +698,9 @@ const pages = {
 					}
 				}
 				buf += `<tr><td>${icon}</td>`;
-				buf += `<td>${ticket.creator}</td>`;
+				buf += Chat.html`<td>${ticket.creator}</td>`;
 				buf += `<td>${ticket.type}</td>`;
-				buf += `<td>${ticket.claimed ? ticket.claimed : `-`}</td>`;
+				buf += Chat.html`<td>${ticket.claimed ? ticket.claimed : `-`}</td>`;
 				buf += `<td>`;
 				const roomid = 'help-' + ticket.userid;
 				let logUrl = '';
