@@ -39,7 +39,7 @@ To reload chat commands:
  * 3. return undefined to send the original message through
  * @typedef {(this: CommandContext, message: string, user: User, room: ChatRoom | GameRoom?, connection: Connection, targetUser: User?, originalMessage: string) => (string | false | null | undefined)} ChatFilter
  */
-/** @typedef {(name: string, user: User) => (string)} NameFilter */
+/** @typedef {(name: string, user: User, forStatus?: boolean) => (string)} NameFilter */
 /** @typedef {(user: User, oldUser: User?, userType: string) => void} LoginFilter */
 
 const LINK_WHITELIST = ['*.pokemonshowdown.com', 'psim.us', 'smogtours.psim.us', '*.smogon.com', '*.pastebin.com', '*.hastebin.com'];
