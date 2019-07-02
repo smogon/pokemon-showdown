@@ -225,7 +225,7 @@ let chatfilter = function (message, user, room) {
 };
 
 /** @type {NameFilter} */
-let namefilter = function (name, user) {
+let namefilter = function (name, user, forStatus) {
 	let id = toID(name);
 	if (Chat.namefilterwhitelist.has(id)) return name;
 	if (id === toID(user.trackRename)) return '';
@@ -248,7 +248,7 @@ let namefilter = function (name, user) {
 			if (matched) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					Punishments.autolock(user, Rooms('staff'), `NameMonitor`, `inappropriate name: ${name}`, `using an inappropriate name: ${name} (from ${user.name})`, false, name);
-				} else {
+				} else if (!forStatus) {
 					user.trackRename = name;
 				}
 				line[3]++;

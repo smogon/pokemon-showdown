@@ -188,8 +188,9 @@ Chat.namefilters = [];
 /**
  * @param {string} name
  * @param {User} user
+ * @param {boolean} forStatus
  */
-Chat.namefilter = function (name, user) {
+Chat.namefilter = function (name, user, forStatus = false) {
 	if (!Config.disablebasicnamefilter) {
 		// whitelist
 		// \u00A1-\u00BF\u00D7\u00F7  Latin punctuation/symbols
@@ -233,7 +234,7 @@ Chat.namefilter = function (name, user) {
 
 	name = Dex.getName(name);
 	for (const filter of Chat.namefilters) {
-		name = filter(name, user);
+		name = filter(name, user, forStatus);
 		if (!name) return '';
 	}
 	return name;
