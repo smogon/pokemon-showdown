@@ -1581,7 +1581,6 @@ class User extends Chat.MessageContext {
 	 */
 	setAway(message) {
 		this.setStatus(`!${message}`);
-		this.updateIdentity();
 	}
 	clearStatus() {
 		if (!this.status) return;
