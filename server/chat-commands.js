@@ -657,7 +657,7 @@ const commands = {
 	status(target, room, user, connection, cmd) {
 		if (!this.canTalk()) return;
 		if (!target) return this.parse('/help status');
-		target = Chat.namefilter(target, user);
+		target = Chat.namefilter(target, user, true);
 		if (!target) return;
 
 		user.status = `(Online) ${target}`;
@@ -670,7 +670,7 @@ const commands = {
 	busy(target, room, user) {
 		if (!this.canTalk()) return;
 
-		let message = Chat.namefilter(target, user);
+		let message = Chat.namefilter(target, user, true);
 
 		const busyMessage = `(Busy)${message ? ` ${message}` : ''}`;
 		user.status = busyMessage;
@@ -695,7 +695,7 @@ const commands = {
 			awayType = `${awayType[0].toUpperCase()}${awayType.slice(1)}`;
 		}
 		if (target) {
-			awayMessage = Chat.namefilter(target, user);
+			awayMessage = Chat.namefilter(target, user, true);
 			if (!awayMessage) return;
 		}
 
