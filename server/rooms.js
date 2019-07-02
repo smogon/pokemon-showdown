@@ -111,7 +111,7 @@ class BasicRoom {
 		this.filterStretching = false;
 		this.filterEmojis = false;
 		this.filterCaps = false;
-		this.mafiaEnabled = false;
+		this.mafiaEnabled = true;
 		this.unoDisabled = false;
 		/** @type {'%' | boolean} */
 		this.toursEnabled = false;
