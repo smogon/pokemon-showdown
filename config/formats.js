@@ -599,16 +599,28 @@ let Formats = [
 		battle: {
 			natureModify(stats, set) {
 				let nature = this.getNature(set.nature);
+				let stat;
 				if (nature.plus) {
 					// @ts-ignore
-					let stat = stats[nature.minus];
+					stat = nature.plus;
 					// @ts-ignore
-					stats[nature.minus] = stats[nature.plus];
-					// @ts-ignore
-					stats[nature.plus] = Math.floor(stat * 1.1);
+					stats[stat] = Math.floor(stats[stat] * 1.1);
 				}
 				return stats;
 			},
+		},
+		onModifyTemplate(template, target, source, effect) {
+			if (!target) return;
+			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
+			let nature = this.getNature(target.set.nature);
+			if (!nature.plus) return template;
+			let newStats = Object.assign({}, template.baseStats);
+			let swap = newStats[nature.plus];
+			// @ts-ignore
+			newStats[nature.plus] = newStats[nature.minus];
+			// @ts-ignore
+			newStats[nature.minus] = swap;
+			return Object.assign({}, template, {baseStats: newStats});
 		},
 	},
 	{
