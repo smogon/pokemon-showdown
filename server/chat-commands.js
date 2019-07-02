@@ -666,8 +666,7 @@ const commands = {
 			statusType = user.status.slice(0, user.status.indexOf(')') + 1);
 		}
 
-		user.status = `${statusType} ${target}`;
-		user.updateIdentity();
+		user.setStatus(`${statusType} ${target}`);
 		this.sendReply(`Your status has been set to: ${target}`);
 	},
 	statushelp: [`/status [note] - Sets a short note as your status, visible when users click your username.`],
@@ -679,9 +678,7 @@ const commands = {
 		let message = Chat.namefilter(target, user, true);
 		if (!message && target) return user.popup("Your status contains a banned word.");
 
-		const busyMessage = `(Busy)${message ? ` ${message}` : ''}`;
-		user.status = busyMessage;
-		user.updateIdentity();
+		user.setStatus(`(Busy)${message ? ` ${message}` : ''}`);
 		this.parse('/blockpms');
 		this.parse('/blockchallenges');
 		this.sendReply("You are now marked as busy.");
