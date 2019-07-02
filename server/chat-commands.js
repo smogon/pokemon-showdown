@@ -1576,7 +1576,11 @@ const commands = {
 			(Config.groups[b] || {rank: 0}).rank - (Config.groups[a] || {rank: 0}).rank
 		).map(r => {
 			let roomRankList = rankLists[r].sort();
-			roomRankList = roomRankList.map(s => s in targetRoom.users ? `**${s}**` : s);
+			roomRankList = roomRankList.map(s => {
+				const u = Users(s);
+				const isAway = u && u.isAway();
+				return s in targetRoom.users && !isAway ? `**${s}**` : s;
+			});
 			return `${Config.groups[r] ? `${Config.groups[r].name}s (${r})` : r}:\n${roomRankList.join(", ")}`;
 		});
 
