@@ -1219,6 +1219,10 @@ class CommandContext extends MessageContext {
 			this.errorReply(`Your username contains a phrase banned by this room.`);
 			return false;
 		}
+		if (user.status && (!this.checkBanwords(room, user.status) && !user.can('bypassall'))) {
+			this.errorReply(`Your status message contains a phrase banned by this room.`);
+			return false;
+		}
 		if (!this.checkBanwords(room, message) && !user.can('mute', null, room)) {
 			this.errorReply("Your message contained banned words in this room.");
 			return false;
