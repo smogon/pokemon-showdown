@@ -1378,7 +1378,7 @@ class User extends Chat.MessageContext {
 	joinRoom(roomid, connection = null) {
 		const room = Rooms(roomid);
 		if (!room) throw new Error(`Room not found: ${roomid}`);
-		if (this.isAway()) this.clearStatus();
+		if (this.isAway) this.clearStatus();
 		if (!connection) {
 			for (const curConnection of this.connections) {
 				// only join full clients, not pop-out single-room
@@ -1414,7 +1414,7 @@ class User extends Chat.MessageContext {
 		if (!this.inRooms.has(room.id)) {
 			return false;
 		}
-		if (this.isAway()) this.clearStatus();
+		if (this.isAway) this.clearStatus();
 		for (const curConnection of this.connections) {
 			if (connection && curConnection !== connection) continue;
 			if (curConnection.inRooms.has(room.id)) {
@@ -1565,9 +1565,6 @@ class User extends Chat.MessageContext {
 			this.chatQueue = null;
 		}
 	}
-	isAway() {
-		return this.status && this.status.charAt(0) === '!';
-	}
 	/**
 	 * @param {string} message
 	 */
@@ -1612,6 +1609,9 @@ class User extends Chat.MessageContext {
 	toString() {
 		return this.userid;
 	}
+	get isAway() {
+		return this.status && this.status.charAt(0) === '!';
+	}
 }
 
 /*********************************************************
@@ -1625,7 +1625,7 @@ function pruneInactive(threshold) {
 	let now = Date.now();
 	for (const user of users.values()) {
 		const awayTimer = user.can('lock') ? STAFF_IDLE_TIMER : IDLE_TIMER;
-		let bypass = user.isAway() || (!user.can('bypassall') && (user.can('bypassafktimer') || Array.from(user.inRooms).some(room => user.can('bypassafktimer', null, /** @type {ChatRoom} */ (Rooms(room))))));
+		let bypass = user.isAway || (!user.can('bypassall') && (user.can('bypassafktimer') || Array.from(user.inRooms).some(room => user.can('bypassafktimer', null, /** @type {ChatRoom} */ (Rooms(room))))));
 		if (!bypass && !user.connections.some(connection => now - connection.lastActiveTime < awayTimer)) {
 			user.popup(`You have been inactive for over ${awayTimer / MINUTES} minutes, and have been marked as idle as a result. To mark yourself as back, send a message in chat, or use the /back command.`);
 			user.setAway('(Idle)');

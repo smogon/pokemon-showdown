@@ -750,7 +750,7 @@ class GlobalRoom extends BasicRoom {
 	 */
 	onCreateBattleRoom(players, room, options) {
 		players.forEach(player => {
-			if (player.isAway()) {
+			if (player.isAway) {
 				player.clearStatus();
 			}
 		});

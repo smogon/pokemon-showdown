@@ -731,7 +731,7 @@ const commands = {
 			return;
 		}
 		if (!user.status) return;
-		const statusType = user.isAway() ? 'away' : user.status.startsWith('(Busy)') ? 'busy' : null;
+		const statusType = user.isAway ? 'away' : user.status.startsWith('(Busy)') ? 'busy' : null;
 		user.clearStatus();
 
 		if (statusType === 'busy') {
@@ -1578,7 +1578,7 @@ const commands = {
 			let roomRankList = rankLists[r].sort();
 			roomRankList = roomRankList.map(s => {
 				const u = Users(s);
-				const isAway = u && u.isAway();
+				const isAway = u && u.isAway;
 				return s in targetRoom.users && !isAway ? `**${s}**` : s;
 			});
 			return `${Config.groups[r] ? `${Config.groups[r].name}s (${r})` : r}:\n${roomRankList.join(", ")}`;
