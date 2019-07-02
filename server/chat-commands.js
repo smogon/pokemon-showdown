@@ -658,7 +658,7 @@ const commands = {
 		if (!this.canTalk()) return;
 		if (!target) return this.parse('/help status');
 		target = Chat.namefilter(target, user, true);
-		if (!target) return;
+		if (!target) return user.popup("Your status contains a banned word.");
 
 		let statusType = '(Online)';
 		// Should work even if users use /status with a message containing ()
@@ -666,8 +666,7 @@ const commands = {
 			statusType = user.status.slice(0, user.status.indexOf(')') + 1);
 		}
 
-		user.status = `${statusType} ${target}`;
-		user.updateIdentity();
+		user.setStatus(`${statusType} ${target}`);
 		this.sendReply(`Your status has been set to: ${target}`);
 	},
 	statushelp: [`/status [note] - Sets a short note as your status, visible when users click your username.`],
@@ -677,10 +676,9 @@ const commands = {
 		if (!this.canTalk()) return;
 
 		let message = Chat.namefilter(target, user, true);
+		if (!message && target) return user.popup("Your status contains a banned word.");
 
-		const busyMessage = `(Busy)${message ? ` ${message}` : ''}`;
-		user.status = busyMessage;
-		user.updateIdentity();
+		user.setStatus(`(Busy)${message ? ` ${message}` : ''}`);
 		this.parse('/blockpms');
 		this.parse('/blockchallenges');
 		this.sendReply("You are now marked as busy.");
@@ -702,7 +700,7 @@ const commands = {
 		}
 		if (target) {
 			awayMessage = Chat.namefilter(target, user, true);
-			if (!awayMessage) return;
+			if (!awayMessage) return user.popup("Your status contains a banned word.");
 		}
 
 		awayMessage = `(${awayType})${awayMessage ? ` ${awayMessage}` : ''}`;
@@ -716,6 +714,23 @@ const commands = {
 	unaway: 'back',
 	unafk: 'back',
 	back(target, room, user) {
+		if (target) {
+			// Clearing another user's status
+			let reason = this.splitTarget(target);
+			let targetUser = this.targetUser;
+			if (!targetUser) return this.errorReply(`User '${target}' not found.`);
+			if (!targetUser.status) return this.errorReply(`${targetUser.name} does not have a status set.`);
+			if (!this.can('forcerename', targetUser)) return false;
+
+			let bracketIndex = targetUser.status.indexOf(')');
+			if (bracketIndex < 0) bracketIndex = -2; // Someone's trying to clear the "Idle" status, for some reason
+			const status = targetUser.status.slice(bracketIndex + 2);
+			this.privateModAction(`(${targetUser.name}'s status "${status}" was cleared by ${user.name}${reason ? `: ${reason}` : ``})`);
+			this.globalModlog('CLEARSTATUS', targetUser, `from ${status} by ${user.name}${reason ? `: ${reason}` : ``}`);
+			targetUser.clearStatus();
+			targetUser.popup(`${user.name} has cleared your status for being inappropriate${reason ? `: ${reason}` : '.'}`);
+			return;
+		}
 		if (!user.status) return;
 		const statusType = user.isAway() ? 'away' : user.status.startsWith('(Busy)') ? 'busy' : null;
 		user.clearStatus();

@@ -248,9 +248,7 @@ let namefilter = function (name, user, forStatus) {
 			if (matched) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					Punishments.autolock(user, Rooms('staff'), `NameMonitor`, `inappropriate name: ${name}`, `using an inappropriate name: ${name} (from ${user.name})`, false, name);
-				} else if (forStatus) {
-					user.popup("Your status contains a banned word.");
-				} else {
+				} else if (!forStatus) {
 					user.trackRename = name;
 				}
 				line[3]++;
