@@ -660,7 +660,13 @@ const commands = {
 		target = Chat.namefilter(target, user, true);
 		if (!target) return;
 
-		user.status = `(Online) ${target}`;
+		let statusType = '(Online)';
+		// Should work even if users use /status with a message containing ()
+		if (user.status && user.status.includes('(') && user.status.includes(')')) {
+			statusType = user.status.slice(0, user.status.indexOf(')') + 1);
+		}
+
+		user.status = `${statusType} ${target}`;
 		user.updateIdentity();
 		this.sendReply(`Your status has been set to: ${target}`);
 	},
