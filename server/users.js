@@ -1378,7 +1378,7 @@ class User extends Chat.MessageContext {
 	joinRoom(roomid, connection = null) {
 		const room = Rooms(roomid);
 		if (!room) throw new Error(`Room not found: ${roomid}`);
-		this.clearStatus();
+		if (this.isAway()) this.clearStatus();
 		if (!connection) {
 			for (const curConnection of this.connections) {
 				// only join full clients, not pop-out single-room
@@ -1414,7 +1414,7 @@ class User extends Chat.MessageContext {
 		if (!this.inRooms.has(room.id)) {
 			return false;
 		}
-		this.clearStatus();
+		if (this.isAway()) this.clearStatus();
 		for (const curConnection of this.connections) {
 			if (connection && curConnection !== connection) continue;
 			if (curConnection.inRooms.has(room.id)) {

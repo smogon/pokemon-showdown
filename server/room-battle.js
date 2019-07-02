@@ -544,7 +544,7 @@ class RoomBattle extends RoomGames.RoomGame {
 		const player = this.playerTable[user.userid];
 		const [choice, rqid] = data.split('|', 2);
 		if (!player) return;
-		user.clearStatus();
+		if (user.isAway()) user.clearStatus();
 		let request = player.request;
 		if (request.isWait !== false && request.isWait !== true) {
 			player.sendRoom(`|error|[Invalid choice] There's nothing to choose`);
