@@ -716,6 +716,21 @@ const commands = {
 	unaway: 'back',
 	unafk: 'back',
 	back(target, room, user) {
+		if (target) {
+			// Clearing another user's status
+			let reason = this.splitTarget(target);
+			let targetUser = this.targetUser;
+			if (!targetUser) return this.errorReply(`User '${target}' not found.`);
+			if (!targetUser.status) return this.errorReply(`${targetUser.name} does not have a status set.`);
+			if (!this.can('forcerename', targetUser)) return false;
+
+			const status = targetUser.status.slice(targetUser.status.indexOf(')') + 2);
+			this.privateModAction(`(${targetUser.name}'s status "${status}" was cleared by ${user.name}${reason ? `: ${reason}` : ``})`);
+			this.globalModlog('CLEARSTATUS', targetUser, `from ${status} by ${user.name}${reason ? `: ${reason}` : ``}`);
+			targetUser.clearStatus();
+			targetUser.popup(`${user.name} has cleared your status for being inappropriate${reason ? `: ${reason}` : '.'}`);
+			return;
+		}
 		if (!user.status) return;
 		const statusType = user.isAway() ? 'away' : user.status.startsWith('(Busy)') ? 'busy' : null;
 		user.clearStatus();
