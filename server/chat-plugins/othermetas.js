@@ -339,6 +339,25 @@ const commands = {
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(template)}`);
 	},
 	scalemonshelp: [`/scale OR /scalemons <pokemon> - Shows the base stats that a Pokemon would have in Scalemons.`],
+
+	'!natureswap': true,
+	ns: 'natureswap',
+	natureswap(target, room, user) {
+		if (!this.runBroadcast()) return;
+		let nature = target.trim().split(' ')[0];
+		let pokemon = target.trim().split(' ')[1];
+		if (!toID(nature) || !toID(pokemon)) return this.parse(`/help natureswap`);
+		nature = Dex.getNature(nature);
+		if (!nature.exists) return this.errorReply(`Error: Pokemon ${nature} not found.`);
+		let template = Dex.deepClone(Dex.getTemplate(pokemon));
+		if (!template.exists) return this.errorReply(`Error: Pokemon ${pokemon} not found.`);
+		let swap = template.baseStats[nature.minus];
+		template.baseStats[nature.minus] = template.baseStats[nature.plus];
+		template.baseStats[nature.plus] = swap;
+		template.tier = 'NS';
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(template)}`);
+	},
+	natureswapshelp: [`/ns OR /natureswap <pokemon> - Shows the base stats that a Pokemon would have in Nature Swap. Usage: /ns <Nature> <Pokemon>.`],
 };
 
 exports.commands = commands;
