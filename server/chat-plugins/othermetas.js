@@ -347,13 +347,13 @@ const commands = {
 		let nature = target.trim().split(' ')[0];
 		let pokemon = target.trim().split(' ')[1];
 		if (!toID(nature) || !toID(pokemon)) return this.parse(`/help natureswap`);
-		nature = Dex.getNature(nature);
-		if (!nature.exists) return this.errorReply(`Error: Pokemon ${nature} not found.`);
+		let natureObj = Dex.getNature(nature);
+		if (!natureObj.exists) return this.errorReply(`Error: Pokemon ${natureObj} not found.`);
 		let template = Dex.deepClone(Dex.getTemplate(pokemon));
 		if (!template.exists) return this.errorReply(`Error: Pokemon ${pokemon} not found.`);
-		let swap = template.baseStats[nature.minus];
-		template.baseStats[nature.minus] = template.baseStats[nature.plus];
-		template.baseStats[nature.plus] = swap;
+		let swap = template.baseStats[natureObj.minus];
+		template.baseStats[natureObj.minus] = template.baseStats[natureObj.plus];
+		template.baseStats[natureObj.plus] = swap;
 		template.tier = 'NS';
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(template)}`);
 	},
