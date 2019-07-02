@@ -723,7 +723,6 @@ const commands = {
 			if (!this.can('forcerename', targetUser)) return false;
 
 			let bracketIndex = targetUser.status.indexOf(')');
-			if (bracketIndex < 0) bracketIndex = -2; // Someone's trying to clear the "Idle" status, for some reason
 			const status = targetUser.status.slice(bracketIndex + 2);
 			this.privateModAction(`(${targetUser.name}'s status "${status}" was cleared by ${user.name}${reason ? `: ${reason}` : ``})`);
 			this.globalModlog('CLEARSTATUS', targetUser, `from ${status} by ${user.name}${reason ? `: ${reason}` : ``}`);
