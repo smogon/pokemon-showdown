@@ -749,7 +749,11 @@ class GlobalRoom extends BasicRoom {
 	 * @param {AnyObject} options
 	 */
 	onCreateBattleRoom(players, room, options) {
-		players.forEach(player => player.clearStatus());
+		players.forEach(player => {
+			if (player.isAway()) {
+				player.clearStatus();
+			}
+		});
 		if (Config.reportbattles) {
 			let reportRoom = Rooms(Config.reportbattles === true ? 'lobby' : Config.reportbattles);
 			if (reportRoom) {
