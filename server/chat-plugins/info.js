@@ -1796,7 +1796,7 @@ const commands = {
 			this.sendReplyBox(
 				`${room ? this.tr("Please follow the rules:") + '<br />' : ``}` +
 				(room && room.rulesLink ? Chat.html`- <a href="${room.rulesLink}">${this.tr `${room.title} room rules`}</a><br />` : ``) +
-				`- <a href="${this.tr('https://${Config.routes.root}/rules')}">${this.tr("Global Rules")}</a>`
+				`- <a href="https://${Config.routes.root}${this.tr('/rules')}">${this.tr("Global Rules")}</a>`
 			);
 			return;
 		}

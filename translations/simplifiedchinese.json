@@ -3,7 +3,7 @@
 
 	"strings": {
 		"Please follow the rules:": "遵守规则:",
-		"[TN: Link to the PS rules for your language]https://pokemonshowdown.com/rules": "https://pokemonshowdown.com/pages/rules-zh",
+		"[TN: Link to the PS rules for your language (path after pokemonshowdown.com]/rules": "/pages/rules-zh",
 		"Global Rules": "全站规则",
 		"${room} room rules": "${room}房间规则",
 
