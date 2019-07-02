@@ -351,12 +351,12 @@ const commands = {
 		if (!natureObj.exists) return this.errorReply(`Error: Pokemon ${natureObj} not found.`);
 		let template = Dex.deepClone(Dex.getTemplate(pokemon));
 		if (!template.exists) return this.errorReply(`Error: Pokemon ${pokemon} not found.`);
+		// @ts-ignore
 		let swap = template.baseStats[natureObj.minus];
 		// @ts-ignore
 		template.baseStats[natureObj.minus] = template.baseStats[natureObj.plus];
 		// @ts-ignore
 		template.baseStats[natureObj.plus] = swap;
-		// @ts-ignore
 		template.tier = 'NS';
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(template)}`);
 	},
