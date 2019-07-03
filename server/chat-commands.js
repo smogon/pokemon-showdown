@@ -725,7 +725,7 @@ const commands = {
 			let bracketIndex = targetUser.status.indexOf(')');
 			const status = targetUser.status.slice(bracketIndex + 2);
 			this.privateModAction(`(${targetUser.name}'s status "${status}" was cleared by ${user.name}${reason ? `: ${reason}` : ``})`);
-			this.globalModlog('CLEARSTATUS', targetUser, `from ${status} by ${user.name}${reason ? `: ${reason}` : ``}`);
+			this.globalModlog('CLEARSTATUS', targetUser, ` from ${status} by ${user.name}${reason ? `: ${reason}` : ``}`);
 			targetUser.clearStatus();
 			targetUser.popup(`${user.name} has cleared your status for being inappropriate${reason ? `: ${reason}` : '.'}`);
 			return;
