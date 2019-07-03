@@ -64993,6 +64993,57 @@ let BattleLearnsets = {
 		wish: ["7L22"],
 		worryseed: ["7T"],
 	}},
+	pokestarsmeargle: {learnset: {
+
+	}},
+	pokestarufo: {learnset: {
+
+	}},
+	pokestarufo2: {learnset: {
+
+	}},
+	pokestarbrycenman: {learnset: {
+
+	}},
+	pokestarmt: {learnset: {
+
+	}},
+	pokestarmt2: {learnset: {
+
+	}},
+	pokestartransport: {learnset: {
+
+	}},
+	pokestargiant: {learnset: {
+
+	}},
+	pokestarhumanoid: {learnset: {
+
+	}},
+	pokestarmonster: {learnset: {
+
+	}},
+	pokestarf00: {learnset: {
+
+	}},
+	pokestarf002: {learnset: {
+
+	}},
+	pokestarspirit: {learnset: {
+
+	}},
+	pokestarblackdoor: {learnset: {
+
+	}},
+	pokestarwhitedoor: {learnset: {
+
+	}},
+	pokestarblackbelt: {learnset: {
+
+	}},
+	pokestarufopropu2: {learnset: {
+
+	}},
 };
 
 exports.BattleLearnsets = BattleLearnsets;
