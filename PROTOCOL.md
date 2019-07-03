@@ -231,6 +231,8 @@ represented by a space), and the rest of the string being their username.
 >
 > Finish logging in (or renaming) by sending: `/trn USERNAME,0,ASSERTION`
 > where `USERNAME` is your desired username and `ASSERTION` is `data.assertion`.
+> A fourth, optional `SETTINGS` parameter can be passed after the `ASSERTION` to
+> preset a user's settings.
 
 `|updateuser|USER@STATUS|NAMED|AVATAR|SETTINGS`
 

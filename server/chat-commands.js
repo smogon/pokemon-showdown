@@ -4488,6 +4488,7 @@ const commands = {
 		let targetName = target;
 		let targetRegistered = false;
 		let targetToken = '';
+		let settings = {};
 		if (commaIndex >= 0) {
 			targetName = target.substr(0, commaIndex);
 			target = target.substr(commaIndex + 1);
@@ -4495,10 +4496,16 @@ const commands = {
 			targetRegistered = target;
 			if (commaIndex >= 0) {
 				targetRegistered = !!parseInt(target.substr(0, commaIndex));
-				targetToken = target.substr(commaIndex + 1);
+				target = target.substr(commaIndex + 1);
+				commaIndex = target.indexOf(',');
+				targetToken = target;
+				if (commaIndex >= 0) {
+					targetToken = target.substr(0, commaIndex);
+					settings = JSON.parse(target.substr(commaIndex + 1));
+				}
 			}
 		}
-		user.rename(targetName, targetToken, targetRegistered, connection);
+		user.rename(targetName, targetToken, targetRegistered, connection, settings);
 	},
 
 	a(target, room, user) {

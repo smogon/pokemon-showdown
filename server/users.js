@@ -441,6 +441,7 @@ class Connection {
 /** @typedef {[string, string, Connection]} ChatQueueEntry */
 
 const SETTINGS = ['isSysop', 'isStaff', 'blockChallenges', 'blockPMs', 'ignoreTickets', 'lastConnected', 'inviteOnlyNextBattle'];
+/** @typedef {{blockChallenges?: boolean, blockPMs?: boolean, ignoreTickets?: boolean, inviteOnlyNextBattle?: boolean}} UserSettings */
 
 // User
 class User extends Chat.MessageContext {
@@ -544,6 +545,16 @@ class User extends Chat.MessageContext {
 		Users.add(this);
 	}
 
+	/**
+	 * @param {UserSettings} [settings]
+	 */
+	applySettings(settings) {
+		if (!settings) return;
+		if ('blockChallenges' in settings) this.blockChallenges = !!settings.blockChallenges;
+		if ('blockPMs' in settings) this.blockPMs = !!settings.blockPMs;
+		if ('ignoreTickets' in settings) this.ignoreTickets = !!settings.ignoreTickets;
+		if ('inviteOnlyNextBattle' in settings) this.inviteOnlyNextBattle = !!settings.inviteOnlyNextBattle;
+	}
 	/**
 	 * @param {string | BasicRoom?} roomid
 	 * @param {string} data
@@ -752,8 +763,9 @@ class User extends Chat.MessageContext {
 	 * @param {string} token Signed assertion returned from login server
 	 * @param {boolean} newlyRegistered Make sure this account will identify as registered
 	 * @param {Connection} connection The connection asking for the rename
+	 * @param {UserSettings} [settings] Settings to apply after a successful rename
 	 */
-	async rename(name, token, newlyRegistered, connection) {
+	async rename(name, token, newlyRegistered, connection, settings) {
 		let userid = toID(name);
 		if (userid !== this.userid) {
 			for (const roomid of this.games) {
@@ -866,15 +878,16 @@ class User extends Chat.MessageContext {
 		this.s2 = tokenDataSplit[6];
 		this.s3 = tokenDataSplit[7];
 
-		this.handleRename(name, userid, newlyRegistered, userType);
+		this.handleRename(name, userid, newlyRegistered, userType, settings);
 	}
 	/**
 	 * @param {string} name
 	 * @param {string} userid
 	 * @param {boolean} newlyRegistered
 	 * @param {string} userType
+	 * @param {UserSettings} [settings] Settings to apply after a successful rename
 	 */
-	handleRename(name, userid, newlyRegistered, userType) {
+	handleRename(name, userid, newlyRegistered, userType, settings) {
 		let conflictUser = users.get(userid);
 		if (conflictUser && !conflictUser.registered && conflictUser.connected) {
 			if (newlyRegistered && userType !== '1') {
@@ -944,6 +957,7 @@ class User extends Chat.MessageContext {
 
 			Rooms.global.checkAutojoin(user);
 			Chat.loginfilter(user, this, userType);
+			user.applySettings(settings);
 			return true;
 		}
 
@@ -956,6 +970,7 @@ class User extends Chat.MessageContext {
 		}
 		Rooms.global.checkAutojoin(this);
 		Chat.loginfilter(this, null, userType);
+		this.applySettings(settings);
 		return true;
 	}
 	/**
