@@ -538,7 +538,7 @@ class Tournament extends Rooms.RoomGame {
 			this.autoDisqualifyTimer = setTimeout(() => this.runAutoDisqualify(), this.autoDisqualifyTimeout);
 		}
 		this.isBracketInvalidated = true;
-		this.room.add('|tournament|start');
+		this.room.add(`|tournament|start|${this.players.length}`);
 		this.room.send('|tournament|update|{"isStarted":true}');
 		this.update();
 		return true;
@@ -1196,7 +1196,7 @@ const commands = {
 		getusers(tournament) {
 			if (!this.runBroadcast()) return;
 			let users = usersToNames(tournament.getRemainingPlayers().sort());
-			this.sendReplyBox(`<strong>${users.length} users remain in this tournament:</strong><br />${Chat.escapeHTML(users.join(', '))}`);
+			this.sendReplyBox(`<strong>${users.length}/${tournament.players.length} users remain in this tournament:</strong><br />${Chat.escapeHTML(users.join(', '))}`);
 		},
 		getupdate(tournament, user) {
 			tournament.updateFor(user);
