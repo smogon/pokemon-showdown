@@ -319,9 +319,9 @@ represented by a space), and the rest of the string being their username.
 
 > `USER` left the tournament.
 
-`|tournament|start`
+`|tournament|start|NUMPLAYERS`
 
-> The tournament started.
+> The tournament started with `NUMPLAYERS` participants.
 
 `|tournament|replace|USER1|USER2`
 
