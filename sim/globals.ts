@@ -990,6 +990,7 @@ interface Template extends Readonly<BasicEffect & TemplateData & TemplateFormats
 	readonly formeLetter: string
 	readonly gender: GenderName
 	readonly genderRatio: {M: number, F: number}
+	readonly learnset: {[k: string]: MoveSource[]}
 	readonly maleOnlyHidden: boolean
 	readonly nfe: boolean
 	readonly prevo: string
@@ -999,7 +1000,6 @@ interface Template extends Readonly<BasicEffect & TemplateData & TemplateFormats
 	readonly addedType?: string
 	readonly isMega?: boolean
 	readonly isPrimal?: boolean
-	readonly learnset?: {[k: string]: MoveSource[]}
 }
 
 type GameType = 'singles' | 'doubles' | 'triples' | 'rotation' | 'multi' | 'free-for-all'
