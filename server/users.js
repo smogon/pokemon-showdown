@@ -546,7 +546,7 @@ class User extends Chat.MessageContext {
 	}
 
 	/**
-	 * @param {UserSettings} [settings]
+	 * @param {UserSettings?}
 	 */
 	applySettings(settings) {
 		if (!settings) return;
