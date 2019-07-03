@@ -1083,7 +1083,10 @@ function runMovesearch(target, cmd, canAll, message) {
 	}
 
 	const getFullLearnsetOfPokemon = (template) => {
-		if (!template.learnset) template = Dex.getTemplate(template.baseSpecies);
+		if (!template.learnset) {
+			template = Dex.getTemplate(template.baseSpecies);
+			template.learnset = template.learnset || {};
+		}
 		const lsetData = new Set(Object.keys(template.learnset));
 
 		while (template.prevo) {
