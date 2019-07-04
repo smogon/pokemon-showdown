@@ -730,7 +730,7 @@ const commands = {
 			targetUser.popup(`${user.name} has cleared your status for being inappropriate${reason ? `: ${reason}` : '.'}`);
 			return;
 		}
-		if (!user.status) return;
+		if (!user.status) return this.errorReply("You do not have a status set and are already marked as back.");
 		const statusType = user.isAway() ? 'away' : user.status.startsWith('(Busy)') ? 'busy' : null;
 		user.clearStatus();
 
