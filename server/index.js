@@ -74,7 +74,7 @@ global.Monitor = require('./monitor');
 if (Config.watchconfig) {
 	FS(require.resolve('../config/config')).onModify(() => {
 		try {
-			global.Config = ConfigLoader.load();
+			global.Config = ConfigLoader.load(true);
 			if (global.Users) Users.cacheGroupData();
 			Monitor.notice('Reloaded ../config/config.js');
 		} catch (e) {
