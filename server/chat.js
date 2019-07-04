@@ -215,7 +215,7 @@ Chat.namefilter = function (name, user, forStatus = false) {
 		if (name.includes('@') && name.includes('.')) return '';
 
 		// url
-		if (/[a-z0-9]\.(com|net|org)/.test(name)) name = name.replace(/\./g, '');
+		if (/[a-z0-9]\.(com|net|org|us|uk|co|gg|tk|ml|gq|ga|xxx|download|stream|)\b/.test(name)) name = name.replace(/\./g, '');
 
 		// Limit the amount of symbols allowed in usernames to 4 maximum, and disallow (R) and (C) from being used in the middle of names.
 		let nameSymbols = name.replace(/[^\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2090-\u23FA\u2500-\u2BD1]+/g, '');
