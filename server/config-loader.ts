@@ -9,8 +9,8 @@ import * as defaults from '../config/config-example';
 
 const CONFIG_PATH = require.resolve('../config/config');
 
-export function load() {
-	delete require.cache[CONFIG_PATH];
+export function load(invalidate: boolean = false) {
+	if (invalidate) delete require.cache[CONFIG_PATH];
 	const config = Object.assign({}, defaults, require('../config/config'));
 	// config.routes is nested - we need to ensure values are set for its keys as well.
 	const routes = config.routes;
