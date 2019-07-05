@@ -540,6 +540,9 @@ class User extends Chat.MessageContext {
 		this.trackRename = '';
 		/** @type {string} */
 		this.status = '';
+		/** @type {number} */
+		this.lastWarnedAt = 0;
+
 		// initialize
 		Users.add(this);
 	}

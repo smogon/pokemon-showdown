@@ -1828,15 +1828,23 @@ const commands = {
 		if (!this.can('warn', targetUser, room)) return false;
 		if (targetUser.can('makeroom')) return this.errorReply("You are not allowed to warn upper staff members.");
 
+		const now = Date.now();
+		const timeout = now - targetUser.lastWarnedAt;
+		if (timeout < 15 * 1000) {
+			const remainder = (15 - (timeout / 1000)).toFixed(2);
+			return this.errorReply(`You must wait ${remainder} more seconds before you can warn ${targetUser.name} again.`);
+		}
+
 		this.addModAction(`${targetUser.name} was warned by ${user.name}.${(target ? ` (${target})` : ``)}`);
 		this.modlog('WARN', targetUser, target, {noalts: 1});
-		if (globalWarn) {
-			this.globalModlog('WARN', targetUser, ` by ${user.userid}${(target ? `: ${target}` : ``)}`);
-		}
+		if (globalWarn) this.globalModlog('WARN', targetUser, ` by ${user.userid}${(target ? `: ${target}` : ``)}`);
 		targetUser.send(`|c|~|/warn ${target}`);
-		let userid = targetUser.getLastId();
+
+		const userid = targetUser.getLastId();
 		this.add(`|unlink|${userid}`);
 		if (userid !== toID(this.inputUsername)) this.add(`|unlink|${toID(this.inputUsername)}`);
+
+		targetUser.lastWarnedAt = now;
 	},
 	warnhelp: [`/warn OR /k [username], [reason] - Warns a user showing them the Pok\u00e9mon Showdown Rules and [reason] in an overlay. Requires: % @ # & ~`],
 
