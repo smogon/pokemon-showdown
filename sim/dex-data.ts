@@ -644,6 +644,9 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 		this.maleOnlyHidden = !!data.maleOnlyHidden;
 		this.maxHP = data.maxHP || undefined;
 		this.learnset = data.learnset || undefined;
+		if (this.isNonstandard === 'Pokestar') {
+			this.learnset = {};
+		}
 		this.eventOnly = !!data.eventOnly;
 		this.eventPokemon = data.eventPokemon || undefined;
 		this.isMega = !!(this.forme && ['Mega', 'Mega-X', 'Mega-Y'].includes(this.forme)) || undefined;
