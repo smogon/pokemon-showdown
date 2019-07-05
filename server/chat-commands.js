@@ -656,9 +656,10 @@ const commands = {
 
 	status(target, room, user, connection, cmd) {
 		if (!this.canTalk()) return;
-		if (!toID(target)) return this.parse('/help status');
+		if (!target) return this.parse('/help status');
+		if (!/[a-zA-Z0-9]/.test(target)) return this.errorReply("Your status must contain at least one letter or number.");
 		target = Chat.namefilter(target, user, true);
-		if (!target) return user.popup("Your status contains a banned word.");
+		if (!target) return this.errorReply("Your status contains a banned word.");
 
 		let statusType = '(Online)';
 		// Should work even if users use /status with a message containing ()
@@ -676,8 +677,10 @@ const commands = {
 		if (!this.canTalk()) return;
 
 		let message = Chat.namefilter(target, user, true);
-		if (!message && toID(target)) return user.popup("Your status contains a banned word.");
-
+		if (target) {
+			if (!/[a-zA-Z0-9]/.test(target)) return this.errorReply("Your status must contain at least one letter or number.");
+			if (!message) return this.errorReply("Your status contains a banned word.");
+		}
 		user.setStatus(`(Busy)${message ? ` ${message}` : ''}`);
 		this.parse('/blockpms');
 		this.parse('/blockchallenges');
@@ -698,11 +701,13 @@ const commands = {
 		} else {
 			awayType = `${awayType[0].toUpperCase()}${awayType.slice(1)}`;
 		}
-		if (toID(target)) {
-			awayMessage = Chat.namefilter(target, user, true);
-			if (!awayMessage) return user.popup("Your status contains a banned word.");
-		}
 
+		if (target) {
+			if (!/[a-zA-Z0-9]/.test(target)) return this.errorReply("Your status must contain at least one letter or number.");
+
+			awayMessage = Chat.namefilter(target, user, true);
+			if (!awayMessage) return this.errorReply("Your status contains a banned word.");
+		}
 		awayMessage = `(${awayType})${awayMessage ? ` ${awayMessage}` : ''}`;
 		user.setAway(awayMessage);
 		this.sendReply("You are now marked as away. Send a message or use /back to indicate you are back.");
