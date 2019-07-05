@@ -5260,7 +5260,7 @@ let BattleFormatsData = {
 		randomBattleMoves: ["blizzard", "gigadrain", "woodhammer", "earthquake", "iceshard", "hiddenpowerfire"],
 		randomDoubleBattleMoves: ["blizzard", "iceshard", "gigadrain", "protect", "focusblast", "woodhammer", "earthquake"],
 		requiredItem: "Abomasite",
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "DUU",
 	},
 	rotom: {
@@ -6173,7 +6173,7 @@ let BattleFormatsData = {
 	cinccino: {
 		randomBattleMoves: ["tailslap", "bulletseed", "rockblast", "knockoff", "uturn"],
 		randomDoubleBattleMoves: ["tailslap", "aquatail", "uturn", "knockoff", "bulletseed", "rockblast", "protect"],
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "(DUU)",
 	},
 	gothita: {
