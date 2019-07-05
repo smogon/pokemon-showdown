@@ -99,7 +99,7 @@ let Formats = [
 	{
 		name: "[Gen 7] PU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3649494/">PU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3652157/">PU Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3614892/">PU Viability Rankings</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3611496/">PU Sample Teams</a>`,
 		],
@@ -107,6 +107,9 @@ let Formats = [
 		mod: 'gen7',
 		ruleset: ['[Gen 7] NU'],
 		banlist: ['NU', 'PUBL'],
+		onBegin() {
+			if (this.rated && this.format === 'gen7pu') this.add('html', `<div class="broadcast-blue"><strong>PU is currently suspecting Guzzlord! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3652157/">suspect thread</a>.</strong></div>`);
+		},
 	},
 	{
 		name: "[Gen 7] LC",
