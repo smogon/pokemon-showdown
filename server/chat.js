@@ -188,9 +188,8 @@ Chat.namefilters = [];
 /**
  * @param {string} name
  * @param {User} user
- * @param {boolean} forStatus
  */
-Chat.namefilter = function (name, user, forStatus = false) {
+Chat.namefilter = function (name, user) {
 	if (!Config.disablebasicnamefilter) {
 		// whitelist
 		// \u00A1-\u00BF\u00D7\u00F7  Latin punctuation/symbols
@@ -234,7 +233,7 @@ Chat.namefilter = function (name, user, forStatus = false) {
 
 	name = Dex.getName(name);
 	for (const filter of Chat.namefilters) {
-		name = filter(name, user, forStatus);
+		name = filter(name, user, false);
 		if (!name) return '';
 	}
 	return name;
@@ -270,10 +269,11 @@ Chat.nicknamefilters = [];
 /**
  * @param {string} nickname
  * @param {User} user
+ * @param {boolean} [forStatus]
  */
-Chat.nicknamefilter = function (nickname, user) {
+Chat.nicknamefilter = function (nickname, user, forStatus = false) {
 	for (const filter of Chat.nicknamefilters) {
-		nickname = filter(nickname, user);
+		nickname = filter(nickname, user, forStatus);
 		if (!nickname) return '';
 	}
 	return nickname;
