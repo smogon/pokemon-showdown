@@ -272,6 +272,7 @@ Chat.nicknamefilters = [];
  * @param {boolean} [forStatus]
  */
 Chat.nicknamefilter = function (nickname, user, forStatus = false) {
+	if (forStatus) nickname = nickname.replace(/\|/g, '');
 	for (const filter of Chat.nicknamefilters) {
 		nickname = filter(nickname, user, forStatus);
 		if (!nickname) return '';
