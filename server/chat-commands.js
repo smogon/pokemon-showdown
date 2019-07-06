@@ -705,6 +705,7 @@ const commands = {
 		}
 
 		if (target) {
+			if (target.length > 32) return this.errorReply(`Your status is too long; it must be under 32 characters.`);
 			if (!/[a-zA-Z0-9]/.test(target)) return this.errorReply("Your status must contain at least one letter or number.");
 
 			awayMessage = Chat.nicknamefilter(target, user, true);
