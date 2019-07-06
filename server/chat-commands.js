@@ -661,58 +661,36 @@ const commands = {
 		target = Chat.namefilter(target, user, true);
 		if (!target) return this.errorReply("Your status contains a banned word.");
 
-		let statusType = '(Online)';
-		// Should work even if users use /status with a message containing ()
-		if (user.status && user.status.includes('(') && user.status.includes(')')) {
-			statusType = user.status.slice(0, user.status.indexOf(')') + 1);
-		}
-
-		user.setStatus(`${statusType} ${target}`);
+		user.setStatus(target, 'online');
 		this.sendReply(`Your status has been set to: ${target}`);
 	},
 	statushelp: [`/status [note] - Sets a short note as your status, visible when users click your username.`],
-
-	'!busy': true,
-	busy(target, room, user) {
-		if (!this.canTalk()) return;
-
-		let message = Chat.namefilter(target, user, true);
-		if (target) {
-			if (!/[a-zA-Z0-9]/.test(target)) return this.errorReply("Your status must contain at least one letter or number.");
-			if (!message) return this.errorReply("Your status contains a banned word.");
-		}
-		user.setStatus(`(Busy)${message ? ` ${message}` : ''}`);
-		this.parse('/blockpms');
-		this.parse('/blockchallenges');
-		this.sendReply("You are now marked as busy.");
-	},
-	busyhelp: [`/busy - Marks you as busy, blocking private messages and challenges. Use /back to mark yourself as back.`],
 
 	'!away': true,
 	idle: 'away',
 	afk: 'away',
 	brb: 'away',
+	busy: 'away',
 	away(target, room, user, connection, cmd) {
 		if (!this.canTalk()) return;
-		let awayType = cmd;
-		let awayMessage = '';
-		if (awayType === 'afk' || awayType === 'brb') {
-			awayType = awayType.toUpperCase();
+
+		let message = target.trim();
+		if (message) {
+			if (!/[a-zA-Z0-9]/.test(message)) return this.errorReply("Your status must contain at least one letter or number.");
+			message = Chat.namefilter(target, true);
+			if (!message) return this.errorReply("Your status contains a banned word.");
 		} else {
-			awayType = `${awayType[0].toUpperCase()}${awayType.slice(1)}`;
+			message = cmd;
+			if (message === 'afk' || message === 'brb') {
+				message = message.toUpperCase();
+			} else {
+				message = message.charAt(0).toUpperCase() + message.slice(1);
+			}
 		}
-
-		if (target) {
-			if (!/[a-zA-Z0-9]/.test(target)) return this.errorReply("Your status must contain at least one letter or number.");
-
-			awayMessage = Chat.namefilter(target, user, true);
-			if (!awayMessage) return this.errorReply("Your status contains a banned word.");
-		}
-		awayMessage = `(${awayType})${awayMessage ? ` ${awayMessage}` : ''}`;
-		user.setAway(awayMessage);
-		this.sendReply("You are now marked as away. Send a message or use /back to indicate you are back.");
+		user.setStatus(message, 'away');
+		this.sendReply("You are now marked as away. Use /back to indicate you are back.");
 	},
-	awayhelp: [`/away - Marks you as away. Send a message or use /back to indicate you are back.`],
+	awayhelp: [`/away - Marks you as away. Use /back to indicate you are back.`],
 
 	'!back': true,
 	clearstatus: 'back',
@@ -727,28 +705,15 @@ const commands = {
 			if (!targetUser.status) return this.errorReply(`${targetUser.name} does not have a status set.`);
 			if (!this.can('forcerename', targetUser)) return false;
 
-			let bracketIndex = targetUser.status.indexOf(')');
-			const status = targetUser.status.slice(bracketIndex + 2);
-			this.privateModAction(`(${targetUser.name}'s status "${status}" was cleared by ${user.name}${reason ? `: ${reason}` : ``})`);
-			this.globalModlog('CLEARSTATUS', targetUser, ` from ${status} by ${user.name}${reason ? `: ${reason}` : ``}`);
+			this.privateModAction(`(${targetUser.name}'s status "${targetUser.status}" was cleared by ${user.name}${reason ? `: ${reason}` : ``})`);
+			this.globalModlog('CLEARSTATUS', targetUser, ` from ${targetUser.status} by ${user.name}${reason ? `: ${reason}` : ``}`);
 			targetUser.clearStatus();
 			targetUser.popup(`${user.name} has cleared your status for being inappropriate${reason ? `: ${reason}` : '.'}`);
 			return;
 		}
-		if (!user.status) return this.errorReply("You do not have a status set and are already marked as back.");
-		const statusType = user.isAway() ? 'away' : user.status.startsWith('(Busy)') ? 'busy' : null;
-		user.clearStatus();
 
-		if (statusType === 'busy') {
-			this.parse('/unblockpms');
-			this.parse('/unblockchallenges');
-		}
-
-		if (statusType) {
-			return this.sendReply(`You are no longer marked as ${statusType}.`);
-		}
-
-		return this.sendReply("You have cleared your status message.");
+		if (!user.clearStatus()) return this.errorReply(`You do not have a status set, and are already marked as back.`);
+		return this.sendReply("You have cleared your status message and marked yourself as back.");
 	},
 	backhelp: [
 		`/back - Marks you as back if you are away.`,
@@ -4420,7 +4385,7 @@ const commands = {
 				avatar: targetUser.avatar,
 				group: targetUser.group,
 				autoconfirmed: !!targetUser.autoconfirmed,
-				status: targetUser.status,
+				status: targetUser.getStatus(),
 				away: targetUser.away,
 				rooms: roomList,
 			};

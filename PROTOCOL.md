@@ -153,18 +153,18 @@ represented by a space), and the rest of the string being their username.
 `|join|USER@STATUS` or `|j|USER@STATUS`
 
 > `USER` joined the room. Optionally, `USER` can end in `@` followed by a user status message.
-> A `STATUS` starting in `!` indicates the user is away.
+> `STATUS` will start in `!` if the user is away, or '` `' otherwise.
 
 `|leave|USER@STATUS` or `|l|USER@STATUS`
 
 > `USER` left the room. Optionally, `USER` can end in `@` followed by a user status message.
-> A `STATUS` starting in `!` indicates the user is away.
+> `STATUS` will start in `!` if the user is away, or '` `' otherwise.
 
 `|name|USER@STATUS|OLDID` or `|n|USER@STATUS|OLDID`
 
 > A user changed name to `USER`, and their previous userid was `OLDID`.
 > Optionally, `USER` can end in `@` followed by a user status message.
-> A `STATUS` starting in `!` indicates the user is away.
+> `STATUS` will start in `!` if the user is away, or '` `' otherwise.
 
 `|chat|USER|MESSAGE` or `|c|USER|MESSAGE`
 

@@ -44,6 +44,13 @@ const FS = require(/** @type {any} */('../.lib-dist/fs')).FS;
 const MINUTES = 60 * 1000;
 const IDLE_TIMER = 60 * MINUTES;
 const STAFF_IDLE_TIMER = 30 * MINUTES;
+/**
+ * Users can be away in 3 different states:
+ * online - The user is online. (This is the default state)
+ * away - The user has marked themselves as afk, and should only be marked back with a command
+ * idle - The user has been marked as afk from inactivity, and should be marked back on performing any action
+ * @typedef {'online' | 'away' | 'idle'} StausBit
+ */
 
 /*********************************************************
  * Utility functions
@@ -540,6 +547,9 @@ class User extends Chat.MessageContext {
 		this.trackRename = '';
 		/** @type {string} */
 		this.status = '';
+		/** @type {StausBit} */
+		this.away = 'online';
+
 		/** @type {number} */
 		this.lastWarnedAt = 0;
 
@@ -606,8 +616,8 @@ class User extends Chat.MessageContext {
 	 */
 	getIdentityWithStatus(roomid = '') {
 		const identity = this.getIdentity(roomid);
-		if (!this.status) return identity;
-		return `${identity}@${this.status}`;
+		const status = this.getStatus();
+		return `${identity}${status ? `@${status}` : ''}`;
 	}
 	/**
 	 * @param {string} minAuth
@@ -1381,7 +1391,6 @@ class User extends Chat.MessageContext {
 	joinRoom(roomid, connection = null) {
 		const room = Rooms(roomid);
 		if (!room) throw new Error(`Room not found: ${roomid}`);
-		if (this.isAway()) this.clearStatus();
 		if (!connection) {
 			for (const curConnection of this.connections) {
 				// only join full clients, not pop-out single-room
@@ -1417,7 +1426,6 @@ class User extends Chat.MessageContext {
 		if (!this.inRooms.has(room.id)) {
 			return false;
 		}
-		if (this.isAway()) this.clearStatus();
 		for (const curConnection of this.connections) {
 			if (connection && curConnection !== connection) continue;
 			if (curConnection.inRooms.has(room.id)) {
@@ -1569,26 +1577,28 @@ class User extends Chat.MessageContext {
 		}
 	}
 	isAway() {
-		return this.status && this.status.charAt(0) === '!';
+		return this.away !== 'online';
 	}
 	/**
 	 * @param {string} message
+	 * @param {StausBit} type
 	 */
-	setStatus(message) {
-		if (message === this.status) return;
+	setStatus(message, type) {
+		if (message === this.status && type === this.away) return;
 		this.status = message;
+		this.away = type;
 		this.updateIdentity();
 	}
-	/**
-	 * @param {string} message
-	 */
-	setAway(message) {
-		this.setStatus(`!${message}`);
+	getStatus() {
+		if (!this.status && this.away === 'online') return '';
+		return `${this.away !== 'online' ? '!' : ' '}${this.status}`;
 	}
 	clearStatus() {
-		if (!this.status) return;
+		if (!this.status && !this.away) return false;
 		this.status = '';
+		this.away = 'online';
 		this.updateIdentity();
+		return true;
 	}
 	destroy() {
 		// deallocate user
@@ -1631,7 +1641,7 @@ function pruneInactive(threshold) {
 		let bypass = user.isAway() || (!user.can('bypassall') && (user.can('bypassafktimer') || Array.from(user.inRooms).some(room => user.can('bypassafktimer', null, /** @type {ChatRoom} */ (Rooms(room))))));
 		if (!bypass && !user.connections.some(connection => now - connection.lastActiveTime < awayTimer)) {
 			user.popup(`You have been inactive for over ${awayTimer / MINUTES} minutes, and have been marked as idle as a result. To mark yourself as back, send a message in chat, or use the /back command.`);
-			user.setAway('(Idle)');
+			user.setStatus("Idle", 'idle');
 		}
 		if (user.connected) continue;
 		if ((now - user.lastConnected) > threshold) {

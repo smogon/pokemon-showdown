@@ -1287,7 +1287,7 @@ class BasicChatRoom extends BasicRoom {
 		if (this.users[user.userid]) return false;
 
 		if (user.named) {
-			this.reportJoin('j', user.getIdentity(this.id));
+			this.reportJoin('j', user.getIdentityWithStatus(this.id));
 		}
 
 		this.users[user.userid] = user;
@@ -1315,12 +1315,12 @@ class BasicChatRoom extends BasicRoom {
 		delete this.users[oldid];
 		this.users[user.userid] = user;
 		if (joining) {
-			this.reportJoin('j', user.getIdentity(this.id));
+			this.reportJoin('j', user.getIdentityWithStatus(this.id));
 			if (this.staffMessage && user.can('mute', null, this)) this.sendUser(user, '|raw|<div class="infobox">(Staff intro:)<br /><div>' + this.staffMessage.replace(/\n/g, '') + '</div></div>');
 		} else if (!user.named) {
 			this.reportJoin('l', oldid);
 		} else {
-			this.reportJoin('n', user.getIdentity(this.id) + '|' + oldid);
+			this.reportJoin('n', user.getIdentityWithStatus(this.id) + '|' + oldid);
 		}
 		if (this.poll && user.userid in this.poll.voters) this.poll.updateFor(user);
 		return true;
@@ -1354,7 +1354,7 @@ class BasicChatRoom extends BasicRoom {
 		this.userCount--;
 
 		if (user.named) {
-			this.reportJoin('l', user.getIdentity(this.id));
+			this.reportJoin('l', user.getIdentityWithStatus(this.id));
 		}
 		if (this.game && this.game.onLeave) this.game.onLeave(user);
 		return true;
