@@ -896,10 +896,9 @@ const commands = {
 		`/subroomgroupchat [roomname] - Creates a subroom groupchat of the current room. Can only be used in a public room you have staff in.`,
 	],
 
-	'!groupchatuptime': true,
 	groupchatuptime(target, room, user) {
-		if (!this.runBroadcast()) return;
 		if (!room.uptime) return this.errorReply("Can only be used in a groupchat.");
+		if (!this.runBroadcast()) return;
 		const uptime = Chat.toDurationString(Date.now() - room.uptime);
 		this.sendReplyBox(`Groupchat uptime: <b>${uptime}</b>`);
 	},
