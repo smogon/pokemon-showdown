@@ -900,8 +900,8 @@ const commands = {
 
 	'!groupchatuptime': true,
 	groupchatuptime(target, room, user) {
+		if (!room || !room.uptime) return this.errorReply("Can only be used in a groupchat.");
 		if (!this.runBroadcast()) return;
-		if (!room.uptime) return this.errorReply("Can only be used in a groupchat.");
 		const uptime = Chat.toDurationString(Date.now() - room.uptime);
 		this.sendReplyBox(`Groupchat uptime: <b>${uptime}</b>`);
 	},
