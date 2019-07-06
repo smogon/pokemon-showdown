@@ -659,7 +659,7 @@ const commands = {
 		if (!target) return this.parse('/help status');
 
 		if (target.length > 32) return this.errorReply(`Your status is too long; it must be under 32 characters.`);
-		target = Chat.nicknamefilter(target, user);
+		target = Chat.nicknamefilter(target, user, true);
 		if (!target) return this.errorReply("Your status contains a banned word.");
 
 		let statusType = '(Online)';
@@ -679,7 +679,7 @@ const commands = {
 
 		if (target) {
 			if (target.length > 32) return this.errorReply(`Your status is too long; it must be under 32 characters.`);
-			target = Chat.nicknamefilter(target, user);
+			target = Chat.nicknamefilter(target, user, true);
 			if (!target) return this.errorReply("Your status contains a banned word.");
 		}
 
@@ -705,9 +705,9 @@ const commands = {
 		}
 
 		if (target) {
-			if (!/[a-zA-Z0-9]/.test(target)) return this.errorReply("Your status must contain at least one letter or number.");
+			if (target.length > 32) return this.errorReply(`Your status is too long; it must be under 32 characters.`);
 
-			awayMessage = Chat.namefilter(target, user, true);
+			awayMessage = Chat.nicknamefilter(target, user, true);
 			if (!awayMessage) return this.errorReply("Your status contains a banned word.");
 		}
 		awayMessage = `(${awayType})${awayMessage ? ` ${awayMessage}` : ''}`;
