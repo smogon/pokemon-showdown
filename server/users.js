@@ -49,7 +49,7 @@ const STAFF_IDLE_TIMER = 30 * MINUTES;
  * online - The user is online. (This is the default state)
  * away - The user has marked themselves as afk, and should only be marked back with a command
  * idle - The user has been marked as afk from inactivity, and should be marked back on performing any action
- * @typedef {'online' | 'away' | 'idle'} StausBit
+ * @typedef {'online' | 'away' | 'idle'} StatusBit
  */
 
 /*********************************************************
@@ -547,7 +547,7 @@ class User extends Chat.MessageContext {
 		this.trackRename = '';
 		/** @type {string} */
 		this.status = '';
-		/** @type {StausBit} */
+		/** @type {StatusBit} */
 		this.away = 'online';
 
 		/** @type {number} */
@@ -1581,7 +1581,7 @@ class User extends Chat.MessageContext {
 	}
 	/**
 	 * @param {string} message
-	 * @param {StausBit} type
+	 * @param {StatusBit} type
 	 */
 	setStatus(message, type) {
 		if (message === this.status && type === this.away) return;
