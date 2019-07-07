@@ -2317,10 +2317,10 @@ let BattleAbilities = {
 			}
 			if (!pickupTargets.length) return;
 			let randomTarget = this.sample(pickupTargets);
-			pokemon.setItem(randomTarget.lastItem);
+			let item = randomTarget.lastItem;
 			randomTarget.lastItem = '';
-			let item = pokemon.getItem();
-			this.add('-item', pokemon, item, '[from] ability: Pickup');
+			this.add('-item', pokemon, this.getItem(item), '[from] ability: Pickup');
+			pokemon.setItem(item);
 		},
 		id: "pickup",
 		name: "Pickup",
