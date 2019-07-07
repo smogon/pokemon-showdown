@@ -11,10 +11,8 @@ Receiving messages
 
 The beginning of a battle will look something like this:
 
-    |elo|Anonycat|1200
-    |elo|Anonybird|1300
-    |player|p1|Anonycat|60
-    |player|p2|Anonybird|113
+    |player|p1|Anonycat|60|1200
+    |player|p2|Anonybird|113|1300
     |teamsize|p1|4
     |teamsize|p2|5
     |gametype|doubles
@@ -41,11 +39,7 @@ The beginning of a battle will look something like this:
     |
     |start
 
-`|elo|PLAYER|ELO`
-
-> - `ELO` is the player's elo in the format they're playing. This will not be sent in unrated battles
-
-`|player|PLAYER|USERNAME|AVATAR`
+`|player|PLAYER|USERNAME|AVATAR|ELO`
 
 > Player details.
 >
@@ -54,6 +48,7 @@ The beginning of a battle will look something like this:
 > - `USERNAME` is the username
 > - `AVATAR` is the player's avatar identifier (usually a number, but other
 >    values can be used for custom avatars)
+> - `ELO` is the player's elo in the format they're playing. This will be `0` in unrated battles
 
 `|teamsize|PLAYER|NUMBER`
 
