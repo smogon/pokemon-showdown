@@ -974,7 +974,7 @@ class RoomBattle extends RoomGames.RoomGame {
 				name: player.name,
 				avatar: user ? '' + user.avatar : '',
 				team: team,
-				rating: rating,
+				rating: Math.round(rating),
 			};
 			this.stream.write(`>player ${slot} ${JSON.stringify(options)}`);
 		}
