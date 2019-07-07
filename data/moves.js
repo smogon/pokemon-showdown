@@ -13281,9 +13281,10 @@ let BattleMovedex = {
 		flags: {snatch: 1},
 		onHit(pokemon) {
 			if (pokemon.item || !pokemon.lastItem) return false;
-			pokemon.setItem(pokemon.lastItem);
+			let item = pokemon.lastItem;
 			pokemon.lastItem = '';
-			this.add('-item', pokemon, pokemon.getItem(), '[from] move: Recycle');
+			this.add('-item', pokemon, this.getItem(item), '[from] move: Recycle');
+			pokemon.setItem(item);
 		},
 		secondary: null,
 		target: "self",
