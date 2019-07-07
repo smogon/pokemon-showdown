@@ -974,7 +974,13 @@ class RoomBattle extends RoomGames.RoomGame {
 				avatar: user ? '' + user.avatar : '',
 				team: team,
 			};
-			this.stream.write(`>player ${slot} ` + JSON.stringify(options));
+			this.stream.write(`>player ${slot} ${JSON.stringify(options)}`);
+			if (this.rated) {
+				new Ladders.LadderStore(this.format).getRating(player.userid).then(response => {
+					const elo = Math.round(response);
+					if (this.room) this.room.add(`|elo|${player.name}|${elo}`);
+				});
+			}
 		}
 
 		if (user) this.room.auth[user.userid] = Users.PLAYER_SYMBOL;

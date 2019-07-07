@@ -11,6 +11,8 @@ Receiving messages
 
 The beginning of a battle will look something like this:
 
+    |elo|Anonycat|1200
+    |elo|Anonybird|1300
     |player|p1|Anonycat|60
     |player|p2|Anonybird|113
     |teamsize|p1|4
@@ -38,6 +40,10 @@ The beginning of a battle will look something like this:
     |teampreview
     |
     |start
+
+`|elo|PLAYER|ELO`
+
+> - `ELO` is the player's elo in the format they're playing. This will not be sent in unrated battles
 
 `|player|PLAYER|USERNAME|AVATAR`
 
