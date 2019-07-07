@@ -960,9 +960,9 @@ class RoomBattle extends RoomGames.RoomGame {
 	 *
 	 * @param {User | null} user
 	 * @param {string?} team
-	 * @param {number} elo
+	 * @param {number} rating
 	 */
-	addPlayer(user, team, elo = 0) {
+	addPlayer(user, team, rating = 0) {
 		// TypeScript bug: no `T extends RoomGamePlayer`
 		const player = /** @type {RoomBattlePlayer} */ (super.addPlayer(user));
 		if (!player) return null;
@@ -974,7 +974,7 @@ class RoomBattle extends RoomGames.RoomGame {
 				name: player.name,
 				avatar: user ? '' + user.avatar : '',
 				team: team,
-				elo: elo,
+				rating: rating,
 			};
 			this.stream.write(`>player ${slot} ${JSON.stringify(options)}`);
 		}

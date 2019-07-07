@@ -39,7 +39,7 @@ The beginning of a battle will look something like this:
     |
     |start
 
-`|player|PLAYER|USERNAME|AVATAR|ELO`
+`|player|PLAYER|USERNAME|AVATAR|RATING`
 
 > Player details.
 >
@@ -48,7 +48,7 @@ The beginning of a battle will look something like this:
 > - `USERNAME` is the username
 > - `AVATAR` is the player's avatar identifier (usually a number, but other
 >    values can be used for custom avatars)
-> - `ELO` is the player's elo in the format they're playing. This will be `0` in unrated battles
+> - `RATING` is the player's Elo rating in the format they're playing. This will only be displayed in rated battles and when the player is first introduced otherwise it's blank
 
 `|teamsize|PLAYER|NUMBER`
 
