@@ -750,8 +750,8 @@ class GlobalRoom extends BasicRoom {
 	 */
 	onCreateBattleRoom(players, room, options) {
 		players.forEach(player => {
-			if (player.isAway()) {
-				player.clearStatus();
+			if (player.statusType === 'idle') {
+				player.setStatus('online');
 			}
 		});
 		if (Config.reportbattles) {
