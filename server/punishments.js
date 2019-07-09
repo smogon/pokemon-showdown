@@ -449,7 +449,8 @@ const Punishments = new (class {
 	 * @return {string}
 	 */
 	renderEntry(entry, id) {
-		let row = [entry.punishType, id, [entry.ips.join(','), entry.userids.join(',')].filter(el => el), entry.expireTime, entry.reason, ...entry.rest];
+		const keys = entry.ips.concat(entry.userids).join(',');
+		const row = [entry.punishType, id, keys, entry.expireTime, entry.reason, ...entry.rest];
 		return row.join('\t') + '\r\n';
 	}
 
