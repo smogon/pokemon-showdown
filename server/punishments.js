@@ -47,6 +47,7 @@ const AUTOLOCK_POINT_THRESHOLD = 8;
  * @property {string} punishType
  * @property {number} expireTime
  * @property {string} reason
+ * @property {any[]} rest
  */
 
 /**
@@ -286,7 +287,7 @@ const Punishments = new (class {
 			/** @type {Map<string, PunishmentEntry>} */
 			const saveTable = new Map();
 			Punishments.ips.forEach((punishment, ip) => {
-				const [punishType, id, expireTime, reason] = punishment;
+				const [punishType, id, expireTime, reason, ...rest] = punishment;
 				if (id.charAt(0) === '#') return;
 				let entry = saveTable.get(id);
 
@@ -301,11 +302,12 @@ const Punishments = new (class {
 					punishType: punishType,
 					expireTime: expireTime,
 					reason: reason,
+					rest: rest,
 				};
 				saveTable.set(id, entry);
 			});
 			Punishments.userids.forEach((punishment, userid) => {
-				const [punishType, id, expireTime, reason] = punishment;
+				const [punishType, id, expireTime, reason, ...rest] = punishment;
 				if (id.charAt(0) === '#') return;
 				let entry = saveTable.get(id);
 
@@ -316,6 +318,7 @@ const Punishments = new (class {
 						punishType: punishType,
 						expireTime: expireTime,
 						reason: reason,
+						rest: rest,
 					};
 					saveTable.set(id, entry);
 				}
@@ -336,7 +339,7 @@ const Punishments = new (class {
 			/** @type {Map<string, PunishmentEntry>} */
 			const saveTable = new Map();
 			Punishments.roomIps.nestedForEach((punishment, roomid, ip) => {
-				const [punishType, punishUserid, expireTime, reason] = punishment;
+				const [punishType, punishUserid, expireTime, reason, ...rest] = punishment;
 				const id = roomid + '\t' + punishUserid;
 				if (id.charAt(0) === '#') return;
 				let entry = saveTable.get(id);
@@ -352,11 +355,12 @@ const Punishments = new (class {
 					punishType: punishType,
 					expireTime: expireTime,
 					reason: reason,
+					rest: rest,
 				};
 				saveTable.set(id, entry);
 			});
 			Punishments.roomUserids.nestedForEach((punishment, roomid, userid) => {
-				const [punishType, punishUserid, expireTime, reason] = punishment;
+				const [punishType, punishUserid, expireTime, reason, ...rest] = punishment;
 				const id = roomid + '\t' + punishUserid;
 				let entry = saveTable.get(id);
 
@@ -367,6 +371,7 @@ const Punishments = new (class {
 						punishType: punishType,
 						expireTime: expireTime,
 						reason: reason,
+						rest: rest,
 					};
 					saveTable.set(id, entry);
 				}
@@ -389,7 +394,7 @@ const Punishments = new (class {
 		/** @type {PunishmentEntry | null} */
 		let entry = null;
 		Punishments.ips.forEach((punishment, ip) => {
-			const [punishType, id, expireTime, reason] = punishment;
+			const [punishType, id, expireTime, reason, ...rest] = punishment;
 			if (id !== entryId) return;
 			if (entry) {
 				entry.userids.push(ip);
@@ -402,10 +407,11 @@ const Punishments = new (class {
 				punishType: punishType,
 				expireTime: expireTime,
 				reason: reason,
+				rest: rest,
 			};
 		});
 		Punishments.userids.forEach((punishment, userid) => {
-			const [punishType, id, expireTime, reason] = punishment;
+			const [punishType, id, expireTime, reason, ...rest] = punishment;
 			if (id !== entryId) return;
 
 			if (!entry) {
@@ -415,6 +421,7 @@ const Punishments = new (class {
 					punishType: punishType,
 					expireTime: expireTime,
 					reason: reason,
+					rest: rest,
 				};
 			}
 
@@ -441,7 +448,7 @@ const Punishments = new (class {
 	 * @return {string}
 	 */
 	renderEntry(entry, id) {
-		let row = [entry.punishType, id, entry.ips.join(','), entry.userids.join(','), entry.expireTime, entry.reason];
+		let row = [entry.punishType, id, entry.ips.join(','), entry.userids.join(','), entry.expireTime, entry.reason, ...entry.rest];
 		return row.join('\t') + '\r\n';
 	}
 
@@ -514,7 +521,7 @@ const Punishments = new (class {
 			this.punishInner(alt, punishment, userids, ips);
 		}
 
-		const [punishType, id, expireTime, reason] = punishment;
+		const [punishType, id, expireTime, reason, ...rest] = punishment;
 		userids.delete(id);
 		Punishments.appendPunishment({
 			userids: [...userids],
@@ -522,6 +529,7 @@ const Punishments = new (class {
 			punishType: punishType,
 			expireTime: expireTime,
 			reason: reason,
+			rest: rest,
 		}, id, PUNISHMENT_FILE);
 		return affected;
 	}
@@ -591,7 +599,7 @@ const Punishments = new (class {
 		for (const ip of ips) {
 			Punishments.ips.set(ip, punishment);
 		}
-		const [punishType, id, expireTime, reason] = punishment;
+		const [punishType, id, expireTime, reason, ...rest] = punishment;
 		let affected = Users.findUsers([...userids], [...ips], {includeTrusted: PUNISH_TRUSTED, forPunishment: true});
 		userids.delete(id);
 		Punishments.appendPunishment({
@@ -600,6 +608,7 @@ const Punishments = new (class {
 			punishType: punishType,
 			expireTime: expireTime,
 			reason: reason,
+			rest: rest,
 		}, id, PUNISHMENT_FILE);
 
 		return affected;
@@ -656,7 +665,7 @@ const Punishments = new (class {
 			this.roomPunishInner(roomid, curUser, punishment, userids, ips);
 		}
 
-		const [punishType, id, expireTime, reason] = punishment;
+		const [punishType, id, expireTime, reason, ...rest] = punishment;
 		userids.delete(id);
 		Punishments.appendPunishment({
 			userids: [...userids],
@@ -664,6 +673,7 @@ const Punishments = new (class {
 			punishType: punishType,
 			expireTime: expireTime,
 			reason: reason,
+			rest: rest,
 		}, roomid + '\t' + id, ROOM_PUNISHMENT_FILE);
 
 		if (typeof room === 'string' || !(room.isPrivate === true || room.isPersonal || room.battle)) {
@@ -721,7 +731,7 @@ const Punishments = new (class {
 		for (const ip of ips) {
 			Punishments.roomIps.nestedSet(room.id, ip, punishment);
 		}
-		const [punishType, id, expireTime, reason] = punishment;
+		const [punishType, id, expireTime, reason, ...rest] = punishment;
 		let affected = Users.findUsers([...userids], [...ips], {includeTrusted: PUNISH_TRUSTED, forPunishment: true});
 		userids.delete(id);
 		Punishments.appendPunishment({
@@ -730,6 +740,7 @@ const Punishments = new (class {
 			punishType: punishType,
 			expireTime: expireTime,
 			reason: reason,
+			rest: rest,
 		}, room.id + '\t' + id, ROOM_PUNISHMENT_FILE);
 
 		if (!(room.isPrivate === true || room.isPersonal || room.battle)) Punishments.monitorRoomPunishments(userid);
