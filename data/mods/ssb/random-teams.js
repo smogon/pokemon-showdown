@@ -788,9 +788,17 @@ class RandomStaffBrosTeams extends RandomTeams {
 				set.moves.push(move);
 			}
 			set.moves.push(ssbSet.signatureMove);
+			if (name === 'Arsenal' && this.getItem(set.item).onPlate) {
+				set.species = 'Arceus-' + this.getItem(set.item).onPlate;
+			}
 			if (name === 'The Immortal' && set.item === 'Choice Scarf') set.moves[3] = 'Superpower';
 			if (name === 'irritated' && !set.moves.includes('Double Iron Bash')) set.moves[this.random(3)] = 'Double Iron Bash';
 			team.push(set);
+			// Swap last and second to last sets if last set has an illusion variant
+			if (team.length === 6 && set.ability.includes("Illusion")) {
+				team[5] = team[4];
+				team[4] = set;
+			}
 		}
 		return team;
 	}
