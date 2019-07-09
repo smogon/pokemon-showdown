@@ -190,7 +190,7 @@ export const IPTools = new class {
 			return;
 		}
 		const blocklist = BLOCKLISTS[index];
-		dns.resolve4(reversedIpDot + blocklist, (err, addresses) => {
+		dns.lookup(reversedIpDot + blocklist, 4, (err, res) => {
 			if (!err) {
 				// blocked
 				IPTools.dnsblCache.set(ip, blocklist);
