@@ -470,15 +470,17 @@ const Punishments = new (class {
 	}
 
 	// sharedips.tsv is in the format:
-	// IP, note
+	// IP, type (in this case always SHARED), note
 
 	async loadSharedIps() {
 		const data = await FS(SHAREDIPS_FILE).readIfExists();
 		if (!data) return;
 		for (const row of data.split("\n")) {
 			if (!row || row === '\r') continue;
-			const [ip, note] = row.trim().split("\t");
+			const [ip, type, note] = row.trim().split("\t");
 			if (!ip.includes('.')) continue;
+			if (type !== 'SHARED') continue;
+
 			Punishments.sharedIps.set(ip, note);
 		}
 	}
@@ -488,14 +490,14 @@ const Punishments = new (class {
 	 * @param {string} note
 	 */
 	appendSharedIp(ip, note) {
-		let buf = `${ip}\t${note}\r\n`;
+		let buf = `${ip}\tSHARED\t${note}\r\n`;
 		FS(SHAREDIPS_FILE).append(buf);
 	}
 
 	saveSharedIps() {
-		let buf = 'IP\tNote\r\n';
+		let buf = 'IP\tType\tNote\r\n';
 		Punishments.sharedIps.forEach((note, ip) => {
-			buf += `${ip}\t${note}\r\n`;
+			buf += `${ip}\tSHARED\t${note}\r\n`;
 		});
 
 		FS(SHAREDIPS_FILE).write(buf);
