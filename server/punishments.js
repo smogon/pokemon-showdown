@@ -243,7 +243,7 @@ const Punishments = new (class {
 			if (punishType === "Punishment") continue;
 			const keys = altKeys.split(',').concat(id);
 
-			const punishment = /** @type {Punishment} */ ([punishType, id, expireTime, reason.join(`\t`)]);
+			const punishment = /** @type {Punishment} */ ([punishType, id, expireTime, ...reason]);
 			if (Date.now() >= expireTime) {
 				continue;
 			}
@@ -269,7 +269,7 @@ const Punishments = new (class {
 			if (!userid) continue; // invalid format
 			const keys = altKeys.split(',').concat(userid);
 
-			const punishment = /** @type {Punishment} */ ([punishType, userid, expireTime, reason.join(`\t`)]);
+			const punishment = /** @type {Punishment} */ ([punishType, userid, expireTime, ...reason]);
 			if (Date.now() >= expireTime) {
 				continue;
 			}
