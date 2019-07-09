@@ -1573,16 +1573,22 @@ class User extends Chat.MessageContext {
 	}
 	/**
 	 * @param {StatusType} type
-	 * @param {string} [message]
 	 */
-	setStatus(type = this.statusType, message) {
-		if (message === this.userMessage && type === this.statusType) return;
-		if (message) this.userMessage = message;
+	setStatusType(type) {
+		if (type === this.statusType) return;
 		this.statusType = type;
 		this.updateIdentity();
 	}
 	/**
-	 * @param {StatusType} type
+	 * @param {string} message
+	 */
+	setUserMessage(message) {
+		if (message === this.userMessage) return;
+		this.userMessage = message;
+		this.updateIdentity();
+	}
+	/**
+	 * @param {StatusType} [type]
 	 */
 	clearStatus(type = this.statusType) {
 		this.statusType = type;
@@ -1630,7 +1636,7 @@ function pruneInactive(threshold) {
 		let bypass = user.statusType !== 'online' || (!user.can('bypassall') && (user.can('bypassafktimer') || Array.from(user.inRooms).some(room => user.can('bypassafktimer', null, /** @type {ChatRoom} */ (Rooms(room))))));
 		if (!bypass && !user.connections.some(connection => now - connection.lastActiveTime < awayTimer)) {
 			user.popup(`You have been inactive for over ${awayTimer / MINUTES} minutes, and have been marked as idle as a result. To mark yourself as back, send a message in chat, or use the /back command.`);
-			user.setStatus('idle');
+			user.setStatusType('idle');
 		}
 		if (user.connected) continue;
 		if ((now - user.lastConnected) > threshold) {

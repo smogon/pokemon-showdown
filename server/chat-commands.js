@@ -662,7 +662,7 @@ const commands = {
 		target = Chat.nicknamefilter(target, user, true);
 		if (!target) return this.errorReply("Your status contains a banned word.");
 
-		user.setStatus(null, target);
+		user.setUserMessage(target);
 		this.sendReply(`Your status has been set to: ${target}.`);
 	},
 	statushelp: [`/status [note] - Sets a short note as your status, visible when users click your username. Use /clearstatus to clear your status message.`],
@@ -671,7 +671,7 @@ const commands = {
 	busy(target, room, user) {
 		if (target) this.errorReply("Setting status messages in /busy is no longer supported. Set a status using /status.");
 
-		user.setStatus('busy');
+		user.setStatusType('busy');
 		this.parse('/blockpms');
 		this.parse('/blockchallenges');
 		this.sendReply("You are now marked as busy.");
@@ -685,16 +685,12 @@ const commands = {
 	away(target, room, user, connection, cmd) {
 		if (target) this.errorReply("Setting status messages in /away is no longer supported. Set a status using /status.");
 
-		user.setstatus('idle');
+		user.setstatusType('idle');
 		this.sendReply("You are now marked as away. Send a message or use /back to indicate you are back.");
 	},
 	awayhelp: [`/away - Marks you as away. Send a message or use /back to indicate you are back.`],
 
-	'!back': true,
-	clearstatus: 'back',
-	unaway: 'back',
-	unafk: 'back',
-	back(target, room, user) {
+	clearstatus(target, room, user) {
 		if (target) {
 			// Clearing another user's status
 			let reason = this.splitTarget(target);
@@ -709,9 +705,24 @@ const commands = {
 			targetUser.popup(`${user.name} has cleared your status message for being inappropriate${reason ? `: ${reason}` : '.'}`);
 			return;
 		}
+
+		if (!user.userMessage) return this.sendReply("You don't have a status message set.");
+		user.setUserMessage('');
+
+		return this.sendReply("You have cleared your status message.");
+	},
+	clearstatushelp: [
+		`/clearstatus - Clears your status message.`,
+		`/clearstatus user, reason - Clears another person's status message. Requires: % @ & ~`,
+	],
+
+	'!back': true,
+	unaway: 'back',
+	unafk: 'back',
+	back(target, room, user) {
 		if (user.statusType === 'online') return this.errorReply("You are already marked as back.");
 		const statusType = user.statusType;
-		user.setStatus('online');
+		user.setStatusType('online');
 
 		if (statusType === 'busy') {
 			this.parse('/unblockpms');
@@ -724,10 +735,7 @@ const commands = {
 
 		return this.sendReply("You have cleared your status message.");
 	},
-	backhelp: [
-		`/back - Marks you as back if you are away.`,
-		`/clearstatus - Clears your status message.`,
-	],
+	backhelp: [`/clearstatus - Clears your status message.`],
 
 	'!rank': true,
 	rank(target, room, user) {

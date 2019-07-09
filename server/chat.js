@@ -564,7 +564,7 @@ class CommandContext extends MessageContext {
 
 		let commandHandler = this.splitCommand(message);
 
-		if (this.user.statusType === 'idle') this.user.setStatus('online');
+		if (this.user.statusType === 'idle') this.user.setStatusType('online');
 
 		if (typeof commandHandler === 'function') {
 			message = this.run(commandHandler);
