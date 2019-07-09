@@ -230,20 +230,20 @@ const Punishments = new (class {
 	}
 
 	// punishments.tsv is in the format:
-	// punishType, userid, ips, userids, expiration time, reason
+	// punishType, userid, ips/usernames, expiration time, reason
 	// room-punishments.tsv is in the format:
-	// punishType, roomid, userid, ips, userids, expiration time, reason
+	// punishType, roomid:userid, ips/usernames, expiration time, reason
 	async loadPunishments() {
 		const data = await FS(PUNISHMENT_FILE).readIfExists();
 		if (!data) return;
 		for (const row of data.split("\n")) {
 			if (!row || row === '\r') continue;
-			const [punishType, userid, ips, userids, expireTimeStr, ...reason] = row.trim().split("\t");
+			const [punishType, id, altKeys, expireTimeStr, ...reason] = row.trim().split("\t");
 			const expireTime = Number(expireTimeStr);
 			if (punishType === "Punishment") continue;
-			const keys = userids.split(',').concat(ips.split(',')).concat(userid);
+			const keys = altKeys.split(',').concat(id);
 
-			const punishment = /** @type {Punishment} */ ([punishType, userid, expireTime, reason.join('\t')]);
+			const punishment = /** @type {Punishment} */ ([punishType, id, expireTime, reason.join(`\t`)]);
 			if (Date.now() >= expireTime) {
 				continue;
 			}
@@ -262,11 +262,12 @@ const Punishments = new (class {
 		if (!data) return;
 		for (const row of data.split("\n")) {
 			if (!row || row === '\r') continue;
-			const [punishType, roomid, userid, ips, userids, expireTimeStr, ...reason] = row.trim().split("\t");
+			const [punishType, id, altKeys, expireTimeStr, ...reason] = row.trim().split("\t");
 			const expireTime = Number(expireTimeStr);
 			if (punishType === "Punishment") continue;
+			const [roomid, userid] = id.split(':');
 			if (!userid) continue; // invalid format
-			const keys = userids.split(',').concat(ips.split(',')).concat(userid);
+			const keys = altKeys.split(',').concat(userid);
 
 			const punishment = /** @type {Punishment} */ ([punishType, userid, expireTime, reason.join(`\t`)]);
 			if (Date.now() >= expireTime) {
@@ -326,7 +327,7 @@ const Punishments = new (class {
 				if (userid !== id) entry.userids.push(userid);
 			});
 
-			let buf = 'Punishment\tUser ID\tIPs\tAlts\tExpires\tReason\r\n';
+			let buf = 'Punishment\tUser ID\tIPs and alts\tExpires\tReason\r\n';
 			for (const [id, entry] of saveTable) {
 				buf += Punishments.renderEntry(entry, id);
 			}
@@ -340,7 +341,7 @@ const Punishments = new (class {
 			const saveTable = new Map();
 			Punishments.roomIps.nestedForEach((punishment, roomid, ip) => {
 				const [punishType, punishUserid, expireTime, reason, ...rest] = punishment;
-				const id = roomid + '\t' + punishUserid;
+				const id = roomid + ':' + punishUserid;
 				if (id.charAt(0) === '#') return;
 				let entry = saveTable.get(id);
 
@@ -361,7 +362,7 @@ const Punishments = new (class {
 			});
 			Punishments.roomUserids.nestedForEach((punishment, roomid, userid) => {
 				const [punishType, punishUserid, expireTime, reason, ...rest] = punishment;
-				const id = roomid + '\t' + punishUserid;
+				const id = roomid + ':' + punishUserid;
 				let entry = saveTable.get(id);
 
 				if (!entry) {
@@ -379,7 +380,7 @@ const Punishments = new (class {
 				if (userid !== punishUserid) entry.userids.push(userid);
 			});
 
-			let buf = 'Punishment\tRoom ID\tUser ID\tIPs\tAlts\tExpires\tReason\r\n';
+			let buf = 'Punishment\tRoom ID:User ID\tIPs and alts\tExpires\tReason\r\n';
 			for (const [id, entry] of saveTable) {
 				buf += Punishments.renderEntry(entry, id);
 			}
@@ -448,7 +449,7 @@ const Punishments = new (class {
 	 * @return {string}
 	 */
 	renderEntry(entry, id) {
-		let row = [entry.punishType, id, entry.ips.join(','), entry.userids.join(','), entry.expireTime, entry.reason, ...entry.rest];
+		let row = [entry.punishType, id, [entry.ips.join(','), entry.userids.join(',')].filter(el => el), entry.expireTime, entry.reason, ...entry.rest];
 		return row.join('\t') + '\r\n';
 	}
 
@@ -674,7 +675,7 @@ const Punishments = new (class {
 			expireTime: expireTime,
 			reason: reason,
 			rest: rest,
-		}, roomid + '\t' + id, ROOM_PUNISHMENT_FILE);
+		}, roomid + ':' + id, ROOM_PUNISHMENT_FILE);
 
 		if (typeof room === 'string' || !(room.isPrivate === true || room.isPersonal || room.battle)) {
 			Punishments.monitorRoomPunishments(user);
@@ -741,7 +742,7 @@ const Punishments = new (class {
 			expireTime: expireTime,
 			reason: reason,
 			rest: rest,
-		}, room.id + '\t' + id, ROOM_PUNISHMENT_FILE);
+		}, room.id + ':' + id, ROOM_PUNISHMENT_FILE);
 
 		if (!(room.isPrivate === true || room.isPersonal || room.battle)) Punishments.monitorRoomPunishments(userid);
 		return affected;
