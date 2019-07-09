@@ -404,8 +404,15 @@ export class ModdedDex {
 			}
 			if (!template.tier) template.tier = 'Illegal';
 			if (!template.doublesTier) template.doublesTier = template.tier;
+			if (template.gen > this.gen) {
+				template.tier = 'Illegal';
+				template.doublesTier = 'Illegal';
+				template.isNonstandard = 'Future';
+			}
 		} else {
-			template = new Data.Template({id, name, exists: false});
+			template = new Data.Template({
+				id, name, exists: false, tier: 'Illegal', doublesTier: 'Illegal', isNonstandard: 'Custom',
+			});
 		}
 		if (template.exists) this.templateCache.set(id, template);
 		return template;
@@ -436,6 +443,9 @@ export class ModdedDex {
 		}
 		if (id && this.data.Movedex.hasOwnProperty(id)) {
 			move = new Data.Move({name}, this.data.Movedex[id]);
+			if (move.gen > this.gen) {
+				(move as any).isNonstandard = 'Future';
+			}
 		} else {
 			move = new Data.Move({id, name, exists: false});
 		}
@@ -595,6 +605,9 @@ export class ModdedDex {
 		}
 		if (id && this.data.Items.hasOwnProperty(id)) {
 			item = new Data.Item({name}, this.data.Items[id]);
+			if (item.gen > this.gen) {
+				(item as any).isNonstandard = 'Future';
+			}
 		} else {
 			item = new Data.Item({id, name, exists: false});
 		}
@@ -618,6 +631,9 @@ export class ModdedDex {
 		}
 		if (id && this.data.Abilities.hasOwnProperty(id)) {
 			ability = new Data.Ability({name}, this.data.Abilities[id]);
+			if (ability.gen > this.gen) {
+				(ability as any).isNonstandard = 'Future';
+			}
 		} else {
 			ability = new Data.Ability({id, name, exists: false});
 		}

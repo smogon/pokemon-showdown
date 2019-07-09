@@ -102,6 +102,7 @@ let BattleFormatsData = {
 	pichuspikyeared: {
 		inherit: true,
 		tier: "NU",
+		isNonstandard: null,
 	},
 	pikachu: {
 		inherit: true,

@@ -11,7 +11,7 @@ class RandomGen2Teams extends RandomGen3Teams {
 		let pokemonPool = [];
 		for (let id in this.data.FormatsData) {
 			let template = this.getTemplate(id);
-			if (!template.isNonstandard && template.gen <= this.gen && this.data.FormatsData[id].randomSet1) {
+			if (!template.isNonstandard && this.data.FormatsData[id].randomSet1) {
 				pokemonPool.push(id);
 			}
 		}

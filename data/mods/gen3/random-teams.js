@@ -610,7 +610,7 @@ class RandomGen3Teams extends RandomGen4Teams {
 		let pokemonPool = [];
 		for (let id in this.data.FormatsData) {
 			let template = this.getTemplate(id);
-			if (template.gen > 3 || template.isNonstandard || !template.randomBattleMoves) continue;
+			if (template.isNonstandard || !template.randomBattleMoves) continue;
 			if (template.evos && !allowedNFE.includes(template.species)) {
 				let invalid = false;
 				for (const evo of template.evos) {
