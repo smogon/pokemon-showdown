@@ -1677,16 +1677,16 @@ const Punishments = new (class {
 			let [punishType, id, expireTime, reason] = punishment;
 			let expiresIn = new Date(expireTime).getTime() - Date.now();
 			if (expiresIn < 1000) continue;
-			let userids = [...data[0]].filter(user => user !== id);
+			let alts = [...data[0]].filter(user => user !== id);
 			let ips = [...data[1]];
-			output.push({"punishType": punishType, "id": id, "expiresIn": expiresIn, "reason": reason, "userids": userids, "ips": ips});
+			output.push({"punishType": punishType, "id": id, "expiresIn": expiresIn, "reason": reason, "alts": alts, "ips": ips});
 		}
 
 		if (room.muteQueue) {
 			for (const entry of room.muteQueue) {
 				let expiresIn = new Date(entry.time).getTime() - Date.now();
 				if (expiresIn < 1000) continue;
-				output.push({"punishType": 'MUTE', "id": entry.userid, "expiresIn": expiresIn, "reason": '', "userids": [], "ips": []});
+				output.push({"punishType": 'MUTE', "id": entry.userid, "expiresIn": expiresIn, "reason": '', "alts": [], "ips": []});
 			}
 		}
 		return output;
