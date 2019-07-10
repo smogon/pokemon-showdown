@@ -786,7 +786,7 @@ let BattleMovedex = {
 			this.add('-anim', source, "Defog", target);
 		},
 		onHit(target, source, move) {
-			let removeAll = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+			let removeAll = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'magmaore'];
 			let silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
 			for (const sideCondition of removeAll) {
 				if (target.side.removeSideCondition(sideCondition)) {
@@ -3336,42 +3336,55 @@ let BattleMovedex = {
 		type: "Electric",
 	},
 	// Saburo
-	soulbend: {
+	magmaore: {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "Raises the user's Attack and Speed by 1 stage. Has a 10% chance to summon either Reflect or Light Screen.",
-		shortDesc: "Atk, Spe +1; 10% chance to set one screen.",
-		id: "soulbend",
-		name: "Soulbend",
+		desc: "Sets up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in. Fails if the effect is already active on the opposing side. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Rock type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively. Has a 30% chance to burn the foe. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin or Defog successfully, or is hit by Defog.",
+		shortDesc: "Hurts foes on switch-in; Factors Rock weakness. 30% burn.",
+		id: "magmaore",
+		name: "Magma Ore",
 		isNonstandard: "Custom",
-		pp: 10,
+		pp: 20,
 		priority: 0,
-		flags: {snatch: 1, mirror: 1},
+		flags: {reflectable: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, "Refresh", source);
-			this.add('-anim', source, "Geomancy", source);
+			this.add('-anim', source, 'Stealth Rock', target);
+			this.add('-anim', source, 'Eruption', target);
 		},
-		boosts: {
-			atk: 1,
-			spe: 1,
-		},
-		secondary: {
-			chance: 10,
-			onHit(target, source) {
-				let result = this.random(2);
-				if (result === 0) {
-					source.side.addSideCondition('reflect', source);
-				} else {
-					source.side.addSideCondition('lightscreen', source);
+		sideCondition: 'magmaore',
+		self: {
+			onHit(pokemon) {
+				if (pokemon.template.speciesid === 'rhydon') {
+					pokemon.addVolatile('magmaore2');
 				}
 			},
 		},
-		target: "self",
-		type: "Psychic",
+		effect: {
+			// this is a side condition
+			onStart(side) {
+				this.add('-message', 'Molten lava appears on the field!');
+			},
+			onSwitchIn(pokemon) {
+				let typeMod = this.clampIntRange(pokemon.runEffectiveness(this.getActiveMove('stealthrock')), -6, 6);
+				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
+				if (!(pokemon.hp <= 0 || pokemon.fainted) && this.random(10) < 4) {
+					if (pokemon.trySetStatus('brn')) pokemon.m.magmaOre = true;
+				}
+			},
+			onSwitchOut(pokemon) {
+				if (pokemon.status === 'brn' && pokemon.m.magmaOre) {
+					pokemon.cureStatus();
+					pokemon.m.magmaOre = false;
+				}
+			},
+		},
+		secondary: null,
+		target: "foeSide",
+		type: "Rock",
 	},
 	// SamJo
 	thicc: {
@@ -4292,6 +4305,48 @@ let BattleMovedex = {
 		},
 		target: "allAdjacentFoes",
 		type: "Psychic",
+	},
+	defog: {
+		inherit: true,
+		onHit(target, source, move) {
+			let success = false;
+			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({evasion: -1});
+			let removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+			let removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'magmaore'];
+			for (const targetCondition of removeTarget) {
+				if (target.side.removeSideCondition(targetCondition)) {
+					if (!removeAll.includes(targetCondition)) continue;
+					this.add('-sideend', target.side, this.getEffect(targetCondition).name, '[from] move: Defog', '[of] ' + source);
+					success = true;
+				}
+			}
+			for (const sideCondition of removeAll) {
+				if (source.side.removeSideCondition(sideCondition)) {
+					this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Defog', '[of] ' + source);
+					success = true;
+				}
+			}
+			return success;
+		},
+	},
+	rapidspin: {
+		inherit: true,
+		self: {
+			onHit(pokemon) {
+				if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
+					this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', '[of] ' + pokemon);
+				}
+				let sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'magmaore'];
+				for (const condition of sideConditions) {
+					if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
+						this.add('-sideend', pokemon.side, this.getEffect(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
+					}
+				}
+				if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
+					pokemon.removeVolatile('partiallytrapped');
+				}
+			},
+		},
 	},
 };
 

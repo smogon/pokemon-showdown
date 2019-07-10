@@ -164,11 +164,6 @@ let BattlePokedex = {
 		inherit: true,
 		types: ['Electric', 'Fighting'],
 	},
-	// Saburo
-	metagrossmega: {
-		inherit: true,
-		abilities: {0: 'Levitate'},
-	},
 	// Sunny
 	sceptilemega: {
 		inherit: true,

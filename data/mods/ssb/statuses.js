@@ -1190,13 +1190,13 @@ let BattleStatuses = {
 	saburo: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|+Saburo|Look beyond what you see`);
+			this.add(`c|+Saburo|I ROCK!`);
 		},
 		onSwitchOut() {
-			this.add(`c|+Saburo|Gotta go teleport somewhere brb`);
+			this.add(`c|+Saburo|I'll be back to rock your world.`);
 		},
 		onFaint() {
-			this.add(`c|+Saburo|...you see too much`);
+			this.add(`c|+Saburo|This is... rock bottom.`);
 		},
 	},
 	samjo: {
@@ -1559,6 +1559,19 @@ let BattleStatuses = {
 				move.basePower += 20;
 				this.debug('glitch out base power boost');
 			}
+		},
+	},
+	// Type-changing custom effect for Saburo
+	magmaore2: {
+		duration: 1,
+		noCopy: true,
+		onStart(pokemon, source) {
+			source.setType(source.types.map(type => type === "Ground" ? "Fire" : type));
+			this.add('-start', source, 'typechange', source.types.join('/'), '[from] move: x1');
+		},
+		onEnd(source) {
+			source.setType(source.types.map(type => type === "Fire" ? "Ground" : type));
+			this.add('-start', source, 'typechange', source.types.join('/'), '[from] move: x1');
 		},
 	},
 	// Modified type setup for arceus
