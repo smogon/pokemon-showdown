@@ -685,11 +685,12 @@ const commands = {
 	away(target, room, user, connection, cmd) {
 		if (target) this.errorReply("Setting status messages in /away is no longer supported. Set a status using /status.");
 
-		user.setstatusType('idle');
+		user.setStatusType('idle');
 		this.sendReply("You are now marked as away. Send a message or use /back to indicate you are back.");
 	},
 	awayhelp: [`/away - Marks you as away. Send a message or use /back to indicate you are back.`],
 
+	cs: 'clearstatus',
 	clearstatus(target, room, user) {
 		if (target) {
 			// Clearing another user's status
@@ -735,7 +736,7 @@ const commands = {
 
 		return this.sendReply("You have cleared your status message.");
 	},
-	backhelp: [`/clearstatus - Clears your status message.`],
+	backhelp: [`/back - Marks you as back if you are away.`],
 
 	'!rank': true,
 	rank(target, room, user) {
