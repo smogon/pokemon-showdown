@@ -113,9 +113,10 @@ let BattleStatuses = {
 		onAfterMoveSelf(pokemon) {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter, pokemon, pokemon);
 		},
-		onBeforeSwitchIn(pokemon) {
+		onSwitchIn(pokemon) {
 			// Regular poison status and damage after a switchout -> switchin.
 			pokemon.status = /** @type {ID} */('psn');
+			this.add('-status', pokemon, 'psn', '[silent]');
 		},
 		onAfterSwitchInSelf(pokemon) {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
