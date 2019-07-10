@@ -1524,6 +1524,18 @@ let BattleStatuses = {
 			this.add(`c|+XpRienzo ☑◡☑|Wait what?`);
 		},
 	},
+	zalm: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|+Zalm|<(:O)000>`);
+		},
+		onSwitchOut() {
+			this.add(`c|+Zalm|Woah`);
+		},
+		onFaint() {
+			this.add(`c|+Zalm|Tfw still no mega weedle`);
+		},
+	},
 	zarel: {
 		noCopy: true,
 		onStart() {

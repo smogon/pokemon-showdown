@@ -709,6 +709,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Blue Flare',
 				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
+			'Zalm': {
+				species: 'Weedle', ability: 'Triage', item: 'Black Sludge', gender: 'M',
+				moves: ['Swords Dance', 'Leech Life', 'Horn Leech'],
+				signatureMove: 'TwinWeedle',
+				evs: {atk: 252, def: 128, spd: 128}, nature: 'Adamant',
+			},
 			'Zarel': {
 				species: 'Meloetta', ability: 'Serene Grace', item: '', gender: 'M',
 				moves: ['Lunar Dance', 'Fiery Dance', 'Perish Song', 'Petal Dance', 'Quiver Dance'],

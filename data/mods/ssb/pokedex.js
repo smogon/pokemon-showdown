@@ -169,6 +169,11 @@ let BattlePokedex = {
 		inherit: true,
 		abilities: {0: 'Contrary'},
 	},
+	// Zalm
+	weedle: {
+		inherit: true,
+		baseStats: {hp: 105, atk: 130, def: 90, spa: 20, spd: 90, spe: 90},
+	},
 };
 
 exports.BattlePokedex = BattlePokedex;

@@ -4249,6 +4249,35 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fire",
 	},
+	// Zalm
+	twinweedle: {
+		accuracy: 100,
+		basePower: 40,
+		multihit: 2,
+		category: "Physical",
+		desc: "Hits twice. Each hit has a 20% chance to poison the target and heals the user 30% damage dealt. If one of the hits breaks the target's substitute, it will take damage for the remaining hits.",
+		shortDesc: "Hits 2 times in one turn. 20% to poison. Heals 30% damage dealt.",
+		id: "twinweedle",
+		isNonstandard: "Custom",
+		name: "TwinWeedle",
+		pp: 25,
+		noPPBoosts: true,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, heal: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Poison Sting', target);
+		},
+		drain: [3, 10],
+		secondary: {
+			chance: 20,
+			status: 'psn',
+		},
+		target: "normal",
+		type: "Poison",
+	},
 	// Zarel
 	relicsongdance: {
 		accuracy: 100,
