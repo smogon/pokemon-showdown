@@ -379,9 +379,11 @@ let BattleMovedex = {
 				return null;
 			},
 			onHit(target, source, move) {
-				this.add('-anim', target, "Scary Face", source);
-				this.add('-anim', target, "Roar", source);
-				source.forceSwitchFlag = true;
+				if (target !== source) {
+					this.add('-anim', target, "Scary Face", source);
+					this.add('-anim', target, "Roar", source);
+					source.forceSwitchFlag = true;
+				}
 			},
 		},
 		secondary: null,
