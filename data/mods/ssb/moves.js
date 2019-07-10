@@ -4111,14 +4111,14 @@ let BattleMovedex = {
 		type: "Fire",
 	},
 	// Xayah
-	stunningdance: {
+	feathersnare: {
 		accuracy: 100,
 		basePower: 95,
 		category: "Special",
-		desc: "Has a 20% chance to make the target flinch and a 100% chance to paralyze the target. Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
-		shortDesc: "20% to flinch; 100% to paralyze; traps target.",
-		id: "stunningdance",
-		name: "Stunning Dance",
+		desc: "Has a 20% chance to make the target flinch and a 50% chance to paralyze the target.",
+		shortDesc: "20% to flinch; 50% to paralyze.",
+		id: "feathersnare",
+		name: "Feather Snare",
 		isNonstandard: "Custom",
 		pp: 10,
 		priority: 0,
@@ -4131,16 +4131,13 @@ let BattleMovedex = {
 			this.add('-anim', source, "Air Slash", target);
 			this.add('-anim', source, "Air Slash", target);
 		},
-		onHit(target, source, move) {
-			if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-		},
 		secondaries: [
 			{
 				chance: 20,
 				volatileStatus: 'flinch',
 			},
 			{
-				chance: 100,
+				chance: 50,
 				status: 'par',
 			},
 		],
