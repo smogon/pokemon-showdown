@@ -610,7 +610,7 @@ class User extends Chat.MessageContext {
 	getIdentityWithStatus(roomid = '') {
 		const identity = this.getIdentity(roomid);
 		const statusMessage = this.statusType === 'busy' ? '!(Busy) ' : this.statusType === 'idle' ? '!(Idle) ' : '';
-		const status = statusSymbol + (this.userMessage || '');
+		const status = statusMessage + (this.userMessage || '');
 		return `${identity}${status ? `@${status}` : ''}`;
 	}
 	/**
