@@ -2137,6 +2137,64 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fighting",
 	},
+	// Kris
+	ectoplasm: {
+		accuracy: 100,
+		basePower: 95,
+		category: "Special",
+		desc: "This move's typing is equal to the user's secondary type.",
+		shortDesc: "Attack is user's 2nd type.",
+		id: "ectoplasm",
+		isNonstandard: "Custom",
+		name: "Ectoplasm",
+		pp: 15,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onTry(pokemon, target) {
+			if (pokemon.types[1] === undefined) {
+				this.add('-fail', pokemon);
+				return null;
+			}
+		},
+		onModifyMove(move, pokemon) {
+			move.type = pokemon.types[1];
+		},
+		onPrepareHit(target, source) {
+			let move = 'Tri Attack';
+			switch (source.types[1]) {
+			case 'Ghost':
+				move = 'Moongeist Beam';
+				break;
+			case 'Flying':
+				move = 'Hurricane';
+				break;
+			case 'Fire':
+				move = 'Blast Burn';
+				break;
+			case 'Water':
+				move = 'Hydro Cannon';
+				break;
+			case 'Grass':
+				move = 'Frenzy Plant';
+				break;
+			case 'Ice':
+				move = 'Sheer Cold';
+				break;
+			}
+			this.add('-anim', source, move, target);
+		},
+		secondary: {
+			chance: 10,
+			boosts: {
+				spd: -1,
+			},
+		},
+		target: "normal",
+		type: "Normal",
+	},
 	// Level 51
 	nextlevelstrats: {
 		accuracy: true,

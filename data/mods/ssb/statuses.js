@@ -784,6 +784,30 @@ let BattleStatuses = {
 			this.add(`c|@KingSwordYT|BUAAAAAA IYA AYÚDAME :(`);
 		},
 	},
+	kris: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c|+Kris|glhf`);
+			if (pokemon.illusion) return;
+			for (const target of pokemon.side.foe.active) {
+				if (!target || target.fainted) continue;
+				for (const moveSlot of target.moveSlots) {
+					const move = this.getMove(moveSlot.move);
+					const moveType = move.id === 'hiddenpower' ? target.hpType : move.type;
+					if (move.category !== 'Status' && (this.getImmunity(moveType, pokemon) && this.getEffectiveness(moveType, pokemon) > 0 || move.ohko)) {
+						this.add('-ability', pokemon, 'Anticipation');
+						return;
+					}
+				}
+			}
+		},
+		onSwitchOut() {
+			this.add(`c|+Kris|lol bye`);
+		},
+		onFaint() {
+			this.add(`c|+Kris|While you were playing Pokemon, I was studying the blade.`);
+		},
+	},
 	level51: {
 		noCopy: true,
 		onStart() {

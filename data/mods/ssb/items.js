@@ -38,6 +38,19 @@ let BattleItems = {
 		gen: 7,
 		desc: "If held by a Golem with Rock Slide, it can use Rickrollout.",
 	},
+	// Kris
+	thunderstone: {
+		inherit: true,
+		// @ts-ignore
+		megaStone: ["Rotom-Wash", "Rotom-Mow", "Rotom-Heat", "Rotom-Frost", "Rotom-Fan"],
+		megaEvolves: "Rotom",
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseTemplate.baseSpecies) return false;
+			return true;
+		},
+		fling: undefined, // Cannot be flung now since its a mega stone
+		desc: "If held by a Rotom, this item allows it to Mega Evolve in battle.",
+	},
 	// MajorBowman
 	victiniumz: {
 		id: "victiniumz",

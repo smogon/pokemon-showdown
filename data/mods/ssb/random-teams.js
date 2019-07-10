@@ -384,6 +384,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Dragon Warrior Touch',
 				evs: {atk: 252, hp: 4, spe: 252}, nature: 'Jolly',
 			},
+			'Kris': {
+				species: 'Rotom', ability: 'Adaptability', item: 'Thunder Stone', gender: 'N',
+				moves: [['Defog', 'Will-O-Wisp', 'Charge'], 'Thunderbolt', ['Recover', 'Volt Switch']],
+				signatureMove: 'Ectoplasm',
+				evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
+			},
 			'Level 51': {
 				species: 'Porygon2', ability: 'Stamina', item: 'Eviolite', gender: 'N',
 				moves: ['Recover', ['Seismic Toss', 'Night Shade'], ['Cosmic Power', 'Aqua Ring']],
