@@ -153,7 +153,7 @@ export function encode(str: string, allowCaps: boolean = false) {
 			curCharCode = (unsafeMapIndex << 2) + 0x2;
 			streamWrite(unsafeStream, 7, curCharCode);
 		} else {
-			curCharCode = (curCharCode << 2) + 0x7;
+			curCharCode = (curCharCode << 3) + 0x7;
 			streamWrite(unsafeStream, 19, curCharCode);
 		}
 	}
