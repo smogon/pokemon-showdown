@@ -505,11 +505,11 @@ class RoomBattle extends RoomGames.RoomGame {
 
 		this.listen();
 
-		this.addPlayer(options.p1, options.p1team || '');
-		this.addPlayer(options.p2, options.p2team || '');
+		this.addPlayer(options.p1, options.p1team || '', options.p1rating);
+		this.addPlayer(options.p2, options.p2team || '', options.p2rating);
 		if (this.playerCap > 2) {
-			this.addPlayer(options.p3, options.p3team || '');
-			this.addPlayer(options.p4, options.p4team || '');
+			this.addPlayer(options.p3, options.p3team || '', options.p3rating);
+			this.addPlayer(options.p4, options.p4team || '', options.p4rating);
 		}
 		this.timer = new RoomBattleTimer(this);
 		if (Config.forcetimer) this.timer.start();
@@ -960,8 +960,9 @@ class RoomBattle extends RoomGames.RoomGame {
 	 *
 	 * @param {User | null} user
 	 * @param {string?} team
+	 * @param {number} rating
 	 */
-	addPlayer(user, team) {
+	addPlayer(user, team, rating = 0) {
 		// TypeScript bug: no `T extends RoomGamePlayer`
 		const player = /** @type {RoomBattlePlayer} */ (super.addPlayer(user));
 		if (!player) return null;
@@ -973,8 +974,9 @@ class RoomBattle extends RoomGames.RoomGame {
 				name: player.name,
 				avatar: user ? '' + user.avatar : '',
 				team: team,
+				rating: Math.round(rating),
 			};
-			this.stream.write(`>player ${slot} ` + JSON.stringify(options));
+			this.stream.write(`>player ${slot} ${JSON.stringify(options)}`);
 		}
 
 		if (user) this.room.auth[user.userid] = Users.PLAYER_SYMBOL;

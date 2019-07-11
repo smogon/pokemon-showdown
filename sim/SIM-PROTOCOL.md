@@ -11,8 +11,8 @@ Receiving messages
 
 The beginning of a battle will look something like this:
 
-    |player|p1|Anonycat|60
-    |player|p2|Anonybird|113
+    |player|p1|Anonycat|60|1200
+    |player|p2|Anonybird|113|1300
     |teamsize|p1|4
     |teamsize|p2|5
     |gametype|doubles
@@ -39,7 +39,7 @@ The beginning of a battle will look something like this:
     |
     |start
 
-`|player|PLAYER|USERNAME|AVATAR`
+`|player|PLAYER|USERNAME|AVATAR|RATING`
 
 > Player details.
 >
@@ -48,6 +48,7 @@ The beginning of a battle will look something like this:
 > - `USERNAME` is the username
 > - `AVATAR` is the player's avatar identifier (usually a number, but other
 >    values can be used for custom avatars)
+> - `RATING` is the player's Elo rating in the format they're playing. This will only be displayed in rated battles and when the player is first introduced otherwise it's blank
 
 `|teamsize|PLAYER|NUMBER`
 

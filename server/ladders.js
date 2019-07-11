@@ -638,8 +638,10 @@ class Ladder extends LadderStore {
 		Rooms.createBattle(ready1.formatid, {
 			p1: user1,
 			p1team: ready1.team,
+			p1rating: ready1.rating,
 			p2: user2,
 			p2team: ready2.team,
+			p2rating: ready2.rating,
 			rated: Math.min(ready1.rating, ready2.rating),
 		});
 	}

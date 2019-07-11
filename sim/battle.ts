@@ -3005,7 +3005,7 @@ export class Battle extends Dex.ModdedDex {
 		}
 		if (!didSomething) return;
 		this.inputLog.push(`>player ${slot} ` + JSON.stringify(options));
-		this.add('player', side.id, side.name, side.avatar);
+		this.add('player', side.id, side.name, side.avatar, options.rating || '');
 		this.start();
 	}
 
