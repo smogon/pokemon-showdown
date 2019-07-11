@@ -784,6 +784,25 @@ let BattleStatuses = {
 			this.add(`c|@KingSwordYT|BUAAAAAA IYA AYÚDAME :(`);
 		},
 	},
+	kipkluif: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|+Kipkluif|I like bacon.`);
+		},
+		onSwitchOut() {
+			this.add(`c|+Kipkluif|Run away da, run run away da`);
+		},
+		onFaint() {
+			this.add(`c|+Kipkluif|Aah! Well, at least I have chicken.`);
+		},
+		// Footballer innate
+		onBasePowerPriority: 8,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.name.includes('Kick') && !pokemon.transformed && !pokemon.illusion) {
+				this.chainModify(1.75);
+			}
+		},
+	},
 	kris: {
 		noCopy: true,
 		onStart(pokemon) {

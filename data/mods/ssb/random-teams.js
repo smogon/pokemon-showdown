@@ -384,6 +384,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Dragon Warrior Touch',
 				evs: {atk: 252, hp: 4, spe: 252}, nature: 'Jolly',
 			},
+			'Kipkluif': {
+				species: 'Combusken', ability: 'Speed Boost', item: 'Eviolite', gender: 'M',
+				moves: ['High Jump Kick', 'Blaze Kick', 'Trop Kick'],
+				signatureMove: 'Salute the Colonel',
+				evs: {hp: 252, atk: 252}, nature: 'Adamant',
+			},
 			'Kris': {
 				species: 'Rotom', ability: 'Adaptability', item: 'Thunder Stone', gender: 'N',
 				moves: [['Defog', 'Will-O-Wisp', 'Charge'], 'Thunderbolt', ['Recover', 'Volt Switch']],
