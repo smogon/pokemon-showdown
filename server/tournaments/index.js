@@ -991,7 +991,6 @@ class Tournament extends Rooms.RoomGame {
 	 */
 	onBattleWin(room, winnerid) {
 		room.tour = null;
-		room.parent = null;
 		if (!room.battle) throw new Error("onBattleWin called without a battle");
 
 		const p1 = this.playerTable[room.p1.userid];
