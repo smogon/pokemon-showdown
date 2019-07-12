@@ -6,7 +6,7 @@ const AUTO_START_MINIMUM_TIMEOUT = 30 * 1000;
 const MAX_REASON_LENGTH = 300;
 const MAX_CUSTOM_NAME_LENGTH = 100;
 const TOURBAN_DURATION = 14 * 24 * 60 * 60 * 1000;
-const ALLOW_ALTS = true;
+const ALLOW_ALTS = false;
 Punishments.roomPunishmentTypes.set('TOURBAN', 'banned from tournaments');
 
 /** @type {{[k: string]: Object}} */
@@ -442,7 +442,7 @@ class Tournament extends Rooms.RoomGame {
 			return;
 		}
 		if (this.checkBanned(replacementUser) || Punishments.isBattleBanned(replacementUser)) {
-			output.errorReply(`${replacementUser} is banned from joining tournaments.`);
+			output.errorReply(`${replacementUser.name} is banned from joining tournaments.`);
 			return;
 		}
 		if (!ALLOW_ALTS) {
@@ -450,7 +450,7 @@ class Tournament extends Rooms.RoomGame {
 				if (!otherPlayer) continue;
 				const otherUser = Users(otherPlayer.userid);
 				if (otherUser && otherUser.latestIp === user.latestIp) {
-					output.sendReply('|tournament|error|AltUserAlreadyAdded');
+					output.errorReply(`${replacementUser.name} already has an alt in the tournament.`);
 					return;
 				}
 			}
