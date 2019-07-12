@@ -765,9 +765,8 @@ class RoomBattle extends RoomGames.RoomGame {
 				Chat.parse('/savereplay', this.room, uploader, uploader.connections[0]);
 			}
 		}
-		const parentGame = this.room.parent && this.room.parent.game;
-		if (parentGame && parentGame.onBattleWin) {
-			parentGame.onBattleWin(this.room, winnerid);
+		if (this.room.tour) {
+			this.room.tour.onBattleWin(this.room, winnerid);
 		}
 		this.room.update();
 	}
