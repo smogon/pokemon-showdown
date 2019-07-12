@@ -11,12 +11,14 @@ For instance:
     > Dashycode.decode('what-is-dashycode-really--3x2awuinvx5eznar3')
     'What IS Dashycode, really? 🤔'
 
-Dashycode is similar to other ways of encoding strings into restricted character sets, like urlencoding, punycode, or Base64.
+Its intended use is to reversibly store arbitrary strings in URLs or domain-names as human-readably as possible.
+
+Dashycode is similar to other ways of encoding strings into restricted character sets, like urlencoding, punycode, or Base64. It's more human-readable than urlencoding or Base64, and can handle strings punycode can't handle.
 
 
 # Features
 
-Dashycode's output is guaranteed to be a valid domain name. In addition to containing only lowercase alphanumeric characters and dashes, it is guaranteed to be non-empty, and to never start nor end with a dash.
+Dashycode's output is guaranteed to be a valid domain name (ignoring length considerations). In addition to containing only lowercase alphanumeric characters and dashes, it is guaranteed to be non-empty, and to never start nor end with a dash.
 
     > Dashycode.encode("")
     '0--0'
@@ -26,6 +28,21 @@ Dashycode's output is guaranteed to be a valid domain name. In addition to conta
 
     > Dashycode.encode("日本語")
     '0--0htdqm79vxb74'
+
+As an encoding, Dashycode is reversible: any string will always encode to a unique output which decodes to that exact original string. Everything is preserved: capitalization, whitespace, etc.
+
+    > Dashycode.decode("0--0")
+    ''
+
+    > Dashycode.decode("0--05")
+    ' '
+
+    > Dashycode.decode("0--0htdqm79vxb74")
+    '日本語'
+
+Dashycode is designed for human-readable text, but any data you can stuff into a JavaScript string can be encoded. However, if you primarily want to encode binary data, you should probably be using [Base32]. (Dashycode is ~20% less efficient than Base32 for max-entropy binary data.)
+
+  [Base32]: https://en.wikipedia.org/wiki/Base32
 
 
 # Readability
