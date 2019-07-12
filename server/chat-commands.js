@@ -654,8 +654,9 @@ const commands = {
 	},
 	unblockpmshelp: [`/unblockpms - Unblocks private messages. Block them with /blockpms.`],
 
+	'!status': true,
 	status(target, room, user, connection, cmd) {
-		if (!this.canTalk()) return;
+		if (user.locked || user.semilocked) return this.errorReply("Your status cannot be updated while you are locked or semilocked.");
 		if (!target) return this.parse('/help status');
 
 		if (target.length > 32) return this.errorReply(`Your status is too long; it must be under 32 characters.`);
@@ -675,8 +676,7 @@ const commands = {
 
 	'!busy': true,
 	busy(target, room, user) {
-		if (!this.canTalk()) return;
-
+		if (user.locked || user.semilocked) return this.errorReply("Your status cannot be updated while you are locked or semilocked.");
 		if (target) {
 			if (target.length > 32) return this.errorReply(`Your status is too long; it must be under 32 characters.`);
 			target = Chat.nicknamefilter(target, user, true);
@@ -695,7 +695,7 @@ const commands = {
 	afk: 'away',
 	brb: 'away',
 	away(target, room, user, connection, cmd) {
-		if (!this.canTalk()) return;
+		if (user.locked || user.semilocked) return this.errorReply("Your status cannot be updated while you are locked or semilocked.");
 		let awayType = cmd;
 		let awayMessage = '';
 		if (awayType === 'afk' || awayType === 'brb') {
