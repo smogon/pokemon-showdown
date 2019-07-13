@@ -4,6 +4,8 @@ const assert = require('assert');
 const Dashycode = require('./../../.lib-dist/dashycode');
 
 describe('Dashycode', function () {
+	// Technically we should be testing for values up to 0x10FFFF, but we will
+	// never see any above 0xFFFF because of how SockJS works.
 	const codepoints = Array.from({length: 0x10000}, (v, k) => k);
 	const encoded = new Map();
 
