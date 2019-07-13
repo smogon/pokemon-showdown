@@ -8,6 +8,7 @@
 npm-debug.log
 .eslintcache
 package-lock.json
+database/sqlite.db
 
 # Typescript build artifacts
 .*-dist/

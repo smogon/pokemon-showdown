@@ -173,6 +173,14 @@ exports.crashguardemail = null;
 }; */
 
 /**
+ * Databases.
+ * This is a map of section in codebase -> database engine.
+ * Use `memory` as the database engine if this is a test server.
+ * @type {{[key: string]: string}}
+ */
+exports.storage = {punishments: 'sqlite'};
+
+/**
  * basic name filter - removes characters used for impersonation
  *   The basic name filter removes Unicode characters that can be used for impersonation,
  *   like the upside-down exclamation mark (looks like an i), the Greek omicron (looks
