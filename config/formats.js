@@ -59,7 +59,7 @@ let Formats = [
 	{
 		name: "[Gen 7] UU",
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3651932/">UU Metagame Discussion</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3652404/">UU Metagame Discussion</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3641346/">UU Viability Rankings</a>`,
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3621217/">UU Sample Teams</a>`,
 		],
@@ -67,6 +67,10 @@ let Formats = [
 		mod: 'gen7',
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['OU', 'UUBL', 'Drizzle', 'Drought', 'Kommonium Z', 'Mewnium Z'],
+		unbanlist: ['Mimikyu'],
+		onBegin() {
+			if (this.rated && this.format === 'gen7uu') this.add('html', `<div class="broadcast-red"><strong>UU is currently suspecting Mimikyu! For information on how to participate check out the <a href="https://www.smogon.com/forums/threads/3652404/">suspect thread</a>.</strong></div>`);
+		},
 	},
 	{
 		name: "[Gen 7] RU",
@@ -78,7 +82,7 @@ let Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] UU'],
-		banlist: ['UU', 'RUBL', 'Aurora Veil'],
+		banlist: ['UU', 'RUBL', 'Mimikyu', 'Aurora Veil'],
 		unbanlist: ['Absol-Mega', 'Drought'],
 	},
 	{
