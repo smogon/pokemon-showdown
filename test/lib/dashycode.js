@@ -9,7 +9,7 @@ describe('Dashycode', function () {
 	const codepoints = Array.from({length: 0x10000}, (v, k) => k);
 	const encoded = new Map();
 
-	const encode = (codepoint, allowCaps) => {
+	const encode = (codepoint) => {
 		const character = String.fromCodePoint(codepoint);
 		const dashycode = Dashycode.encode(character);
 		assert.strictEqual(encoded.has(dashycode), false);
