@@ -80,6 +80,7 @@ class Tournament extends Rooms.RoomGame {
 		this.title = format.name + ' tournament';
 		this.isTournament = true;
 		this.allowRenames = false;
+		/** @type {number} */
 		this.playerCap = (playerCap ? parseInt(playerCap) : Config.tourdefaultplayercap) || 0;
 
 		/** @type {string} */
@@ -1297,7 +1298,7 @@ const commands = {
 					Monitor.log(`[TourMonitor] Room ${tournament.room.id} starting a tour over default cap (${tournament.playerCap})`);
 				}
 				this.privateModAction(`(${user.name} set the tournament's player cap to ${tournament.playerCap}.)`);
-				this.modlog('TOUR PLAYERCAP', null, tournament.playerCap);
+				this.modlog('TOUR PLAYERCAP', null, tournament.playerCap.toString());
 				this.sendReply(`Tournament cap set to ${tournament.playerCap}.`);
 			}
 			this.room.send(`|tournament|update|{"playerCap": "${tournament.playerCap}"}`);
