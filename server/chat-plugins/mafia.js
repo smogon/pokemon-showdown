@@ -159,6 +159,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer {
 		this.lastLynch = 0;
 		this.treestump = false;
 		this.restless = false;
+		this.silenced = false;
 		/** @type {MafiaIDEAplayerData?} */
 		this.IDEA = null;
 	}
@@ -1483,6 +1484,12 @@ class MafiaTracker extends Rooms.RoomGame {
 			}
 		}
 
+		// Silenced check bypasses staff
+		const player = this.playerTable[user.userid] || this.dead[user.userid];
+		if (player && player.silenced) {
+			return `You are silenced and cannot speak.${user.can('mute', null, this.room) ? " You can remove this with /mafia unsilence." : ''}`;
+		}
+
 		if (user.isStaff || (this.room.auth && this.room.auth[user.userid] && this.room.auth[user.userid] !== '+') || this.hostid === user.userid || this.cohosts.includes(user.userid) || !this.started) return false;
 		if (!this.playerTable[user.userid] && (!this.dead[user.userid] || !this.dead[user.userid].treestump)) return `You cannot talk while a game of ${this.title} is going on.`;
 		if (this.phase === 'night') return `You cannot talk at night.`;
@@ -1715,7 +1722,10 @@ const pages = {
 			for (let p in game.playerTable) {
 				let player = game.playerTable[p];
 				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block"><span style="font-weight:bold;">`;
-				buf += `${player.safeName} (${player.role ? player.getRole(true) : ''})${game.lynchModifiers[p] !== undefined ? `(lynches worth ${game.getLynchValue(p)})` : ''}</summary>`;
+				buf += `${player.safeName} (${player.role ? player.getRole(true) : ''})`;
+				buf += game.lynchModifiers[p] !== undefined ? `(lynches worth ${game.getLynchValue(p)})` : '';
+				buf += player.silenced ? '(silenced)' : '';
+				buf += `</summary>`;
 				buf += `<button class="button" name="send" value="/mafia kill ${room.id}, ${player.userid}">Kill</button> `;
 				buf += `<button class="button" name="send" value="/mafia treestump ${room.id}, ${player.userid}">Make a Treestump (Kill)</button> `;
 				buf += `<button class="button" name="send" value="/mafia spirit ${room.id}, ${player.userid}">Make a Restless Spirit (Kill)</button> `;
@@ -2437,6 +2447,26 @@ const commands = {
 			this.parse(`/mafia applylynchmodifier ${target}, ${mod}`);
 		},
 
+		unsilence: 'silence',
+		silence(target, room, user, connection, cmd) {
+			if (!room || !room.game || room.game.gameid !== 'mafia') return this.errorReply(`There is no game of mafia running in this room.`);
+			const game = /** @type {MafiaTracker} */ (room.game);
+			if (game.hostid !== user.userid && !game.cohosts.includes(user.userid) && !this.can('mute', null, room)) return;
+			if (!game.started) return this.errorReply(`The game has not started yet.`);
+
+			target = toID(target);
+			const targetPlayer = game.playerTable[target] || game.dead[target];
+			const silence = cmd === 'silence';
+			if (!targetPlayer) return this.errorReply(`${target} is not in the game of mafia.`);
+			if (silence === targetPlayer.silenced) return this.errorReply(`${targetPlayer.name} is already ${!silence ? 'not' : ''} silenced`);
+			targetPlayer.silenced = silence;
+			this.sendReply(`${targetPlayer.name} has been ${!silence ? 'un' : ''}silenced.`);
+		},
+		silencehelp: [
+			`/mafia silence [player] - Silences [player], preventing them from talking at all. Requires host % @ # & ~`,
+			`/mafia unsilence [player] - Removes a silence on [player], allowing them to talk again. Requires host % @ # & ~`,
+		],
+
 		shifthammer: 'hammer',
 		resethammer: 'hammer',
 		hammer(target, room, user, connection, cmd) {
@@ -3107,6 +3137,8 @@ const commands = {
 			`/mafia spirit [player] - Kills a player, but allows them to vote on the lynch still. Requires host % @ # & ~`,
 			`/mafia spiritstump [player] - Kills a player, but allows them to talk during the day, and vote on the lynch. Requires host % @ # & ~`,
 			`/mafia kick [player] - Kicks a player from the game without revealing their role. Requires host % @ # & ~`,
+			`/mafia silence [player] - Silences [player], preventing them from talking at all. Requires host % @ # & ~`,
+			`/mafia unsilence [player] - Removes a silence on [player], allowing them to talk again. Requires host % @ # & ~`,
 			`/mafia revive [player] - Revive a player who died or add a new player to the game. Requires host % @ # & ~`,
 			`/mafia deadline [minutes|off] - Sets or removes the deadline for the game. Cannot be more than 20 minutes.`,
 			`/mafia sub next, [player] - Forcibly sub [player] out of the game. Requires host % @ # & ~`,

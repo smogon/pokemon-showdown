@@ -1208,6 +1208,7 @@ interface TypeInfo extends Readonly<TypeData> {
 interface PlayerOptions {
 	name?: string;
 	avatar?: string;
+	rating?: number;
 	team?: PokemonSet[] | string | null;
 	seed?: PRNGSeed;
 }

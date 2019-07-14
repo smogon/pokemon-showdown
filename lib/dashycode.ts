@@ -86,7 +86,7 @@ export function encode(str: string, allowCaps: boolean = false) {
 	let alphaIndex = 0;
 	let capBuffer = 0x0;
 	for (let i = 0; i < str.length + 1; i++) {
-		let curCharCode = str.charCodeAt(i);
+		let curCharCode = i !== str.length ? str.charCodeAt(i) : -1;
 		const isLowercase = (97 <= curCharCode && curCharCode <= 122); // a-z
 		const isUppercase = (65 <= curCharCode && curCharCode <= 90); // A-Z
 		const isNumeric = (48 <= curCharCode && curCharCode <= 57); // 0-9
@@ -144,7 +144,7 @@ export function encode(str: string, allowCaps: boolean = false) {
 			isSafe = false;
 		}
 		let unsafeMapIndex = -1;
-		if (curCharCode === 0) {
+		if (curCharCode === -1) {
 			streamWrite(unsafeStream, 2, 0x0);
 		} else if (curCharCode === 32) { // space
 			streamWrite(unsafeStream, 3, 0x3);
@@ -153,7 +153,7 @@ export function encode(str: string, allowCaps: boolean = false) {
 			curCharCode = (unsafeMapIndex << 2) + 0x2;
 			streamWrite(unsafeStream, 7, curCharCode);
 		} else {
-			curCharCode = (curCharCode << 2) + 0x7;
+			curCharCode = (curCharCode << 3) + 0x7;
 			streamWrite(unsafeStream, 19, curCharCode);
 		}
 	}
