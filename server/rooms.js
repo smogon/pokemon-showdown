@@ -1318,7 +1318,7 @@ class BasicChatRoom extends BasicRoom {
 		delete this.users[oldid];
 		this.users[user.userid] = user;
 		if (joining) {
-			this.reportJoin('j', user.getIdentity(this.id));
+			this.reportJoin('j', user.getIdentityWithStatus(this.id));
 			if (this.staffMessage && user.can('mute', null, this)) this.sendUser(user, '|raw|<div class="infobox">(Staff intro:)<br /><div>' + this.staffMessage.replace(/\n/g, '') + '</div></div>');
 		} else if (!user.named) {
 			this.reportJoin('l', oldid);
