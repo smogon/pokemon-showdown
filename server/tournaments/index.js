@@ -63,8 +63,9 @@ class Tournament extends Rooms.RoomGame {
 	 * @param {Object} generator TODO: type this properly
 	 * @param {string | undefined} playerCap
 	 * @param {boolean} isRated
+	 * @param {string | undefined} name
 	 */
-	constructor(room, format, generator, playerCap, isRated) {
+	constructor(room, format, generator, playerCap, isRated, name) {
 		super(room);
 		const formatId = toID(format);
 
@@ -83,7 +84,7 @@ class Tournament extends Rooms.RoomGame {
 		this.playerCap = (playerCap ? parseInt(playerCap) : Config.tourdefaultplayercap) || 0;
 
 		/** @type {string} */
-		this.format = formatId;
+		this.format = name || formatId;
 		this.originalFormat = formatId;
 		/** @type {string} */
 		this.teambuilderFormat = formatId;
@@ -1087,10 +1088,10 @@ function getGenerator(generator) {
 }
 /**
  * @param {string | undefined} generator
- * @param {string?[]} args
+ * @param {string | undefined} modifier
  * @param {CommandContext} output
  */
-function createTournamentGenerator(generator, args, output) {
+function createTournamentGenerator(generator, modifier, output) {
 	let Generator = getGenerator(generator);
 	if (!Generator) {
 		output.errorReply(`${generator} is not a valid type.`);
@@ -1098,7 +1099,7 @@ function createTournamentGenerator(generator, args, output) {
 		output.errorReply(`Valid types: ${generators}`);
 		return;
 	}
-	return new Generator(...args);
+	return new Generator(modifier);
 }
 /**
  *
@@ -1107,11 +1108,12 @@ function createTournamentGenerator(generator, args, output) {
  * @param {string | undefined} generator
  * @param {string | undefined} playerCap
  * @param {boolean} isRated
- * @param {string[]} args
+ * @param {string | undefined} generatorMod
+ * @param {string | undefined} name
  * @param {CommandContext} output
  * @returns {Tournament | undefined}
  */
-function createTournament(room, formatId, generator, playerCap, isRated, args, output) {
+function createTournament(room, formatId, generator, playerCap, isRated, generatorMod, name, output) {
 	if (room.type !== 'chat') {
 		output.errorReply("Tournaments can only be created in chat rooms.");
 		return;
@@ -1141,7 +1143,7 @@ function createTournament(room, formatId, generator, playerCap, isRated, args, o
 		output.errorReply("You cannot have a player cap that is less than 2.");
 		return;
 	}
-	const tour = room.game = exports.tournaments[room.id] = new Tournament(room, format, createTournamentGenerator(generator, args, output), playerCap, isRated);
+	const tour = room.game = exports.tournaments[room.id] = new Tournament(room, format, createTournamentGenerator(generator, generatorMod, output), playerCap, isRated, name);
 	return tour;
 }
 /**
@@ -1246,7 +1248,7 @@ const commands = {
 				return this.sendReply(`Usage: ${cmd} <type> [, <comma-separated arguments>]`);
 			}
 			const playerCap = parseInt(params.splice(1, 1)[0]);
-			const generator = createTournamentGenerator(params.shift(), params, this);
+			const generator = createTournamentGenerator(params.shift(), params.shift(), this);
 			if (generator && tournament.setGenerator(generator, this)) {
 				if (playerCap && playerCap >= 2) {
 					tournament.playerCap = playerCap;
@@ -1679,7 +1681,7 @@ const chatCommands = {
 			}
 
 			/** @type {Tournament | undefined} */
-			let tour = createTournament(room, params.shift(), params.shift(), params.shift(), Config.ratedtours, params, this);
+			let tour = createTournament(room, params.shift(), params.shift(), params.shift(), Config.ratedtours, params.shift(), params.shift(), this);
 			if (tour) {
 				this.privateModAction(`(${user.name} created a tournament in ${tour.format} format.)`);
 				this.modlog('TOUR CREATE', null, tour.format);
