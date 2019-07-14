@@ -611,7 +611,7 @@ class User extends Chat.MessageContext {
 		const identity = this.getIdentity(roomid);
 		const statusMessage = this.statusType === 'busy' ? '!(Busy) ' : this.statusType === 'idle' ? '!(Idle) ' : '';
 		const status = statusMessage + (this.userMessage || '');
-		return `${identity}${status ? `@${status}` : ''}`;
+		return `${identity}${status ? '@' + status : ''}`;
 	}
 	/**
 	 * @param {string} minAuth
