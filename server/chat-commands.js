@@ -4420,7 +4420,7 @@ const commands = {
 				avatar: targetUser.avatar,
 				group: targetUser.group,
 				autoconfirmed: !!targetUser.autoconfirmed,
-				status: targetUser.status,
+				status: targetUser.getStatus(),
 				away: targetUser.away,
 				rooms: roomList,
 			};
