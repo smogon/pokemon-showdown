@@ -139,7 +139,7 @@ class HelpTicket extends Rooms.RoomGame {
 	onLogMessage(message, user) {
 		if (this.ticket.active) return;
 		const blockedMessages = [
-			'hi', 'hello', 'hullo', 'hey', 'yo',
+			'hi', 'hello', 'hullo', 'hey', 'yo', 'ok',
 			'hesrude', 'shesrude', 'hesinappropriate', 'shesinappropriate', 'heswore', 'sheswore',
 		];
 		if ((!user.isStaff || this.ticket.userid === user.userid) && blockedMessages.includes(toID(message))) {
