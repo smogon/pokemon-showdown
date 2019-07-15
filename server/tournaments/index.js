@@ -87,9 +87,13 @@ class Tournament extends Rooms.RoomGame {
 		/** @type {string} */
 		// This will sometimes be sent alone in updates as "format", if the tour doesn't have a custom name
 		this.name = name || formatId;
-		this.originalFormat = formatId;
-		/** @type {string} */
-		this.teambuilderFormat = formatId;
+		/** Format ID not including custom rules */
+		this.baseFormat = formatId;
+		/**
+		 * Full format specifier, including custom rules (such as 'gen7challengecup1v1@@@speciesclause')
+		 * @type {string}
+		 */
+		this.fullFormat = formatId;
 		/** @type {string[]} */
 		this.customRules = [];
 		this.generator = generator;
@@ -161,19 +165,19 @@ class Tournament extends Rooms.RoomGame {
 	 */
 	setCustomRules(rules, output) {
 		try {
-			this.teambuilderFormat = Dex.validateFormat(`${this.originalFormat}@@@${rules}`);
+			this.fullFormat = Dex.validateFormat(`${this.baseFormat}@@@${rules}`);
 		} catch (e) {
 			output.errorReply(`Custom rule error: ${e.message}`);
 			return false;
 		}
 
-		const customRules = Dex.getFormat(this.teambuilderFormat, true).customRules;
+		const customRules = Dex.getFormat(this.fullFormat, true).customRules;
 		if (!customRules) {
 			output.errorReply(`Invalid rules.`);
 			return false;
 		}
 		this.customRules = customRules;
-		if (this.name === this.originalFormat) {
+		if (this.name === this.baseFormat) {
 			this.name = this.getDefaultCustomName();
 			this.room.send(`|tournament|update|${JSON.stringify({format: this.name})}`);
 			this.update();
@@ -253,7 +257,7 @@ class Tournament extends Rooms.RoomGame {
 			isJoined: isJoined,
 			bracketData: this.bracketCache,
 		};
-		if (this.name !== this.originalFormat) update.teambuilderFormat = this.originalFormat;
+		if (this.name !== this.baseFormat) update.teambuilderFormat = this.baseFormat;
 		connection.sendTo(this.room, `|tournament|update|${JSON.stringify(update)}`);
 		if (this.isTournamentStarted && isJoined) {
 			const update2 = {
@@ -891,7 +895,7 @@ class Tournament extends Rooms.RoomGame {
 		this.isAvailableMatchesInvalidated = true;
 		this.update();
 
-		const ready = await Ladders(this.teambuilderFormat).prepBattle(output.connection);
+		const ready = await Ladders(this.fullFormat).prepBattle(output.connection);
 		if (!ready) {
 			from.isBusy = false;
 			to.isBusy = false;
@@ -959,7 +963,7 @@ class Tournament extends Rooms.RoomGame {
 		const challenge = player.pendingChallenge;
 		if (!challenge || !challenge.from) return;
 
-		const ready = await Ladders(this.teambuilderFormat).prepBattle(output.connection);
+		const ready = await Ladders(this.fullFormat).prepBattle(output.connection);
 		if (!ready) return;
 
 		// Prevent battles between offline users from starting
@@ -970,7 +974,7 @@ class Tournament extends Rooms.RoomGame {
 		if (!challenge.from.pendingChallenge) return;
 		if (!player.pendingChallenge) return;
 
-		const room = Rooms.createBattle(this.teambuilderFormat, {
+		const room = Rooms.createBattle(this.fullFormat, {
 			isPrivate: this.room.isPrivate,
 			p1: from,
 			p1team: challenge.team,
@@ -996,7 +1000,7 @@ class Tournament extends Rooms.RoomGame {
 	}
 
 	getDefaultCustomName() {
-		return Dex.getFormat(this.teambuilderFormat).name + " (with custom rules)";
+		return Dex.getFormat(this.fullFormat).name + " (with custom rules)";
 	}
 	/**
 	 * @param {User} user
@@ -1284,11 +1288,11 @@ const commands = {
 			if (Monitor.countPrepBattle(connection.ip, connection)) {
 				return;
 			}
-			TeamValidatorAsync.get(tournament.teambuilderFormat).validateTeam(user.team).then(result => {
+			TeamValidatorAsync.get(tournament.fullFormat).validateTeam(user.team).then(result => {
 				if (result.charAt(0) === '1') {
 					connection.popup("Your team is valid for this tournament.");
 				} else {
-					const formatName = Dex.getFormat(tournament.originalFormat).name;
+					const formatName = Dex.getFormat(tournament.baseFormat).name;
 					// split/join is the easiest way to do a find/replace with an untrusted string, sadly
 					const reasons = result.slice(1).split(formatName).join('this tournament');
 					connection.popup(`Your team was rejected for the following reasons:\n\n- ${reasons.replace(/\n/g, '\n- ')}`);
@@ -1408,9 +1412,9 @@ const commands = {
 				return this.errorReply("The tournament does not have any custom rules.");
 			}
 			tournament.customRules = [];
-			tournament.teambuilderFormat = tournament.originalFormat;
+			tournament.fullFormat = tournament.baseFormat;
 			if (tournament.name === tournament.getDefaultCustomName()) {
-				tournament.name = tournament.originalFormat;
+				tournament.name = tournament.baseFormat;
 				this.room.send(`|tournament|update|${JSON.stringify({format: tournament.name})}`);
 				tournament.update();
 			}
@@ -1437,8 +1441,8 @@ const commands = {
 		},
 		resetname: 'clearname',
 		clearname(tournament, user) {
-			if (tournament.name === tournament.originalFormat) return this.errorReply("The tournament does not have a name.");
-			tournament.name = tournament.originalFormat;
+			if (tournament.name === tournament.baseFormat) return this.errorReply("The tournament does not have a name.");
+			tournament.name = tournament.baseFormat;
 			this.room.send(`|tournament|update|${JSON.stringify({format: tournament.name})}`);
 			this.privateModAction(`(${user.name} cleared the tournament's name.)`);
 			this.modlog('TOUR CLEARNAME');
