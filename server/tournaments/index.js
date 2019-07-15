@@ -6,7 +6,7 @@ const AUTO_START_MINIMUM_TIMEOUT = 30 * 1000;
 const MAX_REASON_LENGTH = 300;
 const MAX_CUSTOM_NAME_LENGTH = 100;
 const TOURBAN_DURATION = 14 * 24 * 60 * 60 * 1000;
-
+const ALLOW_ALTS = false;
 Punishments.roomPunishmentTypes.set('TOURBAN', 'banned from tournaments');
 
 /** @type {{[k: string]: Object}} */
@@ -332,10 +332,9 @@ class Tournament extends Rooms.RoomGame {
 
 	/**
 	 * @param {User} user
-	 * @param {boolean} isAllowAlts
 	 * @param {CommandContext} output
 	 */
-	addUser(user, isAllowAlts, output) {
+	addUser(user, output) {
 		if (!user.named) {
 			output.sendReply('|tournament|error|UserNotNamed');
 			return;
@@ -362,7 +361,7 @@ class Tournament extends Rooms.RoomGame {
 			return;
 		}
 
-		if (!isAllowAlts) {
+		if (!ALLOW_ALTS) {
 			for (let otherPlayer of this.players) {
 				if (!otherPlayer) continue;
 				const otherUser = Users(otherPlayer.userid);
@@ -434,23 +433,77 @@ class Tournament extends Rooms.RoomGame {
 	 * @param {CommandContext} output
 	 */
 	replaceUser(user, replacementUser, output) {
+		if (!this.isTournamentStarted) {
+			output.sendReply('|tournament|error|NotStarted');
+			return;
+		}
 		if (!(user.userid in this.playerTable)) {
-			output.sendReply('|tournament|error|UserNotAdded');
+			output.errorReply(`${user.name} isn't in the tournament.`);
 			return;
 		}
-
+		if (!replacementUser.named) {
+			output.errorReply(`${replacementUser.name} must be named to join the tournament.`);
+			return;
+		}
 		if (replacementUser.userid in this.playerTable) {
-			output.sendReply('|tournament|error|UserAlreadyAdded');
+			output.errorReply(`${replacementUser.name} is already in the tournament.`);
 			return;
 		}
+		if (this.checkBanned(replacementUser) || Punishments.isBattleBanned(replacementUser)) {
+			output.errorReply(`${replacementUser.name} is banned from joining tournaments.`);
+			return;
+		}
+		if (!ALLOW_ALTS) {
+			for (let otherPlayer of this.players) {
+				if (!otherPlayer) continue;
+				const otherUser = Users(otherPlayer.userid);
+				if (otherUser && otherUser.latestIp === user.latestIp) {
+					output.errorReply(`${replacementUser.name} already has an alt in the tournament.`);
+					return;
+				}
+			}
+		}
 
-		// TODO: something
+		// Replace the player
+		this.renamePlayer(replacementUser, user.userid);
+		const newPlayer = this.playerTable[replacementUser.userid];
+
+		// Reset and invalidate any in progress battles
+		let matchPlayer = null;
+		if (newPlayer.inProgressMatch) {
+			matchPlayer = newPlayer;
+		} else {
+			for (const player of this.players) {
+				if (player.inProgressMatch && player.inProgressMatch.to === newPlayer) {
+					matchPlayer = player;
+					break;
+				}
+			}
+		}
+		if (matchPlayer && matchPlayer.inProgressMatch) {
+			matchPlayer.inProgressMatch.to.isBusy = false;
+			matchPlayer.isBusy = false;
+
+			matchPlayer.inProgressMatch.room.addRaw(`<div class="broadcast-red"><b>${Chat.escapeHTML(user.name)} is no longer in the tournament.<br />You can finish playing, but this battle is no longer considered a tournament battle.</div>`).update();
+			matchPlayer.inProgressMatch.room.tour = null;
+			matchPlayer.inProgressMatch.room.parent = null;
+			matchPlayer.inProgressMatch = null;
+		}
+
+		this.isAvailableMatchesInvalidated = true;
+		this.isBracketInvalidated = true;
+		// Update the bracket
+		this.update();
+		this.updateFor(user);
+		this.updateFor(replacementUser);
+		const challengePlayer = newPlayer.pendingChallenge && (newPlayer.pendingChallenge.from || newPlayer.pendingChallenge.to);
+		if (challengePlayer) {
+			const challengeUser = Users.getExact(challengePlayer.userid);
+			if (challengeUser) this.updateFor(challengeUser);
+		}
 
 		this.room.add(`|tournament|replace|${user.name}|${replacementUser.name}`);
-		user.sendTo(this.room, '|tournament|update|{"isJoined":false}');
-		replacementUser.sendTo(this.room, '|tournament|update|{"isJoined":true}');
-		this.isBracketInvalidated = true;
-		this.update();
+		return true;
 	}
 
 	getBracketData() {
@@ -1191,7 +1244,7 @@ const commands = {
 		j: 'join',
 		in: 'join',
 		join(tournament, user) {
-			tournament.addUser(user, false, this);
+			tournament.addUser(user, this);
 		},
 		l: 'leave',
 		out: 'leave',
@@ -1415,6 +1468,15 @@ const commands = {
 				this.privateModAction(`(${(targetUser ? targetUser.name : targetUserid)} was disqualified from the tournament by ${user.name} ${(reason ? ' (' + reason + ')' : '')})`);
 				this.modlog('TOUR DQ', targetUserid, reason);
 			}
+		},
+		sub: 'replace',
+		replace(tournament, user, params, cmd) {
+			const oldUser = Users(params[0]);
+			const newUser = Users(params[1]);
+			if (!oldUser) return this.errorReply(`User ${params[0]} not found.`);
+			if (!newUser) return this.errorReply(`User ${params[1]} not found.`);
+
+			tournament.replaceUser(oldUser, newUser, this);
 		},
 		autostart: 'setautostart',
 		setautostart(tournament, user, params, cmd) {
