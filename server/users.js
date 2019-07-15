@@ -609,9 +609,13 @@ class User extends Chat.MessageContext {
 	 */
 	getIdentityWithStatus(roomid = '') {
 		const identity = this.getIdentity(roomid);
+		const status = this.getStatus();
+		return `${identity}${status ? '@' + status : ''}`;
+	}
+	getStatus() {
 		const statusMessage = this.statusType === 'busy' ? '!(Busy) ' : this.statusType === 'idle' ? '!(Idle) ' : '';
 		const status = statusMessage + (this.userMessage || '');
-		return `${identity}${status ? '@' + status : ''}`;
+		return status;
 	}
 	/**
 	 * @param {string} minAuth
