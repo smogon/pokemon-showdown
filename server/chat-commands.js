@@ -1567,7 +1567,7 @@ const commands = {
 			let roomRankList = rankLists[r].sort();
 			roomRankList = roomRankList.map(s => {
 				const u = Users(s);
-				const isAway = u && u.isAway();
+				const isAway = u && u.statusType !== 'online';
 				return s in targetRoom.users && !isAway ? `**${s}**` : s;
 			});
 			return `${Config.groups[r] ? `${Config.groups[r].name}s (${r})` : r}:\n${roomRankList.join(", ")}`;
