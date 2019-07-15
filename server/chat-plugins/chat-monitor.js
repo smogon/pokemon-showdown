@@ -255,20 +255,19 @@ let namefilter = function (name, user) {
 			}
 		}
 	}
-
-	if (user.trackRename) {
-		const automatic = !Chat.forceRenames.has(toID(user.trackRename));
-		Monitor.log(`[NameMonitor] Username used: ${name} (${automatic ? 'automatically ' : ''}forcerenamed from ${user.trackRename})`);
-		user.trackRename = '';
-	}
 	return name;
 };
 /** @type {LoginFilter} */
 let loginfilter = function (user) {
 	if (user.namelocked) return;
-	const forceRenamer = Chat.forceRenames.get(user.userid);
+
+	const forceRenamed = Chat.forceRenames.has(user.userid);
+	if (user.trackRename) {
+		Monitor.log(`[NameMonitor] Username used: ${user.name} (${forceRenamed ? 'automatically ' : ''}forcerenamed from ${user.trackRename})`);
+		user.trackRename = '';
+	}
 	if (Chat.namefilterwhitelist.has(user.userid)) return;
-	if (forceRenamer) Monitor.log(`[NameMonitor] Forcerenamed name being reused: ${user.name}`);
+	if (forceRenamed) Monitor.log(`[NameMonitor] Forcerenamed name being reused: ${user.name}`);
 };
 /** @type {NameFilter} */
 let nicknamefilter = function (name, user, forStatus) {
