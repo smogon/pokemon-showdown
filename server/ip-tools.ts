@@ -152,6 +152,7 @@ export const IPTools = new class {
 		'rr.com',
 		'sbcglobal.net',
 		'shawcable.net',
+		'sonic.net',
 		'sourcecable.net',
 		'unc.edu',
 		'verizon.net',
