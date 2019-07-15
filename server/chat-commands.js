@@ -3917,6 +3917,9 @@ const commands = {
 		if (room.tour) {
 			return this.errorReply("You can't offer ties in tournaments.");
 		}
+		if (battle.rqid < 100) {
+			return this.errorReply("It's too early to tie, please play until turn 100 or so.");
+		}
 		if (!this.can('roomvoice', null, room)) return;
 		if (cmd === 'accepttie' && !battle.players.some(player => player.wantsTie)) {
 			return this.errorReply("No other player is requesting a tie right now. It was probably canceled.");
