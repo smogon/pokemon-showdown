@@ -660,7 +660,7 @@ const commands = {
 		if (!target) return this.parse('/help status');
 
 		if (target.length > 32) return this.errorReply(`Your status is too long; it must be under 32 characters.`);
-		target = Chat.nicknamefilter(target, user, true);
+		target = Chat.statusfilter(target, user);
 		if (!target) return this.errorReply("Your status contains a banned word.");
 
 		user.setUserMessage(target);

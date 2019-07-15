@@ -270,8 +270,7 @@ let loginfilter = function (user) {
 	if (forceRenamed) Monitor.log(`[NameMonitor] Forcerenamed name being reused: ${user.name}`);
 };
 /** @type {NameFilter} */
-let nicknamefilter = function (name, user, forStatus) {
-	const nameType = forStatus ? 'status message' : 'Pokémon nickname';
+let nicknamefilter = function (name, user) {
 	let lcName = name.replace(/\u039d/g, 'N').toLowerCase().replace(/[\u200b\u007F\u00AD]/g, '').replace(/\u03bf/g, 'o').replace(/\u043e/g, 'o').replace(/\u0430/g, 'a').replace(/\u0435/g, 'e').replace(/\u039d/g, 'e');
 	// Remove false positives.
 	lcName = lcName.replace('herapist', '').replace('grape', '').replace('scrape', '');
@@ -290,7 +289,7 @@ let nicknamefilter = function (name, user, forStatus) {
 			}
 			if (matched) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
-					Punishments.autolock(user, Rooms('staff'), `NameMonitor`, `inappropriate ${nameType}: ${name}`, `${user.name} - using an inappropriate ${nameType}: ${name}`, true);
+					Punishments.autolock(user, Rooms('staff'), `NameMonitor`, `inappropriate Pokémon nickname: ${name}`, `${user.name} - using an inappropriate Pokémon nickname: ${name}`, true);
 				}
 				line[3]++;
 				saveFilters();
@@ -300,6 +299,42 @@ let nicknamefilter = function (name, user, forStatus) {
 	}
 
 	return name;
+};
+/** @type {StatusFilter} */
+let statusfilter = function (status, user) {
+	let lcStatus = status.replace(/\u039d/g, 'N').toLowerCase().replace(/[\u200b\u007F\u00AD]/g, '').replace(/\u03bf/g, 'o').replace(/\u043e/g, 'o').replace(/\u0430/g, 'a').replace(/\u0435/g, 'e').replace(/\u039d/g, 'e');
+	// Remove false positives.
+	lcStatus = lcStatus.replace('herapist', '').replace('grape', '').replace('scrape', '');
+	// Check for blatant staff impersonation attempts. Ideally this could be completely generated from Config.grouplist
+	// for better support for side servers, but not all ranks are staff ranks or should necessarily be filted.
+	if (/(global|room|upper|senior)?\s*(staff|admin|administrator|leader|owner|founder|mod|moderator|driver|voice|operator|sysop|creator)/gi.test(lcStatus)) {
+		return '';
+	}
+
+	for (const list in filterWords) {
+		for (let line of filterWords[list]) {
+			const word = line[0];
+
+			let matched;
+			if (typeof word !== 'string') {
+				matched = word.test(lcStatus);
+			} else if (word.startsWith('\\b') || word.endsWith('\\b')) {
+				matched = new RegExp(word).test(lcStatus);
+			} else {
+				matched = lcStatus.includes(word);
+			}
+			if (matched) {
+				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
+					Punishments.autolock(user, Rooms('staff'), `NameMonitor`, `inappropriate status message: ${status}`, `${user.name} - using an inappropriate status: ${status}`, true);
+				}
+				line[3]++;
+				saveFilters();
+				return '';
+			}
+		}
+	}
+
+	return status;
 };
 
 /** @type {PageTable} */
@@ -450,4 +485,5 @@ exports.commands = commands;
 exports.chatfilter = chatfilter;
 exports.namefilter = namefilter;
 exports.nicknamefilter = nicknamefilter;
+exports.statusfilter = statusfilter;
 exports.loginfilter = loginfilter;

@@ -39,7 +39,8 @@ To reload chat commands:
  * 3. return undefined to send the original message through
  * @typedef {(this: CommandContext, message: string, user: User, room: ChatRoom | GameRoom?, connection: Connection, targetUser: User?, originalMessage: string) => (string | false | null | undefined)} ChatFilter
  */
-/** @typedef {(name: string, user: User, forStatus?: boolean) => (string)} NameFilter */
+/** @typedef {(name: string, user: User) => (string)} NameFilter */
+/** @typedef {(status: string, user: User) => (string)} StatusFilter */
 /** @typedef {(user: User, oldUser: User?, userType: string) => void} LoginFilter */
 
 const LINK_WHITELIST = ['*.pokemonshowdown.com', 'psim.us', 'smogtours.psim.us', '*.smogon.com', '*.pastebin.com', '*.hastebin.com'];
@@ -233,7 +234,7 @@ Chat.namefilter = function (name, user) {
 
 	name = Dex.getName(name);
 	for (const filter of Chat.namefilters) {
-		name = filter(name, user, false);
+		name = filter(name, user);
 		if (!name) return '';
 	}
 	return name;
@@ -269,16 +270,30 @@ Chat.nicknamefilters = [];
 /**
  * @param {string} nickname
  * @param {User} user
- * @param {boolean} [forStatus]
  */
-Chat.nicknamefilter = function (nickname, user, forStatus = false) {
-	if (forStatus) nickname = nickname.replace(/\|/g, '');
+Chat.nicknamefilter = function (nickname, user) {
 	for (const filter of Chat.nicknamefilters) {
-		nickname = filter(nickname, user, forStatus);
+		nickname = filter(nickname, user);
 		if (!nickname) return '';
 	}
 	return nickname;
 };
+
+/**@type {StatusFilter[]} */
+Chat.statusfilters = [];
+/**
+ * @param {string} status
+ * @param {User} user
+ */
+Chat.statusfilter = function (status, user) {
+	status = status.replace(/\|/g, '');
+	for (const filter of Chat.statusfilters) {
+		status = filter(status, user);
+		if (!status) return '';
+	}
+	return status;
+};
+
 
 /*********************************************************
  * Translations
@@ -1525,6 +1540,7 @@ Chat.loadPlugins = function () {
 	if (Config.hostfilter) Chat.hostfilters.push(Config.hostfilter);
 	if (Config.loginfilter) Chat.loginfilters.push(Config.loginfilter);
 	if (Config.nicknamefilter) Chat.nicknamefilters.push(Config.nicknamefilter);
+	if (Config.statusfilter) Chat.statusfilters.push(Config.statusfilter);
 
 	// Install plug-in commands and chat filters
 
@@ -1547,6 +1563,7 @@ Chat.loadPlugins = function () {
 		if (plugin.hostfilter) Chat.hostfilters.push(plugin.hostfilter);
 		if (plugin.loginfilter) Chat.loginfilters.push(plugin.loginfilter);
 		if (plugin.nicknamefilter) Chat.nicknamefilters.push(plugin.nicknamefilter);
+		if (plugin.statusfilter) Chat.statusfilters.push(plugin.statusfilter);
 	}
 };
 
