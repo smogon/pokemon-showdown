@@ -27,7 +27,7 @@ export class LadderStore {
 	 * ladder toplist, to be displayed directly in the ladder tab of the
 	 * client.
 	 */
-	async getTop(): Promise<[string, string] | null> {
+	async getTop(prefix?: string): Promise<[string, string] | null> {
 		return null;
 	}
 
