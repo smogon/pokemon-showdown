@@ -1290,7 +1290,7 @@ class BasicChatRoom extends BasicRoom {
 		if (this.users[user.userid]) return false;
 
 		if (user.named) {
-			this.reportJoin('j', user.getIdentity(this.id));
+			this.reportJoin('j', user.getIdentityWithStatus(this.id));
 		}
 
 		this.users[user.userid] = user;
@@ -1323,7 +1323,7 @@ class BasicChatRoom extends BasicRoom {
 		} else if (!user.named) {
 			this.reportJoin('l', oldid);
 		} else {
-			this.reportJoin('n', user.getIdentity(this.id) + '|' + oldid);
+			this.reportJoin('n', user.getIdentityWithStatus(this.id) + '|' + oldid);
 		}
 		if (this.poll && user.userid in this.poll.voters) this.poll.updateFor(user);
 		return true;
