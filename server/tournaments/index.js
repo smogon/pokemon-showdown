@@ -172,6 +172,11 @@ class Tournament extends Rooms.RoomGame {
 			return false;
 		}
 		this.customRules = customRules;
+		if (this.name === this.originalFormat) {
+			this.name = this.getDefaultCustomName();
+			this.room.send(`|tournament|update|${JSON.stringify({format: this.name})}`);
+			this.update();
+		}
 		return true;
 	}
 
@@ -935,6 +940,10 @@ class Tournament extends Rooms.RoomGame {
 		if (this.forceTimer) room.battle.timer.start();
 		this.update();
 	}
+
+	getDefaultCustomName() {
+		return Dex.getFormat(this.teambuilderFormat).name + " (with custom rules)";
+	}
 	/**
 	 * @param {User} user
 	 */
@@ -1346,6 +1355,11 @@ const commands = {
 			}
 			tournament.customRules = [];
 			tournament.teambuilderFormat = tournament.originalFormat;
+			if (tournament.name === tournament.getDefaultCustomName()) {
+				tournament.name = tournament.originalFormat;
+				this.room.send(`|tournament|update|${JSON.stringify({format: tournament.name})}`);
+				tournament.update();
+			}
 			this.room.addRaw(`<b>The tournament's custom rules were cleared.</b>`);
 			this.privateModAction(`(${user.name} cleared the tournament's custom rules.)`);
 			this.modlog('TOUR CLEARRULES');
