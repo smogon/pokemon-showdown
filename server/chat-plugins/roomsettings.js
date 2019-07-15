@@ -421,7 +421,7 @@ exports.commands = {
 		}
 		const slowchatSetting = (room.slowchat || "OFF");
 		this.privateModAction(`(${user.name} set slowchat to ${slowchatSetting})`);
-		this.modlog('SLOWCHAT', null, slowchatSetting);
+		this.modlog('SLOWCHAT', null, '' + slowchatSetting);
 
 		if (room.chatRoomData) {
 			room.chatRoomData.slowchat = room.slowchat;
