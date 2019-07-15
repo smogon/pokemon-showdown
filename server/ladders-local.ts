@@ -131,7 +131,7 @@ export class LadderStore {
 	 * ladder toplist, to be displayed directly in the ladder tab of the
 	 * client.
 	 */
-	async getTop() {
+	async getTop(prefix?: string) {
 		const formatid = this.formatid;
 		const name = Dex.getFormat(formatid).name;
 		const ladder = await this.getLadder();
@@ -139,6 +139,7 @@ export class LadderStore {
 		buf += `<table>`;
 		buf += `<tr><th>` + ['', 'Username', '<abbr title="Elo rating">Elo</abbr>', 'W', 'L', 'T'].join(`</th><th>`) + `</th></tr>`;
 		for (const [i, row] of ladder.entries()) {
+			if (prefix && !row[0].startsWith(prefix)) continue;
 			buf += `<tr><td>` + [
 				i + 1, row[2], `<strong>${Math.round(row[1])}</strong>`, row[3], row[4], row[5],
 			].join(`</td><td>`) + `</td></tr>`;

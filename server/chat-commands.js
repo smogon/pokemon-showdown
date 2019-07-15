@@ -4434,7 +4434,8 @@ const commands = {
 			));
 		} else if (cmd === 'laddertop') {
 			if (!trustable) return false;
-			Ladders(toID(target)).getTop().then(result => {
+			const [format, prefix] = target.split(',').map(x => x.trim());
+			Ladders(toID(format)).getTop(prefix).then(result => {
 				connection.send('|queryresponse|laddertop|' + JSON.stringify(result));
 			});
 		} else if (cmd === 'roominfo') {
