@@ -319,6 +319,10 @@ represented by a space), and the rest of the string being their username.
 
 > `USER` left the tournament.
 
+`|tournament|replace|OLD|NEW`
+
+> The player `OLD` has been replaced with `NEW`
+
 `|tournament|start|NUMPLAYERS`
 
 > The tournament started with `NUMPLAYERS` participants.
