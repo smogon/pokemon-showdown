@@ -564,7 +564,7 @@ class CommandContext extends MessageContext {
 
 		let commandHandler = this.splitCommand(message);
 
-		if (this.user.isAway() && toID(this.user.status) === 'idle') this.user.clearStatus();
+		if (this.user.statusType === 'idle') this.user.setStatusType('online');
 
 		if (typeof commandHandler === 'function') {
 			message = this.run(commandHandler);
@@ -602,7 +602,6 @@ class CommandContext extends MessageContext {
 			if (this.pmTarget) {
 				Chat.sendPM(message, this.user, this.pmTarget);
 			} else {
-				if (this.user.isAway()) this.user.clearStatus();
 				this.room.add(`|c|${this.user.getIdentity(this.room.id)}|${message}`);
 				if (this.room && this.room.game && this.room.game.onLogMessage) {
 					this.room.game.onLogMessage(message, this.user);
@@ -1072,7 +1071,6 @@ class CommandContext extends MessageContext {
 		if (this.pmTarget) {
 			this.sendReply('|c~|' + (suppressMessage || this.message));
 		} else {
-			if (this.user.isAway()) this.user.clearStatus();
 			this.sendReply('|c|' + this.user.getIdentity(this.room.id) + '|' + (suppressMessage || this.message));
 		}
 		if (!ignoreCooldown && !this.pmTarget) {
@@ -1220,7 +1218,7 @@ class CommandContext extends MessageContext {
 			this.errorReply(`Your username contains a phrase banned by this room.`);
 			return false;
 		}
-		if (user.status && (!this.checkBanwords(room, user.status) && !user.can('bypassall'))) {
+		if (user.userMessage && (!this.checkBanwords(room, user.userMessage) && !user.can('bypassall'))) {
 			this.errorReply(`Your status message contains a phrase banned by this room.`);
 			return false;
 		}

@@ -25,6 +25,7 @@
 
 'use strict';
 /** @typedef {GlobalRoom | GameRoom | ChatRoom} Room */
+/** @typedef {'online' | 'busy' | 'idle'} StatusType */
 
 const PLAYER_SYMBOL = '\u2606';
 const HOST_SYMBOL = '\u2605';
@@ -538,8 +539,10 @@ class User extends Chat.MessageContext {
 		// Used in punishments
 		/** @type {string} */
 		this.trackRename = '';
+		/** @type {StatusType} */
+		this.statusType = 'online';
 		/** @type {string} */
-		this.status = '';
+		this.userMessage = '';
 		/** @type {number} */
 		this.lastWarnedAt = 0;
 
@@ -606,8 +609,9 @@ class User extends Chat.MessageContext {
 	 */
 	getIdentityWithStatus(roomid = '') {
 		const identity = this.getIdentity(roomid);
-		if (!this.status) return identity;
-		return `${identity}@${this.status}`;
+		const statusMessage = this.statusType === 'busy' ? '!(Busy) ' : this.statusType === 'idle' ? '!(Idle) ' : '';
+		const status = statusMessage + (this.userMessage || '');
+		return `${identity}${status ? '@' + status : ''}`;
 	}
 	/**
 	 * @param {string} minAuth
@@ -997,7 +1001,7 @@ class User extends Chat.MessageContext {
 		let joining = !this.named;
 		this.named = !userid.startsWith('guest') || !!this.namelocked;
 
-		if (isForceRenamed) this.status = '';
+		if (isForceRenamed) this.userMessage = '';
 
 		for (const connection of this.connections) {
 			//console.log('' + name + ' renaming: socket ' + i + ' of ' + this.connections.length);
@@ -1089,7 +1093,8 @@ class User extends Chat.MessageContext {
 		this.latestIp = oldUser.latestIp;
 		this.latestHost = oldUser.latestHost;
 		this.latestHostType = oldUser.latestHostType;
-		this.clearStatus();
+		this.userMessage = oldUser.userMessage || this.userMessage || '';
+		this.statusType = oldUser.statusType !== 'online' ? oldUser.statusType : this.statusType;
 
 		oldUser.markDisconnected();
 	}
@@ -1381,7 +1386,6 @@ class User extends Chat.MessageContext {
 	joinRoom(roomid, connection = null) {
 		const room = Rooms(roomid);
 		if (!room) throw new Error(`Room not found: ${roomid}`);
-		if (this.isAway()) this.clearStatus();
 		if (!connection) {
 			for (const curConnection of this.connections) {
 				// only join full clients, not pop-out single-room
@@ -1417,7 +1421,6 @@ class User extends Chat.MessageContext {
 		if (!this.inRooms.has(room.id)) {
 			return false;
 		}
-		if (this.isAway()) this.clearStatus();
 		for (const curConnection of this.connections) {
 			if (connection && curConnection !== connection) continue;
 			if (curConnection.inRooms.has(room.id)) {
@@ -1568,26 +1571,28 @@ class User extends Chat.MessageContext {
 			this.chatQueue = null;
 		}
 	}
-	isAway() {
-		return this.status && this.status.charAt(0) === '!';
-	}
 	/**
-	 * @param {string} message
+	 * @param {StatusType} type
 	 */
-	setStatus(message) {
-		if (message === this.status) return;
-		this.status = message;
+	setStatusType(type) {
+		if (type === this.statusType) return;
+		this.statusType = type;
 		this.updateIdentity();
 	}
 	/**
 	 * @param {string} message
 	 */
-	setAway(message) {
-		this.setStatus(`!${message}`);
+	setUserMessage(message) {
+		if (message === this.userMessage) return;
+		this.userMessage = message;
+		this.updateIdentity();
 	}
-	clearStatus() {
-		if (!this.status) return;
-		this.status = '';
+	/**
+	 * @param {StatusType} [type]
+	 */
+	clearStatus(type = this.statusType) {
+		this.statusType = type;
+		this.userMessage = '';
 		this.updateIdentity();
 	}
 	destroy() {
@@ -1628,10 +1633,10 @@ function pruneInactive(threshold) {
 	let now = Date.now();
 	for (const user of users.values()) {
 		const awayTimer = user.can('lock') ? STAFF_IDLE_TIMER : IDLE_TIMER;
-		let bypass = user.isAway() || (!user.can('bypassall') && (user.can('bypassafktimer') || Array.from(user.inRooms).some(room => user.can('bypassafktimer', null, /** @type {ChatRoom} */ (Rooms(room))))));
+		let bypass = user.statusType !== 'online' || (!user.can('bypassall') && (user.can('bypassafktimer') || Array.from(user.inRooms).some(room => user.can('bypassafktimer', null, /** @type {ChatRoom} */ (Rooms(room))))));
 		if (!bypass && !user.connections.some(connection => now - connection.lastActiveTime < awayTimer)) {
 			user.popup(`You have been inactive for over ${awayTimer / MINUTES} minutes, and have been marked as idle as a result. To mark yourself as back, send a message in chat, or use the /back command.`);
-			user.setAway('(Idle)');
+			user.setStatusType('idle');
 		}
 		if (user.connected) continue;
 		if ((now - user.lastConnected) > threshold) {
