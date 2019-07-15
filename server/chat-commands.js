@@ -4081,6 +4081,7 @@ const commands = {
 		if (room.battle[target].userid) {
 			return this.errorReply(`This room already has a player in slot ${target}.`);
 		}
+		if (targetUser.userid in room.battle.playerTable) return this.errorReply(`${targetUser.name} is already a player in this battle.`);
 
 		room.auth[targetUser.userid] = Users.PLAYER_SYMBOL;
 		let success = room.battle.joinGame(targetUser, target);

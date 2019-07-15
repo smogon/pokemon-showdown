@@ -594,6 +594,11 @@ class RoomBattle extends RoomGames.RoomGame {
 			return false;
 		}
 
+		if (user.userid in this.playerTable) {
+			user.popup(`You have already joined this battle.`);
+			return false;
+		}
+
 		/** @type {SideID[]} */
 		let validSlots = [];
 		for (const player of this.players) {
