@@ -996,8 +996,7 @@ let commands = {
 						userids.add(key);
 					}
 				}
-				// @ts-ignore
-				affected = Users.findUsers([...userids], [...ips], {includeTrusted: true, forPunishment: true});
+				affected = Users.findUsers(/** @type {ID[]} */([...userids]), [...ips], {includeTrusted: true, forPunishment: true});
 				affected.unshift(userid);
 			}
 

@@ -377,7 +377,7 @@ class Connection {
 	onDisconnect() {
 		connections.delete(this.id);
 		if (this.user) this.user.onDisconnect(this);
-		this.user = null as any as User;
+		this.user = null!;
 	}
 
 	popup(message: string) {
@@ -558,7 +558,6 @@ class User extends Chat.MessageContext {
 
 	sendTo(roomid: string | BasicRoom | null, data: string) {
 		if (roomid && typeof roomid !== 'string') roomid = roomid.id;
-		roomid = roomid as string | null;
 		if (roomid && roomid !== 'global' && roomid !== 'lobby') data = `>${roomid}\n${data}`;
 		for (const connection of this.connections) {
 			if (roomid && !connection.inRooms.has(roomid)) continue;
