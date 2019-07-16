@@ -557,7 +557,7 @@ class User extends Chat.MessageContext {
 	}
 
 	sendTo(roomid: string | BasicRoom | null, data: string) {
-		if (roomid && (roomid as BasicRoom).id) roomid = (roomid as BasicRoom).id;
+		if (roomid && typeof roomid !== 'string') roomid = roomid.id;
 		roomid = roomid as string | null;
 		if (roomid && roomid !== 'global' && roomid !== 'lobby') data = `>${roomid}\n${data}`;
 		for (const connection of this.connections) {
