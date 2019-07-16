@@ -286,7 +286,17 @@ Chat.statusfilters = [];
  * @param {User} user
  */
 Chat.statusfilter = function (status, user) {
+	// Protocol character
 	status = status.replace(/\|/g, '');
+	if (!Config.disablebasicnamefilter) {
+		// e-mail address
+		if (status.includes('@') && status.includes('.')) return '';
+		// url
+		if (/[a-z0-9]\.(com|net|org|us|uk|co|gg|tk|ml|gq|ga|xxx|download|stream|)\b/.test(status)) status = status.replace(/\./g, '');
+		// RTL control
+		status = status.replace(/\u202e/g, '');
+	}
+
 	for (const filter of Chat.statusfilters) {
 		status = filter(status, user);
 		if (!status) return '';
