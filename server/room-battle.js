@@ -258,7 +258,7 @@ class RoomBattleTimer {
 		let addPerTurn = isFirst ? 0 : this.settings.addPerTurn;
 		if (this.settings.accelerate && addPerTurn) {
 			// after turn 100ish: 15s/turn -> 10s/turn
-			if (this.battle.requestCount > 200) {
+			if (this.battle.requestCount > 200 && addPerTurn > TICK_TIME) {
 				addPerTurn -= TICK_TIME;
 			}
 			// after turn 200ish: 10s/turn -> 7s/turn
