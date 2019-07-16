@@ -463,7 +463,7 @@ class Tournament extends Rooms.RoomGame {
 			for (let otherPlayer of this.players) {
 				if (!otherPlayer) continue;
 				const otherUser = Users(otherPlayer.userid);
-				if (otherUser && otherUser.latestIp === user.latestIp) {
+				if (otherUser && otherUser.latestIp === targetUser.latestIp) {
 					output.errorReply(`${replacementUser.name} already has an alt in the tournament.`);
 					return;
 				}
