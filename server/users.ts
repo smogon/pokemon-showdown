@@ -25,13 +25,11 @@
 
 'use strict';
 
-type GlobalRoom = import('./rooms').GlobalRoomType;
-type ChatRoom = import('./rooms').ChatRoomType;
 type GameRoom = import('./rooms').GameRoomType;
 type BasicRoom = import('./rooms').BasicRoomType;
 type BasicChatRoom = import('./rooms').BasicChatRoomType;
 
-type Room = GlobalRoom | ChatRoom | GameRoom;
+type Room = import('./rooms').Room;
 
 type StatusType = 'online' | 'busy' | 'idle';
 
@@ -1289,7 +1287,7 @@ class User extends Chat.MessageContext {
 		const prevNames = Object.keys(this.prevNames);
 		return (prevNames.length ? prevNames[prevNames.length - 1] : this.userid) as ID;
 	}
-	async tryJoinRoom(roomid: string | GlobalRoom | GameRoom | ChatRoom, connection: Connection) {
+	async tryJoinRoom(roomid: string | Room, connection: Connection) {
 		roomid = roomid && (roomid as Room).id ? (roomid as Room).id : roomid as string;
 		const room = Rooms.search(roomid);
 		if (!room && roomid.startsWith('view-')) {
@@ -1352,7 +1350,7 @@ class User extends Chat.MessageContext {
 		}
 	}
 	leaveRoom(
-		room: GlobalRoom | GameRoom | ChatRoom | string,
+		room: Room | string,
 		connection: Connection | null = null,
 		force: boolean = false
 	) {
@@ -1553,7 +1551,7 @@ function pruneInactive(threshold: number) {
 		const bypass = user.statusType !== 'online' ||
 			(!user.can('bypassall') &&
 				(user.can('bypassafktimer') ||
-				Array.from(user.inRooms).some(room => user.can('bypassafktimer', null, Rooms(room) as ChatRoom))));
+				Array.from(user.inRooms).some(room => user.can('bypassafktimer', null, Rooms(room) as BasicChatRoom))));
 		if (!bypass && !user.connections.some(connection => now - connection.lastActiveTime < awayTimer)) {
 			user.popup(`You have been inactive for over ${awayTimer / MINUTES} minutes, and have been marked as idle as a result. To mark yourself as back, send a message in chat, or use the /back command.`);
 			user.setStatusType('idle');
