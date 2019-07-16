@@ -41,9 +41,9 @@ declare global {
 	const Roomlog: typeof RoomlogsType.Roomlog
 
 	// users
-	const Users: typeof UsersType
-	const User: typeof UsersType.User
-	const Connection: typeof UsersType.Connection
+	const Users: typeof UsersType.Users
+	const User: typeof UsersType.Users.User
+	const Connection: typeof UsersType.Users.Connection
 	// chat
 	const Chat: typeof ChatType
 	const CommandContext: typeof ChatType.CommandContext

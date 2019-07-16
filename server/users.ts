@@ -1673,7 +1673,7 @@ const users: Map<ID, User> = new Map();
 const prevUsers: Map<ID, ID> = new Map();
 let numUsers = 0;
 
-const Users = Object.assign(getUser, {
+export const Users = Object.assign(getUser, {
 	delete: deleteUser,
 	move,
 	add,
@@ -1702,5 +1702,3 @@ const Users = Object.assign(getUser, {
 	}, 30 * MINUTES),
 	socketConnect,
 });
-
-export = Users;
