@@ -177,7 +177,8 @@ class RoomBattleTimer {
 
 		const hasLongTurns = Dex.getFormat(battle.format, true).gameType !== 'singles';
 		const isChallenge = (!battle.rated && !battle.room.tour);
-		const timerSettings = Dex.getFormat(battle.format, true).timer;
+		const timerEntry = Dex.getRuleTable(Dex.getFormat(battle.format, true)).timer;
+		const timerSettings = timerEntry && timerEntry[0];
 
 		// so that Object.assign doesn't overwrite anything with `undefined`
 		for (const k in timerSettings) {
