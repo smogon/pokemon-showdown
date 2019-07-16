@@ -1167,7 +1167,7 @@ let commands = {
 		Leaderboard.addPoints(targetId, 'points', points, true).write();
 
 		this.privateModAction(`(${targetId} was given ${points} points on the monthly scavengers ladder by ${user.name}.)`);
-		this.modlog('SCAV ADDPOINTS', targetId, points);
+		this.modlog('SCAV ADDPOINTS', targetId, '' + points);
 	},
 
 	removepoints(target, room, user) {
@@ -1184,7 +1184,7 @@ let commands = {
 		Leaderboard.addPoints(targetId, 'points', -points, true).write();
 
 		this.privateModAction(`(${user.name} has taken ${points} points from ${targetId} on the monthly scavengers ladder.)`);
-		this.modlog('SCAV REMOVEPOINTS', targetId, points);
+		this.modlog('SCAV REMOVEPOINTS', targetId, '' + points);
 	},
 
 	resetladder(target, room, user) {
