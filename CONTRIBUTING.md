@@ -149,3 +149,11 @@ In general, use modern features; recent versions of V8 have fixed the performanc
 - **Template strings: ALWAYS** - Supported in Node 4+ and good performance in Node 6+; please start refactoring existing code over, but be careful not to use them for IDs (follow the String standards). Look at existing uses for guidance.
 
 Take "good performance" to mean "approximately on par with ES3" and "great performance" to mean "better than ES3".
+
+
+TypeScript Features
+------------------------------------------------------------------------
+
+- **Constant Enums: NEVER** - Not supported by Sucrase our current choice of transpiler.
+
+- **Default Properties: NEVER** - Bad performance when used with Sucrase. Prefer setting properties directly in a constructor instead.
