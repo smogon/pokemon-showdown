@@ -1073,14 +1073,6 @@ interface ModdedFormatsData extends Partial<FormatsData> {
 	inherit?: boolean
 }
 
-interface RuleTable extends Map<string, string> {
-	checkLearnset: [Function, string] | null
-	complexBans: [string, string, number, string[]][]
-	complexTeamBans: [string, string, number, string[]][]
-	check: (thing: string, setHas: {[k: string]: true}) => string
-	getReason: (key: string) => string
-}
-
 interface Format extends Readonly<BasicEffect & FormatsData> {
 	readonly effectType: 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule'
 	readonly baseRuleset: string[]
@@ -1091,7 +1083,7 @@ interface Format extends Readonly<BasicEffect & FormatsData> {
 	readonly noLog: boolean
 	readonly ruleset: string[]
 	readonly unbanlist: string[]
-	ruleTable: RuleTable | null
+	ruleTable: import('./dex-data').RuleTable | null
 }
 
 type SpreadMoveTargets = (Pokemon | false | null)[]

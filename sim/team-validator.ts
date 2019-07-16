@@ -12,7 +12,7 @@ import {Dex} from './dex';
 export class TeamValidator {
 	readonly format: Format;
 	readonly dex: ModdedDex;
-	readonly ruleTable: RuleTable;
+	readonly ruleTable: import('./dex-data').RuleTable;
 
 	constructor(format: string | Format) {
 		this.format = Dex.getFormat(format);

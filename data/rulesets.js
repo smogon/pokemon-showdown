@@ -415,6 +415,21 @@ let BattleFormats = {
 			}
 		},
 	},
+	blitz: {
+		effectType: 'ValidatorRule',
+		name: 'Blitz',
+		desc: "Super-fast 'Blitz' timer giving 30 second Team Preview and 10 seconds per turn.",
+		onBegin() {
+			this.add('rule', 'Blitz: Super-fast timer');
+		},
+		timer: {starting: 15, addPerTurn: 5, maxPerTurn: 15, maxFirstTurn: 30, grace: 30},
+	},
+	vgctimer: {
+		effectType: 'ValidatorRule',
+		name: 'VGC Timer',
+		desc: "VGC's timer: 90 second Team Preview, 7 minutes Your Time, 1 minute per turn",
+		timer: {starting: 7 * 60, addPerTurn: 0, maxPerTurn: 55, maxFirstTurn: 90, grace: 90, timeoutAutoChoose: true, dcTimerBank: false},
+	},
 	speciesclause: {
 		effectType: 'ValidatorRule',
 		name: 'Species Clause',

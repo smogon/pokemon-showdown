@@ -169,12 +169,14 @@ export class RuleTable extends Map {
 	complexTeamBans: ComplexTeamBan[];
 	// tslint:disable-next-line:ban-types
 	checkLearnset: [Function, string] | null;
+	timer: [Partial<GameTimerSettings>, string] | null;
 
 	constructor() {
 		super();
 		this.complexBans = [];
 		this.complexTeamBans = [];
 		this.checkLearnset = null;
+		this.timer = null;
 	}
 
 	check(thing: string, setHas: {[id: string]: true} | null = null): string {

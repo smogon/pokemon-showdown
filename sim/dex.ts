@@ -758,7 +758,7 @@ export class ModdedDex {
 		}
 	}
 
-	getRuleTable(format: Format, depth: number = 0): RuleTable {
+	getRuleTable(format: Format, depth: number = 0): Data.RuleTable {
 		if (format.ruleTable) return format.ruleTable;
 		const ruleTable = new Data.RuleTable();
 
@@ -780,6 +780,9 @@ export class ModdedDex {
 		}
 		if (format.checkLearnset) {
 			ruleTable.checkLearnset = [format.checkLearnset, format.name];
+		}
+		if (format.timer) {
+			ruleTable.timer = [format.timer, format.name];
 		}
 
 		for (const rule of ruleset) {
@@ -829,6 +832,14 @@ export class ModdedDex {
 						`"${ruleTable.checkLearnset[1]}" and "${subRuleTable.checkLearnset[1]}"`);
 				}
 				ruleTable.checkLearnset = subRuleTable.checkLearnset;
+			}
+			if (subRuleTable.timer) {
+				if (ruleTable.timer) {
+					throw new Error(
+						`"${format.name}" has conflicting move validation rules from ` +
+						`"${ruleTable.timer[1]}" and "${subRuleTable.timer[1]}"`);
+				}
+				ruleTable.timer = subRuleTable.timer;
 			}
 		}
 
