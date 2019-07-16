@@ -175,8 +175,8 @@ const usergroups = Object.create(null);
 function importUsergroups() {
 	// can't just say usergroups = {} because it's exported
 	for (const i in usergroups) delete usergroups[i];
-
-	void FS('config/usergroups.csv').readIfExists().then(data => {
+	// tslint:disable-next-line:no-floating-promises
+	FS('config/usergroups.csv').readIfExists().then(data => {
 		for (const row of data.split("\n")) {
 			if (!row) continue;
 			const cells = row.split(",");
@@ -189,7 +189,8 @@ function exportUsergroups() {
 	for (const i in usergroups) {
 		buffer += usergroups[i].substr(1).replace(/,/g, '') + ',' + usergroups[i].charAt(0) + "\n";
 	}
-	void FS('config/usergroups.csv').write(buffer);
+	// tslint:disable-next-line:no-floating-promises
+	FS('config/usergroups.csv').write(buffer);
 }
 importUsergroups();
 
@@ -1579,7 +1580,8 @@ function socketConnect(worker: Worker, workerid: number, socketid: string, ip: s
 	}
 	// Emergency mode connections logging
 	if (Config.emergency) {
-		void FS('logs/cons.emergency.log').append('[' + ip + ']\n');
+		// tslint:disable-next-line:no-floating-promises
+		FS('logs/cons.emergency.log').append('[' + ip + ']\n');
 	}
 
 	const user = new User(connection);
@@ -1655,7 +1657,8 @@ function socketReceive(worker: Worker, workerid: number, socketid: string, messa
 	}
 	// Emergency logging
 	if (Config.emergency) {
-		void FS('logs/emergency.log').append(`[${user} (${connection.ip})] ${roomId}|${message}\n`);
+		// tslint:disable-next-line:no-floating-promises
+		FS('logs/emergency.log').append(`[${user} (${connection.ip})] ${roomId}|${message}\n`);
 	}
 
 	const startTime = Date.now();
