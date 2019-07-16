@@ -604,6 +604,7 @@ const Punishments = new (class {
 			Punishments.ips.set(ip, punishment);
 		}
 		const [punishType, id, expireTime, reason, ...rest] = punishment;
+		// @ts-ignore
 		let affected = Users.findUsers([...userids], [...ips], {includeTrusted: PUNISH_TRUSTED, forPunishment: true});
 		userids.delete(id);
 		Punishments.appendPunishment({
@@ -736,6 +737,7 @@ const Punishments = new (class {
 			Punishments.roomIps.nestedSet(room.id, ip, punishment);
 		}
 		const [punishType, id, expireTime, reason, ...rest] = punishment;
+		// @ts-ignore
 		let affected = Users.findUsers([...userids], [...ips], {includeTrusted: PUNISH_TRUSTED, forPunishment: true});
 		userids.delete(id);
 		Punishments.appendPunishment({

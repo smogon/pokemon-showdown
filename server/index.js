@@ -96,7 +96,7 @@ global.Ladders = require('./ladders');
 
 global.Chat = require('./chat');
 
-global.Users = require('./users');
+global.Users = require('../.server-dist/users');
 
 global.Punishments = require('./punishments');
 

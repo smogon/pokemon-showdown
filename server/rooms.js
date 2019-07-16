@@ -1752,3 +1752,9 @@ Rooms.rooms.set('global', Rooms.global);
 
 // @ts-ignore
 module.exports = Rooms;
+
+/** @typedef {GlobalRoom} GlobalRoomType */
+/** @typedef {ChatRoom} ChatRoomType */
+/** @typedef {GameRoom} GameRoomType */
+/** @typedef {BasicRoom} BasicRoomType */
+/** @typedef {BasicChatRoom} BasicChatRoomType */
