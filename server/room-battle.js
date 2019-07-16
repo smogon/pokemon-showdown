@@ -239,10 +239,17 @@ class RoomBattleTimer {
 			this.battle.room.add(`|inactive|${requester.name} no longer wants the timer on, but the timer is staying on because ${[...this.timerRequesters].join(', ')} still does.`).update();
 			return false;
 		}
+		if (this.end()) {
+			this.battle.room.add(`|inactiveoff|Battle timer is now OFF.`).update();
+			return true;
+		}
+		return false;
+	}
+	end() {
+		this.timerRequesters.clear();
 		if (!this.timer) return false;
 		clearTimeout(this.timer);
 		this.timer = null;
-		this.battle.room.add(`|inactiveoff|Battle timer is now OFF.`).update();
 		return true;
 	}
 	waitingForChoice(/** @type {SideID} */ slot) {
@@ -729,6 +736,7 @@ class RoomBattle extends RoomGames.RoomGame {
 	 * @param {any} winner
 	 */
 	async onEnd(winner) {
+		this.timer.end();
 		// Declare variables here in case we need them for non-rated battles logging.
 		let p1score = 0.5;
 		const winnerid = toID(winner);
