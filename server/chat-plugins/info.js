@@ -983,7 +983,7 @@ const commands = {
 			let buffer = '<div class="scrollable"><table cellpadding="1" width="100%"><tr><th></th>';
 			let icon = {};
 			for (let type in mod.data.TypeChart) {
-				icon[type] = `<img src="https://${Config.routes.client}/sprites/types/' + type + '.png" width="32" height="14">`;
+				icon[type] = `<img src="https://${Config.routes.client}/sprites/types/${type}.png" width="32" height="14">`;
 				// row of icons at top
 				buffer += '<th>' + icon[type] + '</th>';
 			}
