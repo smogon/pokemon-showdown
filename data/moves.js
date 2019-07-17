@@ -12541,8 +12541,14 @@ let BattleMovedex = {
 				// @ts-ignore
 				source.boosts[i] = target.boosts[i];
 			}
-			if (target.volatiles['focusenergy']) source.addVolatile('focusenergy');
-			if (target.volatiles['laserfocus']) source.addVolatile('laserfocus');
+			const volatilesToCopy = ['focusenergy', 'laserfocus'];
+			for (const volatile of volatilesToCopy) {
+				if (target.volatiles[volatile]) {
+					source.addVolatile(volatile);
+				} else {
+					source.removeVolatile(volatile);
+				}
+			}
 			this.add('-copyboost', source, target, '[from] move: Psych Up');
 		},
 		secondary: null,
