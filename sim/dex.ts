@@ -836,7 +836,7 @@ export class ModdedDex {
 			if (subRuleTable.timer) {
 				if (ruleTable.timer) {
 					throw new Error(
-						`"${format.name}" has conflicting move validation rules from ` +
+						`"${format.name}" has conflicting timer validation rules from ` +
 						`"${ruleTable.timer[1]}" and "${subRuleTable.timer[1]}"`);
 				}
 				ruleTable.timer = subRuleTable.timer;
