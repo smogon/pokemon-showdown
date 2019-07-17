@@ -109,7 +109,7 @@ function merge(user1: User, user2: User) {
  *
  * If this behavior is undesirable, use Users.getExact.
  */
-function getUser(name: string | User | null, exactName: boolean = false) {
+function getUser(name: string | User | null, exactName = false) {
 	if (!name || name === '!') return null;
 	if ((name as User).userid) return name as User;
 	let userid = toID(name);
@@ -173,8 +173,7 @@ const usergroups = Object.create(null);
 function importUsergroups() {
 	// can't just say usergroups = {} because it's exported
 	for (const i in usergroups) delete usergroups[i];
-	// tslint:disable-next-line:no-floating-promises
-	FS('config/usergroups.csv').readIfExists().then(data => {
+	return FS('config/usergroups.csv').readIfExists().then(data => {
 		for (const row of data.split("\n")) {
 			if (!row) continue;
 			const cells = row.split(",");
@@ -187,9 +186,9 @@ function exportUsergroups() {
 	for (const i in usergroups) {
 		buffer += usergroups[i].substr(1).replace(/,/g, '') + ',' + usergroups[i].charAt(0) + "\n";
 	}
-	// tslint:disable-next-line:no-floating-promises
-	FS('config/usergroups.csv').write(buffer);
+	return FS('config/usergroups.csv').write(buffer);
 }
+// tslint:disable-next-line:no-floating-promises
 importUsergroups();
 
 function cacheGroupData() {
@@ -286,6 +285,7 @@ function setOfflineGroup(name: string, group: string, forceTrusted: boolean) {
 		name = usergroup ? usergroup.substr(1) : name;
 		usergroups[userid] = group + name;
 	}
+	// tslint:disable-next-line:no-floating-promises
 	exportUsergroups();
 	return true;
 }
@@ -430,8 +430,7 @@ class User extends Chat.MessageContext {
 	semilocked: string | null;
 	namelocked: string | ID | null;
 	permalocked: string | ID | null;
-	// actually {[k: ID]: string}, but typescript doesn't like that
-	prevNames: {[k: string]: string};
+	prevNames: {[id: /** ID */ string]: string};
 
 	inRooms: Set<string>;
 	games: Set<string>;
@@ -714,7 +713,7 @@ class User extends Chat.MessageContext {
 	canPromote(sourceGroup: string, targetGroup: string) {
 		return this.can('promote', sourceGroup) && this.can('promote', targetGroup);
 	}
-	resetName(isForceRenamed: boolean = false) {
+	resetName(isForceRenamed = false) {
 		return this.forceRename('Guest ' + this.guestNum, false, isForceRenamed);
 	}
 	updateIdentity(roomid: string | null = null) {
@@ -933,7 +932,7 @@ class User extends Chat.MessageContext {
 		Chat.loginfilter(this, null, userType);
 		return true;
 	}
-	forceRename(name: string, registered: boolean, isForceRenamed: boolean = false) {
+	forceRename(name: string, registered: boolean, isForceRenamed = false) {
 		// skip the login server
 		const userid = toID(name);
 
@@ -1153,7 +1152,7 @@ class User extends Chat.MessageContext {
 	 * Set a user's group. Pass (' ', true) to force trusted
 	 * status without giving the user a group.
 	 */
-	setGroup(group: string, forceTrusted: boolean = false) {
+	setGroup(group: string, forceTrusted = false) {
 		if (!group) throw new Error(`Falsy value passed to setGroup`);
 		this.group = group.charAt(0);
 		const wasStaff = this.isStaff;
@@ -1172,6 +1171,7 @@ class User extends Chat.MessageContext {
 			} else {
 				delete usergroups[this.userid];
 			}
+			// tslint:disable-next-line:no-floating-promises
 			exportUsergroups();
 		}
 	}
@@ -1271,7 +1271,7 @@ class User extends Chat.MessageContext {
 	 * If this user is included in the returned list of
 	 * alts (i.e. when forPunishment is true), they will always be the first element of that list.
 	 */
-	getAltUsers(includeTrusted: boolean = false, forPunishment: boolean = false) {
+	getAltUsers(includeTrusted = false, forPunishment = false) {
 		let alts = findUsers([this.getLastId()], Object.keys(this.ips), {includeTrusted, forPunishment});
 		alts = alts.filter(user => user !== this);
 		if (forPunishment) alts.unshift(this);
@@ -1612,7 +1612,7 @@ function socketDisconnect(worker: Worker, workerid: number, socketid: string) {
 	connection.onDisconnect();
 }
 function socketReceive(worker: Worker, workerid: number, socketid: string, message: string) {
-	const id = '' + workerid + '-' + socketid;
+	const id = `${workerid}-${socketid}`;
 
 	const connection = connections.get(id);
 	if (!connection) return;
