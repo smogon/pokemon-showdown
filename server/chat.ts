@@ -283,8 +283,10 @@ export function statusfilter(status: string, user: User) {
  * Translations
  *********************************************************/
 
-export const languages = new Map();
-export const translations = new Map();
+// language id -> language name
+export const languages: Map<string, string> = new Map();
+// language id -> (english string -> translated string)
+export const translations: Map<string, Map<string, [string, string[], string[]]>> = new Map();
 
 // tslint:disable-next-line: no-floating-promises
 FS(TRANSLATION_DIRECTORY).readdir().then(files => {
@@ -294,7 +296,7 @@ FS(TRANSLATION_DIRECTORY).readdir().then(files => {
 		interface TRStrings {
 			[k: string]: string;
 		}
-		const content: Partial<{name: string, strings: TRStrings}> = require(`../${TRANSLATION_DIRECTORY}${fname}`);
+		const content: {name: string, strings: TRStrings} = require(`../${TRANSLATION_DIRECTORY}${fname}`);
 		const id = fname.slice(0, -5);
 
 		languages.set(id, content.name || "Unknown Language");
@@ -312,7 +314,7 @@ FS(TRANSLATION_DIRECTORY).readdir().then(files => {
 					valLabels.push(str);
 					return '${}';
 				}).replace(/\[TN: ?.+?\]/g, '');
-				translations.get(id).set(newKey, [val, keyLabels, valLabels]);
+				translations.get(id)!.set(newKey, [val, keyLabels, valLabels]);
 			}
 		}
 	}
@@ -329,9 +331,9 @@ export function tr(language: string | null, strings: TemplateStringsArray | stri
 	}
 
 	// If strings is an array (normally the case), combine before translating.
-	const trString = Array.isArray(strings) ? strings.join('${}') : strings;
+	const trString = Array.isArray(strings) ? strings.join('${}') : strings as string;
 
-	const entry = translations.get(language).get(trString);
+	const entry = translations.get(language)!.get(trString);
 	let [translated, keyLabels, valLabels] = entry || ["", [], []];
 	if (!translated) translated = trString;
 
@@ -339,13 +341,12 @@ export function tr(language: string | null, strings: TemplateStringsArray | stri
 	if (keys.length) {
 		let reconstructed = '';
 
-		const left = keyLabels.slice();
+		const left: (string | null)[] = keyLabels.slice();
 		for (const [i, str] of translated.split('${}').entries()) {
 			reconstructed += str;
 			if (keys[i]) {
 				let index = left.indexOf(valLabels[i]);
 				if (index < 0) {
-					// @ts-ignore why
 					index = left.findIndex(val => !!val);
 				}
 				if (index < 0) index = i;
@@ -941,8 +942,9 @@ export class CommandContext extends MessageContext {
 			const broadcastMessage = (suppressMessage || this.message).toLowerCase().replace(/[^a-z0-9\s!,]/g, '');
 
 			if (!ignoreCooldown && this.room && this.room.lastBroadcast === broadcastMessage &&
-					this.room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN &&
-					!this.user.can('bypassall')) {
+				this.room.lastBroadcastTime >= Date.now() - BROADCAST_COOLDOWN &&
+				!this.user.can('bypassall')) {
+
 				this.errorReply("You can't broadcast this because it was just broadcasted.");
 				return false;
 			}
@@ -1042,7 +1044,8 @@ export class CommandContext extends MessageContext {
 					return this.errorReply(`The user "${targetUser.name}" is locked and cannot be PMed.`);
 				}
 				if (Config.pmmodchat && !user.authAtLeast(Config.pmmodchat) &&
-						!targetUser.canPromote(user.group, Config.pmmodchat)) {
+					!targetUser.canPromote(user.group, Config.pmmodchat)) {
+
 					const groupName = Config.groups[Config.pmmodchat] && Config.groups[Config.pmmodchat].name || Config.pmmodchat;
 					return this.errorReply(`On this server, you must be of rank ${groupName} or higher to PM users.`);
 				}
