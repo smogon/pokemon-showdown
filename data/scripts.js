@@ -114,7 +114,10 @@ let BattleScripts = {
 			for (const dancer of dancers) {
 				if (this.faintMessages()) break;
 				this.add('-activate', dancer, 'ability: Dancer');
-				this.runMove(move.id, dancer, 0, this.getAbility('dancer'), undefined, true);
+				// @ts-ignore - Fuzz testing shows that TypeScript is likely wrong here and it's impossible for target to be null
+				const dancersTarget = target.side !== dancer.side && pokemon.side === dancer.side ? target : pokemon;
+				// @ts-ignore - Fuzz testing shows that TypeScript is likely wrong here and it's impossible for target to be null
+				this.runMove(move.id, dancer, this.getTargetLoc(dancersTarget, dancer), this.getAbility('dancer'), undefined, true);
 				// Using a Dancer move is enough to spoil Fake Out etc.
 				dancer.activeTurns++;
 			}

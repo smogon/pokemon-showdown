@@ -108,4 +108,32 @@ describe('Dancer', function () {
 		const dancer = battle.p1.active[0];
 		assert.hurts(dancer, () => battle.makeChoices('move fierydance', 'move meanlook'));
 	});
+
+	it('should target the user of a Dance move unless it was an ally attacking an opponent', function () {
+		battle = common.createBattle({gameType: 'doubles'});
+		battle.setPlayer('p1', {team: [
+			{species: 'Oricorio', level: 98, ability: 'dancer', item: 'laggingtail', moves: ['sleeptalk', 'protect', 'teeterdance']},
+			{species: 'Oricorio', level: 99, ability: 'heatproof', moves: ['fierydance', 'sleeptalk']},
+		]});
+		battle.setPlayer('p2', {team: [
+			{species: 'Oricorio', ability: 'heatproof', moves: ['fierydance', 'sleeptalk']},
+			{species: 'Suicune', ability: 'heatproof', moves: ['sleeptalk']},
+		]});
+
+		const opponentTargetingAlly = battle.p2.active[0];
+		assert.hurts(opponentTargetingAlly, () => battle.makeChoices('move sleeptalk, move sleeptalk', 'move fierydance 2, move sleeptalk'));
+
+		const opponentTargetingOpponent = battle.p2.active[0];
+		assert.hurts(opponentTargetingOpponent, () => battle.makeChoices('move sleeptalk, move sleeptalk', 'move fierydance -2, move sleeptalk'));
+
+		const allyTargetingDancer = battle.p1.active[1];
+		assert.hurts(allyTargetingDancer, () => battle.makeChoices('move sleeptalk, move fierydance -1', 'move sleeptalk, move sleeptalk'));
+
+		const allyTargetingOpponent = battle.p1.active[1];
+		const opponentTargetedByAlly = battle.p2.active[1];
+		const opponentNotTargetedByAlly = battle.p2.active[0];
+		assert.hurts(opponentTargetedByAlly, () => battle.makeChoices('move sleeptalk, move fierydance 2', 'move sleeptalk, move sleeptalk'));
+		assert(!allyTargetingOpponent.hurtThisTurn);
+		assert(!opponentNotTargetedByAlly.hurtThisTurn);
+	});
 });
