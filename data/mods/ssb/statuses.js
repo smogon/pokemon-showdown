@@ -892,6 +892,19 @@ let BattleStatuses = {
 			this.add(`c|@MacChaeger|im gonna pyuk`);
 		},
 	},
+	madmonty: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c|+Mad Monty ¾°|/me puts on a coat, to protect himself from the cold.`);
+			this.add(`c|+Mad Monty ¾°|Don't get eaten by llamas!`);
+		},
+		onSwitchOut() {
+			this.add(`c|+Mad Monty ¾°|Oh, I see how it is. Ok, fine. Be that way. I'll just be over here, then.`);
+		},
+		onFaint() {
+			this.add(`c|+Mad Monty ¾°|I take it back- I hope you DO get eaten by llamas. Toodles!`);
+		},
+	},
 	majorbowman: {
 		noCopy: true,
 		onStart() {

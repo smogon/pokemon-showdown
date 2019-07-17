@@ -421,6 +421,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Nap Time',
 				evs: {hp: 252, spa: 80, spe: 176}, ivs: {atk: 0}, nature: 'Modest',
 			},
+			'Mad Monty ¾°': {
+				species: 'Zekrom', ability: 'Minnesnowta', item: 'Expert Belt', gender: 'N',
+				moves: ['Fusion Bolt', 'Avalanche', 'Hone Claws'],
+				signatureMove: 'Llamacide',
+				evs: {atk: 252, spa: 4, spe: 252}, ivs: {def: 0}, nature: 'Lonely', shiny: true,
+			},
 			'MajorBowman': {
 				species: 'Victini', ability: 'Victory Star', item: 'Victinium Z', gender: 'M',
 				moves: ['Bolt Strike', 'Zen Headbutt', 'U-turn'],

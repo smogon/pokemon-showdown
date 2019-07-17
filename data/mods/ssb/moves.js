@@ -2403,6 +2403,40 @@ let BattleMovedex = {
 		type: "Fairy",
 		zMoveEffect: 'clearnegativeboosts',
 	},
+	// Mad Monty ¾°
+	"llamacide": {
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		desc: "This attack has a 40% chance to lower foe's Defense, and a 10% chance to Freeze it.",
+		shortDesc: "40% chance to lower foe's Defense, 10% to Freeze",
+		id: "llamacide",
+		name: "Llamacide",
+		pp: 10,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Nasty Plot", source);
+			this.add('-anim', source, "Plasma Fists", target);
+			this.add('-anim', source, "Sheer Cold", target);
+		},
+		secondaries: [
+			{
+				status: "frz",
+				chance: 10,
+			},
+			{
+				chance: 40,
+				boosts: {
+					def: -1,
+				},
+			},
+		],
+		target: "normal",
+		type: "Ice",
+	},
 	// MajorBowman
 	blazeofglory: {
 		accuracy: true,

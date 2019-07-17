@@ -562,6 +562,25 @@ let BattleAbilities = {
 			}
 		},
 	},
+	// Mad Monty ¾°
+	minnesnowta: {
+		desc: "This Pokemon is immune to Ice-type moves. Its Ice and Electric type attacks have their power multiplied by 1.2x.",
+		shortDesc: "This Pokemon's Ice and Electric attacks  have their power multiplied by 1.2; Ice immunity.",
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Ice') {
+				this.add('-immune', target, '[from] ability: Minnesnowta');
+			}
+		},
+		onBasePowerPriority: 8,
+		onBasePower(basePower, attacker, defender, move) {
+			if (['Electric', 'Ice'].includes(move.type)) {
+				this.debug('Minnesnowta boost');
+				return this.chainModify([0x1333, 0x1000]);
+			}
+		},
+		id: "minnesnowta",
+		name: "Minnesnowta",
+	},
 	// Marshmallon
 	sightseeing: {
 		desc: "If this Pokemon is a Castform, its type and moves changes to the current weather condition's type, except Sandstorm. The user's Defense, Special Attack, Special Defense, Speed, and Accuracy are all boosted 1.5x during weather.",
