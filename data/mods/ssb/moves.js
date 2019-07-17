@@ -3320,6 +3320,34 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Electric",
 	},
+	// Rage
+	rageeeee: {
+		accuracy: 100,
+		basePower: 40,
+		category: "Physical",
+		desc: "The user becomes affected with the effects of rage and endure. The opponent's next attack will hit 2 to 5 times with a base power of 25.",
+		shortDesc: "User: Rage + Endure. Foe: next move hits 2-5x.",
+		id: "rageeeee",
+		name: "Rageeeee",
+		isNonstandard: "Custom",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, contact: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Rage", target);
+		},
+		onHit(target, source) {
+			source.addVolatile('rage', source);
+			source.addVolatile('endure', source);
+			target.addVolatile('enrageeeeed', source);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Flying",
+	},
 	// Raid
 	firestorm: {
 		accuracy: 90,
@@ -3327,6 +3355,8 @@ let BattleMovedex = {
 		category: "Special",
 		desc: "100% chance to burn the target.",
 		shortDesc: "100% chance to burn the target.",
+		id: "firestorm",
+		name: "Firestorm",
 		isNonstandard: "Custom",
 		pp: 10,
 		priority: 0,
