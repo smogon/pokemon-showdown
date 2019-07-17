@@ -1752,3 +1752,10 @@ Rooms.rooms.set('global', Rooms.global);
 
 // @ts-ignore
 module.exports = Rooms;
+
+// For accessing types in full typescript files
+/** @typedef {GlobalRoom} GlobalRoomType */
+/** @typedef {ChatRoom} ChatRoomType */
+/** @typedef {GameRoom} GameRoomType */
+/** @typedef {BasicRoom} BasicRoomType */
+/** @typedef {BasicChatRoom} BasicChatRoomType */

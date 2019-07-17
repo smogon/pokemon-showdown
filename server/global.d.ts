@@ -4,11 +4,11 @@ import RoomsType = require('./rooms');
 import RoomlogsType = require('./roomlogs');
 import {LadderStore as LadderStoreType} from './ladders-remote';
 import LaddersType = require('./ladders');
-import UsersType = require('./users');
 import PunishmentsType = require('./punishments');
 import ChatType = require('./chat');
 
 import * as StreamsType from './../lib/streams';
+import * as UsersType from './users';
 
 declare global {
 	namespace NodeJS {
@@ -41,10 +41,9 @@ declare global {
 	const Roomlog: typeof RoomlogsType.Roomlog
 
 	// users
-	const Users: typeof UsersType
-	const User: typeof UsersType.User
-	const Connection: typeof UsersType.Connection
-
+	const Users: typeof UsersType.Users
+	const User: typeof UsersType.Users.User
+	const Connection: typeof UsersType.Users.Connection
 	// chat
 	const Chat: typeof ChatType
 	const CommandContext: typeof ChatType.CommandContext
