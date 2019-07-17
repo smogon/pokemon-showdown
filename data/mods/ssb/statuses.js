@@ -954,18 +954,6 @@ let BattleStatuses = {
 			this.add(`c|@Megazard|Better luck next thyme`);
 		},
 	},
-	mickthespud: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|%MicktheSpud|Woah!`);
-		},
-		onSwitchOut() {
-			this.add(`c|%MicktheSpud|Woah!`);
-		},
-		onFaint() {
-			this.add(`c|%MicktheSpud|Woah!`);
-		},
-	},
 	mitsuki: {
 		noCopy: true,
 		onStart() {

@@ -683,35 +683,6 @@ let BattleAbilities = {
 			}
 		},
 	},
-	// MicktheSpud
-	fakecrash: {
-		desc: "If this Pokemon is a Lycanroc-Midnight, the first hit it takes in battle deals 0 neutral damage. Its disguise is then broken, and it transforms into Lycanroc-Dusk. Confusion damage also breaks the disguise.",
-		shortDesc: "If this Pokemon is a Lycanroc-Midnight, the first hit it takes in battle deals 0 damage.",
-		id: "fakecrash",
-		name: "Fake Crash",
-		isNonstandard: "Custom",
-		onDamagePriority: 1,
-		onDamage(damage, target, source, effect) {
-			if (effect && effect.effectType === 'Move' && target.template.speciesid === 'lycanrocmidnight' && !target.transformed) {
-				this.add('-activate', target, 'ability: Fake Crash');
-				this.effectData.busted = true;
-				return 0;
-			}
-		},
-		onEffectiveness(typeMod, target, type, move) {
-			if (!target) return;
-			if (target.template.speciesid !== 'lycanrocmidnight' || target.transformed || (target.volatiles['substitute'] && !(move.flags['authentic'] || move.infiltrates))) return;
-			if (!target.runImmunity(move.type)) return;
-			return 0;
-		},
-		onUpdate(pokemon) {
-			if (pokemon.template.speciesid === 'lycanrocmidnight' && this.effectData.busted) {
-				let templateid = 'Lycanroc-Dusk';
-				pokemon.formeChange(templateid, this.effect, true);
-				this.add('-message', `${pokemon.name || pokemon.species}'s true identity was revealed!`);
-			}
-		},
-	},
 	// nui
 	prismaticsurge: {
 		desc: "On switch-in, this Pokemon summons Prismatic Terrain.",
