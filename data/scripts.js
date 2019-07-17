@@ -114,9 +114,9 @@ let BattleScripts = {
 			for (const dancer of dancers) {
 				if (this.faintMessages()) break;
 				this.add('-activate', dancer, 'ability: Dancer');
-				// @ts-ignore - Fuzz testing shows that TypeScript is likely wrong here and it's impossible for target to be null
+				// @ts-ignore - the Dancer ability can't trigger on a move where target is null because it does not copy failed moves.
 				const dancersTarget = target.side !== dancer.side && pokemon.side === dancer.side ? target : pokemon;
-				// @ts-ignore - Fuzz testing shows that TypeScript is likely wrong here and it's impossible for target to be null
+				// @ts-ignore
 				this.runMove(move.id, dancer, this.getTargetLoc(dancersTarget, dancer), this.getAbility('dancer'), undefined, true);
 				// Using a Dancer move is enough to spoil Fake Out etc.
 				dancer.activeTurns++;
