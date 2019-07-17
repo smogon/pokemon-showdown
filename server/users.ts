@@ -403,6 +403,7 @@ class Connection {
 }
 
 type ChatQueueEntry = [string, string, Connection];
+
 const SETTINGS = [
 	'isSysop', 'isStaff', 'blockChallenges', 'blockPMs',
 	'ignoreTickets', 'lastConnected', 'inviteOnlyNextBattle',
