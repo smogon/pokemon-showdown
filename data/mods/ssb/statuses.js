@@ -99,13 +99,13 @@ let BattleStatuses = {
 	aethernum: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%Aethernum|I am __Eterno__, fear me! ...or not...but you should! ...or not...`);
+			this.add(`c|@Aethernum|I am __Eterno__, fear me! ...or not...but you should! ...or not...`);
 		},
 		onSwitchOut() {
-			this.add(`c|%Aethernum|I'm not defeated, i'm just afk :^)`);
+			this.add(`c|@Aethernum|I'm not defeated, i'm just afk :^)`);
 		},
 		onFaint() {
-			this.add(`c|%Aethernum| Has been fun! But i'm too lazy to keep fighting ^_^'`);
+			this.add(`c|@Aethernum| Has been fun! But i'm too lazy to keep fighting ^_^'`);
 		},
 	},
 	akiamara: {
@@ -385,13 +385,13 @@ let BattleStatuses = {
 	decem: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%Decem|:D`);
+			this.add(`c|+Decem|:D`);
 		},
 		onSwitchOut() {
-			this.add(`c|%Decem|bye`);
+			this.add(`c|+Decem|bye`);
 		},
 		onFaint() {
-			this.add(`c|%Decem|>:(`);
+			this.add(`c|+Decem|>:(`);
 		},
 	},
 	deg: {
@@ -523,13 +523,13 @@ let BattleStatuses = {
 		noCopy: true,
 		onStart(target, source) {
 			this.add('-start', source, 'typechange', `Fairy/Steel`);
-			this.add(`c|+fart|it's fukken raw`);
+			this.add(`c|%fart|it's fukken raw`);
 		},
 		onSwitchOut() {
-			this.add(`c|+fart|this boy is not correct. he is **flawed.**`);
+			this.add(`c|%fart|this boy is not correct. he is **flawed.**`);
 		},
 		onFaint() {
-			this.add(`c|+fart|the things I do for love...`);
+			this.add(`c|%fart|the things I do for love...`);
 		},
 	},
 	flare: {
@@ -1130,13 +1130,13 @@ let BattleStatuses = {
 	pre: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|&pre|let's go, in and out, 20 minute adventure`);
+			this.add(`c|~pre|let's go, in and out, 20 minute adventure`);
 		},
 		onSwitchOut() {
-			this.add(`c|&pre|sometimes science is more art than science`);
+			this.add(`c|~pre|sometimes science is more art than science`);
 		},
 		onFaint() {
-			this.add(`c|&pre|LAMBS TO THE COSMIC SLAUGHTER!!`);
+			this.add(`c|~pre|LAMBS TO THE COSMIC SLAUGHTER!!`);
 		},
 	},
 	ptoad: {
