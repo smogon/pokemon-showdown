@@ -27,7 +27,7 @@ let Formats = [
 		name: "[Gen 7] Random Battle (Blitz)",
 		mod: 'gen7',
 		team: 'random',
-		ruleset: ['PotD', 'Pokemon', 'Sleep Clause Mod', 'HP Percentage Mod', 'Cancel Mod', 'Blitz'],
+		ruleset: ['[Gen 7] Random Battle', 'Blitz'],
 	},
 	{
 		name: "[Gen 7] Unrated Random Battle",
