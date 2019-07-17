@@ -3023,6 +3023,39 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Poison",
 	},
+	// Pirate Princess
+	teabreak: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "The user falls asleep for the next two turns and restores all of its HP, curing itself of any major status condition and boosting its defenses in the process. Fails if the user has full HP, is already asleep, or if another effect is preventing sleep.",
+		shortDesc: "User sleeps 2 turns and restores HP and status; boosts defenses.",
+		id: "teabreak",
+		name: "Tea Break",
+		pp: 10,
+		priority: 0,
+		flags: {snatch: 1, heal: 1},
+		onTryMove(pokemon) {
+			this.attrLastMove('[still]');
+			if (pokemon.hp < pokemon.maxhp && pokemon.status !== 'slp' && !pokemon.hasAbility('comatose')) return;
+			this.add('-fail', pokemon);
+			return null;
+		},
+		onHit(target, source, move) {
+			if (!target.setStatus('slp', source, move)) return false;
+			target.statusData.time = 3;
+			target.statusData.startTime = 3;
+			this.heal(target.maxhp); // Aesthetic only as the healing happens after you fall asleep in-game
+			this.boost({atk: 1, spa: 1}, target, source);
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Rest", source);
+			this.add('-anim', source, "Calm Mind", source);
+		},
+		secondary: null,
+		target: "self",
+		type: "Fairy",
+	},
 	// pluviometer
 	grammarhammer: {
 		accuracy: 100,

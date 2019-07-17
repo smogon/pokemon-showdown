@@ -1067,6 +1067,18 @@ let BattleStatuses = {
 			this.add(`c|@Paradise|⠠⠽⠕⠥’⠗⠑⠀⠋⠥⠉⠅⠊⠝⠛⠀⠙⠑⠁⠙,⠀⠅⠊⠙⠙⠕.`);
 		},
 	},
+	pirateprincess: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|%Pirate Princess|Ahoy!`);
+		},
+		onSwitchOut() {
+			this.add(`c|%Pirate Princess|You will always remember this as the day that you almost caught Captain Ja- Pirate Princess!`);
+		},
+		onFaint() {
+			this.add(`c|%Pirate Princesse|Erm… Parley?`);
+		},
+	},
 	pluviometer: {
 		noCopy: true,
 		onStart() {
@@ -1658,6 +1670,42 @@ let BattleStatuses = {
 		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, 'Attract', '[silent]');
+		},
+	},
+	// Custom Acid Rain weather for Pirate Princess
+	acidrain: {
+		name: 'Acid Rain',
+		id: 'acidrain',
+		num: 0,
+		effectType: 'Weather',
+		duration: 5,
+		onModifySpDPriority: 10,
+		onModifySpD(spd, pokemon) {
+			if (pokemon.hasType('Poison') && this.field.isWeather('acidrain')) {
+				return this.modify(spd, 1.5);
+			}
+		},
+		onStart(battle, source, effect) {
+			this.add('-weather', 'Acid Rain');
+		},
+		onResidualOrder: 1,
+		onResidual() {
+			this.add('-weather', 'Acid Rain', '[upkeep]');
+			if (this.field.isWeather('acidrain')) this.eachEvent('Weather');
+		},
+		onWeather(target) {
+			if (target.hasType('Poison')) return;
+			this.damage(target.maxhp / 16);
+		},
+		onModifyMovePriority: -5,
+		onModifyMove(move) {
+			if (!move.ignoreImmunity) move.ignoreImmunity = {};
+			if (move.ignoreImmunity !== true) {
+				move.ignoreImmunity['Steel'] = true;
+			}
+		},
+		onEnd() {
+			this.add('-weather', 'none');
 		},
 	},
 	// Custom effect for Rage's multihit

@@ -128,6 +128,11 @@ let BattlePokedex = {
 		abilities: {0: 'Tough Claws'},
 		types: ['Dark', 'Fairy'],
 	},
+	// Pirate Princess
+	gulpin: {
+		inherit: true,
+		baseStats: {hp: 70, atk: 43, def: 53, spa: 86, spd: 53, spe: 40},
+	},
 	// PokemonDeadChannel
 	charizardmegax: {
 		inherit: true,

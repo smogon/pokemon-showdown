@@ -750,6 +750,15 @@ let BattleAbilities = {
 			}
 		},
 	},
+	// Pirate Princess
+	acidrain: {
+		shortDesc: "On switch-in, this Pokemon summons Acid Rain.",
+		onStart(source) {
+			this.field.setWeather('acidrain');
+		},
+		id: "acidrain",
+		name: "Acid Rain",
+	},
 	// pre
 	optimize: {
 		desc: "This Pokemon changes forme and sets depending on which attack it uses, before the attack takes place. If this Pokemon uses Psycho Boost, it first changes to Deoxys-Attack. If this Pokemon uses Recover, it first changes to Deoxys-Defense. If this Pokemon uses Extreme Speed, it first changes to Deoxys-Speed. If this Pokemon uses Refactor, it first changes to Deoxys.",

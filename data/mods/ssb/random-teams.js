@@ -511,6 +511,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Corrosive Toxic',
 				evs: {hp: 252, def: 4, spd: 252}, nature: 'Careful',
 			},
+			'Pirate Princess': {
+				species: 'Gulpin', ability: 'Acid Rain', item: 'Eviolite', gender: 'F',
+				moves: ['Toxic', 'Venoshock', 'Sleep Talk'],
+				signatureMove: 'Tea Break',
+				evs: {hp: 252, def: 236, spd: 20}, nature: 'Bold', shiny: true,
+			},
 			'pluviometer': {
 				species: 'Mismagius', ability: 'Sheer Force', item: 'Life Orb', gender: '',
 				moves: ['Taunt', 'Moonblast', ['Mystical Fire', 'Earth Power']],
