@@ -565,6 +565,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Firestorm',
 				evs: {def: 4, spa: 252, spe: 252}, nature: 'Timid',
 			},
+			'Ransei': {
+				species: 'Audino-Mega', ability: 'Superguarda', item: 'Safety Goggles', gender: 'M',
+				moves: ['Photon Geyser', 'Sacred Fire', 'Play Rough'],
+				signatureMove: 'Mashup Motive',
+				evs: {hp: 248, atk: 252, spe: 8}, nature: 'Adamant',
+			},
 			'Rory Mercury': {
 				species: 'Charjabug', ability: 'Recharge', item: 'Eviolite', gender: 'M',
 				moves: ['First Impression', 'Leech Life', 'Bolt Strike'],

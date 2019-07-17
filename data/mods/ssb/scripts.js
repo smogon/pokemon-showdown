@@ -306,6 +306,13 @@ let BattleScripts = {
 		this.runEvent('TerrainStart', source, source, status);
 		return true;
 	},
+	modifyDamage(baseDamage, pokemon, target, move, suppressMessages) {
+		if (pokemon.status === 'brn' && move.category === 'Physical' && !(pokemon.hasAbility('guts') || pokemon.hasAbility('superguarda'))) {
+			if (this.gen < 6 || move.id !== 'facade') {
+				baseDamage = this.modify(baseDamage, 0.5);
+			}
+		}
+	},
 	pokemon: {
 		getActionSpeed() {
 			let speed = this.getStat('spe', false, false);

@@ -828,6 +828,38 @@ let BattleAbilities = {
 			if (move.type === 'Flying') move.accuracy = true;
 		},
 	},
+	// Ransei
+	superguarda: {
+		desc: "This user's Attack is doubled until it is hit by a super effective attack. If this Pokemon is statused, its Attack is 1.5x; ignores burn halving physical damage. This Pokemon can only be damaged by direct attacks.",
+		shortDesc: "Atk 2x until hit by SE move. 1.5x Atk if statused. Immune to indirect dmg.",
+		id: "superguarda",
+		name: "Superguarda",
+		isNonstandard: "Custom",
+		onDamage(damage, target, source, effect) {
+			if (effect.effectType !== 'Move') {
+				return false;
+			}
+		},
+		onAfterDamage(damage, target, source, move) {
+			if (target.getMoveHitData(move).typeMod > 0) {
+				if (!target.m.heavilydamaged) {
+					this.add('-message', `${target.name}'s attack was reduced after that super effective attack!`);
+					target.m.heavilydamaged = true;
+				}
+				this.add(`c|@Ransei|Yo really? Why do you keep hitting me with super effective moves?`);
+			}
+		},
+		onModifyAtk(atk, pokemon) {
+			let atkmult = 1;
+			if (!pokemon.m.heavilydamaged) {
+				atkmult *= 2;
+			}
+			if (pokemon.m.status) {
+				atkmult *= 1.5;
+			}
+			return this.chainModify(atkmult);
+		},
+	},
 	// Rory Mercury
 	recharge: {
 		desc: "Upon switching out, this Pokemon has its major status condition cured and restores 1/3 of its maximum HP, rounded down. When this Pokemon switches in, if it uses an Electric-type attack on the next turn, that attack's power will be doubled.",

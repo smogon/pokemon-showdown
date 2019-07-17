@@ -3345,6 +3345,39 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fire",
 	},
+	// Ransei
+	mashupmotive: {
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		desc: "Raises the user's Accuracy by 1. 50% chance to raise Attack by 1.",
+		shortDesc: "Raises Accuracy by 1. 50% chance to raise Atk by 1.",
+		id: "mashupmotive",
+		name: "Mashup Motive",
+		isNonstandard: "Custom",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Revelation Dance", target);
+		},
+		self: {
+			boosts: {
+				accuracy: 1,
+			},
+		},
+		secondary: {
+			chance: 50,
+			self: {
+				boosts: {atk: 1},
+			},
+		},
+		target: "normal",
+		type: "Normal",
+	},
 	// Rory Mercury
 	switchoff: {
 		accuracy: 100,

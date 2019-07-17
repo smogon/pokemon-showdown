@@ -1192,6 +1192,15 @@ let BattleStatuses = {
 		noCopy: true,
 		// No messages provided
 	},
+	ransei: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|@Ransei| Sup! I have been brought from the world of Hackmons to give you a preview of our characteristics. I’ve been genetically engineered to beat you at all costs. Expect to lose this fight!`);
+		},
+		onFaint() {
+			this.add(`c|@Ransei|ripsei`);
+		},
+	},
 	rorymercury: {
 		noCopy: true,
 		onStart(pokemon) {
