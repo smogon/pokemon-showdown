@@ -1554,7 +1554,6 @@ function pruneInactive(threshold: number) {
 				(user.can('bypassafktimer') ||
 				Array.from(user.inRooms).some(room => user.can('bypassafktimer', null, Rooms(room) as BasicChatRoom))));
 		if (!bypass && !user.connections.some(connection => now - connection.lastActiveTime < awayTimer)) {
-			user.popup(`You have been inactive for over ${awayTimer / MINUTES} minutes, and have been marked as idle as a result. To mark yourself as back, send a message in chat, or use the /back command.`);
 			user.setStatusType('idle');
 		}
 		if (user.connected) continue;
