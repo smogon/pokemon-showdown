@@ -883,7 +883,7 @@ export class CommandContext extends MessageContext {
 		action: string,
 		user: string | User | null = null,
 		note: string | null = null,
-		options: Partial<{noalts: boolean, noip: boolean}> = {}
+		options: Partial<{noalts: any, noip: any}> = {}
 	) {
 		let buf = `(${this.room.id}) ${action}: `;
 		if (user) {

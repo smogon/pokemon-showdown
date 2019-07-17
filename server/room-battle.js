@@ -1227,7 +1227,7 @@ const PM = new StreamProcessManager(module, () => {
 if (!PM.isParentProcess) {
 	// This is a child process!
 	global.Config = require(/** @type {any} */('../.server-dist/config-loader')).Config;
-	global.Chat = require('../.server-dist/chat');
+	global.Chat = require(/** @type {any} */('../.server-dist/chat'));
 	// @ts-ignore ???
 	global.Monitor = {
 		/**
