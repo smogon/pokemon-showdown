@@ -5,10 +5,10 @@ import RoomlogsType = require('./roomlogs');
 import {LadderStore as LadderStoreType} from './ladders-remote';
 import LaddersType = require('./ladders');
 import PunishmentsType = require('./punishments');
-import ChatType = require('./chat');
 
 import * as StreamsType from './../lib/streams';
 import * as UsersType from './users';
+import * as ChatType from './chat'
 
 declare global {
 	namespace NodeJS {

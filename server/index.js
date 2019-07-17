@@ -94,7 +94,7 @@ global.LoginServer = require('../.server-dist/loginserver').LoginServer;
 
 global.Ladders = require('./ladders');
 
-global.Chat = require('./chat');
+global.Chat = require('../.server-dist/chat');
 
 global.Users = require('../.server-dist/users').Users;
 

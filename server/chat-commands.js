@@ -3162,7 +3162,7 @@ const commands = {
 					}
 				}
 
-				Chat.uncache('./server/chat');
+				Chat.uncache('./.server-dist/chat');
 				Chat.uncache('./server/chat-commands');
 				Chat.uncacheDir('./server/chat-plugins');
 				Chat.uncacheDir('./translations');
