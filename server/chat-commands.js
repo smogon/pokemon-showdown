@@ -336,7 +336,7 @@ const commands = {
 	'!version': true,
 	version(target, room, user) {
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox(`Server version: <b>${Chat.package.version}</b>`);
+		this.sendReplyBox(`Server version: <b>${Chat.packageData.version}</b>`);
 	},
 
 	'!authority': true,
