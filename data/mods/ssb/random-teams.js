@@ -590,12 +590,6 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Switch Off',
 				evs: {hp: 252, atk: 252, def: 4}, ivs: {spe: 0}, nature: 'Brave',
 			},
-			'Saburo': {
-				species: 'Rhydon', ability: 'Fur Coat', item: 'Eviolite', gender: 'M',
-				moves: ['Thousand Arrows', 'Slack Off', ['Glare', 'Toxic']],
-				signatureMove: 'Magma Ore',
-				evs: {hp: 252, atk: 16, spd: 240}, nature: 'Adamant',
-			},
 			'SamJo': {
 				species: 'Mamoswine', ability: 'Thiccer Fat', item: 'Thiccinium Z', gender: '',
 				moves: ['Icicle Crash', 'Precipice Blades', ['Ice Shard', 'Superpower', 'Stone Edge', 'Knock Off']],

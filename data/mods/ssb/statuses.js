@@ -412,18 +412,6 @@ let BattleStatuses = {
 			this.add(`c|@DragonWhale|i would switch to chomper here`);
 		},
 	},
-	duck: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|+duck|Yes, I'm actually a duck. I know.`);
-		},
-		onSwitchOut() {
-			this.add(`c|+duck|/me waddles away`);
-		},
-		onFaint() {
-			this.add(`c|+duck|Duck you! That move was too op anyway.`);
-		},
-	},
 	e4flint: {
 		// Fire type when mega evolving implemented in scripts.js
 		noCopy: true,
@@ -1240,18 +1228,6 @@ let BattleStatuses = {
 			this.add(`c|+Rory Mercury|/me shook af`);
 		},
 	},
-	saburo: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|+Saburo|I ROCK!`);
-		},
-		onSwitchOut() {
-			this.add(`c|+Saburo|I'll be back to rock your world.`);
-		},
-		onFaint() {
-			this.add(`c|+Saburo|This is... rock bottom.`);
-		},
-	},
 	samjo: {
 		noCopy: true,
 		onStart() {
@@ -1624,19 +1600,6 @@ let BattleStatuses = {
 				move.basePower += 20;
 				this.debug('glitch out base power boost');
 			}
-		},
-	},
-	// Type-changing custom effect for Saburo
-	magmaore2: {
-		duration: 1,
-		noCopy: true,
-		onStart(pokemon, source) {
-			source.setType(source.types.map(type => type === "Ground" ? "Fire" : type));
-			this.add('-start', source, 'typechange', source.types.join('/'), '[from] move: x1');
-		},
-		onEnd(source) {
-			source.setType(source.types.map(type => type === "Fire" ? "Ground" : type));
-			this.add('-start', source, 'typechange', source.types.join('/'), '[from] move: x1');
 		},
 	},
 	// Modified type setup for arceus
