@@ -416,7 +416,7 @@ let BattleFormats = {
 		},
 	},
 	blitz: {
-		effectType: 'ValidatorRule',
+		effectType: 'Rule',
 		name: 'Blitz',
 		desc: "Super-fast 'Blitz' timer giving 30 second Team Preview and 10 seconds per turn.",
 		onBegin() {
@@ -425,7 +425,7 @@ let BattleFormats = {
 		timer: {starting: 15, addPerTurn: 5, maxPerTurn: 15, maxFirstTurn: 30, grace: 30},
 	},
 	vgctimer: {
-		effectType: 'ValidatorRule',
+		effectType: 'Rule',
 		name: 'VGC Timer',
 		desc: "VGC's timer: 90 second Team Preview, 7 minutes Your Time, 1 minute per turn",
 		timer: {starting: 7 * 60, addPerTurn: 0, maxPerTurn: 55, maxFirstTurn: 90, grace: 90, timeoutAutoChoose: true, dcTimerBank: false},
