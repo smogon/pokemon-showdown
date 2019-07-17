@@ -297,7 +297,6 @@ let Formats = [
 
 		mod: 'gen7',
 		searchShow: false,
-		canUseRandomTeam: true,
 		debug: true,
 		maxLevel: 9999,
 		trunc(n) { return Math.trunc(n); },
@@ -578,7 +577,6 @@ let Formats = [
 		mod: 'gen7',
 		gameType: 'doubles',
 		searchShow: false,
-		canUseRandomTeam: true,
 		maxLevel: 9999,
 		trunc(n) { return Math.trunc(n); },
 		defaultLevel: 100,
@@ -981,7 +979,6 @@ let Formats = [
 
 		mod: 'letsgo',
 		searchShow: false,
-		canUseRandomTeam: true,
 		debug: true,
 		maxLevel: 9999,
 		trunc(n) { return Math.trunc(n); },
@@ -1461,7 +1458,6 @@ let Formats = [
 
 		mod: 'gen6',
 		searchShow: false,
-		canUseRandomTeam: true,
 		debug: true,
 		maxLevel: 9999,
 		trunc(n) { return Math.trunc(n); },
@@ -1544,7 +1540,6 @@ let Formats = [
 		mod: 'gen6',
 		gameType: 'doubles',
 		searchShow: false,
-		canUseRandomTeam: true,
 		maxLevel: 9999,
 		trunc(n) { return Math.trunc(n); },
 		defaultLevel: 100,
@@ -1575,7 +1570,6 @@ let Formats = [
 		mod: 'gen6',
 		gameType: 'triples',
 		searchShow: false,
-		canUseRandomTeam: true,
 		maxLevel: 9999,
 		trunc(n) { return Math.trunc(n); },
 		defaultLevel: 100,
@@ -1697,7 +1691,6 @@ let Formats = [
 
 		mod: 'gen5',
 		searchShow: false,
-		canUseRandomTeam: true,
 		debug: true,
 		maxLevel: 9999,
 		trunc(n) { return Math.trunc(n); },
@@ -1746,7 +1739,6 @@ let Formats = [
 		mod: 'gen5',
 		gameType: 'doubles',
 		searchShow: false,
-		canUseRandomTeam: true,
 		debug: true,
 		maxLevel: 9999,
 		trunc(n) { return Math.trunc(n); },
@@ -1825,7 +1817,6 @@ let Formats = [
 
 		mod: 'gen4',
 		searchShow: false,
-		canUseRandomTeam: true,
 		debug: true,
 		maxLevel: 9999,
 		trunc(n) { return Math.trunc(n); },
@@ -1858,7 +1849,6 @@ let Formats = [
 		mod: 'gen4',
 		gameType: 'doubles',
 		searchShow: false,
-		canUseRandomTeam: true,
 		debug: true,
 		maxLevel: 9999,
 		trunc(n) { return Math.trunc(n); },
@@ -1914,7 +1904,6 @@ let Formats = [
 
 		mod: 'gen3',
 		searchShow: false,
-		canUseRandomTeam: true,
 		debug: true,
 		maxLevel: 9999,
 		trunc(n) { return Math.trunc(n); },
@@ -1953,7 +1942,6 @@ let Formats = [
 
 		mod: 'gen2',
 		searchShow: false,
-		canUseRandomTeam: true,
 		debug: true,
 		maxLevel: 9999,
 		trunc(n) { return Math.trunc(n); },
@@ -2014,7 +2002,6 @@ let Formats = [
 
 		mod: 'gen1',
 		searchShow: false,
-		canUseRandomTeam: true,
 		debug: true,
 		maxLevel: 9999,
 		trunc(n) { return Math.trunc(n); },

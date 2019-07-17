@@ -265,11 +265,6 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 	readonly teamLength?: {battle?: number, validate?: [number, number]};
 	/** An optional function that runs at the start of a battle. */
 	readonly onBegin?: (this: Battle) => void;
-	/**
-	 * If no team is selected, this format can generate a random team
-	 * for the player.
-	 */
-	readonly canUseRandomTeam: boolean;
 	/** Pokemon must be obtained from Gen 6 or later. */
 	readonly requirePentagon: boolean;
 	/** Pokemon must be obtained from Gen 7 or later. */
@@ -322,7 +317,6 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 		this.ruleTable = null;
 		this.teamLength = data.teamLength || undefined;
 		this.onBegin = data.onBegin || undefined;
-		this.canUseRandomTeam = !!data.canUseRandomTeam;
 		this.requirePentagon = !!data.requirePentagon;
 		this.requirePlus = !!data.requirePlus;
 		this.maxLevel = data.maxLevel || 100;

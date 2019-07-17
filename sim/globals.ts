@@ -1022,7 +1022,6 @@ interface FormatsData extends EventMethods {
 	banlist?: string[]
 	battle?: ModdedBattleScriptsData
 	cannotMega?: string[]
-	canUseRandomTeam?: boolean
 	challengeShow?: boolean
 	debug?: boolean
 	defaultLevel?: number
