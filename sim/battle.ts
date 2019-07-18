@@ -4,12 +4,14 @@
  *
  * @license MIT
  */
-import Dex = require('./dex');
-global.toId = Dex.getId;
+import {Dex} from './dex';
+global.toID = Dex.getId;
 import * as Data from './dex-data';
+import {Field} from './field';
 import {Pokemon} from './pokemon';
 import {PRNG, PRNGSeed} from './prng';
 import {Side} from './side';
+import {State} from './state';
 
 /** A Pokemon that has fainted. */
 interface FaintedPokemon {
@@ -18,178 +20,220 @@ interface FaintedPokemon {
 	effect: Effect | null;
 }
 
-interface PlayerOptions {
-	name?: string;
-	avatar?: string;
-	team?: PokemonSet[] | string | null;
-}
-
 interface BattleOptions {
-	formatid: string; // Format ID
+	formatid: ID; // Format ID
 	send?: (type: string, data: string | string[]) => void; // Output callback
 	prng?: PRNG; // PRNG override (you usually don't need this, just pass a seed)
 	seed?: PRNGSeed; // PRNG seed
 	rated?: boolean | string; // Rated string
 	p1?: PlayerOptions; // Player 1 data
 	p2?: PlayerOptions; // Player 2 data
+	p3?: PlayerOptions; // Player 3 data
+	p4?: PlayerOptions; // Player 4 data
 	debug?: boolean; // show debug mode option
+	deserialized?: boolean;
+	strictChoices?: boolean; // whether invalid choices should throw
 }
 
+type Part = string | number | boolean | AnyObject | null | undefined;
+
+// The current request state of the Battle:
+//
+//   - 'teampreview': beginning of BW/XY/SM battle (Team Preview)
+//   - 'move': beginning of each turn
+//   - 'switch': end of turn if fainted (or mid turn with switching effects)
+//   - '': no request. Used between turns, or when the battle is over.
+//
+// An individual Side's request state is encapsulated in its `activeRequest` field.
+export type RequestState = 'teampreview' | 'move' | 'switch' | '';
+
 export class Battle extends Dex.ModdedDex {
-	id: string;
-	zMoveTable: {[k: string]: string};
-	log: string[];
-	inputLog: string[];
+	readonly id: ID;
+	readonly debugMode: boolean;
+	readonly deserialized: boolean;
+	readonly strictChoices: boolean;
+	readonly format: string;
+	readonly formatData: AnyObject;
+	readonly cachedFormat: Format;
+	readonly gameType: GameType;
+	readonly field: Field;
+	readonly sides: [Side, Side] | [Side, Side, Side, Side];
+	readonly prngSeed: PRNGSeed;
+	prng: PRNG;
+	rated: boolean | string;
+	reportExactHP: boolean;
+	reportPercentages: boolean;
+	supportCancel: boolean;
+
+	queue: Actions.Action[];
+	readonly faintQueue: FaintedPokemon[];
+
+	readonly log: string[];
+	readonly inputLog: string[];
+	readonly messageLog: string[];
 	sentLogPos: number;
 	sentEnd: boolean;
-	sides: Side[];
-	rated: boolean | string;
-	weatherData: AnyObject;
-	terrainData: AnyObject;
-	pseudoWeather: AnyObject;
-	format: string;
-	formatid: string;
-	cachedFormat: Format;
-	debugMode: boolean;
-	formatData: AnyObject;
+
+	requestState: RequestState;
+	turn: number;
+	midTurn: boolean;
+	started: boolean;
+	ended: boolean;
+	winner?: string;
+
 	effect: Effect;
 	effectData: AnyObject;
+
 	event: AnyObject;
-	itemData: AnyObject;
-	gameType: GameType;
-	reportExactHP: boolean;
-	queue: Actions["Action"][];
-	faintQueue: FaintedPokemon[];
-	messageLog: string[];
-	send: (type: string, data: string | string[]) => void;
-	turn: number;
-	p1: Side;
-	p2: Side;
-	lastUpdate: number;
-	weather: string;
-	terrain: string;
-	ended: boolean;
-	started: boolean;
-	active: boolean;
+	events: AnyObject | null;
 	eventDepth: number;
-	lastMove: Move | null;
+
 	activeMove: ActiveMove | null;
 	activePokemon: Pokemon | null;
 	activeTarget: Pokemon | null;
-	midTurn: boolean;
-	currentRequest: string;
+
+	lastMove: Move | null;
+	lastMoveThisTurn: Move | null;
 	lastMoveLine: number;
-	reportPercentages: boolean;
-	supportCancel: boolean;
-	events: AnyObject | null;
 	lastDamage: number;
 	abilityOrder: number;
-	NOT_FAILURE: '';
-	prng: PRNG;
-	prngSeed: PRNGSeed;
+
 	teamGenerator: ReturnType<typeof Dex.getTeamGenerator> | null;
-	winner?: string;
-	firstStaleWarned?: boolean;
-	staleWarned?: boolean;
-	activeTurns?: number;
+
+	readonly hints: Set<string>;
+
+	readonly zMoveTable: {[k: string]: string};
+
+	readonly NOT_FAIL: '';
+	readonly FAIL: false;
+	readonly SILENT_FAIL: null;
+
+	readonly send: (type: string, data: string | string[]) => void;
 
 	constructor(options: BattleOptions) {
-		let format = Dex.getFormat(options.formatid, true);
+		const format = Dex.getFormat(options.formatid, true);
 		super(format.mod);
+
 		this.zMoveTable = {};
 		Object.assign(this, this.data.Scripts);
+		if (format.battle) Object.assign(this, format.battle);
+
 		this.id = '';
+		this.debugMode = format.debug || !!options.debug;
+		this.deserialized = !!options.deserialized;
+		this.strictChoices = !!options.strictChoices;
+		this.format = format.id;
+		this.formatData = {id: format.id};
+		this.cachedFormat = format;
+		this.gameType = (format.gameType || 'singles');
+		this.field = new Field(this);
+		const isFourPlayer = this.gameType === 'multi' || this.gameType === 'free-for-all';
+		// @ts-ignore
+		this.sides = Array(isFourPlayer ? 4 : 2).fill(null!);
+		this.prng = options.prng || new PRNG(options.seed || undefined);
+		this.prngSeed = this.prng.startingSeed.slice() as PRNGSeed;
+		this.rated = options.rated || !!options.rated;
+		this.reportExactHP = !!format.debug;
+		this.reportPercentages = false;
+		this.supportCancel = false;
+
+		this.queue = [];
+		this.faintQueue = [];
+
 		this.log = [];
 		this.inputLog = [];
+		this.messageLog = [];
 		this.sentLogPos = 0;
 		this.sentEnd = false;
-		// @ts-ignore
-		this.sides = [null, null];
-		// @ts-ignore
-		this.rated = options.rated;
-		this.weatherData = {id: ''};
-		this.terrainData = {id: ''};
-		this.pseudoWeather = {};
-		this.format = format.id;
-		this.formatid = options.formatid;
-		this.cachedFormat = format;
-		this.debugMode = format.debug || !!options.debug;
-		this.formatData = {id: format.id};
+
+		this.requestState = '';
+		this.turn = 0;
+		this.midTurn = false;
+		this.started = false;
+		this.ended = false;
+
 		// tslint:disable-next-line:no-object-literal-type-assertion
 		this.effect = {id: ''} as Effect;
 		this.effectData = {id: ''};
+
 		this.event = {id: ''};
-		this.itemData = {id: ''};
-		this.gameType = (format.gameType || 'singles');
-		this.reportExactHP = !!format.debug;
-		this.queue = [];
-		this.faintQueue = [];
-		this.messageLog = [];
-		this.send = options.send || (() => {});
-		this.turn = 0;
-		// @ts-ignore
-		this.p1 = null;
-		// @ts-ignore
-		this.p2 = null;
-		this.lastUpdate = 0;
-		this.weather = '';
-		this.terrain = '';
-		this.ended = false;
-		this.started = false;
-		this.active = false;
+		this.events = null;
 		this.eventDepth = 0;
-		this.lastMove = null;
+
 		this.activeMove = null;
 		this.activePokemon = null;
 		this.activeTarget = null;
-		this.midTurn = false;
-		this.currentRequest = '';
+
+		this.lastMove = null;
 		this.lastMoveLine = -1;
-		this.reportPercentages = false;
-		this.supportCancel = false;
-		this.events = null;
+		this.lastMoveThisTurn = null;
 		this.lastDamage = 0;
 		this.abilityOrder = 0;
-		this.NOT_FAILURE = '';
-		this.prng = options.prng || new PRNG(options.seed || undefined);
-		this.prngSeed = this.prng.startingSeed.slice() as PRNGSeed;
+
 		this.teamGenerator = null;
+
+		this.hints = new Set();
+
+		this.NOT_FAIL = '';
+		this.FAIL = false;
+		this.SILENT_FAIL = null;
+
+		this.send = options.send || (() => {});
+
 		// bound function for faster speedSort
 		// (so speedSort doesn't need to bind before use)
 		this.comparePriority = this.comparePriority.bind(this);
 
-		const inputOptions: {formatid: string, seed: PRNGSeed, rated?: string | true} = {formatid: options.formatid, seed: this.prng.seed};
+		const inputOptions: {formatid: ID, seed: PRNGSeed, rated?: string | true} = {
+			formatid: options.formatid, seed: this.prng.seed,
+		};
 		if (this.rated) inputOptions.rated = this.rated;
 		if (global.__version) {
-			this.inputLog.push(`>version ${global.__version}`);
+			if (global.__version.head) {
+				this.inputLog.push(`>version ${global.__version.head}`);
+			}
+			if (global.__version.origin) {
+				this.inputLog.push(`>version-origin ${global.__version.origin}`);
+			}
 		}
 		this.inputLog.push(`>start ` + JSON.stringify(inputOptions));
 
 		for (const rule of this.getRuleTable(format).keys()) {
 			if (rule.startsWith('+') || rule.startsWith('-') || rule.startsWith('!')) continue;
-			let subFormat = this.getFormat(rule);
+			const subFormat = this.getFormat(rule);
 			if (subFormat.exists) {
-				let hasEventHandler = Object.keys(subFormat).some(val =>
+				const hasEventHandler = Object.keys(subFormat).some(val =>
 					val.startsWith('on') && !['onBegin', 'onValidateTeam', 'onChangeSet', 'onValidateSet'].includes(val)
 				);
-				if (hasEventHandler) this.addPseudoWeather(rule);
+				if (hasEventHandler) this.field.addPseudoWeather(rule);
 			}
 		}
-		if (options.p1) {
-			this.setPlayer('p1', options.p1);
-		}
-		if (options.p2) {
-			this.setPlayer('p2', options.p2);
+		const sides: SideID[] = ['p1', 'p2', 'p3', 'p4'];
+		for (const side of sides) {
+			if (options[side]) {
+				this.setPlayer(side, options[side]!);
+			}
 		}
 	}
 
-	static logReplay(data: string, isReplay: boolean | Side) {
-		if (isReplay === true) return data;
-		return '';
+	toJSON(): AnyObject {
+		return State.serializeBattle(this);
+	}
+
+	static fromJSON(serialized: string | AnyObject): Battle {
+		return State.deserializeBattle(serialized);
+	}
+
+	get p1() {
+		return this.sides[0];
+	}
+
+	get p2() {
+		return this.sides[1];
 	}
 
 	toString() {
-		return 'Battle: ' + this.format;
+		return `Battle: ${this.format}`;
 	}
 
 	random(m?: number, n?: number) {
@@ -208,219 +252,26 @@ export class Battle extends Dex.ModdedDex {
 		this.prng = new PRNG(this.prng.startingSeed);
 	}
 
-	setWeather(status: string | PureEffect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
-		status = this.getEffect(status);
-		if (!sourceEffect && this.effect) sourceEffect = this.effect;
-		if (!source && this.event && this.event.target) source = this.event.target;
-		if (source === 'debug') source = this.p1.active[0];
-
-		if (this.weather === status.id) {
-			if (sourceEffect && sourceEffect.effectType === 'Ability') {
-				if (this.gen > 5 || this.weatherData.duration === 0) {
-					return false;
-				}
-			} else if (this.gen > 2 || status.id === 'sandstorm') {
-				return false;
-			}
-		}
-		if (source) {
-			let result = this.runEvent('SetWeather', source, source, status);
-			if (!result) {
-				if (result === false) {
-					if (sourceEffect && sourceEffect.weather) {
-						this.add('-fail', source, sourceEffect, '[from] ' + this.weather);
-					} else if (sourceEffect && sourceEffect.effectType === 'Ability') {
-						this.add('-ability', source, sourceEffect, '[from] ' + this.weather, '[fail]');
-					}
-				}
-				return null;
-			}
-		}
-		let prevWeather = this.weather;
-		let prevWeatherData = this.weatherData;
-		this.weather = status.id;
-		this.weatherData = {id: status.id};
-		if (source) {
-			this.weatherData.source = source;
-			this.weatherData.sourcePosition = source.position;
-		}
-		if (status.duration) {
-			this.weatherData.duration = status.duration;
-		}
-		if (status.durationCallback) {
-			if (!source) throw new Error(`setting weather without a source`);
-			this.weatherData.duration = status.durationCallback.call(this, source, source, sourceEffect);
-		}
-		if (!this.singleEvent('Start', status, this.weatherData, this, source, sourceEffect)) {
-			this.weather = prevWeather;
-			this.weatherData = prevWeatherData;
-			return false;
-		}
-		return true;
-	}
-
-	clearWeather() {
-		if (!this.weather) {
-			return false;
-		}
-		let oldstatus = this.getWeather();
-		this.singleEvent('End', oldstatus, this.weatherData, this);
-		this.weather = '';
-		this.weatherData = {id: ''};
-		return true;
-	}
-
-	effectiveWeather() {
-		if (this.suppressingWeather()) return '';
-		return this.weather;
-	}
-
-	isWeather(weather: string | string[]) {
-		let ourWeather = this.effectiveWeather();
-		if (!Array.isArray(weather)) {
-			return ourWeather === toId(weather);
-		}
-		return weather.map(toId).includes(ourWeather);
-	}
-
-	getWeather() {
-		return this.getEffect(this.weather);
-	}
-
-	setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
-		status = this.getEffect(status);
-		if (!sourceEffect && this.effect) sourceEffect = this.effect;
-		if (!source && this.event && this.event.target) source = this.event.target;
-		if (source === 'debug') source = this.p1.active[0];
-		if (!source) throw new Error(`setting terrain without a source`);
-
-		if (this.terrain === status.id) return false;
-		let prevTerrain = this.terrain;
-		let prevTerrainData = this.terrainData;
-		this.terrain = status.id;
-		this.terrainData = {
-			id: status.id,
-			source,
-			sourcePosition: source.position,
-			duration: status.duration,
-		};
-		if (status.durationCallback) {
-			this.terrainData.duration = status.durationCallback.call(this, source, source, sourceEffect);
-		}
-		if (!this.singleEvent('Start', status, this.terrainData, this, source, sourceEffect)) {
-			this.terrain = prevTerrain;
-			this.terrainData = prevTerrainData;
-			return false;
-		}
-		this.runEvent('TerrainStart', source, source, status);
-		return true;
-	}
-
-	clearTerrain() {
-		if (!this.terrain) return false;
-		let oldstatus = this.getTerrain();
-		this.singleEvent('End', oldstatus, this.terrainData, this);
-		this.terrain = '';
-		this.terrainData = {id: ''};
-		return true;
-	}
-
-	effectiveTerrain(target?: Pokemon | Side | Battle) {
-		if (this.event) {
-			if (!target) target = this.event.target;
-		}
-		if (!this.runEvent('TryTerrain', target)) return '';
-		return this.terrain;
-	}
-
-	isTerrain(terrain: string | string[], target?: Pokemon | Side | Battle) {
-		let ourTerrain = this.effectiveTerrain(target);
-		if (!Array.isArray(terrain)) {
-			return ourTerrain === toId(terrain);
-		}
-		return terrain.map(toId).includes(ourTerrain);
-	}
-
-	getTerrain() {
-		return this.getEffect(this.terrain);
-	}
-
-	// @ts-ignore
 	getFormat(format?: string) {
-		if (!format) return this.cachedFormat;
-		return super.getFormat(format, true);
-	}
-
-	addPseudoWeather(status: string | PureEffect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null): boolean {
-		if (!source && this.event && this.event.target) source = this.event.target;
-		if (source === 'debug') source = this.p1.active[0];
-		status = this.getEffect(status);
-
-		let effectData = this.pseudoWeather[status.id];
-		if (effectData) {
-			if (!status.onRestart) return false;
-			return this.singleEvent('Restart', status, effectData, this, source, sourceEffect);
-		}
-		effectData = this.pseudoWeather[status.id] = {
-			id: status.id,
-			source,
-			sourcePosition: source && source.position,
-			duration: status.duration,
-		};
-		if (status.durationCallback) {
-			if (!source) throw new Error(`setting fieldcond without a source`);
-			effectData.duration = status.durationCallback.call(this, source, source, sourceEffect);
-		}
-		if (!this.singleEvent('Start', status, effectData, this, source, sourceEffect)) {
-			delete this.pseudoWeather[status.id];
-			return false;
-		}
-		return true;
-	}
-
-	getPseudoWeather(status: string | Effect) {
-		status = this.getEffect(status);
-		if (!this.pseudoWeather[status.id]) return null;
-		return status;
-	}
-
-	removePseudoWeather(status: string | Effect) {
-		status = this.getEffect(status);
-		let effectData = this.pseudoWeather[status.id];
-		if (!effectData) return false;
-		this.singleEvent('End', status, effectData, this);
-		delete this.pseudoWeather[status.id];
-		return true;
+		return format ? super.getFormat(format, true) : this.cachedFormat;
 	}
 
 	suppressingAttackEvents() {
 		return this.activePokemon && this.activePokemon.isActive && this.activeMove && this.activeMove.ignoreAbility;
 	}
 
-	suppressingWeather() {
-		for (const side of this.sides) {
-			for (const pokemon of side.active) {
-				if (pokemon && !pokemon.ignoringAbility() && pokemon.getAbility().suppressWeather) {
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
 	setActiveMove(move?: ActiveMove | null, pokemon?: Pokemon | null, target?: Pokemon | null) {
-		if (!move) move = null;
-		if (!pokemon) pokemon = null;
-		if (!target) target = pokemon;
-		this.activeMove = move;
-		this.activePokemon = pokemon;
-		this.activeTarget = target;
+		this.activeMove = move || null;
+		this.activePokemon = pokemon || null;
+		this.activeTarget = target || pokemon || null;
 	}
 
 	clearActiveMove(failed?: boolean) {
 		if (this.activeMove) {
+			this.lastMoveThisTurn = null;
 			if (!failed) {
 				this.lastMove = this.activeMove;
+				this.lastMoveThisTurn = this.activeMove;
 			}
 			this.activeMove = null;
 			this.activePokemon = null;
@@ -429,23 +280,9 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	updateSpeed() {
-		let actives = this.p1.active;
-		for (const active of actives) {
-			if (active) active.updateSpeed();
+		for (const pokemon of this.getAllActive()) {
+			pokemon.updateSpeed();
 		}
-		actives = this.p2.active;
-		for (const active of actives) {
-			if (active) active.updateSpeed();
-		}
-	}
-
-	/**
-	 * Truncate a number into an unsigned 32-bit integer, for
-	 * compatibility with the cartridge games' math systems.
-	 */
-	trunc(num: number, bits: number = 0) {
-		if (bits) return (num >>> 0) % (2 ** bits);
-		return num >>> 0;
 	}
 
 	comparePriority(a: AnyObject, b: AnyObject) {
@@ -453,19 +290,25 @@ export class Battle extends Dex.ModdedDex {
 			((b.priority || 0) - (a.priority || 0)) ||
 			((b.speed || 0) - (a.speed || 0)) ||
 			-((b.subOrder || 0) - (a.subOrder || 0)) ||
+			((a.thing && b.thing) ? -(b.thing.abilityOrder - a.thing.abilityOrder) : 0) ||
 			0;
 	}
 
 	static compareRedirectOrder(a: AnyObject, b: AnyObject) {
 		return ((b.priority || 0) - (a.priority || 0)) ||
 			((b.speed || 0) - (a.speed || 0)) ||
-			-(b.thing.abilityOrder - a.thing.abilityOrder) ||
+			((a.thing && b.thing) ? -(b.thing.abilityOrder - a.thing.abilityOrder) : 0) ||
 			0;
 	}
 
-	/**
-	 * Sort a list, resolving speed ties the way the games do.
-	 */
+	static compareLeftToRightOrder(a: AnyObject, b: AnyObject) {
+		return -((b.order || 4294967296) - (a.order || 4294967296)) ||
+			((b.priority || 0) - (a.priority || 0)) ||
+			-((b.index || 0) - (a.index || 0)) ||
+			0;
+	}
+
+	/** Sort a list, resolving speed ties the way the games do. */
 	speedSort<T>(list: T[], comparator: (a: T, b: T) => number = this.comparePriority) {
 		if (list.length < 2) return;
 		let sorted = 0;
@@ -473,13 +316,13 @@ export class Battle extends Dex.ModdedDex {
 			let nextIndexes = [sorted];
 			// grab list of next indexes
 			for (let i = sorted + 1; i < list.length; i++) {
-				let delta = comparator(list[nextIndexes[0]], list[i]);
+				const delta = comparator(list[nextIndexes[0]], list[i]);
 				if (delta < 0) continue;
 				if (delta > 0) nextIndexes = [i];
 				if (delta === 0) nextIndexes.push(i);
 			}
 			// put list of next indexes where they belong
-			let nextCount = nextIndexes.length;
+			const nextCount = nextIndexes.length;
 			for (let i = 0; i < nextCount; i++) {
 				let index = nextIndexes[i];
 				while (index > sorted + i) {
@@ -493,16 +336,9 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	eachEvent(eventid: string, effect?: Effect, relayVar?: boolean) {
-		let actives = [];
+		const actives = this.getAllActive();
 		if (!effect && this.effect) effect = this.effect;
-		for (const side of this.sides) {
-			for (const pokemon of side.active) {
-				if (pokemon) actives.push(pokemon);
-			}
-		}
-		this.speedSort(actives, (a, b) =>
-			b.speed - a.speed
-		);
+		this.speedSort(actives, (a, b) => b.speed - a.speed);
 		for (const pokemon of actives) {
 			this.runEvent(eventid, pokemon, null, effect, relayVar);
 		}
@@ -513,8 +349,9 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	residualEvent(eventid: string, relayVar?: any) {
-		let callbackName = `on${eventid}`;
+		const callbackName = `on${eventid}`;
 		let handlers = this.findBattleEventHandlers(callbackName, 'duration');
+		handlers = handlers.concat(this.findFieldEventHandlers(this.field, callbackName, 'duration'));
 		for (const side of this.sides) {
 			handlers = handlers.concat(this.findSideEventHandlers(side, callbackName, 'duration'));
 			for (const active of side.active) {
@@ -524,14 +361,15 @@ export class Battle extends Dex.ModdedDex {
 		}
 		this.speedSort(handlers);
 		while (handlers.length) {
-			let handler = handlers[0];
+			const handler = handlers[0];
 			handlers.shift();
-			let status = handler.status;
+			const status = handler.status;
 			if (handler.thing.fainted) continue;
 			if (handler.statusData && handler.statusData.duration) {
 				handler.statusData.duration--;
 				if (!handler.statusData.duration) {
-					handler.end.call(handler.thing, status.id);
+					const endCallArgs = handler.endCallArgs || [handler.thing, status.id];
+					handler.end.call(...endCallArgs);
 					continue;
 				}
 			}
@@ -541,13 +379,10 @@ export class Battle extends Dex.ModdedDex {
 		}
 	}
 
-	/**
-	 * The entire event system revolves around this function
-	 * (and its helper functions, getRelevant * )
-	 */
+	/** The entire event system revolves around this function and runEvent. */
 	singleEvent(
 		eventid: string, effect: Effect, effectData: AnyObject | null,
-		target: string | Pokemon | Side | Battle | null, source?: string | Pokemon | Effect | false | null,
+		target: string | Pokemon | Side | Field | Battle | null, source?: string | Pokemon | Effect | false | null,
 		sourceEffect?: Effect | string | null, relayVar?: any) {
 		if (this.eventDepth >= 8) {
 			// oh fuck
@@ -564,8 +399,7 @@ export class Battle extends Dex.ModdedDex {
 			hasRelayVar = false;
 		}
 
-		// @ts-ignore
-		if (effect.effectType === 'Status' && target.status !== effect.id) {
+		if (effect.effectType === 'Status' && (target instanceof Pokemon) && target.status !== effect.id) {
 			// it's changed; call it off
 			return relayVar;
 		}
@@ -579,36 +413,40 @@ export class Battle extends Dex.ModdedDex {
 			return relayVar;
 		}
 		if (effect.effectType === 'Weather' && eventid !== 'Start' && eventid !== 'Residual' &&
-			eventid !== 'End' && this.suppressingWeather()) {
+			eventid !== 'End' && this.field.suppressingWeather()) {
 			this.debug(eventid + ' handler suppressed by Air Lock');
 			return relayVar;
 		}
 
-		// @ts-ignore
-		let callback = effect['on' + eventid];
-
+		// @ts-ignore - dynamic lookup
+		const callback = effect[`on${eventid}`];
 		if (callback === undefined) return relayVar;
-		let parentEffect = this.effect;
-		let parentEffectData = this.effectData;
-		let parentEvent = this.event;
+
+		const parentEffect = this.effect;
+		const parentEffectData = this.effectData;
+		const parentEvent = this.event;
+
 		this.effect = effect;
 		this.effectData = effectData || {};
 		this.event = {id: eventid, target, source, effect: sourceEffect};
 		this.eventDepth++;
-		let args = [target, source, sourceEffect];
+
+		const args = [target, source, sourceEffect];
 		if (hasRelayVar) args.unshift(relayVar);
+
 		let returnVal;
 		if (typeof callback === 'function') {
 			returnVal = callback.apply(this, args);
 		} else {
 			returnVal = callback;
 		}
+
 		this.eventDepth--;
 		this.effect = parentEffect;
 		this.effectData = parentEffectData;
 		this.event = parentEvent;
-		if (returnVal === undefined) return relayVar;
-		return returnVal;
+
+		return returnVal === undefined ? relayVar : returnVal;
 	}
 
 	/**
@@ -716,7 +554,7 @@ export class Battle extends Dex.ModdedDex {
 	 *   they're useful for functions called by the event handler.
 	 */
 	runEvent(
-		eventid: string, target?: Pokemon | Side | Battle | null, source?: string | Pokemon | false | null,
+		eventid: string, target?: Pokemon | Pokemon[] | Side | Battle | null, source?: string | Pokemon | false | null,
 		effect?: Effect | null, relayVar?: any, onEffect?: boolean, fastExit?: boolean) {
 		// if (Battle.eventCounter) {
 		// 	if (!Battle.eventCounter[eventid]) Battle.eventCounter[eventid] = 0;
@@ -733,45 +571,67 @@ export class Battle extends Dex.ModdedDex {
 		if (!target) target = this;
 		let effectSource = null;
 		if (source instanceof Pokemon) effectSource = source;
-		let handlers = this.findEventHandlers(target, eventid, effectSource);
-		if (fastExit) {
+		const handlers = this.findEventHandlers(target, eventid, effectSource);
+		if (eventid === 'TryImmunity' || eventid === 'TryHit' || eventid === 'AfterDamage') {
+			handlers.sort(Battle.compareLeftToRightOrder);
+		} else if (fastExit) {
 			handlers.sort(Battle.compareRedirectOrder);
 		} else {
 			this.speedSort(handlers);
 		}
-		let hasRelayVar = true;
-		let args = [target, source, effect];
+		let hasRelayVar = 1;
+		const args = [target, source, effect];
 		// console.log('Event: ' + eventid + ' (depth ' + this.eventDepth + ') t:' + target.id + ' s:' + (!source || source.id) + ' e:' + effect.id);
 		if (relayVar === undefined || relayVar === null) {
 			relayVar = true;
-			hasRelayVar = false;
+			hasRelayVar = 0;
 		} else {
 			args.unshift(relayVar);
 		}
 
-		let parentEvent = this.event;
+		const parentEvent = this.event;
 		this.event = {id: eventid, target, source, effect, modifier: 1};
 		this.eventDepth++;
 
 		if (onEffect) {
 			if (!effect) throw new Error("onEffect passed without an effect");
-			// @ts-ignore
-			let callback = effect[`on${eventid}`];
+			// @ts-ignore - dynamic lookup
+			const callback = effect[`on${eventid}`];
 			if (callback !== undefined) {
 				handlers.unshift({status: effect, callback, statusData: {}, end: null, thing: target});
 			}
 		}
+
+		let targetRelayVars = [];
+		if (Array.isArray(target)) {
+			if (Array.isArray(relayVar)) {
+				targetRelayVars = relayVar;
+			} else {
+				for (let i = 0; i < target.length; i++) targetRelayVars[i] = true;
+			}
+		}
 		for (const handler of handlers) {
-			let status = handler.status;
-			let thing = handler.thing;
+			if (handler.index !== undefined) {
+				// TODO: find a better way to do this
+				if (!targetRelayVars[handler.index] && !(targetRelayVars[handler.index] === 0 &&
+					eventid === 'AfterDamage')) continue;
+				if (handler.target) {
+					args[hasRelayVar] = handler.target;
+					this.event.target = handler.target;
+				}
+				if (hasRelayVar) args[0] = targetRelayVars[handler.index];
+			}
+			const status = handler.status;
+			const thing = handler.thing;
 			// this.debug('match ' + eventid + ': ' + status.id + ' ' + status.effectType);
 			if (status.effectType === 'Status' && thing.status !== status.id) {
 				// it's changed; call it off
 				continue;
 			}
-			if (status.effectType === 'Ability' && !status.isUnbreakable && this.suppressingAttackEvents() && this.activePokemon !== thing) {
+			if (status.effectType === 'Ability' && !status.isUnbreakable &&
+					this.suppressingAttackEvents() && this.activePokemon !== thing) {
 				// ignore attacking events
-				let AttackingEvents = {
+				const AttackingEvents = {
 					BeforeMove: 1,
 					BasePower: 1,
 					Immunity: 1,
@@ -806,21 +666,22 @@ export class Battle extends Dex.ModdedDex {
 					this.debug(eventid + ' handler suppressed by Embargo, Klutz or Magic Room');
 				}
 				continue;
-			} else if (eventid !== 'End' && status.effectType === 'Ability' && (thing instanceof Pokemon) && thing.ignoringAbility()) {
+			} else if (eventid !== 'End' && status.effectType === 'Ability' &&
+					(thing instanceof Pokemon) && thing.ignoringAbility()) {
 				if (eventid !== 'Update') {
 					this.debug(eventid + ' handler suppressed by Gastro Acid');
 				}
 				continue;
 			}
 			if ((status.effectType === 'Weather' || eventid === 'Weather') &&
-				eventid !== 'Residual' && eventid !== 'End' && this.suppressingWeather()) {
+				eventid !== 'Residual' && eventid !== 'End' && this.field.suppressingWeather()) {
 				this.debug(eventid + ' handler suppressed by Air Lock');
 				continue;
 			}
 			let returnVal;
 			if (typeof handler.callback === 'function') {
-				let parentEffect = this.effect;
-				let parentEffectData = this.effectData;
+				const parentEffect = this.effect;
+				const parentEffectData = this.effectData;
 				this.effect = handler.status;
 				this.effectData = handler.statusData || {};
 				this.effectData.target = thing;
@@ -835,7 +696,14 @@ export class Battle extends Dex.ModdedDex {
 
 			if (returnVal !== undefined) {
 				relayVar = returnVal;
-				if (!relayVar || fastExit) break;
+				if (!relayVar || fastExit) {
+					if (handler.index !== undefined) {
+						targetRelayVars[handler.index] = relayVar;
+						if (targetRelayVars.every(val => !val)) break;
+					} else {
+						break;
+					}
+				}
 				if (hasRelayVar) {
 					args[0] = relayVar;
 				}
@@ -844,12 +712,13 @@ export class Battle extends Dex.ModdedDex {
 
 		this.eventDepth--;
 		if (typeof relayVar === 'number' && relayVar === Math.abs(Math.floor(relayVar))) {
-			// this.debug(eventid + ' modifier: 0x' + ('0000' + (this.event.modifier * 4096).toString(16)).slice(-4).toUpperCase());
+			// this.debug(eventid + ' modifier: 0x' +
+			// 	('0000' + (this.event.modifier * 4096).toString(16)).slice(-4).toUpperCase());
 			relayVar = this.modify(relayVar, this.event.modifier);
 		}
 		this.event = parentEvent;
 
-		return relayVar;
+		return Array.isArray(target) ? targetRelayVars : relayVar;
 	}
 
 	/**
@@ -863,24 +732,34 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	resolveLastPriority(handlers: AnyObject[], callbackName: string) {
-		let handler = handlers[handlers.length - 1];
+		const handler = handlers[handlers.length - 1];
 		handler.order = handler.status[`${callbackName}Order`] || false;
 		handler.priority = handler.status[`${callbackName}Priority`] || 0;
 		handler.subOrder = handler.status[`${callbackName}SubOrder`] || 0;
 		if (handler.thing && handler.thing.getStat) handler.speed = handler.thing.speed;
 	}
 
-	findEventHandlers(thing: Pokemon | Side | Battle, eventName: string, sourceThing?: Pokemon | null) {
+	findEventHandlers(thing: Pokemon | Pokemon[] | Side | Battle, eventName: string, sourceThing?: Pokemon | null) {
 		let handlers: AnyObject[] = [];
+		if (Array.isArray(thing)) {
+			for (const [i, pokemon] of thing.entries()) {
+				// console.log(`Event: ${eventName}, Target: ${'' + pokemon}, ${i}`);
+				const curHandlers = this.findEventHandlers(pokemon, eventName, sourceThing);
+				for (const handler of curHandlers) {
+					handler.target = pokemon; // Original "thing"
+					handler.index = i;
+				}
+				handlers = handlers.concat(curHandlers);
+			}
+			return handlers;
+		}
 		if (thing instanceof Pokemon && thing.isActive) {
 			handlers = this.findPokemonEventHandlers(thing, `on${eventName}`);
-			for (const allyActive of thing.side.active) {
-				if (!allyActive || allyActive.fainted) continue;
+			for (const allyActive of thing.allies()) {
 				handlers.push(...this.findPokemonEventHandlers(allyActive, `onAlly${eventName}`));
 				handlers.push(...this.findPokemonEventHandlers(allyActive, `onAny${eventName}`));
 			}
-			for (const foeActive of thing.side.foe.active) {
-				if (!foeActive || foeActive.fainted) continue;
+			for (const foeActive of thing.foes()) {
 				handlers.push(...this.findPokemonEventHandlers(foeActive, `onFoe${eventName}`));
 				handlers.push(...this.findPokemonEventHandlers(foeActive, `onAny${eventName}`));
 			}
@@ -890,110 +769,114 @@ export class Battle extends Dex.ModdedDex {
 			handlers.push(...this.findPokemonEventHandlers(sourceThing, `onSource${eventName}`));
 		}
 		if (thing instanceof Side) {
-			handlers.push(...this.findSideEventHandlers(thing, `on${eventName}`));
-			handlers.push(...this.findSideEventHandlers(thing, `onAny${eventName}`));
-			handlers.push(...this.findSideEventHandlers(thing.foe, `onFoe${eventName}`));
-			handlers.push(...this.findSideEventHandlers(thing.foe, `onAny${eventName}`));
+			const team = this.gameType === 'multi' ? thing.n % 2 : null;
+			for (const side of this.sides) {
+				if (team === null ? side === thing : side.n % 2 === team) {
+					handlers.push(...this.findSideEventHandlers(side, `on${eventName}`));
+				} else {
+					handlers.push(...this.findSideEventHandlers(side, `onFoe${eventName}`));
+				}
+				handlers.push(...this.findSideEventHandlers(side, `onAny${eventName}`));
+			}
 		}
+		handlers.push(...this.findFieldEventHandlers(this.field, `on${eventName}`));
 		handlers.push(...this.findBattleEventHandlers(`on${eventName}`));
 		return handlers;
 	}
 
 	findPokemonEventHandlers(pokemon: Pokemon, callbackName: string, getKey?: 'duration') {
-		let handlers: AnyObject[] = [];
+		const handlers: AnyObject[] = [];
 
-		let status = pokemon.getStatus();
-		// @ts-ignore
+		const status = pokemon.getStatus();
+		// @ts-ignore - dynamic lookup
 		let callback = status[callbackName];
 		if (callback !== undefined || (getKey && pokemon.statusData[getKey])) {
-			handlers.push({status, callback, statusData: pokemon.statusData, end: pokemon.clearStatus, thing: pokemon});
+			handlers.push({
+				status, callback, statusData: pokemon.statusData, end: pokemon.clearStatus, thing: pokemon,
+			});
 			this.resolveLastPriority(handlers, callbackName);
 		}
-		for (let i in pokemon.volatiles) {
-			let volatileData = pokemon.volatiles[i];
-			let volatile = pokemon.getVolatile(i);
-			// @ts-ignore
+		for (const i in pokemon.volatiles) {
+			const volatileData = pokemon.volatiles[i];
+			const volatile = pokemon.getVolatile(i);
+			// @ts-ignore - dynamic lookup
 			callback = volatile[callbackName];
 			if (callback !== undefined || (getKey && volatileData[getKey])) {
-				handlers.push({status: volatile, callback, statusData: volatileData, end: pokemon.removeVolatile, thing: pokemon});
+				handlers.push({
+					status: volatile, callback, statusData: volatileData, end: pokemon.removeVolatile, thing: pokemon,
+				});
 				this.resolveLastPriority(handlers, callbackName);
 			}
 		}
-		let ability = pokemon.getAbility();
-		// @ts-ignore
+		const ability = pokemon.getAbility();
+		// @ts-ignore - dynamic lookup
 		callback = ability[callbackName];
 		if (callback !== undefined || (getKey && pokemon.abilityData[getKey])) {
-			handlers.push({status: ability, callback, statusData: pokemon.abilityData, end: pokemon.clearAbility, thing: pokemon});
+			handlers.push({
+				status: ability, callback, statusData: pokemon.abilityData, end: pokemon.clearAbility, thing: pokemon,
+			});
 			this.resolveLastPriority(handlers, callbackName);
 		}
-		let item = pokemon.getItem();
-		// @ts-ignore
+		const item = pokemon.getItem();
+		// @ts-ignore - dynamic lookup
 		callback = item[callbackName];
 		if (callback !== undefined || (getKey && pokemon.itemData[getKey])) {
-			handlers.push({status: item, callback, statusData: pokemon.itemData, end: pokemon.clearItem, thing: pokemon});
+			handlers.push({
+				status: item, callback, statusData: pokemon.itemData, end: pokemon.clearItem, thing: pokemon,
+			});
 			this.resolveLastPriority(handlers, callbackName);
 		}
-		let species = pokemon.baseTemplate;
-		// @ts-ignore
+		const species = pokemon.baseTemplate;
+		// @ts-ignore - dynamic lookup
 		callback = species[callbackName];
 		if (callback !== undefined) {
-			handlers.push({status: species, callback, statusData: pokemon.speciesData, end() {}, thing: pokemon});
+			handlers.push({
+				status: species, callback, statusData: pokemon.speciesData, end() {}, thing: pokemon,
+			});
 			this.resolveLastPriority(handlers, callbackName);
+		}
+		const side = pokemon.side;
+		for (const conditionid in side.slotConditions[pokemon.position]) {
+			const slotConditionData = side.slotConditions[pokemon.position][conditionid];
+			const slotCondition = side.getSlotCondition(pokemon, conditionid);
+			// @ts-ignore - dynamic lookup
+			callback = slotCondition[callbackName];
+			if (callback !== undefined || (getKey && slotConditionData[getKey])) {
+				handlers.push({
+					status: slotCondition,
+					callback,
+					statusData: slotConditionData,
+					end: side.removeSlotCondition,
+					endCallArgs: [side, pokemon, slotCondition!.id],
+					thing: side,
+				});
+				this.resolveLastPriority(handlers, callbackName);
+			}
 		}
 
 		return handlers;
 	}
 
 	findBattleEventHandlers(callbackName: string, getKey?: 'duration') {
-		let callbackNamePriority = `${callbackName}Priority`;
-		let handlers: AnyObject[] = [];
+		const callbackNamePriority = `${callbackName}Priority`;
+		const handlers: AnyObject[] = [];
 
 		let callback;
-		for (let i in this.pseudoWeather) {
-			let pseudoWeatherData = this.pseudoWeather[i];
-			let pseudoWeather = this.getPseudoWeather(i);
-			// @ts-ignore
-			callback = pseudoWeather[callbackName];
-			if (callback !== undefined || (getKey && pseudoWeatherData[getKey])) {
-				handlers.push({status: pseudoWeather, callback, statusData: pseudoWeatherData, end: this.removePseudoWeather, thing: this});
-				this.resolveLastPriority(handlers, callbackName);
-			}
-		}
-		let weather = this.getWeather();
-		// @ts-ignore
-		callback = weather[callbackName];
-		if (callback !== undefined || (getKey && this.weatherData[getKey])) {
-			handlers.push({
-				status: weather, callback, statusData: this.weatherData, end: this.clearWeather, thing: this,
-				// @ts-ignore
-				priority: weather[callbackNamePriority] || 0});
-			this.resolveLastPriority(handlers, callbackName);
-		}
-		let terrain = this.getTerrain();
-		// @ts-ignore
-		callback = terrain[callbackName];
-		if (callback !== undefined || (getKey && this.terrainData[getKey])) {
-			handlers.push({
-				status: terrain, callback, statusData: this.terrainData, end: this.clearTerrain, thing: this,
-				// @ts-ignore
-				priority: terrain[callbackNamePriority] || 0});
-			this.resolveLastPriority(handlers, callbackName);
-		}
-		let format = this.getFormat();
-		// @ts-ignore
+		const format = this.getFormat();
+		// @ts-ignore - dynamic lookup
 		callback = format[callbackName];
-		// @ts-ignore
+		// @ts-ignore - dynamic lookup
 		if (callback !== undefined || (getKey && this.formatData[getKey])) {
 			handlers.push({
 				status: format, callback, statusData: this.formatData, end() {}, thing: this,
-				// @ts-ignore
+				// @ts-ignore - dynamic lookup
 				priority: format[callbackNamePriority] || 0});
 			this.resolveLastPriority(handlers, callbackName);
 		}
 		// tslint:disable-next-line:no-conditional-assignment
 		if (this.events && (callback = this.events[callbackName]) !== undefined) {
 			for (const handler of callback) {
-				let statusData = (handler.target.effectType === 'Format') ? this.formatData : undefined;
+				const statusData = (handler.target.effectType === 'Format') ? this.formatData : undefined;
 				handlers.push({
 					status: handler.target, callback: handler.callback, statusData, end() {},
 					thing: this, priority: handler.priority, order: handler.order, subOrder: handler.subOrder});
@@ -1002,16 +885,59 @@ export class Battle extends Dex.ModdedDex {
 		return handlers;
 	}
 
-	findSideEventHandlers(side: Side, callbackName: string, getKey?: 'duration') {
-		let handlers: AnyObject[] = [];
+	findFieldEventHandlers(field: Field, callbackName: string, getKey?: 'duration') {
+		const callbackNamePriority = `${callbackName}Priority`;
+		const handlers: AnyObject[] = [];
 
-		for (let i in side.sideConditions) {
-			let sideConditionData = side.sideConditions[i];
-			let sideCondition = side.getSideCondition(i);
-			// @ts-ignore
-			let callback = sideCondition[callbackName];
+		let callback;
+		for (const i in field.pseudoWeather) {
+			const pseudoWeatherData = field.pseudoWeather[i];
+			const pseudoWeather = field.getPseudoWeather(i);
+			// @ts-ignore - dynamic lookup
+			callback = pseudoWeather[callbackName];
+			if (callback !== undefined || (getKey && pseudoWeatherData[getKey])) {
+				handlers.push({
+					status: pseudoWeather, callback, statusData: pseudoWeatherData, end: field.removePseudoWeather, thing: field,
+				});
+				this.resolveLastPriority(handlers, callbackName);
+			}
+		}
+		const weather = field.getWeather();
+		// @ts-ignore - dynamic lookup
+		callback = weather[callbackName];
+		if (callback !== undefined || (getKey && this.field.weatherData[getKey])) {
+			handlers.push({
+				status: weather, callback, statusData: this.field.weatherData, end: field.clearWeather, thing: field,
+				// @ts-ignore - dynamic lookup
+				priority: weather[callbackNamePriority] || 0});
+			this.resolveLastPriority(handlers, callbackName);
+		}
+		const terrain = field.getTerrain();
+		// @ts-ignore - dynamic lookup
+		callback = terrain[callbackName];
+		if (callback !== undefined || (getKey && field.terrainData[getKey])) {
+			handlers.push({
+				status: terrain, callback, statusData: field.terrainData, end: field.clearTerrain, thing: field,
+				// @ts-ignore - dynamic lookup
+				priority: terrain[callbackNamePriority] || 0});
+			this.resolveLastPriority(handlers, callbackName);
+		}
+
+		return handlers;
+	}
+
+	findSideEventHandlers(side: Side, callbackName: string, getKey?: 'duration') {
+		const handlers: AnyObject[] = [];
+
+		for (const i in side.sideConditions) {
+			const sideConditionData = side.sideConditions[i];
+			const sideCondition = side.getSideCondition(i);
+			// @ts-ignore - dynamic lookup
+			const callback = sideCondition[callbackName];
 			if (callback !== undefined || (getKey && sideConditionData[getKey])) {
-				handlers.push({status: sideCondition, callback, statusData: sideConditionData, end: side.removeSideCondition, thing: side});
+				handlers.push({
+					status: sideCondition, callback, statusData: sideConditionData, end: side.removeSideCondition, thing: side,
+				});
 				this.resolveLastPriority(handlers, callbackName);
 			}
 		}
@@ -1063,11 +989,11 @@ export class Battle extends Dex.ModdedDex {
 			}
 		}
 
-		let eventHandler = {callback, target, priority, order, subOrder};
+		const eventHandler = {callback, target, priority, order, subOrder};
 
 		if (!this.events) this.events = {};
-		let callbackName = `on${eventid}`;
-		let eventHandlers = this.events[callbackName];
+		const callbackName = `on${eventid}`;
+		const eventHandlers = this.events[callbackName];
 		if (eventHandlers === undefined) {
 			this.events[callbackName] = [eventHandler];
 		} else {
@@ -1077,93 +1003,115 @@ export class Battle extends Dex.ModdedDex {
 
 	getPokemon(id: string | Pokemon) {
 		if (typeof id !== 'string') id = id.id;
-		for (const pokemon of this.p1.pokemon) {
-			if (pokemon.id === id) return pokemon;
-		}
-		for (const pokemon of this.p2.pokemon) {
-			if (pokemon.id === id) return pokemon;
+		for (const side of this.sides) {
+			for (const pokemon of side.pokemon) {
+				if (pokemon.id === id) return pokemon;
+			}
 		}
 		return null;
 	}
 
-	makeRequest(type?: string) {
+	getAllPokemon() {
+		const pokemonList: Pokemon[] = [];
+		for (const side of this.sides) {
+			pokemonList.push(...side.pokemon);
+		}
+		return pokemonList;
+	}
+
+	getAllActive() {
+		const pokemonList: Pokemon[] = [];
+		for (const side of this.sides) {
+			for (const pokemon of side.active) {
+				if (pokemon && !pokemon.fainted) {
+					pokemonList.push(pokemon);
+				}
+			}
+		}
+		return pokemonList;
+	}
+
+	makeRequest(type?: RequestState) {
 		if (type) {
-			this.currentRequest = type;
-			this.p1.clearChoice();
-			this.p2.clearChoice();
+			this.requestState = type;
+			for (const side of this.sides) {
+				side.clearChoice();
+			}
 		} else {
-			type = this.currentRequest;
+			type = this.requestState;
 		}
 
+		for (const side of this.sides) {
+			side.activeRequest = null;
+		}
+
+		const maxTeamSize = this.getMaxTeamSize();
+		if (type === 'teampreview') {
+			this.add('teampreview' + (maxTeamSize !== 6 ? '|' + maxTeamSize : ''));
+		}
+
+		const requests = this.getRequests(type, maxTeamSize);
+		for (let i = 0; i < this.sides.length; i++) {
+			this.sides[i].emitRequest(requests[i]);
+		}
+
+		if (this.sides.every(side => side.isChoiceDone())) {
+			throw new Error(`Choices are done immediately after a request`);
+		}
+	}
+
+	getMaxTeamSize() {
+		const teamLengthData = this.getFormat().teamLength;
+		return (teamLengthData && teamLengthData.battle) || 6;
+	}
+
+	getRequests(type: RequestState, maxTeamSize: number) {
 		// default to no request
-		let p1request: any = null;
-		let p2request: any = null;
-		this.p1.currentRequest = '';
-		this.p2.currentRequest = '';
-		let switchTable = [];
+		const requests: any[] = Array(this.sides.length).fill(null);
 
 		switch (type) {
 		case 'switch': {
-			for (const active of this.p1.active) {
-				switchTable.push(!!(active && active.switchFlag));
-			}
-			if (switchTable.some(flag => flag === true)) {
-				this.p1.currentRequest = 'switch';
-				p1request = {forceSwitch: switchTable, side: this.p1.getRequestData()};
-			}
-			switchTable = [];
-			for (const active of this.p2.active) {
-				switchTable.push(!!(active && active.switchFlag));
-			}
-			if (switchTable.some(flag => flag === true)) {
-				this.p2.currentRequest = 'switch';
-				p2request = {forceSwitch: switchTable, side: this.p2.getRequestData()};
+			for (let i = 0; i < this.sides.length; i++) {
+				const side = this.sides[i];
+				const switchTable = [];
+				for (const pokemon of side.active) {
+					switchTable.push(!!(pokemon && pokemon.switchFlag));
+				}
+				if (switchTable.some(flag => flag === true)) {
+					requests[i] = {forceSwitch: switchTable, side: side.getRequestData()};
+				}
 			}
 			break;
 		}
 
 		case 'teampreview':
-			let teamLengthData = this.getFormat().teamLength;
-			let maxTeamSize = teamLengthData && teamLengthData.battle;
-			this.add('teampreview' + (maxTeamSize ? '|' + maxTeamSize : ''));
-			if (!maxTeamSize) maxTeamSize = 6;
-			this.p1.maxTeamSize = maxTeamSize;
-			this.p2.maxTeamSize = maxTeamSize;
-			this.p1.currentRequest = 'teampreview';
-			p1request = {teamPreview: true, maxTeamSize, side: this.p1.getRequestData()};
-			this.p2.currentRequest = 'teampreview';
-			p2request = {teamPreview: true, maxTeamSize, side: this.p2.getRequestData()};
+			for (let i = 0; i < this.sides.length; i++) {
+				const side = this.sides[i];
+				side.maxTeamSize = maxTeamSize;
+				requests[i] = {teamPreview: true, maxTeamSize, side: side.getRequestData()};
+			}
 			break;
 
 		default: {
-			this.p1.currentRequest = 'move';
-			let activeData = this.p1.active.map(pokemon => pokemon && pokemon.getRequestData());
-			p1request = {active: activeData, side: this.p1.getRequestData()};
-
-			this.p2.currentRequest = 'move';
-			activeData = this.p2.active.map(pokemon => pokemon && pokemon.getRequestData());
-			p2request = {active: activeData, side: this.p2.getRequestData()};
+			for (let i = 0; i < this.sides.length; i++) {
+				const side = this.sides[i];
+				const activeData = side.active.map(pokemon => pokemon && pokemon.getRequestData());
+				requests[i] = {active: activeData, side: side.getRequestData()};
+			}
 			break;
 		}
 		}
 
-		if (p1request) {
-			if (!this.supportCancel || !p2request) p1request.noCancel = true;
-			this.p1.emitRequest(p1request);
-		} else {
-			this.p1.emitRequest({wait: true, side: this.p1.getRequestData()});
+		const allRequestsMade = requests.every(request => request);
+		for (let i = 0; i < this.sides.length; i++) {
+			if (requests[i]) {
+				if (!this.supportCancel || !allRequestsMade) requests[i].noCancel = true;
+			} else {
+				requests[i] = {wait: true, side: this.sides[i].getRequestData()};
+			}
 		}
 
-		if (p2request) {
-			if (!this.supportCancel || !p1request) p2request.noCancel = true;
-			this.p2.emitRequest(p2request);
-		} else {
-			this.p2.emitRequest({wait: true, side: this.p2.getRequestData()});
-		}
-
-		if (this.p1.isChoiceDone() && this.p2.isChoiceDone()) {
-			throw new Error(`Choices are done immediately after a request`);
-		}
+		return requests;
 	}
 
 	tiebreak() {
@@ -1209,14 +1157,9 @@ export class Battle extends Dex.ModdedDex {
 		return this.tie();
 	}
 
-	forceWin(side: PlayerSlot | null = null) {
+	forceWin(side: SideID | null = null) {
 		if (this.ended) return false;
-
-		if (side) {
-			this.inputLog.push(`>forcewin ${side}`);
-		} else {
-			this.inputLog.push(`>forcetie`);
-		}
+		this.inputLog.push(side ? `>forcewin ${side}` : `>forcetie`);
 		return this.win(side);
 	}
 
@@ -1224,13 +1167,11 @@ export class Battle extends Dex.ModdedDex {
 		return this.win();
 	}
 
-	win(side?: string | Side | null) {
-		if (this.ended) {
-			return false;
-		}
-		if (side === 'p1' || side === 'p2') {
-			side = this[side];
-		} else if (side !== this.p1 && side !== this.p2) {
+	win(side?: SideID | '' | Side | null) {
+		if (this.ended) return false;
+		if (side && typeof side === 'string') {
+			side = this.getSide(side);
+		} else if (!side || !this.sides.includes(side)) {
 			side = null;
 		}
 		this.winner = side ? side.name : '';
@@ -1242,10 +1183,9 @@ export class Battle extends Dex.ModdedDex {
 			this.add('tie');
 		}
 		this.ended = true;
-		this.active = false;
-		this.currentRequest = '';
+		this.requestState = '';
 		for (const s of this.sides) {
-			s.currentRequest = '';
+			s.activeRequest = null;
 		}
 		return true;
 	}
@@ -1253,25 +1193,17 @@ export class Battle extends Dex.ModdedDex {
 	switchIn(pokemon: Pokemon, pos?: number, sourceEffect: Effect | null = null) {
 		if (!pokemon || pokemon.isActive) return false;
 		if (!pos) pos = 0;
-		let side = pokemon.side;
+		const side = pokemon.side;
 		if (pos >= side.active.length) {
 			throw new Error("Invalid switch position");
 		}
 		let newMove = null;
 		if (side.active[pos]) {
-			let oldActive = side.active[pos];
+			const oldActive = side.active[pos];
 			if (this.gen === 4 && sourceEffect) {
 				newMove = oldActive.lastMove;
 			}
-			if (this.cancelMove(oldActive)) {
-				for (const foeActive of side.foe.active) {
-					if (foeActive.isStale >= 2) {
-						oldActive.isStaleCon++;
-						oldActive.isStaleSource = 'drag';
-						break;
-					}
-				}
-			}
+			this.cancelMove(oldActive);
 			if (oldActive.switchCopyFlag) {
 				oldActive.switchCopyFlag = false;
 				pokemon.copyVolatileFrom(oldActive);
@@ -1281,7 +1213,7 @@ export class Battle extends Dex.ModdedDex {
 		pokemon.isActive = true;
 		this.runEvent('BeforeSwitchIn', pokemon);
 		if (side.active[pos]) {
-			let oldActive = side.active[pos];
+			const oldActive = side.active[pos];
 			oldActive.isActive = false;
 			oldActive.isStarted = false;
 			oldActive.usedItemThisTurn = false;
@@ -1294,8 +1226,8 @@ export class Battle extends Dex.ModdedDex {
 		}
 		side.active[pos] = pokemon;
 		pokemon.activeTurns = 0;
-		for (let m in pokemon.moveSlots) {
-			pokemon.moveSlots[m].used = false;
+		for (const moveSlot of pokemon.moveSlots) {
+			moveSlot.used = false;
 		}
 		this.add('switch', pokemon, pokemon.getDetails);
 		if (sourceEffect) this.log[this.log.length - 1] += `|[from]${sourceEffect.fullname}`;
@@ -1304,39 +1236,34 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	canSwitch(side: Side) {
-		let canSwitchIn = [];
-		for (let i = side.active.length; i < side.pokemon.length; i++) {
-			let pokemon = side.pokemon[i];
-			if (!pokemon.fainted) {
-				canSwitchIn.push(pokemon);
-			}
-		}
-		return canSwitchIn.length;
+		return this.possibleSwitches(side).length;
 	}
 
 	getRandomSwitchable(side: Side) {
-		let canSwitchIn = [];
+		const canSwitchIn = this.possibleSwitches(side);
+		return canSwitchIn.length ? this.sample(canSwitchIn) : null;
+	}
+
+	private possibleSwitches(side: Side) {
+		const canSwitchIn = [];
 		for (let i = side.active.length; i < side.pokemon.length; i++) {
-			let pokemon = side.pokemon[i];
+			const pokemon = side.pokemon[i];
 			if (!pokemon.fainted) {
 				canSwitchIn.push(pokemon);
 			}
 		}
-		if (!canSwitchIn.length) {
-			return null;
-		}
-		return this.sample(canSwitchIn);
+		return canSwitchIn;
 	}
 
 	dragIn(side: Side, pos?: number) {
 		if (!pos) pos = 0;
 		if (pos >= side.active.length) return false;
-		let pokemon = this.getRandomSwitchable(side);
+		const pokemon = this.getRandomSwitchable(side);
 		if (!pokemon || pokemon.isActive) return false;
 		pokemon.isActive = true;
 		this.runEvent('BeforeSwitchIn', pokemon);
 		if (side.active[pos]) {
-			let oldActive = side.active[pos];
+			const oldActive = side.active[pos];
 			if (!oldActive.hp) {
 				return false;
 			}
@@ -1353,22 +1280,14 @@ export class Battle extends Dex.ModdedDex {
 			pokemon.position = pos;
 			side.pokemon[pokemon.position] = pokemon;
 			side.pokemon[oldActive.position] = oldActive;
-			if (this.cancelMove(oldActive)) {
-				for (const foeActive of side.foe.active) {
-					if (foeActive.isStale >= 2) {
-						oldActive.isStaleCon++;
-						oldActive.isStaleSource = 'drag';
-						break;
-					}
-				}
-			}
+			this.cancelMove(oldActive);
 			oldActive.clearVolatile();
 		}
 		side.active[pos] = pokemon;
 		pokemon.activeTurns = 0;
 		if (this.gen === 2) pokemon.draggedIn = this.turn;
-		for (let m in pokemon.moveSlots) {
-			pokemon.moveSlots[m].used = false;
+		for (const moveSlot of pokemon.moveSlots) {
+			moveSlot.used = false;
 		}
 		this.add('drag', pokemon, pokemon.getDetails);
 		if (this.gen >= 5) {
@@ -1390,12 +1309,12 @@ export class Battle extends Dex.ModdedDex {
 		if (slot >= pokemon.side.active.length) {
 			throw new Error("Invalid swap position");
 		}
-		let target = pokemon.side.active[slot];
+		const target = pokemon.side.active[slot];
 		if (slot !== 1 && (!target || target.fainted)) return false;
 
 		this.add('swap', pokemon, slot, attributes || '');
 
-		let side = pokemon.side;
+		const side = pokemon.side;
 		side.pokemon[pokemon.position] = target;
 		side.pokemon[slot] = pokemon;
 		side.active[pokemon.position] = side.pokemon[pokemon.position];
@@ -1411,9 +1330,12 @@ export class Battle extends Dex.ModdedDex {
 
 	nextTurn() {
 		this.turn++;
-		let allStale = true;
-		let oneStale: Pokemon | null = null;
+		this.lastMoveThisTurn = null;
+		const trappedBySide: boolean[] = [];
+		const stalenessBySide: ('internal' | 'external' | undefined)[] = [];
 		for (const side of this.sides) {
+			let sideTrapped = true;
+			let sideStaleness: 'internal' | 'external' | undefined;
 			for (const pokemon of side.active) {
 				if (!pokemon) continue;
 				pokemon.moveThisTurn = '';
@@ -1435,7 +1357,7 @@ export class Battle extends Dex.ModdedDex {
 				if (pokemon.getLastAttackedBy() && this.gen >= 7) pokemon.knownType = true;
 
 				for (let i = pokemon.attackedBy.length - 1; i >= 0; i--) {
-					let attack = pokemon.attackedBy[i];
+					const attack = pokemon.attackedBy[i];
 					if (attack.source.isActive) {
 						attack.thisTurn = false;
 					} else {
@@ -1467,11 +1389,10 @@ export class Battle extends Dex.ModdedDex {
 				if (this.gen > 2) {
 					for (const source of pokemon.side.foe.active) {
 						if (!source || source.fainted) continue;
-						let template = (source.illusion || source).template;
+						const template = (source.illusion || source).template;
 						if (!template.abilities) continue;
-						for (let abilitySlot in template.abilities) {
-							// @ts-ignore
-							let abilityName = template.abilities[abilitySlot];
+						for (const abilitySlot in template.abilities) {
+							const abilityName = template.abilities[abilitySlot as keyof TemplateAbility];
 							if (abilityName === source.ability) {
 								// pokemon event was already run above so we don't need
 								// to run it again.
@@ -1485,7 +1406,7 @@ export class Battle extends Dex.ModdedDex {
 								// unreleased hidden ability
 								continue;
 							}
-							let ability = this.getAbility(abilityName);
+							const ability = this.getAbility(abilityName);
 							if (ruleTable.has('-ability:' + ability.id)) continue;
 							if (pokemon.knownType && !this.getImmunity('trapped', pokemon)) continue;
 							this.singleEvent('FoeMaybeTrapPokemon', ability, {}, pokemon, source);
@@ -1494,150 +1415,24 @@ export class Battle extends Dex.ModdedDex {
 				}
 
 				if (pokemon.fainted) continue;
-				if (pokemon.isStale < 2) {
-					if (pokemon.isStaleCon >= 2) {
-						if (pokemon.hp >= pokemon.isStaleHP - pokemon.maxhp / 100) {
-							pokemon.isStale++;
-							if (this.firstStaleWarned && pokemon.isStale < 2) {
-								switch (pokemon.isStaleSource) {
-								case 'struggle':
-									this.add('bigerror', `${pokemon.name} isn't losing HP from Struggle. If this continues, it will be classified as being in an endless loop`);
-									break;
-								case 'drag':
-									this.add('bigerror', `${pokemon.name} isn't losing PP or HP from being forced to switch. If this continues, it will be classified as being in an endless loop`);
-									break;
-								case 'switch':
-									this.add('bigerror', `${pokemon.name} isn't losing PP or HP from repeatedly switching. If this continues, it will be classified as being in an endless loop`);
-									break;
-								}
-							}
-						}
-						pokemon.isStaleCon = 0;
-						pokemon.isStalePPTurns = 0;
-						pokemon.isStaleHP = pokemon.hp;
-					}
-					if (pokemon.isStalePPTurns >= 5) {
-						if (pokemon.hp >= pokemon.isStaleHP - pokemon.maxhp / 100) {
-							pokemon.isStale++;
-							pokemon.isStaleSource = 'ppstall';
-							if (this.firstStaleWarned && pokemon.isStale < 2) {
-								this.add('bigerror', `${pokemon.name} isn't losing PP or HP. If it keeps on not losing PP or HP, it will be classified as being in an endless loop.`);
-							}
-						}
-						pokemon.isStaleCon = 0;
-						pokemon.isStalePPTurns = 0;
-						pokemon.isStaleHP = pokemon.hp;
-					}
-				}
-				if (pokemon.getMoves().length === 0) {
-					pokemon.isStaleCon++;
-					pokemon.isStaleSource = 'struggle';
-				}
-				if (pokemon.isStale < 2) {
-					allStale = false;
-				} else if (pokemon.isStale && !pokemon.staleWarned) {
-					oneStale = pokemon;
-				}
-				if (!pokemon.isStalePPTurns) {
-					pokemon.isStaleHP = pokemon.hp;
-					if (pokemon.activeTurns) pokemon.isStaleCon = 0;
-				}
-				if (pokemon.activeTurns) {
-					pokemon.isStalePPTurns++;
+
+				sideTrapped = sideTrapped && pokemon.trapped;
+				if (pokemon.staleness) {
+					sideStaleness = sideStaleness === 'external' ? sideStaleness : pokemon.staleness;
 				}
 				pokemon.activeTurns++;
 			}
+			trappedBySide.push(sideTrapped);
+			stalenessBySide.push(sideStaleness);
 			side.faintedLastTurn = side.faintedThisTurn;
 			side.faintedThisTurn = false;
 		}
-		const ruleTable = this.getRuleTable(this.getFormat());
-		if (ruleTable.has('endlessbattleclause')) {
-			if (oneStale) {
-				let activationWarning = ` - If all active Pok\u00e9mon go in an endless loop, Endless Battle Clause will activate.`;
-				if (allStale) activationWarning = ``;
-				let loopReason = ``;
-				switch (oneStale.isStaleSource) {
-				case 'struggle':
-					loopReason = `: it isn't losing HP from Struggle`;
-					break;
-				case 'drag':
-					loopReason = `: it isn't losing PP or HP from being forced to switch`;
-					break;
-				case 'switch':
-					loopReason = `: it isn't losing PP or HP from repeatedly switching`;
-					break;
-				case 'getleppa':
-					loopReason = `: it got a Leppa Berry it didn't start with`;
-					break;
-				case 'useleppa':
-					loopReason = `: it used a Leppa Berry it didn't start with`;
-					break;
-				case 'ppstall':
-					loopReason = `: it isn't losing PP or HP`;
-					break;
-				case 'ppoverflow':
-					loopReason = `: its PP overflowed`;
-					break;
-				}
-				this.add('bigerror', `${oneStale.name} is in an endless loop${loopReason}.${activationWarning}`);
-				oneStale.staleWarned = true;
-				this.firstStaleWarned = true;
-			}
-			if (allStale) {
-				this.add('message', `All active Pok\u00e9mon are in an endless loop. Endless Battle Clause activated!`);
-				let leppaPokemon = null;
-				for (const side of this.sides) {
-					for (const pokemon of side.pokemon) {
-						if (toId(pokemon.set.item) === 'leppaberry') {
-							if (leppaPokemon) {
-								leppaPokemon = null; // both sides have Leppa
-								this.add('-message', `Both sides started with a Leppa Berry.`);
-							} else {
-								leppaPokemon = pokemon;
-							}
-							break;
-						}
-					}
-				}
-				if (leppaPokemon) {
-					this.add('-message', `${leppaPokemon.side.name}'s ${leppaPokemon.name} started with a Leppa Berry and loses.`);
-					this.win(leppaPokemon.side.foe);
-					return;
-				}
-				this.win();
-				return;
-			}
-			if ((this.turn >= 500 && this.turn % 100 === 0) ||
-				(this.turn >= 900 && this.turn % 10 === 0) ||
-				(this.turn >= 990)) {
-				const turnsLeft = 1000 - this.turn;
-				if (turnsLeft < 0) {
-					this.add('message', `It is turn 1000. Endless Battle Clause activated!`);
-					this.tie();
-					return;
-				}
-				const turnsLeftText = (turnsLeft === 1 ? `1 turn` : `${turnsLeft} turns`);
-				this.add('bigerror', `You will auto-tie if the battle doesn't end in ${turnsLeftText} (on turn 1000).`);
-			}
-		} else {
-			if (allStale && !this.staleWarned) {
-				this.staleWarned = true;
-				this.add('bigerror', `If this format had Endless Battle Clause, it would have activated.`);
-			} else if (oneStale) {
-				this.add('bigerror', `${oneStale.name} is in an endless loop.`);
-				oneStale.staleWarned = true;
-			}
-		}
+
+		if (this.maybeTriggerEndlessBattleClause(trappedBySide, stalenessBySide)) return;
 
 		if (this.gameType === 'triples' && !this.sides.filter(side => side.pokemonLeft > 1).length) {
 			// If both sides have one Pokemon left in triples and they are not adjacent, they are both moved to the center.
-			let actives = [];
-			for (const side of this.sides) {
-				for (const pokemon of side.active) {
-					if (!pokemon || pokemon.fainted) continue;
-					actives.push(pokemon);
-				}
-			}
+			const actives = this.getAllActive();
 			if (actives.length > 1 && !this.isAdjacent(actives[0], actives[1])) {
 				this.swapPosition(actives[0], 1, '[silent]');
 				this.swapPosition(actives[1], 1, '[silent]');
@@ -1650,21 +1445,77 @@ export class Battle extends Dex.ModdedDex {
 		this.makeRequest('move');
 	}
 
+	private maybeTriggerEndlessBattleClause(
+		trappedBySide: boolean[], stalenessBySide: ('internal' | 'external' | undefined)[]
+	) {
+		if (!this.getRuleTable(this.getFormat()).has('endlessbattleclause')) return;
+
+		if ((this.turn >= 500 && this.turn % 100 === 0) ||
+			(this.turn >= 900 && this.turn % 10 === 0) ||
+			(this.turn >= 990)) {
+			const turnsLeft = 1000 - this.turn;
+			if (turnsLeft < 0) {
+				this.add('message', `It is turn 1000. Endless Battle Clause activated!`);
+				this.tie();
+				return true;
+			}
+			const turnsLeftText = (turnsLeft === 1 ? `1 turn` : `${turnsLeft} turns`);
+			this.add('bigerror', `You will auto-tie if the battle doesn't end in ${turnsLeftText} turns (on turn 1000).`);
+			if (Config.allowrequestingties) this.hint("If you want to tie earlier, consider using `/offertie`.");
+		}
+
+		// Are all Pokemon on every side stale, with at least one side containing an externally stale Pokemon?
+		if (!stalenessBySide.every(s => !!s) || !stalenessBySide.some(s => s === 'external')) return;
+
+		// Can any of the sides switch to a non-stale Pokemon?
+		for (const [i, trapped] of trappedBySide.entries()) {
+			if (trapped) break; // If all of a side's Pokemon are trapped we know they can't switch.
+			const side = this.sides[i];
+			for (const pokemon of side.pokemon) {
+				// Found a Pokemon that one side can switch to, no need to end the game.
+				if (!pokemon.fainted && !pokemon.staleness) return;
+			}
+		}
+
+		// Endless Battle Clause activates - we determine the winner by looking at each side's sets.
+		const losers: Side[] = [];
+		for (const side of this.sides) {
+			let leppa = false; // Leppa Berry
+			let cycle = false; // Harvest or Recycle
+			for (const pokemon of side.pokemon) {
+				if (toID(pokemon.set.item) === 'leppaberry') leppa = true;
+				if (['harvest', 'pickup'].includes(toID(pokemon.set.ability)) ||
+					pokemon.set.moves.map(toID).includes('recycle' as ID)) {
+					cycle = true;
+				}
+				if (leppa && cycle) break;
+			}
+			if (leppa && cycle) losers.push(side);
+		}
+
+		if (losers.length === 1) {
+			const loser = losers[0];
+			this.add('-message', `${loser.name}'s team started with the rudimentary means to perform Leppa Berry cycling and thus loses.`);
+			return this.win(loser.foe);
+		}
+		if (losers.length === this.sides.length) {
+			this.add('-message', `Each side's team started with the rudimentary means to perform Leppa Berry cycling.`);
+		}
+
+		return this.tie();
+	}
+
 	start() {
-		if (this.active) return;
+		// deserialized should use restart instead
+		if (this.deserialized) return;
+		// need all players to start
+		if (!this.sides.every(side => !!side)) return;
 
-		if (!this.p1 || !this.p2) {
-			// need two players to start
-			return;
-		}
+		if (this.started) return;
 
-		if (this.started) {
-			return;
-		}
-		this.activeTurns = 0;
 		this.started = true;
-		this.p2.foe = this.p1;
-		this.p1.foe = this.p2;
+		this.sides[1].foe = this.sides[0];
+		this.sides[0].foe = this.sides[1];
 
 		for (const side of this.sides) {
 			this.add('teamsize', side.id, side.pokemon.length);
@@ -1673,27 +1524,25 @@ export class Battle extends Dex.ModdedDex {
 		this.add('gametype', this.gameType);
 		this.add('gen', this.gen);
 
-		let format = this.getFormat();
+		const format = this.getFormat();
 
 		this.add('tier', format.name);
 		if (this.rated) {
 			if (this.rated === 'Rated battle') this.rated = true;
 			this.add('rated', typeof this.rated === 'string' ? this.rated : '');
 		}
-		this.add('seed', (side: Side) => Battle.logReplay(this.prngSeed.join(','), side));
 
-		if (format.onBegin) {
-			format.onBegin.call(this);
-		}
+		if (format.onBegin) format.onBegin.call(this);
+		if (format.trunc) this.trunc = format.trunc;
 		for (const rule of this.getRuleTable(format).keys()) {
 			if (rule.startsWith('+') || rule.startsWith('-') || rule.startsWith('!')) continue;
-			let subFormat = this.getFormat(rule);
+			const subFormat = this.getFormat(rule);
 			if (subFormat.exists) {
 				if (subFormat.onBegin) subFormat.onBegin.call(this);
 			}
 		}
 
-		if (!this.p1.pokemon[0] || !this.p2.pokemon[0]) {
+		if (this.sides.some(side => !side.pokemon[0])) {
 			throw new Error('Battle not started: A player has an empty team.');
 		}
 
@@ -1701,7 +1550,17 @@ export class Battle extends Dex.ModdedDex {
 
 		this.addToQueue({choice: 'start'});
 		this.midTurn = true;
-		if (!this.currentRequest) this.go();
+		if (!this.requestState) this.go();
+	}
+
+	restart(send?: (type: string, data: string | string[]) => void) {
+		if (!this.deserialized) throw new Error('Attempt to restart a battle which has not been deserialized');
+
+		const format = this.getFormat();
+		if (format.trunc) this.trunc = format.trunc;
+
+		// @ts-ignore - readonly
+		this.send = send;
 	}
 
 	boost(
@@ -1718,14 +1577,13 @@ export class Battle extends Dex.ModdedDex {
 		boost = this.runEvent('Boost', target, source, effect, Object.assign({}, boost));
 		let success = null;
 		let boosted = false;
-		for (let i in boost) {
-			let currentBoost: SparseBoostsTable = {};
-			// @ts-ignore
-			currentBoost[i] = boost[i];
+		let boostName: BoostName;
+		for (boostName in boost) {
+			const currentBoost: SparseBoostsTable = {};
+			currentBoost[boostName] = boost[boostName];
 			let boostBy = target.boostBy(currentBoost);
 			let msg = '-boost';
-			// @ts-ignore
-			if (boost[i] < 0) {
+			if (boost[boostName]! < 0) {
 				msg = '-unboost';
 				boostBy = -boostBy;
 			}
@@ -1736,37 +1594,146 @@ export class Battle extends Dex.ModdedDex {
 					this.add('-setboost', target, 'atk', target.boosts['atk'], '[from] move: Belly Drum');
 					break;
 				case 'bellydrum2':
-					this.add(msg, target, i, boostBy, '[silent]');
-					this.add('-hint', "In Gen 2, Belly Drum boosts by 2 when it fails.");
+					this.add(msg, target, boostName, boostBy, '[silent]');
+					this.hint("In Gen 2, Belly Drum boosts by 2 when it fails.");
 					break;
 				case 'intimidate': case 'gooey': case 'tanglinghair':
-					this.add(msg, target, i, boostBy);
+					this.add(msg, target, boostName, boostBy);
 					break;
 				case 'zpower':
-					this.add(msg, target, i, boostBy, '[zeffect]');
+					this.add(msg, target, boostName, boostBy, '[zeffect]');
 					break;
 				default:
 					if (!effect) break;
 					if (effect.effectType === 'Move') {
-						this.add(msg, target, i, boostBy);
+						this.add(msg, target, boostName, boostBy);
 					} else {
 						if (effect.effectType === 'Ability' && !boosted) {
 							this.add('-ability', target, effect.name, 'boost');
 							boosted = true;
 						}
-						this.add(msg, target, i, boostBy);
+						this.add(msg, target, boostName, boostBy);
 					}
 					break;
 				}
 				this.runEvent('AfterEachBoost', target, source, effect, currentBoost);
 			} else if (effect && effect.effectType === 'Ability') {
-				if (isSecondary) this.add(msg, target, i, boostBy);
+				if (isSecondary) this.add(msg, target, boostName, boostBy);
 			} else if (!isSecondary && !isSelf) {
-				this.add(msg, target, i, boostBy);
+				this.add(msg, target, boostName, boostBy);
 			}
 		}
 		this.runEvent('AfterBoost', target, source, effect, boost);
 		return success;
+	}
+
+	spreadDamage(
+		damage: SpreadMoveDamage, targetArray: (false | Pokemon | null)[] | null = null,
+		source: Pokemon | null = null, effect: 'drain' | 'recoil' | Effect | null = null, instafaint: boolean = false
+	) {
+		if (!targetArray) return [0];
+		let retVals: (number | false | undefined)[] = [];
+		if (typeof effect === 'string' || !effect) effect = this.getEffectByID((effect || '') as ID);
+		for (const [i, curDamage] of damage.entries()) {
+			const target = targetArray[i];
+			let targetDamage = curDamage;
+			if (!(targetDamage || targetDamage === 0)) {
+				retVals[i] = targetDamage;
+				continue;
+			}
+			if (!target || !target.hp) {
+				retVals[i] = 0;
+				continue;
+			}
+			if (!target.isActive) {
+				retVals[i] = false;
+				continue;
+			}
+			if (targetDamage !== 0) targetDamage = this.clampIntRange(targetDamage, 1);
+
+			if (effect.id !== 'struggle-recoil') { // Struggle recoil is not affected by effects
+				if (effect.effectType === 'Weather' && !target.runStatusImmunity(effect.id)) {
+					this.debug('weather immunity');
+					retVals[i] = 0;
+					continue;
+				}
+				targetDamage = this.runEvent('Damage', target, source, effect, targetDamage);
+				if (!(targetDamage || targetDamage === 0)) {
+					this.debug('damage event failed');
+					retVals[i] = curDamage === true ? undefined : targetDamage;
+					continue;
+				}
+			}
+			if (targetDamage !== 0) targetDamage = this.clampIntRange(targetDamage, 1);
+
+			if (this.gen <= 1) {
+				if (this.currentMod === 'stadium' ||
+					!['recoil', 'drain'].includes(effect.id) && effect.effectType !== 'Status') {
+					this.lastDamage = targetDamage;
+				}
+			}
+
+			retVals[i] = targetDamage = target.damage(targetDamage, source, effect);
+			if (targetDamage !== 0) target.hurtThisTurn = true;
+			if (source && effect.effectType === 'Move') source.lastDamage = targetDamage;
+
+			const name = effect.fullname === 'tox' ? 'psn' : effect.fullname;
+			switch (effect.id) {
+			case 'partiallytrapped':
+				this.add('-damage', target, target.getHealth, '[from] ' + this.effectData.sourceEffect.fullname, '[partiallytrapped]');
+				break;
+			case 'powder':
+				this.add('-damage', target, target.getHealth, '[silent]');
+				break;
+			case 'confused':
+				this.add('-damage', target, target.getHealth, '[from] confusion');
+				break;
+			default:
+				if (effect.effectType === 'Move' || !name) {
+					this.add('-damage', target, target.getHealth);
+				} else if (source && (source !== target || effect.effectType === 'Ability')) {
+					this.add('-damage', target, target.getHealth, '[from] ' + name, '[of] ' + source);
+				} else {
+					this.add('-damage', target, target.getHealth, '[from] ' + name);
+				}
+				break;
+			}
+
+			if (targetDamage) {
+				if (this.gen <= 1 && effect.recoil && source) {
+					const amount = this.clampIntRange(Math.floor(targetDamage * effect.recoil[0] / effect.recoil[1]), 1);
+					this.damage(amount, source, target, 'recoil');
+				}
+				if (this.gen <= 4 && effect.drain && source) {
+					const amount = this.clampIntRange(Math.floor(targetDamage * effect.drain[0] / effect.drain[1]), 1);
+					this.heal(amount, source, target, 'drain');
+				}
+				if (this.gen > 4 && effect.drain && source) {
+					const amount = Math.round(targetDamage * effect.drain[0] / effect.drain[1]);
+					this.heal(amount, source, target, 'drain');
+				}
+			}
+		}
+
+		// @ts-ignore - FIXME AfterDamage passes an Effect, not an ActiveMove
+		if (!effect.flags) effect.flags = {};
+		if (instafaint) {
+			for (const [i, target] of targetArray.entries()) {
+				if (!retVals[i] || !target) continue;
+
+				if (target.hp <= 0) {
+					this.debug('instafaint: ' + this.faintQueue.map(entry => entry.target.name));
+					this.faintMessages(true);
+					if (this.gen <= 2) {
+						target.faint();
+						if (this.gen <= 1) this.queue = [];
+					}
+				}
+			}
+		}
+		retVals = this.runEvent('AfterDamage', (targetArray.filter(val => !!val)) as Pokemon[], source, effect, retVals);
+
+		return retVals;
 	}
 
 	damage(
@@ -1777,87 +1744,7 @@ export class Battle extends Dex.ModdedDex {
 			if (!source) source = this.event.source;
 			if (!effect) effect = this.effect;
 		}
-		if (!target || !target.hp) return 0;
-		if (!target.isActive) return false;
-		if (!(damage || damage === 0)) return damage;
-		if (damage !== 0) damage = this.clampIntRange(damage, 1);
-
-		if (typeof effect === 'string' || !effect) effect = this.getEffect(effect);
-
-		if (effect.id !== 'struggle-recoil') { // Struggle recoil is not affected by effects
-			if (effect.effectType === 'Weather' && !target.runStatusImmunity(effect.id)) {
-				this.debug('weather immunity');
-				return 0;
-			}
-			damage = this.runEvent('Damage', target, source, effect, damage);
-			if (!(damage || damage === 0)) {
-				this.debug('damage event failed');
-				return damage;
-			}
-		}
-		if (damage !== 0) damage = this.clampIntRange(damage, 1);
-
-		if (this.gen <= 1) {
-			if (this.currentMod === 'stadium' ||
-				!['recoil', 'drain'].includes(effect.id) && effect.effectType !== 'Status') {
-				this.lastDamage = damage;
-			}
-		}
-
-		damage = target.damage(damage, source, effect);
-		if (damage !== 0) target.hurtThisTurn = true;
-		if (source && effect.effectType === 'Move') source.lastDamage = damage;
-
-		let name = effect.fullname;
-		if (name === 'tox') name = 'psn';
-		switch (effect.id) {
-		case 'partiallytrapped':
-			this.add('-damage', target, target.getHealth, '[from] ' + this.effectData.sourceEffect.fullname, '[partiallytrapped]');
-			break;
-		case 'powder':
-			this.add('-damage', target, target.getHealth, '[silent]');
-			break;
-		case 'confused':
-			this.add('-damage', target, target.getHealth, '[from] confusion');
-			break;
-		default:
-			if (effect.effectType === 'Move' || !name) {
-				this.add('-damage', target, target.getHealth);
-			} else if (source && (source !== target || effect.effectType === 'Ability')) {
-				this.add('-damage', target, target.getHealth, '[from] ' + name, '[of] ' + source);
-			} else {
-				this.add('-damage', target, target.getHealth, '[from] ' + name);
-			}
-			break;
-		}
-
-		if (damage) {
-			if (this.gen <= 1 && effect.recoil && source) {
-				this.damage(this.clampIntRange(Math.floor(damage * effect.recoil[0] / effect.recoil[1]), 1), source, target, 'recoil');
-			}
-			if (this.gen <= 4 && effect.drain && source) {
-				this.heal(this.clampIntRange(Math.floor(damage * effect.drain[0] / effect.drain[1]), 1), source, target, 'drain');
-			}
-			if (this.gen > 4 && effect.drain && source) {
-				this.heal(Math.round(damage * effect.drain[0] / effect.drain[1]), source, target, 'drain');
-			}
-		}
-
-		// @ts-ignore TODO: AfterDamage passes an Effect, not an ActiveMove
-		if (!effect.flags) effect.flags = {};
-
-		if (instafaint && target.hp <= 0) {
-			this.debug('instafaint: ' + this.faintQueue.map(entry => entry.target.name));
-			this.faintMessages(true);
-			if (this.gen <= 2) {
-				target.faint();
-				if (this.gen <= 1) this.queue = [];
-			}
-		} else {
-			damage = this.runEvent('AfterDamage', target, source, effect, damage);
-		}
-
-		return damage;
+		return this.spreadDamage([damage], [target], source, effect, instafaint)[0];
 	}
 
 	directDamage(damage: number, target?: Pokemon, source: Pokemon | null = null, effect: Effect | null = null) {
@@ -1870,19 +1757,27 @@ export class Battle extends Dex.ModdedDex {
 		if (!damage) return 0;
 		damage = this.clampIntRange(damage, 1);
 
-		if (typeof effect === 'string' || !effect) effect = this.getEffect(effect);
+		if (typeof effect === 'string' || !effect) effect = this.getEffectByID((effect || '') as ID);
 
 		// In Gen 1 BUT NOT STADIUM, Substitute also takes confusion and HJK recoil damage
 		if (this.gen <= 1 && this.currentMod !== 'stadium' &&
-			['confusion', 'highjumpkick'].includes(effect.id) && target.volatiles['substitute']) {
-			target.volatiles['substitute'].hp -= damage;
-			if (target.volatiles['substitute'].hp <= 0) {
-				target.removeVolatile('substitute');
-				target.subFainted = true;
+			['confusion', 'jumpkick', 'highjumpkick'].includes(effect.id) && target.volatiles['substitute']) {
+
+			const hint = "In Gen 1, if a Pokemon with a Substitute hurts itself due to confusion or Jump Kick/Hi Jump Kick recoil and the target";
+			if (source && source.volatiles['substitute']) {
+				source.volatiles['substitute'].hp -= damage;
+				if (source.volatiles['substitute'].hp <= 0) {
+					source.removeVolatile('substitute');
+					source.subFainted = true;
+				} else {
+					this.add('-activate', source, 'Substitute', '[damage]');
+				}
+				this.hint(hint + " has a Substitute, the target's Substitute takes the damage.");
+				return damage;
 			} else {
-				this.add('-activate', target, 'Substitute', '[damage]');
+				this.hint(hint + " does not have a Substitute there is no damage dealt.");
+				return 0;
 			}
-			return damage;
 		}
 
 		damage = target.damage(damage, source, effect);
@@ -1907,7 +1802,7 @@ export class Battle extends Dex.ModdedDex {
 			if (!source) source = this.event.source;
 			if (!effect) effect = this.effect;
 		}
-		if (effect === 'drain') effect = this.getEffect(effect);
+		if (effect === 'drain') effect = this.getEffectByID(effect as ID);
 		if (damage && damage <= 1) damage = 1;
 		damage = this.trunc(damage);
 		// for things like Liquid Ooze, the Heal event still happens when nothing is healed.
@@ -1916,7 +1811,7 @@ export class Battle extends Dex.ModdedDex {
 		if (!target || !target.hp) return false;
 		if (!target.isActive) return false;
 		if (target.hp >= target.maxhp) return false;
-		let finalDamage = target.heal(damage, source, effect);
+		const finalDamage = target.heal(damage, source, effect);
 		switch (effect && effect.id) {
 		case 'leechseed':
 		case 'rest':
@@ -1962,7 +1857,7 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	chainModify(numerator: number | number[], denominator?: number) {
-		let previousMod = this.trunc(this.event.modifier * 4096);
+		const previousMod = this.trunc(this.event.modifier * 4096);
 
 		if (Array.isArray(numerator)) {
 			denominator = numerator[1];
@@ -1988,13 +1883,12 @@ export class Battle extends Dex.ModdedDex {
 			numerator = numerator[0];
 		}
 		const tr = this.trunc;
-		let modifier = tr(numerator * 4096 / denominator);
+		const modifier = tr(numerator * 4096 / denominator);
 		return tr((tr(value * modifier) + 2048 - 1) / 4096);
 	}
 
 	getCategory(move: string | Move) {
-		move = this.getMove(move);
-		return move.category || 'Physical';
+		return this.getMove(move).category || 'Physical';
 	}
 
 	/**
@@ -2005,18 +1899,18 @@ export class Battle extends Dex.ModdedDex {
 	 */
 	getDamage(
 		pokemon: Pokemon, target: Pokemon, move: string | number | ActiveMove,
-		suppressMessages: boolean = false): number | undefined | null | false {
+		suppressMessages: boolean = false
+	): number | undefined | null | false {
 		if (typeof move === 'string') move = this.getActiveMove(move);
 
 		if (typeof move === 'number') {
-			let basePower = move;
-			// @ts-ignore
-			move = (new Data.Move({
+			const basePower = move;
+			move = new Data.Move({
 				basePower,
 				type: '???',
 				category: 'Physical',
 				willCrit: false,
-			})) as ActiveMove;
+			}) as ActiveMove;
 			move.hit = 0;
 		}
 
@@ -2026,29 +1920,22 @@ export class Battle extends Dex.ModdedDex {
 			}
 		}
 
-		if (move.ohko) {
-			return target.maxhp;
-		}
-
-		if (move.damageCallback) {
-			return move.damageCallback.call(this, pokemon, target);
-		}
+		if (move.ohko) return target.maxhp;
+		if (move.damageCallback) return move.damageCallback.call(this, pokemon, target);
 		if (move.damage === 'level') {
 			return pokemon.level;
 		} else if (move.damage) {
 			return move.damage;
 		}
 
-		let category = this.getCategory(move);
-		let defensiveCategory = move.defensiveCategory || category;
+		const category = this.getCategory(move);
+		const defensiveCategory = move.defensiveCategory || category;
 
 		let basePower: number | false | null = move.basePower;
 		if (move.basePowerCallback) {
 			basePower = move.basePowerCallback.call(this, pokemon, target, move);
 		}
-		if (!basePower) {
-			return basePower === 0 ? undefined : basePower;
-		}
+		if (!basePower) return basePower === 0 ? undefined : basePower;
 		basePower = this.clampIntRange(basePower, 1);
 
 		let critMult;
@@ -2065,15 +1952,16 @@ export class Battle extends Dex.ModdedDex {
 			}
 		}
 
-		move.crit = move.willCrit || false;
+		const moveHit = target.getMoveHitData(move);
+		moveHit.crit = move.willCrit || false;
 		if (move.willCrit === undefined) {
 			if (critRatio) {
-				move.crit = this.randomChance(1, critMult[critRatio]);
+				moveHit.crit = this.randomChance(1, critMult[critRatio]);
 			}
 		}
 
-		if (move.crit) {
-			move.crit = this.runEvent('CriticalHit', target, null, move);
+		if (moveHit.crit) {
+			moveHit.crit = this.runEvent('CriticalHit', target, null, move);
 		}
 
 		// happens after crit calculation
@@ -2082,30 +1970,28 @@ export class Battle extends Dex.ModdedDex {
 		if (!basePower) return 0;
 		basePower = this.clampIntRange(basePower, 1);
 
-		let level = pokemon.level;
+		const level = pokemon.level;
 
-		let attacker = pokemon;
-		let defender = target;
-		let attackStat = category === 'Physical' ? 'atk' : 'spa';
-		let defenseStat = defensiveCategory === 'Physical' ? 'def' : 'spd';
-		let statTable = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
+		const attacker = pokemon;
+		const defender = target;
+		const attackStat: StatNameExceptHP = category === 'Physical' ? 'atk' : 'spa';
+		const defenseStat: StatNameExceptHP = defensiveCategory === 'Physical' ? 'def' : 'spd';
+		const statTable = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
 		let attack;
 		let defense;
 
-		// @ts-ignore
 		let atkBoosts = move.useTargetOffensive ? defender.boosts[attackStat] : attacker.boosts[attackStat];
-		// @ts-ignore
 		let defBoosts = move.useSourceDefensive ? attacker.boosts[defenseStat] : defender.boosts[defenseStat];
 
 		let ignoreNegativeOffensive = !!move.ignoreNegativeOffensive;
 		let ignorePositiveDefensive = !!move.ignorePositiveDefensive;
 
-		if (move.crit) {
+		if (moveHit.crit) {
 			ignoreNegativeOffensive = true;
 			ignorePositiveDefensive = true;
 		}
-		let ignoreOffensive = !!(move.ignoreOffensive || (ignoreNegativeOffensive && atkBoosts < 0));
-		let ignoreDefensive = !!(move.ignoreDefensive || (ignorePositiveDefensive && defBoosts > 0));
+		const ignoreOffensive = !!(move.ignoreOffensive || (ignoreNegativeOffensive && atkBoosts < 0));
+		const ignoreDefensive = !!(move.ignoreDefensive || (ignorePositiveDefensive && defBoosts > 0));
 
 		if (ignoreOffensive) {
 			this.debug('Negating (sp)atk boost/penalty.');
@@ -2129,30 +2015,30 @@ export class Battle extends Dex.ModdedDex {
 		}
 
 		// Apply Stat Modifiers
-		// @ts-ignore
 		attack = this.runEvent('Modify' + statTable[attackStat], attacker, defender, move, attack);
-		// @ts-ignore
 		defense = this.runEvent('Modify' + statTable[defenseStat], defender, attacker, move, defense);
 
 		const tr = this.trunc;
 
 		// int(int(int(2 * L / 5 + 2) * A * P / D) / 50);
-		let baseDamage = tr(tr(tr(tr(2 * level / 5 + 2) * basePower * attack) / defense) / 50);
+		const baseDamage = tr(tr(tr(tr(2 * level / 5 + 2) * basePower * attack) / defense) / 50);
 
 		// Calculate damage modifiers separately (order differs between generations)
 		return this.modifyDamage(baseDamage, pokemon, target, move, suppressMessages);
 	}
 
-	modifyDamage(baseDamage: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove, suppressMessages: boolean = false) {
+	modifyDamage(
+		baseDamage: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove, suppressMessages: boolean = false
+	) {
 		const tr = this.trunc;
 		if (!move.type) move.type = '???';
-		let type = move.type;
+		const type = move.type;
 
 		baseDamage += 2;
 
 		// multi-target modifier (doubles only)
 		if (move.spreadHit) {
-			let spreadModifier = move.spreadModifier || 0.75;
+			const spreadModifier = move.spreadModifier || (this.gameType === 'free-for-all' ? 0.5 : 0.75);
 			this.debug('Spread modifier: ' + spreadModifier);
 			baseDamage = this.modify(baseDamage, spreadModifier);
 		}
@@ -2161,7 +2047,8 @@ export class Battle extends Dex.ModdedDex {
 		baseDamage = this.runEvent('WeatherModifyDamage', pokemon, target, move, baseDamage);
 
 		// crit - not a modifier
-		if (move.crit) {
+		const isCrit = target.getMoveHitData(move).crit;
+		if (isCrit) {
 			baseDamage = tr(baseDamage * (move.critModifier || (this.gen >= 6 ? 1.5 : 2)));
 		}
 
@@ -2177,25 +2064,25 @@ export class Battle extends Dex.ModdedDex {
 			baseDamage = this.modify(baseDamage, move.stab || 1.5);
 		}
 		// types
-		move.typeMod = target.runEffectiveness(move);
-
-		move.typeMod = this.clampIntRange(move.typeMod, -6, 6);
-		if (move.typeMod > 0) {
+		let typeMod = target.runEffectiveness(move);
+		typeMod = this.clampIntRange(typeMod, -6, 6);
+		target.getMoveHitData(move).typeMod = typeMod;
+		if (typeMod > 0) {
 			if (!suppressMessages) this.add('-supereffective', target);
 
-			for (let i = 0; i < move.typeMod; i++) {
+			for (let i = 0; i < typeMod; i++) {
 				baseDamage *= 2;
 			}
 		}
-		if (move.typeMod < 0) {
+		if (typeMod < 0) {
 			if (!suppressMessages) this.add('-resisted', target);
 
-			for (let i = 0; i > move.typeMod; i--) {
+			for (let i = 0; i > typeMod; i--) {
 				baseDamage = tr(baseDamage / 2);
 			}
 		}
 
-		if (move.crit && !suppressMessages) this.add('-crit', target);
+		if (isCrit && !suppressMessages) this.add('-crit', target);
 
 		if (pokemon.status === 'brn' && move.category === 'Physical' && !pokemon.hasAbility('guts')) {
 			if (this.gen < 6 || move.id !== 'facade') {
@@ -2209,7 +2096,7 @@ export class Battle extends Dex.ModdedDex {
 		// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 		baseDamage = this.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
 
-		if (move.isZPowered && move.zBrokeProtect) {
+		if (move.isZPowered && target.getMoveHitData(move).zBrokeProtect) {
 			baseDamage = this.modify(baseDamage, 0.25);
 			this.add('-zbroken', target);
 		}
@@ -2231,13 +2118,16 @@ export class Battle extends Dex.ModdedDex {
 	 */
 	validTargetLoc(targetLoc: number, source: Pokemon, targetType: string) {
 		if (targetLoc === 0) return true;
-		let numSlots = source.side.active.length;
-		if (!Math.abs(targetLoc) && Math.abs(targetLoc) > numSlots) return false;
+		const numSlots = source.side.active.length;
+		if (Math.abs(targetLoc) > numSlots) return false;
 
-		let sourceLoc = -(source.position + 1);
-		let isFoe = (targetLoc > 0);
-		let isAdjacent = (isFoe ? Math.abs(-(numSlots + 1 - targetLoc) - sourceLoc) <= 1 : Math.abs(targetLoc - sourceLoc) === 1);
-		let isSelf = (sourceLoc === targetLoc);
+		const sourceLoc = -(source.position + 1);
+		const isFoe = (targetLoc > 0);
+		const acrossFromTargetLoc = -(numSlots + 1 - targetLoc);
+		const isAdjacent = (isFoe ?
+			Math.abs(acrossFromTargetLoc - sourceLoc) <= 1 :
+			Math.abs(targetLoc - sourceLoc) === 1);
+		const isSelf = (sourceLoc === targetLoc);
 
 		switch (targetType) {
 		case 'randomNormal':
@@ -2257,11 +2147,8 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	getTargetLoc(target: Pokemon, source: Pokemon) {
-		if (target.side === source.side) {
-			return -(target.position + 1);
-		} else {
-			return target.position + 1;
-		}
+		const position = target.position + 1;
+		return (target.side === source.side) ? -position : position;
 	}
 
 	validTarget(target: Pokemon, source: Pokemon, targetType: string) {
@@ -2274,8 +2161,7 @@ export class Battle extends Dex.ModdedDex {
 		// Fails if the target is the user and the move can't target its own position
 		if (['adjacentAlly', 'any', 'normal'].includes(move.target) && targetLoc === -(pokemon.position + 1) &&
 				!pokemon.volatiles['twoturnmove'] && !pokemon.volatiles['iceball'] && !pokemon.volatiles['rollout']) {
-			if (move.isFutureMove) return pokemon;
-			return null;
+			return move.isFutureMove ? pokemon : null;
 		}
 		if (move.target !== 'randomNormal' && this.validTargetLoc(targetLoc, pokemon, move.target)) {
 			if (targetLoc > 0) {
@@ -2283,16 +2169,14 @@ export class Battle extends Dex.ModdedDex {
 			} else {
 				target = pokemon.side.active[-targetLoc - 1];
 			}
-			if (target) {
-				if (!target.fainted) {
-					// target exists and is not fainted
-					return target;
-				} else if (target.side === pokemon.side) {
-					// fainted allied targets don't retarget
-					return null;
-				}
+			if (target && !(target.fainted && target.side !== pokemon.side)) {
+				// Target is unfainted: no need to retarget
+				// Or target is a fainted ally: attack shouldn't retarget
+				return target;
 			}
-			// chosen target not valid, retarget randomly with resolveTarget
+
+			// Chosen target not valid,
+			// retarget randomly with resolveTarget
 		}
 		return this.resolveTarget(pokemon, move);
 	}
@@ -2310,11 +2194,10 @@ export class Battle extends Dex.ModdedDex {
 
 		move = this.getMove(move);
 		if (move.target === 'adjacentAlly') {
-			let allyActives = pokemon.side.active;
+			const allyActives = pokemon.side.active;
 			let adjacentAllies = [allyActives[pokemon.position - 1], allyActives[pokemon.position + 1]];
 			adjacentAllies = adjacentAllies.filter(active => active && !active.fainted);
-			if (adjacentAllies.length) return this.sample(adjacentAllies);
-			return null;
+			return adjacentAllies.length ? this.sample(adjacentAllies) : null;
 		}
 		if (move.target === 'self' || move.target === 'all' || move.target === 'allySide' ||
 				move.target === 'allyTeam' || move.target === 'adjacentAllyOrSelf') {
@@ -2324,8 +2207,8 @@ export class Battle extends Dex.ModdedDex {
 			if (move.target === 'adjacentFoe' || move.target === 'normal' || move.target === 'randomNormal') {
 				// even if a move can target an ally, auto-resolution will never make it target an ally
 				// i.e. if both your opponents faint before you use Flamethrower, it will fail instead of targeting your all
-				let foeActives = pokemon.side.foe.active;
-				let frontPosition = foeActives.length - 1 - pokemon.position;
+				const foeActives = pokemon.side.foe.active;
+				const frontPosition = foeActives.length - 1 - pokemon.position;
 				let adjacentFoes = foeActives.slice(frontPosition < 1 ? 0 : frontPosition - 1, frontPosition + 2);
 				adjacentFoes = adjacentFoes.filter(active => active && !active.fainted);
 				if (adjacentFoes.length) return this.sample(adjacentFoes);
@@ -2336,16 +2219,12 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	checkFainted() {
-		for (const pokemon of this.p1.active) {
-			if (pokemon.fainted) {
-				pokemon.status = 'fnt';
-				pokemon.switchFlag = true;
-			}
-		}
-		for (const pokemon of this.p2.active) {
-			if (pokemon.fainted) {
-				pokemon.status = 'fnt';
-				pokemon.switchFlag = true;
+		for (const side of this.sides) {
+			for (const pokemon of side.active) {
+				if (pokemon.fainted) {
+					pokemon.status = 'fnt' as ID;
+					pokemon.switchFlag = true;
+				}
 			}
 		}
 	}
@@ -2361,7 +2240,8 @@ export class Battle extends Dex.ModdedDex {
 		while (this.faintQueue.length) {
 			faintData = this.faintQueue[0];
 			this.faintQueue.shift();
-			if (!faintData.target.fainted && this.runEvent('BeforeFaint', faintData.target, faintData.source, faintData.effect)) {
+			if (!faintData.target.fainted &&
+					this.runEvent('BeforeFaint', faintData.target, faintData.source, faintData.effect)) {
 				this.add('faint', faintData.target);
 				faintData.target.side.pokemonLeft--;
 				this.runEvent('Faint', faintData.target, faintData.source, faintData.effect);
@@ -2380,29 +2260,43 @@ export class Battle extends Dex.ModdedDex {
 			this.queue = [];
 		} else if (this.gen <= 3 && this.gameType === 'singles') {
 			// in gen 3 or earlier, fainting in singles skips to residuals
-			for (const side of this.sides) {
-				for (const pokemon of side.active) {
-					if (this.gen <= 2) {
-						// in gen 2, fainting skips moves only
-						this.cancelMove(pokemon);
-					} else {
-						// in gen 3, fainting skips all moves and switches
-						this.cancelAction(pokemon);
-					}
+			for (const pokemon of this.getAllActive()) {
+				if (this.gen <= 2) {
+					// in gen 2, fainting skips moves only
+					this.cancelMove(pokemon);
+				} else {
+					// in gen 3, fainting skips all moves and switches
+					this.cancelAction(pokemon);
 				}
 			}
 		}
 
-		if (!this.p1.pokemonLeft && !this.p2.pokemonLeft) {
+		let team1PokemonLeft = this.sides[0].pokemonLeft;
+		let team2PokemonLeft = this.sides[1].pokemonLeft;
+		const team3PokemonLeft = this.gameType === 'free-for-all' && this.sides[2]!.pokemonLeft;
+		const team4PokemonLeft = this.gameType === 'free-for-all' && this.sides[3]!.pokemonLeft;
+		if (this.gameType === 'multi') {
+			team1PokemonLeft = this.sides.reduce((total, side) => total + (side.n % 2 === 0 ? side.pokemonLeft : 0), 0);
+			team2PokemonLeft = this.sides.reduce((total, side) => total + (side.n % 2 === 1 ? side.pokemonLeft : 0), 0);
+		}
+		if (!team1PokemonLeft && !team2PokemonLeft && !team3PokemonLeft && !team4PokemonLeft) {
 			this.win(faintData ? faintData.target.side : null);
 			return true;
 		}
-		if (!this.p1.pokemonLeft) {
-			this.win(this.p2);
+		if (!team2PokemonLeft && !team3PokemonLeft && !team4PokemonLeft) {
+			this.win(this.sides[0]);
 			return true;
 		}
-		if (!this.p2.pokemonLeft) {
-			this.win(this.p1);
+		if (!team1PokemonLeft && !team3PokemonLeft && !team4PokemonLeft) {
+			this.win(this.sides[1]);
+			return true;
+		}
+		if (!team1PokemonLeft && !team2PokemonLeft && !team4PokemonLeft) {
+			this.win(this.sides[2]);
+			return true;
+		}
+		if (!team1PokemonLeft && !team2PokemonLeft && !team3PokemonLeft) {
+			this.win(this.sides[3]);
 			return true;
 		}
 		return false;
@@ -2412,14 +2306,14 @@ export class Battle extends Dex.ModdedDex {
 	 * Takes an object describing an action, and fills it out into a full
 	 * Action object.
 	 */
-	resolveAction(action: AnyObject, midTurn: boolean = false): Actions["Action"] {
+	resolveAction(action: AnyObject, midTurn: boolean = false): Actions.Action {
 		if (!action) throw new Error(`Action not passed to resolveAction`);
 
 		if (!action.side && action.pokemon) action.side = action.pokemon.side;
 		if (!action.move && action.moveid) action.move = this.getActiveMove(action.moveid);
 		if (!action.choice && action.move) action.choice = 'move';
 		if (!action.priority && action.priority !== 0) {
-			let priorities = {
+			const priorities = {
 				beforeTurn: 100,
 				beforeTurnMove: 99,
 				switch: 7,
@@ -2433,14 +2327,16 @@ export class Battle extends Dex.ModdedDex {
 				start: 101,
 			};
 			if (action.choice in priorities) {
-				// @ts-ignore
+				// @ts-ignore - Typescript being dumb about index signatures
 				action.priority = priorities[action.choice];
 			}
 		}
 		if (!midTurn) {
 			if (action.choice === 'move') {
 				if (!action.zmove && action.move.beforeTurnCallback) {
-					this.addToQueue({choice: 'beforeTurnMove', pokemon: action.pokemon, move: action.move, targetLoc: action.targetLoc});
+					this.addToQueue({
+						choice: 'beforeTurnMove', pokemon: action.pokemon, move: action.move, targetLoc: action.targetLoc,
+					});
 				}
 				if (action.mega) {
 					// TODO: Check that the Pokémon is not affected by Sky Drop.
@@ -2452,14 +2348,14 @@ export class Battle extends Dex.ModdedDex {
 				}
 			} else if (action.choice === 'switch' || action.choice === 'instaswitch') {
 				if (typeof action.pokemon.switchFlag === 'string') {
-					action.sourceEffect = this.getEffect(action.pokemon.switchFlag);
+					action.sourceEffect = this.getMove(action.pokemon.switchFlag as ID) as any;
 				}
 				action.pokemon.switchFlag = false;
 				if (!action.speed) action.speed = action.pokemon.getActionSpeed();
 			}
 		}
 
-		let deferPriority = this.gen >= 7 && action.mega && action.mega !== 'done';
+		const deferPriority = this.gen >= 7 && action.mega && action.mega !== 'done';
 		if (action.move) {
 			let target = null;
 			action.move = this.getActiveMove(action.move);
@@ -2473,15 +2369,15 @@ export class Battle extends Dex.ModdedDex {
 			if (!action.priority && !deferPriority) {
 				let move = action.move;
 				if (action.zmove) {
-					let zMoveName = this.getZMove(action.move, action.pokemon, true);
+					const zMoveName = this.getZMove(action.move, action.pokemon, true);
 					if (zMoveName) {
-						let zMove = this.getActiveMove(zMoveName);
+						const zMove = this.getActiveMove(zMoveName);
 						if (zMove.exists && zMove.isZ) {
 							move = zMove;
 						}
 					}
 				}
-				let priority = this.runEvent('ModifyPriority', action.pokemon, target, move, move.priority);
+				const priority = this.runEvent('ModifyPriority', action.pokemon, target, move, move.priority);
 				action.priority = priority;
 				// In Gen 6, Quick Guard blocks moves with artificially enhanced priority.
 				if (this.gen > 5) action.move.priority = priority;
@@ -2545,10 +2441,8 @@ export class Battle extends Dex.ModdedDex {
 	/**
 	 * Makes the passed action happen next (skipping speed order).
 	 */
-	prioritizeAction(action: Actions["MoveAction"] | Actions["SwitchAction"], source?: Pokemon, sourceEffect?: Effect) {
-		if (this.event) {
-			if (!sourceEffect) sourceEffect = this.effect;
-		}
+	prioritizeAction(action: Actions.MoveAction | Actions.SwitchAction, source?: Pokemon, sourceEffect?: Effect) {
+		if (this.event && !sourceEffect) sourceEffect = this.effect;
 		for (const [i, curAction] of this.queue.entries()) {
 			if (curAction === action) {
 				this.queue.splice(i, 1);
@@ -2561,7 +2455,7 @@ export class Battle extends Dex.ModdedDex {
 
 	willAct() {
 		for (const action of this.queue) {
-			if (action.choice === 'move' || action.choice === 'switch' || action.choice === 'instaswitch' || action.choice === 'shift') {
+			if (['move', 'switch', 'instaswitch', 'shift'].includes(action.choice)) {
 				return action;
 			}
 		}
@@ -2579,15 +2473,10 @@ export class Battle extends Dex.ModdedDex {
 	}
 
 	cancelAction(pokemon: Pokemon) {
-		let success = false;
-		this.queue = this.queue.filter(action => {
-			if (action.pokemon === pokemon && action.priority >= -100) {
-				success = true;
-				return false;
-			}
-			return true;
-		});
-		return success;
+		const length = this.queue.length;
+		this.queue = this.queue.filter(action =>
+			!(action.pokemon === pokemon && action.priority >= -100));
+		return this.queue.length !== length;
 	}
 
 	cancelMove(pokemon: Pokemon) {
@@ -2609,37 +2498,34 @@ export class Battle extends Dex.ModdedDex {
 		return false;
 	}
 
-	runAction(action: Actions["Action"]) {
+	runAction(action: Actions.Action) {
 		// returns whether or not we ended in a callback
 		switch (action.choice) {
 		case 'start': {
 			// I GIVE UP, WILL WRESTLE WITH EVENT SYSTEM LATER
-			let format = this.getFormat();
+			const format = this.getFormat();
 
 			// Remove Pokémon duplicates remaining after `team` decisions.
-			this.p1.pokemon = this.p1.pokemon.slice(0, this.p1.pokemonLeft);
-			this.p2.pokemon = this.p2.pokemon.slice(0, this.p2.pokemonLeft);
+			for (const side of this.sides) {
+				side.pokemon = side.pokemon.slice(0, side.pokemonLeft);
+			}
 
 			if (format.teamLength && format.teamLength.battle) {
 				// Trim the team: not all of the Pokémon brought to Preview will battle.
-				this.p1.pokemon = this.p1.pokemon.slice(0, format.teamLength.battle);
-				this.p1.pokemonLeft = this.p1.pokemon.length;
-				this.p2.pokemon = this.p2.pokemon.slice(0, format.teamLength.battle);
-				this.p2.pokemonLeft = this.p2.pokemon.length;
+				for (const side of this.sides) {
+					side.pokemon = side.pokemon.slice(0, format.teamLength.battle);
+					side.pokemonLeft = side.pokemon.length;
+				}
 			}
 
 			this.add('start');
-			for (let pos = 0; pos < this.p1.active.length; pos++) {
-				this.switchIn(this.p1.pokemon[pos], pos);
+			for (const side of this.sides) {
+				for (let pos = 0; pos < side.active.length; pos++) {
+					this.switchIn(side.pokemon[pos], pos);
+				}
 			}
-			for (let pos = 0; pos < this.p2.active.length; pos++) {
-				this.switchIn(this.p2.pokemon[pos], pos);
-			}
-			for (const pokemon of this.p1.pokemon) {
-				this.singleEvent('Start', this.getEffect(pokemon.species), pokemon.speciesData, pokemon);
-			}
-			for (const pokemon of this.p2.pokemon) {
-				this.singleEvent('Start', this.getEffect(pokemon.species), pokemon.speciesData, pokemon);
+			for (const pokemon of this.getAllPokemon()) {
+				this.singleEvent('Start', this.getEffectByID(pokemon.speciesid), pokemon.speciesData, pokemon);
 			}
 			this.midTurn = true;
 			break;
@@ -2657,7 +2543,7 @@ export class Battle extends Dex.ModdedDex {
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
 			this.debug('before turn callback: ' + action.move.id);
-			let target = this.getTarget(action.pokemon, action.move, action.targetLoc);
+			const target = this.getTarget(action.pokemon, action.move, action.targetLoc);
 			if (!target) return false;
 			if (!action.move.beforeTurnCallback) throw new Error(`beforeTurnMove has no beforeTurnCallback`);
 			action.move.beforeTurnCallback.call(this, action.pokemon, target);
@@ -2665,7 +2551,7 @@ export class Battle extends Dex.ModdedDex {
 		}
 
 		case 'event':
-			// @ts-ignore Easier than defining a custom event attribute tbh
+			// @ts-ignore - easier than defining a custom event attribute TBH
 			this.runEvent(action.event, action.pokemon);
 			break;
 		case 'team': {
@@ -2685,8 +2571,7 @@ export class Battle extends Dex.ModdedDex {
 			if (action.pokemon.hp) {
 				action.pokemon.beingCalledBack = true;
 				const sourceEffect = action.sourceEffect;
-				// @ts-ignore
-				if (sourceEffect && sourceEffect.selfSwitch === 'copyvolatile') {
+				if (sourceEffect && (sourceEffect as Move).selfSwitch === 'copyvolatile') {
 					action.pokemon.switchCopyFlag = true;
 				}
 				if (!action.pokemon.switchCopyFlag) {
@@ -2696,14 +2581,11 @@ export class Battle extends Dex.ModdedDex {
 					}
 				}
 				if (!this.runEvent('SwitchOut', action.pokemon)) {
-					// Warning: DO NOT interrupt a switch-out
-					// if you just want to trap a pokemon.
-					// To trap a pokemon and prevent it from switching out,
-					// (e.g. Mean Look, Magnet Pull) use the 'trapped' flag
-					// instead.
+					// Warning: DO NOT interrupt a switch-out if you just want to trap a pokemon.
+					// To trap a pokemon and prevent it from switching out, (e.g. Mean Look, Magnet Pull)
+					// use the 'trapped' flag instead.
 
-					// Note: Nothing in BW or earlier interrupts
-					// a switch-out.
+					// Note: Nothing in BW or earlier interrupts a switch-out.
 					break;
 				}
 			}
@@ -2715,27 +2597,17 @@ export class Battle extends Dex.ModdedDex {
 					// in gen 2-4, the switch still happens
 					action.priority = -101;
 					this.queue.unshift(action);
-					this.add('-hint', 'Pursuit target fainted, switch continues in gen 2-4');
+					this.hint("Previously chosen switches continue in Gen 2-4 after a Pursuit target faints.");
 					break;
 				}
 				// in gen 5+, the switch is cancelled
-				this.debug('A Pokemon can\'t switch between when it runs out of HP and when it faints');
+				this.hint("A Pokemon can't switch between when it runs out of HP and when it faints");
 				break;
 			}
 			if (action.target.isActive) {
-				this.add('-hint', 'Switch failed; switch target is already active');
+				this.hint("A switch failed because the Pokémon trying to switch in is already in.");
 				break;
 			}
-			if (action.choice === 'switch' && action.pokemon.activeTurns === 1) {
-				for (const foeActive of action.pokemon.side.foe.active) {
-					if (foeActive.isStale >= 2) {
-						action.pokemon.isStaleCon++;
-						action.pokemon.isStaleSource = 'switch';
-						break;
-					}
-				}
-			}
-
 			this.switchIn(action.target, action.pokemon.position, action.sourceEffect);
 			break;
 		case 'runUnnerve':
@@ -2753,23 +2625,23 @@ export class Battle extends Dex.ModdedDex {
 				action.pokemon.abilityOrder = this.abilityOrder++;
 				this.singleEvent('Start', action.pokemon.getItem(), action.pokemon.itemData, action.pokemon);
 			}
-			delete action.pokemon.draggedIn;
+			if (this.gen === 4) {
+				for (const foeActive of action.pokemon.side.foe.active) {
+					foeActive.removeVolatile('substitutebroken');
+				}
+			}
+			action.pokemon.draggedIn = null;
 			break;
 		case 'runPrimal':
-			if (!action.pokemon.transformed) this.singleEvent('Primal', action.pokemon.getItem(), action.pokemon.itemData, action.pokemon);
+			if (!action.pokemon.transformed) {
+				this.singleEvent('Primal', action.pokemon.getItem(), action.pokemon.itemData, action.pokemon);
+			}
 			break;
 		case 'shift': {
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
 			action.pokemon.activeTurns--;
 			this.swapPosition(action.pokemon, 1);
-			for (const foeActive of action.pokemon.side.foe.active) {
-				if (foeActive.isStale >= 2) {
-					action.pokemon.isStaleCon++;
-					action.pokemon.isStaleSource = 'switch';
-					break;
-				}
-			}
 			break;
 		}
 
@@ -2786,16 +2658,12 @@ export class Battle extends Dex.ModdedDex {
 		}
 
 		// phazing (Roar, etc)
-		for (const pokemon of this.p1.active) {
-			if (pokemon.forceSwitchFlag) {
-				if (pokemon.hp) this.dragIn(pokemon.side, pokemon.position);
-				pokemon.forceSwitchFlag = false;
-			}
-		}
-		for (const pokemon of this.p2.active) {
-			if (pokemon.forceSwitchFlag) {
-				if (pokemon.hp) this.dragIn(pokemon.side, pokemon.position);
-				pokemon.forceSwitchFlag = false;
+		for (const side of this.sides) {
+			for (const pokemon of side.active) {
+				if (pokemon.forceSwitchFlag) {
+					if (pokemon.hp) this.dragIn(pokemon.side, pokemon.position);
+					pokemon.forceSwitchFlag = false;
+				}
 			}
 		}
 
@@ -2815,9 +2683,11 @@ export class Battle extends Dex.ModdedDex {
 		} else if (action.choice === 'megaEvo' && this.gen >= 7) {
 			this.eachEvent('Update');
 			// In Gen 7, the action order is recalculated for a Pokémon that mega evolves.
-			const moveIndex = this.queue.findIndex(queuedAction => queuedAction.pokemon === action.pokemon && queuedAction.choice === 'move');
+			const moveIndex = this.queue.findIndex(queuedAction =>
+				queuedAction.pokemon === action.pokemon && queuedAction.choice === 'move'
+			);
 			if (moveIndex >= 0) {
-				const moveAction = this.queue.splice(moveIndex, 1)[0] as Actions["MoveAction"];
+				const moveAction = this.queue.splice(moveIndex, 1)[0] as Actions.MoveAction;
 				moveAction.mega = 'done';
 				this.insertQueue(moveAction, true);
 			}
@@ -2826,28 +2696,27 @@ export class Battle extends Dex.ModdedDex {
 			return false;
 		}
 
-		let p1switch = this.p1.active.some(mon => mon && !!mon.switchFlag);
-		let p2switch = this.p2.active.some(mon => mon && !!mon.switchFlag);
+		const switches = this.sides.map(side =>
+			side.active.some(pokemon => pokemon && !!pokemon.switchFlag)
+		);
 
-		if (p1switch && !this.canSwitch(this.p1)) {
-			for (const pokemon of this.p1.active) {
-				pokemon.switchFlag = false;
+		for (let i = 0; i < this.sides.length; i++) {
+			if (switches[i] && !this.canSwitch(this.sides[i])) {
+				for (const pokemon of this.sides[i].active) {
+					pokemon.switchFlag = false;
+				}
+				switches[i] = false;
 			}
-			p1switch = false;
-		}
-		if (p2switch && !this.canSwitch(this.p2)) {
-			for (const pokemon of this.p2.active) {
-				pokemon.switchFlag = false;
-			}
-			p2switch = false;
 		}
 
-		if (p1switch || p2switch) {
-			if (this.gen >= 5) {
-				this.eachEvent('Update');
+		for (const playerSwitch of switches) {
+			if (playerSwitch) {
+				if (this.gen >= 5) {
+					this.eachEvent('Update');
+				}
+				this.makeRequest('switch');
+				return true;
 			}
-			this.makeRequest('switch');
-			return true;
 		}
 
 		this.eachEvent('Update');
@@ -2857,9 +2726,7 @@ export class Battle extends Dex.ModdedDex {
 
 	go() {
 		this.add('');
-		if (this.currentRequest) {
-			this.currentRequest = '';
-		}
+		if (this.requestState) this.requestState = '';
 
 		if (!this.midTurn) {
 			this.queue.push(this.resolveAction({choice: 'residual'}));
@@ -2868,16 +2735,10 @@ export class Battle extends Dex.ModdedDex {
 		}
 
 		while (this.queue.length) {
-			let action = this.queue[0];
+			const action = this.queue[0];
 			this.queue.shift();
-
 			this.runAction(action);
-
-			if (this.currentRequest) {
-				return;
-			}
-
-			if (this.ended) return;
+			if (this.requestState || this.ended) return;
 		}
 
 		this.nextTurn();
@@ -2902,10 +2763,8 @@ export class Battle extends Dex.ModdedDex {
 	 * Takes a choice string passed from the client. Starts the next
 	 * turn if all required choices have been made.
 	 */
-	choose(sideid: string, input: string) {
-		let side = null;
-		if (sideid === 'p1' || sideid === 'p2') side = this[sideid];
-		if (!side) throw new Error(`Invalid side ${sideid}`);
+	choose(sideid: SideID, input: string) {
+		const side = this.getSide(sideid);
 
 		if (!side.choose(input)) return false;
 
@@ -2913,7 +2772,7 @@ export class Battle extends Dex.ModdedDex {
 			side.emitChoiceError(`Incomplete choice: ${input} - missing other pokemon`);
 			return false;
 		}
-		this.checkActions();
+		if (this.allChoicesDone()) this.commitDecisions();
 		return true;
 	}
 
@@ -2921,8 +2780,14 @@ export class Battle extends Dex.ModdedDex {
 	 * Convenience method for easily making choices.
 	 */
 	makeChoices(...inputs: string[]) {
-		for (const [i, input] of inputs.entries()) {
-			this.sides[i].choose(input);
+		if (inputs.length) {
+			for (const [i, input] of inputs.entries()) {
+				if (input) this.sides[i].choose(input);
+			}
+		} else {
+			for (const side of this.sides) {
+				side.autoChoose();
+			}
 		}
 		this.commitDecisions();
 	}
@@ -2930,34 +2795,32 @@ export class Battle extends Dex.ModdedDex {
 	commitDecisions() {
 		this.updateSpeed();
 
-		let oldQueue = this.queue;
+		const oldQueue = this.queue;
 		this.queue = [];
+		if (!this.allChoicesDone()) throw new Error("Not all choices done");
+
 		for (const side of this.sides) {
-			side.autoChoose();
+			const choice = side.getChoice();
+			if (choice) this.inputLog.push(`>${side.id} ${choice}`);
 		}
-		let p1choice = this.p1.getChoice();
-		if (p1choice) this.inputLog.push(`>p1 ${p1choice}`);
-		let p2choice = this.p2.getChoice();
-		if (p2choice) this.inputLog.push(`>p2 ${p2choice}`);
 		for (const side of this.sides) {
 			this.addToQueue(side.choice.actions);
 		}
 
 		this.sortQueue();
-		Array.prototype.push.apply(this.queue, oldQueue);
+		this.queue.push(...oldQueue);
 
-		this.currentRequest = '';
-		this.p1.currentRequest = '';
-		this.p2.currentRequest = '';
+		this.requestState = '';
+		for (const side of this.sides) {
+			side.activeRequest = null;
+		}
 
 		this.go();
 	}
 
-	undoChoice(sideid: string) {
-		let side = null;
-		if (sideid === 'p1' || sideid === 'p2') side = this[sideid];
-		if (!side) throw new Error(`Invalid side ${sideid}`);
-		if (!side.currentRequest) return;
+	undoChoice(sideid: SideID) {
+		const side = this.getSide(sideid);
+		if (!side.requestState) return;
 
 		if (side.choice.cantUndo) {
 			side.emitChoiceError(`Can't undo: A trapping/disabling effect would cause undo to leak information`);
@@ -2970,56 +2833,70 @@ export class Battle extends Dex.ModdedDex {
 	/**
 	 * returns true if both decisions are complete
 	 */
-	checkActions() {
+	allChoicesDone() {
 		let totalActions = 0;
-		if (this.p1.isChoiceDone()) {
-			if (!this.supportCancel) this.p1.choice.cantUndo = true;
-			totalActions++;
+		for (const side of this.sides) {
+			if (side.isChoiceDone()) {
+				if (!this.supportCancel) side.choice.cantUndo = true;
+				totalActions++;
+			}
 		}
-		if (this.p2.isChoiceDone()) {
-			if (!this.supportCancel) this.p2.choice.cantUndo = true;
-			totalActions++;
-		}
-		if (totalActions >= this.sides.length) {
-			this.commitDecisions();
-			return true;
-		}
-		return false;
+		return totalActions >= this.sides.length;
 	}
 
-	add(...parts: (string | number | boolean | ((side: Side | boolean) => string) | AnyObject | null | undefined)[]) {
+	hint(hint: string, once?: boolean, side?: Side) {
+		if (this.hints.has(hint)) return;
+
+		if (side) {
+			this.addSplit(side.id, ['-hint', hint]);
+		} else {
+			this.add('-hint', hint);
+		}
+
+		if (once) this.hints.add(hint);
+	}
+
+	addSplit(side: SideID, secret: Part[], shared?: Part[]) {
+		this.log.push(`|split|${side}`);
+		this.add(...secret);
+		if (shared) {
+			this.add(...shared);
+		} else {
+			this.log.push('');
+		}
+	}
+
+	add(...parts: (Part | (() => {side: SideID, secret: string, shared: string}))[]) {
 		if (!parts.some(part => typeof part === 'function')) {
 			this.log.push(`|${parts.join('|')}`);
 			return;
 		}
-		if (this.reportExactHP) {
-			parts = parts.map(part => {
-				if (typeof part !== 'function') return part;
-				// @ts-ignore
-				return part(true);
-			});
-			this.log.push(`|${parts.join('|')}`);
-			return;
+
+		let side: SideID | null = null;
+		const secret = [];
+		const shared = [];
+		for (const part of parts) {
+			if (typeof part === 'function') {
+				const split = part();
+				if (side && side !== split.side) throw new Error("Multiple sides passed to add");
+				side = split.side;
+				secret.push(split.secret);
+				shared.push(split.shared);
+			} else {
+				secret.push(part);
+				shared.push(part);
+			}
 		}
-		this.log.push('|split');
-		let sides: (Side | boolean)[] = [false, this.sides[0], this.sides[1], true];
-		for (const side of sides) {
-			let sideUpdate = '|' + parts.map(part => {
-				if (typeof part !== 'function') return part;
-				// @ts-ignore
-				return part(side);
-			}).join('|');
-			this.log.push(sideUpdate);
-		}
+		this.addSplit(side!, secret, shared);
 	}
 
-// tslint:disable-next-line:ban-types
+	// tslint:disable-next-line:ban-types
 	addMove(...args: (string | number | Function | AnyObject)[]) {
 		this.lastMoveLine = this.log.length;
 		this.log.push(`|${args.join('|')}`);
 	}
 
-// tslint:disable-next-line:ban-types
+	// tslint:disable-next-line:ban-types
 	attrLastMove(...args: (string | number | Function | AnyObject)[]) {
 		if (this.lastMoveLine < 0) return;
 		if (this.log[this.lastMoveLine].startsWith('|-anim|')) {
@@ -3030,7 +2907,7 @@ export class Battle extends Dex.ModdedDex {
 			}
 		} else if (args.includes('[still]')) {
 			// If no animation plays, the target should never be known
-			let parts = this.log[this.lastMoveLine].split('|');
+			const parts = this.log[this.lastMoveLine].split('|');
 			parts[4] = '';
 			this.log[this.lastMoveLine] = parts.join('|');
 		}
@@ -3039,7 +2916,7 @@ export class Battle extends Dex.ModdedDex {
 
 	retargetLastMove(newTarget: Pokemon) {
 		if (this.lastMoveLine < 0) return;
-		let parts = this.log[this.lastMoveLine].split('|');
+		const parts = this.log[this.lastMoveLine].split('|');
 		parts[4] = newTarget.toString();
 		this.log[this.lastMoveLine] = parts.join('|');
 	}
@@ -3050,8 +2927,27 @@ export class Battle extends Dex.ModdedDex {
 		}
 	}
 
+	static extractUpdateForSide(data: string, side: SideID | 'spectator' | 'omniscient' = 'spectator') {
+		if (side === 'omniscient') {
+			// Grab all secret data
+			return data.replace(/\n\|split\|p[1234]\n([^\n]*)\n(?:[^\n]*)/g, '\n$1');
+		}
+
+		// Grab secret data side has access to
+		switch (side) {
+		case 'p1': data = data.replace(/\n\|split\|p1\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
+		case 'p2': data = data.replace(/\n\|split\|p2\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
+		case 'p3': data = data.replace(/\n\|split\|p3\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
+		case 'p4': data = data.replace(/\n\|split\|p4\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
+		}
+
+		// Discard remaining secret data
+		// Note: the last \n? is for secret data that are empty when shared
+		return data.replace(/\n\|split\|(?:[^\n]*)\n(?:[^\n]*)\n\n?/g, '\n');
+	}
+
 	getDebugLog() {
-		return this.log.join('\n').replace(/\|split\n.*\n.*\n.*\n/g, '');
+		return Battle.extractUpdateForSide(this.log.join('\n'), 'omniscient');
 	}
 
 	debugError(activity: string) {
@@ -3060,35 +2956,39 @@ export class Battle extends Dex.ModdedDex {
 
 	// players
 
-	getTeam(team: PokemonSet[] | string | null): PokemonSet[] {
+	getTeam(options: PlayerOptions): PokemonSet[] {
 		const format = this.getFormat();
+		let team = options.team;
 		if (typeof team === 'string') team = Dex.fastUnpackTeam(team);
-		if (!format.team && team) {
-			return team;
+		if ((!format.team || this.deserialized) && team) return team;
+
+		if (!options.seed) {
+			options.seed = PRNG.generateSeed();
 		}
 
 		if (!this.teamGenerator) {
-			this.teamGenerator = this.getTeamGenerator(format, this.prng);
+			this.teamGenerator = this.getTeamGenerator(format, options.seed);
+		} else {
+			this.teamGenerator.setSeed(options.seed);
 		}
-		team = this.teamGenerator.generateTeam();
 
+		team = this.teamGenerator.getTeam(options);
 		return team as PokemonSet[];
 	}
 
-	setPlayer(slot: 'p1' | 'p2', options: PlayerOptions) {
+	setPlayer(slot: SideID, options: PlayerOptions) {
 		let side;
 		let didSomething = true;
-		if (!this[slot]) {
+		const slotNum = parseInt(slot[1], 10) - 1;
+		if (!this.sides[slotNum]) {
 			// create player
-			const slotNum = (slot === 'p2' ? 1 : 0);
-			const team = this.getTeam(options.team || null);
+			const team = this.getTeam(options);
 			side = new Side(options.name || `Player ${slotNum + 1}`, this, slotNum, team);
 			if (options.avatar) side.avatar = '' + options.avatar;
-			this[slot] = side;
 			this.sides[slotNum] = side;
 		} else {
 			// edit player
-			side = this[slot];
+			side = this.sides[slotNum];
 			didSomething = false;
 			if (options.name && side.name !== options.name) {
 				side.name = options.name;
@@ -3105,19 +3005,14 @@ export class Battle extends Dex.ModdedDex {
 		}
 		if (!didSomething) return;
 		this.inputLog.push(`>player ${slot} ` + JSON.stringify(options));
-		this.add('player', side.id, side.name, side.avatar);
+		this.add('player', side.id, side.name, side.avatar, options.rating || '');
 		this.start();
 	}
 
 	/** @deprecated */
-	join(slot: 'p1' | 'p2', name: string, avatar: string, team: PokemonSet[] | string | null) {
-		this.setPlayer(slot, {
-			name,
-			avatar,
-			team,
-		});
-
-		return this[slot];
+	join(slot: SideID, name: string, avatar: string, team: PokemonSet[] | string | null) {
+		this.setPlayer(slot, {name, avatar, team});
+		return this.getSide(slot);
 	}
 
 	sendUpdates() {
@@ -3126,62 +3021,148 @@ export class Battle extends Dex.ModdedDex {
 		this.sentLogPos = this.log.length;
 
 		if (!this.sentEnd && this.ended) {
-			let log = {
+			const log = {
 				winner: this.winner,
 				seed: this.prngSeed,
 				turns: this.turn,
-				p1: this.p1.name,
-				p2: this.p2.name,
-				p1team: this.p1.team,
-				p2team: this.p2.team,
-				score: [this.p1.pokemonLeft, this.p2.pokemonLeft],
+				p1: this.sides[0].name,
+				p2: this.sides[1].name,
+				p3: this.sides[2] && this.sides[2].name,
+				p4: this.sides[3] && this.sides[3].name,
+				p1team: this.sides[0].team,
+				p2team: this.sides[1].team,
+				p3team: this.sides[2] && this.sides[2].team,
+				p4team: this.sides[3] && this.sides[3].team,
+				score: [this.sides[0].pokemonLeft, this.sides[1].pokemonLeft],
 				inputLog: this.inputLog,
 			};
+			if (this.sides[2]) {
+				log.score.push(this.sides[2].pokemonLeft);
+			} else {
+				delete log.p3;
+				delete log.p3team;
+			}
+			if (this.sides[3]) {
+				log.score.push(this.sides[3].pokemonLeft);
+			} else {
+				delete log.p4;
+				delete log.p4team;
+			}
 			this.send('end', JSON.stringify(log));
 			this.sentEnd = true;
 		}
 	}
 
-	runMove(move: string | Move, target: Pokemon, targetLoc?: number, sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean) {
-		throw new Error(`The runMove function needs to be implemented in scripts.js or the battle format.`);
+	combineResults<T extends number | boolean | null | '' | undefined,
+		U extends number | boolean | null | '' | undefined>(
+		left: T, right: U
+	): T | U {
+		const NOT_FAILURE = 'string';
+		const NULL = 'object';
+		const resultsPriorities = ['undefined', NOT_FAILURE, NULL, 'boolean', 'number'];
+		if (resultsPriorities.indexOf(typeof left) > resultsPriorities.indexOf(typeof right)) {
+			return left;
+		} else if (left && !right && right !== 0) {
+			return left;
+		} else if (typeof left === 'number' && typeof right === 'number') {
+			return (left + right) as T;
+		} else {
+			return right;
+		}
 	}
 
-	useMove(move: string | Move, pokemon: Pokemon, target?: Pokemon | null, sourceEffect?: Effect | null, zMove?: string): boolean {
-		throw new Error(`The useMove function needs to be implemented in scripts.js or the battle format.`);
+	getSide(sideid: SideID): Side {
+		return this.sides[parseInt(sideid[1], 10) - 1];
 	}
 
-	/**
-	 * target = undefined: automatically resolve target
-	 * target = null: no target (move will fail)
-	 */
-	useMoveInner(move: string | Move, pokemon: Pokemon, target?: Pokemon | null, sourceEffect?: Effect | null, zMove?: string): boolean {
-		throw new Error(`The useMoveInner function needs to be implemented in scripts.js or the battle format.`);
+	afterMoveSecondaryEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): undefined {
+		throw new UnimplementedError('afterMoveSecondary');
 	}
 
-	tryMoveHit(target: Pokemon, pokemon: Pokemon, move: Move): number | undefined | false | '' {
-		throw new Error(`The tryMoveHit function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	moveHit(
-		target: Pokemon | null, pokemon: Pokemon, move: string | Move,
-		moveData?: ActiveMove | SelfEffect | SecondaryEffect, isSecondary?: boolean, isSelf?: boolean): number | undefined | false {
-		throw new Error(`The tryMoveHit function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	calcRecoilDamage(damage: any, move: Move): number {
-		throw new Error(`The calcRecoilDamage function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	canZMove(pokemon: Pokemon): (AnyObject | null)[] | void {
-		throw new Error(`The canZMove function needs to be implemented in scripts.js or the battle format.`);
-	}
-
-	canUltraBurst(pokemon: Pokemon): string | null {
-		throw new Error(`The canUltraBurst function needs to be implemented in scripts.js or the battle format.`);
+	calcRecoilDamage(damageDealt: number, move: Move): number {
+		throw new UnimplementedError('calcRecoilDamage');
 	}
 
 	canMegaEvo(pokemon: Pokemon): string | null | undefined {
-		throw new Error(`The canMegaEvo function needs to be implemented in scripts.js or the battle format.`);
+		throw new UnimplementedError('canMegaEvo');
+	}
+
+	canUltraBurst(pokemon: Pokemon): string | null {
+		throw new UnimplementedError('canUltraBurst');
+	}
+
+	canZMove(pokemon: Pokemon): (AnyObject | null)[] | void {
+		throw new UnimplementedError('canZMove');
+	}
+
+	forceSwitch(
+		damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove,
+		moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean
+	): SpreadMoveDamage {
+		throw new UnimplementedError('forceSwitch');
+	}
+
+	getActiveZMove(move: Move, pokemon: Pokemon): ActiveMove {
+		throw new UnimplementedError('getActiveZMove');
+	}
+
+	getSpreadDamage(
+		damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove,
+		moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean
+	): SpreadMoveDamage {
+		throw new UnimplementedError('getSpreadDamage');
+	}
+
+	getZMove(move: Move, pokemon: Pokemon, skipChecks?: boolean): string | undefined {
+		throw new UnimplementedError('getZMove');
+	}
+
+	hitStepAccuracy(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
+		throw new UnimplementedError('hitStepAccuracy');
+	}
+
+	hitStepBreakProtect(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): undefined {
+		throw new UnimplementedError('hitStepBreakProtect');
+	}
+
+	hitStepMoveHitLoop(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): SpreadMoveDamage {
+		throw new UnimplementedError('hitStepMoveHitLoop');
+	}
+
+	hitStepPowderImmunity(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
+		throw new UnimplementedError('hitStepPowderImmunity');
+	}
+
+	hitStepPranksterImmunity(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
+		throw new UnimplementedError('hitStepPranksterImmunity');
+	}
+
+	hitStepStealBoosts(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): undefined {
+		throw new UnimplementedError('hitStepStealBoosts');
+	}
+
+	hitStepTryHitEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): (boolean | '')[] {
+		throw new UnimplementedError('hitStepTryHitEvent');
+	}
+
+	hitStepTryImmunityEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
+		throw new UnimplementedError('hitStepTryImmunityEvent ');
+	}
+
+	hitStepTypeImmunity(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean[] {
+		throw new UnimplementedError('hitStepTypeImmunity');
+	}
+
+	isAdjacent(pokemon1: Pokemon, pokemon2: Pokemon): boolean {
+		throw new UnimplementedError('isAdjacent');
+	}
+
+	moveHit(
+		target: Pokemon | null, pokemon: Pokemon, move: ActiveMove,
+		moveData?: ActiveMove | SelfEffect | SecondaryEffect,
+		isSecondary?: boolean, isSelf?: boolean
+	): number | undefined | false {
+		throw new UnimplementedError('moveHit');
 	}
 
 	/**
@@ -3190,46 +3171,113 @@ export class Battle extends Dex.ModdedDex {
 	 * Returns false if the Pokemon cannot Mega Evolve or Ultra Burst, otherwise returns true.
 	 */
 	runMegaEvo(pokemon: Pokemon): boolean {
-		throw new Error(`The runMegaEvo function needs to be implemented in scripts.js or the battle format.`);
+		throw new UnimplementedError('runMegaEvo');
 	}
 
-	getZMove(move: Move, pokemon: Pokemon, skipChecks?: boolean): string | undefined {
-		throw new Error(`The getZMove function needs to be implemented in scripts.js or the battle format.`);
+	runMove(
+		moveOrMoveName: Move | string, pokemon: Pokemon, targetLoc: number,
+		sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean
+	) {
+		throw new UnimplementedError('runMove');
 	}
 
-	getActiveZMove(move: string | Move, pokemon: Pokemon): ActiveMove {
-		throw new Error(`The getActiveZMove function needs to be implemented in scripts.js or the battle format.`);
+	runMoveEffects(
+		damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove,
+		moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean
+	): SpreadMoveDamage {
+		throw new UnimplementedError('runMoveEffects');
 	}
 
 	runZPower(move: ActiveMove, pokemon: Pokemon) {
-		throw new Error(`The runZPower function needs to be implemented in scripts.js or the battle format.`);
+		throw new UnimplementedError('runZPower');
 	}
 
-	isAdjacent(pokemon: Pokemon, target: Pokemon): boolean {
-		throw new Error(`The isAdjacent function needs to be implemented in scripts.js or the battle format.`);
+	secondaries(
+		targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove,
+		isSelf?: boolean
+	): SpreadMoveDamage {
+		throw new UnimplementedError('secondaries');
+	}
+
+	selfDrops(
+		targets: SpreadMoveTargets, source: Pokemon, move: ActiveMove, moveData: ActiveMove,
+		isSecondary?: boolean
+	): SpreadMoveDamage {
+		throw new UnimplementedError('selfDrops');
+	}
+
+	spreadMoveHit(
+		targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove, moveData?: ActiveMove,
+		isSecondary?: boolean, isSelf?: boolean
+	): [SpreadMoveDamage, SpreadMoveTargets] {
+		throw new UnimplementedError('spreadMoveHit');
 	}
 
 	targetTypeChoices(targetType: string): boolean {
-		throw new Error(`The targetTypeChoices function needs to be implemented in scripts.js or the battle format.`);
+		throw new UnimplementedError('targetTypeChoices');
+	}
+
+	tryMoveHit(target: Pokemon, pokemon: Pokemon, move: ActiveMove): number | undefined | false | '' {
+		throw new UnimplementedError('tryMoveHit');
+	}
+
+	tryPrimaryHitEvent(
+		damage: SpreadMoveDamage, targets: SpreadMoveTargets, pokemon: Pokemon, move: ActiveMove,
+		moveData: ActiveMove, isSecondary?: boolean
+	): SpreadMoveDamage {
+		throw new UnimplementedError('tryPrimaryHitEvent');
+	}
+
+	trySpreadMoveHit(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove): boolean {
+		throw new UnimplementedError('trySpreadMoveHit');
+	}
+
+	useMove(
+		move: string | Move, pokemon: Pokemon, target?: Pokemon | null,
+		sourceEffect?: Effect | null, zMove?: string
+	): boolean {
+		throw new UnimplementedError('useMove');
+	}
+
+	/**
+	 * target = undefined: automatically resolve target
+	 * target = null: no target (move will fail)
+	 */
+	useMoveInner(
+		move: string | Move, pokemon: Pokemon, target?: Pokemon | null,
+		sourceEffect?: Effect | null, zMove?: string
+	): boolean {
+		throw new UnimplementedError('useMoveInner');
 	}
 
 	destroy() {
 		// deallocate ourself
 
 		// deallocate children and get rid of references to them
-		for (const side of this.sides) {
-			if (side) side.destroy();
+		this.field.destroy();
+		// @ts-ignore - readonly
+		this.field = null!;
+
+		for (let i = 0; i < this.sides.length; i++) {
+			if (this.sides[i]) {
+				this.sides[i].destroy();
+				this.sides[i] = null!;
+			}
 		}
-		// @ts-ignore - prevent type | null
-		this.p1 = null;
-		// @ts-ignore - prevent type | null
-		this.p2 = null;
 		for (const action of this.queue) {
 			delete action.pokemon;
 		}
-		this.queue = [];
 
+		this.queue = [];
 		// in case the garbage collector really sucks, at least deallocate the log
+		// @ts-ignore - readonly
 		this.log = [];
+	}
+}
+
+class UnimplementedError extends Error {
+	constructor(name: string) {
+		super(`The ${name} function needs to be implemented in scripts.js or the battle format.`);
+		this.name = 'UnimplementedError';
 	}
 }

@@ -56,7 +56,7 @@ let BattleScripts = {
 				if (!pokemon.deductPP(baseMove, null, target) && (move.id !== 'struggle')) {
 					this.add('cant', pokemon, 'nopp', move);
 					let gameConsole = [null, 'Game Boy', 'Game Boy', 'Game Boy Advance', 'DS', 'DS'][this.gen] || '3DS';
-					this.add('-hint', "This is not a bug, this is really how it works on the " + gameConsole + "; try it yourself if you don't believe us.");
+					this.hint(`This is not a bug, this is really how it works on the ${gameConsole}; try it yourself if you don't believe us.`);
 					this.clearActiveMove(true);
 					pokemon.moveThisTurnResult = false;
 					return;
@@ -76,8 +76,7 @@ let BattleScripts = {
 				this.singleEvent('End', this.getAbility('Illusion'), pokemon.abilityData, pokemon);
 			}
 			this.add('-zpower', pokemon);
-			// @ts-ignore pokemon.zMoveUsed only exists in this mod
-			pokemon.zMoveUsed = true;
+			pokemon.m.zMoveUsed = true;
 		}
 		let moveDidSomething = this.useMove(baseMove, pokemon, target, sourceEffect, zMove);
 		if (this.activeMove) move = this.activeMove;
@@ -87,17 +86,15 @@ let BattleScripts = {
 		// Dancer's activation order is completely different from any other event, so it's handled separately
 		if (move.flags['dance'] && moveDidSomething && !move.isExternal) {
 			let dancers = [];
-			for (const side of this.sides) {
-				for (const currentPoke of side.active) {
-					if (!currentPoke || !currentPoke.hp || pokemon === currentPoke) continue;
-					if (currentPoke.hasAbility('dancer') && !currentPoke.isSemiInvulnerable()) {
-						dancers.push(currentPoke);
-					}
+			for (const currentPoke of this.getAllActive()) {
+				if (pokemon === currentPoke) continue;
+				if (currentPoke.hasAbility('dancer') && !currentPoke.isSemiInvulnerable()) {
+					dancers.push(currentPoke);
 				}
 			}
 			// Dancer activates in order of lowest speed stat to highest
 			// Ties go to whichever Pokemon has had the ability for the least amount of time
-			dancers.sort(function (a, b) { return -(b.stats['spe'] - a.stats['spe']) || b.abilityOrder - a.abilityOrder; });
+			dancers.sort(function (a, b) { return -(b.storedStats['spe'] - a.storedStats['spe']) || b.abilityOrder - a.abilityOrder; });
 			for (const dancer of dancers) {
 				if (this.faintMessages()) break;
 				this.add('-activate', dancer, 'ability: Dancer');
@@ -185,8 +182,7 @@ let BattleScripts = {
 	},
 	// Modded to allow each Pokemon on a team to use a Z move once per battle
 	canZMove(pokemon) {
-		// @ts-ignore pokemon.zMoveUsed only exists in this mod
-		if (pokemon.zMoveUsed || (pokemon.transformed && (pokemon.template.isMega || pokemon.template.isPrimal || pokemon.template.forme === "Ultra"))) return;
+		if (pokemon.m.zMoveUsed || (pokemon.transformed && (pokemon.template.isMega || pokemon.template.isPrimal || pokemon.template.forme === "Ultra"))) return;
 		let item = pokemon.getItem();
 		if (!item.zMove) return;
 		if (item.zMoveUser && !item.zMoveUser.includes(pokemon.template.species)) return;
@@ -264,25 +260,25 @@ let BattleScripts = {
 		status = this.getEffect(status);
 		if (!sourceEffect && this.effect) sourceEffect = this.effect;
 		if (!source && this.event && this.event.target) source = this.event.target;
-		if (source === 'debug') source = this.p1.active[0];
+		if (source === 'debug') source = this.sides[0].active[0];
 		if (!source) throw new Error(`setting terrain without a source`);
 
-		if (this.terrain === status.id) return false;
-		let prevTerrain = this.terrain;
-		let prevTerrainData = this.terrainData;
-		this.terrain = status.id;
-		this.terrainData = {
+		if (this.field.terrain === status.id) return false;
+		let prevTerrain = this.field.terrain;
+		let prevTerrainData = this.field.terrainData;
+		this.field.terrain = status.id;
+		this.field.terrainData = {
 			id: status.id,
 			source,
 			sourcePosition: source.position,
 			duration: status.duration,
 		};
 		if (status.durationCallback) {
-			this.terrainData.duration = status.durationCallback.call(this, source, source, sourceEffect);
+			this.field.terrainData.duration = status.durationCallback.call(this, source, source, sourceEffect);
 		}
-		if (!this.singleEvent('Start', status, this.terrainData, this, source, sourceEffect)) {
-			this.terrain = prevTerrain;
-			this.terrainData = prevTerrainData;
+		if (!this.singleEvent('Start', status, this.field.terrainData, this, source, sourceEffect)) {
+			this.field.terrain = prevTerrain;
+			this.field.terrainData = prevTerrainData;
 			return false;
 		}
 		// Always run a terrain end event to prevent a visual glitch with custom terrains
@@ -293,25 +289,10 @@ let BattleScripts = {
 	pokemon: {
 		getActionSpeed() {
 			let speed = this.getStat('spe', false, false);
-			if (speed > 10000) speed = 10000;
-			if (this.battle.getPseudoWeather('trickroom') || this.battle.getPseudoWeather('triviaroom') || this.battle.getPseudoWeather('alienwave')) {
+			if (this.battle.field.getPseudoWeather('trickroom') || this.battle.field.getPseudoWeather('alienwave')) {
 				speed = 0x2710 - speed;
 			}
-			return speed & 0x1FFF;
-		},
-		isGrounded(negateImmunity = false) {
-			if ('gravity' in this.battle.pseudoWeather) return true;
-			if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;
-			if ('smackdown' in this.volatiles) return true;
-			let item = (this.ignoringItem() ? '' : this.item);
-			if (item === 'ironball') return true;
-			// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
-			if (!negateImmunity && this.hasType('Flying') && !('roost' in this.volatiles)) return false;
-			if (this.hasAbility('levitate') && !this.battle.suppressingAttackEvents()) return null;
-			if ('magnetrise' in this.volatiles) return false;
-			if ('telekinesis' in this.volatiles) return false;
-			if ('triviaroom' in this.battle.pseudoWeather && this.name === 'Bimp' && !this.illusion) return false;
-			return item !== 'airballoon';
+			return this.battle.trunc(speed, 13);
 		},
 	},
 };

@@ -34,20 +34,20 @@ export class Tools {
 	 * If an object with an ID is passed, its ID will be returned.
 	 * Otherwise, an empty string will be returned.
 	 *
-	 * Dex.getId is generally assigned to the global toId, because of how
+	 * Dex.getId is generally assigned to the global toID, because of how
 	 * commonly it's used.
 	 */
-	static getId(text: any): string {
+	static getId(text: any): ID {
 		if (text && text.id) {
 			text = text.id;
 		} else if (text && text.userid) {
 			text = text.userid;
 		}
 		if (typeof text !== 'string' && typeof text !== 'number') return '';
-		return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '');
+		return ('' + text).toLowerCase().replace(/[^a-z0-9]+/g, '') as ID;
 	}
 }
-const toId = Tools.getId;
+const toID = Tools.getId;
 
 export class BasicEffect implements EffectData {
 	/**
@@ -56,7 +56,7 @@ export class BasicEffect implements EffectData {
 	 * becomes "mrmime", and "Basculin-Blue-Striped" becomes
 	 * "basculinbluestriped".
 	 */
-	id: string;
+	id: ID;
 	/**
 	 * Name. Currently does not support Unicode letters, so "Flabébé"
 	 * is "Flabebe" and "Nidoran♀" is "Nidoran-F".
@@ -103,11 +103,11 @@ export class BasicEffect implements EffectData {
 	/** The full description for this effect. */
 	desc: string;
 	/**
-	 * Is this item/move/ability/pokemon nonstandard? True for effects
+	 * Is this item/move/ability/pokemon nonstandard? Specified for effects
 	 * that have no use in standard formats: made-up pokemon (CAP),
-	 * glitches (Missingno etc), and Pokestar pokemon.
+	 * glitches (Missingno etc), Pokestar pokemon, etc.
 	 */
-	isNonstandard: boolean;
+	isNonstandard: Nonstandard | null;
 	/** The duration of the effect.  */
 	duration?: number;
 	/** Whether or not the effect is ignored by Baton Pass. */
@@ -115,9 +115,9 @@ export class BasicEffect implements EffectData {
 	/** Whether or not the effect affects fainted Pokemon. */
 	affectsFainted: boolean;
 	/** The status that the effect may cause. */
-	status?: string;
+	status?: ID;
 	/** The weather that the effect may cause. */
-	weather?: undefined;
+	weather?: ID;
 	/** HP that the effect may drain. */
 	drain?: [number, number];
 	flags: AnyObject;
@@ -128,7 +128,7 @@ export class BasicEffect implements EffectData {
 		data = combine(this, data, ...moreData);
 
 		this.name = Tools.getString(data.name).trim();
-		this.id = data.id || toId(this.name); // Hidden Power hack
+		this.id = data.id as ID || toID(this.name); // Hidden Power hack
 		this.fullname = Tools.getString(data.fullname) || this.name;
 		this.effectType = Tools.getString(data.effectType) as EffectType || 'Effect';
 		this.exists = !!(this.exists && this.id);
@@ -137,12 +137,12 @@ export class BasicEffect implements EffectData {
 		this.isUnreleased = data.isUnreleased || false;
 		this.shortDesc = data.shortDesc || '';
 		this.desc = data.desc || '';
-		this.isNonstandard = data.isNonstandard || false;
+		this.isNonstandard = data.isNonstandard || null;
 		this.duration = data.duration;
 		this.noCopy = !!data.noCopy;
 		this.affectsFainted = !!data.affectsFainted;
-		this.status = data.status || undefined;
-		this.weather = data.weather || undefined;
+		this.status = data.status as ID || undefined;
+		this.weather = data.weather as ID || undefined;
 		this.drain = data.drain || undefined;
 		this.flags = data.flags || {};
 		this.sourceEffect = data.sourceEffect || '';
@@ -154,8 +154,8 @@ export class BasicEffect implements EffectData {
 }
 
 /** rule, source, limit, bans */
-type ComplexBan = [string, string, number, string[]];
-type ComplexTeamBan = ComplexBan;
+export type ComplexBan = [string, string, number, string[]];
+export type ComplexTeamBan = ComplexBan;
 
 /**
  * A RuleTable keeps track of the rules that a format has. The key can be:
@@ -169,12 +169,14 @@ export class RuleTable extends Map {
 	complexTeamBans: ComplexTeamBan[];
 	// tslint:disable-next-line:ban-types
 	checkLearnset: [Function, string] | null;
+	timer: [Partial<GameTimerSettings>, string] | null;
 
 	constructor() {
 		super();
 		this.complexBans = [];
 		this.complexTeamBans = [];
 		this.checkLearnset = null;
+		this.timer = null;
 	}
 
 	check(thing: string, setHas: {[id: string]: true} | null = null): string {
@@ -189,10 +191,10 @@ export class RuleTable extends Map {
 	}
 
 	getComplexBanIndex(complexBans: ComplexBan[], rule: string): number {
-		let ruleId = toId(rule);
+		const ruleId = toID(rule);
 		let complexBanIndex = -1;
 		for (let i = 0; i < complexBans.length; i++) {
-			if (toId(complexBans[i][0]) === ruleId) {
+			if (toID(complexBans[i][0]) === ruleId) {
 				complexBanIndex = i;
 				break;
 			}
@@ -201,7 +203,7 @@ export class RuleTable extends Map {
 	}
 
 	addComplexBan(rule: string, source: string, limit: number, bans: string[]) {
-		let complexBanIndex = this.getComplexBanIndex(this.complexBans, rule);
+		const complexBanIndex = this.getComplexBanIndex(this.complexBans, rule);
 		if (complexBanIndex !== -1) {
 			if (this.complexBans[complexBanIndex][2] === Infinity) return;
 			this.complexBans[complexBanIndex] = [rule, source, limit, bans];
@@ -211,7 +213,7 @@ export class RuleTable extends Map {
 	}
 
 	addComplexTeamBan(rule: string, source: string, limit: number, bans: string[]) {
-		let complexBanTeamIndex = this.getComplexBanIndex(this.complexTeamBans, rule);
+		const complexBanTeamIndex = this.getComplexBanIndex(this.complexTeamBans, rule);
 		if (complexBanTeamIndex !== -1) {
 			if (this.complexTeamBans[complexBanTeamIndex][2] === Infinity) return;
 			this.complexTeamBans[complexBanTeamIndex] = [rule, source, limit, bans];
@@ -331,7 +333,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect & Format
 	}
 }
 
-export class PureEffect extends BasicEffect implements Readonly<BasicEffect> {
+export class PureEffect extends BasicEffect implements Readonly<BasicEffect & PureEffectData> {
 	readonly effectType: 'Effect' | 'Weather' | 'Status';
 
 	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
@@ -488,9 +490,9 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	/**
 	 * Species ID. Identical to ID. Note that this is the full ID, e.g.
 	 * 'basculinbluestriped'. To get the base species ID, you need to
-	 * manually read toId(template.baseSpecies).
+	 * manually read toID(template.baseSpecies).
 	 */
-	readonly speciesid: string;
+	readonly speciesid: ID;
 	/**
 	 * Species. Identical to name. Note that this is the full name,
 	 * e.g. 'Basculin-Blue-Striped'. To get the base species name, see
@@ -609,7 +611,7 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 
 		this.fullname = `pokemon: ${data.name}`;
 		this.effectType = 'Pokemon';
-		this.speciesid = data.speciesid || this.id;
+		this.speciesid = data.speciesid as ID || this.id;
 		this.species = data.species || data.name;
 		this.name = data.species;
 		this.baseSpecies = data.baseSpecies || this.name;
@@ -617,7 +619,8 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 		this.otherForms = data.otherForms || undefined;
 		this.otherFormes = data.otherFormes || undefined;
 		this.formeLetter = data.formeLetter || '';
-		this.spriteid = data.spriteid || (toId(this.baseSpecies) + (this.baseSpecies !== this.name ? `-${toId(this.forme)}` : ''));
+		this.spriteid = data.spriteid ||
+			(toID(this.baseSpecies) + (this.baseSpecies !== this.name ? `-${toID(this.forme)}` : ''));
 		this.abilities = data.abilities || {0: ""};
 		this.types = data.types!;
 		this.addedType = data.addedType || undefined;
@@ -687,7 +690,7 @@ interface MoveFlags {
 	mirror?: 1; // Can be copied by Mirror Move.
 	mystery?: 1; // Unknown effect.
 	nonsky?: 1; // Prevented from being executed or selected in a Sky Battle.
-	powder?: 1; // Has no effect on Grass-type Pokemon, Pokemon with the Ability Overcoat, and Pokemon holding Safety Goggles.
+	powder?: 1; // Has no effect on Pokemon which are Grass-type, have the Ability Overcoat, or hold Safety Goggles.
 	protect?: 1; // Blocked by Detect, Protect, Spiky Shield, and if not a Status move, King's Shield.
 	pulse?: 1; // Power is multiplied by 1.5 when used by a Pokemon with the Ability Mega Launcher.
 	punch?: 1; // Power is multiplied by 1.2 when used by a Pokemon with the Ability Iron Fist.
@@ -713,8 +716,6 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 	readonly critRatio: number;
 	/** Will this move always or never be a critical hit? */
 	readonly willCrit?: boolean;
-	/** Is this move a critical hit? */
-	readonly crit?: boolean;
 	/** Can this move OHKO foes? */
 	readonly ohko?: boolean | string;
 	/**
@@ -770,7 +771,7 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 	readonly isZ: boolean | string;
 	readonly flags: MoveFlags;
 	/** Whether or not the user must switch after using this move. */
-	readonly selfSwitch?: string | true;
+	readonly selfSwitch?: ID | boolean;
 	/** Move target only used by Pressure. */
 	readonly pressureTarget: string;
 	/** Move target used if the user is not a Ghost type (for Curse). */
@@ -790,14 +791,14 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 	readonly spreadModifier?: number;
 	/**  Modifier that affects damage when this move is a critical hit. */
 	readonly critModifier?: number;
-	/** Damage modifier based on the user's types. */
-	readonly typeMod: number;
 	/** Forces the move to get STAB even if the type doesn't match. */
 	readonly forceSTAB: boolean;
 	/** True if it can't be copied with Sketch. */
 	readonly noSketch: boolean;
 	/** STAB multiplier (can be modified by other effects) (default 1.5). */
 	readonly stab?: number;
+
+	readonly volatileStatus?: ID;
 
 	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
 		super(data, ...moreData);
@@ -827,16 +828,16 @@ export class Move extends BasicEffect implements Readonly<BasicEffect & MoveData
 		this.noPPBoosts = !!data.noPPBoosts;
 		this.isZ = data.isZ || false;
 		this.flags = data.flags || {};
-		this.selfSwitch = data.selfSwitch || undefined;
+		this.selfSwitch = (typeof data.selfSwitch === 'string' ? (data.selfSwitch as ID) : data.selfSwitch) || undefined;
 		this.pressureTarget = data.pressureTarget || '';
 		this.nonGhostTarget = data.nonGhostTarget || '';
 		this.ignoreAbility = data.ignoreAbility || false;
 		this.damage = data.damage!;
 		this.spreadHit = data.spreadHit || false;
-		this.typeMod = data.typeMod || 0;
 		this.forceSTAB = !!data.forceSTAB;
 		this.noSketch = !!data.noSketch;
 		this.stab = data.stab || undefined;
+		this.volatileStatus = typeof data.volatileStatus === 'string' ? (data.volatileStatus as ID) : undefined;
 
 		if (!this.gen) {
 			if (this.num >= 622) {
@@ -865,7 +866,7 @@ export class TypeInfo implements Readonly<TypeData> {
 	 * ID. This will be a lowercase version of the name with all the
 	 * non-alphanumeric characters removed. e.g. 'flying'
 	 */
-	readonly id: string;
+	readonly id: ID;
 	/** Name. e.g. 'Flying' */
 	readonly name: string;
 	/** Effect type. */
@@ -912,7 +913,7 @@ export class TypeInfo implements Readonly<TypeData> {
 }
 
 function combine(obj: AnyObject, ...data: (AnyObject | null)[]): AnyObject {
-	for (let d of data) {
+	for (const d of data) {
 		if (d) Object.assign(obj, d);
 	}
 	return obj;

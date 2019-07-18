@@ -73,9 +73,9 @@ class Poll {
 
 	generateVotes() {
 		let output = `<div class="infobox"><p style="margin: 2px 0 5px 0"><span style="border:1px solid #6A6;color:#484;border-radius:4px;padding:0 3px"><i class="fa fa-bar-chart"></i> Poll</span> <strong style="font-size:11pt">${this.getQuestionMarkup()}</strong></p>`;
-		this.options.forEach((option, number) => {
+		for (const [number, option] of this.options) {
 			output += `<div style="margin-top: 5px"><button class="button" style="text-align: left" value="/poll vote ${number}" name="send" title="Vote for ${number}. ${Chat.escapeHTML(option.name)}">${number}. <strong>${this.getOptionMarkup(option)}</strong></button></div>`;
-		});
+		}
 		output += `<div style="margin-top: 7px; padding-left: 12px"><button value="/poll results" name="send" title="View results - you will not be able to vote after viewing results"><small>(View results)</small></button></div>`;
 		output += `</div>`;
 
@@ -256,6 +256,10 @@ const commands = {
 			const options = params.splice(1);
 			if (options.length > 8) {
 				return this.errorReply("Too many options for poll (maximum is 8).");
+			}
+
+			if (new Set(options).size !== options.length) {
+				return this.errorReply("There are duplicate options in the poll.");
 			}
 
 			room.poll = new Poll(room, {source: params[0], supportHTML: supportHTML}, options);

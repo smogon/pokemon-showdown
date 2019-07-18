@@ -1,6 +1,6 @@
 'use strict';
 
-/**@type {{[k: string]: ModdedEffectData}} */
+/**@type {{[k: string]: ModdedPureEffectData}} */
 let BattleStatuses = {
 	/*
 	// Example:
@@ -22,13 +22,13 @@ let BattleStatuses = {
 	'2xthetap': { // No single quotes causes issues
 		noCopy: true,
 		onStart() {
-			this.add(`c|%2xTheTap|Time for a heckin' battle.`);
+			this.add(`c|+2xTheTap|Time for a heckin' battle.`);
 		},
 		onSwitchOut() {
-			this.add(`c|%2xTheTap|Doin' me a heckin' concern.`);
+			this.add(`c|+2xTheTap|Doin' me a heckin' concern.`);
 		},
 		onFaint() {
-			this.add(`c|%2xTheTap|Doin' me the final bamboozle.`);
+			this.add(`c|+2xTheTap|Doin' me the final bamboozle.`);
 		},
 	},
 	'5gen': {
@@ -92,7 +92,7 @@ let BattleStatuses = {
 			this.add(`c|%Akir|too sleepy, c ya`);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.typeMod > 0 && !target.illusion) {
+			if (target.getMoveHitData(move).typeMod > 0 && !target.illusion) {
 				this.debug('Solid Rock neutralize');
 				return this.chainModify(0.75);
 			}
@@ -228,18 +228,6 @@ let BattleStatuses = {
 			this.add(`c|@biggie|It was all a dream`);
 		},
 	},
-	bimp: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|+Bimp|Ew it's Bimp -_-`);
-		},
-		onSwitchOut() {
-			this.add(`c|+Bimp|Brb getting Chick-Fil-A.`);
-		},
-		onFaint() {
-			this.add(`c|+Bimp|Well that was uneventful -_-`);
-		},
-	},
 	bobochan: {
 		noCopy: true,
 		onStart() {
@@ -291,13 +279,13 @@ let BattleStatuses = {
 	cc: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%cc|Yo guys! :]`);
+			this.add(`c|+cc|Yo guys! :]`);
 		},
 		onSwitchOut() {
-			this.add(`c|%cc|Gotta go brb`);
+			this.add(`c|+cc|Gotta go brb`);
 		},
 		onFaint() {
-			this.add(`c|%cc|Unfort`);
+			this.add(`c|+cc|Unfort`);
 		},
 	},
 	cerberax: {
@@ -454,21 +442,18 @@ let BattleStatuses = {
 				target.moveSlots.push({
 					move: move.name,
 					id: move.id,
-					// @ts-ignore hacky change for EV's set
-					pp: Math.floor(((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5) * (target.ppPercentages ? target.ppPercentages[i] : 1)),
+					pp: Math.floor(((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5) * (target.m.ppPercentages ? target.m.ppPercentages[i] : 1)),
 					maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
 					target: move.target,
 					disabled: false,
 					used: false,
 					virtual: true,
 				});
-				target.moves.push(move.id);
 			}
 		},
 		onBeforeSwitchOut(pokemon) {
 			if (pokemon.illusion) return;
-			// @ts-ignore hacky change for EV's set
-			pokemon.ppPercentages = pokemon.moveSlots.slice().map(m => {
+			pokemon.m.ppPercentages = pokemon.moveSlots.slice().map(m => {
 				return m.pp / m.maxpp;
 			});
 		},
@@ -503,6 +488,34 @@ let BattleStatuses = {
 			this.add(`c|%FOMG|Rock in peace...`);
 		},
 	},
+	forrce: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c|+Forrce|It's either I win or you lose, 'cause I won't accept defeat.`);
+			if (pokemon.illusion) return;
+			let i = 0;
+			for (const moveSlot of pokemon.moveSlots) {
+				let move = this.getMove(moveSlot.id);
+				moveSlot.pp = Math.floor(((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5) * (pokemon.m.ppPercentages ? pokemon.m.ppPercentages[i] : 1));
+				i++;
+			}
+		},
+		onBeforeSwitchOut(pokemon) {
+			if (pokemon.illusion) return;
+			// track percentages to keep purple pills from resetting pp
+			pokemon.m.ppPercentages = pokemon.moveSlots.slice().map(m => {
+				return m.pp / m.maxpp;
+			});
+		},
+		onSwitchOut() {
+			this.add(`c|+Forrce|What I gotta do to get it through to you? I'm superhuman.`);
+		},
+		onFaint() {
+			this.add(`c|+Forrce|How can I find you?`);
+			this.add(`c|+Forrce|Who do you turn to?`);
+			this.add(`c|+Forrce|How do I bind you?`);
+		},
+	},
 	kalalokki: {
 		noCopy: true,
 		onStart(target) {
@@ -510,7 +523,7 @@ let BattleStatuses = {
 			this.add(`c|@Kalalokki|( •_•)>⌐■-■`);
 			this.add(`c|@Kalalokki|(⌐■_■)`);
 			if (target.illusion) return;
-			this.setWeather('raindance');
+			this.field.setWeather('raindance');
 		},
 		onFaint() {
 			this.add(`c|@Kalalokki|(⌐■_■)`);
@@ -631,10 +644,10 @@ let BattleStatuses = {
 	jdarden: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%jdarden|I've cultivated some mass during my hibernation`);
+			this.add(`c|+jdarden|I've cultivated some mass during my hibernation`);
 		},
 		onFaint() {
-			this.add(`c|%jdarden|Back to my natural state`);
+			this.add(`c|+jdarden|Back to my natural state`);
 		},
 	},
 	kaijubunny: {
@@ -767,35 +780,6 @@ let BattleStatuses = {
 			this.add(`c|+Lost Seso|└[ ─ ಎ ─ ]┘ 0% Battery, feed me ramen please`);
 		},
 	},
-	lycaniumz: {
-		noCopy: true,
-		onStart(pokemon) {
-			this.add(`c|+Lycanium Z|It's either I win or you lose, 'cause I won't accept defeat.`);
-			if (pokemon.illusion) return;
-			let i = 0;
-			for (const moveSlot of pokemon.moveSlots) {
-				let move = this.getMove(moveSlot.id);
-				// @ts-ignore hacky way to reduce purple pill's PP
-				moveSlot.pp = Math.floor(((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5) * (pokemon.ppPercentages ? pokemon.ppPercentages[i] : 1));
-				i++;
-			}
-		},
-		onBeforeSwitchOut(pokemon) {
-			if (pokemon.illusion) return;
-			// @ts-ignore track percentages to keep purple pills from resetting pp
-			pokemon.ppPercentages = pokemon.moveSlots.slice().map(m => {
-				return m.pp / m.maxpp;
-			});
-		},
-		onSwitchOut() {
-			this.add(`c|+Lycanium Z|What I gotta do to get it through to you? I'm superhuman.`);
-		},
-		onFaint() {
-			this.add(`c|+Lycanium Z|How can I find you?`);
-			this.add(`c|+Lycanium Z|Who do you turn to?`);
-			this.add(`c|+Lycanium Z|How do I bind you?`);
-		},
-	},
 	macchaeger: {
 		noCopy: true,
 		onStart() {
@@ -820,10 +804,10 @@ let BattleStatuses = {
 	martha: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%martha|in to lose r1`);
+			this.add(`c|@martha|in to lose r1`);
 		},
 		onSwitchOut() {
-			this.add(`c|%martha|bad`);
+			this.add(`c|@martha|bad`);
 		},
 	},
 	marty: {
@@ -910,7 +894,7 @@ let BattleStatuses = {
 				this.add(`c|@Morfent ( _̀> ̀)|Every 60 seconds in Africa, a minute passes. Together we can stop this. Please spread the word.`);
 			} else {
 				this.add(`c|@Morfent ( _̀> ̀)|!dt morfent's husbando`);
-				this.add(`raw|<ul class="utilichart"><li class="result"><span class="col numcol">UU</span> <span class="col iconcol"><span class="picon" style="background: transparent url(&quot;//play.pokemonshowdown.com/sprites/smicons-sheet.png?a4&quot;) no-repeat scroll -400px -210px"></span></span> <span class="col pokemonnamecol" style="white-space: nowrap"><a href="https://pokemonshowdown.com/dex/pokemon/gengar" target="_blank" rel="noopener">Gengar</a></span> <span class="col typecol"><img src="https://play.pokemonshowdown.com/sprites/types/Ghost.png" alt="Ghost" height="14" width="32"><img src="https://play.pokemonshowdown.com/sprites/types/Poison.png" alt="Poison" height="14" width="32"></span> <span style="float: left ; min-height: 26px"><span class="col abilitycol">Cursed Body</span><span class="col abilitycol"></span></span><span style="float: left ; min-height: 26px"><span class="col statcol"><em>HP</em><br>60</span> <span class="col statcol"><em>Atk</em><br>65</span> <span class="col statcol"><em>Def</em><br>60</span> <span class="col statcol"><em>SpA</em><br>130</span> <span class="col statcol"><em>SpD</em><br>75</span> <span class="col statcol"><em>Spe</em><br>110</span> <span class="col bstcol"><em>BST<br>500</em></span> </span></li><li style="clear: both"></li></ul>`);
+				this.add(`raw|<ul class="utilichart"><li class="result"><span class="col numcol">UU</span> <span class="col iconcol"><span class="picon" style="background: transparent url(&quot;//${Config.routes.client}/sprites/smicons-sheet.png?a4&quot;) no-repeat scroll -400px -210px"></span></span> <span class="col pokemonnamecol" style="white-space: nowrap"><a href="https://${Config.routes.dex}/pokemon/gengar" target="_blank" rel="noopener">Gengar</a></span> <span class="col typecol"><img src="https://${Config.routes.client}/sprites/types/Ghost.png" alt="Ghost" height="14" width="32"><img src="https://${Config.routes.client}/sprites/types/Poison.png" alt="Poison" height="14" width="32"></span> <span style="float: left ; min-height: 26px"><span class="col abilitycol">Cursed Body</span><span class="col abilitycol"></span></span><span style="float: left ; min-height: 26px"><span class="col statcol"><em>HP</em><br>60</span> <span class="col statcol"><em>Atk</em><br>65</span> <span class="col statcol"><em>Def</em><br>60</span> <span class="col statcol"><em>SpA</em><br>130</span> <span class="col statcol"><em>SpD</em><br>75</span> <span class="col statcol"><em>Spe</em><br>110</span> <span class="col bstcol"><em>BST<br>500</em></span> </span></li><li style="clear: both"></li></ul>`);
 				this.add(`raw|<font size="1"><font color="#686868">Dex#:</font> 94&nbsp;|  <font color="#686868">Gen:</font> 1&nbsp;|  <font color="#686868">Height:</font> 1.5 m&nbsp;|  <font color="#686868">Weight:</font> 40.5 kg <em>(60 BP)</em>&nbsp;|  <font color="#686868">Dex Colour:</font> Purple&nbsp;|  <font color="#686868">Egg Group(s):</font> Amorphous&nbsp;|  <font color="#686868">Does Not Evolve</font></font>`);
 			}
 		},
@@ -953,7 +937,7 @@ let BattleStatuses = {
 			this.add(`c|+Osiris|I'm getting too old for this x_x`);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.typeMod > 0 && !target.illusion) {
+			if (target.getMoveHitData(move).typeMod > 0 && !target.illusion) {
 				this.debug('Solid Rock neutralize');
 				return this.chainModify(0.75);
 			}
@@ -1132,33 +1116,30 @@ let BattleStatuses = {
 	snaquaza: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%Snaquaza|Snaq is baq... with a vengeance!`);
+			this.add(`c|@Snaquaza|Snaq is baq... with a vengeance!`);
 		},
 		onSwitchOut(pokemon) {
-			this.add(`c|%Snaquaza|Lynch Hoeen while I'm away...`);
-			// @ts-ignore Hack for Snaquaza's Z move
-			if (pokemon.claimHP) delete pokemon.claimHP;
+			this.add(`c|@Snaquaza|Lynch Hoeen while I'm away...`);
+			if (pokemon.m.claimHP) pokemon.m.claimHP = null;
 		},
 		onFaint() {
-			this.add(`c|%Snaquaza|How did you know I was scum?`);
+			this.add(`c|@Snaquaza|How did you know I was scum?`);
 		},
 		onDamage(damage, pokemon) {
-			// @ts-ignore Hack for Snaquaza's Z move
-			if (!pokemon.claimHP) return;
+			// Hack for Snaquaza's Z move
+			if (!pokemon.m.claimHP) return;
 			// Prevent Snaquaza from fainting while using a fake claim to prevent visual bug
 			if (pokemon.hp - damage <= 0) return (pokemon.hp - 1);
 		},
 		onAfterDamage(damage, pokemon) {
-			// @ts-ignore Hack for Snaquaza's Z move
-			if (!pokemon.claimHP || pokemon.hp > 1) return;
+			// Hack for Snaquaza's Z move
+			if (!pokemon.m.claimHP || pokemon.hp > 1) return;
 			// Now we handle the fake claim "fainting"
-			// @ts-ignore Hack for Snaquaza's Z move
-			pokemon.hp = pokemon.claimHP;
+			pokemon.hp = pokemon.m.claimHP;
 			pokemon.formeChange(pokemon.baseTemplate.id);
 			pokemon.moveSlots = pokemon.moveSlots.slice(0, 4);
 			this.add('message', `${pokemon.name}'s fake claim was uncovered!`);
-			// @ts-ignore Hack for Snaquaza's Z move
-			delete pokemon.claimHP;
+			pokemon.m.claimHP = null;
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
 	},
@@ -1192,13 +1173,13 @@ let BattleStatuses = {
 	teclis: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%Teclis|Sometimes you have to fight to get your point across.`);
+			this.add(`c|@Teclis|Sometimes you have to fight to get your point across.`);
 		},
 		onSwitchOut() {
-			this.add(`c|%Teclis|You deserve a break.`);
+			this.add(`c|@Teclis|You deserve a break.`);
 		},
 		onFaint() {
-			this.add(`c|%Teclis|I'm convinced !`);
+			this.add(`c|@Teclis|I'm convinced !`);
 		},
 	},
 	tennisace: {
@@ -1231,17 +1212,15 @@ let BattleStatuses = {
 				}
 			}
 			this.add('-clearallboost');
-			for (const side of this.sides) {
-				for (const pokemon of side.active) {
-					if (pokemon && pokemon.isActive) pokemon.clearBoosts();
-				}
+			for (const pokemon of this.getAllActive()) {
+				pokemon.clearBoosts();
 			}
-			for (const clear in this.pseudoWeather) {
+			for (const clear in this.field.pseudoWeather) {
 				if (clear.endsWith('mod') || clear.endsWith('clause')) continue;
-				this.removePseudoWeather(clear);
+				this.field.removePseudoWeather(clear);
 			}
-			this.clearWeather();
-			this.clearTerrain();
+			this.field.clearWeather();
+			this.field.clearTerrain();
 		},
 		onFaint() {
 			this.add(`c|%Teremiare|(>'o')>`);

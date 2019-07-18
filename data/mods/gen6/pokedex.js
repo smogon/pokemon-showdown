@@ -257,6 +257,10 @@ let BattlePokedex = {
 		inherit: true,
 		abilities: {0: "Aura Break"},
 	},
+	necturna: {
+		inherit: true,
+		baseStats: {hp: 64, atk: 120, def: 100, spa: 85, spd: 120, spe: 81},
+	},
 	aurumoth: {
 		inherit: true,
 		abilities: {0: "Weak Armor", 1: "No Guard", H: "Illusion"},

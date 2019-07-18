@@ -1,6 +1,6 @@
 'use strict';
 
-/**@type {{[k: string]: EffectData}} */
+/**@type {{[k: string]: PureEffectData}} */
 let BattleStatuses = {
 	brn: {
 		name: 'brn',
@@ -55,6 +55,8 @@ let BattleStatuses = {
 		onStart(target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.effectType === 'Ability') {
 				this.add('-status', target, 'slp', '[from] ability: ' + sourceEffect.name, '[of] ' + source);
+			} else if (sourceEffect && sourceEffect.effectType === 'Move') {
+				this.add('-status', target, 'slp', '[from] move: ' + sourceEffect.name);
 			} else {
 				this.add('-status', target, 'slp');
 			}
@@ -362,84 +364,60 @@ let BattleStatuses = {
 			pokemon.removeVolatile('truant');
 			return null;
 		},
-		onLockMove(pokemon) {
+		onStart(pokemon) {
 			this.add('-mustrecharge', pokemon);
-			return 'recharge';
 		},
+		onLockMove: 'recharge',
 	},
 	futuremove: {
-		// this is a side condition
+		// this is a slot condition
 		name: 'futuremove',
 		id: 'futuremove',
 		num: 0,
-		onStart(side) {
-			this.effectData.positions = [];
-			for (let i = 0; i < side.active.length; i++) {
-				this.effectData.positions[i] = null;
-			}
-		},
+		duration: 3,
 		onResidualOrder: 3,
-		onResidual(side) {
-			let finished = true;
-			for (const [i, target] of side.active.entries()) {
-				let posData = this.effectData.positions[i];
-				if (!posData) continue;
-
-				posData.duration--;
-
-				if (posData.duration > 0) {
-					finished = false;
-					continue;
-				}
-
-				// time's up; time to hit! :D
-				const move = this.getMove(posData.move);
-				if (target.fainted || target === posData.source) {
-					this.add('-hint', '' + move.name + ' did not hit because the target is ' + (target.fainted ? 'fainted' : 'the user') + '.');
-					this.effectData.positions[i] = null;
-					continue;
-				}
-
-				this.add('-end', target, 'move: ' + move.name);
-				target.removeVolatile('Protect');
-				target.removeVolatile('Endure');
-
-				if (posData.source.hasAbility('infiltrator') && this.gen >= 6) {
-					posData.moveData.infiltrates = true;
-				}
-				if (posData.source.hasAbility('normalize') && this.gen >= 6) {
-					posData.moveData.type = 'Normal';
-				}
-				if (posData.source.hasAbility('adaptability') && this.gen >= 6) {
-					posData.moveData.stab = 2;
-				}
-				const hitMove = new this.Data.Move(posData.moveData);
-
-				this.tryMoveHit(target, posData.source, hitMove);
-
-				this.effectData.positions[i] = null;
+		onEnd(target) {
+			const data = this.effectData;
+			// time's up; time to hit! :D
+			const move = this.getMove(data.move);
+			if (target.fainted || target === data.source) {
+				this.hint(`${move.name} did not hit because the target is ${(data.fainted ? 'fainted' : 'the user')}.`);
+				return;
 			}
-			if (finished) {
-				side.removeSideCondition('futuremove');
+
+			this.add('-end', target, 'move: ' + move.name);
+			target.removeVolatile('Protect');
+			target.removeVolatile('Endure');
+
+			if (data.source.hasAbility('infiltrator') && this.gen >= 6) {
+				data.moveData.infiltrates = true;
 			}
+			if (data.source.hasAbility('normalize') && this.gen >= 6) {
+				data.moveData.type = 'Normal';
+			}
+			if (data.source.hasAbility('adaptability') && this.gen >= 6) {
+				data.moveData.stab = 2;
+			}
+			const hitMove = new this.Data.Move(data.moveData);
+
+			this.trySpreadMoveHit([target], data.source, /** @type {ActiveMove} */(/** @type {unknown} */(hitMove)));
 		},
 	},
 	healreplacement: {
-		// this is a side condition
+		// this is a slot condition
 		name: 'healreplacement',
 		id: 'healreplacement',
 		num: 0,
 		onStart(side, source, sourceEffect) {
-			this.effectData.position = source.position;
 			this.effectData.sourceEffect = sourceEffect;
 			this.add('-activate', source, 'healreplacement');
 		},
 		onSwitchInPriority: 1,
 		onSwitchIn(target) {
-			if (!target.fainted && target.position === this.effectData.position) {
+			if (!target.fainted) {
 				target.heal(target.maxhp);
 				this.add('-heal', target, target.getHealth, '[from] move: ' + this.effectData.sourceEffect, '[zeffect]');
-				target.side.removeSideCondition('healreplacement');
+				target.side.removeSlotCondition(target, 'healreplacement');
 			}
 		},
 	},
@@ -650,7 +628,7 @@ let BattleStatuses = {
 		// So we give it increased priority.
 		onModifySpDPriority: 10,
 		onModifySpD(spd, pokemon) {
-			if (pokemon.hasType('Rock') && this.isWeather('sandstorm')) {
+			if (pokemon.hasType('Rock') && this.field.isWeather('sandstorm')) {
 				return this.modify(spd, 1.5);
 			}
 		},
@@ -665,7 +643,7 @@ let BattleStatuses = {
 		onResidualOrder: 1,
 		onResidual() {
 			this.add('-weather', 'Sandstorm', '[upkeep]');
-			if (this.isWeather('sandstorm')) this.eachEvent('Weather');
+			if (this.field.isWeather('sandstorm')) this.eachEvent('Weather');
 		},
 		onWeather(target) {
 			this.damage(target.maxhp / 16);
@@ -697,7 +675,7 @@ let BattleStatuses = {
 		onResidualOrder: 1,
 		onResidual() {
 			this.add('-weather', 'Hail', '[upkeep]');
-			if (this.isWeather('hail')) this.eachEvent('Weather');
+			if (this.field.isWeather('hail')) this.eachEvent('Weather');
 		},
 		onWeather(target) {
 			this.damage(target.maxhp / 16);
@@ -713,7 +691,7 @@ let BattleStatuses = {
 		effectType: 'Weather',
 		duration: 0,
 		onEffectiveness(typeMod, target, type, move) {
-			if (move && move.effectType === 'Move' && type === 'Flying' && typeMod > 0) {
+			if (move && move.effectType === 'Move' && move.category !== 'Status' && type === 'Flying' && typeMod > 0) {
 				this.add('-activate', '', 'deltastream');
 				return 0;
 			}

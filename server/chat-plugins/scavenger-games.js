@@ -16,7 +16,7 @@ class Leaderboard {
 	}
 
 	addPoints(name, aspect, points, noUpdate) {
-		let userid = toId(name);
+		let userid = toID(name);
 
 		if (!userid || userid === 'constructor' || !points) return this;
 		if (!this.data[userid]) this.data[userid] = {name: name};
@@ -50,7 +50,7 @@ class Leaderboard {
 					);
 				}); // identify ties
 			if (userid) {
-				let rank = ladder.find(entry => toId(entry.name) === userid);
+				let rank = ladder.find(entry => toID(entry.name) === userid);
 				resolve(rank);
 			} else {
 				resolve(ladder);
@@ -76,7 +76,7 @@ class ScavGame extends Rooms.RoomGame {
 		super(room);
 
 		this.title = gameType;
-		this.gameid = toId(gameType);
+		this.gameid = toID(gameType);
 
 		this.childGame = null;
 		this.playerCap = Infinity;
@@ -101,7 +101,7 @@ class ScavGame extends Rooms.RoomGame {
 	joinGame(user) {
 		if (!this.childGame) return user.sendTo(this.room, "There is no hunt to join yet.");
 		if (!this.canJoinGame(user)) return user.sendTo(this.room, "You are not allowed to join this hunt.");
-		if ((user.userid in this.players) || this._joinGame(user)) { // if user is already in this parent game, or if the user is able to join this parent game
+		if ((user.userid in this.playerTable) || this._joinGame(user)) { // if user is already in this parent game, or if the user is able to join this parent game
 			if (this.childGame && this.childGame.joinGame) return this.childGame.joinGame(user);
 		}
 	}
@@ -116,13 +116,13 @@ class ScavGame extends Rooms.RoomGame {
 	// renaming in the parent game
 	onRename(user, oldUserid, isJoining, isForceRenamed) {
 		if (!this.allowRenames || (!user.named && !isForceRenamed)) {
-			if (!(user.userid in this.players)) {
+			if (!(user.userid in this.playerTable)) {
 				user.games.delete(this.id);
 				user.updateSearch();
 			}
 			return;
 		}
-		if (!(oldUserid in this.players)) return;
+		if (!(oldUserid in this.playerTable)) return;
 		this.renamePlayer(user, oldUserid);
 		if (this.childGame && this.childGame.onRename) this.childGame.onRename(user, oldUserid, isJoining, isForceRenamed);
 	}
@@ -136,8 +136,8 @@ class ScavGame extends Rooms.RoomGame {
 		}
 		this.room.game = null;
 		this.room = null;
-		for (let i in this.players) {
-			this.players[i].destroy();
+		for (let i in this.playerTable) {
+			this.playerTable[i].destroy();
 		}
 	}
 
@@ -197,13 +197,13 @@ class ScavGame extends Rooms.RoomGame {
 	}
 
 	eliminate(userid) {
-		if (!(userid in this.players)) return false;
-		let name = this.players[userid].name;
+		if (!(userid in this.playerTable)) return false;
+		let name = this.playerTable[userid].name;
 
-		this.players[userid].destroy();
+		this.playerTable[userid].destroy();
 		if (this.childGame && this.childGame.eliminate) this.childGame.eliminate(userid);
 
-		delete this.players[userid];
+		delete this.playerTable[userid];
 		this.playerCount--;
 
 		if (this.leaderboard) {
@@ -223,7 +223,7 @@ class KOGame extends ScavGame {
 	}
 
 	canJoinGame(user) {
-		return this.round === 1 || (user.userid in this.players);
+		return this.round === 1 || (user.userid in this.playerTable);
 	}
 
 	onStartEvent() {
@@ -231,13 +231,13 @@ class KOGame extends ScavGame {
 		if (this.round === 1) {
 			this.announce(`Knockout Games - Round 1.  Everyone is welcome to join!`);
 		} else {
-			let participants = Object.keys(this.players).map(p => this.players[p].name);
+			let participants = Object.keys(this.playerTable).map(p => this.playerTable[p].name);
 			this.announce(`Knockout Games - Round ${this.round}. Only the following ${participants.length} players are allowed to join: ${participants.join(', ')}.`);
 		}
 	}
 
 	onEndEvent() {
-		let completed = this.childGame.completed.map(u => toId(u.name)); // list of userids
+		let completed = this.childGame.completed.map(u => toID(u.name)); // list of userids
 		if (!completed.length) {
 			this.announce(`No one has completed the hunt! This round has been void!`);
 			this.round--;
@@ -247,14 +247,14 @@ class KOGame extends ScavGame {
 
 		if (this.round === 1) {
 			// prune the players that havent finished
-			for (let i in this.players) {
-				if (!(i in this.childGame.players) || !this.childGame.players[i].completed) this.eliminate(i); // user hasnt finished.
+			for (let i in this.playerTable) {
+				if (!(i in this.childGame.playerTable) || !this.childGame.playerTable[i].completed) this.eliminate(i); // user hasnt finished.
 			}
-			this.announce(`Congratulations to ${Chat.toListString(Object.keys(this.players).map(i => this.players[i].name))}! They have completed the first round, and have moved on to the next round!`);
+			this.announce(`Congratulations to ${Chat.toListString(Object.keys(this.playerTable).map(i => this.playerTable[i].name))}! They have completed the first round, and have moved on to the next round!`);
 			return;
 		}
 
-		let unfinished = Object.keys(this.players).filter(id => !completed.includes(id));
+		let unfinished = Object.keys(this.playerTable).filter(id => !completed.includes(id));
 
 		if (!unfinished.length) {
 			unfinished = completed.slice(-1);
@@ -262,9 +262,9 @@ class KOGame extends ScavGame {
 
 		let eliminated = unfinished.map(id => this.eliminate(id)).filter(n => n); // this.eliminate() returns the players name.
 
-		if (Object.keys(this.players).length <= 1) {
+		if (Object.keys(this.playerTable).length <= 1) {
 			// game over
-			let winner = this.players[Object.keys(this.players)[0]];
+			let winner = this.playerTable[Object.keys(this.playerTable)[0]];
 
 			if (winner) {
 				this.announce(`Congratulations to ${winner.name} for winning the Knockout Games!`);
@@ -275,7 +275,7 @@ class KOGame extends ScavGame {
 			return;
 		}
 
-		this.announce(`${Chat.toListString(eliminated.map(n => `<em>${n}</em>`))} ${Chat.plural(eliminated, 'have', 'has')} been eliminated! ${Chat.toListString(Object.keys(this.players).map(p => `<em>${this.players[p].name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
+		this.announce(`${Chat.toListString(eliminated.map(n => `<em>${n}</em>`))} ${Chat.plural(eliminated, 'have', 'has')} been eliminated! ${Chat.toListString(Object.keys(this.playerTable).map(p => `<em>${this.playerTable[p].name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
 	}
 }
 
@@ -285,7 +285,7 @@ class ScavengerGames extends ScavGame {
 	}
 
 	canJoinGame(user) {
-		return this.round === 1 || (user.userid in this.players);
+		return this.round === 1 || (user.userid in this.playerTable);
 	}
 
 	onStartEvent() {
@@ -293,14 +293,14 @@ class ScavengerGames extends ScavGame {
 		if (this.round === 1) {
 			this.announce(`Scavenger Games - Round 1.  Everyone is welcome to join!`);
 		} else {
-			let participants = Object.keys(this.players).map(p => this.players[p].name);
+			let participants = Object.keys(this.playerTable).map(p => this.playerTable[p].name);
 			this.announce(`Scavenger Games - Round ${this.round}. Only the following ${participants.length} players are allowed to join: ${participants.join(', ')}. You have one minute to complete the hunt!`);
 			setImmediate(() => this.childGame.setTimer(1));
 		}
 	}
 
 	onEndEvent() {
-		let completed = this.childGame.completed.map(u => toId(u.name)); // list of userids
+		let completed = this.childGame.completed.map(u => toID(u.name)); // list of userids
 		if (!completed.length) {
 			this.announce(`No one has completed the hunt! This round has been voided!`);
 			this.round--;
@@ -310,20 +310,20 @@ class ScavengerGames extends ScavGame {
 
 		if (this.round === 1) {
 			// prune the players that havent finished
-			for (let i in this.players) {
-				if (!(i in this.childGame.players) || !this.childGame.players[i].completed) this.eliminate(i); // user hasnt finished.
+			for (let i in this.playerTable) {
+				if (!(i in this.childGame.playerTable) || !this.childGame.playerTable[i].completed) this.eliminate(i); // user hasnt finished.
 			}
-			this.announce(`Congratulations to ${Chat.toListString(Object.keys(this.players).map(i => this.players[i].name))}! They have completed the first round, and have moved on to the next round!`);
+			this.announce(`Congratulations to ${Chat.toListString(Object.keys(this.playerTable).map(i => this.playerTable[i].name))}! They have completed the first round, and have moved on to the next round!`);
 			return;
 		}
 
-		let unfinished = Object.keys(this.players).filter(id => !completed.includes(id));
+		let unfinished = Object.keys(this.playerTable).filter(id => !completed.includes(id));
 
 		let eliminated = unfinished.map(id => this.eliminate(id)).filter(n => n); // this.eliminate() returns the players name.
 
-		if (Object.keys(this.players).length <= 1) {
+		if (Object.keys(this.playerTable).length <= 1) {
 			// game over
-			let winner = this.players[Object.keys(this.players)[0]];
+			let winner = this.playerTable[Object.keys(this.playerTable)[0]];
 
 			if (winner) {
 				this.announce(`Congratulations to ${winner.name} for winning the Knockout Games!`);
@@ -334,7 +334,7 @@ class ScavengerGames extends ScavGame {
 			return;
 		}
 
-		this.announce(`${Chat.toListString(eliminated.map(n => `<em>${n}</em>`))} ${Chat.plural(eliminated, 'have', 'has')} been eliminated! ${Chat.toListString(Object.keys(this.players).map(p => `<em>${this.players[p].name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
+		this.announce(`${Chat.toListString(eliminated.map(n => `<em>${n}</em>`))} ${Chat.plural(eliminated, 'have', 'has')} been eliminated! ${Chat.toListString(Object.keys(this.playerTable).map(p => `<em>${this.playerTable[p].name}</em>`))} have successfully completed the last hunt and have moved on to the next round!`);
 	}
 }
 
@@ -436,7 +436,7 @@ class JumpStart extends ScavGame {
 	}
 
 	onEndEvent() {
-		let completed = this.childGame.completed.map(u => toId(u.name)); // list of userids
+		let completed = this.childGame.completed.map(u => toID(u.name)); // list of userids
 		if (!completed.length) {
 			this.announce(`No one has completed the hunt! Better luck next time!`);
 
@@ -445,8 +445,8 @@ class JumpStart extends ScavGame {
 		}
 		if (this.round === 1) {
 			// prune the players that havent finished
-			for (let i in this.players) {
-				if (!(i in this.childGame.players) || !this.childGame.players[i].completed) this.eliminate(i); // user hasnt finished.
+			for (let i in this.playerTable) {
+				if (!(i in this.childGame.playerTable) || !this.childGame.playerTable[i].completed) this.eliminate(i); // user hasnt finished.
 			}
 			this.announce(`The early distribution of hints will start in one minute!`);
 
@@ -498,8 +498,8 @@ class PointRally extends ScavGame {
 		if (this.childGame && this.childGame.destroy) this.childGame.destroy();
 		this.room.game = null;
 		this.room = null;
-		for (let i in this.players) {
-			this.players[i].destroy();
+		for (let i in this.playerTable) {
+			this.playerTable[i].destroy();
 		}
 	}
 }
@@ -520,12 +520,12 @@ class Incognito extends ScavGame {
 	onSubmit(user, value) {
 		if (this.childGame && this.childGame.onSubmit) {
 			// intercept handling of the last question
-			if (user.userid in this.childGame.players && this.childGame.players[user.userid].currentQuestion + 1 >= this.childGame.questions.length) {
+			if (user.userid in this.childGame.playerTable && this.childGame.playerTable[user.userid].currentQuestion + 1 >= this.childGame.questions.length) {
 				let hunt = this.childGame;
 
-				value = toId(value);
+				value = toID(value);
 
-				let player = hunt.players[user.userid];
+				let player = hunt.playerTable[user.userid];
 				if (player.completed) {
 					if (!this.blind) return;
 					return player.sendRoom(`That may or may not be the right answer - if you aren't confident, you can try again!`);
@@ -551,7 +551,7 @@ class Incognito extends ScavGame {
 	markComplete(player) {
 		if (player.completed) return false;
 
-		if (this.childGame.preCompleted.find(p => toId(p.name) === player.userid)) return false;
+		if (this.childGame.preCompleted.find(p => toID(p.name) === player.userid)) return false;
 
 		let now = Date.now();
 		let time = Chat.toDurationString(now - this.childGame.startTime, {hhmmss: true});

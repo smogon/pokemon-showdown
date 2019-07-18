@@ -296,7 +296,6 @@ let BattleMovedex = {
 		},
 		willCrit: true,
 		accuracy: true,
-		onTryHitPriority: 10,
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},
@@ -317,7 +316,6 @@ let BattleMovedex = {
 		basePower: 60,
 		willCrit: true,
 		accuracy: true,
-		onTryHitPriority: 10,
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},
@@ -335,7 +333,6 @@ let BattleMovedex = {
 		basePower: 70,
 		willCrit: true,
 		accuracy: true,
-		onTryHitPriority: 10,
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},
@@ -361,7 +358,6 @@ let BattleMovedex = {
 		basePower: 95,
 		willCrit: true,
 		accuracy: true,
-		onTryHitPriority: 10,
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},
@@ -381,7 +377,6 @@ let BattleMovedex = {
 		basePower: 95,
 		willCrit: true,
 		accuracy: true,
-		onTryHitPriority: 10,
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},
@@ -399,7 +394,6 @@ let BattleMovedex = {
 		basePower: 95,
 		willCrit: true,
 		accuracy: true,
-		onTryHitPriority: 10,
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},
@@ -417,7 +411,6 @@ let BattleMovedex = {
 		basePower: 60,
 		willCrit: true,
 		accuracy: true,
-		onTryHitPriority: 10,
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},
@@ -431,7 +424,6 @@ let BattleMovedex = {
 		basePower: 60,
 		willCrit: true,
 		accuracy: true,
-		onTryHitPriority: 10,
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},
@@ -451,7 +443,6 @@ let BattleMovedex = {
 		basePower: 60,
 		willCrit: true,
 		accuracy: true,
-		onTryHitPriority: 10,
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},
@@ -471,7 +462,6 @@ let BattleMovedex = {
 		basePower: 60,
 		willCrit: true,
 		accuracy: true,
-		onTryHitPriority: 10,
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},
@@ -491,7 +481,6 @@ let BattleMovedex = {
 		basePower: 60,
 		willCrit: true,
 		accuracy: true,
-		onTryHitPriority: 10,
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},
@@ -509,7 +498,6 @@ let BattleMovedex = {
 		basePower: 40,
 		willCrit: true,
 		accuracy: true,
-		onTryHitPriority: 10,
 		onTryHit(target) {
 			target.removeVolatile('substitute');
 		},
@@ -678,6 +666,7 @@ let BattleMovedex = {
 					let moveData = /** @type {ActiveMove} */ ({
 						damage: this.effectData.totalDamage * 2,
 					});
+					// @ts-ignore FIXME
 					this.moveHit(target, pokemon, 'bide', moveData);
 					return false;
 				}
@@ -870,7 +859,7 @@ let BattleMovedex = {
 	silverwind: {
 		inherit: true,
 		basePowerCallback() {
-			if (this.isWeather('hail')) {
+			if (this.field.isWeather('hail')) {
 				return 90;
 			}
 			return 60;
@@ -904,7 +893,7 @@ let BattleMovedex = {
 	ominouswind: {
 		inherit: true,
 		basePowerCallback() {
-			if (this.isWeather('hail')) {
+			if (this.field.isWeather('hail')) {
 				return 90;
 			}
 			return 60;
@@ -977,10 +966,10 @@ let BattleMovedex = {
 			if (lastAttackedBy) {
 				if (lastAttackedBy.damage > 0 && lastAttackedBy.thisTurn) {
 					this.debug('Boosted for getting hit by ' + lastAttackedBy.move);
-					return this.isWeather('hail') ? 180 : 120;
+					return this.field.isWeather('hail') ? 180 : 120;
 				}
 			}
-			return this.isWeather('hail') ? 90 : 60;
+			return this.field.isWeather('hail') ? 90 : 60;
 		},
 		desc: "Power doubles if the user was hit by the target this turn. If the weather is set to hail, this move does 1.5x more damage.",
 		shortDesc: "Power doubles if user is damaged by the target.",
@@ -1232,7 +1221,7 @@ let BattleMovedex = {
 	scald: {
 		inherit: true,
 		onModifyMove(move) {
-			switch (this.effectiveWeather()) {
+			switch (this.field.effectiveWeather()) {
 			case 'sunnyday':
 				// @ts-ignore
 				move.secondary.chance = 60;
@@ -1245,7 +1234,7 @@ let BattleMovedex = {
 		inherit: true,
 		accuracy: 100,
 		onModifyMove(move) {
-			switch (this.effectiveWeather()) {
+			switch (this.field.effectiveWeather()) {
 			case 'sunnyday':
 				// @ts-ignore
 				move.secondary.chance = 60;
@@ -1281,11 +1270,8 @@ let BattleMovedex = {
 		isViable: true,
 		ignoreImmunity: true,
 		onHit(target, source) {
-			target.side.addSideCondition('futuremove');
-			if (target.side.sideConditions['futuremove'].positions[target.position]) {
-				return false;
-			}
-			target.side.sideConditions['futuremove'].positions[target.position] = {
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				duration: 3,
 				move: 'echoedvoice',
 				source: source,
@@ -1302,7 +1288,7 @@ let BattleMovedex = {
 					isFutureMove: true,
 					type: 'Normal',
 				},
-			};
+			});
 			this.add('-start', source, 'move: Echoed Voice');
 			return null;
 		},

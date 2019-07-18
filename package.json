@@ -5,15 +5,14 @@
   "version": "0.11.2",
   "dependencies": {
     "probe-image-size": "^4.0.0",
-    "replace": "^1.0.1",
-    "sockjs": "0.3.18",
-    "sucrase": "^3.9.5"
+    "sockjs": "0.3.19",
+    "sucrase": "^3.10.1"
   },
   "optionalDependencies": {
-    "cloud-env": "^0.2.2",
-    "node-oom-heapdump": "^1.0.10",
-    "node-static": "^0.7.10",
-    "nodemailer": "^4.6.8",
+    "cloud-env": "^0.2.3",
+    "node-oom-heapdump": "^1.1.4",
+    "node-static": "^0.7.11",
+    "nodemailer": "^6.2.1",
     "permessage-deflate": "^0.1.6"
   },
   "engines": {
@@ -22,9 +21,12 @@
   "scripts": {
     "start": "node pokemon-showdown start",
     "build": "node build",
-    "test": "eslint --cache . && tslint --project . && node build && mocha && tsc",
     "tsc": "tsc",
-    "lint": "eslint --cache ."
+    "lint": "eslint --cache . && tslint --project .",
+    "pretest": "npm run lint && npm run build",
+    "test": "mocha",
+    "posttest": "npm run tsc",
+    "fulltest": "npm run pretest && mocha -g \".*\" && npm run posttest"
   },
   "husky": {
     "hooks": {
@@ -58,14 +60,14 @@
   "license": "MIT",
   "devDependencies": {
     "@types/cloud-env": "^0.2.0",
-    "@types/node": "^8.10.36",
-    "@types/node-static": "^0.7.2",
-    "@types/nodemailer": "^4.6.5",
+    "@types/node": "^12.0.2",
+    "@types/node-static": "^0.7.3",
+    "@types/nodemailer": "^6.1.0",
     "@types/sockjs": "^0.3.31",
-    "eslint": "^5.13.0",
-    "husky": "^1.1.2",
-    "mocha": "^5.2.0",
-    "tslint": "^5.13.0",
-    "typescript": "~3.3.3333"
+    "eslint": "^5.16.0",
+    "husky": "^2.3.0",
+    "mocha": "^6.1.4",
+    "tslint": "^5.16.0",
+    "typescript": "^3.5.0"
   }
 }

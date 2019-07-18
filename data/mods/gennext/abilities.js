@@ -5,7 +5,7 @@ let BattleAbilities = {
 	"swiftswim": {
 		inherit: true,
 		onModifySpe(spe, pokemon) {
-			if (this.isWeather(['raindance', 'primordialsea'])) {
+			if (this.field.isWeather(['raindance', 'primordialsea'])) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -14,7 +14,7 @@ let BattleAbilities = {
 	"chlorophyll": {
 		inherit: true,
 		onModifySpe(spe) {
-			if (this.isWeather(['sunnyday', 'desolateland'])) {
+			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -23,7 +23,7 @@ let BattleAbilities = {
 	"sandrush": {
 		inherit: true,
 		onModifySpe(spe, pokemon) {
-			if (this.isWeather('sandstorm')) {
+			if (this.field.isWeather('sandstorm')) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -32,7 +32,7 @@ let BattleAbilities = {
 	"slushrush": {
 		inherit: true,
 		onModifySpe(spe, pokemon) {
-			if (this.isWeather('hail')) {
+			if (this.field.isWeather('hail')) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -45,8 +45,8 @@ let BattleAbilities = {
 				let weather = move.weather;
 				move.weather = '';
 				move.onHit = function (target, source) {
-					this.setWeather(weather, source, this.getAbility('forecast'));
-					this.weatherData.duration = 0;
+					this.field.setWeather(weather, source, this.getAbility('forecast'));
+					this.field.weatherData.duration = 0;
 				};
 				move.target = 'self';
 			}
@@ -85,7 +85,7 @@ let BattleAbilities = {
 	"snowcloak": {
 		inherit: true,
 		onSourceBasePower(basePower) {
-			if (this.isWeather('hail')) {
+			if (this.field.isWeather('hail')) {
 				return basePower * 3 / 4;
 			}
 			return basePower * 7 / 8;
@@ -99,7 +99,7 @@ let BattleAbilities = {
 		desc: "If Sandstorm is active, attacks against this Pokemon do 25% less than normal. If Sandstorm is not active, attacks against this Pokemon do 12.5% less than normal. This Pokemon takes no damage from Sandstorm.",
 		shortDesc: "If Sandstorm is active, attacks against this Pokemon do 25% less; immunity to Sandstorm.",
 		onSourceBasePower(basePower) {
-			if (this.isWeather('sandstorm')) {
+			if (this.field.isWeather('sandstorm')) {
 				return basePower * 4 / 5;
 			}
 		},
@@ -108,7 +108,7 @@ let BattleAbilities = {
 	"waterveil": {
 		inherit: true,
 		onSourceBasePower(basePower) {
-			if (this.isWeather(['raindance', 'primordialsea'])) {
+			if (this.field.isWeather(['raindance', 'primordialsea'])) {
 				return basePower * 3 / 4;
 			}
 			return basePower * 7 / 8;
@@ -124,7 +124,7 @@ let BattleAbilities = {
 			this.heal(target.maxhp / 16);
 		},
 		onAfterDamage(damage, target, source, move) {
-			if (move && move.flags['contact'] && this.isWeather('hail')) {
+			if (move && move.flags['contact'] && this.field.isWeather('hail')) {
 				if (this.randomChance(3, 10)) {
 					source.trySetStatus('frz', target);
 				}
@@ -176,15 +176,15 @@ let BattleAbilities = {
 				let weather = move.weather;
 				move.weather = '';
 				move.onHit = function (target, source) {
-					this.setWeather(weather, source, this.getAbility('flowergift'));
-					this.weatherData.duration = 0;
+					this.field.setWeather(weather, source, this.getAbility('flowergift'));
+					this.field.weatherData.duration = 0;
 				};
 				move.target = 'self';
 				move.sideCondition = 'flowergift';
 			}
 		},
 		onUpdate(pokemon) {
-			if (this.isWeather(['sunnyday', 'desolateland'])) {
+			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
 				if (pokemon.isActive && pokemon.speciesid === 'cherrim' && this.effectData.forme !== 'Sunshine') {
 					this.effectData.forme = 'Sunshine';
 					this.add('-formechange', pokemon, 'Cherrim-Sunshine', '[msg]');
@@ -258,7 +258,7 @@ let BattleAbilities = {
 		inherit: true,
 		shortDesc: "This Pokemon receives 1/2 damage from supereffective attacks.",
 		onSourceModifyDamage(damage, attacker, defender, move) {
-			if (move.typeMod > 0) {
+			if (defender.getMoveHitData(move).typeMod > 0) {
 				this.add('-message', "The attack was weakened by Solid Rock!");
 				return this.chainModify(0.5);
 			}
@@ -268,7 +268,7 @@ let BattleAbilities = {
 		inherit: true,
 		shortDesc: "This Pokemon receives 1/2 damage from supereffective attacks.",
 		onSourceModifyDamage(damage, attacker, defender, move) {
-			if (move.typeMod > 0) {
+			if (defender.getMoveHitData(move).typeMod > 0) {
 				this.add('-message', "The attack was weakened by Filter!");
 				return this.chainModify(0.5);
 			}
@@ -339,8 +339,8 @@ let BattleAbilities = {
 			let totalspd = 0;
 			for (const foe of pokemon.side.foe.active) {
 				if (!foe || foe.fainted) continue;
-				totaldef += foe.stats.def;
-				totalspd += foe.stats.spd;
+				totaldef += foe.storedStats.def;
+				totalspd += foe.storedStats.spd;
 			}
 			if (totaldef && totaldef >= totalspd) {
 				this.boost({spa: 1});
@@ -508,8 +508,8 @@ let BattleAbilities = {
 		onResidualOrder: 26,
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
-			if (!pokemon.gluttonyFlag && !pokemon.item && this.getItem(pokemon.lastItem).isBerry) {
-				pokemon.gluttonyFlag = true;
+			if (!pokemon.m.gluttonyFlag && !pokemon.item && this.getItem(pokemon.lastItem).isBerry) {
+				pokemon.m.gluttonyFlag = true;
 				pokemon.setItem(pokemon.lastItem);
 				pokemon.lastItem = '';
 				this.add("-item", pokemon, pokemon.item, '[from] ability: Gluttony');
@@ -592,7 +592,7 @@ let BattleAbilities = {
 			pokemon.maybeDisabled = true;
 		},
 		onFoeBeforeMove(attacker, defender, move) {
-			if (move.id !== 'struggle' && this.effectData.target.hasMove(move.id)) {
+			if (move.id !== 'struggle' && this.effectData.target.hasMove(move.id) && !move.isZ) {
 				this.add('cant', attacker, 'move: Imprison', move);
 				return false;
 			}
@@ -680,6 +680,7 @@ let BattleAbilities = {
 		},
 		onFoeMaybeTrapPokemon(pokemon, source) {
 			if (!source) source = this.effectData.target;
+			if (!source || !this.isAdjacent(pokemon, source)) return;
 			if (pokemon.ability !== 'shadowtag' && !source.volatiles.shadowtag) {
 				pokemon.maybeTrapped = true;
 			}

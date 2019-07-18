@@ -20,7 +20,7 @@ Ratings and how they work:
 
  2: Situationally useful
 	  An ability that can be useful in certain situations.
-	ex. Blaze, Insomnia
+	ex. Clear Body, Static
 
  3: Useful
 	  An ability that is generally useful.
@@ -43,7 +43,7 @@ let BattleAbilities = {
 	"noability": {
 		shortDesc: "Does nothing.",
 		id: "noability",
-		isNonstandard: "gen2",
+		isNonstandard: "Past",
 		name: "No Ability",
 		rating: 0.1,
 		num: 0,
@@ -109,8 +109,7 @@ let BattleAbilities = {
 		onBasePowerPriority: 8,
 		onBasePower(basePower, pokemon) {
 			let boosted = true;
-			let allActives = pokemon.side.active.concat(pokemon.side.foe.active);
-			for (const target of allActives) {
+			for (const target of this.getAllActive()) {
 				if (target === pokemon) continue;
 				if (this.willMove(target)) {
 					boosted = false;
@@ -132,7 +131,7 @@ let BattleAbilities = {
 		shortDesc: "If this Pokemon (not its substitute) takes a critical hit, its Attack is raised 12 stages.",
 		onHit(target, source, move) {
 			if (!target.hp) return;
-			if (move && move.effectType === 'Move' && move.crit) {
+			if (move && move.effectType === 'Move' && target.getMoveHitData(move).crit) {
 				target.setBoost({atk: 6});
 				this.add('-setboost', target, 'atk', 12, '[from] ability: Anger Point');
 			}
@@ -143,14 +142,15 @@ let BattleAbilities = {
 		num: 83,
 	},
 	"anticipation": {
-		desc: "On switch-in, this Pokemon is alerted if any opposing Pokemon has an attack that is super effective on this Pokemon, or an OHKO move. Counter, Metal Burst, and Mirror Coat count as attacking moves of their respective types, while Hidden Power, Judgment, Natural Gift, Techno Blast, and Weather Ball are considered Normal-type moves.",
+		desc: "On switch-in, this Pokemon is alerted if any opposing Pokemon has an attack that is super effective on this Pokemon, or an OHKO move. Counter, Metal Burst, and Mirror Coat count as attacking moves of their respective types, Hidden Power counts as its determined type, and Judgment, Multi-Attack, Natural Gift, Revelation Dance, Techno Blast, and Weather Ball are considered Normal-type moves.",
 		shortDesc: "On switch-in, this Pokemon shudders if any foe has a supereffective or OHKO move.",
 		onStart(pokemon) {
 			for (const target of pokemon.side.foe.active) {
-				if (target.fainted) continue;
+				if (!target || target.fainted) continue;
 				for (const moveSlot of target.moveSlots) {
-					let move = this.getMove(moveSlot.move);
-					if (move.category !== 'Status' && (this.getImmunity(move.type, pokemon) && this.getEffectiveness(move.type, pokemon) > 0 || move.ohko)) {
+					const move = this.getMove(moveSlot.move);
+					const moveType = move.id === 'hiddenpower' ? target.hpType : move.type;
+					if (move.category !== 'Status' && (this.getImmunity(moveType, pokemon) && this.getEffectiveness(moveType, pokemon) > 0 || move.ohko)) {
 						this.add('-ability', pokemon, 'Anticipation');
 						return;
 					}
@@ -173,7 +173,7 @@ let BattleAbilities = {
 		},
 		onFoeMaybeTrapPokemon(pokemon, source) {
 			if (!source) source = this.effectData.target;
-			if (!this.isAdjacent(pokemon, source)) return;
+			if (!source || !this.isAdjacent(pokemon, source)) return;
 			if (pokemon.isGrounded(!pokemon.knownType)) { // Negate immunity if the type is unknown
 				pokemon.maybeTrapped = true;
 			}
@@ -235,7 +235,7 @@ let BattleAbilities = {
 	},
 	"battery": {
 		shortDesc: "This Pokemon's allies have the power of their special attacks multiplied by 1.3.",
-		onBasePowerPriority: 8,
+		onAllyBasePowerPriority: 8,
 		onAllyBasePower(basePower, attacker, defender, move) {
 			if (attacker !== this.effectData.target && move.category === 'Special') {
 				this.debug('Battery boost');
@@ -280,15 +280,17 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon's highest stat is raised by 1 if it attacks and KOes another Pokemon.",
 		onSourceFaint(target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
-				let stat = 'atk';
+				let statName = 'atk';
 				let bestStat = 0;
-				for (let i in source.stats) {
-					if (source.stats[i] > bestStat) {
-						stat = i;
-						bestStat = source.stats[i];
+				/** @type {StatNameExceptHP} */
+				let s;
+				for (s in source.storedStats) {
+					if (source.storedStats[s] > bestStat) {
+						statName = s;
+						bestStat = source.storedStats[s];
 					}
 				}
-				this.boost({[stat]: 1}, source);
+				this.boost({[statName]: 1}, source);
 			}
 		},
 		id: "beastboost",
@@ -301,7 +303,10 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon's Sp. Atk is raised by 1 when it reaches 1/2 or less of its max HP.",
 		onAfterMoveSecondary(target, source, move) {
 			if (!source || source === target || !target.hp || !move.totalDamage) return;
-			if (target.hp <= target.maxhp / 2 && target.hp + move.totalDamage > target.maxhp / 2) {
+			const lastAttackedBy = target.getLastAttackedBy();
+			if (!lastAttackedBy) return;
+			const damage = move.multihit ? move.totalDamage : lastAttackedBy.damage;
+			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
 				this.boost({spa: 1});
 			}
 		},
@@ -343,7 +348,7 @@ let BattleAbilities = {
 		},
 		id: "blaze",
 		name: "Blaze",
-		rating: 2,
+		rating: 2.5,
 		num: 66,
 	},
 	"bulletproof": {
@@ -374,7 +379,7 @@ let BattleAbilities = {
 	"chlorophyll": {
 		shortDesc: "If Sunny Day is active, this Pokemon's Speed is doubled.",
 		onModifySpe(spe) {
-			if (this.isWeather(['sunnyday', 'desolateland'])) {
+			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
 				return this.chainModify(2);
 			}
 		},
@@ -422,7 +427,7 @@ let BattleAbilities = {
 			let type = move.type;
 			if (target.isActive && move.effectType === 'Move' && move.category !== 'Status' && type !== '???' && !target.hasType(type)) {
 				if (!target.setType(type)) return false;
-				this.add('-start', target, 'typechange', type, '[from] Color Change');
+				this.add('-start', target, 'typechange', type, '[from] ability: Color Change');
 
 				if (target.side.active.length === 2 && target.position === 1) {
 					// Curse Glitch
@@ -603,7 +608,7 @@ let BattleAbilities = {
 		},
 		id: "dazzling",
 		name: "Dazzling",
-		rating: 3,
+		rating: 2.5,
 		num: 219,
 	},
 	"defeatist": {
@@ -653,23 +658,21 @@ let BattleAbilities = {
 		desc: "On switch-in, the weather becomes strong winds that remove the weaknesses of the Flying type from Flying-type Pokemon. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by Desolate Land or Primordial Sea.",
 		shortDesc: "On switch-in, strong winds begin until this Ability is not active in battle.",
 		onStart(source) {
-			this.setWeather('deltastream');
+			this.field.setWeather('deltastream');
 		},
 		onAnySetWeather(target, source, weather) {
-			if (this.getWeather().id === 'deltastream' && !['desolateland', 'primordialsea', 'deltastream'].includes(weather.id)) return false;
+			if (this.field.getWeather().id === 'deltastream' && !['desolateland', 'primordialsea', 'deltastream'].includes(weather.id)) return false;
 		},
 		onEnd(pokemon) {
-			if (this.weatherData.source !== pokemon) return;
-			for (const side of this.sides) {
-				for (const target of side.active) {
-					if (target === pokemon) continue;
-					if (target && target.hp && target.hasAbility('deltastream')) {
-						this.weatherData.source = target;
-						return;
-					}
+			if (this.field.weatherData.source !== pokemon) return;
+			for (const target of this.getAllActive()) {
+				if (target === pokemon) continue;
+				if (target.hasAbility('deltastream')) {
+					this.field.weatherData.source = target;
+					return;
 				}
 			}
-			this.clearWeather();
+			this.field.clearWeather();
 		},
 		id: "deltastream",
 		name: "Delta Stream",
@@ -680,23 +683,21 @@ let BattleAbilities = {
 		desc: "On switch-in, the weather becomes extremely harsh sunlight that prevents damaging Water-type moves from executing, in addition to all the effects of Sunny Day. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by Delta Stream or Primordial Sea.",
 		shortDesc: "On switch-in, extremely harsh sunlight begins until this Ability is not active in battle.",
 		onStart(source) {
-			this.setWeather('desolateland');
+			this.field.setWeather('desolateland');
 		},
 		onAnySetWeather(target, source, weather) {
-			if (this.getWeather().id === 'desolateland' && !['desolateland', 'primordialsea', 'deltastream'].includes(weather.id)) return false;
+			if (this.field.getWeather().id === 'desolateland' && !['desolateland', 'primordialsea', 'deltastream'].includes(weather.id)) return false;
 		},
 		onEnd(pokemon) {
-			if (this.weatherData.source !== pokemon) return;
-			for (const side of this.sides) {
-				for (const target of side.active) {
-					if (target === pokemon) continue;
-					if (target && target.hp && target.hasAbility('desolateland')) {
-						this.weatherData.source = target;
-						return;
-					}
+			if (this.field.weatherData.source !== pokemon) return;
+			for (const target of this.getAllActive()) {
+				if (target === pokemon) continue;
+				if (target.hasAbility('desolateland')) {
+					this.field.weatherData.source = target;
+					return;
 				}
 			}
-			this.clearWeather();
+			this.field.clearWeather();
 		},
 		id: "desolateland",
 		name: "Desolate Land",
@@ -750,7 +751,7 @@ let BattleAbilities = {
 		},
 		id: "download",
 		name: "Download",
-		rating: 4,
+		rating: 3.5,
 		num: 88,
 	},
 	"drizzle": {
@@ -760,7 +761,7 @@ let BattleAbilities = {
 				if (action.choice === 'runPrimal' && action.pokemon === source && source.template.speciesid === 'kyogre') return;
 				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
 			}
-			this.setWeather('raindance');
+			this.field.setWeather('raindance');
 		},
 		id: "drizzle",
 		name: "Drizzle",
@@ -774,7 +775,7 @@ let BattleAbilities = {
 				if (action.choice === 'runPrimal' && action.pokemon === source && source.template.speciesid === 'groudon') return;
 				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
 			}
-			this.setWeather('sunnyday');
+			this.field.setWeather('sunnyday');
 		},
 		id: "drought",
 		name: "Drought",
@@ -792,7 +793,7 @@ let BattleAbilities = {
 				return null;
 			}
 		},
-		onBasePowerPriority: 7,
+		onFoeBasePowerPriority: 7,
 		onFoeBasePower(basePower, attacker, defender, move) {
 			if (this.effectData.target !== defender) return;
 			if (move.type === 'Fire') {
@@ -842,7 +843,7 @@ let BattleAbilities = {
 	"electricsurge": {
 		shortDesc: "On switch-in, this Pokemon summons Electric Terrain.",
 		onStart(source) {
-			this.setTerrain('electricterrain');
+			this.field.setTerrain('electricterrain');
 		},
 		id: "electricsurge",
 		name: "Electric Surge",
@@ -854,7 +855,10 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon switches out when it reaches 1/2 or less of its maximum HP.",
 		onAfterMoveSecondary(target, source, move) {
 			if (!source || source === target || !target.hp || !move.totalDamage) return;
-			if (target.hp <= target.maxhp / 2 && target.hp + move.totalDamage > target.maxhp / 2) {
+			const lastAttackedBy = target.getLastAttackedBy();
+			if (!lastAttackedBy) return;
+			const damage = move.multihit ? move.totalDamage : lastAttackedBy.damage;
+			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
 				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
 				target.switchFlag = true;
 				source.switchFlag = false;
@@ -895,7 +899,7 @@ let BattleAbilities = {
 	"filter": {
 		shortDesc: "This Pokemon receives 3/4 damage from supereffective attacks.",
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.typeMod > 0) {
+			if (target.getMoveHitData(move).typeMod > 0) {
 				this.debug('Filter neutralize');
 				return this.chainModify(0.75);
 			}
@@ -984,7 +988,7 @@ let BattleAbilities = {
 		},
 		onUpdate(pokemon) {
 			if (!pokemon.isActive || pokemon.baseTemplate.baseSpecies !== 'Cherrim' || pokemon.transformed) return;
-			if (this.isWeather(['sunnyday', 'desolateland'])) {
+			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
 				if (pokemon.template.speciesid !== 'cherrimsunshine') {
 					pokemon.formeChange('Cherrim-Sunshine', this.effect, false, '[msg]');
 				}
@@ -994,23 +998,23 @@ let BattleAbilities = {
 				}
 			}
 		},
-		onModifyAtkPriority: 3,
+		onAllyModifyAtkPriority: 3,
 		onAllyModifyAtk(atk) {
 			if (this.effectData.target.baseTemplate.baseSpecies !== 'Cherrim') return;
-			if (this.isWeather(['sunnyday', 'desolateland'])) {
+			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpDPriority: 4,
 		onAllyModifySpD(spd) {
 			if (this.effectData.target.baseTemplate.baseSpecies !== 'Cherrim') return;
-			if (this.isWeather(['sunnyday', 'desolateland'])) {
+			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
 				return this.chainModify(1.5);
 			}
 		},
 		id: "flowergift",
 		name: "Flower Gift",
-		rating: 2.5,
+		rating: 2,
 		num: 122,
 	},
 	"flowerveil": {
@@ -1070,7 +1074,7 @@ let BattleAbilities = {
 		onUpdate(pokemon) {
 			if (pokemon.baseTemplate.baseSpecies !== 'Castform' || pokemon.transformed) return;
 			let forme = null;
-			switch (this.effectiveWeather()) {
+			switch (this.field.effectiveWeather()) {
 			case 'sunnyday':
 			case 'desolateland':
 				if (pokemon.template.speciesid !== 'castformsunny') forme = 'Castform-Sunny';
@@ -1242,7 +1246,7 @@ let BattleAbilities = {
 		shortDesc: "If Grassy Terrain is active, this Pokemon's Defense is multiplied by 1.5.",
 		onModifyDefPriority: 6,
 		onModifyDef(pokemon) {
-			if (this.isTerrain('grassyterrain')) return this.chainModify(1.5);
+			if (this.field.isTerrain('grassyterrain')) return this.chainModify(1.5);
 		},
 		id: "grasspelt",
 		name: "Grass Pelt",
@@ -1252,7 +1256,7 @@ let BattleAbilities = {
 	"grassysurge": {
 		shortDesc: "On switch-in, this Pokemon summons Grassy Terrain.",
 		onStart(source) {
-			this.setTerrain('grassyterrain');
+			this.field.setTerrain('grassyterrain');
 		},
 		id: "grassysurge",
 		name: "Grassy Surge",
@@ -1281,7 +1285,7 @@ let BattleAbilities = {
 		onResidualOrder: 26,
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
-			if (this.isWeather(['sunnyday', 'desolateland']) || this.randomChance(1, 2)) {
+			if (this.field.isWeather(['sunnyday', 'desolateland']) || this.randomChance(1, 2)) {
 				if (pokemon.hp && !pokemon.item && this.getItem(pokemon.lastItem).isBerry) {
 					pokemon.setItem(pokemon.lastItem);
 					pokemon.lastItem = '';
@@ -1316,7 +1320,7 @@ let BattleAbilities = {
 	"heatproof": {
 		desc: "The power of Fire-type attacks against this Pokemon is halved, and burn damage taken is halved.",
 		shortDesc: "The power of Fire-type attacks against this Pokemon is halved; burn damage halved.",
-		onBasePowerPriority: 7,
+		onSourceBasePowerPriority: 7,
 		onSourceBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Fire') {
 				return this.chainModify(0.5);
@@ -1376,7 +1380,7 @@ let BattleAbilities = {
 		},
 		id: "hustle",
 		name: "Hustle",
-		rating: 3,
+		rating: 3.5,
 		num: 55,
 	},
 	"hydration": {
@@ -1385,7 +1389,7 @@ let BattleAbilities = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 1,
 		onResidual(pokemon) {
-			if (pokemon.status && this.isWeather(['raindance', 'primordialsea'])) {
+			if (pokemon.status && this.field.isWeather(['raindance', 'primordialsea'])) {
 				this.debug('hydration');
 				this.add('-activate', pokemon, 'ability: Hydration');
 				pokemon.cureStatus();
@@ -1651,13 +1655,13 @@ let BattleAbilities = {
 		desc: "If Sunny Day is active, this Pokemon cannot gain a major status condition and Rest will fail for it.",
 		shortDesc: "If Sunny Day is active, this Pokemon cannot be statused and Rest will fail for it.",
 		onSetStatus(status, target, source, effect) {
-			if (this.isWeather(['sunnyday', 'desolateland'])) {
+			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
 				if (effect && effect.status) this.add('-immune', target, '[from] ability: Leaf Guard');
 				return false;
 			}
 		},
 		onTryAddVolatile(status, target) {
-			if (status.id === 'yawn' && this.isWeather(['sunnyday', 'desolateland'])) {
+			if (status.id === 'yawn' && this.field.isWeather(['sunnyday', 'desolateland'])) {
 				this.add('-immune', target, '[from] ability: Leaf Guard');
 				return null;
 			}
@@ -1862,7 +1866,8 @@ let BattleAbilities = {
 		},
 		onFoeMaybeTrapPokemon(pokemon, source) {
 			if (!source) source = this.effectData.target;
-			if ((!pokemon.knownType || pokemon.hasType('Steel')) && this.isAdjacent(pokemon, source)) {
+			if (!source || !this.isAdjacent(pokemon, source)) return;
+			if (!pokemon.knownType || pokemon.hasType('Steel')) {
 				pokemon.maybeTrapped = true;
 			}
 		},
@@ -1931,7 +1936,7 @@ let BattleAbilities = {
 	"mistysurge": {
 		shortDesc: "On switch-in, this Pokemon summons Misty Terrain.",
 		onStart(source) {
-			this.setTerrain('mistyterrain');
+			this.field.setTerrain('mistyterrain');
 		},
 		id: "mistysurge",
 		name: "Misty Surge",
@@ -2053,7 +2058,7 @@ let BattleAbilities = {
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.multihitType === 'parentalbond' && move.hit > 1) return this.chainModify(0.25);
 		},
-		rating: 2,
+		rating: 2.5,
 		num: 152,
 	},
 	"naturalcure": {
@@ -2133,7 +2138,7 @@ let BattleAbilities = {
 
 			// only reset .showCure if it's false
 			// (once you know a Pokemon has Natural Cure, its cures are always known)
-			if (!pokemon.showCure) delete pokemon.showCure;
+			if (!pokemon.showCure) pokemon.showCure = undefined;
 		},
 		id: "naturalcure",
 		name: "Natural Cure",
@@ -2143,7 +2148,7 @@ let BattleAbilities = {
 	"neuroforce": {
 		shortDesc: "This Pokemon's attacks that are super effective against the target do 1.25x damage.",
 		onModifyDamage(damage, source, target, move) {
-			if (move && move.typeMod > 0) {
+			if (move && target.getMoveHitData(move).typeMod > 0) {
 				return this.chainModify([0x1400, 0x1000]);
 			}
 		},
@@ -2249,7 +2254,7 @@ let BattleAbilities = {
 		},
 		id: "overgrow",
 		name: "Overgrow",
-		rating: 2,
+		rating: 2.5,
 		num: 65,
 	},
 	"owntempo": {
@@ -2305,17 +2310,17 @@ let BattleAbilities = {
 		onResidual(pokemon) {
 			if (pokemon.item) return;
 			let pickupTargets = [];
-			for (const target of pokemon.side.active.concat(pokemon.side.foe.active)) {
+			for (const target of this.getAllActive()) {
 				if (target.lastItem && target.usedItemThisTurn && this.isAdjacent(pokemon, target)) {
 					pickupTargets.push(target);
 				}
 			}
 			if (!pickupTargets.length) return;
 			let randomTarget = this.sample(pickupTargets);
-			pokemon.setItem(randomTarget.lastItem);
+			let item = randomTarget.lastItem;
 			randomTarget.lastItem = '';
-			let item = pokemon.getItem();
-			this.add('-item', pokemon, item, '[from] ability: Pickup');
+			this.add('-item', pokemon, this.getItem(item), '[from] ability: Pickup');
+			pokemon.setItem(item);
 		},
 		id: "pickup",
 		name: "Pickup",
@@ -2344,7 +2349,7 @@ let BattleAbilities = {
 		},
 		id: "pickpocket",
 		name: "Pickpocket",
-		rating: 1,
+		rating: 1.5,
 		num: 124,
 	},
 	"pixilate": {
@@ -2449,7 +2454,7 @@ let BattleAbilities = {
 		},
 		id: "powerconstruct",
 		name: "Power Construct",
-		rating: 4,
+		rating: 5,
 		num: 211,
 	},
 	"powerofalchemy": {
@@ -2493,30 +2498,28 @@ let BattleAbilities = {
 		},
 		id: "pressure",
 		name: "Pressure",
-		rating: 2,
+		rating: 2.5,
 		num: 46,
 	},
 	"primordialsea": {
 		desc: "On switch-in, the weather becomes heavy rain that prevents damaging Fire-type moves from executing, in addition to all the effects of Rain Dance. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by Delta Stream or Desolate Land.",
 		shortDesc: "On switch-in, heavy rain begins until this Ability is not active in battle.",
 		onStart(source) {
-			this.setWeather('primordialsea');
+			this.field.setWeather('primordialsea');
 		},
 		onAnySetWeather(target, source, weather) {
-			if (this.getWeather().id === 'primordialsea' && !['desolateland', 'primordialsea', 'deltastream'].includes(weather.id)) return false;
+			if (this.field.getWeather().id === 'primordialsea' && !['desolateland', 'primordialsea', 'deltastream'].includes(weather.id)) return false;
 		},
 		onEnd(pokemon) {
-			if (this.weatherData.source !== pokemon) return;
-			for (const side of this.sides) {
-				for (const target of side.active) {
-					if (target === pokemon) continue;
-					if (target && target.hp && target.hasAbility('primordialsea')) {
-						this.weatherData.source = target;
-						return;
-					}
+			if (this.field.weatherData.source !== pokemon) return;
+			for (const target of this.getAllActive()) {
+				if (target === pokemon) continue;
+				if (target.hasAbility('primordialsea')) {
+					this.field.weatherData.source = target;
+					return;
 				}
 			}
-			this.clearWeather();
+			this.field.clearWeather();
 		},
 		id: "primordialsea",
 		name: "Primordial Sea",
@@ -2527,7 +2530,7 @@ let BattleAbilities = {
 		desc: "This Pokemon receives 3/4 damage from supereffective attacks. Moongeist Beam, Sunsteel Strike, and the Mold Breaker, Teravolt, and Turboblaze Abilities cannot ignore this Ability.",
 		shortDesc: "This Pokemon receives 3/4 damage from supereffective attacks.",
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.typeMod > 0) {
+			if (target.getMoveHitData(move).typeMod > 0) {
 				this.debug('Prism Armor neutralize');
 				return this.chainModify(0.75);
 			}
@@ -2546,7 +2549,7 @@ let BattleAbilities = {
 			let type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
-				this.add('-start', source, 'typechange', type, '[from] Protean');
+				this.add('-start', source, 'typechange', type, '[from] ability: Protean');
 			}
 		},
 		id: "protean",
@@ -2557,7 +2560,7 @@ let BattleAbilities = {
 	"psychicsurge": {
 		shortDesc: "On switch-in, this Pokemon summons Psychic Terrain.",
 		onStart(source) {
-			this.setTerrain('psychicterrain');
+			this.field.setTerrain('psychicterrain');
 		},
 		id: "psychicsurge",
 		name: "Psychic Surge",
@@ -2757,7 +2760,7 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon's Ground/Rock/Steel attacks do 1.3x in Sandstorm; immunity to it.",
 		onBasePowerPriority: 8,
 		onBasePower(basePower, attacker, defender, move) {
-			if (this.isWeather('sandstorm')) {
+			if (this.field.isWeather('sandstorm')) {
 				if (move.type === 'Rock' || move.type === 'Ground' || move.type === 'Steel') {
 					this.debug('Sand Force boost');
 					return this.chainModify([0x14CD, 0x1000]);
@@ -2776,7 +2779,7 @@ let BattleAbilities = {
 		desc: "If Sandstorm is active, this Pokemon's Speed is doubled. This Pokemon takes no damage from Sandstorm.",
 		shortDesc: "If Sandstorm is active, this Pokemon's Speed is doubled; immunity to Sandstorm.",
 		onModifySpe(spe, pokemon) {
-			if (this.isWeather('sandstorm')) {
+			if (this.field.isWeather('sandstorm')) {
 				return this.chainModify(2);
 			}
 		},
@@ -2791,7 +2794,7 @@ let BattleAbilities = {
 	"sandstream": {
 		shortDesc: "On switch-in, this Pokemon summons Sandstorm.",
 		onStart(source) {
-			this.setWeather('sandstorm');
+			this.field.setWeather('sandstorm');
 		},
 		id: "sandstream",
 		name: "Sand Stream",
@@ -2806,7 +2809,7 @@ let BattleAbilities = {
 		},
 		onModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
-			if (this.isWeather('sandstorm')) {
+			if (this.field.isWeather('sandstorm')) {
 				this.debug('Sand Veil - decreasing accuracy');
 				return accuracy * 0.8;
 			}
@@ -2928,7 +2931,8 @@ let BattleAbilities = {
 		},
 		onFoeMaybeTrapPokemon(pokemon, source) {
 			if (!source) source = this.effectData.target;
-			if (!pokemon.hasAbility('shadowtag') && this.isAdjacent(pokemon, source)) {
+			if (!source || !this.isAdjacent(pokemon, source)) return;
+			if (!pokemon.hasAbility('shadowtag')) {
 				pokemon.maybeTrapped = true;
 			}
 		},
@@ -3066,7 +3070,7 @@ let BattleAbilities = {
 		},
 		id: "skilllink",
 		name: "Skill Link",
-		rating: 4,
+		rating: 3.5,
 		num: 92,
 	},
 	"slowstart": {
@@ -3102,7 +3106,7 @@ let BattleAbilities = {
 	"slushrush": {
 		shortDesc: "If Hail is active, this Pokemon's Speed is doubled.",
 		onModifySpe(spe, pokemon) {
-			if (this.isWeather('hail')) {
+			if (this.field.isWeather('hail')) {
 				return this.chainModify(2);
 			}
 		},
@@ -3114,7 +3118,7 @@ let BattleAbilities = {
 	"sniper": {
 		shortDesc: "If this Pokemon strikes with a critical hit, the damage is multiplied by 1.5.",
 		onModifyDamage(damage, source, target, move) {
-			if (move.crit) {
+			if (target.getMoveHitData(move).crit) {
 				this.debug('Sniper boost');
 				return this.chainModify(1.5);
 			}
@@ -3132,7 +3136,7 @@ let BattleAbilities = {
 		},
 		onModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
-			if (this.isWeather('hail')) {
+			if (this.field.isWeather('hail')) {
 				this.debug('Snow Cloak - decreasing accuracy');
 				return accuracy * 0.8;
 			}
@@ -3145,7 +3149,7 @@ let BattleAbilities = {
 	"snowwarning": {
 		shortDesc: "On switch-in, this Pokemon summons Hail.",
 		onStart(source) {
-			this.setWeather('hail');
+			this.field.setWeather('hail');
 		},
 		id: "snowwarning",
 		name: "Snow Warning",
@@ -3157,7 +3161,7 @@ let BattleAbilities = {
 		shortDesc: "If Sunny Day is active, this Pokemon's Sp. Atk is 1.5x; loses 1/8 max HP per turn.",
 		onModifySpAPriority: 5,
 		onModifySpA(spa, pokemon) {
-			if (this.isWeather(['sunnyday', 'desolateland'])) {
+			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -3174,7 +3178,7 @@ let BattleAbilities = {
 	"solidrock": {
 		shortDesc: "This Pokemon receives 3/4 damage from supereffective attacks.",
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.typeMod > 0) {
+			if (target.getMoveHitData(move).typeMod > 0) {
 				this.debug('Solid Rock neutralize');
 				return this.chainModify(0.75);
 			}
@@ -3247,7 +3251,7 @@ let BattleAbilities = {
 		},
 		id: "stakeout",
 		name: "Stakeout",
-		rating: 2.5,
+		rating: 3,
 		num: 198,
 	},
 	"stall": {
@@ -3453,7 +3457,7 @@ let BattleAbilities = {
 	"surgesurfer": {
 		shortDesc: "If Electric Terrain is active, this Pokemon's Speed is doubled.",
 		onModifySpe(spe) {
-			if (this.isTerrain('electricterrain')) {
+			if (this.field.isTerrain('electricterrain')) {
 				return this.chainModify(2);
 			}
 		},
@@ -3481,7 +3485,7 @@ let BattleAbilities = {
 		},
 		id: "swarm",
 		name: "Swarm",
-		rating: 2,
+		rating: 2.5,
 		num: 68,
 	},
 	"sweetveil": {
@@ -3508,7 +3512,7 @@ let BattleAbilities = {
 	"swiftswim": {
 		shortDesc: "If Rain Dance is active, this Pokemon's Speed is doubled.",
 		onModifySpe(spe, pokemon) {
-			if (this.isWeather(['raindance', 'primordialsea'])) {
+			if (this.field.isWeather(['raindance', 'primordialsea'])) {
 				return this.chainModify(2);
 			}
 		},
@@ -3625,14 +3629,14 @@ let BattleAbilities = {
 	"thickfat": {
 		desc: "If a Pokemon uses a Fire- or Ice-type attack against this Pokemon, that Pokemon's attacking stat is halved when calculating the damage to this Pokemon.",
 		shortDesc: "Fire/Ice-type moves against this Pokemon deal damage with a halved attacking stat.",
-		onModifyAtkPriority: 6,
+		onSourceModifyAtkPriority: 6,
 		onSourceModifyAtk(atk, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire') {
 				this.debug('Thick Fat weaken');
 				return this.chainModify(0.5);
 			}
 		},
-		onModifySpAPriority: 5,
+		onSourceModifySpAPriority: 5,
 		onSourceModifySpA(atk, attacker, defender, move) {
 			if (move.type === 'Ice' || move.type === 'Fire') {
 				this.debug('Thick Fat weaken');
@@ -3647,7 +3651,7 @@ let BattleAbilities = {
 	"tintedlens": {
 		shortDesc: "This Pokemon's attacks that are not very effective on a target deal double damage.",
 		onModifyDamage(damage, source, target, move) {
-			if (move.typeMod < 0) {
+			if (target.getMoveHitData(move).typeMod < 0) {
 				this.debug('Tinted Lens boost');
 				return this.chainModify(2);
 			}
@@ -3676,7 +3680,7 @@ let BattleAbilities = {
 		},
 		id: "torrent",
 		name: "Torrent",
-		rating: 2,
+		rating: 2.5,
 		num: 67,
 	},
 	"toxicboost": {
@@ -4015,7 +4019,10 @@ let BattleAbilities = {
 		shortDesc: "This Pokemon switches out when it reaches 1/2 or less of its maximum HP.",
 		onAfterMoveSecondary(target, source, move) {
 			if (!source || source === target || !target.hp || !move.totalDamage) return;
-			if (target.hp <= target.maxhp / 2 && target.hp + move.totalDamage > target.maxhp / 2) {
+			const lastAttackedBy = target.getLastAttackedBy();
+			if (!lastAttackedBy) return;
+			const damage = move.multihit ? move.totalDamage : lastAttackedBy.damage;
+			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
 				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
 				target.switchFlag = true;
 				source.switchFlag = false;
@@ -4032,7 +4039,7 @@ let BattleAbilities = {
 		},
 		id: "wimpout",
 		name: "Wimp Out",
-		rating: 2,
+		rating: 1.5,
 		num: 193,
 	},
 	"wonderguard": {
@@ -4115,7 +4122,7 @@ let BattleAbilities = {
 			}
 		},
 		id: "mountaineer",
-		isNonstandard: true,
+		isNonstandard: "CAP",
 		name: "Mountaineer",
 		rating: 3.5,
 		num: -2,
@@ -4124,7 +4131,7 @@ let BattleAbilities = {
 		desc: "On switch-in, this Pokemon blocks certain status moves and instead uses the move against the original user.",
 		shortDesc: "On switch-in, blocks certain status moves and bounces them back to the user.",
 		id: "rebound",
-		isNonstandard: true,
+		isNonstandard: "CAP",
 		name: "Rebound",
 		onTryHitPriority: 1,
 		onTryHit(target, source, move) {
@@ -4159,7 +4166,7 @@ let BattleAbilities = {
 		desc: "The duration of Gravity, Heal Block, Magic Room, Safeguard, Tailwind, Trick Room, and Wonder Room is increased by 2 turns if the effect is started by this Pokemon.",
 		shortDesc: "When used, Gravity/Heal Block/Safeguard/Tailwind/Room effects last 2 more turns.",
 		id: "persistent",
-		isNonstandard: true,
+		isNonstandard: "CAP",
 		name: "Persistent",
 		// implemented in the corresponding move
 		rating: 3.5,

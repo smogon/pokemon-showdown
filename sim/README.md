@@ -50,7 +50,7 @@ In a standard battle, what you write to the simulator looks something like this:
 
 Notice that every line starts with `>`. Lines not starting with `>` are comments, so that input logs can be mixed with output logs and/or normal text easily.
 
-Note that the text after `>p1` or `>p2` can be untrusted input directly from the player, and should be treated accordingly.
+Note that the text after `>p1`, `>p2`, `>p3`, or `>p4` can be untrusted input directly from the player, and should be treated accordingly.
 
 Possible message types include:
 
@@ -70,7 +70,11 @@ Starts a battle:
 
 - `p2` - `PLAYEROPTIONS` for player 2 (defaults to no player; player options must then be passed with `>player p2`)
 
-If `p1` and `p2` are specified, the battle will begin immediately. Otherwise, they must be specified with `>player` before the battle will begin.
+- `p3` - `PLAYEROPTIONS` for player 3 (defaults to no player; player options must then be passed with `>player p3`)
+
+- `p4` - `PLAYEROPTIONS` for player 4 (defaults to no player; player options must then be passed with `>player p4`)
+
+If `p1` and `p2` (and `p3` and `p4` for 4 player battles) are specified, the battle will begin immediately. Otherwise, they must be specified with `>player` before the battle will begin.
 
 See documentation of `>player` (below) for `PLAYEROPTIONS`.
 
@@ -80,7 +84,7 @@ See documentation of `>player` (below) for `PLAYEROPTIONS`.
 
 Sets player information:
 
-`PLAYERID` is either `p1` or `p2`
+`PLAYERID` is `p1`, `p2`, `p3`, or `p4`
 
 `PLAYEROPTIONS` is a JSON object containing the following properties (all optional):
 
@@ -93,6 +97,8 @@ Sets player information:
 ```
 >p1 CHOICE
 >p2 CHOICE
+>p3 CHOICE
+>p4 CHOICE
 ```
 
 Makes a choice for a player. [Possible choices are documented in `SIM-PROTOCOL.md`][possible-choices].
@@ -116,7 +122,15 @@ An update which should be sent to all players and spectators.
 
   [sim-protocol]: https://github.com/Zarel/Pokemon-Showdown/blob/master/sim/SIM-PROTOCOL.md
 
-One message type that only appears here is `|split`. This splits the next four lines into `spectator`, `p1`, `p2`, and `omniscient` messages. The `p1` and `p2` logs will have exact HP values only for the corresponding player, while the `spectator` log will not have exact HP values for either player, and the `omniscient` logs will have exact HP values for both.
+One message type that only appears here is `|split|PLAYERID`:
+
+    |split|PLAYERID
+    SECRET
+    PUBLIC
+
+- `PLAYERID` - one of `p1`, `p2`, `p3`, or `p4`.
+- `SECRET` - messages for the specific player or an omniscient observer (details which may contain information about exact details of the player's set, like exact HP)
+- `PUBLIC` - message with public details suitable for display to opponents / teammates / spectators. Note that this may be empty.
 
     sideupdate
     PLAYERID
@@ -124,7 +138,7 @@ One message type that only appears here is `|split`. This splits the next four l
 
 Send messages to only one player. `|split` will never appear here.
 
-`PLAYERID` will be either `p1` or `p2`.
+`PLAYERID` will be `p1`, `p2`, `p3`, or `p4`.
 
 Note that choice requests (updates telling the player what choices they have for using moves or switching pokemon) are sent this way.
 

@@ -19,12 +19,6 @@ let BattleFormats = {
 			}
 		},
 	},
-	evasionabilitiesclause: {
-		inherit: true,
-		banlist: ['Diglett + Sand Veil', 'Dugtrio + Sand Veil', 'Gligar + Sand Veil', 'Gliscor + Sand Veil',
-			'Swinub + Snow Cloak', 'Piloswine + Snow Cloak', 'Mamoswine + Snow Cloak',
-		],
-	},
 };
 
 exports.BattleFormats = BattleFormats;

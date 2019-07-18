@@ -60,6 +60,34 @@ let BattleAbilities = {
 			}
 		},
 	},
+	"intimidate": {
+		inherit: true,
+		onStart(pokemon) {
+			let activated = false;
+			for (const target of pokemon.side.foe.active) {
+				if (target && this.isAdjacent(target, pokemon) && !target.volatiles['substitute']) {
+					activated = true;
+					break;
+				}
+			}
+
+			if (!activated) {
+				this.hint("In Gen 3, Intimidate does not activate if every target has a Substitute.", false, pokemon.side);
+				return;
+			}
+			this.add('-ability', pokemon, 'Intimidate', 'boost');
+
+			for (const target of pokemon.side.foe.active) {
+				if (!target || !this.isAdjacent(target, pokemon)) continue;
+
+				if (target.volatiles['substitute']) {
+					this.add('-immune', target);
+				} else {
+					this.boost({atk: -1}, target, pokemon);
+				}
+			}
+		},
+	},
 	"lightningrod": {
 		desc: "If this Pokemon is not the target of a single-target Electric-type move used by an opposing Pokemon, this Pokemon redirects that move to itself. This effect considers Hidden Power a Normal-type move.",
 		shortDesc: "This Pokemon draws single-target Electric moves used by opponents to itself.",
@@ -79,8 +107,7 @@ let BattleAbilities = {
 		desc: "If an active Pokemon has the Plus Ability, this Pokemon's Special Attack is multiplied by 1.5.",
 		shortDesc: "If an active Pokemon has the Plus Ability, this Pokemon's Sp. Atk is 1.5x.",
 		onModifySpA(spa, pokemon) {
-			let allActives = pokemon.side.active.concat(pokemon.side.foe.active);
-			for (const active of allActives) {
+			for (const active of this.getAllActive()) {
 				if (!active.fainted && active.hasAbility('plus')) {
 					return this.chainModify(1.5);
 				}
@@ -92,8 +119,7 @@ let BattleAbilities = {
 		desc: "If an active Pokemon has the Minus Ability, this Pokemon's Special Attack is multiplied by 1.5.",
 		shortDesc: "If an active Pokemon has the Minus Ability, this Pokemon's Sp. Atk is 1.5x.",
 		onModifySpA(spa, pokemon) {
-			let allActives = pokemon.side.active.concat(pokemon.side.foe.active);
-			for (const active of allActives) {
+			for (const active of this.getAllActive()) {
 				if (!active.fainted && active.hasAbility('minus')) {
 					return this.chainModify(1.5);
 				}
@@ -114,14 +140,7 @@ let BattleAbilities = {
 	"pressure": {
 		inherit: true,
 		onStart(pokemon) {
-			this.add('split');
-			for (const line of [false, this.sides[0], this.sides[1], true]) {
-				if (line === true || line === pokemon.side) {
-					this.add('-ability', pokemon, 'Pressure', '[silent]');
-				} else {
-					this.log.push('');
-				}
-			}
+			this.addSplit(pokemon.side.id, ['-ability', pokemon, 'Pressure', '[silent]']);
 		},
 	},
 	"roughskin": {
@@ -167,6 +186,23 @@ let BattleAbilities = {
 			if (pokemon.setAbility(ability)) {
 				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
 			}
+		},
+	},
+	"truant": {
+		inherit: true,
+		onStart() {},
+		onSwitchIn(pokemon) {
+			pokemon.truantTurn = this.turn !== 0;
+		},
+		onBeforeMove(pokemon) {
+			if (pokemon.truantTurn) {
+				this.add('cant', pokemon, 'ability: Truant');
+				return false;
+			}
+		},
+		onResidualOrder: 27,
+		onResidual(pokemon) {
+			pokemon.truantTurn = !pokemon.truantTurn;
 		},
 	},
 	"voltabsorb": {

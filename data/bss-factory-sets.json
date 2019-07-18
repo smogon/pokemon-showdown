@@ -3,15 +3,7 @@
 		"flags": {},
 		"sets": [{
 			"species": "Aegislash",
-			"item": "Weakness Policy",
-			"ability": "Stance Change",
-			"evs": {"hp": 252, "atk": 4, "spa": 252},
-			"ivs": {"spe": 0},
-			"nature": "Quiet",
-			"moves": [["King's Shield"], ["Shadow Ball"], ["Flash Cannon", "Sacred Sword"], ["Shadow Sneak"]]
-		}, {
-			"species": "Aegislash",
-			"item": "Ghostium Z",
+			"item": ["Weakness Policy", "Ghostium Z"],
 			"ability": "Stance Change",
 			"evs": {"hp": 252, "atk": 4, "spa": 252},
 			"ivs": {"spe": 0},
@@ -1187,7 +1179,7 @@
 			"ability": "Moxie",
 			"evs": {"hp": 84, "atk": 252, "spe": 172},
 			"nature": "Jolly",
-			"moves": [["Waterfall"], ["Stone Edge", "Rock Slide"], ["Earthquake"], ["Ice Fang"]]
+			"moves": [["Waterfall"], ["Stone Edge"], ["Earthquake"], ["Ice Fang"]]
 		}]
 	},
 	"heatran": {
@@ -2730,7 +2722,7 @@
 			"ability": "RKS System",
 			"evs": {"hp": 4, "atk": 252, "spe": 252},
 			"nature": "Adamant",
-			"moves": [["Multi-Attack"], ["Swords Dance"], ["Flame Charge"], ["Rock Slide", "Stone Edge"]]
+			"moves": [["Multi-Attack"], ["Swords Dance"], ["Flame Charge"], ["Rock Slide"]]
 		}, {
 			"species": "Silvally-Steel",
 			"item": "Steel Memory",
@@ -3066,7 +3058,7 @@
 			"species": "Tapu Koko",
 			"item": "Electric Seed",
 			"ability": "Electric Surge",
-			"evs": {"def": 68, "spa": 196, "spe": 252},
+			"evs": {"def": 60, "spa": 196, "spe": 252},
 			"ivs": {"atk": 0},
 			"nature": "Timid",
 			"moves": [["Calm Mind"], ["Thunderbolt"], ["Dazzling Gleam"], ["Roost"]]

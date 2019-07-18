@@ -66,16 +66,15 @@ const FS = require('../.lib-dist/fs').FS;
  * Load configuration
  *********************************************************/
 
-global.Config = require('../config/config');
+const ConfigLoader = require('../.server-dist/config-loader');
+global.Config = ConfigLoader.Config;
 
 global.Monitor = require('./monitor');
 
 if (Config.watchconfig) {
-	let configPath = require.resolve('../config/config');
-	FS(configPath).onModify(() => {
+	FS(require.resolve('../config/config')).onModify(() => {
 		try {
-			delete require.cache[configPath];
-			global.Config = require('../config/config');
+			global.Config = ConfigLoader.load(true);
 			if (global.Users) Users.cacheGroupData();
 			Monitor.notice('Reloaded ../config/config.js');
 		} catch (e) {
@@ -88,28 +87,28 @@ if (Config.watchconfig) {
  * Set up most of our globals
  *********************************************************/
 
-global.Dex = require('../.sim-dist/dex');
-global.toId = Dex.getId;
+global.Dex = require('../.sim-dist/dex').Dex;
+global.toID = Dex.getId;
 
-global.LoginServer = require('./loginserver');
+global.LoginServer = require('../.server-dist/loginserver').LoginServer;
 
 global.Ladders = require('./ladders');
 
 global.Chat = require('./chat');
 
-global.Users = require('./users');
+global.Users = require('../.server-dist/users').Users;
 
 global.Punishments = require('./punishments');
 
 global.Rooms = require('./rooms');
 
-global.Verifier = require('./verifier');
+global.Verifier = require('../.server-dist/verifier');
 Verifier.PM.spawn();
 
 global.Tournaments = require('./tournaments');
 
-global.Dnsbl = require('./dnsbl');
-Dnsbl.loadDatacenters();
+global.IPTools = require('../.server-dist/ip-tools').IPTools;
+IPTools.loadDatacenters();
 
 if (Config.crashguard) {
 	// graceful crash - allow current battles to finish before restarting

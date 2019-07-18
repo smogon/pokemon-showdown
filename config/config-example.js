@@ -61,7 +61,6 @@ exports.ssl = null;
 
 /*
 // example:
-const fs = require('fs');
 exports.ssl = {
 	port: 443,
 	options: {
@@ -137,6 +136,17 @@ Y929lRybWEiKUr+4Yw2O1W0CAwEAAQ==
 `;
 
 /**
+ * routes - where Pokemon Showdown is hosted.
+ *   Don't change this setting - there aren't any other options right now
+ */
+exports.routes = {
+	root: 'pokemonshowdown.com',
+	client: 'play.pokemonshowdown.com',
+	dex: 'dex.pokemonshowdown.com',
+	replays: 'replay.pokemonshowdown.com',
+};
+
+/**
  * crashguardemail - if the server has been running for more than an hour
  *   and crashes, send an email using these settings, rather than locking down
  *   the server. Uncomment this definition if you want to use this feature;
@@ -170,6 +180,11 @@ exports.crashguardemail = null;
  *   Greek or Cyrillic.
  */
 exports.disablebasicnamefilter = false;
+
+/**
+ * allowrequestingties - enables the use of `/offerdraw` and `/acceptdraw`
+ */
+exports.allowrequestingties = true;
 
 /**
  * report joins and leaves - shows messages like "<USERNAME> joined"
@@ -482,6 +497,7 @@ exports.grouplist = [
 		roomdriver: true,
 		editroom: true,
 		declare: true,
+		addhtml: true,
 		modchatall: true,
 		roomonly: true,
 		gamemanagement: true,
@@ -493,6 +509,7 @@ exports.grouplist = [
 		inherit: '@',
 		jurisdiction: 'u',
 		declare: true,
+		addhtml: true,
 		modchat: true,
 		roomonly: true,
 		gamemanagement: true,
@@ -509,6 +526,7 @@ exports.grouplist = [
 		joinbattle: true,
 		nooverride: true,
 		editprivacy: true,
+		exportinputlog: true,
 	},
 	{
 		symbol: '*',
@@ -518,6 +536,7 @@ exports.grouplist = [
 		jurisdiction: 'u',
 		declare: true,
 		addhtml: true,
+		bypassafktimer: true,
 	},
 	{
 		symbol: '@',

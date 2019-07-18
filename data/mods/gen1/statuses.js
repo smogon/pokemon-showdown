@@ -10,7 +10,7 @@
 
 'use strict';
 
-/**@type {{[k: string]: ModdedEffectData}} */
+/**@type {{[k: string]: ModdedPureEffectData}} */
 let BattleStatuses = {
 	brn: {
 		name: 'brn',
@@ -23,12 +23,11 @@ let BattleStatuses = {
 		},
 		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf(pokemon) {
-			let toxicCounter = 1;
-			if (pokemon.volatiles['residualdmg']) {
-				pokemon.volatiles['residualdmg'].counter++;
-				toxicCounter = pokemon.volatiles['residualdmg'].counter;
-			}
+			let toxicCounter = pokemon.volatiles['residualdmg'] ? pokemon.volatiles['residualdmg'].counter : 1;
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * toxicCounter, pokemon);
+			if (pokemon.volatiles['residualdmg']) {
+				this.hint("In Gen 1, Toxic's counter is retained after Rest and applies to PSN/BRN.", true);
+			}
 		},
 		onSwitchIn(pokemon) {
 			pokemon.addVolatile('brnattackdrop');
@@ -69,8 +68,12 @@ let BattleStatuses = {
 		id: 'slp',
 		num: 0,
 		effectType: 'Status',
-		onStart(target) {
-			this.add('-status', target, 'slp');
+		onStart(target, source, sourceEffect) {
+			if (sourceEffect && sourceEffect.effectType === 'Move') {
+				this.add('-status', target, 'slp', '[from] move: ' + sourceEffect.name);
+			} else {
+				this.add('-status', target, 'slp');
+			}
 			// 1-7 turns
 			this.effectData.startTime = this.random(1, 8);
 			this.effectData.time = this.effectData.startTime;
@@ -118,39 +121,19 @@ let BattleStatuses = {
 		},
 		onAfterMoveSelfPriority: 2,
 		onAfterMoveSelf(pokemon) {
-			let toxicCounter = 1;
-			if (pokemon.volatiles['residualdmg']) {
-				pokemon.volatiles['residualdmg'].counter++;
-				toxicCounter = pokemon.volatiles['residualdmg'].counter;
-			}
+			let toxicCounter = pokemon.volatiles['residualdmg'] ? pokemon.volatiles['residualdmg'].counter : 1;
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * toxicCounter, pokemon);
+			if (pokemon.volatiles['residualdmg']) {
+				this.hint("In Gen 1, Toxic's counter is retained after Rest and applies to PSN/BRN.", true);
+			}
 		},
 		onAfterSwitchInSelf(pokemon) {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
 		},
 	},
 	tox: {
-		name: 'tox',
-		id: 'tox',
-		num: 0,
-		effectType: 'Status',
-		onStart(target) {
-			this.add('-status', target, 'tox');
-			if (!target.volatiles['residualdmg']) target.addVolatile('residualdmg');
-			target.volatiles['residualdmg'].counter = 0;
-		},
+		inherit: true,
 		onAfterMoveSelfPriority: 2,
-		onAfterMoveSelf(pokemon) {
-			pokemon.volatiles['residualdmg'].counter++;
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter, pokemon, pokemon);
-		},
-		onSwitchIn(pokemon) {
-			// Regular poison status and damage after a switchout -> switchin.
-			pokemon.setStatus('psn');
-		},
-		onAfterSwitchInSelf(pokemon) {
-			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
-		},
 	},
 	confusion: {
 		name: 'confusion',
@@ -177,18 +160,8 @@ let BattleStatuses = {
 			}
 			this.add('-activate', pokemon, 'confusion');
 			if (!this.randomChance(128, 256)) {
-				// We check here to implement the substitute bug since otherwise we need to change directDamage to take target.
 				let damage = Math.floor(Math.floor(((Math.floor(2 * pokemon.level / 5) + 2) * pokemon.getStat('atk') * 40) / pokemon.getStat('def', false)) / 50) + 2;
-				if (pokemon.volatiles['substitute']) {
-					// If there is Substitute, we check for opposing substitute.
-					if (target.volatiles['substitute']) {
-						// Damage that one instead.
-						this.directDamage(damage, target);
-					}
-				} else {
-					// No substitute, direct damage to itself.
-					this.directDamage(damage);
-				}
+				this.directDamage(damage, pokemon, target);
 				pokemon.removeVolatile('bide');
 				pokemon.removeVolatile('twoturnmove');
 				pokemon.removeVolatile('fly');
@@ -265,6 +238,10 @@ let BattleStatuses = {
 				}
 			}
 		},
+	},
+	mustrecharge: {
+		inherit: true,
+		onStart() {},
 	},
 	lockedmove: {
 		// Outrage, Thrash, Petal Dance...

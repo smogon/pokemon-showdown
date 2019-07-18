@@ -90,19 +90,17 @@ class Roomlog {
 		log = [];
 		for (let i = 0; i < this.log.length; ++i) {
 			const line = this.log[i];
-			if (line === '|split') {
-				const ownLine = this.log[i + channel + 1];
+			const split = /\|split\|p(\d)/g.exec(line);
+			if (split) {
+				const canSeePrivileged = (channel === Number(split[0]) || channel === -1);
+				const ownLine = this.log[i + (canSeePrivileged ? 1 : 2)];
 				if (ownLine) log.push(ownLine);
-				i += 4;
+				i += 2;
 			} else {
 				log.push(line);
 			}
 		}
-		let textLog = log.join('\n') + '\n';
-		if (channel === 0) {
-			return textLog.replace(/\n\|choice\|\|\n/g, '\n').replace(/\n\|seed\|\n/g, '\n');
-		}
-		return textLog;
+		return log.join('\n') + '\n';
 	}
 	setupModlogStream() {
 		if (this.modlogStream !== undefined) return;
@@ -174,13 +172,13 @@ class Roomlog {
 	 * @param {string} username
 	 */
 	hasUsername(username) {
-		const userid = toId(username);
+		const userid = toID(username);
 		for (const line of this.log) {
 			if (line.startsWith('|c:|')) {
-				const curUserid = toId(line.split('|', 4)[3]);
+				const curUserid = toID(line.split('|', 4)[3]);
 				if (curUserid === userid) return true;
 			} else if (line.startsWith('|c|')) {
-				const curUserid = toId(line.split('|', 3)[2]);
+				const curUserid = toID(line.split('|', 3)[2]);
 				if (curUserid === userid) return true;
 			}
 		}
@@ -197,7 +195,7 @@ class Roomlog {
 		this.log = this.log.filter(line => {
 			if (line.startsWith(messageStart)) {
 				const parts = Chat.splitFirst(line, '|', section);
-				const userid = toId(parts[section - 1]);
+				const userid = toID(parts[section - 1]);
 				if (userids.includes(userid)) {
 					if (!cleared.includes(userid)) cleared.push(userid);
 					if (this.id.startsWith('battle-')) return true; // Don't remove messages in battle rooms to preserve evidence

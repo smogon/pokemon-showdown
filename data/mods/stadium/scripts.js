@@ -7,33 +7,26 @@
 let BattleScripts = {
 	inherit: 'gen1',
 	gen: 1,
-	// BattlePokemon scripts.
+	// BattlePokemon scripts. Stadium shares gen 1 code but it fixes some problems with it.
 	pokemon: {
-		// Stadium shares gen 1 code but it fixes some problems with it.
-		getStat(statName, unmodified) {
-			statName = toId(statName);
-			if (statName === 'hp') return this.maxhp;
-			if (unmodified) return this.stats[statName];
-			// @ts-ignore
-			return this.modifiedStats[statName];
-		},
+		inherit: true,
 		// Gen 1 function to apply a stat modification that is only active until the stat is recalculated or mon switched.
 		// Modified stats are declared in the Pokemon object in sim/pokemon.js in about line 681.
-		modifyStat(stat, modifier) {
-			if (!(stat in this.stats)) return;
+		modifyStat(statName, modifier) {
+			if (!(statName in this.storedStats)) throw new Error("Invalid `statName` passed to `modifyStat`");
 			// @ts-ignore
-			this.modifiedStats[stat] = this.battle.clampIntRange(Math.floor(this.modifiedStats[stat] * modifier), 1);
+			this.modifiedStats[statName] = this.battle.clampIntRange(Math.floor(this.modifiedStats[statName] * modifier), 1);
 		},
 		// This is run on Stadium after boosts and status changes.
 		recalculateStats() {
-			for (let statName in this.stats) {
+			for (let statName in this.storedStats) {
 				/**@type {number} */
 				// @ts-ignore
 				let stat = this.template.baseStats[statName];
 				// @ts-ignore
 				stat = Math.floor(Math.floor(2 * stat + this.set.ivs[statName] + Math.floor(this.set.evs[statName] / 4)) * this.level / 100 + 5);
 				// @ts-ignore
-				this.baseStats[statName] = this.stats[statName] = Math.floor(stat);
+				this.baseStoredStats[statName] = this.storedStats[statName] = Math.floor(stat);
 				// @ts-ignore
 				this.modifiedStats[statName] = Math.floor(stat);
 				// Re-apply drops, if necessary.
@@ -88,7 +81,7 @@ let BattleScripts = {
 	runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect) {
 		let move = this.getActiveMove(moveOrMoveName);
 		let target = this.getTarget(pokemon, move, targetLoc);
-		if (target && target.subFainted) delete target.subFainted;
+		if (target && target.subFainted) target.subFainted = null;
 
 		this.setActiveMove(move, pokemon, target);
 
@@ -382,7 +375,7 @@ let BattleScripts = {
 				}
 			}
 			if (moveData.pseudoWeather) {
-				if (this.addPseudoWeather(moveData.pseudoWeather, pokemon, move)) {
+				if (this.field.addPseudoWeather(moveData.pseudoWeather, pokemon, move)) {
 					didSomething = true;
 				}
 			}
@@ -498,8 +491,8 @@ let BattleScripts = {
 		basePower = this.clampIntRange(basePower, 1);
 
 		// Checking for the move's Critical Hit possibility. We check if it's a 100% crit move, otherwise we calculate the chance.
-		move.crit = move.willCrit || false;
-		if (!move.crit) {
+		let isCrit = move.willCrit || false;
+		if (!isCrit) {
 			// In Stadium, the critical chance is based on speed.
 			// First, we get the base speed and store it. Then we add 76. This is our current crit chance.
 			let critChance = pokemon.template.baseStats['spe'] + 76;
@@ -534,12 +527,12 @@ let BattleScripts = {
 			// We compare our critical hit chance against a random number between 0 and 255.
 			// If the random number is lower, we get a critical hit. This means there is always a 1/255 chance of not hitting critically.
 			if (critChance > 0) {
-				move.crit = this.randomChance(critChance, 256);
+				isCrit = this.randomChance(critChance, 256);
 			}
 		}
 		// There is a critical hit.
-		if (move.crit) {
-			move.crit = this.runEvent('CriticalHit', target, null, move);
+		if (isCrit && this.runEvent('CriticalHit', target, null, move)) {
+			target.getMoveHitData(move).crit = true;
 		}
 
 		// Happens after crit calculation.
@@ -558,7 +551,9 @@ let BattleScripts = {
 		let defender = target;
 		if (move.useTargetOffensive) attacker = target;
 		if (move.useSourceDefensive) defender = pokemon;
+		/** @type {StatNameExceptHP} */
 		let atkType = (move.category === 'Physical') ? 'atk' : 'spa';
+		/** @type {StatNameExceptHP} */
 		let defType = (move.defensiveCategory === 'Physical') ? 'def' : 'spd';
 		let attack = attacker.getStat(atkType);
 		let defense = defender.getStat(defType);
@@ -572,7 +567,7 @@ let BattleScripts = {
 		// In the event of a critical hit, the offense and defense changes are ignored.
 		// This includes both boosts and screens.
 		// Also, level is doubled in damage calculation.
-		if (move.crit) {
+		if (isCrit) {
 			move.ignoreOffensive = true;
 			move.ignoreDefensive = true;
 			level *= 2;

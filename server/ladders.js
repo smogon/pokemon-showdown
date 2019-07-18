@@ -11,7 +11,7 @@
 'use strict';
 
 /** @type {typeof LadderStoreT} */
-const LadderStore = require(typeof Config === 'object' && Config.remoteladder ? './ladders-remote' : './ladders-local');
+const LadderStore = require(typeof Config === 'object' && Config.remoteladder ? '../.server-dist/ladders-remote' : '../.server-dist/ladders-local').LadderStore;
 
 const SECONDS = 1000;
 const PERIODIC_MATCH_INTERVAL = 60 * SECONDS;
@@ -137,7 +137,7 @@ class Ladder extends LadderStore {
 		if (isRated && !Ladders.disabled) {
 			let userid = user.userid;
 			[valResult, rating] = await Promise.all([
-				TeamValidatorAsync(this.formatid).validateTeam(team, !!(user.locked || user.namelocked)),
+				TeamValidatorAsync.get(this.formatid).validateTeam(team, !!(user.locked || user.namelocked)),
 				this.getRating(userid),
 			]);
 			if (userid !== user.userid) {
@@ -150,7 +150,7 @@ class Ladder extends LadderStore {
 				connection.popup(`The ladder is temporarily disabled due to technical difficulties - you will not receive ladder rating for this game.`);
 				rating = 1;
 			}
-			valResult = await TeamValidatorAsync(this.formatid).validateTeam(team, !!(user.locked || user.namelocked));
+			valResult = await TeamValidatorAsync.get(this.formatid).validateTeam(team, !!(user.locked || user.namelocked));
 		}
 
 		if (valResult.charAt(0) !== '1') {
@@ -180,7 +180,7 @@ class Ladder extends LadderStore {
 	 * @param {User} targetUsername
 	 */
 	static rejectChallenge(user, targetUsername) {
-		const targetUserid = toId(targetUsername);
+		const targetUserid = toID(targetUsername);
 		const chall = Ladder.getChallenging(targetUserid);
 		if (chall && chall.to === user.userid) {
 			Ladder.removeChallenge(chall);
@@ -192,7 +192,7 @@ class Ladder extends LadderStore {
 	 * @param {string} username
 	 */
 	static clearChallenges(username) {
-		const userid = toId(username);
+		const userid = toID(username);
 		const userChalls = Ladders.challenges.get(userid);
 		if (userChalls) {
 			for (const chall of userChalls.slice()) {
@@ -228,6 +228,7 @@ class Ladder extends LadderStore {
 		}
 		if (targetUser.blockChallenges && !user.can('bypassblocks', targetUser)) {
 			connection.popup(`The user '${targetUser.name}' is not accepting challenges right now.`);
+			Chat.maybeNotifyBlocked('challenge', targetUser, user);
 			return false;
 		}
 		if (Date.now() < user.lastChallenge + 10 * SECONDS) {
@@ -344,7 +345,7 @@ class Ladder extends LadderStore {
 	 * @return {boolean}
 	 */
 	cancelSearch(user) {
-		const formatid = toId(this.formatid);
+		const formatid = toID(this.formatid);
 
 		const formatTable = Ladders.searches.get(formatid);
 		if (!formatTable) return false;
@@ -377,7 +378,7 @@ class Ladder extends LadderStore {
 	 * @param {BattleReady} search
 	 */
 	getSearcher(search) {
-		const formatid = toId(this.formatid);
+		const formatid = toID(this.formatid);
 		const user = Users.get(search.userid);
 		if (!user || !user.connected || user.userid !== search.userid) {
 			const formatTable = Ladders.searches.get(formatid);
@@ -413,13 +414,13 @@ class Ladder extends LadderStore {
 			if (!room) {
 				Monitor.warn(`while searching, room ${roomid} expired for user ${user.userid} in rooms ${[...user.inRooms]} and games ${[...user.games]}`);
 				user.games.delete(roomid);
-				return;
+				continue;
 			}
 			const game = room.game;
 			if (!game) {
 				Monitor.warn(`while searching, room ${roomid} has no game for user ${user.userid} in rooms ${[...user.inRooms]} and games ${[...user.games]}`);
 				user.games.delete(roomid);
-				return;
+				continue;
 			}
 			games[roomid] = game.title + (game.allowRenames ? '' : '*');
 			atLeastOne = true;
@@ -435,7 +436,7 @@ class Ladder extends LadderStore {
 	 * @param {User} user
 	 */
 	hasSearch(user) {
-		const formatid = toId(this.formatid);
+		const formatid = toID(this.formatid);
 		const formatTable = Ladders.searches.get(formatid);
 		if (!formatTable) return false;
 		return formatTable.has(user.userid);
@@ -486,7 +487,7 @@ class Ladder extends LadderStore {
 		let out = undefined;
 		for (const roomid of user.games) {
 			const room = Rooms(roomid);
-			if (!room || !room.battle || !room.battle.players[user.userid]) continue;
+			if (!room || !room.battle || !room.battle.playerTable[user.userid]) continue;
 			const battle = /** @type {RoomBattle} */ (room.battle);
 			if (battle.requestCount <= 16) {
 				// it's fine as long as it's before turn 5
@@ -496,8 +497,8 @@ class Ladder extends LadderStore {
 			if (Dex.getFormat(battle.format).allowMultisearch) {
 				continue;
 			}
-			const player = battle.players[user.userid];
-			if (!battle.requests[player.slot].isWait) return roomid;
+			const player = battle.playerTable[user.userid];
+			if (!player.request.isWait) return roomid;
 			out = null;
 		}
 		return out;
@@ -512,7 +513,7 @@ class Ladder extends LadderStore {
 	 * @return {boolean}
 	 */
 	matchmakingOK(search1, search2, user1, user2) {
-		const formatid = toId(this.formatid);
+		const formatid = toID(this.formatid);
 		if (!user1 || !user2) {
 			// This should never happen.
 			Monitor.crashlog(new Error(`Matched user ${user1 ? search2.userid : search1.userid} not found`), "The matchmaker");
@@ -637,8 +638,10 @@ class Ladder extends LadderStore {
 		Rooms.createBattle(ready1.formatid, {
 			p1: user1,
 			p1team: ready1.team,
+			p1rating: ready1.rating,
 			p2: user2,
 			p2team: ready2.team,
+			p2rating: ready2.rating,
 			rated: Math.min(ready1.rating, ready2.rating),
 		});
 	}

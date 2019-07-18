@@ -274,7 +274,7 @@ exports.commands = {
 	modchathelp: [`/modchat [off/autoconfirmed/+/%/@/*/player/#/&/~] - Set the level of moderated chat. Requires: * @ \u2606 for off/autoconfirmed/+ options, # & ~ for all the options`],
 
 	ioo(target, room, user) {
-		return this.parse('/modjoin +');
+		return this.parse('/modjoin %');
 	},
 	'!ionext': true,
 	inviteonlynext: 'ionext',
@@ -283,9 +283,11 @@ exports.commands = {
 		if (!(groupConfig && groupConfig.editprivacy)) return this.errorReply(`/ionext - Access denied.`);
 		if (this.meansNo(target)) {
 			user.inviteOnlyNextBattle = false;
+			user.update('inviteOnlyNextBattle');
 			this.sendReply("Your next battle will be publicly visible.");
 		} else {
 			user.inviteOnlyNextBattle = true;
+			user.update('inviteOnlyNextBattle');
 			this.sendReply("Your next battle will be invite-only.");
 		}
 	},
@@ -297,13 +299,13 @@ exports.commands = {
 	inviteonly(target, room, user) {
 		if (!target) return this.parse('/help inviteonly');
 		if (this.meansYes(target)) {
-			return this.parse("/modjoin +");
+			return this.parse("/modjoin %");
 		} else {
 			return this.parse(`/modjoin ${target}`);
 		}
 	},
 	inviteonlyhelp: [
-		`/inviteonly [on|off] - Sets modjoin +. Users can't join unless invited with /invite. Requires: # & ~`,
+		`/inviteonly [on|off] - Sets modjoin %. Users can't join unless invited with /invite. Requires: # & ~`,
 		`/ioo - Shortcut for /inviteonly on`,
 		`/inviteonlynext OR /ionext - Sets your next battle to be invite-only.`,
 		`/ionext off - Sets your next battle to be publicly visible.`,
@@ -325,12 +327,12 @@ exports.commands = {
 		if (target === 'player') target = Users.PLAYER_SYMBOL;
 		if (this.meansNo(target)) {
 			if (!room.modjoin) return this.errorReply(`Modjoin is already turned off in this room.`);
-			delete room.modjoin;
+			room.modjoin = null;
 			this.add(`|raw|<div class="broadcast-blue"><strong>This room is no longer invite only!</strong><br />Anyone may now join.</div>`);
 			this.addModAction(`${user.name} turned off modjoin.`);
 			this.modlog('MODJOIN', null, 'OFF');
 			if (room.chatRoomData) {
-				delete room.chatRoomData.modjoin;
+				room.chatRoomData.modjoin = null;
 				Rooms.global.writeChatRoomData();
 			}
 			return;
@@ -347,8 +349,12 @@ exports.commands = {
 			this.addModAction(`${user.name} set modjoin to autoconfirmed.`);
 			this.modlog('MODJOIN', null, 'autoconfirmed');
 		} else if (target in Config.groups || target === 'trusted') {
-			if (room.battle && !user.can('makeroom') && target !== '+') return this.errorReply(`/modjoin - Access denied from setting modjoin past + in battles.`);
-			if (room.isPersonal && !user.can('makeroom') && target !== '+') return this.errorReply(`/modjoin - Access denied from setting modjoin past + in group chats.`);
+			if (room.battle && !user.can('makeroom') && !'+%'.includes(target)) {
+				return this.errorReply(`/modjoin - Access denied from setting modjoin past % in battles.`);
+			}
+			if (room.isPersonal && !user.can('makeroom') && !'+%'.includes(target)) {
+				return this.errorReply(`/modjoin - Access denied from setting modjoin past % in group chats.`);
+			}
 			if (room.modjoin === target) return this.errorReply(`Modjoin is already set to ${target} in this room.`);
 			room.modjoin = target;
 			this.add(`|raw|<div class="broadcast-red"><strong>This room is now invite only!</strong><br />Users must be rank ${target} or invited with <code>/invite</code> to join</div>`);
@@ -375,7 +381,7 @@ exports.commands = {
 		if (!target) return this.sendReply(`This room's primary language is ${Chat.languages.get(room.language) || 'English'}`);
 		if (!this.can('editroom', null, room)) return false;
 
-		let targetLanguage = toId(target);
+		let targetLanguage = toID(target);
 		if (!Chat.languages.has(targetLanguage)) return this.errorReply(`"${target}" is not a supported language.`);
 
 		room.language = targetLanguage === 'english' ? false : targetLanguage;
@@ -415,7 +421,7 @@ exports.commands = {
 		}
 		const slowchatSetting = (room.slowchat || "OFF");
 		this.privateModAction(`(${user.name} set slowchat to ${slowchatSetting})`);
-		this.modlog('SLOWCHAT', null, slowchatSetting);
+		this.modlog('SLOWCHAT', null, '' + slowchatSetting);
 
 		if (room.chatRoomData) {
 			room.chatRoomData.slowchat = room.slowchat;

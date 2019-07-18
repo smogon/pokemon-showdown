@@ -77,7 +77,7 @@ function streamRead(stream: DashyStream, readLength: number, readMask: number = 
 export function encode(str: string, allowCaps: boolean = false) {
 	if (!str) return '0--0';
 	let safePart = '';
-	let unsafeStream: DashyStream = {
+	const unsafeStream: DashyStream = {
 		codeBuf: '',
 		buf: 0x0,
 		bufLength: 0,
@@ -86,7 +86,7 @@ export function encode(str: string, allowCaps: boolean = false) {
 	let alphaIndex = 0;
 	let capBuffer = 0x0;
 	for (let i = 0; i < str.length + 1; i++) {
-		let curCharCode = str.charCodeAt(i);
+		let curCharCode = i !== str.length ? str.charCodeAt(i) : -1;
 		const isLowercase = (97 <= curCharCode && curCharCode <= 122); // a-z
 		const isUppercase = (65 <= curCharCode && curCharCode <= 90); // A-Z
 		const isNumeric = (48 <= curCharCode && curCharCode <= 57); // 0-9
@@ -144,7 +144,7 @@ export function encode(str: string, allowCaps: boolean = false) {
 			isSafe = false;
 		}
 		let unsafeMapIndex = -1;
-		if (curCharCode === 0) {
+		if (curCharCode === -1) {
 			streamWrite(unsafeStream, 2, 0x0);
 		} else if (curCharCode === 32) { // space
 			streamWrite(unsafeStream, 3, 0x3);
@@ -153,7 +153,7 @@ export function encode(str: string, allowCaps: boolean = false) {
 			curCharCode = (unsafeMapIndex << 2) + 0x2;
 			streamWrite(unsafeStream, 7, curCharCode);
 		} else {
-			curCharCode = (curCharCode << 2) + 0x7;
+			curCharCode = (curCharCode << 3) + 0x7;
 			streamWrite(unsafeStream, 19, curCharCode);
 		}
 	}
@@ -193,7 +193,7 @@ export function decode(codedStr: string) {
 		codedStr = '-' + codedStr.slice(0, -1);
 		lastDashIndex += 1;
 	}
-	let unsafeStream: DashyStream = {
+	const unsafeStream: DashyStream = {
 		codeBuf: codedStr.slice(lastDashIndex + 2),
 		buf: 0x0,
 		bufLength: 0,
@@ -276,7 +276,7 @@ export function vizStream(codeBuf: string, translate: boolean = true) {
 		codeBuf = codeBuf.slice(0, -1);
 		spacedStream = ' [start unsafe]' + spacedStream;
 	}
-	let stream: DashyStream = {
+	const stream: DashyStream = {
 		codeBuf,
 		buf: 0x0,
 		bufLength: 0,

@@ -87,16 +87,16 @@ class Jeopardy extends Rooms.RoomGame {
 		}
 		this.roundstarted = true;
 		if (this.round === 1) {
-			for (let userID in this.players) {
-				let player = this.players[userID];
+			for (let userID in this.playerTable) {
+				let player = this.playerTable[userID];
 				this.points.set(player, 0);
 			}
 		}
 		this.state = 'selecting';
 		let lowest = [];
 		let minpoints;
-		for (let userID in this.players) {
-			let points = this.players[userID].points;
+		for (let userID in this.playerTable) {
+			let points = this.playerTable[userID].points;
 			if (!minpoints) {
 				lowest.push(userID);
 				minpoints = points;
@@ -107,7 +107,7 @@ class Jeopardy extends Rooms.RoomGame {
 				lowest.push(userID);
 			}
 		}
-		this.curPlayer = this.players[lowest[Math.floor(lowest.length * Math.random())]];
+		this.curPlayer = this.playerTable[lowest[Math.floor(lowest.length * Math.random())]];
 		this.prevPlayer = this.curPlayer;
 		this.update();
 		this.nextPlayer();
@@ -134,8 +134,8 @@ class Jeopardy extends Rooms.RoomGame {
 		if (this.question && !this.finals) {
 			buffer += `<table align="left"><tr><td bgcolor="${this.canBuzz ? "00FF00" : "0000FF"}" height="30px" width="30px"></td></tr></table>`;
 		}
-		for (let userID in this.players) {
-			let player = this.players[userID];
+		for (let userID in this.playerTable) {
+			let player = this.playerTable[userID];
 			buffer += `<center>${this.curPlayer && this.curPlayer.name === player.name ? "<b>" : ""}<font size=4>${Chat.escapeHTML(player.name)}(${(player.points || 0)})${this.curPlayer && this.curPlayer.name === player.name ? "</b>" : ""}</center><br />`;
 		}
 		buffer += "</body></html></div>";
@@ -165,7 +165,7 @@ class Jeopardy extends Rooms.RoomGame {
 
 	select(target, user) {
 		if (this.state !== 'selecting') return "The game of Jeopardy is not in the selection phase.";
-		let player = this.players[user.userid];
+		let player = this.playerTable[user.userid];
 		if (!player) return "You are not in the game of Jeopardy.";
 		if (!this.curPlayer || this.curPlayer.userid !== user.userid) return "It is not your turn to select.";
 		let params = target.split(",");
@@ -189,14 +189,14 @@ class Jeopardy extends Rooms.RoomGame {
 	}
 
 	clearwagers() {
-		for (let userID in this.players) {
-			this.players[userID].wager = null;
+		for (let userID in this.playerTable) {
+			this.playerTable[userID].wager = null;
 		}
 	}
 
 	clearbuzzes() {
-		for (let userID in this.players) {
-			this.players[userID].buzzed = false;
+		for (let userID in this.playerTable) {
+			this.playerTable[userID].buzzed = false;
 		}
 	}
 
@@ -220,8 +220,8 @@ class Jeopardy extends Rooms.RoomGame {
 	}
 
 	allowAllBuzzes() {
-		for (let userID in this.players) {
-			this.players[userID].buzzedEarly = false;
+		for (let userID in this.playerTable) {
+			this.playerTable[userID].buzzedEarly = false;
 		}
 	}
 
@@ -232,7 +232,7 @@ class Jeopardy extends Rooms.RoomGame {
 
 	buzz(user) {
 		if (this.state !== 'buzzing') return "You cannot buzz in at this time.";
-		let player = this.players[user.userid];
+		let player = this.playerTable[user.userid];
 		if (!player) return "You are not in the game of Jeopardy.";
 		if (player.buzzed) return "You have already buzzed in to the current question.";
 		if (!this.canBuzz) {
@@ -269,9 +269,9 @@ class Jeopardy extends Rooms.RoomGame {
 
 	wager(amount, user) {
 		if (this.state !== "wagering" && (!this.finals || this.curPlayer.id !== user.userid)) return "You cannot wager at this time.";
-		let player = this.players[user.userid];
+		let player = this.playerTable[user.userid];
 		if (!player) return "You are not in the game of Jeopardy.";
-		amount = toId(amount);
+		amount = toID(amount);
 		let wager = (amount === 'all' ? player.points : parseInt(amount));
 		if (!wager) return "Your wager must be a number, or 'all'";
 		if (wager < 0) return "You cannot wager a negative amount";
@@ -282,8 +282,8 @@ class Jeopardy extends Rooms.RoomGame {
 		if (!this.finals) {
 			this.dailyDouble();
 		} else {
-			for (let userID in this.players) {
-				let player = this.players[userID];
+			for (let userID in this.playerTable) {
+				let player = this.playerTable[userID];
 				if (!player.wager) return;
 			}
 			clearTimeout(this.timeout);
@@ -291,8 +291,8 @@ class Jeopardy extends Rooms.RoomGame {
 		}
 	}
 	finalWagers() {
-		for (let userID in this.players) {
-			let player = this.players[userID];
+		for (let userID in this.playerTable) {
+			let player = this.playerTable[userID];
 			if (!player.wager) player.wager = 0;
 		}
 		this.question = this.finalQuestion;
@@ -302,7 +302,7 @@ class Jeopardy extends Rooms.RoomGame {
 	}
 
 	doFinals() {
-		this.order = Object.keys(this.players);
+		this.order = Object.keys(this.playerTable);
 		this.doFinalPlayer();
 	}
 
@@ -311,8 +311,8 @@ class Jeopardy extends Rooms.RoomGame {
 			this.revealAnswer();
 			let highest = [];
 			let maxpoints;
-			for (let userID in this.players) {
-				let player = this.players[userID];
+			for (let userID in this.playerTable) {
+				let player = this.playerTable[userID];
 				let points = player.points;
 				if (!maxpoints) {
 					highest.push(player.name);
@@ -328,7 +328,7 @@ class Jeopardy extends Rooms.RoomGame {
 			this.destroy();
 			return;
 		} else {
-			this.curPlayer = this.players[this.order.shift()];
+			this.curPlayer = this.playerTable[this.order.shift()];
 			let answer = this.curPlayer.finalanswer;
 			if (answer) {
 				this.room.add(`${this.curPlayer.name} has answered ${Chat.escapeHTML(answer)}!`);
@@ -346,7 +346,7 @@ class Jeopardy extends Rooms.RoomGame {
 
 	answer(target, user) {
 		if (this.state !== 'answering') return "You cannot answer the question at this time.";
-		let player = this.players[user.userid];
+		let player = this.playerTable[user.userid];
 		if (!player) return "You are not in the game of Jeopardy.";
 		if (this.finals) {
 			if (player.finalanswer) return "You have already answered the final jeopardy";
@@ -408,8 +408,8 @@ class Jeopardy extends Rooms.RoomGame {
 	}
 
 	everyBuzzed() {
-		for (let userID in this.players) {
-			if (!this.players[userID].buzzed) return false;
+		for (let userID in this.playerTable) {
+			if (!this.playerTable[userID].buzzed) return false;
 		}
 		return true;
 	}
@@ -607,7 +607,7 @@ exports.commands = {
 			let params = target.split(",");
 			let dataStart = 0;
 			let catStart, questionStart;
-			if (toId(params[0]) === 'final') {
+			if (toID(params[0]) === 'final') {
 				catStart = 'finals';
 				params.splice(0, 1);
 			} else {

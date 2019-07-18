@@ -1,7 +1,6 @@
 {
     "extends": "tslint:latest",
     "defaultSeverity": "error",
-    "jsRules": {},
     "rules": {
         "array-type": [true, "array"],
         "arrow-parens": [true, "ban-single-arg-parens"],
@@ -11,18 +10,32 @@
         "member-access": [true, "no-public"],
         "no-empty": [true, "allow-empty-catch", "allow-empty-functions"],
         "no-string-literal": false,
-        "interface-over-type-literal": false,
-        // TODO: turn on
-        "prefer-const": false,
-        // I do want to bring this down to 120 at some point but maybe later
+        "interface-over-type-literal": true,
+        "arrow-return-shorthand": true,
+        "no-angle-bracket-type-assertion": true,
+        "no-redundant-jsdoc": true,
+        "no-unsafe-finally": true,
+        "object-literal-shorthand": true,
+        "prefer-for-of": true,
+        "static-this": true,
+        "triple-equals": true,
+        "unnecessary-bind": true,
+        "prefer-const": {
+            "severity": "warning",
+            "options": {
+                "destructuring": "all"
+            }
+        },
         "max-line-length": {
             "severity": "warning",
             "options": {
-                "limit": 140,
-                "ignore-pattern": "\\.replace\\(('\\[|/)|^\\s*(// \\s*)?(return |(let |const )?[a-zA-Z0-9$.]+ \\+?= (\\$\\()?|[a-zA-Z0-9$.]+\\()?['\"`]"
+                "limit": 120,
+                "ignore-pattern": "^\\s*(// \\s*)?((let |const )?[a-zA-Z0-9$.]+ \\+?= (\\$\\()?|(return |throw )?(new )?([a-zA-Z0-9$.]+\\()?|Chat.html)?['\"`/]"
             }
         },
+        "no-floating-promises": true,
         "interface-name": false,
+        "no-for-in-array": true,
         "forin": false,
         // maybe one day
         "member-ordering": false,
@@ -34,6 +47,8 @@
         "prefer-conditional-expression": false,
         "prefer-object-spread": false,
         "no-shadowed-variable": [true, {"temporalDeadZone": false}],
+        // I don't understand why people care about this considering how aggressively they drop support for old IE versions
+        "radix": false,
         "object-literal-sort-keys": false,
         "object-literal-key-quotes": [true, "as-needed"],
         "trailing-comma": [
@@ -52,8 +67,10 @@
         "semicolon": [true, "always", "strict-bound-class-methods"],
         "space-before-function-paren": [true, {"anonymous": "always", "named": "never", "asyncArrow": "always"}]
     },
+    "jsEnable": false,
     "rulesDirectory": [],
     "linterOptions": {
-      "exclude": ["node_modules/**/*", "**/*.js", "dev-tools/*", ".*-dist/*"]
+      // TODO: why is tslint looking at .js files anyway?
+      "exclude": ["node_modules/", "**/*.js", "*/globals.ts"]
      }
 }

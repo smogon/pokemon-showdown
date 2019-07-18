@@ -55,8 +55,8 @@ if (('Config' in global) &&
 	Config.loglevel = 2;
 }
 
-/** @type {typeof import('../lib/crashlogger')} */
-let crashlogger = require(/** @type {any} */('../.lib-dist/crashlogger'));
+/** @type {typeof import('../lib/crashlogger').crashlogger} */
+let crashlogger = require(/** @type {any} */('../.lib-dist/crashlogger')).crashlogger;
 
 const Monitor = module.exports = {
 	/*********************************************************
@@ -144,7 +144,7 @@ const Monitor = module.exports = {
 		this.battlePreps.clear();
 		this.battles.clear();
 		this.connections.clear();
-		Dnsbl.cache.clear();
+		IPTools.dnsblCache.clear();
 	},
 
 	connections: new TimedCounter(),

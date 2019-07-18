@@ -37,7 +37,7 @@ function savePrenoms() {
 /**
  * @param {string} nomination
  *
- * toId would return '' for foreign/sadistic nominations
+ * toID would return '' for foreign/sadistic nominations
  */
 function toNominationId(nomination) {
 	return nomination.toLowerCase().replace(/\s/g, '').replace(/\b&\b/g, '');
@@ -118,18 +118,18 @@ class OtdHandler {
 		if (this.winners.slice(this.room === rooms.jubilifetvfilms ? -15 : -30).some(entry => toNominationId(entry[this.keys[0]]) === id)) return user.sendTo(this.room, `This ${this.name.toLowerCase()} has already been ${this.id} in the past month.`);
 
 		for (const value of this.removedNominations.values()) {
-			if (toId(user) in value.userids || user.latestIp in value.ips) return user.sendTo(this.room, `Since your nomination has been removed by staff, you cannot submit another ${this.name.toLowerCase()} until the next round.`);
+			if (toID(user) in value.userids || user.latestIp in value.ips) return user.sendTo(this.room, `Since your nomination has been removed by staff, you cannot submit another ${this.name.toLowerCase()} until the next round.`);
 		}
 
 		const prevNom = this.nominations.get(id);
 		if (prevNom) {
-			if (!(toId(user) in prevNom.userids || user.latestIp in prevNom.ips)) {
+			if (!(toID(user) in prevNom.userids || user.latestIp in prevNom.ips)) {
 				return user.sendTo(this.room, `This ${this.name.toLowerCase()} has already been nominated.`);
 			}
 		}
 
 		for (const [key, value] of this.nominations) {
-			if (toId(user) in value.userids || user.latestIp in value.ips) {
+			if (toID(user) in value.userids || user.latestIp in value.ips) {
 				user.sendTo(this.room, `Your previous vote for ${value.nomination} will be removed.`);
 				this.nominations.delete(key);
 				if (prenoms[this.id]) {
@@ -172,9 +172,9 @@ class OtdHandler {
 		/** @type {string[]} */
 		const entries = [];
 
-		this.nominations.forEach(value => {
+		for (const value of this.nominations.values()) {
 			entries.push(`<li><b>${value.nomination}</b> <i>(Submitted by ${value.name})</i></li>`);
-		});
+		}
 
 		if (entries.length > 20) {
 			buffer += `<table><tr><td><ul>${entries.slice(0, Math.ceil(entries.length / 2)).join('')}</ul></td><td><ul>${entries.slice(Math.ceil(entries.length / 2)).join('')}</ul></td></tr></table>`;
@@ -199,14 +199,14 @@ class OtdHandler {
 	}
 
 	rollWinner() {
-		let keys = Array.from(this.nominations.keys());
+		let keys = [...this.nominations.keys()];
 		if (!keys.length) return false;
 
 		let winner = this.nominations.get(keys[Math.floor(Math.random() * keys.length)]);
 		if (!winner) return false; // Should never happen but shuts typescript up.
 		this.appendWinner(winner.nomination, winner.name);
 
-		const names = Array.from(this.nominations.values()).map(obj => obj.name);
+		const names = [...this.nominations.values()].map(obj => obj.name);
 
 		let columns = names.length > 27 ? 4 : names.length > 18 ? 3 : names.length > 9 ? 2 : 1;
 		let content = '';
@@ -226,7 +226,7 @@ class OtdHandler {
 	 * @param {string} name
 	 */
 	removeNomination(name) {
-		name = toId(name);
+		name = toID(name);
 
 		let success = false;
 		for (const [key, value] of this.nominations) {
@@ -397,7 +397,7 @@ const motw = new OtdHandler('motw', 'Match', rooms.prowrestling, MOTWS_FILE, ['m
  * @param {string} message
  */
 function selectHandler(message) {
-	let id = toId(message.substring(1, 5));
+	let id = toID(message.substring(1, 5));
 	switch (id) {
 	case 'aotd':
 		return aotd;
@@ -464,7 +464,7 @@ let commands = {
 		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 
-		if (!toNominationId(target).length || target.length > 50) return this.sendReply(`'${target}' is not a valid ${handler.name.toLowerCase()} name.`);
+		if (!toNominationId(target).length || target.length > 75) return this.sendReply(`'${target}' is not a valid ${handler.name.toLowerCase()} name.`);
 
 		handler.addNomination(user, target);
 	},
@@ -496,7 +496,7 @@ let commands = {
 		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
 		if (!this.can('mute', null, room)) return false;
 
-		let userid = toId(target);
+		let userid = toID(target);
 		if (!userid) return this.errorReply(`'${target}' is not a valid username.`);
 
 		if (handler.removeNomination(userid)) {

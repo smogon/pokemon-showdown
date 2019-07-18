@@ -1,6 +1,6 @@
 'use strict';
 
-/**@type {{[k: string]: ModdedEffectData}} */
+/**@type {{[k: string]: ModdedPureEffectData}} */
 let BattleStatuses = {
 	brn: {
 		name: 'brn',
@@ -12,10 +12,10 @@ let BattleStatuses = {
 		},
 		onAfterMoveSelfPriority: 3,
 		onAfterMoveSelf(pokemon) {
-			this.damage(pokemon.maxhp / 8);
+			residualdmg(this, pokemon);
 		},
 		onAfterSwitchInSelf(pokemon) {
-			this.damage(pokemon.maxhp / 8);
+			residualdmg(this, pokemon);
 		},
 	},
 	par: {
@@ -36,8 +36,12 @@ let BattleStatuses = {
 		id: 'slp',
 		num: 0,
 		effectType: 'Status',
-		onStart(target) {
-			this.add('-status', target, 'slp');
+		onStart(target, source, sourceEffect) {
+			if (sourceEffect && sourceEffect.effectType === 'Move') {
+				this.add('-status', target, 'slp', '[from] move: ' + sourceEffect.name);
+			} else {
+				this.add('-status', target, 'slp');
+			}
 			// 1-6 turns
 			this.effectData.time = this.random(2, 8);
 		},
@@ -89,10 +93,10 @@ let BattleStatuses = {
 		},
 		onAfterMoveSelfPriority: 3,
 		onAfterMoveSelf(pokemon) {
-			this.damage(pokemon.maxhp / 8);
+			residualdmg(this, pokemon);
 		},
 		onAfterSwitchInSelf(pokemon) {
-			this.damage(pokemon.maxhp / 8);
+			residualdmg(this, pokemon);
 		},
 	},
 	tox: {
@@ -102,19 +106,17 @@ let BattleStatuses = {
 		effectType: 'Status',
 		onStart(target) {
 			this.add('-status', target, 'tox');
-			this.effectData.stage = 0;
+			if (!target.volatiles['residualdmg']) target.addVolatile('residualdmg');
+			target.volatiles['residualdmg'].counter = 0;
 		},
 		onAfterMoveSelfPriority: 3,
 		onAfterMoveSelf(pokemon) {
-			if (this.effectData.stage < 15) {
-				this.effectData.stage++;
-			}
-			this.damage(this.clampIntRange(pokemon.maxhp / 16, 1) * this.effectData.stage);
+			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * pokemon.volatiles['residualdmg'].counter, pokemon, pokemon);
 		},
 		onSwitchIn(pokemon) {
 			// Regular poison status and damage after a switchout -> switchin.
-			this.effectData.stage = 0;
-			pokemon.setStatus('psn');
+			pokemon.status = /** @type {ID} */('psn');
+			this.add('-status', pokemon, 'psn', '[silent]');
 		},
 		onAfterSwitchInSelf(pokemon) {
 			this.damage(this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1));
@@ -153,6 +155,7 @@ let BattleStatuses = {
 				isSelfHit: true,
 				noDamageVariance: true,
 				flags: {},
+				selfdestruct: move.selfdestruct,
 			});
 			let damage = this.getDamage(pokemon, pokemon, move);
 			if (typeof damage !== 'number') throw new Error("Confusion damage not dealt");
@@ -226,6 +229,34 @@ let BattleStatuses = {
 			this.effectData.duration = 2;
 		},
 	},
+	residualdmg: {
+		name: 'residualdmg',
+		id: 'residualdmg',
+		num: 0,
+		onStart(target) {
+			target.volatiles['residualdmg'].counter = 0;
+		},
+		onAfterMoveSelfPriority: 100,
+		onAfterMoveSelf(pokemon) {
+			if (['brn', 'psn', 'tox'].includes(pokemon.status)) pokemon.volatiles['residualdmg'].counter++;
+		},
+		onAfterSwitchInSelf(pokemon) {
+			if (['brn', 'psn', 'tox'].includes(pokemon.status)) pokemon.volatiles['residualdmg'].counter++;
+		},
+	},
 };
+
+/**
+ * @param {Battle} battle
+ * @param {Pokemon} pokemon
+ */
+function residualdmg(battle, pokemon) {
+	if (pokemon.volatiles['residualdmg']) {
+		battle.damage(battle.clampIntRange(Math.floor(pokemon.maxhp / 16) * pokemon.volatiles['residualdmg'].counter, 1), pokemon);
+		battle.hint("In Gen 2, Toxic's counter is retained through Baton Pass/Heal Bell and applies to PSN/BRN.", true);
+	} else {
+		battle.damage(battle.clampIntRange(Math.floor(pokemon.maxhp / 8), 1), pokemon);
+	}
+}
 
 exports.BattleStatuses = BattleStatuses;

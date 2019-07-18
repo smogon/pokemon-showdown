@@ -129,11 +129,11 @@ let BattleFormats = {
 			let battleForme = template.battleOnly && template.species;
 			if (battleForme) {
 				if (template.isMega) set.species = template.baseSpecies;
-				if (template.requiredMove && !set.moves.includes(toId(template.requiredMove))) {
+				if (template.requiredMove && !set.moves.includes(toID(template.requiredMove))) {
 					problems.push(`${template.species} transforms in-battle with ${template.requiredMove}.`); // Meloetta-Pirouette, Rayquaza-Mega
 				}
 			} else {
-				if (template.requiredMove && !set.moves.includes(toId(template.requiredMove))) {
+				if (template.requiredMove && !set.moves.includes(toID(template.requiredMove))) {
 					problems.push(`${(set.name || set.species)} needs to have the move ${template.requiredMove}.`); // Keldeo-Resolute
 				}
 			}
@@ -148,7 +148,7 @@ let BattleFormats = {
 		onChangeSet(set, format) {
 			/**@type {string[]} */
 			let problems = ([]);
-			let avs = this.getAwakeningValues(set);
+			let avs = /** @type {StatsTable} */(this.getAwakeningValues(set));
 			if (set.evs) {
 				for (let k in set.evs) {
 					// @ts-ignore
@@ -164,6 +164,7 @@ let BattleFormats = {
 			// Pokemon cannot have more than 200 Awakening Values in a stat. It is impossible to hack more than 200 AVs onto a stat, so legality doesn't matter.
 			for (let av in avs) {
 				let statNames = {hp: 'HP', atk: 'Attack', def: 'Defense', spa: 'Special Attack', spd: 'Special Defense', spe: 'Speed'};
+				// @ts-ignore
 				if (avs[av] > 200) {
 					// @ts-ignore
 					problems.push(`${set.name || set.species} has more than 200 Awakening Values in its ${statNames[av]}.`);

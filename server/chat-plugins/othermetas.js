@@ -8,7 +8,7 @@
 function getMegaStone(stone) {
 	let item = Dex.getItem(stone);
 	if (!item.exists) {
-		if (toId(stone) === 'dragonascent') {
+		if (toID(stone) === 'dragonascent') {
 			let move = Dex.getMove(stone);
 			return {
 				id: move.id,
@@ -31,7 +31,7 @@ const commands = {
 	om: 'othermetas',
 	othermetas(target, room, user) {
 		if (!this.runBroadcast()) return;
-		target = toId(target);
+		target = toID(target);
 		let buffer = ``;
 
 		if (target === 'all' && this.broadcasting) {
@@ -68,7 +68,7 @@ const commands = {
 	mnm: 'mixandmega',
 	mixandmega(target, room, user) {
 		if (!this.runBroadcast()) return;
-		if (!toId(target) || !target.includes('@')) return this.parse('/help mixandmega');
+		if (!toID(target) || !target.includes('@')) return this.parse('/help mixandmega');
 		let sep = target.split('@');
 		let stone = getMegaStone(sep[1]);
 		let template = Dex.getTemplate(sep[0]);
@@ -95,7 +95,7 @@ const commands = {
 		if (stone.isUnreleased) {
 			this.errorReply(`Warning: ${stone.name} is unreleased and is not usable in current Mix and Mega.`);
 		}
-		if (toId(sep[1]) === 'dragonascent' && !['smeargle', 'rayquaza', 'rayquazamega'].includes(toId(sep[0]))) {
+		if (toID(sep[1]) === 'dragonascent' && !['smeargle', 'rayquaza', 'rayquazamega'].includes(toID(sep[0]))) {
 			this.errorReply(`Warning: Only Pokemon with access to Dragon Ascent can mega evolve with Mega Rayquaza's traits.`);
 		}
 		// Fake Pokemon and Mega Stones
@@ -178,7 +178,7 @@ const commands = {
 	megastone: 'stone',
 	stone(target) {
 		if (!this.runBroadcast()) return;
-		let targetid = toId(target);
+		let targetid = toID(target);
 		if (!targetid) return this.parse('/help stone');
 		let stone = getMegaStone(targetid);
 		if (!stone.exists) return this.errorReply(`Error: Mega Stone not found.`);
@@ -245,12 +245,12 @@ const commands = {
 			buf += `<span class="col itemiconcol"><psicon item="${targetid}"/></span> `;
 		}
 		if (targetid === "dragonascent") {
-			buf += `<span class="col movenamecol" style="white-space:nowrap"><a href="https://pokemonshowdown.com/dex/moves/${targetid}" target="_blank">Dragon Ascent</a></span> `;
+			buf += `<span class="col movenamecol" style="white-space:nowrap"><a href="https://${Config.routes.dex}/moves/${targetid}" target="_blank">Dragon Ascent</a></span> `;
 		} else {
-			buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://pokemonshowdown.com/dex/items/${stone.id}" target="_blank">${stone.name}</a></span> `;
+			buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://${Config.routes.dex}/items/${stone.id}" target="_blank">${stone.name}</a></span> `;
 		}
 		if (deltas.type) {
-			buf += `<span class="col typecol"><img src="https://play.pokemonshowdown.com/sprites/types/${deltas.type}.png" alt="${deltas.type}" height="14" width="32"></span> `;
+			buf += `<span class="col typecol"><img src="https://${Config.routes.client}/sprites/types/${deltas.type}.png" alt="${deltas.type}" height="14" width="32"></span> `;
 		} else {
 			buf += `<span class="col typecol"></span>`;
 		}
@@ -277,7 +277,7 @@ const commands = {
 	'350': '350cup',
 	'350cup'(target, room, user) {
 		if (!this.runBroadcast()) return;
-		if (!toId(target)) return this.parse('/help 350cup');
+		if (!toID(target)) return this.parse('/help 350cup');
 		let template = Dex.deepClone(Dex.getTemplate(target));
 		if (!template.exists) return this.errorReply("Error: Pokemon not found.");
 		let bst = 0;
@@ -295,7 +295,7 @@ const commands = {
 	ts: 'tiershift',
 	tiershift(target, room, user) {
 		if (!this.runBroadcast()) return;
-		if (!toId(target)) return this.parse('/help tiershift');
+		if (!toID(target)) return this.parse('/help tiershift');
 		let template = Dex.deepClone(Dex.getTemplate(target));
 		if (!template.exists) return this.errorReply("Error: Pokemon not found.");
 		/** @type {{[k: string]: number}} */
@@ -327,7 +327,7 @@ const commands = {
 	scale: 'scalemons',
 	scalemons(target, room, user) {
 		if (!this.runBroadcast()) return;
-		if (!toId(target)) return this.parse(`/help scalemons`);
+		if (!toID(target)) return this.parse(`/help scalemons`);
 		let template = Dex.deepClone(Dex.getTemplate(target));
 		if (!template.exists) return this.errorReply(`Error: Pokemon ${target} not found.`);
 		let stats = ['atk', 'def', 'spa', 'spd', 'spe'];
@@ -339,6 +339,27 @@ const commands = {
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(template)}`);
 	},
 	scalemonshelp: [`/scale OR /scalemons <pokemon> - Shows the base stats that a Pokemon would have in Scalemons.`],
+
+	'!natureswap': true,
+	ns: 'natureswap',
+	natureswap(target, room, user) {
+		if (!this.runBroadcast()) return;
+		let nature = target.trim().split(' ')[0];
+		let pokemon = target.trim().split(' ')[1];
+		if (!toID(nature) || !toID(pokemon)) return this.parse(`/help natureswap`);
+		let natureObj = /** @type {{name: string, plus?: string | undefined, minus?: string | undefined, exists?: boolean}} */ Dex.getNature(nature);
+		if (!natureObj.exists) return this.errorReply(`Error: Nature ${nature} not found.`);
+		let template = Dex.deepClone(Dex.getTemplate(pokemon));
+		if (!template.exists) return this.errorReply(`Error: Pokemon ${pokemon} not found.`);
+		if (natureObj.minus && natureObj.plus) {
+			let swap = template.baseStats[natureObj.minus];
+			template.baseStats[natureObj.minus] = template.baseStats[natureObj.plus];
+			template.baseStats[natureObj.plus] = swap;
+			template.tier = 'NS';
+		}
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(template)}`);
+	},
+	natureswapshelp: [`/ns OR /natureswap <pokemon> - Shows the base stats that a Pokemon would have in Nature Swap. Usage: /ns <Nature> <Pokemon>.`],
 };
 
 exports.commands = commands;

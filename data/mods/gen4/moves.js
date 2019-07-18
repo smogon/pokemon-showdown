@@ -40,7 +40,9 @@ let BattleMovedex = {
 		inherit: true,
 		onHit(target, source) {
 			this.add('-cureteam', source, '[from] move: Aromatherapy');
-			source.side.pokemon.forEach(pokemon => pokemon.clearStatus());
+			for (const pokemon of source.side.pokemon) {
+				pokemon.clearStatus();
+			}
 		},
 	},
 	aquaring: {
@@ -428,10 +430,7 @@ let BattleMovedex = {
 		basePower: 120,
 		desc: "Deals typeless damage that cannot be a critical hit two turns after this move is used. Damage is calculated against the target on use, and at the end of the final turn that damage is dealt to the Pokemon at the position the original target had at the time. Fails if this move or Future Sight is already in effect for the target's position.",
 		onTry(source, target) {
-			target.side.addSideCondition('futuremove');
-			if (target.side.sideConditions['futuremove'].positions[target.position]) {
-				return false;
-			}
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 			let moveData = /** @type {ActiveMove} */ ({
 				name: "Doom Desire",
 				basePower: 120,
@@ -441,7 +440,7 @@ let BattleMovedex = {
 				type: '???',
 			});
 			let damage = this.getDamage(source, target, moveData, true);
-			target.side.sideConditions['futuremove'].positions[target.position] = {
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				duration: 3,
 				move: 'doomdesire',
 				source: source,
@@ -457,7 +456,7 @@ let BattleMovedex = {
 					isFutureMove: true,
 					type: '???',
 				},
-			};
+			});
 			this.add('-start', source, 'Doom Desire');
 			return null;
 		},
@@ -689,10 +688,7 @@ let BattleMovedex = {
 		desc: "Deals typeless damage that cannot be a critical hit two turns after this move is used. Damage is calculated against the target on use, and at the end of the final turn that damage is dealt to the Pokemon at the position the original target had at the time. Fails if this move or Doom Desire is already in effect for the target's position.",
 		pp: 15,
 		onTry(source, target) {
-			target.side.addSideCondition('futuremove');
-			if (target.side.sideConditions['futuremove'].positions[target.position]) {
-				return false;
-			}
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 			let moveData = /** @type {ActiveMove} */ ({
 				name: "Future Sight",
 				basePower: 80,
@@ -702,7 +698,7 @@ let BattleMovedex = {
 				type: '???',
 			});
 			let damage = this.getDamage(source, target, moveData, true);
-			target.side.sideConditions['futuremove'].positions[target.position] = {
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				duration: 3,
 				move: 'futuresight',
 				source: source,
@@ -718,7 +714,7 @@ let BattleMovedex = {
 					isFutureMove: true,
 					type: '???',
 				},
-			};
+			});
 			this.add('-start', source, 'Future Sight');
 			return null;
 		},
@@ -763,9 +759,9 @@ let BattleMovedex = {
 		desc: "Every Pokemon in the user's party is cured of its major status condition. Pokemon with the Soundproof Ability are not cured.",
 		onHit(target, source) {
 			this.add('-activate', source, 'move: Heal Bell');
-			source.side.pokemon.forEach(pokemon => {
+			for (const pokemon of source.side.pokemon) {
 				if (!pokemon.hasAbility('soundproof')) pokemon.cureStatus(true);
-			});
+			}
 		},
 	},
 	healblock: {
@@ -818,19 +814,13 @@ let BattleMovedex = {
 		},
 		effect: {
 			duration: 1,
-			onStart(side) {
-				this.debug('Healing Wish started on ' + side.name);
-			},
 			onSwitchInPriority: -1,
 			onSwitchIn(target) {
-				if (target.position !== this.effectData.sourcePosition) {
-					return;
-				}
 				if (target.hp > 0) {
 					target.heal(target.maxhp);
 					target.setStatus('');
 					this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');
-					target.side.removeSideCondition('healingwish');
+					target.side.removeSlotCondition(target, 'healingwish');
 					target.lastMove = this.lastMove;
 				} else {
 					target.switchFlag = true;
@@ -895,6 +885,12 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "The target's held item is lost for the rest of the battle, unless the item is a Griseous Orb or the target has the Multitype or Sticky Hold Abilities. During the effect, the target cannot obtain a new item by any means.",
 		shortDesc: "Target's item is lost and it cannot obtain another.",
+		onAfterHit(target, source) {
+			let item = target.takeItem();
+			if (item) {
+				this.add('-enditem', target, item.name, '[from] move: Knock Off', '[of] ' + source);
+			}
+		},
 	},
 	lastresort: {
 		inherit: true,
@@ -917,7 +913,7 @@ let BattleMovedex = {
 			},
 			onAnyModifyDamagePhase1(damage, source, target, move) {
 				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Special') {
-					if (!move.crit && !move.infiltrates) {
+					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Light Screen weaken');
 						if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
 						return this.chainModify(0.5);
@@ -965,7 +961,7 @@ let BattleMovedex = {
 						moveSlot.pp = moveSlot.maxpp;
 					}
 					this.add('-heal', target, target.getHealth, '[from] move: Lunar Dance');
-					target.side.removeSideCondition('lunardance');
+					target.side.removeSlotCondition(target, 'lunardance');
 					target.lastMove = this.lastMove;
 				} else {
 					target.switchFlag = true;
@@ -1117,9 +1113,9 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Rain Dance, or Sandstorm, all rounded down.",
 		onHit(pokemon) {
-			if (this.isWeather(['sunnyday', 'desolateland'])) {
+			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
 				this.heal(pokemon.maxhp * 2 / 3);
-			} else if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
+			} else if (this.field.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
 				this.heal(pokemon.maxhp / 4);
 			} else {
 				this.heal(pokemon.maxhp / 2);
@@ -1130,9 +1126,9 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Rain Dance, or Sandstorm, all rounded down.",
 		onHit(pokemon) {
-			if (this.isWeather(['sunnyday', 'desolateland'])) {
+			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
 				this.heal(pokemon.maxhp * 2 / 3);
-			} else if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
+			} else if (this.field.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
 				this.heal(pokemon.maxhp / 4);
 			} else {
 				this.heal(pokemon.maxhp / 2);
@@ -1250,6 +1246,22 @@ let BattleMovedex = {
 	rapidspin: {
 		inherit: true,
 		desc: "If this move is successful, the effects of Leech Seed and binding moves end against the user, and all hazards are removed from the user's side of the field.",
+		self: {
+			onHit(pokemon) {
+				if (pokemon.removeVolatile('leechseed')) {
+					this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', '[of] ' + pokemon);
+				}
+				let sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+				for (const condition of sideConditions) {
+					if (pokemon.side.removeSideCondition(condition)) {
+						this.add('-sideend', pokemon.side, this.getEffect(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
+					}
+				}
+				if (pokemon.volatiles['partiallytrapped']) {
+					pokemon.removeVolatile('partiallytrapped');
+				}
+			},
+		},
 	},
 	razorwind: {
 		inherit: true,
@@ -1277,7 +1289,7 @@ let BattleMovedex = {
 			},
 			onAnyModifyDamagePhase1(damage, source, target, move) {
 				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Physical') {
-					if (!move.crit && !move.infiltrates) {
+					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Reflect weaken');
 						if (target.side.active.length > 1) return this.chainModify([0xAAC, 0x1000]);
 						return this.chainModify(0.5);
@@ -1473,6 +1485,55 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "If the target lost HP, the user takes recoil damage equal to 1/4 the HP lost by the target, rounded down, but not less than 1 HP.",
 	},
+	substitute: {
+		inherit: true,
+		effect: {
+			onStart(target) {
+				this.add('-start', target, 'Substitute');
+				this.effectData.hp = Math.floor(target.maxhp / 4);
+				delete target.volatiles['partiallytrapped'];
+			},
+			onTryPrimaryHitPriority: -1,
+			onTryPrimaryHit(target, source, move) {
+				if (target === source || move.flags['authentic']) {
+					return;
+				}
+				let damage = this.getDamage(source, target, move);
+				if (!damage && damage !== 0) {
+					this.add('-fail', source);
+					this.attrLastMove('[still]');
+					return null;
+				}
+				damage = this.runEvent('SubDamage', target, source, move, damage);
+				if (!damage) {
+					return damage;
+				}
+				if (damage > target.volatiles['substitute'].hp) {
+					damage = /** @type {number} */ (target.volatiles['substitute'].hp);
+				}
+				target.volatiles['substitute'].hp -= damage;
+				source.lastDamage = damage;
+				if (target.volatiles['substitute'].hp <= 0) {
+					target.removeVolatile('substitute');
+					target.addVolatile('substitutebroken');
+					if (target.volatiles['substitutebroken']) target.volatiles['substitutebroken'].move = move.id;
+				} else {
+					this.add('-activate', target, 'Substitute', '[damage]');
+				}
+				if (move.recoil && damage) {
+					this.damage(this.calcRecoilDamage(damage, move), source, target, 'recoil');
+				}
+				if (move.drain) {
+					this.heal(Math.ceil(damage * move.drain[0] / move.drain[1]), source, target, 'drain');
+				}
+				this.runEvent('AfterSubDamage', target, source, move, damage);
+				return 0; // hit
+			},
+			onEnd(target) {
+				this.add('-end', target, 'Substitute');
+			},
+		},
+	},
 	suckerpunch: {
 		inherit: true,
 		desc: "Fails if the target did not select a physical or special attack for use this turn, or if the target moves before the user.",
@@ -1501,9 +1562,9 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "The user restores 1/2 of its maximum HP if no weather conditions are in effect, 2/3 of its maximum HP if the weather is Sunny Day, and 1/4 of its maximum HP if the weather is Hail, Rain Dance, or Sandstorm, all rounded down.",
 		onHit(pokemon) {
-			if (this.isWeather(['sunnyday', 'desolateland'])) {
+			if (this.field.isWeather(['sunnyday', 'desolateland'])) {
 				this.heal(pokemon.maxhp * 2 / 3);
-			} else if (this.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
+			} else if (this.field.isWeather(['raindance', 'primordialsea', 'sandstorm', 'hail'])) {
 				this.heal(pokemon.maxhp / 4);
 			} else {
 				this.heal(pokemon.maxhp / 2);
@@ -1624,13 +1685,11 @@ let BattleMovedex = {
 				this.effectData.layers++;
 			},
 			onSwitchIn(pokemon) {
-				if (!pokemon.runImmunity('Ground')) return;
-				if (!pokemon.runImmunity('Poison')) return;
+				if (!pokemon.isGrounded()) return;
 				if (pokemon.hasType('Poison')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
 					pokemon.side.removeSideCondition('toxicspikes');
-				}
-				if (pokemon.volatiles['substitute']) {
+				} else if (pokemon.volatiles['substitute'] || pokemon.hasType('Steel')) {
 					return;
 				} else if (this.effectData.layers >= 2) {
 					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
@@ -1717,12 +1776,11 @@ let BattleMovedex = {
 		desc: "At the end of the next turn, the Pokemon at the user's position has 1/2 of its maximum HP restored to it, rounded down. Fails if this move is already in effect for the user's position.",
 		shortDesc: "Next turn, heals 50% of the recipient's max HP.",
 		flags: {heal: 1},
-		sideCondition: 'Wish',
+		slotCondition: 'Wish',
 		effect: {
 			duration: 2,
 			onResidualOrder: 0.5,
-			onEnd(side) {
-				let target = side.active[this.effectData.sourcePosition];
+			onEnd(target) {
 				if (!target.fainted) {
 					let source = this.effectData.source;
 					let damage = this.heal(target.maxhp / 2, target, target);

@@ -178,7 +178,7 @@ let BattleFormatsData = {
 	pikachustarter: {
 		inherit: true,
 		randomBattleMoves: ["zippyzap", "splishysplash", "thunderbolt", "calmmind", "substitute"],
-		isNonstandard: false,
+		isNonstandard: null,
 		tier: "UU",
 		doublesTier: "DOU",
 	},
@@ -878,7 +878,7 @@ let BattleFormatsData = {
 	eeveestarter: {
 		inherit: true,
 		randomBattleMoves: ["sparklyswirl", "sizzlyslide", "sappyseed", "protect", "buzzybuzz", "bouncybubble"],
-		isNonstandard: false,
+		isNonstandard: null,
 		tier: "OU",
 		doublesTier: "DOU",
 	},
@@ -1037,14 +1037,14 @@ let BattleFormatsData = {
 	meltan: {
 		inherit: true,
 		randomBattleMoves: ["flashcannon", "thunderbolt", "toxic", "protect"],
-		isNonstandard: false,
+		isNonstandard: null,
 		tier: "UU",
 		doublesTier: "DOU",
 	},
 	melmetal: {
 		inherit: true,
 		randomBattleMoves: ["doubleironbash", "earthquake", "rockslide", "icepunch", "thunderwave"],
-		isNonstandard: false,
+		isNonstandard: null,
 		tier: "OU",
 		doublesTier: "DOU",
 	},

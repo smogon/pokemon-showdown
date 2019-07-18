@@ -6,8 +6,8 @@ class RandomLetsGoTeams extends RandomTeams {
 	/**
 	 * @param {string | Template} template
 	 * @param {number} [slot]
-	 * @param {RandomTeamsTypes["TeamDetails"]} [teamDetails]
-	 * @return {RandomTeamsTypes["RandomSet"]}
+	 * @param {RandomTeamsTypes.TeamDetails} [teamDetails]
+	 * @return {RandomTeamsTypes.RandomSet}
 	 */
 	randomSet(template, slot = 1, teamDetails = {}) {
 		template = this.getTemplate(template);
@@ -174,7 +174,7 @@ class RandomLetsGoTeams extends RandomTeams {
 					(hasType['Ground'] && !counter['Ground']) ||
 					(hasType['Ice'] && !counter['Ice']) ||
 					(hasType['Water'] && (!counter['Water'] || !counter.stab)) ||
-					(template.requiredMove && movePool.includes(toId(template.requiredMove))))) {
+					(template.requiredMove && movePool.includes(toID(template.requiredMove))))) {
 					// Reject Status or non-STAB
 					if (!isSetup && !move.weather) {
 						if (move.category === 'Status' || !hasType[move.type] || move.selfSwitch || move.basePower && move.basePower < 40 && !move.multihit) rejected = true;
@@ -234,7 +234,7 @@ class RandomLetsGoTeams extends RandomTeams {
 		let typeComboCount = {};
 		/**@type {{[k: string]: number}} */
 		let baseFormes = {};
-		/**@type {RandomTeamsTypes["TeamDetails"]} */
+		/**@type {RandomTeamsTypes.TeamDetails} */
 		let teamDetails = {};
 
 		while (pokemonPool.length && pokemon.length < 6) {

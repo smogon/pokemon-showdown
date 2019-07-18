@@ -12,6 +12,7 @@ import * as fs from 'fs';
 import * as net from 'net';
 import * as path from 'path';
 import * as repl from 'repl';
+import {crashlogger} from './crashlogger';
 
 export const Repl = new class {
 	/**
@@ -26,11 +27,11 @@ export const Repl = new class {
 		Repl.listenersSetup = true;
 		// Clean up REPL sockets and child processes on forced exit.
 		process.once('exit', code => {
-			Repl.socketPathnames.forEach(s => {
+			for (const s of Repl.socketPathnames) {
 				try {
 					fs.unlinkSync(s);
 				} catch (e) {}
-			});
+			}
 			if (code === 129 || code === 130) {
 				process.exitCode = 0;
 			}
@@ -59,13 +60,13 @@ export const Repl = new class {
 
 		if (filename === 'app') {
 			// Clean up old REPL sockets.
-			let directory = path.dirname(path.resolve(__dirname, '..', Config.replsocketprefix || 'logs/repl', 'app'));
-			for (let file of fs.readdirSync(directory)) {
-				let pathname = path.resolve(directory, file);
-				let stat = fs.statSync(pathname);
+			const directory = path.dirname(path.resolve(__dirname, '..', Config.replsocketprefix || 'logs/repl', 'app'));
+			for (const file of fs.readdirSync(directory)) {
+				const pathname = path.resolve(directory, file);
+				const stat = fs.statSync(pathname);
 				if (!stat.isSocket()) continue;
 
-				let socket = net.connect(pathname, () => {
+				const socket = net.connect(pathname, () => {
 					socket.end();
 					socket.destroy();
 				}).on('error', () => {
@@ -74,7 +75,7 @@ export const Repl = new class {
 			}
 		}
 
-		let server = net.createServer(socket => {
+		const server = net.createServer(socket => {
 			repl.start({
 				input: socket,
 				output: socket,
@@ -90,7 +91,7 @@ export const Repl = new class {
 			socket.on('error', () => socket.destroy());
 		});
 
-		let pathname = path.resolve(__dirname, '..', Config.replsocketprefix || 'logs/repl', filename);
+		const pathname = path.resolve(__dirname, '..', Config.replsocketprefix || 'logs/repl', filename);
 		server.listen(pathname, () => {
 			fs.chmodSync(pathname, Config.replsocketmode || 0o600);
 			Repl.socketPathnames.add(pathname);
@@ -101,12 +102,12 @@ export const Repl = new class {
 				// tslint:disable-next-line:variable-name
 				fs.unlink(pathname, _err => {
 					if (_err && _err.code !== "ENOENT") {
-						require('./crashlogger')(_err, `REPL: ${filename}`);
+						crashlogger(_err, `REPL: ${filename}`);
 					}
 					server.close();
 				});
 			} else {
-				require('./crashlogger')(err, `REPL: ${filename}`);
+				crashlogger(err, `REPL: ${filename}`);
 				server.close();
 			}
 		});

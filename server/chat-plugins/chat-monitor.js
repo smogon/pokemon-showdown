@@ -226,9 +226,9 @@ let chatfilter = function (message, user, room) {
 
 /** @type {NameFilter} */
 let namefilter = function (name, user) {
-	let id = toId(name);
+	let id = toID(name);
 	if (Chat.namefilterwhitelist.has(id)) return name;
-	if (id === user.trackRename) return '';
+	if (id === toID(user.trackRename)) return '';
 	let lcName = name.replace(/\u039d/g, 'N').toLowerCase().replace(/[\u200b\u007F\u00AD]/g, '').replace(/\u03bf/g, 'o').replace(/\u043e/g, 'o').replace(/\u0430/g, 'a').replace(/\u0435/g, 'e').replace(/\u039d/g, 'e');
 	// Remove false positives.
 	lcName = lcName.replace('herapist', '').replace('grape', '').replace('scrape', '');
@@ -248,8 +248,6 @@ let namefilter = function (name, user) {
 			if (matched) {
 				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
 					Punishments.autolock(user, Rooms('staff'), `NameMonitor`, `inappropriate name: ${name}`, `using an inappropriate name: ${name} (from ${user.name})`, false, name);
-				} else {
-					user.trackRename = name;
 				}
 				line[3]++;
 				saveFilters();
@@ -257,14 +255,20 @@ let namefilter = function (name, user) {
 			}
 		}
 	}
-
-	if (user.trackRename) {
-		Monitor.log(`[NameMonitor] Username used: ${name} (forcerenamed from ${user.trackRename})`);
-		user.trackRename = '';
-	}
 	return name;
 };
+/** @type {LoginFilter} */
+let loginfilter = function (user) {
+	if (user.namelocked) return;
 
+	const forceRenamed = Chat.forceRenames.has(user.userid);
+	if (user.trackRename) {
+		Monitor.log(`[NameMonitor] Username used: ${user.name} (${forceRenamed ? 'automatically ' : ''}forcerenamed from ${user.trackRename})`);
+		user.trackRename = '';
+	}
+	if (Chat.namefilterwhitelist.has(user.userid)) return;
+	if (forceRenamed) Monitor.log(`[NameMonitor] Forcerenamed name being reused: ${user.name}`);
+};
 /** @type {NameFilter} */
 let nicknamefilter = function (name, user) {
 	let lcName = name.replace(/\u039d/g, 'N').toLowerCase().replace(/[\u200b\u007F\u00AD]/g, '').replace(/\u03bf/g, 'o').replace(/\u043e/g, 'o').replace(/\u0430/g, 'a').replace(/\u0435/g, 'e').replace(/\u039d/g, 'e');
@@ -295,6 +299,42 @@ let nicknamefilter = function (name, user) {
 	}
 
 	return name;
+};
+/** @type {StatusFilter} */
+let statusfilter = function (status, user) {
+	let lcStatus = status.replace(/\u039d/g, 'N').toLowerCase().replace(/[\u200b\u007F\u00AD]/g, '').replace(/\u03bf/g, 'o').replace(/\u043e/g, 'o').replace(/\u0430/g, 'a').replace(/\u0435/g, 'e').replace(/\u039d/g, 'e');
+	// Remove false positives.
+	lcStatus = lcStatus.replace('herapist', '').replace('grape', '').replace('scrape', '');
+	// Check for blatant staff impersonation attempts. Ideally this could be completely generated from Config.grouplist
+	// for better support for side servers, but not all ranks are staff ranks or should necessarily be filted.
+	if (/\b(?:global|room|upper|senior)?\s*(?:staff|admin|administrator|leader|owner|founder|mod|moderator|driver|voice|operator|sysop|creator)\b/gi.test(lcStatus)) {
+		return '';
+	}
+
+	for (const list in filterWords) {
+		for (let line of filterWords[list]) {
+			const word = line[0];
+
+			let matched;
+			if (typeof word !== 'string') {
+				matched = word.test(lcStatus);
+			} else if (word.startsWith('\\b') || word.endsWith('\\b')) {
+				matched = new RegExp(word).test(lcStatus);
+			} else {
+				matched = lcStatus.includes(word);
+			}
+			if (matched) {
+				if (Chat.monitors[list].punishment === 'AUTOLOCK') {
+					Punishments.autolock(user, Rooms('staff'), `NameMonitor`, `inappropriate status message: ${status}`, `${user.name} - using an inappropriate status: ${status}`, true);
+				}
+				line[3]++;
+				saveFilters();
+				return '';
+			}
+		}
+	}
+
+	return status;
 };
 
 /** @type {PageTable} */
@@ -346,7 +386,7 @@ let commands = {
 			if (!this.can('updateserver')) return false;
 
 			let [list, ...rest] = target.split(',');
-			list = toId(list);
+			list = toID(list);
 
 			if (!list || !rest.length) return this.errorReply("Syntax: /filter add list, word, reason");
 
@@ -391,7 +431,7 @@ let commands = {
 			if (!this.can('updateserver')) return false;
 
 			let [list, ...words] = target.split(',').map(param => param.trim());
-			list = toId(list);
+			list = toID(list);
 
 			if (!list || !words.length) return this.errorReply("Syntax: /filter remove list, words");
 
@@ -429,7 +469,7 @@ let commands = {
 	],
 	allowname(target, room, user) {
 		if (!this.can('forcerename')) return false;
-		target = toId(target);
+		target = toID(target);
 		if (!target) return this.errorReply(`Syntax: /allowname username`);
 		Chat.namefilterwhitelist.set(target, user.name);
 
@@ -445,3 +485,5 @@ exports.commands = commands;
 exports.chatfilter = chatfilter;
 exports.namefilter = namefilter;
 exports.nicknamefilter = nicknamefilter;
+exports.statusfilter = statusfilter;
+exports.loginfilter = loginfilter;

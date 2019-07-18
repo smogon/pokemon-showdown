@@ -142,7 +142,7 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onStart(target) {
-			if (!target.ignoringItem() && !this.getPseudoWeather('gravity')) {
+			if (!target.ignoringItem() && !this.field.getPseudoWeather('gravity')) {
 				this.add('-item', target, 'Air Balloon');
 			}
 		},
@@ -152,8 +152,8 @@ let BattleItems = {
 			if (effect.effectType === 'Move' && effect.id !== 'confused') {
 				this.add('-enditem', target, 'Air Balloon');
 				target.item = '';
-				this.itemData = {id: '', target: this};
-				this.runEvent('AfterUseItem', target, null, null, 'airballoon');
+				target.itemData = {id: '', target};
+				this.runEvent('AfterUseItem', target, null, null, this.getItem('airballoon'));
 			}
 		},
 		onAfterSubDamage(damage, target, source, effect) {
@@ -161,8 +161,8 @@ let BattleItems = {
 			if (effect.effectType === 'Move' && effect.id !== 'confused') {
 				this.add('-enditem', target, 'Air Balloon');
 				target.item = '';
-				this.itemData = {id: '', target: this};
-				this.runEvent('AfterUseItem', target, null, null, 'airballoon');
+				target.itemData = {id: '', target};
+				this.runEvent('AfterUseItem', target, null, null, this.getItem('airballoon'));
 			}
 		},
 		num: 541,
@@ -324,7 +324,7 @@ let BattleItems = {
 			type: "Steel",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Steel' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+			if (move.type === 'Steel' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -464,7 +464,7 @@ let BattleItems = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
-			if (this.isTerrain('grassyterrain')) return;
+			if (this.field.isTerrain('grassyterrain')) return;
 			if (pokemon.hasType('Poison')) {
 				this.heal(pokemon.maxhp / 16);
 			} else {
@@ -472,7 +472,7 @@ let BattleItems = {
 			}
 		},
 		onTerrain(pokemon) {
-			if (!this.isTerrain('grassyterrain')) return;
+			if (!this.field.isTerrain('grassyterrain')) return;
 			if (pokemon.hasType('Poison')) {
 				this.heal(pokemon.maxhp / 16);
 			} else {
@@ -738,7 +738,7 @@ let BattleItems = {
 			type: "Rock",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Rock' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+			if (move.type === 'Rock' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -928,7 +928,7 @@ let BattleItems = {
 			type: "Fighting",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Fighting' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+			if (move.type === 'Fighting' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -962,7 +962,7 @@ let BattleItems = {
 			type: "Flying",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Flying' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+			if (move.type === 'Flying' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -985,7 +985,7 @@ let BattleItems = {
 			type: "Dark",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Dark' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+			if (move.type === 'Dark' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -1452,6 +1452,9 @@ let BattleItems = {
 		onAfterMoveSecondary(target, source, move) {
 			if (source && source !== target && target.hp && move && move.category !== 'Status') {
 				if (!this.canSwitch(target.side) || target.forceSwitchFlag) return;
+				for (const pokemon of this.getAllActive()) {
+					if (pokemon.switchFlag === true) return;
+				}
 				if (target.useItem()) {
 					target.switchFlag = true;
 					source.switchFlag = false;
@@ -1516,12 +1519,12 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && this.isTerrain('electricterrain') && pokemon.useItem()) {
+			if (!pokemon.ignoringItem() && this.field.isTerrain('electricterrain') && pokemon.useItem()) {
 				this.boost({def: 1});
 			}
 		},
 		onAnyTerrainStart() {
-			if (this.isTerrain('electricterrain') && this.effectData.target.useItem()) {
+			if (this.field.isTerrain('electricterrain') && this.effectData.target.useItem()) {
 				this.boost({def: 1}, this.effectData.target);
 			}
 		},
@@ -1563,7 +1566,7 @@ let BattleItems = {
 			type: "Bug",
 		},
 		onHit(target, source, move) {
-			if (move && move.typeMod > 0) {
+			if (move && target.getMoveHitData(move).typeMod > 0) {
 				if (target.eatItem()) {
 					this.heal(target.maxhp / 4);
 				}
@@ -1608,7 +1611,7 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onModifyDamage(damage, source, target, move) {
-			if (move && move.typeMod > 0) {
+			if (move && target.getMoveHitData(move).typeMod > 0) {
 				return this.chainModify([0x1333, 0x1000]);
 			}
 		},
@@ -2193,12 +2196,12 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && this.isTerrain('grassyterrain') && pokemon.useItem()) {
+			if (!pokemon.ignoringItem() && this.field.isTerrain('grassyterrain') && pokemon.useItem()) {
 				this.boost({def: 1});
 			}
 		},
 		onAnyTerrainStart() {
-			if (this.isTerrain('grassyterrain') && this.effectData.target.useItem()) {
+			if (this.field.isTerrain('grassyterrain') && this.effectData.target.useItem()) {
 				this.boost({def: 1}, this.effectData.target);
 			}
 		},
@@ -2336,7 +2339,7 @@ let BattleItems = {
 			type: "Dragon",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Dragon' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+			if (move.type === 'Dragon' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -2609,7 +2612,7 @@ let BattleItems = {
 		},
 		onEffectiveness(typeMod, target, type, move) {
 			if (!target) return;
-			if (target.volatiles['ingrain'] || target.volatiles['smackdown'] || this.getPseudoWeather('gravity')) return;
+			if (target.volatiles['ingrain'] || target.volatiles['smackdown'] || this.field.getPseudoWeather('gravity')) return;
 			if (move.type === 'Ground' && target.hasType('Flying')) return 0;
 		},
 		// airborneness negation implemented in sim/pokemon.js:Pokemon#isGrounded
@@ -2684,7 +2687,7 @@ let BattleItems = {
 			type: "Ghost",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Ghost' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+			if (move.type === 'Ghost' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -2707,7 +2710,7 @@ let BattleItems = {
 			type: "Poison",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Poison' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+			if (move.type === 'Poison' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -2908,11 +2911,11 @@ let BattleItems = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
-			if (this.isTerrain('grassyterrain')) return;
+			if (this.field.isTerrain('grassyterrain')) return;
 			this.heal(pokemon.maxhp / 16);
 		},
 		onTerrain(pokemon) {
-			if (!this.isTerrain('grassyterrain')) return;
+			if (!this.field.isTerrain('grassyterrain')) return;
 			this.heal(pokemon.maxhp / 16);
 		},
 		num: 234,
@@ -2941,10 +2944,6 @@ let BattleItems = {
 			moveSlot.pp += 10;
 			if (moveSlot.pp > moveSlot.maxpp) moveSlot.pp = moveSlot.maxpp;
 			this.add('-activate', pokemon, 'item: Leppa Berry', moveSlot.move, '[consumed]');
-			if (pokemon.item !== 'leppaberry') {
-				pokemon.isStale = 2;
-				pokemon.isStaleSource = 'useleppa';
-			}
 		},
 		num: 154,
 		gen: 3,
@@ -3642,12 +3641,12 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && this.isTerrain('mistyterrain') && pokemon.useItem()) {
+			if (!pokemon.ignoringItem() && this.field.isTerrain('mistyterrain') && pokemon.useItem()) {
 				this.boost({spd: 1});
 			}
 		},
 		onAnyTerrainStart() {
-			if (this.isTerrain('mistyterrain') && this.effectData.target.useItem()) {
+			if (this.field.isTerrain('mistyterrain') && this.effectData.target.useItem()) {
 				this.boost({spd: 1}, this.effectData.target);
 			}
 		},
@@ -3811,7 +3810,7 @@ let BattleItems = {
 			type: "Fire",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Fire' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+			if (move.type === 'Fire' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -3920,7 +3919,7 @@ let BattleItems = {
 			type: "Water",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Water' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+			if (move.type === 'Water' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -3943,7 +3942,7 @@ let BattleItems = {
 			type: "Psychic",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Psychic' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+			if (move.type === 'Psychic' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -4356,7 +4355,7 @@ let BattleItems = {
 			basePower: 30,
 		},
 		onAttractPriority: -1,
-		onAttract(target, source, effect) {
+		onAttract(target, source) {
 			if (target !== source && target === this.activePokemon && this.activeMove && this.activeMove.flags['contact']) return false;
 		},
 		onBoostPriority: -1,
@@ -4449,12 +4448,12 @@ let BattleItems = {
 			basePower: 10,
 		},
 		onStart(pokemon) {
-			if (!pokemon.ignoringItem() && this.isTerrain('psychicterrain') && pokemon.useItem()) {
+			if (!pokemon.ignoringItem() && this.field.isTerrain('psychicterrain') && pokemon.useItem()) {
 				this.boost({spd: 1});
 			}
 		},
 		onAnyTerrainStart() {
-			if (this.isTerrain('psychicterrain') && this.effectData.target.useItem()) {
+			if (this.field.isTerrain('psychicterrain') && this.effectData.target.useItem()) {
 				this.boost({spd: 1}, this.effectData.target);
 			}
 		},
@@ -4706,7 +4705,7 @@ let BattleItems = {
 			type: "Grass",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Grass' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+			if (move.type === 'Grass' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -4851,7 +4850,7 @@ let BattleItems = {
 			type: "Fairy",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Fairy' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+			if (move.type === 'Fairy' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -5144,7 +5143,7 @@ let BattleItems = {
 			type: "Ground",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Ground' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+			if (move.type === 'Ground' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -5639,7 +5638,7 @@ let BattleItems = {
 			type: "Bug",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Bug' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+			if (move.type === 'Bug' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -5837,7 +5836,7 @@ let BattleItems = {
 			type: "Electric",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Electric' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+			if (move.type === 'Electric' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -5951,7 +5950,7 @@ let BattleItems = {
 		},
 		onHitPriority: 1,
 		onHit(target, source, move) {
-			if (target.hp && move.category !== 'Status' && !move.damage && !move.damageCallback && move.typeMod > 0 && target.useItem()) {
+			if (target.hp && move.category !== 'Status' && !move.damage && !move.damageCallback && target.getMoveHitData(move).typeMod > 0 && target.useItem()) {
 				this.boost({atk: 2, spa: 2});
 			}
 		},
@@ -6098,7 +6097,7 @@ let BattleItems = {
 			type: "Ice",
 		},
 		onSourceModifyDamage(damage, source, target, move) {
-			if (move.type === 'Ice' && move.typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
+			if (move.type === 'Ice' && target.getMoveHitData(move).typeMod > 0 && (!target.volatiles['substitute'] || move.flags['authentic'] || (move.infiltrates && this.gen >= 6))) {
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -6164,7 +6163,7 @@ let BattleItems = {
 		},
 		num: 0,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) On switch-in, raises holder's Attack by 2 and confuses it. Single use.",
 	},
 	"berry": {
@@ -6190,7 +6189,7 @@ let BattleItems = {
 		},
 		num: 155,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Restores 10 HP when at 1/2 max HP or less. Single use.",
 	},
 	"bitterberry": {
@@ -6212,7 +6211,7 @@ let BattleItems = {
 		},
 		num: 156,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder is cured if it is confused. Single use.",
 	},
 	"burntberry": {
@@ -6236,7 +6235,7 @@ let BattleItems = {
 		},
 		num: 153,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder is cured if it is frozen. Single use.",
 	},
 	"goldberry": {
@@ -6262,7 +6261,7 @@ let BattleItems = {
 		},
 		num: 158,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Restores 30 HP when at 1/2 max HP or less. Single use.",
 	},
 	"iceberry": {
@@ -6286,7 +6285,7 @@ let BattleItems = {
 		},
 		num: 152,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder is cured if it is burned. Single use.",
 	},
 	"mintberry": {
@@ -6310,7 +6309,7 @@ let BattleItems = {
 		},
 		num: 150,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder wakes up if it is asleep. Single use.",
 	},
 	"miracleberry": {
@@ -6333,7 +6332,7 @@ let BattleItems = {
 		},
 		num: 157,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder cures itself if it is confused or has a status condition. Single use.",
 	},
 	"mysteryberry": {
@@ -6371,14 +6370,10 @@ let BattleItems = {
 			moveSlot.pp += 5;
 			if (moveSlot.pp > moveSlot.maxpp) moveSlot.pp = moveSlot.maxpp;
 			this.add('-activate', pokemon, 'item: Mystery Berry', moveSlot.move);
-			if (pokemon.item !== 'leppaberry') {
-				pokemon.isStale = 2;
-				pokemon.isStaleSource = 'useleppa';
-			}
 		},
 		num: 154,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Restores 5 PP to the first of the holder's moves to reach 0 PP. Single use.",
 	},
 	"pinkbow": {
@@ -6392,7 +6387,7 @@ let BattleItems = {
 		},
 		num: 251,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder's Normal-type attacks have 1.1x power.",
 	},
 	"polkadotbow": {
@@ -6406,7 +6401,7 @@ let BattleItems = {
 		},
 		num: 251,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder's Normal-type attacks have 1.1x power.",
 	},
 	"przcureberry": {
@@ -6430,7 +6425,7 @@ let BattleItems = {
 		},
 		num: 149,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder cures itself if it is paralyzed. Single use.",
 	},
 	"psncureberry": {
@@ -6454,7 +6449,7 @@ let BattleItems = {
 		},
 		num: 151,
 		gen: 2,
-		isNonstandard: 'gen2',
+		isNonstandard: "Past",
 		desc: "(Gen 2) Holder is cured if it is poisoned. Single use.",
 	},
 
@@ -6472,7 +6467,7 @@ let BattleItems = {
 		},
 		num: -1,
 		gen: 6,
-		isNonstandard: true,
+		isNonstandard: "CAP",
 		desc: "If held by a Crucibelle, this item allows it to Mega Evolve in battle.",
 	},
 };

@@ -45,7 +45,7 @@ let BattleFormats = {
 			'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma', 'Magearna', 'Marshadow', 'Zeraora',
 		],
 		onValidateSet(set, format) {
-			if (this.gen < 7 && toId(set.item) === 'souldew') {
+			if (this.gen < 7 && toID(set.item) === 'souldew') {
 				return [`${set.name || set.species} has Soul Dew, which is banned in ${format.name}.`];
 			}
 		},
@@ -65,7 +65,7 @@ let BattleFormats = {
 			'Magearna', 'Marshadow', 'Zeraora',
 		],
 		onValidateSet(set, format) {
-			if (this.gen < 7 && toId(set.item) === 'souldew') {
+			if (this.gen < 7 && toID(set.item) === 'souldew') {
 				return [`${set.name || set.species} has Soul Dew, which is banned in ${format.name}.`];
 			}
 		},
@@ -169,8 +169,8 @@ let BattleFormats = {
 			}
 
 			if (item.isNonstandard) {
-				if (item.isNonstandard === 'gen2') {
-					problems.push(item.name + ' does not exist outside of gen 2.');
+				if (item.isNonstandard === 'Past' || item.isNonstandard === 'Future') {
+					problems.push(item.name + ' does not exist in this generation.');
 				} else if (!allowCAP) {
 					problems.push(item.name + ' does not exist.');
 				}
@@ -258,7 +258,7 @@ let BattleFormats = {
 						problems.push(`${template.species} transforms in-battle with ${Chat.plural(template.requiredItems.length, "either ") + template.requiredItems.join(" or ")}.`); // Mega or Primal
 					}
 				}
-				if (template.requiredMove && set.moves.indexOf(toId(template.requiredMove)) < 0) {
+				if (template.requiredMove && set.moves.indexOf(toID(template.requiredMove)) < 0) {
 					problems.push(`${template.species} transforms in-battle with ${template.requiredMove}.`); // Meloetta-Pirouette, Rayquaza-Mega
 				}
 				if (!format.noChangeForme) set.species = template.baseSpecies; // Fix battle-only forme
@@ -269,7 +269,7 @@ let BattleFormats = {
 				if (template.requiredItems && !template.requiredItems.includes(item.name)) {
 					problems.push(`${(set.name || set.species)} needs to hold ${Chat.plural(template.requiredItems.length, "either ") + template.requiredItems.join(" or ")}.`); // Memory/Drive/Griseous Orb/Plate/Z-Crystal - Forme mismatch
 				}
-				if (template.requiredMove && set.moves.indexOf(toId(template.requiredMove)) < 0) {
+				if (template.requiredMove && set.moves.indexOf(toID(template.requiredMove)) < 0) {
 					problems.push(`${(set.name || set.species)} needs to have the move ${template.requiredMove}.`); // Keldeo-Resolute
 				}
 
@@ -391,11 +391,9 @@ let BattleFormats = {
 		desc: "Allows each player to see the Pok&eacute;mon on their opponent's team before they choose their lead Pok&eacute;mon",
 		onBegin() {
 			this.add('clearpoke');
-			for (const side of this.sides) {
-				for (const pokemon of side.pokemon) {
-					let details = pokemon.details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo|Silvally)(-[a-zA-Z?]+)?/g, '$1-*').replace(', shiny', '');
-					this.add('poke', pokemon.side.id, details, pokemon.item ? 'item' : '');
-				}
+			for (const pokemon of this.getAllPokemon()) {
+				let details = pokemon.details.replace(/(Arceus|Gourgeist|Genesect|Pumpkaboo|Silvally)(-[a-zA-Z?]+)?/g, '$1-*').replace(', shiny', '');
+				this.add('poke', pokemon.side.id, details, pokemon.item ? 'item' : '');
 			}
 		},
 		onTeamPreview() {
@@ -408,13 +406,29 @@ let BattleFormats = {
 		desc: "Only allows Pok&eacute;mon that can evolve and don't have any prior evolutions",
 		onValidateSet(set) {
 			let template = this.getTemplate(set.species || set.name);
-			if (template.prevo) {
+			if (template.prevo && this.getTemplate(template.prevo).gen <= this.gen) {
 				return [set.species + " isn't the first in its evolution family."];
 			}
-			if (!template.nfe) {
+			let futureGenEvo = template.evos && this.getTemplate(template.evos[0]).gen > this.gen;
+			if (!template.nfe || futureGenEvo) {
 				return [set.species + " doesn't have an evolution family."];
 			}
 		},
+	},
+	blitz: {
+		effectType: 'Rule',
+		name: 'Blitz',
+		desc: "Super-fast 'Blitz' timer giving 30 second Team Preview and 10 seconds per turn.",
+		onBegin() {
+			this.add('rule', 'Blitz: Super-fast timer');
+		},
+		timer: {starting: 15, addPerTurn: 5, maxPerTurn: 15, maxFirstTurn: 30, grace: 30},
+	},
+	vgctimer: {
+		effectType: 'Rule',
+		name: 'VGC Timer',
+		desc: "VGC's timer: 90 second Team Preview, 7 minutes Your Time, 1 minute per turn",
+		timer: {starting: 7 * 60, addPerTurn: 0, maxPerTurn: 55, maxFirstTurn: 90, grace: 90, timeoutAutoChoose: true, dcTimerBank: false},
 	},
 	speciesclause: {
 		effectType: 'ValidatorRule',
@@ -467,7 +481,7 @@ let BattleFormats = {
 			/**@type {{[k: string]: true}} */
 			let itemTable = {};
 			for (const set of team) {
-				let item = toId(set.item);
+				let item = toID(set.item);
 				if (!item) continue;
 				if (itemTable[item]) {
 					return ["You are limited to one of each item by Item Clause.", "(You have more than one " + this.getItem(item).name + ")"];
@@ -503,9 +517,9 @@ let BattleFormats = {
 				turboblaze: 'moldbreaker',
 			};
 			for (const set of team) {
-				let ability = toId(set.ability);
+				let ability = toID(set.ability);
 				if (!ability) continue;
-				if (ability in base) ability = base[ability];
+				if (ability in base) ability = /** @type {ID} */(base[ability]);
 				if (ability in abilityTable) {
 					if (abilityTable[ability] >= 2) {
 						return ["You are limited to two of each ability by the Ability Clause.", `(You have more than two ${this.getAbility(ability).name} variants)`];
@@ -566,30 +580,7 @@ let BattleFormats = {
 		effectType: 'Rule',
 		name: 'Endless Battle Clause',
 		desc: "Prevents players from forcing a battle which their opponent cannot end except by forfeit",
-		// implemented in sim/battle.js
-
-		// A Pokémon has a confinement counter, which starts at 0:
-		// +1 confinement whenever:
-		// - it has no available moves other than Struggle
-		// - it was forced to switch by a stale opponent before it could do its
-		//   action for the turn
-		// - it intentionally switched out the turn after it switched in against
-		//   a stale Pokémon
-		// - it shifts in Triples against a stale Pokémon
-		// - it has gone 5 turns without losing PP (mimiced/transformed moves
-		//   count only if no foe is stale)
-		// confinement reset to 0 whenever:
-		// - it uses PP while not Transformed/Impostered
-		// - if it has at least 2 confinement, and begins a turn without losing
-		//   at least 1% of its max HP from the last time its confinement counter
-		//   was 0 - user also becomes half-stale if not already half-stale, or
-		//   stale if already half-stale
-
-		// A Pokémon is also considered stale if:
-		// - it has gained a Leppa berry through any means besides starting
-		//   with one
-		// - OR it has eaten a Leppa berry it isn't holding
-
+		// implemented in sim/battle.js, see https://dex.pokemonshowdown.com/articles/battlerules#endlessbattleclause for the specification.
 		onBegin() {
 			this.add('rule', 'Endless Battle Clause: Forcing endless battles is banned');
 		},
@@ -624,7 +615,7 @@ let BattleFormats = {
 			if (!('move:batonpass' in setHas)) return;
 
 			let item = this.getItem(set.item);
-			let ability = toId(set.ability);
+			let ability = toID(set.ability);
 			/**@type {boolean | string} */
 			let speedBoosted = false;
 			/**@type {boolean | string} */
@@ -806,10 +797,8 @@ let BattleFormats = {
 		desc: "Prevents Rayquaza from mega evolving",
 		onBegin() {
 			this.add('rule', 'Mega Rayquaza Clause: You cannot mega evolve Rayquaza');
-			for (const side of this.sides) {
-				for (const pokemon of side.pokemon) {
-					if (pokemon.speciesid === 'rayquaza') pokemon.canMegaEvo = null;
-				}
+			for (const pokemon of this.getAllPokemon()) {
+				if (pokemon.speciesid === 'rayquaza') pokemon.canMegaEvo = null;
 			}
 		},
 	},
@@ -830,8 +819,11 @@ let BattleFormats = {
 	inversemod: {
 		effectType: 'Rule',
 		name: 'Inverse Mod',
-		desc: "The mod for Inverse Battle which inverts the type effectiveness chart, swapping resistances and weaknesses with each other",
+		desc: "The mod for Inverse Battle which inverts the type effectiveness chart; weaknesses become resistances, while resistances and immunities become weaknesses",
 		onNegateImmunity: false,
+		onBegin() {
+			this.add('rule', 'Inverse Mod: Weaknesses become resistances, while resistances and immunities become weaknesses.');
+		},
 		onEffectiveness(typeMod, target, type, move) {
 			// The effectiveness of Freeze Dry on Water isn't reverted
 			if (move && move.id === 'freezedry' && type === 'Water') return;
@@ -870,6 +862,7 @@ let BattleFormats = {
 			}
 			return this.checkLearnset(move, template, lsetData, set);
 		},
+		unbanlist: ['Shiftry + Leaf Blade + Sucker Punch'],
 	},
 	allowcap: {
 		effectType: 'ValidatorRule',

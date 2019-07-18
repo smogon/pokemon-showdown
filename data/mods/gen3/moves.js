@@ -88,10 +88,10 @@ let BattleMovedex = {
 						}
 						target = possibleTarget;
 					}
-					/**@type {Move} */
+					/** @type {ActiveMove} */
 					// @ts-ignore
 					let moveData = {
-						id: 'bide',
+						id: /** @type {ID} */('bide'),
 						name: "Bide",
 						accuracy: 100,
 						damage: this.effectData.totalDamage * 2,
@@ -200,7 +200,7 @@ let BattleMovedex = {
 		effect: {
 			duration: 1,
 			noCopy: true,
-			onStart(target, source, source2, move) {
+			onStart(target, source, move) {
 				this.effectData.position = null;
 				this.effectData.damage = 0;
 			},
@@ -301,10 +301,7 @@ let BattleMovedex = {
 	doomdesire: {
 		inherit: true,
 		onTry(source, target) {
-			target.side.addSideCondition('futuremove');
-			if (target.side.sideConditions['futuremove'].positions[target.position]) {
-				return false;
-			}
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
 			let moveData = /** @type {ActiveMove} */ ({
 				name: "Doom Desire",
 				basePower: 120,
@@ -314,7 +311,7 @@ let BattleMovedex = {
 				type: '???',
 			});
 			let damage = this.getDamage(source, target, moveData, true);
-			target.side.sideConditions['futuremove'].positions[target.position] = {
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				duration: 3,
 				move: 'doomdesire',
 				source: source,
@@ -330,7 +327,7 @@ let BattleMovedex = {
 					isFutureMove: true,
 					type: '???',
 				},
-			};
+			});
 			this.add('-start', source, 'Doom Desire');
 			return null;
 		},
@@ -577,7 +574,7 @@ let BattleMovedex = {
 		effect: {
 			duration: 1,
 			noCopy: true,
-			onStart(target, source, source2, move) {
+			onStart(target, source, move) {
 				this.effectData.position = null;
 				this.effectData.damage = 0;
 			},
@@ -938,7 +935,7 @@ let BattleMovedex = {
 		desc: "Damage doubles if a weather condition is active, and this move's type changes to match. Ice type during Hail, Water type during Rain Dance, Rock type during Sandstorm, and Fire type during Sunny Day.",
 		shortDesc: "Damage doubles and type varies during weather.",
 		onModifyMove(move) {
-			switch (this.effectiveWeather()) {
+			switch (this.field.effectiveWeather()) {
 			case 'sunnyday':
 				move.type = 'Fire';
 				move.category = 'Special';

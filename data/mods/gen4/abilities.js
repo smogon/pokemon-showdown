@@ -8,7 +8,7 @@ let BattleAbilities = {
 		shortDesc: "If this Pokemon or its substitute takes a critical hit, its Attack is raised 12 stages.",
 		onAfterSubDamage(damage, target, source, move) {
 			if (!target.hp) return;
-			if (move && move.effectType === 'Move' && move.crit) {
+			if (move && move.effectType === 'Move' && target.getMoveHitData(move).crit) {
 				target.setBoost({atk: 6});
 				this.add('-setboost', target, 'atk', 12, '[from] ability: Anger Point');
 			}
@@ -38,7 +38,7 @@ let BattleAbilities = {
 			let type = move.type;
 			if (target.isActive && move.effectType === 'Move' && move.category !== 'Status' && type !== '???' && !target.hasType(type)) {
 				if (!target.setType(type)) return false;
-				this.add('-start', target, 'typechange', type, '[from] Color Change');
+				this.add('-start', target, 'typechange', type, '[from] ability: Color Change');
 			}
 		},
 		onAfterMoveSecondary() {},
@@ -92,12 +92,12 @@ let BattleAbilities = {
 		desc: "If Sunny Day is active, the Attack and Special Defense of this Pokemon and its allies are multiplied by 1.5.",
 		shortDesc: "If Sunny Day is active, Attack and Sp. Def of this Pokemon and its allies are 1.5x.",
 		onAllyModifyAtk(atk) {
-			if (this.isWeather('sunnyday')) {
+			if (this.field.isWeather('sunnyday')) {
 				return this.chainModify(1.5);
 			}
 		},
 		onAllyModifySpD(spd) {
-			if (this.isWeather('sunnyday')) {
+			if (this.field.isWeather('sunnyday')) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -133,6 +133,38 @@ let BattleAbilities = {
 		inherit: true,
 		rating: 2.5,
 	},
+	"intimidate": {
+		inherit: true,
+		onStart(pokemon) {
+			let activated = false;
+			for (const target of pokemon.side.foe.active) {
+				if (target && this.isAdjacent(target, pokemon) &&
+					!(target.volatiles['substitute'] ||
+						target.volatiles['substitutebroken'] && target.volatiles['substitutebroken'].move === 'uturn')) {
+					activated = true;
+					break;
+				}
+			}
+
+			if (!activated) {
+				this.hint("In Gen 4, Intimidate does not activate if every target has a Substitute (or the Substitute was just broken by U-turn).", false, pokemon.side);
+				return;
+			}
+			this.add('-ability', pokemon, 'Intimidate', 'boost');
+
+			for (const target of pokemon.side.foe.active) {
+				if (!target || !this.isAdjacent(target, pokemon)) continue;
+
+				if (target.volatiles['substitute']) {
+					this.add('-immune', target);
+				} else if (target.volatiles['substitutebroken'] && target.volatiles['substitutebroken'].move === 'uturn') {
+					this.hint("In Gen 4, if U-turn breaks Substitute the incoming Intimidate does nothing.");
+				} else {
+					this.boost({atk: -1}, target, pokemon);
+				}
+			}
+		},
+	},
 	"leafguard": {
 		inherit: true,
 		desc: "If Sunny Day is active, this Pokemon cannot gain a major status condition, but can use Rest normally.",
@@ -140,7 +172,7 @@ let BattleAbilities = {
 		onSetStatus(status, target, source, effect) {
 			if (effect && effect.id === 'rest') {
 				return;
-			} else if (this.isWeather('sunnyday')) {
+			} else if (this.field.isWeather('sunnyday')) {
 				return false;
 			}
 		},
@@ -291,6 +323,10 @@ let BattleAbilities = {
 		rating: 4,
 		num: 86,
 	},
+	"soundproof": {
+		inherit: true,
+		shortDesc: "This Pokemon is immune to sound-based moves, including Heal Bell.",
+	},
 	"stench": {
 		desc: "No competitive use.",
 		shortDesc: "No competitive use.",
@@ -346,7 +382,7 @@ let BattleAbilities = {
 			if (effect && effect.id === 'toxicspikes') return;
 			let id = status.id;
 			if (id === 'slp' || id === 'frz') return;
-			if (id === 'tox') id = 'psn';
+			if (id === 'tox') id = /** @type {ID} */('psn');
 			source.trySetStatus(id, target);
 		},
 	},
@@ -402,7 +438,11 @@ let BattleAbilities = {
 		inherit: true,
 		shortDesc: "This Pokemon is only damaged by Fire Fang, supereffective moves, indirect damage.",
 		onTryHit(target, source, move) {
-			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle' || move.id === 'firefang') return;
+			if (move.id === 'firefang') {
+				this.hint("In Gen 4, Fire Fang is always able to hit through Wonder Guard.");
+				return;
+			}
+			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle') return;
 			this.debug('Wonder Guard immunity: ' + move.id);
 			if (target.runEffectiveness(move) <= 0) {
 				this.add('-immune', target, '[from] ability: Wonder Guard');

@@ -126,12 +126,6 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Food Rush',
 				evs: {hp: 4, atk: 252, spd: 252}, nature: 'Adamant',
 			},
-			'Bimp': {
-				species: 'Stakataka', ability: 'Learn Something New!', item: 'Rockium Z', gender: 'M',
-				moves: ['Gyro Ball', 'Stone Edge', 'Earthquake'],
-				signatureMove: 'Trivia Room',
-				evs: {hp: 252, atk: 252, spd: 4}, ivs: {spe: 0}, nature: 'Brave',
-			},
 			'bobochan': {
 				species: 'Emolga', ability: 'Huge Power', item: 'Choice Band', gender: 'M',
 				moves: ['Brave Bird', ['Knock Off', 'Encore'], 'U-turn'],
@@ -252,6 +246,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Rock Slide',
 				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 			},
+			'Forrce': {
+				species: 'Cresselia', ability: 'Wonder Skin', item: 'Leftovers', gender: 'N',
+				moves: ['Moonlight', 'Heart Swap', 'Baton Pass'],
+				signatureMove: 'Purple Pills',
+				evs: {hp: 176, def: 80, spd: 252}, ivs: {atk: 0}, nature: 'Calm',
+			},
 			'grimAuxiliatrix': {
 				species: 'Aggron', ability: 'Sturdy', item: 'Aggronite', gender: '',
 				moves: [['Toxic', 'Stealth Rock'], ['Stone Edge', 'Heat Crash'], 'Earthquake'],
@@ -359,12 +359,6 @@ class RandomStaffBrosTeams extends RandomTeams {
 				moves: ['Calm Mind', 'Petal Dance', 'Fiery Dance'],
 				signatureMove: 'Shuffle Ramen Dance',
 				evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
-			},
-			'Lycanium Z': {
-				species: 'Cresselia', ability: 'Wonder Skin', item: 'Leftovers', gender: 'N',
-				moves: ['Moonlight', 'Heart Swap', 'Baton Pass'],
-				signatureMove: 'Purple Pills',
-				evs: {hp: 176, def: 80, spd: 252}, ivs: {atk: 0}, nature: 'Calm',
 			},
 			'MacChaeger': {
 				species: 'Mantyke', ability: 'Water Veil', item: ['Life Orb', 'Normalium Z'], gender: 'M',

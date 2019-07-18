@@ -1,4 +1,5 @@
-test/main.js test/simulator/**/*.js test/application/*.js test/chat-plugins/*.js
+test/main.js test/lib/**/*.js test/server/**/*.js test/sim/**/*.js
+-g "^((?!\(slow\)).)*$"
 -R dot
 -u bdd
 --exit

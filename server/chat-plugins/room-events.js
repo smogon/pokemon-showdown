@@ -22,7 +22,11 @@ exports.commands = {
 			let buff = '<table border="1" cellspacing="0" cellpadding="3">';
 			buff += '<th>Event Name:</th><th>Event Description:</th><th>Event Date:</th>';
 			for (let i in room.events) {
-				buff += `<tr><td>${Chat.escapeHTML(room.events[i].eventName)}</td><td>${Chat.formatText(room.events[i].desc, true)}</td><td><time>${Chat.escapeHTML(room.events[i].date)}</time></td></tr>`;
+				let timeRemaining = new Date(room.events[i].date).getTime() - new Date().getTime();
+				if (!timeRemaining) timeRemaining = "The time remaining for this event is not available";
+				if (timeRemaining < 0) timeRemaining = "This event will start soon";
+				if (room.events[i].started) timeRemaining = "This event has started";
+				buff += `<tr title="${isNaN(timeRemaining) ? timeRemaining : `This event will start in: ${Chat.toDurationString(timeRemaining, {precision: 2})}`}"><td>${Chat.escapeHTML(room.events[i].eventName)}</td><td>${Chat.formatText(room.events[i].desc, true)}</td><td><time>${Chat.escapeHTML(room.events[i].date)}</time></td></tr>`;
 			}
 			buff += '</table>';
 			return this.sendReply(`|raw|<div class="infobox-limited">${buff}</div>`);
@@ -46,7 +50,7 @@ exports.commands = {
 			if (date.length > 150) return this.errorReply("Event dates should not exceed 150 characters.");
 			if (desc.length > 1000) return this.errorReply("Event descriptions should not exceed 1000 characters.");
 
-			const eventId = toId(eventName);
+			const eventId = toID(eventName);
 			if (!eventId) return this.errorReply("Event names must contain at least one alphanumerical character.");
 
 			this.privateModAction(`(${user.name} ${room.events[eventId] ? "edited the" : "added a"} roomevent titled "${eventName}".)`);
@@ -55,11 +59,34 @@ exports.commands = {
 				eventName: eventName,
 				date: date,
 				desc: desc,
+				started: false,
 			};
 
 			room.chatRoomData.events = room.events;
 			Rooms.global.writeChatRoomData();
 		},
+
+		begin: 'start',
+		start(target, room, user) {
+			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
+			if (!this.can('ban', null, room)) return false;
+			if (!room.events || Object.keys(room.events).length === 0) {
+				return this.errorReply("There are currently no planned upcoming events for this room to start.");
+			}
+			if (!target) return this.errorReply("Usage: /roomevents start [event name]");
+			target = toID(target);
+			if (!room.events[target]) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
+			if (room.events[target].started) return this.errorReply(`The event ${room.events[target].eventName} has already started.`);
+			for (const u in room.users) {
+				if (Users(u).connected) Users(u).sendTo(room, Chat.html`|notify|A new roomevent in ${room.title} has started!|The "${room.events[target].eventName}" roomevent has started!`);
+			}
+			this.add(Chat.html`|raw|<div class="broadcast-blue"><b>The "${room.events[target].eventName}" roomevent has started!</b></div>`);
+			this.modlog('ROOMEVENT', null, `started "${target}"`);
+			room.events[target].started = true;
+			room.chatRoomData.events = room.events;
+			Rooms.global.writeChatRoomData();
+		},
+
 		delete: 'remove',
 		remove(target, room, user) {
 			if (!room.chatRoomData) return this.errorReply("This command is unavailable in temporary rooms.");
@@ -68,7 +95,7 @@ exports.commands = {
 				return this.errorReply("There are currently no planned upcoming events for this room to remove.");
 			}
 			if (!target) return this.errorReply("Usage: /roomevents remove [event name]");
-			target = toId(target);
+			target = toID(target);
 			if (!room.events[target]) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
 			delete room.events[target];
 			this.privateModAction(`(${user.name} removed a roomevent titled "${target}".)`);
@@ -84,7 +111,7 @@ exports.commands = {
 			}
 
 			if (!target) return this.errorReply("Usage: /roomevents view [event name]");
-			target = toId(target);
+			target = toID(target);
 			if (!room.events[target]) return this.errorReply(`There is no such event named '${target}'. Check spelling?`);
 
 			if (!this.runBroadcast()) return;
@@ -114,25 +141,25 @@ exports.commands = {
 			} else {
 				let order = "";
 				[columnName, order] = delimited;
-				order = toId(order);
+				order = toID(order);
 				multiplier = (order === 'desc') ? -1 : 1;
 			}
 
 			// sort the array by the appropriate column name
-			columnName = toId(columnName);
+			columnName = toID(columnName);
 			switch (columnName) {
 			case "date":
 			case "eventdate":
-				sortable.sort((a, b) => { return (toId(a.date) < toId(b.date)) ? -1 * multiplier : (toId(b.date) < toId(a.date)) ? 1 * multiplier : 0; });
+				sortable.sort((a, b) => { return (toID(a.date) < toID(b.date)) ? -1 * multiplier : (toID(b.date) < toID(a.date)) ? 1 * multiplier : 0; });
 				break;
 			case "desc":
 			case "description":
 			case "eventdescription":
-				sortable.sort((a, b) => { return (toId(a.desc) < toId(b.desc)) ? -1 * multiplier : (toId(b.desc) < toId(a.desc)) ? 1 * multiplier : 0; });
+				sortable.sort((a, b) => { return (toID(a.desc) < toID(b.desc)) ? -1 * multiplier : (toID(b.desc) < toID(a.desc)) ? 1 * multiplier : 0; });
 				break;
 			case "eventname":
 			case "name":
-				sortable.sort((a, b) => { return (toId(a.eventName) < toId(b.eventName)) ? -1 * multiplier : (toId(b.eventName) < toId(a.eventName)) ? 1 * multiplier : 0; });
+				sortable.sort((a, b) => { return (toID(a.eventName) < toID(b.eventName)) ? -1 * multiplier : (toID(b.eventName) < toID(a.eventName)) ? 1 * multiplier : 0; });
 				break;
 			default:
 				return this.errorReply("No or invalid column name specified. Please use one of: date, eventdate, desc, description, eventdescription, eventname, name.");
@@ -141,7 +168,7 @@ exports.commands = {
 			// rebuild the room.events object
 			room.events = {};
 			for (const sortedObj of sortable) {
-				const eventId = toId(sortedObj.eventName);
+				const eventId = toID(sortedObj.eventName);
 				room.events[eventId] = sortedObj;
 			}
 			room.chatRoomData.events = room.events;
@@ -157,6 +184,7 @@ exports.commands = {
 	roomeventshelp: [
 		`/roomevents - Displays a list of upcoming room-specific events.`,
 		`/roomevents add [event name] | [event date/time] | [event description] - Adds a room event. A timestamp in event date/time field like YYYY-MM-DD HH:MM±hh:mm will be displayed in user's timezone. Requires: @ # & ~`,
+		`/roomevents start [event name] - Declares to the room that the event has started.`,
 		`/roomevents remove [event name] - Deletes an event. Requires: @ # & ~`,
 		`/roomevents view [event name] - Displays information about a specific event.`,
 		`/roomevents sortby [column name] | [asc/desc (optional)] - Sorts events table by column name and an optional argument to ascending or descending order. Ascending order is default`,

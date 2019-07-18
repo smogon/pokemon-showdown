@@ -102,6 +102,7 @@ let BattleFormatsData = {
 	pichuspikyeared: {
 		inherit: true,
 		tier: "NU",
+		isNonstandard: null,
 	},
 	pikachu: {
 		inherit: true,
@@ -403,7 +404,7 @@ let BattleFormatsData = {
 		tier: "LC",
 	},
 	steelix: {
-		randomBattleMoves: ["stealthrock", "earthquake", "explosion", "curse", "roar", "toxic", "stoneedge", "gyroball"],
+		randomBattleMoves: ["stealthrock", "earthquake", "explosion", "roar", "toxic", "stoneedge", "gyroball"],
 		tier: "UU",
 	},
 	drowzee: {
@@ -1632,7 +1633,7 @@ let BattleFormatsData = {
 	},
 	regirock: {
 		inherit: true,
-		randomBattleMoves: ["stealthrock", "thunderwave", "stoneedge", "earthquake", "curse", "rest", "sleeptalk", "rockslide", "explosion"],
+		randomBattleMoves: ["stealthrock", "thunderwave", "earthquake", "rest", "sleeptalk", "rockslide", "explosion"],
 		tier: "NU",
 	},
 	regice: {
@@ -1713,7 +1714,7 @@ let BattleFormatsData = {
 		tier: "NU",
 	},
 	infernape: {
-		randomBattleMoves: ["stealthrock", "fireblast", "closecombat", "uturn", "grassknot", "stoneedge", "machpunch", "focusblast", "swordsdance", "nastyplot", "hiddenpowerice", "flareblitz", "vacuumwave"],
+		randomBattleMoves: ["stealthrock", "closecombat", "uturn", "grassknot", "stoneedge", "machpunch", "swordsdance", "hiddenpowerice", "flareblitz"],
 		tier: "OU",
 	},
 	piplup: {

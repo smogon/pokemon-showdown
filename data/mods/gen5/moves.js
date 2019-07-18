@@ -23,7 +23,9 @@ let BattleMovedex = {
 		desc: "Every Pokemon in the user's party is cured of its major status condition.",
 		onHit(target, source) {
 			this.add('-activate', source, 'move: Aromatherapy');
-			source.side.pokemon.forEach(pokemon => pokemon.cureStatus());
+			for (const pokemon of source.side.pokemon) {
+				pokemon.cureStatus();
+			}
 		},
 	},
 	assist: {
@@ -308,11 +310,8 @@ let BattleMovedex = {
 		inherit: true,
 		basePower: 100,
 		onTry(source, target) {
-			target.side.addSideCondition('futuremove');
-			if (target.side.sideConditions['futuremove'].positions[target.position]) {
-				return false;
-			}
-			target.side.sideConditions['futuremove'].positions[target.position] = {
+			if (!target.side.addSlotCondition(target, 'futuremove')) return false;
+			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				duration: 3,
 				move: 'futuresight',
 				source: source,
@@ -329,7 +328,7 @@ let BattleMovedex = {
 					isFutureMove: true,
 					type: 'Psychic',
 				},
-			};
+			});
 			this.add('-start', source, 'move: Future Sight');
 			return null;
 		},
@@ -383,7 +382,9 @@ let BattleMovedex = {
 		flags: {snatch: 1, sound: 1},
 		onHit(target, source) {
 			this.add('-activate', source, 'move: Heal Bell');
-			source.side.pokemon.forEach(pokemon => pokemon.cureStatus());
+			for (const pokemon of source.side.pokemon) {
+				pokemon.cureStatus();
+			}
 		},
 	},
 	healpulse: {
@@ -545,7 +546,7 @@ let BattleMovedex = {
 			},
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Special') {
-					if (!move.crit && !move.infiltrates) {
+					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Light Screen weaken');
 						if (target.side.active.length > 1) return this.chainModify([0xA8F, 0x1000]);
 						return this.chainModify(0.5);
@@ -648,7 +649,7 @@ let BattleMovedex = {
 			onStart(pokemon) {
 				this.add("-start", pokemon, 'Mud Sport');
 			},
-			onBasePowerPriority: 1,
+			onAnyBasePowerPriority: 1,
 			onAnyBasePower(basePower, user, target, move) {
 				if (move.type === 'Electric') return this.chainModify([0x548, 0x1000]); // The Mud Sport modifier is slightly higher than the usual 0.33 modifier (0x547)
 			},
@@ -782,7 +783,7 @@ let BattleMovedex = {
 			},
 			onAnyModifyDamage(damage, source, target, move) {
 				if (target !== source && target.side === this.effectData.target && this.getCategory(move) === 'Physical') {
-					if (!move.crit && !move.infiltrates) {
+					if (!target.getMoveHitData(move).crit && !move.infiltrates) {
 						this.debug('Reflect weaken');
 						if (target.side.active.length > 1) return this.chainModify([0xA8F, 0x1000]);
 						return this.chainModify(0.5);
@@ -932,6 +933,19 @@ let BattleMovedex = {
 		inherit: true,
 		basePower: 40,
 		flags: {protect: 1, mirror: 1, sound: 1},
+	},
+	soak: {
+		inherit: true,
+		desc: "Causes the target to become a Water type. Fails if the target is an Arceus.",
+		onHit(target) {
+			if (!target.setType('Water')) {
+				// Soak should animate even when it fails.
+				// Returning false would suppress the animation.
+				this.add('-fail', target);
+				return null;
+			}
+			this.add('-start', target, 'typechange', 'Water');
+		},
 	},
 	solarbeam: {
 		inherit: true,
@@ -1159,7 +1173,7 @@ let BattleMovedex = {
 			onStart(pokemon) {
 				this.add("-start", pokemon, 'move: Water Sport');
 			},
-			onBasePowerPriority: 1,
+			onAnyBasePowerPriority: 1,
 			onAnyBasePower(basePower, user, target, move) {
 				if (move.type === 'Fire') return this.chainModify([0x548, 0x1000]); // The Water Sport modifier is slightly higher than the usual 0.33 modifier (0x547)
 			},

@@ -134,10 +134,7 @@ let BattleMovedex = {
 		self: {
 			volatileStatus: 'partialtrappinglock',
 		},
-		onBeforeMove(pokemon, target, move) {
-			// Removes must recharge volatile even if it misses
-			target.removeVolatile('mustrecharge');
-		},
+		// FIXME: onBeforeMove(pokemon, target) {target.removeVolatile('mustrecharge')}
 		onHit(target, source) {
 			/**
 			 * The duration of the partially trapped must be always renewed to 2
@@ -204,10 +201,7 @@ let BattleMovedex = {
 		self: {
 			volatileStatus: 'partialtrappinglock',
 		},
-		onBeforeMove(pokemon, target, move) {
-			// Removes must recharge volatile even if it misses
-			target.removeVolatile('mustrecharge');
-		},
+		// FIXME: onBeforeMove(pokemon, target) {target.removeVolatile('mustrecharge')}
 		onHit(target, source) {
 			/**
 			 * The duration of the partially trapped must be always renewed to 2
@@ -393,10 +387,7 @@ let BattleMovedex = {
 		self: {
 			volatileStatus: 'partialtrappinglock',
 		},
-		onBeforeMove(pokemon, target, move) {
-			// Removes must recharge volatile even if it misses
-			target.removeVolatile('mustrecharge');
-		},
+		// FIXME: onBeforeMove(pokemon, target) {target.removeVolatile('mustrecharge')}
 		onHit(target, source) {
 			/**
 			 * The duration of the partially trapped must be always renewed to 2
@@ -488,24 +479,22 @@ let BattleMovedex = {
 		shortDesc: "Resets all stat changes. Removes foe's status.",
 		onHit(target, source) {
 			this.add('-clearallboost');
-			for (const side of this.sides) {
-				for (const pokemon of side.active) {
-					pokemon.clearBoosts();
+			for (const pokemon of this.getAllActive()) {
+				pokemon.clearBoosts();
 
-					if (pokemon !== source) {
-						// Clears the status from the opponent
-						pokemon.setStatus('');
-					}
-					if (pokemon.status === 'tox') {
-						pokemon.setStatus('psn');
-					}
-					for (const id of Object.keys(pokemon.volatiles)) {
-						if (id === 'residualdmg') {
-							pokemon.volatiles[id].counter = 0;
-						} else {
-							pokemon.removeVolatile(id);
-							this.add('-end', pokemon, id);
-						}
+				if (pokemon !== source) {
+					// Clears the status from the opponent
+					pokemon.setStatus('');
+				}
+				if (pokemon.status === 'tox') {
+					pokemon.setStatus('psn');
+				}
+				for (const id of Object.keys(pokemon.volatiles)) {
+					if (id === 'residualdmg') {
+						pokemon.volatiles[id].counter = 0;
+					} else {
+						pokemon.removeVolatile(id);
+						this.add('-end', pokemon, id);
 					}
 				}
 			}
@@ -518,7 +507,7 @@ let BattleMovedex = {
 		shortDesc: "User takes 1 HP of damage if it misses.",
 		onMoveFail(target, source, move) {
 			if (!target.types.includes('Ghost')) {
-				this.directDamage(1, source);
+				this.directDamage(1, source, target);
 			}
 		},
 	},
@@ -537,7 +526,9 @@ let BattleMovedex = {
 		desc: "If this attack misses the target, the user takes 1 HP of crash damage. If the user has a substitute, the crash damage is dealt to the target's substitute if it has one, otherwise no crash damage is dealt.",
 		shortDesc: "User takes 1 HP of damage if it misses.",
 		onMoveFail(target, source, move) {
-			this.damage(1, source);
+			if (!target.types.includes('Ghost')) {
+				this.directDamage(1, source, target);
+			}
 		},
 	},
 	karatechop: {
@@ -562,13 +553,18 @@ let BattleMovedex = {
 				}
 				// We check if leeched Pokémon has Toxic to increase leeched damage.
 				let toxicCounter = 1;
-				if (pokemon.volatiles['residualdmg']) {
-					pokemon.volatiles['residualdmg'].counter++;
-					toxicCounter = pokemon.volatiles['residualdmg'].counter;
+				let residualdmg = pokemon.volatiles['residualdmg'];
+				if (residualdmg) {
+					residualdmg.counter++;
+					toxicCounter = residualdmg.counter;
 				}
 				let toLeech = this.clampIntRange(Math.floor(pokemon.maxhp / 16), 1) * toxicCounter;
 				let damage = this.damage(toLeech, pokemon, leecher);
-				if (damage) this.heal(damage, leecher, pokemon);
+				if (residualdmg) this.hint("In Gen 1, Leech Seed's damage is affected by Toxic's counter.", true);
+				if (!damage || toLeech > damage) {
+					this.hint("In Gen 1, Leech Seed recovery is not limited by the remaining HP of the seeded Pokemon.", true);
+				}
+				this.heal(toLeech, leecher, pokemon);
 			},
 		},
 	},
@@ -736,6 +732,7 @@ let BattleMovedex = {
 		onHit(target) {
 			// Fail when health is 255 or 511 less than max
 			if (target.hp === (target.maxhp - 255) || target.hp === (target.maxhp - 511) || target.hp === target.maxhp) {
+				this.hint("In Gen 1, recovery moves fail if (user's maximum HP - user's current HP + 1) is divisible by 256.");
 				return false;
 			}
 			this.heal(Math.floor(target.maxhp / 2), target, target);
@@ -773,17 +770,16 @@ let BattleMovedex = {
 		inherit: true,
 		desc: "The user falls asleep for the next two turns and restores all of its HP, curing itself of any major status condition in the process. This does not remove the user's stat penalty for burn or paralysis. Fails if the user has full HP.",
 		onTryMove() {},
-		onHit(target) {
+		onHit(target, source, move) {
 			// Fails if the difference between
 			// max HP and current HP is 0, 255, or 511
 			if (target.hp >= target.maxhp ||
 			target.hp === (target.maxhp - 255) ||
 			target.hp === (target.maxhp - 511)) return false;
-			if (!target.setStatus('slp')) return false;
+			if (!target.setStatus('slp', source, move)) return false;
 			target.statusData.time = 2;
 			target.statusData.startTime = 2;
-			this.heal(target.maxhp); // Aeshetic only as the healing happens after you fall asleep in-game
-			this.add('-status', target, 'slp', '[from] move: Rest');
+			this.heal(target.maxhp); // Aesthetic only as the healing happens after you fall asleep in-game
 		},
 	},
 	roar: {
@@ -856,6 +852,7 @@ let BattleMovedex = {
 		onHit(target) {
 			// Fail when health is 255 or 511 less than max
 			if (target.hp === (target.maxhp - 255) || target.hp === (target.maxhp - 511) || target.hp === target.maxhp) {
+				this.hint("In Gen 1, recovery moves fail if (user's maximum HP - user's current HP + 1) is divisible by 256.");
 				return false;
 			}
 			this.heal(Math.floor(target.maxhp / 2), target, target);
@@ -905,7 +902,7 @@ let BattleMovedex = {
 		name: "Substitute",
 		pp: 10,
 		priority: 0,
-		volatileStatus: 'Substitute',
+		volatileStatus: 'substitute',
 		onTryHit(target) {
 			if (target.volatiles['substitute']) {
 				this.add('-fail', target, 'move: Substitute');
@@ -945,7 +942,8 @@ let BattleMovedex = {
 				if (move.volatileStatus && target === source) return;
 				// NOTE: In future generations the damage is capped to the remaining HP of the
 				// Substitute, here we deliberately use the uncapped damage when tracking lastDamage etc.
-				let uncappedDamage = this.getDamage(source, target, move);
+				// Also, multi-hit moves must always deal the same damage as the first hit for any subsequent hits
+				let uncappedDamage = move.hit > 1 ? source.lastDamage : this.getDamage(source, target, move);
 				if (!uncappedDamage) return null;
 				uncappedDamage = this.runEvent('SubDamage', target, source, move, uncappedDamage);
 				if (!uncappedDamage) return uncappedDamage;
@@ -1065,10 +1063,7 @@ let BattleMovedex = {
 		self: {
 			volatileStatus: 'partialtrappinglock',
 		},
-		onBeforeMove(pokemon, target, move) {
-			// Removes must recharge volatile even if it misses
-			target.removeVolatile('mustrecharge');
-		},
+		// FIXME: onBeforeMove(pokemon, target) {target.removeVolatile('mustrecharge')}
 		onHit(target, source) {
 			/**
 			 * The duration of the partially trapped must be always renewed to 2

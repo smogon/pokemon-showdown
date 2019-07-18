@@ -40,6 +40,8 @@ To reload chat commands:
  * @typedef {(this: CommandContext, message: string, user: User, room: ChatRoom | GameRoom?, connection: Connection, targetUser: User?, originalMessage: string) => (string | false | null | undefined)} ChatFilter
  */
 /** @typedef {(name: string, user: User) => (string)} NameFilter */
+/** @typedef {(status: string, user: User) => (string)} StatusFilter */
+/** @typedef {(user: User, oldUser: User?, userType: string) => void} LoginFilter */
 
 const LINK_WHITELIST = ['*.pokemonshowdown.com', 'psim.us', 'smogtours.psim.us', '*.smogon.com', '*.pastebin.com', '*.hastebin.com'];
 
@@ -106,13 +108,30 @@ class PatternTester {
 	/**
 	 * @param {string} text
 	 */
-	test(text) {
+	testCommand(text) {
 		const spaceIndex = text.indexOf(' ');
 		if (this.fastElements.has(spaceIndex >= 0 ? text.slice(0, spaceIndex) : text)) {
 			return true;
 		}
 		if (!this.regexp) return false;
 		return this.regexp.test(text);
+	}
+	/**
+	 * @param {string} text
+	 */
+	test(text) {
+		if (!text.includes('\n')) return null;
+		if (this.testCommand(text)) return text;
+		// The PM matching is a huge mess, and really needs to be replaced with
+		// the new multiline command system soon.
+		const pmMatches = /^(\/(?:pm|w|whisper|msg) [^,]*, ?)(.*)/i.exec(text);
+		if (pmMatches && this.testCommand(pmMatches[2])) {
+			if (text.split('\n').every(line => line.startsWith(pmMatches[1]))) {
+				return text.replace(/\n\/(?:pm|w|whisper|msg) [^,]*, ?/g, '\n');
+			}
+			return text;
+		}
+		return null;
 	}
 }
 
@@ -182,7 +201,7 @@ Chat.namefilter = function (name, user) {
 		// \u2E80-\u32FF              CJK symbols
 		// \u3400-\u9FFF              CJK
 		// \uF900-\uFAFF\uFE00-\uFE6F CJK extended
-		name = name.replace(/[^a-zA-Z0-9 /\\.~()<>^*%&=+$@#_'?!"\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F-]+/g, '');
+		name = name.replace(/[^a-zA-Z0-9 /\\.~()<>^*%&=+$#_'?!"\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F-]+/g, '');
 
 		// blacklist
 		// \u00a1 upside-down exclamation mark (i)
@@ -196,7 +215,7 @@ Chat.namefilter = function (name, user) {
 		if (name.includes('@') && name.includes('.')) return '';
 
 		// url
-		if (/[a-z0-9]\.(com|net|org)/.test(name)) name = name.replace(/\./g, '');
+		if (/[a-z0-9]\.(com|net|org|us|uk|co|gg|tk|ml|gq|ga|xxx|download|stream|)\b/.test(name)) name = name.replace(/\./g, '');
 
 		// Limit the amount of symbols allowed in usernames to 4 maximum, and disallow (R) and (C) from being used in the middle of names.
 		let nameSymbols = name.replace(/[^\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2090-\u23FA\u2500-\u2BD1]+/g, '');
@@ -204,6 +223,7 @@ Chat.namefilter = function (name, user) {
 		if (nameSymbols.length > 4 || /[^a-z0-9][a-z0-9][^a-z0-9]/.test(name.toLowerCase() + ' ') || /[\u00ae\u00a9].*[a-zA-Z0-9]/.test(name)) name = name.replace(/[\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F]+/g, '').replace(/[^A-Za-z0-9]{2,}/g, ' ').trim();
 	}
 	name = name.replace(/^[^A-Za-z0-9]+/, ""); // remove symbols from start
+	name = name.replace(/@/g, ""); // Remove @ as this is used to indicate status messages
 
 	// cut name length down to 18 chars
 	if (/[A-Za-z0-9]/.test(name.slice(18))) {
@@ -219,19 +239,20 @@ Chat.namefilter = function (name, user) {
 	}
 	return name;
 };
-/**@type {((host: string, user: User, connection: Connection) => void)[]} */
+/**@type {((host: string, user: User, connection: Connection, hostType: string) => void)[]} */
 Chat.hostfilters = [];
 /**
  * @param {string} host
  * @param {User} user
  * @param {Connection} connection
+ * @param {string} hostType
  */
-Chat.hostfilter = function (host, user, connection) {
+Chat.hostfilter = function (host, user, connection, hostType) {
 	for (const filter of Chat.hostfilters) {
-		filter(host, user, connection);
+		filter(host, user, connection, hostType);
 	}
 };
-/**@type {((user: User, oldUser: User | null, usertype: string) => void)[]} */
+/**@type {LoginFilter[]} */
 Chat.loginfilters = [];
 /**
  * @param {User} user
@@ -257,6 +278,22 @@ Chat.nicknamefilter = function (nickname, user) {
 	}
 	return nickname;
 };
+
+/**@type {StatusFilter[]} */
+Chat.statusfilters = [];
+/**
+ * @param {string} status
+ * @param {User} user
+ */
+Chat.statusfilter = function (status, user) {
+	status = status.replace(/\|/g, '');
+	for (const filter of Chat.statusfilters) {
+		status = filter(status, user);
+		if (!status) return '';
+	}
+	return status;
+};
+
 
 /*********************************************************
  * Translations
@@ -305,7 +342,7 @@ FS(TRANSLATION_DIRECTORY).readdir().then(files => {
  */
 Chat.tr = function (language, strings, ...keys) {
 	if (!language) language = 'english';
-	language = toId(language);
+	language = toID(language);
 	if (!Chat.translations.has(language)) throw new Error(`Trying to translate to a nonexistent language: ${language}`);
 	if (!strings.length) {
 		// @ts-ignore no this isn't any type
@@ -369,7 +406,7 @@ class MessageContext {
 		if (commaIndex < 0) {
 			return [target.trim(), ''];
 		}
-		return [target.substr(0, commaIndex).trim(), target.substr(commaIndex + 1).trim()];
+		return [target.slice(0, commaIndex).trim(), target.slice(commaIndex + 1).trim()];
 	}
 	/**
 	 * @param {string} text
@@ -542,6 +579,8 @@ class CommandContext extends MessageContext {
 
 		let commandHandler = this.splitCommand(message);
 
+		if (this.user.statusType === 'idle') this.user.setStatusType('online');
+
 		if (typeof commandHandler === 'function') {
 			message = this.run(commandHandler);
 		} else {
@@ -579,11 +618,10 @@ class CommandContext extends MessageContext {
 				Chat.sendPM(message, this.user, this.pmTarget);
 			} else {
 				this.room.add(`|c|${this.user.getIdentity(this.room.id)}|${message}`);
+				if (this.room && this.room.game && this.room.game.onLogMessage) {
+					this.room.game.onLogMessage(message, this.user);
+				}
 			}
-		}
-
-		if (this.room && this.room.game && this.room.game.onLogMessage) {
-			this.room.game.onLogMessage(message, this.user);
 		}
 
 		this.update();
@@ -931,7 +969,7 @@ class CommandContext extends MessageContext {
 				buf += ` [${user.latestIp}]`;
 			}
 		}
-		buf += note;
+		buf += note.replace(/\n/gm, ' ');
 
 		Rooms.global.modlog(buf);
 		this.room.modlog(buf);
@@ -946,7 +984,7 @@ class CommandContext extends MessageContext {
 		let buf = `(${this.room.id}) ${action}: `;
 		if (user) {
 			if (typeof user === 'string') {
-				buf += `[${toId(user)}]`;
+				buf += `[${toID(user)}]`;
 			} else {
 				let userid = user.getLastId();
 				buf += `[${userid}]`;
@@ -959,7 +997,7 @@ class CommandContext extends MessageContext {
 			}
 		}
 		buf += ` by ${this.user.userid}`;
-		if (note) buf += `: ${note}`;
+		if (note) buf += `: ${note.replace(/\n/gm, ' ')}`;
 
 		this.room.modlog(buf);
 	}
@@ -1127,7 +1165,8 @@ class CommandContext extends MessageContext {
 					let groupName = Config.groups[Config.pmmodchat] && Config.groups[Config.pmmodchat].name || Config.pmmodchat;
 					return this.errorReply(`On this server, you must be of rank ${groupName} or higher to PM users.`);
 				}
-				if (targetUser.ignorePMs && targetUser.ignorePMs !== user.group && !user.can('lock')) {
+				if (targetUser.blockPMs && targetUser.blockPMs !== user.group && !user.can('lock')) {
+					Chat.maybeNotifyBlocked('pm', targetUser, user);
 					if (!targetUser.can('lock')) {
 						return this.errorReply(`This user is blocking private messages right now.`);
 					} else {
@@ -1135,7 +1174,7 @@ class CommandContext extends MessageContext {
 						return this.sendReply(`|html|If you need help, try opening a <a href="view-help-request" class="button">help ticket</a>`);
 					}
 				}
-				if (user.ignorePMs && user.ignorePMs !== targetUser.group && !targetUser.can('lock')) {
+				if (user.blockPMs && user.blockPMs !== targetUser.group && !targetUser.can('lock')) {
 					return this.errorReply(`You are blocking private messages right now.`);
 				}
 			}
@@ -1194,6 +1233,10 @@ class CommandContext extends MessageContext {
 			this.errorReply(`Your username contains a phrase banned by this room.`);
 			return false;
 		}
+		if (user.userMessage && (!this.checkBanwords(room, user.userMessage) && !user.can('bypassall'))) {
+			this.errorReply(`Your status message contains a phrase banned by this room.`);
+			return false;
+		}
 		if (!this.checkBanwords(room, message) && !user.can('mute', null, room)) {
 			this.errorReply("Your message contained banned words in this room.");
 			return false;
@@ -1216,7 +1259,7 @@ class CommandContext extends MessageContext {
 			user.lastMessageTime = Date.now();
 		}
 
-		if (room && room.highTraffic && toId(message).replace(/[^a-z]+/, '').length < 2 && !user.can('broadcast', null, room)) {
+		if (room && room.highTraffic && toID(message).replace(/[^a-z]+/, '').length < 2 && !user.can('broadcast', null, room)) {
 			this.errorReply('Due to this room being a high traffic room, your message must contain at least two letters.');
 			return false;
 		}
@@ -1314,7 +1357,7 @@ class CommandContext extends MessageContext {
 		}
 
 		// check for mismatched tags
-		let tags = html.toLowerCase().match(/<\/?(div|a|button|b|strong|em|i|u|center|font|marquee|blink|details|summary|code|table|td|tr)\b/g);
+		let tags = html.toLowerCase().match(/<\/?(div|a|button|b|strong|em|i|u|center|font|marquee|blink|details|summary|code|table|td|tr|style|script)\b/g);
 		if (tags) {
 			let stack = [];
 			for (const tag of tags) {
@@ -1497,6 +1540,7 @@ Chat.loadPlugins = function () {
 	if (Config.hostfilter) Chat.hostfilters.push(Config.hostfilter);
 	if (Config.loginfilter) Chat.loginfilters.push(Config.loginfilter);
 	if (Config.nicknamefilter) Chat.nicknamefilters.push(Config.nicknamefilter);
+	if (Config.statusfilter) Chat.statusfilters.push(Config.statusfilter);
 
 	// Install plug-in commands and chat filters
 
@@ -1519,6 +1563,7 @@ Chat.loadPlugins = function () {
 		if (plugin.hostfilter) Chat.hostfilters.push(plugin.hostfilter);
 		if (plugin.loginfilter) Chat.loginfilters.push(plugin.loginfilter);
 		if (plugin.nicknamefilter) Chat.nicknamefilters.push(plugin.nicknamefilter);
+		if (plugin.statusfilter) Chat.statusfilters.push(plugin.statusfilter);
 	}
 };
 
@@ -1714,6 +1759,14 @@ Chat.toListString = function (array) {
 	if (array.length === 1) return array[0];
 	return `${array.slice(0, -1).join(", ")} and ${array.slice(-1)}`;
 };
+
+/** @param {String} html */
+Chat.collapseLineBreaksHTML = function (html) {
+	html = html.replace(/<[^>]*>/g, tag => tag.replace(/\n/g, ' '));
+	html = html.replace(/\n/g, '&#10;');
+	return html;
+};
+
 /**
  * @param {Template} template
  * @param {number} gen
@@ -1723,11 +1776,11 @@ Chat.getDataPokemonHTML = function (template, gen = 7, tier = '') {
 	let buf = '<li class="result">';
 	buf += '<span class="col numcol">' + (tier || template.tier) + '</span> ';
 	buf += `<span class="col iconcol"><psicon pokemon="${template.id}"/></span> `;
-	buf += '<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://pokemonshowdown.com/dex/pokemon/' + template.id + '" target="_blank">' + template.species + '</a></span> ';
+	buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://${Config.routes.dex}/pokemon/${template.id}" target="_blank">${template.species}</a></span> `;
 	buf += '<span class="col typecol">';
 	if (template.types) {
 		for (const type of template.types) {
-			buf += `<img src="https://play.pokemonshowdown.com/sprites/types/${type}.png" alt="${type}" height="14" width="32">`;
+			buf += `<img src="https://${Config.routes.client}/sprites/types/${type}.png" alt="${type}" height="14" width="32">`;
 		}
 	}
 	buf += '</span> ';
@@ -1778,11 +1831,11 @@ Chat.getDataPokemonHTML = function (template, gen = 7, tier = '') {
 Chat.getDataMoveHTML = function (move) {
 	if (typeof move === 'string') move = Object.assign({}, Dex.getMove(move));
 	let buf = `<ul class="utilichart"><li class="result">`;
-	buf += `<span class="col movenamecol"><a href="https://pokemonshowdown.com/dex/moves/${move.id}">${move.name}</a></span> `;
+	buf += `<span class="col movenamecol"><a href="https://${Config.routes.dex}/moves/${move.id}">${move.name}</a></span> `;
 	// encoding is important for the ??? type icon
 	const encodedMoveType = encodeURIComponent(move.type);
-	buf += `<span class="col typecol"><img src="//play.pokemonshowdown.com/sprites/types/${encodedMoveType}.png" alt="${move.type}" width="32" height="14">`;
-	buf += `<img src="//play.pokemonshowdown.com/sprites/categories/${move.category}.png" alt="${move.category}" width="32" height="14"></span> `;
+	buf += `<span class="col typecol"><img src="//${Config.routes.client}/sprites/types/${encodedMoveType}.png" alt="${move.type}" width="32" height="14">`;
+	buf += `<img src="//${Config.routes.client}/sprites/categories/${move.category}.png" alt="${move.category}" width="32" height="14"></span> `;
 	if (move.basePower) buf += `<span class="col labelcol"><em>Power</em><br>${typeof move.basePower === 'number' ? move.basePower : '—'}</span> `;
 	buf += `<span class="col widelabelcol"><em>Accuracy</em><br>${typeof move.accuracy === 'number' ? (move.accuracy + '%') : '—'}</span> `;
 	const basePP = move.pp || 1;
@@ -1798,7 +1851,7 @@ Chat.getDataMoveHTML = function (move) {
 Chat.getDataAbilityHTML = function (ability) {
 	if (typeof ability === 'string') ability = Object.assign({}, Dex.getAbility(ability));
 	let buf = `<ul class="utilichart"><li class="result">`;
-	buf += `<span class="col namecol"><a href="https://pokemonshowdown.com/dex/abilities/${ability.id}">${ability.name}</a></span> `;
+	buf += `<span class="col namecol"><a href="https://${Config.routes.dex}/abilities/${ability.id}">${ability.name}</a></span> `;
 	buf += `<span class="col abilitydesccol">${ability.shortDesc || ability.desc}</span> `;
 	buf += `</li><li style="clear:both"></li></ul>`;
 	return buf;
@@ -1809,7 +1862,7 @@ Chat.getDataAbilityHTML = function (ability) {
 Chat.getDataItemHTML = function (item) {
 	if (typeof item === 'string') item = Object.assign({}, Dex.getItem(item));
 	let buf = `<ul class="utilichart"><li class="result">`;
-	buf += `<span class="col itemiconcol"><psicon item="${item.id}"></span> <span class="col namecol"><a href="https://pokemonshowdown.com/dex/items/${item.id}">${item.name}</a></span> `;
+	buf += `<span class="col itemiconcol"><psicon item="${item.id}"></span> <span class="col namecol"><a href="https://${Config.routes.dex}/items/${item.id}">${item.name}</a></span> `;
 	buf += `<span class="col itemdesccol">${item.shortDesc || item.desc}</span> `;
 	buf += `</li><li style="clear:both"></li></ul>`;
 	return buf;
@@ -1871,8 +1924,10 @@ Chat.stringify = function (value, depth = 0) {
 	return `${constructor}{${buf}}`;
 };
 
-Chat.formatText = require('./chat-formatter').formatText;
-Chat.linkRegex = require('./chat-formatter').linkRegex;
+/** @type {typeof import('./chat-formatter').formatText} */
+Chat.formatText = require(/** @type {any} */('../.server-dist/chat-formatter')).formatText;
+/** @type {typeof import('./chat-formatter').linkRegex} */
+Chat.linkRegex = require(/** @type {any} */('../.server-dist/chat-formatter')).linkRegex;
 Chat.updateServerLock = false;
 
 /**
@@ -1910,6 +1965,28 @@ Chat.fitImage = async function (url, maxHeight = 300, maxWidth = 300) {
 };
 
 /**
+ * Notifies a targetUser that a user was blocked from reaching them due to a setting they have enabled.
+ * @param {'pm'|'challenge'} blocked
+ * @param {User} targetUser
+ * @param {User} user
+ */
+Chat.maybeNotifyBlocked = function (blocked, targetUser, user) {
+	const prefix = `|pm|~|${targetUser.getIdentity()}|/nonotify `;
+	const options = 'or change it in the <button name="openOptions" class="subtle">Options</button> menu in the upper right.';
+	if (blocked === 'pm') {
+		if (!targetUser.blockPMsNotified) {
+			targetUser.send(`${prefix}The user '${user.name}' attempted to PM you but was blocked. To enable PMs, use /unblockpms ${options}`);
+			targetUser.blockPMsNotified = true;
+		}
+	} else if (blocked === 'challenge') {
+		if (!targetUser.blockChallengesNotified) {
+			targetUser.send(`${prefix}The user '${user.name}' attempted to challenge you to a battle but was blocked. To enable challenges, use /unblockchallenges ${options}`);
+			targetUser.blockChallengesNotified = true;
+		}
+	}
+};
+
+/**
  * Used by ChatMonitor.
  * @typedef {[(string | RegExp), string, string?, number]} FilterWord
  * @typedef {(this: CommandContext, line: FilterWord, room: ChatRoom | GameRoom?, user: User, message: string, lcMessage: string, isStaff: boolean) => (string | false | undefined)} MonitorHandler
@@ -1922,6 +1999,11 @@ Chat.filterWords = {};
 Chat.monitors = {};
 /** @type {Map<string, string>} */
 Chat.namefilterwhitelist = new Map();
+/**
+ * Inappropriate userid : forcerenaming staff member's userid
+ * @type {Map<string, string>}
+ */
+Chat.forceRenames = new Map();
 
 /**
  * @param {string} id
