@@ -657,14 +657,8 @@ let Formats = [
 			}
 			let leader = this.dex.deepClone(set);
 			leader.species = teamHas.leader;
-			let problems = this.validateSet(leader, teamHas);
-			if (problems) return problems;
-			set.ability = this.dex.getTemplate(set.species || set.name).abilities['0'];
-			// @ts-ignore
-			set.follower = true;
-			problems = this.validateSet(set, teamHas);
-			set.ability = leader.ability;
-			return problems;
+			leader.follower = true;
+			return this.validateSet(leader, teamHas);
 		},
 	},
 	{
