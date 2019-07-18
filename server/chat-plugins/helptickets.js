@@ -485,7 +485,7 @@ const pages = {
 			const pages = {
 				report: `I want to report someone`,
 				harassment: `Someone is harassing me`,
-				inap: `Someone is using an offensive username or pokemon nickname`,
+				inap: `Someone is using an offensive username, status message or pokemon nickname`,
 				staff: `I want to report a staff member`,
 
 				appeal: `I want to appeal a punishment`,
@@ -517,7 +517,7 @@ const pages = {
 			const ticketTitles = {
 				pmharassment: `PM Harassment`,
 				battleharassment: `Battle Harassment`,
-				inapname: `Inappropriate Username`,
+				inapname: `Inappropriate Username/Status Message`,
 				inappokemon: `Inappropriate Pokemon Nicknames`,
 				appeal: `Appeal`,
 				ipappeal: `IP-Appeal`,
@@ -559,7 +559,7 @@ const pages = {
 					buf += `<p><Button>confirmpmharassment</Button> <Button>confirmbattleharassment</Button></p>`;
 					break;
 				case 'inap':
-					buf += `<p>If a user has an inappropriate name, or has inappropriate Pok&eacute;mon nicknames, click the appropriate button below and a global staff member will take a look.</p>`;
+					buf += `<p>If a user has an inappropriate name, status message or has inappropriate Pok&eacute;mon nicknames, click the appropriate button below and a global staff member will take a look.</p>`;
 					if (!isLast) break;
 					buf += `<p><Button>confirminapname</Button> <Button>confirminappokemon</Button></p>`;
 					break;
