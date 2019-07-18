@@ -214,7 +214,7 @@ let BattleMovedex = {
 		inherit: true,
 		effect: {
 			onTryImmunity(target, source, move) {
-				if (move.id === 'earthquake' || move.id === 'magnitude' || move.id === 'helpinghand') {
+				if (['earthquake', 'magnitude', 'helpinghand'].includes(move.id)) {
 					return;
 				}
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
@@ -229,7 +229,7 @@ let BattleMovedex = {
 		inherit: true,
 		effect: {
 			onTryImmunity(target, source, move) {
-				if (move.id === 'surf' || move.id === 'whirlpool' || move.id === 'helpinghand') {
+				if (['surf', 'whirlpool', 'helpinghand'].includes(move.id)) {
 					return;
 				}
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
@@ -324,7 +324,7 @@ let BattleMovedex = {
 		inherit: true,
 		effect: {
 			onTryImmunity(target, source, move) {
-				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows', 'helpinghand'].includes(move.id) {
+				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows', 'helpinghand'].includes(move.id)) {
 					return;
 				}
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
