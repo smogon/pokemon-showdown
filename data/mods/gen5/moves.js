@@ -215,7 +215,7 @@ let BattleMovedex = {
 	},
 	dig: {
 		inherit: true,
-		effect:{
+		effect: {
 			onTryImmunity(target, source, move) {
 				if (move.id === 'earthquake' || move.id === 'magnitude' || move.id === 'helpinghand') {
 					return;
