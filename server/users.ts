@@ -598,13 +598,11 @@ class User extends Chat.MessageContext {
 	}
 	getIdentityWithStatus(roomid: string = '') {
 		const identity = this.getIdentity(roomid);
-		const status = this.statusType === 'online' ? '' : '@!';
+		const status = this.getStatus();
 		return `${identity}${status}`;
 	}
 	getStatus() {
-		const statusMessage = this.statusType === 'busy' ? '!(Busy) ' : this.statusType === 'idle' ? '!(Idle) ' : '';
-		const status = statusMessage + (this.userMessage || '');
-		return status;
+		return this.statusType === 'idle' ? '@!' : this.statusType === 'busy' ? '@' : /* online */ '';
 	}
 	authAtLeast(minAuth: string, room: BasicChatRoom | null = null) {
 		if (!minAuth || minAuth === ' ') return true;
