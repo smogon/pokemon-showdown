@@ -95,7 +95,7 @@ let BattleMovedex = {
 		inherit: true,
 		effect: {
 			onTryImmunity(target, source, move) {
-				if (move.id === 'gust' || move.id === 'twister') {
+				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown',  'thousandarrows', 'helpinghand'].includes(move.id)) {
 					return;
 				}
 				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'thousandarrows' || move.id === 'helpinghand') {
