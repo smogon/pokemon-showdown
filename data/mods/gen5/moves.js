@@ -98,9 +98,6 @@ let BattleMovedex = {
 				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown',  'thousandarrows', 'helpinghand'].includes(move.id)) {
 					return;
 				}
-				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'thousandarrows' || move.id === 'helpinghand') {
-					return;
-				}
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
 					return;
 				}
@@ -327,10 +324,7 @@ let BattleMovedex = {
 		inherit: true,
 		effect: {
 			onTryImmunity(target, source, move) {
-				if (move.id === 'gust' || move.id === 'twister') {
-					return;
-				}
-				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'thousandarrows' || move.id === 'helpinghand') {
+				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows', 'helpinghand'].includes(move.id) {
 					return;
 				}
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
@@ -988,10 +982,7 @@ let BattleMovedex = {
 				if (source === this.effectData.target && target === this.effectData.source) {
 					return;
 				}
-				if (move.id === 'gust' || move.id === 'twister') {
-					return;
-				}
-				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'thousandarrows' || move.id === 'helpinghand') {
+				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows', 'helpinghand'].includes(move.id) {
 					return;
 				}
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
