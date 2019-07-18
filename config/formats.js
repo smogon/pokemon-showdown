@@ -650,13 +650,12 @@ let Formats = [
 			return set.follower ? null : this.checkLearnset(move, template, lsetData, set);
 		},
 		validateSet(set, teamHas) {
-			if (!teamHas.leader) {
-				let problems = this.validateSet(set, teamHas);
-				teamHas.leader = set.species;
-				return problems;
+			if (!teamHas.leaderSpecies) {
+				teamHas.leaderSpecies = set.species;
+				return this.validateSet(set, teamHas);
 			}
-			let leader = this.dex.deepClone(set);
-			leader.species = teamHas.leader;
+			const leader = this.dex.deepClone(set);
+			leader.species = teamHas.leaderSpecies;
 			leader.follower = true;
 			return this.validateSet(leader, teamHas);
 		},
