@@ -1677,6 +1677,7 @@ let BattleMovedex = {
 					return;
 				}
 				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
+				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
 			onSourceBasePower(basePower, target, source, move) {
@@ -3425,6 +3426,7 @@ let BattleMovedex = {
 					return;
 				}
 				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
+				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
 			onSourceModifyDamage(damage, source, target, move) {
@@ -3590,6 +3592,7 @@ let BattleMovedex = {
 					return;
 				}
 				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
+				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
 			onSourceModifyDamage(damage, source, target, move) {
@@ -5684,6 +5687,7 @@ let BattleMovedex = {
 					return;
 				}
 				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
+				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
 			onSourceModifyDamage(damage, source, target, move) {
@@ -11811,6 +11815,7 @@ let BattleMovedex = {
 					return;
 				}
 				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
+				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
 		},
@@ -14589,6 +14594,7 @@ let BattleMovedex = {
 					return;
 				}
 				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
+				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
 		},
@@ -15202,6 +15208,7 @@ let BattleMovedex = {
 					return;
 				}
 				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
+				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
 			onAnyBasePower(basePower, target, source, move) {
