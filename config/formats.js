@@ -655,16 +655,19 @@ let Formats = [
 			return this.checkLearnset(move, template, lsetData, set);
 		},
 		validateSet(set, teamHas) {
-			if (!teamHas.leaderSpecies) {
-				teamHas.leaderSpecies = set.species;
+			if (!teamHas.leaderIds) {
+				teamHas.leaderIds = [set.name, set.species];
 				return this.validateSet(set, teamHas);
 			}
-			const setSpecies = set.species;
-			set.species = teamHas.leaderSpecies;
+			const setIds = [set.name, set.species];
+			[set.name, set.species] = teamHas.leaderIds;
 			// @ts-ignore
 			set.follower = true;
-			const problems = this.validateSet(set, teamHas);
-			set.species = setSpecies;
+			let problems = this.validateSet(set, teamHas);
+			if (problems) {
+				problems = problems.map(problem => problem.replace(teamHas.leaderIds[0], setIds[0]));
+			}
+			[set.name, set.species] = setIds;
 			return problems;
 		},
 	},
