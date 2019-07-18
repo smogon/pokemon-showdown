@@ -654,7 +654,7 @@ let BattleFormatsData = {
 	moltres: {
 		inherit: true,
 		randomBattleMoves: ["fireblast", "flamethrower", "hiddenpowergrass", "doubleedge", "morningsun", "toxic", "agility", "willowisp", "substitute"],
-		tier: "UUBL",
+		tier: "OU",
 	},
 	dratini: {
 		tier: "LC",
@@ -977,7 +977,7 @@ let BattleFormatsData = {
 	raikou: {
 		inherit: true,
 		randomBattleMoves: ["thunderbolt", "hiddenpowerice", "calmmind", "hiddenpowergrass", "crunch", "substitute", "roar", "rest", "sleeptalk"],
-		tier: "OU",
+		tier: "UUBL",
 	},
 	entei: {
 		inherit: true,
