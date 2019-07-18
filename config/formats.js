@@ -654,10 +654,13 @@ let Formats = [
 				teamHas.leaderSpecies = set.species;
 				return this.validateSet(set, teamHas);
 			}
-			const leader = this.dex.deepClone(set);
-			leader.species = teamHas.leaderSpecies;
-			leader.follower = true;
-			return this.validateSet(leader, teamHas);
+			const setSpecies = set.species;
+			set.species = teamHas.leaderSpecies;
+			// @ts-ignore
+			set.follower = true;
+			const problems = this.validateSet(set, teamHas);
+			set.species = setSpecies;
+			return problems;
 		},
 	},
 	{
