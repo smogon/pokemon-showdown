@@ -982,7 +982,7 @@ let BattleMovedex = {
 				if (source === this.effectData.target && target === this.effectData.source) {
 					return;
 				}
-				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows', 'helpinghand'].includes(move.id) {
+				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows', 'helpinghand'].includes(move.id)) {
 					return;
 				}
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
