@@ -118,9 +118,6 @@ export class BasicEffect implements EffectData {
 	status?: ID;
 	/** The weather that the effect may cause. */
 	weather?: ID;
-	/** HP that the effect may drain. */
-	drain?: [number, number];
-	flags: AnyObject;
 	sourceEffect: string;
 
 	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
@@ -143,8 +140,6 @@ export class BasicEffect implements EffectData {
 		this.affectsFainted = !!data.affectsFainted;
 		this.status = data.status as ID || undefined;
 		this.weather = data.weather as ID || undefined;
-		this.drain = data.drain || undefined;
-		this.flags = data.flags || {};
 		this.sourceEffect = data.sourceEffect || '';
 	}
 
@@ -533,16 +528,6 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	readonly addedType?: string;
 	/** Pre-evolution. '' if nothing evolves into this Pokemon. */
 	readonly prevo: string;
-	/**
-	 * Singles Tier. The Pokemon's location in the Smogon tier system.
-	 * Do not use for LC bans.
-	 */
-	readonly tier: string;
-	/**
-	 * Doubles Tier. The Pokemon's location in the Smogon doubles tier system.
-	 * Do not use for LC bans.
-	 */
-	readonly doublesTier: string;
 	/** Evolutions. Array because many Pokemon have multiple evolutions. */
 	readonly evos: string[];
 	/** Evolution level. falsy if doesn't evolve. */
@@ -558,16 +543,10 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	readonly gender: GenderName;
 	/** Gender ratio. Should add up to 1 unless genderless. */
 	readonly genderRatio: {M: number, F: number};
-	/** Required item. Do not use this directly; see requiredItems. */
-	readonly requiredItem?: string;
-	/**
-	 * Required items. Items required to be in this forme, e.g. a mega
-	 * stone, or Griseous Orb. Array because Arceus formes can hold
-	 * either a Plate or a Z-Crystal.
-	 */
-	readonly requiredItems?: string[];
 	/** Base stats. */
 	readonly baseStats: StatsTable;
+	/** Max HP. Overrides usual HP calculations (for Shedinja). */
+	readonly maxHP?: number;
 	/** Weight (in kg). */
 	readonly weightkg: number;
 	/** Height (in m). */
@@ -581,8 +560,25 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	 * This is mainly relevant to Gen 5.
 	 */
 	readonly maleOnlyHidden: boolean;
-	/** Max HP. Used in the battle engine. */
-	readonly maxHP?: number;
+	/** True if a pokemon is mega. */
+	readonly isMega?: boolean;
+	/** True if a pokemon is primal. */
+	readonly isPrimal?: boolean;
+	/** True if a pokemon is a forme that is only accessible in battle. */
+	readonly battleOnly?: boolean;
+	/** Required item. Do not use this directly; see requiredItems. */
+	readonly requiredItem?: string;
+	/** Required move. Move required to use this forme in-battle. */
+	readonly requiredMove?: string;
+	/** Required ability. Ability required to use this forme in-battle. */
+	readonly requiredAbility?: string;
+	/**
+	 * Required items. Items required to be in this forme, e.g. a mega
+	 * stone, or Griseous Orb. Array because Arceus formes can hold
+	 * either a Plate or a Z-Crystal.
+	 */
+	readonly requiredItems?: string[];
+
 	/**
 	 * Keeps track of exactly how a pokemon might learn a move, in the
 	 * form moveid:sources[].
@@ -592,12 +588,22 @@ export class Template extends BasicEffect implements Readonly<BasicEffect & Temp
 	readonly eventOnly: boolean;
 	/** List of event data for each event. */
 	readonly eventPokemon?: EventInfo[] ;
-	/** True if a pokemon is mega. */
-	readonly isMega?: boolean;
-	/** True if a pokemon is primal. */
-	readonly isPrimal?: boolean;
-	/** True if a pokemon is a forme that is only accessible in battle. */
-	readonly battleOnly?: boolean;
+
+	/**
+	 * Singles Tier. The Pokemon's location in the Smogon tier system.
+	 * Do not use for LC bans (usage tier will override LC Uber).
+	 */
+	readonly tier: string;
+	/**
+	 * Doubles Tier. The Pokemon's location in the Smogon doubles tier system.
+	 * Do not use for LC bans (usage tier will override LC Uber).
+	 */
+	readonly doublesTier: string;
+	readonly randomBattleMoves?: readonly ID[];
+	readonly randomDoubleBattleMoves?: readonly ID[];
+	readonly exclusiveMoves?: readonly ID[];
+	readonly comboMoves?: readonly ID[];
+	readonly essentialMove?: ID;
 
 	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
 		super(data, ...moreData);

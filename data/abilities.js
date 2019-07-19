@@ -321,7 +321,9 @@ let BattleAbilities = {
 			if (source && target === source) return;
 			if (boost.def && boost.def < 0) {
 				delete boost.def;
-				if (!effect.secondaries) this.add("-fail", target, "unboost", "Defense", "[from] ability: Big Pecks", "[of] " + target);
+				if (!(/** @type {ActiveMove} */(effect)).secondaries) {
+					this.add("-fail", target, "unboost", "Defense", "[from] ability: Big Pecks", "[of] " + target);
+				}
 			}
 		},
 		id: "bigpecks",
@@ -401,7 +403,9 @@ let BattleAbilities = {
 					showMsg = true;
 				}
 			}
-			if (showMsg && !effect.secondaries) this.add("-fail", target, "unboost", "[from] ability: Clear Body", "[of] " + target);
+			if (showMsg && !(/** @type {ActiveMove} */(effect)).secondaries) {
+				this.add("-fail", target, "unboost", "[from] ability: Clear Body", "[of] " + target);
+			}
 		},
 		id: "clearbody",
 		name: "Clear Body",
@@ -1031,7 +1035,9 @@ let BattleAbilities = {
 					showMsg = true;
 				}
 			}
-			if (showMsg && !effect.secondaries) this.add('-fail', this.effectData.target, 'unboost', '[from] ability: Flower Veil', '[of] ' + target);
+			if (showMsg && !(/** @type {ActiveMove} */(effect)).secondaries) {
+				this.add('-fail', this.effectData.target, 'unboost', '[from] ability: Flower Veil', '[of] ' + target);
+			}
 		},
 		onAllySetStatus(status, target, source, effect) {
 			if (target.hasType('Grass') && source && target !== source && effect) {
@@ -1174,7 +1180,9 @@ let BattleAbilities = {
 					showMsg = true;
 				}
 			}
-			if (showMsg && !effect.secondaries) this.add("-fail", target, "unboost", "[from] ability: Full Metal Body", "[of] " + target);
+			if (showMsg && !(/** @type {ActiveMove} */(effect)).secondaries) {
+				this.add("-fail", target, "unboost", "[from] ability: Full Metal Body", "[of] " + target);
+			}
 		},
 		isUnbreakable: true,
 		id: "fullmetalbody",
@@ -1406,7 +1414,9 @@ let BattleAbilities = {
 			if (source && target === source) return;
 			if (boost.atk && boost.atk < 0) {
 				delete boost.atk;
-				if (!effect.secondaries) this.add("-fail", target, "unboost", "Attack", "[from] ability: Hyper Cutter", "[of] " + target);
+				if (!(/** @type {ActiveMove} */(effect)).secondaries) {
+					this.add("-fail", target, "unboost", "Attack", "[from] ability: Hyper Cutter", "[of] " + target);
+				}
 			}
 		},
 		id: "hypercutter",
@@ -1631,7 +1641,9 @@ let BattleAbilities = {
 			if (source && target === source) return;
 			if (boost.accuracy && boost.accuracy < 0) {
 				delete boost.accuracy;
-				if (!effect.secondaries) this.add("-fail", target, "unboost", "accuracy", "[from] ability: Keen Eye", "[of] " + target);
+				if (!(/** @type {ActiveMove} */(effect)).secondaries) {
+					this.add("-fail", target, "unboost", "accuracy", "[from] ability: Keen Eye", "[of] " + target);
+				}
 			}
 		},
 		onModifyMove(move) {
@@ -4007,7 +4019,9 @@ let BattleAbilities = {
 					showMsg = true;
 				}
 			}
-			if (showMsg && !effect.secondaries) this.add("-fail", target, "unboost", "[from] ability: White Smoke", "[of] " + target);
+			if (showMsg && !(/** @type {ActiveMove} */(effect)).secondaries) {
+				this.add("-fail", target, "unboost", "[from] ability: White Smoke", "[of] " + target);
+			}
 		},
 		id: "whitesmoke",
 		name: "White Smoke",

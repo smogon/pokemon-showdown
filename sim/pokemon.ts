@@ -1200,7 +1200,7 @@ export class Pokemon {
 		return d;
 	}
 
-	trySetStatus(status: string | Effect, source: Pokemon | null = null, sourceEffect: Effect | null = null) {
+	trySetStatus(status: string | PureEffect, source: Pokemon | null = null, sourceEffect: Effect | null = null) {
 		return this.setStatus(this.status || status, source, sourceEffect);
 	}
 
@@ -1216,13 +1216,13 @@ export class Pokemon {
 	}
 
 	setStatus(
-		status: string | Effect,
+		status: string | PureEffect,
 		source: Pokemon | null = null,
 		sourceEffect: Effect | null = null,
 		ignoreImmunities: boolean = false
 	) {
 		if (!this.hp) return false;
-		status = this.battle.getEffect(status) as Effect;
+		status = this.battle.getEffect(status);
 		if (this.battle.event) {
 			if (!source) source = this.battle.event.source;
 			if (!sourceEffect) sourceEffect = this.battle.effect;

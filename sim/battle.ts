@@ -1699,7 +1699,7 @@ export class Battle extends Dex.ModdedDex {
 				break;
 			}
 
-			if (targetDamage) {
+			if (targetDamage && effect.effectType === 'Move') {
 				if (this.gen <= 1 && effect.recoil && source) {
 					const amount = this.clampIntRange(Math.floor(targetDamage * effect.recoil[0] / effect.recoil[1]), 1);
 					this.damage(amount, source, target, 'recoil');
