@@ -1058,7 +1058,7 @@ class User extends Chat.MessageContext {
 		this.latestHost = oldUser.latestHost;
 		this.latestHostType = oldUser.latestHostType;
 		this.userMessage = oldUser.userMessage || this.userMessage || '';
-		this.statusType = oldUser.statusType !== 'online' ? oldUser.statusType : this.statusType;
+		this.statusType = oldUser.statusType === 'busy' ? oldUser.statusType : this.statusType;
 
 		oldUser.markDisconnected();
 	}
