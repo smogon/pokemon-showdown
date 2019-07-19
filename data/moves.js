@@ -10701,7 +10701,8 @@ let BattleMovedex = {
 		effect: {
 			duration: 5,
 			onBoost(boost, target, source, effect) {
-				if (source && target !== source && (!effect.infiltrates || target.side === source.side)) {
+				if (effect.effectType === 'Move' && effect.infiltrates && target.side !== source.side) return;
+				if (source && target !== source) {
 					let showMsg = false;
 					for (let i in boost) {
 						// @ts-ignore
@@ -10711,7 +10712,9 @@ let BattleMovedex = {
 							showMsg = true;
 						}
 					}
-					if (showMsg && !effect.secondaries) this.add('-activate', target, 'move: Mist');
+					if (showMsg && !(/** @type {ActiveMove} */(effect)).secondaries) {
+						this.add('-activate', target, 'move: Mist');
+					}
 				}
 			},
 			onStart(side) {
@@ -14083,7 +14086,9 @@ let BattleMovedex = {
 				return 5;
 			},
 			onSetStatus(status, target, source, effect) {
-				if (source && target !== source && effect && (!effect.infiltrates || target.side === source.side)) {
+				if (!effect || !source) return;
+				if (effect.effectType === 'Move' && effect.infiltrates && target.side !== source.side) return;
+				if (target !== source) {
 					this.debug('interrupting setStatus');
 					if (effect.id === 'synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
 						this.add('-activate', target, 'move: Safeguard');
@@ -14092,7 +14097,9 @@ let BattleMovedex = {
 				}
 			},
 			onTryAddVolatile(status, target, source, effect) {
-				if ((status.id === 'confusion' || status.id === 'yawn') && source && target !== source && effect && (!effect.infiltrates || target.side === source.side)) {
+				if (!effect || !source) return;
+				if (effect.effectType === 'Move' && effect.infiltrates && target.side !== source.side) return;
+				if ((status.id === 'confusion' || status.id === 'yawn') && target !== source) {
 					if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', target, 'move: Safeguard');
 					return null;
 				}
