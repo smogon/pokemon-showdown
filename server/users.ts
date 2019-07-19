@@ -1058,7 +1058,9 @@ class User extends Chat.MessageContext {
 		this.latestHost = oldUser.latestHost;
 		this.latestHostType = oldUser.latestHostType;
 		this.userMessage = oldUser.userMessage || this.userMessage || '';
-		this.statusType = oldUser.statusType === 'busy' ? oldUser.statusType : this.statusType;
+		// We only propagate the 'busy' statusType through merging - merging is
+		// active enough that the user should no longer be in the 'idle' state.
+		this.statusType = oldUser.statusType === 'busy' ? 'busy' : 'online';
 
 		oldUser.markDisconnected();
 	}
