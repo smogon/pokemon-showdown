@@ -656,16 +656,15 @@ let Formats = [
 			}
 			const setIds = [set.name, set.species];
 			[set.name, set.species] = teamHas.leaderIds;
-			let problems = this.validateSet(set, teamHas) || [];
-			problems = problems.map(problem => problem.replace(teamHas.leaderIds[0], setIds[0]));
+			const problems = new Set((this.validateSet(set, teamHas) || []).map(problem => problem.replace(teamHas.leaderIds[0], setIds[0])));
 			[set.name, set.species] = setIds;
 			// @ts-ignore
 			set.follower = true;
 			set.ability = this.dex.getTemplate(set.species || set.name).abilities['0'];
 			for (const problem of this.validateSet(set, teamHas) || []) {
-				problems.push(problem);
+				problems.add(problem);
 			}
-			return problems || null;
+			return [...problems] || null;
 		},
 	},
 	{
