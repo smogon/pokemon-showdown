@@ -656,14 +656,12 @@ let Formats = [
 			}
 			const setIds = [set.name, set.species];
 			[set.name, set.species] = teamHas.leaderIds;
-			let problems = this.validateSet(set, teamHas);
-			if (problems) {
-				problems = problems.map(problem => problem.replace(teamHas.leaderIds[0], setIds[0]));
-			}
+			let problems = this.validateSet(set, teamHas) || [];
+			problems = problems.map(problem => problem.replace(teamHas.leaderIds[0], setIds[0]));
 			[set.name, set.species] = setIds;
 			// @ts-ignore
 			set.follower = true;
-			return problems;
+			return problems || null;
 		},
 	},
 	{
