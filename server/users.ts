@@ -1171,6 +1171,7 @@ class User extends Chat.MessageContext {
 				this.autoconfirmed = this.userid;
 			} else {
 				delete usergroups[this.userid];
+				this.trusted = '';
 			}
 			// tslint:disable-next-line:no-floating-promises
 			exportUsergroups();
