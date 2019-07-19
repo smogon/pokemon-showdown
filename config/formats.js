@@ -661,6 +661,10 @@ let Formats = [
 			[set.name, set.species] = setIds;
 			// @ts-ignore
 			set.follower = true;
+			set.ability = this.dex.getTemplate(set.species || set.name).abilities['0'];
+			for (const problem of this.validateSet(set, teamHas) || []) {
+				problems.push(problem);
+			}
 			return problems || null;
 		},
 	},
