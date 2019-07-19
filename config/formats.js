@@ -647,12 +647,7 @@ let Formats = [
 		banlist: ['Regigigas', 'Shedinja', 'Slaking', 'Smeargle', 'Imposter', 'Huge Power', 'Pure Power'],
 		checkLearnset(move, template, lsetData, set) {
 			// @ts-ignore
-			if (set.follower) {
-				// @ts-ignore
-				delete set.follower;
-				return null;
-			}
-			return this.checkLearnset(move, template, lsetData, set);
+			return set.follower ? null : this.checkLearnset(move, template, lsetData, set);
 		},
 		validateSet(set, teamHas) {
 			if (!teamHas.leaderIds) {
