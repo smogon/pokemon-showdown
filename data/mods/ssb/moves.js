@@ -2764,7 +2764,7 @@ let BattleMovedex = {
 				return 5;
 			},
 			onTryMove(target, source, move) {
-				let hazardMoves = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'hazardpass', 'beskyttelsesnet', 'bringerofdarkness', 'soulbend', 'smokebomb', 'hurl'];
+				let hazardMoves = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'hazardpass', 'beskyttelsesnet', 'nekoveil', 'bringerofdarkness', 'soulbend', 'smokebomb', 'hurl'];
 				if (hazardMoves.includes(move.id)) {
 					this.add('-message', `Prismatic Terrain prevented ${move.name} from completing!`);
 					return false;
