@@ -647,6 +647,14 @@ class User extends Chat.MessageContext {
 
 		groupData = Config.groups[group];
 
+		const roomIsTemporary = room && (room.isPersonal || room.battle);
+		if (roomIsTemporary && group === this.group && groupData.globalGroupInPersonalRoom) {
+			const newGroup = groupData.globalGroupInPersonalRoom;
+			if (Config.groups[newGroup].rank > groupData.rank) {
+				groupData = Config.groups[newGroup];
+			}
+		}
+
 		if (groupData && groupData[permission]) {
 			const jurisdiction = groupData[permission];
 			if (!targetUser && !targetGroup) {
