@@ -295,9 +295,6 @@ class BasicRoom {
 		if (this.auth && this.isPrivate === true) {
 			return ' ';
 		}
-		if ((this.isPersonal || this.battle) && Config.groups[user.group].globalGroupInPersonalRoom) {
-			return Config.groups[user.group].globalGroupInPersonalRoom;
-		}
 		return user.group;
 	}
 	/**
@@ -791,7 +788,7 @@ class GlobalRoom extends BasicRoom {
 				break;
 			}
 		}
-		delete room.chatRoomData;
+		room.chatRoomData = null;
 		return true;
 	}
 	/**
