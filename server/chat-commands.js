@@ -406,7 +406,7 @@ const commands = {
 	raisedong: 'dongers',
 	raisedongers: 'dongers',
 	dongers: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/Dong.gif"><br />' +
 			'<font size=3><i><font color=red><b><blink>ヽ༼ຈل͜ຈ༽ﾉ raise your dongers ヽ༼ຈل͜ຈ༽ﾉ</blink></b></font></i></font><br />')
 	},
@@ -430,26 +430,26 @@ const commands = {
 
 	Evil: 'evil',
 	evil: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center> <img src = "http://167.114.97.182:9481/TCs/Evil.gif"> <br> <font size="4"><b><i><font color="#9C0D0D">Evil-kun</i><br></font><b> <blink> Ace: Dis is an ivol zing </blink></b><br><b>Elmo sabe donde vives...</b></center>')
 	},
 
 	ac: 'armcannons',
 	armcannons: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src = "http://167.114.97.182:9481/TCs/AC2.gif"> <center><br> <font size="3"><b><i><font color="blue">Josh</i><br></font><b> <blink> Ace: Darmanitan </blink></b> <br><b>Stealing yo girl shofu style</b></center>')
 	},
 	plug: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/plug.jpg" height="300" width="540"/> </a><br><font size="3"><b><i><font color="Black">Plug Crew</i><br></font><b><blink><a href="http://plug.dj/infinite-jam-session/">Plug Room</a></font></blink></b><br></center>')
 	},
 	mandy: function (target, room, user) {
-		if (!this.canBroadcast()) return false;
+		if (!this.runBroadcast()) return false;
 		return this.sendReplyBox(' <center> <img src="http://167.114.97.182:9481/TCs/mandy.gif"> <br> <font size="3"><b><i><font color="99FFFF">Mandy</i><br></font><b> <blink> Ace: I\'m kawaii bitch ^.~ </blink></b> <br><b>Cant handle my Cutness</b></center>');
 	},
 	ac2: 'armcannons2',
 	armcannons2: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/ac3.jpg"><br />' +
 			'<font size=4><i><font color=blue><b>Josh</b></font></i></font><br />' +
 			'<blink><b><font color=gray>Ace: Shocking good looks</font></b></blink><br />' +
@@ -458,7 +458,7 @@ const commands = {
 
 
 	gg: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/OBAMA.jpg"><br />' +
 			'<font size=3><i><font color=red><b>Da Bic Boi</b></font></i></font><br />' +
 			'<b><blink>Ace: Bullet Punch</blink></b><br />' +
@@ -466,7 +466,7 @@ const commands = {
 	},
 	donate: 'gg2',
 	gg2: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/Donateobama.jpg"><br />' +
 			'Like this server and want to help out?<br />' +
 			'<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=MSLQFMFMNUMX4&lc=US&item_name=Infinite%20Server%20%28http%3a%2f%2finfinite%2epsim%2eus%2f%29&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donate_SM%2egif%3aNonHosted"><img src="https://www.paypalobjects.com/en_AU/i/btn/btn_donate_SM.gif" /></a><br />' +
@@ -474,7 +474,7 @@ const commands = {
 			'<b>#Message Da Bic Boi afterwards to make sure the donation went through!</b>')
 	},
 	scrub: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/scrub.jpg" height="247" width="173"><br />' +
 			'<font size=3><i><font color=cyan><b>Scream Scrub</b></font></i></font><br />' +
 			'<b><blink>Ace: Diabeetus</blink></b><br />' +
@@ -482,7 +482,7 @@ const commands = {
 	},
 
 	max: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/max.jpg"><br />' +
 			'<font size=3><i><font color=green><b>Absolute Maximum</b></font></i></font><br />' +
 			'<b><blink>Ace: First Derivative</blink></b><br />' +
@@ -490,13 +490,13 @@ const commands = {
 	},
 	alaskaa: 'weed',
 	weed: function (target, room, user) {
-		if (!this.canBroadcast()) return false;
+		if (!this.runBroadcast()) return false;
 		return this.sendReplyBox('<center> <img src = "http://167.114.97.182:9481/TCs/alaska.gif"> <br> <font size="3"><b><i><font color="00FF00">Alaskaa</i><br></font><b> <blink> Weed </blink></b> <br><b>SMOKEsmOKEWEED EVERYDAY AYY</b></center>');
 	},
 
 	lasers: 'pewpewpew',
 	pewpewpew: function (target, room, user) {
-		if (!this.canBroadcast()) return false;
+		if (!this.runBroadcast()) return false;
 		return this.sendReplyBox('<center> <img src = "http://167.114.97.182:9481/TCs/lasers.gif"> <br> <font size="3"><b><i><font color="8000FF">Lasurs</i><br></font><b> <blink> PEWPEWPEW WITH ME SENPAI ARHFRJGHJHJKDF </blink></b> <br><b>Ace: Godly Instrument</b></center>');
 	},
 
@@ -506,67 +506,67 @@ const commands = {
 	},
 
 	enzo: function (target, room, user) {
-		if (!this.canBroadcast()) return false;
+		if (!this.runBroadcast()) return false;
 		return this.sendReplyBox('<center> <img src = " http://167.114.97.182:9481/TCs/enzo.gif"> <br> <font color=blue>  <font size="3"> <b><i>FranchescoEnzo</i><br></font> <font color=black> Quote: M8 I swer on me mam i\'ll rek u <br> <blink> <b> Ace: Reflexes </b>');
 	},
 
 	fatherj: 'davidj',
 	davidj: function (target, room, user) {
-		if (!this.canBroadcast()) return false;
+		if (!this.runBroadcast()) return false;
 		return this.sendReplyBox('<center> <img src = "http://167.114.97.182:9481/TCs/davidj.gif"> <br> <font size="3"><b><i><font color="00FF00">DavidJ</i><br></font><b> <blink>Ace: OP Spanish Boy</blink></b><br><b>420 Blaze It (Hur Hur)</b></center>');
 	},
 
 	silver: 'sexiness',
 	sexiness: function (target, room, user) {
-		if (!this.canBroadcast()) return false;
+		if (!this.runBroadcast()) return false;
 		return this.sendReplyBox('<center> <img src = "http://167.114.97.182:9481/TCs/silver.gif"> <br> <font size="3"><b><i><font color="00FF00">SilverKill</i><br></font><b>Show them all you\'re not the ordinary type.</b> <br><b><font color=FFBF00>Deal with it. (⌐■_■)</b></center>');
 	},
 
 	kevkev: 'kevn',
 	kevn: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><b><a href="http://167.114.97.182:9481/TCs/kev.gif"><img src="http://167.114.97.182:9481/TCs/kev.gif"></a><br> <font size= 3> <i><font color = "red"> nonstopkevn</i></font><br><blink> <b> Unstoppable</blink> </b> <br>“It does not matter how slow you go so long as you do not stop.”<br>-Wisdom of Confucius.</center></b>')
 	},
 	pu: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('PU is a tier created by <a href="https://www.youtube.com/user/dundealshowdown">Dun Deal</a>.<br>It is a tier below NU, using only Pokemon from LC, NFE, and Pokemon who are barely ever used in NU.<br>A list of the tier\'s Pokemon can be found on the PU website <a href="http://www.partiallyused.weebly.com">here</a>. Please read it!<br>You can interact with the PU community in Dun Deal\'s Place. Happy battling!')
 	},
 	PUban: 'pufix',
 	PUFix: 'pufix',
 	pufix: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('The PU tier was coded in a way that basically every Pokemon that was not part of the PU tier had to manually be banned out.</a><br>By coding the tier this way, some Pokemon that are not PU are able to be used in PU battles.<br>You can submit the names of the Pokemon that we missed <a href="https://docs.google.com/forms/d/1IUFrec8w3bfcvymDGIe7XBBqN6giso_1wdruyymaYOo/viewform?usp=send_form">Here!')
 	},
 	abcabilities: 'abcab',
 	abcab: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('ABC Abilities is a tier created by <a href="https://www.youtube.com/user/dundealshowdown">Dun Deal</a>.<br>It is a tier in which every Pokemon can have any move or ability that starts with the same letter its name starts with.<br>A list of the tier\'s Pokemon can be found <a href="http://www.abcabilities.weebly.com">here</a>. Please read it!<br>You can interact with the ABC Abilities community in Dun Deal\'s Place. Happy Battling!')
 	},
 	infinitebot: 'death',
 	bot: 'death',
 	death: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center> <img src="http://167.114.97.182:9481/TCs/bot.gif"><br><b><blink><FONT COLOR="red">Infinite Bot</FONT COLOR></blink><br>"For all you would-be spammers out there, I will find you, and I kill ban you."</b></center>')
 	},
 	frost: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><a href="http://a.tumblr.com/tumblr_l6dyfyOTqx1qab7jvo1.mp3"> <img src="http://167.114.97.182:9481/TCs/frost.gif"/> </a><br><font size="3"><b><i><font color="blue">Frost</i><br></font><b><blink>Willpower</font></blink></b><br><font color="585858"><i>I\'ll never fall by the likes of people such as you.</i></center>')
 	},
 
 	twerk: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/gandhi.jpg" height="300" width="330"><br />' +
 			'<b><blink>Sample Text</blink></b><br />' +
 			'<b>#twerkteam</b>')
 	},
 	thirsty: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/thirsty.jpg"><br />' +
 			'<b>#TheThirstIsReal</b>')
 	},
 	yallthirsty: 'quantavious',
 	quantavious: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/yall.png" height="180" width="180"><br />' +
 			'<img src="http://167.114.97.182:9481/TCs/yall2.png" height="250" width="180"> <font size=3><b><i><font color=gold>YallThirsty</font></i></b></font> <img src="http://167.114.97.182:9481/TCs/yall3.png" height="180" width="195"><br />' +
 			'<b><blink>Ace: Charizard</blink></b><br />' +
@@ -576,7 +576,7 @@ const commands = {
 	e4mac: 'mac',
 	e6mac: 'mac',
 	mac: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/mac.png" height="180" width="150"><br />' +
 			'<img src="http://167.114.97.182:9481/TCs/mac2.png" height="130" width="150"> <img src="http://167.114.97.182:9481/TCs/mac3.gif"> <img src="http://167.114.97.182:9481/TCs/mac4.png" height="130" width="160"><br />' +
 			'<b><blink>Ace: Mega Aggron</blink><br />' +
@@ -586,44 +586,44 @@ const commands = {
 	Kammi: 'poto2',
 	elsa: 'poto2',
 	poto2: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center> <img src = "http://167.114.97.182:9481/TCs/kammi.gif"> <br> <font size="4"><b><i><font color="#0033CC">Kammi, Frost Queen.</br>')
 	},
 	Queen: 'isawa',
 	queen: 'isawa',
 	isawa: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center> <img src = "http://167.114.97.182:9481/TCs/isawa.gif"> <br> <font size="3"><b><i><font color="#0033CC">Bish please, I\'m the real frost queen.</br>')
 	},
 	poto: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/poto.jpg" height="188" width="300"><br />' +
 			'<font color=blue><b>#kammi</b></font>')
 	},
 	rekt: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/rekt.gif"><br />')
 	},
 	infusion: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/infnusion.gif"><br />')
 	},
 	litalie: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/litalie.jpg"><br />')
 	},
 	mind: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/mind.gif"><br />')
 	},
 	monop: 'monopoly',
 	monopoly: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/monoop.jpg"><br />')
 	},
 	liz: 'lizbith',
 	lizbith: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/lizbith.jpg"><br /><br />' +
 			'<img src="http://167.114.97.182:9481/TCs/lizbith2.jpg"><br /><br />' +
 			'<img src="http://167.114.97.182:9481/TCs/lizbith3.jpg"><br /><br />' +
@@ -632,7 +632,7 @@ const commands = {
 	},
 	tacosaur: 'ellen',
 	ellen: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/ellen.jpg"><br /><br />' +
 			'<img src="http://167.114.97.182:9481/TCs/ellen2.jpg"><br /><br />' +
 			' People who have purchsed her: nonstopkevn, MadAsTheHatter, Tacosaur, sai, jd, kafkablack, chakra, hashtag armcannons, black rabbit, and xVeNoMiiZz, koikazma, Pikabeats o3o ')
@@ -640,17 +640,17 @@ const commands = {
 
 
 	korps: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><b><img src="http://167.114.97.182:9481/TCs/korps.gif"></a><br> <font size= 3> <i><font color = "blue"> Korps</i></font><br><blink> <b> I will find you.</blink> </b><br>“No matter where you go, I\'ll follow you. Because I love you."')
 	},
 	jj: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/jj.gif"><br />' +
 			'<font size=3><i><font color=red><b>Not Da Bic Boi</b></font></i></font><br />' +
 			'<b><blink>Ace: Credit Card</blink></b><br />')
 	},
 	tdfw: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><a href="http://audio.radiorecord.ru/superchart/DJ%20SNAKE%20&%20LIL%20JOHN%20-%20Turn%20Down%20For%20What.mp3"> <img src="http://167.114.97.182:9481/TCs/tdf2.png" /> </a><br><font size="3"><b><i><font color="FF0000">#TD4W</i><br></font><b><blink>Turn Up MothaFuckas</font></blink></b><br><font color="585858"><i>Swag</i></center>')
 	},
 
@@ -658,83 +658,83 @@ const commands = {
 	hue: 'BR',
 	br: 'BR',
 	BR: function (target, room, user) {
-		if (!this.canBroadcast()) return false;
+		if (!this.runBroadcast()) return false;
 		return this.sendReplyBox(' <center><a href="https://a.tumblr.com/tumblr_mujxyk4g1U1shttnco1.mp3"target="_blank"><img src=http://167.114.97.182:9481/TCs/br.gif> </a><br> <font size="3"><b><i><font color="642EFE">BlackRabbit</i><br></font><b> <blink> Ace: Swimpuku </blink></b> <br><b>I am sorry, is my swag distracting you?<b><center>');
 	},
 
 	mad: 'math',
 	math: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center> <img src = "http://167.114.97.182:9481/TCs/math.gif"> <br> <font size="4"><b><i><font color="#0033CC">MadAsTheHatter</i><br></font><b> <blink> Ace: Ralphonso </blink></b><br><b>Stay Frosty</b></center>')
 	},
 	shed: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><a href="http://a.tumblr.com/tumblr_maghncXqXg1qdm6eno1.mp3"> <img src="http://167.114.97.182:9481/TCs/shed.gif" /> </a><br><font size="3"><b><i><font color="FF0000">#733t gg</i><br></font><b><blink> **Gimmicks Ahoy!**</font></blink></b><br><font color="585858"><i>1v1 Me Scrub (Fuggin Click Da Photo)</i></center>')
 	},
 	pantsu: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/pantsu.gif"><br />' +
 			'<font color=blue><b>#AbsolutePervyium \(Credit:shinigami, Pantsu Man\)</b></font>')
 	},
 	rotom: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/rotom.gif" height="250" width="250"><br />'
 		)
 	},
 	taco: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/taco.jpg" height="225" width="300"><br />' +
 			'<font size=3><i><font color=purple><b>#TeamTacoBell</b></font></i></font><br />' +
 			'<b><blink>Ace: Doritos Locos Tacos</blink></b><br />' +
 			'<b>Happy Hour is best Hour!</b>')
 	},
 	jen: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/jen.png" height="188" width="300"><br />' +
 			'<font color=blue><b>#2kawaii4u</b></font>')
 	},
 	air: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/air.gif"><br />' +
 			'<font color=black><b>"I get my own trainer card!?"</b></font>')
 	},
 
 
 	troll: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/troll.jpg"><br />' +
 			'<b>I will shit fury all over you and you will drown in it.</b><br />' +
 			'<b>#swagmaster69</b>')
 	},
 
 	kfc: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/kfc.jpg" height="201" width="300"><br />' +
 			'<font size=3><i><font color=purple><b>Omega Supreme</b></font></i></font><br />'
 		)
 	},
 	newt68: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/newt.jpg"><br />'
 
 		)
 	},
 	bd: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/bd.jpg"><br />' +
 			'<font size=3><i><font color=purple><b>Backdoor Access: Félicette (Credit: JD x Félicette)</b></font></i></font><br />' +
 			' People who have purchased her: buttofTheTitanTank, Chakra, sbet777, MadAsTheHatter, AssaultVestTangela, koikazma, Black Rabbit, hashtag armcannons, nonstopkevn, DavidJ, Félicette, jd, retrofeather, Absolute Maximum, Feeboss, Giantsdms, xVeNoMiiZz, KafkaBlack, Quilavaa, Chakra, Connor the Goodra, and of course: Da Bic Boi. </center>'
 		)
 	},
 	jd: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/jd.jpg"><br />' +
 			'<font size=3><i><font color=blue><b>JD</b></font></i></font><br />' +
 			'<b><blink>Ace: Sexual Tension</blink></b><br />'
 		)
 	},
 	toxic: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center> <img src = "http://167.114.97.182:9481/TCs/toxic.gif"> <br> ' +
 			'<font size="3"><b><i><font color="Purple">Toxic</i><br></font></b>' +
 			'<blink> Ace:Outernet</blink></b> <br>' +
@@ -742,7 +742,7 @@ const commands = {
 		)
 	},
 	waffle: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/chakrawaffle.jpg"><br />' +
 			'<font size=1><i><font color=gray><b>#LikeAWaffle (Credit: Chakra)</b></font></i></font><br />' +
 			'<b><blink>Ace: Elite Hand-To-Waffle Combat</blink></b><br />'
@@ -751,11 +751,11 @@ const commands = {
 	paperangel: 'paper',
 	angel: 'paper',
 	paper: function (target, room, user) {
-		if (!this.canBroadcast()) return false;
+		if (!this.runBroadcast()) return false;
 		return this.sendReplyBox('<center><img src ="http://167.114.97.182:9481/TCs/paperangle.gif"/><br><font size="3"><b><i><font color="B40404">Paper Angel</i><br></font><b> <blink>Ace: What?</blink></b><br><b><i>Yall mothafuckas weird af tbh</i></b></center>');
 	},
 	peppa: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/peppa.gif/" height="251" width="375"><br />' +
 			'<font size=3><i><font color=pink><b>Peppa </b></font></i></font><i><font color=pink><b>Mint </b></font></i></font><br />' +
 			'<font size=3><i><font color=pink><b>List of things Peppamint has said IRL: </b></font></i><br />' +
@@ -769,7 +769,7 @@ const commands = {
 		)
 	},
 	giant: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/giant.gif"><br />' +
 			'<font size=4><i><font color=33FF33><b>Giantsdms</b></font></i></font><br />' +
 			'<b><blink>Ace: Iron Giant</blink></b><br />' +
@@ -777,7 +777,7 @@ const commands = {
 	},
 
 	kafka: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/kafka.gif"><br />' +
 			'<font size=3><i><font color=33FF33><b>Kafka</b></font></i></font><br />' +
 			'<b><blink>Ace: Shimmy</blink></b><br />' +
@@ -785,18 +785,18 @@ const commands = {
 	},
 	fel: 'felicette',
 	felicette: function (target, room, user) {
-		if (!this.canBroadcast()) return false;
+		if (!this.runBroadcast()) return false;
 		return this.sendReplyBox('<center> <img src = "http://167.114.97.182:9481/TCs/fel.jpg"> <br> <font size="3"><b><i><font color="94CAE9">Félicette</i><br></font><b> <font color=pink> <blink> Ace: Cherry Blossoms </blink></b> <br><i>Eternal happiness will only bloom after the suffering of the past has been endured.</i></center>');
 	},
 	chakra: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/chakra.gif"><br />' +
 			'<font size=3><i><font color=B40404><b>Chakra</b></font></i></font><br />' +
 			'<b><blink>Ace: Kawaii</blink></b><br />' +
 			'<br><marquee behavior=scroll direction="left" scrollamount="50">f(x)=e^o3o</marquee>')
 	},
 	sacrisis: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src="http://167.114.97.182:9481/TCs/sacrisis.gif"><br />' +
 			'<font size=3><i><font color=7A770C><b>Sacrisis</b></font></i></font><br />' +
 			'<b><blink>Ace: When you get those hax</blink></b>' +
@@ -804,36 +804,36 @@ const commands = {
 	},
 	quil: 'quilaava',
 	quilaava: function (target, room, user) {
-		if (!this.canBroadcast()) return;
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox('<center><img src= "http://167.114.97.182:9481/TCs/quil.jpg"> <br> <font size="3"><b><i><font color="FF0000">Quil</i><br></font><b><font color="blue"> Quote: In the heat of the moment never quit, press on!</b><br><b><blink><font color="orange"> Ace: Mystery</blink></b></center>')
 	},
 
 	reigns: 'darkness',
 	darkness: function (target, room, user) {
-		if (!this.canBroadcast(/*Never Forget Infinite.*/)) return false;
+		if (!this.runBroadcast(/*Never Forget Infinite.*/)) return false;
 		return this.sendReplyBox('<center><img src ="http://167.114.97.182:9481/TCs/darkness.gif"/><br><font size="3"><b><i><font color="8A0808">DarknessReigns</i><br></font><b> <blink><font color="0B0B61">Ace: Sasuke</font></blink></b><br><b><i>It gets darkest right before dawn.</i></b></center>');
 	},
 
 	prof: function (target, room, user) {
-		if (!this.canBroadcast()) return false;
+		if (!this.runBroadcast()) return false;
 		return this.sendReplyBox('<center> <img src = "http://167.114.97.182:9481/TCs/prof.png"> <br> <font size="3"><b><i><font color="FA58F4">Profpoodle</i><br></font><b> <blink><font color=00FFFF> Ace: Furfrou obv </blink></font></b> <br><b><font color=40FF00> EY BABY U WANT MEH EH? </font></b></center>');
 	},
 
 	ralph: function (target, room, user) {
-		if (!this.canBroadcast()) return false;
+		if (!this.runBroadcast()) return false;
 		return this.sendReplyBox('<center> <img src = "http://167.114.97.182:9481/TCs/ralph.gif"> <br> <font size="3"><b><i><font color="B2C248">Ralphonso</i><br></font><b> <blink> Ace: I GOT DAT <i> Canadian </i> HARD BODY </blink></b> <br> #getripped </center>');
 	},
 
 	connor: 'goodra',
 	goodra: function (target, room, user) {
-		if (!this.canBroadcast()) return false;
+		if (!this.runBroadcast()) return false;
 		return this.sendReplyBox('<center> <img src = "http://167.114.97.182:9481/TCs/connor.gif"> <br> <font size="3"><b><i><font color="0404B4">Connor the Goodra</i><br></font><b> <font color="8A0886">  Ace: The comfort of the bonfire </b> <br><b> <font color="190707"> <blink> Lol you\'re a scrub </b></center>');
 	},
 
 
 	ninkay: 'inky',
 	inky: function (target, room, user) {
-		if (!this.canBroadcast()) return false;
+		if (!this.runBroadcast()) return false;
 		return this.sendReplyBox('<center><img src ="http://167.114.97.182:9481/TCs/inky.gif"/><br><font size="3"><b><i><font color="FF0000">Inkyfeather</i><br></font><b><blink>st0icm4st3r280000</font></blink></b><br><font color="585858"><i>Ninkay out! .3.</i></center>');
 	},
 
