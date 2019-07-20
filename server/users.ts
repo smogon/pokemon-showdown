@@ -881,6 +881,7 @@ class User extends Chat.MessageContext {
 
 			if (userType === '3') {
 				this.isSysop = true;
+				this.isStaff = true;
 				this.trusted = userid;
 				this.autoconfirmed = userid;
 			} else if (userType === '4') {
