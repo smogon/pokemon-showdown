@@ -210,8 +210,21 @@ exports.commands = {
 		if (!this.canTalk()) return;
 		if (!this.can('modchat', null, room)) return false;
 
-		if (room.modchat && room.modchat.length <= 1 && Config.groupsranking.indexOf(room.modchat) > 1 && !user.can('modchatall', null, room)) {
-			return this.errorReply(`/modchat - Access denied for removing a setting higher than ${Config.groupsranking[1]}.`);
+		// 'modchat' lets you set up to 1 (ac/trusted also allowed)
+		// 'modchatall' lets you set up to your current rank
+		// 'makeroom' lets you set any rank, no limit
+		let threshold = 1;
+		let roomGroup = Config.groups[room.getAuth(user)];
+		if (roomGroup && user.can('modchatall', null, room)) {
+			if (user.can('makeroom')) {
+				threshold = Infinity;
+			} else {
+				threshold = roomGroup.rank;
+			}
+		}
+
+		if (room.modchat && room.modchat.length <= 1 && Config.groupsranking.indexOf(room.modchat) > threshold) {
+			return this.errorReply(`/modchat - Access denied for changing a setting higher than ${Config.groupsranking[threshold]}.`);
 		}
 		if (room.requestModchat) {
 			const error = room.requestModchat(user);
@@ -242,13 +255,8 @@ exports.commands = {
 				this.errorReply(`The rank '${target}' was unrecognized as a modchat level.`);
 				return this.parse('/help modchat');
 			}
-			if (Config.groupsranking.indexOf(target) > 1 && !user.can('modchatall', null, room)) {
-				return this.errorReply(`/modchat - Access denied for setting higher than ${Config.groupsranking[1]}.`);
-			}
-			let roomGroup = (room.auth && room.isPrivate === true ? ' ' : user.group);
-			if (room.auth && user.userid in room.auth) roomGroup = room.auth[user.userid];
-			if (Config.groupsranking.indexOf(target) > Math.max(1, Config.groupsranking.indexOf(roomGroup)) && !user.can('makeroom')) {
-				return this.errorReply(`/modchat - Access denied for setting higher than ${roomGroup}.`);
+			if (Config.groupsranking.indexOf(target) > threshold) {
+				return this.errorReply(`/modchat - Access denied for setting higher than ${Config.groupsranking[threshold]}.`);
 			}
 			room.modchat = target;
 			break;
