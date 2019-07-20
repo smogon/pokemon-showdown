@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<list key="installedFeatures">
+		<item value="com.ianbrandt.tools.m2e.mdp.feature:0.0.4.201409291703"/>
+		<item value="org.eclipse.buildship:3.1.0.v20190501-0832"/>
+		<item value="org.eclipse.egit.gitflow.feature:5.4.0.201906121030-r"/>
+		<item value="org.eclipse.egit:5.4.0.201906121030-r"/>
+		<item value="org.eclipse.emf.common:2.16.0.v20190528-0845"/>
+		<item value="org.eclipse.emf.ecore:2.18.0.v20190528-0845"/>
+		<item value="org.eclipse.epp.mpc:1.7.7.v20190521-1752"/>
+		<item value="org.eclipse.help:2.2.600.v20190605-1800"/>
+		<item value="org.eclipse.jdt:3.18.0.v20190605-1800"/>
+		<item value="org.eclipse.jgit.lfs:5.4.0.201906121030-r"/>
+		<item value="org.eclipse.jgit.ssh.apache:5.4.0.201906121030-r"/>
+		<item value="org.eclipse.jgit:5.4.0.201906121030-r"/>
+		<item value="org.eclipse.jst.common.fproj.enablement.jdt:3.12.0.v201906031755"/>
+		<item value="org.eclipse.jst.enterprise_ui.feature:3.9.400.v201905212122"/>
+		<item value="org.eclipse.m2e.feature:1.12.0.20190612-1550"/>
+		<item value="org.eclipse.m2e.logback.feature:1.12.0.20190612-1550"/>
+		<item value="org.eclipse.m2e.wtp.feature:1.4.2.20190530-0057"/>
+		<item value="org.eclipse.m2e.wtp.jaxrs.feature:1.4.2.20190530-0057"/>
+		<item value="org.eclipse.m2e.wtp.jsf.feature:1.4.2.20190530-0057"/>
+		<item value="org.eclipse.pde:3.14.0.v20190605-1800"/>
+		<item value="org.eclipse.platform:4.12.0.v20190605-1801"/>
+		<item value="org.eclipse.rcp:4.12.0.v20190605-1801"/>
+		<item value="org.eclipse.tm.terminal.control.feature:4.5.100.201904091701"/>
+		<item value="org.eclipse.tm.terminal.feature:4.5.100.201904091701"/>
+		<item value="org.eclipse.tm.terminal.view.feature:4.5.100.201904091701"/>
+		<item value="org.eclipse.userstorage:1.2.0.v20190308-0433"/>
+		<item value="org.eclipse.wst.common.fproj:3.7.2.v201903222010"/>
+		<item value="org.eclipse.wst.jsdt.chromium.debug.feature:0.6.100.v201903222101"/>
+		<item value="org.eclipse.wst.jsdt.feature:2.1.1.v201903222101"/>
+		<item value="org.eclipse.wst.json_ui.feature:1.1.5.v201904210526"/>
+		<item value="org.eclipse.wst.web_ui.feature:3.13.0.v201905301652"/>
+		<item value="org.eclipse.wst.xml_ui.feature:3.14.0.v201905291408"/>
+		<item value="org.jboss.tools.m2e.wro4j.feature:1.1.0.201406251020"/>
+		<item value="org.jboss.tools.maven.apt.feature:1.5.2.201812241535"/>
+		<item value="org.sonatype.m2e.buildhelper.feature:0.15.0.201207090124"/>
+		<item value="org.sonatype.m2e.egit.feature:0.15.1.201806191431"/>
+		<item value="org.sonatype.m2e.mavenarchiver.feature:0.17.4.201905300046"/>
+	</list>
+</section>
