@@ -699,7 +699,7 @@ let BattleScripts = {
 			}
 		}
 
-		if (move.ohko) this.add('-ohko');
+		if (move.ohko && move.totalDamage === targets[0].maxhp) this.add('-ohko');
 
 		if (!damage.some(val => !!val || val === 0)) return damage;
 
