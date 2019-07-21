@@ -150,21 +150,20 @@ represented by a space), and the rest of the string being their username.
 
 > Changes the HTML display of the `|uhtml|` message named (NAME).
 
-`|join|USER@STATUS` or `|j|USER@STATUS`
+`|join|USER`, |j|USER`, or `|J|USER`
 
-> `USER` joined the room. Optionally, `USER` can end in `@` followed by a user status message.
-> A `STATUS` starting in `!` indicates the user is away.
+> `USER` joined the room. Optionally, `USER` may be appended with `@!` to
+> indicate that the user is away or busy.
 
-`|leave|USER@STATUS` or `|l|USER@STATUS`
+`|leave|USER`, `|l|USER`, or `|L|USER`
 
-> `USER` left the room. Optionally, `USER` can end in `@` followed by a user status message.
-> A `STATUS` starting in `!` indicates the user is away.
+> `USER` left the room.
 
-`|name|USER@STATUS|OLDID` or `|n|USER@STATUS|OLDID`
+`|name|USER|OLDID`, `|n|USER|OLDID`, or `|N|USER|OLDID`
 
 > A user changed name to `USER`, and their previous userid was `OLDID`.
-> Optionally, `USER` can end in `@` followed by a user status message.
-> A `STATUS` starting in `!` indicates the user is away.
+> Optionally, `USER` may be appended with `@!` to indicate that the user is
+> away or busy.
 
 `|chat|USER|MESSAGE` or `|c|USER|MESSAGE`
 
@@ -232,13 +231,13 @@ represented by a space), and the rest of the string being their username.
 > Finish logging in (or renaming) by sending: `/trn USERNAME,0,ASSERTION`
 > where `USERNAME` is your desired username and `ASSERTION` is `data.assertion`.
 
-`|updateuser|USER@STATUS|NAMED|AVATAR|SETTINGS`
+`|updateuser|USER|NAMED|AVATAR|SETTINGS`
 
-> Your name, avatar or settings were successfully changed. Your rank and username
-> are now `USER`. Optionally, the username can end in `@` followed by a user status message.
-> A `STATUS` starting in `!` indicates the user is away. `NAMED` will be `0` if you are a guest or `1` otherwise. Your
-> avatar is now `AVATAR`. `SETTINGS` is a JSON object representing the current
-> state of various user settings.
+> Your name, avatar or settings were successfully changed. Your rank and
+> username are now `USER`. Optionally, `USER` may be appended with `@!` to
+> indicate that you are away or busy.`NAMED` will be `0` if you are a guest
+> or `1` otherwise. Your avatar is now `AVATAR`. `SETTINGS` is a JSON object
+> representing the current state of various user settings.
 
 `|formats|FORMATSLIST`
 
