@@ -825,7 +825,7 @@ let commands = {
 				}
 			}
 			if (Monitor.countTickets(user.latestIp)) return this.popupReply(`Due to high load, you are limited to creating ${Punishments.sharedIps.has(user.latestIp) ? `50` : `5`} tickets every hour.`);
-			if (!['PM Harassment', 'Battle Harassment', 'Inappropriate Username', 'Inappropriate Pokemon Nicknames', 'Appeal', 'IP-Appeal', 'ISP-Appeal', 'Public Room Assistance Request', 'Other'].includes(target)) return this.parse('/helpticket');
+			if (!['PM Harassment', 'Battle Harassment', 'Inappropriate Username/Status Message', 'Inappropriate Pokemon Nicknames', 'Appeal', 'IP-Appeal', 'ISP-Appeal', 'Public Room Assistance Request', 'Other'].includes(target)) return this.parse('/helpticket');
 			ticket = {
 				creator: user.name,
 				userid: user.userid,
