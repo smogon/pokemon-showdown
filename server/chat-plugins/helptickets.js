@@ -445,6 +445,19 @@ for (const room of Rooms.rooms.values()) {
 	room.game = game;
 }
 
+/** @type {{[k: string]: string}} */
+const ticketTitles = {
+	pmharassment: `PM Harassment`,
+	battleharassment: `Battle Harassment`,
+	inapname: `Inappropriate Username/Status Message`,
+	inappokemon: `Inappropriate Pokemon Nicknames`,
+	appeal: `Appeal`,
+	ipappeal: `IP-Appeal`,
+	appealsemi: `ISP-Appeal`,
+	roomhelp: `Public Room Assistance Request`,
+	other: `Other`,
+};
+
 /** @type {PageTable} */
 const pages = {
 	help: {
@@ -512,18 +525,6 @@ const pages = {
 				confirmappealsemi: `Appeal ISP lock`,
 				confirmroomhelp: `Call a Global Staff member to help`,
 				confirmother: `Call a Global Staff member`,
-			};
-			/** @type {{[k: string]: string}} */
-			const ticketTitles = {
-				pmharassment: `PM Harassment`,
-				battleharassment: `Battle Harassment`,
-				inapname: `Inappropriate Username/Status Message`,
-				inappokemon: `Inappropriate Pokemon Nicknames`,
-				appeal: `Appeal`,
-				ipappeal: `IP-Appeal`,
-				appealsemi: `ISP-Appeal`,
-				roomhelp: `Public Room Assistance Request`,
-				other: `Other`,
 			};
 			for (const [i, page] of query.entries()) {
 				const isLast = (i === query.length - 1);
@@ -825,7 +826,7 @@ let commands = {
 				}
 			}
 			if (Monitor.countTickets(user.latestIp)) return this.popupReply(`Due to high load, you are limited to creating ${Punishments.sharedIps.has(user.latestIp) ? `50` : `5`} tickets every hour.`);
-			if (!['PM Harassment', 'Battle Harassment', 'Inappropriate Username', 'Inappropriate Pokemon Nicknames', 'Appeal', 'IP-Appeal', 'ISP-Appeal', 'Public Room Assistance Request', 'Other'].includes(target)) return this.parse('/helpticket');
+			if (!Object.values(ticketTitles).includes(target)) return this.parse('/helpticket');
 			ticket = {
 				creator: user.name,
 				userid: user.userid,
