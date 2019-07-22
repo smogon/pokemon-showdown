@@ -357,6 +357,7 @@ let BattleItems = {
 		spritenum: 661,
 		num: 851,
 		gen: 7,
+		isPokeball: true,
 		desc: "A special Poke Ball designed to catch Ultra Beasts.",
 	},
 	"beedrillite": {
@@ -780,6 +781,7 @@ let BattleItems = {
 		spritenum: 64,
 		num: 16,
 		gen: 4,
+		isPokeball: true,
 		desc: "A rare Poke Ball that has been crafted to commemorate an occasion.",
 	},
 	"chestoberry": {
@@ -1204,6 +1206,7 @@ let BattleItems = {
 		spritenum: 101,
 		num: 7,
 		gen: 3,
+		isPokeball: true,
 		desc: "A Poke Ball that works especially well on Pokemon that live underwater.",
 	},
 	"domefossil": {
@@ -1359,6 +1362,7 @@ let BattleItems = {
 		spritenum: 111,
 		num: 576,
 		gen: 5,
+		isPokeball: true,
 		desc: "A special Poke Ball that appears out of nowhere in a bag at the Entree Forest.",
 	},
 	"dubiousdisc": {
@@ -1393,6 +1397,7 @@ let BattleItems = {
 		spritenum: 115,
 		num: 13,
 		gen: 4,
+		isPokeball: true,
 		desc: "A Poke Ball that makes it easier to catch wild Pokemon at night or in caves.",
 	},
 	"duskstone": {
@@ -1673,6 +1678,7 @@ let BattleItems = {
 		spritenum: 137,
 		num: 492,
 		gen: 2,
+		isPokeball: true,
 		desc: "A Poke Ball that makes it easier to catch Pokemon which are quick to run away.",
 	},
 	"fightinggem": {
@@ -1974,6 +1980,7 @@ let BattleItems = {
 		spritenum: 153,
 		num: 497,
 		gen: 2,
+		isPokeball: true,
 		desc: "A Poke Ball that makes caught Pokemon more friendly.",
 	},
 	"fullincense": {
@@ -2215,6 +2222,7 @@ let BattleItems = {
 		spritenum: 174,
 		num: 3,
 		gen: 1,
+		isPokeball: true,
 		desc: "A high-performance Ball that provides a higher catch rate than a Poke Ball.",
 	},
 	"grepaberry": {
@@ -2375,6 +2383,7 @@ let BattleItems = {
 		spritenum: 188,
 		num: 14,
 		gen: 4,
+		isPokeball: true,
 		desc: "A remedial Poke Ball that restores the caught Pokemon's HP and status problem.",
 	},
 	"heatrock": {
@@ -2394,6 +2403,7 @@ let BattleItems = {
 		spritenum: 194,
 		num: 495,
 		gen: 2,
+		isPokeball: true,
 		desc: "A Poke Ball for catching very heavy Pokemon.",
 	},
 	"helixfossil": {
@@ -2955,6 +2965,7 @@ let BattleItems = {
 		spritenum: 246,
 		num: 493,
 		gen: 2,
+		isPokeball: true,
 		desc: "A Poke Ball for catching Pokemon that are a lower level than your own.",
 	},
 	"liechiberry": {
@@ -3053,6 +3064,7 @@ let BattleItems = {
 		spritenum: 258,
 		num: 496,
 		gen: 2,
+		isPokeball: true,
 		desc: "Poke Ball for catching Pokemon that are the opposite gender of your Pokemon.",
 	},
 	"lucarionite": {
@@ -3141,6 +3153,7 @@ let BattleItems = {
 		spritenum: 264,
 		num: 494,
 		gen: 2,
+		isPokeball: true,
 		desc: "A Poke Ball for catching Pokemon hooked by a Rod when fishing.",
 	},
 	"lustrousorb": {
@@ -3166,6 +3179,7 @@ let BattleItems = {
 		spritenum: 266,
 		num: 11,
 		gen: 3,
+		isPokeball: true,
 		desc: "A comfortable Poke Ball that makes a caught wild Pokemon quickly grow friendly.",
 	},
 	"lycaniumz": {
@@ -3332,6 +3346,7 @@ let BattleItems = {
 		spritenum: 276,
 		num: 1,
 		gen: 1,
+		isPokeball: true,
 		desc: "The best Ball with the ultimate performance. It will catch any wild Pokemon.",
 	},
 	"mawilite": {
@@ -3660,6 +3675,7 @@ let BattleItems = {
 		spritenum: 294,
 		num: 498,
 		gen: 2,
+		isPokeball: true,
 		desc: "A Poke Ball for catching Pokemon that evolve using the Moon Stone.",
 	},
 	"moonstone": {
@@ -3729,6 +3745,7 @@ let BattleItems = {
 		spritenum: 303,
 		num: 8,
 		gen: 3,
+		isPokeball: true,
 		desc: "A Poke Ball that works especially well on weaker Pokemon in the wild.",
 	},
 	"netball": {
@@ -3737,6 +3754,7 @@ let BattleItems = {
 		spritenum: 304,
 		num: 6,
 		gen: 3,
+		isPokeball: true,
 		desc: "A Poke Ball that works especially well on Water- and Bug-type Pokemon.",
 	},
 	"nevermeltice": {
@@ -3907,6 +3925,7 @@ let BattleItems = {
 		spritenum: 325,
 		num: 500,
 		gen: 4,
+		isPokeball: true,
 		desc: "A special Poke Ball for the Pal Park.",
 	},
 	"passhoberry": {
@@ -4191,6 +4210,7 @@ let BattleItems = {
 		spritenum: 345,
 		num: 4,
 		gen: 1,
+		isPokeball: true,
 		desc: "A device for catching wild Pokemon. It is designed as a capsule system.",
 	},
 	"pomegberry": {
@@ -4322,6 +4342,7 @@ let BattleItems = {
 		spritenum: 363,
 		num: 12,
 		gen: 3,
+		isPokeball: true,
 		desc: "A rare Poke Ball that has been crafted to commemorate an event.",
 	},
 	"primariumz": {
@@ -4494,6 +4515,7 @@ let BattleItems = {
 		spritenum: 372,
 		num: 15,
 		gen: 4,
+		isPokeball: true,
 		desc: "A Poke Ball that provides a better catch rate at the start of a wild encounter.",
 	},
 	"quickclaw": {
@@ -4693,6 +4715,7 @@ let BattleItems = {
 		spritenum: 401,
 		num: 9,
 		gen: 3,
+		isPokeball: true,
 		desc: "A Poke Ball that works well on Pokemon species that were previously caught.",
 	},
 	"rindoberry": {
@@ -4915,6 +4938,7 @@ let BattleItems = {
 		spritenum: 425,
 		num: 5,
 		gen: 1,
+		isPokeball: true,
 		desc: "A special Poke Ball that is used only in the Safari Zone and Great Marsh.",
 	},
 	"safetygoggles": {
@@ -5428,6 +5452,7 @@ let BattleItems = {
 		spritenum: 465,
 		num: 499,
 		gen: 2,
+		isPokeball: true,
 		desc: "A special Poke Ball for the Bug-Catching Contest.",
 	},
 	"starfberry": {
@@ -5709,6 +5734,7 @@ let BattleItems = {
 		spritenum: 494,
 		num: 10,
 		gen: 3,
+		isPokeball: true,
 		desc: "A Poke Ball that becomes better the more turns there are in a battle.",
 	},
 	"toxicorb": {
@@ -5787,6 +5813,7 @@ let BattleItems = {
 		spritenum: 521,
 		num: 2,
 		gen: 1,
+		isPokeball: true,
 		desc: "An ultra-performance Ball that provides a higher catch rate than a Great Ball.",
 	},
 	"ultranecroziumz": {

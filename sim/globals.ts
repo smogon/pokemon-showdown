@@ -762,6 +762,7 @@ interface ItemData extends EffectData, ItemEventMethods, EventMethods {
 	isBerry?: boolean
 	isChoice?: boolean
 	isGem?: boolean
+	isPokeball?: boolean
 	megaStone?: string
 	megaEvolves?: string
 	naturalGift?: {basePower: number, type: string}
