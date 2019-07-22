@@ -397,6 +397,8 @@ export class Item extends BasicEffect implements Readonly<BasicEffect & ItemData
 	readonly onPlate?: string;
 	/** Is this item a Gem? */
 	readonly isGem: boolean;
+	/** Is this item a Pokeball? */
+	readonly isPokeball: boolean;
 
 	constructor(data: AnyObject, ...moreData: (AnyObject | null)[]) {
 		super(data, ...moreData);
@@ -417,6 +419,7 @@ export class Item extends BasicEffect implements Readonly<BasicEffect & ItemData
 		this.ignoreKlutz = !!data.ignoreKlutz;
 		this.onPlate = data.onPlate || undefined;
 		this.isGem = !!data.isGem;
+		this.isPokeball = !!data.isPokeball;
 
 		if (!this.gen) {
 			if (this.num >= 689) {
