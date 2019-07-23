@@ -1972,7 +1972,7 @@ let Formats = [
 		name: "[Gen 1] OU (tradeback)",
 		desc: `RBY OU with movepool additions from the Time Capsule.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/articles/rby-tradebacks-ou/">Information</a>`,
+			`&bullet; <a href="https://www.smogon.com/articles/rby-tradebacks-ou">Information</a>`,
 		],
 
 		mod: 'gen1',
