@@ -177,7 +177,7 @@ Major Contributors
 - Quinton Lee [sirDonovan] - Development
 - [Ridaz] - Art (battle animations)
 - Tobias Mann [asgdf] - Development
-- William [MacChaeger] - Development
+- William MacChaeger - Development
 
 Contributors
 
@@ -192,7 +192,7 @@ Contributors
 - Waleed Hassan [JetOU] - Development
 - Ian Clail [Layell] - Art (battle graphics, sprites)
 - Jeremy Piemonte [panpawn] - Development
-- Kris Johnson [Kris] - Development
+- Kris Johnson - Development
 - Luke Harmon-Vellotti [moo, CheeseMuffin] - Development
 - Russell Jones [SadisticMystic] - Research (game mechanics)
 - Spandan Punwatkar - Development
