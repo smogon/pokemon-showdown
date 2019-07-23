@@ -6894,6 +6894,31 @@ let BattleMovedex = {
 		zMoveEffect: 'redirect',
 		contestType: "Tough",
 	},
+	"guardianofalola": {
+		num: 698,
+		accuracy: true,
+		basePower: 0,
+		damageCallback(pokemon, target) {
+			if (target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] || target.side.getSideCondition('matblock') || target.volatiles['protect'] || target.volatiles['spikyshield']) {
+				this.add('-zbroken', target);
+				return this.clampIntRange(Math.ceil(Math.floor(target.hp * 3 / 4) / 4 - 0.5), 1);
+			}
+			return this.clampIntRange(Math.floor(target.hp * 3 / 4), 1);
+		},
+		category: "Special",
+		desc: "Deals damage to the target equal to 3/4 of its current HP, rounded down, but not less than 1 HP.",
+		shortDesc: "Does damage equal to 3/4 target's current HP.",
+		id: "guardianofalola",
+		name: "Guardian of Alola",
+		pp: 1,
+		priority: 0,
+		flags: {},
+		isZ: "tapuniumz",
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
+		contestType: "Tough",
+	},
 	"guardsplit": {
 		num: 470,
 		accuracy: true,
@@ -6954,31 +6979,6 @@ let BattleMovedex = {
 		type: "Psychic",
 		zMoveBoost: {spe: 1},
 		contestType: "Clever",
-	},
-	"guardianofalola": {
-		num: 698,
-		accuracy: true,
-		basePower: 0,
-		damageCallback(pokemon, target) {
-			if (target.volatiles['banefulbunker'] || target.volatiles['kingsshield'] || target.side.getSideCondition('matblock') || target.volatiles['protect'] || target.volatiles['spikyshield']) {
-				this.add('-zbroken', target);
-				return this.clampIntRange(Math.ceil(Math.floor(target.hp * 3 / 4) / 4 - 0.5), 1);
-			}
-			return this.clampIntRange(Math.floor(target.hp * 3 / 4), 1);
-		},
-		category: "Special",
-		desc: "Deals damage to the target equal to 3/4 of its current HP, rounded down, but not less than 1 HP.",
-		shortDesc: "Does damage equal to 3/4 target's current HP.",
-		id: "guardianofalola",
-		name: "Guardian of Alola",
-		pp: 1,
-		priority: 0,
-		flags: {},
-		isZ: "tapuniumz",
-		secondary: null,
-		target: "normal",
-		type: "Fairy",
-		contestType: "Tough",
 	},
 	"guillotine": {
 		num: 12,
