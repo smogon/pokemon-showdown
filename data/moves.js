@@ -15650,51 +15650,6 @@ let BattleMovedex = {
 		zMovePower: 100,
 		contestType: "Cute",
 	},
-	"spectralthief": {
-		num: 712,
-		accuracy: 100,
-		basePower: 90,
-		category: "Physical",
-		desc: "The target's stat stages greater than 0 are stolen from it and applied to the user before dealing damage.",
-		shortDesc: "Steals target's boosts before dealing damage.",
-		id: "spectralthief",
-		isViable: true,
-		name: "Spectral Thief",
-		pp: 10,
-		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, authentic: 1},
-		stealsBoosts: true,
-		// Boost stealing implemented in scripts.js
-		secondary: null,
-		target: "normal",
-		type: "Ghost",
-		zMovePower: 175,
-		contestType: "Cool",
-	},
-	"speedswap": {
-		num: 683,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "The user swaps its Speed stat with the target. Stat stage changes are unaffected.",
-		shortDesc: "Swaps Speed stat with target.",
-		id: "speedswap",
-		name: "Speed Swap",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, mirror: 1, authentic: 1, mystery: 1},
-		onHit(target, source) {
-			const targetSpe = target.storedStats.spe;
-			target.storedStats.spe = source.storedStats.spe;
-			source.storedStats.spe = targetSpe;
-			this.add('-activate', source, 'move: Speed Swap', '[of] ' + target);
-		},
-		secondary: null,
-		target: "normal",
-		type: "Psychic",
-		zMoveBoost: {spe: 1},
-		contestType: "Clever",
-	},
 	"spikyshield": {
 		num: 596,
 		accuracy: true,
@@ -16033,6 +15988,51 @@ let BattleMovedex = {
 		secondary: null,
 		target: "normal",
 		type: "Fairy",
+		contestType: "Clever",
+	},
+	"spectralthief": {
+		num: 712,
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		desc: "The target's stat stages greater than 0 are stolen from it and applied to the user before dealing damage.",
+		shortDesc: "Steals target's boosts before dealing damage.",
+		id: "spectralthief",
+		isViable: true,
+		name: "Spectral Thief",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, authentic: 1},
+		stealsBoosts: true,
+		// Boost stealing implemented in scripts.js
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+		zMovePower: 175,
+		contestType: "Cool",
+	},
+	"speedswap": {
+		num: 683,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "The user swaps its Speed stat with the target. Stat stage changes are unaffected.",
+		shortDesc: "Swaps Speed stat with target.",
+		id: "speedswap",
+		name: "Speed Swap",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, authentic: 1, mystery: 1},
+		onHit(target, source) {
+			const targetSpe = target.storedStats.spe;
+			target.storedStats.spe = source.storedStats.spe;
+			source.storedStats.spe = targetSpe;
+			this.add('-activate', source, 'move: Speed Swap', '[of] ' + target);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Psychic",
+		zMoveBoost: {spe: 1},
 		contestType: "Clever",
 	},
 	"spiderweb": {
