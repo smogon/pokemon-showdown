@@ -10056,46 +10056,6 @@ let BattleMovedex = {
 		zMoveBoost: {def: 1},
 		contestType: "Cool",
 	},
-	"mefirst": {
-		num: 382,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "The user uses the move the target chose for use this turn against it, if possible, with its power multiplied by 1.5. The move must be a damaging move other than Beak Blast, Chatter, Counter, Covet, Focus Punch, Me First, Metal Burst, Mirror Coat, Shell Trap, Struggle, Thief, or any Z-Move. Fails if the target moves before the user. Ignores the target's substitute for the purpose of copying the move.",
-		shortDesc: "Copies a foe at 1.5x power. User must be faster.",
-		id: "mefirst",
-		name: "Me First",
-		pp: 20,
-		priority: 0,
-		flags: {protect: 1, authentic: 1},
-		onTryHit(target, pokemon) {
-			let action = this.willMove(target);
-			if (action) {
-				let noMeFirst = [
-					'beakblast', 'chatter', 'counter', 'covet', 'focuspunch', 'mefirst', 'metalburst', 'mirrorcoat', 'shelltrap', 'struggle', 'thief',
-				];
-				let move = this.getActiveMove(action.move.id);
-				if (!action.zmove && !move.isZ && move.category !== 'Status' && !noMeFirst.includes(move.id)) {
-					pokemon.addVolatile('mefirst');
-					this.useMove(move, pokemon, target);
-					return null;
-				}
-			}
-			return false;
-		},
-		effect: {
-			duration: 1,
-			onBasePowerPriority: 4,
-			onBasePower(basePower) {
-				return this.chainModify(1.5);
-			},
-		},
-		secondary: null,
-		target: "adjacentFoe",
-		type: "Normal",
-		zMoveBoost: {spe: 2},
-		contestType: "Clever",
-	},
 	"meanlook": {
 		num: 212,
 		accuracy: true,
@@ -10137,6 +10097,46 @@ let BattleMovedex = {
 		type: "Psychic",
 		zMoveBoost: {atk: 1},
 		contestType: "Beautiful",
+	},
+	"mefirst": {
+		num: 382,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "The user uses the move the target chose for use this turn against it, if possible, with its power multiplied by 1.5. The move must be a damaging move other than Beak Blast, Chatter, Counter, Covet, Focus Punch, Me First, Metal Burst, Mirror Coat, Shell Trap, Struggle, Thief, or any Z-Move. Fails if the target moves before the user. Ignores the target's substitute for the purpose of copying the move.",
+		shortDesc: "Copies a foe at 1.5x power. User must be faster.",
+		id: "mefirst",
+		name: "Me First",
+		pp: 20,
+		priority: 0,
+		flags: {protect: 1, authentic: 1},
+		onTryHit(target, pokemon) {
+			let action = this.willMove(target);
+			if (action) {
+				let noMeFirst = [
+					'beakblast', 'chatter', 'counter', 'covet', 'focuspunch', 'mefirst', 'metalburst', 'mirrorcoat', 'shelltrap', 'struggle', 'thief',
+				];
+				let move = this.getActiveMove(action.move.id);
+				if (!action.zmove && !move.isZ && move.category !== 'Status' && !noMeFirst.includes(move.id)) {
+					pokemon.addVolatile('mefirst');
+					this.useMove(move, pokemon, target);
+					return null;
+				}
+			}
+			return false;
+		},
+		effect: {
+			duration: 1,
+			onBasePowerPriority: 4,
+			onBasePower(basePower) {
+				return this.chainModify(1.5);
+			},
+		},
+		secondary: null,
+		target: "adjacentFoe",
+		type: "Normal",
+		zMoveBoost: {spe: 2},
+		contestType: "Clever",
 	},
 	"megadrain": {
 		num: 72,
