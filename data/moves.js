@@ -7316,6 +7316,44 @@ let BattleMovedex = {
 		zMoveBoost: {spa: 2},
 		contestType: "Clever",
 	},
+	"healingwish": {
+		num: 361,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "The user faints and the Pokemon brought out to replace it has its HP fully restored along with having any major status condition cured. The new Pokemon is sent out at the end of the turn, and the healing happens before hazards take effect. Fails if the user is the last unfainted Pokemon in its party.",
+		shortDesc: "User faints. Replacement is fully healed.",
+		id: "healingwish",
+		isViable: true,
+		name: "Healing Wish",
+		pp: 10,
+		priority: 0,
+		flags: {snatch: 1, heal: 1},
+		onTryHit(pokemon, target, move) {
+			if (!this.canSwitch(pokemon.side)) {
+				delete move.selfdestruct;
+				return false;
+			}
+		},
+		selfdestruct: "ifHit",
+		slotCondition: 'healingwish',
+		effect: {
+			duration: 2,
+			onSwitchInPriority: 1,
+			onSwitchIn(target) {
+				if (!target.fainted) {
+					target.heal(target.maxhp);
+					target.setStatus('');
+					this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');
+					target.side.removeSlotCondition(target, 'healingwish');
+				}
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Psychic",
+		contestType: "Beautiful",
+	},
 	"healorder": {
 		num: 456,
 		accuracy: true,
@@ -7364,44 +7402,6 @@ let BattleMovedex = {
 		target: "any",
 		type: "Psychic",
 		zMoveEffect: 'clearnegativeboost',
-		contestType: "Beautiful",
-	},
-	"healingwish": {
-		num: 361,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "The user faints and the Pokemon brought out to replace it has its HP fully restored along with having any major status condition cured. The new Pokemon is sent out at the end of the turn, and the healing happens before hazards take effect. Fails if the user is the last unfainted Pokemon in its party.",
-		shortDesc: "User faints. Replacement is fully healed.",
-		id: "healingwish",
-		isViable: true,
-		name: "Healing Wish",
-		pp: 10,
-		priority: 0,
-		flags: {snatch: 1, heal: 1},
-		onTryHit(pokemon, target, move) {
-			if (!this.canSwitch(pokemon.side)) {
-				delete move.selfdestruct;
-				return false;
-			}
-		},
-		selfdestruct: "ifHit",
-		slotCondition: 'healingwish',
-		effect: {
-			duration: 2,
-			onSwitchInPriority: 1,
-			onSwitchIn(target) {
-				if (!target.fainted) {
-					target.heal(target.maxhp);
-					target.setStatus('');
-					this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');
-					target.side.removeSlotCondition(target, 'healingwish');
-				}
-			},
-		},
-		secondary: null,
-		target: "self",
-		type: "Psychic",
 		contestType: "Beautiful",
 	},
 	"heartstamp": {
