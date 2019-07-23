@@ -15650,87 +15650,6 @@ let BattleMovedex = {
 		zMovePower: 100,
 		contestType: "Cute",
 	},
-	"spikyshield": {
-		num: 596,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon making contact with the user lose 1/8 of their maximum HP, rounded down. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
-		shortDesc: "Protects from moves. Contact: loses 1/8 max HP.",
-		id: "spikyshield",
-		isViable: true,
-		name: "Spiky Shield",
-		pp: 10,
-		priority: 4,
-		flags: {},
-		stallingMove: true,
-		volatileStatus: 'spikyshield',
-		onTryHit(target, source, move) {
-			return !!this.willAct() && this.runEvent('StallMove', target);
-		},
-		onHit(pokemon) {
-			pokemon.addVolatile('stall');
-		},
-		effect: {
-			duration: 1,
-			onStart(target) {
-				this.add('-singleturn', target, 'move: Protect');
-			},
-			onTryHitPriority: 3,
-			onTryHit(target, source, move) {
-				if (!move.flags['protect']) {
-					if (move.isZ) target.getMoveHitData(move).zBrokeProtect = true;
-					return;
-				}
-				this.add('-activate', target, 'move: Protect');
-				let lockedmove = source.getVolatile('lockedmove');
-				if (lockedmove) {
-					// Outrage counter is reset
-					if (source.volatiles['lockedmove'].duration === 2) {
-						delete source.volatiles['lockedmove'];
-					}
-				}
-				if (move.flags['contact']) {
-					this.damage(source.maxhp / 8, source, target);
-				}
-				return this.NOT_FAIL;
-			},
-			onHit(target, source, move) {
-				if (move.isZPowered && move.flags['contact']) {
-					this.damage(source.maxhp / 8, source, target);
-				}
-			},
-		},
-		secondary: null,
-		target: "self",
-		type: "Grass",
-		zMoveBoost: {def: 1},
-		contestType: "Tough",
-	},
-	"spiritshackle": {
-		num: 662,
-		accuracy: 100,
-		basePower: 80,
-		category: "Physical",
-		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
-		shortDesc: "Prevents the target from switching out.",
-		id: "spiritshackle",
-		isViable: true,
-		name: "Spirit Shackle",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		secondary: {
-			chance: 100,
-			onHit(target, source, move) {
-				if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
-			},
-		},
-		target: "normal",
-		type: "Ghost",
-		zMovePower: 160,
-		contestType: "Tough",
-	},
 	"soak": {
 		num: 487,
 		accuracy: 100,
@@ -16111,6 +16030,87 @@ let BattleMovedex = {
 		type: "Ground",
 		zMoveBoost: {def: 1},
 		contestType: "Clever",
+	},
+	"spikyshield": {
+		num: 596,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon making contact with the user lose 1/8 of their maximum HP, rounded down. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
+		shortDesc: "Protects from moves. Contact: loses 1/8 max HP.",
+		id: "spikyshield",
+		isViable: true,
+		name: "Spiky Shield",
+		pp: 10,
+		priority: 4,
+		flags: {},
+		stallingMove: true,
+		volatileStatus: 'spikyshield',
+		onTryHit(target, source, move) {
+			return !!this.willAct() && this.runEvent('StallMove', target);
+		},
+		onHit(pokemon) {
+			pokemon.addVolatile('stall');
+		},
+		effect: {
+			duration: 1,
+			onStart(target) {
+				this.add('-singleturn', target, 'move: Protect');
+			},
+			onTryHitPriority: 3,
+			onTryHit(target, source, move) {
+				if (!move.flags['protect']) {
+					if (move.isZ) target.getMoveHitData(move).zBrokeProtect = true;
+					return;
+				}
+				this.add('-activate', target, 'move: Protect');
+				let lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
+				if (move.flags['contact']) {
+					this.damage(source.maxhp / 8, source, target);
+				}
+				return this.NOT_FAIL;
+			},
+			onHit(target, source, move) {
+				if (move.isZPowered && move.flags['contact']) {
+					this.damage(source.maxhp / 8, source, target);
+				}
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Grass",
+		zMoveBoost: {def: 1},
+		contestType: "Tough",
+	},
+	"spiritshackle": {
+		num: 662,
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
+		shortDesc: "Prevents the target from switching out.",
+		id: "spiritshackle",
+		isViable: true,
+		name: "Spirit Shackle",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		secondary: {
+			chance: 100,
+			onHit(target, source, move) {
+				if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
+			},
+		},
+		target: "normal",
+		type: "Ghost",
+		zMovePower: 160,
+		contestType: "Tough",
 	},
 	"spitup": {
 		num: 255,
