@@ -11256,6 +11256,38 @@ let BattleMovedex = {
 		zMovePower: 160,
 		contestType: "Cool",
 	},
+	"nightmare": {
+		num: 171,
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		desc: "Causes the target to lose 1/4 of its maximum HP, rounded down, at the end of each turn as long as it is asleep. This move does not affect the target unless it is asleep. The effect ends when the target wakes up, even if it falls asleep again in the same turn.",
+		shortDesc: "A sleeping target is hurt by 1/4 max HP per turn.",
+		id: "nightmare",
+		name: "Nightmare",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1},
+		volatileStatus: 'nightmare',
+		effect: {
+			noCopy: true,
+			onStart(pokemon) {
+				if (pokemon.status !== 'slp' && !pokemon.hasAbility('comatose')) {
+					return false;
+				}
+				this.add('-start', pokemon, 'Nightmare');
+			},
+			onResidualOrder: 9,
+			onResidual(pokemon) {
+				this.damage(pokemon.maxhp / 4);
+			},
+		},
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+		zMoveBoost: {spa: 1},
+		contestType: "Clever",
+	},
 	"nightshade": {
 		num: 101,
 		accuracy: 100,
@@ -11295,38 +11327,6 @@ let BattleMovedex = {
 		type: "Dark",
 		zMovePower: 140,
 		contestType: "Cool",
-	},
-	"nightmare": {
-		num: 171,
-		accuracy: 100,
-		basePower: 0,
-		category: "Status",
-		desc: "Causes the target to lose 1/4 of its maximum HP, rounded down, at the end of each turn as long as it is asleep. This move does not affect the target unless it is asleep. The effect ends when the target wakes up, even if it falls asleep again in the same turn.",
-		shortDesc: "A sleeping target is hurt by 1/4 max HP per turn.",
-		id: "nightmare",
-		name: "Nightmare",
-		pp: 15,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		volatileStatus: 'nightmare',
-		effect: {
-			noCopy: true,
-			onStart(pokemon) {
-				if (pokemon.status !== 'slp' && !pokemon.hasAbility('comatose')) {
-					return false;
-				}
-				this.add('-start', pokemon, 'Nightmare');
-			},
-			onResidualOrder: 9,
-			onResidual(pokemon) {
-				this.damage(pokemon.maxhp / 4);
-			},
-		},
-		secondary: null,
-		target: "normal",
-		type: "Ghost",
-		zMoveBoost: {spa: 1},
-		contestType: "Clever",
 	},
 	"nobleroar": {
 		num: 568,
