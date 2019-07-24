@@ -421,27 +421,27 @@ const commands = {
 
 	'!shrug': true,
 	shrug(target) {
-		if (!this.canTalk()) return;
 		target = target ? ' ' + target + ' ' : '';
 		if (target.startsWith(' /me')) target = target.slice(1);
+		if (!this.canTalk(target)) return;
 		return target + '¯\\_(ツ)_/¯';
 	},
 	shrughelp: ['/shrug [message] - Sends the given message, if any, appended with ¯\\_(ツ)_/¯'],
 
 	'!tableflip': true,
 	tableflip(target) {
-		if (!this.canTalk()) return;
 		target = target ? ' ' + target + ' ' : '';
 		if (target.startsWith(' /me')) target = target.slice(1);
+		if (!this.canTalk(target)) return;
 		return target + '(╯°□°）╯︵ ┻━┻';
 	},
 	tablefliphelp: ['/tableflip [message] - Sends the given message, if any, appended with (╯°□°）╯︵ ┻━┻'],
 
 	'!tableunflip': true,
 	tableunflip(target) {
-		if (!this.canTalk()) return;
 		target = target ? ' ' + target + ' ' : '';
 		if (target.startsWith(' /me')) target = target.slice(1);
+		if (!this.canTalk(target)) return;
 		return target + '┬──┬◡ﾉ(° -°ﾉ)';
 	},
 	tableunfliphelp: ['/tableunflip [message] - Sends the given message, if any, appended with ┬──┬◡ﾉ(° -°ﾉ)'],
