@@ -422,7 +422,8 @@ const commands = {
 	'!shrug': true,
 	shrug(target) {
 		if (!this.canTalk()) return;
-		target = target ? target + ' ' : '';
+		target = target ? ' ' + target + ' ' : '';
+		if (target.startsWith(' /me')) target = target.slice(1);
 		return target + '¯\\_(ツ)_/¯';
 	},
 	shrughelp: ['/shrug [message] - Sends the given message, if any, appended with ¯\\_(ツ)_/¯'],
@@ -430,7 +431,8 @@ const commands = {
 	'!tableflip': true,
 	tableflip(target) {
 		if (!this.canTalk()) return;
-		target = target ? target + ' ' : '';
+		target = target ? ' ' + target + ' ' : '';
+		if (target.startsWith(' /me')) target = target.slice(1);
 		return target + '(╯°□°）╯︵ ┻━┻';
 	},
 	tablefliphelp: ['/tableflip [message] - Sends the given message, if any, appended with (╯°□°）╯︵ ┻━┻'],
@@ -438,7 +440,8 @@ const commands = {
 	'!tableunflip': true,
 	tableunflip(target) {
 		if (!this.canTalk()) return;
-		target = target ? target + ' ' : '';
+		target = target ? ' ' + target + ' ' : '';
+		if (target.startsWith(' /me')) target = target.slice(1);
 		return target + '┬──┬◡ﾉ(° -°ﾉ)';
 	},
 	tableunfliphelp: ['/tableunflip [message] - Sends the given message, if any, appended with ┬──┬◡ﾉ(° -°ﾉ)'],
