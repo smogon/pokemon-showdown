@@ -298,7 +298,7 @@ export class ProcessManager {
 	}
 	destroy() {
 		const index = processManagers.indexOf(this);
-		if (index) processManagers.splice(index, 1);
+		if (index >= 0) processManagers.splice(index, 1);
 		return this.unspawn();
 	}
 }
