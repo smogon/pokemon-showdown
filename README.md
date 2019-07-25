@@ -153,7 +153,7 @@ Staff
 - Bär Halberkamp [bumbadadabum] - Development
 - Chris Monsanto [chaos] - Sysadmin
 - Mathieu Dias-Martins [Marty-D] - Research (game mechanics), Development
-- Kirk Scheibelhut [pre, scheibo] - Development
+- Kirk Scheibelhut [pre] - Development
 - [The Immortal] - Development
 
 Retired Staff
@@ -168,7 +168,7 @@ Major Contributors
 
 - Andrew Werner [HoeenHero] - Development
 - Austin Couturier [Austin] - Development (damage calculator)
-- [jumbowhales] - Development
+- [peach] - Development
 - Kevin Lau [Ascriptmaster] - Development, Art (battle animations)
 - Konrad Borowski [xfix] - Development
 - Leonard Craft III [DaWoblefet] - Research (game mechanics)
@@ -177,25 +177,25 @@ Major Contributors
 - Quinton Lee [sirDonovan] - Development
 - [Ridaz] - Art (battle animations)
 - Tobias Mann [asgdf] - Development
-- William MacChaeger - Development
+- William [MacChaeger] - Development
 
 Contributors
 
 - Alexander B. [mathfreak231] - Development
 - Andrew Goodsell [Zracknel] - Art (battle weather backdrops)
 - Avery Zimmer [Lyren, SolarisFox] - Development
-- Ben Davies [Morfent, Kaiepi] - Development
+- Ben Davies [Morfent] - Development
 - Ben Frengley [TalkTakesTime] - Development
 - Cody Thompson [Rising_Dusk] - Development
 - [Honko] - Development (damage calculator)
-- Jacob McLemore - Development
-- Waleed Hassan [JetOU] - Development
+- Jacob McLemore [McLemore] - Development
+- Waleed Hassan [jetou] - Development
 - Ian Clail [Layell] - Art (battle graphics, sprites)
 - Jeremy Piemonte [panpawn] - Development
-- Kris Johnson - Development
+- Kris Johnson [Kris] - Development
 - Luke Harmon-Vellotti [moo, CheeseMuffin] - Development
 - Russell Jones [SadisticMystic] - Research (game mechanics)
-- Spandan Punwatkar - Development
+- Spandan Punwatkar [spandan]- Development
 
 Special thanks
 
