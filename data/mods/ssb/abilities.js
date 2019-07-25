@@ -841,11 +841,14 @@ let BattleAbilities = {
 		},
 		onAfterDamage(damage, target, source, move) {
 			if (target.getMoveHitData(move).typeMod > 0) {
+				if (target.m.heavilydamaged && !target.m.quoteplayed) {
+					this.add(`c|@Ransei|Yo really? Why do you keep hitting me with super effective moves?`);
+					target.m.quoteplayed = true;
+				}
 				if (!target.m.heavilydamaged) {
 					this.add('-message', `${target.name}'s attack was reduced after that super effective attack!`);
 					target.m.heavilydamaged = true;
 				}
-				this.add(`c|@Ransei|Yo really? Why do you keep hitting me with super effective moves?`);
 			}
 		},
 		onModifyAtk(atk, pokemon) {
@@ -853,7 +856,7 @@ let BattleAbilities = {
 			if (!pokemon.m.heavilydamaged) {
 				atkmult *= 2;
 			}
-			if (pokemon.m.status) {
+			if (pokemon.status) {
 				atkmult *= 1.5;
 			}
 			return this.chainModify(atkmult);
