@@ -2035,9 +2035,9 @@ let BattleMovedex = {
 	},
 	// Jolteonite
 	hyperforcestrike: {
-		accuracy: 90,
-		basePower: 120,
-		category: "Special",
+		accuracy: 100,
+		basePower: 75,
+		category: "Physical",
 		desc: "Damages the target and restores user's HP by 25% of its total health.",
 		shortDesc: "Damages the target and heals 25% total HP.",
 		id: "hyperforcestrike",
