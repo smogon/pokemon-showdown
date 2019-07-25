@@ -1234,6 +1234,18 @@ let BattleStatuses = {
 			this.add(`c|+SamJo|Oof, gotta get thiccer……. ;(`);
 		},
 	},
+	schiavetto: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|+Schiavetto|Aight, sis, guess I'm parking.`);
+		},
+		onSwitchOut() {
+			this.add(`c|+Schiavetto|Someone help me press this.`);
+		},
+		onFaint() {
+			this.add(`c|+Schiavetto|Read my ISOs when I'm dead`);
+		},
+	},
 	scotteh: {
 		noCopy: true,
 		onStart() {

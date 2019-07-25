@@ -87,6 +87,18 @@ let BattleItems = {
 		gen: 7,
 		desc: "If held by a Mamoswine with Thicc, it can use Extra T h i c c.",
 	},
+	// Schiavetto
+	mariahcariumz: {
+		id: "mariahcariumz",
+		name: "Mariahcarium Z",
+		isNonstandard: "Custom",
+		onTakeItem: false,
+		zMove: "Plurshift",
+		zMoveFrom: "Poison Jab",
+		zMoveUser: ["Scolipede"],
+		gen: 7,
+		desc: "If helb by a Scolipede with Poison Jab, it can use Plurshift.",
+	},
 	// Snaquaza
 	fakeclaimiumz: {
 		id: "fakeclaimiumz",

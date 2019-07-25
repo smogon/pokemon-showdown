@@ -3634,6 +3634,53 @@ let BattleMovedex = {
 		target: "self",
 		type: "Ice",
 	},
+	// Schiavetto
+	plurshift: {
+		accuracy: 100,
+		basePower: 120,
+		category: "Physical",
+		desc: "Has a 10% chance per effect to apply taunt, confusion, flinch, heal block, and/or focus energy to the target.",
+		shortDesc: "10% taunt/confusion/flinch/heal block/focus energy for foe.",
+		id: "plurshift",
+		name: "Plurshift",
+		isNonstandard: "Custom",
+		pp: 1,
+		priority: 0,
+		flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "First Impression", target);
+			this.add('-anim', target, "Infestation", target);
+		},
+		secondaries: [
+			{
+				volatileStatus: "taunt",
+				chance: 100,
+			},
+			{
+				volatileStatus: "confusion",
+				chance: 100,
+			},
+			{
+				volatileStatus: "flinch",
+				chance: 100,
+			},
+			{
+				volatileStatus: "healblock",
+				chance: 100,
+			},
+			{
+				volatileStatus: "focusenergy",
+				chance: 100,
+			},
+		],
+		selfSwitch: 'copyvolatile',
+		isZ: "mariahcariumz",
+		target: "normal",
+		type: "Poison",
+	},
 	// Scotteh
 	geomagneticstorm: {
 		accuracy: 100,

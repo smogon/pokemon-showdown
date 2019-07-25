@@ -926,6 +926,50 @@ let BattleAbilities = {
 			return false;
 		},
 	},
+	// Schiavetto
+	rvs: {
+		desc: "This Pokemon has two random stats raised by 1 stages and another stat lowered by 1 stage at the end of each turn.",
+		shortDesc: "Raises a 2 random stats by 1 and lowers another stat by 1 at the end the turn.",
+		id: "rvs",
+		name: "RVS",
+		isNonstandard: "Custom",
+		onResidualOrder: 26,
+		onResidualSubOrder: 1,
+		onResidual(pokemon) {
+			let stats = [];
+			let boost = {};
+			for (let statPlus in pokemon.boosts) {
+				// @ts-ignore
+				if (pokemon.boosts[statPlus] < 6) {
+					stats.push(statPlus);
+				}
+			}
+			let randomStat = stats.length ? this.sample(stats) : "";
+			if (randomStat) {
+				// @ts-ignore
+				boost[randomStat] = 1;
+				// Prevent picking the same stat twice, sampleNoReplace dosen't exists on type Battle
+				stats.splice(stats.indexOf(randomStat), 1);
+			}
+
+			randomStat = stats.length ? this.sample(stats) : "";
+			// @ts-ignore
+			if (randomStat) boost[randomStat] = 1;
+
+			stats = [];
+			for (let statMinus in pokemon.boosts) {
+				// @ts-ignore
+				if (pokemon.boosts[statMinus] > -6 && statMinus !== randomStat) {
+					stats.push(statMinus);
+				}
+			}
+			randomStat = stats.length ? this.sample(stats) : "";
+			// @ts-ignore
+			if (randomStat) boost[randomStat] = -1;
+
+			this.boost(boost);
+		},
+	},
 	// Shiba
 	galewingsv1: {
 		desc: "This Pokemon's Flying-type moves have their priority increased by 1.",

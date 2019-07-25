@@ -596,6 +596,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Thicc',
 				evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 			},
+			'Schiavetto': {
+				species: 'Scolipede', ability: 'RVS', item: 'Mariahcarium Z', gender: 'M',
+				moves: ['Fell Stinger', 'Diamond Storm', ['Hammer Arm', 'Ice Hammer', 'Smart Strike']],
+				signatureMove: 'Poison Jab',
+				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
+			},
 			'Scotteh': {
 				species: 'Suicune', ability: 'Fur Coat', item: 'Leftovers', gender: 'M',
 				moves: ['Nasty Plot', 'Ice Beam', 'Scald', 'Recover'],
