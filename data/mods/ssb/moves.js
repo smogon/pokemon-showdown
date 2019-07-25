@@ -1229,6 +1229,38 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Dragon",
 	},
+	// deetah
+	galvanizedstrike: {
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		desc: "Power doubles if the user is burned, paralyzed, or poisoned. The physical damage halving effect from the user's burn is ignored.",
+		shortDesc: "Power doubles if user is burn/poison/paralyzed.",
+		id: "galvanizedstrike",
+		name: "Galvanized Strike",
+		isNonstandard: "Custom",
+		pp: 20,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Wild Charge', target);
+			this.add('-anim', source, 'Bolt Strike', target);
+		},
+		onBasePower(basePower, pokemon) {
+			if (pokemon.status && pokemon.status !== 'slp') {
+				return this.chainModify(2);
+			}
+		},
+		secondary: {
+			chance: 30,
+			status: 'par',
+		},
+		target: "normal",
+		type: "Electric",
+	},
 	// deg
 	luciddreams: {
 		accuracy: 75,

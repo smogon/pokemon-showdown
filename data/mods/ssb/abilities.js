@@ -354,6 +354,26 @@ let BattleAbilities = {
 			if (move && move.type === 'Dragon') return priority + 1;
 		},
 	},
+	// deetah
+	radioactive: {
+		desc: "If this Pokemon is statused, its Attack is 1.5x; ignores burn halving physical damage. This Pokemon heals 1/8 of its max HP when poisoned.",
+		shortDesc: "1.5x Atk if statused. Heals 1/8 if poisoned.",
+		id: "radioactive",
+		name: "Radioactive",
+		isNonstandard: "Custom",
+		onModifyAtk(atk, pokemon) {
+			if (pokemon.status) {
+				return this.chainModify(1.5);
+			}
+		},
+		onDamagePriority: 1,
+		onDamage(damage, target, source, effect) {
+			if (effect.id === 'psn' || effect.id === 'tox') {
+				this.heal(target.maxhp / 8);
+				return false;
+			}
+		},
+	},
 	// E4 Flint
 	starkmountain: {
 		desc: "The user summons Sunny Day when it switches in. In addition, Water-type attacks do halved damage against this Pokemon.",

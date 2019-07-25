@@ -406,6 +406,18 @@ let BattleStatuses = {
 			this.add(`c|+Decem|>:(`);
 		},
 	},
+	deetah: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|+deetah|I can see right through you.`);
+		},
+		onSwitchOut() {
+			this.add(`c|+deetah|Meow :3`);
+		},
+		onFaint() {
+			this.add(`c|+deetah|I have 8 lives left, you can't get rid of me that easily.`);
+		},
+	},
 	deg: {
 		noCopy: true,
 		onStart() {

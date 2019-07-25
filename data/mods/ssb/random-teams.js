@@ -228,6 +228,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Hit and Run',
 				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
+			'deetah': {
+				species: 'Luxray', ability: 'Radioactive', item: 'Toxic Orb', gender: '',
+				moves: ['Zippy Zap', 'Icicle Crash', 'Thousand Arrows'],
+				signatureMove: 'Galvanized Strike',
+				evs: {hp: 28, atk: 244, def: 188, spe: 48}, nature: 'Adamant', shiny: true,
+			},
 			'deg': {
 				species: 'Gengar', ability: 'Bad Dreams', item: 'Gengarite', gender: 'M',
 				moves: [['Hex', 'Shadow Ball'], 'Sludge Wave', 'Focus Blast'],
