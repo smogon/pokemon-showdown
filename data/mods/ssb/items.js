@@ -50,6 +50,7 @@ let BattleItems = {
 		},
 		fling: undefined, // Cannot be flung now since its a mega stone
 		desc: "If held by a Rotom, this item allows it to Mega Evolve in battle.",
+		shortDesc: "If held by a Rotom, this item allows it to Mega Evolve in battle.",
 	},
 	// MajorBowman
 	victiniumz: {
