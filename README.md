@@ -152,8 +152,8 @@ Staff
 
 - Bär Halberkamp [bumbadadabum] - Development
 - Chris Monsanto [chaos] - Sysadmin
-- Mathieu Dias-Martins [Marty-D] - Research (game mechanics), Development
 - Kirk Scheibelhut [pre] - Development
+- Mathieu Dias-Martins [Marty-D] - Research (game mechanics), Development
 - [The Immortal] - Development
 
 Retired Staff
@@ -168,14 +168,14 @@ Major Contributors
 
 - Andrew Werner [HoeenHero] - Development
 - Austin Couturier [Austin] - Development (damage calculator)
-- [peach] - Development
 - Kevin Lau [Ascriptmaster] - Development, Art (battle animations)
 - Konrad Borowski [xfix] - Development
 - Leonard Craft III [DaWoblefet] - Research (game mechanics)
-- Robin Vandenbrande [Quinella] - Development
 - Neil Rashbrook [urkerab] - Development
+- [peach] - Development
 - Quinton Lee [sirDonovan] - Development
 - [Ridaz] - Art (battle animations)
+- Robin Vandenbrande [Quinella] - Development
 - Tobias Mann [asgdf] - Development
 - William [MacChaeger] - Development
 
@@ -188,14 +188,14 @@ Contributors
 - Ben Frengley [TalkTakesTime] - Development
 - Cody Thompson [Rising_Dusk] - Development
 - [Honko] - Development (damage calculator)
-- Jacob McLemore [McLemore] - Development
-- Waleed Hassan [jetou] - Development
 - Ian Clail [Layell] - Art (battle graphics, sprites)
+- Jacob McLemore [McLemore] - Development
 - Jeremy Piemonte [panpawn] - Development
 - Kris Johnson [Kris] - Development
 - Luke Harmon-Vellotti [moo, CheeseMuffin] - Development
 - Russell Jones [SadisticMystic] - Research (game mechanics)
 - Spandan Punwatkar [spandan]- Development
+- Waleed Hassan [jetou] - Development
 
 Special thanks
 
