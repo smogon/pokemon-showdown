@@ -113,6 +113,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Back Off! GRRR!',
 				evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
+			'Anubis': {
+				species: 'Giratina-Origin', ability: 'Distortion World', item: 'Griseous Orb', gender: 'N',
+				moves: ['Shadow Force', 'Spacial Rend', 'Topsy-Turvy'],
+				signatureMove: 'Heretic\'s Mark',
+				evs: {def: 252, spa: 252, spd: 4}, ivs: {spe: 0}, shiny: true, nature: 'Relaxed',
+			},
 			'A Quag to The Past': {
 				species: 'Quagsire', ability: 'Careless', item: 'Leftovers', gender: 'M',
 				moves: ['Recover', 'Toxic', 'Scald'],

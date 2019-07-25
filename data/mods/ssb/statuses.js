@@ -164,6 +164,18 @@ let BattleStatuses = {
 			this.add(`c|+Andrew|avenge me c.kilgannon!`);
 		},
 	},
+	anubis: {
+		noCopy: true,
+		onStart() {
+			this.add(`c|&Anubis|hi ur qt`);
+		},
+		onSwitchOut() {
+			this.add(`c|&Anubis|brb making coffee`);
+		},
+		onFaint() {
+			this.add(`c|&Anubis|worthless evildoer :(`);
+		},
+	},
 	aquagtothepast: {
 		noCopy: true,
 		onStart() {

@@ -165,6 +165,17 @@ let BattleAbilities = {
 			this.field.setTerrain('lavaterrain');
 		},
 	},
+	// Anubis
+	distortionworld: {
+		desc: "For 5 turns, speed becomes the same for all pokemon. The power of Ghott-type attacks made by Pokemon is multiplied by 1.5.",
+		shortDesc: "5 turns. Speed Ties. +Ghost Power",
+		id: "distortionworld",
+		name: "Distortion World",
+		isNonstandard: "Custom",
+		onStart() {
+			this.field.setTerrain('distortionworld');
+		},
+	},
 	// A Quag To The Past
 	careless: {
 		desc: "This Pokemon blocks certain status moves and instead uses the move against the original user. This Pokemon also ignores other Pokemon's Attack, Special Attack, and accuracy stat stages when taking damage, and ignores other Pokemon's Defense, Special Defense, and evasiveness stat stages when dealing damage.",

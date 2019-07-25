@@ -453,6 +453,134 @@ let BattleMovedex = {
 		target: "self",
 		type: "Fire",
 	},
+	// Anubis
+	hereticsmark: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "The target is replaced with a new randomly generated Super Staff Bros Brawl set. The new pokemon retains the old pokemon's HP percentage, power point percentages, and status condition.",
+		shortDesc: "Target is replaced with random SSBB set.",
+		id: "hereticsmark",
+		name: "Heretic's Mark",
+		isNonstandard: "Custom",
+		pp: 2,
+		noPPBoosts: true,
+		priority: -7,
+		flags: {authentic: 1, protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Shadow Force', target);
+			this.add('-anim', target, 'Dark Void', target);
+		},
+		onHit(target, source, move) {
+			// Generate a new team
+			let team = this.teamGenerator.getTeam({name: target.side.name, inBattle: true});
+			let set = team.shift();
+			if (set.name === target.set.name) set = team.shift(); // Must be a new set
+			const oldName = target.name;
+
+			// Bit of a hack so client doesn't crash when formeChange is called for the new pokemon
+			let effect = this.effect;
+			this.effect = /** @type {Effect} */ ({id: ''});
+			// @ts-ignore
+			let pokemon = new Pokemon(set, target.side);
+			this.effect = effect;
+
+			pokemon.hp = Math.floor(pokemon.maxhp * (target.hp / target.maxhp)) || 1;
+			pokemon.status = target.status;
+			if (target.statusData) pokemon.statusData = target.statusData;
+			for (const [j, moveSlot] of pokemon.moveSlots.entries()) {
+				moveSlot.pp = Math.floor(moveSlot.maxpp * (target.moveSlots[j] ? (target.moveSlots[j].pp / target.moveSlots[j].maxpp) : 1));
+			}
+			this.add('faint', target);
+			pokemon.position = target.position;
+
+			target.side.pokemon[0] = pokemon;
+			target.moveSlots = pokemon.moveSlots;
+			// @ts-ignore Read only property needs to be written to for this to work
+			target.baseMoveSlots = pokemon.baseMoveSlots;
+			target.set.name = pokemon.name;
+			// @ts-ignore Read only property needs to be written to for this to work
+			target.name = pokemon.name;
+			// @ts-ignore Read only property needs to be written to for this to work
+			target.item = pokemon.item;
+			// @ts-ignore Read only property needs to be written to for this to work
+			target.id = pokemon.side.id + ": " + pokemon.name;
+			// @ts-ignore Read only property needs to be written to for this to work
+			target.fullname = pokemon.side.id + ": " + pokemon.name;
+			this.add('replace', target, pokemon.getDetails, target.hp / target.maxhp); // name change
+
+			const format = this.getFormat();
+			effect = this.effect;
+			// Temporarly override effect so that the ability end message is not displayed
+			this.effect = /** @type {Effect} */ ({id: ''});
+			target.formeChange(pokemon.template, move, true);
+			this.effect = effect;
+			if (format && format.onSwitchIn) format.onSwitchIn.call(this, target);
+			this.add('-message', `${oldName} was sent to the distortion world and replaced with somebody else!`);
+			for (let stat of Object.keys(target.boosts)) {
+				// @ts-ignore Iterate through stat changes to update client
+				if (target.boosts[stat] !== 0) {
+					// @ts-ignore Iterate through stat changes to update client
+					this.add('-setboost', target, stat, target.boosts[stat], '[silent]');
+				}
+			}
+		},
+		target: "normal",
+		type: "Ghost",
+	},
+	// Used for Anubis's ability
+	distortionworld: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Sets Scripted Terrain for 5 turns. The power of Ghost type moves is boosted by 1.5, and all pokemon on the field have an effective speed of 0. This terrain affects floating Pokemon.",
+		shortDesc: "5 turns: Ghost power+, All pokemon speed tie.",
+		id: "distortionworld",
+		name: "Distortion World",
+		isNonstandard: "Custom",
+		pp: 5,
+		priority: 0,
+		flags: {nosky: true},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Dark Void', source);
+			this.add('-anim', target, 'Dark Void', target);
+		},
+		terrain: 'distortionworld',
+		effect: {
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source && source.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onBasePower(basePower, attacker, defender, move) {
+				if (move.type === 'Ghost') {
+					this.debug('distortion world boost');
+					return this.chainModify(1.5);
+				}
+			},
+			onStart(battle, source, effect) {
+				if (effect && effect.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Distortion World', '[from] ability: ' + effect, '[of] ' + source);
+				} else {
+					this.add('-fieldstart', 'move: Distortion World');
+				}
+				this.add('-message', 'Distortion World has caused all speed to become the same!');
+			},
+			onEnd() {
+				this.add('-fieldend', 'move: Distortion World');
+			},
+		},
+		target: "self",
+		type: "Ghost",
+	},
 	// A Quag to The Past
 	murkyambush: {
 		accuracy: true,

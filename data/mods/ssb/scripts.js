@@ -391,6 +391,9 @@ let BattleScripts = {
 			if (this.battle.field.getPseudoWeather('trickroom') || this.battle.field.getPseudoWeather('alienwave')) {
 				speed = 0x2710 - speed;
 			}
+			if (this.battle.field.isTerrain('distortionworld')) {
+				speed = 0; // Anything times 0 is still 0
+			}
 			return this.battle.trunc(speed, 13);
 		},
 	},
