@@ -1943,36 +1943,6 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Grass",
 	},
-	// Hurl
-	draconicmeme: {
-		accuracy: 100,
-		basePower: 100,
-		category: "Physical",
-		desc: "This move does neutral damage if it would be not very effective or have no effect.",
-		shortDesc: "Always does neutral damage or better.",
-		id: "draconicmeme",
-		name: "Draconic Meme",
-		isNonstandard: "Custom",
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1, mirror: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Dragon Claw', target);
-		},
-		onEffectiveness(typeMod, target, type) {
-			if (typeMod < 0) {
-				return 0;
-			}
-			return typeMod;
-		},
-		ignoreImmunity: {'Dragon': true},
-		secondary: null,
-		target: "normal",
-		type: "Dragon",
-	},
 	// inactive
 	petrifyinggaze: {
 		accuracy: true,

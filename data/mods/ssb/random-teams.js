@@ -331,12 +331,6 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Flower Tornado',
 				evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
-			'Hurl': {
-				species: 'Flygon', ability: 'Adaptability', item: 'Life Orb', gender: 'M',
-				moves: ['Earthquake', 'U-Turn', 'Dragon Dance'],
-				signatureMove: 'Draconic Meme',
-				evs: {hp: 252, atk: 252, spd: 4}, nature: 'Jolly',
-			},
 			'inactive': {
 				species: 'Dusknoir', ability: 'Soul Eater', item: 'Life Orb', gender: '',
 				moves: ['Earthquake', 'Shadow Force', 'Shadow Sneak'],

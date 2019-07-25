@@ -629,24 +629,6 @@ let BattleStatuses = {
 			this.add(`c|%Hubriz|I burn, I pine, I perish.`);
 		},
 	},
-	hurl: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|%Hurl|prepare to be disappointed`);
-		},
-		onSwitchOut() {
-			this.add(`c|%Hurl|/me hurls out`);
-		},
-		onFaint() {
-			this.add(`c|%Hurl|i disappoint people a lot`);
-		},
-		onDamage(damage, target, source, effect) {
-			if (target.illusion) return;
-			if (effect.effectType !== 'Move') {
-				return false;
-			}
-		},
-	},
 	inactive: {
 		noCopy: true,
 		onStart() {
