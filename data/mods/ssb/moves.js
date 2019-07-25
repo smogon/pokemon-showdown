@@ -2033,6 +2033,34 @@ let BattleMovedex = {
 		target: "allyTeam",
 		type: "Poison",
 	},
+	// Jolteonite
+	hyperforcestrike: {
+		accuracy: 90,
+		basePower: 120,
+		category: "Special",
+		desc: "Damages the target and restores user's HP by 25% of its total health.",
+		shortDesc: "Damages the target and heals 25% total HP.",
+		id: "hyperforcestrike",
+		name: "Hyperforce Strike",
+		isNonstandard: "Custom",
+		pp: 15,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, heal: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Draco Meteor", target);
+			this.add('-anim', source, "Outrage", target);
+			this.add('-anim', source, "Supersonic Skystrike", target);
+		},
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			this.heal(pokemon.maxhp / 4, pokemon, pokemon, move);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Flying",
+	},
 	// Kaiju Bunny
 	bestialstrike: {
 		accuracy: 100,

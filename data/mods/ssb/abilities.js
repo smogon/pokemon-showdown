@@ -513,6 +513,22 @@ let BattleAbilities = {
 			move.drain = [1, 3];
 		},
 	},
+	// Jolteonite
+	iceabsorb: {
+		desc: "This Pokemon is immune to Ice-type moves and restores 1/4 of its maximum HP, rounded down, when hit by an Ice-type move.",
+		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Ice moves; Ice immunity.",
+		id: "iceabsorb",
+		name: "Ice Absorb",
+		isNonstandard: "Custom",
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Ice') {
+				if (!this.heal(target.maxhp / 4)) {
+					this.add('-immune', target, '[from] ability: Ice Absorb');
+				}
+				return null;
+			}
+		},
+	},
 	// Kie
 	maelstrom: {
 		desc: "On switch-in, the weather becomes heavy rain that prevents damaging Fire-type moves from executing, in addition to all the effects of Rain Dance. This weather remains in effect until this Ability is no longer active for any Pokemon, or the weather is changed by Delta Stream or Desolate Land. If Rain Dance is active, this Pokemon's Speed is doubled.",
