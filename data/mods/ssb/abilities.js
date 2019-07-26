@@ -1153,6 +1153,18 @@ let BattleAbilities = {
 			}
 		},
 	},
+	// Yuki
+	snowstorm: {
+		desc: "As it switches in, this Pokemon summons hail that remains in effect until replaced by another weather or suppressed by the effects of Cloud Nine, Air Lock, or Delta Stream.",
+		shortDesc: "On switch-in, this Pokemon summons hail which remains active until replaced.",
+		id: "snowstorm",
+		name: "Snow Storm",
+		isNonstandard: "Custom",
+		onStart() {
+			let snowStorm = this.getEffect('hail');
+			this.field.setWeather(snowStorm);
+		},
+	},
 	// Modified Illusion to support SSB volatiles
 	illusion: {
 		inherit: true,

@@ -746,6 +746,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Blue Flare',
 				evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
+			'Yuki': {
+				species: 'Ninetales-Alola', ability: 'Snow Storm', item: 'Focus Sash', gender: 'F',
+				moves: ['Blizzard', 'Moonblast', 'Aurora Veil'],
+				signatureMove: 'Cutie Escape',
+				evs: {hp: 4, spa: 252, spe: 252}, nature: 'Timid',
+			},
 			'Zalm': {
 				species: 'Weedle', ability: 'Triage', item: 'Black Sludge', gender: 'M',
 				moves: ['Swords Dance', 'Leech Life', 'Horn Leech'],

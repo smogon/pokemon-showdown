@@ -4539,6 +4539,55 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Fire",
 	},
+	// Yuki
+	cutieescape: {
+		accuracy: true,
+		category: "Status",
+		basePower: 0,
+		desc: "The user is replaced with another Pokemon in its party. The opponent is confused, trapped, and infatuated regardless of the replacement's gender. This move fails unless the user already took damage this turn.",
+		shortDesc: "If hit; switches out + confuses, traps, infatuates.",
+		id: "cutieescape",
+		name: "Cutie Escape",
+		isNonstandard: "Custom",
+		pp: 10,
+		priority: -6,
+		flags: {mirror: 1},
+		beforeTurnCallback(pokemon) {
+			pokemon.addVolatile('cutieescape');
+			this.add('-message', `${pokemon.name} is preparing to flee!`);
+		},
+		beforeMoveCallback(pokemon) {
+			if (!pokemon.volatiles['cutieescape'] || !pokemon.volatiles['cutieescape'].tookDamage) {
+				this.add('-fail', pokemon, 'move: Cutie Escape');
+				this.add('-hint', 'Cutie Escape only works when Yuki is hit in the same turn the move is used.');
+				return true;
+			}
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Baton Pass", source);
+		},
+		onHit(target, source) {
+			target.addVolatile('confusion');
+			target.addVolatile('cutietrap');
+		},
+		effect: {
+			duration: 1,
+			onStart(pokemon) {
+				this.add('-singleturn', pokemon, 'move: Cutie Escape');
+			},
+			onHit(pokemon, source, move) {
+				if (move.category !== 'Status') {
+					pokemon.volatiles['cutieescape'].tookDamage = true;
+				}
+			},
+		},
+		selfSwitch: true,
+		target: "normal",
+		type: "Fairy",
+	},
 	// Zalm
 	twinweedle: {
 		accuracy: 100,
