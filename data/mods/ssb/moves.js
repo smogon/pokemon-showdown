@@ -3599,8 +3599,8 @@ let BattleMovedex = {
 		accuracy: 100,
 		basePower: 60,
 		category: "Physical",
-		desc: "Before doing damage, the target's stat boosts are inverted. Ignores Ground-type immunity. The user switches out after damaging the target.",
-		shortDesc: "Hits Ground. Inverts target's boosts, then switches.",
+		desc: "Before doing damage, the target's stat boosts are inverted. The user switches out after damaging the target.",
+		shortDesc: "Inverts target's boosts, then switches.",
 		id: "switchoff",
 		name: "Switch Off",
 		isNonstandard: "Custom",
@@ -3626,7 +3626,6 @@ let BattleMovedex = {
 			if (!success) return;
 			this.add('-invertboost', target, '[from] move: Switch Off');
 		},
-		ignoreImmunity: {'Electric': true},
 		selfSwitch: true,
 		secondary: null,
 		target: "normal",
