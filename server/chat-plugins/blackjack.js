@@ -249,12 +249,12 @@ class Blackjack extends Rooms.RoomGame {
 		const value = toID(card).toUpperCase();
 		const symbol = this.symbols[card.substr(-1)];
 		const red = (symbol.charAt(0) === 'H' || symbol.charAt(0) === 'D');
-		let card = value;
-		if (value === 'K') card = 'King';
-		if (value === 'Q') card = 'Queen';
-		if (value === 'A') card = 'Ace';
-		if (value === 'J') card = 'Joker';
-		return `<div title="${card} of ${symbol}" style="${red ? 'color: #992222; ' : 'color: #000000; '}border-radius: 6px; background-color: #ffffff; position: relative; font-size: 15px; display: inline-block; width: 60px; height: 100px; border: 1px solid #000000; padding: 2px 4px;">${value}<br /> ${card.substr(-1)}<br /><span style="padding: 2px 4px; position: absolute; bottom: 0; right: 0; transform: rotate(-180deg);">${value}<br />${card.substr(-1)}</span></div> `;
+		let cardUI = value;
+		if (value === 'K') cardUI = 'King';
+		if (value === 'Q') cardUI = 'Queen';
+		if (value === 'A') cardUI = 'Ace';
+		if (value === 'J') cardUI = 'Joker';
+		return `<div title="${cardUI} of ${symbol}" style="${red ? 'color: #992222; ' : 'color: #000000; '}border-radius: 6px; background-color: #ffffff; position: relative; font-size: 15px; display: inline-block; width: 60px; height: 100px; border: 1px solid #000000; padding: 2px 4px;">${value}<br /> ${card.substr(-1)}<br /><span style="padding: 2px 4px; position: absolute; bottom: 0; right: 0; transform: rotate(-180deg);">${value}<br />${card.substr(-1)}</span></div> `;
 	}
 
 	/**
