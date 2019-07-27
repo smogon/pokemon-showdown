@@ -12,12 +12,14 @@ class Poll {
 	/**
 	 * @param {ChatRoom | GameRoom} room
 	 * @param {QuestionData} questionData
+	 * @param {string|null} creator
 	 * @param {string[]} options
 	 */
-	constructor(room, questionData, options) {
+	constructor(room, questionData, creator, options) {
 		this.pollNumber = ++room.gameNumber;
 		this.room = room;
 		this.question = questionData.source;
+		this.creator = creator;
 		this.supportHTML = questionData.supportHTML;
 		/** @type {{[k: string]: number}} */
 		this.voters = {};
@@ -73,6 +75,7 @@ class Poll {
 
 	generateVotes() {
 		let output = `<div class="infobox"><p style="margin: 2px 0 5px 0"><span style="border:1px solid #6A6;color:#484;border-radius:4px;padding:0 3px"><i class="fa fa-bar-chart"></i> Poll</span> <strong style="font-size:11pt">${this.getQuestionMarkup()}</strong></p>`;
+		if (this.creator) output += `<p style="margin: 2px 0 10px 0"><small><em>Created by ${this.creator}</em></small></p>`;
 		for (const [number, option] of this.options) {
 			output += `<div style="margin-top: 5px"><button class="button" style="text-align: left" value="/poll vote ${number}" name="send" title="Vote for ${number}. ${Chat.escapeHTML(option.name)}">${number}. <strong>${this.getOptionMarkup(option)}</strong></button></div>`;
 		}
@@ -89,6 +92,7 @@ class Poll {
 	generateResults(ended = false, option = 0) {
 		let icon = `<span style="border:1px solid #${ended ? '777;color:#555' : '6A6;color:#484'};border-radius:4px;padding:0 3px"><i class="fa fa-bar-chart"></i> ${ended ? "Poll ended" : "Poll"}</span>`;
 		let output = `<div class="infobox"><p style="margin: 2px 0 5px 0">${icon} <strong style="font-size:11pt">${this.getQuestionMarkup()}</strong></p>`;
+		if (this.creator) output += `<p style="margin: 2px 0 10px 0"><small><em>Created by ${this.creator}</em></small></p>`;
 		let iter = this.options.entries();
 
 		let i = iter.next();
@@ -218,6 +222,7 @@ exports.Poll = Poll;
 /** @type {ChatCommands} */
 const commands = {
 	poll: {
+		anoncreate: 'new',
 		htmlcreate: 'new',
 		create: 'new',
 		new(target, room, user, connection, cmd, message) {
@@ -262,7 +267,7 @@ const commands = {
 				return this.errorReply("There are duplicate options in the poll.");
 			}
 
-			room.poll = new Poll(room, {source: params[0], supportHTML: supportHTML}, options);
+			room.poll = new Poll(room, {source: params[0], supportHTML: supportHTML}, cmd === 'anoncreate' ? null : user.name, options);
 			room.poll.display();
 
 			this.roomlog(`${user.name} used ${message}`);
