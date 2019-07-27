@@ -4,13 +4,10 @@
  *
  * This allows users to play the classic blackjack card game.
  * Credits: jd, panpawn
- * Card images by Byron Knoll (released into public domain)
  *
  * @license MIT license
  */
 'use strict';
-
-const CARD_IMAGE_PATH = 'http://158.69.63.206:8002/cards/';
 
 class Blackjack extends Rooms.RoomGame {
 	constructor(room, user, target) {
@@ -33,10 +30,10 @@ class Blackjack extends Rooms.RoomGame {
 		this.dealer = new BlackjackDealer();
 
 		this.symbols = {
-			'♥': 'H',
-			'♦': 'D',
-			'♣': 'S',
-			'♠': 'C',
+			'♥': 'Hearts',
+			'♦': 'Diamonds',
+			'♣': 'Clubs',
+			'♠': 'Spades',
 		};
 		this.deck = new BlackjackDeck().shuffle();
 
@@ -46,6 +43,7 @@ class Blackjack extends Rooms.RoomGame {
 		this.state = 'signups';
 
 		this.lastMessage = '';
+		this.turnLog = '';
 		this.uhtmlChange = '';
 		this.curUser = '';
 		this.infoboxLimited = '';
@@ -82,7 +80,7 @@ class Blackjack extends Rooms.RoomGame {
 	sendInvite() {
 		const change = this.uhtmlChange;
 		const players = Object.keys(this.playerTable);
-		this.room.send(`|uhtml${change}|blackjack-${this.blackjackNumber}|<div class="infobox${this.infoboxLimited}">${this.createdBy} has created a game of Blackjack. ${this.button}<br /><strong>Players:</strong> ${!players.length ? '(None)' : players.join(', ')}</div>`);
+		this.room.send(`|uhtml${change}|blackjack-${this.blackjackNumber}|<div class="infobox${this.infoboxLimited}">${this.createdBy} has created a game of Blackjack. ${this.button}<br /><strong>Players (${players.length}):</strong> ${!players.length ? '(None)' : players.join(', ')}</div>`);
 		this.uhtmlChange = 'change';
 	}
 
@@ -140,6 +138,7 @@ class Blackjack extends Rooms.RoomGame {
 	 * onConnect - handles replies to send when a user joins the room, if any
 	 * onUpdateConnection - overrides default onUpdateConnection
 	 * createTimer - creates a timer with a countdown for a player
+	 * generateCard - generates the card for the UI
 	 */
 	errorMessage(user, message) {
 		user.sendTo(this.room, Chat.html`|html|<div class="message-error">${message}</div>`);
@@ -150,25 +149,28 @@ class Blackjack extends Rooms.RoomGame {
 		this.lastMessage += message;
 		this.uhtmlChange = 'change';
 	}
-	display(text, clean, playerName, noChange) {
+	display(text, clean, playerName, noChange, end) {
 		let change = this.uhtmlChange;
 		if (noChange) change = '';
 		if (clean) this.lastMessage = '';
 		const message = `|uhtml${change}|blackjack-${this.blackjackNumber}|<div class="infobox${this.infoboxLimited}">`;
 		this.lastMessage += text;
-
-		for (let i in this.playerTable) {
-			if (playerName && this.playerTable[i].name === playerName) { // turn highlighting
-				this.playerTable[i].gameLog += `<span class="highlighted">${text}</span>`;
-				this.playerTable[i].sendRoom(`${message}${this.playerTable[i].gameLog}</div>`);
+		if (end) {
+			text = `The game of blackjack has ended. <details><summary>View turn log</summary>${this.turnLog}</details>${text}`;
+			this.lastMessage = '';
+		}
+		for (let player of Object.keys(this.playerTable)) {
+			if (playerName && this.playerTable[player].name === playerName) { // turn highlighting
+				this.playerTable[player].gameLog += `<span class="highlighted">${text}</span>`;
+				this.playerTable[player].sendRoom(`${message}${end ? text : this.playerTable[player].gameLog}</div>`);
 			} else {
-				this.playerTable[i].gameLog += text;
-				this.playerTable[i].sendRoom(`${message}${this.playerTable[i].gameLog}</div>`);
+				this.playerTable[player].gameLog += text;
+				this.playerTable[player].sendRoom(`${message}${end ? text : this.playerTable[player].gameLog}</div>`);
 			}
 		}
-		for (let i in this.spectators) {
-			let user = Users(this.spectators[i]);
-			if (user) user.sendTo(this.id, `${message}${this.lastMessage + text}</div>`);
+		for (let spectator of Object.keys(this.spectators)) {
+			spectator = Users(this.spectators[spectator]);
+			if (spectator) spectator.sendTo(this.id, `${message}${this.lastMessage + text}</div>`);
 		}
 	}
 	clear() {
@@ -243,6 +245,17 @@ class Blackjack extends Rooms.RoomGame {
 			}
 		}, this.timerTickSeconds * 1000);
 	}
+	generateCard(card) {
+		const value = toID(card).toUpperCase();
+		const symbol = this.symbols[card.substr(-1)];
+		const red = (symbol.charAt(0) === 'H' || symbol.charAt(0) === 'D');
+		let card = value;
+		if (value === 'K') card = 'King';
+		if (value === 'Q') card = 'Queen';
+		if (value === 'A') card = 'Ace';
+		if (value === 'J') card = 'Joker';
+		return `<div title="${card} of ${symbol}" style="${red ? 'color: #992222; ' : 'color: #000000; '}border-radius: 6px; background-color: #ffffff; position: relative; font-size: 15px; display: inline-block; width: 60px; height: 100px; border: 1px solid #000000; padding: 2px 4px;">${value}<br /> ${card.substr(-1)}<br /><span style="padding: 2px 4px; position: absolute; bottom: 0; right: 0; transform: rotate(-180deg);">${value}<br />${card.substr(-1)}</span></div> `;
+	}
 
 	/**
 	 * Game State Changes
@@ -261,25 +274,25 @@ class Blackjack extends Rooms.RoomGame {
 			this.destroy();
 			return;
 		}
-		if (user) this.startedBy = user.name;
+		if (user) this.startedBy = Chat.escapeHTML(user.name);
 		this.infoboxLimited = (numberOfPlayers >= this.playerScrollWheel ? ' infobox-limited' : '');
 		this.send(`[Blackjack has started. ${this.spectateButton}]`, true, true);
 
 		this.curUser = Object.keys(this.playerTable)[0];
 
-		let output = `The game of blackjack has started${(this.startedBy !== '' ? ` (started by ${this.startedBy})` : ``)}. ${this.slideButton}<br />`;
+		let header = `The game of blackjack has started${(this.startedBy !== '' ? ` (started by ${this.startedBy})` : ``)}. ${this.slideButton}<br />`;
 		this.state = 'started';
-		for (let player in this.playerTable) {
+		for (let player of Object.keys(this.playerTable)) {
 			this.giveCard(this.playerTable[player]);
 			this.giveCard(this.playerTable[player]);
-			output += Chat.html`<strong>${this.playerTable[player].name}</strong>: [${this.playerTable[player].cards[0]}] [${this.playerTable[player].cards[1]}] (${this.playerTable[player].points})<br />`;
+			this.turnLog += Chat.html`<strong>${this.playerTable[player].name}</strong>: [${this.playerTable[player].cards[0]}] [${this.playerTable[player].cards[1]}] (${this.playerTable[player].points})<br />`;
 		}
 
 		this.giveCard('dealer');
 		this.giveCard('dealer');
-		output += `<strong>${this.dealer.name}</strong>: [${this.dealer.cards[0]}]`;
+		this.turnLog += `<strong>${this.dealer.name}</strong>: [${this.dealer.cards[0]}]`;
 
-		this.display(output, true);
+		this.display(`${header}${this.turnLog}`, true);
 		this.next();
 	}
 	end(user, cmd) {
@@ -295,21 +308,21 @@ class Blackjack extends Rooms.RoomGame {
 			if (this.dealer.points > 21) {
 				for (let player of Object.keys(this.playerTable)) {
 					if (this.playerTable[player].status === 'bust') continue;
-					winners.push(this.playerTable[player].name);
+					winners.push(Chat.html`<strong>${this.playerTable[player].name}</strong> [${this.playerTable[player].cards.join(', ')}]`);
 				}
 			} else if (this.dealer.points !== 21) {
 				for (let player of Object.keys(this.playerTable)) {
 					if (this.playerTable[player].status === 'bust' || this.playerTable[player].points <= this.dealer.points) continue;
-					winners.push(this.playerTable[player].name);
+					winners.push(Chat.html`<strong>${this.playerTable[player].name}</strong> [${this.playerTable[player].cards.join(', ')}]`);
 				}
 			} else if (this.dealer.points === 21) {
-				winners.push(this.dealer.name);
+				winners.push(`<strong>${this.dealer.name}</strong> [${this.dealer.cards.join(', ')}]`);
 			}
 			this.send(`[Blackjack has ended.]`, true);
 			if (winners.length < 1) {
-				this.display(`<br />There are no winners this time.`);
+				this.display(`There are no winners this time.`, null, null, null, true);
 			} else {
-				this.display(Chat.html`<br />Winner${Chat.plural(winners.length)}: ${winners.join(', ')}`);
+				this.display(`<strong>Winner${Chat.plural(winners.length)}</strong>: ${winners.join(', ')}`, null, null, null, true);
 			}
 		}
 
@@ -357,7 +370,10 @@ class Blackjack extends Rooms.RoomGame {
 		player.status = 'stand';
 		let cards = '';
 		for (let card of player.cards) cards += `[${card}] `;
-		this.display(Chat.html`<br /><strong>${player.name}</strong> <u>stands</u> with ${cards} (${player.points})`, null, player.name);
+		let turnLine = Chat.html`<br /><strong>${player.name}</strong> <u>stands</u> with ${cards} (${player.points}${player.points === 21 ? ' - blackjack!' : ''})`;
+
+		this.turnLog += turnLine;
+		this.display(turnLine, null, player.name);
 		this.clear();
 
 		this.next();
@@ -379,32 +395,39 @@ class Blackjack extends Rooms.RoomGame {
 
 		if (player.cards.length < 3) return;
 
-		if (player.cards.length > 2) this.display(Chat.html`<br /><strong>${player.name}</strong> <u>hit</u> and received [${player.cards[player.cards.length - 1]}] (${player.points})`, null, player.name);
+		let turnLine = Chat.html`<br /><strong>${player.name}</strong> <u>hit</u> and received [${player.cards[player.cards.length - 1]}] (${player.points})`;
+		this.turnLog += turnLine;
+		if (player.cards.length > 2) this.display(turnLine, null, player.name);
 
-		if (user === 'dealer') {
+		if (player === this.dealer) {
 			if (player.points > 21) {
 				let cards = '';
 				for (let card of player.cards) cards += `[${card}] `;
-				this.display(Chat.html`<br /><strong>${this.dealer.name}</strong> has <u>busted</u> with ${cards} (${player.points})`);
+				let turnLine = Chat.html`<br /><strong>${this.dealer.name}</strong> has <u>busted</u> with ${cards} (${player.points})`;
+				this.turnLog += turnLine;
+				this.display(turnLine);
 				this.end();
 				return;
 			} else if (player.points === 21) {
-				this.display(`<br /><strong>${this.dealer.name}</strong> has blackjack!`);
+				let turnLine = Chat.html`<br /><strong>${this.dealer.name}</strong> has blackjack!`;
+				this.turnLog += turnLine;
+				this.display(turnLine);
 				this.end();
 				return;
 			}
-		}
-
-		if (player.points > 21) {
+		} else if (player.points > 21) {
 			player.status = 'bust';
 			let cards = '';
-			for (let card in player.cards) cards += `[${card}] `;
-			this.display(Chat.html`<br /><strong>${player.name}</strong> has <u>busted</u> with ${cards} (${player.points})`, null, player.name);
+			for (let card of player.cards) cards += `[${card}] `;
+			let turnLine = Chat.html`<br /><strong>${player.name}</strong> has <u>busted</u> with ${cards} (${player.points})`;
+			this.turnLog += turnLine;
+			this.display(turnLine, null, player.name);
 			this.clear();
-		}
-		if (player.points === 21) {
+		} else if (player.points === 21) {
 			player.status = 'stand';
-			this.display(Chat.html`<br /><strong>${player.name}</strong> has blackjack!`, null, player.name);
+			let turnLine = Chat.html`<br /><strong>${player.name}</strong> has blackjack!`;
+			this.turnLog += turnLine;
+			this.display(turnLine, null, player.name);
 			this.clear();
 		}
 		if (user !== 'dealer') this.playerTable[user].cards = player.cards;
@@ -443,7 +466,9 @@ class Blackjack extends Rooms.RoomGame {
 			} else if (this.dealer.points >= 17) {
 				let cards = '';
 				for (let card of this.dealer.cards) cards += `[${card}] `;
-				this.display(`<br /><strong>${this.dealer.name}</strong> <u>stands</u> with ${cards} (${this.dealer.points})`);
+				let turnLine = `<br /><strong>${this.dealer.name}</strong> <u>stands</u> with ${cards} (${this.dealer.points})`;
+				this.turnLog += turnLine;
+				this.display(turnLine);
 				this.end();
 			}
 			return;
@@ -456,7 +481,7 @@ class Blackjack extends Rooms.RoomGame {
 		let output = `|uhtml${this.playerTable[this.curUser].selfUhtml}|user-blackjack-${this.blackjackNumber}|<div class="infobox">`;
 		output += `It's your turn to move, ${this.playerTable[this.curUser].name}<br />`;
 		for (let card of this.playerTable[this.curUser].cards) {
-			output += `<img src="${CARD_IMAGE_PATH}${toID(card).toUpperCase() + this.symbols[card.substr(-1)]}.png" title="${card}" height="100"/>' `;
+			output += this.generateCard(card);
 		}
 		output += `<br />Score: ${this.playerTable[this.curUser].points}${(this.playerTable[this.curUser].points === 21 ? ` (you have blackjack!)` : ``)}`;
 		output += `<br /><button class="button" name="send" value="/blackjack hit" title="Hit (get another card)">Hit</button> | <button class="button" name="send" value="/blackjack stand" title="Stand (just keep these cards)">Stand</button>`;
