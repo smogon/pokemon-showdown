@@ -4525,7 +4525,7 @@ let BattleMovedex = {
 		isNonstandard: "Custom",
 		pp: 1,
 		priority: 1,
-		flags: {protect: 1, mirror: 1},
+		flags: {},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
