@@ -402,6 +402,15 @@ exports.replsocketmode = 0o600;
 exports.disablehotpatchall = false;
 
 /**
+ * forcedpublicprefixes - user ID prefixes which will be forced to battle publicly.
+ * Battles involving user IDs which begin with one of the prefixes configured here
+ * will be unaffected by various battle privacy commands such as /modjoin, /hideroom
+ * or /ionext.
+ * @type {string[]}
+ */
+exports.forcedpublicprefixes = [];
+
+/**
  * permissions and groups:
  *   Each entry in `grouplist' is a seperate group. Some of the members are "special"
  *     while the rest is just a normal permission.

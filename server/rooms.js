@@ -1693,8 +1693,12 @@ let Rooms = Object.assign(getRoom, {
 				user.inviteOnlyNextBattle = false;
 			}
 		}
-		if (options.tour && !room.tour.modjoin) inviteOnly = [];
-		if (inviteOnly.length) {
+		const prefix = /** @type {RoomBattle} */(room.game).forcedPublic();
+		if (prefix && inviteOnly.length) {
+			room.isPrivate = false;
+			room.modjoin = null;
+			room.add(`|raw|<div class="broadcast-red"><strong>This battle is required to be public due to a player having a name prefixed by '${prefix}'.</div>`);
+		} else if (!options.tour || room.tour.modjoin) {
 			room.modjoin = '%';
 			room.isPrivate = 'hidden';
 			room.privacySetter = new Set(inviteOnly);

@@ -440,6 +440,7 @@ class User extends Chat.MessageContext {
 	lastPM: string;
 	team: string;
 	lastMatch: string;
+	forcedPublic?: string;
 
 	isSysop: boolean;
 	isStaff: boolean;
@@ -550,6 +551,15 @@ class User extends Chat.MessageContext {
 		this.statusType = 'online';
 		this.userMessage = '';
 		this.lastWarnedAt = 0;
+
+		if (Config.forcedpublicprefixes) {
+			for (const prefix of Config.forcedpublicprefixes) {
+				if (this.userid.startsWith(toID(prefix))) {
+					this.forcedPublic = prefix;
+					break;
+				}
+			}
+		}
 
 		// initialize
 		Users.add(this);
