@@ -228,7 +228,7 @@ class Blackjack extends Rooms.RoomGame {
 	createTimer(player) {
 		this.dqTimer = setTimeout(() => {
 			let cards = '';
-			for (let u in player.cards) cards += `[${player.cards[u]}] `;
+			for (let card of player.cards) cards += `[${card}] `;
 			player.status = 'stand';
 			this.display(Chat.html`<br /><strong>${player.name}</strong> <u>stands</u> with ${cards} (${player.points}) (Auto-stand: took too long to move)`, null, this.playerTable[this.curUser].name);
 			this.clear();
