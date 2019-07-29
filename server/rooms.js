@@ -1696,7 +1696,7 @@ let Rooms = Object.assign(getRoom, {
 		}
 		if (inviteOnly.length) {
 			const prefix = battle.forcedPublic();
-			if (prefix && battle.rated) {
+			if (prefix) {
 				room.isPrivate = false;
 				room.modjoin = null;
 				room.add(`|raw|<div class="broadcast-red"><strong>This battle is required to be public due to a player having a name prefixed by '${prefix}'.</div>`);
