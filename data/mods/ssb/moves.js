@@ -514,9 +514,10 @@ let BattleMovedex = {
 
 			const format = this.getFormat();
 			effect = this.effect;
+			target.setAbility(set.ability, target);
 			// Temporarly override effect so that the ability end message is not displayed
 			this.effect = /** @type {Effect} */ ({id: ''});
-			target.formeChange(pokemon.template, move, true);
+			target.formeChange(pokemon.template, this.getAbility(set.ability), true);
 			this.effect = effect;
 			if (format && format.onSwitchIn) format.onSwitchIn.call(this, target);
 			this.add('-message', `${oldName} was sent to the distortion world and replaced with somebody else!`);
@@ -1376,7 +1377,7 @@ let BattleMovedex = {
 		isNonstandard: "Custom",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1},
+		flags: {protect: 1, authentic: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1997,7 +1998,7 @@ let BattleMovedex = {
 		onHit(target, source, move) {
 			this.boost({atk: 2}, source, source);
 			target.trySetStatus('par', source);
-			target.tryTrap();
+			return target.addVolatile('trapped', source, move, 'trapper');
 		},
 		secondary: null,
 		target: "normal",
@@ -3580,17 +3581,20 @@ let BattleMovedex = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, "Revelation Dance", target);
 		},
-		self: {
-			boosts: {
-				accuracy: 1,
+		secondaries: [
+			{
+				chance: 50,
+				self: {
+					boosts: {atk: 1},
+				},
 			},
-		},
-		secondary: {
-			chance: 50,
-			self: {
-				boosts: {atk: 1},
-			},
-		},
+			{
+				chance: 100,
+				self: {
+					boosts: {accuracy: 1},
+				}
+			}
+		],
 		target: "normal",
 		type: "Normal",
 	},

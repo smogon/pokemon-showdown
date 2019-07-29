@@ -112,12 +112,11 @@ let BattleScripts = {
 		let altForme = pokemon.baseTemplate.otherFormes && this.getTemplate(pokemon.baseTemplate.otherFormes[0]);
 		let item = pokemon.getItem();
 		if (altForme && altForme.isMega && altForme.requiredMove && pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) return altForme.species;
-		if (!Array.isArray(item.megaStone) && item.megaEvolves !== pokemon.baseTemplate.baseSpecies || item.megaStone === pokemon.species) {
+		if (item.megaEvolves !== pokemon.baseTemplate.species || (Array.isArray(item.megaStone) && item.megaStone.includes(pokemon.species)) || (typeof item.megaStone === 'string' && item.megaStone === pokemon.species)) {
 			return null;
 		}
 		if (Array.isArray(item.megaStone)) {
-			if (item.megaStone.includes(pokemon.species)) return null;
-			return item.megaStone[Math.floor(this.random() * item.megaStone.length)];
+			return item.megaStone[this.random(item.megaStone.length)];
 		}
 		return item.megaStone;
 	},

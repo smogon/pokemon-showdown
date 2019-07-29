@@ -770,8 +770,9 @@ let BattleAbilities = {
 	},
 	// Pirate Princess
 	acidrain: {
+		desc: "On switch-in, this Pokemon summons Acid Rain.",
 		shortDesc: "On switch-in, this Pokemon summons Acid Rain.",
-		onStart(source) {
+		onStart() {
 			this.field.setWeather('acidrain');
 		},
 		id: "acidrain",

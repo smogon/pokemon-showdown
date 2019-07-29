@@ -1082,7 +1082,7 @@ let BattleStatuses = {
 			this.add(`c|%Pirate Princess|You will always remember this as the day that you almost caught Captain Ja- Pirate Princess!`);
 		},
 		onFaint() {
-			this.add(`c|%Pirate Princesse|Erm… Parley?`);
+			this.add(`c|%Pirate Princess|Erm… Parley?`);
 		},
 	},
 	pluviometer: {
@@ -1704,7 +1704,7 @@ let BattleStatuses = {
 	},
 	// Custom Acid Rain weather for Pirate Princess
 	acidrain: {
-		name: 'Acid Rain',
+		name: 'AcidRain',
 		id: 'acidrain',
 		num: 0,
 		effectType: 'Weather',
@@ -1716,11 +1716,16 @@ let BattleStatuses = {
 			}
 		},
 		onStart(battle, source, effect) {
-			this.add('-weather', 'Acid Rain');
+			if (effect && effect.effectType === 'Ability') {
+				if (this.gen <= 5) this.effectData.duration = 0;
+				this.add('-weather', 'AcidRain', '[from] ability: ' + effect, '[of] ' + source);
+			} else {
+				this.add('-weather', 'AcidRain');
+			}
 		},
 		onResidualOrder: 1,
 		onResidual() {
-			this.add('-weather', 'Acid Rain', '[upkeep]');
+			this.add('-weather', 'AcidRain', '[upkeep]');
 			if (this.field.isWeather('acidrain')) this.eachEvent('Weather');
 		},
 		onWeather(target) {
