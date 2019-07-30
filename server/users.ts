@@ -526,6 +526,7 @@ class User extends Chat.MessageContext {
 		this.lastPM = '';
 		this.team = '';
 		this.lastMatch = '';
+		this.forcedPublic = null;
 
 		// settings
 		this.isSysop = false;
