@@ -999,8 +999,8 @@ class RoomBattle extends RoomGames.RoomGame {
 
 	forcedPublic() {
 		if (!this.rated) return;
-		for (const userid in this.playerTable) {
-			const user = Users(userid);
+		for (const player of this.players) {
+			const user = player.getUser();
 			if (user && user.forcedPublic) return user.forcedPublic;
 		}
 	}
