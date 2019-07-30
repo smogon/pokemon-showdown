@@ -3133,7 +3133,7 @@ let BattleMovedex = {
 			target.statusData.time = 3;
 			target.statusData.startTime = 3;
 			this.heal(target.maxhp); // Aesthetic only as the healing happens after you fall asleep in-game
-			this.boost({atk: 1, spa: 1}, target, source);
+			this.boost({def: 1, spd: 1}, target, source);
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, "Rest", source);
