@@ -3592,8 +3592,8 @@ let BattleMovedex = {
 				chance: 100,
 				self: {
 					boosts: {accuracy: 1},
-				}
-			}
+				},
+			},
 		],
 		target: "normal",
 		type: "Normal",
