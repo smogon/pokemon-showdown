@@ -168,6 +168,8 @@ let BattleStatuses = {
 		noCopy: true,
 		onStart() {
 			this.add(`c|&Anubis|hi ur qt`);
+			// In loving memory of the SSB programming team's sanity.
+			if (this.random(300) === 272) this.add(`c|&HoeenHero|Anubis's set is OP against programmer sanity.`);
 		},
 		onSwitchOut() {
 			this.add(`c|&Anubis|brb making coffee`);

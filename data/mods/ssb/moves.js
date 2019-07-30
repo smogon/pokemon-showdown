@@ -510,6 +510,12 @@ let BattleMovedex = {
 			target.id = pokemon.side.id + ": " + pokemon.name;
 			// @ts-ignore Read only property needs to be written to for this to work
 			target.fullname = pokemon.side.id + ": " + pokemon.name;
+			// @ts-ignore Read only property needs to be written to for this to work (Prevent pokemon other than Level 51 from being above level 100)
+			target.level = 100;
+			target.set.level = 100;
+			// @ts-ignore Read only property needs to be written to for this to work (Prevent pokemon other than Level 51 from being above level 100)
+			target.side.active[0].level = 100;
+			target.side.active[0].set.level = 100;
 			this.add('replace', target, pokemon.getDetails, target.hp / target.maxhp); // name change
 
 			const format = this.getFormat();
@@ -519,6 +525,12 @@ let BattleMovedex = {
 			this.effect = /** @type {Effect} */ ({id: ''});
 			target.formeChange(pokemon.template, this.getAbility(set.ability), true);
 			this.effect = effect;
+
+			target.side.pokemon[0].canMegaEvo = this.canMegaEvo(pokemon);
+			// @ts-ignore Read only property needs to be written to for this to work
+			target.side.active[0].species = pokemon.species;
+			target.side.active[0].canMegaEvo = this.canMegaEvo(target.side.active[0]);
+
 			if (format && format.onSwitchIn) format.onSwitchIn.call(this, target);
 			this.add('-message', `${oldName} was sent to the distortion world and replaced with somebody else!`);
 			for (let stat of Object.keys(target.boosts)) {
