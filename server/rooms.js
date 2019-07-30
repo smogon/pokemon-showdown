@@ -1699,7 +1699,7 @@ let Rooms = Object.assign(getRoom, {
 			if (prefix) {
 				room.isPrivate = false;
 				room.modjoin = null;
-				room.add(`|raw|<div class="broadcast-red"><strong>This battle is required to be public due to a player having a name prefixed by '${prefix}'.</div>`);
+				room.add(`|raw|<div class="broadcast-blue"><strong>This battle is required to be public due to a player having a name prefixed by '${prefix}'.</div>`);
 			} else if (!options.tour || room.tour.modjoin) {
 				room.modjoin = '%';
 				room.isPrivate = 'hidden';

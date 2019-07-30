@@ -72,7 +72,7 @@ function move(user: User, newUserid: ID) {
 	user.userid = newUserid;
 	users.set(newUserid, user);
 
-	user.forcedPublic = undefined;
+	user.forcedPublic = null;
 	if (Config.forcedpublicprefixes) {
 		for (const prefix of Config.forcedpublicprefixes) {
 			if (user.userid.startsWith(toID(prefix))) {
@@ -450,7 +450,7 @@ class User extends Chat.MessageContext {
 	lastPM: string;
 	team: string;
 	lastMatch: string;
-	forcedPublic?: string;
+	forcedPublic: string | null;
 
 	isSysop: boolean;
 	isStaff: boolean;
