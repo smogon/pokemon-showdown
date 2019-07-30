@@ -796,39 +796,6 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Bug",
 	},
-	// Bhris Brown
-	finalimpact: {
-		basePower: 85,
-		accuracy: 100,
-		category: "Physical",
-		desc: "This move summons Rain Dance and boosts the user's Defense by one stage.",
-		shortDesc: "User's Def +1. Summons Rain Dance.",
-		id: "finalimpact",
-		name: "Final Impact",
-		isNonstandard: "Custom",
-		pp: 5,
-		priority: 0,
-		flags: {mirror: 1, protect: 1, contact: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Meteor Mash', target);
-		},
-		onAfterMoveSecondarySelf() {
-			this.field.setWeather('raindance');
-		},
-		secondary: {
-			chance: 100,
-			self: {
-				boosts: {
-					def: 1,
-				},
-			},
-		},
-		target: "normal",
-		type: "Fighting",
-	},
 	// biggie
 	foodrush: {
 		accuracy: 100,

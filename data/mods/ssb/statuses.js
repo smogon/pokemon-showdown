@@ -270,18 +270,6 @@ let BattleStatuses = {
 			this.add(`c|@Beowulf|BUZZ BUZZ BUZZ BUZZ`);
 		},
 	},
-	bhrisbrown: {
-		noCopy: true,
-		onStart() {
-			this.add(`c|+Bhris Brown|Never send a boy to do a mans job`);
-		},
-		onSwitchOut() {
-			this.add(`c|+Bhris Brown|Goddamit Nappa...`);
-		},
-		onFaint() {
-			this.add(`c|+Bhris Brown|There is one thing I'd like to know...tell me. Will I meet that clown Kakarot in the other world?`);
-		},
-	},
 	biggie: {
 		noCopy: true,
 		onStart() {

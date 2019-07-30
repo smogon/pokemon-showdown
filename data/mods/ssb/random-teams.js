@@ -156,12 +156,6 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Buzzing of the Swarm',
 				evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 			},
-			'Bhris Brown': {
-				species: 'Swampert', ability: 'Damp', item: 'Swampertite', gender: 'M',
-				moves: ['Waterfall', 'Ice Punch', 'Earthquake'],
-				signatureMove: 'Final Impact',
-				evs: {atk: 252, spd: 4, spe: 252}, nature: 'Adamant', shiny: true,
-			},
 			'biggie': {
 				species: 'Snorlax', ability: 'Fur Coat', item: 'Leftovers', gender: 'M',
 				moves: ['Diamond Storm', 'Knock Off', ['Drain Punch', 'Precipice Blades']],
