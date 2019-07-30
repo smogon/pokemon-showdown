@@ -726,7 +726,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 				species: 'Xatu', ability: 'Magic Bounce', item: 'Focus Sash', gender: 'M',
 				moves: ['Substitute', ['Roost', 'Strength Sap'], 'Thunder Wave'],
 				signatureMove: 'glitzer popping',
-				evs: {hp: 4, def: 252, spd: 252}, nature: 'Calm',
+				evs: {hp: 8, def: 252, spd: 248}, nature: 'Calm',
 			},
 			'xJoelituh': {
 				species: 'Marowak-Alola', ability: 'Club Expertise', item: 'Thick Club', gender: 'M',
