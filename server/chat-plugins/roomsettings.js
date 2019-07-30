@@ -330,7 +330,7 @@ exports.commands = {
 		} else if (room.battle) {
 			if (!this.can('editprivacy', null, room)) return;
 			const prefix = room.battle.forcedPublic();
-			if (prefix && !user.can('lock')) return this.errorReply(`This battle is required to be public due to a player having a name prefixed by '${prefix}'.`);
+			if (prefix && !user.can('editprivacy')) return this.errorReply(`This battle is required to be public due to a player having a name prefixed by '${prefix}'.`);
 		} else {
 			if (!this.can('makeroom')) return;
 		}
