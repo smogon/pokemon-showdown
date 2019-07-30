@@ -604,7 +604,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			},
 			'Schiavetto': {
 				species: 'Scolipede', ability: 'RVS', item: 'Mariahcarium Z', gender: 'M',
-				moves: ['Fell Stinger', 'Diamond Storm', ['Hammer Arm', 'Ice Hammer', 'Smart Strike']],
+				moves: ['Fell Stinger', 'Diamond Storm', ['Hammer Arm', 'Ice Hammer', 'Baneful Bunker']],
 				signatureMove: 'Poison Jab',
 				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 			},
