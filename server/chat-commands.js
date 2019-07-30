@@ -4105,6 +4105,13 @@ const commands = {
 		}));
 	},
 
+	hidereplay: function (target, room, user, connection) {
+		if (!room || !room.battle || !this.can('joinbattle', null, room)) return;
+		if (room.hideReplay) return this.errorReply(`The replay for this battle is already set to hidden.`);
+		room.hideReplay = true;
+		this.addModAction(`${user.name} hid the replay of this battle.`);
+	},
+
 	addplayer(target, room, user) {
 		if (!target) return this.parse('/help addplayer');
 		if (!room.battle) return this.errorReply("You can only do this in battle rooms.");
