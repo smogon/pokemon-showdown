@@ -1008,8 +1008,8 @@ const commands = {
 			if (!this.can('editroom', null, room)) return;
 		} else if (room.battle) {
 			if (!this.can('editprivacy', null, room)) return;
-			const prefix = room.forcedPublic();
-			if (prefix) return this.errorReply(`This battle is required to be public due to a player having a name prefixed by '${prefix}'.`);
+			const prefix = room.battle.forcedPublic();
+			if (prefix && !user.can('lock')) return this.errorReply(`This battle is required to be public due to a player having a name prefixed by '${prefix}'.`);
 		} else {
 			// registered chatrooms show up on the room list and so require
 			// higher permissions to modify privacy settings

@@ -71,6 +71,7 @@ function move(user: User, newUserid: ID) {
 	users.delete(user.userid);
 	user.userid = newUserid;
 	users.set(newUserid, user);
+	updateForcedPublic(user);
 
 	return true;
 }
@@ -84,6 +85,7 @@ function add(user: User) {
 
 	if (users.has(user.userid)) throw new Error(`userid taken: ${user.userid}`);
 	users.set(user.userid, user);
+	updateForcedPublic(user);
 }
 function deleteUser(user: User) {
 	prevUsers.delete('guest' + user.guestNum as ID);
@@ -93,7 +95,16 @@ function merge(user1: User, user2: User) {
 	prevUsers.delete(user2.userid);
 	prevUsers.set(user1.userid, user2.userid);
 }
-
+function updateForcedPublic(user: User) {
+	if (Config.forcedpublicprefixes) {
+		for (const prefix of Config.forcedpublicprefixes) {
+			if (user.userid.startsWith(toID(prefix))) {
+				user.forcedPublic = prefix;
+				break;
+			}
+		}
+	}
+}
 /**
  * Get a user.
  *
@@ -551,15 +562,6 @@ class User extends Chat.MessageContext {
 		this.statusType = 'online';
 		this.userMessage = '';
 		this.lastWarnedAt = 0;
-
-		if (Config.forcedpublicprefixes) {
-			for (const prefix of Config.forcedpublicprefixes) {
-				if (this.userid.startsWith(toID(prefix))) {
-					this.forcedPublic = prefix;
-					break;
-				}
-			}
-		}
 
 		// initialize
 		Users.add(this);
