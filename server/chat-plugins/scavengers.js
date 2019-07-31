@@ -1813,6 +1813,7 @@ exports.commands = {
 			"- /scav viewqueue - shows the list of queued scavenger hunts to be automatically started, as well as the option to remove hunts from the queue. (Requires: % @ * # & ~)",
 			"- /scav defaulttimer [value] - sets the default timer applied to automatically started hunts from the queue.",
 			"- /nexthunt - starts the next hunt in the queue.",
+			"- /recycledhunts - Modify the database of recycled hunts and enable/disable autoqueing them. More detailed help can be found in /recycledhuntshelp",
 		].join('<br />');
 
 		const gamesCommands = [
