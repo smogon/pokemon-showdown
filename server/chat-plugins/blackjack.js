@@ -25,6 +25,8 @@ class Blackjack extends Rooms.RoomGame {
 		this.playerCap = 16;
 		this.minimumPlayers = 2;
 		this.playerScrollWheel = 4;
+		this.cardWidth = 50;
+		this.cardHeight = 85;
 
 		this.spectators = Object.create(null);
 		this.dealer = new BlackjackDealer();
@@ -254,7 +256,7 @@ class Blackjack extends Rooms.RoomGame {
 		if (value === 'Q') cardUI = 'Queen';
 		if (value === 'A') cardUI = 'Ace';
 		if (value === 'J') cardUI = 'Joker';
-		return `<div title="${cardUI} of ${symbol}" style="${red ? 'color: #992222; ' : 'color: #000000; '}border-radius: 6px; background-color: #ffffff; position: relative; font-size: 15px; display: inline-block; width: 60px; height: 100px; border: 1px solid #000000; padding: 2px 4px;">${value}<br /> ${card.substr(-1)}<br /><span style="padding: 2px 4px; position: absolute; bottom: 0; right: 0; transform: rotate(-180deg);">${value}<br />${card.substr(-1)}</span></div> `;
+		return `<div title="${cardUI} of ${symbol}" style="color: ${red ? '#992222' : '#000000'}; border-radius: 6px; background-color: #ffffff; position: relative; font-size: 14px; display: inline-block; width: ${this.cardWidth}px; height: ${this.cardHeight}px; border: 1px solid #000000; padding: 2px 4px;">${value}<br /> ${card.substr(-1)}<br /><span style="padding: 2px 4px; position: absolute; bottom: 0; right: 0; transform: rotate(-180deg);">${value}<br />${card.substr(-1)}</span></div> `;
 	}
 
 	/**
@@ -629,13 +631,13 @@ exports.commands = {
 	},
 	blackjackhelp: [
 		"/blackjack create - Creates a game of blackjack. Requires: % @ # & ~",
-		"/blackjack create [autostart] - Automatically creates a game of blackjack in [autostart] minutes. Requiers: % @ # & ~",
+		"/blackjack create [autostart] - Automatically creates a game of blackjack in [autostart] minutes. Requires: % @ # & ~",
 		"/blackjack join - Joins a game of blackjack.",
 		"/blackjack leave - Leaves a game of blackjack.",
 		"/blackjack spectate - Spectates a game of blackjack.",
 		"/blackjack unspectate - Stops spectating a game of blackjack.",
 		"/blackjack end - Ends a game of blackjack. Requires: % @ # & ~",
 		"/blackjack disable - Prevents games of blackjack from being made in the room. Requires: # & ~",
-		"/blackjack enable - Allows games of blackjack from being made in the room. Requires: # & ~",
+		"/blackjack enable - Allows games of blackjack to be made in the room. Requires: # & ~",
 	],
 };
