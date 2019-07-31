@@ -1693,6 +1693,9 @@ exports.commands = {
 	scavresetlb: 'scavengersresetlb',
 	scavengersresetlb: commands.resetladder,
 
+	recycledhunts: commands.recycledhunts,
+	recycledhuntshelp: commands.recycledhuntshelp,
+
 	scavrank: commands.rank,
 	scavladder: 'scavtop',
 	scavtop: commands.ladder,
