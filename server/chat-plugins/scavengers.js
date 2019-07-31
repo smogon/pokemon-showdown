@@ -25,6 +25,7 @@ const DEFAULT_TIMER_DURATION = 120;
 const DATA_FILE = 'config/chat-plugins/scavdata.json';
 const HOST_DATA_FILE = 'config/chat-plugins/scavhostdata.json';
 const PLAYER_DATA_FILE = 'config/chat-plugins/scavplayerdata.json';
+const DATABASE_FILE = 'config/chat-plugins/scavhunts.json';
 
 const SCAVENGE_REGEX = /^((?:\s)?(?:\/{2,}|[^\w/]+)|\s\/)?(?:\s)?(?:s\W?cavenge|s\W?cav(?:engers)? guess|d\W?t|d\W?ata|d\W?etails|g\W?(?:uess)?|v)\b/i; // a regex of some of all the possible slips for leaks.
 const FILTER_LENIENCY = 7;
@@ -32,6 +33,11 @@ const FILTER_LENIENCY = 7;
 const HISTORY_PERIOD = 6; // months
 
 const ScavengerGames = require("./scavenger-games");
+
+let scavengersData = {};
+try {
+	scavengersData = require(`../../${DATABASE_FILE}`);
+} catch (e) {}
 
 // convert points stored in the old format
 const scavsRoom = Rooms('scavengers');
@@ -214,6 +220,69 @@ function formatOrder(place) {
 	if (remainder === 2) return place + 'nd';
 	if (remainder === 3) return place + 'rd';
 	return place + 'th';
+}
+
+class ScavengerHuntDatabase {
+	static getRecycledHuntFromDatabase() {
+		if (!scavengersData.recycledHunts || scavengersData.recycledHunts.length === 0) {
+			return null;
+		}
+		// Return a random hunt from the database.
+		return scavengersData.recycledHunts[Math.floor(Math.random() * scavengersData.recycledHunts.length)];
+	}
+
+	static addRecycledHuntToDatabase(hosts, params) {
+		if (!scavengersData.recycledHunts) {
+			scavengersData.recycledHunts = [];
+		}
+
+
+		const huntSchema = {
+			hosts: hosts,
+			questions: [],
+			get fullText() {
+				return `${this.hosts.map(host => host.name).join(',')} | ${this.questions.map(question => `${question.text} | ${question.answers.join(';')}`).join(' | ')}`;
+			},
+		};
+
+		let questionSchema = {
+			text: '',
+			answers: [],
+			hints: [],
+		};
+
+		for (let i = 0; i < params.length; ++i) {
+			if (i % 2 === 0) {
+				questionSchema.text = params[i];
+			} else {
+				questionSchema.answers = params[i];
+				huntSchema.questions.push(questionSchema);
+				questionSchema = {
+					text: '',
+					answers: [],
+					hints: [],
+				};
+			}
+		}
+
+		scavengersData.recycledHunts.push(huntSchema);
+		FS(DATABASE_FILE).writeUpdate(() => JSON.stringify(scavengersData));
+	}
+
+	static removeRecycledHuntFromDatabase(index) {
+		scavengersData.recycledHunts.splice(index - 1, 1);
+		FS(DATABASE_FILE).writeUpdate(() => JSON.stringify(scavengersData));
+	}
+
+	static addHintToRecycledHunt(huntNumber, questionNumber, hint) {
+		scavengersData.recycledHunts[huntNumber - 1].questions[questionNumber - 1].hints.push(hint);
+		FS(DATABASE_FILE).writeUpdate(() => JSON.stringify(scavengersData));
+	}
+
+	static removeHintToRecycledHunt(huntNumber, questionNumber, hintNumber) {
+		scavengersData.recycledHunts[huntNumber - 1].questions[questionNumber - 1].hints.splice(hintNumber - 1);
+		FS(DATABASE_FILE).writeUpdate(() => JSON.stringify(scavengersData));
+	}
 }
 
 class ScavengerHunt extends Rooms.RoomGame {
