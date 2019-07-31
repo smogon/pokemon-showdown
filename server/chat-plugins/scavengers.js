@@ -485,6 +485,26 @@ class ScavengerHunt extends Rooms.RoomGame {
 			reset = true;
 		}
 
+		if (this.room.addRecycledHuntsToQueueAutomatically) {
+			if (!this.room.scavQueue) {
+				this.room.scavQueue = [];
+			}
+
+			const next = ScavengerHuntDatabase.getRecycledHuntFromDatabase();
+			const correctlyFormattedQuestions = next.questions.reduce((alreadyFormatted, questionObject) => {
+				alreadyFormatted.push(questionObject.text);
+				alreadyFormatted.push(questionObject.answers);
+				return alreadyFormatted;
+			}, []);
+			this.room.scavQueue.push({
+				hosts: next.hosts,
+				questions: correctlyFormattedQuestions,
+				staffHostId: 'scavengermanager',
+				staffHostName: 'Scavenger Manager',
+				gameType: 'unrated',
+			});
+		}
+
 		if (!reset) {
 			let sliceIndex = this.gameType === 'official' ? 5 : 3;
 
