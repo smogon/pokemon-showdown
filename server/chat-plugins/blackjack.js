@@ -480,7 +480,7 @@ class Blackjack extends Rooms.RoomGame {
 			while (this.playerTable[Object.keys(this.playerTable)[number]].status !== 'playing') number++;
 			this.curUser = Object.keys(this.playerTable)[number];
 		}
-		let output = `|uhtml${this.playerTable[this.curUser].selfUhtml}|user-blackjack-${this.blackjackNumber}|<div class="infobox">`;
+		let output = `|uhtml${this.playerTable[this.curUser].selfUhtml}|user-blackjack-${this.blackjackNumber}|<div class="infobox" style="line-height: 20px;">`;
 		output += `It's your turn to move, ${this.playerTable[this.curUser].name}<br />`;
 		for (let card of this.playerTable[this.curUser].cards) {
 			output += this.generateCard(card);
