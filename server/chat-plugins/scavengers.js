@@ -934,6 +934,7 @@ let commands = {
 	createmini: 'create',
 	forcecreate: 'create',
 	forcecreateunrated: 'create',
+	createrecycled: 'create',
 	create(target, room, user, connection, cmd) {
 		if (room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return this.errorReply("Scavenger hunts can only be created in the scavengers room.");
 		if (!this.can('mute', null, room)) return false;
@@ -947,13 +948,26 @@ let commands = {
 			gameType = 'mini';
 		} else if (cmd.includes('unrated')) {
 			gameType = 'unrated';
+		} else if (cmd.includes('recycled')) {
+			gameType = 'recycled';
 		}
 
 		// mini and officials can be started anytime
-		if (!cmd.includes('force') && ['regular', 'unrated'].includes(gameType) && room.scavQueue && room.scavQueue.length && !(room.game && room.game.scavParentGame)) return this.errorReply(`There are currently hunts in the queue! If you would like to start the hunt anyways, use /forcestart${gameType === 'regular' ? 'hunt' : gameType}.`);
+		if (!cmd.includes('force') && ['regular', 'unrated', 'recycled'].includes(gameType) && room.scavQueue && room.scavQueue.length && !(room.game && room.game.scavParentGame)) return this.errorReply(`There are currently hunts in the queue! If you would like to start the hunt anyways, use /forcestart${gameType === 'regular' ? 'hunt' : gameType}.`);
+
+		if (gameType === 'recycled') {
+			target = ScavengerHunt.getRecycledHuntFromDatabase().fullText;
+			if (!target) {
+				return this.errorReply("There are no hunts in the database.");
+			}
+		}
 
 		let [hostsArray, ...params] = target.split('|');
-		let hosts = ScavengerHunt.parseHosts(hostsArray.split(/[,;]/), room, gameType === 'official');
+		// A recycled hunt should list both its original creator and the staff who started it as its host.
+		if (gameType === 'recycled') {
+			hostsArray += `,${user.name}`;
+		}
+		const hosts = ScavengerHunt.parseHosts(hostsArray.split(/[,;]/), room, gameType === 'official' || gameType === 'recycled');
 		if (!hosts) return this.errorReply("The user(s) you specified as the host is not online, or is not in the room.");
 
 		params = ScavengerHunt.parseQuestions(params);
@@ -1705,6 +1719,7 @@ exports.commands = {
 	startofficialhunt: 'starthunt',
 	startminihunt: 'starthunt',
 	startunratedhunt: 'starthunt',
+	startrecycledhunt: 'starthunt',
 
 	forcestarthunt: 'starthunt',
 	forcestartunrated: 'starthunt',
