@@ -1675,7 +1675,7 @@ let commands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox([
 			"<b>Help for Recycled Hunts</b>",
-			"- addhunt &lt;Hunt Text[, hint for question 1 | another hint for question 1, ...]>: Adds a hunt to the database of recycled hunts.",
+			"- addhunt &lt;Hunt Text>: Adds a hunt to the database of recycled hunts.",
 			"- removehunt&lt;Hunt Number>: Removes a hunt form the database of recycled hunts.",
 			"- list: Shows a list of hunts in the database along with their questions and hints.",
 			"- addhint &lt;Hunt Number, Question Number, Hint Text>: Adds a hint to the specified question in the specified hunt.",
