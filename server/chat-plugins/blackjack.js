@@ -230,7 +230,7 @@ class Blackjack extends Rooms.RoomGame {
 			let cards = '';
 			for (let card of player.cards) cards += `[${card}] `;
 			player.status = 'stand';
-			this.display(Chat.html`<br /><strong>${player.name}</strong> <u>stands</u> with ${cards} (${player.points}) (Auto-stand: took too long to move)`, null, this.playerTable[this.curUser].name);
+			this.display(Chat.html`<br /><strong>${player.name}</strong> stands with ${cards} (${player.points}) (Auto-stand: took too long to move)`, null, this.playerTable[this.curUser].name);
 			this.clear();
 			this.next();
 		}, this.turnTimeoutMinutes * 60 * 1000);
@@ -370,7 +370,7 @@ class Blackjack extends Rooms.RoomGame {
 		player.status = 'stand';
 		let cards = '';
 		for (let card of player.cards) cards += `[${card}] `;
-		let turnLine = Chat.html`<br /><strong>${player.name}</strong> <u>stands</u> with ${cards} (${player.points}${player.points === 21 ? ' - blackjack!' : ''})`;
+		let turnLine = Chat.html`<br /><strong>${player.name}</strong> stands with ${cards} (${player.points}${player.points === 21 ? ' - blackjack!' : ''})`;
 
 		this.turnLog += turnLine;
 		this.display(turnLine, null, player.name);
@@ -395,7 +395,7 @@ class Blackjack extends Rooms.RoomGame {
 
 		if (player.cards.length < 3) return;
 
-		let turnLine = Chat.html`<br /><strong>${player.name}</strong> <u>hit</u> and received [${player.cards[player.cards.length - 1]}] (${player.points})`;
+		let turnLine = Chat.html`<br /><strong>${player.name}</strong> hit and received [${player.cards[player.cards.length - 1]}] (${player.points})`;
 		this.turnLog += turnLine;
 		if (player.cards.length > 2) this.display(turnLine, null, player.name);
 
@@ -403,7 +403,7 @@ class Blackjack extends Rooms.RoomGame {
 			if (player.points > 21) {
 				let cards = '';
 				for (let card of player.cards) cards += `[${card}] `;
-				let turnLine = Chat.html`<br /><strong>${this.dealer.name}</strong> has <u>busted</u> with ${cards} (${player.points})`;
+				let turnLine = Chat.html`<br /><strong>${this.dealer.name}</strong> has busted with ${cards} (${player.points})`;
 				this.turnLog += turnLine;
 				this.display(turnLine);
 				this.end();
@@ -419,7 +419,7 @@ class Blackjack extends Rooms.RoomGame {
 			player.status = 'bust';
 			let cards = '';
 			for (let card of player.cards) cards += `[${card}] `;
-			let turnLine = Chat.html`<br /><strong>${player.name}</strong> has <u>busted</u> with ${cards} (${player.points})`;
+			let turnLine = Chat.html`<br /><strong>${player.name}</strong> has busted with ${cards} (${player.points})`;
 			this.turnLog += turnLine;
 			this.display(turnLine, null, player.name);
 			this.clear();
@@ -466,7 +466,7 @@ class Blackjack extends Rooms.RoomGame {
 			} else if (this.dealer.points >= 17) {
 				let cards = '';
 				for (let card of this.dealer.cards) cards += `[${card}] `;
-				let turnLine = `<br /><strong>${this.dealer.name}</strong> <u>stands</u> with ${cards} (${this.dealer.points})`;
+				let turnLine = `<br /><strong>${this.dealer.name}</strong> stands with ${cards} (${this.dealer.points})`;
 				this.turnLog += turnLine;
 				this.display(turnLine);
 				this.end();
