@@ -1651,6 +1651,49 @@ let commands = {
 	},
 };
 
+const pages = {
+	recycledHunts(query, user, connection) {
+		this.title = 'Recycled Hunts';
+		let buf = "";
+		this.extractRoom();
+		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
+		if (!this.room.chatRoomData) return;
+		if (!this.can('mute', null, this.room)) return;
+		buf += `<div class="pad"><h2>List of recycled Scavenger hunts</h2>`;
+		buf += `<ol style="width: 90%;">`;
+		for (let i = 0; i < scavengersData.recycledHunts.length; ++i) {
+			buf += `<li>`;
+			buf += `<h4>By ${scavengersData.recycledHunts[i].hosts.map(host => host.name).join(', ')}</h4>`;
+			for (const question of scavengersData.recycledHunts[i].questions) {
+				buf += `<details>`;
+				buf += `<summary>${question.text}</summary>`;
+				buf += `<dl>`;
+				buf += `<dt>Answers:</dt>`;
+				for (const answer of question.answers) {
+					buf += `<dd>${answer}</dd>`;
+				}
+				buf += `</dl>`;
+
+				if (question.hints.length) {
+					buf += `<dl>`;
+					buf += `<dt>Hints:</dt>`;
+					for (const hint of question.hints) {
+						buf += `<dd>${hint}</dd>`;
+					}
+					buf += `</dl>`;
+				}
+				buf += `</details>`;
+			}
+			buf += `</li>`;
+		}
+		buf += `</ol>`;
+		buf += `</div>`;
+		return buf;
+	},
+};
+
+exports.pages = pages;
+
 exports.commands = {
 	// general
 	scav: 'scavengers',
