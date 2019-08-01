@@ -618,6 +618,7 @@ let Formats = [
 
 		mod: 'gen7',
 		ruleset: ['[Gen 7] Ubers'],
+		noChangeAbility: true,
 		onValidateTeam(team) {
 			/**@type {{[k: string]: boolean}} */
 			let nameTable = {};
@@ -672,6 +673,10 @@ let Formats = [
 					return ["" + template.species + " cannot cross evolve to " + crossTemplate.species + " because its " + stats[statid] + " would be too high."];
 				}
 			}
+
+			// Ability test
+			let ability = this.dex.getAbility(set.ability);
+			if ((ability.name !== 'Huge Power' && ability.name !== 'Pure Power' && ability.name !== 'Shadow Tag') || Object.values(template.abilities).includes(ability.name)) set.species = crossTemplate.species;
 
 			// @ts-ignore
 			set.template = template;
