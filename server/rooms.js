@@ -630,7 +630,7 @@ class GlobalRoom extends BasicRoom {
 		let skipCount = 0;
 		const [formatFilter, eloFilterString, usernameFilter] = filter.split(',');
 		const eloFilter = +eloFilterString;
-		if (this.battleCount > 150 && !formatFilter && !eloFilter) {
+		if (this.battleCount > 150 && !formatFilter && !eloFilter && !usernameFilter) {
 			skipCount = this.battleCount - 150;
 		}
 		for (const room of Rooms.rooms.values()) {
