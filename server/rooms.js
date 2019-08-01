@@ -651,7 +651,7 @@ class GlobalRoom extends BasicRoom {
 		let roomTable = /** @type {{[roomid: string]: {p1?: string, p2?: string, minElo?: 'tour' | number}}} */ ({});
 		for (let i = rooms.length - 1; i >= rooms.length - 100 && i >= 0; i--) {
 			let room = rooms[i];
-			/** @type {{p1?: string, p2?: string, minElo?: string | number}} */
+			/** @type {{p1?: string, p2?: string, minElo?: 'tour' | number}} */
 			let roomData = {};
 			if (room.active && room.battle) {
 				if (room.battle.p1) roomData.p1 = room.battle.p1.name;
