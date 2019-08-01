@@ -224,9 +224,6 @@ function formatOrder(place) {
 
 class ScavengerHuntDatabase {
 	static getRecycledHuntFromDatabase() {
-		if (!scavengersData || !scavengersData.recycledHunts || scavengersData.recycledHunts.length === 0) {
-			return null;
-		}
 		// Return a random hunt from the database.
 		return scavengersData.recycledHunts[Math.floor(Math.random() * scavengersData.recycledHunts.length)];
 	}
@@ -283,8 +280,15 @@ class ScavengerHuntDatabase {
 		scavengersData.recycledHunts[huntNumber - 1].questions[questionNumber - 1].hints.splice(hintNumber - 1);
 		FS(DATABASE_FILE).writeUpdate(() => JSON.stringify(scavengersData));
 	}
-}
 
+	static isEmpty() {
+		return scavengersData && scavengersData.recycledHunts && scavengersData.recycledHunts.length !== 0;
+	}
+
+	static hasHunt(hunt_number) {
+		return !this.isEmpty() && !isNaN(hunt_number) && hunt_number > 0 && hunt_number <= scavengersData.recycledHunts.length;
+	}
+}
 class ScavengerHunt extends Rooms.RoomGame {
 	constructor(room, staffHost, hosts, gameType, questions, parentGame) {
 		super(room);
@@ -485,7 +489,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 			reset = true;
 		}
 
-		if (this.room.addRecycledHuntsToQueueAutomatically) {
+		if (!ScavengerHuntDatabase.isEmpty() && this.room.addRecycledHuntsToQueueAutomatically) {
 			if (!this.room.scavQueue) {
 				this.room.scavQueue = [];
 			}
@@ -976,12 +980,20 @@ let commands = {
 		if (!cmd.includes('force') && ['regular', 'unrated', 'recycled'].includes(gameType) && room.scavQueue && room.scavQueue.length && !(room.game && room.game.scavParentGame)) return this.errorReply(`There are currently hunts in the queue! If you would like to start the hunt anyways, use /forcestart${gameType === 'regular' ? 'hunt' : gameType}.`);
 
 		if (gameType === 'recycled') {
-			target = ScavengerHuntDatabase.getRecycledHuntFromDatabase();
-			if (!target) {
+			if (ScavengerHuntDatabase.isEmpty()) {
 				return this.errorReply("There are no hunts in the database.");
 			}
 
-			target = target.fullText;
+			let hunt;
+			if (target) {
+				const huntNumber = parseInt(target);
+				if (!ScavengerHuntDatabase.hasHunt(huntNumber)) return this.errorReply("You specified an invalid hunt number.");
+				hunt = scavengersData.recycledHunts[huntNumber];
+			} else {
+				hunt = ScavengerHuntDatabase.getRecycledHuntFromDatabase();
+			}
+
+			target = hunt.fullText;
 		}
 
 		let [hostsArray, ...params] = target.split('|');
@@ -1162,7 +1174,7 @@ let commands = {
 			let next;
 			if (target) {
 				const huntNumber = parseInt(target);
-				if (isNaN(huntNumber) || huntNumber <= 0 || scavengersData.recycledHunts && huntNumber > scavengersData.recycledHunts.length) return this.errorReply("You specified an invalid hunt number.");
+				if (!ScavengerHuntDatabase.hasHunt(huntNumber)) return this.errorReply("You specified an invalid hunt number.");
 				next = scavengersData.recycledHunts[huntNumber];
 			} else {
 				next = ScavengerHuntDatabase.getRecycledHuntFromDatabase();
@@ -1655,7 +1667,7 @@ let commands = {
 		}
 
 		// The rest of the commands depend on there already being hunts in the database.
-		if (!scavengersData.recycledHunts) return this.errorReply("There are no hunts in the database.");
+		if (ScavengerHuntDatabase.isEmpty()) return this.errorReply("There are no hunts in the database.");
 
 
 		if (cmd === 'list') {
@@ -1683,7 +1695,7 @@ let commands = {
 		const [huntNumber, questionNumber, hintNumber] = params.map((param) => parseInt(param));
 		const cmdsNeedingHuntNumber = ['removehunt', 'removehint', 'addhint'];
 		if (cmdsNeedingHuntNumber.includes(cmd)) {
-			if (isNaN(huntNumber) || huntNumber <= 0 || huntNumber > scavengersData.recycledHunts.length) return this.errorReply("You specified an invalid hunt number.");
+			if (!ScavengerHuntDatabase.hasHunt(huntNumber)) return this.errorReply("You specified an invalid hunt number.");
 		}
 
 		const cmdsNeedingQuestionNumber = ['addhint', 'removehint'];
