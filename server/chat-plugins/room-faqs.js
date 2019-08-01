@@ -47,9 +47,8 @@ const commands = {
 		topic = toID(topic);
 		if (!(topic && rest.length)) return this.parse('/help roomfaq');
 		let text = rest.join(',').trim();
-		let filteredText = text.replace(/\[\[(?:([^<]+)\s<[^>]+>|([^\]]+))\]\]/g, (match, $1, $2) => $1 || $2);
 		if (topic.length > 25) return this.errorReply("FAQ topics should not exceed 25 characters.");
-		if (filteredText.length > 500) return this.errorReply("FAQ entries should not exceed 500 characters.");
+		if (Chat.stripFormatting(text).length > 500) return this.errorReply("FAQ entries should not exceed 500 characters.");
 
 		text = text.replace(/^>/, '&gt;');
 
