@@ -638,10 +638,11 @@ class GlobalRoom extends BasicRoom {
 			if (room.type !== 'battle') continue;
 			if (formatFilter && formatFilter !== room.format) continue;
 			if (eloFilter && (!room.rated || room.rated < eloFilter)) continue;
-			const p1userid = room.battle && room.battle.p1.userid;
-			const p2userid = room.battle && room.battle.p2.userid;
-			if (usernameFilter && ((p1userid && !p1userid.startsWith(usernameFilter)) && (p2userid && !p2userid.startsWith(usernameFilter)))) {
-				continue;
+			if (usernameFilter && room.battle) {
+				const p1userid = room.battle.p1.userid;
+				const p2userid = room.battle.p2.userid;
+				if (!p1userid || !p2userid) continue;
+				if (!p1userid.startsWith(usernameFilter) && !p2userid.startsWith(usernameFilter)) continue;
 			}
 			if (skipCount && skipCount--) continue;
 
