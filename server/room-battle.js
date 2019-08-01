@@ -997,6 +997,14 @@ class RoomBattle extends RoomGames.RoomGame {
 		return player;
 	}
 
+	forcedPublic() {
+		if (!this.rated) return;
+		for (const player of this.players) {
+			const user = player.getUser();
+			if (user && user.forcedPublic) return user.forcedPublic;
+		}
+	}
+
 	makePlayer(/** @type {User} */ user) {
 		const num = this.players.length + 1;
 		return new RoomBattlePlayer(user, this, num);

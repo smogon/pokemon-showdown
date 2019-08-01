@@ -72,6 +72,16 @@ function move(user: User, newUserid: ID) {
 	user.userid = newUserid;
 	users.set(newUserid, user);
 
+	user.forcedPublic = null;
+	if (Config.forcedpublicprefixes) {
+		for (const prefix of Config.forcedpublicprefixes) {
+			if (user.userid.startsWith(toID(prefix))) {
+				user.forcedPublic = prefix;
+				break;
+			}
+		}
+	}
+
 	return true;
 }
 function add(user: User) {
@@ -440,6 +450,7 @@ class User extends Chat.MessageContext {
 	lastPM: string;
 	team: string;
 	lastMatch: string;
+	forcedPublic: string | null;
 
 	isSysop: boolean;
 	isStaff: boolean;
@@ -515,6 +526,7 @@ class User extends Chat.MessageContext {
 		this.lastPM = '';
 		this.team = '';
 		this.lastMatch = '';
+		this.forcedPublic = null;
 
 		// settings
 		this.isSysop = false;
