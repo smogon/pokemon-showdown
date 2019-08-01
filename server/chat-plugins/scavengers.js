@@ -1634,9 +1634,11 @@ let commands = {
 		[cmd, target] = Chat.splitFirst(target, ' ');
 		cmd = toID(cmd);
 
-		if (cmd === '' || cmd === 'help') {
+		if (cmd === '' || cmd === 'help' || !['addhunt', 'list', 'removehunt', 'addhint', 'removehint', 'autostart'].includes(cmd)) {
 			return this.parse(`/recycledhuntshelp`);
-		} else if (cmd === 'addhunt') {
+		}
+
+		if (cmd === 'addhunt') {
 			if (!target) return this.errorReply(`Usage: ${cmd} Hunt Text`);
 
 			let [hostsArray, ...questions] = target.split('|');
@@ -1650,55 +1652,66 @@ let commands = {
 			return this.privateModAction(`A recycled hunt has been added to the database.`);
 		}
 
-		let params = target.split(',').map(param => param.trim()).filter(param => param !== '');
+		// The rest of the commands depend on there already being hunts in the database.
+		if (!scavengersData.recycledHunts) return this.errorReply("There are no hunts in the database.");
+
 
 		if (cmd === 'list') {
-			if (!scavengersData.recycledHunts) return this.errorReply('There are no hunts in the database.');
 			return this.parse(`/join view-recycledHunts-${room}`);
-		} else if (cmd === 'removehunt') {
-			if (!params) return this.errorReply(`Usage: ${cmd} hunt_number`);
+		}
 
-			const index = parseInt(params);
-			if (isNaN(index) || index <= 0 || scavengersData.recycledHunts && index > scavengersData.recycledHunts.length) return this.errorReply("You specified an invalid hunt to delete.");
-			ScavengerHuntDatabase.removeRecycledHuntFromDatabase(index);
-			return this.privateModAction(`Recycled hunt #${index} was removed from the database.`);
+		let params = target.split(',').map(param => param.trim()).filter(param => param !== '');
+
+		const usageMessages = {
+			'removehunt': 'Usage: removehunt hunt_number',
+			'addhint': 'Usage: addhint hunt number, question number, hint text',
+			'removehint': 'Usage: removehint hunt number, question number, hint text',
+			'autostart': 'Usage: autostart on/off',
+		};
+		if (!params) return this.errorReply(usageMessages[cmd]);
+
+		const numberOfRequiredParameters = {
+			'removehunt': 1,
+			'addhint': 3,
+			'removehint': 3,
+			'autostart': 1,
+		};
+		if (params.length < numberOfRequiredParameters[cmd]) return this.errorReply(usageMessages[cmd]);
+
+		const [huntNumber, questionNumber, hintNumber] = params.map((param) => parseInt(param));
+		const cmdsNeedingHuntNumber = ['removehunt', 'removehint', 'addhint'];
+		if (cmdsNeedingHuntNumber.includes(cmd)) {
+			if (isNaN(huntNumber) || huntNumber <= 0 || huntNumber > scavengersData.recycledHunts.length) return this.errorReply("You specified an invalid hunt number.");
+		}
+
+		const cmdsNeedingQuestionNumber = ['addhint', 'removehint'];
+		if (cmdsNeedingQuestionNumber.includes(cmd)) {
+			if (isNaN(questionNumber) || questionNumber <= 0 || questionNumber > scavengersData.recycledHunts[huntNumber - 1].questions.length) return this.errorReply("You specified an invalid question number.");
+		}
+
+		const cmdsNeedingHintNumber = ['removehint'];
+		if (cmdsNeedingHintNumber.includes(cmd)) {
+			if (isNaN(hintNumber) || hintNumber <= 0 || scavengersData.recycledHunts && hintNumber > scavengersData.recycledHunts[huntNumber - 1].questions[questionNumber - 1].hints.length) return this.errorReply("You specified an invalid hint number.");
+		}
+
+		if (cmd === 'removehunt') {
+			ScavengerHuntDatabase.removeRecycledHuntFromDatabase(huntNumber);
+			return this.privateModAction(`Recycled hunt #${huntNumber} was removed from the database.`);
 		} else if (cmd === 'addhint') {
-			if (!params) return this.errorReply(`Usage: ${cmd} hunt number, question number, hint text`);
-
-			if (params.length < 3) return this.errorReply(`Usage: ${cmd} hunt number, question number, hint text`);
-			const huntNumber = parseInt(params[0]);
-			const questionNumber = parseInt(params[1]);
 			const hintText = params[2];
-
-			if (isNaN(huntNumber) || huntNumber <= 0 || scavengersData.recycledHunts && huntNumber > scavengersData.recycledHunts.length) return this.errorReply("You specified an invalid hunt number.");
-			if (isNaN(questionNumber) || questionNumber <= 0 || scavengersData.recycledHunts && questionNumber > scavengersData.recycledHunts[huntNumber - 1].questions.length) return this.errorReply("You specified an invalid question number.");
-
 			ScavengerHuntDatabase.addHintToRecycledHunt(huntNumber, questionNumber, hintText);
 			return this.privateModAction(`Hint added to Recycled hunt #${huntNumber} question #${questionNumber}: ${hintText}.`);
 		} else if (cmd === 'removehint') {
-			if (!params) return this.errorReply(`Usage: ${cmd} hunt number, question number, hint number`);
-
-			if (params.length < 3) return this.errorReply(`Usage: ${cmd} hunt number, question number, hint number`);
-			const [huntNumber, questionNumber, hintNumber] = params.map(param => parseInt(param));
-
-			if (isNaN(huntNumber) || huntNumber <= 0 || scavengersData.recycledHunts && huntNumber > scavengersData.recycledHunts.length) return this.errorReply("You specified an invalid hunt number.");
-			if (isNaN(questionNumber) || questionNumber <= 0 || scavengersData.recycledHunts && questionNumber > scavengersData.recycledHunts[huntNumber - 1].questions.length) return this.errorReply("You specified an invalid question number.");
-			if (isNaN(hintNumber) || hintNumber <= 0 || scavengersData.recycledHunts && hintNumber > scavengersData.recycledHunts[huntNumber - 1].questions[questionNumber - 1].hints.length) return this.errorReply("You specified an invalid hint number.");
-
 			ScavengerHuntDatabase.removeHintToRecycledHunt(huntNumber, questionNumber, hintNumber);
 			return this.privateModAction(`Hint #${hintNumber} was removed from Recycled hunt #${huntNumber} question #${questionNumber}.`);
 		} else if (cmd === 'autostart') {
-			if (!params) return this.errorReply(`Usage: ${cmd} on/off`);
-			if (params[0] !== 'on' && params[0] !== 'off') return this.errorReply(`Usage: ${cmd} on/off`);
+			if (params[0] !== 'on' && params[0] !== 'off') return this.errorReply(usageMessages[cmd]);
 			if (params[0] === 'on' && room.addRecycledHuntsToQueueAutomatically || params[0] === 'off' && !room.addRecycledHuntsToQueueAutomatically) return this.errorReply(`Autostarting recycled hunts is already ${room.addRecycledHuntsToQueueAutomatically ? 'on' : 'off'}.`);
 			room.addRecycledHuntsToQueueAutomatically = !room.addRecycledHuntsToQueueAutomatically;
 			if (params[0] === 'on') {
 				this.parse("/scav queuerecycled");
 			}
 			return this.privateModAction(`Automatically adding recycled hunts to the queue is now ${room.addRecycledHuntsToQueueAutomatically ? 'on' : 'off'}`);
-		} else {
-			this.errorReply(`Invalid command.`);
-			return this.parse(`/recycledhuntshelp`);
 		}
 	},
 
