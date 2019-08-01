@@ -1683,8 +1683,9 @@ let Rooms = Object.assign(getRoom, {
 			roomTitle = `${p1name} vs. ${p2name}`;
 		}
 		const room = Rooms.createGameRoom(roomid, roomTitle, options);
+		const battle = new Rooms.RoomBattle(room, formatid, options);
 		// @ts-ignore TODO: make RoomBattle a subclass of RoomGame
-		room.game = new Rooms.RoomBattle(room, formatid, options);
+		room.game = battle;
 
 		let inviteOnly = (options.inviteOnly || []);
 		for (const user of players) {
@@ -1693,12 +1694,18 @@ let Rooms = Object.assign(getRoom, {
 				user.inviteOnlyNextBattle = false;
 			}
 		}
-		if (options.tour && !room.tour.modjoin) inviteOnly = [];
 		if (inviteOnly.length) {
-			room.modjoin = '%';
-			room.isPrivate = 'hidden';
-			room.privacySetter = new Set(inviteOnly);
-			room.add(`|raw|<div class="broadcast-red"><strong>This battle is invite-only!</strong><br />Users must be invited with <code>/invite</code> (or be staff) to join</div>`);
+			const prefix = battle.forcedPublic();
+			if (prefix) {
+				room.isPrivate = false;
+				room.modjoin = null;
+				room.add(`|raw|<div class="broadcast-blue"><strong>This battle is required to be public due to a player having a name prefixed by '${prefix}'.</div>`);
+			} else if (!options.tour || room.tour.modjoin) {
+				room.modjoin = '%';
+				room.isPrivate = 'hidden';
+				room.privacySetter = new Set(inviteOnly);
+				room.add(`|raw|<div class="broadcast-red"><strong>This battle is invite-only!</strong><br />Users must be invited with <code>/invite</code> (or be staff) to join</div>`);
+			}
 		}
 
 		for (const p of players) {

@@ -1008,6 +1008,8 @@ const commands = {
 			if (!this.can('editroom', null, room)) return;
 		} else if (room.battle) {
 			if (!this.can('editprivacy', null, room)) return;
+			const prefix = room.battle.forcedPublic();
+			if (prefix && !user.can('editprivacy')) return this.errorReply(`This battle is required to be public due to a player having a name prefixed by '${prefix}'.`);
 		} else {
 			// registered chatrooms show up on the room list and so require
 			// higher permissions to modify privacy settings
@@ -4101,6 +4103,13 @@ const commands = {
 			log: data,
 			id: room.id.substr(7),
 		}));
+	},
+
+	hidereplay(target, room, user, connection) {
+		if (!room || !room.battle || !this.can('joinbattle', null, room)) return;
+		if (room.hideReplay) return this.errorReply(`The replay for this battle is already set to hidden.`);
+		room.hideReplay = true;
+		this.addModAction(`${user.name} hid the replay of this battle.`);
 	},
 
 	addplayer(target, room, user) {

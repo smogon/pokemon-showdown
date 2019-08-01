@@ -296,6 +296,7 @@ exports.commands = {
 		} else {
 			user.inviteOnlyNextBattle = true;
 			user.update('inviteOnlyNextBattle');
+			if (user.forcedPublic) return this.errorReply(`Your next battle will be invite-only provided it is not rated, otherwise your '${user.forcedPublic}' prefix will force the battle to be public.`);
 			this.sendReply("Your next battle will be invite-only.");
 		}
 	},
@@ -328,6 +329,8 @@ exports.commands = {
 			if (!this.can('editroom', null, room)) return;
 		} else if (room.battle) {
 			if (!this.can('editprivacy', null, room)) return;
+			const prefix = room.battle.forcedPublic();
+			if (prefix && !user.can('editprivacy')) return this.errorReply(`This battle is required to be public due to a player having a name prefixed by '${prefix}'.`);
 		} else {
 			if (!this.can('makeroom')) return;
 		}
