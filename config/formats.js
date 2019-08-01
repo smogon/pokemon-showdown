@@ -722,8 +722,7 @@ let Formats = [
 			return mixedTemplate;
 		},
 		onBegin() {
-			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
-			for (const pokemon of allPokemon) {
+			for (const pokemon of this.getAllPokemon()) {
 				pokemon.baseTemplate = pokemon.template;
 			}
 		},
