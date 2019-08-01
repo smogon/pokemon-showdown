@@ -648,7 +648,7 @@ class GlobalRoom extends BasicRoom {
 			rooms.push(room);
 		}
 
-		let roomTable = /** @type {{[roomid: string]: {p1?: string, p2?: string, minElo?: string | number}}} */ ({});
+		let roomTable = /** @type {{[roomid: string]: {p1?: string, p2?: string, minElo?: 'tour' | number}}} */ ({});
 		for (let i = rooms.length - 1; i >= rooms.length - 100 && i >= 0; i--) {
 			let room = rooms[i];
 			/** @type {{p1?: string, p2?: string, minElo?: string | number}} */
