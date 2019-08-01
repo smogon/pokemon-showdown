@@ -4,6 +4,7 @@
 const FS = require(/** @type {any} */('../../.lib-dist/fs')).FS;
 
 const MINUTE = 60 * 1000;
+const PRENOM_BUMP_TIME = 2 * 60 * MINUTE;
 const ROOMIDS = ['thestudio', 'jubilifetvfilms', 'youtube', 'thelibrary', 'prowrestling'];
 
 /** @type {{[k: string]: ChatRoom}} */
@@ -70,6 +71,8 @@ class OtdHandler {
 		this.keys = keys;
 		this.keyLabels = keyLabels;
 		this.timeLabel = week ? 'Week' : 'Day';
+
+		this.lastPrenom = 0;
 
 		/** @type {AnyObject[]} */
 		this.winners = [];
@@ -156,7 +159,15 @@ class OtdHandler {
 
 		user.sendTo(this.room, `Your nomination for ${nomination} was successfully submitted.`);
 
-		this.display(!this.voting);
+		let updateOnly = !this.voting;
+		if (updateOnly) {
+			const now = Date.now();
+			if (now - this.lastPrenom > PRENOM_BUMP_TIME) {
+				updateOnly = false;
+				this.lastPrenom = now;
+			}
+		}
+		this.display(updateOnly);
 	}
 
 	generateNomWindow() {
