@@ -590,72 +590,136 @@ let Formats = [
 		column: 2,
 	},
 	{
-		name: "[Gen 7] Nature Swap",
-		desc: `Pok&eacute;mon have their base stats swapped depending on their nature.`,
+		name: "[Gen 7] Linked",
+		desc: `The first two moves in a Pok&eacute;mon's moveset are used simultaneously.`,
 		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3612727/">Nature Swap</a>`,
+			`&bullet; <a href="https://www.smogon.com/forums/threads/3627804/">Linked</a>`,
 		],
 
-		mod: 'gen7',
+		mod: 'linked',
 		ruleset: ['[Gen 7] OU'],
-		banlist: ['Blissey', 'Chansey', 'Cloyster', 'Hoopa-Unbound', 'Kyurem-Black', 'Stakataka'],
-		battle: {
-			natureModify(stats, set) {
-				let nature = this.getNature(set.nature);
-				let stat;
-				if (nature.plus) {
-					// @ts-ignore
-					stat = nature.plus;
-					// @ts-ignore
-					stats[stat] = Math.floor(stats[stat] * 1.1);
+		banlist: ['Chlorophyll', 'Sand Rush', 'Slush Rush', 'Surge Surfer', 'Swift Swim', 'Unburden', 'King\'s Rock', 'Razor Fang', 'Swampertite'],
+		restrictedMoves: ['Baneful Bunker', 'Bounce', 'Detect', 'Dig', 'Dive', 'Fly', 'Nature\'s Madness', 'Night Shade', 'Phantom Force', 'Protect', 'Seismic Toss', 'Shadow Force', 'Sky Drop', 'Spiky Shield', 'Super Fang'],
+		onValidateSet(set, format) {
+			const restrictedMoves = format.restrictedMoves || [];
+			let problems = [];
+			for (const [i, moveid] of set.moves.entries()) {
+				let move = this.getMove(moveid);
+				if ((i === 0 || i === 1) && restrictedMoves.includes(move.name)) {
+					problems.push(`${set.name || set.species}'s move ${move.name} cannot be linked.`);
 				}
-				return stats;
-			},
-		},
-		onModifyTemplate(template, target, source, effect) {
-			if (!target) return;
-			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
-			let nature = this.getNature(target.set.nature);
-			if (!nature.plus) return template;
-			let newStats = Object.assign({}, template.baseStats);
-			let swap = newStats[nature.plus];
-			// @ts-ignore
-			newStats[nature.plus] = newStats[nature.minus];
-			// @ts-ignore
-			newStats[nature.minus] = swap;
-			return Object.assign({}, template, {baseStats: newStats});
+			}
+			return problems;
 		},
 	},
 	{
-		name: "[Gen 7] Follow the Leader",
-		desc: `The first Pok&eacute;mon provides the moves and abilities for all other Pok&eacute;mon on the team.`,
-		threads: [
-			`&bullet; <a href="https://www.smogon.com/forums/threads/3603860/">Follow the Leader</a>`,
-		],
+		name: "[Gen 7] Cross Evolution",
+		threads: ["&bullet; <a href=\"https://www.smogon.com/forums/threads/3594854/\">Cross Evolution</a>"],
 
 		mod: 'gen7',
-		ruleset: ['[Gen 7] OU'],
-		banlist: ['Regigigas', 'Shedinja', 'Slaking', 'Smeargle', 'Imposter', 'Huge Power', 'Pure Power'],
+		ruleset: ['[Gen 7] Ubers'],
+		onValidateTeam(team) {
+			/**@type {{[k: string]: boolean}} */
+			let nameTable = {};
+			for (let i = 0; i < team.length; i++) {
+				let name = team[i].name;
+				if (name) {
+					if (nameTable[name]) {
+						return ["Your Pokémon must have different nicknames.", "(You have more than one " + name + ")"];
+					}
+					nameTable[name] = true;
+				}
+			}
+		},
 		checkLearnset(move, template, lsetData, set) {
 			// @ts-ignore
-			return set.follower ? null : this.checkLearnset(move, template, lsetData, set);
+			if (!set.template || !set.crossTemplate) return this.checkLearnset(move, template, lsetData, set);
+			// @ts-ignore
+			let problem = this.checkLearnset(move, set.template);
+			if (!problem) return null;
+			// @ts-ignore
+			if (!set.crossMovesLeft) return problem;
+			// @ts-ignore
+			if (this.checkLearnset(move, set.crossTemplate)) return problem;
+			// @ts-ignore
+			set.crossMovesLeft--;
+			return null;
 		},
 		validateSet(set, teamHas) {
-			if (!teamHas.leader) {
-				let problems = this.validateSet(set, teamHas);
-				teamHas.leader = set.species;
-				return problems;
+			let crossTemplate = this.dex.getTemplate(set.name);
+			let onChangeSet = this.dex.getFormat('Pokemon').onChangeSet;
+			let problems = onChangeSet ? onChangeSet.call(this.dex, set, this.format) : null;
+			if (problems && problems.length) return problems;
+			if (!crossTemplate.exists || crossTemplate.isNonstandard) return this.validateSet(set, teamHas);
+			let template = this.dex.getTemplate(set.species);
+			if (!template.exists || template.isNonstandard || template === crossTemplate) return this.validateSet(set, teamHas);
+			if (!template.nfe) return ["" + template.species + " cannot cross evolve because it doesn't evolve."];
+			if (crossTemplate.battleOnly || crossTemplate.isUnreleased || !crossTemplate.prevo) return ["" + template.species + " cannot cross evolve into " + crossTemplate.species + " because it isn't an evolution."];
+			if (template.species === 'Sneasel' || crossTemplate.species === 'Shedinja' || crossTemplate.species === 'Solgaleo' || crossTemplate.species === 'Lunala') return ["" + template.species + " cannot cross evolve into " + crossTemplate.species + " because it is banned."];
+			let crossPrevoTemplate = this.dex.getTemplate(crossTemplate.prevo);
+			if (!crossPrevoTemplate.prevo !== !template.prevo) return ["" + template.species + " cannot cross into " + crossTemplate.species + " because they are not consecutive evolutionary stages."];
+
+			// Make sure no stat is too high/low to cross evolve to
+			let stats = {'hp': 'HP', 'atk': 'Attack', 'def': 'Defense', 'spa': 'Special Attack', 'spd': 'Special Defense', 'spe': 'Speed'};
+			for (let statid in template.baseStats) {
+				// @ts-ignore
+				let evoStat = template.baseStats[statid] + crossTemplate.baseStats[statid] - crossPrevoTemplate.baseStats[statid];
+				if (evoStat < 1) {
+					// @ts-ignore
+					return ["" + template.species + " cannot cross evolve to " + crossTemplate.species + " because its " + stats[statid] + " would be too low."];
+				} else if (evoStat > 255) {
+					// @ts-ignore
+					return ["" + template.species + " cannot cross evolve to " + crossTemplate.species + " because its " + stats[statid] + " would be too high."];
+				}
 			}
-			let leader = this.dex.deepClone(set);
-			leader.species = teamHas.leader;
-			let problems = this.validateSet(leader, teamHas);
-			if (problems) return problems;
-			set.ability = this.dex.getTemplate(set.species || set.name).abilities['0'];
+
 			// @ts-ignore
-			set.follower = true;
+			set.template = template;
+			// @ts-ignore
+			set.crossTemplate = crossTemplate;
+			// @ts-ignore
+			set.crossMovesLeft = 2;
 			problems = this.validateSet(set, teamHas);
-			set.ability = leader.ability;
+			set.name = crossTemplate.species;
+			set.species = template.species;
 			return problems;
+		},
+		onModifyTemplate(template, target, effect) {
+			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
+			if (target.set.name === target.set.species) return;
+			let crossTemplate = this.getTemplate(target.set.name);
+			if (!crossTemplate.exists) return;
+			if (template.battleOnly || !template.nfe) return;
+			if (crossTemplate.battleOnly || crossTemplate.isUnreleased || !crossTemplate.prevo) return;
+			let crossPrevoTemplate = this.getTemplate(crossTemplate.prevo);
+			if (!crossPrevoTemplate.prevo !== !template.prevo) return;
+
+			let mixedTemplate = this.deepClone(template);
+			mixedTemplate.baseSpecies = mixedTemplate.species = template.species + '-' + crossTemplate.species;
+			mixedTemplate.weightkg = Math.max(0.1, +(template.weightkg + crossTemplate.weightkg - crossPrevoTemplate.weightkg).toFixed(1));
+			mixedTemplate.nfe = false;
+			mixedTemplate.evos = [];
+			mixedTemplate.eggGroups = crossTemplate.eggGroups;
+			mixedTemplate.abilities = crossTemplate.abilities;
+
+			for (let statid in template.baseStats) {
+				// @ts-ignore
+				mixedTemplate.baseStats[statid] = template.baseStats[statid] + crossTemplate.baseStats[statid] - crossPrevoTemplate.baseStats[statid];
+				// @ts-ignore
+				if (mixedTemplate.baseStats[statid] < 1 || mixedTemplate.baseStats[statid] > 255) return;
+			}
+
+			if (crossTemplate.types[0] !== crossPrevoTemplate.types[0]) mixedTemplate.types[0] = crossTemplate.types[0];
+			if (crossTemplate.types[1] !== crossPrevoTemplate.types[1]) mixedTemplate.types[1] = crossTemplate.types[1] || crossTemplate.types[0];
+			if (mixedTemplate.types[0] === mixedTemplate.types[1]) mixedTemplate.types.length = 1;
+
+			return mixedTemplate;
+		},
+		onBegin() {
+			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
+			for (let i = 0, len = allPokemon.length; i < len; i++) {
+				allPokemon[i].baseTemplate = allPokemon[i].template;
+			}
 		},
 	},
 	{
@@ -773,7 +837,7 @@ let Formats = [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3598418/">Camomons</a>`,
 		],
 		mod: 'gen7',
-		// searchShow: false,
+		searchShow: false,
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Dragonite', 'Kartana', 'Kyurem-Black', 'Shedinja'],
 		onModifyTemplate(template, target, source, effect) {
@@ -797,7 +861,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
-		searchShow: false,
+		// searchShow: false,
 		ruleset: ['[Gen 7] OU', 'STABmons Move Legality'],
 		banlist: ['Aerodactyl-Mega', 'Blacephalon', 'Kartana', 'Komala', 'Kyurem-Black', 'Porygon-Z', 'Silvally', 'Tapu Koko', 'Tapu Lele', 'Thundurus-Base', 'King\'s Rock', 'Razor Fang'],
 		restrictedMoves: ['Acupressure', 'Belly Drum', 'Chatter', 'Extreme Speed', 'Geomancy', 'Lovely Kiss', 'Shell Smash', 'Shift Gear', 'Spore', 'Thousand Arrows'],
@@ -810,7 +874,7 @@ let Formats = [
 		],
 
 		mod: 'gen7',
-		searchShow: false,
+		// searchShow: false,
 		ruleset: ['[Gen 7] OU'],
 		banlist: ['Damp Rock', 'Deep Sea Tooth', 'Eviolite'],
 		onModifyTemplate(template, target, source, effect) {
@@ -858,7 +922,7 @@ let Formats = [
 
 		mod: 'pic',
 		gameType: 'doubles',
-		// searchShow: false,
+		searchShow: false,
 		ruleset: ['[Gen 7] Doubles OU', 'Sleep Clause Mod'],
 		banlist: [
 			'Kangaskhanite', 'Mawilite', 'Medichamite',
