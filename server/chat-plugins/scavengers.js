@@ -36,7 +36,7 @@ const ScavengerGames = require("./scavenger-games");
 
 let scavengersData = {};
 try {
-	scavengersData = require(`../../${DATABASE_FILE}`);
+	scavengersData = require(`.././${DATABASE_FILE}`);
 } catch (e) {}
 
 // convert points stored in the old format
@@ -1142,25 +1142,53 @@ let commands = {
 	 */
 	queueunrated: 'queue',
 	queuerated: 'queue',
+	queuerecycled: 'queue',
 	queue(target, room, user) {
 		if (room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return this.errorReply("This command can only be used in the scavengers room.");
-		if (!target) {
+		if (!target && this.cmd !== 'queuerecycled') {
 			if (this.cmd === 'queue') return commands.viewqueue.call(this, target, room, user);
 			return this.parse('/scavhelp staff');
 		}
 
 		if (!this.can('mute', null, room)) return false;
 
-		let [hostsArray, ...params] = target.split('|');
-		let hosts = ScavengerHunt.parseHosts(hostsArray.split(/[,;]/), room);
-		if (!hosts) return this.errorReply("The user(s) you specified as the host is not online, or is not in the room.");
+		if (this.cmd === 'queuerecycled') {
+			if (!room.scavQueue) {
+				room.scavQueue = [];
+			}
 
-		params = ScavengerHunt.parseQuestions(params);
-		if (params.err) return this.errorReply(params.err);
+			let next;
+			if (target) {
+				const huntNumber = parseInt(target);
+				if (isNaN(huntNumber) || huntNumber <= 0 || scavengersData.recycledHunts && huntNumber > scavengersData.recycledHunts.length) return this.errorReply("You specified an invalid hunt number.");
+				next = scavengersData.recycledHunts[huntNumber];
+			} else {
+				next = ScavengerHuntDatabase.getRecycledHuntFromDatabase();
+			}
+			const correctlyFormattedQuestions = next.questions.reduce((alreadyFormatted, questionObject) => {
+				alreadyFormatted.push(questionObject.text);
+				alreadyFormatted.push(questionObject.answers);
+				return alreadyFormatted;
+			}, []);
+			room.scavQueue.push({
+				hosts: next.hosts,
+				questions: correctlyFormattedQuestions,
+				staffHostId: 'scavengermanager',
+				staffHostName: 'Scavenger Manager',
+				gameType: 'unrated',
+			});
+		} else {
+			let [hostsArray, ...params] = target.split('|');
+			let hosts = ScavengerHunt.parseHosts(hostsArray.split(/[,;]/), room);
+			if (!hosts) return this.errorReply("The user(s) you specified as the host is not online, or is not in the room.");
 
-		if (!room.scavQueue) room.scavQueue = [];
+			params = ScavengerHunt.parseQuestions(params);
+			if (params.err) return this.errorReply(params.err);
 
-		room.scavQueue.push({hosts: hosts, questions: params.result, staffHostId: user.userid, staffHostName: user.name, gameType: (this.cmd.includes('unrated') ? 'unrated' : 'regular')});
+			if (!room.scavQueue) room.scavQueue = [];
+
+			room.scavQueue.push({hosts: hosts, questions: params.result, staffHostId: user.userid, staffHostName: user.name, gameType: (this.cmd.includes('unrated') ? 'unrated' : 'regular')});
+		}
 		this.privateModAction(`(${user.name} has added a scavenger hunt to the queue.)`);
 
 		if (room.chatRoomData) {
@@ -1625,13 +1653,13 @@ let commands = {
 		let params = target.split(',').map(param => param.trim()).filter(param => param !== '');
 
 		if (cmd === 'list') {
-			if (!scavengersData.recycledHunts) return;
+			if (!scavengersData.recycledHunts) return this.errorReply('There are no hunts in the database.');
 			return this.parse(`/join view-recycledHunts-${room}`);
 		} else if (cmd === 'removehunt') {
 			if (!params) return this.errorReply(`Usage: ${cmd} hunt_number`);
 
 			const index = parseInt(params);
-			if (isNaN(index) || index <= 0 || index > scavengersData.recycledHunts.length) return this.errorReply("You specified an invalid hunt to delete.");
+			if (isNaN(index) || index <= 0 || scavengersData.recycledHunts && index > scavengersData.recycledHunts.length) return this.errorReply("You specified an invalid hunt to delete.");
 			ScavengerHuntDatabase.removeRecycledHuntFromDatabase(index);
 			return this.privateModAction(`Recycled hunt #${index} was removed from the database.`);
 		} else if (cmd === 'addhint') {
@@ -1642,8 +1670,8 @@ let commands = {
 			const questionNumber = parseInt(params[1]);
 			const hintText = params[2];
 
-			if (isNaN(huntNumber) || huntNumber <= 0 || huntNumber > scavengersData.recycledHunts.length) return this.errorReply("You specified an invalid hunt number.");
-			if (isNaN(questionNumber) || questionNumber <= 0 || questionNumber > scavengersData.recycledHunts[huntNumber - 1].questions.length) return this.errorReply("You specified an invalid question number.");
+			if (isNaN(huntNumber) || huntNumber <= 0 || scavengersData.recycledHunts && huntNumber > scavengersData.recycledHunts.length) return this.errorReply("You specified an invalid hunt number.");
+			if (isNaN(questionNumber) || questionNumber <= 0 || scavengersData.recycledHunts && questionNumber > scavengersData.recycledHunts[huntNumber - 1].questions.length) return this.errorReply("You specified an invalid question number.");
 
 			ScavengerHuntDatabase.addHintToRecycledHunt(huntNumber, questionNumber, hintText);
 			return this.privateModAction(`Hint added to Recycled hunt #${huntNumber} question #${questionNumber}: ${hintText}.`);
@@ -1653,9 +1681,9 @@ let commands = {
 			if (params.length < 3) return this.errorReply(`Usage: ${cmd} hunt number, question number, hint number`);
 			const [huntNumber, questionNumber, hintNumber] = params.map(param => parseInt(param));
 
-			if (isNaN(huntNumber) || huntNumber <= 0 || huntNumber > scavengersData.recycledHunts.length) return this.errorReply("You specified an invalid hunt number.");
-			if (isNaN(questionNumber) || questionNumber <= 0 || questionNumber > scavengersData.recycledHunts[huntNumber - 1].questions.length) return this.errorReply("You specified an invalid question number.");
-			if (isNaN(hintNumber) || hintNumber <= 0 || hintNumber > scavengersData.recycledHunts[huntNumber - 1].questions[questionNumber - 1].hints.length) return this.errorReply("You specified an invalid hint number.");
+			if (isNaN(huntNumber) || huntNumber <= 0 || scavengersData.recycledHunts && huntNumber > scavengersData.recycledHunts.length) return this.errorReply("You specified an invalid hunt number.");
+			if (isNaN(questionNumber) || questionNumber <= 0 || scavengersData.recycledHunts && questionNumber > scavengersData.recycledHunts[huntNumber - 1].questions.length) return this.errorReply("You specified an invalid question number.");
+			if (isNaN(hintNumber) || hintNumber <= 0 || scavengersData.recycledHunts && hintNumber > scavengersData.recycledHunts[huntNumber - 1].questions[questionNumber - 1].hints.length) return this.errorReply("You specified an invalid hint number.");
 
 			ScavengerHuntDatabase.removeHintToRecycledHunt(huntNumber, questionNumber, hintNumber);
 			return this.privateModAction(`Hint #${hintNumber} was removed from Recycled hunt #${huntNumber} question #${questionNumber}.`);
@@ -1664,6 +1692,9 @@ let commands = {
 			if (params[0] !== 'on' && params[0] !== 'off') return this.errorReply(`Usage: ${cmd} on/off`);
 			if (params[0] === 'on' && room.addRecycledHuntsToQueueAutomatically || params[0] === 'off' && !room.addRecycledHuntsToQueueAutomatically) return this.errorReply(`Autostarting recycled hunts is already ${room.addRecycledHuntsToQueueAutomatically ? 'on' : 'off'}.`);
 			room.addRecycledHuntsToQueueAutomatically = !room.addRecycledHuntsToQueueAutomatically;
+			if (params[0] === 'on') {
+				this.parse("/scav queuerecycled");
+			}
 			return this.privateModAction(`Automatically adding recycled hunts to the queue is now ${room.addRecycledHuntsToQueueAutomatically ? 'on' : 'off'}`);
 		} else {
 			this.errorReply(`Invalid command.`);
@@ -1810,6 +1841,7 @@ exports.commands = {
 			"- /scav setpoints [1st place], [2nd place], [3rd place], [4th place], [5th place], ... - sets the point values for the wins. Use `/scav setpoints` to view what the current point values are. (Requires: # & ~)",
 			"- /scav setblitz [value] ... - sets the blitz award to `value`. Use `/scav setblitz` to view what the current blitz value is. (Requires: # & ~)",
 			"- /scav queue(rated/unrated) <em>[host] | [hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em> - queues a scavenger hunt to be started after the current hunt is finished. (Requires: % @ * # & ~)",
+			"- /scav queuerecycled [number] - queues a recycled hunt from the database. If number is left blank, then a random hunt is queued.",
 			"- /scav viewqueue - shows the list of queued scavenger hunts to be automatically started, as well as the option to remove hunts from the queue. (Requires: % @ * # & ~)",
 			"- /scav defaulttimer [value] - sets the default timer applied to automatically started hunts from the queue.",
 			"- /nexthunt - starts the next hunt in the queue.",
