@@ -156,7 +156,7 @@ class OtdHandler {
 
 		user.sendTo(this.room, `Your nomination for ${nomination} was successfully submitted.`);
 
-		if (this.voting) this.display();
+		this.display(!this.voting);
 	}
 
 	generateNomWindow() {
@@ -166,7 +166,7 @@ class OtdHandler {
 			buffer += `<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:12pt;">Nominations for ${this.name} of the ${this.timeLabel} are in progress! Use <code>/${this.id} nom</code> to nominate a${['A', 'E', 'I', 'O', 'U'].includes(this.name[0]) ? 'n' : ''} ${this.name.toLowerCase()}!</p>`;
 			if (this.nominations.size) buffer += `<span style="font-weight:bold;">Nominations:</span>`;
 		} else {
-			buffer += `<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:10pt;">Pre-noms for ${this.name} of the ${this.timeLabel}:</p>`;
+			buffer += `<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:10pt;">Pre-noms for ${this.name} of the ${this.timeLabel}. Use <code>/${this.id} nom</code> to nominate a${['A', 'E', 'I', 'O', 'U'].includes(this.name[0]) ? 'n' : ''} ${this.name.toLowerCase()}:</p>`;
 		}
 
 		/** @type {string[]} */
@@ -187,8 +187,8 @@ class OtdHandler {
 		return buffer;
 	}
 
-	display() {
-		this.room.add(`|uhtml|otd|${this.generateNomWindow()}`);
+	display(update = false) {
+		this.room.add(`|uhtml${update ? 'change' : ''}|otd|${this.generateNomWindow()}`);
 	}
 
 	/**
