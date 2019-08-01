@@ -623,12 +623,12 @@ class GlobalRoom extends BasicRoom {
 	}
 
 	/**
-	 * @param {string} filter "formatfilter, elofilter"
+	 * @param {string} filter "formatfilter, elofilter, usernamefilter"
 	 */
 	getBattles(filter) {
 		let rooms = /** @type {GameRoom[]} */ ([]);
 		let skipCount = 0;
-		const [formatFilter, eloFilterString] = filter.split(',');
+		const [formatFilter, eloFilterString, usernameFilter] = filter.split(',');
 		const eloFilter = +eloFilterString;
 		if (this.battleCount > 150 && !formatFilter && !eloFilter) {
 			skipCount = this.battleCount - 150;
@@ -638,15 +638,21 @@ class GlobalRoom extends BasicRoom {
 			if (room.type !== 'battle') continue;
 			if (formatFilter && formatFilter !== room.format) continue;
 			if (eloFilter && (!room.rated || room.rated < eloFilter)) continue;
+			if (usernameFilter && room.battle) {
+				const p1userid = room.battle.p1.userid;
+				const p2userid = room.battle.p2.userid;
+				if (!p1userid || !p2userid) continue;
+				if (!p1userid.startsWith(usernameFilter) && !p2userid.startsWith(usernameFilter)) continue;
+			}
 			if (skipCount && skipCount--) continue;
 
 			rooms.push(room);
 		}
 
-		let roomTable = /** @type {{[roomid: string]: AnyObject}} */ ({});
+		let roomTable = /** @type {{[roomid: string]: {p1?: string, p2?: string, minElo?: 'tour' | number}}} */ ({});
 		for (let i = rooms.length - 1; i >= rooms.length - 100 && i >= 0; i--) {
 			let room = rooms[i];
-			/** @type {{p1?: string, p2?: string, minElo?: string | number}} */
+			/** @type {{p1?: string, p2?: string, minElo?: 'tour' | number}} */
 			let roomData = {};
 			if (room.active && room.battle) {
 				if (room.battle.p1) roomData.p1 = room.battle.p1.name;
