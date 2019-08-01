@@ -690,7 +690,7 @@ let Formats = [
 			return problems;
 		},
 		onModifyTemplate(template, target, source, effect) {
-			if (!effect || !target) return;
+			if (!target) return;
 			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
 			if (target.set.name === target.set.species) return;
 			let crossTemplate = this.getTemplate(target.set.name);
