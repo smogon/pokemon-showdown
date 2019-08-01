@@ -36,7 +36,7 @@ const ScavengerGames = require("./scavenger-games");
 
 let scavengersData = {};
 try {
-	scavengersData = require(`.././${DATABASE_FILE}`);
+	scavengersData = require(`../../${DATABASE_FILE}`);
 } catch (e) {}
 
 // convert points stored in the old format
@@ -224,7 +224,7 @@ function formatOrder(place) {
 
 class ScavengerHuntDatabase {
 	static getRecycledHuntFromDatabase() {
-		if (!scavengersData.recycledHunts || scavengersData.recycledHunts.length === 0) {
+		if (!scavengersData || !scavengersData.recycledHunts || scavengersData.recycledHunts.length === 0) {
 			return null;
 		}
 		// Return a random hunt from the database.
@@ -976,10 +976,12 @@ let commands = {
 		if (!cmd.includes('force') && ['regular', 'unrated', 'recycled'].includes(gameType) && room.scavQueue && room.scavQueue.length && !(room.game && room.game.scavParentGame)) return this.errorReply(`There are currently hunts in the queue! If you would like to start the hunt anyways, use /forcestart${gameType === 'regular' ? 'hunt' : gameType}.`);
 
 		if (gameType === 'recycled') {
-			target = ScavengerHunt.getRecycledHuntFromDatabase().fullText;
+			target = ScavengerHuntDatabase.getRecycledHuntFromDatabase();
 			if (!target) {
 				return this.errorReply("There are no hunts in the database.");
 			}
+
+			target = target.fullText;
 		}
 
 		let [hostsArray, ...params] = target.split('|');
