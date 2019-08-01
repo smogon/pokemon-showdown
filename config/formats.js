@@ -622,8 +622,8 @@ let Formats = [
 		onValidateTeam(team) {
 			/**@type {{[k: string]: boolean}} */
 			let nameTable = {};
-			for (let i = 0; i < team.length; i++) {
-				let name = team[i].name;
+			for (const set of team) {
+				let name = set.name;
 				if (name) {
 					if (nameTable[name]) {
 						return ["Your Pokémon must have different nicknames.", "(You have more than one " + name + ")"];
@@ -689,7 +689,8 @@ let Formats = [
 			set.species = template.species;
 			return problems;
 		},
-		onModifyTemplate(template, target, effect) {
+		onModifyTemplate(template, target, source, effect) {
+			if (!target) return;
 			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
 			if (target.set.name === target.set.species) return;
 			let crossTemplate = this.getTemplate(target.set.name);
@@ -721,9 +722,8 @@ let Formats = [
 			return mixedTemplate;
 		},
 		onBegin() {
-			let allPokemon = this.p1.pokemon.concat(this.p2.pokemon);
-			for (let i = 0, len = allPokemon.length; i < len; i++) {
-				allPokemon[i].baseTemplate = allPokemon[i].template;
+			for (const pokemon of this.getAllPokemon()) {
+				pokemon.baseTemplate = pokemon.template;
 			}
 		},
 	},
