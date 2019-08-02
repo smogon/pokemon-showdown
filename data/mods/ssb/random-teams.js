@@ -332,9 +332,9 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
 			'inactive': {
-				species: 'Dusknoir', ability: 'Soul Eater', item: 'Life Orb', gender: '',
+				species: 'Dusknoir', ability: 'Soul Eater', item: 'Dusknoirium Z', gender: '',
 				moves: ['Earthquake', 'Shadow Force', 'Shadow Sneak'],
-				signatureMove: 'Petrifying Gaze',
+				signatureMove: 'Mean Look',
 				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 			},
 			'irritated': {

@@ -1965,9 +1965,9 @@ let BattleMovedex = {
 		id: "petrifyinggaze",
 		name: "Petrifying Gaze",
 		isNonstandard: "Custom",
-		pp: 10,
+		pp: 1,
 		priority: 0,
-		flags: {reflectable: 1, mirror: 1},
+		flags: {},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1979,6 +1979,7 @@ let BattleMovedex = {
 			target.trySetStatus('par', source);
 			return target.addVolatile('trapped', source, move, 'trapper');
 		},
+		isZ: "dusknoiriumz",
 		secondary: null,
 		target: "normal",
 		type: "Ghost",

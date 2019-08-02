@@ -38,6 +38,18 @@ let BattleItems = {
 		gen: 7,
 		desc: "If held by a Golem with Rock Slide, it can use Rickrollout.",
 	},
+	// inactive
+	dusknoiriumz: {
+		id: "dusknoiriumz",
+		name: "Dusknoirium Z",
+		isNonstandard: "Custom",
+		onTakeItem: false,
+		zMove: "Petrifying Gaze",
+		zMoveFrom: "Mean Look",
+		zMoveUser: ["Dusknoir"],
+		gen: 7,
+		desc: "If held by a Dusknoir with Mean Look, it can use Petrifying Gaze.",
+	},
 	// Kris
 	thunderstone: {
 		inherit: true,
