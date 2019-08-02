@@ -634,6 +634,7 @@ let Formats = [
 					nameTable[name] = true;
 				}
 			}
+			if (!Object.getOwnPropertyNames(nameTable).length) return ["Cross Evolution works using nicknames - your team has exactly 0. (If this was intentional, add a nickname to one Pokémon that isn't the name of a Pokémon species.)"];
 		},
 		checkLearnset(move, template, lsetData, set) {
 			// @ts-ignore
