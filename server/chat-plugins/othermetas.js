@@ -378,7 +378,7 @@ const commands = {
 		if (!template.evos.length) return this.errorReply(`Error: ${template.species} does not evolve.`);
 		if (!crossTemplate.prevo) return this.errorReply(`Error: ${crossTemplate.species} does not have a prevolution.`);
 
-		let setStage = 1
+		let setStage = 1;
 		let crossStage = 1;
 		if (template.prevo) {
 			setStage++;
@@ -442,9 +442,9 @@ const commands = {
 		details['<font color="#686868">Does Not Evolve</font>'] = "";
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(mixedTemplate)}`);
 		this.sendReply('|raw|<font size="1">' + Object.keys(details).map(detail => {
-				if (details[detail] === '') return detail;
-				return '<font color="#686868">' + detail + ':</font> ' + details[detail];
-			}).join("&nbsp;|&ThickSpace;") + '</font>');
+			if (details[detail] === '') return detail;
+			return '<font color="#686868">' + detail + ':</font> ' + details[detail];
+		}).join("&nbsp;|&ThickSpace;") + '</font>');
 	},
 	crossevolvehelp: ["/crossevo <base pokemon>, <evolved pokemon> - Shows the type and stats for the Cross Evolved Pokemon."],
 };
