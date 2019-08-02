@@ -20,7 +20,7 @@ let BattleScripts = {
 		let target = this.getTarget(pokemon, zMove || moveOrMoveName, targetLoc);
 		let baseMove = this.getActiveMove(moveOrMoveName);
 		const pranksterBoosted = baseMove.pranksterBoosted;
-		if (!sourceEffect && baseMove.id !== 'struggle' && !zMove) {
+		if (baseMove.id !== 'struggle' && !zMove && !externalMove) {
 			let changedMove = this.runEvent('OverrideAction', pokemon, target, baseMove);
 			if (changedMove && changedMove !== true) {
 				baseMove = this.getActiveMove(changedMove);
