@@ -573,10 +573,10 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 			},
 			'Rage': {
-				species: 'Salamence', ability: 'Intimidate', item: 'Salamencite', gender: 'M',
-				moves: ['Extreme Speed', 'Thousand Arrows', 'Frustration'],
+				species: 'Salamence', ability: 'Aerilate', item: 'Leftovers', gender: 'M',
+				moves: ['Roost', 'Thousand Arrows', 'Double-Edge'],
 				signatureMove: 'Rageeeee',
-				evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', happiness: 0,
+				evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly',
 			},
 			'Raid': {
 				species: 'Moltres', ability: 'Tempest', item: 'Life Orb', gender: 'N',
