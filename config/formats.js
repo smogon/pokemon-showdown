@@ -1285,7 +1285,7 @@ let Formats = [
 		],
 
 		mod: 'gen2',
-		ruleset: ['Pokemon', 'Standard'],
+		ruleset: ['Pokemon', 'Standard', 'Blitz'],
 		banlist: ['Uber'],
 	},
 
