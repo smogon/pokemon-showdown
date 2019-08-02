@@ -88,6 +88,7 @@ class BasicRoom {
 		this.chatRoomData = null;
 		/** @type {boolean | 'hidden' | 'voice'} */
 		this.isPrivate = false;
+		this.hideReplay = false;
 		this.isPersonal = false;
 		/** @type {string | boolean} */
 		this.isHelp = false;
