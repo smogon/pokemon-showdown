@@ -782,6 +782,8 @@ class RoomBattle extends RoomGames.RoomGame {
 		if (parentGame && parentGame.onBattleWin) {
 			parentGame.onBattleWin(this.room, winnerid);
 		}
+		// If the room's replay was hidden, disable users from joining after the game is over
+		if (this.room.hideReplay) this.room.modjoin = '%';
 		this.room.update();
 	}
 	/**
