@@ -65,12 +65,6 @@ class RandomStaffBrosTeams extends RandomTeams {
 				signatureMove: 'Too Much Saws',
 				evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly',
 			},
-			'ACakeWearingAHat': {
-				species: 'Dunsparce', ability: 'Serene Grace', item: 'Leftovers', gender: 'M',
-				moves: ['Headbutt', 'Shadow Strike', 'Roost'],
-				signatureMove: 'Sparce Dance',
-				evs: {hp: 252, def: 4, spe: 252}, nature: 'Jolly',
-			},
 			'Aelita': {
 				species: 'Porygon-Z', ability: 'Protean', item: 'Life Orb', gender: 'F',
 				moves: [['Boomburst', 'Moonblast'], 'Blue Flare', 'Chatter'],
@@ -179,6 +173,12 @@ class RandomStaffBrosTeams extends RandomTeams {
 				moves: ['Scald', 'Slack Off', 'Psyshock'],
 				signatureMove: 'Wonder Trade',
 				evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold',
+			},
+			'Cake': {
+				species: 'Dunsparce', ability: 'Serene Grace', item: 'Leftovers', gender: 'M',
+				moves: ['Headbutt', 'Shadow Strike', 'Roost'],
+				signatureMove: 'Sparce Dance',
+				evs: {hp: 252, def: 4, spe: 252}, nature: 'Jolly',
 			},
 			'cant say': {
 				species: 'Aegislash', ability: 'Stance Change', item: ['Leftovers', 'Terrain Extender', 'Muscle Band'], gender: 'M',

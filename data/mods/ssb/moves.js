@@ -111,30 +111,6 @@ let BattleMovedex = {
 		target: "normal",
 		type: "Grass",
 	},
-	// ACakeWearingAHat
-	sparcedance: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		desc: "Boosts the user's Attack, Defense, and Speed by one stage.",
-		shortDesc: "+1 atk, def, and spe.",
-		id: "sparcedance",
-		name: "Sparce Dance",
-		isNonstandard: "Custom",
-		pp: 15,
-		priority: 0,
-		flags: {snatch: 1, mirror: 1, dance: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, "Quiver Dance", source);
-		},
-		boosts: {atk: 1, def: 1, spe: 1},
-		secondary: null,
-		target: "self",
-		type: "Normal",
-	},
 	// Aelita
 	energyfield: {
 		accuracy: 100,
@@ -990,6 +966,30 @@ let BattleMovedex = {
 		},
 		target: "self",
 		type: "Psychic",
+	},
+	// Cake
+	sparcedance: {
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		desc: "Boosts the user's Attack, Defense, and Speed by one stage.",
+		shortDesc: "+1 atk, def, and spe.",
+		id: "sparcedance",
+		name: "Sparce Dance",
+		isNonstandard: "Custom",
+		pp: 15,
+		priority: 0,
+		flags: {snatch: 1, mirror: 1, dance: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, "Quiver Dance", source);
+		},
+		boosts: {atk: 1, def: 1, spe: 1},
+		secondary: null,
+		target: "self",
+		type: "Normal",
 	},
 	// cant say
 	aesthetislash: {

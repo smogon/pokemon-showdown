@@ -45,33 +45,6 @@ let BattleStatuses = {
 			this.add(`c|+5gen|I'm not dead yet, just changing formes.`);
 		},
 	},
-	acakewearingahat: {
-		noCopy: true,
-		onStart(source) {
-			this.add(`c|+ACakeWearingAHat|h`);
-			if (source.illusion) return;
-			this.add('-start', source, 'typeadd', 'Ghost');
-		},
-		onSwitchOut(source) {
-			this.add(`c|+ACakeWearingAHat|${source.side.name} is a nerd`);
-		},
-		onFaint() {
-			this.add(`c|+ACakeWearingAHat|According to all known laws of aviation, there is no way that Dunsparce should be able to fly. Its wings are too small to get its fat little body off the ground. Dunsparce, of course, does not learn Fly for this reason. It does learn Roost, though. Cute li'l winged snake thing.`);
-		},
-		// Fat Snake Innate
-		onModifyDefPriority: 6,
-		onModifyDef(def, pokemon) {
-			if (!pokemon.transformed && !pokemon.illusion) {
-				return this.chainModify(1.5);
-			}
-		},
-		onModifySpDPriority: 6,
-		onModifySpD(spd, pokemon) {
-			if (!pokemon.transformed && !pokemon.illusion) {
-				return this.chainModify(1.5);
-			}
-		},
-	},
 	aelita: {
 		noCopy: true,
 		onStart() {
@@ -318,6 +291,33 @@ let BattleStatuses = {
 		},
 		onFaint() {
 			this.add(`c|~bumbadadabum|Who will lead my kingdom now?`);
+		},
+	},
+	cake: {
+		noCopy: true,
+		onStart(source) {
+			this.add(`c|+Cake|h`);
+			if (source.illusion) return;
+			this.add('-start', source, 'typeadd', 'Ghost');
+		},
+		onSwitchOut(source) {
+			this.add(`c|+Cake|${source.side.name} is a nerd`);
+		},
+		onFaint() {
+			this.add(`c|+Cake|According to all known laws of aviation, there is no way that Dunsparce should be able to fly. Its wings are too small to get its fat little body off the ground. Dunsparce, of course, does not learn Fly for this reason. It does learn Roost, though. Cute li'l winged snake thing.`);
+		},
+		// Fat Snake Innate
+		onModifyDefPriority: 6,
+		onModifyDef(def, pokemon) {
+			if (!pokemon.transformed && !pokemon.illusion) {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpDPriority: 6,
+		onModifySpD(spd, pokemon) {
+			if (!pokemon.transformed && !pokemon.illusion) {
+				return this.chainModify(1.5);
+			}
 		},
 	},
 	cantsay: {
