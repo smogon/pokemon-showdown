@@ -65,7 +65,10 @@ export class TeamValidator {
 				problems = problems.concat(setProblems);
 			}
 			if (removeNicknames) {
-				if (format.name !== '[Gen 7] Cross Evolution' || !dex.getTemplate(set.name).exists) {
+				let crossTemplate: Template;
+				if (format.name === '[Gen 7] Cross Evolution' && (crossTemplate = dex.getTemplate(set.name)).exists) {
+					set.name = crossTemplate.species;
+				} else {
 					set.name = dex.getTemplate(set.species).baseSpecies;
 				}
 			}
