@@ -286,7 +286,9 @@ exports.BattleScripts = {
 				// @ts-ignore
 				let linkedMoves = action.linked;
 				for (let i = linkedMoves.length - 1; i >= 0; i--) {
-					let pseudoAction = {choice: 'move', priority: action.priority, speed: action.speed, pokemon: action.pokemon, targetLoc: action.targetLoc, moveid: linkedMoves[i].id, move: linkedMoves[i], mega: action.mega};
+					const isValidTarget = this.validTargetLoc(action.targetLoc, action.pokemon, linkedMoves[i].target);
+					const targetLoc = isValidTarget ? action.targetLoc : this.resolveTarget(action.pokemon, linkedMoves[i]);
+					let pseudoAction = {choice: 'move', priority: action.priority, speed: action.speed, pokemon: action.pokemon, targetLoc: targetLoc, moveid: linkedMoves[i].id, move: linkedMoves[i], mega: action.mega};
 					// @ts-ignore
 					this.queue.unshift(pseudoAction);
 				}
