@@ -125,7 +125,7 @@ let BattlePokedex = {
 	// Overneat
 	absolmega: {
 		inherit: true,
-		abilities: {0: 'Tough Claws'},
+		abilities: {0: 'Filter'},
 		types: ['Dark', 'Fairy'],
 	},
 	// Pirate Princess
