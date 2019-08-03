@@ -699,10 +699,10 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 			},
 			'UnleashOurPassion': {
-				species: 'Stunfisk', ability: 'Teravolt', item: 'Lum Berry', gender: 'M',
-				moves: ['Earth Power', 'Shore Up', ['Surf', 'Giga Drain', 'Stealth Rock']],
-				signatureMove: 'Continuous 1v1',
-				evs: {hp: 252, spa: 200, spd: 56}, ivs: {atk: 0}, nature: 'Modest',
+				species: 'Durant', ability: 'Hustle', item: 'Choice Band', gender: 'M',
+				moves: ['Iron Head', ['Megahorn', 'Leech Life'], ['Wild Charge', 'Superpower']],
+				signatureMove: 'Quick Reload',
+				evs: {hp: 24, atk: 232, spe: 252}, nature: 'Jolly',
 			},
 			'vivalospride': {
 				species: 'Araquanid', ability: 'TRASH VIV WEBS', item: 'Wave Incense', gender: 'M',

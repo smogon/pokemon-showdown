@@ -4305,31 +4305,41 @@ let BattleMovedex = {
 		type: "Psychic",
 	},
 	// UnleashOurPassion
-	continuous1v1: {
-		accuracy: 90,
-		basePower: 120,
-		category: "Special",
-		desc: "Fully restores the user's HP if this move knocks out the target.",
-		shortDesc: "Fully restores user's HP if this move KOes the target.",
-		id: "continuous1v1",
-		name: "Continuous 1v1",
+	quickreload: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		desc: "Removes Reflect, Light Screen, Aurora Veil, Safeguard, Mist, Spikes, Toxic Spikes, Stealth Rock, and Sticky Web from both sides. The user switches out after damaging the target.",
+		shortDesc: "Clears all entry hazards, then switches.",
+		id: "quickreload",
+		name: "Quick Reload",
 		isNonstandard: "Custom",
 		pp: 15,
 		priority: 0,
-		flags: {protect: 1, mirror: 1},
+		flags: {mirror: 1, protect: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, "Discharge", target);
-			this.add('-anim', source, "First Impression", target);
+			this.add('-anim', source, "Defog", target);
+			this.add('-anim', source, "U-Turn", target);
 		},
-		onAfterMoveSecondarySelf(pokemon, target, move) {
-			if (!target || target.fainted || target.hp <= 0) this.heal(pokemon.maxhp, pokemon, pokemon, move);
+		onHit(target, source, move) {
+			let removeAll = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+			let silentRemove = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist'];
+			for (const sideCondition of removeAll) {
+				if (target.side.removeSideCondition(sideCondition)) {
+					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', target.side, this.getEffect(sideCondition).name, '[from] move: Quick Reload', '[of] ' + source);
+				}
+				if (source.side.removeSideCondition(sideCondition)) {
+					if (!(silentRemove.includes(sideCondition))) this.add('-sideend', source.side, this.getEffect(sideCondition).name, '[from] move: Quick Reload', '[of] ' + source);
+				}
+			}
 		},
+		selfSwitch: true,
 		secondary: null,
 		target: "normal",
-		type: "Electric",
+		type: "Bug",
 	},
 	// vivalospride
 	ceilingsabsent: {

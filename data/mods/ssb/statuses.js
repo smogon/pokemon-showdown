@@ -1485,13 +1485,13 @@ let BattleStatuses = {
 	unleashourpassion: {
 		noCopy: true,
 		onStart() {
-			this.add(`c|%UnleashOurPassion|1v1 me if real`);
+			this.add(`c|%UnleashOurPassion|Hi I'm here to participate in a totally serious conversation`);
 		},
 		onSwitchOut() {
-			this.add(`c|%UnleashOurPassion|Tfw you remember switching exists`);
+			this.add(`c|%UnleashOurPassion|Okay that's enough shitposting for now`);
 		},
 		onFaint() {
-			this.add(`c|%UnleashOurPassion|That's hax! You were supposed to miss`);
+			this.add(`c|%UnleashOurPassion|Fine I'll go back to work...`);
 		},
 	},
 	vivalospride: {
