@@ -356,8 +356,8 @@ let BattleAbilities = {
 	},
 	// deetah
 	radioactive: {
-		desc: "If this Pokemon is statused, its Attack is 1.5x; ignores burn halving physical damage. This Pokemon heals 1/8 of its max HP when poisoned.",
-		shortDesc: "1.5x Atk if statused. Heals 1/8 if poisoned.",
+		desc: "If this Pokemon is statused, its Attack is 1.5x; ignores burn halving physical damage. This Pokemon heals 1/8 of its max HP when poisoned. This Pokemon is immune to Ground-type moves.",
+		shortDesc: "1.5x Atk if statused. Heals 1/8 if poisoned. Ground immune.",
 		id: "radioactive",
 		name: "Radioactive",
 		isNonstandard: "Custom",
