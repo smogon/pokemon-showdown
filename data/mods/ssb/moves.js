@@ -1618,10 +1618,10 @@ let BattleMovedex = {
 	// Gallant Spear
 	stormassaultogs: {
 		accuracy: 90,
-		basePower: 20,
+		basePower: 25,
 		multihit: 3,
-		category: "Special",
-		desc: "Hits three times. Each hit has a 10% chance to drop the target's Special Defense, and a 10% chance to burn. Each hit is always a critical hit.If one of the hits breaks the target's substitute, it will take damage for the remaining hits.",
+		category: "Physical",
+		desc: "Hits three times. Each hit has a 10% chance to drop the target's Special Defense, and a 10% chance to burn. Each hit is always a critical hit. If one of the hits breaks the target's substitute, it will take damage for the remaining hits.",
 		shortDesc: "Hits 3 times in one turn. 10% to lower SpD. 10% to burn. Always crits.",
 		id: "stormassaultogs",
 		isNonstandard: "Custom",
@@ -1635,6 +1635,7 @@ let BattleMovedex = {
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Bullet Seed', target);
+			this.add('-anim', source, 'Magma Storm', target);
 		},
 		secondaries: [
 			{
@@ -1643,7 +1644,7 @@ let BattleMovedex = {
 			}, {
 				chance: 10,
 				boosts: {
-					spd: -1,
+					def: -1,
 				},
 			},
 		],

@@ -295,10 +295,10 @@ class RandomStaffBrosTeams extends RandomTeams {
 				evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
 			},
 			'Gallant Spear': {
-				species: 'Rapidash', ability: 'Trombe!', item: ['Eject Button', 'Choice Specs'], gender: 'M',
-				moves: [['Magma Storm', 'Fire Blast'], 'U-turn', ['Tri Attack', 'Recover']],
+				species: 'Rapidash', ability: 'Trombe!', item: ['Eject Button', 'Choice Band'], gender: 'M',
+				moves: ['High Horsepower', 'U-turn', 'Recover'],
 				signatureMove: 'Storm Assault OGs',
-				evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', shiny: true,
+				evs: {atk: 252, spd: 4, spe: 252}, nature: 'Jolly', shiny: true,
 			},
 			'grimAuxiliatrix': {
 				species: 'Aggron', ability: 'Sturdy', item: 'Aggronite', gender: '',
@@ -841,6 +841,7 @@ class RandomStaffBrosTeams extends RandomTeams {
 			if (name === 'Arsenal' && this.getItem(set.item).onPlate) {
 				set.species = 'Arceus-' + this.getItem(set.item).onPlate;
 			}
+			if (name === 'Gallant Spear' && set.item === 'Choice Band') set.moves[3] = 'Aqua Tail';
 			if (name === 'The Immortal' && set.item === 'Choice Scarf') set.moves[3] = 'Superpower';
 			if (name === 'irritated' && !set.moves.includes('Double Iron Bash')) set.moves[this.random(3)] = 'Double Iron Bash';
 			team.push(set);
