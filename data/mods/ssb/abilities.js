@@ -1102,7 +1102,10 @@ let BattleAbilities = {
 		desc: "This Pokemon's attacking stat is doubled while using a Water-type attack. If a Pokemon uses a Fire-type attack against this Pokemon, that Pokemon's attacking stat is halved when calculating the damage to this Pokemon. This Pokemon cannot be burned. Gaining this Ability while burned cures it. Sets Sticky Web on switching in.",
 		shortDesc: "User's Water power is 2x; can't be burned; Fire power is halved. Sets web.",
 		onStart(pokemon) {
-			this.useMove("stickyweb", pokemon);
+			if (!pokemon.m.stickyweb) {
+				this.useMove("stickyweb", pokemon);
+				pokemon.m.stickyweb = true;
+			}
 		},
 		onModifyAtkPriority: 5,
 		onSourceModifyAtk(atk, attacker, defender, move) {
