@@ -34,9 +34,9 @@ const HISTORY_PERIOD = 6; // months
 
 const ScavengerGames = require("./scavenger-games");
 
-let scavengersData = {};
+let scavengersData = {recycledHunts: []};
 try {
-	scavengersData = require(`../../${DATABASE_FILE}`);
+	scavengersData = JSON.parse(FS.readIfExistsSync(DATABASE_FILE));
 } catch (e) {}
 
 // convert points stored in the old format
@@ -229,17 +229,9 @@ class ScavengerHuntDatabase {
 	}
 
 	static addRecycledHuntToDatabase(hosts, params) {
-		if (!scavengersData.recycledHunts) {
-			scavengersData.recycledHunts = [];
-		}
-
-
 		const huntSchema = {
 			hosts: hosts,
 			questions: [],
-			get fullText() {
-				return `${this.hosts.map(host => host.name).join(',')} | ${this.questions.map(question => `${question.text} | ${question.answers.join(';')}`).join(' | ')}`;
-			},
 		};
 
 		let questionSchema = {
@@ -282,11 +274,15 @@ class ScavengerHuntDatabase {
 	}
 
 	static isEmpty() {
-		return scavengersData && scavengersData.recycledHunts && scavengersData.recycledHunts.length !== 0;
+		return scavengersData.recycledHunts.length === 0;
 	}
 
 	static hasHunt(hunt_number) {
-		return !this.isEmpty() && !isNaN(hunt_number) && hunt_number > 0 && hunt_number <= scavengersData.recycledHunts.length;
+		return !isNaN(hunt_number) && hunt_number > 0 && hunt_number <= scavengersData.recycledHunts.length;
+	}
+
+	static getFullTextOfHunt(hunt) {
+		return `${hunt.hosts.map(host => host.name).join(',')} | ${hunt.questions.map(question => `${question.text} | ${question.answers.join(';')}`).join(' | ')}`;
 	}
 }
 class ScavengerHunt extends Rooms.RoomGame {
@@ -495,11 +491,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 			}
 
 			const next = ScavengerHuntDatabase.getRecycledHuntFromDatabase();
-			const correctlyFormattedQuestions = next.questions.reduce((alreadyFormatted, questionObject) => {
-				alreadyFormatted.push(questionObject.text);
-				alreadyFormatted.push(questionObject.answers);
-				return alreadyFormatted;
-			}, []);
+			const correctlyFormattedQuestions = next.questions.flatMap(question => [question.text, question.answers]);
 			this.room.scavQueue.push({
 				hosts: next.hosts,
 				questions: correctlyFormattedQuestions,
@@ -993,7 +985,7 @@ let commands = {
 				hunt = ScavengerHuntDatabase.getRecycledHuntFromDatabase();
 			}
 
-			target = hunt.fullText;
+			target = ScavengerHuntDatabase.getFullTextOfHunt(hunt);
 		}
 
 		let [hostsArray, ...params] = target.split('|');
@@ -1167,6 +1159,9 @@ let commands = {
 		if (!this.can('mute', null, room)) return false;
 
 		if (this.cmd === 'queuerecycled') {
+			if (ScavengerHuntDatabase.isEmpty()) {
+				return this.errorReply(`There are no hunts in the database.`);
+			}
 			if (!room.scavQueue) {
 				room.scavQueue = [];
 			}
@@ -1179,11 +1174,7 @@ let commands = {
 			} else {
 				next = ScavengerHuntDatabase.getRecycledHuntFromDatabase();
 			}
-			const correctlyFormattedQuestions = next.questions.reduce((alreadyFormatted, questionObject) => {
-				alreadyFormatted.push(questionObject.text);
-				alreadyFormatted.push(questionObject.answers);
-				return alreadyFormatted;
-			}, []);
+			const correctlyFormattedQuestions = next.questions.flatMap(question => [question.text, question.answers]);
 			room.scavQueue.push({
 				hosts: next.hosts,
 				questions: correctlyFormattedQuestions,
