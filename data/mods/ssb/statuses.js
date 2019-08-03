@@ -525,13 +525,30 @@ let BattleStatuses = {
 		noCopy: true,
 		onStart(target, source) {
 			this.add('-start', source, 'typechange', `Fairy/Steel`);
-			this.add(`c|%fart|it's fukken raw`);
+			let activeMon;
+			activeMon = toID(source.side.foe.active[0].illusion ? source.side.foe.active[0].illusion.name : activeMon = source.side.foe.active[0].template.name);
+			let family = ['aethernum', 'ceteris', 'flare', 'ransei', 'trickster', 'zalm', 'aelita', 'biggie', 'deetah', 'birdy', 'sunny', 'jolteonite'];
+			if (activeMon === 'hoeenhero' || activeMon === 'pokemondeadchannel') {
+				 this.add(`c|%fart|what song should I sing?`);
+			} else if (activeMon === 'lifeisdank' || activeMon === 'nui' || activeMon === 'grimauxiliatrix') {
+				this.add(`c|%fart|the gang's all here!`);
+			} else if (family.includes(activeMon)) {
+				this.add(`c|%fart|what's cookin', good lookin'?`);
+			} else {
+				this.add(`c|%fart|it's fukken raw`);
+			}
 		},
 		onSwitchOut() {
 			this.add(`c|%fart|this boy is not correct. he is **flawed.**`);
 		},
-		onFaint() {
-			this.add(`c|%fart|the things I do for love...`);
+		onFaint(pokemon) {
+			let activeMon;
+			activeMon = toID(pokemon.side.foe.active[0].illusion ? pokemon.side.foe.active[0].illusion.name : activeMon = pokemon.side.foe.active[0].template.name);
+			if (activeMon === 'unleashourpassion') {
+				this.add(`c|%fart|UOP I'm deleting your mon`);
+			} else {
+				this.add(`c|%fart|the things I do for love...`);
+			}
 		},
 	},
 	flare: {
