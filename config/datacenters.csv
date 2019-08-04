@@ -362,6 +362,7 @@
 40.127.64.0,40.127.111.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 40.127.128.0,40.127.255.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 42.1.60.0,42.1.63.255,Exa Bytes Network Sdn Bhd,http://exabytes.com/
+43.249.38.0,43.249.39.255,Leaseweb,https://www.leaseweb.com/
 45.32.0.0,45.32.255.255,Choopa,https://www.choopa.com/
 45.33.0.0,45.33.127.255,Linode,http://www.linode.com/
 45.34.0.0,45.35.255.255,Psychz Networks,http://psychz.net/
@@ -1598,7 +1599,7 @@
 103.246.248.0,103.246.248.255,quickweb.co.nz,http://quickweb.co.nz/
 103.246.250.0,103.246.251.255,quickweb.co.nz,http://quickweb.co.nz/
 103.253.144.0,103.253.147.255,DigitalOcean AP,https://www.digitalocean.com/
-103.254.152.0,103.254.151.255,Leaseweb,http://www.leaseweb.com/
+103.254.152.0,103.254.155.255,Leaseweb,https://www.leaseweb.com/
 104.37.24.0,104.37.31.255,Web2Objects,http://web2objects.com/
 104.40.0.0,104.40.95.255,Microsoft Azure,http://www.windowsazure.com/en-us/
 104.40.128.0,104.41.63.255,Microsoft Azure,http://www.windowsazure.com/en-us/
@@ -1991,6 +1992,7 @@
 173.204.0.0,173.204.255.255,GoGrid LLC,http://www.gogrid.com/
 173.208.0.0,173.208.127.255,Ubiquity Server Solutions,http://www.ubiquityservers.com/
 173.208.128.0,173.208.255.255,WholeSale Internet Inc,http://www.wholesaleinternet.com/
+173.209.57.240,173.209.57.255,GloboTech Communications,https://www.globo.tech/
 173.211.0.0,173.211.127.255,Colocation America Inc,http://www.colocationamerica.com/
 173.213.64.0,173.213.127.255,infinitie.net,http://www.serverhub.com/
 173.213.224.0,173.213.239.255,Edgewebhosting,http://www.edgewebhosting.net/
@@ -2345,6 +2347,7 @@
 185.156.175.0,185.156.175.255,M247,https://m247.com/
 185.158.251.0,185.158.251.255,VPS2day,https://www.vps2day.com/
 185.159.156.0,185.159.159.255,ProtonVPN,https://protonvpn.com/
+185.161.200.0,185.161.201.255,ProtonVPN,https://protonvpn.com/
 185.165.241.0,185.165.241.255,WorldStream Dedicated Servers,https://www.worldstream.nl/
 185.186.76.0,185.186.79.255,OneProvider,http://oneprovider.com/
 185.189.112.0,185.189.112.255,M247,https://www.m247.com/
@@ -2360,6 +2363,10 @@
 185.220.70.0,185.220.70.255,M247,https://www.m247.com/
 185.220.71.0,185.220.71.255,M247,https://www.m247.com/
 185.236.200.0,185.236.200.255,M247 Dedicated Servers,https://m247.com/
+185.242.4.0,185.242.4.255,M247,https://www.m247.com/
+185.242.5.0,185.242.5.255,M247,https://www.m247.com/
+185.242.6.0,185.242.6.255,M247,https://www.m247.com/
+185.242.7.0,185.242.7.255,M247,https://www.m247.com/
 186.227.162.128,186.227.162.191,Server Green,http://servergreen.com.br/
 186.227.192.0,186.227.207.255,HostDime Brazil,https://www.hostdime.com/
 186.251.128.0,186.251.139.255,ipglobe.net,https://www.ipglobe.net/
@@ -2555,6 +2562,7 @@
 193.22.254.0,193.22.254.255,Keyweb Switzerland,https://www.keyweb.de/en/
 193.27.246.0,193.27.247.255,wehostall,http://wehostall.ru/
 193.28.228.0,193.28.228.255,T-N Media Network,http://t-n-media.de/
+193.31.40.0,193.31.43.255,Digital Energy Technologies,https://det.global/
 193.34.88.0,193.34.91.255,easyhost.be,http://easyhost.be/
 193.34.144.0,193.34.145.255,Giga-Hosting GmbH,http://giga-hosting.biz/
 193.34.166.0,193.34.167.255,Snel Internet Services B.V.,https://www.snelserver.com/
@@ -2929,6 +2937,7 @@
 204.12.0.0,204.12.127.255,HostMySite.com,http://www.webmysite.com/
 204.12.192.0,204.12.255.255,WholeSale Internet Inc,http://www.wholesaleinternet.com/
 204.13.152.0,204.13.155.255,multacom.com,http://multacom.com/
+204.14.72.0,204.14.79.255,Areti Hosting,http://www.areti.net/
 204.14.104.0,204.14.111.255,AccelerateBiz Inc.,http://www.acceleratebiz.com/
 204.14.120.0,204.14.123.255,AllHostShop.com,http://www.allhostshop.com/
 204.15.72.0,204.15.79.255,multacom.com,http://multacom.com/
@@ -3172,6 +3181,7 @@
 209.103.160.0,209.103.191.255,HopOne,http://www.hopone.net/
 209.112.240.0,209.112.255.255,American Internet Services,http://americanis.net/
 209.114.32.0,209.114.63.255,Rackspace,http://www.rackspace.com/
+209.126.88.0,209.126.91.255,CloudIP Solutions,https://cloudip-solutions.com/
 209.126.96.0,209.126.127.255,Hosting Solutions International Inc,http://www.plusserver.de
 209.126.128.0,209.126.255.255,cari.net,http://cari.net/
 209.134.48.0,209.134.63.255,Connectria,http://www.connectria.com/
