@@ -183,8 +183,7 @@ exports.BattleScripts = {
 
 			if (!action.targetLoc) {
 				target = this.resolveTarget(action.pokemon, action.move);
-				// @ts-ignore
-				action.targetLoc = this.getTargetLoc(target, action.pokemon);
+				if (target) action.targetLoc = this.getTargetLoc(target, action.pokemon);
 			}
 
 			if (!action.priority && !deferPriority) {
