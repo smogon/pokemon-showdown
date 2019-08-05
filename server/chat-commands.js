@@ -3895,6 +3895,9 @@ const commands = {
 		if (!battle.allowExtraction) {
 			battle.allowExtraction = ['', ''];
 		}
+		if (user.userid === toID(battle.p1.name) || user.userid === toID(battle.p2.name)) {
+			this.parse(`/allowexportinputlog ${user.userid}`);
+		}
 		if (battle.allowExtraction[0] !== user.userid) {
 			const p1 = Users(battle.p1.name);
 			if (p1) p1.sendTo(room, Chat.html`|html|${user.name} wants to extract the battle input log. <button name="send" value="/allowexportinputlog ${user.userid}">Share your team and choices with "${user.name}"</button>`);
