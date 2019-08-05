@@ -783,7 +783,15 @@ class RoomBattle extends RoomGames.RoomGame {
 			parentGame.onBattleWin(this.room, winnerid);
 		}
 		// If the room's replay was hidden, disable users from joining after the game is over
-		if (this.room.hideReplay) this.room.modjoin = '%';
+		if (this.room.hideReplay) {
+			this.room.modjoin = '%';
+			this.room.isPrivate = 'hidden';
+			// We also save the replay to make sure the hidden setting gets reflected
+			let uploader = Users.get(winnerid || p1id);
+			if (uploader && uploader.connections[0]) {
+				Chat.parse('/savereplay', this.room, uploader, uploader.connections[0]);
+			}
+		}
 		this.room.update();
 	}
 	/**
