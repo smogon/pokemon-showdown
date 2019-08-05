@@ -1545,17 +1545,17 @@ class GameRoom extends BasicChatRoom {
 		return this.game['p' + (num + 1)];
 	}
 	/**
-	 * @param {User} user
+	 * @param {User | null} user
 	 */
 	requestModchat(user) {
-		if (user === null) {
+		if (!user) {
 			this.modchatUser = '';
 			return;
-		} else if (user.can('modchat') || !this.modchatUser || this.modchatUser === user.userid) {
+		} else if (!this.modchatUser || this.modchatUser === user.userid || this.getAuth(user) !== Users.PLAYER_SYMBOL) {
 			this.modchatUser = user.userid;
 			return;
 		} else {
-			return "Invite-only can only be turned off by the user who turned it on, or staff";
+			return "Modchat can only be changed by the user who turned it on, or by staff";
 		}
 	}
 	/**
