@@ -1529,6 +1529,7 @@ class User extends Chat.MessageContext {
 		if (type === this.statusType) return;
 		this.statusType = type;
 		this.updateIdentity();
+		this.update('statusType');
 	}
 	setUserMessage(message: string) {
 		if (message === this.userMessage) return;
