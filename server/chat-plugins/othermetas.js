@@ -398,7 +398,7 @@ const commands = {
 		}
 		const mixedTemplate = Dex.deepClone(template);
 		mixedTemplate.abilities = Dex.deepClone(crossTemplate.abilities);
-		mixedTemplate.baseStats = {};
+		mixedTemplate.baseStats = Dex.deepClone(mixedTemplate.baseStats);
 		for (let statName in template.baseStats) {
 			// @ts-ignore
 			mixedTemplate.baseStats[statName] += crossTemplate.baseStats[statName] - prevo.baseStats[statName];
@@ -415,6 +415,7 @@ const commands = {
 		for (const stat of Object.values(mixedTemplate.baseStats)) {
 			if (stat < 1 || stat > 255) {
 				this.errorReply(`Warning: This Cross Evolution cannot happen since a stat goes below 0 or above 255.`);
+				break;
 			}
 		}
 		mixedTemplate.tier = "CE";
