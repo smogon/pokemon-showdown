@@ -69,7 +69,6 @@ class Blackjack extends Rooms.RoomGame {
 		if (target !== '') {
 			this.autostart = setTimeout(() => this.start(), (target * 60000));
 		}
-		if (!this.room.blackjack) this.room.blackjack = 1;
 
 		this.sendInvite();
 	}
@@ -93,7 +92,7 @@ class Blackjack extends Rooms.RoomGame {
 	joinGame(user) {
 		if (!user.named) return this.errorMessage(user, `You must first choose a name to play Blackjack.`);
 		if (this.state === 'started') return this.errorMessage(user, `Blackjack has already started.`);
-		const joined = this.addPlayer(user, this.playerTable);
+		const joined = this.addPlayer(user);
 		if (!joined) {
 			this.errorMessage(user, `You are already in this game.`);
 			return false;
