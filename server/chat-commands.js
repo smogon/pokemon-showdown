@@ -2089,7 +2089,7 @@ const commands = {
 		}
 
 		// Automatically upload replays as evidence/reference to the punishment
-		if (room.battle) this.parse('/savereplay');
+		if (room.battle) this.parse('/savereplay forpunishment');
 		return true;
 	},
 	lockhelp: [
@@ -2922,7 +2922,7 @@ const commands = {
 		targetUser.popup(`|modal|${user.name} has prevented you from starting new battles for 2 days${reasonText}`);
 
 		// Automatically upload replays as evidence/reference to the punishment
-		if (room.battle) this.parse('/savereplay');
+		if (room.battle) this.parse('/savereplay forpunishment');
 		return true;
 	},
 	battlebanhelp: [`/battleban [username], [reason] - [DEPRECATED] Prevents the user from starting new battles for 2 days and shows them the [reason]. Requires: & ~`],
@@ -4074,7 +4074,13 @@ const commands = {
 
 	uploadreplay: 'savereplay',
 	async savereplay(target, room, user, connection) {
-		if (!room || !room.battle) return;
+		if (!room || !room.battle) {
+			return this.errorReply(`You can only save replays for battles.`);
+		}
+
+		const forPunishment = target === 'forpunishment';
+		if (forPunishment && !this.can('lock')) return false;
+
 		const battle = room.battle;
 		// retrieve spectator log (0) if there are privacy concerns
 		const format = Dex.getFormat(room.format, true);
@@ -4096,7 +4102,7 @@ const commands = {
 			p2: battle.p2.name,
 			format: format.id,
 			rating: rating,
-			hidden: room.isPrivate || room.hideReplay ? '1' : '',
+			hidden: forPunishment ? '2' : room.isPrivate || room.hideReplay ? '1' : '',
 			inputlog: battle.inputLog ? battle.inputLog.join('\n') : null,
 		});
 		if (success && success.errorip) {
