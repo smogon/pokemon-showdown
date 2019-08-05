@@ -17,7 +17,6 @@ class Blackjack extends Rooms.RoomGame {
 		this.turnTimeoutMinutes = 1;
 		this.timerTickSeconds = 5;
 
-		this.blackjackNumber = 0;
 		this.createdBy = user.name;
 		this.startedBy = '';
 		this.allowRenames = true;
@@ -71,10 +70,8 @@ class Blackjack extends Rooms.RoomGame {
 			this.autostart = setTimeout(() => this.start(), (target * 60000));
 		}
 		if (!this.room.blackjack) this.room.blackjack = 1;
-		this.blackjackNumber = this.room.blackjack;
 
 		this.sendInvite();
-		this.room.send(`|notify|Blackjack (${this.room.title})|${this.createdBy} created a game of Blackjack!`);
 	}
 	makePlayer(user) {
 		return new BlackjackPlayer(user, this);
@@ -82,7 +79,7 @@ class Blackjack extends Rooms.RoomGame {
 	sendInvite() {
 		const change = this.uhtmlChange;
 		const players = Object.keys(this.playerTable);
-		this.room.send(`|uhtml${change}|blackjack-${this.blackjackNumber}|<div class="infobox${this.infoboxLimited}">${this.createdBy} has created a game of Blackjack. ${this.button}<br /><strong>Players (${players.length}):</strong> ${!players.length ? '(None)' : players.join(', ')}</div>`);
+		this.room.send(`|uhtml${change}|blackjack-${this.room.gameNumber}|<div class="infobox${this.infoboxLimited}">${this.createdBy} has created a game of Blackjack. ${this.button}<br /><strong>Players (${players.length}):</strong> ${!players.length ? '(None)' : players.join(', ')}</div>`);
 		this.uhtmlChange = 'change';
 	}
 
@@ -147,7 +144,7 @@ class Blackjack extends Rooms.RoomGame {
 	}
 	send(message, clean) {
 		const change = this.uhtmlChange;
-		this.room.send(`|uhtml${change}|blackjack-${this.blackjackNumber}|<div class="infobox${this.infoboxLimited}">${(clean ? message : this.lastMessage + message)}</div>`);
+		this.room.send(`|uhtml${change}|blackjack-${this.room.gameNumber}|<div class="infobox${this.infoboxLimited}">${(clean ? message : this.lastMessage + message)}</div>`);
 		this.lastMessage += message;
 		this.uhtmlChange = 'change';
 	}
@@ -155,7 +152,7 @@ class Blackjack extends Rooms.RoomGame {
 		let change = this.uhtmlChange;
 		if (noChange) change = '';
 		if (clean) this.lastMessage = '';
-		const message = `|uhtml${change}|blackjack-${this.blackjackNumber}|<div class="infobox${this.infoboxLimited}">`;
+		const message = `|uhtml${change}|blackjack-${this.room.gameNumber}|<div class="infobox${this.infoboxLimited}">`;
 		this.lastMessage += text;
 		if (end) {
 			text = `The game of blackjack has ended. <details><summary>View turn log</summary>${this.turnLog}</details>${text}`;
@@ -178,13 +175,9 @@ class Blackjack extends Rooms.RoomGame {
 	clear() {
 		const player = this.playerTable[this.curUser];
 		if (!player) return; // this should never happen
-		player.sendRoom(`|uhtmlchange|user-blackjack-${this.blackjackNumber}|`);
+		player.sendRoom(`|uhtmlchange|user-blackjack-${this.room.gameNumber}|`);
 	}
 	clearAllTimers() {
-		if (this.autostand) {
-			clearTimeout(this.autostand);
-			this.autostand = null;
-		}
 		if (this.dqTimer) {
 			clearTimeout(this.dqTimer);
 			this.dqTimer = null;
@@ -199,11 +192,11 @@ class Blackjack extends Rooms.RoomGame {
 		}
 	}
 	slide(user) {
-		user.sendTo(this.id, `|uhtml|blackjack-${this.blackjackNumber}|`);
+		user.sendTo(this.id, `|uhtml|blackjack-${this.room.gameNumber}|`);
 		this.display('', null, user.name);
 	}
 	onConnect(user) {
-		const message = `|uhtml|blackjack-${this.blackjackNumber}|<div class="infobox${this.infoboxLimited}">`;
+		const message = `|uhtml|blackjack-${this.room.gameNumber}|<div class="infobox${this.infoboxLimited}">`;
 		if (this.state === 'signups') {
 			this.sendInvite();
 		} else if (this.state === 'started') {
@@ -306,7 +299,7 @@ class Blackjack extends Rooms.RoomGame {
 		}
 		let winners = [];
 
-		if (!force) {
+		if (!force && this.state !== 'signups') {
 			if (this.dealer.points > 21) {
 				for (let player of Object.keys(this.playerTable)) {
 					if (this.playerTable[player].status === 'bust') continue;
@@ -320,30 +313,28 @@ class Blackjack extends Rooms.RoomGame {
 			} else if (this.dealer.points === 21) {
 				winners.push(`<strong>${this.dealer.name}</strong> [${this.dealer.cards.join(', ')}]`);
 			}
-			this.send(`[Blackjack has ended.]`, true);
 			if (winners.length < 1) {
 				this.display(`There are no winners this time.`, null, null, null, true);
 			} else {
 				this.display(`<strong>Winner${Chat.plural(winners.length)}</strong>: ${winners.join(', ')}`, null, null, null, true);
 			}
+		} else {
+			this.send(Chat.html`The bame of blackjack has been ended by ${user.name}, and there are no winners because the game never started.`, true);
 		}
 
-		if (this.autostart) {
-			clearTimeout(this.autostart);
-			this.autostart = null;
-		}
 		this.state = 'ended';
 
 		this.destroy();
+		return true;
 	}
 	destroy() {
-		if (Object.keys(this.playerTable)) {
+		if (Object.keys(this.playerTable).length) {
 			for (let player of Object.keys(this.playerTable)) {
 				this.playerTable[player].destroy();
 			}
 		}
-		this.room.blackjack++;
 		this.clearAllTimers();
+		this.room.gameNumber++;
 		delete this.room.game;
 	}
 
@@ -480,7 +471,7 @@ class Blackjack extends Rooms.RoomGame {
 			while (this.playerTable[Object.keys(this.playerTable)[number]].status !== 'playing') number++;
 			this.curUser = Object.keys(this.playerTable)[number];
 		}
-		let output = `|uhtml${this.playerTable[this.curUser].selfUhtml}|user-blackjack-${this.blackjackNumber}|<div class="infobox" style="line-height: 20px;">`;
+		let output = `|uhtml${this.playerTable[this.curUser].selfUhtml}|user-blackjack-${this.room.gameNumber}|<div class="infobox" style="line-height: 20px;">`;
 		output += `It's your turn to move, ${this.playerTable[this.curUser].name}<br />`;
 		for (let card of this.playerTable[this.curUser].cards) {
 			output += this.generateCard(card);
@@ -544,7 +535,7 @@ exports.commands = {
 	blackjack: {
 		new: 'create',
 		create(target, room, user) {
-			if (!this.can('gamemanagement', null, room)) return;
+			if (!this.can('minigame', null, room)) return;
 			if (room.game) return this.errorReply("There is already a game running in this room.");
 			if (room.blackjackDisabled) return this.errorReply("Blackjack is currently disabled in this room.");
 
@@ -553,7 +544,7 @@ exports.commands = {
 			room.game = new Blackjack(room, user, target);
 		},
 		start(target, room, user) {
-			if (!this.can('gamemanagement', null, room)) return;
+			if (!this.can('minigame', null, room)) return;
 			if (!room.game || !room.game.blackjack) return this.errorReply("There is no game of blackjack currently ongoing in this room.");
 
 			this.privateModAction(`(The game of blackjack was started by ${user.name}.)`);
@@ -562,12 +553,14 @@ exports.commands = {
 		},
 		forceend: 'end',
 		end(target, room, user, connection, cmd) {
-			if (!this.can('gamemanagement', null, room)) return;
+			if (!this.can('minigame', null, room)) return;
 			if (!room.game || !room.game.blackjack) return this.errorReply("There is no game of blackjack currently ongoing in this room.");
 
-			this.privateModAction(`The game of blackjack was ended by ${user.name}.`);
-			this.modlog(`BLACKJACK END`);
-			room.game.destroy();
+			const end = room.game.end(user, cmd);
+			if (end) {
+				this.privateModAction(`(The game of blackjack was ended by ${user.name}.)`);
+				this.modlog(`BLACKJACK END`);
+			}
 		},
 		hit(target, room, user) {
 			if (!room.game || !room.game.blackjack) return this.errorReply("There is no game of blackjack currently ongoing in this room.");
@@ -603,7 +596,7 @@ exports.commands = {
 			}
 		},
 		disable(target, room, user) {
-			if (!this.can('declare', null, room)) return;
+			if (!this.can('gamemanagement', null, room)) return;
 			if (room.blackjackDisabled) return this.errorReply("Blackjack is already disabled in this room.");
 			room.blackjackDisabled = true;
 			this.privateModAction(`(${user.name} disabled games of blackjack in this room.)`);
@@ -614,7 +607,7 @@ exports.commands = {
 			}
 		},
 		enable(target, room, user) {
-			if (!this.can('declare', null, room)) return;
+			if (!this.can('gamemanagement', null, room)) return;
 			if (!room.blackjackDisabled) return this.errorReply("Blackjack is already enabled in this room.");
 			room.blackjackDisabled = false;
 			this.privateModAction(`(${user.name} enabled games of blackjack in this room.)`);
@@ -632,11 +625,12 @@ exports.commands = {
 	blackjackhelp: [
 		"/blackjack create - Creates a game of blackjack. Requires: % @ # & ~",
 		"/blackjack create [autostart] - Automatically creates a game of blackjack in [autostart] minutes. Requires: % @ # & ~",
+		"/blackjack start - Starts a game of blackjack. Requires: % @ # & ~",
+		"/blackjack end - Ends a game of blackjack. Requires: % @ # & ~",
 		"/blackjack join - Joins a game of blackjack.",
 		"/blackjack leave - Leaves a game of blackjack.",
 		"/blackjack spectate - Spectates a game of blackjack.",
 		"/blackjack unspectate - Stops spectating a game of blackjack.",
-		"/blackjack end - Ends a game of blackjack. Requires: % @ # & ~",
 		"/blackjack disable - Prevents games of blackjack from being made in the room. Requires: # & ~",
 		"/blackjack enable - Allows games of blackjack to be made in the room. Requires: # & ~",
 	],
