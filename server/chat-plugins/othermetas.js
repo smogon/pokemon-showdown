@@ -360,6 +360,94 @@ const commands = {
 		this.sendReply(`|raw|${Chat.getDataPokemonHTML(template)}`);
 	},
 	natureswapshelp: [`/ns OR /natureswap <pokemon> - Shows the base stats that a Pokemon would have in Nature Swap. Usage: /ns <Nature> <Pokemon>.`],
+
+	'!crossevolve': true,
+	ce: 'crossevolve',
+	crossevo: 'crossevolve',
+	crossevolve(target, user, room) {
+		if (!this.runBroadcast()) return;
+		if (!target || !target.includes(',')) return this.parse(`/help crossevo`);
+
+		const pokes = target.split(',');
+		const template = Dex.getTemplate(pokes[0]);
+		const crossTemplate = Dex.getTemplate(pokes[1]);
+
+		if (!template.exists) return this.errorReply(`Error: Pokemon '${pokes[0]}' not found.`);
+		if (!crossTemplate.exists) return this.errorReply(`Error: Pokemon '${pokes[1]}' not found.`);
+
+		if (!template.evos.length) return this.errorReply(`Error: ${template.species} does not evolve.`);
+		if (!crossTemplate.prevo) return this.errorReply(`Error: ${crossTemplate.species} does not have a prevolution.`);
+
+		let setStage = 1;
+		let crossStage = 1;
+		if (template.prevo) {
+			setStage++;
+			if (Dex.getTemplate(template.prevo).prevo) {
+				setStage++;
+			}
+		}
+		const prevo = Dex.getTemplate(crossTemplate.prevo);
+		if (crossTemplate.prevo) {
+			crossStage++;
+			if (prevo.prevo) {
+				crossStage++;
+			}
+		}
+		if (setStage + 1 !== crossStage) {
+			return this.errorReply(`Error: Cross evolution must follow evolutionary stages. (${template.species} is Stage ${setStage} and can only cross evolve to Stage ${setStage + 1})`);
+		}
+		const mixedTemplate = Dex.deepClone(template);
+		mixedTemplate.abilities = Dex.deepClone(crossTemplate.abilities);
+		mixedTemplate.baseStats = Dex.deepClone(mixedTemplate.baseStats);
+		for (let statName in template.baseStats) {
+			// @ts-ignore
+			mixedTemplate.baseStats[statName] += crossTemplate.baseStats[statName] - prevo.baseStats[statName];
+		}
+		mixedTemplate.types = [template.types[0]];
+		if (template.types[1]) mixedTemplate.types.push(template.types[1]);
+		if (crossTemplate.types[0] !== prevo.types[0]) mixedTemplate.types[0] = crossTemplate.types[0];
+		if (crossTemplate.types[1] !== prevo.types[1]) mixedTemplate.types[1] = crossTemplate.types[1] || crossTemplate.types[0];
+		if (mixedTemplate.types[0] === mixedTemplate.types[1]) mixedTemplate.types = [mixedTemplate.types[0]];
+		mixedTemplate.weightkg += crossTemplate.weightkg - prevo.weightkg;
+		if (mixedTemplate.weightkg <= 0) {
+			mixedTemplate.weightkg = 0.1;
+		}
+		for (const stat of Object.values(mixedTemplate.baseStats)) {
+			if (stat < 1 || stat > 255) {
+				this.errorReply(`Warning: This Cross Evolution cannot happen since a stat goes below 0 or above 255.`);
+				break;
+			}
+		}
+		mixedTemplate.tier = "CE";
+		let weighthit = 20;
+		if (mixedTemplate.weightkg >= 200) {
+			weighthit = 120;
+		} else if (mixedTemplate.weightkg >= 100) {
+			weighthit = 100;
+		} else if (mixedTemplate.weightkg >= 50) {
+			weighthit = 80;
+		} else if (mixedTemplate.weightkg >= 25) {
+			weighthit = 60;
+		} else if (mixedTemplate.weightkg >= 10) {
+			weighthit = 40;
+		}
+		/** @type {{[k: string]: string}} */
+		let details = {
+			"Dex#": mixedTemplate.num,
+			"Gen": mixedTemplate.gen,
+			"Height": mixedTemplate.heightm + " m",
+			"Weight": mixedTemplate.weightkg + " kg <em>(" + weighthit + " BP)</em>",
+			"Dex Colour": mixedTemplate.color,
+		};
+		if (mixedTemplate.eggGroups) details["Egg Group(s)"] = mixedTemplate.eggGroups.join(", ");
+		details['<font color="#686868">Does Not Evolve</font>'] = "";
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(mixedTemplate)}`);
+		this.sendReply('|raw|<font size="1">' + Object.keys(details).map(detail => {
+			if (details[detail] === '') return detail;
+			return '<font color="#686868">' + detail + ':</font> ' + details[detail];
+		}).join("&nbsp;|&ThickSpace;") + '</font>');
+	},
+	crossevolvehelp: ["/crossevo <base pokemon>, <evolved pokemon> - Shows the type and stats for the Cross Evolved Pokemon."],
 };
 
 exports.commands = commands;
