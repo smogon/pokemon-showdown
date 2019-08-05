@@ -3866,6 +3866,7 @@ const commands = {
 		if (!battle) return this.errorReply(`Must be in a battle.`);
 		if (!battle.allowExtraction) return this.errorReply(`Someone must have requested extraction.`);
 		const targetUser = Users.getExact(target);
+		if (!targetUser) return this.errorReply(`User ${target} not found.`);
 
 		if (toID(battle.p1.name) === user.userid) {
 			battle.allowExtraction[0] = targetUser.userid;
