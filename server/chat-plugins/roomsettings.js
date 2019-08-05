@@ -270,7 +270,7 @@ exports.commands = {
 			const modchatSetting = Chat.escapeHTML(room.modchat);
 			this.add(`|raw|<div class="broadcast-red"><strong>Moderated chat was set to ${modchatSetting}!</strong><br />Only users of rank ${modchatSetting} and higher can talk.</div>`);
 		}
-		if (room.battle && !room.modchat && !user.can('modchat')) room.requestModchat(null);
+		if (room.requestModchat && !room.modchat) room.requestModchat(null);
 		this.privateModAction(`(${user.name} set modchat to ${room.modchat})`);
 		this.modlog('MODCHAT', null, `to ${room.modchat}`);
 
