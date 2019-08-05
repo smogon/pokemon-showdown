@@ -52,7 +52,6 @@ class Blackjack extends Rooms.RoomGame {
 		this.button = '<button class="button" name="send" value="/joingame" title="Join Blackjack">Join</button> | <button class="button" name="send" value="/leavegame" title="Leave Blackjack">Leave</button>';
 		this.spectateButton = '<button class="button" name="send" value="/blackjack spectate" title="Spectate Blackjack">Spectate</button>';
 		this.slideButton = '<button class="button" name="send" value="/blackjack slide" title="Slide the game log down in the chat">(<i class="fa fa-arrow-down" aria-hidden="true"></i> slide)</button>';
-		this.atLeastOneJoin = false;
 
 		this.makeGame(target);
 	}
@@ -104,7 +103,6 @@ class Blackjack extends Rooms.RoomGame {
 			this.start();
 		}
 		if (this.spectators[user]) delete this.spectators[user]; // prevent player from spectating
-		this.atLeastOneJoin = true;
 		return true;
 	}
 	leaveGame(user) {
