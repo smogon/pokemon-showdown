@@ -250,7 +250,7 @@ const commands = {
 			game.display(user, true);
 
 			this.modlog('HANGMAN');
-			return this.privateModAction(`(A game of hangman was started by ${user.name}.)`);
+			return this.addModAction(`A game of hangman was started by ${user.name}.`);
 		},
 		createhelp: ["/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ # & ~"],
 
