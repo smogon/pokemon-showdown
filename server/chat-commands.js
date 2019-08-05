@@ -661,7 +661,7 @@ const commands = {
 			user.update('blockPMs');
 			return this.sendReply(`You are now blocking private messages, except from staff and ${target}.`);
 		}
-		user.update();
+		user.update('blockPMs');
 		return this.sendReply("You are now blocking private messages, except from staff.");
 	},
 	blockpmshelp: [`/blockpms - Blocks private messages. Unblock them with /unblockpms.`],
