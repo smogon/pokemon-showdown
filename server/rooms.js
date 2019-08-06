@@ -1212,9 +1212,14 @@ class BasicChatRoom extends BasicRoom {
 	/**
 	 * @param {'j' | 'l' | 'n'} type
 	 * @param {string} entry
+	 * @param {User} user
 	 */
-	reportJoin(type, entry) {
-		if (this.reportJoins) {
+	reportJoin(type, entry, user) {
+		let reportJoins = this.reportJoins;
+		if (reportJoins && this.modchat && !user.authAtLeast(this.modchat, this)) {
+			reportJoins = false;
+		}
+		if (reportJoins) {
 			this.add(`|${type}|${entry}`).update();
 			return;
 		}
@@ -1295,7 +1300,7 @@ class BasicChatRoom extends BasicRoom {
 		if (this.users[user.userid]) return false;
 
 		if (user.named) {
-			this.reportJoin('j', user.getIdentityWithStatus(this.id));
+			this.reportJoin('j', user.getIdentityWithStatus(this.id), user);
 		}
 
 		this.users[user.userid] = user;
@@ -1323,12 +1328,12 @@ class BasicChatRoom extends BasicRoom {
 		delete this.users[oldid];
 		this.users[user.userid] = user;
 		if (joining) {
-			this.reportJoin('j', user.getIdentityWithStatus(this.id));
+			this.reportJoin('j', user.getIdentityWithStatus(this.id), user);
 			if (this.staffMessage && user.can('mute', null, this)) this.sendUser(user, '|raw|<div class="infobox">(Staff intro:)<br /><div>' + this.staffMessage.replace(/\n/g, '') + '</div></div>');
 		} else if (!user.named) {
-			this.reportJoin('l', oldid);
+			this.reportJoin('l', oldid, user);
 		} else {
-			this.reportJoin('n', user.getIdentityWithStatus(this.id) + '|' + oldid);
+			this.reportJoin('n', user.getIdentityWithStatus(this.id) + '|' + oldid, user);
 		}
 		if (this.poll && user.userid in this.poll.voters) this.poll.updateFor(user);
 		return true;
@@ -1341,9 +1346,9 @@ class BasicChatRoom extends BasicRoom {
 		if (user && user.connected) {
 			if (!this.users[user.userid]) return false;
 			if (user.named) {
-				this.reportJoin('n', user.getIdentityWithStatus(this.id) + '|' + user.userid);
+				this.reportJoin('n', user.getIdentityWithStatus(this.id) + '|' + user.userid, user);
 			} else {
-				this.reportJoin('l', user.userid);
+				this.reportJoin('l', user.userid, user);
 			}
 		}
 		return true;
@@ -1362,7 +1367,7 @@ class BasicChatRoom extends BasicRoom {
 		this.userCount--;
 
 		if (user.named) {
-			this.reportJoin('l', user.getIdentity(this.id));
+			this.reportJoin('l', user.getIdentity(this.id), user);
 		}
 		if (this.game && this.game.onLeave) this.game.onLeave(user);
 		return true;
