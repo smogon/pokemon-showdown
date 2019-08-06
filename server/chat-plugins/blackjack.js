@@ -542,7 +542,7 @@ class BlackjackDeck {
 }
 
 exports.commands = {
-	bj: 'blackjack',
+	blj: 'blackjack',
 	blackjack: {
 		new: 'create',
 		create(target, room, user) {
