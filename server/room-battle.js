@@ -773,7 +773,10 @@ class RoomBattle extends RoomGames.RoomGame {
 		} else {
 			this.logData = null;
 		}
-		if (Config.autosavereplays) {
+		// If a replay was saved at any point or we were configured to autosavereplays,
+		// reupload when the battle is over to overwrite the partial data (and potentially
+		// reflect any changes that may have been made to the replay's hidden status).
+		if (this.replaySaved || Config.autosavereplays) {
 			const uploader = Users.get(winnerid || p1id);
 			if (uploader && uploader.connections[0]) {
 				Chat.parse('/savereplay', this.room, uploader, uploader.connections[0]);
@@ -787,13 +790,6 @@ class RoomBattle extends RoomGames.RoomGame {
 		if (this.room.hideReplay) {
 			this.room.modjoin = '%';
 			this.room.isPrivate = 'hidden';
-			// We also resave the replay to make sure the hidden setting gets reflected
-			if (this.replaySaved) {
-				const uploader = Users.get(winnerid || p1id);
-				if (uploader && uploader.connections[0]) {
-					Chat.parse('/savereplay', this.room, uploader, uploader.connections[0]);
-				}
-			}
 		}
 		this.room.update();
 	}
