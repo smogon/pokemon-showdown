@@ -1124,8 +1124,7 @@ export class ModdedDex {
 			}
 
 			// gender
-			const template = dexes['base'].getTemplate(set.species || set.name);
-			if (set.gender && set.gender !== template.gender) {
+			if (set.gender) {
 				buf += '|' + set.gender;
 			} else {
 				buf += '|';
