@@ -4110,7 +4110,7 @@ const commands = {
 		if (!room || !room.battle || !this.can('joinbattle', null, room)) return;
 		if (room.hideReplay) return this.errorReply(`The replay for this battle is already set to hidden.`);
 		room.hideReplay = true;
-		this.parse('/savereplay');
+		if (room.battle.replaySaved) this.parse('/savereplay');
 		this.addModAction(`${user.name} hid the replay of this battle.`);
 	},
 
