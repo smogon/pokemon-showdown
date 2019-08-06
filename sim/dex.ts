@@ -1097,29 +1097,14 @@ export class ModdedDex {
 			buf += (set.name || set.species);
 
 			// species
-			let id = toID(set.species || set.name);
+			const id = toID(set.species || set.name);
 			buf += '|' + (toID(set.name || set.species) === id ? '' : id);
 
 			// item
 			buf += '|' + toID(set.item);
 
 			// ability
-			const template = dexes['base'].getTemplate(set.species || set.name);
-			const abilities = template.abilities;
-			id = toID(set.ability);
-			if (abilities) {
-				if (id === toID(abilities['0'])) {
-					buf += '|';
-				} else if (id === toID(abilities['1'])) {
-					buf += '|1';
-				} else if (id === toID(abilities['H'])) {
-					buf += '|H';
-				} else {
-					buf += '|' + id;
-				}
-			} else {
-				buf += '|' + id;
-			}
+			buf += '|' + toID(set.ability);
 
 			// moves
 			buf += '|' + set.moves.map(toID).join(',');
@@ -1139,7 +1124,7 @@ export class ModdedDex {
 			}
 
 			// gender
-			if (set.gender && set.gender !== template.gender) {
+			if (set.gender) {
 				buf += '|' + set.gender;
 			} else {
 				buf += '|';
