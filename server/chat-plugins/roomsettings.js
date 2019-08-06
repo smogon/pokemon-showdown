@@ -157,6 +157,14 @@ class RoomSettings {
 			return `${this.button('Mafia enabled', null, 'mafia enable')} ${this.button('off', true)}`;
 		}
 	}
+	blackjack() {
+		if (!this.user.can('editroom', null, this.room)) return this.button(this.room.blackjackDisabled ? 'off' : 'Blackjack enabled', true);
+		if (this.room.blackjackDisabled) {
+			return `${this.button('Blackjack enabled', null, 'blackjack enable')} ${this.button('off', true)}`;
+		} else {
+			return `${this.button('Blackjack enabled', true)} ${this.button('off', null, 'blackjack disable')}`;
+		}
+	}
 	language() {
 		if (!this.user.can('editroom', null, this.room)) return this.button(this.room.language ? Chat.languages.get(this.room.language) : 'English', true);
 
@@ -179,6 +187,7 @@ class RoomSettings {
 		output += `<strong>Tournaments:</strong> <br />${this.tourStatus()}<br />`;
 		output += `<strong>UNO:</strong> <br />${this.uno()}<br />`;
 		output += `<strong>Hangman:</strong> <br />${this.hangman()}<br />`;
+		output += `<strong>Blackjack:</strong> <br />${this.blackjack()}<br />`;
 		output += `<strong>Mafia:</strong> <br />${this.mafia()}<br />`;
 		output += '</div>';
 

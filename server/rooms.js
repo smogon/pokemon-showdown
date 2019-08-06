@@ -114,6 +114,7 @@ class BasicRoom {
 		this.filterCaps = false;
 		this.mafiaEnabled = true;
 		this.unoDisabled = false;
+		this.blackjackDisabled = false;
 		/** @type {'%' | boolean} */
 		this.toursEnabled = false;
 		this.tourAnnouncements = false;
