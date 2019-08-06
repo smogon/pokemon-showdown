@@ -47,6 +47,7 @@ class Blackjack extends Rooms.RoomGame {
 		this.turnLog = '';
 		this.uhtmlChange = '';
 		this.curUser = '';
+		this.endedBy = '';
 		this.infoboxLimited = '';
 
 		this.button = '<button class="button" name="send" value="/joingame" title="Join Blackjack">Join</button> | <button class="button" name="send" value="/leavegame" title="Leave Blackjack">Leave</button>';
@@ -135,6 +136,7 @@ class Blackjack extends Rooms.RoomGame {
 	 * onUpdateConnection - overrides default onUpdateConnection
 	 * createTimer - creates a timer with a countdown for a player
 	 * generateCard - generates the card for the UI
+	 * getWinners - returns an array of the winners and their cards
 	 */
 	errorMessage(user, message) {
 		user.sendTo(this.room, Chat.html`|html|<div class="message-error">${message}</div>`);
@@ -146,13 +148,14 @@ class Blackjack extends Rooms.RoomGame {
 		this.uhtmlChange = 'change';
 	}
 	display(text, clean, playerName, noChange, end) {
+		const force = (end && this.endedBy);
 		let change = this.uhtmlChange;
 		if (noChange) change = '';
 		if (clean) this.lastMessage = '';
 		const message = `|uhtml${change}|blackjack-${this.room.gameNumber}|<div class="infobox${this.infoboxLimited}">`;
 		this.lastMessage += text;
 		if (end) {
-			text = `The game of blackjack has ended. <details><summary>View turn log</summary>${this.turnLog}</details>${text}`;
+			text = `The game of blackjack has ${force ? `been forcibly ended by ${this.endedBy}` : 'ended'}. <details><summary>View turn log</summary>${this.turnLog}</details>${text}`;
 			this.lastMessage = '';
 		}
 		for (let player of Object.keys(this.playerTable)) {
@@ -248,6 +251,24 @@ class Blackjack extends Rooms.RoomGame {
 		if (value === 'J') cardUI = 'Joker';
 		return `<div title="${cardUI} of ${symbol}" style="color: ${red ? '#992222' : '#000000'}; border-radius: 6px; background-color: #ffffff; position: relative; font-size: 14px; display: inline-block; width: ${this.cardWidth}px; height: ${this.cardHeight}px; border: 1px solid #000000; padding: 2px 4px;">${value}<br /> ${card.substr(-1)}<br /><span style="padding: 2px 4px; position: absolute; bottom: 0; right: 0; transform: rotate(-180deg);">${value}<br />${card.substr(-1)}</span></div> `;
 	}
+	getWinners(forceend) {
+		let winners = [];
+		if (forceend) this.giveCard('dealer');
+		if (this.dealer.points > 21) {
+			for (let player of Object.keys(this.playerTable)) {
+				if (this.playerTable[player].status === 'bust') continue;
+				winners.push(Chat.html`<strong>${this.playerTable[player].name}</strong> [${this.playerTable[player].cards.join(', ')}]`);
+			}
+		} else if (this.dealer.points !== 21) {
+			for (let player of Object.keys(this.playerTable)) {
+				if (this.playerTable[player].status === 'bust' || this.playerTable[player].points <= this.dealer.points) continue;
+				winners.push(Chat.html`<strong>${this.playerTable[player].name}</strong> [${this.playerTable[player].cards.join(', ')}]`);
+			}
+		} else if (this.dealer.points === 21) {
+			winners.push(`<strong>${this.dealer.name}</strong> [${this.dealer.cards.join(', ')}]`);
+		}
+		return winners;
+	}
 
 	/**
 	 * Game State Changes
@@ -288,34 +309,27 @@ class Blackjack extends Rooms.RoomGame {
 		this.next();
 	}
 	end(user, cmd) {
-		const force = (cmd && cmd === 'forceend');
-		if (this.state === 'started' && cmd && !force) return this.errorMessage(user, `You can only end this game by using /blackjack forceend.`);
+		const force = (cmd && toID(cmd) === 'forceend');
+		if (this.state === 'started' && cmd && !force) return this.errorMessage(user, `Because this game has started, you can only end this game by using /blackjack forceend.`);
+		let winners = this.getWinners();
 		if (force) {
-			this.send(Chat.html`(Blackjack was forcibly ended by ${user.name}.)`, true);
-			if (this.curUser !== '') this.clear();
-		}
-		let winners = [];
-
-		if (!force && this.state !== 'signups') {
-			if (this.dealer.points > 21) {
-				for (let player of Object.keys(this.playerTable)) {
-					if (this.playerTable[player].status === 'bust') continue;
-					winners.push(Chat.html`<strong>${this.playerTable[player].name}</strong> [${this.playerTable[player].cards.join(', ')}]`);
-				}
-			} else if (this.dealer.points !== 21) {
-				for (let player of Object.keys(this.playerTable)) {
-					if (this.playerTable[player].status === 'bust' || this.playerTable[player].points <= this.dealer.points) continue;
-					winners.push(Chat.html`<strong>${this.playerTable[player].name}</strong> [${this.playerTable[player].cards.join(', ')}]`);
-				}
-			} else if (this.dealer.points === 21) {
-				winners.push(`<strong>${this.dealer.name}</strong> [${this.dealer.cards.join(', ')}]`);
-			}
+			winners = this.getWinners(true);
+			this.endedBy = Chat.escapeHTML(user.name);
+			if (this.curUser) this.playerTable[this.curUser].send(`|uhtmlchange|user-blackjack-${this.room.gameNumber}|`);
 			if (winners.length < 1) {
 				this.display(`There are no winners this time.`, null, null, null, true);
 			} else {
 				this.display(`<strong>Winner${Chat.plural(winners.length)}</strong>: ${winners.join(', ')}`, null, null, null, true);
 			}
-		} else {
+		}
+
+		if (!force && this.state !== 'signups') {
+			if (winners.length < 1) {
+				this.display(`There are no winners this time.`, null, null, null, true);
+			} else {
+				this.display(`<strong>Winner${Chat.plural(winners.length)}</strong>: ${winners.join(', ')}`, null, null, null, true);
+			}
+		} else if (this.state === 'signups') {
 			this.send(Chat.html`The bame of blackjack has been ended by ${user.name}, and there are no winners because the game never started.`, true);
 		}
 
@@ -369,7 +383,7 @@ class Blackjack extends Rooms.RoomGame {
 		this.next();
 	}
 	giveCard(user) {
-		if (this.deck.length < 1) this.deck = Dex.shuffle(this.deck);
+		if (this.deck.length < 1) this.deck = new BlackjackDeck().shuffle();
 		const player = (user === 'dealer' ? this.dealer : this.playerTable[user]);
 		if (!player) return; // this should never happen
 		player.cards.push(this.deck[0]);
