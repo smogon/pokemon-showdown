@@ -4095,6 +4095,7 @@ const commands = {
 			hidden: room.isPrivate || room.hideReplay ? '1' : '',
 			inputlog: battle.inputLog ? battle.inputLog.join('\n') : null,
 		});
+		if (success) battle.replySaved = true;
 		if (success && success.errorip) {
 			connection.popup(`This server's request IP ${success.errorip} is not a registered server.`);
 			return;

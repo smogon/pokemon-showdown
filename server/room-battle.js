@@ -447,6 +447,7 @@ class RoomBattle extends RoomGames.RoomGame {
 		this.started = false;
 		this.ended = false;
 		this.active = false;
+		this.replaySaved = false;
 
 		// TypeScript bug: no `T extends RoomGamePlayer`
 		/** @type {{[userid: string]: RoomBattlePlayer}} */
@@ -773,7 +774,7 @@ class RoomBattle extends RoomGames.RoomGame {
 			this.logData = null;
 		}
 		if (Config.autosavereplays) {
-			let uploader = Users.get(winnerid || p1id);
+			const uploader = Users.get(winnerid || p1id);
 			if (uploader && uploader.connections[0]) {
 				Chat.parse('/savereplay', this.room, uploader, uploader.connections[0]);
 			}
@@ -786,10 +787,12 @@ class RoomBattle extends RoomGames.RoomGame {
 		if (this.room.hideReplay) {
 			this.room.modjoin = '%';
 			this.room.isPrivate = 'hidden';
-			// We also save the replay to make sure the hidden setting gets reflected
-			let uploader = Users.get(winnerid || p1id);
-			if (uploader && uploader.connections[0]) {
-				Chat.parse('/savereplay', this.room, uploader, uploader.connections[0]);
+			// We also resave the replay to make sure the hidden setting gets reflected
+			if (this.replaySaved) {
+				const uploader = Users.get(winnerid || p1id);
+				if (uploader && uploader.connections[0]) {
+					Chat.parse('/savereplay', this.room, uploader, uploader.connections[0]);
+				}
 			}
 		}
 		this.room.update();
