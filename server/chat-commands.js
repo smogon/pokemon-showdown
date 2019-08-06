@@ -4105,6 +4105,7 @@ const commands = {
 			hidden: forPunishment ? '2' : room.isPrivate || room.hideReplay ? '1' : '',
 			inputlog: battle.inputLog ? battle.inputLog.join('\n') : null,
 		});
+		if (success) battle.replaySaved = true;
 		if (success && success.errorip) {
 			connection.popup(`This server's request IP ${success.errorip} is not a registered server.`);
 			return;
@@ -4119,6 +4120,7 @@ const commands = {
 		if (!room || !room.battle || !this.can('joinbattle', null, room)) return;
 		if (room.hideReplay) return this.errorReply(`The replay for this battle is already set to hidden.`);
 		room.hideReplay = true;
+		if (room.battle.replaySaved) this.parse('/savereplay');
 		this.addModAction(`${user.name} hid the replay of this battle.`);
 	},
 
