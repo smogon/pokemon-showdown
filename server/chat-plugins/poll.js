@@ -267,7 +267,7 @@ const commands = {
 
 			this.roomlog(`${user.name} used ${message}`);
 			this.modlog('POLL');
-			return this.privateModAction(`(A poll was started by ${user.name}.)`);
+			return this.addModAction(`A poll was started by ${user.name}.`);
 		},
 		newhelp: [`/poll create [question], [option1], [option2], [...] - Creates a poll. Requires: % @ # & ~`],
 
