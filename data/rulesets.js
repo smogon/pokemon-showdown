@@ -418,7 +418,7 @@ let BattleFormats = {
 	blitz: {
 		effectType: 'Rule',
 		name: 'Blitz',
-		desc: "Super-fast 'Blitz' timer giving 30 second Team Preview and 10 seconds per turn.",
+		desc: "Super-fast 'Blitz' timer giving 30 second Team Preview and 15 seconds per turn.",
 		onBegin() {
 			this.add('rule', 'Blitz: Super-fast timer');
 		},
