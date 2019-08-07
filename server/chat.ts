@@ -90,6 +90,7 @@ const BROADCAST_TOKEN = '!';
 
 const TRANSLATION_DIRECTORY = 'translations/';
 
+import { ExecException, exec } from 'child_process';
 import { FS } from '../lib/fs';
 
 // @ts-ignore no typedef available
@@ -1845,6 +1846,37 @@ function registerMonitor(id: string, entry: Monitor) {
 function resolvePage(pageid: string, user: User, connection: Connection) {
 	return (new PageContext({pageid, user, connection})).resolve();
 }
+
+async function version() {
+	function sh(command: string, path: string): Promise<[number, string, string]> {
+		return new Promise((resolve, reject) => {
+			exec(command, {
+				cwd: __dirname,
+				env: {GIT_INDEX_FILE: path},
+			}, (error: ExecException | null, stdout: string | Buffer, stderr: string | Buffer) => {
+				resolve([error && error.code || 0, stdout as string, stderr as string]);
+			});
+		});
+	}
+
+	let hash;
+	try {
+		await FS('.git/index').copyFile('logs/.gitindex');
+		const index = FS('logs/.gitindex');
+
+		let [code, stdout, stderr] = await sh(`git add -A`, index.path);
+		if (code || stderr) return;
+		[code, stdout, stderr] = await sh(`git write-tree`, index.path);
+
+		if (code || stderr) return;
+		hash = stdout.trim();
+
+		await sh(`git reset`, index.path);
+		await index.unlinkIfExists();
+	} catch (err) {}
+	return hash;
+}
+
 export const Chat = {
 	multiLinePattern,
 	baseCommands,
@@ -1914,4 +1946,5 @@ export const Chat = {
 	stripFormatting,
 
 	updateServerLock,
+	version,
 };
