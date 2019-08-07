@@ -253,9 +253,6 @@ class RoomBattleTimer {
 		this.timer = null;
 		return true;
 	}
-	waitingForChoice(/** @type {SideID} */ slot) {
-		return !this.battle[slot].request.isWait;
-	}
 	nextRequest(isFirst = false) {
 		if (this.timer) clearTimeout(this.timer);
 		if (!this.timerRequesters.size) return;
@@ -340,6 +337,7 @@ class RoomBattleTimer {
 		}
 	}
 	checkActivity() {
+		if (this.battle.ended) return;
 		for (const player of this.battle.players) {
 			const isConnected = !!(player && player.active);
 
@@ -378,7 +376,7 @@ class RoomBattleTimer {
 				player.connected = true;
 				if (this.timerRequesters.size) {
 					let timeLeft = ``;
-					if (this.waitingForChoice(player.slot)) {
+					if (!player.request.isWait) {
 						timeLeft = ` and has ${player.turnSecondsLeft} seconds left`;
 					}
 					this.battle.room.add(`|inactive|${player.name} reconnected${timeLeft}.`).update();
