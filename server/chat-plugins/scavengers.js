@@ -253,21 +253,25 @@ class ScavengerHuntDatabase {
 		}
 
 		scavengersData.recycledHunts.push(huntSchema);
-		FS(DATABASE_FILE).writeUpdate(() => JSON.stringify(scavengersData));
+		this.updateDatabaseOnDisk();
 	}
 
 	static removeRecycledHuntFromDatabase(index) {
 		scavengersData.recycledHunts.splice(index - 1, 1);
-		FS(DATABASE_FILE).writeUpdate(() => JSON.stringify(scavengersData));
+		this.updateDatabaseOnDisk();
 	}
 
 	static addHintToRecycledHunt(huntNumber, questionNumber, hint) {
 		scavengersData.recycledHunts[huntNumber - 1].questions[questionNumber - 1].hints.push(hint);
-		FS(DATABASE_FILE).writeUpdate(() => JSON.stringify(scavengersData));
+		this.updateDatabaseOnDisk();
 	}
 
 	static removeHintToRecycledHunt(huntNumber, questionNumber, hintNumber) {
 		scavengersData.recycledHunts[huntNumber - 1].questions[questionNumber - 1].hints.splice(hintNumber - 1);
+		this.updateDatabaseOnDisk();
+	}
+
+	static updateDatabaseOnDisk() {
 		FS(DATABASE_FILE).writeUpdate(() => JSON.stringify(scavengersData));
 	}
 
