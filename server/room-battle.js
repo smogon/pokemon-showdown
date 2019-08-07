@@ -520,7 +520,6 @@ class RoomBattle extends RoomGames.RoomGame {
 			this.addPlayer(options.p4, options.p4team || '', options.p4rating);
 		}
 		this.timer = new RoomBattleTimer(this);
-		if (Config.forcetimer) this.timer.start();
 		this.start();
 	}
 
@@ -687,7 +686,13 @@ class RoomBattle extends RoomGames.RoomGame {
 				this.room.add(line);
 			}
 			this.room.update();
-			if (!this.ended) this.timer.nextRequest();
+			// The actual first decision doesn't occur until after the first two requests
+			// initializing the players and battle have happened.
+			if (this.requestCount === 2 && Config.forcetimer) {
+				this.timer.start();
+			} else if (this.requestCount > 2 && !this.ended) {
+				this.timer.nextRequest();
+			}
 			this.checkActive();
 			break;
 
