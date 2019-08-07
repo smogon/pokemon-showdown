@@ -256,7 +256,10 @@ class RoomBattleTimer {
 		return true;
 	}
 	nextRequest() {
-		if (this.timer) clearTimeout(this.timer);
+		if (this.timer) {
+			clearTimeout(this.timer);
+			this.timer = null;
+		}
 		if (!this.timerRequesters.size) return;
 		const players = this.battle.players;
 		if (players.some(player => player.secondsLeft <= 0)) return;
