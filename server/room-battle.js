@@ -162,6 +162,7 @@ class RoomBattleTimer {
 		this.timer = null;
 		/** @type {Set<string>} */
 		this.timerRequesters = new Set();
+		this.isFirstTurn = true;
 
 		/**
 		 * Last tick, as milliseconds since UNIX epoch.
@@ -222,9 +223,10 @@ class RoomBattleTimer {
 			}
 		}
 		this.timerRequesters.add(userid);
-		this.nextRequest(true);
 		const requestedBy = requester ? ` (requested by ${requester.name})` : ``;
 		this.battle.room.add(`|inactive|Battle timer is ON: inactive players will automatically lose when time's up.${requestedBy}`).update();
+
+		this.nextRequest();
 		return true;
 	}
 	stop(/** @type {User} */ requester) {
@@ -253,11 +255,26 @@ class RoomBattleTimer {
 		this.timer = null;
 		return true;
 	}
-	nextRequest(isFirst = false) {
+	nextRequest() {
 		if (this.timer) clearTimeout(this.timer);
 		if (!this.timerRequesters.size) return;
 		const players = this.battle.players;
 		if (players.some(player => player.secondsLeft <= 0)) return;
+
+		/** false = U-turn or single faint, true = "new turn" */
+		let isFull = true;
+		let isEmpty = true;
+		for (const player of players) {
+			if (player.request.isWait) isFull = false;
+			if (player.request.isWait !== 'cantUndo') isEmpty = false;
+		}
+		if (isEmpty) {
+			// there are no active requests
+			return;
+		}
+		const isFirst = this.isFirstTurn;
+		this.isFirstTurn = false;
+
 		const maxTurnTime = (isFirst ? this.settings.maxFirstTurn : 0) || this.settings.maxPerTurn;
 
 		let addPerTurn = isFirst ? 0 : this.settings.addPerTurn;
@@ -272,6 +289,10 @@ class RoomBattleTimer {
 			}
 		}
 
+		if (!isFull && addPerTurn > TICK_TIME) {
+			addPerTurn = TICK_TIME;
+		}
+
 		const room = this.battle.room;
 		for (const player of players) {
 			if (!isFirst) {
@@ -283,7 +304,7 @@ class RoomBattleTimer {
 			let grace = player.secondsLeft - this.settings.starting;
 			if (grace < 0) grace = 0;
 			if (player) player.sendRoom(`|inactive|Time left: ${secondsLeft} sec this turn | ${player.secondsLeft - grace} sec total` + (grace ? ` | ${grace} sec grace` : ``));
-			if (secondsLeft <= 30) {
+			if (secondsLeft <= 30 && secondsLeft < this.settings.starting) {
 				room.add(`|inactive|${player.name} has ${secondsLeft} seconds left this turn.`);
 			}
 			if (this.debug) {
