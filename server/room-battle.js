@@ -502,6 +502,7 @@ class RoomBattle extends RoomGames.RoomGame {
 		 */
 		this.score = null;
 		this.inputLog = null;
+		this.turn = 0;
 
 		this.rqid = 1;
 		this.requestCount = 0;
@@ -704,6 +705,11 @@ class RoomBattle extends RoomGames.RoomGame {
 		switch (lines[0]) {
 		case 'update':
 			for (const line of lines.slice(1)) {
+				const tokens = line.slice(1).split("|");
+				const type = tokens.shift();
+				if (type === "turn") {
+					this.turn = parseInt(tokens[0]);
+				}
 				this.room.add(line);
 			}
 			this.room.update();
