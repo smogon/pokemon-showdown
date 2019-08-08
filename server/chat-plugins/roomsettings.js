@@ -545,32 +545,42 @@ exports.commands = {
 
 	banwords: 'banword',
 	banword: {
-		add(target, room, user) {
+		regexadd: 'add',
+		addregex: 'add',
+		add(target, room, user, connection, cmd) {
 			if (!target || target === ' ') return this.parse('/help banword');
 			if (!this.can('declare', null, room)) return false;
+
+			const regex = cmd.includes('regex');
+			if (regex && !user.can('makeroom')) return this.errorReply("Regex banwords are only allowed for leaders or above.");
 
 			if (!room.banwords) room.banwords = [];
 
 			// Most of the regex code is copied from the client. TODO: unify them?
-			let words = target.match(/[^,]+(,\d*}[^,]*)?/g);
+			// Regex banwords can have commas in the {1,5} pattern
+			let words = (regex ? target.match(/[^,]+(,\d*}[^,]*)?/g) : target.split(','))
+				.map(word => word.replace(/\n/g, '').trim());
 			if (!words) return this.parse('/help banword');
 
-			words = words.map(word => word.replace(/\n/g, '').trim());
-
-			let banwordRegexLen = (room.banwordRegex instanceof RegExp) ? room.banwordRegex.source.length : 30;
+			// Escape any character with a special meaning in regex
+			if (!regex) {
+				words = words.map(word => {
+					if (/[\\^$*+?()|{}[\]]/.test(word)) this.errorReply(`"${word}" might be a regular expression, did you mean "/banword addregex"?`);
+					return word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+				});
+			}
+			// PS adds a preamble to the banword regex that's 32 chars long
+			let banwordRegexLen = (room.banwordRegex instanceof RegExp) ? room.banwordRegex.source.length : 32;
 			for (let word of words) {
-				if (/[\\^$*+?()|{}[\]]/.test(word)) {
-					if (!user.can('makeroom')) return this.errorReply("Regex banwords are only allowed for leaders or above.");
-
-					try {
-						new RegExp(word); // eslint-disable-line no-new
-					} catch (e) {
-						return this.errorReply(e.message.startsWith('Invalid regular expression: ') ? e.message : `Invalid regular expression: /${word}/: ${e.message}`);
-					}
+				try {
+					new RegExp(word); // eslint-disable-line no-new
+				} catch (e) {
+					return this.errorReply(e.message.startsWith('Invalid regular expression: ') ? e.message : `Invalid regular expression: /${word}/: ${e.message}`);
 				}
 				if (room.banwords.includes(word)) return this.errorReply(`${word} is already a banned phrase.`);
 
-				banwordRegexLen += (banwordRegexLen === 30) ? word.length : `|${word}`.length;
+				// Banword strings are joined, so account for the first string not having the prefix
+				banwordRegexLen += (banwordRegexLen === 32) ? word.length : `|${word}`.length;
 				// RegExp instances whose source is greater than or equal to
 				// v8's RegExpMacroAssembler::kMaxRegister in length will crash
 				// the server on compile. In this case, that would happen each
@@ -646,7 +656,8 @@ exports.commands = {
 		},
 	},
 	banwordhelp: [
-		`/banword add [words] - Adds the comma-separated list of phrases (& or ~ can also input regex) to the banword list of the current room. Requires: # & ~`,
+		`/banword add [words] - Adds the comma-separated list of phrases to the banword list of the current room. Requires: # & ~`,
+		`/banword addregex [words] - Adds the comma-separated list of regular expressions to the banword list of the current room. Requires & ~`,
 		`/banword delete [words] - Removes the comma-separated list of phrases from the banword list. Requires: # & ~`,
 		`/banword list - Shows the list of banned words in the current room. Requires: % @ # & ~`,
 	],
