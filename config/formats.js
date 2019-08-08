@@ -374,6 +374,66 @@ let Formats = [
 		banlist: ['DOU', 'DBL'],
 	},
 	{
+		name: "[Gen 7] VGC 2019 Sun Series",
+
+		mod: 'gen7',
+		gameType: 'doubles',
+		searchShow: false,
+		forcedLevel: 50,
+		teamLength: {
+			validate: [4, 6],
+			battle: 4,
+		},
+		ruleset: ['Pokemon', 'Minimal GBU', 'VGC Timer'],
+		banlist: ['Unown', 'Dragon Ascent', 'Custap Berry', 'Enigma Berry', 'Jaboca Berry', 'Micle Berry', 'Rowap Berry'],
+		requirePlus: true,
+		onValidateTeam(team) {
+			const legends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma'];
+			let n = 0;
+			let problems = [];
+			for (const set of team) {
+				const baseSpecies = this.getTemplate(set.species).baseSpecies;
+				if (legends.includes(baseSpecies)) {
+					n++;
+					if (n === 3) problems.push(`You can only use up to two legendary Pok\u00E9mon.`);
+				}
+				const item = this.getItem(set.item);
+				if (item.zMove || item.megaStone || ['redorb', 'blueorb'].includes(item.id)) problems.push(`${set.name || set.species}'s item ${item.name} is banned.`);
+			}
+			return problems;
+		},
+	},
+	{
+		name: "[Gen 7] VGC 2019 Moon Series",
+
+		mod: 'gen7',
+		gameType: 'doubles',
+		searchShow: false,
+		forcedLevel: 50,
+		teamLength: {
+			validate: [4, 6],
+			battle: 4,
+		},
+		ruleset: ['Pokemon', 'Minimal GBU', 'VGC Timer'],
+		banlist: ['Unown', 'Dragon Ascent'],
+		requirePlus: true,
+		onValidateTeam(team) {
+			const legends = ['Mewtwo', 'Lugia', 'Ho-Oh', 'Kyogre', 'Groudon', 'Rayquaza', 'Dialga', 'Palkia', 'Giratina', 'Reshiram', 'Zekrom', 'Kyurem', 'Xerneas', 'Yveltal', 'Zygarde', 'Cosmog', 'Cosmoem', 'Solgaleo', 'Lunala', 'Necrozma'];
+			let n = 0;
+			let problems = [];
+			for (const set of team) {
+				const baseSpecies = this.getTemplate(set.species).baseSpecies;
+				if (legends.includes(baseSpecies)) {
+					n++;
+					if (n === 3) problems.push(`You can only use up to two legendary Pok\u00E9mon.`);
+				}
+				const item = this.getItem(set.item);
+				if (item.megaStone || ['redorb', 'blueorb', 'ultranecroziumz'].includes(item.id)) problems.push(`${set.name || set.species}'s item ${item.name} is banned.`);
+			}
+			return problems;
+		},
+	},
+	{
 		name: "[Gen 7] VGC 2019 Ultra Series",
 		threads: [
 			`&bullet; <a href="https://www.smogon.com/forums/threads/3641100/">VGC 2019 Discussion</a>`,
