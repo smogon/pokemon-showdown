@@ -330,8 +330,6 @@ const avatarTable = new Set([
 	'zinzolin',
 ]);
 
-const HOTPATCH_VERSIONS = {};
-
 /** @type {ChatCommands} */
 const commands = {
 
@@ -3147,7 +3145,7 @@ const commands = {
 		let patch = target;
 		const requiresForce = (patch) =>
 			version && cmd !== 'forcehotpatch' &&
-			((HOTPATCH_VERSIONS[patch] && HOTPATCH_VERSIONS[patch] === version) ||
+			((Monitor.hotpatchVersions[patch] && Monitor.hotpatchVersions[patch] === version) ||
 			 (global.__version && version === global.__version.head));
 		const requiresForceMessage = `The history in git has not changed since the last time ${target} was hotpatched (${version.slice(0, 8)}), use /forcehotpatch ${target} if you wish to hotpatch anyway.`;
 
@@ -3257,7 +3255,7 @@ const commands = {
 			Rooms.global.notifyRooms(['development', 'staff', 'upperstaff'], `|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${target} - but something failed while trying to hot-patch.`);
 			return this.errorReply(`Something failed while trying to hot-patch ${target}: \n${e.stack}`);
 		}
-		HOTPATCH_VERSIONS[patch] = version;
+		Monitor.hotpatchVersions[patch] = version;
 		Rooms.global.notifyRooms(['development', 'staff', 'upperstaff'], `|c|${user.getIdentity()}|/log ${user.name} used /hotpatch ${target}`);
 	},
 	hotpatchhelp: [

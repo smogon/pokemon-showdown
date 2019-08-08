@@ -95,6 +95,10 @@ global.LoginServer = require('../.server-dist/loginserver').LoginServer;
 global.Ladders = require('../.server-dist/ladders').Ladders;
 
 global.Chat = require('../.server-dist/chat').Chat;
+global.__version = {head: ''};
+Chat.version().then(function (hash) {
+	global.__version.tree = hash;
+});
 
 global.Users = require('../.server-dist/users').Users;
 

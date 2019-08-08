@@ -127,6 +127,7 @@ export const Monitor = {
 	networkUse: {} as unknown as {[k: string]: number},
 	networkCount: {} as unknown as {[k: string]: number},
 	hotpatchLock: {} as unknown as {[k: string]: number},
+	hotpatchVersions: {} as unknown as {[k: string]: number},
 
 	/**
 	 * Counts a connection. Returns true if the connection should be terminated for abuse.
