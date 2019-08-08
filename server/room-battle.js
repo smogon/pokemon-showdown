@@ -705,10 +705,8 @@ class RoomBattle extends RoomGames.RoomGame {
 		switch (lines[0]) {
 		case 'update':
 			for (const line of lines.slice(1)) {
-				const tokens = line.slice(1).split("|");
-				const type = tokens.shift();
-				if (type === "turn") {
-					this.turn = parseInt(tokens[0]);
+				if (line.startsWith('|turn|')) {
+					this.turn = parseInt(line.slice(6));
 				}
 				this.room.add(line);
 			}
