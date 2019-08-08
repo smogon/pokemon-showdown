@@ -34,12 +34,8 @@ const HISTORY_PERIOD = 6; // months
 
 const ScavengerGames = require("./scavenger-games");
 
-let scavengersData = {recycledHunts: []};
-try {
-	scavengersData = JSON.parse(FS(DATABASE_FILE).readIfExistsSync());
-} catch (err) {
-	console.log(err);
-}
+const databaseContentsJSON = FS(DATABASE_FILE).readIfExistsSync();
+const scavengersData = databaseContentsJSON ? JSON.parse(databaseContentsJSON) : {recycledHunts: []};
 
 // convert points stored in the old format
 const scavsRoom = Rooms('scavengers');
