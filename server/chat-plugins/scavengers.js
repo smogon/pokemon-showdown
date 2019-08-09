@@ -25,6 +25,7 @@ const DEFAULT_TIMER_DURATION = 120;
 const DATA_FILE = 'config/chat-plugins/scavdata.json';
 const HOST_DATA_FILE = 'config/chat-plugins/scavhostdata.json';
 const PLAYER_DATA_FILE = 'config/chat-plugins/scavplayerdata.json';
+const DATABASE_FILE = 'config/chat-plugins/scavhunts.json';
 
 const SCAVENGE_REGEX = /^((?:\s)?(?:\/{2,}|[^\w/]+)|\s\/)?(?:\s)?(?:s\W?cavenge|s\W?cav(?:engers)? guess|d\W?t|d\W?ata|d\W?etails|g\W?(?:uess)?|v)\b/i; // a regex of some of all the possible slips for leaks.
 const FILTER_LENIENCY = 7;
@@ -32,6 +33,9 @@ const FILTER_LENIENCY = 7;
 const HISTORY_PERIOD = 6; // months
 
 const ScavengerGames = require("./scavenger-games");
+
+const databaseContentsJSON = FS(DATABASE_FILE).readIfExistsSync();
+const scavengersData = databaseContentsJSON ? JSON.parse(databaseContentsJSON) : {recycledHunts: []};
 
 // convert points stored in the old format
 const scavsRoom = Rooms('scavengers');
@@ -216,6 +220,73 @@ function formatOrder(place) {
 	return place + 'th';
 }
 
+class ScavengerHuntDatabase {
+	static getRecycledHuntFromDatabase() {
+		// Return a random hunt from the database.
+		return scavengersData.recycledHunts[Math.floor(Math.random() * scavengersData.recycledHunts.length)];
+	}
+
+	static addRecycledHuntToDatabase(hosts, params) {
+		const huntSchema = {
+			hosts: hosts,
+			questions: [],
+		};
+
+		let questionSchema = {
+			text: '',
+			answers: [],
+			hints: [],
+		};
+
+		for (let i = 0; i < params.length; ++i) {
+			if (i % 2 === 0) {
+				questionSchema.text = params[i];
+			} else {
+				questionSchema.answers = params[i];
+				huntSchema.questions.push(questionSchema);
+				questionSchema = {
+					text: '',
+					answers: [],
+					hints: [],
+				};
+			}
+		}
+
+		scavengersData.recycledHunts.push(huntSchema);
+		this.updateDatabaseOnDisk();
+	}
+
+	static removeRecycledHuntFromDatabase(index) {
+		scavengersData.recycledHunts.splice(index - 1, 1);
+		this.updateDatabaseOnDisk();
+	}
+
+	static addHintToRecycledHunt(huntNumber, questionNumber, hint) {
+		scavengersData.recycledHunts[huntNumber - 1].questions[questionNumber - 1].hints.push(hint);
+		this.updateDatabaseOnDisk();
+	}
+
+	static removeHintToRecycledHunt(huntNumber, questionNumber, hintNumber) {
+		scavengersData.recycledHunts[huntNumber - 1].questions[questionNumber - 1].hints.splice(hintNumber - 1);
+		this.updateDatabaseOnDisk();
+	}
+
+	static updateDatabaseOnDisk() {
+		FS(DATABASE_FILE).writeUpdate(() => JSON.stringify(scavengersData));
+	}
+
+	static isEmpty() {
+		return scavengersData.recycledHunts.length === 0;
+	}
+
+	static hasHunt(hunt_number) {
+		return !isNaN(hunt_number) && hunt_number > 0 && hunt_number <= scavengersData.recycledHunts.length;
+	}
+
+	static getFullTextOfHunt(hunt) {
+		return `${hunt.hosts.map(host => host.name).join(',')} | ${hunt.questions.map(question => `${question.text} | ${question.answers.join(';')}`).join(' | ')}`;
+	}
+}
 class ScavengerHunt extends Rooms.RoomGame {
 	constructor(room, staffHost, hosts, gameType, questions, parentGame) {
 		super(room);
@@ -414,6 +485,22 @@ class ScavengerHunt extends Rooms.RoomGame {
 		if (this.parentGame) this.parentGame.onBeforeEndHunt();
 		if (!endedBy && (this.preCompleted ? this.preCompleted.length : this.completed.length) === 0) {
 			reset = true;
+		}
+
+		if (!ScavengerHuntDatabase.isEmpty() && this.room.addRecycledHuntsToQueueAutomatically) {
+			if (!this.room.scavQueue) {
+				this.room.scavQueue = [];
+			}
+
+			const next = ScavengerHuntDatabase.getRecycledHuntFromDatabase();
+			const correctlyFormattedQuestions = next.questions.flatMap(question => [question.text, question.answers]);
+			this.room.scavQueue.push({
+				hosts: next.hosts,
+				questions: correctlyFormattedQuestions,
+				staffHostId: 'scavengermanager',
+				staffHostName: 'Scavenger Manager',
+				gameType: 'unrated',
+			});
 		}
 
 		if (!reset) {
@@ -865,6 +952,7 @@ let commands = {
 	createmini: 'create',
 	forcecreate: 'create',
 	forcecreateunrated: 'create',
+	createrecycled: 'create',
 	create(target, room, user, connection, cmd) {
 		if (room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return this.errorReply("Scavenger hunts can only be created in the scavengers room.");
 		if (!this.can('mute', null, room)) return false;
@@ -878,13 +966,36 @@ let commands = {
 			gameType = 'mini';
 		} else if (cmd.includes('unrated')) {
 			gameType = 'unrated';
+		} else if (cmd.includes('recycled')) {
+			gameType = 'recycled';
 		}
 
 		// mini and officials can be started anytime
-		if (!cmd.includes('force') && ['regular', 'unrated'].includes(gameType) && room.scavQueue && room.scavQueue.length && !(room.game && room.game.scavParentGame)) return this.errorReply(`There are currently hunts in the queue! If you would like to start the hunt anyways, use /forcestart${gameType === 'regular' ? 'hunt' : gameType}.`);
+		if (!cmd.includes('force') && ['regular', 'unrated', 'recycled'].includes(gameType) && room.scavQueue && room.scavQueue.length && !(room.game && room.game.scavParentGame)) return this.errorReply(`There are currently hunts in the queue! If you would like to start the hunt anyways, use /forcestart${gameType === 'regular' ? 'hunt' : gameType}.`);
+
+		if (gameType === 'recycled') {
+			if (ScavengerHuntDatabase.isEmpty()) {
+				return this.errorReply("There are no hunts in the database.");
+			}
+
+			let hunt;
+			if (target) {
+				const huntNumber = parseInt(target);
+				if (!ScavengerHuntDatabase.hasHunt(huntNumber)) return this.errorReply("You specified an invalid hunt number.");
+				hunt = scavengersData.recycledHunts[huntNumber];
+			} else {
+				hunt = ScavengerHuntDatabase.getRecycledHuntFromDatabase();
+			}
+
+			target = ScavengerHuntDatabase.getFullTextOfHunt(hunt);
+		}
 
 		let [hostsArray, ...params] = target.split('|');
-		let hosts = ScavengerHunt.parseHosts(hostsArray.split(/[,;]/), room, gameType === 'official');
+		// A recycled hunt should list both its original creator and the staff who started it as its host.
+		if (gameType === 'recycled') {
+			hostsArray += `,${user.name}`;
+		}
+		const hosts = ScavengerHunt.parseHosts(hostsArray.split(/[,;]/), room, gameType === 'official' || gameType === 'recycled');
 		if (!hosts) return this.errorReply("The user(s) you specified as the host is not online, or is not in the room.");
 
 		params = ScavengerHunt.parseQuestions(params);
@@ -1039,25 +1150,52 @@ let commands = {
 	 */
 	queueunrated: 'queue',
 	queuerated: 'queue',
+	queuerecycled: 'queue',
 	queue(target, room, user) {
 		if (room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return this.errorReply("This command can only be used in the scavengers room.");
-		if (!target) {
+		if (!target && this.cmd !== 'queuerecycled') {
 			if (this.cmd === 'queue') return commands.viewqueue.call(this, target, room, user);
 			return this.parse('/scavhelp staff');
 		}
 
 		if (!this.can('mute', null, room)) return false;
 
-		let [hostsArray, ...params] = target.split('|');
-		let hosts = ScavengerHunt.parseHosts(hostsArray.split(/[,;]/), room);
-		if (!hosts) return this.errorReply("The user(s) you specified as the host is not online, or is not in the room.");
+		if (this.cmd === 'queuerecycled') {
+			if (ScavengerHuntDatabase.isEmpty()) {
+				return this.errorReply(`There are no hunts in the database.`);
+			}
+			if (!room.scavQueue) {
+				room.scavQueue = [];
+			}
 
-		params = ScavengerHunt.parseQuestions(params);
-		if (params.err) return this.errorReply(params.err);
+			let next;
+			if (target) {
+				const huntNumber = parseInt(target);
+				if (!ScavengerHuntDatabase.hasHunt(huntNumber)) return this.errorReply("You specified an invalid hunt number.");
+				next = scavengersData.recycledHunts[huntNumber];
+			} else {
+				next = ScavengerHuntDatabase.getRecycledHuntFromDatabase();
+			}
+			const correctlyFormattedQuestions = next.questions.flatMap(question => [question.text, question.answers]);
+			room.scavQueue.push({
+				hosts: next.hosts,
+				questions: correctlyFormattedQuestions,
+				staffHostId: 'scavengermanager',
+				staffHostName: 'Scavenger Manager',
+				gameType: 'unrated',
+			});
+		} else {
+			let [hostsArray, ...params] = target.split('|');
+			let hosts = ScavengerHunt.parseHosts(hostsArray.split(/[,;]/), room);
+			if (!hosts) return this.errorReply("The user(s) you specified as the host is not online, or is not in the room.");
 
-		if (!room.scavQueue) room.scavQueue = [];
+			params = ScavengerHunt.parseQuestions(params);
+			if (params.err) return this.errorReply(params.err);
 
-		room.scavQueue.push({hosts: hosts, questions: params.result, staffHostId: user.userid, staffHostName: user.name, gameType: (this.cmd.includes('unrated') ? 'unrated' : 'regular')});
+			if (!room.scavQueue) room.scavQueue = [];
+
+			room.scavQueue.push({hosts: hosts, questions: params.result, staffHostId: user.userid, staffHostName: user.name, gameType: (this.cmd.includes('unrated') ? 'unrated' : 'regular')});
+		}
 		this.privateModAction(`(${user.name} has added a scavenger hunt to the queue.)`);
 
 		if (room.chatRoomData) {
@@ -1491,7 +1629,155 @@ let commands = {
 			this.parse('/scav modsettings update');
 		},
 	},
+
+	/**
+	 * Database Commands
+	 */
+	recycledhunts(target, room, user) {
+		if (!this.can('mute', null, room)) return false;
+		if (room.id !== 'scavengers' && !(room.parent && room.parent.id === 'scavengers')) return this.errorReply("Scavenger Hunts can only be added to the database in the scavengers room.");
+
+		let cmd;
+		[cmd, target] = Chat.splitFirst(target, ' ');
+		cmd = toID(cmd);
+
+		if (cmd === '' || cmd === 'help' || !['addhunt', 'list', 'removehunt', 'addhint', 'removehint', 'autostart'].includes(cmd)) {
+			return this.parse(`/recycledhuntshelp`);
+		}
+
+		if (cmd === 'addhunt') {
+			if (!target) return this.errorReply(`Usage: ${cmd} Hunt Text`);
+
+			let [hostsArray, ...questions] = target.split('|');
+			const hosts = ScavengerHunt.parseHosts(hostsArray.split(/[,;]/), room, true);
+			if (!hosts) return this.errorReply("You need to specify a host.");
+
+			questions = ScavengerHunt.parseQuestions(questions);
+			if (questions.err) return this.errorReply(questions.err);
+
+			ScavengerHuntDatabase.addRecycledHuntToDatabase(hosts, questions.result);
+			return this.privateModAction(`A recycled hunt has been added to the database.`);
+		}
+
+		// The rest of the commands depend on there already being hunts in the database.
+		if (ScavengerHuntDatabase.isEmpty()) return this.errorReply("There are no hunts in the database.");
+
+
+		if (cmd === 'list') {
+			return this.parse(`/join view-recycledHunts-${room}`);
+		}
+
+		let params = target.split(',').map(param => param.trim()).filter(param => param !== '');
+
+		const usageMessages = {
+			'removehunt': 'Usage: removehunt hunt_number',
+			'addhint': 'Usage: addhint hunt number, question number, hint text',
+			'removehint': 'Usage: removehint hunt number, question number, hint text',
+			'autostart': 'Usage: autostart on/off',
+		};
+		if (!params) return this.errorReply(usageMessages[cmd]);
+
+		const numberOfRequiredParameters = {
+			'removehunt': 1,
+			'addhint': 3,
+			'removehint': 3,
+			'autostart': 1,
+		};
+		if (params.length < numberOfRequiredParameters[cmd]) return this.errorReply(usageMessages[cmd]);
+
+		const [huntNumber, questionNumber, hintNumber] = params.map((param) => parseInt(param));
+		const cmdsNeedingHuntNumber = ['removehunt', 'removehint', 'addhint'];
+		if (cmdsNeedingHuntNumber.includes(cmd)) {
+			if (!ScavengerHuntDatabase.hasHunt(huntNumber)) return this.errorReply("You specified an invalid hunt number.");
+		}
+
+		const cmdsNeedingQuestionNumber = ['addhint', 'removehint'];
+		if (cmdsNeedingQuestionNumber.includes(cmd)) {
+			if (isNaN(questionNumber) || questionNumber <= 0 || questionNumber > scavengersData.recycledHunts[huntNumber - 1].questions.length) return this.errorReply("You specified an invalid question number.");
+		}
+
+		const cmdsNeedingHintNumber = ['removehint'];
+		if (cmdsNeedingHintNumber.includes(cmd)) {
+			if (isNaN(hintNumber) || hintNumber <= 0 || scavengersData.recycledHunts && hintNumber > scavengersData.recycledHunts[huntNumber - 1].questions[questionNumber - 1].hints.length) return this.errorReply("You specified an invalid hint number.");
+		}
+
+		if (cmd === 'removehunt') {
+			ScavengerHuntDatabase.removeRecycledHuntFromDatabase(huntNumber);
+			return this.privateModAction(`Recycled hunt #${huntNumber} was removed from the database.`);
+		} else if (cmd === 'addhint') {
+			const hintText = params[2];
+			ScavengerHuntDatabase.addHintToRecycledHunt(huntNumber, questionNumber, hintText);
+			return this.privateModAction(`Hint added to Recycled hunt #${huntNumber} question #${questionNumber}: ${hintText}.`);
+		} else if (cmd === 'removehint') {
+			ScavengerHuntDatabase.removeHintToRecycledHunt(huntNumber, questionNumber, hintNumber);
+			return this.privateModAction(`Hint #${hintNumber} was removed from Recycled hunt #${huntNumber} question #${questionNumber}.`);
+		} else if (cmd === 'autostart') {
+			if (params[0] !== 'on' && params[0] !== 'off') return this.errorReply(usageMessages[cmd]);
+			if (params[0] === 'on' && room.addRecycledHuntsToQueueAutomatically || params[0] === 'off' && !room.addRecycledHuntsToQueueAutomatically) return this.errorReply(`Autostarting recycled hunts is already ${room.addRecycledHuntsToQueueAutomatically ? 'on' : 'off'}.`);
+			room.addRecycledHuntsToQueueAutomatically = !room.addRecycledHuntsToQueueAutomatically;
+			if (params[0] === 'on') {
+				this.parse("/scav queuerecycled");
+			}
+			return this.privateModAction(`Automatically adding recycled hunts to the queue is now ${room.addRecycledHuntsToQueueAutomatically ? 'on' : 'off'}`);
+		}
+	},
+
+	recycledhuntshelp() {
+		if (!this.runBroadcast()) return;
+		this.sendReplyBox([
+			"<b>Help for Recycled Hunts</b>",
+			"- addhunt &lt;Hunt Text>: Adds a hunt to the database of recycled hunts.",
+			"- removehunt&lt;Hunt Number>: Removes a hunt form the database of recycled hunts.",
+			"- list: Shows a list of hunts in the database along with their questions and hints.",
+			"- addhint &lt;Hunt Number, Question Number, Hint Text>: Adds a hint to the specified question in the specified hunt.",
+			"- removehint &lt;Hunt Number, Question Number, Hint Number>: Removes the specified hint from the specified question in the specified hunt.",
+			"- autostart &lt;on/off>: Sets whether or not recycled hunts are automatically added to the queue when a hunt ends.",
+		].join('<br/>'));
+	},
 };
+
+const pages = {
+	recycledHunts(query, user, connection) {
+		this.title = 'Recycled Hunts';
+		let buf = "";
+		this.extractRoom();
+		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
+		if (!this.room.chatRoomData) return;
+		if (!this.can('mute', null, this.room)) return;
+		buf += `<div class="pad"><h2>List of recycled Scavenger hunts</h2>`;
+		buf += `<ol style="width: 90%;">`;
+		for (let i = 0; i < scavengersData.recycledHunts.length; ++i) {
+			buf += `<li>`;
+			buf += `<h4>By ${scavengersData.recycledHunts[i].hosts.map(host => host.name).join(', ')}</h4>`;
+			for (const question of scavengersData.recycledHunts[i].questions) {
+				buf += `<details>`;
+				buf += `<summary>${question.text}</summary>`;
+				buf += `<dl>`;
+				buf += `<dt>Answers:</dt>`;
+				for (const answer of question.answers) {
+					buf += `<dd>${answer}</dd>`;
+				}
+				buf += `</dl>`;
+
+				if (question.hints.length) {
+					buf += `<dl>`;
+					buf += `<dt>Hints:</dt>`;
+					for (const hint of question.hints) {
+						buf += `<dd>${hint}</dd>`;
+					}
+					buf += `</dl>`;
+				}
+				buf += `</details>`;
+			}
+			buf += `</li>`;
+		}
+		buf += `</ol>`;
+		buf += `</div>`;
+		return buf;
+	},
+};
+
+exports.pages = pages;
 
 exports.commands = {
 	// general
@@ -1504,6 +1790,7 @@ exports.commands = {
 	startofficialhunt: 'starthunt',
 	startminihunt: 'starthunt',
 	startunratedhunt: 'starthunt',
+	startrecycledhunt: 'starthunt',
 
 	forcestarthunt: 'starthunt',
 	forcestartunrated: 'starthunt',
@@ -1534,6 +1821,9 @@ exports.commands = {
 
 	scavresetlb: 'scavengersresetlb',
 	scavengersresetlb: commands.resetladder,
+
+	recycledhunts: commands.recycledhunts,
+	recycledhuntshelp: commands.recycledhuntshelp,
 
 	scavrank: commands.rank,
 	scavladder: 'scavtop',
@@ -1571,9 +1861,11 @@ exports.commands = {
 			"- /scav setpoints [1st place], [2nd place], [3rd place], [4th place], [5th place], ... - sets the point values for the wins. Use `/scav setpoints` to view what the current point values are. (Requires: # & ~)",
 			"- /scav setblitz [value] ... - sets the blitz award to `value`. Use `/scav setblitz` to view what the current blitz value is. (Requires: # & ~)",
 			"- /scav queue(rated/unrated) <em>[host] | [hint] | [answer] | [hint] | [answer] | [hint] | [answer] | ...</em> - queues a scavenger hunt to be started after the current hunt is finished. (Requires: % @ * # & ~)",
+			"- /scav queuerecycled [number] - queues a recycled hunt from the database. If number is left blank, then a random hunt is queued.",
 			"- /scav viewqueue - shows the list of queued scavenger hunts to be automatically started, as well as the option to remove hunts from the queue. (Requires: % @ * # & ~)",
 			"- /scav defaulttimer [value] - sets the default timer applied to automatically started hunts from the queue.",
 			"- /nexthunt - starts the next hunt in the queue.",
+			"- /recycledhunts - Modify the database of recycled hunts and enable/disable autoqueing them. More detailed help can be found in /recycledhuntshelp",
 		].join('<br />');
 
 		const gamesCommands = [
