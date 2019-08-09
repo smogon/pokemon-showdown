@@ -1667,7 +1667,7 @@ let BattleMovedex = {
 		effect: {
 			duration: 2,
 			onTryImmunity(target, source, move) {
-				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown',  'thousandarrows', 'helpinghand'].includes(move.id)) {
+				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows', 'helpinghand'].includes(move.id)) {
 					return;
 				}
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
