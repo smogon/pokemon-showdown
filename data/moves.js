@@ -1667,16 +1667,14 @@ let BattleMovedex = {
 		effect: {
 			duration: 2,
 			onTryImmunity(target, source, move) {
-				if (move.id === 'gust' || move.id === 'twister') {
-					return;
-				}
-				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'thousandarrows' || move.id === 'helpinghand') {
+				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows', 'helpinghand'].includes(move.id)) {
 					return;
 				}
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
 					return;
 				}
 				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
+				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
 			onSourceBasePower(basePower, target, source, move) {
@@ -3418,13 +3416,14 @@ let BattleMovedex = {
 				if (type === 'sandstorm' || type === 'hail') return false;
 			},
 			onTryImmunity(target, source, move) {
-				if (move.id === 'earthquake' || move.id === 'magnitude' || move.id === 'helpinghand') {
+				if (['earthquake', 'magnitude', 'helpinghand'].includes(move.id)) {
 					return;
 				}
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
 					return;
 				}
 				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
+				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
 			onSourceModifyDamage(damage, source, target, move) {
@@ -3583,13 +3582,14 @@ let BattleMovedex = {
 				if (type === 'sandstorm' || type === 'hail') return false;
 			},
 			onTryImmunity(target, source, move) {
-				if (move.id === 'surf' || move.id === 'whirlpool' || move.id === 'helpinghand') {
+				if (['surf', 'whirlpool', 'helpinghand'].includes(move.id)) {
 					return;
 				}
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
 					return;
 				}
 				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
+				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
 			onSourceModifyDamage(damage, source, target, move) {
@@ -5674,16 +5674,14 @@ let BattleMovedex = {
 		effect: {
 			duration: 2,
 			onTryImmunity(target, source, move) {
-				if (move.id === 'gust' || move.id === 'twister') {
-					return;
-				}
-				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'thousandarrows' || move.id === 'helpinghand') {
+				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows', 'helpinghand'].includes(move.id)) {
 					return;
 				}
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
 					return;
 				}
 				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
+				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
 			onSourceModifyDamage(damage, source, target, move) {
@@ -11882,6 +11880,7 @@ let BattleMovedex = {
 					return;
 				}
 				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
+				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
 		},
@@ -14664,6 +14663,7 @@ let BattleMovedex = {
 					return;
 				}
 				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
+				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
 		},
@@ -15292,16 +15292,14 @@ let BattleMovedex = {
 				if (source === this.effectData.target && target === this.effectData.source) {
 					return;
 				}
-				if (move.id === 'gust' || move.id === 'twister') {
-					return;
-				}
-				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'thousandarrows' || move.id === 'helpinghand') {
+				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows', 'helpinghand'].includes(move.id)) {
 					return;
 				}
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
 					return;
 				}
 				if (source.volatiles['lockon'] && target === source.volatiles['lockon'].source) return;
+				if (move.id === 'toxic' && source.hasType('Poison')) return;
 				return false;
 			},
 			onAnyBasePower(basePower, target, source, move) {
