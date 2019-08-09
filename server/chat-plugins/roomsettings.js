@@ -150,7 +150,7 @@ class RoomSettings {
 		}
 	}
 	mafia() {
-		if (!this.user.can('editroom', null, this.room)) return this.button(!this.room.mafiaDisabled ? 'Mafia disabled' : 'off', true);
+		if (!this.user.can('editroom', null, this.room)) return this.button(this.room.mafiaDisabled ? 'off' : 'Mafia disabled', true);
 		if (this.room.mafiaDisabled) {
 			return `${this.button('Mafia enabled', null, 'mafia enable')} ${this.button('off', true)}`;
 		} else {
