@@ -1383,19 +1383,30 @@ const commands = {
 	'!punishments': true,
 	punishments(target, room, user) {
 		if (!this.runBroadcast()) return;
+		const showRoom = (target !== 'global');
+		const showGlobal = (target !== 'room' && target !== 'rooms');
+
+		const roomPunishments = [
+			`<strong>Room punishments</strong>:`,
+			`<strong>warn</strong> - Displays a popup with the rules.`,
+			`<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.`,
+			`<strong>hourmute</strong> - Mutes a user for 60 minutes.`,
+			`<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.`,
+			`<strong>blacklist</strong> - Bans a user for a year.`,
+		];
+
+		const globalPunishments = [
+			`<strong>Global punishments</strong>:`,
+			`<strong>lock</strong> - Locks a user (makes them unable to talk in any rooms or PM non-staff) for 2 days.`,
+			`<strong>weeklock</strong> - Locks a user for a week.`,
+			`<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.`,
+			`<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.`,
+		];
+
 		this.sendReplyBox(
-			`<strong>Room punishments</strong>:<br />` +
-			`<strong>warn</strong> - Displays a popup with the rules.<br />` +
-			`<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.<br />` +
-			`<strong>hourmute</strong> - Mutes a user for 60 minutes.<br />` +
-			`<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.<br />` +
-			`<strong>blacklist</strong> - Bans a user for a year.<br />` +
-			`<br />` +
-			`<strong>Global punishments</strong>:<br />` +
-			`<strong>lock</strong> - Locks a user (makes them unable to talk in any rooms or PM non-staff) for 2 days.<br />` +
-			`<strong>weeklock</strong> - Locks a user for a week.<br />` +
-			`<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.<br />` +
-			`<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.`
+			(showRoom ? roomPunishments.map(str => this.tr(str)).join('<br />') : ``) +
+			(showRoom && showGlobal ? `<br /><br />` : ``) +
+			(showGlobal ? globalPunishments.map(str => this.tr(str)).join('<br />') : ``)
 		);
 	},
 	punishmentshelp: [
@@ -1711,46 +1722,58 @@ const commands = {
 		if (this.broadcastMessage && !this.can('declare', null, room)) return false;
 
 		if (!this.runBroadcast(false, '!htmlbox')) return;
+
+		const strings = [
+			[
+				`<strong>Room drivers (%)</strong> can use:`,
+				`- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules`,
+				`- /mute OR /m <em>username</em>: 7 minute mute`,
+				`- /hourmute OR /hm <em>username</em>: 60 minute mute`,
+				`- /unmute <em>username</em>: unmute`,
+				`- /hidetext <em>username</em>: hide a user's messages from the room`,
+				`- /announce OR /wall <em>message</em>: make an announcement`,
+				`- /modlog <em>username</em>: search the moderator log of the room`,
+				`- /modnote <em>note</em>: add a moderator note that can be read through modlog`,
+			],
+			[
+				`<strong>Room moderators (@)</strong> can also use:`,
+				`- /roomban OR /rb <em>username</em>: ban user from the room`,
+				`- /roomunban <em>username</em>: unban user from the room`,
+				`- /roomvoice <em>username</em>: appoint a room voice`,
+				`- /roomdevoice <em>username</em>: remove a room voice`,
+				`- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room`,
+				`- /roomsettings: change a variety of room settings, namely modchat`,
+			],
+			[
+				`<strong>Room owners (#)</strong> can also use:`,
+				`- /roomintro <em>intro</em>: set the room introduction that will be displayed for all users joining the room`,
+				`- /rules <em>rules link</em>: set the room rules link seen when using /rules`,
+				`- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver`,
+				`- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver`,
+				`- /roomdeauth <em>username</em>: remove all room auth from a user`,
+				`- /declare <em>message</em>: make a large blue declaration to the room`,
+				`- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room`,
+				`- !showimage <em>[url], [width], [height]</em>: show an image to the room`,
+				`- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc`,
+			],
+			[
+				`More detailed help can be found in the <a href="https://www.smogon.com/forums/posts/6774654/">roomauth guide</a>`,
+			],
+			[
+				`Tournament Help:`,
+				`- /tour create <em>format</em>, elimination: create a new single elimination tournament in the current room.`,
+				`- /tour create <em>format</em>, roundrobin: create a new round robin tournament in the current room.`,
+				`- /tour end: forcibly end the tournament in the current room`,
+				`- /tour start: start the tournament in the current room`,
+				`- /tour banlist [pokemon], [talent], [...]: ban moves, abilities, Pokémon or items from being used in a tournament (it must be created first)`,
+			],
+			[
+				`More detailed help can be found in the <a href="https://www.smogon.com/forums/posts/6777489/">tournaments guide</a>`,
+			],
+		];
+
 		this.sendReplyBox(
-			`<strong>Room drivers (%)</strong> can use:<br />` +
-			`- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules<br />` +
-			`- /mute OR /m <em>username</em>: 7 minute mute<br />` +
-			`- /hourmute OR /hm <em>username</em>: 60 minute mute<br />` +
-			`- /unmute <em>username</em>: unmute<br />` +
-			`- /announce OR /wall <em>message</em>: make an announcement<br />` +
-			`- /modlog <em>username</em>: search the moderator log of the room<br />` +
-			`- /modnote <em>note</em>: add a moderator note that can be read through modlog<br />` +
-			`<br />` +
-			`<strong>Room moderators (@)</strong> can also use:<br />` +
-			`- /roomban OR /rb <em>username</em>: ban user from the room<br />` +
-			`- /roomunban <em>username</em>: unban user from the room<br />` +
-			`- /roomvoice <em>username</em>: appoint a room voice<br />` +
-			`- /roomdevoice <em>username</em>: remove a room voice<br />` +
-			`- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room<br />` +
-			`- /roomsettings: change a variety of room settings, namely modchat<br />` +
-			`<br />` +
-			`<strong>Room owners (#)</strong> can also use:<br />` +
-			`- /roomintro <em>intro</em>: set the room introduction that will be displayed for all users joining the room<br />` +
-			`- /rules <em>rules link</em>: set the room rules link seen when using /rules<br />` +
-			`- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver<br />` +
-			`- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver<br />` +
-			`- /roomdeauth <em>username</em>: remove all room auth from a user<br />` +
-			`- /declare <em>message</em>: make a large blue declaration to the room<br />` +
-			`- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room<br />` +
-			`- !showimage <em>[url], [width], [height]</em>: show an image to the room<br />` +
-			`- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc<br />` +
-			`<br />` +
-			`More detailed help can be found in the <a href="https://www.smogon.com/forums/posts/6774654/">roomauth guide</a><br />` +
-			`<br />` +
-			`Tournament Help:<br />` +
-			`- /tour create <em>format</em>, elimination: create a new single elimination tournament in the current room.<br />` +
-			`- /tour create <em>format</em>, roundrobin: create a new round robin tournament in the current room.<br />` +
-			`- /tour end: forcibly end the tournament in the current room<br />` +
-			`- /tour start: start the tournament in the current room<br />` +
-			`- /tour banlist [pokemon], [talent], [...]: ban moves, abilities, Pokémon or items from being used in a tournament (it must be created first)<br />` +
-			`<br />` +
-			`More detailed help can be found in the <a href="https://www.smogon.com/forums/posts/6777489/">tournaments guide</a><br />` +
-			`</div>`
+			strings.map(par => par.map(string => this.tr(string)).join('<br />')).join('<br /><br />')
 		);
 	},
 
