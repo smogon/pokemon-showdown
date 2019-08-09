@@ -99,9 +99,9 @@ function deleteUser(user: User) {
 	prevUsers.delete('guest' + user.guestNum as ID);
 	users.delete(user.userid);
 }
-function merge(user1: User, user2: User) {
-	prevUsers.delete(user2.userid);
-	prevUsers.set(user1.userid, user2.userid);
+function merge(fromUser: User, intoUser: User) {
+	prevUsers.delete(intoUser.userid);
+	prevUsers.set(fromUser.userid, intoUser.userid);
 }
 
 /**
@@ -927,7 +927,7 @@ class User extends Chat.MessageContext {
 			// This user already exists; let's merge
 			user.merge(this);
 
-			Users.merge(user, this);
+			Users.merge(this, user);
 			for (const i in this.prevNames) {
 				if (!user.prevNames[i]) {
 					user.prevNames[i] = this.prevNames[i];
