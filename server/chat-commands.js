@@ -680,15 +680,16 @@ const commands = {
 
 	'!status': true,
 	status(target, room, user, connection, cmd) {
-		if (user.locked || user.semilocked) return this.errorReply("Your status cannot be updated while you are locked or semilocked.");
+		if (user.locked || user.semilocked) return this.errorReply(this.tr("Your status cannot be updated while you are locked or semilocked."));
 		if (!target) return this.parse('/help status');
 
-		if (target.length > 32) return this.errorReply(`Your status is too long; it must be under 32 characters.`);
+		const maxLength = 32;
+		if (target.length > maxLength) return this.errorReply(this.tr `Your status is too long; it must be under ${maxLength} characters.`);
 		target = Chat.statusfilter(target, user);
-		if (!target) return this.errorReply("Your status contains a banned word.");
+		if (!target) return this.errorReply(this.tr("Your status contains a banned word."));
 
 		user.setUserMessage(target);
-		this.sendReply(`Your status has been set to: ${target}.`);
+		this.sendReply(this.tr `Your status has been set to: ${target}.`);
 	},
 	statushelp: [`/status [note] - Sets a short note as your status, visible when users click your username. Use /clearstatus to clear your status message.`],
 
@@ -699,7 +700,7 @@ const commands = {
 		user.setStatusType('busy');
 		this.parse('/blockpms');
 		this.parse('/blockchallenges');
-		this.sendReply("You are now marked as busy.");
+		this.sendReply(this.tr("You are now marked as busy."));
 	},
 	busyhelp: [`/busy - Marks you as busy, blocking private messages and challenges. Use /back to mark yourself as back.`],
 
@@ -711,7 +712,7 @@ const commands = {
 		if (target) this.errorReply("Setting status messages in /away is no longer supported. Set a status using /status.");
 
 		user.setStatusType('idle');
-		this.sendReply("You are now marked as away. Send a message or use /back to indicate you are back.");
+		this.sendReply(this.tr("You are now marked as away. Send a message or use /back to indicate you are back."));
 	},
 	awayhelp: [`/away - Marks you as away. Send a message or use /back to indicate you are back.`],
 
@@ -4598,20 +4599,22 @@ const commands = {
 
 		// overall
 		if (target === 'help' || target === 'h' || target === '?' || target === 'commands') {
-			this.sendReply("/help OR /h OR /? - Gives you help.");
+			this.sendReply(this.tr("/help OR /h OR /? - Gives you help."));
 		} else if (!target) {
-			this.sendReply("COMMANDS: /msg, /reply, /logout, /challenge, /search, /rating, /whois, /user, /report, /join, /leave, /makegroupchat, /userauth, /roomauth");
-			this.sendReply("BATTLE ROOM COMMANDS: /savereplay, /hideroom, /inviteonly, /invite, /timer, /forfeit");
-			this.sendReply("OPTION COMMANDS: /nick, /avatar, /ignore, /status, /away, /busy, /back, /timestamps, /highlight, /showjoins, /hidejoins, /blockchallenges, /blockpms");
-			this.sendReply("INFORMATIONAL/RESOURCE COMMANDS: /groups, /faq, /rules, /intro, /formatshelp, /othermetas, /analysis, /punishments, /calc, /git, /cap, /roomhelp, /roomfaq (replace / with ! to broadcast. Broadcasting requires: + % @ # & ~)");
-			this.sendReply("DATA COMMANDS: /data, /dexsearch, /movesearch, /itemsearch, /learn, /statcalc, /effectiveness, /weakness, /coverage, /randommove, /randompokemon (replace / with ! to broadcast. Broadcasting requires: + % @ # & ~)");
+			const broadcastMsg = this.tr('(replace / with ! to broadcast. Broadcasting requires: + % @ # & ~)');
+
+			this.sendReply(`${this.tr('COMMANDS')}: /msg, /reply, /logout, /challenge, /search, /rating, /whois, /user, /report, /join, /leave, /makegroupchat, /userauth, /roomauth`);
+			this.sendReply(`${this.tr('BATTLE ROOM COMMANDS')}: /savereplay, /hideroom, /inviteonly, /invite, /timer, /forfeit`);
+			this.sendReply(`${this.tr('OPTION COMMANDS')}: /nick, /avatar, /ignore, /status, /away, /busy, /back, /timestamps, /highlight, /showjoins, /hidejoins, /blockchallenges, /blockpms`);
+			this.sendReply(`${this.tr('INFORMATIONAL/RESOURCE COMMANDS')}: /groups, /faq, /rules, /intro, /formatshelp, /othermetas, /analysis, /punishments, /calc, /git, /cap, /roomhelp, /roomfaq ${broadcastMsg}`);
+			this.sendReply(`${this.tr('DATA COMMANDS')}: /data, /dexsearch, /movesearch, /itemsearch, /learn, /statcalc, /effectiveness, /weakness, /coverage, /randommove, /randompokemon ${broadcastMsg}`);
 			if (user.group !== Config.groupsranking[0]) {
-				this.sendReply("DRIVER COMMANDS: /warn, /mute, /hourmute, /unmute, /alts, /forcerename, /modlog, /modnote, /lock, /weeklock, /unlock, /announce");
-				this.sendReply("MODERATOR COMMANDS: /globalban, /unglobalban, /ip, /modchat, /markshared, /unlockip");
-				this.sendReply("LEADER COMMANDS: /declare, /forcetie, /forcewin, /promote, /demote, /banip, /host, /unbanall, /ipsearch");
+				this.sendReply(`${this.tr('DRIVER COMMANDS')}: /warn, /mute, /hourmute, /unmute, /alts, /forcerename, /modlog, /modnote, /lock, /weeklock, /unlock, /announce`);
+				this.sendReply(`${this.tr('MODERATOR COMMANDS')}: /globalban, /unglobalban, /ip, /modchat, /markshared, /unlockip`);
+				this.sendReply(`${this.tr('LEADER COMMANDS')}: /declare, /forcetie, /forcewin, /promote, /demote, /banip, /host, /unbanall, /ipsearch`);
 			}
-			this.sendReply("For an overview of room commands, use /roomhelp");
-			this.sendReply("For details of a specific command, use something like: /help data");
+			this.sendReply(this.tr("For an overview of room commands, use /roomhelp"));
+			this.sendReply(this.tr("For details of a specific command, use something like: /help data"));
 		} else {
 			let altCommandHelp;
 			let helpCmd;

@@ -355,7 +355,7 @@ Chat.tr = function (language, strings, ...keys) {
 	let string = Array.isArray(strings) ? strings.join('${}') : strings;
 
 	const entry = Chat.translations.get(language).get(string);
-	let [translated, keyLabels, valLabels] = entry;
+	let [translated, keyLabels, valLabels] = entry || ["", [], []];
 	if (!translated) translated = string;
 
 	// Replace the gaps in the template string
