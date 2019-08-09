@@ -3059,9 +3059,9 @@ const commands = {
 			if (!room.mafiaEnabled) {
 				return this.errorReply("Mafia is already disabled.");
 			}
-			delete room.mafiaEnabled;
+			room.mafiaEnabled = false;
 			if (room.chatRoomData) {
-				delete room.chatRoomData.mafiaEnabled;
+				room.chatRoomData.mafiaEnabled = false;
 				Rooms.global.writeChatRoomData();
 			}
 			this.modlog('MAFIADISABLE', null);
