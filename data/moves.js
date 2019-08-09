@@ -1667,10 +1667,7 @@ let BattleMovedex = {
 		effect: {
 			duration: 2,
 			onTryImmunity(target, source, move) {
-				if (move.id === 'gust' || move.id === 'twister') {
-					return;
-				}
-				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'thousandarrows' || move.id === 'helpinghand') {
+				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown',  'thousandarrows', 'helpinghand'].includes(move.id)) {
 					return;
 				}
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
@@ -3419,7 +3416,7 @@ let BattleMovedex = {
 				if (type === 'sandstorm' || type === 'hail') return false;
 			},
 			onTryImmunity(target, source, move) {
-				if (move.id === 'earthquake' || move.id === 'magnitude' || move.id === 'helpinghand') {
+				if (['earthquake', 'magnitude', 'helpinghand'].includes(move.id)) {
 					return;
 				}
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
@@ -3585,7 +3582,7 @@ let BattleMovedex = {
 				if (type === 'sandstorm' || type === 'hail') return false;
 			},
 			onTryImmunity(target, source, move) {
-				if (move.id === 'surf' || move.id === 'whirlpool' || move.id === 'helpinghand') {
+				if (['surf', 'whirlpool', 'helpinghand'].includes(move.id)) {
 					return;
 				}
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
@@ -5677,10 +5674,7 @@ let BattleMovedex = {
 		effect: {
 			duration: 2,
 			onTryImmunity(target, source, move) {
-				if (move.id === 'gust' || move.id === 'twister') {
-					return;
-				}
-				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'thousandarrows' || move.id === 'helpinghand') {
+				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows', 'helpinghand'].includes(move.id)) {
 					return;
 				}
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
@@ -15198,10 +15192,7 @@ let BattleMovedex = {
 				if (source === this.effectData.target && target === this.effectData.source) {
 					return;
 				}
-				if (move.id === 'gust' || move.id === 'twister') {
-					return;
-				}
-				if (move.id === 'skyuppercut' || move.id === 'thunder' || move.id === 'hurricane' || move.id === 'smackdown' || move.id === 'thousandarrows' || move.id === 'helpinghand') {
+				if (['gust', 'twister', 'skyuppercut', 'thunder', 'hurricane', 'smackdown', 'thousandarrows', 'helpinghand'].includes(move.id)) {
 					return;
 				}
 				if (source.hasAbility('noguard') || target.hasAbility('noguard')) {
