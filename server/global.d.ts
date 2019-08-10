@@ -45,7 +45,7 @@ declare global {
 	const User: typeof UsersType.Users.User
 	const Connection: typeof UsersType.Users.Connection
 	// chat
-	const Chat: typeof ChatType
-	const CommandContext: typeof ChatType.CommandContext
-	const PageContext: typeof ChatType.PageContext
+	const Chat: typeof ChatType.Chat
+	const CommandContext: typeof ChatType.Chat.CommandContext
+	const PageContext: typeof ChatType.Chat.PageContext
 }

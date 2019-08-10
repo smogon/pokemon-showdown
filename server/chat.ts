@@ -153,23 +153,23 @@ class PatternTester {
 	}
 }
 
-export const multiLinePattern = new PatternTester();
+const multiLinePattern = new PatternTester();
 
 /*********************************************************
  * Load command files
  *********************************************************/
 
-export let baseCommands: ChatCommands = undefined!;
-export let commands: ChatCommands = undefined!;
-export let basePages: PageTable = undefined!;
-export let pages: PageTable = undefined!;
-export const destroyHandlers: (() => void)[] = [];
+const baseCommands: ChatCommands = undefined!;
+const commands: ChatCommands = undefined!;
+const basePages: PageTable = undefined!;
+const pages: PageTable = undefined!;
+const destroyHandlers: (() => void)[] = [];
 
 /*********************************************************
  * Load chat filters
  *********************************************************/
-export const filters: ChatFilter[] = [];
-export function filter(
+const filters: ChatFilter[] = [];
+function filter(
 	context: CommandContext,
 	message: string,
 	user: User,
@@ -191,8 +191,8 @@ export function filter(
 	return message;
 }
 
-export const namefilters: NameFilter[] = [];
-export function namefilter(name: string, user: User) {
+const namefilters: NameFilter[] = [];
+function namefilter(name: string, user: User) {
 	if (!Config.disablebasicnamefilter) {
 		// whitelist
 		// \u00A1-\u00BF\u00D7\u00F7  Latin punctuation/symbols
@@ -246,22 +246,22 @@ export function namefilter(name: string, user: User) {
 	return name;
 }
 
-export const hostfilters: HostFilter[] = [];
-export function hostfilter(host: string, user: User, connection: Connection, hostType: string) {
+const hostfilters: HostFilter[] = [];
+function hostfilter(host: string, user: User, connection: Connection, hostType: string) {
 	for (const curFilter of hostfilters) {
 		curFilter(host, user, connection, hostType);
 	}
 }
 
-export const loginfilters: LoginFilter[] = [];
-export function loginfilter(user: User, oldUser: User | null, usertype: string) {
+const loginfilters: LoginFilter[] = [];
+function loginfilter(user: User, oldUser: User | null, usertype: string) {
 	for (const curFilter of loginfilters) {
 		curFilter(user, oldUser, usertype);
 	}
 }
 
-export const nicknamefilters: NameFilter[] = [];
-export function nicknamefilter(nickname: string, user: User) {
+const nicknamefilters: NameFilter[] = [];
+function nicknamefilter(nickname: string, user: User) {
 	for (const curFilter of nicknamefilters) {
 		nickname = curFilter(nickname, user);
 		if (!nickname) return '';
@@ -269,8 +269,8 @@ export function nicknamefilter(nickname: string, user: User) {
 	return nickname;
 }
 
-export const statusfilters: StatusFilter[] = [];
-export function statusfilter(status: string, user: User) {
+const statusfilters: StatusFilter[] = [];
+function statusfilter(status: string, user: User) {
 	status = status.replace(/\|/g, '');
 	for (const curFilter of statusfilters) {
 		status = curFilter(status, user);
@@ -284,9 +284,9 @@ export function statusfilter(status: string, user: User) {
  *********************************************************/
 
 // language id -> language name
-export const languages: Map<string, string> = new Map();
+const languages: Map<string, string> = new Map();
 // language id -> (english string -> translated string)
-export const translations: Map<string, Map<string, [string, string[], string[]]>> = new Map();
+const translations: Map<string, Map<string, [string, string[], string[]]>> = new Map();
 
 // tslint:disable-next-line: no-floating-promises
 FS(TRANSLATION_DIRECTORY).readdir().then(files => {
@@ -320,7 +320,7 @@ FS(TRANSLATION_DIRECTORY).readdir().then(files => {
 	}
 });
 
-export function tr(language: string | null, strings: TemplateStringsArray | string, ...keys: any[]) {
+function tr(language: string | null, strings: TemplateStringsArray | string, ...keys: any[]) {
 	if (!language) language = 'english';
 	language = toID(language);
 	if (!translations.has(language)) throw new Error(`Trying to translate to a nonexistent language: ${language}`);
@@ -364,7 +364,7 @@ export function tr(language: string | null, strings: TemplateStringsArray | stri
  * Parser
  *********************************************************/
 
-export class MessageContext {
+class MessageContext {
 	recursionDepth: number;
 	user: User;
 	language: string | null;
@@ -402,7 +402,7 @@ export class MessageContext {
 	}
 }
 
-export class PageContext extends MessageContext {
+class PageContext extends MessageContext {
 	connection: Connection;
 	room: Room;
 	pageid: string;
@@ -464,7 +464,7 @@ export class PageContext extends MessageContext {
 		if (pageid) this.pageid = pageid;
 
 		const parts = this.pageid.split('-');
-		let handler: PageHandler | PageTable = pages;
+		let handler: PageHandler | PageTable = Chat.pages;
 		parts.shift();
 		while (handler) {
 			if (typeof handler === 'function') {
@@ -480,7 +480,7 @@ export class PageContext extends MessageContext {
 	}
 }
 
-export class CommandContext extends MessageContext {
+class CommandContext extends MessageContext {
 
 	message: string;
 	pmTarget: User | undefined;
@@ -629,7 +629,7 @@ export class CommandContext extends MessageContext {
 
 		if (cmd.endsWith(',')) cmd = cmd.slice(0, -1);
 
-		let curCommands: ChatCommands = commands;
+		let curCommands: ChatCommands = Chat.commands;
 		let commandHandler;
 		let fullCmd = cmd;
 
@@ -710,7 +710,7 @@ export class CommandContext extends MessageContext {
 	}
 	run(commandHandler: string | {call: (...args: any[]) => any}) {
 		// type checked above
-		if (typeof commandHandler === 'string') commandHandler = commands[commandHandler] as ChatHandler;
+		if (typeof commandHandler === 'string') commandHandler = Chat.commands[commandHandler] as ChatHandler;
 		let result;
 		try {
 			result = commandHandler.call(this, this.target, this.room, this.user, this.connection, this.cmd, this.message);
@@ -1328,13 +1328,13 @@ export class CommandContext extends MessageContext {
  * @param user - the user that sent the message
  * @param connection - the connection the user sent the message from
  */
-export function parse(message: string, room: Room, user: User, connection: Connection) {
+function parse(message: string, room: Room, user: User, connection: Connection) {
 	loadPlugins();
 	const context = new CommandContext({message, room, user, connection});
 
 	return context.parse();
 }
-export function sendPM(message: string, user: User, pmTarget: User, onlyRecipient: User | null = null) {
+function sendPM(message: string, user: User, pmTarget: User, onlyRecipient: User | null = null) {
 	const buf = `|pm|${user.getIdentity()}|${pmTarget.getIdentity()}|${message}`;
 	if (onlyRecipient) return onlyRecipient.send(buf);
 	user.send(buf);
@@ -1343,9 +1343,9 @@ export function sendPM(message: string, user: User, pmTarget: User, onlyRecipien
 	user.lastPM = pmTarget.userid;
 }
 
-export let packageData = {};
+let packageData = {};
 
-export function uncacheTree(root: string) {
+function uncacheTree(root: string) {
 	let toUncache = [require.resolve('../' + root)];
 	do {
 		const newuncache: string[] = [];
@@ -1365,7 +1365,7 @@ export function uncacheTree(root: string) {
 	} while (toUncache.length > 0);
 }
 
-export function uncacheDir(root: string) {
+function uncacheDir(root: string) {
 	const absoluteRoot = FS(root).path;
 	for (const key in require.cache) {
 		if (key.startsWith(absoluteRoot)) {
@@ -1374,13 +1374,13 @@ export function uncacheDir(root: string) {
 	}
 }
 
-export function uncache(path: string) {
+function uncache(path: string) {
 	const absolutePath = require.resolve('../' + path);
 	delete require.cache[absolutePath];
 }
 
-export function loadPlugins() {
-	if (commands) return;
+function loadPlugins() {
+	if (Chat.commands) return;
 
 	// tslint:disable-next-line: no-floating-promises
 	FS('package.json').readIfExists().then(data => {
@@ -1389,10 +1389,10 @@ export function loadPlugins() {
 
 	// prevent TypeScript from resolving
 	const commandsFile = '../server/chat-commands';
-	baseCommands = require(commandsFile).commands;
-	basePages = require(commandsFile).pages;
-	commands = Object.assign({}, baseCommands);
-	pages = Object.assign({}, basePages);
+	Chat.baseCommands = require(commandsFile).commands;
+	Chat.basePages = require(commandsFile).pages;
+	Chat.commands = Object.assign({}, Chat.baseCommands);
+	Chat.pages = Object.assign({}, Chat.basePages);
 
 	if (Config.chatfilter) filters.push(Config.chatfilter);
 	if (Config.namefilter) namefilters.push(Config.namefilter);
@@ -1412,22 +1412,22 @@ export function loadPlugins() {
 		if (file.substr(-3) !== '.js') continue;
 		const plugin = require(`../server/chat-plugins/${file}`);
 
-		Object.assign(commands, plugin.commands);
-		Object.assign(pages, plugin.pages);
+		Object.assign(Chat.commands, plugin.commands);
+		Object.assign(Chat.pages, plugin.pages);
 
-		if (plugin.destroy) destroyHandlers.push(plugin.destroy);
+		if (plugin.destroy) Chat.destroyHandlers.push(plugin.destroy);
 
-		if (plugin.chatfilter) filters.push(plugin.chatfilter);
-		if (plugin.namefilter) namefilters.push(plugin.namefilter);
-		if (plugin.hostfilter) hostfilters.push(plugin.hostfilter);
-		if (plugin.loginfilter) loginfilters.push(plugin.loginfilter);
-		if (plugin.nicknamefilter) nicknamefilters.push(plugin.nicknamefilter);
-		if (plugin.statusfilter) statusfilters.push(plugin.statusfilter);
+		if (plugin.chatfilter) Chat.filters.push(plugin.chatfilter);
+		if (plugin.namefilter) Chat.namefilters.push(plugin.namefilter);
+		if (plugin.hostfilter) Chat.hostfilters.push(plugin.hostfilter);
+		if (plugin.loginfilter) Chat.loginfilters.push(plugin.loginfilter);
+		if (plugin.nicknamefilter) Chat.nicknamefilters.push(plugin.nicknamefilter);
+		if (plugin.statusfilter) Chat.statusfilters.push(plugin.statusfilter);
 	}
 }
 
-export function destroy() {
-	for (const handler of destroyHandlers) {
+function destroy() {
+	for (const handler of Chat.destroyHandlers) {
 		handler();
 	}
 }
@@ -1435,7 +1435,7 @@ export function destroy() {
 /**
  * Escapes HTML in a string.
  */
-export function escapeHTML(str: string) {
+function escapeHTML(str: string) {
 	if (!str) return '';
 	return ('' + str)
 		.replace(/&/g, '&amp;')
@@ -1449,7 +1449,7 @@ export function escapeHTML(str: string) {
 /**
  * Strips HTML from a string.
  */
-export function stripHTML(htmlContent: string) {
+function stripHTML(htmlContent: string) {
 	if (!htmlContent) return '';
 	return htmlContent.replace(/<[^>]*>/g, '');
 }
@@ -1457,7 +1457,7 @@ export function stripHTML(htmlContent: string) {
 /**
  * Template string tag function for escaping HTML
  */
-export function html(strings: TemplateStringsArray, ...args: any) {
+function html(strings: TemplateStringsArray, ...args: any) {
 	let buf = strings[0];
 	let i = 0;
 	while (i < args.length) {
@@ -1472,7 +1472,7 @@ export function html(strings: TemplateStringsArray, ...args: any) {
  * (defaulting to 's') otherwise. Helper function for pluralizing
  * words.
  */
-export function plural(num: any, pluralSuffix = 's', singular = '') {
+function plural(num: any, pluralSuffix = 's', singular = '') {
 	if (num && typeof num.length === 'number') {
 		num = num.length;
 	} else if (num && typeof num.size === 'number') {
@@ -1491,7 +1491,7 @@ export function plural(num: any, pluralSuffix = 's', singular = '') {
  *     Chat.count(["foo"], "things are") === "1 thing is"
  *
  */
-export function count(num: any, pluralSuffix: string, singular = "") {
+function count(num: any, pluralSuffix: string, singular = "") {
 	if (num && typeof num.length === 'number') {
 		num = num.length;
 	} else if (num && typeof num.size === 'number') {
@@ -1523,7 +1523,7 @@ export function count(num: any, pluralSuffix: string, singular = "") {
  * Returns an array of length exactly limit + 1.
  *
  */
-export function splitFirst(str: string, delimiter: string, limit = 1) {
+function splitFirst(str: string, delimiter: string, limit = 1) {
 	const splitStr: string[] = [];
 	while (splitStr.length < limit) {
 		const delimiterIndex = str.indexOf(delimiter);
@@ -1544,7 +1544,7 @@ export function splitFirst(str: string, delimiter: string, limit = 1) {
  *
  * options.human = true will reports hours human-readable
  */
-export function toTimestamp(date: Date, options: {human?: any} = {}) {
+function toTimestamp(date: Date, options: {human?: any} = {}) {
 	const human = options.human;
 	let parts: any[] = [
 		date.getFullYear(),	date.getMonth() + 1, date.getDate(),
@@ -1564,7 +1564,7 @@ export function toTimestamp(date: Date, options: {human?: any} = {}) {
  * options.hhmmss = true will instead report the duration in 00:00:00 format
  *
  */
-export function toDurationString(val: number, options: {hhmmss?: any, precision?: number} = {}) {
+function toDurationString(val: number, options: {hhmmss?: any, precision?: number} = {}) {
 	// TODO: replace by Intl.DurationFormat or equivalent when it becomes available (ECMA-402)
 	// https://github.com/tc39/ecma402/issues/47
 	const date = new Date(+val);
@@ -1599,19 +1599,19 @@ export function toDurationString(val: number, options: {hhmmss?: any, precision?
 /**
  * Takes an array and turns it into a sentence string by adding commas and the word 'and' at the end
  */
-export function toListString(arr: string[]) {
+function toListString(arr: string[]) {
 	if (!arr.length) return '';
 	if (arr.length === 1) return arr[0];
 	return `${arr.slice(0, -1).join(", ")} and ${arr.slice(-1)}`;
 }
 
-export function collapseLineBreaksHTML(htmlContent: string) {
+function collapseLineBreaksHTML(htmlContent: string) {
 	htmlContent = htmlContent.replace(/<[^>]*>/g, tag => tag.replace(/\n/g, ' '));
 	htmlContent = htmlContent.replace(/\n/g, '&#10;');
 	return html;
 }
 
-export function getDataPokemonHTML(template: Template, gen = 7, tier = '') {
+function getDataPokemonHTML(template: Template, gen = 7, tier = '') {
 	if (typeof template === 'string') template = Object.assign({}, Dex.getTemplate(template));
 	let buf = '<li class="result">';
 	buf += '<span class="col numcol">' + (tier || template.tier) + '</span> ';
@@ -1664,7 +1664,7 @@ export function getDataPokemonHTML(template: Template, gen = 7, tier = '') {
 	buf += '</li>';
 	return `<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`;
 }
-export function getDataMoveHTML(move: Move) {
+function getDataMoveHTML(move: Move) {
 	if (typeof move === 'string') move = Object.assign({}, Dex.getMove(move));
 	let buf = `<ul class="utilichart"><li class="result">`;
 	buf += `<span class="col movenamecol"><a href="https://${Config.routes.dex}/moves/${move.id}">${move.name}</a></span> `;
@@ -1682,7 +1682,7 @@ export function getDataMoveHTML(move: Move) {
 	buf += `</li><li style="clear:both"></li></ul>`;
 	return buf;
 }
-export function getDataAbilityHTML(ability: Ability) {
+function getDataAbilityHTML(ability: Ability) {
 	if (typeof ability === 'string') ability = Object.assign({}, Dex.getAbility(ability));
 	let buf = `<ul class="utilichart"><li class="result">`;
 	buf += `<span class="col namecol"><a href="https://${Config.routes.dex}/abilities/${ability.id}">${ability.name}</a></span> `;
@@ -1690,7 +1690,7 @@ export function getDataAbilityHTML(ability: Ability) {
 	buf += `</li><li style="clear:both"></li></ul>`;
 	return buf;
 }
-export function getDataItemHTML(item: string | Item) {
+function getDataItemHTML(item: string | Item) {
 	if (typeof item === 'string') item = Object.assign({}, Dex.getItem(item));
 	let buf = `<ul class="utilichart"><li class="result">`;
 	buf += `<span class="col itemiconcol"><psicon item="${item.id}"></span> <span class="col namecol"><a href="https://${Config.routes.dex}/items/${item.id}">${item.name}</a></span> `;
@@ -1702,7 +1702,7 @@ export function getDataItemHTML(item: string | Item) {
 /**
  * Visualizes eval output in a slightly more readable form
  */
-export function stringify(value: any, depth = 0): string {
+function stringify(value: any, depth = 0): string {
 	if (value === undefined) return `undefined`;
 	if (value === null) return `null`;
 	if (typeof value === 'number' || typeof value === 'boolean') {
@@ -1756,13 +1756,12 @@ export function stringify(value: any, depth = 0): string {
 }
 
 import { formatText, linkRegex, stripFormatting } from './chat-formatter';
-export { formatText, linkRegex, stripFormatting };
-export let updateServerLock = false;
+let updateServerLock = false;
 
 /**
  * Gets the dimension of the image at url. Returns 0x0 if the image isn't found, as well as the relevant error.
  */
-export function getImageDimensions(url: string): Promise<{height: number, width: number, err?: Error}> {
+function getImageDimensions(url: string): Promise<{height: number, width: number, err?: Error}> {
 	return new Promise(resolve => {
 		probe(url).then(dimensions => resolve(dimensions), (err: Error) => resolve({height: 0, width: 0, err}));
 	});
@@ -1772,7 +1771,7 @@ export function getImageDimensions(url: string): Promise<{height: number, width:
  * Generates dimensions to fit an image at url into a maximum size of maxWidth x maxHeight,
  * preserving aspect ratio.
  */
-export async function fitImage(url: string, maxHeight = 300, maxWidth = 300) {
+async function fitImage(url: string, maxHeight = 300, maxWidth = 300) {
 	const {height, width} = await getImageDimensions(url);
 
 	if (width <= maxWidth && height <= maxHeight) return [width, height];
@@ -1790,7 +1789,7 @@ export async function fitImage(url: string, maxHeight = 300, maxWidth = 300) {
 /**
  * Notifies a targetUser that a user was blocked from reaching them due to a setting they have enabled.
  */
-export function maybeNotifyBlocked(blocked: 'pm' | 'challenge', targetUser: User, user: User) {
+function maybeNotifyBlocked(blocked: 'pm' | 'challenge', targetUser: User, user: User) {
 	const prefix = `|pm|~|${targetUser.getIdentity()}|/nonotify `;
 	const options = 'or change it in the <button name="openOptions" class="subtle">Options</button> menu in the upper right.';
 	if (blocked === 'pm') {
@@ -1828,19 +1827,89 @@ export interface Monitor {
 	monitor?: MonitorHandler;
 }
 
-export const filterWords: {[k: string]: FilterWord[]} = {};
-export const monitors: {[k: string]: Monitor} = {};
-export const namefilterwhitelist: Map<string, string> = new Map();
+const filterWords: {[k: string]: FilterWord[]} = {};
+const monitors: {[k: string]: Monitor} = {};
+const namefilterwhitelist: Map<string, string> = new Map();
 /**
  * Inappropriate userid : forcerenaming staff member's userid
  */
-export const forceRenames: Map<ID, string> = new Map();
+const forceRenames: Map<ID, string> = new Map();
 
-export function registerMonitor(id: string, entry: Monitor) {
+function registerMonitor(id: string, entry: Monitor) {
 	if (!filterWords[id]) filterWords[id] = [];
 	monitors[id] = entry;
 }
 
-export function resolvePage(pageid: string, user: User, connection: Connection) {
+function resolvePage(pageid: string, user: User, connection: Connection) {
 	return (new PageContext({pageid, user, connection})).resolve();
 }
+export const Chat = {
+	multiLinePattern,
+	baseCommands,
+	commands,
+	basePages,
+	pages,
+	destroyHandlers,
+	filters,
+	filter,
+	namefilters,
+	namefilter,
+	hostfilters,
+	hostfilter,
+	loginfilters,
+	loginfilter,
+	nicknamefilters,
+	nicknamefilter,
+	statusfilters,
+	statusfilter,
+
+	languages,
+	translations,
+	tr,
+
+	MessageContext,
+	PageContext,
+	CommandContext,
+	parse,
+	sendPM,
+
+	packageData,
+	uncacheTree,
+	uncacheDir,
+	uncache,
+
+	loadPlugins,
+	destroy,
+
+	escapeHTML,
+	stripHTML,
+	html,
+	plural,
+	count,
+	splitFirst,
+	toTimestamp,
+	toDurationString,
+	toListString,
+	collapseLineBreaksHTML,
+	getDataPokemonHTML,
+	getDataMoveHTML,
+	getDataAbilityHTML,
+	getDataItemHTML,
+	stringify,
+	getImageDimensions,
+	fitImage,
+	maybeNotifyBlocked,
+
+	filterWords,
+	monitors,
+	namefilterwhitelist,
+	forceRenames,
+	registerMonitor,
+	resolvePage,
+
+	formatText,
+	linkRegex,
+	stripFormatting,
+
+	updateServerLock,
+};
