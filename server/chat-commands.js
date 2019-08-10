@@ -3141,13 +3141,14 @@ const commands = {
 
 		const lock = Monitor.hotpatchLock;
 		const hotpatches = ['chat', 'formats', 'loginserver', 'punishments', 'dnsbl'];
-		const version = Chat.version();
+		const version = await Chat.version();
 		let patch = target;
 		const requiresForce = (patch) =>
 			version && cmd !== 'forcehotpatch' &&
-			((Monitor.hotpatchVersions[patch] && Monitor.hotpatchVersions[patch] === version) ||
-			 (global.__version && version === global.__version.head));
-		const requiresForceMessage = `The history in git has not changed since the last time ${target} was hotpatched (${version.slice(0, 8)}), use /forcehotpatch ${target} if you wish to hotpatch anyway.`;
+			(Monitor.hotpatchVersions[patch] ?
+				Monitor.hotpatchVersions[patch] === version :
+				(global.__version && version === global.__version.tree));
+		const requiresForceMessage = `The git work tree has not changed since the last time ${target} was hotpatched (${version && version.slice(0, 8)}), use /forcehotpatch ${target} if you wish to hotpatch anyway.`;
 
 		try {
 			if (target === 'all') {
