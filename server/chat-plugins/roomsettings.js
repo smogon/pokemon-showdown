@@ -150,11 +150,11 @@ class RoomSettings {
 		}
 	}
 	mafia() {
-		if (!this.user.can('editroom', null, this.room)) return this.button(this.room.mafiaEnabled ? 'Mafia enabled' : 'off', true);
-		if (this.room.mafiaEnabled) {
-			return `${this.button('Mafia enabled', true)} ${this.button('off', null, 'mafia disable')}`;
-		} else {
+		if (!this.user.can('editroom', null, this.room)) return this.button(this.room.mafiaDisabled ? 'off' : 'Mafia enabled', true);
+		if (this.room.mafiaDisabled) {
 			return `${this.button('Mafia enabled', null, 'mafia enable')} ${this.button('off', true)}`;
+		} else {
+			return `${this.button('Mafia enabled', true)} ${this.button('off', null, 'mafia disable')}`;
 		}
 	}
 	blackjack() {

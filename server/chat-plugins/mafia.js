@@ -1829,7 +1829,7 @@ const commands = {
 		forcehost: 'host',
 		nexthost: 'host',
 		host(target, room, user, connection, cmd) {
-			if (!room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
+			if (room.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (!this.canTalk()) return;
 			if (!room || room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
 			if (room.game) return this.errorReply(`There is already a game of ${room.game.title} in progress in this room.`);
@@ -1885,7 +1885,7 @@ const commands = {
 
 		q: 'queue',
 		queue(target, room, user) {
-			if (!room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
+			if (room.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (room.id !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
 			const args = target.split(',').map(toID);
 			if (['forceadd', 'add', 'remove', 'del', 'delete'].includes(args[0])) {
@@ -2827,7 +2827,7 @@ const commands = {
 		term: 'data',
 		dt: 'data',
 		data(target, room, user, connection, cmd) {
-			if (room && !room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
+			if (room && room.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (cmd === 'role' && !target && room) {
 				// Support /mafia role showing your current role if you're in a game
 				const game = /** @type {MafiaTracker} */ (room.game);
@@ -2892,7 +2892,7 @@ const commands = {
 
 		winfaction: 'win',
 		win(target, room, user, connection, cmd) {
-			if (!room || !room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
+			if (!room || room.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (room.id !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
 			if (cmd === 'winfaction' && (!room.game || room.game.gameid !== 'mafia')) return this.errorReply(`There is no game of mafia running in the room`);
 			if (!this.can('mute', null, room)) return;
@@ -2950,7 +2950,7 @@ const commands = {
 
 		unmvp: 'mvp',
 		mvp(target, room, user, connection, cmd) {
-			if (!room || !room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
+			if (!room || room.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (room.id !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
 			if (!this.can('mute', null, room)) return;
 			const args = target.split(',');
@@ -2991,7 +2991,7 @@ const commands = {
 		mvpladder: 'leaderboard',
 		lb: 'leaderboard',
 		leaderboard(target, room, user, connection, cmd) {
-			if (!room || !room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
+			if (!room || room.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (room.id !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
 			if (['hostlogs', 'playlogs', 'leaverlogs'].includes(cmd)) {
 				if (!this.can('mute', null, room)) return;
@@ -3010,7 +3010,7 @@ const commands = {
 
 		unhostban: 'hostban',
 		hostban(target, room, user, connection, cmd) {
-			if (!room || !room.mafiaEnabled) return this.errorReply(`Mafia is disabled for this room.`);
+			if (!room || room.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
 			if (room.id !== 'mafia') return this.errorReply(`This command can only be used in the Mafia room.`);
 
 			let [targetUser, durationString] = this.splitOne(target);
@@ -3056,12 +3056,12 @@ const commands = {
 
 		disable(target, room, user) {
 			if (!room || !this.can('gamemanagement', null, room)) return;
-			if (!room.mafiaEnabled) {
+			if (room.mafiaDisabled) {
 				return this.errorReply("Mafia is already disabled.");
 			}
-			room.mafiaEnabled = false;
+			room.mafiaDisabled = true;
 			if (room.chatRoomData) {
-				room.chatRoomData.mafiaEnabled = false;
+				room.chatRoomData.mafiaDisabled = true;
 				Rooms.global.writeChatRoomData();
 			}
 			this.modlog('MAFIADISABLE', null);
@@ -3071,12 +3071,12 @@ const commands = {
 
 		enable(target, room, user) {
 			if (!room || !this.can('gamemanagement', null, room)) return;
-			if (room.mafiaEnabled) {
+			if (!room.mafiaDisabled) {
 				return this.errorReply("Mafia is already enabled.");
 			}
-			room.mafiaEnabled = true;
+			room.mafiaDisabled = false;
 			if (room.chatRoomData) {
-				room.chatRoomData.mafiaEnabled = true;
+				room.chatRoomData.mafiaDisabled = false;
 				Rooms.global.writeChatRoomData();
 			}
 			this.modlog('MAFIAENABLE', null);
