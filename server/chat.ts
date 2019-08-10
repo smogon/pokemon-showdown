@@ -182,7 +182,7 @@ function filter(
 	// 2. return an altered string - to alter a user's message
 	// 3. return undefined to send the original message through
 	const originalMessage = message;
-	for (const curFilter of filters) {
+	for (const curFilter of Chat.filters) {
 		const output = curFilter.call(context, message, user, room, connection, targetUser, originalMessage);
 		if (!output && output !== undefined) return output;
 		if (output !== undefined) message = output;
@@ -239,7 +239,7 @@ function namefilter(name: string, user: User) {
 	}
 
 	name = Dex.getName(name);
-	for (const curFilter of namefilters) {
+	for (const curFilter of Chat.namefilters) {
 		name = curFilter(name, user);
 		if (!name) return '';
 	}
@@ -248,21 +248,21 @@ function namefilter(name: string, user: User) {
 
 const hostfilters: HostFilter[] = [];
 function hostfilter(host: string, user: User, connection: Connection, hostType: string) {
-	for (const curFilter of hostfilters) {
+	for (const curFilter of Chat.hostfilters) {
 		curFilter(host, user, connection, hostType);
 	}
 }
 
 const loginfilters: LoginFilter[] = [];
 function loginfilter(user: User, oldUser: User | null, usertype: string) {
-	for (const curFilter of loginfilters) {
+	for (const curFilter of Chat.loginfilters) {
 		curFilter(user, oldUser, usertype);
 	}
 }
 
 const nicknamefilters: NameFilter[] = [];
 function nicknamefilter(nickname: string, user: User) {
-	for (const curFilter of nicknamefilters) {
+	for (const curFilter of Chat.nicknamefilters) {
 		nickname = curFilter(nickname, user);
 		if (!nickname) return '';
 	}
@@ -272,7 +272,7 @@ function nicknamefilter(nickname: string, user: User) {
 const statusfilters: StatusFilter[] = [];
 function statusfilter(status: string, user: User) {
 	status = status.replace(/\|/g, '');
-	for (const curFilter of statusfilters) {
+	for (const curFilter of Chat.statusfilters) {
 		status = curFilter(status, user);
 		if (!status) return '';
 	}
@@ -299,8 +299,8 @@ FS(TRANSLATION_DIRECTORY).readdir().then(files => {
 		const content: {name: string, strings: TRStrings} = require(`../${TRANSLATION_DIRECTORY}${fname}`);
 		const id = fname.slice(0, -5);
 
-		languages.set(id, content.name || "Unknown Language");
-		translations.set(id, new Map());
+		Chat.languages.set(id, content.name || "Unknown Language");
+		Chat.translations.set(id, new Map());
 
 		if (content.strings) {
 			for (const key in content.strings) {
@@ -314,7 +314,7 @@ FS(TRANSLATION_DIRECTORY).readdir().then(files => {
 					valLabels.push(str);
 					return '${}';
 				}).replace(/\[TN: ?.+?\]/g, '');
-				translations.get(id)!.set(newKey, [val, keyLabels, valLabels]);
+				Chat.translations.get(id)!.set(newKey, [val, keyLabels, valLabels]);
 			}
 		}
 	}
@@ -323,17 +323,17 @@ FS(TRANSLATION_DIRECTORY).readdir().then(files => {
 function tr(language: string | null, strings: TemplateStringsArray | string, ...keys: any[]) {
 	if (!language) language = 'english';
 	language = toID(language);
-	if (!translations.has(language)) throw new Error(`Trying to translate to a nonexistent language: ${language}`);
+	if (!Chat.translations.has(language)) throw new Error(`Trying to translate to a nonexistent language: ${language}`);
 	if (!strings.length) {
 		return ((fStrings: TemplateStringsArray | string, ...fKeys: any) => {
-			tr(language, fStrings, ...fKeys);
+			Chat.tr(language, fStrings, ...fKeys);
 		});
 	}
 
 	// If strings is an array (normally the case), combine before translating.
 	const trString = Array.isArray(strings) ? strings.join('${}') : strings as string;
 
-	const entry = translations.get(language)!.get(trString);
+	const entry = Chat.translations.get(language)!.get(trString);
 	let [translated, keyLabels, valLabels] = entry || ["", [], []];
 	if (!translated) translated = trString;
 
@@ -398,7 +398,7 @@ class MessageContext {
 	}
 
 	tr(strings: TemplateStringsArray | string, ...keys: any[]) {
-		return tr(this.language, strings, ...keys);
+		return Chat.tr(this.language, strings, ...keys);
 	}
 }
 
@@ -579,7 +579,7 @@ class CommandContext extends MessageContext {
 
 		if (message && message !== true && typeof message.then !== 'function') {
 			if (this.pmTarget) {
-				sendPM(message, this.user, this.pmTarget);
+				Chat.sendPM(message, this.user, this.pmTarget);
 			} else {
 				this.room.add(`|c|${this.user.getIdentity(this.room.id)}|${message}`);
 				if (this.room && this.room.game && this.room.game.onLogMessage) {
@@ -1050,7 +1050,7 @@ class CommandContext extends MessageContext {
 					return this.errorReply(`On this server, you must be of rank ${groupName} or higher to PM users.`);
 				}
 				if (targetUser.blockPMs && targetUser.blockPMs !== user.group && !user.can('lock')) {
-					maybeNotifyBlocked('pm', targetUser, user);
+					Chat.maybeNotifyBlocked('pm', targetUser, user);
 					if (!targetUser.can('lock')) {
 						return this.errorReply(`This user is blocking private messages right now.`);
 					} else {
@@ -1087,7 +1087,7 @@ class CommandContext extends MessageContext {
 
 		// If the corresponding config option is set, non-AC users cannot send links, except to staff.
 		if (Config.restrictLinks && !user.autoconfirmed) {
-			const links = message.match(linkRegex);
+			const links = message.match(Chat.linkRegex);
 			const allLinksWhitelisted = !links || links.every(link => {
 				link = link.toLowerCase();
 				const domainMatches = /^(?:http:\/\/|https:\/\/)?(?:[^/]*\.)?([^/.]*\.[^/.]*)\.?($|\/|:)/.exec(link);
@@ -1151,8 +1151,8 @@ class CommandContext extends MessageContext {
 			return false;
 		}
 
-		if (filters.length) {
-			return filter(this, message, user, room, connection, targetUser);
+		if (Chat.filters.length) {
+			return Chat.filter(this, message, user, room, connection, targetUser);
 		}
 
 		return message;
@@ -1329,7 +1329,7 @@ class CommandContext extends MessageContext {
  * @param connection - the connection the user sent the message from
  */
 function parse(message: string, room: Room, user: User, connection: Connection) {
-	loadPlugins();
+	Chat.loadPlugins();
 	const context = new CommandContext({message, room, user, connection});
 
 	return context.parse();
@@ -1343,6 +1343,7 @@ function sendPM(message: string, user: User, pmTarget: User, onlyRecipient: User
 	user.lastPM = pmTarget.userid;
 }
 
+// tslint:disable-next-line: prefer-const exported
 let packageData = {};
 
 function uncacheTree(root: string) {
@@ -1384,7 +1385,7 @@ function loadPlugins() {
 
 	// tslint:disable-next-line: no-floating-promises
 	FS('package.json').readIfExists().then(data => {
-		if (data) packageData = JSON.parse(data);
+		if (data) Chat.packageData = JSON.parse(data);
 	});
 
 	// prevent TypeScript from resolving
@@ -1716,7 +1717,7 @@ function stringify(value: any, depth = 0): string {
 	}
 	if (Array.isArray(value)) {
 		if (depth > 10) return `[array]`;
-		return `[` + value.map(elem => stringify(elem, depth + 1)).join(`, `) + `]`;
+		return `[` + value.map(elem => Chat.stringify(elem, depth + 1)).join(`, `) + `]`;
 	}
 	if (value instanceof RegExp || value instanceof Date || value instanceof Function) {
 		if (depth && value instanceof Function) return `Function`;
@@ -1749,13 +1750,14 @@ function stringify(value: any, depth = 0): string {
 		if (buf) buf += `, `;
 		let displayedKey = key;
 		if (!/^[A-Za-z0-9_$]+$/.test(key)) displayedKey = JSON.stringify(key);
-		buf += `${displayedKey}: ` + stringify(value[key], depth + 1);
+		buf += `${displayedKey}: ` + Chat.stringify(value[key], depth + 1);
 	}
 	if (constructor && !buf && constructor !== 'null') return constructor;
 	return `${constructor}{${buf}}`;
 }
 
 import { formatText, linkRegex, stripFormatting } from './chat-formatter';
+// tslint:disable-next-line: prefer-const exported
 let updateServerLock = false;
 
 /**
@@ -1772,7 +1774,7 @@ function getImageDimensions(url: string): Promise<{height: number, width: number
  * preserving aspect ratio.
  */
 async function fitImage(url: string, maxHeight = 300, maxWidth = 300) {
-	const {height, width} = await getImageDimensions(url);
+	const {height, width} = await Chat.getImageDimensions(url);
 
 	if (width <= maxWidth && height <= maxHeight) return [width, height];
 
@@ -1836,8 +1838,8 @@ const namefilterwhitelist: Map<string, string> = new Map();
 const forceRenames: Map<ID, string> = new Map();
 
 function registerMonitor(id: string, entry: Monitor) {
-	if (!filterWords[id]) filterWords[id] = [];
-	monitors[id] = entry;
+	if (!Chat.filterWords[id]) Chat.filterWords[id] = [];
+	Chat.monitors[id] = entry;
 }
 
 function resolvePage(pageid: string, user: User, connection: Connection) {
