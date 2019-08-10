@@ -99,9 +99,9 @@ function deleteUser(user: User) {
 	prevUsers.delete('guest' + user.guestNum as ID);
 	users.delete(user.userid);
 }
-function merge(destinationUser: User, sourceUser: User) {
-	prevUsers.delete(destinationUser.userid);
-	prevUsers.set(sourceUser.userid, destinationUser.userid);
+function merge(toRemain: User, toDestroy: User) {
+	prevUsers.delete(toRemain.userid);
+	prevUsers.set(toDestroy.userid, toRemain.userid);
 }
 
 /**
