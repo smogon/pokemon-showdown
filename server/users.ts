@@ -328,7 +328,7 @@ function isTrusted(name: string | User) {
 
 const connections = new Map();
 
-class Connection {
+export class Connection {
 	id: string;
 	socketid: string;
 	worker: Worker;
@@ -420,7 +420,7 @@ const SETTINGS = [
 ];
 
 // User
-class User extends Chat.MessageContext {
+export class User extends Chat.MessageContext {
 	user: User;
 	mmrCache: {[format: string]: number};
 	guestNum: number;
@@ -430,6 +430,7 @@ class User extends Chat.MessageContext {
 	userid: ID;
 	group: string;
 	avatar: string | number;
+	language: string | null;
 
 	connected: boolean;
 	connections: Connection[];
@@ -492,6 +493,7 @@ class User extends Chat.MessageContext {
 		this.registered = false;
 		this.userid = '';
 		this.group = Config.groupsranking[0];
+		this.language = null;
 
 		this.avatar = DEFAULT_TRAINER_SPRITES[Math.floor(Math.random() * DEFAULT_TRAINER_SPRITES.length)];
 
