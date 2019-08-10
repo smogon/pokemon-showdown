@@ -336,7 +336,7 @@ const commands = {
 	'!version': true,
 	version(target, room, user) {
 		if (!this.runBroadcast()) return;
-		this.sendReplyBox(`Server version: <b>${Chat.package.version}</b>`);
+		this.sendReplyBox(`Server version: <b>${Chat.packageData.version}</b>`);
 	},
 
 	'!authority': true,
@@ -3162,11 +3162,11 @@ const commands = {
 					}
 				}
 
-				Chat.uncache('./server/chat');
+				Chat.uncache('./.server-dist/chat');
 				Chat.uncache('./server/chat-commands');
 				Chat.uncacheDir('./server/chat-plugins');
 				Chat.uncacheDir('./translations');
-				global.Chat = require('./chat');
+				global.Chat = require('../.server-dist/chat');
 
 				let runningTournaments = Tournaments.tournaments;
 				Chat.uncacheDir('./server/tournaments');
