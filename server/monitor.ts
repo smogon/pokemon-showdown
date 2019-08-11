@@ -131,7 +131,7 @@ export const Monitor = {
 	/**
 	 * Counts a connection. Returns true if the connection should be terminated for abuse.
 	 */
-	countConnection(ip: string, name: string = '') {
+	countConnection(ip: string, name = '') {
 		const [count, duration] = this.connections.increment(ip, 30 * 60 * 1000);
 		if (count === 500) {
 			this.adminlog(`[ResourceMonitor] IP ${ip} banned for cflooding (${count} times in ${Chat.toDurationString(duration)}${name ? ': ' + name : ''})`);
@@ -155,7 +155,7 @@ export const Monitor = {
 	 * Counts battles created. Returns true if the connection should be
 	 * terminated for abuse.
 	 */
-	countBattle(ip: string, name: string = '') {
+	countBattle(ip: string, name = '') {
 		const [count, duration] = this.battles.increment(ip, 30 * 60 * 1000);
 		if (duration < 5 * 60 * 1000 && count % 30 === 0) {
 			this.adminlog(`[ResourceMonitor] IP ${ip} has battled ${count} times in the last ${Chat.toDurationString(duration)}${name ? ': ' + name : ''})`);
