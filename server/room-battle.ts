@@ -1187,7 +1187,7 @@ if (!PM.isParentProcess) {
 	// tslint:disable-next-line: no-var-requires
 	global.Config = require('./config-loader').Config;
 	// tslint:disable-next-line: no-var-requires
-	global.Chat = require('./chat');
+	global.Chat = require('./chat').Chat;
 	// @ts-ignore ???
 	global.Monitor = {
 		crashlog(error: Error, source = 'A simulator process', details: {} | null = null) {
