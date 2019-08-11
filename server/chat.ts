@@ -1609,7 +1609,7 @@ function toListString(arr: string[]) {
 function collapseLineBreaksHTML(htmlContent: string) {
 	htmlContent = htmlContent.replace(/<[^>]*>/g, tag => tag.replace(/\n/g, ' '));
 	htmlContent = htmlContent.replace(/\n/g, '&#10;');
-	return html;
+	return htmlContent;
 }
 
 function getDataPokemonHTML(template: Template, gen = 7, tier = '') {
