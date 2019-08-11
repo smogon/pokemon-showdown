@@ -1745,8 +1745,10 @@ let Rooms = Object.assign(getRoom, {
 	ChatRoom: BasicChatRoom,
 	ChatRoomTypeForTS: ChatRoom,
 
-	RoomGame: require('./room-game').RoomGame,
-	RoomGamePlayer: require('./room-game').RoomGamePlayer,
+	/** @type {typeof import('./room-game').RoomGame} */
+	RoomGame: (require(/** @type {any} */('../.server-dist/room-game')).RoomGame),
+	/** @type {typeof import('./room-game').RoomGamePlayer} */
+	RoomGamePlayer: require(/** @type {any} */('../.server-dist/room-game')).RoomGamePlayer,
 
 	RETRY_AFTER_LOGIN,
 

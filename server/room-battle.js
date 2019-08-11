@@ -18,7 +18,7 @@ const BattleStream = require(/** @type {any} */ ('../.sim-dist/battle-stream')).
 /** @type {typeof import('../lib/fs').FS} */
 const FS = require(/** @type {any} */('../.lib-dist/fs')).FS;
 /** @type {typeof import('./room-game')} */
-const RoomGames = require(/** @type {any} */ ('./room-game'));
+const RoomGames = require(/** @type {any} */ ('../.server-dist/room-game'));
 
 /** 5 seconds */
 const TICK_TIME = 5;
@@ -449,7 +449,8 @@ class RoomBattle extends RoomGames.RoomGame {
 	constructor(room, formatid, options) {
 		super(room);
 		let format = Dex.getFormat(formatid, true);
-		this.gameid = 'battle';
+		/** @type {ID} */
+		this.gameid = /** @type {any} */ ('battle');
 		/** @type {GameRoom} */
 		this.room = room;
 		this.title = format.name;
