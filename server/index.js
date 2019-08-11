@@ -69,7 +69,7 @@ const FS = require('../.lib-dist/fs').FS;
 const ConfigLoader = require('../.server-dist/config-loader');
 global.Config = ConfigLoader.Config;
 
-global.Monitor = require('./monitor');
+global.Monitor = require('../.server-dist/monitor').Monitor;
 
 if (Config.watchconfig) {
 	FS(require.resolve('../config/config')).onModify(() => {
