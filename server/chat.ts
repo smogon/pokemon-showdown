@@ -90,7 +90,7 @@ const BROADCAST_TOKEN = '!';
 
 const TRANSLATION_DIRECTORY = 'translations/';
 
-import { ExecException, exec } from 'child_process';
+import { exec, ExecException } from 'child_process';
 import { FS } from '../lib/fs';
 
 // @ts-ignore no typedef available
@@ -1854,7 +1854,7 @@ async function version() {
 				cwd: __dirname,
 				env: {GIT_INDEX_FILE: path},
 			}, (error: ExecException | null, stdout: string | Buffer, stderr: string | Buffer) => {
-				resolve([error && error.code || 0, stdout as string, stderr as string]);
+				resolve([error && error.code || 0, '' + stdout, '' + stderr]);
 			});
 		});
 	}
