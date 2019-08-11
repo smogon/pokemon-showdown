@@ -3166,7 +3166,7 @@ const commands = {
 				Chat.uncache('./server/chat-commands');
 				Chat.uncacheDir('./server/chat-plugins');
 				Chat.uncacheDir('./translations');
-				global.Chat = require('../.server-dist/chat');
+				global.Chat = require('../.server-dist/chat').Chat;
 
 				let runningTournaments = Tournaments.tournaments;
 				Chat.uncacheDir('./server/tournaments');
