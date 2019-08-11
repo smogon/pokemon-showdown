@@ -77,7 +77,7 @@ class HelpTicket extends Rooms.RoomGame {
 	constructor(room, ticket) {
 		super(room);
 		this.title = "Help Ticket - " + ticket.type;
-		this.gameid = "helpticket";
+		this.gameid = /** @type {ID} */ ("helpticket");
 		this.allowRenames = true;
 		this.ticket = ticket;
 		/** @type {string[]} */

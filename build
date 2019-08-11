@@ -63,7 +63,7 @@ replace(path.join(__dirname, '.sim-dist'), [
 	{regex: new RegExp(`(require\\\(.*?)(lib)(.*?\\\))`, 'g'), replace: `$1.lib-dist$3`},
 ]);
 replace(path.join(__dirname, '.server-dist'), [
-	{regex: new RegExp(`(require\\\(.*?)(lib)(.*?\\\))`, 'g'), replace: `$1.lib-dist$3`},
+	{regex: new RegExp(`(require\\\(.*?)(lib|sim)(.*?\\\))`, 'g'), replace: `$1.$2-dist$3`},
 ]);
 
 // Make sure config.js exists. If not, copy it over synchronously from

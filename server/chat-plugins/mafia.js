@@ -192,7 +192,7 @@ class MafiaTracker extends Rooms.RoomGame {
 	constructor(room, host) {
 		super(room);
 
-		this.gameid = 'mafia';
+		this.gameid = /** @type {ID} */ ('mafia');
 		this.title = 'Mafia';
 		this.playerCap = 20;
 		this.allowRenames = false;

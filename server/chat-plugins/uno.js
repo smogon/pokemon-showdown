@@ -120,8 +120,7 @@ class UnoGame extends Rooms.RoomGame {
 		/** @type {NodeJS.Timer?} */
 		this.autostartTimer = null;
 
-		/** @type {string} */
-		this.gameid = 'uno';
+		this.gameid = /** @type {ID} */ ('uno');
 		this.title = 'UNO';
 
 		/** @type {string} */

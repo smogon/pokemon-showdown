@@ -19,7 +19,7 @@ class Hangman extends Rooms.RoomGame {
 
 		this.gameNumber = ++room.gameNumber;
 
-		this.gameid = 'hangman';
+		this.gameid = /** @type {ID} */ ('hangman');
 		this.title = 'Hangman';
 		this.creator = user.userid;
 		this.word = word;

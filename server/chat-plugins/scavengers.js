@@ -312,7 +312,7 @@ class ScavengerHunt extends Rooms.RoomGame {
 		this.staffHostName = staffHost.name;
 		this.cacheUserIps(staffHost); // store it in case of host subbing
 
-		this.gameid = 'scavengerhunt';
+		this.gameid = /** @type {ID} */ ('scavengerhunt');
 		this.title = 'Scavenger Hunt';
 		this.scavGame = true;
 
