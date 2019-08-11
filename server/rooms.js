@@ -1746,7 +1746,7 @@ let Rooms = Object.assign(getRoom, {
 	ChatRoomTypeForTS: ChatRoom,
 
 	/** @type {typeof import('./room-game').RoomGame} */
-	RoomGame: (require(/** @type {any} */('../.server-dist/room-game')).RoomGame),
+	RoomGame: require(/** @type {any} */('../.server-dist/room-game')).RoomGame,
 	/** @type {typeof import('./room-game').RoomGamePlayer} */
 	RoomGamePlayer: require(/** @type {any} */('../.server-dist/room-game')).RoomGamePlayer,
 
@@ -1754,10 +1754,14 @@ let Rooms = Object.assign(getRoom, {
 
 	Roomlogs: Roomlogs,
 
-	RoomBattle: require('./room-battle').RoomBattle,
-	RoomBattlePlayer: require('./room-battle').RoomBattlePlayer,
-	RoomBattleTimer: require('./room-battle').RoomBattleTimer,
-	PM: require('./room-battle').PM,
+	/** @type {typeof import('./room-battle').RoomBattle} */
+	RoomBattle: require(/** @type {any} */('../.server-dist/room-battle')).RoomBattle,
+	/** @type {typeof import('./room-battle').RoomBattlePlayer} */
+	RoomBattlePlayer: require(/** @type {any} */('../.server-dist/room-battle')).RoomBattlePlayer,
+	/** @type {typeof import('./room-battle').RoomBattleTimer} */
+	RoomBattleTimer: require(/** @type {any} */('../.server-dist/room-battle')).RoomBattleTimer,
+	/** @type {typeof import('./room-battle').PM} */
+	PM: require(/** @type {any} */('../.server-dist/room-battle')).PM,
 });
 
 // initialize

@@ -11,14 +11,26 @@
  * @license MIT
  */
 
-'use strict';
+import {execSync} from "child_process";
+import {FS} from "../lib/fs";
+import {StreamProcessManager} from "../lib/process-manager";
+import {Repl} from "../lib/repl";
+import {BattleStream} from "../sim/battle-stream";
+import * as RoomGames from "./room-game";
 
-/** @type {typeof import('../sim/battle-stream').BattleStream} */
-const BattleStream = require(/** @type {any} */ ('../.sim-dist/battle-stream')).BattleStream;
-/** @type {typeof import('../lib/fs').FS} */
-const FS = require(/** @type {any} */('../.lib-dist/fs')).FS;
-/** @type {typeof import('./room-game')} */
-const RoomGames = require(/** @type {any} */ ('../.server-dist/room-game'));
+type ChannelIndex = 0 | 1 | 2 | 3 | 4;
+type PlayerIndex = 1 | 2 | 3 | 4;
+type GameRoom = import('./rooms').GameRoomType;
+type Connection = import('./users').Connection;
+type User = import('./users').User;
+
+interface BattleRequestTracker {
+	rqid: number;
+	request: string;
+	// true = user has decided, false = user has yet to decide, 'cantUndo' = waiting on other user (U-turn, faint-switch) or uncancellable (trapping ability)
+	isWait: 'cantUndo' | true | false;
+	choice: string;
+}
 
 /** 5 seconds */
 const TICK_TIME = 5;
@@ -37,21 +49,24 @@ const DISCONNECTION_BANK_TIME = 300;
 // time after a player disabling the timer before they can re-enable it
 const TIMER_COOLDOWN = 20 * SECONDS;
 
-class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
-	/**
-	 * @param {User | string | null} user
-	 * @param {RoomBattle} game
-	 * @param {number} num
-	 */
-	constructor(user, game, num) {
+export class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
+	slot: SideID;
+	channelIndex: ChannelIndex;
+	request: BattleRequestTracker;
+	wantsTie: boolean;
+	active: boolean;
+	eliminated: boolean;
+	secondsLeft: number;
+	turnSecondsLeft: number;
+	dcSecondsLeft: number;
+	connected: boolean;
+	constructor(user: User | string | null, game: RoomBattle, num: PlayerIndex) {
 		super(user, game, num);
 		if (typeof user === 'string') user = null;
 
-		this.slot = /** @type {SideID} */ (`p${num}`);
-		this.channelIndex = /** @type {0 | 1 | 2 | 3 | 4} */
-			(game.gameType === 'multi' && num > 2 ? num - 2 : num);
+		this.slot = `p${num}` as SideID;
+		this.channelIndex = (game.gameType === 'multi' && num > 2 ? num - 2 : num) as ChannelIndex;
 
-		/** @type {BattleRequestTracker} */
 		this.request = {rqid: 0, request: '', isWait: 'cantUndo', choice: ''};
 		this.wantsTie = false;
 		this.active = true;
@@ -67,7 +82,6 @@ class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 		 *
 		 * The equivalent of "Your Time" in VGC.
 		 *
-		 * @type {number}
 		 */
 		this.secondsLeft = 1;
 		/**
@@ -77,8 +91,6 @@ class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 		 * seconds in a ladder battle. Goes down by 5 every tick.
 		 * Tracked separately from the overall timer, and the player also
 		 * loses if this reaches 0.
-		 *
-		 * @type {number}
 		 */
 		this.turnSecondsLeft = 1;
 		/**
@@ -89,14 +101,11 @@ class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 		 *
 		 * Mostly exists so impatient players don't have to wait the full
 		 * 150 seconds against a disconnected opponent.
-		 *
-		 * @type {number}
 		 */
 		this.dcSecondsLeft = 1;
 		/**
 		 * Used to track a user's last known connection status, and display
 		 * the proper message when it changes.
-		 * @type {boolean}
 		 */
 		this.connected = true;
 
@@ -126,7 +135,7 @@ class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 		this.connected = false;
 		this.active = false;
 	}
-	updateChannel(/** @type {User | Connection} */ user) {
+	updateChannel(user: User | Connection) {
 		if (user instanceof Users.Connection) {
 			// "user" is actually a connection
 			Sockets.channelMove(user.worker, this.game.id, this.channelIndex, user.socketid);
@@ -140,27 +149,30 @@ class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 	toString() {
 		return this.userid;
 	}
-	send(/** @type {string} */ data) {
+	send(data: string) {
 		const user = this.getUser();
 		if (user) user.send(data);
 	}
-	sendRoom(/** @type {string} */ data) {
+	sendRoom(data: string) {
 		const user = this.getUser();
 		if (user) user.sendTo(this.game.id, data);
 	}
 }
 
-class RoomBattleTimer {
-	/**
-	 * @param {RoomBattle} battle
-	 */
-	constructor(battle) {
-		/** @type {RoomBattle} */
+export class RoomBattleTimer {
+	battle: RoomBattle;
+	timer: NodeJS.Timer | null;
+	timerRequesters: Set<ID>;
+	isFirstTurn: boolean;
+	lastTick: number;
+	debug: boolean;
+	lastDisabledTime: number;
+	lastDisabledByUser: null | ID;
+	settings: GameTimerSettings;
+	constructor(battle: RoomBattle) {
 		this.battle = battle;
 
-		/** @type {NodeJS.Timer?} */
 		this.timer = null;
-		/** @type {Set<string>} */
 		this.timerRequesters = new Set();
 		this.isFirstTurn = true;
 
@@ -187,7 +199,6 @@ class RoomBattleTimer {
 			if (timerSettings[k] === undefined) delete timerSettings[k];
 		}
 
-		/** @type {GameTimerSettings} */
 		this.settings = Object.assign({
 			dcTimer: !isChallenge,
 			dcTimerBank: isChallenge,
@@ -207,8 +218,8 @@ class RoomBattleTimer {
 			player.dcSecondsLeft = this.settings.dcTimerBank ? DISCONNECTION_BANK_TIME : DISCONNECTION_TIME;
 		}
 	}
-	start(/** @type {User} */ requester) {
-		let userid = requester ? requester.userid : 'staff';
+	start(requester?: User) {
+		const userid = requester ? requester.userid : 'staff' as ID;
 		if (this.timerRequesters.has(userid)) return false;
 		if (this.timer) {
 			this.battle.room.add(`|inactive|${requester ? requester.name : userid} also wants the timer to be on.`).update();
@@ -218,7 +229,9 @@ class RoomBattleTimer {
 		if (requester && this.battle.playerTable[requester.userid] && this.lastDisabledByUser === requester.userid) {
 			const remainingCooldownMs = (this.lastDisabledTime || 0) + TIMER_COOLDOWN - Date.now();
 			if (remainingCooldownMs > 0) {
-				this.battle.playerTable[requester.userid].sendRoom(`|inactiveoff|The timer can't be re-enabled so soon after disabling it (${Math.ceil(remainingCooldownMs / SECONDS)} seconds remaining).`);
+				this.battle.playerTable[requester.userid].sendRoom(
+					`|inactiveoff|The timer can't be re-enabled so soon after disabling it (${Math.ceil(remainingCooldownMs / SECONDS)} seconds remaining).`
+				);
 				return false;
 			}
 		}
@@ -229,7 +242,7 @@ class RoomBattleTimer {
 		this.nextRequest();
 		return true;
 	}
-	stop(/** @type {User} */ requester) {
+	stop(requester: User) {
 		if (requester) {
 			if (!this.timerRequesters.has(requester.userid)) return false;
 			this.timerRequesters.delete(requester.userid);
@@ -306,7 +319,9 @@ class RoomBattleTimer {
 			const secondsLeft = player.turnSecondsLeft;
 			let grace = player.secondsLeft - this.settings.starting;
 			if (grace < 0) grace = 0;
-			if (player) player.sendRoom(`|inactive|Time left: ${secondsLeft} sec this turn | ${player.secondsLeft - grace} sec total` + (grace ? ` | ${grace} sec grace` : ``));
+			if (player) {
+				player.sendRoom(`|inactive|Time left: ${secondsLeft} sec this turn | ${player.secondsLeft - grace} sec total` + (grace ? ` | ${grace} sec grace` : ``));
+			}
 			if (secondsLeft <= 30 && secondsLeft < this.settings.starting) {
 				room.add(`|inactive|${player.name} has ${secondsLeft} seconds left this turn.`);
 			}
@@ -335,7 +350,7 @@ class RoomBattleTimer {
 				}
 			}
 
-			let dcSecondsLeft = player.dcSecondsLeft;
+			const dcSecondsLeft = player.dcSecondsLeft;
 			if (dcSecondsLeft <= 0) player.turnSecondsLeft = 0;
 			const secondsLeft = player.turnSecondsLeft;
 			if (!secondsLeft) continue;
@@ -432,26 +447,39 @@ class RoomBattleTimer {
 	}
 }
 
-/**
- * @typedef {object} BattleRequestTracker
- * @property {number} rqid
- * @property {string} request
- * @property {'cantUndo' | true | false} isWait true = user has decided, false = user has yet to decide, 'cantUndo' = waiting on other user (U-turn, faint-switch) or uncancellable (trapping ability)
- * @property {string} choice
- */
-
-class RoomBattle extends RoomGames.RoomGame {
-	/**
-	 * @param {GameRoom} room
-	 * @param {string} formatid
-	 * @param {AnyObject} options
-	 */
-	constructor(room, formatid, options) {
+export class RoomBattle extends RoomGames.RoomGame {
+	gameid: ID;
+	room: GameRoom;
+	title: string;
+	allowRenames: boolean;
+	format: string;
+	gameType: string | undefined;
+	rated: number;
+	missingBattleStartMessage: boolean;
+	started: boolean;
+	ended: boolean;
+	active: boolean;
+	replaySaved: boolean;
+	playerTable: {[userid: string]: RoomBattlePlayer};
+	players: RoomBattlePlayer[];
+	p1: RoomBattlePlayer;
+	p2: RoomBattlePlayer;
+	p3: RoomBattlePlayer;
+	p4: RoomBattlePlayer;
+	allowExtraction: [ID, ID] | null;
+	logData: AnyObject | null;
+	endType: string;
+	score: number[] | null;
+	inputLog: string | null;
+	turn: number;
+	rqid: number;
+	requestCount: number;
+	stream: import("../lib/streams").ObjectReadWriteStream<string>;
+	timer: RoomBattleTimer;
+	constructor(room: GameRoom, formatid: string, options: AnyObject) {
 		super(room);
-		let format = Dex.getFormat(formatid, true);
-		/** @type {ID} */
-		this.gameid = /** @type {any} */ ('battle');
-		/** @type {GameRoom} */
+		const format = Dex.getFormat(formatid, true);
+		this.gameid = 'battle' as ID;
 		this.room = room;
 		this.title = format.name;
 		if (!this.title.endsWith(" Battle")) this.title += " Battle";
@@ -462,7 +490,6 @@ class RoomBattle extends RoomGames.RoomGame {
 		/**
 		 * The lower player's rating, for searching purposes.
 		 * 0 for unrated battles. 1 for unknown ratings.
-		 * @type {number}
 		 */
 		this.rated = options.rated || 0;
 		// true when onCreateBattleRoom has been called
@@ -473,27 +500,20 @@ class RoomBattle extends RoomGames.RoomGame {
 		this.replaySaved = false;
 
 		// TypeScript bug: no `T extends RoomGamePlayer`
-		/** @type {{[userid: string]: RoomBattlePlayer}} */
 		this.playerTable = Object.create(null);
 		// TypeScript bug: no `T extends RoomGamePlayer`
-		/** @type {RoomBattlePlayer[]} */
 		this.players = [];
 
 		this.playerCap = this.gameType === 'multi' || this.gameType === 'free-for-all' ? 4 : 2;
-		/** @type {RoomBattlePlayer} */
-		this.p1 = /** @type {any} */ (null);
-		/** @type {RoomBattlePlayer} */
-		this.p2 = /** @type {any} */ (null);
-		/** @type {RoomBattlePlayer} */
-		this.p3 = /** @type {any} */ (null);
-		/** @type {RoomBattlePlayer} */
-		this.p4 = /** @type {any} */ (null);
+		this.p1 = null!;
+		this.p2 = null!;
+		this.p3 = null!;
+		this.p4 = null!;
 
 		// data to be logged
 		/**
 		 * Has this player consented to input log export? If so, set this
 		 * to the userid allowed to export.
-		 * @type {[string, string]?}
 		 */
 		this.allowExtraction = null;
 
@@ -501,8 +521,6 @@ class RoomBattle extends RoomGames.RoomGame {
 		this.endType = 'normal';
 		/**
 		 * If the battle is ended: an array of the number of Pokemon left for each side.
-		 *
-		 * @type {number[] | null}
 		 */
 		this.score = null;
 		this.inputLog = null;
@@ -516,7 +534,8 @@ class RoomBattle extends RoomGames.RoomGame {
 		let ratedMessage = '';
 		if (options.ratedMessage) {
 			ratedMessage = options.ratedMessage;
-		} if (this.rated) {
+		}
+		if (this.rated) {
 			ratedMessage = 'Rated battle';
 		} else if (this.room.tour) {
 			ratedMessage = 'Tournament battle';
@@ -524,7 +543,7 @@ class RoomBattle extends RoomGames.RoomGame {
 
 		this.room.battle = this;
 
-		let battleOptions = {
+		const battleOptions = {
 			formatid: this.format,
 			id: this.id,
 			rated: ratedMessage,
@@ -536,6 +555,7 @@ class RoomBattle extends RoomGames.RoomGame {
 			this.stream.write(`>start ` + JSON.stringify(battleOptions));
 		}
 
+		// tslint:disable-next-line: no-floating-promises
 		this.listen();
 
 		this.addPlayer(options.p1, options.p1team || '', options.p1rating);
@@ -569,20 +589,16 @@ class RoomBattle extends RoomGames.RoomGame {
 		this.active = active;
 		if (Rooms.global.battleCount === 0) Rooms.global.automaticKillRequest();
 	}
-	/**
-	 * @param {User} user
-	 * @param {string} data
-	 */
-	choose(user, data) {
+	choose(user: User, data: string) {
 		const player = this.playerTable[user.userid];
 		const [choice, rqid] = data.split('|', 2);
 		if (!player) return;
-		let request = player.request;
+		const request = player.request;
 		if (request.isWait !== false && request.isWait !== true) {
 			player.sendRoom(`|error|[Invalid choice] There's nothing to choose`);
 			return;
 		}
-		const allPlayersWait = this.players.every(player => !!player.request.isWait);
+		const allPlayersWait = this.players.every(p => !!p.request.isWait);
 		if (allPlayersWait || // too late
 			(rqid && rqid !== '' + request.rqid)) { // WAY too late
 			player.sendRoom(`|error|[Invalid choice] Sorry, too late to make a different move; the next turn has already started`);
@@ -594,20 +610,16 @@ class RoomBattle extends RoomGames.RoomGame {
 
 		this.stream.write(`>${player.slot} ${choice}`);
 	}
-	/**
-	 * @param {User} user
-	 * @param {string} data
-	 */
-	undo(user, data) {
+	undo(user: User, data: string) {
 		const player = this.playerTable[user.userid];
 		const [, rqid] = data.split('|', 2);
 		if (!player) return;
-		let request = player.request;
+		const request = player.request;
 		if (request.isWait !== true) {
 			player.sendRoom(`|error|[Invalid choice] There's nothing to cancel`);
 			return;
 		}
-		const allPlayersWait = this.players.every(player => !!player.request.isWait);
+		const allPlayersWait = this.players.every(p => !!p.request.isWait);
 		if (allPlayersWait || // too late
 			(rqid && rqid !== '' + request.rqid)) { // WAY too late
 			player.sendRoom(`|error|[Invalid choice] Sorry, too late to cancel; the next turn has already started`);
@@ -617,11 +629,7 @@ class RoomBattle extends RoomGames.RoomGame {
 
 		this.stream.write(`>${player.slot} undo`);
 	}
-	/**
-	 * @param {User} user
-	 * @param {SideID?} [slot]
-	 */
-	joinGame(user, slot) {
+	joinGame(user: User, slot?: SideID) {
 		if (!user.can('joinbattle', null, this.room)) {
 			user.popup(`You must be a set as a player to join a battle you didn't start. Ask a player to use /addplayer on you to join this battle.`);
 			return false;
@@ -632,8 +640,7 @@ class RoomBattle extends RoomGames.RoomGame {
 			return false;
 		}
 
-		/** @type {SideID[]} */
-		let validSlots = [];
+		const validSlots: SideID[] = [];
 		for (const player of this.players) {
 			if (!player.userid) validSlots.push(player.slot);
 		}
@@ -658,9 +665,9 @@ class RoomBattle extends RoomGames.RoomGame {
 		this.updatePlayer(this[slot], user);
 		if (validSlots.length - 1 < 1 && this.missingBattleStartMessage) {
 			const users = this.players.map(player => {
-				const user = player.getUser();
-				if (!user) throw new Error(`User ${player.name} not found on ${this.id} battle creation`);
-				return user;
+				const u = player.getUser();
+				if (!u) throw new Error(`User ${player.name} not found on ${this.id} battle creation`);
+				return u;
 			});
 			Rooms.global.onCreateBattleRoom(users, this.room, {rated: this.rated});
 			this.missingBattleStartMessage = false;
@@ -669,10 +676,7 @@ class RoomBattle extends RoomGames.RoomGame {
 		this.room.update();
 		return true;
 	}
-	/**
-	 * @param {User} user
-	 */
-	leaveGame(user) {
+	leaveGame(user: User) {
 		if (!user) return false; // ...
 		if (this.room.rated || this.room.tour) {
 			user.popup(`Players can't be swapped out in a ${this.room.tour ? "tournament" : "rated"} battle.`);
@@ -692,6 +696,7 @@ class RoomBattle extends RoomGames.RoomGame {
 
 	async listen() {
 		let next;
+		// tslint:disable-next-line: no-conditional-assignment
 		while ((next = await this.stream.read())) {
 			this.receive(next.split('\n'));
 		}
@@ -703,7 +708,7 @@ class RoomBattle extends RoomGames.RoomGame {
 			this.checkActive();
 		}
 	}
-	receive(/** @type {string[]} */ lines) {
+	receive(lines: string[]) {
 		for (const player of this.players) player.wantsTie = false;
 
 		switch (lines[0]) {
@@ -720,17 +725,17 @@ class RoomBattle extends RoomGames.RoomGame {
 			break;
 
 		case 'sideupdate': {
-			let slot = /** @type {SideID} */ (lines[1]);
-			let player = this[slot];
+			const slot = lines[1] as SideID;
+			const player = this[slot];
 			if (lines[2].startsWith(`|error|[Invalid choice] Can't do anything`)) {
 				// ... should not happen
 			} else if (lines[2].startsWith(`|error|[Invalid choice]`)) {
-				let request = this[slot].request;
+				const request = this[slot].request;
 				request.isWait = false;
 				request.choice = '';
 			} else if (lines[2].startsWith(`|request|`)) {
 				this.rqid++;
-				let request = JSON.parse(lines[2].slice(9));
+				const request = JSON.parse(lines[2].slice(9));
 				request.rqid = this.rqid;
 				const requestJSON = JSON.stringify(request);
 				this[slot].request = {
@@ -749,32 +754,30 @@ class RoomBattle extends RoomGames.RoomGame {
 
 		case 'end':
 			this.logData = JSON.parse(lines[1]);
-			this.score = this.logData.score;
-			this.inputLog = this.logData.inputLog;
+			this.score = this.logData!.score;
+			this.inputLog = this.logData!.inputLog;
 			this.started = true;
 			if (!this.ended) {
 				this.ended = true;
-				this.onEnd(this.logData.winner);
+				// tslint:disable-next-line: no-floating-promises
+				this.onEnd(this.logData!.winner);
 				this.clearPlayers();
 			}
 			this.checkActive();
 			break;
 		}
 	}
-	/**
-	 * @param {any} winner
-	 */
-	async onEnd(winner) {
+	async onEnd(winner: any) {
 		this.timer.end();
 		// Declare variables here in case we need them for non-rated battles logging.
 		let p1score = 0.5;
 		const winnerid = toID(winner);
 
 		// Check if the battle was rated to update the ladder, return its response, and log the battle.
-		let p1name = this.p1.name;
-		let p2name = this.p2.name;
-		let p1id = toID(p1name);
-		let p2id = toID(p2name);
+		const p1name = this.p1.name;
+		const p2name = this.p2.name;
+		const p1id = toID(p1name);
+		const p2id = toID(p2name);
 		if (this.room.rated) {
 			this.room.rated = 0;
 
@@ -789,6 +792,7 @@ class RoomBattle extends RoomGames.RoomGame {
 				this.room.sendUser(winner, '|askreg|' + winner.userid);
 			}
 			const [score, p1rating, p2rating] = await Ladders(this.format).updateRating(p1name, p2name, p1score, this.room);
+			// tslint:disable-next-line: no-floating-promises
 			this.logBattle(score, p1rating, p2rating);
 		} else if (Config.logchallenges) {
 			if (winnerid === p1id) {
@@ -796,6 +800,7 @@ class RoomBattle extends RoomGames.RoomGame {
 			} else if (winnerid === p2id) {
 				p1score = 0;
 			}
+			// tslint:disable-next-line: no-floating-promises
 			this.logBattle(p1score);
 		} else {
 			this.logData = null;
@@ -820,16 +825,12 @@ class RoomBattle extends RoomGames.RoomGame {
 		}
 		this.room.update();
 	}
-	/**
-	 * @param {number} p1score
-	 * @param {AnyObject?} p1rating
-	 * @param {AnyObject?} p2rating
-	 * @param {AnyObject?} p3rating
-	 * @param {AnyObject?} p4rating
-	 */
-	async logBattle(p1score, p1rating = null, p2rating = null, p3rating = null, p4rating = null) {
+	async logBattle(
+		p1score: number, p1rating: AnyObject | null = null, p2rating: AnyObject | null = null,
+		p3rating: AnyObject | null = null, p4rating: AnyObject | null = null
+		) {
 		if (Dex.getFormat(this.format, true).noLog) return;
-		let logData = this.logData;
+		const logData = this.logData;
 		if (!logData) return;
 		this.logData = null; // deallocate to save space
 		logData.log = this.room.getLog(-1).split('\n'); // replay log (exact damage)
@@ -863,13 +864,9 @@ class RoomBattle extends RoomGames.RoomGame {
 		const logpath = `logs/${logfolder}/${tier}/${logsubfolder}/`;
 		await FS(logpath).mkdirp();
 		await FS(logpath + this.room.id + '.log.json').write(JSON.stringify(logData));
-		//console.log(JSON.stringify(logData));
+		// console.log(JSON.stringify(logData));
 	}
-	/**
-	 * @param {User} user
-	 * @param {Connection?} connection
-	 */
-	onConnect(user, connection = null) {
+	onConnect(user: User, connection: Connection | null = null) {
 		// this handles joining a battle in which a user is a participant,
 		// where the user has already identified before attempting to join
 		// the battle
@@ -884,20 +881,10 @@ class RoomBattle extends RoomGames.RoomGame {
 		}
 		if (!player.active) this.onJoin(user);
 	}
-	/**
-	 * @param {User} user
-	 * @param {Connection?} connection
-	 */
-	onUpdateConnection(user, connection = null) {
+	onUpdateConnection(user: User, connection: Connection | null = null) {
 		this.onConnect(user, connection);
 	}
-	/**
-	 * @param {User} user
-	 * @param {string} oldUserid
-	 * @param {boolean} isJoining
-	 * @param {boolean} isForceRenamed
-	 */
-	onRename(user, oldUserid, isJoining, isForceRenamed) {
+	onRename(user: User, oldUserid: string, isJoining: boolean, isForceRenamed: boolean) {
 		if (user.userid === oldUserid) return;
 		if (!this.playerTable) {
 			// !! should never happen but somehow still does
@@ -913,7 +900,7 @@ class RoomBattle extends RoomGames.RoomGame {
 			return;
 		}
 		if (!this.allowRenames) {
-			let player = this.playerTable[oldUserid];
+			const player = this.playerTable[oldUserid];
 			if (player) {
 				const message = isForceRenamed ? " lost by having an inappropriate name." : " forfeited by changing their name.";
 				this.forfeitPlayer(player, message);
@@ -924,7 +911,7 @@ class RoomBattle extends RoomGames.RoomGame {
 			return;
 		}
 		if (user.userid in this.playerTable) return;
-		let player = this.playerTable[oldUserid];
+		const player = this.playerTable[oldUserid];
 		if (player) {
 			this.updatePlayer(player, user);
 		}
@@ -934,22 +921,16 @@ class RoomBattle extends RoomGames.RoomGame {
 		};
 		this.stream.write(`>player ${player.slot} ` + JSON.stringify(options));
 	}
-	/**
-	 * @param {User} user
-	 */
-	onJoin(user) {
-		let player = this.playerTable[user.userid];
+	onJoin(user: User) {
+		const player = this.playerTable[user.userid];
 		if (player && !player.active) {
 			player.active = true;
 			this.timer.checkActivity();
 			this.room.add(`|player|${player.slot}|${user.name}|${user.avatar}`);
 		}
 	}
-	/**
-	 * @param {User} user
-	 */
-	onLeave(user) {
-		let player = this.playerTable[user.userid];
+	onLeave(user: User) {
+		const player = this.playerTable[user.userid];
 		if (player && player.active) {
 			player.sendRoom(`|request|null`);
 			player.active = false;
@@ -958,15 +939,12 @@ class RoomBattle extends RoomGames.RoomGame {
 		}
 	}
 
-	/**
-	 * @param {User} user
-	 */
-	win(user) {
+	win(user: User) {
 		if (!user) {
 			this.tie();
 			return true;
 		}
-		let player = this.playerTable[user.userid];
+		const player = this.playerTable[user.userid];
 		if (!player) return false;
 		this.stream.write(`>forcewin ${player.slot}`);
 	}
@@ -976,11 +954,7 @@ class RoomBattle extends RoomGames.RoomGame {
 	tiebreak() {
 		this.stream.write(`>tiebreak`);
 	}
-	/**
-	 * @param {User | string} user
-	 * @param {string} message
-	 */
-	forfeit(user, message = '') {
+	forfeit(user: User | string, message = '') {
 		if (typeof user !== 'string') user = user.userid;
 		else user = toID(user);
 
@@ -988,11 +962,7 @@ class RoomBattle extends RoomGames.RoomGame {
 		return this.forfeitPlayer(this.playerTable[user], message);
 	}
 
-	/**
-	 * @param {RoomBattlePlayer} player
-	 * @param {string} message
-	 */
-	forfeitPlayer(player, message = '') {
+	forfeitPlayer(player: RoomBattlePlayer, message = '') {
 		if (this.ended || !this.started) return false;
 
 		if (!message) message = ' forfeited.';
@@ -1006,14 +976,10 @@ class RoomBattle extends RoomGames.RoomGame {
 	/**
 	 * Team should be '' for random teams. `null` should be used only if importing
 	 * an inputlog (so the player isn't recreated)
-	 *
-	 * @param {User | null} user
-	 * @param {string?} team
-	 * @param {number} rating
 	 */
-	addPlayer(user, team, rating = 0) {
+	addPlayer(user: User | null, team: string | null, rating = 0) {
 		// TypeScript bug: no `T extends RoomGamePlayer`
-		const player = /** @type {RoomBattlePlayer} */ (super.addPlayer(user));
+		const player = super.addPlayer(user) as RoomBattlePlayer;
 		if (!player) return null;
 		const slot = player.slot;
 		this[slot] = player;
@@ -1022,7 +988,7 @@ class RoomBattle extends RoomGames.RoomGame {
 			const options = {
 				name: player.name,
 				avatar: user ? '' + user.avatar : '',
-				team: team,
+				team,
 				rating: Math.round(rating),
 			};
 			this.stream.write(`>player ${slot} ${JSON.stringify(options)}`);
@@ -1041,16 +1007,12 @@ class RoomBattle extends RoomGames.RoomGame {
 		}
 	}
 
-	makePlayer(/** @type {User} */ user) {
-		const num = this.players.length + 1;
+	makePlayer(user: User) {
+		const num = (this.players.length + 1) as PlayerIndex;
 		return new RoomBattlePlayer(user, this, num);
 	}
 
-	/**
-	 * @param {RoomBattlePlayer} player
-	 * @param {User?} user
-	 */
-	updatePlayer(player, user) {
+	updatePlayer(player: RoomBattlePlayer, user: User | null) {
 		super.updatePlayer(player, user);
 
 		const slot = player.slot;
@@ -1077,7 +1039,9 @@ class RoomBattle extends RoomGames.RoomGame {
 		this.started = true;
 		const users = this.players.map(player => {
 			const user = player.getUser();
-			if (!user && !this.missingBattleStartMessage) throw new Error(`User ${player.name} not found on ${this.id} battle creation`);
+			if (!user && !this.missingBattleStartMessage) {
+				throw new Error(`User ${player.name} not found on ${this.id} battle creation`);
+			}
 			return user;
 		});
 		if (!this.missingBattleStartMessage) {
@@ -1118,6 +1082,7 @@ class RoomBattle extends RoomGames.RoomGame {
 		this.p4 = null;
 
 		this.ended = true;
+		// tslint:disable-next-line: no-floating-promises
 		this.stream.destroy();
 		if (this.active) {
 			Rooms.global.battleCount += -1;
@@ -1129,16 +1094,15 @@ class RoomBattle extends RoomGames.RoomGame {
 	}
 }
 
-class RoomBattleStream extends BattleStream {
+export class RoomBattleStream extends BattleStream {
+	battle: Battle;
 	constructor() {
 		super({keepAlive: true});
-		/** @type {Battle} */
 		// @ts-ignore
 		this.battle = null;
 	}
 
-	/** @param {string} chunk */
-	_write(chunk) {
+	_write(chunk: string) {
 		const startTime = Date.now();
 		try {
 			this._writeLines(chunk);
@@ -1166,11 +1130,7 @@ class RoomBattleStream extends BattleStream {
 		}
 	}
 
-	/**
-	 * @param {string} type
-	 * @param {string} message
-	 */
-	_writeLine(type, message) {
+	_writeLine(type: string, message: string) {
 		switch (type) {
 		case 'eval':
 			/* eslint-disable no-eval, no-unused-vars */
@@ -1187,13 +1147,14 @@ class RoomBattleStream extends BattleStream {
 			message = message.replace(/\f/g, '\n');
 			battle.add('', '>>> ' + message.replace(/\n/g, '\n||'));
 			try {
+				// tslint:disable-next-line: no-eval
 				let result = eval(message);
 				if (result && result.then) {
-					result.then((/** @type {any} */ unwrappedResult) => {
+					result.then((unwrappedResult: any) => {
 						unwrappedResult = Chat.stringify(unwrappedResult);
 						battle.add('', 'Promise -> ' + unwrappedResult);
 						battle.sendUpdates();
-					}, (/** @type {Error} */ error) => {
+					}, (error: Error) => {
 						battle.add('', '<<< error: ' + error.message);
 						battle.sendUpdates();
 					});
@@ -1212,34 +1173,21 @@ class RoomBattleStream extends BattleStream {
 	}
 }
 
-exports.RoomBattlePlayer = RoomBattlePlayer;
-exports.RoomBattleTimer = RoomBattleTimer;
-exports.RoomBattle = RoomBattle;
-exports.RoomBattleStream = RoomBattleStream;
-
 /*********************************************************
  * Process manager
  *********************************************************/
 
-/** @type {typeof import('../lib/process-manager').StreamProcessManager} */
-const StreamProcessManager = require(/** @type {any} */('../.lib-dist/process-manager')).StreamProcessManager;
-
-const PM = new StreamProcessManager(module, () => {
+export const PM = new StreamProcessManager(module, () => {
 	return new RoomBattleStream();
 });
 
 if (!PM.isParentProcess) {
 	// This is a child process!
-	global.Config = require(/** @type {any} */('../.server-dist/config-loader')).Config;
-	global.Chat = require(/** @type {any} */('../.server-dist/chat'));
+	global.Config = (require('./config-loader') as any).Config;
+	global.Chat = (require('./chat') as any);
 	// @ts-ignore ???
 	global.Monitor = {
-		/**
-		 * @param {Error} error
-		 * @param {string} source
-		 * @param {{}?} details
-		 */
-		crashlog(error, source = 'A simulator process', details = null) {
+		crashlog(error: Error, source = 'A simulator process', details: {} | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			// @ts-ignore
 			process.send(`THROW\n@!!@${repr}\n${error.stack}`);
@@ -1247,7 +1195,6 @@ if (!PM.isParentProcess) {
 	};
 	global.__version = {head: ''};
 	try {
-		const execSync = require('child_process').execSync;
 		const head = execSync('git rev-parse HEAD', {
 			stdio: ['ignore', 'pipe', 'ignore'],
 		});
@@ -1271,11 +1218,8 @@ if (!PM.isParentProcess) {
 		});
 	}
 
-	/** @type {typeof import('../lib/repl').Repl} */
-	const Repl = require(/** @type {any} */('../.lib-dist/repl')).Repl;
+	// tslint:disable-next-line: no-eval
 	Repl.start(`sim-${process.pid}`, cmd => eval(cmd));
 } else {
 	PM.spawn(global.Config ? Config.simulatorprocesses : 1);
 }
-
-exports.PM = PM;
