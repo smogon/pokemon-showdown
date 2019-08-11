@@ -16,7 +16,7 @@ class Jeopardy extends Rooms.RoomGame {
 		this.host = user;
 		this.allowRenames = true;
 		this.state = "signups";
-		this.gameid = 'jeopardy';
+		this.gameid = /** @type {ID} */ ('jeopardy');
 		this.title = 'Jeopardy';
 		this.questions = [];
 		this.started = false;

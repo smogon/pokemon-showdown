@@ -15,16 +15,19 @@
  * @license MIT license
  */
 
-'use strict';
+import {User} from "./users";
+
+type Connection = import('./users').Connection;
+type GameRoom = import('./rooms').GameRoomType;
+type ChatRoom = import('./rooms').ChatRoomType;
 
 // globally Rooms.RoomGamePlayer
-class RoomGamePlayer {
-	/**
-	 * @param {User | string | null} user
-	 * @param {RoomGame} game
-	 * @param {number} num
-	 */
-	constructor(user, game, num = 0) {
+export class RoomGamePlayer {
+	num: number;
+	name: string;
+	userid: string;
+	game: RoomGame;
+	constructor(user: User | string | null, game: RoomGame, num = 0) {
 		this.num = num;
 		if (!user) user = num ? `Player ${num}` : `Player`;
 		/**
@@ -51,7 +54,7 @@ class RoomGamePlayer {
 	}
 	unlinkUser() {
 		if (!this.userid) return;
-		let user = Users.getExact(this.userid);
+		const user = Users.getExact(this.userid);
 		if (user) {
 			user.games.delete(this.game.id);
 			user.updateSearch();
@@ -65,18 +68,12 @@ class RoomGamePlayer {
 	toString() {
 		return this.userid;
 	}
-	/**
-	 * @param {string} data
-	 */
-	send(data) {
-		let user = Users.getExact(this.userid);
+	send(data: string) {
+		const user = Users.getExact(this.userid);
 		if (user) user.send(data);
 	}
-	/**
-	 * @param {string} data
-	 */
-	sendRoom(data) {
-		let user = Users.getExact(this.userid);
+	sendRoom(data: string) {
+		const user = Users.getExact(this.userid);
 		if (user) user.sendTo(this.game.id, data);
 	}
 }
@@ -84,37 +81,41 @@ class RoomGamePlayer {
 /**
  * globally Rooms.RoomGame
  */
-class RoomGame {
-	/**
-	 * @param {ChatRoom | GameRoom} room
-	 */
-	constructor(room) {
+export class RoomGame {
+	id: string;
+	room: ChatRoom | GameRoom;
+	gameid: ID;
+	title: string;
+	allowRenames: boolean;
+	playerTable: {[userid: string]: RoomGamePlayer};
+	players: RoomGamePlayer[];
+	playerCount: number;
+	playerCap: number;
+	ended: boolean;
+	constructor(room: ChatRoom | GameRoom) {
 		this.id = room.id;
-		/** @type {ChatRoom | GameRoom} */
 		this.room = room;
-		this.gameid = 'game';
+		this.gameid = 'game' as ID;
 		this.title = 'Game';
 		this.allowRenames = false;
 		/**
 		 * userid:player table.
 		 *
 		 * Does not contain userless players: use playerList for the full list.
-		 *
-		 * @type {{[userid: string]: RoomGamePlayer}}
 		 */
 		this.playerTable = Object.create(null);
-		/** @type {RoomGamePlayer[]} */
 		this.players = [];
 		this.playerCount = 0;
 		this.playerCap = 0;
 		this.ended = false;
 
-		this.room.game = this;
+		this.room.game = this as RoomGame;
 	}
 
 	destroy() {
 		this.room.game = null;
-		this.room = /** @type {any} */ (null);
+		// @ts-ignore
+		this.room = null;
 		for (const player of this.players) {
 			player.destroy();
 		}
@@ -124,16 +125,12 @@ class RoomGame {
 		this.playerTable = null;
 	}
 
-	/**
-	 * @param {User | string | null} user
-	 * @param {any[]} rest
-	 */
-	addPlayer(user = null, ...rest) {
+	addPlayer(user: User | string | null = null, ...rest: any[]) {
 		if (typeof user !== 'string' && user) {
 			if (user.userid in this.playerTable) return null;
 		}
 		if (this.playerCap > 0 && this.playerCount >= this.playerCap) return null;
-		let player = this.makePlayer(user, ...rest);
+		const player = this.makePlayer(user, ...rest);
 		if (!player) return null;
 		if (typeof user === 'string') user = null;
 		this.players.push(player);
@@ -144,11 +141,7 @@ class RoomGame {
 		return player;
 	}
 
-	/**
-	 * @param {RoomGamePlayer} player
-	 * @param {User | null} user
-	 */
-	updatePlayer(player, user) {
+	updatePlayer(player: RoomGamePlayer, user: User | null) {
 		if (!this.allowRenames) return;
 		if (player.userid) {
 			delete this.playerTable[player.userid];
@@ -163,19 +156,12 @@ class RoomGame {
 		}
 	}
 
-	/**
-	 * @param {User | string | null} user
-	 * @param {any[]} rest
-	 */
-	makePlayer(user, ...rest) {
+	makePlayer(user: User | string | null, ...rest: any[]) {
 		const num = this.players.length ? this.players[this.players.length - 1].num : 1;
 		return new RoomGamePlayer(user, this, num);
 	}
 
-	/**
-	 * @param {RoomGamePlayer | User} player
-	 */
-	removePlayer(player) {
+	removePlayer(player: RoomGamePlayer | User) {
 		if (player instanceof Users.User) {
 			// API changed
 			// TODO: deprecate
@@ -192,11 +178,7 @@ class RoomGame {
 		return true;
 	}
 
-	/**
-	 * @param {User} user
-	 * @param {string} oldUserid
-	 */
-	renamePlayer(user, oldUserid) {
+	renamePlayer(user: User, oldUserid: ID) {
 		if (user.userid === oldUserid) {
 			this.playerTable[user.userid].name = user.name;
 		} else {
@@ -247,18 +229,14 @@ class RoomGame {
 	 *
 	 * While connection is passed, it should not usually be used:
 	 * Any handling of connections should happen in onConnect.
-	 * @param {User} user
-	 * @param {Connection} connection
 	 */
-	onJoin(user, connection) {}
+	onJoin(user: User, connection: Connection) {}
 
 	/**
 	 * Called when a user is banned from the room this game is taking
 	 * place in.
-	 *
-	 * @param {User} user
 	 */
-	removeBannedUser(user) {
+	removeBannedUser(user: User) {
 		// @ts-ignore
 		if (this.forfeit) this.forfeit(user);
 	}
@@ -269,12 +247,8 @@ class RoomGame {
 	 * Check `!user.named` for the case where a user previously had a
 	 * username but is now a guest. By default, updates a player's
 	 * name as long as allowRenames is set to true.
-	 * @param {User} user
-	 * @param {string} oldUserid
-	 * @param {boolean} isJoining
-	 * @param {boolean} isForceRenamed
 	 */
-	onRename(user, oldUserid, isJoining, isForceRenamed) {
+	onRename(user: User, oldUserid: ID, isJoining: boolean, isForceRenamed: boolean) {
 		if (!this.allowRenames || (!user.named && !isForceRenamed)) {
 			if (!(user.userid in this.playerTable)) {
 				user.games.delete(this.id);
@@ -289,9 +263,8 @@ class RoomGame {
 	/**
 	 * Called when a user leaves the room. (i.e. when the user's last
 	 * connection leaves)
-	 * @param {User} user
 	 */
-	onLeave(user) {}
+	onLeave(user: User) {}
 
 	/**
 	 * Called each time a connection joins a room (after onJoin if
@@ -299,11 +272,8 @@ class RoomGame {
 	 * is updated in some way (such as by changing user or renaming).
 	 * If you don't want this behavior, override onUpdateConnection
 	 * and/or onRename.
-	 *
-	 * @param {User} user
-	 * @param {Connection} connection
 	 */
-	onConnect(user, connection) {}
+	onConnect(user: User, connection: Connection) {}
 
 	/**
 	 * Called for each connection in a room that changes users by
@@ -313,11 +283,8 @@ class RoomGame {
 	 * Player updates and an up-to-date report of what's going on in
 	 * the game should be sent during `onConnect`. You should rarely
 	 * need to handle the other events.
-	 *
-	 * @param {User} user
-	 * @param {Connection} connection
 	 */
-	onUpdateConnection(user, connection) {
+	onUpdateConnection(user: User, connection: Connection) {
 		this.onConnect(user, connection);
 	}
 
@@ -325,12 +292,8 @@ class RoomGame {
 	 * Called for every message a user sends while this game is active.
 	 * Return an error message to prevent the message from being sent, or
 	 * `false` to let it through.
-	 *
-	 * @param {string} message
-	 * @param {User} user
-	 * @return {string | false}
 	 */
-	onChatMessage(message, user) {
+	onChatMessage(message: string, user: User): string | false {
 		return false;
 	}
 
@@ -338,13 +301,6 @@ class RoomGame {
 	 * Called for every message a user sends while this game is active.
 	 * Unlike onChatMessage, this function runs after the message has been added to the room's log.
 	 * Do not try to use this to block messages, use onChatMessage for that.
-	 *
-	 * @param {string} message
-	 * @param {User} user
 	 */
-	onLogMessage(message, user) {}
+	onLogMessage(message: string, user: User) {}
 }
-
-// these exports are traditionally attached to rooms.js
-exports.RoomGame = RoomGame;
-exports.RoomGamePlayer = RoomGamePlayer;
