@@ -23,6 +23,7 @@ type PlayerIndex = 1 | 2 | 3 | 4;
 type GameRoom = import('./rooms').GameRoomType;
 type Connection = import('./users').Connection;
 type User = import('./users').User;
+type Stream = import("../lib/streams").ObjectReadWriteStream<string>;
 
 interface BattleRequestTracker {
 	rqid: number;
@@ -474,7 +475,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	turn: number;
 	rqid: number;
 	requestCount: number;
-	stream: import("../lib/streams").ObjectReadWriteStream<string>;
+	stream: Stream;
 	timer: RoomBattleTimer;
 	constructor(room: GameRoom, formatid: string, options: AnyObject) {
 		super(room);
