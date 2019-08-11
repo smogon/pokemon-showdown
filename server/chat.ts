@@ -90,7 +90,6 @@ const BROADCAST_TOKEN = '!';
 
 const TRANSLATION_DIRECTORY = 'translations/';
 
-import { exec, ExecException } from 'child_process';
 import { FS } from '../lib/fs';
 
 // @ts-ignore no typedef available
@@ -1758,8 +1757,6 @@ function stringify(value: any, depth = 0): string {
 }
 
 import { formatText, linkRegex, stripFormatting } from './chat-formatter';
-// tslint:disable-next-line: prefer-const exported
-let updateServerLock = false;
 
 /**
  * Gets the dimension of the image at url. Returns 0x0 if the image isn't found, as well as the relevant error.
@@ -1847,36 +1844,6 @@ function resolvePage(pageid: string, user: User, connection: Connection) {
 	return (new PageContext({pageid, user, connection})).resolve();
 }
 
-async function version() {
-	function sh(command: string, path: string): Promise<[number, string, string]> {
-		return new Promise((resolve, reject) => {
-			exec(command, {
-				cwd: __dirname,
-				env: {GIT_INDEX_FILE: path},
-			}, (error: ExecException | null, stdout: string | Buffer, stderr: string | Buffer) => {
-				resolve([error && error.code || 0, '' + stdout, '' + stderr]);
-			});
-		});
-	}
-
-	let hash;
-	try {
-		await FS('.git/index').copyFile('logs/.gitindex');
-		const index = FS('logs/.gitindex');
-
-		let [code, stdout, stderr] = await sh(`git add -A`, index.path);
-		if (code || stderr) return;
-		[code, stdout, stderr] = await sh(`git write-tree`, index.path);
-
-		if (code || stderr) return;
-		hash = stdout.trim();
-
-		await sh(`git reset`, index.path);
-		await index.unlinkIfExists();
-	} catch (err) {}
-	return hash;
-}
-
 export const Chat = {
 	multiLinePattern,
 	baseCommands,
@@ -1944,7 +1911,4 @@ export const Chat = {
 	formatText,
 	linkRegex,
 	stripFormatting,
-
-	updateServerLock,
-	version,
 };

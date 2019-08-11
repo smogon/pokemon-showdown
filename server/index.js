@@ -70,6 +70,10 @@ const ConfigLoader = require('../.server-dist/config-loader');
 global.Config = ConfigLoader.Config;
 
 global.Monitor = require('../.server-dist/monitor').Monitor;
+global.__version = {head: ''};
+Monitor.version().then(function (hash) {
+	global.__version.tree = hash;
+});
 
 if (Config.watchconfig) {
 	FS(require.resolve('../config/config')).onModify(() => {
@@ -95,10 +99,6 @@ global.LoginServer = require('../.server-dist/loginserver').LoginServer;
 global.Ladders = require('../.server-dist/ladders').Ladders;
 
 global.Chat = require('../.server-dist/chat').Chat;
-global.__version = {head: ''};
-Chat.version().then(function (hash) {
-	global.__version.tree = hash;
-});
 
 global.Users = require('../.server-dist/users').Users;
 

@@ -8,6 +8,7 @@
  */
 'use strict';
 
+import {exec, ExecException} from 'child_process';
 import {crashlogger} from "../lib/crashlogger";
 import {FS} from "../lib/fs";
 
@@ -275,8 +276,39 @@ export const Monitor = {
 		return bytes;
 	},
 
+	async version() {
+		function sh(command: string, path: string): Promise<[number, string, string]> {
+			return new Promise((resolve, reject) => {
+				exec(command, {
+					cwd: __dirname,
+					env: {GIT_INDEX_FILE: path},
+				}, (error: ExecException | null, stdout: string | Buffer, stderr: string | Buffer) => {
+					resolve([error && error.code || 0, '' + stdout, '' + stderr]);
+				});
+			});
+		}
+
+		let hash;
+		try {
+			await FS('.git/index').copyFile('logs/.gitindex');
+			const index = FS('logs/.gitindex');
+
+			let [code, stdout, stderr] = await sh(`git add -A`, index.path);
+			if (code || stderr) return;
+			[code, stdout, stderr] = await sh(`git write-tree`, index.path);
+
+			if (code || stderr) return;
+			hash = stdout.trim();
+
+			await sh(`git reset`, index.path);
+			await index.unlinkIfExists();
+		} catch (err) {}
+		return hash;
+	},
+
 	TimedCounter: TimedCounter as new(entries: [any, [number, number]]) => TimedCounter,
 
+	updateServerLock: false,
 	cleanInterval: null as NodeJS.Timeout | null,
 };
 

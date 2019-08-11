@@ -3141,7 +3141,7 @@ const commands = {
 
 		const lock = Monitor.hotpatchLock;
 		const hotpatches = ['chat', 'formats', 'loginserver', 'punishments', 'dnsbl'];
-		const version = await Chat.version();
+		const version = await Monitor.version();
 		let patch = target;
 		const requiresForce = (patch) =>
 			version && cmd !== 'forcehotpatch' &&
@@ -3596,7 +3596,7 @@ const commands = {
 			return this.errorReply("For safety reasons, /kill can only be used during lockdown.");
 		}
 
-		if (Chat.updateServerLock) {
+		if (Monitor.updateServerLock) {
 			return this.errorReply("Wait for /updateserver to finish before using /kill.");
 		}
 
@@ -3645,11 +3645,11 @@ const commands = {
 			return this.errorReply(`/updateserver - Access denied.`);
 		}
 
-		if (Chat.updateServerLock) {
+		if (Monitor.updateServerLock) {
 			return this.errorReply(`/updateserver - Another update is already in progress (or a previous update crashed).`);
 		}
 
-		Chat.updateServerLock = true;
+		Monitor.updateServerLock = true;
 
 		const logRoom = Rooms('staff') || room;
 
@@ -3674,7 +3674,7 @@ const commands = {
 		let [code, stdout, stderr] = await exec(`git fetch`);
 		if (code) throw new Error(`updateserver: Crash while fetching - make sure this is a Git repository`);
 		if (!stdout && !stderr) {
-			Chat.updateServerLock = false;
+			Monitor.updateServerLock = false;
 			this.sendReply(`There were no updates.`);
 			[code, stdout, stderr] = await exec('../build');
 			if (stderr) {
@@ -3732,7 +3732,7 @@ const commands = {
 			return this.errorReply(`Crash while rebuilding: ${stderr}`);
 		}
 		this.sendReply(`Rebuilt.`);
-		Chat.updateServerLock = false;
+		Monitor.updateServerLock = false;
 	},
 
 	memusage: 'memoryusage',
