@@ -1184,8 +1184,10 @@ export const PM = new StreamProcessManager(module, () => {
 
 if (!PM.isParentProcess) {
 	// This is a child process!
-	global.Config = (require('./config-loader') as any).Config;
-	global.Chat = (require('./chat') as any);
+	// tslint:disable-next-line: no-var-requires
+	global.Config = require('./config-loader').Config;
+	// tslint:disable-next-line: no-var-requires
+	global.Chat = require('./chat');
 	// @ts-ignore ???
 	global.Monitor = {
 		crashlog(error: Error, source = 'A simulator process', details: {} | null = null) {
