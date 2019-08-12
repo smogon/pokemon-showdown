@@ -240,6 +240,15 @@ class FSPath {
 		return fs.symlinkSync(target, this.path);
 	}
 
+	copyFile(dest: string) {
+		if (Config.nofswriting) return Promise.resolve();
+		return new Promise((resolve, reject) => {
+			fs.copyFile(this.path, dest, err => {
+				err ? reject(err) : resolve();
+			});
+		});
+}
+
 	rename(target: string) {
 		if (Config.nofswriting) return Promise.resolve();
 		return new Promise((resolve, reject) => {

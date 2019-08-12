@@ -1757,8 +1757,6 @@ function stringify(value: any, depth = 0): string {
 }
 
 import { formatText, linkRegex, stripFormatting } from './chat-formatter';
-// tslint:disable-next-line: prefer-const exported
-let updateServerLock = false;
 
 /**
  * Gets the dimension of the image at url. Returns 0x0 if the image isn't found, as well as the relevant error.
@@ -1845,6 +1843,7 @@ function registerMonitor(id: string, entry: Monitor) {
 function resolvePage(pageid: string, user: User, connection: Connection) {
 	return (new PageContext({pageid, user, connection})).resolve();
 }
+
 export const Chat = {
 	multiLinePattern,
 	baseCommands,
@@ -1912,6 +1911,4 @@ export const Chat = {
 	formatText,
 	linkRegex,
 	stripFormatting,
-
-	updateServerLock,
 };

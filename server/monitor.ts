@@ -8,6 +8,7 @@
  */
 'use strict';
 
+import {exec, ExecException, ExecOptions} from 'child_process';
 import {crashlogger} from "../lib/crashlogger";
 import {FS} from "../lib/fs";
 
@@ -127,6 +128,7 @@ export const Monitor = {
 	networkUse: {} as unknown as {[k: string]: number},
 	networkCount: {} as unknown as {[k: string]: number},
 	hotpatchLock: {} as unknown as {[k: string]: number},
+	hotpatchVersions: {} as unknown as {[k: string]: number},
 
 	/**
 	 * Counts a connection. Returns true if the connection should be terminated for abuse.
@@ -274,8 +276,40 @@ export const Monitor = {
 		return bytes;
 	},
 
+	sh(command: string, options: ExecOptions = {}): Promise<[number, string, string]> {
+		return new Promise((resolve, reject) => {
+			exec(command, options, (error: ExecException | null, stdout: string | Buffer, stderr: string | Buffer) => {
+				resolve([error && error.code || 0, '' + stdout, '' + stderr]);
+			});
+		});
+	},
+
+	async version() {
+		let hash;
+		try {
+			await FS('.git/index').copyFile('logs/.gitindex');
+			const index = FS('logs/.gitindex');
+			const options = {
+				cwd: __dirname,
+				env: {GIT_INDEX_FILE: index.path},
+			};
+
+			let [code, stdout, stderr] = await this.sh(`git add -A`, options);
+			if (code || stderr) return;
+			[code, stdout, stderr] = await this.sh(`git write-tree`, options);
+
+			if (code || stderr) return;
+			hash = stdout.trim();
+
+			await this.sh(`git reset`, options);
+			await index.unlinkIfExists();
+		} catch (err) {}
+		return hash;
+	},
+
 	TimedCounter: TimedCounter as new(entries: [any, [number, number]]) => TimedCounter,
 
+	updateServerLock: false,
 	cleanInterval: null as NodeJS.Timeout | null,
 };
 
