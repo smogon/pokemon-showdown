@@ -132,7 +132,6 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 			user.games.delete(this.game.id);
 			user.updateSearch();
 		}
-		this.userid = '';
 		this.connected = false;
 		this.active = false;
 	}
