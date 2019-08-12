@@ -3904,7 +3904,7 @@ const commands = {
 		if (!battle.allowExtraction[user.userid]) {
 			battle.allowExtraction[user.userid] = new Set();
 			for (const player of battle.players) {
-				const playerUser = Users(player.name);
+				const playerUser = player.getUser();
 				if (!playerUser) continue;
 				if (playerUser.userid === user.userid) {
 					battle.allowExtraction[user.userid].add(user.userid);
