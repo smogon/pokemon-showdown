@@ -70,6 +70,10 @@ const ConfigLoader = require('../.server-dist/config-loader');
 global.Config = ConfigLoader.Config;
 
 global.Monitor = require('../.server-dist/monitor').Monitor;
+global.__version = {head: ''};
+Monitor.version().then(function (hash) {
+	global.__version.tree = hash;
+});
 
 if (Config.watchconfig) {
 	FS(require.resolve('../config/config')).onModify(() => {
