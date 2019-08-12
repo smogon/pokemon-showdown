@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 
-global.Ladders = require('../../server/ladders');
+global.Ladders = require('../../.server-dist/ladders').Ladders;
 const {Connection, User} = require('../users-utils');
 
 describe('Matchmaker', function () {

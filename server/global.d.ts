@@ -3,7 +3,7 @@ import * as child_process from 'child_process';
 import RoomsType = require('./rooms');
 import RoomlogsType = require('./roomlogs');
 import {LadderStore as LadderStoreType} from './ladders-remote';
-import LaddersType = require('./ladders');
+import {Ladders as LaddersType} from './ladders';
 import PunishmentsType = require('./punishments');
 
 import * as StreamsType from './../lib/streams';

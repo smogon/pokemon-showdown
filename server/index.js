@@ -92,7 +92,7 @@ global.toID = Dex.getId;
 
 global.LoginServer = require('../.server-dist/loginserver').LoginServer;
 
-global.Ladders = require('./ladders');
+global.Ladders = require('../.server-dist/ladders').Ladders;
 
 global.Chat = require('../.server-dist/chat').Chat;
 
