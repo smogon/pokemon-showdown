@@ -7,6 +7,7 @@
 
 /** @typedef {{source: string, supportHTML: boolean}} QuestionData */
 /** @typedef {{name: string, votes: number}} Option */
+/** @typedef {Poll} PollType */
 
 class Poll {
 	/**

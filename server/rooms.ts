@@ -55,6 +55,7 @@ export type Room = GlobalRoom | GameRoom | ChatRoom;
 type User = import('./users').User;
 type Connection = import('./users').Connection;
 type Roomlog = import('./roomlogs').Roomlog;
+type Poll = import('./chat-plugins/poll').PollType;
 
 export abstract class BasicRoom {
 	id: string;
@@ -996,7 +997,7 @@ export class GlobalRoom extends BasicRoom {
 
 export class BasicChatRoom extends BasicRoom {
 	log: Roomlog;
-	poll: any;
+	poll: Poll | null;
 	desc: string;
 	modchat: string | null;
 	filterStretching: boolean;
