@@ -307,7 +307,7 @@ const commands = {
 				if (room.poll.timeout) clearTimeout(room.poll.timeout);
 				room.poll.timeoutMins = timeout;
 				room.poll.timeout = setTimeout(() => {
-					room.poll.end();
+					if (room.poll) room.poll.end();
 					delete room.poll;
 				}, (timeout * 60000));
 				room.add(`The poll timer was turned on: the poll will end in ${timeout} minute(s).`);
