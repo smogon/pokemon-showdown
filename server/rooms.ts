@@ -250,7 +250,7 @@ export abstract class BasicRoom {
 			counter++;
 			buffer += ',' + this.users[i].getIdentityWithStatus(this.id);
 		}
-		const msg = '|users|' + counter + buffer;
+		const msg = `|users|${counter}${buffer}`;
 		return msg;
 	}
 
