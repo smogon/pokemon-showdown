@@ -262,9 +262,9 @@ export class Roomlog {
 	}
 }
 
-const sharedModlogs: Map<string, WriteStream> = new Map();
+const sharedModlogs = new Map<string, WriteStream>();
 
-const roomlogs: Map<string, Roomlog> = new Map();
+const roomlogs = new Map<string, Roomlog>();
 
 function createRoomlog(room: BasicChatRoom, options = {}) {
 	let roomlog = Roomlogs.roomlogs.get(room.id);
