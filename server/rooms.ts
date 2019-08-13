@@ -178,7 +178,7 @@ export abstract class BasicRoom {
 	sendMods(data: string) {
 		this.sendRankedUsers(data, '%');
 	}
-	sendRankedUsers(data: string, minRank: string = '+') {
+	sendRankedUsers(data: string, minRank = '+') {
 		if (this.staffRoom) {
 			if (!this.log) throw new Error(`Staff room ${this.id} has no log`);
 			this.log.add(data);
