@@ -284,9 +284,9 @@ function statusfilter(status: string, user: User) {
  *********************************************************/
 
 // language id -> language name
-const languages: Map<string, string> = new Map();
+const languages = new Map<string, string>();
 // language id -> (english string -> translated string)
-const translations: Map<string, Map<string, [string, string[], string[]]>> = new Map();
+const translations = new Map<string, Map<string, [string, string[], string[]]>>();
 
 // tslint:disable-next-line: no-floating-promises
 FS(TRANSLATION_DIRECTORY).readdir().then(files => {
@@ -1757,8 +1757,6 @@ function stringify(value: any, depth = 0): string {
 }
 
 import { formatText, linkRegex, stripFormatting } from './chat-formatter';
-// tslint:disable-next-line: prefer-const exported
-let updateServerLock = false;
 
 /**
  * Gets the dimension of the image at url. Returns 0x0 if the image isn't found, as well as the relevant error.
@@ -1831,11 +1829,11 @@ export interface Monitor {
 
 const filterWords: {[k: string]: FilterWord[]} = {};
 const monitors: {[k: string]: Monitor} = {};
-const namefilterwhitelist: Map<string, string> = new Map();
+const namefilterwhitelist = new Map<string, string>();
 /**
  * Inappropriate userid : forcerenaming staff member's userid
  */
-const forceRenames: Map<ID, string> = new Map();
+const forceRenames = new Map<ID, string> ();
 
 function registerMonitor(id: string, entry: Monitor) {
 	if (!Chat.filterWords[id]) Chat.filterWords[id] = [];
@@ -1845,6 +1843,7 @@ function registerMonitor(id: string, entry: Monitor) {
 function resolvePage(pageid: string, user: User, connection: Connection) {
 	return (new PageContext({pageid, user, connection})).resolve();
 }
+
 export const Chat = {
 	multiLinePattern,
 	baseCommands,
@@ -1912,6 +1911,4 @@ export const Chat = {
 	formatText,
 	linkRegex,
 	stripFormatting,
-
-	updateServerLock,
 };
