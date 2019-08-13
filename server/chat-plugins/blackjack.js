@@ -330,7 +330,7 @@ class Blackjack extends Rooms.RoomGame {
 				this.display(`<strong>Winner${Chat.plural(winners.length)}</strong>: ${winners.join(', ')}`, null, null, null, true);
 			}
 		} else if (this.state === 'signups') {
-			this.send(Chat.html`The bame of blackjack has been ended by ${user.name}, and there are no winners because the game never started.`, true);
+			this.send(Chat.html`The game of blackjack has been ended by ${user.name}, and there are no winners because the game never started.`, true);
 		}
 
 		this.state = 'ended';
