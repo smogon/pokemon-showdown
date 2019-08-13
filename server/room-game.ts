@@ -24,27 +24,27 @@ type ChatRoom = import('./rooms').ChatRoomType;
 // globally Rooms.RoomGamePlayer
 export class RoomGamePlayer {
 	num: number;
+	/**
+	 * Will be the username of the user playing, but with some exceptions:
+	 *
+	 * - Creating a game with no users will initialize player names to
+	 *   "Player 1", "Player 2", etc.
+	 * - Players will retain the name of the last active user, even if that
+	 *   user abandons the game.
+	 */
 	name: string;
-	userid: string;
+	/**
+	 * This will be '' if there's no user associated with the player.
+	 *
+	 * we explicitly don't hold a direct reference to the user
+	 */
+	userid: ID;
 	game: RoomGame;
 	constructor(user: User | string | null, game: RoomGame, num = 0) {
 		this.num = num;
 		if (!user) user = num ? `Player ${num}` : `Player`;
-		/**
-		 * Will be the username of the user playing, but with some exceptions:
-		 *
-		 * - Creating a game with no users will initialize player names to
-		 *   "Player 1", "Player 2", etc.
-		 * - Players will retain the name of the last active user, even if that
-		 *   user abandons the game.
-		 */
 		this.name = (typeof user === 'string' ? user : user.name);
 		if (typeof user === 'string') user = null;
-		/**
-		 * This will be '' if there's no user associated with the player.
-		 *
-		 * we explicitly don't hold a direct reference to the user
-		 */
 		this.userid = user ? user.userid : '';
 		this.game = game;
 		if (user) {
@@ -87,6 +87,11 @@ export class RoomGame {
 	gameid: ID;
 	title: string;
 	allowRenames: boolean;
+	/**
+	 * userid:player table.
+	 *
+	 * Does not contain userless players: use playerList for the full list.
+	 */
 	playerTable: {[userid: string]: RoomGamePlayer};
 	players: RoomGamePlayer[];
 	playerCount: number;
@@ -98,11 +103,6 @@ export class RoomGame {
 		this.gameid = 'game' as ID;
 		this.title = 'Game';
 		this.allowRenames = false;
-		/**
-		 * userid:player table.
-		 *
-		 * Does not contain userless players: use playerList for the full list.
-		 */
 		this.playerTable = Object.create(null);
 		this.players = [];
 		this.playerCount = 0;
