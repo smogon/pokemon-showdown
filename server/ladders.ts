@@ -40,7 +40,7 @@ class BattleReady {
 /**
  * formatid:userid:BattleReady
  */
-const searches: Map<string, Map<string, BattleReady>> = new Map();
+const searches = new Map<string, Map<string, BattleReady>>();
 
 class Challenge {
 	from: ID;
@@ -57,7 +57,7 @@ class Challenge {
 /**
  * formatid:userid:BattleReady
  */
-const challenges: Map<string, Challenge[]> = new Map();
+const challenges = new Map<string, Challenge[]>();
 
 /**
  * This keeps track of searches for battles, creating a new battle for a newly
