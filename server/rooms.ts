@@ -724,8 +724,9 @@ export class GlobalRoom extends BasicRoom {
 	}
 	addChatRoom(title: string) {
 		const id = toID(title);
-		if (id === 'battles' || id === 'rooms' || id === 'ladder' || id === 'teambuilder' ||
-			id === 'home' || id === 'all' || id === 'public') return false;
+		if (['battles', 'rooms', 'ladder', 'teambuilder', 'home', 'all', 'public'].includes(id)) {
+			return false;
+		}
 		if (Rooms.rooms.has(id)) return false;
 
 		const chatRoomData = {
