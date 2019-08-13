@@ -57,9 +57,41 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 	wantsTie: boolean;
 	active: boolean;
 	eliminated: boolean;
+	/**
+	 * Total timer.
+	 *
+	 * Starts at 210 per player in a ladder battle. Goes down by 5
+	 * every tick. Goes up by 10 every turn (with some complications -
+	 * see `nextRequest`), capped at starting time. The player loses if
+	 * this reaches 0.
+	 *
+	 * The equivalent of "Your Time" in VGC.
+	 *
+	 */
 	secondsLeft: number;
+	/**
+	 * Turn timer.
+	 *
+	 * Set equal to the player's overall timer, but capped at 150
+	 * seconds in a ladder battle. Goes down by 5 every tick.
+	 * Tracked separately from the overall timer, and the player also
+	 * loses if this reaches 0.
+	 */
 	turnSecondsLeft: number;
+	/**
+	 * Disconnect timer.
+	 * Starts at 60 seconds. While the player is disconnected, this
+	 * will go down by 5 every tick. Tracked separately from the
+	 * overall timer, and the player also loses if this reaches 0.
+	 *
+	 * Mostly exists so impatient players don't have to wait the full
+	 * 150 seconds against a disconnected opponent.
+ 	*/
 	dcSecondsLeft: number;
+	/**
+	 * Used to track a user's last known connection status, and display
+	 * the proper message when it changes.
+	 */
 	connected: boolean;
 	constructor(user: User | string | null, game: RoomBattle, num: PlayerIndex) {
 		super(user, game, num);
@@ -73,41 +105,10 @@ export class RoomBattlePlayer extends RoomGames.RoomGamePlayer {
 		this.active = true;
 		this.eliminated = false;
 
-		/**
-		 * Total timer.
-		 *
-		 * Starts at 210 per player in a ladder battle. Goes down by 5
-		 * every tick. Goes up by 10 every turn (with some complications -
-		 * see `nextRequest`), capped at starting time. The player loses if
-		 * this reaches 0.
-		 *
-		 * The equivalent of "Your Time" in VGC.
-		 *
-		 */
 		this.secondsLeft = 1;
-		/**
-		 * Turn timer.
-		 *
-		 * Set equal to the player's overall timer, but capped at 150
-		 * seconds in a ladder battle. Goes down by 5 every tick.
-		 * Tracked separately from the overall timer, and the player also
-		 * loses if this reaches 0.
-		 */
 		this.turnSecondsLeft = 1;
-		/**
-		 * Disconnect timer.
-		 * Starts at 60 seconds. While the player is disconnected, this
-		 * will go down by 5 every tick. Tracked separately from the
-		 * overall timer, and the player also loses if this reaches 0.
-		 *
-		 * Mostly exists so impatient players don't have to wait the full
-		 * 150 seconds against a disconnected opponent.
-		 */
 		this.dcSecondsLeft = 1;
-		/**
-		 * Used to track a user's last known connection status, and display
-		 * the proper message when it changes.
-		 */
+
 		this.connected = true;
 
 		if (user) {
@@ -164,7 +165,12 @@ export class RoomBattleTimer {
 	timer: NodeJS.Timer | null;
 	timerRequesters: Set<ID>;
 	isFirstTurn: boolean;
+	/**
+	 * Last tick, as milliseconds since UNIX epoch.
+	 * Represents the last time a tick happened.
+	 */
 	lastTick: number;
+	/** Debug mode; true to output detailed timer info every tick */
 	debug: boolean;
 	lastDisabledTime: number;
 	lastDisabledByUser: null | ID;
@@ -176,13 +182,8 @@ export class RoomBattleTimer {
 		this.timerRequesters = new Set();
 		this.isFirstTurn = true;
 
-		/**
-		 * Last tick, as milliseconds since UNIX epoch.
-		 * Represents the last time a tick happened.
-		 */
 		this.lastTick = 0;
 
-		/** Debug mode; true to output detailed timer info every tick */
 		this.debug = false;
 
 		this.lastDisabledTime = 0;
@@ -454,6 +455,10 @@ export class RoomBattle extends RoomGames.RoomGame {
 	allowRenames: boolean;
 	format: string;
 	gameType: string | undefined;
+	/**
+	 * The lower player's rating, for searching purposes.
+	 * 0 for unrated battles. 1 for unknown ratings.
+	 */
 	rated: number;
 	missingBattleStartMessage: boolean;
 	started: boolean;
@@ -466,9 +471,16 @@ export class RoomBattle extends RoomGames.RoomGame {
 	p2: RoomBattlePlayer;
 	p3: RoomBattlePlayer;
 	p4: RoomBattlePlayer;
+	/**
+	 * Has this player consented to input log export? If so, set this
+	 * to the userid allowed to export.
+	 */
 	allowExtraction: [ID, ID] | null;
 	logData: AnyObject | null;
 	endType: string;
+	/**
+	 * If the battle is ended: an array of the number of Pokemon left for each side.
+	 */
 	score: number[] | null;
 	inputLog: string | null;
 	turn: number;
@@ -487,10 +499,6 @@ export class RoomBattle extends RoomGames.RoomGame {
 
 		this.format = formatid;
 		this.gameType = format.gameType;
-		/**
-		 * The lower player's rating, for searching purposes.
-		 * 0 for unrated battles. 1 for unknown ratings.
-		 */
 		this.rated = options.rated || 0;
 		// true when onCreateBattleRoom has been called
 		this.missingBattleStartMessage = !!options.inputLog;
@@ -511,17 +519,10 @@ export class RoomBattle extends RoomGames.RoomGame {
 		this.p4 = null!;
 
 		// data to be logged
-		/**
-		 * Has this player consented to input log export? If so, set this
-		 * to the userid allowed to export.
-		 */
 		this.allowExtraction = null;
 
 		this.logData = null;
 		this.endType = 'normal';
-		/**
-		 * If the battle is ended: an array of the number of Pokemon left for each side.
-		 */
 		this.score = null;
 		this.inputLog = null;
 		this.turn = 0;

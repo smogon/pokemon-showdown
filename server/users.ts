@@ -333,6 +333,12 @@ export class Connection {
 	socketid: string;
 	worker: Worker;
 	inRooms: Set<string>;
+	/**
+	 * This can be null during initialization and after disconnecting,
+	 * but we're asserting it non-null for ease of use. The main risk
+	 * is async code, where you need to re-check that it's not null
+	 * before using it.
+	 */
 	user: User;
 	ip: string;
 	protocol: string;
@@ -352,12 +358,6 @@ export class Connection {
 		this.worker = worker;
 		this.inRooms = new Set();
 
-		/**
-		 * This can be null during initialization and after disconnecting,
-		 * but we're asserting it non-null for ease of use. The main risk
-		 * is async code, where you need to re-check that it's not null
-		 * before using it.
-		 */
 		this.user = user!;
 
 		this.ip = ip || '';
@@ -445,7 +445,11 @@ export class User extends Chat.MessageContext {
 	prevNames: {[id: /** ID */ string]: string};
 
 	inRooms: Set<string>;
+	/**
+	 * Set of room IDs
+	 */
 	games: Set<string>;
+	/** Millisecond timestamp for last battle decision */
 	lastDecision: number;
 	lastChallenge: number;
 	lastPM: string;
@@ -516,11 +520,7 @@ export class User extends Chat.MessageContext {
 		this.prevNames = Object.create(null);
 		this.inRooms = new Set();
 
-		/**
-		 * Set of room IDs
-		 */
 		this.games = new Set();
-		/** Millisecond timestamp for last battle decision */
 		this.lastDecision = 0;
 
 		// misc state
