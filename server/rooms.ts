@@ -66,6 +66,11 @@ export abstract class BasicRoom {
 	userCount: number;
 	type: 'chat' | 'battle' | 'global';
 	auth: {[userid: string]: string} | null;
+	/**
+	 * Scrollback log. This is the log that's sent to users when
+	 * joining the room. Should roughly match what's on everyone's
+	 * screen.
+	 */
 	log: Roomlog | null;
 	game: RoomGame | null;
 	battle: RoomBattle | null;
@@ -114,11 +119,6 @@ export abstract class BasicRoom {
 		this.type = 'chat';
 		this.auth = null;
 
-		/**
-		 * Scrollback log. This is the log that's sent to users when
-		 * joining the room. Should roughly match what's on everyone's
-		 * screen.
-		 */
 		this.log = null;
 
 		this.game = null;
@@ -420,7 +420,13 @@ export class GlobalRoom extends BasicRoom {
 	lastReportedCrash: number;
 	chatRoomDataList: AnyObject[];
 	chatRooms: ChatRoom[];
+	/**
+	 * Rooms that users autojoin upon connecting
+	 */
 	autojoinList: ID[];
+	/**
+	 * Rooms that staff autojoin upon connecting
+	 */
 	staffAutojoinList: ID[];
 	ladderIpLog: WriteStream;
 	lastBattle: number;
@@ -467,13 +473,7 @@ export class GlobalRoom extends BasicRoom {
 
 		this.chatRooms = [];
 
-		/**
-		 * Rooms that users autojoin upon connecting
-		 */
 		this.autojoinList = [];
-		/**
-		 * Rooms that staff autojoin upon connecting
-		 */
 		this.staffAutojoinList = [];
 		for (const [i, chatRoomData] of this.chatRoomDataList.entries()) {
 			if (!chatRoomData || !chatRoomData.title) {
@@ -1401,6 +1401,10 @@ export class GameRoom extends BasicChatRoom {
 	p2: AnyObject | null;
 	p3: AnyObject | null;
 	p4: AnyObject | null;
+	/**
+	 * The lower player's rating, for searching purposes.
+	 * 0 for unrated battles. 1 for unknown ratings.
+	 */
 	rated: number;
 	battle: RoomBattle | null;
 	game: RoomGame;
@@ -1430,10 +1434,6 @@ export class GameRoom extends BasicChatRoom {
 		this.p3 = options.p3 || null;
 		this.p4 = options.p4 || null;
 
-		/**
-		 * The lower player's rating, for searching purposes.
-		 * 0 for unrated battles. 1 for unknown ratings.
-		 */
 		this.rated = options.rated || 0;
 		this.battle = null;
 		this.game = null!;

@@ -32,47 +32,47 @@ type WriteStream = import('../lib/streams').WriteStream;
  */
 export class Roomlog {
 	id: string;
+	/**
+	 * Scrollback log
+	 */
 	log: string[];
 	broadcastBuffer: string;
+	/**
+	 * Battle rooms are multichannel, which means their logs are split
+	 * into four channels, public, p1, p2, full.
+	 */
 	isMultichannel: boolean;
+	/**
+	 * Chat rooms auto-truncate, which means it only stores the recent
+	 * messages, if there are more.
+	 */
 	autoTruncate: boolean;
+	/**
+	 * Chat rooms include timestamps.
+	 */
 	logTimes: boolean;
+	/**
+	 * undefined = uninitialized,
+	 * null = disabled
+	 */
 	modlogStream?: WriteStream | null;
+	/**
+	 * undefined = uninitialized,
+	 * null = disabled
+	 */
 	roomlogStream?: WriteStream | null;
 	sharedModlog: boolean;
 	roomlogFilename: string;
 	constructor(room: BasicChatRoom, options: {isMultichannel?: any, autoTruncate?: any, logTimes?: any} = {}) {
 		this.id = room.id;
-		/**
-		 * Scrollback log
-		 */
 		this.log = [];
 		this.broadcastBuffer = '';
 
-		/**
-		 * Battle rooms are multichannel, which means their logs are split
-		 * into four channels, public, p1, p2, full.
-		 */
 		this.isMultichannel = !!options.isMultichannel;
-		/**
-		 * Chat rooms auto-truncate, which means it only stores the recent
-		 * messages, if there are more.
-		 */
 		this.autoTruncate = !!options.autoTruncate;
-		/**
-		 * Chat rooms include timestamps.
-		 */
 		this.logTimes = !!options.logTimes;
 
-		/**
-		 * undefined = uninitialized,
-		 * null = disabled
-		 */
 		this.modlogStream = undefined;
-		/**
-		 * undefined = uninitialized,
-		 * null = disabled
-		 */
 		this.roomlogStream = undefined;
 
 		// modlog/roomlog state
