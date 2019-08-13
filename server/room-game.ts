@@ -18,8 +18,8 @@
 import {User} from "./users";
 
 type Connection = import('./users').Connection;
-type GameRoom = import('./rooms').GameRoomType;
-type ChatRoom = import('./rooms').ChatRoomType;
+type GameRoom = import('./rooms').GameRoom;
+type ChatRoom = import('./rooms').ChatRoom;
 
 // globally Rooms.RoomGamePlayer
 export class RoomGamePlayer {
@@ -150,6 +150,9 @@ export class RoomGame {
 			player.userid = user.userid;
 			player.name = user.name;
 			this.playerTable[player.userid] = player;
+			if (!this.room.auth) {
+				this.room.auth = {};
+			}
 			this.room.auth[player.userid] = Users.PLAYER_SYMBOL;
 		} else {
 			player.unlinkUser();

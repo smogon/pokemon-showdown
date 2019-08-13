@@ -20,7 +20,7 @@ import * as RoomGames from "./room-game";
 
 type ChannelIndex = 0 | 1 | 2 | 3 | 4;
 type PlayerIndex = 1 | 2 | 3 | 4;
-type GameRoom = import('./rooms').GameRoomType;
+type GameRoom = import('./rooms').GameRoom;
 type Connection = import('./users').Connection;
 type User = import('./users').User;
 type Stream = import("../lib/streams").ObjectReadWriteStream<string>;
@@ -815,7 +815,9 @@ export class RoomBattle extends RoomGames.RoomGame {
 			}
 		}
 		const parentGame = this.room.parent && this.room.parent.game;
+		// @ts-ignore - Tournaments aren't TS'd yet
 		if (parentGame && parentGame.onBattleWin) {
+			// @ts-ignore
 			parentGame.onBattleWin(this.room, winnerid);
 		}
 		// If the room's replay was hidden, disable users from joining after the game is over

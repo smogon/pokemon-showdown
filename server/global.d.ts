@@ -1,7 +1,7 @@
 import * as child_process from 'child_process';
 
-import RoomsType = require('./rooms');
-import RoomlogsType = require('./roomlogs');
+import * as RoomsType from './rooms';
+import {Roomlogs as RoomlogsType} from './roomlogs';
 import {LadderStore as LadderStoreType} from './ladders-remote';
 import {Ladders as LaddersType} from './ladders';
 import PunishmentsType = require('./punishments');
@@ -30,13 +30,13 @@ declare global {
 
 	// rooms
 	const GlobalRoom: typeof RoomsType.GlobalRoom
-	const ChatRoom: typeof RoomsType.ChatRoomTypeForTS
+	const ChatRoom: typeof RoomsType.Rooms.ChatRoomTypeForTS
 	const GameRoom: typeof RoomsType.GameRoom
 	const BasicRoom: typeof RoomsType.BasicRoom
 	const BasicChatRoom: typeof RoomsType.ChatRoom
-	const RoomGame: typeof RoomsType.RoomGame
-	const RoomBattle: typeof RoomsType.RoomBattle
-	const Rooms: typeof RoomsType
+	const RoomGame: typeof RoomsType.Rooms.RoomGame
+	const RoomBattle: typeof RoomsType.Rooms.RoomBattle
+	const Rooms: typeof RoomsType.Rooms
 	const Roomlogs: typeof RoomlogsType
 	const Roomlog: typeof RoomlogsType.Roomlog
 
