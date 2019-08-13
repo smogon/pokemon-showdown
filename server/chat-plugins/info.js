@@ -1512,7 +1512,8 @@ const commands = {
 			`- <a href="https://www.smogon.com/forums/threads/3496279/">Beginner's Guide to Pok&eacute;mon Showdown</a><br />` +
 			`- <a href="https://www.smogon.com/dp/articles/intro_comp_pokemon">An introduction to competitive Pok&eacute;mon</a><br />` +
 			`- <a href="https://www.smogon.com/sm/articles/sm_tiers">What do 'OU', 'UU', etc mean?</a><br />` +
-			`- <a href="https://www.smogon.com/xyhub/tiers">What are the rules for each format? What is 'Sleep Clause'?</a>`
+			`- <a href="https://www.smogon.com/dex/sm/formats/">What are the rules for each format?</a><br />` +
+			`- <a href="https://www.smogon.com/sm/articles/clauses">What is 'Sleep Clause' and other clauses?</a>`
 		);
 	},
 	introhelp: [
