@@ -210,7 +210,9 @@ export abstract class BasicRoom {
 	modlog(message: string) { throw new Error(`should be implemented by subclass`); }
 	logEntry() { throw new Error(`room.logEntry has been renamed room.roomlog`); }
 	addLogMessage() { throw new Error(`room.addLogMessage has been renamed room.addByUser`); }
-
+	/**
+	 * Inserts (sanitized) HTML into the room log.
+	 */
 	addRaw(message: string) {
 		return this.add('|raw|' + message);
 	}
