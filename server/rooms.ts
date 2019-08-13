@@ -1510,8 +1510,8 @@ export const Rooms = Object.assign(getRoom, {
 	 * room long-term; just store the roomid and grab it from here (with
 	 * the Rooms(roomid) accessor) when necessary.
 	 */
-	rooms: new Map() as Map<string, Room>,
-	aliases: new Map() as Map<string, string>,
+	rooms: new Map<string, Room>(),
+	aliases: new Map<string, string>(),
 
 	get: getRoom,
 	search(name: string): Room | undefined {
