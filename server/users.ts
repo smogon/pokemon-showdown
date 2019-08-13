@@ -1698,8 +1698,8 @@ function socketReceive(worker: Worker, workerid: number, socketid: string, messa
 	}
 }
 
-const users: Map<ID, User> = new Map();
-const prevUsers: Map<ID, ID> = new Map();
+const users = new Map<ID, User>();
+const prevUsers = new Map<ID, ID>();
 let numUsers = 0;
 
 export const Users = Object.assign(getUser, {
