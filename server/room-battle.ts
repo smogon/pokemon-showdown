@@ -472,8 +472,7 @@ export class RoomBattle extends RoomGames.RoomGame {
 	p3: RoomBattlePlayer;
 	p4: RoomBattlePlayer;
 	/**
-	 * Has this player consented to input log export? If so, set this
-	 * to the userid allowed to export.
+	 * userid that requested extraction -> playerids that accepted the extraction
 	 */
 	allowExtraction: {[k: string]: Set<ID>};
 	logData: AnyObject | null;
