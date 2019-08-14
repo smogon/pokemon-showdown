@@ -1078,7 +1078,6 @@ export class BasicChatRoom extends BasicRoom {
 
 		this.type = 'chat';
 		this.active = false;
-		// TypeScript bug: subclass null
 		this.muteTimer = null;
 
 		this.logUserStatsInterval = null;
@@ -1094,7 +1093,6 @@ export class BasicChatRoom extends BasicRoom {
 		if (this.batchJoins) {
 			this.userList = this.getUserList();
 		}
-		// TypeScript bug: subclass member
 		this.reportJoinsInterval = null;
 		this.tour = null;
 		this.game = null;
