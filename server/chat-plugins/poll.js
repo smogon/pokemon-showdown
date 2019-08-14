@@ -308,8 +308,8 @@ const commands = {
 				room.poll.timeoutMins = timeout;
 				room.poll.timeout = setTimeout(() => {
 					if (room.poll) room.poll.end();
-					delete room.poll;
-				}, (timeout * 60000));
+					room.poll = null;
+				}, timeout * 60000);
 				room.add(`The poll timer was turned on: the poll will end in ${timeout} minute(s).`);
 				this.modlog('POLL TIMER', null, `${timeout} minutes`);
 				return this.privateModAction(`(The poll timer was set to ${timeout} minute(s) by ${user.name}.)`);
