@@ -1514,7 +1514,7 @@ const modifiers = {
 	red_goo: {
 		name: `Red Goo`,
 		id: `redgoo`,
-		memo: [`Red Goo: Whenever a player targets you with an action, you become neighbors with them.`]
+		memo: [`Red Goo: Whenever a player targets you with an action, you become neighbors with them.`],
 	},
 	reflexive: {
 		name: `Reflexive`,
