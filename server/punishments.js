@@ -1527,9 +1527,11 @@ const Punishments = new (class {
 	checkNewNameInRoom(user, userid, roomid) {
 		/** @type {Punishment?} */
 		let punishment = Punishments.roomUserids.nestedGet(roomid, userid) || null;
-		const room = Rooms(roomid);
-		if (!punishment && room.parent) {
-			punishment = Punishments.checkNewNameInRoom(user, userid, room.parent.id);
+		if (!punishment) {
+			const room = Rooms(roomid);
+			if (room.parent) {
+				punishment = Punishments.checkNewNameInRoom(user, userid, room.parent.id);
+			}
 		}
 		if (punishment) {
 			if (punishment[0] !== 'ROOMBAN' && punishment[0] !== 'BLACKLIST') return null;
