@@ -26,9 +26,9 @@ To reload chat commands:
 'use strict';
 
 type Room = import('./rooms').Room;
-type ChatRoom = import('./rooms').ChatRoomType;
-type GameRoom = import('./rooms').GameRoomType;
-type BasicChatRoom = import('./rooms').BasicChatRoomType;
+type ChatRoom = import('./rooms').ChatRoom;
+type GameRoom = import('./rooms').GameRoom;
+type BasicChatRoom = import('./rooms').BasicChatRoom;
 
 type User = import('./users').User;
 type Connection = import('./users').Connection;

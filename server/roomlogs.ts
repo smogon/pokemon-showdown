@@ -7,10 +7,10 @@
  * @license MIT license
  */
 
-'use strict';
+import {FS} from '../lib/fs';
 
-/** @type {typeof import('../lib/fs').FS} */
-const FS = require(/** @type {any} */('../.lib-dist/fs')).FS;
+type BasicChatRoom = import('./rooms').BasicChatRoom;
+type WriteStream = import('../lib/streams').WriteStream;
 
 /**
  * Most rooms have three logs:
@@ -30,55 +30,58 @@ const FS = require(/** @type {any} */('../.lib-dist/fs')).FS;
  * `logs/chat/<ROOMID>/<YEAR>-<MONTH>/<YEAR>-<MONTH>-<DAY>.txt`
  * It contains (nearly) everything.
  */
-class Roomlog {
+export class Roomlog {
+	id: string;
 	/**
-	 * @param {BasicChatRoom} room
-	 * @param {{isMultichannel?: any, autoTruncate?: any, logTimes?: any}} [options]
+	 * Scrollback log
 	 */
-	constructor(room, options = {}) {
+	log: string[];
+	broadcastBuffer: string;
+	/**
+	 * Battle rooms are multichannel, which means their logs are split
+	 * into four channels, public, p1, p2, full.
+	 */
+	isMultichannel: boolean;
+	/**
+	 * Chat rooms auto-truncate, which means it only stores the recent
+	 * messages, if there are more.
+	 */
+	autoTruncate: boolean;
+	/**
+	 * Chat rooms include timestamps.
+	 */
+	logTimes: boolean;
+	/**
+	 * undefined = uninitialized,
+	 * null = disabled
+	 */
+	modlogStream?: WriteStream | null;
+	/**
+	 * undefined = uninitialized,
+	 * null = disabled
+	 */
+	roomlogStream?: WriteStream | null;
+	sharedModlog: boolean;
+	roomlogFilename: string;
+	constructor(room: BasicChatRoom, options: {isMultichannel?: any, autoTruncate?: any, logTimes?: any} = {}) {
 		this.id = room.id;
-		/**
-		 * Scrollback log
-		 * @type {string[]}
-		 */
 		this.log = [];
 		this.broadcastBuffer = '';
 
-		/**
-		 * Battle rooms are multichannel, which means their logs are split
-		 * into four channels, public, p1, p2, full.
-		 */
 		this.isMultichannel = !!options.isMultichannel;
-		/**
-		 * Chat rooms auto-truncate, which means it only stores the recent
-		 * messages, if there are more.
-		 */
 		this.autoTruncate = !!options.autoTruncate;
-		/**
-		 * Chat rooms include timestamps.
-		 */
 		this.logTimes = !!options.logTimes;
 
-		/**
-		 * undefined = uninitialized,
-		 * null = disabled
-		 * @type {WriteStream? | undefined}
-		 */
 		this.modlogStream = undefined;
-		/**
-		 * undefined = uninitialized,
-		 * null = disabled
-		 * @type {WriteStream? | undefined}
-		 */
 		this.roomlogStream = undefined;
 
 		// modlog/roomlog state
 		this.sharedModlog = false;
-		// TypeScript bug: can't infer
-		/** @type {string} */
+
 		this.roomlogFilename = '';
 
 		this.setupModlogStream();
+		// tslint:disable-next-line: no-floating-promises
 		this.setupRoomlogStream(true);
 	}
 	getScrollback(channel = 0) {
@@ -142,23 +145,22 @@ class Roomlog {
 			if (this.roomlogStream === null) return;
 		}
 		this.roomlogFilename = relpath;
+		// tslint:disable-next-line: no-floating-promises
 		if (this.roomlogStream) this.roomlogStream.end();
 		this.roomlogStream = FS(basepath + relpath).createAppendStream();
 		// Create a symlink to today's lobby log.
 		// These operations need to be synchronous, but it's okay
 		// because this code is only executed once every 24 hours.
-		let link0 = basepath + 'today.txt.0';
+		const link0 = basepath + 'today.txt.0';
 		FS(link0).unlinkIfExistsSync();
 		try {
 			FS(link0).symlinkToSync(relpath); // intentionally a relative link
 			FS(link0).renameSync(basepath + 'today.txt');
 		} catch (e) {} // OS might not support symlinks or atomic rename
+		// tslint:disable-next-line: no-floating-promises
 		if (!Roomlogs.rollLogTimer) Roomlogs.rollLogs();
 	}
-	/**
-	 * @param {string} message
-	 */
-	add(message) {
+	add(message: string) {
 		if (message.startsWith('|uhtmlchange|')) return this.uhtmlchange(message);
 		this.roomlog(message);
 		if (this.logTimes && message.startsWith('|c|')) {
@@ -168,10 +170,7 @@ class Roomlog {
 		this.broadcastBuffer += message + '\n';
 		return this;
 	}
-	/**
-	 * @param {string} username
-	 */
-	hasUsername(username) {
+	hasUsername(username: string) {
 		const userid = toID(username);
 		for (const line of this.log) {
 			if (line.startsWith('|c:|')) {
@@ -184,14 +183,10 @@ class Roomlog {
 		}
 		return false;
 	}
-	/**
-	 * @param {string[]} userids
-	 */
-	clearText(userids) {
+	clearText(userids: ID[]) {
 		const messageStart = this.logTimes ? '|c:|' : '|c|';
 		const section = this.logTimes ? 4 : 3; // ['', 'c' timestamp?, author, message]
-		/** @type {string[]} */
-		let cleared = [];
+		const cleared: ID[] = [];
 		this.log = this.log.filter(line => {
 			if (line.startsWith(messageStart)) {
 				const parts = Chat.splitFirst(line, '|', section);
@@ -206,10 +201,7 @@ class Roomlog {
 		});
 		return cleared;
 	}
-	/**
-	 * @param {string} message
-	 */
-	uhtmlchange(message) {
+	uhtmlchange(message: string) {
 		const thirdPipe = message.indexOf('|', 13);
 		const originalStart = '|uhtml|' + message.slice(13, thirdPipe + 1);
 		for (const [i, line] of this.log.entries()) {
@@ -221,19 +213,13 @@ class Roomlog {
 		this.broadcastBuffer += message + '\n';
 		return this;
 	}
-	/**
-	 * @param {string} message
-	 */
-	roomlog(message, date = new Date()) {
+	roomlog(message: string, date = new Date()) {
 		if (!this.roomlogStream) return;
 		const timestamp = Chat.toTimestamp(date).split(' ')[1] + ' ';
 		message = message.replace(/<img[^>]* src="data:image\/png;base64,[^">]+"[^>]*>/g, '');
 		this.roomlogStream.write(timestamp + message + '\n');
 	}
-	/**
-	 * @param {string} message
-	 */
-	modlog(message) {
+	modlog(message: string) {
 		if (!this.modlogStream) return;
 		this.modlogStream.write('[' + (new Date().toJSON()) + '] ' + message + '\n');
 	}
@@ -259,7 +245,7 @@ class Roomlog {
 	}
 
 	destroy() {
-		let promises = [];
+		const promises = [];
 		if (this.sharedModlog) {
 			this.modlogStream = null;
 		}
@@ -276,16 +262,11 @@ class Roomlog {
 	}
 }
 
-/** @type {Map<string, WriteStream>} */
-const sharedModlogs = new Map();
+const sharedModlogs = new Map<string, WriteStream>();
 
-/** @type {Map<string, Roomlog>} */
-const roomlogs = new Map();
+const roomlogs = new Map<string, Roomlog>();
 
-/**
- * @param {BasicChatRoom} room
- */
-function createRoomlog(room, options = {}) {
+function createRoomlog(room: BasicChatRoom, options = {}) {
 	let roomlog = Roomlogs.roomlogs.get(room.id);
 	if (roomlog) throw new Error(`Roomlog ${room.id} already exists`);
 
@@ -293,7 +274,8 @@ function createRoomlog(room, options = {}) {
 	Roomlogs.roomlogs.set(room.id, roomlog);
 	return roomlog;
 }
-const Roomlogs = {
+
+export const Roomlogs = {
 	create: createRoomlog,
 	Roomlog,
 	roomlogs,
@@ -301,8 +283,5 @@ const Roomlogs = {
 
 	rollLogs: Roomlog.rollLogs,
 
-	/** @type {NodeJS.Timer? | true} */
-	rollLogTimer: null,
+	rollLogTimer: null as NodeJS.Timeout | true | null,
 };
-
-module.exports = Roomlogs;

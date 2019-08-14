@@ -1055,6 +1055,7 @@ class Tournament extends Rooms.RoomGame {
 	 * @param {User} user
 	 */
 	onBattleJoin(room, user) {
+		if (!room.p1 || !room.p2) return;
 		if (this.scouting || this.isEnded || user.latestIp === room.p1.latestIp || user.latestIp === room.p2.latestIp) return;
 		if (user.can('makeroom')) return;
 		for (const otherPlayer of this.getRemainingPlayers()) {
@@ -1073,7 +1074,7 @@ class Tournament extends Rooms.RoomGame {
 		this.completedMatches.add(room.id);
 		room.parent = null;
 		if (!room.battle) throw new Error("onBattleWin called without a battle");
-
+		if (!room.p1 || !room.p2) throw new Error("onBattleWin called with missing players");
 		const p1 = this.playerTable[room.p1.userid];
 		const p2 = this.playerTable[room.p2.userid];
 		const winner = this.playerTable[winnerid];
