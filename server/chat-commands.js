@@ -3888,59 +3888,57 @@ const commands = {
 
 	allowexportinputlog(/** @type {string} */ target, /** @type {Room?} */ room, /** @type {User} */ user) {
 		const battle = room.battle;
-		if (!battle) return this.errorReply(`Must be in a battle.`);
-		if (!battle.allowExtraction) return this.errorReply(`Someone must have requested extraction.`);
-		const targetUser = Users.getExact(target);
-		if (!targetUser) return this.errorReply(`User ${target} not found.`);
-
-		if (toID(battle.p1.name) === user.userid) {
-			battle.allowExtraction[0] = targetUser.userid;
-		} else if (toID(battle.p2.name) === user.userid) {
-			battle.allowExtraction[1] = targetUser.userid;
-		} else {
-			return this.errorReply(`Must be a player in the battle.`);
+		if (!battle) {
+			return this.errorReply(`Must be in a battle.`);
 		}
-		this.addModAction(`${user.userid} consents to sharing battle team and choices with ${targetUser.userid}.`);
-		if (battle.allowExtraction.join(',') !== `${targetUser.userid},${targetUser.userid}`) return;
-
-		this.addModAction(`${targetUser.name} has extracted the battle input log.`);
-		const inputLog = battle.inputLog.map(Chat.escapeHTML).join(`<br />`);
-		targetUser.sendTo(room, `|html|<div class="chat"><code style="white-space: pre-wrap; overflow-wrap: break-word; display: block">${inputLog}</code></div>`);
+		const targetUser = Users.getExact(target);
+		if (!targetUser) {
+			return this.errorReply(`User ${target} not found.`);
+		}
+		if (!battle.playerTable[user.userid]) {
+			return this.errorReply("Must be a player in this battle.");
+		}
+		if (!battle.allowExtraction[targetUser.userid]) {
+			return this.errorReply(`${targetUser.name} has not requested extraction.`);
+		}
+		if (battle.allowExtraction[targetUser.userid].has(user.userid)) {
+			return this.errorReply(`You have already consented to extraction with ${targetUser.name}.`);
+		}
+		battle.allowExtraction[targetUser.userid].add(user.userid);
+		this.addModAction(`${user.name} consents to sharing battle team and choices with ${targetUser.name}.`);
+		if (Object.keys(battle.playerTable).length === battle.allowExtraction[targetUser.userid].size) {
+			this.addModAction(`${targetUser.name} has extracted the battle input log.`);
+			const inputLog = battle.inputLog.map(Chat.escapeHTML).join(`<br />`);
+			targetUser.sendTo(room, `|html|<div class="chat"><code style="white-space: pre-wrap; overflow-wrap: break-word; display: block">${inputLog}</code></div>`);
+		}
 	},
 
 	requestinputlog: 'exportinputlog',
 	exportinputlog(target, room, user) {
 		const battle = room.battle;
-		if (!battle) return this.errorReply(`This command only works in battle rooms.`);
+		if (!battle) {
+			return this.errorReply(`This command only works in battle rooms.`);
+		}
 		if (!battle.inputLog) {
 			this.errorReply(`This command only works when the battle has ended - if the battle has stalled, ask players to forfeit.`);
 			if (user.can('forcewin')) this.errorReply(`Alternatively, you can end the battle with /forcetie.`);
 			return;
 		}
 		if (!this.can('exportinputlog', null, room)) return;
-		if (!battle.allowExtraction) {
-			battle.allowExtraction = ['', ''];
+		if (!battle.allowExtraction[user.userid]) {
+			battle.allowExtraction[user.userid] = new Set();
+			for (const player of battle.players) {
+				const playerUser = player.getUser();
+				if (!playerUser) continue;
+				if (playerUser.userid === user.userid) {
+					battle.allowExtraction[user.userid].add(user.userid);
+				} else {
+					playerUser.sendTo(room, Chat.html`|html|${user.name} wants to extract the battle input log. <button name="send" value="/allowexportinputlog ${user.userid}">Share your team and choices with "${user.name}"</button>`);
+				}
+			}
+			return this.addModAction(`${user.name} wants to extract the battle input log.`);
 		}
-		if (user.userid === toID(battle.p1.name) || user.userid === toID(battle.p2.name)) {
-			this.parse(`/allowexportinputlog ${user.userid}`);
-		}
-		if (battle.allowExtraction[0] !== user.userid) {
-			const p1 = Users(battle.p1.name);
-			if (p1) p1.sendTo(room, Chat.html`|html|${user.name} wants to extract the battle input log. <button name="send" value="/allowexportinputlog ${user.userid}">Share your team and choices with "${user.name}"</button>`);
-		}
-		if (battle.allowExtraction[1] !== user.userid) {
-			const p2 = Users(battle.p2.name);
-			if (p2) p2.sendTo(room, Chat.html`|html|${user.name} wants to extract the battle input log. <button name="send" value="/allowexportinputlog ${user.userid}">Share your team and choices with "${user.name}"</button>`);
-		}
-
-		if (battle.allowExtraction.join(',') !== `${user.userid},${user.userid}`) {
-			this.addModAction(`${user.name} wants to extract the battle input log.`);
-			return;
-		}
-
-		this.addModAction(`${user.name} has extracted the battle input log.`);
-		const inputLog = battle.inputLog.map(Chat.escapeHTML).join(`<br />`);
-		user.sendTo(room, `|html|<div class="chat"><code style="white-space: pre-wrap; overflow-wrap: break-word; display: block">${inputLog}</code></div>`);
+		return this.errorReply("You have already requested extraction.");
 	},
 	exportinputloghelp: [`/exportinputlog - Asks players in a battle for permission to export an inputlog. Requires: & ~`],
 
