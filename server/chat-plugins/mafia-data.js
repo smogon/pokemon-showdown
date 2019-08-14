@@ -359,10 +359,22 @@ const roles = {
 	role_cop: {
 		name: `Role Cop`,
 		id: `rolecop`,
-		memo: [`Role Cop: Each night you can PM the host the name of another player. You will be told their exact role, or NO RESULT if your investigation failed.`],
+		memo: [`Role Cop: Each night you can PM the host the name of another player. You will be told their exact role (not alignment), or NO RESULT if your investigation failed.`],
 		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-cop.png"/>`,
 	},
-	vanilla_cop: `neapolitan`,
+	role_cop_classic: `rolecopclassic`,
+	rolecopclassic: {
+		name: `Role Cop (Classic)`,
+		id: `rolecopclassic`,
+		memo: [`Role Cop: Each night you can PM the host the name of another player. You will be told their exact role and alignment, or NO RESULT if your investigation failed.`],
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-cop.png"/>`,
+	},
+	vanilla_cop: {
+		name: `Vanilla Cop`,
+		id: `vanillacop`,
+		memo: [`Vanilla Cop: Each night you can PM the host the name of another player. You will be told if they are VANILLA or NOT VANILLA, or NO RESULT if your investigation failed.`],
+		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-cop.png"/>`,
+	},
 	cop: {
 		name: `Cop`,
 		id: `cop`,
@@ -390,7 +402,7 @@ const roles = {
 	coroner_cracking_idea: `coronercrackingidea`,
 	coronercrackingidea: {
 		name: `Coroner (Cracking Idea)`,
-		id: `coronercrackingidea`,
+		id: `coronerci`,
 		memo: [`Coroner: Each night you can PM the host the name of another (dead) player. You learn the role(s) of the player who killed them, but not who this role belongs to. This also works when your target dies the night you used it.`],
 	},
 	corrupt_queen: {
@@ -718,7 +730,7 @@ const roles = {
 	neapolitan: {
 		name: `Neapolitan`,
 		id: `neapolitan`,
-		memo: [`Neapolitan: Each night, you can PM the host the name of a player. You will be told if they are VANILLA or NOT VANILLA, or receive NO RESULT if your investigation failed.`],
+		memo: [`Neapolitan: Each night, you can PM the host the name of a player. You will be told if they are VT or NOT VT, or receive NO RESULT if your investigation failed.`],
 		image: `<img width="75" height="75" src="//${Config.routes.client}/fx/mafia-cop.png"/>`,
 	},
 	necromancer: {
@@ -756,7 +768,7 @@ const roles = {
 	oracle_si: `oraclesi`,
 	oracle_snaqs_idea: `oraclesi`,
 	oraclesi: {
-		name: `Oracle`,
+		name: `Oracle (Snaq's Idea)`,
 		id: `oraclesi`,
 		memo: [`Oracle: During the Night, you can PM the host a question about the setup of the game. They will answer you with YES or NO.`],
 	},
@@ -844,9 +856,12 @@ const roles = {
 		id: `recruiter`,
 		memo: [`Recruiter: During the Night, you may PM the host the name of another player. This player will be recruited to your own alignment.`],
 	},
-	red_goo: {
-		name: `Red Goo`,
-		id: `redgoo`,
+	redgooci: `redgoocrackingidea`,
+	red_goo_ci: `redgoocrackingidea`,
+	red_goo_cracking_idea: `redgoocrackingidea`,
+	redgoocrackingidea: {
+		name: `Red Goo (Cracking Idea)`,
+		id: `redgooci`,
 		alignment: `goo`,
 		memo: [`Red Goo: Once a game, you may PM the host the name of another player at night. This player will unstoppably die. It is announced that a Red Goo performed this kill.`],
 	},
@@ -1489,12 +1504,17 @@ const modifiers = {
 	rainbow_goo: {
 		name: `Rainbow Goo`,
 		id: `rainbowgoo`,
-		memo: [`Rainbow Goo: Whenever a player targets you with an action, you do something random (anything any other color can do) to them.`],
+		memo: [`Rainbow Goo: Whenever a player targets you with an action, you do something random (anything any other color goo can do) to them.`],
 	},
 	random: {
 		name: `Random`,
 		id: `random`,
 		memo: [`Random: Your role is used randomly.`],
+	},
+	red_goo: {
+		name: `Red Goo`,
+		id: `redgoo`,
+		memo: [`Red Goo: Whenever a player targets you with an action, you become neighbors with them.`]
 	},
 	reflexive: {
 		name: `Reflexive`,
