@@ -1511,8 +1511,9 @@ const Punishments = new (class {
 		if (punishment && (punishment[0] === 'ROOMBAN' || punishment[0] === 'BLACKLIST')) {
 			return true;
 		}
-		if (Rooms(roomid).parent) {
-			return Punishments.checkNameInRoom(user, Rooms(roomid).parent.id);
+		const room = Rooms(roomid);
+		if (room.parent) {
+			return Punishments.checkNameInRoom(user, room.parent.id);
 		}
 		return false;
 	}
@@ -1526,8 +1527,11 @@ const Punishments = new (class {
 	checkNewNameInRoom(user, userid, roomid) {
 		/** @type {Punishment?} */
 		let punishment = Punishments.roomUserids.nestedGet(roomid, userid) || null;
-		if (!punishment && Rooms(roomid).parent) {
-			punishment = Punishments.checkNewNameInRoom(user, userid, Rooms(roomid).parent.id);
+		if (!punishment) {
+			const room = Rooms(roomid);
+			if (room.parent) {
+				punishment = Punishments.checkNewNameInRoom(user, userid, room.parent.id);
+			}
 		}
 		if (punishment) {
 			if (punishment[0] !== 'ROOMBAN' && punishment[0] !== 'BLACKLIST') return null;

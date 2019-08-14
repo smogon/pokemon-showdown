@@ -285,7 +285,7 @@ function pokeUnclaimedTicketTimer(upper, hasUnclaimed, hasAssistRequest) {
  * @param {boolean} hasAssistRequest
  */
 function notifyUnclaimedTicket(upper, hasAssistRequest) {
-	const room = Rooms(upper ? 'upperstaff' : 'staff');
+	const room = /** @type {BasicChatRoom} */ (Rooms(upper ? 'upperstaff' : 'staff'));
 	if (!room) return;
 	// @ts-ignore
 	clearTimeout(unclaimedTicketTimer[room.id]);
@@ -301,7 +301,7 @@ function notifyUnclaimedTicket(upper, hasAssistRequest) {
  * @param {boolean} upper
  */
 function notifyStaff(upper = false) {
-	const room = Rooms(upper ? 'upperstaff' : 'staff');
+	const room = /** @type {BasicChatRoom} */ (Rooms(upper ? 'upperstaff' : 'staff'));
 	if (!room) return;
 	let buf = ``;
 	let keys = Object.keys(tickets).sort((aKey, bKey) => {
@@ -485,6 +485,9 @@ const pages = {
 					tickets[ticket.userid].open = false;
 					writeTickets();
 				} else {
+					if (!helpRoom.auth) {
+						helpRoom.auth = {};
+					}
 					if (!helpRoom.auth[user.userid]) helpRoom.auth[user.userid] = '+';
 					connection.popup(`You already have a Help ticket.`);
 					user.joinRoom(`help-${ticket.userid}`);
@@ -820,6 +823,9 @@ let commands = {
 					tickets[ticket.userid].open = false;
 					writeTickets();
 				} else {
+					if (!helpRoom.auth) {
+						helpRoom.auth = {};
+					}
 					if (!helpRoom.auth[user.userid]) helpRoom.auth[user.userid] = '+';
 					this.parse(`/join help-${ticket.userid}`);
 					return this.popupReply(`You already have an open ticket; please wait for global staff to respond.`);
