@@ -211,6 +211,21 @@ class Ladder extends LadderStore {
 		}
 		const ready = await this.prepBattle(connection);
 		if (!ready) return false;
+		// If our target is already challenging us in the same format,
+		// simply accept the pending challenge instead of creating a new one.
+		const targetChalls = Ladders.challenges.get(targetUser.userid);
+		if (targetChalls) {
+			for (const chall of targetChalls) {
+				if (chall.from === targetUser.userid &&
+					chall.to === user.userid &&
+					chall.formatid === this.formatid) {
+						if (Ladder.removeChallenge(chall)) {
+							Ladders.match(chall.ready, ready);
+							return true;
+						}
+					}
+			}
+		}
 		Ladder.addChallenge(new Challenge(ready, targetUser.userid));
 		user.lastChallenge = Date.now();
 		return true;
