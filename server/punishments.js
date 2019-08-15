@@ -285,48 +285,7 @@ const Punishments = new (class {
 
 	savePunishments() {
 		FS(PUNISHMENT_FILE).writeUpdate(() => {
-			/** @type {Map<string, PunishmentEntry>} */
-			const saveTable = new Map();
-			Punishments.ips.forEach((punishment, ip) => {
-				const [punishType, id, expireTime, reason, ...rest] = punishment;
-				if (id.charAt(0) === '#') return;
-				let entry = saveTable.get(id);
-
-				if (entry) {
-					entry.ips.push(ip);
-					return;
-				}
-
-				entry = {
-					userids: [],
-					ips: [ip],
-					punishType: punishType,
-					expireTime: expireTime,
-					reason: reason,
-					rest: rest,
-				};
-				saveTable.set(id, entry);
-			});
-			Punishments.userids.forEach((punishment, userid) => {
-				const [punishType, id, expireTime, reason, ...rest] = punishment;
-				if (id.charAt(0) === '#') return;
-				let entry = saveTable.get(id);
-
-				if (!entry) {
-					entry = {
-						userids: [],
-						ips: [],
-						punishType: punishType,
-						expireTime: expireTime,
-						reason: reason,
-						rest: rest,
-					};
-					saveTable.set(id, entry);
-				}
-
-				if (userid !== id) entry.userids.push(userid);
-			});
-
+			const saveTable = Punishments.getPunishments();
 			let buf = 'Punishment\tUser ID\tIPs and alts\tExpires\tReason\r\n';
 			for (const [id, entry] of saveTable) {
 				buf += Punishments.renderEntry(entry, id);
@@ -339,47 +298,11 @@ const Punishments = new (class {
 		FS(ROOM_PUNISHMENT_FILE).writeUpdate(() => {
 			/** @type {Map<string, PunishmentEntry>} */
 			const saveTable = new Map();
-			Punishments.roomIps.nestedForEach((punishment, roomid, ip) => {
-				const [punishType, punishUserid, expireTime, reason, ...rest] = punishment;
-				const id = roomid + ':' + punishUserid;
-				if (id.charAt(0) === '#') return;
-				let entry = saveTable.get(id);
-
-				if (entry) {
-					entry.ips.push(ip);
-					return;
+			for (const roomid of Punishments.roomIps.keys()) {
+				for (const [userid, punishment] of Punishments.getPunishments(roomid, true)) {
+					saveTable.set(`${roomid}:${userid}`, punishment);
 				}
-
-				entry = {
-					userids: [],
-					ips: [ip],
-					punishType: punishType,
-					expireTime: expireTime,
-					reason: reason,
-					rest: rest,
-				};
-				saveTable.set(id, entry);
-			});
-			Punishments.roomUserids.nestedForEach((punishment, roomid, userid) => {
-				const [punishType, punishUserid, expireTime, reason, ...rest] = punishment;
-				const id = roomid + ':' + punishUserid;
-				let entry = saveTable.get(id);
-
-				if (!entry) {
-					entry = {
-						userids: [],
-						ips: [],
-						punishType: punishType,
-						expireTime: expireTime,
-						reason: reason,
-						rest: rest,
-					};
-					saveTable.set(id, entry);
-				}
-
-				if (userid !== punishUserid) entry.userids.push(userid);
-			});
-
+			}
 			let buf = 'Punishment\tRoom ID:User ID\tIPs and alts\tExpires\tReason\r\n';
 			for (const [id, entry] of saveTable) {
 				buf += Punishments.renderEntry(entry, id);
@@ -1653,48 +1576,99 @@ const Punishments = new (class {
 
 		return punishments;
 	}
+	/**
+	 * @param {string} [roomid]
+	 * @param {boolean} [ignoreMutes]
+	 */
+	getPunishments(roomid, ignoreMutes) {
+		/** @type {Map<string, PunishmentEntry>} */
+		const punishmentTable = new Map();
+		if (roomid && (!Punishments.roomIps.has(roomid) || !Punishments.roomUserids.has(roomid))) return punishmentTable;
+		// @ts-ignore - `Punishments.roomIps.get(roomid)` is definitely a real value as per the above if condition
+		(roomid ? Punishments.roomIps.get(roomid) : Punishments.ips).forEach((punishment, ip) => {
+			const [punishType, id, expireTime, reason, ...rest] = punishment;
+			if (id.charAt(0) === '#') return;
+			let entry = punishmentTable.get(id);
 
-	/** @param {Room} room */
-	getPunishmentsOfRoom(room) {
-		let output = [];
-		/** @type {Map<Punishment, [Set<string>, Set<string>]>} */
-		const store = new Map();
+			if (entry) {
+				entry.ips.push(ip);
+				return;
+			}
 
-		let map = Punishments.roomUserids.get(room.id);
-		if (map) {
-			for (let [key, value] of map) {
-				if (!store.has(value)) store.set(value, [new Set([]), new Set()]);
-				// @ts-ignore
-				store.get(value)[0].add(key);
+			entry = {
+				userids: [],
+				ips: [ip],
+				punishType: punishType,
+				expireTime: expireTime,
+				reason: reason,
+				rest: rest,
+			};
+			punishmentTable.set(id, entry);
+		});
+		// @ts-ignore - `Punishments.roomUserids.get(roomid)` is definitely a real value as per the above if condition
+		(roomid ? Punishments.roomUserids.get(roomid) : Punishments.userids).forEach((punishment, userid) => {
+			const [punishType, id, expireTime, reason, ...rest] = punishment;
+			if (id.charAt(0) === '#') return;
+			let entry = punishmentTable.get(id);
+
+			if (!entry) {
+				entry = {
+					userids: [],
+					ips: [],
+					punishType: punishType,
+					expireTime: expireTime,
+					reason: reason,
+					rest: rest,
+				};
+				punishmentTable.set(id, entry);
+			}
+
+			if (userid !== id) entry.userids.push(userid);
+		});
+		if (roomid && ignoreMutes !== false) {
+			const room = Rooms(roomid);
+			if (room && room.muteQueue) {
+				for (const mute of room.muteQueue) {
+					punishmentTable.set(mute.userid, {
+						userids: [], ips: [], punishType: "MUTE", expireTime: mute.time, reason: "", rest: [],
+					});
+				}
 			}
 		}
-
-		map = Punishments.roomIps.get(room.id);
-		if (map) {
-			for (let [key, value] of map) {
-				if (!store.has(value)) store.set(value, [new Set([]), new Set()]);
-				// @ts-ignore
-				store.get(value)[1].add(key);
-			}
-		}
-
-		for (const [punishment, data] of store) {
-			let [punishType, id, expireTime, reason] = punishment;
-			let expiresIn = new Date(expireTime).getTime() - Date.now();
+		return punishmentTable;
+	}
+	/**
+	 * @param {Map<string, PunishmentEntry>} punishments
+	 * @param {User} user
+	 */
+	visualizePunishments(punishments, user) {
+		let buf = "";
+		buf += `<div class="ladder pad"><h2>List of active punishments:</h2>`;
+		buf += `<table">`;
+		buf += `<tr>`;
+		buf += `<th>Username</th>`;
+		buf += `<th>Punishment type</th>`;
+		buf += `<th>Expire time</th>`;
+		buf += `<th>Reason</th>`;
+		buf += `<th>Alts</th>`;
+		if (user.can('ban')) buf += `<th>IPs</th>`;
+		buf += `</tr>`;
+		for (const [userid, punishment] of punishments) {
+			const expiresIn = new Date(punishment.expireTime).getTime() - Date.now();
 			if (expiresIn < 1000) continue;
-			let alts = [...data[0]].filter(user => user !== id);
-			let ips = [...data[1]];
-			output.push({"punishType": punishType, "id": id, "expiresIn": expiresIn, "reason": reason, "alts": alts, "ips": ips});
+			const expireString = Chat.toDurationString(expiresIn, {precision: 1});
+			buf += `<tr>`;
+			buf += `<td>${userid}</td>`;
+			buf += `<td>${punishment.punishType}</td>`;
+			buf += `<td>${expireString}</td>`;
+			buf += `<td>${punishment.reason || ' - '}</td>`;
+			buf += `<td>${punishment.userids.join(", ") || ' - '}</td>`;
+			if (user.can('ban')) buf += `<td>${punishment.ips.join(", ") || ' - '}</td>`;
+			buf += `</tr>`;
 		}
-
-		if (room.muteQueue) {
-			for (const entry of room.muteQueue) {
-				let expiresIn = new Date(entry.time).getTime() - Date.now();
-				if (expiresIn < 1000) continue;
-				output.push({"punishType": 'MUTE', "id": entry.userid, "expiresIn": expiresIn, "reason": '', "alts": [], "ips": []});
-			}
-		}
-		return output;
+		buf += `</table>`;
+		buf += `</div>`;
+		return buf;
 	}
 	/**
 	 * Notifies staff if a user has three or more room punishments.
