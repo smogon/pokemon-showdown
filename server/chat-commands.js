@@ -1484,6 +1484,7 @@ const commands = {
 		let targetUser = this.targetUser;
 		let userid = toID(this.targetUsername);
 		let name = targetUser ? targetUser.name : Chat.filter(this, this.targetUsername, user, room, connection);
+		if (!name) return;
 		name = name.slice(0, 18);
 
 		if (!userid) return this.parse('/help roompromote');
