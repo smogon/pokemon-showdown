@@ -1483,7 +1483,8 @@ const commands = {
 		target = this.splitTarget(target, true);
 		let targetUser = this.targetUser;
 		let userid = toID(this.targetUsername);
-		let name = targetUser ? targetUser.name : this.targetUsername;
+		let name = targetUser ? targetUser.name : Chat.filter(this, this.targetUsername, user, room, connection);
+		name = name.slice(0, 18);
 
 		if (!userid) return this.parse('/help roompromote');
 		if (!targetUser && !Users.isUsernameKnown(userid) && !force) {
@@ -2537,11 +2538,13 @@ const commands = {
 	},
 	demotehelp: [`/demote [username], [group] - Demotes the user to the specified group. Requires: & ~`],
 
-	forcepromote(target, room, user) {
+	forcepromote(target, room, user, connection) {
 		// warning: never document this command in /help
 		if (!this.can('forcepromote')) return false;
 		target = this.splitTarget(target, true);
-		let name = this.targetUsername;
+		let name = Chat.filter(this, this.targetUsername, user, room, connection);
+		if (!name) return;
+		name = name.slice(0, 18);
 		let nextGroup = target;
 		if (!Config.groups[nextGroup]) return this.errorReply(`Group '${nextGroup}' does not exist.`);
 		if (Config.groups[nextGroup].roomonly || Config.groups[nextGroup].battleonly) return this.errorReply(`Group '${nextGroup}' does not exist as a global rank.`);
