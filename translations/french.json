@@ -20,6 +20,80 @@
 		"% <strong>Driver</strong> - The above, and they can mute and warn": "% <strong>Driver</strong> - Comme ci-dessus, en plus de pouvoir sanctionner via mute et warn",
 		"@ <strong>Moderator</strong> - The above, and they can room ban users": "@ <strong>Moderator</strong> - Comme ci-dessus, en plus de pouvoir bannir un utilisateur de la room",
 		"* <strong>Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Bot</strong> - Comme les Moderator, à la différence que ces utilisateurs sont des bots",
-		"# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it": "# <strong>Room Owner</strong> - Ce sont les chefs/leaders de la room et ils peuvent les contrôler quasiment en totalité"
+		"# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it": "# <strong>Room Owner</strong> - Ce sont les chefs/leaders de la room et ils peuvent les contrôler quasiment en totalité",
+
+		"/help OR /h OR /? - Gives you help.": "Vous donne de l'aide.",
+		"For an overview of room commands, use /roomhelp": "Pour un aperçu des commandes des salons, utilisez /roomhelp",
+		"For details of a specific command, use something like: /help data": "Pour les détails d'une commande spécifique, utilisez quelque chose comme : /help data",
+
+		"COMMANDS": "COMMANDES",
+		"BATTLE ROOM COMMANDS": "COMMANDES DU SALON DE COMBAT",
+		"OPTION COMMANDS": "COMMANDES D'OPTIONS",
+		"INFORMATIONAL/RESOURCE COMMANDS": "COMMANDES D'INFORMATIONS/DE RESSOURCES",
+		"DATA COMMANDS": "COMMANDES DE DONNEES",
+		"DRIVER COMMANDS": "COMMANDES DE DRIVER",
+		"MODERATOR COMMANDS": "COMMANDES DE MODERATEUR",
+		"LEADER COMMANDS": "COMMANDES DE LEADER",
+
+		"(replace / with ! to broadcast. Broadcasting requires: + % @ # & ~)": "(Remplace / par ! pour afficher publiquement. Afficher publiquement requiert : + % @ & ~)",
+
+		"<strong>Room punishments</strong>:": "<strong>Sanctions du salon</strong>",
+		"<strong>warn</strong> - Displays a popup with the rules.": "<strong>warn</strong> - Affiche une fen&ecirc;tre avec les r&egrave;gles.",
+		"<strong>mute</strong> - Mutes a user (makes them unable to talk) for 7 minutes.": "<strong>mute</strong> - Met en sourdine un utilisateur (cela les emp&ecirc;che de parler) pendant 7 minutes.",
+		"<strong>hourmute</strong> - Mutes a user for 60 minutes.": "<strong>hourmute</strong> - Met en sourdine un utilisateur pendant 60 minutes.",
+		"<strong>ban</strong> - Bans a user (makes them unable to join the room) for 2 days.": "<strong>ban</strong> - Bannit un utilisateur (cela l'emp&ecirc;che de rejoindre le salon) pendant 2 jours.",
+		"<strong>blacklist</strong> - Bans a user for a year.": "<strong>blacklist</strong> - Bannit un utilisateur pendant une ann&eacute;e.",
+
+		"<strong>Global punishments</strong>:": "<strong>Sanctions globales</strong>",
+		"<strong>lock</strong> - Locks a user (makes them unable to talk in any rooms or PM non-staff) for 2 days.": "<strong>lock</strong> - Bloque un utilisateur (cela l'emp&ecirc;che de parler sur n'importe quel salon ou d'envoyer des messages priv&eacute;s à des membres ne faisant pas partie du staff) pendant 2 jours.",
+		"<strong>weeklock</strong> - Locks a user for a week.": "<strong>weeklock</strong> - Bloque un utilisateur pendant une semaine.",
+		"<strong>namelock</strong> - Locks a user and prevents them from having a username for 2 days.": "<strong>namelock</strong> - Bloque un utilisateur et l'emp&ecirc;che d'avoir un identifiant pendant 2 jours.",
+		"<strong>globalban</strong> - Globally bans (makes them unable to connect and play games) for a week.": "<strong>globalban</strong> - Bannissement global (cela emp&ecirc;che de se connecter et de jouer) pendant une semaine.",
+
+		"<strong>Room drivers (%)</strong> can use:": "<strong>Les drivers d'un salon (%)</strong> peuvent utiliser :",
+		"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules": "- /warn OU /k <em>identifiant du joueur</em> : Avertit un utilisateur et affiche les r&egrave;gles de Pok&eacute;mon Showdown",
+		"- /mute OR /m <em>username</em>: 7 minute mute": "- /mute OU /m <em>identifiant du joueur</em> : Met en sourdine pendant 7 minutes",
+		"- /hourmute OR /hm <em>username</em>: 60 minute mute": "- /hourmute OU /hm <em>identifiant du joueur</em> : Met en sourdine pendant 60 minutes",
+		"- /unmute <em>username</em>: unmute": "- /unmute <em>identifiant du joueur</em> : Enl&egrave;ve une mise en sourdine",
+		"- /announce OR /wall <em>message</em>: make an announcement": "- /announce OU /well <em>message</em> : Fait une annonce",
+		"- /modlog <em>username</em>: search the moderator log of the room": "- /modlog <em>identifiant du joueur</em> : Examine le registre de mod&eacute;ration du salon ",
+		"- /modnote <em>note</em>: add a moderator note that can be read through modlog": "- /modnote <em>note</em> : Ajoute une note de mod&eacute;ration qui peut &ecirc;tre lue gr&acirc;ce au modlog",
+
+		"<strong>Room moderators (@)</strong> can also use:": "<strong>Les mod&eacute;rateurs de salon (@)</strong> peuvent &eacute;galement utiliser :",
+		"- /roomban OR /rb <em>username</em>: ban user from the room": "- /roomban OU /rb <em>identifiant du joueur</em>: Bannit le joueur du salon",
+		"- /roomunban <em>username</em>: unban user from the room": "- /roomunban <em>identifiant du joueur</em> : Retire le bannissement d'un utilisateur du salon",
+		"- /roomvoice <em>username</em>: appoint a room voice": "- /roomvoice <em>identifiant du joueur</em> : Nomme un room voice",
+		"- /roomdevoice <em>username</em>: remove a room voice": "- /roomdevoice <em>identifiant du joueur</em> : Retire un room voice",
+		"- /staffintro <em>intro</em>: set the staff introduction that will be displayed for all staff joining the room": "- / staffintro <em>introduction</em> : Param&egrave;tre l'introduction du staff qui sera affich&eacute;e &agrave; tous les membres du staff rejoignant le salon",
+		"- /roomsettings: change a variety of room settings, namely modchat": "- /roomsettings : Permet de changer plusieurs param&egrave;tres du salon, notamment le modchat",
+
+		"<strong>Room owners (#)</strong> can also use:": "<strong>Les propri&eacute;taires du salon (#)</strong> peuvent &eacute;galement utiliser :",
+		"- /roomintro <em>intro</em>: set the room introduction that will be displayed for all users joining the room": "- /roomintro <em>introduction</em> : Param&egrave;tre l'introduction du salon qui sera affich&eacute;e à tous les utilisateurs rejoignant le salon",
+		"- /rules <em>rules link</em>: set the room rules link seen when using /rules": "- /rules <em>lien des r&egrave;gles</em> : Param&egrave;tre le lien des r&egrave;gles affich&eacute;es sur le salon quand /rules est utilis&eacute;e",
+		"- /roommod, /roomdriver <em>username</em>: appoint a room moderator/driver": "- /roommod, /roomdriver <em>identifiant de l'utilisateur</em> : Nomme un mod&eacute;rateur / driver du salon",
+		"- /roomdemod, /roomdedriver <em>username</em>: remove a room moderator/driver": "- /roomdemod, /roomdedriver <em>identifiant de l'utilisateur</em> : Retire le grade de mod&eacute;rateur / driver du salon",
+		"- /roomdeauth <em>username</em>: remove all room auth from a user": "- /roomdeauth <em>identifiant de l'utilisateur</em> : Retire tous les grades d'un salon d'un utilisateur",
+		"- /declare <em>message</em>: make a large blue declaration to the room": "- /declare <em>message</em> : Affiche une grande d&eacute;claration en bleu sur le salon",
+		"- !htmlbox <em>HTML code</em>: broadcast a box of HTML code to the room": "- !htmlbox <em>code HTML</em> : Diffuse une case avec du code HTML sur le salon",
+		"- !showimage <em>[url], [width], [height]</em>: show an image to the room": "- !showimage <em>[url], [largeur], [hauteur]</em> : Montre une image sur le salon",
+		"- /roomsettings: change a variety of room settings, including modchat, capsfilter, etc": "- /roomsettings : Permet de changer plusieurs param&egrave;tres du salon y compris le modchat, le filtre à majuscules, etc",
+
+		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6774654/\">roomauth guide</a>": "Plus de d&eacute;tails peuvent &ecirc;tre trouv&eacute;s dans le <a href=\"https://www.smogon.com/forums/posts/6774654/\">Guide de roomauth</a>",
+
+		"Tournament Help:": "Aide pour les tournois",
+		"- /tour create <em>format</em>, elimination: create a new single elimination tournament in the current room.": "- /tour create <em>format</em>, elimination : cr&eacute;e un nouveau tournoi simple en &eacute;limination directe dans le salon actuel",
+		"- /tour create <em>format</em>, roundrobin: create a new round robin tournament in the current room.": "- /tour create <em>foramt</em>, roundrobin : cr&eacute;e un nouveau tournoi en roundrobin dans le salon actuel",
+		"- /tour end: forcibly end the tournament in the current room": "- /tour end : Force la fin d'un tournoi dans le salon actuel",
+		"- /tour start: start the tournament in the current room": "- /tour start : D&eacute;marre le tournoi dans le salon actuel",
+		"- /tour banlist [pokemon], [talent], [...]: ban moves, abilities, Pokémon or items from being used in a tournament (it must be created first)": "- /tour banlist [pokemon], [talent], [...] : Bannit des attaques, talents, Pok&eacute;mon ou objets d'un tournoi (cette liste doit &ecirc;tre cr&eacute;&eacute;e au pr&eacute;alable)",
+
+		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6777489/\">tournaments guide</a>": "Plus de d&eacute;tails peuvent &ecirc;tre trouv&eacute;s dans le <a href=\"https://www.smogon.com/forums/posts/6777489/\">Guide des tournois</a>",
+
+		"Your status cannot be updated while you are locked or semilocked.": "Votre statut ne peut être mis à jour quand vous êtes verrouillé ou semi-verrouillé.",
+		"Your status is too long; it must be under ${maxLength} characters.": "Votre statut est trop long ; il doit être en dessous de ${maxLength} caractères.",
+		"Your status contains a banned word.": "Votre statut contient un mot bannit.",
+		"Your status has been set to: ${target}.": "Votre statut a été fixé comme ${target}.",
+		"You are now marked as busy.": "Vous êtes maintenant marqué comme occupé.",
+		"You are now marked as away. Send a message or use /back to indicate you are back.": "Vous êtes maintenant indiqué comme absent. Envoyez un message ou utilisez /back pour indiquer que vous êtes de retour."
 	}
 }
