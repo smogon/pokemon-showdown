@@ -1584,7 +1584,7 @@ const Punishments = new (class {
 		/** @type {Map<string, PunishmentEntry>} */
 		const punishmentTable = new Map();
 		if (roomid && (!Punishments.roomIps.has(roomid) || !Punishments.roomUserids.has(roomid))) return punishmentTable;
-		// @ts-ignore - `Punishments.roomIps.get(roomid)` is definetly a real value as per the above if condition
+		// @ts-ignore - `Punishments.roomIps.get(roomid)` is definitely a real value as per the above if condition
 		(roomid ? Punishments.roomIps.get(roomid) : Punishments.ips).forEach((punishment, ip) => {
 			const [punishType, id, expireTime, reason, ...rest] = punishment;
 			if (id.charAt(0) === '#') return;
@@ -1605,7 +1605,7 @@ const Punishments = new (class {
 			};
 			punishmentTable.set(id, entry);
 		});
-		// @ts-ignore - `Punishments.roomUserids.get(roomid)` is definetly a real value as per the above if condition
+		// @ts-ignore - `Punishments.roomUserids.get(roomid)` is definitely a real value as per the above if condition
 		(roomid ? Punishments.roomUserids.get(roomid) : Punishments.userids).forEach((punishment, userid) => {
 			const [punishType, id, expireTime, reason, ...rest] = punishment;
 			if (id.charAt(0) === '#') return;
