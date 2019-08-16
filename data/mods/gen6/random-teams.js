@@ -314,7 +314,7 @@ class RandomGen6Teams extends RandomTeams {
 					break;
 				case 'fierydance': case 'firefang': case 'flamethrower':
 					if (hasMove['blazekick'] || hasMove['overheat']) rejected = true;
-					if (hasMove['fireblast'] && counter.setupType !== 'Physical') rejected = true;
+					if ((hasMove['fireblast'] || hasMove['lavaplume']) && counter.setupType !== 'Physical') rejected = true;
 					break;
 				case 'fireblast':
 					if (hasMove['flareblitz'] && counter.setupType !== 'Special') rejected = true;
@@ -409,10 +409,8 @@ class RandomGen6Teams extends RandomTeams {
 					if ((hasMove['psychic'] || hasMove['psyshock']) && counter.setupType !== 'Physical') rejected = true;
 					break;
 				case 'psyshock':
-					if (movePool.length > 1) {
-						let psychic = movePool.indexOf('psychic');
-						if (psychic >= 0) this.fastPop(movePool, psychic);
-					}
+					let psychic = movePool.indexOf('psychic');
+					if (psychic >= 0) this.fastPop(movePool, psychic);
 					break;
 				case 'headsmash':
 					if (hasMove['stoneedge']) rejected = true;

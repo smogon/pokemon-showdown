@@ -923,7 +923,7 @@ class RandomTeams extends Dex.ModdedDex {
 					break;
 				case 'fierydance': case 'firefang': case 'firepunch': case 'flamethrower':
 					if (hasMove['blazekick'] || hasMove['heatwave'] || hasMove['overheat']) rejected = true;
-					if (hasMove['fireblast'] && counter.setupType !== 'Physical') rejected = true;
+					if ((hasMove['fireblast'] || hasMove['lavaplume']) && counter.setupType !== 'Physical') rejected = true;
 					break;
 				case 'fireblast': case 'magmastorm':
 					if (hasMove['flareblitz'] && counter.setupType !== 'Special') rejected = true;
@@ -1033,10 +1033,8 @@ class RandomTeams extends Dex.ModdedDex {
 					if (hasAbility['Contrary'] && !counter.setupType && !!counter['physicalpool']) rejected = true;
 					break;
 				case 'psyshock':
-					if (movePool.length > 1) {
-						let psychic = movePool.indexOf('psychic');
-						if (psychic >= 0) this.fastPop(movePool, psychic);
-					}
+					let psychic = movePool.indexOf('psychic');
+					if (psychic >= 0) this.fastPop(movePool, psychic);
 					break;
 				case 'headsmash':
 					if (hasMove['stoneedge'] || isDoubles && hasMove['rockslide']) rejected = true;
@@ -1196,8 +1194,11 @@ class RandomTeams extends Dex.ModdedDex {
 				moves[moves.indexOf('autotomize')] = 'rockpolish';
 			}
 		}
-		if (hasMove['raindance'] && hasMove['thunderbolt']) {
+		if (hasMove['raindance'] && hasMove['thunderbolt'] && !isDoubles) {
 			moves[moves.indexOf('thunderbolt')] = 'thunder';
+		}
+		if (hasMove['workup'] && !counter['Special'] && template.id === 'zeraora') {
+			moves[moves.indexOf('workup')] = 'bulkup';
 		}
 
 		/**@type {[string, string | undefined, string | undefined]} */
@@ -1834,8 +1835,10 @@ class RandomTeams extends Dex.ModdedDex {
 
 				// Okay, the set passes, add it to our team
 				pokemon.push(set);
+
 				// For setting Zoroark's level and slot
-				if (set.ability === 'Illusion') teamDetails['illusion'] = pokemon.length - 1;
+				if (set.ability === 'Illusion') teamDetails['illusion'] = pokemon.length;
+
 				// Don't bother performing accounting/tracking other teamDetails on the last Pokemon.
 				if (pokemon.length === 6) break;
 
@@ -1875,12 +1878,12 @@ class RandomTeams extends Dex.ModdedDex {
 		if (illusion) {
 			// Make sure Zoroark isn't in the last slot
 			// (It can't use Illusion if it switches in from the last slot)
-			if (illusion === 5) {
+			if (illusion === 6) {
 				[pokemon[5], pokemon[4]] = [pokemon[4], pokemon[5]];
-				illusion = 4;
+				illusion = 5;
 			}
 			// Set Zoroark's level to be the same as the last Pokemon
-			pokemon[illusion].level = pokemon[5].level;
+			pokemon[illusion - 1].level = pokemon[5].level;
 		}
 
 		return pokemon;
