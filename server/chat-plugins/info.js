@@ -616,6 +616,8 @@ const commands = {
 					if (move.flags['punch']) details["&#10003; Punch"] = "";
 					if (move.flags['powder']) details["&#10003; Powder"] = "";
 					if (move.flags['reflectable']) details["&#10003; Bounceable"] = "";
+					if (move.flags['charge']) details["&#10003; Two-turn move"] = "";
+					if (move.flags['recharge']) details["&#10003; Has recharge turn"] = "";
 					if (move.flags['gravity'] && mod.gen >= 4) details["&#10007; Suppressed by Gravity"] = "";
 					if (move.flags['dance'] && mod.gen >= 7) details["&#10003; Dance move"] = "";
 
