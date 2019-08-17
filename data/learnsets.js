@@ -15998,7 +15998,7 @@ let BattleLearnsets = {
 		brutalswing: ["7M"],
 		bulldoze: ["7M", "6M", "5M"],
 		captivate: ["4M"],
-    celebrate: ["7S1"],
+		celebrate: ["7S1"],
 		confide: ["7M", "6M"],
 		crunch: ["7L33", "6L33", "5L33", "4L33"],
 		curse: ["7E", "7V", "6E", "5E", "4E", "3E"],
