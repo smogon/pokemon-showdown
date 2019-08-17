@@ -1361,8 +1361,8 @@ let Formats = [
 		],
 
 		mod: 'gen3',
-		ruleset: ['Pokemon', 'Standard'],
-		banlist: ['Uber', 'Smeargle + Ingrain'],
+		ruleset: ['Pokemon', 'Standard', '3 Baton Pass Clause'],
+		banlist: ['Uber', 'Smeargle + Baton Pass'],
 	},
 	{
 		name: "[Gen 2] OU",
@@ -1953,8 +1953,8 @@ let Formats = [
 
 		mod: 'gen3',
 		searchShow: false,
-		ruleset: ['[Gen 3] OU'],
-		banlist: ['OU', 'UUBL'],
+		ruleset: ['Pokemon', 'Standard'],
+		banlist: ['Uber', 'OU', 'UUBL', 'Smeargle + Ingrain'],
 	},
 	{
 		name: "[Gen 3] NU",
