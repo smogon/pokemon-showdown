@@ -1613,7 +1613,7 @@ const pages = {
 			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Dead Players</summary>`;
 			for (let d in game.dead) {
 				let dead = game.dead[d];
-				buf += `<p style="font-weight:bold;">${dead.safeName} ${dead.role && !game.noReveal ? '('+ dead.getRole() + ')': ''}`;
+				buf += `<p style="font-weight:bold;">${dead.safeName} ${dead.role && !game.noReveal ? '(' + dead.getRole() + ')' : ''}`;
 				if (dead.treestump) buf += ` (is a Treestump)`;
 				if (dead.restless) buf += ` (is a Restless Spirit)`;
 				buf += `</p>`;
