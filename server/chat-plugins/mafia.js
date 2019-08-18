@@ -1618,8 +1618,9 @@ const pages = {
 				if (dead.restless) buf += ` (is a Restless Spirit)`;
 				buf += `</p>`;
 			}
-			buf += `</details></p><hr/>`;
+			buf += `</details></p>`;
 		}
+		buf += `<hr/>`;
 		if (isPlayer && game.phase === 'IDEApicking') {
 			buf += `<p><b>IDEA information:</b><br />`;
 			const IDEA = game.playerTable[user.userid].IDEA;
