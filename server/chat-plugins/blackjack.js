@@ -78,7 +78,9 @@ class Blackjack extends Rooms.RoomGame {
 	sendInvite() {
 		const change = this.uhtmlChange;
 		const players = Object.keys(this.playerTable);
-		this.room.send(`|uhtml${change}|blackjack-${this.room.gameNumber}|<div class="infobox${this.infoboxLimited}">${this.createdBy} has created a game of Blackjack. ${this.button}<br /><strong>Players (${players.length}):</strong> ${!players.length ? '(None)' : players.join(', ')}</div>`);
+		let playerList = [];
+		for (let player of players) playerList.push(Chat.escapeHTML(this.playerTable[player].name));
+		this.room.send(`|uhtml${change}|blackjack-${this.room.gameNumber}|<div class="infobox${this.infoboxLimited}">${this.createdBy} has created a game of Blackjack. ${this.button}<br /><strong>Players (${players.length}):</strong> ${!players.length ? '(None)' : playerList.join(', ')}</div>`);
 		this.uhtmlChange = 'change';
 	}
 
@@ -295,15 +297,16 @@ class Blackjack extends Rooms.RoomGame {
 
 		let header = `The game of blackjack has started${(this.startedBy !== '' ? ` (started by ${this.startedBy})` : ``)}. ${this.slideButton}<br />`;
 		this.state = 'started';
-		for (let player of Object.keys(this.playerTable)) {
-			this.giveCard(this.playerTable[player]);
-			this.giveCard(this.playerTable[player]);
-			this.turnLog += Chat.html`<strong>${this.playerTable[player].name}</strong>: [${this.playerTable[player].cards[0]}] [${this.playerTable[player].cards[1]}] (${this.playerTable[player].points})<br />`;
-		}
 
 		this.giveCard('dealer');
 		this.giveCard('dealer');
 		this.turnLog += `<strong>${this.dealer.name}</strong>: [${this.dealer.cards[0]}]`;
+
+		for (let player of Object.keys(this.playerTable)) {
+			this.giveCard(this.playerTable[player]);
+			this.giveCard(this.playerTable[player]);
+			this.turnLog += Chat.html`<br /><strong>${this.playerTable[player].name}</strong>: [${this.playerTable[player].cards[0]}] [${this.playerTable[player].cards[1]}] (${this.playerTable[player].points})`;
+		}
 
 		this.display(`${header}${this.turnLog}`, true);
 		this.next();
@@ -557,6 +560,7 @@ exports.commands = {
 		start(target, room, user) {
 			if (!this.can('minigame', null, room)) return;
 			if (!room.game || !room.game.blackjack) return this.errorReply("There is no game of blackjack currently ongoing in this room.");
+			if (room.game.state !== 'signups') return this.errorReply("This game of blackjack has already started.");
 
 			this.privateModAction(`(The game of blackjack was started by ${user.name}.)`);
 			this.modlog(`BLACKJACK START`);
@@ -566,10 +570,11 @@ exports.commands = {
 		end(target, room, user, connection, cmd) {
 			if (!this.can('minigame', null, room)) return;
 			if (!room.game || !room.game.blackjack) return this.errorReply("There is no game of blackjack currently ongoing in this room.");
+			const force = cmd === 'forceend';
 
 			const end = room.game.end(user, cmd);
 			if (end) {
-				this.privateModAction(`(The game of blackjack was ended by ${user.name}.)`);
+				this.privateModAction(`(The game of blackjack was ${force ? 'forcibly' : ''}ended by ${user.name}.)`);
 				this.modlog(`BLACKJACK END`);
 			}
 		},
